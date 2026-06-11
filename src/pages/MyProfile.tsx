@@ -81,17 +81,25 @@ export default function MyProfile() {
       </div>
 
       {myBiz && (
-        <Link to={`/dn/${myBiz.id}`} className="mt-4 block p-4 rounded-2xl bg-card border border-border">
-          <div className="flex items-center gap-3">
+        <div className="mt-4 p-4 rounded-2xl bg-card border border-border">
+          <Link to={`/dn/${myBiz.id}`} className="flex items-center gap-3">
             <Store className="w-5 h-5 text-primary"/>
-            <div>
+            <div className="flex-1 min-w-0">
               <div className="font-bold text-sm">{myBiz.name}</div>
               <div className="text-[11px] text-muted-foreground">
                 {myBiz.status === "approved" ? "Đã duyệt" : myBiz.status === "pending" ? "Chờ duyệt" : "Từ chối"}
               </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+          <button onClick={() => {
+            if (confirm(`Xóa doanh nghiệp "${myBiz.name}"? Hành động này không thể hoàn tác.`)) {
+              deleteBusiness(myBiz.id);
+              toast.success("Đã xóa doanh nghiệp");
+            }
+          }} className="mt-3 w-full py-2.5 rounded-xl bg-destructive/10 text-destructive font-bold text-xs flex items-center justify-center gap-2">
+            <Trash2 className="w-3.5 h-3.5"/> Xóa doanh nghiệp
+          </button>
+        </div>
       )}
 
       <Link to="/de-xuat" className="mt-3 flex items-center gap-2 p-3.5 rounded-2xl bg-card border border-border font-semibold text-sm">
