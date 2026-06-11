@@ -24,6 +24,7 @@ interface StoreCtx extends StoreState {
   logout: () => void;
   approveBusiness: (id: string) => void;
   rejectBusiness: (id: string) => void;
+  deleteBusiness: (id: string) => void;
   addReview: (r: Omit<Review, "id" | "createdAt" | "userName">) => void;
   redeemOffer: (businessId: string) => OfferUsage;
   markUsageRedeemed: (id: string) => void;
@@ -93,6 +94,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     rejectBusiness: (id) => setState(s => ({
       ...s,
       businesses: s.businesses.map(b => b.id === id ? { ...b, status: "rejected" } : b),
+    })),
+    deleteBusiness: (id) => setState(s => ({
+      ...s,
+      businesses: s.businesses.filter(b => b.id !== id),
+      reviews: s.reviews.filter(r => r.businessId !== id),
+      usages: s.usages.filter(u => u.businessId !== id),
     })),
     addReview: (r) => {
       const user = state.users.find(u => u.id === r.userId);

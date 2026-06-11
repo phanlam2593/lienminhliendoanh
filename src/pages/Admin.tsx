@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles } from "lucide-react";
+import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BUSINESS_TYPE_LABELS } from "@/lib/types";
 import { toast } from "sonner";
 
 export default function Admin() {
-  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, loginAdmin, session } = useStore();
-  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions">("overview");
+  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, deleteBusiness, loginAdmin, session } = useStore();
+  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions" | "businesses">("overview");
 
   if (!session.isAdmin) {
     return (
@@ -54,6 +54,7 @@ export default function Admin() {
         {[
           { k: "overview", label: "Tổng quan" },
           { k: "pending", label: `Chờ duyệt (${pending.length})` },
+          { k: "businesses", label: `Doanh nghiệp (${approved.length})` },
           { k: "reviews", label: "Đánh giá" },
           { k: "stats", label: "Thống kê" },
           { k: "suggestions", label: `Đề xuất (${suggestions.length})` },
@@ -132,6 +133,30 @@ export default function Admin() {
               );
             })}
           </Section>
+        </div>
+      )}
+
+      {tab === "businesses" && (
+        <div className="space-y-2 pb-4">
+          {approved.length === 0 ? <Empty msg="Không có doanh nghiệp nào"/> :
+            approved.map(b => (
+              <div key={b.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
+                <img src={b.logo} className="w-12 h-12 rounded-xl object-cover shrink-0"/>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{b.name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">{BUSINESS_TYPE_LABELS[b.type]} · {b.city} · {b.reviewCount} đánh giá · {b.usageCount} ưu đãi</div>
+                </div>
+                <button onClick={() => {
+                  if (confirm(`Xóa doanh nghiệp "${b.name}"? Hành động này không thể hoàn tác.`)) {
+                    deleteBusiness(b.id);
+                    toast.success("Đã xóa doanh nghiệp");
+                  }
+                }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
+                  <Trash2 className="w-4 h-4"/>
+                </button>
+              </div>
+            ))
+          }
         </div>
       )}
 
