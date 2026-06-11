@@ -6,8 +6,8 @@ import { BUSINESS_TYPE_LABELS } from "@/lib/types";
 import { toast } from "sonner";
 
 export default function Admin() {
-  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, loginAdmin, session } = useStore();
-  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions">("overview");
+  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, deleteBusiness, loginAdmin, session } = useStore();
+  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions" | "businesses">("overview");
 
   if (!session.isAdmin) {
     return (
