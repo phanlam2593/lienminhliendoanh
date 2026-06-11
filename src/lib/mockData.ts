@@ -20,6 +20,7 @@ export const seedBusinesses: Business[] = [
     distanceKm: 1.2,
     status: "approved",
     usageCount: 18,
+    ownerId: "u1",
   },
   {
     id: "b2",
@@ -38,6 +39,7 @@ export const seedBusinesses: Business[] = [
     distanceKm: 3.5,
     status: "approved",
     usageCount: 12,
+    ownerId: "u8",
   },
   {
     id: "b3",
@@ -56,6 +58,7 @@ export const seedBusinesses: Business[] = [
     distanceKm: 5.8,
     status: "approved",
     usageCount: 9,
+    ownerId: "u15",
   },
   {
     id: "b4",
