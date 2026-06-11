@@ -136,6 +136,30 @@ export default function Admin() {
         </div>
       )}
 
+      {tab === "businesses" && (
+        <div className="space-y-2 pb-4">
+          {approved.length === 0 ? <Empty msg="Không có doanh nghiệp nào"/> :
+            approved.map(b => (
+              <div key={b.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
+                <img src={b.logo} className="w-12 h-12 rounded-xl object-cover shrink-0"/>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{b.name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">{BUSINESS_TYPE_LABELS[b.type]} · {b.city} · {b.reviewCount} đánh giá · {b.usageCount} ưu đãi</div>
+                </div>
+                <button onClick={() => {
+                  if (confirm(`Xóa doanh nghiệp "${b.name}"? Hành động này không thể hoàn tác.`)) {
+                    deleteBusiness(b.id);
+                    toast.success("Đã xóa doanh nghiệp");
+                  }
+                }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
+                  <Trash2 className="w-4 h-4"/>
+                </button>
+              </div>
+            ))
+          }
+        </div>
+      )}
+
       {tab === "suggestions" && (
         <div className="space-y-2 pb-4">
           {suggestions.length === 0 ? <Empty msg="Chưa có đề xuất nào từ cộng đồng"/> :
