@@ -55,6 +55,7 @@ export default function Admin() {
           { k: "overview", label: "Tổng quan" },
           { k: "pending", label: `Chờ duyệt (${pending.length})` },
           { k: "businesses", label: `Doanh nghiệp (${approved.length})` },
+          { k: "members", label: `Thành viên (${users.length})` },
           { k: "reviews", label: "Đánh giá" },
           { k: "stats", label: "Thống kê" },
           { k: "suggestions", label: `Đề xuất (${suggestions.length})` },
