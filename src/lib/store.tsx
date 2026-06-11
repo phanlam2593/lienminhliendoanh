@@ -108,7 +108,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         return {
           ...s,
           reviews: [review, ...s.reviews],
-          businesses: s.businesses.map(b => b.businessId === r.businessId || b.id === r.businessId
+          businesses: s.businesses.map(b => b.id === r.businessId
             ? { ...b, rating: Math.round(avg * 10) / 10, reviewCount: bizReviews.length }
             : b),
         };
