@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles, Trash2 } from "lucide-react";
+import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles, Trash2, Phone, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BUSINESS_TYPE_LABELS } from "@/lib/types";
 import { toast } from "sonner";
