@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ArrowLeft, MapPin, Phone, Star, Tag, Camera, Send, CheckCircle2, Copy } from "lucide-react";
+import { ArrowLeft, MapPin, Phone, Star, Tag, Camera, Send, CheckCircle2, Copy, Trash2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { BUSINESS_TYPE_LABELS } from "@/lib/types";
 import { toast } from "sonner";
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export default function BusinessDetail() {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
-  const { businesses, reviews, currentUser, redeemOffer, addReview } = useStore();
+  const { businesses, reviews, currentUser, redeemOffer, addReview, deleteBusiness } = useStore();
   const b = businesses.find(x => x.id === id);
   const [stars, setStars] = useState(5);
   const [content, setContent] = useState("");
@@ -18,6 +18,7 @@ export default function BusinessDetail() {
   if (!b) return <div className="p-8 text-center text-sm">Không tìm thấy doanh nghiệp</div>;
 
   const bReviews = reviews.filter(r => r.businessId === b.id);
+  const isOwner = currentUser?.id === b.ownerId;
 
   const handleRedeem = () => {
     if (!currentUser) {
@@ -55,7 +56,7 @@ export default function BusinessDetail() {
       <div className="px-5 -mt-12 relative">
         <div className="flex items-end gap-3 mb-3">
           <img src={b.logo} className="w-20 h-20 rounded-2xl border-4 border-background object-cover shadow-card"/>
-          <div className="pb-1">
+          <div className="pb-1 flex-1 min-w-0">
             <div className="text-[11px] font-bold text-primary uppercase">{BUSINESS_TYPE_LABELS[b.type]}</div>
             <h1 className="text-xl font-extrabold leading-tight">{b.name}</h1>
             <div className="flex items-center gap-1 text-xs mt-0.5">
@@ -64,6 +65,17 @@ export default function BusinessDetail() {
               <span className="text-muted-foreground">· {b.reviewCount} đánh giá · {b.usageCount} lượt</span>
             </div>
           </div>
+          {isOwner && (
+            <button onClick={() => {
+              if (confirm(`Xóa doanh nghiệp "${b.name}"? Hành động này không thể hoàn tác.`)) {
+                deleteBusiness(b.id);
+                toast.success("Đã xóa doanh nghiệp");
+                nav("/");
+              }
+            }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0 mb-1">
+              <Trash2 className="w-4 h-4"/>
+            </button>
+          )}
         </div>
 
         {/* Offer banner */}
