@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ArrowLeft, MapPin, Phone, Star, Tag, Camera, Send, CheckCircle2, Copy } from "lucide-react";
+import { ArrowLeft, MapPin, Phone, Star, Tag, Camera, Send, CheckCircle2, Copy, Trash2 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { BUSINESS_TYPE_LABELS } from "@/lib/types";
 import { toast } from "sonner";
