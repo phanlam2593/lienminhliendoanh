@@ -22,6 +22,7 @@ interface StoreCtx extends StoreState {
   loginAsUser: (id: string) => void;
   loginAdmin: () => void;
   logout: () => void;
+  deleteUser: (id: string) => void;
   approveBusiness: (id: string) => void;
   rejectBusiness: (id: string) => void;
   deleteBusiness: (id: string) => void;
@@ -87,6 +88,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     loginAsUser: (id) => setState(s => ({ ...s, session: { userId: id, isAdmin: false } })),
     loginAdmin: () => setState(s => ({ ...s, session: { userId: null, isAdmin: true } })),
     logout: () => setState(s => ({ ...s, session: { userId: null, isAdmin: false } })),
+    deleteUser: (id) => setState(s => ({
+      ...s,
+      users: s.users.filter(u => u.id !== id),
+      reviews: s.reviews.filter(r => r.userId !== id),
+      usages: s.usages.filter(u => u.userId !== id),
+      businesses: s.businesses.map(b => b.ownerId === id ? { ...b, ownerId: undefined } : b),
+    })),
     approveBusiness: (id) => setState(s => ({
       ...s,
       businesses: s.businesses.map(b => b.id === id ? { ...b, status: "approved" } : b),

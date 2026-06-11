@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles, Trash2 } from "lucide-react";
+import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles, Trash2, Phone, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { BUSINESS_TYPE_LABELS } from "@/lib/types";
 import { toast } from "sonner";
 
 export default function Admin() {
-  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, deleteBusiness, loginAdmin, session } = useStore();
-  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions" | "businesses">("overview");
+  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, deleteBusiness, deleteUser, loginAdmin, session } = useStore();
+  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions" | "businesses" | "members">("overview");
 
   if (!session.isAdmin) {
     return (
@@ -55,6 +55,7 @@ export default function Admin() {
           { k: "overview", label: "Tổng quan" },
           { k: "pending", label: `Chờ duyệt (${pending.length})` },
           { k: "businesses", label: `Doanh nghiệp (${approved.length})` },
+          { k: "members", label: `Thành viên (${users.length})` },
           { k: "reviews", label: "Đánh giá" },
           { k: "stats", label: "Thống kê" },
           { k: "suggestions", label: `Đề xuất (${suggestions.length})` },
@@ -150,6 +151,38 @@ export default function Admin() {
                   if (confirm(`Xóa doanh nghiệp "${b.name}"? Hành động này không thể hoàn tác.`)) {
                     deleteBusiness(b.id);
                     toast.success("Đã xóa doanh nghiệp");
+                  }
+                }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
+                  <Trash2 className="w-4 h-4"/>
+                </button>
+              </div>
+            ))
+          }
+        </div>
+      )}
+
+      {tab === "members" && (
+        <div className="space-y-2 pb-4">
+          {users.length === 0 ? <Empty msg="Không có thành viên nào"/> :
+            users.map(u => (
+              <div key={u.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
+                <div className="w-10 h-10 rounded-xl bg-gradient-brand text-white grid place-items-center text-sm font-extrabold shrink-0">
+                  {u.name.charAt(0)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{u.name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate flex items-center gap-2">
+                    <span className="flex items-center gap-0.5"><Phone className="w-3 h-3"/> {u.phone}</span>
+                    <span className="flex items-center gap-0.5"><MapPin className="w-3 h-3"/> {u.city}</span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">
+                    {u.isVerified ? "Đã xác thực" : "Chưa xác thực"} · {u.hasBusiness ? "Có doanh nghiệp" : "Không có doanh nghiệp"}
+                  </div>
+                </div>
+                <button onClick={() => {
+                  if (confirm(`Xóa thành viên "${u.name}"? Hành động này không thể hoàn tác.`)) {
+                    deleteUser(u.id);
+                    toast.success("Đã xóa thành viên");
                   }
                 }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
                   <Trash2 className="w-4 h-4"/>
