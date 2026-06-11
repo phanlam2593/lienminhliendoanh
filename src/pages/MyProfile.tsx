@@ -1,11 +1,11 @@
 import { useStore } from "@/lib/store";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "@/components/Logo";
-import { LogOut, Shield, User as UserIcon, Plus, Store, Phone, Mail, MapPin, Sparkles } from "lucide-react";
+import { LogOut, Shield, User as UserIcon, Plus, Store, Phone, Mail, MapPin, Sparkles, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function MyProfile() {
-  const { currentUser, session, logout, loginAdmin, businesses, usages } = useStore();
+  const { currentUser, session, logout, loginAdmin, businesses, usages, deleteBusiness } = useStore();
   const nav = useNavigate();
   const myUsages = currentUser ? usages.filter(u => u.userId === currentUser.id).length : 0;
   const myBiz = currentUser ? businesses.find(b => b.ownerId === currentUser.id) : null;
