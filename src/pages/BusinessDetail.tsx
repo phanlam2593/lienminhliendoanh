@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 export default function BusinessDetail() {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
-  const { businesses, reviews, currentUser, redeemOffer, addReview } = useStore();
+  const { businesses, reviews, currentUser, redeemOffer, addReview, deleteBusiness } = useStore();
   const b = businesses.find(x => x.id === id);
   const [stars, setStars] = useState(5);
   const [content, setContent] = useState("");
@@ -18,6 +18,7 @@ export default function BusinessDetail() {
   if (!b) return <div className="p-8 text-center text-sm">Không tìm thấy doanh nghiệp</div>;
 
   const bReviews = reviews.filter(r => r.businessId === b.id);
+  const isOwner = currentUser?.id === b.ownerId;
 
   const handleRedeem = () => {
     if (!currentUser) {
