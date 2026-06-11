@@ -161,6 +161,38 @@ export default function Admin() {
         </div>
       )}
 
+      {tab === "members" && (
+        <div className="space-y-2 pb-4">
+          {users.length === 0 ? <Empty msg="Không có thành viên nào"/> :
+            users.map(u => (
+              <div key={u.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
+                <div className="w-10 h-10 rounded-xl bg-gradient-brand text-white grid place-items-center text-sm font-extrabold shrink-0">
+                  {u.name.charAt(0)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{u.name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate flex items-center gap-2">
+                    <span className="flex items-center gap-0.5"><Phone className="w-3 h-3"/> {u.phone}</span>
+                    <span className="flex items-center gap-0.5"><MapPin className="w-3 h-3"/> {u.city}</span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">
+                    {u.isVerified ? "Đã xác thực" : "Chưa xác thực"} · {u.hasBusiness ? "Có doanh nghiệp" : "Không có doanh nghiệp"}
+                  </div>
+                </div>
+                <button onClick={() => {
+                  if (confirm(`Xóa thành viên "${u.name}"? Hành động này không thể hoàn tác.`)) {
+                    deleteUser(u.id);
+                    toast.success("Đã xóa thành viên");
+                  }
+                }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
+                  <Trash2 className="w-4 h-4"/>
+                </button>
+              </div>
+            ))
+          }
+        </div>
+      )}
+
       {tab === "suggestions" && (
         <div className="space-y-2 pb-4">
           {suggestions.length === 0 ? <Empty msg="Chưa có đề xuất nào từ cộng đồng"/> :
