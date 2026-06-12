@@ -1,186 +1,259 @@
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { ArrowLeft, MapPin, Phone, Star, Tag, Camera, Send, CheckCircle2, Copy, Trash2 } from "lucide-react";
-import { useStore } from "@/lib/store";
-import { BUSINESS_TYPE_LABELS } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Business, CATEGORY_LABEL, Offer, Review } from "@/lib/types";
+import { useAuth } from "@/lib/auth";
+import { StoredImage } from "@/components/StoredImage";
+import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Ticket, Plus, Trash2, Loader2, Camera } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { ACCEPT, uploadImage, validateImage } from "@/lib/upload";
 
 export default function BusinessDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams();
   const nav = useNavigate();
-  const { businesses, reviews, currentUser, redeemOffer, addReview, deleteBusiness } = useStore();
-  const b = businesses.find(x => x.id === id);
-  const [stars, setStars] = useState(5);
+  const { user } = useAuth();
+  const [b, setB] = useState<Business | null>(null);
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [profiles, setProfiles] = useState<Record<string, string>>({});
+  const [rating, setRating] = useState(5);
   const [content, setContent] = useState("");
-  const [code, setCode] = useState<string | null>(null);
+  const [showOffer, setShowOffer] = useState(false);
 
-  if (!b) return <div className="p-8 text-center text-sm">Không tìm thấy doanh nghiệp</div>;
-
-  const bReviews = reviews.filter(r => r.businessId === b.id);
-  const isOwner = currentUser?.id === b.ownerId;
-
-  const handleRedeem = () => {
-    if (!currentUser) {
-      toast.error("Vui lòng đăng ký/đăng nhập để nhận ưu đãi");
-      nav("/dang-ky");
-      return;
+  const load = async () => {
+    if (!id) return;
+    const [bz, of, rv] = await Promise.all([
+      supabase.from("businesses").select("*").eq("id", id).maybeSingle(),
+      supabase.from("offers").select("*").eq("business_id", id).order("created_at", { ascending: false }),
+      supabase.from("reviews").select("*").eq("business_id", id).order("created_at", { ascending: false }),
+    ]);
+    setB(bz.data as Business);
+    setOffers((of.data as Offer[]) || []);
+    setReviews((rv.data as Review[]) || []);
+    const uids = Array.from(new Set((rv.data || []).map((r: any) => r.user_id)));
+    if (uids.length) {
+      const { data: ps } = await supabase.from("profiles").select("id, full_name").in("id", uids);
+      const map: Record<string, string> = {};
+      (ps || []).forEach((p: any) => map[p.id] = p.full_name);
+      setProfiles(map);
     }
-    const u = redeemOffer(b.id);
-    setCode(u.code);
   };
 
-  const handleReview = () => {
-    if (!currentUser?.isVerified) {
-      toast.error("Cần xác thực số điện thoại để đánh giá");
-      return;
-    }
-    if (!content.trim()) return toast.error("Vui lòng viết nội dung đánh giá");
-    addReview({ userId: currentUser.id, businessId: b.id, stars, content });
-    setContent(""); setStars(5);
-    toast.success("Cảm ơn bạn đã đánh giá!");
+  useEffect(() => { load(); }, [id]);
+
+  if (!b) return <div className="p-10 text-center text-muted-foreground">Đang tải...</div>;
+  const isOwner = user?.id === b.owner_id;
+  const avgRating = reviews.length ? reviews.reduce((a, r) => a + r.rating, 0) / reviews.length : 0;
+
+  const submitReview = async () => {
+    if (!user) return toast.error("Vui lòng đăng nhập");
+    if (!content.trim()) return toast.error("Nhập nội dung đánh giá");
+    const { error } = await supabase.from("reviews").insert({
+      business_id: b.id, user_id: user.id, rating, content,
+    });
+    if (error) return toast.error(error.message);
+    toast.success("Đã đăng đánh giá");
+    setContent(""); setRating(5); load();
+  };
+
+  const deleteOffer = async (oid: string) => {
+    if (!confirm("Xoá ưu đãi này?")) return;
+    const { error } = await supabase.from("offers").delete().eq("id", oid);
+    if (error) return toast.error(error.message);
+    toast.success("Đã xoá"); load();
   };
 
   return (
     <div>
-      {/* Cover */}
-      <div className="relative h-56">
-        <img src={b.cover} className="w-full h-full object-cover"/>
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent"/>
-        <button onClick={() => nav(-1)}
-          className="absolute top-3 left-3 w-10 h-10 rounded-full bg-background/95 backdrop-blur grid place-items-center shadow-soft">
-          <ArrowLeft className="w-4 h-4"/>
+      <div className="relative">
+        <StoredImage path={b.image_url} className="w-full h-52 object-cover" fallbackClassName="w-full h-52" alt={b.name} />
+        <button onClick={() => nav(-1)} className="absolute top-4 left-4 w-10 h-10 rounded-full bg-background/90 grid place-items-center shadow-soft backdrop-blur">
+          <ArrowLeft className="w-4 h-4" />
         </button>
       </div>
-
-      <div className="px-5 -mt-12 relative">
-        <div className="flex items-end gap-3 mb-3">
-          <img src={b.logo} className="w-20 h-20 rounded-2xl border-4 border-background object-cover shadow-card"/>
-          <div className="pb-1 flex-1 min-w-0">
-            <div className="text-[11px] font-bold text-primary uppercase">{BUSINESS_TYPE_LABELS[b.type]}</div>
-            <h1 className="text-xl font-extrabold leading-tight">{b.name}</h1>
-            <div className="flex items-center gap-1 text-xs mt-0.5">
-              <Star className="w-3.5 h-3.5 fill-warning text-warning"/>
-              <span className="font-bold">{b.rating || "—"}</span>
-              <span className="text-muted-foreground">· {b.reviewCount} đánh giá · {b.usageCount} lượt</span>
-            </div>
+      <div className="px-5 py-4">
+        <div className="flex items-start gap-2">
+          <div className="flex-1">
+            <h1 className="text-xl font-extrabold">{b.name}</h1>
+            <div className="text-xs text-primary font-bold mt-0.5">{CATEGORY_LABEL[b.category]}</div>
           </div>
-          {isOwner && (
-            <button onClick={() => {
-              if (confirm(`Xóa doanh nghiệp "${b.name}"? Hành động này không thể hoàn tác.`)) {
-                deleteBusiness(b.id);
-                toast.success("Đã xóa doanh nghiệp");
-                nav("/");
-              }
-            }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0 mb-1">
-              <Trash2 className="w-4 h-4"/>
-            </button>
+          {reviews.length > 0 && (
+            <div className="flex items-center gap-1 text-warning text-sm">
+              <Star className="w-4 h-4 fill-current" />
+              <span className="font-bold">{avgRating.toFixed(1)}</span>
+              <span className="text-muted-foreground text-xs">({reviews.length})</span>
+            </div>
           )}
         </div>
+        {b.description && <p className="text-sm text-foreground mt-3">{b.description}</p>}
 
-        {/* Offer banner */}
-        <div className="rounded-2xl bg-gradient-brand text-white p-4 shadow-brand">
-          <div className="flex items-start gap-2">
-            <Tag className="w-5 h-5 shrink-0 mt-0.5"/>
-            <div>
-              <div className="text-[11px] uppercase font-bold opacity-90">Ưu đãi cộng đồng</div>
-              <div className="font-bold text-sm mt-0.5">{b.offer}</div>
-            </div>
+        <div className="space-y-2 mt-4 text-sm">
+          {b.address && <Info icon={MapPin}>{b.address}</Info>}
+          {b.phone && <Info icon={Phone}><a href={`tel:${b.phone}`} className="text-primary">{b.phone}</a></Info>}
+          {b.website && <Info icon={Globe}><a href={b.website} target="_blank" rel="noopener noreferrer" className="text-primary">{b.website}</a></Info>}
+          {b.facebook && <Info icon={Facebook}><a href={b.facebook} target="_blank" rel="noopener noreferrer" className="text-primary">Facebook</a></Info>}
+          {b.zalo && <Info icon={MessageCircle}>Zalo: {b.zalo}</Info>}
+        </div>
+
+        {/* Offers */}
+        <div className="mt-6">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-extrabold">Ưu đãi ({offers.length})</h2>
+            {isOwner && b.status === "approved" && (
+              <button onClick={() => setShowOffer(true)} className="text-xs font-bold text-primary flex items-center gap-1">
+                <Plus className="w-3.5 h-3.5" />Thêm
+              </button>
+            )}
           </div>
-        </div>
-
-        {/* Info */}
-        <div className="mt-4 space-y-2.5">
-          <a href={`tel:${b.phone}`} className="flex items-center gap-3 p-3 rounded-2xl bg-card border border-border">
-            <Phone className="w-4 h-4 text-primary"/>
-            <span className="text-sm font-semibold">{b.phone}</span>
-          </a>
-          <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
-             target="_blank" rel="noreferrer"
-             className="flex items-center gap-3 p-3 rounded-2xl bg-card border border-border">
-            <MapPin className="w-4 h-4 text-secondary"/>
-            <div className="flex-1">
-              <div className="text-sm font-semibold leading-tight">{b.address}</div>
-              <div className="text-[11px] text-secondary font-bold mt-0.5">Mở Google Maps →</div>
+          {offers.length === 0 ? (
+            <div className="p-4 text-center text-xs text-muted-foreground bg-muted/40 rounded-xl">Chưa có ưu đãi</div>
+          ) : (
+            <div className="space-y-2">
+              {offers.map(o => (
+                <div key={o.id} className="p-3 bg-card rounded-xl border border-border/60 shadow-soft">
+                  <div className="flex items-start gap-2">
+                    <div className="w-9 h-9 rounded-lg bg-gradient-brand grid place-items-center text-white shrink-0">
+                      <Ticket className="w-4 h-4" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-bold text-sm">{o.title}</div>
+                      {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
+                      {(o.start_date || o.end_date) && (
+                        <div className="text-[10px] text-muted-foreground mt-1">
+                          {o.start_date && new Date(o.start_date).toLocaleDateString("vi-VN")}
+                          {o.start_date && o.end_date && " → "}
+                          {o.end_date && new Date(o.end_date).toLocaleDateString("vi-VN")}
+                        </div>
+                      )}
+                    </div>
+                    {isOwner && (
+                      <button onClick={() => deleteOffer(o.id)} className="text-destructive p-1">
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          </a>
+          )}
         </div>
-
-        <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{b.description}</p>
 
         {/* Reviews */}
         <div className="mt-6">
-          <h2 className="font-extrabold text-base mb-3">Đánh giá ({bReviews.length})</h2>
-          {currentUser?.isVerified ? (
-            <div className="p-3 rounded-2xl bg-card border border-border mb-3">
-              <div className="flex gap-1 mb-2">
-                {[1,2,3,4,5].map(s => (
-                  <button key={s} onClick={() => setStars(s)}>
-                    <Star className={cn("w-6 h-6", s <= stars ? "fill-warning text-warning" : "text-muted-foreground/40")}/>
+          <h2 className="font-extrabold mb-2">Đánh giá ({reviews.length})</h2>
+          {user ? (
+            <div className="p-3 bg-card rounded-xl border border-border/60 shadow-soft mb-3">
+              <div className="flex items-center gap-1 mb-2">
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button key={n} onClick={() => setRating(n)} type="button">
+                    <Star className={`w-5 h-5 ${n <= rating ? "fill-warning text-warning" : "text-muted-foreground"}`} />
                   </button>
                 ))}
               </div>
-              <div className="flex gap-2">
-                <input value={content} onChange={e => setContent(e.target.value)}
-                  placeholder="Chia sẻ trải nghiệm..."
-                  className="flex-1 px-3 py-2 rounded-xl bg-background border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"/>
-                <button className="w-10 h-10 rounded-xl bg-muted grid place-items-center text-muted-foreground" type="button">
-                  <Camera className="w-4 h-4"/>
-                </button>
-                <button onClick={handleReview} className="w-10 h-10 rounded-xl bg-gradient-brand text-white grid place-items-center">
-                  <Send className="w-4 h-4"/>
-                </button>
-              </div>
+              <textarea value={content} onChange={e => setContent(e.target.value)} rows={2} placeholder="Chia sẻ cảm nhận..."
+                className="w-full p-2 rounded-lg bg-background border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
+              <button onClick={submitReview} className="w-full mt-2 bg-gradient-brand text-white text-sm font-bold py-2 rounded-lg">Đăng đánh giá</button>
             </div>
           ) : (
-            <Link to="/dang-ky" className="block text-center text-xs font-semibold text-primary p-3 rounded-2xl bg-accent mb-3">
-              Đăng ký & xác thực để đánh giá
+            <Link to="/auth/login" className="block p-3 text-xs text-center text-muted-foreground bg-muted/40 rounded-xl mb-3">
+              Đăng nhập để viết đánh giá
             </Link>
           )}
-          <div className="space-y-2.5">
-            {bReviews.map(r => (
-              <div key={r.id} className="p-3 rounded-2xl bg-card border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="font-bold text-sm">{r.userName}</div>
-                  <div className="flex gap-0.5">
-                    {[1,2,3,4,5].map(s => <Star key={s} className={cn("w-3 h-3", s <= r.stars ? "fill-warning text-warning" : "text-muted-foreground/30")}/>)}
+          <div className="space-y-2">
+            {reviews.map(r => (
+              <div key={r.id} className="p-3 bg-card rounded-xl border border-border/60">
+                <div className="flex items-center justify-between">
+                  <div className="font-bold text-xs">{profiles[r.user_id] || "Ẩn danh"}</div>
+                  <div className="flex items-center gap-0.5 text-warning">
+                    {[...Array(r.rating)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
                   </div>
                 </div>
-                <p className="text-xs text-muted-foreground">{r.content}</p>
+                {r.content && <p className="text-sm mt-1">{r.content}</p>}
+                <div className="text-[10px] text-muted-foreground mt-1">{new Date(r.created_at).toLocaleString("vi-VN")}</div>
               </div>
             ))}
-            {bReviews.length === 0 && <div className="text-center text-xs text-muted-foreground py-4">Chưa có đánh giá nào</div>}
           </div>
         </div>
       </div>
 
-      {/* Sticky CTA */}
-      <div className="sticky bottom-20 mx-5 mt-6 z-30">
-        <button onClick={handleRedeem}
-          className="w-full bg-gradient-brand text-white font-extrabold py-4 rounded-2xl shadow-brand active:scale-95 transition text-base flex items-center justify-center gap-2">
-          <Tag className="w-5 h-5"/> NHẬN ƯU ĐÃI
-        </button>
-      </div>
+      {showOffer && <OfferModal businessId={b.id} onClose={() => { setShowOffer(false); load(); }} />}
+    </div>
+  );
+}
 
-      {/* Code modal */}
-      {code && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur grid place-items-center px-5" onClick={() => setCode(null)}>
-          <div onClick={e => e.stopPropagation()} className="w-full max-w-sm bg-card rounded-3xl p-6 text-center animate-float-up shadow-float">
-            <div className="w-16 h-16 rounded-full bg-gradient-brand text-white mx-auto grid place-items-center animate-pulse-ring">
-              <CheckCircle2 className="w-8 h-8"/>
-            </div>
-            <div className="font-extrabold text-lg mt-3">Mã ưu đãi của bạn</div>
-            <div className="text-xs text-muted-foreground">Trình mã này cho nhân viên {b.name}</div>
-            <div className="my-4 p-4 rounded-2xl border-2 border-dashed border-primary/40 bg-accent">
-              <div className="text-3xl font-extrabold tracking-widest text-gradient-brand font-mono">{code}</div>
-            </div>
-            <button onClick={() => { navigator.clipboard.writeText(code); toast.success("Đã copy mã"); }}
-              className="w-full py-2.5 rounded-xl bg-muted font-semibold text-sm flex items-center justify-center gap-2 mb-2">
-              <Copy className="w-4 h-4"/> Sao chép mã
-            </button>
-            <button onClick={() => setCode(null)} className="w-full py-2.5 rounded-xl bg-gradient-brand text-white font-bold text-sm">Đóng</button>
-          </div>
+function Info({ icon: Icon, children }: any) {
+  return (
+    <div className="flex items-start gap-2 text-sm">
+      <Icon className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+      <div className="flex-1">{children}</div>
+    </div>
+  );
+}
+
+function OfferModal({ businessId, onClose }: { businessId: string; onClose: () => void }) {
+  const [f, setF] = useState({ title: "", description: "", start_date: "", end_date: "" });
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    if (!f.title) return toast.error("Nhập tiêu đề");
+    setBusy(true);
+    try {
+      let image_url: string | null = null;
+      if (file) image_url = await uploadImage(file, "offers");
+      const { error } = await supabase.from("offers").insert({
+        business_id: businessId, title: f.title, description: f.description,
+        start_date: f.start_date || null, end_date: f.end_date || null, image_url,
+      });
+      if (error) throw error;
+      toast.success("Đã tạo ưu đãi"); onClose();
+    } catch (e: any) { toast.error(e.message); }
+    finally { setBusy(false); }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 grid place-items-end" onClick={onClose}>
+      <div onClick={e => e.stopPropagation()} className="w-full max-w-md bg-card rounded-t-3xl p-5 space-y-3 max-h-[90vh] overflow-y-auto">
+        <h2 className="text-lg font-extrabold">Thêm ưu đãi</h2>
+        <Fld label="Tiêu đề *" value={f.title} onChange={v => setF({ ...f, title: v })} />
+        <Fld label="Mô tả" value={f.description} onChange={v => setF({ ...f, description: v })} textarea />
+        <div className="grid grid-cols-2 gap-2">
+          <Fld label="Ngày bắt đầu" type="date" value={f.start_date} onChange={v => setF({ ...f, start_date: v })} />
+          <Fld label="Ngày kết thúc" type="date" value={f.end_date} onChange={v => setF({ ...f, end_date: v })} />
         </div>
+        <div>
+          <div className="text-xs font-bold uppercase text-muted-foreground mb-1.5">Hình ảnh</div>
+          <label className="block w-full h-24 rounded-xl border-2 border-dashed border-border bg-background flex items-center justify-center cursor-pointer overflow-hidden">
+            {preview ? <img src={preview} className="w-full h-full object-cover" /> : <Camera className="w-5 h-5 text-muted-foreground" />}
+            <input type="file" accept={ACCEPT} className="hidden" onChange={e => {
+              const fl = e.target.files?.[0]; if (!fl) return;
+              const err = validateImage(fl); if (err) return toast.error(err);
+              setFile(fl); setPreview(URL.createObjectURL(fl));
+            }} />
+          </label>
+        </div>
+        <div className="flex gap-2 pt-2">
+          <button onClick={onClose} className="flex-1 py-3 rounded-xl bg-muted text-sm font-bold">Huỷ</button>
+          <button onClick={submit} disabled={busy} className="flex-1 py-3 rounded-xl bg-gradient-brand text-white text-sm font-bold flex items-center justify-center gap-1">
+            {busy && <Loader2 className="w-4 h-4 animate-spin" />}Tạo
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Fld({ label, value, onChange, type = "text", textarea }: any) {
+  return (
+    <div>
+      <div className="text-xs font-bold uppercase text-muted-foreground mb-1.5">{label}</div>
+      {textarea ? (
+        <textarea value={value} onChange={e => onChange(e.target.value)} rows={2}
+          className="w-full px-3 py-2 rounded-xl bg-background border border-border text-sm" />
+      ) : (
+        <input type={type} value={value} onChange={e => onChange(e.target.value)}
+          className="w-full px-3 py-2 rounded-xl bg-background border border-border text-sm" />
       )}
     </div>
   );

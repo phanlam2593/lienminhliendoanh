@@ -1,260 +1,213 @@
-import { useState } from "react";
-import { useStore } from "@/lib/store";
-import { Users, Store, Gift, Star, Check, X, BarChart3, Sparkles, Trash2, Phone, MapPin } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { BUSINESS_TYPE_LABELS } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { adminCall, clearAdmin } from "@/lib/admin";
+import { Business, CATEGORY_LABEL, Offer, Profile, Review, Suggestion } from "@/lib/types";
+import { Logo } from "@/components/Logo";
+import { StoredImage } from "@/components/StoredImage";
+import { LogOut, Users, Store, Ticket, Star, Lightbulb, Trash2, Check, X, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+type Tab = "dashboard" | "members" | "businesses" | "offers" | "reviews" | "suggestions";
+
 export default function Admin() {
-  const { businesses, users, usages, reviews, suggestions, approveBusiness, rejectBusiness, deleteBusiness, deleteUser, loginAdmin, session } = useStore();
-  const [tab, setTab] = useState<"overview" | "pending" | "reviews" | "stats" | "suggestions" | "businesses" | "members">("overview");
+  const nav = useNavigate();
+  const [tab, setTab] = useState<Tab>("dashboard");
+  const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0, reviews: 0, pendingSuggestions: 0 });
+  const [members, setMembers] = useState<Profile[]>([]);
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [busy, setBusy] = useState(false);
 
-  if (!session.isAdmin) {
-    return (
-      <div className="px-5 pt-10 text-center">
-        <Sparkles className="w-12 h-12 mx-auto text-primary mb-3"/>
-        <h1 className="text-xl font-extrabold mb-1">Khu vực Admin</h1>
-        <p className="text-sm text-muted-foreground mb-5">Đăng nhập admin để quản lý cộng đồng</p>
-        <button onClick={() => { loginAdmin(); toast.success("Đã vào chế độ Admin"); }}
-          className="px-6 py-3 rounded-2xl bg-gradient-brand text-white font-bold shadow-brand">
-          Đăng nhập Admin (demo)
-        </button>
-      </div>
-    );
-  }
+  const loadStats = async () => { try { setStats(await adminCall("stats")); } catch (e: any) { toast.error(e.message); } };
 
-  const pending = businesses.filter(b => b.status === "pending");
-  const approved = businesses.filter(b => b.status === "approved");
-  const stats = approved.map(b => ({ b, count: usages.filter(u => u.businessId === b.id).length }))
-    .sort((a, b) => b.count - a.count);
-  const recentReviews = [...reviews].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 20);
+  const loadTab = async (t: Tab) => {
+    setBusy(true);
+    try {
+      if (t === "members") setMembers(await adminCall("list", { table: "profiles" }));
+      else if (t === "businesses") setBusinesses(await adminCall("list", { table: "businesses" }));
+      else if (t === "offers") setOffers(await adminCall("list", { table: "offers" }));
+      else if (t === "reviews") setReviews(await adminCall("list", { table: "reviews" }));
+      else if (t === "suggestions") setSuggestions(await adminCall("list", { table: "business_suggestions" }));
+    } catch (e: any) { toast.error(e.message); }
+    setBusy(false);
+  };
+
+  useEffect(() => { loadStats(); }, []);
+  useEffect(() => { if (tab !== "dashboard") loadTab(tab); }, [tab]);
+
+  const del = async (table: string, id: string, label: string) => {
+    if (!confirm(`Xoá ${label} này?`)) return;
+    try { await adminCall("delete", { table, id }); toast.success("Đã xoá"); loadTab(tab); loadStats(); }
+    catch (e: any) { toast.error(e.message); }
+  };
+  const updateStatus = async (table: string, id: string, status: string) => {
+    try { await adminCall("update", { table, id, values: { status } }); toast.success("Đã cập nhật"); loadTab(tab); loadStats(); }
+    catch (e: any) { toast.error(e.message); }
+  };
+  const approveSuggestion = async (id: string) => {
+    try { await adminCall("approve_suggestion", { id }); toast.success("Đã duyệt thành doanh nghiệp"); loadTab(tab); loadStats(); }
+    catch (e: any) { toast.error(e.message); }
+  };
+  const deleteUser = async (id: string) => {
+    if (!confirm("Xoá thành viên này? (Tài khoản đăng nhập cũng bị xoá)")) return;
+    try { await adminCall("delete_user", { id }); toast.success("Đã xoá"); loadTab(tab); loadStats(); }
+    catch (e: any) { toast.error(e.message); }
+  };
+
+  const tabs: { id: Tab; label: string; icon: any }[] = [
+    { id: "dashboard", label: "Tổng quan", icon: Star },
+    { id: "members", label: "Thành viên", icon: Users },
+    { id: "businesses", label: "Doanh nghiệp", icon: Store },
+    { id: "offers", label: "Ưu đãi", icon: Ticket },
+    { id: "reviews", label: "Đánh giá", icon: Star },
+    { id: "suggestions", label: "Đề xuất", icon: Lightbulb },
+  ];
 
   return (
-    <div className="px-4 pt-4">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="w-10 h-10 rounded-2xl bg-gradient-brand text-white grid place-items-center">
-          <BarChart3 className="w-5 h-5"/>
+    <div className="mx-auto max-w-md min-h-screen bg-background shadow-float">
+      <header className="sticky top-0 z-30 bg-card border-b border-border px-4 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2"><Logo size={32} /><span className="text-sm font-extrabold">Admin</span></div>
+        <button onClick={() => { clearAdmin(); nav("/"); }} className="text-destructive p-2"><LogOut className="w-4 h-4" /></button>
+      </header>
+
+      <div className="overflow-x-auto scrollbar-hide border-b border-border bg-card">
+        <div className="flex gap-1 px-3 py-2 min-w-max">
+          {tabs.map(t => (
+            <button key={t.id} onClick={() => setTab(t.id)}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold ${tab === t.id ? "bg-gradient-brand text-white" : "bg-muted text-muted-foreground"}`}>
+              <t.icon className="w-3.5 h-3.5" />{t.label}
+            </button>
+          ))}
         </div>
-        <div>
-          <h1 className="font-extrabold text-lg leading-tight">Admin Dashboard</h1>
-          <div className="text-[11px] text-muted-foreground">Quản lý cộng đồng Liên Minh</div>
-        </div>
       </div>
 
-      {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-2 mb-4">
-        <StatCard icon={Users} label="Thành viên" value={users.length} color="primary"/>
-        <StatCard icon={Store} label="Doanh nghiệp" value={approved.length} color="secondary"/>
-        <StatCard icon={Gift} label="Lượt ưu đãi" value={usages.length} color="primary"/>
-        <StatCard icon={Star} label="Đánh giá" value={reviews.length} color="secondary"/>
-      </div>
+      <div className="p-4">
+        {busy && <div className="text-center py-10"><Loader2 className="w-6 h-6 animate-spin mx-auto text-primary" /></div>}
 
-      {/* Tabs */}
-      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide -mx-4 px-4 mb-3 pb-1">
-        {[
-          { k: "overview", label: "Tổng quan" },
-          { k: "pending", label: `Chờ duyệt (${pending.length})` },
-          { k: "businesses", label: `Doanh nghiệp (${approved.length})` },
-          { k: "members", label: `Thành viên (${users.length})` },
-          { k: "reviews", label: "Đánh giá" },
-          { k: "stats", label: "Thống kê" },
-          { k: "suggestions", label: `Đề xuất (${suggestions.length})` },
-        ].map(t => (
-          <button key={t.k} onClick={() => setTab(t.k as any)}
-            className={cn("shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold border whitespace-nowrap",
-              tab === t.k ? "bg-gradient-brand text-white border-transparent" : "bg-card border-border text-muted-foreground")}>
-            {t.label}
-          </button>
-        ))}
-      </div>
+        {tab === "dashboard" && (
+          <div className="grid grid-cols-2 gap-3">
+            <StatCard icon={Users} label="Thành viên" n={stats.members} />
+            <StatCard icon={Store} label="Doanh nghiệp" n={stats.businesses} />
+            <StatCard icon={Ticket} label="Ưu đãi" n={stats.offers} />
+            <StatCard icon={Star} label="Đánh giá" n={stats.reviews} />
+            <div className="col-span-2">
+              <StatCard icon={Lightbulb} label="Đề xuất chờ duyệt" n={stats.pendingSuggestions} highlight />
+            </div>
+          </div>
+        )}
 
-      {tab === "overview" && (
-        <div className="space-y-3 pb-4">
-          <Section title="Doanh nghiệp đang chờ duyệt">
-            {pending.length === 0 ? <Empty msg="Không có doanh nghiệp nào chờ duyệt"/> :
-              pending.slice(0, 3).map(b => <PendingRow key={b.id} b={b} onApprove={approveBusiness} onReject={rejectBusiness}/>)
-            }
-          </Section>
-          <Section title="Mã ưu đãi gần đây">
-            {usages.slice(0, 5).map(u => (
-              <div key={u.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                <div>
-                  <div className="text-xs font-bold font-mono text-primary">{u.code}</div>
-                  <div className="text-[11px] text-muted-foreground">{u.userName} · {u.businessName}</div>
+        {tab === "members" && !busy && (
+          <div className="space-y-2">
+            {members.map(m => (
+              <Row key={m.id}>
+                <div className="w-9 h-9 rounded-full bg-gradient-brand text-white text-sm font-bold grid place-items-center">{(m.full_name || "?").slice(0, 1)}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{m.full_name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">{m.phone || "Chưa có SĐT"}</div>
                 </div>
-                <div className="text-[10px] text-muted-foreground">{new Date(u.createdAt).toLocaleDateString("vi-VN")}</div>
-              </div>
+                <DelBtn onClick={() => deleteUser(m.id)} />
+              </Row>
             ))}
-          </Section>
-        </div>
-      )}
+          </div>
+        )}
 
-      {tab === "pending" && (
-        <div className="space-y-3 pb-4">
-          {pending.length === 0 ? <Empty msg="Không có doanh nghiệp nào chờ duyệt"/> :
-            pending.map(b => <PendingRow key={b.id} b={b} onApprove={approveBusiness} onReject={rejectBusiness}/>)
-          }
-        </div>
-      )}
-
-      {tab === "reviews" && (
-        <div className="space-y-2 pb-4">
-          {recentReviews.map(r => {
-            const biz = businesses.find(b => b.id === r.businessId);
-            return (
-              <div key={r.id} className="p-3 rounded-2xl bg-card border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="font-bold text-sm">{r.userName} <span className="text-muted-foreground font-normal">→ {biz?.name}</span></div>
-                  <div className="flex gap-0.5">
-                    {[1,2,3,4,5].map(s => <Star key={s} className={cn("w-3 h-3", s <= r.stars ? "fill-warning text-warning" : "text-muted-foreground/30")}/>)}
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground">{r.content}</p>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {tab === "stats" && (
-        <div className="space-y-2 pb-4">
-          <Section title="Lượt sử dụng theo doanh nghiệp">
-            {stats.map(({ b, count }) => {
-              const max = stats[0]?.count || 1;
-              return (
-                <div key={b.id} className="py-2">
-                  <div className="flex items-center justify-between text-xs font-semibold mb-1">
-                    <span>{b.name}</span>
-                    <span className="text-primary font-bold">{count}</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-muted overflow-hidden">
-                    <div className="h-full bg-gradient-brand" style={{ width: `${(count / max) * 100}%` }}/>
-                  </div>
-                </div>
-              );
-            })}
-          </Section>
-        </div>
-      )}
-
-      {tab === "businesses" && (
-        <div className="space-y-2 pb-4">
-          {approved.length === 0 ? <Empty msg="Không có doanh nghiệp nào"/> :
-            approved.map(b => (
-              <div key={b.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
-                <img src={b.logo} className="w-12 h-12 rounded-xl object-cover shrink-0"/>
+        {tab === "businesses" && !busy && (
+          <div className="space-y-2">
+            {businesses.map(b => (
+              <Row key={b.id}>
+                <StoredImage path={b.image_url} className="w-12 h-12 rounded-lg object-cover" fallbackClassName="w-12 h-12 rounded-lg" />
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-sm truncate">{b.name}</div>
-                  <div className="text-[11px] text-muted-foreground truncate">{BUSINESS_TYPE_LABELS[b.type]} · {b.city} · {b.reviewCount} đánh giá · {b.usageCount} ưu đãi</div>
+                  <div className="text-[11px] text-muted-foreground truncate">{CATEGORY_LABEL[b.category]} • <span className={b.status === "approved" ? "text-success" : b.status === "rejected" ? "text-destructive" : "text-warning"}>{b.status}</span></div>
                 </div>
-                <button onClick={() => {
-                  if (confirm(`Xóa doanh nghiệp "${b.name}"? Hành động này không thể hoàn tác.`)) {
-                    deleteBusiness(b.id);
-                    toast.success("Đã xóa doanh nghiệp");
-                  }
-                }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
-                  <Trash2 className="w-4 h-4"/>
-                </button>
-              </div>
-            ))
-          }
-        </div>
-      )}
+                {b.status === "pending" && (
+                  <>
+                    <button onClick={() => updateStatus("businesses", b.id, "approved")} className="p-1.5 rounded-lg bg-success/10 text-success"><Check className="w-3.5 h-3.5" /></button>
+                    <button onClick={() => updateStatus("businesses", b.id, "rejected")} className="p-1.5 rounded-lg bg-destructive/10 text-destructive"><X className="w-3.5 h-3.5" /></button>
+                  </>
+                )}
+                <DelBtn onClick={() => del("businesses", b.id, "doanh nghiệp")} />
+              </Row>
+            ))}
+          </div>
+        )}
 
-      {tab === "members" && (
-        <div className="space-y-2 pb-4">
-          {users.length === 0 ? <Empty msg="Không có thành viên nào"/> :
-            users.map(u => (
-              <div key={u.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border">
-                <div className="w-10 h-10 rounded-xl bg-gradient-brand text-white grid place-items-center text-sm font-extrabold shrink-0">
-                  {u.name.charAt(0)}
+        {tab === "offers" && !busy && (
+          <div className="space-y-2">
+            {offers.map(o => (
+              <Row key={o.id}>
+                <div className="w-9 h-9 rounded-lg bg-gradient-brand text-white grid place-items-center"><Ticket className="w-4 h-4" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm truncate">{o.title}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">{new Date(o.created_at).toLocaleDateString("vi-VN")}</div>
+                </div>
+                <DelBtn onClick={() => del("offers", o.id, "ưu đãi")} />
+              </Row>
+            ))}
+          </div>
+        )}
+
+        {tab === "reviews" && !busy && (
+          <div className="space-y-2">
+            {reviews.map(r => (
+              <Row key={r.id}>
+                <div className="flex flex-col items-center w-9">
+                  <div className="text-warning text-sm font-bold">{r.rating}★</div>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm truncate">{u.name}</div>
-                  <div className="text-[11px] text-muted-foreground truncate flex items-center gap-2">
-                    <span className="flex items-center gap-0.5"><Phone className="w-3 h-3"/> {u.phone}</span>
-                    <span className="flex items-center gap-0.5"><MapPin className="w-3 h-3"/> {u.city}</span>
-                  </div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">
-                    {u.isVerified ? "Đã xác thực" : "Chưa xác thực"} · {u.hasBusiness ? "Có doanh nghiệp" : "Không có doanh nghiệp"}
+                  <div className="text-xs line-clamp-2">{r.content || "—"}</div>
+                  <div className="text-[10px] text-muted-foreground">{new Date(r.created_at).toLocaleDateString("vi-VN")}</div>
+                </div>
+                <DelBtn onClick={() => del("reviews", r.id, "đánh giá")} />
+              </Row>
+            ))}
+          </div>
+        )}
+
+        {tab === "suggestions" && !busy && (
+          <div className="space-y-2">
+            {suggestions.map(s => (
+              <div key={s.id} className="p-3 bg-card rounded-xl border border-border/60 shadow-soft">
+                <div className="flex gap-2">
+                  <StoredImage path={s.image_url} className="w-14 h-14 rounded-lg object-cover" fallbackClassName="w-14 h-14 rounded-lg" />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-sm">{s.name}</div>
+                    <div className="text-[11px] text-muted-foreground">{CATEGORY_LABEL[s.category]}</div>
+                    <div className={`text-[10px] font-bold uppercase ${s.status === "approved" ? "text-success" : s.status === "rejected" ? "text-destructive" : "text-warning"}`}>{s.status}</div>
                   </div>
                 </div>
-                <button onClick={() => {
-                  if (confirm(`Xóa thành viên "${u.name}"? Hành động này không thể hoàn tác.`)) {
-                    deleteUser(u.id);
-                    toast.success("Đã xóa thành viên");
-                  }
-                }} className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center shrink-0">
-                  <Trash2 className="w-4 h-4"/>
-                </button>
+                {s.description && <div className="text-xs text-muted-foreground mt-2">{s.description}</div>}
+                {s.contact_info && <div className="text-xs mt-1">📞 {s.contact_info}</div>}
+                {s.status === "pending" && (
+                  <div className="flex gap-2 mt-3">
+                    <button onClick={() => approveSuggestion(s.id)} className="flex-1 py-2 rounded-lg bg-success/10 text-success font-bold text-xs">Duyệt</button>
+                    <button onClick={() => updateStatus("business_suggestions", s.id, "rejected")} className="flex-1 py-2 rounded-lg bg-destructive/10 text-destructive font-bold text-xs">Từ chối</button>
+                    <button onClick={() => del("business_suggestions", s.id, "đề xuất")} className="p-2 rounded-lg bg-muted"><Trash2 className="w-3.5 h-3.5" /></button>
+                  </div>
+                )}
               </div>
-            ))
-          }
-        </div>
-      )}
-
-      {tab === "suggestions" && (
-        <div className="space-y-2 pb-4">
-          {suggestions.length === 0 ? <Empty msg="Chưa có đề xuất nào từ cộng đồng"/> :
-            suggestions.map(s => (
-              <div key={s.id} className="p-3 rounded-2xl bg-card border border-border">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="font-bold text-sm">{s.name}</div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent text-accent-foreground">{BUSINESS_TYPE_LABELS[s.type]}</span>
-                </div>
-                <div className="text-xs text-muted-foreground">{s.address} · {s.phone}</div>
-                {s.facebook && <div className="text-[11px] text-secondary">{s.facebook}</div>}
-              </div>
-            ))
-          }
-        </div>
-      )}
-    </div>
-  );
-}
-
-function StatCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: number; color: "primary" | "secondary" }) {
-  return (
-    <div className="p-3 rounded-2xl bg-card border border-border shadow-soft">
-      <div className={cn("w-8 h-8 rounded-lg grid place-items-center mb-1.5 text-white",
-        color === "primary" ? "bg-gradient-brand" : "bg-secondary")}>
-        <Icon className="w-4 h-4"/>
+            ))}
+          </div>
+        )}
       </div>
-      <div className="text-xl font-extrabold">{value}</div>
-      <div className="text-[10px] uppercase tracking-wide text-muted-foreground font-bold">{label}</div>
     </div>
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function StatCard({ icon: Icon, label, n, highlight }: any) {
   return (
-    <div className="p-3.5 rounded-2xl bg-card border border-border">
-      <div className="font-bold text-sm mb-2">{title}</div>
-      {children}
+    <div className={`p-4 rounded-2xl border ${highlight ? "bg-gradient-brand text-white border-transparent" : "bg-card border-border/60"}`}>
+      <Icon className={`w-5 h-5 ${highlight ? "text-white" : "text-primary"}`} />
+      <div className="text-2xl font-extrabold mt-2">{n}</div>
+      <div className={`text-[11px] font-bold uppercase ${highlight ? "text-white/85" : "text-muted-foreground"}`}>{label}</div>
     </div>
   );
 }
-
-function Empty({ msg }: { msg: string }) {
-  return <div className="text-center text-xs text-muted-foreground py-6">{msg}</div>;
+function Row({ children }: any) {
+  return <div className="flex items-center gap-3 p-2.5 bg-card rounded-xl border border-border/60">{children}</div>;
 }
-
-function PendingRow({ b, onApprove, onReject }: any) {
-  return (
-    <div className="flex items-center gap-3 p-3 rounded-xl bg-background border border-border">
-      <img src={b.logo} className="w-12 h-12 rounded-xl object-cover"/>
-      <div className="flex-1 min-w-0">
-        <div className="font-bold text-sm truncate">{b.name}</div>
-        <div className="text-[11px] text-muted-foreground truncate">{BUSINESS_TYPE_LABELS[b.type]} · {b.city}</div>
-      </div>
-      <button onClick={() => { onApprove(b.id); toast.success("Đã duyệt"); }}
-        className="w-9 h-9 rounded-xl bg-primary text-white grid place-items-center">
-        <Check className="w-4 h-4"/>
-      </button>
-      <button onClick={() => { onReject(b.id); toast.success("Đã từ chối"); }}
-        className="w-9 h-9 rounded-xl bg-destructive/10 text-destructive grid place-items-center">
-        <X className="w-4 h-4"/>
-      </button>
-    </div>
-  );
+function DelBtn({ onClick }: any) {
+  return <button onClick={onClick} className="p-1.5 rounded-lg bg-destructive/10 text-destructive"><Trash2 className="w-3.5 h-3.5" /></button>;
 }
