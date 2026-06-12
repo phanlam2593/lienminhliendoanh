@@ -1,75 +1,68 @@
-export type BusinessType = "cafe" | "nhahang" | "spa" | "homestay" | "salon" | "khac";
+export type BizCategory = "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac";
+export type BizStatus = "pending" | "approved" | "rejected";
 
-export const BUSINESS_TYPE_LABELS: Record<BusinessType, string> = {
-  cafe: "Cafe",
-  nhahang: "Nhà hàng",
-  spa: "Spa",
-  homestay: "Homestay",
-  salon: "Tiệm tóc",
-  khac: "Dịch vụ khác",
+export const CATEGORY_LABEL: Record<BizCategory, string> = {
+  an_uong: "Ăn uống",
+  dich_vu: "Dịch vụ",
+  luu_tru: "Lưu trú",
+  du_lich: "Du lịch",
+  khac: "Khác",
 };
 
-export interface User {
+export const CATEGORIES = Object.keys(CATEGORY_LABEL) as BizCategory[];
+
+export interface Profile {
   id: string;
-  name: string;
-  phone: string;
-  email?: string;
-  city: string;
-  isVerified: boolean;
-  hasBusiness: boolean;
-  businessId?: string;
-  status: "pending" | "approved" | "rejected";
+  full_name: string;
+  phone: string | null;
+  avatar_url: string | null;
+  created_at: string;
 }
 
 export interface Business {
   id: string;
-  code: string; // CFMAY
+  owner_id: string | null;
   name: string;
-  type: BusinessType;
-  city: string;
-  address: string;
-  description: string;
-  offer: string;
-  rating: number;
-  reviewCount: number;
-  cover: string;
-  logo: string;
-  phone: string;
-  distanceKm?: number;
-  status: "pending" | "approved" | "rejected";
-  ownerId?: string;
-  usageCount: number;
+  category: BizCategory;
+  description: string | null;
+  address: string | null;
+  phone: string | null;
+  website: string | null;
+  facebook: string | null;
+  zalo: string | null;
+  image_url: string | null;
+  status: BizStatus;
+  created_at: string;
+}
+
+export interface Offer {
+  id: string;
+  business_id: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  created_at: string;
 }
 
 export interface Review {
   id: string;
-  userId: string;
-  userName: string;
-  businessId: string;
-  stars: number;
-  content: string;
-  images?: string[];
-  createdAt: string;
+  business_id: string;
+  user_id: string;
+  rating: number;
+  content: string | null;
+  created_at: string;
 }
 
-export interface OfferUsage {
+export interface Suggestion {
   id: string;
-  businessId: string;
-  businessCode: string;
-  businessName: string;
-  userId: string;
-  userName: string;
-  code: string;
-  createdAt: string;
-  redeemed: boolean;
-}
-
-export interface SuggestedBusiness {
-  id: string;
+  suggested_by: string | null;
   name: string;
-  type: BusinessType;
-  address: string;
-  phone: string;
-  facebook?: string;
-  createdAt: string;
+  category: BizCategory;
+  description: string | null;
+  contact_info: string | null;
+  image_url: string | null;
+  status: BizStatus;
+  created_at: string;
 }
