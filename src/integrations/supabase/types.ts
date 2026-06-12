@@ -14,7 +14,199 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      business_suggestions: {
+        Row: {
+          category: Database["public"]["Enums"]["biz_category"]
+          contact_info: string | null
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          name: string
+          status: Database["public"]["Enums"]["biz_status"]
+          suggested_by: string | null
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["biz_category"]
+          contact_info?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          status?: Database["public"]["Enums"]["biz_status"]
+          suggested_by?: string | null
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["biz_category"]
+          contact_info?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          status?: Database["public"]["Enums"]["biz_status"]
+          suggested_by?: string | null
+        }
+        Relationships: []
+      }
+      businesses: {
+        Row: {
+          address: string | null
+          category: Database["public"]["Enums"]["biz_category"]
+          created_at: string
+          description: string | null
+          facebook: string | null
+          id: string
+          image_url: string | null
+          name: string
+          owner_id: string | null
+          phone: string | null
+          status: Database["public"]["Enums"]["biz_status"]
+          updated_at: string
+          website: string | null
+          zalo: string | null
+        }
+        Insert: {
+          address?: string | null
+          category?: Database["public"]["Enums"]["biz_category"]
+          created_at?: string
+          description?: string | null
+          facebook?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          owner_id?: string | null
+          phone?: string | null
+          status?: Database["public"]["Enums"]["biz_status"]
+          updated_at?: string
+          website?: string | null
+          zalo?: string | null
+        }
+        Update: {
+          address?: string | null
+          category?: Database["public"]["Enums"]["biz_category"]
+          created_at?: string
+          description?: string | null
+          facebook?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          owner_id?: string | null
+          phone?: string | null
+          status?: Database["public"]["Enums"]["biz_status"]
+          updated_at?: string
+          website?: string | null
+          zalo?: string | null
+        }
+        Relationships: []
+      }
+      offers: {
+        Row: {
+          business_id: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          image_url: string | null
+          start_date: string | null
+          title: string
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          start_date?: string | null
+          title: string
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          image_url?: string | null
+          start_date?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name: string
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          business_id: string
+          content: string | null
+          created_at: string
+          id: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          business_id: string
+          content?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          user_id: string
+        }
+        Update: {
+          business_id?: string
+          content?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +215,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
+      biz_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +343,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      biz_category: ["an_uong", "dich_vu", "luu_tru", "du_lich", "khac"],
+      biz_status: ["pending", "approved", "rejected"],
+    },
   },
 } as const
