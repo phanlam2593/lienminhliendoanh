@@ -4,7 +4,7 @@ import { adminCall, clearAdmin } from "@/lib/admin";
 import { Business, CATEGORY_LABEL, Offer, Profile, Review, Suggestion } from "@/lib/types";
 import { Logo } from "@/components/Logo";
 import { StoredImage } from "@/components/StoredImage";
-import { LogOut, Users, Store, Ticket, Star, Lightbulb, Trash2, Check, X, Loader2 } from "lucide-react";
+import { LogOut, Users, Store, Ticket, Star, Lightbulb, Trash2, Check, X, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 type Tab = "dashboard" | "members" | "businesses" | "offers" | "reviews" | "suggestions";
