@@ -196,8 +196,25 @@ function Info({ icon: Icon, children }: any) {
   );
 }
 
+function OfferCode({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(code); setCopied(true); toast.success("Đã sao chép mã"); setTimeout(() => setCopied(false), 1500); } catch {}
+  };
+  return (
+    <button onClick={copy} type="button"
+      className="mt-2 w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border-2 border-dashed border-primary/50 bg-primary/5 active:scale-[0.98] transition">
+      <div className="text-left">
+        <div className="text-[9px] uppercase font-bold text-muted-foreground tracking-wider">Mã ưu đãi</div>
+        <div className="font-mono font-extrabold text-primary tracking-wider">{code}</div>
+      </div>
+      {copied ? <Check className="w-4 h-4 text-success" /> : <Copy className="w-4 h-4 text-primary" />}
+    </button>
+  );
+}
+
 function OfferModal({ businessId, onClose }: { businessId: string; onClose: () => void }) {
-  const [f, setF] = useState({ title: "", description: "", start_date: "", end_date: "" });
+  const [f, setF] = useState({ title: "", description: "", code: "", start_date: "", end_date: "" });
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [busy, setBusy] = useState(false);
@@ -209,7 +226,7 @@ function OfferModal({ businessId, onClose }: { businessId: string; onClose: () =
       let image_url: string | null = null;
       if (file) image_url = await uploadImage(file, "offers");
       const { error } = await supabase.from("offers").insert({
-        business_id: businessId, title: f.title, description: f.description,
+        business_id: businessId, title: f.title, description: f.description, code: f.code || null,
         start_date: f.start_date || null, end_date: f.end_date || null, image_url,
       });
       if (error) throw error;
