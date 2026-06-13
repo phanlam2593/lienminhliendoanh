@@ -209,10 +209,38 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      public_profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      [_ in never]: never
+      list_member_directory: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          created_at: string
+          full_name: string
+          id: string
+        }[]
+      }
     }
     Enums: {
       biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
