@@ -46,6 +46,9 @@ export default function Admin() {
     try { await adminCall("update", { table, id, values: { status } }); toast.success("Đã cập nhật"); loadTab(tab); loadStats(); }
     catch (e: any) { toast.error(e.message); }
   };
+  const toggleFeatured = async (id: string, featured: boolean) => {
+    try { await adminCall("update", { table: "businesses", id, values: { featured } }); toast.success(featured ? "Đã đánh dấu nổi bật" : "Đã bỏ nổi bật"); loadTab(tab); }
+    catch (e: any) { toast.error(e.message); }
   const approveSuggestion = async (id: string) => {
     try { await adminCall("approve_suggestion", { id }); toast.success("Đã duyệt thành doanh nghiệp"); loadTab(tab); loadStats(); }
     catch (e: any) { toast.error(e.message); }
