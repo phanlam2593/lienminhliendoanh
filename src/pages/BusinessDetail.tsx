@@ -242,6 +242,7 @@ function OfferModal({ businessId, onClose }: { businessId: string; onClose: () =
         <Fld label="Tiêu đề *" value={f.title} onChange={v => setF({ ...f, title: v })} />
         <Fld label="Mô tả" value={f.description} onChange={v => setF({ ...f, description: v })} textarea />
         <Fld label="Mã ưu đãi (vd: SALE20)" value={f.code} onChange={v => setF({ ...f, code: v.toUpperCase() })} />
+        <div className="grid grid-cols-2 gap-2">
           <Fld label="Ngày bắt đầu" type="date" value={f.start_date} onChange={v => setF({ ...f, start_date: v })} />
           <Fld label="Ngày kết thúc" type="date" value={f.end_date} onChange={v => setF({ ...f, end_date: v })} />
         </div>
