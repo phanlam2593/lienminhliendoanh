@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/lib/types";
-import { Users, Phone } from "lucide-react";
+import { Users } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 
 export default function Members() {
