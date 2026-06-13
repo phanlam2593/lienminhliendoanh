@@ -232,15 +232,7 @@ export type Database = {
       }
     }
     Functions: {
-      list_member_directory: {
-        Args: never
-        Returns: {
-          avatar_url: string
-          created_at: string
-          full_name: string
-          id: string
-        }[]
-      }
+      [_ in never]: never
     }
     Enums: {
       biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
