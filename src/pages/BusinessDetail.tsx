@@ -72,6 +72,11 @@ export default function BusinessDetail() {
         </button>
       </div>
       <div className="px-5 py-4">
+        {b.featured && (
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-gradient-brand text-white rounded-full shadow-brand mb-2">
+            <Sparkles className="w-3 h-3" />Nổi bật cộng đồng
+          </div>
+        )}
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <h1 className="text-xl font-extrabold">{b.name}</h1>
