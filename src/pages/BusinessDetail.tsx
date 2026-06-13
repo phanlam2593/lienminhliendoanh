@@ -120,7 +120,7 @@ export default function BusinessDetail() {
                     <div className="w-9 h-9 rounded-lg bg-gradient-brand grid place-items-center text-white shrink-0">
                       <Ticket className="w-4 h-4" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="font-bold text-sm">{o.title}</div>
                       {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
                       {(o.start_date || o.end_date) && (
@@ -130,6 +130,7 @@ export default function BusinessDetail() {
                           {o.end_date && new Date(o.end_date).toLocaleDateString("vi-VN")}
                         </div>
                       )}
+                      {o.code && <OfferCode code={o.code} />}
                     </div>
                     {isOwner && (
                       <button onClick={() => deleteOffer(o.id)} className="text-destructive p-1">
