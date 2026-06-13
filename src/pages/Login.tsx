@@ -16,10 +16,11 @@ export default function Login() {
     if (!email || !password) return toast.error("Vui lòng nhập đầy đủ thông tin");
     setBusy(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) { setBusy(false); return toast.error(error.message === "Invalid login credentials" ? "Email hoặc mật khẩu không đúng" : error.message); }
+    const { data: roleData } = await (supabase as any).rpc("get_my_role");
     setBusy(false);
-    if (error) return toast.error(error.message === "Invalid login credentials" ? "Email hoặc mật khẩu không đúng" : error.message);
     toast.success("Đăng nhập thành công");
-    nav("/");
+    if (roleData === "admin") nav("/admin"); else nav("/");
   };
 
   return (
