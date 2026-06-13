@@ -29,7 +29,7 @@ export default function Members() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm truncate">{m.full_name}</div>
-              {m.phone && <div className="flex items-center gap-1 text-[11px] text-muted-foreground"><Phone className="w-3 h-3" />{m.phone}</div>}
+              
             </div>
             <div className="text-[10px] text-muted-foreground">{new Date(m.created_at).toLocaleDateString("vi-VN")}</div>
           </div>
