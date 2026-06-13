@@ -4,7 +4,7 @@ import { adminCall, clearAdmin } from "@/lib/admin";
 import { Business, CATEGORY_LABEL, Offer, Profile, Review, Suggestion } from "@/lib/types";
 import { Logo } from "@/components/Logo";
 import { StoredImage } from "@/components/StoredImage";
-import { LogOut, Users, Store, Ticket, Star, Lightbulb, Trash2, Check, X, Loader2 } from "lucide-react";
+import { LogOut, Users, Store, Ticket, Star, Lightbulb, Trash2, Check, X, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 type Tab = "dashboard" | "members" | "businesses" | "offers" | "reviews" | "suggestions";
@@ -44,6 +44,10 @@ export default function Admin() {
   };
   const updateStatus = async (table: string, id: string, status: string) => {
     try { await adminCall("update", { table, id, values: { status } }); toast.success("Đã cập nhật"); loadTab(tab); loadStats(); }
+    catch (e: any) { toast.error(e.message); }
+  };
+  const toggleFeatured = async (id: string, featured: boolean) => {
+    try { await adminCall("update", { table: "businesses", id, values: { featured } }); toast.success(featured ? "Đã đánh dấu nổi bật" : "Đã bỏ nổi bật"); loadTab(tab); }
     catch (e: any) { toast.error(e.message); }
   };
   const approveSuggestion = async (id: string) => {
@@ -122,6 +126,12 @@ export default function Admin() {
                   <div className="font-bold text-sm truncate">{b.name}</div>
                   <div className="text-[11px] text-muted-foreground truncate">{CATEGORY_LABEL[b.category]} • <span className={b.status === "approved" ? "text-success" : b.status === "rejected" ? "text-destructive" : "text-warning"}>{b.status}</span></div>
                 </div>
+                {b.status === "approved" && (
+                  <button onClick={() => toggleFeatured(b.id, !b.featured)} title="Nổi bật cộng đồng"
+                    className={`p-1.5 rounded-lg ${b.featured ? "bg-gradient-brand text-white" : "bg-muted text-muted-foreground"}`}>
+                    <Sparkles className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 {b.status === "pending" && (
                   <>
                     <button onClick={() => updateStatus("businesses", b.id, "approved")} className="p-1.5 rounded-lg bg-success/10 text-success"><Check className="w-3.5 h-3.5" /></button>

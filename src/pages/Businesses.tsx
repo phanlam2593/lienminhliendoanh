@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORIES, CATEGORY_LABEL, BizCategory } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
-import { Search, SlidersHorizontal, MapPin, Star, Ticket } from "lucide-react";
+import { Search, SlidersHorizontal, MapPin, Star, Ticket, Sparkles } from "lucide-react";
 
 type Sort = "new" | "rated" | "offers";
 
@@ -80,7 +80,7 @@ export default function Businesses() {
           const c = counts[b.id];
           return (
             <Link key={b.id} to={`/dn/${b.id}`}
-              className="flex gap-3 bg-card rounded-2xl shadow-card overflow-hidden border border-border/60 active:scale-[0.99] transition">
+              className={`relative flex gap-3 bg-card rounded-2xl shadow-card overflow-hidden border active:scale-[0.99] transition ${b.featured ? "border-primary/60 ring-1 ring-primary/30" : "border-border/60"}`}>
               <StoredImage path={b.image_url} className="w-24 h-24 object-cover flex-shrink-0" fallbackClassName="w-24 h-24 flex-shrink-0" alt={b.name} />
               <div className="flex-1 min-w-0 py-2.5 pr-3">
                 <div className="flex items-start gap-2">
@@ -89,6 +89,11 @@ export default function Businesses() {
                     {CATEGORY_LABEL[b.category]}
                   </span>
                 </div>
+                {b.featured && (
+                  <div className="inline-flex items-center gap-1 mt-1 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-gradient-brand text-white rounded-full">
+                    <Sparkles className="w-2.5 h-2.5" />Nổi bật cộng đồng
+                  </div>
+                )}
                 {b.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{b.description}</p>}
                 <div className="flex items-center gap-3 mt-1.5 text-[11px] text-muted-foreground">
                   {b.address && (

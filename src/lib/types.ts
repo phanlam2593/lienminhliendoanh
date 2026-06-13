@@ -32,6 +32,7 @@ export interface Business {
   zalo: string | null;
   image_url: string | null;
   status: BizStatus;
+  featured: boolean;
   created_at: string;
 }
 
@@ -40,6 +41,7 @@ export interface Offer {
   business_id: string;
   title: string;
   description: string | null;
+  code: string | null;
   image_url: string | null;
   start_date: string | null;
   end_date: string | null;

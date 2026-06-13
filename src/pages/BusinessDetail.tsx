@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORY_LABEL, Offer, Review } from "@/lib/types";
 import { useAuth } from "@/lib/auth";
 import { StoredImage } from "@/components/StoredImage";
-import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Ticket, Plus, Trash2, Loader2, Camera } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Ticket, Plus, Trash2, Loader2, Camera, Sparkles, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { ACCEPT, uploadImage, validateImage } from "@/lib/upload";
 
@@ -72,6 +72,11 @@ export default function BusinessDetail() {
         </button>
       </div>
       <div className="px-5 py-4">
+        {b.featured && (
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-gradient-brand text-white rounded-full shadow-brand mb-2">
+            <Sparkles className="w-3 h-3" />Nổi bật cộng đồng
+          </div>
+        )}
         <div className="flex items-start gap-2">
           <div className="flex-1">
             <h1 className="text-xl font-extrabold">{b.name}</h1>
@@ -115,7 +120,7 @@ export default function BusinessDetail() {
                     <div className="w-9 h-9 rounded-lg bg-gradient-brand grid place-items-center text-white shrink-0">
                       <Ticket className="w-4 h-4" />
                     </div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <div className="font-bold text-sm">{o.title}</div>
                       {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
                       {(o.start_date || o.end_date) && (
@@ -125,6 +130,7 @@ export default function BusinessDetail() {
                           {o.end_date && new Date(o.end_date).toLocaleDateString("vi-VN")}
                         </div>
                       )}
+                      {o.code && <OfferCode code={o.code} />}
                     </div>
                     {isOwner && (
                       <button onClick={() => deleteOffer(o.id)} className="text-destructive p-1">
@@ -190,8 +196,25 @@ function Info({ icon: Icon, children }: any) {
   );
 }
 
+function OfferCode({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(code); setCopied(true); toast.success("Đã sao chép mã"); setTimeout(() => setCopied(false), 1500); } catch {}
+  };
+  return (
+    <button onClick={copy} type="button"
+      className="mt-2 w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border-2 border-dashed border-primary/50 bg-primary/5 active:scale-[0.98] transition">
+      <div className="text-left">
+        <div className="text-[9px] uppercase font-bold text-muted-foreground tracking-wider">Mã ưu đãi</div>
+        <div className="font-mono font-extrabold text-primary tracking-wider">{code}</div>
+      </div>
+      {copied ? <Check className="w-4 h-4 text-success" /> : <Copy className="w-4 h-4 text-primary" />}
+    </button>
+  );
+}
+
 function OfferModal({ businessId, onClose }: { businessId: string; onClose: () => void }) {
-  const [f, setF] = useState({ title: "", description: "", start_date: "", end_date: "" });
+  const [f, setF] = useState({ title: "", description: "", code: "", start_date: "", end_date: "" });
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [busy, setBusy] = useState(false);
@@ -203,7 +226,7 @@ function OfferModal({ businessId, onClose }: { businessId: string; onClose: () =
       let image_url: string | null = null;
       if (file) image_url = await uploadImage(file, "offers");
       const { error } = await supabase.from("offers").insert({
-        business_id: businessId, title: f.title, description: f.description,
+        business_id: businessId, title: f.title, description: f.description, code: f.code || null,
         start_date: f.start_date || null, end_date: f.end_date || null, image_url,
       });
       if (error) throw error;
@@ -218,6 +241,7 @@ function OfferModal({ businessId, onClose }: { businessId: string; onClose: () =
         <h2 className="text-lg font-extrabold">Thêm ưu đãi</h2>
         <Fld label="Tiêu đề *" value={f.title} onChange={v => setF({ ...f, title: v })} />
         <Fld label="Mô tả" value={f.description} onChange={v => setF({ ...f, description: v })} textarea />
+        <Fld label="Mã ưu đãi (vd: SALE20)" value={f.code} onChange={v => setF({ ...f, code: v.toUpperCase() })} />
         <div className="grid grid-cols-2 gap-2">
           <Fld label="Ngày bắt đầu" type="date" value={f.start_date} onChange={v => setF({ ...f, start_date: v })} />
           <Fld label="Ngày kết thúc" type="date" value={f.end_date} onChange={v => setF({ ...f, end_date: v })} />
