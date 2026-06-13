@@ -207,6 +207,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       public_profiles: {
@@ -232,6 +253,10 @@ export type Database = {
       }
     }
     Functions: {
+      get_my_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
       get_own_profile: {
         Args: never
         Returns: {
@@ -249,8 +274,16 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role: "admin" | "member"
       biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
       biz_status: "pending" | "approved" | "rejected"
     }
@@ -380,6 +413,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "member"],
       biz_category: ["an_uong", "dich_vu", "luu_tru", "du_lich", "khac"],
       biz_status: ["pending", "approved", "rejected"],
     },

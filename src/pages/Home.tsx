@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div className="pb-6">
       {/* Hero */}
-      <section className="relative px-5 pt-6 pb-8 bg-gradient-hero text-primary-foreground overflow-hidden">
+      <section className="relative px-5 py-10 bg-gradient-hero text-primary-foreground overflow-hidden">
         <div className="absolute inset-0 bg-gradient-glow opacity-50" />
         <div className="relative">
           <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-white/20 rounded-full backdrop-blur">
@@ -53,7 +53,7 @@ export default function Home() {
       </section>
 
       {/* Stats */}
-      <section className="px-5 -mt-5">
+      <section className="px-5 mt-4">
         <div className="grid grid-cols-3 gap-2 bg-card rounded-2xl p-3 shadow-card border border-border/60">
           <Stat icon={Users} label="Thành viên" n={stats.members} />
           <Stat icon={Store} label="Đối tác" n={stats.businesses} />
