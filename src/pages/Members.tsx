@@ -9,7 +9,7 @@ export default function Members() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+      const { data } = await supabase.from("profiles").select("id, full_name, avatar_url, created_at").order("created_at", { ascending: false });
       setMembers((data as Profile[]) || []);
     })();
   }, []);
