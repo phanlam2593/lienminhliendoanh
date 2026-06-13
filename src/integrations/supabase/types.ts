@@ -232,7 +232,23 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      get_own_profile: {
+        Args: never
+        Returns: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "profiles"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
     }
     Enums: {
       biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
