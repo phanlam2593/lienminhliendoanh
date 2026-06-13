@@ -14,7 +14,7 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const [m, b, o, latest, oList, rList] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
         supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "approved"),
         supabase.from("offers").select("*", { count: "exact", head: true }),
         supabase.from("businesses").select("*").eq("status", "approved").order("created_at", { ascending: false }).limit(4),
