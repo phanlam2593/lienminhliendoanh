@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Profile } from "@/lib/types";
-import { Users, Phone } from "lucide-react";
+import { Users } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 
 export default function Members() {
@@ -9,7 +9,7 @@ export default function Members() {
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from("profiles").select("*").order("created_at", { ascending: false });
+      const { data } = await supabase.from("profiles").select("id, full_name, avatar_url, created_at").order("created_at", { ascending: false });
       setMembers((data as Profile[]) || []);
     })();
   }, []);
@@ -29,7 +29,7 @@ export default function Members() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm truncate">{m.full_name}</div>
-              {m.phone && <div className="flex items-center gap-1 text-[11px] text-muted-foreground"><Phone className="w-3 h-3" />{m.phone}</div>}
+              
             </div>
             <div className="text-[10px] text-muted-foreground">{new Date(m.created_at).toLocaleDateString("vi-VN")}</div>
           </div>
