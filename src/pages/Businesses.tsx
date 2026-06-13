@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORIES, CATEGORY_LABEL, BizCategory } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
-import { Search, SlidersHorizontal, MapPin, Star, Ticket } from "lucide-react";
+import { Search, SlidersHorizontal, MapPin, Star, Ticket, Sparkles } from "lucide-react";
 
 type Sort = "new" | "rated" | "offers";
 
