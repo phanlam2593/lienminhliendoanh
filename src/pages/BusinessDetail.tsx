@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORY_LABEL, Offer, Review } from "@/lib/types";
 import { useAuth } from "@/lib/auth";
 import { StoredImage } from "@/components/StoredImage";
-import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Ticket, Plus, Trash2, Loader2, Camera } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Ticket, Plus, Trash2, Loader2, Camera, Sparkles, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 import { ACCEPT, uploadImage, validateImage } from "@/lib/upload";
 
