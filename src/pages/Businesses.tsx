@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORIES, CATEGORY_LABEL, BizCategory } from "@/lib/types";
-import { BusinessCard } from "@/components/BusinessCard";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { StoredImage } from "@/components/StoredImage";
+import { Search, SlidersHorizontal, MapPin, Star, Ticket } from "lucide-react";
 
 type Sort = "new" | "rated" | "offers";
 
@@ -74,8 +75,42 @@ export default function Businesses() {
         ))}
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-2.5">
-        {filtered.map(b => <BusinessCard key={b.id} b={b} />)}
+      <div className="mt-4 space-y-3">
+        {filtered.map(b => {
+          const c = counts[b.id];
+          return (
+            <Link key={b.id} to={`/dn/${b.id}`}
+              className="flex gap-3 bg-card rounded-2xl shadow-card overflow-hidden border border-border/60 active:scale-[0.99] transition">
+              <StoredImage path={b.image_url} className="w-24 h-24 object-cover flex-shrink-0" fallbackClassName="w-24 h-24 flex-shrink-0" alt={b.name} />
+              <div className="flex-1 min-w-0 py-2.5 pr-3">
+                <div className="flex items-start gap-2">
+                  <h3 className="font-bold text-sm flex-1 line-clamp-1">{b.name}</h3>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold whitespace-nowrap">
+                    {CATEGORY_LABEL[b.category]}
+                  </span>
+                </div>
+                {b.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{b.description}</p>}
+                <div className="flex items-center gap-3 mt-1.5 text-[11px] text-muted-foreground">
+                  {b.address && (
+                    <span className="flex items-center gap-0.5 min-w-0">
+                      <MapPin className="w-3 h-3 flex-shrink-0" /><span className="line-clamp-1">{b.address}</span>
+                    </span>
+                  )}
+                  {c?.rating > 0 && (
+                    <span className="flex items-center gap-0.5 text-warning font-bold">
+                      <Star className="w-3 h-3 fill-current" />{c.rating.toFixed(1)}
+                    </span>
+                  )}
+                  {c?.offers > 0 && (
+                    <span className="flex items-center gap-0.5 text-primary font-bold">
+                      <Ticket className="w-3 h-3" />{c.offers}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </Link>
+          );
+        })}
       </div>
       {filtered.length === 0 && (
         <div className="p-8 text-center text-sm text-muted-foreground">Không có doanh nghiệp nào</div>

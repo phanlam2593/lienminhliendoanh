@@ -1,21 +1,35 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { adminLogin } from "@/lib/admin";
 import { Logo } from "@/components/Logo";
 import { toast } from "sonner";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 export default function Login() {
   const nav = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return toast.error("Vui lòng nhập đầy đủ thông tin");
+    if (!username || !password) return toast.error("Vui lòng nhập đầy đủ thông tin");
     setBusy(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const u = username.trim();
+    // Admin login: hardcoded username (no email)
+    if (!u.includes("@")) {
+      try {
+        await adminLogin(u, password);
+        toast.success("Đăng nhập admin thành công");
+        nav("/admin");
+      } catch (err: any) {
+        toast.error(err.message || "Tên đăng nhập hoặc mật khẩu không đúng");
+      } finally { setBusy(false); }
+      return;
+    }
+    // Member login: email + password
+    const { error } = await supabase.auth.signInWithPassword({ email: u, password });
     if (error) { setBusy(false); return toast.error(error.message === "Invalid login credentials" ? "Email hoặc mật khẩu không đúng" : error.message); }
     const { data: roleData } = await (supabase as any).rpc("get_my_role");
     setBusy(false);
@@ -36,8 +50,9 @@ export default function Login() {
         <p className="text-sm text-muted-foreground">Chào mừng quay lại Liên Minh</p>
       </div>
       <form onSubmit={submit} className="px-5 mt-6 space-y-3">
-        <Field label="Email" type="email" value={email} onChange={setEmail} />
+        <Field label="Tên đăng nhập hoặc email" value={username} onChange={setUsername} />
         <Field label="Mật khẩu" type="password" value={password} onChange={setPassword} />
+        <p className="text-[11px] text-muted-foreground">Admin đăng nhập bằng tên đăng nhập. Thành viên đăng nhập bằng email.</p>
         <button disabled={busy} className="w-full bg-gradient-brand text-white font-extrabold py-4 rounded-2xl shadow-brand active:scale-95 transition mt-4 disabled:opacity-60 flex items-center justify-center gap-2">
           {busy && <Loader2 className="w-4 h-4 animate-spin" />}ĐĂNG NHẬP
         </button>

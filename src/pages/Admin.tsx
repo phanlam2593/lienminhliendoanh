@@ -72,8 +72,8 @@ export default function Admin() {
         <button onClick={() => { clearAdmin(); nav("/"); }} className="text-destructive p-2"><LogOut className="w-4 h-4" /></button>
       </header>
 
-      <div className="overflow-x-auto scrollbar-hide border-b border-border bg-card">
-        <div className="flex gap-1 px-3 py-2 min-w-max">
+      <div className="overflow-x-auto border-b border-border bg-card" style={{ WebkitOverflowScrolling: "touch" }}>
+        <div className="flex gap-1 px-3 py-2 w-max">
           {tabs.map(t => (
             <button key={t.id} onClick={() => setTab(t.id)}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold ${tab === t.id ? "bg-gradient-brand text-white" : "bg-muted text-muted-foreground"}`}>
