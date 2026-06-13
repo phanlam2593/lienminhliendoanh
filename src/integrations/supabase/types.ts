@@ -57,6 +57,7 @@ export type Database = {
           created_at: string
           description: string | null
           facebook: string | null
+          featured: boolean
           id: string
           image_url: string | null
           name: string
@@ -73,6 +74,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           facebook?: string | null
+          featured?: boolean
           id?: string
           image_url?: string | null
           name: string
@@ -89,6 +91,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           facebook?: string | null
+          featured?: boolean
           id?: string
           image_url?: string | null
           name?: string
@@ -104,6 +107,7 @@ export type Database = {
       offers: {
         Row: {
           business_id: string
+          code: string | null
           created_at: string
           created_by: string | null
           description: string | null
@@ -115,6 +119,7 @@ export type Database = {
         }
         Insert: {
           business_id: string
+          code?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
@@ -126,6 +131,7 @@ export type Database = {
         }
         Update: {
           business_id?: string
+          code?: string | null
           created_at?: string
           created_by?: string | null
           description?: string | null
