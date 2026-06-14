@@ -270,7 +270,7 @@ export default function Register() {
   );
 }
 
-function Field({ label, children, right }: { label: string; children: React.ReactNode; right?: React.ReactNode }) {
+function Field({ label, children, right, hint }: { label: string; children: React.ReactNode; right?: React.ReactNode; hint?: string }) {
   return (
     <label className="block space-y-1">
       <div className="flex items-center justify-between">
@@ -278,6 +278,7 @@ function Field({ label, children, right }: { label: string; children: React.Reac
         {right}
       </div>
       {children}
+      {hint && <p className="text-[11px] text-muted-foreground">{hint}</p>}
     </label>
   );
 }
