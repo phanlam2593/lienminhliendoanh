@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORY_LABEL, Offer, Review } from "@/lib/types";
 import { useAuth } from "@/lib/auth";
 import { StoredImage } from "@/components/StoredImage";
-import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Ticket, Plus, Trash2, Loader2, Camera, Sparkles, Copy, Check } from "lucide-react";
+import { ArrowLeft, Star, MapPin, Phone, Globe, Facebook, MessageCircle, Tag, Plus, Trash2, Loader2, Camera, Sparkles, Copy, Check, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { ACCEPT, uploadImage, validateImage } from "@/lib/upload";
 
@@ -44,6 +44,7 @@ export default function BusinessDetail() {
   if (!b) return <div className="p-10 text-center text-muted-foreground">Đang tải...</div>;
   const isOwner = user?.id === b.owner_id;
   const avgRating = reviews.length ? reviews.reduce((a, r) => a + r.rating, 0) / reviews.length : 0;
+  const topOffer = offers[0];
 
   const submitReview = async () => {
     if (!user) return toast.error("Vui lòng đăng nhập");
@@ -63,123 +64,211 @@ export default function BusinessDetail() {
     toast.success("Đã xoá"); load();
   };
 
+  const claimOffer = () => {
+    if (topOffer) {
+      const el = document.getElementById("offers-section");
+      el?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      toast.info("Doanh nghiệp chưa có ưu đãi");
+    }
+  };
+
   return (
-    <div>
+    <div className="pb-24">
+      {/* Hero image - full width */}
       <div className="relative">
-        <StoredImage path={b.image_url} className="w-full h-52 object-cover" fallbackClassName="w-full h-52" alt={b.name} />
-        <button onClick={() => nav(-1)} className="absolute top-4 left-4 w-10 h-10 rounded-full bg-background/90 grid place-items-center shadow-soft backdrop-blur">
-          <ArrowLeft className="w-4 h-4" />
+        <StoredImage path={b.image_url} className="w-full h-56 object-cover" fallbackClassName="w-full h-56" alt={b.name} />
+        <button onClick={() => nav(-1)} className="absolute top-4 left-4 w-10 h-10 rounded-full bg-white/90 grid place-items-center shadow-md backdrop-blur">
+          <ArrowLeft className="w-4 h-4 text-foreground" />
         </button>
-      </div>
-      <div className="px-5 py-4">
         {b.featured && (
-          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-gradient-brand text-white rounded-full shadow-brand mb-2">
-            <Sparkles className="w-3 h-3" />Nổi bật cộng đồng
+          <div className="absolute top-4 right-4 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 bg-gradient-brand text-white rounded-full shadow-brand">
+            <Sparkles className="w-3 h-3" />Nổi bật
           </div>
         )}
-        <div className="flex items-start gap-2">
-          <div className="flex-1">
-            <h1 className="text-xl font-extrabold">{b.name}</h1>
-            <div className="text-xs text-primary font-bold mt-0.5">{CATEGORY_LABEL[b.category]}</div>
+      </div>
+
+      {/* Info header */}
+      <div className="px-4 pt-4">
+        <div className="flex items-start gap-3">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-brand grid place-items-center text-white font-extrabold text-2xl shrink-0 shadow-md">
+            {b.name.charAt(0).toUpperCase()}
           </div>
-          {reviews.length > 0 && (
-            <div className="flex items-center gap-1 text-warning text-sm">
-              <Star className="w-4 h-4 fill-current" />
-              <span className="font-bold">{avgRating.toFixed(1)}</span>
-              <span className="text-muted-foreground text-xs">({reviews.length})</span>
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-bold text-primary">{CATEGORY_LABEL[b.category]}</div>
+            <h1 className="text-xl font-extrabold leading-tight mt-0.5">{b.name}</h1>
+            <div className="flex items-center gap-1 mt-1 text-sm">
+              <Star className="w-4 h-4 fill-warning text-warning" />
+              <span className="font-bold">{reviews.length ? avgRating.toFixed(1) : "—"}</span>
+              <span className="text-muted-foreground text-xs">· {reviews.length} đánh giá</span>
             </div>
-          )}
-        </div>
-        {b.description && <p className="text-sm text-foreground mt-3">{b.description}</p>}
-
-        <div className="space-y-2 mt-4 text-sm">
-          {b.address && <Info icon={MapPin}>{b.address}</Info>}
-          {b.phone && <Info icon={Phone}><a href={`tel:${b.phone}`} className="text-primary">{b.phone}</a></Info>}
-          {b.website && <Info icon={Globe}><a href={b.website} target="_blank" rel="noopener noreferrer" className="text-primary">{b.website}</a></Info>}
-          {b.facebook && <Info icon={Facebook}><a href={b.facebook} target="_blank" rel="noopener noreferrer" className="text-primary">Facebook</a></Info>}
-          {b.zalo && <Info icon={MessageCircle}>Zalo: {b.zalo}</Info>}
-        </div>
-
-        {/* Offers */}
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="font-extrabold">Ưu đãi ({offers.length})</h2>
-            {isOwner && b.status === "approved" && (
-              <button onClick={() => setShowOffer(true)} className="text-xs font-bold text-primary flex items-center gap-1">
-                <Plus className="w-3.5 h-3.5" />Thêm
-              </button>
-            )}
           </div>
-          {offers.length === 0 ? (
-            <div className="p-4 text-center text-xs text-muted-foreground bg-muted/40 rounded-xl">Chưa có ưu đãi</div>
-          ) : (
-            <div className="space-y-2">
-              {offers.map(o => (
-                <div key={o.id} className="p-3 bg-card rounded-xl border border-border/60 shadow-soft">
-                  <div className="flex items-start gap-2">
-                    <div className="w-9 h-9 rounded-lg bg-gradient-brand grid place-items-center text-white shrink-0">
-                      <Ticket className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-sm">{o.title}</div>
-                      {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
-                      {(o.start_date || o.end_date) && (
-                        <div className="text-[10px] text-muted-foreground mt-1">
-                          {o.start_date && new Date(o.start_date).toLocaleDateString("vi-VN")}
-                          {o.start_date && o.end_date && " → "}
-                          {o.end_date && new Date(o.end_date).toLocaleDateString("vi-VN")}
-                        </div>
-                      )}
-                      {o.code && <OfferCode code={o.code} />}
-                    </div>
-                    {isOwner && (
-                      <button onClick={() => deleteOffer(o.id)} className="text-destructive p-1">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
+      </div>
 
-        {/* Reviews */}
-        <div className="mt-6">
-          <h2 className="font-extrabold mb-2">Đánh giá ({reviews.length})</h2>
-          {user ? (
-            <div className="p-3 bg-card rounded-xl border border-border/60 shadow-soft mb-3">
-              <div className="flex items-center gap-1 mb-2">
-                {[1, 2, 3, 4, 5].map(n => (
-                  <button key={n} onClick={() => setRating(n)} type="button">
-                    <Star className={`w-5 h-5 ${n <= rating ? "fill-warning text-warning" : "text-muted-foreground"}`} />
-                  </button>
-                ))}
+      {/* Community offer banner */}
+      {topOffer && (
+        <div className="mx-4 mt-4 rounded-2xl bg-gradient-brand text-white p-4 shadow-brand">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-full bg-white/25 grid place-items-center backdrop-blur">
+              <Tag className="w-4 h-4" />
+            </div>
+            <div className="text-[10px] font-extrabold uppercase tracking-widest">Ưu đãi cộng đồng</div>
+          </div>
+          <div className="font-extrabold text-lg mt-2 leading-tight">{topOffer.title}</div>
+          {topOffer.description && <p className="text-sm text-white/90 mt-1">{topOffer.description}</p>}
+          {topOffer.code && (
+            <div className="mt-3 flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-white/15 border border-white/30 backdrop-blur">
+              <div>
+                <div className="text-[9px] uppercase font-bold tracking-wider text-white/80">Mã</div>
+                <div className="font-mono font-extrabold tracking-wider">{topOffer.code}</div>
               </div>
-              <textarea value={content} onChange={e => setContent(e.target.value)} rows={2} placeholder="Chia sẻ cảm nhận..."
-                className="w-full p-2 rounded-lg bg-background border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
-              <button onClick={submitReview} className="w-full mt-2 bg-gradient-brand text-white text-sm font-bold py-2 rounded-lg">Đăng đánh giá</button>
+              <CopyBtn code={topOffer.code} />
             </div>
-          ) : (
-            <Link to="/auth/login" className="block p-3 text-xs text-center text-muted-foreground bg-muted/40 rounded-xl mb-3">
-              Đăng nhập để viết đánh giá
-            </Link>
           )}
+        </div>
+      )}
+
+      {/* Contact info */}
+      <div className="px-4 mt-5 space-y-2.5">
+        {b.phone && (
+          <a href={`tel:${b.phone}`} className="flex items-center gap-3 text-sm">
+            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-primary">
+              <Phone className="w-4 h-4" />
+            </div>
+            <span className="text-primary font-semibold">{b.phone}</span>
+          </a>
+        )}
+        {b.address && (
+          <div className="flex items-start gap-3 text-sm">
+            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-primary shrink-0">
+              <MapPin className="w-4 h-4" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-foreground">{b.address}</div>
+              <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
+                target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary mt-0.5">
+                Mở Google Maps <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+        )}
+        {b.website && (
+          <a href={b.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm">
+            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-primary"><Globe className="w-4 h-4" /></div>
+            <span className="text-primary font-semibold truncate">{b.website}</span>
+          </a>
+        )}
+        {b.facebook && (
+          <a href={b.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-sm">
+            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-primary"><Facebook className="w-4 h-4" /></div>
+            <span className="text-primary font-semibold">Facebook</span>
+          </a>
+        )}
+        {b.zalo && (
+          <div className="flex items-center gap-3 text-sm">
+            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-primary"><MessageCircle className="w-4 h-4" /></div>
+            <span>Zalo: {b.zalo}</span>
+          </div>
+        )}
+      </div>
+
+      {/* Description */}
+      {b.description && (
+        <div className="px-4 mt-5">
+          <h2 className="font-extrabold mb-2">Giới thiệu</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">{b.description}</p>
+        </div>
+      )}
+
+      {/* All Offers */}
+      <div id="offers-section" className="px-4 mt-6">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="font-extrabold">Tất cả ưu đãi ({offers.length})</h2>
+          {isOwner && b.status === "approved" && (
+            <button onClick={() => setShowOffer(true)} className="text-xs font-bold text-primary flex items-center gap-1">
+              <Plus className="w-3.5 h-3.5" />Thêm
+            </button>
+          )}
+        </div>
+        {offers.length === 0 ? (
+          <div className="p-4 text-center text-xs text-muted-foreground bg-muted/40 rounded-xl">Chưa có ưu đãi</div>
+        ) : (
           <div className="space-y-2">
-            {reviews.map(r => (
-              <div key={r.id} className="p-3 bg-card rounded-xl border border-border/60">
-                <div className="flex items-center justify-between">
-                  <div className="font-bold text-xs">{profiles[r.user_id] || "Ẩn danh"}</div>
-                  <div className="flex items-center gap-0.5 text-warning">
-                    {[...Array(r.rating)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
+            {offers.map(o => (
+              <div key={o.id} className="p-3 bg-card rounded-xl border border-border/60 shadow-sm">
+                <div className="flex items-start gap-2">
+                  <div className="w-9 h-9 rounded-lg bg-accent grid place-items-center text-primary shrink-0">
+                    <Tag className="w-4 h-4" />
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-bold text-sm">{o.title}</div>
+                    {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
+                    {(o.start_date || o.end_date) && (
+                      <div className="text-[10px] text-muted-foreground mt-1">
+                        {o.start_date && new Date(o.start_date).toLocaleDateString("vi-VN")}
+                        {o.start_date && o.end_date && " → "}
+                        {o.end_date && new Date(o.end_date).toLocaleDateString("vi-VN")}
+                      </div>
+                    )}
+                    {o.code && <OfferCode code={o.code} />}
+                  </div>
+                  {isOwner && (
+                    <button onClick={() => deleteOffer(o.id)} className="text-destructive p-1">
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
-                {r.content && <p className="text-sm mt-1">{r.content}</p>}
-                <div className="text-[10px] text-muted-foreground mt-1">{new Date(r.created_at).toLocaleString("vi-VN")}</div>
               </div>
             ))}
           </div>
+        )}
+      </div>
+
+      {/* Reviews */}
+      <div className="px-4 mt-6">
+        <h2 className="font-extrabold mb-2">Đánh giá ({reviews.length})</h2>
+        {user ? (
+          <div className="p-3 bg-card rounded-xl border border-border/60 shadow-sm mb-3">
+            <div className="flex items-center gap-1 mb-2">
+              {[1, 2, 3, 4, 5].map(n => (
+                <button key={n} onClick={() => setRating(n)} type="button">
+                  <Star className={`w-5 h-5 ${n <= rating ? "fill-warning text-warning" : "text-muted-foreground"}`} />
+                </button>
+              ))}
+            </div>
+            <textarea value={content} onChange={e => setContent(e.target.value)} rows={2} placeholder="Chia sẻ cảm nhận..."
+              className="w-full p-2 rounded-lg bg-background border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
+            <button onClick={submitReview} className="w-full mt-2 bg-gradient-brand text-white text-sm font-bold py-2 rounded-lg">Đăng đánh giá</button>
+          </div>
+        ) : (
+          <Link to="/auth/register" className="block p-3 text-xs text-center text-primary font-bold bg-accent rounded-xl mb-3">
+            Đăng ký &amp; xác thực để đánh giá →
+          </Link>
+        )}
+        <div className="space-y-2">
+          {reviews.map(r => (
+            <div key={r.id} className="p-3 bg-card rounded-xl border border-border/60">
+              <div className="flex items-center justify-between">
+                <div className="font-bold text-xs">{profiles[r.user_id] || "Ẩn danh"}</div>
+                <div className="flex items-center gap-0.5 text-warning">
+                  {[...Array(r.rating)].map((_, i) => <Star key={i} className="w-3 h-3 fill-current" />)}
+                </div>
+              </div>
+              {r.content && <p className="text-sm mt-1">{r.content}</p>}
+              <div className="text-[10px] text-muted-foreground mt-1">{new Date(r.created_at).toLocaleString("vi-VN")}</div>
+            </div>
+          ))}
         </div>
+      </div>
+
+      {/* Fixed CTA */}
+      <div className="fixed bottom-16 left-1/2 -translate-x-1/2 w-full max-w-md px-4 pb-3 z-30 pointer-events-none">
+        <button onClick={claimOffer}
+          className="pointer-events-auto w-full bg-gradient-to-r from-[#16a373] to-[#0ea5e9] text-white font-extrabold py-3.5 rounded-full shadow-float flex items-center justify-center gap-2 active:scale-[0.98] transition">
+          <Tag className="w-4 h-4" />NHẬN ƯU ĐÃI
+        </button>
       </div>
 
       {showOffer && <OfferModal businessId={b.id} onClose={() => { setShowOffer(false); load(); }} />}
@@ -187,12 +276,15 @@ export default function BusinessDetail() {
   );
 }
 
-function Info({ icon: Icon, children }: any) {
+function CopyBtn({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
   return (
-    <div className="flex items-start gap-2 text-sm">
-      <Icon className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-      <div className="flex-1">{children}</div>
-    </div>
+    <button type="button" onClick={async () => {
+      try { await navigator.clipboard.writeText(code); setCopied(true); toast.success("Đã sao chép"); setTimeout(() => setCopied(false), 1500); } catch {}
+    }} className="px-3 py-1.5 rounded-md bg-white text-primary text-xs font-bold flex items-center gap-1">
+      {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+      {copied ? "Đã chép" : "Sao chép"}
+    </button>
   );
 }
 
