@@ -14,93 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
-      business_suggestions: {
-        Row: {
-          category: Database["public"]["Enums"]["biz_category"]
-          contact_info: string | null
-          created_at: string
-          description: string | null
-          id: string
-          image_url: string | null
-          name: string
-          status: Database["public"]["Enums"]["biz_status"]
-          suggested_by: string | null
-        }
-        Insert: {
-          category?: Database["public"]["Enums"]["biz_category"]
-          contact_info?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string | null
-          name: string
-          status?: Database["public"]["Enums"]["biz_status"]
-          suggested_by?: string | null
-        }
-        Update: {
-          category?: Database["public"]["Enums"]["biz_category"]
-          contact_info?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          image_url?: string | null
-          name?: string
-          status?: Database["public"]["Enums"]["biz_status"]
-          suggested_by?: string | null
-        }
-        Relationships: []
-      }
       businesses: {
         Row: {
           address: string | null
-          category: Database["public"]["Enums"]["biz_category"]
+          cover_url: string | null
           created_at: string
           description: string | null
-          facebook: string | null
-          featured: boolean
+          facebook_url: string | null
+          hours_close: string | null
+          hours_open: string | null
           id: string
-          image_url: string | null
+          is_featured: boolean
           name: string
           owner_id: string | null
           phone: string | null
-          status: Database["public"]["Enums"]["biz_status"]
+          status: Database["public"]["Enums"]["business_status"]
+          type: Database["public"]["Enums"]["business_type"]
           updated_at: string
-          website: string | null
-          zalo: string | null
+          website_url: string | null
         }
         Insert: {
           address?: string | null
-          category?: Database["public"]["Enums"]["biz_category"]
+          cover_url?: string | null
           created_at?: string
           description?: string | null
-          facebook?: string | null
-          featured?: boolean
+          facebook_url?: string | null
+          hours_close?: string | null
+          hours_open?: string | null
           id?: string
-          image_url?: string | null
+          is_featured?: boolean
           name: string
           owner_id?: string | null
           phone?: string | null
-          status?: Database["public"]["Enums"]["biz_status"]
+          status?: Database["public"]["Enums"]["business_status"]
+          type?: Database["public"]["Enums"]["business_type"]
           updated_at?: string
-          website?: string | null
-          zalo?: string | null
+          website_url?: string | null
         }
         Update: {
           address?: string | null
-          category?: Database["public"]["Enums"]["biz_category"]
+          cover_url?: string | null
           created_at?: string
           description?: string | null
-          facebook?: string | null
-          featured?: boolean
+          facebook_url?: string | null
+          hours_close?: string | null
+          hours_open?: string | null
           id?: string
-          image_url?: string | null
+          is_featured?: boolean
           name?: string
           owner_id?: string | null
           phone?: string | null
-          status?: Database["public"]["Enums"]["biz_status"]
+          status?: Database["public"]["Enums"]["business_status"]
+          type?: Database["public"]["Enums"]["business_type"]
           updated_at?: string
-          website?: string | null
-          zalo?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean
+          receiver_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          receiver_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          receiver_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          is_read: boolean
+          related_id: string | null
+          title: string
+          type: Database["public"]["Enums"]["notif_type"]
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          related_id?: string | null
+          title: string
+          type: Database["public"]["Enums"]["notif_type"]
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          related_id?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["notif_type"]
+          user_id?: string
         }
         Relationships: []
       }
@@ -109,37 +136,31 @@ export type Database = {
           business_id: string
           code: string | null
           created_at: string
-          created_by: string | null
           description: string | null
-          end_date: string | null
           id: string
-          image_url: string | null
-          start_date: string | null
+          status: Database["public"]["Enums"]["offer_status"]
           title: string
+          updated_at: string
         }
         Insert: {
           business_id: string
           code?: string | null
           created_at?: string
-          created_by?: string | null
           description?: string | null
-          end_date?: string | null
           id?: string
-          image_url?: string | null
-          start_date?: string | null
+          status?: Database["public"]["Enums"]["offer_status"]
           title: string
+          updated_at?: string
         }
         Update: {
           business_id?: string
           code?: string | null
           created_at?: string
-          created_by?: string | null
           description?: string | null
-          end_date?: string | null
           id?: string
-          image_url?: string | null
-          start_date?: string | null
+          status?: Database["public"]["Enums"]["offer_status"]
           title?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -155,33 +176,81 @@ export type Database = {
         Row: {
           avatar_url: string | null
           created_at: string
+          email: string
           full_name: string
           id: string
-          phone: string | null
+          phone: string
+          status: Database["public"]["Enums"]["account_status"]
           updated_at: string
+          username: string
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          email: string
           full_name: string
           id: string
-          phone?: string | null
+          phone: string
+          status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
+          username: string
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          email?: string
           full_name?: string
           id?: string
-          phone?: string | null
+          phone?: string
+          status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          photo_url: string | null
+          resolved: boolean
+          send_to_admin: boolean
+          send_to_business: boolean
+          target_id: string
+          target_type: Database["public"]["Enums"]["report_target"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          photo_url?: string | null
+          resolved?: boolean
+          send_to_admin?: boolean
+          send_to_business?: boolean
+          target_id: string
+          target_type: Database["public"]["Enums"]["report_target"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          photo_url?: string | null
+          resolved?: boolean
+          send_to_admin?: boolean
+          send_to_business?: boolean
+          target_id?: string
+          target_type?: Database["public"]["Enums"]["report_target"]
+          user_id?: string
         }
         Relationships: []
       }
       reviews: {
         Row: {
           business_id: string
-          content: string | null
+          comment: string | null
           created_at: string
           id: string
           rating: number
@@ -189,7 +258,7 @@ export type Database = {
         }
         Insert: {
           business_id: string
-          content?: string | null
+          comment?: string | null
           created_at?: string
           id?: string
           rating: number
@@ -197,7 +266,7 @@ export type Database = {
         }
         Update: {
           business_id?: string
-          content?: string | null
+          comment?: string | null
           created_at?: string
           id?: string
           rating?: number
@@ -213,6 +282,42 @@ export type Database = {
           },
         ]
       }
+      suggestions: {
+        Row: {
+          business_name: string
+          business_type: Database["public"]["Enums"]["business_type"]
+          contact_info: string
+          created_at: string
+          description: string | null
+          id: string
+          status: Database["public"]["Enums"]["suggestion_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_name: string
+          business_type?: Database["public"]["Enums"]["business_type"]
+          contact_info: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["suggestion_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_name?: string
+          business_type?: Database["public"]["Enums"]["business_type"]
+          contact_info?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["suggestion_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -223,7 +328,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          role?: Database["public"]["Enums"]["app_role"]
+          role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
@@ -236,50 +341,9 @@ export type Database = {
       }
     }
     Views: {
-      public_profiles: {
-        Row: {
-          avatar_url: string | null
-          created_at: string | null
-          full_name: string | null
-          id: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          full_name?: string | null
-          id?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
-      get_my_role: {
-        Args: never
-        Returns: Database["public"]["Enums"]["app_role"]
-      }
-      get_own_profile: {
-        Args: never
-        Returns: {
-          avatar_url: string | null
-          created_at: string
-          full_name: string
-          id: string
-          phone: string | null
-          updated_at: string
-        }
-        SetofOptions: {
-          from: "*"
-          to: "profiles"
-          isOneToOne: true
-          isSetofReturn: false
-        }
-      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -287,11 +351,27 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_approved_member: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "member"
+      account_status: "pending" | "approved" | "rejected"
+      app_role: "guest" | "member" | "admin"
       biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
       biz_status: "pending" | "approved" | "rejected"
+      business_status: "pending" | "approved" | "rejected"
+      business_type: "food" | "service" | "stay" | "travel" | "other"
+      notif_type:
+        | "account_approved"
+        | "account_rejected"
+        | "new_offer"
+        | "new_message"
+        | "suggestion_approved"
+        | "suggestion_rejected"
+        | "report_received"
+        | "broadcast"
+      offer_status: "active" | "inactive"
+      report_target: "business" | "offer"
+      suggestion_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -419,9 +499,25 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "member"],
+      account_status: ["pending", "approved", "rejected"],
+      app_role: ["guest", "member", "admin"],
       biz_category: ["an_uong", "dich_vu", "luu_tru", "du_lich", "khac"],
       biz_status: ["pending", "approved", "rejected"],
+      business_status: ["pending", "approved", "rejected"],
+      business_type: ["food", "service", "stay", "travel", "other"],
+      notif_type: [
+        "account_approved",
+        "account_rejected",
+        "new_offer",
+        "new_message",
+        "suggestion_approved",
+        "suggestion_rejected",
+        "report_received",
+        "broadcast",
+      ],
+      offer_status: ["active", "inactive"],
+      report_target: ["business", "offer"],
+      suggestion_status: ["pending", "approved", "rejected"],
     },
   },
 } as const

@@ -1,139 +1,273 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { Logo } from "@/components/Logo";
-import { ACCEPT, uploadImage, validateImage } from "@/lib/upload";
-import { CATEGORIES, CATEGORY_LABEL, BizCategory } from "@/lib/types";
 import { toast } from "sonner";
-import { ArrowLeft, Loader2, Camera } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { usernameToEmail, BUSINESS_TYPES, BUSINESS_TYPE_LABEL, BusinessType } from "@/lib/types";
+import { Logo } from "@/components/Logo";
+import { uploadImage } from "@/lib/upload";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Check, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type FieldStatus = "idle" | "checking" | "ok" | "taken" | "invalid";
 
 export default function Register() {
   const nav = useNavigate();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState(false);
-  const [preview, setPreview] = useState<string>("");
-  const [file, setFile] = useState<File | null>(null);
-  const [f, setF] = useState({
-    full_name: "", email: "", phone: "", password: "", confirm: "",
-    biz_name: "", biz_cat: "khac" as BizCategory, biz_desc: "",
-  });
+  const [step, setStep] = useState(1);
+  // step 1
+  const [username, setU] = useState("");
+  const [usernameStatus, setUS] = useState<FieldStatus>("idle");
+  const [fullName, setFN] = useState("");
+  const [email, setE] = useState("");
+  const [emailStatus, setES] = useState<FieldStatus>("idle");
+  const [phone, setPh] = useState("");
+  const [phoneStatus, setPhS] = useState<FieldStatus>("idle");
+  const [password, setP] = useState("");
+  const [password2, setP2] = useState("");
+  const [avatarFile, setAv] = useState<File | null>(null);
+  const [isBiz, setBiz] = useState(false);
+  // step 2
+  const [bizName, setBN] = useState("");
+  const [bizType, setBT] = useState<BusinessType>("food");
+  const [open, setOpen] = useState("07:00");
+  const [close, setClose] = useState("22:00");
+  const [bizDesc, setBD] = useState("");
+  const [bizOffer, setBO] = useState("");
+  const [fbUrl, setFB] = useState("");
+  const [webUrl, setW] = useState("");
+  const [coverFile, setCov] = useState<File | null>(null);
+  const [termsOpen, setTO] = useState(false);
+  const [agree, setAgree] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fl = e.target.files?.[0];
-    if (!fl) return;
-    const err = validateImage(fl);
-    if (err) return toast.error(err);
-    setFile(fl); setPreview(URL.createObjectURL(fl));
+  const checkUnique = async (col: "username" | "email" | "phone", val: string) => {
+    if (!val) return false;
+    const { data } = await supabase.from("profiles").select("id").eq(col, val).limit(1).maybeSingle();
+    return !data;
   };
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!f.full_name || !f.email || !f.phone || !f.password) return toast.error("Vui lòng điền đầy đủ thông tin bắt buộc");
-    if (f.password.length < 6) return toast.error("Mật khẩu tối thiểu 6 ký tự");
-    if (f.password !== f.confirm) return toast.error("Mật khẩu xác nhận không khớp");
-    if (f.biz_name && !file) return toast.error("Vui lòng tải ảnh doanh nghiệp");
+  const onBlurUser = async () => {
+    if (!username) { setUS("idle"); return; }
+    if (!/^[a-z0-9_]{3,20}$/i.test(username)) { setUS("invalid"); return; }
+    setUS("checking");
+    setUS((await checkUnique("username", username.toLowerCase())) ? "ok" : "taken");
+  };
+  const onBlurEmail = async () => {
+    if (!email) { setES("idle"); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setES("invalid"); return; }
+    setES("checking");
+    setES((await checkUnique("email", email)) ? "ok" : "taken");
+  };
+  const onBlurPhone = async () => {
+    if (!phone) { setPhS("idle"); return; }
+    if (!/^\d{8,15}$/.test(phone)) { setPhS("invalid"); return; }
+    setPhS("checking");
+    setPhS((await checkUnique("phone", phone)) ? "ok" : "taken");
+  };
 
-    setBusy(true);
+  const step1Valid = username && fullName && email && phone && password.length >= 6 && password === password2
+    && usernameStatus === "ok" && emailStatus === "ok" && phoneStatus === "ok";
+
+  const goNext = () => {
+    if (!step1Valid) { toast.error("Vui lòng điền đủ thông tin hợp lệ"); return; }
+    if (isBiz) setStep(2);
+    else setTO(true);
+  };
+
+  const submitFinal = async () => {
+    if (!agree) { toast.error("Vui lòng đồng ý điều khoản"); return; }
+    setSubmitting(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email: f.email, password: f.password,
+      let avatarPath: string | null = null;
+      if (avatarFile) avatarPath = await uploadImage(avatarFile, "avatars");
+
+      const { data: sign, error } = await supabase.auth.signUp({
+        email: usernameToEmail(username),
+        password,
         options: {
           emailRedirectTo: `${window.location.origin}/`,
-          data: { full_name: f.full_name, phone: f.phone },
+          data: { username: username.toLowerCase(), full_name: fullName, phone, real_email: email, avatar_url: avatarPath },
         },
       });
       if (error) throw error;
+      const uid = sign.user?.id;
+      if (!uid) throw new Error("Không tạo được tài khoản");
 
-      if (f.biz_name && data.user && file) {
-        const path = await uploadImage(file, "businesses");
-        const { error: be } = await supabase.from("businesses").insert({
-          owner_id: data.user.id, name: f.biz_name, category: f.biz_cat,
-          description: f.biz_desc, phone: f.phone, image_url: path, status: "pending",
-        });
-        if (be) console.error(be);
-        toast.success("Đăng ký thành công! Doanh nghiệp đang chờ admin duyệt");
-      } else {
-        toast.success(`Chào mừng ${f.full_name}!`);
+      // give the trigger a moment, then update profile fields not in trigger
+      await new Promise(r => setTimeout(r, 600));
+
+      if (isBiz) {
+        let coverPath: string | null = null;
+        if (coverFile) coverPath = await uploadImage(coverFile, "covers");
+        const { data: biz, error: bErr } = await supabase.from("businesses").insert({
+          owner_id: uid,
+          name: bizName,
+          type: bizType,
+          description: bizDesc,
+          hours_open: open,
+          hours_close: close,
+          facebook_url: fbUrl || null,
+          website_url: webUrl || null,
+          cover_url: coverPath,
+          status: "pending",
+        }).select().single();
+        if (bErr) throw bErr;
+        if (bizOffer) {
+          await supabase.from("offers").insert({
+            business_id: biz.id, title: bizOffer, status: "active",
+          });
+        }
       }
+
+      toast.success("Đăng ký thành công! Đang chờ admin duyệt.");
       nav("/");
-    } catch (err: any) {
-      toast.error(err.message || "Đăng ký thất bại");
-    } finally { setBusy(false); }
+    } catch (e: any) {
+      toast.error(e.message || "Đăng ký thất bại");
+    } finally { setSubmitting(false); setTO(false); }
+  };
+
+  const Status = ({ s }: { s: FieldStatus }) => {
+    if (s === "ok") return <Check className="w-4 h-4 text-emerald-600" />;
+    if (s === "taken") return <span className="text-xs text-destructive">Đã tồn tại</span>;
+    if (s === "invalid") return <span className="text-xs text-destructive">Không hợp lệ</span>;
+    if (s === "checking") return <span className="text-xs text-muted-foreground">…</span>;
+    return null;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-card pb-10">
-      <div className="px-5 pt-5">
-        <button onClick={() => nav("/")} className="w-10 h-10 rounded-full bg-background grid place-items-center shadow-soft">
-          <ArrowLeft className="w-4 h-4" />
-        </button>
-      </div>
-      <div className="px-5 pt-3 text-center">
-        <Logo size={56} className="justify-center" />
-        <h1 className="text-2xl font-extrabold mt-3">Gia nhập Liên Minh</h1>
-        <p className="text-sm text-muted-foreground">Một cộng đồng - Nhiều giá trị</p>
-      </div>
-
-      <form onSubmit={submit} className="px-5 mt-5 space-y-3">
-        <Field label="Họ và tên *" value={f.full_name} onChange={v => setF({ ...f, full_name: v })} />
-        <Field label="Email *" type="email" value={f.email} onChange={v => setF({ ...f, email: v })} />
-        <Field label="Số điện thoại *" value={f.phone} onChange={v => setF({ ...f, phone: v })} />
-        <Field label="Mật khẩu *" type="password" value={f.password} onChange={v => setF({ ...f, password: v })} />
-        <Field label="Xác nhận mật khẩu *" type="password" value={f.confirm} onChange={v => setF({ ...f, confirm: v })} />
-
-        <div className="p-4 rounded-2xl bg-card border-2 border-primary/20 space-y-3">
-          <div className="text-xs font-bold uppercase text-primary">Doanh nghiệp (không bắt buộc)</div>
-          <Field label="Tên doanh nghiệp" value={f.biz_name} onChange={v => setF({ ...f, biz_name: v })} />
-          <div>
-            <Label>Danh mục</Label>
-            <div className="flex flex-wrap gap-1.5">
-              {CATEGORIES.map(c => (
-                <button type="button" key={c} onClick={() => setF({ ...f, biz_cat: c })}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold border transition ${f.biz_cat === c ? "bg-gradient-brand text-white border-transparent" : "bg-background border-border text-muted-foreground"}`}>
-                  {CATEGORY_LABEL[c]}
-                </button>
-              ))}
-            </div>
-          </div>
-          <Field label="Mô tả doanh nghiệp" value={f.biz_desc} onChange={v => setF({ ...f, biz_desc: v })} textarea />
-          <div>
-            <Label>Hình ảnh doanh nghiệp</Label>
-            <input ref={fileRef} type="file" accept={ACCEPT} onChange={onFile} className="hidden" />
-            <button type="button" onClick={() => fileRef.current?.click()}
-              className="w-full h-32 rounded-xl border-2 border-dashed border-border bg-background flex flex-col items-center justify-center gap-1 overflow-hidden">
-              {preview ? <img src={preview} className="w-full h-full object-cover" alt="preview" /> : (
-                <><Camera className="w-6 h-6 text-muted-foreground" /><span className="text-xs text-muted-foreground">Chọn ảnh (JPG/PNG/WEBP, ≤5MB)</span></>
-              )}
-            </button>
-          </div>
+    <div className="min-h-screen p-6 bg-background">
+      <div className="max-w-sm mx-auto space-y-5">
+        <div className="text-center space-y-2">
+          <Logo size={56} />
+          <h1 className="text-xl font-bold">{step === 1 ? "Đăng ký tài khoản" : "Thông tin doanh nghiệp"}</h1>
+          <div className="text-xs text-muted-foreground">Bước {step}/{isBiz ? 2 : 1}</div>
         </div>
 
-        <button disabled={busy} className="w-full bg-gradient-brand text-white font-extrabold py-4 rounded-2xl shadow-brand active:scale-95 transition mt-4 disabled:opacity-60 flex items-center justify-center gap-2">
-          {busy && <Loader2 className="w-4 h-4 animate-spin" />}ĐĂNG KÝ THÀNH VIÊN
-        </button>
-        <p className="text-center text-sm text-muted-foreground pt-2">
-          Đã có tài khoản? <Link to="/auth/login" className="text-primary font-bold">Đăng nhập</Link>
+        {step === 1 ? (
+          <div className="space-y-3">
+            <Field label="Tên đăng nhập *" right={<Status s={usernameStatus} />}>
+              <input value={username} onChange={e => { setU(e.target.value); setUS("idle"); }} onBlur={onBlurUser}
+                autoCapitalize="none" required
+                className="w-full px-4 py-3 rounded-xl border bg-card" placeholder="ví dụ: minhanh" />
+            </Field>
+            <Field label="Họ và tên *">
+              <input value={fullName} onChange={e => setFN(e.target.value)} required
+                className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Email *" right={<Status s={emailStatus} />}>
+              <input type="email" value={email} onChange={e => { setE(e.target.value); setES("idle"); }} onBlur={onBlurEmail} required
+                className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Số điện thoại *" right={<Status s={phoneStatus} />}>
+              <input value={phone} onChange={e => { setPh(e.target.value); setPhS("idle"); }} onBlur={onBlurPhone} required
+                className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Mật khẩu * (tối thiểu 6 ký tự)">
+              <input type="password" value={password} onChange={e => setP(e.target.value)} minLength={6} required
+                className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Xác nhận mật khẩu *">
+              <input type="password" value={password2} onChange={e => setP2(e.target.value)} required
+                className="w-full px-4 py-3 rounded-xl border bg-card" />
+              {password2 && password !== password2 && <span className="text-xs text-destructive">Mật khẩu không khớp</span>}
+            </Field>
+            <Field label="Ảnh đại diện (tùy chọn)">
+              <input type="file" accept="image/*" onChange={e => setAv(e.target.files?.[0] ?? null)} />
+            </Field>
+
+            <label className="flex items-center justify-between p-3 rounded-xl bg-accent">
+              <span className="text-sm font-semibold">Bạn có đang kinh doanh không?</span>
+              <input type="checkbox" checked={isBiz} onChange={e => setBiz(e.target.checked)} className="w-5 h-5" />
+            </label>
+
+            <button onClick={goNext} className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold">
+              {isBiz ? "Tiếp tục" : "Hoàn tất đăng ký"}
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <Field label="Tên doanh nghiệp *">
+              <input value={bizName} onChange={e => setBN(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Loại hình *">
+              <div className="flex flex-wrap gap-2">
+                {BUSINESS_TYPES.map(t => (
+                  <button type="button" key={t} onClick={() => setBT(t)}
+                    className={cn("px-3 py-1.5 rounded-full text-sm border",
+                      bizType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card")}>
+                    {BUSINESS_TYPE_LABEL[t]}
+                  </button>
+                ))}
+              </div>
+            </Field>
+            <div className="grid grid-cols-2 gap-3">
+              <Field label="Giờ mở *">
+                <input type="time" value={open} onChange={e => setOpen(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
+              </Field>
+              <Field label="Giờ đóng *">
+                <input type="time" value={close} onChange={e => setClose(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
+              </Field>
+            </div>
+            <Field label="Mô tả *">
+              <textarea value={bizDesc} onChange={e => setBD(e.target.value)} required rows={3} className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Ưu đãi/Deal cho thành viên *">
+              <input value={bizOffer} onChange={e => setBO(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Facebook URL">
+              <input value={fbUrl} onChange={e => setFB(e.target.value)} className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Website">
+              <input value={webUrl} onChange={e => setW(e.target.value)} className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Ảnh bìa">
+              <input type="file" accept="image/*" onChange={e => setCov(e.target.files?.[0] ?? null)} />
+            </Field>
+            <div className="flex gap-2">
+              <button onClick={() => setStep(1)} className="flex-1 py-3 rounded-xl border">← Quay lại</button>
+              <button onClick={() => setTO(true)} disabled={!bizName || !bizDesc || !bizOffer}
+                className="flex-1 py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50">
+                Hoàn tất
+              </button>
+            </div>
+          </div>
+        )}
+
+        <p className="text-center text-sm">
+          Đã có tài khoản? <Link to="/auth/login" className="text-primary font-semibold">Đăng nhập</Link>
         </p>
-      </form>
+      </div>
+
+      <Dialog open={termsOpen} onOpenChange={setTO}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Điều khoản & điều kiện</DialogTitle></DialogHeader>
+          <div className="text-sm space-y-2 max-h-60 overflow-y-auto">
+            <p>Bằng việc đăng ký, bạn cam kết cung cấp thông tin chính xác và tuân thủ quy định của Liên Minh Liên Đoàn.</p>
+            <p>Tài khoản của bạn sẽ được admin xem xét và phê duyệt trong thời gian sớm nhất.</p>
+            <p>Trong thời gian chờ duyệt, bạn có thể duyệt nội dung nhưng chưa thể đăng đánh giá, gửi đề xuất hay nhắn tin.</p>
+          </div>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={agree} onChange={e => setAgree(e.target.checked)} />
+            Tôi đồng ý với điều khoản
+          </label>
+          <button onClick={submitFinal} disabled={!agree || submitting}
+            className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50">
+            {submitting ? "Đang xử lý…" : "Xác nhận đăng ký"}
+          </button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
 
-function Label({ children }: { children: React.ReactNode }) {
-  return <div className="text-xs font-bold uppercase text-muted-foreground mb-1.5">{children}</div>;
-}
-
-function Field({ label, value, onChange, type = "text", textarea }: { label: string; value: string; onChange: (v: string) => void; type?: string; textarea?: boolean }) {
+function Field({ label, children, right }: { label: string; children: React.ReactNode; right?: React.ReactNode }) {
   return (
-    <div>
-      <Label>{label}</Label>
-      {textarea ? (
-        <textarea value={value} onChange={e => onChange(e.target.value)} rows={3}
-          className="w-full px-3 py-2.5 rounded-xl bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
-      ) : (
-        <input type={type} value={value} onChange={e => onChange(e.target.value)}
-          className="w-full px-3 py-2.5 rounded-xl bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/40" />
-      )}
-    </div>
+    <label className="block space-y-1">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold text-muted-foreground">{label}</span>
+        {right}
+      </div>
+      {children}
+    </label>
   );
 }

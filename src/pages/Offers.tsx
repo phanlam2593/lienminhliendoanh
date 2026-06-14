@@ -1,49 +1,37 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Tag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { Business, Offer } from "@/lib/types";
-import { Ticket, Calendar, Store } from "lucide-react";
-import { StoredImage } from "@/components/StoredImage";
+import type { Offer } from "@/lib/types";
+
+interface OfferWithBiz extends Offer { business?: { id: string; name: string; cover_url: string | null } | null }
 
 export default function Offers() {
-  const [items, setItems] = useState<(Offer & { business: Business })[]>([]);
+  const [list, setList] = useState<OfferWithBiz[]>([]);
 
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase.from("offers")
-        .select("*, business:businesses!inner(*)")
-        .eq("business.status", "approved")
-        .order("created_at", { ascending: false });
-      setItems((data as any) || []);
-    })();
+    supabase.from("offers").select("*, business:businesses(id, name, cover_url)")
+      .eq("status", "active").order("created_at", { ascending: false })
+      .then(({ data }) => setList((data ?? []) as OfferWithBiz[]));
   }, []);
 
   return (
-    <div className="px-5 py-4">
-      <h1 className="text-xl font-extrabold mb-3">Ưu đãi cộng đồng</h1>
-      {items.length === 0 ? (
-        <div className="p-10 text-center text-sm text-muted-foreground">Chưa có ưu đãi nào</div>
+    <div className="p-4 space-y-3">
+      <h1 className="text-xl font-extrabold">Ưu đãi</h1>
+      {list.length === 0 ? (
+        <p className="text-sm text-center py-12 text-muted-foreground">Chưa có ưu đãi nào</p>
       ) : (
         <div className="space-y-3">
-          {items.map(o => (
-            <Link key={o.id} to={`/dn/${o.business_id}`}
-              className="block bg-card rounded-2xl shadow-card border border-border/60 overflow-hidden active:scale-[0.98] transition">
-              <div className="flex">
-                <div className="w-24 h-24 shrink-0 bg-muted">
-                  <StoredImage path={o.image_url || o.business.image_url} className="w-full h-full object-cover" alt={o.title} />
+          {list.map(o => (
+            <Link key={o.id} to={`/dn/${o.business?.id}`} className="block p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-sky-50 border border-emerald-100 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-gradient-brand text-white grid place-items-center"><Tag className="w-5 h-5" /></div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-sm">{o.title}</div>
+                  {o.description && <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{o.description}</div>}
+                  <div className="text-xs text-primary font-semibold mt-1">{o.business?.name}</div>
                 </div>
-                <div className="flex-1 p-3 min-w-0">
-                  <div className="flex items-center gap-1 text-[10px] text-primary font-bold uppercase">
-                    <Store className="w-3 h-3" />{o.business.name}
-                  </div>
-                  <div className="font-bold text-sm mt-0.5 line-clamp-1">{o.title}</div>
-                  {o.description && <div className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{o.description}</div>}
-                  {o.end_date && (
-                    <div className="flex items-center gap-1 text-[10px] text-warning mt-1">
-                      <Calendar className="w-3 h-3" />Đến {new Date(o.end_date).toLocaleDateString("vi-VN")}
-                    </div>
-                  )}
-                </div>
+                {o.code && <div className="text-xs font-mono font-bold bg-white px-2 py-1 rounded border border-dashed">{o.code}</div>}
               </div>
             </Link>
           ))}
