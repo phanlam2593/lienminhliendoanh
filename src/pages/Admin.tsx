@@ -144,7 +144,17 @@ function Offers() {
 
 function Reviews() {
   const [list, setList] = useState<(Review & { profile?: { full_name: string } | null; business?: { name: string } | null })[]>([]);
-  const load = () => supabase.from("reviews").select("*, profile:profiles(full_name), business:businesses(name)").order("created_at", { ascending: false }).then(({ data }) => setList((data ?? []) as any));
+  const load = async () => {
+    const { data } = await supabase.from("reviews").select("*, business:businesses(name)").order("created_at", { ascending: false });
+    const rows = (data ?? []) as any[];
+    const uids = [...new Set(rows.map((r: any) => r.user_id))];
+    let profMap = new Map<string, { full_name: string }>();
+    if (uids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", uids);
+      (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name }));
+    }
+    setList(rows.map((r: any) => ({ ...r, profile: profMap.get(r.user_id) ?? null })));
+  };
   useEffect(() => { load(); }, []);
   const del = async (id: string) => { await supabase.from("reviews").delete().eq("id", id); load(); };
   return (
