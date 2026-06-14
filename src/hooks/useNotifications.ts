@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Notification, Message } from "@/lib/types";
+
+const rand = () => Math.random().toString(36).slice(2, 8);
 
 export function useNotifications() {
   const { user } = useAuth();
