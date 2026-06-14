@@ -56,7 +56,7 @@ export function useUnreadMessages() {
   useEffect(() => {
     refresh();
     if (!user) return;
-    const ch = supabase.channel(`msg:${user.id}`)
+    const ch = supabase.channel(`msg:${user.id}:${rand()}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
         () => refresh())
       .subscribe();
