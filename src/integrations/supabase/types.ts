@@ -131,9 +131,42 @@ export type Database = {
         }
         Relationships: []
       }
+      offer_claims: {
+        Row: {
+          claimed_at: string
+          code: string
+          id: string
+          offer_id: string
+          user_id: string
+        }
+        Insert: {
+          claimed_at?: string
+          code: string
+          id?: string
+          offer_id: string
+          user_id: string
+        }
+        Update: {
+          claimed_at?: string
+          code?: string
+          id?: string
+          offer_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offer_claims_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       offers: {
         Row: {
           business_id: string
+          claim_count: number
           code: string | null
           created_at: string
           description: string | null
@@ -144,6 +177,7 @@ export type Database = {
         }
         Insert: {
           business_id: string
+          claim_count?: number
           code?: string | null
           created_at?: string
           description?: string | null
@@ -154,6 +188,7 @@ export type Database = {
         }
         Update: {
           business_id?: string
+          claim_count?: number
           code?: string | null
           created_at?: string
           description?: string | null

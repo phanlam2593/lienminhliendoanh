@@ -56,8 +56,17 @@ export interface Offer {
   description: string | null;
   code: string | null;
   status: OfferStatus;
+  claim_count: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface OfferClaim {
+  id: string;
+  offer_id: string;
+  user_id: string;
+  code: string;
+  claimed_at: string;
 }
 
 export interface Review {
