@@ -21,7 +21,7 @@ export function useNotifications() {
   useEffect(() => {
     refresh();
     if (!user) return;
-    const ch = supabase.channel(`notif:${user.id}`)
+    const ch = supabase.channel(`notif:${user.id}:${rand()}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
         () => refresh())
       .subscribe();
