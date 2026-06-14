@@ -195,7 +195,7 @@ export default function Register() {
           </div>
         ) : (
           <div className="space-y-3">
-            <Field label="Tên doanh nghiệp *">
+            <Field label="Tên doanh nghiệp *" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
               <input value={bizName} onChange={e => setBN(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
             <Field label="Loại hình *">
@@ -210,17 +210,17 @@ export default function Register() {
               </div>
             </Field>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Giờ mở *">
+              <Field label="Giờ mở *" hint="Ví dụ: 07:00">
                 <input type="time" value={open} onChange={e => setOpen(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
               </Field>
-              <Field label="Giờ đóng *">
+              <Field label="Giờ đóng *" hint="Ví dụ: 22:00">
                 <input type="time" value={close} onChange={e => setClose(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
               </Field>
             </div>
-            <Field label="Mô tả *">
+            <Field label="Mô tả *" hint="Mô tả ngắn gọn về không gian, phong cách, món đặc trưng">
               <textarea value={bizDesc} onChange={e => setBD(e.target.value)} required rows={3} className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
-            <Field label="Ưu đãi/Deal cho thành viên *">
+            <Field label="Ưu đãi/Deal cho thành viên *" hint="Ví dụ: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm 4 người">
               <input value={bizOffer} onChange={e => setBO(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
             <Field label="Facebook URL">
