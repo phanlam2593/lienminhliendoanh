@@ -24,12 +24,19 @@ export default function Home() {
       supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "active"),
       supabase.from("businesses").select("*").eq("status", "approved").eq("is_featured", true).limit(6),
       supabase.from("offers").select("*, business:businesses(id,name)").eq("status", "active").order("created_at", { ascending: false }).limit(5),
-      supabase.from("reviews").select("*, profile:profiles(full_name, avatar_url), business:businesses(id,name)").order("created_at", { ascending: false }).limit(5),
+      supabase.from("reviews").select("*, business:businesses(id,name)").order("created_at", { ascending: false }).limit(5),
     ]);
     setStats({ members: memC.count ?? 0, businesses: bizC.count ?? 0, offers: offC.count ?? 0 });
     setFeatured(((feat.data ?? []) as Business[]).map(b => ({ ...b })));
     setOffers((latestOffers.data ?? []) as OfferWithBiz[]);
-    setReviews((latestReviews.data ?? []) as ReviewWithMeta[]);
+    const reviewsList = (latestReviews.data ?? []) as any[];
+    const uids = [...new Set(reviewsList.map(r => r.user_id))];
+    let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
+    if (uids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", uids);
+      (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
+    }
+    setReviews(reviewsList.map(r => ({ ...r, profile: profMap.get(r.user_id) ?? null })) as ReviewWithMeta[]);
   };
 
   return (

@@ -30,11 +30,18 @@ export default function BusinessDetail() {
     const [{ data: bd }, { data: of }, { data: rv }] = await Promise.all([
       supabase.from("businesses").select("*").eq("id", id).maybeSingle(),
       supabase.from("offers").select("*").eq("business_id", id).eq("status", "active").order("created_at", { ascending: false }),
-      supabase.from("reviews").select("*, profile:profiles(full_name, avatar_url)").eq("business_id", id).order("created_at", { ascending: false }),
+      supabase.from("reviews").select("*").eq("business_id", id).order("created_at", { ascending: false }),
     ]);
     setB(bd as Business | null);
     setOffers((of ?? []) as Offer[]);
-    setReviews((rv ?? []) as ReviewMeta[]);
+    const reviewsList = (rv ?? []) as Review[];
+    const uids = [...new Set(reviewsList.map(r => r.user_id))];
+    let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
+    if (uids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", uids);
+      (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
+    }
+    setReviews(reviewsList.map(r => ({ ...r, profile: profMap.get(r.user_id) ?? null })));
   };
 
   const submitReview = async () => {
