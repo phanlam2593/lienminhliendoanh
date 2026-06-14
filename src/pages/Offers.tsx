@@ -30,6 +30,7 @@ export default function Offers() {
                   <div className="font-bold text-sm">{o.title}</div>
                   {o.description && <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{o.description}</div>}
                   <div className="text-xs text-primary font-semibold mt-1">{o.business?.name}</div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">Đã có {o.claim_count ?? 0} người nhận ưu đãi này</div>
                 </div>
                 {o.code && <div className="text-xs font-mono font-bold bg-white px-2 py-1 rounded border border-dashed">{o.code}</div>}
               </div>

@@ -31,6 +31,10 @@ export default function BusinessDetail() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  const [claimOffer, setClaimOffer] = useState<Offer | null>(null);
+  const [claimCode, setClaimCode] = useState<string | null>(null);
+  const [claimedCodes, setClaimedCodes] = useState<Record<string, string>>({});
+  const [claiming, setClaiming] = useState(false);
 
   useEffect(() => { void load(); }, [id]);
 
@@ -50,6 +54,46 @@ export default function BusinessDetail() {
       (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
     }
     setReviews(reviewsList.map(r => ({ ...r, profile: profMap.get(r.user_id) ?? null })));
+
+    if (user) {
+      const { data: claims } = await supabase.from("offer_claims").select("offer_id, code").eq("user_id", user.id);
+      const map: Record<string, string> = {};
+      (claims ?? []).forEach((c: any) => { map[c.offer_id] = c.code; });
+      setClaimedCodes(map);
+    }
+  };
+
+  const openClaim = (o: Offer) => {
+    if (claimedCodes[o.id]) {
+      setClaimOffer(o);
+      setClaimCode(claimedCodes[o.id]);
+      return;
+    }
+    setClaimOffer(o);
+    setClaimCode(null);
+  };
+
+  const confirmClaim = async () => {
+    if (!user || !claimOffer) return;
+    setClaiming(true);
+    const code = makeCode();
+    const { error } = await supabase.from("offer_claims").insert({
+      offer_id: claimOffer.id, user_id: user.id, code,
+    });
+    setClaiming(false);
+    if (error) {
+      if (error.code === "23505") {
+        toast.info("Bạn đã nhận ưu đãi này rồi");
+        const { data } = await supabase.from("offer_claims").select("code").eq("offer_id", claimOffer.id).eq("user_id", user.id).maybeSingle();
+        if (data) { setClaimCode((data as any).code); setClaimedCodes(p => ({ ...p, [claimOffer.id]: (data as any).code })); }
+        return;
+      }
+      toast.error(error.message); return;
+    }
+    setClaimCode(code);
+    setClaimedCodes(p => ({ ...p, [claimOffer.id]: code }));
+    toast.success("Bạn đã nhận ưu đãi thành công!");
+    load();
   };
 
   const submitReview = async () => {
@@ -108,8 +152,17 @@ export default function BusinessDetail() {
                 <div key={o.id} className="p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-sky-50 border border-emerald-100">
                   <div className="font-semibold text-sm">{o.title}</div>
                   {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
-                  {o.code && <div className="mt-2 inline-block bg-white border border-dashed px-3 py-1 rounded text-sm font-mono font-bold">{o.code}</div>}
-                  {isApproved && <button className="mt-2 ml-2 text-xs px-3 py-1 rounded-full bg-gradient-brand text-primary-foreground font-semibold">Nhận ưu đãi</button>}
+                  <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+                    <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} người nhận ưu đãi này
+                  </div>
+                  {isApproved && (
+                    <button
+                      onClick={() => openClaim(o)}
+                      className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
+                    >
+                      {claimedCodes[o.id] ? "Xem mã ưu đãi" : "Nhận ưu đãi"}
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -172,6 +225,34 @@ export default function BusinessDetail() {
       )}
 
       <ReportDialog open={reportOpen} onOpenChange={setReportOpen} targetType="business" targetId={b.id} />
+
+      <Dialog open={!!claimOffer} onOpenChange={(v) => { if (!v) { setClaimOffer(null); setClaimCode(null); } }}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader><DialogTitle>{claimOffer?.title}</DialogTitle></DialogHeader>
+          {claimOffer && (
+            <div className="space-y-3">
+              {claimOffer.description && <p className="text-sm text-muted-foreground">{claimOffer.description}</p>}
+              {claimCode ? (
+                <>
+                  <div className="bg-emerald-50 border-2 border-dashed border-emerald-300 rounded-xl p-4 text-center">
+                    <div className="text-xs text-muted-foreground mb-1">Mã ưu đãi của bạn</div>
+                    <div className="text-2xl font-mono font-extrabold tracking-wider text-emerald-700">{claimCode}</div>
+                  </div>
+                  <p className="text-xs text-center text-muted-foreground">Xuất trình mã này tại doanh nghiệp để sử dụng ưu đãi.</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs text-muted-foreground">Nhấn xác nhận để nhận mã ưu đãi cá nhân (mỗi tài khoản chỉ nhận 1 lần).</p>
+                  <button onClick={confirmClaim} disabled={claiming}
+                    className="w-full py-2.5 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50">
+                    {claiming ? "Đang xử lý…" : "Xác nhận nhận ưu đãi"}
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
