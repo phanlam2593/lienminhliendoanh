@@ -32,7 +32,10 @@ export default function Suggest() {
   return (
     <form onSubmit={submit} className="p-4 space-y-3 max-w-md">
       <h1 className="text-xl font-extrabold">Đề xuất doanh nghiệp</h1>
-      <input value={name} onChange={e => setName(e.target.value)} placeholder="Tên doanh nghiệp *" required className="w-full px-3 py-2.5 rounded-lg border bg-card" />
+      <div className="space-y-1">
+        <input value={name} onChange={e => setName(e.target.value)} placeholder="Tên doanh nghiệp *" required className="w-full px-3 py-2.5 rounded-lg border bg-card" />
+        <p className="text-[11px] text-muted-foreground">Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai</p>
+      </div>
       <div className="flex flex-wrap gap-2">
         {BUSINESS_TYPES.map(t => (
           <button type="button" key={t} onClick={() => setType(t)}
@@ -42,7 +45,10 @@ export default function Suggest() {
         ))}
       </div>
       <input value={contact} onChange={e => setC(e.target.value)} placeholder="Liên hệ (SĐT/email) *" required className="w-full px-3 py-2.5 rounded-lg border bg-card" />
-      <textarea value={desc} onChange={e => setD(e.target.value)} placeholder="Mô tả ngắn" rows={3} className="w-full px-3 py-2.5 rounded-lg border bg-card" />
+      <div className="space-y-1">
+        <textarea value={desc} onChange={e => setD(e.target.value)} placeholder="Mô tả ngắn" rows={3} className="w-full px-3 py-2.5 rounded-lg border bg-card" />
+        <p className="text-[11px] text-muted-foreground">Mô tả ngắn gọn về không gian, phong cách, món đặc trưng</p>
+      </div>
       <button disabled={loading} className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold">{loading ? "Đang gửi…" : "Gửi đề xuất"}</button>
     </form>
   );
