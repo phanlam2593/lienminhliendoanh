@@ -135,22 +135,28 @@ export type Database = {
         Row: {
           claimed_at: string
           code: string
+          expires_at: string
           id: string
           offer_id: string
+          seq: number | null
           user_id: string
         }
         Insert: {
           claimed_at?: string
           code: string
+          expires_at?: string
           id?: string
           offer_id: string
+          seq?: number | null
           user_id: string
         }
         Update: {
           claimed_at?: string
           code?: string
+          expires_at?: string
           id?: string
           offer_id?: string
+          seq?: number | null
           user_id?: string
         }
         Relationships: [
@@ -379,6 +385,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      claim_offer: {
+        Args: { _offer_id: string }
+        Returns: {
+          claimed_at: string
+          code: string
+          expires_at: string
+          id: string
+          offer_id: string
+          seq: number | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "offer_claims"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -391,6 +415,7 @@ export type Database = {
         Args: { _field: string; _value: string }
         Returns: boolean
       }
+      unaccent_safe: { Args: { _t: string }; Returns: string }
     }
     Enums: {
       account_status: "pending" | "approved" | "rejected"
