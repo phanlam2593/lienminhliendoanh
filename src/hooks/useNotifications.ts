@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Notification, Message } from "@/lib/types";
+
+const rand = () => Math.random().toString(36).slice(2, 8);
 
 export function useNotifications() {
   const { user } = useAuth();
@@ -19,7 +21,7 @@ export function useNotifications() {
   useEffect(() => {
     refresh();
     if (!user) return;
-    const ch = supabase.channel(`notif:${user.id}`)
+    const ch = supabase.channel(`notif:${user.id}:${rand()}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
         () => refresh())
       .subscribe();
@@ -54,7 +56,7 @@ export function useUnreadMessages() {
   useEffect(() => {
     refresh();
     if (!user) return;
-    const ch = supabase.channel(`msg:${user.id}`)
+    const ch = supabase.channel(`msg:${user.id}:${rand()}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
         () => refresh())
       .subscribe();
