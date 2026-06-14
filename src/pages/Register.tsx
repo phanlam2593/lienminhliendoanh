@@ -14,6 +14,7 @@ type FieldStatus = "idle" | "checking" | "ok" | "taken" | "invalid";
 
 export default function Register() {
   const nav = useNavigate();
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [step, setStep] = useState(1);
   // step 1
   const [username, setU] = useState("");
