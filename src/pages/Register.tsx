@@ -154,7 +154,7 @@ export default function Register() {
         {step === 1 ? (
           <div className="space-y-3">
 
-            <Field label="Tên đăng nhập *" right={<Status s={usernameStatus} />}>
+            <Field label="Tên đăng nhập *" right={<Status s={usernameStatus} />} hint="3–20 ký tự, chỉ dùng chữ thường, số và dấu gạch dưới">
               <input value={username} onChange={e => { setU(e.target.value); setUS("idle"); }} onBlur={onBlurUser}
                 autoCapitalize="none" required
                 className="w-full px-4 py-3 rounded-xl border bg-card" placeholder="ví dụ: minhanh" />
@@ -171,7 +171,7 @@ export default function Register() {
               <input value={phone} onChange={e => { setPh(e.target.value); setPhS("idle"); }} onBlur={onBlurPhone} required
                 className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
-            <Field label="Mật khẩu * (tối thiểu 6 ký tự)">
+            <Field label="Mật khẩu *" hint="Tối thiểu 6 ký tự, bao gồm chữ cái và số">
               <input type="password" value={password} onChange={e => setP(e.target.value)} minLength={6} required
                 className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
