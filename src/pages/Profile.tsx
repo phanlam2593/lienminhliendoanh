@@ -227,11 +227,12 @@ function ReportsInbox({ businessIds }: { businessIds: string[] }) {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <label className="block space-y-1">
       <span className="text-[11px] font-semibold text-muted-foreground">{label}</span>
       {children}
+      {hint && <p className="text-[11px] text-muted-foreground">{hint}</p>}
     </label>
   );
 }
