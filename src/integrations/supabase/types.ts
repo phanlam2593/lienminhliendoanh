@@ -387,6 +387,10 @@ export type Database = {
         Returns: boolean
       }
       is_approved_member: { Args: { _user_id: string }; Returns: boolean }
+      is_field_taken: {
+        Args: { _field: string; _value: string }
+        Returns: boolean
+      }
     }
     Enums: {
       account_status: "pending" | "approved" | "rejected"

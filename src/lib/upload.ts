@@ -10,11 +10,17 @@ export function validateImage(file: File): string | null {
   return null;
 }
 
-export async function uploadImage(file: File, folder = "general"): Promise<string> {
+export async function uploadImage(file: File, folder = "general", ownerId?: string): Promise<string> {
   const err = validateImage(file);
   if (err) throw new Error(err);
+  let uid = ownerId;
+  if (!uid) {
+    const { data } = await supabase.auth.getUser();
+    uid = data.user?.id;
+  }
+  if (!uid) throw new Error("Cần đăng nhập để tải ảnh lên");
   const ext = file.name.split(".").pop() || "jpg";
-  const path = `${folder}/${crypto.randomUUID()}.${ext}`;
+  const path = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from("uploads").upload(path, file, {
     contentType: file.type, upsert: false,
   });
