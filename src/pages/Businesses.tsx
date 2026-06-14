@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Business, CATEGORIES, CATEGORY_LABEL, BizCategory } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
-import { Search, SlidersHorizontal, MapPin, Star, Ticket, Sparkles } from "lucide-react";
+import { Search, SlidersHorizontal, MapPin, Star, Tag, Sparkles } from "lucide-react";
 
 type Sort = "new" | "rated" | "offers";
 
 export default function Businesses() {
   const [list, setList] = useState<Business[]>([]);
-  const [counts, setCounts] = useState<Record<string, { rating: number; offers: number }>>({});
+  const [counts, setCounts] = useState<Record<string, { rating: number; offers: number; offerTitle?: string }>>({});
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<BizCategory | "all">("all");
   const [sort, setSort] = useState<Sort>("new");
@@ -17,24 +17,27 @@ export default function Businesses() {
   useEffect(() => {
     (async () => {
       const { data } = await supabase.from("businesses").select("*").eq("status", "approved").order("created_at", { ascending: false });
-      const businesses = (data as Business[]) || [];
-      setList(businesses);
-      // load aggregate counts
+      setList((data as Business[]) || []);
       const [rev, off] = await Promise.all([
         supabase.from("reviews").select("business_id, rating"),
-        supabase.from("offers").select("business_id"),
+        supabase.from("offers").select("business_id, title, created_at").order("created_at", { ascending: false }),
       ]);
-      const c: Record<string, { rating: number; offers: number; count: number; sum: number }> = {};
+      const c: Record<string, { count: number; sum: number; offers: number; offerTitle?: string }> = {};
       (rev.data || []).forEach((r: any) => {
-        c[r.business_id] ??= { rating: 0, offers: 0, count: 0, sum: 0 };
+        c[r.business_id] ??= { count: 0, sum: 0, offers: 0 };
         c[r.business_id].count++; c[r.business_id].sum += r.rating;
       });
       (off.data || []).forEach((o: any) => {
-        c[o.business_id] ??= { rating: 0, offers: 0, count: 0, sum: 0 };
+        c[o.business_id] ??= { count: 0, sum: 0, offers: 0 };
         c[o.business_id].offers++;
+        if (!c[o.business_id].offerTitle) c[o.business_id].offerTitle = o.title;
       });
       const out: any = {};
-      Object.keys(c).forEach(k => out[k] = { rating: c[k].count ? c[k].sum / c[k].count : 0, offers: c[k].offers });
+      Object.keys(c).forEach(k => out[k] = {
+        rating: c[k].count ? c[k].sum / c[k].count : 0,
+        offers: c[k].offers,
+        offerTitle: c[k].offerTitle,
+      });
       setCounts(out);
     })();
   }, []);
@@ -52,8 +55,8 @@ export default function Businesses() {
   }, [list, q, cat, sort, counts]);
 
   return (
-    <div className="px-5 py-4">
-      <h1 className="text-xl font-extrabold mb-3">Doanh nghiệp</h1>
+    <div className="px-4 py-4">
+      <h1 className="text-xl font-extrabold mb-3">Khám phá doanh nghiệp</h1>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm theo tên..."
@@ -75,52 +78,74 @@ export default function Businesses() {
         ))}
       </div>
 
-      <div className="mt-4 space-y-3">
-        {filtered.map(b => {
-          const c = counts[b.id];
-          return (
-            <Link key={b.id} to={`/dn/${b.id}`}
-              className={`relative flex gap-3 bg-card rounded-2xl shadow-card overflow-hidden border active:scale-[0.99] transition ${b.featured ? "border-primary/60 ring-1 ring-primary/30" : "border-border/60"}`}>
-              <StoredImage path={b.image_url} className="w-24 h-24 object-cover flex-shrink-0" fallbackClassName="w-24 h-24 flex-shrink-0" alt={b.name} />
-              <div className="flex-1 min-w-0 py-2.5 pr-3">
-                <div className="flex items-start gap-2">
-                  <h3 className="font-bold text-sm flex-1 line-clamp-1">{b.name}</h3>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold whitespace-nowrap">
-                    {CATEGORY_LABEL[b.category]}
-                  </span>
-                </div>
-                {b.featured && (
-                  <div className="inline-flex items-center gap-1 mt-1 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 bg-gradient-brand text-white rounded-full">
-                    <Sparkles className="w-2.5 h-2.5" />Nổi bật cộng đồng
-                  </div>
-                )}
-                {b.description && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{b.description}</p>}
-                <div className="flex items-center gap-3 mt-1.5 text-[11px] text-muted-foreground">
-                  {b.address && (
-                    <span className="flex items-center gap-0.5 min-w-0">
-                      <MapPin className="w-3 h-3 flex-shrink-0" /><span className="line-clamp-1">{b.address}</span>
-                    </span>
-                  )}
-                  {c?.rating > 0 && (
-                    <span className="flex items-center gap-0.5 text-warning font-bold">
-                      <Star className="w-3 h-3 fill-current" />{c.rating.toFixed(1)}
-                    </span>
-                  )}
-                  {c?.offers > 0 && (
-                    <span className="flex items-center gap-0.5 text-primary font-bold">
-                      <Ticket className="w-3 h-3" />{c.offers}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+      <div className="mt-4 space-y-4">
+        {filtered.map(b => <BusinessListCard key={b.id} b={b} info={counts[b.id]} />)}
       </div>
       {filtered.length === 0 && (
         <div className="p-8 text-center text-sm text-muted-foreground">Không có doanh nghiệp nào</div>
       )}
     </div>
+  );
+}
+
+export function BusinessListCard({ b, info }: { b: Business; info?: { rating: number; offers: number; offerTitle?: string } }) {
+  const rating = info?.rating || 0;
+  return (
+    <Link to={`/dn/${b.id}`}
+      className={`block bg-card rounded-2xl shadow-md overflow-hidden border active:scale-[0.99] transition ${b.featured ? "border-primary/60 ring-1 ring-primary/30" : "border-border/60"}`}>
+      {/* Hero image */}
+      <div className="relative aspect-[16/9] w-full">
+        <StoredImage path={b.image_url} className="w-full h-full object-cover" fallbackClassName="w-full h-full" alt={b.name} />
+        {/* Category pill - top left */}
+        <span className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-foreground shadow-sm">
+          <Tag className="w-2.5 h-2.5" />{CATEGORY_LABEL[b.category]}
+        </span>
+        {/* Rating pill - top right */}
+        {rating > 0 && (
+          <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-white/90 backdrop-blur text-foreground shadow-sm">
+            <Star className="w-3 h-3 fill-warning text-warning" />{rating.toFixed(1)}
+          </span>
+        )}
+        {b.featured && (
+          <span className="absolute bottom-2.5 right-2.5 inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-gradient-brand text-white shadow-brand">
+            <Sparkles className="w-2.5 h-2.5" />Nổi bật
+          </span>
+        )}
+        {/* Logo avatar overlapping */}
+        <div className="absolute -bottom-5 left-3 w-14 h-14 rounded-xl bg-card border-2 border-card shadow-md overflow-hidden grid place-items-center">
+          <div className="w-full h-full bg-gradient-brand grid place-items-center text-white font-extrabold text-lg">
+            {b.name.charAt(0).toUpperCase()}
+          </div>
+        </div>
+      </div>
+
+      {/* Body */}
+      <div className="pt-6 pb-3 px-3">
+        <h3 className="font-extrabold text-base leading-tight line-clamp-1">{b.name}</h3>
+        {b.address && (
+          <div className="flex items-center gap-1 mt-1 text-xs text-muted-foreground">
+            <MapPin className="w-3 h-3 flex-shrink-0" /><span className="line-clamp-1">{b.address}</span>
+          </div>
+        )}
+        {b.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{b.description}</p>}
+      </div>
+
+      {/* Offer banner */}
+      {info?.offerTitle && (
+        <div className="flex items-center gap-2 px-3 py-2.5 bg-accent border-t border-primary/20">
+          <div className="w-6 h-6 rounded-full bg-primary grid place-items-center text-white shrink-0">
+            <Tag className="w-3 h-3" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-[10px] uppercase font-bold tracking-wider text-primary">Ưu đãi cộng đồng</div>
+            <div className="text-xs font-bold text-accent-foreground line-clamp-1">{info.offerTitle}</div>
+          </div>
+          {info.offers > 1 && (
+            <span className="text-[10px] font-bold text-primary">+{info.offers - 1}</span>
+          )}
+        </div>
+      )}
+    </Link>
   );
 }
 
