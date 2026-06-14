@@ -80,15 +80,12 @@ export default function Register() {
     if (!agree) { toast.error("Vui lòng đồng ý điều khoản"); return; }
     setSubmitting(true);
     try {
-      let avatarPath: string | null = null;
-      if (avatarFile) avatarPath = await uploadImage(avatarFile, "avatars");
-
       const { data: sign, error } = await supabase.auth.signUp({
         email: usernameToEmail(username),
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/`,
-          data: { username: username.toLowerCase(), full_name: fullName, phone, real_email: email, avatar_url: avatarPath },
+          data: { username: username.toLowerCase(), full_name: fullName, phone, real_email: email },
         },
       });
       if (error) throw error;
@@ -98,9 +95,15 @@ export default function Register() {
       // give the trigger a moment, then update profile fields not in trigger
       await new Promise(r => setTimeout(r, 600));
 
+      let avatarPath: string | null = null;
+      if (avatarFile) {
+        avatarPath = await uploadImage(avatarFile, "avatars", uid);
+        await supabase.from("profiles").update({ avatar_url: avatarPath }).eq("id", uid);
+      }
+
       if (isBiz) {
         let coverPath: string | null = null;
-        if (coverFile) coverPath = await uploadImage(coverFile, "covers");
+        if (coverFile) coverPath = await uploadImage(coverFile, "covers", uid);
         const { data: biz, error: bErr } = await supabase.from("businesses").insert({
           owner_id: uid,
           name: bizName,
