@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle } from "lucide-react";
+import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business, Offer, Review } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
@@ -10,8 +10,16 @@ import { OpenBadge } from "@/components/OpenBadge";
 import { useAuth } from "@/lib/auth";
 import { ReportDialog } from "@/components/ReportDialog";
 import { timeAgo } from "@/lib/time";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
+
+const makeCode = () => {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let s = "";
+  for (let i = 0; i < 8; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return s;
+};
 
 export default function BusinessDetail() {
   const { id = "" } = useParams();
