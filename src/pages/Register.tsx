@@ -78,6 +78,27 @@ export default function Register() {
     else setTO(true);
   };
 
+  const signUpWithGoogle = async () => {
+    setGoogleLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) {
+        toast.error(result.error.message || "Đăng ký Google thất bại");
+      }
+      if (result.redirected) return;
+      if (!result.error && !result.redirected) {
+        toast.success("Đăng ký thành công");
+        nav("/");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Đăng ký Google thất bại");
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
   const submitFinal = async () => {
     if (!agree) { toast.error("Vui lòng đồng ý điều khoản"); return; }
     setSubmitting(true);
