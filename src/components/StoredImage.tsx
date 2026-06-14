@@ -15,6 +15,7 @@ export function StoredImage({ path, className, fallbackClassName, alt = "", ...r
   useEffect(() => {
     let cancel = false;
     if (!path) { setUrl(""); return; }
+    if (/^https?:\/\//i.test(path)) { setUrl(path); return; }
     getSignedUrl(path).then(u => { if (!cancel) setUrl(u || ""); });
     return () => { cancel = true; };
   }, [path]);
