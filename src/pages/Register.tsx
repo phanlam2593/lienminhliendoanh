@@ -42,7 +42,9 @@ export default function Register() {
 
   const checkUnique = async (col: "username" | "email" | "phone", val: string) => {
     if (!val) return false;
-    const { data } = await supabase.from("profiles").select("id").eq(col, val).limit(1).maybeSingle();
+    const value = col === "username" ? val.toLowerCase() : val;
+    const { data, error } = await supabase.rpc("is_field_taken", { _field: col, _value: value });
+    if (error) return false;
     return !data;
   };
 
