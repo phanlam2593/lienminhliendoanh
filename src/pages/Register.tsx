@@ -154,7 +154,7 @@ export default function Register() {
         {step === 1 ? (
           <div className="space-y-3">
 
-            <Field label="Tên đăng nhập *" right={<Status s={usernameStatus} />}>
+            <Field label="Tên đăng nhập *" right={<Status s={usernameStatus} />} hint="3–20 ký tự, chỉ dùng chữ thường, số và dấu gạch dưới">
               <input value={username} onChange={e => { setU(e.target.value); setUS("idle"); }} onBlur={onBlurUser}
                 autoCapitalize="none" required
                 className="w-full px-4 py-3 rounded-xl border bg-card" placeholder="ví dụ: minhanh" />
@@ -171,7 +171,7 @@ export default function Register() {
               <input value={phone} onChange={e => { setPh(e.target.value); setPhS("idle"); }} onBlur={onBlurPhone} required
                 className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
-            <Field label="Mật khẩu * (tối thiểu 6 ký tự)">
+            <Field label="Mật khẩu *" hint="Tối thiểu 6 ký tự, bao gồm chữ cái và số">
               <input type="password" value={password} onChange={e => setP(e.target.value)} minLength={6} required
                 className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
@@ -195,7 +195,7 @@ export default function Register() {
           </div>
         ) : (
           <div className="space-y-3">
-            <Field label="Tên doanh nghiệp *">
+            <Field label="Tên doanh nghiệp *" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
               <input value={bizName} onChange={e => setBN(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
             <Field label="Loại hình *">
@@ -210,17 +210,17 @@ export default function Register() {
               </div>
             </Field>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Giờ mở *">
+              <Field label="Giờ mở *" hint="Ví dụ: 07:00">
                 <input type="time" value={open} onChange={e => setOpen(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
               </Field>
-              <Field label="Giờ đóng *">
+              <Field label="Giờ đóng *" hint="Ví dụ: 22:00">
                 <input type="time" value={close} onChange={e => setClose(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
               </Field>
             </div>
-            <Field label="Mô tả *">
+            <Field label="Mô tả *" hint="Mô tả ngắn gọn về không gian, phong cách, món đặc trưng">
               <textarea value={bizDesc} onChange={e => setBD(e.target.value)} required rows={3} className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
-            <Field label="Ưu đãi/Deal cho thành viên *">
+            <Field label="Ưu đãi/Deal cho thành viên *" hint="Ví dụ: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm 4 người">
               <input value={bizOffer} onChange={e => setBO(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
             <Field label="Facebook URL">
@@ -270,7 +270,7 @@ export default function Register() {
   );
 }
 
-function Field({ label, children, right }: { label: string; children: React.ReactNode; right?: React.ReactNode }) {
+function Field({ label, children, right, hint }: { label: string; children: React.ReactNode; right?: React.ReactNode; hint?: string }) {
   return (
     <label className="block space-y-1">
       <div className="flex items-center justify-between">
@@ -278,6 +278,7 @@ function Field({ label, children, right }: { label: string; children: React.Reac
         {right}
       </div>
       {children}
+      {hint && <p className="text-[11px] text-muted-foreground">{hint}</p>}
     </label>
   );
 }

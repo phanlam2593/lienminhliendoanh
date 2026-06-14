@@ -4,7 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Message, Profile } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, Send, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface ConvoSummary {
   partnerId: string;
@@ -17,34 +22,48 @@ interface ConvoSummary {
 export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
+  const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
+
+  const load = async () => {
+    if (!user) return;
+    const { data: msgs } = await supabase.from("messages").select("*")
+      .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+      .order("created_at", { ascending: false });
+    const map = new Map<string, ConvoSummary>();
+    (msgs as Message[] | null)?.forEach(m => {
+      const partnerId = m.sender_id === user.id ? m.receiver_id : m.sender_id;
+      if (!map.has(partnerId)) {
+        map.set(partnerId, { partnerId, lastMessage: m.content, lastAt: m.created_at, unread: 0 });
+      }
+      if (m.receiver_id === user.id && !m.is_read) map.get(partnerId)!.unread += 1;
+    });
+    const ids = [...map.keys()];
+    if (ids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", ids);
+      (profs as any[] | null)?.forEach(p => { if (map.has(p.id)) map.get(p.id)!.partner = p; });
+    }
+    setConvos([...map.values()]);
+  };
 
   useEffect(() => {
     if (!user) return;
-    const load = async () => {
-      const { data: msgs } = await supabase.from("messages").select("*")
-        .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
-        .order("created_at", { ascending: false });
-      const map = new Map<string, ConvoSummary>();
-      (msgs as Message[] | null)?.forEach(m => {
-        const partnerId = m.sender_id === user.id ? m.receiver_id : m.sender_id;
-        if (!map.has(partnerId)) {
-          map.set(partnerId, { partnerId, lastMessage: m.content, lastAt: m.created_at, unread: 0 });
-        }
-        if (m.receiver_id === user.id && !m.is_read) map.get(partnerId)!.unread += 1;
-      });
-      const ids = [...map.keys()];
-      if (ids.length) {
-        const { data: profs } = await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", ids);
-        (profs as any[] | null)?.forEach(p => { if (map.has(p.id)) map.get(p.id)!.partner = p; });
-      }
-      setConvos([...map.values()]);
-    };
     load();
     const ch = supabase.channel(`inbox:${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, load)
       .subscribe();
     return () => { supabase.removeChannel(ch); };
   }, [user?.id]);
+
+  const deleteConvo = async () => {
+    if (!confirmPartner || !user) return;
+    const pid = confirmPartner.partnerId;
+    const { error } = await supabase.from("messages").delete()
+      .or(`and(sender_id.eq.${user.id},receiver_id.eq.${pid}),and(sender_id.eq.${pid},receiver_id.eq.${user.id})`);
+    if (error) toast.error(error.message);
+    else toast.success("Đã xóa cuộc trò chuyện");
+    setConfirmPartner(null);
+    load();
+  };
 
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">Cần đăng nhập</div>;
   if (!isApproved && !isAdmin) return <div className="p-8 text-center text-sm text-muted-foreground">Tài khoản cần được duyệt</div>;
@@ -56,19 +75,43 @@ export function MessagesInbox() {
         <p className="text-sm text-center py-12 text-muted-foreground">Chưa có cuộc trò chuyện</p>
       ) : (
         convos.map(c => (
-          <Link key={c.partnerId} to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 p-3 bg-card rounded-xl shadow-sm">
-            <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">{(c.partner?.full_name || "?").slice(0, 1)}</div>
-            <div className="flex-1 min-w-0">
-              <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
-              <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
-            </div>
-            <div className="text-right">
-              <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
-              {c.unread > 0 && <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">{c.unread}</div>}
-            </div>
-          </Link>
+          <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
+            <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
+              <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">{(c.partner?.full_name || "?").slice(0, 1)}</div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
+                <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
+              </div>
+              <div className="text-right">
+                <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
+                {c.unread > 0 && <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">{c.unread}</div>}
+              </div>
+            </Link>
+            <button
+              onClick={() => setConfirmPartner(c)}
+              aria-label="Xóa cuộc trò chuyện"
+              className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         ))
       )}
+
+      <AlertDialog open={!!confirmPartner} onOpenChange={(v) => !v && setConfirmPartner(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Xóa cuộc trò chuyện?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Toàn bộ tin nhắn với {confirmPartner?.partner?.full_name || "người dùng này"} sẽ bị xóa vĩnh viễn.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogAction onClick={deleteConvo} className="bg-destructive hover:bg-destructive/90">Xóa</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -90,7 +133,6 @@ export function MessagesThread() {
         .or(`and(sender_id.eq.${user.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${user.id})`)
         .order("created_at");
       setMsgs((data ?? []) as Message[]);
-      // mark unread as read
       await supabase.from("messages").update({ is_read: true }).eq("sender_id", id).eq("receiver_id", user.id).eq("is_read", false);
       setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 0);
     };

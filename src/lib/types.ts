@@ -66,6 +66,8 @@ export interface OfferClaim {
   offer_id: string;
   user_id: string;
   code: string;
+  seq: number | null;
+  expires_at: string;
   claimed_at: string;
 }
 

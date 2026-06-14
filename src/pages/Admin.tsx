@@ -1,218 +1,395 @@
-import { useEffect, useState } from "react";
-import { Navigate, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Suggestion, Report } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL } from "@/lib/types";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Check, X, Star, Trash2, Send, Save } from "lucide-react";
+import { Check, X, Trash2, Send, Save, Search, Star, Flag } from "lucide-react";
+import { StoredImage } from "@/components/StoredImage";
+
+interface MemberRow extends Profile {
+  business?: Business | null;
+  activeOffers: number;
+  reviewCount: number;
+  suggestionCount: number;
+  claimCount: number;
+}
 
 export default function Admin() {
   const { user, isAdmin, loading } = useAuth();
-  const [sp, setSp] = useSearchParams();
-  const tab = sp.get("tab") || "members";
+  const [rows, setRows] = useState<MemberRow[]>([]);
+  const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<MemberRow | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    void load();
+  }, [isAdmin, refreshKey]);
+
+  const load = async () => {
+    const [{ data: profs }, { data: biz }, { data: offers }, { data: reviews }, { data: sugs }, { data: claims }] = await Promise.all([
+      supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+      supabase.from("businesses").select("*"),
+      supabase.from("offers").select("id, business_id, status"),
+      supabase.from("reviews").select("id, user_id"),
+      supabase.from("suggestions").select("id, user_id"),
+      supabase.from("offer_claims").select("id, user_id"),
+    ]);
+    const bizByOwner = new Map<string, Business>();
+    (biz as Business[] | null)?.forEach(b => { if (b.owner_id) bizByOwner.set(b.owner_id, b); });
+    const activeByBiz = new Map<string, number>();
+    (offers ?? []).forEach((o: any) => {
+      if (o.status !== "active") return;
+      activeByBiz.set(o.business_id, (activeByBiz.get(o.business_id) ?? 0) + 1);
+    });
+    const reviewByUser = new Map<string, number>();
+    (reviews ?? []).forEach((r: any) => reviewByUser.set(r.user_id, (reviewByUser.get(r.user_id) ?? 0) + 1));
+    const sugByUser = new Map<string, number>();
+    (sugs ?? []).forEach((s: any) => sugByUser.set(s.user_id, (sugByUser.get(s.user_id) ?? 0) + 1));
+    const claimByUser = new Map<string, number>();
+    (claims ?? []).forEach((c: any) => claimByUser.set(c.user_id, (claimByUser.get(c.user_id) ?? 0) + 1));
+
+    setRows(((profs as Profile[] | null) ?? []).map(p => {
+      const b = bizByOwner.get(p.id) ?? null;
+      return {
+        ...p,
+        business: b,
+        activeOffers: b ? (activeByBiz.get(b.id) ?? 0) : 0,
+        reviewCount: reviewByUser.get(p.id) ?? 0,
+        suggestionCount: sugByUser.get(p.id) ?? 0,
+        claimCount: claimByUser.get(p.id) ?? 0,
+      };
+    }));
+  };
+
+  const filtered = useMemo(() => {
+    const k = search.trim().toLowerCase();
+    if (!k) return rows;
+    return rows.filter(r =>
+      r.full_name?.toLowerCase().includes(k) ||
+      r.username?.toLowerCase().includes(k) ||
+      r.business?.name?.toLowerCase().includes(k)
+    );
+  }, [rows, search]);
 
   if (loading) return <div className="p-10 text-center text-sm">Đang tải…</div>;
   if (!user || !isAdmin) return <Navigate to="/" replace />;
 
+  const refresh = () => setRefreshKey(k => k + 1);
+
+  const setStatus = async (id: string, status: "approved" | "rejected") => {
+    const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
+    if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); refresh(); }
+  };
+
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Quản trị</h1>
-      <Tabs value={tab} onValueChange={(v) => setSp({ tab: v })}>
-        {/* Fix 3: scrollable tabs on mobile */}
-        <div
-          className="overflow-x-auto scrollbar-hide -mx-4 px-4"
-          style={{ WebkitOverflowScrolling: "touch", whiteSpace: "nowrap" }}
-        >
-          <TabsList className="inline-flex w-max">
-            <TabsTrigger value="members" className="whitespace-nowrap">Thành viên</TabsTrigger>
-            <TabsTrigger value="businesses" className="whitespace-nowrap">Doanh nghiệp</TabsTrigger>
-            <TabsTrigger value="offers" className="whitespace-nowrap">Ưu đãi</TabsTrigger>
-            <TabsTrigger value="reviews" className="whitespace-nowrap">Đánh giá</TabsTrigger>
-            <TabsTrigger value="suggestions" className="whitespace-nowrap">Đề xuất</TabsTrigger>
-            <TabsTrigger value="reports" className="whitespace-nowrap">Báo cáo</TabsTrigger>
-            <TabsTrigger value="broadcast" className="whitespace-nowrap">Phát thông báo</TabsTrigger>
-          </TabsList>
-        </div>
-        <TabsContent value="members"><Members /></TabsContent>
-        <TabsContent value="businesses"><Businesses /></TabsContent>
-        <TabsContent value="offers"><Offers /></TabsContent>
-        <TabsContent value="reviews"><Reviews /></TabsContent>
-        <TabsContent value="suggestions"><Suggestions /></TabsContent>
-        <TabsContent value="reports"><Reports /></TabsContent>
-        <TabsContent value="broadcast"><Broadcast /></TabsContent>
-      </Tabs>
-    </div>
-  );
-}
 
-function Members() {
-  const [list, setList] = useState<Profile[]>([]);
-  const [selected, setSelected] = useState<Profile | null>(null);
-  const load = () => supabase.from("profiles").select("*").order("created_at", { ascending: false }).then(({ data }) => setList((data ?? []) as Profile[]));
-  useEffect(() => { load(); }, []);
-  const setStatus = async (id: string, status: "approved" | "rejected") => {
-    const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Cập nhật"); load(); setSelected(null); }
-  };
-  const del = async (id: string) => {
-    if (!confirm("Xoá thành viên?")) return;
-    await supabase.from("profiles").delete().eq("id", id);
-    load();
-  };
-  return (
-    <div className="space-y-2 mt-3">
-      {list.map(p => (
-        <div key={p.id} className="p-3 bg-card rounded-xl flex items-center gap-2">
-          <button onClick={() => setSelected(p)} className="flex items-center gap-2 flex-1 min-w-0 text-left">
-            <div className="w-8 h-8 rounded-full bg-gradient-brand text-white grid place-items-center text-xs font-bold flex-shrink-0">{p.full_name?.[0]}</div>
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold truncate">{p.full_name} <span className="text-muted-foreground text-xs">@{p.username}</span></div>
-              <div className="text-[10px] text-muted-foreground truncate">{p.email} · {p.status}</div>
+      <div className="relative">
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="Tìm theo tên thành viên hoặc tên doanh nghiệp…"
+          className="w-full pl-9 pr-4 py-2.5 rounded-xl border bg-card text-sm" />
+      </div>
+
+      <div className="space-y-2">
+        {filtered.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">Không có kết quả</p>
+        ) : filtered.map(r => (
+          <button key={r.id} onClick={() => setSelected(r)}
+            className="w-full text-left p-3 bg-card rounded-xl flex items-center gap-3 hover:bg-accent transition">
+            <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center text-sm font-bold flex-shrink-0">
+              {(r.full_name || r.username || "?").slice(0, 1).toUpperCase()}
             </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold truncate">
+                {r.full_name}
+                <span className="text-muted-foreground text-xs ml-1">@{r.username}</span>
+              </div>
+              {r.business ? (
+                <div className="text-[11px] text-muted-foreground truncate">
+                  🏢 {r.business.name} · {r.activeOffers} ưu đãi · {r.reviewCount} đánh giá · {r.suggestionCount} đề xuất
+                </div>
+              ) : (
+                <div className="text-[11px] text-muted-foreground truncate">
+                  {r.claimCount} ưu đãi đã nhận · {r.reviewCount} đánh giá · {r.suggestionCount} đề xuất
+                </div>
+              )}
+            </div>
+            <StatusBadge s={r.status} />
           </button>
-          {p.status === "pending" && (
-            <>
-              <button onClick={() => setStatus(p.id, "approved")} className="w-8 h-8 rounded-full bg-emerald-500 text-white grid place-items-center"><Check className="w-4 h-4" /></button>
-              <button onClick={() => setStatus(p.id, "rejected")} className="w-8 h-8 rounded-full bg-red-500 text-white grid place-items-center"><X className="w-4 h-4" /></button>
-            </>
-          )}
-          <button onClick={() => del(p.id)} className="w-8 h-8 rounded-full bg-muted text-destructive grid place-items-center"><Trash2 className="w-4 h-4" /></button>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      <ReportsSection refreshKey={refreshKey} />
+      <Broadcast />
 
       <MemberDetail
-        profile={selected}
+        row={selected}
         onClose={() => setSelected(null)}
-        onChanged={() => { load(); }}
+        onChanged={refresh}
         onStatus={setStatus}
       />
     </div>
   );
 }
 
-function MemberDetail({ profile, onClose, onChanged, onStatus }: {
-  profile: Profile | null;
+function MemberDetail({ row, onClose, onChanged, onStatus }: {
+  row: MemberRow | null;
   onClose: () => void;
   onChanged: () => void;
   onStatus: (id: string, s: "approved" | "rejected") => void;
 }) {
+  // member fields
   const [fullName, setFN] = useState("");
   const [email, setE] = useState("");
   const [phone, setPh] = useState("");
-  const [biz, setBiz] = useState<Business[]>([]);
-  const [offers, setOffers] = useState<(Offer & { business?: { name: string } | null })[]>([]);
-  const [reviews, setReviews] = useState<(Review & { business?: { name: string } | null })[]>([]);
+
+  // business fields (if any)
+  const [biz, setBiz] = useState<Business | null>(null);
+  const [bName, setBN] = useState("");
+  const [bType, setBT] = useState<BusinessType>("food");
+  const [bDesc, setBD] = useState("");
+  const [bOpen, setBO] = useState("");
+  const [bClose, setBC] = useState("");
+  const [bAddress, setBA] = useState("");
+  const [bPhone, setBPh] = useState("");
+  const [bFb, setBFb] = useState("");
+  const [bWeb, setBW] = useState("");
+  const [bFeatured, setBFeat] = useState(false);
+
+  const [offers, setOffers] = useState<Offer[]>([]);
+  const [newOfferTitle, setNewOfferTitle] = useState("");
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [sugs, setSugs] = useState<Suggestion[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (!profile) return;
-    setFN(profile.full_name); setE(profile.email); setPh(profile.phone);
-    void load(profile.id);
-  }, [profile?.id]);
+    if (!row) return;
+    setFN(row.full_name); setE(row.email); setPh(row.phone);
+    const b = row.business ?? null;
+    setBiz(b);
+    if (b) {
+      setBN(b.name); setBT(b.type); setBD(b.description ?? "");
+      setBO((b.hours_open ?? "07:00:00").slice(0, 5));
+      setBC((b.hours_close ?? "22:00:00").slice(0, 5));
+      setBA(b.address ?? ""); setBPh(b.phone ?? "");
+      setBFb(b.facebook_url ?? ""); setBW(b.website_url ?? "");
+      setBFeat(b.is_featured);
+    }
+    void load(row.id, b?.id);
+  }, [row?.id]);
 
-  const load = async (uid: string) => {
-    const [{ data: b }, { data: r }, { data: s }] = await Promise.all([
-      supabase.from("businesses").select("*").eq("owner_id", uid),
-      supabase.from("reviews").select("*, business:businesses(name)").eq("user_id", uid),
-      supabase.from("suggestions").select("*").eq("user_id", uid),
+  const load = async (uid: string, bizId?: string) => {
+    const [{ data: r }, { data: s }] = await Promise.all([
+      supabase.from("reviews").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
+      supabase.from("suggestions").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
     ]);
-    const bizList = (b ?? []) as Business[];
-    setBiz(bizList);
-    setReviews((r ?? []) as any);
+    setReviews((r ?? []) as Review[]);
     setSugs((s ?? []) as Suggestion[]);
-    if (bizList.length) {
-      const { data: o } = await supabase.from("offers")
-        .select("*, business:businesses(name)")
-        .in("business_id", bizList.map(x => x.id));
-      setOffers((o ?? []) as any);
+    if (bizId) {
+      const { data: o } = await supabase.from("offers").select("*").eq("business_id", bizId).order("created_at", { ascending: false });
+      setOffers((o ?? []) as Offer[]);
     } else setOffers([]);
   };
 
-  const save = async () => {
-    if (!profile) return;
+  const saveProfile = async () => {
+    if (!row) return;
     setSaving(true);
-    const { error } = await supabase.from("profiles").update({ full_name: fullName, email, phone }).eq("id", profile.id);
+    const { error } = await supabase.from("profiles").update({ full_name: fullName, email, phone }).eq("id", row.id);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
-    toast.success("Đã lưu");
+    toast.success("Đã lưu hồ sơ");
     onChanged();
   };
 
+  const saveBiz = async () => {
+    if (!biz) return;
+    setSaving(true);
+    const { error } = await supabase.from("businesses").update({
+      name: bName, type: bType, description: bDesc,
+      hours_open: bOpen, hours_close: bClose,
+      address: bAddress || null, phone: bPhone || null,
+      facebook_url: bFb || null, website_url: bWeb || null,
+      is_featured: bFeatured,
+    }).eq("id", biz.id);
+    setSaving(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã lưu doanh nghiệp");
+    onChanged();
+  };
+
+  const setBizStatus = async (s: "approved" | "rejected") => {
+    if (!biz) return;
+    const { error } = await supabase.from("businesses").update({ status: s }).eq("id", biz.id);
+    if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); onChanged(); }
+  };
+
+  const delBiz = async () => {
+    if (!biz || !confirm("Xóa doanh nghiệp này?")) return;
+    await supabase.from("businesses").delete().eq("id", biz.id);
+    toast.success("Đã xóa"); setBiz(null); onChanged();
+  };
+
+  const delMember = async () => {
+    if (!row || !confirm("Xóa thành viên này?")) return;
+    await supabase.from("profiles").delete().eq("id", row.id);
+    toast.success("Đã xóa"); onChanged(); onClose();
+  };
+
+  const addOffer = async () => {
+    if (!biz || !newOfferTitle.trim()) return;
+    const { error } = await supabase.from("offers").insert({ business_id: biz.id, title: newOfferTitle.trim(), status: "active" });
+    if (error) { toast.error(error.message); return; }
+    setNewOfferTitle("");
+    load(row!.id, biz.id);
+  };
+  const toggleOffer = async (o: Offer) => {
+    await supabase.from("offers").update({ status: o.status === "active" ? "inactive" : "active" }).eq("id", o.id);
+    load(row!.id, biz!.id);
+  };
+  const delOffer = async (id: string) => {
+    if (!confirm("Xóa ưu đãi?")) return;
+    await supabase.from("offers").delete().eq("id", id);
+    load(row!.id, biz!.id);
+  };
+
+  const delReview = async (id: string) => {
+    if (!confirm("Xóa đánh giá?")) return;
+    await supabase.from("reviews").delete().eq("id", id);
+    load(row!.id, biz?.id);
+  };
+  const delSug = async (id: string) => {
+    if (!confirm("Xóa đề xuất?")) return;
+    await supabase.from("suggestions").delete().eq("id", id);
+    load(row!.id, biz?.id);
+  };
+
   return (
-    <Dialog open={!!profile} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Hồ sơ thành viên</DialogTitle></DialogHeader>
-        {profile && (
-          <div className="space-y-4 text-sm">
+    <Dialog open={!!row} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-md max-h-[88vh] overflow-y-auto">
+        <DialogHeader><DialogTitle>Chi tiết thành viên</DialogTitle></DialogHeader>
+        {row && (
+          <div className="space-y-5 text-sm">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-full bg-gradient-brand text-white grid place-items-center text-xl font-bold">{profile.full_name?.[0]}</div>
+              <div className="w-14 h-14 rounded-full bg-gradient-brand text-white grid place-items-center text-xl font-bold">{row.full_name?.[0]}</div>
               <div className="flex-1 min-w-0">
-                <div className="font-semibold">@{profile.username}</div>
-                <div className="text-xs text-muted-foreground">Tham gia: {new Date(profile.created_at).toLocaleDateString("vi-VN")}</div>
-                <div className="text-xs">Trạng thái: <b>{profile.status}</b></div>
+                <div className="font-semibold">@{row.username}</div>
+                <div className="text-xs text-muted-foreground">Tham gia: {new Date(row.created_at).toLocaleDateString("vi-VN")}</div>
+                <StatusBadge s={row.status} />
               </div>
+              <button onClick={delMember} className="w-8 h-8 rounded-full bg-muted text-destructive grid place-items-center" aria-label="Xóa thành viên">
+                <Trash2 className="w-4 h-4" />
+              </button>
             </div>
 
-            {profile.status === "pending" && (
+            {row.status === "pending" && (
               <div className="flex gap-2">
-                <button onClick={() => onStatus(profile.id, "approved")} className="flex-1 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><Check className="w-4 h-4" /> Duyệt</button>
-                <button onClick={() => onStatus(profile.id, "rejected")} className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><X className="w-4 h-4" /> Từ chối</button>
+                <button onClick={() => onStatus(row.id, "approved")} className="flex-1 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><Check className="w-4 h-4" /> Duyệt</button>
+                <button onClick={() => onStatus(row.id, "rejected")} className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><X className="w-4 h-4" /> Từ chối</button>
               </div>
             )}
 
-            <div className="space-y-2">
-              <div className="text-xs font-semibold text-muted-foreground">Thông tin cá nhân</div>
+            <section className="space-y-2">
+              <div className="text-xs font-bold text-muted-foreground">THÔNG TIN CÁ NHÂN</div>
               <input value={fullName} onChange={e => setFN(e.target.value)} placeholder="Họ tên" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
               <input value={email} onChange={e => setE(e.target.value)} placeholder="Email" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
               <input value={phone} onChange={e => setPh(e.target.value)} placeholder="SĐT" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
-              <button onClick={save} disabled={saving} className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"><Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu"}</button>
-            </div>
+              <button onClick={saveProfile} disabled={saving} className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"><Save className="w-4 h-4" /> Lưu hồ sơ</button>
+            </section>
 
-            {biz.length > 0 && (
-              <div className="space-y-1">
-                <div className="text-xs font-semibold text-muted-foreground">Doanh nghiệp ({biz.length})</div>
-                {biz.map(b => (
-                  <div key={b.id} className="p-2 bg-accent rounded text-xs">
-                    <div className="font-semibold">{b.name}</div>
-                    <div>{BUSINESS_TYPE_LABEL[b.type]} · {b.status} · {b.hours_open?.slice(0, 5)}–{b.hours_close?.slice(0, 5)}</div>
+            {biz && (
+              <section className="space-y-2 border-t pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-bold text-muted-foreground">DOANH NGHIỆP</div>
+                  <div className="flex items-center gap-1">
+                    <button onClick={() => { setBFeat(v => !v); }} className={`w-7 h-7 rounded-full grid place-items-center ${bFeatured ? "bg-yellow-400 text-white" : "bg-muted"}`} aria-label="Nổi bật">
+                      <Star className={`w-4 h-4 ${bFeatured ? "fill-white" : ""}`} />
+                    </button>
+                    <StatusBadge s={biz.status} />
+                    <button onClick={delBiz} className="w-7 h-7 rounded-full bg-muted text-destructive grid place-items-center" aria-label="Xóa DN">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+                {biz.cover_url && <div className="h-24 rounded-lg overflow-hidden"><StoredImage path={biz.cover_url} alt={biz.name} className="w-full h-full object-cover" /></div>}
+                <input value={bName} onChange={e => setBN(e.target.value)} placeholder="Tên DN" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+                <div className="flex flex-wrap gap-1.5">
+                  {BUSINESS_TYPES.map(t => (
+                    <button key={t} onClick={() => setBT(t)} className={`px-2.5 py-1 rounded-full text-xs border ${bType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}>
+                      {BUSINESS_TYPE_LABEL[t]}
+                    </button>
+                  ))}
+                </div>
+                <textarea value={bDesc} onChange={e => setBD(e.target.value)} rows={2} placeholder="Mô tả" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="time" value={bOpen} onChange={e => setBO(e.target.value)} className="px-2 py-2 rounded-lg border bg-background text-sm" />
+                  <input type="time" value={bClose} onChange={e => setBC(e.target.value)} className="px-2 py-2 rounded-lg border bg-background text-sm" />
+                </div>
+                <input value={bAddress} onChange={e => setBA(e.target.value)} placeholder="Địa chỉ" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+                <input value={bPhone} onChange={e => setBPh(e.target.value)} placeholder="SĐT DN" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+                <input value={bFb} onChange={e => setBFb(e.target.value)} placeholder="Facebook URL" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+                <input value={bWeb} onChange={e => setBW(e.target.value)} placeholder="Website URL" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+                <button onClick={saveBiz} disabled={saving} className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"><Save className="w-4 h-4" /> Lưu DN</button>
+                {biz.status === "pending" && (
+                  <div className="flex gap-2">
+                    <button onClick={() => setBizStatus("approved")} className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold text-xs">Duyệt DN</button>
+                    <button onClick={() => setBizStatus("rejected")} className="flex-1 py-1.5 rounded-lg bg-red-500 text-white font-semibold text-xs">Từ chối</button>
+                  </div>
+                )}
 
-            {offers.length > 0 && (
-              <div className="space-y-1">
-                <div className="text-xs font-semibold text-muted-foreground">Ưu đãi ({offers.length})</div>
-                {offers.map(o => (
-                  <div key={o.id} className="p-2 bg-accent rounded text-xs">
-                    <b>{o.title}</b> — {o.business?.name} · {o.claim_count ?? 0} lượt nhận
+                <div className="pt-2 border-t space-y-1">
+                  <div className="text-xs font-bold text-muted-foreground">Ưu đãi ({offers.length})</div>
+                  {offers.map(o => (
+                    <div key={o.id} className="flex items-center gap-2 p-2 bg-accent rounded">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-semibold truncate">{o.title}</div>
+                        <div className="text-[10px] text-muted-foreground">{o.status} · {o.claim_count ?? 0} lượt nhận</div>
+                      </div>
+                      <button onClick={() => toggleOffer(o)} className="text-[10px] px-2 py-0.5 rounded bg-card">{o.status === "active" ? "Tắt" : "Bật"}</button>
+                      <button onClick={() => delOffer(o.id)} className="text-destructive"><Trash2 className="w-3.5 h-3.5" /></button>
+                    </div>
+                  ))}
+                  <div className="flex gap-1">
+                    <input value={newOfferTitle} onChange={e => setNewOfferTitle(e.target.value)} placeholder="Thêm ưu đãi…" className="flex-1 px-2 py-1.5 rounded border bg-background text-xs" />
+                    <button onClick={addOffer} className="px-3 rounded bg-primary text-primary-foreground text-xs">Thêm</button>
                   </div>
-                ))}
-              </div>
+                </div>
+              </section>
             )}
 
             {reviews.length > 0 && (
-              <div className="space-y-1">
-                <div className="text-xs font-semibold text-muted-foreground">Đánh giá ({reviews.length})</div>
+              <section className="space-y-1 border-t pt-4">
+                <div className="text-xs font-bold text-muted-foreground">ĐÁNH GIÁ ({reviews.length})</div>
                 {reviews.map(r => (
-                  <div key={r.id} className="p-2 bg-accent rounded text-xs">
-                    {r.business?.name}: {"★".repeat(r.rating)} {r.comment && `— ${r.comment}`}
+                  <div key={r.id} className="flex items-start gap-2 p-2 bg-accent rounded">
+                    <div className="flex-1 min-w-0 text-xs">
+                      <div className="text-yellow-600">{"★".repeat(r.rating)}</div>
+                      {r.comment && <div className="text-muted-foreground line-clamp-2">{r.comment}</div>}
+                    </div>
+                    <button onClick={() => delReview(r.id)} className="text-destructive"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
                 ))}
-              </div>
+              </section>
             )}
 
             {sugs.length > 0 && (
-              <div className="space-y-1">
-                <div className="text-xs font-semibold text-muted-foreground">Đề xuất ({sugs.length})</div>
+              <section className="space-y-1 border-t pt-4">
+                <div className="text-xs font-bold text-muted-foreground">ĐỀ XUẤT ({sugs.length})</div>
                 {sugs.map(s => (
-                  <div key={s.id} className="p-2 bg-accent rounded text-xs">{s.business_name} · {s.status}</div>
+                  <div key={s.id} className="flex items-center gap-2 p-2 bg-accent rounded">
+                    <div className="flex-1 min-w-0 text-xs">
+                      <div className="font-semibold truncate">{s.business_name}</div>
+                      <div className="text-[10px] text-muted-foreground">{BUSINESS_TYPE_LABEL[s.business_type]} · {s.status}</div>
+                    </div>
+                    <button onClick={() => delSug(s.id)} className="text-destructive"><Trash2 className="w-3.5 h-3.5" /></button>
+                  </div>
                 ))}
-              </div>
+              </section>
             )}
           </div>
         )}
@@ -221,154 +398,52 @@ function MemberDetail({ profile, onClose, onChanged, onStatus }: {
   );
 }
 
-function Businesses() {
-  const [list, setList] = useState<Business[]>([]);
-  const load = () => supabase.from("businesses").select("*").order("created_at", { ascending: false }).then(({ data }) => setList((data ?? []) as Business[]));
-  useEffect(() => { load(); }, []);
-  const update = async (id: string, patch: Partial<Business>) => {
-    const { error } = await supabase.from("businesses").update(patch).eq("id", id);
-    if (error) toast.error(error.message); else load();
-  };
-  const del = async (id: string) => {
-    if (!confirm("Xoá doanh nghiệp?")) return;
-    await supabase.from("businesses").delete().eq("id", id);
-    load();
-  };
-  return (
-    <div className="space-y-2 mt-3">
-      {list.map(b => (
-        <div key={b.id} className="p-3 bg-card rounded-xl">
-          <div className="flex items-center gap-2">
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold truncate">{b.name}</div>
-              <div className="text-[10px] text-muted-foreground">{BUSINESS_TYPE_LABEL[b.type]} · {b.status}</div>
-            </div>
-            <button onClick={() => update(b.id, { is_featured: !b.is_featured })} className={`w-8 h-8 rounded-full grid place-items-center ${b.is_featured ? "bg-yellow-400 text-white" : "bg-muted"}`}>
-              <Star className={`w-4 h-4 ${b.is_featured ? "fill-white" : ""}`} />
-            </button>
-            {b.status === "pending" && (
-              <>
-                <button onClick={() => update(b.id, { status: "approved" })} className="w-8 h-8 rounded-full bg-emerald-500 text-white grid place-items-center"><Check className="w-4 h-4" /></button>
-                <button onClick={() => update(b.id, { status: "rejected" })} className="w-8 h-8 rounded-full bg-red-500 text-white grid place-items-center"><X className="w-4 h-4" /></button>
-              </>
-            )}
-            <button onClick={() => del(b.id)} className="w-8 h-8 rounded-full bg-muted text-destructive grid place-items-center"><Trash2 className="w-4 h-4" /></button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+function ReportsSection({ refreshKey }: { refreshKey: number }) {
+  const [list, setList] = useState<(Report & { reporter?: string | null; target_name?: string | null })[]>([]);
 
-function Offers() {
-  const [list, setList] = useState<(Offer & { business?: { name: string } | null })[]>([]);
-  const load = () => supabase.from("offers").select("*, business:businesses(name)").order("created_at", { ascending: false }).then(({ data }) => setList((data ?? []) as any));
-  useEffect(() => { load(); }, []);
-  const toggle = async (o: Offer) => {
-    await supabase.from("offers").update({ status: o.status === "active" ? "inactive" : "active" }).eq("id", o.id);
-    load();
-  };
-  const del = async (id: string) => { if (!confirm("Xoá ưu đãi?")) return; await supabase.from("offers").delete().eq("id", id); load(); };
-  return (
-    <div className="space-y-2 mt-3">
-      {list.map(o => (
-        <div key={o.id} className="p-3 bg-card rounded-xl flex items-center gap-2">
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold truncate">{o.title}</div>
-            <div className="text-[10px] text-muted-foreground">{o.business?.name} · {o.status} · {o.claim_count ?? 0} lượt nhận</div>
-          </div>
-          <button onClick={() => toggle(o)} className="text-xs px-2 py-1 rounded bg-accent">{o.status === "active" ? "Tắt" : "Bật"}</button>
-          <button onClick={() => del(o.id)} className="w-8 h-8 rounded-full bg-muted text-destructive grid place-items-center"><Trash2 className="w-4 h-4" /></button>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Reviews() {
-  const [list, setList] = useState<(Review & { profile?: { full_name: string } | null; business?: { name: string } | null })[]>([]);
   const load = async () => {
-    const { data } = await supabase.from("reviews").select("*, business:businesses(name)").order("created_at", { ascending: false });
-    const rows = (data ?? []) as any[];
-    const uids = [...new Set(rows.map((r: any) => r.user_id))];
-    let profMap = new Map<string, { full_name: string }>();
-    if (uids.length) {
-      const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", uids);
-      (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name }));
-    }
-    setList(rows.map((r: any) => ({ ...r, profile: profMap.get(r.user_id) ?? null })));
+    const { data: reports } = await supabase.from("reports").select("*").order("created_at", { ascending: false });
+    const rows = (reports ?? []) as Report[];
+    const uids = [...new Set(rows.map(r => r.user_id))];
+    const bizIds = [...new Set(rows.filter(r => r.target_type === "business").map(r => r.target_id))];
+    const offerIds = [...new Set(rows.filter(r => r.target_type === "offer").map(r => r.target_id))];
+    const [profsRes, bizRes, offerRes] = await Promise.all([
+      uids.length ? supabase.from("profiles").select("id, full_name").in("id", uids) : Promise.resolve({ data: [] } as any),
+      bizIds.length ? supabase.from("businesses").select("id, name").in("id", bizIds) : Promise.resolve({ data: [] } as any),
+      offerIds.length ? supabase.from("offers").select("id, title").in("id", offerIds) : Promise.resolve({ data: [] } as any),
+    ]);
+    const pm = new Map<string, string>(); (profsRes.data ?? []).forEach((p: any) => pm.set(p.id, p.full_name));
+    const bm = new Map<string, string>(); (bizRes.data ?? []).forEach((b: any) => bm.set(b.id, b.name));
+    const om = new Map<string, string>(); (offerRes.data ?? []).forEach((o: any) => om.set(o.id, o.title));
+    setList(rows.map(r => ({
+      ...r,
+      reporter: pm.get(r.user_id) ?? null,
+      target_name: r.target_type === "business" ? bm.get(r.target_id) ?? null : om.get(r.target_id) ?? null,
+    })));
   };
-  useEffect(() => { load(); }, []);
-  const del = async (id: string) => { await supabase.from("reviews").delete().eq("id", id); load(); };
-  return (
-    <div className="space-y-2 mt-3">
-      {list.map(r => (
-        <div key={r.id} className="p-3 bg-card rounded-xl flex items-start gap-2">
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold">{r.profile?.full_name} → {r.business?.name}</div>
-            <div className="text-xs text-yellow-600">{"★".repeat(r.rating)}</div>
-            {r.comment && <div className="text-xs text-muted-foreground">{r.comment}</div>}
-          </div>
-          <button onClick={() => del(r.id)} className="w-8 h-8 rounded-full bg-muted text-destructive grid place-items-center"><Trash2 className="w-4 h-4" /></button>
-        </div>
-      ))}
-    </div>
-  );
-}
+  useEffect(() => { load(); }, [refreshKey]);
 
-function Suggestions() {
-  const [list, setList] = useState<Suggestion[]>([]);
-  const load = () => supabase.from("suggestions").select("*").order("created_at", { ascending: false }).then(({ data }) => setList((data ?? []) as Suggestion[]));
-  useEffect(() => { load(); }, []);
-  const approve = async (s: Suggestion) => {
-    const { error } = await supabase.from("businesses").insert({
-      name: s.business_name, type: s.business_type, description: s.description, status: "approved",
-    });
-    if (error) { toast.error(error.message); return; }
-    await supabase.from("suggestions").update({ status: "approved" }).eq("id", s.id);
-    load();
-  };
-  const reject = async (id: string) => { await supabase.from("suggestions").update({ status: "rejected" }).eq("id", id); load(); };
-  return (
-    <div className="space-y-2 mt-3">
-      {list.map(s => (
-        <div key={s.id} className="p-3 bg-card rounded-xl space-y-1">
-          <div className="text-sm font-semibold">{s.business_name}</div>
-          <div className="text-[10px] text-muted-foreground">{BUSINESS_TYPE_LABEL[s.business_type]} · {s.contact_info} · {s.status}</div>
-          {s.description && <div className="text-xs">{s.description}</div>}
-          {s.status === "pending" && (
-            <div className="flex gap-2">
-              <button onClick={() => approve(s)} className="text-xs px-3 py-1 rounded bg-emerald-500 text-white">Duyệt</button>
-              <button onClick={() => reject(s.id)} className="text-xs px-3 py-1 rounded bg-red-500 text-white">Từ chối</button>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function Reports() {
-  const [list, setList] = useState<Report[]>([]);
-  const load = () => supabase.from("reports").select("*").order("created_at", { ascending: false }).then(({ data }) => setList((data ?? []) as Report[]));
-  useEffect(() => { load(); }, []);
   const toggle = async (r: Report) => { await supabase.from("reports").update({ resolved: !r.resolved }).eq("id", r.id); load(); };
-  const del = async (id: string) => { await supabase.from("reports").delete().eq("id", id); load(); };
+  const del = async (id: string) => { if (!confirm("Xóa báo cáo?")) return; await supabase.from("reports").delete().eq("id", id); load(); };
+
   return (
-    <div className="space-y-2 mt-3">
-      {list.length === 0 && <p className="text-sm text-muted-foreground text-center py-6">Chưa có báo cáo nào</p>}
+    <section className="space-y-2 border-t pt-4">
+      <h2 className="font-bold flex items-center gap-2"><Flag className="w-4 h-4 text-destructive" /> Báo cáo ({list.length})</h2>
+      {list.length === 0 && <p className="text-sm text-muted-foreground">Chưa có báo cáo nào</p>}
       {list.map(r => (
-        <div key={r.id} className="p-3 bg-card rounded-xl space-y-1">
-          <div className="text-xs text-muted-foreground">{r.target_type} · {r.resolved ? "✓ đã xử lý" : "Chưa xử lý"} · {new Date(r.created_at).toLocaleString("vi-VN")}</div>
+        <div key={r.id} className="p-3 bg-card rounded-xl space-y-1.5">
+          <div className="text-[11px] text-muted-foreground">
+            {r.reporter || "Ẩn danh"} → <b>{r.target_name || r.target_type}</b> · {new Date(r.created_at).toLocaleString("vi-VN")} · {r.resolved ? "✓ đã xử lý" : "Chưa xử lý"}
+          </div>
           <div className="text-sm">{r.description}</div>
-          {r.photo_url && <div className="text-[10px] text-muted-foreground">📎 {r.photo_url}</div>}
+          {r.photo_url && <div className="h-32 rounded-lg overflow-hidden bg-muted"><StoredImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" /></div>}
           <div className="flex gap-2">
-            <button onClick={() => toggle(r)} className="text-xs px-3 py-1 rounded bg-accent">{r.resolved ? "Mở lại" : "Đánh dấu xong"}</button>
-            <button onClick={() => del(r.id)} className="text-xs px-3 py-1 rounded bg-muted text-destructive">Xoá</button>
+            <button onClick={() => toggle(r)} className="text-xs px-3 py-1 rounded bg-accent">{r.resolved ? "Mở lại" : "Đánh dấu đã xử lý"}</button>
+            <button onClick={() => del(r.id)} className="text-xs px-3 py-1 rounded bg-muted text-destructive">Xóa</button>
           </div>
         </div>
       ))}
-    </div>
+    </section>
   );
 }
 
@@ -385,10 +460,22 @@ function Broadcast() {
     setL(false); setT(""); setB(""); toast.success("Đã gửi");
   };
   return (
-    <div className="mt-3 space-y-2">
+    <section className="space-y-2 border-t pt-4">
+      <h2 className="font-bold">Phát thông báo</h2>
       <input value={title} onChange={e => setT(e.target.value)} placeholder="Tiêu đề" className="w-full px-3 py-2 rounded-lg border bg-card text-sm" />
       <textarea value={body} onChange={e => setB(e.target.value)} placeholder="Nội dung" rows={3} className="w-full px-3 py-2 rounded-lg border bg-card text-sm" />
       <button disabled={loading} onClick={send} className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold flex items-center justify-center gap-2"><Send className="w-4 h-4" /> Gửi cho tất cả thành viên</button>
-    </div>
+    </section>
   );
+}
+
+function StatusBadge({ s }: { s?: string }) {
+  if (!s) return null;
+  const map: Record<string, string> = {
+    pending: "bg-yellow-100 text-yellow-700",
+    approved: "bg-emerald-100 text-emerald-700",
+    rejected: "bg-red-100 text-red-700",
+  };
+  const lbl: Record<string, string> = { pending: "Chờ duyệt", approved: "Đã duyệt", rejected: "Từ chối" };
+  return <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-semibold ${map[s] || "bg-muted"}`}>{lbl[s] || s}</span>;
 }

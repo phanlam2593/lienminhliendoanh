@@ -162,7 +162,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
         </label>
       </div>
 
-      <Field label="Tên DN">
+      <Field label="Tên DN" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
         <input value={name} onChange={e => setName(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
       </Field>
       <Field label="Loại hình">
@@ -175,10 +175,10 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
         </div>
       </Field>
       <div className="grid grid-cols-2 gap-2">
-        <Field label="Giờ mở"><input type="time" value={open} onChange={e => setOpen(e.target.value)} className="w-full px-2 py-2 rounded-lg border bg-background text-sm" /></Field>
-        <Field label="Giờ đóng"><input type="time" value={close} onChange={e => setClose(e.target.value)} className="w-full px-2 py-2 rounded-lg border bg-background text-sm" /></Field>
+        <Field label="Giờ mở" hint="Ví dụ: 07:00"><input type="time" value={open} onChange={e => setOpen(e.target.value)} className="w-full px-2 py-2 rounded-lg border bg-background text-sm" /></Field>
+        <Field label="Giờ đóng" hint="Ví dụ: 22:00"><input type="time" value={close} onChange={e => setClose(e.target.value)} className="w-full px-2 py-2 rounded-lg border bg-background text-sm" /></Field>
       </div>
-      <Field label="Mô tả"><textarea value={desc} onChange={e => setDesc(e.target.value)} rows={3} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="Mô tả" hint="Mô tả ngắn gọn về không gian, phong cách, món đặc trưng"><textarea value={desc} onChange={e => setDesc(e.target.value)} rows={3} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
       <Field label="SĐT"><input value={phone} onChange={e => setPhone(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
       <Field label="Địa chỉ"><input value={address} onChange={e => setAddress(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
       <Field label="Facebook URL"><input value={fb} onChange={e => setFb(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
@@ -227,11 +227,12 @@ function ReportsInbox({ businessIds }: { businessIds: string[] }) {
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <label className="block space-y-1">
       <span className="text-[11px] font-semibold text-muted-foreground">{label}</span>
       {children}
+      {hint && <p className="text-[11px] text-muted-foreground">{hint}</p>}
     </label>
   );
 }
