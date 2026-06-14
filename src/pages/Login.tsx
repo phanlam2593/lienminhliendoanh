@@ -28,10 +28,11 @@ export default function Login() {
   return (
     <div className="min-h-screen grid place-items-center p-6 bg-background">
       <form onSubmit={submit} className="w-full max-w-sm space-y-5">
-        <div className="text-center space-y-3">
-          <Logo size={64} />
+        <div className="text-center space-y-3 flex flex-col items-center">
+          <Logo size={64} asLink />
           <h1 className="text-2xl font-bold">Đăng nhập</h1>
-          <p className="text-sm text-muted-foreground">Liên Minh Liên Đoàn</p>
+          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
+          <Link to="/" className="text-sm text-muted-foreground hover:text-primary">Liên Minh Liên Doanh</Link>
         </div>
         <div className="space-y-3">
           <input value={username} onChange={e => setU(e.target.value)} placeholder="Tên đăng nhập"

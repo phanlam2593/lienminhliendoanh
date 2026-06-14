@@ -42,8 +42,9 @@ export default function Home() {
   return (
     <div className="space-y-6">
       <section className="bg-gradient-hero text-white px-5 py-10 rounded-b-3xl">
-        <h1 className="text-2xl font-extrabold leading-tight">Liên Minh Liên Đoàn</h1>
-        <p className="text-sm opacity-90 mt-1">Kết nối thành viên & doanh nghiệp đối tác</p>
+        {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
+        <h1 className="text-2xl font-extrabold leading-tight">Liên Minh Liên Doanh</h1>
+        <p className="text-sm opacity-90 mt-1">Một cộng đồng – Nhiều giá trị</p>
       </section>
 
       <section className="px-4 grid grid-cols-3 gap-2 -mt-8 relative z-10">

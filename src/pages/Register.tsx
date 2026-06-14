@@ -137,8 +137,10 @@ export default function Register() {
   return (
     <div className="min-h-screen p-6 bg-background">
       <div className="max-w-sm mx-auto space-y-5">
-        <div className="text-center space-y-2">
-          <Logo size={56} />
+        <div className="text-center space-y-2 flex flex-col items-center">
+          <Logo size={56} asLink />
+          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
+          <Link to="/" className="text-xs font-semibold text-primary">Liên Minh Liên Doanh</Link>
           <h1 className="text-xl font-bold">{step === 1 ? "Đăng ký tài khoản" : "Thông tin doanh nghiệp"}</h1>
           <div className="text-xs text-muted-foreground">Bước {step}/{isBiz ? 2 : 1}</div>
         </div>
@@ -242,7 +244,8 @@ export default function Register() {
         <DialogContent>
           <DialogHeader><DialogTitle>Điều khoản & điều kiện</DialogTitle></DialogHeader>
           <div className="text-sm space-y-2 max-h-60 overflow-y-auto">
-            <p>Bằng việc đăng ký, bạn cam kết cung cấp thông tin chính xác và tuân thủ quy định của Liên Minh Liên Đoàn.</p>
+            {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
+            <p>Bằng việc đăng ký, bạn cam kết cung cấp thông tin chính xác và tuân thủ quy định của Liên Minh Liên Doanh.</p>
             <p>Tài khoản của bạn sẽ được admin xem xét và phê duyệt trong thời gian sớm nhất.</p>
             <p>Trong thời gian chờ duyệt, bạn có thể duyệt nội dung nhưng chưa thể đăng đánh giá, gửi đề xuất hay nhắn tin.</p>
           </div>
