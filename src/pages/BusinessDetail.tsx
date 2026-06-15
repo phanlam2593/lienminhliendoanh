@@ -253,6 +253,8 @@ export default function BusinessDetail() {
           )}
         </DialogContent>
       </Dialog>
+
+      <ProfileQuickView userId={quickViewUser} open={!!quickViewUser} onOpenChange={(v) => !v && setQuickViewUser(null)} />
     </div>
   );
 }
