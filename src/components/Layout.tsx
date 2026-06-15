@@ -1,11 +1,12 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Home, Search, Ticket, Settings, User as UserIcon, LogOut, Bell, MessageCircle, Clock } from "lucide-react";
-import { useState } from "react";
+import { Home, Search, Ticket, Settings, User as UserIcon, LogOut, Bell, MessageCircle, Clock, Store, Tag as TagIcon, Star, Mail, Phone, Facebook } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { supabase } from "@/integrations/supabase/client";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "Liên Minh Liên Doanh";
@@ -38,10 +39,10 @@ export function Layout() {
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
-      {!hide && (
+      {!hide && !showWelcome && (
         <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-lg border-b border-border/60">
           <div className="flex items-center justify-between px-4 h-14 gap-2">
-            <Logo size={32} withText asLink />
+            <Logo size={36} withText asLink />
             <div className="flex items-center gap-1">
               {user && (
                 <>
@@ -120,17 +121,86 @@ export function Layout() {
 }
 
 function WelcomeScreen() {
+  const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
+  useEffect(() => {
+    (async () => {
+      const [m, b, o] = await Promise.all([
+        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "approved"),
+        supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "approved"),
+        supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "active"),
+      ]);
+      setStats({ members: m.count ?? 0, businesses: b.count ?? 0, offers: o.count ?? 0 });
+    })();
+  }, []);
+
+  const GREEN = "#1a5c35";
+  const features = [
+    { icon: Store, title: "Khám phá đối tác uy tín", desc: "Cafe, nhà hàng, spa, homestay và nhiều hơn nữa" },
+    { icon: TagIcon, title: "Ưu đãi độc quyền", desc: "Nhận deal riêng dành cho thành viên cộng đồng" },
+    { icon: Star, title: "Đánh giá thật từ cộng đồng", desc: "Chia sẻ trải nghiệm và đọc review từ thành viên" },
+  ];
+
   return (
-    <div className="min-h-[80vh] flex flex-col items-center justify-center px-6 text-center gap-6">
-      <Logo size={96} asLink />
-      <div className="space-y-2">
+    <div className="px-5 py-8 flex flex-col items-center text-center gap-6">
+      <Logo size={90} asLink />
+      <div className="space-y-1.5">
         {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-        <h1 className="text-3xl font-extrabold text-gradient-brand">{APP_NAME}</h1>
+        <h1 className="text-2xl font-extrabold" style={{ color: GREEN }}>{APP_NAME}</h1>
         <p className="text-sm text-muted-foreground">{TAGLINE}</p>
       </div>
-      <div className="w-full max-w-xs space-y-2.5">
-        <Link to="/auth/login" className="block w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold">Đăng nhập</Link>
-        <Link to="/auth/register" className="block w-full py-3 rounded-xl border-2 border-primary text-primary font-semibold">Đăng ký</Link>
+
+      <p className="text-sm leading-relaxed text-foreground/80 max-w-sm">
+        🎉 Chào mừng bạn đến với Liên Minh! Nơi mỗi ly cafe, mỗi bữa ăn, mỗi trải nghiệm đều xứng đáng được ưu đãi hơn.
+      </p>
+
+      <div className="w-full max-w-sm grid grid-cols-3 gap-2">
+        {[
+          { v: stats.members, l: "Thành viên" },
+          { v: stats.businesses, l: "Đối tác" },
+          { v: stats.offers, l: "Ưu đãi" },
+        ].map(s => (
+          <div key={s.l} className="bg-card rounded-2xl p-3 shadow-md">
+            <div className="text-xl font-extrabold" style={{ color: GREEN }}>{s.v}</div>
+            <div className="text-[10px] text-muted-foreground font-semibold uppercase">{s.l}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="w-full max-w-sm space-y-3">
+        {features.map(f => (
+          <div key={f.title} className="flex items-start gap-3 p-4 rounded-2xl bg-card border text-left">
+            <div className="w-10 h-10 rounded-xl grid place-items-center shrink-0" style={{ background: `${GREEN}15` }}>
+              <f.icon className="w-5 h-5" style={{ color: GREEN }} />
+            </div>
+            <div>
+              <div className="font-bold text-sm">{f.title}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{f.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="w-full max-w-sm space-y-2.5">
+        <Link to="/auth/register" className="block w-full py-3 rounded-xl font-semibold text-white" style={{ background: GREEN }}>
+          Tham gia ngay
+        </Link>
+        <Link to="/auth/login" className="block w-full py-3 rounded-xl font-semibold border-2" style={{ borderColor: GREEN, color: GREEN }}>
+          Đăng nhập
+        </Link>
+      </div>
+
+      <div className="pt-4 border-t w-full max-w-sm text-xs text-muted-foreground space-y-1.5">
+        <div className="font-bold text-foreground text-sm">Liên hệ admin</div>
+        <a href="mailto:lienminhliendoanh@gmail.com" className="flex items-center justify-center gap-2 hover:text-primary">
+          <Mail className="w-3.5 h-3.5" /> lienminhliendoanh@gmail.com
+        </a>
+        <a href="tel:0339565246" className="flex items-center justify-center gap-2 hover:text-primary">
+          <Phone className="w-3.5 h-3.5" /> 0339565246
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 hover:text-primary">
+          <Facebook className="w-3.5 h-3.5" /> Facebook
+        </a>
       </div>
     </div>
   );

@@ -8,10 +8,13 @@ import { cn } from "@/lib/utils";
 
 type SortKey = "newest" | "rating" | "offers";
 
-const areaFromAddress = (addr: string | null) => {
-  if (!addr) return null;
-  const parts = addr.split(",").map(s => s.trim()).filter(Boolean);
-  return parts[parts.length - 1] || null;
+const FIXED_AREAS = ["Trung tâm", "Phường 3", "Phường 8", "Xuân Hương", "Khác"];
+
+const matchesArea = (addr: string | null, area: string) => {
+  if (!addr) return area === "Khác";
+  const a = addr.toLowerCase();
+  if (area === "Khác") return !FIXED_AREAS.slice(0, -1).some(x => a.includes(x.toLowerCase()));
+  return a.includes(area.toLowerCase());
 };
 
 export default function Businesses() {
@@ -59,16 +62,10 @@ export default function Businesses() {
     }));
   };
 
-  const areas = useMemo(() => {
-    const set = new Set<string>();
-    list.forEach(b => { const a = areaFromAddress(b.address); if (a) set.add(a); });
-    return [...set].sort();
-  }, [list]);
-
   const filtered = useMemo(() => {
     let arr = list;
     if (type !== "all") arr = arr.filter(b => b.type === type);
-    if (area !== "all") arr = arr.filter(b => areaFromAddress(b.address) === area);
+    if (area !== "all") arr = arr.filter(b => matchesArea(b.address, area));
     if (q.trim()) {
       const k = q.toLowerCase();
       arr = arr.filter(b => b.name.toLowerCase().includes(k) || (b.latestOffer ?? "").toLowerCase().includes(k));
@@ -83,7 +80,7 @@ export default function Businesses() {
       <h1 className="text-xl font-extrabold">Khám phá</h1>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm doanh nghiệp, ưu đãi…"
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm cafe, spa, nhà hàng..."
           className="w-full pl-9 pr-4 py-3 rounded-xl border bg-card" />
       </div>
       <div className="flex gap-2 overflow-x-auto scrollbar-hide">
@@ -100,7 +97,7 @@ export default function Businesses() {
         <select value={area} onChange={e => setArea(e.target.value)}
           className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium">
           <option value="all">Tất cả khu vực</option>
-          {areas.map(a => <option key={a} value={a}>{a}</option>)}
+          {FIXED_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
         </select>
       </div>
       <div className="flex gap-2 text-xs">
@@ -110,7 +107,7 @@ export default function Businesses() {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Không tìm thấy doanh nghiệp</p>
+        <p className="text-sm text-center py-12 text-muted-foreground">Không tìm thấy kết quả phù hợp</p>
       ) : (
         <div className="grid gap-4">
           {filtered.map(b => <BusinessCard key={b.id} b={b} />)}
