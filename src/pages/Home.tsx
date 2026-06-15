@@ -23,7 +23,7 @@ export default function Home() {
     })();
   }, []);
 
-  yEffect(() => {
+  useEffect(() => {
     (async () => {
       const [{ data: biz }, { data: offers }, { data: reviews }] = await Promise.all([
         supabase.from("businesses").select("*").eq("status", "approved").eq("is_featured", true).order("created_at", { ascending: false }),
