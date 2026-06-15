@@ -8,10 +8,13 @@ import { cn } from "@/lib/utils";
 
 type SortKey = "newest" | "rating" | "offers";
 
-const areaFromAddress = (addr: string | null) => {
-  if (!addr) return null;
-  const parts = addr.split(",").map(s => s.trim()).filter(Boolean);
-  return parts[parts.length - 1] || null;
+const FIXED_AREAS = ["Trung tâm", "Phường 3", "Phường 8", "Xuân Hương", "Khác"];
+
+const matchesArea = (addr: string | null, area: string) => {
+  if (!addr) return area === "Khác";
+  const a = addr.toLowerCase();
+  if (area === "Khác") return !FIXED_AREAS.slice(0, -1).some(x => a.includes(x.toLowerCase()));
+  return a.includes(area.toLowerCase());
 };
 
 export default function Businesses() {
