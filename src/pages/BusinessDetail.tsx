@@ -149,15 +149,15 @@ export default function BusinessDetail() {
               {reviews.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Chưa có đánh giá nào</p>
               ) : (
-                <div className="space-y-2">
+              <div className="space-y-2">
                   {reviews.map(r => (
                     <div key={r.id} className="p-3 rounded-xl bg-card shadow-sm">
                       <div className="flex items-center gap-2 mb-1">
-                        <div className="w-8 h-8 rounded-full bg-gradient-brand text-white grid place-items-center text-xs font-bold">{(r.profile?.full_name || "?").slice(0, 1)}</div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-sm font-semibold truncate">{r.profile?.full_name || "Ẩn danh"}</div>
+                        <Avatar path={r.profile?.avatar_url} name={r.profile?.full_name} size={32} onClick={() => setQuickViewUser(r.user_id)} />
+                        <button onClick={() => setQuickViewUser(r.user_id)} className="flex-1 min-w-0 text-left">
+                          <div className="text-sm font-semibold truncate hover:text-primary">{r.profile?.full_name || "Ẩn danh"}</div>
                           <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</div>
-                        </div>
+                        </button>
                         <div className="flex text-yellow-500">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className={`w-3 h-3 ${i < r.rating ? "fill-yellow-400" : "opacity-30"}`} />)}</div>
                       </div>
                       {r.comment && <p className="text-xs text-muted-foreground">{r.comment}</p>}
@@ -182,11 +182,11 @@ export default function BusinessDetail() {
                 {reviews.map(r => (
                   <div key={r.id} className="p-3 rounded-xl bg-card shadow-sm">
                     <div className="flex items-center gap-2 mb-1">
-                      <div className="w-8 h-8 rounded-full bg-gradient-brand text-white grid place-items-center text-xs font-bold">{(r.profile?.full_name || "?").slice(0, 1)}</div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-semibold truncate">{r.profile?.full_name || "Ẩn danh"}</div>
+                      <Avatar path={r.profile?.avatar_url} name={r.profile?.full_name} size={32} onClick={() => setQuickViewUser(r.user_id)} />
+                      <button onClick={() => setQuickViewUser(r.user_id)} className="flex-1 min-w-0 text-left">
+                        <div className="text-sm font-semibold truncate hover:text-primary">{r.profile?.full_name || "Ẩn danh"}</div>
                         <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</div>
-                      </div>
+                      </button>
                       <div className="flex text-yellow-500">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className={`w-3 h-3 ${i < r.rating ? "fill-yellow-400" : "opacity-30"}`} />)}</div>
                     </div>
                     {r.comment && <p className="text-xs text-muted-foreground">{r.comment}</p>}
