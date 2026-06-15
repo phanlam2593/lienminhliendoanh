@@ -28,6 +28,7 @@ export interface Profile {
   phone: string;
   avatar_url: string | null;
   status: AccountStatus;
+  admin_note: string | null;
   created_at: string;
   updated_at: string;
 }
