@@ -71,6 +71,38 @@ export type Database = {
         }
         Relationships: []
       }
+      follows: {
+        Row: {
+          created_at: string
+          followee_business_id: string | null
+          followee_user_id: string | null
+          follower_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          followee_business_id?: string | null
+          followee_user_id?: string | null
+          follower_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          followee_business_id?: string | null
+          followee_user_id?: string | null
+          follower_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_followee_business_id_fkey"
+            columns: ["followee_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
@@ -215,6 +247,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          admin_note: string | null
           avatar_url: string | null
           created_at: string
           email: string
@@ -226,6 +259,7 @@ export type Database = {
           username: string
         }
         Insert: {
+          admin_note?: string | null
           avatar_url?: string | null
           created_at?: string
           email: string
@@ -237,6 +271,7 @@ export type Database = {
           username: string
         }
         Update: {
+          admin_note?: string | null
           avatar_url?: string | null
           created_at?: string
           email?: string
@@ -249,6 +284,38 @@ export type Database = {
         }
         Relationships: []
       }
+      report_replies: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          report_id: string
+        }
+        Insert: {
+          author_id: string
+          body: string
+          created_at?: string
+          id?: string
+          report_id: string
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          report_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_replies_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reports: {
         Row: {
           created_at: string
@@ -258,6 +325,7 @@ export type Database = {
           resolved: boolean
           send_to_admin: boolean
           send_to_business: boolean
+          status: Database["public"]["Enums"]["report_status"]
           target_id: string
           target_type: Database["public"]["Enums"]["report_target"]
           user_id: string
@@ -270,6 +338,7 @@ export type Database = {
           resolved?: boolean
           send_to_admin?: boolean
           send_to_business?: boolean
+          status?: Database["public"]["Enums"]["report_status"]
           target_id: string
           target_type: Database["public"]["Enums"]["report_target"]
           user_id: string
@@ -282,6 +351,7 @@ export type Database = {
           resolved?: boolean
           send_to_admin?: boolean
           send_to_business?: boolean
+          status?: Database["public"]["Enums"]["report_status"]
           target_id?: string
           target_type?: Database["public"]["Enums"]["report_target"]
           user_id?: string
@@ -385,6 +455,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_report: {
+        Args: { _report_id: string; _user_id: string }
+        Returns: boolean
+      }
       claim_offer: {
         Args: { _offer_id: string }
         Returns: {
@@ -434,6 +508,7 @@ export type Database = {
         | "report_received"
         | "broadcast"
       offer_status: "active" | "inactive"
+      report_status: "pending" | "replied" | "resolved" | "closed"
       report_target: "business" | "offer"
       suggestion_status: "pending" | "approved" | "rejected"
     }
@@ -580,6 +655,7 @@ export const Constants = {
         "broadcast",
       ],
       offer_status: ["active", "inactive"],
+      report_status: ["pending", "replied", "resolved", "closed"],
       report_target: ["business", "offer"],
       suggestion_status: ["pending", "approved", "rejected"],
     },
