@@ -133,7 +133,6 @@ function WelcomeScreen() {
     })();
   }, []);
 
-  const GREEN = "#1a5c35";
   const features = [
     { icon: Store, title: "Khám phá đối tác uy tín", desc: "Cafe, nhà hàng, spa, homestay và nhiều hơn nữa" },
     { icon: TagIcon, title: "Ưu đãi độc quyền", desc: "Nhận deal riêng dành cho thành viên cộng đồng" },
@@ -145,7 +144,7 @@ function WelcomeScreen() {
       <Logo size={90} asLink />
       <div className="space-y-1.5">
         {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-        <h1 className="text-2xl font-extrabold" style={{ color: GREEN }}>{APP_NAME}</h1>
+        <h1 className="text-2xl font-extrabold text-primary">{APP_NAME}</h1>
         <p className="text-sm text-muted-foreground">{TAGLINE}</p>
       </div>
 
@@ -159,8 +158,8 @@ function WelcomeScreen() {
           { v: stats.businesses, l: "Đối tác" },
           { v: stats.offers, l: "Ưu đãi" },
         ].map(s => (
-          <div key={s.l} className="bg-card rounded-2xl p-3 shadow-md">
-            <div className="text-xl font-extrabold" style={{ color: GREEN }}>{s.v}</div>
+          <div key={s.l} className="bg-card rounded-2xl p-3 shadow-soft">
+            <div className="text-xl font-extrabold text-primary">{s.v}</div>
             <div className="text-[10px] text-muted-foreground font-semibold uppercase">{s.l}</div>
           </div>
         ))}
@@ -169,8 +168,8 @@ function WelcomeScreen() {
       <div className="w-full max-w-sm space-y-3">
         {features.map(f => (
           <div key={f.title} className="flex items-start gap-3 p-4 rounded-2xl bg-card border text-left">
-            <div className="w-10 h-10 rounded-xl grid place-items-center shrink-0" style={{ background: `${GREEN}15` }}>
-              <f.icon className="w-5 h-5" style={{ color: GREEN }} />
+            <div className="w-10 h-10 rounded-xl grid place-items-center shrink-0 bg-accent">
+              <f.icon className="w-5 h-5 text-primary" />
             </div>
             <div>
               <div className="font-bold text-sm">{f.title}</div>
@@ -181,11 +180,11 @@ function WelcomeScreen() {
       </div>
 
       <div className="w-full max-w-sm space-y-2.5">
-        <Link to="/auth/register" className="block w-full py-3 rounded-xl font-semibold text-white" style={{ background: GREEN }}>
-          Tham gia ngay
-        </Link>
-        <Link to="/auth/login" className="block w-full py-3 rounded-xl font-semibold border-2" style={{ borderColor: GREEN, color: GREEN }}>
+        <Link to="/auth/login" className="block w-full py-3 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand">
           Đăng nhập
+        </Link>
+        <Link to="/auth/register" className="block w-full py-3 rounded-xl font-semibold border-2 border-primary text-primary">
+          Tham gia ngay
         </Link>
       </div>
 
