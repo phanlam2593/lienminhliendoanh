@@ -42,7 +42,7 @@ export function Layout() {
       {!hide && (
         <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-lg border-b border-border/60">
           <div className="flex items-center justify-between px-4 h-14 gap-2">
-            <Logo size={32} withText asLink />
+            <Logo size={36} withText asLink />
             <div className="flex items-center gap-1">
               {user && (
                 <>
