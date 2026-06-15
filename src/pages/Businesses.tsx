@@ -107,7 +107,7 @@ export default function Businesses() {
       </div>
 
       {filtered.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Không tìm thấy doanh nghiệp</p>
+        <p className="text-sm text-center py-12 text-muted-foreground">Không tìm thấy kết quả phù hợp</p>
       ) : (
         <div className="grid gap-4">
           {filtered.map(b => <BusinessCard key={b.id} b={b} />)}
