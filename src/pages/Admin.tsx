@@ -165,6 +165,8 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
   const [bFb, setBFb] = useState("");
   const [bWeb, setBW] = useState("");
   const [bFeatured, setBFeat] = useState(false);
+  const [rejectMode, setRejectMode] = useState(false);
+  const [adminNote, setAdminNote] = useState("");
 
   const [offers, setOffers] = useState<Offer[]>([]);
   const [newOfferTitle, setNewOfferTitle] = useState("");
