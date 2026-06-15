@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Business, BusinessType, Offer } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
-import { LogOut, PlusCircle, MessageSquare, Save, Flag } from "lucide-react";
+import { LogOut, PlusCircle, MessageSquare, Save, Flag, Camera } from "lucide-react";
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
+import { Avatar } from "@/components/Avatar";
 
 export default function Profile() {
   const { user, profile, role, refresh, signOut } = useAuth();
@@ -17,6 +18,8 @@ export default function Profile() {
   const [phone, setPh] = useState("");
   const [email, setE] = useState("");
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const avatarInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -50,16 +53,50 @@ export default function Profile() {
     refresh();
   };
 
+  const onAvatarChange = async (file: File) => {
+    if (!user) return;
+    setUploadingAvatar(true);
+    try {
+      const path = await uploadImage(file, "avatars", user.id);
+      const { error } = await supabase.from("profiles").update({ avatar_url: path }).eq("id", user.id);
+      if (error) throw error;
+      toast.success("Đã cập nhật ảnh đại diện");
+      refresh();
+    } catch (e: any) { toast.error(e.message); }
+    finally { setUploadingAvatar(false); }
+  };
+
   return (
     <div className="p-4 space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-16 h-16 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center text-2xl font-bold">
-          {(profile?.full_name || profile?.username || "?").slice(0, 1)}
+        <div className="relative">
+          <Avatar
+            path={profile?.avatar_url}
+            name={profile?.full_name || profile?.username}
+            size={64}
+            onClick={() => avatarInput.current?.click()}
+          />
+          <button
+            type="button"
+            onClick={() => avatarInput.current?.click()}
+            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
+            aria-label="Đổi ảnh đại diện"
+          >
+            <Camera className="w-3.5 h-3.5" />
+          </button>
+          <input
+            ref={avatarInput}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={e => { const f = e.target.files?.[0]; if (f) void onAvatarChange(f); e.currentTarget.value = ""; }}
+          />
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold truncate">{profile?.full_name}</div>
           <div className="text-xs text-muted-foreground">@{profile?.username} · {role}</div>
           <StatusBadge s={profile?.status} />
+          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
         </div>
       </div>
 
