@@ -147,10 +147,12 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   const [offers, setOffers] = useState<Offer[]>([]);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    supabase.from("offers").select("*").eq("business_id", biz.id).order("created_at", { ascending: false })
-      .then(({ data }) => setOffers((data ?? []) as Offer[]));
-  }, [biz.id]);
+  const reloadOffers = async () => {
+    const { data } = await supabase.from("offers").select("*").eq("business_id", biz.id).order("created_at", { ascending: false });
+    setOffers((data ?? []) as Offer[]);
+  };
+
+  useEffect(() => { void reloadOffers(); }, [biz.id]);
 
   const onCover = async (file: File) => {
     try {
@@ -180,8 +182,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
     });
     if (error) { toast.error(error.message); return; }
     setOfferText("");
-    const { data } = await supabase.from("offers").select("*").eq("business_id", biz.id).order("created_at", { ascending: false });
-    setOffers((data ?? []) as Offer[]);
+    await reloadOffers();
     toast.success("Đã thêm ưu đãi");
   };
 
