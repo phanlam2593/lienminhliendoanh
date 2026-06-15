@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock } from "lucide-react";
+import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business, Offer, Review, OfferClaim } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
