@@ -118,6 +118,8 @@ export default function BusinessDetail() {
           </Row>}
         </div>
 
+        <FollowBusinessButton businessId={b.id} ownerId={b.owner_id} />
+
         {offers.length > 0 && (
           <section>
             <h2 className="font-bold mb-2 flex items-center gap-1"><Tag className="w-4 h-4 text-primary" /> Ưu đãi</h2>
