@@ -82,9 +82,10 @@ export default function Admin() {
   const refresh = () => setRefreshKey(k => k + 1);
 
   const setStatus = async (id: string, status: "approved" | "rejected", note?: string) => {
-    const patch: Record<string, unknown> = { status };
-    if (typeof note === "string") patch.admin_note = note.trim() || null;
-    const { error } = await supabase.from("profiles").update(patch).eq("id", id);
+    const patch = typeof note === "string"
+      ? { status, admin_note: note.trim() || null }
+      : { status };
+    const { error } = await supabase.from("profiles").update(patch as any).eq("id", id);
     if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); refresh(); }
   };
 
