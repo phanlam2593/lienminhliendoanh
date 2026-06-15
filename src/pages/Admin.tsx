@@ -294,9 +294,44 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
             </div>
 
             {row.status === "pending" && (
-              <div className="flex gap-2">
-                <button onClick={() => onStatus(row.id, "approved")} className="flex-1 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><Check className="w-4 h-4" /> Duyệt</button>
-                <button onClick={() => onStatus(row.id, "rejected")} className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><X className="w-4 h-4" /> Từ chối</button>
+            {row.status === "pending" && !rejectMode && (
+              <div className="space-y-2">
+                {row.admin_note && (
+                  <div className="text-[11px] text-muted-foreground italic">Ghi chú trước: {row.admin_note}</div>
+                )}
+                <input
+                  value={adminNote}
+                  onChange={e => setAdminNote(e.target.value)}
+                  placeholder="Ghi chú gửi thành viên (tùy chọn khi duyệt)"
+                  className="w-full px-3 py-2 rounded-lg border bg-background text-xs"
+                />
+                <div className="flex gap-2">
+                  <button onClick={() => { onStatus(row.id, "approved", adminNote); setAdminNote(""); }} className="flex-1 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><Check className="w-4 h-4" /> Duyệt</button>
+                  <button onClick={() => setRejectMode(true)} className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><X className="w-4 h-4" /> Từ chối</button>
+                </div>
+              </div>
+            )}
+            {row.status === "pending" && rejectMode && (
+              <div className="space-y-2 p-3 bg-red-50 rounded-lg border border-red-200">
+                <div className="text-xs font-bold text-destructive">Lý do từ chối (bắt buộc)</div>
+                <textarea
+                  value={adminNote}
+                  onChange={e => setAdminNote(e.target.value)}
+                  rows={2}
+                  placeholder="Mô tả ngắn lý do để thành viên hiểu…"
+                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+                />
+                <div className="flex gap-2">
+                  <button onClick={() => { setRejectMode(false); setAdminNote(""); }} className="flex-1 py-2 rounded-lg border text-sm font-semibold">Hủy</button>
+                  <button
+                    onClick={() => {
+                      if (!adminNote.trim()) { toast.error("Vui lòng nhập lý do"); return; }
+                      onStatus(row.id, "rejected", adminNote);
+                      setRejectMode(false); setAdminNote("");
+                    }}
+                    className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm"
+                  >Xác nhận từ chối</button>
+                </div>
               </div>
             )}
 
