@@ -293,7 +293,7 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
               </button>
             </div>
 
-            {row.status === "pending" && (
+            
             {row.status === "pending" && !rejectMode && (
               <div className="space-y-2">
                 {row.admin_note && (
