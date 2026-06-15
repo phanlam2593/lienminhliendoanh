@@ -63,10 +63,19 @@ export default function Businesses() {
     }));
   };
 
+  const areaCounts = useMemo(() => {
+    const m = new Map<string, number>();
+    list.forEach(b => {
+      const a = extractArea(b.address);
+      m.set(a, (m.get(a) ?? 0) + 1);
+    });
+    return Array.from(m.entries()).sort((x, y) => y[1] - x[1]);
+  }, [list]);
+
   const filtered = useMemo(() => {
     let arr = list;
     if (type !== "all") arr = arr.filter(b => b.type === type);
-    if (area !== "all") arr = arr.filter(b => matchesArea(b.address, area));
+    if (area !== "all") arr = arr.filter(b => extractArea(b.address) === area);
     if (q.trim()) {
       const k = q.toLowerCase();
       arr = arr.filter(b => b.name.toLowerCase().includes(k) || (b.latestOffer ?? "").toLowerCase().includes(k));
