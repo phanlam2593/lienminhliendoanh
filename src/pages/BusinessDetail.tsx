@@ -282,3 +282,46 @@ function Countdown({ expiresAt }: { expiresAt: string }) {
 function Row({ icon: Icon, children }: { icon: any; children: React.ReactNode }) {
   return <div className="flex items-center gap-2"><Icon className="w-4 h-4 text-muted-foreground" /> {children}</div>;
 }
+
+function FollowBusinessButton({ businessId, ownerId }: { businessId: string; ownerId: string | null }) {
+  const { user } = useAuth();
+  const [following, setFollowing] = useState(false);
+  const [count, setCount] = useState(0);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const [{ count: c }, { data: rel }] = await Promise.all([
+        supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_business_id", businessId),
+        user ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_business_id", businessId).maybeSingle() : Promise.resolve({ data: null } as any),
+      ]);
+      setCount(c ?? 0);
+      setFollowing(!!rel);
+    })();
+  }, [businessId, user?.id]);
+
+  if (!user || user.id === ownerId) {
+    return <div className="text-xs text-muted-foreground inline-flex items-center gap-1"><Users className="w-3 h-3" /> {count} người theo dõi</div>;
+  }
+
+  const toggle = async () => {
+    setBusy(true);
+    if (following) {
+      const { error } = await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_business_id", businessId);
+      if (!error) { setFollowing(false); setCount(n => Math.max(0, n - 1)); }
+    } else {
+      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_business_id: businessId });
+      if (!error) { setFollowing(true); setCount(n => n + 1); }
+    }
+    setBusy(false);
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <button onClick={toggle} disabled={busy} className={`px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1 ${following ? "bg-muted text-foreground" : "bg-gradient-brand text-primary-foreground"}`}>
+        {following ? <><UserCheck className="w-3.5 h-3.5" /> Đang theo dõi</> : <><UserPlus className="w-3.5 h-3.5" /> Theo dõi</>}
+      </button>
+      <span className="text-xs text-muted-foreground">{count} người theo dõi</span>
+    </div>
+  );
+}
