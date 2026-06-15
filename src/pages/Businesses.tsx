@@ -80,7 +80,7 @@ export default function Businesses() {
       <h1 className="text-xl font-extrabold">Khám phá</h1>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm doanh nghiệp, ưu đãi…"
+        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm cafe, spa, nhà hàng..."
           className="w-full pl-9 pr-4 py-3 rounded-xl border bg-card" />
       </div>
       <div className="flex gap-2 overflow-x-auto scrollbar-hide">
