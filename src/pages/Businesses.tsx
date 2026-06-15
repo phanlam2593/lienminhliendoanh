@@ -8,13 +8,14 @@ import { cn } from "@/lib/utils";
 
 type SortKey = "newest" | "rating" | "offers";
 
-const FIXED_AREAS = ["Trung tâm", "Phường 3", "Phường 8", "Xuân Hương", "Khác"];
-
-const matchesArea = (addr: string | null, area: string) => {
-  if (!addr) return area === "Khác";
-  const a = addr.toLowerCase();
-  if (area === "Khác") return !FIXED_AREAS.slice(0, -1).some(x => a.includes(x.toLowerCase()));
-  return a.includes(area.toLowerCase());
+// Item 7: derive areas dynamically from business addresses.
+// Heuristic: take the last comma-separated segment (usually city / district),
+// trim, collapse whitespace, fall back to "Khác".
+const extractArea = (addr: string | null): string => {
+  if (!addr) return "Khác";
+  const parts = addr.split(",").map(s => s.trim()).filter(Boolean);
+  const last = parts[parts.length - 1] || "Khác";
+  return last.replace(/\s+/g, " ").slice(0, 40);
 };
 
 export default function Businesses() {
