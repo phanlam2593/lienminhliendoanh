@@ -464,8 +464,10 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
   };
   useEffect(() => { load(); }, [refreshKey]);
 
-  const toggle = async (r: Report) => { await supabase.from("reports").update({ resolved: !r.resolved }).eq("id", r.id); load(); };
   const del = async (id: string) => { if (!confirm("Xóa báo cáo?")) return; await supabase.from("reports").delete().eq("id", id); load(); };
+  const onStatusChanged = (id: string, s: ReportStatus) => {
+    setList(prev => prev.map(r => r.id === id ? { ...r, status: s, resolved: s === "resolved" || s === "closed" } : r));
+  };
 
   return (
     <section className="space-y-2 border-t pt-4">
@@ -473,13 +475,21 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
       {list.length === 0 && <p className="text-sm text-muted-foreground">Chưa có báo cáo nào</p>}
       {list.map(r => (
         <div key={r.id} className="p-3 bg-card rounded-xl space-y-1.5">
-          <div className="text-[11px] text-muted-foreground">
-            {r.reporter || "Ẩn danh"} → <b>{r.target_name || r.target_type}</b> · {new Date(r.created_at).toLocaleString("vi-VN")} · {r.resolved ? "✓ đã xử lý" : "Chưa xử lý"}
+          <div className="flex items-start justify-between gap-2">
+            <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
+              {r.reporter || "Ẩn danh"} → <b>{r.target_name || r.target_type}</b> · {new Date(r.created_at).toLocaleString("vi-VN")}
+            </div>
+            <ReportStatusBadge s={r.status} />
           </div>
           <div className="text-sm">{r.description}</div>
           {r.photo_url && <div className="h-32 rounded-lg overflow-hidden bg-muted"><StoredImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" /></div>}
-          <div className="flex gap-2">
-            <button onClick={() => toggle(r)} className="text-xs px-3 py-1 rounded bg-accent">{r.resolved ? "Mở lại" : "Đánh dấu đã xử lý"}</button>
+          <ReportRepliesPanel
+            reportId={r.id}
+            canChangeStatus
+            currentStatus={r.status}
+            onStatusChange={(s) => onStatusChanged(r.id, s)}
+          />
+          <div className="flex gap-2 pt-1">
             <button onClick={() => del(r.id)} className="text-xs px-3 py-1 rounded bg-muted text-destructive">Xóa</button>
           </div>
         </div>
