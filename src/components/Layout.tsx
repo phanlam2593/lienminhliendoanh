@@ -2,6 +2,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-do
 import { Home, Search, Ticket, Settings, User as UserIcon, LogOut, Bell, MessageCircle, Clock, Store, Tag as TagIcon, Star, Mail, Phone, Facebook } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
+import { Avatar } from "./Avatar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
@@ -58,8 +59,10 @@ export function Layout() {
               )}
               {user ? (
                 <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger className="w-9 h-9 rounded-full bg-gradient-brand text-primary-foreground font-bold text-sm grid place-items-center shadow-brand">
-                    {(profile?.full_name || profile?.username || "?").slice(0, 1).toUpperCase()}
+                  <PopoverTrigger asChild>
+                    <button className="rounded-full shadow-brand" aria-label="Mở menu tài khoản">
+                      <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
+                    </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-56 p-2" align="end">
                     <div className="px-2 py-1.5 border-b mb-1">
@@ -133,7 +136,6 @@ function WelcomeScreen() {
     })();
   }, []);
 
-  const GREEN = "#1a5c35";
   const features = [
     { icon: Store, title: "Khám phá đối tác uy tín", desc: "Cafe, nhà hàng, spa, homestay và nhiều hơn nữa" },
     { icon: TagIcon, title: "Ưu đãi độc quyền", desc: "Nhận deal riêng dành cho thành viên cộng đồng" },
@@ -145,7 +147,7 @@ function WelcomeScreen() {
       <Logo size={90} asLink />
       <div className="space-y-1.5">
         {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-        <h1 className="text-2xl font-extrabold" style={{ color: GREEN }}>{APP_NAME}</h1>
+        <h1 className="text-2xl font-extrabold text-primary">{APP_NAME}</h1>
         <p className="text-sm text-muted-foreground">{TAGLINE}</p>
       </div>
 
@@ -159,8 +161,8 @@ function WelcomeScreen() {
           { v: stats.businesses, l: "Đối tác" },
           { v: stats.offers, l: "Ưu đãi" },
         ].map(s => (
-          <div key={s.l} className="bg-card rounded-2xl p-3 shadow-md">
-            <div className="text-xl font-extrabold" style={{ color: GREEN }}>{s.v}</div>
+          <div key={s.l} className="bg-card rounded-2xl p-3 shadow-soft">
+            <div className="text-xl font-extrabold text-primary">{s.v}</div>
             <div className="text-[10px] text-muted-foreground font-semibold uppercase">{s.l}</div>
           </div>
         ))}
@@ -169,8 +171,8 @@ function WelcomeScreen() {
       <div className="w-full max-w-sm space-y-3">
         {features.map(f => (
           <div key={f.title} className="flex items-start gap-3 p-4 rounded-2xl bg-card border text-left">
-            <div className="w-10 h-10 rounded-xl grid place-items-center shrink-0" style={{ background: `${GREEN}15` }}>
-              <f.icon className="w-5 h-5" style={{ color: GREEN }} />
+            <div className="w-10 h-10 rounded-xl grid place-items-center shrink-0 bg-accent">
+              <f.icon className="w-5 h-5 text-primary" />
             </div>
             <div>
               <div className="font-bold text-sm">{f.title}</div>
@@ -181,11 +183,11 @@ function WelcomeScreen() {
       </div>
 
       <div className="w-full max-w-sm space-y-2.5">
-        <Link to="/auth/register" className="block w-full py-3 rounded-xl font-semibold text-white" style={{ background: GREEN }}>
-          Tham gia ngay
-        </Link>
-        <Link to="/auth/login" className="block w-full py-3 rounded-xl font-semibold border-2" style={{ borderColor: GREEN, color: GREEN }}>
+        <Link to="/auth/login" className="block w-full py-3 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand">
           Đăng nhập
+        </Link>
+        <Link to="/auth/register" className="block w-full py-3 rounded-xl font-semibold border-2 border-primary text-primary">
+          Tham gia ngay
         </Link>
       </div>
 

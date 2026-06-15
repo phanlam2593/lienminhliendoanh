@@ -5,9 +5,11 @@ export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
 export type ReportTarget = "business" | "offer";
+export type ReportStatus = "pending" | "replied" | "resolved" | "closed";
 export type NotifType =
   | "account_approved" | "account_rejected" | "new_offer" | "new_message"
-  | "suggestion_approved" | "suggestion_rejected" | "report_received" | "broadcast";
+  | "suggestion_approved" | "suggestion_rejected" | "report_received" | "broadcast"
+  | "new_follower" | "report_reply";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   food: "Ăn uống",
@@ -26,6 +28,7 @@ export interface Profile {
   phone: string;
   avatar_url: string | null;
   status: AccountStatus;
+  admin_note: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -102,6 +105,15 @@ export interface Report {
   send_to_admin: boolean;
   send_to_business: boolean;
   resolved: boolean;
+  status: ReportStatus;
+  created_at: string;
+}
+
+export interface ReportReply {
+  id: string;
+  report_id: string;
+  author_id: string;
+  body: string;
   created_at: string;
 }
 

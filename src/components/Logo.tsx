@@ -5,7 +5,7 @@ import logoAsset from "@/assets/logo.webp.asset.json";
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "LIÊN MINH LIÊN DOANH";
 const TAGLINE = "Một cộng đồng – Nhiều giá trị";
-const GREEN = "#18a974";
+const BRAND = "hsl(var(--primary))";
 
 /**
  * Brand mark: forest-green circle with mountains, 3 people, and a handshake.
@@ -41,7 +41,7 @@ export function Logo({
           <div
             className="font-extrabold"
             style={{
-              color: GREEN,
+              color: BRAND,
               letterSpacing: "1.5px",
               fontSize: size <= 36 ? 12 : size <= 56 ? 14 : 17,
             }}

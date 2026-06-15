@@ -3,11 +3,12 @@ import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import type { Profile, Business, Offer, Review, Suggestion, Report } from "@/lib/types";
+import type { Profile, Business, Offer, Review, Suggestion, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Check, X, Trash2, Send, Save, Search, Star, Flag } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
+import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
 interface MemberRow extends Profile {
   business?: Business | null;
@@ -80,8 +81,11 @@ export default function Admin() {
 
   const refresh = () => setRefreshKey(k => k + 1);
 
-  const setStatus = async (id: string, status: "approved" | "rejected") => {
-    const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
+  const setStatus = async (id: string, status: "approved" | "rejected", note?: string) => {
+    const patch = typeof note === "string"
+      ? { status, admin_note: note.trim() || null }
+      : { status };
+    const { error } = await supabase.from("profiles").update(patch as any).eq("id", id);
     if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); refresh(); }
   };
 
@@ -142,7 +146,7 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
   row: MemberRow | null;
   onClose: () => void;
   onChanged: () => void;
-  onStatus: (id: string, s: "approved" | "rejected") => void;
+  onStatus: (id: string, s: "approved" | "rejected", note?: string) => void;
 }) {
   // member fields
   const [fullName, setFN] = useState("");
@@ -161,6 +165,8 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
   const [bFb, setBFb] = useState("");
   const [bWeb, setBW] = useState("");
   const [bFeatured, setBFeat] = useState(false);
+  const [rejectMode, setRejectMode] = useState(false);
+  const [adminNote, setAdminNote] = useState("");
 
   const [offers, setOffers] = useState<Offer[]>([]);
   const [newOfferTitle, setNewOfferTitle] = useState("");
@@ -287,10 +293,45 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
               </button>
             </div>
 
-            {row.status === "pending" && (
-              <div className="flex gap-2">
-                <button onClick={() => onStatus(row.id, "approved")} className="flex-1 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><Check className="w-4 h-4" /> Duyệt</button>
-                <button onClick={() => onStatus(row.id, "rejected")} className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><X className="w-4 h-4" /> Từ chối</button>
+            
+            {row.status === "pending" && !rejectMode && (
+              <div className="space-y-2">
+                {row.admin_note && (
+                  <div className="text-[11px] text-muted-foreground italic">Ghi chú trước: {row.admin_note}</div>
+                )}
+                <input
+                  value={adminNote}
+                  onChange={e => setAdminNote(e.target.value)}
+                  placeholder="Ghi chú gửi thành viên (tùy chọn khi duyệt)"
+                  className="w-full px-3 py-2 rounded-lg border bg-background text-xs"
+                />
+                <div className="flex gap-2">
+                  <button onClick={() => { onStatus(row.id, "approved", adminNote); setAdminNote(""); }} className="flex-1 py-2 rounded-lg bg-emerald-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><Check className="w-4 h-4" /> Duyệt</button>
+                  <button onClick={() => setRejectMode(true)} className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm flex items-center justify-center gap-1"><X className="w-4 h-4" /> Từ chối</button>
+                </div>
+              </div>
+            )}
+            {row.status === "pending" && rejectMode && (
+              <div className="space-y-2 p-3 bg-red-50 rounded-lg border border-red-200">
+                <div className="text-xs font-bold text-destructive">Lý do từ chối (bắt buộc)</div>
+                <textarea
+                  value={adminNote}
+                  onChange={e => setAdminNote(e.target.value)}
+                  rows={2}
+                  placeholder="Mô tả ngắn lý do để thành viên hiểu…"
+                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+                />
+                <div className="flex gap-2">
+                  <button onClick={() => { setRejectMode(false); setAdminNote(""); }} className="flex-1 py-2 rounded-lg border text-sm font-semibold">Hủy</button>
+                  <button
+                    onClick={() => {
+                      if (!adminNote.trim()) { toast.error("Vui lòng nhập lý do"); return; }
+                      onStatus(row.id, "rejected", adminNote);
+                      setRejectMode(false); setAdminNote("");
+                    }}
+                    className="flex-1 py-2 rounded-lg bg-red-500 text-white font-semibold text-sm"
+                  >Xác nhận từ chối</button>
+                </div>
               </div>
             )}
 
@@ -423,8 +464,10 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
   };
   useEffect(() => { load(); }, [refreshKey]);
 
-  const toggle = async (r: Report) => { await supabase.from("reports").update({ resolved: !r.resolved }).eq("id", r.id); load(); };
   const del = async (id: string) => { if (!confirm("Xóa báo cáo?")) return; await supabase.from("reports").delete().eq("id", id); load(); };
+  const onStatusChanged = (id: string, s: ReportStatus) => {
+    setList(prev => prev.map(r => r.id === id ? { ...r, status: s, resolved: s === "resolved" || s === "closed" } : r));
+  };
 
   return (
     <section className="space-y-2 border-t pt-4">
@@ -432,13 +475,21 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
       {list.length === 0 && <p className="text-sm text-muted-foreground">Chưa có báo cáo nào</p>}
       {list.map(r => (
         <div key={r.id} className="p-3 bg-card rounded-xl space-y-1.5">
-          <div className="text-[11px] text-muted-foreground">
-            {r.reporter || "Ẩn danh"} → <b>{r.target_name || r.target_type}</b> · {new Date(r.created_at).toLocaleString("vi-VN")} · {r.resolved ? "✓ đã xử lý" : "Chưa xử lý"}
+          <div className="flex items-start justify-between gap-2">
+            <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
+              {r.reporter || "Ẩn danh"} → <b>{r.target_name || r.target_type}</b> · {new Date(r.created_at).toLocaleString("vi-VN")}
+            </div>
+            <ReportStatusBadge s={r.status} />
           </div>
           <div className="text-sm">{r.description}</div>
           {r.photo_url && <div className="h-32 rounded-lg overflow-hidden bg-muted"><StoredImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" /></div>}
-          <div className="flex gap-2">
-            <button onClick={() => toggle(r)} className="text-xs px-3 py-1 rounded bg-accent">{r.resolved ? "Mở lại" : "Đánh dấu đã xử lý"}</button>
+          <ReportRepliesPanel
+            reportId={r.id}
+            canChangeStatus
+            currentStatus={r.status}
+            onStatusChange={(s) => onStatusChanged(r.id, s)}
+          />
+          <div className="flex gap-2 pt-1">
             <button onClick={() => del(r.id)} className="text-xs px-3 py-1 rounded bg-muted text-destructive">Xóa</button>
           </div>
         </div>
