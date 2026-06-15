@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Business, BusinessType, Offer } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
-import { LogOut, PlusCircle, MessageSquare, Save, Flag, Camera } from "lucide-react";
+import { LogOut, PlusCircle, MessageSquare, Save, Flag, Camera, Pencil, Eye, EyeOff, Trash2, Send, Users, UserCheck } from "lucide-react";
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Avatar } from "@/components/Avatar";
