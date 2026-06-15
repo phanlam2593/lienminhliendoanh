@@ -81,8 +81,10 @@ export default function Admin() {
 
   const refresh = () => setRefreshKey(k => k + 1);
 
-  const setStatus = async (id: string, status: "approved" | "rejected") => {
-    const { error } = await supabase.from("profiles").update({ status }).eq("id", id);
+  const setStatus = async (id: string, status: "approved" | "rejected", note?: string) => {
+    const patch: Record<string, unknown> = { status };
+    if (typeof note === "string") patch.admin_note = note.trim() || null;
+    const { error } = await supabase.from("profiles").update(patch).eq("id", id);
     if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); refresh(); }
   };
 
@@ -143,7 +145,7 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
   row: MemberRow | null;
   onClose: () => void;
   onChanged: () => void;
-  onStatus: (id: string, s: "approved" | "rejected") => void;
+  onStatus: (id: string, s: "approved" | "rejected", note?: string) => void;
 }) {
   // member fields
   const [fullName, setFN] = useState("");
