@@ -62,16 +62,10 @@ export default function Businesses() {
     }));
   };
 
-  const areas = useMemo(() => {
-    const set = new Set<string>();
-    list.forEach(b => { const a = areaFromAddress(b.address); if (a) set.add(a); });
-    return [...set].sort();
-  }, [list]);
-
   const filtered = useMemo(() => {
     let arr = list;
     if (type !== "all") arr = arr.filter(b => b.type === type);
-    if (area !== "all") arr = arr.filter(b => areaFromAddress(b.address) === area);
+    if (area !== "all") arr = arr.filter(b => matchesArea(b.address, area));
     if (q.trim()) {
       const k = q.toLowerCase();
       arr = arr.filter(b => b.name.toLowerCase().includes(k) || (b.latestOffer ?? "").toLowerCase().includes(k));
