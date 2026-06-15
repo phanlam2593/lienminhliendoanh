@@ -5,7 +5,7 @@ import logoAsset from "@/assets/logo.webp.asset.json";
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "LIÊN MINH LIÊN DOANH";
 const TAGLINE = "Một cộng đồng – Nhiều giá trị";
-const GREEN = "#1a5c35";
+const GREEN = "#18a974";
 
 /**
  * Brand mark: forest-green circle with mountains, 3 people, and a handshake.
