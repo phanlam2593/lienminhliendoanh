@@ -1,11 +1,12 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Home, Search, Ticket, Settings, User as UserIcon, LogOut, Bell, MessageCircle, Clock } from "lucide-react";
-import { useState } from "react";
+import { Home, Search, Ticket, Settings, User as UserIcon, LogOut, Bell, MessageCircle, Clock, Store, Tag as TagIcon, Star, Mail, Phone, Facebook } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { supabase } from "@/integrations/supabase/client";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "Liên Minh Liên Doanh";
