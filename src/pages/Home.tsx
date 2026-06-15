@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { Users, Building2, Tag, Lightbulb, ArrowRight } from "lucide-react";
+import { Users, Building2, Tag, Lightbulb, ArrowRight, Mail, Phone } from "lucide-react";
+import type { Business, Offer, Review } from "@/lib/types";
+import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 export default function Home() {
   const { isApproved } = useAuth();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
+  const [featured, setFeatured] = useState<BusinessCardData[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -17,6 +20,44 @@ export default function Home() {
         supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "active"),
       ]);
       setStats({ members: m.count ?? 0, businesses: b.count ?? 0, offers: o.count ?? 0 });
+    })();
+  }, []);
+
+  yEffect(() => {
+    (async () => {
+      const [{ data: biz }, { data: offers }, { data: reviews }] = await Promise.all([
+        supabase.from("businesses").select("*").eq("status", "approved").eq("is_featured", true).order("created_at", { ascending: false }),
+        supabase.from("offers").select("*").eq("status", "active").order("created_at", { ascending: false }),
+        supabase.from("reviews").select("*").order("created_at", { ascending: false }),
+      ]);
+      const offersList = (offers as Offer[] | null) ?? [];
+      const reviewsList = (reviews as Review[] | null) ?? [];
+
+      const uids = [...new Set(reviewsList.map(r => r.user_id))];
+      let authorMap = new Map<string, string>();
+      if (uids.length) {
+        const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", uids);
+        (profs ?? []).forEach((p: any) => authorMap.set(p.id, p.full_name));
+      }
+
+      setFeatured(((biz as Business[]) ?? []).map(b => {
+        const bOffers = offersList.filter(o => o.business_id === b.id);
+        const bReviews = reviewsList.filter(r => r.business_id === b.id);
+        const sum = bReviews.reduce((s, r) => s + r.rating, 0);
+        const latestOffer = bOffers[0];
+        const latestReview = bReviews[0];
+        return {
+          ...b,
+          rating: bReviews.length ? sum / bReviews.length : 0,
+          reviewCount: bReviews.length,
+          offerCount: bOffers.length,
+          latestOffer: latestOffer?.title ?? null,
+          latestOfferClaims: latestOffer?.claim_count ?? 0,
+          latestReview: latestReview
+            ? { rating: latestReview.rating, comment: latestReview.comment, author: authorMap.get(latestReview.user_id) || "Ẩn danh" }
+            : null,
+        };
+      }));
     })();
   }, []);
 
@@ -69,6 +110,39 @@ export default function Home() {
           </Link>
         </section>
       )}
+
+      {/* Section 4 — Featured businesses */}
+      <section className="px-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-lg font-extrabold">Doanh nghiệp nổi bật</h2>
+          <Link to="/kham-pha" className="text-xs font-semibold text-primary inline-flex items-center gap-1">
+            Xem tất cả <ArrowRight className="w-3 h-3" />
+          </Link>
+        </div>
+        {featured.length === 0 ? (
+          <p className="text-sm text-muted-foreground py-4">Chưa có doanh nghiệp nổi bật</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {featured.map(b => <BusinessCard key={b.id} b={b} />)}
+          </div>
+        )}
+      </section>
+
+      {/* Section 5 — Contact */}
+      <section className="px-4 py-6 text-center">
+        <h3 className="text-sm font-semibold text-muted-foreground mb-2">Liên hệ admin</h3>
+        <div className="flex flex-col items-center gap-1.5 text-xs text-muted-foreground">
+          <a href="mailto:lienminhliendoanh@gmail.com" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+            <Mail className="w-3.5 h-3.5" /> lienminhliendoanh@gmail.com
+          </a>
+          <a href="tel:0339565246" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+            <Phone className="w-3.5 h-3.5" /> 0339565246
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+            Facebook
+          </a>
+        </div>
+      </section>
     </div>
   );
 }
