@@ -8,13 +8,14 @@ import { cn } from "@/lib/utils";
 
 type SortKey = "newest" | "rating" | "offers";
 
-const FIXED_AREAS = ["Trung tâm", "Phường 3", "Phường 8", "Xuân Hương", "Khác"];
-
-const matchesArea = (addr: string | null, area: string) => {
-  if (!addr) return area === "Khác";
-  const a = addr.toLowerCase();
-  if (area === "Khác") return !FIXED_AREAS.slice(0, -1).some(x => a.includes(x.toLowerCase()));
-  return a.includes(area.toLowerCase());
+// Item 7: derive areas dynamically from business addresses.
+// Heuristic: take the last comma-separated segment (usually city / district),
+// trim, collapse whitespace, fall back to "Khác".
+const extractArea = (addr: string | null): string => {
+  if (!addr) return "Khác";
+  const parts = addr.split(",").map(s => s.trim()).filter(Boolean);
+  const last = parts[parts.length - 1] || "Khác";
+  return last.replace(/\s+/g, " ").slice(0, 40);
 };
 
 export default function Businesses() {
@@ -62,10 +63,19 @@ export default function Businesses() {
     }));
   };
 
+  const areaCounts = useMemo(() => {
+    const m = new Map<string, number>();
+    list.forEach(b => {
+      const a = extractArea(b.address);
+      m.set(a, (m.get(a) ?? 0) + 1);
+    });
+    return Array.from(m.entries()).sort((x, y) => y[1] - x[1]);
+  }, [list]);
+
   const filtered = useMemo(() => {
     let arr = list;
     if (type !== "all") arr = arr.filter(b => b.type === type);
-    if (area !== "all") arr = arr.filter(b => matchesArea(b.address, area));
+    if (area !== "all") arr = arr.filter(b => extractArea(b.address) === area);
     if (q.trim()) {
       const k = q.toLowerCase();
       arr = arr.filter(b => b.name.toLowerCase().includes(k) || (b.latestOffer ?? "").toLowerCase().includes(k));
@@ -96,8 +106,8 @@ export default function Businesses() {
         <label className="text-xs font-semibold text-muted-foreground">Khu vực:</label>
         <select value={area} onChange={e => setArea(e.target.value)}
           className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium">
-          <option value="all">Tất cả khu vực</option>
-          {FIXED_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
+          <option value="all">Tất cả khu vực ({list.length})</option>
+          {areaCounts.map(([a, n]) => <option key={a} value={a}>{a} ({n})</option>)}
         </select>
       </div>
       <div className="flex gap-2 text-xs">

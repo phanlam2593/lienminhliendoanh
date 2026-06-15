@@ -455,6 +455,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      broadcast_offer: { Args: { _offer_id: string }; Returns: number }
       can_access_report: {
         Args: { _report_id: string; _user_id: string }
         Returns: boolean
