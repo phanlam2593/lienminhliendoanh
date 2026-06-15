@@ -9,6 +9,7 @@ import { LogOut, PlusCircle, MessageSquare, Save, Flag, Camera } from "lucide-re
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Avatar } from "@/components/Avatar";
+import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
 export default function Profile() {
   const { user, profile, role, refresh, signOut } = useAuth();
@@ -250,14 +251,24 @@ function ReportsInbox({ businessIds }: { businessIds: string[] }) {
       .in("target_id", businessIds).order("created_at", { ascending: false })
       .then(({ data }) => setList(data ?? []));
   }, [businessIds.join(",")]);
+  const onStatusChanged = (id: string, s: any) => setList(prev => prev.map(r => r.id === id ? { ...r, status: s, resolved: s === "resolved" || s === "closed" } : r));
   if (!list.length) return null;
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1"><Flag className="w-4 h-4 text-destructive" /> Báo cáo gửi đến DN của bạn ({list.length})</h2>
       {list.map(r => (
-        <div key={r.id} className="p-3 bg-card rounded-xl shadow-sm text-sm">
-          <div className="text-xs text-muted-foreground">{new Date(r.created_at).toLocaleString("vi-VN")}</div>
+        <div key={r.id} className="p-3 bg-card rounded-xl shadow-sm text-sm space-y-1.5">
+          <div className="flex items-center justify-between gap-2">
+            <div className="text-xs text-muted-foreground">{new Date(r.created_at).toLocaleString("vi-VN")}</div>
+            <ReportStatusBadge s={r.status ?? "pending"} />
+          </div>
           <div>{r.description}</div>
+          <ReportRepliesPanel
+            reportId={r.id}
+            canChangeStatus
+            currentStatus={(r.status ?? "pending") as any}
+            onStatusChange={(s) => onStatusChanged(r.id, s)}
+          />
         </div>
       ))}
     </section>
