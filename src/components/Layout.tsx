@@ -39,7 +39,7 @@ export function Layout() {
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
-      {!hide && (
+      {!hide && !showWelcome && (
         <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-lg border-b border-border/60">
           <div className="flex items-center justify-between px-4 h-14 gap-2">
             <Logo size={36} withText asLink />
