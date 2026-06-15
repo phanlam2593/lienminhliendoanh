@@ -106,8 +106,8 @@ export default function Businesses() {
         <label className="text-xs font-semibold text-muted-foreground">Khu vực:</label>
         <select value={area} onChange={e => setArea(e.target.value)}
           className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium">
-          <option value="all">Tất cả khu vực</option>
-          {FIXED_AREAS.map(a => <option key={a} value={a}>{a}</option>)}
+          <option value="all">Tất cả khu vực ({list.length})</option>
+          {areaCounts.map(([a, n]) => <option key={a} value={a}>{a} ({n})</option>)}
         </select>
       </div>
       <div className="flex gap-2 text-xs">
