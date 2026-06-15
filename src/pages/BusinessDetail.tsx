@@ -11,6 +11,8 @@ import { useAuth } from "@/lib/auth";
 import { ReportDialog } from "@/components/ReportDialog";
 import { timeAgo } from "@/lib/time";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Avatar } from "@/components/Avatar";
+import { ProfileQuickView } from "@/components/ProfileQuickView";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
 
@@ -28,6 +30,7 @@ export default function BusinessDetail() {
   const [claimOffer, setClaimOffer] = useState<Offer | null>(null);
   const [claim, setClaim] = useState<OfferClaim | null>(null);
   const [claiming, setClaiming] = useState(false);
+  const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
 
   useEffect(() => { void load(); }, [id]);
 
