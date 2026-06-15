@@ -101,6 +101,8 @@ export default function Profile() {
         </div>
       </div>
 
+      <FollowStats userId={user.id} />
+
       <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
         <h2 className="font-bold text-sm">Thông tin cá nhân</h2>
         <input value={fullName} onChange={e => setFN(e.target.value)} placeholder="Họ tên" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
