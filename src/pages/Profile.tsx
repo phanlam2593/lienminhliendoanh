@@ -231,15 +231,113 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
       <div className="border-t pt-3 space-y-2">
         <div className="text-xs font-semibold text-muted-foreground">Ưu đãi / Deal</div>
         {offers.map(o => (
-          <div key={o.id} className="text-xs p-2 bg-accent rounded flex justify-between items-center">
-            <span className="truncate">{o.title}</span>
-            <span className="text-[10px] text-muted-foreground">{o.claim_count ?? 0} lượt nhận</span>
-          </div>
+          <OfferRow key={o.id} offer={o} onChanged={reloadOffers} />
         ))}
         <div className="flex gap-2">
           <input value={offerText} onChange={e => setOfferText(e.target.value)} placeholder="Thêm ưu đãi mới…" className="flex-1 px-3 py-2 rounded-lg border bg-background text-sm" />
           <button onClick={addOffer} className="px-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold">Thêm</button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void }) {
+  const [editing, setEditing] = useState(false);
+  const [title, setTitle] = useState(offer.title);
+  const [desc, setDesc] = useState(offer.description ?? "");
+  const [busy, setBusy] = useState(false);
+
+  const save = async () => {
+    if (!title.trim()) return;
+    setBusy(true);
+    const { error } = await supabase.from("offers").update({ title: title.trim(), description: desc || null }).eq("id", offer.id);
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã lưu ưu đãi");
+    setEditing(false);
+    onChanged();
+  };
+
+  const toggleStatus = async () => {
+    const next = offer.status === "active" ? "inactive" : "active";
+    const { error } = await supabase.from("offers").update({ status: next }).eq("id", offer.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success(next === "active" ? "Đã hiển thị ưu đãi" : "Đã tạm ẩn ưu đãi");
+    onChanged();
+  };
+
+  const remove = async () => {
+    if (!confirm("Xóa ưu đãi này?")) return;
+    const { error } = await supabase.from("offers").delete().eq("id", offer.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã xóa");
+    onChanged();
+  };
+
+  const broadcast = async () => {
+    if (!confirm("Gửi thông báo ưu đãi này đến tất cả thành viên?")) return;
+    setBusy(true);
+    const { data, error } = await supabase.rpc("broadcast_offer", { _offer_id: offer.id });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success(`Đã gửi đến ${data ?? 0} thành viên`);
+  };
+
+  if (editing) {
+    return (
+      <div className="p-2 bg-accent rounded space-y-2">
+        <input value={title} onChange={e => setTitle(e.target.value)} className="w-full px-2 py-1.5 rounded border bg-background text-sm" />
+        <textarea value={desc} onChange={e => setDesc(e.target.value)} rows={2} placeholder="Mô tả (tuỳ chọn)" className="w-full px-2 py-1.5 rounded border bg-background text-xs" />
+        <div className="flex gap-2">
+          <button onClick={save} disabled={busy} className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold">{busy ? "Đang lưu…" : "Lưu"}</button>
+          <button onClick={() => { setEditing(false); setTitle(offer.title); setDesc(offer.description ?? ""); }} className="flex-1 py-1.5 rounded border text-xs font-semibold">Hủy</button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-xs p-2 bg-accent rounded space-y-1.5">
+      <div className="flex justify-between items-center gap-2">
+        <span className={`truncate flex-1 ${offer.status === "inactive" ? "line-through text-muted-foreground" : ""}`}>{offer.title}</span>
+        <span className="text-[10px] text-muted-foreground whitespace-nowrap">{offer.claim_count ?? 0} lượt</span>
+      </div>
+      {offer.description && <div className="text-[11px] text-muted-foreground line-clamp-2">{offer.description}</div>}
+      <div className="flex gap-1.5 flex-wrap">
+        <button onClick={() => setEditing(true)} className="px-2 py-1 rounded bg-card border text-[11px] font-semibold inline-flex items-center gap-1"><Pencil className="w-3 h-3" /> Sửa</button>
+        <button onClick={toggleStatus} className="px-2 py-1 rounded bg-card border text-[11px] font-semibold inline-flex items-center gap-1">
+          {offer.status === "active" ? <><EyeOff className="w-3 h-3" /> Tạm ẩn</> : <><Eye className="w-3 h-3" /> Hiện lại</>}
+        </button>
+        <button onClick={broadcast} disabled={busy || offer.status !== "active"} className="px-2 py-1 rounded bg-primary text-primary-foreground text-[11px] font-semibold inline-flex items-center gap-1 disabled:opacity-50"><Send className="w-3 h-3" /> Gửi thông báo</button>
+        <button onClick={remove} className="px-2 py-1 rounded bg-card border text-destructive text-[11px] font-semibold inline-flex items-center gap-1"><Trash2 className="w-3 h-3" /> Xóa</button>
+      </div>
+    </div>
+  );
+}
+
+function FollowStats({ userId }: { userId: string }) {
+  const [followers, setFollowers] = useState(0);
+  const [following, setFollowing] = useState(0);
+  useEffect(() => {
+    (async () => {
+      const [{ count: fc }, { count: gc }] = await Promise.all([
+        supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
+        supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
+      ]);
+      setFollowers(fc ?? 0);
+      setFollowing(gc ?? 0);
+    })();
+  }, [userId]);
+  return (
+    <div className="flex gap-2 text-xs">
+      <div className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm">
+        <div className="text-lg font-extrabold text-primary">{followers}</div>
+        <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><Users className="w-3 h-3" /> Người theo dõi</div>
+      </div>
+      <div className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm">
+        <div className="text-lg font-extrabold text-primary">{following}</div>
+        <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><UserCheck className="w-3 h-3" /> Đang theo dõi</div>
       </div>
     </div>
   );
