@@ -2,6 +2,7 @@ import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-do
 import { Home, Search, Ticket, Settings, User as UserIcon, LogOut, Bell, MessageCircle, Clock, Store, Tag as TagIcon, Star, Mail, Phone, Facebook } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
+import { Avatar } from "./Avatar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
@@ -58,8 +59,10 @@ export function Layout() {
               )}
               {user ? (
                 <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger className="w-9 h-9 rounded-full bg-gradient-brand text-primary-foreground font-bold text-sm grid place-items-center shadow-brand">
-                    {(profile?.full_name || profile?.username || "?").slice(0, 1).toUpperCase()}
+                  <PopoverTrigger asChild>
+                    <button className="rounded-full shadow-brand" aria-label="Mở menu tài khoản">
+                      <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
+                    </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-56 p-2" align="end">
                     <div className="px-2 py-1.5 border-b mb-1">
