@@ -69,7 +69,7 @@ export default function UserProfile() {
         <ArrowLeft className="w-4 h-4" /> Quay lại
       </button>
       <div className="rounded-2xl border bg-card p-5 flex flex-col items-center text-center gap-3">
-        <Avatar url={p.avatar_url} name={p.full_name} size={88} />
+        <Avatar path={p.avatar_url} name={p.full_name} size={88} />
         <div>
           <div className="text-lg font-extrabold">{p.full_name}</div>
           <div className="text-xs text-muted-foreground">@{p.username}</div>
