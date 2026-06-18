@@ -26,38 +26,49 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const [{ data: biz }, { data: offers }, { data: reviews }] = await Promise.all([
-        supabase.from("businesses").select("*").eq("status", "approved").eq("is_featured", true).order("created_at", { ascending: false }),
+        supabase
+          .from("businesses")
+          .select("*")
+          .eq("status", "approved")
+          .eq("is_featured", true)
+          .order("created_at", { ascending: false }),
         supabase.from("offers").select("*").eq("status", "active").order("created_at", { ascending: false }),
         supabase.from("reviews").select("*").order("created_at", { ascending: false }),
       ]);
       const offersList = (offers as Offer[] | null) ?? [];
       const reviewsList = (reviews as Review[] | null) ?? [];
 
-      const uids = [...new Set(reviewsList.map(r => r.user_id))];
+      const uids = [...new Set(reviewsList.map((r) => r.user_id))];
       let authorMap = new Map<string, string>();
       if (uids.length) {
         const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", uids);
         (profs ?? []).forEach((p: any) => authorMap.set(p.id, p.full_name));
       }
 
-      setFeatured(((biz as Business[]) ?? []).map(b => {
-        const bOffers = offersList.filter(o => o.business_id === b.id);
-        const bReviews = reviewsList.filter(r => r.business_id === b.id);
-        const sum = bReviews.reduce((s, r) => s + r.rating, 0);
-        const latestOffer = bOffers[0];
-        const latestReview = bReviews[0];
-        return {
-          ...b,
-          rating: bReviews.length ? sum / bReviews.length : 0,
-          reviewCount: bReviews.length,
-          offerCount: bOffers.length,
-          latestOffer: latestOffer?.title ?? null,
-          latestOfferClaims: latestOffer?.claim_count ?? 0,
-          latestReview: latestReview
-            ? { rating: latestReview.rating, comment: latestReview.comment, author: authorMap.get(latestReview.user_id) || "Ẩn danh" }
-            : null,
-        };
-      }));
+      setFeatured(
+        ((biz as Business[]) ?? []).map((b) => {
+          const bOffers = offersList.filter((o) => o.business_id === b.id);
+          const bReviews = reviewsList.filter((r) => r.business_id === b.id);
+          const sum = bReviews.reduce((s, r) => s + r.rating, 0);
+          const latestOffer = bOffers[0];
+          const latestReview = bReviews[0];
+          return {
+            ...b,
+            rating: bReviews.length ? sum / bReviews.length : 0,
+            reviewCount: bReviews.length,
+            offerCount: bOffers.length,
+            latestOffer: latestOffer?.title ?? null,
+            latestOfferClaims: latestOffer?.claim_count ?? 0,
+            latestReview: latestReview
+              ? {
+                  rating: latestReview.rating,
+                  comment: latestReview.comment,
+                  author: authorMap.get(latestReview.user_id) || "Ẩn danh",
+                }
+              : null,
+          };
+        }),
+      );
     })();
   }, []);
 
@@ -69,11 +80,9 @@ export default function Home() {
         style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}
       >
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">
-          ✦ Cộng đồng đối tác
+          ✦ Hệ sinh thái cộng đồng
         </div>
-        <h1 className="text-2xl font-extrabold leading-tight mt-3">
-          Kết nối thành viên và doanh nghiệp đối tác
-        </h1>
+        <h1 className="text-2xl font-extrabold leading-tight mt-3">Kết nối thành viên và doanh nghiệp đối tác</h1>
         <p className="text-sm opacity-95 mt-1.5">Một cộng đồng – Nhiều giá trị</p>
         <Link
           to="/kham-pha"
@@ -102,9 +111,7 @@ export default function Home() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm">Đề xuất doanh nghiệp mới</div>
-              <div className="text-xs text-muted-foreground mt-0.5">
-                Giới thiệu đối tác cho cộng đồng
-              </div>
+              <div className="text-xs text-muted-foreground mt-0.5">Giới thiệu đối tác cho cộng đồng</div>
             </div>
             <ArrowRight className="w-5 h-5 text-muted-foreground shrink-0" />
           </Link>
@@ -123,7 +130,9 @@ export default function Home() {
           <p className="text-sm text-muted-foreground py-4">Chưa có doanh nghiệp nổi bật</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {featured.map(b => <BusinessCard key={b.id} b={b} />)}
+            {featured.map((b) => (
+              <BusinessCard key={b.id} b={b} />
+            ))}
           </div>
         )}
       </section>
@@ -132,13 +141,21 @@ export default function Home() {
       <section className="px-4 py-6 text-center">
         <h3 className="text-sm font-semibold text-muted-foreground mb-2">Liên hệ admin</h3>
         <div className="flex flex-col items-center gap-1.5 text-xs text-muted-foreground">
-          <a href="mailto:lienminhliendoanh@gmail.com" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+          <a
+            href="mailto:lienminhliendoanh@gmail.com"
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
             <Mail className="w-3.5 h-3.5" /> lienminhliendoanh@gmail.com
           </a>
           <a href="tel:0339565246" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
             <Phone className="w-3.5 h-3.5" /> 0339565246
           </a>
-          <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
+          <a
+            href="https://www.facebook.com/profile.php?id=61590228346408"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
             Facebook
           </a>
         </div>
