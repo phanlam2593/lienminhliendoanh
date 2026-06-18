@@ -279,7 +279,7 @@ export default function Register() {
             </Field>
 
             <label className="flex items-center justify-between p-3 rounded-xl bg-accent">
-              <span className="text-sm font-semibold">Bạn có muốn thêm doanh nghiệp vào hồ sơ không??</span>
+              <span className="text-sm font-semibold">Bạn có muốn thêm doanh nghiệp vào hồ sơ không?</span>
               <input type="checkbox" checked={isBiz} onChange={(e) => setBiz(e.target.checked)} className="w-5 h-5" />
             </label>
 
