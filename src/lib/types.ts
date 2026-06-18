@@ -138,7 +138,8 @@ export interface Notification {
   title: string;
   body: string | null;
   is_read: boolean;
-  related_id: string | null;
+  target_id: string | null;
+  target_type: NotifTargetType | null;
   created_at: string;
 }
 
