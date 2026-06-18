@@ -165,7 +165,9 @@ export default function Register() {
       if (isBiz) {
         toast.success("Đăng ký thành công! Doanh nghiệp của bạn đang chờ admin duyệt.");
       } else {
-        toast.success("Đăng ký thành công! Chào mừng bạn đến với Liên Minh Liên Doanh.");
+        toast.success(
+          "👋 Xin chào thành viên mới! Từ giờ bạn đã là một phần của Liên Minh Liên Doanh. Bắt đầu khám phá ưu đãi từ cộng đồng thôi nào!",
+        );
       }
       nav("/");
     } catch (e: any) {
