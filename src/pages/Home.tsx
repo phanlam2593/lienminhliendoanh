@@ -82,7 +82,9 @@ export default function Home() {
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">
           ✦ Hệ sinh thái cộng đồng
         </div>
-        <h1 className="text-2xl font-extrabold leading-tight mt-3">Kết nối thành viên và doanh nghiệp đối tác</h1>
+        <h1 className="text-2xl font-extrabold leading-tight mt-3">
+          Kết nối thành viên và doanh nghiệp trong cộng đồng
+        </h1>
         <p className="text-sm opacity-95 mt-1.5">Một cộng đồng – Nhiều giá trị</p>
         <Link
           to="/kham-pha"
