@@ -10,6 +10,7 @@ import Businesses from "./pages/Businesses";
 import BusinessDetail from "./pages/BusinessDetail";
 import Offers from "./pages/Offers";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import Suggest from "./pages/Suggest";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/dn/:id" element={<BusinessDetail />} />
               <Route path="/uu-dai" element={<Offers />} />
               <Route path="/ho-so" element={<Profile />} />
+              <Route path="/ho-so/:id" element={<UserProfile />} />
               <Route path="/de-xuat" element={<Suggest />} />
               <Route path="/thong-bao" element={<Notifications />} />
               <Route path="/tin-nhan" element={<MessagesInbox />} />

@@ -7,9 +7,14 @@ export type SuggestionStatus = "pending" | "approved" | "rejected";
 export type ReportTarget = "business" | "offer";
 export type ReportStatus = "pending" | "replied" | "resolved" | "closed";
 export type NotifType =
-  | "account_approved" | "account_rejected" | "new_offer" | "new_message"
-  | "suggestion_approved" | "suggestion_rejected" | "report_received" | "broadcast"
-  | "new_follower" | "report_reply";
+  | "account_approved" | "account_rejected"
+  | "business_approved" | "business_rejected" | "business_pinned"
+  | "new_follower" | "new_deal" | "deal_claimed"
+  | "new_message" | "business_reply" | "admin_message"
+  | "report_submitted" | "report_resolved"
+  | "suggestion_approved" | "suggestion_rejected"
+  | "new_offer" | "report_received" | "broadcast" | "report_reply";
+export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   food: "Ăn uống",
@@ -133,7 +138,8 @@ export interface Notification {
   title: string;
   body: string | null;
   is_read: boolean;
-  related_id: string | null;
+  target_id: string | null;
+  target_type: NotifTargetType | null;
   created_at: string;
 }
 

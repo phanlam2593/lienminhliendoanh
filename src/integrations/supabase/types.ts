@@ -136,9 +136,10 @@ export type Database = {
           created_at: string
           id: string
           is_read: boolean
-          related_id: string | null
+          target_id: string | null
+          target_type: string | null
           title: string
-          type: Database["public"]["Enums"]["notif_type"]
+          type: string
           user_id: string
         }
         Insert: {
@@ -146,9 +147,10 @@ export type Database = {
           created_at?: string
           id?: string
           is_read?: boolean
-          related_id?: string | null
+          target_id?: string | null
+          target_type?: string | null
           title: string
-          type: Database["public"]["Enums"]["notif_type"]
+          type: string
           user_id: string
         }
         Update: {
@@ -156,9 +158,10 @@ export type Database = {
           created_at?: string
           id?: string
           is_read?: boolean
-          related_id?: string | null
+          target_id?: string | null
+          target_type?: string | null
           title?: string
-          type?: Database["public"]["Enums"]["notif_type"]
+          type?: string
           user_id?: string
         }
         Relationships: []
@@ -499,15 +502,6 @@ export type Database = {
       biz_status: "pending" | "approved" | "rejected"
       business_status: "pending" | "approved" | "rejected"
       business_type: "food" | "service" | "stay" | "travel" | "other"
-      notif_type:
-        | "account_approved"
-        | "account_rejected"
-        | "new_offer"
-        | "new_message"
-        | "suggestion_approved"
-        | "suggestion_rejected"
-        | "report_received"
-        | "broadcast"
       offer_status: "active" | "inactive"
       report_status: "pending" | "replied" | "resolved" | "closed"
       report_target: "business" | "offer"
@@ -645,16 +639,6 @@ export const Constants = {
       biz_status: ["pending", "approved", "rejected"],
       business_status: ["pending", "approved", "rejected"],
       business_type: ["food", "service", "stay", "travel", "other"],
-      notif_type: [
-        "account_approved",
-        "account_rejected",
-        "new_offer",
-        "new_message",
-        "suggestion_approved",
-        "suggestion_rejected",
-        "report_received",
-        "broadcast",
-      ],
       offer_status: ["active", "inactive"],
       report_status: ["pending", "replied", "resolved", "closed"],
       report_target: ["business", "offer"],

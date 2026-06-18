@@ -505,7 +505,7 @@ function Broadcast() {
     setL(true);
     const { data: profs } = await supabase.from("profiles").select("id").eq("status", "approved");
     if (profs?.length) {
-      const rows = profs.map((p: any) => ({ user_id: p.id, type: "broadcast" as const, title, body }));
+      const rows = profs.map((p: any) => ({ user_id: p.id, type: "admin_message" as const, title, body, target_type: "system" as const }));
       await supabase.from("notifications").insert(rows);
     }
     setL(false); setT(""); setB(""); toast.success("Đã gửi");
