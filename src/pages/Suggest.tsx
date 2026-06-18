@@ -76,6 +76,16 @@ export default function Suggest() {
         className="w-full px-3 py-2.5 rounded-lg border bg-card"
       />
       <div className="space-y-1">
+        <input
+          value={address}
+          onChange={(e) => setAddr(e.target.value)}
+          placeholder="Địa chỉ *"
+          required
+          className="w-full px-3 py-2.5 rounded-lg border bg-card"
+        />
+        <p className="text-[11px] text-muted-foreground">Ví dụ: 12 Nguyễn Huệ, Phường 3, Đà Lạt</p>
+      </div>
+      <div className="space-y-1">
         <textarea
           value={desc}
           onChange={(e) => setD(e.target.value)}
