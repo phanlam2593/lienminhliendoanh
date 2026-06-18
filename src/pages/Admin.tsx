@@ -629,16 +629,44 @@ function MemberDetail({
               <section className="space-y-1 border-t pt-4">
                 <div className="text-xs font-bold text-muted-foreground">ĐỀ XUẤT ({sugs.length})</div>
                 {sugs.map((s) => (
-                  <div key={s.id} className="flex items-center gap-2 p-2 bg-accent rounded">
-                    <div className="flex-1 min-w-0 text-xs">
-                      <div className="font-semibold truncate">{s.business_name}</div>
-                      <div className="text-[10px] text-muted-foreground">
-                        {BUSINESS_TYPE_LABEL[s.business_type]} · {s.address || ""} · {s.status}
+                  <div key={s.id} className="flex flex-col gap-1.5 p-2 bg-accent rounded">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0 text-xs">
+                        <div className="font-semibold truncate">{s.business_name}</div>
+                        <div className="text-[10px] text-muted-foreground">
+                          {BUSINESS_TYPE_LABEL[s.business_type]} · {s.address || ""} · {s.contact_info}
+                        </div>
+                        {s.description && <div className="text-[10px] text-muted-foreground">{s.description}</div>}
                       </div>
+                      <StatusBadge s={s.status} />
                     </div>
-                    <button onClick={() => delSug(s.id)} className="text-destructive">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex gap-1">
+                      {s.status === "pending" && (
+                        <>
+                          <button
+                            onClick={async () => {
+                              await supabase.from("suggestions").update({ status: "approved" }).eq("id", s.id);
+                              load(row!.id, biz?.id);
+                            }}
+                            className="text-[10px] px-2 py-0.5 rounded bg-emerald-500 text-white"
+                          >
+                            Duyệt
+                          </button>
+                          <button
+                            onClick={async () => {
+                              await supabase.from("suggestions").update({ status: "rejected" }).eq("id", s.id);
+                              load(row!.id, biz?.id);
+                            }}
+                            className="text-[10px] px-2 py-0.5 rounded bg-red-500 text-white"
+                          >
+                            Từ chối
+                          </button>
+                        </>
+                      )}
+                      <button onClick={() => delSug(s.id)} className="text-destructive ml-auto">
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </section>
