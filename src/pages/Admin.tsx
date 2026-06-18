@@ -574,6 +574,7 @@ function SuggestionsSection({ refreshKey }: { refreshKey: number }) {
       ))}
     </section>
   );
+  
 function StatusBadge({ s }: { s?: string }) {
   if (!s) return null;
   const map: Record<string, string> = {
