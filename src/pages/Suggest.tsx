@@ -28,6 +28,7 @@ export default function Suggest() {
       business_name: name,
       business_type: type,
       contact_info: contact,
+      address: address,
       description: desc,
     });
     setL(false);
