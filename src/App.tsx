@@ -36,6 +36,7 @@ const App = () => (
               <Route path="/dn/:id" element={<BusinessDetail />} />
               <Route path="/uu-dai" element={<Offers />} />
               <Route path="/ho-so" element={<Profile />} />
+              <Route path="/ho-so/:id" element={<UserProfile />} />
               <Route path="/de-xuat" element={<Suggest />} />
               <Route path="/thong-bao" element={<Notifications />} />
               <Route path="/tin-nhan" element={<MessagesInbox />} />
