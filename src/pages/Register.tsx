@@ -49,36 +49,67 @@ export default function Register() {
   };
 
   const onBlurUser = async () => {
-    if (!username) { setUS("idle"); return; }
-    if (!/^[a-z0-9_]{3,20}$/i.test(username)) { setUS("invalid"); return; }
+    if (!username) {
+      setUS("idle");
+      return;
+    }
+    if (!/^[a-z0-9_]{3,20}$/i.test(username)) {
+      setUS("invalid");
+      return;
+    }
     setUS("checking");
     setUS((await checkUnique("username", username.toLowerCase())) ? "ok" : "taken");
   };
   const onBlurEmail = async () => {
-    if (!email) { setES("idle"); return; }
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { setES("invalid"); return; }
+    if (!email) {
+      setES("idle");
+      return;
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      setES("invalid");
+      return;
+    }
     setES("checking");
     setES((await checkUnique("email", email)) ? "ok" : "taken");
   };
   const onBlurPhone = async () => {
-    if (!phone) { setPhS("idle"); return; }
-    if (!/^\d{8,15}$/.test(phone)) { setPhS("invalid"); return; }
+    if (!phone) {
+      setPhS("idle");
+      return;
+    }
+    if (!/^\d{8,15}$/.test(phone)) {
+      setPhS("invalid");
+      return;
+    }
     setPhS("checking");
     setPhS((await checkUnique("phone", phone)) ? "ok" : "taken");
   };
 
-  const step1Valid = username && fullName && email && phone && password.length >= 6 && password === password2
-    && usernameStatus === "ok" && emailStatus === "ok" && phoneStatus === "ok";
+  const step1Valid =
+    username &&
+    fullName &&
+    email &&
+    phone &&
+    password.length >= 6 &&
+    password === password2 &&
+    usernameStatus === "ok" &&
+    emailStatus === "ok" &&
+    phoneStatus === "ok";
 
   const goNext = () => {
-    if (!step1Valid) { toast.error("Vui lòng điền đủ thông tin hợp lệ"); return; }
+    if (!step1Valid) {
+      toast.error("Vui lòng điền đủ thông tin hợp lệ");
+      return;
+    }
     if (isBiz) setStep(2);
     else setTO(true);
   };
 
-
   const submitFinal = async () => {
-    if (!agree) { toast.error("Vui lòng đồng ý điều khoản"); return; }
+    if (!agree) {
+      toast.error("Vui lòng đồng ý điều khoản");
+      return;
+    }
     setSubmitting(true);
     try {
       const { data: sign, error } = await supabase.auth.signUp({
@@ -94,7 +125,7 @@ export default function Register() {
       if (!uid) throw new Error("Không tạo được tài khoản");
 
       // give the trigger a moment, then update profile fields not in trigger
-      await new Promise(r => setTimeout(r, 600));
+      await new Promise((r) => setTimeout(r, 600));
 
       let avatarPath: string | null = null;
       if (avatarFile) {
@@ -105,22 +136,28 @@ export default function Register() {
       if (isBiz) {
         let coverPath: string | null = null;
         if (coverFile) coverPath = await uploadImage(coverFile, "covers", uid);
-        const { data: biz, error: bErr } = await supabase.from("businesses").insert({
-          owner_id: uid,
-          name: bizName,
-          type: bizType,
-          description: bizDesc,
-          hours_open: open,
-          hours_close: close,
-          facebook_url: fbUrl || null,
-          website_url: webUrl || null,
-          cover_url: coverPath,
-          status: "pending",
-        }).select().single();
+        const { data: biz, error: bErr } = await supabase
+          .from("businesses")
+          .insert({
+            owner_id: uid,
+            name: bizName,
+            type: bizType,
+            description: bizDesc,
+            hours_open: open,
+            hours_close: close,
+            facebook_url: fbUrl || null,
+            website_url: webUrl || null,
+            cover_url: coverPath,
+            status: "pending",
+          })
+          .select()
+          .single();
         if (bErr) throw bErr;
         if (bizOffer) {
           await supabase.from("offers").insert({
-            business_id: biz.id, title: bizOffer, status: "active",
+            business_id: biz.id,
+            title: bizOffer,
+            status: "active",
           });
         }
       }
@@ -133,7 +170,10 @@ export default function Register() {
       nav("/");
     } catch (e: any) {
       toast.error(e.message || "Đăng ký thất bại");
-    } finally { setSubmitting(false); setTO(false); }
+    } finally {
+      setSubmitting(false);
+      setTO(false);
+    }
   };
 
   const Status = ({ s }: { s: FieldStatus }) => {
@@ -150,64 +190,128 @@ export default function Register() {
         <div className="text-center space-y-2 flex flex-col items-center">
           <Logo size={56} asLink />
           {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-          <Link to="/" className="text-xs font-semibold text-primary">Liên Minh Liên Doanh</Link>
+          <Link to="/" className="text-xs font-semibold text-primary">
+            Liên Minh Liên Doanh
+          </Link>
           <h1 className="text-xl font-bold">{step === 1 ? "Đăng ký tài khoản" : "Thông tin doanh nghiệp"}</h1>
-          <div className="text-xs text-muted-foreground">Bước {step}/{isBiz ? 2 : 1}</div>
+          <div className="text-xs text-muted-foreground">
+            Bước {step}/{isBiz ? 2 : 1}
+          </div>
         </div>
 
         {step === 1 ? (
           <div className="space-y-3">
-
-            <Field label="Tên đăng nhập *" right={<Status s={usernameStatus} />} hint="3–20 ký tự, chỉ dùng chữ thường, số và dấu gạch dưới">
-              <input value={username} onChange={e => { setU(e.target.value); setUS("idle"); }} onBlur={onBlurUser}
-                autoCapitalize="none" required
-                className="w-full px-4 py-3 rounded-xl border bg-card" placeholder="ví dụ: minhanh" />
+            <Field
+              label="Tên đăng nhập *"
+              right={<Status s={usernameStatus} />}
+              hint="3–20 ký tự, chỉ dùng chữ thường, số và dấu gạch dưới"
+            >
+              <input
+                value={username}
+                onChange={(e) => {
+                  setU(e.target.value);
+                  setUS("idle");
+                }}
+                onBlur={onBlurUser}
+                autoCapitalize="none"
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+                placeholder="ví dụ: minhanh"
+              />
             </Field>
             <Field label="Họ và tên *">
-              <input value={fullName} onChange={e => setFN(e.target.value)} required
-                className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={fullName}
+                onChange={(e) => setFN(e.target.value)}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Email *" right={<Status s={emailStatus} />}>
-              <input type="email" value={email} onChange={e => { setE(e.target.value); setES("idle"); }} onBlur={onBlurEmail} required
-                className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => {
+                  setE(e.target.value);
+                  setES("idle");
+                }}
+                onBlur={onBlurEmail}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Số điện thoại *" right={<Status s={phoneStatus} />}>
-              <input value={phone} onChange={e => { setPh(e.target.value); setPhS("idle"); }} onBlur={onBlurPhone} required
-                className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={phone}
+                onChange={(e) => {
+                  setPh(e.target.value);
+                  setPhS("idle");
+                }}
+                onBlur={onBlurPhone}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Mật khẩu *" hint="Tối thiểu 6 ký tự, bao gồm chữ cái và số">
-              <input type="password" value={password} onChange={e => setP(e.target.value)} minLength={6} required
-                className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setP(e.target.value)}
+                minLength={6}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Xác nhận mật khẩu *">
-              <input type="password" value={password2} onChange={e => setP2(e.target.value)} required
-                className="w-full px-4 py-3 rounded-xl border bg-card" />
-              {password2 && password !== password2 && <span className="text-xs text-destructive">Mật khẩu không khớp</span>}
+              <input
+                type="password"
+                value={password2}
+                onChange={(e) => setP2(e.target.value)}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
+              {password2 && password !== password2 && (
+                <span className="text-xs text-destructive">Mật khẩu không khớp</span>
+              )}
             </Field>
             <Field label="Ảnh đại diện (tùy chọn)">
-              <input type="file" accept="image/*" onChange={e => setAv(e.target.files?.[0] ?? null)} />
+              <input type="file" accept="image/*" onChange={(e) => setAv(e.target.files?.[0] ?? null)} />
             </Field>
 
             <label className="flex items-center justify-between p-3 rounded-xl bg-accent">
-              <span className="text-sm font-semibold">Bạn có đang kinh doanh không?</span>
-              <input type="checkbox" checked={isBiz} onChange={e => setBiz(e.target.checked)} className="w-5 h-5" />
+              <span className="text-sm font-semibold">Bạn có muốn thêm doanh nghiệp vào hồ sơ không??</span>
+              <input type="checkbox" checked={isBiz} onChange={(e) => setBiz(e.target.checked)} className="w-5 h-5" />
             </label>
 
-            <button onClick={goNext} className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold">
+            <button
+              onClick={goNext}
+              className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold"
+            >
               {isBiz ? "Tiếp tục" : "Hoàn tất đăng ký"}
             </button>
           </div>
         ) : (
           <div className="space-y-3">
             <Field label="Tên doanh nghiệp *" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
-              <input value={bizName} onChange={e => setBN(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={bizName}
+                onChange={(e) => setBN(e.target.value)}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Loại hình *">
               <div className="flex flex-wrap gap-2">
-                {BUSINESS_TYPES.map(t => (
-                  <button type="button" key={t} onClick={() => setBT(t)}
-                    className={cn("px-3 py-1.5 rounded-full text-sm border",
-                      bizType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card")}>
+                {BUSINESS_TYPES.map((t) => (
+                  <button
+                    type="button"
+                    key={t}
+                    onClick={() => setBT(t)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-sm border",
+                      bizType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card",
+                    )}
+                  >
                     {BUSINESS_TYPE_LABEL[t]}
                   </button>
                 ))}
@@ -215,31 +319,68 @@ export default function Register() {
             </Field>
             <div className="grid grid-cols-2 gap-3">
               <Field label="Giờ mở *" hint="Ví dụ: 07:00">
-                <input type="time" value={open} onChange={e => setOpen(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
+                <input
+                  type="time"
+                  value={open}
+                  onChange={(e) => setOpen(e.target.value)}
+                  className="w-full px-3 py-3 rounded-xl border bg-card"
+                />
               </Field>
               <Field label="Giờ đóng *" hint="Ví dụ: 22:00">
-                <input type="time" value={close} onChange={e => setClose(e.target.value)} className="w-full px-3 py-3 rounded-xl border bg-card" />
+                <input
+                  type="time"
+                  value={close}
+                  onChange={(e) => setClose(e.target.value)}
+                  className="w-full px-3 py-3 rounded-xl border bg-card"
+                />
               </Field>
             </div>
             <Field label="Mô tả *" hint="Mô tả ngắn gọn về không gian, phong cách, món đặc trưng">
-              <textarea value={bizDesc} onChange={e => setBD(e.target.value)} required rows={3} className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <textarea
+                value={bizDesc}
+                onChange={(e) => setBD(e.target.value)}
+                required
+                rows={3}
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
-            <Field label="Ưu đãi/Deal cho thành viên *" hint="Ví dụ: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm 4 người">
-              <input value={bizOffer} onChange={e => setBO(e.target.value)} required className="w-full px-4 py-3 rounded-xl border bg-card" />
+            <Field
+              label="Ưu đãi/Deal cho thành viên *"
+              hint="Ví dụ: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm 4 người"
+            >
+              <input
+                value={bizOffer}
+                onChange={(e) => setBO(e.target.value)}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Facebook URL">
-              <input value={fbUrl} onChange={e => setFB(e.target.value)} className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={fbUrl}
+                onChange={(e) => setFB(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Website">
-              <input value={webUrl} onChange={e => setW(e.target.value)} className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={webUrl}
+                onChange={(e) => setW(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Ảnh bìa">
-              <input type="file" accept="image/*" onChange={e => setCov(e.target.files?.[0] ?? null)} />
+              <input type="file" accept="image/*" onChange={(e) => setCov(e.target.files?.[0] ?? null)} />
             </Field>
             <div className="flex gap-2">
-              <button onClick={() => setStep(1)} className="flex-1 py-3 rounded-xl border">← Quay lại</button>
-              <button onClick={() => setTO(true)} disabled={!bizName || !bizDesc || !bizOffer}
-                className="flex-1 py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50">
+              <button onClick={() => setStep(1)} className="flex-1 py-3 rounded-xl border">
+                ← Quay lại
+              </button>
+              <button
+                onClick={() => setTO(true)}
+                disabled={!bizName || !bizDesc || !bizOffer}
+                className="flex-1 py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
+              >
                 Hoàn tất
               </button>
             </div>
@@ -247,25 +388,38 @@ export default function Register() {
         )}
 
         <p className="text-center text-sm">
-          Đã có tài khoản? <Link to="/auth/login" className="text-primary font-semibold">Đăng nhập</Link>
+          Đã có tài khoản?{" "}
+          <Link to="/auth/login" className="text-primary font-semibold">
+            Đăng nhập
+          </Link>
         </p>
       </div>
 
       <Dialog open={termsOpen} onOpenChange={setTO}>
         <DialogContent>
-          <DialogHeader><DialogTitle>Điều khoản & điều kiện</DialogTitle></DialogHeader>
+          <DialogHeader>
+            <DialogTitle>Điều khoản & điều kiện</DialogTitle>
+          </DialogHeader>
           <div className="text-sm space-y-2 max-h-60 overflow-y-auto">
             {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-            <p>Bằng việc đăng ký, bạn cam kết cung cấp thông tin chính xác và tuân thủ quy định của Liên Minh Liên Doanh.</p>
+            <p>
+              Bằng việc đăng ký, bạn cam kết cung cấp thông tin chính xác và tuân thủ quy định của Liên Minh Liên Doanh.
+            </p>
             <p>Tài khoản của bạn sẽ được admin xem xét và phê duyệt trong thời gian sớm nhất.</p>
-            <p>Trong thời gian chờ duyệt, bạn có thể duyệt nội dung nhưng chưa thể đăng đánh giá, gửi đề xuất hay nhắn tin.</p>
+            <p>
+              Trong thời gian chờ duyệt, bạn có thể duyệt nội dung nhưng chưa thể đăng đánh giá, gửi đề xuất hay nhắn
+              tin.
+            </p>
           </div>
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={agree} onChange={e => setAgree(e.target.checked)} />
+            <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
             Tôi đồng ý với điều khoản
           </label>
-          <button onClick={submitFinal} disabled={!agree || submitting}
-            className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50">
+          <button
+            onClick={submitFinal}
+            disabled={!agree || submitting}
+            className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
+          >
             {submitting ? "Đang xử lý…" : "Xác nhận đăng ký"}
           </button>
         </DialogContent>
@@ -274,7 +428,17 @@ export default function Register() {
   );
 }
 
-function Field({ label, children, right, hint }: { label: string; children: React.ReactNode; right?: React.ReactNode; hint?: string }) {
+function Field({
+  label,
+  children,
+  right,
+  hint,
+}: {
+  label: string;
+  children: React.ReactNode;
+  right?: React.ReactNode;
+  hint?: string;
+}) {
   return (
     <label className="block space-y-1">
       <div className="flex items-center justify-between">
