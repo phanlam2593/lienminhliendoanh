@@ -10,6 +10,7 @@ import Businesses from "./pages/Businesses";
 import BusinessDetail from "./pages/BusinessDetail";
 import Offers from "./pages/Offers";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import Suggest from "./pages/Suggest";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
