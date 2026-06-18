@@ -36,8 +36,8 @@ export default function Suggest() {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã gửi đề xuất, chờ admin duyệt");
-    nav("/");
+    toast.success("Đã gửi đề xuất thành công! Admin sẽ xem xét sớm nhất có thể 🙌");
+    nav(-1);
   };
 
   return (
@@ -89,7 +89,8 @@ export default function Suggest() {
         <textarea
           value={desc}
           onChange={(e) => setD(e.target.value)}
-          placeholder="Mô tả ngắn"
+          placeholder="Mô tả ngắn *"
+          required
           rows={3}
           className="w-full px-3 py-2.5 rounded-lg border bg-card"
         />
