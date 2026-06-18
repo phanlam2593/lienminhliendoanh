@@ -128,7 +128,7 @@ export default function Admin() {
           </button>
         ))}
       </div>
-
+      <SuggestionsSection refreshKey={refreshKey} />
       <ReportsSection refreshKey={refreshKey} />
       <Broadcast />
 
@@ -425,7 +425,9 @@ function MemberDetail({ row, onClose, onChanged, onStatus }: {
                   <div key={s.id} className="flex items-center gap-2 p-2 bg-accent rounded">
                     <div className="flex-1 min-w-0 text-xs">
                       <div className="font-semibold truncate">{s.business_name}</div>
-                      <div className="text-[10px] text-muted-foreground">{BUSINESS_TYPE_LABEL[s.business_type]} · {s.status}</div>
+                      <div className="text-[10px] text-muted-foreground">
+  {BUSINESS_TYPE_LABEL[s.business_type]} · {s.address || ""} · {s.status}
+</div>
                     </div>
                     <button onClick={() => delSug(s.id)} className="text-destructive"><Trash2 className="w-3.5 h-3.5" /></button>
                   </div>
@@ -519,7 +521,59 @@ function Broadcast() {
     </section>
   );
 }
+function SuggestionsSection({ refreshKey }: { refreshKey: number }) {
+  const [list, setList] = useState<any[]>([]);
 
+  const load = async () => {
+    const { data } = await supabase
+      .from("suggestions")
+      .select("*, profiles(full_name, username)")
+      .order("created_at", { ascending: false });
+    setList(data ?? []);
+  };
+
+  useEffect(() => { load(); }, [refreshKey]);
+
+  const setStatus = async (id: string, status: string) => {
+    await supabase.from("suggestions").update({ status }).eq("id", id);
+    toast.success("Đã cập nhật");
+    load();
+  };
+
+  const del = async (id: string) => {
+    if (!confirm("Xóa đề xuất?")) return;
+    await supabase.from("suggestions").delete().eq("id", id);
+    load();
+  };
+
+  return (
+    <section className="space-y-2 border-t pt-4">
+      <h2 className="font-bold">Đề xuất doanh nghiệp ({list.length})</h2>
+      {list.length === 0 && <p className="text-sm text-muted-foreground">Chưa có đề xuất nào</p>}
+      {list.map(s => (
+        <div key={s.id} className="p-3 bg-card rounded-xl space-y-1.5">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <div className="text-sm font-semibold">{s.business_name}</div>
+              <div className="text-[11px] text-muted-foreground">
+                {BUSINESS_TYPE_LABEL[s.business_type as BusinessType]} · {s.address || "Chưa có địa chỉ"} · {(s.profiles as any)?.full_name}
+              </div>
+              <div className="text-[11px] text-muted-foreground">{s.contact_info}</div>
+              {s.description && <div className="text-xs mt-1">{s.description}</div>}
+            </div>
+            <StatusBadge s={s.status} />
+          </div>
+          <div className="flex gap-2 pt-1">
+            {s.status === "pending" && <>
+              <button onClick={() => setStatus(s.id, "approved")} className="text-xs px-3 py-1 rounded bg-emerald-500 text-white">Duyệt</button>
+              <button onClick={() => setStatus(s.id, "rejected")} className="text-xs px-3 py-1 rounded bg-red-500 text-white">Từ chối</button>
+            </>}
+            <button onClick={() => del(s.id)} className="text-xs px-3 py-1 rounded bg-muted text-destructive">Xóa</button>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
 function StatusBadge({ s }: { s?: string }) {
   if (!s) return null;
   const map: Record<string, string> = {
