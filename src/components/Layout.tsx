@@ -213,7 +213,7 @@ function WelcomeScreen() {
   }, []);
 
   const features = [
-    { icon: Store, title: "Khám phá đối tác uy tín", desc: "Cafe, nhà hàng, spa, homestay và nhiều hơn nữa" },
+    { icon: Store, title: "Khám phá doanh nghiệp uy tín", desc: "Cafe, nhà hàng, spa, homestay và nhiều hơn nữa" },
     { icon: TagIcon, title: "Ưu đãi độc quyền", desc: "Nhận deal riêng dành cho thành viên cộng đồng" },
     { icon: Star, title: "Đánh giá thật từ cộng đồng", desc: "Chia sẻ trải nghiệm và đọc review từ thành viên" },
   ];
