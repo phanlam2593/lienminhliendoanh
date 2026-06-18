@@ -97,7 +97,7 @@ export default function Home() {
       {/* Section 2 — Stats */}
       <section className="px-4 grid grid-cols-3 gap-2 -mt-8 relative z-10">
         <Stat icon={Users} value={stats.members} label="Thành viên" />
-        <Stat icon={Building2} value={stats.businesses} label="Đối tác" />
+        <Stat icon={Building2} value={stats.businesses} label="Doanh nghiệp" />
         <Stat icon={Tag} value={stats.offers} label="Ưu đãi" />
       </section>
 
