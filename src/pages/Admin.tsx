@@ -821,10 +821,7 @@ function SuggestionsSection({ refreshKey }: { refreshKey: number }) {
   const [list, setList] = useState<any[]>([]);
 
   const load = async () => {
-    const { data } = await supabase
-      .from("suggestions")
-      .select("*, profiles(full_name, username)")
-      .order("created_at", { ascending: false });
+    const { data } = await supabase.from("suggestions").select("*").order("created_at", { ascending: false });
     setList(data ?? []);
   };
 
