@@ -125,7 +125,11 @@ export default function Register() {
         }
       }
 
-      toast.success("Đăng ký thành công! Đang chờ admin duyệt.");
+      if (isBiz) {
+        toast.success("Đăng ký thành công! Doanh nghiệp của bạn đang chờ admin duyệt.");
+      } else {
+        toast.success("Đăng ký thành công! Chào mừng bạn đến với Liên Minh Liên Doanh.");
+      }
       nav("/");
     } catch (e: any) {
       toast.error(e.message || "Đăng ký thất bại");
