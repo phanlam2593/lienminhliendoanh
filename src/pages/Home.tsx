@@ -113,7 +113,7 @@ export default function Home() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-sm">Đề xuất doanh nghiệp mới</div>
-              <div className="text-xs text-muted-foreground mt-0.5">Giới thiệu đối tác cho cộng đồng</div>
+              <div className="text-xs text-muted-foreground mt-0.5">Giới thiệu doanh nghiệp cho cộng đồng</div>
             </div>
             <ArrowRight className="w-5 h-5 text-muted-foreground shrink-0" />
           </Link>
