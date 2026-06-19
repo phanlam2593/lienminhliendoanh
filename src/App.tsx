@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,11 +11,11 @@ import BusinessDetail from "./pages/BusinessDetail";
 import Offers from "./pages/Offers";
 import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
-import Suggest from "./pages/Suggest";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 import Notifications from "./pages/Notifications";
+import Community from "./pages/Community";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
@@ -34,11 +34,12 @@ const App = () => (
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/kham-pha" element={<Businesses />} />
+              <Route path="/cong-dong" element={<Community />} />
               <Route path="/dn/:id" element={<BusinessDetail />} />
               <Route path="/uu-dai" element={<Offers />} />
               <Route path="/ho-so" element={<Profile />} />
               <Route path="/ho-so/:id" element={<UserProfile />} />
-              <Route path="/de-xuat" element={<Suggest />} />
+              <Route path="/de-xuat" element={<Navigate to="/" replace />} />
               <Route path="/thong-bao" element={<Notifications />} />
               <Route path="/tin-nhan" element={<MessagesInbox />} />
               <Route path="/tin-nhan/:id" element={<MessagesThread />} />
