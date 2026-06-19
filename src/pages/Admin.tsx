@@ -324,11 +324,6 @@ function MemberDetail({
     await supabase.from("reviews").delete().eq("id", id);
     load(row!.id, biz?.id);
   };
-  const delSug = async (id: string) => {
-    if (!confirm("Xóa đề xuất?")) return;
-    await supabase.from("suggestions").delete().eq("id", id);
-    load(row!.id, biz?.id);
-  };
 
   return (
     <Dialog open={!!row} onOpenChange={(v) => !v && onClose()}>
