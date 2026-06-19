@@ -160,12 +160,30 @@ export function MessagesThread() {
         <div className="font-semibold text-sm">{partner?.full_name || "…"}</div>
       </div>
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
-        {msgs.map(m => (
-          <div key={m.id} className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${m.sender_id === user.id ? "bg-primary text-primary-foreground ml-auto rounded-br-sm" : "bg-card border rounded-bl-sm"}`}>
-            {m.content}
-            <div className={`text-[9px] mt-0.5 ${m.sender_id === user.id ? "opacity-70" : "text-muted-foreground"}`}>{timeAgo(m.created_at)}</div>
-          </div>
-        ))}
+        {msgs.map(m => {
+          const mine = m.sender_id === user.id;
+          const canDelete = mine || isAdmin;
+          return (
+            <div key={m.id} className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
+              {canDelete && mine && (
+                <button
+                  onClick={async () => { if (!confirm("Xóa tin nhắn?")) return; await supabase.from("messages").delete().eq("id", m.id); }}
+                  aria-label="Xóa" className="opacity-0 group-hover:opacity-100 text-destructive p-1"
+                ><Trash2 className="w-3 h-3" /></button>
+              )}
+              <div className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}>
+                {m.content}
+                <div className={`text-[9px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>{timeAgo(m.created_at)}</div>
+              </div>
+              {canDelete && !mine && (
+                <button
+                  onClick={async () => { if (!confirm("Xóa tin nhắn?")) return; await supabase.from("messages").delete().eq("id", m.id); }}
+                  aria-label="Xóa" className="opacity-0 group-hover:opacity-100 text-destructive p-1"
+                ><Trash2 className="w-3 h-3" /></button>
+              )}
+            </div>
+          );
+        })}
         <div ref={endRef} />
       </div>
       <div className="flex gap-2 p-3 border-t bg-card">
