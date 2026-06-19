@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Business, BusinessType, Offer } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
-import { LogOut, PlusCircle, MessageSquare, Save, Flag, Camera, Pencil, Eye, EyeOff, Trash2, Send, Users, UserCheck } from "lucide-react";
+import { LogOut, MessageSquare, Save, Flag, Camera, Pencil, Eye, EyeOff, Trash2, Send, Users, UserCheck } from "lucide-react";
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Avatar } from "@/components/Avatar";
@@ -118,8 +118,7 @@ export default function Profile() {
         </section>
       )}
 
-      <div className="grid grid-cols-2 gap-2">
-        <Link to="/de-xuat" className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm text-sm font-semibold"><PlusCircle className="w-4 h-4" /> Đề xuất DN</Link>
+      <div className="grid grid-cols-1 gap-2">
         <Link to="/tin-nhan" className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm text-sm font-semibold"><MessageSquare className="w-4 h-4" /> Tin nhắn</Link>
       </div>
 
