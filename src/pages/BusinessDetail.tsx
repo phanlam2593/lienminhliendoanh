@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck } from "lucide-react";
+import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck, Trash2, Reply, Send } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Business, Offer, Review, OfferClaim } from "@/lib/types";
+import type { Business, Offer, Review, OfferClaim, ReviewReply } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
 import { OpenBadge } from "@/components/OpenBadge";
@@ -15,13 +15,15 @@ import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
+interface ReplyMeta extends ReviewReply { profile?: { full_name: string; avatar_url: string | null } | null }
 
 export default function BusinessDetail() {
   const { id = "" } = useParams();
-  const { user, isApproved } = useAuth();
+  const { user, isApproved, isAdmin } = useAuth();
   const [b, setB] = useState<Business | null>(null);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [reviews, setReviews] = useState<ReviewMeta[]>([]);
+  const [replies, setReplies] = useState<Map<string, ReplyMeta[]>>(new Map());
   const [reportOpen, setReportOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [rating, setRating] = useState(5);
@@ -50,6 +52,27 @@ export default function BusinessDetail() {
       (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
     }
     setReviews(reviewsList.map(r => ({ ...r, profile: profMap.get(r.user_id) ?? null })));
+
+    // load replies
+    const reviewIds = reviewsList.map(r => r.id);
+    if (reviewIds.length) {
+      const { data: reps } = await supabase.from("review_replies").select("*").in("review_id", reviewIds).order("created_at");
+      const repList = (reps ?? []) as ReviewReply[];
+      const repUids = [...new Set(repList.map(r => r.user_id).filter(u => !profMap.has(u)))];
+      if (repUids.length) {
+        const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", repUids);
+        (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
+      }
+      const map = new Map<string, ReplyMeta[]>();
+      repList.forEach(r => {
+        const arr = map.get(r.review_id) ?? [];
+        arr.push({ ...r, profile: profMap.get(r.user_id) ?? null });
+        map.set(r.review_id, arr);
+      });
+      setReplies(map);
+    } else {
+      setReplies(new Map());
+    }
   };
 
   const openClaim = async (o: Offer) => {
@@ -73,6 +96,21 @@ export default function BusinessDetail() {
     load();
   };
 
+  const deleteReview = async (rid: string) => {
+    if (!confirm("Xóa đánh giá này?")) return;
+    const { error } = await supabase.from("reviews").delete().eq("id", rid);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã xóa");
+    load();
+  };
+
+  const deleteReply = async (rid: string) => {
+    if (!confirm("Xóa phản hồi?")) return;
+    const { error } = await supabase.from("review_replies").delete().eq("id", rid);
+    if (error) { toast.error(error.message); return; }
+    load();
+  };
+
   const messageOwner = async () => {
     if (!user || !b?.owner_id || b.owner_id === user.id) return;
     window.location.href = `/tin-nhan/${b.owner_id}`;
@@ -81,6 +119,36 @@ export default function BusinessDetail() {
   if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">Đang tải…</div>;
 
   const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
+  const isOwner = !!user && user.id === b.owner_id;
+
+  const ReviewsBlock = (
+    <section className="mt-2">
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="font-bold">Đánh giá ({reviews.length})</h2>
+        {isApproved && <button onClick={() => setReviewOpen(true)} className="text-xs px-3 py-1.5 rounded-full bg-primary text-primary-foreground font-semibold">Viết đánh giá</button>}
+      </div>
+      {reviews.length === 0 ? (
+        <p className="text-sm text-muted-foreground">Chưa có đánh giá nào</p>
+      ) : (
+        <div className="space-y-2">
+          {reviews.map(r => (
+            <ReviewItem
+              key={r.id}
+              r={r}
+              replies={replies.get(r.id) ?? []}
+              isOwner={isOwner}
+              isAdmin={isAdmin}
+              myId={user?.id}
+              onOpenUser={(uid) => setQuickViewUser(uid)}
+              onDelete={() => deleteReview(r.id)}
+              onDeleteReply={(rid) => deleteReply(rid)}
+              onReplied={load}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
 
   return (
     <div className="pb-24">
@@ -107,15 +175,9 @@ export default function BusinessDetail() {
 
         <div className="space-y-2 text-sm">
           {b.phone && <Row icon={Phone}>{b.phone}</Row>}
-          {b.website_url && <Row icon={Globe}>
-            <a href={b.website_url} target="_blank" rel="noopener noreferrer" className="text-primary">{b.website_url}</a>
-          </Row>}
-          {b.facebook_url && <Row icon={Facebook}>
-            <a href={b.facebook_url} target="_blank" rel="noopener noreferrer" className="text-primary">Facebook</a>
-          </Row>}
-          {b.address && <Row icon={MapPin}>
-            <a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`} className="text-primary">{b.address}</a>
-          </Row>}
+          {b.website_url && <Row icon={Globe}><a href={b.website_url} target="_blank" rel="noopener noreferrer" className="text-primary">{b.website_url}</a></Row>}
+          {b.facebook_url && <Row icon={Facebook}><a href={b.facebook_url} target="_blank" rel="noopener noreferrer" className="text-primary">Facebook</a></Row>}
+          {b.address && <Row icon={MapPin}><a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`} className="text-primary">{b.address}</a></Row>}
         </div>
 
         <FollowBusinessButton businessId={b.id} ownerId={b.owner_id} />
@@ -132,72 +194,17 @@ export default function BusinessDetail() {
                     <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận
                   </div>
                   {isApproved && (
-                    <button
-                      onClick={() => openClaim(o)}
-                      className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
-                    >
+                    <button onClick={() => openClaim(o)} className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold">
                       Nhận ưu đãi
                     </button>
                   )}
                 </div>
               ))}
             </div>
-
-            <section className="mt-6">
-              <div className="flex items-center justify-between mb-2">
-                <h2 className="font-bold">Đánh giá ({reviews.length})</h2>
-                {isApproved && <button onClick={() => setReviewOpen(true)} className="text-xs px-3 py-1.5 rounded-full bg-primary text-primary-foreground font-semibold">Viết đánh giá</button>}
-              </div>
-              {reviews.length === 0 ? (
-                <p className="text-sm text-muted-foreground">Chưa có đánh giá nào</p>
-              ) : (
-              <div className="space-y-2">
-                  {reviews.map(r => (
-                    <div key={r.id} className="p-3 rounded-xl bg-card shadow-sm">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Avatar path={r.profile?.avatar_url} name={r.profile?.full_name} size={32} onClick={() => setQuickViewUser(r.user_id)} />
-                        <button onClick={() => setQuickViewUser(r.user_id)} className="flex-1 min-w-0 text-left">
-                          <div className="text-sm font-semibold truncate hover:text-primary">{r.profile?.full_name || "Ẩn danh"}</div>
-                          <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</div>
-                        </button>
-                        <div className="flex text-yellow-500">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className={`w-3 h-3 ${i < r.rating ? "fill-yellow-400" : "opacity-30"}`} />)}</div>
-                      </div>
-                      {r.comment && <p className="text-xs text-muted-foreground">{r.comment}</p>}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </section>
           </section>
         )}
 
-        {offers.length === 0 && (
-          <section>
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="font-bold">Đánh giá ({reviews.length})</h2>
-              {isApproved && <button onClick={() => setReviewOpen(true)} className="text-xs px-3 py-1.5 rounded-full bg-primary text-primary-foreground font-semibold">Viết đánh giá</button>}
-            </div>
-            {reviews.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Chưa có đánh giá nào</p>
-            ) : (
-              <div className="space-y-2">
-                {reviews.map(r => (
-                  <div key={r.id} className="p-3 rounded-xl bg-card shadow-sm">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Avatar path={r.profile?.avatar_url} name={r.profile?.full_name} size={32} onClick={() => setQuickViewUser(r.user_id)} />
-                      <button onClick={() => setQuickViewUser(r.user_id)} className="flex-1 min-w-0 text-left">
-                        <div className="text-sm font-semibold truncate hover:text-primary">{r.profile?.full_name || "Ẩn danh"}</div>
-                        <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</div>
-                      </button>
-                      <div className="flex text-yellow-500">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className={`w-3 h-3 ${i < r.rating ? "fill-yellow-400" : "opacity-30"}`} />)}</div>
-                    </div>
-                    {r.comment && <p className="text-xs text-muted-foreground">{r.comment}</p>}
-                  </div>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
+        {ReviewsBlock}
 
         <div className="flex gap-2">
           {user && b.owner_id && b.owner_id !== user.id && (
@@ -257,6 +264,73 @@ export default function BusinessDetail() {
       </Dialog>
 
       <ProfileQuickView userId={quickViewUser} open={!!quickViewUser} onOpenChange={(v) => !v && setQuickViewUser(null)} />
+    </div>
+  );
+}
+
+function ReviewItem({ r, replies, isOwner, isAdmin, myId, onOpenUser, onDelete, onDeleteReply, onReplied }: {
+  r: ReviewMeta; replies: ReplyMeta[]; isOwner: boolean; isAdmin: boolean; myId?: string;
+  onOpenUser: (uid: string) => void; onDelete: () => void; onDeleteReply: (id: string) => void; onReplied: () => void;
+}) {
+  const [replyOpen, setReplyOpen] = useState(false);
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submitReply = async () => {
+    const t = text.trim();
+    if (!t || !myId) return;
+    setBusy(true);
+    const { error } = await supabase.from("review_replies").insert({ review_id: r.id, user_id: myId, content: t });
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    setText(""); setReplyOpen(false);
+    toast.success("Đã gửi phản hồi");
+    onReplied();
+  };
+
+  return (
+    <div className="p-3 rounded-xl bg-card shadow-sm space-y-2">
+      <div className="flex items-center gap-2">
+        <Avatar path={r.profile?.avatar_url} name={r.profile?.full_name} size={32} onClick={() => onOpenUser(r.user_id)} />
+        <button onClick={() => onOpenUser(r.user_id)} className="flex-1 min-w-0 text-left">
+          <div className="text-sm font-semibold truncate hover:text-primary">{r.profile?.full_name || "Ẩn danh"}</div>
+          <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</div>
+        </button>
+        <div className="flex text-yellow-500">{Array.from({ length: 5 }).map((_, i) => <Star key={i} className={`w-3 h-3 ${i < r.rating ? "fill-yellow-400" : "opacity-30"}`} />)}</div>
+        {isAdmin && (
+          <button onClick={onDelete} aria-label="Xóa đánh giá" className="text-destructive p-1 rounded hover:bg-destructive/10"><Trash2 className="w-3.5 h-3.5" /></button>
+        )}
+      </div>
+      {r.comment && <p className="text-xs text-muted-foreground">{r.comment}</p>}
+
+      {replies.length > 0 && (
+        <div className="space-y-1.5 ml-6 border-l-2 border-accent pl-2">
+          {replies.map(rep => (
+            <div key={rep.id} className="text-xs space-y-0.5">
+              <div className="flex items-center gap-1.5">
+                <Avatar path={rep.profile?.avatar_url} name={rep.profile?.full_name} size={20} />
+                <span className="font-semibold truncate">{rep.profile?.full_name || "Chủ DN"}</span>
+                <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at)}</span>
+                {(isAdmin || rep.user_id === myId) && (
+                  <button onClick={() => onDeleteReply(rep.id)} aria-label="Xóa phản hồi" className="ml-auto text-destructive p-0.5"><Trash2 className="w-3 h-3" /></button>
+                )}
+              </div>
+              <div className="text-muted-foreground pl-6">{rep.content}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isOwner && !replyOpen && (
+        <button onClick={() => setReplyOpen(true)} className="text-[11px] font-semibold text-primary inline-flex items-center gap-1"><Reply className="w-3 h-3" /> Trả lời</button>
+      )}
+      {isOwner && replyOpen && (
+        <div className="flex gap-1.5">
+          <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") submitReply(); }} placeholder="Trả lời đánh giá…" className="flex-1 px-2 py-1.5 rounded border bg-background text-xs" />
+          <button onClick={submitReply} disabled={busy} className="px-2 rounded bg-primary text-primary-foreground text-xs font-semibold inline-flex items-center gap-1"><Send className="w-3 h-3" /></button>
+          <button onClick={() => { setReplyOpen(false); setText(""); }} className="px-2 rounded border text-xs">Hủy</button>
+        </div>
+      )}
     </div>
   );
 }
