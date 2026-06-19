@@ -20,7 +20,7 @@ import { useAuth } from "@/lib/auth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
-import welcomeGuide from "@/assets/welcome-guide.jpg.asset.json";
+import welcomeGuide from "@/assets/welcome-guide.png.asset.json";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "Liên Minh Liên Doanh";
