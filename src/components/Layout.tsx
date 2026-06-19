@@ -187,7 +187,7 @@ function WelcomeScreen() {
         alt="Hướng dẫn"
         loading="lazy"
         decoding="async"
-        style={{ width: "100%", maxWidth: "180px", height: "auto" }}
+        style={{ width: "100%", maxWidth: "240px", height: "auto" }}
         className="mx-auto rounded-xl"
       />
 
