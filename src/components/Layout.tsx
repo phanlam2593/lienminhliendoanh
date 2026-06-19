@@ -174,19 +174,19 @@ function WelcomeScreen() {
   }, []);
 
   return (
-    <div className="px-5 py-8 flex flex-col items-center text-center gap-6">
-      <Logo size={90} asLink />
-      <div className="space-y-1.5">
+    <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+      <Logo size={72} asLink />
+      <div className="space-y-1">
         {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-        <h1 className="text-2xl font-extrabold text-primary">{APP_NAME}</h1>
-        <p className="text-sm text-muted-foreground">{TAGLINE}</p>
+        <h1 className="text-xl font-extrabold text-primary">{APP_NAME}</h1>
+        <p className="text-xs text-muted-foreground">{TAGLINE}</p>
       </div>
 
       <img
         src={welcomeGuide.url}
         alt="Hướng dẫn"
-        style={{ width: "100%", maxWidth: "360px", height: "auto" }}
-        className="mx-auto rounded-2xl"
+        style={{ width: "100%", maxWidth: "180px", height: "auto" }}
+        className="mx-auto rounded-xl"
       />
 
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
