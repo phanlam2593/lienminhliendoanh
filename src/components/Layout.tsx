@@ -184,9 +184,9 @@ function WelcomeScreen() {
 
       <img
         src={welcomeGuide.url}
-        alt="Sứ mệnh của Liên Minh Liên Doanh"
-        className="mx-auto rounded-2xl shadow-soft"
-        style={{ height: "240px", width: "auto", display: "block" }}
+        alt="Hướng dẫn"
+        style={{ width: "100%", maxWidth: "360px", height: "auto" }}
+        className="mx-auto rounded-2xl"
       />
 
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
