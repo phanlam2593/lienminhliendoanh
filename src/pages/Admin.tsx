@@ -191,7 +191,6 @@ function MemberDetail({
   const [offers, setOffers] = useState<Offer[]>([]);
   const [newOfferTitle, setNewOfferTitle] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
-  const [sugs, setSugs] = useState<Suggestion[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -217,12 +216,8 @@ function MemberDetail({
   }, [row?.id]);
 
   const load = async (uid: string, bizId?: string) => {
-    const [{ data: r }, { data: s }] = await Promise.all([
-      supabase.from("reviews").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-      supabase.from("suggestions").select("*").eq("user_id", uid).order("created_at", { ascending: false }),
-    ]);
+    const { data: r } = await supabase.from("reviews").select("*").eq("user_id", uid).order("created_at", { ascending: false });
     setReviews((r ?? []) as Review[]);
-    setSugs((s ?? []) as Suggestion[]);
     if (bizId) {
       const { data: o } = await supabase
         .from("offers")
