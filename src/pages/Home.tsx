@@ -162,7 +162,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
           offerIds.length ? supabase.from("offers").select("id, title, business_id").in("id", offerIds) : Promise.resolve({ data: [] } as any),
           userIds.length ? supabase.from("profiles").select("id, full_name").in("id", userIds) : Promise.resolve({ data: [] } as any),
         ]);
-        const bizIds = [...new Set((offs ?? []).map((o: any) => o.business_id))];
+        const bizIds: string[] = [...new Set((offs ?? []).map((o: any) => o.business_id as string))];
         const { data: biz } = bizIds.length
           ? await supabase.from("businesses").select("id, name").in("id", bizIds)
           : ({ data: [] } as any);

@@ -122,6 +122,14 @@ export interface ReportReply {
   created_at: string;
 }
 
+export interface ReviewReply {
+  id: string;
+  review_id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+}
+
 export interface Message {
   id: string;
   sender_id: string;
