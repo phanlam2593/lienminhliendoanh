@@ -186,7 +186,7 @@ function WelcomeScreen() {
         src={welcomeGuide.url}
         alt="Sứ mệnh của Liên Minh Liên Doanh"
         className="mx-auto rounded-2xl shadow-soft"
-        style={{ borderRadius: 16, maxWidth: "240px", width: "100%", display: "block" }}
+        style={{ height: "260px", width: "auto", display: "block" }}
       />
 
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
