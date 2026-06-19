@@ -398,6 +398,7 @@ export type Database = {
       }
       suggestions: {
         Row: {
+          address: string | null
           business_name: string
           business_type: Database["public"]["Enums"]["business_type"]
           contact_info: string
@@ -409,6 +410,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          address?: string | null
           business_name: string
           business_type?: Database["public"]["Enums"]["business_type"]
           contact_info: string
@@ -420,6 +422,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          address?: string | null
           business_name?: string
           business_type?: Database["public"]["Enums"]["business_type"]
           contact_info?: string
