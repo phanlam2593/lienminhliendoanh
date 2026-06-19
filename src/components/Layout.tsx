@@ -20,7 +20,7 @@ import { useAuth } from "@/lib/auth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
-import welcomeGuide from "@/assets/welcome-guide.png.asset.json";
+import welcomeGuide from "@/assets/welcome-guide.jpg.asset.json";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "Liên Minh Liên Doanh";
@@ -71,13 +71,20 @@ export function Layout() {
                       <div className="text-[10px] text-muted-foreground truncate">@{profile?.username}</div>
                     </div>
                     <button
-                      onClick={() => { setOpen(false); nav("/ho-so"); }}
+                      onClick={() => {
+                        setOpen(false);
+                        nav("/ho-so");
+                      }}
                       className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
                     >
                       <UserIcon className="w-4 h-4" /> Hồ sơ cá nhân
                     </button>
                     <button
-                      onClick={async () => { await signOut(); setOpen(false); nav("/"); }}
+                      onClick={async () => {
+                        await signOut();
+                        setOpen(false);
+                        nav("/");
+                      }}
                       className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent text-destructive flex items-center gap-2"
                     >
                       <LogOut className="w-4 h-4" /> Đăng xuất
@@ -86,8 +93,18 @@ export function Layout() {
                 </Popover>
               ) : (
                 <div className="flex items-center gap-1.5">
-                  <Link to="/auth/login" className="text-xs font-semibold px-3 py-1.5 rounded-full bg-accent text-accent-foreground">Đăng nhập</Link>
-                  <Link to="/auth/register" className="text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground">Đăng ký</Link>
+                  <Link
+                    to="/auth/login"
+                    className="text-xs font-semibold px-3 py-1.5 rounded-full bg-accent text-accent-foreground"
+                  >
+                    Đăng nhập
+                  </Link>
+                  <Link
+                    to="/auth/register"
+                    className="text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground"
+                  >
+                    Đăng ký
+                  </Link>
                 </div>
               )}
             </div>
@@ -99,7 +116,12 @@ export function Layout() {
         {showWelcome ? (
           <WelcomeScreen />
         ) : showPendingGate ? (
-          <PendingScreen onSignOut={async () => { await signOut(); nav("/"); }} />
+          <PendingScreen
+            onSignOut={async () => {
+              await signOut();
+              nav("/");
+            }}
+          />
         ) : (
           <Outlet />
         )}
@@ -162,8 +184,8 @@ function WelcomeScreen() {
 
       <img
         src={welcomeGuide.url}
-        alt="Sứ mệnh của Liên Minh Liên Doanh"
-        className="w-full max-w-[400px] mx-auto rounded-2xl shadow-soft"
+        alt="Hướng dẫn"
+        className="w-full max-w-[280px] mx-auto rounded-2xl shadow-soft"
         style={{ borderRadius: 16 }}
       />
 
@@ -181,19 +203,37 @@ function WelcomeScreen() {
       </div>
 
       <div className="w-full max-w-sm space-y-2.5">
-        <Link to="/auth/register" className="block w-full py-3 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand">Tham gia ngay</Link>
-        <Link to="/auth/login" className="block w-full py-3 rounded-xl font-semibold border-2 border-primary text-primary">Đăng nhập</Link>
+        <Link
+          to="/auth/register"
+          className="block w-full py-3 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand"
+        >
+          Tham gia ngay
+        </Link>
+        <Link
+          to="/auth/login"
+          className="block w-full py-3 rounded-xl font-semibold border-2 border-primary text-primary"
+        >
+          Đăng nhập
+        </Link>
       </div>
 
       <div className="pt-4 border-t w-full max-w-sm text-xs text-muted-foreground space-y-1.5">
         <div className="font-bold text-foreground text-sm">Liên hệ admin</div>
-        <a href="mailto:lienminhliendoanh@gmail.com" className="flex items-center justify-center gap-2 hover:text-primary">
+        <a
+          href="mailto:lienminhliendoanh@gmail.com"
+          className="flex items-center justify-center gap-2 hover:text-primary"
+        >
           <Mail className="w-3.5 h-3.5" /> lienminhliendoanh@gmail.com
         </a>
         <a href="tel:0339565246" className="flex items-center justify-center gap-2 hover:text-primary">
           <Phone className="w-3.5 h-3.5" /> 0339565246
         </a>
-        <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 hover:text-primary">
+        <a
+          href="https://www.facebook.com/profile.php?id=61590228346408"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 hover:text-primary"
+        >
           <Facebook className="w-3.5 h-3.5" /> Facebook
         </a>
       </div>
@@ -212,8 +252,12 @@ function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
         Tài khoản của bạn đang chờ admin duyệt. Bạn sẽ nhận thông báo khi được chấp thuận.
       </p>
       <div className="flex gap-2">
-        <Link to="/ho-so" className="px-4 py-2 rounded-xl bg-accent text-sm font-semibold">Hồ sơ</Link>
-        <button onClick={onSignOut} className="px-4 py-2 rounded-xl border text-destructive text-sm font-semibold">Đăng xuất</button>
+        <Link to="/ho-so" className="px-4 py-2 rounded-xl bg-accent text-sm font-semibold">
+          Hồ sơ
+        </Link>
+        <button onClick={onSignOut} className="px-4 py-2 rounded-xl border text-destructive text-sm font-semibold">
+          Đăng xuất
+        </button>
       </div>
     </div>
   );
