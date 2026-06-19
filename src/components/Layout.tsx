@@ -195,38 +195,38 @@ function WelcomeScreen() {
           { v: stats.businesses, l: "Doanh nghiệp" },
           { v: stats.offers, l: "Ưu đãi" },
         ].map((s) => (
-          <div key={s.l} className="bg-card rounded-2xl p-3 shadow-soft">
-            <div className="text-xl font-extrabold text-primary">{s.v}</div>
+          <div key={s.l} className="bg-card rounded-2xl p-2 shadow-soft">
+            <div className="text-lg font-extrabold text-primary">{s.v}</div>
             <div className="text-[10px] text-muted-foreground font-semibold uppercase">{s.l}</div>
           </div>
         ))}
       </div>
 
-      <div className="w-full max-w-sm space-y-2.5">
+      <div className="w-full max-w-sm space-y-2">
         <Link
           to="/auth/register"
-          className="block w-full py-3 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand"
+          className="block w-full py-2.5 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand text-sm"
         >
           Tham gia ngay
         </Link>
         <Link
           to="/auth/login"
-          className="block w-full py-3 rounded-xl font-semibold border-2 border-primary text-primary"
+          className="block w-full py-2.5 rounded-xl font-semibold border-2 border-primary text-primary text-sm"
         >
           Đăng nhập
         </Link>
       </div>
 
-      <div className="pt-4 border-t w-full max-w-sm text-xs text-muted-foreground space-y-1.5">
-        <div className="font-bold text-foreground text-sm">Liên hệ admin</div>
+      <div className="pt-2 border-t w-full max-w-sm text-xs text-muted-foreground space-y-1">
+        <div className="font-bold text-foreground text-xs">Liên hệ admin</div>
         <a
           href="mailto:lienminhliendoanh@gmail.com"
           className="flex items-center justify-center gap-2 hover:text-primary"
         >
-          <Mail className="w-3.5 h-3.5" /> lienminhliendoanh@gmail.com
+          <Mail className="w-3 h-3" /> lienminhliendoanh@gmail.com
         </a>
         <a href="tel:0339565246" className="flex items-center justify-center gap-2 hover:text-primary">
-          <Phone className="w-3.5 h-3.5" /> 0339565246
+          <Phone className="w-3 h-3" /> 0339565246
         </a>
         <a
           href="https://www.facebook.com/profile.php?id=61590228346408"
@@ -234,7 +234,7 @@ function WelcomeScreen() {
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-2 hover:text-primary"
         >
-          <Facebook className="w-3.5 h-3.5" /> Facebook
+          <Facebook className="w-3 h-3" /> Facebook
         </a>
       </div>
     </div>
