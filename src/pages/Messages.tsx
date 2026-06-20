@@ -2,10 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import type { Message, Profile } from "@/lib/types";
+import type { Message, Profile, Business } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
-import { ArrowLeft, Send, Trash2 } from "lucide-react";
+import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { Avatar } from "@/components/Avatar";
+import { StoredImage } from "@/components/StoredImage";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
