@@ -25,6 +25,7 @@ export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
+  const [tab, setTab] = useState<"messages" | "follows">("messages");
 
   const load = async () => {
     if (!user) return;
