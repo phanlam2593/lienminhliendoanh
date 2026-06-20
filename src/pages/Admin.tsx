@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Check, X, Trash2, Send, Save, Search, Star, Flag } from "lucide-react";
+import { Check, X, Trash2, Send, Save, Search, Star, Flag, ChevronDown, ChevronRight, Building2, Tag } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
