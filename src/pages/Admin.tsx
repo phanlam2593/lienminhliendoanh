@@ -149,6 +149,8 @@ export default function Admin() {
         )}
       </div>
       
+      <BusinessesSection refreshKey={refreshKey} onChanged={refresh} />
+      <OffersSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
       <Broadcast />
 
