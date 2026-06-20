@@ -279,17 +279,20 @@ function MemberDetail({
   };
 
   const delBiz = async () => {
-    if (!biz || !confirm("Xóa doanh nghiệp này?")) return;
-    await supabase.from("businesses").delete().eq("id", biz.id);
-    toast.success("Đã xóa");
+    if (!biz || !confirm("Xóa doanh nghiệp này và toàn bộ ưu đãi?")) return;
+    await supabase.from("offers").delete().eq("business_id", biz.id);
+    const { error } = await supabase.from("businesses").delete().eq("id", biz.id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã xóa doanh nghiệp");
     setBiz(null);
     onChanged();
   };
 
   const delMember = async () => {
-    if (!row || !confirm("Xóa thành viên này?")) return;
-    await supabase.from("profiles").delete().eq("id", row.id);
-    toast.success("Đã xóa");
+    if (!row || !confirm("Xóa thành viên này? Tất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn.")) return;
+    const { error } = await supabase.functions.invoke("admin-delete-user", { body: { user_id: row.id } });
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã xóa thành viên");
     onChanged();
     onClose();
   };
