@@ -61,6 +61,31 @@ export function Layout() {
             <Logo size={36} withText asLink />
             <div className="flex items-center gap-1">
               {user ? (
+                <>
+                  <Link
+                    to="/tin-nhan"
+                    aria-label="Tin nhắn"
+                    className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    {unreadMsgs > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                        {unreadMsgs > 99 ? "99+" : unreadMsgs}
+                      </span>
+                    )}
+                  </Link>
+                  <Link
+                    to="/thong-bao"
+                    aria-label="Thông báo"
+                    className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
+                  >
+                    <Bell className="w-5 h-5" />
+                    {unread > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                        {unread > 99 ? "99+" : unread}
+                      </span>
+                    )}
+                  </Link>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <button className="rounded-full shadow-brand" aria-label="Mở menu tài khoản">
