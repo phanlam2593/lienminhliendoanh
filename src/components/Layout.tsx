@@ -118,6 +118,7 @@ export function Layout() {
                     </button>
                   </PopoverContent>
                 </Popover>
+                </>
               ) : (
                 <div className="flex items-center gap-1.5">
                   <Link
