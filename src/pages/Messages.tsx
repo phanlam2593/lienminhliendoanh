@@ -74,31 +74,50 @@ export function MessagesInbox() {
   return (
     <div className="p-4 space-y-2">
       <h1 className="text-xl font-extrabold mb-2">Tin nhắn</h1>
-      {convos.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Chưa có cuộc trò chuyện</p>
+      <div className="flex gap-1 p-1 bg-muted rounded-xl">
+        <button
+          onClick={() => setTab("messages")}
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "messages" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+        >
+          Tin nhắn
+        </button>
+        <button
+          onClick={() => setTab("follows")}
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "follows" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+        >
+          Theo dõi
+        </button>
+      </div>
+
+      {tab === "messages" ? (
+        convos.length === 0 ? (
+          <p className="text-sm text-center py-12 text-muted-foreground">Chưa có cuộc trò chuyện</p>
+        ) : (
+          convos.map(c => (
+            <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
+              <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">{(c.partner?.full_name || "?").slice(0, 1)}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
+                  <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
+                  {c.unread > 0 && <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">{c.unread}</div>}
+                </div>
+              </Link>
+              <button
+                onClick={() => setConfirmPartner(c)}
+                aria-label="Xóa cuộc trò chuyện"
+                className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))
+        )
       ) : (
-        convos.map(c => (
-          <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
-            <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">{(c.partner?.full_name || "?").slice(0, 1)}</div>
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
-                <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
-                {c.unread > 0 && <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">{c.unread}</div>}
-              </div>
-            </Link>
-            <button
-              onClick={() => setConfirmPartner(c)}
-              aria-label="Xóa cuộc trò chuyện"
-              className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        ))
+        <FollowsTab userId={user.id} />
       )}
 
       <AlertDialog open={!!confirmPartner} onOpenChange={(v) => !v && setConfirmPartner(null)}>
