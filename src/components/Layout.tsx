@@ -34,6 +34,7 @@ export function Layout() {
   const nav = useNavigate();
   const { user, profile, signOut, isAdmin, loading } = useAuth();
   const { unread } = useNotifications();
+  const unreadMsgs = useUnreadMessages();
   const [open, setOpen] = useState(false);
   const hide = pathname.startsWith("/auth");
 
