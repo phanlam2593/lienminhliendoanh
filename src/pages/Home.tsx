@@ -197,9 +197,8 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
   return (
     <Dialog open={!!kind} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-md max-h-[85vh] overflow-hidden flex flex-col p-0">
-        <DialogHeader className="px-4 pt-4 pb-2 flex-row items-center justify-between">
+        <DialogHeader className="px-4 pt-4 pb-2">
           <DialogTitle>{title} ({filtered.length})</DialogTitle>
-          <button onClick={onClose} aria-label="Đóng" className="w-8 h-8 rounded-full hover:bg-accent grid place-items-center"><X className="w-4 h-4" /></button>
         </DialogHeader>
         <div className="px-4 pb-2">
           <div className="relative">

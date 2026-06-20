@@ -2,10 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import type { Message, Profile } from "@/lib/types";
+import type { Message, Profile, Business } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
-import { ArrowLeft, Send, Trash2 } from "lucide-react";
+import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { Avatar } from "@/components/Avatar";
+import { StoredImage } from "@/components/StoredImage";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -23,6 +25,7 @@ export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
+  const [tab, setTab] = useState<"messages" | "follows">("messages");
 
   const load = async () => {
     if (!user) return;
@@ -71,31 +74,50 @@ export function MessagesInbox() {
   return (
     <div className="p-4 space-y-2">
       <h1 className="text-xl font-extrabold mb-2">Tin nhắn</h1>
-      {convos.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Chưa có cuộc trò chuyện</p>
+      <div className="flex gap-1 p-1 bg-muted rounded-xl">
+        <button
+          onClick={() => setTab("messages")}
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "messages" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+        >
+          Tin nhắn
+        </button>
+        <button
+          onClick={() => setTab("follows")}
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "follows" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+        >
+          Theo dõi
+        </button>
+      </div>
+
+      {tab === "messages" ? (
+        convos.length === 0 ? (
+          <p className="text-sm text-center py-12 text-muted-foreground">Chưa có cuộc trò chuyện</p>
+        ) : (
+          convos.map(c => (
+            <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
+              <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">{(c.partner?.full_name || "?").slice(0, 1)}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
+                  <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
+                  {c.unread > 0 && <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">{c.unread}</div>}
+                </div>
+              </Link>
+              <button
+                onClick={() => setConfirmPartner(c)}
+                aria-label="Xóa cuộc trò chuyện"
+                className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))
+        )
       ) : (
-        convos.map(c => (
-          <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
-            <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">{(c.partner?.full_name || "?").slice(0, 1)}</div>
-              <div className="flex-1 min-w-0">
-                <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
-                <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
-              </div>
-              <div className="text-right">
-                <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
-                {c.unread > 0 && <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">{c.unread}</div>}
-              </div>
-            </Link>
-            <button
-              onClick={() => setConfirmPartner(c)}
-              aria-label="Xóa cuộc trò chuyện"
-              className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        ))
+        <FollowsTab userId={user.id} />
       )}
 
       <AlertDialog open={!!confirmPartner} onOpenChange={(v) => !v && setConfirmPartner(null)}>
@@ -190,6 +212,101 @@ export function MessagesThread() {
         <input value={text} onChange={e => setText(e.target.value)} onKeyDown={e => { if (e.key === "Enter") send(); }}
           placeholder="Nhập tin nhắn…" className="flex-1 px-3 py-2 rounded-full border bg-background text-sm" />
         <button onClick={send} className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center"><Send className="w-4 h-4" /></button>
+      </div>
+    </div>
+  );
+}
+
+function FollowsTab({ userId }: { userId: string }) {
+  const [following, setFollowing] = useState<{ id: string; full_name: string; username: string; avatar_url: string | null }[]>([]);
+  const [followers, setFollowers] = useState<{ id: string; full_name: string; username: string; avatar_url: string | null }[]>([]);
+  const [followingBiz, setFollowingBiz] = useState<Business[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const [{ data: outRows }, { data: inRows }] = await Promise.all([
+        supabase.from("follows").select("followee_user_id, followee_business_id").eq("follower_id", userId),
+        supabase.from("follows").select("follower_id").eq("followee_user_id", userId),
+      ]);
+      const outUserIds = (outRows ?? []).map((r: any) => r.followee_user_id).filter(Boolean);
+      const outBizIds = (outRows ?? []).map((r: any) => r.followee_business_id).filter(Boolean);
+      const inIds = (inRows ?? []).map((r: any) => r.follower_id).filter(Boolean);
+
+      const [outUsersRes, inUsersRes, outBizRes] = await Promise.all([
+        outUserIds.length ? supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", outUserIds) : Promise.resolve({ data: [] } as any),
+        inIds.length ? supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", inIds) : Promise.resolve({ data: [] } as any),
+        outBizIds.length ? supabase.from("businesses").select("*").in("id", outBizIds) : Promise.resolve({ data: [] } as any),
+      ]);
+      setFollowing((outUsersRes.data ?? []) as any);
+      setFollowers((inUsersRes.data ?? []) as any);
+      setFollowingBiz((outBizRes.data ?? []) as Business[]);
+      setLoading(false);
+    })();
+  }, [userId]);
+
+  if (loading) return <p className="text-sm text-center py-12 text-muted-foreground">Đang tải…</p>;
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <h2 className="text-sm font-bold mb-2">Đang theo dõi ({following.length + followingBiz.length})</h2>
+        {following.length === 0 && followingBiz.length === 0 ? (
+          <p className="text-xs text-muted-foreground py-2">Bạn chưa theo dõi ai</p>
+        ) : (
+          <div className="space-y-2">
+            {following.map(p => (
+              <div key={p.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
+                <Avatar path={p.avatar_url} name={p.full_name} size={36} />
+                <Link to={`/ho-so/${p.id}`} className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">{p.full_name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">@{p.username}</div>
+                </Link>
+                <Link to={`/tin-nhan/${p.id}`} className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1">
+                  <MessageCircle className="w-3 h-3" /> Nhắn tin
+                </Link>
+              </div>
+            ))}
+            {followingBiz.map(b => (
+              <div key={b.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
+                <div className="w-9 h-9 rounded-lg overflow-hidden bg-muted shrink-0">
+                  <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                </div>
+                <Link to={`/dn/${b.id}`} className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">🏢 {b.name}</div>
+                </Link>
+                {b.owner_id && (
+                  <Link to={`/tin-nhan/${b.owner_id}`} className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1">
+                    <MessageCircle className="w-3 h-3" /> Nhắn chủ
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h2 className="text-sm font-bold mb-2">Người theo dõi tôi ({followers.length})</h2>
+        {followers.length === 0 ? (
+          <p className="text-xs text-muted-foreground py-2">Chưa có ai theo dõi bạn</p>
+        ) : (
+          <div className="space-y-2">
+            {followers.map(p => (
+              <div key={p.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
+                <Avatar path={p.avatar_url} name={p.full_name} size={36} />
+                <Link to={`/ho-so/${p.id}`} className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">{p.full_name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">@{p.username}</div>
+                </Link>
+                <Link to={`/tin-nhan/${p.id}`} className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1">
+                  <MessageCircle className="w-3 h-3" /> Nhắn tin
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

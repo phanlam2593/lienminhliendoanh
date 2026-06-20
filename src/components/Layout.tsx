@@ -11,13 +11,14 @@ import {
   Mail,
   Phone,
   Facebook,
+  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import welcomeGuide from "@/assets/welcome-guide.png.asset.json";
@@ -33,6 +34,7 @@ export function Layout() {
   const nav = useNavigate();
   const { user, profile, signOut, isAdmin, loading } = useAuth();
   const { unread } = useNotifications();
+  const unreadMsgs = useUnreadMessages();
   const [open, setOpen] = useState(false);
   const hide = pathname.startsWith("/auth");
 
@@ -59,6 +61,31 @@ export function Layout() {
             <Logo size={36} withText asLink />
             <div className="flex items-center gap-1">
               {user ? (
+                <>
+                  <Link
+                    to="/tin-nhan"
+                    aria-label="Tin nhắn"
+                    className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    {unreadMsgs > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                        {unreadMsgs > 99 ? "99+" : unreadMsgs}
+                      </span>
+                    )}
+                  </Link>
+                  <Link
+                    to="/thong-bao"
+                    aria-label="Thông báo"
+                    className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
+                  >
+                    <Bell className="w-5 h-5" />
+                    {unread > 0 && (
+                      <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                        {unread > 99 ? "99+" : unread}
+                      </span>
+                    )}
+                  </Link>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <button className="rounded-full shadow-brand" aria-label="Mở menu tài khoản">
@@ -91,6 +118,7 @@ export function Layout() {
                     </button>
                   </PopoverContent>
                 </Popover>
+                </>
               ) : (
                 <div className="flex items-center gap-1.5">
                   <Link
