@@ -11,13 +11,14 @@ import {
   Mail,
   Phone,
   Facebook,
+  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
-import { useNotifications } from "@/hooks/useNotifications";
+import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 import welcomeGuide from "@/assets/welcome-guide.png.asset.json";
