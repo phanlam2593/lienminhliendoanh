@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Check, X, Trash2, Send, Save, Search, Star, Flag, ChevronDown, ChevronRight, Building2, Tag } from "lucide-react";
+import { Check, X, Trash2, Send, Save, Search, Star, Flag, ChevronDown, ChevronRight, Building2, Tag, Users, Sparkles } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
@@ -100,6 +100,17 @@ export default function Admin() {
     }
   };
 
+  const cleanupOrphans = async () => {
+    if (!confirm("Dọn dẹp tất cả tài khoản đăng nhập không còn hồ sơ?")) return;
+    const t = toast.loading("Đang dọn dẹp…");
+    const { data, error } = await supabase.functions.invoke("admin-cleanup-orphans", { body: {} });
+    toast.dismiss(t);
+    if (error) { toast.error(error.message); return; }
+    const d: any = data ?? {};
+    toast.success(`Tìm thấy ${d.found ?? 0}, đã xóa ${d.deleted ?? 0} tài khoản`);
+    refresh();
+  };
+
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Quản trị</h1>
@@ -114,9 +125,16 @@ export default function Admin() {
         />
       </div>
 
-      <div className="space-y-2">
+      <button
+        onClick={cleanupOrphans}
+        className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+      >
+        <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
+      </button>
+
+      <Collapsible title="Thành viên" icon={Users} count={filtered.length} defaultOpen>
         {filtered.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">Không có kết quả</p>
+          <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
         ) : (
           filtered.map((r) => (
             <button
@@ -132,23 +150,17 @@ export default function Admin() {
                   {r.full_name}
                   <span className="text-muted-foreground text-xs ml-1">@{r.username}</span>
                 </div>
-                {r.business ? (
-                  <div className="text-[11px] text-muted-foreground truncate">
-                    🏢 {r.business.name} · {r.activeOffers} ưu đãi · {r.reviewCount} đánh giá · {r.suggestionCount} đề
-                    xuất
-                  </div>
-                ) : (
-                  <div className="text-[11px] text-muted-foreground truncate">
-                    {r.claimCount} ưu đãi đã nhận · {r.reviewCount} đánh giá · {r.suggestionCount} đề xuất
-                  </div>
-                )}
+                <div className="text-[11px] text-muted-foreground truncate">
+                  Tham gia {new Date(r.created_at).toLocaleDateString("vi-VN")}
+                  {r.business ? ` · 🏢 ${r.business.name}` : ""}
+                </div>
               </div>
               <StatusBadge s={r.status} />
             </button>
           ))
         )}
-      </div>
-      
+      </Collapsible>
+
       <BusinessesSection refreshKey={refreshKey} onChanged={refresh} />
       <OffersSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
@@ -782,8 +794,8 @@ function StatusBadge({ s }: { s?: string }) {
   );
 }
 
-function Collapsible({ title, icon: Icon, count, children }: { title: string; icon: any; count: number; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+function Collapsible({ title, icon: Icon, count, children, defaultOpen = false }: { title: string; icon: any; count: number; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <section className="border-t pt-4">
       <button onClick={() => setOpen(o => !o)} className="w-full flex items-center gap-2 font-bold">
