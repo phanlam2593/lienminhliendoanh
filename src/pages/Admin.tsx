@@ -794,8 +794,8 @@ function StatusBadge({ s }: { s?: string }) {
   );
 }
 
-function Collapsible({ title, icon: Icon, count, children }: { title: string; icon: any; count: number; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+function Collapsible({ title, icon: Icon, count, children, defaultOpen = false }: { title: string; icon: any; count: number; children: React.ReactNode; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <section className="border-t pt-4">
       <button onClick={() => setOpen(o => !o)} className="w-full flex items-center gap-2 font-bold">
