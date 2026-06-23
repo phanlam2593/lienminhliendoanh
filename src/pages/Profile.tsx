@@ -10,6 +10,7 @@ import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Avatar } from "@/components/Avatar";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
+import { FollowListDialog } from "@/components/FollowListDialog";
 
 export default function Profile() {
   const { user, profile, role, refresh, signOut } = useAuth();
@@ -319,6 +320,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
 function FollowStats({ userId }: { userId: string }) {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
+  const [open, setOpen] = useState<null | "followers" | "following">(null);
   useEffect(() => {
     (async () => {
       const [{ count: fc }, { count: gc }] = await Promise.all([
@@ -330,16 +332,24 @@ function FollowStats({ userId }: { userId: string }) {
     })();
   }, [userId]);
   return (
-    <div className="flex gap-2 text-xs">
-      <div className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm">
-        <div className="text-lg font-extrabold text-primary">{followers}</div>
-        <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><Users className="w-3 h-3" /> Người theo dõi</div>
+    <>
+      <div className="flex gap-2 text-xs">
+        <button onClick={() => setOpen("followers")} className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition">
+          <div className="text-lg font-extrabold text-primary">{followers}</div>
+          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><Users className="w-3 h-3" /> Người theo dõi</div>
+        </button>
+        <button onClick={() => setOpen("following")} className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition">
+          <div className="text-lg font-extrabold text-primary">{following}</div>
+          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><UserCheck className="w-3 h-3" /> Đang theo dõi</div>
+        </button>
       </div>
-      <div className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm">
-        <div className="text-lg font-extrabold text-primary">{following}</div>
-        <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><UserCheck className="w-3 h-3" /> Đang theo dõi</div>
-      </div>
-    </div>
+      <FollowListDialog
+        open={open !== null}
+        onOpenChange={(v) => !v && setOpen(null)}
+        target={{ kind: "user", id: userId }}
+        mode={open ?? "followers"}
+      />
+    </>
   );
 }
 

@@ -13,6 +13,7 @@ import { timeAgo } from "@/lib/time";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
+import { FollowListDialog } from "@/components/FollowListDialog";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
 interface ReplyMeta extends ReviewReply { profile?: { full_name: string; avatar_url: string | null } | null }
@@ -362,6 +363,7 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
   const [following, setFollowing] = useState(false);
   const [count, setCount] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [listOpen, setListOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -374,11 +376,14 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
     })();
   }, [businessId, user?.id]);
 
-  if (!user || user.id === ownerId) {
-    return <div className="text-xs text-muted-foreground inline-flex items-center gap-1"><Users className="w-3 h-3" /> {count} người theo dõi</div>;
-  }
+  const countButton = (
+    <button onClick={() => setListOpen(true)} className="text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1">
+      <Users className="w-3 h-3" /> {count} người theo dõi
+    </button>
+  );
 
   const toggle = async () => {
+    if (!user) return;
     setBusy(true);
     if (following) {
       const { error } = await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_business_id", businessId);
@@ -391,11 +396,22 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
   };
 
   return (
-    <div className="flex items-center gap-2">
-      <button onClick={toggle} disabled={busy} className={`px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1 ${following ? "bg-muted text-foreground" : "bg-gradient-brand text-primary-foreground"}`}>
-        {following ? <><UserCheck className="w-3.5 h-3.5" /> Đang theo dõi</> : <><UserPlus className="w-3.5 h-3.5" /> Theo dõi</>}
-      </button>
-      <span className="text-xs text-muted-foreground">{count} người theo dõi</span>
-    </div>
+    <>
+      <div className="flex items-center gap-2">
+        {user && user.id !== ownerId && (
+          <button onClick={toggle} disabled={busy} className={`px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1 ${following ? "bg-muted text-foreground" : "bg-gradient-brand text-primary-foreground"}`}>
+            {following ? <><UserCheck className="w-3.5 h-3.5" /> Đang theo dõi</> : <><UserPlus className="w-3.5 h-3.5" /> Theo dõi</>}
+          </button>
+        )}
+        {countButton}
+      </div>
+      <FollowListDialog
+        open={listOpen}
+        onOpenChange={setListOpen}
+        target={{ kind: "business", id: businessId }}
+        mode="followers"
+        title="Người theo dõi doanh nghiệp"
+      />
+    </>
   );
 }
