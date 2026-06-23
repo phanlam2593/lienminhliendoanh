@@ -109,6 +109,12 @@ export default function UserProfile() {
           {p.phone && <a href={`tel:${p.phone}`} className="flex items-center gap-2 text-muted-foreground"><Phone className="w-4 h-4" />{p.phone}</a>}
         </div>
       </div>
+      <FollowListDialog
+        open={listOpen !== null}
+        onOpenChange={(v) => !v && setListOpen(null)}
+        target={{ kind: "user", id: p.id }}
+        mode={listOpen ?? "followers"}
+      />
     </div>
   );
 }
