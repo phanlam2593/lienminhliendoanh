@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { ArrowLeft, Mail, Phone, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Avatar } from "@/components/Avatar";
+import { FollowListDialog } from "@/components/FollowListDialog";
 import { toast } from "sonner";
 
 interface PubProfile {
@@ -23,15 +24,18 @@ export default function UserProfile() {
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
   const [followers, setFollowers] = useState(0);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [listOpen, setListOpen] = useState<null | "followers" | "following">(null);
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
     (async () => {
-      const [{ data: prof }, { count }, { data: rel }] = await Promise.all([
+      const [{ data: prof }, { count }, { count: gc }, { data: rel }] = await Promise.all([
         supabase.from("profiles").select("id, full_name, username, avatar_url, email, phone").eq("id", id).maybeSingle(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
+        supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
         user ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle() : Promise.resolve({ data: null } as any),
       ]);
       if (!prof) {
@@ -41,6 +45,7 @@ export default function UserProfile() {
       }
       setP(prof as PubProfile);
       setFollowers(count ?? 0);
+      setFollowingCount(gc ?? 0);
       setFollowing(!!rel);
       setLoading(false);
     })();
@@ -74,7 +79,14 @@ export default function UserProfile() {
           <div className="text-lg font-extrabold">{p.full_name}</div>
           <div className="text-xs text-muted-foreground">@{p.username}</div>
         </div>
-        <div className="text-xs text-muted-foreground">{followers} người theo dõi</div>
+        <div className="flex gap-4 text-xs">
+          <button onClick={() => setListOpen("followers")} className="hover:text-primary">
+            <span className="font-bold text-foreground">{followers}</span> người theo dõi
+          </button>
+          <button onClick={() => setListOpen("following")} className="hover:text-primary">
+            <span className="font-bold text-foreground">{followingCount}</span> đang theo dõi
+          </button>
+        </div>
         {!isMe && user && (
           <div className="flex gap-2 w-full">
             <button
