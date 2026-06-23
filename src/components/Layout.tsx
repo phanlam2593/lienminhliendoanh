@@ -106,20 +106,33 @@ export function Layout() {
                       <div className="text-[10px] text-muted-foreground truncate">@{profile?.username}</div>
                     </div>
                     <button
-                      onClick={() => {
-                        setOpen(false);
-                        nav("/ho-so");
-                      }}
+                      onClick={() => { setOpen(false); nav("/ho-so"); }}
                       className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
                     >
                       <UserIcon className="w-4 h-4" /> Hồ sơ cá nhân
                     </button>
+                    {myBusinessId && (
+                      <button
+                        onClick={() => { setOpen(false); nav(`/dn/${myBusinessId}`); }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
+                      >
+                        <Briefcase className="w-4 h-4" /> Hồ sơ doanh nghiệp
+                      </button>
+                    )}
                     <button
-                      onClick={async () => {
-                        await signOut();
-                        setOpen(false);
-                        nav("/");
-                      }}
+                      onClick={() => { setOpen(false); nav("/tin-nhan"); }}
+                      className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
+                    >
+                      <MessageCircle className="w-4 h-4" /> Tin nhắn
+                    </button>
+                    <button
+                      onClick={() => { setOpen(false); nav("/ho-so"); }}
+                      className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
+                    >
+                      <Settings className="w-4 h-4" /> Cài đặt
+                    </button>
+                    <button
+                      onClick={async () => { await signOut(); setOpen(false); nav("/"); }}
                       className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent text-destructive flex items-center gap-2"
                     >
                       <LogOut className="w-4 h-4" /> Đăng xuất
