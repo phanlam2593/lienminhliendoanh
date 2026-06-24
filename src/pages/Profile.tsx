@@ -125,6 +125,8 @@ export default function Profile() {
 
       {biz.length > 0 && <ReportsInbox businessIds={biz.map(b => b.id)} />}
 
+      <SettingsSection userId={user.id} initialPrefs={(profile as any)?.notification_prefs} />
+
       <button onClick={async () => { await signOut(); nav("/"); }} className="w-full py-2.5 rounded-xl border text-destructive font-semibold flex items-center justify-center gap-2">
         <LogOut className="w-4 h-4" /> Đăng xuất
       </button>
