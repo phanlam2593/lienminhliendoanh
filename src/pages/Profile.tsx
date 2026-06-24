@@ -407,3 +407,137 @@ function StatusBadge({ s }: { s?: string }) {
   const lbl: Record<string, string> = { pending: "Chờ duyệt", approved: "Đã duyệt", rejected: "Từ chối" };
   return <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-semibold ${map[s] || "bg-muted"}`}>{lbl[s] || s}</span>;
 }
+
+type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; admin: boolean };
+const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, admin: true };
+
+function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
+  const [open, setOpen] = useState<null | "password" | "notif" | "theme">(null);
+  return (
+    <section className="space-y-2">
+      <h2 className="font-bold text-sm flex items-center gap-1"><Settings className="w-4 h-4" /> Cài đặt</h2>
+      <div className="bg-card rounded-2xl shadow-sm divide-y">
+        <SettingRow icon={<KeyRound className="w-4 h-4" />} label="Đổi mật khẩu" onClick={() => setOpen(open === "password" ? null : "password")} active={open === "password"} />
+        {open === "password" && <div className="p-3"><ChangePasswordForm onDone={() => setOpen(null)} /></div>}
+        <SettingRow icon={<Bell className="w-4 h-4" />} label="Thông báo" onClick={() => setOpen(open === "notif" ? null : "notif")} active={open === "notif"} />
+        {open === "notif" && <div className="p-3"><NotificationPrefsForm userId={userId} initial={initialPrefs} /></div>}
+        <SettingRow icon={<Moon className="w-4 h-4" />} label="Giao diện" onClick={() => setOpen(open === "theme" ? null : "theme")} active={open === "theme"} />
+        {open === "theme" && <div className="p-3"><ThemeToggle /></div>}
+      </div>
+    </section>
+  );
+}
+
+function SettingRow({ icon, label, onClick, active }: { icon: React.ReactNode; label: string; onClick: () => void; active: boolean }) {
+  return (
+    <button onClick={onClick} className={`w-full px-4 py-3 flex items-center gap-2 text-sm font-semibold text-left ${active ? "bg-accent" : ""}`}>
+      {icon} <span className="flex-1">{label}</span>
+      <span className="text-xs text-muted-foreground">{active ? "▲" : "▼"}</span>
+    </button>
+  );
+}
+
+function ChangePasswordForm({ onDone }: { onDone: () => void }) {
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async () => {
+    if (next.length < 6) { toast.error("Mật khẩu mới tối thiểu 6 ký tự"); return; }
+    if (next !== confirm) { toast.error("Mật khẩu xác nhận không khớp"); return; }
+    setBusy(true);
+    try {
+      const { data: u } = await supabase.auth.getUser();
+      const email = u.user?.email;
+      if (!email) throw new Error("Không xác định được tài khoản");
+      const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: current });
+      if (signInErr) { toast.error("Mật khẩu hiện tại không đúng"); setBusy(false); return; }
+      const { error } = await supabase.auth.updateUser({ password: next });
+      if (error) throw error;
+      toast.success("Đổi mật khẩu thành công");
+      setCurrent(""); setNext(""); setConfirm("");
+      onDone();
+    } catch (e: any) {
+      toast.error(e.message || "Có lỗi xảy ra");
+    } finally { setBusy(false); }
+  };
+
+  return (
+    <div className="space-y-2">
+      <input type="password" autoComplete="current-password" value={current} onChange={e => setCurrent(e.target.value)} placeholder="Mật khẩu hiện tại" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+      <input type="password" autoComplete="new-password" value={next} onChange={e => setNext(e.target.value)} placeholder="Mật khẩu mới (≥ 6 ký tự)" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+      <input type="password" autoComplete="new-password" value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="Xác nhận mật khẩu mới" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+      <button onClick={submit} disabled={busy} className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm disabled:opacity-50">
+        {busy ? "Đang xử lý…" : "Cập nhật mật khẩu"}
+      </button>
+    </div>
+  );
+}
+
+function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: any }) {
+  const [prefs, setPrefs] = useState<NotifPrefs>({ ...DEFAULT_PREFS, ...(initial || {}) });
+  const [saving, setSaving] = useState(false);
+
+  const toggle = async (key: keyof NotifPrefs) => {
+    const next = { ...prefs, [key]: !prefs[key] };
+    setPrefs(next);
+    setSaving(true);
+    const { error } = await supabase.from("profiles").update({ notification_prefs: next as any }).eq("id", userId);
+    setSaving(false);
+    if (error) { toast.error(error.message); setPrefs(prefs); return; }
+  };
+
+  const items: { key: keyof NotifPrefs; label: string }[] = [
+    { key: "messages", label: "Tin nhắn mới" },
+    { key: "follows", label: "Người theo dõi mới" },
+    { key: "deals", label: "Ưu đãi mới từ doanh nghiệp đang theo dõi" },
+    { key: "admin", label: "Thông báo từ admin" },
+  ];
+
+  return (
+    <div className="space-y-2">
+      {items.map(it => (
+        <label key={it.key} className="flex items-center justify-between gap-3 p-2 rounded-lg hover:bg-accent cursor-pointer">
+          <span className="text-sm flex-1">{it.label}</span>
+          <button
+            type="button"
+            onClick={() => toggle(it.key)}
+            disabled={saving}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${prefs[it.key] ? "bg-primary" : "bg-muted"}`}
+            aria-pressed={prefs[it.key]}
+          >
+            <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${prefs[it.key] ? "translate-x-5" : "translate-x-0.5"}`} />
+          </button>
+        </label>
+      ))}
+      <p className="text-[11px] text-muted-foreground">Thay đổi sẽ áp dụng cho các thông báo mới.</p>
+    </div>
+  );
+}
+
+function ThemeToggle() {
+  const [dark, setDark] = useState<boolean>(() => typeof document !== "undefined" && document.documentElement.classList.contains("dark"));
+  const apply = (v: boolean) => {
+    setDark(v);
+    if (v) document.documentElement.classList.add("dark");
+    else document.documentElement.classList.remove("dark");
+    try { localStorage.setItem("theme", v ? "dark" : "light"); } catch {}
+  };
+  return (
+    <div className="flex items-center justify-between gap-3 p-2">
+      <span className="text-sm flex items-center gap-2">
+        {dark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+        Chế độ {dark ? "tối" : "sáng"}
+      </span>
+      <button
+        type="button"
+        onClick={() => apply(!dark)}
+        className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${dark ? "bg-primary" : "bg-muted"}`}
+        aria-pressed={dark}
+      >
+        <span className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${dark ? "translate-x-5" : "translate-x-0.5"}`} />
+      </button>
+    </div>
+  );
+}
