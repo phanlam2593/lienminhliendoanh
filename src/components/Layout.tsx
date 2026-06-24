@@ -126,11 +126,12 @@ export function Layout() {
                       <MessageCircle className="w-4 h-4" /> Tin nhắn
                     </button>
                     <button
-                      onClick={() => { setOpen(false); nav("/ho-so"); }}
+                      onClick={() => { setOpen(false); nav("/ho-so?view=settings"); }}
                       className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
                     >
                       <Settings className="w-4 h-4" /> Cài đặt
                     </button>
+
                     <button
                       onClick={async () => { await signOut(); setOpen(false); nav("/"); }}
                       className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent text-destructive flex items-center gap-2"
