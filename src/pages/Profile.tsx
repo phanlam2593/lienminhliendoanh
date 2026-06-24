@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Business, BusinessType, Offer } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
-import { LogOut, MessageSquare, Save, Flag, Camera, Pencil, Eye, EyeOff, Trash2, Send, Users, UserCheck, Settings, KeyRound, Bell, Moon, Sun } from "lucide-react";
+import { LogOut, MessageSquare, Save, Flag, Camera, Pencil, Eye, EyeOff, Trash2, Send, Users, UserCheck, Settings, KeyRound, Bell, Moon, Sun, ArrowLeft, User as UserIcon, Briefcase, ChevronRight } from "lucide-react";
+
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Avatar } from "@/components/Avatar";
