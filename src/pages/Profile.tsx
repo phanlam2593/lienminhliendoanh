@@ -13,9 +13,27 @@ import { Avatar } from "@/components/Avatar";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 import { FollowListDialog } from "@/components/FollowListDialog";
 
+type View = "menu" | "personal" | "business" | "settings";
+
 export default function Profile() {
   const { user, profile, role, refresh, signOut } = useAuth();
   const nav = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialView = (searchParams.get("view") as View) || "menu";
+  const [view, setViewState] = useState<View>(
+    ["menu", "personal", "business", "settings"].includes(initialView) ? initialView : "menu"
+  );
+  const setView = (v: View) => {
+    setViewState(v);
+    if (v === "menu") {
+      searchParams.delete("view");
+      setSearchParams(searchParams, { replace: true });
+    } else {
+      searchParams.set("view", v);
+      setSearchParams(searchParams, { replace: true });
+    }
+  };
+
   const [biz, setBiz] = useState<Business[]>([]);
   const [fullName, setFN] = useState("");
   const [phone, setPh] = useState("");
@@ -31,6 +49,14 @@ export default function Profile() {
     setE(profile?.email ?? "");
     void loadBiz();
   }, [user?.id, profile?.id]);
+
+  // Sync state if URL changes (e.g., user clicks nav link while on /ho-so)
+  useEffect(() => {
+    const v = (searchParams.get("view") as View) || "menu";
+    if (["menu", "personal", "business", "settings"].includes(v) && v !== view) {
+      setViewState(v);
+    }
+  }, [searchParams]);
 
   const loadBiz = async () => {
     if (!user) return;
@@ -69,71 +95,132 @@ export default function Profile() {
     finally { setUploadingAvatar(false); }
   };
 
+  const Header = (
+    <div className="flex items-center gap-3">
+      <div className="relative">
+        <Avatar
+          path={profile?.avatar_url}
+          name={profile?.full_name || profile?.username}
+          size={64}
+          onClick={() => avatarInput.current?.click()}
+        />
+        <button
+          type="button"
+          onClick={() => avatarInput.current?.click()}
+          className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
+          aria-label="Đổi ảnh đại diện"
+        >
+          <Camera className="w-3.5 h-3.5" />
+        </button>
+        <input
+          ref={avatarInput}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={e => { const f = e.target.files?.[0]; if (f) void onAvatarChange(f); e.currentTarget.value = ""; }}
+        />
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="font-bold truncate">{profile?.full_name}</div>
+        <div className="text-xs text-muted-foreground">@{profile?.username} · {role}</div>
+        <StatusBadge s={profile?.status} />
+        {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
+      </div>
+    </div>
+  );
+
+  const BackBar = ({ title }: { title: string }) => (
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => setView("menu")}
+        className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
+        aria-label="Quay lại"
+      >
+        <ArrowLeft className="w-5 h-5" />
+      </button>
+      <h1 className="font-bold text-base">{title}</h1>
+    </div>
+  );
+
+  if (view === "personal") {
+    return (
+      <div className="p-4 space-y-5">
+        <BackBar title="Hồ sơ cá nhân" />
+        {Header}
+        <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
+          <h2 className="font-bold text-sm">Thông tin cá nhân</h2>
+          <input value={fullName} onChange={e => setFN(e.target.value)} placeholder="Họ tên" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+          <input value={email} onChange={e => setE(e.target.value)} placeholder="Email" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+          <input value={phone} onChange={e => setPh(e.target.value)} placeholder="SĐT" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+          <button onClick={save} disabled={saving} className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm">{saving ? "Đang lưu…" : "Lưu thay đổi"}</button>
+        </section>
+      </div>
+    );
+  }
+
+  if (view === "business") {
+    return (
+      <div className="p-4 space-y-5">
+        <BackBar title="Hồ sơ doanh nghiệp" />
+        {biz.length === 0 ? (
+          <div className="p-6 bg-card rounded-2xl text-center text-sm text-muted-foreground">
+            Bạn chưa có doanh nghiệp nào.
+          </div>
+        ) : (
+          <section className="space-y-3">
+            {biz.map(b => <BusinessEditor key={b.id} biz={b} onSaved={loadBiz} />)}
+          </section>
+        )}
+        {biz.length > 0 && <ReportsInbox businessIds={biz.map(b => b.id)} />}
+      </div>
+    );
+  }
+
+  if (view === "settings") {
+    return (
+      <div className="p-4 space-y-5">
+        <BackBar title="Cài đặt" />
+        <SettingsSection userId={user.id} initialPrefs={(profile as any)?.notification_prefs} />
+      </div>
+    );
+  }
+
+  // Default: menu view
   return (
     <div className="p-4 space-y-5">
-      <div className="flex items-center gap-3">
-        <div className="relative">
-          <Avatar
-            path={profile?.avatar_url}
-            name={profile?.full_name || profile?.username}
-            size={64}
-            onClick={() => avatarInput.current?.click()}
-          />
-          <button
-            type="button"
-            onClick={() => avatarInput.current?.click()}
-            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
-            aria-label="Đổi ảnh đại diện"
-          >
-            <Camera className="w-3.5 h-3.5" />
-          </button>
-          <input
-            ref={avatarInput}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="hidden"
-            onChange={e => { const f = e.target.files?.[0]; if (f) void onAvatarChange(f); e.currentTarget.value = ""; }}
-          />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="font-bold truncate">{profile?.full_name}</div>
-          <div className="text-xs text-muted-foreground">@{profile?.username} · {role}</div>
-          <StatusBadge s={profile?.status} />
-          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
-        </div>
-      </div>
-
+      {Header}
       <FollowStats userId={user.id} />
-
-      <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
-        <h2 className="font-bold text-sm">Thông tin cá nhân</h2>
-        <input value={fullName} onChange={e => setFN(e.target.value)} placeholder="Họ tên" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
-        <input value={email} onChange={e => setE(e.target.value)} placeholder="Email" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
-        <input value={phone} onChange={e => setPh(e.target.value)} placeholder="SĐT" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
-        <button onClick={save} disabled={saving} className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm">{saving ? "Đang lưu…" : "Lưu thay đổi"}</button>
-      </section>
-
-      {biz.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="font-bold text-sm">Doanh nghiệp của tôi</h2>
-          {biz.map(b => <BusinessEditor key={b.id} biz={b} onSaved={loadBiz} />)}
-        </section>
-      )}
-
-      <div className="grid grid-cols-1 gap-2">
-        <Link to="/tin-nhan" className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm text-sm font-semibold"><MessageSquare className="w-4 h-4" /> Tin nhắn</Link>
+      <div className="bg-card rounded-2xl shadow-sm divide-y overflow-hidden">
+        <MenuRow icon={<UserIcon className="w-4 h-4" />} label="Hồ sơ cá nhân" onClick={() => setView("personal")} />
+        {biz.length > 0 && (
+          <MenuRow icon={<Briefcase className="w-4 h-4" />} label="Hồ sơ doanh nghiệp" onClick={() => setView("business")} />
+        )}
+        <MenuRow icon={<MessageSquare className="w-4 h-4" />} label="Tin nhắn" onClick={() => nav("/tin-nhan")} />
+        <MenuRow icon={<Settings className="w-4 h-4" />} label="Cài đặt" onClick={() => setView("settings")} />
+        <MenuRow
+          icon={<LogOut className="w-4 h-4" />}
+          label="Đăng xuất"
+          danger
+          onClick={async () => { await signOut(); nav("/"); }}
+        />
       </div>
-
-      {biz.length > 0 && <ReportsInbox businessIds={biz.map(b => b.id)} />}
-
-      <SettingsSection userId={user.id} initialPrefs={(profile as any)?.notification_prefs} />
-
-      <button onClick={async () => { await signOut(); nav("/"); }} className="w-full py-2.5 rounded-xl border text-destructive font-semibold flex items-center justify-center gap-2">
-        <LogOut className="w-4 h-4" /> Đăng xuất
-      </button>
     </div>
   );
 }
+
+function MenuRow({ icon, label, onClick, danger }: { icon: React.ReactNode; label: string; onClick: () => void; danger?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full px-4 py-3.5 flex items-center gap-3 text-sm font-semibold text-left hover:bg-accent transition ${danger ? "text-destructive" : ""}`}
+    >
+      <span className={`w-8 h-8 rounded-full grid place-items-center ${danger ? "bg-destructive/10" : "bg-accent"}`}>{icon}</span>
+      <span className="flex-1">{label}</span>
+      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+    </button>
+  );
+}
+
 
 function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }) {
   const [name, setName] = useState(biz.name);
