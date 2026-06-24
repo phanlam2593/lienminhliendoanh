@@ -277,6 +277,7 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          notification_prefs: Json
           phone: string
           status: Database["public"]["Enums"]["account_status"]
           updated_at: string
@@ -289,6 +290,7 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          notification_prefs?: Json
           phone: string
           status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
@@ -301,6 +303,7 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
+          notification_prefs?: Json
           phone?: string
           status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
@@ -547,6 +550,10 @@ export type Database = {
       is_approved_member: { Args: { _user_id: string }; Returns: boolean }
       is_field_taken: {
         Args: { _field: string; _value: string }
+        Returns: boolean
+      }
+      notif_pref_allowed: {
+        Args: { _key: string; _user_id: string }
         Returns: boolean
       }
       unaccent_safe: { Args: { _t: string }; Returns: string }
