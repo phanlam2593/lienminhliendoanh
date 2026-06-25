@@ -50,6 +50,9 @@ export default function Login() {
 
 
         <p className="text-center text-sm">
+          <Link to="/forgot-password" className="text-primary font-semibold">Quên mật khẩu?</Link>
+        </p>
+        <p className="text-center text-sm">
           Chưa có tài khoản? <Link to="/auth/register" className="text-primary font-semibold">Đăng ký</Link>
         </p>
         <p className="text-center text-xs text-muted-foreground">

@@ -13,6 +13,7 @@ import Profile from "./pages/Profile";
 import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import Admin from "./pages/Admin";
 import Notifications from "./pages/Notifications";
 import Community from "./pages/Community";
@@ -31,6 +32,7 @@ const App = () => (
           <Routes>
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/kham-pha" element={<Businesses />} />
