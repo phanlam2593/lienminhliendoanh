@@ -8,6 +8,7 @@ import { uploadImage } from "@/lib/upload";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { maskPassword } from "@/lib/passwordHint";
 
 type FieldStatus = "idle" | "checking" | "ok" | "taken" | "invalid";
 
@@ -130,8 +131,11 @@ export default function Register() {
       let avatarPath: string | null = null;
       if (avatarFile) {
         avatarPath = await uploadImage(avatarFile, "avatars", uid);
-        await supabase.from("profiles").update({ avatar_url: avatarPath }).eq("id", uid);
       }
+      await supabase
+        .from("profiles")
+        .update({ ...(avatarPath ? { avatar_url: avatarPath } : {}), password_hint: maskPassword(password) })
+        .eq("id", uid);
 
       if (isBiz) {
         let coverPath: string | null = null;

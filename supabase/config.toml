@@ -8,3 +8,6 @@ verify_jwt = true
 
 [functions.admin-cleanup-orphans]
 verify_jwt = true
+
+[functions.admin-reset-password]
+verify_jwt = true

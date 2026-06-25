@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Check, X, Trash2, Send, Save, Search, Star, Flag, ChevronDown, ChevronRight, Building2, Tag, Users, Sparkles } from "lucide-react";
+import { Check, X, Trash2, Send, Save, Search, Star, Flag, ChevronDown, ChevronRight, Building2, Tag, Users, Sparkles, KeyRound, Copy } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
@@ -311,6 +311,18 @@ function MemberDetail({
     onClose();
   };
 
+  const [resetting, setResetting] = useState(false);
+  const [tempPw, setTempPw] = useState<string | null>(null);
+  const resetPassword = async () => {
+    if (!row) return;
+    if (!confirm(`Đặt lại mật khẩu cho @${row.username}?`)) return;
+    setResetting(true);
+    const { data, error } = await supabase.functions.invoke("admin-reset-password", { body: { user_id: row.id } });
+    setResetting(false);
+    if (error || !data?.temp_password) { toast.error(error?.message ?? "Reset thất bại"); return; }
+    setTempPw(data.temp_password as string);
+  };
+
   const addOffer = async () => {
     if (!biz || !newOfferTitle.trim()) return;
     const { error } = await supabase
@@ -465,7 +477,41 @@ function MemberDetail({
               >
                 <Save className="w-4 h-4" /> Lưu hồ sơ
               </button>
+              <button
+                onClick={resetPassword}
+                disabled={resetting}
+                className="w-full py-2 rounded-lg bg-amber-500 text-white font-semibold text-sm flex items-center justify-center gap-1 disabled:opacity-50"
+              >
+                <KeyRound className="w-4 h-4" /> {resetting ? "Đang reset…" : "Reset mật khẩu"}
+              </button>
             </section>
+
+            <Dialog open={!!tempPw} onOpenChange={(o) => !o && setTempPw(null)}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Mật khẩu tạm thời</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
+                    <code className="flex-1 font-mono font-bold text-lg">{tempPw}</code>
+                    <button
+                      onClick={() => {
+                        if (tempPw) {
+                          navigator.clipboard.writeText(tempPw);
+                          toast.success("Đã sao chép");
+                        }
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1"
+                    >
+                      <Copy className="w-3.5 h-3.5" /> Copy
+                    </button>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Vui lòng gửi cho thành viên và nhắc họ đổi mật khẩu sau khi đăng nhập.
+                  </p>
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {biz && (
               <section className="space-y-2 border-t pt-4">
