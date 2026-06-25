@@ -477,7 +477,41 @@ function MemberDetail({
               >
                 <Save className="w-4 h-4" /> Lưu hồ sơ
               </button>
+              <button
+                onClick={resetPassword}
+                disabled={resetting}
+                className="w-full py-2 rounded-lg bg-amber-500 text-white font-semibold text-sm flex items-center justify-center gap-1 disabled:opacity-50"
+              >
+                <KeyRound className="w-4 h-4" /> {resetting ? "Đang reset…" : "Reset mật khẩu"}
+              </button>
             </section>
+
+            <Dialog open={!!tempPw} onOpenChange={(o) => !o && setTempPw(null)}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Mật khẩu tạm thời</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
+                    <code className="flex-1 font-mono font-bold text-lg">{tempPw}</code>
+                    <button
+                      onClick={() => {
+                        if (tempPw) {
+                          navigator.clipboard.writeText(tempPw);
+                          toast.success("Đã sao chép");
+                        }
+                      }}
+                      className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1"
+                    >
+                      <Copy className="w-3.5 h-3.5" /> Copy
+                    </button>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Vui lòng gửi cho thành viên và nhắc họ đổi mật khẩu sau khi đăng nhập.
+                  </p>
+                </div>
+              </DialogContent>
+            </Dialog>
 
             {biz && (
               <section className="space-y-2 border-t pt-4">
