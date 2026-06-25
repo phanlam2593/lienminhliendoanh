@@ -98,9 +98,7 @@ export default function ForgotPassword() {
             />
             {error && <p className="text-sm text-destructive">{error}</p>}
             {locked && (
-              <p className="text-sm text-destructive">
-                Vui lòng thử lại sau {lockMinsLeft} phút hoặc liên hệ admin
-              </p>
+              <p className="text-sm text-destructive">Vui lòng thử lại sau {lockMinsLeft} phút hoặc liên hệ admin</p>
             )}
             <button
               type="submit"
@@ -117,18 +115,14 @@ export default function ForgotPassword() {
             <p className="font-semibold text-emerald-600">✅ Xác nhận thành công! Gợi ý tài khoản của bạn:</p>
             <div className="text-sm space-y-1">
               <div>
-                Tên đăng nhập:{" "}
-                <span className="font-mono font-bold">{maskUsername(result.username)}</span>
+                Tên đăng nhập: <span className="font-mono font-bold">{maskUsername(result.username)}</span>
               </div>
               {result.password_hint ? (
                 <div>
-                  Mật khẩu gợi ý:{" "}
-                  <span className="font-mono font-bold">{result.password_hint}</span>
+                  Mật khẩu gợi ý: <span className="font-mono font-bold">{result.password_hint}</span>
                 </div>
               ) : (
-                <div className="text-destructive">
-                  Tài khoản này chưa có gợi ý mật khẩu. Vui lòng liên hệ admin.
-                </div>
+                <div className="text-destructive">Tài khoản này chưa có gợi ý mật khẩu. Vui lòng liên hệ admin.</div>
               )}
             </div>
             {result.password_hint && (
@@ -154,7 +148,7 @@ export default function ForgotPassword() {
               <p>
                 Facebook:{" "}
                 <a
-                  href="https://www.facebook.com/lienminhliendoanh"
+                  href="https://www.facebook.com/profile.php?id=61590228346408"
                   target="_blank"
                   rel="noreferrer"
                   className="text-primary font-semibold"
@@ -163,10 +157,7 @@ export default function ForgotPassword() {
                 </a>
               </p>
             </div>
-            <Link
-              to="/auth/login"
-              className="block text-center py-2 rounded-xl border text-sm font-semibold"
-            >
+            <Link to="/auth/login" className="block text-center py-2 rounded-xl border text-sm font-semibold">
               ← Quay lại đăng nhập
             </Link>
           </div>
