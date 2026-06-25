@@ -278,6 +278,7 @@ export type Database = {
           full_name: string
           id: string
           notification_prefs: Json
+          password_hint: string | null
           phone: string
           status: Database["public"]["Enums"]["account_status"]
           updated_at: string
@@ -291,6 +292,7 @@ export type Database = {
           full_name: string
           id: string
           notification_prefs?: Json
+          password_hint?: string | null
           phone: string
           status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
@@ -304,6 +306,7 @@ export type Database = {
           full_name?: string
           id?: string
           notification_prefs?: Json
+          password_hint?: string | null
           phone?: string
           status?: Database["public"]["Enums"]["account_status"]
           updated_at?: string
