@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { usernameToEmail } from "@/lib/types";
 import { Logo } from "@/components/Logo";
+import { triggerWelcomeOverlay } from "@/components/WelcomeOverlay";
 
 export default function Login() {
   const nav = useNavigate();
@@ -11,28 +11,6 @@ export default function Login() {
   const [password, setP] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-
-  const showWelcomeToast = () => {
-    const id = toast.custom(
-      () => (
-        <div className="w-[min(92vw,380px)] rounded-2xl border bg-card text-card-foreground shadow-xl p-6 text-center space-y-4">
-          <div className="text-6xl leading-none">👋</div>
-          <h2 className="text-xl font-bold">Chào mừng bạn đến với cộng đồng!</h2>
-          <p className="text-sm text-muted-foreground">Chúc bạn một ngày tốt lành! (^^)/</p>
-          <button
-            onClick={() => {
-              toast.dismiss(id);
-              nav("/");
-            }}
-            className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold"
-          >
-            Bắt đầu →
-          </button>
-        </div>
-      ),
-      { duration: Infinity, dismissible: false }
-    );
-  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +21,8 @@ export default function Login() {
     });
     setLoading(false);
     if (error) { setErr("Sai tên đăng nhập hoặc mật khẩu"); return; }
-    showWelcomeToast();
+    triggerWelcomeOverlay();
+    nav("/", { replace: true });
   };
 
   return (

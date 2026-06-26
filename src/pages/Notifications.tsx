@@ -42,7 +42,15 @@ async function resolveRoute(n: Notification): Promise<string | null> {
       const { data } = await supabase.from("profiles").select("id").eq("id", id).maybeSingle();
       return data ? `/tin-nhan/${id}` : null;
     }
-    case "admin_message": return "/tin-nhan/admin";
+    case "admin_message": {
+      // Admins clicking new-member / new-business notifications: route to the entity
+      if (n.target_type === "user" && id) return `/ho-so/${id}`;
+      if (n.target_type === "business" && id) {
+        const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+        return data ? `/dn/${id}` : "/admin";
+      }
+      return "/tin-nhan/admin";
+    }
     case "report_submitted":
     case "report_received": return "/admin?tab=reports";
     case "report_resolved":
