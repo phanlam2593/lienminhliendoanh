@@ -17,6 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
+import { WelcomeOverlay } from "./WelcomeOverlay";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
@@ -63,6 +64,7 @@ export function Layout() {
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
+      <WelcomeOverlay />
       {!hide && !showWelcome && (
         <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-lg border-b border-border/60">
           <div className="flex items-center justify-between px-4 h-14 gap-2">
