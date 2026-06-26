@@ -628,3 +628,94 @@ function ThemeToggle() {
     </div>
   );
 }
+
+function BusinessCreator({ ownerId, onCreated, hasExisting }: { ownerId: string; onCreated: () => void; hasExisting: boolean }) {
+  const [open, setOpen] = useState(false);
+  const [name, setName] = useState("");
+  const [type, setType] = useState<BusinessType>("food");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [desc, setDesc] = useState("");
+  const [hoursOpen, setHO] = useState("07:00");
+  const [hoursClose, setHC] = useState("22:00");
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const submit = async () => {
+    if (!name.trim()) { toast.error("Vui lòng nhập tên doanh nghiệp"); return; }
+    setSaving(true);
+    try {
+      let cover_url: string | null = null;
+      if (coverFile) {
+        cover_url = await uploadImage(coverFile, "covers");
+      }
+      const { error } = await supabase.from("businesses").insert({
+        owner_id: ownerId,
+        name: name.trim(),
+        type,
+        phone: phone || null,
+        address: address || null,
+        description: desc || null,
+        hours_open: hoursOpen,
+        hours_close: hoursClose,
+        cover_url,
+        status: "pending",
+      });
+      if (error) throw error;
+      toast.success("Đã gửi hồ sơ doanh nghiệp. Đang chờ admin duyệt.");
+      setOpen(false);
+      setName(""); setPhone(""); setAddress(""); setDesc(""); setCoverFile(null);
+      onCreated();
+    } catch (e: any) {
+      toast.error(e.message ?? "Không thể tạo doanh nghiệp");
+    } finally { setSaving(false); }
+  };
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="w-full py-3 rounded-2xl border-2 border-dashed border-primary/40 text-primary font-semibold text-sm hover:bg-primary/5 transition"
+      >
+        + {hasExisting ? "Tạo thêm doanh nghiệp" : "Tạo hồ sơ doanh nghiệp"}
+      </button>
+    );
+  }
+
+  return (
+    <div className="bg-card rounded-2xl p-4 shadow-sm space-y-3">
+      <div className="flex items-center justify-between">
+        <h3 className="font-bold text-sm">Tạo hồ sơ doanh nghiệp mới</h3>
+        <button onClick={() => setOpen(false)} className="text-xs text-muted-foreground">Hủy</button>
+      </div>
+      <p className="text-[11px] text-muted-foreground bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-lg p-2">
+        Sau khi tạo, doanh nghiệp sẽ ở trạng thái <b>Chờ duyệt</b> và chỉ hiển thị công khai sau khi admin phê duyệt.
+      </p>
+      <Field label="Tên doanh nghiệp *">
+        <input value={name} onChange={e => setName(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" />
+      </Field>
+      <Field label="Loại hình">
+        <div className="flex flex-wrap gap-1.5">
+          {BUSINESS_TYPES.map(t => (
+            <button key={t} type="button" onClick={() => setType(t)} className={`px-2.5 py-1 rounded-full text-xs border ${type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}>
+              {BUSINESS_TYPE_LABEL[t]}
+            </button>
+          ))}
+        </div>
+      </Field>
+      <div className="grid grid-cols-2 gap-2">
+        <Field label="Giờ mở"><input type="time" value={hoursOpen} onChange={e => setHO(e.target.value)} className="w-full px-2 py-2 rounded-lg border bg-background text-sm" /></Field>
+        <Field label="Giờ đóng"><input type="time" value={hoursClose} onChange={e => setHC(e.target.value)} className="w-full px-2 py-2 rounded-lg border bg-background text-sm" /></Field>
+      </div>
+      <Field label="SĐT"><input value={phone} onChange={e => setPhone(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="Địa chỉ"><input value={address} onChange={e => setAddress(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="Mô tả"><textarea value={desc} onChange={e => setDesc(e.target.value)} rows={3} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="Ảnh bìa (tuỳ chọn)">
+        <input type="file" accept="image/*" onChange={e => setCoverFile(e.target.files?.[0] ?? null)} className="w-full text-xs" />
+      </Field>
+      <button onClick={submit} disabled={saving} className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm disabled:opacity-50">
+        {saving ? "Đang gửi…" : "Gửi để duyệt"}
+      </button>
+    </div>
+  );
+}
