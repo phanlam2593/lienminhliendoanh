@@ -163,14 +163,15 @@ export default function Profile() {
       <div className="p-4 space-y-5">
         <BackBar title="Hồ sơ doanh nghiệp" />
         {biz.length === 0 ? (
-          <div className="p-6 bg-card rounded-2xl text-center text-sm text-muted-foreground">
-            Bạn chưa có doanh nghiệp nào.
+          <div className="p-4 bg-card rounded-2xl text-center text-sm text-muted-foreground">
+            Bạn chưa có doanh nghiệp nào. Hãy tạo hồ sơ doanh nghiệp đầu tiên bên dưới.
           </div>
         ) : (
           <section className="space-y-3">
             {biz.map(b => <BusinessEditor key={b.id} biz={b} onSaved={loadBiz} />)}
           </section>
         )}
+        <BusinessCreator ownerId={user.id} onCreated={loadBiz} hasExisting={biz.length > 0} />
         {biz.length > 0 && <ReportsInbox businessIds={biz.map(b => b.id)} />}
       </div>
     );
@@ -192,9 +193,7 @@ export default function Profile() {
       <FollowStats userId={user.id} />
       <div className="bg-card rounded-2xl shadow-sm divide-y overflow-hidden">
         <MenuRow icon={<UserIcon className="w-4 h-4" />} label="Hồ sơ cá nhân" onClick={() => setView("personal")} />
-        {biz.length > 0 && (
-          <MenuRow icon={<Briefcase className="w-4 h-4" />} label="Hồ sơ doanh nghiệp" onClick={() => setView("business")} />
-        )}
+        <MenuRow icon={<Briefcase className="w-4 h-4" />} label={biz.length > 0 ? "Hồ sơ doanh nghiệp" : "Tạo hồ sơ doanh nghiệp"} onClick={() => setView("business")} />
         <MenuRow icon={<MessageSquare className="w-4 h-4" />} label="Tin nhắn" onClick={() => nav("/tin-nhan")} />
         <MenuRow icon={<Settings className="w-4 h-4" />} label="Cài đặt" onClick={() => setView("settings")} />
         <MenuRow
