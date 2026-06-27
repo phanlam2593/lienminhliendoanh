@@ -24,14 +24,19 @@ export type Database = {
           hours_close: string | null
           hours_open: string | null
           id: string
+          instagram_url: string | null
           is_featured: boolean
+          level: number
           name: string
           owner_id: string | null
           phone: string | null
+          points: number
           status: Database["public"]["Enums"]["business_status"]
+          tiktok_url: string | null
           type: Database["public"]["Enums"]["business_type"]
           updated_at: string
           website_url: string | null
+          youtube_url: string | null
         }
         Insert: {
           address?: string | null
@@ -42,14 +47,19 @@ export type Database = {
           hours_close?: string | null
           hours_open?: string | null
           id?: string
+          instagram_url?: string | null
           is_featured?: boolean
+          level?: number
           name: string
           owner_id?: string | null
           phone?: string | null
+          points?: number
           status?: Database["public"]["Enums"]["business_status"]
+          tiktok_url?: string | null
           type?: Database["public"]["Enums"]["business_type"]
           updated_at?: string
           website_url?: string | null
+          youtube_url?: string | null
         }
         Update: {
           address?: string | null
@@ -60,14 +70,19 @@ export type Database = {
           hours_close?: string | null
           hours_open?: string | null
           id?: string
+          instagram_url?: string | null
           is_featured?: boolean
+          level?: number
           name?: string
           owner_id?: string | null
           phone?: string | null
+          points?: number
           status?: Database["public"]["Enums"]["business_status"]
+          tiktok_url?: string | null
           type?: Database["public"]["Enums"]["business_type"]
           updated_at?: string
           website_url?: string | null
+          youtube_url?: string | null
         }
         Relationships: []
       }
@@ -91,6 +106,69 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      exchanges: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          receiver_completed_at: string | null
+          receiver_id: string
+          request_description: string
+          request_type: string
+          requester_completed_at: string | null
+          requester_id: string
+          return_description: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          receiver_completed_at?: string | null
+          receiver_id: string
+          request_description: string
+          request_type: string
+          requester_completed_at?: string | null
+          requester_id: string
+          return_description: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          receiver_completed_at?: string | null
+          receiver_id?: string
+          request_description?: string
+          request_type?: string
+          requester_completed_at?: string | null
+          requester_id?: string
+          return_description?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchanges_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exchanges_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       follows: {
         Row: {
@@ -543,6 +621,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      expire_stale_exchanges: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -567,7 +646,20 @@ export type Database = {
       biz_category: "an_uong" | "dich_vu" | "luu_tru" | "du_lich" | "khac"
       biz_status: "pending" | "approved" | "rejected"
       business_status: "pending" | "approved" | "rejected"
-      business_type: "food" | "service" | "stay" | "travel" | "other"
+      business_type:
+        | "food"
+        | "service"
+        | "stay"
+        | "travel"
+        | "other"
+        | "freelancer"
+        | "photographer"
+        | "graphic_designer"
+        | "tiktok"
+        | "youtube"
+        | "streamer"
+        | "influencer"
+        | "content_creator"
       offer_status: "active" | "inactive"
       report_status: "pending" | "replied" | "resolved" | "closed"
       report_target: "business" | "offer"
@@ -704,7 +796,21 @@ export const Constants = {
       biz_category: ["an_uong", "dich_vu", "luu_tru", "du_lich", "khac"],
       biz_status: ["pending", "approved", "rejected"],
       business_status: ["pending", "approved", "rejected"],
-      business_type: ["food", "service", "stay", "travel", "other"],
+      business_type: [
+        "food",
+        "service",
+        "stay",
+        "travel",
+        "other",
+        "freelancer",
+        "photographer",
+        "graphic_designer",
+        "tiktok",
+        "youtube",
+        "streamer",
+        "influencer",
+        "content_creator",
+      ],
       offer_status: ["active", "inactive"],
       report_status: ["pending", "replied", "resolved", "closed"],
       report_target: ["business", "offer"],
