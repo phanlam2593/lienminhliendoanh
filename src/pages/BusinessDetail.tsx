@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck, Trash2, Reply, Send } from "lucide-react";
+import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck, Trash2, Reply, Send, Music2, Instagram, Youtube, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business, Offer, Review, OfferClaim, ReviewReply } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
+import { ExchangeSection } from "@/components/ExchangeSection";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
 interface ReplyMeta extends ReviewReply { profile?: { full_name: string; avatar_url: string | null } | null }
