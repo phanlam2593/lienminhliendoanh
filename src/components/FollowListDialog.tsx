@@ -56,18 +56,39 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
       const { data: follows, error } = await followQuery;
       if (error) throw error;
 
-      const ids = (follows ?? [])
-        .map((f: any) => (mode === "followers" ? f.follower_id : f.followee_user_id))
-        .filter((x: any): x is string => !!x);
+      if (mode === "following") {
+        const userIds = (follows ?? []).map((f: any) => f.followee_user_id).filter((x: any): x is string => !!x);
+        const bizIds = (follows ?? []).map((f: any) => f.followee_business_id).filter((x: any): x is string => !!x);
 
-      if (!ids.length) {
-        setRows([]);
+        const [{ data: profs }, { data: bizList }] = await Promise.all([
+          userIds.length
+            ? supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", userIds)
+            : Promise.resolve({ data: [] } as any),
+          bizIds.length
+            ? supabase.from("businesses").select("id, name, cover_url").in("id", bizIds)
+            : Promise.resolve({ data: [] } as any),
+        ]);
+
+        const userRows = (profs ?? []) as Row[];
+        const bizRows = ((bizList ?? []) as any[]).map((b) => ({
+          id: b.id,
+          full_name: b.name,
+          username: null,
+          avatar_url: b.cover_url,
+          isBusiness: true,
+        }));
+        setRows([...userRows, ...bizRows] as Row[]);
       } else {
-        const { data: profs } = await supabase
-          .from("profiles")
-          .select("id, full_name, username, avatar_url")
-          .in("id", ids);
-        setRows((profs ?? []) as Row[]);
+        const ids = (follows ?? []).map((f: any) => f.follower_id).filter((x: any): x is string => !!x);
+        if (!ids.length) {
+          setRows([]);
+        } else {
+          const { data: profs } = await supabase
+            .from("profiles")
+            .select("id, full_name, username, avatar_url")
+            .in("id", ids);
+          setRows((profs ?? []) as Row[]);
+        }
       }
 
       // Load viewer's own following set to show Follow/Unfollow state
@@ -92,9 +113,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
     const s = q.trim().toLowerCase();
     if (!s) return rows;
     return rows.filter(
-      (r) =>
-        (r.full_name || "").toLowerCase().includes(s) ||
-        (r.username || "").toLowerCase().includes(s),
+      (r) => (r.full_name || "").toLowerCase().includes(s) || (r.username || "").toLowerCase().includes(s),
     );
   }, [rows, q]);
 
@@ -114,16 +133,13 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
         return n;
       });
     } else {
-      const { error } = await supabase
-        .from("follows")
-        .insert({ follower_id: user.id, followee_user_id: otherId });
+      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: otherId });
       if (error) return toast.error(error.message);
       setMyFollowing((s) => new Set(s).add(otherId));
     }
   };
 
-  const heading =
-    title ?? (mode === "followers" ? "Người theo dõi" : "Đang theo dõi");
+  const heading = title ?? (mode === "followers" ? "Người theo dõi" : "Đang theo dõi");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -155,10 +171,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                 const isMe = user?.id === r.id;
                 const isFollowing = myFollowing.has(r.id);
                 return (
-                  <li
-                    key={r.id}
-                    className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent"
-                  >
+                  <li key={r.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
                     <Link
                       to={`/ho-so/${r.id}`}
                       onClick={() => onOpenChange(false)}
@@ -166,14 +179,8 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                     >
                       <Avatar path={r.avatar_url} name={r.full_name || r.username} size={36} />
                       <div className="min-w-0">
-                        <div className="text-sm font-semibold truncate">
-                          {r.full_name || r.username || "Ẩn danh"}
-                        </div>
-                        {r.username && (
-                          <div className="text-[11px] text-muted-foreground truncate">
-                            @{r.username}
-                          </div>
-                        )}
+                        <div className="text-sm font-semibold truncate">{r.full_name || r.username || "Ẩn danh"}</div>
+                        {r.username && <div className="text-[11px] text-muted-foreground truncate">@{r.username}</div>}
                       </div>
                     </Link>
                     {!isMe && user && (
@@ -182,9 +189,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                           onClick={() => toggleFollow(r.id)}
                           aria-label={isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
                           className={`h-8 px-2.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 ${
-                            isFollowing
-                              ? "bg-muted text-foreground"
-                              : "bg-primary text-primary-foreground"
+                            isFollowing ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"
                           }`}
                         >
                           {isFollowing ? (
