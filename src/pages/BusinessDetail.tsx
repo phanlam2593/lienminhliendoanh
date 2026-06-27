@@ -240,6 +240,8 @@ export default function BusinessDetail() {
           </section>
         )}
 
+        <ExchangeSection business={b} />
+
         {ReviewsBlock}
 
         <div className="flex gap-2">
