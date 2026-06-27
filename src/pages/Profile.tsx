@@ -1046,9 +1046,16 @@ function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: 
 }
 
 function ThemeToggle() {
-  const [dark, setDark] = useState<boolean>(
-    () => typeof document !== "undefined" && document.documentElement.classList.contains("dark"),
-  );
+  const [dark, setDark] = useState<boolean>(() => {
+    if (typeof document === "undefined") return false;
+    // Đọc từ localStorage trước, fallback sang class hiện tại
+    try {
+      const saved = localStorage.getItem("theme");
+      if (saved) return saved === "dark";
+    } catch {}
+    return document.documentElement.classList.contains("dark");
+  });
+
   const apply = (v: boolean) => {
     setDark(v);
     if (v) document.documentElement.classList.add("dark");
@@ -1057,6 +1064,7 @@ function ThemeToggle() {
       localStorage.setItem("theme", v ? "dark" : "light");
     } catch {}
   };
+
   return (
     <div className="flex items-center justify-between gap-3 p-2">
       <span className="text-sm flex items-center gap-2">
