@@ -1,22 +1,31 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-export type BusinessType =
-  | "food" | "service" | "stay" | "travel" | "other"
-  | "freelancer" | "photographer" | "graphic_designer"
-  | "tiktok" | "youtube" | "streamer" | "influencer" | "content_creator";
+export type BusinessType = "food" | "service" | "stay" | "travel" | "creator" | "freelance" | "broker" | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
 export type ReportTarget = "business" | "offer";
 export type ReportStatus = "pending" | "replied" | "resolved" | "closed";
 export type NotifType =
-  | "account_approved" | "account_rejected"
-  | "business_approved" | "business_rejected" | "business_pinned"
-  | "new_follower" | "new_deal" | "deal_claimed"
-  | "new_message" | "business_reply" | "admin_message"
-  | "report_submitted" | "report_resolved"
-  | "suggestion_approved" | "suggestion_rejected"
-  | "new_offer" | "report_received" | "broadcast" | "report_reply";
+  | "account_approved"
+  | "account_rejected"
+  | "business_approved"
+  | "business_rejected"
+  | "business_pinned"
+  | "new_follower"
+  | "new_deal"
+  | "deal_claimed"
+  | "new_message"
+  | "business_reply"
+  | "admin_message"
+  | "report_submitted"
+  | "report_resolved"
+  | "suggestion_approved"
+  | "suggestion_rejected"
+  | "new_offer"
+  | "report_received"
+  | "broadcast"
+  | "report_reply";
 export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
@@ -24,15 +33,10 @@ export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   service: "Dịch vụ",
   stay: "Lưu trú",
   travel: "Du lịch",
+  creator: "Sáng tạo nội dung",
+  freelance: "Nghề tự do",
+  broker: "Môi giới",
   other: "Khác",
-  freelancer: "Freelancer",
-  photographer: "Nhiếp ảnh",
-  graphic_designer: "Thiết kế đồ họa",
-  tiktok: "TikToker",
-  youtube: "YouTuber",
-  streamer: "Streamer",
-  influencer: "Influencer",
-  content_creator: "Content Creator",
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_TYPE_LABEL) as BusinessType[];
 
@@ -74,8 +78,13 @@ export interface Business {
 }
 
 export type ExchangeStatus =
-  | "pending" | "accepted" | "requester_done" | "receiver_done"
-  | "completed" | "rejected" | "expired";
+  | "pending"
+  | "accepted"
+  | "requester_done"
+  | "receiver_done"
+  | "completed"
+  | "rejected"
+  | "expired";
 
 export interface Exchange {
   id: string;
