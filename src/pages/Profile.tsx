@@ -229,6 +229,9 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   const [desc, setDesc] = useState(biz.description || "");
   const [fb, setFb] = useState(biz.facebook_url || "");
   const [web, setWeb] = useState(biz.website_url || "");
+  const [tiktok, setTiktok] = useState(biz.tiktok_url || "");
+  const [instagram, setInstagram] = useState(biz.instagram_url || "");
+  const [youtube, setYoutube] = useState(biz.youtube_url || "");
   const [phone, setPhone] = useState(biz.phone || "");
   const [address, setAddress] = useState(biz.address || "");
   const [cover, setCover] = useState(biz.cover_url);
@@ -256,7 +259,9 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
     setSaving(true);
     const { error } = await supabase.from("businesses").update({
       name, type, hours_open: open, hours_close: close, description: desc,
-      facebook_url: fb || null, website_url: web || null, phone: phone || null, address: address || null,
+      facebook_url: fb || null, website_url: web || null,
+      tiktok_url: tiktok || null, instagram_url: instagram || null, youtube_url: youtube || null,
+      phone: phone || null, address: address || null,
     }).eq("id", biz.id);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
@@ -313,6 +318,9 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
       <Field label="Địa chỉ"><input value={address} onChange={e => setAddress(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
       <Field label="Facebook URL"><input value={fb} onChange={e => setFb(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
       <Field label="Website"><input value={web} onChange={e => setWeb(e.target.value)} className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="TikTok URL"><input value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="Link TikTok của bạn" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="Instagram URL"><input value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="Link Instagram của bạn" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
+      <Field label="YouTube URL"><input value={youtube} onChange={e => setYoutube(e.target.value)} placeholder="Link YouTube của bạn" className="w-full px-3 py-2 rounded-lg border bg-background text-sm" /></Field>
 
       <button onClick={save} disabled={saving} className="w-full py-2 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1">
         <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
