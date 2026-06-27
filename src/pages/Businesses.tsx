@@ -11,7 +11,6 @@ type SortKey = "newest" | "rating" | "offers";
 // Item 7: derive areas dynamically from business addresses.
 // Heuristic: take the last comma-separated segment (usually city / district),
 // trim, collapse whitespace, fall back to "Khác".
-const [loading, setLoading] = useState(true);
 const extractArea = (addr: string | null): string => {
   if (!addr) return "Khác";
   const parts = addr
@@ -28,6 +27,7 @@ export default function Businesses() {
   const [type, setType] = useState<BusinessType | "all">("all");
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     void load();
