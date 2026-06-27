@@ -11,6 +11,7 @@ type SortKey = "newest" | "rating" | "offers";
 // Item 7: derive areas dynamically from business addresses.
 // Heuristic: take the last comma-separated segment (usually city / district),
 // trim, collapse whitespace, fall back to "Khác".
+const [loading, setLoading] = useState(true);
 const extractArea = (addr: string | null): string => {
   if (!addr) return "Khác";
   const parts = addr
@@ -33,6 +34,7 @@ export default function Businesses() {
   }, []);
 
   const load = async () => {
+    setLoading(true);
     const [{ data: biz }, { data: offers }, { data: reviews }] = await Promise.all([
       supabase.from("businesses").select("*").eq("status", "approved").order("created_at", { ascending: false }),
       supabase.from("offers").select("*").eq("status", "active").order("created_at", { ascending: false }),
@@ -72,6 +74,7 @@ export default function Businesses() {
         };
       }),
     );
+    setLoading(false);
   };
 
   const areaCounts = useMemo(() => {
@@ -158,7 +161,13 @@ export default function Businesses() {
         ))}
       </div>
 
-      {filtered.length === 0 ? (
+      {loading ? (
+        <div className="grid gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <BusinessCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : filtered.length === 0 ? (
         <p className="text-sm text-center py-12 text-muted-foreground">Không tìm thấy kết quả phù hợp</p>
       ) : (
         <div className="grid gap-4">
@@ -167,6 +176,18 @@ export default function Businesses() {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+function BusinessCardSkeleton() {
+  return (
+    <div className="rounded-2xl bg-card overflow-hidden shadow-sm animate-pulse">
+      <div className="w-full h-36 bg-muted" />
+      <div className="p-3 space-y-2">
+        <div className="h-4 bg-muted rounded w-2/3" />
+        <div className="h-3 bg-muted rounded w-1/2" />
+        <div className="h-3 bg-muted rounded w-1/3" />
+      </div>
     </div>
   );
 }
