@@ -42,8 +42,16 @@ export function Layout() {
   const hide = pathname.startsWith("/auth");
 
   useEffect(() => {
-    if (!user) { setMyBusinessId(null); return; }
-    supabase.from("businesses").select("id").eq("owner_id", user.id).limit(1).maybeSingle()
+    if (!user) {
+      setMyBusinessId(null);
+      return;
+    }
+    supabase
+      .from("businesses")
+      .select("id")
+      .eq("owner_id", user.id)
+      .limit(1)
+      .maybeSingle()
       .then(({ data }) => setMyBusinessId(data?.id ?? null));
   }, [user?.id]);
 
@@ -96,52 +104,68 @@ export function Layout() {
                       </span>
                     )}
                   </Link>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <button className="rounded-full shadow-brand" aria-label="Mở menu tài khoản">
-                      <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
-                    </button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-56 p-2" align="end">
-                    <div className="px-2 py-1.5 border-b mb-1">
-                      <div className="text-xs font-semibold truncate">{profile?.full_name}</div>
-                      <div className="text-[10px] text-muted-foreground truncate">@{profile?.username}</div>
-                    </div>
-                    <button
-                      onClick={() => { setOpen(false); nav("/ho-so"); }}
-                      className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
-                    >
-                      <UserIcon className="w-4 h-4" /> Hồ sơ cá nhân
-                    </button>
-                    {myBusinessId && (
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <button className="rounded-full shadow-brand" aria-label="Mở menu tài khoản">
+                        <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56 p-2" align="end">
+                      <div className="px-2 py-1.5 border-b mb-1">
+                        <div className="text-xs font-semibold truncate">{profile?.full_name}</div>
+                        <div className="text-[10px] text-muted-foreground truncate">@{profile?.username}</div>
+                      </div>
                       <button
-                        onClick={() => { setOpen(false); nav(`/dn/${myBusinessId}`); }}
+                        onClick={() => {
+                          setOpen(false);
+                          nav("/ho-so?view=personal");
+                        }}
                         className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
                       >
-                        <Briefcase className="w-4 h-4" /> Hồ sơ doanh nghiệp
+                        <UserIcon className="w-4 h-4" /> Hồ sơ cá nhân
                       </button>
-                    )}
-                    <button
-                      onClick={() => { setOpen(false); nav("/tin-nhan"); }}
-                      className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
-                    >
-                      <MessageCircle className="w-4 h-4" /> Tin nhắn
-                    </button>
-                    <button
-                      onClick={() => { setOpen(false); nav("/ho-so?view=settings"); }}
-                      className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
-                    >
-                      <Settings className="w-4 h-4" /> Cài đặt
-                    </button>
+                      {myBusinessId && (
+                        <button
+                          onClick={() => {
+                            setOpen(false);
+                            nav("/ho-so?view=business");
+                          }}
+                          className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
+                        >
+                          <Briefcase className="w-4 h-4" /> Hồ sơ doanh nghiệp
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          setOpen(false);
+                          nav("/tin-nhan");
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
+                      >
+                        <MessageCircle className="w-4 h-4" /> Tin nhắn
+                      </button>
+                      <button
+                        onClick={() => {
+                          setOpen(false);
+                          nav("/ho-so?view=settings");
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent flex items-center gap-2"
+                      >
+                        <Settings className="w-4 h-4" /> Cài đặt
+                      </button>
 
-                    <button
-                      onClick={async () => { await signOut(); setOpen(false); nav("/"); }}
-                      className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent text-destructive flex items-center gap-2"
-                    >
-                      <LogOut className="w-4 h-4" /> Đăng xuất
-                    </button>
-                  </PopoverContent>
-                </Popover>
+                      <button
+                        onClick={async () => {
+                          await signOut();
+                          setOpen(false);
+                          nav("/");
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-accent text-destructive flex items-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" /> Đăng xuất
+                      </button>
+                    </PopoverContent>
+                  </Popover>
                 </>
               ) : (
                 <div className="flex items-center gap-1.5">
