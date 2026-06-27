@@ -34,7 +34,7 @@ export function ExchangeSection({ business }: { business: Business }) {
 
   const load = async () => {
     // expire stale first (best-effort)
-    await supabase.rpc("expire_stale_exchanges").catch(() => {});
+    try { await supabase.rpc("expire_stale_exchanges" as any); } catch {}
     const { data: mine } = await supabase.from("businesses").select("*").eq("owner_id", user!.id);
     const mineList = (mine ?? []) as Business[];
     setMyBusinesses(mineList);
