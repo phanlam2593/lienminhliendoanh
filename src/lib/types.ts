@@ -1,6 +1,9 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-export type BusinessType = "food" | "service" | "stay" | "travel" | "other";
+export type BusinessType =
+  | "food" | "service" | "stay" | "travel" | "other"
+  | "freelancer" | "photographer" | "graphic_designer"
+  | "tiktok" | "youtube" | "streamer" | "influencer" | "content_creator";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
@@ -22,6 +25,14 @@ export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   stay: "Lưu trú",
   travel: "Du lịch",
   other: "Khác",
+  freelancer: "Freelancer",
+  photographer: "Nhiếp ảnh",
+  graphic_designer: "Thiết kế đồ họa",
+  tiktok: "TikToker",
+  youtube: "YouTuber",
+  streamer: "Streamer",
+  influencer: "Influencer",
+  content_creator: "Content Creator",
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_TYPE_LABEL) as BusinessType[];
 
@@ -50,9 +61,34 @@ export interface Business {
   address: string | null;
   facebook_url: string | null;
   website_url: string | null;
+  tiktok_url: string | null;
+  instagram_url: string | null;
+  youtube_url: string | null;
   cover_url: string | null;
   is_featured: boolean;
   status: BusinessStatus;
+  points: number;
+  level: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type ExchangeStatus =
+  | "pending" | "accepted" | "requester_done" | "receiver_done"
+  | "completed" | "rejected" | "expired";
+
+export interface Exchange {
+  id: string;
+  requester_id: string;
+  receiver_id: string;
+  request_type: string;
+  request_description: string;
+  return_description: string;
+  status: ExchangeStatus;
+  requester_completed_at: string | null;
+  receiver_completed_at: string | null;
+  completed_at: string | null;
+  expires_at: string;
   created_at: string;
   updated_at: string;
 }
