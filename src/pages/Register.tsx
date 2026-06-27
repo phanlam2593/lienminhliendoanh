@@ -36,6 +36,9 @@ export default function Register() {
   const [bizOffer, setBO] = useState("");
   const [fbUrl, setFB] = useState("");
   const [webUrl, setW] = useState("");
+  const [tiktokUrl, setTk] = useState("");
+  const [instagramUrl, setIg] = useState("");
+  const [youtubeUrl, setYt] = useState("");
   const [coverFile, setCov] = useState<File | null>(null);
   const [termsOpen, setTO] = useState(false);
   const [agree, setAgree] = useState(false);
@@ -151,6 +154,9 @@ export default function Register() {
             hours_close: close,
             facebook_url: fbUrl || null,
             website_url: webUrl || null,
+            tiktok_url: tiktokUrl || null,
+            instagram_url: instagramUrl || null,
+            youtube_url: youtubeUrl || null,
             cover_url: coverPath,
             status: "pending",
           })
@@ -374,6 +380,15 @@ export default function Register() {
                 onChange={(e) => setW(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
+            </Field>
+            <Field label="TikTok URL">
+              <input value={tiktokUrl} onChange={(e) => setTk(e.target.value)} placeholder="Link TikTok của bạn" className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="Instagram URL">
+              <input value={instagramUrl} onChange={(e) => setIg(e.target.value)} placeholder="Link Instagram của bạn" className="w-full px-4 py-3 rounded-xl border bg-card" />
+            </Field>
+            <Field label="YouTube URL">
+              <input value={youtubeUrl} onChange={(e) => setYt(e.target.value)} placeholder="Link YouTube của bạn" className="w-full px-4 py-3 rounded-xl border bg-card" />
             </Field>
             <Field label="Ảnh bìa">
               <input type="file" accept="image/*" onChange={(e) => setCov(e.target.files?.[0] ?? null)} />
