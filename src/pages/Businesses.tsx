@@ -111,13 +111,13 @@ export default function Businesses() {
           className="w-full pl-9 pr-4 py-3 rounded-xl border bg-card"
         />
       </div>
-      <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
         {(["all", ...BUSINESS_TYPES] as const).map((t) => (
           <button
             key={t}
             onClick={() => setType(t as any)}
             className={cn(
-              "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border",
+              "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border shrink-0",
               type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card",
             )}
           >
