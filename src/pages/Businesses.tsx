@@ -111,7 +111,7 @@ export default function Businesses() {
           className="w-full pl-9 pr-4 py-3 rounded-xl border bg-card"
         />
       </div>
-      <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1">
+      <div className="-mx-4 px-4 flex gap-2 overflow-x-auto scrollbar-hide pb-1">
         {(["all", ...BUSINESS_TYPES] as const).map((t) => (
           <button
             key={t}
