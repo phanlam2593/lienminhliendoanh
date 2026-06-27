@@ -163,6 +163,12 @@ export default function BusinessDetail() {
             <h1 className="text-2xl font-extrabold">{b.name}</h1>
           </div>
           <div className="flex items-center gap-2 mt-2 flex-wrap">
+            <span className="inline-flex items-center gap-1 text-xs bg-primary/15 text-primary px-2.5 py-1 rounded-full font-semibold">
+              <Award className="w-3 h-3" /> Lv.{b.level ?? 1}
+            </span>
+            <span className="text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 px-2.5 py-1 rounded-full font-semibold">
+              {b.points ?? 0} điểm
+            </span>
             <span className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-full font-semibold">{BUSINESS_TYPE_LABEL[b.type]}</span>
             <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
             {reviews.length > 0 && (
@@ -177,10 +183,38 @@ export default function BusinessDetail() {
 
         <div className="space-y-2 text-sm">
           {b.phone && <Row icon={Phone}>{b.phone}</Row>}
-          {b.website_url && <Row icon={Globe}><a href={b.website_url} target="_blank" rel="noopener noreferrer" className="text-primary">{b.website_url}</a></Row>}
-          {b.facebook_url && <Row icon={Facebook}><a href={b.facebook_url} target="_blank" rel="noopener noreferrer" className="text-primary">Facebook</a></Row>}
           {b.address && <Row icon={MapPin}><a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`} className="text-primary">{b.address}</a></Row>}
         </div>
+
+        {(b.website_url || b.facebook_url || b.tiktok_url || b.instagram_url || b.youtube_url) && (
+          <div className="flex items-center gap-2 flex-wrap">
+            {b.website_url && (
+              <a href={b.website_url} target="_blank" rel="noopener noreferrer" aria-label="Website" className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 grid place-items-center hover:opacity-80">
+                <Globe className="w-4 h-4" />
+              </a>
+            )}
+            {b.facebook_url && (
+              <a href={b.facebook_url} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-9 h-9 rounded-full bg-blue-600 text-white grid place-items-center hover:opacity-80">
+                <Facebook className="w-4 h-4" />
+              </a>
+            )}
+            {b.tiktok_url && (
+              <a href={b.tiktok_url} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="w-9 h-9 rounded-full bg-black text-white grid place-items-center hover:opacity-80">
+                <Music2 className="w-4 h-4" />
+              </a>
+            )}
+            {b.instagram_url && (
+              <a href={b.instagram_url} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white grid place-items-center hover:opacity-80">
+                <Instagram className="w-4 h-4" />
+              </a>
+            )}
+            {b.youtube_url && (
+              <a href={b.youtube_url} target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="w-9 h-9 rounded-full bg-red-600 text-white grid place-items-center hover:opacity-80">
+                <Youtube className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        )}
 
         <FollowBusinessButton businessId={b.id} ownerId={b.owner_id} />
 
