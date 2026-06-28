@@ -406,11 +406,32 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted shrink-0">
           <StoredImage path={cover} alt={name} className="w-full h-full object-cover" />
         </div>
-        <div className="flex-1 min-w-0">
-          <Link to={`/dn/${biz.id}`} className="font-semibold text-sm truncate block">
-            {name}
-          </Link>
-          <StatusBadge s={biz.status} />
+        <div className="flex-1 min-w-0 space-y-1">
+          <div className="flex items-center gap-2">
+            <Link to={`/dn/${biz.id}`} className="font-semibold text-sm truncate">
+              {name}
+            </Link>
+            <StatusBadge s={biz.status} />
+          </div>
+          <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+            <span>⭐ {stats.reviews}</span>
+            <span>·</span>
+            <span>👥 {stats.followers}</span>
+            <span>·</span>
+            <span className="text-primary font-semibold">Lv.{biz.level}</span>
+          </div>
+          {badges.length > 0 && (
+            <div className="flex gap-1">
+              {badges.map((bt) => {
+                const tier = BADGE_TIERS.find((t) => t.type === bt);
+                return tier ? (
+                  <span key={bt} title={tier.label} className="text-sm">
+                    {tier.emoji}
+                  </span>
+                ) : null;
+              })}
+            </div>
+          )}
         </div>
         <button
           onClick={() => setOpen((o) => !o)}
