@@ -1122,18 +1122,35 @@ function BusinessCreator({
       if (coverFile) {
         cover_url = await uploadImage(coverFile, "covers");
       }
-      const { error } = await supabase.from("businesses").insert({
-        owner_id: ownerId,
-        name: name.trim(),
-        type,
-        phone: phone || null,
-        address: address || null,
-        description: desc || null,
-        hours_open: hoursOpen,
-        hours_close: hoursClose,
-        cover_url,
-        status: "pending",
-      });
+      const { data: newBiz, error } = await supabase
+        .from("businesses")
+        .insert({
+          owner_id: ownerId,
+          name: name.trim(),
+          type,
+          phone: phone || null,
+          address: address || null,
+          description: desc || null,
+          hours_open: hoursOpen,
+          hours_close: hoursClose,
+          cover_url,
+          facebook_url: fbUrl || null,
+          website_url: webUrl || null,
+          tiktok_url: tiktokUrl || null,
+          instagram_url: instagramUrl || null,
+          youtube_url: youtubeUrl || null,
+          status: "pending",
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      if (offerText.trim() && newBiz) {
+        await supabase.from("offers").insert({
+          business_id: newBiz.id,
+          title: offerText.trim(),
+          status: "active",
+        });
+      }
       if (error) throw error;
       toast.success("Đã gửi hồ sơ doanh nghiệp. Đang chờ admin duyệt.");
       setOpen(false);
