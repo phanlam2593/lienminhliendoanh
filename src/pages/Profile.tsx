@@ -399,159 +399,177 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   };
 
   return (
-    <div className="bg-card rounded-2xl p-4 shadow-sm space-y-3">
-      <div className="flex items-center gap-2">
-        <Link to={`/dn/${biz.id}`} className="flex-1 font-semibold text-sm truncate">
-          {name}
-        </Link>
-        <StatusBadge s={biz.status} />
-      </div>
-
-      <div className="relative">
-        <div className="w-full h-32 rounded-xl overflow-hidden bg-muted">
+    <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
+      {/* Header — luôn hiện */}
+      <div className="flex items-center gap-3 p-3">
+        <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted shrink-0">
           <StoredImage path={cover} alt={name} className="w-full h-full object-cover" />
         </div>
-        <label className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded cursor-pointer">
-          Đổi ảnh bìa
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void onCover(f);
-            }}
-          />
-        </label>
-      </div>
-
-      <Field label="Tên DN" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="Loại hình">
-        <div className="flex flex-wrap gap-1.5">
-          {BUSINESS_TYPES.map((t) => (
-            <button
-              key={t}
-              onClick={() => setType(t)}
-              className={`px-2.5 py-1 rounded-full text-xs border ${type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
-            >
-              {BUSINESS_TYPE_LABEL[t]}
-            </button>
-          ))}
+        <div className="flex-1 min-w-0">
+          <Link to={`/dn/${biz.id}`} className="font-semibold text-sm truncate block">
+            {name}
+          </Link>
+          <StatusBadge s={biz.status} />
         </div>
-      </Field>
-      <div className="grid grid-cols-2 gap-2">
-        <Field label="Giờ mở" hint="Ví dụ: 07:00">
-          <input
-            type="time"
-            value={open}
-            onChange={(e) => setOpen(e.target.value)}
-            className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
-          />
-        </Field>
-        <Field label="Giờ đóng" hint="Ví dụ: 22:00">
-          <input
-            type="time"
-            value={close}
-            onChange={(e) => setClose(e.target.value)}
-            className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
-          />
-        </Field>
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="px-3 py-1.5 rounded-lg border text-xs font-semibold shrink-0"
+        >
+          {open ? "Thu gọn" : "Chỉnh sửa"}
+        </button>
       </div>
-      <Field label="Mô tả" hint="Mô tả ngắn gọn về không gian, phong cách, món đặc trưng">
-        <textarea
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="SĐT">
-        <input
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="Địa chỉ">
-        <input
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="Facebook URL">
-        <input
-          value={fb}
-          onChange={(e) => setFb(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="Website">
-        <input
-          value={web}
-          onChange={(e) => setWeb(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="TikTok URL">
-        <input
-          value={tiktok}
-          onChange={(e) => setTiktok(e.target.value)}
-          placeholder="Link TikTok của bạn"
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="Instagram URL">
-        <input
-          value={instagram}
-          onChange={(e) => setInstagram(e.target.value)}
-          placeholder="Link Instagram của bạn"
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
-      <Field label="YouTube URL">
-        <input
-          value={youtube}
-          onChange={(e) => setYoutube(e.target.value)}
-          placeholder="Link YouTube của bạn"
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
 
-      <button
-        onClick={save}
-        disabled={saving}
-        className="w-full py-2 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"
-      >
-        <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
-      </button>
-
-      <div className="border-t pt-3 space-y-2">
-        <div className="text-xs font-semibold text-muted-foreground">Ưu đãi / Deal</div>
-        {offers.map((o) => (
-          <OfferRow key={o.id} offer={o} onChanged={reloadOffers} />
-        ))}
-        <div className="flex gap-2">
-          <input
-            value={offerText}
-            onChange={(e) => setOfferText(e.target.value)}
-            placeholder="Thêm ưu đãi mới…"
-            className="flex-1 px-3 py-2 rounded-lg border bg-background text-sm"
-          />
+      {/* Form — chỉ hiện khi open */}
+      {open && (
+        <div className="px-4 pb-4 space-y-3 border-t pt-3">
+          <div className="relative">
+            <div className="w-full h-32 rounded-xl overflow-hidden bg-muted">
+              <StoredImage path={cover} alt={name} className="w-full h-full object-cover" />
+            </div>
+            <label className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded cursor-pointer">
+              Đổi ảnh bìa
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void onCover(f);
+                }}
+              />
+            </label>
+          </div>
+          <Field label="Tên DN" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+            />
+          </Field>
+          <Field label="Loại hình">
+            <div className="flex flex-wrap gap-1.5">
+              {BUSINESS_TYPES.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setType(t)}
+                  className={`px-2.5 py-1 rounded-full text-xs border ${type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
+                >
+                  {BUSINESS_TYPE_LABEL[t]}
+                </button>
+              ))}
+            </div>
+          </Field>
+          <div className="grid grid-cols-2 gap-2">
+            <Field label="Giờ mở" hint="Ví dụ: 07:00">
+              <input
+                type="time"
+                value={open_}
+                onChange={(e) => setOpen_(e.target.value)}
+                className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+            <Field label="Giờ đóng" hint="Ví dụ: 22:00">
+              <input
+                type="time"
+                value={close_}
+                onChange={(e) => setClose_(e.target.value)}
+                className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+          </div>
+          <Field label="Mô tả">
+            <textarea
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+            />
+          </Field>
+          <div className="grid grid-cols-2 gap-2">
+            <Field label="SĐT">
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+            <Field label="Địa chỉ">
+              <input
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <Field label="Facebook">
+              <input
+                value={fb}
+                onChange={(e) => setFb(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+            <Field label="Website">
+              <input
+                value={web}
+                onChange={(e) => setWeb(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <Field label="TikTok">
+              <input
+                value={tiktok}
+                onChange={(e) => setTiktok(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+            <Field label="Instagram">
+              <input
+                value={instagram}
+                onChange={(e) => setInstagram(e.target.value)}
+                className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+            </Field>
+          </div>
+          <Field label="YouTube">
+            <input
+              value={youtube}
+              onChange={(e) => setYoutube(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+            />
+          </Field>
           <button
-            onClick={addOffer}
-            className="px-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
+            onClick={save}
+            disabled={saving}
+            className="w-full py-2 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"
           >
-            Thêm
+            <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
           </button>
+
+          <div className="border-t pt-3 space-y-2">
+            <div className="text-xs font-semibold text-muted-foreground">Ưu đãi / Deal</div>
+            {offers.map((o) => (
+              <OfferRow key={o.id} offer={o} onChanged={reloadOffers} />
+            ))}
+            <div className="flex gap-2">
+              <input
+                value={offerText}
+                onChange={(e) => setOfferText(e.target.value)}
+                placeholder="Thêm ưu đãi mới…"
+                className="flex-1 px-3 py-2 rounded-lg border bg-background text-sm"
+              />
+              <button
+                onClick={addOffer}
+                className="px-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
+              >
+                Thêm
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
