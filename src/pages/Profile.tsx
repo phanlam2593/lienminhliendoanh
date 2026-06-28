@@ -1103,6 +1103,12 @@ function BusinessCreator({
   const [hoursOpen, setHO] = useState("07:00");
   const [hoursClose, setHC] = useState("22:00");
   const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [fbUrl, setFb] = useState("");
+  const [webUrl, setWeb] = useState("");
+  const [tiktokUrl, setTiktok] = useState("");
+  const [instagramUrl, setInstagram] = useState("");
+  const [youtubeUrl, setYoutube] = useState("");
+  const [offerText, setOfferText] = useState("");
   const [saving, setSaving] = useState(false);
 
   const submit = async () => {
