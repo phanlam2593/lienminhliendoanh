@@ -3,7 +3,7 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { timeAgo } from "@/lib/time";
 import {
   Bell, Check, X, CheckCircle2, XCircle, Star, UserPlus,
-  Tag, Ticket, MessageCircle, Shield, Flag, Lightbulb,
+  Tag, Ticket, MessageCircle, Shield, Flag, Lightbulb, Award, TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,7 @@ const ICONS: Record<string, any> = {
   new_message: MessageCircle, business_reply: MessageCircle, admin_message: Shield,
   report_submitted: Flag, report_received: Flag, report_resolved: Flag, report_reply: Flag,
   suggestion_approved: Lightbulb, suggestion_rejected: Lightbulb,
+  badge_earned: Award, level_up: TrendingUp,
 };
 
 async function resolveRoute(n: Notification): Promise<string | null> {
@@ -57,6 +58,8 @@ async function resolveRoute(n: Notification): Promise<string | null> {
     case "report_reply": return "/ho-so";
     case "suggestion_approved": return "/kham-pha";
     case "suggestion_rejected": return "/ho-so";
+    case "level_up": return id ? `/dn/${id}` : "/ho-so";
+    case "badge_earned": return id ? `/dn/${id}?tab=badges` : "/ho-so";
     default: return "/";
   }
 }

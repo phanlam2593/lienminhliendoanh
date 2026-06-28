@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck, Trash2, Reply, Send, Music2, Instagram, Youtube, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,12 +15,21 @@ import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { ExchangeSection } from "@/components/ExchangeSection";
+import { LevelProgress } from "@/components/LevelProgress";
+import { BadgeRow, BadgeCollection } from "@/components/BadgeRow";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
 interface ReplyMeta extends ReviewReply { profile?: { full_name: string; avatar_url: string | null } | null }
 
 export default function BusinessDetail() {
   const { id = "" } = useParams();
+  const [sp, setSp] = useSearchParams();
+  const tab = (sp.get("tab") as "info" | "badges") || "info";
+  const setTab = (t: "info" | "badges") => {
+    const next = new URLSearchParams(sp);
+    if (t === "info") next.delete("tab"); else next.set("tab", t);
+    setSp(next, { replace: true });
+  };
   const { user, isApproved, isAdmin } = useAuth();
   const [b, setB] = useState<Business | null>(null);
   const [offers, setOffers] = useState<Offer[]>([]);
@@ -158,17 +167,11 @@ export default function BusinessDetail() {
         <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
       </div>
       <div className="p-4 space-y-4">
-        <div>
+        <div className="space-y-2">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-extrabold">{b.name}</h1>
           </div>
-          <div className="flex items-center gap-2 mt-2 flex-wrap">
-            <span className="inline-flex items-center gap-1 text-xs bg-primary/15 text-primary px-2.5 py-1 rounded-full font-semibold">
-              <Award className="w-3 h-3" /> Lv.{b.level ?? 1}
-            </span>
-            <span className="text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 px-2.5 py-1 rounded-full font-semibold">
-              {b.points ?? 0} điểm
-            </span>
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-full font-semibold">{BUSINESS_TYPE_LABEL[b.type]}</span>
             <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
             {reviews.length > 0 && (
@@ -177,7 +180,29 @@ export default function BusinessDetail() {
               </span>
             )}
           </div>
+          <LevelProgress points={b.points ?? 0} level={b.level ?? 1} className="mt-1" />
+          <BadgeRow businessId={b.id} points={b.points ?? 0} />
         </div>
+
+        <div className="flex gap-1 border-b">
+          <button
+            onClick={() => setTab("info")}
+            className={`px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === "info" ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
+          >
+            Thông tin
+          </button>
+          <button
+            onClick={() => setTab("badges")}
+            className={`px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === "badges" ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
+          >
+            Huy hiệu
+          </button>
+        </div>
+
+        {tab === "badges" ? (
+          <BadgeCollection businessId={b.id} points={b.points ?? 0} />
+        ) : (<>
+
 
         {b.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{b.description}</p>}
 
@@ -243,6 +268,7 @@ export default function BusinessDetail() {
         <ExchangeSection business={b} />
 
         {ReviewsBlock}
+        </>)}
 
         <div className="flex gap-2">
           {user && b.owner_id && b.owner_id !== user.id && (

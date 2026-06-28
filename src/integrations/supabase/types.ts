@@ -14,6 +14,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      badges: {
+        Row: {
+          badge_type: string
+          business_id: string
+          earned_at: string
+          id: string
+        }
+        Insert: {
+          badge_type: string
+          business_id: string
+          earned_at?: string
+          id?: string
+        }
+        Update: {
+          badge_type?: string
+          business_id?: string
+          earned_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "badges_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           address: string | null

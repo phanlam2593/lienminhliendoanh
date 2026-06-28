@@ -163,6 +163,7 @@ export default function Admin() {
 
       <BusinessesSection refreshKey={refreshKey} onChanged={refresh} />
       <OffersSection refreshKey={refreshKey} onChanged={refresh} />
+      <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
       <Broadcast />
 
@@ -658,6 +659,7 @@ function MemberDetail({
                     </button>
                   </div>
                 </div>
+                <BadgeAdminManager businessId={biz.id} />
               </section>
             )}
 
@@ -993,5 +995,148 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
       ))}
       {filtered.length === 0 && <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>}
     </Collapsible>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────────
+// Phase 2: Exchanges management
+// ──────────────────────────────────────────────────────────────────────────────
+import { BADGE_TIERS as _BT, type Exchange as _Exchange } from "@/lib/types";
+
+type ExchangeRow = _Exchange & { req_name?: string | null; rec_name?: string | null };
+
+function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
+  const [list, setList] = useState<ExchangeRow[]>([]);
+  const [q, setQ] = useState("");
+
+  const load = async () => {
+    const { data } = await supabase
+      .from("exchanges")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    const rows = (data ?? []) as _Exchange[];
+    const ids = new Set<string>();
+    rows.forEach(r => { ids.add(r.requester_id); ids.add(r.receiver_id); });
+    let nameMap = new Map<string, string>();
+    if (ids.size) {
+      const { data: bz } = await supabase.from("businesses").select("id, name").in("id", [...ids]);
+      (bz ?? []).forEach((b: any) => nameMap.set(b.id, b.name));
+    }
+    setList(rows.map(r => ({ ...r, req_name: nameMap.get(r.requester_id) ?? null, rec_name: nameMap.get(r.receiver_id) ?? null })));
+  };
+  useEffect(() => { void load(); }, [refreshKey]);
+
+  const filtered = list.filter(r => {
+    if (!q.trim()) return true;
+    const s = q.trim().toLowerCase();
+    return (r.req_name ?? "").toLowerCase().includes(s) || (r.rec_name ?? "").toLowerCase().includes(s);
+  });
+
+  const todayCompleted = list.filter(r =>
+    r.status === "completed" && r.completed_at && new Date(r.completed_at).toDateString() === new Date().toDateString()
+  ).length;
+  const pending = list.filter(r => r.status === "pending").length;
+
+  const remove = async (id: string) => {
+    if (!confirm("Xóa trao đổi này?")) return;
+    const { error } = await supabase.from("exchanges").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã xóa"); void load(); onChanged();
+  };
+  const setStatus = async (id: string, status: _Exchange["status"]) => {
+    const patch: any = { status };
+    if (status === "completed") patch.completed_at = new Date().toISOString();
+    const { error } = await supabase.from("exchanges").update(patch).eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    toast.success("Đã cập nhật"); void load(); onChanged();
+  };
+
+  return (
+    <Collapsible title="🤝 Trao đổi" icon={Sparkles} count={list.length}>
+      <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+        <span>Tổng: <b className="text-foreground">{list.length}</b></span>
+        <span>· Đang chờ: <b className="text-foreground">{pending}</b></span>
+        <span>· Hoàn thành hôm nay: <b className="text-foreground">{todayCompleted}</b></span>
+      </div>
+      <input
+        value={q}
+        onChange={e => setQ(e.target.value)}
+        placeholder="Tìm theo tên doanh nghiệp…"
+        className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+      />
+      {filtered.length === 0 ? (
+        <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>
+      ) : filtered.map(r => (
+        <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
+          <div className="flex items-center justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <div className="font-semibold truncate">{r.req_name ?? "?"} → {r.rec_name ?? "?"}</div>
+              <div className="text-muted-foreground">{r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}</div>
+            </div>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {r.status !== "completed" && (
+              <button onClick={() => setStatus(r.id, "completed")} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
+                Đánh dấu hoàn thành
+              </button>
+            )}
+            {r.status !== "expired" && (
+              <button onClick={() => setStatus(r.id, "expired")} className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold">
+                Hết hạn
+              </button>
+            )}
+            <button onClick={() => remove(r.id)} className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1">
+              <Trash2 className="w-3 h-3" /> Xóa
+            </button>
+          </div>
+        </div>
+      ))}
+    </Collapsible>
+  );
+}
+
+// Exported for MemberDetail to embed inside the business section.
+export function BadgeAdminManager({ businessId }: { businessId: string }) {
+  const [earned, setEarned] = useState<Set<string>>(new Set());
+  const load = async () => {
+    const { data } = await supabase.from("badges").select("badge_type").eq("business_id", businessId);
+    setEarned(new Set((data ?? []).map((d: any) => d.badge_type)));
+  };
+  useEffect(() => { void load(); }, [businessId]);
+
+  const toggle = async (type: string, has: boolean) => {
+    if (has) {
+      const { error } = await supabase.from("badges").delete().eq("business_id", businessId).eq("badge_type", type);
+      if (error) { toast.error(error.message); return; }
+    } else {
+      const { error } = await supabase.from("badges").insert({ business_id: businessId, badge_type: type } as any);
+      if (error) { toast.error(error.message); return; }
+    }
+    toast.success("Đã cập nhật huy hiệu");
+    void load();
+  };
+
+  return (
+    <div>
+      <div className="text-xs font-semibold mb-1.5">Huy hiệu</div>
+      <div className="grid grid-cols-2 gap-1.5">
+        {_BT.map(t => {
+          const has = earned.has(t.type);
+          return (
+            <button
+              key={t.type}
+              onClick={() => toggle(t.type, has)}
+              className={`text-[11px] px-2 py-1.5 rounded-lg border text-left flex items-center gap-1.5 ${has ? "bg-primary/10 border-primary/40" : "bg-card"}`}
+            >
+              <span>{t.emoji}</span>
+              <span className="truncate">{t.label}</span>
+              <span className={`ml-auto text-[9px] font-bold ${has ? "text-primary" : "text-muted-foreground"}`}>{has ? "Có" : "Trao"}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
   );
 }

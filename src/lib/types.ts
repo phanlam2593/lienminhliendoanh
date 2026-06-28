@@ -1,6 +1,9 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-export type BusinessType = "food" | "service" | "stay" | "travel" | "creator" | "freelance" | "broker" | "other";
+export type BusinessType =
+  | "food" | "service" | "stay" | "travel" | "other"
+  | "freelancer" | "photographer" | "graphic_designer"
+  | "tiktok" | "youtube" | "streamer" | "influencer" | "content_creator";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
@@ -25,7 +28,24 @@ export type NotifType =
   | "new_offer"
   | "report_received"
   | "broadcast"
-  | "report_reply";
+  | "report_reply"
+  | "badge_earned"
+  | "level_up";
+
+export interface Badge {
+  id: string;
+  business_id: string;
+  badge_type: string;
+  earned_at: string;
+}
+
+export const BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string; color: string }[] = [
+  { type: "active_member",       threshold: 100,  label: "Thành viên tích cực",      emoji: "🌟", color: "from-amber-300 to-yellow-500" },
+  { type: "community_supporter", threshold: 500,  label: "Người ủng hộ cộng đồng",   emoji: "💪", color: "from-sky-400 to-blue-600" },
+  { type: "trusted_partner",     threshold: 1000, label: "Đối tác tin cậy",          emoji: "🤝", color: "from-emerald-400 to-teal-600" },
+  { type: "growth_leader",       threshold: 2500, label: "Người dẫn đầu phát triển", emoji: "🚀", color: "from-fuchsia-400 to-purple-600" },
+  { type: "community_legend",    threshold: 5000, label: "Huyền thoại cộng đồng",    emoji: "👑", color: "from-rose-400 to-red-600" },
+];
 export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
@@ -33,9 +53,14 @@ export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   service: "Dịch vụ",
   stay: "Lưu trú",
   travel: "Du lịch",
-  creator: "Sáng tạo nội dung",
-  freelance: "Nghề tự do",
-  broker: "Môi giới",
+  freelancer: "Nghề tự do",
+  photographer: "Nhiếp ảnh",
+  graphic_designer: "Thiết kế đồ hoạ",
+  tiktok: "TikToker",
+  youtube: "YouTuber",
+  streamer: "Streamer",
+  influencer: "Influencer",
+  content_creator: "Sáng tạo nội dung",
   other: "Khác",
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_TYPE_LABEL) as BusinessType[];
