@@ -167,17 +167,11 @@ export default function BusinessDetail() {
         <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
       </div>
       <div className="p-4 space-y-4">
-        <div>
+        <div className="space-y-2">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-2xl font-extrabold">{b.name}</h1>
           </div>
-          <div className="flex items-center gap-2 mt-2 flex-wrap">
-            <span className="inline-flex items-center gap-1 text-xs bg-primary/15 text-primary px-2.5 py-1 rounded-full font-semibold">
-              <Award className="w-3 h-3" /> Lv.{b.level ?? 1}
-            </span>
-            <span className="text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 px-2.5 py-1 rounded-full font-semibold">
-              {b.points ?? 0} điểm
-            </span>
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-full font-semibold">{BUSINESS_TYPE_LABEL[b.type]}</span>
             <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
             {reviews.length > 0 && (
@@ -186,7 +180,29 @@ export default function BusinessDetail() {
               </span>
             )}
           </div>
+          <LevelProgress points={b.points ?? 0} level={b.level ?? 1} className="mt-1" />
+          <BadgeRow businessId={b.id} points={b.points ?? 0} />
         </div>
+
+        <div className="flex gap-1 border-b">
+          <button
+            onClick={() => setTab("info")}
+            className={`px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === "info" ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
+          >
+            Thông tin
+          </button>
+          <button
+            onClick={() => setTab("badges")}
+            className={`px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === "badges" ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
+          >
+            Huy hiệu
+          </button>
+        </div>
+
+        {tab === "badges" ? (
+          <BadgeCollection businessId={b.id} points={b.points ?? 0} />
+        ) : (<>
+
 
         {b.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{b.description}</p>}
 
