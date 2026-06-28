@@ -163,6 +163,7 @@ export default function Admin() {
 
       <BusinessesSection refreshKey={refreshKey} onChanged={refresh} />
       <OffersSection refreshKey={refreshKey} onChanged={refresh} />
+      <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
       <Broadcast />
 
