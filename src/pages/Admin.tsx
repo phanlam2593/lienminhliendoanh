@@ -135,16 +135,6 @@ export default function Admin() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Quản trị</h1>
 
-      <div className="relative">
-        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Tìm theo tên thành viên hoặc tên doanh nghiệp…"
-          className="w-full pl-9 pr-4 py-2.5 rounded-xl border bg-card text-sm"
-        />
-      </div>
-
       <button
         onClick={cleanupOrphans}
         className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
@@ -153,6 +143,15 @@ export default function Admin() {
       </button>
 
       <Collapsible title="Thành viên" icon={Users} count={filtered.length}>
+        <div className="relative">
+          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Tìm theo tên thành viên hoặc doanh nghiệp…"
+            className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+          />
+        </div>
         {filtered.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
         ) : (
