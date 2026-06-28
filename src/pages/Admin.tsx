@@ -6,7 +6,24 @@ import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Check, X, Trash2, Send, Save, Search, Star, Flag, ChevronDown, ChevronRight, Building2, Tag, Users, Sparkles, KeyRound, Copy } from "lucide-react";
+import {
+  Check,
+  X,
+  Trash2,
+  Send,
+  Save,
+  Search,
+  Star,
+  Flag,
+  ChevronDown,
+  ChevronRight,
+  Building2,
+  Tag,
+  Users,
+  Sparkles,
+  KeyRound,
+  Copy,
+} from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
@@ -105,7 +122,10 @@ export default function Admin() {
     const t = toast.loading("Đang dọn dẹp…");
     const { data, error } = await supabase.functions.invoke("admin-cleanup-orphans", { body: {} });
     toast.dismiss(t);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     const d: any = data ?? {};
     toast.success(`Tìm thấy ${d.found ?? 0}, đã xóa ${d.deleted ?? 0} tài khoản`);
     refresh();
@@ -132,7 +152,7 @@ export default function Admin() {
         <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
       </button>
 
-      <Collapsible title="Thành viên" icon={Users} count={filtered.length} defaultOpen>
+      <Collapsible title="Thành viên" icon={Users} count={filtered.length}>
         {filtered.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
         ) : (
@@ -231,7 +251,11 @@ function MemberDetail({
   }, [row?.id]);
 
   const load = async (uid: string, bizId?: string) => {
-    const { data: r } = await supabase.from("reviews").select("*").eq("user_id", uid).order("created_at", { ascending: false });
+    const { data: r } = await supabase
+      .from("reviews")
+      .select("*")
+      .eq("user_id", uid)
+      .order("created_at", { ascending: false });
     setReviews((r ?? []) as Review[]);
     if (bizId) {
       const { data: o } = await supabase
@@ -297,7 +321,10 @@ function MemberDetail({
     if (!biz || !confirm("Xóa doanh nghiệp này và toàn bộ ưu đãi?")) return;
     await supabase.from("offers").delete().eq("business_id", biz.id);
     const { error } = await supabase.from("businesses").delete().eq("id", biz.id);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Đã xóa doanh nghiệp");
     setBiz(null);
     onChanged();
@@ -306,7 +333,10 @@ function MemberDetail({
   const delMember = async () => {
     if (!row || !confirm("Xóa thành viên này? Tất cả dữ liệu liên quan sẽ bị xóa vĩnh viễn.")) return;
     const { error } = await supabase.functions.invoke("admin-delete-user", { body: { user_id: row.id } });
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Đã xóa thành viên");
     onChanged();
     onClose();
@@ -320,7 +350,10 @@ function MemberDetail({
     setResetting(true);
     const { data, error } = await supabase.functions.invoke("admin-reset-password", { body: { user_id: row.id } });
     setResetting(false);
-    if (error || !data?.temp_password) { toast.error(error?.message ?? "Reset thất bại"); return; }
+    if (error || !data?.temp_password) {
+      toast.error(error?.message ?? "Reset thất bại");
+      return;
+    }
     setTempPw(data.temp_password as string);
   };
 
@@ -679,7 +712,6 @@ function MemberDetail({
                 ))}
               </section>
             )}
-
           </div>
         )}
       </DialogContent>
@@ -842,11 +874,23 @@ function StatusBadge({ s }: { s?: string }) {
   );
 }
 
-function Collapsible({ title, icon: Icon, count, children, defaultOpen = false }: { title: string; icon: any; count: number; children: React.ReactNode; defaultOpen?: boolean }) {
+function Collapsible({
+  title,
+  icon: Icon,
+  count,
+  children,
+  defaultOpen = false,
+}: {
+  title: string;
+  icon: any;
+  count: number;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
   const [open, setOpen] = useState(defaultOpen);
   return (
     <section className="border-t pt-4">
-      <button onClick={() => setOpen(o => !o)} className="w-full flex items-center gap-2 font-bold">
+      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 font-bold">
         {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         <Icon className="w-4 h-4 text-primary" />
         <span>{title}</span>
@@ -864,47 +908,67 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
   const load = async () => {
     const { data: biz } = await supabase.from("businesses").select("*").order("created_at", { ascending: false });
     const rows = (biz as Business[] | null) ?? [];
-    const ownerIds = [...new Set(rows.map(b => b.owner_id).filter(Boolean) as string[])];
+    const ownerIds = [...new Set(rows.map((b) => b.owner_id).filter(Boolean) as string[])];
     let map = new Map<string, string>();
     if (ownerIds.length) {
       const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", ownerIds);
       (profs ?? []).forEach((p: any) => map.set(p.id, p.full_name));
     }
-    setList(rows.map(b => ({ ...b, owner_name: b.owner_id ? map.get(b.owner_id) ?? null : null })));
+    setList(rows.map((b) => ({ ...b, owner_name: b.owner_id ? (map.get(b.owner_id) ?? null) : null })));
   };
-  useEffect(() => { load(); }, [refreshKey]);
+  useEffect(() => {
+    load();
+  }, [refreshKey]);
 
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (!k) return list;
-    return list.filter(b =>
-      b.name.toLowerCase().includes(k) ||
-      (BUSINESS_TYPE_LABEL[b.type] || "").toLowerCase().includes(k)
+    return list.filter(
+      (b) => b.name.toLowerCase().includes(k) || (BUSINESS_TYPE_LABEL[b.type] || "").toLowerCase().includes(k),
     );
   }, [list, q]);
 
   const setStatus = async (id: string, status: "approved" | "rejected") => {
     const { error } = await supabase.from("businesses").update({ status }).eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); load(); onChanged(); }
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Đã cập nhật");
+      load();
+      onChanged();
+    }
   };
   const togglePin = async (b: Business) => {
     const { error } = await supabase.from("businesses").update({ is_featured: !b.is_featured }).eq("id", b.id);
-    if (error) toast.error(error.message); else { toast.success(b.is_featured ? "Đã bỏ ghim" : "Đã ghim"); load(); }
+    if (error) toast.error(error.message);
+    else {
+      toast.success(b.is_featured ? "Đã bỏ ghim" : "Đã ghim");
+      load();
+    }
   };
   const del = async (id: string) => {
     if (!confirm("Xóa doanh nghiệp và toàn bộ ưu đãi?")) return;
     await supabase.from("offers").delete().eq("business_id", id);
     const { error } = await supabase.from("businesses").delete().eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Đã xóa"); load(); onChanged(); }
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Đã xóa");
+      load();
+      onChanged();
+    }
   };
 
   return (
     <Collapsible title="Doanh nghiệp" icon={Building2} count={filtered.length}>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm theo tên hoặc loại…" className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Tìm theo tên hoặc loại…"
+          className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+        />
       </div>
-      {filtered.map(b => (
+      {filtered.map((b) => (
         <div key={b.id} className="p-2 bg-card rounded-xl flex items-center gap-2">
           <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted shrink-0">
             <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
@@ -922,14 +986,24 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
           <div className="flex flex-col gap-1">
             {b.status === "pending" && (
               <>
-                <button onClick={() => setStatus(b.id, "approved")} className="text-emerald-600" aria-label="Duyệt"><Check className="w-4 h-4" /></button>
-                <button onClick={() => setStatus(b.id, "rejected")} className="text-red-600" aria-label="Từ chối"><X className="w-4 h-4" /></button>
+                <button onClick={() => setStatus(b.id, "approved")} className="text-emerald-600" aria-label="Duyệt">
+                  <Check className="w-4 h-4" />
+                </button>
+                <button onClick={() => setStatus(b.id, "rejected")} className="text-red-600" aria-label="Từ chối">
+                  <X className="w-4 h-4" />
+                </button>
               </>
             )}
-            <button onClick={() => togglePin(b)} className={b.is_featured ? "text-yellow-500" : "text-muted-foreground"} aria-label="Ghim">
+            <button
+              onClick={() => togglePin(b)}
+              className={b.is_featured ? "text-yellow-500" : "text-muted-foreground"}
+              aria-label="Ghim"
+            >
               <Star className={`w-4 h-4 ${b.is_featured ? "fill-yellow-400" : ""}`} />
             </button>
-            <button onClick={() => del(b.id)} className="text-destructive" aria-label="Xóa"><Trash2 className="w-4 h-4" /></button>
+            <button onClick={() => del(b.id)} className="text-destructive" aria-label="Xóa">
+              <Trash2 className="w-4 h-4" />
+            </button>
           </div>
         </div>
       ))}
@@ -945,52 +1019,74 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
   const load = async () => {
     const { data: offers } = await supabase.from("offers").select("*").order("created_at", { ascending: false });
     const rows = (offers as Offer[] | null) ?? [];
-    const bizIds = [...new Set(rows.map(o => o.business_id))];
+    const bizIds = [...new Set(rows.map((o) => o.business_id))];
     let map = new Map<string, string>();
     if (bizIds.length) {
       const { data: biz } = await supabase.from("businesses").select("id, name").in("id", bizIds);
       (biz ?? []).forEach((b: any) => map.set(b.id, b.name));
     }
-    setList(rows.map(o => ({ ...o, business_name: map.get(o.business_id) ?? null })));
+    setList(rows.map((o) => ({ ...o, business_name: map.get(o.business_id) ?? null })));
   };
-  useEffect(() => { load(); }, [refreshKey]);
+  useEffect(() => {
+    load();
+  }, [refreshKey]);
 
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (!k) return list;
-    return list.filter(o => o.title.toLowerCase().includes(k) || (o.business_name || "").toLowerCase().includes(k));
+    return list.filter((o) => o.title.toLowerCase().includes(k) || (o.business_name || "").toLowerCase().includes(k));
   }, [list, q]);
 
   const toggle = async (o: Offer) => {
     const next = o.status === "active" ? "inactive" : "active";
     const { error } = await supabase.from("offers").update({ status: next }).eq("id", o.id);
-    if (error) toast.error(error.message); else { toast.success("Đã cập nhật"); load(); }
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Đã cập nhật");
+      load();
+    }
   };
   const del = async (id: string) => {
     if (!confirm("Xóa ưu đãi?")) return;
     const { error } = await supabase.from("offers").delete().eq("id", id);
-    if (error) toast.error(error.message); else { toast.success("Đã xóa"); load(); onChanged(); }
+    if (error) toast.error(error.message);
+    else {
+      toast.success("Đã xóa");
+      load();
+      onChanged();
+    }
   };
 
   return (
     <Collapsible title="Ưu đãi" icon={Tag} count={filtered.length}>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm theo ưu đãi hoặc DN…" className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Tìm theo ưu đãi hoặc DN…"
+          className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+        />
       </div>
-      {filtered.map(o => (
+      {filtered.map((o) => (
         <div key={o.id} className="p-2 bg-card rounded-xl flex items-center gap-2">
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold truncate">{o.title}</div>
-            <div className="text-[11px] text-muted-foreground truncate">🏢 {o.business_name || "—"} · {o.claim_count} lượt nhận</div>
+            <div className="text-[11px] text-muted-foreground truncate">
+              🏢 {o.business_name || "—"} · {o.claim_count} lượt nhận
+            </div>
           </div>
-          <span className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${o.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-muted text-muted-foreground"}`}>
+          <span
+            className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${o.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-muted text-muted-foreground"}`}
+          >
             {o.status === "active" ? "Đang chạy" : "Tắt"}
           </span>
           <button onClick={() => toggle(o)} className="text-xs px-2 py-1 rounded border">
             {o.status === "active" ? "Tắt" : "Bật"}
           </button>
-          <button onClick={() => del(o.id)} className="text-destructive" aria-label="Xóa"><Trash2 className="w-4 h-4" /></button>
+          <button onClick={() => del(o.id)} className="text-destructive" aria-label="Xóa">
+            <Trash2 className="w-4 h-4" />
+          </button>
         </div>
       ))}
       {filtered.length === 0 && <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>}
@@ -1010,89 +1106,133 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
   const [q, setQ] = useState("");
 
   const load = async () => {
-    const { data } = await supabase
-      .from("exchanges")
-      .select("*")
-      .order("created_at", { ascending: false })
-      .limit(200);
+    const { data } = await supabase.from("exchanges").select("*").order("created_at", { ascending: false }).limit(200);
     const rows = (data ?? []) as _Exchange[];
     const ids = new Set<string>();
-    rows.forEach(r => { ids.add(r.requester_id); ids.add(r.receiver_id); });
+    rows.forEach((r) => {
+      ids.add(r.requester_id);
+      ids.add(r.receiver_id);
+    });
     let nameMap = new Map<string, string>();
     if (ids.size) {
-      const { data: bz } = await supabase.from("businesses").select("id, name").in("id", [...ids]);
+      const { data: bz } = await supabase
+        .from("businesses")
+        .select("id, name")
+        .in("id", [...ids]);
       (bz ?? []).forEach((b: any) => nameMap.set(b.id, b.name));
     }
-    setList(rows.map(r => ({ ...r, req_name: nameMap.get(r.requester_id) ?? null, rec_name: nameMap.get(r.receiver_id) ?? null })));
+    setList(
+      rows.map((r) => ({
+        ...r,
+        req_name: nameMap.get(r.requester_id) ?? null,
+        rec_name: nameMap.get(r.receiver_id) ?? null,
+      })),
+    );
   };
-  useEffect(() => { void load(); }, [refreshKey]);
+  useEffect(() => {
+    void load();
+  }, [refreshKey]);
 
-  const filtered = list.filter(r => {
+  const filtered = list.filter((r) => {
     if (!q.trim()) return true;
     const s = q.trim().toLowerCase();
     return (r.req_name ?? "").toLowerCase().includes(s) || (r.rec_name ?? "").toLowerCase().includes(s);
   });
 
-  const todayCompleted = list.filter(r =>
-    r.status === "completed" && r.completed_at && new Date(r.completed_at).toDateString() === new Date().toDateString()
+  const todayCompleted = list.filter(
+    (r) =>
+      r.status === "completed" &&
+      r.completed_at &&
+      new Date(r.completed_at).toDateString() === new Date().toDateString(),
   ).length;
-  const pending = list.filter(r => r.status === "pending").length;
+  const pending = list.filter((r) => r.status === "pending").length;
 
   const remove = async (id: string) => {
     if (!confirm("Xóa trao đổi này?")) return;
     const { error } = await supabase.from("exchanges").delete().eq("id", id);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Đã xóa"); void load(); onChanged();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã xóa");
+    void load();
+    onChanged();
   };
   const setStatus = async (id: string, status: _Exchange["status"]) => {
     const patch: any = { status };
     if (status === "completed") patch.completed_at = new Date().toISOString();
     const { error } = await supabase.from("exchanges").update(patch).eq("id", id);
-    if (error) { toast.error(error.message); return; }
-    toast.success("Đã cập nhật"); void load(); onChanged();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã cập nhật");
+    void load();
+    onChanged();
   };
 
   return (
     <Collapsible title="🤝 Trao đổi" icon={Sparkles} count={list.length}>
       <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-        <span>Tổng: <b className="text-foreground">{list.length}</b></span>
-        <span>· Đang chờ: <b className="text-foreground">{pending}</b></span>
-        <span>· Hoàn thành hôm nay: <b className="text-foreground">{todayCompleted}</b></span>
+        <span>
+          Tổng: <b className="text-foreground">{list.length}</b>
+        </span>
+        <span>
+          · Đang chờ: <b className="text-foreground">{pending}</b>
+        </span>
+        <span>
+          · Hoàn thành hôm nay: <b className="text-foreground">{todayCompleted}</b>
+        </span>
       </div>
       <input
         value={q}
-        onChange={e => setQ(e.target.value)}
+        onChange={(e) => setQ(e.target.value)}
         placeholder="Tìm theo tên doanh nghiệp…"
         className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
       />
       {filtered.length === 0 ? (
         <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>
-      ) : filtered.map(r => (
-        <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
-          <div className="flex items-center justify-between gap-2">
-            <div className="min-w-0 flex-1">
-              <div className="font-semibold truncate">{r.req_name ?? "?"} → {r.rec_name ?? "?"}</div>
-              <div className="text-muted-foreground">{r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}</div>
+      ) : (
+        filtered.map((r) => (
+          <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold truncate">
+                  {r.req_name ?? "?"} → {r.rec_name ?? "?"}
+                </div>
+                <div className="text-muted-foreground">
+                  {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
+                </div>
+              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {r.status !== "completed" && (
-              <button onClick={() => setStatus(r.id, "completed")} className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold">
-                Đánh dấu hoàn thành
+            <div className="flex flex-wrap gap-1.5">
+              {r.status !== "completed" && (
+                <button
+                  onClick={() => setStatus(r.id, "completed")}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold"
+                >
+                  Đánh dấu hoàn thành
+                </button>
+              )}
+              {r.status !== "expired" && (
+                <button
+                  onClick={() => setStatus(r.id, "expired")}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold"
+                >
+                  Hết hạn
+                </button>
+              )}
+              <button
+                onClick={() => remove(r.id)}
+                className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1"
+              >
+                <Trash2 className="w-3 h-3" /> Xóa
               </button>
-            )}
-            {r.status !== "expired" && (
-              <button onClick={() => setStatus(r.id, "expired")} className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold">
-                Hết hạn
-              </button>
-            )}
-            <button onClick={() => remove(r.id)} className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1">
-              <Trash2 className="w-3 h-3" /> Xóa
-            </button>
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </Collapsible>
   );
 }
@@ -1104,15 +1244,23 @@ export function BadgeAdminManager({ businessId }: { businessId: string }) {
     const { data } = await supabase.from("badges").select("badge_type").eq("business_id", businessId);
     setEarned(new Set((data ?? []).map((d: any) => d.badge_type)));
   };
-  useEffect(() => { void load(); }, [businessId]);
+  useEffect(() => {
+    void load();
+  }, [businessId]);
 
   const toggle = async (type: string, has: boolean) => {
     if (has) {
       const { error } = await supabase.from("badges").delete().eq("business_id", businessId).eq("badge_type", type);
-      if (error) { toast.error(error.message); return; }
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
     } else {
       const { error } = await supabase.from("badges").insert({ business_id: businessId, badge_type: type } as any);
-      if (error) { toast.error(error.message); return; }
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
     }
     toast.success("Đã cập nhật huy hiệu");
     void load();
@@ -1122,7 +1270,7 @@ export function BadgeAdminManager({ businessId }: { businessId: string }) {
     <div>
       <div className="text-xs font-semibold mb-1.5">Huy hiệu</div>
       <div className="grid grid-cols-2 gap-1.5">
-        {_BT.map(t => {
+        {_BT.map((t) => {
           const has = earned.has(t.type);
           return (
             <button
@@ -1132,7 +1280,9 @@ export function BadgeAdminManager({ businessId }: { businessId: string }) {
             >
               <span>{t.emoji}</span>
               <span className="truncate">{t.label}</span>
-              <span className={`ml-auto text-[9px] font-bold ${has ? "text-primary" : "text-muted-foreground"}`}>{has ? "Có" : "Trao"}</span>
+              <span className={`ml-auto text-[9px] font-bold ${has ? "text-primary" : "text-muted-foreground"}`}>
+                {has ? "Có" : "Trao"}
+              </span>
             </button>
           );
         })}
