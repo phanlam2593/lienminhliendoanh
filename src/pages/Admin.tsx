@@ -342,6 +342,7 @@ function MemberDetail({
   };
 
   const [resetting, setResetting] = useState(false);
+  const [bizOpen, setBizOpen] = useState(false);
   const [tempPw, setTempPw] = useState<string | null>(null);
   const resetPassword = async () => {
     if (!row) return;
