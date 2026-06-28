@@ -1250,6 +1250,48 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
+      <Field label="Ưu đãi cho thành viên" hint="VD: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm">
+        <input
+          value={offerText}
+          onChange={(e) => setOfferText(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+        />
+      </Field>
+      <Field label="Facebook URL">
+        <input
+          value={fbUrl}
+          onChange={(e) => setFb(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+        />
+      </Field>
+      <Field label="Website">
+        <input
+          value={webUrl}
+          onChange={(e) => setWeb(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+        />
+      </Field>
+      <Field label="TikTok URL">
+        <input
+          value={tiktokUrl}
+          onChange={(e) => setTiktok(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+        />
+      </Field>
+      <Field label="Instagram URL">
+        <input
+          value={instagramUrl}
+          onChange={(e) => setInstagram(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+        />
+      </Field>
+      <Field label="YouTube URL">
+        <input
+          value={youtubeUrl}
+          onChange={(e) => setYoutube(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+        />
+      </Field>
       <Field label="Ảnh bìa (tuỳ chọn)">
         <input
           type="file"
