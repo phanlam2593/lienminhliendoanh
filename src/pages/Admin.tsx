@@ -547,151 +547,164 @@ function MemberDetail({
             </Dialog>
 
             {biz && (
-              <section className="space-y-2 border-t pt-4">
-                <div className="flex items-center justify-between">
-                  <div className="text-xs font-bold text-muted-foreground">DOANH NGHIỆP</div>
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={() => {
-                        setBFeat((v) => !v);
-                      }}
-                      className={`w-7 h-7 rounded-full grid place-items-center ${bFeatured ? "bg-yellow-400 text-white" : "bg-muted"}`}
-                      aria-label="Nổi bật"
-                    >
-                      <Star className={`w-4 h-4 ${bFeatured ? "fill-white" : ""}`} />
-                    </button>
-                    <StatusBadge s={biz.status} />
-                    <button
-                      onClick={delBiz}
-                      className="w-7 h-7 rounded-full bg-muted text-destructive grid place-items-center"
-                      aria-label="Xóa DN"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-                {biz.cover_url && (
-                  <div className="h-24 rounded-lg overflow-hidden">
-                    <StoredImage path={biz.cover_url} alt={biz.name} className="w-full h-full object-cover" />
-                  </div>
-                )}
-                <input
-                  value={bName}
-                  onChange={(e) => setBN(e.target.value)}
-                  placeholder="Tên DN"
-                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-                />
-                <div className="flex flex-wrap gap-1.5">
-                  {BUSINESS_TYPES.map((t) => (
-                    <button
-                      key={t}
-                      onClick={() => setBT(t)}
-                      className={`px-2.5 py-1 rounded-full text-xs border ${bType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
-                    >
-                      {BUSINESS_TYPE_LABEL[t]}
-                    </button>
-                  ))}
-                </div>
-                <textarea
-                  value={bDesc}
-                  onChange={(e) => setBD(e.target.value)}
-                  rows={2}
-                  placeholder="Mô tả"
-                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-                />
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="time"
-                    value={bOpen}
-                    onChange={(e) => setBO(e.target.value)}
-                    className="px-2 py-2 rounded-lg border bg-background text-sm"
-                  />
-                  <input
-                    type="time"
-                    value={bClose}
-                    onChange={(e) => setBC(e.target.value)}
-                    className="px-2 py-2 rounded-lg border bg-background text-sm"
-                  />
-                </div>
-                <input
-                  value={bAddress}
-                  onChange={(e) => setBA(e.target.value)}
-                  placeholder="Địa chỉ"
-                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-                />
-                <input
-                  value={bPhone}
-                  onChange={(e) => setBPh(e.target.value)}
-                  placeholder="SĐT DN"
-                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-                />
-                <input
-                  value={bFb}
-                  onChange={(e) => setBFb(e.target.value)}
-                  placeholder="Facebook URL"
-                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-                />
-                <input
-                  value={bWeb}
-                  onChange={(e) => setBW(e.target.value)}
-                  placeholder="Website URL"
-                  className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-                />
+              <section className="border-t pt-4 space-y-2">
                 <button
-                  onClick={saveBiz}
-                  disabled={saving}
-                  className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"
+                  onClick={() => setBizOpen((o) => !o)}
+                  className="w-full flex items-center gap-2 font-bold text-sm"
                 >
-                  <Save className="w-4 h-4" /> Lưu DN
+                  {bizOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  <Building2 className="w-4 h-4 text-primary" />
+                  <span className="flex-1 text-left">{biz.name}</span>
+                  <StatusBadge s={biz.status} />
                 </button>
-                {biz.status === "pending" && (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setBizStatus("approved")}
-                      className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold text-xs"
-                    >
-                      Duyệt DN
-                    </button>
-                    <button
-                      onClick={() => setBizStatus("rejected")}
-                      className="flex-1 py-1.5 rounded-lg bg-red-500 text-white font-semibold text-xs"
-                    >
-                      Từ chối
-                    </button>
-                  </div>
-                )}
 
-                <div className="pt-2 border-t space-y-1">
-                  <div className="text-xs font-bold text-muted-foreground">Ưu đãi ({offers.length})</div>
-                  {offers.map((o) => (
-                    <div key={o.id} className="flex items-center gap-2 p-2 bg-accent rounded">
-                      <div className="flex-1 min-w-0">
-                        <div className="text-xs font-semibold truncate">{o.title}</div>
-                        <div className="text-[10px] text-muted-foreground">
-                          {o.status} · {o.claim_count ?? 0} lượt nhận
-                        </div>
-                      </div>
-                      <button onClick={() => toggleOffer(o)} className="text-[10px] px-2 py-0.5 rounded bg-card">
-                        {o.status === "active" ? "Tắt" : "Bật"}
+                {bizOpen && (
+                  <div className="space-y-2 pt-1">
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => {
+                          setBFeat((v) => !v);
+                        }}
+                        className={`w-7 h-7 rounded-full grid place-items-center ${bFeatured ? "bg-yellow-400 text-white" : "bg-muted"}`}
+                        aria-label="Nổi bật"
+                      >
+                        <Star className={`w-4 h-4 ${bFeatured ? "fill-white" : ""}`} />
                       </button>
-                      <button onClick={() => delOffer(o.id)} className="text-destructive">
-                        <Trash2 className="w-3.5 h-3.5" />
+                      <button
+                        onClick={delBiz}
+                        className="w-7 h-7 rounded-full bg-muted text-destructive grid place-items-center"
+                        aria-label="Xóa DN"
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
-                  ))}
-                  <div className="flex gap-1">
+                    {biz.cover_url && (
+                      <div className="h-24 rounded-lg overflow-hidden">
+                        <StoredImage path={biz.cover_url} alt={biz.name} className="w-full h-full object-cover" />
+                      </div>
+                    )}
                     <input
-                      value={newOfferTitle}
-                      onChange={(e) => setNewOfferTitle(e.target.value)}
-                      placeholder="Thêm ưu đãi…"
-                      className="flex-1 px-2 py-1.5 rounded border bg-background text-xs"
+                      value={bName}
+                      onChange={(e) => setBN(e.target.value)}
+                      placeholder="Tên DN"
+                      className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
                     />
-                    <button onClick={addOffer} className="px-3 rounded bg-primary text-primary-foreground text-xs">
-                      Thêm
+                    <div className="flex flex-wrap gap-1.5">
+                      {BUSINESS_TYPES.map((t) => (
+                        <button
+                          key={t}
+                          onClick={() => setBT(t)}
+                          className={`px-2.5 py-1 rounded-full text-xs border ${bType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
+                        >
+                          {BUSINESS_TYPE_LABEL[t]}
+                        </button>
+                      ))}
+                    </div>
+                    <textarea
+                      value={bDesc}
+                      onChange={(e) => setBD(e.target.value)}
+                      rows={2}
+                      placeholder="Mô tả"
+                      className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+                    />
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="time"
+                        value={bOpen}
+                        onChange={(e) => setBO(e.target.value)}
+                        className="px-2 py-2 rounded-lg border bg-background text-sm"
+                      />
+                      <input
+                        type="time"
+                        value={bClose}
+                        onChange={(e) => setBC(e.target.value)}
+                        className="px-2 py-2 rounded-lg border bg-background text-sm"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        value={bAddress}
+                        onChange={(e) => setBA(e.target.value)}
+                        placeholder="Địa chỉ"
+                        className="px-3 py-2 rounded-lg border bg-background text-sm"
+                      />
+                      <input
+                        value={bPhone}
+                        onChange={(e) => setBPh(e.target.value)}
+                        placeholder="SĐT DN"
+                        className="px-3 py-2 rounded-lg border bg-background text-sm"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        value={bFb}
+                        onChange={(e) => setBFb(e.target.value)}
+                        placeholder="Facebook URL"
+                        className="px-3 py-2 rounded-lg border bg-background text-sm"
+                      />
+                      <input
+                        value={bWeb}
+                        onChange={(e) => setBW(e.target.value)}
+                        placeholder="Website URL"
+                        className="px-3 py-2 rounded-lg border bg-background text-sm"
+                      />
+                    </div>
+                    <button
+                      onClick={saveBiz}
+                      disabled={saving}
+                      className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"
+                    >
+                      <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu DN"}
                     </button>
+                    {biz.status === "pending" && (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => setBizStatus("approved")}
+                          className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold text-xs"
+                        >
+                          Duyệt DN
+                        </button>
+                        <button
+                          onClick={() => setBizStatus("rejected")}
+                          className="flex-1 py-1.5 rounded-lg bg-red-500 text-white font-semibold text-xs"
+                        >
+                          Từ chối
+                        </button>
+                      </div>
+                    )}
+                    <div className="pt-2 border-t space-y-1">
+                      <div className="text-xs font-bold text-muted-foreground">Ưu đãi ({offers.length})</div>
+                      {offers.map((o) => (
+                        <div key={o.id} className="flex items-center gap-2 p-2 bg-accent rounded">
+                          <div className="flex-1 min-w-0">
+                            <div className="text-xs font-semibold truncate">{o.title}</div>
+                            <div className="text-[10px] text-muted-foreground">
+                              {o.status} · {o.claim_count ?? 0} lượt nhận
+                            </div>
+                          </div>
+                          <button onClick={() => toggleOffer(o)} className="text-[10px] px-2 py-0.5 rounded bg-card">
+                            {o.status === "active" ? "Tắt" : "Bật"}
+                          </button>
+                          <button onClick={() => delOffer(o.id)} className="text-destructive">
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                      <div className="flex gap-1">
+                        <input
+                          value={newOfferTitle}
+                          onChange={(e) => setNewOfferTitle(e.target.value)}
+                          placeholder="Thêm ưu đãi…"
+                          className="flex-1 px-2 py-1.5 rounded border bg-background text-xs"
+                        />
+                        <button onClick={addOffer} className="px-3 rounded bg-primary text-primary-foreground text-xs">
+                          Thêm
+                        </button>
+                      </div>
+                    </div>
+                    <BadgeAdminManager businessId={biz.id} />
                   </div>
-                </div>
-                <BadgeAdminManager businessId={biz.id} />
+                )}
               </section>
             )}
 
