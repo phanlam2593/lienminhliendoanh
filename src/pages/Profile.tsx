@@ -382,6 +382,16 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
     toast.success("Đã lưu doanh nghiệp");
     onSaved();
   };
+  const onCover = async (file: File) => {
+    try {
+      const path = await uploadImage(file, "covers");
+      setCover(path);
+      await supabase.from("businesses").update({ cover_url: path }).eq("id", biz.id);
+      toast.success("Đã cập nhật ảnh bìa");
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
 
   const addOffer = async () => {
     if (!offerText.trim()) return;
