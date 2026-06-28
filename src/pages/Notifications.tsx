@@ -58,6 +58,8 @@ async function resolveRoute(n: Notification): Promise<string | null> {
     case "report_reply": return "/ho-so";
     case "suggestion_approved": return "/kham-pha";
     case "suggestion_rejected": return "/ho-so";
+    case "level_up": return id ? `/dn/${id}` : "/ho-so";
+    case "badge_earned": return id ? `/dn/${id}?tab=badges` : "/ho-so";
     default: return "/";
   }
 }
