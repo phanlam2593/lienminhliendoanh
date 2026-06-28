@@ -1,9 +1,6 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-export type BusinessType =
-  | "food" | "service" | "stay" | "travel" | "other"
-  | "freelancer" | "photographer" | "graphic_designer"
-  | "tiktok" | "youtube" | "streamer" | "influencer" | "content_creator";
+export type BusinessType = "food" | "service" | "stay" | "travel" | "creator" | "freelance" | "broker" | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
@@ -40,11 +37,41 @@ export interface Badge {
 }
 
 export const BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string; color: string }[] = [
-  { type: "active_member",       threshold: 100,  label: "Thành viên tích cực",      emoji: "🌟", color: "from-amber-300 to-yellow-500" },
-  { type: "community_supporter", threshold: 500,  label: "Người ủng hộ cộng đồng",   emoji: "💪", color: "from-sky-400 to-blue-600" },
-  { type: "trusted_partner",     threshold: 1000, label: "Đối tác tin cậy",          emoji: "🤝", color: "from-emerald-400 to-teal-600" },
-  { type: "growth_leader",       threshold: 2500, label: "Người dẫn đầu phát triển", emoji: "🚀", color: "from-fuchsia-400 to-purple-600" },
-  { type: "community_legend",    threshold: 5000, label: "Huyền thoại cộng đồng",    emoji: "👑", color: "from-rose-400 to-red-600" },
+  {
+    type: "active_member",
+    threshold: 100,
+    label: "Thành viên tích cực",
+    emoji: "🌟",
+    color: "from-amber-300 to-yellow-500",
+  },
+  {
+    type: "community_supporter",
+    threshold: 500,
+    label: "Người ủng hộ cộng đồng",
+    emoji: "💪",
+    color: "from-sky-400 to-blue-600",
+  },
+  {
+    type: "trusted_partner",
+    threshold: 1000,
+    label: "Đối tác tin cậy",
+    emoji: "🤝",
+    color: "from-emerald-400 to-teal-600",
+  },
+  {
+    type: "growth_leader",
+    threshold: 2500,
+    label: "Người dẫn đầu phát triển",
+    emoji: "🚀",
+    color: "from-fuchsia-400 to-purple-600",
+  },
+  {
+    type: "community_legend",
+    threshold: 5000,
+    label: "Huyền thoại cộng đồng",
+    emoji: "👑",
+    color: "from-rose-400 to-red-600",
+  },
 ];
 export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
 
