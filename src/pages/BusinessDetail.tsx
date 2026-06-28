@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Star, Phone, Globe, Facebook, MapPin, Flag, Tag, MessageCircle, Users, Clock, UserPlus, UserCheck, Trash2, Reply, Send, Music2, Instagram, Youtube, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,6 +15,8 @@ import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { ExchangeSection } from "@/components/ExchangeSection";
+import { LevelProgress } from "@/components/LevelProgress";
+import { BadgeRow, BadgeCollection } from "@/components/BadgeRow";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
 interface ReplyMeta extends ReviewReply { profile?: { full_name: string; avatar_url: string | null } | null }
