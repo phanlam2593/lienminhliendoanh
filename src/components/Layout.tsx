@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
 import { WelcomeOverlay } from "./WelcomeOverlay";
+import { AchievementOverlay } from "./AchievementOverlay";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
