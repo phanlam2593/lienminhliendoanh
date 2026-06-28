@@ -268,6 +268,7 @@ export default function BusinessDetail() {
         <ExchangeSection business={b} />
 
         {ReviewsBlock}
+        </>)}
 
         <div className="flex gap-2">
           {user && b.owner_id && b.owner_id !== user.id && (
