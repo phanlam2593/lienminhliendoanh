@@ -343,18 +343,16 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
 
   useEffect(() => {
     void reloadOffers();
+    void (async () => {
+      const [{ count: rv }, { count: fl }, { data: bg }] = await Promise.all([
+        supabase.from("reviews").select("*", { count: "exact", head: true }).eq("business_id", biz.id),
+        supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_business_id", biz.id),
+        supabase.from("badges").select("badge_type").eq("business_id", biz.id),
+      ]);
+      setStats({ reviews: rv ?? 0, followers: fl ?? 0 });
+      setBadges((bg ?? []).map((b: any) => b.badge_type));
+    })();
   }, [biz.id]);
-
-  const onCover = async (file: File) => {
-    try {
-      const path = await uploadImage(file, "covers");
-      setCover(path);
-      await supabase.from("businesses").update({ cover_url: path }).eq("id", biz.id);
-      toast.success("Đã cập nhật ảnh bìa");
-    } catch (e: any) {
-      toast.error(e.message);
-    }
-  };
 
   const save = async () => {
     setSaving(true);
