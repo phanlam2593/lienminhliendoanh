@@ -314,6 +314,8 @@ function MenuRow({
 function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }) {
   const [name, setName] = useState(biz.name);
   const [type, setType] = useState<BusinessType>(biz.type);
+  const [stats, setStats] = useState({ reviews: 0, followers: 0 });
+  const [badges, setBadges] = useState<string[]>([]);
   const [open_, setOpen_] = useState(biz.hours_open?.slice(0, 5) || "07:00");
   const [close_, setClose_] = useState(biz.hours_close?.slice(0, 5) || "22:00");
   const [desc, setDesc] = useState(biz.description || "");
