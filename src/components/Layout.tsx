@@ -270,17 +270,45 @@ function WelcomeScreen() {
       />
 
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
-        {[
-          { v: stats.members, l: "Thành viên" },
-          { v: stats.businesses, l: "Doanh nghiệp" },
-          { v: stats.offers, l: "Ưu đãi" },
-        ].map((s) => (
-          <div key={s.l} className="bg-card rounded-2xl p-2 shadow-soft">
-            <div className="text-lg font-extrabold text-primary">{s.v}</div>
-            <div className="text-[10px] text-muted-foreground font-semibold uppercase">{s.l}</div>
-          </div>
-        ))}
-      </div>
+  {[
+    { v: stats.members, l: "Thành viên", emoji: "👥", gradient: "linear-gradient(135deg,#00c9a7,#0891b2)" },
+    { v: stats.businesses, l: "Doanh nghiệp", emoji: "🏢", gradient: "linear-gradient(135deg,#f59e0b,#ef4444)" },
+    { v: stats.offers, l: "Ưu đãi", emoji: "🎁", gradient: "linear-gradient(135deg,#8b5cf6,#ec4899)" },
+  ].map((s) => (
+    <div key={s.l} className="rounded-2xl p-2 shadow-soft text-center" style={{ background: s.gradient }}>
+      <div className="text-xl mb-0.5">{s.emoji}</div>
+      <div className="text-lg font-extrabold text-white">{s.v}</div>
+      <div className="text-[10px] text-white/80 font-semibold uppercase">{s.l}</div>
+    </div>
+  ))}
+</div>
+
+Chỗ 2 — Contact section, tìm:
+tsx<div className="pt-2 border-t w-full max-w-sm text-xs text-muted-foreground space-y-1">
+  <div className="font-bold text-foreground text-xs">Liên hệ admin</div>
+  <a href="mailto:...
+Thay toàn bộ đến hết </div> bằng:
+tsx<div className="pt-2 border-t w-full max-w-sm">
+  <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">Liên hệ admin</div>
+  <div className="grid grid-cols-3 gap-2">
+    <a href="mailto:lienminhliendoanh@gmail.com"
+      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all">
+      <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg">📧</div>
+      <span className="text-[11px] font-semibold text-muted-foreground">Email</span>
+    </a>
+    <a href="tel:0339565246"
+      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all">
+      <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-lg">📞</div>
+      <span className="text-[11px] font-semibold text-muted-foreground">Hotline</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer"
+      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all">
+      <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-lg">📘</div>
+      <span className="text-[11px] font-semibold text-muted-foreground">Facebook</span>
+    </a>
+  </div>
+</div>
+2 chỗ trong Layout.tsx là xong!
 
       <div className="w-full max-w-sm space-y-2">
         <Link
