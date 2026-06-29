@@ -269,14 +269,16 @@ function WelcomeScreen() {
       />
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
         {[
-          { v: stats.members, l: "Thành viên", emoji: "👥", gradient: "linear-gradient(135deg,#00c9a7,#0891b2)" },
-          { v: stats.businesses, l: "Doanh nghiệp", emoji: "🏢", gradient: "linear-gradient(135deg,#f59e0b,#ef4444)" },
-          { v: stats.offers, l: "Ưu đãi", emoji: "🎁", gradient: "linear-gradient(135deg,#8b5cf6,#ec4899)" },
-        ].map((s) => (
-          <div key={s.l} className="rounded-2xl p-2 shadow-soft text-center" style={{ background: s.gradient }}>
-            <div className="text-xl mb-0.5">{s.emoji}</div>
-            <div className="text-lg font-extrabold text-white">{s.v}</div>
-            <div className="text-[10px] text-white/80 font-semibold uppercase">{s.l}</div>
+          { v: stats.members, l: "Thành viên", icon: Users },
+          { v: stats.businesses, l: "Doanh nghiệp", icon: Building2 },
+          { v: stats.offers, l: "Ưu đãi", icon: Tag },
+        ].map(({ v, l, icon: Icon }) => (
+          <div key={l} className="rounded-2xl p-3 text-center bg-card border border-primary/20 shadow-soft">
+            <div className="w-8 h-8 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
+              <Icon className="w-4 h-4 text-white" />
+            </div>
+            <div className="text-xl font-extrabold text-primary">{v}</div>
+            <div className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide">{l}</div>
           </div>
         ))}
       </div>
