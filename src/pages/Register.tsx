@@ -290,10 +290,25 @@ export default function Register() {
               <input type="file" accept="image/*" onChange={(e) => setAv(e.target.files?.[0] ?? null)} />
             </Field>
 
-            <label className="flex items-center justify-between p-3 rounded-xl bg-accent">
-              <span className="text-sm font-semibold">Bạn có muốn thêm doanh nghiệp vào hồ sơ không?</span>
-              <input type="checkbox" checked={isBiz} onChange={(e) => setBiz(e.target.checked)} className="w-5 h-5" />
-            </label>
+            <div className="space-y-2">
+              <div className="text-xs font-semibold text-muted-foreground">Thêm thông tin doanh nghiệp?</div>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setBiz(true)}
+                  className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all ${isBiz ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground"}`}
+                >
+                  🏢 Có, tôi có DN
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBiz(false)}
+                  className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all ${!isBiz ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground"}`}
+                >
+                  👤 Chưa có
+                </button>
+              </div>
+            </div>
 
             <button
               onClick={goNext}
@@ -382,13 +397,28 @@ export default function Register() {
               />
             </Field>
             <Field label="TikTok URL">
-              <input value={tiktokUrl} onChange={(e) => setTk(e.target.value)} placeholder="Link TikTok của bạn" className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={tiktokUrl}
+                onChange={(e) => setTk(e.target.value)}
+                placeholder="Link TikTok của bạn"
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Instagram URL">
-              <input value={instagramUrl} onChange={(e) => setIg(e.target.value)} placeholder="Link Instagram của bạn" className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={instagramUrl}
+                onChange={(e) => setIg(e.target.value)}
+                placeholder="Link Instagram của bạn"
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="YouTube URL">
-              <input value={youtubeUrl} onChange={(e) => setYt(e.target.value)} placeholder="Link YouTube của bạn" className="w-full px-4 py-3 rounded-xl border bg-card" />
+              <input
+                value={youtubeUrl}
+                onChange={(e) => setYt(e.target.value)}
+                placeholder="Link YouTube của bạn"
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
             </Field>
             <Field label="Ảnh bìa">
               <input type="file" accept="image/*" onChange={(e) => setCov(e.target.files?.[0] ?? null)} />
