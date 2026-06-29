@@ -251,7 +251,7 @@ function WelcomeScreen() {
     })();
   }, []);
 
-  return (
+return (
     <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
       <Logo size={72} asLink />
       <div className="space-y-1">
@@ -280,80 +280,33 @@ function WelcomeScreen() {
           </div>
         ))}
       </div>
+      <div className="w-full max-w-sm space-y-2">
+        <Link to="/auth/register" className="block w-full py-2.5 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand text-sm">
+          Tham gia ngay
+        </Link>
+        <Link to="/auth/login" className="block w-full py-2.5 rounded-xl font-semibold border-2 border-primary text-primary text-sm">
+          Đăng nhập
+        </Link>
+      </div>
       <div className="pt-2 border-t w-full max-w-sm">
-        <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">
-          Liên hệ admin
-        </div>
+        <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">Liên hệ admin</div>
         <div className="grid grid-cols-3 gap-2">
-          <a
-            href="mailto:lienminhliendoanh@gmail.com"
-            className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all"
-          >
-            <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg">
-              📧
-            </div>
+          <a href="mailto:lienminhliendoanh@gmail.com" className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all">
+            <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg">📧</div>
             <span className="text-[11px] font-semibold text-muted-foreground">Email</span>
           </a>
-          <a
-            href="tel:0339565246"
-            className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all"
-          >
-            <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-lg">
-              📞
-            </div>
+          <a href="tel:0339565246" className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all">
+            <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-lg">📞</div>
             <span className="text-[11px] font-semibold text-muted-foreground">Hotline</span>
           </a>
-          <a
-            href="https://www.facebook.com/profile.php?id=61590228346408"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all"
-          >
-            <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-lg">
-              📘
-            </div>
+          <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm active:scale-95 transition-all">
+            <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-lg">📘</div>
             <span className="text-[11px] font-semibold text-muted-foreground">Facebook</span>
           </a>
         </div>
       </div>
-      2 chỗ trong Layout.tsx là xong!
-      <div className="w-full max-w-sm space-y-2">
-        <Link
-          to="/auth/register"
-          className="block w-full py-2.5 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand text-sm"
-        >
-          Tham gia ngay
-        </Link>
-        <Link
-          to="/auth/login"
-          className="block w-full py-2.5 rounded-xl font-semibold border-2 border-primary text-primary text-sm"
-        >
-          Đăng nhập
-        </Link>
-      </div>
-      <div className="pt-2 border-t w-full max-w-sm text-xs text-muted-foreground space-y-1">
-        <div className="font-bold text-foreground text-xs">Liên hệ admin</div>
-        <a
-          href="mailto:lienminhliendoanh@gmail.com"
-          className="flex items-center justify-center gap-2 hover:text-primary"
-        >
-          <Mail className="w-3 h-3" /> lienminhliendoanh@gmail.com
-        </a>
-        <a href="tel:0339565246" className="flex items-center justify-center gap-2 hover:text-primary">
-          <Phone className="w-3 h-3" /> 0339565246
-        </a>
-        <a
-          href="https://www.facebook.com/profile.php?id=61590228346408"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-center gap-2 hover:text-primary"
-        >
-          <Facebook className="w-3 h-3" /> Facebook
-        </a>
-      </div>
     </div>
   );
-}
 
 function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
   return (
