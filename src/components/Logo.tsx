@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import logoAsset from "@/assets/logo.webp.asset.json";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "LIÊN MINH LIÊN DOANH";
