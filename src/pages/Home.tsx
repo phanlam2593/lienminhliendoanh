@@ -33,7 +33,12 @@ export default function Home() {
   useEffect(() => {
     (async () => {
       const [{ data: biz }, { data: offers }, { data: reviews }] = await Promise.all([
-        supabase.from("businesses").select("*").eq("status", "approved").eq("is_featured", true).order("created_at", { ascending: false }),
+        supabase
+          .from("businesses")
+          .select("*")
+          .eq("status", "approved")
+          .eq("is_featured", true)
+          .order("created_at", { ascending: false }),
         supabase.from("offers").select("*").eq("status", "active").order("created_at", { ascending: false }),
         supabase.from("reviews").select("*").order("created_at", { ascending: false }),
       ]);
@@ -62,7 +67,11 @@ export default function Home() {
             latestOffer: latestOffer?.title ?? null,
             latestOfferClaims: latestOffer?.claim_count ?? 0,
             latestReview: latestReview
-              ? { rating: latestReview.rating, comment: latestReview.comment, author: authorMap.get(latestReview.user_id) || "Ẩn danh" }
+              ? {
+                  rating: latestReview.rating,
+                  comment: latestReview.comment,
+                  author: authorMap.get(latestReview.user_id) || "Ẩn danh",
+                }
               : null,
           };
         }),
@@ -72,19 +81,48 @@ export default function Home() {
 
   return (
     <div className="space-y-6 pb-6">
-      <section className="text-white px-5 py-10 rounded-b-3xl" style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">✦ Hệ sinh thái cộng đồng</div>
+      <section
+        className="text-white px-5 py-10 rounded-b-3xl"
+        style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}
+      >
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">
+          ✦ Hệ sinh thái cộng đồng
+        </div>
         <h1 className="text-2xl font-extrabold leading-tight mt-3">Nơi thành viên và doanh nghiệp cùng phát triển</h1>
         <p className="text-sm opacity-95 mt-1.5">Một cộng đồng – Nhiều giá trị</p>
-        <Link to="/kham-pha" className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-white text-cyan-700 font-semibold text-sm shadow-md">
+        <Link
+          to="/kham-pha"
+          className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-white text-cyan-700 font-semibold text-sm shadow-md"
+        >
           Khám phá doanh nghiệp <ArrowRight className="w-4 h-4" />
         </Link>
       </section>
 
-      <<section className="px-4 grid grid-cols-3 gap-2 -mt-8 relative z-10">
-        <StatBtn icon={Users} value={stats.members} label="Thành viên" emoji="👥" gradient="linear-gradient(135deg,#00c9a7,#0891b2)" onClick={() => setModal("members")} />
-        <StatBtn icon={Building2} value={stats.businesses} label="Doanh nghiệp" emoji="🏢" gradient="linear-gradient(135deg,#f59e0b,#ef4444)" onClick={() => setModal("businesses")} />
-        <StatBtn icon={Tag} value={stats.offers} label="Ưu đãi" emoji="🎁" gradient="linear-gradient(135deg,#8b5cf6,#ec4899)" onClick={() => setModal("offers")} />
+      <section className="px-4 grid grid-cols-3 gap-2 -mt-8 relative z-10">
+        <StatBtn
+          icon={Users}
+          value={stats.members}
+          label="Thành viên"
+          emoji="👥"
+          gradient="linear-gradient(135deg,#00c9a7,#0891b2)"
+          onClick={() => setModal("members")}
+        />
+        <StatBtn
+          icon={Building2}
+          value={stats.businesses}
+          label="Doanh nghiệp"
+          emoji="🏢"
+          gradient="linear-gradient(135deg,#f59e0b,#ef4444)"
+          onClick={() => setModal("businesses")}
+        />
+        <StatBtn
+          icon={Tag}
+          value={stats.offers}
+          label="Ưu đãi"
+          emoji="🎁"
+          gradient="linear-gradient(135deg,#8b5cf6,#ec4899)"
+          onClick={() => setModal("offers")}
+        />
       </section>
 
       <section className="px-4">
@@ -98,40 +136,76 @@ export default function Home() {
           <p className="text-sm text-muted-foreground py-4">Chưa có doanh nghiệp nổi bật</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {featured.map((b) => <BusinessCard key={b.id} b={b} />)}
+            {featured.map((b) => (
+              <BusinessCard key={b.id} b={b} />
+            ))}
           </div>
         )}
       </section>
 
       <section className="px-4 py-4">
-  <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">Liên hệ admin</div>
-  <div className="grid grid-cols-3 gap-2">
-    <a href="mailto:lienminhliendoanh@gmail.com"
-      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all">
-      <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg">📧</div>
-      <span className="text-[11px] font-semibold text-muted-foreground">Email</span>
-    </a>
-    <a href="tel:0339565246"
-      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all">
-      <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-lg">📞</div>
-      <span className="text-[11px] font-semibold text-muted-foreground">Hotline</span>
-    </a>
-    <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer"
-      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all">
-      <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-lg">📘</div>
-      <span className="text-[11px] font-semibold text-muted-foreground">Facebook</span>
-    </a>
-  </div>
-</section>
+        <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">
+          Liên hệ admin
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          <a
+            href="mailto:lienminhliendoanh@gmail.com"
+            className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all"
+          >
+            <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg">
+              📧
+            </div>
+            <span className="text-[11px] font-semibold text-muted-foreground">Email</span>
+          </a>
+          <a
+            href="tel:0339565246"
+            className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all"
+          >
+            <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-lg">
+              📞
+            </div>
+            <span className="text-[11px] font-semibold text-muted-foreground">Hotline</span>
+          </a>
+          <a
+            href="https://www.facebook.com/profile.php?id=61590228346408"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all"
+          >
+            <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-lg">
+              📘
+            </div>
+            <span className="text-[11px] font-semibold text-muted-foreground">Facebook</span>
+          </a>
+        </div>
+      </section>
 
       <StatsModal kind={modal} onClose={() => setModal(null)} />
     </div>
   );
 }
 
-function StatBtn({ icon: Icon, value, label, onClick, gradient, emoji }: { icon: any; value: number; label: string; onClick: () => void; gradient: string; emoji: string }) {
+function StatBtn({
+  icon: Icon,
+  value,
+  label,
+  onClick,
+  gradient,
+  emoji,
+}: {
+  icon: any;
+  value: number;
+  label: string;
+  onClick: () => void;
+  gradient: string;
+  emoji: string;
+}) {
   return (
-    <button onClick={onClick} className="rounded-2xl p-3 shadow-md text-center hover:shadow-lg active:scale-95 transition-all overflow-hidden" style={{ background: gradient }}>
+    <button
+      onClick={onClick}
+      className="rounded-2xl p-3 shadow-md text-center hover:shadow-lg active:scale-95 transition-all overflow-hidden"
+      style={{ background: gradient }}
+    >
       <div className="text-2xl mb-0.5">{emoji}</div>
       <div className="text-xl font-extrabold text-white">{value}</div>
       <div className="text-[10px] text-white/80 font-semibold uppercase">{label}</div>
@@ -145,12 +219,19 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!kind) { setItems([]); setQ(""); return; }
+    if (!kind) {
+      setItems([]);
+      setQ("");
+      return;
+    }
     setLoading(true);
     (async () => {
       if (kind === "members") {
-        const { data } = await supabase.from("profiles").select("id, full_name, username, avatar_url, created_at")
-          .eq("status", "approved").order("created_at", { ascending: false });
+        const { data } = await supabase
+          .from("profiles")
+          .select("id, full_name, username, avatar_url, created_at")
+          .eq("status", "approved")
+          .order("created_at", { ascending: false });
         setItems(data ?? []);
       } else if (kind === "businesses") {
         const [{ data: biz }, { data: offers }] = await Promise.all([
@@ -161,14 +242,21 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
         (offers ?? []).forEach((o: any) => cnt.set(o.business_id, (cnt.get(o.business_id) ?? 0) + 1));
         setItems((biz ?? []).map((b: any) => ({ ...b, offerCount: cnt.get(b.id) ?? 0 })));
       } else if (kind === "offers") {
-        const { data: claims } = await supabase.from("offer_claims").select("id, offer_id, user_id, code, claimed_at")
-          .order("claimed_at", { ascending: false }).limit(500);
+        const { data: claims } = await supabase
+          .from("offer_claims")
+          .select("id, offer_id, user_id, code, claimed_at")
+          .order("claimed_at", { ascending: false })
+          .limit(500);
         const list = claims ?? [];
         const offerIds = [...new Set(list.map((c: any) => c.offer_id))];
         const userIds = [...new Set(list.map((c: any) => c.user_id))];
         const [{ data: offs }, { data: profs }] = await Promise.all([
-          offerIds.length ? supabase.from("offers").select("id, title, business_id").in("id", offerIds) : Promise.resolve({ data: [] } as any),
-          userIds.length ? supabase.from("profiles").select("id, full_name").in("id", userIds) : Promise.resolve({ data: [] } as any),
+          offerIds.length
+            ? supabase.from("offers").select("id, title, business_id").in("id", offerIds)
+            : Promise.resolve({ data: [] } as any),
+          userIds.length
+            ? supabase.from("profiles").select("id, full_name").in("id", userIds)
+            : Promise.resolve({ data: [] } as any),
         ]);
         const bizIds: string[] = Array.from(new Set(((offs ?? []) as any[]).map((o) => o.business_id as string)));
         const { data: biz } = bizIds.length
@@ -177,15 +265,17 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
         const oMap = new Map((offs ?? []).map((o: any) => [o.id, o]));
         const bMap = new Map((biz ?? []).map((b: any) => [b.id, b.name]));
         const pMap = new Map((profs ?? []).map((p: any) => [p.id, p.full_name]));
-        setItems(list.map((c: any) => {
-          const o = oMap.get(c.offer_id) as any;
-          return {
-            ...c,
-            offer_title: o?.title || "(đã xóa)",
-            business_name: o ? (bMap.get(o.business_id) || "—") : "—",
-            claimer_name: pMap.get(c.user_id) || "Ẩn danh",
-          };
-        }));
+        setItems(
+          list.map((c: any) => {
+            const o = oMap.get(c.offer_id) as any;
+            return {
+              ...c,
+              offer_title: o?.title || "(đã xóa)",
+              business_name: o ? bMap.get(o.business_id) || "—" : "—",
+              claimer_name: pMap.get(c.user_id) || "Ẩn danh",
+            };
+          }),
+        );
       }
       setLoading(false);
     })();
@@ -194,9 +284,20 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
   const filtered = useMemo(() => {
     const k = q.trim().toLowerCase();
     if (!k) return items;
-    if (kind === "members") return items.filter(i => (i.full_name || "").toLowerCase().includes(k) || (i.username || "").toLowerCase().includes(k));
-    if (kind === "businesses") return items.filter(i => (i.name || "").toLowerCase().includes(k) || (BUSINESS_TYPE_LABEL[i.type as keyof typeof BUSINESS_TYPE_LABEL] || "").toLowerCase().includes(k));
-    if (kind === "offers") return items.filter(i => (i.offer_title || "").toLowerCase().includes(k) || (i.business_name || "").toLowerCase().includes(k));
+    if (kind === "members")
+      return items.filter(
+        (i) => (i.full_name || "").toLowerCase().includes(k) || (i.username || "").toLowerCase().includes(k),
+      );
+    if (kind === "businesses")
+      return items.filter(
+        (i) =>
+          (i.name || "").toLowerCase().includes(k) ||
+          (BUSINESS_TYPE_LABEL[i.type as keyof typeof BUSINESS_TYPE_LABEL] || "").toLowerCase().includes(k),
+      );
+    if (kind === "offers")
+      return items.filter(
+        (i) => (i.offer_title || "").toLowerCase().includes(k) || (i.business_name || "").toLowerCase().includes(k),
+      );
     return items;
   }, [items, q, kind]);
 
@@ -206,52 +307,80 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
     <Dialog open={!!kind} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-md max-h-[85vh] overflow-hidden flex flex-col p-0">
         <DialogHeader className="px-4 pt-4 pb-2">
-          <DialogTitle>{title} ({filtered.length})</DialogTitle>
+          <DialogTitle>
+            {title} ({filtered.length})
+          </DialogTitle>
         </DialogHeader>
         <div className="px-4 pb-2">
           <div className="relative">
             <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Tìm kiếm…" className="w-full pl-9 pr-3 py-2 rounded-lg border bg-background text-sm" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Tìm kiếm…"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border bg-background text-sm"
+            />
           </div>
         </div>
         <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
-          {loading ? <p className="text-center py-8 text-sm text-muted-foreground">Đang tải…</p>
-            : filtered.length === 0 ? <p className="text-center py-8 text-sm text-muted-foreground">Không có kết quả</p>
-            : kind === "members" ? filtered.map((m: any) => (
-                <Link key={m.id} to={`/ho-so/${m.id}`} onClick={onClose} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent">
-                  <Avatar path={m.avatar_url} name={m.full_name} size={40} />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold truncate">{m.full_name}</div>
-                    <div className="text-[11px] text-muted-foreground truncate">@{m.username} · Tham gia {new Date(m.created_at).toLocaleDateString("vi-VN")}</div>
+          {loading ? (
+            <p className="text-center py-8 text-sm text-muted-foreground">Đang tải…</p>
+          ) : filtered.length === 0 ? (
+            <p className="text-center py-8 text-sm text-muted-foreground">Không có kết quả</p>
+          ) : kind === "members" ? (
+            filtered.map((m: any) => (
+              <Link
+                key={m.id}
+                to={`/ho-so/${m.id}`}
+                onClick={onClose}
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent"
+              >
+                <Avatar path={m.avatar_url} name={m.full_name} size={40} />
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">{m.full_name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate">
+                    @{m.username} · Tham gia {new Date(m.created_at).toLocaleDateString("vi-VN")}
                   </div>
-                </Link>
-              ))
-            : kind === "businesses" ? filtered.map((b: any) => (
-                <Link key={b.id} to={`/dn/${b.id}`} onClick={onClose} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent">
-                  <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted shrink-0">
-                    <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold truncate">{b.name}</div>
-                    <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 flex-wrap">
-                      <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
-                      <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
-                      <span>· {b.offerCount} ưu đãi</span>
-                    </div>
-                  </div>
-                </Link>
-              ))
-            : filtered.map((c: any) => (
-                <div key={c.id} className="p-3 rounded-lg bg-card border space-y-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="text-sm font-semibold truncate flex-1">{c.offer_title}</div>
-                    <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">{c.code}</span>
-                  </div>
-                  <div className="text-[11px] text-muted-foreground">🏢 {c.business_name}</div>
-                  <div className="text-[11px] text-muted-foreground">👤 {c.claimer_name} · {new Date(c.claimed_at).toLocaleString("vi-VN")}</div>
                 </div>
-              ))
-          }
+              </Link>
+            ))
+          ) : kind === "businesses" ? (
+            filtered.map((b: any) => (
+              <Link
+                key={b.id}
+                to={`/dn/${b.id}`}
+                onClick={onClose}
+                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent"
+              >
+                <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted shrink-0">
+                  <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">{b.name}</div>
+                  <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 flex-wrap">
+                    <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
+                    <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
+                    <span>· {b.offerCount} ưu đãi</span>
+                  </div>
+                </div>
+              </Link>
+            ))
+          ) : (
+            filtered.map((c: any) => (
+              <div key={c.id} className="p-3 rounded-lg bg-card border space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-sm font-semibold truncate flex-1">{c.offer_title}</div>
+                  <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                    {c.code}
+                  </span>
+                </div>
+                <div className="text-[11px] text-muted-foreground">🏢 {c.business_name}</div>
+                <div className="text-[11px] text-muted-foreground">
+                  👤 {c.claimer_name} · {new Date(c.claimed_at).toLocaleString("vi-VN")}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </DialogContent>
     </Dialog>
