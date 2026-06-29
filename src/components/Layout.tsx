@@ -313,12 +313,12 @@ function WelcomeScreen() {
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
               rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border border-primary/20 shadow-soft hover:shadow-brand active:scale-95 transition-all"
+              className="flex flex-col items-center gap-1 p-2 rounded-xl bg-card border border-primary/20 shadow-soft active:scale-95 transition-all"
             >
-              <div className="w-9 h-9 rounded-full bg-gradient-brand grid place-items-center animate-pulse-ring">
-                <Icon className="w-4 h-4 text-white" />
+              <div className="w-7 h-7 rounded-full bg-gradient-brand grid place-items-center animate-pulse-ring">
+                <Icon className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="text-[11px] font-semibold text-muted-foreground">{label}</span>
+              <span className="text-[10px] font-semibold text-muted-foreground">{label}</span>
             </a>
           ))}
         </div>
