@@ -81,9 +81,10 @@ export default function Home() {
         </Link>
       </section>
 
-      <StatBtn icon={Users} value={stats.members} label="Thành viên" emoji="👥" gradient="linear-gradient(135deg,#00c9a7,#0891b2)" onClick={() => setModal("members")} />
-<StatBtn icon={Building2} value={stats.businesses} label="Doanh nghiệp" emoji="🏢" gradient="linear-gradient(135deg,#f59e0b,#ef4444)" onClick={() => setModal("businesses")} />
-<StatBtn icon={Tag} value={stats.offers} label="Ưu đãi" emoji="🎁" gradient="linear-gradient(135deg,#8b5cf6,#ec4899)" onClick={() => setModal("offers")} />
+      <<section className="px-4 grid grid-cols-3 gap-2 -mt-8 relative z-10">
+        <StatBtn icon={Users} value={stats.members} label="Thành viên" emoji="👥" gradient="linear-gradient(135deg,#00c9a7,#0891b2)" onClick={() => setModal("members")} />
+        <StatBtn icon={Building2} value={stats.businesses} label="Doanh nghiệp" emoji="🏢" gradient="linear-gradient(135deg,#f59e0b,#ef4444)" onClick={() => setModal("businesses")} />
+        <StatBtn icon={Tag} value={stats.offers} label="Ưu đãi" emoji="🎁" gradient="linear-gradient(135deg,#8b5cf6,#ec4899)" onClick={() => setModal("offers")} />
       </section>
 
       <section className="px-4">
