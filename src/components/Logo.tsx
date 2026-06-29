@@ -1,15 +1,36 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logo64 from "@/assets/logo-64.png.asset.json";
+import logo128 from "@/assets/logo-128.png.asset.json";
+import logo256 from "@/assets/logo-256.png.asset.json";
+import logo512 from "@/assets/logo-512.png.asset.json";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 const APP_NAME = "LIÊN MINH LIÊN DOANH";
 const TAGLINE = "Một cộng đồng – Nhiều giá trị";
 const BRAND = "#0891b2";
 
+// Responsive srcset — browser picks the smallest variant that satisfies
+// the rendered CSS size × devicePixelRatio. Keeps mobile crisp without
+// shipping the full 1024px master to every viewport.
+const SRCSET = [
+  `${logo64.url} 64w`,
+  `${logo128.url} 128w`,
+  `${logo256.url} 256w`,
+  `${logo512.url} 512w`,
+].join(", ");
+
+function pickSrc(size: number) {
+  if (size <= 48) return logo64.url;
+  if (size <= 96) return logo128.url;
+  if (size <= 192) return logo256.url;
+  return logo512.url;
+}
+
 /**
- * Brand mark: forest-green circle with mountains, 3 people, and a handshake.
- * Uses the official uploaded brand asset. Clicking always navigates to "/".
+ * Brand mark: gradient circle with mountains, 3 people, and a handshake.
+ * Serves responsive variants (64/128/256/512) via srcset for sharp rendering
+ * on every DPR without overshipping bytes on small viewports.
  */
 export function Logo({
   size = 40,
@@ -29,11 +50,15 @@ export function Logo({
   const content = (
     <div className={cn("flex items-center gap-2.5", className)}>
       <img
-        src={logoAsset.url}
+        src={pickSrc(size)}
+        srcSet={SRCSET}
+        sizes={`${size}px`}
         alt="Liên Minh Liên Doanh logo"
         width={size}
         height={size}
         style={{ width: size, height: size }}
+        loading="eager"
+        decoding="async"
         className="object-contain shrink-0"
       />
       {withText && (
