@@ -129,7 +129,7 @@ export default function Home() {
 
       <section className="px-4 py-4">
         <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">
-          Liên hệ admin
+          Liên hệ ban quản trị
         </div>
         <div className="grid grid-cols-3 gap-2">
           {[
