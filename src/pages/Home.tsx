@@ -102,18 +102,26 @@ export default function Home() {
         )}
       </section>
 
-      <section className="px-4 py-6 text-center">
-        <h3 className="text-sm font-semibold text-muted-foreground mb-2">Liên hệ admin</h3>
-        <div className="flex flex-col items-center gap-1.5 text-xs text-muted-foreground">
-          <a href="mailto:lienminhliendoanh@gmail.com" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
-            <Mail className="w-3.5 h-3.5" /> lienminhliendoanh@gmail.com
-          </a>
-          <a href="tel:0339565246" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">
-            <Phone className="w-3.5 h-3.5" /> 0339565246
-          </a>
-          <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors">Facebook</a>
-        </div>
-      </section>
+      <section className="px-4 py-4">
+  <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">Liên hệ admin</div>
+  <div className="grid grid-cols-3 gap-2">
+    <a href="mailto:lienminhliendoanh@gmail.com"
+      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all">
+      <div className="w-9 h-9 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center text-lg">📧</div>
+      <span className="text-[11px] font-semibold text-muted-foreground">Email</span>
+    </a>
+    <a href="tel:0339565246"
+      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all">
+      <div className="w-9 h-9 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-lg">📞</div>
+      <span className="text-[11px] font-semibold text-muted-foreground">Hotline</span>
+    </a>
+    <a href="https://www.facebook.com/profile.php?id=61590228346408" target="_blank" rel="noopener noreferrer"
+      className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card shadow-sm hover:shadow-md active:scale-95 transition-all">
+      <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-lg">📘</div>
+      <span className="text-[11px] font-semibold text-muted-foreground">Facebook</span>
+    </a>
+  </div>
+</section>
 
       <StatsModal kind={modal} onClose={() => setModal(null)} />
     </div>
