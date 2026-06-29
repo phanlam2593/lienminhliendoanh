@@ -190,25 +190,22 @@ function StatBtn({
   value,
   label,
   onClick,
-  gradient,
-  emoji,
 }: {
   icon: any;
   value: number;
   label: string;
   onClick: () => void;
-  gradient: string;
-  emoji: string;
 }) {
   return (
     <button
       onClick={onClick}
-      className="rounded-2xl p-3 shadow-md text-center hover:shadow-lg active:scale-95 transition-all overflow-hidden"
-      style={{ background: gradient }}
+      className="rounded-2xl p-3 text-center bg-card border border-primary/20 shadow-soft hover:shadow-brand active:scale-95 transition-all"
     >
-      <div className="text-2xl mb-0.5">{emoji}</div>
-      <div className="text-xl font-extrabold text-white">{value}</div>
-      <div className="text-[10px] text-white/80 font-semibold uppercase">{label}</div>
+      <div className="w-9 h-9 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
+        <Icon className="w-4 h-4 text-white" />
+      </div>
+      <div className="text-xl font-extrabold text-primary">{value}</div>
+      <div className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide">{label}</div>
     </button>
   );
 }
