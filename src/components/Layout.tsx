@@ -13,6 +13,8 @@ import {
   Facebook,
   MessageCircle,
   Briefcase,
+  Building2,
+  Tag,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
