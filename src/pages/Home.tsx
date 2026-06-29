@@ -128,12 +128,12 @@ export default function Home() {
   );
 }
 
-function StatBtn({ icon: Icon, value, label, onClick }: { icon: any; value: number; label: string; onClick: () => void }) {
+function StatBtn({ icon: Icon, value, label, onClick, gradient, emoji }: { icon: any; value: number; label: string; onClick: () => void; gradient: string; emoji: string }) {
   return (
-    <button onClick={onClick} className="bg-card rounded-2xl p-3 shadow-md text-center hover:shadow-lg active:scale-95 transition">
-      <Icon className="w-5 h-5 text-primary mx-auto" />
-      <div className="text-xl font-extrabold mt-1">{value}</div>
-      <div className="text-[10px] text-muted-foreground font-semibold uppercase">{label}</div>
+    <button onClick={onClick} className="rounded-2xl p-3 shadow-md text-center hover:shadow-lg active:scale-95 transition-all overflow-hidden" style={{ background: gradient }}>
+      <div className="text-2xl mb-0.5">{emoji}</div>
+      <div className="text-xl font-extrabold text-white">{value}</div>
+      <div className="text-[10px] text-white/80 font-semibold uppercase">{label}</div>
     </button>
   );
 }
