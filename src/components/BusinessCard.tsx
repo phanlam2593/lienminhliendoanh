@@ -17,14 +17,17 @@ export interface BusinessCardData extends Business {
 
 export function BusinessCard({ b }: { b: BusinessCardData }) {
   return (
-    <Link to={`/dn/${b.id}`} className="block rounded-2xl overflow-hidden bg-card shadow-md hover:shadow-lg transition active:scale-[0.99]">
+    <Link
+      to={`/dn/${b.id}`}
+      className="block rounded-2xl overflow-hidden bg-card shadow-md hover:shadow-lg transition active:scale-[0.99]"
+    >
       <div className="relative w-full" style={{ height: 200 }}>
         <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
         <span className="absolute top-2 left-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-[11px] font-semibold text-foreground">
           {BUSINESS_TYPE_LABEL[b.type]}
         </span>
         {typeof b.rating === "number" && b.reviewCount! > 0 && (
-          <span className="absolute top-2 right-2 bg-black/70 text-white px-2.5 py-1 rounded-full text-[11px] font-semibold inline-flex items-center gap-1">
+          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-[11px] font-semibold text-emerald-700">
             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
             {b.rating?.toFixed(1)}
           </span>
@@ -36,7 +39,9 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
       <div className="p-3 space-y-1.5">
         <h3 className="font-bold text-base leading-tight line-clamp-1">{b.name}</h3>
         {b.hours_open && b.hours_close && (
-          <p className="text-xs text-muted-foreground">{fmtTime(b.hours_open)} – {fmtTime(b.hours_close)}</p>
+          <p className="text-xs text-muted-foreground">
+            {fmtTime(b.hours_open)} – {fmtTime(b.hours_close)}
+          </p>
         )}
         {b.latestOffer && (
           <div className="mt-2 flex items-center gap-2 bg-emerald-50 text-emerald-700 px-2.5 py-1.5 rounded-full">
@@ -53,7 +58,10 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
           <div className="mt-2 pt-2 border-t border-border/60">
             <div className="flex items-center gap-1 mb-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className={`w-3 h-3 ${i < b.latestReview!.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground opacity-40"}`} />
+                <Star
+                  key={i}
+                  className={`w-3 h-3 ${i < b.latestReview!.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground opacity-40"}`}
+                />
               ))}
               <span className="text-[10px] text-muted-foreground ml-1 truncate">— {b.latestReview.author}</span>
             </div>
