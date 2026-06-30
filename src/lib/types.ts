@@ -83,14 +83,9 @@ export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   service: "Dịch vụ",
   stay: "Lưu trú",
   travel: "Du lịch",
-  freelancer: "Freelancer",
-  photographer: "Nhiếp ảnh",
-  graphic_designer: "Thiết kế đồ họa",
-  tiktok: "TikToker",
-  youtube: "YouTuber",
-  streamer: "Streamer",
-  influencer: "Influencer",
-  content_creator: "Sáng tạo nội dung",
+  creator: "Sáng tạo nội dung",
+  freelance: "Nghề tự do",
+  broker: "Môi giới",
   other: "Khác",
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_TYPE_LABEL) as BusinessType[];
