@@ -27,7 +27,7 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
           {BUSINESS_TYPE_LABEL[b.type]}
         </span>
         {typeof b.rating === "number" && b.reviewCount! > 0 && (
-          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-[11px] font-semibold text-emerald-700">
+          <span className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-[11px] font-semibold text-emerald-700 z-10">
             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
             {b.rating?.toFixed(1)}
           </span>
