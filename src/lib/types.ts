@@ -1,6 +1,9 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-export type BusinessType = "food" | "service" | "stay" | "travel" | "freelancer" | "photographer" | "graphic_designer" | "tiktok" | "youtube" | "streamer" | "influencer" | "content_creator" | "other";
+// DO NOT CHANGE: 8 fixed business types, finalized by product owner
+export type BusinessType =
+  | "food" | "service" | "stay" | "travel"
+  | "creator" | "freelance" | "broker" | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
@@ -80,14 +83,9 @@ export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   service: "Dịch vụ",
   stay: "Lưu trú",
   travel: "Du lịch",
-  freelancer: "Freelancer",
-  photographer: "Nhiếp ảnh",
-  graphic_designer: "Thiết kế đồ họa",
-  tiktok: "TikToker",
-  youtube: "YouTuber",
-  streamer: "Streamer",
-  influencer: "Influencer",
-  content_creator: "Sáng tạo nội dung",
+  creator: "Sáng tạo nội dung",
+  freelance: "Nghề tự do",
+  broker: "Môi giới",
   other: "Khác",
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_TYPE_LABEL) as BusinessType[];
