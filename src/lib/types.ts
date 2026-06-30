@@ -1,6 +1,9 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-export type BusinessType = "food" | "service" | "stay" | "travel" | "freelancer" | "photographer" | "graphic_designer" | "tiktok" | "youtube" | "streamer" | "influencer" | "content_creator" | "other";
+// DO NOT CHANGE: 8 fixed business types, finalized by product owner
+export type BusinessType =
+  | "food" | "service" | "stay" | "travel"
+  | "creator" | "freelance" | "broker" | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
