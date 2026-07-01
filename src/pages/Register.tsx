@@ -386,6 +386,7 @@ export default function Register() {
               <input
                 value={fbUrl}
                 onChange={(e) => setFB(e.target.value)}
+                placeholder="Link Facebook của bạn"
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
@@ -393,6 +394,7 @@ export default function Register() {
               <input
                 value={webUrl}
                 onChange={(e) => setW(e.target.value)}
+                placeholder="Website của bạn"
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
