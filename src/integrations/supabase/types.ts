@@ -689,6 +689,9 @@ export type Database = {
         | "streamer"
         | "influencer"
         | "content_creator"
+        | "creator"
+        | "freelance"
+        | "broker"
       offer_status: "active" | "inactive"
       report_status: "pending" | "replied" | "resolved" | "closed"
       report_target: "business" | "offer"
@@ -839,6 +842,9 @@ export const Constants = {
         "streamer",
         "influencer",
         "content_creator",
+        "creator",
+        "freelance",
+        "broker",
       ],
       offer_status: ["active", "inactive"],
       report_status: ["pending", "replied", "resolved", "closed"],

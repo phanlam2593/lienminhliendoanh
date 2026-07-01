@@ -382,21 +382,23 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Facebook URL">
+            <Field label="Facebook URL (tùy chọn)">
               <input
                 value={fbUrl}
                 onChange={(e) => setFB(e.target.value)}
+                placeholder="Link Facebook của bạn"
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Website">
+            <Field label="Website (tùy chọn)">
               <input
                 value={webUrl}
                 onChange={(e) => setW(e.target.value)}
+                placeholder="Website của bạn"
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="TikTok URL">
+            <Field label="TikTok URL (tùy chọn)">
               <input
                 value={tiktokUrl}
                 onChange={(e) => setTk(e.target.value)}
@@ -404,7 +406,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Instagram URL">
+            <Field label="Instagram URL (tùy chọn)">
               <input
                 value={instagramUrl}
                 onChange={(e) => setIg(e.target.value)}
@@ -412,7 +414,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="YouTube URL">
+            <Field label="YouTube URL (tùy chọn)">
               <input
                 value={youtubeUrl}
                 onChange={(e) => setYt(e.target.value)}
