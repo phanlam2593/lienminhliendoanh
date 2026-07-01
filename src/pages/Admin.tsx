@@ -23,6 +23,16 @@ import {
   Award,
   TrendingUp,
   Building2,
+  Sparkles,
+  Users,
+  Search,
+  Trash2,
+  Save,
+  KeyRound,
+  Copy,
+  ChevronDown,
+  ChevronRight,
+  Send,
 } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
