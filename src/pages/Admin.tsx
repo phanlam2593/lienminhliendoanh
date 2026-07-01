@@ -7,22 +7,22 @@ import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/l
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
+  Bell,
   Check,
   X,
-  Trash2,
-  Send,
-  Save,
-  Search,
+  CheckCircle2,
+  XCircle,
   Star,
-  Flag,
-  ChevronDown,
-  ChevronRight,
-  Building2,
+  UserPlus,
   Tag,
-  Users,
-  Sparkles,
-  KeyRound,
-  Copy,
+  Ticket,
+  MessageCircle,
+  Shield,
+  Flag,
+  Lightbulb,
+  Award,
+  TrendingUp,
+  Building2,
 } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
