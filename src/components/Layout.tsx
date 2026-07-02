@@ -349,3 +349,55 @@ function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
     </div>
   );
 }
+function InstallBanner() {
+  const [show, setShow] = useState(false);
+  const [canPromptNative, setCanPromptNative] = useState(false);
+
+  useEffect(() => {
+    initInstallPrompt((canPrompt) => {
+      setCanPromptNative(canPrompt);
+      setShow(true);
+    });
+  }, []);
+
+  if (!show) return null;
+
+  const handleInstall = async () => {
+    if (canPromptNative) {
+      await triggerInstall();
+      setShow(false);
+    }
+  };
+
+  const handleDismiss = () => {
+    dismissInstallBanner();
+    setShow(false);
+  };
+
+  return (
+    <div className="fixed bottom-16 left-0 right-0 z-50 px-3 pb-2 max-w-md mx-auto animate-in slide-in-from-bottom">
+      <div className="bg-gradient-brand text-white rounded-2xl shadow-brand p-3 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl bg-white/20 grid place-items-center shrink-0">
+          <Download className="w-5 h-5" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-bold">Thêm vào màn hình chính</div>
+          <div className="text-[11px] opacity-90">
+            {canPromptNative ? "Cài app để dùng nhanh hơn" : "Nhấn nút Chia sẻ → Thêm vào MH chính"}
+          </div>
+        </div>
+        {canPromptNative && (
+          <button
+            onClick={handleInstall}
+            className="px-3 py-1.5 rounded-lg bg-white text-primary text-xs font-bold shrink-0"
+          >
+            Thêm
+          </button>
+        )}
+        <button onClick={handleDismiss} className="p-1 shrink-0" aria-label="Đóng">
+          <XIcon className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
