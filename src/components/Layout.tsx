@@ -16,6 +16,8 @@ import {
   MessageCircle,
   Building2,
 } from "lucide-react";
+import { initInstallPrompt, triggerInstall, dismissInstallBanner } from "@/lib/pwa";
+import { Download, X as XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
