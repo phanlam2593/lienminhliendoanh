@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { requestPushPermission } from "@/lib/pwa";
+import { BellRing } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
