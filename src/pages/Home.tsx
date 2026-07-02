@@ -9,7 +9,6 @@ import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { Avatar } from "@/components/Avatar";
 import { StoredImage } from "@/components/StoredImage";
 import { OpenBadge } from "@/components/OpenBadge";
-import { useAuth } from "@/lib/auth";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 type StatKind = "members" | "businesses" | "offers";
