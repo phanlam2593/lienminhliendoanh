@@ -6,8 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 const SW_URL = "/sw.js";
-const VAPID_PUBLIC_KEY =
-  "BHFzPpiSJBKk1OYCSIoxgwsjbBuGUsftLmhFcmvcAyl4EBtYK7DKp2QdLBuMS-4I8Z0-oqxYB66nPWs01hzZnIs";
+const VAPID_PUBLIC_KEY = "BHFzPpiSJBKk1OYCSIoxgwsjbBuGUsftLmhFcmvcAyl4EBtYK7DKp2QdLBuMS-4I8Z0-oqxYB66nPWs01hzZnIs";
 const PUSH_ASK_KEY = "lmld:push-asked";
 
 function isPreviewHost(hostname: string): boolean {
@@ -72,10 +71,7 @@ async function setupPush(registration: ServiceWorkerRegistration) {
 
     await supabase
       .from("push_subscriptions")
-      .upsert(
-        { user_id: user.id, endpoint: json.endpoint, p256dh, auth },
-        { onConflict: "endpoint" },
-      );
+      .upsert({ user_id: user.id, endpoint: json.endpoint, p256dh, auth }, { onConflict: "endpoint" });
   } catch (e) {
     // Silent — push is best-effort
     console.warn("[push] setup failed", e);
@@ -87,7 +83,11 @@ export function registerPwa() {
   if (!("serviceWorker" in navigator)) return;
 
   const inIframe = (() => {
-    try { return window.self !== window.top; } catch { return true; }
+    try {
+      return window.self !== window.top;
+    } catch {
+      return true;
+    }
   })();
   const url = new URL(window.location.href);
   const killed = url.searchParams.get("sw") === "off";
@@ -115,4 +115,47 @@ export function registerPwa() {
       });
     } catch {}
   });
+}
+// ===== Install prompt (Add to Home Screen) =====
+const INSTALL_DISMISS_KEY = "lmld:install-dismissed-at";
+let deferredInstallPrompt: any = null;
+
+function isStandalone(): boolean {
+  return window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone === true;
+}
+
+function shouldShowInstallBanner(): boolean {
+  if (isStandalone()) return false;
+  const dismissedAt = localStorage.getItem(INSTALL_DISMISS_KEY);
+  if (dismissedAt && Date.now() - Number(dismissedAt) < 7 * 24 * 60 * 60 * 1000) return false;
+  return true;
+}
+
+export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
+  if (typeof window === "undefined") return;
+  if (!shouldShowInstallBanner()) return;
+
+  window.addEventListener("beforeinstallprompt", (e: any) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    onShow(true);
+  });
+
+  // iOS doesn't fire beforeinstallprompt — show banner anyway after a short delay
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isIOS && !isStandalone()) {
+    setTimeout(() => onShow(false), 2000);
+  }
+}
+
+export async function triggerInstall(): Promise<boolean> {
+  if (!deferredInstallPrompt) return false;
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  return outcome === "accepted";
+}
+
+export function dismissInstallBanner() {
+  localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now()));
 }
