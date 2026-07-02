@@ -32,7 +32,7 @@ export default function Home() {
       ]);
       setStats({ members: m.count ?? 0, businesses: b.count ?? 0, offers: o.count ?? 0 });
     })();
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => {
     (async () => {
