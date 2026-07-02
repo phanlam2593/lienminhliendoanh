@@ -112,7 +112,7 @@ export default function Home() {
           label="Doanh nghiệp"
           onClick={() => setModal("businesses")}
         />
-        <StatBtn icon={Tag} value={stats.offers} label="Ưu đãi" onClick={() => setModal("offers")} />
+        <StatBtn icon={Tag} value={stats.offers} label="Ưu đãi đã nhận" onClick={() => setModal("offers")} />
       </section>
 
       <section className="px-4">
