@@ -15,14 +15,13 @@ type StatKind = "members" | "businesses" | "offers";
 
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 export default function Home() {
+  const { user } = useAuth();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
   const [featured, setFeatured] = useState<BusinessCardData[]>([]);
   const [modal, setModal] = useState<StatKind | null>(null);
 
   useEffect(() => {
     (async () => {
-      const { user } = useAuth();
-      // ... trong useEffect:
       const [m, b, o] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "approved"),
         supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "approved"),
