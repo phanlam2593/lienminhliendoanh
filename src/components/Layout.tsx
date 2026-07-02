@@ -238,6 +238,7 @@ export function Layout() {
           </div>
         </nav>
       )}
+      <InstallBanner />
     </div>
   );
 }
