@@ -10,4 +10,8 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.admin-reset-password]
+[functions.admin-reset-password]
 verify_jwt = true
+
+[functions.send-push]
+verify_jwt = false
