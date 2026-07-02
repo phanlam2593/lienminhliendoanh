@@ -21,10 +21,15 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
+      const { user } = useAuth();
+      // ... trong useEffect:
       const [m, b, o] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "approved"),
         supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "approved"),
-        supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "active"),
+        supabase
+          .from("offer_claims")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user?.id ?? ""),
       ]);
       setStats({ members: m.count ?? 0, businesses: b.count ?? 0, offers: o.count ?? 0 });
     })();
