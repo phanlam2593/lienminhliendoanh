@@ -42,15 +42,8 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 async function setupPush(registration: ServiceWorkerRegistration) {
   try {
     if (!("PushManager" in window) || !("Notification" in window)) return;
-
-    // Only ask once. Respect the user's prior decision.
-    if (Notification.permission === "denied") return;
-    if (Notification.permission === "default") {
-      if (localStorage.getItem(PUSH_ASK_KEY)) return;
-      localStorage.setItem(PUSH_ASK_KEY, "1");
-      const perm = await Notification.requestPermission();
-      if (perm !== "granted") return;
-    }
+    // Only auto-subscribe if permission was already granted (via manual button).
+    if (Notification.permission !== "granted") return;
 
     const { data: authData } = await supabase.auth.getUser();
     const user = authData?.user;
@@ -158,4 +151,13 @@ export async function triggerInstall(): Promise<boolean> {
 
 export function dismissInstallBanner() {
   localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now()));
+}
+export async function requestPushPermission(): Promise<"granted" | "denied" | "unsupported"> {
+  if (!("Notification" in window) || !("serviceWorker" in navigator)) return "unsupported";
+  const perm = await Notification.requestPermission();
+  if (perm === "granted") {
+    const reg = await navigator.serviceWorker.ready;
+    await setupPush(reg);
+  }
+  return perm;
 }
