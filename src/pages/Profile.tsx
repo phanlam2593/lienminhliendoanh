@@ -926,7 +926,8 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
           active={open === "notif"}
         />
         {open === "notif" && (
-          <div className="p-3">
+          <div className="p-3 space-y-3">
+            <PushPermissionButton />
             <NotificationPrefsForm userId={userId} initial={initialPrefs} />
           </div>
         )}
@@ -1361,5 +1362,51 @@ function BusinessCreator({
         {saving ? "Đang gửi…" : "Gửi để duyệt"}
       </button>
     </div>
+  );
+}
+function PushPermissionButton() {
+  const [status, setStatus] = useState<NotificationPermission | "unsupported" | "checking">("checking");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (typeof Notification === "undefined") {
+      setStatus("unsupported");
+    } else {
+      setStatus(Notification.permission);
+    }
+  }, []);
+
+  const handleEnable = async () => {
+    setBusy(true);
+    const result = await requestPushPermission();
+    setStatus(result);
+    setBusy(false);
+    if (result === "granted") toast.success("Đã bật thông báo đẩy!");
+    else if (result === "denied") toast.error("Bạn đã từ chối quyền thông báo trong trình duyệt");
+  };
+
+  if (status === "unsupported") return null;
+  if (status === "granted") {
+    return (
+      <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold">
+        <BellRing className="w-4 h-4" /> Thông báo đẩy đã bật
+      </div>
+    );
+  }
+  if (status === "denied") {
+    return (
+      <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-xs">
+        Thông báo đang bị chặn. Vào cài đặt trình duyệt để bật lại.
+      </div>
+    );
+  }
+  return (
+    <button
+      onClick={handleEnable}
+      disabled={busy || status === "checking"}
+      className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+    >
+      <BellRing className="w-4 h-4" /> {busy ? "Đang bật…" : "Bật thông báo đẩy"}
+    </button>
   );
 }
