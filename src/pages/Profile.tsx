@@ -34,6 +34,7 @@ import {
 
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
+import { BusinessPhotoManager } from "@/components/BusinessPhotoManager";
 import { Avatar } from "@/components/Avatar";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 import { FollowListDialog } from "@/components/FollowListDialog";
