@@ -377,27 +377,56 @@ function InstallBanner() {
 
   return (
     <div className="fixed bottom-16 left-0 right-0 z-50 px-3 pb-2 max-w-md mx-auto animate-in slide-in-from-bottom">
-      <div className="bg-gradient-brand text-white rounded-2xl shadow-brand p-3 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-white/20 grid place-items-center shrink-0">
-          <Download className="w-5 h-5" />
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-bold">Thêm vào màn hình chính</div>
-          <div className="text-[11px] opacity-90">
-            {canPromptNative ? "Cài app để dùng nhanh hơn" : "Nhấn nút Chia sẻ → Thêm vào MH chính"}
+      <div className="bg-gradient-brand text-white rounded-2xl shadow-brand p-3">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white/20 grid place-items-center shrink-0">
+            <Download className="w-5 h-5" />
           </div>
-        </div>
-        {canPromptNative && (
-          <button
-            onClick={handleInstall}
-            className="px-3 py-1.5 rounded-lg bg-white text-primary text-xs font-bold shrink-0"
-          >
-            Thêm
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold">Thêm vào màn hình chính</div>
+            {canPromptNative ? (
+              <div className="text-[11px] opacity-90">Cài app để dùng nhanh hơn</div>
+            ) : (
+              <div className="text-[11px] opacity-90">Cài đặt trong 2 bước đơn giản</div>
+            )}
+          </div>
+          {canPromptNative && (
+            <button
+              onClick={handleInstall}
+              className="px-3 py-1.5 rounded-lg bg-white text-primary text-xs font-bold shrink-0"
+            >
+              Thêm
+            </button>
+          )}
+          <button onClick={handleDismiss} className="p-1 shrink-0" aria-label="Đóng">
+            <XIcon className="w-4 h-4" />
           </button>
+        </div>
+
+        {!canPromptNative && (
+          <div className="mt-3 pt-3 border-t border-white/20 space-y-2">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="w-5 h-5 rounded-full bg-white/20 grid place-items-center font-bold shrink-0">1</span>
+              <span>Nhấn icon</span>
+              <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/20 shrink-0">
+                <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 3v13m0-13l-4 4m4-4l4 4" strokeLinecap="round" strokeLinejoin="round" />
+                  <rect x="4" y="14" width="16" height="7" rx="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span>ở dưới màn hình Safari</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs">
+              <span className="w-5 h-5 rounded-full bg-white/20 grid place-items-center font-bold shrink-0">2</span>
+              <span>Chọn "Thêm vào MH chính"</span>
+            </div>
+            <div className="flex justify-center pt-1">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 animate-bounce" fill="none" stroke="white" strokeWidth="2">
+                <path d="M12 5v14m0 0l-6-6m6 6l6-6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          </div>
         )}
-        <button onClick={handleDismiss} className="p-1 shrink-0" aria-label="Đóng">
-          <XIcon className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );
