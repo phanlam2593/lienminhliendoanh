@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
         importScripts: ["/push-sw.js"],
-        navigateFallback: "/offline.html",
+        navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
