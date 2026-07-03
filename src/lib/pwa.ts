@@ -159,5 +159,5 @@ export async function requestPushPermission(): Promise<"granted" | "denied" | "u
     const reg = await navigator.serviceWorker.ready;
     await setupPush(reg);
   }
-  return perm;
+  return perm === "granted" ? "granted" : "denied";
 }

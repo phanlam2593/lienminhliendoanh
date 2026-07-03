@@ -17,6 +17,7 @@ import { FollowListDialog } from "@/components/FollowListDialog";
 import { ExchangeSection } from "@/components/ExchangeSection";
 import { LevelProgress } from "@/components/LevelProgress";
 import { BadgeRow, BadgeCollection } from "@/components/BadgeRow";
+import { BusinessGallery } from "@/components/BusinessGallery";
 
 interface ReviewMeta extends Review { profile?: { full_name: string; avatar_url: string | null } | null }
 interface ReplyMeta extends ReviewReply { profile?: { full_name: string; avatar_url: string | null } | null }
@@ -183,6 +184,10 @@ export default function BusinessDetail() {
           <LevelProgress points={b.points ?? 0} level={b.level ?? 1} className="mt-1" />
           <BadgeRow businessId={b.id} points={b.points ?? 0} />
         </div>
+
+        <BusinessGallery businessId={b.id} coverPath={b.cover_url} />
+
+
 
         <div className="flex gap-1 border-b">
           <button

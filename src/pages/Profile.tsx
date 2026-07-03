@@ -34,6 +34,7 @@ import {
 
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
+import { BusinessPhotoManager } from "@/components/BusinessPhotoManager";
 import { Avatar } from "@/components/Avatar";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 import { FollowListDialog } from "@/components/FollowListDialog";
@@ -473,6 +474,8 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               />
             </label>
           </div>
+          <BusinessPhotoManager businessId={biz.id} />
+
           <Field label="Tên DN" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
             <input
               value={name}
