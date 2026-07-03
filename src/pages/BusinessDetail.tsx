@@ -185,6 +185,10 @@ export default function BusinessDetail() {
           <BadgeRow businessId={b.id} points={b.points ?? 0} />
         </div>
 
+        <BusinessGallery businessId={b.id} coverPath={b.cover_url} />
+
+
+
         <div className="flex gap-1 border-b">
           <button
             onClick={() => setTab("info")}
