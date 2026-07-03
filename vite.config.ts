@@ -37,13 +37,12 @@ export default defineConfig(({ mode }) => ({
             handler: "NetworkFirst",
             options: {
               cacheName: "lmld-pages",
-              networkTimeoutSeconds: 4,
+              networkTimeoutSeconds: 8,
               expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 7 },
             },
           },
           {
-            urlPattern: ({ url, sameOrigin }) =>
-              sameOrigin && /\.(?:js|css|woff2?)$/.test(url.pathname),
+            urlPattern: ({ url, sameOrigin }) => sameOrigin && /\.(?:js|css|woff2?)$/.test(url.pathname),
             handler: "CacheFirst",
             options: {
               cacheName: "lmld-static",
@@ -81,6 +80,13 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-    dedupe: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "@tanstack/react-query", "@tanstack/query-core"],
+    dedupe: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@tanstack/react-query",
+      "@tanstack/query-core",
+    ],
   },
 }));
