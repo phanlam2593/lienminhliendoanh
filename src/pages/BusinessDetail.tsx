@@ -457,7 +457,7 @@ export default function BusinessDetail() {
                 <>
                   <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-dashed border-emerald-300 dark:border-emerald-800 rounded-xl p-5 text-center">
                     <div className="text-xs text-muted-foreground mb-1">Mã ưu đãi của bạn</div>
-                    <div className="text-4xl font-mono font-extrabold tracking-widest text-emerald-700">
+                    <div className="text-4xl font-mono font-extrabold tracking-widest text-emerald-700 dark:text-emerald-400">
                       {claim.code}
                     </div>
                   </div>
