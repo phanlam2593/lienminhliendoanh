@@ -29,12 +29,16 @@ interface Msg {
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
   const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [showStickers, setShowStickers] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const [profMap, setProfMap] = useState<Map<string, ProfLite>>(new Map());
   const [members, setMembers] = useState<ProfLite[]>([]);
   const [text, setText] = useState("");
+  const [showStickers, setShowStickers] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
+  const [pendingSticker, setPendingSticker] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
   const enrichProfiles = async (ids: string[]) => {
