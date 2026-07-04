@@ -232,7 +232,7 @@ export default function Community() {
             )}
             {pendingSticker && (
               <div className="relative">
-                <span className="text-4xl px-1">{pendingSticker}</span>
+                <img src={`/stickers/${pendingSticker}`} alt="Sticker" className="w-16 h-16 object-contain" />
                 <button
                   onClick={cancelPending}
                   aria-label="Hủy"
