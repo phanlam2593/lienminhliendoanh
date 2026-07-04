@@ -284,14 +284,28 @@ export function MessagesThread() {
                   <Trash2 className="w-3 h-3" />
                 </button>
               )}
-              <div
-                className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
-              >
-                {m.content}
-                <div className={`text-[9px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
-                  {timeAgo(m.created_at)}
+              {m.type === "sticker" ? (
+                <div className="flex flex-col items-center">
+                  <span className="text-5xl leading-none">{m.content}</span>
+                  <div className="text-[9px] text-muted-foreground mt-0.5">{timeAgo(m.created_at)}</div>
                 </div>
-              </div>
+              ) : m.type === "image" ? (
+                <div className="max-w-[220px]">
+                  <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-2xl w-full object-cover" />
+                  <div className={`text-[9px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
+                    {timeAgo(m.created_at)}
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
+                >
+                  {m.content}
+                  <div className={`text-[9px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
+                    {timeAgo(m.created_at)}
+                  </div>
+                </div>
+              )}
               {canDelete && !mine && (
                 <button
                   onClick={async () => {
