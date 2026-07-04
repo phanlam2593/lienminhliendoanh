@@ -1,4 +1,3 @@
-import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -12,7 +11,6 @@ import { Image as ImageIcon, Smile } from "lucide-react";
 import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
-import { StoredImage } from "@/components/StoredImage";
 import {
   AlertDialog,
   AlertDialogAction,
