@@ -1391,8 +1391,17 @@ function PushPermissionButton() {
   if (status === "unsupported") return null;
   if (status === "granted") {
     return (
-      <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold">
-        <BellRing className="w-4 h-4" /> Thông báo đẩy đã bật
+      <div className="space-y-2">
+        <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold">
+          <BellRing className="w-4 h-4" /> Thông báo đẩy đã bật
+        </div>
+        <button
+          onClick={handleEnable}
+          disabled={busy}
+          className="w-full py-2 rounded-lg border text-xs font-semibold text-muted-foreground disabled:opacity-50"
+        >
+          {busy ? "Đang đồng bộ…" : "Đồng bộ lại đăng ký thông báo"}
+        </button>
       </div>
     );
   }
