@@ -29,6 +29,9 @@ interface Msg {
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
   const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [showStickers, setShowStickers] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   const [profMap, setProfMap] = useState<Map<string, ProfLite>>(new Map());
   const [members, setMembers] = useState<ProfLite[]>([]);
   const [text, setText] = useState("");
