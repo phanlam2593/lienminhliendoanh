@@ -21,6 +21,8 @@ interface Msg {
   id: string;
   user_id: string;
   content: string;
+  type: "text" | "image" | "sticker";
+  image_url: string | null;
   created_at: string;
 }
 
