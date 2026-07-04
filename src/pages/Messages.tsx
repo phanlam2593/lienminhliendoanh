@@ -53,7 +53,7 @@ export function MessagesInbox() {
     (msgs as Message[] | null)?.forEach((m) => {
       const partnerId = m.sender_id === user.id ? m.receiver_id : m.sender_id;
       if (!map.has(partnerId)) {
-        map.set(partnerId, { partnerId, lastMessage: m.content, lastAt: m.created_at, unread: 0 });
+        map.set(partnerId, { partnerId, lastMessage: messagePreview(m), lastAt: m.created_at, unread: 0 });
       }
       if (m.receiver_id === user.id && !m.is_read) map.get(partnerId)!.unread += 1;
     });
