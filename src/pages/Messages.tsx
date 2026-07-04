@@ -223,10 +223,35 @@ export function MessagesThread() {
     const t = text.trim();
     if (!t) return;
     setText("");
-    const { error } = await supabase.from("messages").insert({ sender_id: user.id, receiver_id: id, content: t });
+    const { error } = await supabase
+      .from("messages")
+      .insert({ sender_id: user.id, receiver_id: id, content: t, type: "text" });
     if (error) {
       toast.error("Gửi tin nhắn thất bại: " + error.message);
-      setText(t); // khôi phục nội dung để người dùng thử gửi lại
+      setText(t);
+    }
+  };
+
+  const sendSticker = async (emoji: string) => {
+    setShowStickers(false);
+    const { error } = await supabase
+      .from("messages")
+      .insert({ sender_id: user.id, receiver_id: id, content: emoji, type: "sticker" });
+    if (error) toast.error("Gửi sticker thất bại: " + error.message);
+  };
+
+  const sendImage = async (file: File) => {
+    setUploading(true);
+    try {
+      const path = await uploadImage(file, "messages", user.id);
+      const { error } = await supabase
+        .from("messages")
+        .insert({ sender_id: user.id, receiver_id: id, content: "", type: "image", image_url: path });
+      if (error) throw error;
+    } catch (e: any) {
+      toast.error(e.message || "Gửi ảnh thất bại");
+    } finally {
+      setUploading(false);
     }
   };
 
