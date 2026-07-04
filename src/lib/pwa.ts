@@ -40,15 +40,15 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
   return output;
 }
 
-async function setupPush(registration: ServiceWorkerRegistration) {
+async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok: boolean; message?: string }> {
   try {
-    if (!("PushManager" in window) || !("Notification" in window)) return;
-    // Only auto-subscribe if permission was already granted (via manual button).
-    if (Notification.permission !== "granted") return;
+    if (!("PushManager" in window) || !("Notification" in window))
+      return { ok: false, message: "Trình duyệt không hỗ trợ push" };
+    if (Notification.permission !== "granted") return { ok: false, message: "Chưa cấp quyền thông báo" };
 
     const { data: authData } = await supabase.auth.getUser();
     const user = authData?.user;
-    if (!user) return;
+    if (!user) return { ok: false, message: "Chưa đăng nhập" };
 
     let sub = await registration.pushManager.getSubscription();
     if (!sub) {
@@ -61,20 +61,24 @@ async function setupPush(registration: ServiceWorkerRegistration) {
     const json = sub.toJSON();
     const p256dh = json.keys?.p256dh;
     const auth = json.keys?.auth;
-    if (!json.endpoint || !p256dh || !auth) return;
+    if (!json.endpoint || !p256dh || !auth) return { ok: false, message: "Subscription thiếu p256dh/auth" };
 
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData?.session?.access_token;
-    if (!token) return;
+    if (!token) return { ok: false, message: "Không lấy được access token" };
 
-    await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/register-push`, {
+    const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/register-push`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify({ endpoint: json.endpoint, p256dh, auth }),
     });
-  } catch (e) {
-    // Silent — push is best-effort
-    console.warn("[push] setup failed", e);
+    if (!res.ok) {
+      const text = await res.text().catch(() => "");
+      return { ok: false, message: `HTTP ${res.status}: ${text.slice(0, 200)}` };
+    }
+    return { ok: true };
+  } catch (e: any) {
+    return { ok: false, message: e?.message || String(e) };
   }
 }
 
