@@ -3,6 +3,7 @@
  * Never registers in dev, iframe, or Lovable preview hosts.
  * Supports ?sw=off kill switch.
  */
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 const SW_URL = "/sw.js";
