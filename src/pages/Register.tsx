@@ -128,8 +128,12 @@ export default function Register() {
       const uid = sign.user?.id;
       if (!uid) throw new Error("Không tạo được tài khoản");
 
-      // give the trigger a moment, then update profile fields not in trigger
-      await new Promise((r) => setTimeout(r, 600));
+      // Chờ trigger tạo profile xong (poll tối đa ~5s thay vì đoán 600ms)
+      for (let i = 0; i < 10; i++) {
+        const { data: prof } = await supabase.from("profiles").select("id").eq("id", uid).maybeSingle();
+        if (prof) break;
+        await new Promise((r) => setTimeout(r, 500));
+      }
 
       let avatarPath: string | null = null;
       if (avatarFile) {
