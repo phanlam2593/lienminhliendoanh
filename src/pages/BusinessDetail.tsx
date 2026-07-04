@@ -455,7 +455,7 @@ export default function BusinessDetail() {
                 <div className="py-8 text-center text-sm text-muted-foreground">Đang tạo mã…</div>
               ) : (
                 <>
-                  <div className="bg-emerald-50 border-2 border-dashed border-emerald-300 rounded-xl p-5 text-center">
+                  <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-dashed border-emerald-300 dark:border-emerald-800 rounded-xl p-5 text-center">
                     <div className="text-xs text-muted-foreground mb-1">Mã ưu đãi của bạn</div>
                     <div className="text-4xl font-mono font-extrabold tracking-widest text-emerald-700">
                       {claim.code}
