@@ -124,9 +124,7 @@ export function MessagesInbox() {
           convos.map((c) => (
             <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
               <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center font-bold">
-                  {(c.partner?.full_name || "?").slice(0, 1)}
-                </div>
+                <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
                 <div className="flex-1 min-w-0">
                   <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
                   <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
