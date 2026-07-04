@@ -155,18 +155,24 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          image_url: string | null
+          type: string
           user_id: string
         }
         Insert: {
           content: string
           created_at?: string
           id?: string
+          image_url?: string | null
+          type?: string
           user_id: string
         }
         Update: {
           content?: string
           created_at?: string
           id?: string
+          image_url?: string | null
+          type?: string
           user_id?: string
         }
         Relationships: []
@@ -271,25 +277,31 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          image_url: string | null
           is_read: boolean
           receiver_id: string
           sender_id: string
+          type: string
         }
         Insert: {
           content: string
           created_at?: string
           id?: string
+          image_url?: string | null
           is_read?: boolean
           receiver_id: string
           sender_id: string
+          type?: string
         }
         Update: {
           content?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           is_read?: boolean
           receiver_id?: string
           sender_id?: string
+          type?: string
         }
         Relationships: []
       }
