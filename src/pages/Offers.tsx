@@ -23,7 +23,7 @@ export default function Offers() {
       ) : (
         <div className="space-y-3">
           {list.map(o => (
-            <Link key={o.id} to={`/dn/${o.business?.id}`} className="block p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-sky-50 border border-emerald-100 shadow-sm">
+            <Link key={o.id} to={`/dn/${o.business?.id}`} className="block p-4 rounded-2xl bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-950/30 dark:to-sky-950/30 border border-emerald-100 dark:border-emerald-900 shadow-sm"
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-gradient-brand text-white grid place-items-center"><Tag className="w-5 h-5" /></div>
                 <div className="flex-1 min-w-0">
