@@ -93,10 +93,33 @@ export default function Community() {
     const t = text.trim();
     if (!t) return;
     setText("");
-    const { error } = await supabase.from("community_messages").insert({ user_id: user.id, content: t });
+    const { error } = await supabase.from("community_messages").insert({ user_id: user.id, content: t, type: "text" });
     if (error) {
       toast.error(error.message);
       setText(t);
+    }
+  };
+
+  const sendSticker = async (emoji: string) => {
+    setShowStickers(false);
+    const { error } = await supabase
+      .from("community_messages")
+      .insert({ user_id: user.id, content: emoji, type: "sticker" });
+    if (error) toast.error("Gửi sticker thất bại: " + error.message);
+  };
+
+  const sendImage = async (file: File) => {
+    setUploading(true);
+    try {
+      const path = await uploadImage(file, "community", user.id);
+      const { error } = await supabase
+        .from("community_messages")
+        .insert({ user_id: user.id, content: "", type: "image", image_url: path });
+      if (error) throw error;
+    } catch (e: any) {
+      toast.error(e.message || "Gửi ảnh thất bại");
+    } finally {
+      setUploading(false);
     }
   };
 
