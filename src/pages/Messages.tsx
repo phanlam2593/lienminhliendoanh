@@ -5,7 +5,7 @@ import type { Message, Profile, Business } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
 import { useEffect, useState, useRef } from "react";
 import { STICKERS } from "@/lib/stickers";
-import { uploadImage } from "@/lib/upload";
+import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile } from "lucide-react";
 import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
