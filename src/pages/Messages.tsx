@@ -225,7 +225,55 @@ export function MessagesThread() {
   if (!isApproved && !isAdmin)
     return <div className="p-8 text-center text-sm text-muted-foreground">Tài khoản cần được duyệt</div>;
 
+  const cancelPending = () => {
+    if (pendingImage) URL.revokeObjectURL(pendingImage.previewUrl);
+    setPendingImage(null);
+    setPendingSticker(null);
+  };
+
+  const pickImage = (file: File) => {
+    const err = validateImage(file);
+    if (err) {
+      toast.error(err);
+      return;
+    }
+    setPendingSticker(null);
+    setPendingImage({ file, previewUrl: URL.createObjectURL(file) });
+  };
+
+  const pickSticker = (emoji: string) => {
+    setPendingImage(null);
+    setPendingSticker(emoji);
+    setShowStickers(false);
+  };
+
   const send = async () => {
+    if (pendingImage) {
+      setUploading(true);
+      try {
+        const path = await uploadImage(pendingImage.file, "messages", user.id);
+        const { error } = await supabase
+          .from("messages")
+          .insert({ sender_id: user.id, receiver_id: id, content: "", type: "image", image_url: path });
+        if (error) throw error;
+        URL.revokeObjectURL(pendingImage.previewUrl);
+        setPendingImage(null);
+      } catch (e: any) {
+        toast.error(e.message || "Gửi ảnh thất bại");
+      } finally {
+        setUploading(false);
+      }
+      return;
+    }
+    if (pendingSticker) {
+      const emoji = pendingSticker;
+      setPendingSticker(null);
+      const { error } = await supabase
+        .from("messages")
+        .insert({ sender_id: user.id, receiver_id: id, content: emoji, type: "sticker" });
+      if (error) toast.error("Gửi sticker thất bại: " + error.message);
+      return;
+    }
     const t = text.trim();
     if (!t) return;
     setText("");
@@ -235,29 +283,6 @@ export function MessagesThread() {
     if (error) {
       toast.error("Gửi tin nhắn thất bại: " + error.message);
       setText(t);
-    }
-  };
-
-  const sendSticker = async (emoji: string) => {
-    setShowStickers(false);
-    const { error } = await supabase
-      .from("messages")
-      .insert({ sender_id: user.id, receiver_id: id, content: emoji, type: "sticker" });
-    if (error) toast.error("Gửi sticker thất bại: " + error.message);
-  };
-
-  const sendImage = async (file: File) => {
-    setUploading(true);
-    try {
-      const path = await uploadImage(file, "messages", user.id);
-      const { error } = await supabase
-        .from("messages")
-        .insert({ sender_id: user.id, receiver_id: id, content: "", type: "image", image_url: path });
-      if (error) throw error;
-    } catch (e: any) {
-      toast.error(e.message || "Gửi ảnh thất bại");
-    } finally {
-      setUploading(false);
     }
   };
 
