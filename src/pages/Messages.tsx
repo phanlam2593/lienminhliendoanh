@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Message, Profile, Business } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
+import { useEffect, useState, useRef } from "react";
 import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
