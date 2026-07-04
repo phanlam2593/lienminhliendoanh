@@ -93,7 +93,55 @@ export default function Community() {
       <div className="p-8 text-center text-sm text-muted-foreground">Tài khoản cần được duyệt để vào cộng đồng</div>
     );
 
+  const cancelPending = () => {
+    if (pendingImage) URL.revokeObjectURL(pendingImage.previewUrl);
+    setPendingImage(null);
+    setPendingSticker(null);
+  };
+
+  const pickImage = (file: File) => {
+    const err = validateImage(file);
+    if (err) {
+      toast.error(err);
+      return;
+    }
+    setPendingSticker(null);
+    setPendingImage({ file, previewUrl: URL.createObjectURL(file) });
+  };
+
+  const pickSticker = (emoji: string) => {
+    setPendingImage(null);
+    setPendingSticker(emoji);
+    setShowStickers(false);
+  };
+
   const send = async () => {
+    if (pendingImage) {
+      setUploading(true);
+      try {
+        const path = await uploadImage(pendingImage.file, "community", user.id);
+        const { error } = await supabase
+          .from("community_messages")
+          .insert({ user_id: user.id, content: "", type: "image", image_url: path });
+        if (error) throw error;
+        URL.revokeObjectURL(pendingImage.previewUrl);
+        setPendingImage(null);
+      } catch (e: any) {
+        toast.error(e.message || "Gửi ảnh thất bại");
+      } finally {
+        setUploading(false);
+      }
+      return;
+    }
+    if (pendingSticker) {
+      const emoji = pendingSticker;
+      setPendingSticker(null);
+      const { error } = await supabase
+        .from("community_messages")
+        .insert({ user_id: user.id, content: emoji, type: "sticker" });
+      if (error) toast.error("Gửi sticker thất bại: " + error.message);
+      return;
+    }
     const t = text.trim();
     if (!t) return;
     setText("");
@@ -101,29 +149,6 @@ export default function Community() {
     if (error) {
       toast.error(error.message);
       setText(t);
-    }
-  };
-
-  const sendSticker = async (emoji: string) => {
-    setShowStickers(false);
-    const { error } = await supabase
-      .from("community_messages")
-      .insert({ user_id: user.id, content: emoji, type: "sticker" });
-    if (error) toast.error("Gửi sticker thất bại: " + error.message);
-  };
-
-  const sendImage = async (file: File) => {
-    setUploading(true);
-    try {
-      const path = await uploadImage(file, "community", user.id);
-      const { error } = await supabase
-        .from("community_messages")
-        .insert({ user_id: user.id, content: "", type: "image", image_url: path });
-      if (error) throw error;
-    } catch (e: any) {
-      toast.error(e.message || "Gửi ảnh thất bại");
-    } finally {
-      setUploading(false);
     }
   };
 
