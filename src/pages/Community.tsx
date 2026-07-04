@@ -181,7 +181,42 @@ export default function Community() {
           )}
           <div ref={endRef} />
         </div>
-        <div className="flex gap-2 p-2 border-t bg-card">
+        {showStickers && (
+          <div className="grid grid-cols-6 gap-1 p-2 border-t bg-card">
+            {STICKERS.map((s) => (
+              <button key={s} onClick={() => sendSticker(s)} className="text-3xl p-1 rounded-lg hover:bg-accent">
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+        <div className="flex gap-2 p-2 border-t bg-card items-center">
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void sendImage(f);
+              e.currentTarget.value = "";
+            }}
+          />
+          <button
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+            aria-label="Gửi ảnh"
+            className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+          >
+            <ImageIcon className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => setShowStickers((v) => !v)}
+            aria-label="Sticker"
+            className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showStickers ? "bg-accent" : "text-muted-foreground"}`}
+          >
+            <Smile className="w-5 h-5" />
+          </button>
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -194,7 +229,7 @@ export default function Community() {
           <button
             onClick={send}
             aria-label="Gửi"
-            className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center"
+            className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0"
           >
             <Send className="w-4 h-4" />
           </button>
