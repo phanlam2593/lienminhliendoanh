@@ -7,7 +7,7 @@ import { Send, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { timeAgo } from "@/lib/time";
 import { STICKERS } from "@/lib/stickers";
-import { uploadImage } from "@/lib/upload";
+import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile } from "lucide-react";
 
