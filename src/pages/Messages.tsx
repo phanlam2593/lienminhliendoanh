@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Message, Profile, Business } from "@/lib/types";
+import { STICKERS, isStickerFile } from "@/lib/stickers";
 import { timeAgo } from "@/lib/time";
 import { useEffect, useState, useRef } from "react";
 import { STICKERS } from "@/lib/stickers";
