@@ -128,6 +128,7 @@ export function registerPwa() {
         if (session?.user) {
           const reg = await navigator.serviceWorker.ready;
           await setupPush(reg);
+          scheduleAutoAsk();
         }
       });
     } catch {}
