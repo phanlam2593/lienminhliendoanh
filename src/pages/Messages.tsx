@@ -312,7 +312,11 @@ export function MessagesThread() {
               )}
               {m.type === "sticker" ? (
                 <div className="flex flex-col items-center">
-                  <span className="text-5xl leading-none">{m.content}</span>
+                  {isStickerFile(m.content) ? (
+                    <img src={`/stickers/${m.content}`} alt="Sticker" className="w-28 h-28 object-contain" />
+                  ) : (
+                    <span className="text-5xl leading-none">{m.content}</span>
+                  )}
                   <div className="text-[9px] text-muted-foreground mt-0.5">{timeAgo(m.created_at)}</div>
                 </div>
               ) : m.type === "image" ? (
