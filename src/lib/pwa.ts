@@ -63,19 +63,10 @@ async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok:
     const auth = json.keys?.auth;
     if (!json.endpoint || !p256dh || !auth) return { ok: false, message: "Subscription thiếu p256dh/auth" };
 
-    const { data: sessionData } = await supabase.auth.getSession();
-    const token = sessionData?.session?.access_token;
-    if (!token) return { ok: false, message: "Không lấy được access token" };
-
-    const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/register-push`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ endpoint: json.endpoint, p256dh, auth }),
+    const { error: fnError } = await supabase.functions.invoke("register-push", {
+      body: { endpoint: json.endpoint, p256dh, auth },
     });
-    if (!res.ok) {
-      const text = await res.text().catch(() => "");
-      return { ok: false, message: `HTTP ${res.status}: ${text.slice(0, 200)}` };
-    }
+    if (fnError) return { ok: false, message: fnError.message || String(fnError) };
     return { ok: true };
   } catch (e: any) {
     return { ok: false, message: e?.message || String(e) };
