@@ -16,7 +16,9 @@ export default defineTool({
     });
     const { data, error } = await supabase
       .from("businesses")
-      .select("*")
+      .select(
+        "id, name, type, description, hours_open, hours_close, phone, address, facebook_url, website_url, cover_url, tiktok_url, instagram_url, youtube_url, is_featured, points, level, created_at",
+      )
       .eq("id", id)
       .eq("status", "approved")
       .maybeSingle();

@@ -52,7 +52,9 @@ var get_business_default = defineTool2({
     const supabase = createClient2(process.env.SUPABASE_URL, process.env.SUPABASE_PUBLISHABLE_KEY, {
       auth: { persistSession: false, autoRefreshToken: false }
     });
-    const { data, error } = await supabase.from("businesses").select("*").eq("id", id).eq("status", "approved").maybeSingle();
+    const { data, error } = await supabase.from("businesses").select(
+      "id, name, type, description, hours_open, hours_close, phone, address, facebook_url, website_url, cover_url, tiktok_url, instagram_url, youtube_url, is_featured, points, level, created_at"
+    ).eq("id", id).eq("status", "approved").maybeSingle();
     if (error) return { content: [{ type: "text", text: error.message }], isError: true };
     if (!data) return { content: [{ type: "text", text: "Kh\xF4ng t\xECm th\u1EA5y doanh nghi\u1EC7p" }], isError: true };
     return {
