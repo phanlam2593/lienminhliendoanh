@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Users, Building2, Tag, ArrowRight, Mail, Phone, Facebook, X, Search as SearchIcon } from "lucide-react";
-import type { Business, Offer, Review } from "@/lib/types";
+import type { Business } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { Avatar } from "@/components/Avatar";
