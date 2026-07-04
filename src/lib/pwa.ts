@@ -62,13 +62,37 @@ async function setupPush(registration: ServiceWorkerRegistration) {
     const auth = json.keys?.auth;
     if (!json.endpoint || !p256dh || !auth) return;
 
-    await supabase
-      .from("push_subscriptions")
-      .upsert({ user_id: user.id, endpoint: json.endpoint, p256dh, auth }, { onConflict: "endpoint" });
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return;
+
+    await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/register-push`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ endpoint: json.endpoint, p256dh, auth }),
+    });
   } catch (e) {
     // Silent — push is best-effort
     console.warn("[push] setup failed", e);
   }
+}
+
+// Tự động xin quyền push 1 lần duy nhất sau khi có phiên đăng nhập hợp lệ.
+// Không gọi ngay lúc load trang — chỉ chạy sau tương tác đầu tiên của người dùng
+// (bắt buộc trên iOS Safari, vốn yêu cầu 1 cú tap thật mới cho phép hiện popup quyền).
+function scheduleAutoAsk() {
+  if (typeof window === "undefined") return;
+  if (!("Notification" in window)) return;
+  if (localStorage.getItem(PUSH_ASK_KEY)) return; // đã từng hỏi rồi, không hỏi lại
+  if (Notification.permission !== "default") return; // đã granted hoặc denied rồi thì thôi
+
+  const ask = async () => {
+    if (localStorage.getItem(PUSH_ASK_KEY)) return;
+    localStorage.setItem(PUSH_ASK_KEY, "1");
+    await requestPushPermission();
+  };
+
+  window.addEventListener("pointerdown", ask, { once: true });
 }
 
 export function registerPwa() {
