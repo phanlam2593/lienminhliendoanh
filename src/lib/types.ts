@@ -1,9 +1,7 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
 // DO NOT CHANGE: 8 fixed business types, finalized by product owner
-export type BusinessType =
-  | "food" | "service" | "stay" | "travel"
-  | "creator" | "freelance" | "broker" | "other";
+export type BusinessType = "food" | "service" | "stay" | "travel" | "creator" | "freelance" | "broker" | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type SuggestionStatus = "pending" | "approved" | "rejected";
@@ -230,6 +228,8 @@ export interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
+  type: "text" | "image" | "sticker";
+  image_url: string | null;
   is_read: boolean;
   created_at: string;
 }
