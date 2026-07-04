@@ -302,10 +302,7 @@ export function MessagesThread() {
             <div key={m.id} className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
               {canDelete && mine && (
                 <button
-                  onClick={async () => {
-                    if (!confirm("Xóa tin nhắn?")) return;
-                    await supabase.from("messages").delete().eq("id", m.id);
-                  }}
+                  onClick={() => setConfirmDeleteId(m.id)}
                   aria-label="Xóa"
                   className="opacity-0 group-hover:opacity-100 text-destructive p-1"
                 >
