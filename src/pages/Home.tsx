@@ -344,7 +344,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
               <div key={c.id} className="p-3 rounded-lg bg-card border space-y-1">
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-sm font-semibold truncate flex-1">{c.offer_title}</div>
-                  <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded"
+                  <span className="text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded"></span>
                     {c.code}
                   </span>
                 </div>
