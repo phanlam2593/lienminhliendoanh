@@ -380,10 +380,15 @@ export function MessagesThread() {
         </div>
       )}
       {showStickers && (
-        <div className="grid grid-cols-6 gap-1 p-2 border-t bg-card">
+        <div className="grid grid-cols-5 gap-1 p-2 border-t bg-card max-h-48 overflow-y-auto">
           {STICKERS.map((s) => (
-            <button key={s} onClick={() => pickSticker(s)} className="text-3xl p-1 rounded-lg hover:bg-accent">
-              {s}
+            <button key={s} onClick={() => pickSticker(s)} className="p-1 rounded-lg hover:bg-accent">
+              <img
+                src={`/stickers/${s}`}
+                alt="Sticker"
+                className="w-full aspect-square object-contain"
+                loading="lazy"
+              />
             </button>
           ))}
         </div>
