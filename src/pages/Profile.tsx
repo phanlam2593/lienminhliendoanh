@@ -1384,8 +1384,8 @@ function PushPermissionButton() {
     const result = await requestPushPermission();
     setStatus(result);
     setBusy(false);
-    if (result === "granted") toast.success("Đã bật thông báo đẩy!");
-    else if (result === "denied") toast.error("Bạn đã từ chối quyền thông báo trong trình duyệt");
+    if (result === "denied") toast.error("Bạn đã từ chối quyền thông báo trong trình duyệt");
+    // Toast thành công/lỗi thực sự của việc đăng ký đã được hiện từ bên trong requestPushPermission()
   };
 
   if (status === "unsupported") return null;
