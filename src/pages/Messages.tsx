@@ -290,9 +290,7 @@ export function MessagesThread() {
         <button onClick={() => nav("/tin-nhan")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <div className="w-8 h-8 rounded-full bg-gradient-brand text-white grid place-items-center font-bold text-xs">
-          {(partner?.full_name || "?").slice(0, 1)}
-        </div>
+        <Avatar path={partner?.avatar_url} name={partner?.full_name} size={32} />
         <div className="font-semibold text-sm">{partner?.full_name || "…"}</div>
       </div>
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
