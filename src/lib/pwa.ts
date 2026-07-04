@@ -179,15 +179,17 @@ export async function triggerInstall(): Promise<boolean> {
   return outcome === "accepted";
 }
 
-export function dismissInstallBanner() {
-  localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now()));
-}
 export async function requestPushPermission(): Promise<"granted" | "denied" | "unsupported"> {
   if (!("Notification" in window) || !("serviceWorker" in navigator)) return "unsupported";
   const perm = await Notification.requestPermission();
   if (perm === "granted") {
     const reg = await navigator.serviceWorker.ready;
-    await setupPush(reg);
+    const result = await setupPush(reg);
+    if (!result.ok) {
+      toast.error("Lỗi bật thông báo đẩy: " + result.message);
+    } else {
+      toast.success("Đã đăng ký nhận thông báo đẩy thành công");
+    }
   }
   return perm === "granted" ? "granted" : "denied";
 }
