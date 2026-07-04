@@ -354,10 +354,39 @@ export function MessagesThread() {
         })}
         <div ref={endRef} />
       </div>
+      {(pendingImage || pendingSticker) && (
+        <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
+          {pendingImage && (
+            <div className="relative">
+              <img src={pendingImage.previewUrl} alt="Xem trước" className="w-16 h-16 object-cover rounded-lg border" />
+              <button
+                onClick={cancelPending}
+                aria-label="Hủy"
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
+              >
+                ×
+              </button>
+            </div>
+          )}
+          {pendingSticker && (
+            <div className="relative">
+              <span className="text-4xl px-1">{pendingSticker}</span>
+              <button
+                onClick={cancelPending}
+                aria-label="Hủy"
+                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
+              >
+                ×
+              </button>
+            </div>
+          )}
+          <span className="text-xs text-muted-foreground">Nhấn nút gửi để chia sẻ</span>
+        </div>
+      )}
       {showStickers && (
         <div className="grid grid-cols-6 gap-1 p-2 border-t bg-card">
           {STICKERS.map((s) => (
-            <button key={s} onClick={() => sendSticker(s)} className="text-3xl p-1 rounded-lg hover:bg-accent">
+            <button key={s} onClick={() => pickSticker(s)} className="text-3xl p-1 rounded-lg hover:bg-accent">
               {s}
             </button>
           ))}
@@ -371,14 +400,14 @@ export function MessagesThread() {
           className="hidden"
           onChange={(e) => {
             const f = e.target.files?.[0];
-            if (f) void sendImage(f);
+            if (f) pickImage(f);
             e.currentTarget.value = "";
           }}
         />
         <button
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          aria-label="Gửi ảnh"
+          aria-label="Chọn ảnh"
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
         >
           <ImageIcon className="w-5 h-5" />
@@ -396,12 +425,14 @@ export function MessagesThread() {
           onKeyDown={(e) => {
             if (e.key === "Enter") send();
           }}
-          placeholder="Nhập tin nhắn…"
-          className="flex-1 px-3 py-2 rounded-full border bg-background text-sm"
+          disabled={!!pendingImage || !!pendingSticker}
+          placeholder={pendingImage || pendingSticker ? "Nhấn gửi để chia sẻ…" : "Nhập tin nhắn…"}
+          className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
         />
         <button
           onClick={send}
-          className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0"
+          disabled={uploading}
+          className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0 disabled:opacity-60"
         >
           <Send className="w-4 h-4" />
         </button>
