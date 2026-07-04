@@ -36,47 +36,35 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const [{ data: biz }, { data: offers }, { data: reviews }] = await Promise.all([
-        supabase
-          .from("businesses")
-          .select("*")
-          .eq("status", "approved")
-          .eq("is_featured", true)
-          .order("created_at", { ascending: false }),
-        supabase.from("offers").select("*").eq("status", "active").order("created_at", { ascending: false }),
-        supabase.from("reviews").select("*").order("created_at", { ascending: false }),
-      ]);
-      const offersList = (offers as Offer[] | null) ?? [];
-      const reviewsList = (reviews as Review[] | null) ?? [];
-
-      const uids = [...new Set(reviewsList.map((r) => r.user_id))];
-      let authorMap = new Map<string, string>();
-      if (uids.length) {
-        const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", uids);
-        (profs ?? []).forEach((p: any) => authorMap.set(p.id, p.full_name));
-      }
-
+      const { data: biz } = await supabase
+        .from("businesses")
+        .select("*")
+        .eq("status", "approved")
+        .eq("is_featured", true)
+        .order("created_at", { ascending: false });
+      const ids = ((biz as Business[]) ?? []).map((b) => b.id);
+      const { data: stats } = ids.length
+        ? await supabase.from("business_card_stats").select("*").in("business_id", ids)
+        : { data: [] as any[] };
+      const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
       setFeatured(
         ((biz as Business[]) ?? []).map((b) => {
-          const bOffers = offersList.filter((o) => o.business_id === b.id);
-          const bReviews = reviewsList.filter((r) => r.business_id === b.id);
-          const sum = bReviews.reduce((s, r) => s + r.rating, 0);
-          const latestOffer = bOffers[0];
-          const latestReview = bReviews[0];
+          const s: any = sMap.get(b.id);
           return {
             ...b,
-            rating: bReviews.length ? sum / bReviews.length : 0,
-            reviewCount: bReviews.length,
-            offerCount: bOffers.length,
-            latestOffer: latestOffer?.title ?? null,
-            latestOfferClaims: latestOffer?.claim_count ?? 0,
-            latestReview: latestReview
-              ? {
-                  rating: latestReview.rating,
-                  comment: latestReview.comment,
-                  author: authorMap.get(latestReview.user_id) || "Ẩn danh",
-                }
-              : null,
+            rating: Number(s?.rating ?? 0),
+            reviewCount: s?.review_count ?? 0,
+            offerCount: s?.offer_count ?? 0,
+            latestOffer: s?.latest_offer ?? null,
+            latestOfferClaims: s?.latest_offer_claims ?? 0,
+            latestReview:
+              s?.latest_review_rating != null
+                ? {
+                    rating: s.latest_review_rating,
+                    comment: s.latest_review_comment,
+                    author: s.latest_review_author || "Ẩn danh",
+                  }
+                : null,
           };
         }),
       );
