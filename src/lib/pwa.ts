@@ -115,6 +115,24 @@ export function registerPwa() {
   window.addEventListener("load", async () => {
     try {
       const registration = await navigator.serviceWorker.register(SW_URL);
+
+      // === Tự động cập nhật bản mới ===
+      // 1) Chủ động kiểm tra bản mới: ngay khi mở app, mỗi khi quay lại app, và mỗi 15 phút
+      const checkUpdate = () => registration.update().catch(() => {});
+      checkUpdate();
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") checkUpdate();
+      });
+      setInterval(checkUpdate, 15 * 60 * 1000);
+
+      // 2) Khi SW mới nắm quyền (skipWaiting đã bật sẵn) → tự reload 1 lần để chạy code mới
+      let reloaded = false;
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
+        if (reloaded) return;
+        reloaded = true;
+        window.location.reload();
+      });
+
       // Wait until active, then attempt push subscribe (idempotent).
       const ready = await navigator.serviceWorker.ready;
       await setupPush(ready ?? registration);
