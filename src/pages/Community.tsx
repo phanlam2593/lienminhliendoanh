@@ -189,7 +189,11 @@ export default function Community() {
                       )}
                     </div>
                     {m.type === "sticker" ? (
-                      <span className="text-4xl leading-none inline-block mt-0.5">{m.content}</span>
+                      isStickerFile(m.content) ? (
+                        <img src={`/stickers/${m.content}`} alt="Sticker" className="w-24 h-24 object-contain mt-0.5" />
+                      ) : (
+                        <span className="text-4xl leading-none inline-block mt-0.5">{m.content}</span>
+                      )
                     ) : m.type === "image" ? (
                       <div className="max-w-[200px] mt-0.5">
                         <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-xl w-full object-cover" />
