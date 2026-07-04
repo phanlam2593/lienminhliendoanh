@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "lien-minh-lien-doanh-mcp",
+      "version": "0.1.0",
+      "title": "Liên Minh Liên Doanh"
+    },
+    "tools": [
+      {
+        "name": "list_businesses",
+        "title": "Danh sách doanh nghiệp",
+        "description": "Trả về danh sách doanh nghiệp đã được duyệt trong cộng đồng Liên Minh Liên Doanh. Có thể lọc theo loại hình.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "type": {
+              "description": "Loại hình doanh nghiệp (tùy chọn)",
+              "type": "string",
+              "enum": [
+                "food",
+                "service",
+                "stay",
+                "travel",
+                "creator",
+                "freelance",
+                "broker",
+                "other"
+              ]
+            },
+            "search": {
+              "description": "Từ khóa tìm trong tên doanh nghiệp (tùy chọn)",
+              "type": "string"
+            },
+            "limit": {
+              "default": 20,
+              "description": "Số lượng tối đa",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_business",
+        "title": "Chi tiết doanh nghiệp",
+        "description": "Lấy thông tin chi tiết của một doanh nghiệp đã duyệt theo ID.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$",
+              "description": "ID doanh nghiệp"
+            }
+          },
+          "required": [
+            "id"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_offers",
+        "title": "Danh sách ưu đãi",
+        "description": "Trả về các ưu đãi đang hoạt động trong cộng đồng Liên Minh Liên Doanh.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "business_id": {
+              "description": "Lọc theo ID doanh nghiệp (tùy chọn)",
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+            },
+            "limit": {
+              "default": 20,
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "community_stats",
+        "title": "Thống kê cộng đồng",
+        "description": "Trả về số lượng thành viên, doanh nghiệp và ưu đãi đang hoạt động của Liên Minh Liên Doanh.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
