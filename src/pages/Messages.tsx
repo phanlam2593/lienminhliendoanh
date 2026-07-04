@@ -30,6 +30,12 @@ interface ConvoSummary {
   unread: number;
 }
 
+function messagePreview(m: Pick<Message, "type" | "content">): string {
+  if (m.type === "image") return "📷 Hình ảnh";
+  if (m.type === "sticker") return `${m.content} Sticker`;
+  return m.content;
+}
+
 export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
