@@ -179,6 +179,12 @@ export async function triggerInstall(): Promise<boolean> {
   return outcome === "accepted";
 }
 
+export function dismissInstallBanner() {
+  try {
+    localStorage.setItem(INSTALL_DISMISS_KEY, String(Date.now()));
+  } catch {}
+}
+
 export async function requestPushPermission(): Promise<"granted" | "denied" | "unsupported"> {
   if (!("Notification" in window) || !("serviceWorker" in navigator)) return "unsupported";
   const perm = await Notification.requestPermission();
