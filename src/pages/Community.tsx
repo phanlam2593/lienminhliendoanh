@@ -161,11 +161,19 @@ export default function Community() {
                         </button>
                       )}
                     </div>
-                    <div
-                      className={`text-sm rounded-xl px-3 py-1.5 mt-0.5 inline-block max-w-full break-words ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}
-                    >
-                      {m.content}
-                    </div>
+                    {m.type === "sticker" ? (
+                      <span className="text-4xl leading-none inline-block mt-0.5">{m.content}</span>
+                    ) : m.type === "image" ? (
+                      <div className="max-w-[200px] mt-0.5">
+                        <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-xl w-full object-cover" />
+                      </div>
+                    ) : (
+                      <div
+                        className={`text-sm rounded-xl px-3 py-1.5 mt-0.5 inline-block max-w-full break-words ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}
+                      >
+                        {m.content}
+                      </div>
+                    )}
                   </div>
                 </div>
               );
