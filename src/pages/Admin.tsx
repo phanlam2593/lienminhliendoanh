@@ -849,7 +849,7 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
           </div>
         </div>
       ))}
-    </section>
+    </Collapsible>
   );
 }
 
