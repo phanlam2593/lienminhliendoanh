@@ -118,7 +118,10 @@ export default function Profile() {
 
   const save = async () => {
     setSaving(true);
-    const { error } = await supabase.from("profiles").update({ full_name: fullName, phone, email }).eq("id", user.id);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ full_name: fullName, phone, email, status_message: statusMsg.trim() || null })
+      .eq("id", user.id);
     setSaving(false);
     if (error) {
       toast.error(error.message);
