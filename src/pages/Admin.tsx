@@ -194,7 +194,15 @@ export default function Admin() {
       <OffersSection refreshKey={refreshKey} onChanged={refresh} />
       <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
-      <Broadcast />
+      <Collapsible title="Công cụ quản trị" icon={Sparkles}>
+        <button
+          onClick={cleanupOrphans}
+          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+        >
+          <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
+        </button>
+        <Broadcast />
+      </Collapsible>
 
       <MemberDetail row={selected} onClose={() => setSelected(null)} onChanged={refresh} onStatus={setStatus} />
     </div>
