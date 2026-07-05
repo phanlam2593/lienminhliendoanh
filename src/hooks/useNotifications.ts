@@ -11,9 +11,17 @@ export function useNotifications() {
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
-    if (!user) { setItems([]); setLoading(false); return; }
-    const { data } = await supabase.from("notifications").select("*")
-      .eq("user_id", user.id).order("created_at", { ascending: false }).limit(50);
+    if (!user) {
+      setItems([]);
+      setLoading(false);
+      return;
+    }
+    const { data } = await supabase
+      .from("notifications")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(50);
     setItems((data as Notification[]) ?? []);
     setLoading(false);
   };
@@ -21,14 +29,20 @@ export function useNotifications() {
   useEffect(() => {
     refresh();
     if (!user) return;
-    const ch = supabase.channel(`notif:${user.id}:${rand()}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
-        () => refresh())
+    const ch = supabase
+      .channel(`notif:${user.id}:${rand()}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
+        () => refresh(),
+      )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [user?.id]);
 
-  const unread = items.filter(n => !n.is_read).length;
+  const unread = items.filter((n) => !n.is_read).length;
   const markAllRead = async () => {
     if (!user) return;
     await supabase.from("notifications").update({ is_read: true }).eq("user_id", user.id).eq("is_read", false);
@@ -36,10 +50,15 @@ export function useNotifications() {
   };
   const markRead = async (id: string) => {
     await supabase.from("notifications").update({ is_read: true }).eq("id", id);
-    setItems(items.map(n => n.id === id ? { ...n, is_read: true } : n));
+    setItems(items.map((n) => (n.id === id ? { ...n, is_read: true } : n)));
+  };
+  const deleteAllRead = async () => {
+    if (!user) return;
+    await supabase.from("notifications").delete().eq("user_id", user.id).eq("is_read", true);
+    refresh();
   };
 
-  return { items, unread, loading, refresh, markAllRead, markRead };
+  return { items, unread, loading, refresh, markAllRead, markRead, deleteAllRead };
 }
 
 export function useUnreadMessages() {
@@ -47,20 +66,32 @@ export function useUnreadMessages() {
   const [count, setCount] = useState(0);
 
   const refresh = async () => {
-    if (!user) { setCount(0); return; }
-    const { count: c } = await supabase.from("messages").select("*", { count: "exact", head: true })
-      .eq("receiver_id", user.id).eq("is_read", false);
+    if (!user) {
+      setCount(0);
+      return;
+    }
+    const { count: c } = await supabase
+      .from("messages")
+      .select("*", { count: "exact", head: true })
+      .eq("receiver_id", user.id)
+      .eq("is_read", false);
     setCount(c ?? 0);
   };
 
   useEffect(() => {
     refresh();
     if (!user) return;
-    const ch = supabase.channel(`msg:${user.id}:${rand()}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
-        () => refresh())
+    const ch = supabase
+      .channel(`msg:${user.id}:${rand()}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
+        () => refresh(),
+      )
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [user?.id]);
 
   return count;
