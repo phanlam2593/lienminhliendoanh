@@ -329,9 +329,10 @@ export default function Community() {
             >
               <Avatar path={m.avatar_url} name={m.full_name} size={36} />
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold truncate">
-                  {m.full_name}
-                  {m.id === user.id && <span className="text-[10px] text-muted-foreground ml-1">(bạn)</span>}
+                <div className="text-sm font-semibold truncate flex items-center gap-1.5">
+                  <span className="truncate">{m.full_name}</span>
+                  {m.id === user.id && <span className="text-[10px] text-muted-foreground">(bạn)</span>}
+                  <MemberLevelBadge level={m.level} points={m.points} />
                 </div>
                 {m.status_message && (
                   <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
