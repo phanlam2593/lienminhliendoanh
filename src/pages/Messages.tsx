@@ -25,7 +25,7 @@ import {
 
 interface ConvoSummary {
   partnerId: string;
-  partner?: Pick<Profile, "id" | "full_name" | "username" | "avatar_url">;
+  partner?: Pick<Profile, "id" | "full_name" | "username" | "avatar_url" | "points" | "level">;
   lastMessage: string;
   lastAt: string;
   unread: number;
