@@ -178,12 +178,12 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
           ) : (
             <ul className="space-y-1">
               {filtered.map((r) => {
-                const isMe = user?.id === r.id;
-                const isFollowing = myFollowing.has(r.id);
+                const isMe = !r.isBusiness && user?.id === r.id;
+                const isFollowing = r.isBusiness ? myFollowingBiz.has(r.id) : myFollowing.has(r.id);
                 return (
                   <li key={r.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
                     <Link
-                      to={`/ho-so/${r.id}`}
+                      to={r.isBusiness ? `/dn/${r.id}` : `/ho-so/${r.id}`}
                       onClick={() => onOpenChange(false)}
                       className="flex items-center gap-2 flex-1 min-w-0"
                     >
@@ -195,7 +195,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                     {!isMe && user && (
                       <>
                         <button
-                          onClick={() => toggleFollow(r.id)}
+                          onClick={() => toggleFollow(r)}
                           aria-label={isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
                           className={`h-8 px-2.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 ${
                             isFollowing ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"
@@ -213,14 +213,16 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                             </>
                           )}
                         </button>
-                        <Link
-                          to={`/tin-nhan/${r.id}`}
-                          onClick={() => onOpenChange(false)}
-                          aria-label="Nhắn tin"
-                          className="h-8 w-8 rounded-lg border grid place-items-center"
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                        </Link>
+                        {!r.isBusiness && (
+                          <Link
+                            to={`/tin-nhan/${r.id}`}
+                            onClick={() => onOpenChange(false)}
+                            aria-label="Nhắn tin"
+                            className="h-8 w-8 rounded-lg border grid place-items-center"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                          </Link>
+                        )}
                       </>
                     )}
                   </li>
