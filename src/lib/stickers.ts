@@ -7,7 +7,7 @@ export const STICKER_PACKS = [
   {
     id: "chicken",
     label: "🐔 Gà",
-    files: Array.from({ length: 30 }, (_, i) => `chicken_${String(i + 1).padStart(2, "0")}.png`),
+    files: Array.from({ length: 30 }, (_, i) => `chick_${String(i + 1).padStart(2, "0")}.png`),
   },
 ];
 
