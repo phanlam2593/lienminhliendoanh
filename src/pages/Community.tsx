@@ -43,6 +43,7 @@ export default function Community() {
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [pendingSticker, setPendingSticker] = useState<string | null>(null);
   const [showMembers, setShowMembers] = useState(false);
+  const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -88,6 +89,13 @@ export default function Community() {
     if (!user) return;
     loadMsgs();
     loadMembers();
+    supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "admin")
+      .then(({ data }) => {
+        setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
+      });
     const ch = supabase
       .channel(`community:${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "community_messages" }, () => loadMsgs())
