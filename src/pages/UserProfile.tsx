@@ -33,16 +33,11 @@ export default function UserProfile() {
     setLoading(true);
     (async () => {
       const [{ data: prof }, { count }, { count: gc }, { data: rel }] = await Promise.all([
-        supabase
-          .from("profiles")
-          .select("id, full_name, username, avatar_url, email, phone")
-          .eq("id", id)
-          .maybeSingle(),
+        supabase.rpc("get_public_profile", { _id: id }).maybeSingle(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
         user
-          ? 
-        supabase.rpc("get_public_profile", { _id: id }).maybeSingle(),
+          ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle()
           : Promise.resolve({ data: null } as any),
       ]);
       if (!prof) {
