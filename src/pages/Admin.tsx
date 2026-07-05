@@ -911,7 +911,7 @@ function Collapsible({
 }: {
   title: string;
   icon: any;
-  count: number;
+  count?: number;
   children: React.ReactNode;
   defaultOpen?: boolean;
 }) {
@@ -922,7 +922,7 @@ function Collapsible({
         {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
         <Icon className="w-4 h-4 text-primary" />
         <span>{title}</span>
-        <span className="text-xs text-muted-foreground font-normal">({count})</span>
+        {count !== undefined && <span className="text-xs text-muted-foreground font-normal">({count})</span>}
       </button>
       {open && <div className="mt-3 space-y-2">{children}</div>}
     </section>
