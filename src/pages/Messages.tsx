@@ -191,7 +191,7 @@ export function MessagesThread() {
     if (!user || !id) return;
     supabase
       .from("profiles")
-      .select("*")
+      .select("id, full_name, username, avatar_url, status")
       .eq("id", id)
       .maybeSingle()
       .then(({ data }) => setPartner(data as Profile));
