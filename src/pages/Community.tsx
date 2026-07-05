@@ -168,11 +168,53 @@ export default function Community() {
     if (error) toast.error(error.message);
   };
 
+  const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
+
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
-      {/* Group chat — 60% */}
-      <section className="flex flex-col" style={{ height: "60%" }}>
-        <div className="px-3 py-2 border-b bg-card font-bold text-sm">💬 Nhóm cộng đồng</div>
+      {/* Danh sách thành viên — thu gọn mặc định, nằm trên khung chat */}
+      <button
+        onClick={() => setShowMembers((v) => !v)}
+        className="flex items-center justify-between px-3 py-2 border-b bg-card shrink-0"
+      >
+        <span className="font-bold text-sm flex items-center gap-1.5">
+          👥 {members.length} thành viên
+          <span className="text-emerald-600 font-semibold">· {onlineCount} online</span>
+        </span>
+        {showMembers ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+      </button>
+      {showMembers && (
+        <div className="max-h-[45vh] overflow-y-auto border-b bg-card shrink-0">
+          {members.map((m) => (
+            <Link
+              key={m.id}
+              to={m.id === user.id ? "/ho-so" : `/tin-nhan/${m.id}`}
+              className="flex items-center gap-2 p-2 hover:bg-accent"
+            >
+              <div className="relative shrink-0">
+                <Avatar path={m.avatar_url} name={m.full_name} size={36} />
+                {onlineUsers.has(m.id) && (
+                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-card" />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold truncate flex items-center gap-1.5">
+                  <span className="truncate">{m.full_name}</span>
+                  {m.id === user.id && <span className="text-[10px] text-muted-foreground">(bạn)</span>}
+                  <MemberLevelBadge level={m.level} points={m.points} />
+                </div>
+                {m.status_message && (
+                  <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
+                )}
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {/* Khung chat — chiếm phần còn lại */}
+      <section className="flex flex-col flex-1 min-h-0">
+        <div className="px-3 py-2 border-b bg-card font-bold text-sm shrink-0">💬 Nhóm cộng đồng</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {msgs.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground py-6">
