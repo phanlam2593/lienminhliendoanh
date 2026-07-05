@@ -209,20 +209,66 @@ export default function Admin() {
   );
 }
 
-function PendingSummary({ refreshKey }: { refreshKey: number }) {
-  const [members, setMembers] = useState(0);
-  const [biz, setBiz] = useState(0);
+function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
+  const [members, setMembers] = useState<{ id: string; full_name: string; username: string }[]>([]);
+  const [biz, setBiz] = useState<{ id: string; name: string }[]>([]);
+  const [open, setOpen] = useState(false);
+
+  const load = async () => {
+    const [{ data: m }, { data: b }] = await Promise.all([
+      supabase.from("profiles").select("id, full_name, username").eq("status", "pending"),
+      supabase.from("businesses").select("id, name").eq("status", "pending"),
+    ]);
+    setMembers(m ?? []);
+    setBiz(b ?? []);
+  };
   useEffect(() => {
-    (async () => {
-      const [{ count: m }, { count: b }] = await Promise.all([
-        supabase.from("profiles").select("id", { count: "exact", head: true }).eq("status", "pending"),
-        supabase.from("businesses").select("id", { count: "exact", head: true }).eq("status", "pending"),
-      ]);
-      setMembers(m ?? 0);
-      setBiz(b ?? 0);
-    })();
+    void load();
   }, [refreshKey]);
-  const total = members + biz;
+
+  const approveMember = async (id: string) => {
+    const { error } = await supabase.from("profiles").update({ status: "approved" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã duyệt");
+    load();
+    onChanged();
+  };
+  const rejectMember = async (id: string) => {
+    const { error } = await supabase.from("profiles").update({ status: "rejected" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã từ chối");
+    load();
+    onChanged();
+  };
+  const approveBiz = async (id: string) => {
+    const { error } = await supabase.from("businesses").update({ status: "approved" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã duyệt");
+    load();
+    onChanged();
+  };
+  const rejectBiz = async (id: string) => {
+    const { error } = await supabase.from("businesses").update({ status: "rejected" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã từ chối");
+    load();
+    onChanged();
+  };
+
+  const total = members.length + biz.length;
+
   if (total === 0) {
     return (
       <div className="px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
@@ -230,13 +276,50 @@ function PendingSummary({ refreshKey }: { refreshKey: number }) {
       </div>
     );
   }
+
   return (
-    <div className="px-3 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-sm font-semibold flex items-center gap-2 flex-wrap">
-      <Bell className="w-4 h-4 shrink-0" />
-      <span>Đang chờ duyệt:</span>
-      {members > 0 && <span>{members} thành viên</span>}
-      {biz > 0 && <span>{biz} doanh nghiệp</span>}
-    </div>
+    <section className="rounded-xl bg-amber-50 dark:bg-amber-950/30 overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center gap-2 px-3 py-2.5 text-amber-700 dark:text-amber-400 text-sm font-semibold"
+      >
+        {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+        <Bell className="w-4 h-4" />
+        <span className="flex-1 text-left">Đang chờ duyệt ({total})</span>
+      </button>
+      {open && (
+        <div className="px-3 pb-3 space-y-2">
+          {members.map((m) => (
+            <div key={m.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
+              <div className="flex-1 min-w-0 text-xs">
+                <div className="font-semibold truncate">{m.full_name}</div>
+                <div className="text-muted-foreground">@{m.username} · Thành viên</div>
+              </div>
+              <button onClick={() => approveMember(m.id)} className="text-emerald-600" aria-label="Duyệt">
+                <Check className="w-4 h-4" />
+              </button>
+              <button onClick={() => rejectMember(m.id)} className="text-red-600" aria-label="Từ chối">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+          {biz.map((b) => (
+            <div key={b.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
+              <div className="flex-1 min-w-0 text-xs">
+                <div className="font-semibold truncate">{b.name}</div>
+                <div className="text-muted-foreground">Doanh nghiệp</div>
+              </div>
+              <button onClick={() => approveBiz(b.id)} className="text-emerald-600" aria-label="Duyệt">
+                <Check className="w-4 h-4" />
+              </button>
+              <button onClick={() => rejectBiz(b.id)} className="text-red-600" aria-label="Từ chối">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
 
