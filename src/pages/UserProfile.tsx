@@ -86,7 +86,7 @@ export default function UserProfile() {
         <Avatar path={p.avatar_url} name={p.full_name} size={88} />
         <div>
           <div className="text-lg font-extrabold">{p.full_name}</div>
-          <div className="text-xs text-muted-foreground">@{p.username}</div>
+          {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
         </div>
         <div className="flex gap-4 text-xs">
           <button onClick={() => setListOpen("followers")} className="hover:text-primary">
