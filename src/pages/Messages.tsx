@@ -76,9 +76,7 @@ export function MessagesInbox() {
     if (!user) return;
     load();
     supabase
-      .from("user_roles")
-      .select("user_id")
-      .eq("role", "admin")
+      .rpc("get_admin_user_ids")
       .then(({ data }) => setAdminIds(new Set((data ?? []).map((r: any) => r.user_id))));
     const ch = supabase
       .channel(`inbox:${user.id}`)
