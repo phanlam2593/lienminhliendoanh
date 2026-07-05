@@ -35,6 +35,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
   const [q, setQ] = useState("");
   // Set of profile ids that the current viewer is following (member-follow)
   const [myFollowing, setMyFollowing] = useState<Set<string>>(new Set());
+  const [myFollowingBiz, setMyFollowingBiz] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!open) return;
