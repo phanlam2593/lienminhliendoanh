@@ -183,7 +183,7 @@ export default function Profile() {
         </div>
         <StatusBadge s={profile?.status} />
         {(profile as any)?.status_message && (
-          <div className="text-xs text-muted-foreground italic mt-0.5 line-clamp-2">
+          <div className="text-xs text-primary italic mt-0.5 line-clamp-2 font-medium">
             "{(profile as any).status_message}"
           </div>
         )}
