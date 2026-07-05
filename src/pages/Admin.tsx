@@ -209,6 +209,37 @@ export default function Admin() {
   );
 }
 
+function PendingSummary({ refreshKey }: { refreshKey: number }) {
+  const [members, setMembers] = useState(0);
+  const [biz, setBiz] = useState(0);
+  useEffect(() => {
+    (async () => {
+      const [{ count: m }, { count: b }] = await Promise.all([
+        supabase.from("profiles").select("id", { count: "exact", head: true }).eq("status", "pending"),
+        supabase.from("businesses").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      ]);
+      setMembers(m ?? 0);
+      setBiz(b ?? 0);
+    })();
+  }, [refreshKey]);
+  const total = members + biz;
+  if (total === 0) {
+    return (
+      <div className="px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
+        <CheckCircle2 className="w-4 h-4" /> Không có gì đang chờ duyệt
+      </div>
+    );
+  }
+  return (
+    <div className="px-3 py-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-sm font-semibold flex items-center gap-2 flex-wrap">
+      <Bell className="w-4 h-4 shrink-0" />
+      <span>Đang chờ duyệt:</span>
+      {members > 0 && <span>{members} thành viên</span>}
+      {biz > 0 && <span>{biz} doanh nghiệp</span>}
+    </div>
+  );
+}
+
 function MemberDetail({
   row,
   onClose,
