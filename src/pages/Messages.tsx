@@ -208,10 +208,15 @@ export function MessagesThread() {
     if (!user || !id) return;
     supabase
       .from("profiles")
-      .select("id, full_name, username, avatar_url, status")
+      .select("id, full_name, username, avatar_url, status, points, level")
       .eq("id", id)
       .maybeSingle()
       .then(({ data }) => setPartner(data as Profile));
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", id)
+      .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.role === "admin")));
     const load = async () => {
       const { data } = await supabase
         .from("messages")
