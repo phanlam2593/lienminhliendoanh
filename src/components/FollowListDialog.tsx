@@ -128,27 +128,26 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
     );
   }, [rows, q]);
 
-  const toggleFollow = async (otherId: string) => {
-    if (!user) return;
-    const isFollowing = myFollowing.has(otherId);
-    if (isFollowing) {
-      const { error } = await supabase
+  // Load viewer's own following set to show Follow/Unfollow state
+  if (user) {
+    const [{ data: mineUsers }, { data: mineBiz }] = await Promise.all([
+      supabase
         .from("follows")
-        .delete()
+        .select("followee_user_id")
         .eq("follower_id", user.id)
-        .eq("followee_user_id", otherId);
-      if (error) return toast.error(error.message);
-      setMyFollowing((s) => {
-        const n = new Set(s);
-        n.delete(otherId);
-        return n;
-      });
-    } else {
-      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: otherId });
-      if (error) return toast.error(error.message);
-      setMyFollowing((s) => new Set(s).add(otherId));
-    }
-  };
+        .not("followee_user_id", "is", null),
+      supabase
+        .from("follows")
+        .select("followee_business_id")
+        .eq("follower_id", user.id)
+        .not("followee_business_id", "is", null),
+    ]);
+    setMyFollowing(new Set((mineUsers ?? []).map((r: any) => r.followee_user_id)));
+    setMyFollowingBiz(new Set((mineBiz ?? []).map((r: any) => r.followee_business_id)));
+  } else {
+    setMyFollowing(new Set());
+    setMyFollowingBiz(new Set());
+  }
 
   const heading = title ?? (mode === "followers" ? "Người theo dõi" : "Đang theo dõi");
 
