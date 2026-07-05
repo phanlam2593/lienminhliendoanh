@@ -186,6 +186,7 @@ export default function Community() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 text-[11px]">
                       <span className="font-semibold truncate">{p?.full_name || "Thành viên"}</span>
+                      {p && <MemberLevelBadge level={p.level} points={p.points} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at)}</span>
                       {canDelete && (
                         <button
