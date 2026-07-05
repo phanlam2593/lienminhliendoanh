@@ -361,42 +361,6 @@ export default function Community() {
           </button>
         </div>
       </section>
-
-      {/* Member list — 40% */}
-      <section className="flex flex-col border-t" style={{ height: "40%" }}>
-        <div className="px-3 py-2 border-b bg-card font-bold text-sm">
-          👥 Thành viên ({members.length})
-          <span className="text-emerald-600 font-semibold ml-1">
-            · {members.filter((m) => onlineUsers.has(m.id)).length} online
-          </span>
-        </div>
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
-          {members.map((m) => (
-            <Link
-              key={m.id}
-              to={m.id === user.id ? "/ho-so" : `/tin-nhan/${m.id}`}
-              className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent"
-            >
-              <div className="relative shrink-0">
-                <Avatar path={m.avatar_url} name={m.full_name} size={36} />
-                {onlineUsers.has(m.id) && (
-                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-card" />
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold truncate flex items-center gap-1.5">
-                  <span className="truncate">{m.full_name}</span>
-                  {m.id === user.id && <span className="text-[10px] text-muted-foreground">(bạn)</span>}
-                  <MemberLevelBadge level={m.level} points={m.points} />
-                </div>
-                {m.status_message && (
-                  <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
-                )}
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }
