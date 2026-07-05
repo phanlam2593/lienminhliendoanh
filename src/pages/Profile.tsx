@@ -184,7 +184,13 @@ export default function Profile() {
         </div>
         <div className="flex items-center gap-2 mt-0.5">
           <StatusBadge s={profile?.status} />
-          {profile && <MemberLevelBadge level={(profile as any).level ?? 1} points={(profile as any).points ?? 0} isAdmin={role === "admin"} />}
+          {profile && (
+            <MemberLevelBadge
+              level={(profile as any).level ?? 1}
+              points={(profile as any).points ?? 0}
+              isAdmin={role === "admin"}
+            />
+          )}
         </div>
         {(profile as any)?.status_message && (
           <div className="text-xs text-primary italic mt-0.5 line-clamp-2 font-medium">
@@ -911,7 +917,7 @@ function Field({ label, children, hint }: { label: string; children: React.React
 }
 
 function StatusBadge({ s }: { s?: string }) {
-  if (!s) return null;
+  if (!s || s === "approved") return null;
   const map: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-emerald-100 text-emerald-700",
