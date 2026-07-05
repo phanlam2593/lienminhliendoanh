@@ -196,6 +196,7 @@ function StatBtn({
 }
 
 function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => void }) {
+  const { user } = useAuth();
   const [q, setQ] = useState("");
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
