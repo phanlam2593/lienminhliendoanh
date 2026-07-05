@@ -41,7 +41,8 @@ export default function UserProfile() {
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
         user
-          ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle()
+          ? 
+        supabase.rpc("get_public_profile", { _id: id }).maybeSingle(),
           : Promise.resolve({ data: null } as any),
       ]);
       if (!prof) {
