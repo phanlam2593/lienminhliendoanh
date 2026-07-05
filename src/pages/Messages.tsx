@@ -316,7 +316,7 @@ export function MessagesThread() {
                   ) : (
                     <span className="text-5xl leading-none">{m.content}</span>
                   )}
-                  <div className="text-[9px] text-muted-foreground mt-0.5">{timeAgo(m.created_at)}</div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at)}</div>
                 </div>
               ) : m.type === "image" ? (
                 <div className="max-w-[220px]">
