@@ -136,6 +136,24 @@ export default function Profile() {
     refresh();
   };
 
+  const saveQuickStatus = async () => {
+    if (!user) return;
+    setQuickSaving(true);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ status_message: quickStatusMsg.trim() || null })
+      .eq("id", user.id);
+    setQuickSaving(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã lưu");
+    setQuickStatusOpen(false);
+    setSM(quickStatusMsg);
+    refresh();
+  };
+
   const onAvatarChange = async (file: File) => {
     if (!user) return;
     setUploadingAvatar(true);
