@@ -796,13 +796,32 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
     );
   };
 
+  function Collapsible({
+  title,
+  icon: Icon,
+  count,
+  children,
+  defaultOpen = false,
+}: {
+  title: string;
+  icon: any;
+  count?: number;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
-    <section className="space-y-2 border-t pt-4">
-      <h2 className="font-bold flex items-center gap-2">
-        <Flag className="w-4 h-4 text-destructive" /> Báo cáo ({list.length})
-      </h2>
-      {list.length === 0 && <p className="text-sm text-muted-foreground">Chưa có báo cáo nào</p>}
-      {list.map((r) => (
+    <section className="border-t pt-4">
+      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 font-bold">
+        {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+        <Icon className="w-4 h-4 text-primary" />
+        <span>{title}</span>
+        {count !== undefined && <span className="text-xs text-muted-foreground font-normal">({count})</span>}
+      </button>
+      {open && <div className="mt-3 space-y-2">{children}</div>}
+    </section>
+  );
+}
         <div key={r.id} className="p-3 bg-card rounded-xl space-y-1.5">
           <div className="flex items-start justify-between gap-2">
             <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
