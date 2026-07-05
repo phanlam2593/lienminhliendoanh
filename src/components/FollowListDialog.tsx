@@ -68,7 +68,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
             ? supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", userIds)
             : Promise.resolve({ data: [] } as any),
           bizIds.length
-            ? supabase.from("businesses").select("id, name, cover_url").in("id", bizIds)
+            ? supabase.from("businesses").select("id, name, cover_url, owner_id").in("id", bizIds)
             : Promise.resolve({ data: [] } as any),
         ]);
 
@@ -79,6 +79,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
           username: null,
           avatar_url: b.cover_url,
           isBusiness: true,
+          ownerId: b.owner_id,
         }));
         setRows([...userRows, ...bizRows] as Row[]);
       } else {
