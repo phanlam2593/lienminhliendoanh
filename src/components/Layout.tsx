@@ -119,7 +119,7 @@ export function Layout() {
                     <PopoverContent className="w-56 p-2" align="end">
                       <div className="px-2 py-1.5 border-b mb-1">
                         <div className="text-xs font-semibold truncate">{profile?.full_name}</div>
-                        <div className="text-[10px] text-muted-foreground truncate">@{profile?.username}</div>
+                        <div className="text-[11px] text-muted-foreground truncate">@{profile?.username}</div>
                       </div>
                       <button
                         onClick={() => {
