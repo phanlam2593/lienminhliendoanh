@@ -1072,6 +1072,17 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
   }, [list, q]);
 
   const setStatus = async (id: string, status: "approved" | "rejected") => {
+    if (status === "rejected") {
+      await supabase.from("offers").delete().eq("business_id", id);
+      const { error } = await supabase.from("businesses").delete().eq("id", id);
+      if (error) toast.error(error.message);
+      else {
+        toast.success("Đã từ chối và xóa");
+        load();
+        onChanged();
+      }
+      return;
+    }
     const { error } = await supabase.from("businesses").update({ status }).eq("id", id);
     if (error) toast.error(error.message);
     else {
