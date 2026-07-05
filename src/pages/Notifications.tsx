@@ -128,11 +128,18 @@ export default function Notifications() {
     <div className="p-4 space-y-3">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <h1 className="text-xl font-extrabold">Thông báo</h1>
-        {unread > 0 && (
-          <button onClick={markAllRead} className="text-xs text-primary font-semibold flex items-center gap-1">
-            <Check className="w-3.5 h-3.5" /> Đánh dấu tất cả đã đọc
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {unread > 0 && (
+            <button onClick={markAllRead} className="text-xs text-primary font-semibold flex items-center gap-1">
+              <Check className="w-3.5 h-3.5" /> Đánh dấu tất cả đã đọc
+            </button>
+          )}
+          {items.some((n) => n.is_read) && (
+            <button onClick={deleteAllRead} className="text-xs text-destructive font-semibold flex items-center gap-1">
+              <X className="w-3.5 h-3.5" /> Xóa đã đọc
+            </button>
+          )}
+        </div>
       </div>
       {loading ? (
         <p className="text-sm text-muted-foreground">Đang tải…</p>
