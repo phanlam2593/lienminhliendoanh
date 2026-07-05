@@ -837,6 +837,12 @@ export type Database = {
         }
       }
       expire_stale_exchanges: { Args: never; Returns: undefined }
+      get_admin_user_ids: {
+        Args: never
+        Returns: {
+          user_id: string
+        }[]
+      }
       get_public_profile: {
         Args: { _id: string }
         Returns: {
@@ -860,6 +866,7 @@ export type Database = {
           offers: number
         }[]
       }
+      get_user_role: { Args: { _id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -876,6 +883,7 @@ export type Database = {
         Args: { _key: string; _user_id: string }
         Returns: boolean
       }
+      refresh_admin_pending_notification: { Args: never; Returns: undefined }
       unaccent_safe: { Args: { _t: string }; Returns: string }
     }
     Enums: {
