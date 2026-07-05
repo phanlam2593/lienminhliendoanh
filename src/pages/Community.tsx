@@ -237,10 +237,17 @@ export default function Community() {
               const canDelete = mine || isAdmin;
               return (
                 <div key={m.id} className="group flex items-start gap-2">
-                  <Avatar path={p?.avatar_url} name={p?.full_name} size={32} />
+                  <button onClick={() => setQuickViewUser(m.user_id)} className="shrink-0">
+                    <Avatar path={p?.avatar_url} name={p?.full_name} size={32} />
+                  </button>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 text-[11px]">
-                      <span className="font-semibold truncate">{p?.full_name || "Thành viên"}</span>
+                      <button
+                        onClick={() => setQuickViewUser(m.user_id)}
+                        className="font-semibold truncate hover:text-primary text-left"
+                      >
+                        {p?.full_name || "Thành viên"}
+                      </button>
                       {p && <MemberLevelBadge level={p.level} points={p.points} isAdmin={adminIds.has(m.user_id)} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at)}</span>
                       {canDelete && (
