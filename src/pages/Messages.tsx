@@ -212,10 +212,8 @@ export function MessagesThread() {
       .maybeSingle()
       .then(({ data }) => setPartner(data as Profile));
     supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", id)
-      .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.role === "admin")));
+      .rpc("get_admin_user_ids")
+      .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
     const load = async () => {
       const { data } = await supabase
         .from("messages")
