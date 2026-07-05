@@ -180,7 +180,6 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                       <Avatar path={r.avatar_url} name={r.full_name || r.username} size={36} />
                       <div className="min-w-0">
                         <div className="text-sm font-semibold truncate">{r.full_name || r.username || "Ẩn danh"}</div>
-                        {r.username && <div className="text-[11px] text-muted-foreground truncate">@{r.username}</div>}
                       </div>
                     </Link>
                     {!isMe && user && (
