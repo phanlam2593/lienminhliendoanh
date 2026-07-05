@@ -26,7 +26,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const load = async (uid: string) => {
     const [{ data: p }, { data: r }] = await Promise.all([
-      supabase.from("profiles").select("*").eq("id", uid).maybeSingle(),
+      supabase
+        .from("profiles")
+        .select("id, username, full_name, avatar_url, status, created_at, updated_at, notification_prefs, email, phone")
+        .eq("id", uid)
+        .maybeSingle(),
       supabase.from("user_roles").select("role").eq("user_id", uid),
     ]);
     setProfile((p as Profile) ?? null);
@@ -36,12 +40,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      setSession(s); setUser(s?.user ?? null);
+      setSession(s);
+      setUser(s?.user ?? null);
       if (s?.user) setTimeout(() => load(s.user.id), 0);
-      else { setProfile(null); setRole("guest"); }
+      else {
+        setProfile(null);
+        setRole("guest");
+      }
     });
     supabase.auth.getSession().then(async ({ data: { session: s } }) => {
-      setSession(s); setUser(s?.user ?? null);
+      setSession(s);
+      setUser(s?.user ?? null);
       if (s?.user) await load(s.user.id);
       setLoading(false);
     });
@@ -49,14 +58,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <Ctx.Provider value={{
-      user, session, profile, role,
-      isAdmin: role === "admin",
-      isApproved: profile?.status === "approved" || role === "admin",
-      loading,
-      refresh: async () => { if (user) await load(user.id); },
-      signOut: async () => { await supabase.auth.signOut(); },
-    }}>{children}</Ctx.Provider>
+    <Ctx.Provider
+      value={{
+        user,
+        session,
+        profile,
+        role,
+        isAdmin: role === "admin",
+        isApproved: profile?.status === "approved" || role === "admin",
+        loading,
+        refresh: async () => {
+          if (user) await load(user.id);
+        },
+        signOut: async () => {
+          await supabase.auth.signOut();
+        },
+      }}
+    >
+      {children}
+    </Ctx.Provider>
   );
 }
 
