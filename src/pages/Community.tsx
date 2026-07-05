@@ -46,7 +46,10 @@ export default function Community() {
   const enrichProfiles = async (ids: string[]) => {
     const missing = ids.filter((id) => !profMap.has(id));
     if (!missing.length) return;
-    const { data } = await supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", missing);
+    const { data } = await supabase
+      .from("profiles")
+      .select("id, full_name, username, avatar_url, points, level")
+      .in("id", missing);
     setProfMap((prev) => {
       const n = new Map(prev);
       (data ?? []).forEach((p: any) => n.set(p.id, p));
