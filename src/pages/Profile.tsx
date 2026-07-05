@@ -84,6 +84,7 @@ export default function Profile() {
     setFN(profile?.full_name ?? "");
     setPh(profile?.phone ?? "");
     setE(profile?.email ?? "");
+    setSM((profile as any)?.status_message ?? "");
     void loadBiz();
   }, [user?.id, profile?.id]);
 
