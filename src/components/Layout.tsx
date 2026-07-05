@@ -283,7 +283,7 @@ function WelcomeScreen() {
               <Icon className="w-4 h-4 text-white" />
             </div>
             <div className="text-xl font-extrabold text-primary">{v}</div>
-            <div className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wide">{l}</div>
+            <div className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">{l}</div>
           </div>
         ))}
       </div>
