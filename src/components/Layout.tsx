@@ -321,7 +321,7 @@ function WelcomeScreen() {
               <div className="w-7 h-7 rounded-full bg-gradient-brand grid place-items-center animate-pulse-ring">
                 <Icon className="w-3.5 h-3.5 text-white" />
               </div>
-              <span className="text-[10px] font-semibold text-muted-foreground">{label}</span>
+              <span className="text-[11px] font-semibold text-muted-foreground">{label}</span>
             </a>
           ))}
         </div>
