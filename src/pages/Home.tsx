@@ -201,11 +201,15 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
     setLoading(true);
     (async () => {
       if (kind === "members") {
-        const { data } = await supabase
-          .from("profiles")
-          .select("id, full_name, avatar_url, status_message, created_at")
-          .eq("status", "approved")
-          .order("created_at", { ascending: false });
+        const [{ data }, { data: roles }] = await Promise.all([
+          supabase
+            .from("profiles")
+            .select("id, full_name, avatar_url, status_message, points, level, created_at")
+            .eq("status", "approved")
+            .order("created_at", { ascending: false }),
+          supabase.from("user_roles").select("user_id").eq("role", "admin"),
+        ]);
+        setAdminIds(new Set((roles ?? []).map((r: any) => r.user_id)));
         setItems(data ?? []);
       } else if (kind === "businesses") {
         const [{ data: biz }, { data: offers }] = await Promise.all([
