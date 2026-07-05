@@ -41,9 +41,9 @@ export function ProfileQuickView({
     if (!open || !userId) return;
     setLoading(true);
     (async () => {
-      const [{ data: prof }, { data: roles }, { count }, { data: rel }] = await Promise.all([
+      const [{ data: prof }, { data: roleData }, { count }, { data: rel }] = await Promise.all([
         supabase.rpc("get_public_profile", { _id: userId }).maybeSingle(),
-        supabase.from("user_roles").select("role").eq("user_id", userId),
+        supabase.rpc("get_user_role", { _id: userId }),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
         user
           ? supabase
@@ -54,8 +54,7 @@ export function ProfileQuickView({
               .maybeSingle()
           : Promise.resolve({ data: null } as any),
       ]);
-      const roleNames = (roles ?? []).map((r: any) => r.role);
-      const role = roleNames.includes("admin") ? "admin" : roleNames.includes("member") ? "member" : "guest";
+      const role = (roleData as string) || "guest";
       setP(prof ? { ...(prof as any), role } : null);
       setFollowers(count ?? 0);
       setFollowing(!!rel);
