@@ -311,7 +311,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold truncate">{m.full_name}</div>
                   {m.status_message ? (
-                    <div className="text-[11px] text-muted-foreground italic truncate">{m.status_message}</div>
+                    <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
                   ) : (
                     <div className="text-[11px] text-muted-foreground truncate">
                       Tham gia {new Date(m.created_at).toLocaleDateString("vi-VN")}
