@@ -67,7 +67,7 @@ export default function Community() {
   const loadMembers = async () => {
     const { data } = await supabase
       .from("profiles")
-      .select("id, full_name, username, avatar_url")
+      .select("id, full_name, username, avatar_url, status_message")
       .eq("status", "approved")
       .order("created_at", { ascending: false })
       .limit(200);
