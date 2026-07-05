@@ -100,7 +100,7 @@ export function ProfileQuickView({
               <Avatar path={p.avatar_url} name={p.full_name || p.username} size={84} />
               <div>
                 <div className="font-bold text-base">{p.full_name}</div>
-                {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}>
+                {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
                 <span className="px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold capitalize">
