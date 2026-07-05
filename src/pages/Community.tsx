@@ -323,7 +323,6 @@ export default function Community() {
                   {m.full_name}
                   {m.id === user.id && <span className="text-[10px] text-muted-foreground ml-1">(bạn)</span>}
                 </div>
-                <div className="text-[11px] text-muted-foreground truncate">@{m.username}</div>
               </div>
             </Link>
           ))}
