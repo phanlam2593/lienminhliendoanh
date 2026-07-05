@@ -11,6 +11,7 @@ import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile, ChevronDown, ChevronUp } from "lucide-react";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
+import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 interface ProfLite {
   id: string;
