@@ -330,7 +330,7 @@ export function MessagesThread() {
                   className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
                 >
                   {m.content}
-                  <div className={`text-[9px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
+                  <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
                     {timeAgo(m.created_at)}
                   </div>
                 </div>
