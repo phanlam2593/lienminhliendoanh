@@ -182,7 +182,10 @@ export default function Profile() {
         <div className="text-xs text-muted-foreground">
           @{profile?.username} · {role}
         </div>
-        <StatusBadge s={profile?.status} />
+        <div className="flex items-center gap-2 mt-0.5">
+          <StatusBadge s={profile?.status} />
+          {profile && <MemberLevelBadge level={(profile as any).level ?? 1} points={(profile as any).points ?? 0} />}
+        </div>
         {(profile as any)?.status_message && (
           <div className="text-xs text-primary italic mt-0.5 line-clamp-2 font-medium">
             "{(profile as any).status_message}"
