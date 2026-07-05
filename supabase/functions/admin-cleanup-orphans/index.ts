@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
       if (error) return json({ error: error.message }, 500);
       const users = data?.users ?? [];
       for (const u of users) {
-        if (!profileIds.has(u.id) && u.id !== user.id) orphans.push(u.id);
+        if (!profileIds.has(u.id) && u.id !== userId) orphans.push(u.id);
       }
       if (users.length < perPage) break;
       page++;
