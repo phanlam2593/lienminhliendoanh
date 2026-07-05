@@ -370,6 +370,12 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
                     <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
                     <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
                     <span>· {b.offerCount} ưu đãi</span>
+                    {b.reviewCount > 0 && (
+                      <span className="inline-flex items-center gap-0.5">
+                        · <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {b.rating.toFixed(1)}
+                      </span>
+                    )}
+                    {getLocation(b.address) && <span>· 📍 {getLocation(b.address)}</span>}
                   </div>
                 </div>
               </Link>
