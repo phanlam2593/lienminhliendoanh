@@ -12,17 +12,31 @@ Deno.serve(async (req) => {
   try {
     const authHeader = req.headers.get("Authorization") ?? "";
     const token = authHeader.replace("Bearer ", "");
-    if (!token) return json({ error: "Unauthorized" }, 401);
+    if (!token) {
+      console.error("[cleanup-orphans] Thiếu token");
+      return json({ error: "Unauthorized: missing token" }, 401);
+    }
 
     const url = Deno.env.get("SUPABASE_URL")!;
     const anon = Deno.env.get("SUPABASE_ANON_KEY")!;
     const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    console.log("[cleanup-orphans] Env check:", { hasUrl: !!url, hasAnon: !!anon, hasService: !!service });
 
     const admin = createClient(url, service);
     const userClient = createClient(url, anon);
     const { data: userData, error: uErr } = await userClient.auth.getUser(token);
     const userId = userData?.user?.id;
-    if (uErr || !userId) return json({ error: "Unauthorized" }, 401);
+    if (uErr || !userId) {
+      console.error("[cleanup-orphans] getUser lỗi:", uErr?.message, "userId:", userId);
+      return json({ error: "Unauthorized: " + (uErr?.message ?? "no user") }, 401);
+    }
+
+    const { data: isAdmin, error: roleErr } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
+    if (roleErr) console.error("[cleanup-orphans] has_role lỗi:", roleErr.message);
+    if (!isAdmin) {
+      console.error("[cleanup-orphans] Không phải admin, userId:", userId);
+      return json({ error: "Forbidden: not admin" }, 403);
+    }
 
     const { data: isAdmin } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
     if (!isAdmin) return json({ error: "Forbidden" }, 403);
