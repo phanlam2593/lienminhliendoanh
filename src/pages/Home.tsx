@@ -191,7 +191,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
       if (kind === "members") {
         const { data } = await supabase
           .from("profiles")
-          .select("id, full_name, username, avatar_url, created_at")
+          .select("id, full_name, avatar_url, created_at")
           .eq("status", "approved")
           .order("created_at", { ascending: false });
         setItems(data ?? []);
