@@ -28,7 +28,8 @@ export type NotifType =
   | "broadcast"
   | "report_reply"
   | "badge_earned"
-  | "level_up";
+  | "level_up"
+  | "pending_approval";
 
 export interface Badge {
   id: string;
