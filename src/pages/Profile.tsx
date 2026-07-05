@@ -74,6 +74,7 @@ export default function Profile() {
   const [fullName, setFN] = useState("");
   const [phone, setPh] = useState("");
   const [email, setE] = useState("");
+  const [statusMsg, setSM] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
