@@ -325,6 +325,9 @@ export default function Community() {
                   {m.full_name}
                   {m.id === user.id && <span className="text-[10px] text-muted-foreground ml-1">(bạn)</span>}
                 </div>
+                {m.status_message && (
+                  <div className="text-[11px] text-muted-foreground italic truncate">{m.status_message}</div>
+                )}
               </div>
             </Link>
           ))}
