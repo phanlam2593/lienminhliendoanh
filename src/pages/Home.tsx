@@ -227,7 +227,22 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
         ]);
         const cnt = new Map<string, number>();
         (offers ?? []).forEach((o: any) => cnt.set(o.business_id, (cnt.get(o.business_id) ?? 0) + 1));
-        setItems((biz ?? []).map((b: any) => ({ ...b, offerCount: cnt.get(b.id) ?? 0 })));
+        const bizIds = ((biz as any[]) ?? []).map((b) => b.id);
+        const { data: stats } = bizIds.length
+          ? await supabase
+              .from("business_card_stats")
+              .select("business_id, rating, review_count")
+              .in("business_id", bizIds)
+          : { data: [] as any[] };
+        const rMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
+        setItems(
+          (biz ?? []).map((b: any) => ({
+            ...b,
+            offerCount: cnt.get(b.id) ?? 0,
+            rating: Number(rMap.get(b.id)?.rating ?? 0),
+            reviewCount: rMap.get(b.id)?.review_count ?? 0,
+          })),
+        );
       } else if (kind === "offers") {
         const { data: claims } = await supabase
           .from("offer_claims")
