@@ -22,15 +22,20 @@ export default function Home() {
 
   useEffect(() => {
     (async () => {
-      const [m, b, o] = await Promise.all([
-        supabase.from("profiles").select("id", { count: "exact", head: true }).eq("status", "approved"),
-        supabase.from("businesses").select("id", { count: "exact", head: true }).eq("status", "approved"),
-        supabase
+      const { data: pub } = await supabase.rpc("get_public_stats").maybeSingle();
+      let claimed = 0;
+      if (user?.id) {
+        const { count } = await supabase
           .from("offer_claims")
           .select("id", { count: "exact", head: true })
-          .eq("user_id", user?.id ?? ""),
-      ]);
-      setStats({ members: m.count ?? 0, businesses: b.count ?? 0, offers: o.count ?? 0 });
+          .eq("user_id", user.id);
+        claimed = count ?? 0;
+      }
+      setStats({
+        members: (pub as any)?.members ?? 0,
+        businesses: (pub as any)?.businesses ?? 0,
+        offers: user?.id ? claimed : ((pub as any)?.offers ?? 0),
+      });
     })();
   }, [user?.id]);
 
