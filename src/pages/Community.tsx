@@ -45,6 +45,7 @@ export default function Community() {
   const [pendingSticker, setPendingSticker] = useState<string | null>(null);
   const [showMembers, setShowMembers] = useState(false);
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
+  const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
