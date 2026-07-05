@@ -18,6 +18,7 @@ interface ProfLite {
   avatar_url: string | null;
   status_message: string | null;
 }
+
 interface Msg {
   id: string;
   user_id: string;
