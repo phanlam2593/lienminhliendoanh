@@ -72,11 +72,13 @@ export default function Community() {
   const loadMembers = async () => {
     const { data } = await supabase
       .from("profiles")
-      .select("id, full_name, username, avatar_url, status_message")
+      .select("id, full_name, username, avatar_url, status_message, points, level")
       .eq("status", "approved")
       .order("created_at", { ascending: false })
       .limit(200);
-    setMembers((data ?? []) as ProfLite[]);
+    const list = (data ?? []) as ProfLite[];
+    list.sort((a, b) => (a.id === user?.id ? -1 : b.id === user?.id ? 1 : 0));
+    setMembers(list);
   };
 
   useEffect(() => {
