@@ -33,6 +33,7 @@ interface Msg {
 
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
+  const onlineUsers = useOnlineUsers();
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [profMap, setProfMap] = useState<Map<string, ProfLite>>(new Map());
   const [members, setMembers] = useState<ProfLite[]>([]);
