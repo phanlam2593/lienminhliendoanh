@@ -385,7 +385,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
                 </div>
                 <div className="text-[11px] text-muted-foreground">🏢 {c.business_name}</div>
                 <div className="text-[11px] text-muted-foreground">
-                  👤 {c.claimer_name} · {new Date(c.claimed_at).toLocaleString("vi-VN")}
+                  {new Date(c.claimed_at).toLocaleString("vi-VN")}
                 </div>
               </div>
             ))
