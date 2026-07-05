@@ -74,6 +74,20 @@ export const BADGE_TIERS: { type: string; threshold: number; label: string; emoj
     color: "from-rose-400 to-red-600",
   },
 ];
+
+export const MEMBER_BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string }[] = [
+  { type: "newcomer", threshold: 5, label: "Người mới tích cực", emoji: "🌱" },
+  { type: "connector", threshold: 15, label: "Người kết nối", emoji: "🔗" },
+  { type: "enthusiast", threshold: 30, label: "Thành viên nhiệt tình", emoji: "💚" },
+  { type: "standout", threshold: 60, label: "Gương mặt tiêu biểu", emoji: "🌟" },
+  { type: "legend", threshold: 100, label: "Huyền thoại cộng đồng", emoji: "👑" },
+];
+
+export function getTopMemberBadge(points: number) {
+  let top: (typeof MEMBER_BADGE_TIERS)[number] | null = null;
+  for (const t of MEMBER_BADGE_TIERS) if (points >= t.threshold) top = t;
+  return top;
+}
 export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
