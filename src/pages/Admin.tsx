@@ -150,7 +150,7 @@ export default function Admin() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Quản trị</h1>
 
-      <PendingSummary refreshKey={refreshKey} />
+      <PendingSummary refreshKey={refreshKey} onChanged={refresh} />
 
       <Collapsible title="Thành viên" icon={Users} count={filtered.length}>
         <div className="relative">
