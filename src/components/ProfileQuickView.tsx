@@ -106,7 +106,7 @@ export function ProfileQuickView({
                 <div className="font-bold text-base">{p.full_name}</div>
                 {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
                 <div className="mt-1">
-                  <MemberLevelBadge level={p.level} points={p.points} size="md" />
+                  <MemberLevelBadge level={p.level} points={p.points} size="md" isAdmin={p.role === "admin"} />
                 </div>
                 {p.status_message && (
                   <p className="text-sm text-primary italic mt-1 font-medium">"{p.status_message}"</p>

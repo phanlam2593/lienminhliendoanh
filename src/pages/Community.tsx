@@ -43,6 +43,7 @@ export default function Community() {
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [pendingSticker, setPendingSticker] = useState<string | null>(null);
   const [showMembers, setShowMembers] = useState(false);
+  const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -88,6 +89,13 @@ export default function Community() {
     if (!user) return;
     loadMsgs();
     loadMembers();
+    supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "admin")
+      .then(({ data }) => {
+        setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
+      });
     const ch = supabase
       .channel(`community:${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "community_messages" }, () => loadMsgs())
@@ -201,7 +209,7 @@ export default function Community() {
                 <div className="text-sm font-semibold truncate flex items-center gap-1.5">
                   <span className="truncate">{m.full_name}</span>
                   {m.id === user.id && <span className="text-[10px] text-muted-foreground">(bạn)</span>}
-                  <MemberLevelBadge level={m.level} points={m.points} />
+                  <MemberLevelBadge level={m.level} points={m.points} isAdmin={adminIds.has(m.id)} />
                 </div>
                 {m.status_message && (
                   <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
@@ -231,7 +239,7 @@ export default function Community() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 text-[11px]">
                       <span className="font-semibold truncate">{p?.full_name || "Thành viên"}</span>
-                      {p && <MemberLevelBadge level={p.level} points={p.points} />}
+                      {p && <MemberLevelBadge level={p.level} points={p.points} isAdmin={adminIds.has(m.user_id)} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at)}</span>
                       {canDelete && (
                         <button
