@@ -96,6 +96,8 @@ async function resolveRoute(n: Notification): Promise<string | null> {
       return id ? `/dn/${id}` : "/ho-so";
     case "badge_earned":
       return id ? `/dn/${id}?tab=badges` : "/ho-so";
+    case "pending_approval":
+      return "/admin";
     default:
       return "/";
   }
