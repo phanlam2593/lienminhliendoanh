@@ -38,10 +38,17 @@ export function ProfileQuickView({
     setLoading(true);
     (async () => {
       const [{ data: prof }, { data: roles }, { count }, { data: rel }] = await Promise.all([
-        supabase.from("profiles").select("id, full_name, username, avatar_url, email, phone").eq("id", userId).maybeSingle(),
+        supabase.rpc("get_public_profile", { _id: userId }).maybeSingle(),
         supabase.from("user_roles").select("role").eq("user_id", userId),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
-        user ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", userId).maybeSingle() : Promise.resolve({ data: null } as any),
+        user
+          ? supabase
+              .from("follows")
+              .select("id")
+              .eq("follower_id", user.id)
+              .eq("followee_user_id", userId)
+              .maybeSingle()
+          : Promise.resolve({ data: null } as any),
       ]);
       const roleNames = (roles ?? []).map((r: any) => r.role);
       const role = roleNames.includes("admin") ? "admin" : roleNames.includes("member") ? "member" : "guest";
@@ -56,13 +63,23 @@ export function ProfileQuickView({
     if (!user || !userId || user.id === userId) return;
     setBusy(true);
     if (following) {
-      const { error } = await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_user_id", userId);
+      const { error } = await supabase
+        .from("follows")
+        .delete()
+        .eq("follower_id", user.id)
+        .eq("followee_user_id", userId);
       if (error) toast.error(error.message);
-      else { setFollowing(false); setFollowers(n => Math.max(0, n - 1)); }
+      else {
+        setFollowing(false);
+        setFollowers((n) => Math.max(0, n - 1));
+      }
     } else {
       const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: userId });
       if (error) toast.error(error.message);
-      else { setFollowing(true); setFollowers(n => n + 1); }
+      else {
+        setFollowing(true);
+        setFollowers((n) => n + 1);
+      }
     }
     setBusy(false);
   };
@@ -72,7 +89,9 @@ export function ProfileQuickView({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
-        <DialogHeader><DialogTitle>Hồ sơ nhanh</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Hồ sơ nhanh</DialogTitle>
+        </DialogHeader>
         {loading || !p ? (
           <div className="py-8 text-center text-sm text-muted-foreground">Đang tải…</div>
         ) : (
@@ -84,7 +103,9 @@ export function ProfileQuickView({
                 <div className="text-xs text-muted-foreground">@{p.username}</div>
               </div>
               <div className="flex items-center gap-2 text-[11px]">
-                <span className="px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold capitalize">{p.role}</span>
+                <span className="px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold capitalize">
+                  {p.role}
+                </span>
                 <span className="px-2 py-0.5 rounded-full bg-muted">{followers} người theo dõi</span>
               </div>
             </div>
@@ -109,15 +130,30 @@ export function ProfileQuickView({
                   disabled={busy}
                   className={`flex-1 py-2 rounded-xl font-semibold text-sm flex items-center justify-center gap-1 ${following ? "bg-muted text-foreground" : "bg-gradient-brand text-primary-foreground"}`}
                 >
-                  {following ? <><UserCheck className="w-4 h-4" /> Đang theo dõi</> : <><UserPlus className="w-4 h-4" /> Theo dõi</>}
+                  {following ? (
+                    <>
+                      <UserCheck className="w-4 h-4" /> Đang theo dõi
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-4 h-4" /> Theo dõi
+                    </>
+                  )}
                 </button>
               )}
               {isSelf ? (
-                <Link to="/ho-so" onClick={() => onOpenChange(false)} className="flex-1 py-2 rounded-xl border text-sm font-semibold text-center">
+                <Link
+                  to="/ho-so"
+                  onClick={() => onOpenChange(false)}
+                  className="flex-1 py-2 rounded-xl border text-sm font-semibold text-center"
+                >
                   Mở hồ sơ của tôi
                 </Link>
               ) : (
-                <button onClick={() => onOpenChange(false)} className="flex-1 py-2 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1">
+                <button
+                  onClick={() => onOpenChange(false)}
+                  className="flex-1 py-2 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1"
+                >
                   <X className="w-4 h-4" /> Đóng
                 </button>
               )}
