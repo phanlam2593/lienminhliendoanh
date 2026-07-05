@@ -102,6 +102,7 @@ export function ProfileQuickView({
               <div>
                 <div className="font-bold text-base">{p.full_name}</div>
                 {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
+                {p.status_message && <p className="text-sm text-muted-foreground italic mt-1">"{p.status_message}"</p>}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
                 <span className="px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold capitalize">
