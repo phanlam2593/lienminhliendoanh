@@ -171,57 +171,95 @@ export default function Profile() {
   };
 
   const Header = (
-    <div className="flex items-center gap-3">
-      <div className="relative">
-        <Avatar
-          path={profile?.avatar_url}
-          name={profile?.full_name || profile?.username}
-          size={64}
-          onClick={() => avatarInput.current?.click()}
-        />
-        <button
-          type="button"
-          onClick={() => avatarInput.current?.click()}
-          className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
-          aria-label="Đổi ảnh đại diện"
-        >
-          <Camera className="w-3.5 h-3.5" />
-        </button>
-        <input
-          ref={avatarInput}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void onAvatarChange(f);
-            e.currentTarget.value = "";
-          }}
-        />
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="font-bold truncate">{profile?.full_name}</div>
-        <div className="text-xs text-muted-foreground">
-          @{profile?.username} · {role}
+    <>
+      <div className="flex items-center gap-3">
+        <div className="relative">
+          <Avatar
+            path={profile?.avatar_url}
+            name={profile?.full_name || profile?.username}
+            size={64}
+            onClick={() => avatarInput.current?.click()}
+          />
+          <button
+            type="button"
+            onClick={() => avatarInput.current?.click()}
+            className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
+            aria-label="Đổi ảnh đại diện"
+          >
+            <Camera className="w-3.5 h-3.5" />
+          </button>
+          <input
+            ref={avatarInput}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void onAvatarChange(f);
+              e.currentTarget.value = "";
+            }}
+          />
         </div>
-        <div className="flex items-center gap-2 mt-0.5">
-          <StatusBadge s={profile?.status} />
-          {profile && (
-            <MemberLevelBadge
-              level={(profile as any).level ?? 1}
-              points={(profile as any).points ?? 0}
-              isAdmin={role === "admin"}
-            />
-          )}
-        </div>
-        {(profile as any)?.status_message && (
-          <div className="text-xs text-primary italic mt-0.5 line-clamp-2 font-medium">
-            "{(profile as any).status_message}"
+        <div className="flex-1 min-w-0">
+          <div className="font-bold truncate">{profile?.full_name}</div>
+          <div className="text-xs text-muted-foreground">
+            @{profile?.username} · {role}
           </div>
-        )}
-        {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
+          <div className="flex items-center gap-2 mt-0.5">
+            <StatusBadge s={profile?.status} />
+            {profile && (
+              <MemberLevelBadge
+                level={(profile as any).level ?? 1}
+                points={(profile as any).points ?? 0}
+                isAdmin={role === "admin"}
+              />
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setQuickStatusMsg((profile as any)?.status_message ?? "");
+              setQuickStatusOpen(true);
+            }}
+            className="text-left mt-0.5 block"
+          >
+            {(profile as any)?.status_message ? (
+              <div className="text-xs text-primary italic line-clamp-2 font-medium hover:underline">
+                "{(profile as any).status_message}"
+              </div>
+            ) : (
+              <div className="text-xs text-muted-foreground hover:underline">+ Thêm dòng trạng thái</div>
+            )}
+          </button>
+          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
+        </div>
       </div>
-    </div>
+      <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Dòng trạng thái</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <textarea
+              value={quickStatusMsg}
+              onChange={(e) => setQuickStatusMsg(e.target.value.slice(0, 150))}
+              placeholder="Ví dụ: Đang tuyển nhân viên tại Đà Lạt 🌿"
+              rows={3}
+              maxLength={150}
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
+            />
+            <div className="text-[10px] text-muted-foreground text-right">{quickStatusMsg.length}/150</div>
+            <button
+              onClick={saveQuickStatus}
+              disabled={quickSaving}
+              className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm"
+            >
+              {quickSaving ? "Đang lưu…" : "Lưu"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 
   const BackBar = ({ title }: { title: string }) => (
