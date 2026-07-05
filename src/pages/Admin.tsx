@@ -257,12 +257,13 @@ function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChang
     onChanged();
   };
   const rejectBiz = async (id: string) => {
-    const { error } = await supabase.from("businesses").update({ status: "rejected" }).eq("id", id);
+    await supabase.from("offers").delete().eq("business_id", id);
+    const { error } = await supabase.from("businesses").delete().eq("id", id);
     if (error) {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã từ chối");
+    toast.success("Đã từ chối và xóa");
     load();
     onChanged();
   };
