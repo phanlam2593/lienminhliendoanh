@@ -11,6 +11,7 @@ import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile } from "lucide-react";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
+import { useOnlineUsers } from "@/lib/onlineUsers";
 interface ProfLite {
   id: string;
   full_name: string;
