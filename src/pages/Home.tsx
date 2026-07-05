@@ -14,6 +14,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 
 type StatKind = "members" | "businesses" | "offers";
 
+function getLocation(address?: string | null): string | null {
+  if (!address) return null;
+  const parts = address
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return parts.length ? parts[parts.length - 1] : null;
+}
+
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 export default function Home() {
   const { user } = useAuth();
