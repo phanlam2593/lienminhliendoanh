@@ -1,5 +1,15 @@
-// 30 sticker PNG đặt trong public/stickers/ (tiger_01.png → tiger_30.png)
-export const STICKERS = Array.from({ length: 30 }, (_, i) => `tiger_${String(i + 1).padStart(2, "0")}.png`);
+export const STICKER_PACKS = [
+  {
+    id: "tiger",
+    label: "🐯 Hổ",
+    files: Array.from({ length: 30 }, (_, i) => `tiger_${String(i + 1).padStart(2, "0")}.png`),
+  },
+  {
+    id: "chicken",
+    label: "🐔 Gà",
+    files: Array.from({ length: 30 }, (_, i) => `chicken_${String(i + 1).padStart(2, "0")}.png`),
+  },
+];
 
-// Tin nhắn sticker cũ lưu emoji (trước khi có PNG) — nhận diện để render đúng cả 2 loại
-export const isStickerFile = (content: string) => /^tiger_\d{2}\.png$/.test(content);
+// Nhận diện sticker PNG (khớp cả tiger_XX.png và chicken_XX.png) vs sticker emoji cũ
+export const isStickerFile = (content: string) => /^\w+_\d{2}\.png$/.test(content);
