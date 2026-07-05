@@ -222,7 +222,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                           onClick={() => toggleFollow(r)}
                           aria-label={isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
                           className={`h-8 px-2.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 ${
-                            isFollowing ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"
+                            isFollowing ? "bg-primary/10 text-primary" : "bg-primary text-primary-foreground"
                           }`}
                         >
                           {isFollowing ? (
