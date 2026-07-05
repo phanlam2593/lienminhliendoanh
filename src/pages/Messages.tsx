@@ -321,7 +321,7 @@ export function MessagesThread() {
               ) : m.type === "image" ? (
                 <div className="max-w-[220px]">
                   <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-2xl w-full object-cover" />
-                  <div className={`text-[9px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
+                  <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
                     {timeAgo(m.created_at)}
                   </div>
                 </div>
