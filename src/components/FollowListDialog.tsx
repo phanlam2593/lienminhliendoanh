@@ -95,14 +95,23 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
 
       // Load viewer's own following set to show Follow/Unfollow state
       if (user) {
-        const { data: mine } = await supabase
-          .from("follows")
-          .select("followee_user_id")
-          .eq("follower_id", user.id)
-          .not("followee_user_id", "is", null);
-        setMyFollowing(new Set((mine ?? []).map((r: any) => r.followee_user_id)));
+        const [{ data: mineUsers }, { data: mineBiz }] = await Promise.all([
+          supabase
+            .from("follows")
+            .select("followee_user_id")
+            .eq("follower_id", user.id)
+            .not("followee_user_id", "is", null),
+          supabase
+            .from("follows")
+            .select("followee_business_id")
+            .eq("follower_id", user.id)
+            .not("followee_business_id", "is", null),
+        ]);
+        setMyFollowing(new Set((mineUsers ?? []).map((r: any) => r.followee_user_id)));
+        setMyFollowingBiz(new Set((mineBiz ?? []).map((r: any) => r.followee_business_id)));
       } else {
         setMyFollowing(new Set());
+        setMyFollowingBiz(new Set());
       }
     } catch (e: any) {
       toast.error(e.message || "Không tải được danh sách");
