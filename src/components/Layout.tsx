@@ -219,7 +219,7 @@ export function Layout() {
                 end={t.to === "/"}
                 className={({ isActive }) =>
                   cn(
-                    "relative flex flex-col items-center justify-center gap-0.5 py-2 text-[10px] font-semibold transition-colors",
+                    "relative flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-semibold transition-colors",
                     isActive ? "text-primary" : "text-muted-foreground",
                   )
                 }
