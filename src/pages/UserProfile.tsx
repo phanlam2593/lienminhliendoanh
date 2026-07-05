@@ -10,7 +10,7 @@ import { toast } from "sonner";
 interface PubProfile {
   id: string;
   full_name: string;
-  username: string;
+  username: string | null;
   avatar_url: string | null;
   email: string | null;
   phone: string | null;
@@ -33,10 +33,16 @@ export default function UserProfile() {
     setLoading(true);
     (async () => {
       const [{ data: prof }, { count }, { count: gc }, { data: rel }] = await Promise.all([
-        supabase.from("profiles").select("id, full_name, username, avatar_url, email, phone").eq("id", id).maybeSingle(),
+        supabase
+          .from("profiles")
+          .select("id, full_name, username, avatar_url, email, phone")
+          .eq("id", id)
+          .maybeSingle(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
-        user ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle() : Promise.resolve({ data: null } as any),
+        user
+          ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle()
+          : Promise.resolve({ data: null } as any),
       ]);
       if (!prof) {
         toast.message("Nội dung không còn tồn tại");
@@ -56,10 +62,12 @@ export default function UserProfile() {
     setBusy(true);
     if (following) {
       await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_user_id", id);
-      setFollowing(false); setFollowers(c => Math.max(0, c - 1));
+      setFollowing(false);
+      setFollowers((c) => Math.max(0, c - 1));
     } else {
       await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: id });
-      setFollowing(true); setFollowers(c => c + 1);
+      setFollowing(true);
+      setFollowers((c) => c + 1);
     }
     setBusy(false);
   };
@@ -105,8 +113,18 @@ export default function UserProfile() {
           </div>
         )}
         <div className="w-full space-y-1.5 text-sm text-left mt-2">
-          {p.email && <a href={`mailto:${p.email}`} className="flex items-center gap-2 text-muted-foreground"><Mail className="w-4 h-4" />{p.email}</a>}
-          {p.phone && <a href={`tel:${p.phone}`} className="flex items-center gap-2 text-muted-foreground"><Phone className="w-4 h-4" />{p.phone}</a>}
+          {p.email && (
+            <a href={`mailto:${p.email}`} className="flex items-center gap-2 text-muted-foreground">
+              <Mail className="w-4 h-4" />
+              {p.email}
+            </a>
+          )}
+          {p.phone && (
+            <a href={`tel:${p.phone}`} className="flex items-center gap-2 text-muted-foreground">
+              <Phone className="w-4 h-4" />
+              {p.phone}
+            </a>
+          )}
         </div>
       </div>
       <FollowListDialog
