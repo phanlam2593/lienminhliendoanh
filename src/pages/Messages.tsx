@@ -200,6 +200,7 @@ export function MessagesThread() {
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [pendingSticker, setPendingSticker] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [partnerIsAdmin, setPartnerIsAdmin] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
