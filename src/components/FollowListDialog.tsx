@@ -128,6 +128,49 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
     );
   }, [rows, q]);
 
+  const toggleFollow = async (row: Row) => {
+    if (!user) return;
+    if (row.isBusiness) {
+      const isFollowing = myFollowingBiz.has(row.id);
+      if (isFollowing) {
+        const { error } = await supabase
+          .from("follows")
+          .delete()
+          .eq("follower_id", user.id)
+          .eq("followee_business_id", row.id);
+        if (error) return toast.error(error.message);
+        setMyFollowingBiz((s) => {
+          const n = new Set(s);
+          n.delete(row.id);
+          return n;
+        });
+      } else {
+        const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_business_id: row.id });
+        if (error) return toast.error(error.message);
+        setMyFollowingBiz((s) => new Set(s).add(row.id));
+      }
+      return;
+    }
+    const isFollowing = myFollowing.has(row.id);
+    if (isFollowing) {
+      const { error } = await supabase
+        .from("follows")
+        .delete()
+        .eq("follower_id", user.id)
+        .eq("followee_user_id", row.id);
+      if (error) return toast.error(error.message);
+      setMyFollowing((s) => {
+        const n = new Set(s);
+        n.delete(row.id);
+        return n;
+      });
+    } else {
+      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: row.id });
+      if (error) return toast.error(error.message);
+      setMyFollowing((s) => new Set(s).add(row.id));
+    }
+  };
+
   const heading = title ?? (mode === "followers" ? "Người theo dõi" : "Đang theo dõi");
 
   return (
