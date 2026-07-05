@@ -441,6 +441,17 @@ function MemberDetail({
 
   const setBizStatus = async (s: "approved" | "rejected") => {
     if (!biz) return;
+    if (s === "rejected") {
+      await supabase.from("offers").delete().eq("business_id", biz.id);
+      const { error } = await supabase.from("businesses").delete().eq("id", biz.id);
+      if (error) toast.error(error.message);
+      else {
+        toast.success("Đã từ chối và xóa");
+        setBiz(null);
+        onChanged();
+      }
+      return;
+    }
     const { error } = await supabase.from("businesses").update({ status: s }).eq("id", biz.id);
     if (error) toast.error(error.message);
     else {
