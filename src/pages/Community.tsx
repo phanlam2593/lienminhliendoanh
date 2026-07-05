@@ -40,6 +40,7 @@ export default function Community() {
   const [members, setMembers] = useState<ProfLite[]>([]);
   const [text, setText] = useState("");
   const [showStickers, setShowStickers] = useState(false);
+  const [stickerPack, setStickerPack] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [pendingSticker, setPendingSticker] = useState<string | null>(null);
