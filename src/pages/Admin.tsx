@@ -150,12 +150,7 @@ export default function Admin() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Quản trị</h1>
 
-      <button
-        onClick={cleanupOrphans}
-        className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-      >
-        <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
-      </button>
+      <PendingSummary refreshKey={refreshKey} />
 
       <Collapsible title="Thành viên" icon={Users} count={filtered.length}>
         <div className="relative">
