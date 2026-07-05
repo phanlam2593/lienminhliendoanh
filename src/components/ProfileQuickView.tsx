@@ -12,6 +12,7 @@ interface QuickProfile {
   full_name: string;
   username: string;
   avatar_url: string | null;
+  status_message: string | null;
   email: string | null;
   phone: string | null;
   role: "admin" | "member" | "guest";
