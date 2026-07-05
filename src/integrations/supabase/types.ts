@@ -38,6 +38,13 @@ export type Database = {
             foreignKeyName: "badges_business_id_fkey"
             columns: ["business_id"]
             isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "badges_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
@@ -69,6 +76,13 @@ export type Database = {
           url?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "business_photos_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
           {
             foreignKeyName: "business_photos_business_id_fkey"
             columns: ["business_id"]
@@ -228,8 +242,22 @@ export type Database = {
             foreignKeyName: "exchanges_receiver_id_fkey"
             columns: ["receiver_id"]
             isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "exchanges_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
             referencedRelation: "businesses"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exchanges_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
           },
           {
             foreignKeyName: "exchanges_requester_id_fkey"
@@ -263,6 +291,13 @@ export type Database = {
           id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "follows_followee_business_id_fkey"
+            columns: ["followee_business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
           {
             foreignKeyName: "follows_followee_business_id_fkey"
             columns: ["followee_business_id"]
@@ -414,6 +449,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
           {
             foreignKeyName: "offers_business_id_fkey"
             columns: ["business_id"]
@@ -639,6 +681,13 @@ export type Database = {
             foreignKeyName: "reviews_business_id_fkey"
             columns: ["business_id"]
             isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "reviews_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
@@ -706,7 +755,20 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      business_card_stats: {
+        Row: {
+          business_id: string | null
+          latest_offer: string | null
+          latest_offer_claims: number | null
+          latest_review_author: string | null
+          latest_review_comment: string | null
+          latest_review_rating: number | null
+          offer_count: number | null
+          rating: number | null
+          review_count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       broadcast_offer: { Args: { _offer_id: string }; Returns: number }
@@ -733,6 +795,26 @@ export type Database = {
         }
       }
       expire_stale_exchanges: { Args: never; Returns: undefined }
+      get_public_profile: {
+        Args: { _id: string }
+        Returns: {
+          avatar_url: string
+          email: string
+          full_name: string
+          id: string
+          phone: string
+          status: string
+          username: string
+        }[]
+      }
+      get_public_stats: {
+        Args: never
+        Returns: {
+          businesses: number
+          members: number
+          offers: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
