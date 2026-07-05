@@ -79,6 +79,9 @@ export default function Profile() {
   const [statusMsg, setSM] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [quickStatusOpen, setQuickStatusOpen] = useState(false);
+  const [quickStatusMsg, setQuickStatusMsg] = useState("");
+  const [quickSaving, setQuickSaving] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
