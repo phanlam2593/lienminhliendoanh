@@ -880,8 +880,8 @@ function Broadcast() {
     toast.success("Đã gửi");
   };
   return (
-    <section className="space-y-2 border-t pt-4">
-      <h2 className="font-bold">Phát thông báo</h2>
+    <div className="space-y-2">
+      <h3 className="font-semibold text-sm">📢 Phát thông báo</h3>
       <input
         value={title}
         onChange={(e) => setT(e.target.value)}
