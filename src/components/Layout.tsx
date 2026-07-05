@@ -247,12 +247,12 @@ function WelcomeScreen() {
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
   useEffect(() => {
     (async () => {
-      const [m, b, o] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "approved"),
-        supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "approved"),
-        supabase.from("offers").select("*", { count: "exact", head: true }).eq("status", "active"),
-      ]);
-      setStats({ members: m.count ?? 0, businesses: b.count ?? 0, offers: o.count ?? 0 });
+      const { data: pub } = await supabase.rpc("get_public_stats").maybeSingle();
+      setStats({
+        members: (pub as any)?.members ?? 0,
+        businesses: (pub as any)?.businesses ?? 0,
+        offers: (pub as any)?.offers ?? 0,
+      });
     })();
   }, []);
 
