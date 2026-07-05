@@ -102,7 +102,7 @@ export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
 };
 export const BUSINESS_TYPES = Object.keys(BUSINESS_TYPE_LABEL) as BusinessType[];
 
-eexport interface Profile {
+export interface Profile {
   id: string;
   username: string;
   full_name: string;
