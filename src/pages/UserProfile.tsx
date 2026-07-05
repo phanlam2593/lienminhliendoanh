@@ -83,6 +83,7 @@ export default function UserProfile() {
         <div>
           <div className="text-lg font-extrabold">{p.full_name}</div>
           {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
+          {p.status_message && <p className="text-sm text-muted-foreground italic mt-1">"{p.status_message}"</p>}
         </div>
         <div className="flex gap-4 text-xs">
           <button onClick={() => setListOpen("followers")} className="hover:text-primary">
