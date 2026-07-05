@@ -185,7 +185,19 @@ export default function Register() {
       }
       nav("/");
     } catch (e: any) {
-      toast.error(e.message || "Đăng ký thất bại");
+      const msg = String(e?.message || "");
+      // Dịch các lỗi tiếng Anh thường gặp từ Supabase sang tiếng Việt dễ hiểu
+      if (/leaked|pwned|compromised|data breach/i.test(msg)) {
+        toast.error("Mật khẩu này từng bị lộ trên mạng nên không an toàn. Vui lòng chọn mật khẩu khác mạnh hơn.");
+      } else if (/password.*(short|least|6 char)/i.test(msg)) {
+        toast.error("Mật khẩu quá ngắn. Vui lòng dùng ít nhất 6 ký tự.");
+      } else if (/already registered|already exists|user.*exist/i.test(msg)) {
+        toast.error("Tên đăng nhập này đã có người dùng. Vui lòng chọn tên khác.");
+      } else if (/network|fetch|timeout/i.test(msg)) {
+        toast.error("Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.");
+      } else {
+        toast.error(msg || "Đăng ký thất bại");
+      }
     } finally {
       setSubmitting(false);
       setTO(false);
