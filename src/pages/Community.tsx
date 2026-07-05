@@ -378,6 +378,11 @@ export default function Community() {
           </button>
         </div>
       </section>
+      <ProfileQuickView
+        userId={quickViewUser}
+        open={!!quickViewUser}
+        onOpenChange={(v) => !v && setQuickViewUser(null)}
+      />
     </div>
   );
 }
