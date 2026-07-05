@@ -15,6 +15,7 @@ interface Row {
   full_name: string | null;
   username: string | null;
   avatar_url: string | null;
+  isBusiness?: boolean;
 }
 
 interface Props {
