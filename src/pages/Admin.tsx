@@ -902,7 +902,7 @@ function Broadcast() {
       >
         <Send className="w-4 h-4" /> Gửi cho tất cả thành viên
       </button>
-    </section>
+    </div>
   );
 }
 
