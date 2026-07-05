@@ -300,17 +300,6 @@ export default function Profile() {
             placeholder="SĐT"
             className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
           />
-          <div>
-            <textarea
-              value={statusMsg}
-              onChange={(e) => setSM(e.target.value.slice(0, 150))}
-              placeholder="Dòng trạng thái… (ví dụ: Đang tuyển nhân viên tại Đà Lạt 🌿)"
-              rows={2}
-              maxLength={150}
-              className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
-            />
-            <div className="text-[10px] text-muted-foreground text-right">{statusMsg.length}/150</div>
-          </div>
           <button
             onClick={save}
             disabled={saving}
