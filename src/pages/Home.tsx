@@ -247,27 +247,21 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
       } else if (kind === "offers") {
         const { data: claims } = await supabase
           .from("offer_claims")
-          .select("id, offer_id, user_id, code, claimed_at")
+          .select("id, offer_id, code, claimed_at")
+          .eq("user_id", user?.id ?? "")
           .order("claimed_at", { ascending: false })
           .limit(500);
         const list = claims ?? [];
         const offerIds = [...new Set(list.map((c: any) => c.offer_id))];
-        const userIds = [...new Set(list.map((c: any) => c.user_id))];
-        const [{ data: offs }, { data: profs }] = await Promise.all([
-          offerIds.length
-            ? supabase.from("offers").select("id, title, business_id").in("id", offerIds)
-            : Promise.resolve({ data: [] } as any),
-          userIds.length
-            ? supabase.from("profiles").select("id, full_name").in("id", userIds)
-            : Promise.resolve({ data: [] } as any),
-        ]);
+        const { data: offs } = offerIds.length
+          ? await supabase.from("offers").select("id, title, business_id").in("id", offerIds)
+          : { data: [] as any[] };
         const bizIds: string[] = Array.from(new Set(((offs ?? []) as any[]).map((o) => o.business_id as string)));
         const { data: biz } = bizIds.length
           ? await supabase.from("businesses").select("id, name").in("id", bizIds)
           : ({ data: [] } as any);
         const oMap = new Map((offs ?? []).map((o: any) => [o.id, o]));
         const bMap = new Map((biz ?? []).map((b: any) => [b.id, b.name]));
-        const pMap = new Map((profs ?? []).map((p: any) => [p.id, p.full_name]));
         setItems(
           list.map((c: any) => {
             const o = oMap.get(c.offer_id) as any;
@@ -275,7 +269,6 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
               ...c,
               offer_title: o?.title || "(đã xóa)",
               business_name: o ? bMap.get(o.business_id) || "—" : "—",
-              claimer_name: pMap.get(c.user_id) || "Ẩn danh",
             };
           }),
         );
