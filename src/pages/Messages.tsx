@@ -75,6 +75,11 @@ export function MessagesInbox() {
   useEffect(() => {
     if (!user) return;
     load();
+    supabase
+      .from("user_roles")
+      .select("user_id")
+      .eq("role", "admin")
+      .then(({ data }) => setAdminIds(new Set((data ?? []).map((r: any) => r.user_id))));
     const ch = supabase
       .channel(`inbox:${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, load)
