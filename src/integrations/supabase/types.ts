@@ -307,6 +307,35 @@ export type Database = {
           },
         ]
       }
+      member_badges: {
+        Row: {
+          badge_type: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_type: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_type?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_badges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
@@ -473,10 +502,13 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          level: number
           notification_prefs: Json
           password_hint: string | null
           phone: string
+          points: number
           status: Database["public"]["Enums"]["account_status"]
+          status_message: string | null
           updated_at: string
           username: string
         }
@@ -487,10 +519,13 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          level?: number
           notification_prefs?: Json
           password_hint?: string | null
           phone: string
+          points?: number
           status?: Database["public"]["Enums"]["account_status"]
+          status_message?: string | null
           updated_at?: string
           username: string
         }
@@ -501,10 +536,13 @@ export type Database = {
           email?: string
           full_name?: string
           id?: string
+          level?: number
           notification_prefs?: Json
           password_hint?: string | null
           phone?: string
+          points?: number
           status?: Database["public"]["Enums"]["account_status"]
+          status_message?: string | null
           updated_at?: string
           username?: string
         }
@@ -771,6 +809,10 @@ export type Database = {
       }
     }
     Functions: {
+      award_member_points: {
+        Args: { _amount: number; _user_id: string }
+        Returns: undefined
+      }
       broadcast_offer: { Args: { _offer_id: string }; Returns: number }
       can_access_report: {
         Args: { _report_id: string; _user_id: string }
@@ -802,8 +844,11 @@ export type Database = {
           email: string
           full_name: string
           id: string
+          level: number
           phone: string
+          points: number
           status: string
+          status_message: string
           username: string
         }[]
       }
