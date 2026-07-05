@@ -888,7 +888,7 @@ function Broadcast() {
 }
 
 function StatusBadge({ s }: { s?: string }) {
-  if (!s) return null;
+  if (!s || s === "approved") return null;
   const map: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-emerald-100 text-emerald-700",
