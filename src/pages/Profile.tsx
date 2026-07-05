@@ -182,6 +182,11 @@ export default function Profile() {
           @{profile?.username} · {role}
         </div>
         <StatusBadge s={profile?.status} />
+        {(profile as any)?.status_message && (
+          <div className="text-xs text-muted-foreground italic mt-0.5 line-clamp-2">
+            "{(profile as any).status_message}"
+          </div>
+        )}
         {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
       </div>
     </div>
