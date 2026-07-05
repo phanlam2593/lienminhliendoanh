@@ -11,18 +11,20 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   try {
     const authHeader = req.headers.get("Authorization") ?? "";
-    if (!authHeader) return json({ error: "Unauthorized" }, 401);
+    const token = authHeader.replace("Bearer ", "");
+    if (!token) return json({ error: "Unauthorized" }, 401);
 
     const url = Deno.env.get("SUPABASE_URL")!;
     const anon = Deno.env.get("SUPABASE_ANON_KEY")!;
     const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    const userClient = createClient(url, anon, { global: { headers: { Authorization: authHeader } } });
-    const { data: { user }, error: uErr } = await userClient.auth.getUser();
-    if (uErr || !user) return json({ error: "Unauthorized" }, 401);
-
     const admin = createClient(url, service);
-    const { data: isAdmin } = await admin.rpc("has_role", { _user_id: user.id, _role: "admin" });
+    const userClient = createClient(url, anon);
+    const { data: claimsData, error: uErr } = await userClient.auth.getClaims(token);
+    const userId = claimsData?.claims?.sub as string | undefined;
+    if (uErr || !userId) return json({ error: "Unauthorized" }, 401);
+
+    const { data: isAdmin } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
     if (!isAdmin) return json({ error: "Forbidden" }, 403);
 
     // Load all profile ids
