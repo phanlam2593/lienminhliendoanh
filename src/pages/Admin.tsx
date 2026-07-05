@@ -60,7 +60,13 @@ export default function Admin() {
   const load = async () => {
     const [{ data: profs }, { data: biz }, { data: offers }, { data: reviews }, { data: sugs }, { data: claims }] =
       await Promise.all([
-        supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+        supabase
+          .from("profiles")
+          .select(
+            "id, username, full_name, email, phone, avatar_url, status, created_at, updated_at, admin_note, notification_prefs",
+          )
+          .order("created_at", { ascending: false }),
+        ,
         supabase.from("businesses").select("*"),
         supabase.from("offers").select("id, business_id, status"),
         supabase.from("reviews").select("id, user_id"),
