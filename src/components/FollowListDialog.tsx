@@ -247,6 +247,16 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
                             <MessageCircle className="w-4 h-4" />
                           </Link>
                         )}
+                        {r.isBusiness && r.ownerId && r.ownerId !== user?.id && (
+                          <Link
+                            to={`/tin-nhan/${r.ownerId}`}
+                            onClick={() => onOpenChange(false)}
+                            aria-label="Nhắn tin chủ DN"
+                            className="h-8 w-8 rounded-lg border grid place-items-center"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                          </Link>
+                        )}
                       </>
                     )}
                   </li>
