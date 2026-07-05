@@ -190,6 +190,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
   const [q, setQ] = useState("");
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!kind) {
