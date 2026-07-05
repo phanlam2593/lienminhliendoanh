@@ -39,31 +39,23 @@ export default function ForgotPassword() {
     setError(null);
     setResult(null);
     setLoading(true);
-    const { data, error: qErr } = await supabase
-      .from("profiles")
-      .select("username, password_hint")
-      .eq("email", email.trim())
-      .eq("phone", phone.trim())
-      .maybeSingle();
+    const { data, error: fnErr } = await supabase.functions.invoke("forgot-password", {
+      body: { email: email.trim(), phone: phone.trim() },
+    });
     setLoading(false);
 
-    if (qErr || !data) {
-      const attempts = Number(localStorage.getItem(ATTEMPT_KEY) ?? 0) + 1;
-      localStorage.setItem(ATTEMPT_KEY, String(attempts));
-      if (attempts >= MAX_ATTEMPTS) {
-        const until = Date.now() + LOCK_MS;
-        localStorage.setItem(LOCK_KEY, String(until));
-        localStorage.setItem(ATTEMPT_KEY, "0");
-        setLockUntil(until);
-        setError("Vui lòng thử lại sau 5 phút hoặc liên hệ admin");
-      } else {
-        setError("Không tìm thấy tài khoản với thông tin này");
-      }
+    if (fnErr || !data || data.locked) {
+      const until = Date.now() + LOCK_MS;
+      localStorage.setItem(LOCK_KEY, String(until));
+      setLockUntil(until);
+      setError(data?.message || "Vui lòng thử lại sau ít phút hoặc liên hệ admin");
       return;
     }
-    // success - reset attempts
-    localStorage.setItem(ATTEMPT_KEY, "0");
-    setResult({ username: data.username as string, password_hint: (data as any).password_hint ?? null });
+    if (!data.found) {
+      setError("Không tìm thấy tài khoản với thông tin này");
+      return;
+    }
+    setResult({ username: data.username as string, password_hint: data.password_hint ?? null });
   };
 
   return (
