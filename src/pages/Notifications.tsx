@@ -104,7 +104,7 @@ async function resolveRoute(n: Notification): Promise<string | null> {
 }
 
 export default function Notifications() {
-  const { items, unread, markAllRead, markRead, refresh, loading } = useNotifications();
+  const { items, unread, markAllRead, markRead, deleteAllRead, refresh, loading } = useNotifications();
   const nav = useNavigate();
 
   const tap = async (n: Notification) => {
