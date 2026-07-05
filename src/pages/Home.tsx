@@ -207,7 +207,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
             .select("id, full_name, avatar_url, status_message, points, level, created_at")
             .eq("status", "approved")
             .order("created_at", { ascending: false }),
-          supabase.from("user_roles").select("user_id").eq("role", "admin"),
+          supabase.rpc("get_admin_user_ids"),
         ]);
         setAdminIds(new Set((roles ?? []).map((r: any) => r.user_id)));
         setItems(data ?? []);
