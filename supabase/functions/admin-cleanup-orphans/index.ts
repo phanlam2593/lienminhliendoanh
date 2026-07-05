@@ -71,6 +71,7 @@ Deno.serve(async (req) => {
 
     return json({ ok: true, found: orphans.length, deleted, failures });
   } catch (e) {
+    console.error("[cleanup-orphans] Lỗi không bắt được:", (e as Error).message, (e as Error).stack);
     return json({ error: (e as Error).message }, 500);
   }
 });
