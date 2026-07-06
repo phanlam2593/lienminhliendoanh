@@ -77,6 +77,7 @@ export function Layout() {
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
       <WelcomeOverlay />
+      <WelcomeOnboarding />
       <AchievementOverlay />
       {!hide && !showWelcome && (
         <header className="sticky top-0 z-40 bg-background/85 backdrop-blur-lg border-b border-border/60">
