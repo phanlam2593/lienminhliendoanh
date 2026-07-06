@@ -216,6 +216,8 @@ export async function forceRefreshCheck(): Promise<void> {
     return;
   }
   try {
+    // Ép tải hẳn file sw.js mới, bỏ qua cache trình duyệt, để chắc chắn so sánh đúng bản mới nhất
+    await fetch("/sw.js", { cache: "no-store" });
     const reg = await navigator.serviceWorker.getRegistration();
     if (reg) await reg.update();
   } catch {}
