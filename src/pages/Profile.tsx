@@ -221,14 +221,18 @@ export default function Profile() {
               setQuickStatusMsg((profile as any)?.status_message ?? "");
               setQuickStatusOpen(true);
             }}
-            className="text-left mt-0.5 block"
+            className="text-left mt-1 block"
           >
             {(profile as any)?.status_message ? (
-              <div className="text-xs text-primary italic line-clamp-2 font-medium hover:underline">
-                "{(profile as any).status_message}"
+              <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
+                <span className="text-xs text-foreground font-medium line-clamp-2">
+                  💭 {(profile as any).status_message}
+                </span>
               </div>
             ) : (
-              <div className="text-xs text-muted-foreground hover:underline">+ Thêm dòng trạng thái</div>
+              <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
+                + Thêm dòng trạng thái
+              </div>
             )}
           </button>
           {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
