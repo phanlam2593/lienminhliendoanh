@@ -29,7 +29,6 @@ export function MemberLevelBadge({
       <span className={`h-1.5 ${barWidth} rounded-full bg-muted overflow-hidden shrink-0`}>
         <span className="h-full block rounded-full bg-primary" style={{ width: `${(progress / 10) * 100}%` }} />
       </span>
-      <span className="text-muted-foreground">{progress}/10</span>
       {badge && <span title={badge.label}>{badge.emoji}</span>}
     </span>
   );
