@@ -501,8 +501,10 @@ export type Database = {
           created_at: string
           email: string
           full_name: string
+          has_seen_welcome: boolean
           id: string
           level: number
+          member_number: number | null
           notification_prefs: Json
           password_hint: string | null
           phone: string
@@ -518,8 +520,10 @@ export type Database = {
           created_at?: string
           email: string
           full_name: string
+          has_seen_welcome?: boolean
           id: string
           level?: number
+          member_number?: number | null
           notification_prefs?: Json
           password_hint?: string | null
           phone: string
@@ -535,8 +539,10 @@ export type Database = {
           created_at?: string
           email?: string
           full_name?: string
+          has_seen_welcome?: boolean
           id?: string
           level?: number
+          member_number?: number | null
           notification_prefs?: Json
           password_hint?: string | null
           phone?: string

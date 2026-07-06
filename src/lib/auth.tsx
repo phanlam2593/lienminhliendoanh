@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       supabase
         .from("profiles")
         .select(
-          "id, username, full_name, avatar_url, status, status_message, points, level, created_at, updated_at, notification_prefs, email, phone, admin_note",
+          "id, username, full_name, avatar_url, status, status_message, points, level, created_at, updated_at, notification_prefs, email, phone, admin_note, member_number, has_seen_welcome",
         )
         .eq("id", uid)
         .maybeSingle(),

@@ -73,6 +73,30 @@ async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok:
   }
 }
 
+// Cờ chặn — khi popup Welcome đang mở, KHÔNG được xin quyền push / hiện banner cài app.
+// Được set bởi WelcomeOnboarding. Khi đóng popup sẽ dispatch event "lmld:welcome-done".
+export const WELCOME_ACTIVE_KEY = "lmld:welcome-active";
+export function setWelcomeActive(active: boolean) {
+  try {
+    if (active) localStorage.setItem(WELCOME_ACTIVE_KEY, "1");
+    else {
+      localStorage.removeItem(WELCOME_ACTIVE_KEY);
+      window.dispatchEvent(new Event("lmld:welcome-done"));
+    }
+  } catch {}
+}
+
+function isWelcomeActive() {
+  try { return localStorage.getItem(WELCOME_ACTIVE_KEY) === "1"; } catch { return false; }
+}
+function whenWelcomeDone(): Promise<void> {
+  if (!isWelcomeActive()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const h = () => { window.removeEventListener("lmld:welcome-done", h); resolve(); };
+    window.addEventListener("lmld:welcome-done", h);
+  });
+}
+
 // Tự động xin quyền push 1 lần duy nhất sau khi có phiên đăng nhập hợp lệ.
 // Không gọi ngay lúc load trang — chỉ chạy sau tương tác đầu tiên của người dùng
 // (bắt buộc trên iOS Safari, vốn yêu cầu 1 cú tap thật mới cho phép hiện popup quyền).
@@ -84,12 +108,15 @@ function scheduleAutoAsk() {
 
   const ask = async () => {
     if (localStorage.getItem(PUSH_ASK_KEY)) return;
+    await whenWelcomeDone(); // chờ welcome popup đóng xong mới hỏi
+    if (localStorage.getItem(PUSH_ASK_KEY)) return;
     localStorage.setItem(PUSH_ASK_KEY, "1");
     await requestPushPermission();
   };
 
   window.addEventListener("pointerdown", ask, { once: true });
 }
+
 
 export function registerPwa() {
   if (typeof window === "undefined") return;
@@ -167,18 +194,25 @@ export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
   if (typeof window === "undefined") return;
   if (!shouldShowInstallBanner()) return;
 
+  const guardedShow = async (canPrompt: boolean) => {
+    await whenWelcomeDone();
+    if (!shouldShowInstallBanner()) return;
+    onShow(canPrompt);
+  };
+
   window.addEventListener("beforeinstallprompt", (e: any) => {
     e.preventDefault();
     deferredInstallPrompt = e;
-    onShow(true);
+    void guardedShow(true);
   });
 
   // iOS doesn't fire beforeinstallprompt — show banner anyway after a short delay
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS && !isStandalone()) {
-    setTimeout(() => onShow(false), 2000);
+    setTimeout(() => void guardedShow(false), 2000);
   }
 }
+
 
 export async function triggerInstall(): Promise<boolean> {
   if (!deferredInstallPrompt) return false;

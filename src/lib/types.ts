@@ -117,6 +117,8 @@ export interface Profile {
   points: number;
   level: number;
   admin_note: string | null;
+  member_number: number | null;
+  has_seen_welcome: boolean;
   created_at: string;
   updated_at: string;
 }
