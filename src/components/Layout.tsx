@@ -65,10 +65,7 @@ export function Layout() {
     { to: "/kham-pha", icon: Search, label: "Khám phá" },
     { to: "/cong-dong", icon: Users, label: "Cộng đồng" },
   ];
-  const middleTab = isAdmin
-    ? { to: "/admin", icon: Settings, label: "Admin" }
-    : { to: "/thong-bao", icon: Bell, label: "Thông báo", badge: unread };
-  const tabs = [...baseTabs, middleTab, { to: "/ho-so", icon: UserIcon, label: "Tôi" }];
+  const tabs = isAdmin ? [...baseTabs, { to: "/admin", icon: Settings, label: "Admin" }] : baseTabs;
 
   const showWelcome = !loading && !user && !hide;
   const isPending = profile?.status === "pending" && !isAdmin;
