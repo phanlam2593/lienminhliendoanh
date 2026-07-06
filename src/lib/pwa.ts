@@ -73,6 +73,20 @@ async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok:
   }
 }
 
+// Cờ chặn — khi popup Welcome đang mở, KHÔNG được xin quyền push / hiện banner cài app.
+// Được set bởi WelcomeOnboarding. Khi đóng popup sẽ dispatch event "lmld:welcome-done".
+const WELCOME_ACTIVE_KEY = "lmld:welcome-active";
+function isWelcomeActive() {
+  try { return localStorage.getItem(WELCOME_ACTIVE_KEY) === "1"; } catch { return false; }
+}
+function whenWelcomeDone(): Promise<void> {
+  if (!isWelcomeActive()) return Promise.resolve();
+  return new Promise((resolve) => {
+    const h = () => { window.removeEventListener("lmld:welcome-done", h); resolve(); };
+    window.addEventListener("lmld:welcome-done", h);
+  });
+}
+
 // Tự động xin quyền push 1 lần duy nhất sau khi có phiên đăng nhập hợp lệ.
 // Không gọi ngay lúc load trang — chỉ chạy sau tương tác đầu tiên của người dùng
 // (bắt buộc trên iOS Safari, vốn yêu cầu 1 cú tap thật mới cho phép hiện popup quyền).
@@ -84,12 +98,15 @@ function scheduleAutoAsk() {
 
   const ask = async () => {
     if (localStorage.getItem(PUSH_ASK_KEY)) return;
+    await whenWelcomeDone(); // chờ welcome popup đóng xong mới hỏi
+    if (localStorage.getItem(PUSH_ASK_KEY)) return;
     localStorage.setItem(PUSH_ASK_KEY, "1");
     await requestPushPermission();
   };
 
   window.addEventListener("pointerdown", ask, { once: true });
 }
+
 
 export function registerPwa() {
   if (typeof window === "undefined") return;
