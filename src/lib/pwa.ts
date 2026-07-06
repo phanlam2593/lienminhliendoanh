@@ -208,3 +208,16 @@ export async function requestPushPermission(): Promise<"granted" | "denied" | "u
   }
   return perm === "granted" ? "granted" : "denied";
 }
+
+// Gọi khi người dùng kéo xuống để refresh — luôn reload để chắc chắn lấy bản mới nhất.
+export async function forceRefreshCheck(): Promise<void> {
+  if (!("serviceWorker" in navigator)) {
+    window.location.reload();
+    return;
+  }
+  try {
+    const reg = await navigator.serviceWorker.getRegistration();
+    if (reg) await reg.update();
+  } catch {}
+  window.location.reload();
+}

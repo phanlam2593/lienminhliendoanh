@@ -23,6 +23,7 @@ import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
 import { WelcomeOverlay } from "./WelcomeOverlay";
 import { AchievementOverlay } from "./AchievementOverlay";
+import { PullToRefresh } from "./PullToRefresh";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
