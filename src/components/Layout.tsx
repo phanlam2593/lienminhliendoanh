@@ -144,7 +144,9 @@ export function Layout() {
             }}
           />
         ) : (
-          <Outlet />
+          <PullToRefresh>
+            <Outlet />
+          </PullToRefresh>
         )}
       </main>
 
