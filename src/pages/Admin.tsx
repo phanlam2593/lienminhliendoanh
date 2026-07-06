@@ -24,6 +24,7 @@ import {
   TrendingUp,
   Building2,
   Sparkles,
+  Handshake,
   Users,
   Search,
   Trash2,
