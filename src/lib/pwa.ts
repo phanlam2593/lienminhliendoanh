@@ -75,7 +75,17 @@ async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok:
 
 // Cờ chặn — khi popup Welcome đang mở, KHÔNG được xin quyền push / hiện banner cài app.
 // Được set bởi WelcomeOnboarding. Khi đóng popup sẽ dispatch event "lmld:welcome-done".
-const WELCOME_ACTIVE_KEY = "lmld:welcome-active";
+export const WELCOME_ACTIVE_KEY = "lmld:welcome-active";
+export function setWelcomeActive(active: boolean) {
+  try {
+    if (active) localStorage.setItem(WELCOME_ACTIVE_KEY, "1");
+    else {
+      localStorage.removeItem(WELCOME_ACTIVE_KEY);
+      window.dispatchEvent(new Event("lmld:welcome-done"));
+    }
+  } catch {}
+}
+
 function isWelcomeActive() {
   try { return localStorage.getItem(WELCOME_ACTIVE_KEY) === "1"; } catch { return false; }
 }
