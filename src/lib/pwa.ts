@@ -184,18 +184,25 @@ export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
   if (typeof window === "undefined") return;
   if (!shouldShowInstallBanner()) return;
 
+  const guardedShow = async (canPrompt: boolean) => {
+    await whenWelcomeDone();
+    if (!shouldShowInstallBanner()) return;
+    onShow(canPrompt);
+  };
+
   window.addEventListener("beforeinstallprompt", (e: any) => {
     e.preventDefault();
     deferredInstallPrompt = e;
-    onShow(true);
+    void guardedShow(true);
   });
 
   // iOS doesn't fire beforeinstallprompt — show banner anyway after a short delay
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   if (isIOS && !isStandalone()) {
-    setTimeout(() => onShow(false), 2000);
+    setTimeout(() => void guardedShow(false), 2000);
   }
 }
+
 
 export async function triggerInstall(): Promise<boolean> {
   if (!deferredInstallPrompt) return false;
