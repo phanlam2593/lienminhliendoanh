@@ -221,13 +221,17 @@ export default function Profile() {
               setQuickStatusMsg((profile as any)?.status_message ?? "");
               setQuickStatusOpen(true);
             }}
-            className="text-left mt-1 block"
+            className="text-left mt-2 block"
           >
             {(profile as any)?.status_message ? (
-              <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-                <span className="text-xs text-foreground font-medium line-clamp-2">
-                  💭 {(profile as any).status_message}
-                </span>
+              <div className="relative inline-block max-w-full">
+                <div className="px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
+                  <span className="text-xs text-foreground font-medium line-clamp-2">
+                    {(profile as any).status_message}
+                  </span>
+                </div>
+                <span className="absolute -bottom-1.5 left-3 w-2.5 h-2.5 rounded-full bg-card border border-border" />
+                <span className="absolute -bottom-3 left-1.5 w-1.5 h-1.5 rounded-full bg-card border border-border" />
               </div>
             ) : (
               <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
@@ -235,31 +239,6 @@ export default function Profile() {
               </div>
             )}
           </button>
-          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
-        </div>
-      </div>
-      <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>Dòng trạng thái</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-2">
-            <textarea
-              value={quickStatusMsg}
-              onChange={(e) => setQuickStatusMsg(e.target.value.slice(0, 150))}
-              placeholder="Ví dụ: Đang tuyển nhân viên tại Đà Lạt 🌿"
-              rows={3}
-              maxLength={150}
-              className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
-            />
-            <div className="text-[10px] text-muted-foreground text-right">{quickStatusMsg.length}/150</div>
-            <button
-              onClick={saveQuickStatus}
-              disabled={quickSaving}
-              className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm"
-            >
-              {quickSaving ? "Đang lưu…" : "Lưu"}
-            </button>
           </div>
         </DialogContent>
       </Dialog>
