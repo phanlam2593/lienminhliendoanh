@@ -239,6 +239,31 @@ export default function Profile() {
               </div>
             )}
           </button>
+          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
+        </div>
+      </div>
+      <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Dòng trạng thái</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            <textarea
+              value={quickStatusMsg}
+              onChange={(e) => setQuickStatusMsg(e.target.value.slice(0, 150))}
+              placeholder="Ví dụ: Đang tuyển nhân viên tại Đà Lạt 🌿"
+              rows={3}
+              maxLength={150}
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
+            />
+            <div className="text-[10px] text-muted-foreground text-right">{quickStatusMsg.length}/150</div>
+            <button
+              onClick={saveQuickStatus}
+              disabled={quickSaving}
+              className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm"
+            >
+              {quickSaving ? "Đang lưu…" : "Lưu"}
+            </button>
           </div>
         </DialogContent>
       </Dialog>
