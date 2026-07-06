@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
 import { WelcomeOverlay } from "./WelcomeOverlay";
+import { WelcomeOnboarding } from "./WelcomeOnboarding";
 import { AchievementOverlay } from "./AchievementOverlay";
 import { PullToRefresh } from "./PullToRefresh";
 import { cn } from "@/lib/utils";
