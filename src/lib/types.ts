@@ -77,11 +77,13 @@ export const BADGE_TIERS: { type: string; threshold: number; label: string; emoj
 ];
 
 export const MEMBER_BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string }[] = [
-  { type: "newcomer", threshold: 5, label: "Người mới tích cực", emoji: "🌱" },
-  { type: "connector", threshold: 15, label: "Người kết nối", emoji: "🔗" },
-  { type: "enthusiast", threshold: 30, label: "Thành viên nhiệt tình", emoji: "💚" },
-  { type: "standout", threshold: 60, label: "Gương mặt tiêu biểu", emoji: "🌟" },
-  { type: "legend", threshold: 100, label: "Huyền thoại cộng đồng", emoji: "👑" },
+  { type: "newcomer", threshold: 10, label: "Người mới tích cực", emoji: "🌱" },
+  { type: "connector", threshold: 50, label: "Người kết nối", emoji: "🔗" },
+  { type: "enthusiast", threshold: 100, label: "Thành viên nhiệt tình", emoji: "💚" },
+  { type: "standout", threshold: 500, label: "Gương mặt tiêu biểu", emoji: "🌟" },
+  { type: "pillar", threshold: 1000, label: "Trụ cột cộng đồng", emoji: "🏆" },
+  { type: "legend", threshold: 5000, label: "Huyền thoại cộng đồng", emoji: "👑" },
+  { type: "icon", threshold: 10000, label: "Biểu tượng Liên Minh", emoji: "💎" },
 ];
 
 export function getTopMemberBadge(points: number) {
