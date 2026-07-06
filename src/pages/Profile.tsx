@@ -200,47 +200,42 @@ export default function Profile() {
             }}
           />
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            setQuickStatusMsg((profile as any)?.status_message ?? "");
-            setQuickStatusOpen(true);
-          }}
-          className="relative flex-1 min-w-0 text-left"
-        >
-          {(profile as any)?.status_message ? (
-            <div className="relative inline-block max-w-full">
-              <span className="absolute -left-2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-card border border-border" />
-              <div className="px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-                <span className="text-xs text-primary font-semibold line-clamp-2">
-                  {(profile as any).status_message}
-                </span>
-              </div>
-            </div>
-          ) : (
-            <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
-              + Thêm dòng trạng thái
-            </div>
-          )}
-        </button>
-      </div>
-      <div className="mt-2">
-        <div className="font-bold truncate">{profile?.full_name}</div>
-        <div className="text-xs text-muted-foreground">
-          @{profile?.username} · {role}
+        <div className="flex-1 min-w-0">
+          <div className="font-bold truncate">{profile?.full_name}</div>
+          <div className="text-xs text-muted-foreground">
+            @{profile?.username} · {role}
+          </div>
+          <div className="flex items-center gap-2 mt-0.5">
+            <StatusBadge s={profile?.status} />
+            {profile && (
+              <MemberLevelBadge
+                level={(profile as any).level ?? 1}
+                points={(profile as any).points ?? 0}
+                isAdmin={role === "admin"}
+              />
+            )}
+          </div>
+          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
         </div>
-        <div className="flex items-center gap-2 mt-0.5">
-          <StatusBadge s={profile?.status} />
-          {profile && (
-            <MemberLevelBadge
-              level={(profile as any).level ?? 1}
-              points={(profile as any).points ?? 0}
-              isAdmin={role === "admin"}
-            />
-          )}
-        </div>
-        {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
       </div>
+      <button
+        type="button"
+        onClick={() => {
+          setQuickStatusMsg((profile as any)?.status_message ?? "");
+          setQuickStatusOpen(true);
+        }}
+        className="mt-2 block text-left w-full"
+      >
+        {(profile as any)?.status_message ? (
+          <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
+            <span className="text-xs text-primary font-semibold line-clamp-2">{(profile as any).status_message}</span>
+          </div>
+        ) : (
+          <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
+            + Thêm dòng trạng thái
+          </div>
+        )}
+      </button>
       <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
