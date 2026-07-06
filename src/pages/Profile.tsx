@@ -173,7 +173,7 @@ export default function Profile() {
   const Header = (
     <>
       <div className="flex items-center gap-3">
-        <div className="relative">
+        <div className="relative shrink-0">
           <Avatar
             path={profile?.avatar_url}
             name={profile?.full_name || profile?.username}
@@ -200,47 +200,46 @@ export default function Profile() {
             }}
           />
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="font-bold truncate">{profile?.full_name}</div>
-          <div className="text-xs text-muted-foreground">
-            @{profile?.username} · {role}
-          </div>
-          <div className="flex items-center gap-2 mt-0.5">
-            <StatusBadge s={profile?.status} />
-            {profile && (
-              <MemberLevelBadge
-                level={(profile as any).level ?? 1}
-                points={(profile as any).points ?? 0}
-                isAdmin={role === "admin"}
-              />
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setQuickStatusMsg((profile as any)?.status_message ?? "");
-              setQuickStatusOpen(true);
-            }}
-            className="text-left mt-2 block"
-          >
-            {(profile as any)?.status_message ? (
-              <div className="relative inline-block max-w-full">
-                <div className="px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-                  <span className="text-xs text-foreground font-medium line-clamp-2">
-                    {(profile as any).status_message}
-                  </span>
-                </div>
-                <span className="absolute -bottom-1.5 left-3 w-2.5 h-2.5 rounded-full bg-card border border-border" />
-                <span className="absolute -bottom-3 left-1.5 w-1.5 h-1.5 rounded-full bg-card border border-border" />
+        <button
+          type="button"
+          onClick={() => {
+            setQuickStatusMsg((profile as any)?.status_message ?? "");
+            setQuickStatusOpen(true);
+          }}
+          className="relative flex-1 min-w-0 text-left"
+        >
+          {(profile as any)?.status_message ? (
+            <div className="relative inline-block max-w-full">
+              <span className="absolute -left-2 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-card border border-border" />
+              <div className="px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
+                <span className="text-xs text-primary font-semibold line-clamp-2">
+                  {(profile as any).status_message}
+                </span>
               </div>
-            ) : (
-              <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
-                + Thêm dòng trạng thái
-              </div>
-            )}
-          </button>
-          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
+            </div>
+          ) : (
+            <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
+              + Thêm dòng trạng thái
+            </div>
+          )}
+        </button>
+      </div>
+      <div className="mt-2">
+        <div className="font-bold truncate">{profile?.full_name}</div>
+        <div className="text-xs text-muted-foreground">
+          @{profile?.username} · {role}
         </div>
+        <div className="flex items-center gap-2 mt-0.5">
+          <StatusBadge s={profile?.status} />
+          {profile && (
+            <MemberLevelBadge
+              level={(profile as any).level ?? 1}
+              points={(profile as any).points ?? 0}
+              isAdmin={role === "admin"}
+            />
+          )}
+        </div>
+        {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
       </div>
       <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
         <DialogContent className="max-w-sm">
