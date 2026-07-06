@@ -114,7 +114,7 @@ export function registerPwa() {
 
   window.addEventListener("load", async () => {
     try {
-      const registration = await navigator.serviceWorker.register(SW_URL);
+      const registration = await navigator.serviceWorker.register(SW_URL, { updateViaCache: "none" });
 
       // === Tự động cập nhật bản mới ===
       // 1) Chủ động kiểm tra bản mới: ngay khi mở app, mỗi khi quay lại app, và mỗi 15 phút
