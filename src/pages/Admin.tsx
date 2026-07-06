@@ -63,7 +63,7 @@ export default function Admin() {
         supabase
           .from("profiles")
           .select(
-            "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs",
+            "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
           )
           .order("created_at", { ascending: false }),
         supabase.from("businesses").select("*"),
