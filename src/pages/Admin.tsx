@@ -1338,7 +1338,7 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
   };
 
   return (
-    <Collapsible title="🤝 Trao đổi" icon={Sparkles} count={list.length}>
+    <Collapsible title="Trao đổi" icon={Handshake} count={list.length}>
       <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
         <span>
           Tổng: <b className="text-foreground">{list.length}</b>
