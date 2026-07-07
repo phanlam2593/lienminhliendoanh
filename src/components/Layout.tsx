@@ -3,6 +3,7 @@ import {
   Bell,
   Home,
   Search,
+  MapPin,
   Users,
   Settings,
   User as UserIcon,
