@@ -66,9 +66,11 @@ export function Layout() {
   const baseTabs = [
     { to: "/", icon: Home, label: "Trang chủ" },
     { to: "/kham-pha", icon: Search, label: "Khám phá" },
+    { to: "/quanh-ban", icon: MapPin, label: "Quanh bạn" },
     { to: "/cong-dong", icon: Users, label: "Cộng đồng" },
   ];
   const tabs = isAdmin ? [...baseTabs, { to: "/admin", icon: Settings, label: "Admin" }] : baseTabs;
+  const gridClass = tabs.length === 5 ? "grid-cols-5" : tabs.length === 4 ? "grid-cols-4" : "grid-cols-3";
 
   const showWelcome = !loading && !user && !hide;
   const isPending = profile?.status === "pending" && !isAdmin;
