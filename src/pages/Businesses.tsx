@@ -134,7 +134,7 @@ export default function Businesses() {
     } else {
       if (area !== "all") arr = arr.filter((b) => extractArea(b.address) === area);
       if (sort === "rating") arr = [...arr].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-      else if (sort === "offers") arr = [...arr].sort((a, b) => (b.offerCount ?? 0) - (a.offerCount ?? 0));
+      else if (sort === "offers") arr = [...arr].sort((a: any, b: any) => (b.totalClaims ?? 0) - (a.totalClaims ?? 0));
     }
     return arr;
   }, [list, q, type, area, sort, myPos, radius]);
