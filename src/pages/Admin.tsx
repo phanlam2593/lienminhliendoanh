@@ -416,6 +416,13 @@ function MemberDetail({
         .order("created_at", { ascending: false });
       setOffers((o ?? []) as Offer[]);
     } else setOffers([]);
+    const { data: v } = await supabase
+      .from("login_events")
+      .select("created_at")
+      .eq("user_id", uid)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    setVisits((v ?? []).map((x: any) => x.created_at));
   };
 
   const saveProfile = async () => {
