@@ -70,6 +70,7 @@ export default function Businesses() {
           rating: Number(s?.rating ?? 0),
           reviewCount: s?.review_count ?? 0,
           offerCount: s?.offer_count ?? 0,
+          totalClaims: s?.total_claims ?? 0,
           latestOffer: s?.latest_offer ?? null,
           latestOfferClaims: s?.latest_offer_claims ?? 0,
           latestReview:
