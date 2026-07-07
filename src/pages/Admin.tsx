@@ -55,6 +55,7 @@ export default function Admin() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<MemberRow | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [previewOnboarding, setPreviewOnboarding] = useState(false);
 
   useEffect(() => {
     if (!isAdmin) return;
