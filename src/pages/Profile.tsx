@@ -444,6 +444,27 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
     })();
   }, [biz.id]);
 
+  const useCurrentLocation = () => {
+    if (!navigator.geolocation) {
+      toast.error("Trình duyệt không hỗ trợ định vị");
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLat(pos.coords.latitude);
+        setLng(pos.coords.longitude);
+        setLocating(false);
+        toast.success("Đã lấy vị trí hiện tại — nhớ bấm Lưu doanh nghiệp");
+      },
+      () => {
+        setLocating(false);
+        toast.error("Không lấy được vị trí. Kiểm tra quyền định vị trong trình duyệt.");
+      },
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  };
+
   const save = async () => {
     setSaving(true);
     const { error } = await supabase
@@ -461,8 +482,10 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
         youtube_url: youtube || null,
         phone: phone || null,
         address: address || null,
+        latitude: lat,
+        longitude: lng,
       })
-      .eq("id", biz.id);
+      .eq("id", biz.id);;
     setSaving(false);
     if (error) {
       toast.error(error.message);
