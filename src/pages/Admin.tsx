@@ -195,7 +195,7 @@ export default function Admin() {
                   {r.full_name}
                   <span className="text-muted-foreground text-xs ml-1">@{r.username}</span>
                 </div>
-                <<div className="text-[11px] text-muted-foreground truncate">
+                <div className="text-[11px] text-muted-foreground truncate">
                   Tham gia {new Date(r.created_at).toLocaleDateString("vi-VN")}
                   {r.business ? ` · 🏢 ${r.business.name}` : ""}
                   {r.lastVisit ? ` · Vào lần cuối: ${timeAgo(r.lastVisit)}` : " · Chưa từng mở app"}
