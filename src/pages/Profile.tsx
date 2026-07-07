@@ -22,6 +22,7 @@ import {
   Send,
   Users,
   UserCheck,
+  Star,
   Settings,
   KeyRound,
   Bell,
