@@ -17,6 +17,20 @@ interface AuthCtx {
 
 const Ctx = createContext<AuthCtx | null>(null);
 
+const VISIT_LOGGED_KEY = "lmld_visit_logged_uid";
+
+// Ghi 1 dòng nhật ký mỗi lần MỞ APP (không phải mỗi lần chuyển trang) — dùng sessionStorage
+// để chỉ ghi 1 lần cho mỗi phiên mở tab/app, tránh spam bảng login_events.
+const logVisit = async (uid: string) => {
+  try {
+    if (sessionStorage.getItem(VISIT_LOGGED_KEY) === uid) return;
+    sessionStorage.setItem(VISIT_LOGGED_KEY, uid);
+    await supabase.from("login_events").insert({ user_id: uid });
+  } catch {
+    // Im lặng bỏ qua — ghi log truy cập không được phép làm hỏng trải nghiệm đăng nhập
+  }
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
