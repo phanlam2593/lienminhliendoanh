@@ -165,20 +165,20 @@ export default function Admin() {
 
       <PendingSummary refreshKey={refreshKey} onChanged={refresh} />
 
-      <Collapsible title="Thành viên" icon={Users} count={filtered.length}>
+      <Collapsible title="Thành viên" icon={Users} count={memberTotal}>
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Tìm theo tên thành viên hoặc doanh nghiệp…"
+            placeholder="Tìm theo tên hoặc username…"
             className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
           />
         </div>
-        {filtered.length === 0 ? (
+        {rows.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
         ) : (
-          filtered.map((r) => (
+          rows.map((r) => (
             <button
               key={r.id}
               onClick={() => setSelected(r)}
@@ -201,6 +201,15 @@ export default function Admin() {
               <StatusBadge s={r.status} />
             </button>
           ))
+        )}
+        {memberHasMore && (
+          <button
+            onClick={loadMoreMembers}
+            disabled={memberLoadingMore}
+            className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+          >
+            {memberLoadingMore ? "Đang tải…" : `Tải thêm (còn ${memberTotal - rows.length})`}
+          </button>
         )}
       </Collapsible>
 
