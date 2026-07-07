@@ -513,6 +513,13 @@ export function WelcomeOnboarding({
   const close = async () => {
     if (closing) return;
     setClosing(true);
+    if (previewMode) {
+      setWelcomeActive(false);
+      setVisible(false);
+      setClosing(false);
+      onPreviewClose?.();
+      return;
+    }
     try {
       localStorage.setItem(LOCAL_SEEN_KEY, profile?.id ?? "");
     } catch {}
