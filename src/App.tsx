@@ -19,7 +19,6 @@ import Admin from "./pages/Admin";
 import Notifications from "./pages/Notifications";
 import Community from "./pages/Community";
 import Guide from "./pages/Guide";
-import Nearby from "./pages/Nearby";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
