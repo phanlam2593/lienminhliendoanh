@@ -412,7 +412,8 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   const [tiktok, setTiktok] = useState(biz.tiktok_url || "");
   const [instagram, setInstagram] = useState(biz.instagram_url || "");
   const [youtube, setYoutube] = useState(biz.youtube_url || "");
-  const [phone, setPhone] = const [address, setAddress] = useState(biz.address || "");
+  const [phone, setPhone] = useState(biz.phone || "");
+  const [address, setAddress] = useState(biz.address || "");
   const [lat, setLat] = useState<number | null>(biz.latitude ?? null);
   const [lng, setLng] = useState<number | null>(biz.longitude ?? null);
   const [locating, setLocating] = useState(false);
@@ -485,7 +486,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
         latitude: lat,
         longitude: lng,
       })
-      .eq("id", biz.id);;
+      .eq("id", biz.id);
     setSaving(false);
     if (error) {
       toast.error(error.message);
@@ -658,7 +659,12 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               disabled={locating}
               className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
             >
-              📍 {locating ? "Đang lấy vị trí…" : lat ? "Đã ghim vị trí — bấm để cập nhật lại" : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
+              📍{" "}
+              {locating
+                ? "Đang lấy vị trí…"
+                : lat
+                  ? "Đã ghim vị trí — bấm để cập nhật lại"
+                  : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
@@ -1326,7 +1332,7 @@ function BusinessCreator({
       if (coverFile) {
         cover_url = await uploadImage(coverFile, "covers");
       }
-     const { data: newBiz, error } = await supabase
+      const { data: newBiz, error } = await supabase
         .from("businesses")
         .insert({
           owner_id: ownerId,
@@ -1454,7 +1460,12 @@ function BusinessCreator({
         disabled={locating}
         className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
       >
-        📍 {locating ? "Đang lấy vị trí…" : lat ? "Đã ghim vị trí — bấm lại để cập nhật" : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
+        📍{" "}
+        {locating
+          ? "Đang lấy vị trí…"
+          : lat
+            ? "Đã ghim vị trí — bấm lại để cập nhật"
+            : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
       </button>
       <Field label="Mô tả">
         <textarea
