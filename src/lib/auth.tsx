@@ -58,8 +58,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) setTimeout(() => load(s.user.id), 0);
-      else {
+      if (s?.user) {
+        setTimeout(() => load(s.user.id), 0);
+        void logVisit(s.user.id);
+      } else {
         setProfile(null);
         setRole("guest");
       }
@@ -67,7 +69,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(async ({ data: { session: s } }) => {
       setSession(s);
       setUser(s?.user ?? null);
-      if (s?.user) await load(s.user.id);
+      if (s?.user) {
+        await load(s.user.id);
+        void logVisit(s.user.id);
+      }
       setLoading(false);
     });
     return () => sub.subscription.unsubscribe();
