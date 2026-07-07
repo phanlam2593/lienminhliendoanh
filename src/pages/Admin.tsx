@@ -113,6 +113,7 @@ export default function Admin() {
           reviewCount: reviewByUser.get(p.id) ?? 0,
           suggestionCount: sugByUser.get(p.id) ?? 0,
           claimCount: claimByUser.get(p.id) ?? 0,
+          lastVisit: lastVisitByUser.get(p.id) ?? null,
         };
       }),
     );
