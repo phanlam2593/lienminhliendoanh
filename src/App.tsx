@@ -49,6 +49,7 @@ const App = () => (
                 <Route path="/tin-nhan" element={<MessagesInbox />} />
                 <Route path="/tin-nhan/:id" element={<MessagesThread />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/huong-dan" element={<Guide />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
