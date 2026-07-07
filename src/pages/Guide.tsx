@@ -14,6 +14,15 @@ import {
   Flag,
   ChevronDown,
   ChevronRight,
+  Search,
+  Award,
+  Sun,
+  CalendarDays,
+  Repeat,
+  Heart,
+  Briefcase,
+  Settings,
+  AlertCircle,
 } from "lucide-react";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 
@@ -37,12 +46,46 @@ const BIZ_EXAMPLES: Record<BusinessType, string[]> = {
   other: ["Bất kỳ mô hình nào khác — vẫn tạo ưu đãi, vẫn tham gia cộng đồng bình thường"],
 };
 
+const BIZ_OFFER_IDEAS: Record<BusinessType, string[]> = {
+  food: [
+    "Giảm 10% hoá đơn",
+    "Miễn phí ship",
+    "Mua 5 tặng 1",
+    "Tặng nước/tráng miệng kèm món chính",
+    "Giảm 15% khung giờ vắng khách",
+    "Combo giá cố định (vd 179k bao ăn uống)",
+  ],
+  service: [
+    "Giảm 10-20% cho khách mới",
+    "Miễn phí tư vấn/kiểm tra ban đầu",
+    "Tặng thêm 1 dịch vụ nhỏ đi kèm",
+    "Giảm giá khi đặt combo nhiều dịch vụ",
+  ],
+  stay: ["Giảm giá đêm thứ 2 trở đi", "Tặng bữa sáng miễn phí", "Miễn phí đưa đón", "Giảm 10% khi đặt trước"],
+  travel: ["Giảm giá theo nhóm đông", "Tặng nước/đồ ăn nhẹ trên xe", "Giảm 10% đặt sớm", "Combo trọn gói giá cố định"],
+  creator: ["Đổi review lấy ưu đãi", "Giảm giá gói quay dài hạn", "Tặng ảnh/video hậu kỳ nhanh"],
+  freelance: ["Giảm giá dự án đầu tiên", "Tặng 1 buổi tư vấn miễn phí", "Giảm % phí khi có khách giới thiệu"],
+  broker: ["Giảm 10% phí hoa hồng", "Miễn phí định giá/đo đạc", "Tặng tư vấn pháp lý cơ bản"],
+  other: ["Mua 1 tặng 1", "Giảm giá theo dịp đặc biệt", "Miễn phí vận chuyển"],
+};
+
 interface SectionData {
   id: string;
   icon: any;
   title: string;
   summary: string;
   body: React.ReactNode;
+}
+
+function IconBullet({ icon: Icon, children }: { icon: any; children: React.ReactNode }) {
+  return (
+    <li className="flex items-start gap-2">
+      <span className="w-5 h-5 rounded-full bg-primary/10 grid place-items-center shrink-0 mt-0.5">
+        <Icon className="w-3 h-3 text-primary" />
+      </span>
+      <span className="text-sm leading-snug">{children}</span>
+    </li>
+  );
 }
 
 function GuideSection({ data, open, onToggle }: { data: SectionData; open: boolean; onToggle: () => void }) {
@@ -86,12 +129,27 @@ function BizTypeItem({ type }: { type: BusinessType }) {
         )}
       </button>
       {open && (
-        <div className="px-3 pb-2.5 flex flex-wrap gap-1.5">
-          {BIZ_EXAMPLES[type].map((ex, i) => (
-            <span key={i} className="text-[11px] px-2 py-1 rounded-full bg-card text-muted-foreground">
-              {ex}
-            </span>
-          ))}
+        <div className="px-3 pb-3 space-y-2.5">
+          <div>
+            <div className="text-[11px] font-semibold text-muted-foreground mb-1">Ví dụ ngành nghề</div>
+            <div className="flex flex-wrap gap-1.5">
+              {BIZ_EXAMPLES[type].map((ex, i) => (
+                <span key={i} className="text-[11px] px-2 py-1 rounded-full bg-card text-muted-foreground">
+                  {ex}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="text-[11px] font-semibold text-primary mb-1">💡 Gợi ý ưu đãi nên thử</div>
+            <div className="flex flex-wrap gap-1.5">
+              {BIZ_OFFER_IDEAS[type].map((idea, i) => (
+                <span key={i} className="text-[11px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
+                  {idea}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -107,12 +165,12 @@ export default function Guide() {
       id: "member",
       icon: Users,
       title: "Thành viên",
-      summary: "Khám phá địa điểm, dịch vụ theo khu vực Đà Lạt — trải nghiệm và nhận ưu đãi.",
+      summary: "Khám phá theo khu vực, trải nghiệm và nhận ưu đãi.",
       body: (
-        <ul className="space-y-1.5 text-sm">
-          <li>🔍 Khám phá địa điểm, dịch vụ theo từng khu vực ở Đà Lạt</li>
-          <li>🎁 Nhận ưu đãi từ doanh nghiệp, đưa mã khi trải nghiệm dịch vụ</li>
-          <li>🏆 Tích điểm lên cấp, nhận huy hiệu khi hoạt động</li>
+        <ul className="space-y-2">
+          <IconBullet icon={Search}>Khám phá địa điểm, dịch vụ theo từng khu vực</IconBullet>
+          <IconBullet icon={Gift}>Nhận ưu đãi, đưa mã khi trải nghiệm</IconBullet>
+          <IconBullet icon={Award}>Tích điểm, lên cấp, nhận huy hiệu</IconBullet>
         </ul>
       ),
     },
@@ -120,12 +178,12 @@ export default function Guide() {
       id: "business",
       icon: Building2,
       title: "Doanh nghiệp",
-      summary: "Tạo & quản lý nhiều doanh nghiệp, chia theo nhiều loại hình.",
+      summary: "Tạo & quản lý nhiều doanh nghiệp, chia theo loại hình.",
       body: (
         <div className="space-y-2">
           <p className="text-sm">
-            Mỗi thành viên có thể tạo & quản lý <b>nhiều doanh nghiệp</b> cùng lúc, chia theo 8 loại hình cố định. Bấm
-            vào từng loại hình bên dưới để xem ví dụ ngành nghề:
+            Mỗi thành viên tạo được <b>nhiều doanh nghiệp</b>, chia theo 8 loại hình. Bấm vào 1 loại hình để xem ví dụ
+            ngành nghề + gợi ý ưu đãi:
           </p>
           <div className="space-y-1.5">
             {BUSINESS_TYPES.map((t) => (
@@ -139,74 +197,72 @@ export default function Guide() {
       id: "offers",
       icon: Gift,
       title: "Ưu đãi",
-      summary: "Biến điểm yếu thành lợi thế — cho đi để nhận lại nhiều hơn.",
+      summary: "Biến điểm yếu thành lợi thế.",
       body: (
-        <div className="space-y-1.5 text-sm">
-          <p>Liên Doanh tin: mỗi doanh nghiệp đều có thứ để cho đi, để được nhận lại nhiều hơn.</p>
-          <ul className="space-y-1">
-            <li>☀️ Sáng vắng khách → ưu đãi giờ sáng → tăng doanh thu giờ trống</li>
-            <li>📅 Tháng thấp điểm → ưu đãi cả tháng → kéo khách mùa thấp điểm</li>
-            <li>🎁 Mua 5 tặng 1, freeship... — hãy cho đi để nhận lại</li>
-          </ul>
-        </div>
+        <ul className="space-y-2">
+          <IconBullet icon={Sun}>Sáng vắng khách → ưu đãi giờ sáng</IconBullet>
+          <IconBullet icon={CalendarDays}>Tháng thấp điểm → ưu đãi cả tháng</IconBullet>
+          <IconBullet icon={Gift}>Mua 5 tặng 1, freeship... cho đi để nhận lại</IconBullet>
+        </ul>
       ),
     },
     {
       id: "exchange",
       icon: ArrowLeftRight,
       title: "Trao đổi chéo",
-      summary: "Kết nối với người cùng ngành — cho và nhận cùng lúc.",
+      summary: "Kết nối cùng ngành, cho và nhận cùng lúc.",
       body: (
-        <p className="text-sm">
-          Đang hoạt động sáng tạo nội dung, cần thêm follow? Khám phá và kết bạn với người cùng ngành, trao đổi follow
-          qua lại — cho và nhận cùng lúc.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={Users}>Kết bạn với người cùng ngành</IconBullet>
+          <IconBullet icon={Repeat}>Trao đổi follow, hỗ trợ qua lại</IconBullet>
+        </ul>
       ),
     },
     {
       id: "follow",
       icon: UserCheck,
       title: "Theo dõi",
-      summary: "Lưu lại nơi quen, nhận ưu đãi mới ngay khi có.",
+      summary: "Lưu nơi quen, nhận ưu đãi mới ngay khi có.",
       body: (
-        <p className="text-sm">
-          Follow doanh nghiệp để lưu lại nơi quen, nhận thông báo ngay khi có ưu đãi mới — không cần tự vào kiểm tra.
-          Doanh nghiệp cũng có thể follow lại khách hàng cũ để chăm sóc trực tiếp, gửi ưu đãi riêng khi cần.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={Bell}>Nhận thông báo ngay khi có ưu đãi mới</IconBullet>
+          <IconBullet icon={Heart}>DN follow lại khách cũ để chăm sóc</IconBullet>
+        </ul>
       ),
     },
     {
       id: "status",
       icon: Sparkles,
       title: "Thanh trạng thái",
-      summary: "Đăng nhu cầu ngay trên hồ sơ — tuyển người, tìm việc, hay một lời chào.",
+      summary: "Đăng nhu cầu ngay trên hồ sơ.",
       body: (
-        <p className="text-sm">
-          Đăng nhu cầu ngay trên hồ sơ: tuyển nhân viên, đang tìm việc, có ưu đãi mới, kiếm đối tác — hoặc đơn giản chỉ
-          là một lời chào gửi đến cộng đồng.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={Briefcase}>Tuyển người, tìm việc, tìm đối tác</IconBullet>
+          <IconBullet icon={MessageCircle}>Hoặc đơn giản là một lời chào</IconBullet>
+        </ul>
       ),
     },
     {
       id: "community-chat",
       icon: MessageCircle,
       title: "Trò chuyện cùng cộng đồng",
-      summary: "Chia sẻ, trò chuyện, đăng nhu cầu cùng cả cộng đồng.",
+      summary: "Chia sẻ, trò chuyện cùng cả cộng đồng.",
       body: (
-        <p className="text-sm">
-          Chia sẻ kinh nghiệm, trò chuyện, đăng nhu cầu — cùng trò chuyện với cả cộng đồng theo thời gian thực.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={Users}>Trò chuyện, chia sẻ kinh nghiệm</IconBullet>
+          <IconBullet icon={Send}>Đăng nhu cầu ngay trong chat chung</IconBullet>
+        </ul>
       ),
     },
     {
       id: "messages",
       icon: Send,
       title: "Nhắn tin",
-      summary: "Tương tác trực tiếp với thành viên, doanh nghiệp, bạn bè.",
+      summary: "Tương tác trực tiếp 1-1.",
       body: (
-        <p className="text-sm">
-          Nhắn tin trực tiếp với bất kỳ ai trong cộng đồng — thành viên, doanh nghiệp, hay bạn bè.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={MessageCircle}>Nhắn trực tiếp thành viên, DN, bạn bè</IconBullet>
+        </ul>
       ),
     },
     {
@@ -215,22 +271,22 @@ export default function Guide() {
       title: "Thông báo",
       summary: "Bật/tắt riêng từng loại trong Cài đặt.",
       body: (
-        <p className="text-sm">
-          Bật/tắt riêng từng loại thông báo trong Cài đặt: tin nhắn mới, người theo dõi mới, ưu đãi mới từ doanh nghiệp
-          đang theo dõi, hoặc thông báo từ admin.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={Settings}>Bật/tắt riêng từng loại trong Cài đặt</IconBullet>
+          <IconBullet icon={Bell}>Tin nhắn, follow mới, ưu đãi, admin</IconBullet>
+        </ul>
       ),
     },
     {
       id: "report",
       icon: Flag,
       title: "Báo cáo, góp ý",
-      summary: "Doanh nghiệp không giữ đúng ưu đãi? Có lỗi hay góp ý? Báo cáo tại đây.",
+      summary: "Gặp vấn đề? Báo cáo trực tiếp cho BQT.",
       body: (
-        <p className="text-sm">
-          Doanh nghiệp không giữ đúng ưu đãi đã đăng trên cộng đồng? Gặp lỗi hay có góp ý gì? Hãy báo cáo trực tiếp cho
-          Ban quản lý app tại đây.
-        </p>
+        <ul className="space-y-2">
+          <IconBullet icon={AlertCircle}>DN không giữ đúng ưu đãi đã đăng</IconBullet>
+          <IconBullet icon={Flag}>Lỗi hoặc góp ý — gửi thẳng cho BQT</IconBullet>
+        </ul>
       ),
     },
   ];
