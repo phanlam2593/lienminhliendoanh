@@ -42,10 +42,6 @@ import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportReplie
 
 interface MemberRow extends Profile {
   business?: Business | null;
-  activeOffers: number;
-  reviewCount: number;
-  suggestionCount: number;
-  claimCount: number;
   lastVisit: string | null;
 }
 
