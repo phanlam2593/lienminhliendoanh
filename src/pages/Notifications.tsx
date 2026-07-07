@@ -93,9 +93,11 @@ async function resolveRoute(n: Notification): Promise<string | null> {
     case "suggestion_rejected":
       return "/ho-so";
     case "level_up":
-      return id ? `/dn/${id}` : "/ho-so";
     case "badge_earned":
-      return id ? `/dn/${id}?tab=badges` : "/ho-so";
+      // Đây luôn là badge/level của THÀNH VIÊN (member gamification), target_type luôn là "profile"
+      // — không phải badge doanh nghiệp. Trước đây lỡ nhảy tới /dn/{id} (id lúc này là user id,
+      // không phải business id) khiến trang bị kẹt "Đang tải" mãi vì không tìm thấy DN nào khớp.
+      return "/ho-so";
     case "pending_approval":
       return "/admin";
     default:
