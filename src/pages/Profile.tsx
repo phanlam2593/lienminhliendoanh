@@ -412,8 +412,10 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   const [tiktok, setTiktok] = useState(biz.tiktok_url || "");
   const [instagram, setInstagram] = useState(biz.instagram_url || "");
   const [youtube, setYoutube] = useState(biz.youtube_url || "");
-  const [phone, setPhone] = useState(biz.phone || "");
-  const [address, setAddress] = useState(biz.address || "");
+  const [phone, setPhone] = const [address, setAddress] = useState(biz.address || "");
+  const [lat, setLat] = useState<number | null>(biz.latitude ?? null);
+  const [lng, setLng] = useState<number | null>(biz.longitude ?? null);
+  const [locating, setLocating] = useState(false);
   const [cover, setCover] = useState(biz.cover_url);
   const [offerText, setOfferText] = useState("");
   const [offers, setOffers] = useState<Offer[]>([]);
