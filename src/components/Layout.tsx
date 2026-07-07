@@ -65,7 +65,6 @@ export function Layout() {
   const baseTabs = [
     { to: "/", icon: Home, label: "Trang chủ" },
     { to: "/kham-pha", icon: Search, label: "Khám phá" },
-    { to: "/quanh-ban", icon: MapPin, label: "Quanh bạn" },
     { to: "/cong-dong", icon: Users, label: "Cộng đồng" },
   ];
   const tabs = isAdmin ? [...baseTabs, { to: "/admin", icon: Settings, label: "Admin" }] : baseTabs;
