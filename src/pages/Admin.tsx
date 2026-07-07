@@ -1372,12 +1372,34 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
   );
 }
 
+const OFFER_PAGE_SIZE = 50;
+
 function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
   const [list, setList] = useState<(Offer & { business_name?: string | null })[]>([]);
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const load = async () => {
-    const { data: offers } = await supabase.from("offers").select("*").order("created_at", { ascending: false });
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  const load = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * OFFER_PAGE_SIZE;
+    const to = from + OFFER_PAGE_SIZE - 1;
+    let query = supabase
+      .from("offers")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (debouncedQ) query = query.ilike("title", `%${debouncedQ}%`);
+    const { data: offers, count } = await query;
+    setTotal(count ?? 0);
     const rows = (offers as Offer[] | null) ?? [];
     const bizIds = [...new Set(rows.map((o) => o.business_id))];
     let map = new Map<string, string>();
@@ -1385,17 +1407,21 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
       const { data: biz } = await supabase.from("businesses").select("id, name").in("id", bizIds);
       (biz ?? []).forEach((b: any) => map.set(b.id, b.name));
     }
-    setList(rows.map((o) => ({ ...o, business_name: map.get(o.business_id) ?? null })));
+    const newRows = rows.map((o) => ({ ...o, business_name: map.get(o.business_id) ?? null }));
+    setList((prev) => (append ? [...prev, ...newRows] : newRows));
+    setHasMore(newRows.length === OFFER_PAGE_SIZE);
+    setLoadingMore(false);
   };
   useEffect(() => {
-    load();
-  }, [refreshKey]);
+    setPage(0);
+    void load(0, false);
+  }, [refreshKey, debouncedQ]);
 
-  const filtered = useMemo(() => {
-    const k = q.trim().toLowerCase();
-    if (!k) return list;
-    return list.filter((o) => o.title.toLowerCase().includes(k) || (o.business_name || "").toLowerCase().includes(k));
-  }, [list, q]);
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
+  };
 
   const toggle = async (o: Offer) => {
     const next = o.status === "active" ? "inactive" : "active";
@@ -1403,7 +1429,7 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
-      load();
+      load(0, false);
     }
   };
   const del = async (id: string) => {
@@ -1412,23 +1438,23 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
     if (error) toast.error(error.message);
     else {
       toast.success("Đã xóa");
-      load();
+      load(0, false);
       onChanged();
     }
   };
 
   return (
-    <Collapsible title="Ưu đãi" icon={Tag} count={filtered.length}>
+    <Collapsible title="Ưu đãi" icon={Tag} count={total}>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm theo ưu đãi hoặc DN…"
+          placeholder="Tìm theo tên ưu đãi…"
           className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
         />
       </div>
-      {filtered.map((o) => (
+      {list.map((o) => (
         <div key={o.id} className="p-2 bg-card rounded-xl flex items-center gap-2">
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold truncate">{o.title}</div>
@@ -1449,7 +1475,16 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
           </button>
         </div>
       ))}
-      {filtered.length === 0 && <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>}
+      {list.length === 0 && <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>}
+      {hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+        >
+          {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
+        </button>
+      )}
     </Collapsible>
   );
 }
