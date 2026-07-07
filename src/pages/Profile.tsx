@@ -1279,6 +1279,9 @@ function BusinessCreator({
   const [type, setType] = useState<BusinessType>("food");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
+  const [locating, setLocating] = useState(false);
   const [desc, setDesc] = useState("");
   const [hoursOpen, setHO] = useState("07:00");
   const [hoursClose, setHC] = useState("22:00");
