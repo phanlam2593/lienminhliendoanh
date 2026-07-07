@@ -212,6 +212,7 @@ export default function Admin() {
       <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
       <Collapsible title="Công cụ quản trị" icon={Sparkles}>
+        <CreateMemberForm />
         <button
           onClick={cleanupOrphans}
           className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
