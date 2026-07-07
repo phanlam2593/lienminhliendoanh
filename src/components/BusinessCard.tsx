@@ -10,6 +10,7 @@ export interface BusinessCardData extends Business {
   rating?: number;
   reviewCount?: number;
   offerCount?: number;
+  totalClaims?: number;
   latestOffer?: string | null;
   latestOfferClaims?: number;
   latestReview?: { rating: number; comment: string | null; author: string } | null;
