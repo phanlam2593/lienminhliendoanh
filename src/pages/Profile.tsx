@@ -1305,7 +1305,7 @@ function BusinessCreator({
       if (coverFile) {
         cover_url = await uploadImage(coverFile, "covers");
       }
-      const { data: newBiz, error } = await supabase
+     const { data: newBiz, error } = await supabase
         .from("businesses")
         .insert({
           owner_id: ownerId,
@@ -1313,6 +1313,8 @@ function BusinessCreator({
           type,
           phone: phone || null,
           address: address || null,
+          latitude: lat,
+          longitude: lng,
           description: desc || null,
           hours_open: hoursOpen,
           hours_close: hoursClose,
