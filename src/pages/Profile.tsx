@@ -32,6 +32,7 @@ import {
   User as UserIcon,
   Briefcase,
   ChevronRight,
+  HelpCircle,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
