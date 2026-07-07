@@ -16,7 +16,11 @@ const PRIMARY = "#0891b2";
 const EMERALD = "#10b981";
 
 function formatVi(n: number) {
-  try { return new Intl.NumberFormat("vi-VN").format(n); } catch { return String(n); }
+  try {
+    return new Intl.NumberFormat("vi-VN").format(n);
+  } catch {
+    return String(n);
+  }
 }
 
 function prefersReducedMotion() {
@@ -32,76 +36,108 @@ function SvgDefs() {
     <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden>
       <defs>
         <g id="wo-blobCyan">
-          <path d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C21,88 4,76 4,50 C4,22 20,4 43,4Z" fill="#38cde4"/>
-          <path d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C30,88 18,84 11,75 C30,82 66,74 68,44 C69,24 58,10 43,4Z" fill="#0891b2" opacity=".25"/>
-          <g className="wo-eye"><circle cx="30" cy="44" r="5.5" fill="#0f172a"/><circle cx="32" cy="42" r="2" fill="#fff"/></g>
-          <g className="wo-eye"><circle cx="56" cy="44" r="5.5" fill="#0f172a"/><circle cx="58" cy="42" r="2" fill="#fff"/></g>
-          <ellipse cx="22" cy="56" rx="6" ry="4" fill="#f9a8d4" opacity=".7"/>
-          <ellipse cx="64" cy="56" rx="6" ry="4" fill="#f9a8d4" opacity=".7"/>
-          <path d="M36,58 Q43,66 50,58" stroke="#0f172a" strokeWidth={3} fill="none" strokeLinecap="round"/>
+          <path d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C21,88 4,76 4,50 C4,22 20,4 43,4Z" fill="#38cde4" />
+          <path
+            d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C30,88 18,84 11,75 C30,82 66,74 68,44 C69,24 58,10 43,4Z"
+            fill="#0891b2"
+            opacity=".25"
+          />
+          <g className="wo-eye">
+            <circle cx="30" cy="44" r="5.5" fill="#0f172a" />
+            <circle cx="32" cy="42" r="2" fill="#fff" />
+          </g>
+          <g className="wo-eye">
+            <circle cx="56" cy="44" r="5.5" fill="#0f172a" />
+            <circle cx="58" cy="42" r="2" fill="#fff" />
+          </g>
+          <ellipse cx="22" cy="56" rx="6" ry="4" fill="#f9a8d4" opacity=".7" />
+          <ellipse cx="64" cy="56" rx="6" ry="4" fill="#f9a8d4" opacity=".7" />
+          <path d="M36,58 Q43,66 50,58" stroke="#0f172a" strokeWidth={3} fill="none" strokeLinecap="round" />
         </g>
         <g id="wo-blobGreen">
-          <path d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C21,88 4,76 4,50 C4,22 20,4 43,4Z" fill="#4ade9c"/>
-          <path d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C30,88 18,84 11,75 C30,82 66,74 68,44 C69,24 58,10 43,4Z" fill="#059669" opacity=".25"/>
-          <path d="M20,14 Q28,2 34,12 M52,10 Q58,0 66,12" stroke="#059669" strokeWidth={4} fill="none" strokeLinecap="round"/>
-          <g className="wo-eye"><circle cx="30" cy="44" r="5.5" fill="#0f172a"/><circle cx="32" cy="42" r="2" fill="#fff"/></g>
-          <g className="wo-eye"><circle cx="56" cy="44" r="5.5" fill="#0f172a"/><circle cx="58" cy="42" r="2" fill="#fff"/></g>
-          <ellipse cx="22" cy="56" rx="6" ry="4" fill="#fda4af" opacity=".7"/>
-          <ellipse cx="64" cy="56" rx="6" ry="4" fill="#fda4af" opacity=".7"/>
-          <path d="M36,58 Q43,66 50,58" stroke="#0f172a" strokeWidth={3} fill="none" strokeLinecap="round"/>
+          <path d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C21,88 4,76 4,50 C4,22 20,4 43,4Z" fill="#4ade9c" />
+          <path
+            d="M43,4 C66,4 82,22 82,50 C82,76 65,88 43,88 C30,88 18,84 11,75 C30,82 66,74 68,44 C69,24 58,10 43,4Z"
+            fill="#059669"
+            opacity=".25"
+          />
+          <path
+            d="M20,14 Q28,2 34,12 M52,10 Q58,0 66,12"
+            stroke="#059669"
+            strokeWidth={4}
+            fill="none"
+            strokeLinecap="round"
+          />
+          <g className="wo-eye">
+            <circle cx="30" cy="44" r="5.5" fill="#0f172a" />
+            <circle cx="32" cy="42" r="2" fill="#fff" />
+          </g>
+          <g className="wo-eye">
+            <circle cx="56" cy="44" r="5.5" fill="#0f172a" />
+            <circle cx="58" cy="42" r="2" fill="#fff" />
+          </g>
+          <ellipse cx="22" cy="56" rx="6" ry="4" fill="#fda4af" opacity=".7" />
+          <ellipse cx="64" cy="56" rx="6" ry="4" fill="#fda4af" opacity=".7" />
+          <path d="M36,58 Q43,66 50,58" stroke="#0f172a" strokeWidth={3} fill="none" strokeLinecap="round" />
         </g>
         <g id="wo-gift">
-          <rect x="4" y="12" width="26" height="20" rx="3" fill="#fb7185"/>
-          <rect x="2" y="8" width="30" height="7" rx="2.5" fill="#f43f5e"/>
-          <rect x="14" y="8" width="6" height="24" fill="#fde68a"/>
-          <path d="M17,8 C11,8 8,2 13,1 C16,0.5 17,4 17,8 C17,4 18,0.5 21,1 C26,2 23,8 17,8Z" fill="#fde68a"/>
+          <rect x="4" y="12" width="26" height="20" rx="3" fill="#fb7185" />
+          <rect x="2" y="8" width="30" height="7" rx="2.5" fill="#f43f5e" />
+          <rect x="14" y="8" width="6" height="24" fill="#fde68a" />
+          <path d="M17,8 C11,8 8,2 13,1 C16,0.5 17,4 17,8 C17,4 18,0.5 21,1 C26,2 23,8 17,8Z" fill="#fde68a" />
         </g>
         <g id="wo-heart">
-          <path d="M15,26 C4,18 0,10 4,5 C8,0 14,2 15,7 C16,2 22,0 26,5 C30,10 26,18 15,26Z" fill="#fb7185"/>
-          <circle cx="10" cy="8" r="2.5" fill="#fff" opacity=".6"/>
+          <path d="M15,26 C4,18 0,10 4,5 C8,0 14,2 15,7 C16,2 22,0 26,5 C30,10 26,18 15,26Z" fill="#fb7185" />
+          <circle cx="10" cy="8" r="2.5" fill="#fff" opacity=".6" />
         </g>
         <g id="wo-thumb">
-          <rect x="2" y="12" width="7" height="13" rx="2" fill="#0891b2"/>
-          <path d="M10,13 L14,4 C15,1.5 19,2.5 18.5,5.5 L17,12 L24,12 C27,12 27,16 25,16.5 C27,17.5 26.5,20.5 24.5,21 C26,22 25,24.5 23,25 L12,25 L10,23Z" fill="#38cde4"/>
+          <rect x="2" y="12" width="7" height="13" rx="2" fill="#0891b2" />
+          <path
+            d="M10,13 L14,4 C15,1.5 19,2.5 18.5,5.5 L17,12 L24,12 C27,12 27,16 25,16.5 C27,17.5 26.5,20.5 24.5,21 C26,22 25,24.5 23,25 L12,25 L10,23Z"
+            fill="#38cde4"
+          />
         </g>
         <g id="wo-plusfx">
-          <circle cx="13" cy="13" r="12" fill="#4ade9c"/>
-          <path d="M13,7 V19 M7,13 H19" stroke="#fff" strokeWidth={3.5} strokeLinecap="round"/>
+          <circle cx="13" cy="13" r="12" fill="#4ade9c" />
+          <path d="M13,7 V19 M7,13 H19" stroke="#fff" strokeWidth={3.5} strokeLinecap="round" />
         </g>
         <g id="wo-shop">
-          <rect x="12" y="42" width="106" height="58" rx="8" fill="#fff"/>
-          <rect x="12" y="42" width="106" height="58" rx="8" fill="#0891b2" opacity=".06"/>
-          <rect x="6" y="22" width="118" height="14" rx="5" fill="#0891b2"/>
+          <rect x="12" y="42" width="106" height="58" rx="8" fill="#fff" />
+          <rect x="12" y="42" width="106" height="58" rx="8" fill="#0891b2" opacity=".06" />
+          <rect x="6" y="22" width="118" height="14" rx="5" fill="#0891b2" />
           <g>
-            <path d="M6,34 a8,8 0 0 0 16,0Z" fill="#0891b2"/><path d="M22,34 a8,8 0 0 0 16,0Z" fill="#67e8f9"/>
-            <path d="M38,34 a8,8 0 0 0 16,0Z" fill="#0891b2"/><path d="M54,34 a8,8 0 0 0 16,0Z" fill="#67e8f9"/>
-            <path d="M70,34 a8,8 0 0 0 16,0Z" fill="#0891b2"/><path d="M86,34 a8,8 0 0 0 16,0Z" fill="#67e8f9"/>
-            <path d="M102,34 a8,8 0 0 0 16,0Z" fill="#0891b2"/>
+            <path d="M6,34 a8,8 0 0 0 16,0Z" fill="#0891b2" />
+            <path d="M22,34 a8,8 0 0 0 16,0Z" fill="#67e8f9" />
+            <path d="M38,34 a8,8 0 0 0 16,0Z" fill="#0891b2" />
+            <path d="M54,34 a8,8 0 0 0 16,0Z" fill="#67e8f9" />
+            <path d="M70,34 a8,8 0 0 0 16,0Z" fill="#0891b2" />
+            <path d="M86,34 a8,8 0 0 0 16,0Z" fill="#67e8f9" />
+            <path d="M102,34 a8,8 0 0 0 16,0Z" fill="#0891b2" />
           </g>
-          <rect x="42" y="8" width="46" height="16" rx="6" fill="#10b981"/>
-          <circle cx="52" cy="16" r="3" fill="#fff"/>
-          <rect x="58" y="13" width="24" height="2.5" rx="1.25" fill="#fff"/>
-          <rect x="58" y="18" width="16" height="2.5" rx="1.25" fill="#fff" opacity=".7"/>
-          <rect x="26" y="58" width="26" height="42" rx="5" fill="#0e7490"/>
-          <circle cx="46" cy="80" r="2.5" fill="#fde68a"/>
-          <rect x="64" y="58" width="42" height="26" rx="5" fill="#a5f3fc"/>
-          <path d="M64,71 H106 M85,58 V84" stroke="#fff" strokeWidth={2.5}/>
-          <rect x="79" y="88" width="14" height="9" rx="2" fill="#fb7185"/>
+          <rect x="42" y="8" width="46" height="16" rx="6" fill="#10b981" />
+          <circle cx="52" cy="16" r="3" fill="#fff" />
+          <rect x="58" y="13" width="24" height="2.5" rx="1.25" fill="#fff" />
+          <rect x="58" y="18" width="16" height="2.5" rx="1.25" fill="#fff" opacity=".7" />
+          <rect x="26" y="58" width="26" height="42" rx="5" fill="#0e7490" />
+          <circle cx="46" cy="80" r="2.5" fill="#fde68a" />
+          <rect x="64" y="58" width="42" height="26" rx="5" fill="#a5f3fc" />
+          <path d="M64,71 H106 M85,58 V84" stroke="#fff" strokeWidth={2.5} />
+          <rect x="79" y="88" width="14" height="9" rx="2" fill="#fb7185" />
         </g>
         <g id="wo-miniM">
-          <path d="M20,2 C31,2 38,10 38,22 C38,34 30,40 20,40 C10,40 2,34 2,22 C2,10 9,2 20,2Z" fill="#38cde4"/>
-          <circle cx="14" cy="20" r="2.8" fill="#0f172a"/>
-          <circle cx="26" cy="20" r="2.8" fill="#0f172a"/>
-          <path d="M15,27 Q20,31 25,27" stroke="#0f172a" strokeWidth={2} fill="none" strokeLinecap="round"/>
+          <path d="M20,2 C31,2 38,10 38,22 C38,34 30,40 20,40 C10,40 2,34 2,22 C2,10 9,2 20,2Z" fill="#38cde4" />
+          <circle cx="14" cy="20" r="2.8" fill="#0f172a" />
+          <circle cx="26" cy="20" r="2.8" fill="#0f172a" />
+          <path d="M15,27 Q20,31 25,27" stroke="#0f172a" strokeWidth={2} fill="none" strokeLinecap="round" />
         </g>
         <g id="wo-miniF">
-          <path d="M20,2 C31,2 38,10 38,22 C38,34 30,40 20,40 C10,40 2,34 2,22 C2,10 9,2 20,2Z" fill="#fbbf24"/>
-          <path d="M8,10 Q20,-4 32,10 L32,16 Q20,8 8,16Z" fill="#f59e0b"/>
-          <circle cx="14" cy="21" r="2.8" fill="#0f172a"/>
-          <circle cx="26" cy="21" r="2.8" fill="#0f172a"/>
-          <path d="M15,28 Q20,32 25,28" stroke="#0f172a" strokeWidth={2} fill="none" strokeLinecap="round"/>
-          <ellipse cx="9" cy="26" rx="3" ry="2" fill="#fda4af" opacity=".8"/>
-          <ellipse cx="31" cy="26" rx="3" ry="2" fill="#fda4af" opacity=".8"/>
+          <path d="M20,2 C31,2 38,10 38,22 C38,34 30,40 20,40 C10,40 2,34 2,22 C2,10 9,2 20,2Z" fill="#fbbf24" />
+          <path d="M8,10 Q20,-4 32,10 L32,16 Q20,8 8,16Z" fill="#f59e0b" />
+          <circle cx="14" cy="21" r="2.8" fill="#0f172a" />
+          <circle cx="26" cy="21" r="2.8" fill="#0f172a" />
+          <path d="M15,28 Q20,32 25,28" stroke="#0f172a" strokeWidth={2} fill="none" strokeLinecap="round" />
+          <ellipse cx="9" cy="26" rx="3" ry="2" fill="#fda4af" opacity=".8" />
+          <ellipse cx="31" cy="26" rx="3" ry="2" fill="#fda4af" opacity=".8" />
         </g>
       </defs>
     </svg>
@@ -130,10 +166,18 @@ function Scene1() {
   return (
     <div className="wo-scene wo-s1">
       <SceneClouds />
-      <div className="wo-blob wo-abs-a"><Blob variant="cyan" className="wo-bob" /></div>
-      <div className="wo-blob wo-abs-b"><Blob variant="green" className="wo-bob wo-rev" /></div>
-      <svg viewBox="0 0 34 34" className="wo-fly wo-gift"><use href="#wo-gift"/></svg>
-      <svg viewBox="0 0 30 30" className="wo-fly wo-heartfly"><use href="#wo-heart"/></svg>
+      <div className="wo-blob wo-abs-a">
+        <Blob variant="cyan" className="wo-bob" />
+      </div>
+      <div className="wo-blob wo-abs-b">
+        <Blob variant="green" className="wo-bob wo-rev" />
+      </div>
+      <svg viewBox="0 0 34 34" className="wo-fly wo-gift">
+        <use href="#wo-gift" />
+      </svg>
+      <svg viewBox="0 0 30 30" className="wo-fly wo-heartfly">
+        <use href="#wo-heart" />
+      </svg>
       <div className="wo-badge">Cho là nhận, nhận cũng là cho</div>
     </div>
   );
@@ -142,27 +186,49 @@ function Scene1() {
 const TicketIcons = {
   coffee: (
     <svg viewBox="0 0 24 24" width={24} height={24}>
-      <rect x="4" y="8" width="14" height="11" rx="2" fill="#fff7ed" stroke="#f59e0b" strokeWidth={1.5}/>
-      <path d="M18 10h2a2 2 0 0 1 0 4h-2" stroke="#f59e0b" strokeWidth={1.5} fill="none"/>
-      <path d="M8 4c0 2 2 2 2 4M12 4c0 2 2 2 2 4" stroke="#f59e0b" strokeWidth={1.5} fill="none" strokeLinecap="round"/>
+      <rect x="4" y="8" width="14" height="11" rx="2" fill="#fff7ed" stroke="#f59e0b" strokeWidth={1.5} />
+      <path d="M18 10h2a2 2 0 0 1 0 4h-2" stroke="#f59e0b" strokeWidth={1.5} fill="none" />
+      <path
+        d="M8 4c0 2 2 2 2 4M12 4c0 2 2 2 2 4"
+        stroke="#f59e0b"
+        strokeWidth={1.5}
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   ),
   spa: (
     <svg viewBox="0 0 24 24" width={24} height={24}>
-      <circle cx="12" cy="12" r="10" fill="#fdf2f8"/>
-      <path d="M12 5c2 3 2 5 0 8-2-3-2-5 0-8z" fill="#ec4899"/>
-      <path d="M6 13c3-1 5-1 7 1-3 1-5 1-7-1zM18 13c-3-1-5-1-7 1 3 1 5 1 7-1z" fill="#ec4899" opacity=".7"/>
+      <circle cx="12" cy="12" r="10" fill="#fdf2f8" />
+      <path d="M12 5c2 3 2 5 0 8-2-3-2-5 0-8z" fill="#ec4899" />
+      <path d="M6 13c3-1 5-1 7 1-3 1-5 1-7-1zM18 13c-3-1-5-1-7 1 3 1 5 1 7-1z" fill="#ec4899" opacity=".7" />
     </svg>
   ),
   noodle: (
     <svg viewBox="0 0 24 24" width={24} height={24}>
-      <path d="M3 12h18l-1 6a3 3 0 0 1-3 2H7a3 3 0 0 1-3-2z" fill="#f0fdf4" stroke="#10b981" strokeWidth={1.5}/>
-      <path d="M7 12c1-3 3-4 5-4M11 12c0-2 2-3 4-3" stroke="#10b981" strokeWidth={1.5} fill="none" strokeLinecap="round"/>
+      <path d="M3 12h18l-1 6a3 3 0 0 1-3 2H7a3 3 0 0 1-3-2z" fill="#f0fdf4" stroke="#10b981" strokeWidth={1.5} />
+      <path
+        d="M7 12c1-3 3-4 5-4M11 12c0-2 2-3 4-3"
+        stroke="#10b981"
+        strokeWidth={1.5}
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   ),
 };
 
-function Ticket({ pos, icon, title, code }: { pos: "t1" | "t2" | "t3"; icon: React.ReactNode; title: string; code: string }) {
+function Ticket({
+  pos,
+  icon,
+  title,
+  code,
+}: {
+  pos: "t1" | "t2" | "t3";
+  icon: React.ReactNode;
+  title: string;
+  code: string;
+}) {
   return (
     <div className={`wo-ticket wo-${pos}`}>
       <div className="wo-ticket-ic">{icon}</div>
@@ -188,8 +254,14 @@ function Scene2() {
 function Scene3({ active }: { active: boolean }) {
   const [count, setCount] = useState(0);
   useEffect(() => {
-    if (!active) { setCount(0); return; }
-    if (prefersReducedMotion()) { setCount(10000); return; }
+    if (!active) {
+      setCount(0);
+      return;
+    }
+    if (prefersReducedMotion()) {
+      setCount(10000);
+      return;
+    }
     let n = 0;
     const id = setInterval(() => {
       n = Math.min(10000, n + 137);
@@ -201,11 +273,21 @@ function Scene3({ active }: { active: boolean }) {
   return (
     <div className="wo-scene wo-s3">
       <SceneClouds />
-      <svg viewBox="0 0 130 110" className="wo-shopsvg" aria-hidden><use href="#wo-shop"/></svg>
-      <svg viewBox="0 0 40 44" className="wo-mini wo-m1"><use href="#wo-miniM"/></svg>
-      <svg viewBox="0 0 40 44" className="wo-mini wo-m2"><use href="#wo-miniF"/></svg>
-      <svg viewBox="0 0 40 44" className="wo-mini wo-m3"><use href="#wo-miniF"/></svg>
-      <svg viewBox="0 0 40 44" className="wo-mini wo-m4"><use href="#wo-miniM"/></svg>
+      <svg viewBox="0 0 130 110" className="wo-shopsvg" aria-hidden>
+        <use href="#wo-shop" />
+      </svg>
+      <svg viewBox="0 0 40 44" className="wo-mini wo-m1">
+        <use href="#wo-miniM" />
+      </svg>
+      <svg viewBox="0 0 40 44" className="wo-mini wo-m2">
+        <use href="#wo-miniF" />
+      </svg>
+      <svg viewBox="0 0 40 44" className="wo-mini wo-m3">
+        <use href="#wo-miniF" />
+      </svg>
+      <svg viewBox="0 0 40 44" className="wo-mini wo-m4">
+        <use href="#wo-miniM" />
+      </svg>
       <div className="wo-count">{formatVi(count)} khách tiềm năng</div>
     </div>
   );
@@ -215,11 +297,21 @@ function Scene4() {
   return (
     <div className="wo-scene wo-s4">
       <SceneClouds />
-      <div className="wo-blob wo-abs-a"><Blob variant="cyan" className="wo-bob" /></div>
-      <div className="wo-blob wo-abs-b"><Blob variant="green" className="wo-bob wo-rev" /></div>
-      <svg viewBox="0 0 30 30" className="wo-fx wo-f1"><use href="#wo-heart"/></svg>
-      <svg viewBox="0 0 26 26" className="wo-fx wo-f2"><use href="#wo-plusfx"/></svg>
-      <svg viewBox="0 0 26 26" className="wo-fx wo-f3"><use href="#wo-thumb"/></svg>
+      <div className="wo-blob wo-abs-a">
+        <Blob variant="cyan" className="wo-bob" />
+      </div>
+      <div className="wo-blob wo-abs-b">
+        <Blob variant="green" className="wo-bob wo-rev" />
+      </div>
+      <svg viewBox="0 0 30 30" className="wo-fx wo-f1">
+        <use href="#wo-heart" />
+      </svg>
+      <svg viewBox="0 0 26 26" className="wo-fx wo-f2">
+        <use href="#wo-plusfx" />
+      </svg>
+      <svg viewBox="0 0 26 26" className="wo-fx wo-f3">
+        <use href="#wo-thumb" />
+      </svg>
       <span className="wo-tag wo-ta">🎥 Bạn</span>
       <span className="wo-tag wo-tb">Cộng đồng 💚</span>
     </div>
@@ -238,20 +330,25 @@ function Scene5({ active }: { active: boolean }) {
   }, []);
   return (
     <div className="wo-scene wo-s5">
-      <div className="wo-blob wo-abs-a"><Blob variant="cyan" className="wo-bob" /></div>
-      <div className="wo-blob wo-abs-b"><Blob variant="green" className="wo-bob wo-rev" /></div>
-      {active && confetti.map((c, i) => (
-        <span
-          key={i}
-          className="wo-conf"
-          style={{
-            left: `${c.left}%`,
-            background: c.color,
-            animationDuration: `${c.dur}s`,
-            animationDelay: `${c.delay}s`,
-          }}
-        />
-      ))}
+      <div className="wo-blob wo-abs-a">
+        <Blob variant="cyan" className="wo-bob" />
+      </div>
+      <div className="wo-blob wo-abs-b">
+        <Blob variant="green" className="wo-bob wo-rev" />
+      </div>
+      {active &&
+        confetti.map((c, i) => (
+          <span
+            key={i}
+            className="wo-conf"
+            style={{
+              left: `${c.left}%`,
+              background: c.color,
+              animationDuration: `${c.dur}s`,
+              animationDelay: `${c.delay}s`,
+            }}
+          />
+        ))}
     </div>
   );
 }
@@ -277,8 +374,12 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
         </h2>
         <p className="wo-kao">Cám ơn bạn đã tham gia Liên Minh! *\(^^)/*</p>
         <div className="wo-duo">
-          <div className="wo-line">🎁 Ở đây, tất cả thành viên đều là <b>khách hàng tiềm năng</b> của bạn!</div>
-          <div className="wo-line">💝 Ở đây, tất cả doanh nghiệp đều có <b>ưu đãi dành riêng</b> cho bạn!</div>
+          <div className="wo-line">
+            🎁 Ở đây, tất cả thành viên đều là <b>khách hàng tiềm năng</b> của bạn!
+          </div>
+          <div className="wo-line">
+            💝 Ở đây, tất cả doanh nghiệp đều có <b>ưu đãi dành riêng</b> cho bạn!
+          </div>
         </div>
         <p className="wo-closing">Để Liên Minh giới thiệu sơ cho bạn nhé 👇</p>
       </div>
@@ -288,7 +389,10 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
     return (
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene2 />
-        <h2 className="wo-h2">Bạn là <span className="wo-hl">thành viên</span>?<br/>Đi đâu cũng nhận được ưu đãi</h2>
+        <h2 className="wo-h2">
+          Bạn là <span className="wo-hl">thành viên</span>?<br />
+          Đi đâu cũng nhận được ưu đãi
+        </h2>
         <div className="wo-flow">
           <FlowChip>Nhận mã ưu đãi trong app</FlowChip>
           <FlowArrow />
@@ -302,7 +406,11 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
     return (
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene3 active={active} />
-        <h2 className="wo-h2">Bạn đang <span className="wo-hl">kinh doanh</span><br/>bất kì loại hình nào?</h2>
+        <h2 className="wo-h2">
+          Bạn đang <span className="wo-hl">kinh doanh</span>
+          <br />
+          bất kì loại hình nào?
+        </h2>
         <div className="wo-flow">
           <FlowChip>Đăng ưu đãi có lợi cho bạn</FlowChip>
           <FlowArrow />
@@ -316,7 +424,8 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
     return (
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene4 />
-        <h2 className="wo-h2">Bạn là <span className="wo-hl">người sáng tạo nội dung</span>?<br/>
+        <h2 className="wo-h2">
+          Bạn là <span className="wo-hl">người sáng tạo nội dung</span>?<br />
           <span className="text-xs font-medium text-slate-500">(TikToker, YouTuber, streamer...)</span>
         </h2>
         <div className="wo-flow">
@@ -331,7 +440,13 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
   return (
     <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
       <Scene5 active={active} />
-      <h2 className="wo-h2"><span className="wo-hl">Bạn luôn có thứ để cho,<br/>và luôn có thứ để nhận</span></h2>
+      <h2 className="wo-h2">
+        <span className="wo-hl">
+          Bạn luôn có thứ để cho,
+          <br />
+          và luôn có thứ để nhận
+        </span>
+      </h2>
       <p className="wo-kao">📲 Cài App vào màn hình chính và bật thông báo để giữ kết nối nhé!</p>
     </div>
   );
@@ -340,7 +455,13 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
 /* =========================================================
    Main component
    ========================================================= */
-export function WelcomeOnboarding() {
+export function WelcomeOnboarding({
+  previewMode = false,
+  onPreviewClose,
+}: {
+  previewMode?: boolean;
+  onPreviewClose?: () => void;
+} = {}) {
   const { user, profile, refresh } = useAuth();
   const [page, setPage] = useState(0);
   const [visible, setVisible] = useState(false);
@@ -351,6 +472,10 @@ export function WelcomeOnboarding() {
 
   // Decide whether to show
   useEffect(() => {
+    if (previewMode) {
+      setVisible(true);
+      return;
+    }
     if (!user || !profile) return;
     if (profile.has_seen_welcome) {
       setVisible(false);
@@ -365,7 +490,7 @@ export function WelcomeOnboarding() {
       }
     } catch {}
     setVisible(true);
-  }, [user?.id, profile?.id, profile?.has_seen_welcome]);
+  }, [user?.id, profile?.id, profile?.has_seen_welcome, previewMode]);
 
   // Manage the "welcome active" flag that gates install banner + push
   useEffect(() => {
@@ -380,13 +505,17 @@ export function WelcomeOnboarding() {
     if (!visible) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [visible]);
 
   const close = async () => {
     if (closing) return;
     setClosing(true);
-    try { localStorage.setItem(LOCAL_SEEN_KEY, profile?.id ?? ""); } catch {}
+    try {
+      localStorage.setItem(LOCAL_SEEN_KEY, profile?.id ?? "");
+    } catch {}
     setWelcomeActive(false);
     if (profile?.id) {
       await supabase.from("profiles").update({ has_seen_welcome: true }).eq("id", profile.id);
@@ -398,7 +527,10 @@ export function WelcomeOnboarding() {
 
   const go = (i: number) => setPage(Math.max(0, Math.min(4, i)));
 
-  const onTouchStart = (e: React.TouchEvent) => { startX.current = e.touches[0].clientX; dragging.current = true; };
+  const onTouchStart = (e: React.TouchEvent) => {
+    startX.current = e.touches[0].clientX;
+    dragging.current = true;
+  };
   const onTouchMove = (_e: React.TouchEvent) => {};
   const onTouchEnd = (e: React.TouchEvent) => {
     if (!dragging.current || startX.current == null) return;
@@ -442,7 +574,7 @@ export function WelcomeOnboarding() {
         onTouchEnd={onTouchEnd}
       >
         <div className="wo-track" style={{ transform: `translateX(-${page * 100}%)` }}>
-          {[0,1,2,3,4].map((i) => (
+          {[0, 1, 2, 3, 4].map((i) => (
             <div key={i} className="wo-page">
               <Slide index={i} active={page === i} memberNumber={memberNumber} />
             </div>
@@ -453,7 +585,7 @@ export function WelcomeOnboarding() {
       {/* Footer */}
       <div className="wo-footer">
         <div className="wo-dots" role="tablist" aria-label="Trang">
-          {[0,1,2,3,4].map((i) => (
+          {[0, 1, 2, 3, 4].map((i) => (
             <button
               key={i}
               className={`wo-dot ${page === i ? "wo-dot-active" : ""}`}
@@ -462,10 +594,7 @@ export function WelcomeOnboarding() {
             />
           ))}
         </div>
-        <button
-          onClick={() => (isLast ? close() : go(page + 1))}
-          className="wo-cta"
-        >
+        <button onClick={() => (isLast ? close() : go(page + 1))} className="wo-cta">
           {isLast ? "Bắt đầu!" : "Tiếp tục"}
         </button>
       </div>
