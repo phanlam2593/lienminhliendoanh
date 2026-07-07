@@ -651,6 +651,16 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               />
             </Field>
           </div>
+          <div>
+            <button
+              type="button"
+              onClick={useCurrentLocation}
+              disabled={locating}
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
+            >
+              📍 {locating ? "Đang lấy vị trí…" : lat ? "Đã ghim vị trí — bấm để cập nhật lại" : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
+            </button>
+          </div>
           <div className="grid grid-cols-2 gap-2">
             <Field label="Facebook">
               <input
