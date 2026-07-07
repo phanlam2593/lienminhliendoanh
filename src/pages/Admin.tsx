@@ -1217,12 +1217,34 @@ function Collapsible({
   );
 }
 
+const BIZ_PAGE_SIZE = 50;
+
 function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
   const [list, setList] = useState<(Business & { owner_name?: string | null })[]>([]);
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const load = async () => {
-    const { data: biz } = await supabase.from("businesses").select("*").order("created_at", { ascending: false });
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  const load = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * BIZ_PAGE_SIZE;
+    const to = from + BIZ_PAGE_SIZE - 1;
+    let query = supabase
+      .from("businesses")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (debouncedQ) query = query.ilike("name", `%${debouncedQ}%`);
+    const { data: biz, count } = await query;
+    setTotal(count ?? 0);
     const rows = (biz as Business[] | null) ?? [];
     const ownerIds = [...new Set(rows.map((b) => b.owner_id).filter(Boolean) as string[])];
     let map = new Map<string, string>();
@@ -1230,19 +1252,21 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
       const { data: profs } = await supabase.from("profiles").select("id, full_name").in("id", ownerIds);
       (profs ?? []).forEach((p: any) => map.set(p.id, p.full_name));
     }
-    setList(rows.map((b) => ({ ...b, owner_name: b.owner_id ? (map.get(b.owner_id) ?? null) : null })));
+    const newRows = rows.map((b) => ({ ...b, owner_name: b.owner_id ? (map.get(b.owner_id) ?? null) : null }));
+    setList((prev) => (append ? [...prev, ...newRows] : newRows));
+    setHasMore(newRows.length === BIZ_PAGE_SIZE);
+    setLoadingMore(false);
   };
   useEffect(() => {
-    load();
-  }, [refreshKey]);
+    setPage(0);
+    void load(0, false);
+  }, [refreshKey, debouncedQ]);
 
-  const filtered = useMemo(() => {
-    const k = q.trim().toLowerCase();
-    if (!k) return list;
-    return list.filter(
-      (b) => b.name.toLowerCase().includes(k) || (BUSINESS_TYPE_LABEL[b.type] || "").toLowerCase().includes(k),
-    );
-  }, [list, q]);
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
+  };
 
   const setStatus = async (id: string, status: "approved" | "rejected") => {
     if (status === "rejected") {
@@ -1251,7 +1275,7 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
       if (error) toast.error(error.message);
       else {
         toast.success("Đã từ chối và xóa");
-        load();
+        load(0, false);
         onChanged();
       }
       return;
@@ -1260,7 +1284,7 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
-      load();
+      load(0, false);
       onChanged();
     }
   };
@@ -1269,7 +1293,7 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
     if (error) toast.error(error.message);
     else {
       toast.success(b.is_featured ? "Đã bỏ ghim" : "Đã ghim");
-      load();
+      load(0, false);
     }
   };
   const del = async (id: string) => {
@@ -1279,23 +1303,23 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
     if (error) toast.error(error.message);
     else {
       toast.success("Đã xóa");
-      load();
+      load(0, false);
       onChanged();
     }
   };
 
   return (
-    <Collapsible title="Doanh nghiệp" icon={Building2} count={filtered.length}>
+    <Collapsible title="Doanh nghiệp" icon={Building2} count={total}>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm theo tên hoặc loại…"
+          placeholder="Tìm theo tên…"
           className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
         />
       </div>
-      {filtered.map((b) => (
+      {list.map((b) => (
         <div key={b.id} className="p-2 bg-card rounded-xl flex items-center gap-2">
           <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted shrink-0">
             <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
@@ -1334,7 +1358,16 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
           </div>
         </div>
       ))}
-      {filtered.length === 0 && <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>}
+      {list.length === 0 && <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>}
+      {hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+        >
+          {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
+        </button>
+      )}
     </Collapsible>
   );
 }
