@@ -216,6 +216,12 @@ export default function Admin() {
       <Collapsible title="Công cụ quản trị" icon={Sparkles}>
         <CreateMemberForm />
         <button
+          onClick={() => setPreviewOnboarding(true)}
+          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+        >
+          <Users className="w-3.5 h-3.5" /> Xem lại popup chào mừng thành viên mới
+        </button>
+        <button
           onClick={cleanupOrphans}
           className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
         >
@@ -225,6 +231,7 @@ export default function Admin() {
       </Collapsible>
 
       <MemberDetail row={selected} onClose={() => setSelected(null)} onChanged={refresh} onStatus={setStatus} />
+      {previewOnboarding && <WelcomeOnboarding previewMode onPreviewClose={() => setPreviewOnboarding(false)} />}
     </div>
   );
 }
