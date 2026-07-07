@@ -509,9 +509,13 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
             <StatusBadge s={biz.status} />
           </div>
           <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-            <span>⭐ {stats.reviews}</span>
+            <span className="inline-flex items-center gap-0.5">
+              <Star className="w-3 h-3 text-primary" /> {stats.reviews}
+            </span>
             <span>·</span>
-            <span>👥 {stats.followers}</span>
+            <span className="inline-flex items-center gap-0.5">
+              <Users className="w-3 h-3 text-primary" /> {stats.followers}
+            </span>
             <span>·</span>
             <span className="text-primary font-semibold">Lv.{biz.level}</span>
           </div>
