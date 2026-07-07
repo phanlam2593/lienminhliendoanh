@@ -182,11 +182,20 @@ export default function Businesses() {
         </div>
       )}
       <div className="flex gap-2 text-xs flex-wrap">
+        <button
+          onClick={useNearestSort}
+          className={cn(
+            "px-2.5 py-1 rounded-md font-medium",
+            sort === "nearest" ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+          )}
+        >
+          {locStatus === "requesting" ? "Đang xin quyền…" : "Gần đây"}
+        </button>
         {(
           [
-            ["newest", "Mới nhất"],
             ["rating", "Đánh giá cao"],
-            ["offers", "Nhiều ưu đãi"],
+            ["offers", "Nhiều ưu đãi được nhận"],
+            ["newest", "Mới nhất"],
           ] as [SortKey, string][]
         ).map(([k, l]) => (
           <button
@@ -200,16 +209,6 @@ export default function Businesses() {
             {l}
           </button>
         ))}
-        <button
-          onClick={useNearestSort}
-          className={cn(
-            "px-2.5 py-1 rounded-md font-medium inline-flex items-center gap-1",
-            sort === "nearest" ? "bg-accent text-accent-foreground" : "text-muted-foreground",
-          )}
-        >
-          <Navigation className="w-3 h-3" />
-          {locStatus === "requesting" ? "Đang xin quyền…" : "Gần nhất"}
-        </button>
       </div>
 
       {sort === "nearest" && myPos && (
@@ -223,7 +222,7 @@ export default function Businesses() {
                 radius === r ? "bg-primary text-primary-foreground border-primary" : "bg-card",
               )}
             >
-              ≤ {r}km
+              Dưới {r}km
             </button>
           ))}
         </div>
