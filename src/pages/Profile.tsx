@@ -588,9 +588,6 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               ))}
             </div>
           </Field>
-          <Link to={`/huong-dan#biz-${type}`} className="block text-[11px] text-primary">
-            💡 Xem gợi ý dành riêng cho loại hình "{BUSINESS_TYPE_LABEL[type]}"
-          </Link>
           <div className="grid grid-cols-2 gap-2">
             <Field label="Giờ mở" hint="Ví dụ: 07:00">
               <input
