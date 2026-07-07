@@ -45,6 +45,7 @@ interface MemberRow extends Profile {
   reviewCount: number;
   suggestionCount: number;
   claimCount: number;
+  lastVisit: string | null;
 }
 
 export default function Admin() {
