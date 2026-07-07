@@ -895,6 +895,30 @@ function MemberDetail({
                 ))}
               </section>
             )}
+
+            <section className="border-t pt-4 space-y-2">
+              <button
+                onClick={() => setVisitsOpen((o) => !o)}
+                className="w-full flex items-center gap-2 font-bold text-sm"
+              >
+                {visitsOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                <span>Nhật ký truy cập ({visits.length})</span>
+              </button>
+              {visitsOpen && (
+                <div className="max-h-56 overflow-y-auto space-y-1">
+                  {visits.length === 0 ? (
+                    <p className="text-xs text-muted-foreground">Chưa từng mở app</p>
+                  ) : (
+                    visits.map((v, i) => (
+                      <div key={i} className="text-xs text-muted-foreground p-2 bg-accent rounded flex justify-between">
+                        <span>{new Date(v).toLocaleString("vi-VN")}</span>
+                        <span>{timeAgo(v)}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </section>
           </div>
         )}
       </DialogContent>
