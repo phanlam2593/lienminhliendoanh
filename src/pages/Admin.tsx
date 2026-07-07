@@ -61,20 +61,32 @@ export default function Admin() {
   }, [isAdmin, refreshKey]);
 
   const load = async () => {
-    const [{ data: profs }, { data: biz }, { data: offers }, { data: reviews }, { data: sugs }, { data: claims }] =
-      await Promise.all([
-        supabase
-          .from("profiles")
-          .select(
-            "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
-          )
-          .order("created_at", { ascending: false }),
-        supabase.from("businesses").select("*"),
-        supabase.from("offers").select("id, business_id, status"),
-        supabase.from("reviews").select("id, user_id"),
-        supabase.from("suggestions").select("id, user_id"),
-        supabase.from("offer_claims").select("id, user_id"),
-      ]);
+    const [
+      { data: profs },
+      { data: biz },
+      { data: offers },
+      { data: reviews },
+      { data: sugs },
+      { data: claims },
+      { data: visits },
+    ] = await Promise.all([
+      supabase
+        .from("profiles")
+        .select(
+          "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
+        )
+        .order("created_at", { ascending: false }),
+      supabase.from("businesses").select("*"),
+      supabase.from("offers").select("id, business_id, status"),
+      supabase.from("reviews").select("id, user_id"),
+      supabase.from("suggestions").select("id, user_id"),
+      supabase.from("offer_claims").select("id, user_id"),
+      supabase.from("login_events").select("user_id, created_at").order("created_at", { ascending: false }).limit(3000),
+    ]);
+    const lastVisitByUser = new Map<string, string>();
+    (visits ?? []).forEach((v: any) => {
+      if (!lastVisitByUser.has(v.user_id)) lastVisitByUser.set(v.user_id, v.created_at);
+    });
     const bizByOwner = new Map<string, Business>();
     (biz as Business[] | null)?.forEach((b) => {
       if (b.owner_id) bizByOwner.set(b.owner_id, b);
