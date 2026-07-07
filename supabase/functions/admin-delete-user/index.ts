@@ -20,7 +20,10 @@ Deno.serve(async (req) => {
     const service = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
     const userClient = createClient(url, anon, { global: { headers: { Authorization: authHeader } } });
-    const { data: { user }, error: uErr } = await userClient.auth.getUser();
+    const {
+      data: { user },
+      error: uErr,
+    } = await userClient.auth.getUser();
     if (uErr || !user) return json({ error: "Unauthorized" }, 401);
 
     const admin = createClient(url, service);
@@ -38,8 +41,13 @@ Deno.serve(async (req) => {
       await admin.from("businesses").delete().eq("id", b.id);
     }
 
-    // 2. Delete auth user — cascades profile, user_roles, messages, notifications,
-    //    reviews, reports, offer_claims, follows, replies via ON DELETE CASCADE.
+    // 2. Dọn thông báo "ma" — target_id không có khoá ngoại nên KHÔNG tự cascade
+    //    khi xoá user. Ví dụ: "X vừa theo dõi bạn" / "Tin nhắn mới từ X" vẫn còn
+    //    sau khi X bị xoá, chỉ là trỏ tới người không còn tồn tại.
+    await admin.from("notifications").delete().eq("target_id", user_id);
+
+    // 3. Delete auth user — cascades profile, user_roles, messages, notifications
+    //    CỦA CHÍNH HỌ, reviews, reports, offer_claims, follows, replies via ON DELETE CASCADE.
     const { error: dErr } = await admin.auth.admin.deleteUser(user_id);
     if (dErr) return json({ error: dErr.message }, 500);
 
