@@ -45,88 +45,87 @@ interface MemberRow extends Profile {
   lastVisit: string | null;
 }
 
+const MEMBER_PAGE_SIZE = 50;
+
 export default function Admin() {
   const { user, isAdmin, loading } = useAuth();
   const [rows, setRows] = useState<MemberRow[]>([]);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [selected, setSelected] = useState<MemberRow | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [previewOnboarding, setPreviewOnboarding] = useState(false);
+  const [memberPage, setMemberPage] = useState(0);
+  const [memberTotal, setMemberTotal] = useState(0);
+  const [memberHasMore, setMemberHasMore] = useState(true);
+  const [memberLoadingMore, setMemberLoadingMore] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(search.trim()), 300);
+    return () => clearTimeout(t);
+  }, [search]);
 
   useEffect(() => {
     if (!isAdmin) return;
-    void load();
-  }, [isAdmin, refreshKey]);
+    setMemberPage(0);
+    void loadMembers(0, false);
+  }, [isAdmin, refreshKey, debouncedSearch]);
 
-  const load = async () => {
-    const [
-      { data: profs },
-      { data: biz },
-      { data: offers },
-      { data: reviews },
-      { data: sugs },
-      { data: claims },
-      { data: visits },
-    ] = await Promise.all([
-      supabase
-        .from("profiles")
-        .select(
-          "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
-        )
-        .order("created_at", { ascending: false }),
-      supabase.from("businesses").select("*"),
-      supabase.from("offers").select("id, business_id, status"),
-      supabase.from("reviews").select("id, user_id"),
-      supabase.from("suggestions").select("id, user_id"),
-      supabase.from("offer_claims").select("id, user_id"),
-      supabase.from("login_events").select("user_id, created_at").order("created_at", { ascending: false }).limit(3000),
+  const loadMembers = async (pageNum: number, append: boolean) => {
+    setMemberLoadingMore(true);
+    const from = pageNum * MEMBER_PAGE_SIZE;
+    const to = from + MEMBER_PAGE_SIZE - 1;
+    let q = supabase
+      .from("profiles")
+      .select(
+        "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
+        { count: "exact" },
+      )
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (debouncedSearch) {
+      q = q.or(`full_name.ilike.%${debouncedSearch}%,username.ilike.%${debouncedSearch}%`);
+    }
+    const { data: profs, count } = await q;
+    setMemberTotal(count ?? 0);
+
+    const ids = ((profs as Profile[] | null) ?? []).map((p) => p.id);
+    const [{ data: biz }, { data: visits }] = await Promise.all([
+      ids.length
+        ? supabase.from("businesses").select("*").in("owner_id", ids)
+        : Promise.resolve({ data: [] as Business[] }),
+      ids.length
+        ? supabase
+            .from("login_events")
+            .select("user_id, created_at")
+            .in("user_id", ids)
+            .order("created_at", { ascending: false })
+        : Promise.resolve({ data: [] as any[] }),
     ]);
-    const lastVisitByUser = new Map<string, string>();
-    (visits ?? []).forEach((v: any) => {
-      if (!lastVisitByUser.has(v.user_id)) lastVisitByUser.set(v.user_id, v.created_at);
-    });
     const bizByOwner = new Map<string, Business>();
     (biz as Business[] | null)?.forEach((b) => {
       if (b.owner_id) bizByOwner.set(b.owner_id, b);
     });
-    const activeByBiz = new Map<string, number>();
-    (offers ?? []).forEach((o: any) => {
-      if (o.status !== "active") return;
-      activeByBiz.set(o.business_id, (activeByBiz.get(o.business_id) ?? 0) + 1);
+    const lastVisitByUser = new Map<string, string>();
+    (visits ?? []).forEach((v: any) => {
+      if (!lastVisitByUser.has(v.user_id)) lastVisitByUser.set(v.user_id, v.created_at);
     });
-    const reviewByUser = new Map<string, number>();
-    (reviews ?? []).forEach((r: any) => reviewByUser.set(r.user_id, (reviewByUser.get(r.user_id) ?? 0) + 1));
-    const sugByUser = new Map<string, number>();
-    (sugs ?? []).forEach((s: any) => sugByUser.set(s.user_id, (sugByUser.get(s.user_id) ?? 0) + 1));
-    const claimByUser = new Map<string, number>();
-    (claims ?? []).forEach((c: any) => claimByUser.set(c.user_id, (claimByUser.get(c.user_id) ?? 0) + 1));
 
-    setRows(
-      ((profs as Profile[] | null) ?? []).map((p) => {
-        const b = bizByOwner.get(p.id) ?? null;
-        return {
-          ...p,
-          business: b,
-          activeOffers: b ? (activeByBiz.get(b.id) ?? 0) : 0,
-          reviewCount: reviewByUser.get(p.id) ?? 0,
-          suggestionCount: sugByUser.get(p.id) ?? 0,
-          claimCount: claimByUser.get(p.id) ?? 0,
-          lastVisit: lastVisitByUser.get(p.id) ?? null,
-        };
-      }),
-    );
+    const newRows: MemberRow[] = ((profs as Profile[] | null) ?? []).map((p) => ({
+      ...p,
+      business: bizByOwner.get(p.id) ?? null,
+      lastVisit: lastVisitByUser.get(p.id) ?? null,
+    }));
+    setRows((prev) => (append ? [...prev, ...newRows] : newRows));
+    setMemberHasMore(newRows.length === MEMBER_PAGE_SIZE);
+    setMemberLoadingMore(false);
   };
 
-  const filtered = useMemo(() => {
-    const k = search.trim().toLowerCase();
-    if (!k) return rows;
-    return rows.filter(
-      (r) =>
-        r.full_name?.toLowerCase().includes(k) ||
-        r.username?.toLowerCase().includes(k) ||
-        r.business?.name?.toLowerCase().includes(k),
-    );
-  }, [rows, search]);
+  const loadMoreMembers = () => {
+    const next = memberPage + 1;
+    setMemberPage(next);
+    void loadMembers(next, true);
+  };
 
   if (loading) return <div className="p-10 text-center text-sm">Đang tải…</div>;
   if (!user || !isAdmin) return <Navigate to="/" replace />;
