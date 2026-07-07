@@ -376,6 +376,8 @@ function MemberDetail({
   const [newOfferTitle, setNewOfferTitle] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
   const [saving, setSaving] = useState(false);
+  const [visits, setVisits] = useState<string[]>([]);
+  const [visitsOpen, setVisitsOpen] = useState(false);
 
   useEffect(() => {
     if (!row) return;
