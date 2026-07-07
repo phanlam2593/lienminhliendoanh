@@ -50,9 +50,13 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
             <span className="text-xs font-medium line-clamp-1">{b.latestOffer}</span>
           </div>
         )}
-        {typeof b.latestOfferClaims === "number" && b.latestOfferClaims > 0 && (
+        {typeof b.totalClaims === "number" && b.totalClaims > 0 && (
           <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-            <Users className="w-3 h-3" /> Đã có {b.latestOfferClaims} lượt nhận
+            <Users className="w-3 h-3" /> Tổng {b.totalClaims} lượt đã nhận
+            {typeof b.latestOfferClaims === "number" &&
+              b.latestOfferClaims > 0 &&
+              b.latestOfferClaims !== b.totalClaims &&
+              ` (ưu đãi mới nhất: ${b.latestOfferClaims})`}
           </p>
         )}
         {b.latestReview && (
