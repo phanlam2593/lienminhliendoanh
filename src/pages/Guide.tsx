@@ -1,147 +1,256 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
-import { ArrowLeft, Gift, Users, UserCheck, Camera, Building2 } from "lucide-react";
-import { BUSINESS_TYPE_LABEL, BusinessType } from "@/lib/types";
+import { useState } from "react";
+import {
+  ArrowLeft,
+  Users,
+  Building2,
+  Gift,
+  ArrowLeftRight,
+  UserCheck,
+  Sparkles,
+  MessageCircle,
+  Send,
+  Bell,
+  Flag,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
+import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 
-const BIZ_TIPS: Record<BusinessType, { headline: string; tips: string[] }> = {
-  food: {
-    headline: "Ăn uống",
-    tips: [
-      "Đăng ưu đãi theo giờ vắng khách (giảm giá buổi trưa/tối muộn) để kéo thêm khách",
-      "Cập nhật đúng giờ mở/đóng — nhiều người xem giờ trước khi ghé",
-      "Ảnh món ăn thật, sáng, rõ — ảnh đẹp tăng tỉ lệ khách bấm nhận ưu đãi",
-    ],
-  },
-  service: {
-    headline: "Dịch vụ",
-    tips: [
-      "Ưu đãi giảm % hoặc tặng thêm cho khách mới trong cộng đồng",
-      "Ghi rõ SĐT + địa chỉ để khách liên hệ nhanh",
-      "Follow lại khách đã dùng dịch vụ để dễ chăm sóc lần sau",
-    ],
-  },
-  stay: {
-    headline: "Lưu trú",
-    tips: [
-      "Ưu đãi theo mùa/ngày trong tuần (giá tốt hơn ngày thường)",
-      "Ảnh phòng thật, đủ sáng — đây là yếu tố quyết định khách đặt hay không",
-      "Trả lời tin nhắn nhanh, khách đặt phòng thường cần xác nhận gấp",
-    ],
-  },
-  travel: {
-    headline: "Du lịch",
-    tips: [
-      "Ưu đãi theo combo/tour trọn gói dễ thu hút hơn giảm giá lẻ",
-      "Ghi rõ giờ khởi hành, điểm hẹn để khách chủ động sắp xếp",
-      "Ảnh/video trải nghiệm thật tăng độ tin tưởng",
-    ],
-  },
-  creator: {
-    headline: "Sáng tạo nội dung",
-    tips: [
-      "Follow + tương tác với cộng đồng để tăng lượt theo dõi ngược lại",
-      "Có thể đăng ưu đãi hợp tác quảng bá (review đổi ưu đãi) cho DN khác",
-      "Chia sẻ nội dung về Đà Lạt lên Cộng đồng để mọi người biết bạn làm gì",
-    ],
-  },
-  freelance: {
-    headline: "Nghề tự do",
-    tips: [
-      "Giới thiệu rõ dịch vụ/kỹ năng trong mô tả hồ sơ",
-      "Dùng tính năng Trao đổi để nhận job hoặc đổi dịch vụ với người khác trong cộng đồng",
-      "Ưu đãi nhỏ cho khách đầu tiên giúp có review/uy tín ban đầu",
-    ],
-  },
-  broker: {
-    headline: "Môi giới",
-    tips: [
-      "Đăng tin rõ loại hình (nhà đất, lưu trú...) + khu vực để đúng đối tượng",
-      "Cập nhật tin thường xuyên — tin cũ dễ bị bỏ qua",
-      "Phản hồi nhanh, môi giới sống nhờ tốc độ",
-    ],
-  },
-  other: {
-    headline: "Khác",
-    tips: [
-      "Mô tả rõ bạn kinh doanh gì trong phần giới thiệu DN",
-      "Vẫn có thể tạo ưu đãi cho thành viên như các loại hình khác",
-    ],
-  },
+const BIZ_EXAMPLES: Record<BusinessType, string[]> = {
+  food: ["Quán cà phê", "Nhà hàng", "Quán ăn vặt", "Tiệm bánh", "Quán chè", "Quán lẩu nướng", "Trà sữa", "Bar/Pub"],
+  service: [
+    "Giặt ủi",
+    "Sửa xe",
+    "Làm tóc/nail/spa",
+    "Dọn nhà",
+    "Sửa chữa điện nước",
+    "In ấn",
+    "Photo studio",
+    "Cho thuê xe máy",
+  ],
+  stay: ["Homestay", "Khách sạn", "Villa", "Nhà nghỉ", "Hostel", "Farmstay"],
+  travel: ["Tour trekking", "Xe ghép/đưa đón", "Hướng dẫn viên", "Cho thuê xe du lịch", "Tổ chức team building"],
+  creator: ["TikToker", "YouTuber", "Chụp ảnh/quay video", "Food reviewer", "Blogger du lịch"],
+  freelance: ["Thiết kế đồ hoạ", "Dịch thuật", "Dạy kèm", "Viết lách", "Lập trình freelance", "Kế toán dịch vụ"],
+  broker: ["Mua bán/cho thuê nhà đất", "Môi giới homestay", "Tư vấn đầu tư bất động sản"],
+  other: ["Bất kỳ mô hình nào khác — vẫn tạo ưu đãi, vẫn tham gia cộng đồng bình thường"],
 };
 
+interface SectionData {
+  id: string;
+  icon: any;
+  title: string;
+  summary: string;
+  body: React.ReactNode;
+}
+
+function GuideSection({ data, open, onToggle }: { data: SectionData; open: boolean; onToggle: () => void }) {
+  const Icon = data.icon;
+  return (
+    <div id={data.id} className="bg-card rounded-2xl shadow-sm overflow-hidden">
+      <button onClick={onToggle} className="w-full flex items-start gap-3 p-4 text-left">
+        <span className="w-9 h-9 rounded-full bg-primary/10 grid place-items-center shrink-0">
+          <Icon className="w-4.5 h-4.5 text-primary" />
+        </span>
+        <span className="flex-1 min-w-0">
+          <span className="flex items-center gap-2">
+            <span className="font-bold text-sm">{data.title}</span>
+            {open ? (
+              <ChevronDown className="w-4 h-4 text-muted-foreground shrink-0" />
+            ) : (
+              <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+            )}
+          </span>
+          <span className="block text-xs text-muted-foreground mt-0.5 line-clamp-2">{data.summary}</span>
+        </span>
+      </button>
+      {open && <div className="px-4 pb-4 pl-[52px] space-y-2">{data.body}</div>}
+    </div>
+  );
+}
+
+function BizTypeItem({ type }: { type: BusinessType }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="bg-accent/50 rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left"
+      >
+        <span className="text-sm font-semibold">{BUSINESS_TYPE_LABEL[type]}</span>
+        {open ? (
+          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+        ) : (
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+        )}
+      </button>
+      {open && (
+        <div className="px-3 pb-2.5 flex flex-wrap gap-1.5">
+          {BIZ_EXAMPLES[type].map((ex, i) => (
+            <span key={i} className="text-[11px] px-2 py-1 rounded-full bg-card text-muted-foreground">
+              {ex}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Guide() {
-  useEffect(() => {
-    const hash = window.location.hash?.slice(1);
-    if (hash) {
-      setTimeout(() => {
-        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 80);
-    }
-  }, []);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
+
+  const sections: SectionData[] = [
+    {
+      id: "member",
+      icon: Users,
+      title: "Thành viên",
+      summary: "Khám phá địa điểm, dịch vụ theo khu vực Đà Lạt — trải nghiệm và nhận ưu đãi.",
+      body: (
+        <ul className="space-y-1.5 text-sm">
+          <li>🔍 Khám phá địa điểm, dịch vụ theo từng khu vực ở Đà Lạt</li>
+          <li>🎁 Nhận ưu đãi từ doanh nghiệp, đưa mã khi trải nghiệm dịch vụ</li>
+          <li>🏆 Tích điểm lên cấp, nhận huy hiệu khi hoạt động</li>
+        </ul>
+      ),
+    },
+    {
+      id: "business",
+      icon: Building2,
+      title: "Doanh nghiệp",
+      summary: "Tạo & quản lý nhiều doanh nghiệp, chia theo nhiều loại hình.",
+      body: (
+        <div className="space-y-2">
+          <p className="text-sm">
+            Mỗi thành viên có thể tạo & quản lý <b>nhiều doanh nghiệp</b> cùng lúc, chia theo 8 loại hình cố định. Bấm
+            vào từng loại hình bên dưới để xem ví dụ ngành nghề:
+          </p>
+          <div className="space-y-1.5">
+            {BUSINESS_TYPES.map((t) => (
+              <BizTypeItem key={t} type={t} />
+            ))}
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "offers",
+      icon: Gift,
+      title: "Ưu đãi",
+      summary: "Biến điểm yếu thành lợi thế — cho đi để nhận lại nhiều hơn.",
+      body: (
+        <div className="space-y-1.5 text-sm">
+          <p>Liên Doanh tin: mỗi doanh nghiệp đều có thứ để cho đi, để được nhận lại nhiều hơn.</p>
+          <ul className="space-y-1">
+            <li>☀️ Sáng vắng khách → ưu đãi giờ sáng → tăng doanh thu giờ trống</li>
+            <li>📅 Tháng thấp điểm → ưu đãi cả tháng → kéo khách mùa thấp điểm</li>
+            <li>🎁 Mua 5 tặng 1, freeship... — hãy cho đi để nhận lại</li>
+          </ul>
+        </div>
+      ),
+    },
+    {
+      id: "exchange",
+      icon: ArrowLeftRight,
+      title: "Trao đổi chéo",
+      summary: "Kết nối với người cùng ngành — cho và nhận cùng lúc.",
+      body: (
+        <p className="text-sm">
+          Đang hoạt động sáng tạo nội dung, cần thêm follow? Khám phá và kết bạn với người cùng ngành, trao đổi follow
+          qua lại — cho và nhận cùng lúc.
+        </p>
+      ),
+    },
+    {
+      id: "follow",
+      icon: UserCheck,
+      title: "Theo dõi",
+      summary: "Lưu lại nơi quen, nhận ưu đãi mới ngay khi có.",
+      body: (
+        <p className="text-sm">
+          Follow doanh nghiệp để lưu lại nơi quen, nhận thông báo ngay khi có ưu đãi mới — không cần tự vào kiểm tra.
+          Doanh nghiệp cũng có thể follow lại khách hàng cũ để chăm sóc trực tiếp, gửi ưu đãi riêng khi cần.
+        </p>
+      ),
+    },
+    {
+      id: "status",
+      icon: Sparkles,
+      title: "Thanh trạng thái",
+      summary: "Đăng nhu cầu ngay trên hồ sơ — tuyển người, tìm việc, hay một lời chào.",
+      body: (
+        <p className="text-sm">
+          Đăng nhu cầu ngay trên hồ sơ: tuyển nhân viên, đang tìm việc, có ưu đãi mới, kiếm đối tác — hoặc đơn giản chỉ
+          là một lời chào gửi đến cộng đồng.
+        </p>
+      ),
+    },
+    {
+      id: "community-chat",
+      icon: MessageCircle,
+      title: "Trò chuyện cùng cộng đồng",
+      summary: "Chia sẻ, trò chuyện, đăng nhu cầu cùng cả cộng đồng.",
+      body: (
+        <p className="text-sm">
+          Chia sẻ kinh nghiệm, trò chuyện, đăng nhu cầu — cùng trò chuyện với cả cộng đồng theo thời gian thực.
+        </p>
+      ),
+    },
+    {
+      id: "messages",
+      icon: Send,
+      title: "Nhắn tin",
+      summary: "Tương tác trực tiếp với thành viên, doanh nghiệp, bạn bè.",
+      body: (
+        <p className="text-sm">
+          Nhắn tin trực tiếp với bất kỳ ai trong cộng đồng — thành viên, doanh nghiệp, hay bạn bè.
+        </p>
+      ),
+    },
+    {
+      id: "notifications",
+      icon: Bell,
+      title: "Thông báo",
+      summary: "Bật/tắt riêng từng loại trong Cài đặt.",
+      body: (
+        <p className="text-sm">
+          Bật/tắt riêng từng loại thông báo trong Cài đặt: tin nhắn mới, người theo dõi mới, ưu đãi mới từ doanh nghiệp
+          đang theo dõi, hoặc thông báo từ admin.
+        </p>
+      ),
+    },
+    {
+      id: "report",
+      icon: Flag,
+      title: "Báo cáo, góp ý",
+      summary: "Doanh nghiệp không giữ đúng ưu đãi? Có lỗi hay góp ý? Báo cáo tại đây.",
+      body: (
+        <p className="text-sm">
+          Doanh nghiệp không giữ đúng ưu đãi đã đăng trên cộng đồng? Gặp lỗi hay có góp ý gì? Hãy báo cáo trực tiếp cho
+          Ban quản lý app tại đây.
+        </p>
+      ),
+    },
+  ];
 
   return (
-    <div className="p-4 space-y-6 pb-10">
+    <div className="p-4 space-y-3 pb-10">
       <div className="flex items-center gap-2">
-        <Link to="/ho-so" className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center" aria-label="Quay lại">
+        <Link
+          to="/ho-so"
+          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
+          aria-label="Quay lại"
+        >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="font-bold text-lg">Hướng dẫn sử dụng</h1>
+        <h1 className="font-bold text-lg">Bảng hướng dẫn</h1>
       </div>
 
-      <section id="member" className="bg-card rounded-2xl p-4 shadow-sm space-y-2">
-        <h2 className="font-bold flex items-center gap-2">
-          <Users className="w-4 h-4 text-primary" /> Là thành viên, bạn có thể
-        </h2>
-        <ul className="space-y-1.5 text-sm">
-          <li>🎁 Nhận ưu đãi từ doanh nghiệp trong cộng đồng, đưa mã cho DN khi dùng dịch vụ</li>
-          <li>💬 Nhắn tin trực tiếp với bất kỳ thành viên/chủ doanh nghiệp nào</li>
-          <li>👥 Tham gia chat Cộng đồng, gửi ảnh/sticker, kết bạn</li>
-          <li>⭐ Follow doanh nghiệp hoặc người bạn quan tâm (xem mục Follow bên dưới)</li>
-          <li>🏆 Tích điểm lên cấp, nhận huy hiệu khi hoạt động (claim ưu đãi, follow DN)</li>
-          <li>📝 Viết dòng trạng thái riêng, hiện cho mọi người xem trong hồ sơ/cộng đồng</li>
-        </ul>
-      </section>
-
-      <section id="follow" className="bg-card rounded-2xl p-4 shadow-sm space-y-2">
-        <h2 className="font-bold flex items-center gap-2">
-          <UserCheck className="w-4 h-4 text-primary" /> Follow là gì, để làm gì?
-        </h2>
-        <p className="text-sm">
-          Follow 1 <b>doanh nghiệp</b> giúp bạn <b>nhận thông báo ngay khi họ có ưu đãi mới</b> — không cần tự vào
-          kiểm tra. Follow 1 <b>thành viên</b> giúp bạn dễ theo dõi hoạt động và nhắn tin nhanh hơn.
-        </p>
-        <p className="text-sm">
-          Nếu bạn là chủ doanh nghiệp, follow lại khách hàng cũ cũng là 1 cách chăm sóc khách hàng — họ biết bạn nhớ
-          họ, và bạn dễ nhắn tin ưu đãi riêng khi cần.
-        </p>
-      </section>
-
-      <section id="business" className="space-y-3">
-        <h2 className="font-bold flex items-center gap-2 px-1">
-          <Building2 className="w-4 h-4 text-primary" /> Là doanh nghiệp, gợi ý theo từng loại hình
-        </h2>
-        {(Object.keys(BIZ_TIPS) as BusinessType[]).map((t) => (
-          <div id={`biz-${t}`} key={t} className="bg-card rounded-2xl p-4 shadow-sm space-y-1.5">
-            <div className="font-semibold text-sm text-primary">{BUSINESS_TYPE_LABEL[t]}</div>
-            <ul className="space-y-1 text-sm">
-              {BIZ_TIPS[t].tips.map((tip, i) => (
-                <li key={i}>• {tip}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
-
-      <section id="creator" className="bg-card rounded-2xl p-4 shadow-sm space-y-2">
-        <h2 className="font-bold flex items-center gap-2">
-          <Camera className="w-4 h-4 text-primary" /> Là người sáng tạo nội dung (TikToker, YouTuber...)
-        </h2>
-        <p className="text-sm">
-          Tạo hồ sơ doanh nghiệp loại hình <b>"Sáng tạo nội dung"</b> để cộng đồng biết bạn làm gì. Bạn follow/tương
-          tác với cộng đồng, cộng đồng cũng follow/tương tác lại bạn — cách đơn giản để tăng người theo dõi thật, ở
-          ngay tại Đà Lạt.
-        </p>
-      </section>
+      {sections.map((s) => (
+        <GuideSection key={s.id} data={s} open={openId === s.id} onToggle={() => toggle(s.id)} />
+      ))}
 
       <div className="flex items-center gap-2 justify-center text-muted-foreground pt-2">
         <Gift className="w-4 h-4" />
