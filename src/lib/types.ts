@@ -133,6 +133,8 @@ export interface Business {
   hours_close: string | null;
   phone: string | null;
   address: string | null;
+  latitude: number | null;
+  longitude: number | null;
   facebook_url: string | null;
   website_url: string | null;
   tiktok_url: string | null;
