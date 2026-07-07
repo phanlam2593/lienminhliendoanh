@@ -226,6 +226,104 @@ export default function Admin() {
   );
 }
 
+function CreateMemberForm() {
+  const [open, setOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [realEmail, setRealEmail] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [result, setResult] = useState<{ username: string; temp_password: string } | null>(null);
+
+  const submit = async () => {
+    setCreating(true);
+    const { data, error } = await supabase.functions.invoke("admin-create-member", {
+      body: { username, full_name: fullName, phone, real_email: realEmail },
+    });
+    setCreating(false);
+    if (error || !data?.temp_password) {
+      toast.error(data?.error ?? error?.message ?? "Tạo tài khoản thất bại");
+      return;
+    }
+    setResult({ username: data.username, temp_password: data.temp_password });
+    setUsername("");
+    setFullName("");
+    setPhone("");
+    setRealEmail("");
+  };
+
+  return (
+    <div className="space-y-2">
+      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 text-sm font-semibold">
+        {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+        <UserPlus className="w-4 h-4 text-primary" />
+        <span>Tạo tài khoản thành viên mới</span>
+      </button>
+      {open && (
+        <div className="space-y-2 pt-1">
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username (chữ thường, số, gạch dưới)"
+            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+          />
+          <input
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder="Họ tên"
+            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+          />
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="SĐT (tùy chọn)"
+            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+          />
+          <input
+            value={realEmail}
+            onChange={(e) => setRealEmail(e.target.value)}
+            placeholder="Email thật (tùy chọn)"
+            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+          />
+          <button
+            onClick={submit}
+            disabled={creating || !username.trim() || !fullName.trim()}
+            className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm disabled:opacity-50"
+          >
+            {creating ? "Đang tạo…" : "Tạo tài khoản"}
+          </button>
+        </div>
+      )}
+      <Dialog open={!!result} onOpenChange={(v) => !v && setResult(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Đã tạo tài khoản @{result?.username}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
+              <code className="flex-1 font-mono font-bold text-lg">{result?.temp_password}</code>
+              <button
+                onClick={() => {
+                  if (result) {
+                    navigator.clipboard.writeText(result.temp_password);
+                    toast.success("Đã sao chép");
+                  }
+                }}
+                className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1"
+              >
+                <Copy className="w-3.5 h-3.5" /> Copy
+              </button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Gửi username <b>@{result?.username}</b> và mật khẩu tạm này cho thành viên để họ đăng nhập lần đầu.
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
 function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
   const [members, setMembers] = useState<{ id: string; full_name: string; username: string }[]>([]);
   const [biz, setBiz] = useState<{ id: string; name: string }[]>([]);
