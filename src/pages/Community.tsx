@@ -192,12 +192,6 @@ export default function Community() {
       </button>
       {showMembers && (
         <div className="max-h-[45vh] overflow-y-auto border-b bg-card shrink-0">
-          <Link
-            to="/huong-dan#follow"
-            className="block px-3 py-2 text-[11px] text-primary bg-primary/5 hover:bg-primary/10"
-          >
-            💡 Follow doanh nghiệp để nhận thông báo ngay khi có ưu đãi mới · Xem thêm
-          </Link>
           {members.map((m) => (
             <Link
               key={m.id}
