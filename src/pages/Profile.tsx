@@ -358,11 +358,7 @@ export default function Profile() {
           label={biz.length > 0 ? "Hồ sơ doanh nghiệp" : "Tạo hồ sơ doanh nghiệp"}
           onClick={() => setView("business")}
         />
-        <MenuRow
-          icon={<HelpCircle className="w-4 h-4" />}
-          label="Hướng dẫn sử dụng"
-          onClick={() => nav("/huong-dan")}
-        />
+        <MenuRow icon={<HelpCircle className="w-4 h-4" />} label="Hướng dẫn" onClick={() => nav("/huong-dan")} />
         <MenuRow icon={<Settings className="w-4 h-4" />} label="Cài đặt" onClick={() => setView("settings")} />
         <MenuRow
           icon={<LogOut className="w-4 h-4" />}
