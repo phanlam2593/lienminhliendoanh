@@ -36,6 +36,7 @@ import {
   Send,
 } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
+import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { timeAgo } from "@/lib/time";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 
