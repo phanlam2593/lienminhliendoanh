@@ -1,12 +1,25 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, MapPin, Navigation } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business, BusinessType } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { cn } from "@/lib/utils";
 
-type SortKey = "newest" | "rating" | "offers";
+type SortKey = "newest" | "rating" | "offers" | "nearest";
+type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
+
+const RADIUS_OPTIONS = [1, 5, 10] as const;
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
 // Item 7: derive areas dynamically from business addresses.
 // Heuristic: take the last comma-separated segment (usually city / district),
@@ -28,6 +41,10 @@ export default function Businesses() {
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+
+  const [locStatus, setLocStatus] = useState<LocStatus>("idle");
+  const [myPos, setMyPos] = useState<{ lat: number; lng: number } | null>(null);
+  const [radius, setRadius] = useState<(typeof RADIUS_OPTIONS)[number]>(5);
 
   useEffect(() => {
     void load();
@@ -69,6 +86,27 @@ export default function Businesses() {
     setLoading(false);
   };
 
+  const useNearestSort = () => {
+    if (myPos) {
+      setSort("nearest");
+      return;
+    }
+    if (!navigator.geolocation) {
+      setLocStatus("unsupported");
+      return;
+    }
+    setLocStatus("requesting");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLocStatus("granted");
+        setSort("nearest");
+      },
+      () => setLocStatus("denied"),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  };
+
   const areaCounts = useMemo(() => {
     const m = new Map<string, number>();
     list.forEach((b) => {
@@ -79,17 +117,26 @@ export default function Businesses() {
   }, [list]);
 
   const filtered = useMemo(() => {
-    let arr = list;
+    let arr: (BusinessCardData & { distanceKm?: number })[] = list;
     if (type !== "all") arr = arr.filter((b) => b.type === type);
-    if (area !== "all") arr = arr.filter((b) => extractArea(b.address) === area);
     if (q.trim()) {
       const k = q.toLowerCase();
       arr = arr.filter((b) => b.name.toLowerCase().includes(k) || (b.latestOffer ?? "").toLowerCase().includes(k));
     }
-    if (sort === "rating") arr = [...arr].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-    else if (sort === "offers") arr = [...arr].sort((a, b) => (b.offerCount ?? 0) - (a.offerCount ?? 0));
+
+    if (sort === "nearest" && myPos) {
+      arr = arr
+        .filter((b) => b.latitude != null && b.longitude != null)
+        .map((b) => ({ ...b, distanceKm: haversineKm(myPos.lat, myPos.lng, b.latitude!, b.longitude!) }))
+        .filter((b) => b.distanceKm! <= radius)
+        .sort((a, b) => a.distanceKm! - b.distanceKm!);
+    } else {
+      if (area !== "all") arr = arr.filter((b) => extractArea(b.address) === area);
+      if (sort === "rating") arr = [...arr].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      else if (sort === "offers") arr = [...arr].sort((a, b) => (b.offerCount ?? 0) - (a.offerCount ?? 0));
+    }
     return arr;
-  }, [list, q, type, area, sort]);
+  }, [list, q, type, area, sort, myPos, radius]);
 
   return (
     <div className="p-4 space-y-4">
@@ -117,22 +164,24 @@ export default function Businesses() {
           </button>
         ))}
       </div>
-      <div className="flex items-center gap-2 flex-wrap">
-        <label className="text-xs font-semibold text-muted-foreground">Khu vực:</label>
-        <select
-          value={area}
-          onChange={(e) => setArea(e.target.value)}
-          className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium"
-        >
-          <option value="all">Tất cả khu vực ({list.length})</option>
-          {areaCounts.map(([a, n]) => (
-            <option key={a} value={a}>
-              {a} ({n})
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="flex gap-2 text-xs">
+      {sort !== "nearest" && (
+        <div className="flex items-center gap-2 flex-wrap">
+          <label className="text-xs font-semibold text-muted-foreground">Khu vực:</label>
+          <select
+            value={area}
+            onChange={(e) => setArea(e.target.value)}
+            className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium"
+          >
+            <option value="all">Tất cả khu vực ({list.length})</option>
+            {areaCounts.map(([a, n]) => (
+              <option key={a} value={a}>
+                {a} ({n})
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+      <div className="flex gap-2 text-xs flex-wrap">
         {(
           [
             ["newest", "Mới nhất"],
@@ -151,7 +200,45 @@ export default function Businesses() {
             {l}
           </button>
         ))}
+        <button
+          onClick={useNearestSort}
+          className={cn(
+            "px-2.5 py-1 rounded-md font-medium inline-flex items-center gap-1",
+            sort === "nearest" ? "bg-accent text-accent-foreground" : "text-muted-foreground",
+          )}
+        >
+          <Navigation className="w-3 h-3" />
+          {locStatus === "requesting" ? "Đang xin quyền…" : "Gần nhất"}
+        </button>
       </div>
+
+      {sort === "nearest" && myPos && (
+        <div className="flex gap-2">
+          {RADIUS_OPTIONS.map((r) => (
+            <button
+              key={r}
+              onClick={() => setRadius(r)}
+              className={cn(
+                "px-3 py-1.5 rounded-full text-xs font-semibold border",
+                radius === r ? "bg-primary text-primary-foreground border-primary" : "bg-card",
+              )}
+            >
+              ≤ {r}km
+            </button>
+          ))}
+        </div>
+      )}
+
+      {sort === "nearest" && locStatus === "denied" && (
+        <p className="text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-2">
+          Bạn đã từ chối quyền định vị. Vào cài đặt trình duyệt để bật lại rồi bấm "Gần nhất" lần nữa.
+        </p>
+      )}
+      {sort === "nearest" && locStatus === "unsupported" && (
+        <p className="text-xs text-muted-foreground bg-muted rounded-lg p-2">
+          Trình duyệt của bạn không hỗ trợ định vị.
+        </p>
+      )}
 
       {loading ? (
         <div className="grid gap-4">
@@ -160,11 +247,22 @@ export default function Businesses() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Không tìm thấy kết quả phù hợp</p>
+        <p className="text-sm text-center py-12 text-muted-foreground">
+          {sort === "nearest"
+            ? `Chưa có doanh nghiệp nào trong bán kính ${radius}km. Thử tăng bán kính lên xem sao.`
+            : "Không tìm thấy kết quả phù hợp"}
+        </p>
       ) : (
         <div className="grid gap-4">
-          {filtered.map((b) => (
-            <BusinessCard key={b.id} b={b} />
+          {filtered.map((b: any) => (
+            <div key={b.id} className="space-y-1">
+              {sort === "nearest" && typeof b.distanceKm === "number" && (
+                <div className="flex items-center gap-1 px-1 text-xs font-semibold text-primary">
+                  <MapPin className="w-3 h-3" /> {b.distanceKm.toFixed(1)} km
+                </div>
+              )}
+              <BusinessCard b={b} />
+            </div>
           ))}
         </div>
       )}
