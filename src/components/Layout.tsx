@@ -157,7 +157,7 @@ export function Layout() {
 
       {!hide && !showWelcome && !showPendingGate && (
         <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 bg-card border-t border-border safe-bottom">
-          <div className={`grid ${tabs.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+          <div className={`grid ${gridClass}`}>
             {tabs.map((t: any) => (
               <NavLink
                 key={t.to}
