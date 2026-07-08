@@ -68,6 +68,9 @@ export default function BusinessDetail() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
+  const [reviewImage, setReviewImage] = useState<{ file: File; previewUrl: string } | null>(null);
+  const [reviewUploading, setReviewUploading] = useState(false);
+  const reviewFileRef = useRef<HTMLInputElement>(null);
 
   const [claimOffer, setClaimOffer] = useState<Offer | null>(null);
   const [claim, setClaim] = useState<OfferClaim | null>(null);
