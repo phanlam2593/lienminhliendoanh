@@ -378,9 +378,18 @@ export default function BusinessDetail() {
                     >
                       <div className="font-semibold text-sm">{o.title}</div>
                       {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
-                      <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
-                        <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận
-                      </div>
+                      {isOwner ? (
+                        <button
+                          onClick={() => setClaimsListOffer(o)}
+                          className="text-[11px] text-primary font-semibold mt-1 flex items-center gap-1 hover:underline"
+                        >
+                          <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận · Xem danh sách
+                        </button>
+                      ) : (
+                        <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+                          <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận
+                        </div>
+                      )}
                       {isApproved && (
                         <button
                           onClick={() => openClaim(o)}
