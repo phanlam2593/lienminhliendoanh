@@ -33,7 +33,6 @@ import {
   Briefcase,
   ChevronRight,
   HelpCircle,
-  Flag,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
