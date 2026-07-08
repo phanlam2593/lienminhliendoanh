@@ -36,6 +36,8 @@ const extractArea = (addr: string | null): string => {
 };
 
 export default function Businesses() {
+  const [sp, setSp] = useSearchParams();
+  const [onlyFeatured, setOnlyFeatured] = useState(sp.get("featured") === "1");
   const [list, setList] = useState<BusinessCardData[]>([]);
   const [q, setQ] = useState("");
   const [type, setType] = useState<BusinessType | "all">("all");
