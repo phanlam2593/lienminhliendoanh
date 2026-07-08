@@ -1,24 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "@/hooks/useNotifications";
 import { timeAgo } from "@/lib/time";
-import {
-  Bell,
-  Check,
-  X,
-  CheckCircle2,
-  XCircle,
-  Star,
-  UserPlus,
-  Tag,
-  Ticket,
-  MessageCircle,
-  Shield,
-  Flag,
-  Lightbulb,
-  Award,
-  TrendingUp,
-  Building2,
-} from "lucide-react";
+import { Bell, Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
