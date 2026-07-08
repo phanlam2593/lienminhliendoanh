@@ -466,6 +466,16 @@ export function WelcomeOnboarding({
   const [page, setPage] = useState(0);
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
+  const [memberRank, setMemberRank] = useState<number | null>(null);
+
+  // Tính hạng "thành viên thứ N" ĐỘNG dựa trên số thành viên hiện có (không dùng
+  // profiles.member_number vì cột đó dùng sequence không lùi lại khi xoá tài khoản test).
+  useEffect(() => {
+    if (!profile?.id) return;
+    void supabase
+      .rpc("get_member_rank", { _id: profile.id })
+      .then(({ data }) => setMemberRank(typeof data === "number" ? data : null));
+  }, [profile?.id]);
   const trackRef = useRef<HTMLDivElement>(null);
   const startX = useRef<number | null>(null);
   const dragging = useRef(false);
