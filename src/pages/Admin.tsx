@@ -1137,9 +1137,9 @@ function Broadcast() {
     setL(true);
     const { data: profs } = await supabase.from("profiles").select("id").eq("status", "approved");
     if (profs?.length) {
-      // Gửi TIN NHẮN THẬT từ admin tới từng thành viên (không chỉ tạo notification suông) —
-      // để bấm vào thông báo vào Tin nhắn sẽ thấy đúng nội dung. Trigger notify_new_message
-      // có sẵn sẽ tự tạo thông báo gộp đúng nhóm "messages", không cần tự insert notifications nữa.
+      // Gửi TIN NHẮN THẬT từ admin tới từng thành viên — để bấm vào thông báo, vào Tin nhắn
+      // sẽ thấy đúng nội dung. Trigger notify_new_message có sẵn tự tạo thông báo gộp
+      // đúng nhóm "messages", không cần tự insert notifications nữa.
       const content = body ? `📢 ${title}\n${body}` : `📢 ${title}`;
       const rows = profs
         .filter((p: any) => p.id !== user.id)
