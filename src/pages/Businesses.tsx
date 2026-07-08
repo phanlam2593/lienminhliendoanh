@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Search, MapPin, X, Star } from "lucide-react";
+import { Search, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business, BusinessType } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
