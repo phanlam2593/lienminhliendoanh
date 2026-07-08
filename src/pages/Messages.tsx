@@ -12,6 +12,7 @@ import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
+import { ProfileQuickView } from "@/components/ProfileQuickView";
 import {
   AlertDialog,
   AlertDialogAction,
