@@ -76,6 +76,7 @@ export default function BusinessDetail() {
   const [claim, setClaim] = useState<OfferClaim | null>(null);
   const [claiming, setClaiming] = useState(false);
   const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
+  const [claimsListOffer, setClaimsListOffer] = useState<Offer | null>(null);
 
   useEffect(() => {
     void load();
