@@ -561,7 +561,7 @@ export function WelcomeOnboarding({
 
   if (!visible || !profile) return null;
 
-  const memberNumber = profile.member_number ?? 1;
+  const memberNumber = memberRank ?? 1;
   const isLast = page === 4;
 
   return (
