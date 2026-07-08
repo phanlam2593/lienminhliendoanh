@@ -147,16 +147,28 @@ export default function BusinessDetail() {
 
   const submitReview = async () => {
     if (!user) return;
-    const { error } = await supabase.from("reviews").insert({ user_id: user.id, business_id: id, rating, comment });
-    if (error) {
-      toast.error(error.message);
-      return;
+    setReviewUploading(true);
+    try {
+      let image_url: string | null = null;
+      if (reviewImage) {
+        image_url = await uploadImage(reviewImage.file, "reviews", user.id);
+      }
+      const { error } = await supabase
+        .from("reviews")
+        .insert({ user_id: user.id, business_id: id, rating, comment, image_url });
+      if (error) throw error;
+      toast.success("Đã gửi đánh giá");
+      setReviewOpen(false);
+      setComment("");
+      setRating(5);
+      if (reviewImage) URL.revokeObjectURL(reviewImage.previewUrl);
+      setReviewImage(null);
+      load();
+    } catch (e: any) {
+      toast.error(e.message || "Gửi đánh giá thất bại");
+    } finally {
+      setReviewUploading(false);
     }
-    toast.success("Đã gửi đánh giá");
-    setReviewOpen(false);
-    setComment("");
-    setRating(5);
-    load();
   };
 
   const deleteReview = async (rid: string) => {
