@@ -1,23 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Flag, Lightbulb, Building2, Send } from "lucide-react";
+import { ArrowLeft, Flag, Building2, Send } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 import { LightboxImage } from "@/components/ImageLightbox";
-import type { Report, ReportReply, Suggestion, ReportStatus, SuggestionStatus } from "@/lib/types";
+import type { Report, ReportReply, ReportStatus } from "@/lib/types";
 
 const REPORT_STATUS_LABEL: Record<ReportStatus, { label: string; cls: string }> = {
   pending: { label: "Chờ xử lý", cls: "bg-amber-50 text-amber-700 dark:bg-amber-950/30" },
   replied: { label: "Đã phản hồi", cls: "bg-primary/10 text-primary" },
   resolved: { label: "Đã xử lý", cls: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30" },
   closed: { label: "Đã đóng", cls: "bg-muted text-muted-foreground" },
-};
-const SUGGESTION_STATUS_LABEL: Record<SuggestionStatus, { label: string; cls: string }> = {
-  pending: { label: "Chờ duyệt", cls: "bg-amber-50 text-amber-700 dark:bg-amber-950/30" },
-  approved: { label: "Đã duyệt", cls: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30" },
-  rejected: { label: "Bị từ chối", cls: "bg-red-50 text-red-700 dark:bg-red-950/30" },
 };
 
 function ReportCard({
@@ -82,7 +77,7 @@ function ReportCard({
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Phản hồi khách hàng…"
+            placeholder="Nhập phản hồi…"
             className="flex-1 px-2.5 py-1.5 rounded-lg border bg-background text-xs"
           />
           <button
@@ -101,11 +96,10 @@ function ReportCard({
 
 export default function MyReports() {
   const { user } = useAuth();
-  const [tab, setTab] = useState<"reports" | "suggestions" | "business">("reports");
+  const [tab, setTab] = useState<"reports" | "business">("reports");
   const [reports, setReports] = useState<(Report & { target_name?: string })[]>([]);
   const [bizReports, setBizReports] = useState<(Report & { target_name?: string })[]>([]);
   const [replies, setReplies] = useState<Record<string, ReportReply[]>>({});
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [myBizIds, setMyBizIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -116,9 +110,8 @@ export default function MyReports() {
 
   const load = async () => {
     setLoading(true);
-    const [{ data: rp }, { data: sg }, { data: myBiz }] = await Promise.all([
+    const [{ data: rp }, { data: myBiz }] = await Promise.all([
       supabase.from("reports").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),
-      supabase.from("suggestions").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),
       supabase.from("businesses").select("id").eq("owner_id", user!.id),
     ]);
     const reportRows = (rp as Report[]) ?? [];
@@ -171,7 +164,6 @@ export default function MyReports() {
       setReplies(grouped);
     }
 
-    setSuggestions((sg as Suggestion[]) ?? []);
     setLoading(false);
   };
 
@@ -185,7 +177,7 @@ export default function MyReports() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="font-bold text-lg">Báo cáo & Góp ý của tôi</h1>
+        <h1 className="font-bold text-lg">Báo cáo của tôi</h1>
       </div>
 
       <div className="flex gap-2 flex-wrap">
@@ -193,13 +185,7 @@ export default function MyReports() {
           onClick={() => setTab("reports")}
           className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "reports" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
         >
-          <Flag className="w-3.5 h-3.5 inline mr-1" /> Báo cáo ({reports.length})
-        </button>
-        <button
-          onClick={() => setTab("suggestions")}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "suggestions" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
-        >
-          <Lightbulb className="w-3.5 h-3.5 inline mr-1" /> Góp ý ({suggestions.length})
+          <Flag className="w-3.5 h-3.5 inline mr-1" /> Báo cáo đã gửi ({reports.length})
         </button>
         {myBizIds.length > 0 && (
           <button
@@ -219,37 +205,16 @@ export default function MyReports() {
         ) : (
           <div className="space-y-2">
             {reports.map((r) => (
-              <ReportCard key={r.id} r={r} replies={replies[r.id] ?? []} onReplied={load} />
-            ))}
-          </div>
-        )
-      ) : tab === "business" ? (
-        bizReports.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">Chưa có báo cáo nào về doanh nghiệp của bạn</p>
-        ) : (
-          <div className="space-y-2">
-            {bizReports.map((r) => (
               <ReportCard key={r.id} r={r} replies={replies[r.id] ?? []} canReply onReplied={load} />
             ))}
           </div>
         )
-      ) : suggestions.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-8">Bạn chưa gửi góp ý nào</p>
+      ) : bizReports.length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-8">Chưa có báo cáo nào về doanh nghiệp của bạn</p>
       ) : (
         <div className="space-y-2">
-          {suggestions.map((s) => (
-            <div key={s.id} className="bg-card rounded-xl p-3 space-y-1.5 shadow-sm">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-sm font-semibold truncate">{s.business_name}</span>
-                <span
-                  className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${SUGGESTION_STATUS_LABEL[s.status].cls}`}
-                >
-                  {SUGGESTION_STATUS_LABEL[s.status].label}
-                </span>
-              </div>
-              {s.description && <p className="text-xs text-muted-foreground">{s.description}</p>}
-              <p className="text-[10px] text-muted-foreground">{timeAgo(s.created_at)}</p>
-            </div>
+          {bizReports.map((r) => (
+            <ReportCard key={r.id} r={r} replies={replies[r.id] ?? []} canReply onReplied={load} />
           ))}
         </div>
       )}
