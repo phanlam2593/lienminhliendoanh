@@ -1,7 +1,50 @@
 import { useNavigate } from "react-router-dom";
 import { useNotifications } from "@/hooks/useNotifications";
 import { timeAgo } from "@/lib/time";
-import { Bell, Check, X } from "lucide-react";
+import {
+  Bell,
+  Check,
+  X,
+  UserPlus,
+  Building2,
+  Shield,
+  UserCheck,
+  UserX,
+  Pin,
+  Tag,
+  Gift,
+  MessageSquare,
+  MessageCircle,
+  Flag,
+  Lightbulb,
+  Trophy,
+  Award,
+  Clock,
+} from "lucide-react";
+
+const ICONS: Record<string, typeof Bell> = {
+  account_approved: UserCheck,
+  account_rejected: UserX,
+  business_approved: Building2,
+  business_rejected: Building2,
+  business_pinned: Pin,
+  new_deal: Tag,
+  new_offer: Gift,
+  deal_claimed: Gift,
+  new_follower: UserPlus,
+  new_message: MessageSquare,
+  business_reply: MessageCircle,
+  admin_message: Shield,
+  report_submitted: Flag,
+  report_received: Flag,
+  report_resolved: Flag,
+  report_reply: Flag,
+  suggestion_approved: Lightbulb,
+  suggestion_rejected: Lightbulb,
+  level_up: Trophy,
+  badge_earned: Award,
+  pending_approval: Clock,
+};
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";

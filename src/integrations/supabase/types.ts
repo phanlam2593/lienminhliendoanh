@@ -104,7 +104,9 @@ export type Database = {
           id: string
           instagram_url: string | null
           is_featured: boolean
+          latitude: number | null
           level: number
+          longitude: number | null
           name: string
           owner_id: string | null
           phone: string | null
@@ -127,7 +129,9 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_featured?: boolean
+          latitude?: number | null
           level?: number
+          longitude?: number | null
           name: string
           owner_id?: string | null
           phone?: string | null
@@ -150,7 +154,9 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_featured?: boolean
+          latitude?: number | null
           level?: number
+          longitude?: number | null
           name?: string
           owner_id?: string | null
           phone?: string | null
@@ -398,6 +404,7 @@ export type Database = {
       notifications: {
         Row: {
           body: string | null
+          count: number
           created_at: string
           id: string
           is_read: boolean
@@ -409,6 +416,7 @@ export type Database = {
         }
         Insert: {
           body?: string | null
+          count?: number
           created_at?: string
           id?: string
           is_read?: boolean
@@ -420,6 +428,7 @@ export type Database = {
         }
         Update: {
           body?: string | null
+          count?: number
           created_at?: string
           id?: string
           is_read?: boolean
@@ -836,6 +845,7 @@ export type Database = {
           offer_count: number | null
           rating: number | null
           review_count: number | null
+          total_claims: number | null
         }
         Relationships: []
       }
