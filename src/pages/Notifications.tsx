@@ -72,9 +72,13 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
     return CATEGORY_ROUTE[n.category] ?? "/";
   }
 
-  // Fallback cho thông báo cũ/loại chưa gộp (vd: admin_message từ tính năng Trao đổi)
+  // Fallback cho thông báo cũ/loại chưa gộp (vd: admin_message từ tính năng Trao đổi, hoặc
+  // level_up/badge_earned — 2 loại này CỐ Ý không có category vì không được phép gộp)
   const id = n.target_id ?? undefined;
   switch (n.type) {
+    case "level_up":
+    case "badge_earned":
+      return "/ho-so";
     case "admin_message": {
       if (n.target_type === "user" && id) return `/ho-so/${id}`;
       if (n.target_type === "business" && id) {
