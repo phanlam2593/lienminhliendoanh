@@ -19,6 +19,7 @@ import Admin from "./pages/Admin";
 import Notifications from "./pages/Notifications";
 import Community from "./pages/Community";
 import Guide from "./pages/Guide";
+import MyReports from "./pages/MyReports";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
