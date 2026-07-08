@@ -122,6 +122,7 @@ export default function Businesses() {
 
   const filtered = useMemo(() => {
     let arr: (BusinessCardData & { distanceKm?: number })[] = list;
+    if (onlyFeatured) arr = arr.filter((b) => b.is_featured);
     if (type !== "all") arr = arr.filter((b) => b.type === type);
     if (q.trim()) {
       const k = q.toLowerCase();
