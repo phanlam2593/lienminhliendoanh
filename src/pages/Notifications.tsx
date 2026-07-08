@@ -8,8 +8,6 @@ import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
 
 async function resolveRoute(n: Notification): Promise<string | null> {
-
-async function resolveRoute(n: Notification): Promise<string | null> {
   const id = n.target_id ?? undefined;
   switch (n.type) {
     case "account_approved":
