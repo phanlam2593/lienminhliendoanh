@@ -359,11 +359,7 @@ export default function Profile() {
           onClick={() => setView("business")}
         />
         <MenuRow icon={<HelpCircle className="w-4 h-4" />} label="Hướng dẫn" onClick={() => nav("/huong-dan")} />
-        <MenuRow
-          icon={<Flag className="w-4 h-4" />}
-          label="Báo cáo & Góp ý của tôi"
-          onClick={() => nav("/bao-cao-cua-toi")}
-        />
+        <MenuRow icon={<Flag className="w-4 h-4" />} label="Báo cáo của tôi" onClick={() => nav("/bao-cao-cua-toi")} />
         <MenuRow icon={<Settings className="w-4 h-4" />} label="Cài đặt" onClick={() => setView("settings")} />
         <MenuRow
           icon={<LogOut className="w-4 h-4" />}
