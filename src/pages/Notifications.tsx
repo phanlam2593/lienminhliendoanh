@@ -113,14 +113,6 @@ export default function Notifications() {
       ) : (
         <div className="space-y-1.5">
           {items.map((n) => {
-            const Icon =
-              n.type === "admin_message"
-                ? n.target_type === "user"
-                  ? UserPlus
-                  : n.target_type === "business"
-                    ? Building2
-                    : Shield
-                : (ICONS[n.type] ?? Bell);
             return (
               <div
                 key={n.id}
@@ -137,14 +129,6 @@ export default function Notifications() {
                     n.is_read && "opacity-80",
                   )}
                 >
-                  <div
-                    className={cn(
-                      "w-9 h-9 rounded-full grid place-items-center flex-shrink-0",
-                      n.is_read ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary",
-                    )}
-                  >
-                    <Icon className="w-4 h-4" />
-                  </div>
                   <div className="min-w-0 flex-1">
                     <div className={cn("text-sm", n.is_read ? "font-medium" : "font-bold")}>{n.title}</div>
                     {n.body && <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.body}</div>}
