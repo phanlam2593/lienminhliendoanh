@@ -7,28 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
 
-const ICONS: Record<string, any> = {
-  account_approved: CheckCircle2,
-  account_rejected: XCircle,
-  business_approved: CheckCircle2,
-  business_rejected: XCircle,
-  business_pinned: Star,
-  new_follower: UserPlus,
-  new_deal: Tag,
-  new_offer: Tag,
-  deal_claimed: Ticket,
-  new_message: MessageCircle,
-  business_reply: MessageCircle,
-  admin_message: Shield,
-  report_submitted: Flag,
-  report_received: Flag,
-  report_resolved: Flag,
-  report_reply: Flag,
-  suggestion_approved: Lightbulb,
-  suggestion_rejected: Lightbulb,
-  badge_earned: Award,
-  level_up: TrendingUp,
-};
+async function resolveRoute(n: Notification): Promise<string | null> {
 
 async function resolveRoute(n: Notification): Promise<string | null> {
   const id = n.target_id ?? undefined;
