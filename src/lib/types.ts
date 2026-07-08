@@ -258,15 +258,29 @@ export interface Message {
   created_at: string;
 }
 
+export type NotifCategory =
+  | "messages"
+  | "follows"
+  | "deals_received"
+  | "deals_new"
+  | "pending_approval"
+  | "featured"
+  | "account_updates"
+  | "reports"
+  | "suggestions"
+  | "achievements";
+
 export interface Notification {
   id: string;
   user_id: string;
   type: NotifType;
+  category: NotifCategory | null;
   title: string;
   body: string | null;
   is_read: boolean;
   target_id: string | null;
   target_type: NotifTargetType | null;
+  count: number;
   created_at: string;
 }
 
