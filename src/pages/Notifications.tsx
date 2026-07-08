@@ -90,11 +90,12 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
 
 export default function Notifications() {
   const { items, unread, markAllRead, markRead, deleteAllRead, refresh, loading } = useNotifications();
+  const { role } = useAuth();
   const nav = useNavigate();
 
   const tap = async (n: Notification) => {
     if (!n.is_read) await markRead(n.id);
-    const route = await resolveRoute(n);
+    const route = await resolveRoute(n, role === "admin");
     if (route === null) {
       toast.message("Nội dung không còn tồn tại");
       nav("/");
