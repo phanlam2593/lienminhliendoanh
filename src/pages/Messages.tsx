@@ -42,7 +42,8 @@ export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
-  const [tab, setTab] = useState<"messages" | "follows">("messages");
+  const [sp] = useSearchParams();
+  const [tab, setTab] = useState<"messages" | "follows">(sp.get("tab") === "follows" ? "follows" : "messages");
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
 
   const load = async () => {
