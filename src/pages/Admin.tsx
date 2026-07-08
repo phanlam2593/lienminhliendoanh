@@ -1103,7 +1103,7 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
           <div className="text-sm">{r.description}</div>
           {r.photo_url && (
             <div className="h-32 rounded-lg overflow-hidden bg-muted">
-              <StoredImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
+              <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
             </div>
           )}
           <ReportRepliesPanel
