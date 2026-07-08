@@ -180,12 +180,7 @@ export default function Notifications() {
                     n.is_read && "opacity-80",
                   )}
                 >
-                  <div
-                    className={cn(
-                      "w-9 h-9 rounded-full grid place-items-center flex-shrink-0",
-                      n.is_read ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary",
-                    )}
-                  >
+                  <div className="w-9 h-9 rounded-full bg-primary/10 text-primary grid place-items-center flex-shrink-0">
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="min-w-0 flex-1">
