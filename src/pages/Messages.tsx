@@ -312,9 +312,11 @@ export function MessagesThread() {
         <button onClick={() => nav("/tin-nhan")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <Avatar path={partner?.avatar_url} name={partner?.full_name} size={32} />
-        <div className="flex items-center gap-1.5 min-w-0">
-          <div className="font-semibold text-sm truncate">{partner?.full_name || "…"}</div>
+        <button onClick={() => setQuickViewOpen(true)} className="shrink-0">
+          <Avatar path={partner?.avatar_url} name={partner?.full_name} size={32} />
+        </button>
+        <button onClick={() => setQuickViewOpen(true)} className="flex items-center gap-1.5 min-w-0 text-left">
+          <div className="font-semibold text-sm truncate hover:text-primary">{partner?.full_name || "…"}</div>
           {partner && (
             <MemberLevelBadge
               level={(partner as any).level ?? 1}
@@ -322,8 +324,9 @@ export function MessagesThread() {
               isAdmin={partnerIsAdmin}
             />
           )}
-        </div>
+        </button>
       </div>
+      <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {msgs.map((m) => {
           const mine = m.sender_id === user.id;
