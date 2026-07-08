@@ -146,6 +146,24 @@ export default function Businesses() {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Khám phá</h1>
+      {onlyFeatured && (
+        <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-xs font-semibold">
+          <span className="flex items-center gap-1.5">
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> Đang lọc: chỉ doanh nghiệp nổi bật
+          </span>
+          <button
+            onClick={() => {
+              setOnlyFeatured(false);
+              const next = new URLSearchParams(sp);
+              next.delete("featured");
+              setSp(next, { replace: true });
+            }}
+            aria-label="Bỏ lọc"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
