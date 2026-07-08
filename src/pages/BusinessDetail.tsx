@@ -41,6 +41,7 @@ import { ExchangeSection } from "@/components/ExchangeSection";
 import { LevelProgress } from "@/components/LevelProgress";
 import { BadgeRow, BadgeCollection } from "@/components/BadgeRow";
 import { BusinessGallery } from "@/components/BusinessGallery";
+import { Avatar } from "@/components/Avatar";
 
 interface ReviewMeta extends Review {
   profile?: { full_name: string; avatar_url: string | null } | null;
