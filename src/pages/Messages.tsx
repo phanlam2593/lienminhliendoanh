@@ -201,6 +201,7 @@ export function MessagesThread() {
   const [pendingSticker, setPendingSticker] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [partnerIsAdmin, setPartnerIsAdmin] = useState(false);
+  const [quickViewOpen, setQuickViewOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
