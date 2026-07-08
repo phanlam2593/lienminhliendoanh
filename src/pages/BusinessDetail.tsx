@@ -551,6 +551,68 @@ export default function BusinessDetail() {
         open={!!quickViewUser}
         onOpenChange={(v) => !v && setQuickViewUser(null)}
       />
+
+      <Dialog open={!!claimsListOffer} onOpenChange={(v) => !v && setClaimsListOffer(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Người đã nhận "{claimsListOffer?.title}"</DialogTitle>
+          </DialogHeader>
+          {claimsListOffer && <OfferClaimsList offerId={claimsListOffer.id} onOpenUser={setQuickViewUser} />}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser: (uid: string) => void }) {
+  const [rows, setRows] = useState<
+    { user_id: string; claimed_at: string; full_name: string; avatar_url: string | null }[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const { data: claims } = await supabase
+        .from("offer_claims")
+        .select("user_id, claimed_at")
+        .eq("offer_id", offerId)
+        .order("claimed_at", { ascending: false });
+      const ids = [...new Set((claims ?? []).map((c: any) => c.user_id))];
+      const { data: profs } = ids.length
+        ? await supabase.from("profiles").select("id, full_name, avatar_url").in("id", ids)
+        : { data: [] as any[] };
+      const pMap = new Map((profs ?? []).map((p: any) => [p.id, p]));
+      setRows(
+        (claims ?? []).map((c: any) => ({
+          user_id: c.user_id,
+          claimed_at: c.claimed_at,
+          full_name: pMap.get(c.user_id)?.full_name ?? "Ẩn danh",
+          avatar_url: pMap.get(c.user_id)?.avatar_url ?? null,
+        })),
+      );
+      setLoading(false);
+    })();
+  }, [offerId]);
+
+  if (loading) return <p className="text-sm text-muted-foreground text-center py-6">Đang tải…</p>;
+  if (rows.length === 0) return <p className="text-sm text-muted-foreground text-center py-6">Chưa có ai nhận</p>;
+
+  return (
+    <div className="space-y-1.5 max-h-80 overflow-y-auto">
+      {rows.map((r, i) => (
+        <button
+          key={i}
+          onClick={() => onOpenUser(r.user_id)}
+          className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-left"
+        >
+          <Avatar path={r.avatar_url} name={r.full_name} size={32} />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold truncate">{r.full_name}</div>
+            <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at)}</div>
+          </div>
+        </button>
+      ))}
     </div>
   );
 }
