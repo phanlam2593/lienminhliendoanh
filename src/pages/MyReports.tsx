@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
+import { LightboxImage } from "@/components/ImageLightbox";
 import type { Report, ReportReply, Suggestion, ReportStatus, SuggestionStatus } from "@/lib/types";
 
 const REPORT_STATUS_LABEL: Record<ReportStatus, { label: string; cls: string }> = {
@@ -53,7 +54,9 @@ function ReportCard({
     <div className="bg-card rounded-xl p-3 space-y-1.5 shadow-sm">
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-semibold truncate">{r.target_name || "Nội dung đã xoá"}</span>
-        <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_LABEL[r.status].cls}`}>
+        <span
+          className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_LABEL[r.status].cls}`}
+        >
           {REPORT_STATUS_LABEL[r.status].label}
         </span>
       </div>
@@ -170,7 +173,11 @@ export default function MyReports() {
   return (
     <div className="p-4 space-y-3">
       <div className="flex items-center gap-2">
-        <Link to="/ho-so" className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center" aria-label="Quay lại">
+        <Link
+          to="/ho-so"
+          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
+          aria-label="Quay lại"
+        >
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <h1 className="font-bold text-lg">Báo cáo & Góp ý của tôi</h1>
