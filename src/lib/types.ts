@@ -202,6 +202,7 @@ export interface Review {
   business_id: string;
   rating: number;
   comment: string | null;
+  image_url: string | null;
   created_at: string;
 }
 
