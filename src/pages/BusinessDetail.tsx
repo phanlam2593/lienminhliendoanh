@@ -441,11 +441,56 @@ export default function BusinessDetail() {
               placeholder="Nhận xét…"
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
             />
+            <input
+              ref={reviewFileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                const err = validateImage(f);
+                if (err) {
+                  toast.error(err);
+                  return;
+                }
+                setReviewImage({ file: f, previewUrl: URL.createObjectURL(f) });
+                e.currentTarget.value = "";
+              }}
+            />
+            {reviewImage ? (
+              <div className="relative inline-block">
+                <img
+                  src={reviewImage.previewUrl}
+                  alt="Xem trước"
+                  className="w-20 h-20 object-cover rounded-lg border"
+                />
+                <button
+                  onClick={() => {
+                    URL.revokeObjectURL(reviewImage.previewUrl);
+                    setReviewImage(null);
+                  }}
+                  aria-label="Hủy ảnh"
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
+                >
+                  ×
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => reviewFileRef.current?.click()}
+                className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
+              >
+                <ImageIcon className="w-4 h-4" /> Thêm ảnh (tùy chọn)
+              </button>
+            )}
             <button
               onClick={submitReview}
-              className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold"
+              disabled={reviewUploading}
+              className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
             >
-              Gửi
+              {reviewUploading ? "Đang gửi…" : "Gửi"}
             </button>
           </div>
         </div>
