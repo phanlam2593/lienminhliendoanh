@@ -50,59 +50,38 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
 
-async function resolveRoute(n: Notification): Promise<string | null> {
+const CATEGORY_ROUTE: Record<string, string> = {
+  messages: "/tin-nhan",
+  follows: "/ho-so",
+  deals_received: "/ho-so",
+  deals_new: "/kham-pha",
+  pending_approval: "/admin",
+  featured: "/kham-pha",
+  account_updates: "/ho-so",
+  reports: "/bao-cao-cua-toi",
+  suggestions: "/bao-cao-cua-toi",
+  achievements: "/ho-so",
+};
+
+async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string | null> {
+  // Nhóm đã gộp theo category (10 nhóm) — target_id luôn NULL nên không cần tra cứu gì thêm,
+  // chỉ cần đi thẳng tới đúng trang chức năng, chi tiết ai/cái gì thì trang đó tự hiện.
+  if (n.category) {
+    if (n.category === "reports" && isAdmin) return "/admin?tab=reports";
+    return CATEGORY_ROUTE[n.category] ?? "/";
+  }
+
+  // Fallback cho thông báo cũ/loại chưa gộp (vd: admin_message từ tính năng Trao đổi)
   const id = n.target_id ?? undefined;
   switch (n.type) {
-    case "account_approved":
-      return "/";
-    case "account_rejected":
-      return "/auth/register";
-    case "business_approved":
-    case "business_pinned":
-    case "new_deal":
-    case "new_offer":
-    case "deal_claimed": {
-      if (!id) return "/";
-      const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
-      return data ? `/dn/${id}` : null;
-    }
-    case "business_rejected":
-      return "/ho-so";
-    case "new_follower":
-      return id ? `/ho-so/${id}` : "/ho-so";
-    case "new_message":
-    case "business_reply": {
-      if (!id) return "/tin-nhan";
-      const { data } = await supabase.from("profiles").select("id").eq("id", id).maybeSingle();
-      return data ? `/tin-nhan/${id}` : null;
-    }
     case "admin_message": {
-      // Admins clicking new-member / new-business notifications: route to the entity
       if (n.target_type === "user" && id) return `/ho-so/${id}`;
       if (n.target_type === "business" && id) {
         const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
         return data ? `/dn/${id}` : "/admin";
       }
-      return "/tin-nhan/admin";
+      return "/tin-nhan";
     }
-    case "report_submitted":
-    case "report_received":
-      return "/admin?tab=reports";
-    case "report_resolved":
-    case "report_reply":
-      return "/ho-so";
-    case "suggestion_approved":
-      return "/kham-pha";
-    case "suggestion_rejected":
-      return "/ho-so";
-    case "level_up":
-    case "badge_earned":
-      // Đây luôn là badge/level của THÀNH VIÊN (member gamification), target_type luôn là "profile"
-      // — không phải badge doanh nghiệp. Trước đây lỡ nhảy tới /dn/{id} (id lúc này là user id,
-      // không phải business id) khiến trang bị kẹt "Đang tải" mãi vì không tìm thấy DN nào khớp.
-      return "/ho-so";
-    case "pending_approval":
-      return "/admin";
     default:
       return "/";
   }
