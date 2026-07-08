@@ -73,7 +73,7 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
         }
         return "/kham-pha";
       case "featured":
-        return "/kham-pha?featured=1";
+        return "/";
       case "pending_approval":
         return "/admin";
       case "account_updates":
