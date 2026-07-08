@@ -51,30 +51,49 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
 
-const CATEGORY_ROUTE: Record<string, string> = {
-  messages: "/tin-nhan",
-  follows: "/ho-so",
-  deals_received: "/ho-so",
-  deals_new: "/kham-pha",
-  pending_approval: "/admin",
-  featured: "/kham-pha",
-  account_updates: "/ho-so",
-  reports: "/bao-cao-cua-toi",
-  suggestions: "/bao-cao-cua-toi",
-  achievements: "/ho-so",
-};
-
 async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string | null> {
-  // Nhóm đã gộp theo category (10 nhóm) — target_id luôn NULL nên không cần tra cứu gì thêm,
-  // chỉ cần đi thẳng tới đúng trang chức năng, chi tiết ai/cái gì thì trang đó tự hiện.
+  const id = n.target_id ?? undefined;
+
+  // Nhóm đã gộp theo category (10 nhóm) — target_id giờ luôn là sự kiện MỚI NHẤT
+  // (vd: DN vừa có người claim/follow/đăng ưu đãi gần nhất), dùng để dẫn tới đúng nơi.
   if (n.category) {
-    if (n.category === "reports" && isAdmin) return "/admin?tab=reports";
-    return CATEGORY_ROUTE[n.category] ?? "/";
+    switch (n.category) {
+      case "messages":
+        return "/tin-nhan";
+      case "follows":
+        // Luôn vào tab "Theo dõi" trong Tin nhắn — không dẫn tới 1 người/DN cụ thể vì
+        // đây là gộp chung cả follow cá nhân lẫn follow doanh nghiệp.
+        return "/tin-nhan?tab=follows";
+      case "deals_received":
+      case "deals_new":
+        // target_id là business_id của lần gần nhất — vào thẳng trang DN đó.
+        if (id) {
+          const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+          if (data) return `/dn/${id}`;
+        }
+        return "/kham-pha";
+      case "featured":
+        return "/kham-pha?featured=1";
+      case "pending_approval":
+        return "/admin";
+      case "account_updates":
+        // target_type phân biệt: cập nhật cho DN (vào thẳng trang DN) hay cho chính tài khoản (vào Hồ sơ).
+        if (n.target_type === "business" && id) {
+          const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+          if (data) return `/dn/${id}`;
+        }
+        return "/ho-so";
+      case "reports":
+        return isAdmin ? "/admin?tab=reports" : "/bao-cao-cua-toi";
+      case "suggestions":
+        return "/bao-cao-cua-toi";
+      default:
+        return "/";
+    }
   }
 
-  // Fallback cho thông báo cũ/loại chưa gộp (vd: admin_message từ tính năng Trao đổi, hoặc
+  // Fallback cho thông báo chưa có category (vd: admin_message từ tính năng Trao đổi, hoặc
   // level_up/badge_earned — 2 loại này CỐ Ý không có category vì không được phép gộp)
-  const id = n.target_id ?? undefined;
   switch (n.type) {
     case "level_up":
     case "badge_earned":
