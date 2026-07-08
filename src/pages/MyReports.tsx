@@ -61,6 +61,11 @@ function ReportCard({
         </span>
       </div>
       <p className="text-xs text-muted-foreground">{r.description}</p>
+      {r.photo_url && (
+        <div className="h-32 rounded-lg overflow-hidden bg-muted">
+          <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
+        </div>
+      )}
       <p className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</p>
       {replies.length > 0 && (
         <div className="pt-1.5 mt-1.5 border-t space-y-1.5">
