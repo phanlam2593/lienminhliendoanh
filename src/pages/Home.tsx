@@ -124,9 +124,6 @@ export default function Home() {
       <section className="px-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-extrabold">Doanh nghiệp nổi bật</h2>
-          <Link to="/kham-pha" className="text-xs font-semibold text-primary inline-flex items-center gap-1">
-            Xem tất cả <ArrowRight className="w-3 h-3" />
-          </Link>
         </div>
         {featured.length === 0 ? (
           <p className="text-sm text-muted-foreground py-4">Chưa có doanh nghiệp nổi bật</p>
