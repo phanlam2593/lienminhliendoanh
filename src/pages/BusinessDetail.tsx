@@ -615,6 +615,11 @@ function ReviewItem({
         )}
       </div>
       {r.comment && <p className="text-xs text-muted-foreground">{r.comment}</p>}
+      {r.image_url && (
+        <div className="h-40 rounded-lg overflow-hidden bg-muted">
+          <LightboxImage path={r.image_url} alt="Ảnh đánh giá" className="w-full h-full object-cover" />
+        </div>
+      )}
 
       {replies.length > 0 && (
         <div className="space-y-1.5 ml-6 border-l-2 border-accent pl-2">
