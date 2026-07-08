@@ -1124,6 +1124,7 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
 }
 
 function Broadcast() {
+  const { user } = useAuth();
   const [title, setT] = useState("");
   const [body, setB] = useState("");
   const [loading, setL] = useState(false);
@@ -1132,17 +1133,23 @@ function Broadcast() {
       toast.error("Nhập tiêu đề");
       return;
     }
+    if (!user) return;
     setL(true);
     const { data: profs } = await supabase.from("profiles").select("id").eq("status", "approved");
     if (profs?.length) {
-      const rows = profs.map((p: any) => ({
-        user_id: p.id,
-        type: "admin_message" as const,
-        title,
-        body,
-        target_type: "system" as const,
-      }));
-      await supabase.from("notifications").insert(rows);
+      // Gửi TIN NHẮN THẬT từ admin tới từng thành viên (không chỉ tạo notification suông) —
+      // để bấm vào thông báo vào Tin nhắn sẽ thấy đúng nội dung. Trigger notify_new_message
+      // có sẵn sẽ tự tạo thông báo gộp đúng nhóm "messages", không cần tự insert notifications nữa.
+      const content = body ? `📢 ${title}\n${body}` : `📢 ${title}`;
+      const rows = profs
+        .filter((p: any) => p.id !== user.id)
+        .map((p: any) => ({
+          sender_id: user.id,
+          receiver_id: p.id,
+          content,
+          type: "text" as const,
+        }));
+      if (rows.length) await supabase.from("messages").insert(rows);
     }
     setL(false);
     setT("");
