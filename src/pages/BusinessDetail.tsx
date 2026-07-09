@@ -264,7 +264,10 @@ export default function BusinessDetail() {
               onOpenUser={(uid) => setQuickViewUser(uid)}
               onDelete={() => deleteReview(r.id)}
               onDeleteReply={(rid) => deleteReply(rid)}
-              onReplied={load}
+              onReplied={() => {
+                setReviewPage(0);
+                void loadReviews(0, false);
+              }}
             />
           ))}
         </div>
