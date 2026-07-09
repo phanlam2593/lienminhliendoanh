@@ -76,20 +76,51 @@ export const BADGE_TIERS: { type: string; threshold: number; label: string; emoj
   },
 ];
 
+// Thang bậc DUY NHẤT cho thành viên (đã gộp Lv + badge cũ thành 1 hệ, 2026).
+// Điểm: +1 claim ưu đãi, +1 khi DN của bạn được claim, +1 mỗi bên khi hoàn thành Trao đổi.
 export const MEMBER_BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string }[] = [
-  { type: "newcomer", threshold: 10, label: "Người mới tích cực", emoji: "🌱" },
-  { type: "connector", threshold: 50, label: "Người kết nối", emoji: "🔗" },
-  { type: "enthusiast", threshold: 100, label: "Thành viên nhiệt tình", emoji: "💚" },
-  { type: "standout", threshold: 500, label: "Gương mặt tiêu biểu", emoji: "🌟" },
-  { type: "pillar", threshold: 1000, label: "Trụ cột cộng đồng", emoji: "🏆" },
-  { type: "legend", threshold: 5000, label: "Huyền thoại cộng đồng", emoji: "👑" },
-  { type: "icon", threshold: 10000, label: "Biểu tượng Liên Minh", emoji: "💎" },
+  { type: "bronze", threshold: 100, label: "Đồng", emoji: "🥉" },
+  { type: "silver", threshold: 500, label: "Bạc", emoji: "🥈" },
+  { type: "gold", threshold: 1000, label: "Vàng", emoji: "🥇" },
+  { type: "platinum", threshold: 2000, label: "Bạch kim", emoji: "💠" },
+  { type: "diamond", threshold: 5000, label: "Kim cương", emoji: "💎" },
+  { type: "legend", threshold: 10000, label: "Huyền thoại", emoji: "👑" },
 ];
 
 export function getTopMemberBadge(points: number) {
   let top: (typeof MEMBER_BADGE_TIERS)[number] | null = null;
   for (const t of MEMBER_BADGE_TIERS) if (points >= t.threshold) top = t;
   return top;
+}
+
+// Trả về bậc hiện tại, bậc kế tiếp, và % tiến độ giữa 2 mốc — dùng cho thanh progress bar.
+export function getMemberTierProgress(points: number) {
+  const current = getTopMemberBadge(points);
+  const currentIdx = current ? MEMBER_BADGE_TIERS.findIndex((t) => t.type === current.type) : -1;
+  const next = MEMBER_BADGE_TIERS[currentIdx + 1] ?? null;
+  const base = current?.threshold ?? 0;
+  const target = next?.threshold ?? base;
+  const pct = next ? Math.min(100, Math.max(0, Math.round(((points - base) / (target - base)) * 100))) : 100;
+  return { current, next, pct };
+}
+
+// ── Membership (khung sẵn, CHƯA bật — đổi MEMBERSHIP_ENABLED=true khi cần dùng thật) ──
+export const MEMBERSHIP_ENABLED = false;
+export const MEMBERSHIP_BASE_PRICE = 100000;
+
+export function getMembershipDiscountPct(points: number): number {
+  if (points >= 10000) return 30;
+  if (points >= 5000) return 25;
+  if (points >= 2000) return 20;
+  if (points >= 1000) return 15;
+  if (points >= 500) return 10;
+  if (points >= 100) return 5;
+  return 0;
+}
+
+export function getMembershipPrice(points: number): number {
+  const discount = getMembershipDiscountPct(points);
+  return Math.round(MEMBERSHIP_BASE_PRICE * (1 - discount / 100));
 }
 export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
 
