@@ -289,6 +289,7 @@ export default function Guide() {
         </ul>
       ),
     },
+  ];
 
   return (
     <div className="p-4 space-y-3 pb-10">
