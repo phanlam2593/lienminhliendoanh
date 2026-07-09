@@ -1,5 +1,10 @@
 import { Crown, Sparkles } from "lucide-react";
-import { getMemberTierProgress, getMembershipDiscountPct, getMembershipPrice, MEMBERSHIP_BASE_PRICE } from "@/lib/types";
+import {
+  getMemberTierProgress,
+  getMembershipDiscountPct,
+  getMembershipPrice,
+  MEMBERSHIP_BASE_PRICE,
+} from "@/lib/types";
 
 export function MembershipCard({ points }: { points: number }) {
   const { current, next, pct } = getMemberTierProgress(points);
@@ -9,7 +14,7 @@ export function MembershipCard({ points }: { points: number }) {
   return (
     <div
       className="rounded-2xl p-5 text-white space-y-3"
-      style={{ background: "linear-gradient(135deg, #0891b2 0%, #7c3aed 100%)" }}
+      style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}
     >
       <div className="flex items-center gap-2">
         <Crown className="w-5 h-5" />
@@ -29,7 +34,9 @@ export function MembershipCard({ points }: { points: number }) {
         {next && (
           <div className="space-y-1 pt-1">
             <div className="flex items-center justify-between text-[11px] opacity-75">
-              <span>Tới {next.emoji} {next.label}</span>
+              <span>
+                Tới {next.emoji} {next.label}
+              </span>
               <span>{pct}%</span>
             </div>
             <div className="h-1.5 rounded-full bg-white/20 overflow-hidden">
