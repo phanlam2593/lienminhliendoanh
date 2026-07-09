@@ -207,7 +207,7 @@ export default function Community() {
                 <div className="text-sm font-semibold truncate flex items-center gap-1.5">
                   <span className="truncate">{m.full_name}</span>
                   {m.id === user.id && <span className="text-[10px] text-muted-foreground">(bạn)</span>}
-                  <MemberLevelBadge level={m.level} points={m.points} isAdmin={adminIds.has(m.id)} />
+                  <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
                 </div>
                 {m.status_message && (
                   <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
