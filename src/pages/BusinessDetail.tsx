@@ -239,7 +239,7 @@ export default function BusinessDetail() {
   const ReviewsBlock = (
     <section className="mt-2">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="font-bold">Đánh giá ({reviews.length})</h2>
+        <h2 className="font-bold">Đánh giá ({reviewTotal})</h2>
         {isApproved && (
           <button
             onClick={() => setReviewOpen(true)}
@@ -270,6 +270,15 @@ export default function BusinessDetail() {
               }}
             />
           ))}
+          {reviewHasMore && (
+            <button
+              onClick={loadMoreReviews}
+              disabled={reviewLoadingMore}
+              className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+            >
+              {reviewLoadingMore ? "Đang tải…" : `Tải thêm (còn ${reviewTotal - reviews.length})`}
+            </button>
+          )}
         </div>
       )}
     </section>
