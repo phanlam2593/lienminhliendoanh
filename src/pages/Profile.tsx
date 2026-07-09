@@ -345,6 +345,16 @@ export default function Profile() {
     <div className="p-4 space-y-5">
       {Header}
       <FollowStats userId={user.id} />
+      {(MEMBERSHIP_ENABLED || role === "admin") && (
+        <div className="relative">
+          {!MEMBERSHIP_ENABLED && (
+            <span className="absolute -top-2 left-3 z-10 text-[10px] px-2 py-0.5 rounded-full bg-amber-400 text-amber-950 font-bold">
+              🔒 Bản xem trước — chỉ admin thấy
+            </span>
+          )}
+          <MembershipCard points={(profile as any)?.points ?? 0} />
+        </div>
+      )}
       <div className="bg-card rounded-2xl shadow-sm divide-y overflow-hidden">
         <MenuRow icon={<UserIcon className="w-4 h-4" />} label="Hồ sơ cá nhân" onClick={() => setView("personal")} />
         <MenuRow
