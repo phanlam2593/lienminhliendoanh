@@ -79,7 +79,7 @@ export default function Admin() {
     let q = supabase
       .from("profiles")
       .select(
-        "id, username, full_name, email, phone, avatar_url, status, status_message, points, level, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
+        "id, username, full_name, email, phone, avatar_url, status, status_message, points, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome",
         { count: "exact" },
       )
       .order("created_at", { ascending: false })
