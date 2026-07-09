@@ -1574,7 +1574,7 @@ function OffersSection({ refreshKey, onChanged }: { refreshKey: number; onChange
 // ──────────────────────────────────────────────────────────────────────────────
 // Phase 2: Exchanges management
 // ──────────────────────────────────────────────────────────────────────────────
-import { BADGE_TIERS as _BT, type Exchange as _Exchange } from "@/lib/types";
+import { type Exchange as _Exchange } from "@/lib/types";
 
 type ExchangeRow = _Exchange & { req_name?: string | null; rec_name?: string | null };
 
