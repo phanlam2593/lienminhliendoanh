@@ -312,13 +312,7 @@ export function MessagesThread() {
         </button>
         <button onClick={() => setQuickViewOpen(true)} className="flex items-center gap-1.5 min-w-0 text-left">
           <div className="font-semibold text-sm truncate hover:text-primary">{partner?.full_name || "…"}</div>
-          {partner && (
-            <MemberLevelBadge
-              level={(partner as any).level ?? 1}
-              points={(partner as any).points ?? 0}
-              isAdmin={partnerIsAdmin}
-            />
-          )}
+          {partner && <MemberLevelBadge points={(partner as any).points ?? 0} isAdmin={partnerIsAdmin} />}
         </button>
       </div>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
