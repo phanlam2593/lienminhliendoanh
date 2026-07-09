@@ -146,10 +146,12 @@ export interface Profile {
   status: AccountStatus;
   status_message: string | null;
   points: number;
-  level: number;
   admin_note: string | null;
   member_number: number | null;
   has_seen_welcome: boolean;
+  is_member: boolean;
+  membership_started_at: string | null;
+  membership_expires_at: string | null;
   created_at: string;
   updated_at: string;
 }
