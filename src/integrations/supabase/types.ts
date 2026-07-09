@@ -404,6 +404,7 @@ export type Database = {
       notifications: {
         Row: {
           body: string | null
+          category: string | null
           count: number
           created_at: string
           id: string
@@ -416,6 +417,7 @@ export type Database = {
         }
         Insert: {
           body?: string | null
+          category?: string | null
           count?: number
           created_at?: string
           id?: string
@@ -428,6 +430,7 @@ export type Database = {
         }
         Update: {
           body?: string | null
+          category?: string | null
           count?: number
           created_at?: string
           id?: string
@@ -736,6 +739,7 @@ export type Database = {
           comment: string | null
           created_at: string
           id: string
+          image_url: string | null
           rating: number
           user_id: string
         }
@@ -744,6 +748,7 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           rating: number
           user_id: string
         }
@@ -752,6 +757,7 @@ export type Database = {
           comment?: string | null
           created_at?: string
           id?: string
+          image_url?: string | null
           rating?: number
           user_id?: string
         }
@@ -885,6 +891,7 @@ export type Database = {
           user_id: string
         }[]
       }
+      get_member_rank: { Args: { _id: string }; Returns: number }
       get_public_profile: {
         Args: { _id: string }
         Returns: {
