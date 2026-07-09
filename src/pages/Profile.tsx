@@ -535,21 +535,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
             <span className="inline-flex items-center gap-0.5">
               <Users className="w-3 h-3 text-primary" /> {stats.followers}
             </span>
-            <span>·</span>
-            <span className="text-primary font-semibold">Lv.{biz.level}</span>
           </div>
-          {badges.length > 0 && (
-            <div className="flex gap-1">
-              {badges.map((bt) => {
-                const tier = BADGE_TIERS.find((t) => t.type === bt);
-                return tier ? (
-                  <span key={bt} title={tier.label} className="text-sm">
-                    {tier.emoji}
-                  </span>
-                ) : null;
-              })}
-            </div>
-          )}
         </div>
         <button
           onClick={() => setOpen((o) => !o)}
