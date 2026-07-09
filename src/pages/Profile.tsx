@@ -208,13 +208,7 @@ export default function Profile() {
           </div>
           <div className="flex items-center gap-2 mt-0.5">
             <StatusBadge s={profile?.status} />
-            {profile && (
-              <MemberLevelBadge
-                level={(profile as any).level ?? 1}
-                points={(profile as any).points ?? 0}
-                isAdmin={role === "admin"}
-              />
-            )}
+            {profile && <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />}
           </div>
           {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
         </div>
