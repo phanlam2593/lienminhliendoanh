@@ -8,22 +8,50 @@ interface OfferWithBiz extends Offer {
   business?: { id: string; name: string; cover_url: string | null } | null;
 }
 
+const PAGE_SIZE = 20;
+
 export default function Offers() {
   const [list, setList] = useState<OfferWithBiz[]>([]);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    supabase
+  const load = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    const { data, count } = await supabase
       .from("offers")
-      .select("*, business:businesses(id, name, cover_url)")
+      .select("*, business:businesses(id, name, cover_url)", { count: "exact" })
       .eq("status", "active")
       .order("created_at", { ascending: false })
-      .then(({ data }) => setList((data ?? []) as OfferWithBiz[]));
+      .range(from, to);
+    setTotal(count ?? 0);
+    const newRows = (data ?? []) as OfferWithBiz[];
+    setList((prev) => (append ? [...prev, ...newRows] : newRows));
+    setHasMore(newRows.length === PAGE_SIZE);
+    setLoadingMore(false);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    void load(0, false);
   }, []);
+
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
+  };
 
   return (
     <div className="p-4 space-y-3">
-      <h1 className="text-xl font-extrabold">Ưu đãi</h1>
-      {list.length === 0 ? (
+      <h1 className="text-xl font-extrabold">Ưu đãi{total > 0 ? ` (${total})` : ""}</h1>
+      {loading ? (
+        <p className="text-sm text-center py-12 text-muted-foreground">Đang tải…</p>
+      ) : list.length === 0 ? (
         <p className="text-sm text-center py-12 text-muted-foreground">Chưa có ưu đãi nào</p>
       ) : (
         <div className="space-y-3">
@@ -55,6 +83,15 @@ export default function Offers() {
               </div>
             </Link>
           ))}
+          {hasMore && (
+            <button
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+            >
+              {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
+            </button>
+          )}
         </div>
       )}
     </div>
