@@ -301,9 +301,9 @@ export default function BusinessDetail() {
               {BUSINESS_TYPE_LABEL[b.type]}
             </span>
             <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
-            {reviews.length > 0 && (
+            {reviewTotal > 0 && (
               <span className="text-xs bg-black/70 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {avg.toFixed(1)} ({reviews.length})
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {avgRating.toFixed(1)} ({reviewTotal})
               </span>
             )}
           </div>
