@@ -135,13 +135,7 @@ export function MessagesInbox() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
-                    {c.partner && (
-                      <MemberLevelBadge
-                        level={c.partner.level}
-                        points={c.partner.points}
-                        isAdmin={adminIds.has(c.partnerId)}
-                      />
-                    )}
+                    {c.partner && <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />}
                   </div>
                   <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
                 </div>
