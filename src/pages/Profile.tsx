@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Business, BusinessType, Offer } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
-import { BADGE_TIERS } from "@/lib/types";
 import {
   LogOut,
   MessageSquare,
