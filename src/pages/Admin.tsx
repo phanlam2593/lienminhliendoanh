@@ -1579,12 +1579,34 @@ import { BADGE_TIERS as _BT, type Exchange as _Exchange } from "@/lib/types";
 
 type ExchangeRow = _Exchange & { req_name?: string | null; rec_name?: string | null };
 
+const EXCHANGE_PAGE_SIZE = 50;
+
 function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
   const [list, setList] = useState<ExchangeRow[]>([]);
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [todayCompletedCount, setTodayCompletedCount] = useState(0);
 
-  const load = async () => {
-    const { data } = await supabase.from("exchanges").select("*").order("created_at", { ascending: false }).limit(200);
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  const load = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * EXCHANGE_PAGE_SIZE;
+    const to = from + EXCHANGE_PAGE_SIZE - 1;
+    const { data, count } = await supabase
+      .from("exchanges")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    setTotal(count ?? 0);
     const rows = (data ?? []) as _Exchange[];
     const ids = new Set<string>();
     rows.forEach((r) => {
@@ -1599,31 +1621,42 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
         .in("id", [...ids]);
       (bz ?? []).forEach((b: any) => nameMap.set(b.id, b.name));
     }
-    setList(
-      rows.map((r) => ({
-        ...r,
-        req_name: nameMap.get(r.requester_id) ?? null,
-        rec_name: nameMap.get(r.receiver_id) ?? null,
-      })),
-    );
+    const newRows = rows.map((r) => ({
+      ...r,
+      req_name: nameMap.get(r.requester_id) ?? null,
+      rec_name: nameMap.get(r.receiver_id) ?? null,
+    }));
+    setList((prev) => (append ? [...prev, ...newRows] : newRows));
+    setHasMore(newRows.length === EXCHANGE_PAGE_SIZE);
+    setLoadingMore(false);
   };
+
+  const loadStats = async () => {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const [{ count: pendingC }, { count: doneC }] = await Promise.all([
+      supabase.from("exchanges").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase
+        .from("exchanges")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "completed")
+        .gte("completed_at", todayStart.toISOString()),
+    ]);
+    setPendingCount(pendingC ?? 0);
+    setTodayCompletedCount(doneC ?? 0);
+  };
+
   useEffect(() => {
-    void load();
-  }, [refreshKey]);
+    setPage(0);
+    void load(0, false);
+    void loadStats();
+  }, [refreshKey, debouncedQ]);
 
-  const filtered = list.filter((r) => {
-    if (!q.trim()) return true;
-    const s = q.trim().toLowerCase();
-    return (r.req_name ?? "").toLowerCase().includes(s) || (r.rec_name ?? "").toLowerCase().includes(s);
-  });
-
-  const todayCompleted = list.filter(
-    (r) =>
-      r.status === "completed" &&
-      r.completed_at &&
-      new Date(r.completed_at).toDateString() === new Date().toDateString(),
-  ).length;
-  const pending = list.filter((r) => r.status === "pending").length;
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
+  };
 
   const remove = async (id: string) => {
     if (!confirm("Xóa trao đổi này?")) return;
@@ -1633,7 +1666,8 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
       return;
     }
     toast.success("Đã xóa");
-    void load();
+    load(0, false);
+    loadStats();
     onChanged();
   };
   const setStatus = async (id: string, status: _Exchange["status"]) => {
@@ -1645,21 +1679,22 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
       return;
     }
     toast.success("Đã cập nhật");
-    void load();
+    load(0, false);
+    loadStats();
     onChanged();
   };
 
   return (
-    <Collapsible title="Trao đổi" icon={Handshake} count={list.length}>
+    <Collapsible title="Trao đổi" icon={Handshake} count={total}>
       <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
         <span>
-          Tổng: <b className="text-foreground">{list.length}</b>
+          Tổng: <b className="text-foreground">{total}</b>
         </span>
         <span>
-          · Đang chờ: <b className="text-foreground">{pending}</b>
+          · Đang chờ: <b className="text-foreground">{pendingCount}</b>
         </span>
         <span>
-          · Hoàn thành hôm nay: <b className="text-foreground">{todayCompleted}</b>
+          · Hoàn thành hôm nay: <b className="text-foreground">{todayCompletedCount}</b>
         </span>
       </div>
       <input
@@ -1668,48 +1703,63 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
         placeholder="Tìm theo tên doanh nghiệp…"
         className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
       />
-      {filtered.length === 0 ? (
+      {list.length === 0 ? (
         <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>
       ) : (
-        filtered.map((r) => (
-          <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0 flex-1">
-                <div className="font-semibold truncate">
-                  {r.req_name ?? "?"} → {r.rec_name ?? "?"}
+        list
+          .filter((r) => {
+            if (!debouncedQ) return true;
+            const s = debouncedQ.toLowerCase();
+            return (r.req_name ?? "").toLowerCase().includes(s) || (r.rec_name ?? "").toLowerCase().includes(s);
+          })
+          .map((r) => (
+            <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <div className="font-semibold truncate">
+                    {r.req_name ?? "?"} → {r.rec_name ?? "?"}
+                  </div>
+                  <div className="text-muted-foreground">
+                    {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
+                  </div>
                 </div>
-                <div className="text-muted-foreground">
-                  {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
-                </div>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {r.status !== "completed" && (
+              <div className="flex flex-wrap gap-1.5">
+                {r.status !== "completed" && (
+                  <button
+                    onClick={() => setStatus(r.id, "completed")}
+                    className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold"
+                  >
+                    Đánh dấu hoàn thành
+                  </button>
+                )}
+                {r.status !== "expired" && (
+                  <button
+                    onClick={() => setStatus(r.id, "expired")}
+                    className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold"
+                  >
+                    Hết hạn
+                  </button>
+                )}
                 <button
-                  onClick={() => setStatus(r.id, "completed")}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold"
+                  onClick={() => remove(r.id)}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1"
                 >
-                  Đánh dấu hoàn thành
+                  <Trash2 className="w-3 h-3" /> Xóa
                 </button>
-              )}
-              {r.status !== "expired" && (
-                <button
-                  onClick={() => setStatus(r.id, "expired")}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold"
-                >
-                  Hết hạn
-                </button>
-              )}
-              <button
-                onClick={() => remove(r.id)}
-                className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1"
-              >
-                <Trash2 className="w-3 h-3" /> Xóa
-              </button>
+              </div>
             </div>
-          </div>
-        ))
+          ))
+      )}
+      {hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+        >
+          {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
+        </button>
       )}
     </Collapsible>
   );
