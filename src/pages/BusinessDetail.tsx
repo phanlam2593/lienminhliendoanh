@@ -88,7 +88,7 @@ export default function BusinessDetail() {
   }, [id]);
 
   const load = async () => {
-    const [{ data: bd }, { data: of }, { data: rv }] = await Promise.all([
+    const [{ data: bd }, { data: of }] = await Promise.all([
       supabase.from("businesses").select("*").eq("id", id).maybeSingle(),
       supabase
         .from("offers")
@@ -96,10 +96,24 @@ export default function BusinessDetail() {
         .eq("business_id", id)
         .eq("status", "active")
         .order("created_at", { ascending: false }),
-      supabase.from("reviews").select("*").eq("business_id", id).order("created_at", { ascending: false }),
     ]);
     setB(bd as Business | null);
     setOffers((of ?? []) as Offer[]);
+    setReviewPage(0);
+    void loadReviews(0, false);
+  };
+
+  const loadReviews = async (pageNum: number, append: boolean) => {
+    setReviewLoadingMore(true);
+    const from = pageNum * REVIEW_PAGE_SIZE;
+    const to = from + REVIEW_PAGE_SIZE - 1;
+    const { data: rv, count } = await supabase
+      .from("reviews")
+      .select("*", { count: "exact" })
+      .eq("business_id", id)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    setReviewTotal(count ?? 0);
     const reviewsList = (rv ?? []) as Review[];
     const uids = [...new Set(reviewsList.map((r) => r.user_id))];
     let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
@@ -107,9 +121,10 @@ export default function BusinessDetail() {
       const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", uids);
       (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
     }
-    setReviews(reviewsList.map((r) => ({ ...r, profile: profMap.get(r.user_id) ?? null })));
+    const newReviews = reviewsList.map((r) => ({ ...r, profile: profMap.get(r.user_id) ?? null }));
+    setReviews((prev) => (append ? [...prev, ...newReviews] : newReviews));
 
-    // load replies
+    // load replies for this page's reviews
     const reviewIds = reviewsList.map((r) => r.id);
     if (reviewIds.length) {
       const { data: reps } = await supabase
@@ -123,16 +138,26 @@ export default function BusinessDetail() {
         const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", repUids);
         (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
       }
-      const map = new Map<string, ReplyMeta[]>();
-      repList.forEach((r) => {
-        const arr = map.get(r.review_id) ?? [];
-        arr.push({ ...r, profile: profMap.get(r.user_id) ?? null });
-        map.set(r.review_id, arr);
+      setReplies((prevMap) => {
+        const map = append ? new Map(prevMap) : new Map<string, ReplyMeta[]>();
+        repList.forEach((r) => {
+          const arr = map.get(r.review_id) ?? [];
+          arr.push({ ...r, profile: profMap.get(r.user_id) ?? null });
+          map.set(r.review_id, arr);
+        });
+        return map;
       });
-      setReplies(map);
-    } else {
+    } else if (!append) {
       setReplies(new Map());
     }
+    setReviewHasMore(newReviews.length === REVIEW_PAGE_SIZE);
+    setReviewLoadingMore(false);
+  };
+
+  const loadMoreReviews = () => {
+    const next = reviewPage + 1;
+    setReviewPage(next);
+    void loadReviews(next, true);
   };
 
   const openClaim = async (o: Offer) => {
