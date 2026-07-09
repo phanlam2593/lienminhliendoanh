@@ -244,7 +244,7 @@ export default function Community() {
                       >
                         {p?.full_name || "Thành viên"}
                       </button>
-                      {p && <MemberLevelBadge level={p.level} points={p.points} isAdmin={adminIds.has(m.user_id)} />}
+                      {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at)}</span>
                       {canDelete && (
                         <button
