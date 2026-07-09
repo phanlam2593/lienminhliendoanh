@@ -194,7 +194,8 @@ export default function BusinessDetail() {
       setRating(5);
       if (reviewImage) URL.revokeObjectURL(reviewImage.previewUrl);
       setReviewImage(null);
-      load();
+      setReviewPage(0);
+      void loadReviews(0, false);
     } catch (e: any) {
       toast.error(e.message || "Gửi đánh giá thất bại");
     } finally {
