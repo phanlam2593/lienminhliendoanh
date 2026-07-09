@@ -1601,31 +1601,17 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
     setLoadingMore(true);
     const from = pageNum * EXCHANGE_PAGE_SIZE;
     const to = from + EXCHANGE_PAGE_SIZE - 1;
-    const { data, count } = await supabase
-      .from("exchanges")
+    // exchanges_view đã gộp sẵn req_name/rec_name (join businesses) — tìm kiếm được
+    // thẳng bằng SQL ilike, không cần tự tra tên riêng nữa.
+    let query = supabase
+      .from("exchanges_view")
       .select("*", { count: "exact" })
       .order("created_at", { ascending: false })
       .range(from, to);
+    if (debouncedQ) query = query.or(`req_name.ilike.%${debouncedQ}%,rec_name.ilike.%${debouncedQ}%`);
+    const { data, count } = await query;
     setTotal(count ?? 0);
-    const rows = (data ?? []) as _Exchange[];
-    const ids = new Set<string>();
-    rows.forEach((r) => {
-      ids.add(r.requester_id);
-      ids.add(r.receiver_id);
-    });
-    let nameMap = new Map<string, string>();
-    if (ids.size) {
-      const { data: bz } = await supabase
-        .from("businesses")
-        .select("id, name")
-        .in("id", [...ids]);
-      (bz ?? []).forEach((b: any) => nameMap.set(b.id, b.name));
-    }
-    const newRows = rows.map((r) => ({
-      ...r,
-      req_name: nameMap.get(r.requester_id) ?? null,
-      rec_name: nameMap.get(r.receiver_id) ?? null,
-    }));
+    const newRows = (data ?? []) as ExchangeRow[];
     setList((prev) => (append ? [...prev, ...newRows] : newRows));
     setHasMore(newRows.length === EXCHANGE_PAGE_SIZE);
     setLoadingMore(false);
@@ -1697,60 +1683,57 @@ function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onCha
           · Hoàn thành hôm nay: <b className="text-foreground">{todayCompletedCount}</b>
         </span>
       </div>
-      <input
-        value={q}
-        onChange={(e) => setQ(e.target.value)}
-        placeholder="Tìm theo tên doanh nghiệp…"
-        className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
-      />
+      <div className="relative">
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Tìm theo tên doanh nghiệp…"
+          className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+        />
+      </div>
       {list.length === 0 ? (
         <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>
       ) : (
-        list
-          .filter((r) => {
-            if (!debouncedQ) return true;
-            const s = debouncedQ.toLowerCase();
-            return (r.req_name ?? "").toLowerCase().includes(s) || (r.rec_name ?? "").toLowerCase().includes(s);
-          })
-          .map((r) => (
-            <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
-              <div className="flex items-center justify-between gap-2">
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold truncate">
-                    {r.req_name ?? "?"} → {r.rec_name ?? "?"}
-                  </div>
-                  <div className="text-muted-foreground">
-                    {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
-                  </div>
+        list.map((r) => (
+          <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold truncate">
+                  {r.req_name ?? "?"} → {r.rec_name ?? "?"}
                 </div>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
+                <div className="text-muted-foreground">
+                  {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-1.5">
-                {r.status !== "completed" && (
-                  <button
-                    onClick={() => setStatus(r.id, "completed")}
-                    className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold"
-                  >
-                    Đánh dấu hoàn thành
-                  </button>
-                )}
-                {r.status !== "expired" && (
-                  <button
-                    onClick={() => setStatus(r.id, "expired")}
-                    className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold"
-                  >
-                    Hết hạn
-                  </button>
-                )}
-                <button
-                  onClick={() => remove(r.id)}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1"
-                >
-                  <Trash2 className="w-3 h-3" /> Xóa
-                </button>
-              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
             </div>
-          ))
+            <div className="flex flex-wrap gap-1.5">
+              {r.status !== "completed" && (
+                <button
+                  onClick={() => setStatus(r.id, "completed")}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold"
+                >
+                  Đánh dấu hoàn thành
+                </button>
+              )}
+              {r.status !== "expired" && (
+                <button
+                  onClick={() => setStatus(r.id, "expired")}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold"
+                >
+                  Hết hạn
+                </button>
+              )}
+              <button
+                onClick={() => remove(r.id)}
+                className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1"
+              >
+                <Trash2 className="w-3 h-3" /> Xóa
+              </button>
+            </div>
+          </div>
+        ))
       )}
       {hasMore && (
         <button
