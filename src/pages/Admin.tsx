@@ -986,7 +986,6 @@ function MemberDetail({
                         </button>
                       </div>
                     </div>
-                    <BadgeAdminManager businessId={biz.id} />
                   </div>
                 )}
               </section>
