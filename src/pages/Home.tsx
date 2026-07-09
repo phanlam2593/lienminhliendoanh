@@ -211,7 +211,7 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
         const [{ data }, { data: roles }] = await Promise.all([
           supabase
             .from("profiles")
-            .select("id, full_name, avatar_url, status_message, points, level, created_at")
+            .select("id, full_name, avatar_url, status_message, points, created_at")
             .eq("status", "approved")
             .order("created_at", { ascending: false }),
           supabase.rpc("get_admin_user_ids"),
