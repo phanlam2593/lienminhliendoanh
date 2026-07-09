@@ -65,7 +65,7 @@ export function MessagesInbox() {
     if (ids.length) {
       const { data: profs } = await supabase
         .from("profiles")
-        .select("id, full_name, username, avatar_url, points, level")
+        .select("id, full_name, username, avatar_url, points")
         .in("id", ids);
       (profs as any[] | null)?.forEach((p) => {
         if (map.has(p.id)) map.get(p.id)!.partner = p;
