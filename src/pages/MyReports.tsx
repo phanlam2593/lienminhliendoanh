@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Flag, Building2, Send } from "lucide-react";
+import { ArrowLeft, Flag, Building2, Send, Shield } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 import { LightboxImage } from "@/components/ImageLightbox";
-import type { Report, ReportReply, ReportStatus } from "@/lib/types";
+import { Avatar } from "@/components/Avatar";
+import type { Report, ReportStatus } from "@/lib/types";
 
 const REPORT_STATUS_LABEL: Record<ReportStatus, { label: string; cls: string }> = {
   pending: { label: "Chờ xử lý", cls: "bg-amber-50 text-amber-700 dark:bg-amber-950/30" },
@@ -15,6 +16,16 @@ const REPORT_STATUS_LABEL: Record<ReportStatus, { label: string; cls: string }> 
   closed: { label: "Đã đóng", cls: "bg-muted text-muted-foreground" },
 };
 
+interface EnrichedReply {
+  id: string;
+  body: string;
+  created_at: string;
+  author_id: string;
+  full_name: string;
+  avatar_url: string | null;
+  roleLabel: string | null; // "Admin" | "Chủ doanh nghiệp" | null (thành viên thường)
+}
+
 function ReportCard({
   r,
   replies,
@@ -22,7 +33,7 @@ function ReportCard({
   onReplied,
 }: {
   r: Report & { target_name?: string };
-  replies: ReportReply[];
+  replies: EnrichedReply[];
   canReply?: boolean;
   onReplied: () => void;
 }) {
@@ -63,11 +74,23 @@ function ReportCard({
       )}
       <p className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</p>
       {replies.length > 0 && (
-        <div className="pt-1.5 mt-1.5 border-t space-y-1.5">
+        <div className="pt-1.5 mt-1.5 border-t space-y-2">
           {replies.map((rr) => (
-            <div key={rr.id} className="bg-accent rounded-lg p-2 text-xs">
-              {rr.body}
-              <div className="text-[10px] text-muted-foreground mt-0.5">{timeAgo(rr.created_at)}</div>
+            <div key={rr.id} className="flex items-start gap-2">
+              <Avatar path={rr.avatar_url} name={rr.full_name} size={26} />
+              <div className="flex-1 min-w-0 bg-accent rounded-lg p-2">
+                <div className="flex items-center gap-1.5 text-[11px] font-semibold mb-0.5">
+                  <span className="truncate">{rr.full_name}</span>
+                  {rr.roleLabel && (
+                    <span className="shrink-0 inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                      {rr.roleLabel === "Admin" && <Shield className="w-2.5 h-2.5" />}
+                      {rr.roleLabel}
+                    </span>
+                  )}
+                  <span className="text-muted-foreground font-normal ml-auto shrink-0">{timeAgo(rr.created_at)}</span>
+                </div>
+                <div className="text-xs whitespace-pre-line break-words">{rr.body}</div>
+              </div>
             </div>
           ))}
         </div>
@@ -99,7 +122,7 @@ export default function MyReports() {
   const [tab, setTab] = useState<"reports" | "business">("reports");
   const [reports, setReports] = useState<(Report & { target_name?: string })[]>([]);
   const [bizReports, setBizReports] = useState<(Report & { target_name?: string })[]>([]);
-  const [replies, setReplies] = useState<Record<string, ReportReply[]>>({});
+  const [replies, setReplies] = useState<Record<string, EnrichedReply[]>>({});
   const [myBizIds, setMyBizIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -110,10 +133,12 @@ export default function MyReports() {
 
   const load = async () => {
     setLoading(true);
-    const [{ data: rp }, { data: myBiz }] = await Promise.all([
+    const [{ data: rp }, { data: myBiz }, { data: adminRows }] = await Promise.all([
       supabase.from("reports").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),
       supabase.from("businesses").select("id").eq("owner_id", user!.id),
+      supabase.rpc("get_admin_user_ids"),
     ]);
+    const adminIds = new Set((adminRows ?? []).map((r: any) => r.user_id));
     const reportRows = (rp as Report[]) ?? [];
     const bizIds = (myBiz ?? []).map((b: any) => b.id);
     setMyBizIds(bizIds);
@@ -128,17 +153,18 @@ export default function MyReports() {
       : { data: [] as Report[] };
 
     const allReports = [...reportRows, ...((bizReportRows as Report[]) ?? [])];
-    const targetBizIds = allReports.filter((r) => r.target_type === "business").map((r) => r.target_id);
-    const offerIds = allReports.filter((r) => r.target_type === "offer").map((r) => r.target_id);
+    const targetBizIds = [...new Set(allReports.filter((r) => r.target_type === "business").map((r) => r.target_id))];
+    const offerIds = [...new Set(allReports.filter((r) => r.target_type === "offer").map((r) => r.target_id))];
     const [{ data: biz }, { data: offs }] = await Promise.all([
       targetBizIds.length
-        ? supabase.from("businesses").select("id, name").in("id", targetBizIds)
+        ? supabase.from("businesses").select("id, name, owner_id").in("id", targetBizIds)
         : Promise.resolve({ data: [] as any[] }),
       offerIds.length
         ? supabase.from("offers").select("id, title").in("id", offerIds)
         : Promise.resolve({ data: [] as any[] }),
     ]);
     const bizMap = new Map((biz ?? []).map((b: any) => [b.id, b.name]));
+    const bizOwnerMap = new Map((biz ?? []).map((b: any) => [b.id, b.owner_id]));
     const offMap = new Map((offs ?? []).map((o: any) => [o.id, o.title]));
     const withNames = (rows: Report[]) =>
       rows.map((r) => ({
@@ -157,9 +183,31 @@ export default function MyReports() {
           allReports.map((r) => r.id),
         )
         .order("created_at", { ascending: true });
-      const grouped: Record<string, ReportReply[]> = {};
-      (rep ?? []).forEach((rr: any) => {
-        (grouped[rr.report_id] ??= []).push(rr);
+      const replyRows = rep ?? [];
+      const authorIds = [...new Set(replyRows.map((rr: any) => rr.author_id))];
+      let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
+      if (authorIds.length) {
+        const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", authorIds);
+        (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
+      }
+      const reportById = new Map(allReports.map((r) => [r.id, r]));
+      const grouped: Record<string, EnrichedReply[]> = {};
+      replyRows.forEach((rr: any) => {
+        const prof = profMap.get(rr.author_id);
+        const report = reportById.get(rr.report_id);
+        let roleLabel: string | null = null;
+        if (adminIds.has(rr.author_id)) roleLabel = "Admin";
+        else if (report?.target_type === "business" && bizOwnerMap.get(report.target_id) === rr.author_id)
+          roleLabel = "Chủ doanh nghiệp";
+        (grouped[rr.report_id] ??= []).push({
+          id: rr.id,
+          body: rr.body,
+          created_at: rr.created_at,
+          author_id: rr.author_id,
+          full_name: prof?.full_name || "Người dùng",
+          avatar_url: prof?.avatar_url ?? null,
+          roleLabel,
+        });
       });
       setReplies(grouped);
     }
