@@ -38,6 +38,7 @@ function ReportCard({
   onReplied: () => void;
 }) {
   const { user } = useAuth();
+  const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
 
@@ -57,60 +58,71 @@ function ReportCard({
   };
 
   return (
-    <div className="bg-card rounded-xl p-3 space-y-1.5 shadow-sm">
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-sm font-semibold truncate">{r.target_name || "Nội dung đã xoá"}</span>
-        <span
-          className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_LABEL[r.status].cls}`}
-        >
-          {REPORT_STATUS_LABEL[r.status].label}
-        </span>
-      </div>
-      <p className="text-xs text-muted-foreground">{r.description}</p>
-      {r.photo_url && (
-        <div className="h-32 rounded-lg overflow-hidden bg-muted">
-          <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
-        </div>
-      )}
-      <p className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</p>
-      {replies.length > 0 && (
-        <div className="pt-1.5 mt-1.5 border-t space-y-2">
-          {replies.map((rr) => (
-            <div key={rr.id} className="flex items-start gap-2">
-              <Avatar path={rr.avatar_url} name={rr.full_name} size={26} />
-              <div className="flex-1 min-w-0 bg-accent rounded-lg p-2">
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold mb-0.5">
-                  <span className="truncate">{rr.full_name}</span>
-                  {rr.roleLabel && (
-                    <span className="shrink-0 inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
-                      {rr.roleLabel === "Admin" && <Shield className="w-2.5 h-2.5" />}
-                      {rr.roleLabel}
-                    </span>
-                  )}
-                  <span className="text-muted-foreground font-normal ml-auto shrink-0">{timeAgo(rr.created_at)}</span>
-                </div>
-                <div className="text-xs whitespace-pre-line break-words">{rr.body}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {canReply && (
-        <div className="flex items-center gap-1.5 pt-1">
-          <input
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Nhập phản hồi…"
-            className="flex-1 px-2.5 py-1.5 rounded-lg border bg-background text-xs"
-          />
-          <button
-            onClick={send}
-            disabled={sending || !text.trim()}
-            className="w-8 h-8 rounded-lg bg-primary text-primary-foreground grid place-items-center shrink-0 disabled:opacity-50"
-            aria-label="Gửi phản hồi"
+    <div className="bg-card rounded-xl overflow-hidden shadow-sm">
+      <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-semibold truncate">{r.target_name || "Nội dung đã xoá"}</span>
+          <span
+            className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_LABEL[r.status].cls}`}
           >
-            <Send className="w-3.5 h-3.5" />
-          </button>
+            {REPORT_STATUS_LABEL[r.status].label}
+          </span>
+        </div>
+        <p className="text-xs text-muted-foreground truncate">
+          {open ? r.description : `${r.description?.slice(0, 60)}${(r.description?.length ?? 0) > 60 ? "…" : ""}`} ·{" "}
+          {timeAgo(r.created_at)}
+          {replies.length > 0 && ` · ${replies.length} phản hồi`}
+        </p>
+      </button>
+      {open && (
+        <div className="px-3 pb-3 space-y-1.5">
+          {r.photo_url && (
+            <div className="h-32 rounded-lg overflow-hidden bg-muted">
+              <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
+            </div>
+          )}
+          {replies.length > 0 && (
+            <div className="pt-1.5 mt-1.5 border-t space-y-2">
+              {replies.map((rr) => (
+                <div key={rr.id} className="flex items-start gap-2">
+                  <Avatar path={rr.avatar_url} name={rr.full_name} size={26} />
+                  <div className="flex-1 min-w-0 bg-accent rounded-lg p-2">
+                    <div className="flex items-center gap-1.5 text-[11px] font-semibold mb-0.5">
+                      <span className="truncate">{rr.full_name}</span>
+                      {rr.roleLabel && (
+                        <span className="shrink-0 inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
+                          {rr.roleLabel === "Admin" && <Shield className="w-2.5 h-2.5" />}
+                          {rr.roleLabel}
+                        </span>
+                      )}
+                      <span className="text-muted-foreground font-normal ml-auto shrink-0">
+                        {timeAgo(rr.created_at)}
+                      </span>
+                    </div>
+                    <div className="text-xs whitespace-pre-line break-words">{rr.body}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          {canReply && (
+            <div className="flex items-center gap-1.5 pt-1">
+              <input
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                placeholder="Nhập phản hồi…"
+                className="flex-1 px-2.5 py-1.5 rounded-lg border bg-background text-xs"
+              />
+              <button
+                onClick={send}
+                disabled={sending || !text.trim()}
+                className="w-8 h-8 rounded-lg bg-primary text-primary-foreground grid place-items-center shrink-0 disabled:opacity-50"
+                aria-label="Gửi phản hồi"
+              >
+                <Send className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
