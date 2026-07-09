@@ -54,7 +54,7 @@ export default function Community() {
     if (!missing.length) return;
     const { data } = await supabase
       .from("profiles")
-      .select("id, full_name, username, avatar_url, points, level")
+      .select("id, full_name, username, avatar_url, points")
       .in("id", missing);
     setProfMap((prev) => {
       const n = new Map(prev);
