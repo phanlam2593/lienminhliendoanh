@@ -77,6 +77,11 @@ export default function BusinessDetail() {
   const [claiming, setClaiming] = useState(false);
   const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
   const [claimsListOffer, setClaimsListOffer] = useState<Offer | null>(null);
+  const [reviewPage, setReviewPage] = useState(0);
+  const [reviewTotal, setReviewTotal] = useState(0);
+  const [reviewHasMore, setReviewHasMore] = useState(true);
+  const [reviewLoadingMore, setReviewLoadingMore] = useState(false);
+  const REVIEW_PAGE_SIZE = 10;
 
   useEffect(() => {
     void load();
