@@ -211,7 +211,8 @@ export default function BusinessDetail() {
       return;
     }
     toast.success("Đã xóa");
-    load();
+    setReviewPage(0);
+    void loadReviews(0, false);
   };
 
   const deleteReply = async (rid: string) => {
@@ -221,7 +222,8 @@ export default function BusinessDetail() {
       toast.error(error.message);
       return;
     }
-    load();
+    setReviewPage(0);
+    void loadReviews(0, false);
   };
 
   const messageOwner = async () => {
