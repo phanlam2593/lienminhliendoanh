@@ -236,7 +236,6 @@ export default function BusinessDetail() {
 
   if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">Đang tải…</div>;
 
-  const avg = reviews.length ? reviews.reduce((s, r) => s + r.rating, 0) / reviews.length : 0;
   const isOwner = !!user && user.id === b.owner_id;
 
   const ReviewsBlock = (
