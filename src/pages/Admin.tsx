@@ -1039,12 +1039,91 @@ function MemberDetail({
   );
 }
 
+const REPORT_PAGE_SIZE = 50;
+
+function ReportRow({
+  r,
+  onDeleted,
+  onStatusChanged,
+}: {
+  r: Report & { reporter?: string | null; target_name?: string | null };
+  onDeleted: () => void;
+  onStatusChanged: (id: string, s: ReportStatus) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  const del = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!confirm("Xóa báo cáo?")) return;
+    await supabase.from("reports").delete().eq("id", r.id);
+    onDeleted();
+  };
+
+  return (
+    <div className="bg-card rounded-xl overflow-hidden">
+      <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
+        <div className="flex items-start justify-between gap-2">
+          <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
+            {r.reporter || "Ẩn danh"} → <b className="text-foreground">{r.target_name || r.target_type}</b>
+          </div>
+          <ReportStatusBadge s={r.status} />
+        </div>
+        <div className="text-xs text-muted-foreground truncate">
+          {open ? r.description : `${r.description?.slice(0, 60)}${(r.description?.length ?? 0) > 60 ? "…" : ""}`} ·{" "}
+          {timeAgo(r.created_at)}
+        </div>
+      </button>
+      {open && (
+        <div className="px-3 pb-3 space-y-1.5">
+          {r.photo_url && (
+            <div className="h-32 rounded-lg overflow-hidden bg-muted">
+              <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
+            </div>
+          )}
+          <ReportRepliesPanel
+            reportId={r.id}
+            canChangeStatus
+            currentStatus={r.status}
+            onStatusChange={(s) => onStatusChanged(r.id, s)}
+          />
+          <div className="flex gap-2 pt-1">
+            <button onClick={del} className="text-xs px-3 py-1 rounded bg-muted text-destructive">
+              Xóa
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ReportsSection({ refreshKey }: { refreshKey: number }) {
   const [list, setList] = useState<(Report & { reporter?: string | null; target_name?: string | null })[]>([]);
+  const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const load = async () => {
-    const { data: reports } = await supabase.from("reports").select("*").order("created_at", { ascending: false });
-    const rows = (reports ?? []) as Report[];
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  const load = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * REPORT_PAGE_SIZE;
+    const to = from + REPORT_PAGE_SIZE - 1;
+    let query = supabase
+      .from("reports")
+      .select("*", { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (debouncedQ) query = query.ilike("description", `%${debouncedQ}%`);
+    const { data: reports, count } = await query;
+    setTotal(count ?? 0);
+    const rows = (reports as Report[] | null) ?? [];
     const uids = [...new Set(rows.map((r) => r.user_id))];
     const bizIds = [...new Set(rows.filter((r) => r.target_type === "business").map((r) => r.target_id))];
     const offerIds = [...new Set(rows.filter((r) => r.target_type === "offer").map((r) => r.target_id))];
@@ -1065,23 +1144,26 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
     (bizRes.data ?? []).forEach((b: any) => bm.set(b.id, b.name));
     const om = new Map<string, string>();
     (offerRes.data ?? []).forEach((o: any) => om.set(o.id, o.title));
-    setList(
-      rows.map((r) => ({
-        ...r,
-        reporter: pm.get(r.user_id) ?? null,
-        target_name: r.target_type === "business" ? (bm.get(r.target_id) ?? null) : (om.get(r.target_id) ?? null),
-      })),
-    );
+    const newRows = rows.map((r) => ({
+      ...r,
+      reporter: pm.get(r.user_id) ?? null,
+      target_name: r.target_type === "business" ? (bm.get(r.target_id) ?? null) : (om.get(r.target_id) ?? null),
+    }));
+    setList((prev) => (append ? [...prev, ...newRows] : newRows));
+    setHasMore(newRows.length === REPORT_PAGE_SIZE);
+    setLoadingMore(false);
   };
   useEffect(() => {
-    load();
-  }, [refreshKey]);
+    setPage(0);
+    void load(0, false);
+  }, [refreshKey, debouncedQ]);
 
-  const del = async (id: string) => {
-    if (!confirm("Xóa báo cáo?")) return;
-    await supabase.from("reports").delete().eq("id", id);
-    load();
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
   };
+
   const onStatusChanged = (id: string, s: ReportStatus) => {
     setList((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status: s, resolved: s === "resolved" || s === "closed" } : r)),
@@ -1089,36 +1171,29 @@ function ReportsSection({ refreshKey }: { refreshKey: number }) {
   };
 
   return (
-    <Collapsible title="Báo cáo" icon={Flag} count={list.length}>
-      {list.length === 0 && <p className="text-sm text-muted-foreground">Chưa có báo cáo nào</p>}
+    <Collapsible title="Báo cáo" icon={Flag} count={total}>
+      <div className="relative">
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Tìm theo nội dung báo cáo…"
+          className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+        />
+      </div>
+      {list.length === 0 && <p className="text-sm text-muted-foreground text-center py-2">Chưa có báo cáo nào</p>}
       {list.map((r) => (
-        <div key={r.id} className="p-3 bg-card rounded-xl space-y-1.5">
-          <div className="flex items-start justify-between gap-2">
-            <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
-              {r.reporter || "Ẩn danh"} → <b>{r.target_name || r.target_type}</b> ·{" "}
-              {new Date(r.created_at).toLocaleString("vi-VN")}
-            </div>
-            <ReportStatusBadge s={r.status} />
-          </div>
-          <div className="text-sm">{r.description}</div>
-          {r.photo_url && (
-            <div className="h-32 rounded-lg overflow-hidden bg-muted">
-              <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
-            </div>
-          )}
-          <ReportRepliesPanel
-            reportId={r.id}
-            canChangeStatus
-            currentStatus={r.status}
-            onStatusChange={(s) => onStatusChanged(r.id, s)}
-          />
-          <div className="flex gap-2 pt-1">
-            <button onClick={() => del(r.id)} className="text-xs px-3 py-1 rounded bg-muted text-destructive">
-              Xóa
-            </button>
-          </div>
-        </div>
+        <ReportRow key={r.id} r={r} onDeleted={() => load(0, false)} onStatusChanged={onStatusChanged} />
       ))}
+      {hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+        >
+          {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
+        </button>
+      )}
     </Collapsible>
   );
 }
