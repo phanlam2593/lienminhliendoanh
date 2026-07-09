@@ -89,7 +89,7 @@ export default function BusinessDetail() {
   }, [id]);
 
   const load = async () => {
-    const [{ data: bd }, { data: of }] = await Promise.all([
+    const [{ data: bd }, { data: of }, { data: stats }] = await Promise.all([
       supabase.from("businesses").select("*").eq("id", id).maybeSingle(),
       supabase
         .from("offers")
@@ -97,9 +97,11 @@ export default function BusinessDetail() {
         .eq("business_id", id)
         .eq("status", "active")
         .order("created_at", { ascending: false }),
+      supabase.from("business_card_stats").select("rating, review_count").eq("business_id", id).maybeSingle(),
     ]);
     setB(bd as Business | null);
     setOffers((of ?? []) as Offer[]);
+    setAvgRating(Number((stats as any)?.rating ?? 0));
     setReviewPage(0);
     void loadReviews(0, false);
   };
