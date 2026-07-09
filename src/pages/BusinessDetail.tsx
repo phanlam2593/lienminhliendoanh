@@ -81,6 +81,7 @@ export default function BusinessDetail() {
   const [reviewTotal, setReviewTotal] = useState(0);
   const [reviewHasMore, setReviewHasMore] = useState(true);
   const [reviewLoadingMore, setReviewLoadingMore] = useState(false);
+  const [avgRating, setAvgRating] = useState(0);
   const REVIEW_PAGE_SIZE = 10;
 
   useEffect(() => {
