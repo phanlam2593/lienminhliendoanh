@@ -20,7 +20,6 @@ interface ProfLite {
   avatar_url: string | null;
   status_message: string | null;
   points: number;
-  level: number;
 }
 
 interface Msg {
