@@ -1265,6 +1265,7 @@ function BusinessCreator({
   const [instagramUrl, setInstagram] = useState("");
   const [youtubeUrl, setYoutube] = useState("");
   const [offerText, setOfferText] = useState("");
+  const [pin, setPin] = useState("");
   const [saving, setSaving] = useState(false);
 
   const useCurrentLocation = () => {
