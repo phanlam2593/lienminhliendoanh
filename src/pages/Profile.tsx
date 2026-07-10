@@ -641,7 +641,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
                 ? "Đang lấy vị trí…"
                 : lat
                   ? "Đã ghim vị trí — bấm để cập nhật lại"
-                  : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
+                  : "Ghim vị trí hiện tại (cho tính năng Gần đây)"}
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
