@@ -648,6 +648,19 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               />
             </Field>
           </div>
+          <Field
+            label="Mã PIN xác nhận claim (4 số)"
+            hint="Đọc cho khách khi họ tới quán để họ nhập, xác nhận nhận ưu đãi. Có thể đổi bất cứ lúc nào."
+          >
+            <input
+              value={pin}
+              onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+              inputMode="numeric"
+              placeholder={pinLoaded && !pin ? "Chưa thiết lập" : "••••"}
+              maxLength={4}
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.3em] font-mono"
+            />
+          </Field>
           <div>
             <button
               type="button"
