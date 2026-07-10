@@ -271,6 +271,15 @@ export default function Community() {
       <section className="flex flex-col flex-1 min-h-0">
         <div className="px-3 py-2 border-b bg-card font-bold text-sm shrink-0">💬 Nhóm cộng đồng</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
+          {msgs.length > 0 && msgHasMore && (
+            <button
+              onClick={loadOlderMsgs}
+              disabled={loadingOlderMsgs}
+              className="w-full py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent rounded-lg disabled:opacity-50"
+            >
+              {loadingOlderMsgs ? "Đang tải…" : "Xem thêm tin nhắn cũ"}
+            </button>
+          )}
           {msgs.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground py-6">
               Chưa có tin nhắn nào. Hãy là người đầu tiên!
