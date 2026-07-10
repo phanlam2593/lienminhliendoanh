@@ -1430,6 +1430,19 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
+      <Field
+        label="Mã PIN xác nhận claim (4 số) *"
+        hint="Đọc cho khách khi họ tới quán để họ nhập, xác nhận nhận ưu đãi. Có thể đổi sau trong Hồ sơ doanh nghiệp."
+      >
+        <input
+          value={pin}
+          onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
+          inputMode="numeric"
+          placeholder="VD: 1234"
+          maxLength={4}
+          className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.3em] font-mono"
+        />
+      </Field>
       <button
         type="button"
         onClick={useCurrentLocation}
