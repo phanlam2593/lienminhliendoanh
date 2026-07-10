@@ -437,11 +437,14 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   useEffect(() => {
     void reloadOffers();
     void (async () => {
-      const [{ count: rv }, { count: fl }] = await Promise.all([
+      const [{ count: rv }, { count: fl }, { data: pinRow }] = await Promise.all([
         supabase.from("reviews").select("*", { count: "exact", head: true }).eq("business_id", biz.id),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_business_id", biz.id),
+        supabase.from("business_pins").select("pin").eq("business_id", biz.id).maybeSingle(),
       ]);
       setStats({ reviews: rv ?? 0, followers: fl ?? 0 });
+      setPin((pinRow as any)?.pin ?? "");
+      setPinLoaded(true);
     })();
   }, [biz.id]);
 
