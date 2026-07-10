@@ -27,6 +27,7 @@ import { AchievementOverlay } from "./AchievementOverlay";
 import { PullToRefresh } from "./PullToRefresh";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
