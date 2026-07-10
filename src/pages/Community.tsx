@@ -31,12 +31,22 @@ interface Msg {
   created_at: string;
 }
 
+const MEMBER_PAGE_SIZE = 50;
+const MSG_PAGE_SIZE = 50;
+
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
   const onlineUsers = useOnlineUsers();
   const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
+  const [msgHasMore, setMsgHasMore] = useState(true);
+  const [loadingOlderMsgs, setLoadingOlderMsgs] = useState(false);
   const [profMap, setProfMap] = useState<Map<string, ProfLite>>(new Map());
   const [members, setMembers] = useState<ProfLite[]>([]);
+  const [memberPage, setMemberPage] = useState(0);
+  const [memberTotal, setMemberTotal] = useState(0);
+  const [memberHasMore, setMemberHasMore] = useState(true);
+  const [memberLoadingMore, setMemberLoadingMore] = useState(false);
   const [text, setText] = useState("");
   const [showStickers, setShowStickers] = useState(false);
   const [stickerPack, setStickerPack] = useState(0);
