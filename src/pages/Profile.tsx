@@ -1293,8 +1293,8 @@ function BusinessCreator({
       toast.error("Vui lòng nhập tên doanh nghiệp");
       return;
     }
-    if (!/^\d{4}$/.test(pin)) {
-      toast.error("Vui lòng đặt mã PIN gồm đúng 4 chữ số — dùng để xác nhận khách nhận ưu đãi tại quán");
+    if (!/^[A-Za-z0-9]{4,8}$/.test(pin)) {
+      toast.error("Vui lòng đặt mã PIN gồm 4-8 ký tự chữ/số — dùng để xác nhận khách nhận ưu đãi tại quán");
       return;
     }
     setSaving(true);
