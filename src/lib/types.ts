@@ -286,7 +286,7 @@ export interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
-  type: "text" | "image" | "sticker";
+  type: "text" | "image" | "sticker" | "broadcast";
   image_url: string | null;
   is_read: boolean;
   created_at: string;
