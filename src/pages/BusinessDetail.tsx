@@ -611,16 +611,16 @@ export default function BusinessDetail() {
   );
 }
 
+interface OfferClaimRow {
+  user_id: string;
+  claimed_at: string;
+  full_name: string;
+  avatar_url: string | null;
+}
+
 function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser: (uid: string) => void }) {
   const { user } = useAuth();
-  const [rows, setRows] = useState;
-  {
-    user_id: string;
-    claimed_at: string;
-    full_name: string;
-    avatar_url: string | null;
-  }
-  [] > [];
+  const [rows, setRows] = useState<OfferClaimRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [myFollowing, setMyFollowing] = useState<Set<string>>(new Set());
   const [busyId, setBusyId] = useState<string | null>(null);
