@@ -210,11 +210,16 @@ export default function Profile() {
           </div>
           <div className="flex items-center gap-2 mt-0.5">
             <StatusBadge s={profile?.status} />
-            {profile && <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />}
+            {profile && (
+              <button type="button" onClick={() => setTierLegendOpen(true)}>
+                <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />
+              </button>
+            )}
           </div>
           {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
         </div>
       </div>
+      <TierLegendDialog open={tierLegendOpen} onOpenChange={setTierLegendOpen} points={(profile as any)?.points ?? 0} />
       <button
         type="button"
         onClick={() => {
