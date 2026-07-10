@@ -255,6 +255,15 @@ export default function Community() {
               </div>
             </Link>
           ))}
+          {memberHasMore && (
+            <button
+              onClick={loadMoreMembers}
+              disabled={memberLoadingMore}
+              className="w-full py-2 text-xs font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+            >
+              {memberLoadingMore ? "Đang tải…" : `Tải thêm (còn ${memberTotal - members.length})`}
+            </button>
+          )}
         </div>
       )}
 
