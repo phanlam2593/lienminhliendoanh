@@ -226,6 +226,20 @@ export default function Admin() {
         >
           <Users className="w-3.5 h-3.5" /> Xem lại popup chào mừng thành viên mới
         </button>
+        <Link
+          to="/dieu-khoan"
+          target="_blank"
+          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+        >
+          <Flag className="w-3.5 h-3.5" /> Xem Điều khoản sử dụng (kèm nội quy cộng đồng)
+        </Link>
+        <Link
+          to="/chinh-sach-bao-mat"
+          target="_blank"
+          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+        >
+          <Shield className="w-3.5 h-3.5" /> Xem Chính sách bảo mật
+        </Link>
         <button
           onClick={cleanupOrphans}
           className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
