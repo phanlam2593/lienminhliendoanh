@@ -43,6 +43,7 @@ export function Layout() {
   const { pathname } = useLocation();
   const nav = useNavigate();
   const { user, profile, signOut, isAdmin, loading } = useAuth();
+  const { t } = useLanguage();
   const { unread } = useNotifications();
   const unreadMsgs = useUnreadMessages();
   const [open, setOpen] = useState(false);
