@@ -154,16 +154,23 @@ export default function BusinessDetail() {
     void loadReviews(next, true);
   };
 
-  const openClaim = async (o: Offer) => {
+  const openClaim = (o: Offer) => {
     if (!user || !isApproved) return;
     setClaimOffer(o);
     setClaim(null);
+    setPinInput("");
+  };
+
+  const submitClaim = async () => {
+    if (!claimOffer || pinInput.length !== 4) return;
     setClaiming(true);
-    const { data, error } = await supabase.rpc("claim_offer", { _offer_id: o.id });
+    const { data, error } = await supabase.rpc("claim_offer", {
+      _offer_id: claimOffer.id,
+      _pin: pinInput,
+    });
     setClaiming(false);
     if (error) {
       toast.error(error.message);
-      setClaimOffer(null);
       return;
     }
     setClaim(data as unknown as OfferClaim);
