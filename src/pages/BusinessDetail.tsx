@@ -301,25 +301,7 @@ export default function BusinessDetail() {
 
         <BusinessGallery businessId={b.id} coverPath={b.cover_url} />
 
-        <div className="flex gap-1 border-b">
-          <button
-            onClick={() => setTab("info")}
-            className={`px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === "info" ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
-          >
-            Thông tin
-          </button>
-          <button
-            onClick={() => setTab("badges")}
-            className={`px-3 py-2 text-xs font-semibold border-b-2 -mb-px ${tab === "badges" ? "border-primary text-primary" : "border-transparent text-muted-foreground"}`}
-          >
-            Huy hiệu
-          </button>
-        </div>
-
-        {tab === "badges" ? (
-          <BadgeCollection businessId={b.id} points={b.points ?? 0} />
-        ) : (
-          <>
+        <>
             {b.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{b.description}</p>}
 
             <div className="space-y-2 text-sm">
