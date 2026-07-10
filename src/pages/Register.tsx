@@ -111,8 +111,8 @@ export default function Register() {
   };
 
   const submitFinal = async () => {
-    if (!agree) {
-      toast.error("Vui lòng đồng ý điều khoản");
+    if (!agree || !ageConfirmed) {
+      toast.error("Vui lòng xác nhận đầy đủ các mục bên dưới");
       return;
     }
     setSubmitting(true);
