@@ -40,6 +40,7 @@ import { StoredImage } from "@/components/StoredImage";
 import { BusinessPhotoManager } from "@/components/BusinessPhotoManager";
 import { Avatar } from "@/components/Avatar";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
+import { TierLegendDialog } from "@/components/TierLegendDialog";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import {
   AlertDialog,
