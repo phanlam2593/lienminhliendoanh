@@ -98,16 +98,31 @@ export default function Community() {
     setLoadingOlderMsgs(false);
   };
 
-  const loadMembers = async () => {
-    const { data } = await supabase
+  const loadMembers = async (pageNum = 0, append = false) => {
+    setMemberLoadingMore(true);
+    const from = pageNum * MEMBER_PAGE_SIZE;
+    const to = from + MEMBER_PAGE_SIZE - 1;
+    const { data, count } = await supabase
       .from("profiles")
-      .select("id, full_name, username, avatar_url, status_message, points")
+      .select("id, full_name, username, avatar_url, status_message, points", { count: "exact" })
       .eq("status", "approved")
       .order("created_at", { ascending: false })
-      .limit(200);
+      .range(from, to);
     const list = (data ?? []) as ProfLite[];
-    list.sort((a, b) => (a.id === user?.id ? -1 : b.id === user?.id ? 1 : 0));
-    setMembers(list);
+    setMemberTotal(count ?? 0);
+    setMembers((prev) => {
+      const merged = append ? [...prev, ...list] : list;
+      merged.sort((a, b) => (a.id === user?.id ? -1 : b.id === user?.id ? 1 : 0));
+      return merged;
+    });
+    setMemberHasMore(list.length === MEMBER_PAGE_SIZE);
+    setMemberLoadingMore(false);
+  };
+
+  const loadMoreMembers = () => {
+    const next = memberPage + 1;
+    setMemberPage(next);
+    void loadMembers(next, true);
   };
 
   useEffect(() => {
