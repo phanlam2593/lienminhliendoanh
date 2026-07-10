@@ -680,9 +680,6 @@ function BusinessMini({ biz, role }: { biz?: Business; role: string }) {
       <Avatar path={biz.cover_url} name={biz.name} size={48} />
       <div className="text-[10px] uppercase font-semibold text-muted-foreground">{role}</div>
       <div className="text-xs font-bold truncate w-full">{biz.name}</div>
-      <div className="text-[10px] text-muted-foreground">
-        Lv.{biz.level ?? 1} · {biz.points ?? 0} điểm
-      </div>
     </Link>
   );
 }
