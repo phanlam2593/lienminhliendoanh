@@ -541,8 +541,11 @@ export type Database = {
           full_name: string
           has_seen_welcome: boolean
           id: string
+          is_member: boolean
           level: number
           member_number: number | null
+          membership_expires_at: string | null
+          membership_started_at: string | null
           notification_prefs: Json
           password_hint: string | null
           phone: string
@@ -560,8 +563,11 @@ export type Database = {
           full_name: string
           has_seen_welcome?: boolean
           id: string
+          is_member?: boolean
           level?: number
           member_number?: number | null
+          membership_expires_at?: string | null
+          membership_started_at?: string | null
           notification_prefs?: Json
           password_hint?: string | null
           phone: string
@@ -579,8 +585,11 @@ export type Database = {
           full_name?: string
           has_seen_welcome?: boolean
           id?: string
+          is_member?: boolean
           level?: number
           member_number?: number | null
+          membership_expires_at?: string | null
+          membership_started_at?: string | null
           notification_prefs?: Json
           password_hint?: string | null
           phone?: string
@@ -855,6 +864,87 @@ export type Database = {
         }
         Relationships: []
       }
+      exchanges_view: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          expires_at: string | null
+          id: string | null
+          rec_name: string | null
+          receiver_completed_at: string | null
+          receiver_id: string | null
+          req_name: string | null
+          request_description: string | null
+          request_type: string | null
+          requester_completed_at: string | null
+          requester_id: string | null
+          return_description: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exchanges_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "exchanges_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exchanges_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "exchanges_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      follows_view: {
+        Row: {
+          created_at: string | null
+          followee_avatar: string | null
+          followee_business_id: string | null
+          followee_business_owner_id: string | null
+          followee_name: string | null
+          followee_user_id: string | null
+          followee_username: string | null
+          follower_avatar: string | null
+          follower_id: string | null
+          follower_name: string | null
+          follower_username: string | null
+          id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follows_followee_business_id_fkey"
+            columns: ["followee_business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "follows_followee_business_id_fkey"
+            columns: ["followee_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       award_member_points: {
@@ -892,6 +982,10 @@ export type Database = {
         }[]
       }
       get_member_rank: { Args: { _id: string }; Returns: number }
+      get_membership_discount_pct: {
+        Args: { _points: number }
+        Returns: number
+      }
       get_public_profile: {
         Args: { _id: string }
         Returns: {
