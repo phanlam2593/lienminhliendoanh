@@ -1001,7 +1001,7 @@ type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; admin: 
 const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, admin: true };
 
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
-  const [open, setOpen] = useState<null | "password" | "notif" | "theme">(null);
+  const [open, setOpen] = useState<null | "password" | "notif" | "theme" | "lang">(null);
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1">
@@ -1040,6 +1040,17 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         {open === "theme" && (
           <div className="p-3">
             <ThemeToggle />
+          </div>
+        )}
+        <SettingRow
+          icon={<Globe className="w-4 h-4" />}
+          label="Ngôn ngữ / Language"
+          onClick={() => setOpen(open === "lang" ? null : "lang")}
+          active={open === "lang"}
+        />
+        {open === "lang" && (
+          <div className="p-3">
+            <LanguageToggle />
           </div>
         )}
       </div>
