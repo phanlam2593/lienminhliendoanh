@@ -325,7 +325,6 @@ export default function Profile() {
           </section>
         )}
         <BusinessCreator ownerId={user.id} onCreated={loadBiz} hasExisting={biz.length > 0} />
-        {biz.length > 0 && <ReportsInbox businessIds={biz.map((b) => b.id)} />}
       </div>
     );
   }
