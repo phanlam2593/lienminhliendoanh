@@ -42,6 +42,7 @@ export default function Register() {
   const [coverFile, setCov] = useState<File | null>(null);
   const [termsOpen, setTO] = useState(false);
   const [agree, setAgree] = useState(false);
+  const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const checkUnique = async (col: "username" | "email" | "phone", val: string) => {
