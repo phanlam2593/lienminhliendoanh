@@ -480,9 +480,18 @@ export default function Register() {
               tin.
             </p>
           </div>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} />
-            Tôi đồng ý với điều khoản
+          <label className="flex items-start gap-2 text-sm">
+            <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5" />
+            <span>
+              Tôi đồng ý với{" "}
+              <Link to="/dieu-khoan" target="_blank" className="text-primary font-semibold underline">
+                Điều khoản sử dụng
+              </Link>{" "}
+              và{" "}
+              <Link to="/chinh-sach-bao-mat" target="_blank" className="text-primary font-semibold underline">
+                Chính sách bảo mật
+              </Link>
+            </span>
           </label>
           <button
             onClick={submitFinal}
