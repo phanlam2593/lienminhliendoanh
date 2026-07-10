@@ -1400,7 +1400,7 @@ function BusinessCreator({
           ? "Đang lấy vị trí…"
           : lat
             ? "Đã ghim vị trí — bấm lại để cập nhật"
-            : "Ghim vị trí hiện tại (cho tính năng Gần tôi)"}
+            : "Ghim vị trí hiện tại (cho tính năng Gần đây)"}
       </button>
       <Field label="Mô tả">
         <textarea
