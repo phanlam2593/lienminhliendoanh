@@ -34,36 +34,37 @@ const App = () => (
       <LanguageProvider>
         <AuthProvider>
           <OnlineUsersProvider>
-          <Toaster />
-          <Sonner position="top-center" />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/auth/login" element={<Login />} />
-              <Route path="/auth/register" element={<Register />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/dieu-khoan" element={<Terms />} />
-              <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicy />} />
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/kham-pha" element={<Businesses />} />
-                <Route path="/cong-dong" element={<Community />} />
-                <Route path="/dn/:id" element={<BusinessDetail />} />
-                <Route path="/uu-dai" element={<Offers />} />
-                <Route path="/ho-so" element={<Profile />} />
-                <Route path="/ho-so/:id" element={<UserProfile />} />
-                <Route path="/de-xuat" element={<Navigate to="/" replace />} />
-                <Route path="/thong-bao" element={<Notifications />} />
-                <Route path="/tin-nhan" element={<MessagesInbox />} />
-                <Route path="/tin-nhan/:id" element={<MessagesThread />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/huong-dan" element={<Guide />} />
-                <Route path="/bao-cao-cua-toi" element={<MyReports />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </OnlineUsersProvider>
-      </AuthProvider>
+            <Toaster />
+            <Sonner position="top-center" />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/auth/login" element={<Login />} />
+                <Route path="/auth/register" element={<Register />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/dieu-khoan" element={<Terms />} />
+                <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicy />} />
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/kham-pha" element={<Businesses />} />
+                  <Route path="/cong-dong" element={<Community />} />
+                  <Route path="/dn/:id" element={<BusinessDetail />} />
+                  <Route path="/uu-dai" element={<Offers />} />
+                  <Route path="/ho-so" element={<Profile />} />
+                  <Route path="/ho-so/:id" element={<UserProfile />} />
+                  <Route path="/de-xuat" element={<Navigate to="/" replace />} />
+                  <Route path="/thong-bao" element={<Notifications />} />
+                  <Route path="/tin-nhan" element={<MessagesInbox />} />
+                  <Route path="/tin-nhan/:id" element={<MessagesThread />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/huong-dan" element={<Guide />} />
+                  <Route path="/bao-cao-cua-toi" element={<MyReports />} />
+                </Route>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </OnlineUsersProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
