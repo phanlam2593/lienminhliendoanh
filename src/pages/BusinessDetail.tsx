@@ -297,8 +297,6 @@ export default function BusinessDetail() {
               </span>
             )}
           </div>
-          <LevelProgress points={b.points ?? 0} level={b.level ?? 1} className="mt-1" />
-          <BadgeRow businessId={b.id} points={b.points ?? 0} />
         </div>
 
         <BusinessGallery businessId={b.id} coverPath={b.cover_url} />
