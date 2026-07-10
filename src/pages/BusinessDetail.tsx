@@ -612,10 +612,18 @@ export default function BusinessDetail() {
 }
 
 function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser: (uid: string) => void }) {
-  const [rows, setRows] = useState<
-    { user_id: string; claimed_at: string; full_name: string; avatar_url: string | null }[]
-  >([]);
+  const { user } = useAuth();
+  const [rows, setRows] = useState;
+  {
+    user_id: string;
+    claimed_at: string;
+    full_name: string;
+    avatar_url: string | null;
+  }
+  [] > [];
   const [loading, setLoading] = useState(true);
+  const [myFollowing, setMyFollowing] = useState<Set<string>>(new Set());
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -626,9 +634,19 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
         .eq("offer_id", offerId)
         .order("claimed_at", { ascending: false });
       const ids = [...new Set((claims ?? []).map((c: any) => c.user_id))];
-      const { data: profs } = ids.length
-        ? await supabase.from("profiles").select("id, full_name, avatar_url").in("id", ids)
-        : { data: [] as any[] };
+      const [{ data: profs }, { data: mine }] = await Promise.all([
+        ids.length
+          ? supabase.from("profiles").select("id, full_name, avatar_url").in("id", ids)
+          : Promise.resolve({ data: [] as any[] }),
+        user
+          ? supabase
+              .from("follows")
+              .select("followee_user_id")
+              .eq("follower_id", user.id)
+              .not("followee_user_id", "is", null)
+          : Promise.resolve({ data: [] as any[] }),
+      ]);
+      setMyFollowing(new Set((mine ?? []).map((r: any) => r.followee_user_id)));
       const pMap = new Map((profs ?? []).map((p: any) => [p.id, p]));
       setRows(
         (claims ?? []).map((c: any) => ({
@@ -640,26 +658,65 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
       );
       setLoading(false);
     })();
-  }, [offerId]);
+  }, [offerId, user?.id]);
+
+  const toggleFollow = async (uid: string) => {
+    if (!user) return;
+    setBusyId(uid);
+    const isFollowing = myFollowing.has(uid);
+    if (isFollowing) {
+      await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_user_id", uid);
+      setMyFollowing((s) => {
+        const n = new Set(s);
+        n.delete(uid);
+        return n;
+      });
+    } else {
+      await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: uid });
+      setMyFollowing((s) => new Set(s).add(uid));
+    }
+    setBusyId(null);
+  };
 
   if (loading) return <p className="text-sm text-muted-foreground text-center py-6">Đang tải…</p>;
   if (rows.length === 0) return <p className="text-sm text-muted-foreground text-center py-6">Chưa có ai nhận</p>;
 
   return (
     <div className="space-y-1.5 max-h-80 overflow-y-auto">
-      {rows.map((r, i) => (
-        <button
-          key={i}
-          onClick={() => onOpenUser(r.user_id)}
-          className="w-full flex items-center gap-2 p-2 rounded-lg hover:bg-accent text-left"
-        >
-          <Avatar path={r.avatar_url} name={r.full_name} size={32} />
-          <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold truncate">{r.full_name}</div>
-            <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at)}</div>
+      {rows.map((r, i) => {
+        const isMe = user?.id === r.user_id;
+        const isFollowing = myFollowing.has(r.user_id);
+        return (
+          <div key={i} className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
+            <button onClick={() => onOpenUser(r.user_id)} className="flex items-center gap-2 flex-1 min-w-0 text-left">
+              <Avatar path={r.avatar_url} name={r.full_name} size={32} />
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold truncate">{r.full_name}</div>
+                <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at)}</div>
+              </div>
+            </button>
+            {!isMe && user && (
+              <button
+                onClick={() => toggleFollow(r.user_id)}
+                disabled={busyId === r.user_id}
+                className={`shrink-0 h-8 px-2.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 disabled:opacity-50 ${
+                  isFollowing ? "bg-primary/10 text-primary" : "bg-primary text-primary-foreground"
+                }`}
+              >
+                {isFollowing ? (
+                  <>
+                    <UserCheck className="w-3.5 h-3.5" /> Đang theo dõi
+                  </>
+                ) : (
+                  <>
+                    <UserPlus className="w-3.5 h-3.5" /> Follow
+                  </>
+                )}
+              </button>
+            )}
           </div>
-        </button>
-      ))}
+        );
+      })}
     </div>
   );
 }
