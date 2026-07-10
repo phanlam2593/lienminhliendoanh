@@ -284,7 +284,7 @@ export default function Guide() {
       summary: "Gặp vấn đề? Báo cáo trực tiếp cho BQT.",
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={AlertCircle}>DN không giữ đúng ưu đãi đã đăng</IconBullet>
+          <IconBullet icon={AlertCircle}>Doanh nghiệp không giữ đúng ưu đãi đã đăng</IconBullet>
           <IconBullet icon={Flag}>
             Có lỗi gì đó — gửi thẳng cho BQT, bạn sẽ nhận được phản hồi ngay trong mục "Báo cáo của tôi"
           </IconBullet>
