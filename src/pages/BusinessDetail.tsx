@@ -548,8 +548,29 @@ export default function BusinessDetail() {
           {claimOffer && (
             <div className="space-y-3">
               {claimOffer.description && <p className="text-sm text-muted-foreground">{claimOffer.description}</p>}
-              {claiming || !claim ? (
-                <div className="py-8 text-center text-sm text-muted-foreground">Đang tạo mã…</div>
+              {!claim ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-center text-muted-foreground">
+                    Hỏi nhân viên/chủ quán mã PIN (4 số) để xác nhận bạn đang có mặt tại đây.
+                  </p>
+                  <input
+                    value={pinInput}
+                    onChange={(e) => setPinInput(e.target.value.replace(/\D/g, "").slice(0, 4))}
+                    onKeyDown={(e) => e.key === "Enter" && submitClaim()}
+                    inputMode="numeric"
+                    placeholder="••••"
+                    maxLength={4}
+                    autoFocus
+                    className="w-full text-center text-3xl tracking-[0.5em] font-mono py-3 rounded-xl border bg-background"
+                  />
+                  <button
+                    onClick={submitClaim}
+                    disabled={claiming || pinInput.length !== 4}
+                    className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
+                  >
+                    {claiming ? "Đang kiểm tra…" : "Xác nhận"}
+                  </button>
+                </div>
               ) : (
                 <>
                   <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-dashed border-emerald-300 dark:border-emerald-800 rounded-xl p-5 text-center">
