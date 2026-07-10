@@ -158,11 +158,11 @@ export function Layout() {
       {!hide && !showWelcome && !showPendingGate && (
         <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 bg-card border-t border-border safe-bottom">
           <div className={`grid ${gridClass}`}>
-            {tabs.map((t: any) => (
+            {tabs.map((tab: any) => (
               <NavLink
-                key={t.to}
-                to={t.to}
-                end={t.to === "/"}
+                key={tab.to}
+                to={tab.to}
+                end={tab.to === "/"}
                 className={({ isActive }) =>
                   cn(
                     "relative flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-semibold transition-colors",
@@ -171,14 +171,14 @@ export function Layout() {
                 }
               >
                 <div className="relative">
-                  <t.icon className="w-5 h-5" />
-                  {t.badge > 0 && (
+                  <tab.icon className="w-5 h-5" />
+                  {tab.badge > 0 && (
                     <span className="absolute -top-1 -right-2 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
-                      {t.badge}
+                      {tab.badge}
                     </span>
                   )}
                 </div>
-                <span>{t.label}</span>
+                <span>{tab.label}</span>
               </NavLink>
             ))}
           </div>
