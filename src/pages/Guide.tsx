@@ -261,7 +261,7 @@ export default function Guide() {
       summary: "Tương tác trực tiếp 1-1.",
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={MessageCircle}>Nhắn trực tiếp thành viên, DN, bạn bè</IconBullet>
+          <IconBullet icon={MessageCircle}>Nhắn trực tiếp thành viên, doanh nghiệp, bạn bè</IconBullet>
         </ul>
       ),
     },
