@@ -1,0 +1,111 @@
+import { createContext, useContext, useState, type ReactNode } from "react";
+
+export type Lang = "vi" | "en";
+
+// Chỉ dịch "khung app cố định" (nav, nút bấm, nhãn) — KHÔNG dịch nội dung do người
+// dùng tự viết (mô tả DN, đánh giá, tin nhắn...). Thêm khoá mới ở đây khi cần mở rộng.
+const DICT: Record<Lang, Record<string, string>> = {
+  vi: {
+    "nav.home": "Trang chủ",
+    "nav.explore": "Khám phá",
+    "nav.community": "Cộng đồng",
+    "nav.admin": "Admin",
+    "common.save": "Lưu",
+    "common.cancel": "Hủy",
+    "common.delete": "Xóa",
+    "common.send": "Gửi",
+    "common.loading": "Đang tải…",
+    "common.logout": "Đăng xuất",
+    "common.login": "Đăng nhập",
+    "common.register": "Đăng ký",
+    "common.edit": "Chỉnh sửa",
+    "common.collapse": "Thu gọn",
+    "common.search": "Tìm kiếm",
+    "common.loadMore": "Tải thêm",
+    "common.confirm": "Xác nhận",
+    "common.back": "Quay lại",
+    "profile.personal": "Hồ sơ cá nhân",
+    "profile.business": "Hồ sơ doanh nghiệp",
+    "profile.createBusiness": "Tạo hồ sơ doanh nghiệp",
+    "profile.guide": "Hướng dẫn",
+    "profile.myReports": "Báo cáo của tôi",
+    "profile.settings": "Cài đặt",
+    "type.food": "Ăn uống",
+    "type.service": "Dịch vụ",
+    "type.stay": "Lưu trú",
+    "type.travel": "Du lịch",
+    "type.creator": "Sáng tạo nội dung",
+    "type.freelance": "Freelance",
+    "type.broker": "Môi giới",
+    "type.other": "Khác",
+  },
+  en: {
+    "nav.home": "Home",
+    "nav.explore": "Explore",
+    "nav.community": "Community",
+    "nav.admin": "Admin",
+    "common.save": "Save",
+    "common.cancel": "Cancel",
+    "common.delete": "Delete",
+    "common.send": "Send",
+    "common.loading": "Loading…",
+    "common.logout": "Log out",
+    "common.login": "Log in",
+    "common.register": "Sign up",
+    "common.edit": "Edit",
+    "common.collapse": "Collapse",
+    "common.search": "Search",
+    "common.loadMore": "Load more",
+    "common.confirm": "Confirm",
+    "common.back": "Back",
+    "profile.personal": "Personal Profile",
+    "profile.business": "Business Profile",
+    "profile.createBusiness": "Create Business Profile",
+    "profile.guide": "Guide",
+    "profile.myReports": "My Reports",
+    "profile.settings": "Settings",
+    "type.food": "Food & Drink",
+    "type.service": "Service",
+    "type.stay": "Accommodation",
+    "type.travel": "Travel",
+    "type.creator": "Content Creator",
+    "type.freelance": "Freelance",
+    "type.broker": "Broker",
+    "type.other": "Other",
+  },
+};
+
+interface LangCtx {
+  lang: Lang;
+  setLang: (l: Lang) => void;
+  t: (key: string) => string;
+}
+
+const LanguageContext = createContext<LangCtx | null>(null);
+
+export function LanguageProvider({ children }: { children: ReactNode }) {
+  const [lang, setLangState] = useState<Lang>(() => {
+    try {
+      const saved = localStorage.getItem("lang");
+      if (saved === "en" || saved === "vi") return saved;
+    } catch {}
+    return "vi";
+  });
+
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    try {
+      localStorage.setItem("lang", l);
+    } catch {}
+  };
+
+  const t = (key: string) => DICT[lang][key] ?? DICT.vi[key] ?? key;
+
+  return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
+}
+
+export function useLanguage() {
+  const ctx = useContext(LanguageContext);
+  if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
+  return ctx;
+}
