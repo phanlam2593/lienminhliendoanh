@@ -38,8 +38,6 @@ import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { ExchangeSection } from "@/components/ExchangeSection";
-import { LevelProgress } from "@/components/LevelProgress";
-import { BadgeRow, BadgeCollection } from "@/components/BadgeRow";
 import { BusinessGallery } from "@/components/BusinessGallery";
 
 interface ReviewMeta extends Review {
