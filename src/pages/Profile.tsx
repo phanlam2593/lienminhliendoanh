@@ -567,7 +567,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
           </div>
           <BusinessPhotoManager businessId={biz.id} />
 
-          <Field label="Tên DN" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
+          <Field label="Tên doanh nghiệp" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
