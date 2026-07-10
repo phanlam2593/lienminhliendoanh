@@ -1294,6 +1294,10 @@ function BusinessCreator({
       toast.error("Vui lòng nhập tên doanh nghiệp");
       return;
     }
+    if (!/^\d{4}$/.test(pin)) {
+      toast.error("Vui lòng đặt mã PIN gồm đúng 4 chữ số — dùng để xác nhận khách nhận ưu đãi tại quán");
+      return;
+    }
     setSaving(true);
     try {
       let cover_url: string | null = null;
@@ -1324,6 +1328,10 @@ function BusinessCreator({
         .select()
         .single();
       if (error) throw error;
+      if (newBiz) {
+        const { error: pinError } = await supabase.from("business_pins").insert({ business_id: newBiz.id, pin });
+        if (pinError) throw pinError;
+      }
       if (offerText.trim() && newBiz) {
         await supabase.from("offers").insert({
           business_id: newBiz.id,
@@ -1331,13 +1339,13 @@ function BusinessCreator({
           status: "active",
         });
       }
-      if (error) throw error;
       toast.success("Đã gửi hồ sơ doanh nghiệp. Đang chờ admin duyệt.");
       setOpen(false);
       setName("");
       setPhone("");
       setAddress("");
       setDesc("");
+      setPin("");
       setCoverFile(null);
       onCreated();
     } catch (e: any) {
