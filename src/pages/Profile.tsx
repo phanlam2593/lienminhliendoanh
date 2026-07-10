@@ -277,6 +277,7 @@ export default function Profile() {
       <div className="p-4 space-y-5">
         <BackBar title="Hồ sơ cá nhân" />
         {Header}
+        {(MEMBERSHIP_ENABLED || role === "admin") && <MembershipCard points={(profile as any)?.points ?? 0} />}
         <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
           <h2 className="font-bold text-sm">Thông tin cá nhân</h2>
           <input
@@ -305,7 +306,6 @@ export default function Profile() {
             {saving ? "Đang lưu…" : "Lưu thay đổi"}
           </button>
         </section>
-        {(MEMBERSHIP_ENABLED || role === "admin") && <MembershipCard points={(profile as any)?.points ?? 0} />}
       </div>
     );
   }
