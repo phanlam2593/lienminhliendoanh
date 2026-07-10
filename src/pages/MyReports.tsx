@@ -252,7 +252,7 @@ export default function MyReports() {
             onClick={() => setTab("business")}
             className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "business" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
           >
-            <Building2 className="w-3.5 h-3.5 inline mr-1" /> Về DN của tôi ({bizReports.length})
+            <Building2 className="w-3.5 h-3.5 inline mr-1" /> Về doanh nghiệp của tôi ({bizReports.length})
           </button>
         )}
       </div>
