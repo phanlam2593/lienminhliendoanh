@@ -1221,7 +1221,10 @@ function Broadcast() {
           sender_id: user.id,
           receiver_id: p.id,
           content,
-          type: "text" as const,
+          // type "broadcast" riêng (không phải "text") để lọc khỏi hộp thư CỦA NGƯỜI GỬI
+          // (xem MessagesInbox.load) — tránh 1 lần gửi N người tạo N hội thoại ảo cho admin.
+          // Người nhận vẫn thấy bình thường vì filter chỉ áp dụng phía người gửi.
+          type: "broadcast" as const,
         }));
       if (rows.length) await supabase.from("messages").insert(rows);
     }
