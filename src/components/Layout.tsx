@@ -255,7 +255,7 @@ function WelcomeScreen() {
             { href: "tel:0339565246", icon: Phone, label: "Hotline" },
             { href: "https://www.facebook.com/profile.php?id=61590228346408", icon: Facebook, label: "Facebook" },
           ].map(({ href, icon: Icon, label }) => (
-            
+            <a
               key={label}
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
