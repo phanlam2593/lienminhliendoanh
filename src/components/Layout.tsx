@@ -255,7 +255,7 @@ function WelcomeScreen() {
             { href: "tel:0339565246", icon: Phone, label: "Hotline" },
             { href: "https://www.facebook.com/profile.php?id=61590228346408", icon: Facebook, label: "Facebook" },
           ].map(({ href, icon: Icon, label }) => (
-            <a
+            
               key={label}
               href={href}
               target={href.startsWith("http") ? "_blank" : undefined}
@@ -270,7 +270,27 @@ function WelcomeScreen() {
           ))}
         </div>
       </div>
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="w-full max-w-sm pt-4 text-center space-y-1.5">
+      <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+        <Link to="/dieu-khoan" className="hover:text-primary underline">
+          Điều khoản sử dụng
+        </Link>
+        <span>·</span>
+        <Link to="/chinh-sach-bao-mat" className="hover:text-primary underline">
+          Chính sách bảo mật
+        </Link>
+      </div>
+      <p className="text-[10px] text-muted-foreground">
+        © {new Date().getFullYear()} {APP_NAME} — Đà Lạt, Việt Nam
+      </p>
+    </footer>
   );
 }
 function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
