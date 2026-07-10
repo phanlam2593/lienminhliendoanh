@@ -127,14 +127,16 @@ export default function Community() {
 
   useEffect(() => {
     if (!user) return;
-    loadMsgs();
-    loadMembers();
+    void loadMsgs(MSG_PAGE_SIZE, true);
+    void loadMembers(0, false);
     supabase.rpc("get_admin_user_ids").then(({ data }) => {
       setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
     });
     const ch = supabase
       .channel(`community:${user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "community_messages" }, () => loadMsgs())
+      .on("postgres_changes", { event: "*", schema: "public", table: "community_messages" }, () =>
+        loadMsgs(msgLimit, true),
+      )
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
