@@ -73,16 +73,29 @@ export default function Community() {
     });
   };
 
-  const loadMsgs = async () => {
+  const loadMsgs = async (limit = msgLimit, scrollToBottom = true) => {
+    // Tải LIMIT tin nhắn MỚI NHẤT (không phải cũ nhất) rồi đảo lại thành thứ tự thời gian tăng dần
+    // để hiển thị đúng — tránh giới hạn cứng 200 như trước, "Xem thêm" sẽ tăng dần limit này.
     const { data } = await supabase
       .from("community_messages")
       .select("*")
-      .order("created_at", { ascending: true })
-      .limit(200);
-    const list = (data ?? []) as Msg[];
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    const list = ((data ?? []) as Msg[]).reverse();
     setMsgs(list);
+    setMsgHasMore(list.length === limit);
     void enrichProfiles([...new Set(list.map((m) => m.user_id))]);
-    setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+    if (scrollToBottom) {
+      setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+    }
+  };
+
+  const loadOlderMsgs = async () => {
+    setLoadingOlderMsgs(true);
+    const next = msgLimit + MSG_PAGE_SIZE;
+    setMsgLimit(next);
+    await loadMsgs(next, false);
+    setLoadingOlderMsgs(false);
   };
 
   const loadMembers = async () => {
