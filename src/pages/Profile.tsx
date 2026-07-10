@@ -470,8 +470,8 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   };
 
   const save = async () => {
-    if (!/^\d{4}$/.test(pin)) {
-      toast.error("Mã PIN phải gồm đúng 4 chữ số");
+    if (!/^[A-Za-z0-9]{4,8}$/.test(pin)) {
+      toast.error("Mã PIN phải gồm 4-8 ký tự chữ/số");
       return;
     }
     setSaving(true);
