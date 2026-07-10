@@ -123,13 +123,13 @@ export function Layout() {
                     to="/auth/login"
                     className="text-xs font-semibold px-3 py-1.5 rounded-full bg-accent text-accent-foreground"
                   >
-                    Đăng nhập
+                    {t("common.login")}
                   </Link>
                   <Link
                     to="/auth/register"
                     className="text-xs font-semibold px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground"
                   >
-                    Đăng ký
+                    {t("common.register")}
                   </Link>
                 </div>
               )}
