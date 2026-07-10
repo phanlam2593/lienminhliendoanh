@@ -470,29 +470,36 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   };
 
   const save = async () => {
+    if (!/^\d{4}$/.test(pin)) {
+      toast.error("Mã PIN phải gồm đúng 4 chữ số");
+      return;
+    }
     setSaving(true);
-    const { error } = await supabase
-      .from("businesses")
-      .update({
-        name,
-        type,
-        hours_open: open_,
-        hours_close: close_,
-        description: desc,
-        facebook_url: fb || null,
-        website_url: web || null,
-        tiktok_url: tiktok || null,
-        instagram_url: instagram || null,
-        youtube_url: youtube || null,
-        phone: phone || null,
-        address: address || null,
-        latitude: lat,
-        longitude: lng,
-      })
-      .eq("id", biz.id);
+    const [{ error }, { error: pinError }] = await Promise.all([
+      supabase
+        .from("businesses")
+        .update({
+          name,
+          type,
+          hours_open: open_,
+          hours_close: close_,
+          description: desc,
+          facebook_url: fb || null,
+          website_url: web || null,
+          tiktok_url: tiktok || null,
+          instagram_url: instagram || null,
+          youtube_url: youtube || null,
+          phone: phone || null,
+          address: address || null,
+          latitude: lat,
+          longitude: lng,
+        })
+        .eq("id", biz.id),
+      supabase.from("business_pins").upsert({ business_id: biz.id, pin, updated_at: new Date().toISOString() }),
+    ]);
     setSaving(false);
-    if (error) {
-      toast.error(error.message);
+    if (error || pinError) {
+      toast.error((error || pinError)?.message ?? "Có lỗi xảy ra");
       return;
     }
     toast.success("Đã lưu doanh nghiệp");
