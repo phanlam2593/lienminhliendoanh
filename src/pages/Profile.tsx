@@ -1250,6 +1250,33 @@ function ThemeToggle() {
   );
 }
 
+function LanguageToggle() {
+  const { lang, setLang } = useLanguage();
+  return (
+    <div className="flex items-center justify-between gap-3 p-2">
+      <span className="text-sm flex items-center gap-2">
+        <Globe className="w-4 h-4" /> {lang === "vi" ? "Ngôn ngữ khung app" : "App interface language"}
+      </span>
+      <div className="flex rounded-lg border overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setLang("vi")}
+          className={`px-3 py-1.5 text-xs font-semibold ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+        >
+          Tiếng Việt
+        </button>
+        <button
+          type="button"
+          onClick={() => setLang("en")}
+          className={`px-3 py-1.5 text-xs font-semibold ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+        >
+          English
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function BusinessCreator({
   ownerId,
   onCreated,
