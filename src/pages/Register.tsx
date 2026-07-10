@@ -482,6 +482,15 @@ export default function Register() {
             </p>
           </div>
           <label className="flex items-start gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={ageConfirmed}
+              onChange={(e) => setAgeConfirmed(e.target.checked)}
+              className="mt-0.5"
+            />
+            <span>Tôi xác nhận mình từ đủ 16 tuổi trở lên</span>
+          </label>
+          <label className="flex items-start gap-2 text-sm">
             <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5" />
             <span>
               Tôi đồng ý với{" "}
@@ -496,7 +505,7 @@ export default function Register() {
           </label>
           <button
             onClick={submitFinal}
-            disabled={!agree || submitting}
+            disabled={!agree || !ageConfirmed || submitting}
             className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
           >
             {submitting ? "Đang xử lý…" : "Xác nhận đăng ký"}
