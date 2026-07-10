@@ -49,14 +49,6 @@ interface ReplyMeta extends ReviewReply {
 
 export default function BusinessDetail() {
   const { id = "" } = useParams();
-  const [sp, setSp] = useSearchParams();
-  const tab = (sp.get("tab") as "info" | "badges") || "info";
-  const setTab = (t: "info" | "badges") => {
-    const next = new URLSearchParams(sp);
-    if (t === "info") next.delete("tab");
-    else next.set("tab", t);
-    setSp(next, { replace: true });
-  };
   const { user, isApproved, isAdmin } = useAuth();
   const [b, setB] = useState<Business | null>(null);
   const [offers, setOffers] = useState<Offer[]>([]);
