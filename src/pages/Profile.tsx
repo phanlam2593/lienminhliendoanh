@@ -305,6 +305,7 @@ export default function Profile() {
             {saving ? "Đang lưu…" : "Lưu thay đổi"}
           </button>
         </section>
+        {(MEMBERSHIP_ENABLED || role === "admin") && <MembershipCard points={(profile as any)?.points ?? 0} />}
       </div>
     );
   }
