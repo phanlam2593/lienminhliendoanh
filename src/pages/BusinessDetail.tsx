@@ -162,7 +162,7 @@ export default function BusinessDetail() {
   };
 
   const submitClaim = async () => {
-    if (!claimOffer || pinInput.length !== 4) return;
+    if (!claimOffer || pinInput.length < 4) return;
     setClaiming(true);
     const { data, error } = await supabase.rpc("claim_offer", {
       _offer_id: claimOffer.id,
