@@ -302,130 +302,129 @@ export default function BusinessDetail() {
         <BusinessGallery businessId={b.id} coverPath={b.cover_url} />
 
         <>
-            {b.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{b.description}</p>}
+          {b.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{b.description}</p>}
 
-            <div className="space-y-2 text-sm">
-              {b.phone && <Row icon={Phone}>{b.phone}</Row>}
-              {b.address && (
-                <Row icon={MapPin}>
-                  <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
-                    className="text-primary"
-                  >
-                    {b.address}
-                  </a>
-                </Row>
+          <div className="space-y-2 text-sm">
+            {b.phone && <Row icon={Phone}>{b.phone}</Row>}
+            {b.address && (
+              <Row icon={MapPin}>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
+                  className="text-primary"
+                >
+                  {b.address}
+                </a>
+              </Row>
+            )}
+          </div>
+
+          {(b.website_url || b.facebook_url || b.tiktok_url || b.instagram_url || b.youtube_url) && (
+            <div className="flex items-center gap-2 flex-wrap">
+              {b.website_url && (
+                <a
+                  href={b.website_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Website"
+                  className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 grid place-items-center hover:opacity-80"
+                >
+                  <Globe className="w-4 h-4" />
+                </a>
+              )}
+              {b.facebook_url && (
+                <a
+                  href={b.facebook_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  className="w-9 h-9 rounded-full bg-blue-600 text-white grid place-items-center hover:opacity-80"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+              {b.tiktok_url && (
+                <a
+                  href={b.tiktok_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TikTok"
+                  className="w-9 h-9 rounded-full bg-black text-white grid place-items-center hover:opacity-80"
+                >
+                  <Music2 className="w-4 h-4" />
+                </a>
+              )}
+              {b.instagram_url && (
+                <a
+                  href={b.instagram_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  className="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white grid place-items-center hover:opacity-80"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {b.youtube_url && (
+                <a
+                  href={b.youtube_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="YouTube"
+                  className="w-9 h-9 rounded-full bg-red-600 text-white grid place-items-center hover:opacity-80"
+                >
+                  <Youtube className="w-4 h-4" />
+                </a>
               )}
             </div>
+          )}
 
-            {(b.website_url || b.facebook_url || b.tiktok_url || b.instagram_url || b.youtube_url) && (
-              <div className="flex items-center gap-2 flex-wrap">
-                {b.website_url && (
-                  <a
-                    href={b.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Website"
-                    className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 grid place-items-center hover:opacity-80"
+          <FollowBusinessButton businessId={b.id} ownerId={b.owner_id} />
+
+          {offers.length > 0 && (
+            <section>
+              <h2 className="font-bold mb-2 flex items-center gap-1">
+                <Tag className="w-4 h-4 text-primary" /> Ưu đãi
+              </h2>
+              <div className="space-y-2">
+                {offers.map((o) => (
+                  <div
+                    key={o.id}
+                    className="p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-950/30 dark:to-sky-950/30 border border-emerald-100 dark:border-emerald-900"
                   >
-                    <Globe className="w-4 h-4" />
-                  </a>
-                )}
-                {b.facebook_url && (
-                  <a
-                    href={b.facebook_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Facebook"
-                    className="w-9 h-9 rounded-full bg-blue-600 text-white grid place-items-center hover:opacity-80"
-                  >
-                    <Facebook className="w-4 h-4" />
-                  </a>
-                )}
-                {b.tiktok_url && (
-                  <a
-                    href={b.tiktok_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="TikTok"
-                    className="w-9 h-9 rounded-full bg-black text-white grid place-items-center hover:opacity-80"
-                  >
-                    <Music2 className="w-4 h-4" />
-                  </a>
-                )}
-                {b.instagram_url && (
-                  <a
-                    href={b.instagram_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                    className="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white grid place-items-center hover:opacity-80"
-                  >
-                    <Instagram className="w-4 h-4" />
-                  </a>
-                )}
-                {b.youtube_url && (
-                  <a
-                    href={b.youtube_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="YouTube"
-                    className="w-9 h-9 rounded-full bg-red-600 text-white grid place-items-center hover:opacity-80"
-                  >
-                    <Youtube className="w-4 h-4" />
-                  </a>
-                )}
+                    <div className="font-semibold text-sm">{o.title}</div>
+                    {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
+                    {isOwner ? (
+                      <button
+                        onClick={() => setClaimsListOffer(o)}
+                        className="text-[11px] text-primary font-semibold mt-1 flex items-center gap-1 hover:underline"
+                      >
+                        <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận · Xem danh sách
+                      </button>
+                    ) : (
+                      <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+                        <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận
+                      </div>
+                    )}
+                    {isApproved && (
+                      <button
+                        onClick={() => openClaim(o)}
+                        className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
+                      >
+                        Nhận ưu đãi
+                      </button>
+                    )}
+                  </div>
+                ))}
               </div>
-            )}
+            </section>
+          )}
 
-            <FollowBusinessButton businessId={b.id} ownerId={b.owner_id} />
+          <ExchangeSection business={b} />
 
-            {offers.length > 0 && (
-              <section>
-                <h2 className="font-bold mb-2 flex items-center gap-1">
-                  <Tag className="w-4 h-4 text-primary" /> Ưu đãi
-                </h2>
-                <div className="space-y-2">
-                  {offers.map((o) => (
-                    <div
-                      key={o.id}
-                      className="p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-950/30 dark:to-sky-950/30 border border-emerald-100 dark:border-emerald-900"
-                    >
-                      <div className="font-semibold text-sm">{o.title}</div>
-                      {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
-                      {isOwner ? (
-                        <button
-                          onClick={() => setClaimsListOffer(o)}
-                          className="text-[11px] text-primary font-semibold mt-1 flex items-center gap-1 hover:underline"
-                        >
-                          <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận · Xem danh sách
-                        </button>
-                      ) : (
-                        <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
-                          <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận
-                        </div>
-                      )}
-                      {isApproved && (
-                        <button
-                          onClick={() => openClaim(o)}
-                          className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
-                        >
-                          Nhận ưu đãi
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            <ExchangeSection business={b} />
-
-            {ReviewsBlock}
-          </>
-        )}
+          {ReviewsBlock}
+        </>
 
         <div className="flex gap-2">
           {user && b.owner_id && b.owner_id !== user.id && (
