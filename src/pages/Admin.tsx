@@ -870,7 +870,7 @@ function MemberDetail({
                     <input
                       value={bName}
                       onChange={(e) => setBN(e.target.value)}
-                      placeholder="Tên DN"
+                      placeholder="Tên doanh nghiệp"
                       className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
                     />
                     <div className="flex flex-wrap gap-1.5">
@@ -915,7 +915,7 @@ function MemberDetail({
                       <input
                         value={bPhone}
                         onChange={(e) => setBPh(e.target.value)}
-                        placeholder="SĐT DN"
+                        placeholder="SĐT doanh nghiệp"
                         className="px-3 py-2 rounded-lg border bg-background text-sm"
                       />
                     </div>
@@ -938,7 +938,7 @@ function MemberDetail({
                       disabled={saving}
                       className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"
                     >
-                      <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu DN"}
+                      <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
                     </button>
                     {biz.status === "pending" && (
                       <div className="flex gap-2">
@@ -946,7 +946,7 @@ function MemberDetail({
                           onClick={() => setBizStatus("approved")}
                           className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold text-xs"
                         >
-                          Duyệt DN
+                          Duyệt doanh nghiệp
                         </button>
                         <button
                           onClick={() => setBizStatus("rejected")}
