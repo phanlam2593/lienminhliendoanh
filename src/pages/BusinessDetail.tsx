@@ -65,6 +65,7 @@ export default function BusinessDetail() {
   const [claimOffer, setClaimOffer] = useState<Offer | null>(null);
   const [claim, setClaim] = useState<OfferClaim | null>(null);
   const [claiming, setClaiming] = useState(false);
+  const [pinInput, setPinInput] = useState("");
   const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
   const [claimsListOffer, setClaimsListOffer] = useState<Offer | null>(null);
   const [reviewPage, setReviewPage] = useState(0);
