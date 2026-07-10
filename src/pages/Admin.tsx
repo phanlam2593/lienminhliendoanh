@@ -857,7 +857,7 @@ function MemberDetail({
                       <button
                         onClick={delBiz}
                         className="w-7 h-7 rounded-full bg-muted text-destructive grid place-items-center"
-                        aria-label="Xóa DN"
+                        aria-label="Xóa doanh nghiệp"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
