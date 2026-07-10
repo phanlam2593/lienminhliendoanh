@@ -34,6 +34,7 @@ import {
   Briefcase,
   ChevronRight,
   HelpCircle,
+  Globe,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
