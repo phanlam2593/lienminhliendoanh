@@ -56,6 +56,10 @@ export function MessagesInbox() {
       .order("created_at", { ascending: false });
     const map = new Map<string, ConvoSummary>();
     (msgs as Message[] | null)?.forEach((m) => {
+      // Tin broadcast do CHÍNH TÔI gửi (admin) không tính vào hội thoại của TÔI —
+      // tránh 1 lần gửi N người tạo N hội thoại "ảo" trong hộp thư người gửi.
+      // Người NHẬN vẫn thấy bình thường (điều kiện dưới chỉ chặn khi sender_id === tôi).
+      if (m.type === "broadcast" && m.sender_id === user.id) return;
       const partnerId = m.sender_id === user.id ? m.receiver_id : m.sender_id;
       if (!map.has(partnerId)) {
         map.set(partnerId, { partnerId, lastMessage: messagePreview(m), lastAt: m.created_at, unread: 0 });
