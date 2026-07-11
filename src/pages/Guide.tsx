@@ -242,6 +242,7 @@ function BizTypeItem({ type }: { type: BusinessType }) {
 }
 
 export default function Guide() {
+  const { t } = useLanguage();
   const [openId, setOpenId] = useState<string | null>(null);
   const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
 
