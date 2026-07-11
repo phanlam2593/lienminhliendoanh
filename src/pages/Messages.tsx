@@ -174,15 +174,17 @@ export function MessagesInbox() {
       <AlertDialog open={!!confirmPartner} onOpenChange={(v) => !v && setConfirmPartner(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Xóa cuộc trò chuyện?</AlertDialogTitle>
+            <AlertDialogTitle>{t("messages.deleteConvoTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Toàn bộ tin nhắn với {confirmPartner?.partner?.full_name || "người dùng này"} sẽ bị xóa vĩnh viễn.
+              {t("messages.deleteConvoDesc", {
+                name: confirmPartner?.partner?.full_name || t("messages.thisUser"),
+              })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={deleteConvo} className="bg-destructive hover:bg-destructive/90">
-              Xóa
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
