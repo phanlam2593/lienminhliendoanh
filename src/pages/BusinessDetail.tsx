@@ -397,7 +397,7 @@ export default function BusinessDetail() {
           {offers.length > 0 && (
             <section>
               <h2 className="font-bold mb-2 flex items-center gap-1">
-                <Tag className="w-4 h-4 text-primary" /> Ưu đãi
+                <Tag className="w-4 h-4 text-primary" /> {t("biz.offers")}
               </h2>
               <div className="space-y-2">
                 {offers.map((o) => (
@@ -412,11 +412,12 @@ export default function BusinessDetail() {
                         onClick={() => setClaimsListOffer(o)}
                         className="text-[11px] text-primary font-semibold mt-1 flex items-center gap-1 hover:underline"
                       >
-                        <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận · Xem danh sách
+                        <Users className="w-3 h-3" /> {t("biz.claimsCount", { n: o.claim_count ?? 0 })} ·{" "}
+                        {t("biz.viewList")}
                       </button>
                     ) : (
                       <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
-                        <Users className="w-3 h-3" /> Đã có {o.claim_count ?? 0} lượt nhận
+                        <Users className="w-3 h-3" /> {t("biz.claimsCount", { n: o.claim_count ?? 0 })}
                       </div>
                     )}
                     {isApproved && (
@@ -424,14 +425,12 @@ export default function BusinessDetail() {
                         onClick={() => openClaim(o)}
                         className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
                       >
-                        Nhận ưu đãi
+                        {t("biz.claimOffer")}
                       </button>
                     )}
                   </div>
                 ))}
               </div>
-            </section>
-          )}
 
           <ExchangeSection business={b} />
 
