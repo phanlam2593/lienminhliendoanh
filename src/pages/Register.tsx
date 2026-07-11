@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { maskPassword } from "@/lib/passwordHint";
+import { useLanguage } from "@/lib/i18n";
 
 type FieldStatus = "idle" | "checking" | "ok" | "taken" | "invalid";
 
