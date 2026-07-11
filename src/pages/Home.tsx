@@ -318,16 +318,16 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Tìm kiếm…"
+              placeholder={t("common.searchPlaceholder")}
               className="w-full pl-9 pr-3 py-2 rounded-lg border bg-background text-sm"
             />
           </div>
         </div>
         <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
           {loading ? (
-            <p className="text-center py-8 text-sm text-muted-foreground">Đang tải…</p>
+            <p className="text-center py-8 text-sm text-muted-foreground">{t("common.loading")}</p>
           ) : filtered.length === 0 ? (
-            <p className="text-center py-8 text-sm text-muted-foreground">Không có kết quả</p>
+            <p className="text-center py-8 text-sm text-muted-foreground">{t("common.noResults")}</p>
           ) : kind === "members" ? (
             filtered.map((m: any) => (
               <Link
