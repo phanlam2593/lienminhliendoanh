@@ -99,11 +99,11 @@ export default function Home() {
         </div>
         <h1 className="text-2xl font-extrabold leading-tight mt-3">Nơi thành viên và doanh nghiệp cùng phát triển</h1>
         <p className="text-sm opacity-95 mt-1.5">Một cộng đồng – Nhiều giá trị</p>
-        <Link
+        <<Link
           to="/kham-pha"
           className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-white text-cyan-700 font-semibold text-sm shadow-md"
         >
-          Khám phá doanh nghiệp <ArrowRight className="w-4 h-4" />
+          {t("home.exploreBusinesses")} <ArrowRight className="w-4 h-4" />
         </Link>
       </section>
 
