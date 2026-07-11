@@ -52,6 +52,18 @@ import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
+// Tiêu đề thông báo được sinh từ trigger DB (tiếng Việt cứng). Với các nhóm có tiêu đề
+// CỐ ĐỊNH (không chèn số/tên riêng), ta thay bằng bản dịch ở đây thay vì sửa DB.
+// pending_approval/achievements (badge_earned) có SỐ/TÊN chèn vào nên KHÔNG override — giữ nguyên n.title gốc.
+const NOTIF_TITLE_KEY_BY_CATEGORY: Record<string, string> = {
+  messages: "notifTitle.messages",
+  follows: "notifTitle.follows",
+  deals_received: "notifTitle.dealsReceived",
+  deals_new: "notifTitle.dealsNew",
+  account_updates: "notifTitle.accountUpdates",
+  reports: "notifTitle.reports",
+};
+
 async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string | null> {
   const id = n.target_id ?? undefined;
 
