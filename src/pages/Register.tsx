@@ -476,9 +476,9 @@ export default function Register() {
         )}
 
         <p className="text-center text-sm">
-          Đã có tài khoản?{" "}
+          {t("register.hasAccount")}{" "}
           <Link to="/auth/login" className="text-primary font-semibold">
-            Đăng nhập
+            {t("common.login")}
           </Link>
         </p>
       </div>
