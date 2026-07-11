@@ -1227,7 +1227,7 @@ function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: 
           </button>
         </label>
       ))}
-      <p className="text-[11px] text-muted-foreground">Thay đổi sẽ áp dụng cho các thông báo mới.</p>
+      <p className="text-[11px] text-muted-foreground">{t("notifPrefs.footer")}</p>
     </div>
   );
 }
