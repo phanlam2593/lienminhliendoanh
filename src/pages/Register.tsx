@@ -488,18 +488,13 @@ export default function Register() {
       <Dialog open={termsOpen} onOpenChange={setTO}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Điều khoản & điều kiện</DialogTitle>
+            <DialogTitle>{t("terms.title")}</DialogTitle>
           </DialogHeader>
           <div className="text-sm space-y-2 max-h-60 overflow-y-auto">
-            {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-            <p>
-              Bằng việc đăng ký, bạn cam kết cung cấp thông tin chính xác và tuân thủ quy định của Liên Minh Liên Doanh.
-            </p>
-            <p>Tài khoản của bạn sẽ được admin xem xét và phê duyệt trong thời gian sớm nhất.</p>
-            <p>
-              Trong thời gian chờ duyệt, bạn có thể duyệt nội dung nhưng chưa thể đăng đánh giá, gửi đề xuất hay nhắn
-              tin.
-            </p>
+            {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — t("app.name") tự đổi theo ngôn ngữ */}
+            <p>{t("terms.p1", { app: t("app.name") })}</p>
+            <p>{t("terms.p2")}</p>
+            <p>{t("terms.p3")}</p>
           </div>
           <label className="flex items-start gap-2 text-sm">
             <input
@@ -508,16 +503,16 @@ export default function Register() {
               onChange={(e) => setAgeConfirmed(e.target.checked)}
               className="mt-0.5"
             />
-            <span>Tôi xác nhận mình từ đủ 16 tuổi trở lên</span>
+            <span>{t("terms.ageConfirm")}</span>
           </label>
           <label className="flex items-start gap-2 text-sm">
             <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} className="mt-0.5" />
             <span>
-              Tôi đồng ý với{" "}
+              {t("terms.agreePrefix")}{" "}
               <Link to="/dieu-khoan" target="_blank" className="text-primary font-semibold underline">
                 Điều khoản sử dụng
               </Link>{" "}
-              và{" "}
+              {t("terms.and")}{" "}
               <Link to="/chinh-sach-bao-mat" target="_blank" className="text-primary font-semibold underline">
                 Chính sách bảo mật
               </Link>
@@ -528,7 +523,7 @@ export default function Register() {
             disabled={!agree || !ageConfirmed || submitting}
             className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
           >
-            {submitting ? "Đang xử lý…" : "Xác nhận đăng ký"}
+            {submitting ? t("terms.processing") : t("terms.confirmRegister")}
           </button>
         </DialogContent>
       </Dialog>
