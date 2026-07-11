@@ -62,12 +62,12 @@ const DICT: Record<Lang, Record<string, string>> = {
     "sort.mostClaimed": "Nhiều ưu đãi được nhận",
     "sort.newest": "Mới nhất",
     "explore.underKm": "Dưới {r}km",
-    "explore.locationDenied": "Bạn đã từ chối quyền định vị. Vào cài đặt trình duyệt để bật lại rồi bấm \"Gần đây\" lần nữa.",
+    "explore.locationDenied":
+      'Bạn đã từ chối quyền định vị. Vào cài đặt trình duyệt để bật lại rồi bấm "Gần đây" lần nữa.',
     "explore.locationUnsupported": "Trình duyệt của bạn không hỗ trợ định vị.",
     "explore.noResultsRadius": "Chưa có doanh nghiệp nào trong bán kính {r}km. Thử tăng bán kính lên xem sao.",
     "explore.noResults": "Không tìm thấy kết quả phù hợp",
   },
-  en: {
   en: {
     "nav.home": "Home",
     "nav.explore": "Explore",
@@ -125,7 +125,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "sort.mostClaimed": "Most claimed",
     "sort.newest": "Newest",
     "explore.underKm": "Under {r}km",
-    "explore.locationDenied": "You denied location access. Enable it in your browser settings, then tap \"Nearby\" again.",
+    "explore.locationDenied":
+      'You denied location access. Enable it in your browser settings, then tap "Nearby" again.',
     "explore.locationUnsupported": "Your browser doesn't support location.",
     "explore.noResultsRadius": "No businesses within {r}km yet. Try increasing the radius.",
     "explore.noResults": "No matching results",
