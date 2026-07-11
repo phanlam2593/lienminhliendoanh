@@ -226,8 +226,8 @@ export default function Community() {
         className="flex items-center justify-between px-3 py-2 border-b bg-card shrink-0"
       >
         <span className="font-bold text-sm flex items-center gap-1.5">
-          <Users className="w-4 h-4 text-primary" /> {memberTotal} thành viên
-          <span className="text-emerald-600 font-semibold">· {onlineCount} online (trong số đã tải)</span>
+          <Users className="w-4 h-4 text-primary" /> {t("community.memberCount", { n: memberTotal })}
+          <span className="text-emerald-600 font-semibold">{t("community.onlineCount", { n: onlineCount })}</span>
         </span>
         {showMembers ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
       </button>
