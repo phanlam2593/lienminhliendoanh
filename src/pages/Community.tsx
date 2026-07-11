@@ -200,13 +200,15 @@ export default function Community() {
       if (error) toast.error("Gửi sticker thất bại: " + error.message);
       return;
     }
-    const t = text.trim();
-    if (!t) return;
+    const trimmed = text.trim();
+    if (!trimmed) return;
     setText("");
-    const { error } = await supabase.from("community_messages").insert({ user_id: user.id, content: t, type: "text" });
+    const { error } = await supabase
+      .from("community_messages")
+      .insert({ user_id: user.id, content: trimmed, type: "text" });
     if (error) {
       toast.error(error.message);
-      setText(t);
+      setText(trimmed);
     }
   };
 
