@@ -1517,49 +1517,49 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Ưu đãi cho thành viên" hint="VD: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm">
+      <Field label={t("bizCreator.offerLabel")} hint={t("bizCreator.offerHint2")}>
         <input
           value={offerText}
           onChange={(e) => setOfferText(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Facebook URL">
+      <Field label={t("bizForm.facebook")}>
         <input
           value={fbUrl}
           onChange={(e) => setFb(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Website">
+      <Field label={t("bizForm.website")}>
         <input
           value={webUrl}
           onChange={(e) => setWeb(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="TikTok URL">
+      <Field label={t("bizForm.tiktok")}>
         <input
           value={tiktokUrl}
           onChange={(e) => setTiktok(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Instagram URL">
+      <Field label={t("bizForm.instagram")}>
         <input
           value={instagramUrl}
           onChange={(e) => setInstagram(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="YouTube URL">
+      <Field label={t("bizForm.youtube")}>
         <input
           value={youtubeUrl}
           onChange={(e) => setYoutube(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Ảnh bìa (tuỳ chọn)">
+      <Field label={t("bizCreator.cover")}>
         <input
           type="file"
           accept="image/*"
