@@ -106,7 +106,7 @@ const DICT: Record<Lang, Record<string, string>> = {
 interface LangCtx {
   lang: Lang;
   setLang: (l: Lang) => void;
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const LanguageContext = createContext<LangCtx | null>(null);
