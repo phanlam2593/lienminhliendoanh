@@ -289,23 +289,23 @@ export default function Profile() {
         {Header}
         {(MEMBERSHIP_ENABLED || role === "admin") && <MembershipCard points={(profile as any)?.points ?? 0} />}
         <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
-          <h2 className="font-bold text-sm">Thông tin cá nhân</h2>
+          <h2 className="font-bold text-sm">{t("profile.personalInfo")}</h2>
           <input
             value={fullName}
             onChange={(e) => setFN(e.target.value)}
-            placeholder="Họ tên"
+            placeholder={t("profile.fullName")}
             className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
           />
           <input
             value={email}
             onChange={(e) => setE(e.target.value)}
-            placeholder="Email"
+            placeholder={t("profile.email")}
             className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
           />
           <input
             value={phone}
             onChange={(e) => setPh(e.target.value)}
-            placeholder="SĐT"
+            placeholder={t("profile.phone")}
             className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
           />
           <button
@@ -313,7 +313,7 @@ export default function Profile() {
             disabled={saving}
             className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm"
           >
-            {saving ? "Đang lưu…" : "Lưu thay đổi"}
+            {saving ? t("common.loading") : t("profile.saveChanges")}
           </button>
         </section>
       </div>
