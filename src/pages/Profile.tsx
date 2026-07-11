@@ -1446,22 +1446,22 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Loại hình">
+      <Field label={t("bizForm.type")}>
         <div className="flex flex-wrap gap-1.5">
-          {BUSINESS_TYPES.map((t) => (
+          {BUSINESS_TYPES.map((bt) => (
             <button
-              key={t}
+              key={bt}
               type="button"
-              onClick={() => setType(t)}
-              className={`px-2.5 py-1 rounded-full text-xs border ${type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
+              onClick={() => setType(bt)}
+              className={`px-2.5 py-1 rounded-full text-xs border ${type === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
             >
-              {BUSINESS_TYPE_LABEL[t]}
+              {BUSINESS_TYPE_LABEL[bt]}
             </button>
           ))}
         </div>
       </Field>
       <div className="grid grid-cols-2 gap-2">
-        <Field label="Giờ mở">
+        <Field label={t("bizForm.openTime")}>
           <input
             type="time"
             value={hoursOpen}
@@ -1469,7 +1469,7 @@ function BusinessCreator({
             className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
           />
         </Field>
-        <Field label="Giờ đóng">
+        <Field label={t("bizForm.closeTime")}>
           <input
             type="time"
             value={hoursClose}
@@ -1478,14 +1478,14 @@ function BusinessCreator({
           />
         </Field>
       </div>
-      <Field label="SĐT">
+      <Field label={t("profile.phone")}>
         <input
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label="Địa chỉ">
+      <Field label={t("common.address")}>
         <input
           value={address}
           onChange={(e) => setAddress(e.target.value)}
