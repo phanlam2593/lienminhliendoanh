@@ -226,14 +226,26 @@ function WelcomeScreen() {
         <h1 className="text-xl font-extrabold text-primary">{t("app.name")}</h1>
         <p className="text-xs text-muted-foreground">{t("app.tagline")}</p>
       </div>
-      <img
-        src={welcomeGuide.url}
-        alt="Hướng dẫn"
-        loading="lazy"
-        decoding="async"
-        style={{ width: "100%", maxWidth: "400px", height: "auto" }}
-        className="mx-auto rounded-xl"
-      />
+      <div className="w-full max-w-sm space-y-2">
+        <div className="flex items-center gap-3 bg-card border border-primary/20 rounded-2xl p-3.5 text-left shadow-soft">
+          <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center shrink-0">
+            <Users className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <p className="text-sm font-bold">{t("welcomeCards.memberTitle")}</p>
+            <p className="text-xs text-muted-foreground">{t("welcomeCards.memberDesc")}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 bg-card border border-primary/20 rounded-2xl p-3.5 text-left shadow-soft">
+          <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center shrink-0">
+            <Building2 className="w-5 h-5 text-primary" />
+          </div>
+          <div>
+            <p className="text-sm font-bold">{t("welcomeCards.bizTitle")}</p>
+            <p className="text-xs text-muted-foreground">{t("welcomeCards.bizDesc")}</p>
+          </div>
+        </div>
+      </div>
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
         {[
           { v: stats.members, l: t("stats.members"), icon: Users },
