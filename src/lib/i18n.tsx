@@ -331,6 +331,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     "reports.replyPlaceholder": "Nhập phản hồi…",
     "reports.noSentReports": "Bạn chưa gửi báo cáo nào",
     "reports.noBusinessReports": "Chưa có báo cáo nào về doanh nghiệp của bạn",
+    "follow.notFound": "Không tìm thấy",
+    "follow.noOne": "Chưa có ai",
+    "follow.anonymous": "Ẩn danh",
+    "follow.unfollow": "Bỏ theo dõi",
+    "follow.followBack": "Theo dõi lại",
+    "follow.messageBizOwner": "Nhắn tin chủ DN",
+    "common.loadMoreRemaining": "Tải thêm (còn {n})",
   },
   en: {
     "nav.home": "Home",
