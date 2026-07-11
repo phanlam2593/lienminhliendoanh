@@ -95,6 +95,11 @@ const DICT: Record<Lang, Record<string, string>> = {
     "home.noFeatured": "No featured businesses yet",
     "common.searchPlaceholder": "Search…",
     "common.noResults": "No results",
+    "home.badge": "✦ Community Ecosystem",
+    "home.heroTitle": "Where members and businesses grow together",
+    "app.tagline": "One community – Many values",
+    "home.contactAdmin": "Contact the admin team",
+    "home.joinNow": "Join now",
   },
 };
 
