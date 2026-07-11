@@ -143,13 +143,13 @@ export default function Businesses() {
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-xl font-extrabold">Khám phá</h1>
+      <h1 className="text-xl font-extrabold">{t("nav.explore")}</h1>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm doanh nghiệp trong cộng đồng..."
+          placeholder={t("explore.searchPlaceholder")}
           className="w-full pl-9 pr-4 py-3 rounded-xl border bg-card"
         />
       </div>
