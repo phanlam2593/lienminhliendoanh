@@ -248,7 +248,7 @@ export default function Community() {
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold truncate flex items-center gap-1.5">
                   <span className="truncate">{m.full_name}</span>
-                  {m.id === user.id && <span className="text-[10px] text-muted-foreground">(bạn)</span>}
+                  {m.id === user.id && <span className="text-[10px] text-muted-foreground">{t("community.you")}</span>}
                   <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
                 </div>
                 {m.status_message && (
