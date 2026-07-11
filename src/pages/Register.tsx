@@ -374,7 +374,7 @@ export default function Register() {
                       bizType === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
                     )}
                   >
-                    {BUSINESS_TYPE_LABEL[bt]}
+                    {t(`type.${bt}`)}
                   </button>
                 ))}
               </div>
