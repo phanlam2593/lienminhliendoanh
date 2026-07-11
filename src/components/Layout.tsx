@@ -239,13 +239,13 @@ function WelcomeScreen() {
           to="/auth/register"
           className="block w-full py-2.5 rounded-xl font-semibold text-primary-foreground bg-gradient-brand shadow-brand text-sm"
         >
-          Tham gia ngay
+          {t("home.joinNow")}
         </Link>
         <Link
           to="/auth/login"
           className="block w-full py-2.5 rounded-xl font-semibold border-2 border-primary text-primary text-sm"
         >
-          Đăng nhập
+          {t("common.login")}
         </Link>
       </div>
       <div className="pt-2 border-t w-full max-w-sm">
