@@ -261,6 +261,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "theme.darkMode": "Dark mode",
     "theme.lightMode": "Light mode",
     "app.name": "The Local Alliance",
+    "profile.followers": "Followers",
   },
 };
 
