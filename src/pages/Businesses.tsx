@@ -194,13 +194,13 @@ export default function Businesses() {
             sort === "nearest" ? "bg-accent text-accent-foreground" : "text-muted-foreground",
           )}
         >
-          {locStatus === "requesting" ? "Đang xin quyền…" : "Gần đây"}
+          {locStatus === "requesting" ? t("sort.requestingLocation") : t("sort.nearby")}
         </button>
         {(
           [
-            ["rating", "Đánh giá cao"],
-            ["offers", "Nhiều ưu đãi được nhận"],
-            ["newest", "Mới nhất"],
+            ["rating", t("sort.rating")],
+            ["offers", t("sort.mostClaimed")],
+            ["newest", t("sort.newest")],
           ] as [SortKey, string][]
         ).map(([k, l]) => (
           <button
