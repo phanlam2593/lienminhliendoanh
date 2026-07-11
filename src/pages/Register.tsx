@@ -299,7 +299,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Mật khẩu *" hint="Tối thiểu 6 ký tự, bao gồm chữ cái và số">
+            <Field label={t("register.password")} hint={t("register.passwordHint")}>
               <input
                 type="password"
                 value={password}
