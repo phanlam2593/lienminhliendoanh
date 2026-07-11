@@ -1326,10 +1326,11 @@ function BusinessCreator({
   const [offerText, setOfferText] = useState("");
   const [pin, setPin] = useState("");
   const [saving, setSaving] = useState(false);
+  const { t } = useLanguage();
 
   const useCurrentLocation = () => {
     if (!navigator.geolocation) {
-      toast.error("Trình duyệt không hỗ trợ định vị");
+      toast.error(t("bizCreator.locationUnsupported"));
       return;
     }
     setLocating(true);
@@ -1338,11 +1339,11 @@ function BusinessCreator({
         setLat(pos.coords.latitude);
         setLng(pos.coords.longitude);
         setLocating(false);
-        toast.success("Đã lấy vị trí hiện tại");
+        toast.success(t("bizCreator.locationSuccess"));
       },
       () => {
         setLocating(false);
-        toast.error("Không lấy được vị trí. Kiểm tra quyền định vị trong trình duyệt.");
+        toast.error(t("bizCreator.locationFail"));
       },
       { enableHighAccuracy: true, timeout: 10000 },
     );
