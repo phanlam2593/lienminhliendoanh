@@ -278,6 +278,22 @@ const DICT: Record<Lang, Record<string, string>> = {
     "theme.lightMode": "Light mode",
     "app.name": "The Local Alliance",
     "profile.followers": "Followers",
+    "profile.personalInfo": "Personal Information",
+    "profile.fullName": "Full name",
+    "profile.email": "Email",
+    "profile.phone": "Phone",
+    "profile.saveChanges": "Save changes",
+    "profile.noBusiness": "You don't have a business yet. Create your first business profile below.",
+    "terms.title": "Terms & Conditions",
+    "terms.p1": "By registering, you agree to provide accurate information and follow {app}'s guidelines.",
+    "terms.p2": "Your account will be reviewed and approved by an admin as soon as possible.",
+    "terms.p3":
+      "While pending approval, you can browse content but cannot post reviews, submit suggestions, or send messages.",
+    "terms.ageConfirm": "I confirm that I am at least 16 years old",
+    "terms.agreePrefix": "I agree to the",
+    "terms.and": "and",
+    "terms.confirmRegister": "Confirm registration",
+    "terms.processing": "Processing…",
   },
 };
 
