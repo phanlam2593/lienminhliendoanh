@@ -617,6 +617,7 @@ interface OfferClaimRow {
 
 function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser: (uid: string) => void }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [rows, setRows] = useState<OfferClaimRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [myFollowing, setMyFollowing] = useState<Set<string>>(new Set());
