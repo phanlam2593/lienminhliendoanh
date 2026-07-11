@@ -366,6 +366,47 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notifTitle.dealsNew": "Có ưu đãi mới từ nơi bạn theo dõi",
     "notifTitle.accountUpdates": "Có cập nhật về tài khoản/doanh nghiệp của bạn",
     "notifTitle.reports": "Bạn có cập nhật báo cáo mới",
+    "legal.lastUpdated": "Cập nhật lần cuối: 07/2026",
+    "termsPage.title": "Điều khoản sử dụng",
+    "termsPage.s1Title": "1. Giới thiệu",
+    "termsPage.s1P1":
+      '"{app}" (sau đây gọi là "Ứng dụng") là nền tảng cộng đồng kết nối thành viên và doanh nghiệp tại Đà Lạt. Bằng việc đăng ký và sử dụng Ứng dụng, bạn đồng ý tuân thủ các điều khoản dưới đây.',
+    "termsPage.s2Title": "2. Tài khoản người dùng",
+    "termsPage.s2P1": "Bạn cần cung cấp thông tin chính xác (họ tên, email, số điện thoại) khi đăng ký.",
+    "termsPage.s2P2": "Bạn chịu trách nhiệm bảo mật mật khẩu và mọi hoạt động diễn ra dưới tài khoản của mình.",
+    "termsPage.s2P3":
+      "Tài khoản mới cần được Ban quản trị (BQT) xem xét trong một số trường hợp (đặc biệt là hồ sơ doanh nghiệp) trước khi được hiển thị công khai.",
+    "termsPage.s3Title": "3. Quy tắc ứng xử cộng đồng",
+    "termsPage.s3Intro": "Khi sử dụng tính năng trò chuyện, đánh giá, báo cáo, bạn cam kết:",
+    "termsPage.s3Li1": "Không đăng nội dung sai sự thật, xúc phạm, quấy rối người khác",
+    "termsPage.s3Li2": "Không mạo danh người khác hoặc doanh nghiệp khác",
+    "termsPage.s3Li3": "Không spam, quảng cáo trái phép ngoài mục đích của Ứng dụng",
+    "termsPage.s3Li4": "Tôn trọng quyền riêng tư của thành viên khác",
+    "termsPage.s4Title": "4. Doanh nghiệp & Ưu đãi",
+    "termsPage.s4P1":
+      "Chủ doanh nghiệp chịu trách nhiệm về tính chính xác của thông tin doanh nghiệp và các ưu đãi đã đăng, bao gồm việc thực hiện đúng cam kết ưu đãi khi thành viên xuất trình mã hợp lệ.",
+    "termsPage.s4P2":
+      'Nếu doanh nghiệp không thực hiện đúng ưu đãi đã đăng, thành viên có thể báo cáo qua mục "Báo cáo".',
+    "termsPage.s5Title": "5. Nội dung do người dùng tạo",
+    "termsPage.s5P1":
+      "Bạn giữ quyền sở hữu với nội dung mình đăng (đánh giá, ảnh, tin nhắn), nhưng cấp cho Ứng dụng quyền hiển thị nội dung đó trong phạm vi hoạt động của cộng đồng.",
+    "termsPage.s6Title": "6. Hành vi bị cấm",
+    "termsPage.s6Li1": "Tạo tài khoản giả, sử dụng thông tin của người khác không có sự cho phép",
+    "termsPage.s6Li2": "Can thiệp trái phép vào hệ thống, khai thác lỗ hổng bảo mật",
+    "termsPage.s6Li3": "Sử dụng Ứng dụng cho mục đích vi phạm pháp luật Việt Nam",
+    "termsPage.s6P1": "BQT có quyền tạm khoá hoặc xoá tài khoản vi phạm mà không cần báo trước.",
+    "termsPage.s7Title": "7. Gói thành viên (Membership)",
+    "termsPage.s7P1":
+      "Khi tính năng gói thành viên trả phí được kích hoạt, các điều khoản riêng về thanh toán, hoàn tiền và gia hạn sẽ được thông báo và cần sự đồng ý riêng của bạn trước khi đăng ký.",
+    "termsPage.s8Title": "8. Giới hạn trách nhiệm",
+    "termsPage.s8P1":
+      "Ứng dụng đóng vai trò kết nối thành viên và doanh nghiệp, không phải bên trực tiếp cung cấp hàng hoá/dịch vụ của doanh nghiệp. Ứng dụng không chịu trách nhiệm về chất lượng hàng hoá, dịch vụ do doanh nghiệp cung cấp.",
+    "termsPage.s9Title": "9. Thay đổi điều khoản",
+    "termsPage.s9P1":
+      "Điều khoản có thể được cập nhật theo thời gian. Khi có thay đổi quan trọng, chúng tôi sẽ thông báo trong Ứng dụng.",
+    "termsPage.s10Title": "10. Liên hệ",
+    "termsPage.s10Pre": "Mọi thắc mắc về điều khoản, vui lòng liên hệ qua Zalo",
+    "termsPage.s10Post": 'hoặc Facebook "{app}".',
   },
   en: {
     "nav.home": "Home",
