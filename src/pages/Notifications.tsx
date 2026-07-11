@@ -127,7 +127,7 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
 export default function Notifications() {
   const { items, unread, markAllRead, markRead, deleteAllRead, refresh, loading } = useNotifications();
   const { role } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const nav = useNavigate();
 
   const tap = async (n: Notification) => {
