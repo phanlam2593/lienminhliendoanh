@@ -163,7 +163,7 @@ export default function Businesses() {
               type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card",
             )}
           >
-            {t === "all" ? "Tất cả" : BUSINESS_TYPE_LABEL[t as BusinessType]}
+            {t === "all" ? "Tất cả" : t(`type.${t}` as any)}
           </button>
         ))}
       </div>
