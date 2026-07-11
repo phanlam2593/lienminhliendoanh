@@ -227,7 +227,7 @@ export default function Businesses() {
                 radius === r ? "bg-primary text-primary-foreground border-primary" : "bg-card",
               )}
             >
-              Dưới {r}km
+              {t("explore.underKm", { r })}
             </button>
           ))}
         </div>
@@ -235,13 +235,11 @@ export default function Businesses() {
 
       {sort === "nearest" && locStatus === "denied" && (
         <p className="text-xs text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-lg p-2">
-          Bạn đã từ chối quyền định vị. Vào cài đặt trình duyệt để bật lại rồi bấm "Gần đây" lần nữa.
+          {t("explore.locationDenied")}
         </p>
       )}
       {sort === "nearest" && locStatus === "unsupported" && (
-        <p className="text-xs text-muted-foreground bg-muted rounded-lg p-2">
-          Trình duyệt của bạn không hỗ trợ định vị.
-        </p>
+        <p className="text-xs text-muted-foreground bg-muted rounded-lg p-2">{t("explore.locationUnsupported")}</p>
       )}
 
       {loading ? (
