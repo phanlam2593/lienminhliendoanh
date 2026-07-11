@@ -25,6 +25,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 const BIZ_EXAMPLES: Record<BusinessType, string[]> = {
   food: ["Quán cà phê", "Nhà hàng", "Quán ăn vặt", "Tiệm bánh", "Quán chè", "Quán lẩu nướng", "Trà sữa", "Bar/Pub"],
