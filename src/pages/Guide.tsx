@@ -250,30 +250,31 @@ export default function Guide() {
     {
       id: "member",
       icon: Users,
-      title: "Thành viên",
-      summary: "Khám phá theo khu vực, trải nghiệm và nhận ưu đãi.",
+      title: t("guide.memberTitle"),
+      summary: t("guide.memberSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Search}>Khám phá địa điểm, dịch vụ theo từng khu vực</IconBullet>
-          <IconBullet icon={Gift}>Nhận ưu đãi, đưa mã khi trải nghiệm</IconBullet>
-          <IconBullet icon={Award}>Tích điểm, lên cấp, nhận huy hiệu</IconBullet>
+          <IconBullet icon={Search}>{t("guide.memberB1")}</IconBullet>
+          <IconBullet icon={Gift}>{t("guide.memberB2")}</IconBullet>
+          <IconBullet icon={Award}>{t("guide.memberB3")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "business",
       icon: Building2,
-      title: "Doanh nghiệp",
-      summary: "Tạo & quản lý nhiều doanh nghiệp, chia theo loại hình.",
+      title: t("guide.bizTitle"),
+      summary: t("guide.bizSummary"),
       body: (
         <div className="space-y-2">
           <p className="text-sm">
-            Mỗi thành viên tạo được <b>nhiều doanh nghiệp</b>, chia theo 8 loại hình. Bấm vào 1 loại hình để xem ví dụ
-            ngành nghề + gợi ý ưu đãi:
+            {t("guide.bizBody1")}
+            <b>{t("guide.bizBodyBold")}</b>
+            {t("guide.bizBody2")}
           </p>
           <div className="space-y-1.5">
-            {BUSINESS_TYPES.map((t) => (
-              <BizTypeItem key={t} type={t} />
+            {BUSINESS_TYPES.map((bt) => (
+              <BizTypeItem key={bt} type={bt} />
             ))}
           </div>
         </div>
@@ -282,98 +283,96 @@ export default function Guide() {
     {
       id: "offers",
       icon: Gift,
-      title: "Ưu đãi",
-      summary: "Biến điểm yếu thành lợi thế.",
+      title: t("guide.offersTitle"),
+      summary: t("guide.offersSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Sun}>Sáng vắng khách → ưu đãi giờ sáng</IconBullet>
-          <IconBullet icon={CalendarDays}>Tháng thấp điểm → ưu đãi cả tháng</IconBullet>
-          <IconBullet icon={Gift}>Mua 5 tặng 1, freeship... cho đi để nhận lại</IconBullet>
+          <IconBullet icon={Sun}>{t("guide.offersB1")}</IconBullet>
+          <IconBullet icon={CalendarDays}>{t("guide.offersB2")}</IconBullet>
+          <IconBullet icon={Gift}>{t("guide.offersB3")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "exchange",
       icon: ArrowLeftRight,
-      title: "Trao đổi chéo",
-      summary: "Kết nối cùng ngành, cho và nhận cùng lúc.",
+      title: t("guide.exchangeTitle"),
+      summary: t("guide.exchangeSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Users}>Kết bạn với người cùng ngành</IconBullet>
-          <IconBullet icon={Repeat}>Trao đổi follow, hỗ trợ qua lại</IconBullet>
+          <IconBullet icon={Users}>{t("guide.exchangeB1")}</IconBullet>
+          <IconBullet icon={Repeat}>{t("guide.exchangeB2")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "follow",
       icon: UserCheck,
-      title: "Theo dõi",
-      summary: "Lưu nơi quen, nhận ưu đãi mới ngay khi có.",
+      title: t("guide.followTitle"),
+      summary: t("guide.followSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Bell}>Nhận thông báo ngay khi có ưu đãi mới</IconBullet>
-          <IconBullet icon={Heart}>Doanh nghiệp follow lại khách cũ để chăm sóc</IconBullet>
+          <IconBullet icon={Bell}>{t("guide.followB1")}</IconBullet>
+          <IconBullet icon={Heart}>{t("guide.followB2")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "status",
       icon: Sparkles,
-      title: "Thanh trạng thái",
-      summary: "Đăng nhu cầu ngay trên hồ sơ.",
+      title: t("guide.statusTitle"),
+      summary: t("guide.statusSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Briefcase}>Tuyển người, tìm việc, tìm đối tác</IconBullet>
-          <IconBullet icon={MessageCircle}>Hoặc đơn giản là một lời chào</IconBullet>
+          <IconBullet icon={Briefcase}>{t("guide.statusB1")}</IconBullet>
+          <IconBullet icon={MessageCircle}>{t("guide.statusB2")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "community-chat",
       icon: MessageCircle,
-      title: "Trò chuyện cùng cộng đồng",
-      summary: "Chia sẻ, trò chuyện cùng cả cộng đồng.",
+      title: t("guide.chatTitle"),
+      summary: t("guide.chatSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Users}>Trò chuyện, chia sẻ kinh nghiệm</IconBullet>
-          <IconBullet icon={Send}>Đăng nhu cầu ngay trong chat chung</IconBullet>
+          <IconBullet icon={Users}>{t("guide.chatB1")}</IconBullet>
+          <IconBullet icon={Send}>{t("guide.chatB2")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "messages",
       icon: Send,
-      title: "Nhắn tin",
-      summary: "Tương tác trực tiếp 1-1.",
+      title: t("guide.msgTitle"),
+      summary: t("guide.msgSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={MessageCircle}>Nhắn trực tiếp thành viên, doanh nghiệp, bạn bè</IconBullet>
+          <IconBullet icon={MessageCircle}>{t("guide.msgB1")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "notifications",
       icon: Bell,
-      title: "Thông báo",
-      summary: "Bật/tắt riêng từng loại trong Cài đặt.",
+      title: t("guide.notifTitle"),
+      summary: t("guide.notifSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={Settings}>Bật/tắt riêng từng loại trong Cài đặt</IconBullet>
-          <IconBullet icon={Bell}>Tin nhắn, follow mới, ưu đãi, admin</IconBullet>
+          <IconBullet icon={Settings}>{t("guide.notifB1")}</IconBullet>
+          <IconBullet icon={Bell}>{t("guide.notifB2")}</IconBullet>
         </ul>
       ),
     },
     {
       id: "report",
       icon: Flag,
-      title: "Báo cáo",
-      summary: "Gặp vấn đề? Báo cáo trực tiếp cho BQT.",
+      title: t("guide.reportTitle"),
+      summary: t("guide.reportSummary"),
       body: (
         <ul className="space-y-2">
-          <IconBullet icon={AlertCircle}>Doanh nghiệp không giữ đúng ưu đãi đã đăng</IconBullet>
-          <IconBullet icon={Flag}>
-            Có lỗi gì đó — gửi thẳng cho BQT, bạn sẽ nhận được phản hồi ngay trong mục "Báo cáo của tôi"
-          </IconBullet>
+          <IconBullet icon={AlertCircle}>{t("guide.reportB1")}</IconBullet>
+          <IconBullet icon={Flag}>{t("guide.reportB2")}</IconBullet>
         </ul>
       ),
     },
