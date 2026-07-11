@@ -242,10 +242,8 @@ export default function Register() {
           <Link to="/" className="text-xs font-semibold text-primary">
             {t("app.name")}
           </Link>
-          <h1 className="text-xl font-bold">{step === 1 ? "Đăng ký tài khoản" : "Thông tin doanh nghiệp"}</h1>
-          <div className="text-xs text-muted-foreground">
-            Bước {step}/{isBiz ? 2 : 1}
-          </div>
+          <h1 className="text-xl font-bold">{step === 1 ? t("register.title") : t("register.bizInfoTitle")}</h1>
+          <div className="text-xs text-muted-foreground">{t("register.step", { n: step, total: isBiz ? 2 : 1 })}</div>
         </div>
 
         {step === 1 ? (
