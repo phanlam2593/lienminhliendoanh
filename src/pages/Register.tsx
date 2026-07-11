@@ -503,11 +503,11 @@ export default function Register() {
             <span>
               {t("terms.agreePrefix")}{" "}
               <Link to="/dieu-khoan" target="_blank" className="text-primary font-semibold underline">
-                Điều khoản sử dụng
+                {t("termsPage.title")}
               </Link>{" "}
               {t("terms.and")}{" "}
               <Link to="/chinh-sach-bao-mat" target="_blank" className="text-primary font-semibold underline">
-                Chính sách bảo mật
+                {t("privacyPage.title")}
               </Link>
             </span>
           </label>
