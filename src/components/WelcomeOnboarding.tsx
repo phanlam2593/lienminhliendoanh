@@ -621,18 +621,18 @@ export function WelcomeOnboarding({
 
       {/* Footer */}
       <div className="wo-footer">
-        <div className="wo-dots" role="tablist" aria-label="Trang">
+        <div className="wo-dots" role="tablist" aria-label={t("onboarding.page")}>
           {[0, 1, 2, 3, 4].map((i) => (
             <button
               key={i}
               className={`wo-dot ${page === i ? "wo-dot-active" : ""}`}
               onClick={() => go(i)}
-              aria-label={`Đến trang ${i + 1}`}
+              aria-label={t("onboarding.goToPage", { n: i + 1 })}
             />
           ))}
         </div>
         <button onClick={() => (isLast ? close() : go(page + 1))} className="wo-cta">
-          {isLast ? "Bắt đầu!" : "Tiếp tục"}
+          {isLast ? t("onboarding.start") : t("common.confirm") === "Xác nhận" ? "Tiếp tục" : "Continue"}
         </button>
       </div>
 
