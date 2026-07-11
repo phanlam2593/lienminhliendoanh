@@ -369,6 +369,7 @@ function FlowArrow({ two = false }: { two?: boolean }) {
 }
 
 function Slide({ index, active, memberNumber }: { index: number; active: boolean; memberNumber: number }) {
+  const { t } = useLanguage();
   const key = active ? `active-${index}` : `idle-${index}`;
   if (index === 0) {
     return (
