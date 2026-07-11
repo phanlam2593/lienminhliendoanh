@@ -125,6 +125,12 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notif.deleteRead": "Xóa đã đọc",
     "notif.empty": "Không có thông báo mới",
     "notif.contentGone": "Nội dung không còn tồn tại",
+    "profile.notLoggedIn": "Bạn chưa đăng nhập",
+    "settings.changePassword": "Đổi mật khẩu",
+    "settings.notifications": "Thông báo",
+    "settings.theme": "Giao diện",
+    "theme.darkMode": "Chế độ tối",
+    "theme.lightMode": "Chế độ sáng",
   },
   en: {
     "nav.home": "Home",
