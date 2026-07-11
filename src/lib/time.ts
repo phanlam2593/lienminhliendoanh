@@ -15,11 +15,20 @@ export function fmtTime(t?: string | null) {
   return t.slice(0, 5);
 }
 
-export function timeAgo(iso: string) {
+export function timeAgo(iso: string, lang: "vi" | "en" = "vi") {
   const d = new Date(iso).getTime();
   const s = Math.floor((Date.now() - d) / 1000);
+  const m = Math.floor(s / 60);
+  const h = Math.floor(s / 3600);
+  const days = Math.floor(s / 86400);
+  if (lang === "en") {
+    if (s < 60) return "just now";
+    if (s < 3600) return `${m}m ago`;
+    if (s < 86400) return `${h}h ago`;
+    return `${days}d ago`;
+  }
   if (s < 60) return "vừa xong";
-  if (s < 3600) return `${Math.floor(s / 60)} phút trước`;
-  if (s < 86400) return `${Math.floor(s / 3600)} giờ trước`;
-  return `${Math.floor(s / 86400)} ngày trước`;
+  if (s < 3600) return `${m} phút trước`;
+  if (s < 86400) return `${h} giờ trước`;
+  return `${days} ngày trước`;
 }
