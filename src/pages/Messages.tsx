@@ -301,15 +301,15 @@ export function MessagesThread() {
       if (error) toast.error("Gửi sticker thất bại: " + error.message);
       return;
     }
-    const t = text.trim();
-    if (!t) return;
+    const trimmed = text.trim();
+    if (!trimmed) return;
     setText("");
     const { error } = await supabase
       .from("messages")
-      .insert({ sender_id: user.id, receiver_id: id, content: t, type: "text" });
+      .insert({ sender_id: user.id, receiver_id: id, content: trimmed, type: "text" });
     if (error) {
       toast.error("Gửi tin nhắn thất bại: " + error.message);
-      setText(t);
+      setText(trimmed);
     }
   };
 
