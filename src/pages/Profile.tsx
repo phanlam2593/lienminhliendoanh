@@ -1200,10 +1200,10 @@ function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: 
   };
 
   const items: { key: keyof NotifPrefs; label: string }[] = [
-    { key: "messages", label: "Tin nhắn mới" },
-    { key: "follows", label: "Người theo dõi mới" },
-    { key: "deals", label: "Ưu đãi mới từ doanh nghiệp đang theo dõi" },
-    { key: "admin", label: "Thông báo từ admin" },
+    { key: "messages", label: t("notifPrefs.newMessages") },
+    { key: "follows", label: t("notifPrefs.newFollowers") },
+    { key: "deals", label: t("notifPrefs.newDeals") },
+    { key: "admin", label: t("notifPrefs.adminNotif") },
   ];
 
   return (
