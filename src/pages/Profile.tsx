@@ -354,18 +354,34 @@ export default function Profile() {
       {Header}
       <FollowStats userId={user.id} />
       <div className="bg-card rounded-2xl shadow-sm divide-y overflow-hidden">
-        <MenuRow icon={<UserIcon className="w-4 h-4" />} label="Hồ sơ cá nhân" onClick={() => setView("personal")} />
+        <MenuRow
+          icon={<UserIcon className="w-4 h-4" />}
+          label={t("profile.personal")}
+          onClick={() => setView("personal")}
+        />
         <MenuRow
           icon={<Briefcase className="w-4 h-4" />}
-          label={biz.length > 0 ? "Hồ sơ doanh nghiệp" : "Tạo hồ sơ doanh nghiệp"}
+          label={biz.length > 0 ? t("profile.business") : t("profile.createBusiness")}
           onClick={() => setView("business")}
         />
-        <MenuRow icon={<HelpCircle className="w-4 h-4" />} label="Hướng dẫn" onClick={() => nav("/huong-dan")} />
-        <MenuRow icon={<Flag className="w-4 h-4" />} label="Báo cáo của tôi" onClick={() => nav("/bao-cao-cua-toi")} />
-        <MenuRow icon={<Settings className="w-4 h-4" />} label="Cài đặt" onClick={() => setView("settings")} />
+        <MenuRow
+          icon={<HelpCircle className="w-4 h-4" />}
+          label={t("profile.guide")}
+          onClick={() => nav("/huong-dan")}
+        />
+        <MenuRow
+          icon={<Flag className="w-4 h-4" />}
+          label={t("profile.myReports")}
+          onClick={() => nav("/bao-cao-cua-toi")}
+        />
+        <MenuRow
+          icon={<Settings className="w-4 h-4" />}
+          label={t("profile.settings")}
+          onClick={() => setView("settings")}
+        />
         <MenuRow
           icon={<LogOut className="w-4 h-4" />}
-          label="Đăng xuất"
+          label={t("common.logout")}
           danger
           onClick={async () => {
             await signOut();
