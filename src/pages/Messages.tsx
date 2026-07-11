@@ -487,7 +487,6 @@ export function MessagesThread() {
         </button>
       </div>
 
-      <AlertDialog open={!!confirmDeleteId} onOpenChange={(v) => !v && setConfirmDeleteId(null)}>
        <AlertDialog open={!!confirmDeleteId} onOpenChange={(v) => !v && setConfirmDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
