@@ -376,18 +376,24 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene1 />
         <h2 className="wo-h2">
-          Chào mừng <span className="wo-hl">thành viên thứ {formatVi(memberNumber)}</span> của cộng đồng!
+          {t("onboarding.s0TitlePre")}
+          <span className="wo-hl">{t("onboarding.s0TitleHl", { n: formatVi(memberNumber) })}</span>
+          {t("onboarding.s0TitlePost")}
         </h2>
-        <p className="wo-kao">Cám ơn bạn đã tham gia Liên Minh! *\(^^)/*</p>
+        <p className="wo-kao">{t("onboarding.s0Thanks")}</p>
         <div className="wo-duo">
           <div className="wo-line">
-            🎁 Ở đây, tất cả thành viên đều là <b>khách hàng tiềm năng</b> của bạn!
+            {t("onboarding.s0Line1Pre")}
+            <b>{t("onboarding.s0Line1Bold")}</b>
+            {t("onboarding.s0Line1Post")}
           </div>
           <div className="wo-line">
-            💝 Ở đây, tất cả doanh nghiệp đều có <b>ưu đãi dành riêng</b> cho bạn!
+            {t("onboarding.s0Line2Pre")}
+            <b>{t("onboarding.s0Line2Bold")}</b>
+            {t("onboarding.s0Line2Post")}
           </div>
         </div>
-        <p className="wo-closing">Để Liên Minh giới thiệu sơ cho bạn nhé 👇</p>
+        <p className="wo-closing">{t("onboarding.s0Closing", { app: t("app.name") })}</p>
       </div>
     );
   }
