@@ -1101,6 +1101,7 @@ function SettingRow({
 }
 
 function ChangePasswordForm({ onDone }: { onDone: () => void }) {
+  const { t } = useLanguage();
   const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
