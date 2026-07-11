@@ -420,6 +420,7 @@ function MenuRow({
 }
 
 function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }) {
+  const { t } = useLanguage();
   const [name, setName] = useState(biz.name);
   const [type, setType] = useState<BusinessType>(biz.type);
   const [stats, setStats] = useState({ reviews: 0, followers: 0 });
