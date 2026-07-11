@@ -488,13 +488,14 @@ export function MessagesThread() {
       </div>
 
       <AlertDialog open={!!confirmDeleteId} onOpenChange={(v) => !v && setConfirmDeleteId(null)}>
+       <AlertDialog open={!!confirmDeleteId} onOpenChange={(v) => !v && setConfirmDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Xóa tin nhắn?</AlertDialogTitle>
-            <AlertDialogDescription>Tin nhắn sẽ bị xóa vĩnh viễn.</AlertDialogDescription>
+            <AlertDialogTitle>{t("messages.deleteMsgTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("messages.deleteMsgDesc")}</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Hủy</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
                 if (confirmDeleteId) await supabase.from("messages").delete().eq("id", confirmDeleteId);
@@ -502,7 +503,7 @@ export function MessagesThread() {
               }}
               className="bg-destructive hover:bg-destructive/90"
             >
-              Xóa
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
