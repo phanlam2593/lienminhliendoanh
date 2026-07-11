@@ -197,7 +197,7 @@ function GuideSection({ data, open, onToggle }: { data: SectionData; open: boole
   );
 }
 
-ffunction BizTypeItem({ type }: { type: BusinessType }) {
+function BizTypeItem({ type }: { type: BusinessType }) {
   const { lang, t } = useLanguage();
   const [open, setOpen] = useState(false);
   return (
