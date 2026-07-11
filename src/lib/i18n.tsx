@@ -176,6 +176,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Show this code to staff to confirm manually. It expires in 2 hours. You can get a new code on your next visit.",
     "biz.codeExpired": "Code expired",
     "biz.timeLeft": "{time} left",
+    "biz.writeReviewTitle": "Write a review",
+    "biz.commentPlaceholder": "Your comment…",
+    "biz.addPhoto": "Add photo (optional)",
+    "biz.noOneClaimed": "No claims yet",
+    "biz.reply": "Reply",
+    "biz.replyPlaceholder": "Reply to review…",
   },
 };
 
