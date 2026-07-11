@@ -665,6 +665,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     "reports.replyPlaceholder": "Enter a reply…",
     "reports.noSentReports": "You haven't sent any reports yet",
     "reports.noBusinessReports": "No reports about your business yet",
+    "follow.notFound": "Not found",
+    "follow.noOne": "No one yet",
+    "follow.anonymous": "Anonymous",
+    "follow.unfollow": "Unfollow",
+    "follow.followBack": "Follow back",
+    "follow.messageBizOwner": "Message business owner",
+    "common.loadMoreRemaining": "Load more ({n} left)",
   },
 };
 
