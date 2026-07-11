@@ -279,6 +279,7 @@ function WelcomeScreen() {
 }
 
 function Footer() {
+  const { t } = useLanguage();
   return (
     <footer className="w-full max-w-sm pt-4 text-center space-y-1.5">
       <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
@@ -291,7 +292,7 @@ function Footer() {
         </Link>
       </div>
       <p className="text-[10px] text-muted-foreground">
-        © {new Date().getFullYear()} {APP_NAME} — Đà Lạt, Việt Nam
+        © {new Date().getFullYear()} {t("app.name")} — Đà Lạt, Việt Nam
       </p>
     </footer>
   );
