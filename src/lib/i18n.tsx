@@ -194,6 +194,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "biz.noOneClaimed": "No claims yet",
     "biz.reply": "Reply",
     "biz.replyPlaceholder": "Reply to review…",
+    "community.needLogin": "Please log in",
+    "community.needApproval": "Your account needs approval to join the community",
+    "community.memberCount": "{n} members",
+    "community.onlineCount": "· {n} online (of loaded)",
+    "community.you": "(you)",
+    "community.chatTitle": "💬 Community Chat",
+    "community.loadOlder": "Load older messages",
+    "community.noMessages": "No messages yet. Be the first!",
+    "community.member": "Member",
+    "community.tapToShare": "Tap send to share",
+    "community.inputPlaceholder": "Type a message to the community…",
+    "community.tapSendPlaceholder": "Tap send to share…",
   },
 };
 
