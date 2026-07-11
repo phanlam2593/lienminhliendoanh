@@ -36,6 +36,7 @@ const extractArea = (addr: string | null): string => {
 };
 
 export default function Businesses() {
+  const { t } = useLanguage();
   const [list, setList] = useState<BusinessCardData[]>([]);
   const [q, setQ] = useState("");
   const [type, setType] = useState<BusinessType | "all">("all");
