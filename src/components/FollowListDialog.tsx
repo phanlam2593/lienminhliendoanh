@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Avatar } from "@/components/Avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n";
 import { toast } from "sonner";
 
 type Mode = "followers" | "following";
@@ -33,6 +34,7 @@ const PAGE_SIZE = 30;
 // hỏi thẳng DB kết hợp phân trang — không cần tự tra tên riêng nữa.
 export function FollowListDialog({ open, onOpenChange, target, mode, title }: Props) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [rows, setRows] = useState<Row[]>([]);
   const [q, setQ] = useState("");
@@ -55,12 +57,12 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
 
   useEffect(() => {
     if (!open) return;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       setDebouncedQ(q.trim());
       setPage(0);
       void load(0, false, q.trim());
     }, 300);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
   }, [q]);
 
   const load = async (pageNum: number, append: boolean, searchTerm: string) => {
@@ -179,116 +181,3 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title }: Pr
     } else {
       const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: row.id });
       if (error) return toast.error(error.message);
-      setMyFollowing((s) => new Set(s).add(row.id));
-    }
-  };
-
-  const heading = title ?? (mode === "followers" ? "Người theo dõi" : "Đang theo dõi");
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-sm max-h-[80vh] flex flex-col p-0 gap-0">
-        <DialogHeader className="p-4 pb-2">
-          <DialogTitle>
-            {heading} {total > 0 ? `(${total})` : ""}
-          </DialogTitle>
-        </DialogHeader>
-        <div className="px-4 pb-2">
-          <div className="relative">
-            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Tìm kiếm…"
-              className="w-full pl-8 pr-3 py-2 rounded-lg border bg-background text-sm"
-            />
-          </div>
-        </div>
-        <div className="flex-1 overflow-y-auto px-2 pb-3">
-          {loading ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">Đang tải…</div>
-          ) : rows.length === 0 ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">
-              {debouncedQ ? "Không tìm thấy" : "Chưa có ai"}
-            </div>
-          ) : (
-            <>
-              <ul className="space-y-1">
-                {rows.map((r) => {
-                  const isMe = !r.isBusiness && user?.id === r.id;
-                  const isFollowing = r.isBusiness ? myFollowingBiz.has(r.id) : myFollowing.has(r.id);
-                  return (
-                    <li key={r.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-accent">
-                      <Link
-                        to={r.isBusiness ? `/dn/${r.id}` : `/ho-so/${r.id}`}
-                        onClick={() => onOpenChange(false)}
-                        className="flex items-center gap-2 flex-1 min-w-0"
-                      >
-                        <Avatar path={r.avatar_url} name={r.full_name || r.username} size={36} />
-                        <div className="min-w-0">
-                          <div className="text-sm font-semibold truncate">{r.full_name || r.username || "Ẩn danh"}</div>
-                        </div>
-                      </Link>
-                      {!isMe && user && (
-                        <>
-                          <button
-                            onClick={() => toggleFollow(r)}
-                            aria-label={isFollowing ? "Bỏ theo dõi" : "Theo dõi"}
-                            className={`h-8 px-2.5 rounded-lg text-[11px] font-semibold inline-flex items-center gap-1 ${
-                              isFollowing ? "bg-primary/10 text-primary" : "bg-primary text-primary-foreground"
-                            }`}
-                          >
-                            {isFollowing ? (
-                              <>
-                                <UserCheck className="w-3.5 h-3.5" />
-                                {mode === "following" ? "Bỏ theo dõi" : "Đang theo dõi"}
-                              </>
-                            ) : (
-                              <>
-                                <UserPlus className="w-3.5 h-3.5" />
-                                {mode === "followers" ? "Theo dõi lại" : "Theo dõi"}
-                              </>
-                            )}
-                          </button>
-                          {!r.isBusiness && (
-                            <Link
-                              to={`/tin-nhan/${r.id}`}
-                              onClick={() => onOpenChange(false)}
-                              aria-label="Nhắn tin"
-                              className="h-8 w-8 rounded-lg border grid place-items-center"
-                            >
-                              <MessageCircle className="w-4 h-4" />
-                            </Link>
-                          )}
-                          {r.isBusiness && r.ownerId && r.ownerId !== user?.id && (
-                            <Link
-                              to={`/tin-nhan/${r.ownerId}`}
-                              onClick={() => onOpenChange(false)}
-                              aria-label="Nhắn tin chủ DN"
-                              className="h-8 w-8 rounded-lg border grid place-items-center"
-                            >
-                              <MessageCircle className="w-4 h-4" />
-                            </Link>
-                          )}
-                        </>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-              {hasMore && (
-                <button
-                  onClick={loadMore}
-                  disabled={loadingMore}
-                  className="w-full py-2 mt-1 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
-                >
-                  {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - rows.length})`}
-                </button>
-              )}
-            </>
-          )}
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-}
