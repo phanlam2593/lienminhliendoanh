@@ -51,6 +51,7 @@ interface ReplyMeta extends ReviewReply {
 export default function BusinessDetail() {
   const { id = "" } = useParams();
   const { user, isApproved, isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [b, setB] = useState<Business | null>(null);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [reviews, setReviews] = useState<ReviewMeta[]>([]);
