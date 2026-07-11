@@ -209,7 +209,7 @@ function WelcomeScreen() {
       <div className="space-y-1">
         {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
         <h1 className="text-xl font-extrabold text-primary">{APP_NAME}</h1>
-        <p className="text-xs text-muted-foreground">{TAGLINE}</p>
+        <p className="text-xs text-muted-foreground">{t("app.tagline")}</p>
       </div>
       <img
         src={welcomeGuide.url}
