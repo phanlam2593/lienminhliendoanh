@@ -116,12 +116,12 @@ export default function Profile() {
   if (!user) {
     return (
       <div className="p-8 text-center space-y-4">
-        <p className="text-muted-foreground">Bạn chưa đăng nhập</p>
+        <p className="text-muted-foreground">{t("profile.notLoggedIn")}</p>
         <Link
           to="/auth/login"
           className="inline-block px-4 py-2 rounded-xl bg-primary text-primary-foreground font-semibold"
         >
-          Đăng nhập
+          {t("common.login")}
         </Link>
       </div>
     );
