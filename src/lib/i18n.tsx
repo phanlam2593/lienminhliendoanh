@@ -851,6 +851,50 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s10Title": "10. Contact",
     "termsPage.s10Pre": "For questions about these terms, please contact us via Zalo",
     "termsPage.s10Post": 'or Facebook "{app}".',
+    "privacyPage.title": "Privacy Policy",
+    "privacyPage.s1Title": "1. Data We Collect",
+    "privacyPage.s1Li1": "Registration info: full name, username, email, phone number",
+    "privacyPage.s1Li2": "Avatar, business cover photo, review/report photos (if you upload them)",
+    "privacyPage.s1Li3": "Content you create: messages, reviews, comments, reports",
+    "privacyPage.s1Li4":
+      'GPS location — ONLY when you actively tap "Nearby" or a business owner pins a location, never collected silently',
+    "privacyPage.s1Li5": "Basic activity history (last access time) to support operations",
+    "privacyPage.s2Title": "2. How We Use Your Data",
+    "privacyPage.s2Li1": "Creating and maintaining your account",
+    "privacyPage.s2Li2": "Displaying business info, offers, and reviews to the community",
+    "privacyPage.s2Li3": "Sending notifications related to your activity (messages, offers, follows...)",
+    "privacyPage.s2Li4":
+      'Calculating distance for the "Nearby" feature (processed temporarily only, your location is not stored)',
+    "privacyPage.s2Li5": "Preventing fraud and system abuse",
+    "privacyPage.s3Title": "3. Legal Basis for Processing",
+    "privacyPage.s3P1":
+      "We process your personal data based on the consent you provide when registering and using each specific feature, in accordance with Decree 13/2023/NĐ-CP on personal data protection.",
+    "privacyPage.s4Title": "4. Data Sharing",
+    "privacyPage.s4Pre": "We",
+    "privacyPage.s4Bold": "never sell",
+    "privacyPage.s4Post":
+      "your personal data to third parties. Public information (name, avatar, reviews) is shown to other community members as intended by the App. Data is only provided to competent authorities when required by law.",
+    "privacyPage.s5Title": "5. Data Security",
+    "privacyPage.s5P1":
+      "Data is stored on Supabase infrastructure with role-based access control (Row Level Security). Passwords are encrypted and never stored as plain text.",
+    "privacyPage.s6Title": "6. Data Retention",
+    "privacyPage.s6P1":
+      "Data is kept for as long as you use your account. When you request account deletion, personal data will be deleted per the Admin team's process, except where the law requires retention.",
+    "privacyPage.s7Title": "7. Your Rights",
+    "privacyPage.s7Intro": "Under Decree 13/2023/NĐ-CP, you have the right to:",
+    "privacyPage.s7Li1": "Know how your data is being processed",
+    "privacyPage.s7Li2": "Access, view, and request correction of your personal data",
+    "privacyPage.s7Li3": "Withdraw previously given consent",
+    "privacyPage.s7Li4": "Request deletion of your personal data",
+    "privacyPage.s7Li5": "Request restriction of or object to data processing",
+    "privacyPage.s7Li6": "File complaints or reports as provided by law",
+    "privacyPage.s7Pre": "To exercise these rights, contact us via Zalo",
+    "privacyPage.s7Post": "We respond within 72 hours as required.",
+    "privacyPage.s8Title": "8. Children",
+    "privacyPage.s8P1":
+      "The App is intended for users aged 16 and above. We do not intentionally collect data from children.",
+    "privacyPage.s9Title": "9. Policy Changes",
+    "privacyPage.s9P1": "This policy may be updated over time. Significant changes will be announced in the App.",
   },
 };
 
