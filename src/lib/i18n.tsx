@@ -418,6 +418,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "register.errTaken": "Tên đăng nhập này đã có người dùng. Vui lòng chọn tên khác.",
     "register.errNetwork": "Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.",
     "register.errGeneric": "Đăng ký thất bại",
+    "footer.location": "Đà Lạt, Việt Nam",
     "privacyPage.title": "Chính sách bảo mật",
     "privacyPage.s1Title": "1. Dữ liệu chúng tôi thu thập",
     "privacyPage.s1Li1": "Thông tin đăng ký: họ tên, tên đăng nhập, email, số điện thoại",
