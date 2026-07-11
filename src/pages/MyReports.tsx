@@ -78,7 +78,7 @@ function ReportCard({
         </div>
         <p className="text-xs text-muted-foreground truncate">
           {open ? r.description : `${r.description?.slice(0, 60)}${(r.description?.length ?? 0) > 60 ? "…" : ""}`} ·{" "}
-          {timeAgo(r.created_at)}
+          {timeAgo(r.created_at, lang)}
           {replies.length > 0 && ` · ${t("reports.repliesCount", { n: replies.length })}`}
         </p>
       </button>
