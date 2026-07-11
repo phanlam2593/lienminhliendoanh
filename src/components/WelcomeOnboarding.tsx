@@ -482,6 +482,7 @@ export function WelcomeOnboarding({
   onPreviewClose?: () => void;
 } = {}) {
   const { user, profile, refresh } = useAuth();
+  const { t } = useLanguage();
   const [page, setPage] = useState(0);
   const [visible, setVisible] = useState(false);
   const [closing, setClosing] = useState(false);
