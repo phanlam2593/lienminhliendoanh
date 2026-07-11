@@ -862,6 +862,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s10Title": "10. Contact",
     "termsPage.s10Pre": "For questions about these terms, please contact us via Zalo",
     "termsPage.s10Post": 'or Facebook "{app}".',
+    "register.fillValidInfo": "Please fill in all information correctly",
+    "register.confirmBelow": "Please confirm all items below",
+    "register.accountCreateFail": "Couldn't create account",
+    "register.bizSuccessToast": "Registration successful! Your business is pending admin approval.",
+    "register.memberSuccessToast":
+      "👋 Welcome, new member! You're now part of {app}. Start exploring offers from the community!",
+    "register.errLeaked":
+      "This password has been exposed in a data breach and is unsafe. Please choose a stronger one.",
+    "register.errShort": "Password is too short. Please use at least 6 characters.",
+    "register.errTaken": "This username is already taken. Please choose another.",
+    "register.errNetwork": "Network error. Please check your connection and try again.",
+    "register.errGeneric": "Registration failed",
     "privacyPage.title": "Privacy Policy",
     "privacyPage.s1Title": "1. Data We Collect",
     "privacyPage.s1Li1": "Registration info: full name, username, email, phone number",
