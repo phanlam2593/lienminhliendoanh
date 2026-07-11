@@ -241,18 +241,20 @@ export default function BusinessDetail() {
   const ReviewsBlock = (
     <section className="mt-2">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="font-bold">Đánh giá ({reviewTotal})</h2>
+        <h2 className="font-bold">
+          {t("biz.reviews")} ({reviewTotal})
+        </h2>
         {isApproved && (
           <button
             onClick={() => setReviewOpen(true)}
             className="text-xs px-3 py-1.5 rounded-full bg-primary text-primary-foreground font-semibold"
           >
-            Viết đánh giá
+            {t("biz.writeReview")}
           </button>
         )}
       </div>
       {reviews.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Chưa có đánh giá nào</p>
+        <p className="text-sm text-muted-foreground">{t("biz.noReviews")}</p>
       ) : (
         <div className="space-y-2">
           {reviews.map((r) => (
