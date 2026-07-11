@@ -59,6 +59,7 @@ type View = "menu" | "personal" | "business" | "settings";
 
 export default function Profile() {
   const { user, profile, role, refresh, signOut } = useAuth();
+  const { t } = useLanguage();
   const nav = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialView = (searchParams.get("view") as View) || "menu";
