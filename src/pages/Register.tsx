@@ -209,8 +209,8 @@ export default function Register() {
 
   const Status = ({ s }: { s: FieldStatus }) => {
     if (s === "ok") return <Check className="w-4 h-4 text-emerald-600" />;
-    if (s === "taken") return <span className="text-xs text-destructive">Đã tồn tại</span>;
-    if (s === "invalid") return <span className="text-xs text-destructive">Không hợp lệ</span>;
+    if (s === "taken") return <span className="text-xs text-destructive">{t("register.taken")}</span>;
+    if (s === "invalid") return <span className="text-xs text-destructive">{t("register.invalid")}</span>;
     if (s === "checking") return <span className="text-xs text-muted-foreground">…</span>;
     return null;
   };
