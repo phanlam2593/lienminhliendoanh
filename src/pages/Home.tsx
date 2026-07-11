@@ -302,7 +302,8 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
     return items;
   }, [items, q, kind]);
 
-  const title = kind === "members" ? "Thành viên" : kind === "businesses" ? "Doanh nghiệp" : "Ưu đãi đã nhận";
+  const title =
+    kind === "members" ? t("stats.members") : kind === "businesses" ? t("stats.businesses") : t("stats.offersClaimed");
 
   return (
     <Dialog open={!!kind} onOpenChange={(v) => !v && onClose()}>
