@@ -350,13 +350,13 @@ export function MessagesThread() {
                   ) : (
                     <span className="text-5xl leading-none">{m.content}</span>
                   )}
-                  <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at)}</div>
+                  <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
                 </div>
               ) : m.type === "image" ? (
                 <div className="max-w-[220px]">
                   <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-2xl w-full object-cover" />
                   <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
-                    {timeAgo(m.created_at)}
+                    {timeAgo(m.created_at, lang)}
                   </div>
                 </div>
               ) : (
@@ -365,7 +365,7 @@ export function MessagesThread() {
                 >
                   {m.content}
                   <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
-                    {timeAgo(m.created_at)}
+                    {timeAgo(m.created_at, lang)}
                   </div>
                 </div>
               )}
