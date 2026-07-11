@@ -39,6 +39,7 @@ import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { ExchangeSection } from "@/components/ExchangeSection";
 import { BusinessGallery } from "@/components/BusinessGallery";
+import { useLanguage } from "@/lib/i18n";
 
 interface ReviewMeta extends Review {
   profile?: { full_name: string; avatar_url: string | null } | null;
