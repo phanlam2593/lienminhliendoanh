@@ -908,12 +908,13 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
     })();
   }, [businessId, user?.id]);
 
+  const { t } = useLanguage();
   const countButton = (
     <button
       onClick={() => setListOpen(true)}
       className="text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1"
     >
-      <Users className="w-3 h-3" /> {count} người theo dõi
+      <Users className="w-3 h-3" /> {t("biz.followers", { n: count })}
     </button>
   );
 
