@@ -463,7 +463,7 @@ export default function BusinessDetail() {
           onClick={() => setReviewOpen(false)}
         >
           <div className="bg-card rounded-2xl p-4 w-full max-w-sm space-y-3" onClick={(e) => e.stopPropagation()}>
-            <h3 className="font-bold">Viết đánh giá</h3>
+            <h3 className="font-bold">{t("biz.writeReviewTitle")}</h3>
             <div className="flex justify-center gap-1">
               {[1, 2, 3, 4, 5].map((n) => (
                 <button key={n} onClick={() => setRating(n)}>
