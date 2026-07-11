@@ -459,14 +459,14 @@ export default function Register() {
             </Field>
             <div className="flex gap-2">
               <button onClick={() => setStep(1)} className="flex-1 py-3 rounded-xl border">
-                ← Quay lại
+                {t("register.goBack")}
               </button>
               <button
                 onClick={() => setTO(true)}
                 disabled={!bizName || !bizDesc || !bizOffer}
                 className="flex-1 py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
               >
-                Hoàn tất
+                {t("register.complete")}
               </button>
             </div>
           </div>
