@@ -138,26 +138,26 @@ export default function Notifications() {
   return (
     <div className="p-4 space-y-3">
       <div className="flex items-center justify-between gap-2 flex-wrap">
-        <h1 className="text-xl font-extrabold">Thông báo</h1>
+        <h1 className="text-xl font-extrabold">{t("notif.title")}</h1>
         <div className="flex items-center gap-3">
           {unread > 0 && (
             <button onClick={markAllRead} className="text-xs text-primary font-semibold flex items-center gap-1">
-              <Check className="w-3.5 h-3.5" /> Đánh dấu tất cả đã đọc
+              <Check className="w-3.5 h-3.5" /> {t("notif.markAllRead")}
             </button>
           )}
           {items.some((n) => n.is_read) && (
             <button onClick={deleteAllRead} className="text-xs text-destructive font-semibold flex items-center gap-1">
-              <X className="w-3.5 h-3.5" /> Xóa đã đọc
+              <X className="w-3.5 h-3.5" /> {t("notif.deleteRead")}
             </button>
           )}
         </div>
       </div>
       {loading ? (
-        <p className="text-sm text-muted-foreground">Đang tải…</p>
+        <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
       ) : items.length === 0 ? (
         <div className="text-center py-16 text-sm text-muted-foreground space-y-2">
           <Bell className="w-10 h-10 mx-auto opacity-30" />
-          <p>Không có thông báo mới</p>
+          <p>{t("notif.empty")}</p>
         </div>
       ) : (
         <div className="space-y-1.5">
