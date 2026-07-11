@@ -1429,15 +1429,17 @@ function BusinessCreator({
   return (
     <div className="bg-card rounded-2xl p-4 shadow-sm space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="font-bold text-sm">Tạo hồ sơ doanh nghiệp mới</h3>
+        <h3 className="font-bold text-sm">{t("bizCreator.createNew")}</h3>
         <button onClick={() => setOpen(false)} className="text-xs text-muted-foreground">
-          Hủy
+          {t("common.cancel")}
         </button>
       </div>
       <p className="text-[11px] text-muted-foreground bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-lg p-2">
-        Sau khi tạo, doanh nghiệp sẽ ở trạng thái <b>Chờ duyệt</b> và chỉ hiển thị công khai sau khi admin phê duyệt.
+        {t("bizCreator.pendingPre")}
+        <b>{t("bizCreator.pendingBold")}</b>
+        {t("bizCreator.pendingPost")}
       </p>
-      <Field label="Tên doanh nghiệp *">
+      <Field label={t("bizForm.name")}>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
