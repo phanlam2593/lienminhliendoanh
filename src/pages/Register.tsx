@@ -397,7 +397,7 @@ export default function Register() {
                 />
               </Field>
             </div>
-            <Field label="Mô tả *" hint="Mô tả ngắn gọn về không gian, phong cách, món đặc trưng">
+            <Field label={t("bizForm.desc")} hint={t("bizForm.descHint")}>
               <textarea
                 value={bizDesc}
                 onChange={(e) => setBD(e.target.value)}
