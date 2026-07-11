@@ -212,7 +212,7 @@ export default function Notifications() {
                         {n.body === "Nhấn để xem" ? t("notifBody.tapToView") : n.body}
                       </div>
                     )}
-                    <div className="text-[10px] text-muted-foreground mt-1">{timeAgo(n.created_at)}</div>
+                    <div className="text-[10px] text-muted-foreground mt-1">{timeAgo(n.created_at, lang)}</div>
                   </div>
                 </button>
                 <button
