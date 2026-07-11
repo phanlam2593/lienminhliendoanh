@@ -1572,7 +1572,7 @@ function BusinessCreator({
         disabled={saving}
         className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm disabled:opacity-50"
       >
-        {saving ? "Đang gửi…" : "Gửi để duyệt"}
+        {saving ? t("bizCreator.submitting") : t("bizCreator.submitForApproval")}
       </button>
     </div>
   );
