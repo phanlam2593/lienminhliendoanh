@@ -741,15 +741,18 @@ function ReviewItem({
   onDeleteReply: (id: string) => void;
   onReplied: () => void;
 }) {
+  const { t } = useLanguage();
   const [replyOpen, setReplyOpen] = useState(false);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
 
   const submitReply = async () => {
-    const t = text.trim();
-    if (!t || !myId) return;
+    const trimmed = text.trim();
+    if (!trimmed || !myId) return;
     setBusy(true);
-    const { error } = await supabase.from("review_replies").insert({ review_id: r.id, user_id: myId, content: t });
+    const { error } = await supabase
+      .from("review_replies")
+      .insert({ review_id: r.id, user_id: myId, content: trimmed });
     setBusy(false);
     if (error) {
       toast.error(error.message);
