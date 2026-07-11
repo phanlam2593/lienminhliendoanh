@@ -477,7 +477,7 @@ export default function BusinessDetail() {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={3}
-              placeholder="Nhận xét…"
+              placeholder={t("biz.commentPlaceholder")}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
             />
             <input
