@@ -967,7 +967,7 @@ function FollowStats({ userId }: { userId: string }) {
         >
           <div className="text-lg font-extrabold text-primary">{followers}</div>
           <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-            <Users className="w-3 h-3" /> Người theo dõi
+            <Users className="w-3 h-3" /> {t("profile.followers")}
           </div>
         </button>
         <button
@@ -976,7 +976,7 @@ function FollowStats({ userId }: { userId: string }) {
         >
           <div className="text-lg font-extrabold text-primary">{following}</div>
           <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-            <UserCheck className="w-3 h-3" /> Đang theo dõi
+            <UserCheck className="w-3 h-3" /> {t("messages.followingHeader")}
           </div>
         </button>
       </div>
