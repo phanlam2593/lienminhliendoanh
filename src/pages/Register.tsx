@@ -238,9 +238,9 @@ export default function Register() {
         </div>
         <div className="text-center space-y-2 flex flex-col items-center">
           <Logo size={56} asLink />
-          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
+          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — hiện t("app.name") để đổi theo ngôn ngữ */}
           <Link to="/" className="text-xs font-semibold text-primary">
-            Liên Minh Liên Doanh
+            {t("app.name")}
           </Link>
           <h1 className="text-xl font-bold">{step === 1 ? "Đăng ký tài khoản" : "Thông tin doanh nghiệp"}</h1>
           <div className="text-xs text-muted-foreground">
