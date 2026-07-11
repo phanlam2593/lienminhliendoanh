@@ -205,6 +205,22 @@ function WelcomeScreen() {
 
   return (
     <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
+      <div className="inline-flex rounded-full border overflow-hidden self-center">
+        <button
+          type="button"
+          onClick={() => setLang("vi")}
+          className={`px-3 py-1 text-xs font-semibold ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+        >
+          VI
+        </button>
+        <button
+          type="button"
+          onClick={() => setLang("en")}
+          className={`px-3 py-1 text-xs font-semibold ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+        >
+          EN
+        </button>
+      </div>
       <Logo size={72} asLink />
       <div className="space-y-1">
         {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — hiện t("app.name") để đổi theo ngôn ngữ */}
