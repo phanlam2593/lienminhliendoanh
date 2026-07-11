@@ -1581,6 +1581,7 @@ function BusinessCreator({
   );
 }
 function PushPermissionButton() {
+  const { t } = useLanguage();
   const [status, setStatus] = useState<NotificationPermission | "unsupported" | "checking">("checking");
   const [busy, setBusy] = useState(false);
 
