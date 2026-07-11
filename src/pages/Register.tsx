@@ -15,7 +15,7 @@ type FieldStatus = "idle" | "checking" | "ok" | "taken" | "invalid";
 
 export default function Register() {
   const nav = useNavigate();
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
   const [step, setStep] = useState(1);
   // step 1
   const [username, setU] = useState("");
