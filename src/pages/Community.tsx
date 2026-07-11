@@ -13,6 +13,7 @@ import { Image as ImageIcon, Smile, ChevronDown, ChevronUp, Users } from "lucide
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { useOnlineUsers } from "@/lib/onlineUsers";
+import { useLanguage } from "@/lib/i18n";
 interface ProfLite {
   id: string;
   full_name: string;
