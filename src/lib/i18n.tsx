@@ -874,6 +874,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "register.errTaken": "This username is already taken. Please choose another.",
     "register.errNetwork": "Network error. Please check your connection and try again.",
     "register.errGeneric": "Registration failed",
+    "footer.location": "Đà Lạt, Vietnam",
     "privacyPage.title": "Privacy Policy",
     "privacyPage.s1Title": "1. Data We Collect",
     "privacyPage.s1Li1": "Registration info: full name, username, email, phone number",
