@@ -207,8 +207,8 @@ function WelcomeScreen() {
     <div className="px-5 py-5 flex flex-col items-center text-center gap-3">
       <Logo size={72} asLink />
       <div className="space-y-1">
-        {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-        <h1 className="text-xl font-extrabold text-primary">{APP_NAME}</h1>
+        {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — hiện t("app.name") để đổi theo ngôn ngữ */}
+        <h1 className="text-xl font-extrabold text-primary">{t("app.name")}</h1>
         <p className="text-xs text-muted-foreground">{t("app.tagline")}</p>
       </div>
       <img
