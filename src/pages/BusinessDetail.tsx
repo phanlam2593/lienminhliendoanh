@@ -676,8 +676,9 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
     setBusyId(null);
   };
 
-  if (loading) return <p className="text-sm text-muted-foreground text-center py-6">Đang tải…</p>;
-  if (rows.length === 0) return <p className="text-sm text-muted-foreground text-center py-6">Chưa có ai nhận</p>;
+  if (loading) return <p className="text-sm text-muted-foreground text-center py-6">{t("common.loading")}</p>;
+  if (rows.length === 0)
+    return <p className="text-sm text-muted-foreground text-center py-6">{t("biz.noOneClaimed")}</p>;
 
   return (
     <div className="space-y-1.5 max-h-80 overflow-y-auto">
