@@ -1148,7 +1148,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
         autoComplete="current-password"
         value={current}
         onChange={(e) => setCurrent(e.target.value)}
-        placeholder="Mật khẩu hiện tại"
+        placeholder={t("settings.currentPassword")}
         className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
       />
       <input
@@ -1156,7 +1156,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
         autoComplete="new-password"
         value={next}
         onChange={(e) => setNext(e.target.value)}
-        placeholder="Mật khẩu mới (≥ 6 ký tự)"
+        placeholder={t("settings.newPassword")}
         className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
       />
       <input
@@ -1164,7 +1164,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
         autoComplete="new-password"
         value={confirm}
         onChange={(e) => setConfirm(e.target.value)}
-        placeholder="Xác nhận mật khẩu mới"
+        placeholder={t("settings.confirmNewPassword")}
         className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
       />
       <button
@@ -1172,7 +1172,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
         disabled={busy}
         className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm disabled:opacity-50"
       >
-        {busy ? "Đang xử lý…" : "Cập nhật mật khẩu"}
+        {busy ? t("terms.processing") : t("settings.updatePassword")}
       </button>
     </div>
   );
