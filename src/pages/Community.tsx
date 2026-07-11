@@ -37,6 +37,7 @@ const MSG_PAGE_SIZE = 50;
 
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
+  const { t } = useLanguage();
   const onlineUsers = useOnlineUsers();
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
