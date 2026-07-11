@@ -130,10 +130,10 @@ export default function Home() {
 
       <section className="px-4">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-extrabold">Doanh nghiệp nổi bật</h2>
+          <h2 className="text-lg font-extrabold">{t("home.featured")}</h2>
         </div>
         {featured.length === 0 ? (
-          <p className="text-sm text-muted-foreground py-4">Chưa có doanh nghiệp nổi bật</p>
+          <p className="text-sm text-muted-foreground py-4">{t("home.noFeatured")}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {featured.map((b) => (
