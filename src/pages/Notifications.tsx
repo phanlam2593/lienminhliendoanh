@@ -50,6 +50,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string | null> {
   const id = n.target_id ?? undefined;
