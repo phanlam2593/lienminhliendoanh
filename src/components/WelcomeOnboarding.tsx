@@ -254,6 +254,7 @@ function Scene2() {
 }
 
 function Scene3({ active }: { active: boolean }) {
+  const { t } = useLanguage();
   const [count, setCount] = useState(0);
   useEffect(() => {
     if (!active) {
