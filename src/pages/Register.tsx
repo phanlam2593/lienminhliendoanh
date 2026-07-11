@@ -326,21 +326,21 @@ export default function Register() {
             </Field>
 
             <div className="space-y-2">
-              <div className="text-xs font-semibold text-muted-foreground">Thêm thông tin doanh nghiệp?</div>
+              <div className="text-xs font-semibold text-muted-foreground">{t("register.addBizQuestion")}</div>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={() => setBiz(true)}
                   className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all ${isBiz ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground"}`}
                 >
-                  🏢 Có, tôi có DN
+                  {t("register.yesHaveBiz")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setBiz(false)}
                   className={`py-3 rounded-xl border-2 text-sm font-semibold transition-all ${!isBiz ? "border-primary bg-primary/10 text-primary" : "border-border bg-card text-muted-foreground"}`}
                 >
-                  👤 Chưa có
+                  {t("register.noBiz")}
                 </button>
               </div>
             </div>
@@ -349,7 +349,7 @@ export default function Register() {
               onClick={goNext}
               className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold"
             >
-              {isBiz ? "Tiếp tục" : "Hoàn tất đăng ký"}
+              {isBiz ? t("register.continue") : t("register.completeRegister")}
             </button>
           </div>
         ) : (
