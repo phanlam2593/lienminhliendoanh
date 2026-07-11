@@ -104,7 +104,7 @@ function ReportCard({
                         </span>
                       )}
                       <span className="text-muted-foreground font-normal ml-auto shrink-0">
-                        {timeAgo(rr.created_at)}
+                        {timeAgo(rr.created_at, lang)}
                       </span>
                     </div>
                     <div className="text-xs whitespace-pre-line break-words">{rr.body}</div>
