@@ -250,9 +250,7 @@ export default function Businesses() {
         </div>
       ) : filtered.length === 0 ? (
         <p className="text-sm text-center py-12 text-muted-foreground">
-          {sort === "nearest"
-            ? `Chưa có doanh nghiệp nào trong bán kính ${radius}km. Thử tăng bán kính lên xem sao.`
-            : "Không tìm thấy kết quả phù hợp"}
+          {sort === "nearest" ? t("explore.noResultsRadius", { r: radius }) : t("explore.noResults")}
         </p>
       ) : (
         <div className="grid gap-4">
