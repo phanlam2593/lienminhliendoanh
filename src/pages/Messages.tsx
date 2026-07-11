@@ -149,7 +149,7 @@ export function MessagesInbox() {
                   <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt)}</div>
+                  <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
                   {c.unread > 0 && (
                     <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
                       {c.unread}
