@@ -105,7 +105,7 @@ export default function Register() {
 
   const goNext = () => {
     if (!step1Valid) {
-      toast.error("Vui lòng điền đủ thông tin hợp lệ");
+      toast.error(t("register.fillValidInfo"));
       return;
     }
     if (isBiz) setStep(2);
@@ -114,7 +114,7 @@ export default function Register() {
 
   const submitFinal = async () => {
     if (!agree || !ageConfirmed) {
-      toast.error("Vui lòng xác nhận đầy đủ các mục bên dưới");
+      toast.error(t("register.confirmBelow"));
       return;
     }
     setSubmitting(true);
