@@ -521,7 +521,7 @@ export default function BusinessDetail() {
                 onClick={() => reviewFileRef.current?.click()}
                 className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
               >
-                <ImageIcon className="w-4 h-4" /> Thêm ảnh (tùy chọn)
+                <ImageIcon className="w-4 h-4" /> {t("biz.addPhoto")}
               </button>
             )}
             <button
@@ -529,7 +529,7 @@ export default function BusinessDetail() {
               disabled={reviewUploading}
               className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
             >
-              {reviewUploading ? "Đang gửi…" : "Gửi"}
+              {reviewUploading ? t("common.loading") : t("common.send")}
             </button>
           </div>
         </div>
