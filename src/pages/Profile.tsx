@@ -326,7 +326,7 @@ export default function Profile() {
         <BackBar title={t("profile.business")} />
         {biz.length === 0 ? (
           <div className="p-4 bg-card rounded-2xl text-center text-sm text-muted-foreground">
-            Bạn chưa có doanh nghiệp nào. Hãy tạo hồ sơ doanh nghiệp đầu tiên bên dưới.
+            {t("profile.noBusiness")}
           </div>
         ) : (
           <section className="space-y-3">
