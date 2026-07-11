@@ -120,6 +120,11 @@ const DICT: Record<Lang, Record<string, string>> = {
     "messages.followersHeader": "Người theo dõi tôi",
     "messages.noFollowers": "Chưa có ai theo dõi bạn",
     "messages.messageOwner": "Nhắn chủ",
+    "notif.title": "Thông báo",
+    "notif.markAllRead": "Đánh dấu tất cả đã đọc",
+    "notif.deleteRead": "Xóa đã đọc",
+    "notif.empty": "Không có thông báo mới",
+    "notif.contentGone": "Nội dung không còn tồn tại",
   },
   en: {
     "nav.home": "Home",
