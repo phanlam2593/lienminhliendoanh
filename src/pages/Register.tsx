@@ -287,7 +287,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Số điện thoại *" right={<Status s={phoneStatus} />}>
+            <Field label={t("register.phone")} right={<Status s={phoneStatus} />}>
               <input
                 value={phone}
                 onChange={(e) => {
