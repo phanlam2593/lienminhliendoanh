@@ -591,14 +591,14 @@ export function WelcomeOnboarding({
       <div className="wo-header">
         <div className="flex items-center gap-2 min-w-0">
           <Logo size={28} />
-          <div className="text-[13px] font-bold text-slate-800 truncate">Liên Minh Liên Doanh</div>
+          <div className="text-[13px] font-bold text-slate-800 truncate">{t("app.name")}</div>
         </div>
         <button
           onClick={close}
           className="text-[12px] font-semibold text-slate-500 hover:text-slate-900 px-3 py-1.5 rounded-full flex items-center gap-1"
-          aria-label="Bỏ qua"
+          aria-label={t("onboarding.skip")}
         >
-          Bỏ qua <X className="w-3.5 h-3.5" />
+          {t("onboarding.skip")} <X className="w-3.5 h-3.5" />
         </button>
       </div>
 
