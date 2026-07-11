@@ -300,7 +300,7 @@ export default function Community() {
                         onClick={() => setQuickViewUser(m.user_id)}
                         className="font-semibold truncate hover:text-primary text-left"
                       >
-                        {p?.full_name || "Thành viên"}
+                        {p?.full_name || t("community.member")}
                       </button>
                       {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at)}</span>
