@@ -406,10 +406,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field
-              label="Ưu đãi/Deal cho thành viên *"
-              hint="Ví dụ: Giảm 20% toàn menu, Tặng 1 ly nước khi đặt nhóm 4 người"
-            >
+            <Field label={t("bizForm.offer")} hint={t("bizForm.offerHint")}>
               <input
                 value={bizOffer}
                 onChange={(e) => setBO(e.target.value)}
