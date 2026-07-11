@@ -422,16 +422,17 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene3 active={active} />
         <h2 className="wo-h2">
-          Bạn đang <span className="wo-hl">kinh doanh</span>
+          {t("onboarding.s2TitlePre")}
+          <span className="wo-hl">{t("onboarding.s2TitleHl")}</span>
           <br />
-          bất kì loại hình nào?
+          {t("onboarding.s2TitlePost")}
         </h2>
         <div className="wo-flow">
-          <FlowChip>Đăng ưu đãi có lợi cho bạn</FlowChip>
+          <FlowChip>{t("onboarding.s2Chip1")}</FlowChip>
           <FlowArrow />
-          <FlowChip>Cả cộng đồng là khách của bạn</FlowChip>
+          <FlowChip>{t("onboarding.s2Chip2")}</FlowChip>
         </div>
-        <p className="wo-simple">Đơn giản vậy thôi!</p>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
       </div>
     );
   }
