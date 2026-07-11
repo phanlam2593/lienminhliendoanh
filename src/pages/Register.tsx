@@ -414,19 +414,19 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Facebook URL (tùy chọn)">
+            <Field label={t("bizForm.facebook")}>
               <input
                 value={fbUrl}
                 onChange={(e) => setFB(e.target.value)}
-                placeholder="Link Facebook của bạn"
+                placeholder={t("bizForm.facebookPlaceholder")}
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Website (tùy chọn)">
+            <Field label={t("bizForm.website")}>
               <input
                 value={webUrl}
                 onChange={(e) => setW(e.target.value)}
-                placeholder="Website của bạn"
+                placeholder={t("bizForm.websitePlaceholder")}
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
