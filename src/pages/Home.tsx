@@ -95,10 +95,10 @@ export default function Home() {
         style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}
       >
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">
-          ✦ Hệ sinh thái cộng đồng
+          {t("home.badge")}
         </div>
-        <h1 className="text-2xl font-extrabold leading-tight mt-3">Nơi thành viên và doanh nghiệp cùng phát triển</h1>
-        <p className="text-sm opacity-95 mt-1.5">Một cộng đồng – Nhiều giá trị</p>
+        <h1 className="text-2xl font-extrabold leading-tight mt-3">{t("home.heroTitle")}</h1>
+        <p className="text-sm opacity-95 mt-1.5">{t("app.tagline")}</p>
         <Link
           to="/kham-pha"
           className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-white text-cyan-700 font-semibold text-sm shadow-md"
