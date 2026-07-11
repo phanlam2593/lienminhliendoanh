@@ -221,9 +221,9 @@ function WelcomeScreen() {
       />
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
         {[
-          { v: stats.members, l: "Thành viên", icon: Users },
-          { v: stats.businesses, l: "Doanh nghiệp", icon: Building2 },
-          { v: stats.offers, l: "Ưu đãi", icon: Tag },
+          { v: stats.members, l: t("stats.members"), icon: Users },
+          { v: stats.businesses, l: t("stats.businesses"), icon: Building2 },
+          { v: stats.offers, l: t("stats.offers"), icon: Tag },
         ].map(({ v, l, icon: Icon }) => (
           <div key={l} className="rounded-2xl p-3 text-center bg-card border border-primary/20 shadow-soft">
             <div className="w-8 h-8 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
