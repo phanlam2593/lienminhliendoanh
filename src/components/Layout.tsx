@@ -300,15 +300,15 @@ function Footer() {
     <footer className="w-full max-w-sm pt-4 text-center space-y-1.5">
       <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
         <Link to="/dieu-khoan" className="hover:text-primary underline">
-          Điều khoản sử dụng
+          {t("termsPage.title")}
         </Link>
         <span>·</span>
         <Link to="/chinh-sach-bao-mat" className="hover:text-primary underline">
-          Chính sách bảo mật
+          {t("privacyPage.title")}
         </Link>
       </div>
       <p className="text-[10px] text-muted-foreground">
-        © {new Date().getFullYear()} {t("app.name")} — Đà Lạt, Việt Nam
+        © {new Date().getFullYear()} {t("app.name")} — {t("footer.location")}
       </p>
     </footer>
   );
