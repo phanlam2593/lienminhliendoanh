@@ -549,7 +549,7 @@ function FollowsTab({ userId }: { userId: string }) {
     })();
   }, [userId]);
 
-  if (loading) return <p className="text-sm text-center py-12 text-muted-foreground">Đang tải…</p>;
+  if (loading) return <p className="text-sm text-center py-12 text-muted-foreground">{t("common.loading")}</p>;
 
   return (
     <div className="space-y-4">
