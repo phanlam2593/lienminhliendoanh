@@ -1018,16 +1018,17 @@ type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; admin: 
 const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, admin: true };
 
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState<null | "password" | "notif" | "theme" | "lang">(null);
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1">
-        <Settings className="w-4 h-4" /> Cài đặt
+        <Settings className="w-4 h-4" /> {t("profile.settings")}
       </h2>
       <div className="bg-card rounded-2xl shadow-sm divide-y">
         <SettingRow
           icon={<KeyRound className="w-4 h-4" />}
-          label="Đổi mật khẩu"
+          label={t("settings.changePassword")}
           onClick={() => setOpen(open === "password" ? null : "password")}
           active={open === "password"}
         />
@@ -1038,7 +1039,7 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         )}
         <SettingRow
           icon={<Bell className="w-4 h-4" />}
-          label="Thông báo"
+          label={t("settings.notifications")}
           onClick={() => setOpen(open === "notif" ? null : "notif")}
           active={open === "notif"}
         />
@@ -1050,7 +1051,7 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         )}
         <SettingRow
           icon={<Moon className="w-4 h-4" />}
-          label="Giao diện"
+          label={t("settings.theme")}
           onClick={() => setOpen(open === "theme" ? null : "theme")}
           active={open === "theme"}
         />
