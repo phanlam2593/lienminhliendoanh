@@ -127,7 +127,15 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     } catch {}
   };
 
-  const t = (key: string) => DICT[lang][key] ?? DICT.vi[key] ?? key;
+  const t = (key: string, params?: Record<string, string | number>) => {
+    let s = DICT[lang][key] ?? DICT.vi[key] ?? key;
+    if (params) {
+      for (const [k, v] of Object.entries(params)) {
+        s = s.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+      }
+    }
+    return s;
+  };
 
   return <LanguageContext.Provider value={{ lang, setLang, t }}>{children}</LanguageContext.Provider>;
 }
