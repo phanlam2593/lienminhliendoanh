@@ -323,7 +323,7 @@ export default function Profile() {
   if (view === "business") {
     return (
       <div className="p-4 space-y-5">
-        <BackBar title="Hồ sơ doanh nghiệp" />
+        <BackBar title={t("profile.business")} />
         {biz.length === 0 ? (
           <div className="p-4 bg-card rounded-2xl text-center text-sm text-muted-foreground">
             Bạn chưa có doanh nghiệp nào. Hãy tạo hồ sơ doanh nghiệp đầu tiên bên dưới.
