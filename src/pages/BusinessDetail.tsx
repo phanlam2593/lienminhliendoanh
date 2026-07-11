@@ -573,17 +573,14 @@ export default function BusinessDetail() {
                 </div>
               ) : (
                 <>
-                  <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-dashed border-emerald-300 dark:border-emerald-800 rounded-xl p-5 text-center">
-                    <div className="text-xs text-muted-foreground mb-1">Mã ưu đãi của bạn</div>
+                 <div className="bg-emerald-50 dark:bg-emerald-950/40 border-2 border-dashed border-emerald-300 dark:border-emerald-800 rounded-xl p-5 text-center">
+                    <div className="text-xs text-muted-foreground mb-1">{t("biz.yourCode")}</div>
                     <div className="text-4xl font-mono font-extrabold tracking-widest text-emerald-700 dark:text-emerald-400">
                       {claim.code}
                     </div>
                   </div>
                   <Countdown expiresAt={claim.expires_at} />
-                  <p className="text-xs text-center text-muted-foreground">
-                    Xuất trình mã này cho nhân viên doanh nghiệp để xác nhận thủ công. Mã hết hạn sau 2 giờ. Mỗi lần ghé
-                    thăm bạn có thể nhận một mã mới.
-                  </p>
+                  <p className="text-xs text-center text-muted-foreground">{t("biz.showCode")}</p>
                 </>
               )}
             </div>
