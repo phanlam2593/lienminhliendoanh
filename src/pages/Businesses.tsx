@@ -154,16 +154,16 @@ export default function Businesses() {
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        {(["all", ...BUSINESS_TYPES] as const).map((t) => (
+        {(["all", ...BUSINESS_TYPES] as const).map((bt) => (
           <button
-            key={t}
-            onClick={() => setType(t as any)}
+            key={bt}
+            onClick={() => setType(bt as any)}
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border",
-              type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card",
+              type === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
             )}
           >
-            {t === "all" ? "Tất cả" : t(`type.${t}` as any)}
+            {bt === "all" ? t("common.all") : t(`type.${bt}`)}
           </button>
         ))}
       </div>
