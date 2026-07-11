@@ -402,15 +402,18 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene2 />
         <h2 className="wo-h2">
-          Bạn là <span className="wo-hl">thành viên</span>?<br />
-          Đi đâu cũng nhận được ưu đãi
+          {t("onboarding.s1TitlePre")}
+          <span className="wo-hl">{t("onboarding.s1TitleHl")}</span>
+          {t("onboarding.s1TitlePost")}
+          <br />
+          {t("onboarding.s1TitleLine2")}
         </h2>
         <div className="wo-flow">
-          <FlowChip>Nhận mã ưu đãi trong app</FlowChip>
+          <FlowChip>{t("onboarding.s1Chip1")}</FlowChip>
           <FlowArrow />
-          <FlowChip>Đưa cho doanh nghiệp</FlowChip>
+          <FlowChip>{t("onboarding.s1Chip2")}</FlowChip>
         </div>
-        <p className="wo-simple">Đơn giản vậy thôi!</p>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
       </div>
     );
   }
