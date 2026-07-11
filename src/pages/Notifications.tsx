@@ -122,7 +122,7 @@ export default function Notifications() {
     if (!n.is_read) await markRead(n.id);
     const route = await resolveRoute(n, role === "admin");
     if (route === null) {
-      toast.message("Nội dung không còn tồn tại");
+      toast.message(t("notif.contentGone"));
       nav("/");
       return;
     }
