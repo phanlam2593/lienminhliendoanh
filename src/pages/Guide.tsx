@@ -388,7 +388,7 @@ export default function Guide() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="font-bold text-lg">Bảng hướng dẫn</h1>
+        <h1 className="font-bold text-lg">{t("guide.pageTitle")}</h1>
       </div>
 
       {sections.map((s) => (
@@ -397,7 +397,7 @@ export default function Guide() {
 
       <div className="flex items-center gap-2 justify-center text-muted-foreground pt-2">
         <Gift className="w-4 h-4" />
-        <span className="text-xs">Cho là nhận, nhận cũng là cho 🌿</span>
+        <span className="text-xs">{t("guide.tagline")}</span>
       </div>
     </div>
   );
