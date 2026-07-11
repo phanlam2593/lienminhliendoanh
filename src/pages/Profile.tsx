@@ -1421,7 +1421,7 @@ function BusinessCreator({
         onClick={() => setOpen(true)}
         className="w-full py-3 rounded-2xl border-2 border-dashed border-primary/40 text-primary font-semibold text-sm hover:bg-primary/5 transition"
       >
-        + {hasExisting ? "Tạo thêm doanh nghiệp" : "Tạo hồ sơ doanh nghiệp"}
+        + {hasExisting ? t("bizCreator.addMore") : t("profile.createBusiness")}
       </button>
     );
   }
