@@ -354,7 +354,7 @@ export default function Register() {
           </div>
         ) : (
           <div className="space-y-3">
-            <Field label="Tên doanh nghiệp *" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
+            <Field label={t("bizForm.name")} hint={t("bizForm.nameHint")}>
               <input
                 value={bizName}
                 onChange={(e) => setBN(e.target.value)}
