@@ -1229,6 +1229,7 @@ function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: 
 }
 
 function ThemeToggle() {
+  const { t } = useLanguage();
   const [dark, setDark] = useState<boolean>(() => {
     if (typeof document === "undefined") return false;
     // Đọc từ localStorage trước, fallback sang class hiện tại
