@@ -39,7 +39,9 @@ export function Logo({
   className?: string;
   asLink?: boolean;
 }) {
+  const { t } = useLanguage();
   const showTagline = withText && (withTagline ?? size >= 56);
+  const appName = t("app.name");
 
   const content = (
     <div className={cn("flex items-center gap-2.5", className)}>
@@ -47,7 +49,7 @@ export function Logo({
         src={pickSrc(size)}
         srcSet={SRCSET}
         sizes={`${size}px`}
-        alt="Liên Minh Liên Doanh logo"
+        alt={`${appName} logo`}
         width={size}
         height={size}
         style={{ width: size, height: size }}
@@ -65,9 +67,9 @@ export function Logo({
               fontSize: size <= 36 ? 12 : size <= 56 ? 14 : 17,
             }}
           >
-            {APP_NAME}
+            {appName.toUpperCase()}
           </div>
-          {showTagline && <div className="text-muted-foreground text-[11px] mt-0.5">{TAGLINE}</div>}
+          {showTagline && <div className="text-muted-foreground text-[11px] mt-0.5">{t("app.tagline")}</div>}
         </div>
       )}
     </div>
@@ -75,7 +77,7 @@ export function Logo({
 
   if (asLink) {
     return (
-      <Link to="/" aria-label="Trang chủ Liên Minh Liên Doanh">
+      <Link to="/" aria-label={`Trang chủ ${appName}`}>
         {content}
       </Link>
     );
