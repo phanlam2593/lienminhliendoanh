@@ -249,9 +249,9 @@ export default function Register() {
         {step === 1 ? (
           <div className="space-y-3">
             <Field
-              label="Tên đăng nhập *"
+              label={t("register.username")}
               right={<Status s={usernameStatus} />}
-              hint="3–20 ký tự, chỉ dùng chữ thường, số và dấu gạch dưới"
+              hint={t("register.usernameHint")}
             >
               <input
                 value={username}
@@ -263,10 +263,10 @@ export default function Register() {
                 autoCapitalize="none"
                 required
                 className="w-full px-4 py-3 rounded-xl border bg-card"
-                placeholder="ví dụ: minhanh"
+                placeholder={t("register.usernamePlaceholder")}
               />
             </Field>
-            <Field label="Họ và tên *">
+            <Field label={t("register.fullName")}>
               <input
                 value={fullName}
                 onChange={(e) => setFN(e.target.value)}
