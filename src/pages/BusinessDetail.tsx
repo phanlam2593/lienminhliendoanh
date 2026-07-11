@@ -443,14 +443,14 @@ export default function BusinessDetail() {
               onClick={messageOwner}
               className="flex-1 py-2.5 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1"
             >
-              <MessageCircle className="w-4 h-4" /> Nhắn tin
+              <MessageCircle className="w-4 h-4" /> {t("biz.message")}
             </button>
           )}
           <button
             onClick={() => setReportOpen(true)}
             className="flex-1 py-2.5 rounded-xl border text-sm font-semibold text-destructive flex items-center justify-center gap-1"
           >
-            <Flag className="w-4 h-4" /> Báo cáo
+            <Flag className="w-4 h-4" /> {t("biz.report")}
           </button>
         </div>
       </div>
