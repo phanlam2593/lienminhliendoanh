@@ -169,13 +169,15 @@ export default function Businesses() {
       </div>
       {sort !== "nearest" && (
         <div className="flex items-center gap-2 flex-wrap">
-          <label className="text-xs font-semibold text-muted-foreground">Khu vực:</label>
+          <label className="text-xs font-semibold text-muted-foreground">{t("explore.area")}</label>
           <select
             value={area}
             onChange={(e) => setArea(e.target.value)}
             className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium"
           >
-            <option value="all">Tất cả khu vực ({list.length})</option>
+            <option value="all">
+              {t("explore.allAreas")} ({list.length})
+            </option>
             {areaCounts.map(([a, n]) => (
               <option key={a} value={a}>
                 {a} ({n})
