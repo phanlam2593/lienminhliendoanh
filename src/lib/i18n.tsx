@@ -87,6 +87,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Xuất trình mã này cho nhân viên doanh nghiệp để xác nhận thủ công. Mã hết hạn sau 2 giờ. Mỗi lần ghé thăm bạn có thể nhận một mã mới.",
     "biz.codeExpired": "Mã đã hết hạn",
     "biz.timeLeft": "Còn lại {time}",
+    "biz.writeReviewTitle": "Viết đánh giá",
+    "biz.commentPlaceholder": "Nhận xét…",
+    "biz.addPhoto": "Thêm ảnh (tùy chọn)",
+    "biz.noOneClaimed": "Chưa có ai nhận",
+    "biz.reply": "Trả lời",
+    "biz.replyPlaceholder": "Trả lời đánh giá…",
   },
   en: {
     "nav.home": "Home",
