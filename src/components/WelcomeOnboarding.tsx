@@ -164,6 +164,7 @@ function SceneClouds() {
 }
 
 function Scene1() {
+  const { t } = useLanguage();
   return (
     <div className="wo-scene wo-s1">
       <SceneClouds />
@@ -179,7 +180,7 @@ function Scene1() {
       <svg viewBox="0 0 30 30" className="wo-fly wo-heartfly">
         <use href="#wo-heart" />
       </svg>
-      <div className="wo-badge">Cho là nhận, nhận cũng là cho</div>
+      <div className="wo-badge">{t("onboarding.badge")}</div>
     </div>
   );
 }
