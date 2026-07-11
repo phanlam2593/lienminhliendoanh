@@ -45,7 +45,7 @@ function ReportCard({
   onReplied: () => void;
 }) {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
