@@ -1351,11 +1351,11 @@ function BusinessCreator({
 
   const submit = async () => {
     if (!name.trim()) {
-      toast.error("Vui lòng nhập tên doanh nghiệp");
+      toast.error(t("bizCreator.nameRequired"));
       return;
     }
     if (!/^[A-Za-z0-9]{4,8}$/.test(pin)) {
-      toast.error("Vui lòng đặt mã PIN gồm 4-8 ký tự chữ/số — dùng để xác nhận khách nhận ưu đãi tại quán");
+      toast.error(t("bizCreator.pinRequired"));
       return;
     }
     setSaving(true);
