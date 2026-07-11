@@ -291,7 +291,9 @@ function Scene3({ active }: { active: boolean }) {
       <svg viewBox="0 0 40 44" className="wo-mini wo-m4">
         <use href="#wo-miniM" />
       </svg>
-      <div className="wo-count">{formatVi(count)} khách tiềm năng</div>
+      <div className="wo-count">
+        {formatVi(count)} {t("onboarding.potentialCustomers")}
+      </div>
     </div>
   );
 }
