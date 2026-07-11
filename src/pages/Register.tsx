@@ -380,7 +380,7 @@ export default function Register() {
               </div>
             </Field>
             <div className="grid grid-cols-2 gap-3">
-              <Field label="Giờ mở *" hint="Ví dụ: 07:00">
+              <Field label={t("bizForm.openTime")} hint="07:00">
                 <input
                   type="time"
                   value={open}
