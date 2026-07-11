@@ -248,9 +248,9 @@ export function MessagesThread() {
     };
   }, [user?.id, id]);
 
-  if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">Cần đăng nhập</div>;
+  if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
-    return <div className="p-8 text-center text-sm text-muted-foreground">Tài khoản cần được duyệt</div>;
+    return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
 
   const cancelPending = () => {
     if (pendingImage) URL.revokeObjectURL(pendingImage.previewUrl);
