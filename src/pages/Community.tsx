@@ -368,7 +368,7 @@ export default function Community() {
                 </button>
               </div>
             )}
-            <span className="text-xs text-muted-foreground">Nhấn nút gửi để chia sẻ</span>
+            <span className="text-xs text-muted-foreground">{t("community.tapToShare")}</span>
           </div>
         )}
         {showStickers && (
