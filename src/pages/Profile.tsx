@@ -613,15 +613,15 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
             />
           </Field>
-          <Field label="Loại hình">
+          <Field label={t("bizForm.type")}>
             <div className="flex flex-wrap gap-1.5">
-              {BUSINESS_TYPES.map((t) => (
+              {BUSINESS_TYPES.map((bt) => (
                 <button
-                  key={t}
-                  onClick={() => setType(t)}
-                  className={`px-2.5 py-1 rounded-full text-xs border ${type === t ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
+                  key={bt}
+                  onClick={() => setType(bt)}
+                  className={`px-2.5 py-1 rounded-full text-xs border ${type === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
                 >
-                  {BUSINESS_TYPE_LABEL[t]}
+                  {t(`type.${bt}`)}
                 </button>
               ))}
             </div>
