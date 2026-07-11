@@ -280,7 +280,7 @@ export default function BusinessDetail() {
               disabled={reviewLoadingMore}
               className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
             >
-              {reviewLoadingMore ? "Đang tải…" : `Tải thêm (còn ${reviewTotal - reviews.length})`}
+              {reviewLoadingMore ? t("common.loading") : `${t("common.loadMore")} (${reviewTotal - reviews.length})`}
             </button>
           )}
         </div>
