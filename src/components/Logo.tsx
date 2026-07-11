@@ -6,9 +6,7 @@ import logo128 from "@/assets/logo-128.png.asset.json";
 import logo256 from "@/assets/logo-256.png.asset.json";
 import logo512 from "@/assets/logo-512.png.asset.json";
 
-// DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
-const APP_NAME = "LIÊN MINH LIÊN DOANH";
-const TAGLINE = "Một cộng đồng – Nhiều giá trị";
+// DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — hiện qua t("app.name") để đổi theo ngôn ngữ
 const BRAND = "#0891b2";
 
 // Responsive srcset — browser picks the smallest variant that satisfies
