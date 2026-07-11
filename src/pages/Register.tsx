@@ -446,15 +446,15 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="YouTube URL (tùy chọn)">
+            <Field label={t("bizForm.youtube")}>
               <input
                 value={youtubeUrl}
                 onChange={(e) => setYt(e.target.value)}
-                placeholder="Link YouTube của bạn"
+                placeholder={t("bizForm.youtubePlaceholder")}
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Ảnh bìa">
+            <Field label={t("bizForm.cover")}>
               <input type="file" accept="image/*" onChange={(e) => setCov(e.target.files?.[0] ?? null)} />
             </Field>
             <div className="flex gap-2">
