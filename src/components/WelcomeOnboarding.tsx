@@ -4,6 +4,7 @@ import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "./Logo";
 import { setWelcomeActive } from "@/lib/pwa";
+import { useLanguage } from "@/lib/i18n";
 
 /**
  * Welcome Onboarding — 5-page swipeable popup shown ONCE per user
