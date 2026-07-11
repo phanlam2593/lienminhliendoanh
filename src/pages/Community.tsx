@@ -303,7 +303,7 @@ export default function Community() {
                         {p?.full_name || t("community.member")}
                       </button>
                       {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
-                      <span className="text-muted-foreground">{timeAgo(m.created_at)}</span>
+                      <span className="text-muted-foreground">{timeAgo(m.created_at, lang)}</span>
                       {canDelete && (
                         <button
                           onClick={() => del(m.id)}
