@@ -704,11 +704,11 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
               >
                 {isFollowing ? (
                   <>
-                    <UserCheck className="w-3.5 h-3.5" /> Đang theo dõi
+                    <UserCheck className="w-3.5 h-3.5" /> {t("biz.following")}
                   </>
                 ) : (
                   <>
-                    <UserPlus className="w-3.5 h-3.5" /> Follow
+                    <UserPlus className="w-3.5 h-3.5" /> {t("biz.follow")}
                   </>
                 )}
               </button>
