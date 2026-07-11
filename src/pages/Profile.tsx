@@ -944,6 +944,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
 }
 
 function FollowStats({ userId }: { userId: string }) {
+  const { t } = useLanguage();
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [open, setOpen] = useState<null | "followers" | "following">(null);
