@@ -1179,6 +1179,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
 }
 
 function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: any }) {
+  const { t } = useLanguage();
   const [prefs, setPrefs] = useState<NotifPrefs>({ ...DEFAULT_PREFS, ...(initial || {}) });
   const [saving, setSaving] = useState(false);
 
