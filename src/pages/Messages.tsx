@@ -511,24 +511,17 @@ export function MessagesThread() {
   );
 }
 
+interface FollowUser {
+  id: string;
+  full_name: string;
+  username: string;
+  avatar_url: string | null;
+}
+
 function FollowsTab({ userId }: { userId: string }) {
   const { t } = useLanguage();
-  const [following, setFollowing] = useState;
-  {
-    id: string;
-    full_name: string;
-    username: string;
-    avatar_url: string | null;
-  }
-  [] > [];
-  const [followers, setFollowers] = useState;
-  {
-    id: string;
-    full_name: string;
-    username: string;
-    avatar_url: string | null;
-  }
-  [] > [];
+  const [following, setFollowing] = useState<FollowUser[]>([]);
+  const [followers, setFollowers] = useState<FollowUser[]>([]);
   const [followingBiz, setFollowingBiz] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
 
