@@ -441,15 +441,18 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
         <Scene4 />
         <h2 className="wo-h2">
-          Bạn là <span className="wo-hl">người sáng tạo nội dung</span>?<br />
-          <span className="text-xs font-medium text-slate-500">(TikToker, YouTuber, streamer...)</span>
+          {t("onboarding.s3TitlePre")}
+          <span className="wo-hl">{t("onboarding.s3TitleHl")}</span>
+          {t("onboarding.s3TitlePost")}
+          <br />
+          <span className="text-xs font-medium text-slate-500">{t("onboarding.s3Sub")}</span>
         </h2>
         <div className="wo-flow">
-          <FlowChip>Bạn like, follow, share cộng đồng</FlowChip>
+          <FlowChip>{t("onboarding.s3Chip1")}</FlowChip>
           <FlowArrow two />
-          <FlowChip>Cộng đồng like, follow, share bạn</FlowChip>
+          <FlowChip>{t("onboarding.s3Chip2")}</FlowChip>
         </div>
-        <p className="wo-simple">Đơn giản vậy thôi!</p>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
       </div>
     );
   }
