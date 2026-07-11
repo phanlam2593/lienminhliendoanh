@@ -129,7 +129,7 @@ export default function Register() {
       });
       if (error) throw error;
       const uid = sign.user?.id;
-      if (!uid) throw new Error("Không tạo được tài khoản");
+      if (!uid) throw new Error(t("register.accountCreateFail"));
 
       // Chờ trigger tạo profile xong (poll tối đa ~5s thay vì đoán 600ms)
       for (let i = 0; i < 10; i++) {
