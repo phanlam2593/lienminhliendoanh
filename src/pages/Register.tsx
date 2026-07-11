@@ -218,6 +218,24 @@ export default function Register() {
   return (
     <div className="min-h-screen p-6 bg-background">
       <div className="max-w-sm mx-auto space-y-5">
+        <div className="flex justify-center">
+          <div className="inline-flex rounded-full border overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setLang("vi")}
+              className={`px-3 py-1 text-xs font-semibold ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+            >
+              VI
+            </button>
+            <button
+              type="button"
+              onClick={() => setLang("en")}
+              className={`px-3 py-1 text-xs font-semibold ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+            >
+              EN
+            </button>
+          </div>
+        </div>
         <div className="text-center space-y-2 flex flex-col items-center">
           <Logo size={56} asLink />
           {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
