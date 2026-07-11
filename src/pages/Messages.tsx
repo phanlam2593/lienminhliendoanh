@@ -109,31 +109,31 @@ export function MessagesInbox() {
     load();
   };
 
-  if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">Cần đăng nhập</div>;
+  if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
-    return <div className="p-8 text-center text-sm text-muted-foreground">Tài khoản cần được duyệt</div>;
+    return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
 
   return (
     <div className="p-4 space-y-2">
-      <h1 className="text-xl font-extrabold mb-2">Tin nhắn</h1>
+      <h1 className="text-xl font-extrabold mb-2">{t("messages.title")}</h1>
       <div className="flex gap-1 p-1 bg-muted rounded-xl">
         <button
           onClick={() => setTab("messages")}
           className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "messages" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
         >
-          Tin nhắn
+          {t("messages.title")}
         </button>
         <button
           onClick={() => setTab("follows")}
           className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "follows" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
         >
-          Theo dõi
+          {t("messages.follows")}
         </button>
       </div>
 
       {tab === "messages" ? (
         convos.length === 0 ? (
-          <p className="text-sm text-center py-12 text-muted-foreground">Chưa có cuộc trò chuyện</p>
+          <p className="text-sm text-center py-12 text-muted-foreground">{t("messages.noConversations")}</p>
         ) : (
           convos.map((c) => (
             <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
