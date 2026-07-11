@@ -132,6 +132,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "theme.darkMode": "Chế độ tối",
     "theme.lightMode": "Chế độ sáng",
     "app.name": "Liên Minh Liên Doanh",
+    "profile.followers": "Người theo dõi",
   },
   en: {
     "nav.home": "Home",
