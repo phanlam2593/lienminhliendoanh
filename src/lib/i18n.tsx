@@ -359,6 +359,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     "membership.toward": "Tới",
     "membership.perMonth": "/ tháng",
     "membership.comingSoon": "Sắp ra mắt",
+    "notifBody.tapToView": "Nhấn để xem",
+    "notifTitle.messages": "Bạn có tin nhắn mới",
+    "notifTitle.follows": "Bạn có người theo dõi mới",
+    "notifTitle.dealsReceived": "Bạn có ưu đãi được nhận",
+    "notifTitle.dealsNew": "Có ưu đãi mới từ nơi bạn theo dõi",
+    "notifTitle.accountUpdates": "Có cập nhật về tài khoản/doanh nghiệp của bạn",
+    "notifTitle.reports": "Bạn có cập nhật báo cáo mới",
   },
   en: {
     "nav.home": "Home",
