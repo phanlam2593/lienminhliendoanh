@@ -27,6 +27,7 @@ function getLocation(address?: string | null): string | null {
 // DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
 export default function Home() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
   const [featured, setFeatured] = useState<BusinessCardData[]>([]);
   const [modal, setModal] = useState<StatKind | null>(null);
