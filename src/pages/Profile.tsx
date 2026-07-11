@@ -1399,7 +1399,7 @@ function BusinessCreator({
           status: "active",
         });
       }
-      toast.success("Đã gửi hồ sơ doanh nghiệp. Đang chờ admin duyệt.");
+      toast.success(t("bizCreator.submitSuccess"));
       setOpen(false);
       setName("");
       setPhone("");
@@ -1409,7 +1409,7 @@ function BusinessCreator({
       setCoverFile(null);
       onCreated();
     } catch (e: any) {
-      toast.error(e.message ?? "Không thể tạo doanh nghiệp");
+      toast.error(e.message ?? t("bizCreator.submitFail"));
     } finally {
       setSaving(false);
     }
