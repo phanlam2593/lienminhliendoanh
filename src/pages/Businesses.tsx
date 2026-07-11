@@ -5,6 +5,7 @@ import type { Business, BusinessType } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n";
 
 type SortKey = "newest" | "rating" | "offers" | "nearest";
 type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
