@@ -721,6 +721,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     "membership.toward": "Toward",
     "membership.perMonth": "/ month",
     "membership.comingSoon": "Coming soon",
+    "notifBody.tapToView": "Tap to view",
+    "notifTitle.messages": "You have a new message",
+    "notifTitle.follows": "You have a new follower",
+    "notifTitle.dealsReceived": "Your offer was claimed",
+    "notifTitle.dealsNew": "New offer from a business you follow",
+    "notifTitle.accountUpdates": "There's an update to your account/business",
+    "notifTitle.reports": "You have a report update",
   },
 };
 
