@@ -202,8 +202,16 @@ export default function Notifications() {
                     <Icon className="w-4 h-4" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className={cn("text-sm", n.is_read ? "font-medium" : "font-bold")}>{n.title}</div>
-                    {n.body && <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{n.body}</div>}
+                    <div className={cn("text-sm", n.is_read ? "font-medium" : "font-bold")}>
+                      {n.category && NOTIF_TITLE_KEY_BY_CATEGORY[n.category]
+                        ? t(NOTIF_TITLE_KEY_BY_CATEGORY[n.category])
+                        : n.title}
+                    </div>
+                    {n.body && (
+                      <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                        {n.body === "Nhấn để xem" ? t("notifBody.tapToView") : n.body}
+                      </div>
+                    )}
                     <div className="text-[10px] text-muted-foreground mt-1">{timeAgo(n.created_at)}</div>
                   </div>
                 </button>
