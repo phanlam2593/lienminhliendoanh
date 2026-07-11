@@ -81,6 +81,15 @@ const DICT: Record<Lang, Record<string, string>> = {
     "type.freelance": "Freelance",
     "type.broker": "Broker",
     "type.other": "Other",
+    "stats.members": "Members",
+    "stats.businesses": "Businesses",
+    "stats.offers": "Offers",
+    "stats.offersClaimed": "Offers claimed",
+    "home.featured": "Featured Businesses",
+    "home.exploreBusinesses": "Explore Businesses",
+    "home.noFeatured": "No featured businesses yet",
+    "common.searchPlaceholder": "Search…",
+    "common.noResults": "No results",
   },
 };
 
