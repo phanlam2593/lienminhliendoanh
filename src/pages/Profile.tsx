@@ -1456,7 +1456,7 @@ function BusinessCreator({
               onClick={() => setType(bt)}
               className={`px-2.5 py-1 rounded-full text-xs border ${type === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card"}`}
             >
-              {BUSINESS_TYPE_LABEL[bt]}
+              {t(`type.${bt}`)}
             </button>
           ))}
         </div>
