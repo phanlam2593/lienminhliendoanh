@@ -285,7 +285,7 @@ export default function Profile() {
   if (view === "personal") {
     return (
       <div className="p-4 space-y-5">
-        <BackBar title="Hồ sơ cá nhân" />
+        <BackBar title={t("profile.personal")} />
         {Header}
         {(MEMBERSHIP_ENABLED || role === "admin") && <MembershipCard points={(profile as any)?.points ?? 0} />}
         <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
