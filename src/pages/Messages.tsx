@@ -141,7 +141,9 @@ export function MessagesInbox() {
                 <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <div className="font-semibold text-sm truncate">{c.partner?.full_name || "Người dùng"}</div>
+                    <div className="font-semibold text-sm truncate">
+                      {c.partner?.full_name || t("messages.unknownUser")}
+                    </div>
                     {c.partner && <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />}
                   </div>
                   <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
