@@ -309,7 +309,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Xác nhận mật khẩu *">
+            <Field label={t("register.confirmPassword")}>
               <input
                 type="password"
                 value={password2}
@@ -318,10 +318,10 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
               {password2 && password !== password2 && (
-                <span className="text-xs text-destructive">Mật khẩu không khớp</span>
+                <span className="text-xs text-destructive">{t("register.passwordMismatch")}</span>
               )}
             </Field>
-            <Field label="Ảnh đại diện (tùy chọn)">
+            <Field label={t("register.avatar")}>
               <input type="file" accept="image/*" onChange={(e) => setAv(e.target.files?.[0] ?? null)} />
             </Field>
 
