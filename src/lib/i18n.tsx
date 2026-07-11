@@ -769,6 +769,45 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notifTitle.dealsNew": "New offer from a business you follow",
     "notifTitle.accountUpdates": "There's an update to your account/business",
     "notifTitle.reports": "You have a report update",
+    "legal.lastUpdated": "Last updated: 07/2026",
+    "termsPage.title": "Terms of Use",
+    "termsPage.s1Title": "1. Introduction",
+    "termsPage.s1P1":
+      '"{app}" (referred to as the "App") is a community platform connecting members and businesses in Đà Lạt. By registering and using the App, you agree to comply with the terms below.',
+    "termsPage.s2Title": "2. User Accounts",
+    "termsPage.s2P1": "You must provide accurate information (full name, email, phone number) when registering.",
+    "termsPage.s2P2": "You are responsible for keeping your password secure and for all activity under your account.",
+    "termsPage.s2P3":
+      "New accounts may need to be reviewed by the Admin team in some cases (especially business profiles) before being shown publicly.",
+    "termsPage.s3Title": "3. Community Conduct",
+    "termsPage.s3Intro": "When using chat, reviews, or reports, you agree to:",
+    "termsPage.s3Li1": "Not post false, offensive, or harassing content",
+    "termsPage.s3Li2": "Not impersonate another person or business",
+    "termsPage.s3Li3": "Not spam or advertise outside the App's intended purpose",
+    "termsPage.s3Li4": "Respect other members' privacy",
+    "termsPage.s4Title": "4. Businesses & Offers",
+    "termsPage.s4P1":
+      "Business owners are responsible for the accuracy of their business information and posted offers, including honoring the offer when a member presents a valid code.",
+    "termsPage.s4P2": 'If a business does not honor a posted offer, members can report it via the "Report" section.',
+    "termsPage.s5Title": "5. User-Generated Content",
+    "termsPage.s5P1":
+      "You retain ownership of the content you post (reviews, photos, messages), but grant the App a license to display that content within the scope of community activity.",
+    "termsPage.s6Title": "6. Prohibited Conduct",
+    "termsPage.s6Li1": "Creating fake accounts or using someone else's information without permission",
+    "termsPage.s6Li2": "Unauthorized interference with the system or exploiting security vulnerabilities",
+    "termsPage.s6Li3": "Using the App for purposes that violate Vietnamese law",
+    "termsPage.s6P1": "The Admin team may suspend or delete violating accounts without prior notice.",
+    "termsPage.s7Title": "7. Membership Plan",
+    "termsPage.s7P1":
+      "When the paid membership feature is activated, separate terms on payment, refunds, and renewal will be announced and require your separate consent before subscribing.",
+    "termsPage.s8Title": "8. Limitation of Liability",
+    "termsPage.s8P1":
+      "The App serves to connect members and businesses and is not a direct provider of businesses' goods/services. The App is not responsible for the quality of goods or services provided by businesses.",
+    "termsPage.s9Title": "9. Changes to These Terms",
+    "termsPage.s9P1": "These terms may be updated over time. We will notify you in the App of any significant changes.",
+    "termsPage.s10Title": "10. Contact",
+    "termsPage.s10Pre": "For questions about these terms, please contact us via Zalo",
+    "termsPage.s10Post": 'or Facebook "{app}".',
   },
 };
 
