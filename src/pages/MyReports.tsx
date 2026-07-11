@@ -7,13 +7,20 @@ import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 import { LightboxImage } from "@/components/ImageLightbox";
 import { Avatar } from "@/components/Avatar";
+import { useLanguage } from "@/lib/i18n";
 import type { Report, ReportStatus } from "@/lib/types";
 
-const REPORT_STATUS_LABEL: Record<ReportStatus, { label: string; cls: string }> = {
-  pending: { label: "Chờ xử lý", cls: "bg-amber-50 text-amber-700 dark:bg-amber-950/30" },
-  replied: { label: "Đã phản hồi", cls: "bg-primary/10 text-primary" },
-  resolved: { label: "Đã xử lý", cls: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30" },
-  closed: { label: "Đã đóng", cls: "bg-muted text-muted-foreground" },
+const REPORT_STATUS_CLS: Record<ReportStatus, string> = {
+  pending: "bg-amber-50 text-amber-700 dark:bg-amber-950/30",
+  replied: "bg-primary/10 text-primary",
+  resolved: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30",
+  closed: "bg-muted text-muted-foreground",
+};
+const REPORT_STATUS_KEY: Record<ReportStatus, string> = {
+  pending: "reports.statusPending",
+  replied: "reports.statusReplied",
+  resolved: "reports.statusResolved",
+  closed: "reports.statusClosed",
 };
 
 interface EnrichedReply {
@@ -23,7 +30,7 @@ interface EnrichedReply {
   author_id: string;
   full_name: string;
   avatar_url: string | null;
-  roleLabel: string | null; // "Admin" | "Chủ doanh nghiệp" | null (thành viên thường)
+  roleLabel: "admin" | "owner" | null; // dịch tại nơi hiển thị qua t()
 }
 
 function ReportCard({
@@ -38,6 +45,7 @@ function ReportCard({
   onReplied: () => void;
 }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -61,24 +69,24 @@ function ReportCard({
     <div className="bg-card rounded-xl overflow-hidden shadow-sm">
       <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-semibold truncate">{r.target_name || "Nội dung đã xoá"}</span>
+          <span className="text-sm font-semibold truncate">{r.target_name || t("reports.contentDeleted")}</span>
           <span
-            className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_LABEL[r.status].cls}`}
+            className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_CLS[r.status]}`}
           >
-            {REPORT_STATUS_LABEL[r.status].label}
+            {t(REPORT_STATUS_KEY[r.status])}
           </span>
         </div>
         <p className="text-xs text-muted-foreground truncate">
           {open ? r.description : `${r.description?.slice(0, 60)}${(r.description?.length ?? 0) > 60 ? "…" : ""}`} ·{" "}
           {timeAgo(r.created_at)}
-          {replies.length > 0 && ` · ${replies.length} phản hồi`}
+          {replies.length > 0 && ` · ${t("reports.repliesCount", { n: replies.length })}`}
         </p>
       </button>
       {open && (
         <div className="px-3 pb-3 space-y-1.5">
           {r.photo_url && (
             <div className="h-32 rounded-lg overflow-hidden bg-muted">
-              <LightboxImage path={r.photo_url} alt="Ảnh báo cáo" className="w-full h-full object-cover" />
+              <LightboxImage path={r.photo_url} alt={t("reports.reportImage")} className="w-full h-full object-cover" />
             </div>
           )}
           {replies.length > 0 && (
@@ -91,8 +99,8 @@ function ReportCard({
                       <span className="truncate">{rr.full_name}</span>
                       {rr.roleLabel && (
                         <span className="shrink-0 inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
-                          {rr.roleLabel === "Admin" && <Shield className="w-2.5 h-2.5" />}
-                          {rr.roleLabel}
+                          {rr.roleLabel === "admin" && <Shield className="w-2.5 h-2.5" />}
+                          {rr.roleLabel === "admin" ? t("reports.roleAdmin") : t("reports.roleBusinessOwner")}
                         </span>
                       )}
                       <span className="text-muted-foreground font-normal ml-auto shrink-0">
@@ -110,7 +118,7 @@ function ReportCard({
               <input
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                placeholder="Nhập phản hồi…"
+                placeholder={t("reports.replyPlaceholder")}
                 className="flex-1 px-2.5 py-1.5 rounded-lg border bg-background text-xs"
               />
               <button
@@ -131,6 +139,7 @@ function ReportCard({
 
 export default function MyReports() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [tab, setTab] = useState<"reports" | "business">("reports");
   const [reports, setReports] = useState<(Report & { target_name?: string })[]>([]);
   const [bizReports, setBizReports] = useState<(Report & { target_name?: string })[]>([]);
@@ -207,16 +216,16 @@ export default function MyReports() {
       replyRows.forEach((rr: any) => {
         const prof = profMap.get(rr.author_id);
         const report = reportById.get(rr.report_id);
-        let roleLabel: string | null = null;
-        if (adminIds.has(rr.author_id)) roleLabel = "Admin";
+        let roleLabel: "admin" | "owner" | null = null;
+        if (adminIds.has(rr.author_id)) roleLabel = "admin";
         else if (report?.target_type === "business" && bizOwnerMap.get(report.target_id) === rr.author_id)
-          roleLabel = "Chủ doanh nghiệp";
+          roleLabel = "owner";
         (grouped[rr.report_id] ??= []).push({
           id: rr.id,
           body: rr.body,
           created_at: rr.created_at,
           author_id: rr.author_id,
-          full_name: prof?.full_name || "Người dùng",
+          full_name: prof?.full_name || t("messages.unknownUser"),
           avatar_url: prof?.avatar_url ?? null,
           roleLabel,
         });
@@ -237,7 +246,7 @@ export default function MyReports() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <h1 className="font-bold text-lg">Báo cáo của tôi</h1>
+        <h1 className="font-bold text-lg">{t("reports.pageTitle")}</h1>
       </div>
 
       <div className="flex gap-2 flex-wrap">
@@ -245,23 +254,23 @@ export default function MyReports() {
           onClick={() => setTab("reports")}
           className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "reports" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
         >
-          <Flag className="w-3.5 h-3.5 inline mr-1" /> Báo cáo đã gửi ({reports.length})
+          <Flag className="w-3.5 h-3.5 inline mr-1" /> {t("reports.sent")} ({reports.length})
         </button>
         {myBizIds.length > 0 && (
           <button
             onClick={() => setTab("business")}
             className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "business" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
           >
-            <Building2 className="w-3.5 h-3.5 inline mr-1" /> Về doanh nghiệp của tôi ({bizReports.length})
+            <Building2 className="w-3.5 h-3.5 inline mr-1" /> {t("reports.aboutMyBusiness")} ({bizReports.length})
           </button>
         )}
       </div>
 
       {loading ? (
-        <p className="text-sm text-muted-foreground text-center py-8">Đang tải…</p>
+        <p className="text-sm text-muted-foreground text-center py-8">{t("common.loading")}</p>
       ) : tab === "reports" ? (
         reports.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">Bạn chưa gửi báo cáo nào</p>
+          <p className="text-sm text-muted-foreground text-center py-8">{t("reports.noSentReports")}</p>
         ) : (
           <div className="space-y-2">
             {reports.map((r) => (
@@ -270,7 +279,7 @@ export default function MyReports() {
           </div>
         )
       ) : bizReports.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-8">Chưa có báo cáo nào về doanh nghiệp của bạn</p>
+        <p className="text-sm text-muted-foreground text-center py-8">{t("reports.noBusinessReports")}</p>
       ) : (
         <div className="space-y-2">
           {bizReports.map((r) => (
