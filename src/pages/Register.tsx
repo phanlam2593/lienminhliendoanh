@@ -187,17 +187,17 @@ export default function Register() {
       nav("/");
     } catch (e: any) {
       const msg = String(e?.message || "");
-      // Dịch các lỗi tiếng Anh thường gặp từ Supabase sang tiếng Việt dễ hiểu
+      // Dịch các lỗi tiếng Anh thường gặp từ Supabase sang thông báo dễ hiểu (theo ngôn ngữ đang chọn)
       if (/leaked|pwned|compromised|data breach/i.test(msg)) {
-        toast.error("Mật khẩu này từng bị lộ trên mạng nên không an toàn. Vui lòng chọn mật khẩu khác mạnh hơn.");
+        toast.error(t("register.errLeaked"));
       } else if (/password.*(short|least|6 char)/i.test(msg)) {
-        toast.error("Mật khẩu quá ngắn. Vui lòng dùng ít nhất 6 ký tự.");
+        toast.error(t("register.errShort"));
       } else if (/already registered|already exists|user.*exist/i.test(msg)) {
-        toast.error("Tên đăng nhập này đã có người dùng. Vui lòng chọn tên khác.");
+        toast.error(t("register.errTaken"));
       } else if (/network|fetch|timeout/i.test(msg)) {
-        toast.error("Lỗi kết nối mạng. Vui lòng kiểm tra internet và thử lại.");
+        toast.error(t("register.errNetwork"));
       } else {
-        toast.error(msg || "Đăng ký thất bại");
+        toast.error(msg || t("register.errGeneric"));
       }
     } finally {
       setSubmitting(false);
