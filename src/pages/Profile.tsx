@@ -1492,14 +1492,11 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field
-        label="Mã PIN xác nhận claim (4-8 ký tự) *"
-        hint="Giống kiểu đặt mật khẩu WiFi của quán. Đọc cho khách khi họ tới để họ nhập, xác nhận nhận ưu đãi. Có thể đổi sau trong Hồ sơ doanh nghiệp."
-      >
+      <Field label={t("bizCreator.pinLabelRequired")} hint={t("bizCreator.pinHint")}>
         <input
           value={pin}
           onChange={(e) => setPin(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 8))}
-          placeholder="VD: quan1234"
+          placeholder="quan1234"
           maxLength={8}
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono"
         />
@@ -1510,14 +1507,9 @@ function BusinessCreator({
         disabled={locating}
         className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
       >
-        📍{" "}
-        {locating
-          ? "Đang lấy vị trí…"
-          : lat
-            ? "Đã ghim vị trí — bấm lại để cập nhật"
-            : "Ghim vị trí hiện tại (cho tính năng Gần đây)"}
+        📍 {locating ? t("bizCreator.locating") : lat ? t("bizCreator.locationPinned") : t("bizCreator.pinLocation")}
       </button>
-      <Field label="Mô tả">
+      <Field label={t("bizForm.desc")}>
         <textarea
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
