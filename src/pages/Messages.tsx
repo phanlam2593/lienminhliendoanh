@@ -196,7 +196,7 @@ export function MessagesInbox() {
 export function MessagesThread() {
   const { id = "" } = useParams();
   const { user, isApproved, isAdmin } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const nav = useNavigate();
   const [partner, setPartner] = useState<Profile | null>(null);
   const [msgs, setMsgs] = useState<Message[]>([]);
