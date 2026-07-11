@@ -274,7 +274,7 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Email *" right={<Status s={emailStatus} />}>
+            <Field label={t("register.email")} right={<Status s={emailStatus} />}>
               <input
                 type="email"
                 value={email}
