@@ -1607,14 +1607,14 @@ function PushPermissionButton() {
     return (
       <div className="space-y-2">
         <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold">
-          <BellRing className="w-4 h-4" /> Thông báo đẩy đã bật
+          <BellRing className="w-4 h-4" /> {t("push.enabled")}
         </div>
         <button
           onClick={handleEnable}
           disabled={busy}
           className="w-full py-2 rounded-lg border text-xs font-semibold text-muted-foreground disabled:opacity-50"
         >
-          {busy ? "Đang đồng bộ…" : "Đồng bộ lại đăng ký thông báo"}
+          {busy ? t("push.resyncing") : t("push.resync")}
         </button>
       </div>
     );
@@ -1622,7 +1622,7 @@ function PushPermissionButton() {
   if (status === "denied") {
     return (
       <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-xs">
-        Thông báo đang bị chặn. Vào cài đặt trình duyệt để bật lại.
+        {t("push.blocked")}
       </div>
     );
   }
@@ -1632,7 +1632,7 @@ function PushPermissionButton() {
       disabled={busy || status === "checking"}
       className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
     >
-      <BellRing className="w-4 h-4" /> {busy ? "Đang bật…" : "Bật thông báo đẩy"}
+      <BellRing className="w-4 h-4" /> {busy ? t("push.enabling") : t("push.enable")}
     </button>
   );
 }
