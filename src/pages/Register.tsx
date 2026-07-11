@@ -362,19 +362,19 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Loại hình *">
+            <Field label={t("bizForm.type")}>
               <div className="flex flex-wrap gap-2">
-                {BUSINESS_TYPES.map((t) => (
+                {BUSINESS_TYPES.map((bt) => (
                   <button
                     type="button"
-                    key={t}
-                    onClick={() => setBT(t)}
+                    key={bt}
+                    onClick={() => setBT(bt)}
                     className={cn(
                       "px-3 py-1.5 rounded-full text-sm border",
-                      bizType === t ? "bg-primary text-primary-foreground border-primary" : "bg-card",
+                      bizType === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
                     )}
                   >
-                    {BUSINESS_TYPE_LABEL[t]}
+                    {BUSINESS_TYPE_LABEL[bt]}
                   </button>
                 ))}
               </div>
