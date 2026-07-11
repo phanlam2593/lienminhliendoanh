@@ -42,7 +42,7 @@ function messagePreview(m: Pick<Message, "type" | "content">): string {
 
 export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
   const [sp] = useSearchParams();
