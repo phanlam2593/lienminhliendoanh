@@ -430,19 +430,19 @@ export default function Register() {
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="TikTok URL (tùy chọn)">
+            <Field label={t("bizForm.tiktok")}>
               <input
                 value={tiktokUrl}
                 onChange={(e) => setTk(e.target.value)}
-                placeholder="Link TikTok của bạn"
+                placeholder={t("bizForm.tiktokPlaceholder")}
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
-            <Field label="Instagram URL (tùy chọn)">
+            <Field label={t("bizForm.instagram")}>
               <input
                 value={instagramUrl}
                 onChange={(e) => setIg(e.target.value)}
-                placeholder="Link Instagram của bạn"
+                placeholder={t("bizForm.instagramPlaceholder")}
                 className="w-full px-4 py-3 rounded-xl border bg-card"
               />
             </Field>
