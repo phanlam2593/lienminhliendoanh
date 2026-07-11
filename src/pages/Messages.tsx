@@ -487,7 +487,7 @@ export function MessagesThread() {
         </button>
       </div>
 
-       <AlertDialog open={!!confirmDeleteId} onOpenChange={(v) => !v && setConfirmDeleteId(null)}>
+      <AlertDialog open={!!confirmDeleteId} onOpenChange={(v) => !v && setConfirmDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t("messages.deleteMsgTitle")}</AlertDialogTitle>
@@ -513,9 +513,22 @@ export function MessagesThread() {
 
 function FollowsTab({ userId }: { userId: string }) {
   const { t } = useLanguage();
-  const [following, setFollowing] = useState<
-    { id: string; full_name: string; username: string; avatar_url: string | null }[]
-  >([]);
+  const [following, setFollowing] = useState;
+  {
+    id: string;
+    full_name: string;
+    username: string;
+    avatar_url: string | null;
+  }
+  [] > [];
+  const [followers, setFollowers] = useState;
+  {
+    id: string;
+    full_name: string;
+    username: string;
+    avatar_url: string | null;
+  }
+  [] > [];
   const [followingBiz, setFollowingBiz] = useState<Business[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -553,7 +566,7 @@ function FollowsTab({ userId }: { userId: string }) {
   return (
     <div className="space-y-4">
       <div>
-       <h2 className="text-sm font-bold mb-2">
+        <h2 className="text-sm font-bold mb-2">
           {t("messages.followingHeader")} ({following.length + followingBiz.length})
         </h2>
         {following.length === 0 && followingBiz.length === 0 ? (
@@ -617,32 +630,6 @@ function FollowsTab({ userId }: { userId: string }) {
                   className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1"
                 >
                   <MessageCircle className="w-3 h-3" /> {t("biz.message")}
-                </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div>
-        <h2 className="text-sm font-bold mb-2">Người theo dõi tôi ({followers.length})</h2>
-        {followers.length === 0 ? (
-          <p className="text-xs text-muted-foreground py-2">Chưa có ai theo dõi bạn</p>
-        ) : (
-          <div className="space-y-2">
-            {followers.map((p) => (
-              <div key={p.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
-                <Avatar path={p.avatar_url} name={p.full_name} size={36} />
-                <Link to={`/ho-so/${p.id}`} className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{p.full_name}</div>
-                  <div className="text-[11px] text-muted-foreground truncate">@{p.username}</div>
-                </Link>
-                <Link
-                  to={`/tin-nhan/${p.id}`}
-                  className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1"
-                >
-                  <MessageCircle className="w-3 h-3" /> Nhắn tin
                 </Link>
               </div>
             ))}
