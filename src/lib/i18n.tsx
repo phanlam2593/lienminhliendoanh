@@ -47,6 +47,11 @@ const DICT: Record<Lang, Record<string, string>> = {
     "home.noFeatured": "Chưa có doanh nghiệp nổi bật",
     "common.searchPlaceholder": "Tìm kiếm…",
     "common.noResults": "Không có kết quả",
+    "home.badge": "✦ Hệ sinh thái cộng đồng",
+    "home.heroTitle": "Nơi thành viên và doanh nghiệp cùng phát triển",
+    "app.tagline": "Một cộng đồng – Nhiều giá trị",
+    "home.contactAdmin": "Liên hệ ban quản trị",
+    "home.joinNow": "Tham gia ngay",
   },
   en: {
     "nav.home": "Home",
