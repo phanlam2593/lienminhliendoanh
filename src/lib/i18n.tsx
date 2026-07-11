@@ -252,6 +252,12 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notif.deleteRead": "Delete read",
     "notif.empty": "No new notifications",
     "notif.contentGone": "This content no longer exists",
+    "profile.notLoggedIn": "You are not logged in",
+    "settings.changePassword": "Change password",
+    "settings.notifications": "Notifications",
+    "settings.theme": "Appearance",
+    "theme.darkMode": "Dark mode",
+    "theme.lightMode": "Light mode",
   },
 };
 
