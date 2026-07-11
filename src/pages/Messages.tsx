@@ -554,9 +554,11 @@ function FollowsTab({ userId }: { userId: string }) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-sm font-bold mb-2">Đang theo dõi ({following.length + followingBiz.length})</h2>
+       <h2 className="text-sm font-bold mb-2">
+          {t("messages.followingHeader")} ({following.length + followingBiz.length})
+        </h2>
         {following.length === 0 && followingBiz.length === 0 ? (
-          <p className="text-xs text-muted-foreground py-2">Bạn chưa theo dõi ai</p>
+          <p className="text-xs text-muted-foreground py-2">{t("messages.notFollowingAnyone")}</p>
         ) : (
           <div className="space-y-2">
             {following.map((p) => (
