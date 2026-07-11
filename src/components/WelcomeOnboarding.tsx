@@ -632,7 +632,7 @@ export function WelcomeOnboarding({
           ))}
         </div>
         <button onClick={() => (isLast ? close() : go(page + 1))} className="wo-cta">
-          {isLast ? t("onboarding.start") : t("common.confirm") === "Xác nhận" ? "Tiếp tục" : "Continue"}
+          {isLast ? t("onboarding.start") : t("register.continue")}
         </button>
       </div>
 
