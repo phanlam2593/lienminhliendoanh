@@ -473,7 +473,9 @@ export function MessagesThread() {
             if (e.key === "Enter") send();
           }}
           disabled={!!pendingImage || !!pendingSticker}
-          placeholder={pendingImage || pendingSticker ? "Nhấn gửi để chia sẻ…" : "Nhập tin nhắn…"}
+          placeholder={
+            pendingImage || pendingSticker ? t("community.tapSendPlaceholder") : t("messages.inputPlaceholder")
+          }
           className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
         />
         <button
