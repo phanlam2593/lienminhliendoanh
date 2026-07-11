@@ -190,7 +190,7 @@ export function Layout() {
 }
 
 function WelcomeScreen() {
-  const { t } = useLanguage();
+  const { t, lang, setLang } = useLanguage();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
   useEffect(() => {
     (async () => {
