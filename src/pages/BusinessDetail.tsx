@@ -865,19 +865,21 @@ function ReviewItem({
 }
 
 function Countdown({ expiresAt }: { expiresAt: string }) {
+  const { t } = useLanguage();
   const [ms, setMs] = useState(() => new Date(expiresAt).getTime() - Date.now());
   useEffect(() => {
-    const t = setInterval(() => setMs(new Date(expiresAt).getTime() - Date.now()), 1000);
-    return () => clearInterval(t);
+    const timer = setInterval(() => setMs(new Date(expiresAt).getTime() - Date.now()), 1000);
+    return () => clearInterval(timer);
   }, [expiresAt]);
-  if (ms <= 0) return <div className="text-center text-sm font-semibold text-destructive">Mã đã hết hạn</div>;
+  if (ms <= 0) return <div className="text-center text-sm font-semibold text-destructive">{t("biz.codeExpired")}</div>;
   const h = Math.floor(ms / 3_600_000);
   const m = Math.floor((ms % 3_600_000) / 60_000);
   const s = Math.floor((ms % 60_000) / 1000);
+  const timeStr = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   return (
     <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
       <Clock className="w-4 h-4" />
-      Còn lại {String(h).padStart(2, "0")}:{String(m).padStart(2, "0")}:{String(s).padStart(2, "0")}
+      {t("biz.timeLeft", { time: timeStr })}
     </div>
   );
 }
