@@ -1253,7 +1253,7 @@ function ThemeToggle() {
     <div className="flex items-center justify-between gap-3 p-2">
       <span className="text-sm flex items-center gap-2">
         {dark ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-        Chế độ {dark ? "tối" : "sáng"}
+        {dark ? t("theme.darkMode") : t("theme.lightMode")}
       </span>
       <button
         type="button"
