@@ -513,10 +513,8 @@ export function MessagesThread() {
 }
 
 function FollowsTab({ userId }: { userId: string }) {
+  const { t } = useLanguage();
   const [following, setFollowing] = useState<
-    { id: string; full_name: string; username: string; avatar_url: string | null }[]
-  >([]);
-  const [followers, setFollowers] = useState<
     { id: string; full_name: string; username: string; avatar_url: string | null }[]
   >([]);
   const [followingBiz, setFollowingBiz] = useState<Business[]>([]);
