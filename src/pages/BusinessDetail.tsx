@@ -954,11 +954,11 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
           >
             {following ? (
               <>
-                <UserCheck className="w-3.5 h-3.5" /> Đang theo dõi
+                <UserCheck className="w-3.5 h-3.5" /> {t("biz.following")}
               </>
             ) : (
               <>
-                <UserPlus className="w-3.5 h-3.5" /> Theo dõi
+                <UserPlus className="w-3.5 h-3.5" /> {t("biz.follow")}
               </>
             )}
           </button>
@@ -970,7 +970,6 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
         onOpenChange={setListOpen}
         target={{ kind: "business", id: businessId }}
         mode="followers"
-        title="Người theo dõi doanh nghiệp"
       />
     </>
   );
