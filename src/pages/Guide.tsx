@@ -197,7 +197,8 @@ function GuideSection({ data, open, onToggle }: { data: SectionData; open: boole
   );
 }
 
-function BizTypeItem({ type }: { type: BusinessType }) {
+ffunction BizTypeItem({ type }: { type: BusinessType }) {
+  const { lang, t } = useLanguage();
   const [open, setOpen] = useState(false);
   return (
     <div className="bg-accent/50 rounded-xl overflow-hidden">
@@ -215,9 +216,9 @@ function BizTypeItem({ type }: { type: BusinessType }) {
       {open && (
         <div className="px-3 pb-3 space-y-2.5">
           <div>
-            <div className="text-[11px] font-semibold text-muted-foreground mb-1">Ví dụ ngành nghề</div>
+            <div className="text-[11px] font-semibold text-muted-foreground mb-1">{t("guide.examples")}</div>
             <div className="flex flex-wrap gap-1.5">
-              {BIZ_EXAMPLES[type].map((ex, i) => (
+              {BIZ_EXAMPLES[type][lang].map((ex, i) => (
                 <span key={i} className="text-[11px] px-2 py-1 rounded-full bg-card text-muted-foreground">
                   {ex}
                 </span>
@@ -225,9 +226,9 @@ function BizTypeItem({ type }: { type: BusinessType }) {
             </div>
           </div>
           <div>
-            <div className="text-[11px] font-semibold text-primary mb-1">💡 Gợi ý ưu đãi nên thử</div>
+            <div className="text-[11px] font-semibold text-primary mb-1">{t("guide.offerIdeas")}</div>
             <div className="flex flex-wrap gap-1.5">
-              {BIZ_OFFER_IDEAS[type].map((idea, i) => (
+              {BIZ_OFFER_IDEAS[type][lang].map((idea, i) => (
                 <span key={i} className="text-[11px] px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">
                   {idea}
                 </span>
