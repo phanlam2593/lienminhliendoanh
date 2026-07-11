@@ -241,6 +241,11 @@ const DICT: Record<Lang, Record<string, string>> = {
     "messages.followersHeader": "My followers",
     "messages.noFollowers": "No one follows you yet",
     "messages.messageOwner": "Message owner",
+    "notif.title": "Notifications",
+    "notif.markAllRead": "Mark all as read",
+    "notif.deleteRead": "Delete read",
+    "notif.empty": "No new notifications",
+    "notif.contentGone": "This content no longer exists",
   },
 };
 
