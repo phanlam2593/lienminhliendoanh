@@ -180,11 +180,9 @@ export default function Register() {
       }
 
       if (isBiz) {
-        toast.success("Đăng ký thành công! Doanh nghiệp của bạn đang chờ admin duyệt.");
+        toast.success(t("register.bizSuccessToast"));
       } else {
-        toast.success(
-          "👋 Xin chào thành viên mới! Từ giờ bạn đã là một phần của Liên Minh Liên Doanh. Bắt đầu khám phá ưu đãi từ cộng đồng thôi nào!",
-        );
+        toast.success(t("register.memberSuccessToast", { app: t("app.name") }));
       }
       nav("/");
     } catch (e: any) {
