@@ -388,7 +388,7 @@ export default function Register() {
                   className="w-full px-3 py-3 rounded-xl border bg-card"
                 />
               </Field>
-              <Field label="Giờ đóng *" hint="Ví dụ: 22:00">
+              <Field label={t("bizForm.closeTime")} hint="22:00">
                 <input
                   type="time"
                   value={close}
