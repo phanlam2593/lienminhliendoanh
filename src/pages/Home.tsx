@@ -108,17 +108,22 @@ export default function Home() {
       </section>
 
       <section className="px-4 grid grid-cols-3 gap-2 -mt-8 relative z-10">
-        <StatBtn icon={Users} value={stats.members} label="Thành viên" onClick={() => user && setModal("members")} />
+        <StatBtn
+          icon={Users}
+          value={stats.members}
+          label={t("stats.members")}
+          onClick={() => user && setModal("members")}
+        />
         <StatBtn
           icon={Building2}
           value={stats.businesses}
-          label="Doanh nghiệp"
+          label={t("stats.businesses")}
           onClick={() => user && setModal("businesses")}
         />
         <StatBtn
           icon={Tag}
           value={stats.offers}
-          label={user ? "Ưu đãi đã nhận" : "Ưu đãi"}
+          label={user ? t("stats.offersClaimed") : t("stats.offers")}
           onClick={() => user && setModal("offers")}
         />
       </section>
