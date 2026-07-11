@@ -461,12 +461,12 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       <Scene5 active={active} />
       <h2 className="wo-h2">
         <span className="wo-hl">
-          Bạn luôn có thứ để cho,
+          {t("onboarding.s4TitleLine1")}
           <br />
-          và luôn có thứ để nhận
+          {t("onboarding.s4TitleLine2")}
         </span>
       </h2>
-      <p className="wo-kao">📲 Cài App vào màn hình chính và bật thông báo để giữ kết nối nhé!</p>
+      <p className="wo-kao">{t("onboarding.s4Footer")}</p>
     </div>
   );
 }
