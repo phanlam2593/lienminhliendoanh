@@ -5,8 +5,10 @@ import {
   getMembershipPrice,
   MEMBERSHIP_BASE_PRICE,
 } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 export function MembershipCard({ points }: { points: number }) {
+  const { t } = useLanguage();
   const { current, next, pct } = getMemberTierProgress(points);
   const discount = getMembershipDiscountPct(points);
   const price = getMembershipPrice(points);
@@ -18,24 +20,30 @@ export function MembershipCard({ points }: { points: number }) {
     >
       <div className="flex items-center gap-2">
         <Crown className="w-5 h-5" />
-        <h3 className="font-bold text-lg">Liên Minh Membership</h3>
+        <h3 className="font-bold text-lg">
+          {t("app.name")} {t("membership.title")}
+        </h3>
       </div>
-      <p className="text-sm opacity-90">Ưu đãi độc quyền hàng tháng cho thành viên</p>
+      <p className="text-sm opacity-90">{t("membership.subtitle")}</p>
 
       <div className="bg-white/10 rounded-xl p-3 space-y-2">
         <div className="flex items-center justify-between text-sm">
-          <span className="opacity-80">Bậc hiện tại</span>
-          <span className="font-semibold">{current ? `${current.emoji} ${current.label}` : "Chưa đạt bậc nào"}</span>
+          <span className="opacity-80">{t("membership.currentTier")}</span>
+          <span className="font-semibold">
+            {current ? `${current.emoji} ${t(`tier.${current.type}`)}` : t("membership.noTierYet")}
+          </span>
         </div>
         <div className="flex items-center justify-between text-sm">
-          <span className="opacity-80">Ưu đãi của bạn</span>
-          <span className="font-semibold">{discount > 0 ? `Giảm ${discount}%` : "Chưa có ưu đãi"}</span>
+          <span className="opacity-80">{t("membership.yourDiscount")}</span>
+          <span className="font-semibold">
+            {discount > 0 ? t("membership.discountAmount", { pct: discount }) : t("membership.noDiscountYet")}
+          </span>
         </div>
         {next && (
           <div className="space-y-1 pt-1">
             <div className="flex items-center justify-between text-[11px] opacity-75">
               <span>
-                Tới {next.emoji} {next.label}
+                {t("membership.toward")} {next.emoji} {t(`tier.${next.type}`)}
               </span>
               <span>{pct}%</span>
             </div>
@@ -51,14 +59,14 @@ export function MembershipCard({ points }: { points: number }) {
           <span className="text-sm line-through opacity-60">{MEMBERSHIP_BASE_PRICE.toLocaleString("vi-VN")}đ</span>
         )}
         <span className="text-2xl font-extrabold">{price.toLocaleString("vi-VN")}đ</span>
-        <span className="text-sm opacity-80 mb-1">/ tháng</span>
+        <span className="text-sm opacity-80 mb-1">{t("membership.perMonth")}</span>
       </div>
 
       <button
         disabled
         className="w-full py-2.5 rounded-xl bg-white/20 font-semibold text-sm flex items-center justify-center gap-2 cursor-not-allowed"
       >
-        <Sparkles className="w-4 h-4" /> Sắp ra mắt
+        <Sparkles className="w-4 h-4" /> {t("membership.comingSoon")}
       </button>
     </div>
   );
