@@ -828,7 +828,7 @@ function ReviewItem({
           onClick={() => setReplyOpen(true)}
           className="text-[11px] font-semibold text-primary inline-flex items-center gap-1"
         >
-          <Reply className="w-3 h-3" /> Trả lời
+          <Reply className="w-3 h-3" /> {t("biz.reply")}
         </button>
       )}
       {isOwner && replyOpen && (
@@ -839,7 +839,7 @@ function ReviewItem({
             onKeyDown={(e) => {
               if (e.key === "Enter") submitReply();
             }}
-            placeholder="Trả lời đánh giá…"
+            placeholder={t("biz.replyPlaceholder")}
             className="flex-1 px-2 py-1.5 rounded border bg-background text-xs"
           />
           <button
@@ -856,7 +856,7 @@ function ReviewItem({
             }}
             className="px-2 rounded border text-xs"
           >
-            Hủy
+            {t("common.cancel")}
           </button>
         </div>
       )}
