@@ -10,6 +10,35 @@ const SW_URL = "/sw.js";
 const VAPID_PUBLIC_KEY = "BHFzPpiSJBKk1OYCSIoxgwsjbBuGUsftLmhFcmvcAyl4EBtYK7DKp2QdLBuMS-4I8Z0-oqxYB66nPWs01hzZnIs";
 const PUSH_ASK_KEY = "lmld:push-asked";
 
+// ===== Trạng thái cập nhật PWA (chấm đỏ/xanh) =====
+// "current" = đã ở bản mới nhất · "available" = có bản mới đã tải xong, sẵn sàng áp dụng.
+export type UpdateStatus = "checking" | "current" | "available";
+let updateStatus: UpdateStatus = "checking";
+let swRegistration: ServiceWorkerRegistration | null = null;
+const UPDATE_STATUS_EVENT = "lmld:update-status";
+
+function setUpdateStatus(status: UpdateStatus) {
+  updateStatus = status;
+  window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT, { detail: status }));
+}
+
+export function getUpdateStatus(): UpdateStatus {
+  return updateStatus;
+}
+
+export function onUpdateStatusChange(cb: (status: UpdateStatus) => void): () => void {
+  const handler = (e: Event) => cb((e as CustomEvent).detail as UpdateStatus);
+  window.addEventListener(UPDATE_STATUS_EVENT, handler);
+  return () => window.removeEventListener(UPDATE_STATUS_EVENT, handler);
+}
+
+// Người dùng bấm chấm đỏ → báo cho SW đang "waiting" kích hoạt ngay.
+// Việc reload trang thật sự diễn ra ở sự kiện "controllerchange" bên dưới (chỉ 1 lần).
+export function applyUpdate() {
+  if (!swRegistration?.waiting) return;
+  swRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
+}
+
 function isPreviewHost(hostname: string): boolean {
   if (hostname.startsWith("id-preview--") || hostname.startsWith("preview--")) return true;
   const previewSuffixes = ["lovableproject.com", "lovableproject-dev.com", "beta.lovable.dev"];
@@ -87,12 +116,19 @@ export function setWelcomeActive(active: boolean) {
 }
 
 function isWelcomeActive() {
-  try { return localStorage.getItem(WELCOME_ACTIVE_KEY) === "1"; } catch { return false; }
+  try {
+    return localStorage.getItem(WELCOME_ACTIVE_KEY) === "1";
+  } catch {
+    return false;
+  }
 }
 function whenWelcomeDone(): Promise<void> {
   if (!isWelcomeActive()) return Promise.resolve();
   return new Promise((resolve) => {
-    const h = () => { window.removeEventListener("lmld:welcome-done", h); resolve(); };
+    const h = () => {
+      window.removeEventListener("lmld:welcome-done", h);
+      resolve();
+    };
     window.addEventListener("lmld:welcome-done", h);
   });
 }
@@ -116,7 +152,6 @@ function scheduleAutoAsk() {
 
   window.addEventListener("pointerdown", ask, { once: true });
 }
-
 
 export function registerPwa() {
   if (typeof window === "undefined") return;
@@ -212,7 +247,6 @@ export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
     setTimeout(() => void guardedShow(false), 2000);
   }
 }
-
 
 export async function triggerInstall(): Promise<boolean> {
   if (!deferredInstallPrompt) return false;
