@@ -191,11 +191,29 @@ export default function Community() {
     supabase.rpc("get_admin_user_ids").then(({ data }) => {
       setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
     });
+    // QUAN TRỌNG (hiệu năng ở quy mô lớn): KHÔNG tải lại toàn bộ danh sách mỗi khi có
+    // thay đổi bất kỳ ở đâu trong bảng. Chỉ xử lý nếu dòng thay đổi TRÙNG đúng kênh đang
+    // xem (so với channelRef.current — luôn là giá trị mới nhất), và chỉ thêm/xoá/sửa
+    // ĐÚNG 1 dòng trong state thay vì query lại cả bảng. Ở quy mô 10.000 người, việc này
+    // giúp 1 tin nhắn không kéo theo hàng nghìn truy vấn không liên quan.
+    const matchesCurrentChannel = (row: any) => {
+      const { location, topic } = channelRef.current;
+      if (row.topic !== topic) return false;
+      return location === null ? row.location === null : row.location === location;
+    };
     const ch = supabase
       .channel(`community:${user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "community_messages" }, () =>
-        loadMsgs(msgLimitRef.current, true, channelRef.current.location, channelRef.current.topic),
-      )
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "community_messages" }, (payload) => {
+        const row = payload.new as Msg & { location: string | null; topic: Topic };
+        if (!matchesCurrentChannel(row)) return;
+        setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
+        void enrichProfiles([row.user_id]);
+        setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "community_messages" }, (payload) => {
+        const oldRow = payload.old as { id: string };
+        setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
