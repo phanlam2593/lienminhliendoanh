@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
+import { VNFlag, UKFlag } from "@/components/FlagIcons";
 import type { Business, BusinessType, Offer } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, MEMBERSHIP_ENABLED } from "@/lib/types";
 import { MembershipCard } from "@/components/MembershipCard";
