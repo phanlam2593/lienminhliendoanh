@@ -39,23 +39,7 @@ export function Layout() {
   const { t } = useLanguage();
   const { unread } = useNotifications();
   const unreadMsgs = useUnreadMessages();
-  const [open, setOpen] = useState(false);
-  const [myBusinessId, setMyBusinessId] = useState<string | null>(null);
   const hide = pathname.startsWith("/auth");
-
-  useEffect(() => {
-    if (!user) {
-      setMyBusinessId(null);
-      return;
-    }
-    supabase
-      .from("businesses")
-      .select("id")
-      .eq("owner_id", user.id)
-      .limit(1)
-      .maybeSingle()
-      .then(({ data }) => setMyBusinessId(data?.id ?? null));
-  }, [user?.id]);
 
   const baseTabs = [
     { to: "/", icon: Home, label: t("nav.home") },
