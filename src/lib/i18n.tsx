@@ -977,6 +977,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "channel.news": "News",
     "channel.chooseLocation": "Choose location",
     "channel.chooseTopic": "Choose topic",
+    "update.current": "Up to date",
+    "update.available": "New version available, tap to reload",
+    "update.applying": "Updating…",
   },
 };
 
