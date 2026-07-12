@@ -71,11 +71,17 @@ export function OnlineUsersProvider({ children }: { children: ReactNode }) {
 
   const setMyChannel = (location: string | null, topic: string | null) => {
     myChannelRef.current = { location, topic };
-    void channelRef.current?.track({
-      online_at: new Date().toISOString(),
-      location,
-      topic,
-    });
+    const payload = { online_at: new Date().toISOString(), location, topic };
+    // Lúc mới vào app, presence channel đôi khi chưa kịp sẵn sàng (SUBSCRIBED) —
+    // thử lại vài lần thay vì bỏ cuộc ngay, để không bị kẹt ở giá trị mặc định.
+    const tryTrack = (attemptsLeft: number) => {
+      if (channelRef.current) {
+        void channelRef.current.track(payload);
+      } else if (attemptsLeft > 0) {
+        setTimeout(() => tryTrack(attemptsLeft - 1), 300);
+      }
+    };
+    tryTrack(6);
   };
 
   return <OnlineCtx.Provider value={{ online, setMyChannel }}>{children}</OnlineCtx.Provider>;
