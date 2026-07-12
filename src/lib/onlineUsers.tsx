@@ -72,22 +72,29 @@ export function OnlineUsersProvider({ children }: { children: ReactNode }) {
 
   const setMyChannel = (location: string | null, topic: string | null) => {
     myChannelRef.current = { location, topic };
-    // Lúc mới vào app, presence channel đôi khi chưa kịp sẵn sàng (SUBSCRIBED) —
-    // thử lại vài lần thay vì bỏ cuộc ngay. QUAN TRỌNG: mỗi lần thử lại phải đọc
-    // myChannelRef.current MỚI NHẤT (không phải giá trị "chụp" lúc gọi lần đầu),
-    // để không bị đè bởi dữ liệu cũ nếu người dùng đã đổi kênh trong lúc chờ.
-    const tryTrack = (attemptsLeft: number) => {
-      if (channelRef.current) {
-        void channelRef.current.track({
-          online_at: new Date().toISOString(),
-          location: myChannelRef.current.location,
-          topic: myChannelRef.current.topic,
-        });
-      } else if (attemptsLeft > 0) {
-        setTimeout(() => tryTrack(attemptsLeft - 1), 300);
-      }
-    };
-    tryTrack(6);
+    // QUAN TRỌNG (hiệu năng ở quy mô lớn): mỗi lần track() là 1 lần "phát sóng" presence
+    // tới TẤT CẢ người đang online — nếu người dùng bấm đổi kênh liên tục, mỗi lần đổi
+    // sẽ gây 1 đợt phát sóng riêng. Debounce 400ms: nếu đổi kênh nhiều lần liên tiếp,
+    // chỉ gửi đi đúng 1 lần cho lựa chọn CUỐI CÙNG, thay vì gửi từng lần một.
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      // Lúc mới vào app, presence channel đôi khi chưa kịp sẵn sàng (SUBSCRIBED) —
+      // thử lại vài lần thay vì bỏ cuộc ngay. QUAN TRỌNG: mỗi lần thử lại phải đọc
+      // myChannelRef.current MỚI NHẤT (không phải giá trị "chụp" lúc gọi lần đầu),
+      // để không bị đè bởi dữ liệu cũ nếu người dùng đã đổi kênh trong lúc chờ.
+      const tryTrack = (attemptsLeft: number) => {
+        if (channelRef.current) {
+          void channelRef.current.track({
+            online_at: new Date().toISOString(),
+            location: myChannelRef.current.location,
+            topic: myChannelRef.current.topic,
+          });
+        } else if (attemptsLeft > 0) {
+          setTimeout(() => tryTrack(attemptsLeft - 1), 300);
+        }
+      };
+      tryTrack(6);
+    }, 400);
   };
 
   return <OnlineCtx.Provider value={{ online, setMyChannel }}>{children}</OnlineCtx.Provider>;
