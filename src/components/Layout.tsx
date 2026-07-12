@@ -87,7 +87,6 @@ export function Layout() {
           <div className="flex items-center justify-between px-4 h-14 gap-2">
             <Logo size={36} withText asLink />
             <div className="flex items-center gap-1">
-              <UpdateIndicator />
               {user ? (
                 <>
                   <Link
