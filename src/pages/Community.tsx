@@ -194,7 +194,7 @@ export default function Community() {
     const ch = supabase
       .channel(`community:${user.id}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "community_messages" }, () =>
-        loadMsgs(msgLimit, true),
+        loadMsgs(msgLimitRef.current, true, channelRef.current.location, channelRef.current.topic),
       )
       .subscribe();
     return () => {
