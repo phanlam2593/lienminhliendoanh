@@ -285,6 +285,22 @@ function WelcomeScreen() {
           ))}
         </div>
       </div>
+      <div className="inline-flex rounded-full border overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setLang("vi")}
+          className={`px-3 py-1 text-xs font-semibold flex items-center gap-1.5 ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+        >
+          <VNFlag /> VI
+        </button>
+        <button
+          type="button"
+          onClick={() => setLang("en")}
+          className={`px-3 py-1 text-xs font-semibold flex items-center gap-1.5 ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+        >
+          <UKFlag /> EN
+        </button>
+      </div>
       <Footer />
     </div>
   );
