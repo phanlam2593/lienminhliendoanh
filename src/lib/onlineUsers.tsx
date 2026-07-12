@@ -71,12 +71,17 @@ export function OnlineUsersProvider({ children }: { children: ReactNode }) {
 
   const setMyChannel = (location: string | null, topic: string | null) => {
     myChannelRef.current = { location, topic };
-    const payload = { online_at: new Date().toISOString(), location, topic };
     // Lúc mới vào app, presence channel đôi khi chưa kịp sẵn sàng (SUBSCRIBED) —
-    // thử lại vài lần thay vì bỏ cuộc ngay, để không bị kẹt ở giá trị mặc định.
+    // thử lại vài lần thay vì bỏ cuộc ngay. QUAN TRỌNG: mỗi lần thử lại phải đọc
+    // myChannelRef.current MỚI NHẤT (không phải giá trị "chụp" lúc gọi lần đầu),
+    // để không bị đè bởi dữ liệu cũ nếu người dùng đã đổi kênh trong lúc chờ.
     const tryTrack = (attemptsLeft: number) => {
       if (channelRef.current) {
-        void channelRef.current.track(payload);
+        void channelRef.current.track({
+          online_at: new Date().toISOString(),
+          location: myChannelRef.current.location,
+          topic: myChannelRef.current.topic,
+        });
       } else if (attemptsLeft > 0) {
         setTimeout(() => tryTrack(attemptsLeft - 1), 300);
       }
