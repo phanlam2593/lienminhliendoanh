@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business, BusinessType } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
+import { BUSINESS_TYPES } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n";
