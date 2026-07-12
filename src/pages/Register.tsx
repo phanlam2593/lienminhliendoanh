@@ -10,6 +10,7 @@ import { Check, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { maskPassword } from "@/lib/passwordHint";
 import { useLanguage } from "@/lib/i18n";
+import { VNFlag, UKFlag } from "@/components/FlagIcons";
 
 type FieldStatus = "idle" | "checking" | "ok" | "taken" | "invalid";
 
