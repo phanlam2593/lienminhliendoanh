@@ -13,7 +13,7 @@ import { BUSINESS_TYPES, MEMBERSHIP_ENABLED } from "@/lib/types";
 import { MembershipCard } from "@/components/MembershipCard";
 import {
   LogOut,
-  MessageSquare,
+  Save,
   Save,
   Flag,
   Camera,
