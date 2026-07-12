@@ -267,14 +267,23 @@ export default function Community() {
 
   const send = async () => {
     const base = { location: channelLocation, topic: channelTopic };
+    // QUAN TRỌNG (cảm giác "chậm" khi gửi tin): trước đây không hiện tin nhắn của MÌNH ngay,
+    // phải đợi vòng lặp Realtime (gửi → DB lưu → Realtime phát lại → mới hiện) mới thấy.
+    // Giờ dùng .select().single() lấy lại đúng dòng vừa tạo, hiện NGAY lập tức — không cần
+    // chờ vòng lặp đó. Khi tin từ Realtime echo về sau, đã có sẵn dedup theo id nên không
+    // bị hiện trùng 2 lần.
     if (pendingImage) {
       setUploading(true);
       try {
         const path = await uploadImage(pendingImage.file, "community", user.id);
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("community_messages")
-          .insert({ user_id: user.id, content: "", type: "image", image_url: path, ...base });
+          .insert({ user_id: user.id, content: "", type: "image", image_url: path, ...base })
+          .select()
+          .single();
         if (error) throw error;
+        if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
+        setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
@@ -287,22 +296,34 @@ export default function Community() {
     if (pendingSticker) {
       const emoji = pendingSticker;
       setPendingSticker(null);
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("community_messages")
-        .insert({ user_id: user.id, content: emoji, type: "sticker", ...base });
-      if (error) toast.error("Gửi sticker thất bại: " + error.message);
+        .insert({ user_id: user.id, content: emoji, type: "sticker", ...base })
+        .select()
+        .single();
+      if (error) {
+        toast.error("Gửi sticker thất bại: " + error.message);
+        return;
+      }
+      if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
+      setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
       return;
     }
     const trimmed = text.trim();
     if (!trimmed) return;
     setText("");
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("community_messages")
-      .insert({ user_id: user.id, content: trimmed, type: "text", ...base });
+      .insert({ user_id: user.id, content: trimmed, type: "text", ...base })
+      .select()
+      .single();
     if (error) {
       toast.error(error.message);
       setText(trimmed);
+      return;
     }
+    if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
+    setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
   const del = async (id: string) => {
