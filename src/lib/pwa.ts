@@ -10,38 +10,6 @@ const SW_URL = "/sw.js";
 const VAPID_PUBLIC_KEY = "BHFzPpiSJBKk1OYCSIoxgwsjbBuGUsftLmhFcmvcAyl4EBtYK7DKp2QdLBuMS-4I8Z0-oqxYB66nPWs01hzZnIs";
 const PUSH_ASK_KEY = "lmld:push-asked";
 
-// ===== Trạng thái cập nhật PWA (chấm đỏ/xanh) =====
-// "current" = đã ở bản mới nhất · "available" = có bản mới đã tải xong, sẵn sàng áp dụng.
-export type UpdateStatus = "checking" | "current" | "available";
-// Mặc định "current" (xanh) thay vì "checking" (ẩn) — nếu bước đăng ký service worker
-// gặp trục trặc nhỏ và không bao giờ xác nhận xong, người dùng vẫn luôn thấy chấm xanh
-// thay vì chấm biến mất hoàn toàn không rõ lý do.
-let updateStatus: UpdateStatus = "current";
-let swRegistration: ServiceWorkerRegistration | null = null;
-const UPDATE_STATUS_EVENT = "lmld:update-status";
-
-function setUpdateStatus(status: UpdateStatus) {
-  updateStatus = status;
-  window.dispatchEvent(new CustomEvent(UPDATE_STATUS_EVENT, { detail: status }));
-}
-
-export function getUpdateStatus(): UpdateStatus {
-  return updateStatus;
-}
-
-export function onUpdateStatusChange(cb: (status: UpdateStatus) => void): () => void {
-  const handler = (e: Event) => cb((e as CustomEvent).detail as UpdateStatus);
-  window.addEventListener(UPDATE_STATUS_EVENT, handler);
-  return () => window.removeEventListener(UPDATE_STATUS_EVENT, handler);
-}
-
-// Người dùng bấm chấm đỏ → báo cho SW đang "waiting" kích hoạt ngay.
-// Việc reload trang thật sự diễn ra ở sự kiện "controllerchange" bên dưới (chỉ 1 lần).
-export function applyUpdate() {
-  if (!swRegistration?.waiting) return;
-  swRegistration.waiting.postMessage({ type: "SKIP_WAITING" });
-}
-
 function isPreviewHost(hostname: string): boolean {
   if (hostname.startsWith("id-preview--") || hostname.startsWith("preview--")) return true;
   const previewSuffixes = ["lovableproject.com", "lovableproject-dev.com", "beta.lovable.dev"];
