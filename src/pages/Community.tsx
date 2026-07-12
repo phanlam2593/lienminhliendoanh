@@ -159,6 +159,7 @@ export default function Community() {
     void loadMsgs(MSG_PAGE_SIZE, true, null, "general");
     void loadMembers(0, false);
     void loadLocations();
+    setMyChannel(null, "general");
     supabase.rpc("get_admin_user_ids").then(({ data }) => {
       setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
     });
