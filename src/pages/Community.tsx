@@ -248,36 +248,67 @@ export default function Community() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
-      {/* Bộ chọn kênh — vị trí + chủ đề */}
-      <div className="border-b bg-card shrink-0 px-3 py-2 space-y-1.5">
-        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
-          <button
-            onClick={() => switchChannel(null, channelTopic)}
-            className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border shrink-0 ${channelLocation === null ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground"}`}
-          >
-            {t("channel.nationwide")}
-          </button>
-          {locations.map((loc) => (
-            <button
-              key={loc}
-              onClick={() => switchChannel(loc, channelTopic)}
-              className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border shrink-0 ${channelLocation === loc ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground"}`}
-            >
-              {loc}
+      {/* Bộ chọn kênh — 2 nút dropdown: Địa điểm + Kênh chat */}
+      <div className="border-b bg-card shrink-0 px-3 py-2 flex gap-2">
+        <Popover open={locOpen} onOpenChange={setLocOpen}>
+          <PopoverTrigger asChild>
+            <button className="flex-1 flex items-center justify-between gap-1 px-3 py-1.5 rounded-lg border bg-muted text-xs font-semibold min-w-0">
+              <span className="flex items-center gap-1.5 truncate">
+                <MapPin className="w-3.5 h-3.5 shrink-0 text-primary" />
+                <span className="truncate">{channelLocation ?? t("channel.nationwide")}</span>
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
             </button>
-          ))}
-        </div>
-        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
-          {TOPICS.map((tp) => (
+          </PopoverTrigger>
+          <PopoverContent className="w-56 p-1 max-h-72 overflow-y-auto" align="start">
             <button
-              key={tp}
-              onClick={() => switchChannel(channelLocation, tp)}
-              className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${channelTopic === tp ? "bg-accent text-accent-foreground" : "text-muted-foreground"}`}
+              onClick={() => {
+                switchChannel(null, channelTopic);
+                setLocOpen(false);
+              }}
+              className={`w-full text-left px-2.5 py-2 rounded-lg text-sm ${channelLocation === null ? "bg-accent font-semibold text-primary" : "hover:bg-accent"}`}
             >
-              {t(`channel.${tp}`)}
+              {t("channel.nationwide")}
             </button>
-          ))}
-        </div>
+            {locations.map((loc) => (
+              <button
+                key={loc}
+                onClick={() => {
+                  switchChannel(loc, channelTopic);
+                  setLocOpen(false);
+                }}
+                className={`w-full text-left px-2.5 py-2 rounded-lg text-sm ${channelLocation === loc ? "bg-accent font-semibold text-primary" : "hover:bg-accent"}`}
+              >
+                {loc}
+              </button>
+            ))}
+          </PopoverContent>
+        </Popover>
+        <Popover open={topicOpen} onOpenChange={setTopicOpen}>
+          <PopoverTrigger asChild>
+            <button className="flex-1 flex items-center justify-between gap-1 px-3 py-1.5 rounded-lg border bg-muted text-xs font-semibold min-w-0">
+              <span className="flex items-center gap-1.5 truncate">
+                <Hash className="w-3.5 h-3.5 shrink-0 text-primary" />
+                <span className="truncate">{t(`channel.${channelTopic}`)}</span>
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 shrink-0 text-muted-foreground" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-52 p-1 max-h-72 overflow-y-auto" align="start">
+            {TOPICS.map((tp) => (
+              <button
+                key={tp}
+                onClick={() => {
+                  switchChannel(channelLocation, tp);
+                  setTopicOpen(false);
+                }}
+                className={`w-full text-left px-2.5 py-2 rounded-lg text-sm ${channelTopic === tp ? "bg-accent font-semibold text-primary" : "hover:bg-accent"}`}
+              >
+                {t(`channel.${tp}`)}
+              </button>
+            ))}
+          </PopoverContent>
+        </Popover>
       </div>
 
       {/* Danh sách thành viên — thu gọn mặc định, nằm trên khung chat */}
