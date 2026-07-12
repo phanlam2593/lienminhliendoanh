@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { usernameToEmail } from "@/lib/types";
 import { Logo } from "@/components/Logo";
 import { triggerWelcomeOverlay } from "@/components/WelcomeOverlay";
+import { useLanguage } from "@/lib/i18n";
 
 export default function Login() {
   const nav = useNavigate();
+  const { t } = useLanguage();
   const [username, setU] = useState("");
   const [password, setP] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,13 +16,17 @@ export default function Login() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErr(null); setLoading(true);
+    setErr(null);
+    setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
       email: usernameToEmail(username),
       password,
     });
     setLoading(false);
-    if (error) { setErr("Sai tên đăng nhập hoặc mật khẩu"); return; }
+    if (error) {
+      setErr(t("login.wrongCredentials"));
+      return;
+    }
     triggerWelcomeOverlay();
     nav("/", { replace: true });
   };
@@ -30,32 +36,53 @@ export default function Login() {
       <form onSubmit={submit} className="w-full max-w-sm space-y-5">
         <div className="text-center space-y-3 flex flex-col items-center">
           <Logo size={64} asLink />
-          <h1 className="text-2xl font-bold">Đăng nhập</h1>
-          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" */}
-          <Link to="/" className="text-sm text-muted-foreground hover:text-primary">Liên Minh Liên Doanh</Link>
+          <h1 className="text-2xl font-bold">{t("common.login")}</h1>
+          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — t("app.name") tự đổi theo ngôn ngữ */}
+          <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
+            {t("app.name")}
+          </Link>
         </div>
         <div className="space-y-3">
-          <input value={username} onChange={e => setU(e.target.value)} placeholder="Tên đăng nhập"
-            autoCapitalize="none" autoComplete="username" required
-            className="w-full px-4 py-3 rounded-xl border bg-card" />
-          <input type="password" value={password} onChange={e => setP(e.target.value)} placeholder="Mật khẩu"
-            required minLength={6}
-            className="w-full px-4 py-3 rounded-xl border bg-card" />
+          <input
+            value={username}
+            onChange={(e) => setU(e.target.value)}
+            placeholder={t("login.usernamePlaceholder")}
+            autoCapitalize="none"
+            autoComplete="username"
+            required
+            className="w-full px-4 py-3 rounded-xl border bg-card"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setP(e.target.value)}
+            placeholder={t("login.passwordPlaceholder")}
+            required
+            minLength={6}
+            className="w-full px-4 py-3 rounded-xl border bg-card"
+          />
           {err && <p className="text-sm text-destructive">{err}</p>}
         </div>
-        <button disabled={loading} className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50">
-          {loading ? "Đang đăng nhập…" : "Đăng nhập"}
+        <button
+          disabled={loading}
+          className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
+        >
+          {loading ? t("login.loggingIn") : t("common.login")}
         </button>
 
-
         <p className="text-center text-sm">
-          <Link to="/forgot-password" className="text-primary font-semibold">Quên mật khẩu?</Link>
+          <Link to="/forgot-password" className="text-primary font-semibold">
+            {t("login.forgotPassword")}
+          </Link>
         </p>
         <p className="text-center text-sm">
-          Chưa có tài khoản? <Link to="/auth/register" className="text-primary font-semibold">Đăng ký</Link>
+          {t("login.noAccount")}{" "}
+          <Link to="/auth/register" className="text-primary font-semibold">
+            {t("common.register")}
+          </Link>
         </p>
         <p className="text-center text-xs text-muted-foreground">
-          <Link to="/">← Quay lại trang chủ</Link>
+          <Link to="/">{t("login.backToHome")}</Link>
         </p>
       </form>
     </div>
