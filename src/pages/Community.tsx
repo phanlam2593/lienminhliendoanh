@@ -66,6 +66,8 @@ export default function Community() {
   const [locations, setLocations] = useState<string[]>([]);
   const [channelLocation, setChannelLocation] = useState<string | null>(null);
   const [channelTopic, setChannelTopic] = useState<Topic>("general");
+  const [locOpen, setLocOpen] = useState(false);
+  const [topicOpen, setTopicOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
