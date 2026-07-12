@@ -1286,14 +1286,14 @@ function LanguageToggle() {
           onClick={() => setLang("vi")}
           className={`px-3 py-1.5 text-xs font-semibold ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
         >
-          Tiếng Việt
+          🇻🇳 Tiếng Việt
         </button>
         <button
           type="button"
           onClick={() => setLang("en")}
           className={`px-3 py-1.5 text-xs font-semibold ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
         >
-          English
+          🇺🇸 English
         </button>
       </div>
     </div>
