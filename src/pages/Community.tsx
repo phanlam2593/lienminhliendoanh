@@ -344,13 +344,13 @@ export default function Community() {
                   <span className="truncate">{m.full_name}</span>
                   {m.id === user.id && <span className="text-[10px] text-muted-foreground">{t("community.you")}</span>}
                   <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
+                  {onlineUsers.has(m.id) && onlineUsers.get(m.id)?.topic && (
+                    <span className="text-[10px] text-emerald-600 font-normal truncate">
+                      · {onlineUsers.get(m.id)?.location ?? t("channel.nationwide")} ·{" "}
+                      {t(`channel.${onlineUsers.get(m.id)!.topic}`)}
+                    </span>
+                  )}
                 </div>
-                {onlineUsers.has(m.id) && onlineUsers.get(m.id)?.topic && (
-                  <div className="text-[10px] text-emerald-600 truncate">
-                    {onlineUsers.get(m.id)?.location ?? t("channel.nationwide")} ·{" "}
-                    {t(`channel.${onlineUsers.get(m.id)!.topic}`)}
-                  </div>
-                )}
                 {m.status_message && (
                   <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
                 )}
