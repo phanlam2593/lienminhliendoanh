@@ -32,50 +32,70 @@ export default function Businesses() {
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const [locStatus, setLocStatus] = useState<LocStatus>("idle");
   const [myPos, setMyPos] = useState<{ lat: number; lng: number } | null>(null);
   const [radius, setRadius] = useState<(typeof RADIUS_OPTIONS)[number]>(5);
 
   useEffect(() => {
-    void load();
+    void load(0, false);
   }, []);
 
-  const load = async () => {
-    setLoading(true);
+  // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây tải TOÀN BỘ DN đã duyệt 1 lần,
+  // không giới hạn — ở quy mô hàng nghìn DN sẽ tải hàng MB dữ liệu mỗi lần vào trang.
+  // Giờ tải theo trang (PAGE_SIZE), có nút "Tải thêm" khi còn dữ liệu.
+  // Lưu ý: sắp xếp "Gần đây" chỉ tìm trong số DN ĐÃ TẢI (chưa quét toàn bộ DB theo khoảng
+  // cách) — đủ dùng ở quy mô hiện tại, có thể nâng cấp sau bằng truy vấn địa lý phía server.
+  const load = async (pageNum: number, append: boolean) => {
+    if (append) setLoadingMore(true);
+    else setLoading(true);
+    const from = pageNum * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
     const { data: biz } = await supabase
       .from("businesses")
       .select("*")
       .eq("status", "approved")
-      .order("created_at", { ascending: false });
-    const ids = ((biz as Business[]) ?? []).map((b) => b.id);
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    const rows = (biz as Business[]) ?? [];
+    const ids = rows.map((b) => b.id);
     const { data: stats } = ids.length
       ? await supabase.from("business_card_stats").select("*").in("business_id", ids)
       : { data: [] as any[] };
     const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
-    setList(
-      ((biz as Business[]) ?? []).map((b) => {
-        const s: any = sMap.get(b.id);
-        return {
-          ...b,
-          rating: Number(s?.rating ?? 0),
-          reviewCount: s?.review_count ?? 0,
-          offerCount: s?.offer_count ?? 0,
-          totalClaims: s?.total_claims ?? 0,
-          latestOffer: s?.latest_offer ?? null,
-          latestOfferClaims: s?.latest_offer_claims ?? 0,
-          latestReview:
-            s?.latest_review_rating != null
-              ? {
-                  rating: s.latest_review_rating,
-                  comment: s.latest_review_comment,
-                  author: s.latest_review_author || "Ẩn danh",
-                }
-              : null,
-        };
-      }),
-    );
+    const enriched = rows.map((b) => {
+      const s: any = sMap.get(b.id);
+      return {
+        ...b,
+        rating: Number(s?.rating ?? 0),
+        reviewCount: s?.review_count ?? 0,
+        offerCount: s?.offer_count ?? 0,
+        totalClaims: s?.total_claims ?? 0,
+        latestOffer: s?.latest_offer ?? null,
+        latestOfferClaims: s?.latest_offer_claims ?? 0,
+        latestReview:
+          s?.latest_review_rating != null
+            ? {
+                rating: s.latest_review_rating,
+                comment: s.latest_review_comment,
+                author: s.latest_review_author || "Ẩn danh",
+              }
+            : null,
+      };
+    });
+    setList((prev) => (append ? [...prev, ...enriched] : enriched));
+    setHasMore(rows.length === PAGE_SIZE);
     setLoading(false);
+    setLoadingMore(false);
+  };
+
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
   };
 
   const useNearestSort = () => {
