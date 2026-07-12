@@ -158,8 +158,7 @@ export function registerPwa() {
       });
       setInterval(checkUpdate, 15 * 60 * 1000);
 
-      // 2) Khi SW mới THẬT SỰ nắm quyền (sau khi người dùng bấm áp dụng ở chấm đỏ,
-      // hoặc mọi tab cũ đã đóng hết) → tự reload 1 lần để chạy code mới
+      // 2) Khi SW mới nắm quyền (skipWaiting đã bật sẵn) → tự reload 1 lần để chạy code mới
       let reloaded = false;
       navigator.serviceWorker.addEventListener("controllerchange", () => {
         if (reloaded) return;
