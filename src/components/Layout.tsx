@@ -30,6 +30,7 @@ import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { VNFlag, UKFlag } from "@/components/FlagIcons";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
+import { UpdateIndicator } from "@/components/UpdateIndicator";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 
