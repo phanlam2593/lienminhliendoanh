@@ -938,6 +938,16 @@ const DICT: Record<Lang, Record<string, string>> = {
       "The App is intended for users aged 16 and above. We do not intentionally collect data from children.",
     "privacyPage.s9Title": "9. Policy Changes",
     "privacyPage.s9P1": "This policy may be updated over time. Significant changes will be announced in the App.",
+    "login.usernamePlaceholder": "Username",
+    "login.passwordPlaceholder": "Password",
+    "login.wrongCredentials": "Wrong username or password",
+    "login.loggingIn": "Logging in…",
+    "login.forgotPassword": "Forgot password?",
+    "login.noAccount": "Don't have an account?",
+    "login.backToHome": "← Back to home",
+    "welcomeOverlay.title": "Welcome to the community!",
+    "welcomeOverlay.subtitle": "Have a great day! (^^)/",
+    "welcomeOverlay.start": "Get started →",
   },
 };
 
