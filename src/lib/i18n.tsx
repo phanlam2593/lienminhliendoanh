@@ -489,6 +489,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "channel.news": "Tin tức",
     "channel.chooseLocation": "Chọn vị trí",
     "channel.chooseTopic": "Chọn chủ đề",
+    "update.current": "Đã cập nhật",
+    "update.available": "Có bản mới, nhấn để tải lại",
+    "update.applying": "Đang cập nhật…",
   },
   en: {
     "nav.home": "Home",
