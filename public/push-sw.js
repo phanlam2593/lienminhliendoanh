@@ -1,13 +1,5 @@
-// Push notification handlers — imported into the Workbox-generated /sw.js
+/// Push notification handlers — imported into the Workbox-generated /sw.js
 // via vite-plugin-pwa's workbox.importScripts option.
-
-// Cho phép trang chủ động ra lệnh "áp dụng bản mới ngay" (thay vì tự động kích hoạt
-// ngay khi cài xong — workbox.skipWaiting đã tắt trong vite.config.ts để chờ lệnh này).
-self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
-});
 
 const APP_ICON = "/__l5e/assets-v1/24cf1f1b-163f-4107-8c1f-5aed79ea28fc/logo-256.png";
 const APP_BADGE = "/__l5e/assets-v1/65fc9e55-fcde-461a-9b03-ff8617170886/logo-64.png";
