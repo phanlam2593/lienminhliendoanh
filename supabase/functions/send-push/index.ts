@@ -13,18 +13,87 @@ const VAPID_SUBJECT = Deno.env.get("VAPID_SUBJECT") ?? "mailto:lienminhliendoanh
 
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
 
-const admin = createClient(
-  Deno.env.get("SUPABASE_URL")!,
-  Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-);
+const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+
+interface PushItem {
+  user_id: string;
+  title: string;
+  body: string;
+  url: string;
+}
+
+function urlForTarget(target_type: string | null, target_id: string | null): string {
+  if (target_type === "business" && target_id) return `/dn/${target_id}`;
+  if (target_type === "user" && target_id) return `/ho-so/${target_id}`;
+  if (target_type === "message" && target_id) return `/tin-nhan/${target_id}`;
+  if (target_type === "report" && target_id) return `/ho-so?view=reports`;
+  return "/thong-bao";
+}
+
+// Gửi cho 1 lô nhiều người CÙNG LÚC: 1 truy vấn DB duy nhất lấy hết push_subscriptions
+// (thay vì N truy vấn riêng), rồi gửi song song — quan trọng khi broadcast quy mô lớn.
+async function sendBatch(items: PushItem[]) {
+  if (!items.length) return { sent: 0, removed: 0 };
+  const userIds = [...new Set(items.map((i) => i.user_id))];
+  const { data: subs, error } = await admin
+    .from("push_subscriptions")
+    .select("id, user_id, endpoint, p256dh, auth")
+    .in("user_id", userIds);
+  if (error) throw error;
+
+  const subsByUser = new Map<string, typeof subs>();
+  (subs ?? []).forEach((s: any) => {
+    const arr = subsByUser.get(s.user_id) ?? [];
+    arr.push(s);
+    subsByUser.set(s.user_id, arr);
+  });
+
+  let sent = 0;
+  const stale: string[] = [];
+
+  await Promise.all(
+    items.flatMap((item) => {
+      const userSubs = subsByUser.get(item.user_id) ?? [];
+      const payload = JSON.stringify({ title: item.title, body: item.body, url: item.url });
+      return userSubs.map(async (s: any) => {
+        try {
+          await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload);
+          sent++;
+        } catch (e: any) {
+          const code = e?.statusCode;
+          if (code === 404 || code === 410) stale.push(s.id);
+        }
+      });
+    }),
+  );
+
+  if (stale.length) {
+    await admin.from("push_subscriptions").delete().in("id", stale);
+  }
+  return { sent, removed: stale.length };
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
-    // Support both direct calls { user_id, title, body, url }
-    // and Supabase DB webhook payloads { type, table, record: { ... } }
     const raw = await req.json().catch(() => ({}));
+
+    // Định dạng LÔ (từ trigger FOR EACH STATEMENT — gộp nhiều thông báo trong 1 lượt gọi)
+    if (Array.isArray(raw?.records) && raw?.table === "notifications") {
+      const items: PushItem[] = raw.records
+        .filter((r: any) => r?.user_id && r?.title)
+        .map((r: any) => ({
+          user_id: r.user_id,
+          title: r.title,
+          body: r.body ?? "",
+          url: urlForTarget(r.target_type ?? null, r.target_id ?? null),
+        }));
+      const result = await sendBatch(items);
+      return json(result);
+    }
+
+    // Định dạng CŨ — 1 thông báo (webhook FOR EACH ROW cũ, hoặc gọi trực tiếp từ nơi khác)
     let user_id: string | undefined;
     let title: string | undefined;
     let body: string | undefined;
@@ -35,13 +104,7 @@ Deno.serve(async (req) => {
       user_id = r.user_id;
       title = r.title;
       body = r.body ?? "";
-      const t = r.target_type as string | null;
-      const tid = r.target_id as string | null;
-      if (t === "business" && tid) url = `/dn/${tid}`;
-      else if (t === "user" && tid) url = `/ho-so/${tid}`;
-      else if (t === "message" && tid) url = `/tin-nhan/${tid}`;
-      else if (t === "report" && tid) url = `/ho-so?view=reports`;
-      else url = "/thong-bao";
+      url = urlForTarget(r.target_type ?? null, r.target_id ?? null);
     } else {
       user_id = raw.user_id;
       title = raw.title;
@@ -53,35 +116,8 @@ Deno.serve(async (req) => {
       return json({ error: "user_id and title required" }, 400);
     }
 
-    const { data: subs, error } = await admin
-      .from("push_subscriptions")
-      .select("id, endpoint, p256dh, auth")
-      .eq("user_id", user_id);
-    if (error) throw error;
-    if (!subs?.length) return json({ sent: 0 });
-
-    const payload = JSON.stringify({ title, body: body ?? "", url: url ?? "/" });
-    let sent = 0;
-    const stale: string[] = [];
-
-    await Promise.all(subs.map(async (s) => {
-      try {
-        await webpush.sendNotification(
-          { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
-          payload,
-        );
-        sent++;
-      } catch (e: any) {
-        const code = e?.statusCode;
-        if (code === 404 || code === 410) stale.push(s.id);
-      }
-    }));
-
-    if (stale.length) {
-      await admin.from("push_subscriptions").delete().in("id", stale);
-    }
-
-    return json({ sent, removed: stale.length });
+    const result = await sendBatch([{ user_id, title, body: body ?? "", url: url ?? "/" }]);
+    return json(result);
   } catch (e) {
     return json({ error: (e as Error).message }, 500);
   }
