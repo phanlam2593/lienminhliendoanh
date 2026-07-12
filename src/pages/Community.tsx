@@ -83,6 +83,19 @@ export default function Community() {
   const [topicOpen, setTopicOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const channelRef = useRef<{ location: string | null; topic: Topic }>({
+    location: channelLocation,
+    topic: channelTopic,
+  });
+  const msgLimitRef = useRef(msgLimit);
+
+  useEffect(() => {
+    channelRef.current = { location: channelLocation, topic: channelTopic };
+  }, [channelLocation, channelTopic]);
+
+  useEffect(() => {
+    msgLimitRef.current = msgLimit;
+  }, [msgLimit]);
 
   const enrichProfiles = async (ids: string[]) => {
     const missing = ids.filter((id) => !profMap.has(id));
