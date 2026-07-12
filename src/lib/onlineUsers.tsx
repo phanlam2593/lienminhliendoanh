@@ -28,6 +28,7 @@ export function OnlineUsersProvider({ children }: { children: ReactNode }) {
   const [online, setOnline] = useState<Map<string, PresenceEntry>>(new Map());
   const channelRef = useRef<RealtimeChannel | null>(null);
   const myChannelRef = useRef<{ location: string | null; topic: string | null }>({ location: null, topic: null });
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!user) {
