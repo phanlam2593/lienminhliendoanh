@@ -177,6 +177,26 @@ export function registerPwa() {
   window.addEventListener("load", async () => {
     try {
       const registration = await navigator.serviceWorker.register(SW_URL, { updateViaCache: "none" });
+      swRegistration = registration;
+
+      // === Theo dõi trạng thái cập nhật cho chấm đỏ/xanh ===
+      // Có sẵn bản chờ (waiting) ngay từ đầu → đã có bản mới sẵn sàng.
+      if (registration.waiting && navigator.serviceWorker.controller) {
+        setUpdateStatus("available");
+      } else {
+        setUpdateStatus("current");
+      }
+      registration.addEventListener("updatefound", () => {
+        const newWorker = registration.installing;
+        if (!newWorker) return;
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed") {
+            // Có controller cũ tồn tại = đây là bản CẬP NHẬT (không phải lần cài đầu tiên)
+            if (navigator.serviceWorker.controller) setUpdateStatus("available");
+            else setUpdateStatus("current");
+          }
+        });
+      });
 
       // === Tự động cập nhật bản mới ===
       // 1) Chủ động kiểm tra bản mới: ngay khi mở app, mỗi khi quay lại app, và mỗi 15 phút
