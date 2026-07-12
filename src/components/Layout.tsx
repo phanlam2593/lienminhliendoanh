@@ -231,6 +231,7 @@ function WelcomeScreen() {
           </div>
         </div>
       </div>
+      <p className="text-xs text-muted-foreground -mb-1">{t("home.currentCommunity")}</p>
       <div className="w-full max-w-sm grid grid-cols-3 gap-2">
         {[
           { v: stats.members, l: t("stats.members"), icon: Users },
