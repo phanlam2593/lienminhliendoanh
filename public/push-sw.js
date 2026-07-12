@@ -1,4 +1,4 @@
-/// Push notification handlers — imported into the Workbox-generated /sw.js
+// Push notification handlers — imported into the Workbox-generated /sw.js
 // via vite-plugin-pwa's workbox.importScripts option.
 
 const APP_ICON = "/__l5e/assets-v1/24cf1f1b-163f-4107-8c1f-5aed79ea28fc/logo-256.png";
