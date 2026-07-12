@@ -116,6 +116,7 @@ export default function Community() {
     setChannelTopic(topic);
     setMsgLimit(MSG_PAGE_SIZE);
     void loadMsgs(MSG_PAGE_SIZE, true, loc, topic);
+    setMyChannel(loc, topic);
   };
 
   const loadOlderMsgs = async () => {
