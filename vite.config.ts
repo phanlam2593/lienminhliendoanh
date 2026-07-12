@@ -32,10 +32,7 @@ export default defineConfig(({ mode }) => ({
         navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
-        // TẮT skipWaiting tự động — để bản mới CHỜ ở trạng thái "waiting" cho tới khi
-        // người dùng chủ động bấm nút cập nhật (chấm đỏ), tránh reload đột ngột giữa chừng
-        // lúc đang gõ chat/form. Xem src/lib/pwa.ts (applyUpdate) + public/push-sw.js.
-        skipWaiting: false,
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.mode === "navigate",
