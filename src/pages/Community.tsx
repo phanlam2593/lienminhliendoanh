@@ -12,7 +12,7 @@ import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile, ChevronDown, ChevronUp, Users, MapPin, Hash } from "lucide-react";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
-import { useOnlineUsers } from "@/lib/onlineUsers";
+import { useOnlineUsers, useSetMyChannel } from "@/lib/onlineUsers";
 import { useLanguage } from "@/lib/i18n";
 import { extractArea } from "@/lib/location";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
