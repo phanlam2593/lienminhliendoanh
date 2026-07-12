@@ -476,6 +476,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "welcomeOverlay.title": "Chào mừng bạn đến với cộng đồng!",
     "welcomeOverlay.subtitle": "Chúc bạn một ngày tốt lành! (^^)/",
     "welcomeOverlay.start": "Bắt đầu →",
+    "home.currentCommunity": "Cộng đồng hiện tại",
   },
   en: {
     "nav.home": "Home",
