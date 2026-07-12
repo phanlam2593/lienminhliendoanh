@@ -210,14 +210,14 @@ function WelcomeScreen() {
           onClick={() => setLang("vi")}
           className={`px-3 py-1 text-xs font-semibold ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
         >
-          VI
+          🇻🇳 VI
         </button>
         <button
           type="button"
           onClick={() => setLang("en")}
           className={`px-3 py-1 text-xs font-semibold ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
         >
-          EN
+          🇺🇸 EN
         </button>
       </div>
       <Logo size={72} asLink />
