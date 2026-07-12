@@ -399,7 +399,6 @@ export default function Community() {
 
       {/* Khung chat — chiếm phần còn lại */}
       <section className="flex flex-col flex-1 min-h-0">
-        <div className="px-3 py-2 border-b bg-card font-bold text-sm shrink-0">💬 {channelName}</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {msgs.length > 0 && msgHasMore && (
             <button
