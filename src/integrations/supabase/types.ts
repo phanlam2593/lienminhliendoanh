@@ -92,6 +92,39 @@ export type Database = {
           },
         ]
       }
+      business_pins: {
+        Row: {
+          business_id: string
+          pin: string
+          updated_at: string
+        }
+        Insert: {
+          business_id: string
+          pin: string
+          updated_at?: string
+        }
+        Update: {
+          business_id?: string
+          pin?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_pins_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: true
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "business_pins_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: true
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           address: string | null
@@ -176,6 +209,8 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          location: string | null
+          topic: string
           type: string
           user_id: string
         }
@@ -184,6 +219,8 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          location?: string | null
+          topic?: string
           type?: string
           user_id: string
         }
@@ -192,6 +229,8 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          location?: string | null
+          topic?: string
           type?: string
           user_id?: string
         }
@@ -531,6 +570,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pin_attempts: {
+        Row: {
+          attempted_at: string
+          business_id: string
+          id: string
+          success: boolean
+          user_id: string
+        }
+        Insert: {
+          attempted_at?: string
+          business_id: string
+          id?: string
+          success: boolean
+          user_id: string
+        }
+        Update: {
+          attempted_at?: string
+          business_id?: string
+          id?: string
+          success?: boolean
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -956,24 +1019,7 @@ export type Database = {
         Args: { _report_id: string; _user_id: string }
         Returns: boolean
       }
-      claim_offer: {
-        Args: { _offer_id: string }
-        Returns: {
-          claimed_at: string
-          code: string
-          expires_at: string
-          id: string
-          offer_id: string
-          seq: number | null
-          user_id: string
-        }
-        SetofOptions: {
-          from: "*"
-          to: "offer_claims"
-          isOneToOne: true
-          isSetofReturn: false
-        }
-      }
+      claim_offer: { Args: { _offer_id: string; _pin: string }; Returns: Json }
       expire_stale_exchanges: { Args: never; Returns: undefined }
       get_admin_user_ids: {
         Args: never
