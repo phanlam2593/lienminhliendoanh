@@ -39,6 +39,18 @@ const MEMBER_PAGE_SIZE = 50;
 const MSG_PAGE_SIZE = 50;
 const TOPICS = ["general", "jobs", "marketplace", "housing", "game", "random", "sharing", "qna", "news"] as const;
 type Topic = (typeof TOPICS)[number];
+const CHANNEL_STORAGE_KEY = "lmld:community:channel";
+
+function readSavedChannel(): { location: string | null; topic: Topic } {
+  try {
+    const raw = sessionStorage.getItem(CHANNEL_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (TOPICS.includes(parsed.topic)) return { location: parsed.location ?? null, topic: parsed.topic };
+    }
+  } catch {}
+  return { location: null, topic: "general" };
+}
 
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
