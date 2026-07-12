@@ -164,6 +164,28 @@ export default function BusinessDetail() {
   };
 
   const submitClaim = async () => {
+    if (!claimOffer || pinInput.length < 4) return;
+    setClaiming(true);
+    const { data, error } = await supabase.rpc("claim_offer", {
+      _offer_id: claimOffer.id,
+      _pin: pinInput,
+    });
+    setClaiming(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    // claim_offer giờ trả về JSON {success, error?, claim?} thay vì ném lỗi trực tiếp —
+    // để đảm bảo log số lần nhập sai PIN được lưu lại đúng (RAISE EXCEPTION cũ làm
+    // rollback luôn cả bước ghi log, khiến rate-limit không hoạt động — đã test phát hiện).
+    const result = data as unknown as { success: boolean; error?: string; claim?: OfferClaim };
+    if (!result.success) {
+      toast.error(result.error || "Có lỗi xảy ra");
+      return;
+    }
+    setClaim(result.claim!);
+    load();
+  };
 
   const submitReview = async () => {
     if (!user) return;
