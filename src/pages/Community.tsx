@@ -14,6 +14,8 @@ import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { useLanguage } from "@/lib/i18n";
+import { extractArea } from "@/lib/location";
+
 interface ProfLite {
   id: string;
   full_name: string;
@@ -34,6 +36,8 @@ interface Msg {
 
 const MEMBER_PAGE_SIZE = 50;
 const MSG_PAGE_SIZE = 50;
+const TOPICS = ["general", "jobs", "marketplace", "housing"] as const;
+type Topic = (typeof TOPICS)[number];
 
 export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
@@ -58,6 +62,9 @@ export default function Community() {
   const [showMembers, setShowMembers] = useState(false);
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
   const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
+  const [locations, setLocations] = useState<string[]>([]);
+  const [channelLocation, setChannelLocation] = useState<string | null>(null);
+  const [channelTopic, setChannelTopic] = useState<Topic>("general");
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -75,14 +82,22 @@ export default function Community() {
     });
   };
 
-  const loadMsgs = async (limit = msgLimit, scrollToBottom = true) => {
-    // Tải LIMIT tin nhắn MỚI NHẤT (không phải cũ nhất) rồi đảo lại thành thứ tự thời gian tăng dần
-    // để hiển thị đúng — tránh giới hạn cứng 200 như trước, "Xem thêm" sẽ tăng dần limit này.
-    const { data } = await supabase
+  const loadLocations = async () => {
+    const { data } = await supabase.from("businesses").select("address").eq("status", "approved");
+    const set = new Set<string>();
+    (data ?? []).forEach((b: any) => set.add(extractArea(b.address)));
+    setLocations(Array.from(set).sort());
+  };
+
+  const loadMsgs = async (limit = msgLimit, scrollToBottom = true, loc = channelLocation, topic = channelTopic) => {
+    let q = supabase
       .from("community_messages")
       .select("*")
+      .eq("topic", topic)
       .order("created_at", { ascending: false })
       .limit(limit);
+    q = loc === null ? q.is("location", null) : q.eq("location", loc);
+    const { data } = await q;
     const list = ((data ?? []) as Msg[]).reverse();
     setMsgs(list);
     setMsgHasMore(list.length === limit);
@@ -90,6 +105,13 @@ export default function Community() {
     if (scrollToBottom) {
       setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
     }
+  };
+
+  const switchChannel = (loc: string | null, topic: Topic) => {
+    setChannelLocation(loc);
+    setChannelTopic(topic);
+    setMsgLimit(MSG_PAGE_SIZE);
+    void loadMsgs(MSG_PAGE_SIZE, true, loc, topic);
   };
 
   const loadOlderMsgs = async () => {
@@ -129,8 +151,9 @@ export default function Community() {
 
   useEffect(() => {
     if (!user) return;
-    void loadMsgs(MSG_PAGE_SIZE, true);
+    void loadMsgs(MSG_PAGE_SIZE, true, null, "general");
     void loadMembers(0, false);
+    void loadLocations();
     supabase.rpc("get_admin_user_ids").then(({ data }) => {
       setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
     });
@@ -172,13 +195,14 @@ export default function Community() {
   };
 
   const send = async () => {
+    const base = { location: channelLocation, topic: channelTopic };
     if (pendingImage) {
       setUploading(true);
       try {
         const path = await uploadImage(pendingImage.file, "community", user.id);
         const { error } = await supabase
           .from("community_messages")
-          .insert({ user_id: user.id, content: "", type: "image", image_url: path });
+          .insert({ user_id: user.id, content: "", type: "image", image_url: path, ...base });
         if (error) throw error;
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
@@ -194,7 +218,7 @@ export default function Community() {
       setPendingSticker(null);
       const { error } = await supabase
         .from("community_messages")
-        .insert({ user_id: user.id, content: emoji, type: "sticker" });
+        .insert({ user_id: user.id, content: emoji, type: "sticker", ...base });
       if (error) toast.error("Gửi sticker thất bại: " + error.message);
       return;
     }
@@ -203,7 +227,7 @@ export default function Community() {
     setText("");
     const { error } = await supabase
       .from("community_messages")
-      .insert({ user_id: user.id, content: trimmed, type: "text" });
+      .insert({ user_id: user.id, content: trimmed, type: "text", ...base });
     if (error) {
       toast.error(error.message);
       setText(trimmed);
@@ -217,9 +241,42 @@ export default function Community() {
   };
 
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
+  const channelName = `${channelLocation ?? t("channel.nationwide")} · ${t(`channel.${channelTopic}`)}`;
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
+      {/* Bộ chọn kênh — vị trí + chủ đề */}
+      <div className="border-b bg-card shrink-0 px-3 py-2 space-y-1.5">
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
+          <button
+            onClick={() => switchChannel(null, channelTopic)}
+            className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border shrink-0 ${channelLocation === null ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground"}`}
+          >
+            {t("channel.nationwide")}
+          </button>
+          {locations.map((loc) => (
+            <button
+              key={loc}
+              onClick={() => switchChannel(loc, channelTopic)}
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border shrink-0 ${channelLocation === loc ? "bg-primary text-primary-foreground border-primary" : "bg-muted text-muted-foreground"}`}
+            >
+              {loc}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
+          {TOPICS.map((tp) => (
+            <button
+              key={tp}
+              onClick={() => switchChannel(channelLocation, tp)}
+              className={`px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${channelTopic === tp ? "bg-accent text-accent-foreground" : "text-muted-foreground"}`}
+            >
+              {t(`channel.${tp}`)}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Danh sách thành viên — thu gọn mặc định, nằm trên khung chat */}
       <button
         onClick={() => setShowMembers((v) => !v)}
@@ -271,7 +328,7 @@ export default function Community() {
 
       {/* Khung chat — chiếm phần còn lại */}
       <section className="flex flex-col flex-1 min-h-0">
-        <div className="px-3 py-2 border-b bg-card font-bold text-sm shrink-0">{t("community.chatTitle")}</div>
+        <div className="px-3 py-2 border-b bg-card font-bold text-sm shrink-0">💬 {channelName}</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {msgs.length > 0 && msgHasMore && (
             <button
