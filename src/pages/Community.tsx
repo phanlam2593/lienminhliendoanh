@@ -129,6 +129,9 @@ export default function Community() {
     setMsgLimit(MSG_PAGE_SIZE);
     void loadMsgs(MSG_PAGE_SIZE, true, loc, topic);
     setMyChannel(loc, topic);
+    try {
+      sessionStorage.setItem(CHANNEL_STORAGE_KEY, JSON.stringify({ location: loc, topic }));
+    } catch {}
   };
 
   const loadOlderMsgs = async () => {
