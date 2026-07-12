@@ -477,6 +477,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     "welcomeOverlay.subtitle": "Chúc bạn một ngày tốt lành! (^^)/",
     "welcomeOverlay.start": "Bắt đầu →",
     "home.currentCommunity": "Cộng đồng hiện tại",
+    "channel.nationwide": "Toàn quốc",
+    "channel.general": "Chat chung",
+    "channel.jobs": "Việc làm",
+    "channel.marketplace": "Mua bán",
+    "channel.housing": "Nhà ở / Phòng trọ",
+    "channel.chooseLocation": "Chọn vị trí",
+    "channel.chooseTopic": "Chọn chủ đề",
   },
   en: {
     "nav.home": "Home",
