@@ -12,6 +12,7 @@ type SortKey = "newest" | "rating" | "offers" | "nearest";
 type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
 
 const RADIUS_OPTIONS = [1, 5, 10] as const;
+const PAGE_SIZE = 300;
 
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
