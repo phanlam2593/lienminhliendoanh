@@ -40,6 +40,8 @@ const MSG_PAGE_SIZE = 50;
 const TOPICS = ["general", "jobs", "marketplace", "housing", "game", "random", "sharing", "qna", "news"] as const;
 type Topic = (typeof TOPICS)[number];
 const CHANNEL_STORAGE_KEY = "lmld:community:channel";
+const LOCATIONS_CACHE_KEY = "lmld:community:locations";
+const LOCATIONS_CACHE_TTL = 5 * 60 * 1000; // 5 phút
 
 function readSavedChannel(): { location: string | null; topic: Topic } {
   try {
