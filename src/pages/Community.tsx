@@ -44,6 +44,7 @@ export default function Community() {
   const { user, isApproved, isAdmin } = useAuth();
   const { t, lang } = useLanguage();
   const onlineUsers = useOnlineUsers();
+  const setMyChannel = useSetMyChannel();
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
   const [msgHasMore, setMsgHasMore] = useState(true);
