@@ -275,7 +275,6 @@ export default function Community() {
   };
 
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
-  const channelName = `${channelLocation ?? t("channel.nationwide")} · ${t(`channel.${channelTopic}`)}`;
 
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
