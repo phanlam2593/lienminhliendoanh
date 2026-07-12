@@ -13,7 +13,10 @@ const PUSH_ASK_KEY = "lmld:push-asked";
 // ===== Trạng thái cập nhật PWA (chấm đỏ/xanh) =====
 // "current" = đã ở bản mới nhất · "available" = có bản mới đã tải xong, sẵn sàng áp dụng.
 export type UpdateStatus = "checking" | "current" | "available";
-let updateStatus: UpdateStatus = "checking";
+// Mặc định "current" (xanh) thay vì "checking" (ẩn) — nếu bước đăng ký service worker
+// gặp trục trặc nhỏ và không bao giờ xác nhận xong, người dùng vẫn luôn thấy chấm xanh
+// thay vì chấm biến mất hoàn toàn không rõ lý do.
+let updateStatus: UpdateStatus = "current";
 let swRegistration: ServiceWorkerRegistration | null = null;
 const UPDATE_STATUS_EVENT = "lmld:update-status";
 
