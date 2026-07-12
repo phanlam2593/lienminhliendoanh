@@ -37,7 +37,7 @@ interface Msg {
 
 const MEMBER_PAGE_SIZE = 50;
 const MSG_PAGE_SIZE = 50;
-const TOPICS = ["general", "jobs", "marketplace", "housing"] as const;
+const TOPICS = ["general", "jobs", "marketplace", "housing", "game", "random", "sharing", "qna", "news"] as const;
 type Topic = (typeof TOPICS)[number];
 
 export default function Community() {
