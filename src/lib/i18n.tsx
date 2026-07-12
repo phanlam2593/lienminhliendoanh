@@ -466,6 +466,16 @@ const DICT: Record<Lang, Record<string, string>> = {
     "privacyPage.s9Title": "9. Thay đổi chính sách",
     "privacyPage.s9P1":
       "Chính sách có thể được cập nhật theo thời gian. Thay đổi quan trọng sẽ được thông báo trong Ứng dụng.",
+    "login.usernamePlaceholder": "Tên đăng nhập",
+    "login.passwordPlaceholder": "Mật khẩu",
+    "login.wrongCredentials": "Sai tên đăng nhập hoặc mật khẩu",
+    "login.loggingIn": "Đang đăng nhập…",
+    "login.forgotPassword": "Quên mật khẩu?",
+    "login.noAccount": "Chưa có tài khoản?",
+    "login.backToHome": "← Quay lại trang chủ",
+    "welcomeOverlay.title": "Chào mừng bạn đến với cộng đồng!",
+    "welcomeOverlay.subtitle": "Chúc bạn một ngày tốt lành! (^^)/",
+    "welcomeOverlay.start": "Bắt đầu →",
   },
   en: {
     "nav.home": "Home",
