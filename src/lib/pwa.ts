@@ -248,17 +248,17 @@ export async function requestPushPermission(): Promise<"granted" | "denied" | "u
   return perm === "granted" ? "granted" : "denied";
 }
 
-// Gọi khi người dùng kéo xuống để refresh — chỉ kiểm tra bản mới (không ép reload ngay,
-// vì reload ngay hay xảy ra TRƯỚC khi bản mới kịp tải xong — đây là lý do "vuốt để refresh"
-// trước đây không có tác dụng). Nếu có bản mới, chấm đỏ sẽ tự hiện lên sau vài giây.
+// Gọi khi người dùng kéo xuống để refresh — luôn reload để chắc chắn lấy bản mới nhất.
 export async function forceRefreshCheck(): Promise<void> {
   if (!("serviceWorker" in navigator)) {
     window.location.reload();
     return;
   }
   try {
+    // Ép tải hẳn file sw.js mới, bỏ qua cache trình duyệt, để chắc chắn so sánh đúng bản mới nhất
     await fetch("/sw.js", { cache: "no-store" });
     const reg = await navigator.serviceWorker.getRegistration();
     if (reg) await reg.update();
   } catch {}
+  window.location.reload();
 }
