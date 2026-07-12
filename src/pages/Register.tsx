@@ -222,16 +222,16 @@ export default function Register() {
             <button
               type="button"
               onClick={() => setLang("vi")}
-              className={`px-3 py-1 text-xs font-semibold ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+              className={`px-3 py-1 text-xs font-semibold flex items-center gap-1.5 ${lang === "vi" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
             >
-              🇻🇳 VI
+              <VNFlag /> VI
             </button>
             <button
               type="button"
               onClick={() => setLang("en")}
-              className={`px-3 py-1 text-xs font-semibold ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
+              className={`px-3 py-1 text-xs font-semibold flex items-center gap-1.5 ${lang === "en" ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}
             >
-              🇺🇸 EN
+              <UKFlag /> EN
             </button>
           </div>
         </div>
