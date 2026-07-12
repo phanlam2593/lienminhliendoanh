@@ -113,11 +113,28 @@ export default function Community() {
     });
   };
 
+  // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây quét lại TOÀN BỘ doanh nghiệp mỗi lần
+  // vào trang Cộng đồng để tính danh sách vị trí — lãng phí nếu vào ra liên tục trong
+  // cùng 1 phiên. Cache 5 phút trong sessionStorage, chỉ tính lại khi hết hạn.
   const loadLocations = async () => {
+    try {
+      const cached = sessionStorage.getItem(LOCATIONS_CACHE_KEY);
+      if (cached) {
+        const { locations: cachedLocs, ts } = JSON.parse(cached);
+        if (Date.now() - ts < LOCATIONS_CACHE_TTL) {
+          setLocations(cachedLocs);
+          return;
+        }
+      }
+    } catch {}
     const { data } = await supabase.from("businesses").select("address").eq("status", "approved");
     const set = new Set<string>();
     (data ?? []).forEach((b: any) => set.add(extractArea(b.address)));
-    setLocations(Array.from(set).sort());
+    const result = Array.from(set).sort();
+    setLocations(result);
+    try {
+      sessionStorage.setItem(LOCATIONS_CACHE_KEY, JSON.stringify({ locations: result, ts: Date.now() }));
+    } catch {}
   };
 
   const loadMsgs = async (limit = msgLimit, scrollToBottom = true, loc = channelLocation, topic = channelTopic) => {
