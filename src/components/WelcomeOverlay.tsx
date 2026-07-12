@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/lib/i18n";
 
 const FLAG = "lmld:welcome";
 
 export function triggerWelcomeOverlay() {
-  try { sessionStorage.setItem(FLAG, "1"); } catch {}
+  try {
+    sessionStorage.setItem(FLAG, "1");
+  } catch {}
   window.dispatchEvent(new Event("lmld:welcome"));
 }
 
 export function WelcomeOverlay() {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -24,7 +28,9 @@ export function WelcomeOverlay() {
   if (!open) return null;
 
   const close = () => {
-    try { sessionStorage.removeItem(FLAG); } catch {}
+    try {
+      sessionStorage.removeItem(FLAG);
+    } catch {}
     setOpen(false);
   };
 
@@ -36,13 +42,13 @@ export function WelcomeOverlay() {
     >
       <div className="w-[min(92vw,380px)] rounded-2xl border bg-card text-card-foreground shadow-xl p-6 text-center space-y-4 animate-in zoom-in-95 duration-200">
         <div className="text-6xl leading-none">👋</div>
-        <h2 className="text-xl font-bold">Chào mừng bạn đến với cộng đồng!</h2>
-        <p className="text-sm text-muted-foreground">Chúc bạn một ngày tốt lành! (^^)/</p>
+        <h2 className="text-xl font-bold">{t("welcomeOverlay.title")}</h2>
+        <p className="text-sm text-muted-foreground">{t("welcomeOverlay.subtitle")}</p>
         <button
           onClick={close}
           className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold"
         >
-          Bắt đầu →
+          {t("welcomeOverlay.start")}
         </button>
       </div>
     </div>
