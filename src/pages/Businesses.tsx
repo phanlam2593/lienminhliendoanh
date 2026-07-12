@@ -275,6 +275,15 @@ export default function Businesses() {
           ))}
         </div>
       )}
+      {!loading && hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-2.5 rounded-xl border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+        >
+          {loadingMore ? t("common.loading") : t("common.loadMore")}
+        </button>
+      )}
     </div>
   );
 }
