@@ -957,6 +957,13 @@ const DICT: Record<Lang, Record<string, string>> = {
     "welcomeOverlay.subtitle": "Have a great day! (^^)/",
     "welcomeOverlay.start": "Get started →",
     "home.currentCommunity": "Our community so far",
+    "channel.nationwide": "Nationwide",
+    "channel.general": "General Chat",
+    "channel.jobs": "Jobs",
+    "channel.marketplace": "Marketplace",
+    "channel.housing": "Housing / Rentals",
+    "channel.chooseLocation": "Choose location",
+    "channel.chooseTopic": "Choose topic",
   },
 };
 
