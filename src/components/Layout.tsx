@@ -88,11 +88,11 @@ export function Layout() {
           <div className="flex items-center justify-between px-4 h-14 gap-2">
             <Logo size={36} withText asLink />
             <div className="flex items-center gap-1">
+              <UpdateIndicator />
               {user ? (
                 <>
                   <Link
                     to="/tin-nhan"
-                    aria-label="Tin nhắn"
                     className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
                   >
                     <MessageCircle className="w-5 h-5" />
