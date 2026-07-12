@@ -6,6 +6,7 @@ import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n";
+import { extractArea } from "@/lib/location";
 
 type SortKey = "newest" | "rating" | "offers" | "nearest";
 type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
@@ -21,19 +22,6 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
     Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
-
-// Item 7: derive areas dynamically from business addresses.
-// Heuristic: take the last comma-separated segment (usually city / district),
-// trim, collapse whitespace, fall back to "Khác".
-const extractArea = (addr: string | null): string => {
-  if (!addr) return "Khác";
-  const parts = addr
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  const last = parts[parts.length - 1] || "Khác";
-  return last.replace(/\s+/g, " ").slice(0, 40);
-};
 
 export default function Businesses() {
   const { t } = useLanguage();
