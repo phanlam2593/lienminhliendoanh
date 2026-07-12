@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { usernameToEmail, BUSINESS_TYPES, BUSINESS_TYPE_LABEL, BusinessType } from "@/lib/types";
+import { usernameToEmail, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Logo } from "@/components/Logo";
 import { uploadImage } from "@/lib/upload";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
