@@ -33,10 +33,6 @@ import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 
-// DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
-const APP_NAME = "Liên Minh Liên Doanh";
-const TAGLINE = "Một cộng đồng – Nhiều giá trị";
-
 const PENDING_ALLOWED = ["/ho-so", "/thong-bao", "/tin-nhan"];
 
 export function Layout() {
