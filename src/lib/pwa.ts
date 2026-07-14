@@ -262,3 +262,39 @@ export async function forceRefreshCheck(): Promise<void> {
   } catch {}
   window.location.reload();
 }
+
+// ===== Update status (used by UpdateIndicator) =====
+export type UpdateStatus = "current" | "available";
+let _updateStatus: UpdateStatus = "current";
+const _updateListeners = new Set<(s: UpdateStatus) => void>();
+
+export function getUpdateStatus(): UpdateStatus {
+  return _updateStatus;
+}
+export function onUpdateStatusChange(cb: (s: UpdateStatus) => void): () => void {
+  _updateListeners.add(cb);
+  return () => _updateListeners.delete(cb);
+}
+function _setUpdateStatus(s: UpdateStatus) {
+  _updateStatus = s;
+  _updateListeners.forEach((cb) => cb(s));
+}
+export async function applyUpdate(): Promise<void> {
+  await forceRefreshCheck();
+}
+
+if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistration().then((reg) => {
+    if (!reg) return;
+    if (reg.waiting) _setUpdateStatus("available");
+    reg.addEventListener("updatefound", () => {
+      const nw = reg.installing;
+      if (!nw) return;
+      nw.addEventListener("statechange", () => {
+        if (nw.state === "installed" && navigator.serviceWorker.controller) {
+          _setUpdateStatus("available");
+        }
+      });
+    });
+  }).catch(() => {});
+}
