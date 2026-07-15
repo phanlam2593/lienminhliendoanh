@@ -1166,6 +1166,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s5P1": "This policy may be updated when the App adds new third-party services.",
     "cookiePage.s5Pre": "For any questions, please contact us via Zalo",
     "cookiePage.s5Post": 'or Facebook "{app}".',
+    "membership.activeUntil": "Active — expires {date}",
+    "membership.notEligible": "The free program for the first 1,000 members has closed. Paid plans coming soon.",
   },
 };
 
