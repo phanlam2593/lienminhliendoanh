@@ -234,11 +234,19 @@ export default function Admin() {
           <Flag className="w-3.5 h-3.5" /> Xem Điều khoản sử dụng (kèm nội quy cộng đồng)
         </Link>
         <Link
+          <Link
           to="/chinh-sach-bao-mat"
           target="_blank"
           className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
         >
           <Shield className="w-3.5 h-3.5" /> Xem Chính sách bảo mật
+        </Link>
+        <Link
+          to="/chinh-sach-cookie"
+          target="_blank"
+          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+        >
+          <Search className="w-3.5 h-3.5" /> Xem Chính sách Cookie & Bên thứ ba
         </Link>
         <button
           onClick={cleanupOrphans}
