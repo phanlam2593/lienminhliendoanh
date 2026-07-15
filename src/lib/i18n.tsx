@@ -905,43 +905,91 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notifTitle.reports": "You have a report update",
     "legal.lastUpdated": "Last updated: 07/2026",
     "termsPage.title": "Terms of Use",
-    "termsPage.s1Title": "1. Introduction",
+    "termsPage.s1Title": "1. Introduction & Scope",
     "termsPage.s1P1":
-      '"{app}" (referred to as the "App") is a community platform connecting members and businesses in Đà Lạt. By registering and using the App, you agree to comply with the terms below.',
-    "termsPage.s2Title": "2. User Accounts",
-    "termsPage.s2P1": "You must provide accurate information (full name, email, phone number) when registering.",
-    "termsPage.s2P2": "You are responsible for keeping your password secure and for all activity under your account.",
-    "termsPage.s2P3":
-      "New accounts may need to be reviewed by the Admin team in some cases (especially business profiles) before being shown publicly.",
-    "termsPage.s3Title": "3. Community Conduct",
-    "termsPage.s3Intro": "When using chat, reviews, or reports, you agree to:",
-    "termsPage.s3Li1": "Not post false, offensive, or harassing content",
-    "termsPage.s3Li2": "Not impersonate another person or business",
-    "termsPage.s3Li3": "Not spam or advertise outside the App's intended purpose",
-    "termsPage.s3Li4": "Respect other members' privacy",
-    "termsPage.s4Title": "4. Businesses & Offers",
-    "termsPage.s4P1":
-      "Business owners are responsible for the accuracy of their business information and posted offers, including honoring the offer when a member presents a valid code.",
-    "termsPage.s4P2": 'If a business does not honor a posted offer, members can report it via the "Report" section.',
-    "termsPage.s5Title": "5. User-Generated Content",
-    "termsPage.s5P1":
-      "You retain ownership of the content you post (reviews, photos, messages), but grant the App a license to display that content within the scope of community activity.",
-    "termsPage.s6Title": "6. Prohibited Conduct",
-    "termsPage.s6Li1": "Creating fake accounts or using someone else's information without permission",
-    "termsPage.s6Li2": "Unauthorized interference with the system or exploiting security vulnerabilities",
-    "termsPage.s6Li3": "Using the App for purposes that violate Vietnamese law",
-    "termsPage.s6P1": "The Admin team may suspend or delete violating accounts without prior notice.",
-    "termsPage.s7Title": "7. Membership Plan",
+      '"{app}" (referred to as the "App") is a community platform connecting members and businesses across Vietnam. By registering and using the App, you agree to comply with the terms below.',
+    "termsPage.s1P2":
+      "These Terms apply to every individual or organization accessing or using the App in any capacity (member, business owner, visitor).",
+    "termsPage.s2Title": "2. Definitions",
+    "termsPage.s2Li1": '"App": the {app} software platform, including the website and related mobile (PWA) app.',
+    "termsPage.s2Li2": '"User"/"Member": an individual who has registered and been approved for an App account.',
+    "termsPage.s2Li3":
+      '"Business": an organization or individual business owner who registers a business profile on the App to promote and provide Offers.',
+    "termsPage.s2Li4": '"Offer": a promotion, discount, or gift posted by a Business for Members.',
+    "termsPage.s2Li5": '"Admin Team": the team operating and managing the App.',
+    "termsPage.s3Title": "3. Eligibility",
+    "termsPage.s3P1":
+      "Users must be at least 16 years old and have full civil legal capacity under Vietnamese Civil Code to register and use the App.",
+    "termsPage.s3P2":
+      "The App may refuse service, suspend, or terminate the account of any User who does not meet these eligibility requirements or violates these Terms.",
+    "termsPage.s4Title": "4. User Accounts",
+    "termsPage.s4Li1":
+      "You must provide accurate, complete, and up-to-date information (full name, email, phone number) when registering.",
+    "termsPage.s4Li2":
+      "You are responsible for keeping your login credentials secure and for all activity under your account.",
+    "termsPage.s4Li3":
+      "New accounts, especially business profiles, will be reviewed and approved by the Admin Team before being shown publicly.",
+    "termsPage.s4Li4":
+      "Each individual/organization may only hold one (01) member account, unless otherwise approved by the Admin Team.",
+    "termsPage.s5Title": "5. Community Conduct",
+    "termsPage.s5Intro": "When using chat, reviews, or reports, you agree to:",
+    "termsPage.s5Li1": "Not post false, defamatory, offensive, or harassing content toward others",
+    "termsPage.s5Li2": "Not impersonate another individual, organization, or business",
+    "termsPage.s5Li3": "Not spam or advertise outside the App's intended purpose",
+    "termsPage.s5Li4": "Respect other members' privacy",
+    "termsPage.s6Title": "6. Business Responsibilities & Offers",
+    "termsPage.s6Li1":
+      "Businesses are fully responsible for the accuracy and legality of their business information and posted Offer content.",
+    "termsPage.s6Li2": "Businesses must honor the Offer in full when a Member presents a valid confirmation code.",
+    "termsPage.s6Li3":
+      "Businesses are solely responsible for the quality of goods/services they provide; the App is not a seller of goods/provider of services and does not participate in the transaction between a Business and a Member.",
+    "termsPage.s6Li4": 'If a Business does not honor a posted Offer, Members may report it via the "Report" feature.',
+    "termsPage.s6Li5":
+      "The Admin Team may refuse to approve, suspend, or remove a Business profile/Offer that violates these Terms or applicable law.",
+    "termsPage.s7Title": "7. User-Generated Content & Intellectual Property",
     "termsPage.s7P1":
-      "When the paid membership feature is activated, separate terms on payment, refunds, and renewal will be announced and require your separate consent before subscribing.",
-    "termsPage.s8Title": "8. Limitation of Liability",
-    "termsPage.s8P1":
-      "The App serves to connect members and businesses and is not a direct provider of businesses' goods/services. The App is not responsible for the quality of goods or services provided by businesses.",
-    "termsPage.s9Title": "9. Changes to These Terms",
-    "termsPage.s9P1": "These terms may be updated over time. We will notify you in the App of any significant changes.",
-    "termsPage.s10Title": "10. Contact",
-    "termsPage.s10Pre": "For questions about these terms, please contact us via Zalo",
-    "termsPage.s10Post": 'or Facebook "{app}".',
+      'You retain intellectual property ownership of content you post (reviews, photos, messages — "User Content"), but grant the App a license to use and display that content within the scope of operating and promoting the App.',
+    "termsPage.s7P2":
+      'The name "{app}", logo, interface, source code, and other brand identity elements are owned by the App\'s owner. Unauthorized copying or use without written consent is strictly prohibited.',
+    "termsPage.s8Title": "8. Prohibited Conduct",
+    "termsPage.s8Li1": "Creating fake accounts or using someone else's information without permission",
+    "termsPage.s8Li2": "Unauthorized interference with the system or exploiting security vulnerabilities",
+    "termsPage.s8Li3": "Using automated tools (bots, scripts) for unauthorized access or data collection",
+    "termsPage.s8Li4": "Using the App for purposes that violate Vietnamese law",
+    "termsPage.s9Title": "9. Enforcement & Account Termination",
+    "termsPage.s9P1":
+      "The Admin Team may warn, suspend, or terminate the account of a User who violates these Terms without prior notice, depending on the severity of the violation.",
+    "termsPage.s9P2":
+      "Users may request account termination and deletion of personal data at any time, per the Admin Team's process.",
+    "termsPage.s10Title": "10. Membership Plan",
+    "termsPage.s10P1":
+      "As part of the launch promotion, the first 1,000 Members to register will be granted a free Membership Plan for 03 (three) months from the date of activation.",
+    "termsPage.s10P2":
+      "When this promotional period ends, the Membership Plan will AUTOMATICALLY STOP. The App will NOT automatically switch you to a paid plan and will NOT automatically charge you without your separate, explicit consent to the payment terms at that time.",
+    "termsPage.s10P3":
+      "Beyond the launch promotion, when the official paid Membership Plan is activated, separate terms on fees, payment, and refunds will be announced and require your separate consent before subscribing.",
+    "termsPage.s11Title": "11. Disclaimer & Limitation of Liability",
+    "termsPage.s11P1":
+      'The App is provided "as is," without warranty of uninterrupted operation. The App serves to connect Members and Businesses and is not a direct provider of goods/services.',
+    "termsPage.s11P2":
+      "The App is not responsible for the quality of goods or services provided by Businesses, or for damages arising from transactions between Members and Businesses.",
+    "termsPage.s12Title": "12. Indemnification",
+    "termsPage.s12P1":
+      "You agree to indemnify and hold the App and the Admin Team harmless from any claims or damages arising from your violation of these Terms or applicable law.",
+    "termsPage.s13Title": "13. Governing Law & Dispute Resolution",
+    "termsPage.s13P1":
+      "These Terms are governed by the laws of Vietnam. Disputes will first be resolved through negotiation and good-faith mediation; if no agreement is reached, disputes will be brought to the competent People's Court in Vietnam.",
+    "termsPage.s14Title": "14. Governing Language",
+    "termsPage.s14P1":
+      "These Terms are drafted in both Vietnamese and English. In case of any discrepancy between the two versions, the Vietnamese version shall prevail.",
+    "termsPage.s15Title": "15. Force Majeure",
+    "termsPage.s15P1":
+      "The App is not liable for delays caused by force majeure events beyond its reasonable control (natural disasters, epidemics, third-party infrastructure outages...).",
+    "termsPage.s16Title": "16. Changes to These Terms & Contact",
+    "termsPage.s16P1":
+      "These Terms may be updated over time. We will notify you in the App of any significant changes.",
+    "termsPage.s16Pre": "For questions about these terms, please contact us via Zalo",
+    "termsPage.s16Post": 'or Facebook "{app}".',
     "register.fillValidInfo": "Please fill in all information correctly",
     "register.confirmBelow": "Please confirm all items below",
     "register.accountCreateFail": "Couldn't create account",
