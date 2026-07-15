@@ -1,4 +1,4 @@
-import { Crown, Sparkles } from "lucide-react";
+import { Crown, Sparkles, CheckCircle2 } from "lucide-react";
 import {
   getMemberTierProgress,
   getMembershipDiscountPct,
@@ -7,8 +7,16 @@ import {
 } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
-export function MembershipCard({ points }: { points: number }) {
-  const { t } = useLanguage();
+export function MembershipCard({
+  points,
+  isMember,
+  expiresAt,
+}: {
+  points: number;
+  isMember?: boolean;
+  expiresAt?: string | null;
+}) {
+  const { t, lang } = useLanguage();
   const { current, next, pct } = getMemberTierProgress(points);
   const discount = getMembershipDiscountPct(points);
   const price = getMembershipPrice(points);
@@ -62,12 +70,21 @@ export function MembershipCard({ points }: { points: number }) {
         <span className="text-sm opacity-80 mb-1">{t("membership.perMonth")}</span>
       </div>
 
-      <button
-        disabled
-        className="w-full py-2.5 rounded-xl bg-white/20 font-semibold text-sm flex items-center justify-center gap-2 cursor-not-allowed"
-      >
-        <Sparkles className="w-4 h-4" /> {t("membership.comingSoon")}
-      </button>
+      {isMember && expiresAt ? (
+        <div className="w-full py-2.5 rounded-xl bg-white/20 font-semibold text-sm flex items-center justify-center gap-2">
+          <CheckCircle2 className="w-4 h-4" />
+          {t("membership.activeUntil", {
+            date: new Date(expiresAt).toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US"),
+          })}
+        </div>
+      ) : (
+        <button
+          disabled
+          className="w-full py-2.5 rounded-xl bg-white/20 font-semibold text-sm flex items-center justify-center gap-2 cursor-not-allowed"
+        >
+          <Sparkles className="w-4 h-4" /> {t("membership.notEligible")}
+        </button>
+      )}
     </div>
   );
 }
