@@ -45,6 +45,7 @@ const App = () => (
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/dieu-khoan" element={<Terms />} />
                 <Route path="/chinh-sach-bao-mat" element={<PrivacyPolicy />} />
+                <Route path="/chinh-sach-cookie" element={<CookieThirdParty />} />
                 <Route element={<Layout />}>
                   <Route path="/" element={<Home />} />
                   <Route path="/kham-pha" element={<Businesses />} />
