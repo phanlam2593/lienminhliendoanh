@@ -553,6 +553,36 @@ const DICT: Record<Lang, Record<string, string>> = {
     "update.current": "Đã cập nhật ✓",
     "update.available": "Có bản mới, nhấn để tải lại",
     "update.applying": "Đang cập nhật…",
+    "cookiePage.title": "Chính sách Cookie & Bên thứ ba",
+    "cookiePage.s1Title": "1. Giới thiệu",
+    "cookiePage.s1P1":
+      "Chính sách này giải thích cách {app} sử dụng cookie, công nghệ lưu trữ cục bộ tương tự, và các dịch vụ bên thứ ba trong quá trình vận hành. Chính sách này bổ sung, không thay thế Chính sách bảo mật.",
+    "cookiePage.goodNote":
+      "✓ Khác với nhiều nền tảng mạng xã hội/thương mại điện tử, Ứng dụng KHÔNG sử dụng cookie theo dõi quảng cáo, KHÔNG chia sẻ dữ liệu cho đối tác quảng cáo bên thứ ba, và KHÔNG thực hiện theo dõi hành vi xuyên nền tảng.",
+    "cookiePage.s2Title": '2. Ứng dụng có dùng "cookie" truyền thống không?',
+    "cookiePage.s2P1":
+      "Ứng dụng là Progressive Web App (PWA), chủ yếu dùng bộ nhớ cục bộ trình duyệt (localStorage, sessionStorage) thay vì cookie truyền thống. Dữ liệu lưu trực tiếp trên thiết bị của bạn, không tự động gửi kèm mỗi yêu cầu tới máy chủ như cookie truyền thống.",
+    "cookiePage.s3Title": "3. Danh sách dữ liệu lưu trữ cục bộ",
+    "cookiePage.s3Item1": "lang — Ghi nhớ lựa chọn ngôn ngữ (localStorage, đến khi bạn xoá)",
+    "cookiePage.s3Item2": "lmld:welcome — Đánh dấu đã xem màn hình chào mừng (sessionStorage, hết phiên)",
+    "cookiePage.s3Item3": "lmld:community:channel — Ghi nhớ kênh Cộng đồng đang xem (sessionStorage, hết phiên)",
+    "cookiePage.s3Item4": "lmld:community:locations — Lưu tạm danh sách khu vực (sessionStorage, 5 phút)",
+    "cookiePage.s3Item5": "lmld:push-asked — Ghi nhớ đã hỏi quyền thông báo đẩy (localStorage, đến khi bạn xoá)",
+    "cookiePage.s3Footer":
+      'Bạn có thể xoá toàn bộ dữ liệu này bất kỳ lúc nào qua cài đặt trình duyệt ("Xóa dữ liệu duyệt web") hoặc gỡ cài đặt/cài lại Ứng dụng dạng PWA.',
+    "cookiePage.s4Title": "4. Dịch vụ bên thứ ba Ứng dụng sử dụng",
+    "cookiePage.s4Item1":
+      "Supabase — cơ sở dữ liệu, xác thực, lưu trữ ảnh, tính năng thời gian thực (máy chủ ngoài lãnh thổ Việt Nam)",
+    "cookiePage.s4Item2": "Lovable — nền tảng lưu trữ & xuất bản mã nguồn Ứng dụng (máy chủ ngoài lãnh thổ Việt Nam)",
+    "cookiePage.s4Item3":
+      "Dịch vụ đẩy thông báo của trình duyệt — gửi thông báo đẩy tới thiết bị đã đăng ký (theo hạ tầng từng trình duyệt)",
+    "cookiePage.s4Item4": "Google Fonts — cung cấp phông chữ hiển thị giao diện (máy chủ ngoài lãnh thổ Việt Nam)",
+    "cookiePage.s4Footer":
+      "Các nhà cung cấp trên đóng vai trò bên xử lý dữ liệu thay mặt Ứng dụng, không sử dụng dữ liệu cho mục đích riêng của họ.",
+    "cookiePage.s5Title": "5. Thay đổi chính sách & Liên hệ",
+    "cookiePage.s5P1": "Chính sách này có thể được cập nhật khi Ứng dụng bổ sung dịch vụ bên thứ ba mới.",
+    "cookiePage.s5Pre": "Mọi thắc mắc, vui lòng liên hệ qua Zalo",
+    "cookiePage.s5Post": 'hoặc Facebook "{app}".',
   },
   en: {
     "nav.home": "Home",
