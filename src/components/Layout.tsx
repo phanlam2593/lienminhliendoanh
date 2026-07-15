@@ -287,13 +287,17 @@ function Footer() {
   const { t } = useLanguage();
   return (
     <footer className="w-full max-w-sm pt-4 text-center space-y-1.5">
-      <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground">
+      <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground flex-wrap">
         <Link to="/dieu-khoan" className="hover:text-primary underline">
           {t("termsPage.title")}
         </Link>
         <span>·</span>
         <Link to="/chinh-sach-bao-mat" className="hover:text-primary underline">
           {t("privacyPage.title")}
+        </Link>
+        <span>·</span>
+        <Link to="/chinh-sach-cookie" className="hover:text-primary underline">
+          {t("cookiePage.title")}
         </Link>
       </div>
       <p className="text-[10px] text-muted-foreground">
