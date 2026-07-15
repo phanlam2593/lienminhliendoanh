@@ -583,6 +583,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s5P1": "Chính sách này có thể được cập nhật khi Ứng dụng bổ sung dịch vụ bên thứ ba mới.",
     "cookiePage.s5Pre": "Mọi thắc mắc, vui lòng liên hệ qua Zalo",
     "cookiePage.s5Post": 'hoặc Facebook "{app}".',
+    "membership.activeUntil": "Đang hoạt động — hết hạn {date}",
+    "membership.notEligible": "Chương trình miễn phí 1000 người đầu đã đóng. Gói trả phí sẽ sớm ra mắt.",
   },
   en: {
     "nav.home": "Home",
