@@ -104,8 +104,10 @@ export function getMemberTierProgress(points: number) {
   return { current, next, pct };
 }
 
-// ── Membership (khung sẵn, CHƯA bật — đổi MEMBERSHIP_ENABLED=true khi cần dùng thật) ──
-export const MEMBERSHIP_ENABLED = false;
+// ── Membership — ĐÃ BẬT (Giai đoạn A: miễn phí 3 tháng cho 1000 người đầu, xem
+// trigger grant_launch_membership() trong DB). Giai đoạn B (thu phí thật, cần cổng
+// thanh toán) sẽ làm sau khi có pháp nhân — CHƯA đụng tới phần đó.
+export const MEMBERSHIP_ENABLED = true;
 export const MEMBERSHIP_BASE_PRICE = 100000;
 
 export function getMembershipDiscountPct(points: number): number {
