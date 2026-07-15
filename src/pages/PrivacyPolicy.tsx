@@ -66,22 +66,7 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title={t("privacyPage.s7Title")}>
-        <p>{t("privacyPage.s7Intro")}</p>
-        <ul className="list-disc pl-4 space-y-1">
-          <li>{t("privacyPage.s7Li1")}</li>
-          <li>{t("privacyPage.s7Li2")}</li>
-          <li>{t("privacyPage.s7Li3")}</li>
-          <li>{t("privacyPage.s7Li4")}</li>
-          <li>{t("privacyPage.s7Li5")}</li>
-          <li>{t("privacyPage.s7Li6")}</li>
-        </ul>
-        <p>
-          {t("privacyPage.s7Pre")}{" "}
-          <a href="https://zalo.me/0339565246" className="text-primary font-semibold">
-            0339565246
-          </a>
-          . {t("privacyPage.s7Post")}
-        </p>
+        <p>{t("privacyPage.s7P1")}</p>
       </Section>
 
       <Section title={t("privacyPage.s8Title")}>
@@ -90,6 +75,37 @@ export default function PrivacyPolicy() {
 
       <Section title={t("privacyPage.s9Title")}>
         <p>{t("privacyPage.s9P1")}</p>
+      </Section>
+
+      <Section title={t("privacyPage.s10Title")}>
+        <p>{t("privacyPage.s10Intro")}</p>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("privacyPage.s10Li1")}</li>
+          <li>{t("privacyPage.s10Li2")}</li>
+          <li>{t("privacyPage.s10Li3")}</li>
+          <li>{t("privacyPage.s10Li4")}</li>
+          <li>{t("privacyPage.s10Li5")}</li>
+          <li>{t("privacyPage.s10Li6")}</li>
+        </ul>
+        <p>
+          {t("privacyPage.s10Pre")}{" "}
+          <a href="https://zalo.me/0339565246" className="text-primary font-semibold">
+            0339565246
+          </a>
+          . {t("privacyPage.s10Post")}
+        </p>
+      </Section>
+
+      <Section title={t("privacyPage.s11Title")}>
+        <p>{t("privacyPage.s11P1")}</p>
+      </Section>
+
+      <Section title={t("privacyPage.s12Title")}>
+        <p>{t("privacyPage.s12P1")}</p>
+      </Section>
+
+      <Section title={t("privacyPage.s13Title")}>
+        <p>{t("privacyPage.s13P1")}</p>
       </Section>
     </div>
   );
