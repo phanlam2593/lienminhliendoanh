@@ -287,7 +287,13 @@ export default function Profile() {
       <div className="p-4 space-y-5">
         <BackBar title={t("profile.personal")} />
         {Header}
-        {(MEMBERSHIP_ENABLED || role === "admin") && <MembershipCard points={(profile as any)?.points ?? 0} />}
+        {(MEMBERSHIP_ENABLED || role === "admin") && (
+          <MembershipCard
+            points={(profile as any)?.points ?? 0}
+            isMember={(profile as any)?.is_member ?? false}
+            expiresAt={(profile as any)?.membership_expires_at ?? null}
+          />
+        )}
         <section className="space-y-2 bg-card rounded-2xl p-4 shadow-sm">
           <h2 className="font-bold text-sm">{t("profile.personalInfo")}</h2>
           <input
