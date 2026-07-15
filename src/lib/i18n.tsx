@@ -1131,6 +1131,39 @@ const DICT: Record<Lang, Record<string, string>> = {
     "update.current": "Up to date",
     "update.available": "New version available, tap to reload",
     "update.applying": "Updating…",
+    "cookiePage.title": "Cookie & Third-Party Services Policy",
+    "cookiePage.s1Title": "1. Introduction",
+    "cookiePage.s1P1":
+      "This policy explains how {app} uses cookies, similar local storage technologies, and third-party services during operation. This policy supplements, and does not replace, the Privacy Policy.",
+    "cookiePage.goodNote":
+      "✓ Unlike many social media/e-commerce platforms, the App does NOT use advertising tracking cookies, does NOT share data with third-party advertising partners, and does NOT perform cross-site behavioral tracking.",
+    "cookiePage.s2Title": ' 2. Does the App Use Traditional "Cookies"?',
+    "cookiePage.s2P1":
+      "The App is a Progressive Web App (PWA) that primarily uses browser local storage (localStorage, sessionStorage) instead of traditional cookies. Data is stored directly on your device and is not automatically sent with every request to the server as traditional cookies are.",
+    "cookiePage.s3Title": "3. List of Local Storage Data",
+    "cookiePage.s3Item1": "lang — Remembers your language choice (localStorage, until you clear it)",
+    "cookiePage.s3Item2": "lmld:welcome — Marks that you've seen the welcome screen (sessionStorage, session only)",
+    "cookiePage.s3Item3":
+      "lmld:community:channel — Remembers the Community channel you're viewing (sessionStorage, session only)",
+    "cookiePage.s3Item4": "lmld:community:locations — Temporarily caches the area list (sessionStorage, 5 minutes)",
+    "cookiePage.s3Item5":
+      "lmld:push-asked — Remembers that you were asked for notification permission (localStorage, until you clear it)",
+    "cookiePage.s3Footer":
+      'You can clear all of this data at any time via your browser settings ("Clear browsing data") or by uninstalling/reinstalling the App as a PWA.',
+    "cookiePage.s4Title": "4. Third-Party Services the App Uses",
+    "cookiePage.s4Item1":
+      "Supabase — database, authentication, image storage, real-time features (servers located outside Vietnam)",
+    "cookiePage.s4Item2":
+      "Lovable — hosting & publishing platform for the App's source code (servers located outside Vietnam)",
+    "cookiePage.s4Item3":
+      "Browser push notification services — deliver push notifications to registered devices (per each browser's infrastructure)",
+    "cookiePage.s4Item4": "Google Fonts — provides fonts for the interface (servers located outside Vietnam)",
+    "cookiePage.s4Footer":
+      "The providers above act as data processors on behalf of the App and do not use the data for their own purposes.",
+    "cookiePage.s5Title": "5. Policy Changes & Contact",
+    "cookiePage.s5P1": "This policy may be updated when the App adds new third-party services.",
+    "cookiePage.s5Pre": "For any questions, please contact us via Zalo",
+    "cookiePage.s5Post": 'or Facebook "{app}".',
   },
 };
 
