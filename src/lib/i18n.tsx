@@ -368,45 +368,94 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notifTitle.reports": "Bạn có cập nhật báo cáo mới",
     "legal.lastUpdated": "Cập nhật lần cuối: 07/2026",
     "termsPage.title": "Điều khoản sử dụng",
-    "termsPage.s1Title": "1. Giới thiệu",
+    "termsPage.s1Title": "1. Giới thiệu & Phạm vi áp dụng",
     "termsPage.s1P1":
-      '"{app}" (sau đây gọi là "Ứng dụng") là nền tảng cộng đồng kết nối thành viên và doanh nghiệp tại Đà Lạt. Bằng việc đăng ký và sử dụng Ứng dụng, bạn đồng ý tuân thủ các điều khoản dưới đây.',
-    "termsPage.s2Title": "2. Tài khoản người dùng",
-    "termsPage.s2P1": "Bạn cần cung cấp thông tin chính xác (họ tên, email, số điện thoại) khi đăng ký.",
-    "termsPage.s2P2": "Bạn chịu trách nhiệm bảo mật mật khẩu và mọi hoạt động diễn ra dưới tài khoản của mình.",
-    "termsPage.s2P3":
-      "Tài khoản mới cần được Ban quản trị (BQT) xem xét trong một số trường hợp (đặc biệt là hồ sơ doanh nghiệp) trước khi được hiển thị công khai.",
-    "termsPage.s3Title": "3. Quy tắc ứng xử cộng đồng",
-    "termsPage.s3Intro": "Khi sử dụng tính năng trò chuyện, đánh giá, báo cáo, bạn cam kết:",
-    "termsPage.s3Li1": "Không đăng nội dung sai sự thật, xúc phạm, quấy rối người khác",
-    "termsPage.s3Li2": "Không mạo danh người khác hoặc doanh nghiệp khác",
-    "termsPage.s3Li3": "Không spam, quảng cáo trái phép ngoài mục đích của Ứng dụng",
-    "termsPage.s3Li4": "Tôn trọng quyền riêng tư của thành viên khác",
-    "termsPage.s4Title": "4. Doanh nghiệp & Ưu đãi",
-    "termsPage.s4P1":
-      "Chủ doanh nghiệp chịu trách nhiệm về tính chính xác của thông tin doanh nghiệp và các ưu đãi đã đăng, bao gồm việc thực hiện đúng cam kết ưu đãi khi thành viên xuất trình mã hợp lệ.",
-    "termsPage.s4P2":
-      'Nếu doanh nghiệp không thực hiện đúng ưu đãi đã đăng, thành viên có thể báo cáo qua mục "Báo cáo".',
-    "termsPage.s5Title": "5. Nội dung do người dùng tạo",
-    "termsPage.s5P1":
-      "Bạn giữ quyền sở hữu với nội dung mình đăng (đánh giá, ảnh, tin nhắn), nhưng cấp cho Ứng dụng quyền hiển thị nội dung đó trong phạm vi hoạt động của cộng đồng.",
-    "termsPage.s6Title": "6. Hành vi bị cấm",
-    "termsPage.s6Li1": "Tạo tài khoản giả, sử dụng thông tin của người khác không có sự cho phép",
-    "termsPage.s6Li2": "Can thiệp trái phép vào hệ thống, khai thác lỗ hổng bảo mật",
-    "termsPage.s6Li3": "Sử dụng Ứng dụng cho mục đích vi phạm pháp luật Việt Nam",
-    "termsPage.s6P1": "BQT có quyền tạm khoá hoặc xoá tài khoản vi phạm mà không cần báo trước.",
-    "termsPage.s7Title": "7. Gói thành viên (Membership)",
+      '"{app}" (sau đây gọi là "Ứng dụng") là nền tảng cộng đồng kết nối thành viên và doanh nghiệp trên khắp Việt Nam. Bằng việc đăng ký và sử dụng Ứng dụng, bạn đồng ý tuân thủ các điều khoản dưới đây.',
+    "termsPage.s1P2":
+      "Điều khoản này áp dụng cho mọi cá nhân, tổ chức truy cập hoặc sử dụng Ứng dụng dưới mọi hình thức (thành viên, chủ doanh nghiệp, khách truy cập).",
+    "termsPage.s2Title": "2. Định nghĩa",
+    "termsPage.s2Li1": '"Ứng dụng": nền tảng phần mềm {app} bao gồm website và ứng dụng di động (PWA) liên quan.',
+    "termsPage.s2Li2": '"Người dùng"/"Thành viên": cá nhân đã đăng ký và được chấp thuận tài khoản trên Ứng dụng.',
+    "termsPage.s2Li3":
+      '"Doanh nghiệp": tổ chức, cá nhân kinh doanh đăng ký hồ sơ doanh nghiệp trên Ứng dụng để quảng bá và cung cấp Ưu đãi.',
+    "termsPage.s2Li4":
+      '"Ưu đãi": chương trình khuyến mại, giảm giá, quà tặng do Doanh nghiệp đăng tải dành cho Thành viên.',
+    "termsPage.s2Li5": '"Ban Quản trị"/"BQT": đội ngũ vận hành, quản lý Ứng dụng.',
+    "termsPage.s3Title": "3. Điều kiện sử dụng dịch vụ",
+    "termsPage.s3P1":
+      "Người dùng phải từ đủ 16 tuổi trở lên và có đầy đủ năng lực hành vi dân sự theo quy định của Bộ luật Dân sự Việt Nam để đăng ký và sử dụng Ứng dụng.",
+    "termsPage.s3P2":
+      "Ứng dụng có quyền từ chối cung cấp dịch vụ, tạm ngừng hoặc chấm dứt tài khoản của bất kỳ Người dùng nào không đáp ứng điều kiện sử dụng hoặc vi phạm điều khoản này.",
+    "termsPage.s4Title": "4. Tài khoản người dùng",
+    "termsPage.s4Li1":
+      "Bạn cần cung cấp thông tin chính xác, đầy đủ và cập nhật (họ tên, email, số điện thoại) khi đăng ký.",
+    "termsPage.s4Li2":
+      "Bạn chịu trách nhiệm bảo mật thông tin đăng nhập và mọi hoạt động phát sinh dưới tài khoản của mình.",
+    "termsPage.s4Li3":
+      "Tài khoản mới, đặc biệt là hồ sơ Doanh nghiệp, sẽ được BQT xem xét và phê duyệt trước khi được hiển thị công khai.",
+    "termsPage.s4Li4":
+      "Mỗi cá nhân/tổ chức chỉ được sở hữu một (01) tài khoản thành viên, trừ trường hợp được BQT chấp thuận khác.",
+    "termsPage.s5Title": "5. Quy tắc ứng xử cộng đồng",
+    "termsPage.s5Intro": "Khi sử dụng tính năng trò chuyện, đánh giá, báo cáo, bạn cam kết:",
+    "termsPage.s5Li1": "Không đăng nội dung sai sự thật, phỉ báng, xúc phạm, quấy rối người khác",
+    "termsPage.s5Li2": "Không mạo danh cá nhân, tổ chức hoặc doanh nghiệp khác",
+    "termsPage.s5Li3": "Không spam, quảng cáo trái phép ngoài mục đích của Ứng dụng",
+    "termsPage.s5Li4": "Tôn trọng quyền riêng tư của thành viên khác",
+    "termsPage.s6Title": "6. Trách nhiệm của Doanh nghiệp & Ưu đãi",
+    "termsPage.s6Li1":
+      "Doanh nghiệp chịu trách nhiệm hoàn toàn về tính chính xác, hợp pháp của thông tin doanh nghiệp và nội dung Ưu đãi đã đăng tải.",
+    "termsPage.s6Li2":
+      "Doanh nghiệp có nghĩa vụ thực hiện đúng, đầy đủ nội dung Ưu đãi khi Thành viên xuất trình mã xác nhận hợp lệ.",
+    "termsPage.s6Li3":
+      "Doanh nghiệp tự chịu trách nhiệm về chất lượng hàng hoá, dịch vụ cung cấp; Ứng dụng không phải là bên bán hàng/cung ứng dịch vụ và không tham gia vào giao dịch giữa Doanh nghiệp và Thành viên.",
+    "termsPage.s6Li4":
+      'Nếu Doanh nghiệp không thực hiện đúng ưu đãi, Thành viên có thể phản ánh qua chức năng "Báo cáo".',
+    "termsPage.s6Li5":
+      "BQT có quyền từ chối phê duyệt, tạm ngừng hoặc gỡ bỏ hồ sơ Doanh nghiệp/Ưu đãi vi phạm điều khoản này hoặc quy định pháp luật.",
+    "termsPage.s7Title": "7. Nội dung do người dùng tạo & Quyền sở hữu trí tuệ",
     "termsPage.s7P1":
-      "Khi tính năng gói thành viên trả phí được kích hoạt, các điều khoản riêng về thanh toán, hoàn tiền và gia hạn sẽ được thông báo và cần sự đồng ý riêng của bạn trước khi đăng ký.",
-    "termsPage.s8Title": "8. Giới hạn trách nhiệm",
-    "termsPage.s8P1":
-      "Ứng dụng đóng vai trò kết nối thành viên và doanh nghiệp, không phải bên trực tiếp cung cấp hàng hoá/dịch vụ của doanh nghiệp. Ứng dụng không chịu trách nhiệm về chất lượng hàng hoá, dịch vụ do doanh nghiệp cung cấp.",
-    "termsPage.s9Title": "9. Thay đổi điều khoản",
+      'Bạn giữ quyền sở hữu trí tuệ với nội dung mình đăng (đánh giá, ảnh, tin nhắn — "Nội dung Người dùng"), nhưng cấp cho Ứng dụng quyền sử dụng, hiển thị nội dung đó trong phạm vi vận hành và quảng bá Ứng dụng.',
+    "termsPage.s7P2":
+      'Tên gọi "{app}", logo, giao diện, mã nguồn và các yếu tố nhận diện thương hiệu khác thuộc quyền sở hữu của chủ sở hữu Ứng dụng. Nghiêm cấm sao chép, sử dụng trái phép khi chưa có sự đồng ý bằng văn bản.',
+    "termsPage.s8Title": "8. Hành vi bị nghiêm cấm",
+    "termsPage.s8Li1": "Tạo tài khoản giả, sử dụng thông tin của người khác không có sự cho phép",
+    "termsPage.s8Li2": "Can thiệp trái phép vào hệ thống, khai thác lỗ hổng bảo mật",
+    "termsPage.s8Li3": "Sử dụng công cụ tự động (bot, script) truy cập, thu thập dữ liệu trái phép",
+    "termsPage.s8Li4": "Sử dụng Ứng dụng cho mục đích vi phạm pháp luật Việt Nam",
+    "termsPage.s9Title": "9. Xử lý vi phạm & Chấm dứt tài khoản",
     "termsPage.s9P1":
+      "BQT có quyền cảnh cáo, tạm khoá hoặc chấm dứt tài khoản của Người dùng vi phạm điều khoản này mà không cần báo trước, tuỳ theo mức độ vi phạm.",
+    "termsPage.s9P2":
+      "Người dùng có quyền yêu cầu chấm dứt tài khoản và xoá dữ liệu cá nhân bất kỳ lúc nào theo quy trình xử lý của BQT.",
+    "termsPage.s10Title": "10. Gói thành viên (Membership)",
+    "termsPage.s10P1":
+      "Trong khuôn khổ chương trình ưu đãi ra mắt, 1.000 Thành viên đăng ký sớm nhất sẽ được cấp Gói thành viên miễn phí trong 03 tháng kể từ ngày kích hoạt.",
+    "termsPage.s10P2":
+      "Khi hết thời hạn ưu đãi, Gói thành viên sẽ TỰ ĐỘNG NGỪNG HIỆU LỰC. Ứng dụng KHÔNG tự động chuyển sang gói trả phí và KHÔNG tự động trừ tiền khi chưa có sự đồng ý riêng của Thành viên.",
+    "termsPage.s10P3":
+      "Ngoài chương trình ra mắt, khi gói thành viên trả phí chính thức được kích hoạt, điều khoản riêng về phí/thanh toán/hoàn tiền sẽ được công bố và cần sự đồng ý riêng trước khi đăng ký.",
+    "termsPage.s11Title": "11. Miễn trừ bảo đảm & Giới hạn trách nhiệm",
+    "termsPage.s11P1":
+      'Ứng dụng được cung cấp trên cơ sở "nguyên trạng", không đảm bảo hoạt động không gián đoạn. Ứng dụng đóng vai trò kết nối, không phải bên trực tiếp cung cấp hàng hoá/dịch vụ.',
+    "termsPage.s11P2":
+      "Ứng dụng không chịu trách nhiệm về chất lượng hàng hoá, dịch vụ do Doanh nghiệp cung cấp, hay thiệt hại phát sinh từ giao dịch giữa Thành viên và Doanh nghiệp.",
+    "termsPage.s12Title": "12. Bồi thường",
+    "termsPage.s12P1":
+      "Người dùng đồng ý bồi thường và giữ cho Ứng dụng, BQT không bị tổn hại trước mọi khiếu nại, thiệt hại phát sinh từ việc Người dùng vi phạm điều khoản này hoặc pháp luật.",
+    "termsPage.s13Title": "13. Luật áp dụng & Giải quyết tranh chấp",
+    "termsPage.s13P1":
+      "Điều khoản này được điều chỉnh theo pháp luật Việt Nam. Tranh chấp trước tiên được giải quyết qua thương lượng, hoà giải; nếu không đạt thoả thuận sẽ đưa ra Toà án nhân dân có thẩm quyền tại Việt Nam.",
+    "termsPage.s14Title": "14. Ngôn ngữ áp dụng",
+    "termsPage.s14P1":
+      "Điều khoản này được soạn bằng tiếng Việt và tiếng Anh. Nếu có sự khác biệt giữa hai phiên bản, phiên bản tiếng Việt được ưu tiên áp dụng.",
+    "termsPage.s15Title": "15. Bất khả kháng",
+    "termsPage.s15P1":
+      "Ứng dụng không chịu trách nhiệm về việc chậm trễ do sự kiện bất khả kháng ngoài khả năng kiểm soát hợp lý (thiên tai, dịch bệnh, sự cố hạ tầng bên thứ ba...).",
+    "termsPage.s16Title": "16. Thay đổi điều khoản & Liên hệ",
+    "termsPage.s16P1":
       "Điều khoản có thể được cập nhật theo thời gian. Khi có thay đổi quan trọng, chúng tôi sẽ thông báo trong Ứng dụng.",
-    "termsPage.s10Title": "10. Liên hệ",
-    "termsPage.s10Pre": "Mọi thắc mắc về điều khoản, vui lòng liên hệ qua Zalo",
-    "termsPage.s10Post": 'hoặc Facebook "{app}".',
+    "termsPage.s16Pre": "Mọi thắc mắc về điều khoản, vui lòng liên hệ qua Zalo",
+    "termsPage.s16Post": 'hoặc Facebook "{app}".',
     "register.fillValidInfo": "Vui lòng điền đủ thông tin hợp lệ",
     "register.confirmBelow": "Vui lòng xác nhận đầy đủ các mục bên dưới",
     "register.accountCreateFail": "Không tạo được tài khoản",
