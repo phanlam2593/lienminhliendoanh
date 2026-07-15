@@ -24,6 +24,7 @@ import Guide from "./pages/Guide";
 import MyReports from "./pages/MyReports";
 import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookieThirdParty from "./pages/CookieThirdParty";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
