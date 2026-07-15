@@ -30,31 +30,41 @@ export default function Terms() {
 
       <Section title={t("termsPage.s1Title")}>
         <p>{t("termsPage.s1P1", { app: appName })}</p>
+        <p>{t("termsPage.s1P2")}</p>
       </Section>
 
       <Section title={t("termsPage.s2Title")}>
-        <p>{t("termsPage.s2P1")}</p>
-        <p>{t("termsPage.s2P2")}</p>
-        <p>{t("termsPage.s2P3")}</p>
-      </Section>
-
-      <Section title={t("termsPage.s3Title")}>
-        <p>{t("termsPage.s3Intro")}</p>
         <ul className="list-disc pl-4 space-y-1">
-          <li>{t("termsPage.s3Li1")}</li>
-          <li>{t("termsPage.s3Li2")}</li>
-          <li>{t("termsPage.s3Li3")}</li>
-          <li>{t("termsPage.s3Li4")}</li>
+          <li>{t("termsPage.s2Li1", { app: appName })}</li>
+          <li>{t("termsPage.s2Li2")}</li>
+          <li>{t("termsPage.s2Li3")}</li>
+          <li>{t("termsPage.s2Li4")}</li>
+          <li>{t("termsPage.s2Li5")}</li>
         </ul>
       </Section>
 
+      <Section title={t("termsPage.s3Title")}>
+        <p>{t("termsPage.s3P1")}</p>
+        <p>{t("termsPage.s3P2")}</p>
+      </Section>
+
       <Section title={t("termsPage.s4Title")}>
-        <p>{t("termsPage.s4P1")}</p>
-        <p>{t("termsPage.s4P2")}</p>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.s4Li1")}</li>
+          <li>{t("termsPage.s4Li2")}</li>
+          <li>{t("termsPage.s4Li3")}</li>
+          <li>{t("termsPage.s4Li4")}</li>
+        </ul>
       </Section>
 
       <Section title={t("termsPage.s5Title")}>
-        <p>{t("termsPage.s5P1")}</p>
+        <p>{t("termsPage.s5Intro")}</p>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.s5Li1")}</li>
+          <li>{t("termsPage.s5Li2")}</li>
+          <li>{t("termsPage.s5Li3")}</li>
+          <li>{t("termsPage.s5Li4")}</li>
+        </ul>
       </Section>
 
       <Section title={t("termsPage.s6Title")}>
@@ -62,29 +72,65 @@ export default function Terms() {
           <li>{t("termsPage.s6Li1")}</li>
           <li>{t("termsPage.s6Li2")}</li>
           <li>{t("termsPage.s6Li3")}</li>
+          <li>{t("termsPage.s6Li4")}</li>
+          <li>{t("termsPage.s6Li5")}</li>
         </ul>
-        <p>{t("termsPage.s6P1")}</p>
       </Section>
 
       <Section title={t("termsPage.s7Title")}>
         <p>{t("termsPage.s7P1")}</p>
+        <p>{t("termsPage.s7P2", { app: appName })}</p>
       </Section>
 
       <Section title={t("termsPage.s8Title")}>
-        <p>{t("termsPage.s8P1")}</p>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.s8Li1")}</li>
+          <li>{t("termsPage.s8Li2")}</li>
+          <li>{t("termsPage.s8Li3")}</li>
+          <li>{t("termsPage.s8Li4")}</li>
+        </ul>
       </Section>
 
       <Section title={t("termsPage.s9Title")}>
         <p>{t("termsPage.s9P1")}</p>
+        <p>{t("termsPage.s9P2")}</p>
       </Section>
 
       <Section title={t("termsPage.s10Title")}>
+        <p>{t("termsPage.s10P1")}</p>
+        <p>{t("termsPage.s10P2")}</p>
+        <p>{t("termsPage.s10P3")}</p>
+      </Section>
+
+      <Section title={t("termsPage.s11Title")}>
+        <p>{t("termsPage.s11P1")}</p>
+        <p>{t("termsPage.s11P2")}</p>
+      </Section>
+
+      <Section title={t("termsPage.s12Title")}>
+        <p>{t("termsPage.s12P1")}</p>
+      </Section>
+
+      <Section title={t("termsPage.s13Title")}>
+        <p>{t("termsPage.s13P1")}</p>
+      </Section>
+
+      <Section title={t("termsPage.s14Title")}>
+        <p>{t("termsPage.s14P1")}</p>
+      </Section>
+
+      <Section title={t("termsPage.s15Title")}>
+        <p>{t("termsPage.s15P1")}</p>
+      </Section>
+
+      <Section title={t("termsPage.s16Title")}>
+        <p>{t("termsPage.s16P1")}</p>
         <p>
-          {t("termsPage.s10Pre")}{" "}
+          {t("termsPage.s16Pre")}{" "}
           <a href="https://zalo.me/0339565246" className="text-primary font-semibold">
             0339565246
           </a>{" "}
-          {t("termsPage.s10Post", { app: appName })}
+          {t("termsPage.s16Post", { app: appName })}
         </p>
       </Section>
     </div>
