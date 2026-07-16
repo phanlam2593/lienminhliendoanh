@@ -307,6 +307,33 @@ export function MessagesThread() {
     }
   };
 
+  const startEdit = (m: Message) => {
+    setEditingId(m.id);
+    setEditText(m.content);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditText("");
+  };
+
+  const saveEdit = async () => {
+    const trimmed = editText.trim();
+    if (!trimmed || !editingId) return;
+    const { data, error } = await supabase
+      .from("messages")
+      .update({ content: trimmed, edited_at: new Date().toISOString() })
+      .eq("id", editingId)
+      .select()
+      .single();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (data) setMsgs((prev) => prev.map((m) => (m.id === data.id ? (data as Message) : m)));
+    cancelEdit();
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
