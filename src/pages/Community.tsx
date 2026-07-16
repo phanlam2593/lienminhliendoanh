@@ -33,6 +33,7 @@ interface Msg {
   type: "text" | "image" | "gif";
   image_url: string | null;
   created_at: string;
+  edited_at: string | null;
 }
 
 const MEMBER_PAGE_SIZE = 50;
