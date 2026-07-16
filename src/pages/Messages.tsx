@@ -210,6 +210,7 @@ export function MessagesThread() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user || !id) return;
