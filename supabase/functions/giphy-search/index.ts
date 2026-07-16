@@ -18,8 +18,9 @@ Deno.serve(async (req) => {
     const apiKey = Deno.env.get("GIPHY_API_KEY");
     if (!apiKey) return json({ error: "Chưa cấu hình GIPHY_API_KEY" }, 500);
 
+    const body = req.method === "POST" ? await req.json().catch(() => ({})) : {};
     const url = new URL(req.url);
-    const q = url.searchParams.get("q")?.trim();
+    const q = (body?.q ?? url.searchParams.get("q"))?.trim();
 
     // Không có từ khoá → hiện GIF đang thịnh hành (trending)
     const endpoint = q
