@@ -207,8 +207,9 @@ export function MessagesThread() {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [partnerIsAdmin, setPartnerIsAdmin] = useState(false);
   const [quickViewOpen, setQuickViewOpen] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
-  const endRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user || !id) return;
