@@ -588,6 +588,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "gif.searchPlaceholder": "Tìm GIF...",
     "gif.noResults": "Không tìm thấy GIF nào",
     "gif.poweredBy": "Powered by GIPHY",
+    "gif.tabGif": "GIF",
+    "gif.tabSticker": "Sticker",
   },
   en: {
     "nav.home": "Home",
