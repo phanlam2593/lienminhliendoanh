@@ -229,6 +229,10 @@ export default function Community() {
         const oldRow = payload.old as { id: string };
         setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
       })
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "community_messages" }, (payload) => {
+        const row = payload.new as Msg;
+        setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
