@@ -44,16 +44,16 @@ export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
     <div className="border-t bg-card">
       <div className="flex gap-1 px-2 pt-2">
         <button
-          onClick={() => setKind("gifs")}
-          className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "gifs" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
-        >
-          {t("gif.tabGif")}
-        </button>
-        <button
           onClick={() => setKind("stickers")}
           className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "stickers" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
         >
           {t("gif.tabSticker")}
+        </button>
+        <button
+          onClick={() => setKind("gifs")}
+          className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "gifs" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+        >
+          {t("gif.tabGif")}
         </button>
       </div>
       <div className="p-2 border-b">
