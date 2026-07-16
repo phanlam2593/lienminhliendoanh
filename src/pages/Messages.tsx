@@ -353,9 +353,19 @@ export function MessagesThread() {
         {msgs.map((m) => {
           const mine = m.sender_id === user.id;
           const canDelete = mine || isAdmin;
+          const isEditing = editingId === m.id;
           return (
             <div key={m.id} className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
-              {canDelete && mine && (
+              {mine && m.type === "text" && !isEditing && (
+                <button
+                  onClick={() => startEdit(m)}
+                  aria-label={t("msg.edit")}
+                  className="opacity-0 group-hover:opacity-100 text-muted-foreground p-1"
+                >
+                  <Pencil className="w-3 h-3" />
+                </button>
+              )}
+              {canDelete && mine && !isEditing && (
                 <button
                   onClick={() => setConfirmDeleteId(m.id)}
                   aria-label="Xóa"
@@ -364,7 +374,34 @@ export function MessagesThread() {
                   <Trash2 className="w-3 h-3" />
                 </button>
               )}
-              {m.type === "gif" ? (
+              {isEditing ? (
+                <div className="flex items-center gap-1 max-w-[80%]">
+                  <input
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") saveEdit();
+                      if (e.key === "Escape") cancelEdit();
+                    }}
+                    autoFocus
+                    className="flex-1 px-3 py-2 rounded-2xl border bg-background text-sm"
+                  />
+                  <button
+                    onClick={saveEdit}
+                    aria-label={t("msg.editSave")}
+                    className="w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shrink-0"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={cancelEdit}
+                    aria-label={t("msg.editCancel")}
+                    className="w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : m.type === "gif" ? (
                 <div className="flex flex-col items-center">
                   <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
                   <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
@@ -383,10 +420,11 @@ export function MessagesThread() {
                   {m.content}
                   <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
                     {timeAgo(m.created_at, lang)}
+                    {m.edited_at && <span className="italic"> {t("msg.edited")}</span>}
                   </div>
                 </div>
               )}
-              {canDelete && !mine && (
+              {canDelete && !mine && !isEditing && (
                 <button
                   onClick={() => setConfirmDeleteId(m.id)}
                   aria-label="Xóa"
