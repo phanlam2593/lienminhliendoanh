@@ -590,6 +590,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "gif.poweredBy": "Powered by GIPHY",
     "gif.tabGif": "GIF",
     "gif.tabSticker": "Sticker",
+    "gif.searchStickerPlaceholder": "Tìm Sticker...",
   },
   en: {
     "nav.home": "Home",
