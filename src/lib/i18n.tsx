@@ -1176,6 +1176,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "gif.searchPlaceholder": "Search GIFs...",
     "gif.noResults": "No GIFs found",
     "gif.poweredBy": "Powered by GIPHY",
+    "gif.tabGif": "GIF",
+    "gif.tabSticker": "Sticker",
   },
 };
 
