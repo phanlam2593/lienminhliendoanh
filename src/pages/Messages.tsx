@@ -290,15 +290,6 @@ export function MessagesThread() {
       }
       return;
     }
-    if (pendingSticker) {
-      const emoji = pendingSticker;
-      setPendingSticker(null);
-      const { error } = await supabase
-        .from("messages")
-        .insert({ sender_id: user.id, receiver_id: id, content: emoji, type: "sticker" });
-      if (error) toast.error("Gửi sticker thất bại: " + error.message);
-      return;
-    }
     const trimmed = text.trim();
     if (!trimmed) return;
     setText("");
