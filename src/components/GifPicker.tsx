@@ -12,7 +12,7 @@ interface GifResult {
 
 export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
   const { t } = useLanguage();
-  const [kind, setKind] = useState<"gifs" | "stickers">("gifs");
+  const [kind, setKind] = useState<"gifs" | "stickers">("stickers");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<GifResult[]>([]);
   const [loading, setLoading] = useState(false);
