@@ -77,6 +77,8 @@ export default function Community() {
   const [showMembers, setShowMembers] = useState(false);
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
   const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
   const [locations, setLocations] = useState<string[]>([]);
   const [channelLocation, setChannelLocation] = useState<string | null>(() => readSavedChannel().location);
   const [channelTopic, setChannelTopic] = useState<Topic>(() => readSavedChannel().topic);
