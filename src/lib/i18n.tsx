@@ -591,6 +591,11 @@ const DICT: Record<Lang, Record<string, string>> = {
     "gif.tabGif": "GIF",
     "gif.tabSticker": "Sticker",
     "gif.searchStickerPlaceholder": "Tìm Sticker...",
+    "msg.edited": "(đã chỉnh sửa)",
+    "msg.edit": "Sửa",
+    "msg.editPlaceholder": "Sửa tin nhắn…",
+    "msg.editSave": "Lưu",
+    "msg.editCancel": "Hủy",
   },
   en: {
     "nav.home": "Home",
