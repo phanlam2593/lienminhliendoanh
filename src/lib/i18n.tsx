@@ -1185,6 +1185,11 @@ const DICT: Record<Lang, Record<string, string>> = {
     "gif.tabGif": "GIF",
     "gif.tabSticker": "Sticker",
     "gif.searchStickerPlaceholder": "Search Stickers...",
+    "msg.edited": "(edited)",
+    "msg.edit": "Edit",
+    "msg.editPlaceholder": "Edit message…",
+    "msg.editSave": "Save",
+    "msg.editCancel": "Cancel",
   },
 };
 
