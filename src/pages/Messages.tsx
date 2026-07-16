@@ -332,13 +332,9 @@ export function MessagesThread() {
                   <Trash2 className="w-3 h-3" />
                 </button>
               )}
-              {m.type === "sticker" ? (
+              {m.type === "gif" ? (
                 <div className="flex flex-col items-center">
-                  {isStickerFile(m.content) ? (
-                    <img src={`/stickers/${m.content}`} alt="Sticker" className="w-28 h-28 object-contain" />
-                  ) : (
-                    <span className="text-5xl leading-none">{m.content}</span>
-                  )}
+                  <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
                   <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
                 </div>
               ) : m.type === "image" ? (
