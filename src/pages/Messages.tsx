@@ -405,9 +405,9 @@ export function MessagesThread() {
           <ImageIcon className="w-5 h-5" />
         </button>
         <button
-          onClick={() => setShowStickers((v) => !v)}
-          aria-label="Sticker"
-          className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showStickers ? "bg-accent" : "text-muted-foreground"}`}
+          onClick={() => setShowGifs((v) => !v)}
+          aria-label="GIF"
+          className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showGifs ? "bg-accent" : "text-muted-foreground"}`}
         >
           <Smile className="w-5 h-5" />
         </button>
@@ -417,10 +417,8 @@ export function MessagesThread() {
           onKeyDown={(e) => {
             if (e.key === "Enter") send();
           }}
-          disabled={!!pendingImage || !!pendingSticker}
-          placeholder={
-            pendingImage || pendingSticker ? t("community.tapSendPlaceholder") : t("messages.inputPlaceholder")
-          }
+          disabled={!!pendingImage}
+          placeholder={pendingImage ? t("community.tapSendPlaceholder") : t("messages.inputPlaceholder")}
           className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
         />
         <button
