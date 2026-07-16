@@ -2,7 +2,7 @@ import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Message, Profile, Business } from "@/lib/types";
-import { STICKER_PACKS, isStickerFile } from import { timeAgo } from "@/lib/time";
+import { timeAgo } from "@/lib/time";
 import { GifPicker } from "@/components/GifPicker";
 import { useEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
