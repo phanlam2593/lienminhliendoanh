@@ -585,6 +585,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s5Post": 'hoặc Facebook "{app}".',
     "membership.activeUntil": "Đang hoạt động — hết hạn {date}",
     "membership.notEligible": "Chương trình miễn phí 1000 người đầu đã đóng. Gói trả phí sẽ sớm ra mắt.",
+    "gif.searchPlaceholder": "Tìm GIF...",
+    "gif.noResults": "Không tìm thấy GIF nào",
+    "gif.poweredBy": "Powered by GIPHY",
   },
   en: {
     "nav.home": "Home",
