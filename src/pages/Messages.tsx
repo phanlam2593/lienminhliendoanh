@@ -241,6 +241,10 @@ export function MessagesThread() {
     const ch = supabase
       .channel(`thread:${user.id}:${id}`)
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, load)
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "messages" }, (payload) => {
+        const row = payload.new as Message;
+        setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
