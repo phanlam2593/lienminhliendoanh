@@ -201,11 +201,9 @@ export function MessagesThread() {
   const [partner, setPartner] = useState<Profile | null>(null);
   const [msgs, setMsgs] = useState<Message[]>([]);
   const [text, setText] = useState("");
-  const [showStickers, setShowStickers] = useState(false);
-  const [stickerPack, setStickerPack] = useState(0);
+  const [showGifs, setShowGifs] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
-  const [pendingSticker, setPendingSticker] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [partnerIsAdmin, setPartnerIsAdmin] = useState(false);
   const [quickViewOpen, setQuickViewOpen] = useState(false);
