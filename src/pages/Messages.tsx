@@ -250,10 +250,9 @@ export function MessagesThread() {
   if (!isApproved && !isAdmin)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
 
-  const cancelPending = () => {
+  const cancelPendingImage = () => {
     if (pendingImage) URL.revokeObjectURL(pendingImage.previewUrl);
     setPendingImage(null);
-    setPendingSticker(null);
   };
 
   const pickImage = (file: File) => {
@@ -262,14 +261,15 @@ export function MessagesThread() {
       toast.error(err);
       return;
     }
-    setPendingSticker(null);
     setPendingImage({ file, previewUrl: URL.createObjectURL(file) });
   };
 
-  const pickSticker = (emoji: string) => {
-    setPendingImage(null);
-    setPendingSticker(emoji);
-    setShowStickers(false);
+  const sendGif = async (url: string) => {
+    setShowGifs(false);
+    const { error } = await supabase
+      .from("messages")
+      .insert({ sender_id: user.id, receiver_id: id, content: url, type: "gif" });
+    if (error) toast.error("Gửi GIF thất bại: " + error.message);
   };
 
   const send = async () => {
