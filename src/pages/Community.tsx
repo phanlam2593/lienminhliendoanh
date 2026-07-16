@@ -502,17 +502,54 @@ export default function Community() {
                       </button>
                       {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at, lang)}</span>
+                      {m.edited_at && <span className="text-muted-foreground italic">{t("msg.edited")}</span>}
+                      {mine && m.type === "text" && editingId !== m.id && (
+                        <button
+                          onClick={() => startEdit(m)}
+                          aria-label={t("msg.edit")}
+                          className="ml-auto opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-muted-foreground"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                       {canDelete && (
                         <button
                           onClick={() => del(m.id)}
                           aria-label="Xóa"
-                          className="ml-auto opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-destructive"
+                          className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-destructive ${mine && m.type === "text" ? "" : "ml-auto"}`}
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       )}
                     </div>
-                    {m.type === "gif" ? (
+                    {editingId === m.id ? (
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <input
+                          value={editText}
+                          onChange={(e) => setEditText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") saveEdit();
+                            if (e.key === "Escape") cancelEdit();
+                          }}
+                          autoFocus
+                          className="flex-1 px-2.5 py-1 rounded-lg border bg-background text-sm"
+                        />
+                        <button
+                          onClick={saveEdit}
+                          aria-label={t("msg.editSave")}
+                          className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center shrink-0"
+                        >
+                          <Check className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={cancelEdit}
+                          aria-label={t("msg.editCancel")}
+                          className="w-6 h-6 rounded-full bg-muted grid place-items-center shrink-0"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ) : m.type === "gif" ? (
                       <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
                     ) : m.type === "image" ? (
                       <div className="max-w-[200px] mt-0.5">
