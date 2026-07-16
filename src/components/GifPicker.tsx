@@ -12,15 +12,16 @@ interface GifResult {
 
 export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
   const { t } = useLanguage();
+  const [kind, setKind] = useState<"gifs" | "stickers">("gifs");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<GifResult[]>([]);
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const search = async (q: string) => {
+  const search = async (q: string, k: "gifs" | "stickers") => {
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("giphy-search", { body: { q } });
+      const { data, error } = await supabase.functions.invoke("giphy-search", { body: { q, kind: k } });
       if (!error && data?.results) setResults(data.results);
     } finally {
       setLoading(false);
@@ -28,17 +29,33 @@ export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
   };
 
   useEffect(() => {
-    void search(""); // Hiện GIF thịnh hành ngay khi mở
-  }, []);
+    void search(query, kind);
+    // Đổi loại (GIF/Sticker) → tìm lại ngay với đúng từ khoá đang gõ, không cần chờ debounce
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kind]);
 
   const handleChange = (v: string) => {
     setQuery(v);
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => void search(v), 400);
+    debounceRef.current = setTimeout(() => void search(v, kind), 400);
   };
 
   return (
     <div className="border-t bg-card">
+      <div className="flex gap-1 px-2 pt-2">
+        <button
+          onClick={() => setKind("gifs")}
+          className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "gifs" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+        >
+          {t("gif.tabGif")}
+        </button>
+        <button
+          onClick={() => setKind("stickers")}
+          className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "stickers" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+        >
+          {t("gif.tabSticker")}
+        </button>
+      </div>
       <div className="p-2 border-b">
         <div className="relative">
           <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
