@@ -21,11 +21,13 @@ Deno.serve(async (req) => {
     const body = req.method === "POST" ? await req.json().catch(() => ({})) : {};
     const url = new URL(req.url);
     const q = (body?.q ?? url.searchParams.get("q"))?.trim();
+    // "gifs" hoặc "stickers" — Giphy có 2 API riêng biệt cho từng loại nội dung
+    const kind = (body?.kind ?? url.searchParams.get("kind")) === "stickers" ? "stickers" : "gifs";
 
-    // Không có từ khoá → hiện GIF đang thịnh hành (trending)
+    // Không có từ khoá → hiện nội dung đang thịnh hành (trending) đúng loại đang chọn
     const endpoint = q
-      ? `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${encodeURIComponent(q)}&limit=24&rating=pg-13&lang=vi`
-      : `https://api.giphy.com/v1/gifs/trending?api_key=${apiKey}&limit=24&rating=pg-13`;
+      ? `https://api.giphy.com/v1/${kind}/search?api_key=${apiKey}&q=${encodeURIComponent(q)}&limit=24&rating=pg-13&lang=vi`
+      : `https://api.giphy.com/v1/${kind}/trending?api_key=${apiKey}&limit=24&rating=pg-13`;
 
     const res = await fetch(endpoint);
     if (!res.ok) return json({ error: "Giphy API lỗi" }, res.status);
