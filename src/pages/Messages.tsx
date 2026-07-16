@@ -383,33 +383,7 @@ export function MessagesThread() {
           <span className="text-xs text-muted-foreground">{t("community.tapToShare")}</span>
         </div>
       )}
-      {showStickers && (
-        <div className="border-t bg-card">
-          <div className="flex gap-1 p-2 border-b">
-            {STICKER_PACKS.map((pack, i) => (
-              <button
-                key={pack.id}
-                onClick={() => setStickerPack(i)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${stickerPack === i ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
-              >
-                {pack.label}
-              </button>
-            ))}
-          </div>
-          <div className="grid grid-cols-5 gap-1 p-2 max-h-40 overflow-y-auto">
-            {STICKER_PACKS[stickerPack].files.map((s) => (
-              <button key={s} onClick={() => pickSticker(s)} className="p-1 rounded-lg hover:bg-accent">
-                <img
-                  src={`/stickers/${s}`}
-                  alt="Sticker"
-                  className="w-full aspect-square object-contain"
-                  loading="lazy"
-                />
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
+      {showGifs && <GifPicker onSelect={sendGif} />}
       <div className="flex gap-2 p-3 border-t bg-card items-center">
         <input
           ref={fileRef}
