@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile } from "lucide-react";
-import { ArrowLeft, Send, Trash2, MessageCircle } from "lucide-react";
+import { ArrowLeft, Send, Trash2, MessageCircle, Pencil, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
