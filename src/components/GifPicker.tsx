@@ -62,7 +62,7 @@ export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
           <input
             value={query}
             onChange={(e) => handleChange(e.target.value)}
-            placeholder={t("gif.searchPlaceholder")}
+            placeholder={kind === "stickers" ? t("gif.searchStickerPlaceholder") : t("gif.searchPlaceholder")}
             className="w-full pl-8 pr-3 py-1.5 rounded-full border bg-background text-sm"
           />
         </div>
