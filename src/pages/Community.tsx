@@ -319,6 +319,33 @@ export default function Community() {
     if (error) toast.error(error.message);
   };
 
+  const startEdit = (m: Msg) => {
+    setEditingId(m.id);
+    setEditText(m.content);
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditText("");
+  };
+
+  const saveEdit = async () => {
+    const trimmed = editText.trim();
+    if (!trimmed || !editingId) return;
+    const { data, error } = await supabase
+      .from("community_messages")
+      .update({ content: trimmed, edited_at: new Date().toISOString() })
+      .eq("id", editingId)
+      .select()
+      .single();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (data) setMsgs((prev) => prev.map((m) => (m.id === data.id ? (data as Msg) : m)));
+    cancelEdit();
+  };
+
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
 
   return (
