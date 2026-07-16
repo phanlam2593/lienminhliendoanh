@@ -35,7 +35,7 @@ interface ConvoSummary {
 
 function messagePreview(m: Pick<Message, "type" | "content">): string {
   if (m.type === "image") return "📷 Hình ảnh";
-  if (m.type === "sticker") return `${m.content} Sticker`;
+  if (m.type === "gif") return "🎬 GIF";
   if (m.type === "broadcast") return m.content.replace(/^📢\s*/, "📢 ");
   return m.content;
 }
