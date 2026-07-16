@@ -1171,6 +1171,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s5Post": 'or Facebook "{app}".',
     "membership.activeUntil": "Active — expires {date}",
     "membership.notEligible": "The free program for the first 1,000 members has closed. Paid plans coming soon.",
+    "gif.searchPlaceholder": "Search GIFs...",
+    "gif.noResults": "No GIFs found",
+    "gif.poweredBy": "Powered by GIPHY",
   },
 };
 
