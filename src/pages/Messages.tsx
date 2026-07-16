@@ -368,32 +368,18 @@ export function MessagesThread() {
         })}
         <div ref={endRef} />
       </div>
-      {(pendingImage || pendingSticker) && (
+      {pendingImage && (
         <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
-          {pendingImage && (
-            <div className="relative">
-              <img src={pendingImage.previewUrl} alt="Xem trước" className="w-16 h-16 object-cover rounded-lg border" />
-              <button
-                onClick={cancelPending}
-                aria-label="Hủy"
-                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
-              >
-                ×
-              </button>
-            </div>
-          )}
-          {pendingSticker && (
-            <div className="relative">
-              <img src={`/stickers/${pendingSticker}`} alt="Sticker" className="w-16 h-16 object-contain" />
-              <button
-                onClick={cancelPending}
-                aria-label="Hủy"
-                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
-              >
-                ×
-              </button>
-            </div>
-          )}
+          <div className="relative">
+            <img src={pendingImage.previewUrl} alt="Xem trước" className="w-16 h-16 object-cover rounded-lg border" />
+            <button
+              onClick={cancelPendingImage}
+              aria-label="Hủy"
+              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
+            >
+              ×
+            </button>
+          </div>
           <span className="text-xs text-muted-foreground">{t("community.tapToShare")}</span>
         </div>
       )}
