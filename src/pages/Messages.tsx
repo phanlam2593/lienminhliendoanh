@@ -316,8 +316,9 @@ export function MessagesThread() {
     setShowGifs(false);
     const { error } = await supabase
       .from("messages")
-      .insert({ sender_id: user.id, receiver_id: id, content: url, type: "gif" });
+      .insert({ sender_id: user.id, receiver_id: id, content: url, type: "gif", reply_to_id: replyingTo?.id ?? null });
     if (error) toast.error("Gửi GIF thất bại: " + error.message);
+    setReplyingTo(null);
   };
 
   const send = async () => {
@@ -325,10 +326,16 @@ export function MessagesThread() {
       setUploading(true);
       try {
         const path = await uploadImage(pendingImage.file, "messages", user.id);
-        const { error } = await supabase
-          .from("messages")
-          .insert({ sender_id: user.id, receiver_id: id, content: "", type: "image", image_url: path });
+        const { error } = await supabase.from("messages").insert({
+          sender_id: user.id,
+          receiver_id: id,
+          content: "",
+          type: "image",
+          image_url: path,
+          reply_to_id: replyingTo?.id ?? null,
+        });
         if (error) throw error;
+        setReplyingTo(null);
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
@@ -343,11 +350,19 @@ export function MessagesThread() {
     setText("");
     const { error } = await supabase
       .from("messages")
-      .insert({ sender_id: user.id, receiver_id: id, content: trimmed, type: "text" });
+      .insert({
+        sender_id: user.id,
+        receiver_id: id,
+        content: trimmed,
+        type: "text",
+        reply_to_id: replyingTo?.id ?? null,
+      });
     if (error) {
       toast.error("Gửi tin nhắn thất bại: " + error.message);
       setText(trimmed);
+      return;
     }
+    setReplyingTo(null);
   };
 
   const startEdit = (m: Message) => {
