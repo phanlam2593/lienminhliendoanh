@@ -593,6 +593,15 @@ export default function Community() {
                       {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
                       <span className="text-muted-foreground">{timeAgo(m.created_at, lang)}</span>
                       {m.edited_at && <span className="text-muted-foreground italic">{t("msg.edited")}</span>}
+                      {editingId !== m.id && (
+                        <button
+                          onClick={() => setReplyingTo(m)}
+                          aria-label={t("msg.reply")}
+                          className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-muted-foreground"
+                        >
+                          <ReplyIcon className="w-3.5 h-3.5" />
+                        </button>
+                      )}
                       {mine && m.type === "text" && editingId !== m.id && (
                         <button
                           onClick={() => startEdit(m)}
