@@ -178,6 +178,7 @@ export default function Community() {
     setMsgs(list);
     setMsgHasMore(list.length === limit);
     void enrichProfiles([...new Set(list.map((m) => m.user_id))]);
+    void loadReactions(list.map((m) => m.id));
     if (scrollToBottom) {
       setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
     }
