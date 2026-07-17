@@ -580,6 +580,20 @@ export function MessagesThread() {
         })}
         <div ref={endRef} />
       </div>
+      {replyingTo && (
+        <div className="flex items-center justify-between gap-2 px-3 py-1.5 border-t bg-muted/40">
+          <div className="text-xs min-w-0">
+            <span className="font-semibold text-primary">{t("msg.replyingTo")} </span>
+            <span className="text-muted-foreground truncate">
+              {replyingTo.sender_id === user.id ? t("community.you") : partner?.full_name || ""}:{" "}
+              {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}
+            </span>
+          </div>
+          <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
+            <X className="w-4 h-4 text-muted-foreground" />
+          </button>
+        </div>
+      )}
       {pendingImage && (
         <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
           <div className="relative">
