@@ -123,6 +123,24 @@ export default function Community() {
     });
   };
 
+  const loadReactions = async (messageIds: string[]) => {
+    if (!messageIds.length) {
+      setReactions({});
+      return;
+    }
+    const { data } = await supabase
+      .from("community_message_reactions")
+      .select("message_id, user_id, emoji")
+      .in("message_id", messageIds);
+    const grouped: Record<string, Record<string, string[]>> = {};
+    (data ?? []).forEach((r: any) => {
+      grouped[r.message_id] ??= {};
+      grouped[r.message_id][r.emoji] ??= [];
+      grouped[r.message_id][r.emoji].push(r.user_id);
+    });
+    setReactions(grouped);
+  };
+
   // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây quét lại TOÀN BỘ doanh nghiệp mỗi lần
   // vào trang Cộng đồng để tính danh sách vị trí — lãng phí nếu vào ra liên tục trong
   // cùng 1 phiên. Cache 5 phút trong sessionStorage, chỉ tính lại khi hết hạn.
