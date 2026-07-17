@@ -295,6 +295,7 @@ export interface Message {
   created_at: string;
   edited_at: string | null;
   reply_to_id: string | null;
+  read_at: string | null;
 }
 
 export type NotifCategory =
