@@ -596,6 +596,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "msg.editPlaceholder": "Sửa tin nhắn…",
     "msg.editSave": "Lưu",
     "msg.editCancel": "Hủy",
+    "msg.reply": "Trả lời",
+    "msg.replyingTo": "Đang trả lời",
+    "msg.originalDeleted": "Tin nhắn gốc không còn",
   },
   en: {
     "nav.home": "Home",
