@@ -212,6 +212,7 @@ export function MessagesThread() {
   const [editText, setEditText] = useState("");
   const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
+  const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
