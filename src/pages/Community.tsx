@@ -700,6 +700,15 @@ export default function Community() {
                           <ReplyIcon className="w-3.5 h-3.5" />
                         </button>
                       )}
+                      {isAdmin && editingId !== m.id && (
+                        <button
+                          onClick={() => togglePin(m)}
+                          aria-label={m.is_pinned ? t("pin.unpinButton") : t("pin.button")}
+                          className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition ${m.is_pinned ? "text-primary opacity-100" : "text-muted-foreground"}`}
+                        >
+                          {m.is_pinned ? <PinOff className="w-3.5 h-3.5" /> : <PinIcon className="w-3.5 h-3.5" />}
+                        </button>
+                      )}
                       {mine && m.type === "text" && editingId !== m.id && (
                         <button
                           onClick={() => startEdit(m)}
