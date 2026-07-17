@@ -451,144 +451,155 @@ export function MessagesThread() {
             const isEditing = editingId === m.id;
             const showSeen = m.id === lastSeenMineId;
             return (
-            <div key={m.id} className="flex flex-col">
-              {!isEditing && m.reply_to_id && (
-                <div
-                  className={`mb-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate ${mine ? "self-end" : "self-start"}`}
-                >
-                  {repliedMsg
-                    ? `${repliedMsg.sender_id === user.id ? t("community.you") : partner?.full_name || ""}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
-                    : t("msg.originalDeleted")}
-                </div>
-              )}
-              <div className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
-                {!isEditing && (
-                  <button
-                    onClick={() => setReplyingTo(m)}
-                    aria-label={t("msg.reply")}
-                    className="opacity-0 group-hover:opacity-100 text-muted-foreground p-1"
-                  >
-                    <ReplyIcon className="w-3 h-3" />
-                  </button>
-                )}
-                {mine && m.type === "text" && !isEditing && (
-                  <button
-                    onClick={() => startEdit(m)}
-                    aria-label={t("msg.edit")}
-                    className="opacity-0 group-hover:opacity-100 text-muted-foreground p-1"
-                  >
-                    <Pencil className="w-3 h-3" />
-                  </button>
-                )}
-                {canDelete && mine && !isEditing && (
-                  <button
-                    onClick={() => setConfirmDeleteId(m.id)}
-                    aria-label="Xóa"
-                    className="opacity-0 group-hover:opacity-100 text-destructive p-1"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                )}
-                {isEditing ? (
-                  <div className="flex items-center gap-1 max-w-[80%]">
-                    <input
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") saveEdit();
-                        if (e.key === "Escape") cancelEdit();
-                      }}
-                      autoFocus
-                      className="flex-1 px-3 py-2 rounded-2xl border bg-background text-sm"
-                    />
-                    <button
-                      onClick={saveEdit}
-                      aria-label={t("msg.editSave")}
-                      className="w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shrink-0"
-                    >
-                      <Check className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={cancelEdit}
-                      aria-label={t("msg.editCancel")}
-                      className="w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ) : m.type === "gif" ? (
-                  <div className="flex flex-col items-center">
-                    <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
-                    <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
-                  </div>
-                ) : m.type === "image" ? (
-                  <div className="max-w-[220px]">
-                    <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-2xl w-full object-cover" />
-                    <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
-                      {timeAgo(m.created_at, lang)}
-                    </div>
-                  </div>
-                ) : (
+              <div key={m.id} className="flex flex-col">
+                {!isEditing && m.reply_to_id && (
                   <div
-                    className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
+                    className={`mb-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate ${mine ? "self-end" : "self-start"}`}
                   >
-                    {m.content}
-                    <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
-                      {timeAgo(m.created_at, lang)}
-                      {m.edited_at && <span className="italic"> {t("msg.edited")}</span>}
-                    </div>
+                    {repliedMsg
+                      ? `${repliedMsg.sender_id === user.id ? t("community.you") : partner?.full_name || ""}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
+                      : t("msg.originalDeleted")}
                   </div>
                 )}
-                {canDelete && !mine && !isEditing && (
-                  <button
-                    onClick={() => setConfirmDeleteId(m.id)}
-                    aria-label="Xóa"
-                    className="opacity-0 group-hover:opacity-100 text-destructive p-1"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
-              {!isEditing && (
-                <div className={`flex items-center gap-1 mt-0.5 flex-wrap ${mine ? "justify-end" : "justify-start"}`}>
-                  {Object.entries(reactions[m.id] ?? {})
-                    .filter(([, ids]) => ids.length > 0)
-                    .map(([emoji, ids]) => (
+                <div className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
+                  {!isEditing && (
+                    <button
+                      onClick={() => setReplyingTo(m)}
+                      aria-label={t("msg.reply")}
+                      className="opacity-0 group-hover:opacity-100 text-muted-foreground p-1"
+                    >
+                      <ReplyIcon className="w-3 h-3" />
+                    </button>
+                  )}
+                  {mine && m.type === "text" && !isEditing && (
+                    <button
+                      onClick={() => startEdit(m)}
+                      aria-label={t("msg.edit")}
+                      className="opacity-0 group-hover:opacity-100 text-muted-foreground p-1"
+                    >
+                      <Pencil className="w-3 h-3" />
+                    </button>
+                  )}
+                  {canDelete && mine && !isEditing && (
+                    <button
+                      onClick={() => setConfirmDeleteId(m.id)}
+                      aria-label="Xóa"
+                      className="opacity-0 group-hover:opacity-100 text-destructive p-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  )}
+                  {isEditing ? (
+                    <div className="flex items-center gap-1 max-w-[80%]">
+                      <input
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") saveEdit();
+                          if (e.key === "Escape") cancelEdit();
+                        }}
+                        autoFocus
+                        className="flex-1 px-3 py-2 rounded-2xl border bg-background text-sm"
+                      />
                       <button
-                        key={emoji}
-                        onClick={() => toggleReaction(m.id, emoji)}
-                        className={`text-[11px] px-1.5 py-0.5 rounded-full border flex items-center gap-1 ${ids.includes(user.id) ? "bg-primary/10 border-primary text-primary" : "bg-muted border-transparent text-muted-foreground"}`}
+                        onClick={saveEdit}
+                        aria-label={t("msg.editSave")}
+                        className="w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shrink-0"
                       >
-                        <span>{emoji}</span>
-                        <span>{ids.length}</span>
+                        <Check className="w-3.5 h-3.5" />
                       </button>
-                    ))}
-                  <Popover
-                    open={reactionPickerFor === m.id}
-                    onOpenChange={(v) => setReactionPickerFor(v ? m.id : null)}
-                  >
-                    <PopoverTrigger asChild>
-                      <button className="text-muted-foreground opacity-0 group-hover:opacity-100 transition p-0.5">
-                        <SmilePlus className="w-3.5 h-3.5" />
+                      <button
+                        onClick={cancelEdit}
+                        aria-label={t("msg.editCancel")}
+                        className="w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
+                      >
+                        <X className="w-3.5 h-3.5" />
                       </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-1 flex gap-1" align="start">
-                      {["👍", "❤️", "😂", "😮", "😢", "🙏"].map((e) => (
+                    </div>
+                  ) : m.type === "gif" ? (
+                    <div className="flex flex-col items-center">
+                      <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
+                      <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
+                    </div>
+                  ) : m.type === "image" ? (
+                    <div className="max-w-[220px]">
+                      <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-2xl w-full object-cover" />
+                      <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
+                        {timeAgo(m.created_at, lang)}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
+                    >
+                      {m.content}
+                      <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
+                        {timeAgo(m.created_at, lang)}
+                        {m.edited_at && <span className="italic"> {t("msg.edited")}</span>}
+                      </div>
+                    </div>
+                  )}
+                  {canDelete && !mine && !isEditing && (
+                    <button
+                      onClick={() => setConfirmDeleteId(m.id)}
+                      aria-label="Xóa"
+                      className="opacity-0 group-hover:opacity-100 text-destructive p-1"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  )}
+                </div>
+                {!isEditing && (
+                  <div className={`flex items-center gap-1 mt-0.5 flex-wrap ${mine ? "justify-end" : "justify-start"}`}>
+                    {Object.entries(reactions[m.id] ?? {})
+                      .filter(([, ids]) => ids.length > 0)
+                      .map(([emoji, ids]) => (
                         <button
-                          key={e}
-                          onClick={() => toggleReaction(m.id, e)}
-                          className="text-lg hover:scale-125 transition p-1"
+                          key={emoji}
+                          onClick={() => toggleReaction(m.id, emoji)}
+                          className={`text-[11px] px-1.5 py-0.5 rounded-full border flex items-center gap-1 ${ids.includes(user.id) ? "bg-primary/10 border-primary text-primary" : "bg-muted border-transparent text-muted-foreground"}`}
                         >
-                          {e}
+                          <span>{emoji}</span>
+                          <span>{ids.length}</span>
                         </button>
                       ))}
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                    <Popover
+                      open={reactionPickerFor === m.id}
+                      onOpenChange={(v) => setReactionPickerFor(v ? m.id : null)}
+                    >
+                      <PopoverTrigger asChild>
+                        <button className="text-muted-foreground opacity-0 group-hover:opacity-100 transition p-0.5">
+                          <SmilePlus className="w-3.5 h-3.5" />
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-1 flex gap-1" align="start">
+                        {["👍", "❤️", "😂", "😮", "😢", "🙏"].map((e) => (
+                          <button
+                            key={e}
+                            onClick={() => toggleReaction(m.id, e)}
+                            className="text-lg hover:scale-125 transition p-1"
+                          >
+                            {e}
+                          </button>
+                        ))}
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
+                {showSeen && m.read_at && (
+                  <div className="text-[10px] text-muted-foreground text-right mt-0.5">
+                    {t("msg.seenAt", {
+                      time: new Date(m.read_at).toLocaleTimeString(lang === "vi" ? "vi-VN" : "en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }),
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          });
+        })()}
         <div ref={endRef} />
       </div>
       {replyingTo && (
