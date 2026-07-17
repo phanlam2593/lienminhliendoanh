@@ -90,6 +90,7 @@ export default function Community() {
   const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<Msg | null>(null);
+  const [showTagPicker, setShowTagPicker] = useState(false);
   const [locations, setLocations] = useState<string[]>([]);
   const [channelLocation, setChannelLocation] = useState<string | null>(() => readSavedChannel().location);
   const [channelTopic, setChannelTopic] = useState<Topic>(() => readSavedChannel().topic);
