@@ -1211,6 +1211,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "tag.notifTitle": "{name} mentioned you",
     "typing.oneIsTyping": "{name} is typing…",
     "typing.multipleAreTyping": "{n} people are typing…",
+    "pin.button": "Pin message",
+    "pin.unpinButton": "Unpin",
+    "pin.pinnedLabel": "📌 Pinned",
   },
 };
 
