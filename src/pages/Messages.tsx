@@ -268,6 +268,10 @@ export function MessagesThread() {
         const row = payload.new as Message;
         setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
       })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "messages" }, (payload) => {
+        const oldRow = payload.old as { id: string };
+        setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
+      })
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_reactions" }, (payload) => {
         const r = payload.new as { message_id: string; user_id: string; emoji: string };
         setReactions((prev) => {
