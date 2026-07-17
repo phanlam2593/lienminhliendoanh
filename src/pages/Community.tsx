@@ -85,6 +85,9 @@ export default function Community() {
   const [quickViewUser, setQuickViewUser] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  // reactions[message_id][emoji] = mảng user_id đã thả
+  const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
+  const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [locations, setLocations] = useState<string[]>([]);
   const [channelLocation, setChannelLocation] = useState<string | null>(() => readSavedChannel().location);
   const [channelTopic, setChannelTopic] = useState<Topic>(() => readSavedChannel().topic);
