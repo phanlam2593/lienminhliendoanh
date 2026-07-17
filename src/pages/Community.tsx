@@ -656,6 +656,20 @@ export default function Community() {
 
       {/* Khung chat — chiếm phần còn lại */}
       <section className="flex flex-col flex-1 min-h-0">
+        {pinnedMsgs.length > 0 && (
+          <div className="border-b bg-primary/5 px-3 py-2 space-y-1 shrink-0 max-h-28 overflow-y-auto">
+            {pinnedMsgs.map((pm) => (
+              <div key={pm.id} className="flex items-center gap-1.5 text-xs">
+                <PinIcon className="w-3 h-3 text-primary shrink-0" />
+                <span className="font-semibold text-primary shrink-0">{t("pin.pinnedLabel")}:</span>
+                <span className="truncate text-muted-foreground">
+                  {profMap.get(pm.user_id)?.full_name || t("community.member")}:{" "}
+                  {pm.type === "text" ? pm.content : pm.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {msgs.length > 0 && msgHasMore && (
             <button
