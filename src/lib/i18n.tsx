@@ -603,6 +603,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "tag.button": "Nhắc tên",
     "tag.pickMember": "Chọn người để nhắc tên",
     "tag.notifTitle": "{name} đã nhắc đến bạn",
+    "typing.oneIsTyping": "{name} đang nhập…",
+    "typing.multipleAreTyping": "{n} người đang nhập…",
   },
   en: {
     "nav.home": "Home",
