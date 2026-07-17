@@ -572,6 +572,8 @@ export default function Community() {
             <p className="text-center text-xs text-muted-foreground py-6">{t("community.noMessages")}</p>
           ) : (
             msgs.map((m) => {
+              const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
+              const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
               const p = profMap.get(m.user_id);
               const mine = m.user_id === user.id;
               const canDelete = mine || isAdmin;
