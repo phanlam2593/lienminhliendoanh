@@ -227,12 +227,31 @@ export function MessagesThread() {
       .rpc("get_admin_user_ids")
       .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
     const load = async () => {
+      const loadReactions = async (messageIds: string[]) => {
+      if (!messageIds.length) {
+        setReactions({});
+        return;
+      }
+      const { data } = await supabase
+        .from("message_reactions")
+        .select("message_id, user_id, emoji")
+        .in("message_id", messageIds);
+      const grouped: Record<string, Record<string, string[]>> = {};
+      (data ?? []).forEach((r: any) => {
+        grouped[r.message_id] ??= {};
+        grouped[r.message_id][r.emoji] ??= [];
+        grouped[r.message_id][r.emoji].push(r.user_id);
+      });
+      setReactions(grouped);
+    };
+    const load = async () => {
       const { data } = await supabase
         .from("messages")
         .select("*")
         .or(`and(sender_id.eq.${user.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${user.id})`)
         .order("created_at");
       setMsgs((data ?? []) as Message[]);
+      void loadReactions(((data ?? []) as Message[]).map((m) => m.id));
       await supabase
         .from("messages")
         .update({ is_read: true })
@@ -248,6 +267,26 @@ export function MessagesThread() {
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "messages" }, (payload) => {
         const row = payload.new as Message;
         setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+      })
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_reactions" }, (payload) => {
+        const r = payload.new as { message_id: string; user_id: string; emoji: string };
+        setReactions((prev) => {
+          const next = { ...prev };
+          next[r.message_id] = { ...next[r.message_id] };
+          const arr = next[r.message_id][r.emoji] ?? [];
+          if (!arr.includes(r.user_id)) next[r.message_id][r.emoji] = [...arr, r.user_id];
+          return next;
+        });
+      })
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "message_reactions" }, (payload) => {
+        const r = payload.old as { message_id: string; user_id: string; emoji: string };
+        setReactions((prev) => {
+          if (!prev[r.message_id]?.[r.emoji]) return prev;
+          const next = { ...prev };
+          next[r.message_id] = { ...next[r.message_id] };
+          next[r.message_id][r.emoji] = next[r.message_id][r.emoji].filter((id) => id !== r.user_id);
+          return next;
+        });
       })
       .subscribe();
     return () => {
