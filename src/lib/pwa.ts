@@ -150,13 +150,28 @@ export function registerPwa() {
       const registration = await navigator.serviceWorker.register(SW_URL, { updateViaCache: "none" });
 
       // === Tự động cập nhật bản mới ===
-      // 1) Chủ động kiểm tra bản mới: ngay khi mở app, mỗi khi quay lại app, và mỗi 15 phút
-      const checkUpdate = () => registration.update().catch(() => {});
-      checkUpdate();
+      // Kiểm tra bản mới: ngay khi mở app, mỗi khi quay lại tab, khi focus cửa sổ,
+      // khi mạng vừa online lại, và định kỳ mỗi 5 phút — không cần đóng/mở app.
+      let lastCheck = 0;
+      const checkUpdate = async () => {
+        // Chống spam: tối thiểu 30s giữa 2 lần check
+        const now = Date.now();
+        if (now - lastCheck < 30 * 1000) return;
+        lastCheck = now;
+        try {
+          // Ép fetch file sw.js bỏ qua cache trình duyệt để so sánh bytes chuẩn xác
+          await fetch(SW_URL, { cache: "no-store" }).catch(() => {});
+          await registration.update();
+        } catch {}
+      };
+      void checkUpdate();
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") checkUpdate();
+        if (document.visibilityState === "visible") void checkUpdate();
       });
-      setInterval(checkUpdate, 15 * 60 * 1000);
+      window.addEventListener("focus", () => void checkUpdate());
+      window.addEventListener("online", () => void checkUpdate());
+      setInterval(() => void checkUpdate(), 5 * 60 * 1000);
+
 
       // 2) Khi SW mới nắm quyền (skipWaiting đã bật sẵn) → tự reload 1 lần để chạy code mới
       let reloaded = false;
