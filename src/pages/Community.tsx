@@ -311,6 +311,13 @@ export default function Community() {
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "community_messages" }, (payload) => {
         const row = payload.new as Msg;
         setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+        setPinnedMsgs((prev) => {
+          if (row.is_pinned) {
+            if (prev.some((m) => m.id === row.id)) return prev.map((m) => (m.id === row.id ? row : m));
+            return [row, ...prev].slice(0, 5);
+          }
+          return prev.filter((m) => m.id !== row.id);
+        });
       })
       .on(
         "postgres_changes",
