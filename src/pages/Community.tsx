@@ -787,6 +787,13 @@ export default function Community() {
           )}
           <div ref={endRef} />
         </div>
+        {typingList.length > 0 && (
+          <div className="px-3 py-1 text-[11px] text-muted-foreground italic">
+            {typingList.length === 1
+              ? t("typing.oneIsTyping", { name: typingList[0].name })
+              : t("typing.multipleAreTyping", { n: typingList.length })}
+          </div>
+        )}
         {replyingTo && (
           <div className="flex items-center justify-between gap-2 px-3 py-1.5 border-t bg-muted/40">
             <div className="text-xs min-w-0">
