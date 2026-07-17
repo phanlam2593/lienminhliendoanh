@@ -210,6 +210,8 @@ export function MessagesThread() {
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
+  const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
+  const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
