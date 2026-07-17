@@ -370,6 +370,7 @@ export default function Community() {
       return;
     }
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
+    setReplyingTo(null);
     setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
