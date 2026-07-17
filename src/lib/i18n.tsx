@@ -1193,6 +1193,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "msg.editPlaceholder": "Edit message…",
     "msg.editSave": "Save",
     "msg.editCancel": "Cancel",
+    "msg.reply": "Reply",
+    "msg.replyingTo": "Replying to",
+    "msg.originalDeleted": "Original message no longer available",
   },
 };
 
