@@ -433,13 +433,24 @@ export function MessagesThread() {
       </div>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
-        {msgs.map((m) => {
-          const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
-          const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
-          const mine = m.sender_id === user.id;
-          const canDelete = mine || isAdmin;
-          const isEditing = editingId === m.id;
-          return (
+        {(() => {
+          // Chỉ tìm 1 lần cho cả danh sách: tin nhắn CUỐI CÙNG của tôi đã được xem —
+          // đúng hành vi Messenger/Zalo (không hiện "đã xem" dưới mọi tin, chỉ tin mới nhất).
+          let lastSeenMineId: string | null = null;
+          for (let i = msgs.length - 1; i >= 0; i--) {
+            if (msgs[i].sender_id === user.id && msgs[i].read_at) {
+              lastSeenMineId = msgs[i].id;
+              break;
+            }
+          }
+          return msgs.map((m) => {
+            const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
+            const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
+            const mine = m.sender_id === user.id;
+            const canDelete = mine || isAdmin;
+            const isEditing = editingId === m.id;
+            const showSeen = m.id === lastSeenMineId;
+            return (
             <div key={m.id} className="flex flex-col">
               {!isEditing && m.reply_to_id && (
                 <div
