@@ -711,7 +711,14 @@ export function MessagesThread() {
             <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={async () => {
-                if (confirmDeleteId) await supabase.from("messages").delete().eq("id", confirmDeleteId);
+                if (confirmDeleteId) {
+                  const { error } = await supabase.from("messages").delete().eq("id", confirmDeleteId);
+                  if (error) {
+                    toast.error(error.message);
+                  } else {
+                    setMsgs((prev) => prev.filter((m) => m.id !== confirmDeleteId));
+                  }
+                }
                 setConfirmDeleteId(null);
               }}
               className="bg-destructive hover:bg-destructive/90"
