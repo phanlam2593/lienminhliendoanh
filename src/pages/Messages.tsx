@@ -348,15 +348,13 @@ export function MessagesThread() {
     const trimmed = text.trim();
     if (!trimmed) return;
     setText("");
-    const { error } = await supabase
-      .from("messages")
-      .insert({
-        sender_id: user.id,
-        receiver_id: id,
-        content: trimmed,
-        type: "text",
-        reply_to_id: replyingTo?.id ?? null,
-      });
+    const { error } = await supabase.from("messages").insert({
+      sender_id: user.id,
+      receiver_id: id,
+      content: trimmed,
+      type: "text",
+      reply_to_id: replyingTo?.id ?? null,
+    });
     if (error) {
       toast.error("Gửi tin nhắn thất bại: " + error.message);
       setText(trimmed);
@@ -436,12 +434,32 @@ export function MessagesThread() {
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
         {msgs.map((m) => {
+          const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
+          const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
           const mine = m.sender_id === user.id;
           const canDelete = mine || isAdmin;
           const isEditing = editingId === m.id;
           return (
             <div key={m.id} className="flex flex-col">
+              {!isEditing && m.reply_to_id && (
+                <div
+                  className={`mb-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate ${mine ? "self-end" : "self-start"}`}
+                >
+                  {repliedMsg
+                    ? `${repliedMsg.sender_id === user.id ? t("community.you") : partner?.full_name || ""}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
+                    : t("msg.originalDeleted")}
+                </div>
+              )}
               <div className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
+                {!isEditing && (
+                  <button
+                    onClick={() => setReplyingTo(m)}
+                    aria-label={t("msg.reply")}
+                    className="opacity-0 group-hover:opacity-100 text-muted-foreground p-1"
+                  >
+                    <ReplyIcon className="w-3 h-3" />
+                  </button>
+                )}
                 {mine && m.type === "text" && !isEditing && (
                   <button
                     onClick={() => startEdit(m)}
