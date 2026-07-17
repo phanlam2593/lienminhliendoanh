@@ -424,7 +424,8 @@ export function MessagesThread() {
           const canDelete = mine || isAdmin;
           const isEditing = editingId === m.id;
           return (
-            <div key={m.id} className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
+            <div key={m.id} className="flex flex-col">
+            <div className={`group flex items-end gap-1 ${mine ? "justify-end" : "justify-start"}`}>
               {mine && m.type === "text" && !isEditing && (
                 <button
                   onClick={() => startEdit(m)}
