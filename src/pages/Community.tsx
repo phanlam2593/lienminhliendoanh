@@ -8,7 +8,12 @@ import { toast } from "sonner";
 import { timeAgo } from "@/lib/time";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
-import { Image as ImageIcon, Smile, ChevronDown, ChevronUp, Users, MapPin, Hash } from "lucide-react";
+import { Image as ImageIcon, Smile, ChevronDown, ChevronUp, Users, MapPin, Hash, SmilePlus } from "lucide-react";
+import {
+  Popover as ReactionPopover,
+  PopoverContent as ReactionPopoverContent,
+  PopoverTrigger as ReactionPopoverTrigger,
+} from "@/components/ui/popover";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { GifPicker } from "@/components/GifPicker";
