@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile, SmilePlus } from "lucide-react";
-import { ArrowLeft, Send, Trash2, MessageCircle, Pencil, Check, X } from "lucide-react";
+import { ArrowLeft, Send, Trash2, MessageCircle, Pencil, Check, X, Reply as ReplyIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
