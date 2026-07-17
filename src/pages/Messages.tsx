@@ -226,8 +226,7 @@ export function MessagesThread() {
     supabase
       .rpc("get_admin_user_ids")
       .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
-    const load = async () => {
-      const loadReactions = async (messageIds: string[]) => {
+    const loadReactions = async (messageIds: string[]) => {
       if (!messageIds.length) {
         setReactions({});
         return;
