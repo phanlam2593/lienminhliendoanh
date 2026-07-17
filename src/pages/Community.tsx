@@ -390,7 +390,15 @@ export default function Community() {
     if (!trimmed || !editingId) return;
     const { data, error } = await supabase
       .from("community_messages")
-      .update({ content: trimmed, edited_at: new Date().toISOStrif (data) setMsgs((prev) => prev.map((m) => (m.id === data.id ? (data as Msg) : m)));
+      .update({ content: trimmed, edited_at: new Date().toISOString() })
+      .eq("id", editingId)
+      .select()
+      .single();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (data) setMsgs((prev) => prev.map((m) => (m.id === data.id ? (data as Msg) : m)));
     cancelEdit();
   };
 
@@ -419,18 +427,6 @@ export default function Community() {
         return next;
       });
     }
-  };
-
-  const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;ing() })
-      .eq("id", editingId)
-      .select()
-      .single();
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    if (data) setMsgs((prev) => prev.map((m) => (m.id === data.id ? (data as Msg) : m)));
-    cancelEdit();
   };
 
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
