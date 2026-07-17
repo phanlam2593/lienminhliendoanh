@@ -518,8 +518,26 @@ export default function Community() {
   };
 
   const togglePin = async (m: Msg) => {
-    const { error } = await supabase.from("community_messages").update({ is_pinned: !m.is_pinned }).eq("id", m.id);
-    if (error) toast.error(error.message);
+    const { data, error } = await supabase
+      .from("community_messages")
+      .update({ is_pinned: !m.is_pinned })
+      .eq("id", m.id)
+      .select()
+      .single();
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (!data) return;
+    const row = data as Msg;
+    setMsgs((prev) => prev.map((mm) => (mm.id === row.id ? row : mm)));
+    setPinnedMsgs((prev) => {
+      if (row.is_pinned) {
+        if (prev.some((mm) => mm.id === row.id)) return prev.map((mm) => (mm.id === row.id ? row : mm));
+        return [row, ...prev].slice(0, 5);
+      }
+      return prev.filter((mm) => mm.id !== row.id);
+    });
   };
 
   // Chỉ gửi tối đa 1 lần / 2 giây khi đang gõ liên tục — tránh spam broadcast không cần thiết
