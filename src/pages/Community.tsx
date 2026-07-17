@@ -261,6 +261,34 @@ export default function Community() {
         const row = payload.new as Msg;
         setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
       })
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "community_message_reactions" },
+        (payload) => {
+          const r = payload.new as { message_id: string; user_id: string; emoji: string };
+          setReactions((prev) => {
+            const next = { ...prev };
+            next[r.message_id] = { ...next[r.message_id] };
+            const arr = next[r.message_id][r.emoji] ?? [];
+            if (!arr.includes(r.user_id)) next[r.message_id][r.emoji] = [...arr, r.user_id];
+            return next;
+          });
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "community_message_reactions" },
+        (payload) => {
+          const r = payload.old as { message_id: string; user_id: string; emoji: string };
+          setReactions((prev) => {
+            if (!prev[r.message_id]?.[r.emoji]) return prev;
+            const next = { ...prev };
+            next[r.message_id] = { ...next[r.message_id] };
+            next[r.message_id][r.emoji] = next[r.message_id][r.emoji].filter((id) => id !== r.user_id);
+            return next;
+          });
+        },
+      )
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
