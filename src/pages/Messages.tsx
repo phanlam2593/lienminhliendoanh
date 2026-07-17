@@ -361,19 +361,25 @@ export function MessagesThread() {
     const trimmed = text.trim();
     if (!trimmed) return;
     setText("");
-    const { error } = await supabase.from("messages").insert({
-      sender_id: user.id,
-      receiver_id: id,
-      content: trimmed,
-      type: "text",
-      reply_to_id: replyingTo?.id ?? null,
-    });
+    const { data, error } = await supabase
+      .from("messages")
+      .insert({
+        sender_id: user.id,
+        receiver_id: id,
+        content: trimmed,
+        type: "text",
+        reply_to_id: replyingTo?.id ?? null,
+      })
+      .select()
+      .single();
     if (error) {
       toast.error("Gửi tin nhắn thất bại: " + error.message);
       setText(trimmed);
       return;
     }
+    if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
     setReplyingTo(null);
+    setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
   const startEdit = (m: Message) => {
