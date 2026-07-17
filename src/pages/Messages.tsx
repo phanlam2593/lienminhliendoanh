@@ -333,16 +333,22 @@ export function MessagesThread() {
       setUploading(true);
       try {
         const path = await uploadImage(pendingImage.file, "messages", user.id);
-        const { error } = await supabase.from("messages").insert({
-          sender_id: user.id,
-          receiver_id: id,
-          content: "",
-          type: "image",
-          image_url: path,
-          reply_to_id: replyingTo?.id ?? null,
-        });
+        const { data, error } = await supabase
+          .from("messages")
+          .insert({
+            sender_id: user.id,
+            receiver_id: id,
+            content: "",
+            type: "image",
+            image_url: path,
+            reply_to_id: replyingTo?.id ?? null,
+          })
+          .select()
+          .single();
         if (error) throw error;
+        if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
         setReplyingTo(null);
+        setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
