@@ -1206,6 +1206,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "tag.button": "Mention",
     "tag.pickMember": "Pick someone to mention",
     "tag.notifTitle": "{name} mentioned you",
+    "typing.oneIsTyping": "{name} is typing…",
+    "typing.multipleAreTyping": "{n} people are typing…",
   },
 };
 
