@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => ({
           },
           {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && /\.(?:js|css|woff2?)$/.test(url.pathname),
-            handler: "CacheFirst",
+            handler: "StaleWhileRevalidate",
             options: {
               cacheName: "lmld-static",
               expiration: { maxEntries: 120, maxAgeSeconds: 60 * 60 * 24 * 30 },
@@ -54,10 +54,22 @@ export default defineConfig(({ mode }) => ({
           {
             urlPattern: ({ url, sameOrigin }) =>
               sameOrigin && /\.(?:png|jpg|jpeg|svg|webp|ico|gif)$/.test(url.pathname),
-            handler: "CacheFirst",
+            handler: "StaleWhileRevalidate",
             options: {
               cacheName: "lmld-images",
               expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+            },
+          },
+          {
+            urlPattern: ({ url }) =>
+              url.hostname === "images.unsplash.com" ||
+              url.hostname === "i.pravatar.cc" ||
+              url.hostname.endsWith(".giphy.com"),
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "lmld-images-remote",
+              expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 14 },
+              cacheableResponse: { statuses: [0, 200] },
             },
           },
           {

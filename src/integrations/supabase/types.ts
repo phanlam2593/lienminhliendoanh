@@ -243,6 +243,7 @@ export type Database = {
           id: string
           image_url: string | null
           location: string | null
+          reply_to_id: string | null
           topic: string
           type: string
           user_id: string
@@ -254,6 +255,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
+          reply_to_id?: string | null
           topic?: string
           type?: string
           user_id: string
@@ -265,11 +267,20 @@ export type Database = {
           id?: string
           image_url?: string | null
           location?: string | null
+          reply_to_id?: string | null
           topic?: string
           type?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "community_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "community_messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       exchanges: {
         Row: {
@@ -483,6 +494,7 @@ export type Database = {
           image_url: string | null
           is_read: boolean
           receiver_id: string
+          reply_to_id: string | null
           sender_id: string
           type: string
         }
@@ -494,6 +506,7 @@ export type Database = {
           image_url?: string | null
           is_read?: boolean
           receiver_id: string
+          reply_to_id?: string | null
           sender_id: string
           type?: string
         }
@@ -505,10 +518,19 @@ export type Database = {
           image_url?: string | null
           is_read?: boolean
           receiver_id?: string
+          reply_to_id?: string | null
           sender_id?: string
           type?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
