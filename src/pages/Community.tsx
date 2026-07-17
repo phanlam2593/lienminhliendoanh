@@ -324,6 +324,8 @@ export default function Community() {
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
+      supabase.removeChannel(typingCh);
+      clearInterval(cleanupInterval);
     };
   }, [user?.id]);
 
