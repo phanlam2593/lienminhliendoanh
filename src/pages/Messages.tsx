@@ -314,11 +314,18 @@ export function MessagesThread() {
 
   const sendGif = async (url: string) => {
     setShowGifs(false);
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("messages")
-      .insert({ sender_id: user.id, receiver_id: id, content: url, type: "gif", reply_to_id: replyingTo?.id ?? null });
-    if (error) toast.error("Gửi GIF thất bại: " + error.message);
+      .insert({ sender_id: user.id, receiver_id: id, content: url, type: "gif", reply_to_id: replyingTo?.id ?? null })
+      .select()
+      .single();
+    if (error) {
+      toast.error("Gửi GIF thất bại: " + error.message);
+      return;
+    }
+    if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
     setReplyingTo(null);
+    setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
   const send = async () => {
