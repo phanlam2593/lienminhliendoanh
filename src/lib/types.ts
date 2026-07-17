@@ -293,6 +293,7 @@ export interface Message {
   is_read: boolean;
   created_at: string;
   edited_at: string | null;
+  reply_to_id: string | null;
 }
 
 export type NotifCategory =
