@@ -333,7 +333,7 @@ export default function Community() {
   };
 
   const send = async () => {
-    const base = { location: channelLocation, topic: channelTopic };
+    const base = { location: channelLocation, topic: channelTopic, reply_to_id: replyingTo?.id ?? null };
     if (pendingImage) {
       setUploading(true);
       try {
