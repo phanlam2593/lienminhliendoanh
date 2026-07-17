@@ -317,7 +317,7 @@ export default function Community() {
 
   const sendGif = async (url: string) => {
     setShowGifs(false);
-    const base = { location: channelLocation, topic: channelTopic };
+    const base = { location: channelLocation, topic: channelTopic, reply_to_id: replyingTo?.id ?? null };
     const { data, error } = await supabase
       .from("community_messages")
       .insert({ user_id: user.id, content: url, type: "gif", ...base })
@@ -328,6 +328,7 @@ export default function Community() {
       return;
     }
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
+    setReplyingTo(null);
     setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
   };
 
