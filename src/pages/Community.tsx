@@ -390,7 +390,38 @@ export default function Community() {
     if (!trimmed || !editingId) return;
     const { data, error } = await supabase
       .from("community_messages")
-      .update({ content: trimmed, edited_at: new Date().toISOString() })
+      .update({ content: trimmed, edited_at: new Date().toISOStrif (data) setMsgs((prev) => prev.map((m) => (m.id === data.id ? (data as Msg) : m)));
+    cancelEdit();
+  };
+
+  const toggleReaction = async (messageId: string, emoji: string) => {
+    setReactionPickerFor(null);
+    const already = reactions[messageId]?.[emoji]?.includes(user.id) ?? false;
+    if (already) {
+      await supabase
+        .from("community_message_reactions")
+        .delete()
+        .eq("message_id", messageId)
+        .eq("user_id", user.id)
+        .eq("emoji", emoji);
+      setReactions((prev) => {
+        const next = { ...prev };
+        next[messageId] = { ...next[messageId] };
+        next[messageId][emoji] = (next[messageId][emoji] ?? []).filter((id) => id !== user.id);
+        return next;
+      });
+    } else {
+      await supabase.from("community_message_reactions").insert({ message_id: messageId, user_id: user.id, emoji });
+      setReactions((prev) => {
+        const next = { ...prev };
+        next[messageId] = { ...next[messageId] };
+        next[messageId][emoji] = [...(next[messageId][emoji] ?? []), user.id];
+        return next;
+      });
+    }
+  };
+
+  const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;ing() })
       .eq("id", editingId)
       .select()
       .single();
