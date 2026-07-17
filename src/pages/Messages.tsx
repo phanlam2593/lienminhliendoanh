@@ -254,7 +254,7 @@ export function MessagesThread() {
       void loadReactions(((data ?? []) as Message[]).map((m) => m.id));
       await supabase
         .from("messages")
-        .update({ is_read: true })
+        .update({ is_read: true, read_at: new Date().toISOString() })
         .eq("sender_id", id)
         .eq("receiver_id", user.id)
         .eq("is_read", false);
