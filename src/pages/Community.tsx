@@ -150,6 +150,21 @@ export default function Community() {
     setReactions(grouped);
   };
 
+  const loadPinnedMsgs = async (loc = channelLocation, topic = channelTopic) => {
+    let q = supabase
+      .from("community_messages")
+      .select("*")
+      .eq("topic", topic)
+      .eq("is_pinned", true)
+      .order("created_at", { ascending: false })
+      .limit(5);
+    q = loc === null ? q.is("location", null) : q.eq("location", loc);
+    const { data } = await q;
+    const list = (data ?? []) as Msg[];
+    setPinnedMsgs(list);
+    void enrichProfiles(list.map((m) => m.user_id));
+  };
+
   // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây quét lại TOÀN BỘ doanh nghiệp mỗi lần
   // vào trang Cộng đồng để tính danh sách vị trí — lãng phí nếu vào ra liên tục trong
   // cùng 1 phiên. Cache 5 phút trong sessionStorage, chỉ tính lại khi hết hạn.
