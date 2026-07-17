@@ -89,6 +89,7 @@ export default function Community() {
   // reactions[message_id][emoji] = mảng user_id đã thả
   const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
+  const [replyingTo, setReplyingTo] = useState<Msg | null>(null);
   const [locations, setLocations] = useState<string[]>([]);
   const [channelLocation, setChannelLocation] = useState<string | null>(() => readSavedChannel().location);
   const [channelTopic, setChannelTopic] = useState<Topic>(() => readSavedChannel().topic);
