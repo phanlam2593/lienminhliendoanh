@@ -600,7 +600,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "msg.replyingTo": "Đang trả lời",
     "msg.originalDeleted": "Tin nhắn gốc không còn",
     "msg.seenAt": "Đã xem lúc {time}",
-    "tag.button": "Nhắc tên",,
+    "tag.button": "Nhắc tên",
     "tag.pickMember": "Chọn người để nhắc tên",
     "tag.notifTitle": "{name} đã nhắc đến bạn",
   },
