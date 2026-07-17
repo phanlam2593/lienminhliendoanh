@@ -599,6 +599,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "msg.reply": "Trả lời",
     "msg.replyingTo": "Đang trả lời",
     "msg.originalDeleted": "Tin nhắn gốc không còn",
+    "tag.button": "Nhắc tên",
+    "tag.pickMember": "Chọn người để nhắc tên",
+    "tag.notifTitle": "{name} đã nhắc đến bạn",
   },
   en: {
     "nav.home": "Home",
