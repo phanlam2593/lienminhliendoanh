@@ -874,7 +874,10 @@ export default function Community() {
           </Popover>
           <input
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+              if (e.target.value.trim()) broadcastTyping();
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter") send();
             }}
