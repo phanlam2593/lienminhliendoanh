@@ -486,6 +486,21 @@ export default function Community() {
     }
   };
 
+  // Chỉ gửi tối đa 1 lần / 2 giây khi đang gõ liên tục — tránh spam broadcast không cần thiết
+  const broadcastTyping = () => {
+    const now = Date.now();
+    if (now - lastTypingBroadcastRef.current < 2000) return;
+    lastTypingBroadcastRef.current = now;
+    const myName = profMap.get(user.id)?.full_name || user.email || "";
+    typingChannelRef.current?.send({
+      type: "broadcast",
+      event: "typing",
+      payload: { userId: user.id, name: myName, location: channelLocation, topic: channelTopic },
+    });
+  };
+
+  const typingList = Object.values(typingUsers);
+
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
 
   return (
