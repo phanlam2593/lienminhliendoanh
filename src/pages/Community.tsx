@@ -436,7 +436,12 @@ export default function Community() {
   const del = async (id: string) => {
     if (!confirm("Xóa tin nhắn này?")) return;
     const { error } = await supabase.from("community_messages").delete().eq("id", id);
-    if (error) toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setMsgs((prev) => prev.filter((m) => m.id !== id));
+    setPinnedMsgs((prev) => prev.filter((m) => m.id !== id));
   };
 
   // Quét nội dung tìm @username khớp với thành viên ĐANG TẢI trong danh sách, tạo thông
