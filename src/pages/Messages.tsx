@@ -376,6 +376,33 @@ export function MessagesThread() {
     cancelEdit();
   };
 
+  const toggleReaction = async (messageId: string, emoji: string) => {
+    setReactionPickerFor(null);
+    const already = reactions[messageId]?.[emoji]?.includes(user.id) ?? false;
+    if (already) {
+      await supabase
+        .from("message_reactions")
+        .delete()
+        .eq("message_id", messageId)
+        .eq("user_id", user.id)
+        .eq("emoji", emoji);
+      setReactions((prev) => {
+        const next = { ...prev };
+        next[messageId] = { ...next[messageId] };
+        next[messageId][emoji] = (next[messageId][emoji] ?? []).filter((id) => id !== user.id);
+        return next;
+      });
+    } else {
+      await supabase.from("message_reactions").insert({ message_id: messageId, user_id: user.id, emoji });
+      setReactions((prev) => {
+        const next = { ...prev };
+        next[messageId] = { ...next[messageId] };
+        next[messageId][emoji] = [...(next[messageId][emoji] ?? []), user.id];
+        return next;
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
