@@ -170,6 +170,13 @@ function WelcomeScreen() {
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
   useEffect(() => {
     (async () => {
+      // ⚠️ TẠM THỜI — đang test hiển thị số lớn theo yêu cầu, KHÔNG lấy từ DB thật.
+      // Xoá khối if này để quay lại số liệu thật bình thường.
+      const TEST_FAKE_STATS = true;
+      if (TEST_FAKE_STATS) {
+        setStats({ members: 1632, businesses: 734, offers: 1890 });
+        return;
+      }
       const { data: pub } = await supabase.rpc("get_public_stats").maybeSingle();
       setStats({
         members: (pub as any)?.members ?? 0,
