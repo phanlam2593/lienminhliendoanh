@@ -621,6 +621,13 @@ export default function Community() {
                         </button>
                       )}
                     </div>
+                    {editingId !== m.id && m.reply_to_id && (
+                      <div className="mt-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate">
+                        {repliedMsg
+                          ? `${profMap.get(repliedMsg.user_id)?.full_name || t("community.member")}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
+                          : t("msg.originalDeleted")}
+                      </div>
+                    )}
                     {editingId === m.id ? (
                       <div className="flex items-center gap-1 mt-0.5">
                         <input
