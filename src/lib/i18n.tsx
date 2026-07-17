@@ -1200,6 +1200,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "msg.reply": "Reply",
     "msg.replyingTo": "Replying to",
     "msg.originalDeleted": "Original message no longer available",
+    "msg.seenAt": "Seen at {time}",
     "tag.button": "Mention",
     "tag.pickMember": "Pick someone to mention",
     "tag.notifTitle": "{name} mentioned you",
