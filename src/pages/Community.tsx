@@ -381,6 +381,25 @@ export default function Community() {
     if (error) toast.error(error.message);
   };
 
+  // Quét nội dung tìm @username khớp với thành viên ĐANG TẢI trong danh sách, tạo thông
+  // báo riêng cho từng người (category=null để không bị gộp/đè — giống broadcast_offer).
+  // Không báo cho chính người gửi nếu lỡ tự tag mình.
+  const notifyMentions = async (content: string) => {
+    const matches = [...content.matchAll(/@(\w+)/g)].map((m) => m[1]);
+    if (!matches.length) return;
+    const myName = profMap.get(user.id)?.full_name || user.email || "";
+    const targets = members.filter((m) => matches.includes(m.username) && m.id !== user.id);
+    if (!targets.length) return;
+    const rows = targets.map((tgt) => ({
+      user_id: tgt.id,
+      type: "mention",
+      category: null,
+      title: t("tag.notifTitle", { name: myName }),
+      body: content.slice(0, 100),
+    }));
+    await supabase.from("notifications").insert(rows);
+  };
+
   const startEdit = (m: Msg) => {
     setEditingId(m.id);
     setEditText(m.content);
