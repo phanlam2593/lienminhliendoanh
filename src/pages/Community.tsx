@@ -246,6 +246,31 @@ export default function Community() {
     supabase.rpc("get_admin_user_ids").then(({ data }) => {
       setAdminIds(new Set((data ?? []).map((r: any) => r.user_id)));
     });
+
+    // Kênh "đang nhập" — dùng tên CHUNG cố định (không theo user.id như kênh tin nhắn),
+    // vì broadcast chỉ tới được người khác nếu cùng tên kênh. Lọc đúng vị trí/chủ đề ở
+    // client bằng channelRef.current, giống hệt cách lọc tin nhắn realtime đã làm.
+    const typingCh = supabase
+      .channel("community-typing")
+      .on("broadcast", { event: "typing" }, (payload) => {
+        const p = payload.payload as { userId: string; name: string; location: string | null; topic: Topic };
+        if (p.userId === user.id) return;
+        const { location, topic } = channelRef.current;
+        if (p.topic !== topic) return;
+        if (location === null ? p.location !== null : p.location !== location) return;
+        setTypingUsers((prev) => ({ ...prev, [p.userId]: { name: p.name, ts: Date.now() } }));
+      })
+      .subscribe();
+    typingChannelRef.current = typingCh;
+    const cleanupInterval = setInterval(() => {
+      setTypingUsers((prev) => {
+        const now = Date.now();
+        const next: typeof prev = {};
+        for (const [k, v] of Object.entries(prev)) if (now - v.ts < 4000) next[k] = v;
+        return next;
+      });
+    }, 1000);
+
     const matchesCurrentChannel = (row: any) => {
       const { location, topic } = channelRef.current;
       if (row.topic !== topic) return false;
