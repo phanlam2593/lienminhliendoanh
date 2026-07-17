@@ -798,6 +798,34 @@ export default function Community() {
           >
             <Smile className="w-5 h-5" />
           </button>
+          <Popover open={showTagPicker} onOpenChange={setShowTagPicker}>
+            <PopoverTrigger asChild>
+              <button
+                aria-label={t("tag.button")}
+                className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+              >
+                <AtSign className="w-5 h-5" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56 p-1 max-h-64 overflow-y-auto" align="start">
+              <p className="px-2 py-1 text-[11px] text-muted-foreground">{t("tag.pickMember")}</p>
+              {members
+                .filter((m) => m.id !== user.id)
+                .map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      setText((prev) => `${prev}${prev && !prev.endsWith(" ") ? " " : ""}@${m.username} `);
+                      setShowTagPicker(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-accent text-left"
+                  >
+                    <Avatar path={m.avatar_url} name={m.full_name} size={24} />
+                    <span className="text-sm truncate">{m.full_name}</span>
+                  </button>
+                ))}
+            </PopoverContent>
+          </Popover>
           <input
             value={text}
             onChange={(e) => setText(e.target.value)}
