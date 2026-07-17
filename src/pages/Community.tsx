@@ -512,6 +512,11 @@ export default function Community() {
     }
   };
 
+  const togglePin = async (m: Msg) => {
+    const { error } = await supabase.from("community_messages").update({ is_pinned: !m.is_pinned }).eq("id", m.id);
+    if (error) toast.error(error.message);
+  };
+
   // Chỉ gửi tối đa 1 lần / 2 giây khi đang gõ liên tục — tránh spam broadcast không cần thiết
   const broadcastTyping = () => {
     const now = Date.now();
