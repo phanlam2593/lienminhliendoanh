@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Avatar } from "@/components/Avatar";
-import { Send, Trash2, Pencil, Check, X, Reply as ReplyIcon, AtSign } from "lucide-react";
+import { Send, Trash2, Pencil, Check, X, Reply as ReplyIcon, AtSign, Pin as PinIcon, PinOff } from "lucide-react";
 import { toast } from "sonner";
 import { timeAgo } from "@/lib/time";
 import { uploadImage, validateImage } from "@/lib/upload";
