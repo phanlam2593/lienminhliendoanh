@@ -645,6 +645,43 @@ export default function Community() {
                         {m.content}
                       </div>
                     )}
+                    {editingId !== m.id && (
+                      <div className="flex items-center gap-1 mt-1 flex-wrap">
+                        {Object.entries(reactions[m.id] ?? {})
+                          .filter(([, ids]) => ids.length > 0)
+                          .map(([emoji, ids]) => (
+                            <button
+                              key={emoji}
+                              onClick={() => toggleReaction(m.id, emoji)}
+                              className={`text-[11px] px-1.5 py-0.5 rounded-full border flex items-center gap-1 ${ids.includes(user.id) ? "bg-primary/10 border-primary text-primary" : "bg-muted border-transparent text-muted-foreground"}`}
+                            >
+                              <span>{emoji}</span>
+                              <span>{ids.length}</span>
+                            </button>
+                          ))}
+                        <ReactionPopover
+                          open={reactionPickerFor === m.id}
+                          onOpenChange={(v) => setReactionPickerFor(v ? m.id : null)}
+                        >
+                          <ReactionPopoverTrigger asChild>
+                            <button className="text-muted-foreground opacity-0 group-hover:opacity-100 transition p-0.5">
+                              <SmilePlus className="w-3.5 h-3.5" />
+                            </button>
+                          </ReactionPopoverTrigger>
+                          <ReactionPopoverContent className="w-auto p-1 flex gap-1" align="start">
+                            {REACTION_EMOJIS.map((e) => (
+                              <button
+                                key={e}
+                                onClick={() => toggleReaction(m.id, e)}
+                                className="text-lg hover:scale-125 transition p-1"
+                              >
+                                {e}
+                              </button>
+                            ))}
+                          </ReactionPopoverContent>
+                        </ReactionPopover>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
