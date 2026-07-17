@@ -213,6 +213,7 @@ export default function Community() {
     setChannelTopic(topic);
     setMsgLimit(MSG_PAGE_SIZE);
     void loadMsgs(MSG_PAGE_SIZE, true, loc, topic);
+    void loadPinnedMsgs(loc, topic);
     setMyChannel(loc, topic);
     try {
       sessionStorage.setItem(CHANNEL_STORAGE_KEY, JSON.stringify({ location: loc, topic }));
