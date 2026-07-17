@@ -92,6 +92,7 @@ export default function Community() {
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<Msg | null>(null);
   const [showTagPicker, setShowTagPicker] = useState(false);
+  const [pinnedMsgs, setPinnedMsgs] = useState<Msg[]>([]);
   // typingUsers[user_id] = {name, ts} — ts dùng để tự dọn sau vài giây không có tin mới
   const [typingUsers, setTypingUsers] = useState<Record<string, { name: string; ts: number }>>({});
   const typingChannelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
