@@ -595,6 +595,14 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
             <span className="inline-flex items-center gap-0.5">
               <Users className="w-3 h-3 text-primary" /> {stats.followers}
             </span>
+            <span>·</span>
+            <button
+              type="button"
+              onClick={() => setRegularsOpen(true)}
+              className="inline-flex items-center gap-0.5 font-semibold text-primary hover:underline"
+            >
+              <UserCheck className="w-3 h-3" /> {stats.regulars} khách quen
+            </button>
           </div>
         </div>
         <button
@@ -604,6 +612,15 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
           {open ? "Thu gọn" : "Chỉnh sửa"}
         </button>
       </div>
+
+      <Dialog open={regularsOpen} onOpenChange={setRegularsOpen}>
+        <DialogContent className="max-w-sm max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Khách quen</DialogTitle>
+          </DialogHeader>
+          <BusinessRegularsPanel businessId={biz.id} />
+        </DialogContent>
+      </Dialog>
 
       {/* Form — chỉ hiện khi open */}
       {open && (
