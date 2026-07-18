@@ -86,7 +86,10 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
         if (searchTerm) query = query.or(`follower_name.ilike.%${searchTerm}%,follower_username.ilike.%${searchTerm}%`);
       } else {
         query = query.eq("follower_id", target.id);
+        // "Đang theo dõi" giờ CHỈ hiện thành viên; doanh nghiệp tách hẳn qua "Quán quen"
+        // (onlyBusiness) để 2 danh sách không còn trùng nhau.
         if (onlyBusiness) query = query.not("followee_business_id", "is", null);
+        else query = query.not("followee_user_id", "is", null);
         if (searchTerm) query = query.ilike("followee_name", `%${searchTerm}%`);
       }
       const { data, count, error } = await query.range(from, to);
