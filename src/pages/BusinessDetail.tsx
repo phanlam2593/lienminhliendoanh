@@ -201,6 +201,8 @@ export default function BusinessDetail() {
         .insert({ user_id: user.id, business_id: id, rating, comment, image_url });
       if (error) throw error;
       toast.success("Đã gửi đánh giá");
+      invalidateReviews(id);
+      invalidateBusinesses(id);
       setReviewOpen(false);
       setComment("");
       setRating(5);
