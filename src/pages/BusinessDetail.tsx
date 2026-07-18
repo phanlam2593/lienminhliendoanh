@@ -23,6 +23,7 @@ import {
   Award,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { invalidateReviews, invalidateBusinesses } from "@/lib/queryClient";
 import type { Business, Offer, Review, OfferClaim, ReviewReply } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
@@ -200,6 +201,8 @@ export default function BusinessDetail() {
         .insert({ user_id: user.id, business_id: id, rating, comment, image_url });
       if (error) throw error;
       toast.success("Đã gửi đánh giá");
+      invalidateReviews(id);
+      invalidateBusinesses(id);
       setReviewOpen(false);
       setComment("");
       setRating(5);
@@ -222,6 +225,8 @@ export default function BusinessDetail() {
       return;
     }
     toast.success("Đã xóa");
+    invalidateReviews(id);
+    invalidateBusinesses(id);
     setReviewPage(0);
     void loadReviews(0, false);
   };

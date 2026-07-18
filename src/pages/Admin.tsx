@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { invalidateBusinesses, invalidateReviews } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
@@ -437,6 +438,7 @@ function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChang
       return;
     }
     toast.success("Đã duyệt");
+    invalidateBusinesses(id);
     load();
     onChanged();
   };
@@ -448,6 +450,7 @@ function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChang
       return;
     }
     toast.success("Đã từ chối và xóa");
+    invalidateBusinesses(id);
     load();
     onChanged();
   };
@@ -641,6 +644,7 @@ function MemberDetail({
       if (error) toast.error(error.message);
       else {
         toast.success("Đã từ chối và xóa");
+        invalidateBusinesses(biz.id);
         setBiz(null);
         onChanged();
       }
@@ -650,6 +654,7 @@ function MemberDetail({
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
+      invalidateBusinesses(biz.id);
       onChanged();
     }
   };
@@ -723,6 +728,7 @@ function MemberDetail({
   const delReview = async (id: string) => {
     if (!confirm("Xóa đánh giá?")) return;
     await supabase.from("reviews").delete().eq("id", id);
+    invalidateReviews(biz?.id);
     load(row!.id, biz?.id);
   };
 
@@ -1435,6 +1441,7 @@ function BusinessesSection({
       if (error) toast.error(error.message);
       else {
         toast.success("Đã từ chối và xóa");
+        invalidateBusinesses(id);
         load(0, false);
         onChanged();
       }
@@ -1444,6 +1451,7 @@ function BusinessesSection({
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
+      invalidateBusinesses(id);
       load(0, false);
       onChanged();
     }
