@@ -86,6 +86,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
         if (searchTerm) query = query.or(`follower_name.ilike.%${searchTerm}%,follower_username.ilike.%${searchTerm}%`);
       } else {
         query = query.eq("follower_id", target.id);
+        if (onlyBusiness) query = query.not("followee_business_id", "is", null);
         if (searchTerm) query = query.ilike("followee_name", `%${searchTerm}%`);
       }
       const { data, count, error } = await query.range(from, to);
