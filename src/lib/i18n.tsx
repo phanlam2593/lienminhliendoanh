@@ -701,7 +701,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "community.needLogin": "Please log in",
     "community.needApproval": "Your account needs approval to join the community",
     "community.memberCount": "{n} members",
-    "community.onlineCount": "· {n} online (of loaded)",
+    "community.onlineCount": "· {n} online",
     "community.you": "(you)",
     "community.chatTitle": "💬 Community Chat",
     "community.loadOlder": "Load older messages",
