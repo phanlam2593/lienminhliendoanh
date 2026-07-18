@@ -1427,16 +1427,27 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
       </div>
       {list.map((b) => (
         <div key={b.id} className="p-2 bg-card rounded-xl flex items-center gap-2">
-          <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted shrink-0">
+          <Link to={`/dn/${b.id}`} target="_blank" className="w-12 h-12 rounded-lg overflow-hidden bg-muted shrink-0">
             <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-          </div>
+          </Link>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold truncate flex items-center gap-1">
-              {b.is_featured && <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />}
+            <Link
+              to={`/dn/${b.id}`}
+              target="_blank"
+              className="text-sm font-semibold truncate flex items-center gap-1 hover:text-primary hover:underline w-fit"
+            >
+              {b.is_featured && <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 shrink-0" />}
               {b.name}
-            </div>
+            </Link>
             <div className="text-[11px] text-muted-foreground truncate">
-              {BUSINESS_TYPE_LABEL[b.type] || b.type} · Chủ: {b.owner_name || "—"}
+              {BUSINESS_TYPE_LABEL[b.type] || b.type} · Chủ:{" "}
+              {b.owner_id ? (
+                <Link to={`/tin-nhan/${b.owner_id}`} target="_blank" className="hover:text-primary hover:underline">
+                  {b.owner_name || "—"}
+                </Link>
+              ) : (
+                b.owner_name || "—"
+              )}
             </div>
             <StatusBadge s={b.status} />
           </div>
