@@ -605,6 +605,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "tag.notifTitle": "{name} đã nhắc đến bạn",
     "typing.oneIsTyping": "{name} đang nhập…",
     "typing.multipleAreTyping": "{n} người đang nhập…",
+    "community.noOneOnline": "Chưa có ai online",
     "pin.button": "Ghim tin nhắn",
     "pin.unpinButton": "Bỏ ghim",
     "pin.pinnedLabel": "📌 Đã ghim",
