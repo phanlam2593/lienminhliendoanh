@@ -135,6 +135,37 @@ export default function Admin() {
 
   const refresh = () => setRefreshKey((k) => k + 1);
 
+  // Dùng khi bấm "Mở để chỉnh sửa" trong BusinessQuickView — tải đúng 1 hồ sơ đầy đủ
+  // (kèm business/lastVisit) rồi mở lại đúng khung MemberDetail đã có sẵn, không cần
+  // xây dựng khung sửa doanh nghiệp riêng thứ 2.
+  const openMemberById = async (ownerId: string) => {
+    const { data: prof } = await supabase
+      .from("profiles")
+      .select(
+        "id, username, full_name, email, phone, avatar_url, status, status_message, points, created_at, updated_at, admin_note, notification_prefs, member_number, has_seen_welcome, is_member, membership_started_at, membership_expires_at",
+      )
+      .eq("id", ownerId)
+      .maybeSingle();
+    if (!prof) {
+      toast.error("Không tìm thấy hồ sơ");
+      return;
+    }
+    const [{ data: biz }, { data: v }] = await Promise.all([
+      supabase.from("businesses").select("*").eq("owner_id", ownerId).maybeSingle(),
+      supabase
+        .from("login_events")
+        .select("created_at")
+        .eq("user_id", ownerId)
+        .order("created_at", { ascending: false })
+        .limit(1),
+    ]);
+    setSelected({
+      ...(prof as Profile),
+      business: (biz as Business) ?? null,
+      lastVisit: v?.[0]?.created_at ?? null,
+    });
+  };
+
   const setStatus = async (id: string, status: "approved" | "rejected", note?: string) => {
     const patch = typeof note === "string" ? { status, admin_note: note.trim() || null } : { status };
     const { error } = await supabase
