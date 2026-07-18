@@ -51,8 +51,24 @@ interface MemberRow extends Profile {
 
 const MEMBER_PAGE_SIZE = 50;
 
+// ── Tab điều hướng của trang Quản trị ────────────────────────────────────────
+// DO NOT CHANGE: giữ đúng 7 tab, không đổi key (dùng làm state điều hướng).
+type TabKey = "overview" | "members" | "businesses" | "offers" | "exchanges" | "reports" | "tools";
+
+const TABS: { key: TabKey; label: string; icon: any }[] = [
+  { key: "overview", label: "Tổng quan", icon: TrendingUp },
+  { key: "members", label: "Thành viên", icon: Users },
+  { key: "businesses", label: "Doanh nghiệp", icon: Building2 },
+  { key: "offers", label: "Ưu đãi", icon: Tag },
+  { key: "exchanges", label: "Trao đổi", icon: Handshake },
+  { key: "reports", label: "Báo cáo", icon: Flag },
+  { key: "tools", label: "Công cụ", icon: Sparkles },
+];
+
 export default function Admin() {
   const { user, isAdmin, loading } = useAuth();
+  const [activeTab, setActiveTab] = useState<TabKey>("overview");
+  const [pendingTotal, setPendingTotal] = useState(0);
   const [rows, setRows] = useState<MemberRow[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -198,100 +214,386 @@ export default function Admin() {
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">Quản trị</h1>
 
-      <PendingSummary refreshKey={refreshKey} onChanged={refresh} />
-
-      <Collapsible title="Thành viên" icon={Users} count={memberTotal}>
-        <div className="relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Tìm theo tên hoặc username…"
-            className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
-          />
-        </div>
-        {rows.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
-        ) : (
-          rows.map((r) => (
+      {/* Tab pill wrap xuống dòng — không scroll ngang */}
+      <div className="flex flex-wrap gap-1.5">
+        {TABS.map((t) => {
+          const Icon = t.icon;
+          const active = activeTab === t.key;
+          return (
             <button
-              key={r.id}
-              onClick={() => setSelected(r)}
-              className="w-full text-left p-3 bg-card rounded-xl flex items-center gap-3 hover:bg-accent transition"
+              key={t.key}
+              onClick={() => setActiveTab(t.key)}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
+                active
+                  ? "bg-gradient-brand text-white border-transparent shadow-sm"
+                  : "bg-card text-muted-foreground border-border hover:bg-accent"
+              }`}
             >
-              <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center text-sm font-bold flex-shrink-0">
-                {(r.full_name || r.username || "?").slice(0, 1).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold truncate">
-                  {r.full_name}
-                  <span className="text-muted-foreground text-xs ml-1">@{r.username}</span>
-                </div>
-                <div className="text-[11px] text-muted-foreground truncate">
-                  Tham gia {new Date(r.created_at).toLocaleDateString("vi-VN")}
-                  {r.business ? ` · 🏢 ${r.business.name}` : ""}
-                  {r.lastVisit ? ` · Vào lần cuối: ${timeAgo(r.lastVisit)}` : " · Chưa từng mở app"}
-                </div>
-              </div>
-              <StatusBadge s={r.status} />
+              <Icon className="w-3.5 h-3.5" />
+              {t.label}
+              {t.key === "overview" && pendingTotal > 0 && (
+                <span
+                  className={`min-w-4 h-4 px-1 rounded-full text-[10px] font-bold grid place-items-center ${
+                    active ? "bg-white/25 text-white" : "bg-amber-100 text-amber-700"
+                  }`}
+                >
+                  {pendingTotal}
+                </span>
+              )}
             </button>
-          ))
-        )}
-        {memberHasMore && (
-          <button
-            onClick={loadMoreMembers}
-            disabled={memberLoadingMore}
-            className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
-          >
-            {memberLoadingMore ? "Đang tải…" : `Tải thêm (còn ${memberTotal - rows.length})`}
-          </button>
-        )}
-      </Collapsible>
+          );
+        })}
+      </div>
 
-      <BusinessesSection refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
-      <OffersSection refreshKey={refreshKey} onChanged={refresh} />
-      <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />
-      <ReportsSection refreshKey={refreshKey} />
-      <Collapsible title="Công cụ quản trị" icon={Sparkles}>
-        <CreateMemberForm />
-        <button
-          onClick={() => setPreviewOnboarding(true)}
-          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-        >
-          <Users className="w-3.5 h-3.5" /> Xem lại popup chào mừng thành viên mới
-        </button>
-        <Link
-          to="/dieu-khoan"
-          target="_blank"
-          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-        >
-          <Flag className="w-3.5 h-3.5" /> Xem Điều khoản sử dụng (kèm nội quy cộng đồng)
-        </Link>
-        <Link
-          to="/chinh-sach-bao-mat"
-          target="_blank"
-          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-        >
-          <Shield className="w-3.5 h-3.5" /> Xem Chính sách bảo mật
-        </Link>
-        <Link
-          to="/chinh-sach-cookie"
-          target="_blank"
-          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-        >
-          <Search className="w-3.5 h-3.5" /> Xem Chính sách Cookie & Bên thứ ba
-        </Link>
-        <button
-          onClick={cleanupOrphans}
-          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-        >
-          <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
-        </button>
-        <Broadcast />
-      </Collapsible>
+      {activeTab === "overview" && (
+        <OverviewTab
+          refreshKey={refreshKey}
+          onChanged={refresh}
+          onNavigate={setActiveTab}
+          onPendingChange={setPendingTotal}
+        />
+      )}
+
+      {activeTab === "members" && (
+        <Collapsible title="Thành viên" icon={Users} count={memberTotal}>
+          <div className="relative">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Tìm theo tên hoặc username…"
+              className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+            />
+          </div>
+          {rows.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
+          ) : (
+            rows.map((r) => (
+              <button
+                key={r.id}
+                onClick={() => setSelected(r)}
+                className="w-full text-left p-3 bg-card rounded-xl flex items-center gap-3 hover:bg-accent transition"
+              >
+                <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center text-sm font-bold flex-shrink-0">
+                  {(r.full_name || r.username || "?").slice(0, 1).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate">
+                    {r.full_name}
+                    <span className="text-muted-foreground text-xs ml-1">@{r.username}</span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground truncate">
+                    Tham gia {new Date(r.created_at).toLocaleDateString("vi-VN")}
+                    {r.business ? ` · 🏢 ${r.business.name}` : ""}
+                    {r.lastVisit ? ` · Vào lần cuối: ${timeAgo(r.lastVisit)}` : " · Chưa từng mở app"}
+                  </div>
+                </div>
+                <StatusBadge s={r.status} />
+              </button>
+            ))
+          )}
+          {memberHasMore && (
+            <button
+              onClick={loadMoreMembers}
+              disabled={memberLoadingMore}
+              className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+            >
+              {memberLoadingMore ? "Đang tải…" : `Tải thêm (còn ${memberTotal - rows.length})`}
+            </button>
+          )}
+        </Collapsible>
+      )}
+
+      {activeTab === "businesses" && (
+        <BusinessesSection refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
+      )}
+      {activeTab === "offers" && <OffersSection refreshKey={refreshKey} onChanged={refresh} />}
+      {activeTab === "exchanges" && <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />}
+      {activeTab === "reports" && <ReportsSection refreshKey={refreshKey} />}
+
+      {activeTab === "tools" && (
+        <div className="space-y-3">
+          <div className="bg-card rounded-xl p-3 space-y-2">
+            <div className="text-xs font-bold text-muted-foreground">THAO TÁC</div>
+            <CreateMemberForm />
+            <button
+              onClick={() => setPreviewOnboarding(true)}
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+            >
+              <Users className="w-3.5 h-3.5" /> Xem lại popup chào mừng thành viên mới
+            </button>
+            <button
+              onClick={cleanupOrphans}
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
+            </button>
+          </div>
+
+          <div className="bg-card rounded-xl p-3 space-y-2">
+            <div className="text-xs font-bold text-muted-foreground">TÀI LIỆU</div>
+            <Link
+              to="/dieu-khoan"
+              target="_blank"
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+            >
+              <Flag className="w-3.5 h-3.5" /> Xem Điều khoản sử dụng (kèm nội quy cộng đồng)
+            </Link>
+            <Link
+              to="/chinh-sach-bao-mat"
+              target="_blank"
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+            >
+              <Shield className="w-3.5 h-3.5" /> Xem Chính sách bảo mật
+            </Link>
+            <Link
+              to="/chinh-sach-cookie"
+              target="_blank"
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+            >
+              <Search className="w-3.5 h-3.5" /> Xem Chính sách Cookie & Bên thứ ba
+            </Link>
+          </div>
+
+          <div className="bg-card rounded-xl p-3">
+            <Broadcast />
+          </div>
+        </div>
+      )}
 
       <MemberDetail row={selected} onClose={() => setSelected(null)} onChanged={refresh} onStatus={setStatus} />
       {previewOnboarding && <WelcomeOnboarding previewMode onPreviewClose={() => setPreviewOnboarding(false)} />}
+    </div>
+  );
+}
+
+// ── Tab Tổng quan: số liệu + hàng chờ duyệt + hoạt động gần đây ──────────────
+function OverviewTab({
+  refreshKey,
+  onChanged,
+  onNavigate,
+  onPendingChange,
+}: {
+  refreshKey: number;
+  onChanged: () => void;
+  onNavigate: (t: TabKey) => void;
+  onPendingChange: (n: number) => void;
+}) {
+  const [stats, setStats] = useState({ members: 0, businesses: 0, exchangesToday: 0 });
+  const [pendingMembers, setPendingMembers] = useState<{ id: string; full_name: string; username: string }[]>([]);
+  const [pendingBiz, setPendingBiz] = useState<{ id: string; name: string }[]>([]);
+  const [activity, setActivity] = useState<{ name: string; username: string; at: string }[]>([]);
+
+  const load = async () => {
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const [mRes, bRes, eRes, pmRes, pbRes, evRes] = await Promise.all([
+      supabase.from("profiles").select("*", { count: "exact", head: true }),
+      supabase.from("businesses").select("*", { count: "exact", head: true }),
+      supabase
+        .from("exchanges")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "completed")
+        .gte("completed_at", todayStart.toISOString()),
+      supabase.from("profiles").select("id, full_name, username").eq("status", "pending"),
+      supabase.from("businesses").select("id, name").eq("status", "pending"),
+      supabase.from("login_events").select("user_id, created_at").order("created_at", { ascending: false }).limit(8),
+    ]);
+    setStats({
+      members: mRes.count ?? 0,
+      businesses: bRes.count ?? 0,
+      exchangesToday: eRes.count ?? 0,
+    });
+    const pm = pmRes.data ?? [];
+    const pb = pbRes.data ?? [];
+    setPendingMembers(pm);
+    setPendingBiz(pb);
+    onPendingChange(pm.length + pb.length);
+
+    const events = (evRes.data ?? []) as { user_id: string; created_at: string }[];
+    const uids = [...new Set(events.map((v) => v.user_id))];
+    let nameMap = new Map<string, { name: string; username: string }>();
+    if (uids.length) {
+      const { data: profs } = await supabase.from("profiles").select("id, full_name, username").in("id", uids);
+      (profs ?? []).forEach((p: any) => nameMap.set(p.id, { name: p.full_name, username: p.username }));
+    }
+    setActivity(
+      events
+        .filter((v) => nameMap.has(v.user_id))
+        .map((v) => ({
+          name: nameMap.get(v.user_id)!.name,
+          username: nameMap.get(v.user_id)!.username,
+          at: v.created_at,
+        })),
+    );
+  };
+  useEffect(() => {
+    void load();
+  }, [refreshKey]);
+
+  const approveMember = async (id: string) => {
+    const { error } = await supabase.from("profiles").update({ status: "approved" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã duyệt");
+    load();
+    onChanged();
+  };
+  const rejectMember = async (id: string) => {
+    const { error } = await supabase.from("profiles").update({ status: "rejected" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã từ chối");
+    load();
+    onChanged();
+  };
+  const approveBiz = async (id: string) => {
+    const { error } = await supabase.from("businesses").update({ status: "approved" }).eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã duyệt");
+    invalidateBusinesses(id);
+    load();
+    onChanged();
+  };
+  const rejectBiz = async (id: string) => {
+    await supabase.from("offers").delete().eq("business_id", id);
+    const { error } = await supabase.from("businesses").delete().eq("id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã từ chối và xóa");
+    invalidateBusinesses(id);
+    load();
+    onChanged();
+  };
+
+  const pendingCount = pendingMembers.length + pendingBiz.length;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={() => onNavigate("members")}
+          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition"
+        >
+          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+            <Users className="w-3 h-3" /> Thành viên
+          </div>
+          <div className="text-2xl font-extrabold">{stats.members}</div>
+        </button>
+        <button
+          onClick={() => onNavigate("businesses")}
+          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition"
+        >
+          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+            <Building2 className="w-3 h-3" /> Doanh nghiệp
+          </div>
+          <div className="text-2xl font-extrabold">{stats.businesses}</div>
+        </button>
+        <div className="p-3 bg-card rounded-xl">
+          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+            <Bell className="w-3 h-3" /> Chờ duyệt
+          </div>
+          <div className={`text-2xl font-extrabold ${pendingCount > 0 ? "text-amber-600" : ""}`}>{pendingCount}</div>
+        </div>
+        <button
+          onClick={() => onNavigate("exchanges")}
+          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition"
+        >
+          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+            <Handshake className="w-3 h-3" /> Trao đổi hôm nay
+          </div>
+          <div className="text-2xl font-extrabold text-primary">{stats.exchangesToday}</div>
+        </button>
+      </div>
+
+      {pendingCount === 0 ? (
+        <div className="px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4" /> Không có gì đang chờ duyệt
+        </div>
+      ) : (
+        <section className="rounded-xl bg-amber-50 dark:bg-amber-950/30 p-3 space-y-2">
+          <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-semibold">
+            <Bell className="w-4 h-4" />
+            <span>Cần xử lý ({pendingCount})</span>
+          </div>
+          {pendingMembers.map((m) => (
+            <div key={m.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
+              <div className="flex-1 min-w-0 text-xs">
+                <div className="font-semibold truncate">{m.full_name}</div>
+                <div className="text-muted-foreground">@{m.username} · Thành viên</div>
+              </div>
+              <button
+                onClick={() => approveMember(m.id)}
+                className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
+                aria-label="Duyệt"
+              >
+                <Check className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => rejectMember(m.id)}
+                className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
+                aria-label="Từ chối"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+          {pendingBiz.map((b) => (
+            <div key={b.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
+              <div className="flex-1 min-w-0 text-xs">
+                <div className="font-semibold truncate">{b.name}</div>
+                <div className="text-muted-foreground">Doanh nghiệp</div>
+              </div>
+              <button
+                onClick={() => approveBiz(b.id)}
+                className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
+                aria-label="Duyệt"
+              >
+                <Check className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => rejectBiz(b.id)}
+                className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
+                aria-label="Từ chối"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+        </section>
+      )}
+
+      <section className="space-y-2">
+        <div className="text-xs font-bold text-muted-foreground">HOẠT ĐỘNG GẦN ĐÂY</div>
+        {activity.length === 0 ? (
+          <p className="text-xs text-muted-foreground text-center py-2">Chưa có hoạt động nào</p>
+        ) : (
+          <div className="bg-card rounded-xl divide-y divide-border">
+            {activity.map((a, i) => (
+              <div key={i} className="flex items-center gap-3 p-2.5">
+                <div className="w-8 h-8 rounded-full bg-gradient-brand text-white grid place-items-center text-xs font-bold flex-shrink-0">
+                  {(a.name || a.username || "?").slice(0, 1).toUpperCase()}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs font-semibold truncate">
+                    {a.name} <span className="text-muted-foreground font-normal">@{a.username}</span>
+                  </div>
+                  <div className="text-[11px] text-muted-foreground">Vào app {timeAgo(a.at)}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
 }
@@ -391,123 +693,6 @@ function CreateMemberForm() {
         </DialogContent>
       </Dialog>
     </div>
-  );
-}
-
-function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
-  const [members, setMembers] = useState<{ id: string; full_name: string; username: string }[]>([]);
-  const [biz, setBiz] = useState<{ id: string; name: string }[]>([]);
-  const [open, setOpen] = useState(false);
-
-  const load = async () => {
-    const [{ data: m }, { data: b }] = await Promise.all([
-      supabase.from("profiles").select("id, full_name, username").eq("status", "pending"),
-      supabase.from("businesses").select("id, name").eq("status", "pending"),
-    ]);
-    setMembers(m ?? []);
-    setBiz(b ?? []);
-  };
-  useEffect(() => {
-    void load();
-  }, [refreshKey]);
-
-  const approveMember = async (id: string) => {
-    const { error } = await supabase.from("profiles").update({ status: "approved" }).eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Đã duyệt");
-    load();
-    onChanged();
-  };
-  const rejectMember = async (id: string) => {
-    const { error } = await supabase.from("profiles").update({ status: "rejected" }).eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Đã từ chối");
-    load();
-    onChanged();
-  };
-  const approveBiz = async (id: string) => {
-    const { error } = await supabase.from("businesses").update({ status: "approved" }).eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Đã duyệt");
-    invalidateBusinesses(id);
-    load();
-    onChanged();
-  };
-  const rejectBiz = async (id: string) => {
-    await supabase.from("offers").delete().eq("business_id", id);
-    const { error } = await supabase.from("businesses").delete().eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Đã từ chối và xóa");
-    invalidateBusinesses(id);
-    load();
-    onChanged();
-  };
-
-  const total = members.length + biz.length;
-
-  if (total === 0) {
-    return (
-      <div className="px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
-        <CheckCircle2 className="w-4 h-4" /> Không có gì đang chờ duyệt
-      </div>
-    );
-  }
-
-  return (
-    <section className="rounded-xl bg-amber-50 dark:bg-amber-950/30 overflow-hidden">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center gap-2 px-3 py-2.5 text-amber-700 dark:text-amber-400 text-sm font-semibold"
-      >
-        {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-        <Bell className="w-4 h-4" />
-        <span className="flex-1 text-left">Đang chờ duyệt ({total})</span>
-      </button>
-      {open && (
-        <div className="px-3 pb-3 space-y-2">
-          {members.map((m) => (
-            <div key={m.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
-              <div className="flex-1 min-w-0 text-xs">
-                <div className="font-semibold truncate">{m.full_name}</div>
-                <div className="text-muted-foreground">@{m.username} · Thành viên</div>
-              </div>
-              <button onClick={() => approveMember(m.id)} className="text-emerald-600" aria-label="Duyệt">
-                <Check className="w-4 h-4" />
-              </button>
-              <button onClick={() => rejectMember(m.id)} className="text-red-600" aria-label="Từ chối">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-          {biz.map((b) => (
-            <div key={b.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
-              <div className="flex-1 min-w-0 text-xs">
-                <div className="font-semibold truncate">{b.name}</div>
-                <div className="text-muted-foreground">Doanh nghiệp</div>
-              </div>
-              <button onClick={() => approveBiz(b.id)} className="text-emerald-600" aria-label="Duyệt">
-                <Check className="w-4 h-4" />
-              </button>
-              <button onClick={() => rejectBiz(b.id)} className="text-red-600" aria-label="Từ chối">
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
   );
 }
 
@@ -1346,12 +1531,13 @@ function StatusBadge({ s }: { s?: string }) {
   );
 }
 
+// Trước đây là section thu gọn (collapsible); giờ mỗi tab chỉ hiện 1 section nên
+// header luôn mở — giữ nguyên tên + props để không phải sửa các call site.
 function Collapsible({
   title,
   icon: Icon,
   count,
   children,
-  defaultOpen = false,
 }: {
   title: string;
   icon: any;
@@ -1359,16 +1545,14 @@ function Collapsible({
   children: React.ReactNode;
   defaultOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
   return (
-    <section className="border-t pt-4">
-      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 font-bold">
-        {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+    <section>
+      <div className="flex items-center gap-2 font-bold">
         <Icon className="w-4 h-4 text-primary" />
         <span>{title}</span>
         {count !== undefined && <span className="text-xs text-muted-foreground font-normal">({count})</span>}
-      </button>
-      {open && <div className="mt-3 space-y-2">{children}</div>}
+      </div>
+      <div className="mt-3 space-y-2">{children}</div>
     </section>
   );
 }
