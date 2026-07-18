@@ -728,6 +728,7 @@ function MemberDetail({
   const delReview = async (id: string) => {
     if (!confirm("Xóa đánh giá?")) return;
     await supabase.from("reviews").delete().eq("id", id);
+    invalidateReviews(biz?.id);
     load(row!.id, biz?.id);
   };
 
