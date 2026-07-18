@@ -110,6 +110,7 @@ export function ProfileQuickView({
                 {p.status_message && (
                   <p className="text-sm text-primary italic mt-1 font-medium">"{p.status_message}"</p>
                 )}
+                {p.bio && <p className="text-sm text-muted-foreground mt-1">{p.bio}</p>}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
                 <span className="px-2 py-0.5 rounded-full bg-muted">{followers} người theo dõi</span>
