@@ -964,19 +964,30 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
   );
 }
 
-function FollowStats({ userId }: { userId: string }) {
+ffunction FollowStats({ userId }: { userId: string }) {
   const { t } = useLanguage();
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
-  const [open, setOpen] = useState<null | "followers" | "following">(null);
+  const [regulars, setRegulars] = useState(0);
+  const [open, setOpen] = useState<null | "followers" | "following" | "regulars">(null);
 
   const loadCounts = async () => {
-    const [{ count: fc }, { count: gc }] = await Promise.all([
+    const [{ count: fc }, { count: gc }, { count: rc }] = await Promise.all([
       supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
-      supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
+      supabase
+        .from("follows")
+        .select("*", { count: "exact", head: true })
+        .eq("follower_id", userId)
+        .not("followee_user_id", "is", null),
+      supabase
+        .from("follows")
+        .select("*", { count: "exact", head: true })
+        .eq("follower_id", userId)
+        .not("followee_business_id", "is", null),
     ]);
     setFollowers(fc ?? 0);
     setFollowing(gc ?? 0);
+    setRegulars(rc ?? 0);
   };
 
   useEffect(() => {
@@ -1003,12 +1014,30 @@ function FollowStats({ userId }: { userId: string }) {
             <UserCheck className="w-3 h-3" /> {t("messages.followingHeader")}
           </div>
         </button>
+        <button
+          onClick={() => setOpen("regulars")}
+          className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition"
+        >
+          <div className="text-lg font-extrabold text-primary">{regulars}</div>
+          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+            <UserCheck className="w-3 h-3" /> Quán quen
+          </div>
+        </button>
       </div>
       <FollowListDialog
-        open={open !== null}
+        open={open !== null && open !== "regulars"}
         onOpenChange={(v) => !v && setOpen(null)}
         target={{ kind: "user", id: userId }}
-        mode={open ?? "followers"}
+        mode={open === "following" ? "following" : "followers"}
+        onFollowChange={loadCounts}
+      />
+      <FollowListDialog
+        open={open === "regulars"}
+        onOpenChange={(v) => !v && setOpen(null)}
+        target={{ kind: "user", id: userId }}
+        mode="following"
+        onlyBusiness
+        title="Quán quen"
         onFollowChange={loadCounts}
       />
     </>
