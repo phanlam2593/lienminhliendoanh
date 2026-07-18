@@ -241,6 +241,9 @@ export default function Profile() {
             + Thêm dòng trạng thái
           </div>
         )}
+        {(profile as any)?.bio && (
+          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{(profile as any).bio}</p>
+        )}
       </button>
       <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
         <DialogContent className="max-w-sm">
