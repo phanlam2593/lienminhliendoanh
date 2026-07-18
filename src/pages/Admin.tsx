@@ -1441,6 +1441,7 @@ function BusinessesSection({
       if (error) toast.error(error.message);
       else {
         toast.success("Đã từ chối và xóa");
+        invalidateBusinesses(id);
         load(0, false);
         onChanged();
       }
@@ -1450,6 +1451,7 @@ function BusinessesSection({
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
+      invalidateBusinesses(id);
       load(0, false);
       onChanged();
     }
