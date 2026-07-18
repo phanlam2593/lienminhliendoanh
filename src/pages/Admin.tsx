@@ -1531,7 +1531,12 @@ function BusinessesSection({
           {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
         </button>
       )}
-      <BusinessQuickView businessId={quickBiz} open={!!quickBiz} onOpenChange={(v) => !v && setQuickBiz(null)} />
+      <BusinessQuickView
+        businessId={quickBiz}
+        open={!!quickBiz}
+        onOpenChange={(v) => !v && setQuickBiz(null)}
+        onOpenAdmin={onOpenMember}
+      />
       <ProfileQuickView userId={quickMember} open={!!quickMember} onOpenChange={(v) => !v && setQuickMember(null)} />
     </Collapsible>
   );
