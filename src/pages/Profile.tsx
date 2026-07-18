@@ -955,15 +955,18 @@ function FollowStats({ userId }: { userId: string }) {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [open, setOpen] = useState<null | "followers" | "following">(null);
+
+  const loadCounts = async () => {
+    const [{ count: fc }, { count: gc }] = await Promise.all([
+      supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
+      supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
+    ]);
+    setFollowers(fc ?? 0);
+    setFollowing(gc ?? 0);
+  };
+
   useEffect(() => {
-    (async () => {
-      const [{ count: fc }, { count: gc }] = await Promise.all([
-        supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
-        supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", userId),
-      ]);
-      setFollowers(fc ?? 0);
-      setFollowing(gc ?? 0);
-    })();
+    void loadCounts();
   }, [userId]);
   return (
     <>
