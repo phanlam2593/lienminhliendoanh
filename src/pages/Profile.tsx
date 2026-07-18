@@ -995,6 +995,7 @@ function FollowStats({ userId }: { userId: string }) {
         onOpenChange={(v) => !v && setOpen(null)}
         target={{ kind: "user", id: userId }}
         mode={open ?? "followers"}
+        onFollowChange={loadCounts}
       />
     </>
   );
