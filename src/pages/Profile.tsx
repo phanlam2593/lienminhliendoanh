@@ -44,7 +44,6 @@ import { Avatar } from "@/components/Avatar";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { TierLegendDialog } from "@/components/TierLegendDialog";
 import { FollowListDialog } from "@/components/FollowListDialog";
-import { FriendsDialog } from "@/components/FriendsDialog";
 import { BusinessRegularsPanel } from "@/components/BusinessRegularsPanel";
 import {
   AlertDialog,
