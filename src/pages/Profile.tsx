@@ -62,6 +62,7 @@ export default function Profile() {
   const { user, profile, role, refresh, signOut } = useAuth();
   const { t } = useLanguage();
   const nav = useNavigate();
+  const [bio, setBio] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const initialView = (searchParams.get("view") as View) || "menu";
   const [view, setViewState] = useState<View>(
