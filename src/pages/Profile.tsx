@@ -998,11 +998,7 @@ function FollowStats({ userId }: { userId: string }) {
         .select("*", { count: "exact", head: true })
         .eq("follower_id", userId)
         .not("followee_user_id", "is", null),
-      supabase
-        .from("follows")
-        .select("*", { count: "exact", head: true })
-        .eq("follower_id", userId)
-        .not("followee_business_id", "is", null),
+      supabase.from("business_regulars").select("*", { count: "exact", head: true }).eq("member_id", userId),
     ]);
     setFollowers(fc ?? 0);
     setFollowing(gc ?? 0);
@@ -1044,21 +1040,13 @@ function FollowStats({ userId }: { userId: string }) {
         </button>
       </div>
       <FollowListDialog
-        open={open !== null && open !== "regulars"}
+        open={open === "followers" || open === "following"}
         onOpenChange={(v) => !v && setOpen(null)}
         target={{ kind: "user", id: userId }}
         mode={open === "following" ? "following" : "followers"}
         onFollowChange={loadCounts}
       />
-      <FollowListDialog
-        open={open === "regulars"}
-        onOpenChange={(v) => !v && setOpen(null)}
-        target={{ kind: "user", id: userId }}
-        mode="following"
-        onlyBusiness
-        title="Quán quen"
-        onFollowChange={loadCounts}
-      />
+      <RegularBusinessesDialog userId={userId} open={open === "regulars"} onOpenChange={(v) => !v && setOpen(null)} />
     </>
   );
 }
