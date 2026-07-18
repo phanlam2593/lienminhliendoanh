@@ -12,3 +12,12 @@ try {
 createRoot(document.getElementById("root")!).render(<App />);
 
 registerPwa();
+
+// Ẩn splash động sau khi React vẽ xong khung đầu tiên — tránh xoá quá sớm gây giật hình
+requestAnimationFrame(() => {
+  const splash = document.getElementById("app-splash");
+  if (splash) {
+    splash.style.opacity = "0";
+    setTimeout(() => splash.remove(), 400);
+  }
+});
