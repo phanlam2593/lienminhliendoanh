@@ -1358,7 +1358,15 @@ function Collapsible({
 
 const BIZ_PAGE_SIZE = 50;
 
-function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
+function BusinessesSection({
+  refreshKey,
+  onChanged,
+  onOpenMember,
+}: {
+  refreshKey: number;
+  onChanged: () => void;
+  onOpenMember: (ownerId: string) => void;
+}) {
   const [list, setList] = useState<(Business & { owner_name?: string | null })[]>([]);
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
