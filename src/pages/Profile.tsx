@@ -1010,27 +1010,31 @@ function FollowStats({ userId }: { userId: string }) {
   }, [userId]);
   return (
     <>
-      <div className="grid grid-cols-3 gap-2 text-xs">
+      <div className="grid grid-cols-3 gap-2">
         <button
           onClick={() => setOpen("followers")}
-          className="bg-card rounded-xl py-2.5 px-1 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-2 px-1 text-center shadow-sm hover:bg-accent transition"
         >
-          <div className="text-base font-extrabold text-primary leading-tight">{followers}</div>
-          <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{t("profile.followers")}</div>
+          <div className="text-lg font-extrabold text-primary leading-none">{followers}</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight mt-1">
+            {t("profile.followers")}
+          </div>
         </button>
         <button
           onClick={() => setOpen("following")}
-          className="bg-card rounded-xl py-2.5 px-1 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-2 px-1 text-center shadow-sm hover:bg-accent transition"
         >
-          <div className="text-base font-extrabold text-primary leading-tight">{following}</div>
-          <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{t("messages.followingHeader")}</div>
+          <div className="text-lg font-extrabold text-primary leading-none">{following}</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight mt-1">
+            {t("messages.followingHeader")}
+          </div>
         </button>
         <button
           onClick={() => setOpen("regulars")}
-          className="bg-card rounded-xl py-2.5 px-1 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-2 px-1 text-center shadow-sm hover:bg-accent transition"
         >
-          <div className="text-base font-extrabold text-primary leading-tight">{regulars}</div>
-          <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">Quán quen</div>
+          <div className="text-lg font-extrabold text-primary leading-none">{regulars}</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight mt-1">Quán quen</div>
         </button>
       </div>
       <FollowListDialog
