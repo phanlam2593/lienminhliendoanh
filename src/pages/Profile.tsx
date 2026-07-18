@@ -982,7 +982,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
   );
 }
 
-ffunction FollowStats({ userId }: { userId: string }) {
+function FollowStats({ userId }: { userId: string }) {
   const { t } = useLanguage();
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
