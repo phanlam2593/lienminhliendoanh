@@ -133,14 +133,20 @@ export function BusinessQuickView({
               {b.description && <p className="text-sm mt-1.5">{b.description}</p>}
             </div>
 
-            <div className="flex items-center gap-2 text-[11px]">
+            <div className="flex items-center gap-2 text-[11px] flex-wrap">
+              <button
+                onClick={() => setFollowListOpen(true)}
+                className="px-2.5 py-1 rounded-full bg-muted font-semibold"
+              >
+                {followers} theo dõi
+              </button>
               <button
                 onClick={toggleFollow}
                 disabled={!user || followBusy}
-                className={`px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1 ${following ? "bg-primary/10 text-primary" : "bg-muted"}`}
+                className={`px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1 ${following ? "bg-primary/10 text-primary" : "bg-primary text-primary-foreground"}`}
               >
                 {following ? <UserCheck className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
-                {followers} theo dõi
+                {following ? "Đang theo dõi" : "Theo dõi"}
               </button>
               <button
                 onClick={() => setReviewsOpen((o) => !o)}
@@ -152,6 +158,22 @@ export function BusinessQuickView({
                   (reviewsOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />)}
               </button>
             </div>
+            {businessId && (
+              <FollowListDialog
+                open={followListOpen}
+                onOpenChange={setFollowListOpen}
+                target={{ kind: "business", id: businessId }}
+                mode="followers"
+                onFollowChange={() => {
+                  // Đồng bộ lại số đếm ngoài dialog danh sách khi ai đó follow/unfollow từ trong đó
+                  supabase
+                    .from("follows")
+                    .select("*", { count: "exact", head: true })
+                    .eq("followee_business_id", businessId)
+                    .then(({ count }) => setFollowers(count ?? 0));
+                }}
+              />
+            )}
 
             {reviewsOpen && reviews.length > 0 && (
               <div className="space-y-1.5 max-h-40 overflow-y-auto">
