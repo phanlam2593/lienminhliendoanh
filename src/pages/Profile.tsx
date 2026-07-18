@@ -1010,33 +1010,27 @@ function FollowStats({ userId }: { userId: string }) {
   }, [userId]);
   return (
     <>
-      <div className="flex gap-2 text-xs">
+      <div className="grid grid-cols-3 gap-2 text-xs">
         <button
           onClick={() => setOpen("followers")}
-          className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-2.5 px-1 text-center shadow-sm hover:bg-accent transition"
         >
-          <div className="text-lg font-extrabold text-primary">{followers}</div>
-          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-            <Users className="w-3 h-3" /> {t("profile.followers")}
-          </div>
+          <div className="text-base font-extrabold text-primary leading-tight">{followers}</div>
+          <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{t("profile.followers")}</div>
         </button>
         <button
           onClick={() => setOpen("following")}
-          className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-2.5 px-1 text-center shadow-sm hover:bg-accent transition"
         >
-          <div className="text-lg font-extrabold text-primary">{following}</div>
-          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-            <UserCheck className="w-3 h-3" /> {t("messages.followingHeader")}
-          </div>
+          <div className="text-base font-extrabold text-primary leading-tight">{following}</div>
+          <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">{t("messages.followingHeader")}</div>
         </button>
         <button
           onClick={() => setOpen("regulars")}
-          className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-2.5 px-1 text-center shadow-sm hover:bg-accent transition"
         >
-          <div className="text-lg font-extrabold text-primary">{regulars}</div>
-          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
-            <UserCheck className="w-3 h-3" /> Quán quen
-          </div>
+          <div className="text-base font-extrabold text-primary leading-tight">{regulars}</div>
+          <div className="text-[10px] text-muted-foreground leading-tight mt-0.5">Quán quen</div>
         </button>
       </div>
       <FollowListDialog
