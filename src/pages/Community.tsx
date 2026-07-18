@@ -91,7 +91,11 @@ export default function Community() {
   const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<Msg | null>(null);
-  const [showTagPicker, setShowTagPicker] = useState(false);
+  // mentionQuery !== null nghĩa là đang gõ dở "@..." — hiện gợi ý bên dưới ô nhập.
+  // mentionStart = vị trí ký tự "@" trong chuỗi text, dùng để thay thế đúng đoạn khi chọn.
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [mentionStart, setMentionStart] = useState(-1);
+  const textInputRef = useRef<HTMLInputElement>(null);
   const [pinnedMsgs, setPinnedMsgs] = useState<Msg[]>([]);
   // typingUsers[user_id] = {name, ts} — ts dùng để tự dọn sau vài giây không có tin mới
   const [typingUsers, setTypingUsers] = useState<Record<string, { name: string; ts: number }>>({});
