@@ -48,6 +48,7 @@ export function BusinessQuickView({
   const [followBusy, setFollowBusy] = useState(false);
   const [reviews, setReviews] = useState<QuickReview[]>([]);
   const [reviewsOpen, setReviewsOpen] = useState(false);
+  const [followListOpen, setFollowListOpen] = useState(false);
 
   useEffect(() => {
     if (!open || !businessId) return;
