@@ -438,6 +438,7 @@ function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChang
       return;
     }
     toast.success("Đã duyệt");
+    invalidateBusinesses(id);
     load();
     onChanged();
   };
@@ -449,6 +450,7 @@ function PendingSummary({ refreshKey, onChanged }: { refreshKey: number; onChang
       return;
     }
     toast.success("Đã từ chối và xóa");
+    invalidateBusinesses(id);
     load();
     onChanged();
   };
