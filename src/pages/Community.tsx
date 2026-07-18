@@ -711,21 +711,11 @@ export default function Community() {
                     )}
                   </div>
                   {m.status_message && (
-                  <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
-                )}
-              </div>
-            </Link>
+                    <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
+                  )}
+                </div>
+              </Link>
             ))}
-        </div>
-      )}
-            <button
-              onClick={loadMoreMembers}
-              disabled={memberLoadingMore}
-              className="w-full py-2 text-xs font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
-            >
-              {memberLoadingMore ? t("common.loading") : `${t("common.loadMore")} (${memberTotal - members.length})`}
-            </button>
-          )}
         </div>
       )}
 
