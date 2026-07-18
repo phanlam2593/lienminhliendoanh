@@ -357,41 +357,32 @@ function MiniAvatar({ avatarUrl, name, size = 8 }: { avatarUrl?: string | null; 
   );
 }
 
-// ── Ô điều hướng chính: thay cho tab pill, mỗi ô vừa hiện số liệu vừa bấm
-// được để vào thẳng màn hình chi tiết tương ứng. DO NOT CHANGE thứ tự 6 ô.
-function NavBox({
+// ── Hàng điều hướng chính: thay cho lưới thẻ, mỗi hàng có icon màu riêng theo
+// loại + số liệu + mũi tên, xếp thành 1 danh sách gọn. DO NOT CHANGE thứ tự.
+function StatRow({
   icon: Icon,
   label,
   value,
-  hint,
-  accent,
+  colorClass,
   onClick,
 }: {
   icon: any;
   label: string;
   value?: number;
-  hint?: string;
-  accent?: "amber";
+  colorClass: string;
   onClick: () => void;
 }) {
-  const chipClass =
-    accent === "amber" && (value ?? 0) > 0
-      ? "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
-      : "bg-primary/10 text-primary";
   return (
-    <button onClick={onClick} className="p-3 bg-card rounded-xl text-left hover:bg-accent transition space-y-2">
-      <div className="flex items-center justify-between">
-        <div className={`w-8 h-8 rounded-full grid place-items-center ${chipClass}`}>
-          <Icon className="w-4 h-4" />
-        </div>
-        <ChevronRight className="w-4 h-4 text-muted-foreground" />
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-2.5 px-3.5 py-3 hover:bg-accent transition text-left"
+    >
+      <div className={`w-8 h-8 rounded-full grid place-items-center flex-shrink-0 ${colorClass}`}>
+        <Icon className="w-4 h-4" />
       </div>
-      {value !== undefined ? (
-        <div className="text-2xl font-extrabold leading-none">{value}</div>
-      ) : (
-        <div className="text-sm font-semibold leading-none">{hint}</div>
-      )}
-      <div className="text-[11px] text-muted-foreground">{label}</div>
+      <span className="flex-1 text-sm">{label}</span>
+      {value !== undefined && <span className="text-base font-semibold">{value}</span>}
+      <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
     </button>
   );
 }
@@ -469,24 +460,48 @@ function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigat
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-2">
-        <NavBox icon={Users} label="Thành viên" value={stats.members} onClick={() => onNavigate("members")} />
-        <NavBox
+      <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+        <StatRow
+          icon={Users}
+          label="Thành viên"
+          value={stats.members}
+          colorClass="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
+          onClick={() => onNavigate("members")}
+        />
+        <StatRow
           icon={Building2}
           label="Doanh nghiệp"
           value={stats.businesses}
+          colorClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
           onClick={() => onNavigate("businesses")}
         />
-        <NavBox
+        <StatRow
           icon={Bell}
           label="Chờ duyệt"
           value={stats.pending}
-          accent="amber"
+          colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
           onClick={() => onNavigate("pending")}
         />
-        <NavBox icon={Handshake} label="Trao đổi" value={stats.exchanges} onClick={() => onNavigate("exchanges")} />
-        <NavBox icon={Flag} label="Báo cáo" value={stats.reports} onClick={() => onNavigate("reports")} />
-        <NavBox icon={Sparkles} label="Tạo tài khoản, thông báo…" hint="Công cụ" onClick={() => onNavigate("tools")} />
+        <StatRow
+          icon={Handshake}
+          label="Trao đổi"
+          value={stats.exchanges}
+          colorClass="bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400"
+          onClick={() => onNavigate("exchanges")}
+        />
+        <StatRow
+          icon={Flag}
+          label="Báo cáo"
+          value={stats.reports}
+          colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+          onClick={() => onNavigate("reports")}
+        />
+        <StatRow
+          icon={Sparkles}
+          label="Công cụ"
+          colorClass="bg-muted text-muted-foreground"
+          onClick={() => onNavigate("tools")}
+        />
       </div>
 
       <div className="bg-card rounded-xl border overflow-hidden">
