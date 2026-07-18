@@ -972,47 +972,37 @@ export default function Community() {
           >
             <Smile className="w-5 h-5" />
           </button>
-          <Popover open={showTagPicker} onOpenChange={setShowTagPicker}>
-            <PopoverTrigger asChild>
-              <button
-                aria-label={t("tag.button")}
-                className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
-              >
-                <AtSign className="w-5 h-5" />
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-56 p-1 max-h-64 overflow-y-auto" align="start">
-              <p className="px-2 py-1 text-[11px] text-muted-foreground">{t("tag.pickMember")}</p>
-              {members
-                .filter((m) => m.id !== user.id)
-                .map((m) => (
+          <div className="relative flex-1">
+            {mentionSuggestions.length > 0 && (
+              <div className="absolute bottom-full left-0 right-0 mb-1 bg-card border rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto z-10">
+                {mentionSuggestions.map((m) => (
                   <button
                     key={m.id}
-                    onClick={() => {
-                      setText((prev) => `${prev}${prev && !prev.endsWith(" ") ? " " : ""}@${m.username} `);
-                      setShowTagPicker(false);
-                    }}
-                    className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-accent text-left"
+                    onClick={() => selectMention(m.username)}
+                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent text-left"
                   >
                     <Avatar path={m.avatar_url} name={m.full_name} size={24} />
-                    <span className="text-sm truncate">{m.full_name}</span>
+                    <div className="min-w-0">
+                      <div className="text-sm font-semibold truncate">{m.full_name}</div>
+                      <div className="text-[11px] text-muted-foreground truncate">@{m.username}</div>
+                    </div>
                   </button>
                 ))}
-            </PopoverContent>
-          </Popover>
-          <input
-            value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-              if (e.target.value.trim()) broadcastTyping();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") send();
-            }}
-            disabled={!!pendingImage}
-            placeholder={pendingImage ? t("community.tapSendPlaceholder") : t("community.inputPlaceholder")}
-            className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
-          />
+              </div>
+            )}
+            <input
+              ref={textInputRef}
+              value={text}
+              onChange={(e) => handleTextChange(e.target.value, e.target.selectionStart ?? e.target.value.length)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !mentionSuggestions.length) send();
+                if (e.key === "Escape") setMentionQuery(null);
+              }}
+              disabled={!!pendingImage}
+              placeholder={pendingImage ? t("community.tapSendPlaceholder") : t("community.inputPlaceholder")}
+              className="w-full px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
+            />
+          </div>
           <button
             onClick={send}
             disabled={uploading}
