@@ -321,6 +321,7 @@ export default function BusinessDetail() {
                 <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {avgRating.toFixed(1)} ({reviewTotal})
               </span>
             )}
+            <RegularVisitBadge businessId={b.id} />
           </div>
         </div>
 
