@@ -1492,6 +1492,8 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
           {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
         </button>
       )}
+      <BusinessQuickView businessId={quickBiz} open={!!quickBiz} onOpenChange={(v) => !v && setQuickBiz(null)} />
+      <ProfileQuickView userId={quickMember} open={!!quickMember} onOpenChange={(v) => !v && setQuickMember(null)} />
     </Collapsible>
   );
 }
