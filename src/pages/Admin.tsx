@@ -644,6 +644,7 @@ function MemberDetail({
       if (error) toast.error(error.message);
       else {
         toast.success("Đã từ chối và xóa");
+        invalidateBusinesses(biz.id);
         setBiz(null);
         onChanged();
       }
@@ -653,6 +654,7 @@ function MemberDetail({
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
+      invalidateBusinesses(biz.id);
       onChanged();
     }
   };
