@@ -35,7 +35,7 @@ const PAGE_SIZE = 30;
 
 // Dùng follows_view (đã gộp sẵn tên follower/followee, cả người lẫn DN) để tìm kiếm
 // hỏi thẳng DB kết hợp phân trang — không cần tự tra tên riêng nữa.
-export function FollowListDialog({ open, onOpenChange, target, mode, title }: Props) {
+export function FollowListDialog({ open, onOpenChange, target, mode, title, onFollowChange }: Props) {
   const { user } = useAuth();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
