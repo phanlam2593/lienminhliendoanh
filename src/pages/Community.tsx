@@ -557,6 +557,46 @@ export default function Community() {
     });
   };
 
+  // Tìm "@" gần nhất TRƯỚC vị trí con trỏ (không cách bởi khoảng trắng) → biết đang gõ dở mention
+  const handleTextChange = (value: string, cursorPos: number) => {
+    setText(value);
+    if (value.trim()) broadcastTyping();
+    const uptoCursor = value.slice(0, cursorPos);
+    const match = uptoCursor.match(/(?:^|\s)@(\w*)$/);
+    if (match) {
+      setMentionQuery(match[1]);
+      setMentionStart(uptoCursor.length - match[1].length - 1);
+    } else {
+      setMentionQuery(null);
+    }
+  };
+
+  const selectMention = (username: string) => {
+    if (mentionStart < 0) return;
+    const before = text.slice(0, mentionStart);
+    const after = text.slice(mentionStart + 1 + (mentionQuery?.length ?? 0));
+    const newText = `${before}@${username} ${after}`;
+    setText(newText);
+    setMentionQuery(null);
+    setTimeout(() => {
+      const pos = before.length + username.length + 2;
+      textInputRef.current?.setSelectionRange(pos, pos);
+      textInputRef.current?.focus();
+    }, 0);
+  };
+
+  const mentionSuggestions =
+    mentionQuery !== null
+      ? members
+          .filter(
+            (m) =>
+              m.id !== user.id &&
+              (m.username.toLowerCase().startsWith(mentionQuery.toLowerCase()) ||
+                m.full_name.toLowerCase().includes(mentionQuery.toLowerCase())),
+          )
+          .slice(0, 6)
+      : [];
+
   const typingList = Object.values(typingUsers);
 
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
