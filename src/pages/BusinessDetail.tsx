@@ -225,6 +225,8 @@ export default function BusinessDetail() {
       return;
     }
     toast.success("Đã xóa");
+    invalidateReviews(id);
+    invalidateBusinesses(id);
     setReviewPage(0);
     void loadReviews(0, false);
   };
