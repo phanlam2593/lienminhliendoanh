@@ -96,7 +96,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "community.needLogin": "Cần đăng nhập",
     "community.needApproval": "Tài khoản cần được duyệt để vào cộng đồng",
     "community.memberCount": "{n} thành viên",
-    "community.onlineCount": "· {n} online (trong số đã tải)",
+    "community.onlineCount": "· {n} online",
     "community.you": "(bạn)",
     "community.chatTitle": "💬 Nhóm cộng đồng",
     "community.loadOlder": "Xem thêm tin nhắn cũ",
