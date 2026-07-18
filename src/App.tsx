@@ -29,25 +29,8 @@ import CookieThirdParty from "./pages/CookieThirdParty";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
-// Chiến lược cache cho React Query:
-// - staleTime 30s: dùng ngay dữ liệu cache (không loading nhấp nháy) nhưng coi là "cũ" sau 30s
-// - gcTime 5 phút: giữ cache trong bộ nhớ để điều hướng qua lại tức thì
-// - refetchOnWindowFocus/refetchOnReconnect: tự làm mới khi quay lại tab hoặc mạng online lại
-//   → luôn thấy bản mới nhất mà không cần bấm reload, đồng thời không spam request
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 30 * 1000,
-      gcTime: 5 * 60 * 1000,
-      refetchOnWindowFocus: true,
-      refetchOnReconnect: true,
-      retry: 1,
-    },
-    mutations: {
-      retry: 0,
-    },
-  },
-});
+
+
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
