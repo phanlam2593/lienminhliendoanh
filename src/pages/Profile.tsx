@@ -1076,8 +1076,8 @@ function StatusBadge({ s }: { s?: string }) {
   );
 }
 
-type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; admin: boolean };
-const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, admin: true };
+type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; regulars: boolean; admin: boolean };
+const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, regulars: true, admin: true };
 
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
   const { t } = useLanguage();
