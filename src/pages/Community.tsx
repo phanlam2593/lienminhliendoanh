@@ -679,36 +679,43 @@ export default function Community() {
       </button>
       {showMembers && (
         <div className="max-h-[45vh] overflow-y-auto border-b bg-card shrink-0">
-          {members.map((m) => (
-            <Link
-              key={m.id}
-              to={m.id === user.id ? "/ho-so" : `/tin-nhan/${m.id}`}
-              className="flex items-center gap-2 p-2 hover:bg-accent"
-            >
-              <div className="relative shrink-0">
-                <Avatar path={m.avatar_url} name={m.full_name} size={36} />
-                {onlineUsers.has(m.id) && (
-                  <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-card" />
-                )}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-sm font-semibold truncate flex items-center gap-1.5">
-                  <span className="truncate">{m.full_name}</span>
-                  {m.id === user.id && <span className="text-[10px] text-muted-foreground">{t("community.you")}</span>}
-                  <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
-                  {onlineUsers.has(m.id) && onlineUsers.get(m.id)?.topic && (
-                    <span className="text-[10px] text-emerald-600 font-normal truncate">
-                      · {onlineUsers.get(m.id)?.location ?? t("channel.nationwide")} ·{" "}
-                      {t(`channel.${onlineUsers.get(m.id)!.topic}`)}
-                    </span>
+          {members.filter((m) => onlineUsers.has(m.id)).length === 0 && (
+            <p className="text-center text-xs text-muted-foreground py-6">{t("community.noOneOnline")}</p>
+          )}
+          {members
+            .filter((m) => onlineUsers.has(m.id))
+            .map((m) => (
+              <Link
+                key={m.id}
+                to={m.id === user.id ? "/ho-so" : `/tin-nhan/${m.id}`}
+                className="flex items-center gap-2 p-2 hover:bg-accent"
+              >
+                <div className="relative shrink-0">
+                  <Avatar path={m.avatar_url} name={m.full_name} size={36} />
+                  {onlineUsers.has(m.id) && (
+                    <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-card" />
                   )}
                 </div>
-                {m.status_message && (
-                  <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
-                )}
-              </div>
-            </Link>
-          ))}
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold truncate flex items-center gap-1.5">
+                    <span className="truncate">{m.full_name}</span>
+                    {m.id === user.id && (
+                      <span className="text-[10px] text-muted-foreground">{t("community.you")}</span>
+                    )}
+                    <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
+                    {onlineUsers.has(m.id) && onlineUsers.get(m.id)?.topic && (
+                      <span className="text-[10px] text-emerald-600 font-normal truncate">
+                        · {onlineUsers.get(m.id)?.location ?? t("channel.nationwide")} ·{" "}
+                        {t(`channel.${onlineUsers.get(m.id)!.topic}`)}
+                      </span>
+                    )}
+                  </div>
+                  {m.status_message && (
+                    <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
+                  )}
+                </div>
+              </Link>
+            ))}
           {memberHasMore && (
             <button
               onClick={loadMoreMembers}
