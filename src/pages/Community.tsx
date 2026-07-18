@@ -711,12 +711,13 @@ export default function Community() {
                     )}
                   </div>
                   {m.status_message && (
-                    <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
-                  )}
-                </div>
-              </Link>
+                  <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
+                )}
+              </div>
+            </Link>
             ))}
-          {memberHasMore && (
+        </div>
+      )}
             <button
               onClick={loadMoreMembers}
               disabled={memberLoadingMore}
