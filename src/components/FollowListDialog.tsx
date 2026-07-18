@@ -166,6 +166,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, onFo
         if (error) return toast.error(error.message);
         setMyFollowingBiz((s) => new Set(s).add(row.id));
       }
+      onFollowChange?.();
       return;
     }
     const isFollowing = myFollowing.has(row.id);
@@ -181,11 +182,18 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, onFo
         n.delete(row.id);
         return n;
       });
+      // Đang xem chính danh sách "Đang theo dõi" của TÔI và tôi vừa bỏ theo dõi — người này
+      // không còn thuộc danh sách nữa, phải biến mất khỏi list ngay, không chỉ đổi nút.
+      if (mode === "following" && target.kind === "user" && target.id === user.id) {
+        setRows((prev) => prev.filter((r) => r.id !== row.id));
+        setTotal((n) => Math.max(0, n - 1));
+      }
     } else {
       const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: row.id });
       if (error) return toast.error(error.message);
       setMyFollowing((s) => new Set(s).add(row.id));
     }
+    onFollowChange?.();
   };
 
   const heading = title ?? (mode === "followers" ? t("profile.followers") : t("messages.followingHeader"));
