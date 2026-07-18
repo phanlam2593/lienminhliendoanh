@@ -58,7 +58,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
     setPage(0);
     void load(0, false, "");
     void loadMine();
-  }, [open, target.kind, target.id, mode]);
+  }, [open, target.kind, target.id, mode, onlyBusiness]);
 
   useEffect(() => {
     if (!open) return;
