@@ -34,6 +34,8 @@ import {
   Copy,
   ChevronDown,
   ChevronRight,
+  ExternalLink,
+  Clock,
   Send,
 } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
@@ -54,7 +56,16 @@ const MEMBER_PAGE_SIZE = 50;
 // ── Điều hướng của trang Quản trị ────────────────────────────────────────────
 // DO NOT CHANGE: "overview" là màn hình chính (lưới 6 ô); các key còn lại là
 // màn hình chi tiết, vào bằng cách bấm ô tương ứng, ra bằng nút quay lại.
-type TabKey = "overview" | "members" | "businesses" | "offers" | "exchanges" | "reports" | "tools" | "pending";
+type TabKey =
+  | "overview"
+  | "members"
+  | "businesses"
+  | "offers"
+  | "exchanges"
+  | "reports"
+  | "tools"
+  | "pending"
+  | "activity";
 
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
@@ -64,6 +75,7 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   reports: "Báo cáo",
   tools: "Công cụ",
   pending: "Chờ duyệt",
+  activity: "Hoạt động gần đây",
 };
 
 export default function Admin() {
@@ -282,59 +294,38 @@ export default function Admin() {
       {activeTab === "exchanges" && <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "reports" && <ReportsSection refreshKey={refreshKey} />}
       {activeTab === "pending" && <PendingTab refreshKey={refreshKey} onChanged={refresh} />}
+      {activeTab === "activity" && <ActivityTab refreshKey={refreshKey} />}
 
       {activeTab === "tools" && (
-        <div className="space-y-3">
-          <div className="bg-card rounded-xl p-3 space-y-2">
-            <div className="text-xs font-bold text-muted-foreground">THAO TÁC</div>
-            <CreateMemberForm />
-            <button
-              onClick={() => setActiveTab("offers")}
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-            >
-              <Tag className="w-3.5 h-3.5" /> Quản lý ưu đãi
-            </button>
-            <button
-              onClick={() => setPreviewOnboarding(true)}
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-            >
-              <Users className="w-3.5 h-3.5" /> Xem lại popup chào mừng thành viên mới
-            </button>
-            <button
-              onClick={cleanupOrphans}
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5" /> Dọn dẹp tài khoản cũ (orphan auth)
-            </button>
+        <div className="space-y-4">
+          <div>
+            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">THAO TÁC</div>
+            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+              <CreateMemberForm />
+              <ToolRow icon={Tag} label="Quản lý ưu đãi" onClick={() => setActiveTab("offers")} />
+              <ToolRow
+                icon={Users}
+                label="Xem lại popup chào mừng thành viên mới"
+                onClick={() => setPreviewOnboarding(true)}
+              />
+              <ToolRow icon={Sparkles} label="Dọn dẹp tài khoản cũ (orphan auth)" onClick={cleanupOrphans} />
+            </div>
           </div>
 
-          <div className="bg-card rounded-xl p-3 space-y-2">
-            <div className="text-xs font-bold text-muted-foreground">TÀI LIỆU</div>
-            <Link
-              to="/dieu-khoan"
-              target="_blank"
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-            >
-              <Flag className="w-3.5 h-3.5" /> Xem Điều khoản sử dụng (kèm nội quy cộng đồng)
-            </Link>
-            <Link
-              to="/chinh-sach-bao-mat"
-              target="_blank"
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-            >
-              <Shield className="w-3.5 h-3.5" /> Xem Chính sách bảo mật
-            </Link>
-            <Link
-              to="/chinh-sach-cookie"
-              target="_blank"
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
-            >
-              <Search className="w-3.5 h-3.5" /> Xem Chính sách Cookie & Bên thứ ba
-            </Link>
+          <div>
+            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">TÀI LIỆU</div>
+            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+              <ToolRow icon={Flag} label="Điều khoản sử dụng (kèm nội quy cộng đồng)" href="/dieu-khoan" external />
+              <ToolRow icon={Shield} label="Chính sách bảo mật" href="/chinh-sach-bao-mat" external />
+              <ToolRow icon={Search} label="Chính sách Cookie & Bên thứ ba" href="/chinh-sach-cookie" external />
+            </div>
           </div>
 
-          <div className="bg-card rounded-xl p-3">
-            <Broadcast />
+          <div>
+            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">THÔNG BÁO</div>
+            <div className="bg-card rounded-xl border p-3">
+              <Broadcast />
+            </div>
           </div>
         </div>
       )}
@@ -372,22 +363,76 @@ function NavBox({
   icon: Icon,
   label,
   value,
+  hint,
   accent,
   onClick,
 }: {
   icon: any;
   label: string;
-  value: number;
-  accent?: "amber" | "primary";
+  value?: number;
+  hint?: string;
+  accent?: "amber";
   onClick: () => void;
 }) {
-  const valueClass = accent === "amber" && value > 0 ? "text-amber-600" : accent === "primary" ? "text-primary" : "";
+  const chipClass =
+    accent === "amber" && (value ?? 0) > 0
+      ? "bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
+      : "bg-primary/10 text-primary";
   return (
-    <button onClick={onClick} className="p-3 bg-card rounded-xl text-left hover:bg-accent transition">
-      <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-        <Icon className="w-3 h-3" /> {label}
+    <button onClick={onClick} className="p-3 bg-card rounded-xl text-left hover:bg-accent transition space-y-2">
+      <div className="flex items-center justify-between">
+        <div className={`w-8 h-8 rounded-full grid place-items-center ${chipClass}`}>
+          <Icon className="w-4 h-4" />
+        </div>
+        <ChevronRight className="w-4 h-4 text-muted-foreground" />
       </div>
-      <div className={`text-2xl font-extrabold ${valueClass}`}>{value}</div>
+      {value !== undefined ? (
+        <div className="text-2xl font-extrabold leading-none">{value}</div>
+      ) : (
+        <div className="text-sm font-semibold leading-none">{hint}</div>
+      )}
+      <div className="text-[11px] text-muted-foreground">{label}</div>
+    </button>
+  );
+}
+
+// Hàng danh sách dùng cho trang Công cụ — bordered rows thay vì nút viền đứt,
+// đồng bộ với nguyên tắc "dense list = bordered rows" của app.
+function ToolRow({
+  icon: Icon,
+  label,
+  onClick,
+  href,
+  external,
+}: {
+  icon: any;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+  external?: boolean;
+}) {
+  const content = (
+    <>
+      <Icon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+      <span className="flex-1 text-sm">{label}</span>
+      {external ? (
+        <ExternalLink className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+      ) : (
+        <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+      )}
+    </>
+  );
+  const cls = "w-full flex items-center gap-2.5 px-3 py-3 hover:bg-accent transition text-left";
+  if (href) {
+    return (
+      <Link to={href} target={external ? "_blank" : undefined} className={cls}>
+        {content}
+      </Link>
+    );
+  }
+  return (
+    <button onClick={onClick} className={cls}>
+      {content}
     </button>
   );
 }
@@ -400,17 +445,15 @@ function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigat
     exchanges: 0,
     reports: 0,
   });
-  const [activity, setActivity] = useState<{ name: string; username: string; avatar: string | null; at: string }[]>([]);
 
   const load = async () => {
-    const [mRes, bRes, pmRes, pbRes, eRes, rRes, evRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, eRes, rRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("exchanges").select("*", { count: "exact", head: true }),
       supabase.from("reports").select("*", { count: "exact", head: true }),
-      supabase.from("login_events").select("user_id, created_at").order("created_at", { ascending: false }).limit(5),
     ]);
     setStats({
       members: mRes.count ?? 0,
@@ -419,22 +462,6 @@ function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigat
       exchanges: eRes.count ?? 0,
       reports: rRes.count ?? 0,
     });
-
-    const events = (evRes.data ?? []) as { user_id: string; created_at: string }[];
-    const uids = [...new Set(events.map((v) => v.user_id))];
-    let nameMap = new Map<string, { name: string; username: string; avatar: string | null }>();
-    if (uids.length) {
-      const { data: profs } = await supabase
-        .from("profiles")
-        .select("id, full_name, username, avatar_url")
-        .in("id", uids);
-      (profs ?? []).forEach((p: any) =>
-        nameMap.set(p.id, { name: p.full_name, username: p.username, avatar: p.avatar_url }),
-      );
-    }
-    setActivity(
-      events.filter((v) => nameMap.has(v.user_id)).map((v) => ({ ...nameMap.get(v.user_id)!, at: v.created_at })),
-    );
   };
   useEffect(() => {
     void load();
@@ -457,44 +484,14 @@ function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigat
           accent="amber"
           onClick={() => onNavigate("pending")}
         />
-        <NavBox
-          icon={Handshake}
-          label="Trao đổi"
-          value={stats.exchanges}
-          accent="primary"
-          onClick={() => onNavigate("exchanges")}
-        />
+        <NavBox icon={Handshake} label="Trao đổi" value={stats.exchanges} onClick={() => onNavigate("exchanges")} />
         <NavBox icon={Flag} label="Báo cáo" value={stats.reports} onClick={() => onNavigate("reports")} />
-        <button
-          onClick={() => onNavigate("tools")}
-          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition flex flex-col justify-center"
-        >
-          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-            <Sparkles className="w-3 h-3" /> Công cụ
-          </div>
-          <div className="text-xs text-muted-foreground mt-1">Tạo tài khoản, thông báo…</div>
-        </button>
+        <NavBox icon={Sparkles} label="Tạo tài khoản, thông báo…" hint="Công cụ" onClick={() => onNavigate("tools")} />
       </div>
 
-      <section className="space-y-2">
-        <div className="text-xs font-bold text-muted-foreground">HOẠT ĐỘNG GẦN ĐÂY</div>
-        {activity.length === 0 ? (
-          <p className="text-xs text-muted-foreground text-center py-2">Chưa có hoạt động nào</p>
-        ) : (
-          <div className="bg-card rounded-xl divide-y divide-border">
-            {activity.map((a, i) => (
-              <div key={i} className="flex items-center gap-2.5 p-2">
-                <MiniAvatar avatarUrl={a.avatar} name={a.name || a.username} />
-                <div className="flex-1 min-w-0 text-xs">
-                  <span className="font-semibold">{a.name}</span>{" "}
-                  <span className="text-muted-foreground">@{a.username}</span>
-                </div>
-                <div className="text-[11px] text-muted-foreground flex-shrink-0">{timeAgo(a.at)}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      <div className="bg-card rounded-xl border overflow-hidden">
+        <ToolRow icon={Clock} label="Hoạt động gần đây" onClick={() => onNavigate("activity")} />
+      </div>
     </div>
   );
 }
@@ -626,6 +623,85 @@ function PendingTab({ refreshKey, onChanged }: { refreshKey: number; onChanged: 
   );
 }
 
+// ── Màn hình Hoạt động gần đây: mở đầy đủ khi bấm hàng tóm tắt ở Tổng quan ──
+const ACTIVITY_PAGE_SIZE = 30;
+
+function ActivityTab({ refreshKey }: { refreshKey: number }) {
+  const [list, setList] = useState<{ name: string; username: string; avatar: string | null; at: string }[]>([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
+  const load = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * ACTIVITY_PAGE_SIZE;
+    const to = from + ACTIVITY_PAGE_SIZE - 1;
+    const { data: events } = await supabase
+      .from("login_events")
+      .select("user_id, created_at")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    const rows = (events ?? []) as { user_id: string; created_at: string }[];
+    const uids = [...new Set(rows.map((v) => v.user_id))];
+    let nameMap = new Map<string, { name: string; username: string; avatar: string | null }>();
+    if (uids.length) {
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", uids);
+      (profs ?? []).forEach((p: any) =>
+        nameMap.set(p.id, { name: p.full_name, username: p.username, avatar: p.avatar_url }),
+      );
+    }
+    const newRows = rows
+      .filter((v) => nameMap.has(v.user_id))
+      .map((v) => ({ ...nameMap.get(v.user_id)!, at: v.created_at }));
+    setList((prev) => (append ? [...prev, ...newRows] : newRows));
+    setHasMore(rows.length === ACTIVITY_PAGE_SIZE);
+    setLoadingMore(false);
+  };
+  useEffect(() => {
+    setPage(0);
+    void load(0, false);
+  }, [refreshKey]);
+
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void load(next, true);
+  };
+
+  return (
+    <div className="space-y-2">
+      {list.length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-4">Chưa có hoạt động nào</p>
+      ) : (
+        <div className="bg-card rounded-xl border divide-y divide-border">
+          {list.map((a, i) => (
+            <div key={i} className="flex items-center gap-2.5 p-3">
+              <MiniAvatar avatarUrl={a.avatar} name={a.name || a.username} />
+              <div className="flex-1 min-w-0 text-sm">
+                <span className="font-semibold">{a.name}</span>{" "}
+                <span className="text-muted-foreground text-xs">@{a.username}</span>
+              </div>
+              <div className="text-[11px] text-muted-foreground flex-shrink-0">{timeAgo(a.at)}</div>
+            </div>
+          ))}
+        </div>
+      )}
+      {hasMore && (
+        <button
+          onClick={loadMore}
+          disabled={loadingMore}
+          className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+        >
+          {loadingMore ? "Đang tải…" : "Tải thêm"}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function CreateMemberForm() {
   const [open, setOpen] = useState(false);
   const [username, setUsername] = useState("");
@@ -653,14 +729,21 @@ function CreateMemberForm() {
   };
 
   return (
-    <div className="space-y-2">
-      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-2 text-sm font-semibold">
-        {open ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
-        <UserPlus className="w-4 h-4 text-primary" />
-        <span>Tạo tài khoản thành viên mới</span>
+    <div>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center gap-2.5 px-3 py-3 hover:bg-accent transition text-left"
+      >
+        <UserPlus className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+        <span className="flex-1 text-sm">Tạo tài khoản thành viên mới</span>
+        {open ? (
+          <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+        ) : (
+          <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+        )}
       </button>
       {open && (
-        <div className="space-y-2 pt-1">
+        <div className="space-y-2 px-3 pb-3 border-t pt-3">
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -1519,19 +1602,18 @@ function Broadcast() {
   };
   return (
     <div className="space-y-2">
-      <h3 className="font-semibold text-sm">📢 Phát thông báo</h3>
       <input
         value={title}
         onChange={(e) => setT(e.target.value)}
         placeholder="Tiêu đề"
-        className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+        className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
       />
       <textarea
         value={body}
         onChange={(e) => setB(e.target.value)}
         placeholder="Nội dung"
         rows={3}
-        className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
+        className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
       />
       <button
         disabled={loading}
