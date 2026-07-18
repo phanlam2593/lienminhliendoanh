@@ -1335,6 +1335,8 @@ function BusinessesSection({ refreshKey, onChanged }: { refreshKey: number; onCh
   const [total, setTotal] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [quickBiz, setQuickBiz] = useState<string | null>(null);
+  const [quickMember, setQuickMember] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
