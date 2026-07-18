@@ -613,6 +613,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
             </label>
           </div>
           <BusinessPhotoManager businessId={biz.id} />
+          <BusinessRegularsPanel businessId={biz.id} />
 
           <Field label="Tên doanh nghiệp" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
             <input
