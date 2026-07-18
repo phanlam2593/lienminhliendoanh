@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   XCircle,
   Star,
-  UserPlus,
   Tag,
   Ticket,
   MessageCircle,
@@ -24,7 +23,7 @@ import {
   Award,
   TrendingUp,
   Building2,
-  Sparkles,
+  EyeOff,
   Handshake,
   Users,
   Search,
@@ -63,9 +62,10 @@ type TabKey =
   | "offers"
   | "exchanges"
   | "reports"
-  | "tools"
   | "pending"
-  | "activity";
+  | "activity"
+  | "hidden"
+  | "broadcast";
 
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
@@ -73,9 +73,10 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   offers: "Ưu đãi",
   exchanges: "Trao đổi",
   reports: "Báo cáo",
-  tools: "Công cụ",
   pending: "Chờ duyệt",
   activity: "Hoạt động gần đây",
+  hidden: "Ẩn",
+  broadcast: "Thông báo",
 };
 
 export default function Admin() {
@@ -237,7 +238,9 @@ export default function Admin() {
         <h1 className="text-xl font-extrabold">{activeTab === "overview" ? "Quản trị" : TAB_TITLES[activeTab]}</h1>
       </div>
 
-      {activeTab === "overview" && <OverviewTab refreshKey={refreshKey} onNavigate={setActiveTab} />}
+      {activeTab === "overview" && (
+        <OverviewTab refreshKey={refreshKey} onNavigate={setActiveTab} onCleanup={cleanupOrphans} />
+      )}
 
       {activeTab === "members" && (
         <Collapsible title="Thành viên" icon={Users} count={memberTotal}>
@@ -296,64 +299,22 @@ export default function Admin() {
       {activeTab === "pending" && <PendingTab refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "activity" && <ActivityTab refreshKey={refreshKey} />}
 
-      {activeTab === "tools" && (
-        <div className="space-y-4">
-          <div>
-            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">THÀNH VIÊN</div>
-            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
-              <CreateMemberForm />
-              <ToolRow
-                icon={Users}
-                label="Xem lại popup chào mừng thành viên mới"
-                colorClass="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
-                onClick={() => setPreviewOnboarding(true)}
-              />
-            </div>
-          </div>
+      {activeTab === "hidden" && (
+        <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+          <ToolRow
+            icon={Users}
+            label="Xem lại popup chào mừng thành viên mới"
+            onClick={() => setPreviewOnboarding(true)}
+          />
+          <ToolRow icon={Flag} label="Điều khoản sử dụng" href="/dieu-khoan" external />
+          <ToolRow icon={Shield} label="Chính sách bảo mật" href="/chinh-sach-bao-mat" external />
+          <ToolRow icon={Search} label="Chính sách Cookie" href="/chinh-sach-cookie" external />
+        </div>
+      )}
 
-          <div>
-            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">NỘI DUNG</div>
-            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
-              <ToolRow
-                icon={Tag}
-                label="Quản lý ưu đãi"
-                colorClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
-                onClick={() => setActiveTab("offers")}
-              />
-            </div>
-          </div>
-
-          <div>
-            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">BẢO TRÌ HỆ THỐNG</div>
-            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
-              <ToolRow
-                icon={Trash2}
-                label="Dọn dẹp tài khoản cũ (orphan auth)"
-                colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
-                danger
-                onClick={cleanupOrphans}
-              />
-            </div>
-            <p className="text-[11px] text-muted-foreground px-1 mt-1.5">
-              Xóa vĩnh viễn tài khoản đăng nhập không còn hồ sơ tương ứng. Không thể hoàn tác.
-            </p>
-          </div>
-
-          <div>
-            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">TÀI LIỆU</div>
-            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
-              <ToolRow icon={Flag} label="Điều khoản sử dụng (kèm nội quy cộng đồng)" href="/dieu-khoan" external />
-              <ToolRow icon={Shield} label="Chính sách bảo mật" href="/chinh-sach-bao-mat" external />
-              <ToolRow icon={Search} label="Chính sách Cookie & Bên thứ ba" href="/chinh-sach-cookie" external />
-            </div>
-          </div>
-
-          <div>
-            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">THÔNG BÁO</div>
-            <div className="bg-card rounded-xl border p-3">
-              <Broadcast />
-            </div>
-          </div>
+      {activeTab === "broadcast" && (
+        <div className="bg-card rounded-xl border p-3">
+          <Broadcast />
         </div>
       )}
 
@@ -461,23 +422,33 @@ function ToolRow({
   );
 }
 
-function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigate: (t: TabKey) => void }) {
+function OverviewTab({
+  refreshKey,
+  onNavigate,
+  onCleanup,
+}: {
+  refreshKey: number;
+  onNavigate: (t: TabKey) => void;
+  onCleanup: () => void;
+}) {
   const [stats, setStats] = useState({
     members: 0,
     businesses: 0,
     pending: 0,
     exchanges: 0,
     reports: 0,
+    offers: 0,
   });
 
   const load = async () => {
-    const [mRes, bRes, pmRes, pbRes, eRes, rRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, eRes, rRes, oRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("exchanges").select("*", { count: "exact", head: true }),
       supabase.from("reports").select("*", { count: "exact", head: true }),
+      supabase.from("offers").select("*", { count: "exact", head: true }),
     ]);
     setStats({
       members: mRes.count ?? 0,
@@ -485,6 +456,7 @@ function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigat
       pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
       exchanges: eRes.count ?? 0,
       reports: rRes.count ?? 0,
+      offers: oRes.count ?? 0,
     });
   };
   useEffect(() => {
@@ -492,54 +464,69 @@ function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigat
   }, [refreshKey]);
 
   return (
-    <div className="space-y-4">
-      <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
-        <StatRow
-          icon={Users}
-          label="Thành viên"
-          value={stats.members}
-          colorClass="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
-          onClick={() => onNavigate("members")}
-        />
-        <StatRow
-          icon={Building2}
-          label="Doanh nghiệp"
-          value={stats.businesses}
-          colorClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
-          onClick={() => onNavigate("businesses")}
-        />
-        <StatRow
-          icon={Bell}
-          label="Chờ duyệt"
-          value={stats.pending}
-          colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
-          onClick={() => onNavigate("pending")}
-        />
-        <StatRow
-          icon={Handshake}
-          label="Trao đổi"
-          value={stats.exchanges}
-          colorClass="bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400"
-          onClick={() => onNavigate("exchanges")}
-        />
-        <StatRow
-          icon={Flag}
-          label="Báo cáo"
-          value={stats.reports}
-          colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
-          onClick={() => onNavigate("reports")}
-        />
-        <StatRow
-          icon={Sparkles}
-          label="Công cụ"
-          colorClass="bg-muted text-muted-foreground"
-          onClick={() => onNavigate("tools")}
-        />
-      </div>
-
-      <div className="bg-card rounded-xl border overflow-hidden">
-        <ToolRow icon={Clock} label="Hoạt động gần đây" onClick={() => onNavigate("activity")} />
-      </div>
+    <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+      <StatRow
+        icon={Users}
+        label="Thành viên"
+        value={stats.members}
+        colorClass="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
+        onClick={() => onNavigate("members")}
+      />
+      <StatRow
+        icon={Building2}
+        label="Doanh nghiệp"
+        value={stats.businesses}
+        colorClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
+        onClick={() => onNavigate("businesses")}
+      />
+      <StatRow
+        icon={Bell}
+        label="Chờ duyệt"
+        value={stats.pending}
+        colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
+        onClick={() => onNavigate("pending")}
+      />
+      <StatRow
+        icon={Handshake}
+        label="Trao đổi"
+        value={stats.exchanges}
+        colorClass="bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400"
+        onClick={() => onNavigate("exchanges")}
+      />
+      <StatRow
+        icon={Flag}
+        label="Báo cáo"
+        value={stats.reports}
+        colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+        onClick={() => onNavigate("reports")}
+      />
+      <StatRow
+        icon={Tag}
+        label="Ưu đãi"
+        value={stats.offers}
+        colorClass="bg-primary/10 text-primary"
+        onClick={() => onNavigate("offers")}
+      />
+      <ToolRow
+        icon={Trash2}
+        label="Dọn dẹp"
+        colorClass="bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400"
+        danger
+        onClick={onCleanup}
+      />
+      <ToolRow
+        icon={EyeOff}
+        label="Ẩn"
+        colorClass="bg-muted text-muted-foreground"
+        onClick={() => onNavigate("hidden")}
+      />
+      <ToolRow
+        icon={Send}
+        label="Thông báo"
+        colorClass="bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400"
+        onClick={() => onNavigate("broadcast")}
+      />
+      <ToolRow icon={Clock} label="Hoạt động gần đây" onClick={() => onNavigate("activity")} />
     </div>
   );
 }
@@ -746,113 +733,6 @@ function ActivityTab({ refreshKey }: { refreshKey: number }) {
           {loadingMore ? "Đang tải…" : "Tải thêm"}
         </button>
       )}
-    </div>
-  );
-}
-
-function CreateMemberForm() {
-  const [open, setOpen] = useState(false);
-  const [username, setUsername] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [realEmail, setRealEmail] = useState("");
-  const [creating, setCreating] = useState(false);
-  const [result, setResult] = useState<{ username: string; temp_password: string } | null>(null);
-
-  const submit = async () => {
-    setCreating(true);
-    const { data, error } = await supabase.functions.invoke("admin-create-member", {
-      body: { username, full_name: fullName, phone, real_email: realEmail },
-    });
-    setCreating(false);
-    if (error || !data?.temp_password) {
-      toast.error(data?.error ?? error?.message ?? "Tạo tài khoản thất bại");
-      return;
-    }
-    setResult({ username: data.username, temp_password: data.temp_password });
-    setUsername("");
-    setFullName("");
-    setPhone("");
-    setRealEmail("");
-  };
-
-  return (
-    <div>
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center gap-2.5 px-3.5 py-3 hover:bg-accent transition text-left"
-      >
-        <div className="w-8 h-8 rounded-full grid place-items-center flex-shrink-0 bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
-          <UserPlus className="w-4 h-4" />
-        </div>
-        <span className="flex-1 text-sm">Tạo tài khoản thành viên mới</span>
-        {open ? (
-          <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-        ) : (
-          <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-        )}
-      </button>
-      {open && (
-        <div className="space-y-2 px-3 pb-3 border-t pt-3">
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username (chữ thường, số, gạch dưới)"
-            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
-          />
-          <input
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Họ tên"
-            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
-          />
-          <input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="SĐT (tùy chọn)"
-            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
-          />
-          <input
-            value={realEmail}
-            onChange={(e) => setRealEmail(e.target.value)}
-            placeholder="Email thật (tùy chọn)"
-            className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
-          />
-          <button
-            onClick={submit}
-            disabled={creating || !username.trim() || !fullName.trim()}
-            className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm disabled:opacity-50"
-          >
-            {creating ? "Đang tạo…" : "Tạo tài khoản"}
-          </button>
-        </div>
-      )}
-      <Dialog open={!!result} onOpenChange={(v) => !v && setResult(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Đã tạo tài khoản @{result?.username}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-muted">
-              <code className="flex-1 font-mono font-bold text-lg">{result?.temp_password}</code>
-              <button
-                onClick={() => {
-                  if (result) {
-                    navigator.clipboard.writeText(result.temp_password);
-                    toast.success("Đã sao chép");
-                  }
-                }}
-                className="px-3 py-1.5 rounded-lg bg-primary text-primary-foreground text-xs font-semibold flex items-center gap-1"
-              >
-                <Copy className="w-3.5 h-3.5" /> Copy
-              </button>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Gửi username <b>@{result?.username}</b> và mật khẩu tạm này cho thành viên để họ đăng nhập lần đầu.
-            </p>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
