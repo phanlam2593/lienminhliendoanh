@@ -315,6 +315,15 @@ export default function Profile() {
             placeholder={t("profile.phone")}
             className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
           />
+          <Field label="Giới thiệu bản thân" hint="Vài dòng ngắn để mọi người hiểu hơn về bạn (tối đa 300 ký tự)">
+            <textarea
+              value={bio}
+              onChange={(e) => setBio(e.target.value.slice(0, 300))}
+              rows={3}
+              placeholder="Ví dụ: Mê cà phê, làm freelance thiết kế, sống ở Đà Lạt được 3 năm 🌿"
+              className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
+            />
+          </Field>
           <button
             onClick={save}
             disabled={saving}
