@@ -1046,19 +1046,29 @@ function MemberDetail({
             )}
 
             {reviews.length > 0 && (
-              <section className="space-y-1 border-t pt-4">
-                <div className="text-xs font-bold text-muted-foreground">ĐÁNH GIÁ ({reviews.length})</div>
-                {reviews.map((r) => (
-                  <div key={r.id} className="flex items-start gap-2 p-2 bg-accent rounded">
-                    <div className="flex-1 min-w-0 text-xs">
-                      <div className="text-yellow-600">{"★".repeat(r.rating)}</div>
-                      {r.comment && <div className="text-muted-foreground line-clamp-2">{r.comment}</div>}
-                    </div>
-                    <button onClick={() => delReview(r.id)} className="text-destructive">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+              <section className="border-t pt-4 space-y-2">
+                <button
+                  onClick={() => setReviewsOpen((o) => !o)}
+                  className="w-full flex items-center gap-2 font-bold text-sm"
+                >
+                  {reviewsOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  <span>Đánh giá ({reviews.length})</span>
+                </button>
+                {reviewsOpen && (
+                  <div className="space-y-1 max-h-64 overflow-y-auto">
+                    {reviews.map((r) => (
+                      <div key={r.id} className="flex items-start gap-2 p-2 bg-accent rounded">
+                        <div className="flex-1 min-w-0 text-xs">
+                          <div className="text-yellow-600">{"★".repeat(r.rating)}</div>
+                          {r.comment && <div className="text-muted-foreground line-clamp-2">{r.comment}</div>}
+                        </div>
+                        <button onClick={() => delReview(r.id)} className="text-destructive">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </section>
             )}
 
