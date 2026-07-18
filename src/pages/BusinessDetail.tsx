@@ -997,3 +997,29 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
     </>
   );
 }
+
+function RegularVisitBadge({ businessId }: { businessId: string }) {
+  const { user } = useAuth();
+  const [visits, setVisits] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const { data } = await supabase
+        .from("business_regulars")
+        .select("visit_count")
+        .eq("business_id", businessId)
+        .eq("member_id", user.id)
+        .maybeSingle();
+      setVisits((data as any)?.visit_count ?? null);
+    })();
+  }, [businessId, user?.id]);
+
+  if (!visits) return null;
+
+  return (
+    <span className="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
+      <Award className="w-3 h-3" /> Bạn đã ghé {visits} lần
+    </span>
+  );
+}
