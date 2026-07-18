@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { invalidateBusinesses, invalidateReviews } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
 import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
