@@ -51,24 +51,24 @@ interface MemberRow extends Profile {
 
 const MEMBER_PAGE_SIZE = 50;
 
-// ── Tab điều hướng của trang Quản trị ────────────────────────────────────────
-// DO NOT CHANGE: giữ đúng 7 tab, không đổi key (dùng làm state điều hướng).
-type TabKey = "overview" | "members" | "businesses" | "offers" | "exchanges" | "reports" | "tools";
+// ── Điều hướng của trang Quản trị ────────────────────────────────────────────
+// DO NOT CHANGE: "overview" là màn hình chính (lưới 6 ô); các key còn lại là
+// màn hình chi tiết, vào bằng cách bấm ô tương ứng, ra bằng nút quay lại.
+type TabKey = "overview" | "members" | "businesses" | "offers" | "exchanges" | "reports" | "tools" | "pending";
 
-const TABS: { key: TabKey; label: string; icon: any }[] = [
-  { key: "overview", label: "Tổng quan", icon: TrendingUp },
-  { key: "members", label: "Thành viên", icon: Users },
-  { key: "businesses", label: "Doanh nghiệp", icon: Building2 },
-  { key: "offers", label: "Ưu đãi", icon: Tag },
-  { key: "exchanges", label: "Trao đổi", icon: Handshake },
-  { key: "reports", label: "Báo cáo", icon: Flag },
-  { key: "tools", label: "Công cụ", icon: Sparkles },
-];
+const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
+  members: "Thành viên",
+  businesses: "Doanh nghiệp",
+  offers: "Ưu đãi",
+  exchanges: "Trao đổi",
+  reports: "Báo cáo",
+  tools: "Công cụ",
+  pending: "Chờ duyệt",
+};
 
 export default function Admin() {
   const { user, isAdmin, loading } = useAuth();
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
-  const [pendingTotal, setPendingTotal] = useState(0);
   const [rows, setRows] = useState<MemberRow[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -212,47 +212,20 @@ export default function Admin() {
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-xl font-extrabold">Quản trị</h1>
-
-      {/* Tab pill wrap xuống dòng — không scroll ngang */}
-      <div className="flex flex-wrap gap-1.5">
-        {TABS.map((t) => {
-          const Icon = t.icon;
-          const active = activeTab === t.key;
-          return (
-            <button
-              key={t.key}
-              onClick={() => setActiveTab(t.key)}
-              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition ${
-                active
-                  ? "bg-gradient-brand text-white border-transparent shadow-sm"
-                  : "bg-card text-muted-foreground border-border hover:bg-accent"
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              {t.label}
-              {t.key === "overview" && pendingTotal > 0 && (
-                <span
-                  className={`min-w-4 h-4 px-1 rounded-full text-[10px] font-bold grid place-items-center ${
-                    active ? "bg-white/25 text-white" : "bg-amber-100 text-amber-700"
-                  }`}
-                >
-                  {pendingTotal}
-                </span>
-              )}
-            </button>
-          );
-        })}
+      <div className="flex items-center gap-2">
+        {activeTab !== "overview" && (
+          <button
+            onClick={() => setActiveTab("overview")}
+            className="w-8 h-8 rounded-full bg-card border grid place-items-center flex-shrink-0"
+            aria-label="Quay lại Tổng quan"
+          >
+            <ChevronRight className="w-4 h-4 rotate-180" />
+          </button>
+        )}
+        <h1 className="text-xl font-extrabold">{activeTab === "overview" ? "Quản trị" : TAB_TITLES[activeTab]}</h1>
       </div>
 
-      {activeTab === "overview" && (
-        <OverviewTab
-          refreshKey={refreshKey}
-          onChanged={refresh}
-          onNavigate={setActiveTab}
-          onPendingChange={setPendingTotal}
-        />
-      )}
+      {activeTab === "overview" && <OverviewTab refreshKey={refreshKey} onNavigate={setActiveTab} />}
 
       {activeTab === "members" && (
         <Collapsible title="Thành viên" icon={Users} count={memberTotal}>
@@ -274,9 +247,7 @@ export default function Admin() {
                 onClick={() => setSelected(r)}
                 className="w-full text-left p-3 bg-card rounded-xl flex items-center gap-3 hover:bg-accent transition"
               >
-                <div className="w-10 h-10 rounded-full bg-gradient-brand text-white grid place-items-center text-sm font-bold flex-shrink-0">
-                  {(r.full_name || r.username || "?").slice(0, 1).toUpperCase()}
-                </div>
+                <MiniAvatar avatarUrl={r.avatar_url} name={r.full_name || r.username} size={10} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-semibold truncate">
                     {r.full_name}
@@ -310,12 +281,19 @@ export default function Admin() {
       {activeTab === "offers" && <OffersSection refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "exchanges" && <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "reports" && <ReportsSection refreshKey={refreshKey} />}
+      {activeTab === "pending" && <PendingTab refreshKey={refreshKey} onChanged={refresh} />}
 
       {activeTab === "tools" && (
         <div className="space-y-3">
           <div className="bg-card rounded-xl p-3 space-y-2">
             <div className="text-xs font-bold text-muted-foreground">THAO TÁC</div>
             <CreateMemberForm />
+            <button
+              onClick={() => setActiveTab("offers")}
+              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
+            >
+              <Tag className="w-3.5 h-3.5" /> Quản lý ưu đãi
+            </button>
             <button
               onClick={() => setPreviewOnboarding(true)}
               className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground hover:bg-accent flex items-center justify-center gap-1.5"
@@ -368,64 +346,173 @@ export default function Admin() {
 }
 
 // ── Tab Tổng quan: số liệu + hàng chờ duyệt + hoạt động gần đây ──────────────
-function OverviewTab({
-  refreshKey,
-  onChanged,
-  onNavigate,
-  onPendingChange,
+// Avatar nhỏ dùng chung cho danh sách thành viên/hoạt động — ảnh thật nếu có,
+// rơi về vòng tròn chữ cái đầu (bg-gradient-brand) nếu chưa có avatar_url.
+function MiniAvatar({ avatarUrl, name, size = 8 }: { avatarUrl?: string | null; name?: string | null; size?: 8 | 10 }) {
+  const dim = size === 10 ? "w-10 h-10" : "w-8 h-8";
+  if (avatarUrl) {
+    return (
+      <div className={`${dim} rounded-full overflow-hidden flex-shrink-0 bg-muted`}>
+        <StoredImage path={avatarUrl} alt={name || "avatar"} className="w-full h-full object-cover" />
+      </div>
+    );
+  }
+  return (
+    <div
+      className={`${dim} rounded-full bg-gradient-brand text-white grid place-items-center text-xs font-bold flex-shrink-0`}
+    >
+      {(name || "?").slice(0, 1).toUpperCase()}
+    </div>
+  );
+}
+
+// ── Ô điều hướng chính: thay cho tab pill, mỗi ô vừa hiện số liệu vừa bấm
+// được để vào thẳng màn hình chi tiết tương ứng. DO NOT CHANGE thứ tự 6 ô.
+function NavBox({
+  icon: Icon,
+  label,
+  value,
+  accent,
+  onClick,
 }: {
-  refreshKey: number;
-  onChanged: () => void;
-  onNavigate: (t: TabKey) => void;
-  onPendingChange: (n: number) => void;
+  icon: any;
+  label: string;
+  value: number;
+  accent?: "amber" | "primary";
+  onClick: () => void;
 }) {
-  const [stats, setStats] = useState({ members: 0, businesses: 0, exchangesToday: 0 });
-  const [pendingMembers, setPendingMembers] = useState<{ id: string; full_name: string; username: string }[]>([]);
-  const [pendingBiz, setPendingBiz] = useState<{ id: string; name: string }[]>([]);
-  const [activity, setActivity] = useState<{ name: string; username: string; at: string }[]>([]);
+  const valueClass = accent === "amber" && value > 0 ? "text-amber-600" : accent === "primary" ? "text-primary" : "";
+  return (
+    <button onClick={onClick} className="p-3 bg-card rounded-xl text-left hover:bg-accent transition">
+      <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+        <Icon className="w-3 h-3" /> {label}
+      </div>
+      <div className={`text-2xl font-extrabold ${valueClass}`}>{value}</div>
+    </button>
+  );
+}
+
+function OverviewTab({ refreshKey, onNavigate }: { refreshKey: number; onNavigate: (t: TabKey) => void }) {
+  const [stats, setStats] = useState({
+    members: 0,
+    businesses: 0,
+    pending: 0,
+    exchanges: 0,
+    reports: 0,
+  });
+  const [activity, setActivity] = useState<{ name: string; username: string; avatar: string | null; at: string }[]>([]);
 
   const load = async () => {
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const [mRes, bRes, eRes, pmRes, pbRes, evRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, eRes, rRes, evRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
-      supabase
-        .from("exchanges")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "completed")
-        .gte("completed_at", todayStart.toISOString()),
-      supabase.from("profiles").select("id, full_name, username").eq("status", "pending"),
-      supabase.from("businesses").select("id, name").eq("status", "pending"),
-      supabase.from("login_events").select("user_id, created_at").order("created_at", { ascending: false }).limit(8),
+      supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("exchanges").select("*", { count: "exact", head: true }),
+      supabase.from("reports").select("*", { count: "exact", head: true }),
+      supabase.from("login_events").select("user_id, created_at").order("created_at", { ascending: false }).limit(5),
     ]);
     setStats({
       members: mRes.count ?? 0,
       businesses: bRes.count ?? 0,
-      exchangesToday: eRes.count ?? 0,
+      pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
+      exchanges: eRes.count ?? 0,
+      reports: rRes.count ?? 0,
     });
-    const pm = pmRes.data ?? [];
-    const pb = pbRes.data ?? [];
-    setPendingMembers(pm);
-    setPendingBiz(pb);
-    onPendingChange(pm.length + pb.length);
 
     const events = (evRes.data ?? []) as { user_id: string; created_at: string }[];
     const uids = [...new Set(events.map((v) => v.user_id))];
-    let nameMap = new Map<string, { name: string; username: string }>();
+    let nameMap = new Map<string, { name: string; username: string; avatar: string | null }>();
     if (uids.length) {
-      const { data: profs } = await supabase.from("profiles").select("id, full_name, username").in("id", uids);
-      (profs ?? []).forEach((p: any) => nameMap.set(p.id, { name: p.full_name, username: p.username }));
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", uids);
+      (profs ?? []).forEach((p: any) =>
+        nameMap.set(p.id, { name: p.full_name, username: p.username, avatar: p.avatar_url }),
+      );
     }
     setActivity(
-      events
-        .filter((v) => nameMap.has(v.user_id))
-        .map((v) => ({
-          name: nameMap.get(v.user_id)!.name,
-          username: nameMap.get(v.user_id)!.username,
-          at: v.created_at,
-        })),
+      events.filter((v) => nameMap.has(v.user_id)).map((v) => ({ ...nameMap.get(v.user_id)!, at: v.created_at })),
     );
+  };
+  useEffect(() => {
+    void load();
+  }, [refreshKey]);
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-2">
+        <NavBox icon={Users} label="Thành viên" value={stats.members} onClick={() => onNavigate("members")} />
+        <NavBox
+          icon={Building2}
+          label="Doanh nghiệp"
+          value={stats.businesses}
+          onClick={() => onNavigate("businesses")}
+        />
+        <NavBox
+          icon={Bell}
+          label="Chờ duyệt"
+          value={stats.pending}
+          accent="amber"
+          onClick={() => onNavigate("pending")}
+        />
+        <NavBox
+          icon={Handshake}
+          label="Trao đổi"
+          value={stats.exchanges}
+          accent="primary"
+          onClick={() => onNavigate("exchanges")}
+        />
+        <NavBox icon={Flag} label="Báo cáo" value={stats.reports} onClick={() => onNavigate("reports")} />
+        <button
+          onClick={() => onNavigate("tools")}
+          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition flex flex-col justify-center"
+        >
+          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
+            <Sparkles className="w-3 h-3" /> Công cụ
+          </div>
+          <div className="text-xs text-muted-foreground mt-1">Tạo tài khoản, thông báo…</div>
+        </button>
+      </div>
+
+      <section className="space-y-2">
+        <div className="text-xs font-bold text-muted-foreground">HOẠT ĐỘNG GẦN ĐÂY</div>
+        {activity.length === 0 ? (
+          <p className="text-xs text-muted-foreground text-center py-2">Chưa có hoạt động nào</p>
+        ) : (
+          <div className="bg-card rounded-xl divide-y divide-border">
+            {activity.map((a, i) => (
+              <div key={i} className="flex items-center gap-2.5 p-2">
+                <MiniAvatar avatarUrl={a.avatar} name={a.name || a.username} />
+                <div className="flex-1 min-w-0 text-xs">
+                  <span className="font-semibold">{a.name}</span>{" "}
+                  <span className="text-muted-foreground">@{a.username}</span>
+                </div>
+                <div className="text-[11px] text-muted-foreground flex-shrink-0">{timeAgo(a.at)}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
+
+// ── Màn hình Chờ duyệt: gộp duyệt/từ chối thành viên + doanh nghiệp ─────────
+function PendingTab({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
+  const [pendingMembers, setPendingMembers] = useState<
+    { id: string; full_name: string; username: string; avatar_url: string | null }[]
+  >([]);
+  const [pendingBiz, setPendingBiz] = useState<{ id: string; name: string }[]>([]);
+
+  const load = async () => {
+    const [{ data: m }, { data: b }] = await Promise.all([
+      supabase.from("profiles").select("id, full_name, username, avatar_url").eq("status", "pending"),
+      supabase.from("businesses").select("id, name").eq("status", "pending"),
+    ]);
+    setPendingMembers(m ?? []);
+    setPendingBiz(b ?? []);
   };
   useEffect(() => {
     void load();
@@ -475,125 +562,66 @@ function OverviewTab({
     onChanged();
   };
 
-  const pendingCount = pendingMembers.length + pendingBiz.length;
+  const total = pendingMembers.length + pendingBiz.length;
+
+  if (total === 0) {
+    return (
+      <div className="px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
+        <CheckCircle2 className="w-4 h-4" /> Không có gì đang chờ duyệt
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-2">
-        <button
-          onClick={() => onNavigate("members")}
-          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition"
-        >
-          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-            <Users className="w-3 h-3" /> Thành viên
+    <div className="space-y-2">
+      {pendingMembers.map((m) => (
+        <div key={m.id} className="flex items-center gap-2 bg-card rounded-xl p-2.5">
+          <MiniAvatar avatarUrl={m.avatar_url} name={m.full_name || m.username} />
+          <div className="flex-1 min-w-0 text-xs">
+            <div className="font-semibold truncate">{m.full_name}</div>
+            <div className="text-muted-foreground">@{m.username} · Thành viên</div>
           </div>
-          <div className="text-2xl font-extrabold">{stats.members}</div>
-        </button>
-        <button
-          onClick={() => onNavigate("businesses")}
-          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition"
-        >
-          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-            <Building2 className="w-3 h-3" /> Doanh nghiệp
-          </div>
-          <div className="text-2xl font-extrabold">{stats.businesses}</div>
-        </button>
-        <div className="p-3 bg-card rounded-xl">
-          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-            <Bell className="w-3 h-3" /> Chờ duyệt
-          </div>
-          <div className={`text-2xl font-extrabold ${pendingCount > 0 ? "text-amber-600" : ""}`}>{pendingCount}</div>
+          <button
+            onClick={() => approveMember(m.id)}
+            className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
+            aria-label="Duyệt"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => rejectMember(m.id)}
+            className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
+            aria-label="Từ chối"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
-        <button
-          onClick={() => onNavigate("exchanges")}
-          className="p-3 bg-card rounded-xl text-left hover:bg-accent transition"
-        >
-          <div className="text-[11px] text-muted-foreground flex items-center gap-1">
-            <Handshake className="w-3 h-3" /> Trao đổi hôm nay
+      ))}
+      {pendingBiz.map((b) => (
+        <div key={b.id} className="flex items-center gap-2 bg-card rounded-xl p-2.5">
+          <div className="w-8 h-8 rounded-full bg-muted grid place-items-center flex-shrink-0">
+            <Building2 className="w-4 h-4 text-muted-foreground" />
           </div>
-          <div className="text-2xl font-extrabold text-primary">{stats.exchangesToday}</div>
-        </button>
-      </div>
-
-      {pendingCount === 0 ? (
-        <div className="px-3 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4" /> Không có gì đang chờ duyệt
+          <div className="flex-1 min-w-0 text-xs">
+            <div className="font-semibold truncate">{b.name}</div>
+            <div className="text-muted-foreground">Doanh nghiệp</div>
+          </div>
+          <button
+            onClick={() => approveBiz(b.id)}
+            className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
+            aria-label="Duyệt"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => rejectBiz(b.id)}
+            className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
+            aria-label="Từ chối"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
-      ) : (
-        <section className="rounded-xl bg-amber-50 dark:bg-amber-950/30 p-3 space-y-2">
-          <div className="flex items-center gap-2 text-amber-700 dark:text-amber-400 text-sm font-semibold">
-            <Bell className="w-4 h-4" />
-            <span>Cần xử lý ({pendingCount})</span>
-          </div>
-          {pendingMembers.map((m) => (
-            <div key={m.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
-              <div className="flex-1 min-w-0 text-xs">
-                <div className="font-semibold truncate">{m.full_name}</div>
-                <div className="text-muted-foreground">@{m.username} · Thành viên</div>
-              </div>
-              <button
-                onClick={() => approveMember(m.id)}
-                className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
-                aria-label="Duyệt"
-              >
-                <Check className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => rejectMember(m.id)}
-                className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
-                aria-label="Từ chối"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-          {pendingBiz.map((b) => (
-            <div key={b.id} className="flex items-center gap-2 bg-card rounded-lg p-2">
-              <div className="flex-1 min-w-0 text-xs">
-                <div className="font-semibold truncate">{b.name}</div>
-                <div className="text-muted-foreground">Doanh nghiệp</div>
-              </div>
-              <button
-                onClick={() => approveBiz(b.id)}
-                className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
-                aria-label="Duyệt"
-              >
-                <Check className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => rejectBiz(b.id)}
-                className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
-                aria-label="Từ chối"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-        </section>
-      )}
-
-      <section className="space-y-2">
-        <div className="text-xs font-bold text-muted-foreground">HOẠT ĐỘNG GẦN ĐÂY</div>
-        {activity.length === 0 ? (
-          <p className="text-xs text-muted-foreground text-center py-2">Chưa có hoạt động nào</p>
-        ) : (
-          <div className="bg-card rounded-xl divide-y divide-border">
-            {activity.map((a, i) => (
-              <div key={i} className="flex items-center gap-3 p-2.5">
-                <div className="w-8 h-8 rounded-full bg-gradient-brand text-white grid place-items-center text-xs font-bold flex-shrink-0">
-                  {(a.name || a.username || "?").slice(0, 1).toUpperCase()}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs font-semibold truncate">
-                    {a.name} <span className="text-muted-foreground font-normal">@{a.username}</span>
-                  </div>
-                  <div className="text-[11px] text-muted-foreground">Vào app {timeAgo(a.at)}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      ))}
     </div>
   );
 }
