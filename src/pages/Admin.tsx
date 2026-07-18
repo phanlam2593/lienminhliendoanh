@@ -247,7 +247,7 @@ export default function Admin() {
         )}
       </Collapsible>
 
-      <BusinessesSection refreshKey={refreshKey} onChanged={refresh} />
+      <BusinessesSection refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
       <OffersSection refreshKey={refreshKey} onChanged={refresh} />
       <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />
       <ReportsSection refreshKey={refreshKey} />
