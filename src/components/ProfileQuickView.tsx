@@ -17,6 +17,7 @@ interface QuickProfile {
   points: number;
   email: string | null;
   phone: string | null;
+  bio: string | null;
   role: "admin" | "member" | "guest";
 }
 
