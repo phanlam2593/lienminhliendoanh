@@ -40,6 +40,8 @@ import { LightboxImage } from "@/components/ImageLightbox";
 import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
 import { timeAgo } from "@/lib/time";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
+import { ProfileQuickView } from "@/components/ProfileQuickView";
+import { BusinessQuickView } from "@/components/BusinessQuickView";
 
 interface MemberRow extends Profile {
   business?: Business | null;
