@@ -134,7 +134,7 @@ export default function Profile() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: fullName, phone, email, status_message: statusMsg.trim() || null })
+      .update({ full_name: fullName, phone, email, bio: bio.trim() || null, status_message: statusMsg.trim() || null })
       .eq("id", user.id);
     setSaving(false);
     if (error) {
