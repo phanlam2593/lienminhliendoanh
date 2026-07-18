@@ -956,6 +956,7 @@ function FollowStats({ userId }: { userId: string }) {
   const { t } = useLanguage();
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
+  const [friendsOpen, setFriendsOpen] = useState(false);
   const [open, setOpen] = useState<null | "followers" | "following">(null);
 
   const loadCounts = async () => {
@@ -991,6 +992,15 @@ function FollowStats({ userId }: { userId: string }) {
             <UserCheck className="w-3 h-3" /> {t("messages.followingHeader")}
           </div>
         </button>
+        <button
+          onClick={() => setFriendsOpen(true)}
+          className="flex-1 bg-card rounded-xl p-3 text-center shadow-sm hover:bg-accent transition"
+        >
+          <div className="text-lg font-extrabold text-primary">—</div>
+          <div className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+            <Users className="w-3 h-3" /> Bạn bè
+          </div>
+        </button>
       </div>
       <FollowListDialog
         open={open !== null}
@@ -999,6 +1009,7 @@ function FollowStats({ userId }: { userId: string }) {
         mode={open ?? "followers"}
         onFollowChange={loadCounts}
       />
+      <FriendsDialog open={friendsOpen} onOpenChange={setFriendsOpen} userId={userId} />
     </>
   );
 }
