@@ -209,9 +209,7 @@ export default function Profile() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold truncate">{profile?.full_name}</div>
-          <div className="text-xs text-muted-foreground">
-            @{profile?.username} · {role}
-          </div>
+          <div className="text-xs text-muted-foreground">@{profile?.username}</div>
           <div className="flex items-center gap-2 mt-0.5">
             <StatusBadge s={profile?.status} />
             {profile && (
