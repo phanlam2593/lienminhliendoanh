@@ -242,6 +242,7 @@ export type Database = {
           edited_at: string | null
           id: string
           image_url: string | null
+          is_pinned: boolean
           location: string | null
           reply_to_id: string | null
           topic: string
@@ -254,6 +255,7 @@ export type Database = {
           edited_at?: string | null
           id?: string
           image_url?: string | null
+          is_pinned?: boolean
           location?: string | null
           reply_to_id?: string | null
           topic?: string
@@ -266,6 +268,7 @@ export type Database = {
           edited_at?: string | null
           id?: string
           image_url?: string | null
+          is_pinned?: boolean
           location?: string | null
           reply_to_id?: string | null
           topic?: string
@@ -493,6 +496,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_read: boolean
+          read_at: string | null
           receiver_id: string
           reply_to_id: string | null
           sender_id: string
@@ -505,6 +509,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_read?: boolean
+          read_at?: string | null
           receiver_id: string
           reply_to_id?: string | null
           sender_id: string
@@ -517,6 +522,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_read?: boolean
+          read_at?: string | null
           receiver_id?: string
           reply_to_id?: string | null
           sender_id?: string
