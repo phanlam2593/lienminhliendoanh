@@ -299,17 +299,44 @@ export default function Admin() {
       {activeTab === "tools" && (
         <div className="space-y-4">
           <div>
-            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">THAO TÁC</div>
+            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">THÀNH VIÊN</div>
             <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
               <CreateMemberForm />
-              <ToolRow icon={Tag} label="Quản lý ưu đãi" onClick={() => setActiveTab("offers")} />
               <ToolRow
                 icon={Users}
                 label="Xem lại popup chào mừng thành viên mới"
+                colorClass="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
                 onClick={() => setPreviewOnboarding(true)}
               />
-              <ToolRow icon={Sparkles} label="Dọn dẹp tài khoản cũ (orphan auth)" onClick={cleanupOrphans} />
             </div>
+          </div>
+
+          <div>
+            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">NỘI DUNG</div>
+            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+              <ToolRow
+                icon={Tag}
+                label="Quản lý ưu đãi"
+                colorClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
+                onClick={() => setActiveTab("offers")}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="text-xs font-bold text-muted-foreground px-1 mb-1.5">BẢO TRÌ HỆ THỐNG</div>
+            <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+              <ToolRow
+                icon={Trash2}
+                label="Dọn dẹp tài khoản cũ (orphan auth)"
+                colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+                danger
+                onClick={cleanupOrphans}
+              />
+            </div>
+            <p className="text-[11px] text-muted-foreground px-1 mt-1.5">
+              Xóa vĩnh viễn tài khoản đăng nhập không còn hồ sơ tương ứng. Không thể hoàn tác.
+            </p>
           </div>
 
           <div>
@@ -387,25 +414,31 @@ function StatRow({
   );
 }
 
-// Hàng danh sách dùng cho trang Công cụ — bordered rows thay vì nút viền đứt,
-// đồng bộ với nguyên tắc "dense list = bordered rows" của app.
+// Hàng danh sách dùng cho trang Công cụ — bordered rows với icon chip màu theo
+// nhóm, đồng bộ hình ảnh với danh sách hàng ở Tổng quan (StatRow).
 function ToolRow({
   icon: Icon,
   label,
   onClick,
   href,
   external,
+  colorClass = "bg-muted text-muted-foreground",
+  danger,
 }: {
   icon: any;
   label: string;
   onClick?: () => void;
   href?: string;
   external?: boolean;
+  colorClass?: string;
+  danger?: boolean;
 }) {
   const content = (
     <>
-      <Icon className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-      <span className="flex-1 text-sm">{label}</span>
+      <div className={`w-8 h-8 rounded-full grid place-items-center flex-shrink-0 ${colorClass}`}>
+        <Icon className="w-4 h-4" />
+      </div>
+      <span className={`flex-1 text-sm ${danger ? "text-destructive" : ""}`}>{label}</span>
       {external ? (
         <ExternalLink className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
       ) : (
@@ -413,7 +446,7 @@ function ToolRow({
       )}
     </>
   );
-  const cls = "w-full flex items-center gap-2.5 px-3 py-3 hover:bg-accent transition text-left";
+  const cls = "w-full flex items-center gap-2.5 px-3.5 py-3 hover:bg-accent transition text-left";
   if (href) {
     return (
       <Link to={href} target={external ? "_blank" : undefined} className={cls}>
@@ -747,9 +780,11 @@ function CreateMemberForm() {
     <div>
       <button
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center gap-2.5 px-3 py-3 hover:bg-accent transition text-left"
+        className="w-full flex items-center gap-2.5 px-3.5 py-3 hover:bg-accent transition text-left"
       >
-        <UserPlus className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+        <div className="w-8 h-8 rounded-full grid place-items-center flex-shrink-0 bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
+          <UserPlus className="w-4 h-4" />
+        </div>
         <span className="flex-1 text-sm">Tạo tài khoản thành viên mới</span>
         {open ? (
           <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
