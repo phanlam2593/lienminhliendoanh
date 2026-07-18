@@ -26,6 +26,9 @@ interface Props {
   target: Target;
   mode: Mode;
   title?: string;
+  // Gọi mỗi khi follow/unfollow thành công — để trang CHA (nơi hiện số đếm ngoài dialog
+  // này) tự cập nhật lại, tránh hiện số cũ cho tới khi rời trang quay lại.
+  onFollowChange?: () => void;
 }
 
 const PAGE_SIZE = 30;
