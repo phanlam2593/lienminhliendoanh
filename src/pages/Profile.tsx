@@ -463,6 +463,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
   const [offers, setOffers] = useState<Offer[]>([]);
   const [saving, setSaving] = useState(false);
   const [open, setOpen] = useState(false);
+  const [regularsOpen, setRegularsOpen] = useState(false);
 
   const reloadOffers = async () => {
     const { data } = await supabase
