@@ -112,9 +112,6 @@ export function ProfileQuickView({
                 )}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
-                <span className="px-2 py-0.5 rounded-full bg-accent text-accent-foreground font-semibold capitalize">
-                  {p.role}
-                </span>
                 <span className="px-2 py-0.5 rounded-full bg-muted">{followers} người theo dõi</span>
               </div>
             </div>
