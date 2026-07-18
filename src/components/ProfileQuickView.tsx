@@ -93,7 +93,7 @@ export function ProfileQuickView({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Hồ sơ nhanh</DialogTitle>
+          <DialogTitle>Hồ sơ</DialogTitle>
         </DialogHeader>
         {loading || !p ? (
           <div className="py-8 text-center text-sm text-muted-foreground">Đang tải…</div>
