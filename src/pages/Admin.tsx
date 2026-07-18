@@ -469,14 +469,14 @@ function OverviewTab({
         icon={Users}
         label="Thành viên"
         value={stats.members}
-        colorClass="bg-blue-100 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400"
+        colorClass="bg-primary/10 text-primary"
         onClick={() => onNavigate("members")}
       />
       <StatRow
         icon={Building2}
         label="Doanh nghiệp"
         value={stats.businesses}
-        colorClass="bg-emerald-100 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
+        colorClass="bg-primary/10 text-primary"
         onClick={() => onNavigate("businesses")}
       />
       <StatRow
@@ -490,14 +490,14 @@ function OverviewTab({
         icon={Handshake}
         label="Trao đổi"
         value={stats.exchanges}
-        colorClass="bg-violet-100 text-violet-600 dark:bg-violet-950/40 dark:text-violet-400"
+        colorClass="bg-primary/10 text-primary"
         onClick={() => onNavigate("exchanges")}
       />
       <StatRow
         icon={Flag}
         label="Báo cáo"
         value={stats.reports}
-        colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+        colorClass="bg-primary/10 text-primary"
         onClick={() => onNavigate("reports")}
       />
       <StatRow
@@ -514,19 +514,19 @@ function OverviewTab({
         danger
         onClick={onCleanup}
       />
-      <ToolRow
-        icon={EyeOff}
-        label="Ẩn"
-        colorClass="bg-muted text-muted-foreground"
-        onClick={() => onNavigate("hidden")}
-      />
+      <ToolRow icon={EyeOff} label="Ẩn" colorClass="bg-primary/10 text-primary" onClick={() => onNavigate("hidden")} />
       <ToolRow
         icon={Send}
         label="Thông báo"
-        colorClass="bg-indigo-100 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400"
+        colorClass="bg-primary/10 text-primary"
         onClick={() => onNavigate("broadcast")}
       />
-      <ToolRow icon={Clock} label="Hoạt động gần đây" onClick={() => onNavigate("activity")} />
+      <ToolRow
+        icon={Clock}
+        label="Hoạt động gần đây"
+        colorClass="bg-primary/10 text-primary"
+        onClick={() => onNavigate("activity")}
+      />
     </div>
   );
 }
