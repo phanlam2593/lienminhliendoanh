@@ -115,7 +115,7 @@ export default function BusinessDetail() {
     const uids = [...new Set(reviewsList.map((r) => r.user_id))];
     let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
     if (uids.length) {
-      const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", uids);
+      const { data: profs } = await supabase.from("profiles_public").select("id, full_name, avatar_url").in("id", uids);
       (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
     }
     const newReviews = reviewsList.map((r) => ({ ...r, profile: profMap.get(r.user_id) ?? null }));
