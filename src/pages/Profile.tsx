@@ -35,6 +35,8 @@ import {
   ChevronRight,
   HelpCircle,
   Globe,
+  Smartphone,
+  Store,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
