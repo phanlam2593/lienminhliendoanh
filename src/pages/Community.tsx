@@ -126,7 +126,7 @@ export default function Community() {
     const missing = ids.filter((id) => !profMap.has(id));
     if (!missing.length) return;
     const { data } = await supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, username, avatar_url, points")
       .in("id", missing);
     setProfMap((prev) => {
