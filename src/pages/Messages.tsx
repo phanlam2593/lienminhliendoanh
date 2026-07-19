@@ -219,7 +219,7 @@ export function MessagesThread() {
   useEffect(() => {
     if (!user || !id) return;
     supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, username, avatar_url, status, points")
       .eq("id", id)
       .maybeSingle()
