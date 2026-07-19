@@ -72,7 +72,7 @@ export function MessagesInbox() {
     const ids = [...map.keys()];
     if (ids.length) {
       const { data: profs } = await supabase
-        .from("profiles")
+        .from("profiles_public")
         .select("id, full_name, username, avatar_url, points")
         .in("id", ids);
       (profs as any[] | null)?.forEach((p) => {
