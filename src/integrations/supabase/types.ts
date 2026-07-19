@@ -125,6 +125,48 @@ export type Database = {
           },
         ]
       }
+      business_regulars: {
+        Row: {
+          business_id: string
+          created_at: string
+          last_visit_at: string | null
+          marked_by: string | null
+          member_id: string
+          visit_count: number
+        }
+        Insert: {
+          business_id: string
+          created_at?: string
+          last_visit_at?: string | null
+          marked_by?: string | null
+          member_id: string
+          visit_count?: number
+        }
+        Update: {
+          business_id?: string
+          created_at?: string
+          last_visit_at?: string | null
+          marked_by?: string | null
+          member_id?: string
+          visit_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_regulars_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "business_regulars_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           address: string | null
@@ -697,6 +739,7 @@ export type Database = {
         Row: {
           admin_note: string | null
           avatar_url: string | null
+          bio: string | null
           created_at: string
           email: string
           full_name: string
@@ -719,6 +762,7 @@ export type Database = {
         Insert: {
           admin_note?: string | null
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           email: string
           full_name: string
@@ -741,6 +785,7 @@ export type Database = {
         Update: {
           admin_note?: string | null
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           email?: string
           full_name?: string
@@ -1025,6 +1070,30 @@ export type Database = {
         }
         Relationships: []
       }
+      business_customer_visits: {
+        Row: {
+          business_id: string | null
+          last_visit_at: string | null
+          user_id: string | null
+          visit_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exchanges_view: {
         Row: {
           completed_at: string | null
@@ -1134,6 +1203,7 @@ export type Database = {
         Args: { _id: string }
         Returns: {
           avatar_url: string
+          bio: string
           email: string
           full_name: string
           id: string
