@@ -237,7 +237,7 @@ export default function Community() {
     const from = pageNum * MEMBER_PAGE_SIZE;
     const to = from + MEMBER_PAGE_SIZE - 1;
     const { data, count } = await supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, username, avatar_url, status_message, points", { count: "exact" })
       .eq("status", "approved")
       .order("created_at", { ascending: false })
