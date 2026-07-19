@@ -12,31 +12,31 @@
   "categories": ["social", "business", "lifestyle"],
   "icons": [
     {
-      "src": "/__l5e/assets-v1/65fc9e55-fcde-461a-9b03-ff8617170886/logo-64.png",
+      "src": "/icons/logo-64.png",
       "sizes": "64x64",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/__l5e/assets-v1/b0e81308-3abe-44e6-be53-d250f338fbdf/logo-128.png",
+      "src": "/icons/logo-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/__l5e/assets-v1/24cf1f1b-163f-4107-8c1f-5aed79ea28fc/logo-256.png",
+      "src": "/icons/logo-256.png",
       "sizes": "256x256",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/__l5e/assets-v1/01f9222e-cb68-4fda-a981-466f837c5838/logo-512.png",
+      "src": "/icons/logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/__l5e/assets-v1/01f9222e-cb68-4fda-a981-466f837c5838/logo-512.png",
+      "src": "/icons/logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
