@@ -1087,10 +1087,9 @@ function StatusBadge({ s }: { s?: string }) {
 
 type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; regulars: boolean; admin: boolean };
 const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, regulars: true, admin: true };
-
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
   const { t } = useLanguage();
-  const [open, setOpen] = useState<null | "password" | "notif" | "theme" | "lang">(null);
+  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang">(null);
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1">
@@ -1118,6 +1117,17 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
           <div className="p-3 space-y-3">
             <PushPermissionButton />
             <NotificationPrefsForm userId={userId} initial={initialPrefs} />
+          </div>
+        )}
+        <SettingRow
+          icon={<Smartphone className="w-4 h-4" />}
+          label="Cài app ra màn hình chính"
+          onClick={() => setOpen(open === "install" ? null : "install")}
+          active={open === "install"}
+        />
+        {open === "install" && (
+          <div className="p-3">
+            <InstallAppButton />
           </div>
         )}
         <SettingRow
