@@ -457,14 +457,15 @@ export default function Community() {
     const myName = profMap.get(user.id)?.full_name || user.email || "";
     const targets = members.filter((m) => matches.includes(m.username) && m.id !== user.id);
     if (!targets.length) return;
-    const rows = targets.map((tgt) => ({
-      user_id: tgt.id,
-      type: "mention",
-      category: null,
-      title: t("tag.notifTitle", { name: myName }),
-      body: content.slice(0, 100),
-    }));
-    await supabase.from("notifications").insert(rows);
+    await Promise.all(
+      targets.map((tgt) =>
+        supabase.rpc("notify_mention", {
+          _target_user_id: tgt.id,
+          _title: t("tag.notifTitle", { name: myName }),
+          _body: content.slice(0, 100),
+        }),
+      ),
+    );
   };
 
   const startEdit = (m: Msg) => {
