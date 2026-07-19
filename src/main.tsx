@@ -15,10 +15,9 @@ registerPwa();
 
 // Giữ splash động tối thiểu ~1200ms kể từ lúc bắt đầu load — đảm bảo user
 // luôn kịp thấy logo + tên app + tagline sau khi OS splash tắt, dù React mount rất nhanh.
-const SPLASH_MIN_MS = 1200;
+const SPLASH_MIN_MS = 1800;
 const SPLASH_FADE_MS = 400;
-const splashStart =
-  typeof performance !== "undefined" && performance.timeOrigin ? performance.timeOrigin : Date.now();
+const splashStart = typeof performance !== "undefined" && performance.timeOrigin ? performance.timeOrigin : Date.now();
 requestAnimationFrame(() => {
   const splash = document.getElementById("app-splash");
   if (!splash) return;
