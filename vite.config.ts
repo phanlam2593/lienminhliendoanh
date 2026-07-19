@@ -26,9 +26,14 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ["favicon.ico", "robots.txt", "placeholder.svg", "offline.html"],
       manifest: false,
       workbox: {
-        globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2}"],
+        // CỐ Ý KHÔNG precache "html": nếu precache index.html thì precacheAndRoute()
+        // sẽ đăng ký 1 route match "/" (directoryIndex mặc định) TRƯỚC mọi runtimeCaching,
+        // khiến navigation bị phục vụ cache-first từ snapshot HTML lúc build và không bao
+        // giờ thấy bản mới. Để HTML luôn đi qua NetworkFirst bên dưới, và offline rơi về
+        // /offline.html (đã có trong includeAssets nên vẫn được precache).
+        globPatterns: ["**/*.{js,css,ico,png,svg,webp,woff2}"],
         importScripts: ["/push-sw.js"],
-        navigateFallback: "/index.html",
+        navigateFallback: "/offline.html",
         navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
