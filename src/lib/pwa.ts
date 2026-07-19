@@ -172,7 +172,6 @@ export function registerPwa() {
       window.addEventListener("online", () => void checkUpdate());
       setInterval(() => void checkUpdate(), 5 * 60 * 1000);
 
-
       // 2) Khi SW mới nắm quyền (skipWaiting đã bật sẵn) → tự reload 1 lần để chạy code mới
       let reloaded = false;
       navigator.serviceWorker.addEventListener("controllerchange", () => {
@@ -200,8 +199,16 @@ export function registerPwa() {
 const INSTALL_DISMISS_KEY = "lmld:install-dismissed-at";
 let deferredInstallPrompt: any = null;
 
-function isStandalone(): boolean {
+export function isStandalone(): boolean {
   return window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone === true;
+}
+
+export function isIOSDevice(): boolean {
+  return /iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+export function canInstallNatively(): boolean {
+  return !!deferredInstallPrompt;
 }
 
 function shouldShowInstallBanner(): boolean {
@@ -310,17 +317,20 @@ export async function applyUpdate(): Promise<void> {
 }
 
 if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-  navigator.serviceWorker.getRegistration().then((reg) => {
-    if (!reg) return;
-    if (reg.waiting) _setUpdateStatus("available");
-    reg.addEventListener("updatefound", () => {
-      const nw = reg.installing;
-      if (!nw) return;
-      nw.addEventListener("statechange", () => {
-        if (nw.state === "installed" && navigator.serviceWorker.controller) {
-          _setUpdateStatus("available");
-        }
+  navigator.serviceWorker
+    .getRegistration()
+    .then((reg) => {
+      if (!reg) return;
+      if (reg.waiting) _setUpdateStatus("available");
+      reg.addEventListener("updatefound", () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener("statechange", () => {
+          if (nw.state === "installed" && navigator.serviceWorker.controller) {
+            _setUpdateStatus("available");
+          }
+        });
       });
-    });
-  }).catch(() => {});
+    })
+    .catch(() => {});
 }
