@@ -759,10 +759,10 @@ function FollowsTab({ userId }: { userId: string }) {
 
       const [outUsersRes, inUsersRes, outBizRes] = await Promise.all([
         outUserIds.length
-          ? supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", outUserIds)
+          ? supabase.from("profiles_public").select("id, full_name, username, avatar_url").in("id", outUserIds)
           : Promise.resolve({ data: [] } as any),
         inIds.length
-          ? supabase.from("profiles").select("id, full_name, username, avatar_url").in("id", inIds)
+          ? supabase.from("profiles_public").select("id, full_name, username, avatar_url").in("id", inIds)
           : Promise.resolve({ data: [] } as any),
         outBizIds.length
           ? supabase.from("businesses").select("*").in("id", outBizIds)
