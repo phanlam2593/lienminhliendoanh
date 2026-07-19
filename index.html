@@ -22,15 +22,31 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(160deg, #00c9a7 0%, #0891b2 100%);
+        /* Bắt đầu bằng ĐÚNG màu phẳng của splash hệ điều hành (background_color trong
+           manifest) — để lúc chuyển giao không bị giật màu. Gradient sẽ "nở" ra sau. */
+        background: #0891b2;
         transition: opacity 0.4s ease;
+        overflow: hidden;
       }
-      html[data-hide-splash] #app-splash { display: none; }
+      #app-splash::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, #00c9a7 0%, #0891b2 100%);
+        opacity: 0;
+        animation: app-splash-bloom 0.7s ease-out 0.1s forwards;
+      }
+      @keyframes app-splash-bloom {
+        to { opacity: 1; }
+      }
       #app-splash img {
+        position: relative;
+        z-index: 1;
         width: 112px;
         height: 112px;
         filter: drop-shadow(0 6px 18px rgba(0,0,0,0.25));
-        animation: app-splash-pulse 2.2s ease-in-out infinite;
+        /* Đứng yên 0.5s đầu (giống hệt icon tĩnh của splash hệ điều hành), sau đó mới bắt đầu nhấp nháy */
+        animation: app-splash-pulse 2.2s ease-in-out 0.5s infinite;
       }
       @keyframes app-splash-pulse {
         0%, 100% { transform: scale(1); }
