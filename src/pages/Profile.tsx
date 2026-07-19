@@ -1085,8 +1085,22 @@ function StatusBadge({ s }: { s?: string }) {
   );
 }
 
-type NotifPrefs = { messages: boolean; follows: boolean; deals: boolean; regulars: boolean; admin: boolean };
-const DEFAULT_PREFS: NotifPrefs = { messages: true, follows: true, deals: true, regulars: true, admin: true };
+type NotifPrefs = {
+  messages: boolean;
+  follows: boolean;
+  deals: boolean;
+  regulars: boolean;
+  mentions: boolean;
+  admin: boolean;
+};
+const DEFAULT_PREFS: NotifPrefs = {
+  messages: true,
+  follows: true,
+  deals: true,
+  regulars: true,
+  mentions: true,
+  admin: true,
+};
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
   const { t } = useLanguage();
   const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang">(null);
