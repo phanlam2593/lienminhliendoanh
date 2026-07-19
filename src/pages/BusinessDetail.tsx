@@ -132,7 +132,10 @@ export default function BusinessDetail() {
       const repList = (reps ?? []) as ReviewReply[];
       const repUids = [...new Set(repList.map((r) => r.user_id).filter((u) => !profMap.has(u)))];
       if (repUids.length) {
-        const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", repUids);
+        const { data: profs } = await supabase
+          .from("profiles_public")
+          .select("id, full_name, avatar_url")
+          .in("id", repUids);
         (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
       }
       setReplies((prevMap) => {
