@@ -1015,28 +1015,37 @@ function FollowStats({ userId }: { userId: string }) {
       <div className="grid grid-cols-3 gap-2">
         <button
           onClick={() => setOpen("followers")}
-          className="bg-card rounded-xl py-2 px-1 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-3 px-1 flex flex-col items-center gap-1 shadow-sm hover:bg-accent transition"
         >
-          <div className="text-lg font-extrabold text-primary leading-none">{followers}</div>
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight mt-1">
+          <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
+            <Users className="w-3.5 h-3.5 text-primary" />
+          </span>
+          <div className="text-base font-extrabold text-primary leading-none">{followers}</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
             {t("profile.followers")}
           </div>
         </button>
         <button
           onClick={() => setOpen("following")}
-          className="bg-card rounded-xl py-2 px-1 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-3 px-1 flex flex-col items-center gap-1 shadow-sm hover:bg-accent transition"
         >
-          <div className="text-lg font-extrabold text-primary leading-none">{following}</div>
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight mt-1">
+          <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
+            <UserCheck className="w-3.5 h-3.5 text-primary" />
+          </span>
+          <div className="text-base font-extrabold text-primary leading-none">{following}</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
             {t("messages.followingHeader")}
           </div>
         </button>
         <button
           onClick={() => setOpen("regulars")}
-          className="bg-card rounded-xl py-2 px-1 text-center shadow-sm hover:bg-accent transition"
+          className="bg-card rounded-xl py-3 px-1 flex flex-col items-center gap-1 shadow-sm hover:bg-accent transition"
         >
-          <div className="text-lg font-extrabold text-primary leading-none">{regulars}</div>
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight mt-1">Quán quen</div>
+          <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
+            <Store className="w-3.5 h-3.5 text-primary" />
+          </span>
+          <div className="text-base font-extrabold text-primary leading-none">{regulars}</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">Quán quen</div>
         </button>
       </div>
       <FollowListDialog
