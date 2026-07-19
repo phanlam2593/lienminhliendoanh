@@ -44,7 +44,7 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
         return;
       }
       const { data: profiles } = await supabase
-        .from("profiles")
+        .from("profiles_public")
         .select("id, full_name, username, avatar_url")
         .in("id", ids);
       const profMap = new Map((profiles ?? []).map((p: any) => [p.id, p]));
