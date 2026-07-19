@@ -651,7 +651,7 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
       const ids = [...new Set((claims ?? []).map((c: any) => c.user_id))];
       const [{ data: profs }, { data: mine }] = await Promise.all([
         ids.length
-          ? supabase.from("profiles").select("id, full_name, avatar_url").in("id", ids)
+          ? supabase.from("profiles_public").select("id, full_name, avatar_url").in("id", ids)
           : Promise.resolve({ data: [] as any[] }),
         user
           ? supabase
