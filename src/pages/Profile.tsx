@@ -1297,6 +1297,7 @@ function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: 
     { key: "follows", label: t("notifPrefs.newFollowers") },
     { key: "deals", label: t("notifPrefs.newDeals") },
     { key: "regulars", label: "Hoạt động khách quen" },
+    { key: "mentions", label: "Được nhắc tên (@tag)" },
     { key: "admin", label: t("notifPrefs.adminNotif") },
   ];
 
