@@ -220,7 +220,6 @@ function shouldShowInstallBanner(): boolean {
 
 export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
   if (typeof window === "undefined") return;
-  if (!shouldShowInstallBanner()) return;
 
   const guardedShow = async (canPrompt: boolean) => {
     await whenWelcomeDone();
@@ -228,15 +227,22 @@ export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
     onShow(canPrompt);
   };
 
+  // Luôn lắng nghe & lưu deferred prompt — kể cả khi banner tự động đang bị ẩn (do người
+  // dùng từng bấm "Để sau") — để nút "Cài app" trong trang Cài đặt vẫn dùng được về sau.
   window.addEventListener("beforeinstallprompt", (e: any) => {
     e.preventDefault();
     deferredInstallPrompt = e;
+    window.dispatchEvent(new Event("lmld:install-available"));
     void guardedShow(true);
   });
 
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    window.dispatchEvent(new Event("lmld:install-available"));
+  });
+
   // iOS doesn't fire beforeinstallprompt — show banner anyway after a short delay
-  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isIOS && !isStandalone()) {
+  if (isIOSDevice() && !isStandalone()) {
     setTimeout(() => void guardedShow(false), 2000);
   }
 }
@@ -246,6 +252,7 @@ export async function triggerInstall(): Promise<boolean> {
   deferredInstallPrompt.prompt();
   const { outcome } = await deferredInstallPrompt.userChoice;
   deferredInstallPrompt = null;
+  window.dispatchEvent(new Event("lmld:install-available"));
   return outcome === "accepted";
 }
 
