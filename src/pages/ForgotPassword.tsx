@@ -23,9 +23,13 @@ export default function ForgotPassword() {
   const [lockUntil, setLockUntil] = useState<number>(0);
   const [now, setNow] = useState(Date.now());
 
+  const [attempts, setAttempts] = useState<number>(0);
+
   useEffect(() => {
     const l = Number(localStorage.getItem(LOCK_KEY) ?? 0);
     if (l > Date.now()) setLockUntil(l);
+    else localStorage.removeItem(LOCK_KEY);
+    setAttempts(Number(localStorage.getItem(ATTEMPT_KEY) ?? 0));
     const t = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(t);
   }, []);
