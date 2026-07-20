@@ -241,18 +241,6 @@ export interface Review {
   created_at: string;
 }
 
-export interface Suggestion {
-  id: string;
-  user_id: string;
-  business_name: string;
-  business_type: BusinessType;
-  contact_info: string;
-  description: string | null;
-  status: SuggestionStatus;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface Report {
   id: string;
   user_id: string;
