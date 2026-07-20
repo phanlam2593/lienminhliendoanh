@@ -10,6 +10,7 @@ const corsHeaders = {
 const VAPID_PUBLIC = Deno.env.get("VAPID_PUBLIC_KEY")!;
 const VAPID_PRIVATE = Deno.env.get("VAPID_PRIVATE_KEY")!;
 const VAPID_SUBJECT = Deno.env.get("VAPID_SUBJECT") ?? "mailto:lienminhliendoanh@gmail.com";
+const PUSH_DISPATCH_SECRET = Deno.env.get("PUSH_DISPATCH_SECRET");
 
 webpush.setVapidDetails(VAPID_SUBJECT, VAPID_PUBLIC, VAPID_PRIVATE);
 
@@ -75,6 +76,14 @@ async function sendBatch(items: PushItem[]) {
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  const incomingSecret = req.headers.get("x-push-dispatch-secret");
+  if (!PUSH_DISPATCH_SECRET || incomingSecret !== PUSH_DISPATCH_SECRET) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const raw = await req.json().catch(() => ({}));
