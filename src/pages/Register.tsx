@@ -148,39 +148,50 @@ export default function Register() {
         .update({ ...(avatarPath ? { avatar_url: avatarPath } : {}), password_hint: maskPassword(password) })
         .eq("id", uid);
 
+      let bizCreateFailed = false;
       if (isBiz) {
-        let coverPath: string | null = null;
-        if (coverFile) coverPath = await uploadImage(coverFile, "covers", uid);
-        const { data: biz, error: bErr } = await supabase
-          .from("businesses")
-          .insert({
-            owner_id: uid,
-            name: bizName,
-            type: bizType,
-            description: bizDesc,
-            hours_open: open,
-            hours_close: close,
-            facebook_url: fbUrl || null,
-            website_url: webUrl || null,
-            tiktok_url: tiktokUrl || null,
-            instagram_url: instagramUrl || null,
-            youtube_url: youtubeUrl || null,
-            cover_url: coverPath,
-            status: "pending",
-          })
-          .select()
-          .single();
-        if (bErr) throw bErr;
-        if (bizOffer) {
-          await supabase.from("offers").insert({
-            business_id: biz.id,
-            title: bizOffer,
-            status: "active",
-          });
+        try {
+          let coverPath: string | null = null;
+          if (coverFile) coverPath = await uploadImage(coverFile, "covers", uid);
+          const { data: biz, error: bErr } = await supabase
+            .from("businesses")
+            .insert({
+              owner_id: uid,
+              name: bizName,
+              type: bizType,
+              description: bizDesc,
+              hours_open: open,
+              hours_close: close,
+              facebook_url: fbUrl || null,
+              website_url: webUrl || null,
+              tiktok_url: tiktokUrl || null,
+              instagram_url: instagramUrl || null,
+              youtube_url: youtubeUrl || null,
+              cover_url: coverPath,
+              status: "pending",
+            })
+            .select()
+            .single();
+          if (bErr) throw bErr;
+          if (bizOffer) {
+            await supabase.from("offers").insert({
+              business_id: biz.id,
+              title: bizOffer,
+              status: "active",
+            });
+          }
+        } catch {
+          // Tài khoản đã tạo xong rồi — lỗi ở bước này không nên coi là đăng ký thất bại
+          bizCreateFailed = true;
         }
       }
 
-      if (isBiz) {
+      if (isBiz && bizCreateFailed) {
+        toast.success(t("register.memberSuccessToast", { app: t("app.name") }));
+        toast.error(
+          "Tài khoản đã tạo thành công, nhưng lưu thông tin doanh nghiệp bị lỗi. Vào Hồ sơ để thêm lại doanh nghiệp của bạn.",
+        );
+      } else if (isBiz) {
         toast.success(t("register.bizSuccessToast"));
       } else {
         toast.success(t("register.memberSuccessToast", { app: t("app.name") }));
