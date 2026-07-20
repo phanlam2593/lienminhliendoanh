@@ -443,6 +443,21 @@ export type Database = {
           },
         ]
       }
+      internal_config: {
+        Row: {
+          key: string
+          value: string
+        }
+        Insert: {
+          key: string
+          value: string
+        }
+        Update: {
+          key?: string
+          value?: string
+        }
+        Relationships: []
+      }
       login_events: {
         Row: {
           created_at: string
@@ -465,6 +480,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "login_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
             referencedColumns: ["id"]
           },
         ]
@@ -494,6 +516,13 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "member_badges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
             referencedColumns: ["id"]
           },
         ]
@@ -840,6 +869,13 @@ export type Database = {
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "push_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       report_replies: {
@@ -993,45 +1029,6 @@ export type Database = {
           },
         ]
       }
-      suggestions: {
-        Row: {
-          address: string | null
-          business_name: string
-          business_type: Database["public"]["Enums"]["business_type"]
-          contact_info: string
-          created_at: string
-          description: string | null
-          id: string
-          status: Database["public"]["Enums"]["suggestion_status"]
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          address?: string | null
-          business_name: string
-          business_type?: Database["public"]["Enums"]["business_type"]
-          contact_info: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          status?: Database["public"]["Enums"]["suggestion_status"]
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          address?: string | null
-          business_name?: string
-          business_type?: Database["public"]["Enums"]["business_type"]
-          contact_info?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          status?: Database["public"]["Enums"]["suggestion_status"]
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       user_roles: {
         Row: {
           created_at: string
@@ -1175,6 +1172,51 @@ export type Database = {
           },
         ]
       }
+      profiles_public: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string | null
+          is_member: boolean | null
+          level: number | null
+          member_number: number | null
+          points: number | null
+          status: Database["public"]["Enums"]["account_status"] | null
+          status_message: string | null
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_member?: boolean | null
+          level?: number | null
+          member_number?: number | null
+          points?: number | null
+          status?: Database["public"]["Enums"]["account_status"] | null
+          status_message?: string | null
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string | null
+          is_member?: boolean | null
+          level?: number | null
+          member_number?: number | null
+          points?: number | null
+          status?: Database["public"]["Enums"]["account_status"] | null
+          status_message?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       award_member_points: {
@@ -1239,6 +1281,10 @@ export type Database = {
       notif_pref_allowed: {
         Args: { _key: string; _user_id: string }
         Returns: boolean
+      }
+      notify_mention: {
+        Args: { _body: string; _target_user_id: string; _title: string }
+        Returns: undefined
       }
       refresh_admin_pending_notification: { Args: never; Returns: undefined }
       unaccent_safe: { Args: { _t: string }; Returns: string }
