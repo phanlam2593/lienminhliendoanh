@@ -48,17 +48,38 @@ export default function ForgotPassword() {
     });
     setLoading(false);
 
-    if (fnErr || !data || data.locked) {
+    // Server tự báo khoá → khoá ngay, không tính vào số lần thử của máy này
+    if (data?.locked) {
       const until = Date.now() + LOCK_MS;
       localStorage.setItem(LOCK_KEY, String(until));
       setLockUntil(until);
+      localStorage.removeItem(ATTEMPT_KEY);
+      setAttempts(0);
       setError(data?.message || "Vui lòng thử lại sau ít phút hoặc liên hệ admin");
       return;
     }
-    if (!data.found) {
-      setError("Không tìm thấy tài khoản với thông tin này");
+
+    // Lỗi mạng/hệ thống hoặc không tìm thấy tài khoản → tính 1 lần thử sai
+    if (fnErr || !data || !data.found) {
+      const nextAttempts = attempts + 1;
+      setAttempts(nextAttempts);
+      localStorage.setItem(ATTEMPT_KEY, String(nextAttempts));
+      if (nextAttempts >= MAX_ATTEMPTS) {
+        const until = Date.now() + LOCK_MS;
+        localStorage.setItem(LOCK_KEY, String(until));
+        setLockUntil(until);
+        localStorage.removeItem(ATTEMPT_KEY);
+        setAttempts(0);
+        setError("Bạn đã nhập sai quá số lần cho phép. Vui lòng thử lại sau ít phút hoặc liên hệ admin");
+      } else {
+        setError(`Không tìm thấy tài khoản với thông tin này (còn ${MAX_ATTEMPTS - nextAttempts} lần thử)`);
+      }
       return;
     }
+
+    // Thành công → reset đếm lần thử
+    localStorage.removeItem(ATTEMPT_KEY);
+    setAttempts(0);
     setResult({ username: data.username as string, password_hint: data.password_hint ?? null });
   };
 
