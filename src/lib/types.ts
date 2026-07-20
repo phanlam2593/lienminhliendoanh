@@ -292,7 +292,6 @@ export type NotifCategory =
   | "featured"
   | "account_updates"
   | "reports"
-  | "suggestions"
   | "achievements";
 
 export interface Notification {
