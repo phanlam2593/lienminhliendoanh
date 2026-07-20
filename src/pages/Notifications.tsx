@@ -98,9 +98,8 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
         return "/ho-so";
       case "reports":
         return isAdmin ? "/admin?tab=reports" : "/bao-cao-cua-toi";
-      case "suggestions":
-        return "/bao-cao-cua-toi";
       default:
+
         return "/";
     }
   }
