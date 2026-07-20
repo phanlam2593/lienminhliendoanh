@@ -122,7 +122,7 @@ export function getMembershipPrice(points: number): number {
   const discount = getMembershipDiscountPct(points);
   return Math.round(MEMBERSHIP_BASE_PRICE * (1 - discount / 100));
 }
-export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "suggestion" | "system";
+export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "system";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   food: "Ăn uống",
