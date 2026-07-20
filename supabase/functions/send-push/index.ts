@@ -77,6 +77,14 @@ async function sendBatch(items: PushItem[]) {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
+  const incomingSecret = req.headers.get("x-push-dispatch-secret");
+  if (!PUSH_DISPATCH_SECRET || incomingSecret !== PUSH_DISPATCH_SECRET) {
+    return new Response(JSON.stringify({ error: "unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const raw = await req.json().catch(() => ({}));
 
