@@ -4,7 +4,6 @@ export type AccountStatus = "pending" | "approved" | "rejected";
 export type BusinessType = "food" | "service" | "stay" | "travel" | "creator" | "freelance" | "broker" | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
-export type SuggestionStatus = "pending" | "approved" | "rejected";
 export type ReportTarget = "business" | "offer";
 export type ReportStatus = "pending" | "replied" | "resolved" | "closed";
 export type NotifType =
