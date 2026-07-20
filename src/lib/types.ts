@@ -29,51 +29,6 @@ export type NotifType =
   | "pending_approval"
   | "mention";
 
-export interface Badge {
-  id: string;
-  business_id: string;
-  badge_type: string;
-  earned_at: string;
-}
-
-export const BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string; color: string }[] = [
-  {
-    type: "active_member",
-    threshold: 100,
-    label: "Thành viên tích cực",
-    emoji: "🌟",
-    color: "from-amber-300 to-yellow-500",
-  },
-  {
-    type: "community_supporter",
-    threshold: 500,
-    label: "Người ủng hộ cộng đồng",
-    emoji: "💪",
-    color: "from-sky-400 to-blue-600",
-  },
-  {
-    type: "trusted_partner",
-    threshold: 1000,
-    label: "Đối tác tin cậy",
-    emoji: "🤝",
-    color: "from-emerald-400 to-teal-600",
-  },
-  {
-    type: "growth_leader",
-    threshold: 2500,
-    label: "Người dẫn đầu phát triển",
-    emoji: "🚀",
-    color: "from-fuchsia-400 to-purple-600",
-  },
-  {
-    type: "community_legend",
-    threshold: 5000,
-    label: "Huyền thoại cộng đồng",
-    emoji: "👑",
-    color: "from-rose-400 to-red-600",
-  },
-];
-
 // Thang bậc DUY NHẤT cho thành viên (đã gộp Lv + badge cũ thành 1 hệ, 2026).
 // Điểm: +1 claim ưu đãi, +1 khi DN của bạn được claim, +1 mỗi bên khi hoàn thành Trao đổi.
 export const MEMBER_BADGE_TIERS: { type: string; threshold: number; label: string; emoji: string }[] = [
