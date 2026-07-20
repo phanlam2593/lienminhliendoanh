@@ -20,8 +20,6 @@ export type NotifType =
   | "admin_message"
   | "report_submitted"
   | "report_resolved"
-  | "suggestion_approved"
-  | "suggestion_rejected"
   | "new_offer"
   | "report_received"
   | "broadcast"
