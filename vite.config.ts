@@ -38,15 +38,6 @@ export default defineConfig(({ mode }) => ({
         skipWaiting: true,
         runtimeCaching: [
           {
-            urlPattern: ({ request }) => request.mode === "navigate",
-            handler: "NetworkFirst",
-            options: {
-              cacheName: "lmld-pages",
-              networkTimeoutSeconds: 15,
-              expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 7 },
-            },
-          },
-          {
             urlPattern: ({ url, sameOrigin }) => sameOrigin && /\.(?:js|css|woff2?)$/.test(url.pathname),
             handler: "StaleWhileRevalidate",
             options: {
