@@ -145,7 +145,7 @@ export default function Home() {
       </section>
 
       <footer className="px-4 pt-2 pb-4">
-        <div className="rounded-2xl bg-muted p-5 flex flex-col items-center text-center gap-3">
+        <div className="rounded-2xl bg-accent p-5 flex flex-col items-center text-center gap-3">
           <Logo size={44} asLink />
           <p className="text-sm font-bold text-foreground">{t("home.footerThanks")}</p>
           <div className="flex items-center justify-center gap-x-2 gap-y-1.5 text-xs font-medium text-muted-foreground flex-wrap">
