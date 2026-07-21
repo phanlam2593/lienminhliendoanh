@@ -1240,7 +1240,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
 
   const submit = async () => {
     if (next.length < 6) {
-      toast.error("Mật khẩu mới tối thiểu 6 ký tự");
+      toast.error(t("settings.pwTooShort"));
       return;
     }
     if (next !== confirm) {
