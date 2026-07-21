@@ -1173,7 +1173,7 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         )}
         <SettingRow
           icon={<HelpCircle className="w-4 h-4" />}
-          label="Trợ giúp & Liên hệ"
+          label={t("settings.help")}
           onClick={() => setOpen(open === "help" ? null : "help")}
           active={open === "help"}
         />
