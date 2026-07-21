@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import {
   Star,
@@ -53,6 +53,7 @@ export default function BusinessDetail() {
   const { id = "" } = useParams();
   const { user, isApproved, isAdmin } = useAuth();
   const { t } = useLanguage();
+  const nav = useNavigate();
   const [b, setB] = useState<Business | null>(null);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [reviews, setReviews] = useState<ReviewMeta[]>([]);
