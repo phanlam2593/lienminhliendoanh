@@ -227,7 +227,7 @@ export default function BusinessDetail() {
   };
 
   const deleteReview = async (rid: string) => {
-    if (!confirm("Xóa đánh giá này?")) return;
+    if (!confirm(t("biz.confirmDeleteReview"))) return;
     const { error } = await supabase.from("reviews").delete().eq("id", rid);
     if (error) {
       toast.error(error.message);
