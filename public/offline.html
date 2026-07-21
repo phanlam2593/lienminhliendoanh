@@ -48,22 +48,54 @@
   <body>
     <main class="card">
       <div class="badge">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M1 1l22 22"/><path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
-          <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
-          <path d="M10.71 5.05A16 16 0 0 1 22.58 9"/>
-          <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
-          <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
-          <line x1="12" y1="20" x2="12.01" y2="20"/>
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M1 1l22 22" />
+          <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
+          <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />
+          <path d="M10.71 5.05A16 16 0 0 1 22.58 9" />
+          <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88" />
+          <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+          <line x1="12" y1="20" x2="12.01" y2="20" />
         </svg>
       </div>
       <h1>Bạn đang ngoại tuyến</h1>
-      <p>Không có kết nối mạng. Một số nội dung đã xem gần đây vẫn có thể truy cập được. Vui lòng kiểm tra Wi-Fi hoặc dữ liệu di động rồi thử lại.</p>
+      <p>
+        Không có kết nối mạng. Một số nội dung đã xem gần đây vẫn có thể truy cập được. Vui lòng kiểm tra Wi-Fi hoặc dữ
+        liệu di động rồi thử lại.
+      </p>
       <button onclick="location.reload()">Thử lại</button>
       <div class="hint">Liên Minh Liên Doanh · Một cộng đồng – Nhiều giá trị</div>
     </main>
     <script>
-      window.addEventListener("online", () => location.reload());
+      function tryReconnect() {
+        if (!navigator.onLine) return;
+        // Thử fetch thật để chắc chắn có mạng, tránh navigator.onLine báo sai
+        fetch(location.origin + "/?_check=" + Date.now(), { cache: "no-store", mode: "no-cors" })
+          .then(() => location.reload())
+          .catch(() => {});
+      }
+
+      // Bắt sự kiện chuyển từ offline -> online (giữ nguyên như cũ)
+      window.addEventListener("online", tryReconnect);
+
+      // Bắt khi app được mở lại từ nền (quan trọng nhất cho PWA/app đã cài)
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") tryReconnect();
+      });
+      window.addEventListener("pageshow", tryReconnect);
+      window.addEventListener("focus", tryReconnect);
+
+      // Dự phòng: tự kiểm tra định kỳ mỗi 5 giây trong lúc đang hiển thị màn offline
+      setInterval(tryReconnect, 5000);
     </script>
   </body>
 </html>
