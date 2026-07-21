@@ -154,50 +154,84 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
   const toggleFollow = async (row: Row) => {
     if (!user) return;
     if (row.isBusiness) {
-      const isFollowing = myFollowingBiz.has(row.id);
-      if (isFollowing) {
+      const wasFollowing = myFollowingBiz.has(row.id);
+      // Optimistic
+      setMyFollowingBiz((s) => {
+        const n = new Set(s);
+        if (wasFollowing) n.delete(row.id);
+        else n.add(row.id);
+        return n;
+      });
+      if (wasFollowing) {
         const { error } = await supabase
           .from("follows")
           .delete()
           .eq("follower_id", user.id)
           .eq("followee_business_id", row.id);
-        if (error) return toast.error(error.message);
-        setMyFollowingBiz((s) => {
-          const n = new Set(s);
-          n.delete(row.id);
-          return n;
-        });
+        if (error) {
+          setMyFollowingBiz((s) => new Set(s).add(row.id));
+          return toast.error(error.message);
+        }
       } else {
         const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_business_id: row.id });
-        if (error) return toast.error(error.message);
-        setMyFollowingBiz((s) => new Set(s).add(row.id));
+        if (error) {
+          setMyFollowingBiz((s) => {
+            const n = new Set(s);
+            n.delete(row.id);
+            return n;
+          });
+          return toast.error(error.message);
+        }
       }
       onFollowChange?.();
       return;
     }
-    const isFollowing = myFollowing.has(row.id);
-    if (isFollowing) {
+    const wasFollowing = myFollowing.has(row.id);
+    // Optimistic
+    setMyFollowing((s) => {
+      const n = new Set(s);
+      if (wasFollowing) n.delete(row.id);
+      else n.add(row.id);
+      return n;
+    });
+    // Snapshot list nếu cần rollback khi đang ở "Đang theo dõi" của chính mình
+    const isSelfFollowingList = mode === "following" && target.kind === "user" && target.id === user.id;
+    let removedRow: Row | undefined;
+    let removedIndex = -1;
+    if (wasFollowing && isSelfFollowingList) {
+      removedIndex = rows.findIndex((r) => r.id === row.id);
+      removedRow = rows[removedIndex];
+      setRows((prev) => prev.filter((r) => r.id !== row.id));
+      setTotal((n) => Math.max(0, n - 1));
+    }
+    if (wasFollowing) {
       const { error } = await supabase
         .from("follows")
         .delete()
         .eq("follower_id", user.id)
         .eq("followee_user_id", row.id);
-      if (error) return toast.error(error.message);
-      setMyFollowing((s) => {
-        const n = new Set(s);
-        n.delete(row.id);
-        return n;
-      });
-      // Đang xem chính danh sách "Đang theo dõi" của TÔI và tôi vừa bỏ theo dõi — người này
-      // không còn thuộc danh sách nữa, phải biến mất khỏi list ngay, không chỉ đổi nút.
-      if (mode === "following" && target.kind === "user" && target.id === user.id) {
-        setRows((prev) => prev.filter((r) => r.id !== row.id));
-        setTotal((n) => Math.max(0, n - 1));
+      if (error) {
+        setMyFollowing((s) => new Set(s).add(row.id));
+        if (removedRow && removedIndex >= 0) {
+          setRows((prev) => {
+            const copy = [...prev];
+            copy.splice(removedIndex, 0, removedRow!);
+            return copy;
+          });
+          setTotal((n) => n + 1);
+        }
+        return toast.error(error.message);
       }
     } else {
       const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: row.id });
-      if (error) return toast.error(error.message);
-      setMyFollowing((s) => new Set(s).add(row.id));
+      if (error) {
+        setMyFollowing((s) => {
+          const n = new Set(s);
+          n.delete(row.id);
+          return n;
+        });
+        return toast.error(error.message);
+      }
     }
     onFollowChange?.();
   };
