@@ -93,6 +93,7 @@ export default function Profile() {
   const [quickStatusOpen, setQuickStatusOpen] = useState(false);
   const [tierLegendOpen, setTierLegendOpen] = useState(false);
   const [quickStatusMsg, setQuickStatusMsg] = useState("");
+  const [helpOpen, setHelpOpen] = useState(false);
   const [quickSaving, setQuickSaving] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
 
