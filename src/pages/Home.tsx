@@ -205,119 +205,167 @@ function StatBtn({
     </button>
   );
 }
-
-function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => void }) {
+function StatsModal({
+  kind,
+  onClose,
+  totalMembers,
+  totalBusinesses,
+}: {
+  kind: StatKind | null;
+  onClose: () => void;
+  totalMembers: number;
+  totalBusinesses: number;
+}) {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const PAGE_SIZE = 30;
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [q]);
+
+  const loadMembers = async (pageNum: number, append: boolean, search: string) => {
+    const from = pageNum * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    let query = supabase
+      .from("profiles")
+      .select("id, full_name, avatar_url, status_message, points, created_at")
+      .eq("status", "approved")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (search) query = query.or(`full_name.ilike.%${search}%,username.ilike.%${search}%`);
+    const [{ data }, { data: roles }] = await Promise.all([query, supabase.rpc("get_admin_user_ids")]);
+    setAdminIds(new Set((roles ?? []).map((r: any) => r.user_id)));
+    const list = data ?? [];
+    setItems((prev) => (append ? [...prev, ...list] : list));
+    setHasMore(list.length === PAGE_SIZE);
+  };
+
+  const loadBusinesses = async (pageNum: number, append: boolean, search: string) => {
+    const from = pageNum * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    let query = supabase
+      .from("businesses")
+      .select("*")
+      .eq("status", "approved")
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (search) query = query.ilike("name", `%${search}%`);
+    const { data: biz } = await query;
+    const bizList = (biz as any[]) ?? [];
+    const bizIds = bizList.map((b) => b.id);
+    const [{ data: offers }, { data: stats }] = await Promise.all([
+      bizIds.length
+        ? supabase.from("offers").select("business_id, status").eq("status", "active").in("business_id", bizIds)
+        : Promise.resolve({ data: [] as any[] }),
+      bizIds.length
+        ? supabase.from("business_card_stats").select("business_id, rating, review_count").in("business_id", bizIds)
+        : Promise.resolve({ data: [] as any[] }),
+    ]);
+    const cnt = new Map<string, number>();
+    (offers ?? []).forEach((o: any) => cnt.set(o.business_id, (cnt.get(o.business_id) ?? 0) + 1));
+    const rMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
+    const list = bizList.map((b: any) => ({
+      ...b,
+      offerCount: cnt.get(b.id) ?? 0,
+      rating: Number(rMap.get(b.id)?.rating ?? 0),
+      reviewCount: rMap.get(b.id)?.review_count ?? 0,
+    }));
+    setItems((prev) => (append ? [...prev, ...list] : list));
+    setHasMore(list.length === PAGE_SIZE);
+  };
+
+  const loadOffersClaimed = async () => {
+    const { data: claims } = await supabase
+      .from("offer_claims")
+      .select("id, offer_id, code, claimed_at")
+      .eq("user_id", user?.id ?? "")
+      .order("claimed_at", { ascending: false })
+      .limit(500);
+    const list = claims ?? [];
+    const offerIds = [...new Set(list.map((c: any) => c.offer_id))];
+    const { data: offs } = offerIds.length
+      ? await supabase.from("offers").select("id, title, business_id").in("id", offerIds)
+      : { data: [] as any[] };
+    const bizIds: string[] = Array.from(new Set(((offs ?? []) as any[]).map((o) => o.business_id as string)));
+    const { data: biz } = bizIds.length
+      ? await supabase.from("businesses").select("id, name").in("id", bizIds)
+      : ({ data: [] } as any);
+    const oMap = new Map((offs ?? []).map((o: any) => [o.id, o]));
+    const bMap = new Map((biz ?? []).map((b: any) => [b.id, b.name]));
+    setItems(
+      list.map((c: any) => {
+        const o = oMap.get(c.offer_id) as any;
+        return {
+          ...c,
+          offer_title: o?.title || "(đã xóa)",
+          business_name: o ? bMap.get(o.business_id) || "—" : "—",
+        };
+      }),
+    );
+    setHasMore(false);
+  };
 
   useEffect(() => {
     if (!kind) {
       setItems([]);
       setQ("");
+      setDebouncedQ("");
       return;
     }
+    setPage(0);
     setLoading(true);
     (async () => {
-      if (kind === "members") {
-        const [{ data }, { data: roles }] = await Promise.all([
-          supabase
-            .from("profiles")
-            .select("id, full_name, avatar_url, status_message, points, created_at")
-            .eq("status", "approved")
-            .order("created_at", { ascending: false }),
-          supabase.rpc("get_admin_user_ids"),
-        ]);
-        setAdminIds(new Set((roles ?? []).map((r: any) => r.user_id)));
-        setItems(data ?? []);
-      } else if (kind === "businesses") {
-        const [{ data: biz }, { data: offers }] = await Promise.all([
-          supabase.from("businesses").select("*").eq("status", "approved").order("created_at", { ascending: false }),
-          supabase.from("offers").select("business_id, status").eq("status", "active"),
-        ]);
-        const cnt = new Map<string, number>();
-        (offers ?? []).forEach((o: any) => cnt.set(o.business_id, (cnt.get(o.business_id) ?? 0) + 1));
-        const bizIds = ((biz as any[]) ?? []).map((b) => b.id);
-        const { data: stats } = bizIds.length
-          ? await supabase
-              .from("business_card_stats")
-              .select("business_id, rating, review_count")
-              .in("business_id", bizIds)
-          : { data: [] as any[] };
-        const rMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
-        setItems(
-          (biz ?? []).map((b: any) => ({
-            ...b,
-            offerCount: cnt.get(b.id) ?? 0,
-            rating: Number(rMap.get(b.id)?.rating ?? 0),
-            reviewCount: rMap.get(b.id)?.review_count ?? 0,
-          })),
-        );
-      } else if (kind === "offers") {
-        const { data: claims } = await supabase
-          .from("offer_claims")
-          .select("id, offer_id, code, claimed_at")
-          .eq("user_id", user?.id ?? "")
-          .order("claimed_at", { ascending: false })
-          .limit(500);
-        const list = claims ?? [];
-        const offerIds = [...new Set(list.map((c: any) => c.offer_id))];
-        const { data: offs } = offerIds.length
-          ? await supabase.from("offers").select("id, title, business_id").in("id", offerIds)
-          : { data: [] as any[] };
-        const bizIds: string[] = Array.from(new Set(((offs ?? []) as any[]).map((o) => o.business_id as string)));
-        const { data: biz } = bizIds.length
-          ? await supabase.from("businesses").select("id, name").in("id", bizIds)
-          : ({ data: [] } as any);
-        const oMap = new Map((offs ?? []).map((o: any) => [o.id, o]));
-        const bMap = new Map((biz ?? []).map((b: any) => [b.id, b.name]));
-        setItems(
-          list.map((c: any) => {
-            const o = oMap.get(c.offer_id) as any;
-            return {
-              ...c,
-              offer_title: o?.title || "(đã xóa)",
-              business_name: o ? bMap.get(o.business_id) || "—" : "—",
-            };
-          }),
-        );
-      }
+      if (kind === "members") await loadMembers(0, false, debouncedQ);
+      else if (kind === "businesses") await loadBusinesses(0, false, debouncedQ);
+      else if (kind === "offers") await loadOffersClaimed();
       setLoading(false);
     })();
-  }, [kind]);
+  }, [kind, debouncedQ]);
+
+  const loadMore = async () => {
+    const next = page + 1;
+    setPage(next);
+    setLoadingMore(true);
+    if (kind === "members") await loadMembers(next, true, debouncedQ);
+    else if (kind === "businesses") await loadBusinesses(next, true, debouncedQ);
+    setLoadingMore(false);
+  };
 
   const filtered = useMemo(() => {
+    if (kind !== "offers") return items;
     const k = q.trim().toLowerCase();
     if (!k) return items;
-    if (kind === "members")
-      return items.filter(
-        (i) => (i.full_name || "").toLowerCase().includes(k) || (i.username || "").toLowerCase().includes(k),
-      );
-    if (kind === "businesses")
-      return items.filter(
-        (i) =>
-          (i.name || "").toLowerCase().includes(k) ||
-          (BUSINESS_TYPE_LABEL[i.type as keyof typeof BUSINESS_TYPE_LABEL] || "").toLowerCase().includes(k),
-      );
-    if (kind === "offers")
-      return items.filter(
-        (i) => (i.offer_title || "").toLowerCase().includes(k) || (i.business_name || "").toLowerCase().includes(k),
-      );
-    return items;
+    return items.filter(
+      (i) => (i.offer_title || "").toLowerCase().includes(k) || (i.business_name || "").toLowerCase().includes(k),
+    );
   }, [items, q, kind]);
 
   const title =
     kind === "members" ? t("stats.members") : kind === "businesses" ? t("stats.businesses") : t("stats.offersClaimed");
+
+  const countLabel =
+    kind === "members" && !debouncedQ
+      ? totalMembers
+      : kind === "businesses" && !debouncedQ
+        ? totalBusinesses
+        : filtered.length;
 
   return (
     <Dialog open={!!kind} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-md max-h-[85vh] overflow-hidden flex flex-col p-0">
         <DialogHeader className="px-4 pt-4 pb-2">
           <DialogTitle>
-            {title} ({filtered.length})
+            {title} ({countLabel})
           </DialogTitle>
         </DialogHeader>
         <div className="px-4 pb-2">
@@ -337,56 +385,78 @@ function StatsModal({ kind, onClose }: { kind: StatKind | null; onClose: () => v
           ) : filtered.length === 0 ? (
             <p className="text-center py-8 text-sm text-muted-foreground">{t("common.noResults")}</p>
           ) : kind === "members" ? (
-            filtered.map((m: any) => (
-              <Link
-                key={m.id}
-                to={`/ho-so/${m.id}`}
-                onClick={onClose}
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent"
-              >
-                <Avatar path={m.avatar_url} name={m.full_name} size={40} />
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate flex items-center gap-1.5">
-                    <span className="truncate">{m.full_name}</span>
-                    <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
-                  </div>
-                  {m.status_message ? (
-                    <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
-                  ) : (
-                    <div className="text-[11px] text-muted-foreground truncate">
-                      Tham gia {new Date(m.created_at).toLocaleDateString("vi-VN")}
+            <>
+              {filtered.map((m: any) => (
+                <Link
+                  key={m.id}
+                  to={`/ho-so/${m.id}`}
+                  onClick={onClose}
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent"
+                >
+                  <Avatar path={m.avatar_url} name={m.full_name} size={40} />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold truncate flex items-center gap-1.5">
+                      <span className="truncate">{m.full_name}</span>
+                      <MemberLevelBadge points={m.points} isAdmin={adminIds.has(m.id)} />
                     </div>
-                  )}
-                </div>
-              </Link>
-            ))
-          ) : kind === "businesses" ? (
-            filtered.map((b: any) => (
-              <Link
-                key={b.id}
-                to={`/dn/${b.id}`}
-                onClick={onClose}
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent"
-              >
-                <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted shrink-0">
-                  <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{b.name}</div>
-                  <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 flex-wrap">
-                    <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
-                    <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
-                    <span>· {b.offerCount} ưu đãi</span>
-                    {b.reviewCount > 0 && (
-                      <span className="inline-flex items-center gap-0.5">
-                        · <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {b.rating.toFixed(1)}
-                      </span>
+                    {m.status_message ? (
+                      <div className="text-[11px] text-primary italic truncate font-medium">{m.status_message}</div>
+                    ) : (
+                      <div className="text-[11px] text-muted-foreground truncate">
+                        Tham gia {new Date(m.created_at).toLocaleDateString("vi-VN")}
+                      </div>
                     )}
-                    {getLocation(b.address) && <span>· 📍 {getLocation(b.address)}</span>}
                   </div>
-                </div>
-              </Link>
-            ))
+                </Link>
+              ))}
+              {hasMore && (
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+                >
+                  {loadingMore ? t("common.loading") : t("common.loadMore")}
+                </button>
+              )}
+            </>
+          ) : kind === "businesses" ? (
+            <>
+              {filtered.map((b: any) => (
+                <Link
+                  key={b.id}
+                  to={`/dn/${b.id}`}
+                  onClick={onClose}
+                  className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent"
+                >
+                  <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted shrink-0">
+                    <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold truncate">{b.name}</div>
+                    <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 flex-wrap">
+                      <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
+                      <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
+                      <span>· {b.offerCount} ưu đãi</span>
+                      {b.reviewCount > 0 && (
+                        <span className="inline-flex items-center gap-0.5">
+                          · <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {b.rating.toFixed(1)}
+                        </span>
+                      )}
+                      {getLocation(b.address) && <span>· 📍 {getLocation(b.address)}</span>}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+              {hasMore && (
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+                >
+                  {loadingMore ? t("common.loading") : t("common.loadMore")}
+                </button>
+              )}
+            </>
           ) : (
             filtered.map((c: any) => (
               <div key={c.id} className="p-3 rounded-lg bg-card border space-y-1">
