@@ -209,7 +209,7 @@ export default function BusinessDetail() {
         }
         throw error;
       }
-      toast.success("Đã gửi đánh giá");
+      toast.success(t("biz.reviewSent"));
       invalidateReviews(id);
       invalidateBusinesses(id);
       setReviewOpen(false);
