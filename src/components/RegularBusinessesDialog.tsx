@@ -5,6 +5,7 @@ import { Bell, BellOff } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { StoredImage } from "@/components/StoredImage";
+import { useLanguage } from "@/lib/i18n";
 
 interface RegularBiz {
   id: string;
@@ -15,9 +16,6 @@ interface RegularBiz {
   notifOn: boolean;
 }
 
-// "Quán quen" là lịch sử ghé quán (đọc từ business_regulars, tự động ghi nhận khi
-// claim ưu đãi) — KHÔNG phải follow xã hội, nên không có nút "bỏ theo dõi". Chỉ có
-// chuông bật/tắt thông báo deal mới, vẫn chạy ngầm qua bảng follows như cũ.
 export function RegularBusinessesDialog({
   userId,
   open,
@@ -27,6 +25,7 @@ export function RegularBusinessesDialog({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  const { t, lang } = useLanguage();
   const [rows, setRows] = useState<RegularBiz[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -58,7 +57,7 @@ export function RegularBusinessesDialog({
       setRows(
         (regulars ?? []).map((r: any) => ({
           id: r.business_id,
-          name: bizMap.get(r.business_id)?.name ?? "Doanh nghiệp",
+          name: bizMap.get(r.business_id)?.name ?? t("regulars.defaultBizName"),
           cover_url: bizMap.get(r.business_id)?.cover_url ?? null,
           visits: r.visit_count,
           lastVisit: r.last_visit_at,
@@ -66,7 +65,7 @@ export function RegularBusinessesDialog({
         })),
       );
     } catch (e: any) {
-      toast.error(e.message || "Không tải được danh sách");
+      toast.error(e.message || t("follow.loadFail"));
     } finally {
       setLoading(false);
     }
@@ -86,9 +85,7 @@ export function RegularBusinessesDialog({
         .eq("followee_business_id", biz.id);
       if (error) return toast.error(error.message);
     } else {
-      const { error } = await supabase
-        .from("follows")
-        .insert({ follower_id: userId, followee_business_id: biz.id });
+      const { error } = await supabase.from("follows").insert({ follower_id: userId, followee_business_id: biz.id });
       if (error) return toast.error(error.message);
     }
     setRows((prev) => prev.map((r) => (r.id === biz.id ? { ...r, notifOn: !r.notifOn } : r)));
@@ -98,15 +95,15 @@ export function RegularBusinessesDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm max-h-[80vh] flex flex-col p-0 gap-0">
         <DialogHeader className="p-4 pb-2">
-          <DialogTitle>Quán quen {rows.length > 0 ? `(${rows.length})` : ""}</DialogTitle>
+          <DialogTitle>
+            {t("regulars.title")} {rows.length > 0 ? `(${rows.length})` : ""}
+          </DialogTitle>
         </DialogHeader>
         <div className="flex-1 overflow-y-auto px-2 pb-3">
           {loading ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">Đang tải…</div>
+            <div className="p-6 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
           ) : rows.length === 0 ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">
-              Chưa có quán quen nào. Claim ưu đãi ở quán nào đó là quán sẽ tự xuất hiện ở đây.
-            </div>
+            <div className="p-6 text-center text-sm text-muted-foreground">{t("regulars.empty")}</div>
           ) : (
             <ul className="space-y-1">
               {rows.map((r) => (
@@ -122,14 +119,18 @@ export function RegularBusinessesDialog({
                     <div className="min-w-0">
                       <div className="text-sm font-semibold truncate">{r.name}</div>
                       <div className="text-[11px] text-muted-foreground">
-                        {r.visits} lượt ghé
-                        {r.lastVisit ? ` · gần nhất ${new Date(r.lastVisit).toLocaleDateString("vi-VN")}` : ""}
+                        {t("regulars.visitsCount", { n: r.visits })}
+                        {r.lastVisit
+                          ? t("regulars.lastVisitSuffix", {
+                              date: new Date(r.lastVisit).toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US"),
+                            })
+                          : ""}
                       </div>
                     </div>
                   </Link>
                   <button
                     onClick={() => toggleNotif(r)}
-                    aria-label={r.notifOn ? "Tắt thông báo deal mới" : "Bật thông báo deal mới"}
+                    aria-label={r.notifOn ? t("regulars.notifOff") : t("regulars.notifOn")}
                     className={`h-8 w-8 rounded-lg border grid place-items-center shrink-0 ${
                       r.notifOn ? "text-primary border-primary/40 bg-primary/10" : "text-muted-foreground"
                     }`}
