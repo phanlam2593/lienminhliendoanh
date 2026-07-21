@@ -24,7 +24,7 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
   if (pinned.length === 0) {
     return (
       <div className="h-[60vh] rounded-xl border bg-card grid place-items-center text-center px-6">
-        <p className="text-sm text-muted-foreground">Chưa có doanh nghiệp nào ghim vị trí trên bản đồ</p>
+        <p className="text-sm text-muted-foreground">{t("map.noPinned")}</p>
       </div>
     );
   }
