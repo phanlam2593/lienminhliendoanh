@@ -721,6 +721,11 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono"
             />
           </Field>
+          {!lat && (
+            <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5">
+              Doanh nghiệp của bạn chưa xuất hiện trên bản đồ Khám phá — ghim vị trí để khách dễ tìm thấy hơn.
+            </div>
+          )}
           <div>
             <button
               type="button"
