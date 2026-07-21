@@ -322,6 +322,18 @@ export default function Admin() {
           />
           <ToolRow icon={Flag} label="Điều khoản sử dụng" href="/dieu-khoan" external />
           <ToolRow icon={Shield} label="Chính sách bảo mật" href="/chinh-sach-bao-mat" external />
+          <ToolRow
+            icon={Building2}
+            label="Xuất CSV: Doanh nghiệp"
+            onClick={() => exportTableToCSV("businesses", "doanh-nghiep")}
+          />
+          <ToolRow
+            icon={Users}
+            label="Xuất CSV: Thành viên"
+            onClick={() => exportTableToCSV("profiles", "thanh-vien")}
+          />
+          <ToolRow icon={Tag} label="Xuất CSV: Ưu đãi" onClick={() => exportTableToCSV("offers", "uu-dai")} />
+          <ToolRow icon={Star} label="Xuất CSV: Đánh giá" onClick={() => exportTableToCSV("reviews", "danh-gia")} />
           <ToolRow icon={Search} label="Chính sách Cookie" href="/chinh-sach-cookie" external />
         </div>
       )}
