@@ -233,7 +233,7 @@ export default function BusinessDetail() {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã xóa");
+    toast.success(t("common.deleted"));
     invalidateReviews(id);
     invalidateBusinesses(id);
     setReviewPage(0);
