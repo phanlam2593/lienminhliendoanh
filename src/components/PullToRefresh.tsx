@@ -55,7 +55,15 @@ export function PullToRefresh({ children }: { children: React.ReactNode }) {
       >
         <RefreshCw className={`w-5 h-5 text-primary ${refreshing || pull >= THRESHOLD ? "animate-spin" : ""}`} />
       </div>
-      <div style={{ transform: `translateY(${refreshing ? 0 : Math.min(pull, THRESHOLD) * 0.4}px)` }}>{children}</div>
+      <div
+        style={
+          pull > 0 || refreshing
+            ? { transform: `translateY(${refreshing ? 0 : Math.min(pull, THRESHOLD) * 0.4}px)` }
+            : undefined
+        }
+      >
+        {children}
+      </div>
     </div>
   );
 }
