@@ -44,6 +44,7 @@ import { timeAgo } from "@/lib/time";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { BusinessQuickView } from "@/components/BusinessQuickView";
+import { exportTableToCSV } from "@/lib/csvExport";
 
 interface MemberRow extends Profile {
   business?: Business | null;
