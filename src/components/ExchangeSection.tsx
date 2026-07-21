@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Handshake, Check, X, Clock, Loader2, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n";
 import type { Business, Exchange, ExchangeStatus } from "@/lib/types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar } from "@/components/Avatar";
@@ -20,39 +21,42 @@ const REQ_TYPES = [
 
 const ACTIVE: ExchangeStatus[] = ["pending", "accepted", "requester_done", "receiver_done"];
 
-const STATUS_COLOR: Record<ExchangeStatus, { dot: string; chip: string; label: string }> = {
-  pending: {
-    dot: "bg-amber-400",
-    chip: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200",
-    label: "Chờ phản hồi",
-  },
-  accepted: {
-    dot: "bg-sky-400",
-    chip: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200",
-    label: "Đã chấp nhận",
-  },
-  requester_done: {
-    dot: "bg-sky-500",
-    chip: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200",
-    label: "Người gửi xong",
-  },
-  receiver_done: {
-    dot: "bg-sky-500",
-    chip: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200",
-    label: "Người nhận xong",
-  },
-  completed: {
-    dot: "bg-emerald-500",
-    chip: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200",
-    label: "Hoàn thành",
-  },
-  rejected: {
-    dot: "bg-rose-500",
-    chip: "bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200",
-    label: "Đã từ chối",
-  },
-  expired: { dot: "bg-muted-foreground", chip: "bg-muted text-muted-foreground", label: "Đã hết hạn" },
-};
+function useStatusColor(): Record<ExchangeStatus, { dot: string; chip: string; label: string }> {
+  const { t } = useLanguage();
+  return {
+    pending: {
+      dot: "bg-amber-400",
+      chip: "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200",
+      label: t("exchange.statusPending"),
+    },
+    accepted: {
+      dot: "bg-sky-400",
+      chip: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200",
+      label: t("exchange.statusAccepted"),
+    },
+    requester_done: {
+      dot: "bg-sky-500",
+      chip: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200",
+      label: t("exchange.statusRequesterDone"),
+    },
+    receiver_done: {
+      dot: "bg-sky-500",
+      chip: "bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-200",
+      label: t("exchange.statusReceiverDone"),
+    },
+    completed: {
+      dot: "bg-emerald-500",
+      chip: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200",
+      label: t("exchange.statusCompleted"),
+    },
+    rejected: {
+      dot: "bg-rose-500",
+      chip: "bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200",
+      label: t("exchange.statusRejected"),
+    },
+    expired: { dot: "bg-muted-foreground", chip: "bg-muted text-muted-foreground", label: t("exchange.statusExpired") },
+  };
+}
 
 // Step index 0-5 for progress dots
 const STATUS_STEP: Record<ExchangeStatus, number> = {
@@ -66,6 +70,7 @@ const STATUS_STEP: Record<ExchangeStatus, number> = {
 };
 
 export function ExchangeSection({ business }: { business: Business }) {
+  const { t } = useLanguage();
   const { user, isApproved } = useAuth();
   const [myBusinesses, setMyBusinesses] = useState<Business[]>([]);
   const [selectedReqId, setSelectedReqId] = useState<string>("");
@@ -78,7 +83,6 @@ export function ExchangeSection({ business }: { business: Business }) {
   const isOwnerSelf = !!user && user.id === business.owner_id;
   const canExchange = !!user && isApproved && !isOwnerSelf && myBusinesses.length > 0;
 
-  // Count pending outgoing across all my businesses → limit 5 per business
   const myBizIds = useMemo(() => myBusinesses.map((b) => b.id), [myBusinesses]);
   const myPendingByBiz = useMemo(() => {
     const m = new Map<string, number>();
@@ -161,41 +165,37 @@ export function ExchangeSection({ business }: { business: Business }) {
     <section className="space-y-3">
       <div className="flex items-center justify-between">
         <h2 className="font-bold flex items-center gap-1.5">
-          <Handshake className="w-4 h-4 text-primary" /> Trao đổi hỗ trợ
+          <Handshake className="w-4 h-4 text-primary" /> {t("exchange.title")}
         </h2>
         {canExchange && (
           <button
             onClick={() => !limitReached && setOpen(true)}
             disabled={limitReached}
-            title={
-              limitReached ? "Bạn đang có 5 trao đổi chưa hoàn thành. Hoàn thành bớt trước khi gửi thêm." : undefined
-            }
+            title={limitReached ? t("exchange.limitReached") : undefined}
             className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Gửi yêu cầu trao đổi
+            {t("exchange.sendRequest")}
           </button>
         )}
       </div>
 
-      {!user && <p className="text-xs text-muted-foreground">Đăng nhập để gửi yêu cầu trao đổi hỗ trợ.</p>}
+      {!user && <p className="text-xs text-muted-foreground">{t("exchange.needLogin")}</p>}
       {user && !isOwnerSelf && myBusinesses.length === 0 && (
-        <p className="text-xs text-muted-foreground">Bạn cần có hồ sơ doanh nghiệp để gửi yêu cầu trao đổi.</p>
+        <p className="text-xs text-muted-foreground">{t("exchange.needBusiness")}</p>
       )}
       {canExchange && limitReached && (
-        <p className="text-[11px] text-amber-700 dark:text-amber-300">
-          Bạn đang có 5 trao đổi chưa hoàn thành. Hoàn thành bớt trước khi gửi thêm.
-        </p>
+        <p className="text-[11px] text-amber-700 dark:text-amber-300">{t("exchange.limitReached")}</p>
       )}
 
       <div className="flex gap-1 border-b">
         <TabBtn active={tab === "active"} onClick={() => setTab("active")}>
-          Đang chờ ({counts.active})
+          {t("exchange.tabActive")} ({counts.active})
         </TabBtn>
         <TabBtn active={tab === "completed"} onClick={() => setTab("completed")}>
-          Hoàn thành ({counts.completed})
+          {t("exchange.tabCompleted")} ({counts.completed})
         </TabBtn>
         <TabBtn active={tab === "rejected"} onClick={() => setTab("rejected")}>
-          Đã từ chối ({counts.rejected})
+          {t("exchange.tabRejected")} ({counts.rejected})
         </TabBtn>
       </div>
       <div className="space-y-2">
@@ -237,10 +237,11 @@ export function ExchangeSection({ business }: { business: Business }) {
 }
 
 function EmptyState({ tab }: { tab: "active" | "completed" | "rejected" }) {
+  const { t } = useLanguage();
   const msg = {
-    active: "Chưa có trao đổi nào đang chờ. Hãy gửi yêu cầu đầu tiên! 🤝",
-    completed: "Chưa có trao đổi nào hoàn thành. Bắt đầu trao đổi để nhận điểm! 🌟",
-    rejected: "Không có trao đổi nào bị từ chối 👍",
+    active: t("exchange.emptyActive"),
+    completed: t("exchange.emptyCompleted"),
+    rejected: t("exchange.emptyRejected"),
   }[tab];
   return <div className="text-xs text-muted-foreground py-6 text-center bg-muted/30 rounded-xl">{msg}</div>;
 }
@@ -273,6 +274,7 @@ function CreateExchangeDialog({
   receiver: Business;
   onCreated: () => void;
 }) {
+  const { t } = useLanguage();
   const [reqType, setReqType] = useState(REQ_TYPES[0]);
   const [wantText, setWantText] = useState("");
   const [giveText, setGiveText] = useState("");
@@ -282,11 +284,11 @@ function CreateExchangeDialog({
   const submit = async () => {
     setErr(null);
     if (!selectedReqId) {
-      setErr("Chọn doanh nghiệp của bạn");
+      setErr(t("exchange.selectBusinessErr"));
       return;
     }
     if (!wantText.trim() || !giveText.trim()) {
-      setErr("Vui lòng điền đầy đủ thông tin");
+      setErr(t("exchange.fillAllErr"));
       return;
     }
     setBusy(true);
@@ -302,7 +304,7 @@ function CreateExchangeDialog({
       setErr(error.message);
       return;
     }
-    toast.success("Đã gửi yêu cầu trao đổi");
+    toast.success(t("exchange.requestSent"));
     setWantText("");
     setGiveText("");
     onOpenChange(false);
@@ -313,12 +315,12 @@ function CreateExchangeDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Trao đổi với {receiver.name}</DialogTitle>
+          <DialogTitle>{t("exchange.withWhom", { name: receiver.name })}</DialogTitle>
         </DialogHeader>
         <div className="space-y-3">
           {myBusinesses.length > 1 && (
             <div>
-              <div className="text-xs font-semibold mb-1">Doanh nghiệp của bạn</div>
+              <div className="text-xs font-semibold mb-1">{t("exchange.yourBusiness")}</div>
               <select
                 value={selectedReqId}
                 onChange={(e) => setSelectedReqId(e.target.value)}
@@ -333,34 +335,34 @@ function CreateExchangeDialog({
             </div>
           )}
           <div>
-            <div className="text-xs font-semibold mb-1">Loại yêu cầu</div>
+            <div className="text-xs font-semibold mb-1">{t("exchange.reqTypeLabel")}</div>
             <select
               value={reqType}
               onChange={(e) => setReqType(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
             >
-              {REQ_TYPES.map((t) => (
-                <option key={t} value={t}>
-                  {t}
+              {REQ_TYPES.map((rt) => (
+                <option key={rt} value={rt}>
+                  {rt}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <div className="text-xs font-semibold mb-1">Bạn muốn nhận gì?</div>
+            <div className="text-xs font-semibold mb-1">{t("exchange.wantLabel")}</div>
             <input
               value={wantText}
               onChange={(e) => setWantText(e.target.value)}
-              placeholder="Ví dụ: Follow TikTok của tôi"
+              placeholder={t("exchange.wantPlaceholder")}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
             />
           </div>
           <div>
-            <div className="text-xs font-semibold mb-1">Bạn sẽ làm gì đổi lại?</div>
+            <div className="text-xs font-semibold mb-1">{t("exchange.giveLabel")}</div>
             <input
               value={giveText}
               onChange={(e) => setGiveText(e.target.value)}
-              placeholder="Ví dụ: Tôi sẽ follow Facebook của bạn"
+              placeholder={t("exchange.givePlaceholder")}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
             />
           </div>
@@ -370,7 +372,7 @@ function CreateExchangeDialog({
             disabled={busy}
             className="w-full py-2.5 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm disabled:opacity-50"
           >
-            {busy ? "Đang gửi…" : "Gửi yêu cầu"}
+            {busy ? t("exchange.sending") : t("exchange.sendRequestBtn")}
           </button>
         </div>
       </DialogContent>
@@ -379,7 +381,6 @@ function CreateExchangeDialog({
 }
 
 function StepDots({ step }: { step: number }) {
-  // 6 steps: created → pending → accepted → requester_done → receiver_done → completed
   return (
     <div className="flex items-center gap-1">
       {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -393,18 +394,20 @@ function StepDots({ step }: { step: number }) {
 }
 
 function Countdown({ expiresAt }: { expiresAt: string }) {
+  const { t } = useLanguage();
   const [now, setNow] = useState(Date.now());
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 60_000);
     return () => clearInterval(t);
   }, []);
   const ms = new Date(expiresAt).getTime() - now;
-  if (ms <= 0) return <span className="text-[10px] text-rose-500">Đã hết hạn</span>;
+  if (ms <= 0) return <span className="text-[10px] text-rose-500">{t("exchange.statusExpired")}</span>;
   const days = Math.floor(ms / 86_400_000);
   const hours = Math.floor((ms % 86_400_000) / 3_600_000);
   return (
     <span className="text-[10px] text-muted-foreground inline-flex items-center gap-1">
-      <Clock className="w-3 h-3" /> Còn {days > 0 ? `${days} ngày` : `${hours} giờ`}
+      <Clock className="w-3 h-3" />{" "}
+      {days > 0 ? t("exchange.daysLeft", { n: days }) : t("exchange.hoursLeft", { n: hours })}
     </span>
   );
 }
@@ -422,6 +425,8 @@ function ExchangeCard({
   onChanged: () => void;
   onOpen: () => void;
 }) {
+  const { t } = useLanguage();
+  const STATUS_COLOR = useStatusColor();
   const [busy, setBusy] = useState(false);
   const iAmRequester = myBusinessIds.includes(e.requester_id);
   const mineId = iAmRequester ? e.requester_id : e.receiver_id;
@@ -458,34 +463,34 @@ function ExchangeCard({
     action = (
       <div className="flex gap-2">
         <ActionBtn variant="primary" disabled={busy} onClick={accept}>
-          <Check className="w-3.5 h-3.5" /> Chấp nhận
+          <Check className="w-3.5 h-3.5" /> {t("exchange.accept")}
         </ActionBtn>
         <ActionBtn variant="ghost" disabled={busy} onClick={reject}>
-          <X className="w-3.5 h-3.5" /> Từ chối
+          <X className="w-3.5 h-3.5" /> {t("exchange.reject")}
         </ActionBtn>
       </div>
     );
   } else if (e.status === "accepted" && iAmRequester) {
     action = (
       <ActionBtn variant="primary" disabled={busy} onClick={requesterMarkDone}>
-        <Check className="w-3.5 h-3.5" /> Tôi đã hoàn thành
+        <Check className="w-3.5 h-3.5" /> {t("exchange.iAmDone")}
       </ActionBtn>
     );
   } else if (e.status === "requester_done" && !iAmRequester) {
     action = (
       <div className="flex gap-2">
         <ActionBtn variant="primary" disabled={busy} onClick={receiverConfirmAndDo}>
-          <Check className="w-3.5 h-3.5" /> Xác nhận & Tôi đã xong
+          <Check className="w-3.5 h-3.5" /> {t("exchange.confirmAndDone")}
         </ActionBtn>
         <ActionBtn variant="ghost" disabled={busy} onClick={receiverRejectDone}>
-          <X className="w-3.5 h-3.5" /> Chưa thực hiện
+          <X className="w-3.5 h-3.5" /> {t("exchange.notDoneYet")}
         </ActionBtn>
       </div>
     );
   } else if (e.status === "receiver_done" && iAmRequester) {
     action = (
       <ActionBtn variant="primary" disabled={busy} onClick={requesterConfirmCompletion}>
-        <Check className="w-3.5 h-3.5" /> Xác nhận hoàn thành
+        <Check className="w-3.5 h-3.5" /> {t("exchange.confirmComplete")}
       </ActionBtn>
     );
   }
@@ -533,6 +538,8 @@ function ExchangeDetailDialog({
   myBusinessIds: string[];
   onChanged: () => void;
 }) {
+  const { t } = useLanguage();
+  const STATUS_COLOR = useStatusColor();
   const [busy, setBusy] = useState(false);
   if (!exchange) return null;
   const e = exchange;
@@ -557,28 +564,27 @@ function ExchangeDetailDialog({
   };
 
   const timeline: { at: string | null; label: string }[] = [
-    { at: e.created_at, label: "📨 Yêu cầu được gửi" },
+    { at: e.created_at, label: t("exchange.tlSent") },
     {
       at: e.status === "rejected" || e.status === "expired" ? e.updated_at : null,
-      label: e.status === "rejected" ? "❌ Bị từ chối" : "⌛ Đã hết hạn",
+      label: e.status === "rejected" ? t("exchange.tlRejected") : t("exchange.tlExpired"),
     },
-    { at: ["accepted", "requester_done", "receiver_done", "completed"].includes(e.status) ? null : null, label: "" },
-    { at: e.requester_completed_at, label: "✅ Người gửi xác nhận hoàn thành" },
-    { at: e.receiver_completed_at, label: "✅ Người nhận xác nhận hoàn thành" },
-    { at: e.completed_at, label: "🎉 Trao đổi hoàn thành (+1 điểm)" },
+    { at: e.requester_completed_at, label: t("exchange.tlReqDone") },
+    { at: e.receiver_completed_at, label: t("exchange.tlRecDone") },
+    { at: e.completed_at, label: t("exchange.tlCompleted") },
   ].filter((x) => x.at && x.label);
 
   return (
     <Dialog open onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-sm max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Chi tiết trao đổi</DialogTitle>
+          <DialogTitle>{t("exchange.detailTitle")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-2">
-            <BusinessMini biz={reqBiz} role="Người gửi" />
+            <BusinessMini biz={reqBiz} role={t("exchange.roleRequester")} />
             <div className="text-2xl">🤝</div>
-            <BusinessMini biz={recBiz} role="Người nhận" />
+            <BusinessMini biz={recBiz} role={t("exchange.roleReceiver")} />
           </div>
 
           <div className="flex items-center justify-between">
@@ -590,24 +596,30 @@ function ExchangeDetailDialog({
 
           <div className="space-y-1 text-sm">
             <div>
-              <b>Loại:</b> {e.request_type}
+              <b>{t("exchange.typeLabel")}</b> {e.request_type}
             </div>
             <div>
-              <b>{reqBiz?.name || "Người gửi"} muốn:</b> {e.request_description}
+              <b>
+                {reqBiz?.name || t("exchange.roleRequester")} {t("exchange.wants")}
+              </b>{" "}
+              {e.request_description}
             </div>
             <div>
-              <b>{reqBiz?.name || "Người gửi"} đổi lại:</b> {e.return_description}
+              <b>
+                {reqBiz?.name || t("exchange.roleRequester")} {t("exchange.givesBack")}
+              </b>{" "}
+              {e.return_description}
             </div>
           </div>
 
           <div>
-            <div className="text-xs font-bold mb-1.5">Lịch sử</div>
+            <div className="text-xs font-bold mb-1.5">{t("exchange.history")}</div>
             <ol className="space-y-1.5 border-l-2 border-primary/30 pl-3">
-              {timeline.map((t, i) => (
+              {timeline.map((tl, i) => (
                 <li key={i} className="text-xs">
-                  <div className="font-medium">{t.label}</div>
+                  <div className="font-medium">{tl.label}</div>
                   <div className="text-[10px] text-muted-foreground">
-                    {t.at ? new Date(t.at).toLocaleString("vi-VN") : ""}
+                    {tl.at ? new Date(tl.at).toLocaleString("vi-VN") : ""}
                   </div>
                 </li>
               ))}
@@ -619,10 +631,10 @@ function ExchangeDetailDialog({
               {e.status === "pending" && !iAmRequester && (
                 <>
                   <ActionBtn variant="primary" disabled={busy} onClick={() => update({ status: "accepted" })}>
-                    <Check className="w-3.5 h-3.5" /> Chấp nhận
+                    <Check className="w-3.5 h-3.5" /> {t("exchange.accept")}
                   </ActionBtn>
                   <ActionBtn variant="ghost" disabled={busy} onClick={() => update({ status: "rejected" })}>
-                    <X className="w-3.5 h-3.5" /> Từ chối
+                    <X className="w-3.5 h-3.5" /> {t("exchange.reject")}
                   </ActionBtn>
                 </>
               )}
@@ -632,7 +644,7 @@ function ExchangeDetailDialog({
                   disabled={busy}
                   onClick={() => update({ status: "requester_done", requester_completed_at: new Date().toISOString() })}
                 >
-                  <Check className="w-3.5 h-3.5" /> Tôi đã hoàn thành
+                  <Check className="w-3.5 h-3.5" /> {t("exchange.iAmDone")}
                 </ActionBtn>
               )}
               {e.status === "requester_done" && !iAmRequester && (
@@ -642,14 +654,14 @@ function ExchangeDetailDialog({
                     disabled={busy}
                     onClick={() => update({ status: "receiver_done", receiver_completed_at: new Date().toISOString() })}
                   >
-                    <Check className="w-3.5 h-3.5" /> Xác nhận & Tôi đã xong
+                    <Check className="w-3.5 h-3.5" /> {t("exchange.confirmAndDone")}
                   </ActionBtn>
                   <ActionBtn
                     variant="ghost"
                     disabled={busy}
                     onClick={() => update({ status: "accepted", requester_completed_at: null })}
                   >
-                    <X className="w-3.5 h-3.5" /> Chưa thực hiện
+                    <X className="w-3.5 h-3.5" /> {t("exchange.notDoneYet")}
                   </ActionBtn>
                 </>
               )}
@@ -659,7 +671,7 @@ function ExchangeDetailDialog({
                   disabled={busy}
                   onClick={() => update({ status: "completed", completed_at: new Date().toISOString() })}
                 >
-                  <Check className="w-3.5 h-3.5" /> Xác nhận hoàn thành
+                  <Check className="w-3.5 h-3.5" /> {t("exchange.confirmComplete")}
                 </ActionBtn>
               )}
             </div>
