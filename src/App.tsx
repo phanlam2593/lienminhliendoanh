@@ -12,6 +12,7 @@ import { LanguageProvider } from "@/lib/i18n";
 import { OnlineUsersProvider } from "@/lib/onlineUsers";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import { useLanguage } from "@/lib/i18n";
 import { Layout } from "@/components/Layout";
 import Home from "./pages/Home";
 import Businesses from "./pages/Businesses";
