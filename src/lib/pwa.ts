@@ -296,21 +296,7 @@ export function onUpdateStatusChange(cb: (s: UpdateStatus) => void): () => void 
   _updateListeners.add(cb);
   return () => _updateListeners.delete(cb);
 }
-function _setUpdateStatus(s: UpdateStatus) {
-  const prev = _updateStatus;
-  _updateStatus = s;
-  _updateListeners.forEach((cb) => cb(s));
-  if (s === "available" && prev !== "available") {
-    toast("Đã có bản cập nhật mới", {
-      description: "Đang tự động tải lại để áp dụng…",
-      duration: 4000,
-    });
-    // Tự động reload sau 2s để người dùng kịp thấy toast; controllerchange sẽ chặn reload lặp
-    setTimeout(() => {
-      void applyUpdate();
-    }, 2000);
-  }
-}
+
 export async function applyUpdate(): Promise<void> {
   await forceRefreshCheck();
 }
