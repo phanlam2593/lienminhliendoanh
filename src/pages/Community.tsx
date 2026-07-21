@@ -95,6 +95,7 @@ export default function Community() {
   // mentionStart = vị trí ký tự "@" trong chuỗi text, dùng để thay thế đúng đoạn khi chọn.
   const [mentionQuery, setMentionQuery] = useState<string | null>(null);
   const [mentionStart, setMentionStart] = useState(-1);
+  const [mentionResults, setMentionResults] = useState<ProfLite[]>([]);
   const textInputRef = useRef<HTMLInputElement>(null);
   const [pinnedMsgs, setPinnedMsgs] = useState<Msg[]>([]);
   // typingUsers[user_id] = {name, ts} — ts dùng để tự dọn sau vài giây không có tin mới
