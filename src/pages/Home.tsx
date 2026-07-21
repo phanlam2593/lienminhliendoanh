@@ -144,31 +144,30 @@ export default function Home() {
         )}
       </section>
 
-      <section className="px-4 py-4">
-        <div className="text-xs font-bold text-muted-foreground text-center mb-3 uppercase tracking-wider">
-          {t("home.contactAdmin")}
+      <footer className="px-4 pt-2 pb-1 text-center space-y-3">
+        <Logo size={40} asLink />
+        <p className="text-xs text-muted-foreground">{t("home.footerThanks")}</p>
+        <div className="flex items-center justify-center gap-2.5 text-[11px] text-muted-foreground flex-wrap">
+          <Link to="/huong-dan" className="hover:text-primary">
+            {t("profile.guide")}
+          </Link>
+          <span>·</span>
+          <Link to="/dieu-khoan" className="hover:text-primary">
+            {t("termsPage.title")}
+          </Link>
+          <span>·</span>
+          <Link to="/chinh-sach-bao-mat" className="hover:text-primary">
+            {t("privacyPage.title")}
+          </Link>
+          <span>·</span>
+          <Link to="/chinh-sach-cookie" className="hover:text-primary">
+            {t("cookiePage.title")}
+          </Link>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { href: "mailto:lienminhliendoanh@gmail.com", icon: Mail, label: "Email" },
-            { href: "tel:0339565246", icon: Phone, label: "Hotline" },
-            { href: "https://www.facebook.com/profile.php?id=61590228346408", icon: Facebook, label: "Facebook" },
-          ].map(({ href, icon: Icon, label }) => (
-            <a
-              key={label}
-              href={href}
-              target={href.startsWith("http") ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-card border border-primary/20 shadow-soft hover:shadow-brand active:scale-95 transition-all"
-            >
-              <div className="w-9 h-9 rounded-full bg-gradient-brand grid place-items-center animate-pulse-ring">
-                <Icon className="w-4 h-4 text-white" />
-              </div>
-              <span className="text-[11px] font-semibold text-muted-foreground">{label}</span>
-            </a>
-          ))}
-        </div>
-      </section>
+        <p className="text-[10px] text-muted-foreground">
+          © {new Date().getFullYear()} {t("app.name")} — {t("footer.location")}
+        </p>
+      </footer>
 
       <StatsModal kind={modal} onClose={() => setModal(null)} />
     </div>
