@@ -796,7 +796,7 @@ function ReviewItem({
     }
     setText("");
     setReplyOpen(false);
-    toast.success("Đã gửi phản hồi");
+    toast.success(t("biz.replySent"));
     onReplied();
   };
 
