@@ -35,6 +35,7 @@ import {
   ChevronRight,
   HelpCircle,
   Globe,
+  Phone,
   Smartphone,
   Store,
 } from "lucide-react";
