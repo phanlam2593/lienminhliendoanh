@@ -444,6 +444,13 @@ export default function Profile() {
                 0339565246
               </a>
             </p>
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary font-semibold"
+              >
+                0339565246
+              </a>
+            </p>
             <p>
               Facebook:{" "}
               
