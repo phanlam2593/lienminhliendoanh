@@ -1103,7 +1103,7 @@ const DEFAULT_PREFS: NotifPrefs = {
 };
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
   const { t } = useLanguage();
-  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang">(null);
+  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang" | "help">(null);
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1">
@@ -1164,6 +1164,39 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         {open === "lang" && (
           <div className="p-3">
             <LanguageToggle />
+          </div>
+        )}
+        <SettingRow
+          icon={<HelpCircle className="w-4 h-4" />}
+          label="Trợ giúp & Liên hệ"
+          onClick={() => setOpen(open === "help" ? null : "help")}
+          active={open === "help"}
+        />
+        {open === "help" && (
+          <div className="p-3 text-xs space-y-1">
+            <p className="font-semibold">Liên hệ admin:</p>
+            <p>
+              Zalo:{" "}
+              <a
+                href="https://zalo.me/0339565246"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary font-semibold"
+              >
+                0339565246
+              </a>
+            </p>
+            <p>
+              Facebook:{" "}
+              <a
+                href="https://www.facebook.com/profile.php?id=61590228346408"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary font-semibold"
+              >
+                Liên Minh Liên Doanh
+              </a>
+            </p>
           </div>
         )}
       </div>
