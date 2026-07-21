@@ -1227,6 +1227,17 @@ const DICT: Record<Lang, Record<string, string>> = {
     "pin.button": "Pin message",
     "pin.unpinButton": "Unpin",
     "pin.pinnedLabel": "📌 Pinned",
+    "network.offline": "No internet connection",
+    "network.offlineDesc": "Please check your internet connection.",
+    "network.online": "Back online",
+    "explore.viewList": "List",
+    "explore.viewMap": "Map",
+    "map.noPinned": "No businesses have pinned their location on the map yet",
+    "map.viewDetail": "View details",
+    "bizForm.mapBanner":
+      "Your business isn't showing on the Explore map yet — pin your location so customers can find you.",
+    "settings.help": "Help & Contact",
+    "settings.contactAdmin": "Contact admin:",
   },
 };
 
