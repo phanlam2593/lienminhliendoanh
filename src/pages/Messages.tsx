@@ -89,9 +89,21 @@ export function MessagesInbox() {
     supabase
       .rpc("get_admin_user_ids")
       .then(({ data }) => setAdminIds(new Set((data ?? []).map((r: any) => r.user_id))));
+    // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây nghe "*" trên TOÀN BỘ bảng messages —
+    // tin nhắn của bất kỳ 2 người dùng nào khác cũng kích hoạt tải lại hộp thư của mình.
+    // Giờ chỉ lọc đúng những gì liên quan tới tài khoản mình.
     const ch = supabase
       .channel(`inbox:${user.id}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, load)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "messages", filter: `sender_id=eq.${user.id}` },
+        load,
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
+        load,
+      )
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
