@@ -683,17 +683,30 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
   const toggleFollow = async (uid: string) => {
     if (!user) return;
     setBusyId(uid);
-    const isFollowing = myFollowing.has(uid);
-    if (isFollowing) {
-      await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_user_id", uid);
-      setMyFollowing((s) => {
-        const n = new Set(s);
-        n.delete(uid);
-        return n;
-      });
+    const wasFollowing = myFollowing.has(uid);
+    // Optimistic
+    setMyFollowing((s) => {
+      const n = new Set(s);
+      if (wasFollowing) n.delete(uid);
+      else n.add(uid);
+      return n;
+    });
+    if (wasFollowing) {
+      const { error } = await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_user_id", uid);
+      if (error) {
+        setMyFollowing((s) => new Set(s).add(uid));
+        toast.error(error.message);
+      }
     } else {
-      await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: uid });
-      setMyFollowing((s) => new Set(s).add(uid));
+      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: uid });
+      if (error) {
+        setMyFollowing((s) => {
+          const n = new Set(s);
+          n.delete(uid);
+          return n;
+        });
+        toast.error(error.message);
+      }
     }
     setBusyId(null);
   };
@@ -952,23 +965,29 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
   const toggle = async () => {
     if (!user) return;
     setBusy(true);
-    if (following) {
+    const wasFollowing = following;
+    // Optimistic
+    setFollowing(!wasFollowing);
+    setCount((n) => (wasFollowing ? Math.max(0, n - 1) : n + 1));
+    if (wasFollowing) {
       const { error } = await supabase
         .from("follows")
         .delete()
         .eq("follower_id", user.id)
         .eq("followee_business_id", businessId);
-      if (!error) {
-        setFollowing(false);
-        setCount((n) => Math.max(0, n - 1));
+      if (error) {
+        setFollowing(true);
+        setCount((n) => n + 1);
+        toast.error(error.message);
       }
     } else {
       const { error } = await supabase
         .from("follows")
         .insert({ follower_id: user.id, followee_business_id: businessId });
-      if (!error) {
-        setFollowing(true);
-        setCount((n) => n + 1);
+      if (error) {
+        setFollowing(false);
+        setCount((n) => Math.max(0, n - 1));
+        toast.error(error.message);
       }
     }
     setBusy(false);

@@ -134,7 +134,15 @@ export function MessagesInbox() {
 
       {tab === "messages" ? (
         convos.length === 0 ? (
-          <p className="text-sm text-center py-12 text-muted-foreground">{t("messages.noConversations")}</p>
+          <div className="text-center py-12 space-y-3">
+            <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
+            <Link
+              to="/kham-pha"
+              className="inline-block px-4 py-2 rounded-full bg-gradient-brand text-primary-foreground text-sm font-semibold"
+            >
+              Bắt đầu trò chuyện từ trang doanh nghiệp
+            </Link>
+          </div>
         ) : (
           convos.map((c) => (
             <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">

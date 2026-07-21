@@ -65,23 +65,28 @@ export function ProfileQuickView({
   const toggleFollow = async () => {
     if (!user || !userId || user.id === userId) return;
     setBusy(true);
-    if (following) {
+    const wasFollowing = following;
+    // Optimistic
+    setFollowing(!wasFollowing);
+    setFollowers((n) => (wasFollowing ? Math.max(0, n - 1) : n + 1));
+    if (wasFollowing) {
       const { error } = await supabase
         .from("follows")
         .delete()
         .eq("follower_id", user.id)
         .eq("followee_user_id", userId);
-      if (error) toast.error(error.message);
-      else {
-        setFollowing(false);
-        setFollowers((n) => Math.max(0, n - 1));
+      if (error) {
+        // rollback
+        setFollowing(true);
+        setFollowers((n) => n + 1);
+        toast.error(error.message);
       }
     } else {
       const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: userId });
-      if (error) toast.error(error.message);
-      else {
-        setFollowing(true);
-        setFollowers((n) => n + 1);
+      if (error) {
+        setFollowing(false);
+        setFollowers((n) => Math.max(0, n - 1));
+        toast.error(error.message);
       }
     }
     setBusy(false);

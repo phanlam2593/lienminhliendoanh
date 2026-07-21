@@ -50,9 +50,22 @@ export default function Offers() {
     <div className="p-4 space-y-3">
       <h1 className="text-xl font-extrabold">Ưu đãi{total > 0 ? ` (${total})` : ""}</h1>
       {loading ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Đang tải…</p>
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <OfferSkeleton key={i} />
+          ))}
+        </div>
       ) : list.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Chưa có ưu đãi nào</p>
+        <div className="text-center py-12 space-y-3">
+          <Tag className="w-10 h-10 mx-auto opacity-30" />
+          <p className="text-sm text-muted-foreground">Chưa có ưu đãi nào</p>
+          <Link
+            to="/kham-pha"
+            className="inline-block px-4 py-2 rounded-full bg-gradient-brand text-primary-foreground text-sm font-semibold"
+          >
+            Khám phá doanh nghiệp
+          </Link>
+        </div>
       ) : (
         <div className="space-y-3">
           {list.map((o) => (
@@ -94,6 +107,21 @@ export default function Offers() {
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+function OfferSkeleton() {
+  return (
+    <div className="p-4 rounded-2xl bg-card border shadow-sm animate-pulse">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-muted" />
+        <div className="flex-1 space-y-2">
+          <div className="h-4 bg-muted rounded w-2/3" />
+          <div className="h-3 bg-muted rounded w-full" />
+          <div className="h-3 bg-muted rounded w-1/3" />
+        </div>
+      </div>
     </div>
   );
 }
