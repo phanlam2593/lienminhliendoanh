@@ -479,10 +479,11 @@ export default function Community() {
   // báo riêng cho từng người (category=null để không bị gộp/đè — giống broadcast_offer).
   // Không báo cho chính người gửi nếu lỡ tự tag mình.
   const notifyMentions = async (content: string) => {
-    const matches = [...content.matchAll(/@(\w+)/g)].map((m) => m[1]);
+    const matches = [...new Set([...content.matchAll(/@(\w+)/g)].map((m) => m[1]))];
     if (!matches.length) return;
     const myName = profMap.get(user.id)?.full_name || user.email || "";
-    const targets = members.filter((m) => matches.includes(m.username) && m.id !== user.id);
+    const { data } = await supabase.from("profiles_public").select("id, username").in("username", matches);
+    const targets = ((data ?? []) as { id: string; username: string }[]).filter((p) => p.id !== user.id);
     if (!targets.length) return;
     await Promise.all(
       targets.map((tgt) =>
