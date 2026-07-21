@@ -50,9 +50,22 @@ export default function Offers() {
     <div className="p-4 space-y-3">
       <h1 className="text-xl font-extrabold">Ưu đãi{total > 0 ? ` (${total})` : ""}</h1>
       {loading ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Đang tải…</p>
+        <div className="space-y-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <OfferSkeleton key={i} />
+          ))}
+        </div>
       ) : list.length === 0 ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Chưa có ưu đãi nào</p>
+        <div className="text-center py-12 space-y-3">
+          <Tag className="w-10 h-10 mx-auto opacity-30" />
+          <p className="text-sm text-muted-foreground">Chưa có ưu đãi nào</p>
+          <Link
+            to="/kham-pha"
+            className="inline-block px-4 py-2 rounded-full bg-gradient-brand text-primary-foreground text-sm font-semibold"
+          >
+            Khám phá doanh nghiệp
+          </Link>
+        </div>
       ) : (
         <div className="space-y-3">
           {list.map((o) => (
