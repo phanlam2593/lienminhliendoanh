@@ -123,6 +123,32 @@ export default function Community() {
     msgLimitRef.current = msgLimit;
   }, [msgLimit]);
 
+  // QUAN TRỌNG (đúng ở quy mô lớn): tìm gợi ý @tag bằng query DB trực tiếp theo từ khoá,
+  // KHÔNG lọc trên mảng members đã tải (chỉ 50 người mới nhất) — nếu không, tag đúng 1
+  // thành viên "cũ" sẽ không ra gợi ý khi cộng đồng có hơn 50 người.
+  useEffect(() => {
+    if (mentionQuery === null) {
+      setMentionResults([]);
+      return;
+    }
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const safe = mentionQuery.replace(/[%,]/g, "");
+      const { data } = await supabase
+        .from("profiles_public")
+        .select("id, full_name, username, avatar_url, status_message, points")
+        .eq("status", "approved")
+        .or(`username.ilike.${safe}%,full_name.ilike.%${safe}%`)
+        .neq("id", user?.id ?? "")
+        .limit(6);
+      if (!cancelled) setMentionResults((data as ProfLite[]) ?? []);
+    }, 200);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [mentionQuery, user?.id]);
+
   const enrichProfiles = async (ids: string[]) => {
     const missing = ids.filter((id) => !profMap.has(id));
     if (!missing.length) return;
