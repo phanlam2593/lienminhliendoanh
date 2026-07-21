@@ -1028,6 +1028,7 @@ function FollowBusinessButton({ businessId, ownerId }: { businessId: string; own
 
 function RegularVisitBadge({ businessId }: { businessId: string }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [visits, setVisits] = useState<number | null>(null);
 
   useEffect(() => {
