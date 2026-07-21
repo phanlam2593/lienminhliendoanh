@@ -164,11 +164,27 @@ export default function Notifications() {
         </div>
       </div>
       {loading ? (
-        <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+        <div className="space-y-1.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-3 rounded-xl border bg-card p-3 animate-pulse">
+              <div className="w-9 h-9 rounded-full bg-muted" />
+              <div className="flex-1 space-y-2">
+                <div className="h-3.5 bg-muted rounded w-2/3" />
+                <div className="h-3 bg-muted rounded w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 text-sm text-muted-foreground space-y-2">
+        <div className="text-center py-16 text-sm text-muted-foreground space-y-3">
           <Bell className="w-10 h-10 mx-auto opacity-30" />
           <p>{t("notif.empty")}</p>
+          <button
+            onClick={() => nav("/kham-pha")}
+            className="inline-block px-4 py-2 rounded-full bg-gradient-brand text-primary-foreground text-sm font-semibold"
+          >
+            {t("nav.explore") || "Khám phá doanh nghiệp"}
+          </button>
         </div>
       ) : (
         <div className="space-y-1.5">
