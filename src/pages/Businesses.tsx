@@ -7,6 +7,8 @@ import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n";
 import { extractArea } from "@/lib/location";
+import { BusinessMapView } from "@/components/BusinessMapView";
+import { List, Map as MapIcon } from "lucide-react";
 
 type SortKey = "newest" | "rating" | "offers" | "nearest";
 type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
