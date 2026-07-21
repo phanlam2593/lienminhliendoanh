@@ -401,6 +401,11 @@ export default function Profile() {
         />
         <MenuRow icon={<Phone className="w-4 h-4" />} label={t("settings.help")} onClick={() => setHelpOpen(true)} />
         <MenuRow
+          icon={<Phone className="w-4 h-4" />}
+          label={t("settings.help")}
+          onClick={() => setHelpOpen(true)}
+        />
+        <MenuRow
           icon={<Settings className="w-4 h-4" />}
           label={t("profile.settings")}
           onClick={() => setView("settings")}
@@ -415,6 +420,45 @@ export default function Profile() {
           }}
         />
       </div>
+
+      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("settings.help")}</DialogTitle>
+          </DialogHeader>
+          <div className="text-sm space-y-2.5">
+            <p className="font-semibold text-muted-foreground">{t("settings.contactAdmin")}</p>
+            <p>
+              Email:{" "}
+              <a href="mailto:lienminhliendoanh@gmail.com" className="text-primary font-semibold">
+                lienminhliendoanh@gmail.com
+              </a>
+            </p>
+            <p>
+              Zalo:{" "}
+              
+                href="https://zalo.me/0339565246"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary font-semibold"
+              >
+                0339565246
+              </a>
+            </p>
+            <p>
+              Facebook:{" "}
+              
+                href="https://www.facebook.com/profile.php?id=61590228346408"
+                target="_blank"
+                rel="noreferrer"
+                className="text-primary font-semibold"
+              >
+                Liên Minh Liên Doanh
+              </a>
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
