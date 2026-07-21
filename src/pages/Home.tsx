@@ -145,27 +145,27 @@ export default function Home() {
       </section>
 
       <footer className="px-4 pt-2 pb-4">
-        <div className="rounded-2xl bg-card border border-primary/20 shadow-soft p-5 flex flex-col items-center text-center gap-3">
+        <div className="rounded-2xl bg-muted p-5 flex flex-col items-center text-center gap-3">
           <Logo size={44} asLink />
-          <p className="text-sm font-bold text-primary">{t("home.footerThanks")}</p>
-          <div className="flex items-center justify-center gap-x-2 gap-y-1.5 text-xs font-semibold text-primary/70 flex-wrap">
+          <p className="text-sm font-bold text-foreground">{t("home.footerThanks")}</p>
+          <div className="flex items-center justify-center gap-x-2 gap-y-1.5 text-xs font-medium text-muted-foreground flex-wrap">
             <Link to="/huong-dan" className="hover:text-primary transition-colors">
               {t("profile.guide")}
             </Link>
-            <span className="text-border">•</span>
+            <span>•</span>
             <Link to="/dieu-khoan" className="hover:text-primary transition-colors">
               {t("termsPage.title")}
             </Link>
-            <span className="text-border">•</span>
+            <span>•</span>
             <Link to="/chinh-sach-bao-mat" className="hover:text-primary transition-colors">
               {t("privacyPage.title")}
             </Link>
-            <span className="text-border">•</span>
+            <span>•</span>
             <Link to="/chinh-sach-cookie" className="hover:text-primary transition-colors">
               {t("cookiePage.title")}
             </Link>
           </div>
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[11px] text-muted-foreground/60">
             © {new Date().getFullYear()} {t("app.name")} · {t("footer.location")}
           </p>
         </div>
