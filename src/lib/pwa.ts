@@ -297,6 +297,22 @@ export function onUpdateStatusChange(cb: (s: UpdateStatus) => void): () => void 
   return () => _updateListeners.delete(cb);
 }
 
+function _setUpdateStatus(s: UpdateStatus) {
+  const prev = _updateStatus;
+  _updateStatus = s;
+  _updateListeners.forEach((cb) => cb(s));
+  if (s === "available" && prev !== "available") {
+    // KHÔNG tự động reload nữa — ép reload đúng lúc mạng chập chờn từng gây ra bug
+    // "báo mất mạng dù có mạng". Chỉ báo cho biết, để người dùng tự bấm cập nhật khi
+    // họ đang rảnh tay, qua nút UpdateIndicator đã có sẵn.
+    toast("Đã có bản cập nhật mới", {
+      description: "Bấm để tải lại và áp dụng bản mới.",
+      duration: 8000,
+      action: { label: "Cập nhật", onClick: () => void applyUpdate() },
+    });
+  }
+}
+
 export async function applyUpdate(): Promise<void> {
   await forceRefreshCheck();
 }
