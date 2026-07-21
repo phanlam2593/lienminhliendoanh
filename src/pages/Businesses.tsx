@@ -172,7 +172,7 @@ export default function Businesses() {
             viewMode === "map" ? "bg-primary text-primary-foreground" : "bg-card border",
           )}
         >
-          <MapIcon className="w-3.5 h-3.5" /> Bản đồ
+          <MapIcon className="w-3.5 h-3.5" /> {t("explore.viewMap")}
         </button>
       </div>
       <div className="relative">
