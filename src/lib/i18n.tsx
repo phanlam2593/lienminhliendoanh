@@ -609,6 +609,17 @@ const DICT: Record<Lang, Record<string, string>> = {
     "pin.button": "Ghim tin nhắn",
     "pin.unpinButton": "Bỏ ghim",
     "pin.pinnedLabel": "📌 Đã ghim",
+    "network.offline": "Mất kết nối mạng",
+    "network.offlineDesc": "Vui lòng kiểm tra kết nối internet của bạn.",
+    "network.online": "Đã có kết nối trở lại",
+    "explore.viewList": "Danh sách",
+    "explore.viewMap": "Bản đồ",
+    "map.noPinned": "Chưa có doanh nghiệp nào ghim vị trí trên bản đồ",
+    "map.viewDetail": "Xem chi tiết",
+    "bizForm.mapBanner":
+      "Doanh nghiệp của bạn chưa xuất hiện trên bản đồ Khám phá — ghim vị trí để khách dễ tìm thấy hơn.",
+    "settings.help": "Trợ giúp & Liên hệ",
+    "settings.contactAdmin": "Liên hệ admin:",
   },
   en: {
     "nav.home": "Home",
