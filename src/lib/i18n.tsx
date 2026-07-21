@@ -730,6 +730,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "regulars.notifOff": "Tắt thông báo deal mới",
     "regulars.notifOn": "Bật thông báo deal mới",
     "regulars.defaultBizName": "Doanh nghiệp",
+    "common.loadMore": "Tải thêm",
     "home.footerThanks": "Cảm ơn bạn đã là một phần của cộng đồng 🌿",
   },
   en: {
