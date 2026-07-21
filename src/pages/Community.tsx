@@ -614,17 +614,7 @@ export default function Community() {
     }, 0);
   };
 
-  const mentionSuggestions =
-    mentionQuery !== null
-      ? members
-          .filter(
-            (m) =>
-              m.id !== user.id &&
-              (m.username.toLowerCase().startsWith(mentionQuery.toLowerCase()) ||
-                m.full_name.toLowerCase().includes(mentionQuery.toLowerCase())),
-          )
-          .slice(0, 6)
-      : [];
+  const mentionSuggestions = mentionQuery !== null ? mentionResults : [];
 
   const typingList = Object.values(typingUsers);
 
