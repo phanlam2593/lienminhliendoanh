@@ -1179,7 +1179,7 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         />
         {open === "help" && (
           <div className="p-3 text-xs space-y-1">
-            <p className="font-semibold">Liên hệ admin:</p>
+            <p className="font-semibold">{t("settings.contactAdmin")}</p>
             <p>
               Zalo:{" "}
               <a
