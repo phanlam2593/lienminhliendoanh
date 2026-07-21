@@ -29,12 +29,35 @@ export function useNotifications() {
   useEffect(() => {
     refresh();
     if (!user) return;
+    // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây MỌI sự kiện realtime (INSERT/UPDATE/DELETE)
+    // đều gọi refresh() → chạy lại nguyên query 50 dòng. Với người dùng có nhiều hoạt động dồn dập
+    // (nhiều follow/deal cùng lúc) sẽ tạo nhiều query lặp không cần thiết. Giờ cập nhật state
+    // tăng dần theo đúng payload, không query lại toàn bộ.
     const ch = supabase
       .channel(`notif:${user.id}:${rand()}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
-        () => refresh(),
+        { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          const row = payload.new as Notification;
+          setItems((prev) => (prev.some((n) => n.id === row.id) ? prev : [row, ...prev].slice(0, 50)));
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          const row = payload.new as Notification;
+          setItems((prev) => prev.map((n) => (n.id === row.id ? row : n)));
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
+        (payload) => {
+          const oldRow = payload.old as { id: string };
+          setItems((prev) => prev.filter((n) => n.id !== oldRow.id));
+        },
       )
       .subscribe();
     return () => {
