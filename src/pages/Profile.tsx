@@ -1092,7 +1092,9 @@ function FollowStats({ userId }: { userId: string }) {
             <Store className="w-3.5 h-3.5 text-primary" />
           </span>
           <div className="text-base font-extrabold text-primary leading-none">{regulars}</div>
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">Quán quen</div>
+          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
+            {t("regulars.title")}
+          </div>
         </button>
       </div>
       <FollowListDialog
