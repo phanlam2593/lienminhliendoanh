@@ -171,7 +171,12 @@ export default function Home() {
         </div>
       </footer>
 
-      <StatsModal kind={modal} onClose={() => setModal(null)} />
+      <StatsModal
+        kind={modal}
+        onClose={() => setModal(null)}
+        totalMembers={stats.members}
+        totalBusinesses={stats.businesses}
+      />
     </div>
   );
 }
