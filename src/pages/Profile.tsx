@@ -399,11 +399,7 @@ export default function Profile() {
           label={t("profile.myReports")}
           onClick={() => nav("/bao-cao-cua-toi")}
         />
-        <MenuRow
-          icon={<Phone className="w-4 h-4" />}
-          label={t("settings.help")}
-          onClick={() => setHelpOpen(true)}
-        />
+        <MenuRow icon={<Phone className="w-4 h-4" />} label={t("settings.help")} onClick={() => setHelpOpen(true)} />
         <MenuRow
           icon={<Settings className="w-4 h-4" />}
           label={t("profile.settings")}
@@ -435,7 +431,7 @@ export default function Profile() {
             </p>
             <p>
               Zalo:{" "}
-              
+              <a
                 href="https://zalo.me/0339565246"
                 target="_blank"
                 rel="noreferrer"
@@ -446,7 +442,7 @@ export default function Profile() {
             </p>
             <p>
               Facebook:{" "}
-              
+              <a
                 href="https://www.facebook.com/profile.php?id=61590228346408"
                 target="_blank"
                 rel="noreferrer"
@@ -1217,7 +1213,6 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
             <LanguageToggle />
           </div>
         )}
-        
       </div>
     </section>
   );
