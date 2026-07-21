@@ -205,7 +205,7 @@ export default function BusinessDetail() {
         .insert({ user_id: user.id, business_id: id, rating, comment, image_url });
       if (error) {
         if (error.code === "23505") {
-          throw new Error("Bạn đã đánh giá doanh nghiệp này rồi. Mỗi người chỉ được đánh giá 1 lần.");
+          throw new Error(t("biz.alreadyReviewed"));
         }
         throw error;
       }
