@@ -321,35 +321,59 @@ export default function Community() {
       });
     }, 1000);
 
+    return () => {
+      supabase.removeChannel(typingCh);
+      clearInterval(cleanupInterval);
+    };
+  }, [user?.id]);
+
+  // QUAN TRỌNG (hiệu năng ở quy mô lớn): kênh tin nhắn/reaction tách riêng, subscribe lại
+  // mỗi khi đổi TOPIC và lọc theo topic ngay ở phía Postgres (filter) — thay vì trước đây
+  // nghe HẾT toàn bộ bảng community_messages rồi mới lọc ở client, khiến mọi tin nhắn ở
+  // mọi kênh đều bị đẩy tới mọi người dùng đang mở app. Vị trí vẫn lọc ở client vì Supabase
+  // Realtime chỉ hỗ trợ lọc 1 cột trong filter.
+  useEffect(() => {
+    if (!user) return;
     const matchesCurrentChannel = (row: any) => {
-      const { location, topic } = channelRef.current;
-      if (row.topic !== topic) return false;
+      const { location } = channelRef.current;
       return location === null ? row.location === null : row.location === location;
     };
     const ch = supabase
-      .channel(`community:${user.id}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "community_messages" }, (payload) => {
-        const row = payload.new as Msg & { location: string | null; topic: Topic };
-        if (!matchesCurrentChannel(row)) return;
-        setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
-        void enrichProfiles([row.user_id]);
-        setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
-      })
-      .on("postgres_changes", { event: "DELETE", schema: "public", table: "community_messages" }, (payload) => {
-        const oldRow = payload.old as { id: string };
-        setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
-      })
-      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "community_messages" }, (payload) => {
-        const row = payload.new as Msg;
-        setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
-        setPinnedMsgs((prev) => {
-          if (row.is_pinned) {
-            if (prev.some((m) => m.id === row.id)) return prev.map((m) => (m.id === row.id ? row : m));
-            return [row, ...prev].slice(0, 5);
-          }
-          return prev.filter((m) => m.id !== row.id);
-        });
-      })
+      .channel(`community:${user.id}:${channelTopic}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "community_messages", filter: `topic=eq.${channelTopic}` },
+        (payload) => {
+          const row = payload.new as Msg & { location: string | null; topic: Topic };
+          if (!matchesCurrentChannel(row)) return;
+          setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
+          void enrichProfiles([row.user_id]);
+          setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "community_messages", filter: `topic=eq.${channelTopic}` },
+        (payload) => {
+          const oldRow = payload.old as { id: string };
+          setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "community_messages", filter: `topic=eq.${channelTopic}` },
+        (payload) => {
+          const row = payload.new as Msg;
+          setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+          setPinnedMsgs((prev) => {
+            if (row.is_pinned) {
+              if (prev.some((m) => m.id === row.id)) return prev.map((m) => (m.id === row.id ? row : m));
+              return [row, ...prev].slice(0, 5);
+            }
+            return prev.filter((m) => m.id !== row.id);
+          });
+        },
+      )
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "community_message_reactions" },
@@ -381,10 +405,8 @@ export default function Community() {
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
-      supabase.removeChannel(typingCh);
-      clearInterval(cleanupInterval);
     };
-  }, [user?.id]);
+  }, [user?.id, channelTopic]);
 
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved)
