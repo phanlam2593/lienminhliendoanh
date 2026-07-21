@@ -252,9 +252,9 @@ export default function BusinessDetail() {
     void loadReviews(0, false);
   };
 
-  const messageOwner = async () => {
+  const messageOwner = () => {
     if (!user || !b?.owner_id || b.owner_id === user.id) return;
-    window.location.href = `/tin-nhan/${b.owner_id}`;
+    nav(`/tin-nhan/${b.owner_id}`);
   };
 
   if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">Đang tải…</div>;
