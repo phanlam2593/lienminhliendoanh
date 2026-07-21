@@ -399,7 +399,6 @@ export default function Profile() {
           label={t("profile.myReports")}
           onClick={() => nav("/bao-cao-cua-toi")}
         />
-        <MenuRow icon={<Phone className="w-4 h-4" />} label={t("settings.help")} onClick={() => setHelpOpen(true)} />
         <MenuRow
           icon={<Phone className="w-4 h-4" />}
           label={t("settings.help")}
