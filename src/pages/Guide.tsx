@@ -399,6 +399,15 @@ export default function Guide() {
         <Gift className="w-4 h-4" />
         <span className="text-xs">{t("guide.tagline")}</span>
       </div>
+
+      <div className="pt-2 flex justify-center">
+        <Link
+          to="/ho-so"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-semibold text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" /> {t("common.back")}
+        </Link>
+      </div>
     </div>
   );
 }
