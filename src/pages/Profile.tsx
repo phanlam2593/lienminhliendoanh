@@ -1771,6 +1771,7 @@ function PushPermissionButton() {
 }
 
 function InstallAppButton() {
+  const { t } = useLanguage();
   const [installable, setInstallable] = useState(canInstallNatively());
   const [busy, setBusy] = useState(false);
 
@@ -1783,7 +1784,7 @@ function InstallAppButton() {
   if (isStandalone()) {
     return (
       <div className="flex items-center gap-2 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-sm font-semibold">
-        <Smartphone className="w-4 h-4" /> Đã cài đặt trên thiết bị này
+        <Smartphone className="w-4 h-4" /> {t("settings.installedAlready")}
       </div>
     );
   }
@@ -1796,12 +1797,12 @@ function InstallAppButton() {
           const accepted = await triggerInstall();
           setBusy(false);
           setInstallable(canInstallNatively());
-          if (accepted) toast.success("Đã cài đặt ứng dụng");
+          if (accepted) toast.success(t("settings.installSuccess"));
         }}
         disabled={busy}
         className="w-full py-2.5 rounded-lg bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
       >
-        <Smartphone className="w-4 h-4" /> {busy ? "Đang mở…" : "Cài app ra màn hình chính"}
+        <Smartphone className="w-4 h-4" /> {busy ? t("settings.installOpening") : t("settings.installApp")}
       </button>
     );
   }
@@ -1809,15 +1810,16 @@ function InstallAppButton() {
   if (isIOSDevice()) {
     return (
       <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-xs leading-relaxed">
-        Trên iPhone/iPad: nhấn nút <b>Chia sẻ</b> (hình vuông mũi tên lên) trên thanh Safari, sau đó chọn{" "}
-        <b>"Thêm vào MH chính"</b>.
+        {t("settings.installIOSPre")}
+        <b>{t("settings.installIOSShare")}</b>
+        {t("settings.installIOSMid")}
+        <b>{t("settings.installIOSAdd")}</b>
+        {t("settings.installIOSPost")}
       </div>
     );
   }
 
   return (
-    <div className="p-2.5 rounded-lg bg-muted text-muted-foreground text-xs">
-      Trình duyệt này chưa hỗ trợ cài app trực tiếp. Thử mở bằng Chrome hoặc Safari.
-    </div>
+    <div className="p-2.5 rounded-lg bg-muted text-muted-foreground text-xs">{t("settings.installUnsupported")}</div>
   );
 }
