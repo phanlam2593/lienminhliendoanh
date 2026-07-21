@@ -145,9 +145,9 @@ export default function Home() {
       </section>
 
       <footer className="px-4 pt-2 pb-4">
-        <div className="rounded-2xl bg-card border border-border/60 p-5 flex flex-col items-center text-center gap-3 shadow-soft">
+        <div className="rounded-2xl bg-card border border-primary/20 shadow-soft p-5 flex flex-col items-center text-center gap-3">
           <Logo size={44} asLink />
-          <p className="text-sm font-semibold text-foreground">{t("home.footerThanks")}</p>
+          <p className="text-sm font-bold text-primary">{t("home.footerThanks")}</p>
           <div className="flex items-center justify-center gap-x-2 gap-y-1.5 text-xs font-medium text-muted-foreground flex-wrap">
             <Link to="/huong-dan" className="hover:text-primary transition-colors">
               {t("profile.guide")}
@@ -165,7 +165,7 @@ export default function Home() {
               {t("cookiePage.title")}
             </Link>
           </div>
-          <p className="text-[11px] text-muted-foreground/70">
+          <p className="text-[11px] text-muted-foreground">
             © {new Date().getFullYear()} {t("app.name")} · {t("footer.location")}
           </p>
         </div>
