@@ -11,7 +11,13 @@ try {
 
 createRoot(document.getElementById("root")!).render(<App />);
 
-registerPwa();
+// TẠM THỜI TẮT SERVICE WORKER (ngày launch) — chủ động gỡ SW cũ trên máy user để loại
+// bỏ hoàn toàn nguy cơ dính lỗi "ngoại tuyến giả".
+if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+  navigator.serviceWorker.getRegistrations().then((regs) => {
+    regs.forEach((r) => r.unregister());
+  });
+}
 
 // Giữ splash động tối thiểu ~1200ms kể từ lúc bắt đầu load — đảm bảo user
 // luôn kịp thấy logo + tên app + tagline sau khi OS splash tắt, dù React mount rất nhanh.
