@@ -4,12 +4,19 @@ import { X, ImagePlus, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { uploadImage } from "@/lib/upload";
 import { StoredImage } from "./StoredImage";
+import { useLanguage } from "@/lib/i18n";
 
-interface Photo { id: string; url: string; caption: string | null; sort_order: number }
+interface Photo {
+  id: string;
+  url: string;
+  caption: string | null;
+  sort_order: number;
+}
 
 const MAX_PHOTOS = 8;
 
 export function BusinessPhotoManager({ businessId }: { businessId: string }) {
+  const { t } = useLanguage();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
@@ -25,18 +32,20 @@ export function BusinessPhotoManager({ businessId }: { businessId: string }) {
     setPhotos((data ?? []) as Photo[]);
   };
 
-  useEffect(() => { void load(); }, [businessId]);
+  useEffect(() => {
+    void load();
+  }, [businessId]);
 
   const onFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
     const remaining = MAX_PHOTOS - photos.length;
     if (remaining <= 0) {
-      toast.error(`Tối đa ${MAX_PHOTOS} ảnh mỗi doanh nghiệp`);
+      toast.error(t("gallery.maxPhotos", { n: MAX_PHOTOS }));
       return;
     }
     const list = Array.from(files).slice(0, remaining);
     if (files.length > remaining) {
-      toast.info(`Chỉ tải lên ${remaining} ảnh (tối đa ${MAX_PHOTOS})`);
+      toast.info(t("gallery.onlyUploaded", { n: remaining, max: MAX_PHOTOS }));
     }
     setUploading(true);
     setProgress({ done: 0, total: list.length });
@@ -51,7 +60,7 @@ export function BusinessPhotoManager({ businessId }: { businessId: string }) {
         });
         if (error) throw error;
       } catch (e: any) {
-        toast.error(e.message || "Tải ảnh thất bại");
+        toast.error(e.message || t("gallery.uploadFail"));
       }
       setProgress({ done: i + 1, total: list.length });
     }
@@ -59,30 +68,35 @@ export function BusinessPhotoManager({ businessId }: { businessId: string }) {
     setProgress(null);
     if (inputRef.current) inputRef.current.value = "";
     await load();
-    toast.success("Đã cập nhật thư viện");
+    toast.success(t("gallery.updated"));
   };
 
   const removePhoto = async (id: string) => {
-    if (!confirm("Xóa ảnh này?")) return;
+    if (!confirm(t("gallery.confirmDeletePhoto"))) return;
     const { error } = await supabase.from("business_photos").delete().eq("id", id);
-    if (error) { toast.error(error.message); return; }
-    setPhotos(ps => ps.filter(p => p.id !== id));
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setPhotos((ps) => ps.filter((p) => p.id !== id));
   };
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <div className="text-xs font-semibold">Thư viện ảnh</div>
-        <div className="text-[11px] text-muted-foreground">{photos.length}/{MAX_PHOTOS}</div>
+        <div className="text-xs font-semibold">{t("gallery.title")}</div>
+        <div className="text-[11px] text-muted-foreground">
+          {photos.length}/{MAX_PHOTOS}
+        </div>
       </div>
       {photos.length > 0 && (
         <div className="grid grid-cols-3 gap-2">
-          {photos.map(p => (
+          {photos.map((p) => (
             <div key={p.id} className="relative aspect-square rounded-lg overflow-hidden bg-muted group">
               <StoredImage path={p.url} alt={p.caption || ""} className="w-full h-full object-cover" />
               <button
                 onClick={() => removePhoto(p.id)}
-                aria-label="Xóa ảnh"
+                aria-label={t("gallery.deletePhoto")}
                 className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/70 text-white grid place-items-center hover:bg-destructive"
               >
                 <X className="w-3.5 h-3.5" />
@@ -91,16 +105,18 @@ export function BusinessPhotoManager({ businessId }: { businessId: string }) {
           ))}
         </div>
       )}
-      <label className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border-2 border-dashed text-xs font-semibold cursor-pointer ${uploading || photos.length >= MAX_PHOTOS ? "opacity-60 pointer-events-none" : "hover:border-primary hover:text-primary"}`}>
+      <label
+        className={`flex items-center justify-center gap-2 w-full py-2.5 rounded-lg border-2 border-dashed text-xs font-semibold cursor-pointer ${uploading || photos.length >= MAX_PHOTOS ? "opacity-60 pointer-events-none" : "hover:border-primary hover:text-primary"}`}
+      >
         {uploading ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
-            Đang tải {progress?.done ?? 0}/{progress?.total ?? 0}…
+            {t("gallery.uploading", { done: progress?.done ?? 0, total: progress?.total ?? 0 })}
           </>
         ) : (
           <>
             <ImagePlus className="w-4 h-4" />
-            {photos.length >= MAX_PHOTOS ? "Đã đạt tối đa" : "Tải ảnh lên (có thể chọn nhiều)"}
+            {photos.length >= MAX_PHOTOS ? t("gallery.maxReached") : t("gallery.uploadMultiple")}
           </>
         )}
         <input
