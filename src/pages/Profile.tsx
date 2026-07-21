@@ -1732,7 +1732,7 @@ function PushPermissionButton() {
     const result = await requestPushPermission();
     setStatus(result);
     setBusy(false);
-    if (result === "denied") toast.error("Bạn đã từ chối quyền thông báo trong trình duyệt");
+    if (result === "denied") toast.error(t("settings.pushDenied"));
     // Toast thành công/lỗi thực sự của việc đăng ký đã được hiện từ bên trong requestPushPermission()
   };
 
