@@ -273,7 +273,9 @@ export default function Businesses() {
         <p className="text-xs text-muted-foreground bg-muted rounded-lg p-2">{t("explore.locationUnsupported")}</p>
       )}
 
-      {loading ? (
+      {viewMode === "map" ? (
+        <BusinessMapView businesses={filtered} />
+      ) : loading ? (
         <div className="grid gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <BusinessCardSkeleton key={i} />
