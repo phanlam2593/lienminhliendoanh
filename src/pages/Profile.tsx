@@ -723,7 +723,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
           </Field>
           {!lat && (
             <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5">
-              Doanh nghiệp của bạn chưa xuất hiện trên bản đồ Khám phá — ghim vị trí để khách dễ tìm thấy hơn.
+              {t("bizForm.mapBanner")}
             </div>
           )}
           <div>
