@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { StoredImage } from "@/components/StoredImage";
 import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import type { BusinessCardData } from "@/components/BusinessCard";
+import { useLanguage } from "@/lib/i18n";
 
 // Fix icon mặc định của Leaflet hay bị vỡ khi qua bundler — lỗi phổ biến cộng đồng hay gặp
 delete (L.Icon.Default.prototype as any)._getIconUrl;
