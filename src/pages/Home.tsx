@@ -152,15 +152,15 @@ export default function Home() {
             <Link to="/huong-dan" className="hover:text-primary transition-colors">
               {t("profile.guide")}
             </Link>
-            <span>•</span>
+            <span className="text-primary/50">•</span>
             <Link to="/dieu-khoan" className="hover:text-primary transition-colors">
               {t("termsPage.title")}
             </Link>
-            <span>•</span>
+            <span className="text-primary/50">•</span>
             <Link to="/chinh-sach-bao-mat" className="hover:text-primary transition-colors">
               {t("privacyPage.title")}
             </Link>
-            <span>•</span>
+            <span className="text-primary/50">•</span>
             <Link to="/chinh-sach-cookie" className="hover:text-primary transition-colors">
               {t("cookiePage.title")}
             </Link>
