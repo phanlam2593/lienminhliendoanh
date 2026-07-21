@@ -1224,39 +1224,7 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
             <LanguageToggle />
           </div>
         )}
-        <SettingRow
-          icon={<HelpCircle className="w-4 h-4" />}
-          label={t("settings.help")}
-          onClick={() => setOpen(open === "help" ? null : "help")}
-          active={open === "help"}
-        />
-        {open === "help" && (
-          <div className="p-3 text-xs space-y-1">
-            <p className="font-semibold">{t("settings.contactAdmin")}</p>
-            <p>
-              Zalo:{" "}
-              <a
-                href="https://zalo.me/0339565246"
-                target="_blank"
-                rel="noreferrer"
-                className="text-primary font-semibold"
-              >
-                0339565246
-              </a>
-            </p>
-            <p>
-              Facebook:{" "}
-              <a
-                href="https://www.facebook.com/profile.php?id=61590228346408"
-                target="_blank"
-                rel="noreferrer"
-                className="text-primary font-semibold"
-              >
-                Liên Minh Liên Doanh
-              </a>
-            </p>
-          </div>
-        )}
+        
       </div>
     </section>
   );
