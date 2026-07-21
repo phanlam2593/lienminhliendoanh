@@ -33,31 +33,29 @@ import CookieThirdParty from "./pages/CookieThirdParty";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
 import NotFound from "./pages/NotFound";
 
-
-
-
 const OFFLINE_TOAST_ID = "app-offline-toast";
 
 function NetworkStatusWatcher() {
   const online = useOnlineStatus();
   const wasOffline = useRef(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!online) {
       wasOffline.current = true;
-      toast.error("Mất kết nối mạng", {
+      toast.error(t("network.offline"), {
         id: OFFLINE_TOAST_ID,
         duration: Infinity,
-        description: "Vui lòng kiểm tra kết nối internet của bạn.",
+        description: t("network.offlineDesc"),
       });
     } else {
       toast.dismiss(OFFLINE_TOAST_ID);
       if (wasOffline.current) {
         wasOffline.current = false;
-        toast.success("Đã có kết nối trở lại", { duration: 2500 });
+        toast.success(t("network.online"), { duration: 2500 });
       }
     }
-  }, [online]);
+  }, [online, t]);
 
   return null;
 }
