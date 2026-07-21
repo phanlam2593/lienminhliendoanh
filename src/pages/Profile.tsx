@@ -1713,6 +1713,7 @@ function BusinessCreator({
     </div>
   );
 }
+
 function PushPermissionButton() {
   const { t } = useLanguage();
   const [status, setStatus] = useState<NotificationPermission | "unsupported" | "checking">("checking");
