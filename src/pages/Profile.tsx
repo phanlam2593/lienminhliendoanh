@@ -1140,7 +1140,7 @@ function SettingsSection({ userId, initialPrefs }: { userId: string; initialPref
         )}
         <SettingRow
           icon={<Smartphone className="w-4 h-4" />}
-          label="Cài app ra màn hình chính"
+          label={t("settings.installApp")}
           onClick={() => setOpen(open === "install" ? null : "install")}
           active={open === "install"}
         />
