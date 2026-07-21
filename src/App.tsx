@@ -80,6 +80,7 @@ const App = () => (
               <Sonner position="top-center" />
               <NetworkStatusWatcher />
               <BrowserRouter>
+                <ScrollToTop />
                 <Routes>
                   <Route path="/auth/login" element={<Login />} />
                   <Route path="/auth/register" element={<Register />} />
