@@ -80,6 +80,9 @@
       <div class="hint">Liên Minh Liên Doanh · Cảm ơn bạn đã là một phần của cộng đồng 🌿</div>
     </main>
     <script>
+      try {
+        if (localStorage.getItem("theme") === "dark") document.documentElement.classList.add("dark");
+      } catch {}
       function tryReconnect() {
         if (!navigator.onLine) return;
         // Thử fetch thật để chắc chắn có mạng, tránh navigator.onLine báo sai
