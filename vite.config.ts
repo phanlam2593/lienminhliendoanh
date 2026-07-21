@@ -33,8 +33,6 @@ export default defineConfig(({ mode }) => ({
         // /offline.html (đã có trong includeAssets nên vẫn được precache).
         globPatterns: ["**/*.{js,css,ico,png,svg,webp,woff2}"],
         importScripts: ["/push-sw.js"],
-        navigateFallback: "/offline.html",
-        navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
