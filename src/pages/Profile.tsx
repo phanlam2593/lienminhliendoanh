@@ -1260,7 +1260,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
       }
       const { error } = await supabase.auth.updateUser({ password: next });
       if (error) throw error;
-      toast.success("Đổi mật khẩu thành công");
+      toast.success(t("settings.pwChangeSuccess"));
       setCurrent("");
       setNext("");
       setConfirm("");
