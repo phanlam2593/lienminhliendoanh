@@ -163,7 +163,7 @@ export default function Businesses() {
             viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-card border",
           )}
         >
-          <List className="w-3.5 h-3.5" /> Danh sách
+          <List className="w-3.5 h-3.5" /> {t("explore.viewList")}
         </button>
         <button
           onClick={() => setViewMode("map")}
