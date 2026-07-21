@@ -107,6 +107,15 @@ export default function PrivacyPolicy() {
       <Section title={t("privacyPage.s13Title")}>
         <p>{t("privacyPage.s13P1")}</p>
       </Section>
+
+      <div className="pt-4 flex justify-center">
+        <Link
+          to="/ho-so"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-semibold text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" /> {t("common.back")}
+        </Link>
+      </div>
     </div>
   );
 }
