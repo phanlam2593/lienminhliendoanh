@@ -49,7 +49,7 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
                   to={`/dn/${b.id}`}
                   className="block text-center text-xs font-semibold py-1.5 rounded bg-primary text-primary-foreground"
                 >
-                  Xem chi tiết
+                  {t("map.viewDetail")}
                 </Link>
               </div>
             </Popup>
