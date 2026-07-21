@@ -98,6 +98,7 @@ export default function BusinessDetail() {
     setAvgRating(Number((stats as any)?.rating ?? 0));
     setReviewPage(0);
     void loadReviews(0, false);
+    void supabase.rpc("increment_business_view", { _business_id: id }); // ← thêm dòng này
   };
 
   const loadReviews = async (pageNum: number, append: boolean) => {
