@@ -172,14 +172,6 @@ export function registerPwa() {
       window.addEventListener("online", () => void checkUpdate());
       setInterval(() => void checkUpdate(), 5 * 60 * 1000);
 
-      // 2) Khi SW mới nắm quyền (skipWaiting đã bật sẵn) → tự reload 1 lần để chạy code mới
-      let reloaded = false;
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        if (reloaded) return;
-        reloaded = true;
-        window.location.reload();
-      });
-
       // Wait until active, then attempt push subscribe (idempotent).
       const ready = await navigator.serviceWorker.ready;
       await setupPush(ready ?? registration);
