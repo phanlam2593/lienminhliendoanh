@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => ({
             handler: "NetworkFirst",
             options: {
               cacheName: "lmld-pages",
-              networkTimeoutSeconds: 8,
+              networkTimeoutSeconds: 15,
               expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 7 },
             },
           },
