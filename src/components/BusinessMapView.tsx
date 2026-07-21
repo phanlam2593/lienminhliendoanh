@@ -18,6 +18,7 @@ L.Icon.Default.mergeOptions({
 const DALAT_CENTER: [number, number] = [11.9404, 108.4583];
 
 export function BusinessMapView({ businesses }: { businesses: BusinessCardData[] }) {
+  const { t } = useLanguage();
   const pinned = businesses.filter((b: any) => b.latitude != null && b.longitude != null);
 
   if (pinned.length === 0) {
