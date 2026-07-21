@@ -116,7 +116,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
       setRows((prev) => (append ? [...prev, ...newRows] : newRows));
       setHasMore((data ?? []).length === PAGE_SIZE);
     } catch (e: any) {
-      toast.error(e.message || "Không tải được danh sách");
+      toast.error(e.message || t("follow.loadFail"));
     } finally {
       setLoading(false);
       setLoadingMore(false);
