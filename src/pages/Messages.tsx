@@ -215,6 +215,8 @@ export function MessagesInbox() {
   );
 }
 
+const MSG_PAGE_SIZE = 50;
+
 export function MessagesThread() {
   const { id = "" } = useParams();
   const { user, isApproved, isAdmin } = useAuth();
@@ -222,6 +224,9 @@ export function MessagesThread() {
   const nav = useNavigate();
   const [partner, setPartner] = useState<Profile | null>(null);
   const [msgs, setMsgs] = useState<Message[]>([]);
+  const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
+  const [msgHasMore, setMsgHasMore] = useState(true);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const [text, setText] = useState("");
   const [showGifs, setShowGifs] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -237,8 +242,52 @@ export function MessagesThread() {
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
 
+  const loadReactions = async (messageIds: string[]) => {
+    if (!messageIds.length) {
+      setReactions({});
+      return;
+    }
+    const { data } = await supabase
+      .from("message_reactions")
+      .select("message_id, user_id, emoji")
+      .in("message_id", messageIds);
+    const grouped: Record<string, Record<string, string[]>> = {};
+    (data ?? []).forEach((r: any) => {
+      grouped[r.message_id] ??= {};
+      grouped[r.message_id][r.emoji] ??= [];
+      grouped[r.message_id][r.emoji].push(r.user_id);
+    });
+    setReactions(grouped);
+  };
+
+  const loadMsgs = async (limit: number, scrollToBottom: boolean) => {
+    if (!user || !id) return;
+    const { data } = await supabase
+      .from("messages")
+      .select("*")
+      .or(`and(sender_id.eq.${user.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${user.id})`)
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    const list = ((data ?? []) as Message[]).reverse();
+    setMsgs(list);
+    setMsgHasMore(list.length === limit);
+    void loadReactions(list.map((m) => m.id));
+    if (scrollToBottom) {
+      setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 0);
+    }
+  };
+
+  const loadOlderMsgs = async () => {
+    setLoadingOlder(true);
+    const next = msgLimit + MSG_PAGE_SIZE;
+    setMsgLimit(next);
+    await loadMsgs(next, false);
+    setLoadingOlder(false);
+  };
+
   useEffect(() => {
     if (!user || !id) return;
+    setMsgLimit(MSG_PAGE_SIZE);
     supabase
       .from("profiles_public")
       .select("id, full_name, username, avatar_url, status, points")
@@ -248,51 +297,73 @@ export function MessagesThread() {
     supabase
       .rpc("get_admin_user_ids")
       .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
-    const loadReactions = async (messageIds: string[]) => {
-      if (!messageIds.length) {
-        setReactions({});
-        return;
-      }
-      const { data } = await supabase
-        .from("message_reactions")
-        .select("message_id, user_id, emoji")
-        .in("message_id", messageIds);
-      const grouped: Record<string, Record<string, string[]>> = {};
-      (data ?? []).forEach((r: any) => {
-        grouped[r.message_id] ??= {};
-        grouped[r.message_id][r.emoji] ??= [];
-        grouped[r.message_id][r.emoji].push(r.user_id);
-      });
-      setReactions(grouped);
-    };
-    const load = async () => {
-      const { data } = await supabase
-        .from("messages")
-        .select("*")
-        .or(`and(sender_id.eq.${user.id},receiver_id.eq.${id}),and(sender_id.eq.${id},receiver_id.eq.${user.id})`)
-        .order("created_at");
-      setMsgs((data ?? []) as Message[]);
-      void loadReactions(((data ?? []) as Message[]).map((m) => m.id));
-      await supabase
-        .from("messages")
-        .update({ is_read: true, read_at: new Date().toISOString() })
-        .eq("sender_id", id)
-        .eq("receiver_id", user.id)
-        .eq("is_read", false);
-      setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 0);
-    };
-    load();
+    void loadMsgs(MSG_PAGE_SIZE, true);
+    void supabase
+      .from("messages")
+      .update({ is_read: true, read_at: new Date().toISOString() })
+      .eq("sender_id", id)
+      .eq("receiver_id", user.id)
+      .eq("is_read", false);
+
+    // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây INSERT không lọc gì cả — MỌI tin nhắn
+    // gửi ở BẤT KỲ đâu trong toàn app đều kích hoạt tải lại toàn bộ lịch sử đoạn chat này.
+    // Giờ lọc theo sender_id ngay ở Postgres + xác nhận đúng cặp hội thoại ở client, và chỉ
+    // thêm tin nhắn mới vào state thay vì tải lại từ đầu.
     const ch = supabase
       .channel(`thread:${user.id}:${id}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "messages" }, load)
-      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "messages" }, (payload) => {
-        const row = payload.new as Message;
-        setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
-      })
-      .on("postgres_changes", { event: "DELETE", schema: "public", table: "messages" }, (payload) => {
-        const oldRow = payload.old as { id: string };
-        setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
-      })
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages", filter: `sender_id=eq.${id}` },
+        (payload) => {
+          const row = payload.new as Message;
+          if (row.receiver_id !== user.id) return;
+          setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
+          void supabase.from("messages").update({ is_read: true, read_at: new Date().toISOString() }).eq("id", row.id);
+          setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages", filter: `sender_id=eq.${user.id}` },
+        (payload) => {
+          const row = payload.new as Message;
+          if (row.receiver_id !== id) return;
+          setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
+          setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "messages", filter: `sender_id=eq.${id}` },
+        (payload) => {
+          const row = payload.new as Message;
+          setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "messages", filter: `sender_id=eq.${user.id}` },
+        (payload) => {
+          const row = payload.new as Message;
+          setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "messages", filter: `sender_id=eq.${id}` },
+        (payload) => {
+          const oldRow = payload.old as { id: string };
+          setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "messages", filter: `sender_id=eq.${user.id}` },
+        (payload) => {
+          const oldRow = payload.old as { id: string };
+          setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
+        },
+      )
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_reactions" }, (payload) => {
         const r = payload.new as { message_id: string; user_id: string; emoji: string };
         setReactions((prev) => {
