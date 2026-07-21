@@ -1244,7 +1244,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
       return;
     }
     if (next !== confirm) {
-      toast.error("Mật khẩu xác nhận không khớp");
+      toast.error(t("register.passwordMismatch"));
       return;
     }
     setBusy(true);
