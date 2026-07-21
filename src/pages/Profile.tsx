@@ -1266,7 +1266,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
       setConfirm("");
       onDone();
     } catch (e: any) {
-      toast.error(e.message || "Có lỗi xảy ra");
+      toast.error(e.message || t("common.genericError"));
     } finally {
       setBusy(false);
     }
