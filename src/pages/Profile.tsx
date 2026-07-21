@@ -1161,7 +1161,7 @@ const DEFAULT_PREFS: NotifPrefs = {
 };
 function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
   const { t } = useLanguage();
-  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang" | "help">(null);
+  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang">(null);
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1">
