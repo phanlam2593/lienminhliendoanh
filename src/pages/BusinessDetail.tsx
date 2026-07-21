@@ -1048,7 +1048,7 @@ function RegularVisitBadge({ businessId }: { businessId: string }) {
 
   return (
     <span className="text-xs bg-primary/10 text-primary px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
-      <Award className="w-3 h-3" /> Bạn đã ghé {visits} lần
+      <Award className="w-3 h-3" /> {t("biz.visitedTimes", { n: visits })}
     </span>
   );
 }
