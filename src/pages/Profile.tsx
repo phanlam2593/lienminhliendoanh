@@ -1251,7 +1251,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
     try {
       const { data: u } = await supabase.auth.getUser();
       const email = u.user?.email;
-      if (!email) throw new Error("Không xác định được tài khoản");
+      if (!email) throw new Error(t("settings.pwNoAccount"));
       const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: current });
       if (signInErr) {
         toast.error("Mật khẩu hiện tại không đúng");
