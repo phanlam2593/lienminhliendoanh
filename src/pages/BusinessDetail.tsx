@@ -185,7 +185,7 @@ export default function BusinessDetail() {
     // rollback luôn cả bước ghi log, khiến rate-limit không hoạt động — đã test phát hiện).
     const result = data as unknown as { success: boolean; error?: string; claim?: OfferClaim };
     if (!result.success) {
-      toast.error(result.error || "Có lỗi xảy ra");
+      toast.error(result.error || t("common.genericError"));
       return;
     }
     setClaim(result.claim!);
