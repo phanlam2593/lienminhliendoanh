@@ -155,6 +155,26 @@ export default function Businesses() {
   return (
     <div className="p-4 space-y-4">
       <h1 className="text-xl font-extrabold">{t("nav.explore")}</h1>
+      <div className="flex gap-1.5">
+        <button
+          onClick={() => setViewMode("list")}
+          className={cn(
+            "flex-1 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5",
+            viewMode === "list" ? "bg-primary text-primary-foreground" : "bg-card border",
+          )}
+        >
+          <List className="w-3.5 h-3.5" /> Danh sách
+        </button>
+        <button
+          onClick={() => setViewMode("map")}
+          className={cn(
+            "flex-1 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5",
+            viewMode === "map" ? "bg-primary text-primary-foreground" : "bg-card border",
+          )}
+        >
+          <MapIcon className="w-3.5 h-3.5" /> Bản đồ
+        </button>
+      </div>
       <div className="relative">
         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
