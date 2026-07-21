@@ -1254,7 +1254,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
       if (!email) throw new Error(t("settings.pwNoAccount"));
       const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: current });
       if (signInErr) {
-        toast.error("Mật khẩu hiện tại không đúng");
+        toast.error(t("settings.pwWrongCurrent"));
         setBusy(false);
         return;
       }
