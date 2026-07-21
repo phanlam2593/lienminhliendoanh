@@ -160,7 +160,20 @@ export default function Admin() {
     void loadMembers(next, true);
   };
 
-  if (loading) return <div className="p-10 text-center text-sm">Đang tải…</div>;
+  if (loading)
+    return (
+      <div className="p-4 space-y-3">
+        <div className="h-8 w-40 bg-muted rounded animate-pulse" />
+        <div className="grid grid-cols-2 gap-2">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="h-20 rounded-xl bg-card border animate-pulse" />
+          ))}
+        </div>
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-14 rounded-xl bg-card border animate-pulse" />
+        ))}
+      </div>
+    );
   if (!user || !isAdmin) return <Navigate to="/" replace />;
 
   const refresh = () => setRefreshKey((k) => k + 1);
