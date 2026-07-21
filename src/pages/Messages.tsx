@@ -548,6 +548,15 @@ export function MessagesThread() {
       </div>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div className="flex-1 overflow-y-auto p-3 space-y-2">
+        {msgs.length > 0 && msgHasMore && (
+          <button
+            onClick={loadOlderMsgs}
+            disabled={loadingOlder}
+            className="w-full py-1.5 text-xs font-semibold text-muted-foreground hover:bg-accent rounded-lg disabled:opacity-50"
+          >
+            {loadingOlder ? t("common.loading") : t("community.loadOlder")}
+          </button>
+        )}
         {(() => {
           // Chỉ tìm 1 lần cho cả danh sách: tin nhắn CUỐI CÙNG của tôi đã được xem —
           // đúng hành vi Messenger/Zalo (không hiện "đã xem" dưới mọi tin, chỉ tin mới nhất).
