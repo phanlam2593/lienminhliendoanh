@@ -1459,6 +1459,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "regulars.notifOff": "Turn off new deal notifications",
     "regulars.notifOn": "Turn on new deal notifications",
     "regulars.defaultBizName": "Business",
+    "home.footerThanks": "Thanks for being part of the community 🌿",
   },
 };
 
