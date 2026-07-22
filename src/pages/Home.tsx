@@ -237,7 +237,7 @@ function StatsModal({
     const from = pageNum * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;
     let query = supabase
-      .from("profiles")
+      .from("profiles_public")
       .select("id, full_name, avatar_url, status_message, points, created_at")
       .eq("status", "approved")
       .order("created_at", { ascending: false })
