@@ -208,7 +208,10 @@ export default function MyReports() {
       const authorIds = [...new Set(replyRows.map((rr: any) => rr.author_id))];
       let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
       if (authorIds.length) {
-        const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", authorIds);
+        const { data: profs } = await supabase
+          .from("profiles_public")
+          .select("id, full_name, avatar_url")
+          .in("id", authorIds);
         (profs ?? []).forEach((p: any) => profMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
       }
       const reportById = new Map(allReports.map((r) => [r.id, r]));
