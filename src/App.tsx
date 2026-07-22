@@ -28,6 +28,7 @@ import Notifications from "./pages/Notifications";
 import Community from "./pages/Community";
 import Guide from "./pages/Guide";
 import MyReports from "./pages/MyReports";
+import Questline from "./pages/Questline";
 import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookieThirdParty from "./pages/CookieThirdParty";
