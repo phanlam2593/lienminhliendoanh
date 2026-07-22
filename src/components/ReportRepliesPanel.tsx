@@ -59,7 +59,7 @@ export function ReportRepliesPanel({
     const uids = [...new Set(rows.map((r) => r.author_id))];
     let pm = new Map<string, { full_name: string; avatar_url: string | null }>();
     if (uids.length) {
-      const { data: profs } = await supabase.from("profiles").select("id, full_name, avatar_url").in("id", uids);
+      const { data: profs } = await supabase.from("profiles_public").select("id, full_name, avatar_url").in("id", uids);
       (profs ?? []).forEach((p: any) => pm.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }));
     }
     setReplies(rows.map((r) => ({ ...r, author: pm.get(r.author_id) ?? null })));
