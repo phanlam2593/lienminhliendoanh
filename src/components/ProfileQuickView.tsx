@@ -162,12 +162,15 @@ export function ProfileQuickView({
                   Mở hồ sơ của tôi
                 </Link>
               ) : (
-                <button
-                  onClick={() => onOpenChange(false)}
-                  className="flex-1 py-2 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1"
-                >
-                  <X className="w-4 h-4" /> Đóng
-                </button>
+                user && (
+                  <Link
+                    to={`/tin-nhan/${userId}`}
+                    onClick={() => onOpenChange(false)}
+                    className="flex-1 py-2 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1"
+                  >
+                    <MessageCircle className="w-4 h-4" /> Nhắn tin
+                  </Link>
+                )
               )}
             </div>
           </div>
