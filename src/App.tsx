@@ -103,6 +103,7 @@ const App = () => (
                     <Route path="/admin" element={<Admin />} />
                     <Route path="/huong-dan" element={<Guide />} />
                     <Route path="/bao-cao-cua-toi" element={<MyReports />} />
+                    <Route path="/questline" element={<Questline />} />
                   </Route>
                   <Route path="*" element={<NotFound />} />
                 </Routes>
