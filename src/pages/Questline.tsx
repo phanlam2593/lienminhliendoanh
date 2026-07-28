@@ -640,27 +640,6 @@ const QUESTS: Quest[] = [
     action: "Hồ sơ → Hướng dẫn, cuộn hết trang.",
     expect: "Trang tải đủ, không có chữ/icon vỡ, không có link chết (bấm thử 1-2 link nếu có).",
   },
-  {
-    id: "legal-privacy",
-    category: "Pháp lý & Hướng dẫn",
-    title: "Chính sách bảo mật",
-    action: "Đọc hết trang Chính sách bảo mật.",
-    expect: "Nội dung đầy đủ, có nút quay lại ở cuối trang.",
-  },
-  {
-    id: "legal-cookie",
-    category: "Pháp lý & Hướng dẫn",
-    title: "Chính sách Cookie",
-    action: "Đọc trang Chính sách Cookie & bên thứ ba.",
-    expect: "Nội dung đầy đủ, có nút quay lại ở cuối trang.",
-  },
-  {
-    id: "guide-page",
-    category: "Pháp lý & Hướng dẫn",
-    title: "Trang Hướng dẫn sử dụng",
-    action: "Hồ sơ → Hướng dẫn.",
-    expect: "Nội dung hướng dẫn đầy đủ, dễ hiểu, có nút quay lại.",
-  },
 
   // ===== Cộng đồng nâng cao =====
   {
