@@ -783,6 +783,7 @@ const STORAGE_KEY = "lmld:questline:v3";
 const CATEGORIES = [...new Set(QUESTS.map((q) => q.category))];
 
 export default function Questline() {
+  const { role } = useAuth();
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [loaded, setLoaded] = useState(false);
 
