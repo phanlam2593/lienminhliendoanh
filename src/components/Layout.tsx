@@ -53,7 +53,7 @@ export function Layout() {
         { to: "/kham-pha", icon: Search, label: t("nav.explore") },
         { to: "/admin", icon: Settings, label: t("nav.admin") },
         { to: "/cong-dong", icon: Users, label: t("nav.community") },
-        { to: "/questline", icon: Target, label: "Kiểm tra" },
+        { to: "/questline", icon: Target, label: "Quest" },
       ]
     : baseTabs;
   const gridClass = tabs.length === 5 ? "grid-cols-5" : tabs.length === 4 ? "grid-cols-4" : "grid-cols-3";
