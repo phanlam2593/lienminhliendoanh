@@ -47,7 +47,15 @@ export function Layout() {
     { to: "/kham-pha", icon: Search, label: t("nav.explore") },
     { to: "/cong-dong", icon: Users, label: t("nav.community") },
   ];
-  const tabs = isAdmin ? [...baseTabs, { to: "/admin", icon: Settings, label: t("nav.admin") }] : baseTabs;
+  const tabs = isAdmin
+    ? [
+        { to: "/", icon: Home, label: t("nav.home") },
+        { to: "/kham-pha", icon: Search, label: t("nav.explore") },
+        { to: "/admin", icon: Settings, label: t("nav.admin") },
+        { to: "/cong-dong", icon: Users, label: t("nav.community") },
+        { to: "/questline", icon: Target, label: "Kiểm tra" },
+      ]
+    : baseTabs;
   const gridClass = tabs.length === 5 ? "grid-cols-5" : tabs.length === 4 ? "grid-cols-4" : "grid-cols-3";
 
   const showWelcome = !loading && !user && !hide;
