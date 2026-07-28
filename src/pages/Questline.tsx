@@ -615,9 +615,30 @@ const QUESTS: Quest[] = [
   {
     id: "legal-terms",
     category: "Pháp lý & Hướng dẫn",
-    title: "Điều khoản sử dụng",
-    action: "Đọc hết trang Điều khoản, bấm nút 'Quay lại' ở cuối trang.",
-    expect: "Nội dung đầy đủ, nút quay lại đưa đúng về trang Hồ sơ.",
+    title: "Trang Điều khoản không lỗi",
+    action: "Mở trang Điều khoản sử dụng, cuộn hết xuống cuối, bấm nút 'Quay lại'.",
+    expect: "Trang tải đủ, không trắng/vỡ giữa chừng; nút quay lại đưa đúng về Hồ sơ, không lỗi console.",
+  },
+  {
+    id: "legal-privacy",
+    category: "Pháp lý & Hướng dẫn",
+    title: "Trang Chính sách bảo mật không lỗi",
+    action: "Mở trang Chính sách bảo mật, cuộn hết xuống cuối.",
+    expect: "Trang tải đủ, không trắng/vỡ, nút quay lại ở cuối hoạt động đúng.",
+  },
+  {
+    id: "legal-cookie",
+    category: "Pháp lý & Hướng dẫn",
+    title: "Trang Chính sách Cookie không lỗi",
+    action: "Mở trang Chính sách Cookie & bên thứ ba, cuộn hết xuống cuối.",
+    expect: "Trang tải đủ, không trắng/vỡ, nút quay lại ở cuối hoạt động đúng.",
+  },
+  {
+    id: "guide-page",
+    category: "Pháp lý & Hướng dẫn",
+    title: "Trang Hướng dẫn không lỗi",
+    action: "Hồ sơ → Hướng dẫn, cuộn hết trang.",
+    expect: "Trang tải đủ, không có chữ/icon vỡ, không có link chết (bấm thử 1-2 link nếu có).",
   },
   {
     id: "legal-privacy",
