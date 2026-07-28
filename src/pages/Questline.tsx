@@ -829,6 +829,10 @@ export default function Questline() {
   const completed = useMemo(() => QUESTS.filter((q) => done[q.id]).length, [done]);
   const pct = total ? Math.round((completed / total) * 100) : 0;
 
+  if (role !== "admin") {
+    return <Navigate to="/ho-so" replace />;
+  }
+
   return (
     <div className="p-4 space-y-4 pb-10">
       <div className="flex items-center gap-2">
