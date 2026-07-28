@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowLeft, Check, RotateCcw, PartyPopper } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 
 interface Quest {
   id: string;
