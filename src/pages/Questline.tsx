@@ -565,6 +565,7 @@ const QUESTS: Quest[] = [
     action: "Với 1 tài khoản MỚI, lướt hết 5 trang chào mừng rồi đóng lại. Sau đó mở lại app (F5 hoặc mở lại tab).",
     expect: "Màn chào mừng KHÔNG hiện lại lần 2 — chứng tỏ đã lưu đúng trạng thái 'đã xem'.",
   },
+
   {
     id: "onb-membernum",
     category: "Onboarding thành viên mới",
