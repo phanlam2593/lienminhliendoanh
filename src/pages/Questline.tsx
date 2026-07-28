@@ -561,10 +561,11 @@ const QUESTS: Quest[] = [
   {
     id: "onb-welcome",
     category: "Onboarding thành viên mới",
-    title: "Màn chào mừng 5 trang",
-    action: "Với 1 tài khoản MỚI (chưa từng thấy welcome), lướt qua đủ 5 trang chào mừng.",
-    expect: "Vuốt/bấm qua từng trang mượt, đóng được ở trang cuối.",
+    title: "Màn chào mừng không lặp lại",
+    action: "Với 1 tài khoản MỚI, lướt hết 5 trang chào mừng rồi đóng lại. Sau đó mở lại app (F5 hoặc mở lại tab).",
+    expect: "Màn chào mừng KHÔNG hiện lại lần 2 — chứng tỏ đã lưu đúng trạng thái 'đã xem'.",
   },
+  ,
   {
     id: "onb-membernum",
     category: "Onboarding thành viên mới",
