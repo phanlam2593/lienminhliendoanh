@@ -12,6 +12,7 @@ import {
   Tag,
   MessageCircle,
   Building2,
+  Target,
 } from "lucide-react";
 import { initInstallPrompt, triggerInstall, dismissInstallBanner } from "@/lib/pwa";
 import { Download, X as XIcon } from "lucide-react";
