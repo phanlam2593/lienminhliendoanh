@@ -205,6 +205,8 @@ export interface Report {
   send_to_business: boolean;
   resolved: boolean;
   status: ReportStatus;
+  owner_confirmed_resolved: boolean;
+  reporter_satisfied: boolean | null;
   created_at: string;
 }
 
