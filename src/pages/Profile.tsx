@@ -1040,7 +1040,7 @@ function FollowStats({ userId }: { userId: string }) {
   const [regulars, setRegulars] = useState(0);
   const [open, setOpen] = useState<null | "followers" | "following" | "regulars">(null);
 
-  cconst loadCounts = async () => {
+  const loadCounts = async () => {
     const [{ count: fc }, { count: gc }, { data: regRows }, { data: followBizRows }] = await Promise.all([
       supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
       supabase
