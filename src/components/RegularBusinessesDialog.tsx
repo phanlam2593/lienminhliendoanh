@@ -32,43 +32,38 @@ export function RegularBusinessesDialog({
   const load = async () => {
     setLoading(true);
     try {
-      const [{ data: regulars }, { data: followRows }] = await Promise.all([
-        supabase
-          .from("business_regulars")
-          .select("business_id, visit_count, last_visit_at")
-          .eq("member_id", userId)
-          .order("visit_count", { ascending: false }),
-        supabase
-          .from("follows")
-          .select("followee_business_id")
-          .eq("follower_id", userId)
-          .not("followee_business_id", "is", null),
-      ]);
+      const { data: regulars } = await supabase
+        .from("business_regulars")
+        .select("business_id, visit_count, last_visit_at")
+        .eq("member_id", userId)
+        .order("visit_count", { ascending: false });
 
-      const regularMap = new Map((regulars ?? []).map((r: any) => [r.business_id, r]));
-      const followedIds = new Set((followRows ?? []).map((r: any) => r.followee_business_id));
-      const ids = [...new Set([...regularMap.keys(), ...followedIds])];
-
+      const ids = (regulars ?? []).map((r: any) => r.business_id);
       if (ids.length === 0) {
         setRows([]);
         return;
       }
-      const { data: bizList } = await supabase.from("businesses").select("id, name, cover_url").in("id", ids);
+      const [{ data: bizList }, { data: notifRows }] = await Promise.all([
+        supabase.from("businesses").select("id, name, cover_url").in("id", ids),
+        supabase
+          .from("follows")
+          .select("followee_business_id")
+          .eq("follower_id", userId)
+          .in("followee_business_id", ids),
+      ]);
       const bizMap = new Map((bizList ?? []).map((b: any) => [b.id, b]));
+      const notifSet = new Set((notifRows ?? []).map((r: any) => r.followee_business_id));
 
-      const combined = ids.map((id) => {
-        const reg = regularMap.get(id) as any;
-        return {
-          id,
-          name: bizMap.get(id)?.name ?? t("regulars.defaultBizName"),
-          cover_url: bizMap.get(id)?.cover_url ?? null,
-          visits: reg?.visit_count ?? 0,
-          lastVisit: reg?.last_visit_at ?? null,
-          notifOn: followedIds.has(id),
-        };
-      });
-      combined.sort((a, b) => b.visits - a.visits);
-      setRows(combined);
+      setRows(
+        (regulars ?? []).map((r: any) => ({
+          id: r.business_id,
+          name: bizMap.get(r.business_id)?.name ?? t("regulars.defaultBizName"),
+          cover_url: bizMap.get(r.business_id)?.cover_url ?? null,
+          visits: r.visit_count,
+          lastVisit: r.last_visit_at,
+          notifOn: notifSet.has(r.business_id),
+        })),
+      );
     } catch (e: any) {
       toast.error(e.message || t("follow.loadFail"));
     } finally {
@@ -124,12 +119,20 @@ export function RegularBusinessesDialog({
                     <div className="min-w-0">
                       <div className="text-sm font-semibold truncate">{r.name}</div>
                       <div className="text-[11px] text-muted-foreground">
-                        {t("regulars.visitsCount", { n: r.visits })}
-                        {r.lastVisit
-                          ? t("regulars.lastVisitSuffix", {
-                              date: new Date(r.lastVisit).toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US"),
-                            })
-                          : ""}
+                        {r.visits > 0 ? (
+                          <>
+                            {t("regulars.visitsCount", { n: r.visits })}
+                            {r.lastVisit
+                              ? t("regulars.lastVisitSuffix", {
+                                  date: new Date(r.lastVisit).toLocaleDateString(lang === "vi" ? "vi-VN" : "en-US"),
+                                })
+                              : ""}
+                          </>
+                        ) : (
+                          <span className="text-primary font-semibold">
+                            {lang === "vi" ? "Đang theo dõi" : "Following"}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </Link>
