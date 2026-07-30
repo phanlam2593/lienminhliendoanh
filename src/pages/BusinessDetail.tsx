@@ -87,8 +87,12 @@ export default function BusinessDetail() {
   const REVIEW_PAGE_SIZE = 10;
 
   useEffect(() => {
-    void load();
-  }, [id]);
+    const claimsOfferId = searchParams.get("claims");
+    if (claimsOfferId && offers.length) {
+      const o = offers.find((of) => of.id === claimsOfferId);
+      if (o) setClaimsListOffer(o);
+    }
+  }, [offers, searchParams]);
 
   const load = async () => {
     const [{ data: bd }, { data: of }, { data: stats }] = await Promise.all([
