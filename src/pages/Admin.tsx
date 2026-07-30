@@ -1436,6 +1436,7 @@ function ReportRow({
             reportId={r.id}
             canChangeStatus
             currentStatus={r.status}
+            reporterSatisfied={r.reporter_satisfied}
             onStatusChange={(s) => onStatusChanged(r.id, s)}
           />
           <div className="flex gap-2 pt-1">
