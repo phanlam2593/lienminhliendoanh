@@ -787,6 +787,7 @@ function ReviewItem({
   const [editRating, setEditRating] = useState(r.rating);
   const [editComment, setEditComment] = useState(r.comment ?? "");
   const [editBusy, setEditBusy] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const isMine = !!myId && myId === r.user_id;
 
   const saveEdit = async () => {
