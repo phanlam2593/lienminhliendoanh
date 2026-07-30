@@ -1365,7 +1365,7 @@ function MemberDetail({
 
 const REPORT_PAGE_SIZE = 50;
 
-ffunction ReportRow({
+function ReportRow({
   r,
   onDeleted,
   onStatusChanged,
@@ -1437,13 +1437,7 @@ ffunction ReportRow({
   );
 }
 
-function ReportsSection({
-  refreshKey,
-  onOpenMember,
-}: {
-  refreshKey: number;
-  onOpenMember: (ownerId: string) => void;
-}) {
+function ReportsSection({ refreshKey, onOpenMember }: { refreshKey: number; onOpenMember: (ownerId: string) => void }) {
   const [list, setList] = useState<(Report & { reporter?: string | null; target_name?: string | null })[]>([]);
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
