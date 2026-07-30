@@ -1151,7 +1151,15 @@ const DEFAULT_PREFS: NotifPrefs = {
   mentions: true,
   admin: true,
 };
-function SettingsSection({ userId, initialPrefs }: { userId: string; initialPrefs?: any }) {
+function SettingsSection({
+  userId,
+  initialPrefs,
+  onPrefsSaved,
+}: {
+  userId: string;
+  initialPrefs?: any;
+  onPrefsSaved?: () => void;
+}) {
   const { t } = useLanguage();
   const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang">(null);
   return (
