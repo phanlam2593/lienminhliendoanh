@@ -174,6 +174,7 @@ export function ReportRepliesPanel({
           <p className="text-[10px] text-muted-foreground">{t("reports.statusHint")}</p>
         </div>
       )}
+      <ProfileQuickView userId={quickUser} open={!!quickUser} onOpenChange={(v) => !v && setQuickUser(null)} />
     </div>
   );
 }
