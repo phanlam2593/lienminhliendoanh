@@ -1040,19 +1040,30 @@ function FollowStats({ userId }: { userId: string }) {
   const [regulars, setRegulars] = useState(0);
   const [open, setOpen] = useState<null | "followers" | "following" | "regulars">(null);
 
-  const loadCounts = async () => {
-    const [{ count: fc }, { count: gc }, { count: rc }] = await Promise.all([
+  cconst loadCounts = async () => {
+    const [{ count: fc }, { count: gc }, { data: regRows }, { data: followBizRows }] = await Promise.all([
       supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
       supabase
         .from("follows")
         .select("*", { count: "exact", head: true })
         .eq("follower_id", userId)
         .not("followee_user_id", "is", null),
-      supabase.from("business_regulars").select("*", { count: "exact", head: true }).eq("member_id", userId),
+      supabase.from("business_regulars").select("business_id").eq("member_id", userId),
+      supabase
+        .from("follows")
+        .select("followee_business_id")
+        .eq("follower_id", userId)
+        .not("followee_business_id", "is", null),
     ]);
     setFollowers(fc ?? 0);
     setFollowing(gc ?? 0);
-    setRegulars(rc ?? 0);
+    // Đếm gộp DN đã claim (business_regulars) + DN đang follow chưa claim, khớp với
+    // danh sách thật sự hiện trong RegularBusinessesDialog.
+    const regularIds = new Set([
+      ...(regRows ?? []).map((r: any) => r.business_id),
+      ...(followBizRows ?? []).map((r: any) => r.followee_business_id),
+    ]);
+    setRegulars(regularIds.size);
   };
 
   useEffect(() => {
