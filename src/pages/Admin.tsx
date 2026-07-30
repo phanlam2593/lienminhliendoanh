@@ -80,9 +80,26 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   broadcast: "Thông báo",
 };
 
+const VALID_TABS: TabKey[] = [
+  "overview",
+  "members",
+  "businesses",
+  "offers",
+  "exchanges",
+  "reports",
+  "pending",
+  "activity",
+  "hidden",
+  "broadcast",
+];
+
 export default function Admin() {
   const { user, isAdmin, loading } = useAuth();
-  const [activeTab, setActiveTab] = useState<TabKey>("overview");
+  const [searchParams] = useSearchParams();
+  const tabFromUrl = searchParams.get("tab") as TabKey | null;
+  const [activeTab, setActiveTab] = useState<TabKey>(
+    tabFromUrl && VALID_TABS.includes(tabFromUrl) ? tabFromUrl : "overview",
+  );
   const [rows, setRows] = useState<MemberRow[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
