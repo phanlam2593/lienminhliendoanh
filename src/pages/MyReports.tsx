@@ -1,6 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, Flag, Building2, Send, Shield } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  Flag,
+  Building2,
+  Send,
+  Shield,
+  CheckCircle2,
+  ThumbsUp,
+  ThumbsDown,
+  MessageCircle,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/integrations/supabase/client";
 import { timeAgo } from "@/lib/time";
@@ -30,22 +40,29 @@ interface EnrichedReply {
   author_id: string;
   full_name: string;
   avatar_url: string | null;
-  roleLabel: "admin" | "owner" | null; // dịch tại nơi hiển thị qua t()
+  roleLabel: "admin" | "owner" | null;
 }
+
+type ReportRow = Report & { target_name?: string; target_href?: string | null };
 
 function ReportCard({
   r,
   replies,
   canReply,
   onReplied,
+  isOwnerOfTarget,
+  reporterInfo,
 }: {
-  r: Report & { target_name?: string };
+  r: ReportRow;
   replies: EnrichedReply[];
   canReply?: boolean;
   onReplied: () => void;
+  isOwnerOfTarget?: boolean;
+  reporterInfo?: { full_name: string; avatar_url: string | null } | null;
 }) {
   const { user } = useAuth();
   const { t, lang } = useLanguage();
+  const nav = useNavigate();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
@@ -56,6 +73,9 @@ function ReportCard({
 
   const isMine = user?.id === r.user_id;
   const canEditReport = isMine && r.status === "pending";
+  const canDelete =
+    (isMine && (r.status === "pending" || r.status === "resolved" || r.status === "closed")) ||
+    (isOwnerOfTarget && (r.status === "resolved" || r.status === "closed"));
 
   const send = async () => {
     if (!text.trim() || !user) return;
@@ -112,11 +132,57 @@ function ReportCard({
     onReplied();
   };
 
+  const markOwnerResolved = async () => {
+    const { error } = await supabase
+      .from("reports")
+      .update({ owner_confirmed_resolved: true, reporter_satisfied: null })
+      .eq("id", r.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã đánh dấu — đang chờ người báo cáo xác nhận");
+    onReplied();
+  };
+
+  const confirmSatisfied = async (satisfied: boolean) => {
+    const { error } = await supabase
+      .from("reports")
+      .update(
+        satisfied
+          ? { reporter_satisfied: true, status: "resolved" as ReportStatus, resolved: true }
+          : { reporter_satisfied: false },
+      )
+      .eq("id", r.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(satisfied ? "Đã chốt xong — cảm ơn bạn!" : "Đã báo admin hỗ trợ thêm");
+    onReplied();
+  };
+
   return (
     <div className="bg-card rounded-xl overflow-hidden shadow-sm">
       <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
         <div className="flex items-center justify-between gap-2">
-          <span className="text-sm font-semibold truncate">{r.target_name || t("reports.contentDeleted")}</span>
+          <span className="text-sm font-semibold truncate">
+            {r.target_href ? (
+              <span
+                role="link"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nav(r.target_href!);
+                }}
+                className="hover:text-primary hover:underline"
+              >
+                {r.target_name || t("reports.contentDeleted")}
+              </span>
+            ) : (
+              r.target_name || t("reports.contentDeleted")
+            )}
+          </span>
           <span
             className={`text-[10px] px-2 py-0.5 rounded-full font-semibold shrink-0 ${REPORT_STATUS_CLS[r.status]}`}
           >
@@ -133,6 +199,19 @@ function ReportCard({
       </button>
       {open && (
         <div className="px-3 pb-3 space-y-1.5">
+          {reporterInfo && (
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-accent/60">
+              <Avatar path={reporterInfo.avatar_url} name={reporterInfo.full_name} size={28} />
+              <span className="text-xs font-semibold flex-1 truncate">{reporterInfo.full_name}</span>
+              <Link
+                to={`/tin-nhan/${r.user_id}`}
+                className="text-[11px] px-2 py-1 rounded-lg border font-semibold inline-flex items-center gap-1"
+              >
+                <MessageCircle className="w-3 h-3" /> Nhắn tin
+              </Link>
+            </div>
+          )}
+
           {editOpen ? (
             <div className="space-y-1.5">
               <textarea
@@ -154,31 +233,37 @@ function ReportCard({
               </div>
             </div>
           ) : (
-            canEditReport && (
+            (canEditReport || canDelete) && (
               <div className="flex gap-2 pt-1">
-                <button
-                  onClick={() => {
-                    setEditDesc(r.description ?? "");
-                    setEditOpen(true);
-                  }}
-                  className="text-[11px] px-2.5 py-1 rounded bg-muted font-semibold"
-                >
-                  Sửa
-                </button>
-                <button
-                  onClick={deleteReport}
-                  className="text-[11px] px-2.5 py-1 rounded bg-muted text-destructive font-semibold"
-                >
-                  Xóa
-                </button>
+                {canEditReport && (
+                  <button
+                    onClick={() => {
+                      setEditDesc(r.description ?? "");
+                      setEditOpen(true);
+                    }}
+                    className="text-[11px] px-2.5 py-1 rounded bg-muted font-semibold"
+                  >
+                    Sửa
+                  </button>
+                )}
+                {canDelete && (
+                  <button
+                    onClick={deleteReport}
+                    className="text-[11px] px-2.5 py-1 rounded bg-muted text-destructive font-semibold"
+                  >
+                    Xóa
+                  </button>
+                )}
               </div>
             )
           )}
+
           {r.photo_url && (
             <div className="h-32 rounded-lg overflow-hidden bg-muted">
               <LightboxImage path={r.photo_url} alt={t("reports.reportImage")} className="w-full h-full object-cover" />
             </div>
           )}
+
           {replies.length > 0 && (
             <div className="pt-1.5 mt-1.5 border-t space-y-2">
               {replies.map((rr) => (
@@ -249,6 +334,58 @@ function ReportCard({
               ))}
             </div>
           )}
+
+          {r.status === "resolved" && (
+            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
+              ✅ Đã giải quyết xong
+            </div>
+          )}
+
+          {r.reporter_satisfied === false && (
+            <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-xs font-semibold">
+              ⏳ Đang chờ admin hỗ trợ xử lý thêm
+            </div>
+          )}
+
+          {isMine && r.owner_confirmed_resolved && r.reporter_satisfied === null && (
+            <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 space-y-1.5">
+              <p className="text-xs font-semibold">
+                Chủ doanh nghiệp cho biết đã xử lý xong. Bạn có hài lòng với cách giải quyết này không?
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => confirmSatisfied(true)}
+                  className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-semibold inline-flex items-center justify-center gap-1"
+                >
+                  <ThumbsUp className="w-3.5 h-3.5" /> Hài lòng
+                </button>
+                <button
+                  onClick={() => confirmSatisfied(false)}
+                  className="flex-1 py-1.5 rounded-lg bg-muted text-xs font-semibold inline-flex items-center justify-center gap-1"
+                >
+                  <ThumbsDown className="w-3.5 h-3.5" /> Chưa hài lòng
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isOwnerOfTarget && r.status !== "resolved" && (
+            <div className="pt-1">
+              {r.owner_confirmed_resolved && r.reporter_satisfied === null ? (
+                <p className="text-[11px] text-muted-foreground italic">
+                  Đã đánh dấu xử lý xong — đang chờ người báo cáo xác nhận…
+                </p>
+              ) : (
+                <button
+                  onClick={markOwnerResolved}
+                  className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold inline-flex items-center gap-1"
+                >
+                  <CheckCircle2 className="w-3 h-3" /> Đánh dấu đã xử lý xong
+                </button>
+              )}
+            </div>
+          )}
+
           {canReply && (
             <div className="flex items-center gap-1.5 pt-1">
               <input
@@ -277,9 +414,10 @@ export default function MyReports() {
   const { user } = useAuth();
   const { t } = useLanguage();
   const [tab, setTab] = useState<"reports" | "business">("reports");
-  const [reports, setReports] = useState<(Report & { target_name?: string })[]>([]);
-  const [bizReports, setBizReports] = useState<(Report & { target_name?: string })[]>([]);
+  const [reports, setReports] = useState<ReportRow[]>([]);
+  const [bizReports, setBizReports] = useState<ReportRow[]>([]);
   const [replies, setReplies] = useState<Record<string, EnrichedReply[]>>({});
+  const [reporters, setReporters] = useState<Map<string, { full_name: string; avatar_url: string | null }>>(new Map());
   const [myBizIds, setMyBizIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -312,24 +450,73 @@ export default function MyReports() {
     const allReports = [...reportRows, ...((bizReportRows as Report[]) ?? [])];
     const targetBizIds = [...new Set(allReports.filter((r) => r.target_type === "business").map((r) => r.target_id))];
     const offerIds = [...new Set(allReports.filter((r) => r.target_type === "offer").map((r) => r.target_id))];
-    const [{ data: biz }, { data: offs }] = await Promise.all([
+    const reviewIds = [...new Set(allReports.filter((r) => r.target_type === "review").map((r) => r.target_id))];
+
+    const [{ data: biz }, { data: offs }, { data: revs }] = await Promise.all([
       targetBizIds.length
         ? supabase.from("businesses").select("id, name, owner_id").in("id", targetBizIds)
         : Promise.resolve({ data: [] as any[] }),
       offerIds.length
-        ? supabase.from("offers").select("id, title").in("id", offerIds)
+        ? supabase.from("offers").select("id, title, business_id").in("id", offerIds)
+        : Promise.resolve({ data: [] as any[] }),
+      reviewIds.length
+        ? supabase.from("reviews").select("id, business_id, rating").in("id", reviewIds)
         : Promise.resolve({ data: [] as any[] }),
     ]);
-    const bizMap = new Map((biz ?? []).map((b: any) => [b.id, b.name]));
-    const bizOwnerMap = new Map((biz ?? []).map((b: any) => [b.id, b.owner_id]));
-    const offMap = new Map((offs ?? []).map((o: any) => [o.id, o.title]));
-    const withNames = (rows: Report[]) =>
-      rows.map((r) => ({
-        ...r,
-        target_name: r.target_type === "business" ? bizMap.get(r.target_id) : offMap.get(r.target_id),
-      }));
-    setReports(withNames(reportRows));
-    setBizReports(withNames((bizReportRows as Report[]) ?? []));
+
+    // Review/offer cũng thuộc về 1 DN — nạp thêm tên DN cho những id chưa có trong `biz`.
+    const relatedBizIds = [
+      ...new Set([...(revs ?? []).map((r: any) => r.business_id), ...(offs ?? []).map((o: any) => o.business_id)]),
+    ].filter((id) => !targetBizIds.includes(id));
+    const { data: extraBiz } = relatedBizIds.length
+      ? await supabase.from("businesses").select("id, name, owner_id").in("id", relatedBizIds)
+      : { data: [] as any[] };
+
+    const allBiz = [...(biz ?? []), ...(extraBiz ?? [])];
+    const bizMap = new Map(allBiz.map((b: any) => [b.id, b.name]));
+    const bizOwnerMap = new Map(allBiz.map((b: any) => [b.id, b.owner_id]));
+    const offMap = new Map((offs ?? []).map((o: any) => [o.id, o]));
+    const revMap = new Map((revs ?? []).map((r: any) => [r.id, r]));
+
+    const withNames = (rows: Report[]): ReportRow[] =>
+      rows.map((r) => {
+        if (r.target_type === "business") {
+          return { ...r, target_name: bizMap.get(r.target_id), target_href: `/dn/${r.target_id}` };
+        }
+        if (r.target_type === "offer") {
+          const o = offMap.get(r.target_id);
+          return { ...r, target_name: o?.title, target_href: o?.business_id ? `/dn/${o.business_id}` : null };
+        }
+        if (r.target_type === "review") {
+          const rv = revMap.get(r.target_id);
+          const bizName = rv ? bizMap.get(rv.business_id) : null;
+          return {
+            ...r,
+            target_name: bizName ? `Đánh giá ${rv.rating}★ tại ${bizName}` : "Đánh giá",
+            target_href: rv?.business_id ? `/dn/${rv.business_id}` : null,
+          };
+        }
+        return r;
+      });
+
+    const reportsWithNames = withNames(reportRows);
+    const bizReportsWithNames = withNames((bizReportRows as Report[]) ?? []);
+    setReports(reportsWithNames);
+    setBizReports(bizReportsWithNames);
+
+    // Tên + avatar người báo cáo — chỉ cần cho tab "Về DN của tôi" để chủ DN biết ai đã báo cáo.
+    const reporterIds = [...new Set(bizReportsWithNames.map((r) => r.user_id))];
+    const reporterMap = new Map<string, { full_name: string; avatar_url: string | null }>();
+    if (reporterIds.length) {
+      const { data: reporterProfs } = await supabase
+        .from("profiles_public")
+        .select("id, full_name, avatar_url")
+        .in("id", reporterIds);
+      (reporterProfs ?? []).forEach((p: any) =>
+        reporterMap.set(p.id, { full_name: p.full_name, avatar_url: p.avatar_url }),
+      );
+    }
+    setReporters(reporterMap);
 
     if (allReports.length) {
       const { data: rep } = await supabase
@@ -422,7 +609,15 @@ export default function MyReports() {
       ) : (
         <div className="space-y-2">
           {bizReports.map((r) => (
-            <ReportCard key={r.id} r={r} replies={replies[r.id] ?? []} canReply onReplied={load} />
+            <ReportCard
+              key={r.id}
+              r={r}
+              replies={replies[r.id] ?? []}
+              canReply
+              isOwnerOfTarget
+              reporterInfo={reporters.get(r.user_id) ?? null}
+              onReplied={load}
+            />
           ))}
         </div>
       )}
