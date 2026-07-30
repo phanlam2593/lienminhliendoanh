@@ -104,6 +104,17 @@ export default function BusinessDetail() {
     setB(bd as Business | null);
     setOffers((of ?? []) as Offer[]);
     setAvgRating(Number((stats as any)?.rating ?? 0));
+    const ownerId = (bd as Business | null)?.owner_id;
+    if (ownerId) {
+      const { data: ownerP } = await supabase
+        .from("profiles_public")
+        .select("id, full_name, avatar_url")
+        .eq("id", ownerId)
+        .maybeSingle();
+      setOwnerProfile(ownerP as any);
+    } else {
+      setOwnerProfile(null);
+    }
     setReviewPage(0);
     void loadReviews(0, false);
     void supabase.rpc("increment_business_view", { _business_id: id }); // ← thêm dòng này
