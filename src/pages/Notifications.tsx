@@ -75,14 +75,20 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
         return "/tin-nhan";
       case "follows":
         // target_type/target_id giờ phân biệt: follow một DN mình sở hữu → vào thẳng
-        // trang DN đó (có nút xem danh sách người theo dõi thật); follow cá nhân → vào
-        // tab "Theo dõi" trong Tin nhắn như cũ.
+        // danh sách người theo dõi của DN đó (mở sẵn); follow cá nhân → vào tab "Theo dõi"
+        // trong Tin nhắn như cũ.
         if (n.target_type === "business" && id) {
           const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
-          if (data) return `/dn/${id}`;
+          if (data) return `/dn/${id}?followers=1`;
         }
         return "/tin-nhan?tab=follows";
       case "deals_received":
+        // target_id giờ là offer_id của lần gần nhất — vào thẳng danh sách người đã nhận ưu đãi đó.
+        if (id) {
+          const { data } = await supabase.from("offers").select("id, business_id").eq("id", id).maybeSingle();
+          if (data) return `/dn/${data.business_id}?claims=${id}`;
+        }
+        return "/kham-pha";
       case "deals_new":
         // target_id là business_id của lần gần nhất — vào thẳng trang DN đó.
         if (id) {
