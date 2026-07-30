@@ -956,7 +956,7 @@ function ReviewItem({
             <div key={rep.id} className="text-xs space-y-0.5">
               <div className="flex items-center gap-1.5">
                 <Avatar path={rep.profile?.avatar_url} name={rep.profile?.full_name} size={20} />
-                <span className="font-semibold truncate">{rep.profile?.full_name || "Chủ DN"}</span>
+                <span className="font-semibold truncate">{rep.profile?.full_name || "Chủ doanh nghiệp"}</span>
                 <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at)}</span>
                 {(isAdmin || rep.user_id === myId) && (
                   <button
