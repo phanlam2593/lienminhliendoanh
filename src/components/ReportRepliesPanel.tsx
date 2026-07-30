@@ -146,7 +146,7 @@ export function ReportRepliesPanel({
       {canChangeStatus && (
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-[10px] text-muted-foreground font-semibold">{t("reports.statusLabel")}</span>
-          {(["pending", "replied", "resolved", "closed"] as ReportStatus[]).map((s) => (
+          {(["pending", "resolved", "closed"] as ReportStatus[]).map((s) => (
             <button
               key={s}
               onClick={() => updateStatus(s)}
