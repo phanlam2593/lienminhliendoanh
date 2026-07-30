@@ -1365,14 +1365,16 @@ function MemberDetail({
 
 const REPORT_PAGE_SIZE = 50;
 
-function ReportRow({
+ffunction ReportRow({
   r,
   onDeleted,
   onStatusChanged,
+  onOpenBiz,
 }: {
   r: Report & { reporter?: string | null; target_name?: string | null };
   onDeleted: () => void;
   onStatusChanged: (id: string, s: ReportStatus) => void;
+  onOpenBiz: (businessId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -1388,7 +1390,21 @@ function ReportRow({
       <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
         <div className="flex items-start justify-between gap-2">
           <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
-            {r.reporter || "Ẩn danh"} → <b className="text-foreground">{r.target_name || r.target_type}</b>
+            {r.reporter || "Ẩn danh"} →{" "}
+            {r.target_type === "business" && r.target_id ? (
+              <span
+                role="link"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onOpenBiz(r.target_id);
+                }}
+                className="text-foreground font-bold hover:text-primary hover:underline"
+              >
+                {r.target_name || r.target_type}
+              </span>
+            ) : (
+              <b className="text-foreground">{r.target_name || r.target_type}</b>
+            )}
           </div>
           <ReportStatusBadge s={r.status} />
         </div>
