@@ -144,17 +144,20 @@ export function ReportRepliesPanel({
       </div>
 
       {canChangeStatus && (
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[10px] text-muted-foreground font-semibold">{t("reports.statusLabel")}</span>
-          {(["pending", "resolved", "closed"] as ReportStatus[]).map((s) => (
-            <button
-              key={s}
-              onClick={() => updateStatus(s)}
-              className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${s === currentStatus ? STATUS_CLASS[s] + " border-transparent" : "bg-card text-muted-foreground border-border"}`}
-            >
-              {STATUS_LABEL[s]}
-            </button>
-          ))}
+        <div className="space-y-1">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] text-muted-foreground font-semibold">{t("reports.statusLabel")}</span>
+            {(["pending", "resolved", "closed"] as ReportStatus[]).map((s) => (
+              <button
+                key={s}
+                onClick={() => updateStatus(s)}
+                className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${s === currentStatus ? STATUS_CLASS[s] + " border-transparent" : "bg-card text-muted-foreground border-border"}`}
+              >
+                {STATUS_LABEL[s]}
+              </button>
+            ))}
+          </div>
+          <p className="text-[10px] text-muted-foreground">{t("reports.statusHint")}</p>
         </div>
       )}
     </div>
