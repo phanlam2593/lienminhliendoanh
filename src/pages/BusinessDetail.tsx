@@ -55,7 +55,13 @@ export default function BusinessDetail() {
   const { user, isApproved, isAdmin } = useAuth();
   const { t } = useLanguage();
   const nav = useNavigate();
+  const [searchParams] = useSearchParams();
   const [b, setB] = useState<Business | null>(null);
+  const [ownerProfile, setOwnerProfile] = useState<{
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null>(null);
   const [offers, setOffers] = useState<Offer[]>([]);
   const [reviews, setReviews] = useState<ReviewMeta[]>([]);
   const [replies, setReplies] = useState<Map<string, ReplyMeta[]>>(new Map());
