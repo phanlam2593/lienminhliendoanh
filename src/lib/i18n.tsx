@@ -337,7 +337,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "follow.anonymous": "Ẩn danh",
     "follow.unfollow": "Bỏ theo dõi",
     "follow.followBack": "Theo dõi lại",
-    "follow.messageBizOwner": "Nhắn tin chủ DN",
+    "follow.messageBizOwner": "Nhắn tin chủ doanh nghiệp",
     "common.loadMoreRemaining": "Tải thêm (còn {n})",
     "tier.bronze": "Đồng",
     "tier.silver": "Bạc",
