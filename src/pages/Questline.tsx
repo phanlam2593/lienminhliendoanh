@@ -893,7 +893,8 @@ export default function Questline() {
           <div className="h-full bg-gradient-brand transition-all duration-300" style={{ width: `${pct}%` }} />
         </div>
         <p className="text-[11px] text-muted-foreground">
-          Tự động lưu ngay khi tick — tắt app rồi vào lại, tiến độ vẫn còn nguyên trên máy này.
+          Tự động lưu ngay khi tick — đăng nhập bằng tài khoản admin này ở bất kỳ máy/trình duyệt/domain nào cũng thấy
+          đúng tiến độ.
         </p>
         {pct === 100 && (
           <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-sm font-bold pt-1">
