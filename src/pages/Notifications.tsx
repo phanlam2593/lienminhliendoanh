@@ -228,11 +228,9 @@ export default function Notifications() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className={cn("text-sm", n.is_read ? "font-medium" : "font-bold")}>
-                      {n.category === "follows" && n.target_type === "business"
-                        ? n.title
-                        : n.category && NOTIF_TITLE_KEY_BY_CATEGORY[n.category]
-                          ? t(NOTIF_TITLE_KEY_BY_CATEGORY[n.category])
-                          : n.title}
+                      {n.category && NOTIF_TITLE_KEY_BY_CATEGORY[n.category]
+                        ? t(NOTIF_TITLE_KEY_BY_CATEGORY[n.category])
+                        : n.title}
                     </div>
                     {n.body && (
                       <div className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
