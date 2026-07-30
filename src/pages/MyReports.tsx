@@ -17,6 +17,7 @@ import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 import { LightboxImage } from "@/components/ImageLightbox";
 import { Avatar } from "@/components/Avatar";
+import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { useLanguage } from "@/lib/i18n";
 import type { Report, ReportStatus } from "@/lib/types";
 
@@ -70,6 +71,7 @@ function ReportCard({
   const [editDesc, setEditDesc] = useState(r.description ?? "");
   const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
   const [editReplyText, setEditReplyText] = useState("");
+  const [quickUser, setQuickUser] = useState<string | null>(null);
 
   const isMine = user?.id === r.user_id;
   const canEditReport = isMine && r.status === "pending";
@@ -162,9 +164,81 @@ function ReportCard({
     onReplied();
   };
 
+  // Gộp mọi trạng thái (đã giải quyết / đang tranh chấp / chờ xác nhận / nút đánh dấu)
+  // vào MỘT khối duy nhất, hiện ngay dưới đầu thẻ — tránh rải rác nhiều banner như trước.
+  const renderStatusArea = () => {
+    if (r.status === "resolved") {
+      return (
+        <div className="flex items-center gap-1.5 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
+          <CheckCircle2 className="w-4 h-4 shrink-0" /> Đã giải quyết xong
+        </div>
+      );
+    }
+    if (r.reporter_satisfied === false) {
+      return (
+        <div className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/30 space-y-1.5">
+          <p className="text-xs font-semibold text-red-700 dark:text-red-400">⏳ Đang chờ admin hỗ trợ xử lý thêm</p>
+          {isOwnerOfTarget && (
+            <button
+              type="button"
+              onClick={markOwnerResolved}
+              className="text-[11px] px-2.5 py-1 rounded-full bg-card border font-semibold"
+            >
+              Đã xử lý thêm — đánh dấu lại
+            </button>
+          )}
+        </div>
+      );
+    }
+    if (isMine && r.owner_confirmed_resolved && r.reporter_satisfied === null) {
+      return (
+        <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 space-y-1.5">
+          <p className="text-xs font-semibold">
+            Chủ doanh nghiệp cho biết đã xử lý xong. Bạn có hài lòng với cách giải quyết này không?
+          </p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => confirmSatisfied(true)}
+              className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-semibold inline-flex items-center justify-center gap-1"
+            >
+              <ThumbsUp className="w-3.5 h-3.5" /> Hài lòng
+            </button>
+            <button
+              type="button"
+              onClick={() => confirmSatisfied(false)}
+              className="flex-1 py-1.5 rounded-lg bg-muted text-xs font-semibold inline-flex items-center justify-center gap-1"
+            >
+              <ThumbsDown className="w-3.5 h-3.5" /> Chưa hài lòng
+            </button>
+          </div>
+        </div>
+      );
+    }
+    if (isOwnerOfTarget) {
+      if (r.owner_confirmed_resolved && r.reporter_satisfied === null) {
+        return (
+          <p className="text-[11px] text-muted-foreground italic">
+            Đã đánh dấu xử lý xong — đang chờ người báo cáo xác nhận…
+          </p>
+        );
+      }
+      return (
+        <button
+          type="button"
+          onClick={markOwnerResolved}
+          className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold inline-flex items-center gap-1 w-fit"
+        >
+          <CheckCircle2 className="w-3 h-3" /> Đánh dấu đã xử lý xong
+        </button>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="bg-card rounded-xl overflow-hidden shadow-sm">
-      <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
+      <button type="button" onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm font-semibold truncate">
             {r.target_href ? (
@@ -198,19 +272,33 @@ function ReportCard({
         )}
       </button>
       {open && (
-        <div className="px-3 pb-3 space-y-1.5">
+        <div className="px-3 pb-3 space-y-2">
           {reporterInfo && (
-            <div className="flex items-center gap-2 p-2 rounded-lg bg-accent/60">
-              <Avatar path={reporterInfo.avatar_url} name={reporterInfo.full_name} size={28} />
-              <span className="text-xs font-semibold flex-1 truncate">{reporterInfo.full_name}</span>
+            <div className="flex items-center gap-2 p-2.5 rounded-lg bg-accent/50">
+              <button type="button" onClick={() => setQuickUser(r.user_id)} className="shrink-0">
+                <Avatar path={reporterInfo.avatar_url} name={reporterInfo.full_name} size={32} />
+              </button>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] text-muted-foreground">Người báo cáo</div>
+                <button
+                  type="button"
+                  onClick={() => setQuickUser(r.user_id)}
+                  className="text-xs font-semibold hover:text-primary hover:underline truncate block text-left"
+                >
+                  {reporterInfo.full_name}
+                </button>
+              </div>
               <Link
                 to={`/tin-nhan/${r.user_id}`}
-                className="text-[11px] px-2 py-1 rounded-lg border font-semibold inline-flex items-center gap-1"
+                aria-label="Nhắn tin"
+                className="w-8 h-8 rounded-full border grid place-items-center shrink-0 hover:bg-card"
               >
-                <MessageCircle className="w-3 h-3" /> Nhắn tin
+                <MessageCircle className="w-3.5 h-3.5" />
               </Link>
             </div>
           )}
+
+          {renderStatusArea()}
 
           {editOpen ? (
             <div className="space-y-1.5">
@@ -222,21 +310,27 @@ function ReportCard({
               />
               <div className="flex gap-2">
                 <button
+                  type="button"
                   onClick={saveEdit}
                   className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold"
                 >
                   Lưu
                 </button>
-                <button onClick={() => setEditOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
+                <button
+                  type="button"
+                  onClick={() => setEditOpen(false)}
+                  className="flex-1 py-1.5 rounded border text-xs"
+                >
                   Hủy
                 </button>
               </div>
             </div>
           ) : (
             (canEditReport || canDelete) && (
-              <div className="flex gap-2 pt-1">
+              <div className="flex gap-2">
                 {canEditReport && (
                   <button
+                    type="button"
                     onClick={() => {
                       setEditDesc(r.description ?? "");
                       setEditOpen(true);
@@ -248,6 +342,7 @@ function ReportCard({
                 )}
                 {canDelete && (
                   <button
+                    type="button"
                     onClick={deleteReport}
                     className="text-[11px] px-2.5 py-1 rounded bg-muted text-destructive font-semibold"
                   >
@@ -268,10 +363,18 @@ function ReportCard({
             <div className="pt-1.5 mt-1.5 border-t space-y-2">
               {replies.map((rr) => (
                 <div key={rr.id} className="flex items-start gap-2">
-                  <Avatar path={rr.avatar_url} name={rr.full_name} size={26} />
+                  <button type="button" onClick={() => setQuickUser(rr.author_id)} className="shrink-0">
+                    <Avatar path={rr.avatar_url} name={rr.full_name} size={26} />
+                  </button>
                   <div className="flex-1 min-w-0 bg-accent rounded-lg p-2">
                     <div className="flex items-center gap-1.5 text-[11px] font-semibold mb-0.5">
-                      <span className="truncate">{rr.full_name}</span>
+                      <button
+                        type="button"
+                        onClick={() => setQuickUser(rr.author_id)}
+                        className="truncate hover:text-primary hover:underline"
+                      >
+                        {rr.full_name}
+                      </button>
                       {rr.roleLabel && (
                         <span className="shrink-0 inline-flex items-center gap-0.5 text-[9px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">
                           {rr.roleLabel === "admin" && <Shield className="w-2.5 h-2.5" />}
@@ -292,12 +395,14 @@ function ReportCard({
                         />
                         <div className="flex gap-1.5">
                           <button
+                            type="button"
                             onClick={() => saveReplyEdit(rr.id)}
                             className="px-2 py-0.5 rounded bg-primary text-primary-foreground text-[10px] font-semibold"
                           >
                             Lưu
                           </button>
                           <button
+                            type="button"
                             onClick={() => setEditingReplyId(null)}
                             className="px-2 py-0.5 rounded border text-[10px]"
                           >
@@ -311,6 +416,7 @@ function ReportCard({
                         {rr.author_id === user?.id && (
                           <div className="flex gap-2 mt-1">
                             <button
+                              type="button"
                               onClick={() => {
                                 setEditingReplyId(rr.id);
                                 setEditReplyText(rr.body);
@@ -320,6 +426,7 @@ function ReportCard({
                               Sửa
                             </button>
                             <button
+                              type="button"
                               onClick={() => deleteReply(rr.id)}
                               className="text-[10px] font-semibold text-destructive"
                             >
@@ -335,66 +442,22 @@ function ReportCard({
             </div>
           )}
 
-          {r.status === "resolved" && (
-            <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
-              ✅ Đã giải quyết xong
-            </div>
-          )}
-
-          {r.reporter_satisfied === false && (
-            <div className="p-2 rounded-lg bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 text-xs font-semibold">
-              ⏳ Đang chờ admin hỗ trợ xử lý thêm
-            </div>
-          )}
-
-          {isMine && r.owner_confirmed_resolved && r.reporter_satisfied === null && (
-            <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 space-y-1.5">
-              <p className="text-xs font-semibold">
-                Chủ doanh nghiệp cho biết đã xử lý xong. Bạn có hài lòng với cách giải quyết này không?
-              </p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => confirmSatisfied(true)}
-                  className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-semibold inline-flex items-center justify-center gap-1"
-                >
-                  <ThumbsUp className="w-3.5 h-3.5" /> Hài lòng
-                </button>
-                <button
-                  onClick={() => confirmSatisfied(false)}
-                  className="flex-1 py-1.5 rounded-lg bg-muted text-xs font-semibold inline-flex items-center justify-center gap-1"
-                >
-                  <ThumbsDown className="w-3.5 h-3.5" /> Chưa hài lòng
-                </button>
-              </div>
-            </div>
-          )}
-
-          {isOwnerOfTarget && r.status !== "resolved" && (
-            <div className="pt-1">
-              {r.owner_confirmed_resolved && r.reporter_satisfied === null ? (
-                <p className="text-[11px] text-muted-foreground italic">
-                  Đã đánh dấu xử lý xong — đang chờ người báo cáo xác nhận…
-                </p>
-              ) : (
-                <button
-                  onClick={markOwnerResolved}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold inline-flex items-center gap-1"
-                >
-                  <CheckCircle2 className="w-3 h-3" /> Đánh dấu đã xử lý xong
-                </button>
-              )}
-            </div>
-          )}
-
           {canReply && (
             <div className="flex items-center gap-1.5 pt-1">
               <input
                 value={text}
                 onChange={(e) => setText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    void send();
+                  }
+                }}
                 placeholder={t("reports.replyPlaceholder")}
                 className="flex-1 px-2.5 py-1.5 rounded-lg border bg-background text-xs"
               />
               <button
+                type="button"
                 onClick={send}
                 disabled={sending || !text.trim()}
                 className="w-8 h-8 rounded-lg bg-primary text-primary-foreground grid place-items-center shrink-0 disabled:opacity-50"
@@ -406,6 +469,7 @@ function ReportCard({
           )}
         </div>
       )}
+      <ProfileQuickView userId={quickUser} open={!!quickUser} onOpenChange={(v) => !v && setQuickUser(null)} />
     </div>
   );
 }
@@ -464,7 +528,7 @@ export default function MyReports() {
         : Promise.resolve({ data: [] as any[] }),
     ]);
 
-    // Review/offer cũng thuộc về 1 DN — nạp thêm tên DN cho những id chưa có trong `biz`.
+    // Review/offer cũng thuộc về 1 doanh nghiệp — nạp thêm tên DN cho những id chưa có trong `biz`.
     const relatedBizIds = [
       ...new Set([...(revs ?? []).map((r: any) => r.business_id), ...(offs ?? []).map((o: any) => o.business_id)]),
     ].filter((id) => !targetBizIds.includes(id));
@@ -504,7 +568,8 @@ export default function MyReports() {
     setReports(reportsWithNames);
     setBizReports(bizReportsWithNames);
 
-    // Tên + avatar người báo cáo — chỉ cần cho tab "Về DN của tôi" để chủ DN biết ai đã báo cáo.
+    // Tên + avatar người báo cáo — chỉ cần cho tab "Về doanh nghiệp của tôi" để chủ doanh
+    // nghiệp biết ai đã báo cáo.
     const reporterIds = [...new Set(bizReportsWithNames.map((r) => r.user_id))];
     const reporterMap = new Map<string, { full_name: string; avatar_url: string | null }>();
     if (reporterIds.length) {
@@ -577,6 +642,7 @@ export default function MyReports() {
 
       <div className="flex gap-2 flex-wrap">
         <button
+          type="button"
           onClick={() => setTab("reports")}
           className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "reports" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
         >
@@ -584,6 +650,7 @@ export default function MyReports() {
         </button>
         {myBizIds.length > 0 && (
           <button
+            type="button"
             onClick={() => setTab("business")}
             className={`px-3 py-1.5 rounded-full text-xs font-semibold ${tab === "business" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
           >
