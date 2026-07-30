@@ -19,6 +19,14 @@ export function PullToRefresh({ children }: { children: React.ReactNode }) {
         startY.current = null;
         return;
       }
+      // Bỏ qua nếu đang có ô nhập liệu được focus — bàn phím ảo đóng lại khi submit làm
+      // khung nhìn co lại đột ngột, dễ bị đọc nhầm thành cử chỉ kéo xuống và tự reload
+      // trang ngoài ý muốn (đúng bug Kir gặp: gửi comment xong bị tải lại trang).
+      const active = document.activeElement as HTMLElement | null;
+      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable)) {
+        startY.current = null;
+        return;
+      }
       startY.current = e.touches[0].clientY;
     };
     const onTouchMove = (e: TouchEvent) => {
