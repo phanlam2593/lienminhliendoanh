@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Send } from "lucide-react";
+import { Send, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import type { ReportReply, ReportStatus } from "@/lib/types";
 import { Avatar } from "./Avatar";
+import { ProfileQuickView } from "./ProfileQuickView";
 
 const STATUS_CLASS: Record<ReportStatus, string> = {
   pending: "bg-yellow-100 text-yellow-700",
