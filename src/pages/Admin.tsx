@@ -1391,7 +1391,18 @@ function ReportRow({
       <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
         <div className="flex items-start justify-between gap-2">
           <div className="text-[11px] text-muted-foreground flex-1 min-w-0">
-            {r.reporter || "Ẩn danh"} →{" "}
+            <span
+              role="link"
+              tabIndex={0}
+              onClick={(e) => {
+                e.stopPropagation();
+                setQuickReporter(true);
+              }}
+              className="font-semibold hover:text-primary hover:underline"
+            >
+              {r.reporter || "Ẩn danh"}
+            </span>{" "}
+            →{" "}
             {r.target_type === "business" && r.target_id ? (
               <span
                 role="link"
