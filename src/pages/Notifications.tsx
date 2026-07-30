@@ -74,8 +74,13 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "messages":
         return "/tin-nhan";
       case "follows":
-        // Luôn vào tab "Theo dõi" trong Tin nhắn — không dẫn tới 1 người/DN cụ thể vì
-        // đây là gộp chung cả follow cá nhân lẫn follow doanh nghiệp.
+        // target_type/target_id giờ phân biệt: follow một DN mình sở hữu → vào thẳng
+        // trang DN đó (có nút xem danh sách người theo dõi thật); follow cá nhân → vào
+        // tab "Theo dõi" trong Tin nhắn như cũ.
+        if (n.target_type === "business" && id) {
+          const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+          if (data) return `/dn/${id}`;
+        }
         return "/tin-nhan?tab=follows";
       case "deals_received":
       case "deals_new":
@@ -99,7 +104,6 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "reports":
         return isAdmin ? "/admin?tab=reports" : "/bao-cao-cua-toi";
       default:
-
         return "/";
     }
   }
