@@ -50,7 +50,7 @@ export function ReportRepliesPanel({
   const { user } = useAuth();
   const { t } = useLanguage();
   const STATUS_LABEL = useStatusLabel();
-  const [replies, setReplies] = useState
+  const [replies, setReplies] = useState<
     (ReportReply & { author?: { full_name: string; avatar_url: string | null } | null })[]
   >([]);
   const [body, setBody] = useState("");
