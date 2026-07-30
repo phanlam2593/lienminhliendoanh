@@ -243,6 +243,7 @@ export interface Message {
 export type NotifCategory =
   | "messages"
   | "follows"
+  | "follows_business"
   | "deals_received"
   | "deals_new"
   | "pending_approval"
