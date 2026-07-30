@@ -21,7 +21,6 @@ import {
   Instagram,
   Youtube,
   Award,
-  Pencil,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { invalidateReviews, invalidateBusinesses } from "@/lib/queryClient";
@@ -783,6 +782,27 @@ function ReviewItem({
   const [replyOpen, setReplyOpen] = useState(false);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editRating, setEditRating] = useState(r.rating);
+  const [editComment, setEditComment] = useState(r.comment ?? "");
+  const [editBusy, setEditBusy] = useState(false);
+  const isMine = !!myId && myId === r.user_id;
+
+  const saveEdit = async () => {
+    setEditBusy(true);
+    const { error } = await supabase
+      .from("reviews")
+      .update({ rating: editRating, comment: editComment.trim() || null })
+      .eq("id", r.id);
+    setEditBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã lưu");
+    setEditOpen(false);
+    onReplied();
+  };
 
   const submitReply = async () => {
     const trimmed = text.trim();
