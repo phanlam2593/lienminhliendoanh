@@ -1445,6 +1445,7 @@ function ReportRow({
           </div>
         </div>
       )}
+      <ProfileQuickView userId={r.user_id} open={quickReporter} onOpenChange={setQuickReporter} />
     </div>
   );
 }
