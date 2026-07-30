@@ -453,7 +453,11 @@ export default function BusinessDetail() {
             </div>
           )}
 
-          <FollowBusinessButton businessId={b.id} ownerId={b.owner_id} />
+          <FollowBusinessButton
+            businessId={b.id}
+            ownerId={b.owner_id}
+            autoOpenList={searchParams.get("followers") === "1"}
+          />
 
           {offers.length > 0 && (
             <section>
