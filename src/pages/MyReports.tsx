@@ -49,6 +49,13 @@ function ReportCard({
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
   const [sending, setSending] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editDesc, setEditDesc] = useState(r.description ?? "");
+  const [editingReplyId, setEditingReplyId] = useState<string | null>(null);
+  const [editReplyText, setEditReplyText] = useState("");
+
+  const isMine = user?.id === r.user_id;
+  const canEditReport = isMine && r.status === "pending";
 
   const send = async () => {
     if (!text.trim() || !user) return;
@@ -65,6 +72,46 @@ function ReportCard({
     onReplied();
   };
 
+  const saveEdit = async () => {
+    const { error } = await supabase.from("reports").update({ description: editDesc.trim() }).eq("id", r.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setEditOpen(false);
+    onReplied();
+  };
+
+  const deleteReport = async () => {
+    if (!confirm("Xóa báo cáo này?")) return;
+    const { error } = await supabase.from("reports").delete().eq("id", r.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    onReplied();
+  };
+
+  const saveReplyEdit = async (replyId: string) => {
+    const { error } = await supabase.from("report_replies").update({ body: editReplyText.trim() }).eq("id", replyId);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setEditingReplyId(null);
+    onReplied();
+  };
+
+  const deleteReply = async (replyId: string) => {
+    if (!confirm("Xóa phản hồi này?")) return;
+    const { error } = await supabase.from("report_replies").delete().eq("id", replyId);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    onReplied();
+  };
+
   return (
     <div className="bg-card rounded-xl overflow-hidden shadow-sm">
       <button onClick={() => setOpen((o) => !o)} className="w-full p-3 text-left space-y-1">
@@ -76,14 +123,57 @@ function ReportCard({
             {t(REPORT_STATUS_KEY[r.status])}
           </span>
         </div>
-        <p className="text-xs text-muted-foreground truncate">
-          {open ? r.description : `${r.description?.slice(0, 60)}${(r.description?.length ?? 0) > 60 ? "…" : ""}`} ·{" "}
-          {timeAgo(r.created_at, lang)}
-          {replies.length > 0 && ` · ${t("reports.repliesCount", { n: replies.length })}`}
-        </p>
+        {!editOpen && (
+          <p className="text-xs text-muted-foreground truncate">
+            {open ? r.description : `${r.description?.slice(0, 60)}${(r.description?.length ?? 0) > 60 ? "…" : ""}`} ·{" "}
+            {timeAgo(r.created_at, lang)}
+            {replies.length > 0 && ` · ${t("reports.repliesCount", { n: replies.length })}`}
+          </p>
+        )}
       </button>
       {open && (
         <div className="px-3 pb-3 space-y-1.5">
+          {editOpen ? (
+            <div className="space-y-1.5">
+              <textarea
+                value={editDesc}
+                onChange={(e) => setEditDesc(e.target.value)}
+                rows={2}
+                className="w-full px-2 py-1.5 rounded border bg-background text-xs"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={saveEdit}
+                  className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold"
+                >
+                  Lưu
+                </button>
+                <button onClick={() => setEditOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
+                  Hủy
+                </button>
+              </div>
+            </div>
+          ) : (
+            canEditReport && (
+              <div className="flex gap-2 pt-1">
+                <button
+                  onClick={() => {
+                    setEditDesc(r.description ?? "");
+                    setEditOpen(true);
+                  }}
+                  className="text-[11px] px-2.5 py-1 rounded bg-muted font-semibold"
+                >
+                  Sửa
+                </button>
+                <button
+                  onClick={deleteReport}
+                  className="text-[11px] px-2.5 py-1 rounded bg-muted text-destructive font-semibold"
+                >
+                  Xóa
+                </button>
+              </div>
+            )
+          )}
           {r.photo_url && (
             <div className="h-32 rounded-lg overflow-hidden bg-muted">
               <LightboxImage path={r.photo_url} alt={t("reports.reportImage")} className="w-full h-full object-cover" />
@@ -107,7 +197,53 @@ function ReportCard({
                         {timeAgo(rr.created_at, lang)}
                       </span>
                     </div>
-                    <div className="text-xs whitespace-pre-line break-words">{rr.body}</div>
+                    {editingReplyId === rr.id ? (
+                      <div className="space-y-1">
+                        <textarea
+                          value={editReplyText}
+                          onChange={(e) => setEditReplyText(e.target.value)}
+                          rows={2}
+                          className="w-full px-2 py-1 rounded border bg-background text-xs"
+                        />
+                        <div className="flex gap-1.5">
+                          <button
+                            onClick={() => saveReplyEdit(rr.id)}
+                            className="px-2 py-0.5 rounded bg-primary text-primary-foreground text-[10px] font-semibold"
+                          >
+                            Lưu
+                          </button>
+                          <button
+                            onClick={() => setEditingReplyId(null)}
+                            className="px-2 py-0.5 rounded border text-[10px]"
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="text-xs whitespace-pre-line break-words">{rr.body}</div>
+                        {rr.author_id === user?.id && (
+                          <div className="flex gap-2 mt-1">
+                            <button
+                              onClick={() => {
+                                setEditingReplyId(rr.id);
+                                setEditReplyText(rr.body);
+                              }}
+                              className="text-[10px] font-semibold text-muted-foreground"
+                            >
+                              Sửa
+                            </button>
+                            <button
+                              onClick={() => deleteReply(rr.id)}
+                              className="text-[10px] font-semibold text-destructive"
+                            >
+                              Xóa
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
