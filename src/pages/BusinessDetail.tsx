@@ -90,7 +90,6 @@ export default function BusinessDetail() {
     void load();
   }, [id]);
 
-  useEffect(() => {
     const claimsOfferId = searchParams.get("claims");
     if (claimsOfferId && offers.length) {
       const o = offers.find((of) => of.id === claimsOfferId);
