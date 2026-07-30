@@ -1377,6 +1377,7 @@ function ReportRow({
   onOpenBiz: (businessId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
+  const [quickReporter, setQuickReporter] = useState(false);
 
   const del = async (e: React.MouseEvent) => {
     e.stopPropagation();
