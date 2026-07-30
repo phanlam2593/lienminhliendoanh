@@ -106,14 +106,24 @@ export function ReportRepliesPanel({
 
   return (
     <div className="space-y-2 mt-2">
+      {reporterSatisfied === false && (
+        <div className="flex items-center gap-1.5 p-2 rounded-lg bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400 text-xs font-semibold">
+          <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> Người báo cáo chưa hài lòng với cách xử lý — cần admin hỗ
+          trợ thêm
+        </div>
+      )}
       {replies.length > 0 && (
         <div className="space-y-1.5 max-h-60 overflow-y-auto pr-1">
           {replies.map((r) => (
             <div key={r.id} className="flex items-start gap-2 p-2 bg-accent rounded-lg">
-              <Avatar path={r.author?.avatar_url} name={r.author?.full_name} size={24} />
+              <button onClick={() => setQuickUser(r.author_id)} className="shrink-0">
+                <Avatar path={r.author?.avatar_url} name={r.author?.full_name} size={24} />
+              </button>
               <div className="flex-1 min-w-0">
                 <div className="text-[11px] font-semibold">
-                  {r.author?.full_name || t("messages.unknownUser")}
+                  <button onClick={() => setQuickUser(r.author_id)} className="hover:text-primary hover:underline">
+                    {r.author?.full_name || t("messages.unknownUser")}
+                  </button>
                   <span className="text-muted-foreground font-normal ml-1">
                     {new Date(r.created_at).toLocaleString("vi-VN")}
                   </span>
