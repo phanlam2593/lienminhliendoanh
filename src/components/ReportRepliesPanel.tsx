@@ -38,21 +38,24 @@ export function ReportRepliesPanel({
   reportId,
   canChangeStatus,
   currentStatus,
+  reporterSatisfied,
   onStatusChange,
 }: {
   reportId: string;
   canChangeStatus?: boolean;
   currentStatus: ReportStatus;
+  reporterSatisfied?: boolean | null;
   onStatusChange?: (s: ReportStatus) => void;
 }) {
   const { user } = useAuth();
   const { t } = useLanguage();
   const STATUS_LABEL = useStatusLabel();
-  const [replies, setReplies] = useState<
+  const [replies, setReplies] = useState
     (ReportReply & { author?: { full_name: string; avatar_url: string | null } | null })[]
   >([]);
   const [body, setBody] = useState("");
   const [sending, setSending] = useState(false);
+  const [quickUser, setQuickUser] = useState<string | null>(null);
 
   const load = async () => {
     const { data } = await supabase.from("report_replies").select("*").eq("report_id", reportId).order("created_at");
