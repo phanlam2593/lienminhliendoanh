@@ -31,13 +31,13 @@ export function ReportDialog({
       toast.error(t("report.needApproved"));
       return;
     }
-    if (!desc.trim() || !file) {
+    if (!desc.trim()) {
       toast.error(t("report.needFields"));
       return;
     }
     setLoading(true);
     try {
-      const path = await uploadImage(file, "reports");
+      const path = file ? await uploadImage(file, "reports") : null;
       const { error } = await supabase.from("reports").insert({
         user_id: user.id,
         target_type: targetType,
