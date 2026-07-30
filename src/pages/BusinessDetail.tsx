@@ -860,7 +860,17 @@ function ReviewItem({
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         )}
+        {isOwner && !isMine && (
+          <button
+            onClick={() => setReportOpen(true)}
+            aria-label="Báo cáo đánh giá"
+            className="text-muted-foreground p-1 rounded hover:bg-accent"
+          >
+            <Flag className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
+      <ReportDialog open={reportOpen} onOpenChange={setReportOpen} targetType="review" targetId={r.id} />
       {editOpen ? (
         <div className="space-y-2">
           <div className="flex gap-1">
