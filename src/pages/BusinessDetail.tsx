@@ -359,6 +359,17 @@ export default function BusinessDetail() {
             )}
             <RegularVisitBadge businessId={b.id} />
           </div>
+          {ownerProfile && (
+            <button
+              onClick={() => setQuickViewUser(ownerProfile.id)}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary"
+            >
+              <Avatar path={ownerProfile.avatar_url} name={ownerProfile.full_name} size={24} />
+              <span>
+                Chủ DN: <span className="font-semibold text-foreground">{ownerProfile.full_name}</span>
+              </span>
+            </button>
+          )}
         </div>
 
         <BusinessGallery businessId={b.id} coverPath={b.cover_url} />
