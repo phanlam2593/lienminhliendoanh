@@ -923,7 +923,7 @@ function ReviewItem({
         </div>
       )}
 
-      {isOwner && !replyOpen && (
+      {(isOwner || isMine) && !replyOpen && (
         <button
           onClick={() => setReplyOpen(true)}
           className="text-[11px] font-semibold text-primary inline-flex items-center gap-1"
@@ -931,7 +931,7 @@ function ReviewItem({
           <Reply className="w-3 h-3" /> {t("biz.reply")}
         </button>
       )}
-      {isOwner && replyOpen && (
+      {(isOwner || isMine) && replyOpen && (
         <div className="flex gap-1.5">
           <input
             value={text}
