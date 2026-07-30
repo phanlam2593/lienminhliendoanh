@@ -1437,7 +1437,13 @@ ffunction ReportRow({
   );
 }
 
-function ReportsSection({ refreshKey }: { refreshKey: number }) {
+function ReportsSection({
+  refreshKey,
+  onOpenMember,
+}: {
+  refreshKey: number;
+  onOpenMember: (ownerId: string) => void;
+}) {
   const [list, setList] = useState<(Report & { reporter?: string | null; target_name?: string | null })[]>([]);
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
