@@ -1538,7 +1538,13 @@ function ReportsSection({
       </div>
       {list.length === 0 && <p className="text-sm text-muted-foreground text-center py-2">Chưa có báo cáo nào</p>}
       {list.map((r) => (
-        <ReportRow key={r.id} r={r} onDeleted={() => load(0, false)} onStatusChanged={onStatusChanged} />
+        <ReportRow
+          key={r.id}
+          r={r}
+          onDeleted={() => load(0, false)}
+          onStatusChanged={onStatusChanged}
+          onOpenBiz={openBizReport}
+        />
       ))}
       {hasMore && (
         <button
