@@ -366,7 +366,7 @@ export default function BusinessDetail() {
             >
               <Avatar path={ownerProfile.avatar_url} name={ownerProfile.full_name} size={24} />
               <span>
-                Chủ DN: <span className="font-semibold text-foreground">{ownerProfile.full_name}</span>
+                Chủ doanh nghiệp: <span className="font-semibold text-foreground">{ownerProfile.full_name}</span>
               </span>
             </button>
           )}
