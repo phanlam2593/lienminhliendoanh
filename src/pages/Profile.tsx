@@ -1188,7 +1188,7 @@ function SettingsSection({
         {open === "notif" && (
           <div className="p-3 space-y-3">
             <PushPermissionButton />
-            <NotificationPrefsForm userId={userId} initial={initialPrefs} />
+            <NotificationPrefsForm userId={userId} initial={initialPrefs} onSaved={onPrefsSaved} />
           </div>
         )}
         <SettingRow
