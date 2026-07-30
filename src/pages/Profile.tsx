@@ -368,7 +368,7 @@ export default function Profile() {
     return (
       <div className="p-4 space-y-5">
         <BackBar title={t("profile.settings")} />
-        <SettingsSection userId={user.id} initialPrefs={(profile as any)?.notification_prefs} />
+        <SettingsSection userId={user.id} initialPrefs={(profile as any)?.notification_prefs} onPrefsSaved={refresh} />
       </div>
     );
   }
