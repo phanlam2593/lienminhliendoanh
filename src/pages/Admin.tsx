@@ -1516,6 +1516,15 @@ function ReportsSection({
     );
   };
 
+  const openBizReport = async (businessId: string) => {
+    const { data } = await supabase.from("businesses").select("owner_id").eq("id", businessId).maybeSingle();
+    if (!data?.owner_id) {
+      toast.error("Doanh nghiệp này không còn tồn tại");
+      return;
+    }
+    onOpenMember(data.owner_id);
+  };
+
   return (
     <Collapsible title="Báo cáo" icon={Flag} count={total}>
       <div className="relative">
