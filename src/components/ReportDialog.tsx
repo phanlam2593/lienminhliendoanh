@@ -78,9 +78,12 @@ export function ReportDialog({
           <input type="checkbox" checked={toAdmin} onChange={(e) => setToAdmin(e.target.checked)} />{" "}
           {t("report.sendToAdmin")}
         </label>
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" checked={toBiz} onChange={(e) => setToBiz(e.target.checked)} /> {t("report.sendToBiz")}
-        </label>
+        {targetType !== "review" && (
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={toBiz} onChange={(e) => setToBiz(e.target.checked)} />{" "}
+            {t("report.sendToBiz")}
+          </label>
+        )}
         <button
           disabled={loading}
           onClick={submit}
