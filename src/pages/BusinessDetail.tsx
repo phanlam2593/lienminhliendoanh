@@ -1043,12 +1043,24 @@ function Row({ icon: Icon, children }: { icon: any; children: React.ReactNode })
   );
 }
 
-function FollowBusinessButton({ businessId, ownerId }: { businessId: string; ownerId: string | null }) {
+function FollowBusinessButton({
+  businessId,
+  ownerId,
+  autoOpenList,
+}: {
+  businessId: string;
+  ownerId: string | null;
+  autoOpenList?: boolean;
+}) {
   const { user } = useAuth();
   const [following, setFollowing] = useState(false);
   const [count, setCount] = useState(0);
   const [busy, setBusy] = useState(false);
   const [listOpen, setListOpen] = useState(false);
+
+  useEffect(() => {
+    if (autoOpenList) setListOpen(true);
+  }, [autoOpenList]);
 
   useEffect(() => {
     (async () => {
