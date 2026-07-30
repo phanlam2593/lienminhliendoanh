@@ -1329,7 +1329,7 @@ function ChangePasswordForm({ onDone }: { onDone: () => void }) {
   );
 }
 
-function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: any }) {
+function NotificationPrefsForm({ userId, initial, onSaved }: { userId: string; initial?: any; onSaved?: () => void }) {
   const { t } = useLanguage();
   const [prefs, setPrefs] = useState<NotifPrefs>({ ...DEFAULT_PREFS, ...(initial || {}) });
   const [saving, setSaving] = useState(false);
@@ -1348,6 +1348,7 @@ function NotificationPrefsForm({ userId, initial }: { userId: string; initial?: 
       setPrefs(prefs);
       return;
     }
+    onSaved?.();
   };
 
   const items: { key: keyof NotifPrefs; label: string }[] = [
