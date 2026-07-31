@@ -164,7 +164,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "register.passwordMismatch": "Mật khẩu không khớp",
     "register.avatar": "Ảnh đại diện (tùy chọn)",
     "register.addBizQuestion": "Thêm thông tin doanh nghiệp?",
-    "register.yesHaveBiz": "🏢 Có, tôi có DN",
+    "register.yesHaveBiz": "🏢 Có, tôi có doanh nghiệp",
     "register.noBiz": "👤 Chưa có",
     "register.continue": "Tiếp tục",
     "register.completeRegister": "Hoàn tất đăng ký",
