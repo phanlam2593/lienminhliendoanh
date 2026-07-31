@@ -458,8 +458,9 @@ const QUESTS: Quest[] = [
     id: "report-reply-view",
     category: "Báo cáo",
     title: "Xem phản hồi báo cáo",
-    action: "Nếu có admin phản hồi báo cáo của bạn, mở xem.",
-    expect: "Tên admin phản hồi đúng, KHÔNG hiện 'Người dùng'.",
+    action: "Nếu có admin hoặc chủ DN phản hồi báo cáo của bạn, mở xem, bấm vào avatar/tên người phản hồi.",
+    expect:
+      "Tên đúng (không 'Người dùng'), có tag 'Admin'/'Chủ doanh nghiệp' phù hợp, bấm avatar/tên mở được quick profile.",
   },
 
   // ===== PWA & Cài đặt =====
