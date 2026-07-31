@@ -968,7 +968,7 @@ export default function Questline() {
 
   const reset = async () => {
     if (!user || !confirm("Xoá hết tiến độ, làm lại từ đầu?")) return;
-    const { error } = await supabase.from("reports").delete().eq("user_id", user.id);
+    const { error } = await supabase.from("questline_progress").delete().eq("user_id", user.id);
     if (error) {
       toast.error(error.message);
       return;
