@@ -131,6 +131,39 @@ export type Database = {
           },
         ]
       }
+      business_view_daily: {
+        Row: {
+          business_id: string
+          view_count: number
+          view_date: string
+        }
+        Insert: {
+          business_id: string
+          view_count?: number
+          view_date?: string
+        }
+        Update: {
+          business_id?: string
+          view_count?: number
+          view_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_view_daily_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "business_card_stats"
+            referencedColumns: ["business_id"]
+          },
+          {
+            foreignKeyName: "business_view_daily_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       businesses: {
         Row: {
           address: string | null
@@ -842,6 +875,24 @@ export type Database = {
           },
         ]
       }
+      questline_progress: {
+        Row: {
+          completed_at: string
+          quest_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          quest_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          quest_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       report_replies: {
         Row: {
           author_id: string
@@ -879,7 +930,9 @@ export type Database = {
           created_at: string
           description: string
           id: string
+          owner_confirmed_resolved: boolean
           photo_url: string | null
+          reporter_satisfied: boolean | null
           resolved: boolean
           send_to_admin: boolean
           send_to_business: boolean
@@ -892,7 +945,9 @@ export type Database = {
           created_at?: string
           description: string
           id?: string
+          owner_confirmed_resolved?: boolean
           photo_url?: string | null
+          reporter_satisfied?: boolean | null
           resolved?: boolean
           send_to_admin?: boolean
           send_to_business?: boolean
@@ -905,7 +960,9 @@ export type Database = {
           created_at?: string
           description?: string
           id?: string
+          owner_confirmed_resolved?: boolean
           photo_url?: string | null
+          reporter_satisfied?: boolean | null
           resolved?: boolean
           send_to_admin?: boolean
           send_to_business?: boolean
@@ -1237,6 +1294,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_business_view: {
+        Args: { _business_id: string }
+        Returns: undefined
+      }
       is_approved_member: { Args: { _user_id: string }; Returns: boolean }
       is_field_taken: {
         Args: { _field: string; _value: string }
@@ -1278,7 +1339,7 @@ export type Database = {
         | "broker"
       offer_status: "active" | "inactive"
       report_status: "pending" | "replied" | "resolved" | "closed"
-      report_target: "business" | "offer"
+      report_target: "business" | "offer" | "review"
       suggestion_status: "pending" | "approved" | "rejected"
     }
     CompositeTypes: {
@@ -1432,7 +1493,7 @@ export const Constants = {
       ],
       offer_status: ["active", "inactive"],
       report_status: ["pending", "replied", "resolved", "closed"],
-      report_target: ["business", "offer"],
+      report_target: ["business", "offer", "review"],
       suggestion_status: ["pending", "approved", "rejected"],
     },
   },

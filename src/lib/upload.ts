@@ -62,11 +62,24 @@ export async function uploadImage(file: File, folder = "general", ownerId?: stri
 
 const cache = new Map<string, string>();
 
+// Ảnh mặc định nằm trong bucket "uploads". Nếu path có tiền tố "<bucket>/" của một bucket
+// khác đã được khai báo ở đây (vd "avatars/..." dùng cho avatar tài khoản test) thì ký URL
+// từ bucket đó. Không đổi hành vi cũ với mọi path hiện có.
+const EXTRA_BUCKETS = ["avatars"];
+
 export async function getSignedUrl(path: string): Promise<string> {
   if (!path) return "";
   if (cache.has(path)) return cache.get(path)!;
-  const { data, error } = await supabase.storage.from("uploads").createSignedUrl(path, 60 * 60 * 24 * 7);
+  let bucket = "uploads";
+  let key = path;
+  const prefix = path.split("/")[0];
+  if (EXTRA_BUCKETS.includes(prefix)) {
+    bucket = prefix;
+    key = path.slice(prefix.length + 1);
+  }
+  const { data, error } = await supabase.storage.from(bucket).createSignedUrl(key, 60 * 60 * 24 * 7);
   if (error || !data) return "";
   cache.set(path, data.signedUrl);
   return data.signedUrl;
 }
+
