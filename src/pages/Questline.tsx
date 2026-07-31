@@ -901,6 +901,81 @@ const QUESTS: Quest[] = [
     action: "Gỡ và cài lại app vào màn hình chính điện thoại.",
     expect: "Tên dưới icon là 'Lomi', mở app vào bên trong vẫn thấy 'Liên Minh Liên Doanh' như cũ.",
   },
+
+  // ===== Rủi ro dự đoán (dựa trên pattern bug đã gặp) =====
+  {
+    id: "risk-i18n-report-ui",
+    category: "Rủi ro dự đoán",
+    title: "⚠️ Giao diện báo cáo mới có bị sót dịch tiếng Anh?",
+    action:
+      "Đổi ngôn ngữ sang English, mở 1 báo cáo đang ở luồng chốt case (nút 'Đánh dấu đã xử lý xong', prompt Hài lòng/Chưa hài lòng, banner 'Đã giải quyết xong'/'Đang chờ admin hỗ trợ', dòng 'Người báo cáo', dòng 'Chủ doanh nghiệp: X').",
+    expect:
+      "NHIỀU KHẢ NĂNG SẼ THẤY CHỮ VIỆT SÓT LẠI — các cụm này được thêm hôm nay dạng viết cứng, chưa qua hệ thống dịch. Nếu thấy tiếng Việt lẫn vào giao diện English, báo lại để mình bổ sung vào bộ từ điển i18n.",
+  },
+  {
+    id: "risk-notif-merge-other-cat",
+    category: "Rủi ro dự đoán",
+    title: "Thông báo 'ưu đãi mới' và 'admin' có bị kẹt dữ liệu cũ như deals_received từng bị?",
+    action:
+      "Follow 1 DN, đợi/nhờ DN đó đăng 2 ưu đãi mới liên tiếp (2 lần cách nhau). Tương tự: đổi trạng thái tài khoản 1 người 2 lần liên tiếp (duyệt→từ chối→duyệt lại) xem thông báo 'admin' có đúng lần cuối không.",
+    expect:
+      "Lần thông báo THỨ 2 phải hiện đúng thông tin MỚI NHẤT (không phải dữ liệu của lần đầu bị kẹt lại) — đây chính là loại lỗi vừa tìm thấy ở deals_received.",
+  },
+  {
+    id: "risk-exchange-realtime-sync",
+    category: "Rủi ro dự đoán",
+    title: "Trao đổi hỗ trợ có đồng bộ realtime đúng như tin nhắn không?",
+    action:
+      "Mở 2 thiết bị/tab: 1 bên gửi yêu cầu trao đổi, bên kia đang đứng sẵn ở màn danh sách Trao đổi (không bấm F5).",
+    expect:
+      "Yêu cầu mới tự hiện ra ngay KHÔNG CẦN F5 — nếu phải tải lại mới thấy, đây là lỗi cùng họ với vụ thiếu Realtime DELETE listener ở Messages.tsx trước đây.",
+  },
+  {
+    id: "risk-reaction-realtime-others",
+    category: "Rủi ro dự đoán",
+    title: "Reaction cộng đồng có đồng bộ cho NGƯỜI KHÁC đang xem không?",
+    action: "2 tài khoản cùng mở 1 kênh Cộng đồng. Tài khoản A thả reaction vào 1 tin nhắn.",
+    expect: "Tài khoản B (đang đứng yên, không thao tác gì) phải thấy số reaction tăng NGAY, không cần tải lại trang.",
+  },
+  {
+    id: "risk-rapid-double-review",
+    category: "Rủi ro dự đoán",
+    title: "Bấm gửi đánh giá 2 lần nhanh có tạo trùng không?",
+    action: "Viết 1 đánh giá, bấm nút Gửi 2 lần thật nhanh liên tiếp (trước khi nút kịp disable).",
+    expect: "Chỉ tạo ra ĐÚNG 1 đánh giá, không có 2 review giống hệt nhau từ cùng 1 người cho cùng 1 DN.",
+  },
+  {
+    id: "risk-rapid-double-exchange",
+    category: "Rủi ro dự đoán",
+    title: "Bấm gửi yêu cầu trao đổi 2 lần nhanh có tạo trùng không?",
+    action: "Gửi 1 yêu cầu trao đổi hỗ trợ, bấm nút Gửi 2 lần thật nhanh liên tiếp.",
+    expect: "Chỉ tạo ra ĐÚNG 1 yêu cầu, không nhân đôi trong danh sách 'Đang chờ'.",
+  },
+  {
+    id: "risk-rapid-follow-toggle",
+    category: "Rủi ro dự đoán",
+    title: "Follow/Unfollow dồn dập có làm lệch số đếm không?",
+    action: "Bấm Theo dõi → Bỏ theo dõi → Theo dõi lại thật nhanh liên tiếp (4-5 lần) cho cùng 1 DN.",
+    expect:
+      "Trạng thái cuối cùng (đang theo dõi hay không) và số người theo dõi hiển thị phải khớp đúng với lần bấm CUỐI CÙNG, không bị lệch/đếm sai do bấm nhanh.",
+  },
+  {
+    id: "risk-listview-vs-detail-count",
+    category: "Rủi ro dự đoán",
+    title: "Số liệu ở danh sách Khám phá có khớp với trang chi tiết DN không?",
+    action:
+      "Ghi lại số 'người theo dõi'/số sao hiện trên CARD ở trang Khám phá của 1 DN, rồi bấm vào xem trang chi tiết DN đó ngay sau.",
+    expect:
+      "2 con số nên khớp nhau. Nếu lệch nhẹ trong vòng vài phút sau 1 thay đổi mới — đó là do card dùng dữ liệu cache 5 phút (business_card_stats), KHÔNG phải bug, chỉ cần biết trước để không hoảng khi thấy lệch tạm thời.",
+  },
+  {
+    id: "risk-claim-mark-used",
+    category: "Rủi ro dự đoán",
+    title: "Chủ DN đánh dấu mã ưu đãi đã dùng — có cập nhật đúng phía khách không?",
+    action:
+      "Nếu có nút đánh dấu 1 mã ưu đãi đã sử dụng ở phía chủ DN, thử đánh dấu, rồi xem lại phía tài khoản khách đã claim mã đó.",
+    expect: "Trạng thái mã cập nhật đúng ở cả 2 phía, không bị 'đã dùng' ở 1 bên nhưng bên kia vẫn hiện chưa dùng.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
