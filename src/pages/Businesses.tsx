@@ -39,25 +39,20 @@ export default function Businesses() {
   const [radius, setRadius] = useState<(typeof RADIUS_OPTIONS)[number]>(5);
 
   useEffect(() => {
-    void load(0, false);
+    void load();
   }, []);
 
-  // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây tải TOÀN BỘ DN đã duyệt 1 lần,
-  // không giới hạn — ở quy mô hàng nghìn DN sẽ tải hàng MB dữ liệu mỗi lần vào trang.
-  // Giờ tải theo trang (PAGE_SIZE), có nút "Tải thêm" khi còn dữ liệu.
-  // Lưu ý: sắp xếp "Gần đây" chỉ tìm trong số DN ĐÃ TẢI (chưa quét toàn bộ DB theo khoảng
-  // cách) — đủ dùng ở quy mô hiện tại, có thể nâng cấp sau bằng truy vấn địa lý phía server.
-  const load = async (pageNum: number, append: boolean) => {
-    if (append) setLoadingMore(true);
-    else setLoading(true);
-    const from = pageNum * PAGE_SIZE;
-    const to = from + PAGE_SIZE - 1;
+  // Tải TOÀN BỘ DN đã duyệt cùng lúc (theo yêu cầu — chấp nhận đánh đổi hiệu năng khi
+  // số lượng DN thật lên rất cao). .range(0, 49999) để vượt giới hạn mặc định 1000 dòng
+  // của Supabase/PostgREST.
+  const load = async () => {
+    setLoading(true);
     const { data: biz } = await supabase
       .from("businesses")
       .select("*")
       .eq("status", "approved")
       .order("created_at", { ascending: false })
-      .range(from, to);
+      .range(0, 49999);
     const rows = (biz as Business[]) ?? [];
     const ids = rows.map((b) => b.id);
     const { data: stats } = ids.length
@@ -84,16 +79,8 @@ export default function Businesses() {
             : null,
       };
     });
-    setList((prev) => (append ? [...prev, ...enriched] : enriched));
-    setHasMore(rows.length === PAGE_SIZE);
+    setList(enriched);
     setLoading(false);
-    setLoadingMore(false);
-  };
-
-  const loadMore = () => {
-    const next = page + 1;
-    setPage(next);
-    void load(next, true);
   };
 
   const useNearestSort = () => {
