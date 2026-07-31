@@ -33,9 +33,6 @@ export default function Businesses() {
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [locStatus, setLocStatus] = useState<LocStatus>("idle");
   const [myPos, setMyPos] = useState<{ lat: number; lng: number } | null>(null);
