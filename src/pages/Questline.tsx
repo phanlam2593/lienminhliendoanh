@@ -976,6 +976,93 @@ const QUESTS: Quest[] = [
       "Nếu có nút đánh dấu 1 mã ưu đãi đã sử dụng ở phía chủ DN, thử đánh dấu, rồi xem lại phía tài khoản khách đã claim mã đó.",
     expect: "Trạng thái mã cập nhật đúng ở cả 2 phía, không bị 'đã dùng' ở 1 bên nhưng bên kia vẫn hiện chưa dùng.",
   },
+
+  // ===== Data test quy mô lớn (1346 acc / 1000 DN) =====
+  {
+    id: "bulk-type-label",
+    category: "Data test quy mô lớn",
+    title: "Nhãn loại hình DN không bị trống/lỗi",
+    action:
+      "Lọc lần lượt qua cả 8 loại hình (Ăn uống, Dịch vụ, Lưu trú, Du lịch, Sáng tạo nội dung, Nghề tự do, Môi giới, Khác) ở trang Khám phá.",
+    expect:
+      "Mỗi loại đều ra đúng DN, KHÔNG có DN nào hiện nhãn trống/undefined (bug cũ do gán sai type freelancer/photographer/graphic_designer đã sửa).",
+  },
+  {
+    id: "bulk-name-unique",
+    category: "Data test quy mô lớn",
+    title: "Tên DN không trùng lặp lộ liễu",
+    action: "Cuộn qua vài chục DN trong 1 loại hình bất kỳ (VD Dịch vụ, Môi giới).",
+    expect: "Tên đa dạng, không thấy dính 1 cụm hậu tố lặp đi lặp lại (VD nhiều 'Phát Đạt'/'Thành Công' liên tiếp).",
+  },
+  {
+    id: "bulk-cover-relevant",
+    category: "Data test quy mô lớn",
+    title: "Ảnh bìa khớp đúng ngành, không có ảnh người",
+    action:
+      "Xem ảnh bìa của vài DN thuộc nhóm Dịch vụ/Nghề tự do/Sáng tạo nội dung (taxi, thợ điện, luật sư, gia sư, MC, photographer...).",
+    expect:
+      "Ảnh liên quan tới vật dụng/không gian ngành đó (dây điện, sách luật, micro...), KHÔNG có ảnh chân dung người 'nhìn Tây'.",
+  },
+  {
+    id: "bulk-avatar-gender",
+    category: "Data test quy mô lớn",
+    title: "Avatar khớp đúng giới tính",
+    action: "Vào Admin → Thành viên, xem vài tài khoản có tên đệm 'Văn' và vài tài khoản có tên đệm 'Thị'.",
+    expect: "Tên đệm 'Văn' → avatar nam; tên đệm 'Thị' → avatar nữ, khớp 100%.",
+  },
+  {
+    id: "bulk-review-diverse",
+    category: "Data test quy mô lớn",
+    title: "Đánh giá đa dạng rating, không toàn 5 sao",
+    action: "Mở vài DN bất kỳ, xem phần đánh giá.",
+    expect:
+      "Thấy rating trải đều (đa số 4-5 sao nhưng có cả 3, 2, 1 sao xen kẽ), bình luận đa dạng câu chữ, không lặp y hệt liên tục.",
+  },
+  {
+    id: "bulk-area-filter-count",
+    category: "Data test quy mô lớn",
+    title: "Bộ lọc khu vực đúng số, 'Tất cả khu vực' không hiện số",
+    action: "Khám phá → mở dropdown khu vực, chọn 1 khu vực bất kỳ có số hiển thị (VD Đà Lạt (45)).",
+    expect: "'Tất cả khu vực' không kèm số; chọn 1 khu vực cụ thể ra đúng số lượng DN như số đã hiện trong dropdown.",
+  },
+  {
+    id: "bulk-map-spread",
+    category: "Data test quy mô lớn",
+    title: "Ghim bản đồ rải khắp cả nước",
+    action: "Khám phá → chế độ Bản đồ, kéo/thu nhỏ xem tổng thể.",
+    expect:
+      "Ghim xuất hiện ở nhiều tỉnh/thành khác nhau (Đà Lạt, Hà Nội, Đà Nẵng, Phú Quốc...), không dồn hết vào 1 điểm.",
+  },
+  {
+    id: "bulk-food-stay-first",
+    category: "Data test quy mô lớn",
+    title: "Ăn uống + Lưu trú lên đầu danh sách chưa lọc",
+    action: "Khám phá → để nguyên bộ lọc 'Tất cả' (chưa chọn loại hình cụ thể), xem đầu danh sách.",
+    expect: "Các DN Ăn uống/Lưu trú xuất hiện trước, không bị chen ngang bởi 1 khối DN cùng loại khác (VD Nghề tự do).",
+  },
+  {
+    id: "bulk-loadall-no-cap",
+    category: "Data test quy mô lớn",
+    title: "Danh sách DN tải hết, không dừng ở 300",
+    action: "Khám phá → chọn 'Tất cả khu vực', cuộn xuống cuối danh sách, đếm ước lượng số DN hiện ra.",
+    expect: "Không còn nút 'Tải thêm' và số lượng vượt quá 300 (đã bỏ giới hạn phân trang theo yêu cầu).",
+  },
+  {
+    id: "bulk-niche-types-exist",
+    category: "Data test quy mô lớn",
+    title: "Đủ ngành nghề đặc thù mới",
+    action: "Tìm kiếm lần lượt: 'Taxi', 'Sửa Ống Nước', 'Luật Sư', 'Gia Sư', 'Cho Thuê Phòng Trọ', 'Môi Giới Nhà Đất'.",
+    expect: "Mỗi từ khoá đều ra ít nhất 1 kết quả DN phù hợp.",
+  },
+  {
+    id: "bulk-membership-boundary",
+    category: "Data test quy mô lớn",
+    title: "Ranh giới membership 1000 người miễn phí (SAU KHI đã xoá data test)",
+    action:
+      "Sau khi Kir xoá hết 1346 acc test, đăng ký 1 tài khoản thật mới, kiểm tra có được cấp membership miễn phí không.",
+    expect:
+      "Được cấp đúng nếu tổng số người approved hiện tại (thật) chưa tới 1000 — xác nhận cơ chế đã phục hồi đúng sau khi dọn data test.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
