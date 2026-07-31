@@ -731,8 +731,9 @@ const QUESTS: Quest[] = [
     id: "admin-reports-manage",
     category: "Admin nâng cao",
     title: "Quản lý trạng thái báo cáo",
-    action: "Đổi trạng thái 1 báo cáo qua các bước Chờ → Đã phản hồi → Đã xử lý.",
-    expect: "Trạng thái cập nhật đúng ở cả 2 phía (admin và người gửi).",
+    action: "Đổi trạng thái 1 báo cáo qua Chờ xử lý → Đã giải quyết → Đã đóng (3 nút bấm tay).",
+    expect:
+      "Trạng thái cập nhật đúng ở cả 2 phía; 'Đã phản hồi' tự chuyển khi admin gửi reply đầu tiên, không có nút bấm tay riêng.",
   },
   {
     id: "admin-exchanges-view",
