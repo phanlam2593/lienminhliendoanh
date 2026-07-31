@@ -780,6 +780,126 @@ const QUESTS: Quest[] = [
     action: "Bấm 'Nhận ưu đãi' 2 lần thật nhanh liên tiếp cho cùng 1 ưu đãi.",
     expect: "Chỉ tạo ra đúng 1 mã, không bị lỗi/trùng.",
   },
+
+  // ===== Cập nhật phiên 31/07 =====
+  {
+    id: "new-follow-business-notif",
+    category: "Cập nhật phiên 31/07",
+    title: "Thông báo follow doanh nghiệp",
+    action: "Tài khoản A follow 1 DN của tài khoản B (chưa từng follow trước đó).",
+    expect:
+      "B nhận thông báo có TÊN DN trong tiêu đề, bấm vào ra thẳng danh sách người theo dõi của đúng DN đó (mở sẵn), thấy A trong danh sách.",
+  },
+  {
+    id: "new-follow-personal-notif",
+    category: "Cập nhật phiên 31/07",
+    title: "Thông báo follow cá nhân",
+    action: "Tài khoản A follow tài khoản B với tư cách cá nhân (không phải DN).",
+    expect:
+      "B nhận thông báo chung 'Bạn có người theo dõi mới', bấm vào ra tab Theo dõi trong Tin nhắn (không phải trang DN).",
+  },
+  {
+    id: "new-follow-2-separate",
+    category: "Cập nhật phiên 31/07",
+    title: "2 thông báo follow không đè nhau",
+    action: "Cùng 1 người vừa follow DN của bạn, vừa follow bạn cá nhân (2 hành động khác nhau).",
+    expect: "Thấy ĐỦ 2 dòng thông báo riêng biệt trong mục Thông báo, không cái nào bị mất/đè lên cái kia.",
+  },
+  {
+    id: "new-claim-notif-list",
+    category: "Cập nhật phiên 31/07",
+    title: "Thông báo nhận ưu đãi → đúng danh sách",
+    action: "Có người claim 1 ưu đãi của DN bạn, bấm vào thông báo 'Bạn có ưu đãi được nhận'.",
+    expect:
+      "Ra thẳng trang DN với dialog danh sách người đã nhận ĐÚNG ưu đãi đó đã mở sẵn (không phải trang DN chung chung).",
+  },
+  {
+    id: "new-admin-report-tab",
+    category: "Cập nhật phiên 31/07",
+    title: "Admin bấm thông báo báo cáo → đúng tab",
+    action: "Với tài khoản admin, có báo cáo mới, bấm vào thông báo 'Bạn có cập nhật báo cáo mới'.",
+    expect: "Vào thẳng Admin, tự nhảy đúng tab 'Báo cáo' (không phải tab Tổng quan).",
+  },
+  {
+    id: "new-review-edit",
+    category: "Cập nhật phiên 31/07",
+    title: "Sửa đánh giá của mình",
+    action: "Bấm icon bút chì trên 1 review bạn đã viết, đổi sao/nội dung, lưu.",
+    expect: "Cập nhật đúng ngay trong danh sách, không tạo review mới trùng.",
+  },
+  {
+    id: "new-review-report",
+    category: "Cập nhật phiên 31/07",
+    title: "Chủ DN báo cáo 1 review",
+    action:
+      "Với DN của bạn, bấm icon cờ trên 1 review có sẵn (không phải review của chính bạn), gửi báo cáo (thử để trống ảnh).",
+    expect:
+      "Gửi thành công dù không có ảnh, KHÔNG có ô 'Gửi cho Doanh nghiệp' trong form này, hiện đúng trong Admin/Báo cáo của tôi.",
+  },
+  {
+    id: "new-review-reply-both",
+    category: "Cập nhật phiên 31/07",
+    title: "Reply qua lại trên review",
+    action: "Chủ DN reply 1 review, sau đó người viết review reply lại tiếp.",
+    expect: "Cả 2 chiều đều gửi được, hiện đúng theo thứ tự thời gian.",
+  },
+  {
+    id: "new-report-no-photo",
+    category: "Cập nhật phiên 31/07",
+    title: "Báo cáo không cần ảnh",
+    action: "Báo cáo 1 doanh nghiệp, KHÔNG chọn ảnh nào, gửi thẳng.",
+    expect: "Gửi thành công, không bị báo lỗi bắt buộc ảnh.",
+  },
+  {
+    id: "new-report-resolve-flow",
+    category: "Cập nhật phiên 31/07",
+    title: "Luồng chốt báo cáo — Hài lòng",
+    action:
+      "Chủ DN reply xong bấm 'Đánh dấu đã xử lý xong'. Qua tài khoản người báo cáo, thấy prompt Hài lòng/Chưa hài lòng, chọn Hài lòng.",
+    expect: "Trạng thái chuyển 'Đã giải quyết xong', CẢ 2 tài khoản đều thấy nút Xoá xuất hiện.",
+  },
+  {
+    id: "new-report-dispute-flow",
+    category: "Cập nhật phiên 31/07",
+    title: "Luồng chốt báo cáo — Chưa hài lòng",
+    action: "Lặp lại như trên nhưng chọn 'Chưa hài lòng' ở bước xác nhận.",
+    expect: "Admin nhận được banner cảnh báo đỏ 'Người báo cáo chưa hài lòng' khi mở báo cáo đó trong Admin.",
+  },
+  {
+    id: "new-report-admin-edit-any",
+    category: "Cập nhật phiên 31/07",
+    title: "Admin sửa/xoá comment của người khác",
+    action: "Với tài khoản admin, mở 1 báo cáo có comment của người khác (không phải admin viết), bấm Sửa hoặc Xoá.",
+    expect: "Sửa/xoá thành công dù không phải comment của admin.",
+  },
+  {
+    id: "new-report-quickprofile",
+    category: "Cập nhật phiên 31/07",
+    title: "Quick profile trong báo cáo",
+    action: "Bấm vào avatar hoặc tên bất kỳ ai (người báo cáo, người reply) trong 1 báo cáo.",
+    expect: "Mở đúng popup hồ sơ nhanh của người đó, không im lặng/không phản ứng gì.",
+  },
+  {
+    id: "new-biz-owner-visible",
+    category: "Cập nhật phiên 31/07",
+    title: "Thấy chủ doanh nghiệp",
+    action: "Vào trang chi tiết 1 DN bất kỳ, tìm dòng 'Chủ doanh nghiệp'.",
+    expect: "Hiện đúng tên chủ DN, bấm vào mở được quick profile.",
+  },
+  {
+    id: "new-keyboard-no-reload",
+    category: "Cập nhật phiên 31/07",
+    title: "Gõ + gửi không bị tự reload trang",
+    action: "Gõ 1 đoạn dài vào ô nhập báo cáo/đánh giá/tin nhắn (đang cuộn ở đầu trang), bấm Gửi.",
+    expect: "Gửi xong ở lại ĐÚNG trang hiện tại, KHÔNG tự reload/bị đẩy về trang trước.",
+  },
+  {
+    id: "new-lomi-icon",
+    category: "Cập nhật phiên 31/07",
+    title: "Tên 'Lomi' trên màn hình chính",
+    action: "Gỡ và cài lại app vào màn hình chính điện thoại.",
+    expect: "Tên dưới icon là 'Lomi', mở app vào bên trong vẫn thấy 'Liên Minh Liên Doanh' như cũ.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
