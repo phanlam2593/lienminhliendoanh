@@ -206,9 +206,7 @@ export default function Businesses() {
             onChange={(e) => setArea(e.target.value)}
             className="px-3 py-1.5 rounded-lg border bg-card text-xs font-medium"
           >
-            <option value="all">
-              {t("explore.allAreas")} ({list.length})
-            </option>
+            <option value="all">{t("explore.allAreas")}</option>
             {areaCounts.map(([a, n]) => (
               <option key={a} value={a}>
                 {a} ({n})
