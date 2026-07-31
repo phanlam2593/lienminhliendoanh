@@ -3,7 +3,6 @@ import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowLeft, Check, RotateCcw, PartyPopper } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { supabase } from "@/integrations/supabase/client";
 
 interface Quest {
   id: string;
@@ -104,7 +103,8 @@ const QUESTS: Quest[] = [
     category: "Tài khoản & Hồ sơ",
     title: "Danh sách Tin dùng",
     action: "Hồ sơ → bấm số 'Tin dùng'.",
-    expect: "Hiện đúng các DN đã claim ưu đãi trước đó.",
+    expect:
+      "Hiện đúng các DN đã claim ưu đãi (kèm lượt ghé/hạng) VÀ các DN đang follow nhưng chưa claim (tag 'Đang theo dõi') — không DN nào hiện 2 tag cùng lúc.",
   },
 
   // ===== Doanh nghiệp (khách) =====
@@ -784,73 +784,45 @@ const STORAGE_KEY = "lmld:questline:v3";
 const CATEGORIES = [...new Set(QUESTS.map((q) => q.category))];
 
 export default function Questline() {
-  const { role, user } = useAuth();
+  const { role } = useAuth();
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
-    void loadProgress();
-  }, [user?.id]);
-
-  const loadProgress = async () => {
-    const { data } = await supabase.from("questline_progress").select("quest_id").eq("user_id", user!.id);
-    const dbDone: Record<string, boolean> = {};
-    (data ?? []).forEach((r: any) => {
-      dbDone[r.quest_id] = true;
-    });
-
-    // Chuyển 1 LẦN DUY NHẤT tiến độ cũ (nếu trình duyệt này từng lưu ở localStorage trước
-    // khi tính năng chuyển sang lưu database) — để không mất công tick lại từ đầu.
-    let localDone: Record<string, boolean> = {};
     try {
-      const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("lmld:questline:v2");
-      if (raw) localDone = JSON.parse(raw);
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) setDone(JSON.parse(raw));
+      else {
+        // Di chuyển tiến độ từ bản v2 cũ (nếu có) sang, tránh mất công tick lại từ đầu.
+        const old = localStorage.getItem("lmld:questline:v2");
+        if (old) setDone(JSON.parse(old));
+      }
     } catch {}
-    const toMigrate = Object.keys(localDone).filter((id) => localDone[id] && !dbDone[id]);
-    if (toMigrate.length) {
-      await supabase.from("questline_progress").upsert(toMigrate.map((quest_id) => ({ user_id: user!.id, quest_id })));
-      toMigrate.forEach((id) => {
-        dbDone[id] = true;
-      });
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {}
-    }
-
-    setDone(dbDone);
     setLoaded(true);
+  }, []);
+
+  const toggle = (id: string) => {
+    setDone((prev) => {
+      const willCheck = !prev[id];
+      const next = { ...prev, [id]: willCheck };
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        if (willCheck) {
+          toast.success("✓ Đã lưu tiến độ", { duration: 1000 });
+        }
+      } catch {
+        toast.error("Không lưu được — trình duyệt đang chặn localStorage?");
+      }
+      return next;
+    });
   };
 
-  const toggle = async (id: string) => {
-    if (!user) return;
-    const willCheck = !done[id];
-    setDone((prev) => ({ ...prev, [id]: willCheck }));
-    if (willCheck) {
-      const { error } = await supabase.from("questline_progress").insert({ user_id: user.id, quest_id: id });
-      if (error) {
-        toast.error("Không lưu được: " + error.message);
-        setDone((prev) => ({ ...prev, [id]: false }));
-        return;
-      }
-      toast.success("✓ Đã lưu tiến độ", { duration: 1000 });
-    } else {
-      const { error } = await supabase.from("questline_progress").delete().eq("user_id", user.id).eq("quest_id", id);
-      if (error) {
-        toast.error("Không xoá được: " + error.message);
-        setDone((prev) => ({ ...prev, [id]: true }));
-      }
-    }
-  };
-
-  const reset = async () => {
-    if (!user || !confirm("Xoá hết tiến độ, làm lại từ đầu?")) return;
-    const { error } = await supabase.from("questline_progress").delete().eq("user_id", user.id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
+  const reset = () => {
+    if (!confirm("Xoá hết tiến độ, làm lại từ đầu?")) return;
     setDone({});
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
     toast("Đã làm mới tiến độ");
   };
 
@@ -893,8 +865,7 @@ export default function Questline() {
           <div className="h-full bg-gradient-brand transition-all duration-300" style={{ width: `${pct}%` }} />
         </div>
         <p className="text-[11px] text-muted-foreground">
-          Tự động lưu ngay khi tick — đăng nhập bằng tài khoản admin này ở bất kỳ máy/trình duyệt/domain nào cũng thấy
-          đúng tiến độ.
+          Tự động lưu ngay khi tick — tắt app rồi vào lại, tiến độ vẫn còn nguyên trên máy này.
         </p>
         {pct === 100 && (
           <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-sm font-bold pt-1">
