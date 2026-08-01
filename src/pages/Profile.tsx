@@ -485,7 +485,7 @@ function MenuRow({
   );
 }
 
-function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }) {
+function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved: () => void; initialOpen?: boolean }) {
   const { t } = useLanguage();
   const [name, setName] = useState(biz.name);
   const [type, setType] = useState<BusinessType>(biz.type);
