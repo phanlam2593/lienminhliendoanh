@@ -2307,14 +2307,35 @@ function ExchangesSection({
             <div className="flex items-center justify-between gap-2">
               <div className="min-w-0 flex-1">
                 <div className="font-semibold truncate">
-                  {r.req_name ?? "?"} → {r.rec_name ?? "?"}
+                  <button onClick={() => setQuickBiz(r.requester_id)} className="hover:text-primary hover:underline">
+                    {r.req_name ?? "?"}
+                  </button>
+                  {" → "}
+                  <button onClick={() => setQuickBiz(r.receiver_id)} className="hover:text-primary hover:underline">
+                    {r.rec_name ?? "?"}
+                  </button>
                 </div>
                 <div className="text-muted-foreground">
                   {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
                 </div>
               </div>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent font-semibold">{r.status}</span>
+              <span
+                className={`text-[10px] px-2 py-0.5 rounded-full font-semibold whitespace-nowrap ${EXCHANGE_STATUS_CHIP[r.status] ?? "bg-accent"}`}
+              >
+                {EXCHANGE_STATUS_LABEL[r.status] ?? r.status}
+              </span>
             </div>
+            <div className="text-[11px] text-muted-foreground">{exchangeWaitingText(r)}</div>
+            {EXCHANGE_STEP[r.status] > 0 && (
+              <div className="flex items-center gap-1">
+                {[1, 2, 3, 4].map((i) => (
+                  <span
+                    key={i}
+                    className={`h-1.5 rounded-full ${i <= EXCHANGE_STEP[r.status] ? "bg-primary w-4" : "bg-muted w-2"}`}
+                  />
+                ))}
+              </div>
+            )}
             <div className="flex flex-wrap gap-1.5">
               {r.status !== "completed" && (
                 <button
