@@ -1399,13 +1399,6 @@ function MemberDetail({
       toast.error(error.message);
       return;
     }
-    if (user) {
-      await supabase.from("messages").insert({
-        sender_id: user.id,
-        receiver_id: row.id,
-        content: `📋 Hồ sơ doanh nghiệp "${biz.name}" cần bổ sung:\n${bizRejectNote.trim()}\n\nSau khi chỉnh sửa và lưu lại, hồ sơ sẽ tự động gửi lại để duyệt.`,
-      });
-    }
     toast.success("Đã gửi yêu cầu bổ sung");
     invalidateBusinesses(biz.id);
     setBiz((prev) => (prev ? { ...prev, status: "rejected", admin_note: bizRejectNote.trim() } : prev));
