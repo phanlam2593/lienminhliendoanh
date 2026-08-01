@@ -59,13 +59,24 @@ export default function Businesses() {
   // của Supabase/PostgREST.
   const load = async () => {
     setLoading(true);
-    const { data: biz } = await supabase
-      .from("businesses")
-      .select("*")
-      .eq("status", "approved")
-      .order("created_at", { ascending: false })
-      .range(0, 49999);
-    const rows = (biz as Business[]) ?? [];
+    // Supabase mặc định âm thầm cắt ở "Max Rows" (thường 1000) dù .range() yêu cầu nhiều
+    // hơn — không báo lỗi, chỉ lặng lẽ thiếu DN cũ nhất. Tải theo từng đợt 1000 dòng cho
+    // tới khi hết, để không phụ thuộc vào cấu hình đó nữa.
+    let rows: Business[] = [];
+    let from = 0;
+    const CHUNK = 1000;
+    while (true) {
+      const { data: page } = await supabase
+        .from("businesses")
+        .select("*")
+        .eq("status", "approved")
+        .order("created_at", { ascending: false })
+        .range(from, from + CHUNK - 1);
+      const chunk = (page as Business[]) ?? [];
+      rows = rows.concat(chunk);
+      if (chunk.length < CHUNK) break;
+      from += CHUNK;
+    }
     // KHÔNG lọc theo .in(ids) — với 1000+ doanh nghiệp, URL sẽ vượt giới hạn độ dài
     // cho phép và bị server từ chối, khiến toàn bộ rating/ưu đãi/review bị rỗng. View
     // này vốn đã gọn (mỗi DN 1 dòng) nên lấy nguyên view rồi map ở client là đủ nhanh.
