@@ -2250,6 +2250,7 @@ function BusinessesSection({
   const [quickBiz, setQuickBiz] = useState<string | null>(null);
   const [quickMember, setQuickMember] = useState<string | null>(null);
   const [claimsBiz, setClaimsBiz] = useState<{ id: string; name: string } | null>(null);
+  const [revisionTarget, setRevisionTarget] = useState<(Business & { owner_name?: string | null }) | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
