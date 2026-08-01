@@ -175,7 +175,7 @@ export default function Businesses() {
       setHasMore(false);
       setLoading(false);
     });
-  }, [sort, myPos, radius, type, onlineOnly, debouncedQ]);
+  }, [sort, myPos, radius, filterKey, debouncedQ]);
 
   const loadMore = () => {
     const next = page + 1;
