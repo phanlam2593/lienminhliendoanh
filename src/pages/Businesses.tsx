@@ -151,7 +151,7 @@ export default function Businesses() {
     setPage(0);
     setLoading(true);
     void loadPage(0, false);
-  }, [type, onlineOnly, area, debouncedQ, sort]);
+  }, [filterKey, area, debouncedQ, sort]);
 
   useEffect(() => {
     if (viewMode !== "map") return;
