@@ -151,6 +151,10 @@ const BIZ_OFFER_IDEAS: Record<BusinessType, { vi: string[]; en: string[] }> = {
     vi: ["Giảm 10% phí hoa hồng", "Miễn phí định giá/đo đạc", "Tặng tư vấn pháp lý cơ bản"],
     en: ["10% off commission fee", "Free appraisal/measurement", "Free basic legal consultation"],
   },
+  shopping: {
+    vi: ["Giảm 10% cho hoá đơn từ 200k", "Mua 2 tặng 1", "Tặng quà nhỏ cho khách quen", "Miễn phí giao hàng nội thành"],
+    en: ["10% off orders from 200k", "Buy 2 get 1 free", "Small gift for regulars", "Free local delivery"],
+  },
   other: {
     vi: ["Mua 1 tặng 1", "Giảm giá theo dịp đặc biệt", "Miễn phí vận chuyển"],
     en: ["Buy 1 get 1 free", "Special occasion discount", "Free shipping"],
