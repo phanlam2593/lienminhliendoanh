@@ -711,8 +711,8 @@ function PendingTab({
           </button>
           <button
             onClick={() => rejectBiz(b.id)}
-            className="px-2.5 py-1.5 rounded-lg bg-red-500 text-white"
-            aria-label="Từ chối"
+            className="px-2.5 py-1.5 rounded-lg bg-amber-500 text-white"
+            aria-label="Yêu cầu bổ sung"
           >
             <X className="w-4 h-4" />
           </button>
