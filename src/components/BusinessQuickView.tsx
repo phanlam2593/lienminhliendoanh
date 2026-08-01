@@ -21,6 +21,11 @@ interface QuickBiz {
   owner_id: string | null;
 }
 
+interface QuickOwner {
+  full_name: string;
+  username: string;
+}
+
 interface QuickReview {
   id: string;
   rating: number;
