@@ -1516,6 +1516,7 @@ function BusinessCreator({
   const [lng, setLng] = useState<number | null>(null);
   const [locating, setLocating] = useState(false);
   const [desc, setDesc] = useState("");
+  const [isOnline, setIsOnline] = useState(false);
   const [hoursOpen, setHO] = useState("07:00");
   const [hoursClose, setHC] = useState("22:00");
   const [coverFile, setCoverFile] = useState<File | null>(null);
