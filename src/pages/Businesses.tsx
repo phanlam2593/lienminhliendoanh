@@ -54,10 +54,10 @@ export default function Businesses() {
       .order("created_at", { ascending: false })
       .range(0, 49999);
     const rows = (biz as Business[]) ?? [];
-    const ids = rows.map((b) => b.id);
-    const { data: stats } = ids.length
-      ? await supabase.from("business_card_stats").select("*").in("business_id", ids)
-      : { data: [] as any[] };
+    // KHÔNG lọc theo .in(ids) — với 1000+ doanh nghiệp, URL sẽ vượt giới hạn độ dài
+    // cho phép và bị server từ chối, khiến toàn bộ rating/ưu đãi/review bị rỗng. View
+    // này vốn đã gọn (mỗi DN 1 dòng) nên lấy nguyên view rồi map ở client là đủ nhanh.
+    const { data: stats } = await supabase.from("business_card_stats").select("*");
     const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
     const enriched = rows.map((b) => {
       const s: any = sMap.get(b.id);
