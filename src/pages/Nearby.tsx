@@ -42,10 +42,9 @@ export default function Nearby() {
           .not("latitude", "is", null)
           .not("longitude", "is", null);
         const rows = (biz as Business[]) ?? [];
-        const ids = rows.map((b) => b.id);
-        const { data: stats } = ids.length
-          ? await supabase.from("business_card_stats").select("*").in("business_id", ids)
-          : { data: [] as any[] };
+        // Không lọc theo .in(ids) — lý do y hệt bên Khám phá: với hàng nghìn DN, URL sẽ
+        // vượt giới hạn cho phép. Lấy nguyên view rồi map ở client.
+        const { data: stats } = await supabase.from("business_card_stats").select("*");
         const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
         const withDistance: NearbyItem[] = rows.map((b) => {
           const s: any = sMap.get(b.id);
