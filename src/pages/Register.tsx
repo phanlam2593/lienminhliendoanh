@@ -33,6 +33,7 @@ export default function Register() {
   // step 2
   const [bizName, setBN] = useState("");
   const [bizType, setBT] = useState<BusinessType>("food");
+  const [isOnline, setIsOnline] = useState(false);
   const [open, setOpen] = useState("07:00");
   const [close, setClose] = useState("22:00");
   const [bizDesc, setBD] = useState("");
