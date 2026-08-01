@@ -1706,7 +1706,7 @@ function BusinessesSection({
     let query = supabase
       .from("businesses")
       .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
+      .order("total_claims", { ascending: false })
       .range(from, to);
     if (debouncedQ) query = query.ilike("name", `%${debouncedQ}%`);
     const { data: biz, count } = await query;
