@@ -1154,6 +1154,12 @@ function BusinessDetailDialog({
                 </button>
               </div>
             </div>
+            <button
+              onClick={() => onOpenChange(false)}
+              className="w-full py-2 rounded-lg border text-sm font-semibold flex items-center justify-center gap-1"
+            >
+              <X className="w-4 h-4" /> Đóng
+            </button>
           </div>
         )}
       </DialogContent>
