@@ -562,6 +562,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
       return;
     }
     setSaving(true);
+    const wasRejected = biz.status === "rejected";
     const [{ error }, { error: pinError }] = await Promise.all([
       supabase
         .from("businesses")
@@ -580,6 +581,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
           address: address || null,
           latitude: lat,
           longitude: lng,
+          ...(wasRejected ? { status: "pending", admin_note: null } : {}),
         })
         .eq("id", biz.id),
       supabase.from("business_pins").upsert({ business_id: biz.id, pin, updated_at: new Date().toISOString() }),
@@ -589,7 +591,7 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
       toast.error((error || pinError)?.message ?? "Có lỗi xảy ra");
       return;
     }
-    toast.success("Đã lưu doanh nghiệp");
+    toast.success(wasRejected ? "Đã lưu và gửi lại để duyệt" : "Đã lưu doanh nghiệp");
     onSaved();
   };
   const onCover = async (file: File) => {
