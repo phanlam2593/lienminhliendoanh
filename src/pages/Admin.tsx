@@ -478,18 +478,16 @@ function OverviewTab({
     pending: 0,
     exchanges: 0,
     reports: 0,
-    offers: 0,
   });
 
   const load = async () => {
-    const [mRes, bRes, pmRes, pbRes, eRes, rRes, oRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, eRes, rRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("exchanges").select("*", { count: "exact", head: true }),
       supabase.from("reports").select("*", { count: "exact", head: true }),
-      supabase.from("offers").select("*", { count: "exact", head: true }),
     ]);
     setStats({
       members: mRes.count ?? 0,
@@ -497,7 +495,6 @@ function OverviewTab({
       pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
       exchanges: eRes.count ?? 0,
       reports: rRes.count ?? 0,
-      offers: oRes.count ?? 0,
     });
   };
   useEffect(() => {
