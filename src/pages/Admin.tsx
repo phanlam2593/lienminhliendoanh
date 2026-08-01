@@ -1324,20 +1324,60 @@ function MemberDetail({
                     >
                       <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
                     </button>
-                    {biz.status === "pending" && (
+                    {biz.status === "rejected" && biz.admin_note && (
+                      <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5 space-y-1">
+                        <div className="font-bold">📋 Đã yêu cầu bổ sung:</div>
+                        <div>{biz.admin_note}</div>
+                        <div className="text-[10px] opacity-80">
+                          Đang chờ chủ DN chỉnh sửa và gửi lại — hồ sơ sẽ tự quay lại "Chờ duyệt".
+                        </div>
+                      </div>
+                    )}
+                    {biz.status === "pending" && !bizRejectMode && (
                       <div className="flex gap-2">
                         <button
-                          onClick={() => setBizStatus("approved")}
+                          onClick={approveBizProfile}
                           className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white font-semibold text-xs"
                         >
                           Duyệt doanh nghiệp
                         </button>
                         <button
-                          onClick={() => setBizStatus("rejected")}
-                          className="flex-1 py-1.5 rounded-lg bg-red-500 text-white font-semibold text-xs"
+                          onClick={() => setBizRejectMode(true)}
+                          className="flex-1 py-1.5 rounded-lg bg-amber-500 text-white font-semibold text-xs"
                         >
-                          Từ chối
+                          Yêu cầu bổ sung
                         </button>
+                      </div>
+                    )}
+                    {biz.status === "pending" && bizRejectMode && (
+                      <div className="space-y-2 p-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-900">
+                        <div className="text-xs font-bold text-amber-700 dark:text-amber-400">
+                          Nội dung cần bổ sung (bắt buộc)
+                        </div>
+                        <textarea
+                          value={bizRejectNote}
+                          onChange={(e) => setBizRejectNote(e.target.value)}
+                          rows={3}
+                          placeholder="Mô tả rõ những gì chủ DN cần chỉnh sửa/bổ sung…"
+                          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setBizRejectMode(false);
+                              setBizRejectNote("");
+                            }}
+                            className="flex-1 py-2 rounded-lg border text-sm font-semibold"
+                          >
+                            Hủy
+                          </button>
+                          <button
+                            onClick={requestBizRevision}
+                            className="flex-1 py-2 rounded-lg bg-amber-500 text-white font-semibold text-sm"
+                          >
+                            Gửi yêu cầu bổ sung
+                          </button>
+                        </div>
                       </div>
                     )}
                     <div className="pt-2 border-t space-y-1">
