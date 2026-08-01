@@ -575,9 +575,11 @@ function PendingTab({
   onChanged: () => void;
   onOpenMember: (ownerId: string) => void;
 }) {
+  const { user } = useAuth();
   type PendingMember = { id: string; full_name: string; username: string; avatar_url: string | null };
+  type PendingBiz = { id: string; name: string; owner_id: string | null };
   const [pendingMembers, setPendingMembers] = useState<PendingMember[]>([]);
-  const [pendingBiz, setPendingBiz] = useState<{ id: string; name: string }[]>([]);
+  const [pendingBiz, setPendingBiz] = useState<PendingBiz[]>([]);
   const [quickBiz, setQuickBiz] = useState<string | null>(null);
 
   const load = async () => {
