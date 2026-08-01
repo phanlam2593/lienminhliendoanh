@@ -724,24 +724,39 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               ))}
             </div>
           </Field>
-          <div className="grid grid-cols-2 gap-2">
-            <Field label="Giờ mở" hint="Ví dụ: 07:00">
-              <input
-                type="time"
-                value={open_}
-                onChange={(e) => setOpen_(e.target.value)}
-                className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+          <label className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-accent/50 cursor-pointer">
+            <span className="text-xs font-semibold">🌐 Chỉ bán online (không có địa điểm/giờ mở cửa cố định)</span>
+            <button
+              type="button"
+              onClick={() => setIsOnline((v) => !v)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition shrink-0 ${isOnline ? "bg-primary" : "bg-muted"}`}
+              aria-pressed={isOnline}
+            >
+              <span
+                className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${isOnline ? "translate-x-5" : "translate-x-0.5"}`}
               />
-            </Field>
-            <Field label="Giờ đóng" hint="Ví dụ: 22:00">
-              <input
-                type="time"
-                value={close_}
-                onChange={(e) => setClose_(e.target.value)}
-                className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
-              />
-            </Field>
-          </div>
+            </button>
+          </label>
+          {!isOnline && (
+            <div className="grid grid-cols-2 gap-2">
+              <Field label="Giờ mở" hint="Ví dụ: 07:00">
+                <input
+                  type="time"
+                  value={open_}
+                  onChange={(e) => setOpen_(e.target.value)}
+                  className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+                />
+              </Field>
+              <Field label="Giờ đóng" hint="Ví dụ: 22:00">
+                <input
+                  type="time"
+                  value={close_}
+                  onChange={(e) => setClose_(e.target.value)}
+                  className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+                />
+              </Field>
+            </div>
+          )}
           <Field label="Mô tả">
             <textarea
               value={desc}
