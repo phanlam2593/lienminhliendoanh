@@ -564,11 +564,25 @@ function OverviewTab({
 }
 
 // ── Màn hình Chờ duyệt: gộp duyệt/từ chối thành viên + doanh nghiệp ─────────
-function PendingTab({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
-  const [pendingMembers, setPendingMembers] = useState<
-    { id: string; full_name: string; username: string; avatar_url: string | null }[]
-  >([]);
+function PendingTab({
+  refreshKey,
+  onChanged,
+  onOpenMember,
+}: {
+  refreshKey: number;
+  onChanged: () => void;
+  onOpenMember: (ownerId: string) => void;
+}) {
+  const [pendingMembers, setPendingMembers] = useState;
+  {
+    id: string;
+    full_name: string;
+    username: string;
+    avatar_url: string | null;
+  }
+  [] > [];
   const [pendingBiz, setPendingBiz] = useState<{ id: string; name: string }[]>([]);
+  const [quickBiz, setQuickBiz] = useState<string | null>(null);
 
   const load = async () => {
     const [{ data: m }, { data: b }] = await Promise.all([
