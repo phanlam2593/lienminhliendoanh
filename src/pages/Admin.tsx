@@ -70,7 +70,6 @@ type TabKey =
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
   businesses: "Doanh nghiệp",
-  offers: "Ưu đãi",
   exchanges: "Trao đổi",
   reports: "Báo cáo",
   pending: "Chờ duyệt",
