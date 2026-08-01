@@ -571,8 +571,9 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
         .update({
           name,
           type,
-          hours_open: open_,
-          hours_close: close_,
+          is_online: isOnline,
+          hours_open: isOnline ? null : open_,
+          hours_close: isOnline ? null : close_,
           description: desc,
           facebook_url: fb || null,
           website_url: web || null,
