@@ -41,6 +41,7 @@ export default function Businesses() {
   const [list, setList] = useState<BusinessCardData[]>([]);
   const [q, setQ] = useState("");
   const [type, setType] = useState<BusinessType | "all">("all");
+  const [onlineOnly, setOnlineOnly] = useState(false);
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
   const [loading, setLoading] = useState(true);
