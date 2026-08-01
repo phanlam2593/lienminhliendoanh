@@ -654,11 +654,13 @@ function PendingTab({
     <div className="space-y-2">
       {pendingMembers.map((m) => (
         <div key={m.id} className="flex items-center gap-2 bg-card rounded-xl p-2.5">
-          <MiniAvatar avatarUrl={m.avatar_url} name={m.full_name || m.username} />
-          <div className="flex-1 min-w-0 text-xs">
-            <div className="font-semibold truncate">{m.full_name}</div>
-            <div className="text-muted-foreground">@{m.username} · Thành viên</div>
-          </div>
+          <button onClick={() => onOpenMember(m.id)} className="flex-1 min-w-0 flex items-center gap-2 text-left">
+            <MiniAvatar avatarUrl={m.avatar_url} name={m.full_name || m.username} />
+            <div className="flex-1 min-w-0 text-xs">
+              <div className="font-semibold truncate">{m.full_name}</div>
+              <div className="text-muted-foreground">@{m.username} · Thành viên</div>
+            </div>
+          </button>
           <button
             onClick={() => approveMember(m.id)}
             className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
