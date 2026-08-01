@@ -75,7 +75,7 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   pending: "Chờ duyệt",
   activity: "Hoạt động gần đây",
   hidden: "Ẩn",
-  broadcast: "Thông báo",
+  broadcast: "Phát thông báo",
 };
 
 const VALID_TABS: TabKey[] = [
