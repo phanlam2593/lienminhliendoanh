@@ -54,6 +54,13 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "business_photos_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       business_pins: {
@@ -85,6 +92,13 @@ export type Database = {
             columns: ["business_id"]
             isOneToOne: true
             referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "business_pins_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: true
+            referencedRelation: "businesses_explore_view"
             referencedColumns: ["id"]
           },
         ]
@@ -129,6 +143,13 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "business_regulars_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       business_view_daily: {
@@ -162,11 +183,20 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "business_view_daily_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       businesses: {
         Row: {
           address: string | null
+          admin_note: string | null
+          area: string | null
           cover_url: string | null
           created_at: string
           description: string | null
@@ -176,15 +206,18 @@ export type Database = {
           id: string
           instagram_url: string | null
           is_featured: boolean
+          is_online: boolean
           latitude: number | null
           level: number
           longitude: number | null
           name: string
+          name_unaccent: string | null
           owner_id: string | null
           phone: string | null
           points: number
           status: Database["public"]["Enums"]["business_status"]
           tiktok_url: string | null
+          total_claims: number
           type: Database["public"]["Enums"]["business_type"]
           updated_at: string
           website_url: string | null
@@ -192,6 +225,8 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          admin_note?: string | null
+          area?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
@@ -201,15 +236,18 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_featured?: boolean
+          is_online?: boolean
           latitude?: number | null
           level?: number
           longitude?: number | null
           name: string
+          name_unaccent?: string | null
           owner_id?: string | null
           phone?: string | null
           points?: number
           status?: Database["public"]["Enums"]["business_status"]
           tiktok_url?: string | null
+          total_claims?: number
           type?: Database["public"]["Enums"]["business_type"]
           updated_at?: string
           website_url?: string | null
@@ -217,6 +255,8 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          admin_note?: string | null
+          area?: string | null
           cover_url?: string | null
           created_at?: string
           description?: string | null
@@ -226,15 +266,18 @@ export type Database = {
           id?: string
           instagram_url?: string | null
           is_featured?: boolean
+          is_online?: boolean
           latitude?: number | null
           level?: number
           longitude?: number | null
           name?: string
+          name_unaccent?: string | null
           owner_id?: string | null
           phone?: string | null
           points?: number
           status?: Database["public"]["Enums"]["business_status"]
           tiktok_url?: string | null
+          total_claims?: number
           type?: Database["public"]["Enums"]["business_type"]
           updated_at?: string
           website_url?: string | null
@@ -386,6 +429,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "exchanges_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "exchanges_requester_id_fkey"
             columns: ["requester_id"]
             isOneToOne: false
@@ -397,6 +447,13 @@ export type Database = {
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exchanges_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
             referencedColumns: ["id"]
           },
         ]
@@ -438,6 +495,13 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "follows_followee_business_id_fkey"
+            columns: ["followee_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       internal_config: {
@@ -476,6 +540,13 @@ export type Database = {
             foreignKeyName: "login_events_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "login_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -508,6 +579,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "member_badges_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "member_badges_user_id_fkey"
             columns: ["user_id"]
@@ -735,6 +813,13 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       pin_attempts: {
@@ -769,6 +854,7 @@ export type Database = {
           created_at: string
           email: string
           full_name: string
+          full_name_unaccent: string | null
           has_seen_welcome: boolean
           id: string
           is_member: boolean
@@ -792,6 +878,7 @@ export type Database = {
           created_at?: string
           email: string
           full_name: string
+          full_name_unaccent?: string | null
           has_seen_welcome?: boolean
           id: string
           is_member?: boolean
@@ -815,6 +902,7 @@ export type Database = {
           created_at?: string
           email?: string
           full_name?: string
+          full_name_unaccent?: string | null
           has_seen_welcome?: boolean
           id?: string
           is_member?: boolean
@@ -859,6 +947,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "push_subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
           {
             foreignKeyName: "push_subscriptions_user_id_fkey"
             columns: ["user_id"]
@@ -929,6 +1024,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          description_unaccent: string | null
           id: string
           owner_confirmed_resolved: boolean
           photo_url: string | null
@@ -944,6 +1040,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
+          description_unaccent?: string | null
           id?: string
           owner_confirmed_resolved?: boolean
           photo_url?: string | null
@@ -959,6 +1056,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          description_unaccent?: string | null
           id?: string
           owner_confirmed_resolved?: boolean
           photo_url?: string | null
@@ -1048,6 +1146,13 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reviews_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
       }
       user_roles: {
@@ -1110,7 +1215,55 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "offers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      businesses_explore_view: {
+        Row: {
+          address: string | null
+          admin_note: string | null
+          area: string | null
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          facebook_url: string | null
+          hours_close: string | null
+          hours_open: string | null
+          id: string | null
+          instagram_url: string | null
+          is_featured: boolean | null
+          is_online: boolean | null
+          latest_offer: string | null
+          latest_offer_claims: number | null
+          latest_review_author: string | null
+          latest_review_comment: string | null
+          latest_review_rating: number | null
+          latitude: number | null
+          level: number | null
+          longitude: number | null
+          name: string | null
+          name_unaccent: string | null
+          offer_count: number | null
+          owner_id: string | null
+          phone: string | null
+          points: number | null
+          rating: number | null
+          review_count: number | null
+          status: Database["public"]["Enums"]["business_status"] | null
+          tiktok_url: string | null
+          total_claims: number | null
+          type: Database["public"]["Enums"]["business_type"] | null
+          updated_at: string | null
+          website_url: string | null
+          youtube_url: string | null
+        }
+        Relationships: []
       }
       exchanges_view: {
         Row: {
@@ -1119,9 +1272,11 @@ export type Database = {
           expires_at: string | null
           id: string | null
           rec_name: string | null
+          rec_name_unaccent: string | null
           receiver_completed_at: string | null
           receiver_id: string | null
           req_name: string | null
+          req_name_unaccent: string | null
           request_description: string | null
           request_type: string | null
           requester_completed_at: string | null
@@ -1146,6 +1301,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "exchanges_receiver_id_fkey"
+            columns: ["receiver_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "exchanges_requester_id_fkey"
             columns: ["requester_id"]
             isOneToOne: false
@@ -1157,6 +1319,13 @@ export type Database = {
             columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exchanges_requester_id_fkey"
+            columns: ["requester_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
             referencedColumns: ["id"]
           },
         ]
@@ -1191,7 +1360,25 @@ export type Database = {
             referencedRelation: "businesses"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "follows_followee_business_id_fkey"
+            columns: ["followee_business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses_explore_view"
+            referencedColumns: ["id"]
+          },
         ]
+      }
+      member_last_login: {
+        Row: {
+          avatar_url: string | null
+          full_name: string | null
+          full_name_unaccent: string | null
+          last_login_at: string | null
+          user_id: string | null
+          username: string | null
+        }
+        Relationships: []
       }
       profiles_public: {
         Row: {
@@ -1245,16 +1432,31 @@ export type Database = {
         Returns: undefined
       }
       broadcast_offer: { Args: { _offer_id: string }; Returns: number }
+      business_area_counts: {
+        Args: never
+        Returns: {
+          area: string
+          cnt: number
+        }[]
+      }
       can_access_report: {
         Args: { _report_id: string; _user_id: string }
         Returns: boolean
       }
       claim_offer: { Args: { _offer_id: string; _pin: string }; Returns: Json }
+      compute_business_area: { Args: { addr: string }; Returns: string }
       expire_stale_exchanges: { Args: never; Returns: undefined }
       get_admin_user_ids: {
         Args: never
         Returns: {
           user_id: string
+        }[]
+      }
+      get_area_counts: {
+        Args: never
+        Returns: {
+          area: string
+          cnt: number
         }[]
       }
       get_member_rank: { Args: { _id: string }; Returns: number }
@@ -1294,6 +1496,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      immutable_unaccent: { Args: { "": string }; Returns: string }
       increment_business_view: {
         Args: { _business_id: string }
         Returns: undefined
@@ -1312,6 +1515,9 @@ export type Database = {
         Returns: undefined
       }
       refresh_admin_pending_notification: { Args: never; Returns: undefined }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
+      unaccent: { Args: { "": string }; Returns: string }
       unaccent_safe: { Args: { _t: string }; Returns: string }
     }
     Enums: {
@@ -1337,6 +1543,7 @@ export type Database = {
         | "creator"
         | "freelance"
         | "broker"
+        | "shopping"
       offer_status: "active" | "inactive"
       report_status: "pending" | "replied" | "resolved" | "closed"
       report_target: "business" | "offer" | "review"
@@ -1490,6 +1697,7 @@ export const Constants = {
         "creator",
         "freelance",
         "broker",
+        "shopping",
       ],
       offer_status: ["active", "inactive"],
       report_status: ["pending", "replied", "resolved", "closed"],
