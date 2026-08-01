@@ -147,6 +147,26 @@ export function BusinessQuickView({
                 {b.name}
               </div>
               <div className="text-xs text-muted-foreground">{BUSINESS_TYPE_LABEL[b.type] || b.type}</div>
+              {owner && (
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Chủ DN:{" "}
+                  {onOpenAdmin && b.owner_id ? (
+                    <button
+                      onClick={() => {
+                        onOpenAdmin(b.owner_id!);
+                        onOpenChange(false);
+                      }}
+                      className="text-primary font-semibold hover:underline"
+                    >
+                      {owner.full_name} <span className="text-muted-foreground font-normal">@{owner.username}</span>
+                    </button>
+                  ) : (
+                    <span className="font-semibold">
+                      {owner.full_name} <span className="font-normal">@{owner.username}</span>
+                    </span>
+                  )}
+                </div>
+              )}
               {b.description && <p className="text-sm mt-1.5">{b.description}</p>}
             </div>
 
