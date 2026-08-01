@@ -351,7 +351,13 @@ export default function BusinessDetail() {
             <span className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-full font-semibold">
               {BUSINESS_TYPE_LABEL[b.type]}
             </span>
-            <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
+            {b.is_online ? (
+              <span className="text-xs bg-sky-500 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
+                🌐 Bán online
+              </span>
+            ) : (
+              <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
+            )}
             {reviewTotal > 0 && (
               <span className="text-xs bg-black/70 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
                 <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {avgRating.toFixed(1)} ({reviewTotal})
