@@ -679,13 +679,15 @@ function PendingTab({
       ))}
       {pendingBiz.map((b) => (
         <div key={b.id} className="flex items-center gap-2 bg-card rounded-xl p-2.5">
-          <div className="w-8 h-8 rounded-full bg-muted grid place-items-center flex-shrink-0">
-            <Building2 className="w-4 h-4 text-muted-foreground" />
-          </div>
-          <div className="flex-1 min-w-0 text-xs">
-            <div className="font-semibold truncate">{b.name}</div>
-            <div className="text-muted-foreground">Doanh nghiệp</div>
-          </div>
+          <button onClick={() => setQuickBiz(b.id)} className="flex-1 min-w-0 flex items-center gap-2 text-left">
+            <div className="w-8 h-8 rounded-full bg-muted grid place-items-center flex-shrink-0">
+              <Building2 className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <div className="flex-1 min-w-0 text-xs">
+              <div className="font-semibold truncate">{b.name}</div>
+              <div className="text-muted-foreground">Doanh nghiệp</div>
+            </div>
+          </button>
           <button
             onClick={() => approveBiz(b.id)}
             className="px-2.5 py-1.5 rounded-lg bg-emerald-500 text-white"
@@ -702,6 +704,12 @@ function PendingTab({
           </button>
         </div>
       ))}
+      <BusinessQuickView
+        businessId={quickBiz}
+        open={!!quickBiz}
+        onOpenChange={(v) => !v && setQuickBiz(null)}
+        onOpenAdmin={onOpenMember}
+      />
     </div>
   );
 }
