@@ -793,26 +793,30 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono"
             />
           </Field>
-          {!lat && (
-            <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5">
-              {t("bizForm.mapBanner")}
-            </div>
+          {!isOnline && (
+            <>
+              {!lat && (
+                <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5">
+                  {t("bizForm.mapBanner")}
+                </div>
+              )}
+              <div>
+                <button
+                  type="button"
+                  onClick={useCurrentLocation}
+                  disabled={locating}
+                  className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
+                >
+                  📍{" "}
+                  {locating
+                    ? "Đang lấy vị trí…"
+                    : lat
+                      ? "Đã ghim vị trí — bấm để cập nhật lại"
+                      : "Ghim vị trí hiện tại (cho tính năng Gần đây)"}
+                </button>
+              </div>
+            </>
           )}
-          <div>
-            <button
-              type="button"
-              onClick={useCurrentLocation}
-              disabled={locating}
-              className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
-            >
-              📍{" "}
-              {locating
-                ? "Đang lấy vị trí…"
-                : lat
-                  ? "Đã ghim vị trí — bấm để cập nhật lại"
-                  : "Ghim vị trí hiện tại (cho tính năng Gần đây)"}
-            </button>
-          </div>
           <div className="grid grid-cols-2 gap-2">
             <Field label="Facebook">
               <input
