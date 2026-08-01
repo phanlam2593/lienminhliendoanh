@@ -693,7 +693,10 @@ function PendingTab({
       ))}
       {pendingBiz.map((b) => (
         <div key={b.id} className="flex items-center gap-2 bg-card rounded-xl p-2.5">
-          <button onClick={() => setQuickBiz(b.id)} className="flex-1 min-w-0 flex items-center gap-2 text-left">
+          <button
+            onClick={() => (b.owner_id ? onOpenMember(b.owner_id) : setQuickBiz(b.id))}
+            className="flex-1 min-w-0 flex items-center gap-2 text-left"
+          >
             <div className="w-8 h-8 rounded-full bg-muted grid place-items-center flex-shrink-0">
               <Building2 className="w-4 h-4 text-muted-foreground" />
             </div>
