@@ -160,7 +160,7 @@ export default function Businesses() {
       setMapItems(rows);
       setLoading(false);
     });
-  }, [viewMode, type, onlineOnly, debouncedQ]);
+  }, [viewMode, filterKey, debouncedQ]);
 
   useEffect(() => {
     if (sort !== "nearest" || !myPos) return;
