@@ -144,7 +144,8 @@ export default function Admin() {
       .order("created_at", { ascending: false })
       .range(from, to);
     if (debouncedSearch) {
-      q = q.or(`full_name.ilike.%${debouncedSearch}%,username.ilike.%${debouncedSearch}%`);
+      const k = normalizeVi(debouncedSearch);
+      q = q.or(`full_name_unaccent.ilike.%${k}%,username.ilike.%${k}%`);
     }
     const { data: profs, count } = await q;
     setMemberTotal(count ?? 0);
