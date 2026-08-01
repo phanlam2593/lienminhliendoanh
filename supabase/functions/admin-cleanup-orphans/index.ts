@@ -38,9 +38,6 @@ Deno.serve(async (req) => {
       return json({ error: "Forbidden: not admin" }, 403);
     }
 
-    const { data: isAdmin } = await admin.rpc("has_role", { _user_id: userId, _role: "admin" });
-    if (!isAdmin) return json({ error: "Forbidden" }, 403);
-
     // Load all profile ids
     const { data: profs } = await admin.from("profiles").select("id");
     const profileIds = new Set((profs ?? []).map((p: any) => p.id));
