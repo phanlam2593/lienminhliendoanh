@@ -642,6 +642,7 @@ function PendingTab({
   const [pendingMembers, setPendingMembers] = useState<PendingMember[]>([]);
   const [pendingBiz, setPendingBiz] = useState<PendingBiz[]>([]);
   const [bizDetailId, setBizDetailId] = useState<string | null>(null);
+  const [revisionTarget, setRevisionTarget] = useState<PendingBiz | null>(null);
 
   const load = async () => {
     const [{ data: m }, { data: b }] = await Promise.all([
