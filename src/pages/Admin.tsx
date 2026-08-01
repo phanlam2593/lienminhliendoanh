@@ -937,27 +937,49 @@ function MemberDetail({
     onChanged();
   };
 
-  const setBizStatus = async (s: "approved" | "rejected") => {
+  const approveBizProfile = async () => {
     if (!biz) return;
-    if (s === "rejected") {
-      await supabase.from("offers").delete().eq("business_id", biz.id);
-      const { error } = await supabase.from("businesses").delete().eq("id", biz.id);
-      if (error) toast.error(error.message);
-      else {
-        toast.success("Đã từ chối và xóa");
-        invalidateBusinesses(biz.id);
-        setBiz(null);
-        onChanged();
-      }
+    const { error } = await supabase
+      .from("businesses")
+      .update({ status: "approved", admin_note: null })
+      .eq("id", biz.id);
+    if (error) {
+      toast.error(error.message);
       return;
     }
-    const { error } = await supabase.from("businesses").update({ status: s }).eq("id", biz.id);
-    if (error) toast.error(error.message);
-    else {
-      toast.success("Đã cập nhật");
-      invalidateBusinesses(biz.id);
-      onChanged();
+    toast.success("Đã duyệt");
+    invalidateBusinesses(biz.id);
+    setBiz((prev) => (prev ? { ...prev, status: "approved", admin_note: null } : prev));
+    onChanged();
+  };
+
+  const requestBizRevision = async () => {
+    if (!biz || !row) return;
+    if (!bizRejectNote.trim()) {
+      toast.error("Vui lòng nhập nội dung cần bổ sung");
+      return;
     }
+    const { error } = await supabase
+      .from("businesses")
+      .update({ status: "rejected", admin_note: bizRejectNote.trim() })
+      .eq("id", biz.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    if (user) {
+      await supabase.from("messages").insert({
+        sender_id: user.id,
+        receiver_id: row.id,
+        content: `📋 Hồ sơ doanh nghiệp "${biz.name}" cần bổ sung:\n${bizRejectNote.trim()}\n\nSau khi chỉnh sửa và lưu lại, hồ sơ sẽ tự động gửi lại để duyệt.`,
+      });
+    }
+    toast.success("Đã gửi yêu cầu bổ sung");
+    invalidateBusinesses(biz.id);
+    setBiz((prev) => (prev ? { ...prev, status: "rejected", admin_note: bizRejectNote.trim() } : prev));
+    setBizRejectMode(false);
+    setBizRejectNote("");
+    onChanged();
   };
 
   const delBiz = async () => {
