@@ -82,7 +82,6 @@ const VALID_TABS: TabKey[] = [
   "overview",
   "members",
   "businesses",
-  "offers",
   "exchanges",
   "reports",
   "pending",
