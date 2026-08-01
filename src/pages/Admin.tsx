@@ -2129,7 +2129,66 @@ type ExchangeRow = _Exchange & { req_name?: string | null; rec_name?: string | n
 
 const EXCHANGE_PAGE_SIZE = 50;
 
-function ExchangesSection({ refreshKey, onChanged }: { refreshKey: number; onChanged: () => void }) {
+const EXCHANGE_STATUS_LABEL: Record<string, string> = {
+  pending: "Chờ phản hồi",
+  accepted: "Đã chấp nhận",
+  requester_done: "Bên gửi đã xong",
+  receiver_done: "Bên nhận đã xong",
+  completed: "Hoàn thành",
+  rejected: "Đã từ chối",
+  expired: "Đã hết hạn",
+};
+const EXCHANGE_STATUS_CHIP: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-800",
+  accepted: "bg-sky-100 text-sky-800",
+  requester_done: "bg-sky-100 text-sky-800",
+  receiver_done: "bg-sky-100 text-sky-800",
+  completed: "bg-emerald-100 text-emerald-800",
+  rejected: "bg-rose-100 text-rose-800",
+  expired: "bg-muted text-muted-foreground",
+};
+const EXCHANGE_STEP: Record<string, number> = {
+  pending: 1,
+  accepted: 2,
+  requester_done: 3,
+  receiver_done: 4,
+  completed: 4,
+  rejected: 0,
+  expired: 0,
+};
+function exchangeWaitingText(r: ExchangeRow): string {
+  const req = r.req_name ?? "Bên gửi";
+  const rec = r.rec_name ?? "Bên nhận";
+  switch (r.status) {
+    case "pending":
+      return `⏳ Đang chờ ${rec} phản hồi (chấp nhận/từ chối)`;
+    case "accepted":
+      return `⏳ Đang chờ ${req} thực hiện phần của mình`;
+    case "requester_done":
+      return `⏳ Đang chờ ${rec} xác nhận & thực hiện phần của mình`;
+    case "receiver_done":
+      return `⏳ Đang chờ ${req} xác nhận hoàn tất`;
+    case "completed":
+      return `✅ Cả 2 bên đã hoàn tất`;
+    case "rejected":
+      return `❌ ${rec} đã từ chối yêu cầu`;
+    case "expired":
+      return `⌛ Hết hạn — không bên nào phản hồi kịp`;
+    default:
+      return "";
+  }
+}
+
+function ExchangesSection({
+  refreshKey,
+  onChanged,
+  onOpenMember,
+}: {
+  refreshKey: number;
+  onChanged: () => void;
+  onOpenMember: (ownerId: string) => void;
+}) {
+  const [quickBiz, setQuickBiz] = useState<string | null>(null);
   const [list, setList] = useState<ExchangeRow[]>([]);
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
