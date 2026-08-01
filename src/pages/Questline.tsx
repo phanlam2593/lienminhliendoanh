@@ -1141,6 +1141,83 @@ const QUESTS: Quest[] = [
     action: "Admin → Tổng quan, tìm hàng gửi thông báo hàng loạt.",
     expect: "Hiện đúng tên 'Phát thông báo' thay vì 'Thông báo'.",
   },
+
+  // ===== Cập nhật phiên 02/08 =====
+  {
+    id: "0802-type-shopping",
+    category: "Cập nhật phiên 02/08",
+    title: "Loại hình mới 'Buôn bán' xuất hiện đủ mọi nơi",
+    action: "Kiểm tra loại hình 'Buôn bán' có trong: bộ lọc Khám phá, form Đăng ký (bước có DN), Tạo DN mới, Sửa DN.",
+    expect: "Cả 4 nơi đều thấy đúng nút 'Buôn bán', chọn được, lưu được bình thường như các loại khác.",
+  },
+  {
+    id: "0802-search-noaccent-admin",
+    category: "Cập nhật phiên 02/08",
+    title: "Tìm kiếm không dấu trong Admin",
+    action:
+      "Ở Admin, gõ KHÔNG DẤU vào ô tìm của từng tab: Thành viên, Doanh nghiệp, Hoạt động gần đây, Báo cáo, Trao đổi (VD gõ 'quang anh' hoặc 'bds').",
+    expect: "Mỗi ô đều ra đúng kết quả có dấu tương ứng, không cần gõ đúng dấu mới tìm ra.",
+  },
+  {
+    id: "0802-search-noaccent-explore",
+    category: "Cập nhật phiên 02/08",
+    title: "Tìm kiếm không dấu ở Khám phá",
+    action: "Ở Khám phá, gõ không dấu tên 1 DN có dấu (VD 'bds' cho 'BĐS...').",
+    expect: "Vẫn ra đúng kết quả dù gõ thiếu dấu.",
+  },
+  {
+    id: "0802-explore-pagination",
+    category: "Cập nhật phiên 02/08",
+    title: "Khám phá tải theo trang, không mất DN cũ",
+    action:
+      "Mở Khám phá (để 'Tất cả', sắp xếp 'Mới nhất'), cuộn xuống cuối bấm 'Tải thêm' liên tục vài lần cho tới hết.",
+    expect:
+      "Ban đầu chỉ tải ~20 DN, mỗi lần bấm 'Tải thêm' ra thêm ~20 cái, KHÔNG lặp lại DN đã hiện, và tải được tới DN cuối cùng (kể cả DN cũ/tạo lâu rồi) — không còn bị mất khoảng 15 DN cuối như lỗi trước.",
+  },
+  {
+    id: "0802-explore-sort-db",
+    category: "Cập nhật phiên 02/08",
+    title: "Sắp xếp 'Đánh giá cao' / 'Nhiều ưu đãi' vẫn đúng",
+    action: "Khám phá → đổi lần lượt qua sắp xếp 'Đánh giá cao' và 'Nhiều ưu đãi được nhận'.",
+    expect: "DN đầu danh sách đúng là DN có rating cao nhất / nhiều lượt nhận ưu đãi nhất, không bị xáo trộn.",
+  },
+  {
+    id: "0802-explore-map-nearest",
+    category: "Cập nhật phiên 02/08",
+    title: "Bản đồ & 'Gần đây' vẫn đủ DN sau khi đổi qua phân trang",
+    action: "Khám phá → chuyển 'Bản đồ', xem tổng thể; rồi bấm 'Gần đây'.",
+    expect:
+      "Bản đồ vẫn thấy đủ ghim như trước (không bị thiếu do phân trang), 'Gần đây' vẫn tính khoảng cách + lọc bán kính đúng.",
+  },
+  {
+    id: "0802-online-toggle-form",
+    category: "Cập nhật phiên 02/08",
+    title: "Công tắc 'Chỉ bán hàng online' trong form DN",
+    action: "Tạo DN mới (hoặc sửa DN có sẵn) → bật công tắc 'Chỉ bán hàng online'.",
+    expect: "Giờ mở/Giờ đóng và nút 'Ghim vị trí' biến mất ngay khi bật, hiện lại khi tắt.",
+  },
+  {
+    id: "0802-online-badge",
+    category: "Cập nhật phiên 02/08",
+    title: "Nhãn 'Bán hàng online' trên card & trang chi tiết",
+    action: "Mở 1 DN đã bật bán hàng online (VD 'Tiệm Bánh Mì Đức Thành') — xem cả ở card Khám phá và trang chi tiết.",
+    expect: "Hiện nhãn 'Bán hàng online' màu xanh dương thay cho huy hiệu giờ mở/đóng cửa, không có icon 🌐.",
+  },
+  {
+    id: "0802-online-filter-chip",
+    category: "Cập nhật phiên 02/08",
+    title: "Nút lọc 'Bán hàng online' nằm chung hàng loại hình",
+    action: "Khám phá → tìm nút 'Bán hàng online' ở hàng nút loại hình (Ăn uống, Dịch vụ...).",
+    expect:
+      "Nằm chung 1 hàng, hình dáng giống hệt các nút loại hình khác, bấm vào là lọc ngay (không cần bấm 'Tất cả' trước).",
+  },
+  {
+    id: "0802-cover-images-load",
+    category: "Cập nhật phiên 02/08",
+    title: "Ảnh bìa DN không còn bị vỡ",
+    action: "Lướt qua vài chục DN bất kỳ ở Khám phá, để ý ảnh bìa từng card.",
+    expect: "Tất cả đều load được ảnh (không còn icon ảnh vỡ), kể cả nhóm từng bị lỗi trước đó như 'Kế Toán Tự Do'.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
