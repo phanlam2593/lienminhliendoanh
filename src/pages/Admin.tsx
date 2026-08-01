@@ -696,13 +696,6 @@ function PendingTab({
       toast.error(error.message);
       return;
     }
-    if (user && revisionTarget.owner_id) {
-      await supabase.from("messages").insert({
-        sender_id: user.id,
-        receiver_id: revisionTarget.owner_id,
-        content: `📋 Hồ sơ doanh nghiệp "${revisionTarget.name}" cần bổ sung:\n${note}\n\nSau khi chỉnh sửa và lưu lại, hồ sơ sẽ tự động gửi lại để duyệt.`,
-      });
-    }
     toast.success("Đã gửi yêu cầu bổ sung");
     invalidateBusinesses(revisionTarget.id);
     setRevisionTarget(null);
