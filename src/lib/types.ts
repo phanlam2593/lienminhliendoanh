@@ -1,7 +1,17 @@
 export type AppRole = "guest" | "member" | "admin";
 export type AccountStatus = "pending" | "approved" | "rejected";
-// DO NOT CHANGE: 8 fixed business types, finalized by product owner
-export type BusinessType = "food" | "service" | "stay" | "travel" | "creator" | "freelance" | "broker" | "other";
+// 9 fixed business types, finalized by product owner (thêm "shopping" ngày 01/08 — tách
+// từ "other" vì đa số DN "Khác" thực chất là cửa hàng/mua sắm)
+export type BusinessType =
+  | "food"
+  | "service"
+  | "stay"
+  | "travel"
+  | "creator"
+  | "freelance"
+  | "broker"
+  | "shopping"
+  | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected";
 export type OfferStatus = "active" | "inactive";
 export type ReportTarget = "business" | "offer" | "review";
