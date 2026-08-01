@@ -133,6 +133,7 @@ export interface Business {
   status: BusinessStatus;
   points: number;
   level: number;
+  total_claims: number;
   created_at: string;
   updated_at: string;
 }
