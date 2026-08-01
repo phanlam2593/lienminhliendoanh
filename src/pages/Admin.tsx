@@ -1473,11 +1473,11 @@ function ReportsSection({ refreshKey, onOpenMember }: { refreshKey: number; onOp
     const from = pageNum * REPORT_PAGE_SIZE;
     const to = from + REPORT_PAGE_SIZE - 1;
     let query = supabase
-      .from("reports")
+      .from("businesses")
       .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
+      .order("total_claims", { ascending: false })
       .range(from, to);
-    if (debouncedQ) query = query.ilike("description", `%${debouncedQ}%`);
+    if (debouncedQ) query = query.ilike("name", `%${debouncedQ}%`);
     const { data: reports, count } = await query;
     setTotal(count ?? 0);
     const rows = (reports as Report[] | null) ?? [];
