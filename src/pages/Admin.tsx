@@ -1209,7 +1209,8 @@ function ActivityTab({ refreshKey }: { refreshKey: number }) {
       .order("last_login_at", { ascending: false })
       .range(from, to);
     if (debouncedQ) {
-      query = query.or(`full_name.ilike.%${debouncedQ}%,username.ilike.%${debouncedQ}%`);
+      const k = normalizeVi(debouncedQ);
+      query = query.or(`full_name_unaccent.ilike.%${k}%,username.ilike.%${k}%`);
     }
     const { data: rows } = await query;
     const newRows = ((rows ?? []) as any[]).map((r) => ({
