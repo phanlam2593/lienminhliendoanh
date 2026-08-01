@@ -1063,6 +1063,84 @@ const QUESTS: Quest[] = [
     expect:
       "Được cấp đúng nếu tổng số người approved hiện tại (thật) chưa tới 1000 — xác nhận cơ chế đã phục hồi đúng sau khi dọn data test.",
   },
+
+  // ===== Cập nhật phiên 01/08 =====
+  {
+    id: "0801-biz-list-sort",
+    category: "Cập nhật phiên 01/08",
+    title: "Doanh nghiệp sắp xếp theo lượt nhận ưu đãi",
+    action: "Admin → tab Doanh nghiệp, quan sát thứ tự danh sách.",
+    expect: "DN có nhiều lượt nhận ưu đãi nhất nằm trên đầu, giảm dần xuống dưới.",
+  },
+  {
+    id: "0801-biz-claims-popup",
+    category: "Cập nhật phiên 01/08",
+    title: "Xem danh sách người nhận ưu đãi từ Admin",
+    action: "Admin → Doanh nghiệp → bấm vào dòng '🎟️ X lượt nhận ưu đãi' của 1 DN.",
+    expect:
+      "Ra popup liệt kê từng ưu đãi của DN đó; bấm vào 1 ưu đãi thấy đúng danh sách người đã nhận (tên, thời gian, mã).",
+  },
+  {
+    id: "0801-pending-open-direct",
+    category: "Cập nhật phiên 01/08",
+    title: "Chờ duyệt: bấm tên DN ra thẳng form sửa",
+    action: "Admin → Chờ duyệt → bấm vào tên 1 DN đang chờ.",
+    expect:
+      "Ra thẳng popup sửa DN (không qua Xem nhanh, không qua Chi tiết thành viên), có nút 'Đóng' ở cuối, không có nút X đè lên nhãn trạng thái.",
+  },
+  {
+    id: "0801-revision-request",
+    category: "Cập nhật phiên 01/08",
+    title: "Yêu cầu bổ sung thay vì Từ chối",
+    action: "Admin → Chờ duyệt (hoặc Doanh nghiệp) → bấm nút X 'Yêu cầu bổ sung' trên 1 DN, nhập nội dung, gửi.",
+    expect:
+      "Ra popup nhập liệu đàng hoàng (không phải hộp thoại trình duyệt), DN KHÔNG bị xoá, chuyển sang trạng thái cần bổ sung.",
+  },
+  {
+    id: "0801-revision-notif-owner",
+    category: "Cập nhật phiên 01/08",
+    title: "Chủ DN nhận đúng thông báo yêu cầu bổ sung",
+    action: "Đăng nhập bằng tài khoản chủ DN vừa bị yêu cầu bổ sung, mở Thông báo, bấm vào thông báo cập nhật DN.",
+    expect:
+      "Vào thẳng Hồ sơ doanh nghiệp, đúng DN đó tự mở sẵn form sửa, thấy banner '📋 Ban quản trị yêu cầu bổ sung' kèm đúng nội dung admin đã nhập.",
+  },
+  {
+    id: "0801-revision-resubmit",
+    category: "Cập nhật phiên 01/08",
+    title: "Sửa xong tự gửi lại chờ duyệt",
+    action: "Từ màn hình trên, sửa lại thông tin DN rồi bấm 'Lưu doanh nghiệp'.",
+    expect:
+      "Lưu xong, DN tự quay lại trạng thái 'Chờ duyệt' — không cần bước nộp lại riêng, banner yêu cầu bổ sung biến mất.",
+  },
+  {
+    id: "0801-pending-notif-tab",
+    category: "Cập nhật phiên 01/08",
+    title: "Thông báo Chờ duyệt vào đúng tab",
+    action: "Với tài khoản admin, có mục chờ duyệt mới, bấm vào thông báo 'Chờ duyệt'.",
+    expect: "Vào thẳng Admin, tự nhảy đúng tab 'Chờ duyệt' (không phải Tổng quan).",
+  },
+  {
+    id: "0801-exchange-admin-vi",
+    category: "Cập nhật phiên 01/08",
+    title: "Trao đổi trong Admin hiện tiếng Việt + đúng bước",
+    action: "Admin → tab Trao đổi, xem vài lượt trao đổi ở các trạng thái khác nhau.",
+    expect:
+      "Trạng thái hiện tiếng Việt (không phải 'pending'/'accepted'...), có dòng 'Đang chờ ai' đúng tên DN, có thanh tiến độ.",
+  },
+  {
+    id: "0801-exchange-biz-quickview",
+    category: "Cập nhật phiên 01/08",
+    title: "Bấm tên DN trong Trao đổi ra popup xem nhanh",
+    action: "Admin → Trao đổi → bấm vào tên 1 trong 2 DN của 1 lượt trao đổi.",
+    expect: "Mở đúng popup Xem nhanh DN đó, có dòng 'Chủ DN: tên' bấm được để mở hồ sơ chủ.",
+  },
+  {
+    id: "0801-broadcast-rename",
+    category: "Cập nhật phiên 01/08",
+    title: "Tên tab 'Phát thông báo'",
+    action: "Admin → Tổng quan, tìm hàng gửi thông báo hàng loạt.",
+    expect: "Hiện đúng tên 'Phát thông báo' thay vì 'Thông báo'.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
