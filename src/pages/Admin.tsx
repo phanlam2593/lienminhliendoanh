@@ -328,6 +328,7 @@ export default function Admin() {
       {activeTab === "pending" && (
         <PendingTab refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
       )}
+      {activeTab === "activity" && <ActivityTab refreshKey={refreshKey} />}
 
       {activeTab === "hidden" && (
         <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
