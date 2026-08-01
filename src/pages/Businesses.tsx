@@ -128,6 +128,7 @@ export default function Businesses() {
   const filtered = useMemo(() => {
     let arr: (BusinessCardData & { distanceKm?: number })[] = list;
     if (type !== "all") arr = arr.filter((b) => b.type === type);
+    if (onlineOnly) arr = arr.filter((b) => b.is_online);
     if (q.trim()) {
       const k = normalizeVi(q);
       arr = arr.filter((b) => normalizeVi(b.name).includes(k) || normalizeVi(b.latestOffer ?? "").includes(k));
