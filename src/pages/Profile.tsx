@@ -509,7 +509,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
   const [offerText, setOfferText] = useState("");
   const [offers, setOffers] = useState<Offer[]>([]);
   const [saving, setSaving] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!initialOpen);
   const [regularsOpen, setRegularsOpen] = useState(false);
 
   const reloadOffers = async () => {
