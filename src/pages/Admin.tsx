@@ -2372,6 +2372,12 @@ function ExchangesSection({
           {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
         </button>
       )}
+      <BusinessQuickView
+        businessId={quickBiz}
+        open={!!quickBiz}
+        onOpenChange={(v) => !v && setQuickBiz(null)}
+        onOpenAdmin={onOpenMember}
+      />
     </Collapsible>
   );
 }
