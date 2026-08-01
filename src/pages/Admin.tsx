@@ -51,6 +51,18 @@ interface MemberRow extends Profile {
   lastVisit: string | null;
 }
 
+// Bỏ dấu tiếng Việt trước khi gửi lên DB tìm kiếm — khớp với cột *_unaccent (cột tính sẵn
+// bằng extension unaccent) để gõ "bds", "quang anh" không dấu vẫn tìm ra "BĐS Đà Lạt",
+// "Quang Anh" có dấu.
+function normalizeVi(str: string): string {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase();
+}
+
 const MEMBER_PAGE_SIZE = 50;
 
 // ── Điều hướng của trang Quản trị ────────────────────────────────────────────
