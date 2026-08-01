@@ -1878,7 +1878,7 @@ function BusinessClaimsDialog({
   business: { id: string; name: string } | null;
   onOpenChange: (open: boolean) => void;
 }) {
-  const [offers, setOffers] = useState
+  const [offers, setOffers] = useState<
     (Offer & {
       claimers?: {
         id: string;
