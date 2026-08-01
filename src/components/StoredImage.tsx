@@ -20,10 +20,13 @@ export function StoredImage({ path, className, fallbackClassName, alt = "", ...r
     setErr(false);
     setUrl("");
     if (!path) return;
-    if (/^https?:\/\//i.test(path)) {
+    // Link tuyệt đối (http/https) hoặc đường dẫn tĩnh của app (bắt đầu bằng "/", ví dụ
+    // ảnh CDN /__l5e/assets-v1/...) thì dùng trực tiếp, không cần signed URL của storage.
+    if (/^https?:\/\//i.test(path) || path.startsWith("/")) {
       setUrl(path);
       return;
     }
+
 
     // QUAN TRỌNG: lấy link ảnh (signed URL) đôi khi thất bại tạm thời (mạng chập chờn,
     // API timeout...) — trước đây nếu thất bại thì kẹt mãi ở trạng thái "đang tải", không

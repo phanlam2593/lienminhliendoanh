@@ -83,6 +83,10 @@ const BIZ_EXAMPLES: Record<BusinessType, { vi: string[]; en: string[] }> = {
     vi: ["Mua bán/cho thuê nhà đất", "Môi giới homestay", "Tư vấn đầu tư bất động sản"],
     en: ["Real estate sale/rental", "Homestay brokerage", "Real estate investment consulting"],
   },
+  shopping: {
+    vi: ["Cửa hàng tiện lợi", "Shop quần áo", "Tiệm quà tặng", "Cửa hàng đồ chơi", "Đặc sản/quà lưu niệm"],
+    en: ["Convenience store", "Clothing shop", "Gift shop", "Toy store", "Local specialties & souvenirs"],
+  },
   other: {
     vi: ["Bất kỳ mô hình nào khác — vẫn tạo ưu đãi, vẫn tham gia cộng đồng bình thường"],
     en: ["Any other type — you can still create offers and join the community as usual"],
@@ -146,6 +150,10 @@ const BIZ_OFFER_IDEAS: Record<BusinessType, { vi: string[]; en: string[] }> = {
   broker: {
     vi: ["Giảm 10% phí hoa hồng", "Miễn phí định giá/đo đạc", "Tặng tư vấn pháp lý cơ bản"],
     en: ["10% off commission fee", "Free appraisal/measurement", "Free basic legal consultation"],
+  },
+  shopping: {
+    vi: ["Giảm 10% cho hoá đơn từ 200k", "Mua 2 tặng 1", "Tặng quà nhỏ cho khách quen", "Miễn phí giao hàng nội thành"],
+    en: ["10% off orders from 200k", "Buy 2 get 1 free", "Small gift for regulars", "Free local delivery"],
   },
   other: {
     vi: ["Mua 1 tặng 1", "Giảm giá theo dịp đặc biệt", "Miễn phí vận chuyển"],
