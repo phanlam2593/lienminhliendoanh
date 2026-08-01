@@ -818,6 +818,7 @@ function MemberDetail({
   onChanged: () => void;
   onStatus: (id: string, s: "approved" | "rejected", note?: string) => void;
 }) {
+  const { user } = useAuth();
   // member fields
   const [fullName, setFN] = useState("");
   const [email, setE] = useState("");
