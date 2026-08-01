@@ -767,7 +767,7 @@ function PendingTab({
             <Check className="w-4 h-4" />
           </button>
           <button
-            onClick={() => rejectBiz(b.id)}
+            onClick={() => setRevisionTarget(b)}
             className="px-2.5 py-1.5 rounded-lg bg-amber-500 text-white"
             aria-label="Yêu cầu bổ sung"
           >
@@ -775,6 +775,11 @@ function PendingTab({
           </button>
         </div>
       ))}
+      <RevisionRequestDialog
+        target={revisionTarget}
+        onOpenChange={(v) => !v && setRevisionTarget(null)}
+        onSubmit={submitRevision}
+      />
       <BusinessDetailDialog
         businessId={bizDetailId}
         onOpenChange={(v) => !v && setBizDetailId(null)}
