@@ -345,6 +345,7 @@ export default function Profile() {
   }
 
   if (view === "business") {
+    const editBizId = searchParams.get("edit");
     return (
       <div className="p-4 space-y-5">
         <BackBar title={t("profile.business")} />
@@ -355,7 +356,7 @@ export default function Profile() {
         ) : (
           <section className="space-y-3">
             {biz.map((b) => (
-              <BusinessEditor key={b.id} biz={b} onSaved={loadBiz} />
+              <BusinessEditor key={b.id} biz={b} onSaved={loadBiz} initialOpen={b.id === editBizId} />
             ))}
           </section>
         )}
