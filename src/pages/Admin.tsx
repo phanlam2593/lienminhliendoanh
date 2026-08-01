@@ -2442,6 +2442,11 @@ function BusinessesSection({
       />
       <ProfileQuickView userId={quickMember} open={!!quickMember} onOpenChange={(v) => !v && setQuickMember(null)} />
       <BusinessClaimsDialog business={claimsBiz} onOpenChange={(v) => !v && setClaimsBiz(null)} />
+      <RevisionRequestDialog
+        target={revisionTarget}
+        onOpenChange={(v) => !v && setRevisionTarget(null)}
+        onSubmit={submitRevision}
+      />
     </Collapsible>
   );
 }
