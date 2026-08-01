@@ -2042,7 +2042,7 @@ function ReportsSection({ refreshKey, onOpenMember }: { refreshKey: number; onOp
       .select("*", { count: "exact" })
       .order("created_at", { ascending: false })
       .range(from, to);
-    if (debouncedQ) query = query.ilike("description", `%${debouncedQ}%`);
+    if (debouncedQ) query = query.ilike("description_unaccent", `%${normalizeVi(debouncedQ)}%`);
     const { data: reports, count } = await query;
     setTotal(count ?? 0);
     const rows = (reports as Report[] | null) ?? [];
