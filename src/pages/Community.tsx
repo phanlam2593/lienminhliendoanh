@@ -210,7 +210,7 @@ export default function Community() {
         }
       }
     } catch {}
-    const { data } = await supabase.from("businesses").select("address").eq("status", "approved");
+    const { data } = await supabase.from("businesses").select("address").eq("status", "approved").range(0, 9999);
     const set = new Set<string>();
     (data ?? []).forEach((b: any) => set.add(extractArea(b.address)));
     const result = Array.from(set).sort();
