@@ -1864,7 +1864,131 @@ function BusinessesSection({
         onOpenAdmin={onOpenMember}
       />
       <ProfileQuickView userId={quickMember} open={!!quickMember} onOpenChange={(v) => !v && setQuickMember(null)} />
+      <BusinessClaimsDialog business={claimsBiz} onOpenChange={(v) => !v && setClaimsBiz(null)} />
     </Collapsible>
+  );
+}
+
+// ── Popup lượt nhận ưu đãi: 1 DN có thể có nhiều ưu đãi, mỗi ưu đãi bấm vào mới
+// tải danh sách người nhận (lazy load, tránh query dư khi không mở tới).
+function BusinessClaimsDialog({
+  business,
+  onOpenChange,
+}: {
+  business: { id: string; name: string } | null;
+  onOpenChange: (open: boolean) => void;
+}) {
+  const [offers, setOffers] = useState
+    (Offer & {
+      claimers?: {
+        id: string;
+        user_id: string;
+        claimed_at: string;
+        code: string;
+        profile?: { full_name: string; username: string; avatar_url: string | null } | null;
+      }[];
+      claimersLoaded?: boolean;
+      claimersOpen?: boolean;
+    })[]
+  >([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!business) {
+      setOffers([]);
+      return;
+    }
+    setLoading(true);
+    supabase
+      .from("offers")
+      .select("*")
+      .eq("business_id", business.id)
+      .order("claim_count", { ascending: false })
+      .then(({ data }) => {
+        setOffers(((data as Offer[]) ?? []).map((o) => ({ ...o })));
+        setLoading(false);
+      });
+  }, [business?.id]);
+
+  const toggleOffer = async (offerId: string) => {
+    const target = offers.find((o) => o.id === offerId);
+    setOffers((prev) => prev.map((o) => (o.id === offerId ? { ...o, claimersOpen: !o.claimersOpen } : o)));
+    if (target?.claimersLoaded) return;
+    const { data: claims } = await supabase
+      .from("offer_claims")
+      .select("id, user_id, claimed_at, code")
+      .eq("offer_id", offerId)
+      .order("claimed_at", { ascending: false });
+    const uids = [...new Set((claims ?? []).map((c: any) => c.user_id))];
+    let nameMap = new Map<string, { full_name: string; username: string; avatar_url: string | null }>();
+    if (uids.length) {
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", uids);
+      (profs ?? []).forEach((p: any) => nameMap.set(p.id, p));
+    }
+    const claimers = (claims ?? []).map((c: any) => ({ ...c, profile: nameMap.get(c.user_id) ?? null }));
+    setOffers((prev) => prev.map((o) => (o.id === offerId ? { ...o, claimers, claimersLoaded: true } : o)));
+  };
+
+  return (
+    <Dialog open={!!business} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Lượt nhận ưu đãi · {business?.name}</DialogTitle>
+        </DialogHeader>
+        {loading ? (
+          <p className="text-sm text-muted-foreground text-center py-4">Đang tải…</p>
+        ) : offers.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-4">Chưa có ưu đãi nào</p>
+        ) : (
+          <div className="space-y-2">
+            {offers.map((o) => (
+              <div key={o.id} className="bg-card border rounded-xl overflow-hidden">
+                <button onClick={() => toggleOffer(o.id)} className="w-full flex items-center gap-2 p-2.5 text-left">
+                  {o.claimersOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold truncate">{o.title}</div>
+                    <div className="text-[11px] text-muted-foreground">
+                      {o.claim_count ?? 0} lượt nhận · {o.status === "active" ? "Đang chạy" : "Tắt"}
+                    </div>
+                  </div>
+                </button>
+                {o.claimersOpen && (
+                  <div className="px-2.5 pb-2.5 space-y-1 border-t pt-2">
+                    {!o.claimersLoaded ? (
+                      <p className="text-xs text-muted-foreground py-1">Đang tải…</p>
+                    ) : o.claimers && o.claimers.length > 0 ? (
+                      o.claimers.map((c) => (
+                        <div key={c.id} className="flex items-center gap-2 text-xs py-1">
+                          <MiniAvatar
+                            avatarUrl={c.profile?.avatar_url}
+                            name={c.profile?.full_name || c.profile?.username}
+                            size={8}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold truncate">
+                              {c.profile?.full_name || "—"}
+                              <span className="text-muted-foreground font-normal"> @{c.profile?.username}</span>
+                            </div>
+                            <div className="text-muted-foreground">
+                              {new Date(c.claimed_at).toLocaleString("vi-VN")} · mã {c.code}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-muted-foreground py-1">Chưa có ai nhận ưu đãi này</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
   );
 }
 
