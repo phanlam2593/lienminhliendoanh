@@ -37,7 +37,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "type.creator": "Sáng tạo nội dung",
     "type.freelance": "Nghề tự do",
     "type.broker": "Môi giới",
-    "type.shopping": "Mua sắm",
+    "type.shopping": "Buôn bán",
     "type.other": "Khác",
     "stats.members": "Thành viên",
     "stats.businesses": "Doanh nghiệp",
