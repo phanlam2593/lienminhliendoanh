@@ -531,13 +531,6 @@ function OverviewTab({
         onClick={() => onNavigate("businesses")}
       />
       <StatRow
-        icon={Tag}
-        label="Ưu đãi"
-        value={stats.offers}
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("offers")}
-      />
-      <StatRow
         icon={Handshake}
         label="Trao đổi"
         value={stats.exchanges}
