@@ -410,9 +410,9 @@ function StatRow({
       <div className={`w-8 h-8 rounded-full grid place-items-center flex-shrink-0 ${colorClass}`}>
         <Icon className="w-4 h-4" />
       </div>
-      <span className="flex-1 text-sm">
+      <span className={`flex-1 text-sm ${value ? "font-bold" : ""}`}>
         {label}
-        {value !== undefined && <span className="text-muted-foreground"> ({value})</span>}
+        {value !== undefined && <span className="text-muted-foreground font-normal"> ({value})</span>}
       </span>
       <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
     </button>
