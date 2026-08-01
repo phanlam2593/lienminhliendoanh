@@ -1886,7 +1886,11 @@ function BusinessesSection({
                 <button onClick={() => setStatus(b.id, "approved")} className="text-emerald-600" aria-label="Duyệt">
                   <Check className="w-4 h-4" />
                 </button>
-                <button onClick={() => setStatus(b.id, "rejected")} className="text-red-600" aria-label="Từ chối">
+                <button
+                  onClick={() => setStatus(b.id, "rejected")}
+                  className="text-amber-600"
+                  aria-label="Yêu cầu bổ sung"
+                >
                   <X className="w-4 h-4" />
                 </button>
               </>
