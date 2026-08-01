@@ -854,6 +854,8 @@ function MemberDetail({
     setFN(row.full_name);
     setE(row.email);
     setPh(row.phone);
+    setBizRejectMode(false);
+    setBizRejectNote("");
     const b = row.business ?? null;
     setBiz(b);
     if (b) {
