@@ -1693,6 +1693,7 @@ function BusinessesSection({
   const [loadingMore, setLoadingMore] = useState(false);
   const [quickBiz, setQuickBiz] = useState<string | null>(null);
   const [quickMember, setQuickMember] = useState<string | null>(null);
+  const [claimsBiz, setClaimsBiz] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
