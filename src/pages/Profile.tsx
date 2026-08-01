@@ -1663,24 +1663,39 @@ function BusinessCreator({
           ))}
         </div>
       </Field>
-      <div className="grid grid-cols-2 gap-2">
-        <Field label={t("bizForm.openTime")}>
-          <input
-            type="time"
-            value={hoursOpen}
-            onChange={(e) => setHO(e.target.value)}
-            className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+      <label className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-accent/50 cursor-pointer">
+        <span className="text-xs font-semibold">🌐 Chỉ bán online (không có địa điểm/giờ mở cửa cố định)</span>
+        <button
+          type="button"
+          onClick={() => setIsOnline((v) => !v)}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition shrink-0 ${isOnline ? "bg-primary" : "bg-muted"}`}
+          aria-pressed={isOnline}
+        >
+          <span
+            className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition ${isOnline ? "translate-x-5" : "translate-x-0.5"}`}
           />
-        </Field>
-        <Field label={t("bizForm.closeTime")}>
-          <input
-            type="time"
-            value={hoursClose}
-            onChange={(e) => setHC(e.target.value)}
-            className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
-          />
-        </Field>
-      </div>
+        </button>
+      </label>
+      {!isOnline && (
+        <div className="grid grid-cols-2 gap-2">
+          <Field label={t("bizForm.openTime")}>
+            <input
+              type="time"
+              value={hoursOpen}
+              onChange={(e) => setHO(e.target.value)}
+              className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+            />
+          </Field>
+          <Field label={t("bizForm.closeTime")}>
+            <input
+              type="time"
+              value={hoursClose}
+              onChange={(e) => setHC(e.target.value)}
+              className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
+            />
+          </Field>
+        </div>
+      )}
       <Field label={t("profile.phone")}>
         <input
           value={phone}
