@@ -47,6 +47,7 @@ export function BusinessQuickView({
 }) {
   const { user } = useAuth();
   const [b, setB] = useState<QuickBiz | null>(null);
+  const [owner, setOwner] = useState<QuickOwner | null>(null);
   const [loading, setLoading] = useState(false);
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(false);
