@@ -2671,7 +2671,10 @@ function ExchangesSection({
       .select("*", { count: "exact" })
       .order("created_at", { ascending: false })
       .range(from, to);
-    if (debouncedQ) query = query.or(`req_name.ilike.%${debouncedQ}%,rec_name.ilike.%${debouncedQ}%`);
+    if (debouncedQ) {
+      const k = normalizeVi(debouncedQ);
+      query = query.or(`req_name_unaccent.ilike.%${k}%,rec_name_unaccent.ilike.%${k}%`);
+    }
     const { data, count } = await query;
     setTotal(count ?? 0);
     const newRows = (data ?? []) as ExchangeRow[];
