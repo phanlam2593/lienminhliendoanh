@@ -321,7 +321,6 @@ export default function Admin() {
       {activeTab === "businesses" && (
         <BusinessesSection refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
       )}
-      {activeTab === "offers" && <OffersSection refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "exchanges" && <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "reports" && <ReportsSection refreshKey={refreshKey} onOpenMember={openMemberById} />}
       {activeTab === "pending" && <PendingTab refreshKey={refreshKey} onChanged={refresh} />}
