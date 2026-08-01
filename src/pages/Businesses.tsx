@@ -128,8 +128,8 @@ export default function Businesses() {
     let arr: (BusinessCardData & { distanceKm?: number })[] = list;
     if (type !== "all") arr = arr.filter((b) => b.type === type);
     if (q.trim()) {
-      const k = q.toLowerCase();
-      arr = arr.filter((b) => b.name.toLowerCase().includes(k) || (b.latestOffer ?? "").toLowerCase().includes(k));
+      const k = normalizeVi(q);
+      arr = arr.filter((b) => normalizeVi(b.name).includes(k) || normalizeVi(b.latestOffer ?? "").includes(k));
     }
 
     if (sort === "nearest" && myPos) {
