@@ -323,8 +323,9 @@ export default function Admin() {
       )}
       {activeTab === "exchanges" && <ExchangesSection refreshKey={refreshKey} onChanged={refresh} />}
       {activeTab === "reports" && <ReportsSection refreshKey={refreshKey} onOpenMember={openMemberById} />}
-      {activeTab === "pending" && <PendingTab refreshKey={refreshKey} onChanged={refresh} />}
-      {activeTab === "activity" && <ActivityTab refreshKey={refreshKey} />}
+      {activeTab === "pending" && (
+        <PendingTab refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
+      )}
 
       {activeTab === "hidden" && (
         <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
