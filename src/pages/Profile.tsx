@@ -1719,14 +1719,16 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono"
         />
       </Field>
-      <button
-        type="button"
-        onClick={useCurrentLocation}
-        disabled={locating}
-        className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
-      >
-        📍 {locating ? t("bizCreator.locating") : lat ? t("bizCreator.locationPinned") : t("bizCreator.pinLocation")}
-      </button>
+      {!isOnline && (
+        <button
+          type="button"
+          onClick={useCurrentLocation}
+          disabled={locating}
+          className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
+        >
+          📍 {locating ? t("bizCreator.locating") : lat ? t("bizCreator.locationPinned") : t("bizCreator.pinLocation")}
+        </button>
+      )}
       <Field label={t("bizForm.desc")}>
         <textarea
           value={desc}
