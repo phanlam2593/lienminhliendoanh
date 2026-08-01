@@ -1173,42 +1173,46 @@ const ACTIVITY_PAGE_SIZE = 30;
 
 function ActivityTab({ refreshKey }: { refreshKey: number }) {
   const [list, setList] = useState<{ name: string; username: string; avatar: string | null; at: string }[]>([]);
+  const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  // Dùng view member_last_login (gộp sẵn theo thành viên, MAX(created_at) mỗi người) thay
+  // vì liệt kê từng lượt đăng nhập riêng lẻ — mỗi thành viên chỉ hiện đúng 1 dòng gần nhất.
   const load = async (pageNum: number, append: boolean) => {
     setLoadingMore(true);
     const from = pageNum * ACTIVITY_PAGE_SIZE;
     const to = from + ACTIVITY_PAGE_SIZE - 1;
-    const { data: events } = await supabase
-      .from("login_events")
-      .select("user_id, created_at")
-      .order("created_at", { ascending: false })
+    let query = supabase
+      .from("member_last_login")
+      .select("user_id, full_name, username, avatar_url, last_login_at")
+      .order("last_login_at", { ascending: false })
       .range(from, to);
-    const rows = (events ?? []) as { user_id: string; created_at: string }[];
-    const uids = [...new Set(rows.map((v) => v.user_id))];
-    let nameMap = new Map<string, { name: string; username: string; avatar: string | null }>();
-    if (uids.length) {
-      const { data: profs } = await supabase
-        .from("profiles")
-        .select("id, full_name, username, avatar_url")
-        .in("id", uids);
-      (profs ?? []).forEach((p: any) =>
-        nameMap.set(p.id, { name: p.full_name, username: p.username, avatar: p.avatar_url }),
-      );
+    if (debouncedQ) {
+      query = query.or(`full_name.ilike.%${debouncedQ}%,username.ilike.%${debouncedQ}%`);
     }
-    const newRows = rows
-      .filter((v) => nameMap.has(v.user_id))
-      .map((v) => ({ ...nameMap.get(v.user_id)!, at: v.created_at }));
+    const { data: rows } = await query;
+    const newRows = ((rows ?? []) as any[]).map((r) => ({
+      name: r.full_name,
+      username: r.username,
+      avatar: r.avatar_url,
+      at: r.last_login_at,
+    }));
     setList((prev) => (append ? [...prev, ...newRows] : newRows));
-    setHasMore(rows.length === ACTIVITY_PAGE_SIZE);
+    setHasMore(newRows.length === ACTIVITY_PAGE_SIZE);
     setLoadingMore(false);
   };
   useEffect(() => {
     setPage(0);
     void load(0, false);
-  }, [refreshKey]);
+  }, [refreshKey, debouncedQ]);
 
   const loadMore = () => {
     const next = page + 1;
@@ -1218,8 +1222,17 @@ function ActivityTab({ refreshKey }: { refreshKey: number }) {
 
   return (
     <div className="space-y-2">
+      <div className="relative">
+        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+        <input
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          placeholder="Tìm theo tên hoặc username…"
+          className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
+        />
+      </div>
       {list.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-4">Chưa có hoạt động nào</p>
+        <p className="text-sm text-muted-foreground text-center py-4">Không có kết quả</p>
       ) : (
         <div className="bg-card rounded-xl border divide-y divide-border">
           {list.map((a, i) => (
