@@ -239,29 +239,20 @@ export default function Businesses() {
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        {(["all", ...BUSINESS_TYPES] as const).map((bt) => (
+        {(["all", ...BUSINESS_TYPES, "online"] as const).map((bt) => (
           <button
             key={bt}
-            onClick={() => setType(bt as any)}
+            onClick={() => setFilterKey(bt as any)}
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border",
-              type === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
+              filterKey === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
             )}
           >
-            {bt === "all" ? t("common.all") : t(`type.${bt}`)}
+            {bt === "all" ? t("common.all") : bt === "online" ? "🌐 Bán online" : t(`type.${bt}`)}
           </button>
         ))}
-        <button
-          onClick={() => setOnlineOnly((v) => !v)}
-          className={cn(
-            "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border inline-flex items-center gap-1",
-            onlineOnly ? "bg-sky-500 text-white border-sky-500" : "bg-card",
-          )}
-        >
-          🌐 Bán online
-        </button>
       </div>
-      {sort !== "nearest" && !onlineOnly && (
+      {sort !== "nearest" && filterKey !== "online" && (
         <div className="flex items-center gap-2 flex-wrap">
           <label className="text-xs font-semibold text-muted-foreground">{t("explore.area")}</label>
           <select
