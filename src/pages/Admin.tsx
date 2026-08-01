@@ -838,6 +838,8 @@ function MemberDetail({
   const [bFeatured, setBFeat] = useState(false);
   const [rejectMode, setRejectMode] = useState(false);
   const [adminNote, setAdminNote] = useState("");
+  const [bizRejectMode, setBizRejectMode] = useState(false);
+  const [bizRejectNote, setBizRejectNote] = useState("");
 
   const [offers, setOffers] = useState<Offer[]>([]);
   const [newOfferTitle, setNewOfferTitle] = useState("");
