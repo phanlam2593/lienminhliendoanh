@@ -2215,7 +2215,6 @@ function BusinessesSection({
   onChanged: () => void;
   onOpenMember: (ownerId: string) => void;
 }) {
-  const { user } = useAuth();
   const [list, setList] = useState<(Business & { owner_name?: string | null })[]>([]);
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
