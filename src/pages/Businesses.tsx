@@ -193,8 +193,17 @@ export default function Businesses() {
             {bt === "all" ? t("common.all") : t(`type.${bt}`)}
           </button>
         ))}
+        <button
+          onClick={() => setOnlineOnly((v) => !v)}
+          className={cn(
+            "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border inline-flex items-center gap-1",
+            onlineOnly ? "bg-sky-500 text-white border-sky-500" : "bg-card",
+          )}
+        >
+          🌐 Bán online
+        </button>
       </div>
-      {sort !== "nearest" && (
+      {sort !== "nearest" && !onlineOnly && (
         <div className="flex items-center gap-2 flex-wrap">
           <label className="text-xs font-semibold text-muted-foreground">{t("explore.area")}</label>
           <select
