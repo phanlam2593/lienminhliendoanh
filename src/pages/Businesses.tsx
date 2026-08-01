@@ -146,7 +146,7 @@ export default function Businesses() {
       else if (sort === "offers") arr = [...arr].sort((a: any, b: any) => (b.totalClaims ?? 0) - (a.totalClaims ?? 0));
     }
     return arr;
-  }, [list, q, type, area, sort, myPos, radius]);
+  }, [list, q, type, onlineOnly, area, sort, myPos, radius]);
 
   return (
     <div className="p-4 space-y-4">
