@@ -796,7 +796,6 @@ function BusinessDetailDialog({
   onOpenChange: (open: boolean) => void;
   onChanged: () => void;
 }) {
-  const { user } = useAuth();
   const [biz, setBiz] = useState<Business | null>(null);
   const [loading, setLoading] = useState(false);
   const [bName, setBN] = useState("");
