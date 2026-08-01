@@ -101,9 +101,12 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "pending_approval":
         return "/admin";
       case "account_updates":
-        // target_type phân biệt: cập nhật cho DN (vào thẳng trang DN) hay cho chính tài khoản (vào Hồ sơ).
+        // target_type phân biệt: cập nhật cho DN hay cho chính tài khoản (vào Hồ sơ).
+        // Với DN: nếu đang "cần bổ sung" (rejected) thì vào thẳng form sửa trong Hồ sơ
+        // doanh nghiệp (tự mở sẵn) — nếu đã duyệt thì vào trang công khai của DN như cũ.
         if (n.target_type === "business" && id) {
-          const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+          const { data } = await supabase.from("businesses").select("id, status").eq("id", id).maybeSingle();
+          if (data?.status === "rejected") return `/ho-so?view=business&edit=${id}`;
           if (data) return `/dn/${id}`;
         }
         return "/ho-so";
