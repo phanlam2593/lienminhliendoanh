@@ -60,7 +60,6 @@ type TabKey =
   | "overview"
   | "members"
   | "businesses"
-  | "offers"
   | "exchanges"
   | "reports"
   | "pending"
