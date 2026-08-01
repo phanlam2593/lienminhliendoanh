@@ -1610,6 +1610,7 @@ function BusinessCreator({
       setDesc("");
       setPin("");
       setCoverFile(null);
+      setIsOnline(false);
       onCreated();
     } catch (e: any) {
       toast.error(e.message ?? t("bizCreator.submitFail"));
