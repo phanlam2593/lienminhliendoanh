@@ -82,6 +82,17 @@ export function BusinessQuickView({
       setFollowers(fc ?? 0);
       setReviews((rv ?? []) as QuickReview[]);
       setFollowing(!!rel);
+      const ownerId = (biz as QuickBiz | null)?.owner_id;
+      if (ownerId) {
+        const { data: ownerProf } = await supabase
+          .from("profiles")
+          .select("full_name, username")
+          .eq("id", ownerId)
+          .maybeSingle();
+        setOwner((ownerProf as QuickOwner) ?? null);
+      } else {
+        setOwner(null);
+      }
       setLoading(false);
     })();
   }, [open, businessId, user?.id]);
