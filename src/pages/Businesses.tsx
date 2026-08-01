@@ -248,7 +248,7 @@ export default function Businesses() {
               filterKey === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
             )}
           >
-            {bt === "all" ? t("common.all") : bt === "online" ? "🌐 Bán online" : t(`type.${bt}`)}
+            {bt === "all" ? t("common.all") : bt === "online" ? "Bán hàng online" : t(`type.${bt}`)}
           </button>
         ))}
       </div>
