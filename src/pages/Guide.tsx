@@ -84,8 +84,26 @@ const BIZ_EXAMPLES: Record<BusinessType, { vi: string[]; en: string[] }> = {
     en: ["Real estate sale/rental", "Homestay brokerage", "Real estate investment consulting"],
   },
   shopping: {
-    vi: ["Cửa hàng tiện lợi", "Shop quần áo", "Tiệm quà tặng", "Cửa hàng đồ chơi", "Đặc sản/quà lưu niệm"],
-    en: ["Convenience store", "Clothing shop", "Gift shop", "Toy store", "Local specialties & souvenirs"],
+    vi: [
+      "Bán hàng online (Facebook/Zalo/TikTok Shop)",
+      "Shop online trên Shopee/Lazada",
+      "Livestream bán hàng",
+      "Cửa hàng tiện lợi",
+      "Shop quần áo",
+      "Tiệm quà tặng",
+      "Cửa hàng đồ chơi",
+      "Đặc sản/quà lưu niệm",
+    ],
+    en: [
+      "Online selling (Facebook/Zalo/TikTok Shop)",
+      "Online shop on Shopee/Lazada",
+      "Livestream selling",
+      "Convenience store",
+      "Clothing shop",
+      "Gift shop",
+      "Toy store",
+      "Local specialties & souvenirs",
+    ],
   },
   other: {
     vi: ["Bất kỳ mô hình nào khác — vẫn tạo ưu đãi, vẫn tham gia cộng đồng bình thường"],
