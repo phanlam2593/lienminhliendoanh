@@ -83,6 +83,10 @@ const BIZ_EXAMPLES: Record<BusinessType, { vi: string[]; en: string[] }> = {
     vi: ["Mua bán/cho thuê nhà đất", "Môi giới homestay", "Tư vấn đầu tư bất động sản"],
     en: ["Real estate sale/rental", "Homestay brokerage", "Real estate investment consulting"],
   },
+  shopping: {
+    vi: ["Cửa hàng tiện lợi", "Shop quần áo", "Tiệm quà tặng", "Cửa hàng đồ chơi", "Đặc sản/quà lưu niệm"],
+    en: ["Convenience store", "Clothing shop", "Gift shop", "Toy store", "Local specialties & souvenirs"],
+  },
   other: {
     vi: ["Bất kỳ mô hình nào khác — vẫn tạo ưu đãi, vẫn tham gia cộng đồng bình thường"],
     en: ["Any other type — you can still create offers and join the community as usual"],
