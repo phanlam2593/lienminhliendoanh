@@ -1814,6 +1814,7 @@ function BusinessesSection({
                 b.owner_name || "—"
               )}
             </div>
+            <div className="text-[11px] text-muted-foreground truncate">🎟️ {b.total_claims ?? 0} lượt nhận ưu đãi</div>
             <StatusBadge s={b.status} />
           </div>
           <div className="flex flex-col gap-1">
