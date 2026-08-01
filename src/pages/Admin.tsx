@@ -1777,15 +1777,32 @@ function BusinessesSection({
 
   const setStatus = async (id: string, status: "approved" | "rejected") => {
     if (status === "rejected") {
-      await supabase.from("offers").delete().eq("business_id", id);
-      const { error } = await supabase.from("businesses").delete().eq("id", id);
-      if (error) toast.error(error.message);
-      else {
-        toast.success("Đã từ chối và xóa");
-        invalidateBusinesses(id);
-        load(0, false);
-        onChanged();
+      const note = window.prompt("Nội dung cần bổ sung để gửi cho chủ doanh nghiệp:");
+      if (note === null) return;
+      if (!note.trim()) {
+        toast.error("Vui lòng nhập nội dung cần bổ sung");
+        return;
       }
+      const target = list.find((b) => b.id === id);
+      const { error } = await supabase
+        .from("businesses")
+        .update({ status: "rejected", admin_note: note.trim() })
+        .eq("id", id);
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+      if (user && target?.owner_id) {
+        await supabase.from("messages").insert({
+          sender_id: user.id,
+          receiver_id: target.owner_id,
+          content: `📋 Hồ sơ doanh nghiệp "${target.name}" cần bổ sung:\n${note.trim()}\n\nSau khi chỉnh sửa và lưu lại, hồ sơ sẽ tự động gửi lại để duyệt.`,
+        });
+      }
+      toast.success("Đã gửi yêu cầu bổ sung");
+      invalidateBusinesses(id);
+      load(0, false);
+      onChanged();
       return;
     }
     const { error } = await supabase.from("businesses").update({ status }).eq("id", id);
