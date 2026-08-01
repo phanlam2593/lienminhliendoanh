@@ -69,8 +69,7 @@ export default function Businesses() {
 
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
-  const [type, setType] = useState<BusinessType | "all">("all");
-  const [onlineOnly, setOnlineOnly] = useState(false);
+  const [filterKey, setFilterKey] = useState<BusinessType | "all" | "online">("all");
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
   const [areaCounts, setAreaCounts] = useState<[string, number][]>([]);
