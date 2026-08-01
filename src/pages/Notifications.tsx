@@ -99,7 +99,7 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "featured":
         return "/";
       case "pending_approval":
-        return "/admin";
+        return "/admin?tab=pending";
       case "account_updates":
         // target_type phân biệt: cập nhật cho DN hay cho chính tài khoản (vào Hồ sơ).
         // Với DN: nếu đang "cần bổ sung" (rejected) thì vào thẳng form sửa trong Hồ sơ
