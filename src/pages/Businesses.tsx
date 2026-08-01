@@ -15,6 +15,17 @@ type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
 
 const RADIUS_OPTIONS = [1, 5, 10] as const;
 
+// Bỏ dấu tiếng Việt để tìm kiếm không phân biệt có dấu/không dấu — "bds", "BDS", "bất
+// động sản" đều khớp được với tên DN có dấu đầy đủ như "BĐS Đà Lạt".
+function normalizeVi(str: string): string {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D")
+    .toLowerCase();
+}
+
 function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
   const R = 6371;
   const dLat = ((lat2 - lat1) * Math.PI) / 180;
