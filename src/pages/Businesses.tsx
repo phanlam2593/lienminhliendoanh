@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search, MapPin } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import type { Business, BusinessType } from "@/lib/types";
+import type { BusinessType } from "@/lib/types";
 import { BUSINESS_TYPES } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n";
-import { extractArea } from "@/lib/location";
 import { BusinessMapView } from "@/components/BusinessMapView";
 import { List, Map as MapIcon } from "lucide-react";
 
@@ -14,6 +13,7 @@ type SortKey = "newest" | "rating" | "offers" | "nearest";
 type LocStatus = "idle" | "requesting" | "granted" | "denied" | "unsupported";
 
 const RADIUS_OPTIONS = [1, 5, 10] as const;
+const PAGE_SIZE = 20;
 
 // Bỏ dấu tiếng Việt để tìm kiếm không phân biệt có dấu/không dấu — "bds", "BDS", "bất
 // động sản" đều khớp được với tên DN có dấu đầy đủ như "BĐS Đà Lạt".
@@ -36,74 +36,152 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// businesses_explore_view = businesses JOIN business_card_stats (rating/ưu đãi/review
+// gộp sẵn) — cho phép lọc + sắp xếp thẳng ở tầng database, không cần tải hết về JS nữa.
+function mapRow(b: any): BusinessCardData {
+  return {
+    ...b,
+    rating: Number(b.rating ?? 0),
+    reviewCount: b.review_count ?? 0,
+    offerCount: b.offer_count ?? 0,
+    totalClaims: b.total_claims ?? 0,
+    latestOffer: b.latest_offer ?? null,
+    latestOfferClaims: b.latest_offer_claims ?? 0,
+    latestReview:
+      b.latest_review_rating != null
+        ? {
+            rating: b.latest_review_rating,
+            comment: b.latest_review_comment,
+            author: b.latest_review_author || "Ẩn danh",
+          }
+        : null,
+  };
+}
+
 export default function Businesses() {
   const { t } = useLanguage();
-  const [list, setList] = useState<BusinessCardData[]>([]);
+  const [items, setItems] = useState<(BusinessCardData & { distanceKm?: number })[]>([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const [type, setType] = useState<BusinessType | "all">("all");
   const [onlineOnly, setOnlineOnly] = useState(false);
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
-  const [loading, setLoading] = useState(true);
+  const [areaCounts, setAreaCounts] = useState<[string, number][]>([]);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [locStatus, setLocStatus] = useState<LocStatus>("idle");
   const [myPos, setMyPos] = useState<{ lat: number; lng: number } | null>(null);
   const [radius, setRadius] = useState<(typeof RADIUS_OPTIONS)[number]>(5);
+  const [mapItems, setMapItems] = useState<BusinessCardData[]>([]);
 
   useEffect(() => {
-    void load();
+    const timer = setTimeout(() => setDebouncedQ(q.trim()), 300);
+    return () => clearTimeout(timer);
+  }, [q]);
+
+  useEffect(() => {
+    void supabase.rpc("business_area_counts").then(({ data }) => {
+      setAreaCounts(((data ?? []) as any[]).map((r) => [r.area as string, Number(r.cnt)]));
+    });
   }, []);
 
-  // Tải TOÀN BỘ DN đã duyệt cùng lúc (theo yêu cầu — chấp nhận đánh đổi hiệu năng khi
-  // số lượng DN thật lên rất cao). .range(0, 49999) để vượt giới hạn mặc định 1000 dòng
-  // của Supabase/PostgREST.
-  const load = async () => {
-    setLoading(true);
-    // Supabase mặc định âm thầm cắt ở "Max Rows" (thường 1000) dù .range() yêu cầu nhiều
-    // hơn — không báo lỗi, chỉ lặng lẽ thiếu DN cũ nhất. Tải theo từng đợt 1000 dòng cho
-    // tới khi hết, để không phụ thuộc vào cấu hình đó nữa.
-    let rows: Business[] = [];
+  // Câu lệnh lọc dùng chung cho cả list phân trang lẫn tập dữ liệu địa lý (map/gần đây) —
+  // để 2 chế độ luôn khớp cùng 1 bộ lọc loại hình/online/tìm kiếm đang chọn.
+  const applyFilters = (query: any) => {
+    let q2 = query;
+    if (type !== "all") q2 = q2.eq("type", type);
+    if (onlineOnly) q2 = q2.eq("is_online", true);
+    if (debouncedQ) q2 = q2.ilike("name_unaccent", `%${normalizeVi(debouncedQ)}%`);
+    return q2;
+  };
+
+  const loadPage = async (pageNum: number, append: boolean) => {
+    setLoadingMore(true);
+    const from = pageNum * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+    let query = supabase.from("businesses_explore_view").select("*", { count: "exact" });
+    query = applyFilters(query);
+    if (area !== "all") query = query.eq("area", area);
+    if (sort === "rating") query = query.order("rating", { ascending: false, nullsFirst: false });
+    else if (sort === "offers") query = query.order("total_claims", { ascending: false });
+    else query = query.order("created_at", { ascending: false });
+    query = query.range(from, to);
+    const { data, count } = await query;
+    const mapped = ((data ?? []) as any[]).map(mapRow);
+    setTotal(count ?? 0);
+    setItems((prev) => (append ? [...prev, ...mapped] : mapped));
+    setHasMore(mapped.length === PAGE_SIZE);
+    setLoading(false);
+    setLoadingMore(false);
+  };
+
+  // Chỉ dùng cho Bản đồ / Gần đây — 2 chế độ này cần biết TOÀN BỘ DN có ghim vị trí
+  // (không phân trang được vì bản đồ/khoảng cách cần thấy hết), nhưng tập này tự nhiên
+  // đã nhỏ hơn nhiều so với tổng số DN (chỉ những DN đã ghim vị trí), nên tải hết vẫn nhẹ.
+  // Tải theo từng đợt 1000 để không bị Supabase âm thầm cắt bớt khi vượt "Max Rows".
+  const loadGeoAll = async () => {
+    let rows: any[] = [];
     let from = 0;
     const CHUNK = 1000;
     while (true) {
-      const { data: page } = await supabase
-        .from("businesses")
+      let query = supabase
+        .from("businesses_explore_view")
         .select("*")
-        .eq("status", "approved")
-        .order("created_at", { ascending: false })
+        .not("latitude", "is", null)
+        .not("longitude", "is", null)
         .range(from, from + CHUNK - 1);
-      const chunk = (page as Business[]) ?? [];
+      query = applyFilters(query);
+      const { data } = await query;
+      const chunk = (data ?? []) as any[];
       rows = rows.concat(chunk);
       if (chunk.length < CHUNK) break;
       from += CHUNK;
     }
-    // KHÔNG lọc theo .in(ids) — với 1000+ doanh nghiệp, URL sẽ vượt giới hạn độ dài
-    // cho phép và bị server từ chối, khiến toàn bộ rating/ưu đãi/review bị rỗng. View
-    // này vốn đã gọn (mỗi DN 1 dòng) nên lấy nguyên view rồi map ở client là đủ nhanh.
-    const { data: stats } = await supabase.from("business_card_stats").select("*");
-    const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
-    const enriched = rows.map((b) => {
-      const s: any = sMap.get(b.id);
-      return {
-        ...b,
-        rating: Number(s?.rating ?? 0),
-        reviewCount: s?.review_count ?? 0,
-        offerCount: s?.offer_count ?? 0,
-        totalClaims: s?.total_claims ?? 0,
-        latestOffer: s?.latest_offer ?? null,
-        latestOfferClaims: s?.latest_offer_claims ?? 0,
-        latestReview:
-          s?.latest_review_rating != null
-            ? {
-                rating: s.latest_review_rating,
-                comment: s.latest_review_comment,
-                author: s.latest_review_author || "Ẩn danh",
-              }
-            : null,
-      };
+    return rows.map(mapRow);
+  };
+
+  // Tải lại trang 1 mỗi khi đổi bộ lọc (trừ khi đang ở chế độ "Gần đây" — có effect riêng)
+  useEffect(() => {
+    if (sort === "nearest") return;
+    setPage(0);
+    setLoading(true);
+    void loadPage(0, false);
+  }, [type, onlineOnly, area, debouncedQ, sort]);
+
+  useEffect(() => {
+    if (viewMode !== "map") return;
+    setLoading(true);
+    void loadGeoAll().then((rows) => {
+      setMapItems(rows);
+      setLoading(false);
     });
-    setList(enriched);
-    setLoading(false);
+  }, [viewMode, type, onlineOnly, debouncedQ]);
+
+  useEffect(() => {
+    if (sort !== "nearest" || !myPos) return;
+    setLoading(true);
+    void loadGeoAll().then((rows) => {
+      const withDist = rows
+        .map((b) => ({ ...b, distanceKm: haversineKm(myPos.lat, myPos.lng, b.latitude!, b.longitude!) }))
+        .filter((b) => b.distanceKm <= radius)
+        .sort((a, b) => a.distanceKm - b.distanceKm);
+      setItems(withDist);
+      setTotal(withDist.length);
+      setHasMore(false);
+      setLoading(false);
+    });
+  }, [sort, myPos, radius, type, onlineOnly, debouncedQ]);
+
+  const loadMore = () => {
+    const next = page + 1;
+    setPage(next);
+    void loadPage(next, true);
   };
 
   const useNearestSort = () => {
@@ -127,37 +205,7 @@ export default function Businesses() {
     );
   };
 
-  const areaCounts = useMemo(() => {
-    const m = new Map<string, number>();
-    list.forEach((b) => {
-      const a = extractArea(b.address);
-      m.set(a, (m.get(a) ?? 0) + 1);
-    });
-    return Array.from(m.entries()).sort((x, y) => y[1] - x[1]);
-  }, [list]);
-
-  const filtered = useMemo(() => {
-    let arr: (BusinessCardData & { distanceKm?: number })[] = list;
-    if (type !== "all") arr = arr.filter((b) => b.type === type);
-    if (onlineOnly) arr = arr.filter((b) => b.is_online);
-    if (q.trim()) {
-      const k = normalizeVi(q);
-      arr = arr.filter((b) => normalizeVi(b.name).includes(k) || normalizeVi(b.latestOffer ?? "").includes(k));
-    }
-
-    if (sort === "nearest" && myPos) {
-      arr = arr
-        .filter((b) => b.latitude != null && b.longitude != null)
-        .map((b) => ({ ...b, distanceKm: haversineKm(myPos.lat, myPos.lng, b.latitude!, b.longitude!) }))
-        .filter((b) => b.distanceKm! <= radius)
-        .sort((a, b) => a.distanceKm! - b.distanceKm!);
-    } else {
-      if (area !== "all") arr = arr.filter((b) => extractArea(b.address) === area);
-      if (sort === "rating") arr = [...arr].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
-      else if (sort === "offers") arr = [...arr].sort((a: any, b: any) => (b.totalClaims ?? 0) - (a.totalClaims ?? 0));
-    }
-    return arr;
-  }, [list, q, type, onlineOnly, area, sort, myPos, radius]);
+  const filtered = useMemo(() => items, [items]);
 
   return (
     <div className="p-4 space-y-4">
@@ -288,7 +336,7 @@ export default function Businesses() {
       )}
 
       {viewMode === "map" ? (
-        <BusinessMapView businesses={filtered} />
+        <BusinessMapView businesses={mapItems} />
       ) : loading ? (
         <div className="grid gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
@@ -301,7 +349,7 @@ export default function Businesses() {
         </p>
       ) : (
         <div className="grid gap-4">
-          {filtered.map((b: any) => (
+          {filtered.map((b) => (
             <div key={b.id} className="space-y-1">
               {sort === "nearest" && typeof b.distanceKm === "number" && (
                 <div className="flex items-center gap-1 px-1 text-xs font-semibold text-primary">
@@ -311,6 +359,15 @@ export default function Businesses() {
               <BusinessCard b={b} />
             </div>
           ))}
+          {sort !== "nearest" && hasMore && (
+            <button
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="w-full py-2.5 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
+            >
+              {loadingMore ? t("common.loading") : t("common.loadMoreRemaining", { n: total - items.length })}
+            </button>
+          )}
         </div>
       )}
     </div>
