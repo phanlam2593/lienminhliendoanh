@@ -565,6 +565,67 @@ function OverviewTab({
   );
 }
 
+// ── Popup nhập nội dung cần bổ sung — dùng chung cho nút "X" (Yêu cầu bổ sung)
+// ở danh sách Chờ duyệt và danh sách Doanh nghiệp, thay cho window.prompt() xấu xí.
+function RevisionRequestDialog({
+  target,
+  onOpenChange,
+  onSubmit,
+}: {
+  target: { id: string; name: string } | null;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (note: string) => Promise<void>;
+}) {
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setNote("");
+  }, [target?.id]);
+
+  const submit = async () => {
+    if (!note.trim()) {
+      toast.error("Vui lòng nhập nội dung cần bổ sung");
+      return;
+    }
+    setBusy(true);
+    await onSubmit(note.trim());
+    setBusy(false);
+  };
+
+  return (
+    <Dialog open={!!target} onOpenChange={(v) => !v && onOpenChange(false)}>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Yêu cầu bổ sung · {target?.name}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-2 p-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg border border-amber-200 dark:border-amber-900">
+          <div className="text-xs font-bold text-amber-700 dark:text-amber-400">Nội dung cần bổ sung (bắt buộc)</div>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            rows={3}
+            placeholder="Mô tả rõ những gì chủ DN cần chỉnh sửa/bổ sung…"
+            className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+          />
+          <div className="flex gap-2">
+            <button onClick={() => onOpenChange(false)} className="flex-1 py-2 rounded-lg border text-sm font-semibold">
+              Hủy
+            </button>
+            <button
+              onClick={submit}
+              disabled={busy}
+              className="flex-1 py-2 rounded-lg bg-amber-500 text-white font-semibold text-sm disabled:opacity-50"
+            >
+              {busy ? "Đang gửi…" : "Gửi yêu cầu bổ sung"}
+            </button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ── Màn hình Chờ duyệt: gộp duyệt/từ chối thành viên + doanh nghiệp ─────────
 function PendingTab({
   refreshKey,
