@@ -766,6 +766,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "type.creator": "Content Creator",
     "type.freelance": "Freelance",
     "type.broker": "Broker",
+    "type.shopping": "Shopping",
     "type.other": "Other",
     "stats.members": "Members",
     "stats.businesses": "Businesses",
