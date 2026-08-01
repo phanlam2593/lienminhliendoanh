@@ -2274,7 +2274,7 @@ function BusinessesSection({
       .select("*", { count: "exact" })
       .order("total_claims", { ascending: false })
       .range(from, to);
-    if (debouncedQ) query = query.ilike("name", `%${debouncedQ}%`);
+    if (debouncedQ) query = query.ilike("name_unaccent", `%${normalizeVi(debouncedQ)}%`);
     const { data: biz, count } = await query;
     setTotal(count ?? 0);
     const rows = (biz as Business[] | null) ?? [];
