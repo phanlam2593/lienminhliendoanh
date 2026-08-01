@@ -134,6 +134,7 @@ export interface Business {
   points: number;
   level: number;
   total_claims: number;
+  admin_note: string | null;
   created_at: string;
   updated_at: string;
 }
