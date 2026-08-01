@@ -94,8 +94,8 @@ export default function Businesses() {
   // để 2 chế độ luôn khớp cùng 1 bộ lọc loại hình/online/tìm kiếm đang chọn.
   const applyFilters = (query: any) => {
     let q2 = query;
-    if (type !== "all") q2 = q2.eq("type", type);
-    if (onlineOnly) q2 = q2.eq("is_online", true);
+    if (filterKey === "online") q2 = q2.eq("is_online", true);
+    else if (filterKey !== "all") q2 = q2.eq("type", filterKey);
     if (debouncedQ) q2 = q2.ilike("name_unaccent", `%${normalizeVi(debouncedQ)}%`);
     return q2;
   };
