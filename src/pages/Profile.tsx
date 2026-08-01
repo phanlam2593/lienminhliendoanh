@@ -673,6 +673,15 @@ function BusinessEditor({ biz, onSaved }: { biz: Business; onSaved: () => void }
       {/* Form — chỉ hiện khi open */}
       {open && (
         <div className="px-4 pb-4 space-y-3 border-t pt-3">
+          {biz.status === "rejected" && biz.admin_note && (
+            <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-3 space-y-1 border border-amber-200 dark:border-amber-900">
+              <div className="font-bold">📋 Ban quản trị yêu cầu bổ sung:</div>
+              <div>{biz.admin_note}</div>
+              <div className="text-[10px] opacity-80">
+                Chỉnh sửa nội dung bên dưới rồi bấm "Lưu doanh nghiệp" — hồ sơ sẽ tự động gửi lại để duyệt.
+              </div>
+            </div>
+          )}
           <div className="relative">
             <div className="w-full h-32 rounded-xl overflow-hidden bg-muted">
               <StoredImage path={cover} alt={name} className="w-full h-full object-cover" />
