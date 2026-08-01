@@ -962,7 +962,7 @@ function BusinessDetailDialog({
 
   return (
     <Dialog open={!!businessId} onOpenChange={(v) => !v && onOpenChange(false)}>
-      <DialogContent className="max-w-md max-h-[88vh] overflow-y-auto">
+      <DialogContent hideClose className="max-w-md max-h-[88vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-primary" />
