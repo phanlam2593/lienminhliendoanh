@@ -170,8 +170,24 @@ const BIZ_OFFER_IDEAS: Record<BusinessType, { vi: string[]; en: string[] }> = {
     en: ["10% off commission fee", "Free appraisal/measurement", "Free basic legal consultation"],
   },
   shopping: {
-    vi: ["Giảm 10% cho hoá đơn từ 200k", "Mua 2 tặng 1", "Tặng quà nhỏ cho khách quen", "Miễn phí giao hàng nội thành"],
-    en: ["10% off orders from 200k", "Buy 2 get 1 free", "Small gift for regulars", "Free local delivery"],
+    vi: [
+      "Giảm 10% cho hoá đơn từ 200k",
+      "Mua 2 tặng 1",
+      "Tặng quà nhỏ cho khách quen",
+      "Miễn phí giao hàng nội thành",
+      "Freeship cho đơn online đầu tiên",
+      "Mã giảm giá riêng cho khách đặt qua Zalo/Facebook",
+      "Giảm giá đặc biệt trong buổi livestream",
+    ],
+    en: [
+      "10% off orders from 200k",
+      "Buy 2 get 1 free",
+      "Small gift for regulars",
+      "Free local delivery",
+      "Free shipping on your first online order",
+      "Exclusive code for orders via Zalo/Facebook",
+      "Livestream-only special discount",
+    ],
   },
   other: {
     vi: ["Mua 1 tặng 1", "Giảm giá theo dịp đặc biệt", "Miễn phí vận chuyển"],
