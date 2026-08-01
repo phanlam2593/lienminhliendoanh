@@ -512,7 +512,7 @@ function OverviewTab({
       />
       <ToolRow
         icon={Send}
-        label="Thông báo"
+        label="Phát thông báo"
         colorClass="bg-primary/10 text-primary"
         onClick={() => onNavigate("broadcast")}
       />
