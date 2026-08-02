@@ -338,7 +338,7 @@ export function MessagesThread() {
           const row = payload.new as Message;
           if (row.receiver_id !== user.id) return;
           setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
-          void supabase.from("messages").update({ is_read: true, read_at: new Date().toISOString() }).eq("id", row.id);
+          void markThreadRead();
           setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
         },
       )
