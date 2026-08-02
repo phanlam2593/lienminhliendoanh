@@ -643,7 +643,7 @@ export default function Community() {
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem-5rem)]">
+    <div className="flex flex-col h-[calc(100vh-3.5rem-var(--bottom-nav-h,5rem))]">
       {/* Bộ chọn kênh — 2 nút dropdown: Địa điểm + Kênh chat */}
       <div className="border-b bg-card shrink-0 px-3 py-2 flex gap-2">
         <Popover open={locOpen} onOpenChange={setLocOpen}>
