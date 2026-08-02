@@ -101,6 +101,7 @@ Deno.serve(async (req) => {
           title: r.title,
           body: r.body ?? "",
           url: urlForTarget(r.target_type ?? null, r.target_id ?? null),
+          category: r.category ?? undefined,
         }));
       const result = await sendBatch(items);
       return json(result);
