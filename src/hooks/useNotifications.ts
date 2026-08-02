@@ -95,11 +95,14 @@ export interface IncomingMsgPopup {
 }
 
 export function useNewMessagePopups() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [popups, setPopups] = useState<IncomingMsgPopup[]>([]);
+  // Mặc định BẬT nếu chưa từng lưu lựa chọn (undefined) — chỉ tắt khi người dùng chủ động
+  // tắt trong Cài đặt → Thông báo → "Bong bóng chat nổi khi có tin nhắn mới".
+  const chatHeadsEnabled = (profile as any)?.notification_prefs?.chatHeads !== false;
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !chatHeadsEnabled) return;
     const ch = supabase
       .channel(`msgpopup:${user.id}:${rand()}`)
       .on(
