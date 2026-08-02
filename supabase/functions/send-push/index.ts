@@ -132,7 +132,7 @@ Deno.serve(async (req) => {
       return json({ error: "user_id and title required" }, 400);
     }
 
-    const result = await sendBatch([{ user_id, title, body: body ?? "", url: url ?? "/" }]);
+    const result = await sendBatch([{ user_id, title, body: body ?? "", url: url ?? "/", category }]);
     return json(result);
   } catch (e) {
     return json({ error: (e as Error).message }, 500);
