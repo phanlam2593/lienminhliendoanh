@@ -188,8 +188,15 @@ export function Layout() {
   );
 }
 
-// ── Bong bóng avatar nổi khi có tin nhắn mới (kiểu "chat head" Messenger) — hiện ở góc
-// dưới bên phải, phía trên thanh điều hướng, tự biến mất sau 8s nếu không bấm vào.
+// ── Bong bóng avatar nổi khi có tin nhắn mới, kéo-thả tự do trong màn hình app (kiểu
+// "chat head" Messenger/Zalo — chỉ khác là giới hạn trong app, không nổi ra ngoài được vì
+// web app không có quyền hiển thị đè lên app khác như app native).
+// - Bấm (không kéo) → mở đoạn chat.
+// - Kéo đi đâu cũng được trong màn hình, thả ra thì dính lại (snap) vào cạnh trái/phải gần nhất.
+// - Kéo xuống sát đáy màn hình sẽ hiện vùng tròn "X", thả vào đó là tắt bong bóng.
+// - Không đụng vào gì thì tự tắt sau 8 giây.
+const BUBBLE_SIZE = 56;
+
 function IncomingMessageBubble({
   popup,
   onOpen,
@@ -199,33 +206,97 @@ function IncomingMessageBubble({
   onOpen: () => void;
   onDismiss: () => void;
 }) {
+  const [pos, setPos] = useState(() => ({
+    x: window.innerWidth - BUBBLE_SIZE - 16,
+    y: window.innerHeight - 180,
+  }));
+  const [dragging, setDragging] = useState(false);
+  const [overDropZone, setOverDropZone] = useState(false);
+  const dragInfo = useRef<{ startX: number; startY: number; origX: number; origY: number; moved: boolean } | null>(
+    null,
+  );
+  const autoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const resetAutoTimer = () => {
+    if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
+    autoTimerRef.current = setTimeout(onDismiss, 8000);
+  };
+
   useEffect(() => {
-    const t = setTimeout(onDismiss, 8000);
-    return () => clearTimeout(t);
+    resetAutoTimer();
+    return () => {
+      if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
+    };
   }, [popup.senderId]);
 
+  const isOverDropZone = (x: number, y: number) => y + BUBBLE_SIZE / 2 > window.innerHeight - 90;
+
+  const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    dragInfo.current = { startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y, moved: false };
+    setDragging(true);
+    if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
+  };
+
+  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!dragInfo.current) return;
+    const dx = e.clientX - dragInfo.current.startX;
+    const dy = e.clientY - dragInfo.current.startY;
+    if (Math.abs(dx) > 6 || Math.abs(dy) > 6) dragInfo.current.moved = true;
+    let nx = dragInfo.current.origX + dx;
+    let ny = dragInfo.current.origY + dy;
+    nx = Math.max(4, Math.min(window.innerWidth - BUBBLE_SIZE - 4, nx));
+    ny = Math.max(60, Math.min(window.innerHeight - BUBBLE_SIZE - 4, ny));
+    setPos({ x: nx, y: ny });
+    setOverDropZone(isOverDropZone(nx, ny));
+  };
+
+  const onPointerUp = () => {
+    const info = dragInfo.current;
+    dragInfo.current = null;
+    setDragging(false);
+    if (!info) return;
+    if (!info.moved) {
+      onOpen();
+      return;
+    }
+    if (isOverDropZone(pos.x, pos.y)) {
+      onDismiss();
+      return;
+    }
+    const snapX = pos.x + BUBBLE_SIZE / 2 < window.innerWidth / 2 ? 8 : window.innerWidth - BUBBLE_SIZE - 8;
+    setPos((p) => ({ ...p, x: snapX }));
+    setOverDropZone(false);
+    resetAutoTimer();
+  };
+
   return (
-    <div className="fixed bottom-20 right-4 z-50 animate-in slide-in-from-bottom-4 fade-in zoom-in-95">
-      <div className="relative">
-        <button
-          onClick={onOpen}
-          className="w-14 h-14 rounded-full shadow-brand ring-4 ring-primary/30 overflow-hidden bg-card animate-bounce"
-          aria-label={popup.name}
+    <>
+      {dragging && (
+        <div
+          className={cn(
+            "fixed left-1/2 -translate-x-1/2 bottom-4 z-50 w-16 h-16 rounded-full grid place-items-center transition-all",
+            overDropZone ? "bg-destructive scale-125" : "bg-muted-foreground/60 scale-100",
+          )}
         >
-          <Avatar path={popup.avatar} name={popup.name} size={56} />
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onDismiss();
-          }}
-          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-muted-foreground/80 text-white grid place-items-center text-[10px]"
-          aria-label="Đóng"
-        >
-          <XIcon className="w-3 h-3" />
-        </button>
-      </div>
-    </div>
+          <XIcon className="w-6 h-6 text-white" />
+        </div>
+      )}
+      <button
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        style={{ left: pos.x, top: pos.y, width: BUBBLE_SIZE, height: BUBBLE_SIZE, touchAction: "none" }}
+        className={cn(
+          "fixed z-50 rounded-full shadow-brand ring-4 ring-primary/30 overflow-hidden bg-card",
+          !dragging && "animate-bounce",
+          dragging && overDropZone && "opacity-50 scale-90",
+        )}
+        aria-label={popup.name}
+      >
+        <Avatar path={popup.avatar} name={popup.name} size={BUBBLE_SIZE} />
+      </button>
+    </>
   );
 }
 
