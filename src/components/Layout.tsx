@@ -127,7 +127,7 @@ export function Layout() {
         </header>
       )}
 
-      <main className="pb-20">
+      <main className={isFullHeightPage ? "" : "pb-20"}>
         {showWelcome ? (
           <WelcomeScreen />
         ) : showPendingGate ? (
