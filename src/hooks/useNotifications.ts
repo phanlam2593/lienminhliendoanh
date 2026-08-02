@@ -84,6 +84,50 @@ export function useNotifications() {
   return { items, unread, loading, refresh, markAllRead, markRead, deleteAllRead };
 }
 
+// Bong bóng avatar nổi lên khi có tin nhắn MỚI tới (kiểu "chat head" của Messenger) — lắng
+// nghe đúng sự kiện INSERT tin nhắn gửi tới mình, lấy avatar người gửi để hiện bong bóng.
+export interface IncomingMsgPopup {
+  senderId: string;
+  name: string;
+  avatar: string | null;
+}
+
+export function useNewMessagePopup() {
+  const { user } = useAuth();
+  const [popup, setPopup] = useState<IncomingMsgPopup | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    const ch = supabase
+      .channel(`msgpopup:${user.id}:${rand()}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
+        async (payload) => {
+          const row = payload.new as Message;
+          if (row.type === "broadcast") return;
+          const { data: prof } = await supabase
+            .from("profiles")
+            .select("full_name, username, avatar_url")
+            .eq("id", row.sender_id)
+            .maybeSingle();
+          setPopup({
+            senderId: row.sender_id,
+            name: (prof as any)?.full_name || (prof as any)?.username || "?",
+            avatar: (prof as any)?.avatar_url ?? null,
+          });
+        },
+      )
+      .subscribe();
+    return () => {
+      supabase.removeChannel(ch);
+    };
+  }, [user?.id]);
+
+  const dismiss = () => setPopup(null);
+  return { popup, dismiss };
+}
+
 export function useUnreadMessages() {
   const { user } = useAuth();
   const [count, setCount] = useState(0);
