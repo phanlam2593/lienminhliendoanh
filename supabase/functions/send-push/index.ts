@@ -21,6 +21,7 @@ interface PushItem {
   title: string;
   body: string;
   url: string;
+  category?: string;
 }
 
 function urlForTarget(target_type: string | null, target_id: string | null): string {
