@@ -104,6 +104,15 @@ export function useUnreadMessages() {
   useEffect(() => {
     refresh();
     if (!user) return;
+    // Không chỉ dựa vào Realtime: khi mở đoạn chat và đánh dấu đã đọc, Messages.tsx phát
+    // sự kiện "messages:read" để đếm lại ngay. Ngoài ra đếm lại khi quay lại tab/app.
+    const onRead = () => void refresh();
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void refresh();
+    };
+    window.addEventListener("messages:read", onRead);
+    window.addEventListener("focus", onVisible);
+    document.addEventListener("visibilitychange", onVisible);
     const ch = supabase
       .channel(`msg:${user.id}:${rand()}`)
       .on(
@@ -113,9 +122,13 @@ export function useUnreadMessages() {
       )
       .subscribe();
     return () => {
+      window.removeEventListener("messages:read", onRead);
+      window.removeEventListener("focus", onVisible);
+      document.removeEventListener("visibilitychange", onVisible);
       supabase.removeChannel(ch);
     };
   }, [user?.id]);
+
 
   return count;
 }
