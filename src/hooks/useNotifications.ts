@@ -133,7 +133,7 @@ export function useNewMessagePopups() {
     return () => {
       supabase.removeChannel(ch);
     };
-  }, [user?.id]);
+  }, [user?.id, chatHeadsEnabled]);
 
   const dismiss = (senderId: string) => setPopups((prev) => prev.filter((p) => p.senderId !== senderId));
   return { popups, dismiss };
