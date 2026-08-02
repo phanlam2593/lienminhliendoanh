@@ -90,7 +90,11 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
 
   return (
     <div className="h-[60vh] rounded-xl overflow-hidden border">
-      <MapContainer center={myPos ? [myPos.lat, myPos.lng] : DALAT_CENTER} zoom={13} style={{ height: "100%", width: "100%" }}>
+      <MapContainer
+        center={myPos ? [myPos.lat, myPos.lng] : DALAT_CENTER}
+        zoom={13}
+        style={{ height: "100%", width: "100%" }}
+      >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -115,7 +119,7 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
                 >
                   {t("map.viewDetail")}
                 </Link>
-                
+                <a
                   href={`https://www.google.com/maps/dir/?api=1&destination=${b.latitude},${b.longitude}`}
                   target="_blank"
                   rel="noopener noreferrer"
