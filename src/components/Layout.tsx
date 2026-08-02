@@ -169,18 +169,6 @@ export function Layout() {
           </div>
         </nav>
       )}
-      {visibleMsgPopups.map((p, i) => (
-        <IncomingMessageBubble
-          key={p.senderId}
-          popup={p}
-          stackIndex={i}
-          onOpen={() => {
-            dismissMsgPopup(p.senderId);
-            nav(`/tin-nhan/${p.senderId}`);
-          }}
-          onDismiss={() => dismissMsgPopup(p.senderId)}
-        />
-      ))}
       <InstallBanner />
     </div>
   );
