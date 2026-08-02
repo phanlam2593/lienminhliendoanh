@@ -616,7 +616,9 @@ const DICT: Record<Lang, Record<string, string>> = {
     "network.online": "Đã có kết nối trở lại",
     "explore.viewList": "Danh sách",
     "explore.viewMap": "Bản đồ",
-    "map.noPinned": "Chưa có doanh nghiệp nào ghim vị trí trên bản đồ",
+    "map.noPinned": "Chưa có doanh nghiệp nào ghim vị trí",
+    "map.youAreHere": "Vị trí của bạn",
+    "map.directions": "Chỉ đường",
     "map.viewDetail": "Xem chi tiết",
     "bizForm.mapBanner":
       "Doanh nghiệp của bạn chưa xuất hiện trên bản đồ Khám phá — ghim vị trí để khách dễ tìm thấy hơn.",
