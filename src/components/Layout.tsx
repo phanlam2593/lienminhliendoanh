@@ -196,7 +196,7 @@ export function Layout() {
 // - Bấm (không kéo) → mở đoạn chat.
 // - Kéo đi đâu cũng được trong màn hình, thả ra thì dính lại (snap) vào cạnh trái/phải gần nhất.
 // - Kéo xuống sát đáy màn hình sẽ hiện vùng tròn "X", thả vào đó là tắt bong bóng.
-// - Không đụng vào gì thì tự tắt sau 8 giây.
+// - KHÔNG tự tắt — cứ hiện mãi cho tới khi bị kéo vào vùng X hoặc bấm mở đúng đoạn chat đó.
 const BUBBLE_SIZE = 56;
 
 function IncomingMessageBubble({
