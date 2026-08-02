@@ -113,12 +113,14 @@ Deno.serve(async (req) => {
     let body: string | undefined;
     let url: string | undefined;
 
+    let category: string | undefined;
     if (raw?.record && raw?.table === "notifications") {
       const r = raw.record;
       user_id = r.user_id;
       title = r.title;
       body = r.body ?? "";
       url = urlForTarget(r.target_type ?? null, r.target_id ?? null);
+      category = r.category ?? undefined;
     } else {
       user_id = raw.user_id;
       title = raw.title;
