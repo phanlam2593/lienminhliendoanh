@@ -289,7 +289,6 @@ const DICT: Record<Lang, Record<string, string>> = {
     "push.enable": "Bật thông báo đẩy",
     "push.enabling": "Đang bật…",
     "notifPrefs.newMessages": "Tin nhắn mới",
-    "notifPrefs.chatHeads": "Bong bóng chat nổi khi có tin nhắn mới",
     "notifPrefs.newFollowers": "Người theo dõi mới",
     "notifPrefs.newDeals": "Ưu đãi mới từ doanh nghiệp đang theo dõi",
     "notifPrefs.adminNotif": "Thông báo từ admin",
