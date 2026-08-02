@@ -40,11 +40,7 @@ export function Layout() {
   const { t } = useLanguage();
   const { unread } = useNotifications();
   const unreadMsgs = useUnreadMessages();
-  const { popups: msgPopups, dismiss: dismissMsgPopup } = useNewMessagePopups();
   const hide = pathname.startsWith("/auth");
-  // Đang mở đúng đoạn chat với người nào thì bong bóng của người đó khỏi hiện (dư thừa,
-  // đang xem tin của họ rồi) — mấy bong bóng người khác vẫn hiện bình thường.
-  const visibleMsgPopups = msgPopups.filter((p) => pathname !== `/tin-nhan/${p.senderId}`);
 
   const baseTabs = [
     { to: "/", icon: Home, label: t("nav.home") },
