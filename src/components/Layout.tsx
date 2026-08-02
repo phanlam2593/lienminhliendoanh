@@ -62,6 +62,10 @@ export function Layout() {
   const isPending = profile?.status === "pending" && !isAdmin;
   const showPendingGate =
     !loading && user && isPending && !hide && !PENDING_ALLOWED.some((p) => pathname.startsWith(p));
+  // Trang Tin nhắn (1 đoạn chat cụ thể) và Cộng đồng tự tính chiều cao vừa khít màn hình
+  // riêng (đã trừ sẵn phần header + nav) — không cần main cộng thêm pb-20 nữa, kẻo bị trừ
+  // 2 lần, sinh khoảng trắng thừa + cuộn sai.
+  const isFullHeightPage = /^\/tin-nhan\/.+/.test(pathname) || pathname === "/cong-dong";
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
