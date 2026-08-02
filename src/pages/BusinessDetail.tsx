@@ -393,7 +393,7 @@ export default function BusinessDetail() {
             )}
             {b.address && (
               <Row icon={MapPin}>
-                
+                <a
                   target="_blank"
                   rel="noopener noreferrer"
                   href={
