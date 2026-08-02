@@ -101,6 +101,39 @@ export function useNewMessagePopups() {
   // tắt trong Cài đặt → Thông báo → "Bong bóng chat nổi khi có tin nhắn mới".
   const chatHeadsEnabled = (profile as any)?.notification_prefs?.chatHeads !== false;
 
+  // Mở app lên (hoặc F5) mà đã có sẵn tin chưa đọc từ TRƯỚC (lúc app đóng) cũng phải hiện
+  // bong bóng luôn — không chỉ bắt tin MỚI tới trong lúc đang mở app như trước.
+  useEffect(() => {
+    if (!user || !chatHeadsEnabled) return;
+    (async () => {
+      const { data } = await supabase
+        .from("messages")
+        .select("sender_id")
+        .eq("receiver_id", user.id)
+        .eq("is_read", false)
+        .neq("type", "broadcast")
+        .order("created_at", { ascending: false })
+        .limit(50);
+      const senderIds = [...new Set((data ?? []).map((m: any) => m.sender_id))];
+      if (!senderIds.length) return;
+      const { data: profs } = await supabase
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", senderIds);
+      const map = new Map((profs ?? []).map((p: any) => [p.id, p]));
+      setPopups((prev) => {
+        const existing = new Set(prev.map((p) => p.senderId));
+        const added = senderIds
+          .filter((id) => !existing.has(id))
+          .map((id) => {
+            const p = map.get(id);
+            return { senderId: id, name: p?.full_name || p?.username || "?", avatar: p?.avatar_url ?? null };
+          });
+        return [...prev, ...added];
+      });
+    })();
+  }, [user?.id, chatHeadsEnabled]);
+
   useEffect(() => {
     if (!user || !chatHeadsEnabled) return;
     const ch = supabase
