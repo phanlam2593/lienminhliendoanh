@@ -77,10 +77,7 @@ export function Layout() {
                 <>
                   <Link
                     to="/tin-nhan"
-                    className={cn(
-                      "relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent",
-                      msgBounce && "animate-bounce",
-                    )}
+                    className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
                   >
                     <MessageCircle className="w-5 h-5" />
                     {unreadMsgs > 0 && (
