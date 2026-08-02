@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { initInstallPrompt, triggerInstall, dismissInstallBanner } from "@/lib/pwa";
 import { Download, X as XIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
 import { Avatar } from "./Avatar";
 import { WelcomeOverlay } from "./WelcomeOverlay";
