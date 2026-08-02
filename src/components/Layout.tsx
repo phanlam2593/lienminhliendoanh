@@ -42,6 +42,20 @@ export function Layout() {
   const unreadMsgs = useUnreadMessages();
   const hide = pathname.startsWith("/auth");
 
+  // Icon tin nhắn "nhảy" (giống FB/Zalo) đúng thời điểm số tin chưa đọc TĂNG LÊN — không
+  // nhảy liên tục mỗi lần render, chỉ nhảy khi có tin MỚI thật sự vừa tới.
+  const prevUnreadMsgsRef = useRef(unreadMsgs);
+  const [msgBounce, setMsgBounce] = useState(false);
+  useEffect(() => {
+    if (unreadMsgs > prevUnreadMsgsRef.current) {
+      setMsgBounce(true);
+      const t = setTimeout(() => setMsgBounce(false), 1000);
+      prevUnreadMsgsRef.current = unreadMsgs;
+      return () => clearTimeout(t);
+    }
+    prevUnreadMsgsRef.current = unreadMsgs;
+  }, [unreadMsgs]);
+
   const baseTabs = [
     { to: "/", icon: Home, label: t("nav.home") },
     { to: "/kham-pha", icon: Search, label: t("nav.explore") },
