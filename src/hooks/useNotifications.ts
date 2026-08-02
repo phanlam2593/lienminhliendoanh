@@ -86,15 +86,17 @@ export function useNotifications() {
 
 // Bong bóng avatar nổi lên khi có tin nhắn MỚI tới (kiểu "chat head" của Messenger) — lắng
 // nghe đúng sự kiện INSERT tin nhắn gửi tới mình, lấy avatar người gửi để hiện bong bóng.
+// Nhiều người nhắn cùng lúc → nhiều bong bóng cùng hiện (mỗi người 1 cái, không trùng),
+// không tự tắt — chỉ tắt khi kéo vào vùng X hoặc bấm mở đúng đoạn chat đó.
 export interface IncomingMsgPopup {
   senderId: string;
   name: string;
   avatar: string | null;
 }
 
-export function useNewMessagePopup() {
+export function useNewMessagePopups() {
   const { user } = useAuth();
-  const [popup, setPopup] = useState<IncomingMsgPopup | null>(null);
+  const [popups, setPopups] = useState<IncomingMsgPopup[]>([]);
 
   useEffect(() => {
     if (!user) return;
@@ -111,10 +113,16 @@ export function useNewMessagePopup() {
             .select("full_name, username, avatar_url")
             .eq("id", row.sender_id)
             .maybeSingle();
-          setPopup({
-            senderId: row.sender_id,
-            name: (prof as any)?.full_name || (prof as any)?.username || "?",
-            avatar: (prof as any)?.avatar_url ?? null,
+          setPopups((prev) => {
+            if (prev.some((p) => p.senderId === row.sender_id)) return prev;
+            return [
+              ...prev,
+              {
+                senderId: row.sender_id,
+                name: (prof as any)?.full_name || (prof as any)?.username || "?",
+                avatar: (prof as any)?.avatar_url ?? null,
+              },
+            ];
           });
         },
       )
@@ -124,8 +132,8 @@ export function useNewMessagePopup() {
     };
   }, [user?.id]);
 
-  const dismiss = () => setPopup(null);
-  return { popup, dismiss };
+  const dismiss = (senderId: string) => setPopups((prev) => prev.filter((p) => p.senderId !== senderId));
+  return { popups, dismiss };
 }
 
 export function useUnreadMessages() {
