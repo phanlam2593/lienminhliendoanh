@@ -256,14 +256,10 @@ function IncomingMessageBubble({
         onOpen();
         return;
       }
-      setPos((p) => {
-        if (isOverDropZone(p.x, p.y)) {
-          onDismiss();
-          return p;
-        }
-        const snapX = p.x + BUBBLE_SIZE / 2 < window.innerWidth / 2 ? 8 : window.innerWidth - BUBBLE_SIZE - 8;
-        return { ...p, x: snapX };
-      });
+      // Buông tay là giữ nguyên đúng chỗ vừa thả — không tự dính về cạnh trái/phải nữa.
+      if (isOverDropZone(pos.x, pos.y)) {
+        onDismiss();
+      }
       setOverDropZone(false);
     };
     window.addEventListener("pointermove", onMove);
