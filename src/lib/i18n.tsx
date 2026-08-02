@@ -1020,7 +1020,6 @@ const DICT: Record<Lang, Record<string, string>> = {
     "push.enable": "Enable push notifications",
     "push.enabling": "Enabling…",
     "notifPrefs.newMessages": "New messages",
-    "notifPrefs.chatHeads": "Floating chat bubble for new messages",
     "notifPrefs.newFollowers": "New followers",
     "notifPrefs.newDeals": "New offers from businesses you follow",
     "notifPrefs.adminNotif": "Admin notifications",
