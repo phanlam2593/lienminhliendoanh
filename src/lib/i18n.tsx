@@ -1350,6 +1350,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "explore.viewList": "List",
     "explore.viewMap": "Map",
     "map.noPinned": "No businesses have pinned their location on the map yet",
+    "map.youAreHere": "Your location",
+    "map.directions": "Directions",
     "map.viewDetail": "View details",
     "bizForm.mapBanner":
       "Your business isn't showing on the Explore map yet — pin your location so customers can find you.",
