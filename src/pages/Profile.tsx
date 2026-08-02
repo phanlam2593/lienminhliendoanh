@@ -1397,7 +1397,6 @@ function NotificationPrefsForm({ userId, initial, onSaved }: { userId: string; i
 
   const items: { key: keyof NotifPrefs; label: string }[] = [
     { key: "messages", label: t("notifPrefs.newMessages") },
-    { key: "chatHeads", label: t("notifPrefs.chatHeads") },
     { key: "follows", label: t("notifPrefs.newFollowers") },
     { key: "deals", label: t("notifPrefs.newDeals") },
     { key: "regulars", label: t("notifPrefs.regularsActivity") },
