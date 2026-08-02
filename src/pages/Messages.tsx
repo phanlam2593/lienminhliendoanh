@@ -297,7 +297,16 @@ export function MessagesThread() {
       .update({ is_read: true, read_at: new Date().toISOString() })
       .eq("sender_id", id)
       .eq("receiver_id", user.id)
-      .eq("is_read", false);
+      .eq("is_read", false)
+      .select("id")
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("[mark-read] lỗi:", error);
+          toast.error("Lỗi đánh dấu đã đọc: " + error.message);
+        } else {
+          toast.success("Đã đánh dấu " + (data?.length ?? 0) + " tin là đã đọc");
+        }
+      });
 
     // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây INSERT không lọc gì cả — MỌI tin nhắn
     // gửi ở BẤT KỲ đâu trong toàn app đều kích hoạt tải lại toàn bộ lịch sử đoạn chat này.
