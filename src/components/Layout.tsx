@@ -42,15 +42,6 @@ export function Layout() {
   const unreadMsgs = useUnreadMessages();
   const hide = pathname.startsWith("/auth");
 
-  <Link
-                    to="/tin-nhan"
-                    className={cn(
-                      "relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent",
-                      msgBounce && "animate-bounce",
-                    )}
-                  >
-                    <MessageCircle className="w-5 h-5" />
-
   const baseTabs = [
     { to: "/", icon: Home, label: t("nav.home") },
     { to: "/kham-pha", icon: Search, label: t("nav.explore") },
