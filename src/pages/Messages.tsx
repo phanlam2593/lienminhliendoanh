@@ -406,8 +406,11 @@ export function MessagesThread() {
       })
       .subscribe();
     return () => {
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onFocus);
       supabase.removeChannel(ch);
     };
+
   }, [user?.id, id]);
 
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
