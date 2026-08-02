@@ -173,7 +173,58 @@ export function Layout() {
           </div>
         </nav>
       )}
+      {msgPopup && !isViewingSenderThread && (
+        <IncomingMessageBubble
+          popup={msgPopup}
+          onOpen={() => {
+            dismissMsgPopup();
+            nav(`/tin-nhan/${msgPopup.senderId}`);
+          }}
+          onDismiss={dismissMsgPopup}
+        />
+      )}
       <InstallBanner />
+    </div>
+  );
+}
+
+// ── Bong bóng avatar nổi khi có tin nhắn mới (kiểu "chat head" Messenger) — hiện ở góc
+// dưới bên phải, phía trên thanh điều hướng, tự biến mất sau 8s nếu không bấm vào.
+function IncomingMessageBubble({
+  popup,
+  onOpen,
+  onDismiss,
+}: {
+  popup: { senderId: string; name: string; avatar: string | null };
+  onOpen: () => void;
+  onDismiss: () => void;
+}) {
+  useEffect(() => {
+    const t = setTimeout(onDismiss, 8000);
+    return () => clearTimeout(t);
+  }, [popup.senderId]);
+
+  return (
+    <div className="fixed bottom-20 right-4 z-50 animate-in slide-in-from-bottom-4 fade-in zoom-in-95">
+      <div className="relative">
+        <button
+          onClick={onOpen}
+          className="w-14 h-14 rounded-full shadow-brand ring-4 ring-primary/30 overflow-hidden bg-card animate-bounce"
+          aria-label={popup.name}
+        >
+          <Avatar path={popup.avatar} name={popup.name} size={56} />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            onDismiss();
+          }}
+          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-muted-foreground/80 text-white grid place-items-center text-[10px]"
+          aria-label="Đóng"
+        >
+          <XIcon className="w-3 h-3" />
+        </button>
+      </div>
     </div>
   );
 }
