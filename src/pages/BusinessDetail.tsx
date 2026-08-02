@@ -384,13 +384,23 @@ export default function BusinessDetail() {
           {b.description && <p className="text-sm text-muted-foreground whitespace-pre-line">{b.description}</p>}
 
           <div className="space-y-2 text-sm">
-            {b.phone && <Row icon={Phone}>{b.phone}</Row>}
+            {b.phone && (
+              <Row icon={Phone}>
+                <a href={`tel:${b.phone}`} className="text-primary font-medium">
+                  {b.phone}
+                </a>
+              </Row>
+            )}
             {b.address && (
               <Row icon={MapPin}>
-                <a
+                
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.address)}`}
+                  href={
+                    b.latitude != null && b.longitude != null
+                      ? `https://www.google.com/maps/dir/?api=1&destination=${b.latitude},${b.longitude}`
+                      : `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(b.address)}`
+                  }
                   className="text-primary"
                 >
                   {b.address}
