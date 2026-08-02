@@ -232,43 +232,57 @@ function IncomingMessageBubble({
   const isOverDropZone = (x: number, y: number) => y + BUBBLE_SIZE / 2 > window.innerHeight - 90;
 
   const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    e.currentTarget.setPointerCapture(e.pointerId);
     dragInfo.current = { startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y, moved: false };
     setDragging(true);
     if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
   };
 
-  const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
-    if (!dragInfo.current) return;
-    const dx = e.clientX - dragInfo.current.startX;
-    const dy = e.clientY - dragInfo.current.startY;
-    if (Math.abs(dx) > 6 || Math.abs(dy) > 6) dragInfo.current.moved = true;
-    let nx = dragInfo.current.origX + dx;
-    let ny = dragInfo.current.origY + dy;
-    nx = Math.max(4, Math.min(window.innerWidth - BUBBLE_SIZE - 4, nx));
-    ny = Math.max(60, Math.min(window.innerHeight - BUBBLE_SIZE - 4, ny));
-    setPos({ x: nx, y: ny });
-    setOverDropZone(isOverDropZone(nx, ny));
-  };
-
-  const onPointerUp = () => {
-    const info = dragInfo.current;
-    dragInfo.current = null;
-    setDragging(false);
-    if (!info) return;
-    if (!info.moved) {
-      onOpen();
-      return;
-    }
-    if (isOverDropZone(pos.x, pos.y)) {
-      onDismiss();
-      return;
-    }
-    const snapX = pos.x + BUBBLE_SIZE / 2 < window.innerWidth / 2 ? 8 : window.innerWidth - BUBBLE_SIZE - 8;
-    setPos((p) => ({ ...p, x: snapX }));
-    setOverDropZone(false);
-    resetAutoTimer();
-  };
+  // QUAN TRỌNG: gắn sự kiện move/up lên toàn `window` khi đang kéo (thay vì chỉ gắn lên
+  // riêng cái nút) — cách này đáng tin cậy hơn hẳn `setPointerCapture` trên mobile/PWA,
+  // tránh bị các thành phần khác (như kéo-để-làm-mới trang) giành mất sự kiện chạm giữa chừng.
+  useEffect(() => {
+    if (!dragging) return;
+    const onMove = (e: PointerEvent) => {
+      if (!dragInfo.current) return;
+      const dx = e.clientX - dragInfo.current.startX;
+      const dy = e.clientY - dragInfo.current.startY;
+      if (Math.abs(dx) > 6 || Math.abs(dy) > 6) dragInfo.current.moved = true;
+      let nx = dragInfo.current.origX + dx;
+      let ny = dragInfo.current.origY + dy;
+      nx = Math.max(4, Math.min(window.innerWidth - BUBBLE_SIZE - 4, nx));
+      ny = Math.max(60, Math.min(window.innerHeight - BUBBLE_SIZE - 4, ny));
+      setPos({ x: nx, y: ny });
+      setOverDropZone(isOverDropZone(nx, ny));
+    };
+    const onUp = () => {
+      const info = dragInfo.current;
+      dragInfo.current = null;
+      setDragging(false);
+      if (!info) return;
+      if (!info.moved) {
+        onOpen();
+        return;
+      }
+      setPos((p) => {
+        if (isOverDropZone(p.x, p.y)) {
+          onDismiss();
+          return p;
+        }
+        const snapX = p.x + BUBBLE_SIZE / 2 < window.innerWidth / 2 ? 8 : window.innerWidth - BUBBLE_SIZE - 8;
+        return { ...p, x: snapX };
+      });
+      setOverDropZone(false);
+      resetAutoTimer();
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+    };
+  }, [dragging]);
 
   return (
     <>
@@ -284,12 +298,9 @@ function IncomingMessageBubble({
       )}
       <button
         onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
         style={{ left: pos.x, top: pos.y, width: BUBBLE_SIZE, height: BUBBLE_SIZE, touchAction: "none" }}
         className={cn(
-          "fixed z-50 rounded-full shadow-brand ring-4 ring-primary/30 overflow-hidden bg-card",
-          !dragging && "animate-bounce",
+          "fixed z-50 rounded-full shadow-brand ring-4 ring-primary/30 overflow-hidden bg-card animate-in zoom-in-50 fade-in",
           dragging && overDropZone && "opacity-50 scale-90",
         )}
         aria-label={popup.name}
