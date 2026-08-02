@@ -201,42 +201,33 @@ const BUBBLE_SIZE = 56;
 
 function IncomingMessageBubble({
   popup,
+  stackIndex,
   onOpen,
   onDismiss,
 }: {
   popup: { senderId: string; name: string; avatar: string | null };
+  stackIndex: number;
   onOpen: () => void;
   onDismiss: () => void;
 }) {
+  // Vị trí ban đầu xếp chồng lên nhau theo thứ tự tới — bong bóng mới nhất nằm trên cùng,
+  // các bong bóng cũ dạt dần lên trên, giống Messenger. Chỉ tính lúc mới hiện ra, sau đó
+  // người dùng kéo đi đâu thì giữ nguyên đó, không tự sắp xếp lại.
   const [pos, setPos] = useState(() => ({
     x: window.innerWidth - BUBBLE_SIZE - 16,
-    y: window.innerHeight - 180,
+    y: window.innerHeight - 180 - stackIndex * (BUBBLE_SIZE + 10),
   }));
   const [dragging, setDragging] = useState(false);
   const [overDropZone, setOverDropZone] = useState(false);
   const dragInfo = useRef<{ startX: number; startY: number; origX: number; origY: number; moved: boolean } | null>(
     null,
   );
-  const autoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const resetAutoTimer = () => {
-    if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
-    autoTimerRef.current = setTimeout(onDismiss, 8000);
-  };
-
-  useEffect(() => {
-    resetAutoTimer();
-    return () => {
-      if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
-    };
-  }, [popup.senderId]);
 
   const isOverDropZone = (x: number, y: number) => y + BUBBLE_SIZE / 2 > window.innerHeight - 90;
 
   const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     dragInfo.current = { startX: e.clientX, startY: e.clientY, origX: pos.x, origY: pos.y, moved: false };
     setDragging(true);
-    if (autoTimerRef.current) clearTimeout(autoTimerRef.current);
   };
 
   // QUAN TRỌNG: gắn sự kiện move/up lên toàn `window` khi đang kéo (thay vì chỉ gắn lên
@@ -274,7 +265,6 @@ function IncomingMessageBubble({
         return { ...p, x: snapX };
       });
       setOverDropZone(false);
-      resetAutoTimer();
     };
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
