@@ -1186,6 +1186,7 @@ type NotifPrefs = {
   regulars: boolean;
   mentions: boolean;
   admin: boolean;
+  chatHeads: boolean;
 };
 const DEFAULT_PREFS: NotifPrefs = {
   messages: true,
@@ -1194,6 +1195,7 @@ const DEFAULT_PREFS: NotifPrefs = {
   regulars: true,
   mentions: true,
   admin: true,
+  chatHeads: true,
 };
 function SettingsSection({
   userId,
