@@ -56,7 +56,10 @@ async function sendBatch(items: PushItem[]) {
   await Promise.all(
     items.flatMap((item) => {
       const userSubs = subsByUser.get(item.user_id) ?? [];
-      const payload = JSON.stringify({ title: item.title, body: item.body, url: item.url });
+      // Gắn "tag" = category (VD "messages") — trình duyệt/điện thoại sẽ THAY THẾ thông báo
+      // cũ cùng tag bằng cái mới thay vì xếp chồng thêm, nên 1000 tin nhắn dồn dập chỉ hiện
+      // đúng 1 thông báo (được cập nhật nội dung mới nhất), không phải hàng chục cái.
+      const payload = JSON.stringify({ title: item.title, body: item.body, url: item.url, tag: item.category });
       return userSubs.map(async (s: any) => {
         try {
           await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload);
