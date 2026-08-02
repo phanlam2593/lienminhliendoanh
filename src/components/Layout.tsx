@@ -42,19 +42,14 @@ export function Layout() {
   const unreadMsgs = useUnreadMessages();
   const hide = pathname.startsWith("/auth");
 
-  // Icon tin nhắn "nhảy" (giống FB/Zalo) đúng thời điểm số tin chưa đọc TĂNG LÊN — không
-  // nhảy liên tục mỗi lần render, chỉ nhảy khi có tin MỚI thật sự vừa tới.
-  const prevUnreadMsgsRef = useRef(unreadMsgs);
-  const [msgBounce, setMsgBounce] = useState(false);
-  useEffect(() => {
-    if (unreadMsgs > prevUnreadMsgsRef.current) {
-      setMsgBounce(true);
-      const t = setTimeout(() => setMsgBounce(false), 1000);
-      prevUnreadMsgsRef.current = unreadMsgs;
-      return () => clearTimeout(t);
-    }
-    prevUnreadMsgsRef.current = unreadMsgs;
-  }, [unreadMsgs]);
+  <Link
+                    to="/tin-nhan"
+                    className={cn(
+                      "relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent",
+                      msgBounce && "animate-bounce",
+                    )}
+                  >
+                    <MessageCircle className="w-5 h-5" />
 
   const baseTabs = [
     { to: "/", icon: Home, label: t("nav.home") },
