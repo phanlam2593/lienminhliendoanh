@@ -279,6 +279,30 @@ export function MessagesThread() {
     setLoadingOlder(false);
   };
 
+  // Đánh dấu ĐÃ ĐỌC mọi tin chưa đọc của đối phương trong đoạn chat này.
+  // QUAN TRỌNG: không phụ thuộc riêng vào sự kiện Realtime UPDATE để hạ badge —
+  // sau khi UPDATE thành công, cập nhật state tại chỗ + phát sự kiện toàn cục
+  // "messages:read" để badge ở header (useUnreadMessages) tự đếm lại ngay.
+  const markThreadRead = async () => {
+    if (!user || !id) return;
+    const { data, error } = await supabase
+      .from("messages")
+      .update({ is_read: true, read_at: new Date().toISOString() })
+      .eq("sender_id", id)
+      .eq("receiver_id", user.id)
+      .eq("is_read", false)
+      .select("id");
+    if (error) {
+      console.error("[mark-read] lỗi:", error);
+      return;
+    }
+    if (data?.length) {
+      const ids = new Set(data.map((r: any) => r.id));
+      setMsgs((prev) => prev.map((m) => (ids.has(m.id) ? { ...m, is_read: true } : m)));
+    }
+    window.dispatchEvent(new Event("messages:read"));
+  };
+
   useEffect(() => {
     if (!user || !id) return;
     setMsgLimit(MSG_PAGE_SIZE);
@@ -292,21 +316,14 @@ export function MessagesThread() {
       .rpc("get_admin_user_ids")
       .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
     void loadMsgs(MSG_PAGE_SIZE, true);
-    void supabase
-      .from("messages")
-      .update({ is_read: true, read_at: new Date().toISOString() })
-      .eq("sender_id", id)
-      .eq("receiver_id", user.id)
-      .eq("is_read", false)
-      .select("id")
-      .then(({ data, error }) => {
-        if (error) {
-          console.error("[mark-read] lỗi:", error);
-          toast.error("Lỗi đánh dấu đã đọc: " + error.message);
-        } else {
-          toast.success("Đã đánh dấu " + (data?.length ?? 0) + " tin là đã đọc");
-        }
-      });
+    void markThreadRead();
+    // Thử lại khi người dùng quay lại tab/app (lần đầu có thể lỗi mạng hoặc token vừa hết hạn)
+    const onFocus = () => {
+      if (document.visibilityState === "visible") void markThreadRead();
+    };
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onFocus);
+
 
     // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây INSERT không lọc gì cả — MỌI tin nhắn
     // gửi ở BẤT KỲ đâu trong toàn app đều kích hoạt tải lại toàn bộ lịch sử đoạn chat này.
