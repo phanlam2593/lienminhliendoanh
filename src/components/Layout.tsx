@@ -67,6 +67,20 @@ export function Layout() {
   // 2 lần, sinh khoảng trắng thừa + cuộn sai.
   const isFullHeightPage = /^\/tin-nhan\/.+/.test(pathname) || pathname === "/cong-dong";
 
+  // Đo chiều cao THẬT của thanh điều hướng dưới cùng (khác nhau tuỳ máy/kiểu điều hướng
+  // Android) thay vì đoán cố định 5rem — số đoán sai là nguyên nhân gây khoảng trắng thừa
+  // ở các trang tự tính chiều cao vừa khít màn hình (Tin nhắn, Cộng đồng).
+  const navRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const el = navRef.current;
+    if (!el) return;
+    const setVar = () => document.documentElement.style.setProperty("--bottom-nav-h", `${el.offsetHeight}px`);
+    setVar();
+    const ro = new ResizeObserver(setVar);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [tabs.length]);
+
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
       <WelcomeOverlay />
