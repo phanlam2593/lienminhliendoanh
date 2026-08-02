@@ -27,7 +27,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { VNFlag, UKFlag } from "@/components/FlagIcons";
-import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
+import { useNotifications, useUnreadMessages, useNewMessagePopup } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { supabase } from "@/integrations/supabase/client";
 
