@@ -267,7 +267,12 @@ export function MessagesThread() {
     setMsgHasMore(list.length === limit);
     void loadReactions(list.map((m) => m.id));
     if (scrollToBottom) {
-      setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 0);
+      // Cuộn ngay lập tức (không hiệu ứng mượt, tránh cảm giác "kẹt" giữa chừng), rồi cuộn
+      // lại lần nữa sau 1 khoảng ngắn để bù cho trường hợp ảnh/GIF trong đoạn chat tải
+      // chậm hơn chữ, làm khung cao thêm ra sau khi đã cuộn lần đầu.
+      const scrollToEnd = () => endRef.current?.scrollIntoView({ behavior: "auto" });
+      requestAnimationFrame(scrollToEnd);
+      setTimeout(scrollToEnd, 400);
     }
   };
 
@@ -323,7 +328,6 @@ export function MessagesThread() {
     };
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onFocus);
-
 
     // QUAN TRỌNG (hiệu năng ở quy mô lớn): trước đây INSERT không lọc gì cả — MỌI tin nhắn
     // gửi ở BẤT KỲ đâu trong toàn app đều kích hoạt tải lại toàn bộ lịch sử đoạn chat này.
@@ -410,7 +414,6 @@ export function MessagesThread() {
       document.removeEventListener("visibilitychange", onFocus);
       supabase.removeChannel(ch);
     };
-
   }, [user?.id, id]);
 
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
