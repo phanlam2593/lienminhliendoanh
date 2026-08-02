@@ -14,8 +14,26 @@ export function PullToRefresh({ children }: { children: React.ReactNode }) {
     const el = containerRef.current;
     if (!el) return;
 
+    // QUAN TRỌNG: trước đây chỉ kiểm tra window.scrollY (độ cuộn của CẢ TRANG) — nhưng
+    // những trang có khung cuộn RIÊNG bên trong (như Tin nhắn) thì window.scrollY luôn = 0,
+    // khiến PullToRefresh tưởng luôn "đang ở đầu trang" và giành mất mọi cử chỉ kéo tay,
+    // xung đột với việc cuộn bên trong khung đó (không kéo được, hình bị lệch khi kéo).
+    // Giờ tìm đúng khung cuộn gần nhất chứa điểm chạm, kiểm tra scrollTop của CHÍNH nó.
+    const findScrollableAncestor = (el: EventTarget | null): Element | null => {
+      let node = el as Element | null;
+      while (node && node !== document.body) {
+        const style = window.getComputedStyle(node);
+        if ((style.overflowY === "auto" || style.overflowY === "scroll") && node.scrollHeight > node.clientHeight) {
+          return node;
+        }
+        node = node.parentElement;
+      }
+      return null;
+    };
     const onTouchStart = (e: TouchEvent) => {
-      if (window.scrollY > 0 || refreshing) {
+      const scrollable = findScrollableAncestor(e.target);
+      const scrollTop = scrollable ? scrollable.scrollTop : window.scrollY;
+      if (scrollTop > 0 || refreshing) {
         startY.current = null;
         return;
       }
