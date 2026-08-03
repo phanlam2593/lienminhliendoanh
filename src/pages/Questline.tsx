@@ -1218,6 +1218,52 @@ const QUESTS: Quest[] = [
     action: "Lướt qua vài chục DN bất kỳ ở Khám phá, để ý ảnh bìa từng card.",
     expect: "Tất cả đều load được ảnh (không còn icon ảnh vỡ), kể cả nhóm từng bị lỗi trước đó như 'Kế Toán Tự Do'.",
   },
+
+  // ===== Cập nhật phiên 02/08 (buổi tối — tin nhắn & thông báo) =====
+  {
+    id: "0802pm-msg-scroll-gap",
+    category: "Cập nhật phiên 02/08 (tối)",
+    title: "Hết khoảng trắng thừa ở Tin nhắn & Cộng đồng",
+    action: "Mở 1 đoạn Tin nhắn riêng và kênh Cộng đồng, để ý khoảng cách giữa ô nhập tin và thanh điều hướng dưới.",
+    expect: "Không còn khoảng trắng thừa, ô nhập tin nằm sát ngay phía trên thanh điều hướng.",
+  },
+  {
+    id: "0802pm-msg-scroll-works",
+    category: "Cập nhật phiên 02/08 (tối)",
+    title: "Cuộn lên/xuống được ở Tin nhắn & Cộng đồng",
+    action: "Trong 2 trang trên, thử kéo tay cuộn lên xem tin cũ, cuộn xuống lại.",
+    expect: "Cuộn mượt bình thường, không bị kẹt/lệch hình như trước.",
+  },
+  {
+    id: "0802pm-msg-open-scrolls-to-latest",
+    category: "Cập nhật phiên 02/08 (tối)",
+    title: "Mở đoạn chat nhảy đúng xuống tin mới nhất",
+    action: "Mở 1 đoạn chat có nhiều tin nhắn (đặc biệt đoạn có kèm ảnh/GIF), quan sát vị trí dừng lại.",
+    expect: "Luôn dừng đúng ở tin nhắn MỚI NHẤT, không bị kẹt trước 1-2 tin cuối do ảnh/GIF tải chậm.",
+  },
+  {
+    id: "0802pm-msg-unread-badge",
+    category: "Cập nhật phiên 02/08 (tối)",
+    title: "Số tin chưa đọc giảm đúng khi mở đoạn chat",
+    action: "Từ 1 tài khoản đang có tin chưa đọc, mở đúng đoạn chat đó, đợi vài giây, quay ra xem icon tin nhắn.",
+    expect: "Số chưa đọc giảm đúng (hoặc hết hẳn nếu đó là tin cuối), không cần tải lại trang mới thấy đổi.",
+  },
+  {
+    id: "0802pm-push-every-message",
+    category: "Cập nhật phiên 02/08 (tối)",
+    title: "Nhận thông báo đẩy cho MỌI tin nhắn, không chỉ tin đầu",
+    action: "Tắt app hẳn (không mở), nhờ người khác nhắn liên tiếp 3-4 tin nhắn cách nhau vài phút.",
+    expect:
+      "Nhận được thông báo đẩy cho từng đợt (trước đây chỉ tin đầu tiên trong ngày mới có, các tin sau bị im lặng).",
+  },
+  {
+    id: "0802pm-push-coalesce",
+    category: "Cập nhật phiên 02/08 (tối)",
+    title: "Nhiều tin nhắn dồn dập chỉ hiện 1 thông báo",
+    action: "Nhờ người khác nhắn liên tiếp thật nhanh 5-10 tin nhắn trong lúc app đang tắt/chạy nền.",
+    expect:
+      "Chỉ thấy ĐÚNG 1 thông báo trên màn hình khoá (nội dung cập nhật theo tin mới nhất), KHÔNG bị xếp chồng thành nhiều thông báo riêng lẻ.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
