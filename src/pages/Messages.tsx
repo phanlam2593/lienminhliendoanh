@@ -291,12 +291,10 @@ export function MessagesThread() {
     setMsgHasMore(list.length === limit);
     void loadReactions(list.map((m) => m.id));
     if (scrollToBottom) {
-      // Cuộn ngay lập tức (không hiệu ứng mượt, tránh cảm giác "kẹt" giữa chừng), rồi cuộn
-      // lại lần nữa sau 1 khoảng ngắn để bù cho trường hợp ảnh/GIF trong đoạn chat tải
-      // chậm hơn chữ, làm khung cao thêm ra sau khi đã cuộn lần đầu.
-      const scrollToEnd = () => endRef.current?.scrollIntoView({ behavior: "auto" });
-      requestAnimationFrame(scrollToEnd);
-      setTimeout(scrollToEnd, 400);
+      pinnedToBottomRef.current = true;
+      requestAnimationFrame(() => endRef.current?.scrollIntoView({ behavior: "auto" }));
+      // Không cần đoán thêm khoảng chờ nào nữa — ResizeObserver phía trên sẽ tự cuộn lại
+      // đúng lúc ảnh/GIF thật sự tải xong, dù nhanh hay chậm.
     }
   };
 
