@@ -597,7 +597,7 @@ export function MessagesThread() {
         </button>
       </div>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div ref={scrollContainerRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-3 space-y-2">
         {msgs.length > 0 && msgHasMore && (
           <button
             onClick={loadOlderMsgs}
