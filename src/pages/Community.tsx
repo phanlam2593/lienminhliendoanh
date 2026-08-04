@@ -235,7 +235,11 @@ export default function Community() {
     void enrichProfiles([...new Set(list.map((m) => m.user_id))]);
     void loadReactions(list.map((m) => m.id));
     if (scrollToBottom) {
-      setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+      // Giống Tin nhắn: cuộn ngay + cuộn bù lần nữa sau 400ms, phòng trường hợp ảnh/GIF
+      // trong đoạn chat tải chậm hơn chữ làm khung cao thêm ra sau khi đã cuộn lần đầu.
+      const scrollToEnd = () => endRef.current?.scrollIntoView({ behavior: "auto" });
+      requestAnimationFrame(scrollToEnd);
+      setTimeout(scrollToEnd, 400);
     }
   };
 
