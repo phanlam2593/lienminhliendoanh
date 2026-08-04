@@ -235,6 +235,30 @@ export function MessagesThread() {
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // Có đang ở gần đáy khung chat không — dùng để quyết định có tự ghim xuống đáy khi khung
+  // đổi chiều cao (do ảnh/GIF tải xong) hay không, tránh làm phiền nếu người dùng đang cố
+  // tình cuộn lên xem tin cũ.
+  const pinnedToBottomRef = useRef(true);
+
+  // Thay vì đoán 1 khoảng thời gian cố định để "chờ ảnh tải xong", theo dõi TRỰC TIẾP khi
+  // nào khung chat đổi chiều cao thật (ảnh/GIF tải xong sẽ kích hoạt) và tự ghim lại xuống
+  // đáy ngay lúc đó — đúng ở mọi tốc độ mạng, không phụ thuộc số ms đoán mò.
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const handleScroll = () => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    pinnedToBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
 
   const loadReactions = async (messageIds: string[]) => {
     if (!messageIds.length) {
