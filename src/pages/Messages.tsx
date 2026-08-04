@@ -559,7 +559,7 @@ export function MessagesThread() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem-var(--bottom-nav-h,5rem))]">
+    <div className="flex flex-col h-[calc(100dvh-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
         <button onClick={() => nav("/tin-nhan")}>
           <ArrowLeft className="w-5 h-5" />
