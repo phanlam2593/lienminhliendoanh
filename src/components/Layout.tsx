@@ -397,7 +397,10 @@ function InstallBanner() {
   };
 
   return (
-    <div className="fixed bottom-16 left-0 right-0 z-50 px-3 pb-2 max-w-md mx-auto animate-in slide-in-from-bottom">
+    <div
+      className="fixed left-0 right-0 z-50 px-3 pb-2 max-w-md mx-auto animate-in slide-in-from-bottom"
+      style={{ bottom: "calc(var(--bottom-nav-h, 5rem) + 0.5rem)" }}
+    >
       <div className="bg-gradient-brand text-white rounded-2xl shadow-brand p-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-white/20 grid place-items-center shrink-0">
