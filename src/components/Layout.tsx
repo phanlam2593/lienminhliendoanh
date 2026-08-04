@@ -67,19 +67,30 @@ export function Layout() {
   // 2 lần, sinh khoảng trắng thừa + cuộn sai.
   const isFullHeightPage = /^\/tin-nhan\/.+/.test(pathname) || pathname === "/cong-dong";
 
-  // Đo chiều cao THẬT của thanh điều hướng dưới cùng (khác nhau tuỳ máy/kiểu điều hướng
-  // Android) thay vì đoán cố định 5rem — số đoán sai là nguyên nhân gây khoảng trắng thừa
-  // ở các trang tự tính chiều cao vừa khít màn hình (Tin nhắn, Cộng đồng).
+  // Đo chiều cao THẬT của thanh điều hướng dưới cùng VÀ header trên cùng (khác nhau tuỳ
+  // máy/kiểu điều hướng Android, cỡ chữ hệ thống...) thay vì đoán số cố định — số đoán sai
+  // là nguyên nhân gây khoảng trắng thừa/cuộn sai ở các trang tự tính chiều cao vừa khít
+  // màn hình (Tin nhắn, Cộng đồng).
   const navRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   useEffect(() => {
-    const el = navRef.current;
-    if (!el) return;
-    const setVar = () => document.documentElement.style.setProperty("--bottom-nav-h", `${el.offsetHeight}px`);
-    setVar();
-    const ro = new ResizeObserver(setVar);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [tabs.length]);
+    const navEl = navRef.current;
+    const headerEl = headerRef.current;
+    const setNavVar = () =>
+      navEl && document.documentElement.style.setProperty("--bottom-nav-h", `${navEl.offsetHeight}px`);
+    const setHeaderVar = () =>
+      headerEl && document.documentElement.style.setProperty("--header-h", `${headerEl.offsetHeight}px`);
+    setNavVar();
+    setHeaderVar();
+    const roNav = navEl ? new ResizeObserver(setNavVar) : null;
+    const roHeader = headerEl ? new ResizeObserver(setHeaderVar) : null;
+    if (navEl) roNav!.observe(navEl);
+    if (headerEl) roHeader!.observe(headerEl);
+    return () => {
+      roNav?.disconnect();
+      roHeader?.disconnect();
+    };
+  }, [tabs.length, hide, showWelcome]);
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
