@@ -109,6 +109,24 @@ export default function Community() {
   const [topicOpen, setTopicOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const pinnedToBottomRef = useRef(true);
+
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const handleScroll = () => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    pinnedToBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+  };
   const channelRef = useRef<{ location: string | null; topic: Topic }>({
     location: channelLocation,
     topic: channelTopic,
