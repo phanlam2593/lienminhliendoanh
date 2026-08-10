@@ -2147,7 +2147,25 @@ function Broadcast() {
     }
     if (!user) return;
     setL(true);
-    const { data: profs } = await supabase.from("profiles").select("id").eq("status", "approved");
+    // Tải theo từng đợt 1000 — trước đây .select("id") 1 lần bị Supabase âm thầm cắt ở
+    // 1000 dòng, khiến "Gửi cho tất cả thành viên" chỉ thực sự gửi tới 1000 người đầu
+    // tiên (im lặng bỏ sót phần còn lại) mà giao diện vẫn báo "Đã gửi" bình thường.
+    let profs: { id: string }[] = [];
+    {
+      let from = 0;
+      const CHUNK = 1000;
+      while (true) {
+        const { data } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("status", "approved")
+          .range(from, from + CHUNK - 1);
+        const chunk = data ?? [];
+        profs = profs.concat(chunk);
+        if (chunk.length < CHUNK) break;
+        from += CHUNK;
+      }
+    }
     if (profs?.length) {
       // Gửi TIN NHẮN THẬT từ admin tới từng thành viên — để bấm vào thông báo, vào Tin nhắn
       // sẽ thấy đúng nội dung. Trigger notify_new_message có sẵn tự tạo thông báo gộp
