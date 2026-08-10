@@ -2516,12 +2516,26 @@ function BusinessClaimsDialog({
     const target = offers.find((o) => o.id === offerId);
     setOffers((prev) => prev.map((o) => (o.id === offerId ? { ...o, claimersOpen: !o.claimersOpen } : o)));
     if (target?.claimersLoaded) return;
-    const { data: claims } = await supabase
-      .from("offer_claims")
-      .select("id, user_id, claimed_at, code")
-      .eq("offer_id", offerId)
-      .order("claimed_at", { ascending: false });
-    const uids = [...new Set((claims ?? []).map((c: any) => c.user_id))];
+    // Tải theo từng đợt 1000 — ưu đãi hot (700+ lượt nhận đã thấy trong data thật) có thể
+    // sớm vượt ngưỡng 1000 mà Supabase âm thầm cắt bớt nếu chỉ query 1 lần.
+    let claims: any[] = [];
+    {
+      let from = 0;
+      const CHUNK = 1000;
+      while (true) {
+        const { data } = await supabase
+          .from("offer_claims")
+          .select("id, user_id, claimed_at, code")
+          .eq("offer_id", offerId)
+          .order("claimed_at", { ascending: false })
+          .range(from, from + CHUNK - 1);
+        const chunk = data ?? [];
+        claims = claims.concat(chunk);
+        if (chunk.length < CHUNK) break;
+        from += CHUNK;
+      }
+    }
+    const uids = [...new Set(claims.map((c: any) => c.user_id))];
     let nameMap = new Map<string, { full_name: string; username: string; avatar_url: string | null }>();
     if (uids.length) {
       const { data: profs } = await supabase
