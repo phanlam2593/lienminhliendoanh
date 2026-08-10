@@ -35,17 +35,36 @@ export default function Nearby() {
         setStatus("granted");
         setLoading(true);
         const { latitude: myLat, longitude: myLng } = pos.coords;
-        const { data: biz } = await supabase
-          .from("businesses")
-          .select("*")
-          .eq("status", "approved")
-          .not("latitude", "is", null)
-          .not("longitude", "is", null);
-        const rows = (biz as Business[]) ?? [];
-        // Không lọc theo .in(ids) — lý do y hệt bên Khám phá: với hàng nghìn DN, URL sẽ
-        // vượt giới hạn cho phép. Lấy nguyên view rồi map ở client.
-        const { data: stats } = await supabase.from("business_card_stats").select("*");
-        const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
+        // Tải theo từng đợt 1000 cho cả 2 nguồn — số DN có ghim vị trí đã tiệm cận/vượt
+        // 1000, query 1 lần trước đây bị Supabase âm thầm cắt bớt, khiến DN gần bạn nhất
+        // có thể bị thiếu trong danh sách mà không có dấu hiệu báo lỗi gì.
+        const fetchAllChunked = async (build: (from: number, to: number) => any) => {
+          let rows: any[] = [];
+          let from = 0;
+          const CHUNK = 1000;
+          while (true) {
+            const { data } = await build(from, from + CHUNK - 1);
+            const chunk = data ?? [];
+            rows = rows.concat(chunk);
+            if (chunk.length < CHUNK) break;
+            from += CHUNK;
+          }
+          return rows;
+        };
+        const bizRows = await fetchAllChunked((from, to) =>
+          supabase
+            .from("businesses")
+            .select("*")
+            .eq("status", "approved")
+            .not("latitude", "is", null)
+            .not("longitude", "is", null)
+            .range(from, to),
+        );
+        const rows = bizRows as Business[];
+        const statRows = await fetchAllChunked((from, to) =>
+          supabase.from("business_card_stats").select("*").range(from, to),
+        );
+        const sMap = new Map(statRows.map((s: any) => [s.business_id, s]));
         const withDistance: NearbyItem[] = rows.map((b) => {
           const s: any = sMap.get(b.id);
           return {
