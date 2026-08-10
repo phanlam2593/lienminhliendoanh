@@ -15,13 +15,31 @@ function toCSV(rows: Record<string, any>[]): string {
 
 export async function exportTableToCSV(table: string, filename: string) {
   const t = toast.loading("Đang xuất dữ liệu…");
-  const { data, error } = await supabase.from(table as any).select("*");
+  // Tải theo từng đợt 1000 dòng thay vì 1 lần .select("*") — Supabase âm thầm cắt ở 1000
+  // dòng mặc định, trước đây khiến file xuất ra thiếu dữ liệu mà vẫn báo "thành công".
+  let rows: Record<string, any>[] = [];
+  let from = 0;
+  const CHUNK = 1000;
+  let fetchError: any = null;
+  while (true) {
+    const { data, error } = await supabase
+      .from(table as any)
+      .select("*")
+      .range(from, from + CHUNK - 1);
+    if (error) {
+      fetchError = error;
+      break;
+    }
+    const chunk = data ?? [];
+    rows = rows.concat(chunk);
+    if (chunk.length < CHUNK) break;
+    from += CHUNK;
+  }
   toast.dismiss(t);
-  if (error) {
-    toast.error(error.message);
+  if (fetchError) {
+    toast.error(fetchError.message);
     return;
   }
-  const rows = data ?? [];
   if (rows.length === 0) {
     toast.error("Không có dữ liệu để xuất");
     return;
