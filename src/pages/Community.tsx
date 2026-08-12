@@ -810,166 +810,167 @@ export default function Community() {
             </button>
           )}
           <div ref={contentRef}>
-          {msgs.length === 0 ? (
-            <p className="text-center text-xs text-muted-foreground py-6">{t("community.noMessages")}</p>
-          ) : (
-            msgs.map((m) => {
-              const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
-              const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
-              const p = profMap.get(m.user_id);
-              const mine = m.user_id === user.id;
-              const canDelete = mine || isAdmin;
-              return (
-                <div key={m.id} className="group flex items-start gap-2">
-                  <button onClick={() => setQuickViewUser(m.user_id)} className="shrink-0">
-                    <Avatar path={p?.avatar_url} name={p?.full_name} size={32} />
-                  </button>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 text-[11px]">
-                      <button
-                        onClick={() => setQuickViewUser(m.user_id)}
-                        className="font-semibold truncate hover:text-primary text-left"
-                      >
-                        {p?.full_name || t("community.member")}
-                      </button>
-                      {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
-                      <span className="text-muted-foreground">{timeAgo(m.created_at, lang)}</span>
-                      {m.edited_at && <span className="text-muted-foreground italic">{t("msg.edited")}</span>}
-                      {editingId !== m.id && (
+            {msgs.length === 0 ? (
+              <p className="text-center text-xs text-muted-foreground py-6">{t("community.noMessages")}</p>
+            ) : (
+              msgs.map((m) => {
+                const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
+                const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
+                const p = profMap.get(m.user_id);
+                const mine = m.user_id === user.id;
+                const canDelete = mine || isAdmin;
+                return (
+                  <div key={m.id} className="group flex items-start gap-2">
+                    <button onClick={() => setQuickViewUser(m.user_id)} className="shrink-0">
+                      <Avatar path={p?.avatar_url} name={p?.full_name} size={32} />
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5 text-[11px]">
                         <button
-                          onClick={() => setReplyingTo(m)}
-                          aria-label={t("msg.reply")}
-                          className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-muted-foreground"
+                          onClick={() => setQuickViewUser(m.user_id)}
+                          className="font-semibold truncate hover:text-primary text-left"
                         >
-                          <ReplyIcon className="w-3.5 h-3.5" />
+                          {p?.full_name || t("community.member")}
                         </button>
-                      )}
-                      {isAdmin && editingId !== m.id && (
-                        <button
-                          onClick={() => togglePin(m)}
-                          aria-label={m.is_pinned ? t("pin.unpinButton") : t("pin.button")}
-                          className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition ${m.is_pinned ? "text-primary opacity-100" : "text-muted-foreground"}`}
-                        >
-                          {m.is_pinned ? <PinOff className="w-3.5 h-3.5" /> : <PinIcon className="w-3.5 h-3.5" />}
-                        </button>
-                      )}
-                      {mine && m.type === "text" && editingId !== m.id && (
-                        <button
-                          onClick={() => startEdit(m)}
-                          aria-label={t("msg.edit")}
-                          className="ml-auto opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-muted-foreground"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                      {canDelete && (
-                        <button
-                          onClick={() => del(m.id)}
-                          aria-label="Xóa"
-                          className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-destructive ${mine && m.type === "text" ? "" : "ml-auto"}`}
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                    </div>
-                    {editingId !== m.id && m.reply_to_id && (
-                      <div className="mt-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate">
-                        {repliedMsg
-                          ? `${profMap.get(repliedMsg.user_id)?.full_name || t("community.member")}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
-                          : t("msg.originalDeleted")}
-                      </div>
-                    )}
-                    {editingId === m.id ? (
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <input
-                          value={editText}
-                          onChange={(e) => setEditText(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") saveEdit();
-                            if (e.key === "Escape") cancelEdit();
-                          }}
-                          autoFocus
-                          className="flex-1 px-2.5 py-1 rounded-lg border bg-background text-sm"
-                        />
-                        <button
-                          onClick={saveEdit}
-                          aria-label={t("msg.editSave")}
-                          className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center shrink-0"
-                        >
-                          <Check className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={cancelEdit}
-                          aria-label={t("msg.editCancel")}
-                          className="w-6 h-6 rounded-full bg-muted grid place-items-center shrink-0"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ) : m.type === "gif" ? (
-                      <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
-                    ) : m.type === "image" ? (
-                      <div className="max-w-[200px] mt-0.5">
-                        <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-xl w-full object-cover" />
-                      </div>
-                    ) : (
-                      <div
-                        className={`text-sm rounded-xl px-3 py-1.5 mt-0.5 inline-block max-w-full break-words ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}
-                      >
-                        {m.content.split(/(@\w+)/g).map((part, i) =>
-                          part.startsWith("@") && members.some((mb) => mb.username === part.slice(1)) ? (
-                            <span key={i} className={`font-bold ${mine ? "underline" : "text-primary"}`}>
-                              {part}
-                            </span>
-                          ) : (
-                            part
-                          ),
+                        {p && <MemberLevelBadge points={p.points} isAdmin={adminIds.has(m.user_id)} />}
+                        <span className="text-muted-foreground">{timeAgo(m.created_at, lang)}</span>
+                        {m.edited_at && <span className="text-muted-foreground italic">{t("msg.edited")}</span>}
+                        {editingId !== m.id && (
+                          <button
+                            onClick={() => setReplyingTo(m)}
+                            aria-label={t("msg.reply")}
+                            className="opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-muted-foreground"
+                          >
+                            <ReplyIcon className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {isAdmin && editingId !== m.id && (
+                          <button
+                            onClick={() => togglePin(m)}
+                            aria-label={m.is_pinned ? t("pin.unpinButton") : t("pin.button")}
+                            className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition ${m.is_pinned ? "text-primary opacity-100" : "text-muted-foreground"}`}
+                          >
+                            {m.is_pinned ? <PinOff className="w-3.5 h-3.5" /> : <PinIcon className="w-3.5 h-3.5" />}
+                          </button>
+                        )}
+                        {mine && m.type === "text" && editingId !== m.id && (
+                          <button
+                            onClick={() => startEdit(m)}
+                            aria-label={t("msg.edit")}
+                            className="ml-auto opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-muted-foreground"
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {canDelete && (
+                          <button
+                            onClick={() => del(m.id)}
+                            aria-label="Xóa"
+                            className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-destructive ${mine && m.type === "text" ? "" : "ml-auto"}`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         )}
                       </div>
-                    )}
-                    {editingId !== m.id && (
-                      <div className="flex items-center gap-1 mt-1 flex-wrap">
-                        {Object.entries(reactions[m.id] ?? {})
-                          .filter(([, ids]) => ids.length > 0)
-                          .map(([emoji, ids]) => (
-                            <button
-                              key={emoji}
-                              onClick={() => toggleReaction(m.id, emoji)}
-                              className={`text-[11px] px-1.5 py-0.5 rounded-full border flex items-center gap-1 ${ids.includes(user.id) ? "bg-primary/10 border-primary text-primary" : "bg-muted border-transparent text-muted-foreground"}`}
-                            >
-                              <span>{emoji}</span>
-                              <span>{ids.length}</span>
-                            </button>
-                          ))}
-                        <ReactionPopover
-                          open={reactionPickerFor === m.id}
-                          onOpenChange={(v) => setReactionPickerFor(v ? m.id : null)}
+                      {editingId !== m.id && m.reply_to_id && (
+                        <div className="mt-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate">
+                          {repliedMsg
+                            ? `${profMap.get(repliedMsg.user_id)?.full_name || t("community.member")}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
+                            : t("msg.originalDeleted")}
+                        </div>
+                      )}
+                      {editingId === m.id ? (
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <input
+                            value={editText}
+                            onChange={(e) => setEditText(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") saveEdit();
+                              if (e.key === "Escape") cancelEdit();
+                            }}
+                            autoFocus
+                            className="flex-1 px-2.5 py-1 rounded-lg border bg-background text-sm"
+                          />
+                          <button
+                            onClick={saveEdit}
+                            aria-label={t("msg.editSave")}
+                            className="w-6 h-6 rounded-full bg-primary text-primary-foreground grid place-items-center shrink-0"
+                          >
+                            <Check className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={cancelEdit}
+                            aria-label={t("msg.editCancel")}
+                            className="w-6 h-6 rounded-full bg-muted grid place-items-center shrink-0"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ) : m.type === "gif" ? (
+                        <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
+                      ) : m.type === "image" ? (
+                        <div className="max-w-[200px] mt-0.5">
+                          <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-xl w-full object-cover" />
+                        </div>
+                      ) : (
+                        <div
+                          className={`text-sm rounded-xl px-3 py-1.5 mt-0.5 inline-block max-w-full break-words ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}
                         >
-                          <ReactionPopoverTrigger asChild>
-                            <button className="text-muted-foreground opacity-0 group-hover:opacity-100 transition p-0.5">
-                              <SmilePlus className="w-3.5 h-3.5" />
-                            </button>
-                          </ReactionPopoverTrigger>
-                          <ReactionPopoverContent className="w-auto p-1 flex gap-1" align="start">
-                            {REACTION_EMOJIS.map((e) => (
+                          {m.content.split(/(@\w+)/g).map((part, i) =>
+                            part.startsWith("@") && members.some((mb) => mb.username === part.slice(1)) ? (
+                              <span key={i} className={`font-bold ${mine ? "underline" : "text-primary"}`}>
+                                {part}
+                              </span>
+                            ) : (
+                              part
+                            ),
+                          )}
+                        </div>
+                      )}
+                      {editingId !== m.id && (
+                        <div className="flex items-center gap-1 mt-1 flex-wrap">
+                          {Object.entries(reactions[m.id] ?? {})
+                            .filter(([, ids]) => ids.length > 0)
+                            .map(([emoji, ids]) => (
                               <button
-                                key={e}
-                                onClick={() => toggleReaction(m.id, e)}
-                                className="text-lg hover:scale-125 transition p-1"
+                                key={emoji}
+                                onClick={() => toggleReaction(m.id, emoji)}
+                                className={`text-[11px] px-1.5 py-0.5 rounded-full border flex items-center gap-1 ${ids.includes(user.id) ? "bg-primary/10 border-primary text-primary" : "bg-muted border-transparent text-muted-foreground"}`}
                               >
-                                {e}
+                                <span>{emoji}</span>
+                                <span>{ids.length}</span>
                               </button>
                             ))}
-                          </ReactionPopoverContent>
-                        </ReactionPopover>
-                      </div>
-                    )}
+                          <ReactionPopover
+                            open={reactionPickerFor === m.id}
+                            onOpenChange={(v) => setReactionPickerFor(v ? m.id : null)}
+                          >
+                            <ReactionPopoverTrigger asChild>
+                              <button className="text-muted-foreground opacity-0 group-hover:opacity-100 transition p-0.5">
+                                <SmilePlus className="w-3.5 h-3.5" />
+                              </button>
+                            </ReactionPopoverTrigger>
+                            <ReactionPopoverContent className="w-auto p-1 flex gap-1" align="start">
+                              {REACTION_EMOJIS.map((e) => (
+                                <button
+                                  key={e}
+                                  onClick={() => toggleReaction(m.id, e)}
+                                  className="text-lg hover:scale-125 transition p-1"
+                                >
+                                  {e}
+                                </button>
+                              ))}
+                            </ReactionPopoverContent>
+                          </ReactionPopover>
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })
-          )}
-          <div ref={endRef} />
+                );
+              })
+            )}
+            <div ref={endRef} />
+          </div>
         </div>
         {typingList.length > 0 && (
           <div className="px-3 py-1 text-[11px] text-muted-foreground italic">
