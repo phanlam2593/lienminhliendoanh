@@ -809,6 +809,7 @@ export default function Community() {
               {loadingOlderMsgs ? t("common.loading") : t("community.loadOlder")}
             </button>
           )}
+          <div ref={contentRef}>
           {msgs.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground py-6">{t("community.noMessages")}</p>
           ) : (
