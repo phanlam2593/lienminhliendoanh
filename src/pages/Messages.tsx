@@ -608,6 +608,7 @@ export function MessagesThread() {
             {loadingOlder ? t("common.loading") : t("community.loadOlder")}
           </button>
         )}
+        <div ref={contentRef}>
         {(() => {
           // Chỉ tìm 1 lần cho cả danh sách: tin nhắn CUỐI CÙNG của tôi đã được xem —
           // đúng hành vi Messenger/Zalo (không hiện "đã xem" dưới mọi tin, chỉ tin mới nhất).
