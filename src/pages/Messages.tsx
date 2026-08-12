@@ -236,16 +236,19 @@ export function MessagesThread() {
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  // Có đang ở gần đáy khung chat không — dùng để quyết định có tự ghim xuống đáy khi khung
-  // đổi chiều cao (do ảnh/GIF tải xong) hay không, tránh làm phiền nếu người dùng đang cố
-  // tình cuộn lên xem tin cũ.
+  // QUAN TRỌNG: khung cuộn ngoài (scrollContainerRef) có chiều cao CỐ ĐỊNH (flex-1 trong
+  // khung khít màn hình) — kích thước bản thân nó KHÔNG đổi khi nội dung bên trong dài ra
+  // do ảnh/GIF tải xong (chỉ phần cuộn overflow bên trong đổi, ResizeObserver không thấy).
+  // Phải theo dõi đúng LỚP BỌC NỘI DUNG (co giãn tự nhiên theo nội dung thật) thay vì khung
+  // cuộn — lớp đó mới thực sự đổi kích thước khi ảnh/GIF tải xong.
+  const contentRef = useRef<HTMLDivElement>(null);
+  // Có đang ở gần đáy khung chat không — dùng để quyết định có tự ghim xuống đáy khi nội
+  // dung đổi chiều cao hay không, tránh làm phiền nếu người dùng đang cố tình cuộn lên xem
+  // tin cũ.
   const pinnedToBottomRef = useRef(true);
 
-  // Thay vì đoán 1 khoảng thời gian cố định để "chờ ảnh tải xong", theo dõi TRỰC TIẾP khi
-  // nào khung chat đổi chiều cao thật (ảnh/GIF tải xong sẽ kích hoạt) và tự ghim lại xuống
-  // đáy ngay lúc đó — đúng ở mọi tốc độ mạng, không phụ thuộc số ms đoán mò.
   useEffect(() => {
-    const el = scrollContainerRef.current;
+    const el = contentRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => {
       if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
