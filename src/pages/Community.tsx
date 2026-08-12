@@ -110,10 +110,14 @@ export default function Community() {
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // QUAN TRỌNG: khung cuộn ngoài có chiều cao CỐ ĐỊNH, kích thước bản thân nó không đổi
+  // khi nội dung bên trong dài ra do ảnh/GIF tải xong — phải theo dõi đúng lớp bọc nội
+  // dung (co giãn tự nhiên) thay vì khung cuộn.
+  const contentRef = useRef<HTMLDivElement>(null);
   const pinnedToBottomRef = useRef(true);
 
   useEffect(() => {
-    const el = scrollContainerRef.current;
+    const el = contentRef.current;
     if (!el) return;
     const ro = new ResizeObserver(() => {
       if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
