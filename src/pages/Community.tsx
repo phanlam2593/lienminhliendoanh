@@ -113,18 +113,22 @@ export default function Community() {
   // QUAN TRỌNG: khung cuộn ngoài có chiều cao CỐ ĐỊNH, kích thước bản thân nó không đổi
   // khi nội dung bên trong dài ra do ảnh/GIF tải xong — phải theo dõi đúng lớp bọc nội
   // dung (co giãn tự nhiên) thay vì khung cuộn.
-  const contentRef = useRef<HTMLDivElement>(null);
   const pinnedToBottomRef = useRef(true);
-
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => {
-      if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  // QUAN TRỌNG: dùng "callback ref" thay vì useRef+useEffect([]) — lý do y hệt bên Tin
+  // nhắn: contentRef có thể chưa tồn tại lúc effect [] chạy lần đầu, và không bao giờ thử
+  // lại. Callback ref tự động được gọi đúng lúc phần tử thật sự gắn vào DOM.
+  const contentRef = (node: HTMLDivElement | null) => {
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = null;
+    if (node) {
+      const ro = new ResizeObserver(() => {
+        if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
+      });
+      ro.observe(node);
+      resizeObserverRef.current = ro;
+    }
+  };
 
   const handleScroll = () => {
     const el = scrollContainerRef.current;
