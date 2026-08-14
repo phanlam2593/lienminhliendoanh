@@ -241,21 +241,27 @@ export function MessagesThread() {
   // do ảnh/GIF tải xong (chỉ phần cuộn overflow bên trong đổi, ResizeObserver không thấy).
   // Phải theo dõi đúng LỚP BỌC NỘI DUNG (co giãn tự nhiên theo nội dung thật) thay vì khung
   // cuộn — lớp đó mới thực sự đổi kích thước khi ảnh/GIF tải xong.
-  const contentRef = useRef<HTMLDivElement>(null);
   // Có đang ở gần đáy khung chat không — dùng để quyết định có tự ghim xuống đáy khi nội
   // dung đổi chiều cao hay không, tránh làm phiền nếu người dùng đang cố tình cuộn lên xem
   // tin cũ.
   const pinnedToBottomRef = useRef(true);
-
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => {
-      if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  // QUAN TRỌNG: dùng "callback ref" thay vì useRef+useEffect([]) — lúc trang mới mở, vài
+  // lần render đầu có thể vẫn đang ở giao diện "đang tải/kiểm tra đăng nhập" (contentRef
+  // chưa tồn tại trong DOM lúc đó), effect với dependency [] chạy 1 lần rồi thôi, không
+  // bao giờ thử gắn lại khi giao diện chat thật sự xuất hiện sau đó. Callback ref tự động
+  // được gọi lại đúng lúc phần tử thật sự được gắn vào DOM, dù sớm hay trễ.
+  const contentRef = (node: HTMLDivElement | null) => {
+    resizeObserverRef.current?.disconnect();
+    resizeObserverRef.current = null;
+    if (node) {
+      const ro = new ResizeObserver(() => {
+        if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
+      });
+      ro.observe(node);
+      resizeObserverRef.current = ro;
+    }
+  };
 
   const handleScroll = () => {
     const el = scrollContainerRef.current;
