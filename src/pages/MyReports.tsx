@@ -597,7 +597,8 @@ export default function MyReports() {
           "report_id",
           allReports.map((r) => r.id),
         )
-        .order("created_at", { ascending: true });
+        .order("created_at", { ascending: true })
+        .range(0, 4999);
       const replyRows = rep ?? [];
       const authorIds = [...new Set(replyRows.map((rr: any) => rr.author_id))];
       let profMap = new Map<string, { full_name: string; avatar_url: string | null }>();
