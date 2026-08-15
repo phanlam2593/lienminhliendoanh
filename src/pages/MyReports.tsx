@@ -514,6 +514,7 @@ export default function MyReports() {
           .eq("target_type", "business")
           .in("target_id", bizIds)
           .order("created_at", { ascending: false })
+          .range(0, 4999)
       : { data: [] as Report[] };
 
     const allReports = [...reportRows, ...((bizReportRows as Report[]) ?? [])];
