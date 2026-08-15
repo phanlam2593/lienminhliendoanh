@@ -493,8 +493,13 @@ export default function MyReports() {
   const load = async () => {
     setLoading(true);
     const [{ data: rp }, { data: myBiz }, { data: adminRows }] = await Promise.all([
-      supabase.from("reports").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),
-      supabase.from("businesses").select("id").eq("owner_id", user!.id),
+      supabase
+        .from("reports")
+        .select("*")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .range(0, 4999),
+      supabase.from("businesses").select("id").eq("owner_id", user!.id).range(0, 4999),
       supabase.rpc("get_admin_user_ids"),
     ]);
     const adminIds = new Set((adminRows ?? []).map((r: any) => r.user_id));
