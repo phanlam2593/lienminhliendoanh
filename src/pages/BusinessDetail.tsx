@@ -156,7 +156,8 @@ export default function BusinessDetail() {
         .from("review_replies")
         .select("*")
         .in("review_id", reviewIds)
-        .order("created_at");
+        .order("created_at")
+        .range(0, 4999);
       const repList = (reps ?? []) as ReviewReply[];
       const repUids = [...new Set(repList.map((r) => r.user_id).filter((u) => !profMap.has(u)))];
       if (repUids.length) {
