@@ -37,12 +37,14 @@ export function RegularBusinessesDialog({
           .from("business_regulars")
           .select("business_id, visit_count, last_visit_at")
           .eq("member_id", userId)
-          .order("visit_count", { ascending: false }),
+          .order("visit_count", { ascending: false })
+          .range(0, 4999),
         supabase
           .from("follows")
           .select("followee_business_id")
           .eq("follower_id", userId)
-          .not("followee_business_id", "is", null),
+          .not("followee_business_id", "is", null)
+          .range(0, 4999),
       ]);
 
       const regularMap = new Map((regulars ?? []).map((r: any) => [r.business_id, r]));
