@@ -237,9 +237,27 @@ export default function Community() {
         }
       }
     } catch {}
-    const { data } = await supabase.from("businesses").select("address").eq("status", "approved").range(0, 9999);
+    // Tải theo từng đợt 1000 thay vì tin vào .range(0,9999) — nếu Supabase áp giới hạn
+    // mặc định thấp hơn, cách cũ sẽ âm thầm chỉ lấy được 1000 dòng đầu, làm danh sách khu
+    // vực bị thiếu mà không ai biết.
+    let addrRows: any[] = [];
+    {
+      let from = 0;
+      const CHUNK = 1000;
+      while (true) {
+        const { data: chunkData } = await supabase
+          .from("businesses")
+          .select("address")
+          .eq("status", "approved")
+          .range(from, from + CHUNK - 1);
+        const chunk = chunkData ?? [];
+        addrRows = addrRows.concat(chunk);
+        if (chunk.length < CHUNK) break;
+        from += CHUNK;
+      }
+    }
     const set = new Set<string>();
-    (data ?? []).forEach((b: any) => set.add(extractArea(b.address)));
+    addrRows.forEach((b: any) => set.add(extractArea(b.address)));
     const result = Array.from(set).sort();
     setLocations(result);
     try {
