@@ -64,7 +64,7 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
       const profMap = new Map((profiles ?? []).map((p: any) => [p.id, p]));
 
       setRows(
-        (regulars ?? []).map((r: any) => ({
+        regulars.map((r: any) => ({
           id: r.member_id,
           full_name: profMap.get(r.member_id)?.full_name ?? null,
           username: profMap.get(r.member_id)?.username ?? null,
