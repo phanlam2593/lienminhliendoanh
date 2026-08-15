@@ -127,7 +127,8 @@ export function ExchangeSection({ business }: { business: Business }) {
       .from("exchanges")
       .select("*")
       .or(orFilter)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(0, 4999);
     const list = (data ?? []) as Exchange[];
     setExchanges(list);
 
@@ -140,7 +141,8 @@ export function ExchangeSection({ business }: { business: Business }) {
       const { data: bs } = await supabase
         .from("businesses")
         .select("*")
-        .in("id", [...bizIds]);
+        .in("id", [...bizIds])
+        .range(0, 4999);
       const m = new Map<string, Business>();
       (bs ?? []).forEach((b: any) => m.set(b.id, b));
       setBizMap(m);
