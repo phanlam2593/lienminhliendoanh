@@ -197,7 +197,8 @@ export default function Community() {
     const { data } = await supabase
       .from("community_message_reactions")
       .select("message_id, user_id, emoji")
-      .in("message_id", messageIds);
+      .in("message_id", messageIds)
+      .range(0, 4999);
     const grouped: Record<string, Record<string, string[]>> = {};
     (data ?? []).forEach((r: any) => {
       grouped[r.message_id] ??= {};
