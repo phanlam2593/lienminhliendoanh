@@ -832,7 +832,12 @@ function BusinessDetailDialog({
     setLoading(true);
     const [{ data: b }, { data: o }] = await Promise.all([
       supabase.from("businesses").select("*").eq("id", id).maybeSingle(),
-      supabase.from("offers").select("*").eq("business_id", id).order("created_at", { ascending: false }),
+      supabase
+        .from("offers")
+        .select("*")
+        .eq("business_id", id)
+        .order("created_at", { ascending: false })
+        .range(0, 4999),
     ]);
     if (b) {
       const loaded = b as Business;
