@@ -708,12 +708,25 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const { data: claims } = await supabase
-        .from("offer_claims")
-        .select("user_id, claimed_at")
-        .eq("offer_id", offerId)
-        .order("claimed_at", { ascending: false });
-      const ids = [...new Set((claims ?? []).map((c: any) => c.user_id))];
+      // Tải theo từng đợt 1000 — ưu đãi hot có thể vượt ngưỡng mặc định của Supabase.
+      let claims: any[] = [];
+      {
+        let from = 0;
+        const CHUNK = 1000;
+        while (true) {
+          const { data } = await supabase
+            .from("offer_claims")
+            .select("user_id, claimed_at")
+            .eq("offer_id", offerId)
+            .order("claimed_at", { ascending: false })
+            .range(from, from + CHUNK - 1);
+          const chunk = data ?? [];
+          claims = claims.concat(chunk);
+          if (chunk.length < CHUNK) break;
+          from += CHUNK;
+        }
+      }
+      const ids = [...new Set(claims.map((c: any) => c.user_id))];
       const [{ data: profs }, { data: mine }] = await Promise.all([
         ids.length
           ? supabase.from("profiles_public").select("id, full_name, avatar_url").in("id", ids)
@@ -724,12 +737,13 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
               .select("followee_user_id")
               .eq("follower_id", user.id)
               .not("followee_user_id", "is", null)
+              .range(0, 4999)
           : Promise.resolve({ data: [] as any[] }),
       ]);
       setMyFollowing(new Set((mine ?? []).map((r: any) => r.followee_user_id)));
       const pMap = new Map((profs ?? []).map((p: any) => [p.id, p]));
       setRows(
-        (claims ?? []).map((c: any) => ({
+        claims.map((c: any) => ({
           user_id: c.user_id,
           claimed_at: c.claimed_at,
           full_name: pMap.get(c.user_id)?.full_name ?? "Ẩn danh",
