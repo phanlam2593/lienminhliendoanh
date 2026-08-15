@@ -117,7 +117,7 @@ export default function Profile() {
 
   const loadBiz = async () => {
     if (!user) return;
-    const { data } = await supabase.from("businesses").select("*").eq("owner_id", user.id);
+    const { data } = await supabase.from("businesses").select("*").eq("owner_id", user.id).range(0, 4999);
     setBiz((data ?? []) as Business[]);
   };
 
