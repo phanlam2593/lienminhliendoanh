@@ -32,13 +32,27 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
   const load = async () => {
     setLoading(true);
     try {
-      const { data: regulars } = await supabase
-        .from("business_regulars")
-        .select("member_id, visit_count, last_visit_at, created_at")
-        .eq("business_id", businessId)
-        .order("visit_count", { ascending: false });
+      // Tải theo từng đợt 1000 — DN đông khách quen có thể vượt ngưỡng mặc định của
+      // Supabase, khiến số "Tổng khách quen" bị đếm thiếu mà không báo lỗi gì.
+      let regulars: any[] = [];
+      {
+        let from = 0;
+        const CHUNK = 1000;
+        while (true) {
+          const { data } = await supabase
+            .from("business_regulars")
+            .select("member_id, visit_count, last_visit_at, created_at")
+            .eq("business_id", businessId)
+            .order("visit_count", { ascending: false })
+            .range(from, from + CHUNK - 1);
+          const chunk = data ?? [];
+          regulars = regulars.concat(chunk);
+          if (chunk.length < CHUNK) break;
+          from += CHUNK;
+        }
+      }
 
-      const ids = (regulars ?? []).map((r: any) => r.member_id);
+      const ids = regulars.map((r: any) => r.member_id);
       if (ids.length === 0) {
         setRows([]);
         return;
