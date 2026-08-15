@@ -62,7 +62,7 @@ export default function Home() {
         .order("created_at", { ascending: false });
       const ids = ((biz as Business[]) ?? []).map((b) => b.id);
       const { data: stats } = ids.length
-        ? await supabase.from("business_card_stats").select("*").in("business_id", ids)
+        ? await supabase.from("business_card_stats").select("*").in("business_id", ids).range(0, 4999)
         : { data: [] as any[] };
       const sMap = new Map((stats ?? []).map((s: any) => [s.business_id, s]));
       setFeatured(
