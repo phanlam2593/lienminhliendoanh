@@ -659,8 +659,8 @@ function PendingTab({
 
   const load = async () => {
     const [{ data: m }, { data: b }] = await Promise.all([
-      supabase.from("profiles").select("id, full_name, username, avatar_url").eq("status", "pending"),
-      supabase.from("businesses").select("id, name, owner_id").eq("status", "pending"),
+      supabase.from("profiles").select("id, full_name, username, avatar_url").eq("status", "pending").range(0, 4999),
+      supabase.from("businesses").select("id, name, owner_id").eq("status", "pending").range(0, 4999),
     ]);
     setPendingMembers(m ?? []);
     setPendingBiz(b ?? []);
