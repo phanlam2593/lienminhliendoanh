@@ -60,7 +60,12 @@ export function ReportRepliesPanel({
   const [editText, setEditText] = useState("");
 
   const load = async () => {
-    const { data } = await supabase.from("report_replies").select("*").eq("report_id", reportId).order("created_at");
+    const { data } = await supabase
+      .from("report_replies")
+      .select("*")
+      .eq("report_id", reportId)
+      .order("created_at")
+      .range(0, 4999);
     const rows = (data ?? []) as ReportReply[];
     const uids = [...new Set(rows.map((r) => r.author_id))];
     let pm = new Map<string, { full_name: string; avatar_url: string | null }>();
