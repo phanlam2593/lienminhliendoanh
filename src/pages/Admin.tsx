@@ -1350,14 +1350,16 @@ function MemberDetail({
       .from("reviews")
       .select("*")
       .eq("user_id", uid)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(0, 4999);
     setReviews((r ?? []) as Review[]);
     if (bizId) {
       const { data: o } = await supabase
         .from("offers")
         .select("*")
         .eq("business_id", bizId)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(0, 4999);
       setOffers((o ?? []) as Offer[]);
     } else setOffers([]);
     const { data: v } = await supabase
