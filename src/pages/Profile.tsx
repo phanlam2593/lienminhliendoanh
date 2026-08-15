@@ -518,7 +518,8 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
       .from("offers")
       .select("*")
       .eq("business_id", biz.id)
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(0, 4999);
     setOffers((data ?? []) as Offer[]);
   };
 
