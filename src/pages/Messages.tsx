@@ -911,9 +911,15 @@ function FollowsTab({ userId }: { userId: string }) {
   useEffect(() => {
     (async () => {
       setLoading(true);
+      // Thêm .range() phòng trường hợp 1 người follow/được follow rất nhiều (>1000) — trước
+      // đây không giới hạn gì, dễ bị Supabase âm thầm cắt bớt khi vượt ngưỡng mặc định.
       const [{ data: outRows }, { data: inRows }] = await Promise.all([
-        supabase.from("follows").select("followee_user_id, followee_business_id").eq("follower_id", userId),
-        supabase.from("follows").select("follower_id").eq("followee_user_id", userId),
+        supabase
+          .from("follows")
+          .select("followee_user_id, followee_business_id")
+          .eq("follower_id", userId)
+          .range(0, 4999),
+        supabase.from("follows").select("follower_id").eq("followee_user_id", userId).range(0, 4999),
       ]);
       const outUserIds = (outRows ?? []).map((r: any) => r.followee_user_id).filter(Boolean);
       const outBizIds = (outRows ?? []).map((r: any) => r.followee_business_id).filter(Boolean);
