@@ -793,11 +793,17 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
             hint="Giống kiểu đặt mật khẩu WiFi của quán. Đọc cho khách khi họ tới để họ nhập, xác nhận nhận ưu đãi. Có thể đổi bất cứ lúc nào."
           >
             <input
+              ref={pinInputRef}
               value={pin}
-              onChange={(e) => setPin(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 8))}
+              onChange={(e) => {
+                setPin(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 8));
+                setPinError(false);
+              }}
               placeholder={pinLoaded && !pin ? "Chưa thiết lập" : "VD: quan1234"}
               maxLength={8}
-              className="w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono"
+              className={`w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono ${
+                pinError ? "border-destructive ring-2 ring-destructive/30" : ""
+              }`}
             />
           </Field>
           {!isOnline && (
