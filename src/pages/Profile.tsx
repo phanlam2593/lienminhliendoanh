@@ -563,9 +563,13 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
 
   const save = async () => {
     if (!/^[A-Za-z0-9]{4,8}$/.test(pin)) {
-      toast.error("Mã PIN phải gồm 4-8 ký tự chữ/số");
+      setPinError(true);
+      toast.error("Chưa lưu được — cần đặt mã PIN hợp lệ (4-8 ký tự chữ/số) ở ô được khoanh đỏ bên dưới");
+      pinInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      pinInputRef.current?.focus();
       return;
     }
+    setPinError(false);
     setSaving(true);
     const wasRejected = biz.status === "rejected";
     const [{ error }, { error: pinError }] = await Promise.all([
