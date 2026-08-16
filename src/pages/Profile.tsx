@@ -492,6 +492,8 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
   const [stats, setStats] = useState({ reviews: 0, followers: 0, regulars: 0 });
   const [pin, setPin] = useState("");
   const [pinLoaded, setPinLoaded] = useState(false);
+  const [pinError, setPinError] = useState(false);
+  const pinInputRef = useRef<HTMLInputElement>(null);
   const [open_, setOpen_] = useState(biz.hours_open?.slice(0, 5) || "07:00");
   const [close_, setClose_] = useState(biz.hours_close?.slice(0, 5) || "22:00");
   const [isOnline, setIsOnline] = useState(biz.is_online ?? false);
