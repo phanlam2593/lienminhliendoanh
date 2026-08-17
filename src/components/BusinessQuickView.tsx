@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { ChevronDown, ChevronUp, MapPin, Phone, Star, UserCheck, UserPlus, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n";
 import { StoredImage } from "@/components/StoredImage";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { BUSINESS_TYPE_LABEL, type BusinessType } from "@/lib/types";
