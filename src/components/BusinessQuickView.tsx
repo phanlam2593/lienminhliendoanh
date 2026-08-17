@@ -47,6 +47,7 @@ export function BusinessQuickView({
   onOpenAdmin?: (ownerId: string) => void;
 }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [b, setB] = useState<QuickBiz | null>(null);
   const [owner, setOwner] = useState<QuickOwner | null>(null);
   const [loading, setLoading] = useState(false);
