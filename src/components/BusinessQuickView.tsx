@@ -151,7 +151,7 @@ export function BusinessQuickView({
               <div className="text-xs text-muted-foreground">{BUSINESS_TYPE_LABEL[b.type] || b.type}</div>
               {owner && (
                 <div className="text-xs text-muted-foreground mt-0.5">
-                  Chủ DN:{" "}
+                  {t("bizQuick.owner")}:{" "}
                   {onOpenAdmin && b.owner_id ? (
                     <button
                       onClick={() => {
