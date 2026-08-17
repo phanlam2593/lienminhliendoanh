@@ -250,13 +250,13 @@ export function BusinessQuickView({
                 }}
                 className="flex-1 py-2 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-semibold text-center"
               >
-                {onOpenAdmin ? "Mở để chỉnh sửa" : "Mở trang đầy đủ"}
+                {onOpenAdmin ? t("bizQuick.editFull") : t("bizQuick.viewFull")}
               </button>
               <button
                 onClick={() => onOpenChange(false)}
                 className="flex-1 py-2 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1"
               >
-                <X className="w-4 h-4" /> Đóng
+                <X className="w-4 h-4" /> {t("common.close")}
               </button>
             </div>
           </div>
