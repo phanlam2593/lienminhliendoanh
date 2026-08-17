@@ -754,7 +754,6 @@ const DICT: Record<Lang, Record<string, string>> = {
     "common.delete": "Delete",
     "common.send": "Send",
     "common.loading": "Loading…",
-    "common.close": "Close",
     "bizQuick.title": "Quick view",
     "bizQuick.owner": "Owner",
     "bizQuick.followersCount": "{n} followers",
