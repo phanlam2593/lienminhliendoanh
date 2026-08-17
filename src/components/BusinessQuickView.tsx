@@ -177,7 +177,7 @@ export function BusinessQuickView({
                 onClick={() => setFollowListOpen(true)}
                 className="px-2.5 py-1 rounded-full bg-muted font-semibold"
               >
-                {followers} theo dõi
+                {t("bizQuick.followersCount", { n: followers })}
               </button>
               <button
                 onClick={toggleFollow}
@@ -185,14 +185,14 @@ export function BusinessQuickView({
                 className={`px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1 ${following ? "bg-primary/10 text-primary" : "bg-primary text-primary-foreground"}`}
               >
                 {following ? <UserCheck className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
-                {following ? "Đang theo dõi" : "Theo dõi"}
+                {following ? t("bizQuick.following") : t("bizQuick.follow")}
               </button>
               <button
                 onClick={() => setReviewsOpen((o) => !o)}
                 disabled={reviews.length === 0}
                 className="px-2.5 py-1 rounded-full bg-muted font-semibold inline-flex items-center gap-1 disabled:opacity-60"
               >
-                {avgRating ? `★ ${avgRating.toFixed(1)} (${reviews.length})` : "Chưa có đánh giá"}
+                {avgRating ? `★ ${avgRating.toFixed(1)} (${reviews.length})` : t("bizQuick.noReviews")}
                 {reviews.length > 0 &&
                   (reviewsOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />)}
               </button>
