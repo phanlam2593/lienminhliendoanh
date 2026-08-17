@@ -132,10 +132,10 @@ export function BusinessQuickView({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Xem nhanh doanh nghiệp</DialogTitle>
+          <DialogTitle>{t("bizQuick.title")}</DialogTitle>
         </DialogHeader>
         {loading || !b ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">Đang tải…</div>
+          <div className="py-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
         ) : (
           <div className="space-y-4">
             {b.cover_url && (
