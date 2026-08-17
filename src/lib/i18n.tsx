@@ -487,7 +487,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "privacyPage.s1Li1": "Thông tin đăng ký: họ tên, tên đăng nhập, email, số điện thoại",
     "privacyPage.s1Li2": "Ảnh đại diện, ảnh bìa doanh nghiệp, ảnh đánh giá/báo cáo (nếu bạn tải lên)",
     "privacyPage.s1Li3": "Nội dung bạn tạo: tin nhắn, đánh giá, bình luận, báo cáo",
-    "privacyPage.s1Li4": 'Vị trí GPS — CHỈ khi bạn chủ động bấm "Gần đây" hoặc chủ DN ghim vị trí, không thu thập ngầm',
+    "privacyPage.s1Li4":
+      'Vị trí GPS — CHỈ khi bạn chủ động bấm "Gần đây" hoặc chủ doanh nghiệp ghim vị trí, không thu thập ngầm',
     "privacyPage.s1Li5": "Lịch sử hoạt động cơ bản (thời điểm truy cập gần nhất) để phục vụ vận hành",
     "privacyPage.s2Title": "2. Mục đích sử dụng dữ liệu",
     "privacyPage.s2Li1": "Tạo và duy trì tài khoản của bạn",
