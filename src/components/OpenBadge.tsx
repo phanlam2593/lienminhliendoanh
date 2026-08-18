@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { isOpenNow, fmtTime } from "@/lib/time";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n";
 
 export function OpenBadge({ open, close, size = "sm", showHours = false }: {
   open?: string | null; close?: string | null;
   size?: "sm" | "md"; showHours?: boolean;
 }) {
+  const { t } = useLanguage();
   const [tick, setTick] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setTick(x => x + 1), 60_000);
@@ -18,7 +20,7 @@ export function OpenBadge({ open, close, size = "sm", showHours = false }: {
     <span className={cn("inline-flex items-center gap-1 rounded-full font-semibold", cls,
       status ? "bg-emerald-500 text-white" : "bg-red-500 text-white")}>
       <span className={cn("w-1.5 h-1.5 rounded-full bg-white", status && "animate-pulse")} />
-      {status ? "Đang mở cửa" : "Đã đóng cửa"}
+      {status ? t("openBadge.open") : t("openBadge.closed")}
       {showHours && open && close && (
         <span className="opacity-90 font-normal ml-1">{fmtTime(open)}–{fmtTime(close)}</span>
       )}

@@ -3,6 +3,7 @@ import { MapPin, Navigation } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Business } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
+import { useLanguage } from "@/lib/i18n";
 
 type NearbyItem = BusinessCardData & { distanceKm: number };
 
@@ -19,6 +20,7 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
 }
 
 export default function Nearby() {
+  const { t } = useLanguage();
   const [status, setStatus] = useState<"idle" | "requesting" | "granted" | "denied" | "unsupported">("idle");
   const [items, setItems] = useState<NearbyItem[]>([]);
   const [radius, setRadius] = useState<(typeof RADIUS_OPTIONS)[number]>(5);
@@ -91,29 +93,29 @@ export default function Nearby() {
   if (status === "idle" || status === "requesting" || status === "denied" || status === "unsupported") {
     return (
       <div className="p-4">
-        <h1 className="text-xl font-extrabold mb-4">Doanh nghiệp quanh bạn</h1>
+        <h1 className="text-xl font-extrabold mb-4">{t("nearby.title")}</h1>
         <div className="bg-card rounded-2xl p-6 text-center space-y-3 shadow-sm">
           <div className="w-14 h-14 rounded-full bg-primary/10 grid place-items-center mx-auto">
             <MapPin className="w-6 h-6 text-primary" />
           </div>
           {status === "unsupported" ? (
-            <p className="text-sm text-muted-foreground">Trình duyệt của bạn không hỗ trợ định vị.</p>
+            <p className="text-sm text-muted-foreground">{t("explore.locationUnsupported")}</p>
           ) : status === "denied" ? (
             <>
               <p className="text-sm text-muted-foreground">
-                Bạn đã từ chối quyền định vị. Vào cài đặt trình duyệt để bật lại rồi thử lại.
+                {t("nearby.denied")}
               </p>
               <button
                 onClick={start}
                 className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm"
               >
-                Thử lại
+                {t("common.retry")}
               </button>
             </>
           ) : (
             <>
               <p className="text-sm text-muted-foreground">
-                Bật định vị để xem doanh nghiệp gần bạn nhất, kèm ưu đãi đang chạy.
+                {t("nearby.enablePrompt")}
               </p>
               <button
                 onClick={start}
@@ -121,7 +123,7 @@ export default function Nearby() {
                 className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm inline-flex items-center gap-2 disabled:opacity-50"
               >
                 <Navigation className="w-4 h-4" />
-                {status === "requesting" ? "Đang xin quyền…" : "Bật định vị"}
+                {status === "requesting" ? t("sort.requestingLocation") : t("nearby.enableCta")}
               </button>
             </>
           )}
@@ -132,7 +134,7 @@ export default function Nearby() {
 
   return (
     <div className="p-4 space-y-4">
-      <h1 className="text-xl font-extrabold">Doanh nghiệp quanh bạn</h1>
+      <h1 className="text-xl font-extrabold">{t("nearby.title")}</h1>
       <div className="flex gap-2">
         {RADIUS_OPTIONS.map((r) => (
           <button
@@ -147,10 +149,10 @@ export default function Nearby() {
         ))}
       </div>
       {loading ? (
-        <p className="text-sm text-center py-12 text-muted-foreground">Đang tìm doanh nghiệp gần bạn…</p>
+        <p className="text-sm text-center py-12 text-muted-foreground">{t("nearby.searching")}</p>
       ) : filtered.length === 0 ? (
         <p className="text-sm text-center py-12 text-muted-foreground">
-          Chưa có doanh nghiệp nào trong bán kính {radius}km. Thử tăng bán kính lên xem sao.
+          {t("explore.noResultsRadius", { r: radius })}
         </p>
       ) : (
         <div className="space-y-3">

@@ -248,7 +248,7 @@ export default function BusinessDetail() {
       setReviewPage(0);
       void loadReviews(0, false);
     } catch (e: any) {
-      toast.error(e.message || "Gửi đánh giá thất bại");
+      toast.error(e.message || t("biz.reviewSendFail"));
     } finally {
       setReviewUploading(false);
     }
@@ -284,7 +284,7 @@ export default function BusinessDetail() {
     nav(`/tin-nhan/${b.owner_id}`);
   };
 
-  if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">Đang tải…</div>;
+  if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
 
   const isOwner = !!user && user.id === b.owner_id;
 
@@ -373,7 +373,7 @@ export default function BusinessDetail() {
             >
               <Avatar path={ownerProfile.avatar_url} name={ownerProfile.full_name} size={24} />
               <span>
-                Chủ doanh nghiệp: <span className="font-semibold text-foreground">{ownerProfile.full_name}</span>
+                {t("bizQuick.owner")}: <span className="font-semibold text-foreground">{ownerProfile.full_name}</span>
               </span>
             </button>
           )}
@@ -583,7 +583,7 @@ export default function BusinessDetail() {
               <div className="relative inline-block">
                 <img
                   src={reviewImage.previewUrl}
-                  alt="Xem trước"
+                  alt={t("chat.previewAlt")}
                   className="w-20 h-20 object-cover rounded-lg border"
                 />
                 <button
@@ -591,7 +591,7 @@ export default function BusinessDetail() {
                     URL.revokeObjectURL(reviewImage.previewUrl);
                     setReviewImage(null);
                   }}
-                  aria-label="Hủy ảnh"
+                  aria-label={t("biz.cancelImage")}
                   className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
                 >
                   ×
@@ -681,7 +681,7 @@ export default function BusinessDetail() {
       <Dialog open={!!claimsListOffer} onOpenChange={(v) => !v && setClaimsListOffer(null)}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Người đã nhận "{claimsListOffer?.title}"</DialogTitle>
+            <DialogTitle>{t("biz.claimersOf", { title: claimsListOffer?.title ?? "" })}</DialogTitle>
           </DialogHeader>
           {claimsListOffer && <OfferClaimsList offerId={claimsListOffer.id} onOpenUser={setQuickViewUser} />}
         </DialogContent>
@@ -872,7 +872,7 @@ function ReviewItem({
       toast.error(error.message);
       return;
     }
-    toast.success("Đã lưu");
+    toast.success(t("common.saved"));
     setEditOpen(false);
     onReplied();
   };
@@ -916,7 +916,7 @@ function ReviewItem({
         {isMine && (
           <button
             onClick={() => setEditOpen((o) => !o)}
-            aria-label="Sửa đánh giá"
+            aria-label={t("biz.editReview")}
             className="text-muted-foreground p-1 rounded hover:bg-accent"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -925,7 +925,7 @@ function ReviewItem({
         {(isMine || isAdmin) && (
           <button
             onClick={onDelete}
-            aria-label="Xóa đánh giá"
+            aria-label={t("biz.deleteReview")}
             className="text-destructive p-1 rounded hover:bg-destructive/10"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -934,7 +934,7 @@ function ReviewItem({
         {isOwner && !isMine && (
           <button
             onClick={() => setReportOpen(true)}
-            aria-label="Báo cáo đánh giá"
+            aria-label={t("biz.reportReview")}
             className="text-muted-foreground p-1 rounded hover:bg-accent"
           >
             <Flag className="w-3.5 h-3.5" />
@@ -965,7 +965,7 @@ function ReviewItem({
               disabled={editBusy}
               className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold"
             >
-              {editBusy ? "Đang lưu…" : "Lưu"}
+              {editBusy ? t("common.saving") : t("common.save")}
             </button>
             <button onClick={() => setEditOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
               Hủy
@@ -977,7 +977,7 @@ function ReviewItem({
       )}
       {r.image_url && (
         <div className="h-40 rounded-lg overflow-hidden bg-muted">
-          <LightboxImage path={r.image_url} alt="Ảnh đánh giá" className="w-full h-full object-cover" />
+          <LightboxImage path={r.image_url} alt={t("biz.reviewImageAlt")} className="w-full h-full object-cover" />
         </div>
       )}
 
@@ -987,12 +987,12 @@ function ReviewItem({
             <div key={rep.id} className="text-xs space-y-0.5">
               <div className="flex items-center gap-1.5">
                 <Avatar path={rep.profile?.avatar_url} name={rep.profile?.full_name} size={20} />
-                <span className="font-semibold truncate">{rep.profile?.full_name || "Chủ doanh nghiệp"}</span>
+                <span className="font-semibold truncate">{rep.profile?.full_name || t("bizQuick.owner")}</span>
                 <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at)}</span>
                 {(isAdmin || rep.user_id === myId) && (
                   <button
                     onClick={() => onDeleteReply(rep.id)}
-                    aria-label="Xóa phản hồi"
+                    aria-label={t("biz.deleteReply")}
                     className="ml-auto text-destructive p-0.5"
                   >
                     <Trash2 className="w-3 h-3" />

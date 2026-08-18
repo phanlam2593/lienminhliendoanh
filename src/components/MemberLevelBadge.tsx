@@ -1,4 +1,5 @@
 import { getMemberTierProgress } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 export function MemberLevelBadge({
   points,
@@ -9,6 +10,7 @@ export function MemberLevelBadge({
   isAdmin?: boolean;
   size?: "sm" | "md";
 }) {
+  const { t } = useLanguage();
   if (isAdmin) {
     return (
       <span
@@ -27,7 +29,7 @@ export function MemberLevelBadge({
           {current.emoji} {current.label}
         </span>
       ) : (
-        <span className="text-muted-foreground">Thành viên mới</span>
+        <span className="text-muted-foreground">{t("level.newMember")}</span>
       )}
       <span className={`h-1.5 ${barWidth} rounded-full bg-muted overflow-hidden shrink-0`}>
         <span className="h-full block rounded-full bg-primary" style={{ width: `${pct}%` }} />

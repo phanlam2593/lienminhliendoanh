@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar } from "@/components/Avatar";
+import { useLanguage } from "@/lib/i18n";
 
 interface Regular {
   id: string;
@@ -16,16 +17,17 @@ interface Regular {
 
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
-function tierOf(visits: number): { label: string; className: string } {
+function tierOf(visits: number): { labelKey: string; className: string } {
   if (visits >= 5)
-    return { label: "VIP", className: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400" };
-  if (visits >= 2) return { label: "Thân thiết", className: "bg-primary/10 text-primary" };
-  return { label: "Mới", className: "bg-muted text-muted-foreground" };
+    return { labelKey: "regularsPanel.tierVip", className: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400" };
+  if (visits >= 2) return { labelKey: "regularsPanel.tierLoyal", className: "bg-primary/10 text-primary" };
+  return { labelKey: "regularsPanel.tierNew", className: "bg-muted text-muted-foreground" };
 }
 
 // Danh sách này tự động: mỗi lần khách claim ưu đãi tại quán, trigger DB
 // (auto_regular_on_claim) tự thêm/tăng visit_count ở đây — không cần đánh dấu tay nữa.
 export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
+  const { t } = useLanguage();
   const [rows, setRows] = useState<Regular[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -75,7 +77,7 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
         })),
       );
     } catch (e: any) {
-      toast.error(e.message || "Không tải được danh sách khách");
+      toast.error(e.message || t("regularsPanel.loadFail"));
     } finally {
       setLoading(false);
     }
@@ -95,30 +97,30 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
     void load();
   };
 
-  if (loading) return <div className="text-xs text-muted-foreground py-2">Đang tải danh sách khách…</div>;
+  if (loading) return <div className="text-xs text-muted-foreground py-2">{t("regularsPanel.loading")}</div>;
 
   const newThisWeek = rows.filter((r) => Date.now() - new Date(r.createdAt).getTime() < WEEK_MS).length;
 
   return (
     <div className="border-t pt-3 space-y-3">
       <div className="text-xs font-semibold text-muted-foreground">
-        Khách quen — chỉ bạn thấy danh sách này. Tự động ghi nhận mỗi khi khách claim ưu đãi.
+        {t("regularsPanel.intro")}
       </div>
 
       <div className="grid grid-cols-2 gap-2">
         <div className="bg-accent/50 rounded-xl p-3 text-center">
           <div className="text-lg font-extrabold text-primary">{rows.length}</div>
-          <div className="text-[11px] text-muted-foreground">Tổng khách quen</div>
+          <div className="text-[11px] text-muted-foreground">{t("regularsPanel.total")}</div>
         </div>
         <div className="bg-accent/50 rounded-xl p-3 text-center">
           <div className="text-lg font-extrabold text-primary">{newThisWeek}</div>
-          <div className="text-[11px] text-muted-foreground">Khách mới tuần này</div>
+          <div className="text-[11px] text-muted-foreground">{t("regularsPanel.newThisWeek")}</div>
         </div>
       </div>
 
       {rows.length === 0 ? (
         <div className="text-xs text-muted-foreground py-2">
-          Chưa có khách quen nào. Danh sách sẽ tự xuất hiện khi khách bắt đầu claim ưu đãi tại quán.
+          {t("regularsPanel.empty")}
         </div>
       ) : (
         <ul className="space-y-1.5">
@@ -130,16 +132,18 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
                   <Avatar path={r.avatar_url} name={r.full_name || r.username} size={32} />
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <div className="text-xs font-semibold truncate">{r.full_name || r.username || "Ẩn danh"}</div>
+                      <div className="text-xs font-semibold truncate">{r.full_name || r.username || t("common.anonymous")}</div>
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold shrink-0 ${tier.className}`}
                       >
-                        {tier.label}
+                        {t(tier.labelKey)}
                       </span>
                     </div>
                     <div className="text-[10px] text-muted-foreground">
-                      {r.visits} lượt ghé
-                      {r.lastVisit ? ` · gần nhất ${new Date(r.lastVisit).toLocaleDateString("vi-VN")}` : ""}
+                      {t("regulars.visitsCount", { n: r.visits })}
+                      {r.lastVisit
+                        ? t("regulars.lastVisitSuffix", { date: new Date(r.lastVisit).toLocaleDateString("vi-VN") })
+                        : ""}
                     </div>
                   </div>
                 </Link>
@@ -147,7 +151,7 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
                   onClick={() => removeRegular(r.id)}
                   className="h-8 px-2.5 rounded-lg text-[11px] font-semibold shrink-0 border text-muted-foreground"
                 >
-                  Bỏ khỏi danh sách
+                  {t("regularsPanel.remove")}
                 </button>
               </li>
             );

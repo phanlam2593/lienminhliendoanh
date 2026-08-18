@@ -60,11 +60,11 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
         )}
         {typeof b.totalClaims === "number" && b.totalClaims > 0 && (
           <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-            <Users className="w-3 h-3" /> Tổng {b.totalClaims} lượt đã nhận
+            <Users className="w-3 h-3" /> {t("bizCard.totalClaims", { n: b.totalClaims })}
             {typeof b.latestOfferClaims === "number" &&
               b.latestOfferClaims > 0 &&
               b.latestOfferClaims !== b.totalClaims &&
-              ` (ưu đãi mới nhất: ${b.latestOfferClaims})`}
+              t("bizCard.latestOfferClaims", { n: b.latestOfferClaims })}
           </p>
         )}
         {b.latestReview && (

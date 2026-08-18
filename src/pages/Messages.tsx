@@ -118,7 +118,7 @@ export function MessagesInbox() {
       .delete()
       .or(`and(sender_id.eq.${user.id},receiver_id.eq.${pid}),and(sender_id.eq.${pid},receiver_id.eq.${user.id})`);
     if (error) toast.error(error.message);
-    else toast.success("Đã xóa cuộc trò chuyện");
+    else toast.success(t("messages.convoDeleted"));
     setConfirmPartner(null);
     load();
   };
@@ -175,7 +175,7 @@ export function MessagesInbox() {
               </Link>
               <button
                 onClick={() => setConfirmPartner(c)}
-                aria-label="Xóa cuộc trò chuyện"
+                aria-label={t("messages.deleteConvo")}
                 className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
               >
                 <Trash2 className="w-4 h-4" />
@@ -473,7 +473,7 @@ export function MessagesThread() {
       .select()
       .single();
     if (error) {
-      toast.error("Gửi GIF thất bại: " + error.message);
+      toast.error(t("chat.sendGifFail") + ": " + error.message);
       return;
     }
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
@@ -505,7 +505,7 @@ export function MessagesThread() {
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
-        toast.error(e.message || "Gửi ảnh thất bại");
+        toast.error(e.message || t("chat.sendImageFail"));
       } finally {
         setUploading(false);
       }
@@ -526,7 +526,7 @@ export function MessagesThread() {
       .select()
       .single();
     if (error) {
-      toast.error("Gửi tin nhắn thất bại: " + error.message);
+      toast.error(t("chat.sendFail") + ": " + error.message);
       setText(trimmed);
       return;
     }
@@ -665,7 +665,7 @@ export function MessagesThread() {
                     {canDelete && mine && !isEditing && (
                       <button
                         onClick={() => setConfirmDeleteId(m.id)}
-                        aria-label="Xóa"
+                        aria-label={t("common.delete")}
                         className="opacity-0 group-hover:opacity-100 text-destructive p-1"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -705,7 +705,7 @@ export function MessagesThread() {
                       </div>
                     ) : m.type === "image" ? (
                       <div className="max-w-[220px]">
-                        <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-2xl w-full object-cover" />
+                        <StoredImage path={m.image_url} alt={t("chat.imageAlt")} className="rounded-2xl w-full object-cover" />
                         <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
                           {timeAgo(m.created_at, lang)}
                         </div>
@@ -724,7 +724,7 @@ export function MessagesThread() {
                     {canDelete && !mine && !isEditing && (
                       <button
                         onClick={() => setConfirmDeleteId(m.id)}
-                        aria-label="Xóa"
+                        aria-label={t("common.delete")}
                         className="opacity-0 group-hover:opacity-100 text-destructive p-1"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -804,7 +804,7 @@ export function MessagesThread() {
       {pendingImage && (
         <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
           <div className="relative">
-            <img src={pendingImage.previewUrl} alt="Xem trước" className="w-16 h-16 object-cover rounded-lg border" />
+            <img src={pendingImage.previewUrl} alt={t("chat.previewAlt")} className="w-16 h-16 object-cover rounded-lg border" />
             <button
               onClick={cancelPendingImage}
               aria-label="Hủy"
@@ -832,7 +832,7 @@ export function MessagesThread() {
         <button
           onClick={() => fileRef.current?.click()}
           disabled={uploading}
-          aria-label="Chọn ảnh"
+          aria-label={t("chat.pickImage")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
         >
           <ImageIcon className="w-5 h-5" />

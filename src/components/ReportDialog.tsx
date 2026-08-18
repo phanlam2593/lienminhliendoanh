@@ -73,7 +73,7 @@ export function ReportDialog({
           className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
         />
         <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-        <p className="text-[11px] text-muted-foreground -mt-1">Ảnh minh họa (không bắt buộc)</p>
+        <p className="text-[11px] text-muted-foreground -mt-1">{t("report.photoOptional")}</p>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={toAdmin} onChange={(e) => setToAdmin(e.target.checked)} />{" "}
           {t("report.sendToAdmin")}

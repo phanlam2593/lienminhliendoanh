@@ -5,6 +5,7 @@ import { Mail, MessageCircle, Phone, UserCheck, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "./Avatar";
 import { MemberLevelBadge } from "./MemberLevelBadge";
 
@@ -31,6 +32,7 @@ export function ProfileQuickView({
   onOpenChange: (v: boolean) => void;
 }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [p, setP] = useState<QuickProfile | null>(null);
   const [loading, setLoading] = useState(false);
   const [following, setFollowing] = useState(false);
@@ -98,10 +100,10 @@ export function ProfileQuickView({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>Hồ sơ</DialogTitle>
+          <DialogTitle>{t("profileQuick.title")}</DialogTitle>
         </DialogHeader>
         {loading || !p ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">Đang tải…</div>
+          <div className="py-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
         ) : (
           <div className="space-y-4">
             <div className="flex flex-col items-center text-center gap-2">
@@ -118,7 +120,7 @@ export function ProfileQuickView({
                 {p.bio && <p className="text-sm text-muted-foreground mt-1">{p.bio}</p>}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
-                <span className="px-2 py-0.5 rounded-full bg-muted">{followers} người theo dõi</span>
+                <span className="px-2 py-0.5 rounded-full bg-muted">{t("profileQuick.followersCount", { n: followers })}</span>
               </div>
             </div>
 
@@ -144,11 +146,11 @@ export function ProfileQuickView({
                 >
                   {following ? (
                     <>
-                      <UserCheck className="w-4 h-4" /> Đang theo dõi
+                      <UserCheck className="w-4 h-4" /> {t("common.following")}
                     </>
                   ) : (
                     <>
-                      <UserPlus className="w-4 h-4" /> Theo dõi
+                      <UserPlus className="w-4 h-4" /> {t("common.follow")}
                     </>
                   )}
                 </button>
@@ -159,7 +161,7 @@ export function ProfileQuickView({
                   onClick={() => onOpenChange(false)}
                   className="flex-1 py-2 rounded-xl border text-sm font-semibold text-center"
                 >
-                  Mở hồ sơ của tôi
+                  {t("profileQuick.openMyProfile")}
                 </Link>
               ) : (
                 user && (
@@ -168,7 +170,7 @@ export function ProfileQuickView({
                     onClick={() => onOpenChange(false)}
                     className="flex-1 py-2 rounded-xl border text-sm font-semibold flex items-center justify-center gap-1"
                   >
-                    <MessageCircle className="w-4 h-4" /> Nhắn tin
+                    <MessageCircle className="w-4 h-4" /> {t("common.message")}
                   </Link>
                 )
               )}

@@ -481,7 +481,7 @@ export default function Community() {
       .select()
       .single();
     if (error) {
-      toast.error("Gửi GIF thất bại: " + error.message);
+      toast.error(t("chat.sendGifFail") + ": " + error.message);
       return;
     }
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
@@ -507,7 +507,7 @@ export default function Community() {
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
-        toast.error(e.message || "Gửi ảnh thất bại");
+        toast.error(e.message || t("chat.sendImageFail"));
       } finally {
         setUploading(false);
       }
@@ -533,7 +533,7 @@ export default function Community() {
   };
 
   const del = async (id: string) => {
-    if (!confirm("Xóa tin nhắn này?")) return;
+    if (!confirm(t("chat.confirmDeleteMessage"))) return;
     const { error } = await supabase.from("community_messages").delete().eq("id", id);
     if (error) {
       toast.error(error.message);
@@ -888,7 +888,7 @@ export default function Community() {
                         {canDelete && (
                           <button
                             onClick={() => del(m.id)}
-                            aria-label="Xóa"
+                            aria-label={t("common.delete")}
                             className={`opacity-0 group-hover:opacity-100 focus:opacity-100 transition text-destructive ${mine && m.type === "text" ? "" : "ml-auto"}`}
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -933,7 +933,7 @@ export default function Community() {
                         <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
                       ) : m.type === "image" ? (
                         <div className="max-w-[200px] mt-0.5">
-                          <StoredImage path={m.image_url} alt="Hình ảnh" className="rounded-xl w-full object-cover" />
+                          <StoredImage path={m.image_url} alt={t("chat.imageAlt")} className="rounded-xl w-full object-cover" />
                         </div>
                       ) : (
                         <div
@@ -1019,7 +1019,7 @@ export default function Community() {
         {pendingImage && (
           <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
             <div className="relative">
-              <img src={pendingImage.previewUrl} alt="Xem trước" className="w-16 h-16 object-cover rounded-lg border" />
+              <img src={pendingImage.previewUrl} alt={t("chat.previewAlt")} className="w-16 h-16 object-cover rounded-lg border" />
               <button
                 onClick={cancelPendingImage}
                 aria-label="Hủy"
@@ -1047,7 +1047,7 @@ export default function Community() {
           <button
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
-            aria-label="Chọn ảnh"
+            aria-label={t("chat.pickImage")}
             className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
           >
             <ImageIcon className="w-5 h-5" />
@@ -1093,7 +1093,7 @@ export default function Community() {
           <button
             onClick={send}
             disabled={uploading}
-            aria-label="Gửi"
+            aria-label={t("common.send")}
             className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0 disabled:opacity-60"
           >
             <Send className="w-4 h-4" />
