@@ -254,6 +254,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "onboarding.tagYou": "🎥 Bạn",
     "onboarding.tagCommunity": "Cộng đồng 💚",
     "exchange.reqTypeOther": "Khác",
+    "upload.errType": "Chỉ chấp nhận JPG, PNG, WEBP",
+    "upload.errSize": "Ảnh tối đa 5MB",
+    "upload.errAuth": "Cần đăng nhập để tải ảnh lên",
+    "push.errUnsupported": "Trình duyệt không hỗ trợ push",
+    "push.errNoPermission": "Chưa cấp quyền thông báo",
+    "push.errNotLoggedIn": "Chưa đăng nhập",
+    "push.errSubscription": "Subscription thiếu p256dh/auth",
+    "push.enableFailed": "Lỗi bật thông báo đẩy: {msg}",
+    "push.enableSuccess": "Đã đăng ký nhận thông báo đẩy thành công",
+    "pwa.updateTitle": "Đã có bản cập nhật mới",
+    "pwa.updateDesc": "Bấm để tải lại và áp dụng bản mới.",
+    "pwa.updateAction": "Cập nhật",
     "onboarding.skip": "Bỏ qua",
     "onboarding.badge": "Cho là nhận, nhận cũng là cho",
     "onboarding.potentialCustomers": "khách tiềm năng",
@@ -1164,6 +1176,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "onboarding.tagYou": "🎥 You",
     "onboarding.tagCommunity": "Community 💚",
     "exchange.reqTypeOther": "Other",
+    "upload.errType": "Only JPG, PNG and WEBP are accepted",
+    "upload.errSize": "Image must be under 5MB",
+    "upload.errAuth": "You need to sign in to upload images",
+    "push.errUnsupported": "This browser does not support push",
+    "push.errNoPermission": "Notification permission not granted",
+    "push.errNotLoggedIn": "Not signed in",
+    "push.errSubscription": "Subscription is missing p256dh/auth",
+    "push.enableFailed": "Could not enable push notifications: {msg}",
+    "push.enableSuccess": "Push notifications enabled successfully",
+    "pwa.updateTitle": "A new update is available",
+    "pwa.updateDesc": "Tap to reload and apply the new version.",
+    "pwa.updateAction": "Update",
     "onboarding.skip": "Skip",
     "onboarding.badge": "Give and you shall receive",
     "onboarding.potentialCustomers": "potential customers",
@@ -1870,3 +1894,21 @@ export function useLanguage() {
   if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
   return ctx;
 }
+
+// Dịch NGOÀI React (module tiện ích, toast trong .ts thường không có hook) — đọc ngôn ngữ
+// đang chọn trực tiếp từ localStorage, dùng CHUNG bộ khoá DICT với useLanguage().
+export function tStatic(key: string, params?: Record<string, string | number>) {
+  let lang: Lang = "vi";
+  try {
+    const saved = localStorage.getItem("lang");
+    if (saved === "en" || saved === "vi") lang = saved;
+  } catch {}
+  let s = DICT[lang][key] ?? DICT.vi[key] ?? key;
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      s = s.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+    }
+  }
+  return s;
+}
+
