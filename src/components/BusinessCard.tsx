@@ -36,7 +36,7 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
         <div className="absolute bottom-2 left-2">
           {b.is_online ? (
             <span className="inline-flex items-center gap-1 rounded-full font-semibold text-[10px] px-2 py-0.5 bg-sky-500 text-white">
-              Bán hàng online
+              {t("online.badge")}
             </span>
           ) : (
             <OpenBadge open={b.hours_open} close={b.hours_close} />
