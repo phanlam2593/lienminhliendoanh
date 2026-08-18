@@ -732,7 +732,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
             </div>
           </Field>
           <label className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-accent/50 cursor-pointer">
-            <span className="text-xs font-semibold">Chỉ bán hàng online (không có địa điểm/giờ mở cửa cố định)</span>
+            <span className="text-xs font-semibold">{t("online.toggleLabel")}</span>
             <button
               type="button"
               onClick={() => setIsOnline((v) => !v)}
