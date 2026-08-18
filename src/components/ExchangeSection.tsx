@@ -345,7 +345,7 @@ function CreateExchangeDialog({
             >
               {REQ_TYPES.map((rt) => (
                 <option key={rt} value={rt}>
-                  {rt}
+                  {rt === "Khác" ? t("exchange.reqTypeOther") : rt}
                 </option>
               ))}
             </select>
