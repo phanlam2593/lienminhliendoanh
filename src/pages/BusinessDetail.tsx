@@ -354,7 +354,7 @@ export default function BusinessDetail() {
             </span>
             {b.is_online ? (
               <span className="text-xs bg-sky-500 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
-                Bán hàng online
+                {t("online.badge")}
               </span>
             ) : (
               <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
