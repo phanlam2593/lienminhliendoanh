@@ -1367,6 +1367,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "network.offlineDesc": "Please check your internet connection.",
     "network.online": "Back online",
     "explore.viewList": "List",
+    "online.badge": "Online sales",
+    "online.toggleLabel": "Online only (no physical location/fixed hours)",
     "explore.viewMap": "Map",
     "map.noPinned": "No businesses have pinned their location on the map yet",
     "map.youAreHere": "Your location",
