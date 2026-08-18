@@ -107,7 +107,7 @@ export function ReportRepliesPanel({
   };
 
   const deleteReply = async (replyId: string) => {
-    if (!confirm("Xóa phản hồi này?")) return;
+    if (!confirm(t("reports.confirmDeleteReply"))) return;
     const { error } = await supabase.from("report_replies").delete().eq("id", replyId);
     if (error) {
       toast.error(error.message);
@@ -135,8 +135,7 @@ export function ReportRepliesPanel({
     <div className="space-y-2 mt-2">
       {reporterSatisfied === false && (
         <div className="flex items-center gap-1.5 p-2 rounded-lg bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-400 text-xs font-semibold">
-          <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> Người báo cáo chưa hài lòng với cách xử lý — cần admin hỗ
-          trợ thêm
+          <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> {t("reports.notSatisfiedBanner")}
         </div>
       )}
       {replies.length > 0 && (
@@ -175,14 +174,14 @@ export function ReportRepliesPanel({
                           onClick={() => saveReplyEdit(r.id)}
                           className="px-2 py-0.5 rounded bg-primary text-primary-foreground text-[10px] font-semibold"
                         >
-                          Lưu
+                          {t("common.save")}
                         </button>
                         <button
                           type="button"
                           onClick={() => setEditingReplyId(null)}
                           className="px-2 py-0.5 rounded border text-[10px]"
                         >
-                          Hủy
+                          {t("common.cancel")}
                         </button>
                       </div>
                     </div>
@@ -199,14 +198,14 @@ export function ReportRepliesPanel({
                             }}
                             className="text-[10px] font-semibold text-muted-foreground"
                           >
-                            Sửa
+                            {t("common.editShort")}
                           </button>
                           <button
                             type="button"
                             onClick={() => deleteReply(r.id)}
                             className="text-[10px] font-semibold text-destructive"
                           >
-                            Xóa
+                            {t("common.delete")}
                           </button>
                         </div>
                       )}
