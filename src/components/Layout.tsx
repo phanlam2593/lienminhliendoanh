@@ -120,7 +120,7 @@ export function Layout() {
                   </Link>
                   <Link
                     to="/thong-bao"
-                    aria-label="Thông báo"
+                    aria-label={t("nav.notifications")}
                     className="relative w-9 h-9 grid place-items-center rounded-full hover:bg-accent"
                   >
                     <Bell className="w-5 h-5" />
@@ -130,7 +130,7 @@ export function Layout() {
                       </span>
                     )}
                   </Link>
-                  <Link to="/ho-so" aria-label="Hồ sơ" className="rounded-full shadow-brand">
+                  <Link to="/ho-so" aria-label={t("nav.profileShort")} className="rounded-full shadow-brand">
                     <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
                   </Link>
                 </>
@@ -351,27 +351,29 @@ function Footer() {
   );
 }
 function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
+  const { t } = useLanguage();
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center gap-5">
       <div className="w-16 h-16 rounded-full bg-yellow-100 grid place-items-center">
         <Clock className="w-8 h-8 text-yellow-600" />
       </div>
-      <h1 className="text-xl font-bold">Tài khoản đang chờ duyệt</h1>
+      <h1 className="text-xl font-bold">{t("pending.title")}</h1>
       <p className="text-sm text-muted-foreground max-w-xs">
-        Tài khoản của bạn đang chờ admin duyệt. Bạn sẽ nhận thông báo khi được chấp thuận.
+        {t("pending.body")}
       </p>
       <div className="flex gap-2">
         <Link to="/ho-so" className="px-4 py-2 rounded-xl bg-accent text-sm font-semibold">
-          Hồ sơ
+          {t("nav.profileShort")}
         </Link>
         <button onClick={onSignOut} className="px-4 py-2 rounded-xl border text-destructive text-sm font-semibold">
-          Đăng xuất
+          {t("common.logout")}
         </button>
       </div>
     </div>
   );
 }
 function InstallBanner() {
+  const { t } = useLanguage();
   const [show, setShow] = useState(false);
   const [canPromptNative, setCanPromptNative] = useState(false);
 
@@ -407,11 +409,11 @@ function InstallBanner() {
             <Download className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-bold">Thêm vào màn hình chính</div>
+            <div className="text-sm font-bold">{t("install.title")}</div>
             {canPromptNative ? (
-              <div className="text-[11px] opacity-90">Cài app để dùng nhanh hơn</div>
+              <div className="text-[11px] opacity-90">{t("install.subtitleNative")}</div>
             ) : (
-              <div className="text-[11px] opacity-90">Cài đặt trong 2 bước đơn giản</div>
+              <div className="text-[11px] opacity-90">{t("install.subtitleManual")}</div>
             )}
           </div>
           {canPromptNative && (
@@ -419,10 +421,10 @@ function InstallBanner() {
               onClick={handleInstall}
               className="px-3 py-1.5 rounded-lg bg-white text-primary text-xs font-bold shrink-0"
             >
-              Thêm
+              {t("install.add")}
             </button>
           )}
-          <button onClick={handleDismiss} className="p-1 shrink-0" aria-label="Đóng">
+          <button onClick={handleDismiss} className="p-1 shrink-0" aria-label={t("common.close")}>
             <XIcon className="w-4 h-4" />
           </button>
         </div>
@@ -431,18 +433,18 @@ function InstallBanner() {
           <div className="mt-3 pt-3 border-t border-white/20 space-y-2">
             <div className="flex items-center gap-2 text-xs">
               <span className="w-5 h-5 rounded-full bg-white/20 grid place-items-center font-bold shrink-0">1</span>
-              <span>Nhấn icon</span>
+              <span>{t("install.step1")}</span>
               <span className="inline-flex items-center justify-center w-6 h-6 rounded bg-white/20 shrink-0">
                 <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 3v13m0-13l-4 4m4-4l4 4" strokeLinecap="round" strokeLinejoin="round" />
                   <rect x="4" y="14" width="16" height="7" rx="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span>ở dưới màn hình Safari</span>
+              <span>{t("install.step1b")}</span>
             </div>
             <div className="flex items-center gap-2 text-xs">
               <span className="w-5 h-5 rounded-full bg-white/20 grid place-items-center font-bold shrink-0">2</span>
-              <span>Chọn "Thêm vào MH chính"</span>
+              <span>{t("install.step2")}</span>
             </div>
             <div className="flex justify-center pt-1">
               <svg viewBox="0 0 24 24" className="w-5 h-5 animate-bounce" fill="none" stroke="white" strokeWidth="2">
