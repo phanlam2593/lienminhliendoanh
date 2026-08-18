@@ -624,6 +624,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "network.offlineDesc": "Vui lòng kiểm tra kết nối internet của bạn.",
     "network.online": "Đã có kết nối trở lại",
     "explore.viewList": "Danh sách",
+    "online.badge": "Bán hàng online",
+    "online.toggleLabel": "Chỉ bán hàng online (không có địa điểm/giờ mở cửa cố định)",
     "explore.viewMap": "Bản đồ",
     "map.noPinned": "Chưa có doanh nghiệp nào ghim vị trí",
     "map.youAreHere": "Vị trí của bạn",
