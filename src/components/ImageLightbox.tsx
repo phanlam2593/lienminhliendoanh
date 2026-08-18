@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 import { StoredImage } from "./StoredImage";
+import { useLanguage } from "@/lib/i18n";
 
 export function LightboxImage({
   path,
@@ -11,11 +12,12 @@ export function LightboxImage({
   alt?: string;
   className?: string;
 }) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   if (!path) return null;
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className="block w-full h-full cursor-zoom-in" aria-label="Xem ảnh cỡ lớn">
+      <button type="button" onClick={() => setOpen(true)} className="block w-full h-full cursor-zoom-in" aria-label={t("lightbox.viewLarge")}>
         <StoredImage path={path} alt={alt ?? ""} className={className} />
       </button>
       {open && (
@@ -25,7 +27,7 @@ export function LightboxImage({
         >
           <button
             onClick={() => setOpen(false)}
-            aria-label="Đóng"
+            aria-label={t("common.close")}
             className="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 text-white grid place-items-center"
           >
             <X className="w-5 h-5" />
