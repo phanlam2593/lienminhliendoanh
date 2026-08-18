@@ -5,6 +5,7 @@
  */
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { tStatic } from "@/lib/i18n";
 
 const SW_URL = "/sw.js";
 const VAPID_PUBLIC_KEY = "BHFzPpiSJBKk1OYCSIoxgwsjbBuGUsftLmhFcmvcAyl4EBtYK7DKp2QdLBuMS-4I8Z0-oqxYB66nPWs01hzZnIs";
@@ -43,12 +44,12 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
 async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok: boolean; message?: string }> {
   try {
     if (!("PushManager" in window) || !("Notification" in window))
-      return { ok: false, message: "Trình duyệt không hỗ trợ push" };
-    if (Notification.permission !== "granted") return { ok: false, message: "Chưa cấp quyền thông báo" };
+      return { ok: false, message: tStatic("push.errUnsupported") };
+    if (Notification.permission !== "granted") return { ok: false, message: tStatic("push.errNoPermission") };
 
     const { data: authData } = await supabase.auth.getUser();
     const user = authData?.user;
-    if (!user) return { ok: false, message: "Chưa đăng nhập" };
+    if (!user) return { ok: false, message: tStatic("push.errNotLoggedIn") };
 
     let sub = await registration.pushManager.getSubscription();
     if (!sub) {
@@ -61,7 +62,7 @@ async function setupPush(registration: ServiceWorkerRegistration): Promise<{ ok:
     const json = sub.toJSON();
     const p256dh = json.keys?.p256dh;
     const auth = json.keys?.auth;
-    if (!json.endpoint || !p256dh || !auth) return { ok: false, message: "Subscription thiếu p256dh/auth" };
+    if (!json.endpoint || !p256dh || !auth) return { ok: false, message: tStatic("push.errSubscription") };
 
     const { error: fnError } = await supabase.functions.invoke("register-push", {
       body: { endpoint: json.endpoint, p256dh, auth },
@@ -261,9 +262,9 @@ export async function requestPushPermission(): Promise<"granted" | "denied" | "u
     const reg = await navigator.serviceWorker.ready;
     const result = await setupPush(reg);
     if (!result.ok) {
-      toast.error("Lỗi bật thông báo đẩy: " + result.message);
+      toast.error(tStatic("push.enableFailed", { msg: result.message ?? "" }));
     } else {
-      toast.success("Đã đăng ký nhận thông báo đẩy thành công");
+      toast.success(tStatic("push.enableSuccess"));
     }
   }
   return perm === "granted" ? "granted" : "denied";
@@ -305,10 +306,10 @@ function _setUpdateStatus(s: UpdateStatus) {
     // KHÔNG tự động reload nữa — ép reload đúng lúc mạng chập chờn từng gây ra bug
     // "báo mất mạng dù có mạng". Chỉ báo cho biết, để người dùng tự bấm cập nhật khi
     // họ đang rảnh tay, qua nút UpdateIndicator đã có sẵn.
-    toast("Đã có bản cập nhật mới", {
-      description: "Bấm để tải lại và áp dụng bản mới.",
+    toast(tStatic("pwa.updateTitle"), {
+      description: tStatic("pwa.updateDesc"),
       duration: 8000,
-      action: { label: "Cập nhật", onClick: () => void applyUpdate() },
+      action: { label: tStatic("pwa.updateAction"), onClick: () => void applyUpdate() },
     });
   }
 }

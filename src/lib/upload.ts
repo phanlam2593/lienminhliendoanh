@@ -1,11 +1,12 @@
 import { supabase } from "@/integrations/supabase/client";
+import { tStatic } from "@/lib/i18n";
 
 export const MAX_SIZE = 5 * 1024 * 1024;
 export const ACCEPT = "image/jpeg,image/png,image/webp";
 
 export function validateImage(file: File): string | null {
-  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) return "Chỉ chấp nhận JPG, PNG, WEBP";
-  if (file.size > MAX_SIZE) return "Ảnh tối đa 5MB";
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) return tStatic("upload.errType");
+  if (file.size > MAX_SIZE) return tStatic("upload.errSize");
   return null;
 }
 
@@ -49,7 +50,7 @@ export async function uploadImage(file: File, folder = "general", ownerId?: stri
     const { data } = await supabase.auth.getUser();
     uid = data.user?.id;
   }
-  if (!uid) throw new Error("Cần đăng nhập để tải ảnh lên");
+  if (!uid) throw new Error(tStatic("upload.errAuth"));
   const ext = compressed.name.split(".").pop() || "jpg";
   const path = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
   const { error } = await supabase.storage.from("uploads").upload(path, compressed, {
