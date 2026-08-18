@@ -18,6 +18,7 @@ export interface BusinessCardData extends Business {
 }
 
 export function BusinessCard({ b }: { b: BusinessCardData }) {
+  const { t } = useLanguage();
   return (
     <Link
       to={`/dn/${b.id}`}
