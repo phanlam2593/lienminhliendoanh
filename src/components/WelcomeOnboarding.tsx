@@ -243,12 +243,13 @@ function Ticket({
 }
 
 function Scene2() {
+  const { t } = useLanguage();
   return (
     <div className="wo-scene wo-s2">
       <SceneClouds />
-      <Ticket pos="t1" icon={TicketIcons.coffee} title="Cafe nhà B – Giảm 10% · Mua 5 tặng 1" code="CF10" />
-      <Ticket pos="t2" icon={TicketIcons.spa} title="Spa nhà C – -10% buổi sáng" code="SPA10" />
-      <Ticket pos="t3" icon={TicketIcons.noodle} title="Quán ăn nhà D – Ưu đãi 150k bao ăn" code="AN150" />
+      <Ticket pos="t1" icon={TicketIcons.coffee} title={t("onboarding.ticket1")} code="CF10" />
+      <Ticket pos="t2" icon={TicketIcons.spa} title={t("onboarding.ticket2")} code="SPA10" />
+      <Ticket pos="t3" icon={TicketIcons.noodle} title={t("onboarding.ticket3")} code="AN150" />
     </div>
   );
 }
@@ -299,6 +300,7 @@ function Scene3({ active }: { active: boolean }) {
 }
 
 function Scene4() {
+  const { t } = useLanguage();
   return (
     <div className="wo-scene wo-s4">
       <SceneClouds />
@@ -317,8 +319,8 @@ function Scene4() {
       <svg viewBox="0 0 26 26" className="wo-fx wo-f3">
         <use href="#wo-thumb" />
       </svg>
-      <span className="wo-tag wo-ta">🎥 Bạn</span>
-      <span className="wo-tag wo-tb">Cộng đồng 💚</span>
+      <span className="wo-tag wo-ta">{t("onboarding.tagYou")}</span>
+      <span className="wo-tag wo-tb">{t("onboarding.tagCommunity")}</span>
     </div>
   );
 }

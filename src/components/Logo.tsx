@@ -77,7 +77,7 @@ export function Logo({
 
   if (asLink) {
     return (
-      <Link to="/" aria-label={`Trang chủ ${appName}`}>
+      <Link to="/" aria-label={`${t("nav.home")} ${appName}`}>
         {content}
       </Link>
     );

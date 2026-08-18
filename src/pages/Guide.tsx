@@ -426,7 +426,7 @@ export default function Guide() {
         <Link
           to="/ho-so"
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
-          aria-label="Quay lại"
+          aria-label={t("common.back")}
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
