@@ -105,7 +105,7 @@ function ReportCard({
   };
 
   const deleteReport = async () => {
-    if (!confirm("Xóa báo cáo này?")) return;
+    if (!confirm(t("reports.confirmDeleteReport"))) return;
     const { error } = await supabase.from("reports").delete().eq("id", r.id);
     if (error) {
       toast.error(error.message);
@@ -125,7 +125,7 @@ function ReportCard({
   };
 
   const deleteReply = async (replyId: string) => {
-    if (!confirm("Xóa phản hồi này?")) return;
+    if (!confirm(t("reports.confirmDeleteReply"))) return;
     const { error } = await supabase.from("report_replies").delete().eq("id", replyId);
     if (error) {
       toast.error(error.message);
@@ -143,7 +143,7 @@ function ReportCard({
       toast.error(error.message);
       return;
     }
-    toast.success("Đã đánh dấu — đang chờ người báo cáo xác nhận");
+    toast.success(t("reports.markedWaitingReporter"));
     onReplied();
   };
 
@@ -160,7 +160,7 @@ function ReportCard({
       toast.error(error.message);
       return;
     }
-    toast.success(satisfied ? "Đã chốt xong — cảm ơn bạn!" : "Đã báo admin hỗ trợ thêm");
+    toast.success(satisfied ? t("reports.closedThanks") : t("reports.escalatedToAdmin"));
     onReplied();
   };
 
@@ -170,21 +170,21 @@ function ReportCard({
     if (r.status === "resolved") {
       return (
         <div className="flex items-center gap-1.5 p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-xs font-semibold">
-          <CheckCircle2 className="w-4 h-4 shrink-0" /> Đã giải quyết xong
+          <CheckCircle2 className="w-4 h-4 shrink-0" /> {t("reports.resolvedDone")}
         </div>
       );
     }
     if (r.reporter_satisfied === false) {
       return (
         <div className="p-2.5 rounded-lg bg-red-50 dark:bg-red-950/30 space-y-1.5">
-          <p className="text-xs font-semibold text-red-700 dark:text-red-400">⏳ Đang chờ admin hỗ trợ xử lý thêm</p>
+          <p className="text-xs font-semibold text-red-700 dark:text-red-400">{t("reports.waitingAdmin")}</p>
           {isOwnerOfTarget && (
             <button
               type="button"
               onClick={markOwnerResolved}
               className="text-[11px] px-2.5 py-1 rounded-full bg-card border font-semibold"
             >
-              Đã xử lý thêm — đánh dấu lại
+              {t("reports.markAgain")}
             </button>
           )}
         </div>
@@ -194,7 +194,7 @@ function ReportCard({
       return (
         <div className="p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 space-y-1.5">
           <p className="text-xs font-semibold">
-            Chủ doanh nghiệp cho biết đã xử lý xong. Bạn có hài lòng với cách giải quyết này không?
+            {t("reports.askSatisfied")}
           </p>
           <div className="flex gap-2">
             <button
@@ -202,14 +202,14 @@ function ReportCard({
               onClick={() => confirmSatisfied(true)}
               className="flex-1 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-semibold inline-flex items-center justify-center gap-1"
             >
-              <ThumbsUp className="w-3.5 h-3.5" /> Hài lòng
+              <ThumbsUp className="w-3.5 h-3.5" /> {t("reports.satisfied")}
             </button>
             <button
               type="button"
               onClick={() => confirmSatisfied(false)}
               className="flex-1 py-1.5 rounded-lg bg-muted text-xs font-semibold inline-flex items-center justify-center gap-1"
             >
-              <ThumbsDown className="w-3.5 h-3.5" /> Chưa hài lòng
+              <ThumbsDown className="w-3.5 h-3.5" /> {t("reports.notSatisfied")}
             </button>
           </div>
         </div>
@@ -219,7 +219,7 @@ function ReportCard({
       if (r.owner_confirmed_resolved && r.reporter_satisfied === null) {
         return (
           <p className="text-[11px] text-muted-foreground italic">
-            Đã đánh dấu xử lý xong — đang chờ người báo cáo xác nhận…
+            {t("reports.waitingReporterConfirm")}
           </p>
         );
       }
@@ -229,7 +229,7 @@ function ReportCard({
           onClick={markOwnerResolved}
           className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 font-semibold inline-flex items-center gap-1 w-fit"
         >
-          <CheckCircle2 className="w-3 h-3" /> Đánh dấu đã xử lý xong
+          <CheckCircle2 className="w-3 h-3" /> {t("reports.markResolved")}
         </button>
       );
     }
@@ -279,7 +279,7 @@ function ReportCard({
                 <Avatar path={reporterInfo.avatar_url} name={reporterInfo.full_name} size={32} />
               </button>
               <div className="flex-1 min-w-0">
-                <div className="text-[10px] text-muted-foreground">Người báo cáo</div>
+                <div className="text-[10px] text-muted-foreground">{t("reports.reporter")}</div>
                 <button
                   type="button"
                   onClick={() => setQuickUser(r.user_id)}
@@ -290,7 +290,7 @@ function ReportCard({
               </div>
               <Link
                 to={`/tin-nhan/${r.user_id}`}
-                aria-label="Nhắn tin"
+                aria-label={t("common.message")}
                 className="w-8 h-8 rounded-full border grid place-items-center shrink-0 hover:bg-card"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
@@ -314,14 +314,14 @@ function ReportCard({
                   onClick={saveEdit}
                   className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold"
                 >
-                  Lưu
+                  {t("common.save")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditOpen(false)}
                   className="flex-1 py-1.5 rounded border text-xs"
                 >
-                  Hủy
+                  {t("common.cancel")}
                 </button>
               </div>
             </div>
@@ -337,7 +337,7 @@ function ReportCard({
                     }}
                     className="text-[11px] px-2.5 py-1 rounded bg-muted font-semibold"
                   >
-                    Sửa
+                    {t("common.editShort")}
                   </button>
                 )}
                 {canDelete && (
@@ -346,7 +346,7 @@ function ReportCard({
                     onClick={deleteReport}
                     className="text-[11px] px-2.5 py-1 rounded bg-muted text-destructive font-semibold"
                   >
-                    Xóa
+                    {t("common.delete")}
                   </button>
                 )}
               </div>
@@ -399,14 +399,14 @@ function ReportCard({
                             onClick={() => saveReplyEdit(rr.id)}
                             className="px-2 py-0.5 rounded bg-primary text-primary-foreground text-[10px] font-semibold"
                           >
-                            Lưu
+                            {t("common.save")}
                           </button>
                           <button
                             type="button"
                             onClick={() => setEditingReplyId(null)}
                             className="px-2 py-0.5 rounded border text-[10px]"
                           >
-                            Hủy
+                            {t("common.cancel")}
                           </button>
                         </div>
                       </div>
@@ -423,14 +423,14 @@ function ReportCard({
                               }}
                               className="text-[10px] font-semibold text-muted-foreground"
                             >
-                              Sửa
+                              {t("common.editShort")}
                             </button>
                             <button
                               type="button"
                               onClick={() => deleteReply(rr.id)}
                               className="text-[10px] font-semibold text-destructive"
                             >
-                              Xóa
+                              {t("common.delete")}
                             </button>
                           </div>
                         )}
@@ -461,7 +461,7 @@ function ReportCard({
                 onClick={send}
                 disabled={sending || !text.trim()}
                 className="w-8 h-8 rounded-lg bg-primary text-primary-foreground grid place-items-center shrink-0 disabled:opacity-50"
-                aria-label="Gửi phản hồi"
+                aria-label={t("reports.sendReply")}
               >
                 <Send className="w-3.5 h-3.5" />
               </button>
@@ -640,7 +640,7 @@ export default function MyReports() {
         <Link
           to="/ho-so"
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
-          aria-label="Quay lại"
+          aria-label={t("common.back")}
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
