@@ -34,8 +34,8 @@ interface ConvoSummary {
   unread: number;
 }
 
-function messagePreview(m: Pick<Message, "type" | "content">): string {
-  if (m.type === "image") return `📷 ${tGlobal("chat.imageAlt")}`;
+function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) => string): string {
+  if (m.type === "image") return `📷 ${tr("chat.imageAlt")}`;
   if (m.type === "gif") return "🎬 GIF";
   if (m.type === "broadcast") return m.content.replace(/^📢\s*/, "📢 ");
   return m.content;
@@ -66,7 +66,7 @@ export function MessagesInbox() {
       if (m.type === "broadcast" && m.sender_id === user.id) return;
       const partnerId = m.sender_id === user.id ? m.receiver_id : m.sender_id;
       if (!map.has(partnerId)) {
-        map.set(partnerId, { partnerId, lastMessage: messagePreview(m), lastAt: m.created_at, unread: 0 });
+        map.set(partnerId, { partnerId, lastMessage: messagePreview(m, t), lastAt: m.created_at, unread: 0 });
       }
       if (m.receiver_id === user.id && !m.is_read) map.get(partnerId)!.unread += 1;
     });
