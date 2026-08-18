@@ -5,6 +5,7 @@ import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { OpenBadge } from "./OpenBadge";
 import { StoredImage } from "./StoredImage";
 import { fmtTime } from "@/lib/time";
+import { useLanguage } from "@/lib/i18n";
 
 export interface BusinessCardData extends Business {
   rating?: number;
