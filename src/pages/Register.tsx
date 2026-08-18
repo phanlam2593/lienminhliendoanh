@@ -392,7 +392,7 @@ export default function Register() {
               </div>
             </Field>
             <label className="flex items-center justify-between gap-3 p-3 rounded-xl bg-card border cursor-pointer">
-              <span className="text-xs font-semibold">Chỉ bán hàng online (không có địa điểm/giờ mở cửa cố định)</span>
+              <span className="text-xs font-semibold">{t("online.toggleLabel")}</span>
               <button
                 type="button"
                 onClick={() => setIsOnline((v) => !v)}
