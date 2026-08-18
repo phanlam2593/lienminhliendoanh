@@ -300,6 +300,7 @@ function Scene3({ active }: { active: boolean }) {
 }
 
 function Scene4() {
+  const { t } = useLanguage();
   return (
     <div className="wo-scene wo-s4">
       <SceneClouds />
