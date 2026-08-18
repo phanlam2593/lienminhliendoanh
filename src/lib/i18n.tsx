@@ -1870,3 +1870,21 @@ export function useLanguage() {
   if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
   return ctx;
 }
+
+// Dịch NGOÀI React (module tiện ích, toast trong .ts thường không có hook) — đọc ngôn ngữ
+// đang chọn trực tiếp từ localStorage, dùng CHUNG bộ khoá DICT với useLanguage().
+export function tStatic(key: string, params?: Record<string, string | number>) {
+  let lang: Lang = "vi";
+  try {
+    const saved = localStorage.getItem("lang");
+    if (saved === "en" || saved === "vi") lang = saved;
+  } catch {}
+  let s = DICT[lang][key] ?? DICT.vi[key] ?? key;
+  if (params) {
+    for (const [k, v] of Object.entries(params)) {
+      s = s.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+    }
+  }
+  return s;
+}
+
