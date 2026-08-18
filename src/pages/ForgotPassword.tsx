@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { maskUsername } from "@/lib/passwordHint";
+import { useLanguage } from "@/lib/i18n";
 
 const ATTEMPT_KEY = "fp_attempts";
 const LOCK_KEY = "fp_lock_until";
@@ -15,6 +16,7 @@ type Result = {
 };
 
 export default function ForgotPassword() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,7 +57,7 @@ export default function ForgotPassword() {
       setLockUntil(until);
       localStorage.removeItem(ATTEMPT_KEY);
       setAttempts(0);
-      setError(data?.message || "Vui lòng thử lại sau ít phút hoặc liên hệ admin");
+      setError(data?.message || t("fp.tryLater"));
       return;
     }
 
@@ -70,9 +72,9 @@ export default function ForgotPassword() {
         setLockUntil(until);
         localStorage.removeItem(ATTEMPT_KEY);
         setAttempts(0);
-        setError("Bạn đã nhập sai quá số lần cho phép. Vui lòng thử lại sau ít phút hoặc liên hệ admin");
+        setError(t("fp.tooManyAttempts"));
       } else {
-        setError(`Không tìm thấy tài khoản với thông tin này (còn ${MAX_ATTEMPTS - nextAttempts} lần thử)`);
+        setError(t("fp.notFound", { n: MAX_ATTEMPTS - nextAttempts }));
       }
       return;
     }
@@ -88,9 +90,9 @@ export default function ForgotPassword() {
       <div className="w-full max-w-sm space-y-5">
         <div className="text-center space-y-3 flex flex-col items-center">
           <Logo size={64} asLink />
-          <h1 className="text-2xl font-bold">Quên mật khẩu</h1>
+          <h1 className="text-2xl font-bold">{t("fp.title")}</h1>
           <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
-            Liên Minh Liên Doanh
+            {t("app.name")}
           </Link>
         </div>
 
@@ -99,7 +101,7 @@ export default function ForgotPassword() {
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email đã đăng ký"
+              placeholder={t("fp.emailPlaceholder")}
               type="email"
               required
               disabled={locked}
@@ -108,49 +110,49 @@ export default function ForgotPassword() {
             <input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="Số điện thoại đã đăng ký"
+              placeholder={t("fp.phonePlaceholder")}
               required
               disabled={locked}
               className="w-full px-4 py-3 rounded-xl border bg-card"
             />
             {error && <p className="text-sm text-destructive">{error}</p>}
             {locked && (
-              <p className="text-sm text-destructive">Vui lòng thử lại sau {lockMinsLeft} phút hoặc liên hệ admin</p>
+              <p className="text-sm text-destructive">{t("fp.lockedMins", { n: lockMinsLeft })}</p>
             )}
             <button
               type="submit"
               disabled={loading || locked}
               className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
             >
-              {loading ? "Đang kiểm tra…" : "Xác nhận"}
+              {loading ? t("fp.checking") : t("fp.confirm")}
             </button>
           </form>
         )}
 
         {result && (
           <div className="space-y-3 rounded-2xl border bg-card p-4">
-            <p className="font-semibold text-emerald-600">✅ Xác nhận thành công! Gợi ý tài khoản của bạn:</p>
+            <p className="font-semibold text-emerald-600">{t("fp.successTitle")}</p>
             <div className="text-sm space-y-1">
               <div>
-                Tên đăng nhập: <span className="font-mono font-bold">{maskUsername(result.username)}</span>
+                {t("fp.usernameLabel")}: <span className="font-mono font-bold">{maskUsername(result.username)}</span>
               </div>
               {result.password_hint ? (
                 <div>
-                  Mật khẩu gợi ý: <span className="font-mono font-bold">{result.password_hint}</span>
+                  {t("fp.hintLabel")}: <span className="font-mono font-bold">{result.password_hint}</span>
                 </div>
               ) : (
-                <div className="text-destructive">Tài khoản này chưa có gợi ý mật khẩu. Vui lòng liên hệ admin.</div>
+                <div className="text-destructive">{t("fp.noHint")}</div>
               )}
             </div>
             {result.password_hint && (
               <div className="text-xs text-muted-foreground bg-accent rounded-lg p-3">
-                💡 Tip: Mật khẩu thường là tên + số bạn hay dùng
+                {t("fp.tip")}
                 <br />
-                Ví dụ: tên123, ngaysinh, tensdt...
+                {t("fp.tipExample")}
               </div>
             )}
             <div className="text-xs space-y-1 pt-2 border-t">
-              <p className="font-semibold">Vẫn không nhớ? Liên hệ admin:</p>
+              <p className="font-semibold">{t("fp.contactAdmin")}</p>
               <p>
                 Zalo:{" "}
                 <a
@@ -170,18 +172,18 @@ export default function ForgotPassword() {
                   rel="noreferrer"
                   className="text-primary font-semibold"
                 >
-                  Liên Minh Liên Doanh
+                  {t("app.name")}
                 </a>
               </p>
             </div>
             <Link to="/auth/login" className="block text-center py-2 rounded-xl border text-sm font-semibold">
-              ← Quay lại đăng nhập
+              ← {t("fp.backToLogin")}
             </Link>
           </div>
         )}
 
         <p className="text-center text-xs text-muted-foreground">
-          <Link to="/auth/login">← Quay lại đăng nhập</Link>
+          <Link to="/auth/login">← {t("fp.backToLogin")}</Link>
         </p>
       </div>
     </div>
