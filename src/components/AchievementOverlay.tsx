@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Notification } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 type Achievement = { kind: "badge" | "level"; title: string; subtitle?: string };
 
@@ -12,6 +13,7 @@ type Achievement = { kind: "badge" | "level"; title: string; subtitle?: string }
  */
 export function AchievementOverlay() {
   const { user } = useAuth();
+  const { t: tx } = useLanguage();
   const [queue, setQueue] = useState<Achievement[]>([]);
   const current = queue[0];
 
@@ -63,7 +65,7 @@ export function AchievementOverlay() {
         {current.subtitle && (
           <div className="text-xs text-muted-foreground mt-1">{current.subtitle}</div>
         )}
-        <div className="text-[10px] text-muted-foreground mt-3">Chạm để đóng</div>
+        <div className="text-[10px] text-muted-foreground mt-3">{tx("achievement.tapToClose")}</div>
       </div>
     </div>
   );

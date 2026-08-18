@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { ArrowLeft, Mail, Phone, MessageCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
+import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { toast } from "sonner";
@@ -21,6 +22,7 @@ export default function UserProfile() {
   const { id } = useParams();
   const nav = useNavigate();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [p, setP] = useState<PubProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
@@ -42,7 +44,7 @@ export default function UserProfile() {
           : Promise.resolve({ data: null } as any),
       ]);
       if (!prof) {
-        toast.message("Nội dung không còn tồn tại");
+        toast.message(t("common.contentGone"));
         nav("/");
         return;
       }
@@ -69,14 +71,14 @@ export default function UserProfile() {
     setBusy(false);
   };
 
-  if (loading || !p) return <div className="p-6 text-sm text-muted-foreground">Đang tải…</div>;
+  if (loading || !p) return <div className="p-6 text-sm text-muted-foreground">{t("common.loading")}</div>;
 
   const isMe = user?.id === p.id;
 
   return (
     <div className="p-4 space-y-4 max-w-xl mx-auto">
       <button onClick={() => nav(-1)} className="flex items-center gap-1 text-sm text-muted-foreground">
-        <ArrowLeft className="w-4 h-4" /> Quay lại
+        <ArrowLeft className="w-4 h-4" /> {t("common.back")}
       </button>
       <div className="rounded-2xl border bg-card p-5 flex flex-col items-center text-center gap-3">
         <Avatar path={p.avatar_url} name={p.full_name} size={88} />
@@ -87,10 +89,10 @@ export default function UserProfile() {
         </div>
         <div className="flex gap-4 text-xs">
           <button onClick={() => setListOpen("followers")} className="hover:text-primary">
-            <span className="font-bold text-foreground">{followers}</span> người theo dõi
+            <span className="font-bold text-foreground">{followers}</span> {t("follow.followersLabel")}
           </button>
           <button onClick={() => setListOpen("following")} className="hover:text-primary">
-            <span className="font-bold text-foreground">{followingCount}</span> đang theo dõi
+            <span className="font-bold text-foreground">{followingCount}</span> {t("follow.followingLabel")}
           </button>
         </div>
         {!isMe && user && (
@@ -100,13 +102,13 @@ export default function UserProfile() {
               disabled={busy}
               className={`flex-1 h-10 rounded-xl text-sm font-semibold ${following ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"}`}
             >
-              {following ? "Đang theo dõi" : "Theo dõi"}
+              {following ? t("common.following") : t("common.follow")}
             </button>
             <button
               onClick={() => nav(`/tin-nhan/${p.id}`)}
               className="flex-1 h-10 rounded-xl text-sm font-semibold border flex items-center justify-center gap-1"
             >
-              <MessageCircle className="w-4 h-4" /> Nhắn tin
+              <MessageCircle className="w-4 h-4" /> {t("common.message")}
             </button>
           </div>
         )}
