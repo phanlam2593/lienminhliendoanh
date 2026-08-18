@@ -137,7 +137,7 @@ export function RegularBusinessesDialog({
                           </>
                         ) : (
                           <span className="text-primary font-semibold">
-                            {lang === "vi" ? "Đang theo dõi" : "Following"}
+                            {t("common.following")}
                           </span>
                         )}
                       </div>

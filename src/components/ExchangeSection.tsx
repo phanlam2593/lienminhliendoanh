@@ -507,8 +507,8 @@ function ExchangeCard({
         </div>
         <div className="flex-1 min-w-0">
           <div className="text-sm font-semibold truncate">
-            {mine?.name || "Doanh nghiệp"} <span className="text-muted-foreground">·</span>{" "}
-            {other?.name || "Doanh nghiệp"}
+            {mine?.name || t("regulars.defaultBizName")} <span className="text-muted-foreground">·</span>{" "}
+            {other?.name || t("regulars.defaultBizName")}
           </div>
           <div className="text-[10px] text-muted-foreground truncate">{e.request_type}</div>
         </div>

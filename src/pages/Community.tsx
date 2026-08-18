@@ -816,7 +816,7 @@ export default function Community() {
                 <span className="font-semibold text-primary shrink-0">{t("pin.pinnedLabel")}:</span>
                 <span className="truncate text-muted-foreground">
                   {profMap.get(pm.user_id)?.full_name || t("community.member")}:{" "}
-                  {pm.type === "text" ? pm.content : pm.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}
+                  {pm.type === "text" ? pm.content : pm.type === "gif" ? "🎬 GIF" : `📷 ${t("chat.imageAlt")}`}
                 </span>
               </div>
             ))}
@@ -1008,7 +1008,7 @@ export default function Community() {
               <span className="font-semibold text-primary">{t("msg.replyingTo")} </span>
               <span className="text-muted-foreground truncate">
                 {profMap.get(replyingTo.user_id)?.full_name || t("community.member")}:{" "}
-                {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}
+                {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : `📷 ${t("chat.imageAlt")}`}
               </span>
             </div>
             <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
@@ -1022,7 +1022,7 @@ export default function Community() {
               <img src={pendingImage.previewUrl} alt={t("chat.previewAlt")} className="w-16 h-16 object-cover rounded-lg border" />
               <button
                 onClick={cancelPendingImage}
-                aria-label="Hủy"
+                aria-label={t("common.cancel")}
                 className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
               >
                 ×

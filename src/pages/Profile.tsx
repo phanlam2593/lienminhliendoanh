@@ -146,7 +146,7 @@ export default function Profile() {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã lưu");
+    toast.success(t("common.saved"));
     refresh();
   };
 
@@ -162,7 +162,7 @@ export default function Profile() {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã lưu");
+    toast.success(t("common.saved"));
     setQuickStatusOpen(false);
     setSM(quickStatusMsg);
     refresh();
@@ -175,7 +175,7 @@ export default function Profile() {
       const path = await uploadImage(file, "avatars", user.id);
       const { error } = await supabase.from("profiles").update({ avatar_url: path }).eq("id", user.id);
       if (error) throw error;
-      toast.success("Đã cập nhật ảnh đại diện");
+      toast.success(t("profile.avatarUpdated"));
       refresh();
     } catch (e: any) {
       toast.error(e.message);
@@ -198,7 +198,7 @@ export default function Profile() {
             type="button"
             onClick={() => avatarInput.current?.click()}
             className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
-            aria-label="Đổi ảnh đại diện"
+            aria-label={t("profile.changeAvatar")}
           >
             <Camera className="w-3.5 h-3.5" />
           </button>
@@ -225,7 +225,7 @@ export default function Profile() {
               </button>
             )}
           </div>
-          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">Đang tải ảnh…</div>}
+          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>}
         </div>
       </div>
       <TierLegendDialog open={tierLegendOpen} onOpenChange={setTierLegendOpen} points={(profile as any)?.points ?? 0} />
@@ -243,7 +243,7 @@ export default function Profile() {
           </div>
         ) : (
           <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
-            + Thêm dòng trạng thái
+            + {t("profile.addStatusLine")}
           </div>
         )}
         {(profile as any)?.bio && (
@@ -253,13 +253,13 @@ export default function Profile() {
       <Dialog open={quickStatusOpen} onOpenChange={setQuickStatusOpen}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>Dòng trạng thái</DialogTitle>
+            <DialogTitle>{t("profile.statusLine")}</DialogTitle>
           </DialogHeader>
           <div className="space-y-2">
             <textarea
               value={quickStatusMsg}
               onChange={(e) => setQuickStatusMsg(e.target.value.slice(0, 150))}
-              placeholder="Ví dụ: Đang tuyển nhân viên tại Đà Lạt 🌿"
+              placeholder={t("profile.statusPlaceholder")}
               rows={3}
               maxLength={150}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
@@ -270,7 +270,7 @@ export default function Profile() {
               disabled={quickSaving}
               className="w-full py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm"
             >
-              {quickSaving ? "Đang lưu…" : "Lưu"}
+              {quickSaving ? t("common.saving") : t("common.save")}
             </button>
           </div>
         </DialogContent>
@@ -283,7 +283,7 @@ export default function Profile() {
       <button
         onClick={() => setView("menu")}
         className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
-        aria-label="Quay lại"
+        aria-label={t("common.back")}
       >
         <ArrowLeft className="w-5 h-5" />
       </button>
@@ -323,12 +323,12 @@ export default function Profile() {
             placeholder={t("profile.phone")}
             className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
           />
-          <Field label="Giới thiệu bản thân" hint="Vài dòng ngắn để mọi người hiểu hơn về bạn (tối đa 300 ký tự)">
+          <Field label={t("profile.bioLabel")} hint={t("profile.bioHint")}>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value.slice(0, 300))}
               rows={3}
-              placeholder="Ví dụ: Mê cà phê, làm freelance thiết kế, sống ở Đà Lạt được 3 năm 🌿"
+              placeholder={t("profile.bioPlaceholder")}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
             />
           </Field>
@@ -450,7 +450,7 @@ export default function Profile() {
                 rel="noreferrer"
                 className="text-primary font-semibold"
               >
-                Liên Minh Liên Doanh
+                {t("app.name")}
               </a>
             </p>
           </div>
@@ -542,7 +542,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
 
   const useCurrentLocation = () => {
     if (!navigator.geolocation) {
-      toast.error("Trình duyệt không hỗ trợ định vị");
+      toast.error(t("bizForm.geoUnsupported"));
       return;
     }
     setLocating(true);
@@ -551,11 +551,11 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
         setLat(pos.coords.latitude);
         setLng(pos.coords.longitude);
         setLocating(false);
-        toast.success("Đã lấy vị trí hiện tại — nhớ bấm Lưu doanh nghiệp");
+        toast.success(t("bizForm.geoGot"));
       },
       () => {
         setLocating(false);
-        toast.error("Không lấy được vị trí. Kiểm tra quyền định vị trong trình duyệt.");
+        toast.error(t("bizForm.geoFail"));
       },
       { enableHighAccuracy: true, timeout: 10000 },
     );
@@ -564,7 +564,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
   const save = async () => {
     if (!/^[A-Za-z0-9]{4,8}$/.test(pin)) {
       setPinError(true);
-      toast.error("Chưa lưu được — cần đặt mã PIN hợp lệ (4-8 ký tự chữ/số) ở ô được khoanh đỏ bên dưới");
+      toast.error(t("bizForm.pinRequired"));
       pinInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
       pinInputRef.current?.focus();
       return;
@@ -598,10 +598,10 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
     ]);
     setSaving(false);
     if (error || pinError) {
-      toast.error((error || pinError)?.message ?? "Có lỗi xảy ra");
+      toast.error((error || pinError)?.message ?? t("common.errorOccurred"));
       return;
     }
-    toast.success(wasRejected ? "Đã lưu và gửi lại để duyệt" : "Đã lưu doanh nghiệp");
+    toast.success(wasRejected ? t("bizForm.savedResubmitted") : t("bizForm.saved"));
     onSaved();
   };
   const onCover = async (file: File) => {
@@ -609,7 +609,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
       const path = await uploadImage(file, "covers");
       setCover(path);
       await supabase.from("businesses").update({ cover_url: path }).eq("id", biz.id);
-      toast.success("Đã cập nhật ảnh bìa");
+      toast.success(t("bizForm.coverUpdated"));
     } catch (e: any) {
       toast.error(e.message);
     }
@@ -628,7 +628,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
     }
     setOfferText("");
     await reloadOffers();
-    toast.success("Đã thêm ưu đãi");
+    toast.success(t("offerRow.added"));
   };
 
   return (
@@ -659,7 +659,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               onClick={() => setRegularsOpen(true)}
               className="inline-flex items-center gap-0.5 font-semibold text-primary hover:underline"
             >
-              <UserCheck className="w-3 h-3" /> {stats.regulars} khách quen
+              <UserCheck className="w-3 h-3" /> {t("bizForm.regularsCount", { n: stats.regulars })}
             </button>
           </div>
         </div>
@@ -667,14 +667,14 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
           onClick={() => setOpen((o) => !o)}
           className="px-3 py-1.5 rounded-lg border text-xs font-semibold shrink-0"
         >
-          {open ? "Thu gọn" : "Chỉnh sửa"}
+          {open ? t("common.collapse") : t("common.edit")}
         </button>
       </div>
 
       <Dialog open={regularsOpen} onOpenChange={setRegularsOpen}>
         <DialogContent className="max-w-sm max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Khách quen</DialogTitle>
+            <DialogTitle>{t("regularsPanel.tierLoyal")}</DialogTitle>
           </DialogHeader>
           <BusinessRegularsPanel businessId={biz.id} />
         </DialogContent>
@@ -685,10 +685,10 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
         <div className="px-4 pb-4 space-y-3 border-t pt-3">
           {biz.status === "rejected" && biz.admin_note && (
             <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-3 space-y-1 border border-amber-200 dark:border-amber-900">
-              <div className="font-bold">📋 Ban quản trị yêu cầu bổ sung:</div>
+              <div className="font-bold">{t("bizForm.adminNoteTitle")}</div>
               <div>{biz.admin_note}</div>
               <div className="text-[10px] opacity-80">
-                Chỉnh sửa nội dung bên dưới rồi bấm "Lưu doanh nghiệp" — hồ sơ sẽ tự động gửi lại để duyệt.
+                {t("bizForm.adminNoteHint")}
               </div>
             </div>
           )}
@@ -697,7 +697,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               <StoredImage path={cover} alt={name} className="w-full h-full object-cover" />
             </div>
             <label className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded cursor-pointer">
-              Đổi ảnh bìa
+              {t("bizForm.changeCover")}
               <input
                 type="file"
                 accept="image/*"
@@ -711,7 +711,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
           </div>
           <BusinessPhotoManager businessId={biz.id} />
 
-          <Field label="Tên doanh nghiệp" hint="Ví dụ: Nhà Hàng Hương Quê, Cafe Sương Mai">
+          <Field label={t("bizForm.nameLabel")} hint={t("bizForm.nameHint")}>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -746,7 +746,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
           </label>
           {!isOnline && (
             <div className="grid grid-cols-2 gap-2">
-              <Field label="Giờ mở" hint="Ví dụ: 07:00">
+              <Field label={t("bizForm.openLabel")} hint={t("bizForm.openHint")}>
                 <input
                   type="time"
                   value={open_}
@@ -754,7 +754,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
                   className="w-full px-2 py-2 rounded-lg border bg-background text-sm"
                 />
               </Field>
-              <Field label="Giờ đóng" hint="Ví dụ: 22:00">
+              <Field label={t("bizForm.closeLabel")} hint={t("bizForm.closeHint")}>
                 <input
                   type="time"
                   value={close_}
@@ -764,7 +764,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               </Field>
             </div>
           )}
-          <Field label="Mô tả">
+          <Field label={t("bizForm.descLabel")}>
             <textarea
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
@@ -773,14 +773,14 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
             />
           </Field>
           <div className="grid grid-cols-2 gap-2">
-            <Field label="SĐT">
+            <Field label={t("bizForm.phoneLabel")}>
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
               />
             </Field>
-            <Field label="Địa chỉ">
+            <Field label={t("bizForm.addressLabel")}>
               <input
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
@@ -789,8 +789,8 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
             </Field>
           </div>
           <Field
-            label="Mã PIN xác nhận claim (4-8 ký tự)"
-            hint="Giống kiểu đặt mật khẩu WiFi của quán. Đọc cho khách khi họ tới để họ nhập, xác nhận nhận ưu đãi. Có thể đổi bất cứ lúc nào."
+            label={t("bizForm.pinLabel")}
+            hint={t("bizForm.pinHint")}
           >
             <input
               ref={pinInputRef}
@@ -799,7 +799,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
                 setPin(e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 8));
                 setPinError(false);
               }}
-              placeholder={pinLoaded && !pin ? "Chưa thiết lập" : "VD: quan1234"}
+              placeholder={pinLoaded && !pin ? t("bizForm.pinNotSet") : t("bizForm.pinExample")}
               maxLength={8}
               className={`w-full px-3 py-2 rounded-lg border bg-background text-sm tracking-[0.15em] font-mono ${
                 pinError ? "border-destructive ring-2 ring-destructive/30" : ""
@@ -822,10 +822,10 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
                 >
                   📍{" "}
                   {locating
-                    ? "Đang lấy vị trí…"
+                    ? t("bizForm.locating")
                     : lat
-                      ? "Đã ghim vị trí — bấm để cập nhật lại"
-                      : "Ghim vị trí hiện tại (cho tính năng Gần đây)"}
+                      ? t("bizForm.locationPinned")
+                      : t("bizForm.pinLocation")}
                 </button>
               </div>
             </>
@@ -874,11 +874,11 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
             disabled={saving}
             className="w-full py-2 rounded-lg bg-gradient-brand text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1"
           >
-            <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
+            <Save className="w-4 h-4" /> {saving ? t("common.saving") : t("bizForm.saveBusiness")}
           </button>
 
           <div className="border-t pt-3 space-y-2">
-            <div className="text-xs font-semibold text-muted-foreground">Ưu đãi / Deal</div>
+            <div className="text-xs font-semibold text-muted-foreground">{t("bizForm.offersSection")}</div>
             {offers.map((o) => (
               <OfferRow key={o.id} offer={o} onChanged={reloadOffers} />
             ))}
@@ -886,14 +886,14 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               <input
                 value={offerText}
                 onChange={(e) => setOfferText(e.target.value)}
-                placeholder="Thêm ưu đãi mới…"
+                placeholder={t("bizForm.newOfferPlaceholder")}
                 className="flex-1 px-3 py-2 rounded-lg border bg-background text-sm"
               />
               <button
                 onClick={addOffer}
                 className="px-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
               >
-                Thêm
+                {t("install.add")}
               </button>
             </div>
           </div>
@@ -904,6 +904,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
 }
 
 function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void }) {
+  const { t } = useLanguage();
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(offer.title);
   const [desc, setDesc] = useState(offer.description ?? "");
@@ -921,7 +922,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
       toast.error(error.message);
       return;
     }
-    toast.success("Đã lưu ưu đãi");
+    toast.success(t("offerRow.saved"));
     setEditing(false);
     onChanged();
   };
@@ -933,7 +934,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
       toast.error(error.message);
       return;
     }
-    toast.success(next === "active" ? "Đã hiển thị ưu đãi" : "Đã tạm ẩn ưu đãi");
+    toast.success(next === "active" ? t("offerRow.shown") : t("offerRow.hidden"));
     onChanged();
   };
 
@@ -943,7 +944,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
       toast.error(error.message);
       return;
     }
-    toast.success("Đã xóa");
+    toast.success(t("offerRow.deleted"));
     onChanged();
   };
 
@@ -955,7 +956,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
       toast.error(error.message);
       return;
     }
-    toast.success(`Đã gửi đến ${data ?? 0} thành viên`);
+    toast.success(t("offerRow.broadcastSent", { n: data ?? 0 }));
   };
 
   if (editing) {
@@ -970,7 +971,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           rows={2}
-          placeholder="Mô tả (tuỳ chọn)"
+          placeholder={t("offerRow.descPlaceholder")}
           className="w-full px-2 py-1.5 rounded border bg-background text-xs"
         />
         <div className="flex gap-2">
@@ -979,7 +980,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
             disabled={busy}
             className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold"
           >
-            {busy ? "Đang lưu…" : "Lưu"}
+            {busy ? t("common.saving") : t("common.save")}
           </button>
           <button
             onClick={() => {
@@ -989,7 +990,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
             }}
             className="flex-1 py-1.5 rounded border text-xs font-semibold"
           >
-            Hủy
+            {t("common.cancel")}
           </button>
         </div>
       </div>
@@ -1002,7 +1003,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
         <span className={`truncate flex-1 ${offer.status === "inactive" ? "line-through text-muted-foreground" : ""}`}>
           {offer.title}
         </span>
-        <span className="text-[10px] text-muted-foreground whitespace-nowrap">{offer.claim_count ?? 0} lượt</span>
+        <span className="text-[10px] text-muted-foreground whitespace-nowrap">{t("offerRow.claimsShort", { n: offer.claim_count ?? 0 })}</span>
       </div>
       {offer.description && <div className="text-[11px] text-muted-foreground line-clamp-2">{offer.description}</div>}
       <div className="flex gap-1.5 flex-wrap">
@@ -1010,7 +1011,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
           onClick={() => setEditing(true)}
           className="px-2 py-1 rounded bg-card border text-[11px] font-semibold inline-flex items-center gap-1"
         >
-          <Pencil className="w-3 h-3" /> Sửa
+          <Pencil className="w-3 h-3" /> {t("common.editShort")}
         </button>
         <button
           onClick={toggleStatus}
@@ -1018,11 +1019,11 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
         >
           {offer.status === "active" ? (
             <>
-              <EyeOff className="w-3 h-3" /> Tạm ẩn
+              <EyeOff className="w-3 h-3" /> {t("offerRow.hide")}
             </>
           ) : (
             <>
-              <Eye className="w-3 h-3" /> Hiện lại
+              <Eye className="w-3 h-3" /> {t("offerRow.show")}
             </>
           )}
         </button>
@@ -1034,20 +1035,19 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
               disabled={busy || offer.status !== "active"}
               className="px-2 py-1 rounded bg-primary text-primary-foreground text-[11px] font-semibold inline-flex items-center gap-1 disabled:opacity-50"
             >
-              <Send className="w-3 h-3" /> Gửi thông báo
+              <Send className="w-3 h-3" /> {t("offerRow.broadcast")}
             </button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Gửi thông báo ưu đãi?</AlertDialogTitle>
+              <AlertDialogTitle>{t("offerRow.broadcastTitle")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Thông báo về <b>"{offer.title}"</b> sẽ được gửi đến tất cả thành viên đang theo dõi doanh nghiệp của
-                bạn.
+                {t("offerRow.broadcastDesc", { title: offer.title })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Hủy</AlertDialogCancel>
-              <AlertDialogAction onClick={broadcast}>Gửi ngay</AlertDialogAction>
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+              <AlertDialogAction onClick={broadcast}>{t("offerRow.sendNow")}</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -1056,20 +1056,20 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <button className="px-2 py-1 rounded bg-card border text-destructive text-[11px] font-semibold inline-flex items-center gap-1">
-              <Trash2 className="w-3 h-3" /> Xóa
+              <Trash2 className="w-3 h-3" /> {t("common.delete")}
             </button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Xóa ưu đãi này?</AlertDialogTitle>
+              <AlertDialogTitle>{t("offerRow.deleteTitle")}</AlertDialogTitle>
               <AlertDialogDescription>
-                Ưu đãi <b>"{offer.title}"</b> sẽ bị xóa vĩnh viễn và không thể khôi phục.
+                {t("offerRow.deleteDesc", { title: offer.title })}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Hủy</AlertDialogCancel>
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
               <AlertDialogAction onClick={remove} className="bg-destructive hover:bg-destructive/90">
-                Xóa
+                {t("common.delete")}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -1178,13 +1178,18 @@ function Field({ label, children, hint }: { label: string; children: React.React
 }
 
 function StatusBadge({ s }: { s?: string }) {
+  const { t } = useLanguage();
   if (!s || s === "approved") return null;
   const map: Record<string, string> = {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-emerald-100 text-emerald-700",
     rejected: "bg-red-100 text-red-700",
   };
-  const lbl: Record<string, string> = { pending: "Chờ duyệt", approved: "Đã duyệt", rejected: "Từ chối" };
+  const lbl: Record<string, string> = {
+    pending: t("status.pending"),
+    approved: t("status.approved"),
+    rejected: t("status.rejected"),
+  };
   return (
     <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-semibold ${map[s] || "bg-muted"}`}>
       {lbl[s] || s}

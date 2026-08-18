@@ -307,7 +307,7 @@ function StatsModal({
         const o = oMap.get(c.offer_id) as any;
         return {
           ...c,
-          offer_title: o?.title || "(đã xóa)",
+          offer_title: o?.title || t("home.offerDeleted"),
           business_name: o ? bMap.get(o.business_id) || "—" : "—",
         };
       }),
@@ -436,7 +436,7 @@ function StatsModal({
                     <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 flex-wrap">
                       <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
                       <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
-                      <span>· {b.offerCount} ưu đãi</span>
+                      <span>· {t("home.offersCount", { n: b.offerCount })}</span>
                       {b.reviewCount > 0 && (
                         <span className="inline-flex items-center gap-0.5">
                           · <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {b.rating.toFixed(1)}

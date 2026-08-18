@@ -191,7 +191,7 @@ export default function Register() {
       if (isBiz && bizCreateFailed) {
         toast.success(t("register.memberSuccessToast", { app: t("app.name") }));
         toast.error(
-          "Tài khoản đã tạo thành công, nhưng lưu thông tin doanh nghiệp bị lỗi. Vào Hồ sơ để thêm lại doanh nghiệp của bạn.",
+          t("register.bizSaveFailed"),
         );
       } else if (isBiz) {
         toast.success(t("register.bizSuccessToast"));

@@ -562,7 +562,9 @@ export default function MyReports() {
           const bizName = rv ? bizMap.get(rv.business_id) : null;
           return {
             ...r,
-            target_name: bizName ? `Đánh giá ${rv.rating}★ tại ${bizName}` : "Đánh giá",
+            target_name: bizName
+              ? t("reports.reviewAt", { rating: rv.rating, biz: bizName })
+              : t("reports.reviewTarget"),
             target_href: rv?.business_id ? `/dn/${rv.business_id}` : null,
           };
         }
