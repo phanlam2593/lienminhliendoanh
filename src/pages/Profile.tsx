@@ -146,7 +146,7 @@ export default function Profile() {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã lưu");
+    toast.success(t("common.saved"));
     refresh();
   };
 
@@ -162,7 +162,7 @@ export default function Profile() {
       toast.error(error.message);
       return;
     }
-    toast.success("Đã lưu");
+    toast.success(t("common.saved"));
     setQuickStatusOpen(false);
     setSM(quickStatusMsg);
     refresh();

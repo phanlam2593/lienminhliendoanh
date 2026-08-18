@@ -30,7 +30,7 @@ export function Avatar({ path, name, size = 40, onClick, className, ringClassNam
 
   const Comp: any = interactive ? "button" : "div";
   const extraProps = interactive
-    ? { type: "button", onClick, "aria-label": "Mở ảnh đại diện" }
+    ? { type: "button", onClick, "aria-label": "avatar" }
     : { "aria-hidden": true };
 
   return (

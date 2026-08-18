@@ -35,7 +35,7 @@ interface ConvoSummary {
 }
 
 function messagePreview(m: Pick<Message, "type" | "content">): string {
-  if (m.type === "image") return "📷 Hình ảnh";
+  if (m.type === "image") return `📷 ${tGlobal("chat.imageAlt")}`;
   if (m.type === "gif") return "🎬 GIF";
   if (m.type === "broadcast") return m.content.replace(/^📢\s*/, "📢 ");
   return m.content;
@@ -793,7 +793,7 @@ export function MessagesThread() {
             <span className="font-semibold text-primary">{t("msg.replyingTo")} </span>
             <span className="text-muted-foreground truncate">
               {replyingTo.sender_id === user.id ? t("community.you") : partner?.full_name || ""}:{" "}
-              {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}
+              {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : `📷 ${t("chat.imageAlt")}`}
             </span>
           </div>
           <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
@@ -807,7 +807,7 @@ export function MessagesThread() {
             <img src={pendingImage.previewUrl} alt={t("chat.previewAlt")} className="w-16 h-16 object-cover rounded-lg border" />
             <button
               onClick={cancelPendingImage}
-              aria-label="Hủy"
+              aria-label={t("common.cancel")}
               className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-destructive text-white grid place-items-center text-xs leading-none"
             >
               ×

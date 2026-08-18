@@ -585,7 +585,7 @@ export function WelcomeOnboarding({
   const isLast = page === 4;
 
   return (
-    <div className="wo-root" role="dialog" aria-modal="true" aria-label="Chào mừng thành viên mới">
+    <div className="wo-root" role="dialog" aria-modal="true" aria-label={t("onboarding.ariaLabel")}>
       <SvgDefs />
       {/* Header */}
       <div className="wo-header">

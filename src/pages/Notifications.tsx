@@ -196,7 +196,7 @@ export default function Notifications() {
             onClick={() => nav("/kham-pha")}
             className="inline-block px-4 py-2 rounded-full bg-gradient-brand text-primary-foreground text-sm font-semibold"
           >
-            {t("nav.explore") || "Khám phá doanh nghiệp"}
+            {t("nav.explore")}
           </button>
         </div>
       ) : (
@@ -245,7 +245,7 @@ export default function Notifications() {
                 </button>
                 <button
                   onClick={(e) => del(e, n.id)}
-                  aria-label="Xóa thông báo"
+                  aria-label={t("notif.deleteOne")}
                   className="w-9 grid place-items-center text-muted-foreground hover:bg-destructive/10 hover:text-destructive flex-shrink-0"
                 >
                   <X className="w-4 h-4" />
