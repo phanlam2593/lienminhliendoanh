@@ -483,38 +483,52 @@ export default function BusinessDetail() {
               <h2 className="font-bold mb-2 flex items-center gap-1">
                 <Tag className="w-4 h-4 text-primary" /> {t("biz.offers")}
               </h2>
-              <div className="space-y-2">
-                {offers.map((o) => (
-                  <div
-                    key={o.id}
-                    className="p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-950/30 dark:to-sky-950/30 border border-emerald-100 dark:border-emerald-900"
-                  >
-                    <div className="font-semibold text-sm">{o.title}</div>
-                    {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
-                    {isOwner ? (
-                      <button
-                        onClick={() => setClaimsListOffer(o)}
-                        className="text-[11px] text-primary font-semibold mt-1 flex items-center gap-1 hover:underline"
-                      >
-                        <Users className="w-3 h-3" /> {t("biz.claimsCount", { n: o.claim_count ?? 0 })} ·{" "}
-                        {t("biz.viewList")}
-                      </button>
-                    ) : (
-                      <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
-                        <Users className="w-3 h-3" /> {t("biz.claimsCount", { n: o.claim_count ?? 0 })}
-                      </div>
-                    )}
-                    {isApproved && (
-                      <button
-                        onClick={() => openClaim(o)}
-                        className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
-                      >
-                        {t("biz.claimOffer")}
-                      </button>
-                    )}
+              {!canViewOffers ? (
+                <button
+                  onClick={() => nav("/ho-so?view=personal")}
+                  className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 text-left"
+                >
+                  <Lock className="w-5 h-5 text-primary shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold">{t("offers.lockedTitle")}</div>
+                    <div className="text-xs text-muted-foreground">{t("offers.lockedDesc")}</div>
                   </div>
-                ))}
-              </div>
+                  <span className="text-xs font-semibold text-primary shrink-0">{t("offers.viewMembership")}</span>
+                </button>
+              ) : (
+                <div className="space-y-2">
+                  {offers.map((o) => (
+                    <div
+                      key={o.id}
+                      className="p-3 rounded-xl bg-gradient-to-r from-emerald-50 to-sky-50 dark:from-emerald-950/30 dark:to-sky-950/30 border border-emerald-100 dark:border-emerald-900"
+                    >
+                      <div className="font-semibold text-sm">{o.title}</div>
+                      {o.description && <div className="text-xs text-muted-foreground mt-0.5">{o.description}</div>}
+                      {isOwner ? (
+                        <button
+                          onClick={() => setClaimsListOffer(o)}
+                          className="text-[11px] text-primary font-semibold mt-1 flex items-center gap-1 hover:underline"
+                        >
+                          <Users className="w-3 h-3" /> {t("biz.claimsCount", { n: o.claim_count ?? 0 })} ·{" "}
+                          {t("biz.viewList")}
+                        </button>
+                      ) : (
+                        <div className="text-[11px] text-muted-foreground mt-1 flex items-center gap-1">
+                          <Users className="w-3 h-3" /> {t("biz.claimsCount", { n: o.claim_count ?? 0 })}
+                        </div>
+                      )}
+                      {isApproved && (
+                        <button
+                          onClick={() => openClaim(o)}
+                          className="mt-2 text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold"
+                        >
+                          {t("biz.claimOffer")}
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </section>
           )}
 
