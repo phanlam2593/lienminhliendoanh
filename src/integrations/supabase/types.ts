@@ -1446,6 +1446,7 @@ export type Database = {
       claim_offer: { Args: { _offer_id: string; _pin: string }; Returns: Json }
       compute_business_area: { Args: { addr: string }; Returns: string }
       expire_stale_exchanges: { Args: never; Returns: undefined }
+      expire_stale_memberships: { Args: never; Returns: undefined }
       get_admin_user_ids: {
         Args: never
         Returns: {
