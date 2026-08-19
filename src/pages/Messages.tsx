@@ -218,6 +218,18 @@ export function MessagesThread() {
   const { user, isApproved, isAdmin } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
+  const onlineUsers = useOnlineUsers();
+  const { startCall } = useCall();
+  const partnerOnline = onlineUsers.has(id);
+
+  const handleCall = () => {
+    if (!partner) return;
+    if (!partnerOnline) {
+      toast(t("call.offline"));
+      return;
+    }
+    startCall({ id: partner.id, full_name: partner.full_name, avatar_url: partner.avatar_url });
+  };
   const [partner, setPartner] = useState<Profile | null>(null);
   const [msgs, setMsgs] = useState<Message[]>([]);
   const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
