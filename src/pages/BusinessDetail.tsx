@@ -22,6 +22,7 @@ import {
   Youtube,
   Award,
   Pencil,
+  Lock,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { invalidateReviews, invalidateBusinesses } from "@/lib/queryClient";
