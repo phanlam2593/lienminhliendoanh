@@ -112,7 +112,7 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
                   <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="text-sm font-semibold">{b.name}</div>
-                <div className="text-xs text-muted-foreground">{BUSINESS_TYPE_LABEL[b.type]}</div>
+                <div className="text-xs text-muted-foreground">{t(`type.${b.type}`)}</div>
                 <Link
                   to={`/dn/${b.id}`}
                   className="block text-center text-xs font-semibold py-1.5 rounded bg-primary text-primary-foreground"
