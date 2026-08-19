@@ -1783,13 +1783,20 @@ function BusinessCreator({
           className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
         />
       </Field>
-      <Field label={t("bizCreator.offerLabel")} hint={t("bizCreator.offerHint2")}>
-        <input
-          value={offerText}
-          onChange={(e) => setOfferText(e.target.value)}
-          className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
-        />
-      </Field>
+      {isMember ? (
+        <Field label={t("bizCreator.offerLabel")} hint={t("bizCreator.offerHint2")}>
+          <input
+            value={offerText}
+            onChange={(e) => setOfferText(e.target.value)}
+            className="w-full px-3 py-2 rounded-lg border bg-background text-sm"
+          />
+        </Field>
+      ) : (
+        <div className="flex items-start gap-2 px-3 py-2 rounded-lg border border-dashed border-primary/40 bg-primary/5">
+          <Lock className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+          <span className="text-xs text-muted-foreground">{t("bizForm.offerMembershipRequired")}</span>
+        </div>
+      )}
       <Field label={t("bizForm.facebook")}>
         <input
           value={fbUrl}
