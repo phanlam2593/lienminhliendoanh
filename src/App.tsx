@@ -78,6 +78,7 @@ const App = () => (
         <LanguageProvider>
           <AuthProvider>
             <OnlineUsersProvider>
+            <CallProvider>
               <Toaster />
               <Sonner position="top-center" />
               <NetworkStatusWatcher />
