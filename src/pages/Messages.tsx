@@ -8,7 +8,9 @@ import { useEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile, SmilePlus } from "lucide-react";
-import { ArrowLeft, Send, Trash2, MessageCircle, Pencil, Check, X, Reply as ReplyIcon } from "lucide-react";
+import { ArrowLeft, Send, Trash2, MessageCircle, Pencil, Check, X, Reply as ReplyIcon, Phone } from "lucide-react";
+import { useOnlineUsers } from "@/lib/onlineUsers";
+import { useCall } from "@/lib/call";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
@@ -705,7 +707,11 @@ export function MessagesThread() {
                       </div>
                     ) : m.type === "image" ? (
                       <div className="max-w-[220px]">
-                        <StoredImage path={m.image_url} alt={t("chat.imageAlt")} className="rounded-2xl w-full object-cover" />
+                        <StoredImage
+                          path={m.image_url}
+                          alt={t("chat.imageAlt")}
+                          className="rounded-2xl w-full object-cover"
+                        />
                         <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
                           {timeAgo(m.created_at, lang)}
                         </div>
@@ -793,7 +799,11 @@ export function MessagesThread() {
             <span className="font-semibold text-primary">{t("msg.replyingTo")} </span>
             <span className="text-muted-foreground truncate">
               {replyingTo.sender_id === user.id ? t("community.you") : partner?.full_name || ""}:{" "}
-              {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : `📷 ${t("chat.imageAlt")}`}
+              {replyingTo.type === "text"
+                ? replyingTo.content
+                : replyingTo.type === "gif"
+                  ? "🎬 GIF"
+                  : `📷 ${t("chat.imageAlt")}`}
             </span>
           </div>
           <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
@@ -804,7 +814,11 @@ export function MessagesThread() {
       {pendingImage && (
         <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
           <div className="relative">
-            <img src={pendingImage.previewUrl} alt={t("chat.previewAlt")} className="w-16 h-16 object-cover rounded-lg border" />
+            <img
+              src={pendingImage.previewUrl}
+              alt={t("chat.previewAlt")}
+              className="w-16 h-16 object-cover rounded-lg border"
+            />
             <button
               onClick={cancelPendingImage}
               aria-label={t("common.cancel")}
