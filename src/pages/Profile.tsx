@@ -499,8 +499,19 @@ function MenuRow({
   );
 }
 
-function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved: () => void; initialOpen?: boolean }) {
+function BusinessEditor({
+  biz,
+  onSaved,
+  initialOpen,
+  isMember,
+}: {
+  biz: Business;
+  onSaved: () => void;
+  initialOpen?: boolean;
+  isMember: boolean;
+}) {
   const { t } = useLanguage();
+  const navMembership = useNavigate();
   const [name, setName] = useState(biz.name);
   const [type, setType] = useState<BusinessType>(biz.type);
   const [stats, setStats] = useState({ reviews: 0, followers: 0, regulars: 0 });
