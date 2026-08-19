@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Tag } from "lucide-react";
+import { Tag, Lock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Offer } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 
 interface OfferWithBiz extends Offer {
   business?: { id: string; name: string; cover_url: string | null } | null;
