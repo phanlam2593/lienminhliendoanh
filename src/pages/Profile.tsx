@@ -897,20 +897,32 @@ function BusinessEditor({
             {offers.map((o) => (
               <OfferRow key={o.id} offer={o} onChanged={reloadOffers} />
             ))}
-            <div className="flex gap-2">
-              <input
-                value={offerText}
-                onChange={(e) => setOfferText(e.target.value)}
-                placeholder={t("bizForm.newOfferPlaceholder")}
-                className="flex-1 px-3 py-2 rounded-lg border bg-background text-sm"
-              />
+            {isMember ? (
+              <div className="flex gap-2">
+                <input
+                  value={offerText}
+                  onChange={(e) => setOfferText(e.target.value)}
+                  placeholder={t("bizForm.newOfferPlaceholder")}
+                  className="flex-1 px-3 py-2 rounded-lg border bg-background text-sm"
+                />
+                <button
+                  onClick={addOffer}
+                  className="px-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
+                >
+                  {t("install.add")}
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={addOffer}
-                className="px-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold"
+                type="button"
+                onClick={() => navMembership("/ho-so?view=personal")}
+                className="w-full flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-primary/40 bg-primary/5 text-left"
               >
-                {t("install.add")}
+                <Lock className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-xs text-muted-foreground flex-1">{t("bizForm.offerMembershipRequired")}</span>
+                <span className="text-xs font-semibold text-primary shrink-0">{t("bizForm.offerMembershipCta")}</span>
               </button>
-            </div>
+            )}
           </div>
         </div>
       )}
