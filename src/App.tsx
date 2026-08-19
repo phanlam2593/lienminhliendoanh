@@ -10,6 +10,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/lib/auth";
 import { LanguageProvider } from "@/lib/i18n";
 import { OnlineUsersProvider } from "@/lib/onlineUsers";
+import { CallProvider } from "@/lib/call";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useLanguage } from "@/lib/i18n";
