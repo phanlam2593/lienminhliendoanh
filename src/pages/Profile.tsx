@@ -1545,10 +1545,12 @@ function BusinessCreator({
   ownerId,
   onCreated,
   hasExisting,
+  isMember,
 }: {
   ownerId: string;
   onCreated: () => void;
   hasExisting: boolean;
+  isMember: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
