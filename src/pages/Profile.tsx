@@ -359,11 +359,22 @@ export default function Profile() {
         ) : (
           <section className="space-y-3">
             {biz.map((b) => (
-              <BusinessEditor key={b.id} biz={b} onSaved={loadBiz} initialOpen={b.id === editBizId} />
+              <BusinessEditor
+                key={b.id}
+                biz={b}
+                onSaved={loadBiz}
+                initialOpen={b.id === editBizId}
+                isMember={(profile as any)?.is_member ?? false}
+              />
             ))}
           </section>
         )}
-        <BusinessCreator ownerId={user.id} onCreated={loadBiz} hasExisting={biz.length > 0} />
+        <BusinessCreator
+          ownerId={user.id}
+          onCreated={loadBiz}
+          hasExisting={biz.length > 0}
+          isMember={(profile as any)?.is_member ?? false}
+        />
       </div>
     );
   }
