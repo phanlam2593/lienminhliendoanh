@@ -38,6 +38,7 @@ import {
   Phone,
   Smartphone,
   Store,
+  Lock,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
@@ -225,7 +226,9 @@ export default function Profile() {
               </button>
             )}
           </div>
-          {uploadingAvatar && <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>}
+          {uploadingAvatar && (
+            <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>
+          )}
         </div>
       </div>
       <TierLegendDialog open={tierLegendOpen} onOpenChange={setTierLegendOpen} points={(profile as any)?.points ?? 0} />
@@ -687,9 +690,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
             <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-3 space-y-1 border border-amber-200 dark:border-amber-900">
               <div className="font-bold">{t("bizForm.adminNoteTitle")}</div>
               <div>{biz.admin_note}</div>
-              <div className="text-[10px] opacity-80">
-                {t("bizForm.adminNoteHint")}
-              </div>
+              <div className="text-[10px] opacity-80">{t("bizForm.adminNoteHint")}</div>
             </div>
           )}
           <div className="relative">
@@ -788,10 +789,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
               />
             </Field>
           </div>
-          <Field
-            label={t("bizForm.pinLabel")}
-            hint={t("bizForm.pinHint")}
-          >
+          <Field label={t("bizForm.pinLabel")} hint={t("bizForm.pinHint")}>
             <input
               ref={pinInputRef}
               value={pin}
@@ -820,12 +818,7 @@ function BusinessEditor({ biz, onSaved, initialOpen }: { biz: Business; onSaved:
                   disabled={locating}
                   className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-primary hover:bg-primary/5 flex items-center justify-center gap-1.5 disabled:opacity-50"
                 >
-                  📍{" "}
-                  {locating
-                    ? t("bizForm.locating")
-                    : lat
-                      ? t("bizForm.locationPinned")
-                      : t("bizForm.pinLocation")}
+                  📍 {locating ? t("bizForm.locating") : lat ? t("bizForm.locationPinned") : t("bizForm.pinLocation")}
                 </button>
               </div>
             </>
@@ -1003,7 +996,9 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
         <span className={`truncate flex-1 ${offer.status === "inactive" ? "line-through text-muted-foreground" : ""}`}>
           {offer.title}
         </span>
-        <span className="text-[10px] text-muted-foreground whitespace-nowrap">{t("offerRow.claimsShort", { n: offer.claim_count ?? 0 })}</span>
+        <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+          {t("offerRow.claimsShort", { n: offer.claim_count ?? 0 })}
+        </span>
       </div>
       {offer.description && <div className="text-[11px] text-muted-foreground line-clamp-2">{offer.description}</div>}
       <div className="flex gap-1.5 flex-wrap">
@@ -1041,9 +1036,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t("offerRow.broadcastTitle")}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("offerRow.broadcastDesc", { title: offer.title })}
-              </AlertDialogDescription>
+              <AlertDialogDescription>{t("offerRow.broadcastDesc", { title: offer.title })}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
@@ -1062,9 +1055,7 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>{t("offerRow.deleteTitle")}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("offerRow.deleteDesc", { title: offer.title })}
-              </AlertDialogDescription>
+              <AlertDialogDescription>{t("offerRow.deleteDesc", { title: offer.title })}</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
