@@ -53,7 +53,7 @@ interface ReplyMeta extends ReviewReply {
 
 export default function BusinessDetail() {
   const { id = "" } = useParams();
-  const { user, isApprove  const { user, profile, isApproved, isAdmin } = useAuth();d, isAdmin } = useAuth();
+  const { user, profile, isApproved, isAdmin } = useAuth();
   const { t } = useLanguage();
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
