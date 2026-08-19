@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star, Tag, Users } from "lucide-react";
 import type { Business } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { OpenBadge } from "./OpenBadge";
 import { StoredImage } from "./StoredImage";
 import { fmtTime } from "@/lib/time";

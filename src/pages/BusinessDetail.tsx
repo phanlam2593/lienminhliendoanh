@@ -27,7 +27,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { invalidateReviews, invalidateBusinesses } from "@/lib/queryClient";
 import type { Business, Offer, Review, OfferClaim, ReviewReply } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
 import { LightboxImage } from "@/components/ImageLightbox";
 import { OpenBadge } from "@/components/OpenBadge";

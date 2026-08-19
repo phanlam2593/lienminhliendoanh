@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Link } from "react-router-dom";
 import { StoredImage } from "@/components/StoredImage";
-import { BUSINESS_TYPE_LABEL, BusinessType } from "@/lib/types";
+import { BusinessType } from "@/lib/types";
 import type { BusinessCardData } from "@/components/BusinessCard";
 import { useLanguage } from "@/lib/i18n";
 import { Navigation } from "lucide-react";

@@ -6,7 +6,6 @@ import { useLanguage } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
 import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star } from "lucide-react";
 import type { Business } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { Avatar } from "@/components/Avatar";
 import { StoredImage } from "@/components/StoredImage";

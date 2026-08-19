@@ -24,7 +24,7 @@ import {
   Settings,
   AlertCircle,
 } from "lucide-react";
-import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
+import { BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
 const BIZ_EXAMPLES: Record<BusinessType, { vi: string[]; en: string[] }> = {

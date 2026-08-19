@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { StoredImage } from "@/components/StoredImage";
 import { FollowListDialog } from "@/components/FollowListDialog";
-import { BUSINESS_TYPE_LABEL, type BusinessType } from "@/lib/types";
+import { type BusinessType } from "@/lib/types";
 
 interface QuickBiz {
   id: string;
