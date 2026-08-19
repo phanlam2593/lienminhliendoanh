@@ -74,6 +74,20 @@ export default function Offers() {
             {t("home.exploreBusinesses")}
           </Link>
         </div>
+      ) : !canView ? (
+        <Link
+          to="/ho-so?view=personal"
+          className="flex items-center gap-3 p-4 rounded-2xl border border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10"
+        >
+          <Lock className="w-6 h-6 text-primary shrink-0" />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-bold">{t("offers.lockedTitle")}</div>
+            <div className="text-xs text-muted-foreground mt-0.5">
+              {t("offers.lockedDesc")} ({total})
+            </div>
+          </div>
+          <span className="text-xs font-semibold text-primary shrink-0">{t("offers.viewMembership")}</span>
+        </Link>
       ) : (
         <div className="space-y-3">
           {list.map((o) => (
