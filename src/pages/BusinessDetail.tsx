@@ -27,7 +27,6 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { invalidateReviews, invalidateBusinesses } from "@/lib/queryClient";
 import type { Business, Offer, Review, OfferClaim, ReviewReply } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { StoredImage } from "@/components/StoredImage";
 import { LightboxImage } from "@/components/ImageLightbox";
 import { OpenBadge } from "@/components/OpenBadge";
@@ -352,7 +351,7 @@ export default function BusinessDetail() {
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-full font-semibold">
-              {BUSINESS_TYPE_LABEL[b.type]}
+              {t(`type.${b.type}`)}
             </span>
             {b.is_online ? (
               <span className="text-xs bg-sky-500 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">

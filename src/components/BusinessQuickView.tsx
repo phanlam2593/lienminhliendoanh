@@ -7,7 +7,7 @@ import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { StoredImage } from "@/components/StoredImage";
 import { FollowListDialog } from "@/components/FollowListDialog";
-import { BUSINESS_TYPE_LABEL, type BusinessType } from "@/lib/types";
+import { type BusinessType } from "@/lib/types";
 
 interface QuickBiz {
   id: string;
@@ -148,7 +148,7 @@ export function BusinessQuickView({
                 {b.is_featured && <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />}
                 {b.name}
               </div>
-              <div className="text-xs text-muted-foreground">{BUSINESS_TYPE_LABEL[b.type] || b.type}</div>
+              <div className="text-xs text-muted-foreground">{t(`type.${b.type}`)}</div>
               {owner && (
                 <div className="text-xs text-muted-foreground mt-0.5">
                   {t("bizQuick.owner")}:{" "}

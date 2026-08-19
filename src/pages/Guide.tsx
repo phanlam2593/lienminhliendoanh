@@ -24,7 +24,7 @@ import {
   Settings,
   AlertCircle,
 } from "lucide-react";
-import { BUSINESS_TYPE_LABEL, BUSINESS_TYPES, BusinessType } from "@/lib/types";
+import { BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
 const BIZ_EXAMPLES: Record<BusinessType, { vi: string[]; en: string[] }> = {
@@ -248,7 +248,7 @@ function BizTypeItem({ type }: { type: BusinessType }) {
         onClick={() => setOpen((o) => !o)}
         className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left"
       >
-        <span className="text-sm font-semibold">{BUSINESS_TYPE_LABEL[type]}</span>
+        <span className="text-sm font-semibold">{t(`type.${type}`)}</span>
         {open ? (
           <ChevronDown className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
         ) : (

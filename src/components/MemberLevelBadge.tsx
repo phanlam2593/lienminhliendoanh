@@ -26,7 +26,7 @@ export function MemberLevelBadge({
     <span className={`inline-flex items-center gap-1 shrink-0 ${size === "sm" ? "text-[10px]" : "text-xs"}`}>
       {current ? (
         <span className="font-semibold text-primary">
-          {current.emoji} {current.label}
+          {current.emoji} {t(`tier.${current.type}`)}
         </span>
       ) : (
         <span className="text-muted-foreground">{t("level.newMember")}</span>

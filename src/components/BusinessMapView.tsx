@@ -4,7 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Link } from "react-router-dom";
 import { StoredImage } from "@/components/StoredImage";
-import { BUSINESS_TYPE_LABEL, BusinessType } from "@/lib/types";
+import { BusinessType } from "@/lib/types";
 import type { BusinessCardData } from "@/components/BusinessCard";
 import { useLanguage } from "@/lib/i18n";
 import { Navigation } from "lucide-react";
@@ -112,7 +112,7 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
                   <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="text-sm font-semibold">{b.name}</div>
-                <div className="text-xs text-muted-foreground">{BUSINESS_TYPE_LABEL[b.type]}</div>
+                <div className="text-xs text-muted-foreground">{t(`type.${b.type}`)}</div>
                 <Link
                   to={`/dn/${b.id}`}
                   className="block text-center text-xs font-semibold py-1.5 rounded bg-primary text-primary-foreground"

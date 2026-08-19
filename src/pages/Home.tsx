@@ -6,7 +6,6 @@ import { useLanguage } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
 import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star } from "lucide-react";
 import type { Business } from "@/lib/types";
-import { BUSINESS_TYPE_LABEL } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { Avatar } from "@/components/Avatar";
 import { StoredImage } from "@/components/StoredImage";
@@ -434,7 +433,7 @@ function StatsModal({
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold truncate">{b.name}</div>
                     <div className="text-[11px] text-muted-foreground truncate flex items-center gap-1.5 flex-wrap">
-                      <span>{BUSINESS_TYPE_LABEL[b.type as keyof typeof BUSINESS_TYPE_LABEL] || b.type}</span>
+                      <span>{t(`type.${b.type}`)}</span>
                       <OpenBadge open={b.hours_open} close={b.hours_close} size="sm" />
                       <span>· {t("home.offersCount", { n: b.offerCount })}</span>
                       {b.reviewCount > 0 && (
