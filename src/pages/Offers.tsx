@@ -14,6 +14,8 @@ const PAGE_SIZE = 20;
 
 export default function Offers() {
   const { t } = useLanguage();
+  const { profile, isAdmin } = useAuth();
+  const canView = isAdmin || !!(profile as any)?.is_member;
   const [list, setList] = useState<OfferWithBiz[]>([]);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
