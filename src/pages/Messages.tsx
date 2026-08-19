@@ -612,10 +612,22 @@ export function MessagesThread() {
         <button onClick={() => setQuickViewOpen(true)} className="shrink-0">
           <Avatar path={partner?.avatar_url} name={partner?.full_name} size={32} />
         </button>
-        <button onClick={() => setQuickViewOpen(true)} className="flex items-center gap-1.5 min-w-0 text-left">
+        <button onClick={() => setQuickViewOpen(true)} className="flex items-center gap-1.5 min-w-0 text-left flex-1">
           <div className="font-semibold text-sm truncate hover:text-primary">{partner?.full_name || "…"}</div>
           {partner && <MemberLevelBadge points={(partner as any).points ?? 0} isAdmin={partnerIsAdmin} />}
         </button>
+        {partner && (
+          <button
+            onClick={handleCall}
+            className={`w-9 h-9 rounded-full grid place-items-center shrink-0 ${
+              partnerOnline ? "bg-primary/10 text-primary" : "bg-accent text-muted-foreground"
+            }`}
+            aria-label={t("call.startCall")}
+            title={partnerOnline ? t("call.startCall") : t("call.offline")}
+          >
+            <Phone className="w-4 h-4" />
+          </button>
+        )}
       </div>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div ref={scrollContainerRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-3 space-y-2">
