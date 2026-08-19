@@ -288,6 +288,7 @@ export default function BusinessDetail() {
   if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
 
   const isOwner = !!user && user.id === b.owner_id;
+  const canViewOffers = isOwner || isAdmin || !!(profile as any)?.is_member;
 
   const ReviewsBlock = (
     <section className="mt-2">
