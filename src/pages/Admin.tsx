@@ -1282,6 +1282,92 @@ function ActivityTab({ refreshKey }: { refreshKey: number }) {
   );
 }
 
+// ── Quản lý Membership thủ công (chưa có cổng thanh toán, admin xử lý tay) ──
+function MembershipAdminSection({ row, onChanged }: { row: MemberRow; onChanged: () => void }) {
+  const [busy, setBusy] = useState(false);
+
+  const isMember = !!(row as any).is_member;
+  const expiresAt = (row as any).membership_expires_at as string | null;
+  const isExpired = isMember && expiresAt && new Date(expiresAt) < new Date();
+
+  const setMembership = async (patch: { is_member: boolean; membership_expires_at: string | null }) => {
+    setBusy(true);
+    const nowIso = new Date().toISOString();
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        is_member: patch.is_member,
+        membership_expires_at: patch.membership_expires_at,
+        membership_started_at: patch.is_member
+          ? (row as any).membership_started_at || nowIso
+          : (row as any).membership_started_at,
+      } as any)
+      .eq("id", row.id);
+    setBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Đã cập nhật membership");
+    onChanged();
+  };
+
+  const extend = (months: number) => {
+    const base = expiresAt && new Date(expiresAt) > new Date() ? new Date(expiresAt) : new Date();
+    base.setMonth(base.getMonth() + months);
+    setMembership({ is_member: true, membership_expires_at: base.toISOString() });
+  };
+
+  const toggleOff = () =>
+    setMembership({ is_member: false, membership_expires_at: (row as any).membership_expires_at });
+
+  return (
+    <section className="border-t pt-4 space-y-2">
+      <div className="text-xs font-bold text-muted-foreground flex items-center gap-1.5">
+        <Award className="w-3.5 h-3.5" /> MEMBERSHIP
+      </div>
+      <div
+        className={`text-xs px-3 py-2 rounded-lg font-semibold ${
+          isMember && !isExpired
+            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-400"
+            : "bg-muted text-muted-foreground"
+        }`}
+      >
+        {isMember && !isExpired && expiresAt
+          ? `🎖️ Hội viên · hết hạn ${new Date(expiresAt).toLocaleDateString("vi-VN")}`
+          : isMember && isExpired
+            ? `⌛ Đã hết hạn ${expiresAt ? new Date(expiresAt).toLocaleDateString("vi-VN") : ""}`
+            : "Chưa là hội viên"}
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        <button
+          onClick={() => extend(1)}
+          disabled={busy}
+          className="px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-semibold disabled:opacity-50"
+        >
+          +1 tháng
+        </button>
+        <button
+          onClick={() => extend(3)}
+          disabled={busy}
+          className="px-2.5 py-1.5 rounded-lg bg-primary/10 text-primary text-xs font-semibold disabled:opacity-50"
+        >
+          +3 tháng
+        </button>
+        {isMember && (
+          <button
+            onClick={toggleOff}
+            disabled={busy}
+            className="px-2.5 py-1.5 rounded-lg bg-destructive/10 text-destructive text-xs font-semibold disabled:opacity-50"
+          >
+            Tắt ngay
+          </button>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function MemberDetail({
   row,
   onClose,
