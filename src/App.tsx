@@ -34,6 +34,7 @@ import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookieThirdParty from "./pages/CookieThirdParty";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
+import CallHistory from "./pages/CallHistory";
 import NotFound from "./pages/NotFound";
 
 const OFFLINE_TOAST_ID = "app-offline-toast";
