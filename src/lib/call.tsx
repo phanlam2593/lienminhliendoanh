@@ -365,27 +365,15 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
     ch.on("broadcast", { event: "ice" }, async ({ payload }) => {
       const { callId, candidate } = payload as { callId: string; candidate: RTCIceCandidateInit };
-      console.log(
-        "[call] NHẬN ice từ đối phương, callId khớp:",
-        stateRef.current.status !== "idle" && (stateRef.current as any).callId === callId,
-      );
       const s = stateRef.current;
-      if (s.status === "idle" || s.callId !== callId) {
-        console.log("[call] BỎ QUA ice vì state=idle hoặc callId lệch");
-        return;
-      }
+      if (s.status === "idle" || s.callId !== callId) return;
       if (pcRef.current?.remoteDescription) {
         try {
           await pcRef.current.addIceCandidate(candidate);
-          console.log("[call] addIceCandidate (nhận) OK");
-        } catch (err) {
-          console.error("[call] addIceCandidate (nhận) LỖI:", err);
+        } catch {
+          /* ignore */
         }
       } else {
-        console.log(
-          "[call] chưa có remoteDescription, xếp hàng chờ. Số lượng đang chờ:",
-          pendingIceRef.current.length + 1,
-        );
         pendingIceRef.current.push(candidate);
       }
     });
