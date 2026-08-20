@@ -191,6 +191,36 @@ export function CallProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Ghi lại kết quả cuộc gọi vào bảng `calls` — dùng upsert theo callId nên bên nào
+  // ghi trước cũng được, bên còn lại (nếu có ghi) sẽ merge đè lên đúng 1 dòng, không
+  // tạo trùng. Nếu cuộc gọi đã kết nối thật (status "connected") thì luôn tính là
+  // "answered" bất kể lý do kết thúc gọi hàm này là gì.
+  const logCall = async (status: "answered" | "missed" | "declined" | "busy") => {
+    const s = stateRef.current;
+    if (s.status === "idle" || !user) return;
+    const iAmCaller = amICallerRef.current;
+    const callerId = iAmCaller ? user.id : s.peer.id;
+    const calleeId = iAmCaller ? s.peer.id : user.id;
+    const isConnected = s.status === "connected";
+    const durationSeconds = isConnected ? Math.max(0, Math.floor((Date.now() - s.startedAt) / 1000)) : null;
+    try {
+      await supabase.from("calls").upsert(
+        {
+          id: s.callId,
+          caller_id: callerId,
+          callee_id: calleeId,
+          status: isConnected ? "answered" : status,
+          answered_at: isConnected ? new Date(s.startedAt).toISOString() : null,
+          ended_at: new Date().toISOString(),
+          duration_seconds: durationSeconds,
+        } as any,
+        { onConflict: "id" },
+      );
+    } catch {
+      /* không chặn luồng kết thúc cuộc gọi nếu ghi log lỗi */
+    }
+  };
+
   const endCall = (notifyPeer: boolean, reason?: string) => {
     const s = stateRef.current;
     if (notifyPeer && s.status !== "idle") {
