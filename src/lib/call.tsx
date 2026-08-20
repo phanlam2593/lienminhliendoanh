@@ -222,6 +222,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
 
     return pc;
+  };
 
   const getMic = async (): Promise<MediaStream | null> => {
     try {
