@@ -378,11 +378,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
         return;
       }
       pendingIceRef.current = [];
+      amICallerRef.current = false;
       setState({ status: "incoming", callId, peer: from, offerSdp: sdp });
       ringtone.start("ring");
       ringTimeoutRef.current = setTimeout(() => {
         if (stateRef.current.status === "incoming") {
           sendSignal(from.id, "reject", { callId, reason: "timeout" });
+          void logCall("missed");
           cleanupCall();
           setState({ status: "idle" });
         }
