@@ -104,6 +104,7 @@ const App = () => (
                       <Route path="/thong-bao" element={<Notifications />} />
                       <Route path="/tin-nhan" element={<MessagesInbox />} />
                       <Route path="/tin-nhan/:id" element={<MessagesThread />} />
+                      <Route path="/cuoc-goi" element={<CallHistory />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/huong-dan" element={<Guide />} />
                       <Route path="/bao-cao-cua-toi" element={<MyReports />} />
