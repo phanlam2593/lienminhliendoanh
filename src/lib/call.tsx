@@ -18,9 +18,7 @@ import { toast } from "sonner";
 // có traffic thật.
 // ============================================================================
 
-const ICE_SERVERS: RTCIceServer[] = [
-  { urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] },
-];
+const ICE_SERVERS: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
 
 const RING_TIMEOUT_MS = 30_000;
 
@@ -187,10 +185,17 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
 
     pc.oniceconnectionstatechange = () => {
+      console.log("[call] iceConnectionState:", pc.iceConnectionState);
       if (pc.iceConnectionState === "failed") {
         toast.error(t("call.connectionFailed"));
         endCall(true, "failed");
       }
+    };
+    pc.onconnectionstatechange = () => {
+      console.log("[call] connectionState:", pc.connectionState);
+    };
+    pc.onicegatheringstatechange = () => {
+      console.log("[call] iceGatheringState:", pc.iceGatheringState);
     };
 
     return pc;
@@ -388,8 +393,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => () => cleanupCall(), []);
 
-  const elapsed =
-    state.status === "connected" ? Math.max(0, Math.floor((Date.now() - state.startedAt) / 1000)) : 0;
+  const elapsed = state.status === "connected" ? Math.max(0, Math.floor((Date.now() - state.startedAt) / 1000)) : 0;
   const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const ss = String(elapsed % 60).padStart(2, "0");
 
