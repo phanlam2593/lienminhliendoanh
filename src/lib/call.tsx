@@ -215,21 +215,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
 
     pc.oniceconnectionstatechange = () => {
-      console.log("[call] iceConnectionState:", pc.iceConnectionState);
       if (pc.iceConnectionState === "failed") {
         toast.error(t("call.connectionFailed"));
         endCall(true, "failed");
       }
     };
-    pc.onconnectionstatechange = () => {
-      console.log("[call] connectionState:", pc.connectionState);
-    };
-    pc.onicegatheringstatechange = () => {
-      console.log("[call] iceGatheringState:", pc.iceGatheringState);
-    };
 
     return pc;
-  };
 
   const getMic = async (): Promise<MediaStream | null> => {
     try {
