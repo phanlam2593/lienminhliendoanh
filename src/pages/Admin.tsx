@@ -1656,6 +1656,8 @@ function MemberDetail({
               </button>
             </section>
 
+            <MembershipAdminSection row={row} onChanged={onChanged} />
+
             <Dialog open={!!tempPw} onOpenChange={(o) => !o && setTempPw(null)}>
               <DialogContent>
                 <DialogHeader>
