@@ -149,15 +149,44 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setMuted(false);
   };
 
+  const outboundRef = useRef<{
+    peerId: string;
+    channel: ReturnType<typeof supabase.channel>;
+    ready: boolean;
+    queue: { event: string; payload: Record<string, unknown> }[];
+  } | null>(null);
+
+  // Dùng LẠI 1 kênh duy nhất cho toàn bộ tín hiệu (offer/answer/ice) của 1 cuộc gọi,
+  // thay vì tạo kênh mới cho mỗi tin nhắn — tránh bắn hàng loạt kênh trùng tên cùng
+  // lúc khi ICE candidate dồn dập (đây là nguyên nhân candidate bị rớt trước đó).
   const sendSignal = (peerId: string, event: string, payload: Record<string, unknown>) => {
-    const ch = supabase.channel(`call:${peerId}`);
-    ch.subscribe((status) => {
-      if (status === "SUBSCRIBED") {
-        void ch.send({ type: "broadcast", event, payload }).finally(() => {
-          setTimeout(() => supabase.removeChannel(ch), 800);
-        });
-      }
-    });
+    let ob = outboundRef.current;
+    if (!ob || ob.peerId !== peerId) {
+      if (ob) supabase.removeChannel(ob.channel);
+      const channel = supabase.channel(`call:${peerId}`);
+      ob = { peerId, channel, ready: false, queue: [] };
+      outboundRef.current = ob;
+      channel.subscribe((status) => {
+        if (status === "SUBSCRIBED" && outboundRef.current === ob) {
+          ob!.ready = true;
+          const pending = ob!.queue;
+          ob!.queue = [];
+          pending.forEach((m) => void channel.send({ type: "broadcast", event: m.event, payload: m.payload }));
+        }
+      });
+    }
+    if (ob.ready) {
+      void ob.channel.send({ type: "broadcast", event, payload });
+    } else {
+      ob.queue.push({ event, payload });
+    }
+  };
+
+  const closeOutboundChannel = () => {
+    if (outboundRef.current) {
+      supabase.removeChannel(outboundRef.current.channel);
+      outboundRef.current = null;
+    }
   };
 
   const endCall = (notifyPeer: boolean, reason?: string) => {
