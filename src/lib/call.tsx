@@ -430,7 +430,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       const s = stateRef.current;
       if (s.status === "calling" && s.callId === callId) {
         toast(t("call.declined"));
-        endCall(false);
+        endCall(false, "declined");
       }
     });
 
@@ -439,7 +439,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       const s = stateRef.current;
       if (s.status === "calling" && s.callId === callId) {
         toast(t("call.busy"));
-        endCall(false);
+        endCall(false, "busy");
       }
     });
 
@@ -448,6 +448,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       const s = stateRef.current;
       if (s.status !== "idle" && s.callId === callId) {
         toast(t("call.ended"));
+        void logCall(s.status === "connected" ? "answered" : "missed");
         cleanupCall();
         setState({ status: "idle" });
       }
