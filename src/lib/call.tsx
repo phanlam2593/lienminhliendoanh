@@ -204,10 +204,6 @@ export function CallProvider({ children }: { children: ReactNode }) {
     pcRef.current = pc;
 
     pc.onicecandidate = (e) => {
-      console.log(
-        "[call] onicecandidate:",
-        e.candidate ? e.candidate.type + " " + e.candidate.candidate : "(hết candidate)",
-      );
       if (e.candidate) sendSignal(peerId, "ice", { callId, candidate: e.candidate.toJSON() });
     };
 
