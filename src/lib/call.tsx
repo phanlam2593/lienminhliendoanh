@@ -287,6 +287,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     const stream = await getMic();
     if (!stream) return;
 
+    amICallerRef.current = true;
     setState({ status: "calling", callId, peer });
     ringtone.start("ringback");
 
