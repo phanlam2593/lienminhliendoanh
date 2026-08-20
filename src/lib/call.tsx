@@ -226,6 +226,17 @@ export function CallProvider({ children }: { children: ReactNode }) {
     if (notifyPeer && s.status !== "idle") {
       sendSignal(s.peer.id, "end", { callId: s.callId, reason: reason ?? "hangup" });
     }
+    if (s.status !== "idle") {
+      const status =
+        s.status === "connected"
+          ? "answered"
+          : reason === "declined"
+            ? "declined"
+            : reason === "busy"
+              ? "busy"
+              : "missed";
+      void logCall(status);
+    }
     cleanupCall();
     setState({ status: "idle" });
   };
