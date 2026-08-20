@@ -349,6 +349,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     const s = stateRef.current;
     if (s.status !== "incoming") return;
     sendSignal(s.peer.id, "reject", { callId: s.callId });
+    void logCall("declined");
     cleanupCall();
     setState({ status: "idle" });
   };
