@@ -309,6 +309,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     const ch = supabase.channel(`call:${user.id}`);
 
     ch.on("broadcast", { event: "offer" }, ({ payload }) => {
+      console.log("[call] NHẬN offer");
       const { callId, sdp, from } = payload as {
         callId: string;
         sdp: RTCSessionDescriptionInit;
