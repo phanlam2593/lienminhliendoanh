@@ -343,19 +343,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
         }
       }, RING_TIMEOUT_MS);
     });
-
     ch.on("broadcast", { event: "answer" }, async ({ payload }) => {
-      console.log("[call] NHẬN answer");
       const { callId, sdp } = payload as { callId: string; sdp: RTCSessionDescriptionInit };
       const s = stateRef.current;
-      if (s.status !== "calling" || s.callId !== callId || !pcRef.current) {
-        console.log("[call] BỎ QUA answer vì state/callId/pc không khớp");
-        return;
-      }
+      if (s.status !== "calling" || s.callId !== callId || !pcRef.current) return;
       clearRingTimeout();
       ringtone.stop();
       await pcRef.current.setRemoteDescription(sdp);
-      console.log("[call] setRemoteDescription (answer) xong");
       for (const c of pendingIceRef.current) {
         try {
           await pcRef.current.addIceCandidate(c);
