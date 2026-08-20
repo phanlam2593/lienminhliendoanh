@@ -182,9 +182,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
 
     pc.ontrack = (e) => {
+      console.log("[call] ontrack, số track:", e.streams[0]?.getAudioTracks().length);
       if (remoteAudioRef.current) {
         remoteAudioRef.current.srcObject = e.streams[0];
-        void remoteAudioRef.current.play().catch(() => {});
+        remoteAudioRef.current
+          .play()
+          .then(() => console.log("[call] audio.play() OK"))
+          .catch((err) => console.error("[call] audio.play() lỗi:", err));
       }
     };
 
