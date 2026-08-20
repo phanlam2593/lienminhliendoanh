@@ -142,7 +142,17 @@ export function MessagesInbox() {
 
   return (
     <div className="p-4 space-y-2">
-      <h1 className="text-xl font-extrabold mb-2">{t("messages.title")}</h1>
+      <div className="flex items-center justify-between mb-2">
+        <h1 className="text-xl font-extrabold">{t("messages.title")}</h1>
+        <Link
+          to="/cuoc-goi"
+          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground"
+          aria-label={t("callHistory.title")}
+          title={t("callHistory.title")}
+        >
+          <History className="w-5 h-5" />
+        </Link>
+      </div>
       <div className="flex gap-1 p-1 bg-muted rounded-xl">
         <button
           onClick={() => setTab("messages")}
