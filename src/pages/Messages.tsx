@@ -355,6 +355,16 @@ export function MessagesThread() {
     }
   };
 
+  const loadCalls = async () => {
+    if (!user || !id) return;
+    const { data } = await supabase
+      .from("calls")
+      .select("id, caller_id, callee_id, status, duration_seconds, created_at")
+      .or(`and(caller_id.eq.${user.id},callee_id.eq.${id}),and(caller_id.eq.${id},callee_id.eq.${user.id})`)
+      .order("created_at", { ascending: true });
+    setCalls((data ?? []) as CallRow[]);
+  };
+
   const loadOlderMsgs = async () => {
     setLoadingOlder(true);
     const next = msgLimit + MSG_PAGE_SIZE;
