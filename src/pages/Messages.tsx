@@ -50,6 +50,15 @@ interface ConvoSummary {
   unread: number;
 }
 
+interface CallRow {
+  id: string;
+  caller_id: string;
+  callee_id: string;
+  status: "answered" | "missed" | "declined" | "busy";
+  duration_seconds: number | null;
+  created_at: string;
+}
+
 function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) => string): string {
   if (m.type === "image") return `📷 ${tr("chat.imageAlt")}`;
   if (m.type === "gif") return "🎬 GIF";
