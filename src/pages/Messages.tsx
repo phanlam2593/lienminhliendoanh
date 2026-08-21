@@ -265,6 +265,7 @@ export function MessagesThread() {
   };
   const [partner, setPartner] = useState<Profile | null>(null);
   const [msgs, setMsgs] = useState<Message[]>([]);
+  const [calls, setCalls] = useState<CallRow[]>([]);
   const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
   const [msgHasMore, setMsgHasMore] = useState(true);
   const [loadingOlder, setLoadingOlder] = useState(false);
