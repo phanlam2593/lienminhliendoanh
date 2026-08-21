@@ -29,6 +29,7 @@ function urlForTarget(target_type: string | null, target_id: string | null): str
   if (target_type === "user" && target_id) return `/ho-so/${target_id}`;
   if (target_type === "message" && target_id) return `/tin-nhan/${target_id}`;
   if (target_type === "report" && target_id) return `/ho-so?view=reports`;
+  if (target_type === "call") return `/cuoc-goi`;
   return "/thong-bao";
 }
 
