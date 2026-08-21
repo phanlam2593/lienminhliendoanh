@@ -18,6 +18,9 @@ import {
   X,
   Reply as ReplyIcon,
   Phone,
+  PhoneMissed,
+  PhoneIncoming,
+  PhoneOutgoing,
   History,
 } from "lucide-react";
 import { useOnlineUsers } from "@/lib/onlineUsers";
