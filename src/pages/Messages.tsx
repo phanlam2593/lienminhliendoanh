@@ -498,6 +498,28 @@ export function MessagesThread() {
           return next;
         });
       })
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${id}` },
+        (payload) => {
+          const row = payload.new as CallRow;
+          if (row.callee_id !== user.id) return;
+          setCalls((prev) =>
+            prev.some((c) => c.id === row.id) ? prev.map((c) => (c.id === row.id ? row : c)) : [...prev, row],
+          );
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${user.id}` },
+        (payload) => {
+          const row = payload.new as CallRow;
+          if (row.callee_id !== id) return;
+          setCalls((prev) =>
+            prev.some((c) => c.id === row.id) ? prev.map((c) => (c.id === row.id ? row : c)) : [...prev, row],
+          );
+        },
+      )
       .subscribe();
     return () => {
       window.removeEventListener("focus", onFocus);
