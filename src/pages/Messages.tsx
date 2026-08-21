@@ -410,6 +410,7 @@ export function MessagesThread() {
       .rpc("get_admin_user_ids")
       .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
     void loadMsgs(MSG_PAGE_SIZE, true);
+    void loadCalls();
     void markThreadRead();
     // Thử lại khi người dùng quay lại tab/app (lần đầu có thể lỗi mạng hoặc token vừa hết hạn)
     const onFocus = () => {
