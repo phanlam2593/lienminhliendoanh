@@ -36,8 +36,6 @@ import {
   ExternalLink,
   Clock,
   Send,
-  Award,
-  PhoneMissed,
 } from "lucide-react";
 import { StoredImage } from "@/components/StoredImage";
 import { LightboxImage } from "@/components/ImageLightbox";
