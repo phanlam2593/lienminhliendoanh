@@ -718,7 +718,72 @@ export function MessagesThread() {
                 break;
               }
             }
-            return msgs.map((m) => {
+            const timeline: ({ kind: "message"; item: Message } | { kind: "call"; item: CallRow })[] = [
+              ...msgs.map((mm) => ({ kind: "message" as const, item: mm })),
+              ...calls.map((c) => ({ kind: "call" as const, item: c })),
+            ].sort((a, b) => new Date(a.item.created_at).getTime() - new Date(b.item.created_at).getTime());
+            return timeline.map((entry) => {
+              if (entry.kind === "call") {
+                const c = entry.item;
+                const outgoing = c.caller_id === user.id;
+                const missedByMe = !outgoing && (c.status === "missed" || c.status === "busy");
+                const durMin = Math.floor((c.duration_seconds ?? 0) / 60);
+                const durSec = (c.duration_seconds ?? 0) % 60;
+                const header =
+                  c.status === "answered"
+                    ? outgoing
+                      ? t("call.inline.outgoingAnswered")
+                      : t("call.inline.incomingAnswered")
+                    : t("call.inline.title");
+                const sub =
+                  c.status === "answered"
+                    ? t("call.inline.durationLong", { m: durMin, s: durSec })
+                    : c.status === "missed"
+                      ? outgoing
+                        ? t("call.inline.noAnswer")
+                        : t("call.inline.missedSub")
+                      : c.status === "declined"
+                        ? outgoing
+                          ? t("call.inline.theyDeclined")
+                          : t("call.inline.youDeclinedSub")
+                        : t("call.inline.busySub");
+                return (
+                  <div key={`call-${c.id}`} className="flex justify-center my-1.5">
+                    <div className="flex items-center gap-2.5 px-3 py-2 rounded-2xl bg-card border max-w-[85%]">
+                      <div
+                        className={`w-8 h-8 rounded-full grid place-items-center shrink-0 ${
+                          missedByMe ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"
+                        }`}
+                      >
+                        {missedByMe ? (
+                          <PhoneMissed className="w-4 h-4" />
+                        ) : outgoing ? (
+                          <PhoneOutgoing className="w-4 h-4" />
+                        ) : (
+                          <PhoneIncoming className="w-4 h-4" />
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <div className={`text-xs font-semibold ${missedByMe ? "text-destructive" : ""}`}>
+                          {missedByMe ? t("call.inline.missedByMe") : header}
+                        </div>
+                        <div className="text-[11px] text-muted-foreground">{sub}</div>
+                      </div>
+                      {partner && (
+                        <button
+                          onClick={() =>
+                            startCall({ id: partner.id, full_name: partner.full_name, avatar_url: partner.avatar_url })
+                          }
+                          className="ml-1 text-xs font-semibold text-primary shrink-0"
+                        >
+                          {t("call.inline.callBack")}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              }
+              const m = entry.item;
               const msgsById = new Map(msgs.map((mm) => [mm.id, mm]));
               const repliedMsg = m.reply_to_id ? msgsById.get(m.reply_to_id) : null;
               const mine = m.sender_id === user.id;
