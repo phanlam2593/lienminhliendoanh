@@ -748,8 +748,12 @@ export function MessagesThread() {
                           : t("call.inline.youDeclinedSub")
                         : t("call.inline.busySub");
                 return (
-                  <div key={`call-${c.id}`} className="flex justify-center my-1.5">
-                    <div className="flex items-center gap-2.5 px-3 py-2 rounded-2xl bg-card border max-w-[85%]">
+                  <div key={`call-${c.id}`} className={`flex ${outgoing ? "justify-end" : "justify-start"} my-1.5`}>
+                    <div
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-2xl bg-card border max-w-[85%] ${
+                        outgoing ? "rounded-br-sm" : "rounded-bl-sm"
+                      }`}
+                    >
                       <div
                         className={`w-8 h-8 rounded-full grid place-items-center shrink-0 ${
                           missedByMe ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"
