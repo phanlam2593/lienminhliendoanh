@@ -130,7 +130,6 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const ringTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const durationTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [, forceTick] = useState(0);
-  const [debugIce, setDebugIce] = useState<string>("");
   const ringtone = useRingtone();
 
   stateRef.current = state;
