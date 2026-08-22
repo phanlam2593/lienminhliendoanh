@@ -318,7 +318,8 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setState({ status: "calling", callId, peer });
     ringtone.start("ringback");
 
-    const pc = setupPeerConnection(peer.id, callId);
+    const iceServers = await getIceServers();
+    const pc = setupPeerConnection(peer.id, callId, iceServers);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
     const offer = await pc.createOffer();
