@@ -157,7 +157,6 @@ export function CallProvider({ children }: { children: ReactNode }) {
     pendingIceRef.current = [];
     if (remoteAudioRef.current) remoteAudioRef.current.srcObject = null;
     setMuted(false);
-    setDebugIce("");
     closeOutboundChannel();
   };
 
