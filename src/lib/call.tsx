@@ -266,14 +266,10 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
 
     pc.oniceconnectionstatechange = () => {
-      setDebugIce(`ice:${pc.iceConnectionState} conn:${pc.connectionState}`);
       if (pc.iceConnectionState === "failed") {
         toast.error(t("call.connectionFailed"));
         endCall(true, "failed");
       }
-    };
-    pc.onconnectionstatechange = () => {
-      setDebugIce(`ice:${pc.iceConnectionState} conn:${pc.connectionState}`);
     };
 
     return pc;
