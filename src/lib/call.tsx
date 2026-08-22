@@ -18,7 +18,28 @@ import { toast } from "sonner";
 // có traffic thật.
 // ============================================================================
 
-const ICE_SERVERS: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
+const STUN_ONLY: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
+
+// Giai đoạn 2: lấy thêm TURN credentials (Cloudflare Realtime) trước mỗi cuộc gọi —
+// cần thiết cho các cặp NAT "khó" (mạng di động, xuyên quốc gia) mà STUN một mình
+// không vượt qua được. Nếu lấy TURN thất bại vì lý do gì đó, tự động lùi về chỉ dùng
+// STUN (giống Giai đoạn 1 cũ) để cuộc gọi vẫn có cơ hội chạy thay vì treo cứng.
+async function getIceServers(): Promise<RTCIceServer[]> {
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    if (!token) return STUN_ONLY;
+    const res = await fetch("https://ewquysvcjuqdkfieeuxd.supabase.co/functions/v1/get-turn-credentials", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!res.ok) return STUN_ONLY;
+    const data = await res.json();
+    return Array.isArray(data.iceServers) && data.iceServers.length ? data.iceServers : STUN_ONLY;
+  } catch {
+    return STUN_ONLY;
+  }
+}
 
 const RING_TIMEOUT_MS = 30_000;
 
