@@ -351,7 +351,8 @@ export function CallProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const pc = setupPeerConnection(s.peer.id, s.callId);
+    const iceServers = await getIceServers();
+    const pc = setupPeerConnection(s.peer.id, s.callId, iceServers);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
     await pc.setRemoteDescription(s.offerSdp);
