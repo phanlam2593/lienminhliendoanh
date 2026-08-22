@@ -264,8 +264,8 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setState({ status: "idle" });
   };
 
-  const setupPeerConnection = (peerId: string, callId: string) => {
-    const pc = new RTCPeerConnection({ iceServers: ICE_SERVERS });
+  const setupPeerConnection = (peerId: string, callId: string, iceServers: RTCIceServer[]) => {
+    const pc = new RTCPeerConnection({ iceServers });
     pcRef.current = pc;
 
     pc.onicecandidate = (e) => {
