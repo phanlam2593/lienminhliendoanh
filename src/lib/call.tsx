@@ -485,6 +485,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
               {state.status === "incoming" && t("call.incoming")}
               {state.status === "connected" && `${mm}:${ss}`}
             </div>
+            {debugIce && <div className="text-[10px] text-muted-foreground/60 mt-1 font-mono">{debugIce}</div>}
           </div>
 
           {state.status === "incoming" ? (
