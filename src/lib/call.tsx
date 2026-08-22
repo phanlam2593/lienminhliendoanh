@@ -6,18 +6,6 @@ import { Avatar } from "@/components/Avatar";
 import { Phone, PhoneOff, Mic, MicOff } from "lucide-react";
 import { toast } from "sonner";
 
-// ============================================================================
-// Voice call 1-1 — Giai đoạn 1 (chỉ STUN miễn phí, chưa có TURN).
-// Kiến trúc: mỗi người "báo danh" nghe trên kênh Supabase Realtime riêng của
-// mình (call:{userId}), giống hệt cơ chế online-users đã có. Người gọi tạo
-// RTCPeerConnection, gửi "offer" tới kênh của người nhận; 2 bên trao đổi
-// answer/ice qua broadcast — không ghi gì vào DB (tín hiệu chỉ tồn tại tức
-// thời, không cần lưu). Vì chỉ dùng STUN công khai (miễn phí), một số trường
-// hợp mạng NAT khó (~15-25%, hay gặp ở 4G/wifi công cộng VN) sẽ không kết nối
-// được — báo lỗi rõ ràng thay vì treo màn hình, sẽ nâng cấp thêm TURN sau khi
-// có traffic thật.
-// ============================================================================
-
 const STUN_ONLY: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
 
 // Giai đoạn 2: lấy thêm TURN credentials (Cloudflare Realtime) trước mỗi cuộc gọi —
