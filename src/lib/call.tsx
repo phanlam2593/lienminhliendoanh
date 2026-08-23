@@ -36,7 +36,13 @@ type CallPeerInfo = { id: string; full_name: string | null; avatar_url: string |
 type CallState =
   | { status: "idle" }
   | { status: "calling"; callId: string; peer: CallPeerInfo }
-  | { status: "incoming"; callId: string; peer: CallPeerInfo; offerSdp: RTCSessionDescriptionInit }
+  | {
+      status: "incoming";
+      callId: string;
+      peer: CallPeerInfo;
+      offerSdp?: RTCSessionDescriptionInit;
+      viaLateDetection?: boolean;
+    }
   | { status: "connected"; callId: string; peer: CallPeerInfo; startedAt: number };
 
 interface CallCtxValue {
