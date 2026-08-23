@@ -245,6 +245,11 @@ export function CallProvider({ children }: { children: ReactNode }) {
     } catch {
       /* không chặn luồng kết thúc cuộc gọi nếu ghi log lỗi */
     }
+    // Báo thẳng cho khung chat (nếu đang mở với đúng người này) biết cuộc gọi vừa có
+    // kết quả — để nó tự làm mới lại bong bóng cuộc gọi ngay lập tức, không phụ thuộc
+    // Realtime của bảng "calls" (không chắc chắn/độ trễ khó lường) và không bắt phải
+    // thoát ra vào lại mới thấy cập nhật.
+    window.dispatchEvent(new CustomEvent("call:logged", { detail: { peerId: s.peer.id } }));
   };
 
   const endCall = (notifyPeer: boolean, reason?: string) => {
