@@ -502,18 +502,9 @@ export function CallProvider({ children }: { children: ReactNode }) {
     ch.on("broadcast", { event: "reject" }, ({ payload }) => {
       const { callId } = payload as { callId: string };
       const s = stateRef.current;
-      console.log(
-        "[call] NHẬN reject, callId:",
-        callId,
-        "state hiện tại:",
-        s.status,
-        s.status !== "idle" ? (s as any).callId : "",
-      );
       if (s.status === "calling" && s.callId === callId) {
         toast(t("call.declined"));
         endCall(false, "declined");
-      } else {
-        console.log("[call] BỎ QUA reject vì state/callId không khớp");
       }
     });
 
