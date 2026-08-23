@@ -539,6 +539,7 @@ export function MessagesThread() {
         "postgres_changes",
         { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${id}` },
         (payload) => {
+          console.log("[calls-rt] nhận (caller=partner):", payload.eventType, payload.new);
           const row = payload.new as CallRow;
           if (row.callee_id !== user.id) return;
           setCalls((prev) =>
@@ -550,6 +551,7 @@ export function MessagesThread() {
         "postgres_changes",
         { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${user.id}` },
         (payload) => {
+          console.log("[calls-rt] nhận (caller=tôi):", payload.eventType, payload.new);
           const row = payload.new as CallRow;
           if (row.callee_id !== id) return;
           setCalls((prev) =>
