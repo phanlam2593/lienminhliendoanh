@@ -47,7 +47,7 @@ type CallState =
 
 interface CallCtxValue {
   state: CallState;
-  startCall: (peer: CallPeerInfo) => void;
+  startCall: (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string }) => void;
 }
 
 const CallCtx = createContext<CallCtxValue>({ state: { status: "idle" }, startCall: () => {} });
