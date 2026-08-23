@@ -170,6 +170,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     peerId: string;
     channel: ReturnType<typeof supabase.channel>;
     ready: boolean;
+    closing: boolean;
     queue: { event: string; payload: Record<string, unknown> }[];
   } | null>(null);
 
