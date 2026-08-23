@@ -418,7 +418,20 @@ export function CallProvider({ children }: { children: ReactNode }) {
         sdp: RTCSessionDescriptionInit;
         from: CallPeerInfo;
       };
-      if (stateRef.current.status !== "idle") {
+      const cur = stateRef.current;
+
+      // "Đụng độ": mình đang gọi ĐÚNG người này, mà họ cũng đang gọi lại mình cùng lúc
+      // (thường do họ không thấy chuông đổ nên tự bấm gọi lại, hoặc đang "Nghe" 1 cuộc
+      // gọi phát hiện qua đường trễ). Thay vì báo "bận" vô lý, coi như họ vừa bắt máy:
+      // huỷ lượt gọi đi của mình và kết nối thẳng bằng offer mới của họ.
+      if (cur.status === "calling" && cur.peer.id === from.id) {
+        cleanupCall();
+        amICallerRef.current = false;
+        void connectAsCallee(callId, from, sdp);
+        return;
+      }
+
+      if (cur.status !== "idle") {
         sendSignal(from.id, "busy", { callId });
         return;
       }
