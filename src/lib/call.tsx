@@ -303,17 +303,21 @@ export function CallProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const startCall = async (peer: CallPeerInfo) => {
+  const startCall = async (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string }) => {
     if (!user || !profile) return;
     if (stateRef.current.status !== "idle") {
       toast.error(t("call.alreadyInCall"));
       return;
     }
-    const callId = crypto.randomUUID();
+    // "Trả lời" qua đường trễ (opts.asAnswerToCallId): dùng LẠI đúng callId gốc thay vì
+    // tạo cuộc gọi mới — giữ đúng chiều "ai gọi ai" trong DB (không bị đảo ngược), và
+    // tránh tạo ra 1 dòng "ringing" mồ côi không bao giờ được cập nhật.
+    const isAnswering = !!opts?.asAnswerToCallId;
+    const callId = opts?.asAnswerToCallId ?? crypto.randomUUID();
     const stream = await getMic();
     if (!stream) return;
 
-    amICallerRef.current = true;
+    amICallerRef.current = !isAnswering;
     setState({ status: "calling", callId, peer });
     ringtone.start("ringback");
 
@@ -329,20 +333,24 @@ export function CallProvider({ children }: { children: ReactNode }) {
       sdp: offer,
       from: { id: user.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
     });
-    // Ghi lại "đang đổ chuông" vào DB (không chỉ tín hiệu tức thời qua broadcast) — để
-    // nếu người nhận đang tắt app, họ vẫn biết qua push + tự phát hiện lại khi mở app
-    // lên (xem effect "phát hiện cuộc gọi qua đường trễ" bên dưới).
-    void supabase
-      .from("calls")
-      .insert({
-        id: callId,
-        caller_id: user.id,
-        callee_id: peer.id,
-        status: "ringing",
-      } as any)
-      .then(({ error }) => {
-        if (error) console.error("[call] LỖI insert ringing:", error.message, error);
-      });
+
+    if (!isAnswering) {
+      // Ghi lại "đang đổ chuông" vào DB (không chỉ tín hiệu tức thời qua broadcast) — để
+      // nếu người nhận đang tắt app, họ vẫn biết qua push + tự phát hiện lại khi mở app
+      // lên. Chỉ ghi khi đây thực sự là cuộc gọi MỚI — nếu là trả lời qua đường trễ thì
+      // dòng "ringing" đã được ghi từ lúc người gọi bắt đầu rồi, không ghi lại nữa.
+      void supabase
+        .from("calls")
+        .insert({
+          id: callId,
+          caller_id: user.id,
+          callee_id: peer.id,
+          status: "ringing",
+        } as any)
+        .then(({ error }) => {
+          if (error) console.error("[call] LỖI insert ringing:", error.message, error);
+        });
+    }
 
     ringTimeoutRef.current = setTimeout(() => {
       if (stateRef.current.status === "calling") {
