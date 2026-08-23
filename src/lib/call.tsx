@@ -552,11 +552,11 @@ export function CallProvider({ children }: { children: ReactNode }) {
   // gọi lại thủ công.
   useEffect(() => {
     if (!canReceiveCalls || !user) return;
-    if (stateRef.current.status !== "idle") return;
 
-    (async () => {
+    const checkPendingRinging = async () => {
+      if (stateRef.current.status !== "idle") return;
       const cutoffIso = new Date(Date.now() - RING_TIMEOUT_MS).toISOString();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("calls")
         .select("id, caller_id, created_at")
         .eq("callee_id", user.id)
@@ -565,6 +565,10 @@ export function CallProvider({ children }: { children: ReactNode }) {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
+      if (error) {
+        console.error("[call] LỖI kiểm tra cuộc gọi đang đổ chuông:", error.message);
+        return;
+      }
       if (!data || stateRef.current.status !== "idle") return;
 
       const { data: callerProfile } = await supabase
@@ -587,7 +591,23 @@ export function CallProvider({ children }: { children: ReactNode }) {
           setState({ status: "idle" });
         }
       }, remainingMs);
-    })();
+    };
+
+    void checkPendingRinging();
+
+    // Kiểm tra lại mỗi khi tab/app quay lại trạng thái hiển thị (VD: người dùng vừa
+    // minimize/chuyển app khác rồi quay lại) — không chỉ lúc component vừa mount, vì
+    // component có thể vẫn đang tồn tại (không unmount) suốt lúc app bị ẩn đi, nên hiệu
+    // ứng mount-only trước đây sẽ không tự chạy lại.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void checkPendingRinging();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [canReceiveCalls, user?.id]);
 
