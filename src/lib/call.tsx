@@ -399,14 +399,16 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
     if (s.viaLateDetection) {
       // Phát hiện qua đường trễ (mở app sau khi chuông đã reo, không bắt được offer
-      // sống qua kênh realtime) — "Nghe" ở đây nghĩa là gọi ngược lại cho người đó ngay.
-      // Nếu họ vẫn đang mở app chờ (trạng thái "calling"), nhánh xử lý "đụng độ" trong
-      // offer handler bên dưới sẽ tự nhận ra và nối 2 bên lại làm 1 — không cần SDP cũ.
+      // sống qua kênh realtime) — "Nghe" ở đây nghĩa là gọi ngược lại cho người đó ngay,
+      // nhưng dùng LẠI đúng callId gốc (giữ đúng chiều "ai gọi ai" trong DB). Nếu họ vẫn
+      // đang mở app chờ (trạng thái "calling"), nhánh xử lý "đụng độ" trong offer handler
+      // bên dưới sẽ tự nhận ra và nối 2 bên lại làm 1 — không cần SDP cũ.
       const peer = s.peer;
+      const originalCallId = s.callId;
       cleanupCall();
       stateRef.current = { status: "idle" };
       setState({ status: "idle" });
-      await startCall(peer);
+      await startCall(peer, { asAnswerToCallId: originalCallId });
       return;
     }
 
