@@ -452,7 +452,10 @@ export function CallProvider({ children }: { children: ReactNode }) {
       // huỷ lượt gọi đi của mình và kết nối thẳng bằng offer mới của họ.
       if (cur.status === "calling" && cur.peer.id === from.id) {
         cleanupCall();
-        amICallerRef.current = false;
+        // KHÔNG đổi amICallerRef ở đây nữa — nếu callId khớp với cuộc gọi mình đang chủ
+        // động gọi đi (tức đối phương đang "trả lời" qua đường trễ bằng đúng callId gốc),
+        // mình vẫn đúng là người gọi ban đầu, giữ nguyên vai trò để chiều "ai gọi ai"
+        // trong DB/nhật ký cuộc gọi không bị đảo ngược.
         // Cập nhật callId NGAY (không đợi connectAsCallee xử lý xong) — nếu không, các
         // ICE candidate của đối phương đến trong lúc đang thương lượng (xin quyền mic,
         // lấy TURN...) sẽ bị handler "ice" âm thầm bỏ qua vì so sánh với callId CŨ, gây
