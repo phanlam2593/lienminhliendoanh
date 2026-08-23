@@ -318,6 +318,15 @@ export function CallProvider({ children }: { children: ReactNode }) {
       sdp: offer,
       from: { id: user.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
     });
+    // Ghi lại "đang đổ chuông" vào DB (không chỉ tín hiệu tức thời qua broadcast) — để
+    // nếu người nhận đang tắt app, họ vẫn biết qua push + tự phát hiện lại khi mở app
+    // lên (xem effect "phát hiện cuộc gọi qua đường trễ" bên dưới).
+    void supabase.from("calls").insert({
+      id: callId,
+      caller_id: user.id,
+      callee_id: peer.id,
+      status: "ringing",
+    } as any);
 
     ringTimeoutRef.current = setTimeout(() => {
       if (stateRef.current.status === "calling") {
