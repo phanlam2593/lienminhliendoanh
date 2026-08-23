@@ -179,27 +179,23 @@ export function CallProvider({ children }: { children: ReactNode }) {
   // lúc khi ICE candidate dồn dập (đây là nguyên nhân candidate bị rớt trước đó).
   const sendSignal = (peerId: string, event: string, payload: Record<string, unknown>) => {
     let ob = outboundRef.current;
-    if (!ob || ob.peerId !== peerId) {
+    if (!ob || ob.peerId !== peerId || ob.closing) {
       if (ob) supabase.removeChannel(ob.channel);
       const channel = supabase.channel(`call:${peerId}`);
-      ob = { peerId, channel, ready: false, queue: [] };
+      ob = { peerId, channel, ready: false, closing: false, queue: [] };
       outboundRef.current = ob;
       channel.subscribe((status) => {
-        console.log("[call] outbound channel status:", status, "tới", peerId);
         if (status === "SUBSCRIBED" && outboundRef.current === ob) {
           ob!.ready = true;
           const pending = ob!.queue;
           ob!.queue = [];
-          console.log("[call] xả hàng chờ, số tin nhắn:", pending.length);
           pending.forEach((m) => void channel.send({ type: "broadcast", event: m.event, payload: m.payload }));
         }
       });
     }
     if (ob.ready) {
-      console.log("[call] sendSignal GỬI NGAY:", event, "tới", peerId);
       void ob.channel.send({ type: "broadcast", event, payload });
     } else {
-      console.log("[call] sendSignal XẾP HÀNG (kênh chưa sẵn sàng):", event, "tới", peerId);
       ob.queue.push({ event, payload });
     }
   };
