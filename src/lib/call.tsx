@@ -518,6 +518,52 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
   }, [canReceiveCalls, user?.id]);
 
+  // --- Phát hiện cuộc gọi qua đường trễ: mở app lên (từ thông báo hoặc mở icon bình
+  // thường) trong lúc có người đang gọi mà lỡ không bắt được offer sống qua kênh
+  // realtime (do app đang đóng lúc họ gọi). Kiểm tra 1 lần khi vừa có quyền nhận cuộc
+  // gọi — nếu có, tự nhảy thẳng vào màn hình Nghe/Từ chối, không cần vào lịch sử rồi
+  // gọi lại thủ công.
+  useEffect(() => {
+    if (!canReceiveCalls || !user) return;
+    if (stateRef.current.status !== "idle") return;
+
+    (async () => {
+      const cutoffIso = new Date(Date.now() - RING_TIMEOUT_MS).toISOString();
+      const { data } = await supabase
+        .from("calls")
+        .select("id, caller_id, created_at")
+        .eq("callee_id", user.id)
+        .eq("status", "ringing")
+        .gt("created_at", cutoffIso)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (!data || stateRef.current.status !== "idle") return;
+
+      const { data: callerProfile } = await supabase
+        .from("profiles_public")
+        .select("id, full_name, avatar_url")
+        .eq("id", data.caller_id)
+        .maybeSingle();
+      const peer: CallPeerInfo = callerProfile
+        ? { id: callerProfile.id, full_name: callerProfile.full_name, avatar_url: callerProfile.avatar_url }
+        : { id: data.caller_id, full_name: null, avatar_url: null };
+
+      amICallerRef.current = false;
+      setState({ status: "incoming", callId: data.id, peer, viaLateDetection: true });
+      ringtone.start("ring");
+      const remainingMs = Math.max(3000, RING_TIMEOUT_MS - (Date.now() - new Date(data.created_at).getTime()));
+      ringTimeoutRef.current = setTimeout(() => {
+        if (stateRef.current.status === "incoming") {
+          void logCall("missed");
+          cleanupCall();
+          setState({ status: "idle" });
+        }
+      }, remainingMs);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canReceiveCalls, user?.id]);
+
   useEffect(() => () => cleanupCall(), []);
 
   const elapsed = state.status === "connected" ? Math.max(0, Math.floor((Date.now() - state.startedAt) / 1000)) : 0;
