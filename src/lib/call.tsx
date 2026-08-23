@@ -206,12 +206,16 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const closeOutboundChannel = () => {
     const ob = outboundRef.current;
     if (!ob) return;
-    outboundRef.current = null;
-    // Trễ 1 nhịp trước khi thật sự đóng kênh — tránh trường hợp tín hiệu cuối (VD
-    // "reject" khi từ chối cuộc gọi) vừa được xếp hàng chờ kênh SUBSCRIBED thì kênh đã
-    // bị đóng ngay lập tức, khiến tín hiệu không bao giờ gửi đi được (đúng nguyên nhân
-    // khiến người gọi vẫn nghe chuông reo dù đối phương đã bấm Từ chối).
-    setTimeout(() => supabase.removeChannel(ob.channel), 600);
+    // Trễ TOÀN BỘ việc dọn dẹp (cả null hoá tham chiếu lẫn xoá kênh) — lần sửa trước
+    // chỉ trễ bước xoá kênh nhưng lại null hoá outboundRef.current ngay lập tức, khiến
+    // callback SUBSCRIBED (đến sau, bất đồng bộ) kiểm tra "outboundRef.current === ob"
+    // luôn sai → hàng chờ tín hiệu (VD "reject") không bao giờ được xả ra gửi đi. Giữ
+    // nguyên tham chiếu trong lúc chờ, chỉ null hoá nếu vẫn còn là chính nó (tránh đè
+    // nhầm lên 1 kênh MỚI hơn nếu vừa có cuộc gọi khác bắt đầu trong lúc chờ).
+    setTimeout(() => {
+      if (outboundRef.current === ob) outboundRef.current = null;
+      supabase.removeChannel(ob.channel);
+    }, 600);
   };
 
   // Ghi lại kết quả cuộc gọi vào bảng `calls` — dùng upsert theo callId nên bên nào
