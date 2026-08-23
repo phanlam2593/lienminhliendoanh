@@ -184,10 +184,12 @@ export function CallProvider({ children }: { children: ReactNode }) {
       ob = { peerId, channel, ready: false, queue: [] };
       outboundRef.current = ob;
       channel.subscribe((status) => {
+        console.log("[call] outbound channel status:", status, "tới", peerId);
         if (status === "SUBSCRIBED" && outboundRef.current === ob) {
           ob!.ready = true;
           const pending = ob!.queue;
           ob!.queue = [];
+          console.log("[call] xả hàng chờ, số tin nhắn:", pending.length);
           pending.forEach((m) => void channel.send({ type: "broadcast", event: m.event, payload: m.payload }));
         }
       });
