@@ -336,9 +336,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     }, RING_TIMEOUT_MS);
   };
 
-  const acceptCall = async () => {
-    const s = stateRef.current;
-    if (s.status !== "incoming") return;
+  const connectAsCallee = async (callId: string, peer: CallPeerInfo, offerSdp: RTCSessionDescriptionInit) => {
     clearRingTimeout();
     ringtone.stop();
 
@@ -349,10 +347,10 @@ export function CallProvider({ children }: { children: ReactNode }) {
     }
 
     const iceServers = await getIceServers();
-    const pc = setupPeerConnection(s.peer.id, s.callId, iceServers);
+    const pc = setupPeerConnection(peer.id, callId, iceServers);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
-    await pc.setRemoteDescription(s.offerSdp);
+    await pc.setRemoteDescription(offerSdp);
     for (const c of pendingIceRef.current) {
       try {
         await pc.addIceCandidate(c);
@@ -364,11 +362,32 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
     const answer = await pc.createAnswer();
     await pc.setLocalDescription(answer);
-    sendSignal(s.peer.id, "answer", { callId: s.callId, sdp: answer });
+    sendSignal(peer.id, "answer", { callId, sdp: answer });
 
     const startedAt = Date.now();
-    setState({ status: "connected", callId: s.callId, peer: s.peer, startedAt });
+    setState({ status: "connected", callId, peer, startedAt });
     durationTimerRef.current = setInterval(() => forceTick((n) => n + 1), 1000);
+  };
+
+  const acceptCall = async () => {
+    const s = stateRef.current;
+    if (s.status !== "incoming") return;
+
+    if (s.viaLateDetection) {
+      // Phát hiện qua đường trễ (mở app sau khi chuông đã reo, không bắt được offer
+      // sống qua kênh realtime) — "Nghe" ở đây nghĩa là gọi ngược lại cho người đó ngay.
+      // Nếu họ vẫn đang mở app chờ (trạng thái "calling"), nhánh xử lý "đụng độ" trong
+      // offer handler bên dưới sẽ tự nhận ra và nối 2 bên lại làm 1 — không cần SDP cũ.
+      const peer = s.peer;
+      cleanupCall();
+      stateRef.current = { status: "idle" };
+      setState({ status: "idle" });
+      await startCall(peer);
+      return;
+    }
+
+    if (!s.offerSdp) return;
+    await connectAsCallee(s.callId, s.peer, s.offerSdp);
   };
 
   const declineCall = () => {
