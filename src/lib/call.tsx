@@ -203,12 +203,14 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const closeOutboundChannel = () => {
     const ob = outboundRef.current;
     if (!ob) return;
-    // Trễ TOÀN BỘ việc dọn dẹp (cả null hoá tham chiếu lẫn xoá kênh) — lần sửa trước
-    // chỉ trễ bước xoá kênh nhưng lại null hoá outboundRef.current ngay lập tức, khiến
-    // callback SUBSCRIBED (đến sau, bất đồng bộ) kiểm tra "outboundRef.current === ob"
-    // luôn sai → hàng chờ tín hiệu (VD "reject") không bao giờ được xả ra gửi đi. Giữ
-    // nguyên tham chiếu trong lúc chờ, chỉ null hoá nếu vẫn còn là chính nó (tránh đè
-    // nhầm lên 1 kênh MỚI hơn nếu vừa có cuộc gọi khác bắt đầu trong lúc chờ).
+    // Đánh dấu "đang đóng" ngay — để nếu ngay sau đó có cuộc gọi MỚI tới ĐÚNG người
+    // này (VD kịch bản "đụng độ": vừa huỷ cuộc gọi cũ, lập tức kết nối lại với cùng
+    // người đó), sendSignal biết phải tạo kênh hoàn toàn mới thay vì tưởng nhầm dùng
+    // lại được kênh cũ sắp bị xoá — nếu không, kênh sẽ bị xoá giữa chừng trong lúc
+    // cuộc gọi mới đang dùng nó, gây mất tín hiệu ICE khiến "kết nối được nhưng câm".
+    // Trễ việc xoá thật + null hoá tham chiếu 1 nhịp để tín hiệu cuối (VD "reject")
+    // kịp gửi đi trước khi dọn dẹp.
+    ob.closing = true;
     setTimeout(() => {
       if (outboundRef.current === ob) outboundRef.current = null;
       supabase.removeChannel(ob.channel);
