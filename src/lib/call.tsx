@@ -443,6 +443,12 @@ export function CallProvider({ children }: { children: ReactNode }) {
       if (cur.status === "calling" && cur.peer.id === from.id) {
         cleanupCall();
         amICallerRef.current = false;
+        // Cập nhật callId NGAY (không đợi connectAsCallee xử lý xong) — nếu không, các
+        // ICE candidate của đối phương đến trong lúc đang thương lượng (xin quyền mic,
+        // lấy TURN...) sẽ bị handler "ice" âm thầm bỏ qua vì so sánh với callId CŨ, gây
+        // đúng hiện tượng "kết nối được nhưng câm".
+        stateRef.current = { status: "calling", callId, peer: from };
+        setState({ status: "calling", callId, peer: from });
         void connectAsCallee(callId, from, sdp);
         return;
       }
