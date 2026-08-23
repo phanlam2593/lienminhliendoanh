@@ -164,6 +164,8 @@ export function MessagesInbox() {
         { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
         load,
       )
+      .on("postgres_changes", { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${user.id}` }, load)
+      .on("postgres_changes", { event: "*", schema: "public", table: "calls", filter: `callee_id=eq.${user.id}` }, load)
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
