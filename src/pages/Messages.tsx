@@ -96,6 +96,13 @@ export function MessagesInbox() {
       .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
       .order("created_at", { ascending: false })
       .limit(500);
+    const { data: callRows } = await supabase
+      .from("calls")
+      .select("id, caller_id, callee_id, status, duration_seconds, created_at")
+      .or(`caller_id.eq.${user.id},callee_id.eq.${user.id}`)
+      .order("created_at", { ascending: false })
+      .limit(500);
+
     const map = new Map<string, ConvoSummary>();
     (msgs as Message[] | null)?.forEach((m) => {
       // Tin broadcast do CHÍNH TÔI gửi (admin) không tính vào hội thoại của TÔI —
@@ -108,6 +115,21 @@ export function MessagesInbox() {
       }
       if (m.receiver_id === user.id && !m.is_read) map.get(partnerId)!.unread += 1;
     });
+
+    // Nếu cuộc gọi gần nhất với 1 người MỚI HƠN tin nhắn gần nhất, hiện nó làm tin nhắn
+    // cuối thay vì tin nhắn cũ — đúng kiểu Zalo/FB (kể cả khi 2 người chưa từng nhắn tin
+    // với nhau, chỉ mới gọi).
+    (callRows as any[] | null)?.forEach((c) => {
+      const partnerId = c.caller_id === user.id ? c.callee_id : c.caller_id;
+      const existing = map.get(partnerId);
+      if (existing && new Date(existing.lastAt) >= new Date(c.created_at)) return;
+      const outgoing = c.caller_id === user.id;
+      const entry = existing ?? { partnerId, lastMessage: "", lastAt: c.created_at, unread: 0 };
+      entry.lastMessage = callPreviewText(c, outgoing, t);
+      entry.lastAt = c.created_at;
+      map.set(partnerId, entry);
+    });
+
     const ids = [...map.keys()];
     if (ids.length) {
       const { data: profs } = await supabase
@@ -118,7 +140,7 @@ export function MessagesInbox() {
         if (map.has(p.id)) map.get(p.id)!.partner = p;
       });
     }
-    setConvos([...map.values()]);
+    setConvos([...map.values()].sort((a, b) => new Date(b.lastAt).getTime() - new Date(a.lastAt).getTime()));
   };
 
   useEffect(() => {
