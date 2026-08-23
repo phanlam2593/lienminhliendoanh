@@ -167,8 +167,16 @@ export function MessagesInbox() {
       .on("postgres_changes", { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${user.id}` }, load)
       .on("postgres_changes", { event: "*", schema: "public", table: "calls", filter: `callee_id=eq.${user.id}` }, load)
       .subscribe();
+
+    // Không chỉ dựa vào Realtime của bảng "calls" (độ trễ/độ tin cậy khó lường) — call.tsx
+    // tự phát tín hiệu ngay khi 1 cuộc gọi vừa có kết quả, nghe thêm ở đây để chắc chắn
+    // danh sách hội thoại luôn cập nhật kịp thời.
+    const onCallLogged = () => load();
+    window.addEventListener("call:logged", onCallLogged);
+
     return () => {
       supabase.removeChannel(ch);
+      window.removeEventListener("call:logged", onCallLogged);
     };
   }, [user?.id]);
 
