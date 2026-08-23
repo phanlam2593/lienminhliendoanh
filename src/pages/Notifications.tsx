@@ -113,6 +113,11 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "reports":
         return isAdmin ? "/admin?tab=reports" : "/bao-cao-cua-toi";
       case "calls":
+        // "Đang gọi" (chuông còn sống) dẫn thẳng vào khung chat với người gọi — nếu
+        // cuộc gọi vẫn còn hiệu lực, CallProvider (mount ở App root) sẽ tự phát hiện
+        // và bật ngay màn hình Nghe/Từ chối đè lên bất kỳ trang nào. "Cuộc gọi nhỡ"
+        // (đã kết thúc) thì vào thẳng Nhật ký cuộc gọi như cũ.
+        if (n.target_type === "call_ringing" && id) return `/tin-nhan/${id}`;
         return "/cuoc-goi";
       default:
         return "/";
