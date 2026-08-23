@@ -66,6 +66,19 @@ function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) =>
   return m.content;
 }
 
+function callPreviewText(
+  c: { status: string; duration_seconds: number | null },
+  outgoing: boolean,
+  tr: (k: string, params?: any) => string,
+): string {
+  if (c.status === "answered") return `📞 ${tr("callHistory.answered")}`;
+  if (c.status === "missed") return outgoing ? `📞 ${tr("call.inline.noAnswer")}` : `📞 ${tr("callHistory.missed")}`;
+  if (c.status === "declined")
+    return outgoing ? `📞 ${tr("callHistory.declinedByThem")}` : `📞 ${tr("callHistory.youDeclined")}`;
+  if (c.status === "busy") return `📞 ${tr("callHistory.busy")}`;
+  return `📞 ${tr("call.inline.title")}`;
+}
+
 export function MessagesInbox() {
   const { user, isApproved, isAdmin } = useAuth();
   const { t, lang } = useLanguage();
