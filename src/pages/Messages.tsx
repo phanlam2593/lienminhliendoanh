@@ -547,7 +547,6 @@ export function MessagesThread() {
         "postgres_changes",
         { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${id}` },
         (payload) => {
-          console.log("[calls-rt] nhận (caller=partner):", payload.eventType, payload.new);
           const row = payload.new as CallRow;
           if (row.callee_id !== user.id) return;
           setCalls((prev) =>
@@ -559,7 +558,6 @@ export function MessagesThread() {
         "postgres_changes",
         { event: "*", schema: "public", table: "calls", filter: `caller_id=eq.${user.id}` },
         (payload) => {
-          console.log("[calls-rt] nhận (caller=tôi):", payload.eventType, payload.new);
           const row = payload.new as CallRow;
           if (row.callee_id !== id) return;
           setCalls((prev) =>
@@ -568,9 +566,20 @@ export function MessagesThread() {
         },
       )
       .subscribe();
+
+    // Không chỉ dựa vào Realtime của bảng "calls" — call.tsx tự phát tín hiệu ngay khi
+    // cuộc gọi với ĐÚNG người đang chat cùng vừa có kết quả, nghe thêm để chắc chắn bong
+    // bóng cuộc gọi cập nhật ngay, không cần thoát ra vào lại.
+    const onCallLogged = (e: Event) => {
+      const detail = (e as CustomEvent).detail as { peerId?: string } | undefined;
+      if (detail?.peerId === id) void loadCalls();
+    };
+    window.addEventListener("call:logged", onCallLogged);
+
     return () => {
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onFocus);
+      window.removeEventListener("call:logged", onCallLogged);
       supabase.removeChannel(ch);
     };
   }, [user?.id, id]);
