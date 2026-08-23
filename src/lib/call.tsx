@@ -397,6 +397,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const declineCall = () => {
     const s = stateRef.current;
     if (s.status !== "incoming") return;
+    console.log("[call] declineCall() gửi reject tới", s.peer.id, "callId:", s.callId);
     sendSignal(s.peer.id, "reject", { callId: s.callId });
     void logCall("declined");
     cleanupCall();
