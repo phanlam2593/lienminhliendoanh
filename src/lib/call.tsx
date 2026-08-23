@@ -193,8 +193,10 @@ export function CallProvider({ children }: { children: ReactNode }) {
       });
     }
     if (ob.ready) {
+      console.log("[call] sendSignal GỬI NGAY:", event, "tới", peerId);
       void ob.channel.send({ type: "broadcast", event, payload });
     } else {
+      console.log("[call] sendSignal XẾP HÀNG (kênh chưa sẵn sàng):", event, "tới", peerId);
       ob.queue.push({ event, payload });
     }
   };
