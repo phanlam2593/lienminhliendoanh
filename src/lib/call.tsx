@@ -269,6 +269,9 @@ export function CallProvider({ children }: { children: ReactNode }) {
               ? "busy"
               : "missed";
       void logCall(status);
+      // Kết thúc cuộc gọi (dù bằng cách nào) thì đưa thẳng vào khung chat với người đó
+      // luôn — dù trước đó đang ở trang bất kỳ (VD Trang chủ) khi bắt/kết thúc cuộc gọi.
+      nav(`/tin-nhan/${s.peer.id}`);
     }
     cleanupCall();
     setState({ status: "idle" });
