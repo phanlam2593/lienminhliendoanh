@@ -79,11 +79,11 @@ const App = () => (
         <LanguageProvider>
           <AuthProvider>
             <OnlineUsersProvider>
-              <CallProvider>
-                <Toaster />
-                <Sonner position="top-center" />
-                <NetworkStatusWatcher />
-                <BrowserRouter>
+              <Toaster />
+              <Sonner position="top-center" />
+              <NetworkStatusWatcher />
+              <BrowserRouter>
+                <CallProvider>
                   <ScrollToTop />
                   <Routes>
                     <Route path="/auth/login" element={<Login />} />
