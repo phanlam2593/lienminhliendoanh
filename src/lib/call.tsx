@@ -125,6 +125,7 @@ function useRingtone() {
 export function CallProvider({ children }: { children: ReactNode }) {
   const { user, profile, isApproved, isAdmin } = useAuth();
   const { t } = useLanguage();
+  const nav = useNavigate();
   const [state, setState] = useState<CallState>({ status: "idle" });
   const [muted, setMuted] = useState(false);
 
