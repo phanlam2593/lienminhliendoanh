@@ -406,6 +406,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const acceptCall = async () => {
     const s = stateRef.current;
     if (s.status !== "incoming") return;
+    nav(`/tin-nhan/${s.peer.id}`);
 
     if (s.viaLateDetection) {
       // Phát hiện qua đường trễ (mở app sau khi chuông đã reo, không bắt được offer
