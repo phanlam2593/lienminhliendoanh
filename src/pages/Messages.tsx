@@ -22,6 +22,9 @@ import {
   PhoneIncoming,
   PhoneOutgoing,
   History,
+  MoreVertical,
+  Ban,
+  ShieldCheck,
 } from "lucide-react";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { useCall } from "@/lib/call";
