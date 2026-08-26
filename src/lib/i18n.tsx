@@ -1947,6 +1947,19 @@ const DICT: Record<Lang, Record<string, string>> = {
     "reports.reporter": "Reporter",
     "reports.sendReply": "Send reply",
     "achievement.tapToClose": "Tap to close",
+    "block.menu": "More options",
+    "block.block": "Block user",
+    "block.unblock": "Unblock",
+    "block.blocked": "User blocked",
+    "block.unblocked": "User unblocked",
+    "block.confirmTitle": "Block this user?",
+    "block.confirmDesc":
+      "You won't be able to message, call, or follow each other with {name} anymore. Neither of you will see each other's profile.",
+    "block.bannerBlocked": "You've blocked this person.",
+    "wall.posts": "Posts",
+    "wall.reviews": "Reviews",
+    "wall.noPosts": "No community posts yet",
+    "wall.noReviews": "No reviews yet",
   },
 };
 
