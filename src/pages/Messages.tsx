@@ -784,7 +784,56 @@ export function MessagesThread() {
             <Phone className="w-4 h-4" />
           </button>
         )}
+        <Popover open={blockMenuOpen} onOpenChange={setBlockMenuOpen}>
+          <PopoverTrigger asChild>
+            <button
+              className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+              aria-label={t("block.menu")}
+            >
+              <MoreVertical className="w-4 h-4" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-48 p-1" align="end">
+            {iBlockedThem ? (
+              <button
+                onClick={() => {
+                  setBlockMenuOpen(false);
+                  unblockUser();
+                }}
+                className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-left"
+              >
+                <ShieldCheck className="w-4 h-4" /> {t("block.unblock")}
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setBlockMenuOpen(false);
+                  setConfirmBlockOpen(true);
+                }}
+                className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-destructive text-left"
+              >
+                <Ban className="w-4 h-4" /> {t("block.block")}
+              </button>
+            )}
+          </PopoverContent>
+        </Popover>
       </div>
+      <AlertDialog open={confirmBlockOpen} onOpenChange={setConfirmBlockOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("block.confirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("block.confirmDesc", { name: partner?.full_name || t("messages.thisUser") })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={blockUser} className="bg-destructive hover:bg-destructive/90">
+              {t("block.block")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div ref={scrollContainerRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-3 space-y-2">
         {msgs.length > 0 && msgHasMore && (
