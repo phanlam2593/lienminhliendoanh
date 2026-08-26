@@ -1,12 +1,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { ArrowLeft, Mail, Phone, MessageCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  Mail,
+  Phone,
+  MessageCircle,
+  MoreVertical,
+  Ban,
+  ShieldCheck,
+  Star,
+  MessageSquare,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
+import { StoredImage } from "@/components/StoredImage";
 import { FollowListDialog } from "@/components/FollowListDialog";
+import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface PubProfile {
   id: string;
@@ -16,13 +39,31 @@ interface PubProfile {
   status_message: string | null;
   email: string | null;
   phone: string | null;
+  bio: string | null;
+}
+
+interface WallPost {
+  id: string;
+  content: string;
+  type: "text" | "image" | "gif";
+  image_url: string | null;
+  created_at: string;
+}
+
+interface WallReview {
+  id: string;
+  rating: number;
+  comment: string | null;
+  image_url: string | null;
+  created_at: string;
+  businesses: { id: string; name: string; cover_url: string | null } | null;
 }
 
 export default function UserProfile() {
   const { id } = useParams();
   const nav = useNavigate();
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [p, setP] = useState<PubProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
@@ -30,17 +71,27 @@ export default function UserProfile() {
   const [followingCount, setFollowingCount] = useState(0);
   const [listOpen, setListOpen] = useState<null | "followers" | "following">(null);
   const [busy, setBusy] = useState(false);
+  const [iBlockedThem, setIBlockedThem] = useState(false);
+  const [blockMenuOpen, setBlockMenuOpen] = useState(false);
+  const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
+  const [tab, setTab] = useState<"posts" | "reviews">("posts");
+  const [posts, setPosts] = useState<WallPost[]>([]);
+  const [reviews, setReviews] = useState<WallReview[]>([]);
+  const [wallLoading, setWallLoading] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     setLoading(true);
     (async () => {
-      const [{ data: prof }, { count }, { count: gc }, { data: rel }] = await Promise.all([
+      const [{ data: prof }, { count }, { count: gc }, { data: rel }, { data: blockRow }] = await Promise.all([
         supabase.rpc("get_public_profile", { _id: id }).maybeSingle(),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
         user
           ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle()
+          : Promise.resolve({ data: null } as any),
+        user
+          ? supabase.from("blocks").select("id").eq("blocker_id", user.id).eq("blocked_id", id).maybeSingle()
           : Promise.resolve({ data: null } as any),
       ]);
       if (!prof) {
@@ -52,9 +103,34 @@ export default function UserProfile() {
       setFollowers(count ?? 0);
       setFollowingCount(gc ?? 0);
       setFollowing(!!rel);
+      setIBlockedThem(!!blockRow);
       setLoading(false);
     })();
   }, [id, user?.id, nav]);
+
+  useEffect(() => {
+    if (!id) return;
+    setWallLoading(true);
+    (async () => {
+      const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
+        supabase
+          .from("community_messages")
+          .select("id, content, type, image_url, created_at")
+          .eq("user_id", id)
+          .order("created_at", { ascending: false })
+          .limit(20),
+        supabase
+          .from("reviews")
+          .select("id, rating, comment, image_url, created_at, businesses(id, name, cover_url)")
+          .eq("user_id", id)
+          .order("created_at", { ascending: false })
+          .limit(20),
+      ]);
+      setPosts((postRows ?? []) as WallPost[]);
+      setReviews((reviewRows ?? []) as unknown as WallReview[]);
+      setWallLoading(false);
+    })();
+  }, [id]);
 
   const toggleFollow = async () => {
     if (!user || !id) return;
@@ -64,11 +140,40 @@ export default function UserProfile() {
       setFollowing(false);
       setFollowers((c) => Math.max(0, c - 1));
     } else {
-      await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: id });
+      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: id });
+      if (error) {
+        toast.error(error.message);
+        setBusy(false);
+        return;
+      }
       setFollowing(true);
       setFollowers((c) => c + 1);
     }
     setBusy(false);
+  };
+
+  const blockUser = async () => {
+    if (!user || !id) return;
+    const { error } = await supabase.from("blocks").insert({ blocker_id: user.id, blocked_id: id });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setIBlockedThem(true);
+    setConfirmBlockOpen(false);
+    setFollowing(false);
+    toast.success(t("block.blocked"));
+  };
+
+  const unblockUser = async () => {
+    if (!user || !id) return;
+    const { error } = await supabase.from("blocks").delete().eq("blocker_id", user.id).eq("blocked_id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setIBlockedThem(false);
+    toast.success(t("block.unblocked"));
   };
 
   if (loading || !p) return <div className="p-6 text-sm text-muted-foreground">{t("common.loading")}</div>;
@@ -76,57 +181,193 @@ export default function UserProfile() {
   const isMe = user?.id === p.id;
 
   return (
-    <div className="p-4 space-y-4 max-w-xl mx-auto">
-      <button onClick={() => nav(-1)} className="flex items-center gap-1 text-sm text-muted-foreground">
-        <ArrowLeft className="w-4 h-4" /> {t("common.back")}
-      </button>
-      <div className="rounded-2xl border bg-card p-5 flex flex-col items-center text-center gap-3">
-        <Avatar path={p.avatar_url} name={p.full_name} size={88} />
-        <div>
-          <div className="text-lg font-extrabold">{p.full_name}</div>
-          {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
-          {p.status_message && <p className="text-sm text-primary italic mt-1 font-medium">"{p.status_message}"</p>}
-        </div>
-        <div className="flex gap-4 text-xs">
-          <button onClick={() => setListOpen("followers")} className="hover:text-primary">
-            <span className="font-bold text-foreground">{followers}</span> {t("follow.followersLabel")}
-          </button>
-          <button onClick={() => setListOpen("following")} className="hover:text-primary">
-            <span className="font-bold text-foreground">{followingCount}</span> {t("follow.followingLabel")}
-          </button>
-        </div>
+    <div className="max-w-xl mx-auto pb-6">
+      <div className="relative">
+        <div className="h-28 bg-gradient-brand rounded-b-2xl" />
+        <button
+          onClick={() => nav(-1)}
+          className="absolute top-3 left-3 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white grid place-items-center backdrop-blur-sm"
+          aria-label={t("common.back")}
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </button>
         {!isMe && user && (
-          <div className="flex gap-2 w-full">
-            <button
-              onClick={toggleFollow}
-              disabled={busy}
-              className={`flex-1 h-10 rounded-xl text-sm font-semibold ${following ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"}`}
-            >
-              {following ? t("common.following") : t("common.follow")}
+          <Popover open={blockMenuOpen} onOpenChange={setBlockMenuOpen}>
+            <PopoverTrigger asChild>
+              <button
+                className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white grid place-items-center backdrop-blur-sm"
+                aria-label={t("block.menu")}
+              >
+                <MoreVertical className="w-4 h-4" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-48 p-1" align="end">
+              {iBlockedThem ? (
+                <button
+                  onClick={() => {
+                    setBlockMenuOpen(false);
+                    unblockUser();
+                  }}
+                  className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-left"
+                >
+                  <ShieldCheck className="w-4 h-4" /> {t("block.unblock")}
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setBlockMenuOpen(false);
+                    setConfirmBlockOpen(true);
+                  }}
+                  className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-destructive text-left"
+                >
+                  <Ban className="w-4 h-4" /> {t("block.block")}
+                </button>
+              )}
+            </PopoverContent>
+          </Popover>
+        )}
+        <div className="px-5 -mt-10 flex flex-col items-center text-center gap-2">
+          <div className="ring-4 ring-background rounded-full">
+            <Avatar path={p.avatar_url} name={p.full_name} size={88} />
+          </div>
+          <div>
+            <div className="text-lg font-extrabold">{p.full_name}</div>
+            {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
+            {p.status_message && <p className="text-sm text-primary italic mt-1 font-medium">"{p.status_message}"</p>}
+          </div>
+          {p.bio && <p className="text-sm text-muted-foreground max-w-sm whitespace-pre-wrap">{p.bio}</p>}
+          <div className="flex gap-4 text-xs mt-1">
+            <button onClick={() => setListOpen("followers")} className="hover:text-primary">
+              <span className="font-bold text-foreground">{followers}</span> {t("follow.followersLabel")}
             </button>
-            <button
-              onClick={() => nav(`/tin-nhan/${p.id}`)}
-              className="flex-1 h-10 rounded-xl text-sm font-semibold border flex items-center justify-center gap-1"
-            >
-              <MessageCircle className="w-4 h-4" /> {t("common.message")}
+            <button onClick={() => setListOpen("following")} className="hover:text-primary">
+              <span className="font-bold text-foreground">{followingCount}</span> {t("follow.followingLabel")}
             </button>
           </div>
-        )}
-        <div className="w-full space-y-1.5 text-sm text-left mt-2">
-          {p.email && (
-            <a href={`mailto:${p.email}`} className="flex items-center gap-2 text-muted-foreground">
-              <Mail className="w-4 h-4" />
-              {p.email}
-            </a>
+          {!isMe && user && (
+            <div className="flex gap-2 w-full mt-1">
+              <button
+                onClick={toggleFollow}
+                disabled={busy || iBlockedThem}
+                className={`flex-1 h-10 rounded-xl text-sm font-semibold disabled:opacity-50 ${following ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"}`}
+              >
+                {following ? t("common.following") : t("common.follow")}
+              </button>
+              <button
+                onClick={() => nav(`/tin-nhan/${p.id}`)}
+                disabled={iBlockedThem}
+                className="flex-1 h-10 rounded-xl text-sm font-semibold border flex items-center justify-center gap-1 disabled:opacity-50"
+              >
+                <MessageCircle className="w-4 h-4" /> {t("common.message")}
+              </button>
+            </div>
           )}
-          {p.phone && (
-            <a href={`tel:${p.phone}`} className="flex items-center gap-2 text-muted-foreground">
-              <Phone className="w-4 h-4" />
-              {p.phone}
-            </a>
+          {iBlockedThem && (
+            <div className="w-full text-xs text-muted-foreground bg-muted/60 rounded-lg px-3 py-2">
+              {t("block.bannerBlocked")}
+            </div>
+          )}
+          <div className="w-full space-y-1.5 text-sm text-left mt-1">
+            {p.email && (
+              <a href={`mailto:${p.email}`} className="flex items-center gap-2 text-muted-foreground">
+                <Mail className="w-4 h-4" />
+                {p.email}
+              </a>
+            )}
+            {p.phone && (
+              <a href={`tel:${p.phone}`} className="flex items-center gap-2 text-muted-foreground">
+                <Phone className="w-4 h-4" />
+                {p.phone}
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-4 mt-5">
+        <div className="flex gap-1 p-1 bg-muted rounded-xl">
+          <button
+            onClick={() => setTab("posts")}
+            className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "posts" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+          >
+            <MessageSquare className="w-3.5 h-3.5" /> {t("wall.posts")}
+          </button>
+          <button
+            onClick={() => setTab("reviews")}
+            className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "reviews" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+          >
+            <Star className="w-3.5 h-3.5" /> {t("wall.reviews")}
+          </button>
+        </div>
+
+        <div className="mt-3 space-y-2">
+          {wallLoading ? (
+            <p className="text-center text-xs text-muted-foreground py-8">{t("common.loading")}</p>
+          ) : tab === "posts" ? (
+            posts.length === 0 ? (
+              <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
+            ) : (
+              posts.map((post) => (
+                <div key={post.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
+                  <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
+                  {post.type === "gif" ? (
+                    <img src={post.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
+                  ) : post.type === "image" ? (
+                    <StoredImage path={post.image_url} alt={t("chat.imageAlt")} className="max-w-[220px] rounded-xl" />
+                  ) : (
+                    <p className="text-sm whitespace-pre-wrap">{post.content}</p>
+                  )}
+                </div>
+              ))
+            )
+          ) : reviews.length === 0 ? (
+            <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noReviews")}</p>
+          ) : (
+            reviews.map((rv) => (
+              <div key={rv.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
+                <div className="flex items-center justify-between gap-2">
+                  {rv.businesses ? (
+                    <Link to={`/dn/${rv.businesses.id}`} className="text-sm font-semibold hover:text-primary truncate">
+                      🏢 {rv.businesses.name}
+                    </Link>
+                  ) : (
+                    <span className="text-sm font-semibold text-muted-foreground">{t("reports.contentDeleted")}</span>
+                  )}
+                  <div className="flex items-center gap-0.5 shrink-0">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3.5 h-3.5 ${i < rv.rating ? "fill-primary text-primary" : "text-muted"}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                {rv.comment && <p className="text-sm text-muted-foreground">{rv.comment}</p>}
+                {rv.image_url && (
+                  <StoredImage path={rv.image_url} alt={t("biz.reviewImageAlt")} className="max-w-[200px] rounded-xl" />
+                )}
+                <div className="text-[11px] text-muted-foreground">{timeAgo(rv.created_at, lang)}</div>
+              </div>
+            ))
           )}
         </div>
       </div>
+
+      <AlertDialog open={confirmBlockOpen} onOpenChange={setConfirmBlockOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("block.confirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("block.confirmDesc", { name: p.full_name })}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={blockUser} className="bg-destructive hover:bg-destructive/90">
+              {t("block.block")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <FollowListDialog
         open={listOpen !== null}
         onOpenChange={(v) => !v && setListOpen(null)}
