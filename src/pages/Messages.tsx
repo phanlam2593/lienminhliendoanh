@@ -736,6 +736,29 @@ export function MessagesThread() {
     }
   };
 
+  const blockUser = async () => {
+    if (!partner) return;
+    const { error } = await supabase.from("blocks").insert({ blocker_id: user.id, blocked_id: partner.id });
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setIBlockedThem(true);
+    setConfirmBlockOpen(false);
+    toast.success(t("block.blocked"));
+  };
+
+  const unblockUser = async () => {
+    if (!partner) return;
+    const { error } = await supabase.from("blocks").delete().eq("blocker_id", user.id).eq("blocked_id", partner.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setIBlockedThem(false);
+    toast.success(t("block.unblocked"));
+  };
+
   return (
     <div className="flex flex-col h-[calc(100dvh-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
