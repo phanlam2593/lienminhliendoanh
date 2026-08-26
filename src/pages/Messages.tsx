@@ -329,9 +329,6 @@ export function MessagesThread() {
   const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
-  const [iBlockedThem, setIBlockedThem] = useState(false);
-  const [blockMenuOpen, setBlockMenuOpen] = useState(false);
-  const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -460,6 +457,13 @@ export function MessagesThread() {
     supabase
       .rpc("get_admin_user_ids")
       .then(({ data }) => setPartnerIsAdmin((data ?? []).some((r: any) => r.user_id === id)));
+    supabase
+      .from("blocks")
+      .select("id")
+      .eq("blocker_id", user.id)
+      .eq("blocked_id", id)
+      .maybeSingle()
+      .then(({ data }) => setIBlockedThem(!!data));
     void loadMsgs(MSG_PAGE_SIZE, true);
     void loadCalls();
     void markThreadRead();
