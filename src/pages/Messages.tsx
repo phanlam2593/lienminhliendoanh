@@ -1128,6 +1128,14 @@ export function MessagesThread() {
           <span className="text-xs text-muted-foreground">{t("community.tapToShare")}</span>
         </div>
       )}
+      {iBlockedThem && (
+        <div className="flex items-center justify-between gap-2 px-3 py-2 border-t bg-muted/60 text-xs">
+          <span className="text-muted-foreground">{t("block.bannerBlocked")}</span>
+          <button onClick={unblockUser} className="font-semibold text-primary shrink-0">
+            {t("block.unblock")}
+          </button>
+        </div>
+      )}
       {showGifs && <GifPicker onSelect={sendGif} />}
       <div className="flex gap-2 p-3 border-t bg-card items-center">
         <input
@@ -1143,7 +1151,7 @@ export function MessagesThread() {
         />
         <button
           onClick={() => fileRef.current?.click()}
-          disabled={uploading}
+          disabled={uploading || iBlockedThem}
           aria-label={t("chat.pickImage")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
         >
@@ -1151,6 +1159,7 @@ export function MessagesThread() {
         </button>
         <button
           onClick={() => setShowGifs((v) => !v)}
+          disabled={iBlockedThem}
           aria-label="GIF"
           className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showGifs ? "bg-accent" : "text-muted-foreground"}`}
         >
@@ -1162,13 +1171,19 @@ export function MessagesThread() {
           onKeyDown={(e) => {
             if (e.key === "Enter") send();
           }}
-          disabled={!!pendingImage}
-          placeholder={pendingImage ? t("community.tapSendPlaceholder") : t("messages.inputPlaceholder")}
+          disabled={!!pendingImage || iBlockedThem}
+          placeholder={
+            iBlockedThem
+              ? t("block.bannerBlocked")
+              : pendingImage
+                ? t("community.tapSendPlaceholder")
+                : t("messages.inputPlaceholder")
+          }
           className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
         />
         <button
           onClick={send}
-          disabled={uploading}
+          disabled={uploading || iBlockedThem}
           className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0 disabled:opacity-60"
         >
           <Send className="w-4 h-4" />
