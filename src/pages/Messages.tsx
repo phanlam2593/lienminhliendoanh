@@ -329,6 +329,9 @@ export function MessagesThread() {
   const [reactions, setReactions] = useState<Record<string, Record<string, string[]>>>({});
   const [reactionPickerFor, setReactionPickerFor] = useState<string | null>(null);
   const [replyingTo, setReplyingTo] = useState<Message | null>(null);
+  const [iBlockedThem, setIBlockedThem] = useState(false);
+  const [blockMenuOpen, setBlockMenuOpen] = useState(false);
+  const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);

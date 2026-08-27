@@ -10,10 +10,31 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.5"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
+      blocks: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       business_photos: {
         Row: {
           business_id: string | null
@@ -1544,6 +1565,16 @@ export type Database = {
         Args: { _points: number }
         Returns: number
       }
+      get_my_blocked_users: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          blocked_at: string
+          full_name: string
+          id: string
+          username: string
+        }[]
+      }
       get_public_profile: {
         Args: { _id: string }
         Returns: {
@@ -1582,6 +1613,7 @@ export type Database = {
         Returns: undefined
       }
       is_approved_member: { Args: { _user_id: string }; Returns: boolean }
+      is_blocked: { Args: { _a: string; _b: string }; Returns: boolean }
       is_field_taken: {
         Args: { _field: string; _value: string }
         Returns: boolean
