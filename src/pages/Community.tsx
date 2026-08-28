@@ -123,7 +123,7 @@ export default function Community() {
     resizeObserverRef.current = null;
     if (node) {
       const ro = new ResizeObserver(() => {
-        if (pinnedToBottomRef.current) endRef.current?.scrollIntoView({ behavior: "auto" });
+        if (pinnedToBottomRef.current) scrollToBottom(false);
       });
       ro.observe(node);
       resizeObserverRef.current = ro;
