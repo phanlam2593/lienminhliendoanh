@@ -288,7 +288,7 @@ export default function Community() {
     void loadReactions(list.map((m) => m.id));
     if (scrollToBottom) {
       pinnedToBottomRef.current = true;
-      requestAnimationFrame(() => endRef.current?.scrollIntoView({ behavior: "auto" }));
+      requestAnimationFrame(() => scrollToBottom(false));
     }
   };
 
