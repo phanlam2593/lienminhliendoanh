@@ -146,6 +146,9 @@ export default function Community() {
     el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
   };
   const channelRef = useRef<{ location: string | null; topic: Topic }>({
+    location: channelLocation,
+    topic: channelTopic,
+  });
   const msgLimitRef = useRef(msgLimit);
 
   useEffect(() => {
@@ -272,7 +275,12 @@ export default function Community() {
     } catch {}
   };
 
-  const loadMsgs = async (limit = msgLimit, shouldScrollToBottom = true, loc = channelLocation, topic = channelTopic) => {
+  const loadMsgs = async (
+    limit = msgLimit,
+    shouldScrollToBottom = true,
+    loc = channelLocation,
+    topic = channelTopic,
+  ) => {
     let q = supabase
       .from("community_messages")
       .select("*")
@@ -940,7 +948,11 @@ export default function Community() {
                         <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
                       ) : m.type === "image" ? (
                         <div className="max-w-[200px] mt-0.5">
-                          <StoredImage path={m.image_url} alt={t("chat.imageAlt")} className="rounded-xl w-full object-cover" />
+                          <StoredImage
+                            path={m.image_url}
+                            alt={t("chat.imageAlt")}
+                            className="rounded-xl w-full object-cover"
+                          />
                         </div>
                       ) : (
                         <div
@@ -1015,7 +1027,11 @@ export default function Community() {
               <span className="font-semibold text-primary">{t("msg.replyingTo")} </span>
               <span className="text-muted-foreground truncate">
                 {profMap.get(replyingTo.user_id)?.full_name || t("community.member")}:{" "}
-                {replyingTo.type === "text" ? replyingTo.content : replyingTo.type === "gif" ? "🎬 GIF" : `📷 ${t("chat.imageAlt")}`}
+                {replyingTo.type === "text"
+                  ? replyingTo.content
+                  : replyingTo.type === "gif"
+                    ? "🎬 GIF"
+                    : `📷 ${t("chat.imageAlt")}`}
               </span>
             </div>
             <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
@@ -1026,7 +1042,11 @@ export default function Community() {
         {pendingImage && (
           <div className="flex items-center gap-2 px-3 py-2 border-t bg-muted/40">
             <div className="relative">
-              <img src={pendingImage.previewUrl} alt={t("chat.previewAlt")} className="w-16 h-16 object-cover rounded-lg border" />
+              <img
+                src={pendingImage.previewUrl}
+                alt={t("chat.previewAlt")}
+                className="w-16 h-16 object-cover rounded-lg border"
+              />
               <button
                 onClick={cancelPendingImage}
                 aria-label={t("common.cancel")}
