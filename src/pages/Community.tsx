@@ -536,7 +536,7 @@ export default function Community() {
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
     setReplyingTo(null);
     void notifyMentions(trimmed);
-    setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+    setTimeout(() => scrollToBottom(true), 50);
   };
 
   const del = async (id: string) => {
