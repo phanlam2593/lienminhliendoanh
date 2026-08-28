@@ -676,6 +676,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
               {state.status === "incoming" && t("call.incoming")}
               {state.status === "connected" && `${mm}:${ss}`}
             </div>
+            {(debugIceSrc || debugIce) && (
+              <div className="mt-3 px-3 py-2 rounded-xl bg-card border text-xs font-semibold text-center space-y-1 max-w-[280px]">
+                <div className="text-[10px] text-muted-foreground">Chụp màn hình này gửi cho admin nhé 🙏</div>
+                {debugIceSrc && <div>{debugIceSrc}</div>}
+                {debugIce && <div>{debugIce}</div>}
+              </div>
+            )}
           </div>
 
           {state.status === "incoming" ? (
