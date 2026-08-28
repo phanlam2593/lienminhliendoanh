@@ -661,7 +661,7 @@ export function MessagesThread() {
         if (error) throw error;
         if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
         setReplyingTo(null);
-        setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+        setTimeout(() => scrollToBottom(true), 50);
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
