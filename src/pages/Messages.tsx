@@ -501,7 +501,7 @@ export function MessagesThread() {
           if (row.receiver_id !== user.id) return;
           setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
           void markThreadRead();
-          setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+          setTimeout(() => scrollToBottom(true), 50);
         },
       )
       .on(
