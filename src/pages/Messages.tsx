@@ -511,7 +511,7 @@ export function MessagesThread() {
           const row = payload.new as Message;
           if (row.receiver_id !== id) return;
           setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
-          setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+          setTimeout(() => scrollToBottom(true), 50);
         },
       )
       .on(
