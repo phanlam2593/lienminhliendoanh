@@ -368,6 +368,16 @@ export function MessagesThread() {
     pinnedToBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
   };
 
+  // QUAN TRỌNG: dùng scrollTo() trực tiếp trên ĐÚNG khung cuộn tin nhắn, KHÔNG dùng
+  // endRef.scrollIntoView() nữa — scrollIntoView() trên Safari/iOS có lỗi nổi tiếng là đôi
+  // khi kéo lệch cả TRANG (che luôn phần tên/nút gọi ở trên) thay vì chỉ cuộn đúng khung
+  // tin nhắn bên trong. scrollTo() trên chính khung đó thì không bao giờ ảnh hưởng ra ngoài.
+  const scrollToBottom = (smooth = false) => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
+  };
+
   const loadReactions = async (messageIds: string[]) => {
     if (!messageIds.length) {
       setReactions({});
