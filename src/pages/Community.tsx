@@ -401,7 +401,7 @@ export default function Community() {
           if (!matchesCurrentChannel(row)) return;
           setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
           void enrichProfiles([row.user_id]);
-          setTimeout(() => endRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+          setTimeout(() => scrollToBottom(true), 50);
         },
       )
       .on(
