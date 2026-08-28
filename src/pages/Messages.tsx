@@ -396,7 +396,7 @@ export function MessagesThread() {
     setReactions(grouped);
   };
 
-  const loadMsgs = async (limit: number, scrollToBottom: boolean) => {
+  const loadMsgs = async (limit: number, shouldScrollToBottom: boolean) => {
     if (!user || !id) return;
     const { data } = await supabase
       .from("messages")
@@ -408,7 +408,7 @@ export function MessagesThread() {
     setMsgs(list);
     setMsgHasMore(list.length === limit);
     void loadReactions(list.map((m) => m.id));
-    if (scrollToBottom) {
+    if (shouldScrollToBottom) {
       pinnedToBottomRef.current = true;
       requestAnimationFrame(() => scrollToBottom(false));
       // Không cần đoán thêm khoảng chờ nào nữa — ResizeObserver phía trên sẽ tự cuộn lại
