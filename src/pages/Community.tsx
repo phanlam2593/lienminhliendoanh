@@ -272,7 +272,7 @@ export default function Community() {
     } catch {}
   };
 
-  const loadMsgs = async (limit = msgLimit, scrollToBottom = true, loc = channelLocation, topic = channelTopic) => {
+  const loadMsgs = async (limit = msgLimit, shouldScrollToBottom = true, loc = channelLocation, topic = channelTopic) => {
     let q = supabase
       .from("community_messages")
       .select("*")
@@ -286,7 +286,7 @@ export default function Community() {
     setMsgHasMore(list.length === limit);
     void enrichProfiles([...new Set(list.map((m) => m.user_id))]);
     void loadReactions(list.map((m) => m.id));
-    if (scrollToBottom) {
+    if (shouldScrollToBottom) {
       pinnedToBottomRef.current = true;
       requestAnimationFrame(() => scrollToBottom(false));
     }
