@@ -410,7 +410,7 @@ export function MessagesThread() {
     void loadReactions(list.map((m) => m.id));
     if (scrollToBottom) {
       pinnedToBottomRef.current = true;
-      requestAnimationFrame(() => endRef.current?.scrollIntoView({ behavior: "auto" }));
+      requestAnimationFrame(() => scrollToBottom(false));
       // Không cần đoán thêm khoảng chờ nào nữa — ResizeObserver phía trên sẽ tự cuộn lại
       // đúng lúc ảnh/GIF thật sự tải xong, dù nhanh hay chậm.
     }
