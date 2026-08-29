@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,7 +10,7 @@ const CF_TURN_KEY_ID = Deno.env.get("CF_TURN_KEY_ID")!;
 const CF_TURN_KEY_TOKEN = Deno.env.get("CF_TURN_KEY_TOKEN")!;
 console.log("[get-turn-credentials] CF_TURN_KEY_ID có giá trị:", !!CF_TURN_KEY_ID, "độ dài:", CF_TURN_KEY_ID?.length, "| CF_TURN_KEY_TOKEN có giá trị:", !!CF_TURN_KEY_TOKEN, "độ dài:", CF_TURN_KEY_TOKEN?.length);
 
-const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!);
 
 // Cấp TURN credentials NGẮN HẠN (1 giờ) cho client dùng khi gọi thoại — chỉ cấp cho
 // user đã đăng nhập thật (xác thực JWT), tránh bị người ngoài lạm dụng gọi thẳng
@@ -23,8 +23,11 @@ Deno.serve(async (req) => {
     const jwt = authHeader.replace(/^Bearer\s+/i, "");
     if (!jwt) return json({ error: "unauthorized" }, 401);
 
-    const { data: userData, error: userErr } = await admin.auth.getUser(jwt);
-    if (userErr || !userData?.user) return json({ error: "unauthorized" }, 401);
+    const { data: claimsData, error: claimsErr } = await admin.auth.getClaims(jwt);
+    if (claimsErr || !claimsData?.claims?.sub) {
+      console.error("[get-turn-credentials] xác thực JWT thất bại:", claimsErr?.message);
+      return json({ error: "unauthorized" }, 401);
+    }
 
     const res = await fetch(
       `https://rtc.live.cloudflare.com/v1/turn/keys/${CF_TURN_KEY_ID}/credentials/generate-ice-servers`,
