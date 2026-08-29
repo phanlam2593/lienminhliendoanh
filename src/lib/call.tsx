@@ -399,7 +399,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const iceServers = await getIceServers((src) => setDebugIceSrc(src));
+    const iceServers = await getIceServers();
     const pc = setupPeerConnection(peer.id, callId, iceServers);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
