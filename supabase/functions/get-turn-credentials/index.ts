@@ -8,6 +8,7 @@ const corsHeaders = {
 
 const CF_TURN_KEY_ID = Deno.env.get("CF_TURN_KEY_ID")!;
 const CF_TURN_KEY_TOKEN = Deno.env.get("CF_TURN_KEY_TOKEN")!;
+console.log("[get-turn-credentials] CF_TURN_KEY_ID có giá trị:", !!CF_TURN_KEY_ID, "độ dài:", CF_TURN_KEY_ID?.length, "| CF_TURN_KEY_TOKEN có giá trị:", !!CF_TURN_KEY_TOKEN, "độ dài:", CF_TURN_KEY_TOKEN?.length);
 
 const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 
@@ -36,6 +37,7 @@ Deno.serve(async (req) => {
 
     if (!res.ok) {
       const detail = await res.text();
+      console.error("[get-turn-credentials] Cloudflare trả lỗi, status:", res.status, "detail:", detail);
       return json({ error: "cloudflare_error", detail }, 502);
     }
 
