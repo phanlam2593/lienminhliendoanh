@@ -23,8 +23,11 @@ Deno.serve(async (req) => {
     const jwt = authHeader.replace(/^Bearer\s+/i, "");
     if (!jwt) return json({ error: "unauthorized" }, 401);
 
-    const { data: userData, error: userErr } = await admin.auth.getUser(jwt);
-    if (userErr || !userData?.user) return json({ error: "unauthorized" }, 401);
+    const { data: claimsData, error: claimsErr } = await admin.auth.getClaims(jwt);
+    if (claimsErr || !claimsData?.claims?.sub) {
+      console.error("[get-turn-credentials] xác thực JWT thất bại:", claimsErr?.message);
+      return json({ error: "unauthorized" }, 401);
+    }
 
     const res = await fetch(
       `https://rtc.live.cloudflare.com/v1/turn/keys/${CF_TURN_KEY_ID}/credentials/generate-ice-servers`,
