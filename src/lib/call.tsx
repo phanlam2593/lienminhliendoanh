@@ -13,40 +13,21 @@ const STUN_ONLY: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stu
 // cần thiết cho các cặp NAT "khó" (mạng di động, xuyên quốc gia) mà STUN một mình
 // không vượt qua được. Nếu lấy TURN thất bại vì lý do gì đó, tự động lùi về chỉ dùng
 // STUN (giống Giai đoạn 1 cũ) để cuộc gọi vẫn có cơ hội chạy thay vì treo cứng.
-async function getIceServers(onResult?: (src: string) => void): Promise<RTCIceServer[]> {
+async function getIceServers(): Promise<RTCIceServer[]> {
   try {
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData.session?.access_token;
-    if (!token) {
-      onResult?.("🔴 KHÔNG lấy được TURN (thiếu phiên đăng nhập)");
-      return STUN_ONLY;
-    }
+    if (!token) return STUN_ONLY;
     const res = await fetch("https://ewquysvcjuqdkfieeuxd.supabase.co/functions/v1/get-turn-credentials", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (!res.ok) {
-      onResult?.(`🔴 KHÔNG lấy được TURN (lỗi server ${res.status})`);
-      return STUN_ONLY;
-    }
+    if (!res.ok) return STUN_ONLY;
     const data = await res.json();
-    if (Array.isArray(data.iceServers) && data.iceServers.length) {
-      onResult?.(`🟢 Có TURN (${data.iceServers.length} server)`);
-      return data.iceServers;
-    }
-    onResult?.("🔴 KHÔNG lấy được TURN (server trả về rỗng)");
-    return STUN_ONLY;
-  } catch (e) {
-    onResult?.(`🔴 KHÔNG lấy được TURN (lỗi mạng: ${(e as Error).message})`);
+    return Array.isArray(data.iceServers) && data.iceServers.length ? data.iceServers : STUN_ONLY;
+  } catch {
     return STUN_ONLY;
   }
-}
-
-function friendlyIceStatus(ice: RTCIceConnectionState): string {
-  if (ice === "connected" || ice === "completed") return "🟢 ĐÃ KẾT NỐI XONG";
-  if (ice === "failed") return "🔴 KẾT NỐI THẤT BẠI";
-  if (ice === "disconnected") return "🟡 MẤT KẾT NỐI TẠM THỜI";
-  return "🟠 ĐANG TÌM ĐƯỜNG KẾT NỐI...";
 }
 
 const RING_TIMEOUT_MS = 30_000;
