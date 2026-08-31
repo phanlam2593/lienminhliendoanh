@@ -39,6 +39,8 @@ import {
   Smartphone,
   Store,
   Lock,
+  Ban,
+  ShieldCheck,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
