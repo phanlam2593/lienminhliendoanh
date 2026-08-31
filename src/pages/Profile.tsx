@@ -1250,7 +1250,7 @@ function SettingsSection({
   onPrefsSaved?: () => void;
 }) {
   const { t } = useLanguage();
-  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang">(null);
+  const [open, setOpen] = useState<null | "password" | "notif" | "install" | "theme" | "lang" | "blocked">(null);
   return (
     <section className="space-y-2">
       <h2 className="font-bold text-sm flex items-center gap-1">
