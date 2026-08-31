@@ -1962,6 +1962,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "wall.reviews": "Reviews",
     "wall.noPosts": "No community posts yet",
     "wall.noReviews": "No reviews yet",
+    "block.blockedUsers": "Blocked users",
+    "block.noBlockedUsers": "You haven't blocked anyone",
   },
 };
 
