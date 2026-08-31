@@ -982,6 +982,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "wall.reviews": "Đánh giá",
     "wall.noPosts": "Chưa có bài viết nào trong Cộng đồng",
     "wall.noReviews": "Chưa có đánh giá nào",
+    "block.blockedUsers": "Người dùng đã chặn",
+    "block.noBlockedUsers": "Bạn chưa chặn ai",
   },
   en: {
     "nav.home": "Home",
