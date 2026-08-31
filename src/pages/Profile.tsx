@@ -41,6 +41,8 @@ import {
   Lock,
   Ban,
   ShieldCheck,
+  MoreVertical,
+  MessageSquare,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
