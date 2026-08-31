@@ -1313,8 +1313,81 @@ function SettingsSection({
             <LanguageToggle />
           </div>
         )}
+        <SettingRow
+          icon={<Ban className="w-4 h-4" />}
+          label={t("block.blockedUsers")}
+          onClick={() => setOpen(open === "blocked" ? null : "blocked")}
+          active={open === "blocked"}
+        />
+        {open === "blocked" && (
+          <div className="p-3">
+            <BlockedUsersList />
+          </div>
+        )}
       </div>
     </section>
+  );
+}
+
+function BlockedUsersList() {
+  const { t } = useLanguage();
+  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<{ id: string; full_name: string; username: string; avatar_url: string | null }[]>(
+    [],
+  );
+
+  const load = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.rpc("get_my_blocked_users");
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      return;
+    }
+    setUsers((data ?? []) as any);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    void load();
+  }, []);
+
+  const unblock = async (id: string) => {
+    const { error } = await supabase
+      .from("blocks")
+      .delete()
+      .eq("blocker_id", (await supabase.auth.getUser()).data.user?.id)
+      .eq("blocked_id", id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setUsers((prev) => prev.filter((u) => u.id !== id));
+    toast.success(t("block.unblocked"));
+  };
+
+  if (loading) return <p className="text-xs text-center text-muted-foreground py-4">{t("common.loading")}</p>;
+  if (users.length === 0)
+    return <p className="text-xs text-center text-muted-foreground py-4">{t("block.noBlockedUsers")}</p>;
+
+  return (
+    <div className="space-y-2">
+      {users.map((u) => (
+        <div key={u.id} className="flex items-center gap-2 p-2 bg-accent/50 rounded-xl">
+          <Avatar path={u.avatar_url} name={u.full_name} size={32} />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold truncate">{u.full_name}</div>
+            <div className="text-[11px] text-muted-foreground truncate">@{u.username}</div>
+          </div>
+          <button
+            onClick={() => unblock(u.id)}
+            className="px-3 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1 shrink-0"
+          >
+            <ShieldCheck className="w-3.5 h-3.5" /> {t("block.unblock")}
+          </button>
+        </div>
+      ))}
+    </div>
   );
 }
 
