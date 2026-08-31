@@ -102,6 +102,7 @@ export default function Profile() {
   const [quickStatusMsg, setQuickStatusMsg] = useState("");
   const [helpOpen, setHelpOpen] = useState(false);
   const [quickSaving, setQuickSaving] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
