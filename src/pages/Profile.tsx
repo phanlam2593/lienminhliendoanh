@@ -590,7 +590,7 @@ export default function Profile() {
             </p>
             <p>
               Zalo:{" "}
-              
+              <a
                 href="https://zalo.me/0339565246"
                 target="_blank"
                 rel="noreferrer"
@@ -601,7 +601,7 @@ export default function Profile() {
             </p>
             <p>
               Facebook:{" "}
-              
+              <a
                 href="https://www.facebook.com/profile.php?id=61590228346408"
                 target="_blank"
                 rel="noreferrer"
