@@ -1335,6 +1335,107 @@ function FollowStats({ userId }: { userId: string }) {
   );
 }
 
+function OwnWall({ userId }: { userId: string }) {
+  const { t, lang } = useLanguage();
+  const [tab, setTab] = useState<"posts" | "reviews">("posts");
+  const [posts, setPosts] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    (async () => {
+      const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
+        supabase
+          .from("community_messages")
+          .select("id, content, type, image_url, created_at")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(20),
+        supabase
+          .from("reviews")
+          .select("id, rating, comment, image_url, created_at, businesses(id, name)")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(20),
+      ]);
+      setPosts(postRows ?? []);
+      setReviews((reviewRows ?? []) as any);
+      setLoading(false);
+    })();
+  }, [userId]);
+
+  return (
+    <div>
+      <div className="flex gap-1 p-1 bg-muted rounded-xl">
+        <button
+          onClick={() => setTab("posts")}
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "posts" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+        >
+          <MessageSquare className="w-3.5 h-3.5" /> {t("wall.posts")}
+        </button>
+        <button
+          onClick={() => setTab("reviews")}
+          className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "reviews" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
+        >
+          <Star className="w-3.5 h-3.5" /> {t("wall.reviews")}
+        </button>
+      </div>
+      <div className="mt-3 space-y-2">
+        {loading ? (
+          <p className="text-center text-xs text-muted-foreground py-8">{t("common.loading")}</p>
+        ) : tab === "posts" ? (
+          posts.length === 0 ? (
+            <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
+          ) : (
+            posts.map((post) => (
+              <div key={post.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
+                <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
+                {post.type === "gif" ? (
+                  <img src={post.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
+                ) : post.type === "image" ? (
+                  <StoredImage path={post.image_url} alt={t("chat.imageAlt")} className="max-w-[220px] rounded-xl" />
+                ) : (
+                  <p className="text-sm whitespace-pre-wrap">{post.content}</p>
+                )}
+              </div>
+            ))
+          )
+        ) : reviews.length === 0 ? (
+          <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noReviews")}</p>
+        ) : (
+          reviews.map((rv) => (
+            <div key={rv.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
+              <div className="flex items-center justify-between gap-2">
+                {rv.businesses ? (
+                  <Link to={`/dn/${rv.businesses.id}`} className="text-sm font-semibold hover:text-primary truncate">
+                    🏢 {rv.businesses.name}
+                  </Link>
+                ) : (
+                  <span className="text-sm font-semibold text-muted-foreground">{t("reports.contentDeleted")}</span>
+                )}
+                <div className="flex items-center gap-0.5 shrink-0">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-3.5 h-3.5 ${i < rv.rating ? "fill-primary text-primary" : "text-muted"}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              {rv.comment && <p className="text-sm text-muted-foreground">{rv.comment}</p>}
+              {rv.image_url && (
+                <StoredImage path={rv.image_url} alt={t("biz.reviewImageAlt")} className="max-w-[200px] rounded-xl" />
+              )}
+              <div className="text-[11px] text-muted-foreground">{timeAgo(rv.created_at, lang)}</div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
   return (
     <label className="block space-y-1">
