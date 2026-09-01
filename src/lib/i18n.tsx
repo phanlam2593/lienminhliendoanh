@@ -4,7 +4,7 @@ export type Lang = "vi" | "en";
 
 // Chỉ dịch "khung app cố định" (nav, nút bấm, nhãn) — KHÔNG dịch nội dung do người
 // dùng tự viết (mô tả DN, đánh giá, tin nhắn...). Thêm khoá mới ở đây khi cần mở rộng.
-const DICT: Record<Lang, Record<string, string>> = {
+const DICT: Record<Lanhg, Record<string, string>> = {
   vi: {
     "nav.home": "Trang chủ",
     "nav.explore": "Khám phá",
@@ -399,7 +399,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notifTitle.dealsNew": "Có ưu đãi mới từ nơi bạn theo dõi",
     "notifTitle.accountUpdates": "Có cập nhật về tài khoản/doanh nghiệp của bạn",
     "notifTitle.reports": "Bạn có cập nhật báo cáo mới",
-    "legal.lastUpdated": "Cập nhật lần cuối: 07/2026",
+    "legal.lastUpdated": "Cập nhật lần cuối: 09/2026",
     "termsPage.title": "Điều khoản sử dụng",
     "termsPage.s1Title": "1. Giới thiệu & Phạm vi áp dụng",
     "termsPage.s1P1":
@@ -462,7 +462,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Người dùng có quyền yêu cầu chấm dứt tài khoản và xoá dữ liệu cá nhân bất kỳ lúc nào theo quy trình xử lý của BQT.",
     "termsPage.s10Title": "10. Gói thành viên (Membership)",
     "termsPage.s10P1":
-      "Trong khuôn khổ chương trình ưu đãi ra mắt, 1.000 Thành viên đăng ký sớm nhất sẽ được cấp Gói thành viên miễn phí trong 03 tháng kể từ ngày kích hoạt.",
+      "Mọi Thành viên mới được BQT duyệt tài khoản sẽ được cấp Gói thành viên miễn phí trong 03 tháng kể từ ngày kích hoạt, không giới hạn số lượng.",
     "termsPage.s10P2":
       "Khi hết thời hạn ưu đãi, Gói thành viên sẽ TỰ ĐỘNG NGỪNG HIỆU LỰC. Ứng dụng KHÔNG tự động chuyển sang gói trả phí và KHÔNG tự động trừ tiền khi chưa có sự đồng ý riêng của Thành viên.",
     "termsPage.s10P3":
@@ -521,7 +521,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "privacyPage.s2Li5": "Ngăn chặn gian lận, lạm dụng hệ thống",
     "privacyPage.s3Title": "3. Cơ sở pháp lý xử lý dữ liệu",
     "privacyPage.s3P1":
-      "Chúng tôi xử lý dữ liệu cá nhân của bạn dựa trên sự đồng ý bạn cung cấp khi đăng ký và sử dụng từng tính năng cụ thể, phù hợp với Nghị định 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân.",
+      "Chúng tôi xử lý dữ liệu cá nhân của bạn dựa trên sự đồng ý bạn cung cấp khi đăng ký và sử dụng từng tính năng cụ thể, phù hợp với Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 (hiệu lực từ 01/01/2026) và Nghị định 356/2025/NĐ-CP hướng dẫn thi hành.",
     "privacyPage.s4Title": "4. Chia sẻ dữ liệu",
     "privacyPage.s4Pre": "Chúng tôi",
     "privacyPage.s4Bold": "không bán",
@@ -529,7 +529,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "dữ liệu cá nhân của bạn cho bên thứ ba. Thông tin công khai (tên, ảnh đại diện, đánh giá) hiển thị cho các thành viên khác trong cộng đồng theo đúng mục đích của Ứng dụng. Dữ liệu chỉ được cung cấp cho cơ quan nhà nước có thẩm quyền khi pháp luật yêu cầu.",
     "privacyPage.s5Title": "5. Chuyển dữ liệu ra nước ngoài",
     "privacyPage.s5P1":
-      "Ứng dụng sử dụng hạ tầng lưu trữ và xử lý dữ liệu của nhà cung cấp dịch vụ đám mây bên thứ ba (Supabase), có máy chủ đặt ngoài lãnh thổ Việt Nam. Việc chuyển dữ liệu cá nhân ra nước ngoài (nếu có) được thực hiện phù hợp với quy định tại Nghị định 13/2023/NĐ-CP.",
+      "Ứng dụng sử dụng hạ tầng lưu trữ và xử lý dữ liệu của nhà cung cấp dịch vụ đám mây bên thứ ba (Supabase), có máy chủ đặt ngoài lãnh thổ Việt Nam. Việc chuyển dữ liệu cá nhân ra nước ngoài (nếu có) được thực hiện phù hợp với quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.",
     "privacyPage.s6Title": "6. Cookie & Công nghệ lưu trữ tương tự",
     "privacyPage.s6P1":
       "Ứng dụng sử dụng bộ nhớ cục bộ của trình duyệt (localStorage, sessionStorage) để lưu tùy chọn ngôn ngữ, phiên đăng nhập và một số dữ liệu tạm thời nhằm cải thiện trải nghiệm sử dụng. Dữ liệu này lưu trên thiết bị của bạn, không phải trên máy chủ, và không dùng cho mục đích quảng cáo theo dõi xuyên nền tảng.",
@@ -543,18 +543,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "privacyPage.s9P1":
       "Ứng dụng chỉ định Ban Quản trị làm đầu mối tiếp nhận, xử lý các yêu cầu, khiếu nại của bạn liên quan đến bảo vệ dữ liệu cá nhân. Mọi yêu cầu gửi qua kênh liên hệ chính thức nêu tại Điều 13 sẽ được tiếp nhận và phản hồi trong vòng 72 giờ.",
     "privacyPage.s10Title": "10. Quyền của bạn",
-    "privacyPage.s10Intro": "Theo Nghị định 13/2023/NĐ-CP, bạn có quyền:",
+    "privacyPage.s10Intro": "Theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, bạn có quyền:",
     "privacyPage.s10Li1": "Được biết dữ liệu của mình đang được xử lý ra sao",
     "privacyPage.s10Li2": "Truy cập, xem, yêu cầu chỉnh sửa dữ liệu cá nhân",
     "privacyPage.s10Li3": "Rút lại sự đồng ý đã cung cấp trước đó",
     "privacyPage.s10Li4": "Yêu cầu xoá dữ liệu cá nhân",
-    "privacyPage.s10Li5": "Yêu cầu hạn chế hoặc phản đối việc xử lý dữ liệu",
+    "privacyPage.s10Li5": "Yêu cầu hạn chế, phản đối việc xử lý dữ liệu, hoặc từ chối nhận quảng cáo/tiếp thị",
     "privacyPage.s10Li6": "Khiếu nại, tố cáo theo quy định pháp luật",
     "privacyPage.s10Pre": "Để thực hiện các quyền trên, liên hệ Zalo",
     "privacyPage.s10Post": "Chúng tôi phản hồi trong vòng 72 giờ theo quy định.",
     "privacyPage.s11Title": "11. Xử lý sự cố vi phạm dữ liệu cá nhân",
     "privacyPage.s11P1":
-      "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân có khả năng gây tổn hại đến quyền và lợi ích hợp pháp của bạn, chúng tôi cam kết áp dụng biện pháp khắc phục cần thiết và thông báo cho cơ quan có thẩm quyền, chủ thể dữ liệu bị ảnh hưởng theo quy định tại Nghị định 13/2023/NĐ-CP.",
+      "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân có khả năng gây tổn hại đến quyền và lợi ích hợp pháp của bạn, chúng tôi cam kết áp dụng biện pháp khắc phục cần thiết và thông báo cho cơ quan chuyên trách bảo vệ dữ liệu cá nhân trong vòng 72 giờ kể từ khi phát hiện sự cố, đồng thời thông báo cho chủ thể dữ liệu bị ảnh hưởng, theo quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP. Vi phạm nghĩa vụ bảo vệ dữ liệu có thể bị xử phạt hành chính theo Nghị định 330/2026/NĐ-CP.",
     "privacyPage.s12Title": "12. Trẻ em",
     "privacyPage.s12P1":
       "Ứng dụng dành cho người từ đủ 16 tuổi trở lên. Chúng tôi không chủ đích thu thập dữ liệu của trẻ em.",
@@ -1401,7 +1401,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "notifTitle.dealsNew": "New offer from a business you follow",
     "notifTitle.accountUpdates": "There's an update to your account/business",
     "notifTitle.reports": "You have a report update",
-    "legal.lastUpdated": "Last updated: 07/2026",
+    "legal.lastUpdated": "Last updated: 09/2026",
     "termsPage.title": "Terms of Use",
     "termsPage.s1Title": "1. Introduction & Scope",
     "termsPage.s1P1":
@@ -1461,7 +1461,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Users may request account termination and deletion of personal data at any time, per the Admin Team's process.",
     "termsPage.s10Title": "10. Membership Plan",
     "termsPage.s10P1":
-      "As part of the launch promotion, the first 1,000 Members to register will be granted a free Membership Plan for 03 (three) months from the date of activation.",
+      "Every new Member approved by the Admin Team is granted a free Membership Plan for 03 (three) months from the date of activation, with no cap on the number of Members.",
     "termsPage.s10P2":
       "When this promotional period ends, the Membership Plan will AUTOMATICALLY STOP. The App will NOT automatically switch you to a paid plan and will NOT automatically charge you without your separate, explicit consent to the payment terms at that time.",
     "termsPage.s10P3":
@@ -1522,7 +1522,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "privacyPage.s2Li5": "Preventing fraud and system abuse",
     "privacyPage.s3Title": "3. Legal Basis for Processing",
     "privacyPage.s3P1":
-      "We process your personal data based on the consent you provide when registering and using each specific feature, in accordance with Decree 13/2023/NĐ-CP on personal data protection.",
+      "We process your personal data based on the consent you provide when registering and using each specific feature, in accordance with the Law on Personal Data Protection No. 91/2025/QH15 (effective from 01/01/2026) and its implementing Decree 356/2025/NĐ-CP.",
     "privacyPage.s4Title": "4. Data Sharing",
     "privacyPage.s4Pre": "We",
     "privacyPage.s4Bold": "never sell",
@@ -1530,7 +1530,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "your personal data to third parties. Public information (name, avatar, reviews) is shown to other community members as intended by the App. Data is only provided to competent authorities when required by law.",
     "privacyPage.s5Title": "5. International Data Transfer",
     "privacyPage.s5P1":
-      "The App uses infrastructure from a third-party cloud service provider (Supabase), whose servers are located outside Vietnam. Any transfer of personal data abroad is carried out in accordance with Decree 13/2023/NĐ-CP.",
+      "The App uses infrastructure from a third-party cloud service provider (Supabase), whose servers are located outside Vietnam. Any transfer of personal data abroad is carried out in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP.",
     "privacyPage.s6Title": "6. Cookies & Similar Storage Technologies",
     "privacyPage.s6P1":
       "The App uses browser local storage (localStorage, sessionStorage) to save your language preference, login session, and some temporary data to improve your experience. This data is stored on your device, not on our servers, and is not used for cross-site advertising tracking.",
@@ -1544,18 +1544,19 @@ const DICT: Record<Lang, Record<string, string>> = {
     "privacyPage.s9P1":
       "The App designates the Admin Team as the contact point for receiving and handling your requests and complaints related to personal data protection. Requests sent via the official contact channel in Section 13 will be received and responded to within 72 hours.",
     "privacyPage.s10Title": "10. Your Rights",
-    "privacyPage.s10Intro": "Under Decree 13/2023/NĐ-CP, you have the right to:",
+    "privacyPage.s10Intro": "Under the Law on Personal Data Protection No. 91/2025/QH15, you have the right to:",
     "privacyPage.s10Li1": "Know how your data is being processed",
     "privacyPage.s10Li2": "Access, view, and request correction of your personal data",
     "privacyPage.s10Li3": "Withdraw previously given consent",
     "privacyPage.s10Li4": "Request deletion of your personal data",
-    "privacyPage.s10Li5": "Request restriction of or object to data processing",
+    "privacyPage.s10Li5":
+      "Request restriction of or object to data processing, or opt out of receiving advertising/marketing",
     "privacyPage.s10Li6": "File complaints or reports as provided by law",
     "privacyPage.s10Pre": "To exercise these rights, contact us via Zalo",
     "privacyPage.s10Post": "We respond within 72 hours as required.",
     "privacyPage.s11Title": "11. Personal Data Breach Response",
     "privacyPage.s11P1":
-      "In the event of a personal data breach likely to harm your lawful rights and interests, we commit to applying necessary remedial measures and notifying the competent authority and affected data subjects in accordance with Decree 13/2023/NĐ-CP.",
+      "In the event of a personal data breach likely to harm your lawful rights and interests, we commit to applying necessary remedial measures and notifying the specialized personal data protection authority within 72 hours of discovering the breach, as well as the affected data subjects, in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP. Violations of data protection obligations may be subject to administrative penalties under Decree 330/2026/NĐ-CP.",
     "privacyPage.s12Title": "12. Children",
     "privacyPage.s12P1":
       "The App is intended for users aged 16 and above. We do not intentionally collect data from children.",
