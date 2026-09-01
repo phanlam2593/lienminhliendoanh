@@ -272,6 +272,15 @@ export default function UserProfile() {
             </button>
           </div>
           {!isMe && user && (
+            <FriendButton
+              targetId={p.id}
+              targetName={p.full_name}
+              disabled={iBlockedThem}
+              onChanged={loadFriendsCount}
+              className="w-full mt-1"
+            />
+          )}
+          {!isMe && user && (
             <div className="flex gap-2 w-full mt-1">
               <button
                 onClick={toggleFollow}
