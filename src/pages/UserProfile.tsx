@@ -134,7 +134,7 @@ export default function UserProfile() {
     (async () => {
       const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
         supabase
-          .from("community_messages")
+          .from("wall_posts")
           .select("id, content, type, image_url, created_at")
           .eq("user_id", id)
           .order("created_at", { ascending: false })
