@@ -221,6 +221,22 @@ export default function Profile() {
     }
   };
 
+  const onCoverChange = async (file: File) => {
+    if (!user) return;
+    setCoverUploading(true);
+    try {
+      const path = await uploadImage(file, "covers", user.id);
+      const { error } = await supabase.from("profiles").update({ cover_url: path }).eq("id", user.id);
+      if (error) throw error;
+      toast.success(t("profile.coverUpdated"));
+      refresh();
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setCoverUploading(false);
+    }
+  };
+
   const Header = (
     <>
       <div className="flex items-center gap-3">
