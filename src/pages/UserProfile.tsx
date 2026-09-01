@@ -267,6 +267,9 @@ export default function UserProfile() {
             <button onClick={() => setListOpen("following")} className="hover:text-primary">
               <span className="font-bold text-foreground">{followingCount}</span> {t("follow.followingLabel")}
             </button>
+            <button onClick={() => setFriendsOpen(true)} className="hover:text-primary">
+              <span className="font-bold text-foreground">{friendsCount}</span> {t("friend.friends")}
+            </button>
           </div>
           {!isMe && user && (
             <div className="flex gap-2 w-full mt-1">
