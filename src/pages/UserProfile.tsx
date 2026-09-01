@@ -81,6 +81,23 @@ export default function UserProfile() {
   const [posts, setPosts] = useState<WallPost[]>([]);
   const [reviews, setReviews] = useState<WallReview[]>([]);
   const [wallLoading, setWallLoading] = useState(false);
+  const [friendsOpen, setFriendsOpen] = useState(false);
+  const [friendsCount, setFriendsCount] = useState(0);
+
+  const loadFriendsCount = async () => {
+    if (!id) return;
+    const { count } = await supabase
+      .from("friendships")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "accepted")
+      .or(`requester_id.eq.${id},addressee_id.eq.${id}`);
+    setFriendsCount(count ?? 0);
+  };
+
+  useEffect(() => {
+    void loadFriendsCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   useEffect(() => {
     if (!id) return;
