@@ -267,7 +267,8 @@ export type NotifCategory =
   | "account_updates"
   | "reports"
   | "achievements"
-  | "calls";
+  | "calls"
+  | "friend_requests";
 
 export interface Notification {
   id: string;
