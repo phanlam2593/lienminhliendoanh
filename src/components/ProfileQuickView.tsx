@@ -1,4 +1,4 @@
-…import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { Mail, MessageCircle, Phone, UserCheck, UserPlus } from "lucide-react";
