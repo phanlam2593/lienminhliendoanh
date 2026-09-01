@@ -107,6 +107,12 @@ export default function Profile() {
   const [quickSaving, setQuickSaving] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
+  const coverInput = useRef<HTMLInputElement>(null);
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [friendsOpen, setFriendsOpen] = useState(false);
+  const [friendsInitialTab, setFriendsInitialTab] = useState<"friends" | "requests">("friends");
+  const [pendingFriendRequests, setPendingFriendRequests] = useState(0);
+  const [wallReloadKey, setWallReloadKey] = useState(0);
 
   useEffect(() => {
     if (!user) return;
