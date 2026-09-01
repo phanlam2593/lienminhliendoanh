@@ -203,7 +203,11 @@ export default function UserProfile() {
   return (
     <div className="max-w-xl mx-auto pb-6">
       <div className="relative">
-        <div className="h-28 bg-gradient-brand rounded-b-2xl" />
+        {p.cover_url ? (
+          <StoredImage path={p.cover_url} alt="" className="h-28 w-full object-cover rounded-b-2xl" />
+        ) : (
+          <div className="h-28 bg-gradient-brand rounded-b-2xl" />
+        )}
         <button
           onClick={() => nav(-1)}
           className="absolute top-3 left-3 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white grid place-items-center backdrop-blur-sm"
