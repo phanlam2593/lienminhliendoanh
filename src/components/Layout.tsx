@@ -303,7 +303,7 @@ export function Layout() {
               <NavLink
                 key={tab.to}
                 to={tab.to}
-                end={tab.to === "/"}
+                end={tab.to === "/" || tab.to === "/ho-so"}
                 className={({ isActive }) =>
                   cn(
                     "relative flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-semibold transition-colors",
