@@ -148,9 +148,73 @@ export function Layout() {
                       </span>
                     )}
                   </Link>
-                  <Link to="/ho-so" aria-label={t("nav.profileShort")} className="rounded-full shadow-brand">
-                    <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
-                  </Link>
+                  <Popover open={menuOpen} onOpenChange={setMenuOpen}>
+                    <PopoverTrigger asChild>
+                      <button type="button" aria-label={t("nav.profileShort")} className="rounded-full shadow-brand">
+                        <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-56 p-1" align="end">
+                      <HeaderMenuRow
+                        icon={<User className="w-4 h-4" />}
+                        label={t("profile.personal")}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          nav("/ho-so?view=personal");
+                        }}
+                      />
+                      <HeaderMenuRow
+                        icon={<Briefcase className="w-4 h-4" />}
+                        label={t("profile.business")}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          nav("/ho-so?view=business");
+                        }}
+                      />
+                      <HeaderMenuRow
+                        icon={<HelpCircle className="w-4 h-4" />}
+                        label={t("profile.guide")}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          nav("/huong-dan");
+                        }}
+                      />
+                      <HeaderMenuRow
+                        icon={<Flag className="w-4 h-4" />}
+                        label={t("profile.myReports")}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          nav("/bao-cao-cua-toi");
+                        }}
+                      />
+                      <HeaderMenuRow
+                        icon={<Phone className="w-4 h-4" />}
+                        label={t("settings.help")}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          setHelpOpen(true);
+                        }}
+                      />
+                      <HeaderMenuRow
+                        icon={<Settings className="w-4 h-4" />}
+                        label={t("profile.settings")}
+                        onClick={() => {
+                          setMenuOpen(false);
+                          nav("/ho-so?view=settings");
+                        }}
+                      />
+                      <HeaderMenuRow
+                        icon={<LogOut className="w-4 h-4" />}
+                        label={t("common.logout")}
+                        danger
+                        onClick={async () => {
+                          setMenuOpen(false);
+                          await signOut();
+                          nav("/");
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </>
               ) : (
                 <div className="flex items-center gap-1.5">
