@@ -53,6 +53,8 @@ import { Avatar } from "@/components/Avatar";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { TierLegendDialog } from "@/components/TierLegendDialog";
 import { FollowListDialog } from "@/components/FollowListDialog";
+import { FriendsListDialog } from "@/components/FriendsListDialog";
+import { WallComposer } from "@/components/WallComposer";
 import { RegularBusinessesDialog } from "@/components/RegularBusinessesDialog";
 import { BusinessRegularsPanel } from "@/components/BusinessRegularsPanel";
 import {
