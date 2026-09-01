@@ -84,6 +84,7 @@ export default function UserProfile() {
   const [wallLoading, setWallLoading] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(false);
   const [friendsCount, setFriendsCount] = useState(0);
+  const [statusExpanded, setStatusExpanded] = useState(false);
 
   const loadFriendsCount = async () => {
     if (!id) return;
@@ -256,14 +257,20 @@ export default function UserProfile() {
             <div className="relative ring-4 ring-background rounded-full shrink-0">
               <Avatar path={p.avatar_url} name={p.full_name} size={88} />
               {p.status_message && (
-                <div className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-fit max-w-[180px]">
+                <button
+                  type="button"
+                  onClick={() => setStatusExpanded((v) => !v)}
+                  className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-44 text-left"
+                >
                   <div className="absolute -bottom-[13px] left-3 w-2 h-2 rounded-full bg-card border border-border" />
                   <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
                   <div className="absolute -bottom-[26px] left-5 w-1 h-1 rounded-full bg-card border border-border" />
-                  <p className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-sm text-primary italic font-medium line-clamp-2">
+                  <p
+                    className={`relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-sm text-primary italic font-medium ${statusExpanded ? "" : "line-clamp-2"}`}
+                  >
                     "{p.status_message}"
                   </p>
-                </div>
+                </button>
               )}
             </div>
             <div className="flex-1 min-w-0 pb-1.5">
