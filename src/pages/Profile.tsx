@@ -579,7 +579,7 @@ export default function Profile() {
                     setQuickStatusMsg((profile as any)?.status_message ?? "");
                     setQuickStatusOpen(true);
                   }}
-                  className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-44 text-left"
+                  className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"
                 >
                   <div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" />
                   <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
@@ -595,7 +595,7 @@ export default function Profile() {
                     setQuickStatusMsg("");
                     setQuickStatusOpen(true);
                   }}
-                  className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-44 text-left"
+                  className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"
                 >
                   <span className="relative block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
                     + {t("profile.addStatusLine")}
