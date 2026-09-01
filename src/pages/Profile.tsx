@@ -55,6 +55,7 @@ import { TierLegendDialog } from "@/components/TierLegendDialog";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { FriendsListDialog } from "@/components/FriendsListDialog";
 import { WallComposer } from "@/components/WallComposer";
+import { WallPostCard } from "@/components/WallPostCard";
 import { RegularBusinessesDialog } from "@/components/RegularBusinessesDialog";
 import { BusinessRegularsPanel } from "@/components/BusinessRegularsPanel";
 import {
@@ -598,7 +599,8 @@ export default function Profile() {
           >
             {(profile as any)?.status_message ? (
               <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)]">
-                <div className="absolute -top-1 left-4 w-2.5 h-2.5 bg-card border-l border-t rounded-sm rotate-45" />
+                <div className="absolute -top-[7px] left-4 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-b-[7px] border-b-border" />
+                <div className="absolute -top-[6px] left-[17px] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-card" />
                 <div className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
                   <span className="text-xs text-primary font-semibold line-clamp-2">
                     {(profile as any).status_message}
@@ -1502,18 +1504,7 @@ function OwnWall({ userId, reloadKey }: { userId: string; reloadKey?: number }) 
           posts.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
           ) : (
-            posts.map((post) => (
-              <div key={post.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
-                <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
-                {post.type === "gif" ? (
-                  <img src={post.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
-                ) : post.type === "image" ? (
-                  <StoredImage path={post.image_url} alt={t("chat.imageAlt")} className="max-w-[220px] rounded-xl" />
-                ) : (
-                  <p className="text-sm whitespace-pre-wrap">{post.content}</p>
-                )}
-              </div>
-            ))
+            posts.map((post) => <WallPostCard key={post.id} post={post} />)
           )
         ) : reviews.length === 0 ? (
           <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noReviews")}</p>
