@@ -38,6 +38,7 @@ interface PubProfile {
   full_name: string;
   username: string | null;
   avatar_url: string | null;
+  cover_url: string | null;
   status_message: string | null;
   email: string | null;
   phone: string | null;
