@@ -111,6 +111,8 @@ export interface Profile {
   email: string;
   phone: string;
   avatar_url: string | null;
+  cover_url: string | null;
+  bio: string | null;
   status: AccountStatus;
   status_message: string | null;
   points: number;
