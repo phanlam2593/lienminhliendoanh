@@ -148,6 +148,16 @@ export default function Profile() {
     setBiz((data ?? []) as Business[]);
   };
 
+  const loadPendingFriendRequests = async () => {
+    if (!user) return;
+    const { count } = await supabase
+      .from("friendships")
+      .select("*", { count: "exact", head: true })
+      .eq("addressee_id", user.id)
+      .eq("status", "pending");
+    setPendingFriendRequests(count ?? 0);
+  };
+
   if (!user) {
     return (
       <div className="p-8 text-center space-y-4">
