@@ -1264,6 +1264,228 @@ const QUESTS: Quest[] = [
     expect:
       "Chỉ thấy ĐÚNG 1 thông báo trên màn hình khoá (nội dung cập nhật theo tin mới nhất), KHÔNG bị xếp chồng thành nhiều thông báo riêng lẻ.",
   },
+
+  // ===== Cuộc gọi thoại =====
+  {
+    id: "call-outgoing",
+    category: "Cuộc gọi thoại",
+    title: "Gọi thoại cho 1 người bạn",
+    action: "Vào khung chat 1-1 với 1 người, bấm icon gọi thoại.",
+    expect: "Bên kia thấy màn hình 'Cuộc gọi đến', nghe được tiếng khi cả 2 nhận.",
+  },
+  {
+    id: "call-incoming-accept",
+    category: "Cuộc gọi thoại",
+    title: "Nhận và trả lời cuộc gọi đến",
+    action: "Khi có người gọi tới, bấm nghe.",
+    expect: "Kết nối thành công, nghe được tiếng 2 chiều thật (không chỉ tiếng chuông).",
+  },
+  {
+    id: "call-decline",
+    category: "Cuộc gọi thoại",
+    title: "Từ chối cuộc gọi",
+    action: "Khi có cuộc gọi đến, bấm từ chối.",
+    expect: "Người gọi thấy trạng thái 'Từ chối/Bận', không bị treo màn hình gọi.",
+  },
+  {
+    id: "call-end",
+    category: "Cuộc gọi thoại",
+    title: "Kết thúc cuộc gọi giữa chừng",
+    action: "Đang gọi, bấm nút kết thúc.",
+    expect: "Cả 2 bên thoát khỏi màn hình gọi, quay về đúng khung chat, không bị đứng hình.",
+  },
+  {
+    id: "call-missed-notif",
+    category: "Cuộc gọi thoại",
+    title: "Thông báo cuộc gọi nhỡ",
+    action: "Gọi cho 1 người rồi tắt máy trước khi họ bắt máy (hoặc để chuông tự hết).",
+    expect: "Người nhận thấy thông báo 'Cuộc gọi nhỡ' khi mở lại app.",
+  },
+  {
+    id: "call-history-bubble",
+    category: "Cuộc gọi thoại",
+    title: "Bong bóng lịch sử cuộc gọi trong khung chat",
+    action: "Sau khi gọi xong, xem lại khung chat với người đó.",
+    expect: "Có bong bóng cuộc gọi (đúng hướng trái/phải theo ai gọi) hiện thời lượng hoặc trạng thái nhỡ.",
+  },
+  {
+    id: "call-history-page",
+    category: "Cuộc gọi thoại",
+    title: "Trang Lịch sử cuộc gọi",
+    action: "Mở trang Lịch sử cuộc gọi (/cuoc-goi).",
+    expect: "Danh sách cuộc gọi gần đây hiện đúng, đủ.",
+  },
+  {
+    id: "call-glare",
+    category: "Cuộc gọi thoại",
+    title: "Gọi trùng nhau 2 chiều cùng lúc",
+    action: "Nhờ người kia gọi cho bạn đúng lúc bạn cũng đang bấm gọi họ.",
+    expect: "Tự nối thành 1 cuộc gọi duy nhất, không báo 'Bận' hay bị lỗi.",
+  },
+
+  // ===== Chặn người dùng =====
+  {
+    id: "block-user",
+    category: "Chặn người dùng",
+    title: "Chặn 1 người dùng",
+    action: "Vào hồ sơ 1 người → menu 3 chấm → Chặn.",
+    expect: "Không nhắn tin/gọi được nữa, biến mất khỏi tìm kiếm/theo dõi lẫn nhau.",
+  },
+  {
+    id: "block-unfollow-auto",
+    category: "Chặn người dùng",
+    title: "Chặn tự huỷ theo dõi 2 chiều",
+    action: "Chặn 1 người đang follow bạn hoặc bạn đang follow.",
+    expect: "Theo dõi 2 chiều tự huỷ ngay khi chặn.",
+  },
+  {
+    id: "block-unblock",
+    category: "Chặn người dùng",
+    title: "Bỏ chặn từ Cài đặt",
+    action: "Cài đặt → Người dùng đã chặn → bỏ chặn 1 người.",
+    expect: "Nhắn tin/xem hồ sơ lại được bình thường.",
+  },
+
+  // ===== Cập nhật phiên 01/09 (Trang cá nhân) =====
+  {
+    id: "0901-profile-cover",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Đổi ảnh bìa cá nhân",
+    action: "Hồ sơ → bấm icon máy ảnh trên ảnh bìa → chọn ảnh mới.",
+    expect: "Ảnh bìa mới hiện ngay, không cần tải lại trang.",
+  },
+  {
+    id: "0901-profile-hero-layout",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Bố cục hồ sơ kiểu FB",
+    action: "Mở Hồ sơ của mình.",
+    expect: "Avatar nằm bên trái, tên/username nằm cạnh (không phải canh giữa như trước).",
+  },
+  {
+    id: "0901-profile-status-bubble",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Bong bóng dòng trạng thái có đuôi",
+    action: "Đặt 1 dòng trạng thái mới.",
+    expect: "Bong bóng có đuôi tam giác trỏ LÊN góc trên avatar, không phải trỏ xuống.",
+  },
+  {
+    id: "0901-nav-tab",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Tab Hồ sơ ở thanh điều hướng dưới",
+    action: "Nhìn thanh nav dưới cùng.",
+    expect: "Có tab riêng dẫn thẳng vào Hồ sơ, không cần qua icon avatar trên header.",
+  },
+  {
+    id: "0901-header-avatar-menu",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Menu dọc khi bấm avatar header",
+    action: "Bấm avatar ở góc phải header (không phải tab Hồ sơ dưới).",
+    expect: "Mở popup menu dọc (Hồ sơ, Cài đặt, Đăng xuất...) chứ không nhảy thẳng trang.",
+  },
+  {
+    id: "0901-friend-request-send",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Gửi lời mời kết bạn",
+    action: "Vào hồ sơ 1 người khác → bấm nút 'Kết bạn' (CTA xanh nổi bật).",
+    expect: "Họ nhận được thông báo lời mời kết bạn.",
+  },
+  {
+    id: "0901-friend-request-accept",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Chấp nhận lời mời kết bạn",
+    action: "Nhận thông báo lời mời kết bạn → chấp nhận.",
+    expect: "Cả 2 hiện là bạn bè, xuất hiện trong danh sách Bạn bè của nhau.",
+  },
+  {
+    id: "0901-friends-list",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Danh sách Bạn bè",
+    action: "Hồ sơ → bấm 'Bạn bè'.",
+    expect: "Hiện đúng danh sách những người đã là bạn (khác với danh sách theo dõi).",
+  },
+  {
+    id: "0901-wall-post-text",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Đăng bài chữ lên tường",
+    action: "Hồ sơ → gõ vào ô 'Bạn đang nghĩ gì?' → Đăng.",
+    expect: "Bài hiện ngay đầu tường, KHÔNG hiện bên trang Cộng đồng.",
+  },
+  {
+    id: "0901-wall-post-image",
+    category: "Cập nhật phiên 01/09 (Trang cá nhân)",
+    title: "Đăng bài kèm ảnh lên tường",
+    action: "Đăng 1 bài có đính kèm ảnh trên tường.",
+    expect: "Ảnh hiện đúng, không vỡ layout, không lẫn vào tường người khác.",
+  },
+
+  // ===== Cập nhật phiên 01/09 (Thả tim & bình luận) =====
+  {
+    id: "0901-wall-react",
+    category: "Cập nhật phiên 01/09 (Thả tim & bình luận)",
+    title: "Thả tim 1 bài trên tường",
+    action: "Bấm nút 'Thả tim' dưới 1 bài viết.",
+    expect: "Tim chuyển màu đỏ, số đếm +1 ngay.",
+  },
+  {
+    id: "0901-wall-unreact",
+    category: "Cập nhật phiên 01/09 (Thả tim & bình luận)",
+    title: "Bỏ thả tim",
+    action: "Bấm lại nút tim đã thả.",
+    expect: "Tim trở lại rỗng, số đếm -1.",
+  },
+  {
+    id: "0901-wall-comment",
+    category: "Cập nhật phiên 01/09 (Thả tim & bình luận)",
+    title: "Viết bình luận 1 bài",
+    action: "Bấm 'Bình luận' → gõ nội dung → Enter/gửi.",
+    expect: "Bình luận hiện ngay kèm avatar + tên đúng, số bình luận cập nhật.",
+  },
+  {
+    id: "0901-wall-comment-blocked",
+    category: "Cập nhật phiên 01/09 (Thả tim & bình luận)",
+    title: "Người bị chặn không bình luận/thả tim được",
+    action: "Chặn 1 người rồi kiểm tra họ có còn thả tim/bình luận bài của bạn không.",
+    expect: "Không thao tác được / không thấy bài (áp dụng đúng luật chặn cho cả 2 bảng reaction và comment).",
+  },
+
+  // ===== Thành viên (dùng thử) =====
+  {
+    id: "membership-trial-auto",
+    category: "Thành viên (dùng thử)",
+    title: "Thành viên mới tự có 3 tháng dùng thử",
+    action: "Duyệt 1 tài khoản mới trong Admin, kiểm tra trạng thái thành viên của họ.",
+    expect: "Tự động có Thành viên + hạn dùng 3 tháng, không cần thao tác gì thêm.",
+  },
+  {
+    id: "membership-admin-extend",
+    category: "Thành viên (dùng thử)",
+    title: "Admin gia hạn thành viên",
+    action: "Admin → chi tiết 1 thành viên → bấm +1/+3 tháng.",
+    expect: "Hạn thành viên cập nhật đúng, cộng dồn nếu còn hạn.",
+  },
+  {
+    id: "membership-gate-offer",
+    category: "Thành viên (dùng thử)",
+    title: "Hết hạn thành viên bị khoá tạo ưu đãi",
+    action: "Với 1 tài khoản đã hết hạn thành viên (hoặc admin tắt thủ công), thử tạo ưu đãi mới cho DN của họ.",
+    expect: "Bị chặn/báo cần là thành viên, không tạo được.",
+  },
+
+  // ===== Cập nhật phiên 01/09 (Pháp lý) =====
+  {
+    id: "0901-legal-privacy-law",
+    category: "Cập nhật phiên 01/09 (Pháp lý)",
+    title: "Chính sách bảo mật trích đúng luật mới",
+    action: "Mở trang Chính sách bảo mật → xem phần căn cứ pháp lý & xử lý sự cố.",
+    expect: "Ghi rõ Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 + Nghị định 356/2025/NĐ-CP, KHÔNG còn nhắc Nghị định 13/2023/NĐ-CP cũ; có nhắc thời hạn 72 giờ báo cơ quan chức năng khi có sự cố.",
+  },
+  {
+    id: "0901-legal-membership-text",
+    category: "Cập nhật phiên 01/09 (Pháp lý)",
+    title: "Điều khoản không còn giới hạn 1000 người",
+    action: "Mở trang Điều khoản sử dụng → mục Thành viên.",
+    expect: "Ghi là mọi thành viên mới được duyệt đều có ưu đãi, không còn câu giới hạn 1.000 người đăng ký sớm nhất.",
+  },
 ];
 
 const STORAGE_KEY = "lmld:questline:v3";
