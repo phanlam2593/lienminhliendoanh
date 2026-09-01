@@ -35,6 +35,7 @@ import { useLanguage } from "@/lib/i18n";
 import { VNFlag, UKFlag } from "@/components/FlagIcons";
 import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 
 const PENDING_ALLOWED = ["/ho-so", "/thong-bao", "/tin-nhan"];
