@@ -579,7 +579,7 @@ export default function Profile() {
                     setQuickStatusMsg((profile as any)?.status_message ?? "");
                     setQuickStatusOpen(true);
                   }}
-                  className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-fit max-w-[180px] text-left"
+                  className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-44 text-left"
                 >
                   <div className="absolute -bottom-[13px] left-3 w-2 h-2 rounded-full bg-card border border-border" />
                   <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
