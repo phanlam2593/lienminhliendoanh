@@ -37,7 +37,9 @@ export type NotifType =
   | "badge_earned"
   | "level_up"
   | "pending_approval"
-  | "mention";
+  | "mention"
+  | "friend_request"
+  | "friend_accepted";
 
 // Thang bậc DUY NHẤT cho thành viên (đã gộp Lv + badge cũ thành 1 hệ, 2026).
 // Điểm: +1 claim ưu đãi, +1 khi DN của bạn được claim, +1 mỗi bên khi hoàn thành Trao đổi.
