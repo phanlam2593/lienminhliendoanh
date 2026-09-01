@@ -263,8 +263,8 @@ export default function UserProfile() {
           </div>
           {p.status_message && (
             <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)] mt-1.5">
-              <div className="absolute -top-[7px] left-4 w-0 h-0 border-l-[7px] border-l-transparent border-r-[7px] border-r-transparent border-b-[7px] border-b-border" />
-              <div className="absolute -top-[6px] left-[17px] w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-b-[6px] border-b-card" />
+              <div className="absolute -top-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-b-[11px] border-b-border" />
+              <div className="absolute -top-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-card" />
               <p className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-sm text-primary italic font-medium">
                 "{p.status_message}"
               </p>
