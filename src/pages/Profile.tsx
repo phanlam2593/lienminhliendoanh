@@ -1446,7 +1446,7 @@ function FollowStats({ userId }: { userId: string }) {
   );
 }
 
-function OwnWall({ userId }: { userId: string }) {
+function OwnWall({ userId, reloadKey }: { userId: string; reloadKey?: number }) {
   const { t, lang } = useLanguage();
   const [tab, setTab] = useState<"posts" | "reviews">("posts");
   const [posts, setPosts] = useState<any[]>([]);
@@ -1458,7 +1458,7 @@ function OwnWall({ userId }: { userId: string }) {
     (async () => {
       const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
         supabase
-          .from("community_messages")
+          .from("wall_posts")
           .select("id, content, type, image_url, created_at")
           .eq("user_id", userId)
           .order("created_at", { ascending: false })
@@ -1474,7 +1474,7 @@ function OwnWall({ userId }: { userId: string }) {
       setReviews((reviewRows ?? []) as any);
       setLoading(false);
     })();
-  }, [userId]);
+  }, [userId, reloadKey]);
 
   return (
     <div>
