@@ -444,7 +444,35 @@ export default function Profile() {
   return (
     <div className="pb-5">
       <div className="relative">
-        <div className="h-28 bg-gradient-brand rounded-b-2xl" />
+        {(profile as any)?.cover_url ? (
+          <StoredImage path={(profile as any).cover_url} alt="" className="h-28 w-full object-cover rounded-b-2xl" />
+        ) : (
+          <div className="h-28 bg-gradient-brand rounded-b-2xl" />
+        )}
+        <button
+          type="button"
+          onClick={() => coverInput.current?.click()}
+          className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/30 hover:bg-black/40 text-white grid place-items-center backdrop-blur-sm"
+          aria-label={t("profile.changeCover")}
+        >
+          <Camera className="w-3.5 h-3.5" />
+        </button>
+        <input
+          ref={coverInput}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) void onCoverChange(f);
+            e.currentTarget.value = "";
+          }}
+        />
+        {coverUploading && (
+          <div className="absolute inset-0 rounded-b-2xl bg-black/20 grid place-items-center">
+            <span className="text-[11px] text-white font-semibold">{t("profile.uploadingImage")}</span>
+          </div>
+        )}
         <Popover open={menuOpen} onOpenChange={setMenuOpen}>
           <PopoverTrigger asChild>
             <button
