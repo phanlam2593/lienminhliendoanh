@@ -410,6 +410,7 @@ export default function UserProfile() {
         target={{ kind: "user", id: p.id }}
         mode={listOpen ?? "followers"}
       />
+      <FriendsListDialog userId={p.id} open={friendsOpen} onOpenChange={setFriendsOpen} onChanged={loadFriendsCount} />
     </div>
   );
 }
