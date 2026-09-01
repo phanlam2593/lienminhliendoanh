@@ -543,48 +543,50 @@ export default function Profile() {
             />
           </PopoverContent>
         </Popover>
-        <div className="px-5 -mt-10 flex flex-col items-center text-center gap-2">
-          <div className="relative ring-4 ring-background rounded-full">
-            <Avatar
-              path={profile?.avatar_url}
-              name={profile?.full_name || profile?.username}
-              size={88}
-              onClick={() => avatarInput.current?.click()}
-            />
-            <button
-              type="button"
-              onClick={() => avatarInput.current?.click()}
-              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
-              aria-label={t("profile.changeAvatar")}
-            >
-              <Camera className="w-3.5 h-3.5" />
-            </button>
-            <input
-              ref={avatarInput}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="hidden"
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                if (f) void onAvatarChange(f);
-                e.currentTarget.value = "";
-              }}
-            />
-          </div>
-          <div>
-            <div className="text-lg font-extrabold">{profile?.full_name}</div>
-            <div className="text-xs text-muted-foreground">@{profile?.username}</div>
-            <div className="flex items-center justify-center gap-2 mt-0.5">
-              <StatusBadge s={profile?.status} />
-              {profile && (
-                <button type="button" onClick={() => setTierLegendOpen(true)}>
-                  <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />
-                </button>
+        <div className="px-4 -mt-10">
+          <div className="flex items-end gap-3">
+            <div className="relative ring-4 ring-background rounded-full shrink-0">
+              <Avatar
+                path={profile?.avatar_url}
+                name={profile?.full_name || profile?.username}
+                size={88}
+                onClick={() => avatarInput.current?.click()}
+              />
+              <button
+                type="button"
+                onClick={() => avatarInput.current?.click()}
+                className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
+                aria-label={t("profile.changeAvatar")}
+              >
+                <Camera className="w-3.5 h-3.5" />
+              </button>
+              <input
+                ref={avatarInput}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="hidden"
+                onChange={(e) => {
+                  const f = e.target.files?.[0];
+                  if (f) void onAvatarChange(f);
+                  e.currentTarget.value = "";
+                }}
+              />
+            </div>
+            <div className="flex-1 min-w-0 pb-1.5">
+              <div className="text-lg font-extrabold truncate">{profile?.full_name}</div>
+              <div className="text-xs text-muted-foreground truncate">@{profile?.username}</div>
+              <div className="flex items-center gap-2 mt-0.5">
+                <StatusBadge s={profile?.status} />
+                {profile && (
+                  <button type="button" onClick={() => setTierLegendOpen(true)}>
+                    <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />
+                  </button>
+                )}
+              </div>
+              {uploadingAvatar && (
+                <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>
               )}
             </div>
-            {uploadingAvatar && (
-              <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>
-            )}
           </div>
           <button
             type="button"
@@ -592,23 +594,24 @@ export default function Profile() {
               setQuickStatusMsg((profile as any)?.status_message ?? "");
               setQuickStatusOpen(true);
             }}
-            className="block text-center w-full"
+            className="block text-left w-full mt-1.5"
           >
             {(profile as any)?.status_message ? (
-              <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-                <span className="text-xs text-primary font-semibold line-clamp-2">
-                  {(profile as any).status_message}
-                </span>
+              <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)]">
+                <div className="absolute -top-1 left-4 w-2.5 h-2.5 bg-card border-l border-t rounded-sm rotate-45" />
+                <div className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
+                  <span className="text-xs text-primary font-semibold line-clamp-2">
+                    {(profile as any).status_message}
+                  </span>
+                </div>
               </div>
             ) : (
-              <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
+              <div className="ml-[100px] w-fit max-w-[calc(100%-100px)] px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
                 + {t("profile.addStatusLine")}
               </div>
             )}
             {(profile as any)?.bio && (
-              <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto whitespace-pre-wrap">
-                {(profile as any).bio}
-              </p>
+              <p className="text-sm text-muted-foreground mt-1.5 whitespace-pre-wrap">{(profile as any).bio}</p>
             )}
           </button>
         </div>
