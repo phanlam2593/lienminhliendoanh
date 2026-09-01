@@ -240,7 +240,7 @@ export default function Profile() {
 
   const Header = (
     <>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4 mt-6">
         <div className="relative shrink-0">
           <Avatar
             path={profile?.avatar_url}
@@ -270,8 +270,8 @@ export default function Profile() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold truncate">{profile?.full_name}</div>
-          <div className="text-xs text-muted-foreground">@{profile?.username}</div>
-          <div className="flex items-center gap-2 mt-0.5">
+          <div className="text-xs text-muted-foreground mt-0.5">@{profile?.username}</div>
+          <div className="flex items-center gap-2 mt-1.5">
             <StatusBadge s={profile?.status} />
             {profile && (
               <button type="button" onClick={() => setTierLegendOpen(true)}>
