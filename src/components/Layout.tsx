@@ -330,6 +330,31 @@ export function Layout() {
   );
 }
 
+function HeaderMenuRow({
+  icon,
+  label,
+  onClick,
+  danger,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick: () => void;
+  danger?: boolean;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full px-4 py-3.5 flex items-center gap-3 text-sm font-semibold text-left hover:bg-accent transition ${danger ? "text-destructive" : ""}`}
+    >
+      <span className={`w-8 h-8 rounded-full grid place-items-center ${danger ? "bg-destructive/10" : "bg-accent"}`}>
+        {icon}
+      </span>
+      <span className="flex-1">{label}</span>
+      <ChevronRight className="w-4 h-4 text-muted-foreground" />
+    </button>
+  );
+}
+
 function WelcomeScreen() {
   const { t, lang, setLang } = useLanguage();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
