@@ -78,6 +78,8 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "follows":
         // Giờ CHỈ còn follow cá nhân (follow DN đã tách riêng category "follows_business" bên dưới).
         return "/tin-nhan?tab=follows";
+      case "friend_requests":
+        return "/ho-so?friends=1";
       case "follows_business":
         if (id) {
           const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
