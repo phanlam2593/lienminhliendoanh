@@ -17,6 +17,8 @@ import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
 import { StoredImage } from "@/components/StoredImage";
 import { FollowListDialog } from "@/components/FollowListDialog";
+import { FriendButton } from "@/components/FriendButton";
+import { FriendsListDialog } from "@/components/FriendsListDialog";
 import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
