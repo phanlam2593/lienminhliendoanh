@@ -266,7 +266,7 @@ export default function Profile() {
               if (f) void onAvatarChange(f);
               e.currentTarget.value = "";
             }}
-          />{(profile as any)?.status_message ? (<button type="button" onClick={() => { setQuickStatusMsg((profile as any)?.status_message ?? ""); setQuickStatusOpen(true); }} className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"><div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" /><div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" /><div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" /><span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">"{(profile as any).status_message.length > 60 ? (profile as any).status_message.slice(0, 60) + "…" : (profile as any).status_message}"</span></button>) : (<button type="button" onClick={() => { setQuickStatusMsg(""); setQuickStatusOpen(true); }} className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"><span className="relative block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">+ {t("profile.addStatusLine")}</span></button>)}
+          />
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold truncate">{profile?.full_name}</div>
@@ -293,15 +293,15 @@ export default function Profile() {
         }}
         className="mt-2 block text-left w-full"
       >
-        {false && ((profile as any)?.status_message ? (
+        {(profile as any)?.status_message ? (
           <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-            <span className="text-sm text-primary italic font-medium break-words">"{(profile as any).status_message.length > 60 ? (profile as any).status_message.slice(0, 60) + "…" : (profile as any).status_message}"</span>
+            <span className="text-xs text-primary font-semibold line-clamp-2">{(profile as any).status_message}</span>
           </div>
         ) : (
           <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
             + {t("profile.addStatusLine")}
           </div>
-        ))}
+        )}
         {(profile as any)?.bio && (
           <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{(profile as any).bio}</p>
         )}
@@ -314,13 +314,13 @@ export default function Profile() {
           <div className="space-y-2">
             <textarea
               value={quickStatusMsg}
-              onChange={(e) => setQuickStatusMsg(e.target.value.slice(0, 60))}
+              onChange={(e) => setQuickStatusMsg(e.target.value.slice(0, 150))}
               placeholder={t("profile.statusPlaceholder")}
               rows={3}
-              maxLength={60}
+              maxLength={150}
               className="w-full px-3 py-2 rounded-lg border bg-background text-sm resize-none"
             />
-            <div className="text-[10px] text-muted-foreground text-right">{quickStatusMsg.length}/60</div>
+            <div className="text-[10px] text-muted-foreground text-right">{quickStatusMsg.length}/150</div>
             <button
               onClick={saveQuickStatus}
               disabled={quickSaving}
