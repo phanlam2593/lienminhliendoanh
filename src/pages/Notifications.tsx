@@ -33,6 +33,8 @@ const ICONS: Record<string, typeof Bell> = {
   new_offer: Gift,
   deal_claimed: Gift,
   new_follower: UserPlus,
+  friend_request: UserPlus,
+  friend_accepted: UserCheck,
   new_message: MessageSquare,
   business_reply: MessageCircle,
   admin_message: Shield,
