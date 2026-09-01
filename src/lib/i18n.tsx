@@ -4,7 +4,7 @@ export type Lang = "vi" | "en";
 
 // Chỉ dịch "khung app cố định" (nav, nút bấm, nhãn) — KHÔNG dịch nội dung do người
 // dùng tự viết (mô tả DN, đánh giá, tin nhắn...). Thêm khoá mới ở đây khi cần mở rộng.
-const DICT: Record<Lanhg, Record<string, string>> = {
+const DICT: Record<Lang, Record<string, string>> = {
   vi: {
     "nav.home": "Trang chủ",
     "nav.explore": "Khám phá",
