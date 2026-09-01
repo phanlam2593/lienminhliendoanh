@@ -644,9 +644,47 @@ export default function Profile() {
         <FollowStats userId={user.id} />
       </div>
 
-      <div className="px-4 mt-5">
-        <OwnWall userId={user.id} />
+      <div className="px-4 mt-2">
+        <button
+          onClick={() => {
+            setFriendsInitialTab("friends");
+            setFriendsOpen(true);
+          }}
+          className="w-full bg-card rounded-xl py-3 px-4 flex items-center justify-between shadow-sm hover:bg-accent transition"
+        >
+          <span className="text-sm font-semibold flex items-center gap-2">
+            <UserPlus className="w-4 h-4 text-primary" /> {t("friend.friends")}
+          </span>
+          <span className="flex items-center gap-2">
+            {pendingFriendRequests > 0 && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setFriendsInitialTab("requests");
+                  setFriendsOpen(true);
+                }}
+                className="w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold grid place-items-center"
+              >
+                {pendingFriendRequests}
+              </span>
+            )}
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </span>
+        </button>
       </div>
+
+      <div className="px-4 mt-5 space-y-3">
+        <WallComposer onPosted={() => setWallReloadKey((k) => k + 1)} />
+        <OwnWall userId={user.id} reloadKey={wallReloadKey} />
+      </div>
+
+      <FriendsListDialog
+        userId={user.id}
+        open={friendsOpen}
+        onOpenChange={setFriendsOpen}
+        initialTab={friendsInitialTab}
+        onChanged={loadPendingFriendRequests}
+      />
 
       <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
         <DialogContent className="max-w-sm">
