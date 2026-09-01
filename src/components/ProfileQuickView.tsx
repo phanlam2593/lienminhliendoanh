@@ -107,7 +107,7 @@ export function ProfileQuickView({
         ) : (
           <div className="space-y-4">
             <div className="flex flex-col items-center text-center gap-2">
-              <div className="relative"><Avatar path={p.avatar_url} name={p.full_name || p.username} size={84} />{p.status_message && (<div className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[150px] text-left"><div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" /><div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" /><div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" /><span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic">"{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"</span></div>)}</div>
+              <div className="relative"><Avatar path={p.avatar_url} name={p.full_name || p.username} size={84} />{p.status_message && (<div className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[150px] text-left"><div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" /><div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" /><div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" /><span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">"{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"</span></div>)}</div>
               <div>
                 <div className="font-bold text-base">{p.full_name}</div>
                 {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
@@ -116,7 +116,7 @@ export function ProfileQuickView({
                 </div>
                 {false && (p.status_message && (
                   <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm mt-1">
-                    <span className="text-sm text-primary italic font-medium">"{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"</span>
+                    <span className="text-sm text-primary italic font-medium break-words">"{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"</span>
                   </div>
                 ))}
                 {p.bio && <p className="text-sm text-muted-foreground mt-1">{p.bio}</p>}
