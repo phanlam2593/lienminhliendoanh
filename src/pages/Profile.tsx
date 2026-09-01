@@ -613,17 +613,7 @@ export default function Profile() {
             }}
             className="block text-left w-full mt-1.5"
           >
-            {(profile as any)?.status_message ? (
-              <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)]">
-                <div className="absolute -top-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-b-[11px] border-b-border" />
-                <div className="absolute -top-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-card" />
-                <div className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-                  <span className="text-xs text-primary font-semibold line-clamp-2">
-                    {(profile as any).status_message}
-                  </span>
-                </div>
-              </div>
-            ) : (
+            {!(profile as any)?.status_message && (
               <div className="ml-[100px] w-fit max-w-[calc(100%-100px)] px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
                 + {t("profile.addStatusLine")}
               </div>

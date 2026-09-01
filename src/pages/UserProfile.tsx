@@ -253,23 +253,23 @@ export default function UserProfile() {
         )}
         <div className="px-4 -mt-10">
           <div className="flex items-end gap-3">
-            <div className="ring-4 ring-background rounded-full shrink-0">
+            <div className="relative ring-4 ring-background rounded-full shrink-0">
               <Avatar path={p.avatar_url} name={p.full_name} size={88} />
+              {p.status_message && (
+                <div className="absolute bottom-[calc(100%-6px)] left-2 z-10 w-fit max-w-[180px]">
+                  <div className="absolute -bottom-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[11px] border-t-border" />
+                  <div className="absolute -bottom-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-card" />
+                  <p className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-sm text-primary italic font-medium line-clamp-2">
+                    "{p.status_message}"
+                  </p>
+                </div>
+              )}
             </div>
             <div className="flex-1 min-w-0 pb-1.5">
               <div className="text-lg font-extrabold truncate">{p.full_name}</div>
               {p.username && <div className="text-xs text-muted-foreground truncate">@{p.username}</div>}
             </div>
           </div>
-          {p.status_message && (
-            <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)] mt-1.5">
-              <div className="absolute -top-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-b-[11px] border-b-border" />
-              <div className="absolute -top-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-card" />
-              <p className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-sm text-primary italic font-medium">
-                "{p.status_message}"
-              </p>
-            </div>
-          )}
           {p.bio && <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap">{p.bio}</p>}
           <div className="flex items-center gap-4 text-xs mt-3 bg-card rounded-xl px-3 py-2.5 shadow-sm">
             <button onClick={() => setListOpen("followers")} className="hover:text-primary">
