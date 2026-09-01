@@ -250,24 +250,33 @@ export default function UserProfile() {
             </PopoverContent>
           </Popover>
         )}
-        <div className="px-5 -mt-10 flex flex-col items-center text-center gap-2">
-          <div className="ring-4 ring-background rounded-full">
-            <Avatar path={p.avatar_url} name={p.full_name} size={88} />
+        <div className="px-4 -mt-10">
+          <div className="flex items-end gap-3">
+            <div className="ring-4 ring-background rounded-full shrink-0">
+              <Avatar path={p.avatar_url} name={p.full_name} size={88} />
+            </div>
+            <div className="flex-1 min-w-0 pb-1.5">
+              <div className="text-lg font-extrabold truncate">{p.full_name}</div>
+              {p.username && <div className="text-xs text-muted-foreground truncate">@{p.username}</div>}
+            </div>
           </div>
-          <div>
-            <div className="text-lg font-extrabold">{p.full_name}</div>
-            {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
-            {p.status_message && <p className="text-sm text-primary italic mt-1 font-medium">"{p.status_message}"</p>}
-          </div>
-          {p.bio && <p className="text-sm text-muted-foreground max-w-sm whitespace-pre-wrap">{p.bio}</p>}
-          <div className="flex gap-4 text-xs mt-1">
+          {p.status_message && (
+            <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)] mt-1.5">
+              <div className="absolute -top-1 left-4 w-2.5 h-2.5 bg-card border-l border-t rounded-sm rotate-45" />
+              <p className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-sm text-primary italic font-medium">
+                "{p.status_message}"
+              </p>
+            </div>
+          )}
+          {p.bio && <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap">{p.bio}</p>}
+          <div className="flex items-center gap-4 text-xs mt-3 bg-card rounded-xl px-3 py-2.5 shadow-sm">
             <button onClick={() => setListOpen("followers")} className="hover:text-primary">
               <span className="font-bold text-foreground">{followers}</span> {t("follow.followersLabel")}
             </button>
             <button onClick={() => setListOpen("following")} className="hover:text-primary">
               <span className="font-bold text-foreground">{followingCount}</span> {t("follow.followingLabel")}
             </button>
-            <button onClick={() => setFriendsOpen(true)} className="hover:text-primary">
+            <button onClick={() => setFriendsOpen(true)} className="hover:text-primary ml-auto">
               <span className="font-bold text-foreground">{friendsCount}</span> {t("friend.friends")}
             </button>
           </div>
@@ -277,15 +286,15 @@ export default function UserProfile() {
               targetName={p.full_name}
               disabled={iBlockedThem}
               onChanged={loadFriendsCount}
-              className="w-full mt-1"
+              className="w-full mt-2"
             />
           )}
           {!isMe && user && (
-            <div className="flex gap-2 w-full mt-1">
+            <div className="flex gap-2 w-full mt-2">
               <button
                 onClick={toggleFollow}
                 disabled={busy || iBlockedThem}
-                className={`flex-1 h-10 rounded-xl text-sm font-semibold disabled:opacity-50 ${following ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"}`}
+                className={`flex-1 h-10 rounded-xl text-sm font-semibold disabled:opacity-50 ${following ? "bg-muted text-foreground" : "bg-primary/10 text-primary"}`}
               >
                 {following ? t("common.following") : t("common.follow")}
               </button>
@@ -299,11 +308,11 @@ export default function UserProfile() {
             </div>
           )}
           {iBlockedThem && (
-            <div className="w-full text-xs text-muted-foreground bg-muted/60 rounded-lg px-3 py-2">
+            <div className="w-full text-xs text-muted-foreground bg-muted/60 rounded-lg px-3 py-2 mt-2">
               {t("block.bannerBlocked")}
             </div>
           )}
-          <div className="w-full space-y-1.5 text-sm text-left mt-1">
+          <div className="w-full space-y-1.5 text-sm mt-2">
             {p.email && (
               <a href={`mailto:${p.email}`} className="flex items-center gap-2 text-muted-foreground">
                 <Mail className="w-4 h-4" />
