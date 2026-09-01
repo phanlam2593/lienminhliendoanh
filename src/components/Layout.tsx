@@ -55,6 +55,7 @@ export function Layout() {
     { to: "/", icon: Home, label: t("nav.home") },
     { to: "/kham-pha", icon: Search, label: t("nav.explore") },
     { to: "/cong-dong", icon: Users, label: t("nav.community") },
+    { to: "/ho-so", icon: User, label: t("nav.profileShort") },
   ];
   const tabs = isAdmin
     ? [
@@ -63,9 +64,17 @@ export function Layout() {
         { to: "/admin", icon: Settings, label: t("nav.admin") },
         { to: "/cong-dong", icon: Users, label: t("nav.community") },
         { to: "/questline", icon: Target, label: "Quest" },
+        { to: "/ho-so", icon: User, label: t("nav.profileShort") },
       ]
     : baseTabs;
-  const gridClass = tabs.length === 5 ? "grid-cols-5" : tabs.length === 4 ? "grid-cols-4" : "grid-cols-3";
+  const gridClass =
+    tabs.length === 6
+      ? "grid-cols-6"
+      : tabs.length === 5
+        ? "grid-cols-5"
+        : tabs.length === 4
+          ? "grid-cols-4"
+          : "grid-cols-3";
 
   const showWelcome = !loading && !user && !hide;
   const isPending = profile?.status === "pending" && !isAdmin;
