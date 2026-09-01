@@ -295,7 +295,7 @@ export default function Profile() {
       >
         {(profile as any)?.status_message ? (
           <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-            <span className="text-xs text-primary font-semibold line-clamp-2">{(profile as any).status_message}</span>
+            <span className="text-sm text-primary italic font-medium line-clamp-2">"{(profile as any).status_message}"</span>
           </div>
         ) : (
           <div className="inline-block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
