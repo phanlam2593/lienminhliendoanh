@@ -13,6 +13,12 @@ import {
   MessageCircle,
   Building2,
   Target,
+  User,
+  Briefcase,
+  HelpCircle,
+  Flag,
+  LogOut,
+  ChevronRight,
 } from "lucide-react";
 import { initInstallPrompt, triggerInstall, dismissInstallBanner } from "@/lib/pwa";
 import { Download, X as XIcon } from "lucide-react";
@@ -358,9 +364,7 @@ function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
         <Clock className="w-8 h-8 text-yellow-600" />
       </div>
       <h1 className="text-xl font-bold">{t("pending.title")}</h1>
-      <p className="text-sm text-muted-foreground max-w-xs">
-        {t("pending.body")}
-      </p>
+      <p className="text-sm text-muted-foreground max-w-xs">{t("pending.body")}</p>
       <div className="flex gap-2">
         <Link to="/ho-so" className="px-4 py-2 rounded-xl bg-accent text-sm font-semibold">
           {t("nav.profileShort")}
