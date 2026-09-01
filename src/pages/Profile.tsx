@@ -43,6 +43,7 @@ import {
   ShieldCheck,
   MoreVertical,
   MessageSquare,
+  UserPlus,
 } from "lucide-react";
 
 import { uploadImage } from "@/lib/upload";
