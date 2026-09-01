@@ -115,12 +115,16 @@ export function ProfileQuickView({
                   <MemberLevelBadge points={p.points} size="md" isAdmin={p.role === "admin"} />
                 </div>
                 {p.status_message && (
-                  <p className="text-sm text-primary italic mt-1 font-medium">"{p.status_message}"</p>
+                  <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm mt-1">
+                    <span className="text-sm text-primary italic font-medium line-clamp-2">"{p.status_message}"</span>
+                  </div>
                 )}
                 {p.bio && <p className="text-sm text-muted-foreground mt-1">{p.bio}</p>}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
-                <span className="px-2 py-0.5 rounded-full bg-muted">{t("profileQuick.followersCount", { n: followers })}</span>
+                <span className="px-2 py-0.5 rounded-full bg-muted">
+                  {t("profileQuick.followersCount", { n: followers })}
+                </span>
               </div>
             </div>
 
