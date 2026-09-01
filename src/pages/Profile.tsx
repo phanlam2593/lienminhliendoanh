@@ -572,6 +572,22 @@ export default function Profile() {
                   e.currentTarget.value = "";
                 }}
               />
+              {(profile as any)?.status_message && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuickStatusMsg((profile as any)?.status_message ?? "");
+                    setQuickStatusOpen(true);
+                  }}
+                  className="absolute bottom-[calc(100%-6px)] left-2 z-10 w-fit max-w-[180px] text-left"
+                >
+                  <div className="absolute -bottom-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[11px] border-t-border" />
+                  <div className="absolute -bottom-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-card" />
+                  <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold line-clamp-2">
+                    {(profile as any).status_message}
+                  </span>
+                </button>
+              )}
             </div>
             <div className="flex-1 min-w-0 pb-1.5">
               <div className="text-lg font-extrabold truncate">{profile?.full_name}</div>
@@ -597,17 +613,7 @@ export default function Profile() {
             }}
             className="block text-left w-full mt-1.5"
           >
-            {(profile as any)?.status_message ? (
-              <div className="relative ml-[100px] w-fit max-w-[calc(100%-100px)]">
-                <div className="absolute -top-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-b-[11px] border-b-border" />
-                <div className="absolute -top-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-b-[10px] border-b-card" />
-                <div className="relative px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm">
-                  <span className="text-xs text-primary font-semibold line-clamp-2">
-                    {(profile as any).status_message}
-                  </span>
-                </div>
-              </div>
-            ) : (
+            {!(profile as any)?.status_message && (
               <div className="ml-[100px] w-fit max-w-[calc(100%-100px)] px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
                 + {t("profile.addStatusLine")}
               </div>
