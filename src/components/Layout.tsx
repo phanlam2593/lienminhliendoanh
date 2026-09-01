@@ -48,6 +48,8 @@ export function Layout() {
   const { unread } = useNotifications();
   const unreadMsgs = useUnreadMessages();
   const hide = pathname.startsWith("/auth");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const baseTabs = [
     { to: "/", icon: Home, label: t("nav.home") },
