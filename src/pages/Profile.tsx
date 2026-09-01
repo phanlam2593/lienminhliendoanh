@@ -581,8 +581,9 @@ export default function Profile() {
                   }}
                   className="absolute bottom-[calc(100%-6px)] left-2 z-10 w-fit max-w-[180px] text-left"
                 >
-                  <div className="absolute -bottom-[11px] left-4 w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[11px] border-t-border" />
-                  <div className="absolute -bottom-[10px] left-[17px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-card" />
+                  <div className="absolute -bottom-[13px] left-3 w-2 h-2 rounded-full bg-card border border-border" />
+                  <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
+                  <div className="absolute -bottom-[26px] left-5 w-1 h-1 rounded-full bg-card border border-border" />
                   <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold line-clamp-2">
                     {(profile as any).status_message}
                   </span>
