@@ -122,7 +122,17 @@ export default function Profile() {
     setBio((profile as any)?.bio ?? "");
     setSM((profile as any)?.status_message ?? "");
     void loadBiz();
+    void loadPendingFriendRequests();
   }, [user?.id, profile?.id]);
+
+  // Mở sẵn dialog bạn bè (tab Lời mời) khi bấm vào từ thông báo /ho-so?friends=1
+  useEffect(() => {
+    if (searchParams.get("friends") === "1") {
+      setFriendsInitialTab("requests");
+      setFriendsOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Sync state if URL changes (e.g., user clicks nav link while on /ho-so)
   useEffect(() => {
