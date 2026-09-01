@@ -572,7 +572,7 @@ export default function Profile() {
                   e.currentTarget.value = "";
                 }}
               />
-              {(profile as any)?.status_message && (
+              {(profile as any)?.status_message ? (
                 <button
                   type="button"
                   onClick={() => {
@@ -586,6 +586,19 @@ export default function Profile() {
                   <div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" />
                   <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold line-clamp-2">
                     {(profile as any).status_message}
+                  </span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setQuickStatusMsg("");
+                    setQuickStatusOpen(true);
+                  }}
+                  className="absolute bottom-[calc(100%-6px)] left-12 z-10 w-44 text-left"
+                >
+                  <span className="relative block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
+                    + {t("profile.addStatusLine")}
                   </span>
                 </button>
               )}
@@ -614,11 +627,6 @@ export default function Profile() {
             }}
             className="block text-left w-full mt-1.5"
           >
-            {!(profile as any)?.status_message && (
-              <div className="ml-[100px] w-fit max-w-[calc(100%-100px)] px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
-                + {t("profile.addStatusLine")}
-              </div>
-            )}
             {(profile as any)?.bio && (
               <p className="text-sm text-muted-foreground mt-1.5 whitespace-pre-wrap">{(profile as any).bio}</p>
             )}
