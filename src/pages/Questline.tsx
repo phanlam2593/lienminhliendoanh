@@ -37,6 +37,29 @@ const QUESTS: Quest[] = [
     expect: "Hiện ngay dưới avatar.",
   },
   {
+    id: "acc-status-wrap",
+    category: "Tài khoản & Hồ sơ",
+    title: "Dòng trạng thái chữ dài dính liền không xuống dòng được",
+    action:
+      "Đặt dòng trạng thái là 1 chuỗi dài không có dấu cách (gõ liền một mạch, ví dụ toàn dấu chấm), lưu, xem lại ở trang chủ Hồ sơ.",
+    expect: "Chữ tự xuống dòng gọn trong khung bong bóng, không tràn ra ngoài khung hay đè lên chữ/nút khác.",
+  },
+  {
+    id: "acc-status-quickview",
+    category: "Tài khoản & Hồ sơ",
+    title: "Bong bóng trạng thái trong 'Xem nhanh hồ sơ'",
+    action: "Bấm vào tên/avatar 1 người có dòng trạng thái (trong đánh giá, chat...) để mở popup 'Xem nhanh'.",
+    expect: "Khung bong bóng phía trên avatar có khoảng cách vừa đủ, không tràn/đè lên tiêu đề popup phía trên.",
+  },
+  {
+    id: "acc-status-personal",
+    category: "Tài khoản & Hồ sơ",
+    title: "Dòng trạng thái trong trang 'Hồ sơ cá nhân' (Cài đặt)",
+    action: "Vào Hồ sơ → Hồ sơ cá nhân (trang chỉnh sửa) → bấm dòng trạng thái, gõ câu dài hơn 60 ký tự, lưu.",
+    expect:
+      "Gõ được tối đa 150 ký tự, hiển thị dạng khung chữ đơn giản (không có đuôi bong bóng chấm tròn), tối đa 2 dòng rồi cắt bớt.",
+  },
+  {
     id: "acc-bio",
     category: "Tài khoản & Hồ sơ",
     title: "Sửa thông tin cá nhân",
@@ -1477,7 +1500,8 @@ const QUESTS: Quest[] = [
     category: "Cập nhật phiên 01/09 (Pháp lý)",
     title: "Chính sách bảo mật trích đúng luật mới",
     action: "Mở trang Chính sách bảo mật → xem phần căn cứ pháp lý & xử lý sự cố.",
-    expect: "Ghi rõ Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 + Nghị định 356/2025/NĐ-CP, KHÔNG còn nhắc Nghị định 13/2023/NĐ-CP cũ; có nhắc thời hạn 72 giờ báo cơ quan chức năng khi có sự cố.",
+    expect:
+      "Ghi rõ Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 + Nghị định 356/2025/NĐ-CP, KHÔNG còn nhắc Nghị định 13/2023/NĐ-CP cũ; có nhắc thời hạn 72 giờ báo cơ quan chức năng khi có sự cố.",
   },
   {
     id: "0901-legal-membership-text",
