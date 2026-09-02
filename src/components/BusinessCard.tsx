@@ -25,8 +25,10 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
     >
       <div className="relative w-full" style={{ height: 200 }}>
         <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-        <span className="absolute top-2 left-2 inline-flex items-center bg-emerald-500 text-white px-2 py-0.5 rounded-full text-[10px] font-semibold">
-          {t(`type.${b.type}`)}
+        <span
+          className={`absolute top-2 left-2 inline-flex items-center text-white px-2 py-0.5 rounded-full text-[10px] font-semibold ${b.is_online ? "bg-sky-500" : "bg-emerald-500"}`}
+        >
+          {b.is_online ? t("online.badge") : t(`type.${b.type}`)}
         </span>
         {typeof b.rating === "number" && b.reviewCount! > 0 && (
           <span className="absolute top-2 right-2 bg-white/90 backdrop-blur px-2.5 py-1 rounded-full text-[11px] font-semibold text-emerald-700 z-10">
@@ -35,13 +37,7 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
           </span>
         )}
         <div className="absolute bottom-2 left-2">
-          {b.is_online ? (
-            <span className="inline-flex items-center gap-1 rounded-full font-semibold text-[10px] px-2 py-0.5 bg-sky-500 text-white">
-              {t("online.badge")}
-            </span>
-          ) : (
-            <OpenBadge open={b.hours_open} close={b.hours_close} />
-          )}
+          {!b.is_online && <OpenBadge open={b.hours_open} close={b.hours_close} />}
         </div>
       </div>
       <div className="p-3 space-y-1.5">
