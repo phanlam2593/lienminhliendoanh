@@ -241,17 +241,13 @@ export default function Businesses() {
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        {(["all", ...BUSINESS_TYPES, "online"] as const).map((bt) => (
+        {(["all", ...BUSINESS_TYPES.filter((x) => x !== "other"), "online", "other"] as const).map((bt) => (
           <button
             key={bt}
             onClick={() => setFilterKey(bt as any)}
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border",
-              filterKey === bt
-                ? bt === "online"
-                  ? "bg-sky-500 text-white border-sky-500"
-                  : "bg-primary text-primary-foreground border-primary"
-                : "bg-card",
+              filterKey === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
             )}
           >
             {bt === "all" ? t("common.all") : bt === "online" ? t("online.badge") : t(`type.${bt}`)}
