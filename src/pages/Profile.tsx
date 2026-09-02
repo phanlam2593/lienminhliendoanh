@@ -585,7 +585,11 @@ export default function Profile() {
                   <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
                   <div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" />
                   <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">
-                    "{(profile as any).status_message.length > 60 ? (profile as any).status_message.slice(0, 60) + "…" : (profile as any).status_message}"
+                    "
+                    {(profile as any).status_message.length > 60
+                      ? (profile as any).status_message.slice(0, 60) + "…"
+                      : (profile as any).status_message}
+                    "
                   </span>
                 </button>
               ) : (
@@ -861,14 +865,8 @@ function BusinessEditor({
   };
 
   const save = async () => {
-    if (!/^[A-Za-z0-9]{4,8}$/.test(pin)) {
-      setPinError(true);
-      toast.error(t("bizForm.pinRequired"));
-      pinInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-      pinInputRef.current?.focus();
-      return;
-    }
-    setPinError(false);
+    const pinValid = /^[A-Za-z0-9]{4,8}$/.test(pin);
+    setPinError(!pinValid);
     setSaving(true);
     const wasRejected = biz.status === "rejected";
     const [{ error }, { error: pinError }] = await Promise.all([
@@ -893,11 +891,25 @@ function BusinessEditor({
           ...(wasRejected ? { status: "pending", admin_note: null } : {}),
         })
         .eq("id", biz.id),
-      supabase.from("business_pins").upsert({ business_id: biz.id, pin, updated_at: new Date().toISOString() }),
+      pinValid
+        ? supabase.from("business_pins").upsert({ business_id: biz.id, pin, updated_at: new Date().toISOString() })
+        : Promise.resolve({ error: null }),
     ]);
     setSaving(false);
-    if (error || pinError) {
-      toast.error((error || pinError)?.message ?? t("common.errorOccurred"));
+    if (error) {
+      toast.error(error.message ?? t("common.errorOccurred"));
+      return;
+    }
+    if (!pinValid) {
+      toast.error(t("bizForm.pinRequired"));
+      pinInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      pinInputRef.current?.focus();
+      onSaved();
+      return;
+    }
+    if (pinError) {
+      toast.error(pinError.message ?? t("common.errorOccurred"));
+      onSaved();
       return;
     }
     toast.success(wasRejected ? t("bizForm.savedResubmitted") : t("bizForm.saved"));
