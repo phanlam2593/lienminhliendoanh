@@ -704,7 +704,7 @@ export default function BusinessDetail() {
       <Dialog open={!!claimsListOffer} onOpenChange={(v) => !v && setClaimsListOffer(null)}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>{t("biz.claimersOf", { title: claimsListOffer?.title ?? "" })}</DialogTitle>
+            <DialogTitle>{t("biz.claimersOf", { name: claimsListOffer?.title ?? "" })}</DialogTitle>
           </DialogHeader>
           {claimsListOffer && <OfferClaimsList offerId={claimsListOffer.id} onOpenUser={setQuickViewUser} />}
         </DialogContent>
