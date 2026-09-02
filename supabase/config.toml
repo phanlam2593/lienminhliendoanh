@@ -12,3 +12,5 @@ verify_jwt = true
 
 [functions.send-push]
 verify_jwt = false
+[functions.register-push]
+verify_jwt = false
