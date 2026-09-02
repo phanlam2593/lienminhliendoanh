@@ -15,20 +15,7 @@ Deno.serve(async (req) => {
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    // Xác thực người gọi bằng chính JWT của họ (không tự nhận user_id từ body)
-    const userClient = createClient(supabaseUrl, anonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: authData, error: authErr } = await userClient.auth.getUser();
-    if (authErr || !authData?.user) {
-      return new Response(JSON.stringify({ error: "unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    const userId = authData.user.id;
-
-    const { endpoint, p256dh, auth } = await req.json();
+    const { endpoint, p256dh, auth, oldEndpoint } = await req.json();
     if (!endpoint || !p256dh || !auth) {
       return new Response(JSON.stringify({ error: "missing fields" }), {
         status: 400,
@@ -36,9 +23,37 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Quyền service-role: xoá bất kỳ row nào đang giữ endpoint này (kể cả của user khác)
     const admin = createClient(supabaseUrl, serviceKey);
+
+    let userId = null;
+    if (authHeader) {
+      const userClient = createClient(supabaseUrl, anonKey, {
+        global: { headers: { Authorization: authHeader } },
+      });
+      const { data: authData } = await userClient.auth.getUser();
+      if (authData?.user) userId = authData.user.id;
+    }
+
+    if (!userId && oldEndpoint) {
+      const { data: oldRow } = await admin
+        .from("push_subscriptions")
+        .select("user_id")
+        .eq("endpoint", oldEndpoint)
+        .maybeSingle();
+      if (oldRow?.user_id) userId = oldRow.user_id;
+    }
+
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     await admin.from("push_subscriptions").delete().eq("endpoint", endpoint);
+    if (oldEndpoint && oldEndpoint !== endpoint) {
+      await admin.from("push_subscriptions").delete().eq("endpoint", oldEndpoint);
+    }
 
     const { error: insertErr } = await admin
       .from("push_subscriptions")
