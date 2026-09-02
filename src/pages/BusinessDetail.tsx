@@ -761,7 +761,7 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
         claims.map((c: any) => ({
           user_id: c.user_id,
           claimed_at: c.claimed_at,
-          full_name: pMap.get(c.user_id)?.full_name ?? "Ẩn danh",
+          full_name: pMap.get(c.user_id)?.full_name ?? t("common.anonymous"),
           avatar_url: pMap.get(c.user_id)?.avatar_url ?? null,
         })),
       );
@@ -815,7 +815,7 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
               <Avatar path={r.avatar_url} name={r.full_name} size={32} />
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold truncate">{r.full_name}</div>
-                <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at)}</div>
+                <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at, useLanguage().lang)}</div>
               </div>
             </button>
             {!isMe && user && (
@@ -920,8 +920,10 @@ function ReviewItem({
           onClick={() => onOpenUser(r.user_id)}
         />
         <button onClick={() => onOpenUser(r.user_id)} className="flex-1 min-w-0 text-left">
-          <div className="text-sm font-semibold truncate hover:text-primary">{r.profile?.full_name || "Ẩn danh"}</div>
-          <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at)}</div>
+          <div className="text-sm font-semibold truncate hover:text-primary">
+            {r.profile?.full_name || t("common.anonymous")}
+          </div>
+          <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at, useLanguage().lang)}</div>
         </button>
         <div className="flex text-yellow-500">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -983,7 +985,7 @@ function ReviewItem({
               {editBusy ? t("common.saving") : t("common.save")}
             </button>
             <button onClick={() => setEditOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
-              Hủy
+              {t("common.cancel")}
             </button>
           </div>
         </div>
@@ -1003,7 +1005,7 @@ function ReviewItem({
               <div className="flex items-center gap-1.5">
                 <Avatar path={rep.profile?.avatar_url} name={rep.profile?.full_name} size={20} />
                 <span className="font-semibold truncate">{rep.profile?.full_name || t("bizQuick.owner")}</span>
-                <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at)}</span>
+                <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at, useLanguage().lang)}</span>
                 {(isAdmin || rep.user_id === myId) && (
                   <button
                     onClick={() => onDeleteReply(rep.id)}
