@@ -364,16 +364,12 @@ export default function BusinessDetail() {
             <h1 className="text-2xl font-extrabold">{b.name}</h1>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs bg-accent text-accent-foreground px-2.5 py-1 rounded-full font-semibold">
-              {t(`type.${b.type}`)}
+            <span
+              className={`text-xs px-2.5 py-1 rounded-full font-semibold ${b.is_online ? "bg-sky-500 text-white" : "bg-accent text-accent-foreground"}`}
+            >
+              {b.is_online ? t("online.badge") : t(`type.${b.type}`)}
             </span>
-            {b.is_online ? (
-              <span className="text-xs bg-sky-500 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
-                {t("online.badge")}
-              </span>
-            ) : (
-              <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />
-            )}
+            {!b.is_online && <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />}
             {reviewTotal > 0 && (
               <span className="text-xs bg-black/70 text-white px-2.5 py-1 rounded-full font-semibold inline-flex items-center gap-1">
                 <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" /> {avgRating.toFixed(1)} ({reviewTotal})
