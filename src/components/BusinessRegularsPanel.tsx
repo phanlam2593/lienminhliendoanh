@@ -19,7 +19,10 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 function tierOf(visits: number): { labelKey: string; className: string } {
   if (visits >= 5)
-    return { labelKey: "regularsPanel.tierVip", className: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400" };
+    return {
+      labelKey: "regularsPanel.tierVip",
+      className: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400",
+    };
   if (visits >= 2) return { labelKey: "regularsPanel.tierLoyal", className: "bg-primary/10 text-primary" };
   return { labelKey: "regularsPanel.tierNew", className: "bg-muted text-muted-foreground" };
 }
@@ -103,25 +106,21 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
 
   return (
     <div className="border-t pt-3 space-y-3">
-      <div className="text-xs font-semibold text-muted-foreground">
-        {t("regularsPanel.intro")}
-      </div>
+      <div className="text-xs font-semibold text-muted-foreground">{t("regularsPanel.intro")}</div>
 
       <div className="grid grid-cols-2 gap-2">
         <div className="bg-accent/50 rounded-xl p-3 text-center">
           <div className="text-lg font-extrabold text-primary">{rows.length}</div>
-          <div className="text-[11px] text-muted-foreground">{t("regularsPanel.total")}</div>
+          <div className="text-[11px] text-muted-foreground">{t("regularsPanel.total", { n: rows.length })}</div>
         </div>
         <div className="bg-accent/50 rounded-xl p-3 text-center">
           <div className="text-lg font-extrabold text-primary">{newThisWeek}</div>
-          <div className="text-[11px] text-muted-foreground">{t("regularsPanel.newThisWeek")}</div>
+          <div className="text-[11px] text-muted-foreground">{t("regularsPanel.newThisWeek", { n: newThisWeek })}</div>
         </div>
       </div>
 
       {rows.length === 0 ? (
-        <div className="text-xs text-muted-foreground py-2">
-          {t("regularsPanel.empty")}
-        </div>
+        <div className="text-xs text-muted-foreground py-2">{t("regularsPanel.empty")}</div>
       ) : (
         <ul className="space-y-1.5">
           {rows.map((r) => {
@@ -132,7 +131,9 @@ export function BusinessRegularsPanel({ businessId }: { businessId: string }) {
                   <Avatar path={r.avatar_url} name={r.full_name || r.username} size={32} />
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <div className="text-xs font-semibold truncate">{r.full_name || r.username || t("common.anonymous")}</div>
+                      <div className="text-xs font-semibold truncate">
+                        {r.full_name || r.username || t("common.anonymous")}
+                      </div>
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold shrink-0 ${tier.className}`}
                       >
