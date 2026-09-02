@@ -25,9 +25,7 @@ export function BusinessCard({ b }: { b: BusinessCardData }) {
     >
       <div className="relative w-full" style={{ height: 200 }}>
         <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-        <span
-          className={`absolute top-2 left-2 inline-flex items-center text-white px-2 py-0.5 rounded-full text-[10px] font-semibold ${b.is_online ? "bg-sky-500" : "bg-emerald-500"}`}
-        >
+        <span className="absolute top-2 left-2 inline-flex items-center text-white px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500">
           {b.is_online ? t("online.badge") : t(`type.${b.type}`)}
         </span>
         {typeof b.rating === "number" && b.reviewCount! > 0 && (
