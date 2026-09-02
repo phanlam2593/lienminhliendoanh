@@ -364,9 +364,7 @@ export default function BusinessDetail() {
             <h1 className="text-2xl font-extrabold">{b.name}</h1>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span
-              className={`text-xs px-2.5 py-1 rounded-full font-semibold ${b.is_online ? "bg-sky-500 text-white" : "bg-accent text-accent-foreground"}`}
-            >
+            <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-accent text-accent-foreground">
               {b.is_online ? t("online.badge") : t(`type.${b.type}`)}
             </span>
             {!b.is_online && <OpenBadge open={b.hours_open} close={b.hours_close} showHours size="md" />}
