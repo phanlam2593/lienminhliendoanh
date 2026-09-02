@@ -69,8 +69,7 @@ export default function Businesses() {
 
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
-  const [filterKey, setFilterKey] = useState<BusinessType | "all">("all");
-  const [onlineOnly, setOnlineOnly] = useState(false);
+  const [filterKey, setFilterKey] = useState<BusinessType | "all" | "online">("all");
   const [sort, setSort] = useState<SortKey>("newest");
   const [area, setArea] = useState<string>("all");
   const [areaCounts, setAreaCounts] = useState<[string, number][]>([]);
@@ -95,8 +94,8 @@ export default function Businesses() {
   // để 2 chế độ luôn khớp cùng 1 bộ lọc loại hình/online/tìm kiếm đang chọn.
   const applyFilters = (query: any) => {
     let q2 = query;
-    if (onlineOnly) q2 = q2.eq("is_online", true);
-    if (filterKey !== "all") q2 = q2.eq("type", filterKey);
+    if (filterKey === "online") q2 = q2.eq("is_online", true);
+    else if (filterKey !== "all") q2 = q2.eq("type", filterKey);
     if (debouncedQ) q2 = q2.ilike("name_unaccent", `%${normalizeVi(debouncedQ)}%`);
     return q2;
   };
@@ -154,7 +153,7 @@ export default function Businesses() {
     setPage(0);
     setLoading(true);
     void loadPage(0, false);
-  }, [filterKey, onlineOnly, area, debouncedQ, sort]);
+  }, [filterKey, area, debouncedQ, sort]);
 
   useEffect(() => {
     if (viewMode !== "map") return;
@@ -163,7 +162,7 @@ export default function Businesses() {
       setMapItems(rows);
       setLoading(false);
     });
-  }, [viewMode, filterKey, onlineOnly, debouncedQ]);
+  }, [viewMode, filterKey, debouncedQ]);
 
   useEffect(() => {
     if (sort !== "nearest" || !myPos) return;
@@ -178,7 +177,7 @@ export default function Businesses() {
       setHasMore(false);
       setLoading(false);
     });
-  }, [sort, myPos, radius, filterKey, onlineOnly, debouncedQ]);
+  }, [sort, myPos, radius, filterKey, debouncedQ]);
 
   const loadMore = () => {
     const next = page + 1;
@@ -242,29 +241,24 @@ export default function Businesses() {
         />
       </div>
       <div className="flex flex-wrap gap-2">
-        {(["all", ...BUSINESS_TYPES] as const).map((bt) => (
+        {(["all", ...BUSINESS_TYPES, "online"] as const).map((bt) => (
           <button
             key={bt}
             onClick={() => setFilterKey(bt as any)}
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border",
-              filterKey === bt ? "bg-primary text-primary-foreground border-primary" : "bg-card",
+              filterKey === bt
+                ? bt === "online"
+                  ? "bg-sky-500 text-white border-sky-500"
+                  : "bg-primary text-primary-foreground border-primary"
+                : "bg-card",
             )}
           >
-            {bt === "all" ? t("common.all") : t(`type.${bt}`)}
+            {bt === "all" ? t("common.all") : bt === "online" ? t("online.badge") : t(`type.${bt}`)}
           </button>
         ))}
-        <button
-          onClick={() => setOnlineOnly((v) => !v)}
-          className={cn(
-            "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap border",
-            onlineOnly ? "bg-sky-500 text-white border-sky-500" : "bg-card",
-          )}
-        >
-          {t("online.badge")}
-        </button>
       </div>
-      {sort !== "nearest" && (
+      {filterKey !== "online" && sort !== "nearest" && (
         <div className="flex items-center gap-2 flex-wrap">
           <label className="text-xs font-semibold text-muted-foreground">{t("explore.area")}</label>
           <select
