@@ -128,6 +128,17 @@ export default function BusinessDetail() {
     void supabase.rpc("increment_business_view", { _business_id: id }); // ← thêm dòng này
   };
 
+  // Nạp lại rating trung bình + tổng số review — gọi sau khi viết/sửa/xoá review để
+  // badge sao ở đầu trang không bị cũ (trước đây chỉ loadReviews() nên avgRating đứng yên).
+  const refreshStats = async () => {
+    const { data: stats } = await supabase
+      .from("business_card_stats")
+      .select("rating, review_count")
+      .eq("business_id", id)
+      .maybeSingle();
+    setAvgRating(Number((stats as any)?.rating ?? 0));
+  };
+
   const loadReviews = async (pageNum: number, append: boolean) => {
     setReviewLoadingMore(true);
     const from = pageNum * REVIEW_PAGE_SIZE;
@@ -245,6 +256,7 @@ export default function BusinessDetail() {
       setRating(5);
       if (reviewImage) URL.revokeObjectURL(reviewImage.previewUrl);
       setReviewImage(null);
+      void refreshStats();
       setReviewPage(0);
       void loadReviews(0, false);
     } catch (e: any) {
@@ -266,6 +278,7 @@ export default function BusinessDetail() {
     invalidateBusinesses(id);
     setReviewPage(0);
     void loadReviews(0, false);
+    void refreshStats();
   };
 
   const deleteReply = async (rid: string) => {
@@ -322,6 +335,7 @@ export default function BusinessDetail() {
               onReplied={() => {
                 setReviewPage(0);
                 void loadReviews(0, false);
+                void refreshStats();
               }}
             />
           ))}
