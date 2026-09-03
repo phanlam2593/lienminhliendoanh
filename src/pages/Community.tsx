@@ -69,6 +69,7 @@ export default function Community() {
   const onlineUsers = useOnlineUsers();
   const setMyChannel = useSetMyChannel();
   const [msgs, setMsgs] = useState<Msg[]>([]);
+  const [msgsLoading, setMsgsLoading] = useState(true);
   const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
   const [msgHasMore, setMsgHasMore] = useState(true);
   const [loadingOlderMsgs, setLoadingOlderMsgs] = useState(false);
@@ -291,6 +292,7 @@ export default function Community() {
     const { data } = await q;
     const list = ((data ?? []) as Msg[]).reverse();
     setMsgs(list);
+    setMsgsLoading(false);
     setMsgHasMore(list.length === limit);
     void enrichProfiles([...new Set(list.map((m) => m.user_id))]);
     void loadReactions(list.map((m) => m.id));
@@ -849,7 +851,9 @@ export default function Community() {
             </button>
           )}
           <div ref={contentRef}>
-            {msgs.length === 0 ? (
+            {msgsLoading ? (
+              <p className="text-center text-xs text-muted-foreground py-6">{t("common.loading")}</p>
+            ) : msgs.length === 0 ? (
               <p className="text-center text-xs text-muted-foreground py-6">{t("community.noMessages")}</p>
             ) : (
               msgs.map((m) => {
