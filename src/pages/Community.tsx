@@ -64,7 +64,7 @@ function readSavedChannel(): { location: string | null; topic: Topic } {
 }
 
 export default function Community() {
-  const { user, isApproved, isAdmin } = useAuth();
+  const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
   const { t, lang } = useLanguage();
   const onlineUsers = useOnlineUsers();
   const setMyChannel = useSetMyChannel();
@@ -469,6 +469,7 @@ export default function Community() {
     };
   }, [user?.id, channelTopic]);
 
+  if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
