@@ -1,5 +1,5 @@
 export type AppRole = "guest" | "member" | "admin";
-export type AccountStatus = "pending" | "approved" | "rejected";
+export type AccountStatus = "pending" | "approved" | "rejected" | "needs_revision";
 // 9 fixed business types, finalized by product owner (thêm "shopping" ngày 01/08 — tách
 // từ "other" vì đa số DN "Khác" thực chất là cửa hàng/mua sắm)
 export type BusinessType =
@@ -12,7 +12,7 @@ export type BusinessType =
   | "broker"
   | "shopping"
   | "other";
-export type BusinessStatus = "pending" | "approved" | "rejected";
+export type BusinessStatus = "pending" | "approved" | "rejected" | "needs_revision";
 export type OfferStatus = "active" | "inactive";
 export type ReportTarget = "business" | "offer" | "review";
 export type ReportStatus = "pending" | "replied" | "resolved" | "closed";
@@ -34,6 +34,8 @@ export type NotifType =
   | "report_received"
   | "broadcast"
   | "report_reply"
+  | "account_needs_revision"
+  | "business_needs_revision"
   | "badge_earned"
   | "level_up"
   | "pending_approval"
