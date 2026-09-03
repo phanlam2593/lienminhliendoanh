@@ -485,12 +485,14 @@ export default function BusinessDetail() {
             autoOpenList={searchParams.get("followers") === "1"}
           />
 
-          {offers.length > 0 && (
+          {
             <section>
               <h2 className="font-bold mb-2 flex items-center gap-1">
                 <Tag className="w-4 h-4 text-primary" /> {t("biz.offers")}
               </h2>
-              {!canViewOffers ? (
+              {offers.length === 0 ? (
+                <p className="text-sm text-muted-foreground">{t("biz.noOffers")}</p>
+              ) : !canViewOffers ? (
                 <button
                   onClick={() => nav("/ho-so?view=personal")}
                   className="w-full flex items-center gap-3 p-3 rounded-xl border border-dashed border-primary/40 bg-primary/5 hover:bg-primary/10 text-left"
@@ -537,7 +539,7 @@ export default function BusinessDetail() {
                 </div>
               )}
             </section>
-          )}
+          }
 
           <ExchangeSection business={b} />
 
