@@ -713,7 +713,7 @@ function PendingTab({
     if (!revisionTarget) return;
     const { error } = await supabase
       .from("businesses")
-      .update({ status: "rejected", admin_note: note })
+      .update({ status: "needs_revision", admin_note: note })
       .eq("id", revisionTarget.id);
     if (error) {
       toast.error(error.message);
@@ -927,7 +927,7 @@ function BusinessDetailDialog({
     }
     const { error } = await supabase
       .from("businesses")
-      .update({ status: "rejected", admin_note: bizRejectNote.trim() })
+      .update({ status: "needs_revision", admin_note: bizRejectNote.trim() })
       .eq("id", biz.id);
     if (error) {
       toast.error(error.message);
@@ -935,7 +935,7 @@ function BusinessDetailDialog({
     }
     toast.success("Đã gửi yêu cầu bổ sung");
     invalidateBusinesses(biz.id);
-    setBiz((prev) => (prev ? { ...prev, status: "rejected", admin_note: bizRejectNote.trim() } : prev));
+    setBiz((prev) => (prev ? { ...prev, status: "needs_revision", admin_note: bizRejectNote.trim() } : prev));
     setBizRejectMode(false);
     setBizRejectNote("");
     onChanged();
@@ -1097,7 +1097,7 @@ function BusinessDetailDialog({
             >
               <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
             </button>
-            {biz.status === "rejected" && biz.admin_note && (
+            {biz.status === "needs_revision" && biz.admin_note && (
               <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5 space-y-1">
                 <div className="font-bold">📋 Đã yêu cầu bổ sung:</div>
                 <div>{biz.admin_note}</div>
@@ -1541,7 +1541,7 @@ function MemberDetail({
     }
     const { error } = await supabase
       .from("businesses")
-      .update({ status: "rejected", admin_note: bizRejectNote.trim() })
+      .update({ status: "needs_revision", admin_note: bizRejectNote.trim() })
       .eq("id", biz.id);
     if (error) {
       toast.error(error.message);
@@ -1549,7 +1549,7 @@ function MemberDetail({
     }
     toast.success("Đã gửi yêu cầu bổ sung");
     invalidateBusinesses(biz.id);
-    setBiz((prev) => (prev ? { ...prev, status: "rejected", admin_note: bizRejectNote.trim() } : prev));
+    setBiz((prev) => (prev ? { ...prev, status: "needs_revision", admin_note: bizRejectNote.trim() } : prev));
     setBizRejectMode(false);
     setBizRejectNote("");
     onChanged();
@@ -1899,7 +1899,7 @@ function MemberDetail({
                     >
                       <Save className="w-4 h-4" /> {saving ? "Đang lưu…" : "Lưu doanh nghiệp"}
                     </button>
-                    {biz.status === "rejected" && biz.admin_note && (
+                    {biz.status === "needs_revision" && biz.admin_note && (
                       <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-2.5 space-y-1">
                         <div className="font-bold">📋 Đã yêu cầu bổ sung:</div>
                         <div>{biz.admin_note}</div>
@@ -2337,8 +2337,14 @@ function StatusBadge({ s }: { s?: string }) {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-emerald-100 text-emerald-700",
     rejected: "bg-red-100 text-red-700",
+    needs_revision: "bg-amber-100 text-amber-700",
   };
-  const lbl: Record<string, string> = { pending: "Chờ duyệt", approved: "Đã duyệt", rejected: "Từ chối" };
+  const lbl: Record<string, string> = {
+    pending: "Chờ duyệt",
+    approved: "Đã duyệt",
+    rejected: "Từ chối",
+    needs_revision: "Cần bổ sung",
+  };
   return (
     <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-semibold ${map[s] || "bg-muted"}`}>
       {lbl[s] || s}
@@ -2454,7 +2460,7 @@ function BusinessesSection({
     if (!revisionTarget) return;
     const { error } = await supabase
       .from("businesses")
-      .update({ status: "rejected", admin_note: note })
+      .update({ status: "needs_revision", admin_note: note })
       .eq("id", revisionTarget.id);
     if (error) {
       toast.error(error.message);
