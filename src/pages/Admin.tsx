@@ -205,6 +205,9 @@ export default function Admin() {
   if (!user || !isAdmin) return <Navigate to="/" replace />;
 
   const refresh = () => setRefreshKey((k) => k + 1);
+  const updateSelectedRow = (patch: Partial<MemberRow>) => {
+    setSelected((prev) => (prev ? { ...prev, ...patch } : prev));
+  };
 
   // Dùng khi bấm "Mở để chỉnh sửa" trong BusinessQuickView — tải đúng 1 hồ sơ đầy đủ
   // (kèm business/lastVisit) rồi mở lại đúng khung MemberDetail đã có sẵn, không cần
@@ -374,7 +377,13 @@ export default function Admin() {
         </div>
       )}
 
-      <MemberDetail row={selected} onClose={() => setSelected(null)} onChanged={refresh} onStatus={setStatus} />
+      <MemberDetail
+        row={selected}
+        onClose={() => setSelected(null)}
+        onChanged={refresh}
+        onStatus={setStatus}
+        onRowUpdate={updateSelectedRow}
+      />
       {previewOnboarding && <WelcomeOnboarding previewMode onPreviewClose={() => setPreviewOnboarding(false)} />}
     </div>
   );
@@ -1281,7 +1290,15 @@ function ActivityTab({ refreshKey }: { refreshKey: number }) {
 }
 
 // ── Quản lý Membership thủ công (chưa có cổng thanh toán, admin xử lý tay) ──
-function MembershipAdminSection({ row, onChanged }: { row: MemberRow; onChanged: () => void }) {
+function MembershipAdminSection({
+  row,
+  onChanged,
+  onRowUpdate,
+}: {
+  row: MemberRow;
+  onChanged: () => void;
+  onRowUpdate?: (patch: Partial<MemberRow>) => void;
+}) {
   const [busy, setBusy] = useState(false);
 
   const isMember = !!(row as any).is_member;
@@ -1307,6 +1324,7 @@ function MembershipAdminSection({ row, onChanged }: { row: MemberRow; onChanged:
       return;
     }
     toast.success("Đã cập nhật membership");
+    onRowUpdate?.(patch);
     onChanged();
   };
 
@@ -1371,11 +1389,13 @@ function MemberDetail({
   onClose,
   onChanged,
   onStatus,
+  onRowUpdate,
 }: {
   row: MemberRow | null;
   onClose: () => void;
   onChanged: () => void;
   onStatus: (id: string, s: "approved" | "rejected", note?: string) => void;
+  onRowUpdate?: (patch: Partial<MemberRow>) => void;
 }) {
   // member fields
   const [fullName, setFN] = useState("");
@@ -1740,7 +1760,7 @@ function MemberDetail({
               </button>
             </section>
 
-            <MembershipAdminSection row={row} onChanged={onChanged} />
+            <MembershipAdminSection row={row} onChanged={onChanged} onRowUpdate={onRowUpdate} />
 
             <Dialog open={!!tempPw} onOpenChange={(o) => !o && setTempPw(null)}>
               <DialogContent>
