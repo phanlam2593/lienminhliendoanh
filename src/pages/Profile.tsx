@@ -868,7 +868,7 @@ function BusinessEditor({
     const pinValid = /^[A-Za-z0-9]{4,8}$/.test(pin);
     setPinError(!pinValid);
     setSaving(true);
-    const wasRejected = biz.status === "rejected";
+    const wasRejected = biz.status === "rejected" || biz.status === "needs_revision";
     const [{ error }, { error: pinError }] = await Promise.all([
       supabase
         .from("businesses")
@@ -994,7 +994,7 @@ function BusinessEditor({
       {/* Form — chỉ hiện khi open */}
       {open && (
         <div className="px-4 pb-4 space-y-3 border-t pt-3">
-          {biz.status === "rejected" && biz.admin_note && (
+          {biz.status === "needs_revision" && biz.admin_note && (
             <div className="text-xs bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 rounded-lg p-3 space-y-1 border border-amber-200 dark:border-amber-900">
               <div className="font-bold">{t("bizForm.adminNoteTitle")}</div>
               <div>{biz.admin_note}</div>
@@ -1585,11 +1585,13 @@ function StatusBadge({ s }: { s?: string }) {
     pending: "bg-yellow-100 text-yellow-700",
     approved: "bg-emerald-100 text-emerald-700",
     rejected: "bg-red-100 text-red-700",
+    needs_revision: "bg-amber-100 text-amber-700",
   };
   const lbl: Record<string, string> = {
     pending: t("status.pending"),
     approved: t("status.approved"),
     rejected: t("status.rejected"),
+    needs_revision: t("status.needs_revision"),
   };
   return (
     <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded font-semibold ${map[s] || "bg-muted"}`}>
