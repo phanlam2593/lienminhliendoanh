@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Heart, MessageCircle, Send } from "lucide-react";
+import { Heart, MessageCircle, Send, Pencil, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -14,6 +14,7 @@ interface WallPostCardPost {
   type: string;
   image_url: string | null;
   created_at: string;
+  user_id: string;
 }
 
 interface WallCommentRow {
@@ -24,8 +25,8 @@ interface WallCommentRow {
   profiles: { full_name: string; avatar_url: string | null } | null;
 }
 
-export function WallPostCard({ post }: { post: WallPostCardPost }) {
-  const { user } = useAuth();
+export function WallPostCard({ post, onDeleted }: { post: WallPostCardPost; onDeleted?: (postId: string) => void }) {
+  const { user, isAdmin } = useAuth();
   const { t, lang } = useLanguage();
   const [reactionCount, setReactionCount] = useState(0);
   const [iReacted, setIReacted] = useState(false);
@@ -36,6 +37,17 @@ export function WallPostCard({ post }: { post: WallPostCardPost }) {
   const [commentsLoading, setCommentsLoading] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [sending, setSending] = useState(false);
+
+  const [postContent, setPostContent] = useState(post.content);
+  const [editPostOpen, setEditPostOpen] = useState(false);
+  const [editPostText, setEditPostText] = useState(post.content ?? "");
+  const [editPostBusy, setEditPostBusy] = useState(false);
+  const [deletingPost, setDeletingPost] = useState(false);
+  const isMinePost = !!user && user.id === post.user_id;
+
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editCommentText, setEditCommentText] = useState("");
+  const [editCommentBusy, setEditCommentBusy] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -53,7 +65,11 @@ export function WallPostCard({ post }: { post: WallPostCardPost }) {
     if (!user || reactBusy) return;
     setReactBusy(true);
     if (iReacted) {
-      const { error } = await supabase.from("wall_post_reactions").delete().eq("post_id", post.id).eq("user_id", user.id);
+      const { error } = await supabase
+        .from("wall_post_reactions")
+        .delete()
+        .eq("post_id", post.id)
+        .eq("user_id", user.id);
       if (!error) {
         setIReacted(false);
         setReactionCount((c) => Math.max(0, c - 1));
@@ -105,15 +121,124 @@ export function WallPostCard({ post }: { post: WallPostCardPost }) {
     setSending(false);
   };
 
+  const openEditPost = () => {
+    setEditPostText(postContent ?? "");
+    setEditPostOpen((o) => !o);
+  };
+
+  const saveEditPost = async () => {
+    const trimmed = editPostText.trim();
+    if (!trimmed) return;
+    setEditPostBusy(true);
+    const { error } = await supabase.from("wall_posts").update({ content: trimmed }).eq("id", post.id);
+    setEditPostBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setPostContent(trimmed);
+    setEditPostOpen(false);
+    toast.success(t("common.saved"));
+  };
+
+  const deletePost = async () => {
+    if (!confirm(t("wall.confirmDeletePost"))) return;
+    setDeletingPost(true);
+    const { error } = await supabase.from("wall_posts").delete().eq("id", post.id);
+    setDeletingPost(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(t("common.deleted"));
+    onDeleted?.(post.id);
+  };
+
+  const startEditComment = (c: WallCommentRow) => {
+    setEditingCommentId(c.id);
+    setEditCommentText(c.content);
+  };
+
+  const saveEditComment = async (cId: string) => {
+    const trimmed = editCommentText.trim();
+    if (!trimmed) return;
+    setEditCommentBusy(true);
+    const { error } = await supabase.from("wall_post_comments").update({ content: trimmed }).eq("id", cId);
+    setEditCommentBusy(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setComments((prev) => prev.map((c) => (c.id === cId ? { ...c, content: trimmed } : c)));
+    setEditingCommentId(null);
+    toast.success(t("common.saved"));
+  };
+
+  const deleteComment = async (cId: string) => {
+    if (!confirm(t("wall.confirmDeleteComment"))) return;
+    const { error } = await supabase.from("wall_post_comments").delete().eq("id", cId);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setComments((prev) => prev.filter((c) => c.id !== cId));
+    setCommentCount((c) => Math.max(0, c - 1));
+    toast.success(t("common.deleted"));
+  };
+
   return (
     <div className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
-      <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
+        {(isMinePost || isAdmin) && (
+          <div className="flex items-center gap-0.5 shrink-0">
+            {isMinePost && post.type === "text" && (
+              <button
+                onClick={openEditPost}
+                aria-label={t("wall.editPost")}
+                className="text-muted-foreground p-1 rounded hover:bg-accent"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <button
+              onClick={deletePost}
+              disabled={deletingPost}
+              aria-label={t("wall.deletePost")}
+              className="text-destructive p-1 rounded hover:bg-destructive/10 disabled:opacity-50"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+      </div>
       {post.type === "gif" ? (
-        <img src={post.content ?? ""} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
+        <img src={postContent ?? ""} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
       ) : post.type === "image" ? (
         <StoredImage path={post.image_url} alt={t("chat.imageAlt")} className="max-w-[220px] rounded-xl" />
+      ) : editPostOpen ? (
+        <div className="space-y-1.5">
+          <textarea
+            value={editPostText}
+            onChange={(e) => setEditPostText(e.target.value)}
+            rows={3}
+            className="w-full px-2 py-1.5 rounded-lg border bg-background text-sm"
+          />
+          <div className="flex gap-2">
+            <button
+              onClick={saveEditPost}
+              disabled={editPostBusy || !editPostText.trim()}
+              className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold disabled:opacity-50"
+            >
+              {editPostBusy ? t("common.saving") : t("common.save")}
+            </button>
+            <button onClick={() => setEditPostOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
+              {t("common.cancel")}
+            </button>
+          </div>
+        </div>
       ) : (
-        <p className="text-sm whitespace-pre-wrap">{post.content}</p>
+        <p className="text-sm whitespace-pre-wrap">{postContent}</p>
       )}
 
       <div className="flex items-center gap-4 pt-1.5 border-t border-border/60 mt-1.5">
@@ -125,7 +250,10 @@ export function WallPostCard({ post }: { post: WallPostCardPost }) {
           <Heart className={`w-4 h-4 ${iReacted ? "fill-red-500" : ""}`} />
           {reactionCount > 0 ? reactionCount : t("wall.react")}
         </button>
-        <button onClick={toggleComments} className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+        <button
+          onClick={toggleComments}
+          className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground"
+        >
           <MessageCircle className="w-4 h-4" />
           {commentCount > 0 ? t("wall.commentsCount", { n: commentCount }) : t("wall.comment")}
         </button>
@@ -136,15 +264,70 @@ export function WallPostCard({ post }: { post: WallPostCardPost }) {
           {commentsLoading ? (
             <p className="text-center text-[11px] text-muted-foreground py-2">{t("common.loading")}</p>
           ) : (
-            comments.map((c) => (
-              <div key={c.id} className="flex items-start gap-2">
-                <Avatar path={c.profiles?.avatar_url ?? null} name={c.profiles?.full_name ?? "?"} size={26} />
-                <div className="flex-1 min-w-0 bg-muted rounded-2xl px-2.5 py-1.5">
-                  <div className="text-[11px] font-semibold">{c.profiles?.full_name ?? t("messages.unknownUser")}</div>
-                  <div className="text-xs whitespace-pre-wrap">{c.content}</div>
+            comments.map((c) => {
+              const isMineComment = !!user && user.id === c.user_id;
+              return (
+                <div key={c.id} className="flex items-start gap-2">
+                  <Avatar path={c.profiles?.avatar_url ?? null} name={c.profiles?.full_name ?? "?"} size={26} />
+                  <div className="flex-1 min-w-0">
+                    {editingCommentId === c.id ? (
+                      <div className="space-y-1">
+                        <textarea
+                          value={editCommentText}
+                          onChange={(e) => setEditCommentText(e.target.value)}
+                          rows={2}
+                          className="w-full px-2 py-1 rounded-lg border bg-background text-xs"
+                        />
+                        <div className="flex gap-1.5">
+                          <button
+                            onClick={() => saveEditComment(c.id)}
+                            disabled={editCommentBusy || !editCommentText.trim()}
+                            className="px-2.5 py-1 rounded bg-primary text-primary-foreground text-[11px] font-semibold disabled:opacity-50"
+                          >
+                            {editCommentBusy ? t("common.saving") : t("common.save")}
+                          </button>
+                          <button
+                            onClick={() => setEditingCommentId(null)}
+                            className="px-2.5 py-1 rounded border text-[11px]"
+                          >
+                            {t("common.cancel")}
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-muted rounded-2xl px-2.5 py-1.5 flex items-start justify-between gap-1.5">
+                        <div className="min-w-0">
+                          <div className="text-[11px] font-semibold">
+                            {c.profiles?.full_name ?? t("messages.unknownUser")}
+                          </div>
+                          <div className="text-xs whitespace-pre-wrap">{c.content}</div>
+                        </div>
+                        {(isMineComment || isAdmin) && (
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            {isMineComment && (
+                              <button
+                                onClick={() => startEditComment(c)}
+                                aria-label={t("wall.editComment")}
+                                className="text-muted-foreground p-0.5 rounded hover:bg-accent/60"
+                              >
+                                <Pencil className="w-3 h-3" />
+                              </button>
+                            )}
+                            <button
+                              onClick={() => deleteComment(c.id)}
+                              aria-label={t("wall.deleteComment")}
+                              className="text-destructive p-0.5 rounded hover:bg-destructive/10"
+                            >
+                              <Trash2 className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           )}
           {user && (
             <div className="flex items-center gap-2">
