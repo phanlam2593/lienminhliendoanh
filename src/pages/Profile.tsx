@@ -46,7 +46,7 @@ import {
   UserPlus,
 } from "lucide-react";
 
-import { uploadImage } from "@/lib/upload";
+import { uploadImage, MAX_SIZE_AVATAR } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { BusinessPhotoManager } from "@/components/BusinessPhotoManager";
 import { Avatar } from "@/components/Avatar";
@@ -210,7 +210,7 @@ export default function Profile() {
     if (!user) return;
     setUploadingAvatar(true);
     try {
-      const path = await uploadImage(file, "avatars", user.id);
+      const path = await uploadImage(file, "avatars", user.id, MAX_SIZE_AVATAR);
       const { error } = await supabase.from("profiles").update({ avatar_url: path }).eq("id", user.id);
       if (error) throw error;
       toast.success(t("profile.avatarUpdated"));
