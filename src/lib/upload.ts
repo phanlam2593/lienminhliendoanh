@@ -1,12 +1,13 @@
 import { supabase } from "@/integrations/supabase/client";
 import { tStatic } from "@/lib/i18n";
 
-export const MAX_SIZE = 5 * 1024 * 1024;
+export const MAX_SIZE_AVATAR = 5 * 1024 * 1024;
+export const MAX_SIZE = 20 * 1024 * 1024;
 export const ACCEPT = "image/jpeg,image/png,image/webp";
 
-export function validateImage(file: File): string | null {
+export function validateImage(file: File, maxSize = MAX_SIZE): string | null {
   if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) return tStatic("upload.errType");
-  if (file.size > MAX_SIZE) return tStatic("upload.errSize");
+  if (file.size > maxSize) return tStatic("upload.errSize", { mb: Math.round(maxSize / (1024 * 1024)) });
   return null;
 }
 
@@ -41,8 +42,13 @@ async function compressImage(file: File, maxDim = 1600, quality = 0.82): Promise
   }
 }
 
-export async function uploadImage(file: File, folder = "general", ownerId?: string): Promise<string> {
-  const err = validateImage(file);
+export async function uploadImage(
+  file: File,
+  folder = "general",
+  ownerId?: string,
+  maxSize = MAX_SIZE,
+): Promise<string> {
+  const err = validateImage(file, maxSize);
   if (err) throw new Error(err);
   const compressed = await compressImage(file);
   let uid = ownerId;
@@ -83,4 +89,3 @@ export async function getSignedUrl(path: string): Promise<string> {
   cache.set(path, data.signedUrl);
   return data.signedUrl;
 }
-
