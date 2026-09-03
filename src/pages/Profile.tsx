@@ -1491,7 +1491,7 @@ function OwnWall({ userId, reloadKey }: { userId: string; reloadKey?: number }) 
       const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
         supabase
           .from("wall_posts")
-          .select("id, content, type, image_url, created_at")
+          .select("id, content, type, image_url, created_at, user_id")
           .eq("user_id", userId)
           .order("created_at", { ascending: false })
           .limit(20),
@@ -1531,7 +1531,13 @@ function OwnWall({ userId, reloadKey }: { userId: string; reloadKey?: number }) 
           posts.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
           ) : (
-            posts.map((post) => <WallPostCard key={post.id} post={post} />)
+            posts.map((post) => (
+              <WallPostCard
+                key={post.id}
+                post={post}
+                onDeleted={(id) => setPosts((prev) => prev.filter((p) => p.id !== id))}
+              />
+            ))
           )
         ) : reviews.length === 0 ? (
           <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noReviews")}</p>
