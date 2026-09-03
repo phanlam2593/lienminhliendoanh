@@ -52,6 +52,7 @@ interface WallPost {
   type: "text" | "image" | "gif";
   image_url: string | null;
   created_at: string;
+  user_id: string;
 }
 
 interface WallReview {
