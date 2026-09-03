@@ -83,7 +83,7 @@ function callPreviewText(
 }
 
 export function MessagesInbox() {
-  const { user, isApproved, isAdmin } = useAuth();
+  const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
   const { t, lang } = useLanguage();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
@@ -196,6 +196,7 @@ export function MessagesInbox() {
     load();
   };
 
+  if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
@@ -296,7 +297,7 @@ const MSG_PAGE_SIZE = 50;
 
 export function MessagesThread() {
   const { id = "" } = useParams();
-  const { user, isApproved, isAdmin } = useAuth();
+  const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
   const onlineUsers = useOnlineUsers();
@@ -607,6 +608,7 @@ export function MessagesThread() {
     };
   }, [user?.id, id]);
 
+  if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
