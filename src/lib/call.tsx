@@ -17,15 +17,26 @@ async function getIceServers(): Promise<RTCIceServer[]> {
   try {
     const { data: sessionData } = await supabase.auth.getSession();
     const token = sessionData.session?.access_token;
-    if (!token) return STUN_ONLY;
+    if (!token) {
+      console.error("[call] Không có access token, dùng STUN-only (không lấy TURN)");
+      return STUN_ONLY;
+    }
     const res = await fetch("https://ewquysvcjuqdkfieeuxd.supabase.co/functions/v1/get-turn-credentials", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (!res.ok) return STUN_ONLY;
+    if (!res.ok) {
+      console.error("[call] get-turn-credentials lỗi, dùng STUN-only. status=", res.status);
+      return STUN_ONLY;
+    }
     const data = await res.json();
-    return Array.isArray(data.iceServers) && data.iceServers.length ? data.iceServers : STUN_ONLY;
-  } catch {
+    if (!Array.isArray(data.iceServers) || !data.iceServers.length) {
+      console.error("[call] get-turn-credentials không có iceServers hợp lệ, dùng STUN-only:", data);
+      return STUN_ONLY;
+    }
+    return data.iceServers;
+  } catch (err) {
+    console.error("[call] Lỗi khi lấy TURN credentials, dùng STUN-only:", err);
     return STUN_ONLY;
   }
 }
@@ -180,6 +191,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
     if (remoteAudioRef.current) remoteAudioRef.current.srcObject = null;
     if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
     if (localVideoRef.current) localVideoRef.current.srcObject = null;
+    if (SPEAKER_TOGGLE_SUPPORTED) {
+      // Trả sinkId về "default" giữa các cuộc gọi — nếu không, cuộc gọi sau vẫn "dính"
+      // thiết bị xuất âm mà cuộc gọi trước đã đổi sang (có thể đã rút/không còn phát).
+      [remoteAudioRef.current, remoteVideoRef.current].forEach((el) => {
+        if (el) void (el as any).setSinkId("default").catch(() => {});
+      });
+    }
     setMuted(false);
     setCameraOff(false);
     setSpeakerOn(false);
