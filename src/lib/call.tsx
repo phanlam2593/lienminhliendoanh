@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
-import { Phone, PhoneOff, Mic, MicOff } from "lucide-react";
+import { Phone, PhoneOff, Mic, MicOff, Video, VideoOff, RotateCw } from "lucide-react";
 import { toast } from "sonner";
 
 const STUN_ONLY: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
@@ -36,19 +36,20 @@ type CallPeerInfo = { id: string; full_name: string | null; avatar_url: string |
 
 type CallState =
   | { status: "idle" }
-  | { status: "calling"; callId: string; peer: CallPeerInfo }
+  | { status: "calling"; callId: string; peer: CallPeerInfo; video: boolean }
   | {
       status: "incoming";
       callId: string;
       peer: CallPeerInfo;
       offerSdp?: RTCSessionDescriptionInit;
       viaLateDetection?: boolean;
+      video: boolean;
     }
-  | { status: "connected"; callId: string; peer: CallPeerInfo; startedAt: number };
+  | { status: "connected"; callId: string; peer: CallPeerInfo; startedAt: number; video: boolean };
 
 interface CallCtxValue {
   state: CallState;
-  startCall: (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string }) => void;
+  startCall: (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string; video?: boolean }) => void;
 }
 
 const CallCtx = createContext<CallCtxValue>({ state: { status: "idle" }, startCall: () => {} });
@@ -128,10 +129,15 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const nav = useNavigate();
   const [state, setState] = useState<CallState>({ status: "idle" });
   const [muted, setMuted] = useState(false);
+  const [cameraOff, setCameraOff] = useState(false);
 
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
+  const remoteStreamRef = useRef<MediaStream | null>(null);
   const remoteAudioRef = useRef<HTMLAudioElement | null>(null);
+  const localVideoRef = useRef<HTMLVideoElement | null>(null);
+  const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
+  const facingModeRef = useRef<"user" | "environment">("user");
   const pendingIceRef = useRef<RTCIceCandidateInit[]>([]);
   const stateRef = useRef<CallState>(state);
   const amICallerRef = useRef(false);
@@ -162,9 +168,14 @@ export function CallProvider({ children }: { children: ReactNode }) {
     pcRef.current = null;
     localStreamRef.current?.getTracks().forEach((tr) => tr.stop());
     localStreamRef.current = null;
+    remoteStreamRef.current = null;
     pendingIceRef.current = [];
     if (remoteAudioRef.current) remoteAudioRef.current.srcObject = null;
+    if (remoteVideoRef.current) remoteVideoRef.current.srcObject = null;
+    if (localVideoRef.current) localVideoRef.current.srcObject = null;
     setMuted(false);
+    setCameraOff(false);
+    facingModeRef.current = "user";
     closeOutboundChannel();
   };
 
@@ -238,6 +249,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
           caller_id: callerId,
           callee_id: calleeId,
           status: isConnected ? "answered" : status,
+          call_type: s.video ? "video" : "voice",
           answered_at: isConnected ? new Date(s.startedAt).toISOString() : null,
           ended_at: new Date().toISOString(),
           duration_seconds: durationSeconds,
@@ -277,7 +289,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setState({ status: "idle" });
   };
 
-  const setupPeerConnection = (peerId: string, callId: string, iceServers: RTCIceServer[]) => {
+  const setupPeerConnection = (peerId: string, callId: string, iceServers: RTCIceServer[], video: boolean) => {
     const pc = new RTCPeerConnection({ iceServers });
     pcRef.current = pc;
 
@@ -286,7 +298,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
     };
 
     pc.ontrack = (e) => {
-      if (remoteAudioRef.current) {
+      remoteStreamRef.current = e.streams[0];
+      if (video) {
+        if (remoteVideoRef.current) {
+          remoteVideoRef.current.srcObject = e.streams[0];
+          void remoteVideoRef.current.play().catch(() => {});
+        }
+      } else if (remoteAudioRef.current) {
         remoteAudioRef.current.srcObject = e.streams[0];
         void remoteAudioRef.current.play().catch(() => {});
       }
@@ -302,18 +320,24 @@ export function CallProvider({ children }: { children: ReactNode }) {
     return pc;
   };
 
-  const getMic = async (): Promise<MediaStream | null> => {
+  // video=false: chỉ xin mic (gọi thoại, hành vi cũ). video=true: xin cả camera —
+  // nếu bị từ chối/lỗi thì HUỶ CUỘC GỌI LUÔN, không âm thầm lùi về gọi thoại (để
+  // người dùng biết rõ vì sao và có thể thử lại đúng ý mình).
+  const getMedia = async (video: boolean): Promise<MediaStream | null> => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: video ? { facingMode: facingModeRef.current } : false,
+      });
       localStreamRef.current = stream;
       return stream;
     } catch {
-      toast.error(t("call.micDenied"));
+      toast.error(video ? t("call.cameraDenied") : t("call.micDenied"));
       return null;
     }
   };
 
-  const startCall = async (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string }) => {
+  const startCall = async (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string; video?: boolean }) => {
     if (!user || !profile) return;
     if (stateRef.current.status !== "idle") {
       toast.error(t("call.alreadyInCall"));
@@ -323,16 +347,17 @@ export function CallProvider({ children }: { children: ReactNode }) {
     // tạo cuộc gọi mới — giữ đúng chiều "ai gọi ai" trong DB (không bị đảo ngược), và
     // tránh tạo ra 1 dòng "ringing" mồ côi không bao giờ được cập nhật.
     const isAnswering = !!opts?.asAnswerToCallId;
+    const isVideo = !!opts?.video;
     const callId = opts?.asAnswerToCallId ?? crypto.randomUUID();
-    const stream = await getMic();
+    const stream = await getMedia(isVideo);
     if (!stream) return;
 
     amICallerRef.current = !isAnswering;
-    setState({ status: "calling", callId, peer });
+    setState({ status: "calling", callId, peer, video: isVideo });
     ringtone.start("ringback");
 
     const iceServers = await getIceServers();
-    const pc = setupPeerConnection(peer.id, callId, iceServers);
+    const pc = setupPeerConnection(peer.id, callId, iceServers, isVideo);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
     const offer = await pc.createOffer();
@@ -341,6 +366,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     sendSignal(peer.id, "offer", {
       callId,
       sdp: offer,
+      video: isVideo,
       from: { id: user.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
     });
 
@@ -356,6 +382,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
           caller_id: user.id,
           callee_id: peer.id,
           status: "ringing",
+          call_type: isVideo ? "video" : "voice",
         } as any)
         .then(({ error }) => {
           if (error) console.error("[call] LỖI insert ringing:", error.message, error);
@@ -370,18 +397,23 @@ export function CallProvider({ children }: { children: ReactNode }) {
     }, RING_TIMEOUT_MS);
   };
 
-  const connectAsCallee = async (callId: string, peer: CallPeerInfo, offerSdp: RTCSessionDescriptionInit) => {
+  const connectAsCallee = async (
+    callId: string,
+    peer: CallPeerInfo,
+    offerSdp: RTCSessionDescriptionInit,
+    video: boolean,
+  ) => {
     clearRingTimeout();
     ringtone.stop();
 
-    const stream = await getMic();
+    const stream = await getMedia(video);
     if (!stream) {
-      endCall(true, "no-mic");
+      endCall(true, video ? "no-camera" : "no-mic");
       return;
     }
 
     const iceServers = await getIceServers();
-    const pc = setupPeerConnection(peer.id, callId, iceServers);
+    const pc = setupPeerConnection(peer.id, callId, iceServers, video);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
     await pc.setRemoteDescription(offerSdp);
@@ -399,7 +431,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     sendSignal(peer.id, "answer", { callId, sdp: answer });
 
     const startedAt = Date.now();
-    setState({ status: "connected", callId, peer, startedAt });
+    setState({ status: "connected", callId, peer, startedAt, video });
     durationTimerRef.current = setInterval(() => forceTick((n) => n + 1), 1000);
   };
 
@@ -416,15 +448,16 @@ export function CallProvider({ children }: { children: ReactNode }) {
       // bên dưới sẽ tự nhận ra và nối 2 bên lại làm 1 — không cần SDP cũ.
       const peer = s.peer;
       const originalCallId = s.callId;
+      const isVideo = s.video;
       cleanupCall();
       stateRef.current = { status: "idle" };
       setState({ status: "idle" });
-      await startCall(peer, { asAnswerToCallId: originalCallId });
+      await startCall(peer, { asAnswerToCallId: originalCallId, video: isVideo });
       return;
     }
 
     if (!s.offerSdp) return;
-    await connectAsCallee(s.callId, s.peer, s.offerSdp);
+    await connectAsCallee(s.callId, s.peer, s.offerSdp, s.video);
   };
 
   const declineCall = () => {
@@ -445,17 +478,54 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setMuted(next);
   };
 
+  const toggleCamera = () => {
+    const stream = localStreamRef.current;
+    if (!stream) return;
+    const next = !cameraOff;
+    stream.getVideoTracks().forEach((tr) => (tr.enabled = !next));
+    setCameraOff(next);
+  };
+
+  // Đổi camera trước/sau: xin lại getUserMedia với facingMode ngược lại rồi
+  // replaceTrack ngay trên sender hiện có — tránh phải tái đàm phán SDP (renegotiation)
+  // giữa chừng cuộc gọi, vốn có thể làm rớt kết nối đang chạy.
+  const switchCamera = async () => {
+    const stream = localStreamRef.current;
+    const pc = pcRef.current;
+    const oldTrack = stream?.getVideoTracks()[0];
+    if (!stream || !pc || !oldTrack) return;
+    facingModeRef.current = facingModeRef.current === "user" ? "environment" : "user";
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: { facingMode: facingModeRef.current },
+      });
+      const newTrack = newStream.getVideoTracks()[0];
+      if (!newTrack) return;
+      const sender = pc.getSenders().find((s) => s.track?.kind === "video");
+      if (sender) await sender.replaceTrack(newTrack);
+      oldTrack.stop();
+      stream.removeTrack(oldTrack);
+      stream.addTrack(newTrack);
+      if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+    } catch {
+      toast.error(t("call.cameraDenied"));
+    }
+  };
+
   // --- Nghe tín hiệu trên kênh riêng của mình ---
   useEffect(() => {
     if (!canReceiveCalls || !user) return;
     const ch = supabase.channel(`call:${user.id}`);
 
     ch.on("broadcast", { event: "offer" }, ({ payload }) => {
-      const { callId, sdp, from } = payload as {
+      const { callId, sdp, from, video } = payload as {
         callId: string;
         sdp: RTCSessionDescriptionInit;
         from: CallPeerInfo;
+        video?: boolean;
       };
+      const isVideo = !!video;
       const cur = stateRef.current;
 
       // "Đụng độ": mình đang gọi ĐÚNG người này, mà họ cũng đang gọi lại mình cùng lúc
@@ -472,9 +542,9 @@ export function CallProvider({ children }: { children: ReactNode }) {
         // ICE candidate của đối phương đến trong lúc đang thương lượng (xin quyền mic,
         // lấy TURN...) sẽ bị handler "ice" âm thầm bỏ qua vì so sánh với callId CŨ, gây
         // đúng hiện tượng "kết nối được nhưng câm".
-        stateRef.current = { status: "calling", callId, peer: from };
-        setState({ status: "calling", callId, peer: from });
-        void connectAsCallee(callId, from, sdp);
+        stateRef.current = { status: "calling", callId, peer: from, video: isVideo };
+        setState({ status: "calling", callId, peer: from, video: isVideo });
+        void connectAsCallee(callId, from, sdp, isVideo);
         return;
       }
 
@@ -484,7 +554,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       }
       pendingIceRef.current = [];
       amICallerRef.current = false;
-      setState({ status: "incoming", callId, peer: from, offerSdp: sdp });
+      setState({ status: "incoming", callId, peer: from, offerSdp: sdp, video: isVideo });
       ringtone.start("ring");
       ringTimeoutRef.current = setTimeout(() => {
         if (stateRef.current.status === "incoming") {
@@ -511,7 +581,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       }
       pendingIceRef.current = [];
       const startedAt = Date.now();
-      setState({ status: "connected", callId, peer: s.peer, startedAt });
+      setState({ status: "connected", callId, peer: s.peer, startedAt, video: s.video });
       durationTimerRef.current = setInterval(() => forceTick((n) => n + 1), 1000);
     });
 
@@ -578,7 +648,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       const cutoffIso = new Date(Date.now() - RING_TIMEOUT_MS).toISOString();
       const { data, error } = await supabase
         .from("calls")
-        .select("id, caller_id, created_at")
+        .select("id, caller_id, created_at, call_type")
         .eq("callee_id", user.id)
         .eq("status", "ringing")
         .gt("created_at", cutoffIso)
@@ -601,7 +671,13 @@ export function CallProvider({ children }: { children: ReactNode }) {
         : { id: data.caller_id, full_name: null, avatar_url: null };
 
       amICallerRef.current = false;
-      setState({ status: "incoming", callId: data.id, peer, viaLateDetection: true });
+      setState({
+        status: "incoming",
+        callId: data.id,
+        peer,
+        viaLateDetection: true,
+        video: (data as any).call_type === "video",
+      });
       ringtone.start("ring");
       const remainingMs = Math.max(3000, RING_TIMEOUT_MS - (Date.now() - new Date(data.created_at).getTime()));
       ringTimeoutRef.current = setTimeout(() => {
@@ -633,28 +709,76 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => () => cleanupCall(), []);
 
+  // Gắn lại stream vào thẻ <video> mỗi khi state đổi — đảm bảo chắc chắn dù thẻ
+  // <video> chỉ được mount SAU khi stream đã có sẵn (thứ tự mount/ontrack không cố
+  // định), thay vì chỉ gán 1 lần lúc getMedia()/ontrack chạy.
+  useEffect(() => {
+    if (localVideoRef.current && localStreamRef.current) {
+      localVideoRef.current.srcObject = localStreamRef.current;
+    }
+    if (remoteVideoRef.current && remoteStreamRef.current) {
+      remoteVideoRef.current.srcObject = remoteStreamRef.current;
+      void remoteVideoRef.current.play().catch(() => {});
+    }
+  }, [state]);
+
   const elapsed = state.status === "connected" ? Math.max(0, Math.floor((Date.now() - state.startedAt) / 1000)) : 0;
   const mm = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const ss = String(elapsed % 60).padStart(2, "0");
+
+  const isVideoMode = (state.status === "calling" || state.status === "connected") && state.video;
 
   return (
     <CallCtx.Provider value={{ state, startCall }}>
       {children}
       <audio ref={remoteAudioRef} autoPlay playsInline className="hidden" />
       {state.status !== "idle" && (
-        <div className="fixed inset-0 z-[100] bg-background/98 backdrop-blur-sm flex flex-col items-center justify-center gap-6 px-6">
-          <Avatar path={state.peer.avatar_url} name={state.peer.full_name} size={96} />
-          <div className="text-center">
-            <div className="text-xl font-bold">{state.peer.full_name || "…"}</div>
-            <div className="text-sm text-muted-foreground mt-1">
-              {state.status === "calling" && t("call.calling")}
-              {state.status === "incoming" && t("call.incoming")}
-              {state.status === "connected" && `${mm}:${ss}`}
-            </div>
-          </div>
+        <div
+          className={`fixed inset-0 z-[100] flex flex-col items-center justify-center gap-6 px-6 ${
+            isVideoMode ? "bg-black overflow-hidden" : "bg-background/98 backdrop-blur-sm"
+          }`}
+        >
+          {isVideoMode ? (
+            <>
+              <video
+                ref={remoteVideoRef}
+                autoPlay
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover bg-black"
+              />
+              <video
+                ref={localVideoRef}
+                autoPlay
+                playsInline
+                muted
+                className={`absolute top-4 right-4 w-28 h-40 rounded-xl object-cover border-2 border-white/30 shadow-lg bg-black/60 z-10 ${
+                  cameraOff ? "hidden" : ""
+                }`}
+              />
+              <div className="absolute top-6 left-0 right-0 text-center text-white z-10 px-6">
+                <div className="text-lg font-bold drop-shadow">{state.peer.full_name || "…"}</div>
+                <div className="text-sm opacity-90 drop-shadow mt-1">
+                  {state.status === "calling" && t("call.calling")}
+                  {state.status === "connected" && `${mm}:${ss}`}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <Avatar path={state.peer.avatar_url} name={state.peer.full_name} size={96} />
+              <div className="text-center">
+                <div className="text-xl font-bold">{state.peer.full_name || "…"}</div>
+                <div className="text-sm text-muted-foreground mt-1">
+                  {state.status === "calling" && t("call.calling")}
+                  {state.status === "incoming" && (state.video ? t("call.incomingVideo") : t("call.incoming"))}
+                  {state.status === "connected" && `${mm}:${ss}`}
+                </div>
+              </div>
+            </>
+          )}
 
           {state.status === "incoming" ? (
-            <div className="flex items-center gap-10 mt-4">
+            <div className={`flex items-center gap-10 mt-4 ${isVideoMode ? "z-10" : ""}`}>
               <button
                 onClick={declineCall}
                 className="w-16 h-16 rounded-full bg-destructive text-destructive-foreground grid place-items-center shadow-lg active:scale-95"
@@ -671,16 +795,31 @@ export function CallProvider({ children }: { children: ReactNode }) {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-6 mt-4">
+            <div className={`flex items-center gap-6 mt-4 ${isVideoMode ? "absolute bottom-10 z-10" : ""}`}>
               {state.status === "connected" && (
                 <button
                   onClick={toggleMute}
                   className={`w-14 h-14 rounded-full grid place-items-center shadow active:scale-95 ${
-                    muted ? "bg-accent text-foreground" : "bg-card border text-foreground"
+                    muted
+                      ? "bg-accent text-foreground"
+                      : isVideoMode
+                        ? "bg-white/20 text-white backdrop-blur"
+                        : "bg-card border text-foreground"
                   }`}
                   aria-label={muted ? t("call.unmute") : t("call.mute")}
                 >
                   {muted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                </button>
+              )}
+              {isVideoMode && (
+                <button
+                  onClick={toggleCamera}
+                  className={`w-14 h-14 rounded-full grid place-items-center shadow active:scale-95 ${
+                    cameraOff ? "bg-accent text-foreground" : "bg-white/20 text-white backdrop-blur"
+                  }`}
+                  aria-label={cameraOff ? t("call.cameraOn") : t("call.cameraOff")}
+                >
+                  {cameraOff ? <VideoOff className="w-6 h-6" /> : <Video className="w-6 h-6" />}
                 </button>
               )}
               <button
@@ -690,6 +829,15 @@ export function CallProvider({ children }: { children: ReactNode }) {
               >
                 <PhoneOff className="w-7 h-7" />
               </button>
+              {isVideoMode && (
+                <button
+                  onClick={switchCamera}
+                  className="w-14 h-14 rounded-full grid place-items-center shadow active:scale-95 bg-white/20 text-white backdrop-blur"
+                  aria-label={t("call.switchCamera")}
+                >
+                  <RotateCw className="w-6 h-6" />
+                </button>
+              )}
             </div>
           )}
         </div>
