@@ -148,6 +148,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const [muted, setMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
   const [speakerOn, setSpeakerOn] = useState(false);
+  const [mainView, setMainView] = useState<"remote" | "local">("remote");
 
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -201,6 +202,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setMuted(false);
     setCameraOff(false);
     setSpeakerOn(false);
+    setMainView("remote");
     facingModeRef.current = "user";
     closeOutboundChannel();
   };
@@ -785,6 +787,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const ss = String(elapsed % 60).padStart(2, "0");
 
   const isVideoMode = (state.status === "calling" || state.status === "connected") && state.video;
+  const remoteIsMain = mainView === "remote";
 
   return (
     <CallCtx.Provider value={{ state, startCall }}>
@@ -802,16 +805,26 @@ export function CallProvider({ children }: { children: ReactNode }) {
                 ref={remoteVideoRef}
                 autoPlay
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover bg-black"
+                onClick={() => setMainView((v) => (v === "remote" ? "local" : "remote"))}
+                className={
+                  remoteIsMain
+                    ? "absolute inset-0 w-full h-full object-cover bg-black cursor-pointer"
+                    : "absolute top-4 right-4 w-28 h-40 rounded-xl object-cover border-2 border-white/30 shadow-lg bg-black/60 z-10 cursor-pointer"
+                }
               />
               <video
                 ref={localVideoRef}
                 autoPlay
                 playsInline
                 muted
-                className={`absolute top-4 right-4 w-28 h-40 rounded-xl object-cover border-2 border-white/30 shadow-lg bg-black/60 z-10 ${
-                  cameraOff ? "hidden" : ""
-                }`}
+                onClick={() => setMainView((v) => (v === "remote" ? "local" : "remote"))}
+                className={
+                  !remoteIsMain
+                    ? "absolute inset-0 w-full h-full object-cover bg-black cursor-pointer"
+                    : `absolute top-4 right-4 w-28 h-40 rounded-xl object-cover border-2 border-white/30 shadow-lg bg-black/60 z-10 cursor-pointer ${
+                        cameraOff ? "hidden" : ""
+                      }`
+                }
               />
               <div className="absolute top-6 left-0 right-0 text-center text-white z-10 px-6">
                 <div className="text-lg font-bold drop-shadow">{state.peer.full_name || "…"}</div>
