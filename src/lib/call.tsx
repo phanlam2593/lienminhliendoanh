@@ -520,20 +520,28 @@ export function CallProvider({ children }: { children: ReactNode }) {
     const pc = pcRef.current;
     const oldTrack = stream?.getVideoTracks()[0];
     if (!stream || !pc || !oldTrack) return;
-    facingModeRef.current = facingModeRef.current === "user" ? "environment" : "user";
+    const nextFacingMode = facingModeRef.current === "user" ? "environment" : "user";
+    // Dừng camera CŨ trước khi xin camera MỚI — đa số máy (đặc biệt Android) chỉ cho 1
+    // MediaStream giữ camera cùng lúc; xin stream mới khi cái cũ còn "sống" sẽ lỗi
+    // (NotReadableError/OverconstrainedError), bị hứng nhầm vào catch chung và hiện
+    // sai thành "cần quyền camera" dù quyền đã cấp từ trước (case Kir báo r27).
+    oldTrack.stop();
+    stream.removeTrack(oldTrack);
     try {
       const newStream = await navigator.mediaDevices.getUserMedia({
         audio: false,
-        video: { facingMode: facingModeRef.current },
+        video: { facingMode: nextFacingMode },
       });
       const newTrack = newStream.getVideoTracks()[0];
       if (!newTrack) return;
+      facingModeRef.current = nextFacingMode;
       const sender = pc.getSenders().find((s) => s.track?.kind === "video");
       if (sender) await sender.replaceTrack(newTrack);
-      oldTrack.stop();
-      stream.removeTrack(oldTrack);
       stream.addTrack(newTrack);
-      if (localVideoRef.current) localVideoRef.current.srcObject = stream;
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+        void localVideoRef.current.play().catch(() => {});
+      }
     } catch {
       toast.error(t("call.cameraDenied"));
     }
@@ -764,6 +772,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (localVideoRef.current && localStreamRef.current) {
       localVideoRef.current.srcObject = localStreamRef.current;
+      void localVideoRef.current.play().catch(() => {});
     }
     if (remoteVideoRef.current && remoteStreamRef.current) {
       remoteVideoRef.current.srcObject = remoteStreamRef.current;
