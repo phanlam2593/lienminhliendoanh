@@ -30,6 +30,7 @@ import Community from "./pages/Community";
 import Guide from "./pages/Guide";
 import MyReports from "./pages/MyReports";
 import Questline from "./pages/Questline";
+import Quet from "./pages/Quet";
 import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookieThirdParty from "./pages/CookieThirdParty";
@@ -109,6 +110,7 @@ const App = () => (
                       <Route path="/huong-dan" element={<Guide />} />
                       <Route path="/bao-cao-cua-toi" element={<MyReports />} />
                       <Route path="/questline" element={<Questline />} />
+                      <Route path="/quet" element={<Quet />} />
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Routes>
