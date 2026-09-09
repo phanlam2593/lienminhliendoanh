@@ -21,6 +21,7 @@ import {
   Trophy,
   Award,
   Clock,
+  Flame,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof Bell> = {
@@ -47,6 +48,7 @@ const ICONS: Record<string, typeof Bell> = {
   level_up: Trophy,
   badge_earned: Award,
   pending_approval: Clock,
+  swipe_match: Flame,
 };
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -64,6 +66,7 @@ const NOTIF_TITLE_KEY_BY_CATEGORY: Record<string, string> = {
   deals_new: "notifTitle.dealsNew",
   account_updates: "notifTitle.accountUpdates",
   reports: "notifTitle.reports",
+  swipe_matches: "notifTitle.swipeMatches",
 };
 
 async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string | null> {
@@ -116,6 +119,8 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
         return "/ho-so";
       case "reports":
         return isAdmin ? "/admin?tab=reports" : "/bao-cao-cua-toi";
+      case "swipe_matches":
+        return "/quet?tab=matches";
       case "calls":
         // "Đang gọi" (chuông còn sống) dẫn thẳng vào khung chat với người gọi — nếu
         // cuộc gọi vẫn còn hiệu lực, CallProvider (mount ở App root) sẽ tự phát hiện
