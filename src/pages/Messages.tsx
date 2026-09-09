@@ -18,6 +18,7 @@ import {
   X,
   Reply as ReplyIcon,
   Phone,
+  Video,
   PhoneMissed,
   PhoneIncoming,
   PhoneOutgoing,
@@ -58,6 +59,7 @@ interface CallRow {
   caller_id: string;
   callee_id: string;
   status: "answered" | "missed" | "declined" | "busy";
+  call_type: "voice" | "video";
   duration_seconds: number | null;
   created_at: string;
 }
@@ -70,16 +72,18 @@ function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) =>
 }
 
 function callPreviewText(
-  c: { status: string; duration_seconds: number | null },
+  c: { status: string; duration_seconds: number | null; call_type?: string },
   outgoing: boolean,
   tr: (k: string, params?: any) => string,
 ): string {
-  if (c.status === "answered") return `📞 ${tr("callHistory.answered")}`;
-  if (c.status === "missed") return outgoing ? `📞 ${tr("call.inline.noAnswer")}` : `📞 ${tr("callHistory.missed")}`;
+  const icon = c.call_type === "video" ? "📹" : "📞";
+  if (c.status === "answered") return `${icon} ${tr("callHistory.answered")}`;
+  if (c.status === "missed")
+    return outgoing ? `${icon} ${tr("call.inline.noAnswer")}` : `${icon} ${tr("callHistory.missed")}`;
   if (c.status === "declined")
-    return outgoing ? `📞 ${tr("callHistory.declinedByThem")}` : `📞 ${tr("callHistory.youDeclined")}`;
-  if (c.status === "busy") return `📞 ${tr("callHistory.busy")}`;
-  return `📞 ${tr("call.inline.title")}`;
+    return outgoing ? `${icon} ${tr("callHistory.declinedByThem")}` : `${icon} ${tr("callHistory.youDeclined")}`;
+  if (c.status === "busy") return `${icon} ${tr("callHistory.busy")}`;
+  return `${icon} ${tr("call.inline.title")}`;
 }
 
 export function MessagesInbox() {
@@ -102,7 +106,7 @@ export function MessagesInbox() {
       .limit(500);
     const { data: callRows } = await supabase
       .from("calls")
-      .select("id, caller_id, callee_id, status, duration_seconds, created_at")
+      .select("id, caller_id, callee_id, status, call_type, duration_seconds, created_at")
       .or(`caller_id.eq.${user.id},callee_id.eq.${user.id}`)
       .order("created_at", { ascending: false })
       .limit(500);
@@ -318,6 +322,14 @@ export function MessagesThread() {
     }
     startCall({ id: partner.id, full_name: partner.full_name, avatar_url: partner.avatar_url });
   };
+  const handleVideoCall = () => {
+    if (!partner) return;
+    if (!partnerOnline) {
+      toast(t("call.offline"));
+      return;
+    }
+    startCall({ id: partner.id, full_name: partner.full_name, avatar_url: partner.avatar_url }, { video: true });
+  };
   const [partner, setPartner] = useState<Profile | null>(null);
   const [msgs, setMsgs] = useState<Message[]>([]);
   const [msgsLoading, setMsgsLoading] = useState(true);
@@ -429,7 +441,7 @@ export function MessagesThread() {
     if (!user || !id) return;
     const { data } = await supabase
       .from("calls")
-      .select("id, caller_id, callee_id, status, duration_seconds, created_at")
+      .select("id, caller_id, callee_id, status, call_type, duration_seconds, created_at")
       .or(`and(caller_id.eq.${user.id},callee_id.eq.${id}),and(caller_id.eq.${id},callee_id.eq.${user.id})`)
       .order("created_at", { ascending: true });
     setCalls((data ?? []) as CallRow[]);
@@ -796,16 +808,28 @@ export function MessagesThread() {
           {partner && <MemberLevelBadge points={(partner as any).points ?? 0} isAdmin={partnerIsAdmin} />}
         </button>
         {partner && (
-          <button
-            onClick={handleCall}
-            className={`w-9 h-9 rounded-full grid place-items-center shrink-0 ${
-              partnerOnline ? "bg-primary/10 text-primary" : "bg-accent text-muted-foreground"
-            }`}
-            aria-label={t("call.startCall")}
-            title={partnerOnline ? t("call.startCall") : t("call.offline")}
-          >
-            <Phone className="w-4 h-4" />
-          </button>
+          <>
+            <button
+              onClick={handleCall}
+              className={`w-9 h-9 rounded-full grid place-items-center shrink-0 ${
+                partnerOnline ? "bg-primary/10 text-primary" : "bg-accent text-muted-foreground"
+              }`}
+              aria-label={t("call.startCall")}
+              title={partnerOnline ? t("call.startCall") : t("call.offline")}
+            >
+              <Phone className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleVideoCall}
+              className={`w-9 h-9 rounded-full grid place-items-center shrink-0 ${
+                partnerOnline ? "bg-primary/10 text-primary" : "bg-accent text-muted-foreground"
+              }`}
+              aria-label={t("call.startVideoCall")}
+              title={partnerOnline ? t("call.startVideoCall") : t("call.offline")}
+            >
+              <Video className="w-4 h-4" />
+            </button>
+          </>
         )}
         <Popover open={blockMenuOpen} onOpenChange={setBlockMenuOpen}>
           <PopoverTrigger asChild>
@@ -893,19 +917,24 @@ export function MessagesThread() {
                   const missedByMe = !outgoing && (c.status === "missed" || c.status === "busy");
                   const durMin = Math.floor((c.duration_seconds ?? 0) / 60);
                   const durSec = (c.duration_seconds ?? 0) % 60;
+                  const isVideo = (c as any).call_type === "video";
                   const header =
                     c.status === "answered"
                       ? outgoing
                         ? t("call.inline.outgoingAnswered")
                         : t("call.inline.incomingAnswered")
-                      : t("call.inline.title");
+                      : isVideo
+                        ? t("call.inline.titleVideo")
+                        : t("call.inline.title");
                   const sub =
                     c.status === "answered"
                       ? t("call.inline.durationLong", { m: durMin, s: durSec })
                       : c.status === "missed"
                         ? outgoing
                           ? t("call.inline.noAnswer")
-                          : t("call.inline.missedSub")
+                          : isVideo
+                            ? t("call.inline.missedSubVideo")
+                            : t("call.inline.missedSub")
                         : c.status === "declined"
                           ? outgoing
                             ? t("call.inline.theyDeclined")
@@ -923,7 +952,9 @@ export function MessagesThread() {
                             missedByMe ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"
                           }`}
                         >
-                          {missedByMe ? (
+                          {isVideo ? (
+                            <Video className="w-4 h-4" />
+                          ) : missedByMe ? (
                             <PhoneMissed className="w-4 h-4" />
                           ) : outgoing ? (
                             <PhoneOutgoing className="w-4 h-4" />
@@ -940,11 +971,14 @@ export function MessagesThread() {
                         {partner && (
                           <button
                             onClick={() =>
-                              startCall({
-                                id: partner.id,
-                                full_name: partner.full_name,
-                                avatar_url: partner.avatar_url,
-                              })
+                              startCall(
+                                {
+                                  id: partner.id,
+                                  full_name: partner.full_name,
+                                  avatar_url: partner.avatar_url,
+                                },
+                                { video: isVideo },
+                              )
                             }
                             className="ml-1 text-xs font-semibold text-primary shrink-0"
                           >
