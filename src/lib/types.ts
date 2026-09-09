@@ -290,3 +290,47 @@ export interface Notification {
 
 export const USERNAME_DOMAIN = "lienminh.local";
 export const usernameToEmail = (u: string) => `${u.trim().toLowerCase()}@${USERNAME_DOMAIN}`;
+
+// ── Tính năng "Quẹt" (r28) — 3 bảng swipe_needs/swipe_actions/swipe_matches tạo qua SQL
+// trực tiếp, CHƯA có trong types.ts generated của Supabase — Quet.tsx dùng (supabase as any)
+// cho 3 bảng này, và dùng các type app-level dưới đây để có gõ-phím-gợi-ý (autocomplete).
+export type NeedType = "trao_doi" | "lam_quen" | "tim_viec" | "game";
+export type SwipeActionKind = "like" | "pass";
+
+export const NEED_TYPE_LABEL: Record<NeedType, { vi: string; en: string }> = {
+  trao_doi: { vi: "Trao đổi tương tác", en: "Engagement Trade" },
+  lam_quen: { vi: "Làm quen", en: "Dating" },
+  tim_viec: { vi: "Tìm việc/Tuyển người", en: "Jobs" },
+  game: { vi: "Game", en: "Game" },
+};
+
+export interface SwipeNeed {
+  id: string;
+  user_id: string;
+  need_type: NeedType;
+  title: string;
+  description: string | null;
+  area: string | null;
+  is_active: boolean;
+  details: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SwipeAction {
+  id: string;
+  need_id: string;
+  actor_id: string;
+  action: SwipeActionKind;
+  created_at: string;
+}
+
+export interface SwipeMatch {
+  id: string;
+  need_id_a: string;
+  need_id_b: string;
+  user_a: string;
+  user_b: string;
+  need_type: NeedType;
+  created_at: string;
+}
