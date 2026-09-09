@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PhoneIncoming, PhoneOutgoing, PhoneMissed, Phone } from "lucide-react";
+import { PhoneIncoming, PhoneOutgoing, PhoneMissed, Phone, Video } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -13,6 +13,7 @@ interface CallRow {
   caller_id: string;
   callee_id: string;
   status: "answered" | "missed" | "declined" | "busy";
+  call_type: "voice" | "video";
   duration_seconds: number | null;
   created_at: string;
 }
@@ -69,16 +70,16 @@ export default function CallHistory() {
     const to = from + PAGE_SIZE - 1;
     const { data, count } = await supabase
       .from("calls")
-      .select("id, caller_id, callee_id, status, duration_seconds, created_at", { count: "exact" })
+      .select("id, caller_id, callee_id, status, call_type, duration_seconds, created_at", { count: "exact" })
       .or(`caller_id.eq.${user.id},callee_id.eq.${user.id}`)
       .order("created_at", { ascending: false })
       .range(from, to);
     setTotal(count ?? 0);
     const newRows = (data ?? []) as CallRow[];
 
-    const otherIds = [
-      ...new Set(newRows.map((r) => (r.caller_id === user.id ? r.callee_id : r.caller_id))),
-    ].filter((id) => !people.has(id));
+    const otherIds = [...new Set(newRows.map((r) => (r.caller_id === user.id ? r.callee_id : r.caller_id)))].filter(
+      (id) => !people.has(id),
+    );
     if (otherIds.length) {
       const { data: profs } = await supabase
         .from("profiles_public")
@@ -135,6 +136,7 @@ export default function CallHistory() {
             const otherId = isOutgoing ? r.callee_id : r.caller_id;
             const other = people.get(otherId);
             const isMissedForMe = !isOutgoing && (r.status === "missed" || r.status === "busy");
+            const isVideo = (r as any).call_type === "video";
             return (
               <button
                 key={r.id}
@@ -147,7 +149,9 @@ export default function CallHistory() {
                     {other?.full_name || other?.username || "…"}
                   </div>
                   <div className="text-xs text-muted-foreground flex items-center gap-1">
-                    {isOutgoing ? (
+                    {isVideo ? (
+                      <Video className={`w-3 h-3 flex-shrink-0 ${isMissedForMe ? "text-destructive" : ""}`} />
+                    ) : isOutgoing ? (
                       <PhoneOutgoing className="w-3 h-3 flex-shrink-0" />
                     ) : isMissedForMe ? (
                       <PhoneMissed className="w-3 h-3 flex-shrink-0 text-destructive" />
@@ -165,12 +169,15 @@ export default function CallHistory() {
                     tabIndex={0}
                     onClick={(e) => {
                       e.stopPropagation();
-                      startCall({ id: other.id, full_name: other.full_name, avatar_url: other.avatar_url });
+                      startCall(
+                        { id: other.id, full_name: other.full_name, avatar_url: other.avatar_url },
+                        { video: isVideo },
+                      );
                     }}
                     className="w-9 h-9 rounded-full bg-primary/10 text-primary grid place-items-center flex-shrink-0"
-                    aria-label={t("call.startCall")}
+                    aria-label={isVideo ? t("call.startVideoCall") : t("call.startCall")}
                   >
-                    <Phone className="w-4 h-4" />
+                    {isVideo ? <Video className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
                   </span>
                 )}
               </button>
