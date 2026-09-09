@@ -208,12 +208,6 @@ export default function Notifications() {
         <div className="text-center py-16 text-sm text-muted-foreground space-y-3">
           <Bell className="w-10 h-10 mx-auto opacity-30" />
           <p>{t("notif.empty")}</p>
-          <button
-            onClick={() => nav("/kham-pha")}
-            className="inline-block px-4 py-2 rounded-full bg-gradient-brand text-primary-foreground text-sm font-semibold"
-          >
-            {t("nav.explore")}
-          </button>
         </div>
       ) : (
         <div className="space-y-1.5">
