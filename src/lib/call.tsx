@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
-import { Phone, PhoneOff, Mic, MicOff, Video, VideoOff, RotateCw } from "lucide-react";
+import { Phone, PhoneOff, Mic, MicOff, Video, VideoOff, RotateCw, Volume2, Volume1 } from "lucide-react";
 import { toast } from "sonner";
 
 const STUN_ONLY: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
@@ -31,6 +31,12 @@ async function getIceServers(): Promise<RTCIceServer[]> {
 }
 
 const RING_TIMEOUT_MS = 30_000;
+
+// setSinkId (chọn thiết bị xuất âm thanh) chỉ hỗ trợ ở 1 số trình duyệt (Chrome/Edge
+// desktop+Android, Safari 18.4+ cả macOS/iOS; Firefox chưa hỗ trợ) — kiểm tra 1 lần,
+// ẨN nút bật loa ngoài hoàn toàn nếu trình duyệt không hỗ trợ, thay vì hiện nút vô dụng.
+const SPEAKER_TOGGLE_SUPPORTED =
+  typeof window !== "undefined" && typeof (window as any).HTMLMediaElement?.prototype?.setSinkId === "function";
 
 type CallPeerInfo = { id: string; full_name: string | null; avatar_url: string | null };
 
@@ -130,6 +136,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CallState>({ status: "idle" });
   const [muted, setMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
+  const [speakerOn, setSpeakerOn] = useState(false);
 
   const pcRef = useRef<RTCPeerConnection | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
@@ -175,6 +182,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
     if (localVideoRef.current) localVideoRef.current.srcObject = null;
     setMuted(false);
     setCameraOff(false);
+    setSpeakerOn(false);
     facingModeRef.current = "user";
     closeOutboundChannel();
   };
@@ -513,6 +521,29 @@ export function CallProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Bật/tắt loa ngoài: tìm thiết bị audiooutput có label khớp "speaker" (loa ngoài) so
+  // với thiết bị mặc định/tai nghe (earpiece/receiver) qua enumerateDevices(), rồi
+  // setSinkId lên CẢ audio+video ref (chỉ 1 trong 2 đang thật sự phát tuỳ voice/video
+  // call). Không tìm thấy thiết bị "speaker" riêng (VD trên desktop, hoặc label không rõ)
+  // thì lùi về deviceId "default" — vẫn đổi state UI để nút không đứng im, dù việc đổi
+  // thiết bị thật có thể không có tác dụng rõ rệt trên máy đó.
+  const toggleSpeaker = async () => {
+    if (!SPEAKER_TOGGLE_SUPPORTED) return;
+    const next = !speakerOn;
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const outputs = devices.filter((d) => d.kind === "audiooutput");
+      const speakerDev = outputs.find((d) => /speaker/i.test(d.label));
+      const earpieceDev = outputs.find((d) => /earpiece|receiver/i.test(d.label));
+      const sinkId = next ? (speakerDev?.deviceId ?? "default") : (earpieceDev?.deviceId ?? "default");
+      const targets = [remoteAudioRef.current, remoteVideoRef.current].filter((el): el is HTMLMediaElement => !!el);
+      await Promise.all(targets.map((el) => (el as any).setSinkId(sinkId)));
+      setSpeakerOn(next);
+    } catch {
+      toast.error(t("call.speakerUnsupported"));
+    }
+  };
+
   // --- Nghe tín hiệu trên kênh riêng của mình ---
   useEffect(() => {
     if (!canReceiveCalls || !user) return;
@@ -809,6 +840,21 @@ export function CallProvider({ children }: { children: ReactNode }) {
                   aria-label={muted ? t("call.unmute") : t("call.mute")}
                 >
                   {muted ? <MicOff className="w-6 h-6" /> : <Mic className="w-6 h-6" />}
+                </button>
+              )}
+              {state.status === "connected" && SPEAKER_TOGGLE_SUPPORTED && (
+                <button
+                  onClick={toggleSpeaker}
+                  className={`w-14 h-14 rounded-full grid place-items-center shadow active:scale-95 ${
+                    speakerOn
+                      ? "bg-accent text-foreground"
+                      : isVideoMode
+                        ? "bg-white/20 text-white backdrop-blur"
+                        : "bg-card border text-foreground"
+                  }`}
+                  aria-label={speakerOn ? t("call.speakerOff") : t("call.speakerOn")}
+                >
+                  {speakerOn ? <Volume2 className="w-6 h-6" /> : <Volume1 className="w-6 h-6" />}
                 </button>
               )}
               {isVideoMode && (
