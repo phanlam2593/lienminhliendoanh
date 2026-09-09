@@ -313,6 +313,7 @@ export interface SwipeNeed {
   area: string | null;
   is_active: boolean;
   details: Record<string, unknown>;
+  photo_url: string | null;
   created_at: string;
   updated_at: string;
 }
