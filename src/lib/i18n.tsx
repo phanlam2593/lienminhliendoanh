@@ -1110,7 +1110,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "quet.tabMine": "Mine",
     "quet.tabMatches": "Connections",
     "quet.filterAll": "All",
-    "quet.type.trao_doi": "Engagement Trade",
+    "quet.type.trao_doi": "Trade",
     "quet.type.lam_quen": "Dating",
     "quet.type.tim_viec": "Jobs",
     "quet.type.game": "Game",
