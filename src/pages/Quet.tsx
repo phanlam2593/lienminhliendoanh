@@ -275,12 +275,22 @@ export default function Quet() {
   const [locStatus, setLocStatus] = useState<"idle" | "requesting" | "granted" | "denied" | "unsupported">("idle");
 
   // Kéo-thả kiểu Tinder cho thẻ trên cùng.
-  const [drag, setDrag] = useState({ x: 0, y: 0, dragging: false });
+  // Trong lúc kéo KHÔNG dùng React state (re-render mỗi pointermove gây giật) —
+  // cập nhật transform trực tiếp qua ref + requestAnimationFrame.
+  const [dragging, setDragging] = useState(false);
+  const dragRef = useRef({ x: 0, y: 0, active: false });
+  const cardRef = useRef<HTMLDivElement>(null);
+  const likeRef = useRef<HTMLDivElement>(null);
+  const passRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
   const [exiting, setExiting] = useState<"left" | "right" | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
   const [frontEntering, setFrontEntering] = useState(false);
   const enteredIdRef = useRef<string | null>(null);
   const actionsRowRef = useRef<HTMLDivElement>(null);
+  const cardWrapRef = useRef<HTMLDivElement>(null);
+  const [cardH, setCardH] = useState<number | null>(null);
+
 
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
