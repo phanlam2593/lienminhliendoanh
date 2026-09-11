@@ -1,15 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Heart, X, Flame, MessageCircle, Plus, Trash2, Camera } from "lucide-react";
+import {
+  Heart,
+  X,
+  Flame,
+  MessageCircle,
+  Trash2,
+  Camera,
+  Gamepad2,
+  Scale,
+  Briefcase,
+  Settings,
+  ChevronLeft,
+  type LucideIcon,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadImage, validateImage, getSignedUrl, ACCEPT } from "@/lib/upload";
@@ -20,8 +31,55 @@ import type { NeedType, SwipeNeed, SwipeMatch } from "@/lib/types";
 // để bỏ qua kiểm tra type nghiêm ngặt của Database generic CHỈ cho 3 bảng này.
 const db = supabase as any;
 
-type ViewTab = "swipe" | "mine" | "matches";
-const VALID_TABS: ViewTab[] = ["swipe", "mine", "matches"];
+type ViewTab = "category" | "swipe" | "matches";
+const VALID_TABS: ViewTab[] = ["category", "swipe", "matches"];
+
+// 4 mục cố định của Quẹt (round 29.1: chia lại thành 3 trang — chọn mục / quẹt / kết nối).
+const CATEGORIES: { type: NeedType; Icon: LucideIcon }[] = [
+  { type: "game", Icon: Gamepad2 },
+  { type: "lam_quen", Icon: Heart },
+  { type: "trao_doi", Icon: Scale },
+  { type: "tim_viec", Icon: Briefcase },
+];
+const CATEGORY_ICON: Record<NeedType, LucideIcon> = {
+  game: Gamepad2,
+  lam_quen: Heart,
+  trao_doi: Scale,
+  tim_viec: Briefcase,
+};
+
+function CategoryIcon({ type, className }: { type: NeedType; className?: string }) {
+  const Icon = CATEGORY_ICON[type];
+  return <Icon className={className} />;
+}
+
+// Ghép các thông tin phụ (lương, tuổi, giới tính, tên game, hình thức trao đổi...) theo
+// từng loại nhu cầu thành 1 dòng nhãn ngắn hiển thị trên thẻ quẹt.
+function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string, string>) => string): string[] {
+  const d = (need.details as Record<string, string>) ?? {};
+  const chips: string[] = [];
+  if (need.need_type === "tim_viec") {
+    chips.push(d.role === "hirer" ? t("quet.roleHirer") : t("quet.roleSeeker"));
+    if (d.salary) chips.push(`💰 ${d.salary}`);
+    if (d.ageRange) chips.push(`🎂 ${d.ageRange}`);
+    if (d.gender === "male") chips.push(t("quet.gender.male"));
+    if (d.gender === "female") chips.push(t("quet.gender.female"));
+  }
+  if (need.need_type === "lam_quen") {
+    if (d.gender === "male") chips.push(t("quet.gender.male"));
+    if (d.gender === "female") chips.push(t("quet.gender.female"));
+    if (d.gender === "other") chips.push(t("quet.gender.other"));
+    if (d.age) chips.push(t("quet.ageYearsOld", { age: d.age }));
+  }
+  if (need.need_type === "trao_doi") {
+    chips.push(d.tradeType === "buy_sell" ? t("quet.tradeType.buySell") : t("quet.tradeType.interaction"));
+  }
+  if (need.need_type === "game") {
+    if (d.gameName) chips.push(d.gameName);
+    chips.push(d.mode === "trade" ? t("quet.modeTrade") : t("quet.modePlaymate"));
+  }
+  return chips;
+}
 
 interface OwnerInfo {
   id: string;
@@ -66,10 +124,15 @@ export default function Quet() {
   const [searchParams] = useSearchParams();
 
   const initialTabParam = searchParams.get("tab");
-  const initialTab: ViewTab = VALID_TABS.includes(initialTabParam as ViewTab) ? (initialTabParam as ViewTab) : "swipe";
+  const initialTab: ViewTab = VALID_TABS.includes(initialTabParam as ViewTab)
+    ? (initialTabParam as ViewTab)
+    : "category";
 
   const [tab, setTab] = useState<ViewTab>(initialTab);
-  const [typeFilter, setTypeFilter] = useState<NeedType | "all">("all");
+  const [activeCategory, setActiveCategory] = useState<NeedType | null>(null);
+  const [categoryStep, setCategoryStep] = useState<"grid" | "form">("grid");
+  const [editingNeed, setEditingNeed] = useState<SwipeNeed | null>(null);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [candidates, setCandidates] = useState<SwipeNeed[]>([]);
@@ -78,7 +141,6 @@ export default function Quet() {
   const [myNeeds, setMyNeeds] = useState<SwipeNeed[]>([]);
   const [matches, setMatches] = useState<MatchRow[]>([]);
 
-  const [createOpen, setCreateOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formType, setFormType] = useState<NeedType>("trao_doi");
   const [formTitle, setFormTitle] = useState("");
@@ -86,6 +148,12 @@ export default function Quet() {
   const [formArea, setFormArea] = useState("");
   const [formRole, setFormRole] = useState<"seeker" | "hirer">("seeker");
   const [formMode, setFormMode] = useState<"playmate" | "trade">("playmate");
+  const [formSalary, setFormSalary] = useState("");
+  const [formAgeRange, setFormAgeRange] = useState("");
+  const [formAge, setFormAge] = useState("");
+  const [formGender, setFormGender] = useState("any");
+  const [formGameName, setFormGameName] = useState("");
+  const [formTradeType, setFormTradeType] = useState<"interaction" | "buy_sell">("interaction");
   const [formPhotoFile, setFormPhotoFile] = useState<File | null>(null);
   const [formPhotoPreview, setFormPhotoPreview] = useState("");
 
@@ -99,14 +167,19 @@ export default function Quet() {
   const myId = user?.id;
 
   const loadCandidates = async () => {
-    if (!myId) return;
+    if (!myId || !activeCategory) return;
     setLoading(true);
     const { data: swiped } = await db.from("swipe_actions").select("need_id").eq("actor_id", myId);
     const swipedIds: string[] = (swiped ?? []).map((s: any) => s.need_id);
 
-    let q = db.from("swipe_needs").select("*").eq("is_active", true).neq("user_id", myId);
-    if (typeFilter !== "all") q = q.eq("need_type", typeFilter);
-    const { data, error } = await q.order("created_at", { ascending: false }).limit(50);
+    const { data, error } = await db
+      .from("swipe_needs")
+      .select("*")
+      .eq("is_active", true)
+      .eq("need_type", activeCategory)
+      .neq("user_id", myId)
+      .order("created_at", { ascending: false })
+      .limit(50);
     if (error) {
       toast.error(t("common.error"));
       setLoading(false);
@@ -177,14 +250,18 @@ export default function Quet() {
   };
 
   useEffect(() => {
-    if (!myId) return;
+    if (!myId || tab !== "swipe" || !activeCategory) return;
     void loadCandidates();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [myId, typeFilter]);
+  }, [myId, tab, activeCategory]);
+
+  useEffect(() => {
+    if (tab === "swipe" && !activeCategory) setTab("category");
+  }, [tab, activeCategory]);
 
   useEffect(() => {
     if (!myId) return;
-    if (tab === "mine") void loadMyNeeds();
+    if (tab === "category") void loadMyNeeds();
     if (tab === "matches") void loadMatches();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myId, tab]);
@@ -241,10 +318,50 @@ export default function Quet() {
     }
   };
 
-  const createNeed = async () => {
+  // Đưa toàn bộ field của form về mặc định (tạo mới) hoặc điền sẵn từ 1 nhu cầu có sẵn (sửa).
+  const resetFormFields = (type: NeedType, need?: SwipeNeed | null) => {
+    setFormType(type);
+    setFormTitle(need?.title ?? "");
+    setFormDesc(need?.description ?? "");
+    setFormArea(need?.area ?? "");
+    setFormPhotoFile(null);
+    setFormPhotoPreview("");
+    const d = (need?.details as Record<string, string>) ?? {};
+    setFormRole(d.role === "hirer" ? "hirer" : "seeker");
+    setFormMode(d.mode === "trade" ? "trade" : "playmate");
+    setFormSalary(d.salary ?? "");
+    setFormAgeRange(d.ageRange ?? "");
+    setFormAge(d.age ?? "");
+    setFormGender(d.gender ?? (type === "tim_viec" ? "any" : "male"));
+    setFormGameName(d.gameName ?? "");
+    setFormTradeType(d.tradeType === "buy_sell" ? "buy_sell" : "interaction");
+  };
+
+  const handleCategoryClick = (type: NeedType, need: SwipeNeed | undefined) => {
+    if (need) {
+      setActiveCategory(type);
+      setTab("swipe");
+      return;
+    }
+    resetFormFields(type, null);
+    setEditingNeed(null);
+    setConfirmingDelete(false);
+    setCategoryStep("form");
+  };
+
+  const openEdit = (need: SwipeNeed) => {
+    resetFormFields(need.need_type, need);
+    setEditingNeed(need);
+    setConfirmingDelete(false);
+    setCategoryStep("form");
+  };
+
+  const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
+
+  const saveNeed = async () => {
     if (!myId || !formTitle.trim()) return;
     setSaving(true);
-    let photoPath: string | null = null;
+    let photoPath: string | null = editingNeed?.photo_url ?? null;
     if (formPhotoFile) {
       try {
         photoPath = await uploadImage(formPhotoFile, "quet", myId);
@@ -255,40 +372,64 @@ export default function Quet() {
       }
     }
     const details: Record<string, string> = {};
-    if (formType === "tim_viec") details.role = formRole;
-    if (formType === "game") details.mode = formMode;
-    const { error } = await db.from("swipe_needs").insert({
-      user_id: myId,
+    if (formType === "tim_viec") {
+      details.role = formRole;
+      details.gender = formGender;
+      if (formSalary.trim()) details.salary = formSalary.trim();
+      if (formAgeRange.trim()) details.ageRange = formAgeRange.trim();
+    }
+    if (formType === "lam_quen") {
+      details.gender = formGender;
+      if (formAge.trim()) details.age = formAge.trim();
+    }
+    if (formType === "trao_doi") {
+      details.tradeType = formTradeType;
+    }
+    if (formType === "game") {
+      details.mode = formMode;
+      if (formGameName.trim()) details.gameName = formGameName.trim();
+    }
+    const payload = {
       need_type: formType,
       title: formTitle.trim(),
       description: formDesc.trim() || null,
       area: formArea.trim() || null,
       details,
       photo_url: photoPath,
-    });
+    };
+    let error;
+    if (editingNeed) {
+      ({ error } = await db.from("swipe_needs").update(payload).eq("id", editingNeed.id));
+    } else {
+      ({ error } = await db.from("swipe_needs").insert({ user_id: myId, is_active: true, ...payload }));
+    }
     setSaving(false);
     if (error) {
       toast.error(t("common.error"));
       return;
     }
-    setCreateOpen(false);
-    setFormTitle("");
-    setFormDesc("");
-    setFormArea("");
-    setFormPhotoFile(null);
-    setFormPhotoPreview("");
     toast.success(t("common.saved"));
+    await loadMyNeeds();
+    setCategoryStep("grid");
+    setEditingNeed(null);
+    setActiveCategory(formType);
+    setTab("swipe");
+  };
+
+  const togglePauseEditing = async () => {
+    if (!editingNeed) return;
+    const next = !editingNeed.is_active;
+    await db.from("swipe_needs").update({ is_active: next }).eq("id", editingNeed.id);
+    setEditingNeed({ ...editingNeed, is_active: next });
     void loadMyNeeds();
   };
 
-  const toggleActive = async (need: SwipeNeed) => {
-    setMyNeeds((prev) => prev.map((n) => (n.id === need.id ? { ...n, is_active: !n.is_active } : n)));
-    await db.from("swipe_needs").update({ is_active: !need.is_active }).eq("id", need.id);
-  };
-
-  const deleteNeed = async (need: SwipeNeed) => {
-    setMyNeeds((prev) => prev.filter((n) => n.id !== need.id));
-    await db.from("swipe_needs").delete().eq("id", need.id);
+  const deleteEditing = async () => {
+    if (!editingNeed) return;
+    await db.from("swipe_needs").delete().eq("id", editingNeed.id);
+    setCategoryStep("grid");
+    setEditingNeed(null);
+    void loadMyNeeds();
   };
 
   const topCard = candidates[0];
@@ -329,38 +470,286 @@ export default function Quet() {
           <Flame className="w-5 h-5 text-primary" /> {t("quet.title")}
         </h1>
         <div className="flex items-center gap-1 rounded-full bg-muted p-1 text-xs font-semibold">
-          {(["swipe", "mine", "matches"] as ViewTab[]).map((v) => (
-            <button
-              key={v}
-              onClick={() => setTab(v)}
-              className={cn(
-                "px-3 py-1.5 rounded-full transition",
-                tab === v ? "bg-card shadow-soft text-primary" : "text-muted-foreground",
-              )}
-            >
-              {v === "swipe" ? t("quet.tabSwipe") : v === "mine" ? t("quet.tabMine") : t("quet.tabMatches")}
-            </button>
-          ))}
+          <button
+            onClick={() => setTab("category")}
+            className={cn(
+              "px-3 py-1.5 rounded-full transition",
+              tab !== "matches" ? "bg-card shadow-soft text-primary" : "text-muted-foreground",
+            )}
+          >
+            {t("quet.tabSwipe")}
+          </button>
+          <button
+            onClick={() => setTab("matches")}
+            className={cn(
+              "px-3 py-1.5 rounded-full transition",
+              tab === "matches" ? "bg-card shadow-soft text-primary" : "text-muted-foreground",
+            )}
+          >
+            {t("quet.tabMatches")}
+          </button>
         </div>
       </div>
 
-      {tab === "swipe" && (
-        <>
-          <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-4 px-4">
-            {(["all", "trao_doi", "lam_quen", "tim_viec", "game"] as const).map((v) => (
+      {tab === "category" && categoryStep === "grid" && (
+        <div className="space-y-3">
+          <div className="text-xs text-muted-foreground">{t("quet.category.subtitle")}</div>
+          <div className="grid grid-cols-2 gap-3">
+            {CATEGORIES.map(({ type, Icon }) => {
+              const need = needByType(type);
+              return (
+                <div key={type} className="relative">
+                  <button
+                    onClick={() => handleCategoryClick(type, need)}
+                    className="w-full h-full rounded-2xl border bg-card p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition"
+                  >
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
+                      <Icon className="w-7 h-7" />
+                    </div>
+                    <div className="font-bold text-sm">{t(`quet.type.${type}`)}</div>
+                    <div className="text-[11px] text-muted-foreground leading-snug">
+                      {t(`quet.category.${type}.brief`)}
+                    </div>
+                    {need && (
+                      <span
+                        className={cn(
+                          "text-[10px] font-semibold px-2 py-0.5 rounded-full",
+                          need.is_active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
+                        )}
+                      >
+                        {need.is_active ? t("quet.category.active") : t("quet.category.paused")}
+                      </span>
+                    )}
+                  </button>
+                  {need && (
+                    <button
+                      onClick={() => openEdit(need)}
+                      aria-label={t("quet.category.manage")}
+                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-card/90 border grid place-items-center text-muted-foreground"
+                    >
+                      <Settings className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {tab === "category" && categoryStep === "form" && (
+        <div className="space-y-3">
+          <button
+            onClick={() => {
+              setCategoryStep("grid");
+              setEditingNeed(null);
+              setConfirmingDelete(false);
+            }}
+            className="flex items-center gap-1 text-xs font-semibold text-muted-foreground"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" /> {t("quet.backToCategories")}
+          </button>
+
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-xl bg-gradient-brand text-primary-foreground grid place-items-center">
+              <CategoryIcon type={formType} className="w-5 h-5" />
+            </div>
+            <div className="font-extrabold">{t(`quet.type.${formType}`)}</div>
+          </div>
+
+          {formType === "tim_viec" && (
+            <Select value={formRole} onValueChange={(v) => setFormRole(v as "seeker" | "hirer")}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="seeker">{t("quet.roleSeeker")}</SelectItem>
+                <SelectItem value="hirer">{t("quet.roleHirer")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          {formType === "game" && (
+            <Select value={formMode} onValueChange={(v) => setFormMode(v as "playmate" | "trade")}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="playmate">{t("quet.modePlaymate")}</SelectItem>
+                <SelectItem value="trade">{t("quet.modeTrade")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          {formType === "trao_doi" && (
+            <Select value={formTradeType} onValueChange={(v) => setFormTradeType(v as "interaction" | "buy_sell")}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="interaction">{t("quet.tradeType.interaction")}</SelectItem>
+                <SelectItem value="buy_sell">{t("quet.tradeType.buySell")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+
+          <Input
+            placeholder={t(`quet.field.title.${formType}`)}
+            value={formTitle}
+            onChange={(e) => setFormTitle(e.target.value)}
+          />
+
+          {formType === "tim_viec" && (
+            <>
+              <Input
+                placeholder={t("quet.field.salary")}
+                value={formSalary}
+                onChange={(e) => setFormSalary(e.target.value)}
+              />
+              <Input
+                placeholder={t("quet.field.ageRange")}
+                value={formAgeRange}
+                onChange={(e) => setFormAgeRange(e.target.value)}
+              />
+              <Select value={formGender} onValueChange={setFormGender}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">{t("quet.gender.male")}</SelectItem>
+                  <SelectItem value="female">{t("quet.gender.female")}</SelectItem>
+                  <SelectItem value="any">{t("quet.gender.any")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </>
+          )}
+
+          {formType === "lam_quen" && (
+            <>
+              <Select value={formGender} onValueChange={setFormGender}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">{t("quet.gender.male")}</SelectItem>
+                  <SelectItem value="female">{t("quet.gender.female")}</SelectItem>
+                  <SelectItem value="other">{t("quet.gender.other")}</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input placeholder={t("quet.field.age")} value={formAge} onChange={(e) => setFormAge(e.target.value)} />
+            </>
+          )}
+
+          {formType === "game" && (
+            <Input
+              placeholder={t("quet.field.gameName")}
+              value={formGameName}
+              onChange={(e) => setFormGameName(e.target.value)}
+            />
+          )}
+
+          <Textarea
+            placeholder={t(`quet.field.desc.${formType}`)}
+            value={formDesc}
+            onChange={(e) => setFormDesc(e.target.value)}
+            rows={3}
+          />
+          <Input placeholder={t("quet.needArea")} value={formArea} onChange={(e) => setFormArea(e.target.value)} />
+
+          {editingNeed?.photo_url && !formPhotoPreview && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-muted">
+                <CardPhoto path={editingNeed.photo_url} />
+              </div>
+              {t("quet.addPhoto")}
+            </div>
+          )}
+          <div>
+            {formPhotoPreview ? (
+              <div className="relative w-full h-32 rounded-xl overflow-hidden">
+                <img src={formPhotoPreview} alt="" className="w-full h-full object-cover" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFormPhotoFile(null);
+                    setFormPhotoPreview("");
+                  }}
+                  className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 text-white grid place-items-center"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <label className="flex items-center justify-center gap-1.5 w-full h-16 rounded-xl border border-dashed cursor-pointer text-xs font-semibold text-muted-foreground hover:bg-accent/40">
+                <Camera className="w-4 h-4" /> {t("quet.addPhoto")}
+                <input
+                  type="file"
+                  accept={ACCEPT}
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (!f) return;
+                    const err = validateImage(f);
+                    if (err) {
+                      toast.error(err);
+                      return;
+                    }
+                    setFormPhotoFile(f);
+                    setFormPhotoPreview(URL.createObjectURL(f));
+                  }}
+                />
+              </label>
+            )}
+          </div>
+
+          <button
+            onClick={saveNeed}
+            disabled={saving || !formTitle.trim()}
+            className="w-full py-2.5 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-semibold disabled:opacity-50"
+          >
+            {t("common.save")}
+          </button>
+
+          {editingNeed && (
+            <div className="flex items-center gap-2 pt-1">
               <button
-                key={v}
-                onClick={() => setTypeFilter(v)}
-                className={cn(
-                  "shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold border",
-                  typeFilter === v
-                    ? "bg-gradient-brand text-primary-foreground border-transparent"
-                    : "bg-card text-muted-foreground",
-                )}
+                onClick={togglePauseEditing}
+                className="flex-1 py-2 rounded-xl border text-xs font-semibold text-muted-foreground"
               >
-                {v === "all" ? t("quet.filterAll") : t(`quet.type.${v}`)}
+                {editingNeed.is_active ? t("quet.pauseNeed") : t("quet.resumeNeed")}
               </button>
-            ))}
+              {confirmingDelete ? (
+                <button
+                  onClick={deleteEditing}
+                  className="flex-1 py-2 rounded-xl bg-destructive text-destructive-foreground text-xs font-semibold"
+                >
+                  {t("quet.deleteNeedConfirm")}
+                </button>
+              ) : (
+                <button
+                  onClick={() => setConfirmingDelete(true)}
+                  className="flex-1 py-2 rounded-xl border border-destructive/40 text-destructive text-xs font-semibold flex items-center justify-center gap-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> {t("quet.deleteNeed")}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === "swipe" && activeCategory && (
+        <>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setTab("category")}
+              aria-label={t("quet.backToCategories")}
+              className="w-8 h-8 rounded-full border grid place-items-center text-muted-foreground shrink-0"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-1.5 text-sm font-bold">
+              <CategoryIcon type={activeCategory} className="w-4 h-4 text-primary" />
+              {t(`quet.type.${activeCategory}`)}
+            </div>
           </div>
 
           {loading ? (
@@ -447,24 +836,14 @@ export default function Quet() {
                         {topCard.description}
                       </div>
                     )}
-                    {topCard.need_type === "tim_viec" && (topCard.details as any)?.role && (
+                    {needDetailChips(topCard, t).length > 0 && (
                       <div
                         className={cn(
                           "text-[11px] font-semibold mt-2",
                           topCard.photo_url ? "text-white" : "text-primary",
                         )}
                       >
-                        {(topCard.details as any).role === "hirer" ? t("quet.roleHirer") : t("quet.roleSeeker")}
-                      </div>
-                    )}
-                    {topCard.need_type === "game" && (topCard.details as any)?.mode && (
-                      <div
-                        className={cn(
-                          "text-[11px] font-semibold mt-2",
-                          topCard.photo_url ? "text-white" : "text-primary",
-                        )}
-                      >
-                        {(topCard.details as any).mode === "trade" ? t("quet.modeTrade") : t("quet.modePlaymate")}
+                        {needDetailChips(topCard, t).join("  ·  ")}
                       </div>
                     )}
                     <div
@@ -496,41 +875,6 @@ export default function Quet() {
         </>
       )}
 
-      {tab === "mine" && (
-        <div className="space-y-3">
-          <button
-            onClick={() => setCreateOpen(true)}
-            className="w-full py-2.5 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-semibold flex items-center justify-center gap-1.5"
-          >
-            <Plus className="w-4 h-4" /> {t("quet.createNeed")}
-          </button>
-          {myNeeds.length === 0 ? (
-            <div className="text-center py-10 text-sm text-muted-foreground">{t("quet.emptyMyNeeds")}</div>
-          ) : (
-            myNeeds.map((n) => (
-              <div key={n.id} className="rounded-xl border bg-card p-3 flex items-start gap-3">
-                {n.photo_url && (
-                  <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-muted">
-                    <CardPhoto path={n.photo_url} />
-                  </div>
-                )}
-                <div className="flex-1 min-w-0">
-                  <div className="text-[11px] font-semibold text-primary">{t(`quet.type.${n.need_type}`)}</div>
-                  <div className="font-bold text-sm truncate">{n.title}</div>
-                  {n.area && <div className="text-xs text-muted-foreground">📍 {n.area}</div>}
-                </div>
-                <div className="flex flex-col items-end gap-2">
-                  <Switch checked={n.is_active} onCheckedChange={() => toggleActive(n)} />
-                  <button onClick={() => deleteNeed(n)} className="text-destructive">
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-      )}
-
       {tab === "matches" && (
         <div className="space-y-2">
           {matches.length === 0 ? (
@@ -542,11 +886,16 @@ export default function Quet() {
                 onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
                 className="w-full flex items-center gap-3 rounded-xl border bg-card p-3 text-left hover:bg-accent/40"
               >
-                <Avatar
-                  path={m.otherUser?.avatar_url}
-                  name={m.otherUser?.full_name || m.otherUser?.username}
-                  size={44}
-                />
+                <div className="relative shrink-0">
+                  <Avatar
+                    path={m.otherUser?.avatar_url}
+                    name={m.otherUser?.full_name || m.otherUser?.username}
+                    size={44}
+                  />
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-card">
+                    <CategoryIcon type={m.need_type} className="w-3 h-3" />
+                  </div>
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="font-bold text-sm truncate">
                     {m.otherUser?.full_name || m.otherUser?.username || "—"}
@@ -559,104 +908,6 @@ export default function Quet() {
           )}
         </div>
       )}
-
-      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="max-w-sm">
-          <DialogHeader>
-            <DialogTitle>{t("quet.createNeed")}</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3">
-            <div>
-              <div className="text-xs font-semibold mb-1">{t("quet.selectType")}</div>
-              <Select value={formType} onValueChange={(v) => setFormType(v as NeedType)}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="trao_doi">{t("quet.type.trao_doi")}</SelectItem>
-                  <SelectItem value="lam_quen">{t("quet.type.lam_quen")}</SelectItem>
-                  <SelectItem value="tim_viec">{t("quet.type.tim_viec")}</SelectItem>
-                  <SelectItem value="game">{t("quet.type.game")}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            {formType === "tim_viec" && (
-              <Select value={formRole} onValueChange={(v) => setFormRole(v as "seeker" | "hirer")}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="seeker">{t("quet.roleSeeker")}</SelectItem>
-                  <SelectItem value="hirer">{t("quet.roleHirer")}</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-            {formType === "game" && (
-              <Select value={formMode} onValueChange={(v) => setFormMode(v as "playmate" | "trade")}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="playmate">{t("quet.modePlaymate")}</SelectItem>
-                  <SelectItem value="trade">{t("quet.modeTrade")}</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-            <Input placeholder={t("quet.needTitle")} value={formTitle} onChange={(e) => setFormTitle(e.target.value)} />
-            <Textarea
-              placeholder={t("quet.needDescription")}
-              value={formDesc}
-              onChange={(e) => setFormDesc(e.target.value)}
-              rows={3}
-            />
-            <Input placeholder={t("quet.needArea")} value={formArea} onChange={(e) => setFormArea(e.target.value)} />
-            <div>
-              {formPhotoPreview ? (
-                <div className="relative w-full h-32 rounded-xl overflow-hidden">
-                  <img src={formPhotoPreview} alt="" className="w-full h-full object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setFormPhotoFile(null);
-                      setFormPhotoPreview("");
-                    }}
-                    className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 text-white grid place-items-center"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ) : (
-                <label className="flex items-center justify-center gap-1.5 w-full h-16 rounded-xl border border-dashed cursor-pointer text-xs font-semibold text-muted-foreground hover:bg-accent/40">
-                  <Camera className="w-4 h-4" /> {t("quet.addPhoto")}
-                  <input
-                    type="file"
-                    accept={ACCEPT}
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (!f) return;
-                      const err = validateImage(f);
-                      if (err) {
-                        toast.error(err);
-                        return;
-                      }
-                      setFormPhotoFile(f);
-                      setFormPhotoPreview(URL.createObjectURL(f));
-                    }}
-                  />
-                </label>
-              )}
-            </div>
-            <button
-              onClick={createNeed}
-              disabled={saving || !formTitle.trim()}
-              className="w-full py-2.5 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-semibold disabled:opacity-50"
-            >
-              {t("common.save")}
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
 
       {matchInfo && (
         <div className="fixed inset-0 z-50 bg-black/70 grid place-items-center p-6" onClick={() => setMatchInfo(null)}>
