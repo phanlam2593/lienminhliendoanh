@@ -542,32 +542,68 @@ export default function Quet() {
   // để animation và cập nhật dữ liệu khớp nhịp với nhau.
   const triggerSwipe = (dir: "left" | "right") => {
     if (!topCard || exiting) return;
+    dragRef.current.active = false;
+    setDragging(false);
     setExiting(dir);
     setTimeout(() => {
       void act(topCard, dir === "right" ? "like" : "pass");
       setExiting(null);
-      setDrag({ x: 0, y: 0, dragging: false });
+      dragRef.current = { x: 0, y: 0, active: false };
     }, 220);
+  };
+
+  // Vẽ lại vị trí thẻ theo ngón tay — chạy trong 1 rAF, KHÔNG qua React state.
+  const paintDrag = () => {
+    rafRef.current = null;
+    const el = cardRef.current;
+    if (!el) return;
+    const { x, y } = dragRef.current;
+    const rot = Math.max(-18, Math.min(18, x / 12));
+    el.style.transform = `translate3d(${x}px, ${y * 0.4}px, 0) rotate(${rot}deg)`;
+    if (likeRef.current) likeRef.current.style.opacity = String(Math.max(0, Math.min(1, x / SWIPE_THRESHOLD)));
+    if (passRef.current) passRef.current.style.opacity = String(Math.max(0, Math.min(1, -x / SWIPE_THRESHOLD)));
+  };
+  const schedulePaint = () => {
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(paintDrag);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (exiting) return;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     dragStart.current = { x: e.clientX, y: e.clientY };
-    setDrag({ x: 0, y: 0, dragging: true });
+    dragRef.current = { x: 0, y: 0, active: true };
+    if (cardRef.current) cardRef.current.style.transition = "none";
+    setDragging(true);
   };
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!drag.dragging) return;
-    setDrag({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y, dragging: true });
+    if (!dragRef.current.active) return;
+    dragRef.current.x = e.clientX - dragStart.current.x;
+    dragRef.current.y = e.clientY - dragStart.current.y;
+    schedulePaint();
   };
   const onPointerUp = () => {
-    if (!drag.dragging) return;
-    if (Math.abs(drag.x) > SWIPE_THRESHOLD) {
-      triggerSwipe(drag.x > 0 ? "right" : "left");
-    } else {
-      setDrag({ x: 0, y: 0, dragging: false });
+    if (!dragRef.current.active) return;
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
     }
+    const x = dragRef.current.x;
+    if (Math.abs(x) > SWIPE_THRESHOLD) {
+      triggerSwipe(x > 0 ? "right" : "left");
+      return;
+    }
+    // Bật lại về giữa mượt (spring nhẹ) rồi mới trả quyền vẽ cho React.
+    const el = cardRef.current;
+    if (el) {
+      el.style.transition = "transform 300ms cubic-bezier(0.2,0.9,0.2,1)";
+      el.style.transform = "translate3d(0, 0, 0) rotate(0deg)";
+    }
+    if (likeRef.current) likeRef.current.style.opacity = "0";
+    if (passRef.current) passRef.current.style.opacity = "0";
+    dragRef.current = { x: 0, y: 0, active: false };
+    setDragging(false);
   };
+
 
   // Đưa toàn bộ field của form về mặc định (tạo mới) hoặc điền sẵn từ 1 nhu cầu có sẵn (sửa).
   const resetFormFields = (type: NeedType, need?: SwipeNeed | null) => {
