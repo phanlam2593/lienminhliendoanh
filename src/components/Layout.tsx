@@ -281,7 +281,7 @@ export function Layout() {
         </DialogContent>
       </Dialog>
 
-      <main className={isFullHeightPage ? "" : "pb-20"}>
+      <main style={isFullHeightPage ? undefined : { paddingBottom: "calc(var(--bottom-nav-h, 5rem) + 0.75rem)" }}>
         {showWelcome ? (
           <WelcomeScreen />
         ) : showPendingGate ? (
