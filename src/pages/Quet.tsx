@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Heart,
@@ -158,10 +158,54 @@ function CardPhoto({ path, className }: { path: string | null | undefined; class
   );
 }
 
+// Chùm "pháo giấy" bung ra khi match — thuần CSS/inline, không cần thư viện ngoài.
+// Toạ độ đích (tx/ty) và góc xoay random hoá 1 lần mỗi khi component này được mount
+// (mount lại mỗi lần mở modal match mới, nên mỗi lần match sẽ ra 1 chùm pháo khác nhau).
+function ConfettiBurst() {
+  const pieces = useMemo(
+    () =>
+      Array.from({ length: 24 }, (_, i) => {
+        const angle = (i / 24) * Math.PI * 2 + Math.random() * 0.4;
+        const distance = 80 + Math.random() * 70;
+        return {
+          id: i,
+          tx: Math.cos(angle) * distance,
+          ty: Math.sin(angle) * distance,
+          rot: Math.round(Math.random() * 360),
+          delay: Math.round(Math.random() * 150),
+          color: ["#00c9a7", "#0891b2", "#fbbf24", "#f97316", "#ec4899", "#8b5cf6"][i % 6],
+          size: 5 + Math.random() * 5,
+        };
+      }),
+    [],
+  );
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {pieces.map((p) => (
+        <span
+          key={p.id}
+          className="absolute left-1/2 top-1/2 rounded-sm confetti-piece"
+          style={
+            {
+              width: `${p.size}px`,
+              height: `${p.size * 0.4}px`,
+              backgroundColor: p.color,
+              "--tx": `${p.tx}px`,
+              "--ty": `${p.ty}px`,
+              "--rot": `${p.rot}deg`,
+              animationDelay: `${p.delay}ms`,
+            } as React.CSSProperties
+          }
+        />
+      ))}
+    </div>
+  );
+}
+
 const SWIPE_THRESHOLD = 100;
 
 export default function Quet() {
-  const { user, isApproved } = useAuth();
+  const { user, profile, isApproved } = useAuth();
   const { t } = useLanguage();
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
@@ -218,8 +262,11 @@ export default function Quet() {
   const [drag, setDrag] = useState({ x: 0, y: 0, dragging: false });
   const [exiting, setExiting] = useState<"left" | "right" | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
+  const [frontEntering, setFrontEntering] = useState(false);
+  const enteredIdRef = useRef<string | null>(null);
 
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const myId = user?.id;
 
@@ -343,6 +390,17 @@ export default function Quet() {
     if (tab === "matches") void loadMatches();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myId, tab]);
+
+  // Hiệu ứng match: chữ/avatar "trồi" lên trước, pháo giấy bung SAU một nhịp ngắn
+  // (khớp đúng ý muốn "hiện chữ rồi pháo bông" thay vì bung cùng lúc).
+  useEffect(() => {
+    if (!matchInfo) {
+      setShowConfetti(false);
+      return;
+    }
+    const timer = setTimeout(() => setShowConfetti(true), 260);
+    return () => clearTimeout(timer);
+  }, [matchInfo]);
 
   const act = async (need: SwipeNeed, action: "like" | "pass") => {
     if (!myId) return;
@@ -542,6 +600,21 @@ export default function Quet() {
       ? haversineKm(myPos.lat, myPos.lng, topCard.latitude, topCard.longitude)
       : null;
 
+  // Khi thẻ đầu đổi (sau khi quẹt xong, đổi sang người kế tiếp) → phát 1 hiệu ứng
+  // "trồi lên" ngắn (bắt đầu ở dáng nhỏ/mờ như lúc còn là thẻ phía sau, rồi mới
+  // animate về đúng vị trí) thay vì thẻ mới bật ra đột ngột/giật lại từ vị trí cũ.
+  useEffect(() => {
+    if (!topCard) return;
+    if (enteredIdRef.current === topCard.id) return;
+    enteredIdRef.current = topCard.id;
+    setFrontEntering(true);
+    const raf = requestAnimationFrame(() => {
+      requestAnimationFrame(() => setFrontEntering(false));
+    });
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topCard?.id]);
+
   const rotate = Math.max(-18, Math.min(18, drag.x / 12));
   const likeOpacity = Math.max(0, Math.min(1, drag.x / SWIPE_THRESHOLD));
   const passOpacity = Math.max(0, Math.min(1, -drag.x / SWIPE_THRESHOLD));
@@ -556,8 +629,17 @@ export default function Quet() {
     };
   } else if (drag.dragging) {
     cardStyle = { transform: `translate(${drag.x}px, ${drag.y * 0.4}px) rotate(${rotate}deg)`, transition: "none" };
+  } else if (frontEntering) {
+    // Vị trí xuất phát của hiệu ứng "trồi lên": y hệt dáng vẻ lúc còn là thẻ phía sau
+    // (scale nhỏ hơn + hạ xuống + mờ hơn), CHƯA có transition — để frame sau mới bật
+    // transition rồi đổi giá trị thì trình duyệt mới thật sự animate được.
+    cardStyle = { transform: "scale(0.95) translateY(8px) rotate(0deg)", opacity: 0.7, transition: "none" };
   } else {
-    cardStyle = { transform: "translate(0,0) rotate(0deg)", transition: "transform 250ms cubic-bezier(0.2,0.8,0.2,1)" };
+    cardStyle = {
+      transform: "scale(1) translateY(0) rotate(0deg)",
+      opacity: 1,
+      transition: "transform 280ms cubic-bezier(0.2,0.8,0.2,1), opacity 280ms ease-out",
+    };
   }
 
   if (!isApproved) {
@@ -1024,11 +1106,15 @@ export default function Quet() {
             <div className="space-y-3">
               <div className="relative h-[460px]">
                 {nextCard && (
-                  <div className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft scale-[0.95] translate-y-2 opacity-70">
+                  <div
+                    key={nextCard.id}
+                    className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft scale-[0.95] translate-y-2 opacity-70"
+                  >
                     <CardPhoto path={nextCard.photo_url} />
                   </div>
                 )}
                 <div
+                  key={topCard.id}
                   onPointerDown={onPointerDown}
                   onPointerMove={onPointerMove}
                   onPointerUp={onPointerUp}
@@ -1181,14 +1267,47 @@ export default function Quet() {
       )}
 
       {matchInfo && (
-        <div className="fixed inset-0 z-50 bg-black/70 grid place-items-center p-6" onClick={() => setMatchInfo(null)}>
+        <div
+          className="fixed inset-0 z-50 bg-black/70 grid place-items-center p-6 animate-in fade-in duration-200"
+          onClick={() => setMatchInfo(null)}
+        >
+          <style>{`
+            @keyframes match-pop {
+              0% { transform: scale(0.4); opacity: 0; }
+              60% { transform: scale(1.08); opacity: 1; }
+              100% { transform: scale(1); opacity: 1; }
+            }
+            @keyframes confetti-pop {
+              0% { transform: translate(-50%, -50%) translate(0, 0) rotate(0deg); opacity: 1; }
+              100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) rotate(var(--rot)); opacity: 0; }
+            }
+            .confetti-piece { animation: confetti-pop 900ms ease-out forwards; }
+            .match-pop { animation: match-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+          `}</style>
           <div
-            className="bg-card rounded-3xl p-6 max-w-xs w-full text-center space-y-4 shadow-brand"
+            className="relative bg-card rounded-3xl p-6 max-w-xs w-full text-center space-y-4 shadow-brand overflow-hidden match-pop"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-2xl">🎉</div>
-            <div className="text-xl font-extrabold">{t("quet.matchModalTitle")}</div>
-            <div className="flex items-center justify-center -space-x-3">
+            {showConfetti && <ConfettiBurst />}
+            <div className="relative text-4xl match-pop" style={{ animationDelay: "0ms" }}>
+              🎉
+            </div>
+            <div className="relative text-2xl font-extrabold text-primary match-pop" style={{ animationDelay: "90ms" }}>
+              {t("quet.matchModalTitle")}
+            </div>
+            <div
+              className="relative flex items-center justify-center -space-x-4 match-pop"
+              style={{ animationDelay: "170ms" }}
+            >
+              <Avatar
+                path={profile?.avatar_url}
+                name={profile?.full_name || profile?.username}
+                size={64}
+                ringClassName="ring-4 ring-card"
+              />
+              <div className="z-10 w-8 h-8 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center ring-4 ring-card">
+                <Flame className="w-4 h-4" />
+              </div>
               <Avatar
                 path={matchInfo.owner?.avatar_url}
                 name={matchInfo.owner?.full_name || matchInfo.owner?.username}
@@ -1196,10 +1315,10 @@ export default function Quet() {
                 ringClassName="ring-4 ring-card"
               />
             </div>
-            <div className="text-sm text-muted-foreground">
+            <div className="relative text-sm text-muted-foreground match-pop" style={{ animationDelay: "230ms" }}>
               {t("quet.matchModalBody", { name: matchInfo.owner?.full_name || matchInfo.owner?.username || "—" })}
             </div>
-            <div className="space-y-2 pt-1">
+            <div className="relative space-y-2 pt-1 match-pop" style={{ animationDelay: "300ms" }}>
               <button
                 onClick={() => {
                   const id = matchInfo.owner?.id;
