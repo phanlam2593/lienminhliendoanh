@@ -1331,6 +1331,216 @@ export type Database = {
           },
         ]
       }
+      swipe_actions: {
+        Row: {
+          action: Database["public"]["Enums"]["swipe_action"]
+          actor_id: string
+          created_at: string
+          id: string
+          need_id: string
+        }
+        Insert: {
+          action: Database["public"]["Enums"]["swipe_action"]
+          actor_id: string
+          created_at?: string
+          id?: string
+          need_id: string
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["swipe_action"]
+          actor_id?: string
+          created_at?: string
+          id?: string
+          need_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swipe_actions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "swipe_actions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_actions_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_actions_need_id_fkey"
+            columns: ["need_id"]
+            isOneToOne: false
+            referencedRelation: "swipe_needs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      swipe_matches: {
+        Row: {
+          created_at: string
+          id: string
+          need_id_a: string
+          need_id_b: string
+          need_type: Database["public"]["Enums"]["need_type"]
+          user_a: string
+          user_b: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          need_id_a: string
+          need_id_b: string
+          need_type: Database["public"]["Enums"]["need_type"]
+          user_a: string
+          user_b: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          need_id_a?: string
+          need_id_b?: string
+          need_type?: Database["public"]["Enums"]["need_type"]
+          user_a?: string
+          user_b?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swipe_matches_need_id_a_fkey"
+            columns: ["need_id_a"]
+            isOneToOne: false
+            referencedRelation: "swipe_needs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_need_id_b_fkey"
+            columns: ["need_id_b"]
+            isOneToOne: false
+            referencedRelation: "swipe_needs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_user_a_fkey"
+            columns: ["user_a"]
+            isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_user_a_fkey"
+            columns: ["user_a"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_user_a_fkey"
+            columns: ["user_a"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_user_b_fkey"
+            columns: ["user_b"]
+            isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_user_b_fkey"
+            columns: ["user_b"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_matches_user_b_fkey"
+            columns: ["user_b"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      swipe_needs: {
+        Row: {
+          area: string | null
+          created_at: string
+          description: string | null
+          details: Json
+          id: string
+          is_active: boolean
+          latitude: number | null
+          longitude: number | null
+          need_type: Database["public"]["Enums"]["need_type"]
+          photo_url: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          area?: string | null
+          created_at?: string
+          description?: string | null
+          details?: Json
+          id?: string
+          is_active?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          need_type: Database["public"]["Enums"]["need_type"]
+          photo_url?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          area?: string | null
+          created_at?: string
+          description?: string | null
+          details?: Json
+          id?: string
+          is_active?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          need_type?: Database["public"]["Enums"]["need_type"]
+          photo_url?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swipe_needs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "member_last_login"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "swipe_needs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "swipe_needs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles_public"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -1888,10 +2098,12 @@ export type Database = {
         | "freelance"
         | "broker"
         | "shopping"
+      need_type: "trao_doi" | "lam_quen" | "tim_viec" | "game"
       offer_status: "active" | "inactive"
       report_status: "pending" | "replied" | "resolved" | "closed"
-      report_target: "business" | "offer" | "review"
+      report_target: "business" | "offer" | "review" | "user"
       suggestion_status: "pending" | "approved" | "rejected"
+      swipe_action: "like" | "pass"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2043,10 +2255,12 @@ export const Constants = {
         "broker",
         "shopping",
       ],
+      need_type: ["trao_doi", "lam_quen", "tim_viec", "game"],
       offer_status: ["active", "inactive"],
       report_status: ["pending", "replied", "resolved", "closed"],
-      report_target: ["business", "offer", "review"],
+      report_target: ["business", "offer", "review", "user"],
       suggestion_status: ["pending", "approved", "rejected"],
+      swipe_action: ["like", "pass"],
     },
   },
 } as const
