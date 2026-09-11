@@ -420,7 +420,9 @@ export default function Quet() {
       return;
     }
     const needIds = Array.from(new Set(rows.flatMap((r: any) => [r.need_id_a, r.need_id_b])));
-    const otherIds = Array.from(new Set(rows.map((r: any) => (r.user_a === myId ? r.user_b : r.user_a))));
+    const otherIds = Array.from(
+      new Set(rows.map((r: any) => (r.user_a === myId ? r.user_b : r.user_a))),
+    ) as string[];
     const [{ data: needs }, { data: profs }] = await Promise.all([
       db.from("swipe_needs").select("*").in("id", needIds),
       supabase.from("profiles_public").select("id, username, full_name, avatar_url").in("id", otherIds),
