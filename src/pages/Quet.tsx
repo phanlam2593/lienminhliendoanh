@@ -31,6 +31,22 @@ import type { NeedType, SwipeNeed, SwipeMatch } from "@/lib/types";
 // để bỏ qua kiểm tra type nghiêm ngặt của Database generic CHỈ cho 3 bảng này.
 const db = supabase as any;
 
+// Bỏ dấu tiếng Việt để gợi ý khu vực không phân biệt có dấu/không dấu (giống bộ lọc
+// Khám phá) — gõ "Da" hay "đà" đều khớp được với "Đà Lạt".
+function normalizeVi(str: string): string {
+  return str.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase();
+}
+
+function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 type ViewTab = "category" | "swipe" | "matches";
 const VALID_TABS: ViewTab[] = ["category", "swipe", "matches"];
 
@@ -188,6 +204,15 @@ export default function Quet() {
   const [formTradeType, setFormTradeType] = useState<"interaction" | "buy_sell">("interaction");
   const [formPhotoFile, setFormPhotoFile] = useState<File | null>(null);
   const [formPhotoPreview, setFormPhotoPreview] = useState("");
+  const [formLat, setFormLat] = useState<number | null>(null);
+  const [formLng, setFormLng] = useState<number | null>(null);
+  const [locatingForm, setLocatingForm] = useState(false);
+
+  // Gợi ý khu vực (giống bên Khám phá) + vị trí để tính khoảng cách khi quẹt.
+  const [areaCounts, setAreaCounts] = useState<[string, number][]>([]);
+  const [areaSuggestOpen, setAreaSuggestOpen] = useState(false);
+  const [myPos, setMyPos] = useState<{ lat: number; lng: number } | null>(null);
+  const [locStatus, setLocStatus] = useState<"idle" | "requesting" | "granted" | "denied" | "unsupported">("idle");
 
   // Kéo-thả kiểu Tinder cho thẻ trên cùng.
   const [drag, setDrag] = useState({ x: 0, y: 0, dragging: false });
@@ -199,6 +224,12 @@ export default function Quet() {
   const myId = user?.id;
 
   const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
+
+  useEffect(() => {
+    void supabase.rpc("business_area_counts").then(({ data }) => {
+      setAreaCounts(((data ?? []) as any[]).map((r) => [r.area as string, Number(r.cnt)]));
+    });
+  }, []);
 
   const loadCandidates = async () => {
     if (!myId || !activeCategory) return;
@@ -371,6 +402,8 @@ export default function Quet() {
     setFormTitle(need?.title ?? "");
     setFormDesc(need?.description ?? "");
     setFormArea(need?.area ?? "");
+    setFormLat(need?.latitude ?? null);
+    setFormLng(need?.longitude ?? null);
     setFormPhotoFile(null);
     setFormPhotoPreview("");
     const d = (need?.details as Record<string, string>) ?? {};
@@ -461,6 +494,8 @@ export default function Quet() {
       title: finalTitle,
       description: formDesc.trim() || null,
       area: formArea.trim() || null,
+      latitude: formLat,
+      longitude: formLng,
       details,
       photo_url: photoPath,
     };
@@ -502,6 +537,10 @@ export default function Quet() {
   const topCard = candidates[0];
   const nextCard = candidates[1];
   const topOwner = topCard ? owners[topCard.user_id] : null;
+  const topDistanceKm =
+    myPos && topCard?.latitude != null && topCard?.longitude != null
+      ? haversineKm(myPos.lat, myPos.lng, topCard.latitude, topCard.longitude)
+      : null;
 
   const rotate = Math.max(-18, Math.min(18, drag.x / 12));
   const likeOpacity = Math.max(0, Math.min(1, drag.x / SWIPE_THRESHOLD));
@@ -779,7 +818,73 @@ export default function Quet() {
             />
           )}
 
-          <Input placeholder={t("quet.needArea")} value={formArea} onChange={(e) => setFormArea(e.target.value)} />
+          <div className="relative">
+            <Input
+              placeholder={t("quet.needArea")}
+              value={formArea}
+              onChange={(e) => {
+                setFormArea(e.target.value);
+                setAreaSuggestOpen(true);
+              }}
+              onFocus={() => setAreaSuggestOpen(true)}
+              onBlur={() => setTimeout(() => setAreaSuggestOpen(false), 150)}
+            />
+            {areaSuggestOpen && areaCounts.length > 0 && (
+              <div className="absolute z-10 mt-1 w-full rounded-xl border bg-card shadow-soft max-h-48 overflow-y-auto">
+                {areaCounts
+                  .filter(([a]) => !formArea.trim() || normalizeVi(a).includes(normalizeVi(formArea.trim())))
+                  .slice(0, 8)
+                  .map(([a, n]) => (
+                    <button
+                      key={a}
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        setFormArea(a);
+                        setAreaSuggestOpen(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-sm hover:bg-accent/60 flex items-center justify-between gap-2"
+                    >
+                      <span>{a}</span>
+                      <span className="text-[10px] text-muted-foreground">{n}</span>
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              if (!navigator.geolocation) {
+                toast.error(t("explore.locationUnsupported"));
+                return;
+              }
+              setLocatingForm(true);
+              navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                  setFormLat(pos.coords.latitude);
+                  setFormLng(pos.coords.longitude);
+                  setLocatingForm(false);
+                },
+                () => {
+                  setLocatingForm(false);
+                  toast.error(t("common.error"));
+                },
+                { enableHighAccuracy: true, timeout: 10000 },
+              );
+            }}
+            className={cn(
+              "text-xs font-semibold flex items-center gap-1.5",
+              formLat != null ? "text-primary" : "text-muted-foreground",
+            )}
+          >
+            📍{" "}
+            {locatingForm
+              ? t("sort.requestingLocation")
+              : formLat != null
+                ? t("quet.field.locationOn")
+                : t("quet.field.shareLocation")}
+          </button>
 
           {editingNeed?.photo_url && !formPhotoPreview && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -877,7 +982,34 @@ export default function Quet() {
               <CategoryIcon type={activeCategory} className="w-4 h-4 text-primary" />
               {t(`quet.type.${activeCategory}`)}
             </div>
+            {!myPos && (
+              <button
+                onClick={() => {
+                  if (!navigator.geolocation) {
+                    setLocStatus("unsupported");
+                    return;
+                  }
+                  setLocStatus("requesting");
+                  navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                      setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+                      setLocStatus("granted");
+                    },
+                    () => setLocStatus("denied"),
+                    { enableHighAccuracy: true, timeout: 10000 },
+                  );
+                }}
+                className="ml-auto text-[11px] font-semibold text-muted-foreground border rounded-full px-2.5 py-1"
+              >
+                📍 {locStatus === "requesting" ? t("sort.requestingLocation") : t("nearby.enableCta")}
+              </button>
+            )}
           </div>
+          {locStatus === "denied" && (
+            <p className="text-[11px] text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-lg px-2 py-1">
+              {t("explore.locationDenied")}
+            </p>
+          )}
 
           {loading ? (
             <div className="h-[460px] rounded-2xl bg-muted animate-pulse" />
@@ -946,11 +1078,14 @@ export default function Quet() {
                       </div>
                     </div>
                     <div className="font-extrabold text-lg mb-1">{topCard.title}</div>
-                    {topCard.area && (
+                    {(topCard.area || topDistanceKm != null) && (
                       <div
                         className={cn("text-xs mb-2", topCard.photo_url ? "text-white/80" : "text-muted-foreground")}
                       >
-                        📍 {topCard.area}
+                        📍{" "}
+                        {[topCard.area, topDistanceKm != null ? `${topDistanceKm.toFixed(1)} km` : null]
+                          .filter(Boolean)
+                          .join(" · ")}
                       </div>
                     )}
                     {topCard.description && (
