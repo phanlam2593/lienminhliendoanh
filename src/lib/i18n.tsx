@@ -18,7 +18,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "quet.filterAll": "Tất cả",
     "quet.type.trao_doi": "Trao đổi",
     "quet.type.lam_quen": "Làm quen",
-    "quet.type.tim_viec": "Tìm việc/Tuyển người",
+    "quet.type.tim_viec": "Công việc",
     "quet.type.game": "Game",
     "quet.loginRequired": "Đăng nhập để dùng Quẹt",
     "quet.noMoreCards": "Hết thẻ rồi, quay lại sau nhé!",
