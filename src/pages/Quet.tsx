@@ -291,7 +291,6 @@ export default function Quet() {
   const cardWrapRef = useRef<HTMLDivElement>(null);
   const [cardH, setCardH] = useState<number | null>(null);
 
-
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
@@ -317,12 +316,9 @@ export default function Quet() {
       const top = el.getBoundingClientRect().top;
       const vh = window.visualViewport?.height ?? window.innerHeight;
       const navRaw = getComputedStyle(document.documentElement).getPropertyValue("--bottom-nav-h");
-      const navH = navRaw.trim().endsWith("rem")
-        ? parseFloat(navRaw) * 16
-        : parseFloat(navRaw) || 80;
+      const navH = navRaw.trim().endsWith("rem") ? parseFloat(navRaw) * 16 : parseFloat(navRaw) || 80;
       const actionsH = actionsRowRef.current?.offsetHeight ?? 56;
-      const undoH = lastAction ? 46 : 0;
-      const avail = vh - top - actionsH - undoH - navH - 32;
+      const avail = vh - top - actionsH - navH - 32;
       setCardH(Math.round(Math.max(240, Math.min(520, avail))));
     };
     window.scrollTo(0, 0);
@@ -336,8 +332,7 @@ export default function Quet() {
       window.removeEventListener("orientationchange", measure);
       window.visualViewport?.removeEventListener("resize", measure);
     };
-  }, [tab, activeCategory, locStatus, radiusKm, lastAction, loading]);
-
+  }, [tab, activeCategory, locStatus, radiusKm, loading]);
 
   const myId = user?.id;
 
@@ -420,9 +415,7 @@ export default function Quet() {
       return;
     }
     const needIds = Array.from(new Set(rows.flatMap((r: any) => [r.need_id_a, r.need_id_b])));
-    const otherIds = Array.from(
-      new Set(rows.map((r: any) => (r.user_a === myId ? r.user_b : r.user_a))),
-    ) as string[];
+    const otherIds = Array.from(new Set(rows.map((r: any) => (r.user_a === myId ? r.user_b : r.user_a)))) as string[];
     const [{ data: needs }, { data: profs }] = await Promise.all([
       db.from("swipe_needs").select("*").in("id", needIds),
       supabase.from("profiles_public").select("id, username, full_name, avatar_url").in("id", otherIds),
@@ -605,7 +598,6 @@ export default function Quet() {
     dragRef.current = { x: 0, y: 0, active: false };
     setDragging(false);
   };
-
 
   // Đưa toàn bộ field của form về mặc định (tạo mới) hoặc điền sẵn từ 1 nhu cầu có sẵn (sửa).
   const resetFormFields = (type: NeedType, need?: SwipeNeed | null) => {
@@ -799,7 +791,6 @@ export default function Quet() {
       transition: "transform 280ms cubic-bezier(0.2,0.8,0.2,1), opacity 280ms ease-out",
     };
   }
-
 
   if (!isApproved) {
     return (
@@ -1274,11 +1265,7 @@ export default function Quet() {
           )}
 
           {loading ? (
-            <div
-              ref={cardWrapRef}
-              style={{ height: cardH ?? 460 }}
-              className="rounded-2xl bg-muted animate-pulse"
-            />
+            <div ref={cardWrapRef} style={{ height: cardH ?? 460 }} className="rounded-2xl bg-muted animate-pulse" />
           ) : !topCard ? (
             <div
               ref={cardWrapRef}
@@ -1309,7 +1296,6 @@ export default function Quet() {
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
                   style={{ ...cardStyle, touchAction: "none", willChange: "transform", backfaceVisibility: "hidden" }}
-
                   className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
                 >
                   <CardPhoto path={topCard.photo_url} />
@@ -1404,7 +1390,7 @@ export default function Quet() {
                     {topCard.description && (
                       <div
                         className={cn(
-                          "text-sm flex-1 overflow-y-auto pointer-events-auto",
+                          "text-sm flex-1 overflow-hidden",
                           topCard.photo_url ? "text-white/90" : "text-muted-foreground",
                         )}
                       >
@@ -1438,7 +1424,20 @@ export default function Quet() {
                   </div>
                 </div>
               </div>
-              <div ref={actionsRowRef} className="flex items-center justify-center gap-6">
+              <div ref={actionsRowRef} className="flex items-center justify-center gap-4">
+                <button
+                  onClick={() => lastAction && void undoLastAction()}
+                  disabled={!lastAction}
+                  aria-label={t("quet.undo")}
+                  className={cn(
+                    "w-10 h-10 rounded-full border-2 grid place-items-center transition active:scale-95",
+                    lastAction
+                      ? "border-amber-400 text-amber-500"
+                      : "border-muted-foreground/15 text-muted-foreground/25 cursor-not-allowed",
+                  )}
+                >
+                  <Undo2 className="w-4 h-4" />
+                </button>
                 <button
                   onClick={() => triggerSwipe("left")}
                   aria-label={t("quet.pass")}
@@ -1454,16 +1453,6 @@ export default function Quet() {
                   <Heart className="w-6 h-6" />
                 </button>
               </div>
-            </div>
-          )}
-          {lastAction && (
-            <div className="flex justify-center">
-              <button
-                onClick={() => void undoLastAction()}
-                className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground border rounded-full px-3 py-1.5"
-              >
-                <Undo2 className="w-3.5 h-3.5" /> {t("quet.undo")}
-              </button>
             </div>
           )}
         </>
