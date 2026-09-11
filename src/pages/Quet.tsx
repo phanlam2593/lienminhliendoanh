@@ -34,7 +34,8 @@ const db = supabase as any;
 type ViewTab = "category" | "swipe" | "matches";
 const VALID_TABS: ViewTab[] = ["category", "swipe", "matches"];
 
-// 4 mục cố định của Quẹt (round 29.1: chia lại thành 3 trang — chọn mục / quẹt / kết nối).
+// 4 mục cố định của Quẹt (round 29.1: chia lại thành 3 trang — chọn mục / quẹt / kết nối;
+// round 29.2: field theo từng mục chi tiết hơn + lọc giới tính kiểu Tinder cho Làm quen).
 const CATEGORIES: { type: NeedType; Icon: LucideIcon }[] = [
   { type: "game", Icon: Gamepad2 },
   { type: "lam_quen", Icon: Heart },
@@ -54,21 +55,27 @@ function CategoryIcon({ type, className }: { type: NeedType; className?: string 
 }
 
 // Ghép các thông tin phụ (lương, tuổi, giới tính, tên game, hình thức trao đổi...) theo
-// từng loại nhu cầu thành 1 dòng nhãn ngắn hiển thị trên thẻ quẹt.
+// từng loại nhu cầu (và theo role tìm-việc/tuyển-người) thành 1 dòng nhãn ngắn trên thẻ quẹt.
 function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string, string>) => string): string[] {
   const d = (need.details as Record<string, string>) ?? {};
   const chips: string[] = [];
   if (need.need_type === "tim_viec") {
-    chips.push(d.role === "hirer" ? t("quet.roleHirer") : t("quet.roleSeeker"));
+    const isHirer = d.role === "hirer";
+    chips.push(isHirer ? t("quet.roleHirer") : t("quet.roleSeeker"));
     if (d.salary) chips.push(`💰 ${d.salary}`);
-    if (d.ageRange) chips.push(`🎂 ${d.ageRange}`);
-    if (d.gender === "male") chips.push(t("quet.gender.male"));
-    if (d.gender === "female") chips.push(t("quet.gender.female"));
+    if (isHirer) {
+      if (d.ageRange) chips.push(`🎂 ${d.ageRange}`);
+      if (d.gender === "male") chips.push(t("quet.gender.male"));
+      if (d.gender === "female") chips.push(t("quet.gender.female"));
+    } else {
+      if (d.age) chips.push(t("quet.ageYearsOld", { age: d.age }));
+      if (d.skills) chips.push(`🛠️ ${d.skills}`);
+    }
   }
   if (need.need_type === "lam_quen") {
     if (d.gender === "male") chips.push(t("quet.gender.male"));
     if (d.gender === "female") chips.push(t("quet.gender.female"));
-    if (d.gender === "other") chips.push(t("quet.gender.other"));
+    if (d.gender === "lgbt") chips.push(t("quet.gender.lgbt"));
     if (d.age) chips.push(t("quet.ageYearsOld", { age: d.age }));
   }
   if (need.need_type === "trao_doi") {
@@ -79,6 +86,26 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
     chips.push(d.mode === "trade" ? t("quet.modeTrade") : t("quet.modePlaymate"));
   }
   return chips;
+}
+
+// Các field dạng văn bản dài (yêu cầu, kinh nghiệm, đối tượng mong muốn...) hiển thị riêng
+// từng dòng bên dưới phần mô tả, thay vì gộp chung vào hàng chip ngắn ở trên.
+function needExtraLines(
+  need: SwipeNeed,
+  t: (key: string, vars?: Record<string, string>) => string,
+): { label: string; value: string }[] {
+  const d = (need.details as Record<string, string>) ?? {};
+  const lines: { label: string; value: string }[] = [];
+  if (need.need_type === "tim_viec" && d.role !== "hirer" && d.experience) {
+    lines.push({ label: t("quet.field.experience"), value: d.experience });
+  }
+  if ((need.need_type === "lam_quen" || need.need_type === "game") && d.requirement) {
+    lines.push({ label: t("quet.field.requirement"), value: d.requirement });
+  }
+  if (need.need_type === "trao_doi" && d.target) {
+    lines.push({ label: t("quet.field.target"), value: d.target });
+  }
+  return lines;
 }
 
 interface OwnerInfo {
@@ -152,6 +179,11 @@ export default function Quet() {
   const [formAgeRange, setFormAgeRange] = useState("");
   const [formAge, setFormAge] = useState("");
   const [formGender, setFormGender] = useState("any");
+  const [formTargetGender, setFormTargetGender] = useState("any");
+  const [formTargetText, setFormTargetText] = useState("");
+  const [formRequirement, setFormRequirement] = useState("");
+  const [formExperience, setFormExperience] = useState("");
+  const [formSkills, setFormSkills] = useState("");
   const [formGameName, setFormGameName] = useState("");
   const [formTradeType, setFormTradeType] = useState<"interaction" | "buy_sell">("interaction");
   const [formPhotoFile, setFormPhotoFile] = useState<File | null>(null);
@@ -166,20 +198,35 @@ export default function Quet() {
 
   const myId = user?.id;
 
+  const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
+
   const loadCandidates = async () => {
     if (!myId || !activeCategory) return;
     setLoading(true);
     const { data: swiped } = await db.from("swipe_actions").select("need_id").eq("actor_id", myId);
     const swipedIds: string[] = (swiped ?? []).map((s: any) => s.need_id);
 
-    const { data, error } = await db
+    let q = db
       .from("swipe_needs")
       .select("*")
       .eq("is_active", true)
       .eq("need_type", activeCategory)
-      .neq("user_id", myId)
-      .order("created_at", { ascending: false })
-      .limit(50);
+      .neq("user_id", myId);
+
+    // Làm quen: lọc 2 chiều kiểu Tinder — chỉ hiện người có giới tính khớp với "muốn tìm"
+    // của mình, VÀ "muốn tìm" của họ khớp với giới tính của mình (hoặc để "Không yêu cầu").
+    if (activeCategory === "lam_quen") {
+      const myNeed = needByType("lam_quen");
+      const myDetails = (myNeed?.details as Record<string, string>) ?? {};
+      if (myDetails.target && myDetails.target !== "any") {
+        q = q.eq("details->>gender", myDetails.target);
+      }
+      if (myDetails.gender) {
+        q = q.or(`details->>target.eq.${myDetails.gender},details->>target.eq.any`);
+      }
+    }
+
+    const { data, error } = await q.order("created_at", { ascending: false }).limit(50);
     if (error) {
       toast.error(t("common.error"));
       setLoading(false);
@@ -333,6 +380,11 @@ export default function Quet() {
     setFormAgeRange(d.ageRange ?? "");
     setFormAge(d.age ?? "");
     setFormGender(d.gender ?? (type === "tim_viec" ? "any" : "male"));
+    setFormTargetGender(type === "lam_quen" ? (d.target ?? "any") : "any");
+    setFormTargetText(type === "trao_doi" ? (d.target ?? "") : "");
+    setFormRequirement(d.requirement ?? "");
+    setFormExperience(d.experience ?? "");
+    setFormSkills(d.skills ?? "");
     setFormGameName(d.gameName ?? "");
     setFormTradeType(d.tradeType === "buy_sell" ? "buy_sell" : "interaction");
   };
@@ -356,10 +408,11 @@ export default function Quet() {
     setCategoryStep("form");
   };
 
-  const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
+  // Game/Trao đổi không còn field Tiêu đề riêng — bắt buộc phải có Mô tả/Giới thiệu thay thế.
+  const canSave = formType === "game" || formType === "trao_doi" ? !!formDesc.trim() : !!formTitle.trim();
 
   const saveNeed = async () => {
-    if (!myId || !formTitle.trim()) return;
+    if (!myId || !canSave) return;
     setSaving(true);
     let photoPath: string | null = editingNeed?.photo_url ?? null;
     if (formPhotoFile) {
@@ -372,26 +425,40 @@ export default function Quet() {
       }
     }
     const details: Record<string, string> = {};
+    let finalTitle = formTitle.trim();
     if (formType === "tim_viec") {
       details.role = formRole;
-      details.gender = formGender;
-      if (formSalary.trim()) details.salary = formSalary.trim();
-      if (formAgeRange.trim()) details.ageRange = formAgeRange.trim();
+      if (formRole === "hirer") {
+        if (formSalary.trim()) details.salary = formSalary.trim();
+        if (formAgeRange.trim()) details.ageRange = formAgeRange.trim();
+        details.gender = formGender;
+      } else {
+        if (formSalary.trim()) details.salary = formSalary.trim();
+        if (formAge.trim()) details.age = formAge.trim();
+        if (formExperience.trim()) details.experience = formExperience.trim();
+        if (formSkills.trim()) details.skills = formSkills.trim();
+      }
     }
     if (formType === "lam_quen") {
       details.gender = formGender;
+      details.target = formTargetGender;
       if (formAge.trim()) details.age = formAge.trim();
+      if (formRequirement.trim()) details.requirement = formRequirement.trim();
     }
     if (formType === "trao_doi") {
       details.tradeType = formTradeType;
+      if (formTargetText.trim()) details.target = formTargetText.trim();
+      finalTitle = t(`quet.tradeType.${formTradeType}`);
     }
     if (formType === "game") {
       details.mode = formMode;
       if (formGameName.trim()) details.gameName = formGameName.trim();
+      if (formRequirement.trim()) details.requirement = formRequirement.trim();
+      finalTitle = formGameName.trim() || t("quet.type.game");
     }
     const payload = {
       need_type: formType,
-      title: formTitle.trim(),
+      title: finalTitle,
       description: formDesc.trim() || null,
       area: formArea.trim() || null,
       details,
@@ -557,6 +624,7 @@ export default function Quet() {
             <div className="font-extrabold">{t(`quet.type.${formType}`)}</div>
           </div>
 
+          {/* ── Field mở đầu riêng theo từng mục ── */}
           {formType === "tim_viec" && (
             <Select value={formRole} onValueChange={(v) => setFormRole(v as "seeker" | "hirer")}>
               <SelectTrigger>
@@ -569,15 +637,22 @@ export default function Quet() {
             </Select>
           )}
           {formType === "game" && (
-            <Select value={formMode} onValueChange={(v) => setFormMode(v as "playmate" | "trade")}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="playmate">{t("quet.modePlaymate")}</SelectItem>
-                <SelectItem value="trade">{t("quet.modeTrade")}</SelectItem>
-              </SelectContent>
-            </Select>
+            <>
+              <Select value={formMode} onValueChange={(v) => setFormMode(v as "playmate" | "trade")}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="playmate">{t("quet.modePlaymate")}</SelectItem>
+                  <SelectItem value="trade">{t("quet.modeTrade")}</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input
+                placeholder={t("quet.field.gameName")}
+                value={formGameName}
+                onChange={(e) => setFormGameName(e.target.value)}
+              />
+            </>
           )}
           {formType === "trao_doi" && (
             <Select value={formTradeType} onValueChange={(v) => setFormTradeType(v as "interaction" | "buy_sell")}>
@@ -591,13 +666,37 @@ export default function Quet() {
             </Select>
           )}
 
-          <Input
-            placeholder={t(`quet.field.title.${formType}`)}
-            value={formTitle}
-            onChange={(e) => setFormTitle(e.target.value)}
-          />
+          {/* Tiêu đề — CHỈ còn ở Làm quen ("Tên") và Công việc, Game/Trao đổi bỏ hẳn */}
+          {(formType === "lam_quen" || formType === "tim_viec") && (
+            <Input
+              placeholder={t(`quet.field.title.${formType}`)}
+              value={formTitle}
+              onChange={(e) => setFormTitle(e.target.value)}
+            />
+          )}
 
-          {formType === "tim_viec" && (
+          {/* ── Công việc: field khác nhau hẳn giữa Tìm việc và Tuyển người ── */}
+          {formType === "tim_viec" && formRole === "seeker" && (
+            <>
+              <Input
+                placeholder={t("quet.field.desiredSalary")}
+                value={formSalary}
+                onChange={(e) => setFormSalary(e.target.value)}
+              />
+              <Input placeholder={t("quet.field.age")} value={formAge} onChange={(e) => setFormAge(e.target.value)} />
+              <Input
+                placeholder={t("quet.field.experience")}
+                value={formExperience}
+                onChange={(e) => setFormExperience(e.target.value)}
+              />
+              <Input
+                placeholder={t("quet.field.skills")}
+                value={formSkills}
+                onChange={(e) => setFormSkills(e.target.value)}
+              />
+            </>
+          )}
+          {formType === "tim_viec" && formRole === "hirer" && (
             <>
               <Input
                 placeholder={t("quet.field.salary")}
@@ -622,36 +721,64 @@ export default function Quet() {
             </>
           )}
 
+          {/* ── Làm quen: giới tính của mình + muốn tìm ai (lọc 2 chiều kiểu Tinder) + tuổi ── */}
           {formType === "lam_quen" && (
             <>
-              <Select value={formGender} onValueChange={setFormGender}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">{t("quet.gender.male")}</SelectItem>
-                  <SelectItem value="female">{t("quet.gender.female")}</SelectItem>
-                  <SelectItem value="other">{t("quet.gender.other")}</SelectItem>
-                </SelectContent>
-              </Select>
+              <div>
+                <div className="text-xs font-semibold mb-1 text-muted-foreground">{t("quet.field.gender")}</div>
+                <Select value={formGender} onValueChange={setFormGender}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">{t("quet.gender.male")}</SelectItem>
+                    <SelectItem value="female">{t("quet.gender.female")}</SelectItem>
+                    <SelectItem value="lgbt">{t("quet.gender.lgbt")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <div className="text-xs font-semibold mb-1 text-muted-foreground">{t("quet.field.targetGender")}</div>
+                <Select value={formTargetGender} onValueChange={setFormTargetGender}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">{t("quet.gender.male")}</SelectItem>
+                    <SelectItem value="female">{t("quet.gender.female")}</SelectItem>
+                    <SelectItem value="any">{t("quet.gender.any")}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               <Input placeholder={t("quet.field.age")} value={formAge} onChange={(e) => setFormAge(e.target.value)} />
             </>
           )}
 
-          {formType === "game" && (
-            <Input
-              placeholder={t("quet.field.gameName")}
-              value={formGameName}
-              onChange={(e) => setFormGameName(e.target.value)}
-            />
-          )}
-
+          {/* ── Mô tả/Giới thiệu — dùng chung, nhãn đổi theo từng mục ── */}
           <Textarea
             placeholder={t(`quet.field.desc.${formType}`)}
             value={formDesc}
             onChange={(e) => setFormDesc(e.target.value)}
             rows={3}
           />
+
+          {/* ── Field đứng SAU phần mô tả theo từng mục ── */}
+          {(formType === "lam_quen" || formType === "game") && (
+            <Textarea
+              placeholder={t("quet.field.requirement")}
+              value={formRequirement}
+              onChange={(e) => setFormRequirement(e.target.value)}
+              rows={2}
+            />
+          )}
+          {formType === "trao_doi" && (
+            <Input
+              placeholder={t("quet.field.target")}
+              value={formTargetText}
+              onChange={(e) => setFormTargetText(e.target.value)}
+            />
+          )}
+
           <Input placeholder={t("quet.needArea")} value={formArea} onChange={(e) => setFormArea(e.target.value)} />
 
           {editingNeed?.photo_url && !formPhotoPreview && (
@@ -702,7 +829,7 @@ export default function Quet() {
 
           <button
             onClick={saveNeed}
-            disabled={saving || !formTitle.trim()}
+            disabled={saving || !canSave}
             className="w-full py-2.5 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-semibold disabled:opacity-50"
           >
             {t("common.save")}
@@ -846,6 +973,15 @@ export default function Quet() {
                         {needDetailChips(topCard, t).join("  ·  ")}
                       </div>
                     )}
+                    {needExtraLines(topCard, t).map((line, i) => (
+                      <div
+                        key={i}
+                        className={cn("text-xs mt-1", topCard.photo_url ? "text-white/80" : "text-muted-foreground")}
+                      >
+                        <span className="font-semibold">{line.label}: </span>
+                        {line.value}
+                      </div>
+                    ))}
                     <div
                       className={cn("text-[10px] mt-2", topCard.photo_url ? "text-white/70" : "text-muted-foreground")}
                     >
