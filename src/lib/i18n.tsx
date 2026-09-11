@@ -16,7 +16,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "quet.tabMine": "Của tôi",
     "quet.tabMatches": "Kết nối",
     "quet.filterAll": "Tất cả",
-    "quet.type.trao_doi": "Trao đổi tương tác",
+    "quet.type.trao_doi": "Trao đổi",
     "quet.type.lam_quen": "Làm quen",
     "quet.type.tim_viec": "Tìm việc/Tuyển người",
     "quet.type.game": "Game",
