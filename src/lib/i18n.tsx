@@ -36,7 +36,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "quet.needArea": "Khu vực",
     "quet.roleSeeker": "Tìm việc",
     "quet.roleHirer": "Tuyển người",
-    "quet.modePlaymate": "Tìm bạn chơi",
+    "quet.modePlaymate": "Tìm bạn chơi chung",
     "quet.modeTrade": "Mua/bán",
     "quet.matchModalTitle": "Đã kết nối! 🎉",
     "quet.matchModalBody": "Bạn và {name} đã thích nhau. Nhắn tin ngay nhé!",
