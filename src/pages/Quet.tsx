@@ -275,12 +275,22 @@ export default function Quet() {
   const [locStatus, setLocStatus] = useState<"idle" | "requesting" | "granted" | "denied" | "unsupported">("idle");
 
   // Kéo-thả kiểu Tinder cho thẻ trên cùng.
-  const [drag, setDrag] = useState({ x: 0, y: 0, dragging: false });
+  // Trong lúc kéo KHÔNG dùng React state (re-render mỗi pointermove gây giật) —
+  // cập nhật transform trực tiếp qua ref + requestAnimationFrame.
+  const [dragging, setDragging] = useState(false);
+  const dragRef = useRef({ x: 0, y: 0, active: false });
+  const cardRef = useRef<HTMLDivElement>(null);
+  const likeRef = useRef<HTMLDivElement>(null);
+  const passRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
   const [exiting, setExiting] = useState<"left" | "right" | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
   const [frontEntering, setFrontEntering] = useState(false);
   const enteredIdRef = useRef<string | null>(null);
   const actionsRowRef = useRef<HTMLDivElement>(null);
+  const cardWrapRef = useRef<HTMLDivElement>(null);
+  const [cardH, setCardH] = useState<number | null>(null);
+
 
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -297,16 +307,37 @@ export default function Quet() {
     matchId: string | null;
   } | null>(null);
 
-  // Đảm bảo nút Thích/Bỏ qua luôn nằm trọn trong màn hình ngay khi vào Quẹt — không dựa
-  // vào việc người dùng tự cuộn. Một số máy/khi bật thêm hàng "Bật định vị"/"Bán kính"
-  // phía trên khiến nội dung cao hơn 1 màn hình, nav fixed sẽ đè lên nút nếu chưa cuộn tới.
+  // Toàn bộ màn quẹt phải vừa đúng 1 màn hình: đo không gian còn lại thật (viewport thật -
+  // vị trí thẻ - hàng nút - nav dưới) rồi cho thẻ co giãn vừa đủ, thay vì chiều cao cố định.
   useEffect(() => {
     if (tab !== "swipe" || !activeCategory) return;
-    const raf = requestAnimationFrame(() => {
-      actionsRowRef.current?.scrollIntoView({ block: "end", behavior: "instant" as ScrollBehavior });
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [tab, activeCategory, locStatus, radiusKm]);
+    const measure = () => {
+      const el = cardWrapRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      const vh = window.visualViewport?.height ?? window.innerHeight;
+      const navRaw = getComputedStyle(document.documentElement).getPropertyValue("--bottom-nav-h");
+      const navH = navRaw.trim().endsWith("rem")
+        ? parseFloat(navRaw) * 16
+        : parseFloat(navRaw) || 80;
+      const actionsH = actionsRowRef.current?.offsetHeight ?? 56;
+      const undoH = lastAction ? 46 : 0;
+      const avail = vh - top - actionsH - undoH - navH - 32;
+      setCardH(Math.round(Math.max(240, Math.min(520, avail))));
+    };
+    window.scrollTo(0, 0);
+    const raf = requestAnimationFrame(measure);
+    window.addEventListener("resize", measure);
+    window.addEventListener("orientationchange", measure);
+    window.visualViewport?.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("orientationchange", measure);
+      window.visualViewport?.removeEventListener("resize", measure);
+    };
+  }, [tab, activeCategory, locStatus, radiusKm, lastAction, loading]);
+
 
   const myId = user?.id;
 
@@ -389,7 +420,9 @@ export default function Quet() {
       return;
     }
     const needIds = Array.from(new Set(rows.flatMap((r: any) => [r.need_id_a, r.need_id_b])));
-    const otherIds = Array.from(new Set(rows.map((r: any) => (r.user_a === myId ? r.user_b : r.user_a))));
+    const otherIds = Array.from(
+      new Set(rows.map((r: any) => (r.user_a === myId ? r.user_b : r.user_a))),
+    ) as string[];
     const [{ data: needs }, { data: profs }] = await Promise.all([
       db.from("swipe_needs").select("*").in("id", needIds),
       supabase.from("profiles_public").select("id, username, full_name, avatar_url").in("id", otherIds),
@@ -511,32 +544,68 @@ export default function Quet() {
   // để animation và cập nhật dữ liệu khớp nhịp với nhau.
   const triggerSwipe = (dir: "left" | "right") => {
     if (!topCard || exiting) return;
+    dragRef.current.active = false;
+    setDragging(false);
     setExiting(dir);
     setTimeout(() => {
       void act(topCard, dir === "right" ? "like" : "pass");
       setExiting(null);
-      setDrag({ x: 0, y: 0, dragging: false });
+      dragRef.current = { x: 0, y: 0, active: false };
     }, 220);
+  };
+
+  // Vẽ lại vị trí thẻ theo ngón tay — chạy trong 1 rAF, KHÔNG qua React state.
+  const paintDrag = () => {
+    rafRef.current = null;
+    const el = cardRef.current;
+    if (!el) return;
+    const { x, y } = dragRef.current;
+    const rot = Math.max(-18, Math.min(18, x / 12));
+    el.style.transform = `translate3d(${x}px, ${y * 0.4}px, 0) rotate(${rot}deg)`;
+    if (likeRef.current) likeRef.current.style.opacity = String(Math.max(0, Math.min(1, x / SWIPE_THRESHOLD)));
+    if (passRef.current) passRef.current.style.opacity = String(Math.max(0, Math.min(1, -x / SWIPE_THRESHOLD)));
+  };
+  const schedulePaint = () => {
+    if (rafRef.current == null) rafRef.current = requestAnimationFrame(paintDrag);
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (exiting) return;
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     dragStart.current = { x: e.clientX, y: e.clientY };
-    setDrag({ x: 0, y: 0, dragging: true });
+    dragRef.current = { x: 0, y: 0, active: true };
+    if (cardRef.current) cardRef.current.style.transition = "none";
+    setDragging(true);
   };
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!drag.dragging) return;
-    setDrag({ x: e.clientX - dragStart.current.x, y: e.clientY - dragStart.current.y, dragging: true });
+    if (!dragRef.current.active) return;
+    dragRef.current.x = e.clientX - dragStart.current.x;
+    dragRef.current.y = e.clientY - dragStart.current.y;
+    schedulePaint();
   };
   const onPointerUp = () => {
-    if (!drag.dragging) return;
-    if (Math.abs(drag.x) > SWIPE_THRESHOLD) {
-      triggerSwipe(drag.x > 0 ? "right" : "left");
-    } else {
-      setDrag({ x: 0, y: 0, dragging: false });
+    if (!dragRef.current.active) return;
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
     }
+    const x = dragRef.current.x;
+    if (Math.abs(x) > SWIPE_THRESHOLD) {
+      triggerSwipe(x > 0 ? "right" : "left");
+      return;
+    }
+    // Bật lại về giữa mượt (spring nhẹ) rồi mới trả quyền vẽ cho React.
+    const el = cardRef.current;
+    if (el) {
+      el.style.transition = "transform 300ms cubic-bezier(0.2,0.9,0.2,1)";
+      el.style.transform = "translate3d(0, 0, 0) rotate(0deg)";
+    }
+    if (likeRef.current) likeRef.current.style.opacity = "0";
+    if (passRef.current) passRef.current.style.opacity = "0";
+    dragRef.current = { x: 0, y: 0, active: false };
+    setDragging(false);
   };
+
 
   // Đưa toàn bộ field của form về mặc định (tạo mới) hoặc điền sẵn từ 1 nhu cầu có sẵn (sửa).
   const resetFormFields = (type: NeedType, need?: SwipeNeed | null) => {
@@ -707,20 +776,17 @@ export default function Quet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topCard?.id]);
 
-  const rotate = Math.max(-18, Math.min(18, drag.x / 12));
-  const likeOpacity = Math.max(0, Math.min(1, drag.x / SWIPE_THRESHOLD));
-  const passOpacity = Math.max(0, Math.min(1, -drag.x / SWIPE_THRESHOLD));
-
   let cardStyle: React.CSSProperties;
   if (exiting) {
     const flyX = exiting === "right" ? 700 : -700;
     cardStyle = {
-      transform: `translate(${flyX}px, ${drag.y}px) rotate(${exiting === "right" ? 24 : -24}deg)`,
+      transform: `translate3d(${flyX}px, ${dragRef.current.y}px, 0) rotate(${exiting === "right" ? 24 : -24}deg)`,
       opacity: 0,
       transition: "transform 220ms ease-out, opacity 220ms ease-out",
     };
-  } else if (drag.dragging) {
-    cardStyle = { transform: `translate(${drag.x}px, ${drag.y * 0.4}px) rotate(${rotate}deg)`, transition: "none" };
+  } else if (dragging) {
+    // Trong lúc kéo, transform do paintDrag() ghi trực tiếp — React không quản lý nữa.
+    cardStyle = { transition: "none" };
   } else if (frontEntering) {
     // Vị trí xuất phát của hiệu ứng "trồi lên": y hệt dáng vẻ lúc còn là thẻ phía sau
     // (scale nhỏ hơn + hạ xuống + mờ hơn), CHƯA có transition — để frame sau mới bật
@@ -733,6 +799,7 @@ export default function Quet() {
       transition: "transform 280ms cubic-bezier(0.2,0.8,0.2,1), opacity 280ms ease-out",
     };
   }
+
 
   if (!isApproved) {
     return (
@@ -1207,9 +1274,17 @@ export default function Quet() {
           )}
 
           {loading ? (
-            <div className="h-[460px] rounded-2xl bg-muted animate-pulse" />
+            <div
+              ref={cardWrapRef}
+              style={{ height: cardH ?? 460 }}
+              className="rounded-2xl bg-muted animate-pulse"
+            />
           ) : !topCard ? (
-            <div className="h-[460px] rounded-2xl border border-dashed grid place-items-center text-center px-6 text-sm text-muted-foreground">
+            <div
+              ref={cardWrapRef}
+              style={{ height: cardH ?? 460 }}
+              className="rounded-2xl border border-dashed grid place-items-center text-center px-6 text-sm text-muted-foreground"
+            >
               <div>
                 <Flame className="w-10 h-10 mx-auto mb-3 opacity-30" />
                 {t("quet.noMoreCards")}
@@ -1217,7 +1292,7 @@ export default function Quet() {
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="relative h-[460px]">
+              <div ref={cardWrapRef} className="relative" style={{ height: cardH ?? 460 }}>
                 {nextCard && (
                   <div
                     key={nextCard.id}
@@ -1228,11 +1303,13 @@ export default function Quet() {
                 )}
                 <div
                   key={topCard.id}
+                  ref={cardRef}
                   onPointerDown={onPointerDown}
                   onPointerMove={onPointerMove}
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
-                  style={{ ...cardStyle, touchAction: "none" }}
+                  style={{ ...cardStyle, touchAction: "none", willChange: "transform", backfaceVisibility: "hidden" }}
+
                   className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
                 >
                   <CardPhoto path={topCard.photo_url} />
@@ -1274,23 +1351,26 @@ export default function Quet() {
                     </PopoverContent>
                   </Popover>
                   <div
+                    ref={likeRef}
                     className={cn(
                       "absolute top-6 left-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg -rotate-12",
                       "border-primary text-primary",
                     )}
-                    style={{ opacity: likeOpacity }}
+                    style={{ opacity: 0, willChange: "opacity" }}
                   >
                     {t("quet.like").toUpperCase()}
                   </div>
                   <div
+                    ref={passRef}
                     className={cn(
                       "absolute top-6 right-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg rotate-12",
                       "border-muted-foreground text-muted-foreground",
                     )}
-                    style={{ opacity: passOpacity }}
+                    style={{ opacity: 0, willChange: "opacity" }}
                   >
                     {t("quet.pass").toUpperCase()}
                   </div>
+
                   <div
                     className={cn(
                       "absolute inset-0 p-5 flex flex-col pointer-events-none",

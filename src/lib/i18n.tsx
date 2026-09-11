@@ -1963,7 +1963,6 @@ const DICT: Record<Lang, Record<string, string>> = {
     "status.pending": "Pending",
     "status.approved": "Approved",
     "status.needs_revision": "Needs revision",
-    "status.rejected": "Rejected",
     "notif.deleteOne": "Delete notification",
     "profile.avatarUpdated": "Profile photo updated",
     "profile.changeAvatar": "Change profile photo",
