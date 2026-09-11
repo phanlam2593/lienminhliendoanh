@@ -272,6 +272,7 @@ export type NotifCategory =
   | "reports"
   | "achievements"
   | "calls"
+  | "swipe_matches"
   | "friend_requests";
 
 export interface Notification {
