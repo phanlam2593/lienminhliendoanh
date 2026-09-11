@@ -307,16 +307,37 @@ export default function Quet() {
     matchId: string | null;
   } | null>(null);
 
-  // Đảm bảo nút Thích/Bỏ qua luôn nằm trọn trong màn hình ngay khi vào Quẹt — không dựa
-  // vào việc người dùng tự cuộn. Một số máy/khi bật thêm hàng "Bật định vị"/"Bán kính"
-  // phía trên khiến nội dung cao hơn 1 màn hình, nav fixed sẽ đè lên nút nếu chưa cuộn tới.
+  // Toàn bộ màn quẹt phải vừa đúng 1 màn hình: đo không gian còn lại thật (viewport thật -
+  // vị trí thẻ - hàng nút - nav dưới) rồi cho thẻ co giãn vừa đủ, thay vì chiều cao cố định.
   useEffect(() => {
     if (tab !== "swipe" || !activeCategory) return;
-    const raf = requestAnimationFrame(() => {
-      actionsRowRef.current?.scrollIntoView({ block: "end", behavior: "instant" as ScrollBehavior });
-    });
-    return () => cancelAnimationFrame(raf);
-  }, [tab, activeCategory, locStatus, radiusKm]);
+    const measure = () => {
+      const el = cardWrapRef.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      const vh = window.visualViewport?.height ?? window.innerHeight;
+      const navRaw = getComputedStyle(document.documentElement).getPropertyValue("--bottom-nav-h");
+      const navH = navRaw.trim().endsWith("rem")
+        ? parseFloat(navRaw) * 16
+        : parseFloat(navRaw) || 80;
+      const actionsH = actionsRowRef.current?.offsetHeight ?? 56;
+      const undoH = lastAction ? 46 : 0;
+      const avail = vh - top - actionsH - undoH - navH - 32;
+      setCardH(Math.round(Math.max(240, Math.min(520, avail))));
+    };
+    window.scrollTo(0, 0);
+    const raf = requestAnimationFrame(measure);
+    window.addEventListener("resize", measure);
+    window.addEventListener("orientationchange", measure);
+    window.visualViewport?.addEventListener("resize", measure);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("orientationchange", measure);
+      window.visualViewport?.removeEventListener("resize", measure);
+    };
+  }, [tab, activeCategory, locStatus, radiusKm, lastAction, loading]);
+
 
   const myId = user?.id;
 
