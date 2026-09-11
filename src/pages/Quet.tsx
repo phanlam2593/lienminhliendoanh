@@ -774,20 +774,17 @@ export default function Quet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topCard?.id]);
 
-  const rotate = Math.max(-18, Math.min(18, drag.x / 12));
-  const likeOpacity = Math.max(0, Math.min(1, drag.x / SWIPE_THRESHOLD));
-  const passOpacity = Math.max(0, Math.min(1, -drag.x / SWIPE_THRESHOLD));
-
   let cardStyle: React.CSSProperties;
   if (exiting) {
     const flyX = exiting === "right" ? 700 : -700;
     cardStyle = {
-      transform: `translate(${flyX}px, ${drag.y}px) rotate(${exiting === "right" ? 24 : -24}deg)`,
+      transform: `translate3d(${flyX}px, ${dragRef.current.y}px, 0) rotate(${exiting === "right" ? 24 : -24}deg)`,
       opacity: 0,
       transition: "transform 220ms ease-out, opacity 220ms ease-out",
     };
-  } else if (drag.dragging) {
-    cardStyle = { transform: `translate(${drag.x}px, ${drag.y * 0.4}px) rotate(${rotate}deg)`, transition: "none" };
+  } else if (dragging) {
+    // Trong lúc kéo, transform do paintDrag() ghi trực tiếp — React không quản lý nữa.
+    cardStyle = { transition: "none" };
   } else if (frontEntering) {
     // Vị trí xuất phát của hiệu ứng "trồi lên": y hệt dáng vẻ lúc còn là thẻ phía sau
     // (scale nhỏ hơn + hạ xuống + mờ hơn), CHƯA có transition — để frame sau mới bật
@@ -800,6 +797,7 @@ export default function Quet() {
       transition: "transform 280ms cubic-bezier(0.2,0.8,0.2,1), opacity 280ms ease-out",
     };
   }
+
 
   if (!isApproved) {
     return (
