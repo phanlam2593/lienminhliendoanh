@@ -1339,23 +1339,26 @@ export default function Quet() {
                     </PopoverContent>
                   </Popover>
                   <div
+                    ref={likeRef}
                     className={cn(
                       "absolute top-6 left-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg -rotate-12",
                       "border-primary text-primary",
                     )}
-                    style={{ opacity: likeOpacity }}
+                    style={{ opacity: 0, willChange: "opacity" }}
                   >
                     {t("quet.like").toUpperCase()}
                   </div>
                   <div
+                    ref={passRef}
                     className={cn(
                       "absolute top-6 right-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg rotate-12",
                       "border-muted-foreground text-muted-foreground",
                     )}
-                    style={{ opacity: passOpacity }}
+                    style={{ opacity: 0, willChange: "opacity" }}
                   >
                     {t("quet.pass").toUpperCase()}
                   </div>
+
                   <div
                     className={cn(
                       "absolute inset-0 p-5 flex flex-col pointer-events-none",
