@@ -311,6 +311,8 @@ export interface SwipeNeed {
   title: string;
   description: string | null;
   area: string | null;
+  latitude: number | null;
+  longitude: number | null;
   is_active: boolean;
   details: Record<string, unknown>;
   photo_url: string | null;
