@@ -1272,9 +1272,17 @@ export default function Quet() {
           )}
 
           {loading ? (
-            <div className="h-[460px] rounded-2xl bg-muted animate-pulse" />
+            <div
+              ref={cardWrapRef}
+              style={{ height: cardH ?? 460 }}
+              className="rounded-2xl bg-muted animate-pulse"
+            />
           ) : !topCard ? (
-            <div className="h-[460px] rounded-2xl border border-dashed grid place-items-center text-center px-6 text-sm text-muted-foreground">
+            <div
+              ref={cardWrapRef}
+              style={{ height: cardH ?? 460 }}
+              className="rounded-2xl border border-dashed grid place-items-center text-center px-6 text-sm text-muted-foreground"
+            >
               <div>
                 <Flame className="w-10 h-10 mx-auto mb-3 opacity-30" />
                 {t("quet.noMoreCards")}
@@ -1282,7 +1290,7 @@ export default function Quet() {
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="relative h-[460px]">
+              <div ref={cardWrapRef} className="relative" style={{ height: cardH ?? 460 }}>
                 {nextCard && (
                   <div
                     key={nextCard.id}
@@ -1293,11 +1301,13 @@ export default function Quet() {
                 )}
                 <div
                   key={topCard.id}
+                  ref={cardRef}
                   onPointerDown={onPointerDown}
                   onPointerMove={onPointerMove}
                   onPointerUp={onPointerUp}
                   onPointerCancel={onPointerUp}
-                  style={{ ...cardStyle, touchAction: "none" }}
+                  style={{ ...cardStyle, touchAction: "none", willChange: "transform", backfaceVisibility: "hidden" }}
+
                   className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
                 >
                   <CardPhoto path={topCard.photo_url} />
