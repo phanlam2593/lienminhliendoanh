@@ -280,6 +280,7 @@ export default function Quet() {
   const dragStart = useRef({ x: 0, y: 0 });
   const [frontEntering, setFrontEntering] = useState(false);
   const enteredIdRef = useRef<string | null>(null);
+  const actionsRowRef = useRef<HTMLDivElement>(null);
 
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -295,6 +296,17 @@ export default function Quet() {
     actionId: string | null;
     matchId: string | null;
   } | null>(null);
+
+  // Đảm bảo nút Thích/Bỏ qua luôn nằm trọn trong màn hình ngay khi vào Quẹt — không dựa
+  // vào việc người dùng tự cuộn. Một số máy/khi bật thêm hàng "Bật định vị"/"Bán kính"
+  // phía trên khiến nội dung cao hơn 1 màn hình, nav fixed sẽ đè lên nút nếu chưa cuộn tới.
+  useEffect(() => {
+    if (tab !== "swipe" || !activeCategory) return;
+    const raf = requestAnimationFrame(() => {
+      actionsRowRef.current?.scrollIntoView({ block: "end", behavior: "instant" as ScrollBehavior });
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [tab, activeCategory, locStatus, radiusKm]);
 
   const myId = user?.id;
 
@@ -1346,7 +1358,7 @@ export default function Quet() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-center gap-6">
+              <div ref={actionsRowRef} className="flex items-center justify-center gap-6">
                 <button
                   onClick={() => triggerSwipe("left")}
                   aria-label={t("quet.pass")}
