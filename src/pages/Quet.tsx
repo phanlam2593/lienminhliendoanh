@@ -752,6 +752,10 @@ export default function Quet() {
     myPos && topCard?.latitude != null && topCard?.longitude != null
       ? haversineKm(myPos.lat, myPos.lng, topCard.latitude, topCard.longitude)
       : null;
+  const [descExpanded, setDescExpanded] = useState(false);
+  useEffect(() => {
+    setDescExpanded(false);
+  }, [topCard?.id]);
 
   // Khi thẻ đầu đổi (sau khi quẹt xong, đổi sang người kế tiếp) → phát 1 hiệu ứng
   // "trồi lên" ngắn (bắt đầu ở dáng nhỏ/mờ như lúc còn là thẻ phía sau, rồi mới
@@ -1388,13 +1392,32 @@ export default function Quet() {
                       </div>
                     )}
                     {topCard.description && (
-                      <div
-                        className={cn(
-                          "text-sm flex-1 overflow-hidden",
-                          topCard.photo_url ? "text-white/90" : "text-muted-foreground",
+                      <div className="flex-1 overflow-hidden flex flex-col">
+                        <div
+                          className={cn(
+                            "text-sm",
+                            !descExpanded && "line-clamp-3",
+                            topCard.photo_url ? "text-white/90" : "text-muted-foreground",
+                          )}
+                        >
+                          {topCard.description}
+                        </div>
+                        {topCard.description.length > 90 && (
+                          <button
+                            type="button"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDescExpanded((v) => !v);
+                            }}
+                            className={cn(
+                              "self-start text-xs font-semibold mt-0.5 pointer-events-auto underline underline-offset-2",
+                              topCard.photo_url ? "text-white" : "text-primary",
+                            )}
+                          >
+                            {descExpanded ? t("quet.collapse") : t("quet.seeMore")}
+                          </button>
                         )}
-                      >
-                        {topCard.description}
                       </div>
                     )}
                     {needDetailChips(topCard, t).length > 0 && (
