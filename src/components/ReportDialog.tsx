@@ -72,7 +72,12 @@ export function ReportDialog({
           placeholder={t("report.descPlaceholder")}
           className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
         />
-        <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          className="block w-full min-w-0 max-w-full text-xs file:mr-2 file:py-1.5 file:px-2.5 file:rounded-md file:border-0 file:bg-accent file:text-xs file:font-semibold"
+        />
         <p className="text-[11px] text-muted-foreground -mt-1">{t("report.photoOptional")}</p>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={toAdmin} onChange={(e) => setToAdmin(e.target.checked)} />{" "}
