@@ -12,6 +12,10 @@ import {
   Briefcase,
   Settings,
   ChevronLeft,
+  MoreVertical,
+  Ban,
+  Flag,
+  Undo2,
   type LucideIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +25,18 @@ import { Avatar } from "@/components/Avatar";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { ReportDialog } from "@/components/ReportDialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { uploadImage, validateImage, getSignedUrl, ACCEPT } from "@/lib/upload";
@@ -268,6 +284,18 @@ export default function Quet() {
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // Bo loc ban kinh + menu "..." (bao cao/chan) + hoan tac quet nham.
+  const [radiusKm, setRadiusKm] = useState<number | null>(null);
+  const [cardMenuOpen, setCardMenuOpen] = useState(false);
+  const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [menuTargetOwnerId, setMenuTargetOwnerId] = useState<string | null>(null);
+  const [lastAction, setLastAction] = useState<{
+    need: SwipeNeed;
+    actionId: string | null;
+    matchId: string | null;
+  } | null>(null);
+
   const myId = user?.id;
 
   const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
@@ -406,11 +434,16 @@ export default function Quet() {
     if (!myId) return;
     const likedOwner = owners[need.user_id] ?? null;
     setCandidates((prev) => prev.filter((n) => n.id !== need.id));
-    const { error } = await db.from("swipe_actions").insert({ need_id: need.id, actor_id: myId, action });
+    const { data: actionRow, error } = await db
+      .from("swipe_actions")
+      .insert({ need_id: need.id, actor_id: myId, action })
+      .select("id")
+      .single();
     if (error) {
       toast.error(t("common.error"));
       return;
     }
+    let matchId: string | null = null;
     if (action === "like") {
       const { data: newMatch } = await db
         .from("swipe_matches")
@@ -419,8 +452,47 @@ export default function Quet() {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-      if (newMatch) setMatchInfo({ owner: likedOwner, needTitle: need.title });
+      if (newMatch) {
+        matchId = newMatch.id;
+        setMatchInfo({ owner: likedOwner, needTitle: need.title });
+      }
     }
+    setLastAction({ need, actionId: actionRow?.id ?? null, matchId });
+  };
+
+  // "Hoan tac" chi co tac dung trong it giay sau khi quet.
+  useEffect(() => {
+    if (!lastAction) return;
+    const timer = setTimeout(() => setLastAction(null), 6000);
+    return () => clearTimeout(timer);
+  }, [lastAction]);
+
+  const undoLastAction = async () => {
+    if (!lastAction) return;
+    const { need, actionId, matchId } = lastAction;
+    setLastAction(null);
+    if (matchId) {
+      await db.from("swipe_matches").delete().eq("id", matchId);
+      setMatches((prev) => prev.filter((m) => m.id !== matchId));
+    }
+    if (actionId) {
+      await db.from("swipe_actions").delete().eq("id", actionId);
+    }
+    setCandidates((prev) => (prev.some((n) => n.id === need.id) ? prev : [need, ...prev]));
+    toast.success(t("quet.undoDone"));
+  };
+
+  const blockOwner = async () => {
+    if (!myId || !menuTargetOwnerId) return;
+    const blockedId = menuTargetOwnerId;
+    setConfirmBlockOpen(false);
+    const { error: blockError } = await supabase.from("blocks").insert({ blocker_id: myId, blocked_id: blockedId });
+    if (blockError) {
+      toast.error(t("common.error"));
+      return;
+    }
+    setCandidates((prev) => prev.filter((n) => n.user_id !== blockedId));
+    toast.success(t("block.blocked"));
   };
 
   // Kích hoạt quẹt (từ kéo-thả HOẶC bấm nút) — cho thẻ bay ra rồi mới thật sự gọi act(),
@@ -592,8 +664,16 @@ export default function Quet() {
     void loadMyNeeds();
   };
 
-  const topCard = candidates[0];
-  const nextCard = candidates[1];
+  const visibleCandidates = useMemo(() => {
+    if (radiusKm == null || !myPos) return candidates;
+    return candidates.filter((n) => {
+      if (n.latitude == null || n.longitude == null) return true;
+      return haversineKm(myPos.lat, myPos.lng, n.latitude, n.longitude) <= radiusKm;
+    });
+  }, [candidates, myPos, radiusKm]);
+
+  const topCard = visibleCandidates[0];
+  const nextCard = visibleCandidates[1];
   const topOwner = topCard ? owners[topCard.user_id] : null;
   const topDistanceKm =
     myPos && topCard?.latitude != null && topCard?.longitude != null
@@ -1087,6 +1167,27 @@ export default function Quet() {
               </button>
             )}
           </div>
+          {myPos && (
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-muted-foreground">
+              <span>{t("quet.radiusLabel")}</span>
+              <Select
+                value={radiusKm == null ? "all" : String(radiusKm)}
+                onValueChange={(v) => setRadiusKm(v === "all" ? null : Number(v))}
+              >
+                <SelectTrigger className="h-7 w-auto text-[11px] px-2.5 rounded-full border gap-1">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t("quet.radiusAll")}</SelectItem>
+                  {[5, 10, 20, 50, 100].map((km) => (
+                    <SelectItem key={km} value={String(km)}>
+                      {t("quet.radiusKm", { km })}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
           {locStatus === "denied" && (
             <p className="text-[11px] text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-lg px-2 py-1">
               {t("explore.locationDenied")}
@@ -1126,6 +1227,40 @@ export default function Quet() {
                   {topCard.photo_url && (
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                   )}
+                  <Popover open={cardMenuOpen} onOpenChange={setCardMenuOpen}>
+                    <PopoverTrigger asChild>
+                      <button
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => e.stopPropagation()}
+                        aria-label={t("block.menu")}
+                        className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur grid place-items-center text-white"
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-44 p-1" onPointerDown={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => {
+                          setMenuTargetOwnerId(topOwner?.id ?? null);
+                          setCardMenuOpen(false);
+                          setReportOpen(true);
+                        }}
+                        className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left"
+                      >
+                        <Flag className="w-4 h-4" /> {t("biz.report")}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setMenuTargetOwnerId(topOwner?.id ?? null);
+                          setCardMenuOpen(false);
+                          setConfirmBlockOpen(true);
+                        }}
+                        className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left text-destructive"
+                      >
+                        <Ban className="w-4 h-4" /> {t("block.block")}
+                      </button>
+                    </PopoverContent>
+                  </Popover>
                   <div
                     className={cn(
                       "absolute top-6 left-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg -rotate-12",
@@ -1227,6 +1362,16 @@ export default function Quet() {
                   <Heart className="w-6 h-6" />
                 </button>
               </div>
+            </div>
+          )}
+          {lastAction && (
+            <div className="flex justify-center">
+              <button
+                onClick={() => void undoLastAction()}
+                className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground border rounded-full px-3 py-1.5"
+              >
+                <Undo2 className="w-3.5 h-3.5" /> {t("quet.undo")}
+              </button>
             </div>
           )}
         </>
@@ -1338,6 +1483,23 @@ export default function Quet() {
             </div>
           </div>
         </div>
+      )}
+
+      <AlertDialog open={confirmBlockOpen} onOpenChange={setConfirmBlockOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("block.confirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("block.confirmDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => void blockOwner()}>{t("block.block")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {menuTargetOwnerId && (
+        <ReportDialog open={reportOpen} onOpenChange={setReportOpen} targetType="user" targetId={menuTargetOwnerId} />
       )}
     </div>
   );
