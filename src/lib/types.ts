@@ -14,7 +14,7 @@ export type BusinessType =
   | "other";
 export type BusinessStatus = "pending" | "approved" | "rejected" | "needs_revision";
 export type OfferStatus = "active" | "inactive";
-export type ReportTarget = "business" | "offer" | "review";
+export type ReportTarget = "business" | "offer" | "review" | "user";
 export type ReportStatus = "pending" | "replied" | "resolved" | "closed";
 export type NotifType =
   | "account_approved"
