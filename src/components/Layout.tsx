@@ -120,7 +120,7 @@ export function Layout() {
       roNav?.disconnect();
       roHeader?.disconnect();
     };
-  }, [tabs.length, hide, showWelcome]);
+  }, [tabs.length, hide, showWelcome, showCompleteProfileGate, showPendingGate]);
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
