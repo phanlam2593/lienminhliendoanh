@@ -44,7 +44,7 @@ const PENDING_ALLOWED = ["/ho-so", "/thong-bao", "/tin-nhan"];
 export function Layout() {
   const { pathname } = useLocation();
   const nav = useNavigate();
-  const { user, profile, signOut, isAdmin, loading } = useAuth();
+  const { user, profile, signOut, isAdmin, loading, refresh } = useAuth();
   const { t } = useLanguage();
   const { unread } = useNotifications();
   const unreadMsgs = useUnreadMessages();
@@ -82,9 +82,16 @@ export function Layout() {
             : "grid-cols-3";
 
   const showWelcome = !loading && !user && !hide;
+  const needsCompleteProfile = !!profile && !profile.phone;
+  const showCompleteProfileGate = !loading && !!user && needsCompleteProfile && !hide;
   const isPending = profile?.status === "pending" && !isAdmin;
   const showPendingGate =
-    !loading && user && isPending && !hide && !PENDING_ALLOWED.some((p) => pathname.startsWith(p));
+    !loading &&
+    user &&
+    isPending &&
+    !hide &&
+    !showCompleteProfileGate &&
+    !PENDING_ALLOWED.some((p) => pathname.startsWith(p));
   // Trang Tin nhắn (1 đoạn chat cụ thể) và Cộng đồng tự tính chiều cao vừa khít màn hình
   // riêng (đã trừ sẵn phần header + nav) — không cần main cộng thêm pb-20 nữa, kẻo bị trừ
   // 2 lần, sinh khoảng trắng thừa + cuộn sai.
@@ -284,6 +291,8 @@ export function Layout() {
       <main style={isFullHeightPage ? undefined : { paddingBottom: "calc(var(--bottom-nav-h, 5rem) + 0.75rem)" }}>
         {showWelcome ? (
           <WelcomeScreen />
+        ) : showCompleteProfileGate ? (
+          <CompleteProfileScreen onDone={refresh} />
         ) : showPendingGate ? (
           <PendingScreen
             onSignOut={async () => {
@@ -298,7 +307,7 @@ export function Layout() {
         )}
       </main>
 
-      {!hide && !showWelcome && !showPendingGate && (
+      {!hide && !showWelcome && !showPendingGate && !showCompleteProfileGate && (
         <nav
           ref={navRef}
           className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 bg-card border-t border-border safe-bottom"
@@ -501,6 +510,106 @@ function Footer() {
     </footer>
   );
 }
+function CompleteProfileScreen({ onDone }: { onDone: () => Promise<void> }) {
+  const { t } = useLanguage();
+  const { user, profile } = useAuth();
+  const [username, setUsername] = useState(profile?.username?.startsWith("g_") ? "" : (profile?.username ?? ""));
+  const [phone, setPhone] = useState("");
+  const [usernameErr, setUsernameErr] = useState<string | null>(null);
+  const [phoneErr, setPhoneErr] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const checkUnique = async (col: "username" | "phone", val: string) => {
+    const { data, error } = await supabase.rpc("is_field_taken", { _field: col, _value: val });
+    if (error) return false;
+    return !data;
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUsernameErr(null);
+    setPhoneErr(null);
+    if (!/^[a-z0-9_]{3,20}$/i.test(username)) {
+      setUsernameErr(t("register.usernameHint"));
+      return;
+    }
+    if (!/^\d{8,15}$/.test(phone)) {
+      setPhoneErr(t("register.invalid"));
+      return;
+    }
+    setSubmitting(true);
+    const lowerUsername = username.toLowerCase();
+    const [usernameFree, phoneFree] = await Promise.all([
+      lowerUsername === profile?.username ? true : checkUnique("username", lowerUsername),
+      checkUnique("phone", phone),
+    ]);
+    if (!usernameFree) {
+      setSubmitting(false);
+      setUsernameErr(t("register.taken"));
+      return;
+    }
+    if (!phoneFree) {
+      setSubmitting(false);
+      setPhoneErr(t("register.taken"));
+      return;
+    }
+    if (!user) {
+      setSubmitting(false);
+      return;
+    }
+    const { error } = await supabase.from("profiles").update({ username: lowerUsername, phone }).eq("id", user.id);
+    setSubmitting(false);
+    if (error) {
+      setPhoneErr(t("register.fillValidInfo"));
+      return;
+    }
+    await onDone();
+  };
+
+  return (
+    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center gap-5">
+      <h1 className="text-xl font-bold">{t("completeProfile.title")}</h1>
+      <p className="text-sm text-muted-foreground max-w-xs">
+        {t("completeProfile.subtitle", { app: t("app.name") })}
+      </p>
+      <form onSubmit={submit} className="w-full max-w-xs space-y-3 text-left">
+        <label className="block space-y-1">
+          <span className="text-xs font-semibold text-muted-foreground">{t("register.username")}</span>
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder={t("register.usernamePlaceholder")}
+            autoCapitalize="none"
+            required
+            className="w-full px-4 py-3 rounded-xl border bg-card"
+          />
+          {usernameErr ? (
+            <p className="text-xs text-destructive">{usernameErr}</p>
+          ) : (
+            <p className="text-[11px] text-muted-foreground">{t("register.usernameHint")}</p>
+          )}
+        </label>
+        <label className="block space-y-1">
+          <span className="text-xs font-semibold text-muted-foreground">{t("register.phone")}</span>
+          <input
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            className="w-full px-4 py-3 rounded-xl border bg-card"
+          />
+          {phoneErr && <p className="text-xs text-destructive">{phoneErr}</p>}
+        </label>
+        <button
+          disabled={submitting}
+          className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
+        >
+          {submitting ? t("completeProfile.submitting") : t("completeProfile.submit")}
+        </button>
+      </form>
+    </div>
+  );
+}
+
 function PendingScreen({ onSignOut }: { onSignOut: () => void }) {
   const { t } = useLanguage();
   return (
