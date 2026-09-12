@@ -60,11 +60,14 @@ export default function Register() {
 
   const registerWithGoogle = async () => {
     setGoogleLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/` },
+    // PHẢI dùng lovable.auth.signInWithOAuth (managed OAuth của Lovable Cloud) —
+    // gọi supabase.auth.signInWithOAuth trực tiếp sẽ lỗi "missing OAuth secret"
+    // vì credentials Google managed chỉ đi qua broker của Lovable.
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
-    if (error) {
+    if (result.redirected) return;
+    if (result.error) {
       setGoogleLoading(false);
       toast.error(t("login.googleError"));
     }
