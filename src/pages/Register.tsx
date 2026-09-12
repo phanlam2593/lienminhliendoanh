@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import { usernameToEmail, BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { Logo } from "@/components/Logo";
 import { uploadImage } from "@/lib/upload";
@@ -60,11 +61,14 @@ export default function Register() {
 
   const registerWithGoogle = async () => {
     setGoogleLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/` },
+    // PHẢI dùng lovable.auth.signInWithOAuth (managed OAuth của Lovable Cloud) —
+    // gọi supabase.auth.signInWithOAuth trực tiếp sẽ lỗi "missing OAuth secret"
+    // vì credentials Google managed chỉ đi qua broker của Lovable.
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
     });
-    if (error) {
+    if (result.redirected) return;
+    if (result.error) {
       setGoogleLoading(false);
       toast.error(t("login.googleError"));
     }
