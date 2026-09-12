@@ -111,7 +111,7 @@ export interface Profile {
   username: string;
   full_name: string;
   email: string;
-  phone: string;
+  phone: string | null;
   avatar_url: string | null;
   cover_url: string | null;
   bio: string | null;

@@ -1038,7 +1038,7 @@ export type Database = {
           membership_started_at: string | null
           notification_prefs: Json
           password_hint: string | null
-          phone: string
+          phone: string | null
           points: number
           status: Database["public"]["Enums"]["account_status"]
           status_message: string | null
@@ -1063,7 +1063,7 @@ export type Database = {
           membership_started_at?: string | null
           notification_prefs?: Json
           password_hint?: string | null
-          phone: string
+          phone?: string | null
           points?: number
           status?: Database["public"]["Enums"]["account_status"]
           status_message?: string | null
@@ -1088,7 +1088,7 @@ export type Database = {
           membership_started_at?: string | null
           notification_prefs?: Json
           password_hint?: string | null
-          phone?: string
+          phone?: string | null
           points?: number
           status?: Database["public"]["Enums"]["account_status"]
           status_message?: string | null
