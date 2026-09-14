@@ -39,7 +39,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
-import { ExchangeSection } from "@/components/ExchangeSection";
 import { BusinessGallery } from "@/components/BusinessGallery";
 import { useLanguage } from "@/lib/i18n";
 
@@ -540,8 +539,6 @@ export default function BusinessDetail() {
               )}
             </section>
           }
-
-          <ExchangeSection business={b} />
 
           {ReviewsBlock}
         </>
