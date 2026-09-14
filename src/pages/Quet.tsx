@@ -952,11 +952,8 @@ export default function Quet() {
                     )}
                   </button>
                   <button
-                    onClick={() => need && openEdit(need)}
-                    className={cn(
-                      "w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition",
-                      !need && "invisible pointer-events-none",
-                    )}
+                    onClick={() => (need ? openEdit(need) : handleCategoryClick(type, need))}
+                    className="w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
                   >
                     <Settings className="w-3.5 h-3.5" /> {t("quet.category.manage")}
                   </button>
