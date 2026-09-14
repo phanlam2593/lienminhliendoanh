@@ -111,7 +111,9 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
     if (d.age) chips.push(t("quet.ageYearsOld", { age: d.age }));
   }
   if (need.need_type === "trao_doi") {
-    chips.push(d.tradeType === "buy_sell" ? t("quet.tradeType.buySell") : t("quet.tradeType.interaction"));
+    chips.push(
+      t(`quet.tradeType.${d.tradeType === "rent" ? "rent" : d.tradeType === "buy_sell" ? "buy_sell" : "interaction"}`),
+    );
   }
   if (need.need_type === "game") {
     if (d.gameName) chips.push(d.gameName);
@@ -261,7 +263,7 @@ export default function Quet() {
   const [formExperience, setFormExperience] = useState("");
   const [formSkills, setFormSkills] = useState("");
   const [formGameName, setFormGameName] = useState("");
-  const [formTradeType, setFormTradeType] = useState<"interaction" | "buy_sell">("interaction");
+  const [formTradeType, setFormTradeType] = useState<"interaction" | "buy_sell" | "rent">("interaction");
   const [formPhotoFile, setFormPhotoFile] = useState<File | null>(null);
   const [formPhotoPreview, setFormPhotoPreview] = useState("");
   const [formLat, setFormLat] = useState<number | null>(null);
@@ -622,7 +624,7 @@ export default function Quet() {
     setFormExperience(d.experience ?? "");
     setFormSkills(d.skills ?? "");
     setFormGameName(d.gameName ?? "");
-    setFormTradeType(d.tradeType === "buy_sell" ? "buy_sell" : "interaction");
+    setFormTradeType(d.tradeType === "buy_sell" ? "buy_sell" : d.tradeType === "rent" ? "rent" : "interaction");
   };
 
   const handleCategoryClick = (type: NeedType, need: SwipeNeed | undefined) => {
@@ -930,13 +932,17 @@ export default function Quet() {
             </>
           )}
           {formType === "trao_doi" && (
-            <Select value={formTradeType} onValueChange={(v) => setFormTradeType(v as "interaction" | "buy_sell")}>
+            <Select
+              value={formTradeType}
+              onValueChange={(v) => setFormTradeType(v as "interaction" | "buy_sell" | "rent")}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="interaction">{t("quet.tradeType.interaction")}</SelectItem>
                 <SelectItem value="buy_sell">{t("quet.tradeType.buySell")}</SelectItem>
+                <SelectItem value="rent">{t("quet.tradeType.rent")}</SelectItem>
               </SelectContent>
             </Select>
           )}
