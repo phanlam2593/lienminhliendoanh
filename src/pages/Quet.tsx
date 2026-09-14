@@ -921,10 +921,10 @@ export default function Quet() {
             {CATEGORIES.map(({ type, Icon }) => {
               const need = needByType(type);
               return (
-                <div key={type} className="relative">
+                <div key={type} className="h-full flex flex-col gap-1.5">
                   <button
                     onClick={() => handleCategoryClick(type, need)}
-                    className="w-full h-full rounded-2xl border bg-card p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition"
+                    className="flex-1 w-full rounded-2xl border bg-card p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition"
                   >
                     <div className="w-14 h-14 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
                       <Icon className="w-7 h-7" />
@@ -947,10 +947,9 @@ export default function Quet() {
                   {need && (
                     <button
                       onClick={() => openEdit(need)}
-                      aria-label={t("quet.category.manage")}
-                      className="absolute top-2 right-2 w-7 h-7 rounded-full bg-card/90 border grid place-items-center text-muted-foreground"
+                      className="w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
                     >
-                      <Settings className="w-3.5 h-3.5" />
+                      <Settings className="w-3.5 h-3.5" /> {t("quet.category.manage")}
                     </button>
                   )}
                 </div>
