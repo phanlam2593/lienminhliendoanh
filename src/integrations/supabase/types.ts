@@ -1483,6 +1483,7 @@ export type Database = {
           longitude: number | null
           need_type: Database["public"]["Enums"]["need_type"]
           photo_url: string | null
+          photo_urls: string[]
           title: string
           updated_at: string
           user_id: string
@@ -1498,6 +1499,7 @@ export type Database = {
           longitude?: number | null
           need_type: Database["public"]["Enums"]["need_type"]
           photo_url?: string | null
+          photo_urls?: string[]
           title: string
           updated_at?: string
           user_id: string
@@ -1513,6 +1515,7 @@ export type Database = {
           longitude?: number | null
           need_type?: Database["public"]["Enums"]["need_type"]
           photo_url?: string | null
+          photo_urls?: string[]
           title?: string
           updated_at?: string
           user_id?: string
@@ -2067,6 +2070,13 @@ export type Database = {
       notify_mention: {
         Args: { _body: string; _target_user_id: string; _title: string }
         Returns: undefined
+      }
+      quet_loai_hinh_counts: {
+        Args: never
+        Returns: {
+          cnt: number
+          loai_hinh: string
+        }[]
       }
       refresh_admin_pending_notification: { Args: never; Returns: undefined }
       show_limit: { Args: never; Returns: number }
