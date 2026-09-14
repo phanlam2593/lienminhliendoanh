@@ -63,6 +63,35 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// Danh sách gợi ý "loại hình" cho Trao đổi (mua/bán, thuê/cho thuê) — gộp bất động sản +
+// xe cộ/đồ dùng/dịch vụ, mỗi mục gắn category để suy ra bộ tuỳ chọn "Tình trạng" phù hợp.
+const LOAI_HINH_SEED: { label: string; category: "real_estate" | "goods" }[] = [
+  { label: "Nhà nguyên căn", category: "real_estate" },
+  { label: "Phòng trọ", category: "real_estate" },
+  { label: "Căn hộ", category: "real_estate" },
+  { label: "Đất", category: "real_estate" },
+  { label: "Mặt bằng kinh doanh", category: "real_estate" },
+  { label: "Xe máy", category: "goods" },
+  { label: "Ô tô", category: "goods" },
+  { label: "Đồ điện tử", category: "goods" },
+  { label: "Đồ nội thất", category: "goods" },
+  { label: "Đồ gia dụng", category: "goods" },
+  { label: "Dịch vụ", category: "goods" },
+  { label: "Khác", category: "goods" },
+];
+
+// Suy ra "Tình trạng" nên hỏi kiểu bất động sản (còn trống/có người ở) hay kiểu đồ vật
+// (mới/đã dùng) dựa trên loại hình đã chọn/gõ — khớp danh sách gợi ý trước, không khớp thì
+// đoán qua từ khoá, mặc định về "goods" (áp dụng rộng hơn).
+function classifyLoaiHinh(text: string): "real_estate" | "goods" {
+  const norm = normalizeVi(text.trim());
+  if (!norm) return "goods";
+  const seedMatch = LOAI_HINH_SEED.find((s) => normalizeVi(s.label) === norm);
+  if (seedMatch) return seedMatch.category;
+  if (/nha|dat|phong tro|can ho|mat bang/.test(norm)) return "real_estate";
+  return "goods";
+}
+
 type ViewTab = "category" | "swipe" | "matches";
 const VALID_TABS: ViewTab[] = ["category", "swipe", "matches"];
 
@@ -111,9 +140,21 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
     if (d.age) chips.push(t("quet.ageYearsOld", { age: d.age }));
   }
   if (need.need_type === "trao_doi") {
-    chips.push(
-      t(`quet.tradeType.${d.tradeType === "rent" ? "rent" : d.tradeType === "buy_sell" ? "buy_sell" : "interaction"}`),
-    );
+    if (d.tradeType === "buy_sell" || d.tradeType === "rent") {
+      const dirKey =
+        d.direction === "buy"
+          ? "buy"
+          : d.direction === "rent_seek"
+            ? "rentSeek"
+            : d.direction === "rent_offer"
+              ? "rentOffer"
+              : "sell";
+      chips.push(t(`quet.tradeDirection.${dirKey}`));
+      if (d.loaiHinh) chips.push(d.loaiHinh);
+      if (d.gia) chips.push(`💰 ${d.gia}`);
+    } else {
+      chips.push(t("quet.tradeType.interaction"));
+    }
   }
   if (need.need_type === "game") {
     if (d.gameName) chips.push(d.gameName);
@@ -138,6 +179,12 @@ function needExtraLines(
   }
   if (need.need_type === "trao_doi" && d.target) {
     lines.push({ label: t("quet.field.target"), value: d.target });
+  }
+  if (need.need_type === "trao_doi" && d.tinhTrang) {
+    const validKeys = ["trong", "coNguoiO", "moi", "daSuDung"];
+    if (validKeys.includes(d.tinhTrang)) {
+      lines.push({ label: t("quet.field.tinhTrang"), value: t(`quet.tinhTrang.${d.tinhTrang}`) });
+    }
   }
   return lines;
 }
@@ -264,8 +311,15 @@ export default function Quet() {
   const [formSkills, setFormSkills] = useState("");
   const [formGameName, setFormGameName] = useState("");
   const [formTradeType, setFormTradeType] = useState<"interaction" | "buy_sell" | "rent">("interaction");
-  const [formPhotoFile, setFormPhotoFile] = useState<File | null>(null);
-  const [formPhotoPreview, setFormPhotoPreview] = useState("");
+  const [formTradeDirection, setFormTradeDirection] = useState<"sell" | "buy" | "rent_offer" | "rent_seek">("sell");
+  const [formLoaiHinh, setFormLoaiHinh] = useState("");
+  const [formGiaText, setFormGiaText] = useState("");
+  const [formTinhTrang, setFormTinhTrang] = useState("");
+  const [loaiHinhCounts, setLoaiHinhCounts] = useState<[string, number][]>([]);
+  const [loaiHinhSuggestOpen, setLoaiHinhSuggestOpen] = useState(false);
+  const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
+  const [newPhotoFiles, setNewPhotoFiles] = useState<File[]>([]);
+  const [newPhotoPreviews, setNewPhotoPreviews] = useState<string[]>([]);
   const [formLat, setFormLat] = useState<number | null>(null);
   const [formLng, setFormLng] = useState<number | null>(null);
   const [locatingForm, setLocatingForm] = useState(false);
@@ -343,6 +397,9 @@ export default function Quet() {
   useEffect(() => {
     void supabase.rpc("business_area_counts").then(({ data }) => {
       setAreaCounts(((data ?? []) as any[]).map((r) => [r.area as string, Number(r.cnt)]));
+    });
+    void db.rpc("quet_loai_hinh_counts").then(({ data }: any) => {
+      setLoaiHinhCounts(((data ?? []) as any[]).map((r) => [r.loai_hinh as string, Number(r.cnt)]));
     });
   }, []);
 
@@ -609,8 +666,9 @@ export default function Quet() {
     setFormArea(need?.area ?? "");
     setFormLat(need?.latitude ?? null);
     setFormLng(need?.longitude ?? null);
-    setFormPhotoFile(null);
-    setFormPhotoPreview("");
+    setNewPhotoFiles([]);
+    setNewPhotoPreviews([]);
+    setExistingPhotos(need?.photo_urls?.length ? need.photo_urls : need?.photo_url ? [need.photo_url] : []);
     const d = (need?.details as Record<string, string>) ?? {};
     setFormRole(d.role === "hirer" ? "hirer" : "seeker");
     setFormMode(d.mode === "trade" ? "trade" : "playmate");
@@ -624,7 +682,18 @@ export default function Quet() {
     setFormExperience(d.experience ?? "");
     setFormSkills(d.skills ?? "");
     setFormGameName(d.gameName ?? "");
-    setFormTradeType(d.tradeType === "buy_sell" ? "buy_sell" : d.tradeType === "rent" ? "rent" : "interaction");
+    const tt = d.tradeType === "buy_sell" ? "buy_sell" : d.tradeType === "rent" ? "rent" : "interaction";
+    setFormTradeType(tt);
+    setFormTradeDirection(
+      d.direction === "buy" || d.direction === "sell" || d.direction === "rent_seek" || d.direction === "rent_offer"
+        ? d.direction
+        : tt === "rent"
+          ? "rent_offer"
+          : "sell",
+    );
+    setFormLoaiHinh(d.loaiHinh ?? "");
+    setFormGiaText(d.gia ?? "");
+    setFormTinhTrang(d.tinhTrang ?? "");
   };
 
   const handleCategoryClick = (type: NeedType, need: SwipeNeed | undefined) => {
@@ -652,10 +721,11 @@ export default function Quet() {
   const saveNeed = async () => {
     if (!myId || !canSave) return;
     setSaving(true);
-    let photoPath: string | null = editingNeed?.photo_url ?? null;
-    if (formPhotoFile) {
+    let finalPhotoUrls: string[] = existingPhotos;
+    if (newPhotoFiles.length > 0) {
       try {
-        photoPath = await uploadImage(formPhotoFile, "quet", myId);
+        const uploaded = await Promise.all(newPhotoFiles.map((f) => uploadImage(f, "quet", myId)));
+        finalPhotoUrls = [...existingPhotos, ...uploaded].slice(0, 4);
       } catch {
         toast.error(t("common.error"));
         setSaving(false);
@@ -685,7 +755,15 @@ export default function Quet() {
     }
     if (formType === "trao_doi") {
       details.tradeType = formTradeType;
-      if (formTargetText.trim()) details.target = formTargetText.trim();
+      if (formTradeType === "interaction") {
+        if (formTargetText.trim()) details.target = formTargetText.trim();
+      } else {
+        details.direction = formTradeDirection;
+        if (formLoaiHinh.trim()) details.loaiHinh = formLoaiHinh.trim();
+        if (formGiaText.trim()) details.gia = formGiaText.trim();
+        const isOffering = formTradeDirection === "sell" || formTradeDirection === "rent_offer";
+        if (isOffering && formTinhTrang) details.tinhTrang = formTinhTrang;
+      }
       finalTitle = t(`quet.tradeType.${formTradeType}`);
     }
     if (formType === "game") {
@@ -702,7 +780,8 @@ export default function Quet() {
       latitude: formLat,
       longitude: formLng,
       details,
-      photo_url: photoPath,
+      photo_url: finalPhotoUrls[0] ?? null,
+      photo_urls: finalPhotoUrls,
     };
     let error;
     if (editingNeed) {
@@ -934,7 +1013,11 @@ export default function Quet() {
           {formType === "trao_doi" && (
             <Select
               value={formTradeType}
-              onValueChange={(v) => setFormTradeType(v as "interaction" | "buy_sell" | "rent")}
+              onValueChange={(v) => {
+                const tt = v as "interaction" | "buy_sell" | "rent";
+                setFormTradeType(tt);
+                setFormTradeDirection(tt === "rent" ? "rent_offer" : "sell");
+              }}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -943,6 +1026,29 @@ export default function Quet() {
                 <SelectItem value="interaction">{t("quet.tradeType.interaction")}</SelectItem>
                 <SelectItem value="buy_sell">{t("quet.tradeType.buySell")}</SelectItem>
                 <SelectItem value="rent">{t("quet.tradeType.rent")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          {formType === "trao_doi" && formTradeType !== "interaction" && (
+            <Select
+              value={formTradeDirection}
+              onValueChange={(v) => setFormTradeDirection(v as "sell" | "buy" | "rent_offer" | "rent_seek")}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {formTradeType === "buy_sell" ? (
+                  <>
+                    <SelectItem value="sell">{t("quet.tradeDirection.sell")}</SelectItem>
+                    <SelectItem value="buy">{t("quet.tradeDirection.buy")}</SelectItem>
+                  </>
+                ) : (
+                  <>
+                    <SelectItem value="rent_offer">{t("quet.tradeDirection.rentOffer")}</SelectItem>
+                    <SelectItem value="rent_seek">{t("quet.tradeDirection.rentSeek")}</SelectItem>
+                  </>
+                )}
               </SelectContent>
             </Select>
           )}
@@ -1037,7 +1143,13 @@ export default function Quet() {
 
           {/* ── Mô tả/Giới thiệu — dùng chung, nhãn đổi theo từng mục ── */}
           <Textarea
-            placeholder={t(`quet.field.desc.${formType}`)}
+            placeholder={
+              formType === "trao_doi" &&
+              formTradeType !== "interaction" &&
+              (formTradeDirection === "buy" || formTradeDirection === "rent_seek")
+                ? t("quet.field.descRequest")
+                : t(`quet.field.desc.${formType}`)
+            }
             value={formDesc}
             onChange={(e) => setFormDesc(e.target.value)}
             rows={3}
@@ -1052,13 +1164,91 @@ export default function Quet() {
               rows={2}
             />
           )}
-          {formType === "trao_doi" && (
+          {formType === "trao_doi" && formTradeType === "interaction" && (
             <Input
               placeholder={t("quet.field.target")}
               value={formTargetText}
               onChange={(e) => setFormTargetText(e.target.value)}
             />
           )}
+          {formType === "trao_doi" && formTradeType !== "interaction" && (
+            <div className="relative">
+              <Input
+                placeholder={
+                  formTradeDirection === "sell" || formTradeDirection === "rent_offer"
+                    ? t("quet.field.loaiHinh")
+                    : t("quet.field.loaiHinhWanted")
+                }
+                value={formLoaiHinh}
+                onChange={(e) => {
+                  setFormLoaiHinh(e.target.value);
+                  setLoaiHinhSuggestOpen(true);
+                }}
+                onFocus={() => setLoaiHinhSuggestOpen(true)}
+                onBlur={() => setTimeout(() => setLoaiHinhSuggestOpen(false), 150)}
+              />
+              {loaiHinhSuggestOpen && (
+                <div className="absolute z-10 mt-1 w-full rounded-xl border bg-card shadow-soft max-h-48 overflow-y-auto">
+                  {(() => {
+                    const q = normalizeVi(formLoaiHinh.trim());
+                    const seedLabels = LOAI_HINH_SEED.map((s) => s.label);
+                    const dataLabels = loaiHinhCounts.map(([a]) => a).filter((a) => !seedLabels.includes(a));
+                    const all = [...seedLabels, ...dataLabels];
+                    return all
+                      .filter((a) => !q || normalizeVi(a).includes(q))
+                      .slice(0, 8)
+                      .map((a) => (
+                        <button
+                          key={a}
+                          type="button"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={() => {
+                            setFormLoaiHinh(a);
+                            setLoaiHinhSuggestOpen(false);
+                          }}
+                          className="w-full text-left px-3 py-2 text-sm hover:bg-accent/60"
+                        >
+                          {a}
+                        </button>
+                      ));
+                  })()}
+                </div>
+              )}
+            </div>
+          )}
+          {formType === "trao_doi" && formTradeType !== "interaction" && (
+            <Input
+              placeholder={
+                formTradeDirection === "sell" || formTradeDirection === "rent_offer"
+                  ? t("quet.field.gia")
+                  : t("quet.field.nganSach")
+              }
+              value={formGiaText}
+              onChange={(e) => setFormGiaText(e.target.value)}
+            />
+          )}
+          {formType === "trao_doi" &&
+            formTradeType !== "interaction" &&
+            (formTradeDirection === "sell" || formTradeDirection === "rent_offer") && (
+              <Select value={formTinhTrang} onValueChange={setFormTinhTrang}>
+                <SelectTrigger>
+                  <SelectValue placeholder={t("quet.field.tinhTrang")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {classifyLoaiHinh(formLoaiHinh) === "real_estate" ? (
+                    <>
+                      <SelectItem value="trong">{t("quet.tinhTrang.trong")}</SelectItem>
+                      <SelectItem value="coNguoiO">{t("quet.tinhTrang.coNguoiO")}</SelectItem>
+                    </>
+                  ) : (
+                    <>
+                      <SelectItem value="moi">{t("quet.tinhTrang.moi")}</SelectItem>
+                      <SelectItem value="daSuDung">{t("quet.tinhTrang.daSuDung")}</SelectItem>
+                    </>
+                  )}
+                </SelectContent>
+              </Select>
+            )}
 
           <div className="relative">
             <Input
@@ -1128,50 +1318,58 @@ export default function Quet() {
                 : t("quet.field.shareLocation")}
           </button>
 
-          {editingNeed?.photo_url && !formPhotoPreview && (
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-muted">
-                <CardPhoto path={editingNeed.photo_url} />
-              </div>
-              {t("quet.addPhoto")}
-            </div>
-          )}
           <div>
-            {formPhotoPreview ? (
-              <div className="relative w-full h-32 rounded-xl overflow-hidden">
-                <img src={formPhotoPreview} alt="" className="w-full h-full object-cover" />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setFormPhotoFile(null);
-                    setFormPhotoPreview("");
-                  }}
-                  className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 text-white grid place-items-center"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            ) : (
-              <label className="flex items-center justify-center gap-1.5 w-full h-16 rounded-xl border border-dashed cursor-pointer text-xs font-semibold text-muted-foreground hover:bg-accent/40">
-                <Camera className="w-4 h-4" /> {t("quet.addPhoto")}
-                <input
-                  type="file"
-                  accept={ACCEPT}
-                  className="hidden"
-                  onChange={(e) => {
-                    const f = e.target.files?.[0];
-                    if (!f) return;
-                    const err = validateImage(f);
-                    if (err) {
-                      toast.error(err);
-                      return;
-                    }
-                    setFormPhotoFile(f);
-                    setFormPhotoPreview(URL.createObjectURL(f));
-                  }}
-                />
-              </label>
-            )}
+            <div className="text-xs font-semibold mb-1.5 text-muted-foreground">{t("quet.addPhotoMulti")}</div>
+            <div className="grid grid-cols-4 gap-2">
+              {existingPhotos.map((path, i) => (
+                <div key={`e-${i}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+                  <CardPhoto path={path} />
+                  <button
+                    type="button"
+                    onClick={() => setExistingPhotos((prev) => prev.filter((_, idx) => idx !== i))}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white grid place-items-center"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {newPhotoPreviews.map((url, i) => (
+                <div key={`n-${i}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+                  <img src={url} alt="" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewPhotoFiles((prev) => prev.filter((_, idx) => idx !== i));
+                      setNewPhotoPreviews((prev) => prev.filter((_, idx) => idx !== i));
+                    }}
+                    className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white grid place-items-center"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+              {existingPhotos.length + newPhotoFiles.length < 4 && (
+                <label className="aspect-square rounded-xl border border-dashed cursor-pointer flex items-center justify-center text-muted-foreground hover:bg-accent/40">
+                  <Camera className="w-5 h-5" />
+                  <input
+                    type="file"
+                    accept={ACCEPT}
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (!f) return;
+                      const err = validateImage(f);
+                      if (err) {
+                        toast.error(err);
+                        return;
+                      }
+                      setNewPhotoFiles((prev) => [...prev, f]);
+                      setNewPhotoPreviews((prev) => [...prev, URL.createObjectURL(f)]);
+                    }}
+                  />
+                </label>
+              )}
+            </div>
           </div>
 
           <button
@@ -1309,6 +1507,13 @@ export default function Quet() {
                   className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
                 >
                   <CardPhoto path={topCard.photo_url} />
+                  {(topCard.photo_urls?.length ?? 0) > 1 && (
+                    <div className="absolute top-3 inset-x-0 flex items-center justify-center gap-1 pointer-events-none">
+                      {topCard.photo_urls!.slice(0, 4).map((_, i) => (
+                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/80" />
+                      ))}
+                    </div>
+                  )}
                   {topCard.photo_url && (
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
                   )}
