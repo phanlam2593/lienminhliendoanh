@@ -315,6 +315,8 @@ export default function Quet() {
   const [formLoaiHinh, setFormLoaiHinh] = useState("");
   const [formGiaText, setFormGiaText] = useState("");
   const [formTinhTrang, setFormTinhTrang] = useState("");
+  const [formDienTich, setFormDienTich] = useState("");
+  const [formNganhNghe, setFormNganhNghe] = useState("");
   const [loaiHinhCounts, setLoaiHinhCounts] = useState<[string, number][]>([]);
   const [loaiHinhSuggestOpen, setLoaiHinhSuggestOpen] = useState(false);
   const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
@@ -694,6 +696,8 @@ export default function Quet() {
     setFormLoaiHinh(d.loaiHinh ?? "");
     setFormGiaText(d.gia ?? "");
     setFormTinhTrang(d.tinhTrang ?? "");
+    setFormDienTich(d.dienTich ?? "");
+    setFormNganhNghe(d.nganhNghe ?? "");
   };
 
   const handleCategoryClick = (type: NeedType, need: SwipeNeed | undefined) => {
@@ -736,6 +740,7 @@ export default function Quet() {
     let finalTitle = formTitle.trim();
     if (formType === "tim_viec") {
       details.role = formRole;
+      if (formNganhNghe) details.nganhNghe = formNganhNghe;
       if (formRole === "hirer") {
         if (formSalary.trim()) details.salary = formSalary.trim();
         if (formAgeRange.trim()) details.ageRange = formAgeRange.trim();
@@ -760,6 +765,8 @@ export default function Quet() {
       } else {
         details.direction = formTradeDirection;
         if (formLoaiHinh.trim()) details.loaiHinh = formLoaiHinh.trim();
+        if (classifyLoaiHinh(formLoaiHinh) === "real_estate" && formDienTich.trim())
+          details.dienTich = formDienTich.trim();
         if (formGiaText.trim()) details.gia = formGiaText.trim();
         const isOffering = formTradeDirection === "sell" || formTradeDirection === "rent_offer";
         if (isOffering && formTinhTrang) details.tinhTrang = formTinhTrang;
@@ -944,14 +951,15 @@ export default function Quet() {
                       </span>
                     )}
                   </button>
-                  {need && (
-                    <button
-                      onClick={() => openEdit(need)}
-                      className="w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
-                    >
-                      <Settings className="w-3.5 h-3.5" /> {t("quet.category.manage")}
-                    </button>
-                  )}
+                  <button
+                    onClick={() => need && openEdit(need)}
+                    className={cn(
+                      "w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition",
+                      !need && "invisible pointer-events-none",
+                    )}
+                  >
+                    <Settings className="w-3.5 h-3.5" /> {t("quet.category.manage")}
+                  </button>
                 </div>
               );
             })}
@@ -988,6 +996,25 @@ export default function Quet() {
               <SelectContent>
                 <SelectItem value="seeker">{t("quet.roleSeeker")}</SelectItem>
                 <SelectItem value="hirer">{t("quet.roleHirer")}</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+          {formType === "tim_viec" && (
+            <Select value={formNganhNghe} onValueChange={setFormNganhNghe}>
+              <SelectTrigger>
+                <SelectValue placeholder={t("quet.field.nganhNghe")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="fnb">{t("quet.nganhNghe.fnb")}</SelectItem>
+                <SelectItem value="banHang">{t("quet.nganhNghe.banHang")}</SelectItem>
+                <SelectItem value="giaoHang">{t("quet.nganhNghe.giaoHang")}</SelectItem>
+                <SelectItem value="cskh">{t("quet.nganhNghe.cskh")}</SelectItem>
+                <SelectItem value="lamDep">{t("quet.nganhNghe.lamDep")}</SelectItem>
+                <SelectItem value="xayDung">{t("quet.nganhNghe.xayDung")}</SelectItem>
+                <SelectItem value="vanPhong">{t("quet.nganhNghe.vanPhong")}</SelectItem>
+                <SelectItem value="congNghe">{t("quet.nganhNghe.congNghe")}</SelectItem>
+                <SelectItem value="giaoDuc">{t("quet.nganhNghe.giaoDuc")}</SelectItem>
+                <SelectItem value="khac">{t("quet.nganhNghe.khac")}</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -1215,6 +1242,19 @@ export default function Quet() {
               )}
             </div>
           )}
+          {formType === "trao_doi" &&
+            formTradeType !== "interaction" &&
+            classifyLoaiHinh(formLoaiHinh) === "real_estate" && (
+              <Input
+                placeholder={
+                  formTradeDirection === "sell" || formTradeDirection === "rent_offer"
+                    ? t("quet.field.dienTich")
+                    : t("quet.field.dienTichWanted")
+                }
+                value={formDienTich}
+                onChange={(e) => setFormDienTich(e.target.value)}
+              />
+            )}
           {formType === "trao_doi" && formTradeType !== "interaction" && (
             <Input
               placeholder={
