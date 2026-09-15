@@ -16,11 +16,17 @@ import {
   Ban,
   Flag,
   Undo2,
+  Info,
+  SlidersHorizontal,
+  UserX,
+  Pencil,
+  Plus,
   type LucideIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
+import { useOnlineUsers } from "@/lib/onlineUsers";
 import { Avatar } from "@/components/Avatar";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -94,9 +100,11 @@ function classifyLoaiHinh(text: string): "real_estate" | "goods" {
 
 type ViewTab = "category" | "swipe" | "matches";
 const VALID_TABS: ViewTab[] = ["category", "swipe", "matches"];
+type CategoryStep = "grid" | "manage" | "form";
 
 // 4 mục cố định của Quẹt (round 29.1: chia lại thành 3 trang — chọn mục / quẹt / kết nối;
-// round 29.2: field theo từng mục chi tiết hơn + lọc giới tính kiểu Tinder cho Làm quen).
+// round 29.2: field theo từng mục chi tiết hơn + lọc giới tính kiểu Tinder cho Làm quen;
+// round 35: bỏ giới hạn 1 nhu cầu/mục — mỗi mục cho phép nhiều nhu cầu, quản lý qua danh sách).
 const CATEGORIES: { type: NeedType; Icon: LucideIcon }[] = [
   { type: "game", Icon: Gamepad2 },
   { type: "lam_quen", Icon: Heart },
@@ -116,13 +124,15 @@ function CategoryIcon({ type, className }: { type: NeedType; className?: string 
 }
 
 // Ghép các thông tin phụ (lương, tuổi, giới tính, tên game, hình thức trao đổi...) theo
-// từng loại nhu cầu (và theo role tìm-việc/tuyển-người) thành 1 dòng nhãn ngắn trên thẻ quẹt.
+// từng loại nhu cầu (và theo role tìm-việc/tuyển-người) thành 1 dòng nhãn ngắn — giờ chỉ
+// hiện trong màn "Chi tiết" (round 35 rút gọn mặt trước thẻ quẹt xuống tên/tuổi/giới thiệu).
 function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string, string>) => string): string[] {
   const d = (need.details as Record<string, string>) ?? {};
   const chips: string[] = [];
   if (need.need_type === "tim_viec") {
     const isHirer = d.role === "hirer";
     chips.push(isHirer ? t("quet.roleHirer") : t("quet.roleSeeker"));
+    if (d.nganhNghe) chips.push(t(`quet.nganhNghe.${d.nganhNghe}`));
     if (d.salary) chips.push(`💰 ${d.salary}`);
     if (isHirer) {
       if (d.ageRange) chips.push(`🎂 ${d.ageRange}`);
@@ -151,6 +161,7 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
               : "sell";
       chips.push(t(`quet.tradeDirection.${dirKey}`));
       if (d.loaiHinh) chips.push(d.loaiHinh);
+      if (d.dienTich) chips.push(`${d.dienTich} m²`);
       if (d.gia) chips.push(`💰 ${d.gia}`);
     } else {
       chips.push(t("quet.tradeType.interaction"));
@@ -164,7 +175,7 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
 }
 
 // Các field dạng văn bản dài (yêu cầu, kinh nghiệm, đối tượng mong muốn...) hiển thị riêng
-// từng dòng bên dưới phần mô tả, thay vì gộp chung vào hàng chip ngắn ở trên.
+// từng dòng trong màn "Chi tiết".
 function needExtraLines(
   need: SwipeNeed,
   t: (key: string, vars?: Record<string, string>) => string,
@@ -189,6 +200,16 @@ function needExtraLines(
   return lines;
 }
 
+// Tuổi hiển thị ở mặt trước thẻ (kiểu Tinder "Tên, Tuổi") — chỉ có ý nghĩa khi là tuổi CỦA
+// CHÍNH người đăng (Làm quen, hoặc Tìm việc với vai trò người tìm việc); "Độ tuổi yêu cầu"
+// của bên tuyển người là tuổi họ MONG MUỐN ở ứng viên, không phải tuổi của họ, nên bỏ qua.
+function needFrontAge(need: SwipeNeed): string | null {
+  const d = (need.details as Record<string, string>) ?? {};
+  if (need.need_type === "lam_quen" && d.age) return d.age;
+  if (need.need_type === "tim_viec" && d.role !== "hirer" && d.age) return d.age;
+  return null;
+}
+
 interface OwnerInfo {
   id: string;
   username: string | null;
@@ -201,6 +222,12 @@ type MatchRow = SwipeMatch & {
   myNeed: SwipeNeed | null;
   otherNeed: SwipeNeed | null;
 };
+
+interface DetailTarget {
+  need: SwipeNeed;
+  owner: OwnerInfo | null;
+  distanceKm: number | null;
+}
 
 // Ảnh nền của thẻ quẹt lưu "path" trong storage (giống avatar) chứ không phải URL thẳng —
 // tự resolve qua getSignedUrl (có cache sẵn trong lib/upload) rồi mới render <img>.
@@ -268,12 +295,15 @@ function ConfettiBurst() {
 }
 
 const SWIPE_THRESHOLD = 100;
+const TAP_MOVE_TOLERANCE = 10;
+const TAP_MAX_DURATION = 300;
 
 export default function Quet() {
   const { user, profile, isApproved } = useAuth();
   const { t } = useLanguage();
   const nav = useNavigate();
   const [searchParams] = useSearchParams();
+  const onlineUsers = useOnlineUsers();
 
   const initialTabParam = searchParams.get("tab");
   const initialTab: ViewTab = VALID_TABS.includes(initialTabParam as ViewTab)
@@ -282,9 +312,11 @@ export default function Quet() {
 
   const [tab, setTab] = useState<ViewTab>(initialTab);
   const [activeCategory, setActiveCategory] = useState<NeedType | null>(null);
-  const [categoryStep, setCategoryStep] = useState<"grid" | "form">("grid");
+  const [categoryStep, setCategoryStep] = useState<CategoryStep>("grid");
+  const [manageCategory, setManageCategory] = useState<NeedType | null>(null);
   const [editingNeed, setEditingNeed] = useState<SwipeNeed | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [candidates, setCandidates] = useState<SwipeNeed[]>([]);
@@ -343,11 +375,13 @@ export default function Quet() {
   const rafRef = useRef<number | null>(null);
   const [exiting, setExiting] = useState<"left" | "right" | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
+  const pointerDownTimeRef = useRef(0);
   const [frontEntering, setFrontEntering] = useState(false);
   const enteredIdRef = useRef<string | null>(null);
   const actionsRowRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
   const [cardH, setCardH] = useState<number | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -363,6 +397,26 @@ export default function Quet() {
     actionId: string | null;
     matchId: string | null;
   } | null>(null);
+
+  // Bộ lọc theo từng mục (round 35) — độ tuổi (Làm quen/Tìm việc), ngành nghề (Tìm việc),
+  // loại giao dịch (Trao đổi), chế độ (Game). Reset mỗi khi đổi mục để không lọc nhầm sang
+  // mục khác.
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filterAgeMin, setFilterAgeMin] = useState("");
+  const [filterAgeMax, setFilterAgeMax] = useState("");
+  const [filterNganhNghe, setFilterNganhNghe] = useState<string>("all");
+  const [filterTradeType, setFilterTradeType] = useState<string>("all");
+  const [filterMode, setFilterMode] = useState<string>("all");
+
+  // Ảnh đang xem trong bộ ảnh (tối đa 4) của thẻ trên cùng — chạm nửa trái/phải ảnh (KHÔNG
+  // kéo) để chuyển ảnh, chỉ like/dislike khi thật sự quẹt/bấm nút.
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  // Modal "Chi tiết" dùng chung cho cả thẻ quẹt lẫn danh sách Kết nối.
+  const [detailFor, setDetailFor] = useState<DetailTarget | null>(null);
+
+  // Hủy kết nối (unmatch) từ tab Kết nối.
+  const [unmatchTarget, setUnmatchTarget] = useState<MatchRow | null>(null);
 
   // Toàn bộ màn quẹt phải vừa đúng 1 màn hình: đo không gian còn lại thật (viewport thật -
   // vị trí thẻ - hàng nút - nav dưới) rồi cho thẻ co giãn vừa đủ, thay vì chiều cao cố định.
@@ -395,6 +449,7 @@ export default function Quet() {
   const myId = user?.id;
 
   const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
+  const needsOfType = (type: NeedType) => myNeeds.filter((n) => n.need_type === type);
 
   useEffect(() => {
     void supabase.rpc("business_area_counts").then(({ data }) => {
@@ -404,6 +459,26 @@ export default function Quet() {
       setLoaiHinhCounts(((data ?? []) as any[]).map((r) => [r.loai_hinh as string, Number(r.cnt)]));
     });
   }, []);
+
+  // Round 35: hỏi vị trí ngay khi vừa vào trang Quẹt (thay vì bắt bấm nút thủ công) — vẫn
+  // giữ nút "📍 Bật định vị" cũ để bấm lại thủ công nếu lúc đầu bị từ chối/lỗi.
+  useEffect(() => {
+    if (!isApproved) return;
+    if (!navigator.geolocation) {
+      setLocStatus("unsupported");
+      return;
+    }
+    setLocStatus("requesting");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLocStatus("granted");
+      },
+      () => setLocStatus("denied"),
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApproved]);
 
   const loadCandidates = async () => {
     if (!myId || !activeCategory) return;
@@ -518,6 +593,16 @@ export default function Quet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myId, tab]);
 
+  // Đổi mục quẹt → xoá bộ lọc cũ (tránh lọc nhầm sang mục không liên quan).
+  useEffect(() => {
+    setFilterAgeMin("");
+    setFilterAgeMax("");
+    setFilterNganhNghe("all");
+    setFilterTradeType("all");
+    setFilterMode("all");
+    setFilterOpen(false);
+  }, [activeCategory]);
+
   // Hiệu ứng match: chữ/avatar "trồi" lên trước, pháo giấy bung SAU một nhịp ngắn
   // (khớp đúng ý muốn "hiện chữ rồi pháo bông" thay vì bung cùng lúc).
   useEffect(() => {
@@ -530,33 +615,49 @@ export default function Quet() {
   }, [matchInfo]);
 
   const act = async (need: SwipeNeed, action: "like" | "pass") => {
-    if (!myId) return;
+    if (!myId || busy) return;
+    setBusy(true);
     const likedOwner = owners[need.user_id] ?? null;
     setCandidates((prev) => prev.filter((n) => n.id !== need.id));
+    // upsert (không phải insert) để chống lỗi khi swipe_actions cũ cho đúng nhu cầu này
+    // (vd vừa "bỏ qua" rồi "hoàn tác" — hàng cũ có thể đang trong quá trình xoá) vẫn còn —
+    // upsert ghi đè action mới thay vì báo lỗi trùng khoá.
     const { data: actionRow, error } = await db
       .from("swipe_actions")
-      .insert({ need_id: need.id, actor_id: myId, action })
+      .upsert({ need_id: need.id, actor_id: myId, action }, { onConflict: "need_id,actor_id" })
       .select("id")
       .single();
     if (error) {
       toast.error(t("common.error"));
+      setCandidates((prev) => (prev.some((n) => n.id === need.id) ? prev : [need, ...prev]));
+      setBusy(false);
       return;
     }
     let matchId: string | null = null;
     if (action === "like") {
-      const { data: newMatch } = await db
-        .from("swipe_matches")
-        .select("id")
-        .or(`need_id_a.eq.${need.id},need_id_b.eq.${need.id}`)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (newMatch) {
-        matchId = newMatch.id;
-        setMatchInfo({ owner: likedOwner, needTitle: need.title });
+      // QUAN TRỌNG (sửa lỗi round 35): trước đây tìm "match GẦN NHẤT có liên quan tới need
+      // này" — nếu need này đã từng match với người KHÁC trước đó (vd dữ liệu test), sẽ vô
+      // tình lấy nhầm match CŨ đó, và nếu sau đó bấm "hoàn tác" sẽ XOÁ NHẦM match không liên
+      // quan. Giờ chỉ tìm match đúng giữa NHU CẦU CỦA MÌNH và nhu cầu vừa thích.
+      const myNeedId = activeCategory ? needByType(activeCategory)?.id : null;
+      if (myNeedId) {
+        const { data: newMatch } = await db
+          .from("swipe_matches")
+          .select("id")
+          .or(
+            `and(need_id_a.eq.${need.id},need_id_b.eq.${myNeedId}),and(need_id_a.eq.${myNeedId},need_id_b.eq.${need.id})`,
+          )
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (newMatch) {
+          matchId = newMatch.id;
+          setMatchInfo({ owner: likedOwner, needTitle: need.title });
+        }
       }
     }
     setLastAction({ need, actionId: actionRow?.id ?? null, matchId });
+    setBusy(false);
   };
 
   // "Hoan tac" chi co tac dung trong it giay sau khi quet.
@@ -567,7 +668,8 @@ export default function Quet() {
   }, [lastAction]);
 
   const undoLastAction = async () => {
-    if (!lastAction) return;
+    if (!lastAction || busy) return;
+    setBusy(true);
     const { need, actionId, matchId } = lastAction;
     setLastAction(null);
     if (matchId) {
@@ -578,6 +680,7 @@ export default function Quet() {
       await db.from("swipe_actions").delete().eq("id", actionId);
     }
     setCandidates((prev) => (prev.some((n) => n.id === need.id) ? prev : [need, ...prev]));
+    setBusy(false);
     toast.success(t("quet.undoDone"));
   };
 
@@ -594,10 +697,23 @@ export default function Quet() {
     toast.success(t("block.blocked"));
   };
 
+  const unmatch = async () => {
+    if (!unmatchTarget) return;
+    const id = unmatchTarget.id;
+    setUnmatchTarget(null);
+    const { error } = await db.from("swipe_matches").delete().eq("id", id);
+    if (error) {
+      toast.error(t("common.error"));
+      return;
+    }
+    setMatches((prev) => prev.filter((m) => m.id !== id));
+    toast.success(t("quet.unmatchDone"));
+  };
+
   // Kích hoạt quẹt (từ kéo-thả HOẶC bấm nút) — cho thẻ bay ra rồi mới thật sự gọi act(),
   // để animation và cập nhật dữ liệu khớp nhịp với nhau.
   const triggerSwipe = (dir: "left" | "right") => {
-    if (!topCard || exiting) return;
+    if (!topCard || exiting || busy) return;
     dragRef.current.active = false;
     setDragging(false);
     setExiting(dir);
@@ -628,6 +744,7 @@ export default function Quet() {
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     dragStart.current = { x: e.clientX, y: e.clientY };
     dragRef.current = { x: 0, y: 0, active: true };
+    pointerDownTimeRef.current = Date.now();
     if (cardRef.current) cardRef.current.style.transition = "none";
     setDragging(true);
   };
@@ -637,13 +754,14 @@ export default function Quet() {
     dragRef.current.y = e.clientY - dragStart.current.y;
     schedulePaint();
   };
-  const onPointerUp = () => {
+  const onPointerUp = (e: React.PointerEvent) => {
     if (!dragRef.current.active) return;
     if (rafRef.current != null) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
     }
     const x = dragRef.current.x;
+    const y = dragRef.current.y;
     if (Math.abs(x) > SWIPE_THRESHOLD) {
       triggerSwipe(x > 0 ? "right" : "left");
       return;
@@ -656,6 +774,23 @@ export default function Quet() {
     }
     if (likeRef.current) likeRef.current.style.opacity = "0";
     if (passRef.current) passRef.current.style.opacity = "0";
+    // Chạm nhẹ (không kéo, không giữ lâu) trên nửa trái/phải ảnh → chuyển ảnh trước/sau,
+    // giống Instagram/Tinder — KHÔNG tính là quẹt thích/bỏ qua.
+    const dt = Date.now() - pointerDownTimeRef.current;
+    if (
+      Math.abs(x) < TAP_MOVE_TOLERANCE &&
+      Math.abs(y) < TAP_MOVE_TOLERANCE &&
+      dt < TAP_MAX_DURATION &&
+      topPhotoList.length > 1 &&
+      el
+    ) {
+      const rect = el.getBoundingClientRect();
+      const tapX = e.clientX - rect.left;
+      setPhotoIndex((i) => {
+        if (tapX > rect.width / 2) return Math.min(i + 1, topPhotoList.length - 1);
+        return Math.max(i - 1, 0);
+      });
+    }
     dragRef.current = { x: 0, y: 0, active: false };
     setDragging(false);
   };
@@ -700,12 +835,25 @@ export default function Quet() {
     setFormNganhNghe(d.nganhNghe ?? "");
   };
 
-  const handleCategoryClick = (type: NeedType, need: SwipeNeed | undefined) => {
-    if (need) {
+  // Bấm thẻ mục lớn: có nhu cầu ĐANG HOẠT ĐỘNG thuộc mục này thì vào quẹt luôn; chưa có (hoặc
+  // toàn bộ đang tạm dừng) thì mở màn quản lý danh sách để tạo mới.
+  const handleCategoryClick = (type: NeedType) => {
+    const hasActive = myNeeds.some((n) => n.need_type === type && n.is_active);
+    if (hasActive) {
       setActiveCategory(type);
       setTab("swipe");
       return;
     }
+    setManageCategory(type);
+    setCategoryStep("manage");
+  };
+
+  const openManage = (type: NeedType) => {
+    setManageCategory(type);
+    setCategoryStep("manage");
+  };
+
+  const openCreateForm = (type: NeedType) => {
     resetFormFields(type, null);
     setEditingNeed(null);
     setConfirmingDelete(false);
@@ -803,10 +951,11 @@ export default function Quet() {
     }
     toast.success(t("common.saved"));
     await loadMyNeeds();
-    setCategoryStep("grid");
     setEditingNeed(null);
-    setActiveCategory(formType);
-    setTab("swipe");
+    // Round 35: quay về danh sách quản lý (không nhảy thẳng vào quẹt nữa) — vì giờ 1 mục có
+    // thể có nhiều nhu cầu, người dùng có thể muốn thêm/sửa tiếp trước khi bắt đầu quẹt.
+    setManageCategory(formType);
+    setCategoryStep("manage");
   };
 
   const togglePauseEditing = async () => {
@@ -819,30 +968,95 @@ export default function Quet() {
 
   const deleteEditing = async () => {
     if (!editingNeed) return;
+    const type = editingNeed.need_type;
     await db.from("swipe_needs").delete().eq("id", editingNeed.id);
-    setCategoryStep("grid");
     setEditingNeed(null);
+    setManageCategory(type);
+    setCategoryStep("manage");
+    void loadMyNeeds();
+  };
+
+  const deleteFromManageList = async (id: string) => {
+    setDeleteTargetId(null);
+    await db.from("swipe_needs").delete().eq("id", id);
     void loadMyNeeds();
   };
 
   const visibleCandidates = useMemo(() => {
-    if (radiusKm == null || !myPos) return candidates;
-    return candidates.filter((n) => {
-      if (n.latitude == null || n.longitude == null) return true;
-      return haversineKm(myPos.lat, myPos.lng, n.latitude, n.longitude) <= radiusKm;
-    });
-  }, [candidates, myPos, radiusKm]);
+    let list = candidates;
+    if (radiusKm != null && myPos) {
+      list = list.filter((n) => {
+        if (n.latitude == null || n.longitude == null) return true;
+        return haversineKm(myPos.lat, myPos.lng, n.latitude, n.longitude) <= radiusKm;
+      });
+    }
+    const ageMin = filterAgeMin.trim() ? Number(filterAgeMin) : null;
+    const ageMax = filterAgeMax.trim() ? Number(filterAgeMax) : null;
+    if ((activeCategory === "lam_quen" || activeCategory === "tim_viec") && (ageMin != null || ageMax != null)) {
+      list = list.filter((n) => {
+        const d = (n.details as Record<string, string>) ?? {};
+        const ageStr = activeCategory === "tim_viec" && d.role === "hirer" ? null : d.age;
+        if (!ageStr) return true;
+        const age = Number(ageStr);
+        if (Number.isNaN(age)) return true;
+        if (ageMin != null && age < ageMin) return false;
+        if (ageMax != null && age > ageMax) return false;
+        return true;
+      });
+    }
+    if (activeCategory === "tim_viec" && filterNganhNghe !== "all") {
+      list = list.filter((n) => ((n.details as Record<string, string>)?.nganhNghe ?? "") === filterNganhNghe);
+    }
+    if (activeCategory === "trao_doi" && filterTradeType !== "all") {
+      list = list.filter(
+        (n) => ((n.details as Record<string, string>)?.tradeType ?? "interaction") === filterTradeType,
+      );
+    }
+    if (activeCategory === "game" && filterMode !== "all") {
+      list = list.filter((n) => ((n.details as Record<string, string>)?.mode ?? "playmate") === filterMode);
+    }
+    return list;
+  }, [
+    candidates,
+    myPos,
+    radiusKm,
+    activeCategory,
+    filterAgeMin,
+    filterAgeMax,
+    filterNganhNghe,
+    filterTradeType,
+    filterMode,
+  ]);
+
+  const filterActive =
+    !!filterAgeMin.trim() ||
+    !!filterAgeMax.trim() ||
+    filterNganhNghe !== "all" ||
+    filterTradeType !== "all" ||
+    filterMode !== "all";
 
   const topCard = visibleCandidates[0];
   const nextCard = visibleCandidates[1];
+  // Bộ ảnh của thẻ trên cùng (dùng để giới hạn chỉ số ảnh khi chạm chuyển ảnh trong
+  // onPointerUp phía trên — closure đó chỉ thực sự chạy lúc người dùng thả tay, tức LÀ SAU
+  // khi lượt render này đã hoàn tất, nên tham chiếu một biến khai báo sau nó trong cùng hàm
+  // vẫn đọc đúng giá trị mới nhất, không bị lỗi thứ tự khai báo).
+  const topPhotoList: string[] = topCard?.photo_urls?.length
+    ? topCard.photo_urls.slice(0, 4)
+    : topCard?.photo_url
+      ? [topCard.photo_url]
+      : [];
   const topOwner = topCard ? owners[topCard.user_id] : null;
+  const topOwnerOnline = topOwner ? onlineUsers.has(topOwner.id) : false;
   const topDistanceKm =
     myPos && topCard?.latitude != null && topCard?.longitude != null
       ? haversineKm(myPos.lat, myPos.lng, topCard.latitude, topCard.longitude)
       : null;
+  const topFrontAge = topCard ? needFrontAge(topCard) : null;
   const [descExpanded, setDescExpanded] = useState(false);
   useEffect(() => {
     setDescExpanded(false);
+    setPhotoIndex(0);
   }, [topCard?.id]);
 
   // Khi thẻ đầu đổi (sau khi quẹt xong, đổi sang người kế tiếp) → phát 1 hiệu ứng
@@ -884,6 +1098,10 @@ export default function Quet() {
     };
   }
 
+  const openDetail = (need: SwipeNeed, owner: OwnerInfo | null, distanceKm: number | null) => {
+    setDetailFor({ need, owner, distanceKm });
+  };
+
   if (!isApproved) {
     return (
       <div className="p-6 text-center text-sm text-muted-foreground">
@@ -892,6 +1110,16 @@ export default function Quet() {
       </div>
     );
   }
+
+  const detailChips = detailFor ? needDetailChips(detailFor.need, t) : [];
+  const detailExtraLines = detailFor ? needExtraLines(detailFor.need, t) : [];
+  const detailPhotos = detailFor
+    ? detailFor.need.photo_urls?.length
+      ? detailFor.need.photo_urls.slice(0, 4)
+      : detailFor.need.photo_url
+        ? [detailFor.need.photo_url]
+        : []
+    : [];
 
   return (
     <div className="p-4 space-y-4">
@@ -926,11 +1154,12 @@ export default function Quet() {
           <div className="text-xs text-muted-foreground">{t("quet.category.subtitle")}</div>
           <div className="grid grid-cols-2 gap-3">
             {CATEGORIES.map(({ type, Icon }) => {
-              const need = needByType(type);
+              const list = needsOfType(type);
+              const activeCount = list.filter((n) => n.is_active).length;
               return (
                 <div key={type} className="h-full flex flex-col gap-1.5">
                   <button
-                    onClick={() => handleCategoryClick(type, need)}
+                    onClick={() => handleCategoryClick(type)}
                     className="flex-1 w-full rounded-2xl border bg-card p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition"
                   >
                     <div className="w-14 h-14 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
@@ -940,19 +1169,19 @@ export default function Quet() {
                     <div className="text-[11px] text-muted-foreground leading-snug">
                       {t(`quet.category.${type}.brief`)}
                     </div>
-                    {need && (
+                    {list.length > 0 && (
                       <span
                         className={cn(
                           "text-[10px] font-semibold px-2 py-0.5 rounded-full",
-                          need.is_active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
+                          activeCount > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
                         )}
                       >
-                        {need.is_active ? t("quet.category.active") : t("quet.category.paused")}
+                        {t("quet.needsCount", { count: String(list.length) })}
                       </span>
                     )}
                   </button>
                   <button
-                    onClick={() => (need ? openEdit(need) : handleCategoryClick(type, need))}
+                    onClick={() => openManage(type)}
                     className="w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
                   >
                     <Settings className="w-3.5 h-3.5" /> {t("quet.category.manage")}
@@ -964,11 +1193,78 @@ export default function Quet() {
         </div>
       )}
 
-      {tab === "category" && categoryStep === "form" && (
+      {tab === "category" && categoryStep === "manage" && manageCategory && (
         <div className="space-y-3">
           <button
             onClick={() => {
               setCategoryStep("grid");
+              setManageCategory(null);
+            }}
+            className="flex items-center gap-1 text-xs font-semibold text-muted-foreground"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" /> {t("quet.backToCategories")}
+          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-xl bg-gradient-brand text-primary-foreground grid place-items-center">
+              <CategoryIcon type={manageCategory} className="w-5 h-5" />
+            </div>
+            <div className="font-extrabold">{t(`quet.type.${manageCategory}`)}</div>
+          </div>
+
+          <div className="space-y-2">
+            {needsOfType(manageCategory).length === 0 ? (
+              <div className="text-center py-8 text-sm text-muted-foreground">{t("quet.noNeedsYet")}</div>
+            ) : (
+              needsOfType(manageCategory).map((n) => (
+                <div key={n.id} className="flex items-center gap-2 rounded-xl border bg-card p-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-sm truncate">{n.title}</span>
+                      <span
+                        className={cn(
+                          "text-[10px] font-semibold px-1.5 py-0.5 rounded-full shrink-0",
+                          n.is_active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
+                        )}
+                      >
+                        {n.is_active ? t("quet.category.active") : t("quet.category.paused")}
+                      </span>
+                    </div>
+                    {n.description && <div className="text-xs text-muted-foreground truncate">{n.description}</div>}
+                  </div>
+                  <button
+                    onClick={() => openEdit(n)}
+                    aria-label={t("quet.editNeed")}
+                    className="w-8 h-8 rounded-full border grid place-items-center text-muted-foreground shrink-0"
+                  >
+                    <Pencil className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setDeleteTargetId(n.id)}
+                    aria-label={t("quet.deleteNeed")}
+                    className="w-8 h-8 rounded-full border border-destructive/40 grid place-items-center text-destructive shrink-0"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+
+          <button
+            onClick={() => openCreateForm(manageCategory)}
+            className="w-full py-2.5 rounded-xl border-2 border-dashed text-sm font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
+          >
+            <Plus className="w-4 h-4" /> {t("quet.addNeed")}
+          </button>
+        </div>
+      )}
+
+      {tab === "category" && categoryStep === "form" && (
+        <div className="space-y-3">
+          <button
+            onClick={() => {
+              setCategoryStep("manage");
+              setManageCategory(formType);
               setEditingNeed(null);
               setConfirmingDelete(false);
             }}
@@ -1458,6 +1754,124 @@ export default function Quet() {
               <CategoryIcon type={activeCategory} className="w-4 h-4 text-primary" />
               {t(`quet.type.${activeCategory}`)}
             </div>
+            <Popover open={filterOpen} onOpenChange={setFilterOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className={cn(
+                    "ml-auto w-8 h-8 rounded-full border grid place-items-center relative shrink-0",
+                    filterActive ? "border-primary text-primary" : "text-muted-foreground",
+                  )}
+                  aria-label={t("quet.filter")}
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  {filterActive && <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-primary" />}
+                </button>
+              </PopoverTrigger>
+              <PopoverContent align="end" className="w-64 p-3 space-y-2.5">
+                <div className="text-xs font-bold">{t("quet.filter")}</div>
+                {(activeCategory === "lam_quen" || activeCategory === "tim_viec") && (
+                  <div>
+                    <div className="text-[11px] font-semibold mb-1 text-muted-foreground">
+                      {t("quet.filterAgeRange")}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        placeholder={t("quet.filterAgeFrom")}
+                        value={filterAgeMin}
+                        onChange={(e) => setFilterAgeMin(e.target.value.replace(/[^0-9]/g, ""))}
+                        className="h-8 text-xs"
+                        inputMode="numeric"
+                      />
+                      <Input
+                        placeholder={t("quet.filterAgeTo")}
+                        value={filterAgeMax}
+                        onChange={(e) => setFilterAgeMax(e.target.value.replace(/[^0-9]/g, ""))}
+                        className="h-8 text-xs"
+                        inputMode="numeric"
+                      />
+                    </div>
+                  </div>
+                )}
+                {activeCategory === "tim_viec" && (
+                  <div>
+                    <div className="text-[11px] font-semibold mb-1 text-muted-foreground">
+                      {t("quet.field.nganhNghe")}
+                    </div>
+                    <Select value={filterNganhNghe} onValueChange={setFilterNganhNghe}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t("quet.filterAll")}</SelectItem>
+                        {[
+                          "fnb",
+                          "banHang",
+                          "giaoHang",
+                          "cskh",
+                          "lamDep",
+                          "xayDung",
+                          "vanPhong",
+                          "congNghe",
+                          "giaoDuc",
+                          "khac",
+                        ].map((k) => (
+                          <SelectItem key={k} value={k}>
+                            {t(`quet.nganhNghe.${k}`)}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                {activeCategory === "trao_doi" && (
+                  <div>
+                    <div className="text-[11px] font-semibold mb-1 text-muted-foreground">
+                      {t("quet.filterTradeType")}
+                    </div>
+                    <Select value={filterTradeType} onValueChange={setFilterTradeType}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t("quet.filterAll")}</SelectItem>
+                        <SelectItem value="interaction">{t("quet.tradeType.interaction")}</SelectItem>
+                        <SelectItem value="buy_sell">{t("quet.tradeType.buySell")}</SelectItem>
+                        <SelectItem value="rent">{t("quet.tradeType.rent")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                {activeCategory === "game" && (
+                  <div>
+                    <div className="text-[11px] font-semibold mb-1 text-muted-foreground">{t("quet.filterMode")}</div>
+                    <Select value={filterMode} onValueChange={setFilterMode}>
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t("quet.filterAll")}</SelectItem>
+                        <SelectItem value="playmate">{t("quet.modePlaymate")}</SelectItem>
+                        <SelectItem value="trade">{t("quet.modeTrade")}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+                {filterActive && (
+                  <button
+                    onClick={() => {
+                      setFilterAgeMin("");
+                      setFilterAgeMax("");
+                      setFilterNganhNghe("all");
+                      setFilterTradeType("all");
+                      setFilterMode("all");
+                    }}
+                    className="w-full text-xs font-semibold text-destructive pt-1"
+                  >
+                    {t("quet.filterClear")}
+                  </button>
+                )}
+              </PopoverContent>
+            </Popover>
             {!myPos && (
               <button
                 onClick={() => {
@@ -1475,7 +1889,7 @@ export default function Quet() {
                     { enableHighAccuracy: true, timeout: 10000 },
                   );
                 }}
-                className="ml-auto text-[11px] font-semibold text-muted-foreground border rounded-full px-2.5 py-1"
+                className="text-[11px] font-semibold text-muted-foreground border rounded-full px-2.5 py-1 shrink-0"
               >
                 📍 {locStatus === "requesting" ? t("sort.requestingLocation") : t("nearby.enableCta")}
               </button>
@@ -1542,16 +1956,22 @@ export default function Quet() {
                   style={{ ...cardStyle, touchAction: "none", willChange: "transform", backfaceVisibility: "hidden" }}
                   className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
                 >
-                  <CardPhoto path={topCard.photo_url} />
-                  {(topCard.photo_urls?.length ?? 0) > 1 && (
-                    <div className="absolute top-3 inset-x-0 flex items-center justify-center gap-1 pointer-events-none">
-                      {topCard.photo_urls!.slice(0, 4).map((_, i) => (
-                        <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/80" />
+                  <CardPhoto path={topPhotoList[photoIndex] ?? topCard.photo_url} />
+                  {topPhotoList.length > 1 && (
+                    <div className="absolute top-2.5 inset-x-2.5 flex items-center gap-1 pointer-events-none z-10">
+                      {topPhotoList.map((_, i) => (
+                        <div
+                          key={i}
+                          className={cn(
+                            "h-1 flex-1 rounded-full transition-colors",
+                            i === photoIndex ? "bg-white" : "bg-white/40",
+                          )}
+                        />
                       ))}
                     </div>
                   )}
-                  {topCard.photo_url && (
-                    <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
+                  {(topPhotoList.length > 0 || topCard.photo_url) && (
+                    <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
                   )}
                   <Popover open={cardMenuOpen} onOpenChange={setCardMenuOpen}>
                     <PopoverTrigger asChild>
@@ -1610,41 +2030,40 @@ export default function Quet() {
 
                   <div
                     className={cn(
-                      "absolute inset-0 p-5 flex flex-col pointer-events-none",
-                      topCard.photo_url && "justify-end text-white",
+                      "absolute inset-0 p-5 flex flex-col justify-end pointer-events-none",
+                      (topPhotoList.length > 0 || topCard.photo_url) && "text-white",
                     )}
                   >
-                    <div className="flex items-center gap-2 mb-3">
-                      <Avatar path={topOwner?.avatar_url} name={topOwner?.full_name || topOwner?.username} size={44} />
+                    <div className="flex items-center gap-2 mb-2 pointer-events-auto">
+                      <div className="relative shrink-0">
+                        <Avatar
+                          path={topOwner?.avatar_url}
+                          name={topOwner?.full_name || topOwner?.username}
+                          size={44}
+                        />
+                        {topOwnerOnline && (
+                          <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-black/50" />
+                        )}
+                      </div>
                       <div className="min-w-0">
-                        <div className="font-bold text-sm truncate">
-                          {topOwner?.full_name || topOwner?.username || "—"}
+                        <div className="font-extrabold text-lg leading-tight flex items-baseline gap-1.5 min-w-0">
+                          <span className="truncate">{topOwner?.full_name || topOwner?.username || "—"}</span>
+                          {topFrontAge && (
+                            <span className="text-sm font-semibold opacity-90 shrink-0">, {topFrontAge}</span>
+                          )}
                         </div>
-                        <div
-                          className={cn("text-[11px]", topCard.photo_url ? "text-white/80" : "text-muted-foreground")}
-                        >
-                          {t(`quet.type.${topCard.need_type}`)}
-                        </div>
+                        {topOwnerOnline && (
+                          <div className="text-[11px] font-semibold text-emerald-300">{t("quet.online")}</div>
+                        )}
                       </div>
                     </div>
-                    <div className="font-extrabold text-lg mb-1">{topCard.title}</div>
-                    {(topCard.area || topDistanceKm != null) && (
-                      <div
-                        className={cn("text-xs mb-2", topCard.photo_url ? "text-white/80" : "text-muted-foreground")}
-                      >
-                        📍{" "}
-                        {[topCard.area, topDistanceKm != null ? `${topDistanceKm.toFixed(1)} km` : null]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </div>
-                    )}
                     {topCard.description && (
-                      <div className="flex-1 overflow-hidden flex flex-col">
+                      <div className="pointer-events-auto">
                         <div
                           className={cn(
                             "text-sm",
-                            !descExpanded && "line-clamp-3",
-                            topCard.photo_url ? "text-white/90" : "text-muted-foreground",
+                            !descExpanded && "line-clamp-2",
+                            topPhotoList.length > 0 || topCard.photo_url ? "text-white/90" : "text-muted-foreground",
                           )}
                         >
                           {topCard.description}
@@ -1658,8 +2077,8 @@ export default function Quet() {
                               setDescExpanded((v) => !v);
                             }}
                             className={cn(
-                              "self-start text-xs font-semibold mt-0.5 pointer-events-auto underline underline-offset-2",
-                              topCard.photo_url ? "text-white" : "text-primary",
+                              "self-start text-xs font-semibold mt-0.5 underline underline-offset-2",
+                              topPhotoList.length > 0 || topCard.photo_url ? "text-white" : "text-primary",
                             )}
                           >
                             {descExpanded ? t("quet.collapse") : t("quet.seeMore")}
@@ -1667,34 +2086,32 @@ export default function Quet() {
                         )}
                       </div>
                     )}
-                    {needDetailChips(topCard, t).length > 0 && (
-                      <div
-                        className={cn(
-                          "text-[11px] font-semibold mt-2",
-                          topCard.photo_url ? "text-white" : "text-primary",
-                        )}
-                      >
-                        {needDetailChips(topCard, t).join("  ·  ")}
-                      </div>
-                    )}
-                    {needExtraLines(topCard, t).map((line, i) => (
-                      <div
-                        key={i}
-                        className={cn("text-xs mt-1", topCard.photo_url ? "text-white/80" : "text-muted-foreground")}
-                      >
-                        <span className="font-semibold">{line.label}: </span>
-                        {line.value}
-                      </div>
-                    ))}
+                    <button
+                      type="button"
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openDetail(topCard, topOwner, topDistanceKm);
+                      }}
+                      className={cn(
+                        "self-start mt-2.5 pointer-events-auto text-xs font-semibold flex items-center gap-1 underline underline-offset-2",
+                        topPhotoList.length > 0 || topCard.photo_url ? "text-white" : "text-primary",
+                      )}
+                    >
+                      <Info className="w-3.5 h-3.5" /> {t("quet.detail")}
+                    </button>
                     <div
-                      className={cn("text-[10px] mt-2", topCard.photo_url ? "text-white/70" : "text-muted-foreground")}
+                      className={cn(
+                        "text-[10px] mt-2",
+                        topPhotoList.length > 0 || topCard.photo_url ? "text-white/70" : "text-muted-foreground",
+                      )}
                     >
                       {t("quet.contactHidden")}
                     </div>
                   </div>
                 </div>
               </div>
-              <div ref={actionsRowRef} className="flex items-center justify-center gap-4">
+              <div ref={actionsRowRef} className="flex items-center justify-center gap-3">
                 <button
                   onClick={() => lastAction && void undoLastAction()}
                   disabled={!lastAction}
@@ -1722,6 +2139,13 @@ export default function Quet() {
                 >
                   <Heart className="w-6 h-6" />
                 </button>
+                <button
+                  onClick={() => openDetail(topCard, topOwner, topDistanceKm)}
+                  aria-label={t("quet.detail")}
+                  className="w-10 h-10 rounded-full border-2 border-muted-foreground/30 grid place-items-center text-muted-foreground active:scale-95 transition"
+                >
+                  <Info className="w-4 h-4" />
+                </button>
               </div>
             </div>
           )}
@@ -1733,31 +2157,62 @@ export default function Quet() {
           {matches.length === 0 ? (
             <div className="text-center py-10 text-sm text-muted-foreground">{t("quet.emptyMatches")}</div>
           ) : (
-            matches.map((m) => (
-              <button
-                key={m.id}
-                onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
-                className="w-full flex items-center gap-3 rounded-xl border bg-card p-3 text-left hover:bg-accent/40"
-              >
-                <div className="relative shrink-0">
-                  <Avatar
-                    path={m.otherUser?.avatar_url}
-                    name={m.otherUser?.full_name || m.otherUser?.username}
-                    size={44}
-                  />
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-card">
-                    <CategoryIcon type={m.need_type} className="w-3 h-3" />
-                  </div>
+            matches.map((m) => {
+              const isOnline = m.otherUser ? onlineUsers.has(m.otherUser.id) : false;
+              return (
+                <div key={m.id} className="w-full flex items-center gap-3 rounded-xl border bg-card p-3">
+                  <button
+                    onClick={() => m.otherNeed && openDetail(m.otherNeed, m.otherUser, null)}
+                    className="flex items-center gap-3 flex-1 min-w-0 text-left"
+                  >
+                    <div className="relative shrink-0">
+                      <Avatar
+                        path={m.otherUser?.avatar_url}
+                        name={m.otherUser?.full_name || m.otherUser?.username}
+                        size={44}
+                      />
+                      <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-card">
+                        <CategoryIcon type={m.need_type} className="w-3 h-3" />
+                      </div>
+                      {isOnline && (
+                        <span className="absolute top-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-sm truncate">
+                        {m.otherUser?.full_name || m.otherUser?.username || "—"}
+                      </div>
+                      <div className="text-xs text-muted-foreground truncate">{m.otherNeed?.title}</div>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
+                    aria-label={t("quet.sendMessage")}
+                    className="w-9 h-9 rounded-full grid place-items-center text-primary shrink-0"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                  </button>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        aria-label={t("block.menu")}
+                        className="w-8 h-8 rounded-full grid place-items-center text-muted-foreground shrink-0"
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-40 p-1">
+                      <button
+                        onClick={() => setUnmatchTarget(m)}
+                        className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left text-destructive"
+                      >
+                        <UserX className="w-4 h-4" /> {t("quet.unmatch")}
+                      </button>
+                    </PopoverContent>
+                  </Popover>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="font-bold text-sm truncate">
-                    {m.otherUser?.full_name || m.otherUser?.username || "—"}
-                  </div>
-                  <div className="text-xs text-muted-foreground truncate">{m.otherNeed?.title}</div>
-                </div>
-                <MessageCircle className="w-4 h-4 text-primary" />
-              </button>
-            ))
+              );
+            })
           )}
         </div>
       )}
@@ -1836,6 +2291,78 @@ export default function Quet() {
         </div>
       )}
 
+      {detailFor && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 flex items-end sm:items-center justify-center sm:p-6 animate-in fade-in duration-200"
+          onClick={() => setDetailFor(null)}
+        >
+          <div
+            className="relative bg-card rounded-t-3xl sm:rounded-3xl w-full sm:max-w-sm max-h-[85vh] overflow-y-auto p-5 space-y-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setDetailFor(null)}
+              aria-label={t("common.cancel")}
+              className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-muted grid place-items-center"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <div className="font-extrabold text-base pr-8">{t("quet.detailTitle")}</div>
+            {detailPhotos.length > 0 && (
+              <div className="grid grid-cols-4 gap-1.5">
+                {detailPhotos.map((p, i) => (
+                  <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                    <CardPhoto path={p} />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex items-center gap-2.5">
+              <div className="relative shrink-0">
+                <Avatar
+                  path={detailFor.owner?.avatar_url}
+                  name={detailFor.owner?.full_name || detailFor.owner?.username}
+                  size={48}
+                />
+                {detailFor.owner && onlineUsers.has(detailFor.owner.id) && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <div className="font-bold text-sm truncate">
+                  {detailFor.owner?.full_name || detailFor.owner?.username || "—"}
+                </div>
+                <div className="text-xs text-muted-foreground flex items-center gap-1">
+                  <CategoryIcon type={detailFor.need.need_type} className="w-3 h-3" />
+                  {t(`quet.type.${detailFor.need.need_type}`)}
+                </div>
+              </div>
+            </div>
+            <div className="font-extrabold">{detailFor.need.title}</div>
+            {(detailFor.need.area || detailFor.distanceKm != null) && (
+              <div className="text-xs text-muted-foreground">
+                📍{" "}
+                {[detailFor.need.area, detailFor.distanceKm != null ? `${detailFor.distanceKm.toFixed(1)} km` : null]
+                  .filter(Boolean)
+                  .join(" · ")}
+              </div>
+            )}
+            {detailFor.need.description && (
+              <div className="text-sm whitespace-pre-wrap">{detailFor.need.description}</div>
+            )}
+            {detailChips.length > 0 && (
+              <div className="text-xs font-semibold text-primary">{detailChips.join("  ·  ")}</div>
+            )}
+            {detailExtraLines.map((line, i) => (
+              <div key={i} className="text-xs text-muted-foreground">
+                <span className="font-semibold">{line.label}: </span>
+                {line.value}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <AlertDialog open={confirmBlockOpen} onOpenChange={setConfirmBlockOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -1845,6 +2372,33 @@ export default function Quet() {
           <AlertDialogFooter>
             <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={() => void blockOwner()}>{t("block.block")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!unmatchTarget} onOpenChange={(open) => !open && setUnmatchTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("quet.unmatchConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("quet.unmatchConfirmDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => void unmatch()}>{t("quet.unmatch")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!deleteTargetId} onOpenChange={(open) => !open && setDeleteTargetId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("quet.deleteNeedConfirm")}</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => deleteTargetId && void deleteFromManageList(deleteTargetId)}>
+              {t("quet.deleteNeed")}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
