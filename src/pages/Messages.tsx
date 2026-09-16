@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth";
 import type { Message, Profile, Business } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
 import { GifPicker } from "@/components/GifPicker";
-import { useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile, SmilePlus } from "lucide-react";
@@ -370,7 +370,14 @@ export function MessagesThread() {
   // chưa tồn tại trong DOM lúc đó), effect với dependency [] chạy 1 lần rồi thôi, không
   // bao giờ thử gắn lại khi giao diện chat thật sự xuất hiện sau đó. Callback ref tự động
   // được gọi lại đúng lúc phần tử thật sự được gắn vào DOM, dù sớm hay trễ.
-  const contentRef = (node: HTMLDivElement | null) => {
+  // QUAN TRONG: boc useCallback([]) de giu NGUYEN danh tinh ham qua moi lan render --
+  // neu khong, moi lan component re-render (don dap luc moi mo trang: setPartner, setMsgs,
+  // setCalls, setIBlockedThem... moi cai mot luot render rieng do la cac call bat dong bo
+  // khac nhau) React coi day la "ref khac nen" thao roi gan lai ResizeObserver lien tuc, co
+  // the huy mat lan thong bao kich thuoc DAU TIEN truoc khi no kip ban ra -- day chinh la ly
+  // do tu cuon xuong day doi khi khong an o lan vao trang dau tien (nhung lan sau cac loi goi
+  // API da nhanh/co san nen don lai thanh 1 lan render, tinh co khong gap loi).
+  const contentRef = useCallback((node: HTMLDivElement | null) => {
     resizeObserverRef.current?.disconnect();
     resizeObserverRef.current = null;
     if (node) {
@@ -380,7 +387,7 @@ export function MessagesThread() {
       ro.observe(node);
       resizeObserverRef.current = ro;
     }
-  };
+  }, []);
 
   const handleScroll = () => {
     const el = scrollContainerRef.current;
@@ -432,8 +439,20 @@ export function MessagesThread() {
     if (shouldScrollToBottom) {
       pinnedToBottomRef.current = true;
       requestAnimationFrame(() => scrollToBottom(false));
-      // Không cần đoán thêm khoảng chờ nào nữa — ResizeObserver phía trên sẽ tự cuộn lại
-      // đúng lúc ảnh/GIF thật sự tải xong, dù nhanh hay chậm.
+      // ResizeObserver phia tren se tu cuon lai dung luc anh/GIF thuc su tai xong. Nhung
+      // phong them truong hop rAF o tren chay dung luc scrollContainerRef CHUA gan vao DOM
+      // (vi du dang o man hinh "dang tai/kiem tra dang nhap" luc vao trang lan dau) -- thu
+      // lai vai lan bang setTimeout, vo hai neu da dung vi tri roi vi dich luon la day khung,
+      // va tu huy neu nguoi dung da cuon len (pinnedToBottomRef thanh false).
+      setTimeout(() => {
+        if (pinnedToBottomRef.current) scrollToBottom(false);
+      }, 150);
+      setTimeout(() => {
+        if (pinnedToBottomRef.current) scrollToBottom(false);
+      }, 500);
+      setTimeout(() => {
+        if (pinnedToBottomRef.current) scrollToBottom(false);
+      }, 1200);
     }
   };
 
