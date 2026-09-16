@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -119,7 +119,14 @@ export default function Community() {
   // QUAN TRỌNG: dùng "callback ref" thay vì useRef+useEffect([]) — lý do y hệt bên Tin
   // nhắn: contentRef có thể chưa tồn tại lúc effect [] chạy lần đầu, và không bao giờ thử
   // lại. Callback ref tự động được gọi đúng lúc phần tử thật sự gắn vào DOM.
-  const contentRef = (node: HTMLDivElement | null) => {
+  // QUAN TRONG: boc useCallback([]) de giu NGUYEN danh tinh ham qua moi lan render --
+  // neu khong, moi lan component re-render (don dap luc moi mo trang do nhieu call bat
+  // dong bo khac nhau resolve rieng le) React coi day la "ref khac" nen thao roi gan lai
+  // ResizeObserver lien tuc, co the huy mat lan thong bao kich thuoc DAU TIEN truoc khi no
+  // kip ban ra -- day chinh la ly do tu cuon xuong day doi khi khong an o lan vao trang dau
+  // tien (nhung lan sau cac loi goi API da nhanh/co san nen don lai thanh 1 lan render,
+  // tinh co khong gap loi).
+  const contentRef = useCallback((node: HTMLDivElement | null) => {
     resizeObserverRef.current?.disconnect();
     resizeObserverRef.current = null;
     if (node) {
@@ -129,7 +136,7 @@ export default function Community() {
       ro.observe(node);
       resizeObserverRef.current = ro;
     }
-  };
+  }, []);
 
   const handleScroll = () => {
     const el = scrollContainerRef.current;
@@ -299,6 +306,20 @@ export default function Community() {
     if (shouldScrollToBottom) {
       pinnedToBottomRef.current = true;
       requestAnimationFrame(() => scrollToBottom(false));
+      // ResizeObserver phia tren se tu cuon lai dung luc anh/GIF thuc su tai xong. Nhung
+      // phong them truong hop rAF o tren chay dung luc scrollContainerRef CHUA gan vao DOM
+      // (vi du dang o man hinh "dang tai/kiem tra dang nhap" luc vao trang lan dau) -- thu
+      // lai vai lan bang setTimeout, vo hai neu da dung vi tri roi vi dich luon la day khung,
+      // va tu huy neu nguoi dung da cuon len (pinnedToBottomRef thanh false).
+      setTimeout(() => {
+        if (pinnedToBottomRef.current) scrollToBottom(false);
+      }, 150);
+      setTimeout(() => {
+        if (pinnedToBottomRef.current) scrollToBottom(false);
+      }, 500);
+      setTimeout(() => {
+        if (pinnedToBottomRef.current) scrollToBottom(false);
+      }, 1200);
     }
   };
 
