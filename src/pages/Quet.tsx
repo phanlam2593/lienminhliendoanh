@@ -2284,69 +2284,71 @@ export default function Quet() {
 
       {detailFor && (
         <div className="fixed inset-0 z-50 bg-background overflow-y-auto animate-in fade-in duration-200">
-          <div className="relative w-full h-[58vh] bg-muted">
-            <CardPhoto path={detailPhotos[0]} />
-            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
-            <button
-              onClick={() => setDetailFor(null)}
-              aria-label={t("common.cancel")}
-              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/35 backdrop-blur-sm grid place-items-center text-white"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="relative -mt-24 px-5 pb-8 space-y-3 text-white">
-            <div className="flex items-center gap-2.5">
-              <div className="relative shrink-0">
-                <Avatar
-                  path={detailFor.owner?.avatar_url}
-                  name={detailFor.owner?.full_name || detailFor.owner?.username}
-                  size={40}
-                />
-                {detailFor.owner && onlineUsers.has(detailFor.owner.id) && (
-                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-black/40" />
-                )}
-              </div>
-              <div className="min-w-0">
-                <div className="font-bold text-sm truncate">
-                  {detailFor.owner?.full_name || detailFor.owner?.username || "—"}
-                </div>
-                <div className="text-[11px] text-white/80 flex items-center gap-1">
-                  <CategoryIcon type={detailFor.need.need_type} className="w-3 h-3" />
-                  {t(`quet.type.${detailFor.need.need_type}`)}
-                </div>
-              </div>
+          <div className="min-h-full flex flex-col">
+            <div className="relative w-full flex-1 min-h-[40vh] bg-muted">
+              <CardPhoto path={detailPhotos[0]} />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
+              <button
+                onClick={() => setDetailFor(null)}
+                aria-label={t("common.cancel")}
+                className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/35 backdrop-blur-sm grid place-items-center text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-            <div className="font-extrabold text-lg leading-tight">{detailFor.need.title}</div>
-            {(detailFor.need.area || detailFor.distanceKm != null) && (
-              <div className="text-xs text-white/80">
-                📍{" "}
-                {[detailFor.need.area, detailFor.distanceKm != null ? `${detailFor.distanceKm.toFixed(1)} km` : null]
-                  .filter(Boolean)
-                  .join(" · ")}
-              </div>
-            )}
-            {detailPhotos.length > 1 && (
-              <div className="grid grid-cols-4 gap-1.5 pt-1">
-                {detailPhotos.map((p, i) => (
-                  <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
-                    <CardPhoto path={p} />
+            <div className="relative -mt-24 px-5 pb-8 space-y-3 text-white shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="relative shrink-0">
+                  <Avatar
+                    path={detailFor.owner?.avatar_url}
+                    name={detailFor.owner?.full_name || detailFor.owner?.username}
+                    size={40}
+                  />
+                  {detailFor.owner && onlineUsers.has(detailFor.owner.id) && (
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-black/40" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-sm truncate">
+                    {detailFor.owner?.full_name || detailFor.owner?.username || "—"}
                   </div>
-                ))}
+                  <div className="text-[11px] text-white/80 flex items-center gap-1">
+                    <CategoryIcon type={detailFor.need.need_type} className="w-3 h-3" />
+                    {t(`quet.type.${detailFor.need.need_type}`)}
+                  </div>
+                </div>
               </div>
-            )}
-            {detailFor.need.description && (
-              <div className="text-sm whitespace-pre-wrap text-white/90">{detailFor.need.description}</div>
-            )}
-            {detailChips.length > 0 && (
-              <div className="text-xs font-semibold text-primary">{detailChips.join("  ·  ")}</div>
-            )}
-            {detailExtraLines.map((line, i) => (
-              <div key={i} className="text-xs text-white/70">
-                <span className="font-semibold text-white/90">{line.label}: </span>
-                {line.value}
-              </div>
-            ))}
+              <div className="font-extrabold text-lg leading-tight">{detailFor.need.title}</div>
+              {(detailFor.need.area || detailFor.distanceKm != null) && (
+                <div className="text-xs text-white/80">
+                  📍{" "}
+                  {[detailFor.need.area, detailFor.distanceKm != null ? `${detailFor.distanceKm.toFixed(1)} km` : null]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </div>
+              )}
+              {detailPhotos.length > 1 && (
+                <div className="grid grid-cols-4 gap-1.5 pt-1">
+                  {detailPhotos.map((p, i) => (
+                    <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                      <CardPhoto path={p} />
+                    </div>
+                  ))}
+                </div>
+              )}
+              {detailFor.need.description && (
+                <div className="text-sm whitespace-pre-wrap text-white/90">{detailFor.need.description}</div>
+              )}
+              {detailChips.length > 0 && (
+                <div className="text-xs font-semibold text-primary">{detailChips.join("  ·  ")}</div>
+              )}
+              {detailExtraLines.map((line, i) => (
+                <div key={i} className="text-xs text-white/70">
+                  <span className="font-semibold text-white/90">{line.label}: </span>
+                  {line.value}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
