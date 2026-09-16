@@ -2287,7 +2287,7 @@ export default function Quet() {
           <div className="min-h-full flex flex-col">
             <div className="relative w-full flex-1 min-h-[40vh] bg-muted">
               <CardPhoto path={detailPhotos[0]} />
-              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/95 via-black/55 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-black/55 to-transparent" />
               <button
                 onClick={() => setDetailFor(null)}
                 aria-label={t("common.cancel")}
