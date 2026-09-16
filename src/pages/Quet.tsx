@@ -378,7 +378,6 @@ export default function Quet() {
   const pointerDownTimeRef = useRef(0);
   const [frontEntering, setFrontEntering] = useState(false);
   const enteredIdRef = useRef<string | null>(null);
-  const actionsRowRef = useRef<HTMLDivElement>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
   const [cardH, setCardH] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
@@ -419,7 +418,10 @@ export default function Quet() {
   const [unmatchTarget, setUnmatchTarget] = useState<MatchRow | null>(null);
 
   // Toàn bộ màn quẹt phải vừa đúng 1 màn hình: đo không gian còn lại thật (viewport thật -
-  // vị trí thẻ - hàng nút - nav dưới) rồi cho thẻ co giãn vừa đủ, thay vì chiều cao cố định.
+  // vị trí thẻ - nav dưới) rồi cho thẻ co giãn LẤP ĐẦY phần còn lại — nút bấm và hàng
+  // danh mục/bộ lọc giờ nổi ĐÈ lên trên ảnh (absolute, không còn nằm ngoài luồng bên dưới
+  // thẻ nữa) nên không cần trừ chiều cao của chúng, và cũng không giới hạn trần cứng
+  // (trước đây cap 520px khiến ảnh bỏ trống khoảng trắng phía dưới khi màn hình còn dư chỗ).
   useEffect(() => {
     if (tab !== "swipe" || !activeCategory) return;
     const measure = () => {
@@ -429,9 +431,8 @@ export default function Quet() {
       const vh = window.visualViewport?.height ?? window.innerHeight;
       const navRaw = getComputedStyle(document.documentElement).getPropertyValue("--bottom-nav-h");
       const navH = navRaw.trim().endsWith("rem") ? parseFloat(navRaw) * 16 : parseFloat(navRaw) || 80;
-      const actionsH = actionsRowRef.current?.offsetHeight ?? 56;
-      const avail = vh - top - actionsH - navH - 32;
-      setCardH(Math.round(Math.max(240, Math.min(520, avail))));
+      const avail = vh - top - navH - 12;
+      setCardH(Math.round(Math.max(240, avail)));
     };
     window.scrollTo(0, 0);
     const raf = requestAnimationFrame(measure);
