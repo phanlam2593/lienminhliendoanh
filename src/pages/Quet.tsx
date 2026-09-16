@@ -1033,7 +1033,8 @@ export default function Quet() {
     !!filterAgeMax.trim() ||
     filterNganhNghe !== "all" ||
     filterTradeType !== "all" ||
-    filterMode !== "all";
+    filterMode !== "all" ||
+    radiusKm != null;
 
   const topCard = visibleCandidates[0];
   const nextCard = visibleCandidates[1];
@@ -1741,34 +1742,259 @@ export default function Quet() {
       )}
 
       {tab === "swipe" && activeCategory && (
-        <>
-          <div className="flex items-center gap-2">
+        <div ref={cardWrapRef} className="relative" style={{ height: cardH ?? 460 }}>
+          {loading ? (
+            <div className="absolute inset-0 rounded-2xl bg-muted animate-pulse" />
+          ) : !topCard ? (
+            <div className="absolute inset-0 rounded-2xl border border-dashed grid place-items-center text-center px-6 text-sm text-muted-foreground">
+              <div>
+                <Flame className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                {t("quet.noMoreCards")}
+              </div>
+            </div>
+          ) : (
+            <>
+              {nextCard && (
+                <div
+                  key={nextCard.id}
+                  className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft scale-[0.95] translate-y-2 opacity-70"
+                >
+                  <CardPhoto path={nextCard.photo_url} />
+                </div>
+              )}
+              <div
+                key={topCard.id}
+                ref={cardRef}
+                onPointerDown={onPointerDown}
+                onPointerMove={onPointerMove}
+                onPointerUp={onPointerUp}
+                onPointerCancel={onPointerUp}
+                style={{ ...cardStyle, touchAction: "none", willChange: "transform", backfaceVisibility: "hidden" }}
+                className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
+              >
+                <CardPhoto path={topPhotoList[photoIndex] ?? topCard.photo_url} />
+                {topPhotoList.length > 1 && (
+                  <div className="absolute top-2.5 inset-x-2.5 flex items-center gap-1 pointer-events-none z-10">
+                    {topPhotoList.map((_, i) => (
+                      <div
+                        key={i}
+                        className={cn(
+                          "h-1 flex-1 rounded-full transition-colors",
+                          i === photoIndex ? "bg-white" : "bg-white/40",
+                        )}
+                      />
+                    ))}
+                  </div>
+                )}
+                {(topPhotoList.length > 0 || topCard.photo_url) && (
+                  <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
+                )}
+                <Popover open={cardMenuOpen} onOpenChange={setCardMenuOpen}>
+                  <PopoverTrigger asChild>
+                    <button
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={(e) => e.stopPropagation()}
+                      aria-label={t("block.menu")}
+                      className="absolute top-14 right-3 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur grid place-items-center text-white"
+                    >
+                      <MoreVertical className="w-4 h-4" />
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent align="end" className="w-44 p-1" onPointerDown={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => {
+                        setMenuTargetOwnerId(topOwner?.id ?? null);
+                        setCardMenuOpen(false);
+                        setReportOpen(true);
+                      }}
+                      className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left"
+                    >
+                      <Flag className="w-4 h-4" /> {t("biz.report")}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMenuTargetOwnerId(topOwner?.id ?? null);
+                        setCardMenuOpen(false);
+                        setConfirmBlockOpen(true);
+                      }}
+                      className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left text-destructive"
+                    >
+                      <Ban className="w-4 h-4" /> {t("block.block")}
+                    </button>
+                  </PopoverContent>
+                </Popover>
+                <div
+                  ref={likeRef}
+                  className={cn(
+                    "absolute top-6 left-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg -rotate-12",
+                    "border-primary text-primary",
+                  )}
+                  style={{ opacity: 0, willChange: "opacity" }}
+                >
+                  {t("quet.like").toUpperCase()}
+                </div>
+                <div
+                  ref={passRef}
+                  className={cn(
+                    "absolute top-6 right-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg rotate-12",
+                    "border-muted-foreground text-muted-foreground",
+                  )}
+                  style={{ opacity: 0, willChange: "opacity" }}
+                >
+                  {t("quet.pass").toUpperCase()}
+                </div>
+
+                <div
+                  className={cn(
+                    "absolute inset-0 p-5 pb-20 flex flex-col justify-end pointer-events-none",
+                    (topPhotoList.length > 0 || topCard.photo_url) && "text-white",
+                  )}
+                >
+                  <div className="flex items-center gap-2 mb-2 pointer-events-auto">
+                    <div className="relative shrink-0">
+                      <Avatar path={topOwner?.avatar_url} name={topOwner?.full_name || topOwner?.username} size={44} />
+                      {topOwnerOnline && (
+                        <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-black/50" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-extrabold text-lg leading-tight flex items-baseline gap-1.5 min-w-0">
+                        <span className="truncate">{topOwner?.full_name || topOwner?.username || "—"}</span>
+                        {topFrontAge && (
+                          <span className="text-sm font-semibold opacity-90 shrink-0">, {topFrontAge}</span>
+                        )}
+                      </div>
+                      {topOwnerOnline && (
+                        <div className="text-[11px] font-semibold text-emerald-300">{t("quet.online")}</div>
+                      )}
+                    </div>
+                  </div>
+                  {topCard.description && (
+                    <div className="pointer-events-auto">
+                      <div
+                        className={cn(
+                          "text-sm",
+                          !descExpanded && "line-clamp-2",
+                          topPhotoList.length > 0 || topCard.photo_url ? "text-white/90" : "text-muted-foreground",
+                        )}
+                      >
+                        {topCard.description}
+                      </div>
+                      {topCard.description.length > 90 && (
+                        <button
+                          type="button"
+                          onPointerDown={(e) => e.stopPropagation()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDescExpanded((v) => !v);
+                          }}
+                          className={cn(
+                            "self-start text-xs font-semibold mt-0.5 underline underline-offset-2",
+                            topPhotoList.length > 0 || topCard.photo_url ? "text-white" : "text-primary",
+                          )}
+                        >
+                          {descExpanded ? t("quet.collapse") : t("quet.seeMore")}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                  <div
+                    className={cn(
+                      "text-[10px] mt-2",
+                      topPhotoList.length > 0 || topCard.photo_url ? "text-white/70" : "text-muted-foreground",
+                    )}
+                  >
+                    {t("quet.contactHidden")}
+                  </div>
+                </div>
+              </div>
+              <div className="absolute bottom-3 inset-x-0 z-20 flex items-center justify-center gap-3.5">
+                <button
+                  onClick={() => lastAction && void undoLastAction()}
+                  disabled={!lastAction}
+                  aria-label={t("quet.undo")}
+                  className={cn(
+                    "w-12 h-12 rounded-full border-2 backdrop-blur-sm grid place-items-center transition active:scale-95",
+                    lastAction
+                      ? "bg-black/30 border-amber-400 text-amber-400"
+                      : "bg-black/20 border-white/15 text-white/30 cursor-not-allowed",
+                  )}
+                >
+                  <Undo2 className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => triggerSwipe("left")}
+                  aria-label={t("quet.pass")}
+                  className="w-12 h-12 rounded-full border-2 border-white/40 bg-black/30 backdrop-blur-sm grid place-items-center text-white active:scale-95 transition"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => triggerSwipe("right")}
+                  aria-label={t("quet.like")}
+                  className="w-12 h-12 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shadow-brand active:scale-95 transition"
+                >
+                  <Heart className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => openDetail(topCard, topOwner, topDistanceKm)}
+                  aria-label={t("quet.detail")}
+                  className="w-12 h-12 rounded-full border-2 border-white/40 bg-black/30 backdrop-blur-sm grid place-items-center text-white active:scale-95 transition"
+                >
+                  <Info className="w-5 h-5" />
+                </button>
+              </div>
+            </>
+          )}
+
+          <div className="absolute top-3 inset-x-3 z-30 flex items-center gap-2">
             <button
               onClick={() => setTab("category")}
               aria-label={t("quet.backToCategories")}
-              className="w-8 h-8 rounded-full border grid place-items-center text-muted-foreground shrink-0"
+              className="w-8 h-8 rounded-full bg-black/35 backdrop-blur-sm grid place-items-center text-white shrink-0"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <div className="flex items-center gap-1.5 text-sm font-bold">
-              <CategoryIcon type={activeCategory} className="w-4 h-4 text-primary" />
+            <div className="flex items-center gap-1.5 text-xs font-bold text-white bg-black/35 backdrop-blur-sm rounded-full px-2.5 py-1.5 shrink-0">
+              <CategoryIcon type={activeCategory} className="w-3.5 h-3.5" />
               {t(`quet.type.${activeCategory}`)}
             </div>
             <Popover open={filterOpen} onOpenChange={setFilterOpen}>
               <PopoverTrigger asChild>
                 <button
                   className={cn(
-                    "ml-auto w-8 h-8 rounded-full border grid place-items-center relative shrink-0",
-                    filterActive ? "border-primary text-primary" : "text-muted-foreground",
+                    "ml-auto w-8 h-8 rounded-full backdrop-blur-sm grid place-items-center relative shrink-0",
+                    filterActive ? "bg-primary text-primary-foreground" : "bg-black/35 text-white",
                   )}
                   aria-label={t("quet.filter")}
                 >
                   <SlidersHorizontal className="w-3.5 h-3.5" />
-                  {filterActive && <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-primary" />}
+                  {filterActive && <span className="absolute top-0.5 right-0.5 w-1.5 h-1.5 rounded-full bg-white" />}
                 </button>
               </PopoverTrigger>
               <PopoverContent align="end" className="w-64 p-3 space-y-2.5">
                 <div className="text-xs font-bold">{t("quet.filter")}</div>
+                {myPos && (
+                  <div>
+                    <div className="text-[11px] font-semibold mb-1 text-muted-foreground">{t("quet.radiusLabel")}</div>
+                    <Select
+                      value={radiusKm == null ? "all" : String(radiusKm)}
+                      onValueChange={(v) => setRadiusKm(v === "all" ? null : Number(v))}
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">{t("quet.radiusAll")}</SelectItem>
+                        {[5, 10, 20, 50, 100].map((km) => (
+                          <SelectItem key={km} value={String(km)}>
+                            {t("quet.radiusKm", { km })}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
                 {(activeCategory === "lam_quen" || activeCategory === "tim_viec") && (
                   <div>
                     <div className="text-[11px] font-semibold mb-1 text-muted-foreground">
@@ -1864,6 +2090,7 @@ export default function Quet() {
                       setFilterNganhNghe("all");
                       setFilterTradeType("all");
                       setFilterMode("all");
+                      setRadiusKm(null);
                     }}
                     className="w-full text-xs font-semibold text-destructive pt-1"
                   >
@@ -1889,267 +2116,18 @@ export default function Quet() {
                     { enableHighAccuracy: true, timeout: 10000 },
                   );
                 }}
-                className="text-[11px] font-semibold text-muted-foreground border rounded-full px-2.5 py-1 shrink-0"
+                className="text-[11px] font-semibold text-white bg-black/35 backdrop-blur-sm rounded-full px-2.5 py-1.5 shrink-0"
               >
                 📍 {locStatus === "requesting" ? t("sort.requestingLocation") : t("nearby.enableCta")}
               </button>
             )}
           </div>
-          {myPos && (
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-muted-foreground">
-              <span>{t("quet.radiusLabel")}</span>
-              <Select
-                value={radiusKm == null ? "all" : String(radiusKm)}
-                onValueChange={(v) => setRadiusKm(v === "all" ? null : Number(v))}
-              >
-                <SelectTrigger className="h-7 w-auto text-[11px] px-2.5 rounded-full border gap-1">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t("quet.radiusAll")}</SelectItem>
-                  {[5, 10, 20, 50, 100].map((km) => (
-                    <SelectItem key={km} value={String(km)}>
-                      {t("quet.radiusKm", { km })}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
           {locStatus === "denied" && (
-            <p className="text-[11px] text-amber-600 bg-amber-50 dark:bg-amber-950/30 rounded-lg px-2 py-1">
+            <p className="absolute top-14 left-3 right-14 z-30 text-[11px] text-amber-700 bg-amber-50 dark:bg-amber-950/80 dark:text-amber-300 rounded-lg px-2 py-1 shadow">
               {t("explore.locationDenied")}
             </p>
           )}
-
-          {loading ? (
-            <div ref={cardWrapRef} style={{ height: cardH ?? 460 }} className="rounded-2xl bg-muted animate-pulse" />
-          ) : !topCard ? (
-            <div
-              ref={cardWrapRef}
-              style={{ height: cardH ?? 460 }}
-              className="rounded-2xl border border-dashed grid place-items-center text-center px-6 text-sm text-muted-foreground"
-            >
-              <div>
-                <Flame className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                {t("quet.noMoreCards")}
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <div ref={cardWrapRef} className="relative" style={{ height: cardH ?? 460 }}>
-                {nextCard && (
-                  <div
-                    key={nextCard.id}
-                    className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft scale-[0.95] translate-y-2 opacity-70"
-                  >
-                    <CardPhoto path={nextCard.photo_url} />
-                  </div>
-                )}
-                <div
-                  key={topCard.id}
-                  ref={cardRef}
-                  onPointerDown={onPointerDown}
-                  onPointerMove={onPointerMove}
-                  onPointerUp={onPointerUp}
-                  onPointerCancel={onPointerUp}
-                  style={{ ...cardStyle, touchAction: "none", willChange: "transform", backfaceVisibility: "hidden" }}
-                  className="absolute inset-0 rounded-2xl overflow-hidden bg-card border shadow-soft cursor-grab active:cursor-grabbing select-none"
-                >
-                  <CardPhoto path={topPhotoList[photoIndex] ?? topCard.photo_url} />
-                  {topPhotoList.length > 1 && (
-                    <div className="absolute top-2.5 inset-x-2.5 flex items-center gap-1 pointer-events-none z-10">
-                      {topPhotoList.map((_, i) => (
-                        <div
-                          key={i}
-                          className={cn(
-                            "h-1 flex-1 rounded-full transition-colors",
-                            i === photoIndex ? "bg-white" : "bg-white/40",
-                          )}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  {(topPhotoList.length > 0 || topCard.photo_url) && (
-                    <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
-                  )}
-                  <Popover open={cardMenuOpen} onOpenChange={setCardMenuOpen}>
-                    <PopoverTrigger asChild>
-                      <button
-                        onPointerDown={(e) => e.stopPropagation()}
-                        onClick={(e) => e.stopPropagation()}
-                        aria-label={t("block.menu")}
-                        className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur grid place-items-center text-white"
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent align="end" className="w-44 p-1" onPointerDown={(e) => e.stopPropagation()}>
-                      <button
-                        onClick={() => {
-                          setMenuTargetOwnerId(topOwner?.id ?? null);
-                          setCardMenuOpen(false);
-                          setReportOpen(true);
-                        }}
-                        className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left"
-                      >
-                        <Flag className="w-4 h-4" /> {t("biz.report")}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setMenuTargetOwnerId(topOwner?.id ?? null);
-                          setCardMenuOpen(false);
-                          setConfirmBlockOpen(true);
-                        }}
-                        className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm hover:bg-muted text-left text-destructive"
-                      >
-                        <Ban className="w-4 h-4" /> {t("block.block")}
-                      </button>
-                    </PopoverContent>
-                  </Popover>
-                  <div
-                    ref={likeRef}
-                    className={cn(
-                      "absolute top-6 left-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg -rotate-12",
-                      "border-primary text-primary",
-                    )}
-                    style={{ opacity: 0, willChange: "opacity" }}
-                  >
-                    {t("quet.like").toUpperCase()}
-                  </div>
-                  <div
-                    ref={passRef}
-                    className={cn(
-                      "absolute top-6 right-6 px-3 py-1.5 rounded-lg border-4 font-extrabold text-lg rotate-12",
-                      "border-muted-foreground text-muted-foreground",
-                    )}
-                    style={{ opacity: 0, willChange: "opacity" }}
-                  >
-                    {t("quet.pass").toUpperCase()}
-                  </div>
-
-                  <div
-                    className={cn(
-                      "absolute inset-0 p-5 flex flex-col justify-end pointer-events-none",
-                      (topPhotoList.length > 0 || topCard.photo_url) && "text-white",
-                    )}
-                  >
-                    <div className="flex items-center gap-2 mb-2 pointer-events-auto">
-                      <div className="relative shrink-0">
-                        <Avatar
-                          path={topOwner?.avatar_url}
-                          name={topOwner?.full_name || topOwner?.username}
-                          size={44}
-                        />
-                        {topOwnerOnline && (
-                          <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-black/50" />
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="font-extrabold text-lg leading-tight flex items-baseline gap-1.5 min-w-0">
-                          <span className="truncate">{topOwner?.full_name || topOwner?.username || "—"}</span>
-                          {topFrontAge && (
-                            <span className="text-sm font-semibold opacity-90 shrink-0">, {topFrontAge}</span>
-                          )}
-                        </div>
-                        {topOwnerOnline && (
-                          <div className="text-[11px] font-semibold text-emerald-300">{t("quet.online")}</div>
-                        )}
-                      </div>
-                    </div>
-                    {topCard.description && (
-                      <div className="pointer-events-auto">
-                        <div
-                          className={cn(
-                            "text-sm",
-                            !descExpanded && "line-clamp-2",
-                            topPhotoList.length > 0 || topCard.photo_url ? "text-white/90" : "text-muted-foreground",
-                          )}
-                        >
-                          {topCard.description}
-                        </div>
-                        {topCard.description.length > 90 && (
-                          <button
-                            type="button"
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDescExpanded((v) => !v);
-                            }}
-                            className={cn(
-                              "self-start text-xs font-semibold mt-0.5 underline underline-offset-2",
-                              topPhotoList.length > 0 || topCard.photo_url ? "text-white" : "text-primary",
-                            )}
-                          >
-                            {descExpanded ? t("quet.collapse") : t("quet.seeMore")}
-                          </button>
-                        )}
-                      </div>
-                    )}
-                    <button
-                      type="button"
-                      onPointerDown={(e) => e.stopPropagation()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openDetail(topCard, topOwner, topDistanceKm);
-                      }}
-                      className={cn(
-                        "self-start mt-2.5 pointer-events-auto text-xs font-semibold flex items-center gap-1 underline underline-offset-2",
-                        topPhotoList.length > 0 || topCard.photo_url ? "text-white" : "text-primary",
-                      )}
-                    >
-                      <Info className="w-3.5 h-3.5" /> {t("quet.detail")}
-                    </button>
-                    <div
-                      className={cn(
-                        "text-[10px] mt-2",
-                        topPhotoList.length > 0 || topCard.photo_url ? "text-white/70" : "text-muted-foreground",
-                      )}
-                    >
-                      {t("quet.contactHidden")}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div ref={actionsRowRef} className="flex items-center justify-center gap-3">
-                <button
-                  onClick={() => lastAction && void undoLastAction()}
-                  disabled={!lastAction}
-                  aria-label={t("quet.undo")}
-                  className={cn(
-                    "w-10 h-10 rounded-full border-2 grid place-items-center transition active:scale-95",
-                    lastAction
-                      ? "border-amber-400 text-amber-500"
-                      : "border-muted-foreground/15 text-muted-foreground/25 cursor-not-allowed",
-                  )}
-                >
-                  <Undo2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => triggerSwipe("left")}
-                  aria-label={t("quet.pass")}
-                  className="w-14 h-14 rounded-full border-2 border-muted-foreground/30 grid place-items-center text-muted-foreground active:scale-95 transition"
-                >
-                  <X className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={() => triggerSwipe("right")}
-                  aria-label={t("quet.like")}
-                  className="w-14 h-14 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shadow-brand active:scale-95 transition"
-                >
-                  <Heart className="w-6 h-6" />
-                </button>
-                <button
-                  onClick={() => openDetail(topCard, topOwner, topDistanceKm)}
-                  aria-label={t("quet.detail")}
-                  className="w-10 h-10 rounded-full border-2 border-muted-foreground/30 grid place-items-center text-muted-foreground active:scale-95 transition"
-                >
-                  <Info className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          )}
-        </>
+        </div>
       )}
 
       {tab === "matches" && (
