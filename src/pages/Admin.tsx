@@ -2069,6 +2069,7 @@ function ReportRow({
 }) {
   const [open, setOpen] = useState(false);
   const [quickReporter, setQuickReporter] = useState(false);
+  const [quickTarget, setQuickTarget] = useState(false);
 
   const del = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -2105,6 +2106,17 @@ function ReportRow({
               >
                 {r.target_name || r.target_type}
               </span>
+            ) : r.target_type === "user" && r.target_id ? (
+              <span
+                role="link"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setQuickTarget(true);
+                }}
+                className="text-foreground font-bold hover:text-primary hover:underline"
+              >
+                {r.target_name || "Người dùng"}
+              </span>
             ) : (
               <b className="text-foreground">{r.target_name || r.target_type}</b>
             )}
@@ -2138,6 +2150,11 @@ function ReportRow({
         </div>
       )}
       <ProfileQuickView userId={r.user_id} open={quickReporter} onOpenChange={setQuickReporter} />
+      <ProfileQuickView
+        userId={r.target_type === "user" ? r.target_id : null}
+        open={quickTarget}
+        onOpenChange={setQuickTarget}
+      />
     </div>
   );
 }
@@ -2170,11 +2187,13 @@ function ReportsSection({ refreshKey, onOpenMember }: { refreshKey: number; onOp
     setTotal(count ?? 0);
     const rows = (reports as Report[] | null) ?? [];
     const uids = [...new Set(rows.map((r) => r.user_id))];
+    const targetUserIds = [...new Set(rows.filter((r) => r.target_type === "user").map((r) => r.target_id))];
+    const allProfileIds = [...new Set([...uids, ...targetUserIds])];
     const bizIds = [...new Set(rows.filter((r) => r.target_type === "business").map((r) => r.target_id))];
     const offerIds = [...new Set(rows.filter((r) => r.target_type === "offer").map((r) => r.target_id))];
     const [profsRes, bizRes, offerRes] = await Promise.all([
-      uids.length
-        ? supabase.from("profiles").select("id, full_name").in("id", uids)
+      allProfileIds.length
+        ? supabase.from("profiles").select("id, full_name").in("id", allProfileIds)
         : Promise.resolve({ data: [] } as any),
       bizIds.length
         ? supabase.from("businesses").select("id, name").in("id", bizIds)
@@ -2192,7 +2211,12 @@ function ReportsSection({ refreshKey, onOpenMember }: { refreshKey: number; onOp
     const newRows = rows.map((r) => ({
       ...r,
       reporter: pm.get(r.user_id) ?? null,
-      target_name: r.target_type === "business" ? (bm.get(r.target_id) ?? null) : (om.get(r.target_id) ?? null),
+      target_name:
+        r.target_type === "business"
+          ? (bm.get(r.target_id) ?? null)
+          : r.target_type === "user"
+            ? (pm.get(r.target_id) ?? null)
+            : (om.get(r.target_id) ?? null),
     }));
     setList((prev) => (append ? [...prev, ...newRows] : newRows));
     setHasMore(newRows.length === REPORT_PAGE_SIZE);
