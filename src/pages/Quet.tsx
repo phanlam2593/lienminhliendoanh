@@ -413,6 +413,8 @@ export default function Quet() {
 
   // Modal "Chi tiết" dùng chung cho cả thẻ quẹt lẫn danh sách Kết nối.
   const [detailFor, setDetailFor] = useState<DetailTarget | null>(null);
+  // Ảnh đang xem trong khung "Chi tiết" (bấm vào ảnh nhỏ bên dưới để đổi ảnh chính).
+  const [detailPhotoIndex, setDetailPhotoIndex] = useState(0);
 
   // Hủy kết nối (unmatch) từ tab Kết nối.
   const [unmatchTarget, setUnmatchTarget] = useState<MatchRow | null>(null);
@@ -1102,6 +1104,7 @@ export default function Quet() {
 
   const openDetail = (need: SwipeNeed, owner: OwnerInfo | null, distanceKm: number | null) => {
     setDetailFor({ need, owner, distanceKm });
+    setDetailPhotoIndex(0);
   };
 
   if (!isApproved) {
@@ -2290,7 +2293,7 @@ export default function Quet() {
         <div className="fixed inset-0 z-50 bg-background overflow-y-auto animate-in fade-in duration-200">
           <div className="min-h-full flex flex-col">
             <div className="relative w-full flex-1 min-h-[40vh] bg-muted">
-              <CardPhoto path={detailPhotos[0]} />
+              <CardPhoto path={detailPhotos[detailPhotoIndex] ?? detailPhotos[0]} />
               <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-background via-black/55 to-transparent" />
               <button
                 onClick={() => setDetailFor(null)}
@@ -2334,9 +2337,17 @@ export default function Quet() {
               {detailPhotos.length > 1 && (
                 <div className="grid grid-cols-4 gap-1.5 pt-1">
                   {detailPhotos.map((p, i) => (
-                    <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
+                    <button
+                      key={i}
+                      onClick={() => setDetailPhotoIndex(i)}
+                      aria-label={t("quet.viewPhoto")}
+                      className={cn(
+                        "relative aspect-square rounded-lg overflow-hidden bg-muted",
+                        i === detailPhotoIndex && "ring-2 ring-white",
+                      )}
+                    >
                       <CardPhoto path={p} />
-                    </div>
+                    </button>
                   ))}
                 </div>
               )}
