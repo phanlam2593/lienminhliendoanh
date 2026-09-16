@@ -294,6 +294,32 @@ function ConfettiBurst() {
   );
 }
 
+function MatchSkeleton() {
+  return (
+    <div className="w-full flex items-center gap-3 rounded-xl border bg-card p-3 animate-pulse">
+      <div className="w-11 h-11 rounded-full bg-muted shrink-0" />
+      <div className="flex-1 min-w-0 space-y-1.5">
+        <div className="h-3.5 bg-muted rounded w-1/3" />
+        <div className="h-3 bg-muted rounded w-1/2" />
+      </div>
+      <div className="w-9 h-9 rounded-full bg-muted shrink-0" />
+    </div>
+  );
+}
+
+function NeedRowSkeleton() {
+  return (
+    <div className="flex items-center gap-2 rounded-xl border bg-card p-3 animate-pulse">
+      <div className="flex-1 min-w-0 space-y-1.5">
+        <div className="h-3.5 bg-muted rounded w-2/5" />
+        <div className="h-3 bg-muted rounded w-3/5" />
+      </div>
+      <div className="w-8 h-8 rounded-full bg-muted shrink-0" />
+      <div className="w-8 h-8 rounded-full bg-muted shrink-0" />
+    </div>
+  );
+}
+
 const SWIPE_THRESHOLD = 100;
 const TAP_MOVE_TOLERANCE = 10;
 const TAP_MAX_DURATION = 300;
@@ -323,7 +349,9 @@ export default function Quet() {
   const [owners, setOwners] = useState<Record<string, OwnerInfo>>({});
 
   const [myNeeds, setMyNeeds] = useState<SwipeNeed[]>([]);
+  const [myNeedsLoading, setMyNeedsLoading] = useState(true);
   const [matches, setMatches] = useState<MatchRow[]>([]);
+  const [matchesLoading, setMatchesLoading] = useState(true);
 
   const [saving, setSaving] = useState(false);
   const [formType, setFormType] = useState<NeedType>("trao_doi");
@@ -543,6 +571,7 @@ export default function Quet() {
       .eq("user_id", myId)
       .order("created_at", { ascending: false });
     setMyNeeds(data ?? []);
+    setMyNeedsLoading(false);
   };
 
   const loadMatches = async () => {
@@ -555,6 +584,7 @@ export default function Quet() {
     const rows = data ?? [];
     if (rows.length === 0) {
       setMatches([]);
+      setMatchesLoading(false);
       return;
     }
     const needIds = Array.from(new Set(rows.flatMap((r: any) => [r.need_id_a, r.need_id_b])));
@@ -581,6 +611,7 @@ export default function Quet() {
         };
       }),
     );
+    setMatchesLoading(false);
   };
 
   useEffect(() => {
@@ -1236,7 +1267,13 @@ export default function Quet() {
           </div>
 
           <div className="space-y-2">
-            {needsOfType(manageCategory).length === 0 ? (
+            {myNeedsLoading ? (
+              <div className="space-y-2">
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <NeedRowSkeleton key={i} />
+                ))}
+              </div>
+            ) : needsOfType(manageCategory).length === 0 ? (
               <div className="text-center py-8 text-sm text-muted-foreground">{t("quet.noNeedsYet")}</div>
             ) : (
               needsOfType(manageCategory).map((n) => (
@@ -2156,7 +2193,13 @@ export default function Quet() {
 
       {tab === "matches" && (
         <div className="space-y-2">
-          {matches.length === 0 ? (
+          {matchesLoading ? (
+            <div className="space-y-2">
+              {Array.from({ length: 2 }).map((_, i) => (
+                <MatchSkeleton key={i} />
+              ))}
+            </div>
+          ) : matches.length === 0 ? (
             <div className="text-center py-10 text-sm text-muted-foreground">{t("quet.emptyMatches")}</div>
           ) : (
             matches.map((m) => {
