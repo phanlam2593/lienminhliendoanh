@@ -477,7 +477,11 @@ export default function Quet() {
         setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude });
         setLocStatus("granted");
       },
-      () => setLocStatus("denied"),
+      // Chỉ báo "denied" (kèm banner bảo vào cài đặt trình duyệt) khi đúng là bị TỪ CHỐI
+      // quyền (code 1) — timeout/chưa bắt được GPS (code 2/3) thì quay về "idle" để khỏi
+      // báo nhầm "bạn đã từ chối" trong khi người dùng chưa từ chối gì; nút "📍 Bật định
+      // vị" vẫn còn đó để bấm thử lại.
+      (err) => setLocStatus(err.code === 1 ? "denied" : "idle"),
       { enableHighAccuracy: true, timeout: 10000 },
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -2132,7 +2136,7 @@ export default function Quet() {
                       setMyPos({ lat: pos.coords.latitude, lng: pos.coords.longitude });
                       setLocStatus("granted");
                     },
-                    () => setLocStatus("denied"),
+                    (err) => setLocStatus(err.code === 1 ? "denied" : "idle"),
                     { enableHighAccuracy: true, timeout: 10000 },
                   );
                 }}
