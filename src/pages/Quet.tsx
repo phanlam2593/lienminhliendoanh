@@ -323,10 +323,10 @@ function NeedRowSkeleton() {
 const SWIPE_THRESHOLD = 100;
 const TAP_MOVE_TOLERANCE = 10;
 const TAP_MAX_DURATION = 300;
-// Sau khi "bỏ qua" 1 nhu cầu, không ẩn vĩnh viễn nữa — sau PASS_COOLDOWN_DAYS ngày (hoặc sớm
+// Sau khi "bỏ qua" 1 nhu cầu, không ẩn vĩnh viễn nữa — sau PASS_COOLDOWN_HOURS giờ (hoặc sớm
 // hơn nếu người đăng đã sửa bài) nhu cầu đó sẽ hiện lại để cân nhắc lần nữa, tránh cạn "kho"
 // ứng viên ở các mục ít người đăng. "Thích" thì vẫn ẩn vĩnh viễn như cũ.
-const PASS_COOLDOWN_DAYS = 30;
+const PASS_COOLDOWN_HOURS = 48;
 
 export default function Quet() {
   const { user, profile, isApproved } = useAuth();
@@ -530,7 +530,7 @@ export default function Quet() {
       if (s.action === "like") likedIds.add(s.need_id);
       else if (s.action === "pass") passedAt.set(s.need_id, s.created_at);
     });
-    const cooldownCutoff = Date.now() - PASS_COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
+    const cooldownCutoff = Date.now() - PASS_COOLDOWN_HOURS * 60 * 60 * 1000;
 
     let q = db
       .from("swipe_needs")
