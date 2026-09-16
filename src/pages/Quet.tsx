@@ -323,6 +323,10 @@ function NeedRowSkeleton() {
 const SWIPE_THRESHOLD = 100;
 const TAP_MOVE_TOLERANCE = 10;
 const TAP_MAX_DURATION = 300;
+// Sau khi "bỏ qua" 1 nhu cầu, không ẩn vĩnh viễn nữa — sau PASS_COOLDOWN_DAYS ngày (hoặc sớm
+// hơn nếu người đăng đã sửa bài) nhu cầu đó sẽ hiện lại để cân nhắc lần nữa, tránh cạn "kho"
+// ứng viên ở các mục ít người đăng. "Thích" thì vẫn ẩn vĩnh viễn như cũ.
+const PASS_COOLDOWN_DAYS = 30;
 
 export default function Quet() {
   const { user, profile, isApproved } = useAuth();
@@ -518,8 +522,15 @@ export default function Quet() {
   const loadCandidates = async () => {
     if (!myId || !activeCategory) return;
     setLoading(true);
-    const { data: swiped } = await db.from("swipe_actions").select("need_id").eq("actor_id", myId);
-    const swipedIds: string[] = (swiped ?? []).map((s: any) => s.need_id);
+    const { data: swiped } = await db.from("swipe_actions").select("need_id, action, created_at").eq("actor_id", myId);
+    // "Thích" thì ẩn vĩnh viễn; "Bỏ qua" thì nhớ thời điểm bỏ qua để tính hạn hồi phục bên dưới.
+    const likedIds = new Set<string>();
+    const passedAt = new Map<string, string>();
+    (swiped ?? []).forEach((s: any) => {
+      if (s.action === "like") likedIds.add(s.need_id);
+      else if (s.action === "pass") passedAt.set(s.need_id, s.created_at);
+    });
+    const cooldownCutoff = Date.now() - PASS_COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
 
     let q = db
       .from("swipe_needs")
@@ -547,7 +558,14 @@ export default function Quet() {
       setLoading(false);
       return;
     }
-    const filtered: SwipeNeed[] = (data ?? []).filter((n: SwipeNeed) => !swipedIds.includes(n.id));
+    const filtered: SwipeNeed[] = (data ?? []).filter((n: SwipeNeed) => {
+      if (likedIds.has(n.id)) return false;
+      const passedTime = passedAt.get(n.id);
+      if (!passedTime) return true;
+      const editedSincePass = new Date(n.updated_at).getTime() > new Date(passedTime).getTime();
+      const cooldownExpired = new Date(passedTime).getTime() < cooldownCutoff;
+      return editedSincePass || cooldownExpired;
+    });
     setCandidates(filtered);
 
     const ownerIds = Array.from(new Set(filtered.map((n) => n.user_id)));
@@ -662,7 +680,10 @@ export default function Quet() {
     // upsert ghi đè action mới thay vì báo lỗi trùng khoá.
     const { data: actionRow, error } = await db
       .from("swipe_actions")
-      .upsert({ need_id: need.id, actor_id: myId, action }, { onConflict: "need_id,actor_id" })
+      .upsert(
+        { need_id: need.id, actor_id: myId, action, created_at: new Date().toISOString() },
+        { onConflict: "need_id,actor_id" },
+      )
       .select("id")
       .single();
     if (error) {
