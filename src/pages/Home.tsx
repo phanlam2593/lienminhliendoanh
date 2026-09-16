@@ -29,7 +29,9 @@ export default function Home() {
   const { user } = useAuth();
   const { t } = useLanguage();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
+  const [statsLoading, setStatsLoading] = useState(true);
   const [featured, setFeatured] = useState<BusinessCardData[]>([]);
+  const [featuredLoading, setFeaturedLoading] = useState(true);
   const [modal, setModal] = useState<StatKind | null>(null);
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function Home() {
         businesses: (pub as any)?.businesses ?? 0,
         offers: user?.id ? claimed : ((pub as any)?.offers ?? 0),
       });
+      setStatsLoading(false);
     })();
   }, [user?.id]);
 
@@ -85,6 +88,7 @@ export default function Home() {
           };
         }),
       );
+      setFeaturedLoading(false);
     })();
   }, []);
 
@@ -113,18 +117,21 @@ export default function Home() {
           value={stats.members}
           label={t("stats.members")}
           onClick={() => user && setModal("members")}
+          loading={statsLoading}
         />
         <StatBtn
           icon={Building2}
           value={stats.businesses}
           label={t("stats.businesses")}
           onClick={() => user && setModal("businesses")}
+          loading={statsLoading}
         />
         <StatBtn
           icon={Tag}
           value={stats.offers}
           label={user ? t("stats.offersClaimed") : t("stats.offers")}
           onClick={() => user && setModal("offers")}
+          loading={statsLoading}
         />
       </section>
 
@@ -132,7 +139,13 @@ export default function Home() {
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-lg font-extrabold">{t("home.featured")}</h2>
         </div>
-        {featured.length === 0 ? (
+        {featuredLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {Array.from({ length: 2 }).map((_, i) => (
+              <FeaturedCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : featured.length === 0 ? (
           <p className="text-sm text-muted-foreground py-4">{t("home.noFeatured")}</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -185,11 +198,13 @@ function StatBtn({
   value,
   label,
   onClick,
+  loading,
 }: {
   icon: any;
   value: number;
   label: string;
   onClick: () => void;
+  loading?: boolean;
 }) {
   return (
     <button
@@ -199,9 +214,26 @@ function StatBtn({
       <div className="w-9 h-9 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
         <Icon className="w-4 h-4 text-white" />
       </div>
-      <div className="text-xl font-extrabold text-primary">{value}</div>
+      {loading ? (
+        <div className="h-6 w-8 mx-auto mb-0.5 rounded bg-muted animate-pulse" />
+      ) : (
+        <div className="text-xl font-extrabold text-primary">{value}</div>
+      )}
       <div className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">{label}</div>
     </button>
+  );
+}
+
+function FeaturedCardSkeleton() {
+  return (
+    <div className="rounded-2xl bg-card overflow-hidden shadow-sm animate-pulse">
+      <div className="w-full h-36 bg-muted" />
+      <div className="p-3 space-y-2">
+        <div className="h-4 bg-muted rounded w-2/3" />
+        <div className="h-3 bg-muted rounded w-1/2" />
+        <div className="h-3 bg-muted rounded w-1/3" />
+      </div>
+    </div>
   );
 }
 function StatsModal({
