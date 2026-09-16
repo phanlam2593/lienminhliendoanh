@@ -23,8 +23,7 @@ import {
   Award,
   TrendingUp,
   Building2,
-  EyeOff,
-  Handshake,
+  Wrench,
   Users,
   Search,
   Trash2,
@@ -68,25 +67,15 @@ const MEMBER_PAGE_SIZE = 50;
 // ── Điều hướng của trang Quản trị ────────────────────────────────────────────
 // DO NOT CHANGE: "overview" là màn hình chính (lưới 6 ô); các key còn lại là
 // màn hình chi tiết, vào bằng cách bấm ô tương ứng, ra bằng nút quay lại.
-type TabKey =
-  | "overview"
-  | "members"
-  | "businesses"
-  | "exchanges"
-  | "reports"
-  | "pending"
-  | "activity"
-  | "hidden"
-  | "broadcast";
+type TabKey = "overview" | "members" | "businesses" | "reports" | "pending" | "activity" | "hidden" | "broadcast";
 
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
   businesses: "Doanh nghiệp",
-  exchanges: "Trao đổi",
   reports: "Báo cáo",
   pending: "Chờ duyệt",
   activity: "Hoạt động gần đây",
-  hidden: "Ẩn",
+  hidden: "Công cụ khác",
   broadcast: "Phát thông báo",
 };
 
@@ -94,7 +83,6 @@ const VALID_TABS: TabKey[] = [
   "overview",
   "members",
   "businesses",
-  "exchanges",
   "reports",
   "pending",
   "activity",
@@ -337,9 +325,6 @@ export default function Admin() {
       {activeTab === "businesses" && (
         <BusinessesSection refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
       )}
-      {activeTab === "exchanges" && (
-        <ExchangesSection refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
-      )}
       {activeTab === "reports" && <ReportsSection refreshKey={refreshKey} onOpenMember={openMemberById} />}
       {activeTab === "pending" && (
         <PendingTab refreshKey={refreshKey} onChanged={refresh} onOpenMember={openMemberById} />
@@ -489,6 +474,10 @@ function ToolRow({
   );
 }
 
+function GroupLabel({ children }: { children: React.ReactNode }) {
+  return <div className="px-1 mb-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">{children}</div>;
+}
+
 function OverviewTab({
   refreshKey,
   onNavigate,
@@ -502,24 +491,21 @@ function OverviewTab({
     members: 0,
     businesses: 0,
     pending: 0,
-    exchanges: 0,
     reports: 0,
   });
 
   const load = async () => {
-    const [mRes, bRes, pmRes, pbRes, eRes, rRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, rRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
-      supabase.from("exchanges").select("*", { count: "exact", head: true }),
       supabase.from("reports").select("*", { count: "exact", head: true }),
     ]);
     setStats({
       members: mRes.count ?? 0,
       businesses: bRes.count ?? 0,
       pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
-      exchanges: eRes.count ?? 0,
       reports: rRes.count ?? 0,
     });
   };
@@ -528,62 +514,83 @@ function OverviewTab({
   }, [refreshKey]);
 
   return (
-    <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
-      <StatRow
-        icon={Bell}
-        label="Chờ duyệt"
-        value={stats.pending}
-        colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
-        onClick={() => onNavigate("pending")}
-      />
-      <ToolRow
-        icon={Send}
-        label="Phát thông báo"
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("broadcast")}
-      />
-      <StatRow
-        icon={Users}
-        label="Thành viên"
-        value={stats.members}
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("members")}
-      />
-      <StatRow
-        icon={Building2}
-        label="Doanh nghiệp"
-        value={stats.businesses}
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("businesses")}
-      />
-      <StatRow
-        icon={Handshake}
-        label="Trao đổi"
-        value={stats.exchanges}
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("exchanges")}
-      />
-      <StatRow
-        icon={Flag}
-        label="Báo cáo"
-        value={stats.reports}
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("reports")}
-      />
-      <ToolRow
-        icon={Clock}
-        label="Hoạt động gần đây"
-        colorClass="bg-primary/10 text-primary"
-        onClick={() => onNavigate("activity")}
-      />
-      <ToolRow icon={EyeOff} label="Ẩn" colorClass="bg-primary/10 text-primary" onClick={() => onNavigate("hidden")} />
-      <ToolRow
-        icon={Trash2}
-        label="Dọn dẹp"
-        colorClass="bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400"
-        danger
-        onClick={onCleanup}
-      />
+    <div className="space-y-5">
+      <div>
+        <GroupLabel>Cần xử lý</GroupLabel>
+        <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+          <StatRow
+            icon={Bell}
+            label="Chờ duyệt"
+            value={stats.pending}
+            colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
+            onClick={() => onNavigate("pending")}
+          />
+          <StatRow
+            icon={Flag}
+            label="Báo cáo"
+            value={stats.reports}
+            colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
+            onClick={() => onNavigate("reports")}
+          />
+        </div>
+      </div>
+
+      <div>
+        <GroupLabel>Quản lý</GroupLabel>
+        <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+          <StatRow
+            icon={Users}
+            label="Thành viên"
+            value={stats.members}
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("members")}
+          />
+          <StatRow
+            icon={Building2}
+            label="Doanh nghiệp"
+            value={stats.businesses}
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("businesses")}
+          />
+        </div>
+      </div>
+
+      <div>
+        <GroupLabel>Công cụ</GroupLabel>
+        <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+          <ToolRow
+            icon={Send}
+            label="Phát thông báo"
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("broadcast")}
+          />
+          <ToolRow
+            icon={Clock}
+            label="Hoạt động gần đây"
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("activity")}
+          />
+          <ToolRow
+            icon={Wrench}
+            label="Công cụ khác"
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("hidden")}
+          />
+        </div>
+      </div>
+
+      <div>
+        <GroupLabel>Bảo trì</GroupLabel>
+        <div className="bg-card rounded-xl border divide-y divide-border overflow-hidden">
+          <ToolRow
+            icon={Trash2}
+            label="Dọn dẹp tài khoản mồ côi"
+            colorClass="bg-red-100 text-red-600 dark:bg-red-950/40 dark:text-red-400"
+            danger
+            onClick={onCleanup}
+          />
+        </div>
+      </div>
     </div>
   );
 }
@@ -2727,270 +2734,5 @@ function BusinessClaimsDialog({
         )}
       </DialogContent>
     </Dialog>
-  );
-}
-
-// ──────────────────────────────────────────────────────────────────────────────
-// Phase 2: Exchanges management
-// ──────────────────────────────────────────────────────────────────────────────
-import { type Exchange as _Exchange } from "@/lib/types";
-
-type ExchangeRow = _Exchange & { req_name?: string | null; rec_name?: string | null };
-
-const EXCHANGE_PAGE_SIZE = 50;
-
-const EXCHANGE_STATUS_LABEL: Record<string, string> = {
-  pending: "Chờ phản hồi",
-  accepted: "Đã chấp nhận",
-  requester_done: "Bên gửi đã xong",
-  receiver_done: "Bên nhận đã xong",
-  completed: "Hoàn thành",
-  rejected: "Đã từ chối",
-  expired: "Đã hết hạn",
-};
-const EXCHANGE_STATUS_CHIP: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-800",
-  accepted: "bg-sky-100 text-sky-800",
-  requester_done: "bg-sky-100 text-sky-800",
-  receiver_done: "bg-sky-100 text-sky-800",
-  completed: "bg-emerald-100 text-emerald-800",
-  rejected: "bg-rose-100 text-rose-800",
-  expired: "bg-muted text-muted-foreground",
-};
-const EXCHANGE_STEP: Record<string, number> = {
-  pending: 1,
-  accepted: 2,
-  requester_done: 3,
-  receiver_done: 4,
-  completed: 4,
-  rejected: 0,
-  expired: 0,
-};
-function exchangeWaitingText(r: ExchangeRow): string {
-  const req = r.req_name ?? "Bên gửi";
-  const rec = r.rec_name ?? "Bên nhận";
-  switch (r.status) {
-    case "pending":
-      return `⏳ Đang chờ ${rec} phản hồi (chấp nhận/từ chối)`;
-    case "accepted":
-      return `⏳ Đang chờ ${req} thực hiện phần của mình`;
-    case "requester_done":
-      return `⏳ Đang chờ ${rec} xác nhận & thực hiện phần của mình`;
-    case "receiver_done":
-      return `⏳ Đang chờ ${req} xác nhận hoàn tất`;
-    case "completed":
-      return `✅ Cả 2 bên đã hoàn tất`;
-    case "rejected":
-      return `❌ ${rec} đã từ chối yêu cầu`;
-    case "expired":
-      return `⌛ Hết hạn — không bên nào phản hồi kịp`;
-    default:
-      return "";
-  }
-}
-
-function ExchangesSection({
-  refreshKey,
-  onChanged,
-  onOpenMember,
-}: {
-  refreshKey: number;
-  onChanged: () => void;
-  onOpenMember: (ownerId: string) => void;
-}) {
-  const [quickBiz, setQuickBiz] = useState<string | null>(null);
-  const [list, setList] = useState<ExchangeRow[]>([]);
-  const [q, setQ] = useState("");
-  const [debouncedQ, setDebouncedQ] = useState("");
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [todayCompletedCount, setTodayCompletedCount] = useState(0);
-
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedQ(q.trim()), 300);
-    return () => clearTimeout(t);
-  }, [q]);
-
-  const load = async (pageNum: number, append: boolean) => {
-    setLoadingMore(true);
-    const from = pageNum * EXCHANGE_PAGE_SIZE;
-    const to = from + EXCHANGE_PAGE_SIZE - 1;
-    // exchanges_view đã gộp sẵn req_name/rec_name (join businesses) — tìm kiếm được
-    // thẳng bằng SQL ilike, không cần tự tra tên riêng nữa.
-    let query = supabase
-      .from("exchanges_view")
-      .select("*", { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(from, to);
-    if (debouncedQ) {
-      const k = normalizeVi(debouncedQ);
-      query = query.or(`req_name_unaccent.ilike.%${k}%,rec_name_unaccent.ilike.%${k}%`);
-    }
-    const { data, count } = await query;
-    setTotal(count ?? 0);
-    const newRows = (data ?? []) as ExchangeRow[];
-    setList((prev) => (append ? [...prev, ...newRows] : newRows));
-    setHasMore(newRows.length === EXCHANGE_PAGE_SIZE);
-    setLoadingMore(false);
-  };
-
-  const loadStats = async () => {
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-    const [{ count: pendingC }, { count: doneC }] = await Promise.all([
-      supabase.from("exchanges").select("*", { count: "exact", head: true }).eq("status", "pending"),
-      supabase
-        .from("exchanges")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "completed")
-        .gte("completed_at", todayStart.toISOString()),
-    ]);
-    setPendingCount(pendingC ?? 0);
-    setTodayCompletedCount(doneC ?? 0);
-  };
-
-  useEffect(() => {
-    setPage(0);
-    void load(0, false);
-    void loadStats();
-  }, [refreshKey, debouncedQ]);
-
-  const loadMore = () => {
-    const next = page + 1;
-    setPage(next);
-    void load(next, true);
-  };
-
-  const remove = async (id: string) => {
-    if (!confirm("Xóa trao đổi này?")) return;
-    const { error } = await supabase.from("exchanges").delete().eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Đã xóa");
-    load(0, false);
-    loadStats();
-    onChanged();
-  };
-  const setStatus = async (id: string, status: _Exchange["status"]) => {
-    const patch: any = { status };
-    if (status === "completed") patch.completed_at = new Date().toISOString();
-    const { error } = await supabase.from("exchanges").update(patch).eq("id", id);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Đã cập nhật");
-    load(0, false);
-    loadStats();
-    onChanged();
-  };
-
-  return (
-    <Collapsible title="Trao đổi" icon={Handshake} count={total}>
-      <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-        <span>
-          Tổng: <b className="text-foreground">{total}</b>
-        </span>
-        <span>
-          · Đang chờ: <b className="text-foreground">{pendingCount}</b>
-        </span>
-        <span>
-          · Hoàn thành hôm nay: <b className="text-foreground">{todayCompletedCount}</b>
-        </span>
-      </div>
-      <div className="relative">
-        <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm theo tên doanh nghiệp…"
-          className="w-full pl-9 pr-3 py-2 rounded-lg border bg-card text-sm"
-        />
-      </div>
-      {list.length === 0 ? (
-        <p className="text-xs text-muted-foreground text-center py-2">Không có kết quả</p>
-      ) : (
-        list.map((r) => (
-          <div key={r.id} className="p-3 bg-card rounded-xl space-y-2 text-xs">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0 flex-1">
-                <div className="font-semibold truncate">
-                  <button onClick={() => setQuickBiz(r.requester_id)} className="hover:text-primary hover:underline">
-                    {r.req_name ?? "?"}
-                  </button>
-                  {" → "}
-                  <button onClick={() => setQuickBiz(r.receiver_id)} className="hover:text-primary hover:underline">
-                    {r.rec_name ?? "?"}
-                  </button>
-                </div>
-                <div className="text-muted-foreground">
-                  {r.request_type} · {new Date(r.created_at).toLocaleDateString("vi-VN")}
-                </div>
-              </div>
-              <span
-                className={`text-[10px] px-2 py-0.5 rounded-full font-semibold whitespace-nowrap ${EXCHANGE_STATUS_CHIP[r.status] ?? "bg-accent"}`}
-              >
-                {EXCHANGE_STATUS_LABEL[r.status] ?? r.status}
-              </span>
-            </div>
-            <div className="text-[11px] text-muted-foreground">{exchangeWaitingText(r)}</div>
-            {EXCHANGE_STEP[r.status] > 0 && (
-              <div className="flex items-center gap-1">
-                {[1, 2, 3, 4].map((i) => (
-                  <span
-                    key={i}
-                    className={`h-1.5 rounded-full ${i <= EXCHANGE_STEP[r.status] ? "bg-primary w-4" : "bg-muted w-2"}`}
-                  />
-                ))}
-              </div>
-            )}
-            <div className="flex flex-wrap gap-1.5">
-              {r.status !== "completed" && (
-                <button
-                  onClick={() => setStatus(r.id, "completed")}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-semibold"
-                >
-                  Đánh dấu hoàn thành
-                </button>
-              )}
-              {r.status !== "expired" && (
-                <button
-                  onClick={() => setStatus(r.id, "expired")}
-                  className="text-[11px] px-2.5 py-1 rounded-full bg-muted font-semibold"
-                >
-                  Hết hạn
-                </button>
-              )}
-              <button
-                onClick={() => remove(r.id)}
-                className="text-[11px] px-2.5 py-1 rounded-full bg-destructive/10 text-destructive font-semibold inline-flex items-center gap-1"
-              >
-                <Trash2 className="w-3 h-3" /> Xóa
-              </button>
-            </div>
-          </div>
-        ))
-      )}
-      {hasMore && (
-        <button
-          onClick={loadMore}
-          disabled={loadingMore}
-          className="w-full py-2 rounded-lg border text-sm font-semibold text-muted-foreground hover:bg-accent disabled:opacity-50"
-        >
-          {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - list.length})`}
-        </button>
-      )}
-      <BusinessQuickView
-        businessId={quickBiz}
-        open={!!quickBiz}
-        onOpenChange={(v) => !v && setQuickBiz(null)}
-        onOpenAdmin={onOpenMember}
-      />
-    </Collapsible>
   );
 }
