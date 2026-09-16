@@ -619,8 +619,13 @@ export default function Quet() {
     setMatches(
       rows.map((r: any) => {
         const otherUserId = r.user_a === myId ? r.user_b : r.user_a;
-        const myNeedId = r.user_a === myId ? r.need_id_a : r.need_id_b;
-        const otherNeedId = r.user_a === myId ? r.need_id_b : r.need_id_a;
+        // Sửa lỗi: need_id_a/need_id_b được gán theo LEAST/GREATEST(uuid) lúc tạo match (DB
+        // trigger handle_swipe_match), KHÔNG cố định tương ứng với user_a/user_b — phải tra
+        // chủ sở hữu thật của need_id_a mới biết đâu là nhu cầu của mình, tránh hiện NHẦM
+        // nhu cầu của người kia thành "của mình" (và ngược lại) trong tab Kết nối.
+        const needAOwner = needMap[r.need_id_a]?.user_id;
+        const myNeedId = needAOwner === myId ? r.need_id_a : r.need_id_b;
+        const otherNeedId = myNeedId === r.need_id_a ? r.need_id_b : r.need_id_a;
         return {
           ...r,
           otherUser: profMap[otherUserId] ?? null,
