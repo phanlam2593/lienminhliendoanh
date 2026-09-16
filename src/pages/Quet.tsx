@@ -1126,7 +1126,7 @@ export default function Quet() {
   const swipeFloating = tab === "swipe" && !!activeCategory;
 
   return (
-    <div className="p-4 space-y-4 relative">
+    <div className={cn("relative space-y-4", tab === "swipe" ? "" : "p-4")}>
       <div
         className={cn(
           "flex items-center justify-between transition",
