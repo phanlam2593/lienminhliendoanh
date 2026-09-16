@@ -1131,8 +1131,9 @@ export default function Quet() {
         className={cn("flex items-center justify-between transition", swipeFloating && "absolute top-3 inset-x-3 z-40")}
       >
         <h1
+          onClick={() => setTab("category")}
           className={cn(
-            "text-xl font-extrabold flex items-center gap-1.5",
+            "text-xl font-extrabold flex items-center gap-1.5 cursor-pointer",
             swipeFloating && "bg-black/35 backdrop-blur-sm rounded-full px-3 py-1.5 text-white",
           )}
         >
@@ -1962,10 +1963,13 @@ export default function Quet() {
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-white bg-black/35 backdrop-blur-sm rounded-full px-2.5 py-1.5 shrink-0">
+            <button
+              onClick={() => setTab("category")}
+              className="flex items-center gap-1.5 text-xs font-bold text-white bg-black/35 backdrop-blur-sm rounded-full px-2.5 py-1.5 shrink-0"
+            >
               <CategoryIcon type={activeCategory} className="w-3.5 h-3.5" />
               {t(`quet.type.${activeCategory}`)}
-            </div>
+            </button>
             <Popover open={filterOpen} onOpenChange={setFilterOpen}>
               <PopoverTrigger asChild>
                 <button
