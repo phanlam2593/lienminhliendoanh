@@ -12,7 +12,6 @@ import {
   Tag,
   MessageCircle,
   Building2,
-  Target,
   Flame,
   User,
   Briefcase,
@@ -66,7 +65,6 @@ export function Layout() {
         { to: "/quet", icon: Flame, label: t("nav.quet") },
         { to: "/admin", icon: Settings, label: t("nav.admin") },
         { to: "/cong-dong", icon: Users, label: t("nav.community") },
-        { to: "/questline", icon: Target, label: "Quest" },
         { to: "/ho-so", icon: User, label: t("nav.profileShort") },
       ]
     : baseTabs;
@@ -569,9 +567,7 @@ function CompleteProfileScreen({ onDone }: { onDone: () => Promise<void> }) {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center gap-5">
       <h1 className="text-xl font-bold">{t("completeProfile.title")}</h1>
-      <p className="text-sm text-muted-foreground max-w-xs">
-        {t("completeProfile.subtitle", { app: t("app.name") })}
-      </p>
+      <p className="text-sm text-muted-foreground max-w-xs">{t("completeProfile.subtitle", { app: t("app.name") })}</p>
       <form onSubmit={submit} className="w-full max-w-xs space-y-3 text-left">
         <label className="block space-y-1">
           <span className="text-xs font-semibold text-muted-foreground">{t("register.username")}</span>
