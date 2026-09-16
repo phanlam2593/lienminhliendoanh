@@ -82,6 +82,7 @@ export default function BusinessDetail() {
   const [reviewTotal, setReviewTotal] = useState(0);
   const [reviewHasMore, setReviewHasMore] = useState(true);
   const [reviewLoadingMore, setReviewLoadingMore] = useState(false);
+  const [reviewsLoading, setReviewsLoading] = useState(true);
   const [avgRating, setAvgRating] = useState(0);
   const REVIEW_PAGE_SIZE = 10;
 
@@ -191,6 +192,7 @@ export default function BusinessDetail() {
     }
     setReviewHasMore(newReviews.length === REVIEW_PAGE_SIZE);
     setReviewLoadingMore(false);
+    if (!append) setReviewsLoading(false);
   };
 
   const loadMoreReviews = () => {
@@ -316,7 +318,13 @@ export default function BusinessDetail() {
           </button>
         )}
       </div>
-      {reviews.length === 0 ? (
+      {reviewsLoading ? (
+        <div className="space-y-2">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <ReviewSkeleton key={i} />
+          ))}
+        </div>
+      ) : reviews.length === 0 ? (
         <p className="text-sm text-muted-foreground">{t("biz.noReviews")}</p>
       ) : (
         <div className="space-y-2">
@@ -1086,6 +1094,21 @@ function Countdown({ expiresAt }: { expiresAt: string }) {
     <div className="flex items-center justify-center gap-1.5 text-sm font-semibold text-emerald-700 dark:text-emerald-400">
       <Clock className="w-4 h-4" />
       {t("biz.timeLeft", { time: timeStr })}
+    </div>
+  );
+}
+
+function ReviewSkeleton() {
+  return (
+    <div className="p-3 rounded-xl bg-card shadow-sm space-y-2 animate-pulse">
+      <div className="flex items-center gap-2">
+        <div className="w-8 h-8 rounded-full bg-muted shrink-0" />
+        <div className="flex-1 space-y-1.5">
+          <div className="h-3 bg-muted rounded w-1/3" />
+          <div className="h-2.5 bg-muted rounded w-1/4" />
+        </div>
+      </div>
+      <div className="h-3 bg-muted rounded w-4/5" />
     </div>
   );
 }
