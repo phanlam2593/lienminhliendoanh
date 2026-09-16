@@ -1123,18 +1123,37 @@ export default function Quet() {
         : []
     : [];
 
+  const swipeFloating = tab === "swipe" && !!activeCategory;
+
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="p-4 space-y-4 relative">
+      <div
+        className={cn(
+          "flex items-center justify-between transition",
+          swipeFloating &&
+            "absolute top-3 inset-x-3 z-40 bg-black/35 backdrop-blur-sm rounded-2xl px-3 py-2 text-white",
+        )}
+      >
         <h1 className="text-xl font-extrabold flex items-center gap-1.5">
           <Flame className="w-5 h-5 text-primary" /> {t("quet.title")}
         </h1>
-        <div className="flex items-center gap-1 rounded-full bg-muted p-1 text-xs font-semibold">
+        <div
+          className={cn(
+            "flex items-center gap-1 rounded-full p-1 text-xs font-semibold",
+            swipeFloating ? "bg-black/25" : "bg-muted",
+          )}
+        >
           <button
             onClick={() => setTab("category")}
             className={cn(
               "px-3 py-1.5 rounded-full transition",
-              tab !== "matches" ? "bg-card shadow-soft text-primary" : "text-muted-foreground",
+              tab !== "matches"
+                ? swipeFloating
+                  ? "bg-white/90 text-primary shadow-soft"
+                  : "bg-card shadow-soft text-primary"
+                : swipeFloating
+                  ? "text-white/80"
+                  : "text-muted-foreground",
             )}
           >
             {t("quet.tabSwipe")}
@@ -1143,7 +1162,13 @@ export default function Quet() {
             onClick={() => setTab("matches")}
             className={cn(
               "px-3 py-1.5 rounded-full transition",
-              tab === "matches" ? "bg-card shadow-soft text-primary" : "text-muted-foreground",
+              tab === "matches"
+                ? swipeFloating
+                  ? "bg-white/90 text-primary shadow-soft"
+                  : "bg-card shadow-soft text-primary"
+                : swipeFloating
+                  ? "text-white/80"
+                  : "text-muted-foreground",
             )}
           >
             {t("quet.tabMatches")}
@@ -1156,8 +1181,6 @@ export default function Quet() {
           <div className="text-xs text-muted-foreground">{t("quet.category.subtitle")}</div>
           <div className="grid grid-cols-2 gap-3">
             {CATEGORIES.map(({ type, Icon }) => {
-              const list = needsOfType(type);
-              const activeCount = list.filter((n) => n.is_active).length;
               return (
                 <div key={type} className="h-full flex flex-col gap-1.5">
                   <button
@@ -1171,16 +1194,6 @@ export default function Quet() {
                     <div className="text-[11px] text-muted-foreground leading-snug">
                       {t(`quet.category.${type}.brief`)}
                     </div>
-                    {list.length > 0 && (
-                      <span
-                        className={cn(
-                          "text-[10px] font-semibold px-2 py-0.5 rounded-full",
-                          activeCount > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground",
-                        )}
-                      >
-                        {t("quet.needsCount", { count: String(list.length) })}
-                      </span>
-                    )}
                   </button>
                   <button
                     onClick={() => openManage(type)}
@@ -1796,7 +1809,7 @@ export default function Quet() {
                       onPointerDown={(e) => e.stopPropagation()}
                       onClick={(e) => e.stopPropagation()}
                       aria-label={t("block.menu")}
-                      className="absolute top-14 right-3 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur grid place-items-center text-white"
+                      className="absolute top-24 right-3 z-10 w-8 h-8 rounded-full bg-black/30 backdrop-blur grid place-items-center text-white"
                     >
                       <MoreVertical className="w-4 h-4" />
                     </button>
@@ -1899,14 +1912,6 @@ export default function Quet() {
                       )}
                     </div>
                   )}
-                  <div
-                    className={cn(
-                      "text-[10px] mt-2",
-                      topPhotoList.length > 0 || topCard.photo_url ? "text-white/70" : "text-muted-foreground",
-                    )}
-                  >
-                    {t("quet.contactHidden")}
-                  </div>
                 </div>
               </div>
               <div className="absolute bottom-3 inset-x-0 z-20 flex items-center justify-center gap-3.5">
@@ -1948,7 +1953,7 @@ export default function Quet() {
             </>
           )}
 
-          <div className="absolute top-3 inset-x-3 z-30 flex items-center gap-2">
+          <div className="absolute top-14 inset-x-3 z-30 flex items-center gap-2">
             <button
               onClick={() => setTab("category")}
               aria-label={t("quet.backToCategories")}
@@ -2098,6 +2103,12 @@ export default function Quet() {
                     {t("quet.filterClear")}
                   </button>
                 )}
+                <button
+                  onClick={() => setFilterOpen(false)}
+                  className="w-full h-9 rounded-xl bg-primary text-primary-foreground text-xs font-bold mt-1"
+                >
+                  {t("quet.filterConfirm")}
+                </button>
               </PopoverContent>
             </Popover>
             {!myPos && (
@@ -2124,7 +2135,7 @@ export default function Quet() {
             )}
           </div>
           {locStatus === "denied" && (
-            <p className="absolute top-14 left-3 right-14 z-30 text-[11px] text-amber-700 bg-amber-50 dark:bg-amber-950/80 dark:text-amber-300 rounded-lg px-2 py-1 shadow">
+            <p className="absolute top-24 left-3 right-14 z-30 text-[11px] text-amber-700 bg-amber-50 dark:bg-amber-950/80 dark:text-amber-300 rounded-lg px-2 py-1 shadow">
               {t("explore.locationDenied")}
             </p>
           )}
@@ -2271,59 +2282,58 @@ export default function Quet() {
       )}
 
       {detailFor && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 flex items-end sm:items-center justify-center sm:p-6 animate-in fade-in duration-200"
-          onClick={() => setDetailFor(null)}
-        >
-          <div
-            className="relative bg-card rounded-t-3xl sm:rounded-3xl w-full sm:max-w-sm max-h-[85vh] overflow-y-auto p-5 space-y-3"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 z-50 bg-background flex flex-col animate-in fade-in duration-200">
+          <div className="relative w-full h-[45vh] shrink-0 bg-muted">
+            <CardPhoto path={detailPhotos[0]} />
+            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
             <button
               onClick={() => setDetailFor(null)}
               aria-label={t("common.cancel")}
-              className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-muted grid place-items-center"
+              className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-black/35 backdrop-blur-sm grid place-items-center text-white"
             >
               <X className="w-4 h-4" />
             </button>
-            <div className="font-extrabold text-base pr-8">{t("quet.detailTitle")}</div>
-            {detailPhotos.length > 0 && (
+            <div className="absolute inset-x-4 bottom-4 text-white space-y-1.5">
+              <div className="flex items-center gap-2.5">
+                <div className="relative shrink-0">
+                  <Avatar
+                    path={detailFor.owner?.avatar_url}
+                    name={detailFor.owner?.full_name || detailFor.owner?.username}
+                    size={40}
+                  />
+                  {detailFor.owner && onlineUsers.has(detailFor.owner.id) && (
+                    <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-black/40" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-sm truncate">
+                    {detailFor.owner?.full_name || detailFor.owner?.username || "—"}
+                  </div>
+                  <div className="text-[11px] text-white/80 flex items-center gap-1">
+                    <CategoryIcon type={detailFor.need.need_type} className="w-3 h-3" />
+                    {t(`quet.type.${detailFor.need.need_type}`)}
+                  </div>
+                </div>
+              </div>
+              <div className="font-extrabold text-lg leading-tight">{detailFor.need.title}</div>
+              {(detailFor.need.area || detailFor.distanceKm != null) && (
+                <div className="text-xs text-white/80">
+                  📍{" "}
+                  {[detailFor.need.area, detailFor.distanceKm != null ? `${detailFor.distanceKm.toFixed(1)} km` : null]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto p-5 space-y-3">
+            {detailPhotos.length > 1 && (
               <div className="grid grid-cols-4 gap-1.5">
                 {detailPhotos.map((p, i) => (
                   <div key={i} className="relative aspect-square rounded-lg overflow-hidden bg-muted">
                     <CardPhoto path={p} />
                   </div>
                 ))}
-              </div>
-            )}
-            <div className="flex items-center gap-2.5">
-              <div className="relative shrink-0">
-                <Avatar
-                  path={detailFor.owner?.avatar_url}
-                  name={detailFor.owner?.full_name || detailFor.owner?.username}
-                  size={48}
-                />
-                {detailFor.owner && onlineUsers.has(detailFor.owner.id) && (
-                  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
-                )}
-              </div>
-              <div className="min-w-0">
-                <div className="font-bold text-sm truncate">
-                  {detailFor.owner?.full_name || detailFor.owner?.username || "—"}
-                </div>
-                <div className="text-xs text-muted-foreground flex items-center gap-1">
-                  <CategoryIcon type={detailFor.need.need_type} className="w-3 h-3" />
-                  {t(`quet.type.${detailFor.need.need_type}`)}
-                </div>
-              </div>
-            </div>
-            <div className="font-extrabold">{detailFor.need.title}</div>
-            {(detailFor.need.area || detailFor.distanceKm != null) && (
-              <div className="text-xs text-muted-foreground">
-                📍{" "}
-                {[detailFor.need.area, detailFor.distanceKm != null ? `${detailFor.distanceKm.toFixed(1)} km` : null]
-                  .filter(Boolean)
-                  .join(" · ")}
               </div>
             )}
             {detailFor.need.description && (
