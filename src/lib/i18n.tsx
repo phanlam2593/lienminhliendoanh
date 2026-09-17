@@ -771,7 +771,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s5Pre": "Mọi thắc mắc, vui lòng liên hệ qua Zalo",
     "cookiePage.s5Post": 'hoặc Facebook "{app}".',
     "membership.activeUntil": "Đang hoạt động — hết hạn {date}",
-    "membership.notEligible": "Chương trình miễn phí 1000 người đầu đã đóng. Gói trả phí sẽ sớm ra mắt.",
+    "membership.notEligible":
+      "Ưu đãi miễn phí 3 tháng đầu đã kết thúc. Gói 49.000đ/tháng sẽ sớm mở thanh toán — theo dõi thông báo nhé!",
     "gif.searchPlaceholder": "Tìm GIF...",
     "gif.noResults": "Không tìm thấy GIF nào",
     "gif.poweredBy": "Powered by GIPHY",
@@ -1950,7 +1951,8 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s5Pre": "For any questions, please contact us via Zalo",
     "cookiePage.s5Post": 'or Facebook "{app}".',
     "membership.activeUntil": "Active — expires {date}",
-    "membership.notEligible": "The free program for the first 1,000 members has closed. Paid plans coming soon.",
+    "membership.notEligible":
+      "Your free 3-month trial has ended. The 49,000₫/month plan will open for payment soon — watch for the announcement!",
     "gif.searchPlaceholder": "Search GIFs...",
     "gif.noResults": "No GIFs found",
     "gif.poweredBy": "Powered by GIPHY",
