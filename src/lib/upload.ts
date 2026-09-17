@@ -84,13 +84,15 @@ export async function uploadAudio(file: File | Blob, folder = "voice", ownerId?:
   }
   if (!uid) throw new Error(tStatic("upload.errAuth"));
   const ext = baseType === "audio/mp4" ? "m4a" : baseType === "audio/ogg" ? "ogg" : baseType === "audio/mpeg" ? "mp3" : "webm";
-  const path = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("uploads").upload(path, file, {
+  // Bucket "uploads" chỉ cho phép image/* nên tệp âm thanh đi vào bucket riêng "voice".
+  // Đường dẫn trả về có tiền tố "voice/" để getSignedUrl() ký URL từ đúng bucket.
+  const key = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from("voice").upload(key, file, {
     contentType: baseType,
     upsert: false,
   });
   if (error) throw error;
-  return path;
+  return `voice/${key}`;
 }
 
 const cache = new Map<string, string>();
