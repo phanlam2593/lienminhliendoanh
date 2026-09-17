@@ -9,7 +9,17 @@ import { timeAgo } from "@/lib/time";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
-import { Image as ImageIcon, Smile, ChevronDown, ChevronUp, Users, MapPin, Hash, SmilePlus } from "lucide-react";
+import {
+  Image as ImageIcon,
+  Camera as CameraIcon,
+  Smile,
+  ChevronDown,
+  ChevronUp,
+  Users,
+  MapPin,
+  Hash,
+  SmilePlus,
+} from "lucide-react";
 import {
   Popover as ReactionPopover,
   PopoverContent as ReactionPopoverContent,
@@ -111,6 +121,7 @@ export default function Community() {
   const [locOpen, setLocOpen] = useState(false);
   const [topicOpen, setTopicOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   // QUAN TRỌNG: khung cuộn ngoài có chiều cao CỐ ĐỊNH, kích thước bản thân nó không đổi
@@ -1154,6 +1165,18 @@ export default function Community() {
               e.currentTarget.value = "";
             }}
           />
+          <input
+            ref={cameraRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) pickImage(f);
+              e.currentTarget.value = "";
+            }}
+          />
           <button
             onClick={() => fileRef.current?.click()}
             disabled={uploading}
@@ -1161,6 +1184,14 @@ export default function Community() {
             className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
           >
             <ImageIcon className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => cameraRef.current?.click()}
+            disabled={uploading}
+            aria-label={t("chat.takePhoto")}
+            className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+          >
+            <CameraIcon className="w-5 h-5" />
           </button>
           <button
             onClick={() => setShowGifs((v) => !v)}
