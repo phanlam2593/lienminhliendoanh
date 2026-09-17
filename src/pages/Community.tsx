@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { timeAgo } from "@/lib/time";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
+import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
 import { Image as ImageIcon, Smile, ChevronDown, ChevronUp, Users, MapPin, Hash, SmilePlus } from "lucide-react";
 import {
   Popover as ReactionPopover,
@@ -1005,19 +1006,24 @@ export default function Community() {
                           />
                         </div>
                       ) : (
-                        <div
-                          className={`text-sm rounded-xl px-3 py-1.5 mt-0.5 inline-block max-w-full break-words ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}
-                        >
-                          {m.content.split(/(@\w+)/g).map((part, i) =>
-                            part.startsWith("@") && members.some((mb) => mb.username === part.slice(1)) ? (
-                              <span key={i} className={`font-bold ${mine ? "underline" : "text-primary"}`}>
-                                {part}
-                              </span>
-                            ) : (
-                              part
-                            ),
-                          )}
-                        </div>
+                        <>
+                          <div
+                            className={`text-sm rounded-xl px-3 py-1.5 mt-0.5 inline-block max-w-full break-words ${mine ? "bg-primary text-primary-foreground" : "bg-card border"}`}
+                          >
+                            {m.content.split(/(@\w+)/g).map((part, i) =>
+                              part.startsWith("@") && members.some((mb) => mb.username === part.slice(1)) ? (
+                                <span key={i} className={`font-bold ${mine ? "underline" : "text-primary"}`}>
+                                  {part}
+                                </span>
+                              ) : (
+                                <span key={i}>{linkifyContent(part)}</span>
+                              ),
+                            )}
+                          </div>
+                          <div className="mt-1">
+                            <ChatLinkPreview text={m.content} />
+                          </div>
+                        </>
                       )}
                       {editingId !== m.id && (
                         <div className="flex items-center gap-1 mt-1 flex-wrap">
