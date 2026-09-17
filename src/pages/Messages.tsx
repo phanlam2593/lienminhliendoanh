@@ -1,7 +1,7 @@
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import type { Message, Profile, Business } from "@/lib/types";
+import type { Message, Profile } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
 import { GifPicker } from "@/components/GifPicker";
 import { useCallback, useEffect, useLayoutEffect, useState, useRef } from "react";
@@ -12,7 +12,6 @@ import {
   ArrowLeft,
   Send,
   Trash2,
-  MessageCircle,
   Pencil,
   Check,
   X,
@@ -32,6 +31,8 @@ import {
   BellOff,
   Search,
   Images,
+  Link2,
+  Play,
 } from "lucide-react";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { useCall } from "@/lib/call";
@@ -94,14 +95,161 @@ function callPreviewText(
   return `${icon} ${tr("call.inline.title")}`;
 }
 
+// --- Xu ly link trong tin nhan: tu bam duoc, tu nhung video Youtube, tu lay preview website (giong FB) ---
+
+function linkifyContent(text: string) {
+  const re = /(https?:\/\/[^\s]+)/g;
+  const nodes: (string | JSX.Element)[] = [];
+  let lastIndex = 0;
+  let m: RegExpExecArray | null;
+  let key = 0;
+  while ((m = re.exec(text))) {
+    if (m.index > lastIndex) nodes.push(text.slice(lastIndex, m.index));
+    const raw = m[0];
+    const url = raw.replace(/[),.!?]+$/, "");
+    const trail = raw.slice(url.length);
+    nodes.push(
+      <a
+        key={`lnk-${key++}`}
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={(e) => e.stopPropagation()}
+        className="underline break-all"
+      >
+        {url}
+      </a>,
+    );
+    if (trail) nodes.push(trail);
+    lastIndex = m.index + raw.length;
+  }
+  if (lastIndex < text.length) nodes.push(text.slice(lastIndex));
+  return nodes.length ? nodes : text;
+}
+
+function extractFirstUrl(text: string): string | null {
+  const m = text.match(/https?:\/\/[^\s]+/);
+  if (!m) return null;
+  return m[0].replace(/[),.!?]+$/, "");
+}
+
+function getYoutubeId(url: string): string | null {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\.|^m\./, "");
+    if (host === "youtu.be") return u.pathname.slice(1).split("/")[0] || null;
+    if (host === "youtube.com") {
+      if (u.pathname === "/watch") return u.searchParams.get("v");
+      if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2] || null;
+      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2] || null;
+    }
+  } catch {
+    /* khong phai URL hop le */
+  }
+  return null;
+}
+
+function YoutubeEmbed({ videoId }: { videoId: string }) {
+  const [playing, setPlaying] = useState(false);
+  return (
+    <div className="relative w-64 aspect-video rounded-xl overflow-hidden bg-muted">
+      {playing ? (
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      ) : (
+        <button type="button" onClick={() => setPlaying(true)} className="w-full h-full relative block">
+          <img
+            src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+            alt="YouTube"
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          <span className="absolute inset-0 grid place-items-center bg-black/25">
+            <span className="w-12 h-12 rounded-full bg-white/90 grid place-items-center">
+              <Play className="w-6 h-6 ml-0.5" fill="black" stroke="black" />
+            </span>
+          </span>
+        </button>
+      )}
+    </div>
+  );
+}
+
+type LinkMetaData = { title?: string; description?: string; image?: string; siteName?: string; url: string };
+const linkPreviewCache = new Map<string, LinkMetaData | null>();
+
+function LinkPreviewCard({ url }: { url: string }) {
+  const [meta, setMeta] = useState<LinkMetaData | null | undefined>(() => linkPreviewCache.get(url));
+
+  useEffect(() => {
+    if (linkPreviewCache.has(url)) {
+      setMeta(linkPreviewCache.get(url) ?? null);
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.functions.invoke("link-preview", { body: { url } });
+      if (cancelled) return;
+      const ok = !error && data && !data.error && (data.title || data.image);
+      const result: LinkMetaData | null = ok ? (data as LinkMetaData) : null;
+      linkPreviewCache.set(url, result);
+      setMeta(result);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [url]);
+
+  if (!meta) return null;
+
+  let domain = "";
+  try {
+    domain = new URL(meta.url || url).hostname.replace(/^www\./, "");
+  } catch {
+    domain = url;
+  }
+
+  return (
+    <a
+      href={meta.url || url}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={(e) => e.stopPropagation()}
+      className="flex items-center gap-2 w-64 rounded-xl border bg-card overflow-hidden hover:opacity-90"
+    >
+      {meta.image ? (
+        <img src={meta.image} alt="" className="w-14 h-14 object-cover shrink-0" loading="lazy" />
+      ) : (
+        <div className="w-14 h-14 shrink-0 bg-muted grid place-items-center">
+          <Link2 className="w-5 h-5 text-muted-foreground" />
+        </div>
+      )}
+      <div className="min-w-0 py-1.5 pr-2">
+        {meta.title && <div className="text-xs font-semibold line-clamp-2">{meta.title}</div>}
+        <div className="text-[10px] text-muted-foreground truncate mt-0.5">{domain}</div>
+      </div>
+    </a>
+  );
+}
+
+function ChatLinkPreview({ text }: { text: string }) {
+  const url = extractFirstUrl(text);
+  if (!url) return null;
+  const ytId = getYoutubeId(url);
+  if (ytId) return <YoutubeEmbed videoId={ytId} />;
+  return <LinkPreviewCard url={url} />;
+}
+
 export function MessagesInbox() {
   const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
   const { t, lang } = useLanguage();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [convosLoading, setConvosLoading] = useState(true);
   const [confirmPartner, setConfirmPartner] = useState<ConvoSummary | null>(null);
-  const [sp] = useSearchParams();
-  const [tab, setTab] = useState<"messages" | "follows">(sp.get("tab") === "follows" ? "follows" : "messages");
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
   const onlineUsers = useOnlineUsers();
 
@@ -414,23 +562,7 @@ export function MessagesInbox() {
           <History className="w-5 h-5" />
         </Link>
       </div>
-      <div className="flex gap-1 p-1 bg-muted rounded-xl">
-        <button
-          onClick={() => setTab("messages")}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "messages" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
-        >
-          {t("messages.title")}
-        </button>
-        <button
-          onClick={() => setTab("follows")}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold ${tab === "follows" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
-        >
-          {t("messages.follows")}
-        </button>
-      </div>
-
-      {tab === "messages" ? (
-        convosLoading ? (
+      {convosLoading ? (
           <div className="text-center py-12 space-y-3">
             <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
           </div>
@@ -480,7 +612,7 @@ export function MessagesInbox() {
               sortedConvos.map((c) => (
                 <div
                   key={c.partnerId}
-                  className="relative flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm select-none"
+                  className="relative flex items-center gap-2 p-3 rounded-xl select-none active:bg-accent/60 transition-colors"
                   onPointerDown={(e) => onRowPointerDown(c, e)}
                   onPointerMove={onRowPointerMove}
                   onPointerUp={onRowPointerUp}
@@ -532,8 +664,6 @@ export function MessagesInbox() {
             )}
           </>
         )
-      ) : (
-        <FollowsTab userId={user.id} />
       )}
 
       <Drawer open={!!actionSheetFor} onOpenChange={(v) => !v && setActionSheetFor(null)}>
@@ -1229,7 +1359,7 @@ export function MessagesThread() {
       .or(
         `and(sender_id.eq.${user.id},receiver_id.eq.${partner.id}),and(sender_id.eq.${partner.id},receiver_id.eq.${user.id})`,
       )
-      .in("type", ["image", "gif"])
+      .eq("type", "image")
       .order("created_at", { ascending: false })
       .limit(200);
     setMediaItems((data as any[] | null) ?? []);
@@ -1242,8 +1372,11 @@ export function MessagesThread() {
         <button onClick={() => nav("/tin-nhan")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <button onClick={() => setQuickViewOpen(true)} className="shrink-0">
+        <button onClick={() => setQuickViewOpen(true)} className="shrink-0 relative">
           <Avatar path={partner?.avatar_url} name={partner?.full_name} size={32} />
+          {partnerOnline && (
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-background" />
+          )}
         </button>
         <button onClick={() => setQuickViewOpen(true)} className="flex items-center gap-1.5 min-w-0 text-left flex-1">
           <div className="font-semibold text-sm truncate hover:text-primary">{partner?.full_name || "…"}</div>
@@ -1601,14 +1734,17 @@ export function MessagesThread() {
                           </div>
                         </div>
                       ) : (
-                        <div
-                          className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
-                        >
-                          {m.content}
-                          <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
-                            {timeAgo(m.created_at, lang)}
-                            {m.edited_at && <span className="italic"> {t("msg.edited")}</span>}
+                        <div className={`flex flex-col gap-1 max-w-[75%] ${mine ? "items-end" : "items-start"}`}>
+                          <div
+                            className={`px-3 py-2 rounded-2xl text-sm ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}
+                          >
+                            {linkifyContent(m.content)}
+                            <div className={`text-[11px] mt-0.5 ${mine ? "opacity-70" : "text-muted-foreground"}`}>
+                              {timeAgo(m.created_at, lang)}
+                              {m.edited_at && <span className="italic"> {t("msg.edited")}</span>}
+                            </div>
                           </div>
+                          <ChatLinkPreview text={m.content} />
                         </div>
                       )}
                       {canDelete && !mine && !isEditing && (
@@ -1804,134 +1940,6 @@ export function MessagesThread() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
-  );
-}
-
-interface FollowUser {
-  id: string;
-  full_name: string;
-  username: string;
-  avatar_url: string | null;
-}
-
-function FollowsTab({ userId }: { userId: string }) {
-  const { t } = useLanguage();
-  const [following, setFollowing] = useState<FollowUser[]>([]);
-  const [followers, setFollowers] = useState<FollowUser[]>([]);
-  const [followingBiz, setFollowingBiz] = useState<Business[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      // Thêm .range() phòng trường hợp 1 người follow/được follow rất nhiều (>1000) — trước
-      // đây không giới hạn gì, dễ bị Supabase âm thầm cắt bớt khi vượt ngưỡng mặc định.
-      const [{ data: outRows }, { data: inRows }] = await Promise.all([
-        supabase
-          .from("follows")
-          .select("followee_user_id, followee_business_id")
-          .eq("follower_id", userId)
-          .range(0, 4999),
-        supabase.from("follows").select("follower_id").eq("followee_user_id", userId).range(0, 4999),
-      ]);
-      const outUserIds = (outRows ?? []).map((r: any) => r.followee_user_id).filter(Boolean);
-      const outBizIds = (outRows ?? []).map((r: any) => r.followee_business_id).filter(Boolean);
-      const inIds = (inRows ?? []).map((r: any) => r.follower_id).filter(Boolean);
-
-      const [outUsersRes, inUsersRes, outBizRes] = await Promise.all([
-        outUserIds.length
-          ? supabase.from("profiles_public").select("id, full_name, username, avatar_url").in("id", outUserIds)
-          : Promise.resolve({ data: [] } as any),
-        inIds.length
-          ? supabase.from("profiles_public").select("id, full_name, username, avatar_url").in("id", inIds)
-          : Promise.resolve({ data: [] } as any),
-        outBizIds.length
-          ? supabase.from("businesses").select("*").in("id", outBizIds)
-          : Promise.resolve({ data: [] } as any),
-      ]);
-      setFollowing((outUsersRes.data ?? []) as any);
-      setFollowers((inUsersRes.data ?? []) as any);
-      setFollowingBiz((outBizRes.data ?? []) as Business[]);
-      setLoading(false);
-    })();
-  }, [userId]);
-
-  if (loading) return <p className="text-sm text-center py-12 text-muted-foreground">{t("common.loading")}</p>;
-
-  return (
-    <div className="space-y-4">
-      <div>
-        <h2 className="text-sm font-bold mb-2">
-          {t("messages.followingHeader")} ({following.length + followingBiz.length})
-        </h2>
-        {following.length === 0 && followingBiz.length === 0 ? (
-          <p className="text-xs text-muted-foreground py-2">{t("messages.notFollowingAnyone")}</p>
-        ) : (
-          <div className="space-y-2">
-            {following.map((p) => (
-              <div key={p.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
-                <Avatar path={p.avatar_url} name={p.full_name} size={36} />
-                <Link to={`/ho-so/${p.id}`} className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{p.full_name}</div>
-                  <div className="text-[11px] text-muted-foreground truncate">@{p.username}</div>
-                </Link>
-                <Link
-                  to={`/tin-nhan/${p.id}`}
-                  className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1"
-                >
-                  <MessageCircle className="w-3 h-3" /> {t("biz.message")}
-                </Link>
-              </div>
-            ))}
-            {followingBiz.map((b) => (
-              <div key={b.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
-                <div className="w-9 h-9 rounded-lg overflow-hidden bg-muted shrink-0">
-                  <StoredImage path={b.cover_url} alt={b.name} className="w-full h-full object-cover" />
-                </div>
-                <Link to={`/dn/${b.id}`} className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">🏢 {b.name}</div>
-                </Link>
-                {b.owner_id && (
-                  <Link
-                    to={`/tin-nhan/${b.owner_id}`}
-                    className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1"
-                  >
-                    <MessageCircle className="w-3 h-3" /> {t("messages.messageOwner")}
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <div>
-        <h2 className="text-sm font-bold mb-2">
-          {t("messages.followersHeader")} ({followers.length})
-        </h2>
-        {followers.length === 0 ? (
-          <p className="text-xs text-muted-foreground py-2">{t("messages.noFollowers")}</p>
-        ) : (
-          <div className="space-y-2">
-            {followers.map((p) => (
-              <div key={p.id} className="flex items-center gap-2 p-2 bg-card rounded-xl">
-                <Avatar path={p.avatar_url} name={p.full_name} size={36} />
-                <Link to={`/ho-so/${p.id}`} className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold truncate">{p.full_name}</div>
-                  <div className="text-[11px] text-muted-foreground truncate">@{p.username}</div>
-                </Link>
-                <Link
-                  to={`/tin-nhan/${p.id}`}
-                  className="text-xs px-3 py-1.5 rounded-full bg-gradient-brand text-primary-foreground font-semibold inline-flex items-center gap-1"
-                >
-                  <MessageCircle className="w-3 h-3" /> {t("biz.message")}
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
     </div>
   );
 }
