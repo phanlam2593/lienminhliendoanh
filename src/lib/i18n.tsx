@@ -682,13 +682,13 @@ const DICT: Record<Lang, Record<string, string>> = {
       "dữ liệu cá nhân của bạn cho bên thứ ba. Thông tin công khai (tên, ảnh đại diện, đánh giá) hiển thị cho các thành viên khác trong cộng đồng theo đúng mục đích của Ứng dụng. Dữ liệu chỉ được cung cấp cho cơ quan nhà nước có thẩm quyền khi pháp luật yêu cầu.",
     "privacyPage.s5Title": "5. Chuyển dữ liệu ra nước ngoài",
     "privacyPage.s5P1":
-      "Ứng dụng được xây dựng và vận hành trên nền tảng Lovable, có máy chủ đặt ngoài lãnh thổ Việt Nam. Việc chuyển dữ liệu cá nhân ra nước ngoài (nếu có) được thực hiện phù hợp với quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.",
+      "Ứng dụng được xây dựng và vận hành trên một nền tảng phát triển phần mềm của bên thứ ba, có máy chủ đặt ngoài lãnh thổ Việt Nam. Việc chuyển dữ liệu cá nhân ra nước ngoài (nếu có) được thực hiện phù hợp với quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.",
     "privacyPage.s6Title": "6. Cookie & Công nghệ lưu trữ tương tự",
     "privacyPage.s6P1":
       "Ứng dụng sử dụng bộ nhớ cục bộ của trình duyệt (localStorage, sessionStorage) để lưu tùy chọn ngôn ngữ, phiên đăng nhập và một số dữ liệu tạm thời nhằm cải thiện trải nghiệm sử dụng. Dữ liệu này lưu trên thiết bị của bạn, không phải trên máy chủ, và không dùng cho mục đích quảng cáo theo dõi xuyên nền tảng.",
     "privacyPage.s7Title": "7. Bảo mật dữ liệu",
     "privacyPage.s7P1":
-      "Dữ liệu được lưu trữ trên hạ tầng nền tảng Lovable với kiểm soát truy cập theo vai trò (Row Level Security). Mật khẩu được mã hoá, không lưu dưới dạng văn bản thô.",
+      "Dữ liệu được lưu trữ trên hạ tầng của nền tảng vận hành Ứng dụng, với kiểm soát truy cập theo vai trò (Row Level Security). Mật khẩu được mã hoá, không lưu dưới dạng văn bản thô.",
     "privacyPage.s8Title": "8. Thời gian lưu trữ",
     "privacyPage.s8P1":
       "Dữ liệu được lưu trong suốt thời gian bạn còn sử dụng tài khoản. Khi bạn yêu cầu xoá tài khoản, dữ liệu cá nhân sẽ được xoá theo quy trình xử lý của BQT, trừ trường hợp pháp luật yêu cầu lưu giữ.",
@@ -757,16 +757,16 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s2P1":
       "Ứng dụng là Progressive Web App (PWA), chủ yếu dùng bộ nhớ cục bộ trình duyệt (localStorage, sessionStorage) thay vì cookie truyền thống. Dữ liệu lưu trực tiếp trên thiết bị của bạn, không tự động gửi kèm mỗi yêu cầu tới máy chủ như cookie truyền thống.",
     "cookiePage.s3Title": "3. Danh sách dữ liệu lưu trữ cục bộ",
-    "cookiePage.s3Item1": "lang — Ghi nhớ lựa chọn ngôn ngữ (localStorage, đến khi bạn xoá)",
-    "cookiePage.s3Item2": "lmld:welcome — Đánh dấu đã xem màn hình chào mừng (sessionStorage, hết phiên)",
-    "cookiePage.s3Item3": "lmld:community:channel — Ghi nhớ kênh Cộng đồng đang xem (sessionStorage, hết phiên)",
-    "cookiePage.s3Item4": "lmld:community:locations — Lưu tạm danh sách khu vực (sessionStorage, 5 phút)",
-    "cookiePage.s3Item5": "lmld:push-asked — Ghi nhớ đã hỏi quyền thông báo đẩy (localStorage, đến khi bạn xoá)",
+    "cookiePage.s3Item1": "Ghi nhớ lựa chọn ngôn ngữ hiển thị (lưu trên thiết bị, đến khi bạn xoá)",
+    "cookiePage.s3Item2": "Đánh dấu đã xem màn hình chào mừng (chỉ trong phiên truy cập hiện tại)",
+    "cookiePage.s3Item3": "Ghi nhớ kênh Cộng đồng bạn đang xem (chỉ trong phiên truy cập hiện tại)",
+    "cookiePage.s3Item4": "Lưu tạm danh sách khu vực để tăng tốc tải trang (tự xoá sau 5 phút)",
+    "cookiePage.s3Item5": "Ghi nhớ đã hỏi quyền thông báo đẩy (lưu trên thiết bị, đến khi bạn xoá)",
     "cookiePage.s3Footer":
       'Bạn có thể xoá toàn bộ dữ liệu này bất kỳ lúc nào qua cài đặt trình duyệt ("Xóa dữ liệu duyệt web") hoặc gỡ cài đặt/cài lại Ứng dụng dạng PWA.',
     "cookiePage.s4Title": "4. Dịch vụ bên thứ ba Ứng dụng sử dụng",
     "cookiePage.s4Item1":
-      "Lovable — nền tảng phát triển & vận hành Ứng dụng, bao gồm cơ sở dữ liệu, xác thực người dùng, lưu trữ ảnh và tính năng thời gian thực (máy chủ đặt ngoài lãnh thổ Việt Nam)",
+      "Nền tảng phát triển & vận hành Ứng dụng, bao gồm cơ sở dữ liệu, xác thực người dùng, lưu trữ ảnh và tính năng thời gian thực (máy chủ đặt ngoài lãnh thổ Việt Nam)",
     "cookiePage.s4Item2":
       "Dịch vụ đẩy thông báo của trình duyệt — gửi thông báo đẩy tới thiết bị đã đăng ký (theo hạ tầng từng trình duyệt)",
     "cookiePage.s4Item3": "Dịch vụ phông chữ trực tuyến của bên thứ ba (máy chủ đặt ngoài lãnh thổ Việt Nam)",
@@ -1865,13 +1865,13 @@ const DICT: Record<Lang, Record<string, string>> = {
       "your personal data to third parties. Public information (name, avatar, reviews) is shown to other community members as intended by the App. Data is only provided to competent authorities when required by law.",
     "privacyPage.s5Title": "5. International Data Transfer",
     "privacyPage.s5P1":
-      "The App is built and run on the Lovable platform, whose servers are located outside Vietnam. Any transfer of personal data abroad is carried out in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP.",
+      "The App is built and run on a third-party software development platform, whose servers are located outside Vietnam. Any transfer of personal data abroad is carried out in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP.",
     "privacyPage.s6Title": "6. Cookies & Similar Storage Technologies",
     "privacyPage.s6P1":
       "The App uses browser local storage (localStorage, sessionStorage) to save your language preference, login session, and some temporary data to improve your experience. This data is stored on your device, not on our servers, and is not used for cross-site advertising tracking.",
     "privacyPage.s7Title": "7. Data Security",
     "privacyPage.s7P1":
-      "Data is stored on the Lovable platform's infrastructure with role-based access control (Row Level Security). Passwords are encrypted and never stored as plain text.",
+      "Data is stored on the infrastructure of the platform that runs the App, with role-based access control (Row Level Security). Passwords are encrypted and never stored as plain text.",
     "privacyPage.s8Title": "8. Data Retention",
     "privacyPage.s8P1":
       "Data is kept for as long as you use your account. When you request account deletion, personal data will be deleted per the Admin team's process, except where the law requires retention.",
@@ -1940,18 +1940,17 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s2P1":
       "The App is a Progressive Web App (PWA) that primarily uses browser local storage (localStorage, sessionStorage) instead of traditional cookies. Data is stored directly on your device and is not automatically sent with every request to the server as traditional cookies are.",
     "cookiePage.s3Title": "3. List of Local Storage Data",
-    "cookiePage.s3Item1": "lang — Remembers your language choice (localStorage, until you clear it)",
-    "cookiePage.s3Item2": "lmld:welcome — Marks that you've seen the welcome screen (sessionStorage, session only)",
-    "cookiePage.s3Item3":
-      "lmld:community:channel — Remembers the Community channel you're viewing (sessionStorage, session only)",
-    "cookiePage.s3Item4": "lmld:community:locations — Temporarily caches the area list (sessionStorage, 5 minutes)",
+    "cookiePage.s3Item1": "Remembers your display language choice (stored on device, until you clear it)",
+    "cookiePage.s3Item2": "Marks that you've seen the welcome screen (current session only)",
+    "cookiePage.s3Item3": "Remembers the Community channel you're viewing (current session only)",
+    "cookiePage.s3Item4": "Temporarily caches the area list to speed up page loads (auto-clears after 5 minutes)",
     "cookiePage.s3Item5":
-      "lmld:push-asked — Remembers that you were asked for notification permission (localStorage, until you clear it)",
+      "Remembers that you were asked for notification permission (stored on device, until you clear it)",
     "cookiePage.s3Footer":
       'You can clear all of this data at any time via your browser settings ("Clear browsing data") or by uninstalling/reinstalling the App as a PWA.',
     "cookiePage.s4Title": "4. Third-Party Services the App Uses",
     "cookiePage.s4Item1":
-      "Lovable — the platform the App is built and run on, including its database, user authentication, image storage, and realtime features (servers located outside Vietnam)",
+      "The platform the App is built and run on, including its database, user authentication, image storage, and realtime features (servers located outside Vietnam)",
     "cookiePage.s4Item2":
       "Browser push notification services — deliver push notifications to registered devices (per each browser's infrastructure)",
     "cookiePage.s4Item3": "A third-party online font service (servers located outside Vietnam)",
