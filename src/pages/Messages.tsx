@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/auth";
 import type { Message, Profile, Business } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
 import { GifPicker } from "@/components/GifPicker";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
 import { Image as ImageIcon, Smile, SmilePlus } from "lucide-react";
@@ -404,6 +404,20 @@ export function MessagesThread() {
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
   };
+
+  // Dam bao cuon xuong cuoi ngay khi khung tin nhan THUC SU duoc gan vao DOM (vi du sau
+  // khi man hinh "dang xac thuc" bien mat) -- rAF/setTimeout ben duoi co the chay truoc
+  // luc do, khi scrollContainerRef con la null, nen can them 1 lop bao hiem nay.
+  useEffect(() => {
+    if (!authLoading && user && pinnedToBottomRef.current) scrollToBottom(false);
+  }, [authLoading, user?.id]);
+
+  // Cuon xuong cuoi NGAY SAU KHI React cap nhat xong DOM (truoc khi trinh duyet ve khung
+  // hinh tiep theo) ngay luc tin nhan vua hien ra -- dung so lieu layout THUC TE tai thoi
+  // diem do thay vi doan bang rAF/setTimeout nhu ben duoi.
+  useLayoutEffect(() => {
+    if (!msgsLoading && pinnedToBottomRef.current) scrollToBottom(false);
+  }, [msgsLoading]);
 
   const loadReactions = async (messageIds: string[]) => {
     if (!messageIds.length) {
@@ -814,7 +828,7 @@ export function MessagesThread() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
+    <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
         <button onClick={() => nav("/tin-nhan")}>
           <ArrowLeft className="w-5 h-5" />
