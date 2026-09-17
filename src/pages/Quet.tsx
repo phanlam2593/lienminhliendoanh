@@ -2436,6 +2436,14 @@ export default function Quet() {
                   {line.value}
                 </div>
               ))}
+              {detailFor.owner && (
+                <button
+                  onClick={() => nav(`/tin-nhan/${detailFor.owner!.id}`)}
+                  className="w-full py-2.5 mt-1 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-semibold"
+                >
+                  {t("quet.sendMessage")}
+                </button>
+              )}
             </div>
           </div>
         </div>
