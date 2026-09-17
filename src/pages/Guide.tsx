@@ -341,10 +341,18 @@ export default function Guide() {
       title: t("guide.exchangeTitle"),
       summary: t("guide.exchangeSummary"),
       body: (
-        <ul className="space-y-2">
-          <IconBullet icon={Users}>{t("guide.exchangeB1")}</IconBullet>
-          <IconBullet icon={Repeat}>{t("guide.exchangeB2")}</IconBullet>
-        </ul>
+        <div className="space-y-2">
+          <ul className="space-y-2">
+            <IconBullet icon={Users}>{t("guide.exchangeB1")}</IconBullet>
+            <IconBullet icon={Repeat}>{t("guide.exchangeB2")}</IconBullet>
+          </ul>
+          <Link
+            to="/quet"
+            className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+          >
+            {t("guide.exchangeCta")} →
+          </Link>
+        </div>
       ),
     },
     {
@@ -378,6 +386,7 @@ export default function Guide() {
       summary: t("guide.chatSummary"),
       body: (
         <ul className="space-y-2">
+          <IconBullet icon={Search}>{t("guide.chatB3")}</IconBullet>
           <IconBullet icon={Users}>{t("guide.chatB1")}</IconBullet>
           <IconBullet icon={Send}>{t("guide.chatB2")}</IconBullet>
         </ul>
