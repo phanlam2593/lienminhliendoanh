@@ -284,7 +284,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "terms.p2": "Tài khoản của bạn sẽ được admin xem xét và phê duyệt trong thời gian sớm nhất.",
     "terms.p3":
       "Trong thời gian chờ duyệt, bạn có thể duyệt nội dung nhưng chưa thể đăng đánh giá, gửi đề xuất hay nhắn tin.",
-    "terms.ageConfirm": "Tôi xác nhận mình từ đủ 16 tuổi trở lên",
+    "terms.ageConfirm": "Tôi xác nhận mình từ đủ 18 tuổi trở lên",
     "terms.agreePrefix": "Tôi đồng ý với",
     "terms.and": "và",
     "terms.confirmRegister": "Xác nhận đăng ký",
@@ -562,7 +562,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s2Li5": '"Ban Quản trị"/"BQT": đội ngũ vận hành, quản lý Ứng dụng.',
     "termsPage.s3Title": "3. Điều kiện sử dụng dịch vụ",
     "termsPage.s3P1":
-      "Người dùng phải từ đủ 16 tuổi trở lên và có đầy đủ năng lực hành vi dân sự theo quy định của Bộ luật Dân sự Việt Nam để đăng ký và sử dụng Ứng dụng.",
+      "Người dùng phải từ đủ 18 tuổi trở lên và có đầy đủ năng lực hành vi dân sự theo quy định của Bộ luật Dân sự Việt Nam để đăng ký và sử dụng Ứng dụng. Việc đăng ký tài khoản được xem là lời cam kết của Người dùng về việc đáp ứng điều kiện độ tuổi này.",
     "termsPage.s3P2":
       "Ứng dụng có quyền từ chối cung cấp dịch vụ, tạm ngừng hoặc chấm dứt tài khoản của bất kỳ Người dùng nào không đáp ứng điều kiện sử dụng hoặc vi phạm điều khoản này.",
     "termsPage.s4Title": "4. Tài khoản người dùng",
@@ -601,11 +601,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s8Li2": "Can thiệp trái phép vào hệ thống, khai thác lỗ hổng bảo mật",
     "termsPage.s8Li3": "Sử dụng công cụ tự động (bot, script) truy cập, thu thập dữ liệu trái phép",
     "termsPage.s8Li4": "Sử dụng Ứng dụng cho mục đích vi phạm pháp luật Việt Nam",
+    "termsPage.s8Li5":
+      "Đăng tải, chia sẻ, phát tán nội dung khiêu dâm, đồi truỵ, kích động bạo lực, phân biệt chủng tộc/tôn giáo hoặc nội dung bị pháp luật Việt Nam nghiêm cấm (theo Điều 8 Luật An ninh mạng 2018, Điều 326 Bộ luật Hình sự về Tội truyền bá văn hoá phẩm đồi trụy và các quy định liên quan)",
+    "termsPage.s8Li6":
+      "Mua bán, quảng cáo hàng hoá/dịch vụ bị cấm theo pháp luật Việt Nam (vũ khí, ma tuý, hàng giả, hàng cấm, động vật hoang dã, cờ bạc trái phép...)",
+    "termsPage.s8Li7": "Sử dụng Ứng dụng để lừa đảo, chiếm đoạt tài sản hoặc thực hiện hành vi phạm tội khác",
     "termsPage.s9Title": "9. Xử lý vi phạm & Chấm dứt tài khoản",
     "termsPage.s9P1":
       "BQT có quyền cảnh cáo, tạm khoá hoặc chấm dứt tài khoản của Người dùng vi phạm điều khoản này mà không cần báo trước, tuỳ theo mức độ vi phạm.",
     "termsPage.s9P2":
       "Người dùng có quyền yêu cầu chấm dứt tài khoản và xoá dữ liệu cá nhân bất kỳ lúc nào theo quy trình xử lý của BQT.",
+    "termsPage.s9P3":
+      "BQT có quyền gỡ bỏ ngay lập tức nội dung vi phạm và cung cấp thông tin liên quan cho cơ quan chức năng có thẩm quyền khi có yêu cầu hợp pháp hoặc khi phát hiện hành vi vi phạm pháp luật nghiêm trọng.",
     "termsPage.s10Title": "10. Gói thành viên (Membership)",
     "termsPage.s10P1":
       "Mọi Thành viên mới được BQT duyệt tài khoản sẽ được cấp Gói thành viên miễn phí trong 03 tháng kể từ ngày kích hoạt, không giới hạn số lượng.",
@@ -675,13 +682,13 @@ const DICT: Record<Lang, Record<string, string>> = {
       "dữ liệu cá nhân của bạn cho bên thứ ba. Thông tin công khai (tên, ảnh đại diện, đánh giá) hiển thị cho các thành viên khác trong cộng đồng theo đúng mục đích của Ứng dụng. Dữ liệu chỉ được cung cấp cho cơ quan nhà nước có thẩm quyền khi pháp luật yêu cầu.",
     "privacyPage.s5Title": "5. Chuyển dữ liệu ra nước ngoài",
     "privacyPage.s5P1":
-      "Ứng dụng sử dụng hạ tầng lưu trữ và xử lý dữ liệu của nhà cung cấp dịch vụ đám mây bên thứ ba (Supabase), có máy chủ đặt ngoài lãnh thổ Việt Nam. Việc chuyển dữ liệu cá nhân ra nước ngoài (nếu có) được thực hiện phù hợp với quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.",
+      "Ứng dụng được xây dựng và vận hành trên nền tảng Lovable, có máy chủ đặt ngoài lãnh thổ Việt Nam. Việc chuyển dữ liệu cá nhân ra nước ngoài (nếu có) được thực hiện phù hợp với quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP.",
     "privacyPage.s6Title": "6. Cookie & Công nghệ lưu trữ tương tự",
     "privacyPage.s6P1":
       "Ứng dụng sử dụng bộ nhớ cục bộ của trình duyệt (localStorage, sessionStorage) để lưu tùy chọn ngôn ngữ, phiên đăng nhập và một số dữ liệu tạm thời nhằm cải thiện trải nghiệm sử dụng. Dữ liệu này lưu trên thiết bị của bạn, không phải trên máy chủ, và không dùng cho mục đích quảng cáo theo dõi xuyên nền tảng.",
     "privacyPage.s7Title": "7. Bảo mật dữ liệu",
     "privacyPage.s7P1":
-      "Dữ liệu được lưu trữ trên hạ tầng Supabase với kiểm soát truy cập theo vai trò (Row Level Security). Mật khẩu được mã hoá, không lưu dưới dạng văn bản thô.",
+      "Dữ liệu được lưu trữ trên hạ tầng nền tảng Lovable với kiểm soát truy cập theo vai trò (Row Level Security). Mật khẩu được mã hoá, không lưu dưới dạng văn bản thô.",
     "privacyPage.s8Title": "8. Thời gian lưu trữ",
     "privacyPage.s8P1":
       "Dữ liệu được lưu trong suốt thời gian bạn còn sử dụng tài khoản. Khi bạn yêu cầu xoá tài khoản, dữ liệu cá nhân sẽ được xoá theo quy trình xử lý của BQT, trừ trường hợp pháp luật yêu cầu lưu giữ.",
@@ -703,7 +710,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Trong trường hợp xảy ra sự cố vi phạm dữ liệu cá nhân có khả năng gây tổn hại đến quyền và lợi ích hợp pháp của bạn, chúng tôi cam kết áp dụng biện pháp khắc phục cần thiết và thông báo cho cơ quan chuyên trách bảo vệ dữ liệu cá nhân trong vòng 72 giờ kể từ khi phát hiện sự cố, đồng thời thông báo cho chủ thể dữ liệu bị ảnh hưởng, theo quy định tại Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15 và Nghị định 356/2025/NĐ-CP. Vi phạm nghĩa vụ bảo vệ dữ liệu có thể bị xử phạt hành chính theo Nghị định 330/2026/NĐ-CP.",
     "privacyPage.s12Title": "12. Trẻ em",
     "privacyPage.s12P1":
-      "Ứng dụng dành cho người từ đủ 16 tuổi trở lên. Chúng tôi không chủ đích thu thập dữ liệu của trẻ em.",
+      "Ứng dụng dành cho người từ đủ 18 tuổi trở lên. Chúng tôi không chủ đích thu thập dữ liệu của trẻ em; nếu phát hiện tài khoản thuộc về người dưới 18 tuổi, chúng tôi sẽ xoá tài khoản và dữ liệu liên quan.",
     "privacyPage.s13Title": "13. Thay đổi chính sách & Liên hệ",
     "privacyPage.s13P1":
       "Chính sách có thể được cập nhật theo thời gian. Thay đổi quan trọng sẽ được thông báo trong Ứng dụng.",
@@ -759,11 +766,10 @@ const DICT: Record<Lang, Record<string, string>> = {
       'Bạn có thể xoá toàn bộ dữ liệu này bất kỳ lúc nào qua cài đặt trình duyệt ("Xóa dữ liệu duyệt web") hoặc gỡ cài đặt/cài lại Ứng dụng dạng PWA.',
     "cookiePage.s4Title": "4. Dịch vụ bên thứ ba Ứng dụng sử dụng",
     "cookiePage.s4Item1":
-      "Supabase — cơ sở dữ liệu, xác thực, lưu trữ ảnh, tính năng thời gian thực (máy chủ ngoài lãnh thổ Việt Nam)",
-    "cookiePage.s4Item2": "Lovable — nền tảng lưu trữ & xuất bản mã nguồn Ứng dụng (máy chủ ngoài lãnh thổ Việt Nam)",
-    "cookiePage.s4Item3":
+      "Lovable — nền tảng phát triển & vận hành Ứng dụng, bao gồm cơ sở dữ liệu, xác thực người dùng, lưu trữ ảnh và tính năng thời gian thực (máy chủ đặt ngoài lãnh thổ Việt Nam)",
+    "cookiePage.s4Item2":
       "Dịch vụ đẩy thông báo của trình duyệt — gửi thông báo đẩy tới thiết bị đã đăng ký (theo hạ tầng từng trình duyệt)",
-    "cookiePage.s4Item4": "Google Fonts — cung cấp phông chữ hiển thị giao diện (máy chủ ngoài lãnh thổ Việt Nam)",
+    "cookiePage.s4Item3": "Dịch vụ phông chữ trực tuyến của bên thứ ba (máy chủ đặt ngoài lãnh thổ Việt Nam)",
     "cookiePage.s4Footer":
       "Các nhà cung cấp trên đóng vai trò bên xử lý dữ liệu thay mặt Ứng dụng, không sử dụng dữ liệu cho mục đích riêng của họ.",
     "cookiePage.s5Title": "5. Thay đổi chính sách & Liên hệ",
@@ -1462,7 +1468,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "terms.p2": "Your account will be reviewed and approved by an admin as soon as possible.",
     "terms.p3":
       "While pending approval, you can browse content but cannot post reviews, submit suggestions, or send messages.",
-    "terms.ageConfirm": "I confirm that I am at least 16 years old",
+    "terms.ageConfirm": "I confirm that I am at least 18 years old",
     "terms.agreePrefix": "I agree to the",
     "terms.and": "and",
     "terms.confirmRegister": "Confirm registration",
@@ -1739,7 +1745,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s2Li5": '"Admin Team": the team operating and managing the App.',
     "termsPage.s3Title": "3. Eligibility",
     "termsPage.s3P1":
-      "Users must be at least 16 years old and have full civil legal capacity under Vietnamese Civil Code to register and use the App.",
+      "Users must be at least 18 years old and have full civil legal capacity under Vietnamese Civil Code to register and use the App. Registering an account constitutes the User's confirmation that they meet this age requirement.",
     "termsPage.s3P2":
       "The App may refuse service, suspend, or terminate the account of any User who does not meet these eligibility requirements or violates these Terms.",
     "termsPage.s4Title": "4. User Accounts",
@@ -1776,11 +1782,18 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s8Li2": "Unauthorized interference with the system or exploiting security vulnerabilities",
     "termsPage.s8Li3": "Using automated tools (bots, scripts) for unauthorized access or data collection",
     "termsPage.s8Li4": "Using the App for purposes that violate Vietnamese law",
+    "termsPage.s8Li5":
+      "Posting, sharing, or distributing pornographic, obscene, violence-inciting, or racially/religiously discriminatory content, or any content prohibited under Vietnamese law (per Article 8 of the 2018 Law on Cybersecurity, Article 326 of the Penal Code on spreading obscene materials, and related regulations)",
+    "termsPage.s8Li6":
+      "Selling or advertising goods/services banned under Vietnamese law (weapons, drugs, counterfeit or prohibited goods, wildlife, illegal gambling, etc.)",
+    "termsPage.s8Li7": "Using the App to commit fraud, misappropriate property, or engage in other criminal activity",
     "termsPage.s9Title": "9. Enforcement & Account Termination",
     "termsPage.s9P1":
       "The Admin Team may warn, suspend, or terminate the account of a User who violates these Terms without prior notice, depending on the severity of the violation.",
     "termsPage.s9P2":
       "Users may request account termination and deletion of personal data at any time, per the Admin Team's process.",
+    "termsPage.s9P3":
+      "The Admin Team may immediately remove violating content and provide relevant information to competent authorities upon lawful request or upon discovering a serious violation of the law.",
     "termsPage.s10Title": "10. Membership Plan",
     "termsPage.s10P1":
       "Every new Member approved by the Admin Team is granted a free Membership Plan for 03 (three) months from the date of activation, with no cap on the number of Members.",
@@ -1852,13 +1865,13 @@ const DICT: Record<Lang, Record<string, string>> = {
       "your personal data to third parties. Public information (name, avatar, reviews) is shown to other community members as intended by the App. Data is only provided to competent authorities when required by law.",
     "privacyPage.s5Title": "5. International Data Transfer",
     "privacyPage.s5P1":
-      "The App uses infrastructure from a third-party cloud service provider (Supabase), whose servers are located outside Vietnam. Any transfer of personal data abroad is carried out in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP.",
+      "The App is built and run on the Lovable platform, whose servers are located outside Vietnam. Any transfer of personal data abroad is carried out in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP.",
     "privacyPage.s6Title": "6. Cookies & Similar Storage Technologies",
     "privacyPage.s6P1":
       "The App uses browser local storage (localStorage, sessionStorage) to save your language preference, login session, and some temporary data to improve your experience. This data is stored on your device, not on our servers, and is not used for cross-site advertising tracking.",
     "privacyPage.s7Title": "7. Data Security",
     "privacyPage.s7P1":
-      "Data is stored on Supabase infrastructure with role-based access control (Row Level Security). Passwords are encrypted and never stored as plain text.",
+      "Data is stored on the Lovable platform's infrastructure with role-based access control (Row Level Security). Passwords are encrypted and never stored as plain text.",
     "privacyPage.s8Title": "8. Data Retention",
     "privacyPage.s8P1":
       "Data is kept for as long as you use your account. When you request account deletion, personal data will be deleted per the Admin team's process, except where the law requires retention.",
@@ -1881,7 +1894,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "In the event of a personal data breach likely to harm your lawful rights and interests, we commit to applying necessary remedial measures and notifying the specialized personal data protection authority within 72 hours of discovering the breach, as well as the affected data subjects, in accordance with the Law on Personal Data Protection No. 91/2025/QH15 and Decree 356/2025/NĐ-CP. Violations of data protection obligations may be subject to administrative penalties under Decree 330/2026/NĐ-CP.",
     "privacyPage.s12Title": "12. Children",
     "privacyPage.s12P1":
-      "The App is intended for users aged 16 and above. We do not intentionally collect data from children.",
+      "The App is intended for users aged 18 and above. We do not intentionally collect data from children; if we discover an account belongs to someone under 18, we will delete the account and related data.",
     "privacyPage.s13Title": "13. Policy Changes & Contact",
     "privacyPage.s13P1": "This policy may be updated over time. Significant changes will be announced in the App.",
     "login.usernamePlaceholder": "Username",
@@ -1938,12 +1951,10 @@ const DICT: Record<Lang, Record<string, string>> = {
       'You can clear all of this data at any time via your browser settings ("Clear browsing data") or by uninstalling/reinstalling the App as a PWA.',
     "cookiePage.s4Title": "4. Third-Party Services the App Uses",
     "cookiePage.s4Item1":
-      "Supabase — database, authentication, image storage, real-time features (servers located outside Vietnam)",
+      "Lovable — the platform the App is built and run on, including its database, user authentication, image storage, and realtime features (servers located outside Vietnam)",
     "cookiePage.s4Item2":
-      "Lovable — hosting & publishing platform for the App's source code (servers located outside Vietnam)",
-    "cookiePage.s4Item3":
       "Browser push notification services — deliver push notifications to registered devices (per each browser's infrastructure)",
-    "cookiePage.s4Item4": "Google Fonts — provides fonts for the interface (servers located outside Vietnam)",
+    "cookiePage.s4Item3": "A third-party online font service (servers located outside Vietnam)",
     "cookiePage.s4Footer":
       "The providers above act as data processors on behalf of the App and do not use the data for their own purposes.",
     "cookiePage.s5Title": "5. Policy Changes & Contact",
