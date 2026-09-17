@@ -140,10 +140,35 @@ export default function Community() {
     }
   }, []);
 
+  // Vi tri scrollTop cua lan xu ly scroll truoc — dung de biet nguoi dung cuon LEN hay
+  // noi dung dai ra ben duoi.
+  const lastScrollTopRef = useRef(0);
+  // Moc thoi gian bo qua su kien scroll do CHINH APP tao ra (scrollTo cua scrollToBottom).
+  const ignoreScrollUntilRef = useRef(0);
+
+  // QUAN TRONG (nguyen nhan goc cua bug "khong tu cuon xuong cuoi"): su kien scroll KHONG
+  // duoc phat dong bo. Khi app goi scrollTo(scrollHeight), trinh duyet phat su kien scroll o
+  // frame sau; neu trong khoang do noi dung dai them (anh/GIF/link preview/avatar tai xong),
+  // thi luc handleScroll chay khoang cach tới day da thanh vai tram px → cong thuc cu ket
+  // luan "nguoi dung da cuon len" va tat ghim vinh vien, khien moi lan tu cuon sau do bi bo
+  // qua. Vi vay: (1) bo qua su kien scroll do chinh app tao ra, (2) chi bo ghim khi scrollTop
+  // THUC SU giam (nguoi dung cuon len), (3) ghim lai khi da o gan day.
   const handleScroll = () => {
     const el = scrollContainerRef.current;
     if (!el) return;
-    pinnedToBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    const top = el.scrollTop;
+    const prev = lastScrollTopRef.current;
+    lastScrollTopRef.current = top;
+    if (performance.now() < ignoreScrollUntilRef.current) {
+      pinnedToBottomRef.current = true;
+      return;
+    }
+    const distance = el.scrollHeight - top - el.clientHeight;
+    if (distance < 80) {
+      pinnedToBottomRef.current = true;
+    } else if (top < prev - 4) {
+      pinnedToBottomRef.current = false;
+    }
   };
 
   // QUAN TRỌNG: dùng scrollTo() trực tiếp trên ĐÚNG khung cuộn tin nhắn, KHÔNG dùng
@@ -153,7 +178,9 @@ export default function Community() {
   const scrollToBottom = (smooth = false) => {
     const el = scrollContainerRef.current;
     if (!el) return;
+    ignoreScrollUntilRef.current = performance.now() + (smooth ? 800 : 350);
     el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
+    lastScrollTopRef.current = el.scrollTop;
   };
 
   // Dam bao cuon xuong cuoi ngay khi khung tin nhan THUC SU duoc gan vao DOM (vi du sau
