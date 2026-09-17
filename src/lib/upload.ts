@@ -67,6 +67,32 @@ export async function uploadImage(
   return path;
 }
 
+// ── Tin nhắn thoại (voice message). Không nén như ảnh: file opus/mp4 đã nhỏ sẵn
+// (~1KB/giây). Giới hạn 10MB là dư cho vài phút ghi âm.
+export const MAX_SIZE_AUDIO = 10 * 1024 * 1024;
+const AUDIO_MIMES = ["audio/webm", "audio/mp4", "audio/ogg", "audio/mpeg"];
+
+export async function uploadAudio(file: File | Blob, folder = "voice", ownerId?: string): Promise<string> {
+  const baseType = (file.type || "").split(";")[0];
+  if (!AUDIO_MIMES.includes(baseType)) throw new Error(tStatic("upload.errType"));
+  if (file.size > MAX_SIZE_AUDIO)
+    throw new Error(tStatic("upload.errSize", { mb: Math.round(MAX_SIZE_AUDIO / (1024 * 1024)) }));
+  let uid = ownerId;
+  if (!uid) {
+    const { data } = await supabase.auth.getUser();
+    uid = data.user?.id;
+  }
+  if (!uid) throw new Error(tStatic("upload.errAuth"));
+  const ext = baseType === "audio/mp4" ? "m4a" : baseType === "audio/ogg" ? "ogg" : baseType === "audio/mpeg" ? "mp3" : "webm";
+  const path = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
+  const { error } = await supabase.storage.from("uploads").upload(path, file, {
+    contentType: baseType,
+    upsert: false,
+  });
+  if (error) throw error;
+  return path;
+}
+
 const cache = new Map<string, string>();
 
 // Ảnh mặc định nằm trong bucket "uploads". Nếu path có tiền tố "<bucket>/" của một bucket

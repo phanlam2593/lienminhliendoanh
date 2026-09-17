@@ -5,9 +5,11 @@ import type { Message, Profile } from "@/lib/types";
 import { timeAgo } from "@/lib/time";
 import { GifPicker } from "@/components/GifPicker";
 import { useCallback, useEffect, useLayoutEffect, useState, useRef } from "react";
-import { uploadImage, validateImage } from "@/lib/upload";
+import { uploadImage, uploadAudio, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
-import { Image as ImageIcon, Camera as CameraIcon, Smile, SmilePlus } from "lucide-react";
+import { VoiceMessageBubble } from "@/components/VoiceMessageBubble";
+import { useVoiceRecorder, formatDuration } from "@/hooks/useVoiceRecorder";
+import { Image as ImageIcon, Camera as CameraIcon, Smile, SmilePlus, Mic } from "lucide-react";
 import {
   ArrowLeft,
   Send,
@@ -76,6 +78,7 @@ interface CallRow {
 function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) => string): string {
   if (m.type === "image") return `📷 ${tr("chat.imageAlt")}`;
   if (m.type === "gif") return "🎬 GIF";
+  if (m.type === "voice") return `🎤 ${tr("chat.voiceMessage")}`;
   if (m.type === "broadcast") return m.content.replace(/^📢\s*/, "📢 ");
   return m.content;
 }
@@ -769,6 +772,7 @@ export function MessagesThread() {
   const [text, setText] = useState("");
   const [showGifs, setShowGifs] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const voice = useVoiceRecorder(() => toast.error(t("chat.micDenied")));
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [partnerIsAdmin, setPartnerIsAdmin] = useState(false);
@@ -1138,6 +1142,40 @@ export function MessagesThread() {
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
     setReplyingTo(null);
     setTimeout(() => scrollToBottom(true), 50);
+  };
+
+  const startVoice = () => {
+    void voice.start();
+  };
+
+  const sendVoice = async () => {
+    const rec = await voice.stop();
+    if (!rec) return;
+    setUploading(true);
+    try {
+      const file = new File([rec.blob], "voice", { type: rec.blob.type });
+      const path = await uploadAudio(file, "messages-voice", user.id);
+      const { data, error } = await supabase
+        .from("messages")
+        .insert({
+          sender_id: user.id,
+          receiver_id: id,
+          content: String(rec.seconds),
+          type: "voice",
+          image_url: path,
+          reply_to_id: replyingTo?.id ?? null,
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
+      setReplyingTo(null);
+      setTimeout(() => scrollToBottom(true), 50);
+    } catch (e: any) {
+      toast.error(e.message || t("chat.sendVoiceFail"));
+    } finally {
+      setUploading(false);
+    }
   };
 
   const send = async () => {
@@ -1682,6 +1720,16 @@ export function MessagesThread() {
                           <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
                           <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
                         </div>
+                      ) : m.type === "voice" ? (
+                        <div className={`flex flex-col ${mine ? "items-end" : "items-start"}`}>
+                          <VoiceMessageBubble
+                            path={m.image_url}
+                            seconds={Number(m.content) || 0}
+                            mine={mine}
+                            label={t("chat.playVoice")}
+                          />
+                          <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
+                        </div>
                       ) : m.type === "image" ? (
                         <div className="max-w-[220px]">
                           <StoredImage
@@ -1784,7 +1832,9 @@ export function MessagesThread() {
                 ? replyingTo.content
                 : replyingTo.type === "gif"
                   ? "🎬 GIF"
-                  : `📷 ${t("chat.imageAlt")}`}
+                  : replyingTo.type === "voice"
+                    ? `🎤 ${t("chat.voiceMessage")}`
+                    : `📷 ${t("chat.imageAlt")}`}
             </span>
           </div>
           <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
@@ -1868,24 +1918,49 @@ export function MessagesThread() {
         >
           <Smile className="w-5 h-5" />
         </button>
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") send();
-          }}
-          disabled={!!pendingImage || iBlockedThem}
-          placeholder={
-            iBlockedThem
-              ? t("block.bannerBlocked")
-              : pendingImage
-                ? t("community.tapSendPlaceholder")
-                : t("messages.inputPlaceholder")
-          }
-          className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
-        />
+        {!voice.recording && (
+          <button
+            onClick={startVoice}
+            disabled={uploading || iBlockedThem}
+            aria-label={t("chat.recordVoice")}
+            className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0 disabled:opacity-60"
+          >
+            <Mic className="w-5 h-5" />
+          </button>
+        )}
+        {voice.recording ? (
+          <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
+            <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse shrink-0" />
+            <span className="text-sm font-medium tabular-nums">{formatDuration(voice.seconds)}</span>
+            <span className="text-xs text-muted-foreground truncate">{t("chat.recording")}</span>
+            <button
+              onClick={voice.cancel}
+              aria-label={t("common.cancel")}
+              className="ml-auto w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") send();
+            }}
+            disabled={!!pendingImage || iBlockedThem}
+            placeholder={
+              iBlockedThem
+                ? t("block.bannerBlocked")
+                : pendingImage
+                  ? t("community.tapSendPlaceholder")
+                  : t("messages.inputPlaceholder")
+            }
+            className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
+          />
+        )}
         <button
-          onClick={send}
+          onClick={voice.recording ? sendVoice : send}
           disabled={uploading || iBlockedThem}
           className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0 disabled:opacity-60"
         >
