@@ -71,11 +71,16 @@ export function getMemberTierProgress(points: number) {
   return { current, next, pct };
 }
 
-// ── Membership — ĐÃ BẬT (Giai đoạn A: miễn phí 3 tháng cho 1000 người đầu, xem
-// trigger grant_launch_membership() trong DB). Giai đoạn B (thu phí thật, cần cổng
-// thanh toán) sẽ làm sau khi có pháp nhân — CHƯA đụng tới phần đó.
+// ── Membership — ĐÃ BẬT. Giai đoạn A: mọi thành viên mới được duyệt có 3 tháng
+// miễn phí, không giới hạn số lượng (xem trigger grant_launch_membership() trong DB).
+// Giai đoạn B (17/09, quyết định của Kir): sau khi hết hạn miễn phí, giá CỐ ĐỊNH
+// 49.000đ/tháng cho mọi người — KHÔNG còn giảm giá theo điểm tích luỹ (để giữ thông
+// điệp giá đơn giản, rõ ràng). getMembershipDiscountPct() vẫn giữ lại chỉ để hiển thị
+// cấp bậc cộng đồng (MemberLevelBadge/MembershipCard), KHÔNG áp dụng vào giá nữa.
+// Cổng thanh toán thật (Momo/VNPay/ZaloPay/PayOS...) CHƯA được tích hợp — xem phần
+// tư vấn chiến lược membership Claude gửi kèm.
 export const MEMBERSHIP_ENABLED = true;
-export const MEMBERSHIP_BASE_PRICE = 100000;
+export const MEMBERSHIP_BASE_PRICE = 49000;
 
 export function getMembershipDiscountPct(points: number): number {
   if (points >= 10000) return 30;
@@ -87,9 +92,10 @@ export function getMembershipDiscountPct(points: number): number {
   return 0;
 }
 
-export function getMembershipPrice(points: number): number {
-  const discount = getMembershipDiscountPct(points);
-  return Math.round(MEMBERSHIP_BASE_PRICE * (1 - discount / 100));
+// Giá luôn CỐ ĐỊNH (flat) — tham số points được giữ lại chỉ để tương thích chữ ký hàm
+// với các nơi đang gọi getMembershipPrice(points), không dùng để tính giảm giá.
+export function getMembershipPrice(_points: number): number {
+  return MEMBERSHIP_BASE_PRICE;
 }
 export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "system" | "call" | "call_ringing";
 
