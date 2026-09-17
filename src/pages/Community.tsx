@@ -77,6 +77,7 @@ export default function Community() {
   const [members, setMembers] = useState<ProfLite[]>([]);
   const [memberPage, setMemberPage] = useState(0);
   const [memberTotal, setMemberTotal] = useState(0);
+  const [memberCountLoading, setMemberCountLoading] = useState(true);
   const [memberHasMore, setMemberHasMore] = useState(true);
   const [memberLoadingMore, setMemberLoadingMore] = useState(false);
   const [text, setText] = useState("");
@@ -355,6 +356,7 @@ export default function Community() {
       .range(from, to);
     const list = (data ?? []) as ProfLite[];
     setMemberTotal(count ?? 0);
+    setMemberCountLoading(false);
     setMembers((prev) => {
       const merged = append ? [...prev, ...list] : list;
       merged.sort((a, b) => (a.id === user?.id ? -1 : b.id === user?.id ? 1 : 0));
@@ -798,8 +800,15 @@ export default function Community() {
         className="flex items-center justify-between px-3 py-2 border-b bg-card shrink-0"
       >
         <span className="font-bold text-sm flex items-center gap-1.5">
-          <Users className="w-4 h-4 text-primary" /> {t("community.memberCount", { n: memberTotal })}
-          <span className="text-emerald-600 font-semibold">{t("community.onlineCount", { n: onlineCount })}</span>
+          <Users className="w-4 h-4 text-primary" />{" "}
+          {memberCountLoading ? (
+            <span className="inline-block h-3.5 w-24 rounded bg-muted animate-pulse" />
+          ) : (
+            <>
+              {t("community.memberCount", { n: memberTotal })}
+              <span className="text-emerald-600 font-semibold">{t("community.onlineCount", { n: onlineCount })}</span>
+            </>
+          )}
         </span>
         {showMembers ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
       </button>
