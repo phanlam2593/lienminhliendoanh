@@ -88,12 +88,16 @@ export default function Terms() {
           <li>{t("termsPage.s8Li2")}</li>
           <li>{t("termsPage.s8Li3")}</li>
           <li>{t("termsPage.s8Li4")}</li>
+          <li>{t("termsPage.s8Li5")}</li>
+          <li>{t("termsPage.s8Li6")}</li>
+          <li>{t("termsPage.s8Li7")}</li>
         </ul>
       </Section>
 
       <Section title={t("termsPage.s9Title")}>
         <p>{t("termsPage.s9P1")}</p>
         <p>{t("termsPage.s9P2")}</p>
+        <p>{t("termsPage.s9P3")}</p>
       </Section>
 
       <Section title={t("termsPage.s10Title")}>
