@@ -694,7 +694,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Dữ liệu được lưu trong suốt thời gian bạn còn sử dụng tài khoản. Khi bạn yêu cầu xoá tài khoản, dữ liệu cá nhân sẽ được xoá theo quy trình xử lý của BQT, trừ trường hợp pháp luật yêu cầu lưu giữ.",
     "privacyPage.s9Title": "9. Đầu mối phụ trách bảo vệ dữ liệu cá nhân",
     "privacyPage.s9P1":
-      "Ứng dụng chỉ định Ban Quản trị làm đầu mối tiếp nhận, xử lý các yêu cầu, khiếu nại của bạn liên quan đến bảo vệ dữ liệu cá nhân. Mọi yêu cầu gửi qua kênh liên hệ chính thức nêu tại Điều 13 sẽ được tiếp nhận và phản hồi trong vòng 72 giờ.",
+      "Ứng dụng chỉ định Ban Quản trị làm đầu mối tiếp nhận, xử lý các yêu cầu, khiếu nại của bạn liên quan đến bảo vệ dữ liệu cá nhân. Mọi yêu cầu gửi qua kênh liên hệ chính thức nêu tại Điều 10 sẽ được tiếp nhận và phản hồi trong vòng 72 giờ.",
     "privacyPage.s10Title": "10. Quyền của bạn",
     "privacyPage.s10Intro": "Theo Luật Bảo vệ dữ liệu cá nhân số 91/2025/QH15, bạn có quyền:",
     "privacyPage.s10Li1": "Được biết dữ liệu của mình đang được xử lý ra sao",
@@ -1877,7 +1877,7 @@ const DICT: Record<Lang, Record<string, string>> = {
       "Data is kept for as long as you use your account. When you request account deletion, personal data will be deleted per the Admin team's process, except where the law requires retention.",
     "privacyPage.s9Title": "9. Data Protection Contact Point",
     "privacyPage.s9P1":
-      "The App designates the Admin Team as the contact point for receiving and handling your requests and complaints related to personal data protection. Requests sent via the official contact channel in Section 13 will be received and responded to within 72 hours.",
+      "The App designates the Admin Team as the contact point for receiving and handling your requests and complaints related to personal data protection. Requests sent via the official contact channel in Section 10 will be received and responded to within 72 hours.",
     "privacyPage.s10Title": "10. Your Rights",
     "privacyPage.s10Intro": "Under the Law on Personal Data Protection No. 91/2025/QH15, you have the right to:",
     "privacyPage.s10Li1": "Know how your data is being processed",
