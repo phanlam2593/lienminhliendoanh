@@ -56,7 +56,7 @@ import { Input } from "@/components/ui/input";
 
 interface ConvoSummary {
   partnerId: string;
-  partner?: Pick<Profile, "id" | "full_name" | "username" | "avatar_url" | "points">;
+  partner?: Pick<Profile, "id" | "full_name" | "username" | "avatar_url" | "points" | "status_message">;
   lastMessage: string;
   lastAt: string;
   unread: number;
