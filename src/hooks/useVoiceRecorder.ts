@@ -16,34 +16,44 @@ function pickMimeType(): string | undefined {
 
 export interface VoiceRecorder {
   recording: boolean;
+  paused: boolean;
   seconds: number;
   start: () => Promise<boolean>;
   stop: () => Promise<{ blob: Blob; seconds: number; mimeType: string } | null>;
   cancel: () => void;
+  pause: () => void;
+  resume: () => void;
 }
 
 export function useVoiceRecorder(onPermissionError?: () => void): VoiceRecorder {
   const [recording, setRecording] = useState(false);
+  const [paused, setPaused] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startedAtRef = useRef(0);
+  const pausedAtRef = useRef(0);
   const cancelledRef = useRef(false);
 
-  const cleanup = useCallback(() => {
+  const stopTimer = useCallback(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
+  }, []);
+
+  const cleanup = useCallback(() => {
+    stopTimer();
     streamRef.current?.getTracks().forEach((tr) => tr.stop());
     streamRef.current = null;
     recorderRef.current = null;
     chunksRef.current = [];
     setRecording(false);
+    setPaused(false);
     setSeconds(0);
-  }, []);
+  }, [stopTimer]);
 
   useEffect(() => () => cleanup(), [cleanup]);
 
@@ -63,6 +73,7 @@ export function useVoiceRecorder(onPermissionError?: () => void): VoiceRecorder 
       streamRef.current = stream;
       startedAtRef.current = Date.now();
       setSeconds(0);
+      setPaused(false);
       setRecording(true);
       timerRef.current = setInterval(() => {
         setSeconds(Math.floor((Date.now() - startedAtRef.current) / 1000));
@@ -106,7 +117,36 @@ export function useVoiceRecorder(onPermissionError?: () => void): VoiceRecorder 
     cleanup();
   }, [cleanup]);
 
-  return { recording, seconds, start, stop, cancel };
+  const pause = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state !== "recording") return;
+    try {
+      rec.pause();
+    } catch {
+      return;
+    }
+    pausedAtRef.current = Date.now();
+    stopTimer();
+    setPaused(true);
+  }, [stopTimer]);
+
+  const resume = useCallback(() => {
+    const rec = recorderRef.current;
+    if (!rec || rec.state !== "paused") return;
+    try {
+      rec.resume();
+    } catch {
+      return;
+    }
+    // Đẩy mốc bắt đầu tới để (now - startedAt) vẫn khớp số giây đã đếm trước khi tạm dừng.
+    startedAtRef.current += Date.now() - pausedAtRef.current;
+    setPaused(false);
+    timerRef.current = setInterval(() => {
+      setSeconds(Math.floor((Date.now() - startedAtRef.current) / 1000));
+    }, 250);
+  }, []);
+
+  return { recording, paused, seconds, start, stop, cancel, pause, resume };
 }
 
 export function formatDuration(totalSeconds: number): string {
