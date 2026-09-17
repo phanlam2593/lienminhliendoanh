@@ -1234,7 +1234,7 @@ export default function Community() {
           />
           <button
             onClick={() => fileRef.current?.click()}
-            disabled={uploading}
+            disabled={uploading || voice.recording}
             aria-label={t("chat.pickImage")}
             className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
           >
@@ -1242,7 +1242,7 @@ export default function Community() {
           </button>
           <button
             onClick={() => cameraRef.current?.click()}
-            disabled={uploading}
+            disabled={uploading || voice.recording}
             aria-label={t("chat.takePhoto")}
             className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
           >
@@ -1250,6 +1250,7 @@ export default function Community() {
           </button>
           <button
             onClick={() => setShowGifs((v) => !v)}
+            disabled={voice.recording}
             aria-label="GIF"
             className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showGifs ? "bg-accent" : "text-muted-foreground"}`}
           >
@@ -1258,7 +1259,7 @@ export default function Community() {
           {!voice.recording && (
             <button
               onClick={startVoice}
-              disabled={uploading}
+              disabled={uploading || !!pendingImage}
               aria-label={t("chat.recordVoice")}
               className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0 disabled:opacity-60"
             >
@@ -1266,10 +1267,10 @@ export default function Community() {
             </button>
           )}
           {voice.recording ? (
-            <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
+            <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
               <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse shrink-0" />
-              <span className="text-sm font-medium tabular-nums">{formatDuration(voice.seconds)}</span>
-              <span className="text-xs text-muted-foreground truncate">{t("chat.recording")}</span>
+              <span className="text-sm font-medium tabular-nums shrink-0">{formatDuration(voice.seconds)}</span>
+              <span className="text-xs text-muted-foreground truncate min-w-0">{t("chat.recording")}</span>
               <button
                 onClick={voice.cancel}
                 aria-label={t("common.cancel")}
@@ -1279,37 +1280,37 @@ export default function Community() {
               </button>
             </div>
           ) : (
-          <div className="relative flex-1">
-            {mentionSuggestions.length > 0 && (
-              <div className="absolute bottom-full left-0 right-0 mb-1 bg-card border rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto z-10">
-                {mentionSuggestions.map((m) => (
-                  <button
-                    key={m.id}
-                    onClick={() => selectMention(m.username)}
-                    className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent text-left"
-                  >
-                    <Avatar path={m.avatar_url} name={m.full_name} size={24} />
-                    <div className="min-w-0">
-                      <div className="text-sm font-semibold truncate">{m.full_name}</div>
-                      <div className="text-[11px] text-muted-foreground truncate">@{m.username}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
-            <input
-              ref={textInputRef}
-              value={text}
-              onChange={(e) => handleTextChange(e.target.value, e.target.selectionStart ?? e.target.value.length)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !mentionSuggestions.length) send();
-                if (e.key === "Escape") setMentionQuery(null);
-              }}
-              disabled={!!pendingImage}
-              placeholder={pendingImage ? t("community.tapSendPlaceholder") : t("community.inputPlaceholder")}
-              className="w-full px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
-            />
-          </div>
+            <div className="relative flex-1">
+              {mentionSuggestions.length > 0 && (
+                <div className="absolute bottom-full left-0 right-0 mb-1 bg-card border rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto z-10">
+                  {mentionSuggestions.map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => selectMention(m.username)}
+                      className="w-full flex items-center gap-2 px-3 py-2 hover:bg-accent text-left"
+                    >
+                      <Avatar path={m.avatar_url} name={m.full_name} size={24} />
+                      <div className="min-w-0">
+                        <div className="text-sm font-semibold truncate">{m.full_name}</div>
+                        <div className="text-[11px] text-muted-foreground truncate">@{m.username}</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+              <input
+                ref={textInputRef}
+                value={text}
+                onChange={(e) => handleTextChange(e.target.value, e.target.selectionStart ?? e.target.value.length)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !mentionSuggestions.length) send();
+                  if (e.key === "Escape") setMentionQuery(null);
+                }}
+                disabled={!!pendingImage}
+                placeholder={pendingImage ? t("community.tapSendPlaceholder") : t("community.inputPlaceholder")}
+                className="w-full px-3 py-2 rounded-full border bg-background text-base disabled:opacity-60"
+              />
+            </div>
           )}
           <button
             onClick={voice.recording ? sendVoice : send}
