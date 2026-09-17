@@ -563,107 +563,104 @@ export function MessagesInbox() {
         </Link>
       </div>
       {convosLoading ? (
-          <div className="text-center py-12 space-y-3">
-            <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+        <div className="text-center py-12 space-y-3">
+          <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
+        </div>
+      ) : convos.length === 0 ? (
+        <div className="text-center py-12 space-y-3">
+          <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
+        </div>
+      ) : (
+        <>
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t("messages.searchPlaceholder")}
+              className="pl-9 h-10 rounded-xl"
+            />
           </div>
-        ) : convos.length === 0 ? (
-          <div className="text-center py-12 space-y-3">
-            <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
-          </div>
-        ) : (
-          <>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t("messages.searchPlaceholder")}
-                className="pl-9 h-10 rounded-xl"
-              />
-            </div>
 
-            {!search.trim() && activeStrip.length > 0 && (
-              <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {activeStrip.map((c) => (
-                  <Link
-                    key={c.partnerId}
-                    to={`/tin-nhan/${c.partnerId}`}
-                    className="flex flex-col items-center gap-1 shrink-0 w-14"
-                  >
-                    <div className="relative">
-                      <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={48} />
-                      {onlineUsers.has(c.partnerId) && (
-                        <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-background" />
-                      )}
-                    </div>
-                    <div className="text-[10px] text-center truncate w-full text-muted-foreground">
-                      {c.partner?.full_name?.split(" ")[0] || t("messages.unknownUser")}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {sortedConvos.length === 0 ? (
-              <div className="text-center py-12 space-y-3">
-                <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
-              </div>
-            ) : (
-              sortedConvos.map((c) => (
-                <div
+          {!search.trim() && activeStrip.length > 0 && (
+            <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {activeStrip.map((c) => (
+                <Link
                   key={c.partnerId}
-                  className="relative flex items-center gap-2 p-3 rounded-xl select-none active:bg-accent/60 transition-colors"
-                  onPointerDown={(e) => onRowPointerDown(c, e)}
-                  onPointerMove={onRowPointerMove}
-                  onPointerUp={onRowPointerUp}
-                  onPointerCancel={onRowPointerUp}
-                  onContextMenu={(e) => e.preventDefault()}
+                  to={`/tin-nhan/${c.partnerId}`}
+                  className="flex flex-col items-center gap-1 shrink-0 w-14"
                 >
-                  <Link
-                    to={`/tin-nhan/${c.partnerId}`}
-                    onClick={onRowLinkClick}
-                    className="flex items-center gap-3 flex-1 min-w-0"
-                  >
-                    <div className="relative shrink-0">
-                      <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
-                      {onlineUsers.has(c.partnerId) && (
-                        <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
+                  <div className="relative">
+                    <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={48} />
+                    {onlineUsers.has(c.partnerId) && (
+                      <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-background" />
+                    )}
+                  </div>
+                  <div className="text-[10px] text-center truncate w-full text-muted-foreground">
+                    {c.partner?.full_name?.split(" ")[0] || t("messages.unknownUser")}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+
+          {sortedConvos.length === 0 ? (
+            <div className="text-center py-12 space-y-3">
+              <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
+            </div>
+          ) : (
+            sortedConvos.map((c) => (
+              <div
+                key={c.partnerId}
+                className="relative flex items-center gap-2 p-3 rounded-xl select-none active:bg-accent/60 transition-colors"
+                onPointerDown={(e) => onRowPointerDown(c, e)}
+                onPointerMove={onRowPointerMove}
+                onPointerUp={onRowPointerUp}
+                onPointerCancel={onRowPointerUp}
+                onContextMenu={(e) => e.preventDefault()}
+              >
+                <Link
+                  to={`/tin-nhan/${c.partnerId}`}
+                  onClick={onRowLinkClick}
+                  className="flex items-center gap-3 flex-1 min-w-0"
+                >
+                  <div className="relative shrink-0">
+                    <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
+                    {onlineUsers.has(c.partnerId) && (
+                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      {pinnedIds.has(c.partnerId) && (
+                        <Pin className="w-3 h-3 text-primary shrink-0" aria-label={t("messages.pinnedTooltip")} />
                       )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        {pinnedIds.has(c.partnerId) && (
-                          <Pin className="w-3 h-3 text-primary shrink-0" aria-label={t("messages.pinnedTooltip")} />
-                        )}
-                        <div className="font-semibold text-sm truncate">
-                          {c.partner?.full_name || t("messages.unknownUser")}
-                        </div>
-                        {c.partner && (
-                          <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />
-                        )}
-                        {mutedIds.has(c.partnerId) && (
-                          <BellOff
-                            className="w-3.5 h-3.5 text-muted-foreground shrink-0"
-                            aria-label={t("messages.mutedTooltip")}
-                          />
-                        )}
+                      <div className="font-semibold text-sm truncate">
+                        {c.partner?.full_name || t("messages.unknownUser")}
                       </div>
-                      <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
-                      {c.unread > 0 && (
-                        <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
-                          {c.unread}
-                        </div>
+                      {c.partner && <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />}
+                      {mutedIds.has(c.partnerId) && (
+                        <BellOff
+                          className="w-3.5 h-3.5 text-muted-foreground shrink-0"
+                          aria-label={t("messages.mutedTooltip")}
+                        />
                       )}
                     </div>
-                  </Link>
-                </div>
-              ))
-            )}
-          </>
-        )
+                    <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
+                    {c.unread > 0 && (
+                      <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
+                        {c.unread}
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              </div>
+            ))
+          )}
+        </>
       )}
 
       <Drawer open={!!actionSheetFor} onOpenChange={(v) => !v && setActionSheetFor(null)}>
