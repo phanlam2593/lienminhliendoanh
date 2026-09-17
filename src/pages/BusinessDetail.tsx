@@ -1133,6 +1133,7 @@ function FollowBusinessButton({
   const { user } = useAuth();
   const [following, setFollowing] = useState(false);
   const [count, setCount] = useState(0);
+  const [countLoading, setCountLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [listOpen, setListOpen] = useState(false);
 
@@ -1155,6 +1156,7 @@ function FollowBusinessButton({
       ]);
       setCount(c ?? 0);
       setFollowing(!!rel);
+      setCountLoading(false);
     })();
   }, [businessId, user?.id]);
 
@@ -1164,7 +1166,12 @@ function FollowBusinessButton({
       onClick={() => setListOpen(true)}
       className="text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1"
     >
-      <Users className="w-3 h-3" /> {t("biz.followers", { n: count })}
+      <Users className="w-3 h-3" />{" "}
+      {countLoading ? (
+        <span className="inline-block h-3 w-16 rounded bg-muted animate-pulse" />
+      ) : (
+        t("biz.followers", { n: count })
+      )}
     </button>
   );
 
