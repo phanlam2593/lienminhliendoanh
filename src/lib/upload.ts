@@ -100,7 +100,7 @@ const cache = new Map<string, string>();
 // Ảnh mặc định nằm trong bucket "uploads". Nếu path có tiền tố "<bucket>/" của một bucket
 // khác đã được khai báo ở đây (vd "avatars/..." dùng cho avatar tài khoản test) thì ký URL
 // từ bucket đó. Không đổi hành vi cũ với mọi path hiện có.
-const EXTRA_BUCKETS = ["avatars"];
+const EXTRA_BUCKETS = ["avatars", "voice"];
 
 export async function getSignedUrl(path: string): Promise<string> {
   if (!path) return "";
