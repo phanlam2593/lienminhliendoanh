@@ -161,10 +161,6 @@ export default function Home() {
           <Logo size={44} asLink />
           <p className="text-sm font-bold text-foreground">{t("home.footerThanks")}</p>
           <div className="flex items-center justify-center gap-x-2 gap-y-1.5 text-xs font-medium text-muted-foreground flex-wrap">
-            <Link to="/huong-dan" className="hover:text-primary transition-colors">
-              {t("profile.guide")}
-            </Link>
-            <span className="text-primary/50">•</span>
             <Link to="/dieu-khoan" className="hover:text-primary transition-colors">
               {t("termsPage.title")}
             </Link>
