@@ -56,7 +56,6 @@ export default function CookieThirdParty() {
           <li>{t("cookiePage.s4Item1")}</li>
           <li>{t("cookiePage.s4Item2")}</li>
           <li>{t("cookiePage.s4Item3")}</li>
-          <li>{t("cookiePage.s4Item4")}</li>
         </ul>
         <p>{t("cookiePage.s4Footer")}</p>
       </Section>
