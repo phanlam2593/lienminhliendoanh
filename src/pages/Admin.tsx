@@ -105,6 +105,7 @@ export default function Admin() {
   const [previewOnboarding, setPreviewOnboarding] = useState(false);
   const [memberPage, setMemberPage] = useState(0);
   const [memberTotal, setMemberTotal] = useState(0);
+  const [memberCountLoading, setMemberCountLoading] = useState(true);
   const [memberHasMore, setMemberHasMore] = useState(true);
   const [memberLoadingMore, setMemberLoadingMore] = useState(false);
 
@@ -137,6 +138,7 @@ export default function Admin() {
     }
     const { data: profs, count } = await q;
     setMemberTotal(count ?? 0);
+    setMemberCountLoading(false);
 
     const ids = ((profs as Profile[] | null) ?? []).map((p) => p.id);
     const [{ data: biz }, { data: visits }] = await Promise.all([
@@ -275,7 +277,7 @@ export default function Admin() {
       )}
 
       {activeTab === "members" && (
-        <Collapsible title="Thành viên" icon={Users} count={memberTotal}>
+        <Collapsible title="Thành viên" icon={Users} count={memberCountLoading ? undefined : memberTotal}>
           <div className="relative">
             <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
@@ -493,6 +495,7 @@ function OverviewTab({
     pending: 0,
     reports: 0,
   });
+  const [statsLoading, setStatsLoading] = useState(true);
 
   const load = async () => {
     const [mRes, bRes, pmRes, pbRes, rRes] = await Promise.all([
@@ -508,6 +511,7 @@ function OverviewTab({
       pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
       reports: rRes.count ?? 0,
     });
+    setStatsLoading(false);
   };
   useEffect(() => {
     void load();
@@ -521,14 +525,14 @@ function OverviewTab({
           <StatRow
             icon={Bell}
             label="Chờ duyệt"
-            value={stats.pending}
+            value={statsLoading ? undefined : stats.pending}
             colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
             onClick={() => onNavigate("pending")}
           />
           <StatRow
             icon={Flag}
             label="Báo cáo"
-            value={stats.reports}
+            value={statsLoading ? undefined : stats.reports}
             colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
             onClick={() => onNavigate("reports")}
           />
@@ -541,14 +545,14 @@ function OverviewTab({
           <StatRow
             icon={Users}
             label="Thành viên"
-            value={stats.members}
+            value={statsLoading ? undefined : stats.members}
             colorClass="bg-primary/10 text-primary"
             onClick={() => onNavigate("members")}
           />
           <StatRow
             icon={Building2}
             label="Doanh nghiệp"
-            value={stats.businesses}
+            value={statsLoading ? undefined : stats.businesses}
             colorClass="bg-primary/10 text-primary"
             onClick={() => onNavigate("businesses")}
           />
