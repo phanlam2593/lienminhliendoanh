@@ -34,6 +34,7 @@ import {
   Images,
   Link2,
   Play,
+  Pause,
 } from "lucide-react";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
@@ -1900,51 +1901,61 @@ export function MessagesThread() {
             e.currentTarget.value = "";
           }}
         />
-        <button
-          onClick={() => fileRef.current?.click()}
-          disabled={uploading || iBlockedThem || voice.recording}
-          aria-label={t("chat.pickImage")}
-          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
-        >
-          <ImageIcon className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => cameraRef.current?.click()}
-          disabled={uploading || iBlockedThem || voice.recording}
-          aria-label={t("chat.takePhoto")}
-          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
-        >
-          <CameraIcon className="w-5 h-5" />
-        </button>
-        <button
-          onClick={() => setShowGifs((v) => !v)}
-          disabled={iBlockedThem || voice.recording}
-          aria-label="GIF"
-          className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showGifs ? "bg-accent" : "text-muted-foreground"}`}
-        >
-          <Smile className="w-5 h-5" />
-        </button>
-        {!voice.recording && (
-          <button
-            onClick={startVoice}
-            disabled={uploading || iBlockedThem || !!pendingImage}
-            aria-label={t("chat.recordVoice")}
-            className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0 disabled:opacity-60"
-          >
-            <Mic className="w-5 h-5" />
-          </button>
+        {!voice.recording && !text.trim() && (
+          <>
+            <button
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading || iBlockedThem}
+              aria-label={t("chat.pickImage")}
+              className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+            >
+              <ImageIcon className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => cameraRef.current?.click()}
+              disabled={uploading || iBlockedThem}
+              aria-label={t("chat.takePhoto")}
+              className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+            >
+              <CameraIcon className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setShowGifs((v) => !v)}
+              disabled={iBlockedThem}
+              aria-label="GIF"
+              className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showGifs ? "bg-accent" : "text-muted-foreground"}`}
+            >
+              <Smile className="w-5 h-5" />
+            </button>
+            <button
+              onClick={startVoice}
+              disabled={uploading || iBlockedThem || !!pendingImage}
+              aria-label={t("chat.recordVoice")}
+              className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0 disabled:opacity-60"
+            >
+              <Mic className="w-5 h-5" />
+            </button>
+          </>
         )}
         {voice.recording ? (
           <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
-            <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse shrink-0" />
-            <span className="text-sm font-medium tabular-nums shrink-0">{formatDuration(voice.seconds)}</span>
-            <span className="text-xs text-muted-foreground truncate min-w-0">{t("chat.recording")}</span>
             <button
-              onClick={voice.cancel}
-              aria-label={t("common.cancel")}
-              className="ml-auto w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
+              type="button"
+              onClick={() => (voice.paused ? voice.resume() : voice.pause())}
+              aria-label={voice.paused ? t("chat.resumeRecording") : t("chat.pauseRecording")}
+              className="w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
             >
-              <X className="w-4 h-4" />
+              {voice.paused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+            </button>
+            <span className={`w-2 h-2 rounded-full bg-destructive shrink-0 ${voice.paused ? "" : "animate-pulse"}`} />
+            <span className="text-sm font-medium tabular-nums shrink-0">{formatDuration(voice.seconds)}</span>
+            <button
+              type="button"
+              onClick={voice.cancel}
+              aria-label={t("chat.discardRecording")}
+              className="ml-auto w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0 text-destructive"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
             </button>
           </div>
         ) : (
@@ -1962,12 +1973,13 @@ export function MessagesThread() {
                   ? t("community.tapSendPlaceholder")
                   : t("messages.inputPlaceholder")
             }
-            className="flex-1 px-3 py-2 rounded-full border bg-background text-base disabled:opacity-60"
+            className="flex-1 min-w-0 px-3 py-2 rounded-full border bg-background text-base disabled:opacity-60"
           />
         )}
         <button
           onClick={voice.recording ? sendVoice : send}
           disabled={uploading || iBlockedThem}
+          aria-label={t("common.send")}
           className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0 disabled:opacity-60"
         >
           <Send className="w-4 h-4" />
