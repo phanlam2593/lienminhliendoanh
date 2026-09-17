@@ -793,6 +793,7 @@ function BusinessEditor({
   const [name, setName] = useState(biz.name);
   const [type, setType] = useState<BusinessType>(biz.type);
   const [stats, setStats] = useState({ reviews: 0, followers: 0, regulars: 0 });
+  const [statsLoading, setStatsLoading] = useState(true);
   const [pin, setPin] = useState("");
   const [pinLoaded, setPinLoaded] = useState(false);
   const [pinError, setPinError] = useState(false);
@@ -838,6 +839,7 @@ function BusinessEditor({
         supabase.from("business_pins").select("pin").eq("business_id", biz.id).maybeSingle(),
       ]);
       setStats({ reviews: rv ?? 0, followers: fl ?? 0, regulars: rg ?? 0 });
+      setStatsLoading(false);
       setPin((pinRow as any)?.pin ?? "");
       setPinLoaded(true);
     })();
@@ -958,11 +960,21 @@ function BusinessEditor({
           </div>
           <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
             <span className="inline-flex items-center gap-0.5">
-              <Star className="w-3 h-3 text-primary" /> {stats.reviews}
+              <Star className="w-3 h-3 text-primary" />{" "}
+              {statsLoading ? (
+                <span className="inline-block h-2.5 w-4 rounded bg-muted animate-pulse align-middle" />
+              ) : (
+                stats.reviews
+              )}
             </span>
             <span>·</span>
             <span className="inline-flex items-center gap-0.5">
-              <Users className="w-3 h-3 text-primary" /> {stats.followers}
+              <Users className="w-3 h-3 text-primary" />{" "}
+              {statsLoading ? (
+                <span className="inline-block h-2.5 w-4 rounded bg-muted animate-pulse align-middle" />
+              ) : (
+                stats.followers
+              )}
             </span>
             <span>·</span>
             <button
@@ -970,7 +982,12 @@ function BusinessEditor({
               onClick={() => setRegularsOpen(true)}
               className="inline-flex items-center gap-0.5 font-semibold text-primary hover:underline"
             >
-              <UserCheck className="w-3 h-3" /> {t("bizForm.regularsCount", { n: stats.regulars })}
+              <UserCheck className="w-3 h-3" />{" "}
+              {statsLoading ? (
+                <span className="inline-block h-2.5 w-4 rounded bg-muted animate-pulse align-middle" />
+              ) : (
+                t("bizForm.regularsCount", { n: stats.regulars })
+              )}
             </button>
           </div>
         </div>
@@ -1395,6 +1412,7 @@ function FollowStats({ userId }: { userId: string }) {
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [regulars, setRegulars] = useState(0);
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<null | "followers" | "following" | "regulars">(null);
 
   const loadCounts = async () => {
@@ -1424,7 +1442,8 @@ function FollowStats({ userId }: { userId: string }) {
   };
 
   useEffect(() => {
-    void loadCounts();
+    setLoading(true);
+    void loadCounts().finally(() => setLoading(false));
   }, [userId]);
   return (
     <>
@@ -1436,7 +1455,11 @@ function FollowStats({ userId }: { userId: string }) {
           <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
             <Users className="w-3.5 h-3.5 text-primary" />
           </span>
-          <div className="text-base font-extrabold text-primary leading-none">{followers}</div>
+          {loading ? (
+            <div className="h-5 w-6 rounded bg-muted animate-pulse" />
+          ) : (
+            <div className="text-base font-extrabold text-primary leading-none">{followers}</div>
+          )}
           <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
             {t("profile.followers")}
           </div>
@@ -1448,7 +1471,11 @@ function FollowStats({ userId }: { userId: string }) {
           <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
             <UserCheck className="w-3.5 h-3.5 text-primary" />
           </span>
-          <div className="text-base font-extrabold text-primary leading-none">{following}</div>
+          {loading ? (
+            <div className="h-5 w-6 rounded bg-muted animate-pulse" />
+          ) : (
+            <div className="text-base font-extrabold text-primary leading-none">{following}</div>
+          )}
           <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
             {t("messages.followingHeader")}
           </div>
@@ -1460,7 +1487,11 @@ function FollowStats({ userId }: { userId: string }) {
           <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
             <Store className="w-3.5 h-3.5 text-primary" />
           </span>
-          <div className="text-base font-extrabold text-primary leading-none">{regulars}</div>
+          {loading ? (
+            <div className="h-5 w-6 rounded bg-muted animate-pulse" />
+          ) : (
+            <div className="text-base font-extrabold text-primary leading-none">{regulars}</div>
+          )}
           <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
             {t("regulars.title")}
           </div>
