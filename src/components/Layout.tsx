@@ -120,6 +120,24 @@ export function Layout() {
     };
   }, [tabs.length, hide, showWelcome, showCompleteProfileGate, showPendingGate]);
 
+  // Chiều cao viewport THẬT SỰ đang hiển thị (đã trừ phần bị bàn phím ảo che) -- dùng
+  // visualViewport thay vì dvh vì không phải trình duyệt nào cũng tự co dvh theo bàn phím
+  // (đặc biệt Safari/iOS đời cũ). Các trang tự tính chiều cao vừa khít màn hình (Tin nhắn,
+  // Cộng đồng) dùng biến --vvh này để khung nội dung co lại đúng theo bàn phím, thay vì bị
+  // trình duyệt tự cuộn cả trang lên (che mất header/logo) như hành vi mặc định trước đây.
+  useEffect(() => {
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const setVvh = () => document.documentElement.style.setProperty("--vvh", `${vv.height}px`);
+    setVvh();
+    vv.addEventListener("resize", setVvh);
+    vv.addEventListener("scroll", setVvh);
+    return () => {
+      vv.removeEventListener("resize", setVvh);
+      vv.removeEventListener("scroll", setVvh);
+    };
+  }, []);
+
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
       <WelcomeOverlay />
