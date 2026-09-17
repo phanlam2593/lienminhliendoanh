@@ -7,7 +7,7 @@ import { GifPicker } from "@/components/GifPicker";
 import { useCallback, useEffect, useLayoutEffect, useState, useRef } from "react";
 import { uploadImage, validateImage } from "@/lib/upload";
 import { StoredImage } from "@/components/StoredImage";
-import { Image as ImageIcon, Smile, SmilePlus } from "lucide-react";
+import { Image as ImageIcon, Camera as CameraIcon, Smile, SmilePlus } from "lucide-react";
 import {
   ArrowLeft,
   Send,
@@ -789,6 +789,7 @@ export function MessagesThread() {
   >([]);
   const [mediaLoading, setMediaLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   // QUAN TRỌNG: khung cuộn ngoài (scrollContainerRef) có chiều cao CỐ ĐỊNH (flex-1 trong
@@ -1831,6 +1832,18 @@ export function MessagesThread() {
             e.currentTarget.value = "";
           }}
         />
+        <input
+          ref={cameraRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          capture="environment"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) pickImage(f);
+            e.currentTarget.value = "";
+          }}
+        />
         <button
           onClick={() => fileRef.current?.click()}
           disabled={uploading || iBlockedThem}
@@ -1838,6 +1851,14 @@ export function MessagesThread() {
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
         >
           <ImageIcon className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => cameraRef.current?.click()}
+          disabled={uploading || iBlockedThem}
+          aria-label={t("chat.takePhoto")}
+          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
+        >
+          <CameraIcon className="w-5 h-5" />
         </button>
         <button
           onClick={() => setShowGifs((v) => !v)}
