@@ -461,7 +461,7 @@ export function MessagesInbox() {
                 >
                   <PopoverTrigger asChild>
                     {myStatus ? (
-                      <button type="button" className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10">
+                      <button type="button" className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[68px] z-10">
                         <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic truncate text-center">
                           {myStatus}
                           <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
@@ -518,7 +518,7 @@ export function MessagesInbox() {
                     <button
                       type="button"
                       onClick={() => setStatusViewFor(c)}
-                      className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10"
+                      className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[68px] z-10"
                     >
                       <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic truncate text-center">
                         {c.partner.status_message}
