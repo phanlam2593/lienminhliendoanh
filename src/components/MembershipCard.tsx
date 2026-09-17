@@ -1,10 +1,5 @@
 import { Crown, Sparkles, CheckCircle2 } from "lucide-react";
-import {
-  getMemberTierProgress,
-  getMembershipDiscountPct,
-  getMembershipPrice,
-  MEMBERSHIP_BASE_PRICE,
-} from "@/lib/types";
+import { getMemberTierProgress, getMembershipPrice } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
 
 export function MembershipCard({
@@ -18,7 +13,6 @@ export function MembershipCard({
 }) {
   const { t, lang } = useLanguage();
   const { current, next, pct } = getMemberTierProgress(points);
-  const discount = getMembershipDiscountPct(points);
   const price = getMembershipPrice(points);
 
   return (
@@ -41,12 +35,6 @@ export function MembershipCard({
             {current ? `${current.emoji} ${t(`tier.${current.type}`)}` : t("membership.noTierYet")}
           </span>
         </div>
-        <div className="flex items-center justify-between text-sm">
-          <span className="opacity-80">{t("membership.yourDiscount")}</span>
-          <span className="font-semibold">
-            {discount > 0 ? t("membership.discountAmount", { pct: discount }) : t("membership.noDiscountYet")}
-          </span>
-        </div>
         {next && (
           <div className="space-y-1 pt-1">
             <div className="flex items-center justify-between text-[11px] opacity-75">
@@ -63,9 +51,6 @@ export function MembershipCard({
       </div>
 
       <div className="flex items-end gap-2">
-        {discount > 0 && (
-          <span className="text-sm line-through opacity-60">{MEMBERSHIP_BASE_PRICE.toLocaleString("vi-VN")}đ</span>
-        )}
         <span className="text-2xl font-extrabold">{price.toLocaleString("vi-VN")}đ</span>
         <span className="text-sm opacity-80 mb-1">{t("membership.perMonth")}</span>
       </div>
