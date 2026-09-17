@@ -26,6 +26,12 @@ import {
   MoreVertical,
   Ban,
   ShieldCheck,
+  Pin,
+  PinOff,
+  Bell,
+  BellOff,
+  Search,
+  Images,
 } from "lucide-react";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { useCall } from "@/lib/call";
@@ -45,6 +51,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useLanguage } from "@/lib/i18n";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { Input } from "@/components/ui/input";
 
 interface ConvoSummary {
   partnerId: string;
@@ -95,6 +103,52 @@ export function MessagesInbox() {
   const [sp] = useSearchParams();
   const [tab, setTab] = useState<"messages" | "follows">(sp.get("tab") === "follows" ? "follows" : "messages");
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
+  const onlineUsers = useOnlineUsers();
+
+  // Ghim/tắt thông báo/chặn theo từng người — lưu ở bảng riêng (message_pins/message_mutes/
+  // blocks), KHÔNG đụng bảng messages. Tải 1 lần vì chỉ chính mình bấm mới đổi (#QUY TẮC state riêng).
+  const [pinnedIds, setPinnedIds] = useState<Set<string>>(new Set());
+  const [mutedIds, setMutedIds] = useState<Set<string>>(new Set());
+  const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
+  const [search, setSearch] = useState("");
+  const [actionSheetFor, setActionSheetFor] = useState<ConvoSummary | null>(null);
+  const [confirmBlockFor, setConfirmBlockFor] = useState<ConvoSummary | null>(null);
+
+  // Nhấn-giữ ~500ms (không dịch ngón tay quá 10px) trên 1 dòng hội thoại để mở bảng tuỳ
+  // chọn — giống Messenger/FB, thay cho nút thùng rác cố định hiện trước đây.
+  const longPressTimer = useRef<number | null>(null);
+  const longPressFired = useRef(false);
+  const pressStart = useRef({ x: 0, y: 0 });
+
+  const clearLongPress = () => {
+    if (longPressTimer.current) {
+      window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+  const onRowPointerDown = (c: ConvoSummary, e: React.PointerEvent) => {
+    pressStart.current = { x: e.clientX, y: e.clientY };
+    longPressFired.current = false;
+    clearLongPress();
+    longPressTimer.current = window.setTimeout(() => {
+      longPressFired.current = true;
+      if (navigator.vibrate) navigator.vibrate(12);
+      setActionSheetFor(c);
+    }, 500);
+  };
+  const onRowPointerMove = (e: React.PointerEvent) => {
+    if (!longPressTimer.current) return;
+    if (Math.abs(e.clientX - pressStart.current.x) > 10 || Math.abs(e.clientY - pressStart.current.y) > 10) {
+      clearLongPress();
+    }
+  };
+  const onRowPointerUp = () => clearLongPress();
+  const onRowLinkClick = (e: React.MouseEvent) => {
+    if (longPressFired.current) {
+      e.preventDefault();
+      longPressFired.current = false;
+    }
+  };
 
   const load = async () => {
     if (!user) return;
@@ -152,9 +206,22 @@ export function MessagesInbox() {
     setConvosLoading(false);
   };
 
+  const loadPrefs = useCallback(async () => {
+    if (!user) return;
+    const [{ data: pins }, { data: mutes }, { data: blks }] = await Promise.all([
+      supabase.from("message_pins").select("partner_id").eq("user_id", user.id),
+      supabase.from("message_mutes").select("muted_user_id").eq("user_id", user.id),
+      supabase.from("blocks").select("blocked_id").eq("blocker_id", user.id),
+    ]);
+    setPinnedIds(new Set((pins ?? []).map((r: any) => r.partner_id)));
+    setMutedIds(new Set((mutes ?? []).map((r: any) => r.muted_user_id)));
+    setBlockedIds(new Set((blks ?? []).map((r: any) => r.blocked_id)));
+  }, [user?.id]);
+
   useEffect(() => {
     if (!user) return;
     load();
+    loadPrefs();
     supabase
       .rpc("get_admin_user_ids")
       .then(({ data }) => setAdminIds(new Set((data ?? []).map((r: any) => r.user_id))));
@@ -202,6 +269,133 @@ export function MessagesInbox() {
     load();
   };
 
+  const togglePin = async (c: ConvoSummary) => {
+    if (!user) return;
+    const pinned = pinnedIds.has(c.partnerId);
+    setActionSheetFor(null);
+    if (pinned) {
+      setPinnedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(c.partnerId);
+        return next;
+      });
+      await supabase.from("message_pins").delete().eq("user_id", user.id).eq("partner_id", c.partnerId);
+    } else {
+      setPinnedIds((prev) => new Set(prev).add(c.partnerId));
+      const { error } = await supabase.from("message_pins").insert({ user_id: user.id, partner_id: c.partnerId });
+      if (error) {
+        toast.error(error.message);
+        setPinnedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(c.partnerId);
+          return next;
+        });
+      }
+    }
+  };
+
+  const toggleMute = async (c: ConvoSummary) => {
+    if (!user) return;
+    const muted = mutedIds.has(c.partnerId);
+    setActionSheetFor(null);
+    if (muted) {
+      setMutedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(c.partnerId);
+        return next;
+      });
+      const { error } = await supabase
+        .from("message_mutes")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("muted_user_id", c.partnerId);
+      if (!error) toast.success(t("messages.unmutedToast"));
+    } else {
+      setMutedIds((prev) => new Set(prev).add(c.partnerId));
+      const { error } = await supabase.from("message_mutes").insert({ user_id: user.id, muted_user_id: c.partnerId });
+      if (error) {
+        toast.error(error.message);
+        setMutedIds((prev) => {
+          const next = new Set(prev);
+          next.delete(c.partnerId);
+          return next;
+        });
+      } else {
+        toast.success(t("messages.mutedToast"));
+      }
+    }
+  };
+
+  const toggleBlock = (c: ConvoSummary) => {
+    if (blockedIds.has(c.partnerId)) {
+      setActionSheetFor(null);
+      void unblockFromList(c);
+    } else {
+      setActionSheetFor(null);
+      setConfirmBlockFor(c);
+    }
+  };
+
+  const unblockFromList = async (c: ConvoSummary) => {
+    if (!user) return;
+    setBlockedIds((prev) => {
+      const next = new Set(prev);
+      next.delete(c.partnerId);
+      return next;
+    });
+    const { error } = await supabase.from("blocks").delete().eq("blocker_id", user.id).eq("blocked_id", c.partnerId);
+    if (error) toast.error(error.message);
+    else toast.success(t("block.unblocked"));
+  };
+
+  const confirmBlock = async () => {
+    if (!confirmBlockFor || !user) return;
+    const pid = confirmBlockFor.partnerId;
+    const { error } = await supabase.from("blocks").insert({ blocker_id: user.id, blocked_id: pid });
+    setConfirmBlockFor(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setBlockedIds((prev) => new Set(prev).add(pid));
+    toast.success(t("block.blocked"));
+  };
+
+  // Bỏ dấu tiếng Việt đơn giản để tìm không cần gõ đúng dấu.
+  const fold = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/đ/g, "d");
+
+  const filteredConvos = search.trim()
+    ? convos.filter((c) => {
+        const hay = fold(`${c.partner?.full_name ?? ""} ${c.partner?.username ?? ""}`);
+        return hay.includes(fold(search.trim()));
+      })
+    : convos;
+
+  // Ghim lên đầu (không đổi thứ tự giữa các mục đã ghim), phần còn lại theo tin nhắn/cuộc
+  // gọi gần nhất — không tính "chat nhiều/ít" ở ĐÂY (đã dùng cho dải hoạt động phía trên).
+  const sortedConvos = [...filteredConvos].sort((a, b) => {
+    const aPinned = pinnedIds.has(a.partnerId);
+    const bPinned = pinnedIds.has(b.partnerId);
+    if (aPinned !== bPinned) return aPinned ? -1 : 1;
+    return new Date(b.lastAt).getTime() - new Date(a.lastAt).getTime();
+  });
+
+  // Dải "đang hoạt động" kiểu Messenger — online lên trước, rồi ai nhắn gần đây nhất
+  // (một cách gián tiếp thể hiện hay chat với ai), tối đa 12 người để không tràn ngang.
+  const activeStrip = [...convos]
+    .sort((a, b) => {
+      const aOn = onlineUsers.has(a.partnerId) ? 0 : 1;
+      const bOn = onlineUsers.has(b.partnerId) ? 0 : 1;
+      if (aOn !== bOn) return aOn - bOn;
+      return new Date(b.lastAt).getTime() - new Date(a.lastAt).getTime();
+    })
+    .slice(0, 12);
+
   if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
@@ -245,41 +439,170 @@ export function MessagesInbox() {
             <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
           </div>
         ) : (
-          convos.map((c) => (
-            <div key={c.partnerId} className="flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm">
-              <Link to={`/tin-nhan/${c.partnerId}`} className="flex items-center gap-3 flex-1 min-w-0">
-                <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <div className="font-semibold text-sm truncate">
-                      {c.partner?.full_name || t("messages.unknownUser")}
-                    </div>
-                    {c.partner && <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />}
-                  </div>
-                  <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
-                  {c.unread > 0 && (
-                    <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
-                      {c.unread}
-                    </div>
-                  )}
-                </div>
-              </Link>
-              <button
-                onClick={() => setConfirmPartner(c)}
-                aria-label={t("messages.deleteConvo")}
-                className="w-8 h-8 rounded-full hover:bg-destructive/10 text-destructive grid place-items-center flex-shrink-0"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+          <>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t("messages.searchPlaceholder")}
+                className="pl-9 h-10 rounded-xl"
+              />
             </div>
-          ))
+
+            {!search.trim() && activeStrip.length > 0 && (
+              <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {activeStrip.map((c) => (
+                  <Link
+                    key={c.partnerId}
+                    to={`/tin-nhan/${c.partnerId}`}
+                    className="flex flex-col items-center gap-1 shrink-0 w-14"
+                  >
+                    <div className="relative">
+                      <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={48} />
+                      {onlineUsers.has(c.partnerId) && (
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-background" />
+                      )}
+                    </div>
+                    <div className="text-[10px] text-center truncate w-full text-muted-foreground">
+                      {c.partner?.full_name?.split(" ")[0] || t("messages.unknownUser")}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            {sortedConvos.length === 0 ? (
+              <div className="text-center py-12 space-y-3">
+                <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
+              </div>
+            ) : (
+              sortedConvos.map((c) => (
+                <div
+                  key={c.partnerId}
+                  className="relative flex items-center gap-2 p-3 bg-card rounded-xl shadow-sm select-none"
+                  onPointerDown={(e) => onRowPointerDown(c, e)}
+                  onPointerMove={onRowPointerMove}
+                  onPointerUp={onRowPointerUp}
+                  onPointerCancel={onRowPointerUp}
+                  onContextMenu={(e) => e.preventDefault()}
+                >
+                  <Link
+                    to={`/tin-nhan/${c.partnerId}`}
+                    onClick={onRowLinkClick}
+                    className="flex items-center gap-3 flex-1 min-w-0"
+                  >
+                    <div className="relative shrink-0">
+                      <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
+                      {onlineUsers.has(c.partnerId) && (
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        {pinnedIds.has(c.partnerId) && (
+                          <Pin className="w-3 h-3 text-primary shrink-0" aria-label={t("messages.pinnedTooltip")} />
+                        )}
+                        <div className="font-semibold text-sm truncate">
+                          {c.partner?.full_name || t("messages.unknownUser")}
+                        </div>
+                        {c.partner && (
+                          <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />
+                        )}
+                        {mutedIds.has(c.partnerId) && (
+                          <BellOff
+                            className="w-3.5 h-3.5 text-muted-foreground shrink-0"
+                            aria-label={t("messages.mutedTooltip")}
+                          />
+                        )}
+                      </div>
+                      <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
+                      {c.unread > 0 && (
+                        <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
+                          {c.unread}
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                </div>
+              ))
+            )}
+          </>
         )
       ) : (
         <FollowsTab userId={user.id} />
       )}
+
+      <Drawer open={!!actionSheetFor} onOpenChange={(v) => !v && setActionSheetFor(null)}>
+        <DrawerContent>
+          <DrawerHeader className="flex flex-row items-center gap-3 text-left pb-2">
+            <Avatar path={actionSheetFor?.partner?.avatar_url} name={actionSheetFor?.partner?.full_name} size={36} />
+            <DrawerTitle className="text-base">
+              {actionSheetFor?.partner?.full_name || t("messages.unknownUser")}
+            </DrawerTitle>
+          </DrawerHeader>
+          <div className="p-2 pb-6 space-y-1">
+            {actionSheetFor && (
+              <>
+                <button
+                  onClick={() => togglePin(actionSheetFor)}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-accent text-left"
+                >
+                  {pinnedIds.has(actionSheetFor.partnerId) ? (
+                    <>
+                      <PinOff className="w-4 h-4" /> {t("messages.unpinConvo")}
+                    </>
+                  ) : (
+                    <>
+                      <Pin className="w-4 h-4" /> {t("messages.pinConvo")}
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => toggleMute(actionSheetFor)}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-accent text-left"
+                >
+                  {mutedIds.has(actionSheetFor.partnerId) ? (
+                    <>
+                      <Bell className="w-4 h-4" /> {t("messages.unmuteConvo")}
+                    </>
+                  ) : (
+                    <>
+                      <BellOff className="w-4 h-4" /> {t("messages.muteConvo")}
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => toggleBlock(actionSheetFor)}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-accent text-destructive text-left"
+                >
+                  {blockedIds.has(actionSheetFor.partnerId) ? (
+                    <>
+                      <ShieldCheck className="w-4 h-4" /> {t("block.unblock")}
+                    </>
+                  ) : (
+                    <>
+                      <Ban className="w-4 h-4" /> {t("block.block")}
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={() => {
+                    setConfirmPartner(actionSheetFor);
+                    setActionSheetFor(null);
+                  }}
+                  className="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-semibold hover:bg-accent text-destructive text-left"
+                >
+                  <Trash2 className="w-4 h-4" /> {t("messages.deleteConvo")}
+                </button>
+              </>
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
 
       <AlertDialog open={!!confirmPartner} onOpenChange={(v) => !v && setConfirmPartner(null)}>
         <AlertDialogContent>
@@ -295,6 +618,23 @@ export function MessagesInbox() {
             <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={deleteConvo} className="bg-destructive hover:bg-destructive/90">
               {t("common.delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!confirmBlockFor} onOpenChange={(v) => !v && setConfirmBlockFor(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("block.confirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("block.confirmDesc", { name: confirmBlockFor?.partner?.full_name || t("messages.thisUser") })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmBlock} className="bg-destructive hover:bg-destructive/90">
+              {t("block.block")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -352,6 +692,13 @@ export function MessagesThread() {
   const [iBlockedThem, setIBlockedThem] = useState(false);
   const [blockMenuOpen, setBlockMenuOpen] = useState(false);
   const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
+  const [iMutedThem, setIMutedThem] = useState(false);
+  const [confirmDeleteConvoOpen, setConfirmDeleteConvoOpen] = useState(false);
+  const [allMediaOpen, setAllMediaOpen] = useState(false);
+  const [mediaItems, setMediaItems] = useState<
+    { id: string; type: string; content: string; image_url: string | null }[]
+  >([]);
+  const [mediaLoading, setMediaLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -531,6 +878,13 @@ export function MessagesThread() {
       .eq("blocked_id", id)
       .maybeSingle()
       .then(({ data }) => setIBlockedThem(!!data));
+    supabase
+      .from("message_mutes")
+      .select("id")
+      .eq("user_id", user.id)
+      .eq("muted_user_id", id)
+      .maybeSingle()
+      .then(({ data }) => setIMutedThem(!!data));
     void loadMsgs(MSG_PAGE_SIZE, true);
     void loadCalls();
     void markThreadRead();
@@ -827,6 +1181,61 @@ export function MessagesThread() {
     toast.success(t("block.unblocked"));
   };
 
+  const toggleMuteThread = async () => {
+    if (!user || !partner) return;
+    if (iMutedThem) {
+      setIMutedThem(false);
+      const { error } = await supabase
+        .from("message_mutes")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("muted_user_id", partner.id);
+      if (!error) toast.success(t("messages.unmutedToast"));
+    } else {
+      setIMutedThem(true);
+      const { error } = await supabase.from("message_mutes").insert({ user_id: user.id, muted_user_id: partner.id });
+      if (error) {
+        toast.error(error.message);
+        setIMutedThem(false);
+      } else {
+        toast.success(t("messages.mutedToast"));
+      }
+    }
+  };
+
+  const deleteThisConvo = async () => {
+    if (!user || !partner) return;
+    const { error } = await supabase
+      .from("messages")
+      .delete()
+      .or(
+        `and(sender_id.eq.${user.id},receiver_id.eq.${partner.id}),and(sender_id.eq.${partner.id},receiver_id.eq.${user.id})`,
+      );
+    setConfirmDeleteConvoOpen(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success(t("messages.convoDeleted"));
+    nav("/tin-nhan");
+  };
+
+  const loadAllMedia = async () => {
+    if (!user || !partner) return;
+    setMediaLoading(true);
+    const { data } = await supabase
+      .from("messages")
+      .select("id, type, content, image_url, created_at")
+      .or(
+        `and(sender_id.eq.${user.id},receiver_id.eq.${partner.id}),and(sender_id.eq.${partner.id},receiver_id.eq.${user.id})`,
+      )
+      .in("type", ["image", "gif"])
+      .order("created_at", { ascending: false })
+      .limit(200);
+    setMediaItems((data as any[] | null) ?? []);
+    setMediaLoading(false);
+  };
+
   return (
     <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
@@ -873,7 +1282,34 @@ export function MessagesThread() {
               <MoreVertical className="w-4 h-4" />
             </button>
           </PopoverTrigger>
-          <PopoverContent className="w-48 p-1" align="end">
+          <PopoverContent className="w-52 p-1" align="end">
+            <button
+              onClick={() => {
+                setBlockMenuOpen(false);
+                setAllMediaOpen(true);
+                void loadAllMedia();
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-left"
+            >
+              <Images className="w-4 h-4" /> {t("messages.allMedia")}
+            </button>
+            <button
+              onClick={() => {
+                setBlockMenuOpen(false);
+                toggleMuteThread();
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-left"
+            >
+              {iMutedThem ? (
+                <>
+                  <Bell className="w-4 h-4" /> {t("messages.unmuteConvo")}
+                </>
+              ) : (
+                <>
+                  <BellOff className="w-4 h-4" /> {t("messages.muteConvo")}
+                </>
+              )}
+            </button>
             {iBlockedThem ? (
               <button
                 onClick={() => {
@@ -895,6 +1331,15 @@ export function MessagesThread() {
                 <Ban className="w-4 h-4" /> {t("block.block")}
               </button>
             )}
+            <button
+              onClick={() => {
+                setBlockMenuOpen(false);
+                setConfirmDeleteConvoOpen(true);
+              }}
+              className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-destructive text-left"
+            >
+              <Trash2 className="w-4 h-4" /> {t("messages.deleteConvo")}
+            </button>
           </PopoverContent>
         </Popover>
       </div>
@@ -914,6 +1359,50 @@ export function MessagesThread() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog open={confirmDeleteConvoOpen} onOpenChange={setConfirmDeleteConvoOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("messages.deleteConvoTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("messages.deleteConvoDesc", { name: partner?.full_name || t("messages.thisUser") })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={deleteThisConvo} className="bg-destructive hover:bg-destructive/90">
+              {t("common.delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <Drawer open={allMediaOpen} onOpenChange={setAllMediaOpen}>
+        <DrawerContent className="max-h-[80vh]">
+          <DrawerHeader>
+            <DrawerTitle>{t("messages.allMedia")}</DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-6 overflow-y-auto">
+            {mediaLoading ? (
+              <div className="py-10 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+            ) : mediaItems.length === 0 ? (
+              <div className="py-10 text-center text-sm text-muted-foreground">{t("messages.noMedia")}</div>
+            ) : (
+              <div className="grid grid-cols-3 gap-1.5">
+                {mediaItems.map((m) => (
+                  <div key={m.id} className="aspect-square rounded-lg overflow-hidden bg-muted">
+                    {m.type === "image" ? (
+                      <StoredImage path={m.image_url} alt={t("chat.imageAlt")} className="w-full h-full object-cover" />
+                    ) : (
+                      <img src={m.content} alt="GIF" className="w-full h-full object-cover" loading="lazy" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </DrawerContent>
+      </Drawer>
       <ProfileQuickView userId={id} open={quickViewOpen} onOpenChange={setQuickViewOpen} />
       <div ref={scrollContainerRef} onScroll={handleScroll} className="flex-1 overflow-y-auto p-3 space-y-2">
         {msgs.length > 0 && msgHasMore && (
