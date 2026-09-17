@@ -92,7 +92,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (user) await load(user.id);
         },
         signOut: async () => {
-          await supabase.auth.signOut();
+          // scope: "local" — CHỈ đăng xuất thiết bị/trình duyệt hiện tại. Mặc định của
+          // Supabase là scope "global" (đăng xuất TẤT CẢ thiết bị đang đăng nhập cùng
+          // tài khoản) — đã gây bug: đăng xuất trên điện thoại làm máy tính cũng bị đăng
+          // xuất theo dù không hề bấm gì ở đó.
+          await supabase.auth.signOut({ scope: "local" });
         },
       }}
     >
