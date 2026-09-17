@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -154,6 +154,21 @@ export default function Community() {
     if (!el) return;
     el.scrollTo({ top: el.scrollHeight, behavior: smooth ? "smooth" : "auto" });
   };
+
+  // Dam bao cuon xuong cuoi ngay khi khung tin nhan THUC SU duoc gan vao DOM (vi du sau
+  // khi man hinh "dang xac thuc" bien mat) -- rAF/setTimeout ben duoi co the chay truoc
+  // luc do, khi scrollContainerRef con la null, nen can them 1 lop bao hiem nay.
+  useEffect(() => {
+    if (!authLoading && user && pinnedToBottomRef.current) scrollToBottom(false);
+  }, [authLoading, user?.id]);
+
+  // Cuon xuong cuoi NGAY SAU KHI React cap nhat xong DOM (truoc khi trinh duyet ve khung
+  // hinh tiep theo) ngay luc tin nhan vua hien ra -- dung so lieu layout THUC TE tai thoi
+  // diem do thay vi doan bang rAF/setTimeout nhu ben duoi.
+  useLayoutEffect(() => {
+    if (!msgsLoading && pinnedToBottomRef.current) scrollToBottom(false);
+  }, [msgsLoading]);
+
   const channelRef = useRef<{ location: string | null; topic: Topic }>({
     location: channelLocation,
     topic: channelTopic,
@@ -730,7 +745,7 @@ export default function Community() {
   const onlineCount = members.filter((m) => onlineUsers.has(m.id)).length;
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
+    <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       {/* Bộ chọn kênh — 2 nút dropdown: Địa điểm + Kênh chat */}
       <div className="border-b bg-card shrink-0 px-3 py-2 flex gap-2">
         <Popover open={locOpen} onOpenChange={setLocOpen}>
