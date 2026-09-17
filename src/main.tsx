@@ -3,10 +3,12 @@ import App from "./App.tsx";
 import "./index.css";
 import { registerPwa } from "./lib/pwa";
 
+// Mặc định app dùng dark theme; chỉ dùng light nếu user đã tự chọn light trước đó.
 // Apply persisted theme before render to avoid flash
+document.documentElement.classList.add("dark");
 try {
   const theme = localStorage.getItem("theme");
-  if (theme === "dark") document.documentElement.classList.add("dark");
+  if (theme === "light") document.documentElement.classList.remove("dark");
 } catch {}
 
 createRoot(document.getElementById("root")!).render(<App />);
