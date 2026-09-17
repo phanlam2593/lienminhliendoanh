@@ -320,7 +320,11 @@ function NeedRowSkeleton() {
   );
 }
 
-const SWIPE_THRESHOLD = 100;
+// Ngưỡng quẹt tính theo % chiều rộng THẬT của thẻ (đo qua cardRef lúc bắt đầu kéo),
+// KHÔNG dùng số px cố định — màn nhỏ/to đều cảm giác "nhẹ tay" như nhau (nguyên tắc #44).
+const SWIPE_THRESHOLD_RATIO = 0.28;
+const SWIPE_THRESHOLD_MIN = 80;
+const SWIPE_THRESHOLD_MAX = 160;
 const TAP_MOVE_TOLERANCE = 10;
 const TAP_MAX_DURATION = 300;
 // Sau khi "bỏ qua" 1 nhu cầu, không ẩn vĩnh viễn nữa — sau PASS_COOLDOWN_HOURS giờ (hoặc sớm
@@ -408,6 +412,7 @@ export default function Quet() {
   const [exiting, setExiting] = useState<"left" | "right" | null>(null);
   const dragStart = useRef({ x: 0, y: 0 });
   const pointerDownTimeRef = useRef(0);
+  const swipeThresholdRef = useRef(SWIPE_THRESHOLD_MIN * 1.5); // đo thật lại ở onPointerDown
   const [frontEntering, setFrontEntering] = useState(false);
   const enteredIdRef = useRef<string | null>(null);
   const cardWrapRef = useRef<HTMLDivElement>(null);
@@ -796,8 +801,10 @@ export default function Quet() {
     const { x, y } = dragRef.current;
     const rot = Math.max(-18, Math.min(18, x / 12));
     el.style.transform = `translate3d(${x}px, ${y * 0.4}px, 0) rotate(${rot}deg)`;
-    if (likeRef.current) likeRef.current.style.opacity = String(Math.max(0, Math.min(1, x / SWIPE_THRESHOLD)));
-    if (passRef.current) passRef.current.style.opacity = String(Math.max(0, Math.min(1, -x / SWIPE_THRESHOLD)));
+    if (likeRef.current)
+      likeRef.current.style.opacity = String(Math.max(0, Math.min(1, x / swipeThresholdRef.current)));
+    if (passRef.current)
+      passRef.current.style.opacity = String(Math.max(0, Math.min(1, -x / swipeThresholdRef.current)));
   };
   const schedulePaint = () => {
     if (rafRef.current == null) rafRef.current = requestAnimationFrame(paintDrag);
@@ -809,6 +816,12 @@ export default function Quet() {
     dragStart.current = { x: e.clientX, y: e.clientY };
     dragRef.current = { x: 0, y: 0, active: true };
     pointerDownTimeRef.current = Date.now();
+    // Đo chiều rộng THẬT của thẻ đang kéo (không đoán theo window.innerWidth vì trang có
+    // thể có khung/padding riêng) để tính ngưỡng quẹt theo tỉ lệ, không phải số px cố định.
+    const cardW = cardRef.current?.getBoundingClientRect().width ?? 0;
+    swipeThresholdRef.current = cardW
+      ? Math.max(SWIPE_THRESHOLD_MIN, Math.min(SWIPE_THRESHOLD_MAX, cardW * SWIPE_THRESHOLD_RATIO))
+      : SWIPE_THRESHOLD_MIN * 1.5;
     if (cardRef.current) cardRef.current.style.transition = "none";
     setDragging(true);
   };
@@ -826,7 +839,7 @@ export default function Quet() {
     }
     const x = dragRef.current.x;
     const y = dragRef.current.y;
-    if (Math.abs(x) > SWIPE_THRESHOLD) {
+    if (Math.abs(x) > swipeThresholdRef.current) {
       triggerSwipe(x > 0 ? "right" : "left");
       return;
     }
