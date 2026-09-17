@@ -56,6 +56,8 @@ import {
 import { useLanguage } from "@/lib/i18n";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 interface ConvoSummary {
   partnerId: string;
@@ -455,60 +457,64 @@ export function MessagesInbox() {
           {!search.trim() && (
             <div className="flex gap-3 overflow-x-auto pb-1 pt-7 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <div className="flex flex-col items-center gap-1 shrink-0 w-16 relative">
-                <Popover
-                  open={statusPopoverOpen}
-                  onOpenChange={(o) => {
-                    setStatusPopoverOpen(o);
-                    if (o) setStatusDraft(myStatus ?? "");
-                  }}
-                >
-                  <PopoverTrigger asChild>
-                    {myStatus ? (
-                      <button type="button" className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[68px] z-10">
-                        <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic truncate text-center">
-                          {myStatus}
-                          <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
-                        </span>
-                      </button>
-                    ) : (
+                {myStatus ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStatusDraft(myStatus ?? "");
+                      setStatusPopoverOpen(true);
+                    }}
+                    className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[68px] z-10"
+                  >
+                    <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic truncate text-center">
+                      {myStatus}
+                      <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStatusDraft(myStatus ?? "");
+                      setStatusPopoverOpen(true);
+                    }}
+                    aria-label={t("profile.statusPlaceholder")}
+                    className="absolute top-8 left-8 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background text-xs font-bold z-10"
+                  >
+                    +
+                  </button>
+                )}
+                <Dialog open={statusPopoverOpen} onOpenChange={setStatusPopoverOpen}>
+                  <DialogContent className="max-w-sm w-[92vw]">
+                    <DialogHeader>
+                      <DialogTitle>{t("profile.editStatusTitle")}</DialogTitle>
+                    </DialogHeader>
+                    <Textarea
+                      value={statusDraft}
+                      onChange={(e) => setStatusDraft(e.target.value)}
+                      placeholder={t("profile.statusPlaceholder")}
+                      maxLength={60}
+                      className="min-h-[120px] text-base"
+                      autoFocus
+                    />
+                    <DialogFooter>
                       <button
                         type="button"
-                        aria-label={t("profile.statusPlaceholder")}
-                        className="absolute top-8 left-8 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background text-xs font-bold z-10"
+                        onClick={() => setStatusPopoverOpen(false)}
+                        className="text-sm px-4 py-2 rounded-lg text-muted-foreground hover:bg-accent"
                       >
-                        +
+                        {t("common.cancel")}
                       </button>
-                    )}
-                  </PopoverTrigger>
-                  <PopoverContent className="w-64 p-3" align="start">
-                    <div className="space-y-2">
-                      <Input
-                        value={statusDraft}
-                        onChange={(e) => setStatusDraft(e.target.value)}
-                        placeholder={t("profile.statusPlaceholder")}
-                        maxLength={60}
-                        className="h-9 text-sm"
-                        autoFocus
-                      />
-                      <div className="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setStatusPopoverOpen(false)}
-                          className="text-xs px-3 py-1.5 rounded-lg text-muted-foreground hover:bg-accent"
-                        >
-                          {t("common.cancel")}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={saveMyStatus}
-                          className="text-xs px-3 py-1.5 rounded-lg bg-primary text-primary-foreground font-semibold"
-                        >
-                          {t("common.save")}
-                        </button>
-                      </div>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                      <button
+                        type="button"
+                        onClick={saveMyStatus}
+                        className="text-sm px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold"
+                      >
+                        {t("common.save")}
+                      </button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
                 <Link to={`/tin-nhan/${user.id}`}>
                   <Avatar path={profile?.avatar_url} name={profile?.full_name} size={48} />
                 </Link>
@@ -1896,7 +1902,7 @@ export function MessagesThread() {
         />
         <button
           onClick={() => fileRef.current?.click()}
-          disabled={uploading || iBlockedThem}
+          disabled={uploading || iBlockedThem || voice.recording}
           aria-label={t("chat.pickImage")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
         >
@@ -1904,7 +1910,7 @@ export function MessagesThread() {
         </button>
         <button
           onClick={() => cameraRef.current?.click()}
-          disabled={uploading || iBlockedThem}
+          disabled={uploading || iBlockedThem || voice.recording}
           aria-label={t("chat.takePhoto")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0"
         >
@@ -1912,7 +1918,7 @@ export function MessagesThread() {
         </button>
         <button
           onClick={() => setShowGifs((v) => !v)}
-          disabled={iBlockedThem}
+          disabled={iBlockedThem || voice.recording}
           aria-label="GIF"
           className={`w-9 h-9 rounded-full hover:bg-accent grid place-items-center shrink-0 ${showGifs ? "bg-accent" : "text-muted-foreground"}`}
         >
@@ -1921,7 +1927,7 @@ export function MessagesThread() {
         {!voice.recording && (
           <button
             onClick={startVoice}
-            disabled={uploading || iBlockedThem}
+            disabled={uploading || iBlockedThem || !!pendingImage}
             aria-label={t("chat.recordVoice")}
             className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0 disabled:opacity-60"
           >
@@ -1929,10 +1935,10 @@ export function MessagesThread() {
           </button>
         )}
         {voice.recording ? (
-          <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
+          <div className="flex-1 min-w-0 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
             <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse shrink-0" />
-            <span className="text-sm font-medium tabular-nums">{formatDuration(voice.seconds)}</span>
-            <span className="text-xs text-muted-foreground truncate">{t("chat.recording")}</span>
+            <span className="text-sm font-medium tabular-nums shrink-0">{formatDuration(voice.seconds)}</span>
+            <span className="text-xs text-muted-foreground truncate min-w-0">{t("chat.recording")}</span>
             <button
               onClick={voice.cancel}
               aria-label={t("common.cancel")}
@@ -1956,7 +1962,7 @@ export function MessagesThread() {
                   ? t("community.tapSendPlaceholder")
                   : t("messages.inputPlaceholder")
             }
-            className="flex-1 px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
+            className="flex-1 px-3 py-2 rounded-full border bg-background text-base disabled:opacity-60"
           />
         )}
         <button
