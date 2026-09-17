@@ -118,6 +118,7 @@ export function MessagesInbox() {
   const [myStatus, setMyStatus] = useState<string | null>(null);
   const [statusPopoverOpen, setStatusPopoverOpen] = useState(false);
   const [statusDraft, setStatusDraft] = useState("");
+  const [statusViewFor, setStatusViewFor] = useState<ConvoSummary | null>(null);
 
   useEffect(() => {
     setMyStatus(profile?.status_message ?? null);
@@ -461,7 +462,7 @@ export function MessagesInbox() {
                   <PopoverTrigger asChild>
                     {myStatus ? (
                       <button type="button" className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10">
-                        <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic break-words text-center">
+                        <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic truncate text-center">
                           {myStatus}
                           <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
                         </span>
@@ -512,30 +513,58 @@ export function MessagesInbox() {
               </div>
 
               {activeStrip.map((c) => (
-                <Link
-                  key={c.partnerId}
-                  to={`/tin-nhan/${c.partnerId}`}
-                  className="flex flex-col items-center gap-1 shrink-0 w-16 relative"
-                >
+                <div key={c.partnerId} className="flex flex-col items-center gap-1 shrink-0 w-16 relative">
                   {c.partner?.status_message && (
-                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10 block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic break-words text-center">
-                      {c.partner.status_message}
-                      <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
-                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setStatusViewFor(c)}
+                      className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10"
+                    >
+                      <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic truncate text-center">
+                        {c.partner.status_message}
+                        <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
+                      </span>
+                    </button>
                   )}
-                  <div className="relative">
+                  <Link to={`/tin-nhan/${c.partnerId}`} className="relative block">
                     <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={48} />
                     {onlineUsers.has(c.partnerId) && (
                       <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-400 ring-2 ring-background" />
                     )}
-                  </div>
-                  <div className="text-[10px] text-center truncate w-full text-muted-foreground">
+                  </Link>
+                  <Link
+                    to={`/tin-nhan/${c.partnerId}`}
+                    className="text-[10px] text-center truncate w-full text-muted-foreground"
+                  >
                     {c.partner?.full_name?.split(" ")[0] || t("messages.unknownUser")}
-                  </div>
-                </Link>
+                  </Link>
+                </div>
               ))}
             </div>
           )}
+
+          <AlertDialog open={!!statusViewFor} onOpenChange={(o) => !o && setStatusViewFor(null)}>
+            <AlertDialogContent className="max-w-xs">
+              <AlertDialogHeader>
+                <div className="flex items-center gap-2">
+                  <Avatar
+                    path={statusViewFor?.partner?.avatar_url}
+                    name={statusViewFor?.partner?.full_name}
+                    size={40}
+                  />
+                  <AlertDialogTitle className="text-sm font-semibold">
+                    {statusViewFor?.partner?.full_name || t("messages.unknownUser")}
+                  </AlertDialogTitle>
+                </div>
+                <AlertDialogDescription className="text-base text-primary italic font-medium pt-2 text-left break-words">
+                  "{statusViewFor?.partner?.status_message}"
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>{t("common.close")}</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           {sortedConvos.length === 0 ? (
             <div className="text-center py-12 space-y-3">
