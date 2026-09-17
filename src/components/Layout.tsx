@@ -161,7 +161,11 @@ export function Layout() {
                   <Popover open={menuOpen} onOpenChange={setMenuOpen}>
                     <PopoverTrigger asChild>
                       <button type="button" aria-label={t("nav.profileShort")} className="rounded-full shadow-brand">
-                        <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
+                        {profile ? (
+                          <Avatar path={profile?.avatar_url} name={profile?.full_name || profile?.username} size={36} />
+                        ) : (
+                          <div className="w-9 h-9 rounded-full bg-muted animate-pulse" />
+                        )}
                       </button>
                     </PopoverTrigger>
                     <PopoverContent className="w-56 p-1" align="end">
@@ -370,6 +374,7 @@ function HeaderMenuRow({
 function WelcomeScreen() {
   const { t, lang, setLang } = useLanguage();
   const [stats, setStats] = useState({ members: 0, businesses: 0, offers: 0 });
+  const [statsLoading, setStatsLoading] = useState(true);
   useEffect(() => {
     (async () => {
       const { data: pub } = await supabase.rpc("get_public_stats").maybeSingle();
@@ -378,6 +383,7 @@ function WelcomeScreen() {
         businesses: (pub as any)?.businesses ?? 0,
         offers: (pub as any)?.offers ?? 0,
       });
+      setStatsLoading(false);
     })();
   }, []);
 
@@ -420,7 +426,11 @@ function WelcomeScreen() {
             <div className="w-8 h-8 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
               <Icon className="w-4 h-4 text-white" />
             </div>
-            <div className="text-xl font-extrabold text-primary">{v}</div>
+            {statsLoading ? (
+              <div className="h-6 w-8 mx-auto mb-0.5 rounded bg-muted animate-pulse" />
+            ) : (
+              <div className="text-xl font-extrabold text-primary">{v}</div>
+            )}
             <div className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">{l}</div>
           </div>
         ))}
