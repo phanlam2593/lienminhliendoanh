@@ -99,44 +99,54 @@ export function Layout() {
   // máy/kiểu điều hướng Android, cỡ chữ hệ thống...) thay vì đoán số cố định — số đoán sai
   // là nguyên nhân gây khoảng trắng thừa/cuộn sai ở các trang tự tính chiều cao vừa khít
   // màn hình (Tin nhắn, Cộng đồng).
+  //
+  // QUAN TRỌNG (xem QUY TẮC #44 trong knowledge -- đã từng bị lỗi này rồi): khi bàn phím
+  // ảo mở lên, KHÔNG PHẢI trình duyệt/máy nào cũng tự co "layout viewport" theo bàn phím
+  // (nhiều bản Android Chrome giữ nguyên window.innerHeight, chỉ visualViewport.height co
+  // lại) -- lúc đó thanh nav "fixed bottom-0" bị đẩy khuất HẲN xuống dưới bàn phím, không
+  // còn chiếm chỗ nào của khung nhìn đang thấy nữa. Nếu vẫn trừ cứng --bottom-nav-h bằng
+  // offsetHeight TĨNH của nó (bug thực tế đã gặp), khung chat bị trừ dư ra đúng 1 khoảng =
+  // chiều cao thanh nav, sinh khoảng đen trống giữa ô nhập và bàn phím. Fix bằng cách đo
+  // THẬT phần thanh nav ĐANG THỰC SỰ chồng lên khung nhìn hiện tại (so getBoundingClientRect
+  // với visualViewport), ra 0 khi nó bị khuất hẳn, ra đúng chiều cao khi hiện bình thường --
+  // tự đúng cho mọi máy/mọi trình duyệt, không cần đoán riêng theo Android hay iOS.
   const navRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLElement>(null);
   useEffect(() => {
     const navEl = navRef.current;
     const headerEl = headerRef.current;
-    const setNavVar = () =>
-      navEl && document.documentElement.style.setProperty("--bottom-nav-h", `${navEl.offsetHeight}px`);
-    const setHeaderVar = () =>
-      headerEl && document.documentElement.style.setProperty("--header-h", `${headerEl.offsetHeight}px`);
-    setNavVar();
-    setHeaderVar();
-    const roNav = navEl ? new ResizeObserver(setNavVar) : null;
-    const roHeader = headerEl ? new ResizeObserver(setHeaderVar) : null;
+    const vv = window.visualViewport;
+
+    const update = () => {
+      const viewportH = vv ? vv.height : window.innerHeight;
+      document.documentElement.style.setProperty("--vvh", `${viewportH}px`);
+      if (headerEl) {
+        document.documentElement.style.setProperty("--header-h", `${headerEl.offsetHeight}px`);
+      }
+      if (navEl) {
+        const rect = navEl.getBoundingClientRect();
+        const overlap = Math.max(0, Math.min(rect.bottom, viewportH) - Math.max(rect.top, 0));
+        document.documentElement.style.setProperty("--bottom-nav-h", `${overlap}px`);
+      }
+    };
+
+    update();
+    const roNav = navEl ? new ResizeObserver(update) : null;
+    const roHeader = headerEl ? new ResizeObserver(update) : null;
     if (navEl) roNav!.observe(navEl);
     if (headerEl) roHeader!.observe(headerEl);
+    vv?.addEventListener("resize", update);
+    vv?.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
+
     return () => {
       roNav?.disconnect();
       roHeader?.disconnect();
+      vv?.removeEventListener("resize", update);
+      vv?.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, [tabs.length, hide, showWelcome, showCompleteProfileGate, showPendingGate]);
-
-  // Chiều cao viewport THẬT SỰ đang hiển thị (đã trừ phần bị bàn phím ảo che) -- dùng
-  // visualViewport thay vì dvh vì không phải trình duyệt nào cũng tự co dvh theo bàn phím
-  // (đặc biệt Safari/iOS đời cũ). Các trang tự tính chiều cao vừa khít màn hình (Tin nhắn,
-  // Cộng đồng) dùng biến --vvh này để khung nội dung co lại đúng theo bàn phím, thay vì bị
-  // trình duyệt tự cuộn cả trang lên (che mất header/logo) như hành vi mặc định trước đây.
-  useEffect(() => {
-    const vv = window.visualViewport;
-    if (!vv) return;
-    const setVvh = () => document.documentElement.style.setProperty("--vvh", `${vv.height}px`);
-    setVvh();
-    vv.addEventListener("resize", setVvh);
-    vv.addEventListener("scroll", setVvh);
-    return () => {
-      vv.removeEventListener("resize", setVvh);
-      vv.removeEventListener("scroll", setVvh);
-    };
-  }, []);
 
   return (
     <div className="mx-auto min-h-screen max-w-md bg-background relative shadow-float">
