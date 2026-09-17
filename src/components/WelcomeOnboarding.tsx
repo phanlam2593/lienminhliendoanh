@@ -325,6 +325,38 @@ function Scene4() {
   );
 }
 
+function SceneCommunity() {
+  const { t } = useLanguage();
+  return (
+    <div className="wo-scene wo-s6">
+      <SceneClouds />
+      <div className="wo-blob wo-abs-a">
+        <Blob variant="cyan" className="wo-bob" />
+      </div>
+      <div className="wo-blob wo-abs-b">
+        <Blob variant="green" className="wo-bob wo-rev" />
+      </div>
+      <div className="wo-badge">{t("onboarding.communityBadge")}</div>
+    </div>
+  );
+}
+
+function SceneSwipe() {
+  const { t } = useLanguage();
+  return (
+    <div className="wo-scene wo-s7">
+      <SceneClouds />
+      <div className="wo-blob wo-abs-a">
+        <Blob variant="green" className="wo-bob" />
+      </div>
+      <div className="wo-blob wo-abs-b">
+        <Blob variant="cyan" className="wo-bob wo-rev" />
+      </div>
+      <div className="wo-badge">{t("onboarding.swipeBadge")}</div>
+    </div>
+  );
+}
+
 function Scene5({ active }: { active: boolean }) {
   const confetti = useMemo(() => {
     const colors = ["#0891b2", "#10b981", "#fbbf24", "#fb7185", "#67e8f9"];
@@ -458,6 +490,42 @@ function Slide({ index, active, memberNumber }: { index: number; active: boolean
       </div>
     );
   }
+  if (index === 4) {
+    return (
+      <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
+        <SceneCommunity />
+        <h2 className="wo-h2">
+          {t("onboarding.communityTitlePre")}
+          <span className="wo-hl">{t("onboarding.communityTitleHl")}</span>
+          {t("onboarding.communityTitlePost")}
+        </h2>
+        <div className="wo-flow">
+          <FlowChip>{t("onboarding.communityChip1")}</FlowChip>
+          <FlowArrow />
+          <FlowChip>{t("onboarding.communityChip2")}</FlowChip>
+        </div>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
+      </div>
+    );
+  }
+  if (index === 5) {
+    return (
+      <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
+        <SceneSwipe />
+        <h2 className="wo-h2">
+          {t("onboarding.swipeTitlePre")}
+          <span className="wo-hl">{t("onboarding.swipeTitleHl")}</span>
+          {t("onboarding.swipeTitlePost")}
+        </h2>
+        <div className="wo-flow">
+          <FlowChip>{t("onboarding.swipeChip1")}</FlowChip>
+          <FlowArrow two />
+          <FlowChip>{t("onboarding.swipeChip2")}</FlowChip>
+        </div>
+        <p className="wo-simple">{t("onboarding.simple")}</p>
+      </div>
+    );
+  }
   return (
     <div key={key} className={`wo-slide ${active ? "wo-active" : ""}`}>
       <Scene5 active={active} />
@@ -564,7 +632,7 @@ export function WelcomeOnboarding({
     setClosing(false);
   };
 
-  const go = (i: number) => setPage(Math.max(0, Math.min(4, i)));
+  const go = (i: number) => setPage(Math.max(0, Math.min(6, i)));
 
   const onTouchStart = (e: React.TouchEvent) => {
     startX.current = e.touches[0].clientX;
@@ -584,7 +652,7 @@ export function WelcomeOnboarding({
   if (!visible || !profile) return null;
 
   const memberNumber = memberRank ?? 1;
-  const isLast = page === 4;
+  const isLast = page === 6;
 
   return (
     <div className="wo-root" role="dialog" aria-modal="true" aria-label={t("onboarding.ariaLabel")}>
@@ -613,7 +681,7 @@ export function WelcomeOnboarding({
         onTouchEnd={onTouchEnd}
       >
         <div className="wo-track" style={{ transform: `translateX(-${page * 100}%)` }}>
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="wo-page">
               <Slide index={i} active={page === i} memberNumber={memberNumber} />
             </div>
@@ -624,7 +692,7 @@ export function WelcomeOnboarding({
       {/* Footer */}
       <div className="wo-footer">
         <div className="wo-dots" role="tablist" aria-label={t("onboarding.page")}>
-          {[0, 1, 2, 3, 4].map((i) => (
+          {[0, 1, 2, 3, 4, 5, 6].map((i) => (
             <button
               key={i}
               className={`wo-dot ${page === i ? "wo-dot-active" : ""}`}
