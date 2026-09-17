@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { Avatar } from "@/components/Avatar";
-import { Send, Trash2, Pencil, Check, X, Reply as ReplyIcon, Pin as PinIcon, PinOff } from "lucide-react";
+import { Send, Trash2, Pencil, Check, X, Reply as ReplyIcon, Pin as PinIcon, PinOff, Mic } from "lucide-react";
 import { toast } from "sonner";
 import { timeAgo } from "@/lib/time";
-import { uploadImage, validateImage } from "@/lib/upload";
+import { uploadImage, uploadAudio, validateImage } from "@/lib/upload";
+import { VoiceMessageBubble } from "@/components/VoiceMessageBubble";
+import { useVoiceRecorder, formatDuration } from "@/hooks/useVoiceRecorder";
 import { StoredImage } from "@/components/StoredImage";
 import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
 import {
@@ -46,7 +48,7 @@ interface Msg {
   id: string;
   user_id: string;
   content: string;
-  type: "text" | "image" | "gif";
+  type: "text" | "image" | "gif" | "voice";
   image_url: string | null;
   created_at: string;
   edited_at: string | null;
@@ -94,6 +96,7 @@ export default function Community() {
   const [text, setText] = useState("");
   const [showGifs, setShowGifs] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const voice = useVoiceRecorder(() => toast.error(t("chat.micDenied")));
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [showMembers, setShowMembers] = useState(false);
   const [adminIds, setAdminIds] = useState<Set<string>>(new Set());
@@ -584,6 +587,41 @@ export default function Community() {
     setTimeout(() => scrollToBottom(true), 50);
   };
 
+  const startVoice = () => {
+    void voice.start();
+  };
+
+  const sendVoice = async () => {
+    const rec = await voice.stop();
+    if (!rec) return;
+    setUploading(true);
+    try {
+      const file = new File([rec.blob], "voice", { type: rec.blob.type });
+      const path = await uploadAudio(file, "community-voice", user.id);
+      const { data, error } = await supabase
+        .from("community_messages")
+        .insert({
+          user_id: user.id,
+          content: String(rec.seconds),
+          type: "voice",
+          image_url: path,
+          location: channelLocation,
+          topic: channelTopic,
+          reply_to_id: replyingTo?.id ?? null,
+        })
+        .select()
+        .single();
+      if (error) throw error;
+      if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Msg]));
+      setReplyingTo(null);
+      setTimeout(() => scrollToBottom(true), 50);
+    } catch (e: any) {
+      toast.error(e.message || t("chat.sendVoiceFail"));
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const send = async () => {
     const base = { location: channelLocation, topic: channelTopic, reply_to_id: replyingTo?.id ?? null };
     if (pendingImage) {
@@ -918,7 +956,13 @@ export default function Community() {
                 <span className="font-semibold text-primary shrink-0">{t("pin.pinnedLabel")}:</span>
                 <span className="truncate text-muted-foreground">
                   {profMap.get(pm.user_id)?.full_name || t("community.member")}:{" "}
-                  {pm.type === "text" ? pm.content : pm.type === "gif" ? "🎬 GIF" : `📷 ${t("chat.imageAlt")}`}
+                  {pm.type === "text"
+                    ? pm.content
+                    : pm.type === "gif"
+                      ? "🎬 GIF"
+                      : pm.type === "voice"
+                        ? `🎤 ${t("chat.voiceMessage")}`
+                        : `📷 ${t("chat.imageAlt")}`}
                 </span>
               </div>
             ))}
@@ -1035,6 +1079,15 @@ export default function Community() {
                         </div>
                       ) : m.type === "gif" ? (
                         <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
+                      ) : m.type === "voice" ? (
+                        <div className="mt-0.5">
+                          <VoiceMessageBubble
+                            path={m.image_url}
+                            seconds={Number(m.content) || 0}
+                            mine={mine}
+                            label={t("chat.playVoice")}
+                          />
+                        </div>
                       ) : m.type === "image" ? (
                         <div className="max-w-[200px] mt-0.5">
                           <StoredImage
@@ -1125,7 +1178,9 @@ export default function Community() {
                   ? replyingTo.content
                   : replyingTo.type === "gif"
                     ? "🎬 GIF"
-                    : `📷 ${t("chat.imageAlt")}`}
+                    : replyingTo.type === "voice"
+                      ? `🎤 ${t("chat.voiceMessage")}`
+                      : `📷 ${t("chat.imageAlt")}`}
               </span>
             </div>
             <button onClick={() => setReplyingTo(null)} aria-label={t("msg.editCancel")} className="shrink-0">
@@ -1200,6 +1255,30 @@ export default function Community() {
           >
             <Smile className="w-5 h-5" />
           </button>
+          {!voice.recording && (
+            <button
+              onClick={startVoice}
+              disabled={uploading}
+              aria-label={t("chat.recordVoice")}
+              className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground shrink-0 disabled:opacity-60"
+            >
+              <Mic className="w-5 h-5" />
+            </button>
+          )}
+          {voice.recording ? (
+            <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-full border bg-background">
+              <span className="w-2.5 h-2.5 rounded-full bg-destructive animate-pulse shrink-0" />
+              <span className="text-sm font-medium tabular-nums">{formatDuration(voice.seconds)}</span>
+              <span className="text-xs text-muted-foreground truncate">{t("chat.recording")}</span>
+              <button
+                onClick={voice.cancel}
+                aria-label={t("common.cancel")}
+                className="ml-auto w-7 h-7 rounded-full bg-muted grid place-items-center shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
           <div className="relative flex-1">
             {mentionSuggestions.length > 0 && (
               <div className="absolute bottom-full left-0 right-0 mb-1 bg-card border rounded-xl shadow-lg overflow-hidden max-h-52 overflow-y-auto z-10">
@@ -1231,8 +1310,9 @@ export default function Community() {
               className="w-full px-3 py-2 rounded-full border bg-background text-sm disabled:opacity-60"
             />
           </div>
+          )}
           <button
-            onClick={send}
+            onClick={voice.recording ? sendVoice : send}
             disabled={uploading}
             aria-label={t("common.send")}
             className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0 disabled:opacity-60"

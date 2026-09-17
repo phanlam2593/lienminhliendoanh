@@ -257,7 +257,7 @@ export interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
-  type: "text" | "image" | "sticker" | "broadcast" | "gif";
+  type: "text" | "image" | "sticker" | "broadcast" | "gif" | "voice";
   image_url: string | null;
   is_read: boolean;
   created_at: string;

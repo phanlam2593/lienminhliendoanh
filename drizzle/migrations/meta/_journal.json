@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789659975667,
+      "tag": "0000_voice_bucket_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789660117332,
+      "tag": "0001_allow_voice_message_type",
+      "breakpoints": true
+    }
+  ]
+}
