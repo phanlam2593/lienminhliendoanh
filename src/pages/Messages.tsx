@@ -21,7 +21,6 @@ import {
   PhoneMissed,
   PhoneIncoming,
   PhoneOutgoing,
-  History,
   MoreVertical,
   Ban,
   ShieldCheck,
@@ -245,7 +244,7 @@ function ChatLinkPreview({ text }: { text: string }) {
 }
 
 export function MessagesInbox() {
-  const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
+  const { user, profile, isApproved, isAdmin, loading: authLoading, refresh } = useAuth();
   const { t, lang } = useLanguage();
   const [convos, setConvos] = useState<ConvoSummary[]>([]);
   const [convosLoading, setConvosLoading] = useState(true);
@@ -261,6 +260,32 @@ export function MessagesInbox() {
   const [search, setSearch] = useState("");
   const [actionSheetFor, setActionSheetFor] = useState<ConvoSummary | null>(null);
   const [confirmBlockFor, setConfirmBlockFor] = useState<ConvoSummary | null>(null);
+
+  // Status cá nhân (kiểu "note" của FB) hiện ở đầu dải avatar đang hoạt động — dùng lại
+  // field status_message đã có sẵn ở trang Cá nhân, sửa nhanh ngay tại đây qua popover.
+  const [myStatus, setMyStatus] = useState<string | null>(null);
+  const [statusPopoverOpen, setStatusPopoverOpen] = useState(false);
+  const [statusDraft, setStatusDraft] = useState("");
+
+  useEffect(() => {
+    setMyStatus(profile?.status_message ?? null);
+  }, [profile?.status_message]);
+
+  const saveMyStatus = async () => {
+    if (!user) return;
+    const { error } = await supabase
+      .from("profiles")
+      .update({ status_message: statusDraft.trim() || null })
+      .eq("id", user.id);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setMyStatus(statusDraft.trim() || null);
+    setStatusPopoverOpen(false);
+    toast.success(t("common.saved"));
+    void refresh();
+  };
 
   // Nhấn-giữ ~500ms (không dịch ngón tay quá 10px) trên 1 dòng hội thoại để mở bảng tuỳ
   // chọn — giống Messenger/FB, thay cho nút thùng rác cố định hiện trước đây.
@@ -344,7 +369,7 @@ export function MessagesInbox() {
     if (ids.length) {
       const { data: profs } = await supabase
         .from("profiles_public")
-        .select("id, full_name, username, avatar_url, points")
+        .select("id, full_name, username, avatar_url, points, status_message")
         .in("id", ids);
       (profs as any[] | null)?.forEach((p) => {
         if (map.has(p.id)) map.get(p.id)!.partner = p;
@@ -551,17 +576,6 @@ export function MessagesInbox() {
 
   return (
     <div className="p-4 space-y-2">
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="text-xl font-extrabold">{t("messages.title")}</h1>
-        <Link
-          to="/cuoc-goi"
-          className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center text-muted-foreground"
-          aria-label={t("callHistory.title")}
-          title={t("callHistory.title")}
-        >
-          <History className="w-5 h-5" />
-        </Link>
-      </div>
       {convosLoading ? (
         <div className="text-center py-12 space-y-3">
           <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
@@ -582,14 +596,81 @@ export function MessagesInbox() {
             />
           </div>
 
-          {!search.trim() && activeStrip.length > 0 && (
-            <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {!search.trim() && (
+            <div className="flex gap-3 overflow-x-auto pb-1 pt-7 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="flex flex-col items-center gap-1 shrink-0 w-16 relative">
+                <Popover
+                  open={statusPopoverOpen}
+                  onOpenChange={(o) => {
+                    setStatusPopoverOpen(o);
+                    if (o) setStatusDraft(myStatus ?? "");
+                  }}
+                >
+                  <PopoverTrigger asChild>
+                    {myStatus ? (
+                      <button type="button" className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10">
+                        <span className="relative block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic break-words text-center">
+                          {myStatus}
+                          <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        aria-label={t("profile.statusPlaceholder")}
+                        className="absolute top-8 left-8 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background text-xs font-bold z-10"
+                      >
+                        +
+                      </button>
+                    )}
+                  </PopoverTrigger>
+                  <PopoverContent className="w-64 p-3" align="start">
+                    <div className="space-y-2">
+                      <Input
+                        value={statusDraft}
+                        onChange={(e) => setStatusDraft(e.target.value)}
+                        placeholder={t("profile.statusPlaceholder")}
+                        maxLength={60}
+                        className="h-9 text-sm"
+                        autoFocus
+                      />
+                      <div className="flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setStatusPopoverOpen(false)}
+                          className="text-xs px-3 py-1.5 rounded-lg text-muted-foreground hover:bg-accent"
+                        >
+                          {t("common.cancel")}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={saveMyStatus}
+                          className="text-xs px-3 py-1.5 rounded-lg bg-primary text-primary-foreground font-semibold"
+                        >
+                          {t("common.save")}
+                        </button>
+                      </div>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+                <Link to={`/tin-nhan/${user.id}`}>
+                  <Avatar path={profile?.avatar_url} name={profile?.full_name} size={48} />
+                </Link>
+                <div className="text-[10px] text-center truncate w-full text-muted-foreground">{t("messages.you")}</div>
+              </div>
+
               {activeStrip.map((c) => (
                 <Link
                   key={c.partnerId}
                   to={`/tin-nhan/${c.partnerId}`}
-                  className="flex flex-col items-center gap-1 shrink-0 w-14"
+                  className="flex flex-col items-center gap-1 shrink-0 w-16 relative"
                 >
+                  {c.partner?.status_message && (
+                    <span className="absolute -top-7 left-1/2 -translate-x-1/2 max-w-[120px] z-10 block px-2.5 py-1 rounded-2xl bg-card border border-border shadow-sm text-[10px] text-primary font-semibold italic break-words text-center">
+                      {c.partner.status_message}
+                      <span className="absolute left-1/2 -translate-x-1/2 -bottom-[5px] w-2 h-2 bg-card border-b border-r border-border rotate-45" />
+                    </span>
+                  )}
                   <div className="relative">
                     <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={48} />
                     {onlineUsers.has(c.partnerId) && (
