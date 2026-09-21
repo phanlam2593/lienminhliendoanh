@@ -61,10 +61,29 @@ async function sendBatch(items: PushItem[]) {
       // Gắn "tag" = category (VD "messages") — trình duyệt/điện thoại sẽ THAY THẾ thông báo
       // cũ cùng tag bằng cái mới thay vì xếp chồng thêm, nên 1000 tin nhắn dồn dập chỉ hiện
       // đúng 1 thông báo (được cập nhật nội dung mới nhất), không phải hàng chục cái.
-      const payload = JSON.stringify({ title: item.title, body: item.body, url: item.url, tag: item.category });
+      const payload = JSON.stringify({
+        title: item.title,
+        body: item.body,
+        url: item.url,
+        tag: item.category,
+        // renotify: khi nhiều thông báo cùng tag dồn lại (máy offline/ngủ lâu), thông báo mới
+        // PHẢI báo lại (rung/âm) thay vì âm thầm thay thế cái cũ — đây là lý do máy đóng lâu
+        // rồi có tin mới mà không thấy gì hiện lên.
+        renotify: true,
+      });
       return userSubs.map(async (s: any) => {
         try {
-          await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload);
+          await webpush.sendNotification(
+            { endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } },
+            payload,
+            {
+              // urgency "high": máy Android đang Doze/ngủ sâu sẽ được đánh thức để giao ngay,
+              // thay vì bị gom lại chờ lần thức tiếp theo (mặc định "normal").
+              urgency: "high",
+              // Giữ message trong push service 24h nếu máy offline, để mở máy lên vẫn nhận được.
+              TTL: 60 * 60 * 24,
+            },
+          );
           sent++;
         } catch (e: any) {
           const code = e?.statusCode;
