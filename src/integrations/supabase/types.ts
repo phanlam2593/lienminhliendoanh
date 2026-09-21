@@ -2086,6 +2086,16 @@ export type Database = {
           offers: number
         }[]
       }
+      get_usage_stats: {
+        Args: never
+        Returns: {
+          category: string
+          item_count: number
+          month: string
+          total_bytes: number
+          total_seconds: number
+        }[]
+      }
       get_user_role: { Args: { _id: string }; Returns: string }
       has_role: {
         Args: {

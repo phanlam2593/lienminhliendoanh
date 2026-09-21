@@ -17,6 +17,9 @@ self.addEventListener("push", (event) => {
     badge: APP_BADGE,
     data: { url: data.url || "/" },
     tag: data.tag,
+    // Có tag mà không renotify => thông báo mới thay thế âm thầm, người dùng không hay biết.
+    renotify: data.renotify === true && !!data.tag,
+    timestamp: Date.now(),
   };
   event.waitUntil(self.registration.showNotification(title, options));
 });
