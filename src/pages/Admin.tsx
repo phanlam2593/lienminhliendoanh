@@ -35,7 +35,17 @@ import {
   ExternalLink,
   Clock,
   Send,
+  HardDrive,
 } from "lucide-react";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { StoredImage } from "@/components/StoredImage";
 import { LightboxImage } from "@/components/ImageLightbox";
 import { WelcomeOnboarding } from "@/components/WelcomeOnboarding";
@@ -67,7 +77,16 @@ const MEMBER_PAGE_SIZE = 50;
 // ── Điều hướng của trang Quản trị ────────────────────────────────────────────
 // DO NOT CHANGE: "overview" là màn hình chính (lưới 6 ô); các key còn lại là
 // màn hình chi tiết, vào bằng cách bấm ô tương ứng, ra bằng nút quay lại.
-type TabKey = "overview" | "members" | "businesses" | "reports" | "pending" | "activity" | "hidden" | "broadcast";
+type TabKey =
+  | "overview"
+  | "members"
+  | "businesses"
+  | "reports"
+  | "pending"
+  | "activity"
+  | "hidden"
+  | "broadcast"
+  | "usage";
 
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
@@ -77,6 +96,7 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   activity: "Hoạt động gần đây",
   hidden: "Công cụ khác",
   broadcast: "Phát thông báo",
+  usage: "Dung lượng",
 };
 
 const VALID_TABS: TabKey[] = [
@@ -88,6 +108,7 @@ const VALID_TABS: TabKey[] = [
   "activity",
   "hidden",
   "broadcast",
+  "usage",
 ];
 
 export default function Admin() {
@@ -364,6 +385,8 @@ export default function Admin() {
         </div>
       )}
 
+      {activeTab === "usage" && <UsageTab />}
+
       <MemberDetail
         row={selected}
         onClose={() => setSelected(null)}
@@ -579,6 +602,12 @@ function OverviewTab({
             label="Công cụ khác"
             colorClass="bg-primary/10 text-primary"
             onClick={() => onNavigate("hidden")}
+          />
+          <ToolRow
+            icon={HardDrive}
+            label="Dung lượng"
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("usage")}
           />
         </div>
       </div>
@@ -2362,6 +2391,216 @@ function Broadcast() {
       >
         <Send className="w-4 h-4" /> Gửi cho tất cả thành viên
       </button>
+    </div>
+  );
+}
+
+// ── Tab "Dung lượng" — thống kê dung lượng lưu trữ (ảnh, ghi âm) và số lượt
+// hoạt động (tin nhắn, GIF, cuộc gọi) theo tháng, để hoạch định chi phí sau này.
+// Dữ liệu lấy từ RPC get_usage_stats() (SECURITY DEFINER, chỉ admin gọi được).
+type UsageRow = {
+  month: string;
+  category: "image" | "voice" | "gif" | "text_message" | "call";
+  item_count: number;
+  total_bytes: number | null;
+  total_seconds: number | null;
+};
+
+function formatBytes(bytes: number): string {
+  if (!bytes) return "0 B";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  let v = bytes;
+  let i = 0;
+  while (v >= 1024 && i < units.length - 1) {
+    v /= 1024;
+    i++;
+  }
+  return `${v.toFixed(i === 0 ? 0 : v < 10 ? 1 : 0)} ${units[i]}`;
+}
+
+function formatMonth(month: string): string {
+  return new Date(month).toLocaleDateString("vi-VN", { month: "numeric", year: "2-digit" });
+}
+
+const STORAGE_CHART_CONFIG: ChartConfig = {
+  image: { label: "Ảnh", theme: { light: "#2a78d6", dark: "#3987e5" } },
+  voice: { label: "Ghi âm", theme: { light: "#eb6834", dark: "#d95926" } },
+};
+
+const ACTIVITY_CHART_CONFIG: ChartConfig = {
+  text_message: { label: "Tin nhắn", theme: { light: "#1baf7a", dark: "#199e70" } },
+  gif: { label: "GIF", theme: { light: "#eda100", dark: "#c98500" } },
+};
+
+const CALL_CHART_CONFIG: ChartConfig = {
+  call: { label: "Cuộc gọi", theme: { light: "#4a3aa7", dark: "#9085e9" } },
+};
+
+function UsageTab() {
+  const [rows, setRows] = useState<UsageRow[] | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase.rpc("get_usage_stats");
+      if (error) {
+        toast.error("Không tải được dữ liệu dung lượng");
+        return;
+      }
+      setRows((data ?? []) as UsageRow[]);
+    })();
+  }, []);
+
+  const { storageData, activityData, callData, totals } = useMemo(() => {
+    if (!rows) return { storageData: [] as any[], activityData: [] as any[], callData: [] as any[], totals: null };
+
+    const months = Array.from(new Set(rows.map((r) => r.month))).sort();
+    const find = (m: string, c: UsageRow["category"]) => rows.find((r) => r.month === m && r.category === c);
+
+    let cumImage = 0;
+    let cumVoice = 0;
+    const storageData = months.map((m) => {
+      cumImage += find(m, "image")?.total_bytes ?? 0;
+      cumVoice += find(m, "voice")?.total_bytes ?? 0;
+      return {
+        month: formatMonth(m),
+        image: Math.round((cumImage / (1024 * 1024)) * 10) / 10,
+        voice: Math.round((cumVoice / (1024 * 1024)) * 10) / 10,
+      };
+    });
+
+    const activityData = months.map((m) => ({
+      month: formatMonth(m),
+      text_message: find(m, "text_message")?.item_count ?? 0,
+      gif: find(m, "gif")?.item_count ?? 0,
+    }));
+
+    const callData = months.map((m) => ({
+      month: formatMonth(m),
+      call: find(m, "call")?.item_count ?? 0,
+    }));
+
+    const totalImageBytes = rows.filter((r) => r.category === "image").reduce((s, r) => s + (r.total_bytes ?? 0), 0);
+    const totalVoiceBytes = rows.filter((r) => r.category === "voice").reduce((s, r) => s + (r.total_bytes ?? 0), 0);
+    const totalCallSeconds = rows.filter((r) => r.category === "call").reduce((s, r) => s + (r.total_seconds ?? 0), 0);
+    const totalCalls = rows.filter((r) => r.category === "call").reduce((s, r) => s + r.item_count, 0);
+
+    return {
+      storageData,
+      activityData,
+      callData,
+      totals: {
+        totalImageBytes,
+        totalVoiceBytes,
+        totalCallMinutes: Math.round(totalCallSeconds / 60),
+        totalCalls,
+      },
+    };
+  }, [rows]);
+
+  if (rows === null) {
+    return (
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-2">
+          {Array.from({ length: 2 }).map((_, i) => (
+            <div key={i} className="h-20 rounded-xl bg-card border animate-pulse" />
+          ))}
+        </div>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="h-52 rounded-xl bg-card border animate-pulse" />
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-5">
+      <p className="text-xs text-muted-foreground leading-relaxed">
+        Ảnh và ghi âm chiếm dung lượng lưu trữ thật (Supabase Storage). Tin nhắn, GIF và cuộc gọi không chiếm dung lượng
+        lưu trữ — số liệu bên dưới là số lượt hoạt động, dùng để ước tính chi phí băng thông/API sau này.
+      </p>
+
+      <div className="grid grid-cols-2 gap-2">
+        <div className="bg-card rounded-xl border p-3.5">
+          <div className="text-xs text-muted-foreground mb-1">Tổng dung lượng ảnh</div>
+          <div className="text-lg font-extrabold">{formatBytes(totals?.totalImageBytes ?? 0)}</div>
+        </div>
+        <div className="bg-card rounded-xl border p-3.5">
+          <div className="text-xs text-muted-foreground mb-1">Tổng dung lượng ghi âm</div>
+          <div className="text-lg font-extrabold">{formatBytes(totals?.totalVoiceBytes ?? 0)}</div>
+        </div>
+      </div>
+
+      <div className="bg-card rounded-xl border p-3.5">
+        <div className="text-sm font-bold mb-3">Dung lượng lưu trữ theo tháng (MB, tích lũy)</div>
+        {storageData.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-6">Chưa có dữ liệu</p>
+        ) : (
+          <ChartContainer config={STORAGE_CHART_CONFIG} className="h-52 w-full">
+            <AreaChart data={storageData} margin={{ left: 0, right: 8, top: 4, bottom: 0 }}>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border" />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
+              <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={11} width={36} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Area
+                dataKey="image"
+                type="monotone"
+                fill="var(--color-image)"
+                fillOpacity={0.18}
+                stroke="var(--color-image)"
+                strokeWidth={2}
+              />
+              <Area
+                dataKey="voice"
+                type="monotone"
+                fill="var(--color-voice)"
+                fillOpacity={0.18}
+                stroke="var(--color-voice)"
+                strokeWidth={2}
+              />
+            </AreaChart>
+          </ChartContainer>
+        )}
+      </div>
+
+      <div className="bg-card rounded-xl border p-3.5">
+        <div className="text-sm font-bold mb-3">Hoạt động theo tháng (số lượt)</div>
+        {activityData.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-6">Chưa có dữ liệu</p>
+        ) : (
+          <ChartContainer config={ACTIVITY_CHART_CONFIG} className="h-52 w-full">
+            <BarChart data={activityData} margin={{ left: 0, right: 8, top: 4, bottom: 0 }}>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border" />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
+              <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={11} width={32} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Bar dataKey="text_message" fill="var(--color-text_message)" radius={[4, 4, 0, 0]} maxBarSize={24} />
+              <Bar dataKey="gif" fill="var(--color-gif)" radius={[4, 4, 0, 0]} maxBarSize={24} />
+            </BarChart>
+          </ChartContainer>
+        )}
+      </div>
+
+      <div className="bg-card rounded-xl border p-3.5">
+        <div className="text-sm font-bold mb-1">Cuộc gọi theo tháng</div>
+        <div className="text-xs text-muted-foreground mb-3">
+          Tổng {totals?.totalCalls ?? 0} cuộc gọi · {totals?.totalCallMinutes ?? 0} phút
+        </div>
+        {callData.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-6">Chưa có dữ liệu</p>
+        ) : (
+          <ChartContainer config={CALL_CHART_CONFIG} className="h-52 w-full">
+            <BarChart data={callData} margin={{ left: 0, right: 8, top: 4, bottom: 0 }}>
+              <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-border" />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} fontSize={11} />
+              <YAxis tickLine={false} axisLine={false} tickMargin={8} fontSize={11} width={28} />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="call" fill="var(--color-call)" radius={[4, 4, 0, 0]} maxBarSize={24} />
+            </BarChart>
+          </ChartContainer>
+        )}
+      </div>
     </div>
   );
 }
