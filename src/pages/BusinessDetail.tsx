@@ -31,7 +31,7 @@ import { StoredImage } from "@/components/StoredImage";
 import { LightboxImage } from "@/components/ImageLightbox";
 import { OpenBadge } from "@/components/OpenBadge";
 import { uploadImage, validateImage } from "@/lib/upload";
-import { Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon, Camera } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { ReportDialog } from "@/components/ReportDialog";
 import { timeAgo } from "@/lib/time";
@@ -71,6 +71,7 @@ export default function BusinessDetail() {
   const [reviewImage, setReviewImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [reviewUploading, setReviewUploading] = useState(false);
   const reviewFileRef = useRef<HTMLInputElement>(null);
+  const reviewCameraRef = useRef<HTMLInputElement>(null);
 
   const [claimOffer, setClaimOffer] = useState<Offer | null>(null);
   const [claim, setClaim] = useState<OfferClaim | null>(null);
@@ -609,6 +610,24 @@ export default function BusinessDetail() {
                 e.currentTarget.value = "";
               }}
             />
+            <input
+              ref={reviewCameraRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (!f) return;
+                const err = validateImage(f);
+                if (err) {
+                  toast.error(err);
+                  return;
+                }
+                setReviewImage({ file: f, previewUrl: URL.createObjectURL(f) });
+                e.currentTarget.value = "";
+              }}
+            />
             {reviewImage ? (
               <div className="relative inline-block">
                 <img
@@ -628,13 +647,22 @@ export default function BusinessDetail() {
                 </button>
               </div>
             ) : (
-              <button
-                type="button"
-                onClick={() => reviewFileRef.current?.click()}
-                className="w-full py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
-              >
-                <ImageIcon className="w-4 h-4" /> {t("biz.addPhoto")}
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => reviewFileRef.current?.click()}
+                  className="flex-1 py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
+                >
+                  <ImageIcon className="w-4 h-4" /> {t("biz.addPhoto")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => reviewCameraRef.current?.click()}
+                  className="flex-1 py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
+                >
+                  <Camera className="w-4 h-4" /> {t("chat.takePhoto")}
+                </button>
+              </div>
             )}
             <button
               onClick={submitReview}
