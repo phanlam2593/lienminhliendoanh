@@ -1261,22 +1261,34 @@ export default function Quet() {
           <div className="grid grid-cols-2 gap-3">
             {CATEGORIES.map(({ type, Icon }) => {
               return (
-                <div key={type} className="h-full flex flex-col gap-1.5">
+                <div
+                  key={type}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleCategoryClick(type)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleCategoryClick(type);
+                    }
+                  }}
+                  className="h-full w-full rounded-2xl border bg-card p-4 pb-3 flex flex-col items-center gap-2 text-center cursor-pointer active:scale-95 transition"
+                >
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
+                    <Icon className="w-7 h-7" />
+                  </div>
+                  <div className="font-bold text-sm">{t(`quet.type.${type}`)}</div>
+                  <div className="text-[11px] text-muted-foreground leading-snug">
+                    {t(`quet.category.${type}.brief`)}
+                  </div>
+                  {/* Nút Quản lý nằm GỌN TRONG khung thẻ (trước đây là nút rời bên dưới khung) */}
                   <button
-                    onClick={() => handleCategoryClick(type)}
-                    className="flex-1 w-full rounded-2xl border bg-card p-4 flex flex-col items-center gap-2 text-center active:scale-95 transition"
-                  >
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
-                      <Icon className="w-7 h-7" />
-                    </div>
-                    <div className="font-bold text-sm">{t(`quet.type.${type}`)}</div>
-                    <div className="text-[11px] text-muted-foreground leading-snug">
-                      {t(`quet.category.${type}.brief`)}
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => openManage(type)}
-                    className="w-full h-8 rounded-xl border bg-card text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openManage(type);
+                    }}
+                    className="mt-auto w-full h-8 rounded-xl bg-muted/60 text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5 active:scale-95 transition"
                   >
                     <Settings className="w-3.5 h-3.5" /> {t("quet.category.manage")}
                   </button>
