@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { Mail, MessageCircle, Phone, UserCheck, UserPlus } from "lucide-react";
+import { Mail, MessageCircle, Phone, Star, UserCheck, UserPlus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "./Avatar";
 import { MemberLevelBadge } from "./MemberLevelBadge";
+import { ImageViewer } from "./ImageLightbox";
 
 interface QuickProfile {
   id: string;
@@ -38,12 +39,17 @@ export function ProfileQuickView({
   const [following, setFollowing] = useState(false);
   const [followers, setFollowers] = useState(0);
   const [busy, setBusy] = useState(false);
+  const [avatarViewOpen, setAvatarViewOpen] = useState(false);
+  // Đánh giá DN gần đây của người này — thay cho tab "Đánh giá" đã bỏ khỏi trang cá nhân.
+  const [reviews, setReviews] = useState<
+    { id: string; rating: number; comment: string | null; businesses: { id: string; name: string } | null }[]
+  >([]);
 
   useEffect(() => {
     if (!open || !userId) return;
     setLoading(true);
     (async () => {
-      const [{ data: prof }, { data: roleData }, { count }, { data: rel }] = await Promise.all([
+      const [{ data: prof }, { data: roleData }, { count }, { data: rel }, { data: rv }] = await Promise.all([
         supabase.rpc("get_public_profile", { _id: userId }).maybeSingle(),
         supabase.rpc("get_user_role", { _id: userId }),
         supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", userId),
@@ -55,7 +61,14 @@ export function ProfileQuickView({
               .eq("followee_user_id", userId)
               .maybeSingle()
           : Promise.resolve({ data: null } as any),
+        supabase
+          .from("reviews")
+          .select("id, rating, comment, businesses(id, name)")
+          .eq("user_id", userId)
+          .order("created_at", { ascending: false })
+          .limit(10),
       ]);
+      setReviews((rv ?? []) as any);
       const role = (roleData as string) || "guest";
       setP(prof ? { ...(prof as any), role } : null);
       setFollowers(count ?? 0);
@@ -107,18 +120,38 @@ export function ProfileQuickView({
         ) : (
           <div className="space-y-4">
             <div className="flex flex-col items-center text-center gap-2 mt-6">
-              <div className="relative"><Avatar path={p.avatar_url} name={p.full_name || p.username} size={84} />{p.status_message && (<div className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[150px] text-left"><div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" /><div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" /><div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" /><span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">"{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"</span></div>)}</div>
+              <div className="relative">
+                <Avatar
+                  path={p.avatar_url}
+                  name={p.full_name || p.username}
+                  size={84}
+                  onClick={p.avatar_url ? () => setAvatarViewOpen(true) : undefined}
+                />
+                <ImageViewer path={p.avatar_url} open={avatarViewOpen} onClose={() => setAvatarViewOpen(false)} />
+                {p.status_message && (
+                  <div className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[150px] text-left">
+                    <div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" />
+                    <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
+                    <div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" />
+                    <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">
+                      "{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"
+                    </span>
+                  </div>
+                )}
+              </div>
               <div>
                 <div className="font-bold text-base">{p.full_name}</div>
                 {p.username && <div className="text-xs text-muted-foreground">@{p.username}</div>}
                 <div className="mt-1">
                   <MemberLevelBadge points={p.points} size="md" isAdmin={p.role === "admin"} />
                 </div>
-                {false && (p.status_message && (
+                {false && p.status_message && (
                   <div className="inline-block max-w-full px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm mt-1">
-                    <span className="text-sm text-primary italic font-medium break-words">"{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"</span>
+                    <span className="text-sm text-primary italic font-medium break-words">
+                      "{p.status_message.length > 60 ? p.status_message.slice(0, 60) + "…" : p.status_message}"
+                    </span>
                   </div>
-                ))}
+                )}
                 {p.bio && <p className="text-sm text-muted-foreground mt-1">{p.bio}</p>}
               </div>
               <div className="flex items-center gap-2 text-[11px]">
@@ -140,6 +173,52 @@ export function ProfileQuickView({
                 </a>
               )}
             </div>
+
+            {reviews.length > 0 && (
+              <div className="space-y-1.5">
+                <div className="text-xs font-bold text-muted-foreground">
+                  {t("profileQuick.reviews", { n: reviews.length })}
+                </div>
+                <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
+                  {reviews.map((r) => (
+                    <div key={r.id} className="rounded-xl bg-muted/60 px-3 py-2">
+                      <div className="flex items-center justify-between gap-2">
+                        {r.businesses ? (
+                          <Link
+                            to={`/dn/${r.businesses.id}`}
+                            onClick={() => onOpenChange(false)}
+                            className="text-xs font-semibold truncate hover:text-primary"
+                          >
+                            {r.businesses.name}
+                          </Link>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">{t("reports.contentDeleted")}</span>
+                        )}
+                        <div className="flex shrink-0">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-3 h-3 ${i < r.rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/40"}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      {r.comment && <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{r.comment}</p>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!isSelf && (
+              <Link
+                to={`/ho-so/${userId}`}
+                onClick={() => onOpenChange(false)}
+                className="block text-center text-xs font-semibold text-primary"
+              >
+                {t("profileQuick.viewProfile")}
+              </Link>
+            )}
 
             <div className="flex gap-2">
               {!isSelf && user && (
