@@ -37,6 +37,7 @@ import { useNotifications, useUnreadMessages } from "@/hooks/useNotifications";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
+import { isAdultDob } from "@/lib/types";
 
 const PENDING_ALLOWED = ["/ho-so", "/thong-bao", "/tin-nhan"];
 
@@ -80,7 +81,9 @@ export function Layout() {
             : "grid-cols-3";
 
   const showWelcome = !loading && !user && !hide;
-  const needsCompleteProfile = !!profile && !profile.phone;
+  // Thiếu SĐT (đăng nhập Google lần đầu) HOẶC thiếu ngày sinh (tài khoản cũ trước khi có mục
+  // này) → bắt bổ sung 1 lần, màn hình chỉ hỏi đúng những mục còn thiếu.
+  const needsCompleteProfile = !!profile && (!profile.phone || !profile.date_of_birth);
   const showCompleteProfileGate = !loading && !!user && needsCompleteProfile && !hide;
   const isPending = profile?.status === "pending" && !isAdmin;
   const showPendingGate =
@@ -549,10 +552,15 @@ function Footer() {
 function CompleteProfileScreen({ onDone }: { onDone: () => Promise<void> }) {
   const { t } = useLanguage();
   const { user, profile } = useAuth();
+  const needAccount = !profile?.phone;
+  const needDob = !profile?.date_of_birth;
   const [username, setUsername] = useState(profile?.username?.startsWith("g_") ? "" : (profile?.username ?? ""));
   const [phone, setPhone] = useState("");
+  const [dob, setDob] = useState("");
+  const [adultConfirmed, setAdultConfirmed] = useState(false);
   const [usernameErr, setUsernameErr] = useState<string | null>(null);
   const [phoneErr, setPhoneErr] = useState<string | null>(null);
+  const [dobErr, setDobErr] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const checkUnique = async (col: "username" | "phone", val: string) => {
@@ -565,38 +573,52 @@ function CompleteProfileScreen({ onDone }: { onDone: () => Promise<void> }) {
     e.preventDefault();
     setUsernameErr(null);
     setPhoneErr(null);
-    if (!/^[a-z0-9_]{3,20}$/i.test(username)) {
+    setDobErr(null);
+    if (needAccount && !/^[a-z0-9_]{3,20}$/i.test(username)) {
       setUsernameErr(t("register.usernameHint"));
       return;
     }
-    if (!/^\d{8,15}$/.test(phone)) {
+    if (needAccount && !/^\d{8,15}$/.test(phone)) {
       setPhoneErr(t("register.invalid"));
       return;
     }
+    if (needDob && !isAdultDob(dob)) {
+      setDobErr(t("register.dobUnder18"));
+      return;
+    }
+    if (needDob && !adultConfirmed) {
+      setDobErr(t("register.confirmBelow"));
+      return;
+    }
+    if (!user) return;
     setSubmitting(true);
-    const lowerUsername = username.toLowerCase();
-    const [usernameFree, phoneFree] = await Promise.all([
-      lowerUsername === profile?.username ? true : checkUnique("username", lowerUsername),
-      checkUnique("phone", phone),
-    ]);
-    if (!usernameFree) {
-      setSubmitting(false);
-      setUsernameErr(t("register.taken"));
-      return;
+    const update: { username?: string; phone?: string; date_of_birth?: string } = {};
+    if (needAccount) {
+      const lowerUsername = username.toLowerCase();
+      const [usernameFree, phoneFree] = await Promise.all([
+        lowerUsername === profile?.username ? true : checkUnique("username", lowerUsername),
+        checkUnique("phone", phone),
+      ]);
+      if (!usernameFree) {
+        setSubmitting(false);
+        setUsernameErr(t("register.taken"));
+        return;
+      }
+      if (!phoneFree) {
+        setSubmitting(false);
+        setPhoneErr(t("register.taken"));
+        return;
+      }
+      update.username = lowerUsername;
+      update.phone = phone;
     }
-    if (!phoneFree) {
-      setSubmitting(false);
-      setPhoneErr(t("register.taken"));
-      return;
-    }
-    if (!user) {
-      setSubmitting(false);
-      return;
-    }
-    const { error } = await supabase.from("profiles").update({ username: lowerUsername, phone }).eq("id", user.id);
+    if (needDob) update.date_of_birth = dob;
+    const { error } = await supabase.from("profiles").update(update).eq("id", user.id);
     setSubmitting(false);
     if (error) {
-      setPhoneErr(t("register.fillValidInfo"));
+      if (String(error.message).includes("DOB_UNDER_18")) setDobErr(t("register.dobUnder18"));
+      else if (needAccount) setPhoneErr(t("register.fillValidInfo"));
+      else setDobErr(t("register.fillValidInfo"));
       return;
     }
     await onDone();
@@ -605,34 +627,69 @@ function CompleteProfileScreen({ onDone }: { onDone: () => Promise<void> }) {
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center gap-5">
       <h1 className="text-xl font-bold">{t("completeProfile.title")}</h1>
-      <p className="text-sm text-muted-foreground max-w-xs">{t("completeProfile.subtitle", { app: t("app.name") })}</p>
+      <p className="text-sm text-muted-foreground max-w-xs">
+        {needAccount ? t("completeProfile.subtitle", { app: t("app.name") }) : t("completeProfile.dobSubtitle")}
+      </p>
       <form onSubmit={submit} className="w-full max-w-xs space-y-3 text-left">
-        <label className="block space-y-1">
-          <span className="text-xs font-semibold text-muted-foreground">{t("register.username")}</span>
-          <input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={t("register.usernamePlaceholder")}
-            autoCapitalize="none"
-            required
-            className="w-full px-4 py-3 rounded-xl border bg-card"
-          />
-          {usernameErr ? (
-            <p className="text-xs text-destructive">{usernameErr}</p>
-          ) : (
-            <p className="text-[11px] text-muted-foreground">{t("register.usernameHint")}</p>
-          )}
-        </label>
-        <label className="block space-y-1">
-          <span className="text-xs font-semibold text-muted-foreground">{t("register.phone")}</span>
-          <input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            required
-            className="w-full px-4 py-3 rounded-xl border bg-card"
-          />
-          {phoneErr && <p className="text-xs text-destructive">{phoneErr}</p>}
-        </label>
+        {needAccount && (
+          <>
+            <label className="block space-y-1">
+              <span className="text-xs font-semibold text-muted-foreground">{t("register.username")}</span>
+              <input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder={t("register.usernamePlaceholder")}
+                autoCapitalize="none"
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
+              {usernameErr ? (
+                <p className="text-xs text-destructive">{usernameErr}</p>
+              ) : (
+                <p className="text-[11px] text-muted-foreground">{t("register.usernameHint")}</p>
+              )}
+            </label>
+            <label className="block space-y-1">
+              <span className="text-xs font-semibold text-muted-foreground">{t("register.phone")}</span>
+              <input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
+              {phoneErr && <p className="text-xs text-destructive">{phoneErr}</p>}
+            </label>
+          </>
+        )}
+        {needDob && (
+          <>
+            <label className="block space-y-1">
+              <span className="text-xs font-semibold text-muted-foreground">{t("register.dob")}</span>
+              <input
+                type="date"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                max={new Date().toISOString().slice(0, 10)}
+                required
+                className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
+              {dobErr ? (
+                <p className="text-xs text-destructive">{dobErr}</p>
+              ) : (
+                <p className="text-[11px] text-muted-foreground">{t("register.dobHint")}</p>
+              )}
+            </label>
+            <label className="flex items-start gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={adultConfirmed}
+                onChange={(e) => setAdultConfirmed(e.target.checked)}
+                className="mt-0.5"
+              />
+              <span>{t("terms.ageConfirm")}</span>
+            </label>
+          </>
+        )}
         <button
           disabled={submitting}
           className="w-full py-3 rounded-xl bg-gradient-brand text-primary-foreground font-semibold disabled:opacity-50"
