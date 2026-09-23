@@ -6,7 +6,7 @@ import { timeAgo } from "@/lib/time";
 import { GifPicker } from "@/components/GifPicker";
 import { useCallback, useEffect, useLayoutEffect, useState, useRef } from "react";
 import { uploadImage, uploadAudio, validateImage } from "@/lib/upload";
-import { StoredImage } from "@/components/StoredImage";
+import { LightboxImage } from "@/components/ImageLightbox";
 import { VoiceMessageBubble } from "@/components/VoiceMessageBubble";
 import { useVoiceRecorder, formatDuration } from "@/hooks/useVoiceRecorder";
 import { Image as ImageIcon, Camera as CameraIcon, Smile, SmilePlus, Mic } from "lucide-react";
@@ -35,6 +35,7 @@ import {
   Link2,
   Play,
   Pause,
+  MessageCircle,
 } from "lucide-react";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
@@ -393,6 +394,31 @@ export function MessagesInbox() {
     toast.success(t("block.blocked"));
   };
 
+  // Tìm NGƯỜI để bắt đầu trò chuyện mới (không chỉ lọc các cuộc trò chuyện đã có) — để tài
+  // khoản mới chưa nhắn với ai vẫn dùng được ô tìm kiếm. profiles_public đã tự ẩn người bị chặn.
+  const [peopleResults, setPeopleResults] = useState<
+    { id: string; full_name: string | null; username: string | null; avatar_url: string | null }[]
+  >([]);
+  useEffect(() => {
+    const q = search.trim();
+    if (q.length < 2 || !user) {
+      setPeopleResults([]);
+      return;
+    }
+    const handle = setTimeout(async () => {
+      const safe = q.replace(/[%,()*]/g, " ");
+      const { data } = await supabase
+        .from("profiles_public")
+        .select("id, full_name, username, avatar_url")
+        .or(`full_name.ilike.%${safe}%,username.ilike.%${safe}%`)
+        .neq("id", user.id)
+        .limit(10);
+      const convoIds = new Set(convos.map((c) => c.partnerId));
+      setPeopleResults(((data ?? []) as any[]).filter((p) => !convoIds.has(p.id)));
+    }, 300);
+    return () => clearTimeout(handle);
+  }, [search, user?.id, convos]);
+
   // Bỏ dấu tiếng Việt đơn giản để tìm không cần gõ đúng dấu.
   const fold = (s: string) =>
     s
@@ -438,10 +464,6 @@ export function MessagesInbox() {
       {convosLoading ? (
         <div className="text-center py-12 space-y-3">
           <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
-        </div>
-      ) : convos.length === 0 ? (
-        <div className="text-center py-12 space-y-3">
-          <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
         </div>
       ) : (
         <>
@@ -576,61 +598,84 @@ export function MessagesInbox() {
             </AlertDialogContent>
           </AlertDialog>
 
-          {sortedConvos.length === 0 ? (
-            <div className="text-center py-12 space-y-3">
-              <p className="text-sm text-muted-foreground">{t("messages.noConversations")}</p>
-            </div>
-          ) : (
-            sortedConvos.map((c) => (
-              <div
-                key={c.partnerId}
-                className="relative flex items-center gap-2 p-3 rounded-xl select-none active:bg-accent/60 transition-colors"
-                onPointerDown={(e) => onRowPointerDown(c, e)}
-                onPointerMove={onRowPointerMove}
-                onPointerUp={onRowPointerUp}
-                onPointerCancel={onRowPointerUp}
-                onContextMenu={(e) => e.preventDefault()}
-              >
-                <Link
-                  to={`/tin-nhan/${c.partnerId}`}
-                  onClick={onRowLinkClick}
-                  className="flex items-center gap-3 flex-1 min-w-0"
+          {sortedConvos.length === 0
+            ? peopleResults.length === 0 && (
+                <div className="text-center py-12 space-y-2 px-6">
+                  <MessageCircle className="w-10 h-10 mx-auto text-muted-foreground/40" />
+                  <p className="text-sm font-semibold">{t("messages.noConversations")}</p>
+                  {!search.trim() && <p className="text-xs text-muted-foreground">{t("messages.emptyHint")}</p>}
+                </div>
+              )
+            : sortedConvos.map((c) => (
+                <div
+                  key={c.partnerId}
+                  className="relative flex items-center gap-2 p-3 rounded-xl select-none active:bg-accent/60 transition-colors"
+                  onPointerDown={(e) => onRowPointerDown(c, e)}
+                  onPointerMove={onRowPointerMove}
+                  onPointerUp={onRowPointerUp}
+                  onPointerCancel={onRowPointerUp}
+                  onContextMenu={(e) => e.preventDefault()}
                 >
-                  <div className="relative shrink-0">
-                    <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
-                    {onlineUsers.has(c.partnerId) && (
-                      <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      {pinnedIds.has(c.partnerId) && (
-                        <Pin className="w-3 h-3 text-primary shrink-0" aria-label={t("messages.pinnedTooltip")} />
-                      )}
-                      <div className="font-semibold text-sm truncate">
-                        {c.partner?.full_name || t("messages.unknownUser")}
-                      </div>
-                      {c.partner && <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />}
-                      {mutedIds.has(c.partnerId) && (
-                        <BellOff
-                          className="w-3.5 h-3.5 text-muted-foreground shrink-0"
-                          aria-label={t("messages.mutedTooltip")}
-                        />
+                  <Link
+                    to={`/tin-nhan/${c.partnerId}`}
+                    onClick={onRowLinkClick}
+                    className="flex items-center gap-3 flex-1 min-w-0"
+                  >
+                    <div className="relative shrink-0">
+                      <Avatar path={c.partner?.avatar_url} name={c.partner?.full_name} size={40} />
+                      {onlineUsers.has(c.partnerId) && (
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-card" />
                       )}
                     </div>
-                    <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
-                    {c.unread > 0 && (
-                      <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
-                        {c.unread}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        {pinnedIds.has(c.partnerId) && (
+                          <Pin className="w-3 h-3 text-primary shrink-0" aria-label={t("messages.pinnedTooltip")} />
+                        )}
+                        <div className="font-semibold text-sm truncate">
+                          {c.partner?.full_name || t("messages.unknownUser")}
+                        </div>
+                        {c.partner && (
+                          <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />
+                        )}
+                        {mutedIds.has(c.partnerId) && (
+                          <BellOff
+                            className="w-3.5 h-3.5 text-muted-foreground shrink-0"
+                            aria-label={t("messages.mutedTooltip")}
+                          />
+                        )}
                       </div>
-                    )}
+                      <div className="text-xs text-muted-foreground truncate">{c.lastMessage}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[10px] text-muted-foreground">{timeAgo(c.lastAt, lang)}</div>
+                      {c.unread > 0 && (
+                        <div className="mt-1 inline-block min-w-4 px-1.5 rounded-full bg-red-500 text-white text-[10px] font-bold">
+                          {c.unread}
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                </div>
+              ))}
+
+          {peopleResults.length > 0 && (
+            <div className="pt-2">
+              <div className="text-xs font-semibold text-muted-foreground px-1 pb-1">{t("messages.peopleResults")}</div>
+              {peopleResults.map((p) => (
+                <Link
+                  key={p.id}
+                  to={`/tin-nhan/${p.id}`}
+                  className="flex items-center gap-3 p-3 rounded-xl active:bg-accent/60 transition-colors"
+                >
+                  <Avatar path={p.avatar_url} name={p.full_name} size={40} />
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-sm truncate">{p.full_name || t("messages.unknownUser")}</div>
+                    {p.username && <div className="text-xs text-muted-foreground truncate">@{p.username}</div>}
                   </div>
                 </Link>
-              </div>
-            ))
+              ))}
+            </div>
           )}
         </>
       )}
@@ -1530,7 +1575,12 @@ export function MessagesThread() {
                 {mediaItems.map((m) => (
                   <div key={m.id} className="aspect-square rounded-lg overflow-hidden bg-muted">
                     {m.type === "image" ? (
-                      <StoredImage path={m.image_url} alt={t("chat.imageAlt")} className="w-full h-full object-cover" />
+                      <LightboxImage
+                        path={m.image_url}
+                        alt={t("chat.imageAlt")}
+                        className="w-full h-full object-cover"
+                        download
+                      />
                     ) : (
                       <img src={m.content} alt="GIF" className="w-full h-full object-cover" loading="lazy" />
                     )}
@@ -1739,10 +1789,12 @@ export function MessagesThread() {
                         </div>
                       ) : m.type === "image" ? (
                         <div className="max-w-[220px]">
-                          <StoredImage
+                          <LightboxImage
                             path={m.image_url}
                             alt={t("chat.imageAlt")}
                             className="rounded-2xl w-full object-cover"
+                            buttonClassName="block w-full cursor-zoom-in"
+                            download
                           />
                           <div className={`text-[11px] mt-0.5 ${mine ? "text-right" : ""} text-muted-foreground`}>
                             {timeAgo(m.created_at, lang)}
