@@ -52,7 +52,7 @@ import { BusinessPhotoManager } from "@/components/BusinessPhotoManager";
 import { Avatar } from "@/components/Avatar";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { TierLegendDialog } from "@/components/TierLegendDialog";
-import { FollowListDialog } from "@/components/FollowListDialog";
+import { FollowListDialog, SuggestedFollows } from "@/components/FollowListDialog";
 import { FriendsListDialog } from "@/components/FriendsListDialog";
 import { WallComposer } from "@/components/WallComposer";
 import { WallPostCard } from "@/components/WallPostCard";
@@ -112,7 +112,7 @@ export default function Profile() {
   const [coverUploading, setCoverUploading] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(false);
   const [friendsInitialTab, setFriendsInitialTab] = useState<"friends" | "requests">("friends");
-  const [pendingFriendRequests, setPendingFriendRequests] = useState(0);
+  const [friendsCount, setFriendsCount] = useState(0);
   const [wallReloadKey, setWallReloadKey] = useState(0);
 
   useEffect(() => {
@@ -123,13 +123,13 @@ export default function Profile() {
     setBio((profile as any)?.bio ?? "");
     setSM((profile as any)?.status_message ?? "");
     void loadBiz();
-    void loadPendingFriendRequests();
+    void loadFriendsCount();
   }, [user?.id, profile?.id]);
 
-  // Mở sẵn dialog bạn bè (tab Lời mời) khi bấm vào từ thông báo /ho-so?friends=1
+  // Mở sẵn dialog bạn bè khi bấm vào từ thông báo cũ /ho-so?friends=1
   useEffect(() => {
     if (searchParams.get("friends") === "1") {
-      setFriendsInitialTab("requests");
+      setFriendsInitialTab("friends");
       setFriendsOpen(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -149,14 +149,11 @@ export default function Profile() {
     setBiz((data ?? []) as Business[]);
   };
 
-  const loadPendingFriendRequests = async () => {
+  // "Bạn bè" = theo dõi qua lại (bỏ cơ chế lời mời kết bạn cũ)
+  const loadFriendsCount = async () => {
     if (!user) return;
-    const { count } = await supabase
-      .from("friendships")
-      .select("*", { count: "exact", head: true })
-      .eq("addressee_id", user.id)
-      .eq("status", "pending");
-    setPendingFriendRequests(count ?? 0);
+    const { data } = await (supabase as any).rpc("get_mutual_follows", { _uid: user.id });
+    setFriendsCount((data ?? []).length);
   };
 
   if (!user) {
@@ -618,11 +615,7 @@ export default function Profile() {
             className="h-8 px-3 rounded-full bg-muted hover:bg-accent text-xs font-semibold flex items-center gap-1.5 transition"
           >
             <UserPlus className="w-3.5 h-3.5 text-primary" /> {t("friend.friends")}
-            {pendingFriendRequests > 0 && (
-              <span className="min-w-4 h-4 px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold grid place-items-center">
-                {pendingFriendRequests}
-              </span>
-            )}
+            <span className="text-muted-foreground">{friendsCount}</span>
           </button>
         </div>
       </div>
@@ -653,6 +646,8 @@ export default function Profile() {
         </DialogContent>
       </Dialog>
 
+      <SuggestedFollows className="px-4 mt-5" onFollowChange={loadFriendsCount} />
+
       <div className="px-4 mt-5 space-y-3">
         <WallComposer onPosted={() => setWallReloadKey((k) => k + 1)} />
         <OwnWall userId={user.id} reloadKey={wallReloadKey} />
@@ -663,7 +658,7 @@ export default function Profile() {
         open={friendsOpen}
         onOpenChange={setFriendsOpen}
         initialTab={friendsInitialTab}
-        onChanged={loadPendingFriendRequests}
+        onChanged={loadFriendsCount}
       />
 
       <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
