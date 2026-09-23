@@ -21,6 +21,8 @@ import {
   UserX,
   Pencil,
   Plus,
+  Car,
+  ChevronRight,
   type LucideIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -1387,6 +1389,21 @@ export default function Quet() {
               );
             })}
           </div>
+          {/* Đưa đón & giao hàng — thẻ ngang dưới 4 mục */}
+          <button
+            type="button"
+            onClick={() => nav("/dua-don")}
+            className="w-full rounded-2xl border bg-card p-3 flex items-center gap-3 text-left active:scale-[0.98] transition"
+          >
+            <div className="w-12 h-12 shrink-0 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
+              <Car className="w-6 h-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-sm">{t("quet.rides.title")}</div>
+              <div className="text-[11px] text-muted-foreground leading-snug">{t("quet.rides.brief")}</div>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </button>
         </div>
       )}
 
