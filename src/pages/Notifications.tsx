@@ -22,6 +22,7 @@ import {
   Award,
   Clock,
   Flame,
+  Car,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof Bell> = {
@@ -49,6 +50,12 @@ const ICONS: Record<string, typeof Bell> = {
   badge_earned: Award,
   pending_approval: Clock,
   swipe_match: Flame,
+  ride_new: Car,
+  ride_accepted: Car,
+  ride_status: Car,
+  driver_pending: Car,
+  driver_approved: Car,
+  driver_rejected: Car,
 };
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -106,7 +113,11 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
       case "featured":
         return "/";
       case "pending_approval":
+        if (n.target_type === "ride_driver") return "/admin?tab=rides";
         return "/admin?tab=pending";
+      case "rides":
+        if (n.target_type === "ride_driver") return "/dua-don?tab=driver";
+        return id ? `/dua-don?ride=${id}` : "/dua-don";
       case "account_updates":
         // target_type phân biệt: cập nhật cho DN hay cho chính tài khoản (vào Hồ sơ).
         // Với DN: nếu đang "cần bổ sung" (rejected) thì vào thẳng form sửa trong Hồ sơ
