@@ -1,26 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import {
-  ArrowLeft,
-  Mail,
-  Phone,
-  MessageCircle,
-  MoreVertical,
-  Ban,
-  ShieldCheck,
-  Star,
-  MessageSquare,
-} from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, Mail, Phone, MessageCircle, MoreVertical, Ban, ShieldCheck, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
-import { StoredImage } from "@/components/StoredImage";
+import { ImageViewer } from "@/components/ImageLightbox";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { FriendButton } from "@/components/FriendButton";
 import { FriendsListDialog } from "@/components/FriendsListDialog";
 import { WallPostCard } from "@/components/WallPostCard";
-import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
@@ -55,20 +44,11 @@ interface WallPost {
   user_id: string;
 }
 
-interface WallReview {
-  id: string;
-  rating: number;
-  comment: string | null;
-  image_url: string | null;
-  created_at: string;
-  businesses: { id: string; name: string; cover_url: string | null } | null;
-}
-
 export default function UserProfile() {
   const { id } = useParams();
   const nav = useNavigate();
   const { user } = useAuth();
-  const { t, lang } = useLanguage();
+  const { t } = useLanguage();
   const [p, setP] = useState<PubProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
@@ -79,9 +59,8 @@ export default function UserProfile() {
   const [iBlockedThem, setIBlockedThem] = useState(false);
   const [blockMenuOpen, setBlockMenuOpen] = useState(false);
   const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
-  const [tab, setTab] = useState<"posts" | "reviews">("posts");
   const [posts, setPosts] = useState<WallPost[]>([]);
-  const [reviews, setReviews] = useState<WallReview[]>([]);
+  const [avatarViewOpen, setAvatarViewOpen] = useState(false);
   const [wallLoading, setWallLoading] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(false);
   const [friendsCount, setFriendsCount] = useState(0);
@@ -135,22 +114,13 @@ export default function UserProfile() {
     if (!id) return;
     setWallLoading(true);
     (async () => {
-      const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
-        supabase
-          .from("wall_posts")
-          .select("id, content, type, image_url, created_at, user_id")
-          .eq("user_id", id)
-          .order("created_at", { ascending: false })
-          .limit(20),
-        supabase
-          .from("reviews")
-          .select("id, rating, comment, image_url, created_at, businesses(id, name, cover_url)")
-          .eq("user_id", id)
-          .order("created_at", { ascending: false })
-          .limit(20),
-      ]);
+      const { data: postRows } = await supabase
+        .from("wall_posts")
+        .select("id, content, type, image_url, created_at, user_id")
+        .eq("user_id", id)
+        .order("created_at", { ascending: false })
+        .limit(20);
       setPosts((postRows ?? []) as WallPost[]);
-      setReviews((reviewRows ?? []) as unknown as WallReview[]);
       setWallLoading(false);
     })();
   }, [id]);
@@ -205,15 +175,10 @@ export default function UserProfile() {
 
   return (
     <div className="max-w-xl mx-auto pb-6">
-      <div className="relative">
-        {p.cover_url ? (
-          <StoredImage path={p.cover_url} alt="" className="h-28 w-full object-cover rounded-b-2xl" />
-        ) : (
-          <div className="h-28 bg-gradient-brand rounded-b-2xl" />
-        )}
+      <div className="relative pt-14">
         <button
           onClick={() => nav(-1)}
-          className="absolute top-3 left-3 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white grid place-items-center backdrop-blur-sm"
+          className="absolute top-3 left-3 w-9 h-9 rounded-full bg-muted hover:bg-accent text-foreground grid place-items-center"
           aria-label={t("common.back")}
         >
           <ArrowLeft className="w-4 h-4" />
@@ -222,7 +187,7 @@ export default function UserProfile() {
           <Popover open={blockMenuOpen} onOpenChange={setBlockMenuOpen}>
             <PopoverTrigger asChild>
               <button
-                className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white grid place-items-center backdrop-blur-sm"
+                className="absolute top-3 right-3 w-9 h-9 rounded-full bg-muted hover:bg-accent text-foreground grid place-items-center"
                 aria-label={t("block.menu")}
               >
                 <MoreVertical className="w-4 h-4" />
@@ -253,10 +218,16 @@ export default function UserProfile() {
             </PopoverContent>
           </Popover>
         )}
-        <div className="px-4 -mt-10">
-          <div className="flex items-end gap-3">
-            <div className="relative ring-4 ring-background rounded-full shrink-0">
-              <Avatar path={p.avatar_url} name={p.full_name} size={88} />
+        <div className="px-4">
+          <div className="flex items-center gap-4">
+            <div className="relative rounded-full shrink-0">
+              <Avatar
+                path={p.avatar_url}
+                name={p.full_name}
+                size={88}
+                onClick={p.avatar_url ? () => setAvatarViewOpen(true) : undefined}
+              />
+              <ImageViewer path={p.avatar_url} open={avatarViewOpen} onClose={() => setAvatarViewOpen(false)} />
               {p.status_message && (
                 <button
                   type="button"
@@ -274,23 +245,31 @@ export default function UserProfile() {
                 </button>
               )}
             </div>
-            <div className="flex-1 min-w-0 pb-1.5">
-              <div className="text-lg font-extrabold truncate">{p.full_name}</div>
-              {p.username && <div className="text-xs text-muted-foreground truncate">@{p.username}</div>}
+            {/* Kiểu Instagram: số liệu gọn bên phải avatar */}
+            <div className="flex-1 min-w-0 grid grid-cols-3 gap-1">
+              {(
+                [
+                  { n: followers, label: t("follow.followersLabel"), onClick: () => setListOpen("followers") },
+                  { n: followingCount, label: t("follow.followingLabel"), onClick: () => setListOpen("following") },
+                  { n: friendsCount, label: t("friend.friends"), onClick: () => setFriendsOpen(true) },
+                ] as const
+              ).map((it) => (
+                <button
+                  key={it.label}
+                  onClick={it.onClick}
+                  className="flex flex-col items-center gap-0.5 py-1 rounded-lg hover:bg-accent/60 transition"
+                >
+                  <div className="text-base font-extrabold leading-tight">{it.n}</div>
+                  <div className="text-[11px] text-muted-foreground leading-tight text-center">{it.label}</div>
+                </button>
+              ))}
             </div>
           </div>
-          {p.bio && <p className="text-sm text-muted-foreground mt-2 whitespace-pre-wrap">{p.bio}</p>}
-          <div className="flex items-center gap-4 text-xs mt-3 bg-card rounded-xl px-3 py-2.5 shadow-sm">
-            <button onClick={() => setListOpen("followers")} className="hover:text-primary">
-              <span className="font-bold text-foreground">{followers}</span> {t("follow.followersLabel")}
-            </button>
-            <button onClick={() => setListOpen("following")} className="hover:text-primary">
-              <span className="font-bold text-foreground">{followingCount}</span> {t("follow.followingLabel")}
-            </button>
-            <button onClick={() => setFriendsOpen(true)} className="hover:text-primary ml-auto">
-              <span className="font-bold text-foreground">{friendsCount}</span> {t("friend.friends")}
-            </button>
+          <div className="min-w-0 mt-3">
+            <div className="text-lg font-extrabold truncate">{p.full_name}</div>
+            {p.username && <div className="text-xs text-muted-foreground truncate">@{p.username}</div>}
           </div>
+          {p.bio && <p className="text-sm text-muted-foreground mt-1.5 whitespace-pre-wrap">{p.bio}</p>}
           {!isMe && user && (
             <FriendButton
               targetId={p.id}
@@ -341,64 +320,23 @@ export default function UserProfile() {
       </div>
 
       <div className="px-4 mt-5">
-        <div className="flex gap-1 p-1 bg-muted rounded-xl">
-          <button
-            onClick={() => setTab("posts")}
-            className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "posts" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
-          >
-            <MessageSquare className="w-3.5 h-3.5" /> {t("wall.posts")}
-          </button>
-          <button
-            onClick={() => setTab("reviews")}
-            className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "reviews" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
-          >
-            <Star className="w-3.5 h-3.5" /> {t("wall.reviews")}
-          </button>
+        {/* Chỉ còn "Bài viết" — phần Đánh giá đã bỏ khỏi trang cá nhân theo yêu cầu */}
+        <div className="text-sm font-bold flex items-center gap-1.5 px-1">
+          <MessageSquare className="w-3.5 h-3.5" /> {t("wall.posts")}
         </div>
 
         <div className="mt-3 space-y-2">
           {wallLoading ? (
             <p className="text-center text-xs text-muted-foreground py-8">{t("common.loading")}</p>
-          ) : tab === "posts" ? (
-            posts.length === 0 ? (
-              <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
-            ) : (
-              posts.map((post) => (
-                <WallPostCard
-                  key={post.id}
-                  post={post}
-                  onDeleted={(id) => setPosts((prev) => prev.filter((p) => p.id !== id))}
-                />
-              ))
-            )
-          ) : reviews.length === 0 ? (
-            <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noReviews")}</p>
+          ) : posts.length === 0 ? (
+            <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
           ) : (
-            reviews.map((rv) => (
-              <div key={rv.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  {rv.businesses ? (
-                    <Link to={`/dn/${rv.businesses.id}`} className="text-sm font-semibold hover:text-primary truncate">
-                      🏢 {rv.businesses.name}
-                    </Link>
-                  ) : (
-                    <span className="text-sm font-semibold text-muted-foreground">{t("reports.contentDeleted")}</span>
-                  )}
-                  <div className="flex items-center gap-0.5 shrink-0">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-3.5 h-3.5 ${i < rv.rating ? "fill-primary text-primary" : "text-muted"}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                {rv.comment && <p className="text-sm text-muted-foreground">{rv.comment}</p>}
-                {rv.image_url && (
-                  <StoredImage path={rv.image_url} alt={t("biz.reviewImageAlt")} className="max-w-[200px] rounded-xl" />
-                )}
-                <div className="text-[11px] text-muted-foreground">{timeAgo(rv.created_at, lang)}</div>
-              </div>
+            posts.map((post) => (
+              <WallPostCard
+                key={post.id}
+                post={post}
+                onDeleted={(id) => setPosts((prev) => prev.filter((p) => p.id !== id))}
+              />
             ))
           )}
         </div>
