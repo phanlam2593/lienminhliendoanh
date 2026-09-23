@@ -258,7 +258,7 @@ export function Layout() {
                     </PopoverContent>
                   </Popover>
                 </>
-              ) : (
+              ) : loading ? null : (
                 <div className="flex items-center gap-1.5">
                   <Link
                     to="/auth/login"

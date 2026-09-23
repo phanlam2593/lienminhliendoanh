@@ -78,6 +78,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, []);
 
+  // App đã biết chắc trạng thái đăng nhập + đã nạp xong hồ sơ → tắt splash (xem main.tsx).
+  useEffect(() => {
+    if (!loading) (window as any).__lomiHideSplash?.();
+  }, [loading]);
+
   return (
     <Ctx.Provider
       value={{
@@ -96,6 +101,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           // Supabase là scope "global" (đăng xuất TẤT CẢ thiết bị đang đăng nhập cùng
           // tài khoản) — đã gây bug: đăng xuất trên điện thoại làm máy tính cũng bị đăng
           // xuất theo dù không hề bấm gì ở đó.
+          // Gỡ đăng ký push CỦA MÁY NÀY khỏi tài khoản đang đăng xuất — 1 máy chỉ có 1
+          // endpoint push; nếu không gỡ, máy đã đăng xuất vẫn tiếp tục nhận thông báo của tài
+          // khoản cũ (lộ tin nhắn), và khi đăng nhập tài khoản khác trên cùng máy thì endpoint
+          // bị "giành" qua lại giữa các tài khoản → tài khoản kia mất thông báo.
+          try {
+            const reg = "serviceWorker" in navigator ? await navigator.serviceWorker.getRegistration() : undefined;
+            const pushSub = await reg?.pushManager.getSubscription();
+            if (pushSub && user) {
+              await supabase
+                .from("push_subscriptions")
+                .delete()
+                .eq("endpoint", pushSub.endpoint)
+                .eq("user_id", user.id);
+            }
+          } catch {
+            // Bỏ qua — không được làm hỏng việc đăng xuất
+          }
           await supabase.auth.signOut({ scope: "local" });
         },
       }}
