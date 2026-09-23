@@ -36,7 +36,10 @@ import {
   Play,
   Pause,
   MessageCircle,
+  Users,
 } from "lucide-react";
+import { CreateGroupDialog, GroupListSection } from "./GroupChat";
+import { AiAssistantRow } from "./AiAssistant";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
 import { useCall } from "@/lib/call";
@@ -128,6 +131,7 @@ export function MessagesInbox() {
   const [statusViewFor, setStatusViewFor] = useState<ConvoSummary | null>(null);
   const [statusReply, setStatusReply] = useState("");
   const [statusSending, setStatusSending] = useState(false);
+  const [createGroupOpen, setCreateGroupOpen] = useState(false);
   const navigateInbox = useNavigate();
 
   // Thả cảm xúc / trả lời GHI CHÚ (status) của người khác → gửi thành 1 tin nhắn 1-1 kèm trích
@@ -497,15 +501,27 @@ export function MessagesInbox() {
         </div>
       ) : (
         <>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder={t("messages.searchPlaceholder")}
-              className="pl-9 h-10 rounded-xl"
-            />
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder={t("messages.searchPlaceholder")}
+                className="pl-9 h-10 rounded-xl"
+              />
+            </div>
+            {/* Tạo chat nhóm (#24) */}
+            <button
+              type="button"
+              onClick={() => setCreateGroupOpen(true)}
+              aria-label={t("group.create")}
+              className="h-10 w-10 shrink-0 rounded-xl bg-primary/10 text-primary grid place-items-center"
+            >
+              <Users className="w-5 h-5" />
+            </button>
           </div>
+          <CreateGroupDialog open={createGroupOpen} onOpenChange={setCreateGroupOpen} />
 
           {!search.trim() && (
             <div className="flex gap-3 overflow-x-auto pb-1 pt-7 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -663,6 +679,9 @@ export function MessagesInbox() {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
+
+          {!search.trim() && <AiAssistantRow />}
+          <GroupListSection search={search} />
 
           {sortedConvos.length === 0
             ? peopleResults.length === 0 && (
