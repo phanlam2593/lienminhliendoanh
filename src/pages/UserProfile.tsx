@@ -7,7 +7,6 @@ import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
 import { ImageViewer } from "@/components/ImageLightbox";
 import { FollowListDialog } from "@/components/FollowListDialog";
-import { FriendButton } from "@/components/FriendButton";
 import { FriendsListDialog } from "@/components/FriendsListDialog";
 import { WallPostCard } from "@/components/WallPostCard";
 import { toast } from "sonner";
@@ -52,6 +51,7 @@ export default function UserProfile() {
   const [p, setP] = useState<PubProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [following, setFollowing] = useState(false);
+  const [followsMe, setFollowsMe] = useState(false);
   const [followers, setFollowers] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
   const [listOpen, setListOpen] = useState<null | "followers" | "following">(null);
@@ -66,14 +66,11 @@ export default function UserProfile() {
   const [friendsCount, setFriendsCount] = useState(0);
   const [statusExpanded, setStatusExpanded] = useState(false);
 
+  // "Bạn bè" = theo dõi qua lại (kiểu Instagram) — bỏ lời mời kết bạn cũ.
   const loadFriendsCount = async () => {
     if (!id) return;
-    const { count } = await supabase
-      .from("friendships")
-      .select("*", { count: "exact", head: true })
-      .eq("status", "accepted")
-      .or(`requester_id.eq.${id},addressee_id.eq.${id}`);
-    setFriendsCount(count ?? 0);
+    const { data } = await (supabase as any).rpc("get_mutual_follows", { _uid: id });
+    setFriendsCount((data ?? []).length);
   };
 
   useEffect(() => {
@@ -85,17 +82,21 @@ export default function UserProfile() {
     if (!id) return;
     setLoading(true);
     (async () => {
-      const [{ data: prof }, { count }, { count: gc }, { data: rel }, { data: blockRow }] = await Promise.all([
-        supabase.rpc("get_public_profile", { _id: id }).maybeSingle(),
-        supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
-        supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
-        user
-          ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle()
-          : Promise.resolve({ data: null } as any),
-        user
-          ? supabase.from("blocks").select("id").eq("blocker_id", user.id).eq("blocked_id", id).maybeSingle()
-          : Promise.resolve({ data: null } as any),
-      ]);
+      const [{ data: prof }, { count }, { count: gc }, { data: rel }, { data: blockRow }, { data: relBack }] =
+        await Promise.all([
+          supabase.rpc("get_public_profile", { _id: id }).maybeSingle(),
+          supabase.from("follows").select("*", { count: "exact", head: true }).eq("followee_user_id", id),
+          supabase.from("follows").select("*", { count: "exact", head: true }).eq("follower_id", id),
+          user
+            ? supabase.from("follows").select("id").eq("follower_id", user.id).eq("followee_user_id", id).maybeSingle()
+            : Promise.resolve({ data: null } as any),
+          user
+            ? supabase.from("blocks").select("id").eq("blocker_id", user.id).eq("blocked_id", id).maybeSingle()
+            : Promise.resolve({ data: null } as any),
+          user
+            ? supabase.from("follows").select("id").eq("follower_id", id).eq("followee_user_id", user.id).maybeSingle()
+            : Promise.resolve({ data: null } as any),
+        ]);
       if (!prof) {
         toast.message(t("common.contentGone"));
         nav("/");
@@ -105,6 +106,7 @@ export default function UserProfile() {
       setFollowers(count ?? 0);
       setFollowingCount(gc ?? 0);
       setFollowing(!!rel);
+      setFollowsMe(!!relBack);
       setIBlockedThem(!!blockRow);
       setLoading(false);
     })();
@@ -143,6 +145,7 @@ export default function UserProfile() {
       setFollowers((c) => c + 1);
     }
     setBusy(false);
+    void loadFriendsCount();
   };
 
   const blockUser = async () => {
@@ -271,22 +274,19 @@ export default function UserProfile() {
           </div>
           {p.bio && <p className="text-sm text-muted-foreground mt-1.5 whitespace-pre-wrap">{p.bio}</p>}
           {!isMe && user && (
-            <FriendButton
-              targetId={p.id}
-              targetName={p.full_name}
-              disabled={iBlockedThem}
-              onChanged={loadFriendsCount}
-              className="w-full mt-2"
-            />
-          )}
-          {!isMe && user && (
             <div className="flex gap-2 w-full mt-2">
               <button
                 onClick={toggleFollow}
                 disabled={busy || iBlockedThem}
                 className={`flex-1 h-10 rounded-xl text-sm font-semibold disabled:opacity-50 ${following ? "bg-muted text-foreground" : "bg-primary/10 text-primary"}`}
               >
-                {following ? t("common.following") : t("common.follow")}
+                {following && followsMe
+                  ? t("friend.isFriend")
+                  : following
+                    ? t("common.following")
+                    : followsMe
+                      ? t("follow.followBack")
+                      : t("common.follow")}
               </button>
               <button
                 onClick={() => nav(`/tin-nhan/${p.id}`)}
