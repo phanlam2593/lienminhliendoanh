@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Camera, Image as ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,6 +23,8 @@ export function ReportDialog({
   const { t } = useLanguage();
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const libraryRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
   const [toAdmin, setToAdmin] = useState(true);
   const [toBiz, setToBiz] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -72,12 +75,59 @@ export function ReportDialog({
           placeholder={t("report.descPlaceholder")}
           className="w-full px-3 py-2 rounded-lg border bg-card text-sm"
         />
+        {/* 2 lựa chọn: chọn ảnh có sẵn hoặc chụp ảnh mới bằng camera */}
         <input
+          ref={libraryRef}
           type="file"
           accept="image/*"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="block w-full min-w-0 max-w-full text-xs file:mr-2 file:py-1.5 file:px-2.5 file:rounded-md file:border-0 file:bg-accent file:text-xs file:font-semibold"
+          className="hidden"
+          onChange={(e) => {
+            setFile(e.target.files?.[0] ?? null);
+            e.currentTarget.value = "";
+          }}
         />
+        <input
+          ref={cameraRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={(e) => {
+            setFile(e.target.files?.[0] ?? null);
+            e.currentTarget.value = "";
+          }}
+        />
+        {file ? (
+          <div className="flex items-center gap-2 min-w-0 rounded-lg border px-2.5 py-1.5">
+            <ImageIcon className="w-4 h-4 text-primary shrink-0" />
+            <span className="flex-1 min-w-0 truncate text-xs">{file.name}</span>
+            <button
+              type="button"
+              onClick={() => setFile(null)}
+              aria-label={t("common.delete")}
+              className="w-6 h-6 rounded-full hover:bg-accent grid place-items-center shrink-0"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => libraryRef.current?.click()}
+              className="flex-1 py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
+            >
+              <ImageIcon className="w-4 h-4" /> {t("biz.addPhoto")}
+            </button>
+            <button
+              type="button"
+              onClick={() => cameraRef.current?.click()}
+              className="flex-1 py-2 rounded-lg border border-dashed text-xs font-semibold text-muted-foreground flex items-center justify-center gap-1.5"
+            >
+              <Camera className="w-4 h-4" /> {t("chat.takePhoto")}
+            </button>
+          </div>
+        )}
         <p className="text-[11px] text-muted-foreground -mt-1">{t("report.photoOptional")}</p>
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={toAdmin} onChange={(e) => setToAdmin(e.target.checked)} />{" "}
