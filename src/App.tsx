@@ -35,6 +35,9 @@ import Terms from "./pages/Terms";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookieThirdParty from "./pages/CookieThirdParty";
 import { MessagesInbox, MessagesThread } from "./pages/Messages";
+import GroupChat from "./pages/GroupChat";
+import Rides from "./pages/Rides";
+import AiAssistant from "./pages/AiAssistant";
 import CallHistory from "./pages/CallHistory";
 import NotFound from "./pages/NotFound";
 
@@ -104,6 +107,9 @@ const App = () => (
                       <Route path="/de-xuat" element={<Navigate to="/" replace />} />
                       <Route path="/thong-bao" element={<Notifications />} />
                       <Route path="/tin-nhan" element={<MessagesInbox />} />
+                      <Route path="/tin-nhan/nhom/:gid" element={<GroupChat />} />
+                      <Route path="/dua-don" element={<Rides />} />
+                      <Route path="/tro-ly-ai" element={<AiAssistant />} />
                       <Route path="/tin-nhan/:id" element={<MessagesThread />} />
                       <Route path="/cuoc-goi" element={<CallHistory />} />
                       <Route path="/admin" element={<Admin />} />
