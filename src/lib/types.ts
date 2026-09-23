@@ -130,8 +130,18 @@ export interface Profile {
   is_member: boolean;
   membership_started_at: string | null;
   membership_expires_at: string | null;
+  date_of_birth?: string | null;
   created_at: string;
   updated_at: string;
+}
+
+// Ngày sinh "YYYY-MM-DD" → đã đủ 18 tuổi chưa (so theo ngày hiện tại của máy).
+export function isAdultDob(dob: string | null | undefined): boolean {
+  if (!dob || !/^\d{4}-\d{2}-\d{2}$/.test(dob)) return false;
+  const [y, m, d] = dob.split("-").map(Number);
+  const now = new Date();
+  const eighteenth = new Date(y + 18, m - 1, d);
+  return y >= 1900 && eighteenth <= now;
 }
 
 export interface Business {
