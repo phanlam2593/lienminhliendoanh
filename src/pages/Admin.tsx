@@ -36,6 +36,7 @@ import {
   Clock,
   Send,
   HardDrive,
+  Car,
 } from "lucide-react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
@@ -53,6 +54,7 @@ import { timeAgo } from "@/lib/time";
 import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportRepliesPanel";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { BusinessQuickView } from "@/components/BusinessQuickView";
+import { RideAdminPanel } from "./Rides";
 import { exportTableToCSV } from "@/lib/csvExport";
 
 interface MemberRow extends Profile {
@@ -86,7 +88,8 @@ type TabKey =
   | "activity"
   | "hidden"
   | "broadcast"
-  | "usage";
+  | "usage"
+  | "rides";
 
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
@@ -97,6 +100,7 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   hidden: "Công cụ khác",
   broadcast: "Phát thông báo",
   usage: "Dung lượng",
+  rides: "Đưa đón",
 };
 
 const VALID_TABS: TabKey[] = [
@@ -109,6 +113,7 @@ const VALID_TABS: TabKey[] = [
   "hidden",
   "broadcast",
   "usage",
+  "rides",
 ];
 
 export default function Admin() {
@@ -387,6 +392,8 @@ export default function Admin() {
 
       {activeTab === "usage" && <UsageTab />}
 
+      {activeTab === "rides" && <RideAdminPanel />}
+
       <MemberDetail
         row={selected}
         onClose={() => setSelected(null)}
@@ -608,6 +615,12 @@ function OverviewTab({
             label="Dung lượng"
             colorClass="bg-primary/10 text-primary"
             onClick={() => onNavigate("usage")}
+          />
+          <ToolRow
+            icon={Car}
+            label="Đưa đón (tài xế & bảng giá)"
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("rides")}
           />
         </div>
       </div>
