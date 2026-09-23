@@ -118,6 +118,48 @@ const CATEGORY_ICON: Record<NeedType, LucideIcon> = {
   tim_viec: Briefcase,
 };
 
+// Công việc: ngày + ca có thể làm (lưu dạng chuỗi "t2,t3" / "sang,toi" trong details)
+const AVAIL_DAYS = ["t2", "t3", "t4", "t5", "t6", "t7", "cn"] as const;
+const AVAIL_SHIFTS = ["sang", "chieu", "toi", "dem"] as const;
+// Nhà đất: tiện ích xung quanh
+const GAN_DAU = ["cho", "sieuThi", "truongHoc", "benhVien", "trungTam", "congVien", "benXe"] as const;
+const splitCsv = (v?: string) => (v ? v.split(",").filter(Boolean) : []);
+
+function ChipToggleGroup({
+  options,
+  value,
+  onChange,
+  labelFor,
+}: {
+  options: readonly string[];
+  value: string[];
+  onChange: (v: string[]) => void;
+  labelFor: (k: string) => string;
+}) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {options.map((k) => {
+        const on = value.includes(k);
+        return (
+          <button
+            key={k}
+            type="button"
+            onClick={() =>
+              onChange(on ? value.filter((x) => x !== k) : options.filter((o) => o === k || value.includes(o)))
+            }
+            className={cn(
+              "h-8 px-3 rounded-full text-xs font-semibold border transition",
+              on ? "bg-primary text-primary-foreground border-primary" : "bg-card text-muted-foreground",
+            )}
+          >
+            {labelFor(k)}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function CategoryIcon({ type, className }: { type: NeedType; className?: string }) {
   const Icon = CATEGORY_ICON[type];
   return <Icon className={className} />;
@@ -134,6 +176,10 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
     chips.push(isHirer ? t("quet.roleHirer") : t("quet.roleSeeker"));
     if (d.nganhNghe) chips.push(t(`quet.nganhNghe.${d.nganhNghe}`));
     if (d.salary) chips.push(`💰 ${d.salary}`);
+    const days = splitCsv(d.availDays);
+    if (days.length) chips.push(`📅 ${days.map((k) => t(`quet.day.${k}`)).join(", ")}`);
+    const shifts = splitCsv(d.availShifts);
+    if (shifts.length) chips.push(`🕒 ${shifts.map((k) => t(`quet.shift.${k}`)).join(", ")}`);
     if (isHirer) {
       if (d.ageRange) chips.push(`🎂 ${d.ageRange}`);
       if (d.gender === "male") chips.push(t("quet.gender.male"));
@@ -162,6 +208,11 @@ function needDetailChips(need: SwipeNeed, t: (key: string, vars?: Record<string,
       chips.push(t(`quet.tradeDirection.${dirKey}`));
       if (d.loaiHinh) chips.push(d.loaiHinh);
       if (d.dienTich) chips.push(`${d.dienTich} m²`);
+      if (d.phongNgu) chips.push(t("quet.chip.phongNgu", { n: d.phongNgu }));
+      if (d.phongTam) chips.push(t("quet.chip.phongTam", { n: d.phongTam }));
+      if (d.choDauXe) chips.push(`🅿️ ${t(`quet.choDauXe.${d.choDauXe}`)}`);
+      const gan = splitCsv(d.ganDau);
+      if (gan.length) chips.push(`📍 ${t("quet.chip.ganDau")} ${gan.map((k) => t(`quet.ganDau.${k}`)).join(", ")}`);
       if (d.gia) chips.push(`💰 ${d.gia}`);
     } else {
       chips.push(t("quet.tradeType.interaction"));
@@ -385,6 +436,12 @@ export default function Quet() {
   const [formTinhTrang, setFormTinhTrang] = useState("");
   const [formDienTich, setFormDienTich] = useState("");
   const [formNganhNghe, setFormNganhNghe] = useState("");
+  const [formAvailDays, setFormAvailDays] = useState<string[]>([]);
+  const [formAvailShifts, setFormAvailShifts] = useState<string[]>([]);
+  const [formPhongNgu, setFormPhongNgu] = useState("");
+  const [formPhongTam, setFormPhongTam] = useState("");
+  const [formChoDauXe, setFormChoDauXe] = useState("");
+  const [formGanDau, setFormGanDau] = useState<string[]>([]);
   const [loaiHinhCounts, setLoaiHinhCounts] = useState<[string, number][]>([]);
   const [loaiHinhSuggestOpen, setLoaiHinhSuggestOpen] = useState(false);
   const [existingPhotos, setExistingPhotos] = useState<string[]>([]);
@@ -418,6 +475,10 @@ export default function Quet() {
   const cardWrapRef = useRef<HTMLDivElement>(null);
   const [cardH, setCardH] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  // Giới hạn 10 lượt quẹt/ngày cho người chưa là thành viên — chốt ở server (trigger
+  // enforce_swipe_daily_limit), client chỉ hiển thị số lượt còn lại + popup khi hết.
+  const [swipeQuota, setSwipeQuota] = useState<{ unlimited: boolean; limit: number; used: number } | null>(null);
+  const [swipeLimitOpen, setSwipeLimitOpen] = useState(false);
 
   const [matchInfo, setMatchInfo] = useState<{ owner: OwnerInfo | null; needTitle: string } | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -682,6 +743,10 @@ export default function Quet() {
 
   const act = async (need: SwipeNeed, action: "like" | "pass") => {
     if (!myId || busy) return;
+    if (swipeQuota && !swipeQuota.unlimited && swipeQuota.used >= swipeQuota.limit) {
+      setSwipeLimitOpen(true);
+      return;
+    }
     setBusy(true);
     const likedOwner = owners[need.user_id] ?? null;
     setCandidates((prev) => prev.filter((n) => n.id !== need.id));
@@ -697,11 +762,17 @@ export default function Quet() {
       .select("id")
       .single();
     if (error) {
-      toast.error(t("common.error"));
+      if (String(error.message ?? "").includes("SWIPE_LIMIT")) {
+        setSwipeQuota((q) => (q ? { ...q, used: q.limit } : q));
+        setSwipeLimitOpen(true);
+      } else {
+        toast.error(t("common.error"));
+      }
       setCandidates((prev) => (prev.some((n) => n.id === need.id) ? prev : [need, ...prev]));
       setBusy(false);
       return;
     }
+    setSwipeQuota((q) => (q && !q.unlimited ? { ...q, used: q.used + 1 } : q));
     let matchId: string | null = null;
     if (action === "like") {
       // QUAN TRỌNG (sửa lỗi round 35): trước đây tìm "match GẦN NHẤT có liên quan tới need
@@ -728,6 +799,13 @@ export default function Quet() {
     setLastAction({ need, actionId: actionRow?.id ?? null, matchId });
     setBusy(false);
   };
+
+  useEffect(() => {
+    if (!myId) return;
+    void db.rpc("get_my_swipe_quota").then(({ data }: { data: any }) => {
+      if (data) setSwipeQuota(data);
+    });
+  }, [myId]);
 
   // "Hoan tac" chi co tac dung trong it giay sau khi quet.
   useEffect(() => {
@@ -910,6 +988,12 @@ export default function Quet() {
     setFormTinhTrang(d.tinhTrang ?? "");
     setFormDienTich(d.dienTich ?? "");
     setFormNganhNghe(d.nganhNghe ?? "");
+    setFormAvailDays(splitCsv(d.availDays));
+    setFormAvailShifts(splitCsv(d.availShifts));
+    setFormPhongNgu(d.phongNgu ?? "");
+    setFormPhongTam(d.phongTam ?? "");
+    setFormChoDauXe(d.choDauXe ?? "");
+    setFormGanDau(splitCsv(d.ganDau));
   };
 
   // Bấm thẻ mục lớn: có nhu cầu ĐANG HOẠT ĐỘNG thuộc mục này thì vào quẹt luôn; chưa có (hoặc
@@ -966,6 +1050,8 @@ export default function Quet() {
     if (formType === "tim_viec") {
       details.role = formRole;
       if (formNganhNghe) details.nganhNghe = formNganhNghe;
+      if (formAvailDays.length) details.availDays = formAvailDays.join(",");
+      if (formAvailShifts.length) details.availShifts = formAvailShifts.join(",");
       if (formRole === "hirer") {
         if (formSalary.trim()) details.salary = formSalary.trim();
         if (formAgeRange.trim()) details.ageRange = formAgeRange.trim();
@@ -990,8 +1076,13 @@ export default function Quet() {
       } else {
         details.direction = formTradeDirection;
         if (formLoaiHinh.trim()) details.loaiHinh = formLoaiHinh.trim();
-        if (classifyLoaiHinh(formLoaiHinh) === "real_estate" && formDienTich.trim())
-          details.dienTich = formDienTich.trim();
+        if (classifyLoaiHinh(formLoaiHinh) === "real_estate") {
+          if (formDienTich.trim()) details.dienTich = formDienTich.trim();
+          if (formPhongNgu) details.phongNgu = formPhongNgu;
+          if (formPhongTam) details.phongTam = formPhongTam;
+          if (formChoDauXe) details.choDauXe = formChoDauXe;
+          if (formGanDau.length) details.ganDau = formGanDau.join(",");
+        }
         if (formGiaText.trim()) details.gia = formGiaText.trim();
         const isOffering = formTradeDirection === "sell" || formTradeDirection === "rent_offer";
         if (isOffering && formTinhTrang) details.tinhTrang = formTinhTrang;
@@ -1423,6 +1514,25 @@ export default function Quet() {
               </SelectContent>
             </Select>
           )}
+          {formType === "tim_viec" && (
+            <div className="space-y-1.5 rounded-xl border p-3">
+              <div className="text-xs font-semibold text-muted-foreground">
+                {formRole === "hirer" ? t("quet.field.availHirer") : t("quet.field.availSeeker")}
+              </div>
+              <ChipToggleGroup
+                options={AVAIL_DAYS}
+                value={formAvailDays}
+                onChange={setFormAvailDays}
+                labelFor={(k) => t(`quet.day.${k}`)}
+              />
+              <ChipToggleGroup
+                options={AVAIL_SHIFTS}
+                value={formAvailShifts}
+                onChange={setFormAvailShifts}
+                labelFor={(k) => t(`quet.shift.${k}`)}
+              />
+            </div>
+          )}
           {formType === "game" && (
             <>
               <Select value={formMode} onValueChange={(v) => setFormMode(v as "playmate" | "trade")}>
@@ -1660,6 +1770,57 @@ export default function Quet() {
                 onChange={(e) => setFormDienTich(e.target.value)}
               />
             )}
+          {formType === "trao_doi" &&
+            formTradeType !== "interaction" &&
+            classifyLoaiHinh(formLoaiHinh) === "real_estate" && (
+              <div className="space-y-2 rounded-xl border p-3">
+                <div className="grid grid-cols-3 gap-2">
+                  <Select value={formPhongNgu} onValueChange={setFormPhongNgu}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("quet.field.phongNgu")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["1", "2", "3", "4", "5+"].map((n) => (
+                        <SelectItem key={n} value={n}>
+                          {t("quet.chip.phongNgu", { n })}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={formPhongTam} onValueChange={setFormPhongTam}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("quet.field.phongTam")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["1", "2", "3", "4+"].map((n) => (
+                        <SelectItem key={n} value={n}>
+                          {t("quet.chip.phongTam", { n })}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={formChoDauXe} onValueChange={setFormChoDauXe}>
+                    <SelectTrigger>
+                      <SelectValue placeholder={t("quet.field.choDauXe")} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["none", "xeMay", "oto"].map((k) => (
+                        <SelectItem key={k} value={k}>
+                          {t(`quet.choDauXe.${k}`)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="text-xs font-semibold text-muted-foreground">{t("quet.field.ganDau")}</div>
+                <ChipToggleGroup
+                  options={GAN_DAU}
+                  value={formGanDau}
+                  onChange={setFormGanDau}
+                  labelFor={(k) => t(`quet.ganDau.${k}`)}
+                />
+              </div>
+            )}
           {formType === "trao_doi" && formTradeType !== "interaction" && (
             <Input
               placeholder={
@@ -1854,6 +2015,14 @@ export default function Quet() {
 
       {tab === "swipe" && activeCategory && (
         <div ref={cardWrapRef} className="relative" style={{ height: cardH ?? 460 }}>
+          {swipeQuota && !swipeQuota.unlimited && (
+            <div className="absolute top-5 left-1/2 -translate-x-1/2 z-20 pointer-events-none px-2.5 py-1 rounded-full bg-black/55 text-white text-[11px] font-semibold whitespace-nowrap">
+              {t("quet.quotaLeft", {
+                n: String(Math.max(0, swipeQuota.limit - swipeQuota.used)),
+                limit: String(swipeQuota.limit),
+              })}
+            </div>
+          )}
           {loading ? (
             <div className="absolute inset-0 rounded-2xl bg-muted animate-pulse" />
           ) : !topCard ? (
@@ -2509,6 +2678,23 @@ export default function Quet() {
             <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={() => deleteTargetId && void deleteFromManageList(deleteTargetId)}>
               {t("quet.deleteNeed")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={swipeLimitOpen} onOpenChange={setSwipeLimitOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("quet.limitTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("quet.limitDesc", { limit: String(swipeQuota?.limit ?? 10) })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.close")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => nav("/ho-so?view=personal")}>
+              {t("offers.viewMembership")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
