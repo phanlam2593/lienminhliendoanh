@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
-import { StoredImage } from "@/components/StoredImage";
+import { LightboxImage } from "@/components/ImageLightbox";
 import { timeAgo } from "@/lib/time";
 import { toast } from "sonner";
 
@@ -128,15 +128,19 @@ export function WallPostCard({ post, onDeleted }: { post: WallPostCardPost; onDe
 
   const saveEditPost = async () => {
     const trimmed = editPostText.trim();
-    if (!trimmed) return;
+    // Bài có ảnh được phép để trống chữ; bài chỉ có chữ thì không.
+    if (!trimmed && post.type !== "image") return;
     setEditPostBusy(true);
-    const { error } = await supabase.from("wall_posts").update({ content: trimmed }).eq("id", post.id);
+    const { error } = await supabase
+      .from("wall_posts")
+      .update({ content: trimmed || null })
+      .eq("id", post.id);
     setEditPostBusy(false);
     if (error) {
       toast.error(error.message);
       return;
     }
-    setPostContent(trimmed);
+    setPostContent(trimmed || null);
     setEditPostOpen(false);
     toast.success(t("common.saved"));
   };
@@ -192,7 +196,7 @@ export function WallPostCard({ post, onDeleted }: { post: WallPostCardPost; onDe
         <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
         {(isMinePost || isAdmin) && (
           <div className="flex items-center gap-0.5 shrink-0">
-            {isMinePost && post.type === "text" && (
+            {isMinePost && (post.type === "text" || post.type === "image") && (
               <button
                 onClick={openEditPost}
                 aria-label={t("wall.editPost")}
@@ -214,31 +218,42 @@ export function WallPostCard({ post, onDeleted }: { post: WallPostCardPost; onDe
       </div>
       {post.type === "gif" ? (
         <img src={postContent ?? ""} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
-      ) : post.type === "image" ? (
-        <StoredImage path={post.image_url} alt={t("chat.imageAlt")} className="max-w-[220px] rounded-xl" />
-      ) : editPostOpen ? (
-        <div className="space-y-1.5">
-          <textarea
-            value={editPostText}
-            onChange={(e) => setEditPostText(e.target.value)}
-            rows={3}
-            className="w-full px-2 py-1.5 rounded-lg border bg-background text-sm"
-          />
-          <div className="flex gap-2">
-            <button
-              onClick={saveEditPost}
-              disabled={editPostBusy || !editPostText.trim()}
-              className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold disabled:opacity-50"
-            >
-              {editPostBusy ? t("common.saving") : t("common.save")}
-            </button>
-            <button onClick={() => setEditPostOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
-              {t("common.cancel")}
-            </button>
-          </div>
-        </div>
       ) : (
-        <p className="text-sm whitespace-pre-wrap">{postContent}</p>
+        <>
+          {/* Chữ của bài viết — hiện cho CẢ bài có ảnh (trước đây bài có ảnh chỉ hiện ảnh, mất chữ) */}
+          {editPostOpen ? (
+            <div className="space-y-1.5">
+              <textarea
+                value={editPostText}
+                onChange={(e) => setEditPostText(e.target.value)}
+                rows={3}
+                className="w-full px-2 py-1.5 rounded-lg border bg-background text-sm"
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={saveEditPost}
+                  disabled={editPostBusy || (!editPostText.trim() && post.type !== "image")}
+                  className="flex-1 py-1.5 rounded bg-primary text-primary-foreground text-xs font-semibold disabled:opacity-50"
+                >
+                  {editPostBusy ? t("common.saving") : t("common.save")}
+                </button>
+                <button onClick={() => setEditPostOpen(false)} className="flex-1 py-1.5 rounded border text-xs">
+                  {t("common.cancel")}
+                </button>
+              </div>
+            </div>
+          ) : (
+            postContent && <p className="text-sm whitespace-pre-wrap">{postContent}</p>
+          )}
+          {post.type === "image" && post.image_url && (
+            <LightboxImage
+              path={post.image_url}
+              alt={t("chat.imageAlt")}
+              className="w-full max-h-[420px] object-cover rounded-xl"
+              buttonClassName="block w-full cursor-zoom-in"
+            />
+          )}
+        </>
       )}
 
       <div className="flex items-center gap-4 pt-1.5 border-t border-border/60 mt-1.5">
