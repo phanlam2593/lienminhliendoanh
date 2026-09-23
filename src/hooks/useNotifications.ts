@@ -93,12 +93,15 @@ export function useUnreadMessages() {
       setCount(0);
       return;
     }
-    const { count: c } = await supabase
-      .from("messages")
-      .select("*", { count: "exact", head: true })
-      .eq("receiver_id", user.id)
-      .eq("is_read", false);
-    setCount(c ?? 0);
+    const [{ count: c }, { data: groups }] = await Promise.all([
+      supabase.from("messages").select("*", { count: "exact", head: true }).eq("receiver_id", user.id).eq("is_read", false),
+      // Tin chưa đọc trong các nhóm chat (#24) cũng cộng vào chấm đỏ Tin nhắn
+      (supabase as any).rpc("get_my_groups"),
+    ]);
+    const groupUnread = ((groups ?? []) as { unread: number; muted: boolean }[])
+      .filter((g) => !g.muted)
+      .reduce((sum, g) => sum + (g.unread ?? 0), 0);
+    setCount((c ?? 0) + groupUnread);
   };
 
   useEffect(() => {
@@ -120,6 +123,7 @@ export function useUnreadMessages() {
         { event: "*", schema: "public", table: "messages", filter: `receiver_id=eq.${user.id}` },
         () => refresh(),
       )
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "group_messages" }, () => refresh())
       .subscribe();
     return () => {
       window.removeEventListener("messages:read", onRead);
