@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { MessageCircle, Search, UserCheck, UserPlus } from "lucide-react";
+import { MessageCircle, Search, UserCheck, UserPlus, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar } from "@/components/Avatar";
 import { supabase } from "@/integrations/supabase/client";
@@ -342,8 +342,133 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
               )}
             </>
           )}
+          {!loading && !debouncedQ && user && target.kind === "user" && target.id === user.id && (
+            <SuggestedFollows limit={10} className="mt-4 px-2" onFollowChange={onFollowChange} />
+          )}
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+interface Suggestion {
+  id: string;
+  full_name: string | null;
+  username: string | null;
+  avatar_url: string | null;
+  reason: "follows_you" | "mutual" | "shared_biz" | "same_area" | "same_interest" | "new";
+  mutual_count: number;
+}
+
+/**
+ * "Gợi ý theo dõi" kiểu Instagram/Facebook — dải thẻ cuộn ngang.
+ * Thứ tự do RPC get_follow_suggestions() tính điểm ở server: đang theo dõi mình (chưa theo
+ * dõi lại) > bạn chung > cùng quán/DN quen > cùng khu vực trên Quẹt > cùng loại nhu cầu Quẹt.
+ * Đã theo dõi / đã chặn / chính mình bị loại sẵn.
+ */
+export function SuggestedFollows({
+  limit = 12,
+  className,
+  onFollowChange,
+}: {
+  limit?: number;
+  className?: string;
+  onFollowChange?: () => void;
+}) {
+  const { user } = useAuth();
+  const { t } = useLanguage();
+  const [items, setItems] = useState<Suggestion[] | null>(null);
+  const [followed, setFollowed] = useState<Set<string>>(new Set());
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    void (supabase as any)
+      .rpc("get_follow_suggestions", { _limit: limit })
+      .then(({ data }: { data: Suggestion[] | null }) => {
+        setItems(data ?? []);
+      });
+  }, [user?.id, limit]);
+
+  if (!user || !items || items.length === 0) return null;
+
+  const toggle = async (s: Suggestion) => {
+    if (busyId) return;
+    setBusyId(s.id);
+    const isOn = followed.has(s.id);
+    if (isOn) {
+      const { error } = await supabase.from("follows").delete().eq("follower_id", user.id).eq("followee_user_id", s.id);
+      if (!error) {
+        setFollowed((prev) => {
+          const n = new Set(prev);
+          n.delete(s.id);
+          return n;
+        });
+      }
+    } else {
+      const { error } = await supabase.from("follows").insert({ follower_id: user.id, followee_user_id: s.id });
+      if (error) toast.error(error.message);
+      else setFollowed((prev) => new Set(prev).add(s.id));
+    }
+    setBusyId(null);
+    onFollowChange?.();
+  };
+
+  const reasonText = (s: Suggestion) =>
+    s.reason === "follows_you"
+      ? t("suggest.reason.followsYou")
+      : s.reason === "mutual"
+        ? t("suggest.reason.mutual", { n: String(s.mutual_count) })
+        : t(
+            `suggest.reason.${s.reason === "shared_biz" ? "sharedBiz" : s.reason === "same_area" ? "sameArea" : s.reason === "same_interest" ? "sameInterest" : "new"}`,
+          );
+
+  return (
+    <section className={className}>
+      <div className="text-sm font-bold px-1 mb-2">{t("suggest.title")}</div>
+      <div className="flex gap-2.5 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {items.map((s) => {
+          const isOn = followed.has(s.id);
+          return (
+            <div
+              key={s.id}
+              className="relative shrink-0 w-36 rounded-2xl border bg-card p-3 flex flex-col items-center text-center gap-1.5"
+            >
+              <button
+                type="button"
+                onClick={() => setItems((prev) => (prev ?? []).filter((x) => x.id !== s.id))}
+                aria-label={t("common.close")}
+                className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full grid place-items-center text-muted-foreground hover:bg-accent"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+              <Link to={`/ho-so/${s.id}`} className="flex flex-col items-center gap-1.5 min-w-0 w-full">
+                <Avatar path={s.avatar_url} name={s.full_name || s.username} size={60} />
+                <div className="text-sm font-semibold truncate w-full">{s.full_name || s.username}</div>
+              </Link>
+              <div className="text-[10px] text-muted-foreground leading-tight line-clamp-2 min-h-[2.2em]">
+                {reasonText(s)}
+              </div>
+              <button
+                type="button"
+                onClick={() => void toggle(s)}
+                disabled={busyId === s.id}
+                className={`w-full h-8 rounded-lg text-xs font-semibold flex items-center justify-center gap-1 disabled:opacity-50 ${
+                  isOn ? "bg-muted text-foreground" : "bg-gradient-brand text-primary-foreground"
+                }`}
+              >
+                {isOn ? <UserCheck className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
+                {isOn
+                  ? t("common.following")
+                  : s.reason === "follows_you"
+                    ? t("follow.followBack")
+                    : t("common.follow")}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 }
