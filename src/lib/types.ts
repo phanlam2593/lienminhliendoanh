@@ -97,7 +97,7 @@ export function getMembershipDiscountPct(points: number): number {
 export function getMembershipPrice(_points: number): number {
   return MEMBERSHIP_BASE_PRICE;
 }
-export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "system" | "call" | "call_ringing";
+export type NotifTargetType = "business" | "user" | "message" | "deal" | "report" | "system" | "call" | "call_ringing" | "group" | "ride" | "ride_driver";
 
 export const BUSINESS_TYPE_LABEL: Record<BusinessType, string> = {
   food: "Ăn uống",
@@ -289,7 +289,8 @@ export type NotifCategory =
   | "achievements"
   | "calls"
   | "swipe_matches"
-  | "friend_requests";
+  | "friend_requests"
+  | "rides";
 
 export interface Notification {
   id: string;
