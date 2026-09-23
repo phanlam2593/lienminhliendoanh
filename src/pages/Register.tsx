@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { usernameToEmail, BUSINESS_TYPES, BusinessType } from "@/lib/types";
+import { usernameToEmail, BUSINESS_TYPES, BusinessType, isAdultDob } from "@/lib/types";
 import { Logo } from "@/components/Logo";
 import { uploadImage } from "@/lib/upload";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -27,6 +27,7 @@ export default function Register() {
   const [email, setE] = useState("");
   const [emailStatus, setES] = useState<FieldStatus>("idle");
   const [phone, setPh] = useState("");
+  const [dob, setDob] = useState("");
   const [phoneStatus, setPhS] = useState<FieldStatus>("idle");
   const [password, setP] = useState("");
   const [password2, setP2] = useState("");
@@ -114,6 +115,7 @@ export default function Register() {
   const step1Valid =
     username &&
     fullName &&
+    isAdultDob(dob) &&
     email &&
     phone &&
     password.length >= 6 &&
@@ -143,7 +145,13 @@ export default function Register() {
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/`,
-          data: { username: username.toLowerCase(), full_name: fullName, phone, real_email: email },
+          data: {
+            username: username.toLowerCase(),
+            full_name: fullName,
+            phone,
+            real_email: email,
+            date_of_birth: dob,
+          },
         },
       });
       if (error) throw error;
@@ -207,9 +215,7 @@ export default function Register() {
 
       if (isBiz && bizCreateFailed) {
         toast.success(t("register.memberSuccessToast", { app: t("app.name") }));
-        toast.error(
-          t("register.bizSaveFailed"),
-        );
+        toast.error(t("register.bizSaveFailed"));
       } else if (isBiz) {
         toast.success(t("register.bizSuccessToast"));
       } else {
@@ -315,6 +321,19 @@ export default function Register() {
                 onChange={(e) => setFN(e.target.value)}
                 required
                 className="w-full px-4 py-3 rounded-xl border bg-card"
+              />
+            </Field>
+            <Field
+              label={t("register.dob")}
+              hint={dob && !isAdultDob(dob) ? t("register.dobUnder18") : t("register.dobHint")}
+            >
+              <input
+                type="date"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+                max={new Date().toISOString().slice(0, 10)}
+                required
+                className={`w-full px-4 py-3 rounded-xl border bg-card ${dob && !isAdultDob(dob) ? "border-destructive" : ""}`}
               />
             </Field>
             <Field label={t("register.email")} right={<Status s={emailStatus} />}>
@@ -587,10 +606,22 @@ export default function Register() {
 function GoogleIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z" />
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
-      <path fill="#4CAF50" d="M24 44c5.2 0 10-2 13.6-5.2l-6.3-5.3C29.3 35.4 26.8 36 24 36c-5.3 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.2 44 24 44z" />
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.5l6.3 5.3C41.4 35.6 44 30.2 44 24c0-1.3-.1-2.7-.4-3.5z" />
+      <path
+        fill="#FFC107"
+        d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"
+      />
+      <path
+        fill="#FF3D00"
+        d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.5 6.1 29.5 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"
+      />
+      <path
+        fill="#4CAF50"
+        d="M24 44c5.2 0 10-2 13.6-5.2l-6.3-5.3C29.3 35.4 26.8 36 24 36c-5.3 0-9.6-3.1-11.3-7.5l-6.5 5C9.6 39.6 16.2 44 24 44z"
+      />
+      <path
+        fill="#1976D2"
+        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.5l6.3 5.3C41.4 35.6 44 30.2 44 24c0-1.3-.1-2.7-.4-3.5z"
+      />
     </svg>
   );
 }
