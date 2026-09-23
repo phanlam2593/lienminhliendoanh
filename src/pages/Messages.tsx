@@ -126,6 +126,33 @@ export function MessagesInbox() {
   const [statusPopoverOpen, setStatusPopoverOpen] = useState(false);
   const [statusDraft, setStatusDraft] = useState("");
   const [statusViewFor, setStatusViewFor] = useState<ConvoSummary | null>(null);
+  const [statusReply, setStatusReply] = useState("");
+  const [statusSending, setStatusSending] = useState(false);
+  const navigateInbox = useNavigate();
+
+  // Thả cảm xúc / trả lời GHI CHÚ (status) của người khác → gửi thành 1 tin nhắn 1-1 kèm trích
+  // dẫn ghi chú (giống Messenger/Threads), rồi mở luôn đoạn chat với người đó.
+  const sendStatusReaction = async (payload: { emoji?: string; text?: string }) => {
+    const target = statusViewFor;
+    if (!user || !target?.partner?.status_message || statusSending) return;
+    const note = target.partner.status_message;
+    const content = payload.emoji
+      ? t("status.reactedMsg", { emoji: payload.emoji, note })
+      : t("status.repliedMsg", { note, text: (payload.text ?? "").trim() });
+    if (!payload.emoji && !(payload.text ?? "").trim()) return;
+    setStatusSending(true);
+    const { error } = await supabase
+      .from("messages")
+      .insert({ sender_id: user.id, receiver_id: target.partnerId, content, type: "text" });
+    setStatusSending(false);
+    if (error) {
+      toast.error(t("chat.sendFail") + ": " + error.message);
+      return;
+    }
+    setStatusReply("");
+    setStatusViewFor(null);
+    navigateInbox(`/tin-nhan/${target.partnerId}`);
+  };
 
   useEffect(() => {
     setMyStatus(profile?.status_message ?? null);
@@ -445,7 +472,10 @@ export function MessagesInbox() {
 
   // Dải "đang hoạt động" kiểu Messenger — online lên trước, rồi ai nhắn gần đây nhất
   // (một cách gián tiếp thể hiện hay chat với ai), tối đa 12 người để không tràn ngang.
+  // Bỏ cuộc trò chuyện với CHÍNH MÌNH khỏi dải này — ô đầu tiên đã là avatar của mình rồi,
+  // nếu không sẽ hiện 2 avatar của bản thân cạnh nhau.
   const activeStrip = [...convos]
+    .filter((c) => c.partnerId !== user?.id)
     .sort((a, b) => {
       const aOn = onlineUsers.has(a.partnerId) ? 0 : 1;
       const bOn = onlineUsers.has(b.partnerId) ? 0 : 1;
@@ -592,8 +622,44 @@ export function MessagesInbox() {
                   "{statusViewFor?.partner?.status_message}"
                 </AlertDialogDescription>
               </AlertDialogHeader>
+              <div className="flex justify-between gap-1">
+                {["❤️", "😂", "😮", "😢", "👍", "🔥"].map((emo) => (
+                  <button
+                    key={emo}
+                    type="button"
+                    disabled={statusSending}
+                    onClick={() => void sendStatusReaction({ emoji: emo })}
+                    className="w-10 h-10 rounded-full bg-muted text-xl grid place-items-center active:scale-90 transition disabled:opacity-50"
+                  >
+                    {emo}
+                  </button>
+                ))}
+              </div>
+              <div className="flex items-center gap-2">
+                <Input
+                  value={statusReply}
+                  onChange={(e) => setStatusReply(e.target.value.slice(0, 300))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      void sendStatusReaction({ text: statusReply });
+                    }
+                  }}
+                  placeholder={t("status.replyPlaceholder")}
+                  className="h-10 rounded-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => void sendStatusReaction({ text: statusReply })}
+                  disabled={!statusReply.trim() || statusSending}
+                  aria-label={t("common.send")}
+                  className="w-10 h-10 shrink-0 rounded-full bg-primary text-primary-foreground grid place-items-center disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
               <AlertDialogFooter>
-                <AlertDialogCancel>{t("common.close")}</AlertDialogCancel>
+                <AlertDialogCancel onClick={() => setStatusReply("")}>{t("common.close")}</AlertDialogCancel>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
