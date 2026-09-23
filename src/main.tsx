@@ -11,16 +11,19 @@ try {
   if (theme === "light") document.documentElement.classList.remove("dark");
 } catch {}
 
-createRoot(document.getElementById("root")!).render(<App />);
-
-registerPwa();
-
 // Giữ splash động tối thiểu ~1200ms kể từ lúc bắt đầu load — đảm bảo user
 // luôn kịp thấy logo + tên app + tagline sau khi OS splash tắt, dù React mount rất nhanh.
-const SPLASH_MIN_MS = 1800;
+const SPLASH_MIN_MS = 1200;
 const SPLASH_FADE_MS = 400;
 const splashStart = typeof performance !== "undefined" && performance.timeOrigin ? performance.timeOrigin : Date.now();
-requestAnimationFrame(() => {
+// Splash chỉ tắt khi app đã SẴN SÀNG THẬT (AuthProvider gọi window.__lomiHideSplash sau khi
+// đã biết đăng nhập hay chưa + nạp xong hồ sơ) — trước đây tắt cứng theo giờ nên người dùng
+// thấy lộ ra nút Đăng nhập/Đăng ký rồi khung avatar xám ~2s trước khi app load xong.
+// Có chốt an toàn 10s để splash không bao giờ bị kẹt nếu mạng quá chậm/lỗi.
+let splashHidden = false;
+const hideSplash = () => {
+  if (splashHidden) return;
+  splashHidden = true;
   const splash = document.getElementById("app-splash");
   if (!splash) return;
   const elapsed = Date.now() - splashStart;
@@ -29,4 +32,10 @@ requestAnimationFrame(() => {
     splash.style.opacity = "0";
     setTimeout(() => splash.remove(), SPLASH_FADE_MS);
   }, wait);
-});
+};
+(window as any).__lomiHideSplash = hideSplash;
+setTimeout(hideSplash, 10000);
+
+createRoot(document.getElementById("root")!).render(<App />);
+
+registerPwa();
