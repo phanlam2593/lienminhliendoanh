@@ -441,43 +441,15 @@ export default function Profile() {
     );
   }
 
-  // Default: menu view — trang cá nhân kiểu Facebook/Zalo
+  // Default: menu view — trang cá nhân kiểu Instagram (đã bỏ ảnh bìa theo yêu cầu):
+  // avatar bên trái + dãy số liệu gọn bên phải, tên/bio bên dưới, "Bạn bè" là 1 chip nhỏ.
   return (
     <div className="pb-5">
-      <div className="relative">
-        {(profile as any)?.cover_url ? (
-          <StoredImage path={(profile as any).cover_url} alt="" className="h-28 w-full object-cover rounded-b-2xl" />
-        ) : (
-          <div className="h-28 bg-gradient-brand rounded-b-2xl" />
-        )}
-        <button
-          type="button"
-          onClick={() => coverInput.current?.click()}
-          className="absolute bottom-2 right-2 w-8 h-8 rounded-full bg-black/30 hover:bg-black/40 text-white grid place-items-center backdrop-blur-sm"
-          aria-label={t("profile.changeCover")}
-        >
-          <Camera className="w-3.5 h-3.5" />
-        </button>
-        <input
-          ref={coverInput}
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void onCoverChange(f);
-            e.currentTarget.value = "";
-          }}
-        />
-        {coverUploading && (
-          <div className="absolute inset-0 rounded-b-2xl bg-black/20 grid place-items-center">
-            <span className="text-[11px] text-white font-semibold">{t("profile.uploadingImage")}</span>
-          </div>
-        )}
+      <div className="relative px-4 pt-12">
         <Popover open={menuOpen} onOpenChange={setMenuOpen}>
           <PopoverTrigger asChild>
             <button
-              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/20 hover:bg-black/30 text-white grid place-items-center backdrop-blur-sm"
+              className="absolute top-3 right-3 w-9 h-9 rounded-full bg-muted hover:bg-accent text-foreground grid place-items-center"
               aria-label={t("profile.settings")}
             >
               <MoreVertical className="w-4 h-4" />
@@ -544,95 +516,112 @@ export default function Profile() {
             />
           </PopoverContent>
         </Popover>
-        <div className="px-4 -mt-10">
-          <div className="flex items-end gap-3">
-            <div className="relative ring-4 ring-background rounded-full shrink-0">
-              <Avatar
-                path={profile?.avatar_url}
-                name={profile?.full_name || profile?.username}
-                size={88}
-                onClick={() => avatarInput.current?.click()}
-              />
+        <div className="flex items-center gap-4">
+          <div className="relative rounded-full shrink-0">
+            <Avatar
+              path={profile?.avatar_url}
+              name={profile?.full_name || profile?.username}
+              size={88}
+              onClick={() => avatarInput.current?.click()}
+            />
+            <button
+              type="button"
+              onClick={() => avatarInput.current?.click()}
+              className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
+              aria-label={t("profile.changeAvatar")}
+            >
+              <Camera className="w-3.5 h-3.5" />
+            </button>
+            <input
+              ref={avatarInput}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void onAvatarChange(f);
+                e.currentTarget.value = "";
+              }}
+            />
+            {(profile as any)?.status_message ? (
               <button
                 type="button"
-                onClick={() => avatarInput.current?.click()}
-                className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary text-primary-foreground grid place-items-center shadow-brand"
-                aria-label={t("profile.changeAvatar")}
-              >
-                <Camera className="w-3.5 h-3.5" />
-              </button>
-              <input
-                ref={avatarInput}
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) void onAvatarChange(f);
-                  e.currentTarget.value = "";
+                onClick={() => {
+                  setQuickStatusMsg((profile as any)?.status_message ?? "");
+                  setQuickStatusOpen(true);
                 }}
-              />
-              {(profile as any)?.status_message ? (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setQuickStatusMsg((profile as any)?.status_message ?? "");
-                    setQuickStatusOpen(true);
-                  }}
-                  className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"
-                >
-                  <div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" />
-                  <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
-                  <div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" />
-                  <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">
-                    "
-                    {(profile as any).status_message.length > 60
-                      ? (profile as any).status_message.slice(0, 60) + "…"
-                      : (profile as any).status_message}
-                    "
-                  </span>
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setQuickStatusMsg("");
-                    setQuickStatusOpen(true);
-                  }}
-                  className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"
-                >
-                  <span className="relative block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
-                    + {t("profile.addStatusLine")}
-                  </span>
-                </button>
-              )}
-            </div>
-            <div className="flex-1 min-w-0 pb-1.5">
-              <div className="text-lg font-extrabold truncate">{profile?.full_name}</div>
-              <div className="text-xs text-muted-foreground truncate">@{profile?.username}</div>
-              <div className="flex items-center gap-2 mt-0.5">
-                <StatusBadge s={profile?.status} />
-                {profile && (
-                  <button type="button" onClick={() => setTierLegendOpen(true)}>
-                    <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />
-                  </button>
-                )}
-              </div>
-              {uploadingAvatar && (
-                <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>
-              )}
-            </div>
+                className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"
+              >
+                <div className="absolute -bottom-[13px] left-5 w-2 h-2 rounded-full bg-card border border-border" />
+                <div className="absolute -bottom-[20px] left-4 w-1.5 h-1.5 rounded-full bg-card border border-border" />
+                <div className="absolute -bottom-[26px] left-3 w-1 h-1 rounded-full bg-card border border-border" />
+                <span className="relative block px-3 py-1.5 rounded-2xl bg-card border border-border shadow-sm text-xs text-primary font-semibold italic break-words">
+                  "
+                  {(profile as any).status_message.length > 60
+                    ? (profile as any).status_message.slice(0, 60) + "…"
+                    : (profile as any).status_message}
+                  "
+                </span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  setQuickStatusMsg("");
+                  setQuickStatusOpen(true);
+                }}
+                className="absolute bottom-[calc(100%+2px)] left-12 z-10 w-max max-w-[190px] text-left"
+              >
+                <span className="relative block px-3 py-1.5 rounded-2xl border border-dashed border-border text-xs text-muted-foreground">
+                  + {t("profile.addStatusLine")}
+                </span>
+              </button>
+            )}
           </div>
+          <div className="flex-1 min-w-0">
+            <FollowStats userId={user.id} />
+          </div>
+        </div>
+        <div className="min-w-0 mt-3">
+          <div className="text-lg font-extrabold truncate">{profile?.full_name}</div>
+          <div className="text-xs text-muted-foreground truncate">@{profile?.username}</div>
+          <div className="flex items-center gap-2 mt-0.5">
+            <StatusBadge s={profile?.status} />
+            {profile && (
+              <button type="button" onClick={() => setTierLegendOpen(true)}>
+                <MemberLevelBadge points={(profile as any).points ?? 0} isAdmin={role === "admin"} />
+              </button>
+            )}
+          </div>
+          {uploadingAvatar && (
+            <div className="text-[10px] text-muted-foreground mt-0.5">{t("profile.uploadingImage")}</div>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setQuickStatusMsg((profile as any)?.status_message ?? "");
+            setQuickStatusOpen(true);
+          }}
+          className="block text-left w-full mt-1.5"
+        >
+          {(profile as any)?.bio && (
+            <p className="text-sm text-muted-foreground mt-1.5 whitespace-pre-wrap">{(profile as any).bio}</p>
+          )}
+        </button>
+        <div className="flex flex-wrap gap-2 mt-3">
           <button
-            type="button"
             onClick={() => {
-              setQuickStatusMsg((profile as any)?.status_message ?? "");
-              setQuickStatusOpen(true);
+              setFriendsInitialTab("friends");
+              setFriendsOpen(true);
             }}
-            className="block text-left w-full mt-1.5"
+            className="h-8 px-3 rounded-full bg-muted hover:bg-accent text-xs font-semibold flex items-center gap-1.5 transition"
           >
-            {(profile as any)?.bio && (
-              <p className="text-sm text-muted-foreground mt-1.5 whitespace-pre-wrap">{(profile as any).bio}</p>
+            <UserPlus className="w-3.5 h-3.5 text-primary" /> {t("friend.friends")}
+            {pendingFriendRequests > 0 && (
+              <span className="min-w-4 h-4 px-1 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold grid place-items-center">
+                {pendingFriendRequests}
+              </span>
             )}
           </button>
         </div>
@@ -663,39 +652,6 @@ export default function Profile() {
           </div>
         </DialogContent>
       </Dialog>
-
-      <div className="px-4 mt-4">
-        <FollowStats userId={user.id} />
-      </div>
-
-      <div className="px-4 mt-2">
-        <button
-          onClick={() => {
-            setFriendsInitialTab("friends");
-            setFriendsOpen(true);
-          }}
-          className="w-full bg-card rounded-xl py-3 px-4 flex items-center justify-between shadow-sm hover:bg-accent transition"
-        >
-          <span className="text-sm font-semibold flex items-center gap-2">
-            <UserPlus className="w-4 h-4 text-primary" /> {t("friend.friends")}
-          </span>
-          <span className="flex items-center gap-2">
-            {pendingFriendRequests > 0 && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setFriendsInitialTab("requests");
-                  setFriendsOpen(true);
-                }}
-                className="w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold grid place-items-center"
-              >
-                {pendingFriendRequests}
-              </span>
-            )}
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </span>
-        </button>
-      </div>
 
       <div className="px-4 mt-5 space-y-3">
         <WallComposer onPosted={() => setWallReloadKey((k) => k + 1)} />
@@ -1447,55 +1403,28 @@ function FollowStats({ userId }: { userId: string }) {
   }, [userId]);
   return (
     <>
-      <div className="grid grid-cols-3 gap-2">
-        <button
-          onClick={() => setOpen("followers")}
-          className="bg-card rounded-xl py-3 px-1 flex flex-col items-center gap-1 shadow-sm hover:bg-accent transition"
-        >
-          <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
-            <Users className="w-3.5 h-3.5 text-primary" />
-          </span>
-          {loading ? (
-            <div className="h-5 w-6 rounded bg-muted animate-pulse" />
-          ) : (
-            <div className="text-base font-extrabold text-primary leading-none">{followers}</div>
-          )}
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
-            {t("profile.followers")}
-          </div>
-        </button>
-        <button
-          onClick={() => setOpen("following")}
-          className="bg-card rounded-xl py-3 px-1 flex flex-col items-center gap-1 shadow-sm hover:bg-accent transition"
-        >
-          <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
-            <UserCheck className="w-3.5 h-3.5 text-primary" />
-          </span>
-          {loading ? (
-            <div className="h-5 w-6 rounded bg-muted animate-pulse" />
-          ) : (
-            <div className="text-base font-extrabold text-primary leading-none">{following}</div>
-          )}
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
-            {t("messages.followingHeader")}
-          </div>
-        </button>
-        <button
-          onClick={() => setOpen("regulars")}
-          className="bg-card rounded-xl py-3 px-1 flex flex-col items-center gap-1 shadow-sm hover:bg-accent transition"
-        >
-          <span className="w-6 h-6 rounded-full bg-primary/10 grid place-items-center">
-            <Store className="w-3.5 h-3.5 text-primary" />
-          </span>
-          {loading ? (
-            <div className="h-5 w-6 rounded bg-muted animate-pulse" />
-          ) : (
-            <div className="text-base font-extrabold text-primary leading-none">{regulars}</div>
-          )}
-          <div className="text-[11px] font-semibold text-muted-foreground leading-tight text-center">
-            {t("regulars.title")}
-          </div>
-        </button>
+      {/* Kiểu Instagram: số to + nhãn nhỏ, không khung/icon cho gọn */}
+      <div className="grid grid-cols-3 gap-1">
+        {(
+          [
+            { key: "followers", n: followers, label: t("profile.followers") },
+            { key: "following", n: following, label: t("messages.followingHeader") },
+            { key: "regulars", n: regulars, label: t("regulars.title") },
+          ] as const
+        ).map((it) => (
+          <button
+            key={it.key}
+            onClick={() => setOpen(it.key)}
+            className="flex flex-col items-center gap-0.5 py-1 rounded-lg hover:bg-accent/60 transition"
+          >
+            {loading ? (
+              <div className="h-5 w-6 rounded bg-muted animate-pulse" />
+            ) : (
+              <div className="text-base font-extrabold leading-tight">{it.n}</div>
+            )}
+            <div className="text-[11px] text-muted-foreground leading-tight text-center">{it.label}</div>
+          </button>
+        ))}
       </div>
       <FollowListDialog
         open={open === "followers" || open === "following"}
@@ -1510,94 +1439,43 @@ function FollowStats({ userId }: { userId: string }) {
 }
 
 function OwnWall({ userId, reloadKey }: { userId: string; reloadKey?: number }) {
-  const { t, lang } = useLanguage();
-  const [tab, setTab] = useState<"posts" | "reviews">("posts");
+  const { t } = useLanguage();
   const [posts, setPosts] = useState<any[]>([]);
-  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Trang cá nhân chỉ còn "Bài viết" — phần Đánh giá đã bỏ khỏi trang cá nhân theo yêu cầu
+  // (đánh giá của 1 người giờ xem qua ProfileQuickView khi bấm avatar ở mục đánh giá DN).
   useEffect(() => {
     setLoading(true);
     (async () => {
-      const [{ data: postRows }, { data: reviewRows }] = await Promise.all([
-        supabase
-          .from("wall_posts")
-          .select("id, content, type, image_url, created_at, user_id")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false })
-          .limit(20),
-        supabase
-          .from("reviews")
-          .select("id, rating, comment, image_url, created_at, businesses(id, name)")
-          .eq("user_id", userId)
-          .order("created_at", { ascending: false })
-          .limit(20),
-      ]);
+      const { data: postRows } = await supabase
+        .from("wall_posts")
+        .select("id, content, type, image_url, created_at, user_id")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(20);
       setPosts(postRows ?? []);
-      setReviews((reviewRows ?? []) as any);
       setLoading(false);
     })();
   }, [userId, reloadKey]);
 
   return (
     <div>
-      <div className="flex gap-1 p-1 bg-muted rounded-xl">
-        <button
-          onClick={() => setTab("posts")}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "posts" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
-        >
-          <MessageSquare className="w-3.5 h-3.5" /> {t("wall.posts")}
-        </button>
-        <button
-          onClick={() => setTab("reviews")}
-          className={`flex-1 py-2 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 ${tab === "reviews" ? "bg-card shadow-sm" : "text-muted-foreground"}`}
-        >
-          <Star className="w-3.5 h-3.5" /> {t("wall.reviews")}
-        </button>
+      <div className="text-sm font-bold flex items-center gap-1.5 px-1">
+        <MessageSquare className="w-3.5 h-3.5" /> {t("wall.posts")}
       </div>
       <div className="mt-3 space-y-2">
         {loading ? (
           <p className="text-center text-xs text-muted-foreground py-8">{t("common.loading")}</p>
-        ) : tab === "posts" ? (
-          posts.length === 0 ? (
-            <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
-          ) : (
-            posts.map((post) => (
-              <WallPostCard
-                key={post.id}
-                post={post}
-                onDeleted={(id) => setPosts((prev) => prev.filter((p) => p.id !== id))}
-              />
-            ))
-          )
-        ) : reviews.length === 0 ? (
-          <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noReviews")}</p>
+        ) : posts.length === 0 ? (
+          <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
         ) : (
-          reviews.map((rv) => (
-            <div key={rv.id} className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
-              <div className="flex items-center justify-between gap-2">
-                {rv.businesses ? (
-                  <Link to={`/dn/${rv.businesses.id}`} className="text-sm font-semibold hover:text-primary truncate">
-                    🏢 {rv.businesses.name}
-                  </Link>
-                ) : (
-                  <span className="text-sm font-semibold text-muted-foreground">{t("reports.contentDeleted")}</span>
-                )}
-                <div className="flex items-center gap-0.5 shrink-0">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3.5 h-3.5 ${i < rv.rating ? "fill-primary text-primary" : "text-muted"}`}
-                    />
-                  ))}
-                </div>
-              </div>
-              {rv.comment && <p className="text-sm text-muted-foreground">{rv.comment}</p>}
-              {rv.image_url && (
-                <StoredImage path={rv.image_url} alt={t("biz.reviewImageAlt")} className="max-w-[200px] rounded-xl" />
-              )}
-              <div className="text-[11px] text-muted-foreground">{timeAgo(rv.created_at, lang)}</div>
-            </div>
+          posts.map((post) => (
+            <WallPostCard
+              key={post.id}
+              post={post}
+              onDeleted={(id) => setPosts((prev) => prev.filter((p) => p.id !== id))}
+            />
           ))
         )}
       </div>
