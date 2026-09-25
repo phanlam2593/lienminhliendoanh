@@ -277,3 +277,18 @@
     animation: none !important;
   }
 }
+
+/* Linh vật Lomi (26/09): nhún nhẹ, chớp mắt, vẫy tay, nhảy khi chạm. */
+@keyframes lomi-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes lomi-shadow { 0%,100% { transform: scaleX(1); opacity: .12; } 50% { transform: scaleX(.85); opacity: .08; } }
+@keyframes lomi-blink { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes lomi-wave { 0%,70%,100% { transform: rotate(0deg); } 80% { transform: rotate(-18deg); } 90% { transform: rotate(10deg); } }
+@keyframes lomi-hop { 0% { transform: translateY(0) scale(1); } 40% { transform: translateY(-14px) scale(1.06,.94); } 100% { transform: translateY(0) scale(1); } }
+.lomi-bob { animation: lomi-bob 2.8s ease-in-out infinite; overflow: visible; }
+.lomi-shadow { transform-origin: 50px 100px; animation: lomi-shadow 2.8s ease-in-out infinite; }
+.lomi-eye { transform-box: fill-box; transform-origin: center; animation: lomi-blink 4.5s infinite; }
+.lomi-wave { transform-box: fill-box; transform-origin: 0% 100%; animation: lomi-wave 5s ease-in-out infinite; }
+.lomi-hop { animation: lomi-hop 0.26s ease-out; }
+@media (prefers-reduced-motion: reduce) {
+  .lomi-bob, .lomi-shadow, .lomi-eye, .lomi-wave, .lomi-hop { animation: none !important; }
+}
