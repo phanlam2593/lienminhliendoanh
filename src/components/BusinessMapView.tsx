@@ -8,6 +8,7 @@ import { BusinessType } from "@/lib/types";
 import type { BusinessCardData } from "@/components/BusinessCard";
 import { useLanguage } from "@/lib/i18n";
 import { Navigation } from "lucide-react";
+import { MAP_TILE_ATTR, MAP_TILE_URL } from "@/components/LiveRideMap";
 
 // Fix icon mặc định của Leaflet hay bị vỡ khi qua bundler — lỗi phổ biến cộng đồng hay gặp
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -95,10 +96,8 @@ export function BusinessMapView({ businesses }: { businesses: BusinessCardData[]
         zoom={13}
         style={{ height: "100%", width: "100%" }}
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        {/* Bản đồ nền CARTO (25/09) — tile OSM gốc hay lỗi 503/bị chặn khi dùng nhiều */}
+        <TileLayer attribution={MAP_TILE_ATTR} url={MAP_TILE_URL} subdomains="abcd" maxZoom={19} />
         {myPos && (
           <Marker position={[myPos.lat, myPos.lng]} icon={userLocationIcon}>
             <Popup>{t("map.youAreHere")}</Popup>
