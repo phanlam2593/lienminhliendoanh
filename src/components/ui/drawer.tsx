@@ -2,10 +2,26 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 
 import { cn } from "@/lib/utils";
+import { useBackClosableOpen } from "@/lib/navigation";
 
-const Drawer = ({ shouldScaleBackground = true, ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
-  <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
-);
+// Nút Back (Android) khi ngăn kéo đang mở → chỉ đóng nó, không rời trang.
+const Drawer = ({
+  shouldScaleBackground = true,
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
+  const [isOpen, setOpen] = useBackClosableOpen(open, defaultOpen, onOpenChange);
+  return (
+    <DrawerPrimitive.Root
+      shouldScaleBackground={shouldScaleBackground}
+      open={isOpen}
+      onOpenChange={setOpen}
+      {...(props as any)}
+    />
+  );
+};
 Drawer.displayName = "Drawer";
 
 const DrawerTrigger = DrawerPrimitive.Trigger;

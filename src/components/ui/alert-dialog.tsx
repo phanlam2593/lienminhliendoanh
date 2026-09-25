@@ -3,8 +3,18 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { useBackClosableOpen } from "@/lib/navigation";
 
-const AlertDialog = AlertDialogPrimitive.Root;
+// Nút Back (Android) khi hộp xác nhận đang mở → chỉ đóng hộp, không rời trang.
+const AlertDialog = ({
+  open,
+  defaultOpen,
+  onOpenChange,
+  ...props
+}: React.ComponentProps<typeof AlertDialogPrimitive.Root>) => {
+  const [isOpen, setOpen] = useBackClosableOpen(open, defaultOpen, onOpenChange);
+  return <AlertDialogPrimitive.Root open={isOpen} onOpenChange={setOpen} {...props} />;
+};
 
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
 

@@ -3,8 +3,13 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useBackClosableOpen } from "@/lib/navigation";
 
-const Dialog = DialogPrimitive.Root;
+// Nút Back (Android) / vuốt lùi khi hộp thoại đang mở → chỉ đóng hộp thoại, không rời trang.
+const Dialog = ({ open, defaultOpen, onOpenChange, ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) => {
+  const [isOpen, setOpen] = useBackClosableOpen(open, defaultOpen, onOpenChange);
+  return <DialogPrimitive.Root open={isOpen} onOpenChange={setOpen} {...props} />;
+};
 
 const DialogTrigger = DialogPrimitive.Trigger;
 
