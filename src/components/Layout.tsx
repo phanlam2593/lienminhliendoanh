@@ -360,10 +360,10 @@ export function Layout() {
         )}
       </main>
 
+      {/* Thanh điều hướng NỔI dạng "viên thuốc" (26/09): kính mờ, bo tròn, cách đáy 1 khoảng.
+          Lớp ngoài trong suốt + pointer-events-none (chạm vào khe hở 2 bên vẫn tới nội dung bên
+          dưới); navRef đo cả lớp ngoài nên --bottom-nav-h đã gồm khoảng hở → nội dung không bị che. */}
       {!hide && !showWelcome && !showPendingGate && !showCompleteProfileGate && (
-        // Thanh điều hướng NỔI dạng "viên thuốc" (26/09, r47): kính mờ, bo tròn, cách đáy 1 khoảng.
-        // Lớp ngoài trong suốt + pointer-events-none (chạm vào khe hở 2 bên vẫn tới nội dung bên
-        // dưới); navRef đo cả lớp ngoài nên --bottom-nav-h đã gồm khoảng hở → nội dung không bị che.
         <nav
           ref={navRef}
           className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-3 pt-1 pointer-events-none"
@@ -374,6 +374,10 @@ export function Layout() {
           >
             {tabs.map((tab: any) => {
               const center = tab.to === "/quet";
+              const isActive =
+                tab.to === "/" || tab.to === "/ho-so"
+                  ? pathname === tab.to
+                  : pathname === tab.to || pathname.startsWith(tab.to + "/");
               return (
                 <NavLink
                   key={tab.to}
@@ -393,8 +397,6 @@ export function Layout() {
                     )
                   }
                 >
-                  {({ isActive }) => (
-                    <>
                       {center ? (
                         <div
                           className={cn(
@@ -428,8 +430,6 @@ export function Layout() {
                         </div>
                       )}
                       <span className={cn(isActive && "font-bold")}>{tab.label}</span>
-                    </>
-                  )}
                 </NavLink>
               );
             })}
