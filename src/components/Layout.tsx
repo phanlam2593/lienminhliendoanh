@@ -43,7 +43,8 @@ import { useGoBack } from "@/lib/navigation";
 
 // Trang con KHÔNG tự có nút ← riêng → header hiện nút ← (25/09). Rất quan trọng cho iPhone:
 // PWA cài trên iOS không có nút Back hệ thống, thiếu nút này là kẹt ở trang con.
-const HEADER_BACK_PATTERNS = [/^\/tin-nhan\/?$/, /^\/thong-bao\/?$/, /^\/dn\/[^/]+/, /^\/uu-dai\/?$/, /^\/cuoc-goi\/?$/];
+// /admin (26/09): Admin không còn ở thanh điều hướng dưới — vào từ Hồ sơ → Cài đặt, nên cần nút ←.
+const HEADER_BACK_PATTERNS = [/^\/admin\/?$/, /^\/tin-nhan\/?$/, /^\/thong-bao\/?$/, /^\/dn\/[^/]+/, /^\/uu-dai\/?$/, /^\/cuoc-goi\/?$/];
 
 const PENDING_ALLOWED = ["/ho-so", "/thong-bao", "/tin-nhan"];
 
@@ -67,16 +68,9 @@ export function Layout() {
     { to: "/cong-dong", icon: Users, label: t("nav.community") },
     { to: "/ho-so", icon: User, label: t("nav.profileShort") },
   ];
-  const tabs = isAdmin
-    ? [
-        { to: "/", icon: Home, label: t("nav.home") },
-        { to: "/kham-pha", icon: Search, label: t("nav.explore") },
-        { to: "/quet", icon: Flame, label: t("nav.quet") },
-        { to: "/admin", icon: Settings, label: t("nav.admin") },
-        { to: "/cong-dong", icon: Users, label: t("nav.community") },
-        { to: "/ho-so", icon: User, label: t("nav.profileShort") },
-      ]
-    : baseTabs;
+  // Admin (26/09 theo ý Kir): bỏ tab Admin khỏi thanh điều hướng dưới (6 tab bị chật) — vào
+  // Bảng quản trị từ Hồ sơ → Cài đặt (thẻ nổi bật ở đầu, có đếm việc cần xử lý).
+  const tabs = baseTabs;
   const gridClass =
     tabs.length === 7
       ? "grid-cols-7"
@@ -174,7 +168,7 @@ export function Layout() {
               {showHeaderBack && (
                 <button
                   type="button"
-                  onClick={() => goBack("/")}
+                  onClick={() => goBack(pathname.startsWith("/admin") ? "/ho-so?view=settings" : "/")}
                   aria-label={t("common.back")}
                   className="w-9 h-9 -ml-2 shrink-0 grid place-items-center rounded-full hover:bg-accent"
                 >
