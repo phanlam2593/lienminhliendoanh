@@ -24,6 +24,13 @@ import {
   Briefcase,
   Settings,
   AlertCircle,
+  Bike,
+  Car,
+  Clock,
+  Info,
+  MapPin,
+  Navigation,
+  Phone,
 } from "lucide-react";
 import { BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
@@ -347,12 +354,34 @@ export default function Guide() {
           <ul className="space-y-2">
             <IconBullet icon={Users}>{t("guide.exchangeB1")}</IconBullet>
             <IconBullet icon={Repeat}>{t("guide.exchangeB2")}</IconBullet>
+            <IconBullet icon={Info}>{t("guide.exchangeB3")}</IconBullet>
+            <IconBullet icon={Clock}>{t("guide.exchangeB4")}</IconBullet>
+            <IconBullet icon={Flag}>{t("guide.exchangeB5")}</IconBullet>
           </ul>
           <Link
             to="/quet"
             className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
           >
             {t("guide.exchangeCta")} →
+          </Link>
+        </div>
+      ),
+    },
+    {
+      id: "rides",
+      icon: Bike,
+      title: t("guide.ridesTitle"),
+      summary: t("guide.ridesSummary"),
+      body: (
+        <div className="space-y-2">
+          <ul className="space-y-2">
+            <IconBullet icon={MapPin}>{t("guide.ridesB1")}</IconBullet>
+            <IconBullet icon={MessageCircle}>{t("guide.ridesB2")}</IconBullet>
+            <IconBullet icon={Navigation}>{t("guide.ridesB3")}</IconBullet>
+            <IconBullet icon={Car}>{t("guide.ridesB4")}</IconBullet>
+          </ul>
+          <Link to="/dua-don" className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline">
+            {t("guide.ridesCta")} →
           </Link>
         </div>
       ),
@@ -406,6 +435,30 @@ export default function Guide() {
       ),
     },
     {
+      id: "groups",
+      icon: Users,
+      title: t("guide.groupTitle"),
+      summary: t("guide.groupSummary"),
+      body: (
+        <ul className="space-y-2">
+          <IconBullet icon={Users}>{t("guide.groupB1")}</IconBullet>
+          <IconBullet icon={Phone}>{t("guide.groupB2")}</IconBullet>
+        </ul>
+      ),
+    },
+    {
+      id: "ai",
+      icon: Sparkles,
+      title: t("guide.aiTitle"),
+      summary: t("guide.aiSummary"),
+      body: (
+        <ul className="space-y-2">
+          <IconBullet icon={MessageCircle}>{t("guide.aiB1")}</IconBullet>
+          <IconBullet icon={AlertCircle}>{t("guide.aiB2")}</IconBullet>
+        </ul>
+      ),
+    },
+    {
       id: "notifications",
       icon: Bell,
       title: t("guide.notifTitle"),
@@ -414,6 +467,18 @@ export default function Guide() {
         <ul className="space-y-2">
           <IconBullet icon={Settings}>{t("guide.notifB1")}</IconBullet>
           <IconBullet icon={Bell}>{t("guide.notifB2")}</IconBullet>
+        </ul>
+      ),
+    },
+    {
+      id: "tip",
+      icon: Heart,
+      title: t("guide.tipTitle"),
+      summary: t("guide.tipSummary"),
+      body: (
+        <ul className="space-y-2">
+          <IconBullet icon={Heart}>{t("guide.tipB1")}</IconBullet>
+          <IconBullet icon={Info}>{t("guide.tipB2")}</IconBullet>
         </ul>
       ),
     },

@@ -79,6 +79,40 @@ export default function Terms() {
         </ul>
       </Section>
 
+      <Section title={t("termsPage.q1Title")}>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.q1Li1")}</li>
+          <li>{t("termsPage.q1Li2")}</li>
+          <li>{t("termsPage.q1Li3")}</li>
+          <li>{t("termsPage.q1Li4")}</li>
+          <li>{t("termsPage.q1Li5")}</li>
+          <li>{t("termsPage.q1Li6")}</li>
+        </ul>
+      </Section>
+
+      <Section title={t("termsPage.r1Title")}>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.r1Li1")}</li>
+          <li>{t("termsPage.r1Li2")}</li>
+          <li>{t("termsPage.r1Li3")}</li>
+          <li>{t("termsPage.r1Li4")}</li>
+          <li>{t("termsPage.r1Li5")}</li>
+          <li>{t("termsPage.r1Li6")}</li>
+        </ul>
+      </Section>
+
+      <Section title={t("termsPage.c1Title")}>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.c1Li1")}</li>
+          <li>{t("termsPage.c1Li2")}</li>
+          <li>{t("termsPage.c1Li3")}</li>
+        </ul>
+      </Section>
+
+      <Section title={t("termsPage.t1Title")}>
+        <p>{t("termsPage.t1P1")}</p>
+      </Section>
+
       <Section title={t("termsPage.s7Title")}>
         <p>{t("termsPage.s7P1")}</p>
         <p>{t("termsPage.s7P2", { app: appName })}</p>

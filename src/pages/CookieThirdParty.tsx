@@ -49,6 +49,8 @@ export default function CookieThirdParty() {
           <li>{t("cookiePage.s3Item3")}</li>
           <li>{t("cookiePage.s3Item4")}</li>
           <li>{t("cookiePage.s3Item5")}</li>
+          <li>{t("cookiePage.s3Item6")}</li>
+          <li>{t("cookiePage.s3Item7")}</li>
         </ul>
         <p>{t("cookiePage.s3Footer")}</p>
       </Section>
@@ -58,6 +60,11 @@ export default function CookieThirdParty() {
           <li>{t("cookiePage.s4Item1")}</li>
           <li>{t("cookiePage.s4Item2")}</li>
           <li>{t("cookiePage.s4Item3")}</li>
+          <li>{t("cookiePage.s4Item4")}</li>
+          <li>{t("cookiePage.s4Item5")}</li>
+          <li>{t("cookiePage.s4Item6")}</li>
+          <li>{t("cookiePage.s4Item7")}</li>
+          <li>{t("cookiePage.s4Item8")}</li>
         </ul>
         <p>{t("cookiePage.s4Footer")}</p>
       </Section>

@@ -36,6 +36,10 @@ export default function PrivacyPolicy() {
           <li>{t("privacyPage.s1Li3")}</li>
           <li>{t("privacyPage.s1Li4")}</li>
           <li>{t("privacyPage.s1Li5")}</li>
+          <li>{t("privacyPage.s1Li6")}</li>
+          <li>{t("privacyPage.s1Li7")}</li>
+          <li>{t("privacyPage.s1Li8")}</li>
+          <li>{t("privacyPage.s1Li9")}</li>
         </ul>
       </Section>
 
@@ -46,6 +50,9 @@ export default function PrivacyPolicy() {
           <li>{t("privacyPage.s2Li3")}</li>
           <li>{t("privacyPage.s2Li4")}</li>
           <li>{t("privacyPage.s2Li5")}</li>
+          <li>{t("privacyPage.s2Li6")}</li>
+          <li>{t("privacyPage.s2Li7")}</li>
+          <li>{t("privacyPage.s2Li8")}</li>
         </ul>
       </Section>
 
@@ -57,6 +64,7 @@ export default function PrivacyPolicy() {
         <p>
           {t("privacyPage.s4Pre")} <b>{t("privacyPage.s4Bold")}</b> {t("privacyPage.s4Post")}
         </p>
+        <p>{t("privacyPage.s4Extra")}</p>
       </Section>
 
       <Section title={t("privacyPage.s5Title")}>

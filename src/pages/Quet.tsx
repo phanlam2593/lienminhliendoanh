@@ -380,6 +380,8 @@ const SWIPE_THRESHOLD_RATIO = 0.28;
 const SWIPE_THRESHOLD_MIN = 80;
 const SWIPE_THRESHOLD_MAX = 160;
 const TAP_MOVE_TOLERANCE = 10;
+// Vuốt lên quá mức này (px) → mở Chi tiết thẻ (kiểu Tinder).
+const SWIPE_UP_THRESHOLD = 90;
 const TAP_MAX_DURATION = 300;
 // Sau khi "bỏ qua" 1 nhu cầu, không ẩn vĩnh viễn nữa — sau PASS_COOLDOWN_HOURS giờ (hoặc sớm
 // hơn nếu người đăng đã sửa bài) nhu cầu đó sẽ hiện lại để cân nhắc lần nữa, tránh cạn "kho"
@@ -858,6 +860,12 @@ export default function Quet() {
         if (newMatch) {
           matchId = newMatch.id;
           setMatchInfo({ owner: likedOwner, needTitle: need.title });
+          // Rung nhẹ khi có Kết nối (máy hỗ trợ) — cảm giác "It's a match" quen thuộc.
+          try {
+            navigator.vibrate?.([60, 40, 120]);
+          } catch {
+            /* bỏ qua */
+          }
         }
       }
     }
@@ -994,6 +1002,13 @@ export default function Quet() {
     }
     if (likeRef.current) likeRef.current.style.opacity = "0";
     if (passRef.current) passRef.current.style.opacity = "0";
+    // Vuốt LÊN (không lệch ngang nhiều) → mở Chi tiết, giống Tinder.
+    if (y < -SWIPE_UP_THRESHOLD && Math.abs(x) < swipeThresholdRef.current * 0.6 && topCard) {
+      openDetail(topCard, topOwner, topDistanceKm);
+      dragRef.current = { x: 0, y: 0, active: false };
+      setDragging(false);
+      return;
+    }
     // Chạm nhẹ (không kéo, không giữ lâu) trên nửa trái/phải ảnh → chuyển ảnh trước/sau,
     // giống Instagram/Tinder — KHÔNG tính là quẹt thích/bỏ qua.
     const dt = Date.now() - pointerDownTimeRef.current;
