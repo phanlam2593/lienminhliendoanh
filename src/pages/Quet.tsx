@@ -1523,6 +1523,53 @@ export default function Quet() {
 
       {tab === "category" && categoryStep === "grid" && (
         <div className="space-y-3">
+          {/* Dải "Kết nối mới" đặt TRÊN 4 mục (theo ý Kir 26/09); mẹo an toàn vẫn ở cuối trang. */}
+          <div className="rounded-2xl border bg-card p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-bold">{t("quet.newMatches")}</div>
+              {pendingMatches.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => goScreen({ tab: "matches" })}
+                  className="text-xs font-semibold text-primary"
+                >
+                  {t("quet.seeAll")}
+                </button>
+              )}
+            </div>
+            {matchesLoading ? (
+              <div className="flex gap-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="w-14 h-14 rounded-full bg-muted animate-pulse" />
+                ))}
+              </div>
+            ) : pendingMatches.length === 0 ? (
+              <p className="text-xs text-muted-foreground py-1">{t("quet.noNewMatchesHint")}</p>
+            ) : (
+              <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {pendingMatches.map((m) => (
+                  <button
+                    key={`new-${m.id}`}
+                    onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
+                    className="shrink-0 w-16 flex flex-col items-center gap-1"
+                  >
+                    <div className="relative p-0.5 rounded-full bg-gradient-brand">
+                      <div className="rounded-full bg-background p-0.5">
+                        <Avatar path={m.otherUser?.avatar_url} name={m.otherUser?.full_name || m.otherUser?.username} size={48} frame={false} />
+                      </div>
+                      <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background">
+                        <CategoryIcon type={m.need_type} className="w-3 h-3" />
+                      </div>
+                    </div>
+                    <span className="text-[11px] font-semibold truncate w-full text-center">
+                      {(m.otherUser?.full_name || m.otherUser?.username || "—").split(" ").slice(-1)[0]}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="text-xs text-muted-foreground">{t("quet.category.subtitle")}</div>
           <div className="grid grid-cols-2 gap-3">
             {CATEGORIES.map(({ type, Icon }) => {
@@ -1569,53 +1616,6 @@ export default function Quet() {
             })}
           </div>
           {/* Đưa đón & giao hàng: đã chuyển ra Trang chủ (26/09 theo ý Kir). */}
-
-          {/* Nửa dưới trang (26/09): dải "Kết nối mới" + mẹo an toàn — để trang không bị trống. */}
-          <div className="rounded-2xl border bg-card p-3 space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-bold">{t("quet.newMatches")}</div>
-              {pendingMatches.length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => goScreen({ tab: "matches" })}
-                  className="text-xs font-semibold text-primary"
-                >
-                  {t("quet.seeAll")}
-                </button>
-              )}
-            </div>
-            {matchesLoading ? (
-              <div className="flex gap-3">
-                {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="w-14 h-14 rounded-full bg-muted animate-pulse" />
-                ))}
-              </div>
-            ) : pendingMatches.length === 0 ? (
-              <p className="text-xs text-muted-foreground py-1">{t("quet.noNewMatchesHint")}</p>
-            ) : (
-              <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {pendingMatches.map((m) => (
-                  <button
-                    key={`new-${m.id}`}
-                    onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
-                    className="shrink-0 w-16 flex flex-col items-center gap-1"
-                  >
-                    <div className="relative p-0.5 rounded-full bg-gradient-brand">
-                      <div className="rounded-full bg-background p-0.5">
-                        <Avatar path={m.otherUser?.avatar_url} name={m.otherUser?.full_name || m.otherUser?.username} size={48} frame={false} />
-                      </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background">
-                        <CategoryIcon type={m.need_type} className="w-3 h-3" />
-                      </div>
-                    </div>
-                    <span className="text-[11px] font-semibold truncate w-full text-center">
-                      {(m.otherUser?.full_name || m.otherUser?.username || "—").split(" ").slice(-1)[0]}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           <div className="rounded-2xl border bg-card p-3 space-y-1.5">
             <div className="flex items-center gap-1.5 text-sm font-bold">
