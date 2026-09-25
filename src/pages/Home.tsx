@@ -98,9 +98,16 @@ export default function Home() {
   return (
     <div className="space-y-6 pb-6">
       <section
-        className="text-white px-5 py-10 rounded-b-3xl"
+        className="relative overflow-hidden isolate text-white px-5 py-10 rounded-b-3xl"
         style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}
       >
+        {/* Nền aurora chuyển động chậm + lưới chấm (26/09) — xem .aurora trong index.css */}
+        <div className="aurora -z-10" aria-hidden>
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="aurora-grid -z-10" aria-hidden />
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">
           {t("home.badge")}
         </div>
@@ -108,7 +115,7 @@ export default function Home() {
         <p className="text-sm opacity-95 mt-1.5">{t("app.tagline")}</p>
         <Link
           to="/kham-pha"
-          className="inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-white text-cyan-700 font-semibold text-sm shadow-md"
+          className="tap inline-flex items-center gap-2 mt-5 px-5 py-2.5 rounded-xl bg-white text-cyan-700 font-semibold text-sm shadow-md"
         >
           {t("home.exploreBusinesses")} <ArrowRight className="w-4 h-4" />
         </Link>
@@ -240,7 +247,7 @@ function StatBtn({
   return (
     <button
       onClick={onClick}
-      className="rounded-2xl p-3 text-center bg-card border border-primary/20 shadow-soft hover:shadow-brand active:scale-95 transition-all"
+      className="tap rounded-2xl p-3 text-center bg-card/90 backdrop-blur border border-primary/20 shadow-soft hover:shadow-brand transition-shadow"
     >
       <div className="w-9 h-9 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
         <Icon className="w-4 h-4 text-white" />
@@ -248,11 +255,39 @@ function StatBtn({
       {loading ? (
         <div className="h-6 w-8 mx-auto mb-0.5 rounded bg-muted animate-pulse" />
       ) : (
-        <div className="text-xl font-extrabold text-primary">{value}</div>
+        <div className="text-xl font-extrabold text-gradient-brand tabular-nums">
+          <CountUp value={value} />
+        </div>
       )}
       <div className="text-[11px] text-muted-foreground font-semibold uppercase tracking-wide">{label}</div>
     </button>
   );
+}
+
+// Số chạy từ 0 lên (≈0.9s, chậm dần cuối) khi vừa có dữ liệu — hiệu ứng nhỏ cho cảm giác "sống".
+function CountUp({ value }: { value: number }) {
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    if (!value) {
+      setN(0);
+      return;
+    }
+    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+      setN(value);
+      return;
+    }
+    let raf = 0;
+    const start = performance.now();
+    const dur = 900;
+    const step = (now: number) => {
+      const p = Math.min(1, (now - start) / dur);
+      setN(Math.round(value * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [value]);
+  return <>{n.toLocaleString("vi-VN")}</>;
 }
 
 function FeaturedCardSkeleton() {
