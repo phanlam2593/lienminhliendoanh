@@ -26,6 +26,9 @@ export default defineConfig(({ mode }) => ({
       includeAssets: ["favicon.ico", "robots.txt", "placeholder.svg", "offline.html"],
       manifest: false,
       workbox: {
+        // Bundle chính đã ~2.1MB, vượt mặc định 2MiB của Workbox → build fail.
+        // Nâng lên 4MiB để precache được; bundle tăng thêm vẫn an toàn.
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
         // CỐ Ý KHÔNG precache "html": nếu precache index.html thì precacheAndRoute()
         // sẽ đăng ký 1 route match "/" (directoryIndex mặc định) TRƯỚC mọi runtimeCaching,
         // khiến navigation bị phục vụ cache-first từ snapshot HTML lúc build và không bao
