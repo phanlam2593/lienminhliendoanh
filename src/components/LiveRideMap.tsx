@@ -191,3 +191,92 @@ export function LiveRideMap({ ride, className }: { ride: LiveRide; className?: s
     </div>
   );
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BẢN ĐỒ KHI ĐẶT XE (25/09) — hiện ngay khi đã có điểm đón và/hoặc điểm đến (kể cả lấy từ
+// GPS), kiểu Grab: 2 ghim KÉO ĐƯỢC để chỉnh vị trí cho chính xác (thả tay → tự tra lại
+// địa chỉ + tính lại giá). Không có điểm nào → không hiện.
+// ─────────────────────────────────────────────────────────────────────────────
+function DraggablePin({
+  pos,
+  color,
+  label,
+  onMove,
+}: {
+  pos: LatLng;
+  color: string;
+  label: string;
+  onMove: (lat: number, lng: number) => void;
+}) {
+  const icon = useMemo(() => pinIcon(color, label), [color, label]);
+  const handlers = useMemo(
+    () => ({
+      dragend: (e: any) => {
+        const ll = e.target.getLatLng();
+        onMove(ll.lat, ll.lng);
+      },
+    }),
+    [onMove],
+  );
+  return <Marker position={pos} icon={icon} draggable eventHandlers={handlers} />;
+}
+
+export function BookingMap({
+  pickup,
+  dropoff,
+  onMove,
+}: {
+  pickup: { lat: number; lng: number } | null;
+  dropoff: { lat: number; lng: number } | null;
+  onMove: (which: "pickup" | "dropoff", lat: number, lng: number) => void;
+}) {
+  const { t } = useLanguage();
+  const [follow, setFollow] = useState(true);
+  const pts: LatLng[] = [pickup, dropoff].filter(Boolean).map((p) => [p!.lat, p!.lng] as LatLng);
+  // Chọn điểm mới (không phải kéo ghim) → tự căn khung lại.
+  const key = pts.map((p) => p.map((v) => v.toFixed(3)).join(",")).join("|");
+  useEffect(() => setFollow(true), [key]);
+  if (pts.length === 0) return null;
+  return (
+    <div className="space-y-1">
+      <div className="relative h-52 rounded-xl overflow-hidden border isolate">
+        <MapContainer center={pts[0]} zoom={15} style={{ height: "100%", width: "100%" }} zoomControl={false}>
+          <TileLayer url={MAP_TILE_URL} attribution={MAP_TILE_ATTR} subdomains="abcd" maxZoom={19} />
+          {pickup && dropoff && (
+            <Polyline
+              positions={[
+                [pickup.lat, pickup.lng],
+                [dropoff.lat, dropoff.lng],
+              ]}
+              pathOptions={{ color: "#0891b2", weight: 3, dashArray: "6 8", opacity: 0.85 }}
+            />
+          )}
+          {pickup && (
+            <DraggablePin
+              pos={[pickup.lat, pickup.lng]}
+              color="#10b981"
+              label={t("ride.map.pickup")}
+              onMove={(la, ln) => {
+                setFollow(false);
+                onMove("pickup", la, ln);
+              }}
+            />
+          )}
+          {dropoff && (
+            <DraggablePin
+              pos={[dropoff.lat, dropoff.lng]}
+              color="#ef4444"
+              label={t("ride.map.dropoff")}
+              onMove={(la, ln) => {
+                setFollow(false);
+                onMove("dropoff", la, ln);
+              }}
+            />
+          )}
+          <AutoFit points={pts} follow={follow} onUserMove={() => setFollow(false)} />
+        </MapContainer>
+      </div>
+      <p className="text-[11px] text-muted-foreground">{t("ride.map.dragHint")}</p>
+    </div>
+  );
+}
