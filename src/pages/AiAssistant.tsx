@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { ArrowLeft, Lock, Maximize2, Send, Sparkles, Trash2, X } from "lucide-react";
+import { ArrowLeft, Lock, Maximize2, Send, Trash2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { LomiMascot } from "@/components/LomiMascot";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn, 20 câu/ngày (giờ VN).
@@ -61,8 +62,8 @@ export function AiAssistantRow() {
   const { t } = useLanguage();
   return (
     <Link to="/tro-ly-ai" className="flex items-center gap-3 p-3 rounded-xl active:bg-accent/60 transition-colors">
-      <div className="w-10 h-10 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center shrink-0">
-        <Sparkles className="w-5 h-5" />
+      <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center shrink-0">
+        <LomiMascot size={30} animated={false} />
       </div>
       <div className="flex-1 min-w-0">
         <div className="font-semibold text-sm truncate">{t("ai.title")}</div>
@@ -179,8 +180,8 @@ export function AiChat({
             <ArrowLeft className="w-5 h-5" />
           </button>
         )}
-        <div className="w-9 h-9 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center">
-          <Sparkles className="w-4 h-4" />
+        <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center shrink-0">
+          <LomiMascot size={30} animated={false} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold text-sm">{t("ai.title")}</div>
@@ -221,6 +222,7 @@ export function AiChat({
         ) : msgs.length === 0 ? (
           <div className="py-8 space-y-4">
             <div className="text-center space-y-1 px-6">
+              <LomiMascot size={72} className="mx-auto mb-1" />
               <p className="text-sm font-semibold">{t("ai.welcome")}</p>
               <p className="text-xs text-muted-foreground">{t("ai.welcomeDesc")}</p>
             </div>
@@ -304,9 +306,10 @@ export function AiChat({
 // vào tai để hiện lại. Vị trí + trạng thái thu gọn lưu trên máy (localStorage).
 // Ẩn ở các trang có ô nhập tin nhắn phía dưới (chat, cộng đồng) và màn quẹt để khỏi che nút.
 // ─────────────────────────────────────────────────────────────────────────────
-const BUBBLE_KEY = "lmld:ai-bubble";
+const BUBBLE_KEY = "lmld:lomi-bubble"; // v2: mặc định góc dưới bên phải
+const GREET_KEY = "lmld:lomi-greet-day";
 type BubblePos = { side: "left" | "right"; y: number; tucked: boolean }; // y = tỉ lệ 0..1 theo chiều cao
-const SIZE = 52;
+const SIZE = 60;
 
 function readPos(): BubblePos {
   try {
@@ -316,7 +319,7 @@ function readPos(): BubblePos {
   } catch {
     /* bỏ qua */
   }
-  return { side: "right", y: 0.72, tucked: false };
+  return { side: "right", y: 1, tucked: false };
 }
 
 export function AiBubble() {
@@ -328,6 +331,25 @@ export function AiBubble() {
   const [open, setOpen] = useState(false);
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
   const start = useRef<{ px: number; py: number; moved: boolean } | null>(null);
+  // Lời chào nhỏ mỗi ngày 1 lần (hiện 5 giây).
+  const [greet, setGreet] = useState(false);
+  const [hop, setHop] = useState(false);
+  useEffect(() => {
+    if (!user) return;
+    const today = new Date().toDateString();
+    try {
+      if (localStorage.getItem(GREET_KEY) === today) return;
+      localStorage.setItem(GREET_KEY, today);
+    } catch {
+      return;
+    }
+    const a = window.setTimeout(() => setGreet(true), 1500);
+    const b = window.setTimeout(() => setGreet(false), 6500);
+    return () => {
+      window.clearTimeout(a);
+      window.clearTimeout(b);
+    };
+  }, [user?.id]);
   useBackToClose(open, () => setOpen(false));
 
   useEffect(() => {
@@ -378,8 +400,15 @@ export function AiBubble() {
     if (!s) return;
     if (!s.moved) {
       // Chạm: đang thu gọn → hiện lại; bình thường → mở chat.
+      setGreet(false);
       if (pos.tucked) setPos({ ...pos, tucked: false });
-      else setOpen(true);
+      else {
+        setHop(true);
+        window.setTimeout(() => {
+          setHop(false);
+          setOpen(true);
+        }, 260);
+      }
       return;
     }
     const W = window.innerWidth;
@@ -399,7 +428,7 @@ export function AiBubble() {
   const style: React.CSSProperties = drag
     ? { left: drag.x, top: drag.y, transition: "none" }
     : pos.tucked
-      ? { top: topPx, [pos.side]: -SIZE + 16 }
+      ? { top: topPx, [pos.side]: -SIZE / 2 }
       : { top: topPx, [pos.side]: 12 };
 
   return (
@@ -414,20 +443,26 @@ export function AiBubble() {
           start.current = null;
           setDrag(null);
         }}
-        style={{ ...style, width: SIZE, height: SIZE, touchAction: "none" }}
+        style={{ ...style, width: SIZE, height: SIZE + 4, touchAction: "none" }}
         className={cn(
-          "fixed z-40 rounded-full bg-gradient-brand text-white grid place-items-center shadow-brand ring-4 ring-background/70 transition-[top,left,right,opacity] duration-300 select-none",
-          pos.tucked && !drag && "opacity-80",
+          "fixed z-40 grid place-items-center select-none drop-shadow-[0_6px_10px_rgba(8,145,178,0.35)] transition-[top,left,right,opacity] duration-300",
+          pos.tucked && !drag && "opacity-90",
+          hop && "lomi-hop",
         )}
       >
-        <Sparkles
-          className="w-6 h-6 transition-transform duration-300"
-          style={
-            pos.tucked && !drag
-              ? { transform: `translateX(${pos.side === "right" ? -(SIZE / 2 - 9) : SIZE / 2 - 9}px) scale(0.75)` }
-              : undefined
-          }
-        />
+        <span className={cn("block transition-transform duration-300", pos.tucked && !drag && (pos.side === "right" ? "-rotate-[20deg]" : "rotate-[20deg]"))}>
+          <LomiMascot size={SIZE} />
+        </span>
+        {greet && !pos.tucked && !drag && (
+          <span
+            className={cn(
+              "absolute bottom-full mb-1 w-max max-w-[180px] rounded-2xl bg-card border shadow-lg px-3 py-1.5 text-xs font-semibold text-foreground text-left animate-in fade-in zoom-in-95 duration-300",
+              pos.side === "right" ? "right-0 rounded-br-sm" : "left-0 rounded-bl-sm",
+            )}
+          >
+            {t("ai.greet")}
+          </span>
+        )}
       </button>
 
       {open && (
