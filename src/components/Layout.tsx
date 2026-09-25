@@ -361,7 +361,7 @@ export function Layout() {
       </main>
 
       {!hide && !showWelcome && !showPendingGate && !showCompleteProfileGate && (
-        // Thanh điều hướng NỔI dạng "viên thuốc" (26/09): kính mờ, bo tròn, cách đáy 1 khoảng.
+        // Thanh điều hướng NỔI dạng "viên thuốc" (26/09, r47): kính mờ, bo tròn, cách đáy 1 khoảng.
         // Lớp ngoài trong suốt + pointer-events-none (chạm vào khe hở 2 bên vẫn tới nội dung bên
         // dưới); navRef đo cả lớp ngoài nên --bottom-nav-h đã gồm khoảng hở → nội dung không bị che.
         <nav
