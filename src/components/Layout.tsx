@@ -361,34 +361,78 @@ export function Layout() {
       </main>
 
       {!hide && !showWelcome && !showPendingGate && !showCompleteProfileGate && (
+        // Thanh điều hướng NỔI dạng "viên thuốc" (26/09): kính mờ, bo tròn, cách đáy 1 khoảng.
+        // Lớp ngoài trong suốt + pointer-events-none (chạm vào khe hở 2 bên vẫn tới nội dung bên
+        // dưới); navRef đo cả lớp ngoài nên --bottom-nav-h đã gồm khoảng hở → nội dung không bị che.
         <nav
           ref={navRef}
-          className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 bg-card border-t border-border safe-bottom"
+          className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-40 px-3 pt-1 pointer-events-none"
+          style={{ paddingBottom: "max(env(safe-area-inset-bottom), 10px)" }}
         >
-          <div className={`grid ${gridClass}`}>
-            {tabs.map((tab: any) => (
-              <NavLink
-                key={tab.to}
-                to={tab.to}
-                end={tab.to === "/" || tab.to === "/ho-so"}
-                className={({ isActive }) =>
-                  cn(
-                    "relative flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-semibold transition-colors",
-                    isActive ? "text-primary" : "text-muted-foreground",
-                  )
-                }
-              >
-                <div className="relative">
-                  <tab.icon className="w-5 h-5" />
-                  {tab.badge > 0 && (
-                    <span className="absolute -top-1 -right-2 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
-                      {tab.badge}
-                    </span>
+          <div
+            className={`grid ${gridClass} pointer-events-auto rounded-[26px] border border-white/40 dark:border-white/10 bg-card/80 supports-[backdrop-filter]:bg-card/65 backdrop-blur-xl backdrop-saturate-150 shadow-float px-1`}
+          >
+            {tabs.map((tab: any) => {
+              const center = tab.to === "/quet";
+              return (
+                <NavLink
+                  key={tab.to}
+                  to={tab.to}
+                  end={tab.to === "/" || tab.to === "/ho-so"}
+                  onClick={() => {
+                    try {
+                      navigator.vibrate?.(8);
+                    } catch {
+                      /* không hỗ trợ rung */
+                    }
+                  }}
+                  className={({ isActive }) =>
+                    cn(
+                      "group relative flex flex-col items-center justify-center gap-0.5 py-1.5 text-[10.5px] font-semibold transition-colors active:scale-90 duration-150",
+                      isActive ? "text-primary" : "text-muted-foreground",
+                    )
+                  }
+                >
+                  {({ isActive }) => (
+                    <>
+                      {center ? (
+                        <div
+                          className={cn(
+                            "relative w-11 h-11 -mt-5 rounded-full bg-gradient-brand text-white grid place-items-center ring-4 ring-background transition-transform duration-300",
+                            isActive ? "scale-105 nav-glow" : "shadow-brand",
+                          )}
+                        >
+                          <tab.icon className="w-5 h-5" />
+                          {tab.badge > 0 && (
+                            <span className="absolute -top-1 -right-1 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                              {tab.badge}
+                            </span>
+                          )}
+                        </div>
+                      ) : (
+                        <div
+                          className={cn(
+                            "relative h-7 w-12 rounded-full grid place-items-center transition-all duration-300",
+                            isActive ? "bg-primary/15" : "bg-transparent",
+                          )}
+                        >
+                          <tab.icon
+                            className={cn("w-5 h-5 transition-transform duration-300", isActive && "scale-110")}
+                            strokeWidth={isActive ? 2.4 : 2}
+                          />
+                          {tab.badge > 0 && (
+                            <span className="absolute -top-1 right-0.5 min-w-4 h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                              {tab.badge}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      <span className={cn(isActive && "font-bold")}>{tab.label}</span>
+                    </>
                   )}
-                </div>
-                <span>{tab.label}</span>
-              </NavLink>
-            ))}
+                </NavLink>
+              );
+            })}
           </div>
         </nav>
       )}
