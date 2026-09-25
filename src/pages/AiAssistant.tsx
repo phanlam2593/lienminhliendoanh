@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useGoBack } from "@/lib/navigation";
-import { ArrowLeft, Lock, Send, Sparkles, Trash2 } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useBackToClose, useGoBack } from "@/lib/navigation";
+import { ArrowLeft, Lock, Maximize2, Send, Sparkles, Trash2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -73,8 +73,28 @@ export function AiAssistantRow() {
 }
 
 export default function AiAssistant() {
-  const nav = useNavigate();
   const goBack = useGoBack();
+  return (
+    <AiChat
+      onBack={() => goBack("/tin-nhan")}
+      className="h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))] max-w-2xl mx-auto"
+    />
+  );
+}
+
+/** Khung chat AI dùng chung cho trang /tro-ly-ai và bảng nổi mở từ bong bóng. */
+export function AiChat({
+  onBack,
+  onClose,
+  onExpand,
+  className,
+}: {
+  onBack?: () => void;
+  onClose?: () => void;
+  onExpand?: () => void;
+  className?: string;
+}) {
+  const nav = useNavigate();
   const { t } = useLanguage();
   const { user } = useAuth();
   const [quota, setQuota] = useState<Quota | null>(null);
@@ -152,11 +172,13 @@ export default function AiAssistant() {
   const suggestions = [t("ai.s1"), t("ai.s2"), t("ai.s3"), t("ai.s4")];
 
   return (
-    <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))] max-w-2xl mx-auto">
+    <div className={cn("flex flex-col", className)}>
       <div className="flex items-center gap-2 p-3 border-b">
-        <button onClick={() => goBack("/tin-nhan")} aria-label={t("common.back")}>
-          <ArrowLeft className="w-5 h-5" />
-        </button>
+        {onBack && (
+          <button onClick={onBack} aria-label={t("common.back")}>
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+        )}
         <div className="w-9 h-9 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center">
           <Sparkles className="w-4 h-4" />
         </div>
@@ -169,6 +191,16 @@ export default function AiAssistant() {
         {msgs.length > 0 && (
           <button onClick={clear} aria-label={t("ai.clear")} className="p-2 text-muted-foreground">
             <Trash2 className="w-4 h-4" />
+          </button>
+        )}
+        {onExpand && (
+          <button onClick={onExpand} aria-label={t("ai.expand")} className="p-2 text-muted-foreground">
+            <Maximize2 className="w-4 h-4" />
+          </button>
+        )}
+        {onClose && (
+          <button onClick={onClose} aria-label={t("common.close")} className="p-2 text-muted-foreground">
+            <X className="w-5 h-5" />
           </button>
         )}
       </div>
@@ -262,5 +294,159 @@ export default function AiAssistant() {
         </form>
       )}
     </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BONG BÓNG TRỢ LÝ AI (26/09 theo ý Kir) — nút tròn nổi ở mép màn hình, bấm mở khung chat
+// dạng bảng trượt lên (không rời trang đang xem). Kéo được lên/xuống, thả gần mép bên nào thì
+// dính mép đó; KÉO SÁT RA MÉP thì bong bóng thu gọn thành 1 "tai" nhỏ cho đỡ chiếm chỗ, chạm
+// vào tai để hiện lại. Vị trí + trạng thái thu gọn lưu trên máy (localStorage).
+// Ẩn ở các trang có ô nhập tin nhắn phía dưới (chat, cộng đồng) và màn quẹt để khỏi che nút.
+// ─────────────────────────────────────────────────────────────────────────────
+const BUBBLE_KEY = "lmld:ai-bubble";
+type BubblePos = { side: "left" | "right"; y: number; tucked: boolean }; // y = tỉ lệ 0..1 theo chiều cao
+const SIZE = 52;
+
+function readPos(): BubblePos {
+  try {
+    const p = JSON.parse(localStorage.getItem(BUBBLE_KEY) || "null");
+    if (p && (p.side === "left" || p.side === "right") && typeof p.y === "number")
+      return { side: p.side, y: Math.min(1, Math.max(0, p.y)), tucked: !!p.tucked };
+  } catch {
+    /* bỏ qua */
+  }
+  return { side: "right", y: 0.72, tucked: false };
+}
+
+export function AiBubble() {
+  const { user } = useAuth();
+  const { t } = useLanguage();
+  const nav = useNavigate();
+  const { pathname, search } = useLocation();
+  const [pos, setPos] = useState<BubblePos>(readPos);
+  const [open, setOpen] = useState(false);
+  const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
+  const start = useRef<{ px: number; py: number; moved: boolean } | null>(null);
+  useBackToClose(open, () => setOpen(false));
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(BUBBLE_KEY, JSON.stringify(pos));
+    } catch {
+      /* bỏ qua */
+    }
+  }, [pos]);
+
+  // Đổi trang → đóng khung chat.
+  useEffect(() => setOpen(false), [pathname]);
+
+  const hidden =
+    !user ||
+    pathname.startsWith("/tro-ly-ai") ||
+    pathname.startsWith("/tin-nhan/") ||
+    pathname.startsWith("/cong-dong") ||
+    pathname.startsWith("/cuoc-goi") ||
+    pathname.startsWith("/auth") ||
+    (pathname.startsWith("/quet") && /tab=swipe/.test(search));
+  if (hidden) return null;
+
+  // Vùng được phép đặt bong bóng: dưới thanh tiêu đề, trên thanh điều hướng.
+  const bounds = () => {
+    const css = getComputedStyle(document.documentElement);
+    const top = (parseFloat(css.getPropertyValue("--header-h")) || 56) + 8;
+    const bottom = window.innerHeight - (parseFloat(css.getPropertyValue("--bottom-nav-h")) || 80) - SIZE - 8;
+    return { top, bottom: Math.max(top + 1, bottom) };
+  };
+  const b = typeof window !== "undefined" ? bounds() : { top: 0, bottom: 0 };
+  const topPx = b.top + pos.y * (b.bottom - b.top);
+
+  const onDown = (e: React.PointerEvent) => {
+    start.current = { px: e.clientX, py: e.clientY, moved: false };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const onMove = (e: React.PointerEvent) => {
+    const s = start.current;
+    if (!s) return;
+    if (!s.moved && Math.hypot(e.clientX - s.px, e.clientY - s.py) < 6) return;
+    s.moved = true;
+    setDrag({ x: e.clientX - SIZE / 2, y: e.clientY - SIZE / 2 });
+  };
+  const onUp = (e: React.PointerEvent) => {
+    const s = start.current;
+    start.current = null;
+    if (!s) return;
+    if (!s.moved) {
+      // Chạm: đang thu gọn → hiện lại; bình thường → mở chat.
+      if (pos.tucked) setPos({ ...pos, tucked: false });
+      else setOpen(true);
+      return;
+    }
+    const W = window.innerWidth;
+    const side = e.clientX < W / 2 ? "left" : "right";
+    const nearEdge = e.clientX < 28 || e.clientX > W - 28;
+    const { top, bottom } = bounds();
+    const y = Math.min(1, Math.max(0, (e.clientY - SIZE / 2 - top) / (bottom - top)));
+    setPos({ side, y, tucked: nearEdge });
+    setDrag(null);
+    try {
+      navigator.vibrate?.(8);
+    } catch {
+      /* bỏ qua */
+    }
+  };
+
+  const style: React.CSSProperties = drag
+    ? { left: drag.x, top: drag.y, transition: "none" }
+    : pos.tucked
+      ? { top: topPx, [pos.side]: -SIZE + 16 }
+      : { top: topPx, [pos.side]: 12 };
+
+  return (
+    <>
+      <button
+        type="button"
+        aria-label={t("ai.title")}
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerCancel={() => {
+          start.current = null;
+          setDrag(null);
+        }}
+        style={{ ...style, width: SIZE, height: SIZE, touchAction: "none" }}
+        className={cn(
+          "fixed z-40 rounded-full bg-gradient-brand text-white grid place-items-center shadow-brand ring-4 ring-background/70 transition-[top,left,right,opacity] duration-300 select-none",
+          pos.tucked && !drag && "opacity-80",
+        )}
+      >
+        <Sparkles
+          className="w-6 h-6 transition-transform duration-300"
+          style={
+            pos.tucked && !drag
+              ? { transform: `translateX(${pos.side === "right" ? -(SIZE / 2 - 9) : SIZE / 2 - 9}px) scale(0.75)` }
+              : undefined
+          }
+        />
+      </button>
+
+      {open && (
+        <div className="fixed inset-0 z-50 bg-black/40 animate-in fade-in duration-200" onClick={() => setOpen(false)}>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="absolute inset-x-0 bottom-0 mx-auto max-w-md h-[min(78vh,calc(var(--vvh,100dvh)-3rem))] bg-background rounded-t-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300"
+          >
+            <AiChat
+              className="h-full"
+              onClose={() => setOpen(false)}
+              onExpand={() => {
+                setOpen(false);
+                nav("/tro-ly-ai");
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
