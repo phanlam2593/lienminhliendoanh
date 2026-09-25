@@ -225,9 +225,12 @@ export function BookingMap({
   pickup,
   dropoff,
   onMove,
+  route,
 }: {
   pickup: { lat: number; lng: number } | null;
   dropoff: { lat: number; lng: number } | null;
+  /** Tuyến đường đi thật (OSRM) — có thì vẽ đường liền theo phố, không thì nét đứt thẳng. */
+  route?: LatLng[];
   onMove: (which: "pickup" | "dropoff", lat: number, lng: number) => void;
 }) {
   const { t } = useLanguage();
@@ -242,7 +245,9 @@ export function BookingMap({
       <div className="relative h-52 rounded-xl overflow-hidden border isolate">
         <MapContainer center={pts[0]} zoom={15} style={{ height: "100%", width: "100%" }} zoomControl={false}>
           <TileLayer url={MAP_TILE_URL} attribution={MAP_TILE_ATTR} subdomains="abcd" maxZoom={19} />
-          {pickup && dropoff && (
+          {pickup && dropoff && route && route.length > 1 ? (
+            <Polyline positions={route} pathOptions={{ color: "#0891b2", weight: 5, opacity: 0.85 }} />
+          ) : pickup && dropoff ? (
             <Polyline
               positions={[
                 [pickup.lat, pickup.lng],
@@ -250,7 +255,7 @@ export function BookingMap({
               ]}
               pathOptions={{ color: "#0891b2", weight: 3, dashArray: "6 8", opacity: 0.85 }}
             />
-          )}
+          ) : null}
           {pickup && (
             <DraggablePin
               pos={[pickup.lat, pickup.lng]}
@@ -273,7 +278,7 @@ export function BookingMap({
               }}
             />
           )}
-          <AutoFit points={pts} follow={follow} onUserMove={() => setFollow(false)} />
+          <AutoFit points={pts.length === 2 && route && route.length > 1 ? [...pts, ...route] : pts} follow={follow} onUserMove={() => setFollow(false)} />
         </MapContainer>
       </div>
       <p className="text-[11px] text-muted-foreground">{t("ride.map.dragHint")}</p>
