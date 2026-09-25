@@ -290,7 +290,8 @@ export type NotifCategory =
   | "calls"
   | "swipe_matches"
   | "friend_requests"
-  | "rides";
+  | "rides"
+  | "social";
 
 export interface Notification {
   id: string;
