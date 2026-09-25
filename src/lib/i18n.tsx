@@ -3123,7 +3123,29 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
+  // Không throw khi thiếu provider: khi Vite HMR tải lại module này, context cũ/mới
+  // có thể lệch nhau trong 1 nhịp render → throw sẽ trắng màn toàn app. Thay vào đó
+  // trả bản dịch mặc định (đọc localStorage giống tStatic) để UI vẫn hiện bình thường.
+  if (!ctx) {
+    let lang: Lang = "vi";
+    try {
+      const saved = localStorage.getItem("lang");
+      if (saved === "en" || saved === "vi") lang = saved;
+    } catch {}
+    return {
+      lang,
+      setLang: () => {},
+      t: (key: string, params?: Record<string, string | number>) => {
+        let s = DICT[lang][key] ?? DICT.vi[key] ?? key;
+        if (params) {
+          for (const [k, v] of Object.entries(params)) {
+            s = s.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
+          }
+        }
+        return s;
+      },
+    };
+  }
   return ctx;
 }
 
