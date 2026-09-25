@@ -35,6 +35,7 @@ import { ImageViewer } from "@/components/ImageLightbox";
 import { TipAppCard } from "@/components/TipAppCard";
 import { LoadingState } from "@/components/LoadingState";
 import { BookingMap, LiveRideMap } from "@/components/LiveRideMap";
+import { fetchRoadRoute, type RoadRoute } from "@/lib/route";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -43,7 +44,7 @@ import { Textarea } from "@/components/ui/textarea";
 // Giá THAM KHẢO (25/09) = giá mở cửa (đã gồm N km đầu, mặc định 2 km) + giá/km tiếp theo theo
 // BẬC (vd giao hàng xe máy: km 3–10 5k, km 11–20 4k, >20 3.5k) + phụ phí hàng ô tô (cồng kềnh /
 // bốc dỡ). Admin chỉnh ở bảng ride_pricing, tính ở SERVER (quote_ride/create_ride → ride_fare())
-// theo quãng đường chim bay × 1.3. Giá chỉ để tham khảo — 2 bên tự thoả thuận, trả tiền mặt
+// theo QUÃNG ĐƯỜNG ĐI THỰC TẾ (tuyến OSRM, lib/route.ts; lỗi mạng → chim bay × 1.3). Giá chỉ để tham khảo — 2 bên tự thoả thuận, trả tiền mặt
 // trực tiếp cho tài xế (tài xế nhận 100%, app không giữ tiền). Tài xế phải đăng ký (kèm ảnh
 // chân dung) + admin duyệt (ride_drivers).
 // ─────────────────────────────────────────────────────────────────────────────
@@ -497,7 +498,9 @@ function CustomerTab() {
   const [pickup, setPickup] = useState<Place | null>(null);
   const [dropoff, setDropoff] = useState<Place | null>(null);
   const [note, setNote] = useState("");
-  const [quote, setQuote] = useState<{ distance_km: number; price: number; extra_fee?: number } | null>(null);
+  const [quote, setQuote] = useState<{ distance_km: number; price: number; extra_fee?: number; road?: boolean } | null>(null);
+  // Tuyến đường thật: undefined = đang tìm, null = không lấy được (dùng ước lượng).
+  const [route, setRoute] = useState<RoadRoute | null | undefined>(undefined);
   const [booking, setBooking] = useState(false);
   const [extras, setExtras] = useState<Extra[]>([]);
   const [pricing, setPricing] = useState<Pricing[]>([]);
@@ -563,11 +566,32 @@ function CustomerTab() {
     if (vehicle === "oto_4" && passengers > 4) setPassengers(4);
   }, [vehicle]);
 
+  // 1) Lấy tuyến đường đi thật (chờ 400ms sau lần kéo ghim cuối cho đỡ gọi dồn).
+  useEffect(() => {
+    if (!pickup || !dropoff) {
+      setRoute(undefined);
+      return;
+    }
+    setRoute(undefined);
+    const ctrl = new AbortController();
+    const timer = window.setTimeout(() => {
+      void fetchRoadRoute(pickup, dropoff, ctrl.signal).then((r) => {
+        if (!ctrl.signal.aborted) setRoute(r);
+      });
+    }, 400);
+    return () => {
+      window.clearTimeout(timer);
+      ctrl.abort();
+    };
+  }, [pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng]);
+
+  // 2) Báo giá theo km thực tế (server tự kiểm tra; không có tuyến → ước lượng).
   useEffect(() => {
     if (!pickup || !dropoff) {
       setQuote(null);
       return;
     }
+    if (route === undefined) return; // đợi tuyến đường xong mới báo giá, tránh giá nhảy 2 lần
     let cancel = false;
     void db
       .rpc("quote_ride", {
@@ -577,6 +601,7 @@ function CustomerTab() {
         dlat: dropoff.lat,
         dlng: dropoff.lng,
         _extras: extras,
+        _road_km: route?.km ?? null,
       })
       .then(({ data }: any) => {
         if (!cancel) setQuote(data);
@@ -584,7 +609,7 @@ function CustomerTab() {
     return () => {
       cancel = true;
     };
-  }, [pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, vehicle, extras.join(",")]);
+  }, [pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, vehicle, extras.join(","), route]);
 
   const active = rides.find((r) => ACTIVE.includes(r.status));
   const history = rides.filter((r) => !ACTIVE.includes(r.status));
@@ -614,6 +639,7 @@ function CustomerTab() {
       dlng: dropoff.lng,
       _note: note,
       _extras: extras,
+      _road_km: route?.km ?? null,
     });
     setBooking(false);
     if (error) {
@@ -773,6 +799,7 @@ function CustomerTab() {
           <BookingMap
             pickup={pickup}
             dropoff={dropoff}
+            route={route?.coords}
             onMove={(which, lat, lng) => {
               const set = which === "pickup" ? setPickup : setDropoff;
               // Đặt vị trí mới ngay (giá tính lại liền), địa chỉ chữ cập nhật sau khi tra xong.
@@ -795,7 +822,8 @@ function CustomerTab() {
                 <span className="text-lg font-extrabold text-primary">{money(quote.price)}</span>
               </div>
               <div className="text-[11px] text-muted-foreground">
-                ~{Number(quote.distance_km).toFixed(1)} km
+                {quote.road ? "" : "~"}
+                {Number(quote.distance_km).toFixed(1)} km {quote.road ? t("ride.byRoad") : t("ride.estimated")}
                 {quote.extra_fee ? ` · ${t("ride.inclExtra", { fee: money(quote.extra_fee) })}` : ""} · {t("ride.dealNote")}
               </div>
             </div>

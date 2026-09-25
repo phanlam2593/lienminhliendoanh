@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
-import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star, Car, ChevronRight } from "lucide-react";
+import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star, Car, Bike, Package } from "lucide-react";
 import type { Business } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { Avatar } from "@/components/Avatar";
@@ -137,21 +137,34 @@ export default function Home() {
       </section>
 
       {user && (
-        // Lối vào Đưa đón & Giao hàng (26/09): 1 thẻ ngang, chuyển từ trang Quẹt ra đây.
+        // Lối vào Đưa đón & Giao hàng (26/09) — dạng BANNER kiểu Grab: tiêu đề + 2 nút đi thẳng
+        // vào đúng loại (Đặt xe / Giao hàng), hình minh hoạ chìm bên phải. Trước đây là 1 dòng
+        // giống mục danh sách nên nhìn lạc lõng giữa hàng số liệu và "Doanh nghiệp nổi bật".
         <section className="px-4">
-          <Link
-            to="/dua-don"
-            className="w-full rounded-2xl border bg-card p-3 flex items-center gap-3 text-left active:scale-[0.98] transition"
-          >
-            <div className="w-12 h-12 shrink-0 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
-              <Car className="w-6 h-6" />
+          <div className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/15 via-cyan-500/10 to-transparent p-4">
+            <Car
+              aria-hidden
+              className="absolute -right-4 -bottom-5 w-32 h-32 text-primary/10 rotate-[-8deg] pointer-events-none"
+            />
+            <div className="relative">
+              <div className="font-extrabold text-base leading-tight">{t("quet.rides.title")}</div>
+              <p className="text-xs text-muted-foreground mt-0.5 pr-16 leading-snug">{t("home.ridesBanner")}</p>
+              <div className="flex gap-2 mt-3">
+                <Link
+                  to="/dua-don"
+                  className="flex-1 h-10 rounded-xl bg-gradient-brand text-primary-foreground text-sm font-bold inline-flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.97] transition"
+                >
+                  <Bike className="w-4 h-4" /> {t("home.rideBook")}
+                </Link>
+                <Link
+                  to="/dua-don?kind=hang"
+                  className="flex-1 h-10 rounded-xl bg-card border text-primary text-sm font-bold inline-flex items-center justify-center gap-1.5 active:scale-[0.97] transition"
+                >
+                  <Package className="w-4 h-4" /> {t("home.rideDeliver")}
+                </Link>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm">{t("quet.rides.title")}</div>
-              <div className="text-[11px] text-muted-foreground leading-snug">{t("quet.rides.brief")}</div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </Link>
+          </div>
         </section>
       )}
 

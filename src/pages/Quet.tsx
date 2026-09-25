@@ -24,6 +24,7 @@ import {
   Plus,
   Car,
   ChevronRight,
+  ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -479,6 +480,11 @@ export default function Quet() {
   const [talkedIds, setTalkedIds] = useState<Set<string>>(new Set());
   // Số Kết nối mới kể từ lần cuối mở tab Kết nối (chấm đỏ trên tab) — mốc lưu trên máy.
   const [newMatchCount, setNewMatchCount] = useState(0);
+  // Kết nối chưa nhắn lần nào (ở tab Kết nối) / số người đã chuyển sang Tin nhắn.
+  const pendingMatches = matches.filter((m) => m.otherUser && !talkedIds.has(m.otherUser.id));
+  const talkedCount = matches.filter((m) => m.otherUser && talkedIds.has(m.otherUser.id)).length;
+  // Số nhu cầu đang bật của NGƯỜI KHÁC theo từng mục (hiện "N người đang tìm" trên thẻ mục).
+  const [typeCounts, setTypeCounts] = useState<Partial<Record<NeedType, number>>>({});
   // Hướng dẫn cử chỉ lần đầu vào màn quẹt.
   const [showSwipeTutorial, setShowSwipeTutorial] = useState(false);
 
@@ -798,7 +804,21 @@ export default function Quet() {
 
   useEffect(() => {
     if (!myId) return;
-    if (tab === "category") void loadMyNeeds();
+    if (tab === "category") {
+      void loadMyNeeds();
+      void loadMatches(); // cho dải "Kết nối mới" dưới 4 mục
+      void Promise.all(
+        CATEGORIES.map(({ type }) =>
+          db
+            .from("swipe_needs")
+            .select("id", { count: "exact", head: true })
+            .eq("need_type", type)
+            .eq("is_active", true)
+            .neq("user_id", myId)
+            .then(({ count }: any) => [type, count ?? 0] as const),
+        ),
+      ).then((pairs) => setTypeCounts(Object.fromEntries(pairs)));
+    }
     if (tab === "matches") void loadMatches();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myId, tab]);
@@ -1527,6 +1547,12 @@ export default function Quet() {
                   <div className="text-[11px] text-muted-foreground leading-snug">
                     {t(`quet.category.${type}.brief`)}
                   </div>
+                  {(typeCounts[type] ?? 0) > 0 && (
+                    <div className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary bg-primary/10 rounded-full px-2 py-0.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      {t("quet.category.activeCount", { n: typeCounts[type] ?? 0 })}
+                    </div>
+                  )}
                   {/* Nút Quản lý nằm GỌN TRONG khung thẻ (trước đây là nút rời bên dưới khung) */}
                   <button
                     type="button"
@@ -1543,6 +1569,64 @@ export default function Quet() {
             })}
           </div>
           {/* Đưa đón & giao hàng: đã chuyển ra Trang chủ (26/09 theo ý Kir). */}
+
+          {/* Nửa dưới trang (26/09): dải "Kết nối mới" + mẹo an toàn — để trang không bị trống. */}
+          <div className="rounded-2xl border bg-card p-3 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="text-sm font-bold">{t("quet.newMatches")}</div>
+              {pendingMatches.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => goScreen({ tab: "matches" })}
+                  className="text-xs font-semibold text-primary"
+                >
+                  {t("quet.seeAll")}
+                </button>
+              )}
+            </div>
+            {matchesLoading ? (
+              <div className="flex gap-3">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="w-14 h-14 rounded-full bg-muted animate-pulse" />
+                ))}
+              </div>
+            ) : pendingMatches.length === 0 ? (
+              <p className="text-xs text-muted-foreground py-1">{t("quet.noNewMatchesHint")}</p>
+            ) : (
+              <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {pendingMatches.map((m) => (
+                  <button
+                    key={`new-${m.id}`}
+                    onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
+                    className="shrink-0 w-16 flex flex-col items-center gap-1"
+                  >
+                    <div className="relative p-0.5 rounded-full bg-gradient-brand">
+                      <div className="rounded-full bg-background p-0.5">
+                        <Avatar path={m.otherUser?.avatar_url} name={m.otherUser?.full_name || m.otherUser?.username} size={48} frame={false} />
+                      </div>
+                      <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background">
+                        <CategoryIcon type={m.need_type} className="w-3 h-3" />
+                      </div>
+                    </div>
+                    <span className="text-[11px] font-semibold truncate w-full text-center">
+                      {(m.otherUser?.full_name || m.otherUser?.username || "—").split(" ").slice(-1)[0]}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-2xl border bg-card p-3 space-y-1.5">
+            <div className="flex items-center gap-1.5 text-sm font-bold">
+              <ShieldCheck className="w-4 h-4 text-primary" /> {t("quet.safety.title")}
+            </div>
+            <ul className="text-xs text-muted-foreground space-y-1 list-disc pl-5">
+              <li>{t("quet.safety.1")}</li>
+              <li>{t("quet.safety.2")}</li>
+              <li>{t("quet.safety.3")}</li>
+            </ul>
+          </div>
         </div>
       )}
 
@@ -2582,6 +2666,9 @@ export default function Quet() {
       )}
 
       {tab === "matches" && (
+        // Kết nối (26/09, kiểu Tinder): CHỈ những người đã kết nối mà CHƯA nhắn tin lần nào. Nhắn
+        // tin nhắn đầu tiên xong → cuộc trò chuyện nằm hẳn ở Tin nhắn (có nhãn "Từ Quẹt" + Huỷ kết
+        // nối trong menu chat) — không còn 1 người xuất hiện ở cả 2 nơi.
         <div className="space-y-2">
           {matchesLoading ? (
             <div className="space-y-2">
@@ -2593,40 +2680,15 @@ export default function Quet() {
             <div className="text-center py-10 text-sm text-muted-foreground">{t("quet.emptyMatches")}</div>
           ) : (
             <>
-            {matches.some((m) => m.otherUser && !talkedIds.has(m.otherUser.id)) && (
-              <div className="space-y-2 pb-1">
-                <div className="text-xs font-bold text-primary uppercase tracking-wide">{t("quet.newMatches")}</div>
-                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                  {matches
-                    .filter((m) => m.otherUser && !talkedIds.has(m.otherUser.id))
-                    .map((m) => (
-                      <button
-                        key={`new-${m.id}`}
-                        onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
-                        className="shrink-0 w-16 flex flex-col items-center gap-1"
-                      >
-                        <div className="relative p-0.5 rounded-full bg-gradient-brand">
-                          <div className="rounded-full bg-background p-0.5">
-                            <Avatar path={m.otherUser?.avatar_url} name={m.otherUser?.full_name || m.otherUser?.username} size={52} frame={false} />
-                          </div>
-                          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background">
-                            <CategoryIcon type={m.need_type} className="w-3 h-3" />
-                          </div>
-                        </div>
-                        <span className="text-[11px] font-semibold truncate w-full text-center">
-                          {(m.otherUser?.full_name || m.otherUser?.username || "—").split(" ").slice(-1)[0]}
-                        </span>
-                      </button>
-                    ))}
+              {pendingMatches.length > 0 ? (
+                <p className="text-xs text-muted-foreground">{t("quet.pendingHint")}</p>
+              ) : (
+                <div className="text-center py-8 space-y-1">
+                  <div className="text-3xl">💬</div>
+                  <p className="text-sm text-muted-foreground">{t("quet.allChatted")}</p>
                 </div>
-                <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide pt-1">{t("quet.allMatches")}</div>
-                {!matches.some((m) => m.otherUser && talkedIds.has(m.otherUser.id)) && (
-                  <p className="text-xs text-muted-foreground py-3 text-center">{t("quet.noChatsYet")}</p>
-                )}
-              </div>
-            )}
-            {/* Kiểu Messenger/Tinder: người ở hàng "Kết nối mới" (chưa nhắn) KHÔNG lặp lại ở danh sách dưới. */}
-            {matches.filter((m) => !(m.otherUser && !talkedIds.has(m.otherUser.id))).map((m) => {
+              )}
+              {pendingMatches.map((m) => {
               const isOnline = m.otherUser ? onlineUsers.has(m.otherUser.id) : false;
               return (
                 <div key={m.id} className="w-full flex items-center gap-3 rounded-xl border bg-card p-3">
@@ -2681,7 +2743,18 @@ export default function Quet() {
                   </Popover>
                 </div>
               );
-            })}
+              })}
+              {talkedCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => nav("/tin-nhan")}
+                  className="w-full mt-2 rounded-xl border border-dashed p-3 flex items-center gap-2 text-sm text-muted-foreground hover:bg-muted/50"
+                >
+                  <MessageCircle className="w-4 h-4 text-primary shrink-0" />
+                  <span className="flex-1 text-left">{t("quet.chatsInMessages", { n: talkedCount })}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              )}
             </>
           )}
         </div>

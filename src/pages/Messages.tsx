@@ -15,6 +15,8 @@ import {
   ArrowLeft,
   Send,
   Trash2,
+  Flame,
+  UserX,
   Pencil,
   Check,
   X,
@@ -121,6 +123,8 @@ export function MessagesInbox() {
   const [pinnedIds, setPinnedIds] = useState<Set<string>>(new Set());
   const [mutedIds, setMutedIds] = useState<Set<string>>(new Set());
   const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
+  // Người đã Kết nối qua Quẹt → nhãn nhỏ "Từ Quẹt" cạnh tên (26/09).
+  const [quetIds, setQuetIds] = useState<Set<string>>(new Set());
   const [search, setSearch] = useState("");
   const [actionSheetFor, setActionSheetFor] = useState<ConvoSummary | null>(null);
   const [confirmBlockFor, setConfirmBlockFor] = useState<ConvoSummary | null>(null);
@@ -274,11 +278,13 @@ export function MessagesInbox() {
 
   const loadPrefs = useCallback(async () => {
     if (!user) return;
-    const [{ data: pins }, { data: mutes }, { data: blks }] = await Promise.all([
+    const [{ data: pins }, { data: mutes }, { data: blks }, { data: sm }] = await Promise.all([
       supabase.from("message_pins").select("partner_id").eq("user_id", user.id),
       supabase.from("message_mutes").select("muted_user_id").eq("user_id", user.id),
       supabase.from("blocks").select("blocked_id").eq("blocker_id", user.id),
+      (supabase as any).from("swipe_matches").select("user_a, user_b").or(`user_a.eq.${user.id},user_b.eq.${user.id}`),
     ]);
+    setQuetIds(new Set(((sm ?? []) as { user_a: string; user_b: string }[]).map((r) => (r.user_a === user.id ? r.user_b : r.user_a))));
     setPinnedIds(new Set((pins ?? []).map((r: any) => r.partner_id)));
     setMutedIds(new Set((mutes ?? []).map((r: any) => r.muted_user_id)));
     setBlockedIds(new Set((blks ?? []).map((r: any) => r.blocked_id)));
@@ -725,6 +731,11 @@ export function MessagesInbox() {
                         {c.partner && (
                           <MemberLevelBadge points={c.partner.points} isAdmin={adminIds.has(c.partnerId)} />
                         )}
+                        {quetIds.has(c.partnerId) && (
+                          <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-primary bg-primary/10 rounded-full px-1.5 py-0.5 shrink-0">
+                            <Flame className="w-2.5 h-2.5" /> {t("quet.fromQuet")}
+                          </span>
+                        )}
                         {mutedIds.has(c.partnerId) && (
                           <BellOff
                             className="w-3.5 h-3.5 text-muted-foreground shrink-0"
@@ -925,6 +936,27 @@ export function MessagesThread() {
   const [iBlockedThem, setIBlockedThem] = useState(false);
   const [blockMenuOpen, setBlockMenuOpen] = useState(false);
   const [confirmBlockOpen, setConfirmBlockOpen] = useState(false);
+  // Kết nối Quẹt với người này (nếu có) → mục "Huỷ kết nối" trong menu ⋯ (26/09).
+  const [quetMatchIds, setQuetMatchIds] = useState<string[]>([]);
+  const [confirmUnmatchOpen, setConfirmUnmatchOpen] = useState(false);
+  useEffect(() => {
+    if (!user || !id) return;
+    void (supabase as any)
+      .from("swipe_matches")
+      .select("id")
+      .or(`and(user_a.eq.${user.id},user_b.eq.${id}),and(user_a.eq.${id},user_b.eq.${user.id})`)
+      .then(({ data }: any) => setQuetMatchIds(((data ?? []) as { id: string }[]).map((r) => r.id)));
+  }, [user?.id, id]);
+  const unmatchQuet = async () => {
+    if (!quetMatchIds.length) return;
+    const { error } = await (supabase as any).from("swipe_matches").delete().in("id", quetMatchIds);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setQuetMatchIds([]);
+    toast.success(t("quet.unmatchDone"));
+  };
   const [iMutedThem, setIMutedThem] = useState(false);
   const [confirmDeleteConvoOpen, setConfirmDeleteConvoOpen] = useState(false);
   const [allMediaOpen, setAllMediaOpen] = useState(false);
@@ -1602,6 +1634,17 @@ export function MessagesThread() {
                 <Ban className="w-4 h-4" /> {t("block.block")}
               </button>
             )}
+            {quetMatchIds.length > 0 && (
+              <button
+                onClick={() => {
+                  setBlockMenuOpen(false);
+                  setConfirmUnmatchOpen(true);
+                }}
+                className="w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-sm font-semibold hover:bg-accent text-destructive text-left"
+              >
+                <UserX className="w-4 h-4" /> {t("quet.unmatch")}
+              </button>
+            )}
             <button
               onClick={() => {
                 setBlockMenuOpen(false);
@@ -1626,6 +1669,21 @@ export function MessagesThread() {
             <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={blockUser} className="bg-destructive hover:bg-destructive/90">
               {t("block.block")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={confirmUnmatchOpen} onOpenChange={setConfirmUnmatchOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("quet.unmatchConfirmTitle")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("quet.unmatchConfirmDesc")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => void unmatchQuet()} className="bg-destructive hover:bg-destructive/90">
+              {t("quet.unmatch")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
