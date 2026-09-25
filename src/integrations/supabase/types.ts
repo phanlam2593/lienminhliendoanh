@@ -1671,7 +1671,11 @@ export type Database = {
           created_at: string
           customer_id: string
           distance_km: number
+          driver_heading: number | null
           driver_id: string | null
+          driver_lat: number | null
+          driver_lng: number | null
+          driver_loc_at: string | null
           dropoff_lat: number
           dropoff_lng: number
           dropoff_text: string
@@ -1697,7 +1701,11 @@ export type Database = {
           created_at?: string
           customer_id: string
           distance_km: number
+          driver_heading?: number | null
           driver_id?: string | null
+          driver_lat?: number | null
+          driver_lng?: number | null
+          driver_loc_at?: string | null
           dropoff_lat: number
           dropoff_lng: number
           dropoff_text: string
@@ -1723,7 +1731,11 @@ export type Database = {
           created_at?: string
           customer_id?: string
           distance_km?: number
+          driver_heading?: number | null
           driver_id?: string | null
+          driver_lat?: number | null
+          driver_lng?: number | null
+          driver_loc_at?: string | null
           dropoff_lat?: number
           dropoff_lng?: number
           dropoff_text?: string
@@ -2401,6 +2413,7 @@ export type Database = {
       }
     }
     Functions: {
+      _demo_move_driver: { Args: never; Returns: undefined }
       accept_ride: { Args: { _rid: string }; Returns: undefined }
       add_group_members: {
         Args: { _gid: string; _member_ids: string[] }
@@ -2472,6 +2485,7 @@ export type Database = {
           _note: string
           _passengers: number
           _pickup_text: string
+          _road_km?: number
           _vehicle: string
           dlat: number
           dlng: number
@@ -2633,6 +2647,7 @@ export type Database = {
       quote_ride: {
         Args: {
           _extras?: string[]
+          _road_km?: number
           _vehicle: string
           dlat: number
           dlng: number
@@ -2670,6 +2685,10 @@ export type Database = {
       show_trgm: { Args: { "": string }; Returns: string[] }
       unaccent: { Args: { "": string }; Returns: string }
       unaccent_safe: { Args: { _t: string }; Returns: string }
+      update_ride_location: {
+        Args: { _heading?: number; _lat: number; _lng: number; _rid: string }
+        Returns: Json
+      }
       update_ride_status: {
         Args: { _rid: string; _status: string }
         Returns: undefined
