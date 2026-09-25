@@ -30,6 +30,7 @@ import { WelcomeOverlay } from "./WelcomeOverlay";
 import { WelcomeOnboarding } from "./WelcomeOnboarding";
 import { AchievementOverlay } from "./AchievementOverlay";
 import { PullToRefresh } from "./PullToRefresh";
+import { AiBubble } from "@/pages/AiAssistant";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -430,6 +431,7 @@ export function Layout() {
           </div>
         </nav>
       )}
+      {!hide && !showWelcome && !showPendingGate && !showCompleteProfileGate && <AiBubble />}
       <InstallBanner />
     </div>
   );
