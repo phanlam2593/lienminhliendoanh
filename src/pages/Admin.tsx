@@ -2552,7 +2552,7 @@ function UsageTab() {
   return (
     <div className="space-y-5">
       <p className="text-xs text-muted-foreground leading-relaxed">
-        Ảnh và ghi âm chiếm dung lượng lưu trữ thật (Supabase Storage). Tin nhắn, GIF và cuộc gọi không chiếm dung lượng
+        Ảnh và ghi âm chiếm dung lượng lưu trữ thật (kho lưu trữ của nền tảng). Tin nhắn, GIF và cuộc gọi không chiếm dung lượng
         lưu trữ — số liệu bên dưới là số lượt hoạt động, dùng để ước tính chi phí băng thông/API sau này.
       </p>
 

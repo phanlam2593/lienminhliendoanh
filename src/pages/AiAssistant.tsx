@@ -8,6 +8,7 @@ import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
 import { FAQS, FAQ_CATS, matchFaq, type Faq, type FaqCat } from "@/lib/lomiFaq";
+import { BUSINESS_TYPES } from "@/lib/types";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn, 20 câu/ngày (giờ VN).
@@ -78,7 +79,10 @@ export function openLomi(nav: (to: string) => void) {
 function FaqBrowser({ onPick, onClose }: { onPick: (f: Faq) => void; onClose?: () => void }) {
   const { t, lang } = useLanguage();
   const [cat, setCat] = useState<FaqCat>("start");
-  const list = FAQS.filter((f) => f.cat === cat);
+  const [more, setMore] = useState(false);
+  const all = FAQS.filter((f) => f.cat === cat);
+  // Gọn: mỗi chủ đề hiện 3 câu đầu, bấm "Xem thêm" mới bung hết.
+  const list = more ? all : all.slice(0, 3);
   return (
     <div className="rounded-2xl border bg-card/80 overflow-hidden">
       <div className="flex items-center gap-2 px-3 pt-3">
@@ -97,7 +101,10 @@ function FaqBrowser({ onPick, onClose }: { onPick: (f: Faq) => void; onClose?: (
         {FAQ_CATS.map((c) => (
           <button
             key={c.id}
-            onClick={() => setCat(c.id)}
+            onClick={() => {
+              setCat(c.id);
+              setMore(false);
+            }}
             className={cn(
               "shrink-0 text-[11px] px-2.5 py-1 rounded-full border transition active:scale-95",
               c.id === cat ? "bg-primary text-primary-foreground border-primary" : "bg-background",
@@ -112,16 +119,25 @@ function FaqBrowser({ onPick, onClose }: { onPick: (f: Faq) => void; onClose?: (
           <button
             key={f.id}
             onClick={() => onPick(f)}
-            className="w-full text-left text-[13px] px-3 py-2.5 active:bg-accent/60 transition-colors flex items-center gap-2"
+            className="w-full text-left text-[13px] px-3 py-2 active:bg-accent/60 transition-colors flex items-center gap-2"
           >
             <span className="flex-1">{lang === "en" ? f.q.en : f.q.vi}</span>
             <span className="text-muted-foreground">›</span>
           </button>
         ))}
       </div>
-      <Link to="/huong-dan" className="block text-center text-[11px] font-semibold text-primary py-2 border-t">
-        {t("ai.faqFullGuide")}
-      </Link>
+      <div className="flex items-center justify-between border-t px-3 py-2 text-[11px] font-semibold">
+        {all.length > 3 ? (
+          <button onClick={() => setMore((v) => !v)} className="text-primary">
+            {more ? t("ai.faqLess") : t("ai.faqMore", { n: String(all.length - 3) })}
+          </button>
+        ) : (
+          <span />
+        )}
+        <Link to="/huong-dan" className="text-muted-foreground">
+          {t("ai.faqFullGuide")}
+        </Link>
+      </div>
     </div>
   );
 }
@@ -175,6 +191,7 @@ export function AiChat({
   const [showFaq, setShowFaq] = useState(false);
   const { lang } = useLanguage();
   const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const loadQuota = async () => {
     const { data } = await db.rpc("get_my_ai_quota");
@@ -186,6 +203,14 @@ export function AiChat({
     setMsgs(loadHistory(user.id));
     void loadQuota();
   }, [user?.id]);
+
+  // Ô nhập tự cao theo nội dung (tối đa max-h-32) — câu gợi ý điền sẵn dài 2 dòng vẫn đọc được hết.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [input]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -328,31 +353,43 @@ export function AiChat({
 
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
         {msgs.length === 0 ? (
-          <div className="py-4 space-y-4">
+          <div className="py-3 space-y-4">
             <div className="text-center space-y-1 px-6">
-              <LomiMascot size={72} className="mx-auto mb-1" />
+              <LomiMascot size={60} className="mx-auto mb-1" />
               <p className="text-sm font-semibold">{t("ai.welcome")}</p>
               <p className="text-xs text-muted-foreground">{t(nonMember ? "ai.welcomeDescFree" : "ai.welcomeDesc")}</p>
             </div>
-            {nonMember ? (
-              <button
-                onClick={() => nav("/ho-so?view=personal")}
-                className="w-full flex items-center gap-2 text-left rounded-2xl border border-primary/30 bg-primary/5 px-3 py-2.5"
-              >
-                <Sparkles className="w-4 h-4 text-primary shrink-0" />
-                <span className="flex-1 text-xs">{t("ai.lockedDesc")}</span>
-                <span className="text-xs font-semibold text-primary shrink-0">{t("offers.viewMembership")}</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => void send(t("ai.s3"), true)}
-                className="w-full flex items-center gap-2 text-left rounded-2xl border bg-card px-3 py-2.5 active:scale-[.98] transition"
-              >
-                <Sparkles className="w-4 h-4 text-primary shrink-0" />
-                <span className="flex-1 text-xs">{t("ai.s3")}</span>
-              </button>
-            )}
             <FaqBrowser onPick={(f) => answerFaq(f)} />
+            {/* Gợi ý nhờ Lomi AI tư vấn ưu đãi theo loại hình — chỉ hiện với Membership (không chào mời
+                Membership ngay khi mới mở; người chưa có chỉ được nhắc khi hỏi câu ngoài danh sách).
+                Bấm = điền sẵn câu hỏi để người dùng tự viết thêm chi tiết, chưa gửi (chưa tính lượt). */}
+            {quota?.member && (
+              <div className="space-y-2 px-1">
+                <div className="flex items-center gap-1.5 text-xs font-semibold">
+                  <Sparkles className="w-3.5 h-3.5 text-primary" />
+                  {t("ai.bizAdviceTitle")}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {BUSINESS_TYPES.map((k) => (
+                    <button
+                      key={k}
+                      onClick={() => {
+                        setInput(t("ai.bizAdvicePrompt", { type: t(`type.${k}`).toLowerCase() }));
+                        requestAnimationFrame(() => {
+                          const el = inputRef.current;
+                          if (!el) return;
+                          el.focus();
+                          el.setSelectionRange(el.value.length, el.value.length);
+                        });
+                      }}
+                      className="text-[11px] px-2.5 py-1 rounded-full border bg-card active:scale-95 transition"
+                    >
+                      {t(`type.${k}`)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           msgs.map((m, i) => (
@@ -414,6 +451,7 @@ export function AiChat({
           className="p-3 border-t flex items-end gap-2"
         >
           <textarea
+            ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value.slice(0, 1000))}
             onKeyDown={(e) => {

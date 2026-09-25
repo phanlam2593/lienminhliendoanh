@@ -31,6 +31,7 @@ import {
   MapPin,
   Navigation,
   Phone,
+  Zap,
 } from "lucide-react";
 import { BUSINESS_TYPES, BusinessType } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
@@ -454,6 +455,8 @@ export default function Guide() {
       body: (
         <ul className="space-y-2">
           <IconBullet icon={MessageCircle}>{t("guide.aiB1")}</IconBullet>
+          <IconBullet icon={Zap}>{t("guide.aiB3")}</IconBullet>
+          <IconBullet icon={Sparkles}>{t("guide.aiB4")}</IconBullet>
           <IconBullet icon={AlertCircle}>{t("guide.aiB2")}</IconBullet>
         </ul>
       ),
