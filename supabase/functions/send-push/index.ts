@@ -34,6 +34,15 @@ function urlForTarget(target_type: string | null, target_id: string | null): str
   return "/thong-bao";
 }
 
+// Bấm push → mở /thong-bao?open=<id>: app tự tra đúng thông báo rồi chuyển tới đích bằng CHÍNH
+// logic resolveRoute của trang Thông báo (1 nguồn logic duy nhất, không đoán URL riêng ở đây nữa).
+// Riêng cuộc gọi đang đổ chuông → vào thẳng khung chat cho nhanh.
+function urlForRecord(r: any): string {
+  if (r?.target_type === "call_ringing" && r?.target_id) return `/tin-nhan/${r.target_id}`;
+  if (r?.id) return `/thong-bao?open=${r.id}`;
+  return urlForTarget(r?.target_type ?? null, r?.target_id ?? null);
+}
+
 // Gửi cho 1 lô nhiều người CÙNG LÚC: 1 truy vấn DB duy nhất lấy hết push_subscriptions
 // (thay vì N truy vấn riêng), rồi gửi song song — quan trọng khi broadcast quy mô lớn.
 async function sendBatch(items: PushItem[]) {
@@ -121,7 +130,7 @@ Deno.serve(async (req) => {
           user_id: r.user_id,
           title: r.title,
           body: r.body ?? "",
-          url: urlForTarget(r.target_type ?? null, r.target_id ?? null),
+          url: urlForRecord(r),
           category: r.category ?? undefined,
         }));
       const result = await sendBatch(items);
@@ -140,7 +149,7 @@ Deno.serve(async (req) => {
       user_id = r.user_id;
       title = r.title;
       body = r.body ?? "";
-      url = urlForTarget(r.target_type ?? null, r.target_id ?? null);
+      url = urlForRecord(r);
       category = r.category ?? undefined;
     } else {
       user_id = raw.user_id;
