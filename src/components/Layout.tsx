@@ -30,7 +30,7 @@ import { WelcomeOverlay } from "./WelcomeOverlay";
 import { WelcomeOnboarding } from "./WelcomeOnboarding";
 import { AchievementOverlay } from "./AchievementOverlay";
 import { PullToRefresh } from "./PullToRefresh";
-import { AiBubble } from "@/pages/AiAssistant";
+import { AiBubble, openLomi } from "@/pages/AiAssistant";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -236,7 +236,7 @@ export function Layout() {
                         label={t("profile.guide")}
                         onClick={() => {
                           setMenuOpen(false);
-                          nav("/huong-dan");
+                          openLomi(nav);
                         }}
                       />
                       <HeaderMenuRow
