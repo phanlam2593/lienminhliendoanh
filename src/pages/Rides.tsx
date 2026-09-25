@@ -33,6 +33,7 @@ import { StoredImage } from "@/components/StoredImage";
 import { ImageViewer } from "@/components/ImageLightbox";
 import { TipAppCard } from "@/components/TipAppCard";
 import { LoadingState } from "@/components/LoadingState";
+import { LiveRideMap } from "@/components/LiveRideMap";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -79,6 +80,23 @@ interface Ride {
   created_at: string;
   extras?: Extra[] | null;
   extra_fee?: number | null;
+  driver_lat?: number | null;
+  driver_lng?: number | null;
+  driver_heading?: number | null;
+  driver_loc_at?: string | null;
+}
+
+// Realtime UPDATE của 1 cuốc (vd vị trí live của tài xế ~4 giây/lần) → GỘP thẳng vào state
+// thay vì tải lại cả danh sách. Trả về true nếu cần tải lại (cuốc mới / đổi trạng thái / đổi tài xế).
+function mergeRideUpdate(prev: Ride[], row: Partial<Ride> | null | undefined): { next: Ride[]; reload: boolean } {
+  if (!row?.id) return { next: prev, reload: true };
+  const old = prev.find((r) => r.id === row.id);
+  if (!old) return { next: prev, reload: true };
+  const merged = { ...old, ...row } as Ride;
+  return {
+    next: prev.map((r) => (r.id === row.id ? merged : r)),
+    reload: old.status !== merged.status || old.driver_id !== merged.driver_id,
+  };
 }
 
 interface DriverRow {
@@ -498,7 +516,16 @@ function CustomerTab() {
     if (!user) return;
     const ch = supabase
       .channel(`rides-c:${user.id}:${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "rides", filter: `customer_id=eq.${user.id}` }, () => void load())
+      .on("postgres_changes", { event: "*", schema: "public", table: "rides", filter: `customer_id=eq.${user.id}` }, (payload: any) => {
+        if (payload.eventType !== "UPDATE") return void load();
+        let reload = false;
+        setRides((prev) => {
+          const r = mergeRideUpdate(prev, payload.new);
+          reload = r.reload;
+          return r.next;
+        });
+        if (reload) void load();
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
@@ -637,6 +664,7 @@ function CustomerTab() {
       {active ? (
         <div className="space-y-2">
           <div className="text-sm font-bold">{t("ride.yourActive")}</div>
+          {(active.status === "accepted" || active.status === "picked_up") && <LiveRideMap ride={active} />}
           <RideCard ride={active} viewer="customer" onChanged={() => void load()} />
           {active.status === "searching" && (
             <div className="text-xs text-muted-foreground text-center flex items-center justify-center gap-1.5">
@@ -861,12 +889,84 @@ function DriverTab() {
     void loadRides();
     const ch = supabase
       .channel(`rides-d:${user.id}:${Math.random().toString(36).slice(2)}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "rides" }, () => void loadRides())
+      .on("postgres_changes", { event: "*", schema: "public", table: "rides" }, (payload: any) => {
+        if (payload.eventType !== "UPDATE") return void loadRides();
+        let reload = false;
+        setRides((prev) => {
+          const r = mergeRideUpdate(prev, payload.new);
+          reload = r.reload;
+          return r.next;
+        });
+        if (reload) void loadRides();
+      })
       .subscribe();
     return () => {
       supabase.removeChannel(ch);
     };
   }, [approved, user?.id]);
+
+  // ── Chia sẻ vị trí LIVE cho khách trong lúc chạy chuyến (accepted / picked_up) ──
+  // watchPosition → gửi update_ride_location tối đa ~4 giây/lần (hoặc sớm hơn nếu đi >25m);
+  // đứng yên thì 15 giây gửi lại 1 lần để khách vẫn thấy "đang cập nhật". Giữ màn hình sáng
+  // (Wake Lock) vì PWA bị tắt màn hình/ra nền là trình duyệt ngừng cấp GPS (nhất là iPhone).
+  const activeTripId = rides.find(
+    (r) => r.driver_id === user?.id && (r.status === "accepted" || r.status === "picked_up"),
+  )?.id;
+  const [liveShare, setLiveShare] = useState<"off" | "on" | "denied">("off");
+  useEffect(() => {
+    if (!activeTripId || !navigator.geolocation) {
+      setLiveShare("off");
+      return;
+    }
+    let last = { t: 0, lat: 0, lng: 0, heading: null as number | null };
+    let wake: any = null;
+    const reqWake = async () => {
+      try {
+        wake = await (navigator as any).wakeLock?.request("screen");
+      } catch {
+        /* máy không hỗ trợ / đang ở nền — bỏ qua */
+      }
+    };
+    void reqWake();
+    const onVis = () => {
+      if (document.visibilityState === "visible") void reqWake();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    const send = (lat: number, lng: number, heading: number | null, force = false) => {
+      const now = Date.now();
+      const movedM = last.t ? kmBetween(last.lat, last.lng, lat, lng) * 1000 : Infinity;
+      if (!force && now - last.t < 4000 && movedM < 25) return;
+      if (now - last.t < 2500) return;
+      last = { t: now, lat, lng, heading };
+      void db.rpc("update_ride_location", { _rid: activeTripId, _lat: lat, _lng: lng, _heading: heading });
+    };
+    const watchId = navigator.geolocation.watchPosition(
+      (p) => {
+        setLiveShare("on");
+        setPos({ lat: p.coords.latitude, lng: p.coords.longitude });
+        const h = p.coords.heading;
+        send(p.coords.latitude, p.coords.longitude, h != null && !Number.isNaN(h) ? h : null);
+      },
+      (err) => {
+        if (err.code === 1) setLiveShare("denied");
+      },
+      { enableHighAccuracy: true, maximumAge: 3000, timeout: 20000 },
+    );
+    const keepAlive = window.setInterval(() => {
+      if (last.t && Date.now() - last.t > 15000) send(last.lat, last.lng, last.heading, true);
+    }, 15000);
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+      window.clearInterval(keepAlive);
+      document.removeEventListener("visibilitychange", onVis);
+      try {
+        void wake?.release?.();
+      } catch {
+        /* bỏ qua */
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTripId]);
 
   // Đang bật "Nhận cuốc" → cứ 4 phút báo vị trí + còn online 1 lần (server chỉ báo cuốc mới
   // cho tài xế hoạt động trong 30 phút gần nhất).
@@ -1070,6 +1170,19 @@ function DriverTab() {
       {myActive.length > 0 && (
         <div className="space-y-2">
           <div className="text-sm font-bold">{t("ride.yourTrip")}</div>
+          {liveShare !== "off" && (
+            <div
+              className={cn(
+                "rounded-xl px-3 py-2 text-xs flex items-start gap-2",
+                liveShare === "on"
+                  ? "bg-primary/10 text-primary"
+                  : "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+              )}
+            >
+              <MapPin className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+              <span>{liveShare === "on" ? t("ride.map.sharing") : t("ride.map.denied")}</span>
+            </div>
+          )}
           {myActive.map((r) => (
             <RideCard key={r.id} ride={r} viewer="driver" myPos={pos} onChanged={() => void loadRides()} />
           ))}
