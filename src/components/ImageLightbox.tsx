@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { StoredImage } from "./StoredImage";
 import { useLanguage } from "@/lib/i18n";
 import { getSignedUrl } from "@/lib/upload";
+import { useBackToClose } from "@/lib/navigation";
 
 // Lấy link thật của ảnh: link tuyệt đối / đường dẫn tĩnh dùng luôn, còn lại là path trong
 // storage → xin signed URL (giống StoredImage).
@@ -54,6 +55,8 @@ export function ImageViewer({
 }) {
   const { t } = useLanguage();
   const [busy, setBusy] = useState(false);
+  // Back (Android) khi đang xem ảnh → chỉ đóng ảnh.
+  useBackToClose(open && !!path, onClose);
 
   useEffect(() => {
     if (!open) return;

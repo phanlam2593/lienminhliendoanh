@@ -8,6 +8,7 @@ import { useLanguage } from "@/lib/i18n";
 import { StoredImage } from "@/components/StoredImage";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { type BusinessType } from "@/lib/types";
+import { LoadingState } from "@/components/LoadingState";
 
 interface QuickBiz {
   id: string;
@@ -135,7 +136,7 @@ export function BusinessQuickView({
           <DialogTitle>{t("bizQuick.title")}</DialogTitle>
         </DialogHeader>
         {loading || !b ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+          <LoadingState />
         ) : (
           <div className="space-y-4">
             {b.cover_url && (

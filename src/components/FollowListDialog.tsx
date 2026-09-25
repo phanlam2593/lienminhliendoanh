@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { toast } from "sonner";
+import { LoadingState } from "@/components/LoadingState";
 
 type Mode = "followers" | "following";
 type Target = { kind: "user"; id: string } | { kind: "business"; id: string };
@@ -259,7 +260,7 @@ export function FollowListDialog({ open, onOpenChange, target, mode, title, only
         </div>
         <div className="flex-1 overflow-y-auto px-2 pb-3">
           {loading ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+            <LoadingState />
           ) : rows.length === 0 ? (
             <div className="p-6 text-center text-sm text-muted-foreground">
               {debouncedQ ? t("follow.notFound") : t("follow.noOne")}

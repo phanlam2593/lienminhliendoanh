@@ -9,6 +9,7 @@ import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "./Avatar";
 import { MemberLevelBadge } from "./MemberLevelBadge";
 import { ImageViewer } from "./ImageLightbox";
+import { LoadingState } from "@/components/LoadingState";
 
 interface QuickProfile {
   id: string;
@@ -116,7 +117,7 @@ export function ProfileQuickView({
           <DialogTitle>{t("profileQuick.title")}</DialogTitle>
         </DialogHeader>
         {loading || !p ? (
-          <div className="py-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+          <LoadingState />
         ) : (
           <div className="space-y-4">
             <div className="flex flex-col items-center text-center gap-2 mt-6">

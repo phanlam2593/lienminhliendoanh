@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Avatar } from "@/components/Avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/lib/i18n";
+import { LoadingState } from "@/components/LoadingState";
 
 interface PersonRow {
   id: string;
@@ -48,7 +49,7 @@ export function FriendsListDialog({ userId, open, onOpenChange }: Props) {
         <p className="px-4 pb-2 text-[11px] text-muted-foreground">{t("friend.mutualHint")}</p>
         <div className="flex-1 overflow-y-auto px-2 pb-3">
           {loading ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+            <LoadingState />
           ) : friends.length === 0 ? (
             <div className="p-6 text-center text-sm text-muted-foreground">{t("friend.noFriends")}</div>
           ) : (

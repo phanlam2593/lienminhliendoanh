@@ -19,6 +19,7 @@ import {
   Flag,
   LogOut,
   ChevronRight,
+  ArrowLeft,
 } from "lucide-react";
 import { initInstallPrompt, triggerInstall, dismissInstallBanner } from "@/lib/pwa";
 import { Download, X as XIcon } from "lucide-react";
@@ -38,12 +39,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { isAdultDob } from "@/lib/types";
+import { useGoBack } from "@/lib/navigation";
+
+// Trang con KHÔNG tự có nút ← riêng → header hiện nút ← (25/09). Rất quan trọng cho iPhone:
+// PWA cài trên iOS không có nút Back hệ thống, thiếu nút này là kẹt ở trang con.
+const HEADER_BACK_PATTERNS = [/^\/tin-nhan\/?$/, /^\/thong-bao\/?$/, /^\/dn\/[^/]+/, /^\/uu-dai\/?$/, /^\/cuoc-goi\/?$/];
 
 const PENDING_ALLOWED = ["/ho-so", "/thong-bao", "/tin-nhan"];
 
 export function Layout() {
   const { pathname } = useLocation();
   const nav = useNavigate();
+  const goBack = useGoBack();
+  const showHeaderBack = HEADER_BACK_PATTERNS.some((re) => re.test(pathname));
   const { user, profile, signOut, isAdmin, loading, refresh } = useAuth();
   const { t } = useLanguage();
   const { unread } = useNotifications();
@@ -162,7 +170,19 @@ export function Layout() {
           className="sticky top-0 z-40 bg-background/85 backdrop-blur-lg border-b border-border/60"
         >
           <div className="flex items-center justify-between px-4 h-14 gap-2">
-            <Logo size={36} withText asLink />
+            <div className="flex items-center gap-1 min-w-0">
+              {showHeaderBack && (
+                <button
+                  type="button"
+                  onClick={() => goBack("/")}
+                  aria-label={t("common.back")}
+                  className="w-9 h-9 -ml-2 shrink-0 grid place-items-center rounded-full hover:bg-accent"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
+              <Logo size={36} withText asLink />
+            </div>
             <div className="flex items-center gap-1">
               {user ? (
                 <>
@@ -255,7 +275,7 @@ export function Layout() {
                         onClick={async () => {
                           setMenuOpen(false);
                           await signOut();
-                          nav("/");
+                          nav("/", { replace: true });
                         }}
                       />
                     </PopoverContent>
@@ -330,7 +350,7 @@ export function Layout() {
           <PendingScreen
             onSignOut={async () => {
               await signOut();
-              nav("/");
+              nav("/", { replace: true });
             }}
           />
         ) : (

@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { supabase } from "@/integrations/supabase/client";
 import { StoredImage } from "@/components/StoredImage";
 import { useLanguage } from "@/lib/i18n";
+import { LoadingState } from "@/components/LoadingState";
 
 interface RegularBiz {
   id: string;
@@ -108,7 +109,7 @@ export function RegularBusinessesDialog({
         </DialogHeader>
         <div className="flex-1 overflow-y-auto px-2 pb-3">
           {loading ? (
-            <div className="p-6 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+            <LoadingState />
           ) : rows.length === 0 ? (
             <div className="p-6 text-center text-sm text-muted-foreground">{t("regulars.empty")}</div>
           ) : (

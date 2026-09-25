@@ -3,6 +3,7 @@ import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { StoredImage } from "./StoredImage";
 import { useLanguage } from "@/lib/i18n";
+import { useBackToClose } from "@/lib/navigation";
 
 interface Photo {
   path: string;
@@ -25,6 +26,9 @@ export function BusinessGallery({ businessId, coverPath }: { businessId: string;
       setPhotos((data ?? []).map((p: any) => ({ path: p.url, caption: p.caption })));
     })();
   }, [businessId]);
+
+  // Back (Android) khi đang xem ảnh phóng to → chỉ đóng ảnh.
+  useBackToClose(idx !== null, () => setIdx(null));
 
   if (photos.length === 0) return null;
 
