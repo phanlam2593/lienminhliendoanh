@@ -44,6 +44,7 @@ import {
   MoreVertical,
   MessageSquare,
   UserPlus,
+  LayoutDashboard,
 } from "lucide-react";
 
 import { uploadImage, MAX_SIZE_AVATAR } from "@/lib/upload";
@@ -444,6 +445,7 @@ export default function Profile() {
     return (
       <div className="p-4 space-y-5">
         <BackBar title={t("profile.settings")} />
+        {role === "admin" && <AdminEntryCard />}
         <SettingsSection userId={user.id} initialPrefs={(profile as any)?.notification_prefs} onPrefsSaved={refresh} />
       </div>
     );
@@ -504,6 +506,16 @@ export default function Profile() {
                 setHelpOpen(true);
               }}
             />
+            {role === "admin" && (
+              <MenuRow
+                icon={<LayoutDashboard className="w-4 h-4" />}
+                label={t("admin.entryTitle")}
+                onClick={() => {
+                  setMenuOpen(false);
+                  nav("/admin");
+                }}
+              />
+            )}
             <MenuRow
               icon={<Settings className="w-4 h-4" />}
               label={t("profile.settings")}
@@ -1541,6 +1553,56 @@ const DEFAULT_PREFS: NotifPrefs = {
   mentions: true,
   admin: true,
 };
+// Lối vào Bảng quản trị (26/09) — chỉ admin thấy, đặt đầu trang Cài đặt thay cho tab Admin ở
+// thanh điều hướng dưới. Đếm nhanh việc đang chờ: DN chờ duyệt + thành viên chờ duyệt + báo cáo mới.
+function AdminEntryCard() {
+  const { t } = useLanguage();
+  const nav = useNavigate();
+  const [pending, setPending] = useState<number | null>(null);
+  useEffect(() => {
+    const head = { count: "exact" as const, head: true };
+    void Promise.all([
+      supabase.from("businesses").select("id", head).eq("status", "pending"),
+      supabase.from("profiles").select("id", head).eq("status", "pending"),
+      supabase.from("reports").select("id", head).eq("status", "pending"),
+    ]).then((rs) => setPending(rs.reduce((n, r: any) => n + (r.count ?? 0), 0)));
+  }, []);
+  return (
+    <button
+      type="button"
+      onClick={() => nav("/admin")}
+      className="tap relative w-full overflow-hidden isolate rounded-2xl p-4 text-left text-white shadow-brand"
+      style={{ background: "linear-gradient(135deg, #00c9a7 0%, #0891b2 100%)" }}
+    >
+      <LayoutDashboard
+        aria-hidden
+        className="absolute -right-4 -bottom-6 w-28 h-28 text-white/15 -rotate-12 pointer-events-none -z-10"
+      />
+      <div className="flex items-center gap-3">
+        <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur grid place-items-center shrink-0">
+          <ShieldCheck className="w-5 h-5" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-extrabold leading-tight">{t("admin.entryTitle")}</div>
+          <div className="text-xs opacity-90">
+            {pending === null
+              ? t("admin.entrySub")
+              : pending > 0
+                ? t("admin.entryPending", { n: pending })
+                : t("admin.entryAllClear")}
+          </div>
+        </div>
+        {pending ? (
+          <span className="min-w-6 h-6 px-1.5 rounded-full bg-white text-cyan-700 text-xs font-extrabold grid place-items-center">
+            {pending > 99 ? "99+" : pending}
+          </span>
+        ) : null}
+        <ChevronRight className="w-5 h-5 opacity-80" />
+      </div>
+    </button>
+  );
+}
+
 function SettingsSection({
   userId,
   initialPrefs,
