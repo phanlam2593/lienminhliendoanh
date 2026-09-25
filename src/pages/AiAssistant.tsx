@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import { LomiMascot } from "@/components/LomiMascot";
+import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn, 20 câu/ngày (giờ VN).
@@ -300,26 +300,30 @@ export function AiChat({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BONG BÓNG TRỢ LÝ AI (26/09 theo ý Kir) — nút tròn nổi ở mép màn hình, bấm mở khung chat
-// dạng bảng trượt lên (không rời trang đang xem). Kéo được lên/xuống, thả gần mép bên nào thì
-// dính mép đó; KÉO SÁT RA MÉP thì bong bóng thu gọn thành 1 "tai" nhỏ cho đỡ chiếm chỗ, chạm
-// vào tai để hiện lại. Vị trí + trạng thái thu gọn lưu trên máy (localStorage).
-// Ẩn ở các trang có ô nhập tin nhắn phía dưới (chat, cộng đồng) và màn quẹt để khỏi che nút.
+// BONG BÓNG LOMI (26/09 theo ý Kir) — linh vật Lomi nổi trên màn hình, chạm để mở khung chat AI
+// dạng bảng trượt lên (không rời trang đang xem).
+// • Kéo THẢ Ở ĐÂU CŨNG ĐƯỢC (trong vùng giữa thanh tiêu đề và thanh điều hướng) — không tự dính mép.
+// • Thả SÁT MÉP trái/phải → Lomi nấp nửa người ở mép cho đỡ chiếm chỗ; chạm để ra lại.
+// • Biểu cảm theo thao tác: bị kéo → mắt tròn, miệng "Ô", người nghiêng theo hướng kéo; lắc qua
+//   lại mạnh → chóng mặt (mắt xoắn, sao quay); thả xuống → cười tít; chạm → mắt lấp lánh rồi mở
+//   chat; để yên lâu → ngủ gật "z z"; thỉnh thoảng liếc mắt nhìn quanh.
+// • Vị trí lưu trên máy (localStorage). Ẩn ở trang có ô nhập phía dưới (chat, cộng đồng) và màn quẹt.
 // ─────────────────────────────────────────────────────────────────────────────
-const BUBBLE_KEY = "lmld:lomi-bubble"; // v2: mặc định góc dưới bên phải
+const BUBBLE_KEY = "lmld:lomi-bubble-v3";
 const GREET_KEY = "lmld:lomi-greet-day";
-type BubblePos = { side: "left" | "right"; y: number; tucked: boolean }; // y = tỉ lệ 0..1 theo chiều cao
+type BubblePos = { x: number; y: number; tucked: false | "left" | "right" }; // x, y = tỉ lệ 0..1
 const SIZE = 60;
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 function readPos(): BubblePos {
   try {
     const p = JSON.parse(localStorage.getItem(BUBBLE_KEY) || "null");
-    if (p && (p.side === "left" || p.side === "right") && typeof p.y === "number")
-      return { side: p.side, y: Math.min(1, Math.max(0, p.y)), tucked: !!p.tucked };
+    if (p && typeof p.x === "number" && typeof p.y === "number")
+      return { x: clamp01(p.x), y: clamp01(p.y), tucked: p.tucked === "left" || p.tucked === "right" ? p.tucked : false };
   } catch {
     /* bỏ qua */
   }
-  return { side: "right", y: 1, tucked: false };
+  return { x: 1, y: 1, tucked: false };
 }
 
 export function AiBubble() {
@@ -329,11 +333,35 @@ export function AiBubble() {
   const { pathname, search } = useLocation();
   const [pos, setPos] = useState<BubblePos>(readPos);
   const [open, setOpen] = useState(false);
-  const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
-  const start = useRef<{ px: number; py: number; moved: boolean } | null>(null);
-  // Lời chào nhỏ mỗi ngày 1 lần (hiện 5 giây).
-  const [greet, setGreet] = useState(false);
+  const [drag, setDrag] = useState<{ x: number; y: number; tilt: number } | null>(null);
+  const [mood, setMood] = useState<LomiMood>("idle");
+  const [look, setLook] = useState(0);
+  const [say, setSay] = useState<string | null>(null);
   const [hop, setHop] = useState(false);
+  const [, force] = useState(0);
+  const start = useRef<{
+    px: number;
+    py: number;
+    moved: boolean;
+    lastX: number;
+    lastT: number;
+    dir: number;
+    flips: number[];
+    dizzy: boolean;
+  } | null>(null);
+  const moodTimer = useRef<number>();
+  const lastTouch = useRef(Date.now());
+
+  const setMoodFor = (m: LomiMood, ms: number) => {
+    window.clearTimeout(moodTimer.current);
+    setMood(m);
+    moodTimer.current = window.setTimeout(() => setMood("idle"), ms);
+  };
+  const touch = () => {
+    lastTouch.current = Date.now();
+  };
+
+  // Lời chào nhỏ mỗi ngày 1 lần.
   useEffect(() => {
     if (!user) return;
     const today = new Date().toDateString();
@@ -343,13 +371,41 @@ export function AiBubble() {
     } catch {
       return;
     }
-    const a = window.setTimeout(() => setGreet(true), 1500);
-    const b = window.setTimeout(() => setGreet(false), 6500);
+    const a = window.setTimeout(() => {
+      setSay(t("ai.greet"));
+      setMoodFor("happy", 2500);
+    }, 1500);
+    const b = window.setTimeout(() => setSay(null), 6500);
     return () => {
       window.clearTimeout(a);
       window.clearTimeout(b);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
+
+  // Liếc mắt nhìn quanh + ngủ gật khi để yên lâu.
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (start.current) return;
+      const idleFor = Date.now() - lastTouch.current;
+      setMood((m) => {
+        if (idleFor > 45000 && m === "idle") return "sleepy";
+        return m;
+      });
+      if (idleFor < 45000) {
+        const r = Math.random();
+        setLook(r < 0.33 ? -1 : r < 0.66 ? 1 : 0);
+        window.setTimeout(() => setLook(0), 1400);
+      }
+    }, 7000);
+    const onResize = () => force((n) => n + 1);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.clearInterval(id);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
+
   useBackToClose(open, () => setOpen(false));
 
   useEffect(() => {
@@ -373,51 +429,114 @@ export function AiBubble() {
     (pathname.startsWith("/quet") && /tab=swipe/.test(search));
   if (hidden) return null;
 
-  // Vùng được phép đặt bong bóng: dưới thanh tiêu đề, trên thanh điều hướng.
+  // Vùng được phép đặt Lomi: dưới thanh tiêu đề, trên thanh điều hướng, cách 2 mép 8px.
   const bounds = () => {
     const css = getComputedStyle(document.documentElement);
     const top = (parseFloat(css.getPropertyValue("--header-h")) || 56) + 8;
     const bottom = window.innerHeight - (parseFloat(css.getPropertyValue("--bottom-nav-h")) || 80) - SIZE - 8;
-    return { top, bottom: Math.max(top + 1, bottom) };
+    const left = 8;
+    const right = window.innerWidth - SIZE - 8;
+    return { top, bottom: Math.max(top + 1, bottom), left, right: Math.max(left + 1, right) };
   };
-  const b = typeof window !== "undefined" ? bounds() : { top: 0, bottom: 0 };
+  const b = bounds();
   const topPx = b.top + pos.y * (b.bottom - b.top);
+  const leftPx =
+    pos.tucked === "left"
+      ? -SIZE / 2
+      : pos.tucked === "right"
+        ? window.innerWidth - SIZE / 2
+        : b.left + pos.x * (b.right - b.left);
 
   const onDown = (e: React.PointerEvent) => {
-    start.current = { px: e.clientX, py: e.clientY, moved: false };
+    touch();
+    start.current = {
+      px: e.clientX,
+      py: e.clientY,
+      moved: false,
+      lastX: e.clientX,
+      lastT: performance.now(),
+      dir: 0,
+      flips: [],
+      dizzy: false,
+    };
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
   const onMove = (e: React.PointerEvent) => {
     const s = start.current;
     if (!s) return;
     if (!s.moved && Math.hypot(e.clientX - s.px, e.clientY - s.py) < 6) return;
-    s.moved = true;
-    setDrag({ x: e.clientX - SIZE / 2, y: e.clientY - SIZE / 2 });
+    if (!s.moved) {
+      s.moved = true;
+      window.clearTimeout(moodTimer.current);
+      setMood("wee");
+      setSay(null);
+    }
+    const now = performance.now();
+    const dx = e.clientX - s.lastX;
+    const dt = Math.max(1, now - s.lastT);
+    const vx = dx / dt; // px/ms
+    // Đếm số lần đổi hướng kéo ngang nhanh → lắc qua lắc lại thì chóng mặt.
+    const dir = Math.abs(dx) > 3 ? Math.sign(dx) : 0;
+    if (dir && s.dir && dir !== s.dir) s.flips.push(now);
+    if (dir) s.dir = dir;
+    s.flips = s.flips.filter((ts) => now - ts < 1400);
+    if (!s.dizzy && s.flips.length >= 4) {
+      s.dizzy = true;
+      setMood("dizzy");
+      setSay(t("ai.dizzy"));
+      try {
+        navigator.vibrate?.([15, 40, 15]);
+      } catch {
+        /* bỏ qua */
+      }
+    }
+    s.lastX = e.clientX;
+    s.lastT = now;
+    const tilt = Math.max(-28, Math.min(28, vx * 22));
+    setDrag({ x: e.clientX - SIZE / 2, y: e.clientY - SIZE / 2, tilt });
   };
   const onUp = (e: React.PointerEvent) => {
     const s = start.current;
     start.current = null;
+    touch();
     if (!s) return;
     if (!s.moved) {
-      // Chạm: đang thu gọn → hiện lại; bình thường → mở chat.
-      setGreet(false);
-      if (pos.tucked) setPos({ ...pos, tucked: false });
-      else {
-        setHop(true);
-        window.setTimeout(() => {
-          setHop(false);
-          setOpen(true);
-        }, 260);
+      // Chạm: đang nấp mép → ra lại; đang ngủ → thức dậy; bình thường → vui rồi mở chat.
+      setSay(null);
+      if (pos.tucked) {
+        setPos({ ...pos, tucked: false });
+        setMoodFor("happy", 900);
+        return;
       }
+      if (mood === "sleepy") {
+        setMoodFor("excited", 900);
+        setSay(t("ai.wake"));
+        window.setTimeout(() => setSay(null), 1800);
+        return;
+      }
+      setMoodFor("excited", 700);
+      setHop(true);
+      window.setTimeout(() => {
+        setHop(false);
+        setOpen(true);
+      }, 300);
       return;
     }
     const W = window.innerWidth;
-    const side = e.clientX < W / 2 ? "left" : "right";
-    const nearEdge = e.clientX < 28 || e.clientX > W - 28;
-    const { top, bottom } = bounds();
-    const y = Math.min(1, Math.max(0, (e.clientY - SIZE / 2 - top) / (bottom - top)));
-    setPos({ side, y, tucked: nearEdge });
+    const { top, bottom, left, right } = bounds();
+    const tucked = e.clientX < 22 ? "left" : e.clientX > W - 22 ? "right" : false;
+    const x = clamp01((e.clientX - SIZE / 2 - left) / (right - left));
+    const y = clamp01((e.clientY - SIZE / 2 - top) / (bottom - top));
+    setPos({ x: tucked === "left" ? 0 : tucked === "right" ? 1 : x, y, tucked });
     setDrag(null);
+    setHop(true);
+    window.setTimeout(() => setHop(false), 300);
+    if (s.dizzy) {
+      setMoodFor("dizzy", 2200);
+      window.setTimeout(() => setSay(null), 2200);
+    } else {
+      setMoodFor("happy", 1000);
+    }
     try {
       navigator.vibrate?.(8);
     } catch {
@@ -425,11 +544,13 @@ export function AiBubble() {
     }
   };
 
+  const onRight = (drag ? drag.x : leftPx) > window.innerWidth / 2;
   const style: React.CSSProperties = drag
     ? { left: drag.x, top: drag.y, transition: "none" }
-    : pos.tucked
-      ? { top: topPx, [pos.side]: -SIZE / 2 }
-      : { top: topPx, [pos.side]: 12 };
+    : { left: leftPx, top: topPx };
+  // Nấp mép: nghiêng đầu ló vào trong, mắt nhìn vào giữa màn hình.
+  const peekTilt = pos.tucked === "left" ? 20 : pos.tucked === "right" ? -20 : 0;
+  const lookNow = pos.tucked === "left" ? 1 : pos.tucked === "right" ? -1 : look;
 
   return (
     <>
@@ -442,25 +563,33 @@ export function AiBubble() {
         onPointerCancel={() => {
           start.current = null;
           setDrag(null);
+          setMood("idle");
         }}
         style={{ ...style, width: SIZE, height: SIZE + 4, touchAction: "none" }}
         className={cn(
-          "fixed z-40 grid place-items-center select-none drop-shadow-[0_6px_10px_rgba(8,145,178,0.35)] transition-[top,left,right,opacity] duration-300",
+          "fixed z-40 grid place-items-center select-none drop-shadow-[0_6px_10px_rgba(8,145,178,0.35)] transition-[top,left,opacity] duration-300 ease-out",
           pos.tucked && !drag && "opacity-90",
           hop && "lomi-hop",
         )}
       >
-        <span className={cn("block transition-transform duration-300", pos.tucked && !drag && (pos.side === "right" ? "-rotate-[20deg]" : "rotate-[20deg]"))}>
-          <LomiMascot size={SIZE} />
+        <span
+          className="block transition-transform duration-200 ease-out"
+          style={{
+            transform: drag
+              ? `rotate(${drag.tilt}deg) scale(1.08)`
+              : `rotate(${peekTilt}deg)`,
+          }}
+        >
+          <LomiMascot size={SIZE} mood={mood} look={lookNow} />
         </span>
-        {greet && !pos.tucked && !drag && (
+        {say && !pos.tucked && (
           <span
             className={cn(
-              "absolute bottom-full mb-1 w-max max-w-[180px] rounded-2xl bg-card border shadow-lg px-3 py-1.5 text-xs font-semibold text-foreground text-left animate-in fade-in zoom-in-95 duration-300",
-              pos.side === "right" ? "right-0 rounded-br-sm" : "left-0 rounded-bl-sm",
+              "absolute bottom-full mb-2 w-max max-w-[180px] rounded-2xl bg-card border shadow-lg px-3 py-1.5 text-xs font-semibold text-foreground text-left animate-in fade-in zoom-in-95 duration-200 pointer-events-none",
+              onRight ? "right-0 rounded-br-sm" : "left-0 rounded-bl-sm",
             )}
           >
-            {t("ai.greet")}
+            {say}
           </span>
         )}
       </button>
