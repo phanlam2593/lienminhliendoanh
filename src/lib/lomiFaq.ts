@@ -433,7 +433,7 @@ export function normalizeVi(s: string): string {
 }
 
 // Câu nhờ VIẾT / SÁNG TẠO → luôn để AI trả lời, không chặn bằng FAQ.
-const CREATIVE = /\b(viet|soan|sang tac|caption|mo ta giup|y tuong cho|dat ten|slogan|content|bai dang cho|write|draft)\b/;
+const CREATIVE = /\b(viet|soan|tu van|sang tac|caption|mo ta giup|y tuong cho|dat ten|slogan|content|bai dang cho|write|draft)\b/;
 
 export function matchFaq(text: string): Faq | null {
   const n = ` ${normalizeVi(text)} `;
