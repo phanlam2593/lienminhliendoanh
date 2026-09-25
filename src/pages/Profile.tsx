@@ -73,6 +73,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { timeAgo } from "@/lib/time";
 import { LoadingState } from "@/components/LoadingState";
+import { openLomi } from "@/pages/AiAssistant";
 type View = "menu" | "personal" | "business" | "settings";
 
 export default function Profile() {
@@ -487,7 +488,7 @@ export default function Profile() {
               label={t("profile.guide")}
               onClick={() => {
                 setMenuOpen(false);
-                nav("/huong-dan");
+                openLomi(nav);
               }}
             />
             <MenuRow

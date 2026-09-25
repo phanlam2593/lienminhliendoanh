@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { ArrowLeft, Lock, Maximize2, Send, Trash2, X } from "lucide-react";
+import { ArrowLeft, BookOpen, Maximize2, Send, Sparkles, Trash2, X, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
+import { FAQS, FAQ_CATS, matchFaq, type Faq, type FaqCat } from "@/lib/lomiFaq";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn, 20 câu/ngày (giờ VN).
@@ -14,7 +15,15 @@ import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
 // Lịch sử chat chỉ lưu trên máy (localStorage, 30 tin gần nhất) — không lưu DB.
 // ─────────────────────────────────────────────────────────────────────────────
 
-type Msg = { role: "user" | "assistant"; content: string };
+// local = câu hỏi/đáp trả lời ngay trên máy từ danh sách soạn sẵn (lomiFaq) — không gọi AI, không tính lượt,
+// và không gửi kèm làm ngữ cảnh khi gọi AI. ask = câu gốc (để bấm "Hỏi Lomi AI" nếu muốn hỏi sâu hơn).
+type Msg = {
+  role: "user" | "assistant";
+  content: string;
+  local?: boolean;
+  ask?: string;
+  note?: "member" | "limit";
+};
 type Quota = { member: boolean; limit: number; used: number };
 
 const db = supabase as any;
@@ -54,6 +63,66 @@ function RichText({ text }: { text: string }) {
         ),
       )}
     </>
+  );
+}
+
+/** Mở Lomi (bảng nổi) từ bất kỳ đâu — vd mục "Hỏi Lomi · Hướng dẫn" trong menu. Không có bong bóng
+ *  trên trang hiện tại (bị ẩn) → sang trang /tro-ly-ai. */
+export function openLomi(nav: (to: string) => void) {
+  const ev = new CustomEvent<{ handled: boolean }>("lomi:open", { detail: { handled: false } });
+  window.dispatchEvent(ev);
+  if (!ev.detail.handled) nav("/tro-ly-ai");
+}
+
+/** Bộ duyệt câu hỏi thường gặp: chip chủ đề + danh sách câu hỏi. */
+function FaqBrowser({ onPick, onClose }: { onPick: (f: Faq) => void; onClose?: () => void }) {
+  const { t, lang } = useLanguage();
+  const [cat, setCat] = useState<FaqCat>("start");
+  const list = FAQS.filter((f) => f.cat === cat);
+  return (
+    <div className="rounded-2xl border bg-card/80 overflow-hidden">
+      <div className="flex items-center gap-2 px-3 pt-3">
+        <BookOpen className="w-4 h-4 text-primary" />
+        <div className="flex-1 text-xs font-bold">{t("ai.faqTitle")}</div>
+        <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-full px-2 py-0.5">
+          {t("ai.faqFree")}
+        </span>
+        {onClose && (
+          <button onClick={onClose} aria-label={t("common.close")} className="p-1 -mr-1 text-muted-foreground">
+            <X className="w-4 h-4" />
+          </button>
+        )}
+      </div>
+      <div className="flex gap-1.5 overflow-x-auto px-3 py-2 scrollbar-hide">
+        {FAQ_CATS.map((c) => (
+          <button
+            key={c.id}
+            onClick={() => setCat(c.id)}
+            className={cn(
+              "shrink-0 text-[11px] px-2.5 py-1 rounded-full border transition active:scale-95",
+              c.id === cat ? "bg-primary text-primary-foreground border-primary" : "bg-background",
+            )}
+          >
+            {c.emoji} {lang === "en" ? c.en : c.vi}
+          </button>
+        ))}
+      </div>
+      <div className="divide-y border-t">
+        {list.map((f) => (
+          <button
+            key={f.id}
+            onClick={() => onPick(f)}
+            className="w-full text-left text-[13px] px-3 py-2.5 active:bg-accent/60 transition-colors flex items-center gap-2"
+          >
+            <span className="flex-1">{lang === "en" ? f.q.en : f.q.vi}</span>
+            <span className="text-muted-foreground">›</span>
+          </button>
+        ))}
+      </div>
+      <Link to="/huong-dan" className="block text-center text-[11px] font-semibold text-primary py-2 border-t">
+        {t("ai.faqFullGuide")}
+      </Link>
+    </div>
   );
 }
 
@@ -103,6 +172,8 @@ export function AiChat({
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [showFaq, setShowFaq] = useState(false);
+  const { lang } = useLanguage();
   const endRef = useRef<HTMLDivElement>(null);
 
   const loadQuota = async () => {
@@ -118,22 +189,63 @@ export function AiChat({
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [msgs.length, busy]);
+  }, [msgs.length, busy, showFaq]);
 
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
 
   const left = quota ? Math.max(0, quota.limit - quota.used) : null;
 
-  const send = async (text: string) => {
+  const push = (add: Msg[]) => {
+    const next = [...msgs, ...add];
+    setMsgs(next);
+    saveHistory(user.id, next);
+    return next;
+  };
+
+  // Trả lời ngay từ danh sách soạn sẵn — không gọi AI, không tính lượt.
+  const answerFaq = (f: Faq, asked?: string) => {
+    setErr(null);
+    setShowFaq(false);
+    const q = asked ?? (lang === "en" ? f.q.en : f.q.vi);
+    push([
+      { role: "user", content: q, local: true },
+      { role: "assistant", content: lang === "en" ? f.a.en : f.a.vi, local: true, ask: asked },
+    ]);
+  };
+
+  const send = async (text: string, forceAi = false) => {
     const q = text.trim();
     if (!q || busy) return;
     setErr(null);
-    const next: Msg[] = [...msgs, { role: "user", content: q }];
-    setMsgs(next);
-    saveHistory(user.id, next);
     setInput("");
+    // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
+    if (!forceAi) {
+      const f = matchFaq(q);
+      if (f) return answerFaq(f, q);
+    }
+    // 2) Không phải Membership / hết lượt → báo ngay, không gọi server.
+    if (quota && !quota.member) {
+      setShowFaq(false);
+      push([
+        { role: "user", content: q, local: true },
+        { role: "assistant", content: t("ai.memberOnlyLocal"), local: true, note: "member" },
+      ]);
+      return;
+    }
+    if (left === 0) {
+      setShowFaq(false);
+      push([
+        { role: "user", content: q, local: true },
+        { role: "assistant", content: t("ai.limitLocal"), local: true, note: "limit" },
+      ]);
+      return;
+    }
+    // 3) Gọi Lomi AI (tính 1 lượt). Chỉ gửi phần hội thoại với AI, bỏ các câu trả lời soạn sẵn.
+    setShowFaq(false);
+    const next = push([{ role: "user", content: q }]);
     setBusy(true);
-    const { data, error } = await supabase.functions.invoke("ai-assistant", { body: { messages: next.slice(-12) } });
+    const ctx = next.filter((m) => !m.local).slice(-12).map(({ role, content }) => ({ role, content }));
+    const { data, error } = await supabase.functions.invoke("ai-assistant", { body: { messages: ctx } });
     setBusy(false);
     let code: string | null = null;
     if (error) {
@@ -169,8 +281,7 @@ export function AiChat({
     setErr(null);
   };
 
-  const locked = quota && !quota.member;
-  const suggestions = [t("ai.s1"), t("ai.s2"), t("ai.s3"), t("ai.s4")];
+  const nonMember = !!quota && !quota.member;
 
   return (
     <div className={cn("flex flex-col", className)}>
@@ -190,6 +301,15 @@ export function AiChat({
           )}
         </div>
         {msgs.length > 0 && (
+          <button
+            onClick={() => setShowFaq((v) => !v)}
+            aria-label={t("ai.faqTitle")}
+            className={cn("p-2 rounded-full", showFaq ? "text-primary bg-primary/10" : "text-muted-foreground")}
+          >
+            <BookOpen className="w-4 h-4" />
+          </button>
+        )}
+        {msgs.length > 0 && (
           <button onClick={clear} aria-label={t("ai.clear")} className="p-2 text-muted-foreground">
             <Trash2 className="w-4 h-4" />
           </button>
@@ -207,40 +327,36 @@ export function AiChat({
       </div>
 
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
-        {locked ? (
-          <div className="text-center py-12 px-6 space-y-3">
-            <Lock className="w-10 h-10 mx-auto text-muted-foreground/50" />
-            <p className="text-sm font-semibold">{t("ai.lockedTitle")}</p>
-            <p className="text-xs text-muted-foreground">{t("ai.lockedDesc")}</p>
-            <button
-              onClick={() => nav("/ho-so?view=personal")}
-              className="h-9 px-4 rounded-full bg-primary text-primary-foreground text-sm font-semibold"
-            >
-              {t("offers.viewMembership")}
-            </button>
-          </div>
-        ) : msgs.length === 0 ? (
-          <div className="py-8 space-y-4">
+        {msgs.length === 0 ? (
+          <div className="py-4 space-y-4">
             <div className="text-center space-y-1 px-6">
               <LomiMascot size={72} className="mx-auto mb-1" />
               <p className="text-sm font-semibold">{t("ai.welcome")}</p>
-              <p className="text-xs text-muted-foreground">{t("ai.welcomeDesc")}</p>
+              <p className="text-xs text-muted-foreground">{t(nonMember ? "ai.welcomeDescFree" : "ai.welcomeDesc")}</p>
             </div>
-            <div className="flex flex-wrap gap-2 justify-center">
-              {suggestions.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => void send(s)}
-                  className="text-xs px-3 py-1.5 rounded-full border bg-card active:scale-95 transition"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+            {nonMember ? (
+              <button
+                onClick={() => nav("/ho-so?view=personal")}
+                className="w-full flex items-center gap-2 text-left rounded-2xl border border-primary/30 bg-primary/5 px-3 py-2.5"
+              >
+                <Sparkles className="w-4 h-4 text-primary shrink-0" />
+                <span className="flex-1 text-xs">{t("ai.lockedDesc")}</span>
+                <span className="text-xs font-semibold text-primary shrink-0">{t("offers.viewMembership")}</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => void send(t("ai.s3"), true)}
+                className="w-full flex items-center gap-2 text-left rounded-2xl border bg-card px-3 py-2.5 active:scale-[.98] transition"
+              >
+                <Sparkles className="w-4 h-4 text-primary shrink-0" />
+                <span className="flex-1 text-xs">{t("ai.s3")}</span>
+              </button>
+            )}
+            <FaqBrowser onPick={(f) => answerFaq(f)} />
           </div>
         ) : (
           msgs.map((m, i) => (
-            <div key={i} className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}>
+            <div key={i} className={cn("flex flex-col", m.role === "user" ? "items-end" : "items-start")}>
               <div
                 className={cn(
                   "max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap break-words",
@@ -249,9 +365,35 @@ export function AiChat({
               >
                 {m.role === "assistant" ? <RichText text={m.content} /> : m.content}
               </div>
+              {m.role === "assistant" && m.local && (
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 ml-1 text-[11px] text-muted-foreground">
+                  {!m.note && (
+                    <span className="inline-flex items-center gap-1">
+                      <Zap className="w-3 h-3 text-amber-500" />
+                      {t("ai.quickNote")}
+                    </span>
+                  )}
+                  {m.note === "member" && (
+                    <button onClick={() => nav("/ho-so?view=personal")} className="font-semibold text-primary">
+                      {t("offers.viewMembership")} ›
+                    </button>
+                  )}
+                  {!m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
+                    <button onClick={() => void send(m.ask!, true)} className="font-semibold text-primary">
+                      {t("ai.askAi")}
+                    </button>
+                  )}
+                  {(m.note || i === msgs.length - 1) && !showFaq && (
+                    <button onClick={() => setShowFaq(true)} className="font-semibold text-primary">
+                      {t("ai.moreFaq")}
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           ))
         )}
+        {showFaq && msgs.length > 0 && <FaqBrowser onPick={(f) => answerFaq(f)} onClose={() => setShowFaq(false)} />}
         {busy && (
           <div className="flex justify-start">
             <div className="bg-muted rounded-2xl rounded-bl-md px-3 py-2 text-sm text-muted-foreground animate-pulse">
@@ -263,7 +405,7 @@ export function AiChat({
         <div ref={endRef} />
       </div>
 
-      {!locked && (
+      {(
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -282,12 +424,11 @@ export function AiChat({
             }}
             rows={1}
             placeholder={t("ai.placeholder")}
-            disabled={left === 0}
             className="flex-1 resize-none rounded-2xl border bg-background px-3 py-2 text-sm max-h-32 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
           />
           <button
             type="submit"
-            disabled={!input.trim() || busy || left === 0}
+            disabled={!input.trim() || busy}
             aria-label={t("common.send")}
             className="w-10 h-10 shrink-0 rounded-full bg-primary text-primary-foreground grid place-items-center disabled:opacity-50"
           >
@@ -427,6 +568,19 @@ export function AiBubble() {
     pathname.startsWith("/cuoc-goi") ||
     pathname.startsWith("/auth") ||
     (pathname.startsWith("/quet") && /tab=swipe/.test(search));
+
+  // Mục "Hỏi Lomi · Hướng dẫn" trong menu → mở bảng chat ngay tại trang đang xem.
+  useEffect(() => {
+    if (hidden) return;
+    const onOpen = (e: Event) => {
+      const d = (e as CustomEvent<{ handled: boolean }>).detail;
+      if (d) d.handled = true;
+      setOpen(true);
+    };
+    window.addEventListener("lomi:open", onOpen);
+    return () => window.removeEventListener("lomi:open", onOpen);
+  }, [hidden]);
+
   if (hidden) return null;
 
   // Vùng được phép đặt Lomi: dưới thanh tiêu đề, trên thanh điều hướng, cách 2 mép 8px.
