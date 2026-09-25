@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
-import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star, Car, Bike, Package } from "lucide-react";
+import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star, Car, Bike, Package, Handshake, Crown, MountainSnow } from "lucide-react";
 import { BUSINESS_TYPES, getMemberTierProgress, type Business, type BusinessType } from "@/lib/types";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { timeAgo } from "@/lib/time";
@@ -108,6 +108,11 @@ export default function Home() {
           <span />
         </div>
         <div className="aurora-grid -z-10" aria-hidden />
+        {/* Hình in chìm (26/09): bắt tay = liên minh, giống kiểu xe ở banner Đưa đón */}
+        <Handshake
+          aria-hidden
+          className="absolute -right-6 -bottom-8 w-44 h-44 text-white/15 -rotate-12 pointer-events-none -z-10"
+        />
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-semibold backdrop-blur">
           {t("home.badge")}
         </div>
@@ -178,8 +183,13 @@ export default function Home() {
       )}
 
       <section className="px-4">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-extrabold">{t("home.featured")}</h2>
+        <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-amber-400/15 via-primary/5 to-transparent px-4 py-3 mb-3">
+          <Crown
+            aria-hidden
+            className="absolute -right-3 -bottom-5 w-24 h-24 text-amber-500/15 rotate-12 pointer-events-none"
+          />
+          <h2 className="relative text-lg font-extrabold leading-tight">{t("home.featured")}</h2>
+          <p className="relative text-xs text-muted-foreground">{t("home.featuredSub")}</p>
         </div>
         {featuredLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -199,7 +209,12 @@ export default function Home() {
       </section>
 
       <footer className="px-4 pt-2 pb-4">
-        <div className="rounded-2xl bg-accent dark:bg-card dark:border dark:border-border p-5 flex flex-col items-center text-center gap-3">
+        <div className="relative overflow-hidden isolate rounded-2xl bg-accent dark:bg-card dark:border dark:border-border p-5 flex flex-col items-center text-center gap-3">
+          {/* Núi Đà Lạt in chìm */}
+          <MountainSnow
+            aria-hidden
+            className="absolute -left-6 -bottom-8 w-36 h-36 text-primary/10 pointer-events-none -z-10"
+          />
           <Logo size={44} asLink />
           <p className="text-sm font-bold text-foreground">{t("home.footerThanks")}</p>
           <div className="flex items-center justify-center gap-x-2 gap-y-1.5 text-xs font-medium text-muted-foreground flex-wrap">
@@ -247,8 +262,10 @@ function StatBtn({
   return (
     <button
       onClick={onClick}
-      className="tap rounded-2xl p-3 text-center bg-card/90 backdrop-blur border border-primary/20 shadow-soft hover:shadow-brand transition-shadow"
+      className="tap relative overflow-hidden isolate rounded-2xl p-3 text-center bg-card/90 backdrop-blur border border-primary/20 shadow-soft hover:shadow-brand transition-shadow"
     >
+      {/* Icon cùng chủ đề in chìm góc phải */}
+      <Icon aria-hidden className="absolute -right-3 -bottom-3 w-16 h-16 text-primary/[0.12] -rotate-12 pointer-events-none -z-10" />
       <div className="w-9 h-9 rounded-full bg-gradient-brand mx-auto mb-1.5 grid place-items-center animate-pulse-ring">
         <Icon className="w-4 h-4 text-white" />
       </div>
