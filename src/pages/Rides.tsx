@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useGoBack } from "@/lib/navigation";
 import {
   ArrowLeft,
+  BadgeCheck,
   Bike,
   Camera,
   Car,
@@ -33,7 +34,7 @@ import { StoredImage } from "@/components/StoredImage";
 import { ImageViewer } from "@/components/ImageLightbox";
 import { TipAppCard } from "@/components/TipAppCard";
 import { LoadingState } from "@/components/LoadingState";
-import { LiveRideMap } from "@/components/LiveRideMap";
+import { BookingMap, LiveRideMap } from "@/components/LiveRideMap";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -412,7 +413,14 @@ function RideCard({
             <Avatar path={other.avatar_url} name={other.full_name} size={36} />
           )}
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold truncate">{other.full_name}</div>
+            <div className="text-sm font-semibold truncate flex items-center gap-1">
+              <span className="truncate">{other.full_name}</span>
+              {viewer === "customer" && (
+                <span className="shrink-0 inline-flex items-center gap-0.5 text-[10px] font-semibold text-sky-600 dark:text-sky-400">
+                  <BadgeCheck className="w-3.5 h-3.5" /> {t("ride.verified")}
+                </span>
+              )}
+            </div>
             {viewer === "customer" && other.plate && (
               <div className="text-[11px] text-muted-foreground truncate">
                 {other.plate}
@@ -477,8 +485,13 @@ function RideCard({
 function CustomerTab() {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const [searchParams] = useSearchParams();
   const [rides, setRides] = useState<Ride[]>([]);
-  const [kind, setKind] = useState<Kind>("nguoi");
+  // ?kind=hang|do_an (lối tắt "Giao hàng" ở Trang chủ) → mở sẵn đúng loại.
+  const [kind, setKind] = useState<Kind>(() => {
+    const k = searchParams.get("kind");
+    return k === "hang" || k === "do_an" ? k : "nguoi";
+  });
   const [vehicle, setVehicle] = useState<Vehicle>("xe_may");
   const [passengers, setPassengers] = useState(1);
   const [pickup, setPickup] = useState<Place | null>(null);
@@ -757,6 +770,18 @@ function CustomerTab() {
           )}
           <PlaceField label={kind === "nguoi" ? t("ride.pickup") : t("ride.pickupGoods")} value={pickup} onChange={setPickup} near={pickup ?? dropoff} allowGps />
           <PlaceField label={kind === "nguoi" ? t("ride.dropoff") : t("ride.dropoffGoods")} value={dropoff} onChange={setDropoff} near={pickup} />
+          <BookingMap
+            pickup={pickup}
+            dropoff={dropoff}
+            onMove={(which, lat, lng) => {
+              const set = which === "pickup" ? setPickup : setDropoff;
+              // Đặt vị trí mới ngay (giá tính lại liền), địa chỉ chữ cập nhật sau khi tra xong.
+              set((prev) => ({ label: prev?.label ?? `${lat.toFixed(5)}, ${lng.toFixed(5)}`, lat, lng }));
+              void reverseGeocode(lat, lng).then((label) =>
+                set((prev) => (prev && prev.lat === lat && prev.lng === lng ? { ...prev, label } : prev)),
+              );
+            }}
+          />
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value.slice(0, 300))}

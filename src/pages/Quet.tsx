@@ -475,6 +475,12 @@ export default function Quet() {
   const [myNeedsLoading, setMyNeedsLoading] = useState(true);
   const [matches, setMatches] = useState<MatchRow[]>([]);
   const [matchesLoading, setMatchesLoading] = useState(true);
+  // Kiểu Tinder (25/09): Kết nối CHƯA nhắn tin lần nào → hàng "Kết nối mới" ở trên cùng.
+  const [talkedIds, setTalkedIds] = useState<Set<string>>(new Set());
+  // Số Kết nối mới kể từ lần cuối mở tab Kết nối (chấm đỏ trên tab) — mốc lưu trên máy.
+  const [newMatchCount, setNewMatchCount] = useState(0);
+  // Hướng dẫn cử chỉ lần đầu vào màn quẹt.
+  const [showSwipeTutorial, setShowSwipeTutorial] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [formType, setFormType] = useState<NeedType>("trao_doi");
@@ -746,6 +752,16 @@ export default function Quet() {
     ]);
     const needMap: Record<string, SwipeNeed> = {};
     (needs ?? []).forEach((n: SwipeNeed) => (needMap[n.id] = n));
+    // Ai đã từng nhắn tin qua lại với mình (1 trong 2 chiều) → không còn là "Kết nối mới".
+    const idList = otherIds.join(",");
+    const { data: msgRows } = await supabase
+      .from("messages")
+      .select("sender_id, receiver_id")
+      .or(`and(sender_id.eq.${myId},receiver_id.in.(${idList})),and(receiver_id.eq.${myId},sender_id.in.(${idList}))`)
+      .limit(2000);
+    setTalkedIds(
+      new Set(((msgRows ?? []) as { sender_id: string; receiver_id: string }[]).map((r) => (r.sender_id === myId ? r.receiver_id : r.sender_id))),
+    );
     const profMap: Record<string, OwnerInfo> = {};
     (profs ?? []).forEach((p: any) => (profMap[p.id] = p));
 
@@ -786,6 +802,56 @@ export default function Quet() {
     if (tab === "matches") void loadMatches();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myId, tab]);
+
+  // Chấm đỏ số Kết nối mới trên tab "Kết nối" (đếm từ lần cuối mở tab, mốc lưu trên máy).
+  const seenKey = myId ? `lomi_matches_seen_${myId}` : "";
+  const refreshNewMatchCount = async () => {
+    if (!myId) return;
+    let since = "1970-01-01T00:00:00Z";
+    try {
+      since = localStorage.getItem(seenKey) || since;
+    } catch {
+      /* bỏ qua */
+    }
+    const { count } = await db
+      .from("swipe_matches")
+      .select("id", { count: "exact", head: true })
+      .or(`user_a.eq.${myId},user_b.eq.${myId}`)
+      .gt("created_at", since);
+    setNewMatchCount(count ?? 0);
+  };
+  useEffect(() => {
+    if (!myId) return;
+    if (tab === "matches") {
+      try {
+        localStorage.setItem(seenKey, new Date().toISOString());
+      } catch {
+        /* bỏ qua */
+      }
+      setNewMatchCount(0);
+      return;
+    }
+    void refreshNewMatchCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [myId, tab, matchInfo]);
+
+  // Lần đầu vào màn quẹt → hiện hướng dẫn cử chỉ 1 lần.
+  useEffect(() => {
+    if (tab !== "swipe") return;
+    try {
+      if (!localStorage.getItem("lomi_quet_tutorial_v1")) setShowSwipeTutorial(true);
+    } catch {
+      /* bỏ qua */
+    }
+  }, [tab]);
+  const closeSwipeTutorial = () => {
+    setShowSwipeTutorial(false);
+    try {
+      localStorage.setItem("lomi_quet_tutorial_v1", "1");
+    } catch {
+      /* bỏ qua */
+    }
+  };
 
   // Đổi mục quẹt → xoá bộ lọc cũ (tránh lọc nhầm sang mục không liên quan).
   useEffect(() => {
@@ -1423,7 +1489,14 @@ export default function Quet() {
                   : "text-muted-foreground",
             )}
           >
-            {t("quet.tabMatches")}
+            <span className="relative">
+              {t("quet.tabMatches")}
+              {newMatchCount > 0 && tab !== "matches" && (
+                <span className="absolute -top-2 -right-4 min-w-[16px] h-4 px-1 rounded-full bg-red-500 text-white text-[9px] font-bold grid place-items-center">
+                  {newMatchCount > 9 ? "9+" : newMatchCount}
+                </span>
+              )}
+            </span>
           </button>
         </div>
       </div>
@@ -2497,6 +2570,28 @@ export default function Quet() {
               {t("explore.locationDenied")}
             </p>
           )}
+          {showSwipeTutorial && topCard && (
+            <div
+              className="absolute inset-0 z-50 rounded-2xl bg-black/75 backdrop-blur-[2px] text-white flex flex-col items-center justify-center gap-4 px-6 text-center animate-in fade-in duration-200"
+              onClick={closeSwipeTutorial}
+            >
+              <div className="text-lg font-extrabold">{t("quet.tutTitle")}</div>
+              <div className="w-full max-w-[260px] space-y-3 text-sm text-left">
+                <div className="flex items-center gap-3"><span className="text-2xl w-8 text-center">👉</span>{t("quet.tutRight")}</div>
+                <div className="flex items-center gap-3"><span className="text-2xl w-8 text-center">👈</span>{t("quet.tutLeft")}</div>
+                <div className="flex items-center gap-3"><span className="text-2xl w-8 text-center">👆</span>{t("quet.tutUp")}</div>
+                <div className="flex items-center gap-3"><span className="text-2xl w-8 text-center">📷</span>{t("quet.tutTap")}</div>
+                <div className="flex items-center gap-3"><span className="text-2xl w-8 text-center">↺</span>{t("quet.tutUndo")}</div>
+              </div>
+              <button
+                type="button"
+                onClick={closeSwipeTutorial}
+                className="mt-1 px-6 h-10 rounded-full bg-gradient-brand text-primary-foreground font-bold"
+              >
+                {t("quet.tutOk")}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -2511,7 +2606,37 @@ export default function Quet() {
           ) : matches.length === 0 ? (
             <div className="text-center py-10 text-sm text-muted-foreground">{t("quet.emptyMatches")}</div>
           ) : (
-            matches.map((m) => {
+            <>
+            {matches.some((m) => m.otherUser && !talkedIds.has(m.otherUser.id)) && (
+              <div className="space-y-2 pb-1">
+                <div className="text-xs font-bold text-primary uppercase tracking-wide">{t("quet.newMatches")}</div>
+                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1">
+                  {matches
+                    .filter((m) => m.otherUser && !talkedIds.has(m.otherUser.id))
+                    .map((m) => (
+                      <button
+                        key={`new-${m.id}`}
+                        onClick={() => m.otherUser && nav(`/tin-nhan/${m.otherUser.id}`)}
+                        className="shrink-0 w-16 flex flex-col items-center gap-1"
+                      >
+                        <div className="relative p-0.5 rounded-full bg-gradient-brand">
+                          <div className="rounded-full bg-background p-0.5">
+                            <Avatar path={m.otherUser?.avatar_url} name={m.otherUser?.full_name || m.otherUser?.username} size={52} frame={false} />
+                          </div>
+                          <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full bg-primary text-primary-foreground grid place-items-center ring-2 ring-background">
+                            <CategoryIcon type={m.need_type} className="w-3 h-3" />
+                          </div>
+                        </div>
+                        <span className="text-[11px] font-semibold truncate w-full text-center">
+                          {(m.otherUser?.full_name || m.otherUser?.username || "—").split(" ").slice(-1)[0]}
+                        </span>
+                      </button>
+                    ))}
+                </div>
+                <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide pt-1">{t("quet.allMatches")}</div>
+              </div>
+            )}
+            {matches.map((m) => {
               const isOnline = m.otherUser ? onlineUsers.has(m.otherUser.id) : false;
               return (
                 <div key={m.id} className="w-full flex items-center gap-3 rounded-xl border bg-card p-3">
@@ -2566,7 +2691,8 @@ export default function Quet() {
                   </Popover>
                 </div>
               );
-            })
+            })}
+            </>
           )}
         </div>
       )}

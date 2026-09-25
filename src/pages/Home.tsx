@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { Logo } from "@/components/Logo";
-import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star } from "lucide-react";
+import { Users, Building2, Tag, ArrowRight, X, Search as SearchIcon, Star, Bike, Package, Flame } from "lucide-react";
 import type { Business } from "@/lib/types";
 import { BusinessCard, BusinessCardData } from "@/components/BusinessCard";
 import { Avatar } from "@/components/Avatar";
@@ -135,6 +135,30 @@ export default function Home() {
           loading={statsLoading}
         />
       </section>
+
+      {user && (
+        // Lối tắt nhanh (25/09): Đặt xe / Giao hàng / Quẹt — trước đây Đưa đón nằm sâu dưới Quẹt, khó tìm.
+        <section className="px-4 grid grid-cols-3 gap-2">
+          {(
+            [
+              { to: "/dua-don", icon: Bike, label: t("home.quick.ride") },
+              { to: "/dua-don?kind=hang", icon: Package, label: t("home.quick.delivery") },
+              { to: "/quet", icon: Flame, label: t("home.quick.quet") },
+            ] as const
+          ).map((q) => (
+            <Link
+              key={q.to}
+              to={q.to}
+              className="rounded-2xl border bg-card p-3 flex flex-col items-center gap-1.5 text-xs font-bold hover:border-primary/40 active:scale-[0.98] transition"
+            >
+              <span className="w-10 h-10 rounded-xl bg-gradient-brand text-primary-foreground grid place-items-center">
+                <q.icon className="w-5 h-5" />
+              </span>
+              {q.label}
+            </Link>
+          ))}
+        </section>
+      )}
 
       <section className="px-4">
         <div className="flex items-center justify-between mb-3">
