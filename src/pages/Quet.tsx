@@ -1542,21 +1542,7 @@ export default function Quet() {
               );
             })}
           </div>
-          {/* Đưa đón & giao hàng — thẻ ngang dưới 4 mục */}
-          <button
-            type="button"
-            onClick={() => nav("/dua-don")}
-            className="w-full rounded-2xl border bg-card p-3 flex items-center gap-3 text-left active:scale-[0.98] transition"
-          >
-            <div className="w-12 h-12 shrink-0 rounded-2xl bg-gradient-brand text-primary-foreground grid place-items-center">
-              <Car className="w-6 h-6" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="font-bold text-sm">{t("quet.rides.title")}</div>
-              <div className="text-[11px] text-muted-foreground leading-snug">{t("quet.rides.brief")}</div>
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </button>
+          {/* Đưa đón & giao hàng: đã chuyển ra Trang chủ (26/09 theo ý Kir). */}
         </div>
       )}
 
@@ -2610,7 +2596,7 @@ export default function Quet() {
             {matches.some((m) => m.otherUser && !talkedIds.has(m.otherUser.id)) && (
               <div className="space-y-2 pb-1">
                 <div className="text-xs font-bold text-primary uppercase tracking-wide">{t("quet.newMatches")}</div>
-                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1">
+                <div className="flex gap-3 overflow-x-auto pb-1 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {matches
                     .filter((m) => m.otherUser && !talkedIds.has(m.otherUser.id))
                     .map((m) => (
@@ -2634,9 +2620,13 @@ export default function Quet() {
                     ))}
                 </div>
                 <div className="text-xs font-bold text-muted-foreground uppercase tracking-wide pt-1">{t("quet.allMatches")}</div>
+                {!matches.some((m) => m.otherUser && talkedIds.has(m.otherUser.id)) && (
+                  <p className="text-xs text-muted-foreground py-3 text-center">{t("quet.noChatsYet")}</p>
+                )}
               </div>
             )}
-            {matches.map((m) => {
+            {/* Kiểu Messenger/Tinder: người ở hàng "Kết nối mới" (chưa nhắn) KHÔNG lặp lại ở danh sách dưới. */}
+            {matches.filter((m) => !(m.otherUser && !talkedIds.has(m.otherUser.id))).map((m) => {
               const isOnline = m.otherUser ? onlineUsers.has(m.otherUser.id) : false;
               return (
                 <div key={m.id} className="w-full flex items-center gap-3 rounded-xl border bg-card p-3">
