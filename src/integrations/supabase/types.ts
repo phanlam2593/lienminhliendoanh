@@ -32,6 +32,36 @@ export type Database = {
         }
         Relationships: []
       }
+      app_tips: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          ref_id: string | null
+          source: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          ref_id?: string | null
+          source: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          ref_id?: string | null
+          source?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       blocks: {
         Row: {
           blocked_id: string
@@ -1529,6 +1559,7 @@ export type Database = {
           admin_note: string | null
           also_delivery: boolean
           created_at: string
+          driver_photo_url: string | null
           is_online: boolean
           last_lat: number | null
           last_lng: number | null
@@ -1546,6 +1577,7 @@ export type Database = {
           admin_note?: string | null
           also_delivery?: boolean
           created_at?: string
+          driver_photo_url?: string | null
           is_online?: boolean
           last_lat?: number | null
           last_lng?: number | null
@@ -1563,6 +1595,7 @@ export type Database = {
           admin_note?: string | null
           also_delivery?: boolean
           created_at?: string
+          driver_photo_url?: string | null
           is_online?: boolean
           last_lat?: number | null
           last_lng?: number | null
@@ -1582,24 +1615,48 @@ export type Database = {
         Row: {
           active: boolean
           base_fare: number
+          included_km: number
           min_fare: number
           per_km: number
+          sort_order: number
+          surcharge_bulky: number
+          surcharge_loading: number
+          tier2_from_km: number | null
+          tier2_per_km: number | null
+          tier3_from_km: number | null
+          tier3_per_km: number | null
           updated_at: string
           vehicle: string
         }
         Insert: {
           active?: boolean
           base_fare?: number
+          included_km?: number
           min_fare?: number
           per_km?: number
+          sort_order?: number
+          surcharge_bulky?: number
+          surcharge_loading?: number
+          tier2_from_km?: number | null
+          tier2_per_km?: number | null
+          tier3_from_km?: number | null
+          tier3_per_km?: number | null
           updated_at?: string
           vehicle: string
         }
         Update: {
           active?: boolean
           base_fare?: number
+          included_km?: number
           min_fare?: number
           per_km?: number
+          sort_order?: number
+          surcharge_bulky?: number
+          surcharge_loading?: number
+          tier2_from_km?: number | null
+          tier2_per_km?: number | null
+          tier3_from_km?: number | null
+          tier3_per_km?: number | null
           updated_at?: string
           vehicle?: string
         }
@@ -1618,6 +1675,8 @@ export type Database = {
           dropoff_lat: number
           dropoff_lng: number
           dropoff_text: string
+          extra_fee: number
+          extras: string[]
           id: string
           kind: string
           note: string | null
@@ -1642,6 +1701,8 @@ export type Database = {
           dropoff_lat: number
           dropoff_lng: number
           dropoff_text: string
+          extra_fee?: number
+          extras?: string[]
           id?: string
           kind: string
           note?: string | null
@@ -1666,6 +1727,8 @@ export type Database = {
           dropoff_lat?: number
           dropoff_lng?: number
           dropoff_text?: string
+          extra_fee?: number
+          extras?: string[]
           id?: string
           kind?: string
           note?: string | null
@@ -2347,12 +2410,20 @@ export type Database = {
         Args: { _note?: string; _status: string; _uid: string }
         Returns: undefined
       }
+      admin_tip_stats: { Args: never; Returns: Json }
       admin_update_ride_pricing: {
         Args: {
           _active: boolean
           _base: number
+          _bulky?: number
+          _included_km?: number
+          _loading?: number
           _min: number
           _per_km: number
+          _tier2_from?: number
+          _tier2_per?: number
+          _tier3_from?: number
+          _tier3_per?: number
           _vehicle: string
         }
         Returns: undefined
@@ -2361,6 +2432,7 @@ export type Database = {
         Args: {
           _also_delivery: boolean
           _desc: string
+          _driver_photo?: string
           _license_photo: string
           _plate: string
           _vehicle: string
@@ -2395,6 +2467,7 @@ export type Database = {
       create_ride: {
         Args: {
           _dropoff_text: string
+          _extras?: string[]
           _kind: string
           _note: string
           _passengers: number
@@ -2559,12 +2632,17 @@ export type Database = {
       }
       quote_ride: {
         Args: {
+          _extras?: string[]
           _vehicle: string
           dlat: number
           dlng: number
           plat: number
           plng: number
         }
+        Returns: Json
+      }
+      record_app_tip: {
+        Args: { _amount: number; _ref?: string; _source: string }
         Returns: Json
       }
       refresh_admin_pending_notification: { Args: never; Returns: undefined }
@@ -2575,6 +2653,13 @@ export type Database = {
       }
       ride_distance_km: {
         Args: { dlat: number; dlng: number; plat: number; plng: number }
+        Returns: number
+      }
+      ride_fare: {
+        Args: {
+          km: number
+          p: Database["public"]["Tables"]["ride_pricing"]["Row"]
+        }
         Returns: number
       }
       set_driver_online: {
