@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/lib/auth";
 import { useNotifications } from "@/hooks/useNotifications";
 import { timeAgo } from "@/lib/time";
@@ -23,6 +24,10 @@ import {
   Clock,
   Flame,
   Car,
+  Phone,
+  PhoneMissed,
+  Users,
+  AtSign,
 } from "lucide-react";
 
 const ICONS: Record<string, typeof Bell> = {
@@ -56,11 +61,18 @@ const ICONS: Record<string, typeof Bell> = {
   driver_pending: Car,
   driver_approved: Car,
   driver_rejected: Car,
+  business_regular: Award,
+  business_needs_revision: Building2,
+  account_needs_revision: UserX,
+  mention: AtSign,
+  incoming_call: Phone,
+  missed_call: PhoneMissed,
 };
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Notification } from "@/lib/types";
+import { LoadingState } from "@/components/LoadingState";
 import { useLanguage } from "@/lib/i18n";
 
 // Tiêu đề thông báo được sinh từ trigger DB (tiếng Việt cứng). Với các nhóm có tiêu đề
@@ -84,21 +96,34 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
   if (n.category) {
     switch (n.category) {
       case "messages":
+        // Tin nhắn NHÓM: target_id = id nhóm → vào thẳng nhóm (nếu mình còn trong nhóm).
+        // Tin 1-1 gộp chung 1 dòng (target_id NULL) → vào hộp thư.
+        if (n.target_type === "group" && id) {
+          const { data } = await (supabase as any).from("group_chats").select("id").eq("id", id).maybeSingle();
+          if (data) return `/tin-nhan/nhom/${id}`;
+        }
         return "/tin-nhan";
       case "follows":
         // Giờ CHỈ còn follow cá nhân (follow DN đã tách riêng category "follows_business" bên dưới).
-        return "/tin-nhan?tab=follows";
+        // Mở sẵn danh sách "Người theo dõi" ở Hồ sơ (trước đây vào /tin-nhan?tab=follows — hộp thư
+        // không có tab này nên chỉ rơi vào hộp thư trống).
+        return "/ho-so?followers=1";
       case "friend_requests":
-        return "/ho-so?friends=1";
+        // Cơ chế lời mời kết bạn đã bỏ (#50) — thông báo cũ dẫn tới trang của người đó.
+        return id ? `/ho-so/${id}` : "/ho-so";
       case "follows_business":
         if (id) {
           const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
           if (data) return `/dn/${id}?followers=1`;
         }
-        return "/tin-nhan?tab=follows";
+        return "/ho-so?followers=1";
       case "deals_received":
         // target_id giờ là offer_id của lần gần nhất — vào thẳng danh sách người đã nhận ưu đãi đó.
-        if (id) {
+        if (id && n.target_type === "business") {
+          // Thông báo cũ (trước khi đổi sang offer_id) — target là DN.
+          const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+          if (data) return `/dn/${id}`;
+        } else if (id) {
           const { data } = await supabase.from("offers").select("id, business_id").eq("id", id).maybeSingle();
           if (data) return `/dn/${data.business_id}?claims=${id}`;
         }
@@ -111,6 +136,12 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
         }
         return "/kham-pha";
       case "featured":
+      case "social":
+        // "DN mới được ghim nổi bật" / "Bạn là khách quen" — target_id là DN → vào trang DN đó.
+        if (id) {
+          const { data } = await supabase.from("businesses").select("id").eq("id", id).maybeSingle();
+          if (data) return `/dn/${id}`;
+        }
         return "/";
       case "pending_approval":
         if (n.target_type === "ride_driver") return "/admin?tab=rides";
@@ -124,7 +155,7 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
         // doanh nghiệp (tự mở sẵn) — nếu đã duyệt thì vào trang công khai của DN như cũ.
         if (n.target_type === "business" && id) {
           const { data } = await supabase.from("businesses").select("id, status").eq("id", id).maybeSingle();
-          if (data?.status === "rejected") return `/ho-so?view=business&edit=${id}`;
+          if (data?.status === "rejected" || data?.status === "needs_revision") return `/ho-so?view=business&edit=${id}`;
           if (data) return `/dn/${id}`;
         }
         return "/ho-so";
@@ -150,6 +181,9 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
     case "level_up":
     case "badge_earned":
       return "/ho-so";
+    case "mention":
+      // Được nhắc tên (@) trong Cộng đồng.
+      return "/cong-dong";
     case "admin_message": {
       if (n.target_type === "user" && id) return `/ho-so/${id}`;
       if (n.target_type === "business" && id) {
@@ -165,9 +199,38 @@ async function resolveRoute(n: Notification, isAdmin: boolean): Promise<string |
 
 export default function Notifications() {
   const { items, unread, markAllRead, markRead, deleteAllRead, refresh, loading } = useNotifications();
-  const { role } = useAuth();
+  const { role, user, loading: authLoading } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
+  const [searchParams] = useSearchParams();
+  const openId = searchParams.get("open");
+
+  // Bấm thông báo ĐẨY (push) → service worker mở /thong-bao?open=<id> → ở đây tra đúng thông
+  // báo đó rồi chuyển thẳng tới nơi cần đến bằng CHÍNH logic resolveRoute như khi bấm trong
+  // danh sách (trước đây push tự đoán URL riêng nên nhiều loại chỉ rơi về trang Thông báo).
+  useEffect(() => {
+    if (!openId || authLoading) return;
+    if (!user) {
+      nav("/", { replace: true });
+      return;
+    }
+    let cancel = false;
+    void (async () => {
+      const { data } = await supabase.from("notifications").select("*").eq("id", openId).maybeSingle();
+      if (cancel) return;
+      if (!data) {
+        nav("/thong-bao", { replace: true });
+        return;
+      }
+      if (!data.is_read) await markRead(data.id);
+      const route = await resolveRoute(data as Notification, role === "admin");
+      if (!cancel) nav(route ?? "/", { replace: true });
+    })();
+    return () => {
+      cancel = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openId, authLoading, user?.id]);
 
   const tap = async (n: Notification) => {
     if (!n.is_read) await markRead(n.id);
@@ -185,6 +248,8 @@ export default function Notifications() {
     await supabase.from("notifications").delete().eq("id", id);
     refresh();
   };
+
+  if (openId) return <LoadingState full />;
 
   return (
     <div className="p-4 space-y-3">
@@ -230,7 +295,9 @@ export default function Notifications() {
                   : n.target_type === "business"
                     ? Building2
                     : Shield
-                : (ICONS[n.type] ?? Bell);
+                : n.type === "new_message" && n.target_type === "group"
+                  ? Users
+                  : (ICONS[n.type] ?? Bell);
             return (
               <div
                 key={n.id}

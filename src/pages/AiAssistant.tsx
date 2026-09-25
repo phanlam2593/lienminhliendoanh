@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
 import { ArrowLeft, Lock, Send, Sparkles, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -73,6 +74,7 @@ export function AiAssistantRow() {
 
 export default function AiAssistant() {
   const nav = useNavigate();
+  const goBack = useGoBack();
   const { t } = useLanguage();
   const { user } = useAuth();
   const [quota, setQuota] = useState<Quota | null>(null);
@@ -152,7 +154,7 @@ export default function AiAssistant() {
   return (
     <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))] max-w-2xl mx-auto">
       <div className="flex items-center gap-2 p-3 border-b">
-        <button onClick={() => nav("/tin-nhan")} aria-label={t("common.back")}>
+        <button onClick={() => goBack("/tin-nhan")} aria-label={t("common.back")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="w-9 h-9 rounded-full bg-gradient-brand text-primary-foreground grid place-items-center">

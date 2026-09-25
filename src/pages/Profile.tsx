@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { requestPushPermission, canInstallNatively, isIOSDevice, isStandalone, triggerInstall } from "@/lib/pwa";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BellRing } from "lucide-react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -71,6 +71,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { timeAgo } from "@/lib/time";
+import { LoadingState } from "@/components/LoadingState";
 type View = "menu" | "personal" | "business" | "settings";
 
 export default function Profile() {
@@ -83,14 +84,24 @@ export default function Profile() {
   const [view, setViewState] = useState<View>(
     ["menu", "personal", "business", "settings"].includes(initialView) ? initialView : "menu",
   );
+  const location = useLocation();
+  // Mỗi mục con (Cá nhân / Doanh nghiệp / Cài đặt) là 1 mục lịch sử riêng (25/09) → Back Android
+  // hoặc nút ← quay về menu Hồ sơ thay vì thoát khỏi trang (trước đây dùng replace).
   const setView = (v: View) => {
-    setViewState(v);
+    if (v === view) return;
     if (v === "menu") {
+      setViewState(v);
+      if ((location.state as { profileSub?: boolean } | null)?.profileSub) {
+        nav(-1);
+        return;
+      }
       searchParams.delete("view");
       setSearchParams(searchParams, { replace: true });
     } else {
-      searchParams.set("view", v);
-      setSearchParams(searchParams, { replace: true });
+      setViewState(v);
+      const next = new URLSearchParams(searchParams);
+      next.set("view", v);
+      setSearchParams(next, { state: { profileSub: true } });
     }
   };
 
@@ -508,7 +519,7 @@ export default function Profile() {
               onClick={async () => {
                 setMenuOpen(false);
                 await signOut();
-                nav("/");
+                nav("/", { replace: true });
               }}
             />
           </PopoverContent>
@@ -576,7 +587,7 @@ export default function Profile() {
             )}
           </div>
           <div className="flex-1 min-w-0">
-            <FollowStats userId={user.id} />
+            <FollowStats userId={user.id} autoOpen={searchParams.get("followers") === "1" ? "followers" : undefined} />
           </div>
         </div>
         <div className="min-w-0 mt-3">
@@ -1358,13 +1369,17 @@ function OfferRow({ offer, onChanged }: { offer: Offer; onChanged: () => void })
   );
 }
 
-function FollowStats({ userId }: { userId: string }) {
+function FollowStats({ userId, autoOpen }: { userId: string; autoOpen?: "followers" }) {
   const { t } = useLanguage();
   const [followers, setFollowers] = useState(0);
   const [following, setFollowing] = useState(0);
   const [regulars, setRegulars] = useState(0);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState<null | "followers" | "following" | "regulars">(null);
+  // Mở sẵn danh sách người theo dõi khi vào từ thông báo "có người theo dõi mới" (/ho-so?followers=1)
+  useEffect(() => {
+    if (autoOpen) setOpen(autoOpen);
+  }, [autoOpen]);
 
   const loadCounts = async () => {
     const [{ count: fc }, { count: gc }, { data: regRows }, { data: followBizRows }] = await Promise.all([
@@ -1461,7 +1476,7 @@ function OwnWall({ userId, reloadKey }: { userId: string; reloadKey?: number }) 
       </div>
       <div className="mt-3 space-y-2">
         {loading ? (
-          <p className="text-center text-xs text-muted-foreground py-8">{t("common.loading")}</p>
+          <LoadingState />
         ) : posts.length === 0 ? (
           <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
         ) : (
@@ -1652,7 +1667,7 @@ function BlockedUsersList() {
     toast.success(t("block.unblocked"));
   };
 
-  if (loading) return <p className="text-xs text-center text-muted-foreground py-4">{t("common.loading")}</p>;
+  if (loading) return <LoadingState />;
   if (users.length === 0)
     return <p className="text-xs text-center text-muted-foreground py-4">{t("block.noBlockedUsers")}</p>;
 

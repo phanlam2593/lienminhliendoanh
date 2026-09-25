@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
 import {
   ArrowLeft,
   Bike,
+  Camera,
   Car,
   Check,
   ChevronRight,
@@ -14,6 +16,7 @@ import {
   Package,
   Phone,
   Search,
+  Truck,
   UtensilsCrossed,
   Users,
   X,
@@ -27,20 +30,27 @@ import { uploadImage } from "@/lib/upload";
 import { cn } from "@/lib/utils";
 import { Avatar } from "@/components/Avatar";
 import { StoredImage } from "@/components/StoredImage";
+import { ImageViewer } from "@/components/ImageLightbox";
+import { TipAppCard } from "@/components/TipAppCard";
+import { LoadingState } from "@/components/LoadingState";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ĐƯA ĐÓN / GIAO NHẬN (#7) — route /dua-don, vào từ thẻ dưới 4 mục của trang Quẹt.
-// Giá = giá mở cửa + giá/km (admin đặt ở bảng ride_pricing), tính ở SERVER (create_ride)
-// theo quãng đường chim bay × 1.3. Tài xế phải đăng ký + admin duyệt (ride_drivers).
-// Trả tiền mặt trực tiếp cho tài xế — app không giữ tiền.
+// Giá THAM KHẢO (25/09) = giá mở cửa (đã gồm N km đầu, mặc định 2 km) + giá/km tiếp theo theo
+// BẬC (vd giao hàng xe máy: km 3–10 5k, km 11–20 4k, >20 3.5k) + phụ phí hàng ô tô (cồng kềnh /
+// bốc dỡ). Admin chỉnh ở bảng ride_pricing, tính ở SERVER (quote_ride/create_ride → ride_fare())
+// theo quãng đường chim bay × 1.3. Giá chỉ để tham khảo — 2 bên tự thoả thuận, trả tiền mặt
+// trực tiếp cho tài xế (tài xế nhận 100%, app không giữ tiền). Tài xế phải đăng ký (kèm ảnh
+// chân dung) + admin duyệt (ride_drivers).
 // ─────────────────────────────────────────────────────────────────────────────
 
 const db = supabase as any;
 
 type Kind = "nguoi" | "hang" | "do_an";
-type Vehicle = "xe_may" | "oto_4" | "oto_7" | "giao_hang";
+type Vehicle = "xe_may" | "oto_4" | "oto_7" | "giao_hang" | "giao_hang_oto";
+type Extra = "bulky" | "loading";
 type RideStatus = "searching" | "accepted" | "picked_up" | "completed" | "cancelled";
 
 interface Place {
@@ -67,6 +77,8 @@ interface Ride {
   note: string | null;
   status: RideStatus;
   created_at: string;
+  extras?: Extra[] | null;
+  extra_fee?: number | null;
 }
 
 interface DriverRow {
@@ -76,6 +88,7 @@ interface DriverRow {
   vehicle_desc: string | null;
   vehicle_photo_url: string | null;
   license_photo_url: string | null;
+  driver_photo_url: string | null;
   also_delivery: boolean;
   status: "pending" | "approved" | "rejected";
   admin_note: string | null;
@@ -86,9 +99,30 @@ interface DriverRow {
 interface Pricing {
   vehicle: Vehicle;
   base_fare: number;
+  included_km: number;
   per_km: number;
   min_fare: number;
+  tier2_from_km: number | null;
+  tier2_per_km: number | null;
+  tier3_from_km: number | null;
+  tier3_per_km: number | null;
+  surcharge_bulky: number;
+  surcharge_loading: number;
+  sort_order: number;
   active: boolean;
+}
+
+// Dòng mô tả giá ngắn gọn: "15.000đ / 2 km đầu · 5.000đ/km · từ km 10: 4.000đ/km…"
+function pricingSummary(p: Pricing, t: (k: string, v?: Record<string, string>) => string) {
+  const parts = [
+    t("ride.price.open", { price: money(p.base_fare), km: String(Number(p.included_km)) }),
+    t("ride.price.perKm", { price: money(p.per_km) }),
+  ];
+  if (p.tier2_from_km && p.tier2_per_km)
+    parts.push(t("ride.price.fromKm", { km: String(Number(p.tier2_from_km)), price: money(p.tier2_per_km) }));
+  if (p.tier3_from_km && p.tier3_per_km)
+    parts.push(t("ride.price.fromKm", { km: String(Number(p.tier3_from_km)), price: money(p.tier3_per_km) }));
+  return parts.join(" · ");
 }
 
 const ACTIVE: RideStatus[] = ["searching", "accepted", "picked_up"];
@@ -144,6 +178,7 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
 function VehicleIcon({ v, className }: { v: string; className?: string }) {
   if (v === "xe_may") return <Bike className={className} />;
   if (v === "giao_hang") return <Package className={className} />;
+  if (v === "giao_hang_oto") return <Truck className={className} />;
   return <Car className={className} />;
 }
 
@@ -262,6 +297,7 @@ function RideCard({
   const { t } = useLanguage();
   const [parties, setParties] = useState<any>(null);
   const [busy, setBusy] = useState(false);
+  const [photoOpen, setPhotoOpen] = useState(false);
 
   useEffect(() => {
     void db.rpc("get_ride_parties", { _rid: ride.id }).then(({ data }: any) => setParties(data));
@@ -305,7 +341,9 @@ function RideCard({
         </div>
         <div className="text-right">
           <div className="text-base font-extrabold text-primary">{money(ride.price)}</div>
-          <div className="text-[10px] text-muted-foreground">~{Number(ride.distance_km).toFixed(1)} km</div>
+          <div className="text-[10px] text-muted-foreground">
+            {t("ride.refPriceShort")} · ~{Number(ride.distance_km).toFixed(1)} km
+          </div>
         </div>
       </div>
       <div className="text-xs space-y-1">
@@ -328,11 +366,33 @@ function RideCard({
           <span className="line-clamp-2">{ride.dropoff_text}</span>
         </a>
         {ride.note && <div className="text-muted-foreground italic">"{ride.note}"</div>}
+        {!!ride.extras?.length && (
+          <div className="flex flex-wrap gap-1 pt-0.5">
+            {ride.extras.map((x) => (
+              <span key={x} className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-300 text-[10px] font-semibold">
+                {t(`ride.extra.${x}`)}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {other && (
         <div className="flex items-center gap-2 rounded-xl bg-muted/60 p-2">
-          <Avatar path={other.avatar_url} name={other.full_name} size={36} />
+          {viewer === "customer" && other.driver_photo_url ? (
+            <>
+              <button type="button" onClick={() => setPhotoOpen(true)} className="shrink-0" aria-label={t("ride.driverPhoto")}>
+                <StoredImage
+                  path={other.driver_photo_url}
+                  alt={other.full_name}
+                  className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/40"
+                />
+              </button>
+              <ImageViewer path={other.driver_photo_url} open={photoOpen} onClose={() => setPhotoOpen(false)} alt={other.full_name} />
+            </>
+          ) : (
+            <Avatar path={other.avatar_url} name={other.full_name} size={36} />
+          )}
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold truncate">{other.full_name}</div>
             {viewer === "customer" && other.plate && (
@@ -406,14 +466,32 @@ function CustomerTab() {
   const [pickup, setPickup] = useState<Place | null>(null);
   const [dropoff, setDropoff] = useState<Place | null>(null);
   const [note, setNote] = useState("");
-  const [quote, setQuote] = useState<{ distance_km: number; price: number } | null>(null);
+  const [quote, setQuote] = useState<{ distance_km: number; price: number; extra_fee?: number } | null>(null);
   const [booking, setBooking] = useState(false);
+  const [extras, setExtras] = useState<Extra[]>([]);
+  const [pricing, setPricing] = useState<Pricing[]>([]);
+  const [showPrices, setShowPrices] = useState(false);
+  const [ridesLoading, setRidesLoading] = useState(true);
+  const [tippedRideIds, setTippedRideIds] = useState<Set<string> | null>(null);
 
   const load = async () => {
     if (!user) return;
-    const { data } = await db.from("rides").select("*").eq("customer_id", user.id).order("created_at", { ascending: false }).limit(15);
+    const [{ data }, { data: tips }] = await Promise.all([
+      db.from("rides").select("*").eq("customer_id", user.id).order("created_at", { ascending: false }).limit(15),
+      db.from("app_tips").select("ref_id").eq("user_id", user.id).eq("source", "ride"),
+    ]);
     setRides((data ?? []) as Ride[]);
+    setTippedRideIds(new Set(((tips ?? []) as { ref_id: string }[]).map((x) => x.ref_id)));
+    setRidesLoading(false);
   };
+
+  useEffect(() => {
+    void db
+      .from("ride_pricing")
+      .select("*")
+      .order("sort_order")
+      .then(({ data }: any) => setPricing((data ?? []) as Pricing[]));
+  }, []);
 
   useEffect(() => {
     void load();
@@ -428,10 +506,17 @@ function CustomerTab() {
   }, [user?.id]);
 
   useEffect(() => {
-    if (kind !== "nguoi") setVehicle("giao_hang");
-    else if (vehicle === "giao_hang") setVehicle("xe_may");
+    if (kind === "do_an") setVehicle("giao_hang");
+    else if (kind === "hang") {
+      if (vehicle !== "giao_hang" && vehicle !== "giao_hang_oto") setVehicle("giao_hang");
+    } else if (vehicle === "giao_hang" || vehicle === "giao_hang_oto") setVehicle("xe_may");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kind]);
+
+  // Phụ phí (cồng kềnh / bốc dỡ) chỉ áp cho giao hàng bằng ô tô.
+  useEffect(() => {
+    if (vehicle !== "giao_hang_oto") setExtras([]);
+  }, [vehicle]);
 
   useEffect(() => {
     if (vehicle === "xe_may") setPassengers(1);
@@ -443,13 +528,36 @@ function CustomerTab() {
       setQuote(null);
       return;
     }
+    let cancel = false;
     void db
-      .rpc("quote_ride", { _vehicle: vehicle, plat: pickup.lat, plng: pickup.lng, dlat: dropoff.lat, dlng: dropoff.lng })
-      .then(({ data }: any) => setQuote(data));
-  }, [pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, vehicle]);
+      .rpc("quote_ride", {
+        _vehicle: vehicle,
+        plat: pickup.lat,
+        plng: pickup.lng,
+        dlat: dropoff.lat,
+        dlng: dropoff.lng,
+        _extras: extras,
+      })
+      .then(({ data }: any) => {
+        if (!cancel) setQuote(data);
+      });
+    return () => {
+      cancel = true;
+    };
+  }, [pickup?.lat, pickup?.lng, dropoff?.lat, dropoff?.lng, vehicle, extras.join(",")]);
 
   const active = rides.find((r) => ACTIVE.includes(r.status));
   const history = rides.filter((r) => !ACTIVE.includes(r.status));
+  // Gợi ý tip cho app sau chuyến vừa hoàn thành gần nhất (trong 3 ngày, chưa tip).
+  const tipRide =
+    !active && tippedRideIds
+      ? history.find(
+          (r) =>
+            r.status === "completed" &&
+            !tippedRideIds.has(r.id) &&
+            Date.now() - new Date(r.created_at).getTime() < 3 * 24 * 3600 * 1000,
+        )
+      : undefined;
 
   const book = async () => {
     if (!pickup || !dropoff || booking) return;
@@ -465,6 +573,7 @@ function CustomerTab() {
       dlat: dropoff.lat,
       dlng: dropoff.lng,
       _note: note,
+      _extras: extras,
     });
     setBooking(false);
     if (error) {
@@ -476,20 +585,55 @@ function CustomerTab() {
             ? t("ride.errTooFar")
             : m.includes("TOO_MANY_PASSENGERS")
               ? t("ride.errPassengers")
-              : m,
+              : m.includes("VEHICLE_UNAVAILABLE")
+                ? t("ride.errVehicleOff")
+                : m,
       );
       return;
     }
     toast.success(t("ride.booked"));
     setNote("");
     setDropoff(null);
+    setExtras([]);
     void load();
   };
 
-  const vehicleOptions: Vehicle[] = kind === "nguoi" ? ["xe_may", "oto_4", "oto_7"] : ["giao_hang"];
+  const activePricing = pricing.filter((p) => p.active);
+  const isOn = (v: Vehicle) => !pricing.length || activePricing.some((p) => p.vehicle === v);
+  const vehicleOptions: Vehicle[] = (
+    kind === "nguoi"
+      ? (["xe_may", "oto_4", "oto_7"] as Vehicle[])
+      : kind === "hang"
+        ? (["giao_hang", "giao_hang_oto"] as Vehicle[])
+        : (["giao_hang"] as Vehicle[])
+  ).filter(isOn);
+  const curPricing = pricing.find((p) => p.vehicle === vehicle);
+
+  if (ridesLoading) {
+    return (
+      <div className="rounded-2xl border bg-card p-3 space-y-3 animate-pulse">
+        <div className="grid grid-cols-3 gap-2">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="h-16 rounded-xl bg-muted" />
+          ))}
+        </div>
+        <div className="h-9 rounded-lg bg-muted" />
+        <div className="h-10 rounded-xl bg-muted" />
+        <div className="h-10 rounded-xl bg-muted" />
+        <div className="h-11 rounded-xl bg-muted" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
+      {tipRide && (
+        <TipAppCard
+          source="ride"
+          refId={tipRide.id}
+          onDone={() => setTippedRideIds((prev) => new Set([...(prev ?? []), tipRide.id]))}
+        />
+      )}
       {active ? (
         <div className="space-y-2">
           <div className="text-sm font-bold">{t("ride.yourActive")}</div>
@@ -524,7 +668,7 @@ function CustomerTab() {
               </button>
             ))}
           </div>
-          {kind === "nguoi" && (
+          {vehicleOptions.length > 1 && (
             <div className="flex gap-2">
               {vehicleOptions.map((v) => (
                 <button
@@ -559,6 +703,30 @@ function CustomerTab() {
               </div>
             </div>
           )}
+          {vehicle === "giao_hang_oto" && curPricing && (
+            <div className="space-y-1.5">
+              {(
+                [
+                  ["bulky", curPricing.surcharge_bulky],
+                  ["loading", curPricing.surcharge_loading],
+                ] as const
+              )
+                .filter(([, fee]) => fee > 0)
+                .map(([x, fee]) => (
+                  <label key={x} className="flex items-center gap-2 rounded-xl border px-3 h-10 text-sm">
+                    <input
+                      type="checkbox"
+                      checked={extras.includes(x)}
+                      onChange={(e) =>
+                        setExtras((arr) => (e.target.checked ? [...arr, x] : arr.filter((y) => y !== x)))
+                      }
+                    />
+                    <span className="flex-1">{t(`ride.extra.${x}`)}</span>
+                    <span className="text-xs font-semibold text-muted-foreground">+{money(fee)}</span>
+                  </label>
+                ))}
+            </div>
+          )}
           <PlaceField label={kind === "nguoi" ? t("ride.pickup") : t("ride.pickupGoods")} value={pickup} onChange={setPickup} near={pickup ?? dropoff} allowGps />
           <PlaceField label={kind === "nguoi" ? t("ride.dropoff") : t("ride.dropoffGoods")} value={dropoff} onChange={setDropoff} near={pickup} />
           <Textarea
@@ -568,9 +736,15 @@ function CustomerTab() {
             className="min-h-[60px] text-sm"
           />
           {quote && (
-            <div className="flex items-center justify-between rounded-xl bg-primary/5 px-3 py-2">
-              <span className="text-xs text-muted-foreground">~{Number(quote.distance_km).toFixed(1)} km · {t("ride.cashNote")}</span>
-              <span className="text-lg font-extrabold text-primary">{money(quote.price)}</span>
+            <div className="rounded-xl bg-primary/5 px-3 py-2 space-y-0.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold">{t("ride.refPrice")}</span>
+                <span className="text-lg font-extrabold text-primary">{money(quote.price)}</span>
+              </div>
+              <div className="text-[11px] text-muted-foreground">
+                ~{Number(quote.distance_km).toFixed(1)} km
+                {quote.extra_fee ? ` · ${t("ride.inclExtra", { fee: money(quote.extra_fee) })}` : ""} · {t("ride.dealNote")}
+              </div>
             </div>
           )}
           <button
@@ -581,6 +755,34 @@ function CustomerTab() {
           >
             {booking ? t("common.loading") : t("ride.book")}
           </button>
+          {activePricing.length > 0 && (
+            <div className="text-center">
+              <button type="button" onClick={() => setShowPrices((v) => !v)} className="text-xs text-primary font-semibold">
+                {showPrices ? t("ride.hidePrices") : t("ride.showPrices")}
+              </button>
+              {showPrices && (
+                <div className="mt-2 rounded-xl border divide-y text-left">
+                  {activePricing.map((p) => (
+                    <div key={p.vehicle} className="p-2.5 flex gap-2 items-start">
+                      <VehicleIcon v={p.vehicle} className="w-4 h-4 mt-0.5 text-primary shrink-0" />
+                      <div className="min-w-0">
+                        <div className="text-xs font-bold">{t(`ride.vehicle.${p.vehicle}`)}</div>
+                        <div className="text-[11px] text-muted-foreground">{pricingSummary(p, t)}</div>
+                        {(p.surcharge_bulky > 0 || p.surcharge_loading > 0) && (
+                          <div className="text-[11px] text-muted-foreground">
+                            {p.surcharge_bulky > 0 && `${t("ride.extra.bulky")} +${money(p.surcharge_bulky)}`}
+                            {p.surcharge_bulky > 0 && p.surcharge_loading > 0 && " · "}
+                            {p.surcharge_loading > 0 && `${t("ride.extra.loading")} +${money(p.surcharge_loading)}`}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <div className="p-2.5 text-[11px] text-muted-foreground">{t("ride.priceFootnote")}</div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -611,10 +813,23 @@ function DriverTab() {
   const { t } = useLanguage();
   const [driver, setDriver] = useState<DriverRow | null | undefined>(undefined);
   const [rides, setRides] = useState<Ride[]>([]);
+  const [ridesLoaded, setRidesLoaded] = useState(false);
   const [pos, setPos] = useState<{ lat: number; lng: number } | null>(null);
   const [form, setForm] = useState({ vehicle: "xe_may", plate: "", desc: "", also: true });
   const [vehiclePhoto, setVehiclePhoto] = useState<File | null>(null);
   const [licensePhoto, setLicensePhoto] = useState<File | null>(null);
+  const [driverPhoto, setDriverPhoto] = useState<File | null>(null);
+  const [driverPhotoPreview, setDriverPhotoPreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!driverPhoto) {
+      setDriverPhotoPreview(null);
+      return;
+    }
+    const u = URL.createObjectURL(driverPhoto);
+    setDriverPhotoPreview(u);
+    return () => URL.revokeObjectURL(u);
+  }, [driverPhoto]);
   const [saving, setSaving] = useState(false);
   const heartbeat = useRef<number | null>(null);
 
@@ -632,6 +847,7 @@ function DriverTab() {
       db.from("rides").select("*").eq("driver_id", user.id).order("created_at", { ascending: false }).limit(10),
     ]);
     setRides([...(mine ?? []), ...(open ?? [])] as Ride[]);
+    setRidesLoaded(true);
   };
 
   useEffect(() => {
@@ -693,8 +909,12 @@ function DriverTab() {
 
   const apply = async () => {
     if (!user || form.plate.trim().length < 4) return toast.error(t("ride.errPlate"));
+    // Ảnh chân dung tài xế BẮT BUỘC (khách cần nhận mặt đúng người tới đón). Gửi lại hồ sơ
+    // mà đã có ảnh cũ thì không bắt chọn lại.
+    if (!driverPhoto && !driver?.driver_photo_url) return toast.error(t("ride.errDriverPhoto"));
     setSaving(true);
     try {
+      const dp = driverPhoto ? await uploadImage(driverPhoto, "drivers", user.id) : null;
       const vp = vehiclePhoto ? await uploadImage(vehiclePhoto, "drivers", user.id) : null;
       const lp = licensePhoto ? await uploadImage(licensePhoto, "drivers", user.id) : null;
       const { error } = await db.rpc("apply_driver", {
@@ -704,17 +924,26 @@ function DriverTab() {
         _vehicle_photo: vp,
         _license_photo: lp,
         _also_delivery: form.also,
+        _driver_photo: dp,
       });
       if (error) throw error;
       toast.success(t("ride.applied"));
+      setDriverPhoto(null);
       void loadDriver();
     } catch (e: any) {
-      toast.error(e?.message ?? t("common.error"));
+      const m = String(e?.message ?? "");
+      toast.error(m.includes("DRIVER_PHOTO_REQUIRED") ? t("ride.errDriverPhoto") : m || t("common.error"));
     }
     setSaving(false);
   };
 
-  if (driver === undefined) return <div className="text-center text-sm text-muted-foreground py-8">{t("common.loading")}</div>;
+  if (driver === undefined)
+    return (
+      <div className="space-y-3 animate-pulse">
+        <div className="h-20 rounded-2xl bg-muted" />
+        <div className="h-40 rounded-2xl bg-muted" />
+      </div>
+    );
 
   if (!approved) {
     return (
@@ -748,6 +977,30 @@ function DriverTab() {
               </button>
             ))}
           </div>
+          <div className="flex items-center gap-3 rounded-xl border p-2.5">
+            {driverPhotoPreview ? (
+              <img src={driverPhotoPreview} alt="" className="w-16 h-16 rounded-full object-cover ring-2 ring-primary/40 shrink-0" />
+            ) : driver?.driver_photo_url ? (
+              <StoredImage path={driver.driver_photo_url} alt="" className="w-16 h-16 rounded-full object-cover ring-2 ring-primary/40 shrink-0" />
+            ) : (
+              <div className="w-16 h-16 rounded-full bg-muted grid place-items-center shrink-0 text-muted-foreground">
+                <Camera className="w-6 h-6" />
+              </div>
+            )}
+            <label className="flex-1 min-w-0 text-xs space-y-1 cursor-pointer">
+              <span className="font-semibold">
+                {t("ride.driverPhoto")} <span className="text-destructive">*</span>
+              </span>
+              <span className="block text-[11px] text-muted-foreground">{t("ride.driverPhotoHint")}</span>
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                capture="user"
+                onChange={(e) => setDriverPhoto(e.target.files?.[0] ?? null)}
+                className="block w-full min-w-0 max-w-full text-xs"
+              />
+            </label>
+          </div>
           <Input value={form.plate} onChange={(e) => setForm((f) => ({ ...f, plate: e.target.value.slice(0, 20) }))} placeholder={t("ride.plate")} />
           <Input value={form.desc} onChange={(e) => setForm((f) => ({ ...f, desc: e.target.value.slice(0, 200) }))} placeholder={t("ride.vehicleDesc")} />
           <label className="flex items-center gap-2 text-sm">
@@ -756,11 +1009,11 @@ function DriverTab() {
           </label>
           <label className="block text-xs space-y-1">
             <span className="font-semibold text-muted-foreground">{t("ride.vehiclePhoto")}</span>
-            <input type="file" accept="image/*" onChange={(e) => setVehiclePhoto(e.target.files?.[0] ?? null)} className="block w-full text-xs" />
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setVehiclePhoto(e.target.files?.[0] ?? null)} className="block w-full min-w-0 max-w-full text-xs" />
           </label>
           <label className="block text-xs space-y-1">
             <span className="font-semibold text-muted-foreground">{t("ride.licensePhoto")}</span>
-            <input type="file" accept="image/*" onChange={(e) => setLicensePhoto(e.target.files?.[0] ?? null)} className="block w-full text-xs" />
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => setLicensePhoto(e.target.files?.[0] ?? null)} className="block w-full min-w-0 max-w-full text-xs" />
           </label>
           <button
             type="button"
@@ -792,7 +1045,19 @@ function DriverTab() {
           driver!.is_online ? "bg-gradient-brand text-primary-foreground" : "bg-card border",
         )}
       >
-        <span className={cn("w-3 h-3 rounded-full", driver!.is_online ? "bg-white animate-pulse" : "bg-muted-foreground/40")} />
+        {driver!.driver_photo_url ? (
+          <span className="relative shrink-0">
+            <StoredImage path={driver!.driver_photo_url} alt="" className="w-11 h-11 rounded-full object-cover" />
+            <span
+              className={cn(
+                "absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full ring-2 ring-background",
+                driver!.is_online ? "bg-emerald-400 animate-pulse" : "bg-muted-foreground/60",
+              )}
+            />
+          </span>
+        ) : (
+          <span className={cn("w-3 h-3 rounded-full", driver!.is_online ? "bg-white animate-pulse" : "bg-muted-foreground/40")} />
+        )}
         <div className="flex-1">
           <div className="font-bold">{driver!.is_online ? t("ride.online") : t("ride.offline")}</div>
           <div className={cn("text-xs", driver!.is_online ? "text-primary-foreground/80" : "text-muted-foreground")}>
@@ -815,6 +1080,8 @@ function DriverTab() {
         <div className="text-sm font-bold">{t("ride.openRides", { n: String(open.length) })}</div>
         {!driver!.is_online ? (
           <p className="text-xs text-muted-foreground text-center py-4">{t("ride.turnOnHint")}</p>
+        ) : !ridesLoaded ? (
+          <LoadingState />
         ) : open.length === 0 ? (
           <p className="text-xs text-muted-foreground text-center py-4">{t("ride.noOpen")}</p>
         ) : (
@@ -827,6 +1094,7 @@ function DriverTab() {
 
 export default function Rides() {
   const nav = useNavigate();
+  const goBack = useGoBack();
   const { t } = useLanguage();
   const { user, isApproved } = useAuth();
   const [params, setParams] = useSearchParams();
@@ -852,7 +1120,7 @@ export default function Rides() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center gap-2">
-        <button onClick={() => nav("/quet")} aria-label={t("common.back")}>
+        <button onClick={() => goBack("/quet")} aria-label={t("common.back")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
         <h1 className="text-lg font-extrabold flex-1">{t("ride.title")}</h1>
@@ -879,18 +1147,24 @@ export function RideAdminPanel() {
   const [drivers, setDrivers] = useState<(DriverRow & { profile?: { full_name: string; phone: string | null } })[]>([]);
   const [pricing, setPricing] = useState<Pricing[]>([]);
   const [note, setNote] = useState<Record<string, string>>({});
+  const [tipStats, setTipStats] = useState<{ count: number; total: number; count_30d: number; total_30d: number } | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [viewPhoto, setViewPhoto] = useState<string | null>(null);
 
   const load = async () => {
-    const [{ data: d }, { data: p }] = await Promise.all([
+    const [{ data: d }, { data: p }, { data: ts }] = await Promise.all([
       db.from("ride_drivers").select("*").order("created_at", { ascending: false }).limit(100),
-      db.from("ride_pricing").select("*").order("vehicle"),
+      db.from("ride_pricing").select("*").order("sort_order"),
+      db.rpc("admin_tip_stats"),
     ]);
+    setTipStats(ts ?? null);
     const rows = (d ?? []) as DriverRow[];
     const ids = rows.map((r) => r.user_id);
     const { data: profs } = ids.length ? await supabase.from("profiles").select("id, full_name, phone").in("id", ids) : { data: [] };
     const byId = new Map(((profs ?? []) as any[]).map((x) => [x.id, x]));
     setDrivers(rows.map((r) => ({ ...r, profile: byId.get(r.user_id) })));
     setPricing((p ?? []) as Pricing[]);
+    setLoaded(true);
   };
 
   useEffect(() => {
@@ -905,12 +1179,20 @@ export function RideAdminPanel() {
   };
 
   const savePrice = async (p: Pricing) => {
+    const n = (v: unknown) => Math.max(0, Math.round(Number(v) || 0));
     const { error } = await db.rpc("admin_update_ride_pricing", {
       _vehicle: p.vehicle,
-      _base: Math.round(Number(p.base_fare) || 0),
-      _per_km: Math.round(Number(p.per_km) || 0),
-      _min: Math.round(Number(p.min_fare) || 0),
+      _base: n(p.base_fare),
+      _per_km: n(p.per_km),
+      _min: n(p.min_fare),
       _active: p.active,
+      _included_km: Math.max(0, Number(p.included_km) || 0),
+      _tier2_from: Number(p.tier2_from_km) || null,
+      _tier2_per: n(p.tier2_per_km) || null,
+      _tier3_from: Number(p.tier3_from_km) || null,
+      _tier3_per: n(p.tier3_per_km) || null,
+      _bulky: n(p.surcharge_bulky),
+      _loading: n(p.surcharge_loading),
     });
     if (error) return toast.error(error.message);
     toast.success(t("common.saved"));
@@ -919,10 +1201,45 @@ export function RideAdminPanel() {
   const pending = drivers.filter((d) => d.status === "pending");
   const others = drivers.filter((d) => d.status !== "pending");
 
+  if (!loaded) {
+    return (
+      <div className="space-y-3 animate-pulse">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="h-28 rounded-xl bg-muted" />
+        ))}
+      </div>
+    );
+  }
+
+  const PRICE_FIELDS: { k: keyof Pricing; step?: string }[] = [
+    { k: "base_fare" },
+    { k: "included_km", step: "0.5" },
+    { k: "per_km" },
+    { k: "min_fare" },
+    { k: "tier2_from_km", step: "0.5" },
+    { k: "tier2_per_km" },
+    { k: "tier3_from_km", step: "0.5" },
+    { k: "tier3_per_km" },
+    { k: "surcharge_bulky" },
+    { k: "surcharge_loading" },
+  ];
+
   return (
     <div className="space-y-5">
+      {tipStats && (
+        <section className="rounded-xl border p-3 space-y-1">
+          <h2 className="font-bold text-sm">{t("tip.admin.title")}</h2>
+          <div className="text-xs text-muted-foreground">
+            {t("tip.admin.total", { n: String(tipStats.count), sum: money(tipStats.total) })}
+          </div>
+          <div className="text-xs text-muted-foreground">
+            {t("tip.admin.last30", { n: String(tipStats.count_30d), sum: money(tipStats.total_30d) })}
+          </div>
+        </section>
+      )}
       <section className="space-y-2">
         <h2 className="font-bold text-sm">{t("ride.admin.pricing")}</h2>
+        <p className="text-[11px] text-muted-foreground">{t("ride.admin.pricingHint")}</p>
         {pricing.map((p, i) => (
           <div key={p.vehicle} className="rounded-xl border p-3 space-y-2">
             <div className="flex items-center justify-between">
@@ -938,16 +1255,25 @@ export function RideAdminPanel() {
                 {t("ride.admin.active")}
               </label>
             </div>
-            <div className="grid grid-cols-3 gap-2">
-              {(["base_fare", "per_km", "min_fare"] as const).map((k) => (
-                <label key={k} className="text-[11px] space-y-1">
-                  <span className="text-muted-foreground">{t(`ride.admin.${k}`)}</span>
+            <div className="text-[11px] text-muted-foreground">{pricingSummary(p, t)}</div>
+            <div className="grid grid-cols-2 gap-2">
+              {PRICE_FIELDS.filter(
+                ({ k }) => (k !== "surcharge_bulky" && k !== "surcharge_loading") || p.vehicle === "giao_hang_oto",
+              ).map(({ k, step }) => (
+                <label key={k} className="text-[11px] space-y-1 min-w-0">
+                  <span className="text-muted-foreground block truncate">{t(`ride.admin.${k}`)}</span>
                   <Input
                     type="number"
-                    inputMode="numeric"
-                    value={p[k]}
+                    inputMode="decimal"
+                    step={step}
+                    value={(p[k] as number | null) ?? ""}
+                    placeholder="—"
                     onChange={(e) =>
-                      setPricing((arr) => arr.map((x, j) => (j === i ? { ...x, [k]: Math.max(0, Number(e.target.value) || 0) } : x)))
+                      setPricing((arr) =>
+                        arr.map((x, j) =>
+                          j === i ? { ...x, [k]: e.target.value === "" ? null : Math.max(0, Number(e.target.value) || 0) } : x,
+                        ),
+                      )
                     }
                     className="h-9"
                   />
@@ -977,9 +1303,26 @@ export function RideAdminPanel() {
               {d.vehicle_desc ? ` · ${d.vehicle_desc}` : ""}
               {d.also_delivery ? ` · ${t("ride.alsoDelivery")}` : ""}
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              {d.vehicle_photo_url && <StoredImage path={d.vehicle_photo_url} alt="" className="rounded-lg w-full h-24 object-cover" />}
-              {d.license_photo_url && <StoredImage path={d.license_photo_url} alt="" className="rounded-lg w-full h-24 object-cover" />}
+            <div className="grid grid-cols-3 gap-2">
+              {(
+                [
+                  [d.driver_photo_url, "ride.driverPhoto"],
+                  [d.vehicle_photo_url, "ride.vehiclePhoto"],
+                  [d.license_photo_url, "ride.licensePhoto"],
+                ] as const
+              ).map(([path, label]) =>
+                path ? (
+                  <button key={label} type="button" onClick={() => setViewPhoto(path)} className="space-y-0.5 text-left">
+                    <StoredImage path={path} alt="" className="rounded-lg w-full h-24 object-cover" />
+                    <span className="block text-[10px] text-muted-foreground truncate">{t(label)}</span>
+                  </button>
+                ) : (
+                  <div key={label} className="space-y-0.5">
+                    <div className="rounded-lg w-full h-24 bg-muted grid place-items-center text-[10px] text-muted-foreground">—</div>
+                    <span className="block text-[10px] text-muted-foreground truncate">{t(label)}</span>
+                  </div>
+                ),
+              )}
             </div>
             <Input
               value={note[d.user_id] ?? ""}
@@ -1005,6 +1348,11 @@ export function RideAdminPanel() {
           {others.map((d) => (
             <div key={d.user_id} className="flex items-center gap-2 text-xs rounded-lg border p-2">
               <span className={cn("w-2 h-2 rounded-full", d.is_online ? "bg-emerald-500" : "bg-muted-foreground/40")} />
+              {d.driver_photo_url && (
+                <button type="button" onClick={() => setViewPhoto(d.driver_photo_url)} className="shrink-0">
+                  <StoredImage path={d.driver_photo_url} alt="" className="w-7 h-7 rounded-full object-cover" />
+                </button>
+              )}
               <span className="flex-1 truncate font-semibold">{d.profile?.full_name}</span>
               <span className="text-muted-foreground">{d.plate}</span>
               <span className={d.status === "approved" ? "text-primary" : "text-destructive"}>{t(`ride.driverStatus.${d.status}`)}</span>
@@ -1017,6 +1365,7 @@ export function RideAdminPanel() {
           ))}
         </section>
       )}
+      <ImageViewer path={viewPhoto} open={!!viewPhoto} onClose={() => setViewPhoto(null)} />
     </div>
   );
 }

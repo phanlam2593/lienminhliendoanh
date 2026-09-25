@@ -221,7 +221,8 @@ export default function Register() {
       } else {
         toast.success(t("register.memberSuccessToast", { app: t("app.name") }));
       }
-      nav("/");
+      // replace: Back sau khi đăng ký xong không quay lại form đăng ký nữa
+      nav("/", { replace: true });
     } catch (e: any) {
       const msg = String(e?.message || "");
       // Dịch các lỗi tiếng Anh thường gặp từ Supabase sang thông báo dễ hiểu (theo ngôn ngữ đang chọn)

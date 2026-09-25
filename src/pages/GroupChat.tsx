@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
 import {
   ArrowLeft,
   Bell,
@@ -29,6 +30,7 @@ import { GifPicker } from "@/components/GifPicker";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import { LoadingState } from "@/components/LoadingState";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CHAT NHÓM (#24) — tối đa 50 người/nhóm (chốt ở server trong create_group_chat /
@@ -101,10 +103,12 @@ function PeoplePicker({
   const { t } = useLanguage();
   const [q, setQ] = useState("");
   const [results, setResults] = useState<Person[]>([]);
+  const [searching, setSearching] = useState(true);
 
   useEffect(() => {
     if (!user) return;
     const query = q.trim();
+    setSearching(true);
     const handle = setTimeout(async () => {
       let rows: Person[] = [];
       if (query.length >= 2) {
@@ -122,6 +126,7 @@ function PeoplePicker({
         rows = ((data ?? []) as Person[]).slice(0, 15);
       }
       setResults(rows.filter((p) => !excludeIds.includes(p.id)));
+      setSearching(false);
     }, 250);
     return () => clearTimeout(handle);
   }, [q, user?.id, excludeIds.join(",")]);
@@ -160,7 +165,9 @@ function PeoplePicker({
         />
       </div>
       <div className="max-h-60 overflow-y-auto space-y-0.5">
-        {results.length === 0 ? (
+        {searching && results.length === 0 ? (
+          <LoadingState className="py-4" />
+        ) : results.length === 0 ? (
           <p className="text-center text-xs text-muted-foreground py-4">{t("group.noPeople")}</p>
         ) : (
           results.map((p) => {
@@ -322,6 +329,7 @@ export function GroupListSection({ search }: { search: string }) {
 export default function GroupChat() {
   const { gid } = useParams();
   const nav = useNavigate();
+  const goBack = useGoBack();
   const { user } = useAuth();
   const { t, lang } = useLanguage();
   const [group, setGroup] = useState<{ id: string; name: string; created_by: string } | null>(null);
@@ -381,7 +389,7 @@ export default function GroupChat() {
       if (cancelled) return;
       if (!g) {
         toast.message(t("common.contentGone"));
-        nav("/tin-nhan");
+        nav("/tin-nhan", { replace: true });
         return;
       }
       setGroup(g);
@@ -545,7 +553,7 @@ export default function GroupChat() {
   return (
     <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
-        <button onClick={() => nav("/tin-nhan")} aria-label={t("common.back")}>
+        <button onClick={() => goBack("/tin-nhan")} aria-label={t("common.back")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
         <button onClick={() => setSettingsOpen(true)} className="flex items-center gap-2 flex-1 min-w-0 text-left">
@@ -562,7 +570,7 @@ export default function GroupChat() {
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-2">
         {loading ? (
-          <div className="text-center text-sm text-muted-foreground py-10">{t("common.loading")}</div>
+          <LoadingState />
         ) : (
           msgs.map((m, i) => {
             if (m.type === "system") {

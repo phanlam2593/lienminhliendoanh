@@ -1,4 +1,5 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import type { Message, Profile } from "@/lib/types";
@@ -63,6 +64,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { LoadingState } from "@/components/LoadingState";
 
 interface ConvoSummary {
   partnerId: string;
@@ -488,7 +490,7 @@ export function MessagesInbox() {
     })
     .slice(0, 12);
 
-  if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
+  if (authLoading) return <LoadingState full />;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
@@ -879,6 +881,7 @@ export function MessagesThread() {
   const { user, isApproved, isAdmin, loading: authLoading } = useAuth();
   const { t, lang } = useLanguage();
   const nav = useNavigate();
+  const goBack = useGoBack();
   const onlineUsers = useOnlineUsers();
   const { startCall } = useCall();
   const partnerOnline = onlineUsers.has(id);
@@ -1246,7 +1249,7 @@ export function MessagesThread() {
     };
   }, [user?.id, id]);
 
-  if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
+  if (authLoading) return <LoadingState full />;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved && !isAdmin)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
@@ -1504,7 +1507,7 @@ export function MessagesThread() {
   return (
     <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
       <div className="flex items-center gap-2 px-3 py-2 border-b">
-        <button onClick={() => nav("/tin-nhan")}>
+        <button onClick={() => goBack("/tin-nhan")} aria-label={t("common.back")}>
           <ArrowLeft className="w-5 h-5" />
         </button>
         <button onClick={() => setQuickViewOpen(true)} className="shrink-0 relative">
@@ -1652,7 +1655,7 @@ export function MessagesThread() {
           </DrawerHeader>
           <div className="px-4 pb-6 overflow-y-auto">
             {mediaLoading ? (
-              <div className="py-10 text-center text-sm text-muted-foreground">{t("common.loading")}</div>
+              <LoadingState />
             ) : mediaItems.length === 0 ? (
               <div className="py-10 text-center text-sm text-muted-foreground">{t("messages.noMedia")}</div>
             ) : (
@@ -1689,7 +1692,7 @@ export function MessagesThread() {
         )}
         <div ref={contentRef}>
           {msgsLoading ? (
-            <p className="text-center text-xs text-muted-foreground py-6">{t("common.loading")}</p>
+            <LoadingState />
           ) : (
             (() => {
               // Chỉ tìm 1 lần cho cả danh sách: tin nhắn CUỐI CÙNG của tôi đã được xem —

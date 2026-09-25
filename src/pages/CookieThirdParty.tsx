@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
 import { ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 
@@ -12,18 +12,20 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 export default function CookieThirdParty() {
+  const goBack = useGoBack();
   const { t } = useLanguage();
   const appName = t("app.name");
   return (
     <div className="p-4 space-y-4 pb-10 max-w-lg mx-auto">
       <div className="flex items-center gap-2">
-        <Link
-          to="/ho-so"
+        <button
+          type="button"
+          onClick={() => goBack("/")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
           aria-label={t("common.back")}
         >
           <ArrowLeft className="w-5 h-5" />
-        </Link>
+        </button>
         <h1 className="font-bold text-lg">{t("cookiePage.title")}</h1>
       </div>
       <p className="text-xs text-muted-foreground">{t("legal.lastUpdated")}</p>
@@ -72,12 +74,13 @@ export default function CookieThirdParty() {
       </Section>
 
       <div className="pt-4 flex justify-center">
-        <Link
-          to="/ho-so"
+        <button
+          type="button"
+          onClick={() => goBack("/")}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border text-sm font-semibold text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" /> {t("common.back")}
-        </Link>
+        </button>
       </div>
     </div>
   );

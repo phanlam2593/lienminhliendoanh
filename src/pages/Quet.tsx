@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useBackToClose } from "@/lib/navigation";
 import {
   Heart,
   X,
@@ -389,7 +390,8 @@ export default function Quet() {
   const { user, profile, isApproved } = useAuth();
   const { t } = useLanguage();
   const nav = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const onlineUsers = useOnlineUsers();
 
   const initialTabParam = searchParams.get("tab");
@@ -404,6 +406,64 @@ export default function Quet() {
   const [editingNeed, setEditingNeed] = useState<SwipeNeed | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+  // ── Điều hướng trong Quẹt gắn với URL (25/09) ──
+  // Mỗi màn (lưới 4 mục → quản lý → form, quẹt theo mục, Kết nối) là 1 mục lịch sử riêng →
+  // nút Back Android / nút ← trong app quay lại ĐÚNG màn trước thay vì thoát hẳn khỏi Quẹt.
+  // URL: ?tab=swipe|matches  &cat=<need_type>  &step=manage|form. quetDepth (location.state)
+  // = số màn Quẹt đã đẩy vào lịch sử, để biết nav(-1) có còn nằm trong Quẹt hay không.
+  const quetDepth = (location.state as { quetDepth?: number } | null)?.quetDepth ?? 0;
+  type QuetScreen = { tab: ViewTab; cat?: NeedType | null; step?: CategoryStep };
+  const goScreen = (sc: QuetScreen, replace = false) => {
+    const p = new URLSearchParams();
+    if (sc.tab !== "category") p.set("tab", sc.tab);
+    if (sc.cat) p.set("cat", sc.cat);
+    if (sc.tab === "category" && sc.step && sc.step !== "grid") p.set("step", sc.step);
+    setSearchParams(p, { replace, state: { quetDepth: replace ? quetDepth : quetDepth + 1 } });
+  };
+  const backScreen = (parent: QuetScreen) => {
+    if (quetDepth > 0) nav(-1);
+    else goScreen(parent, true);
+  };
+  const backToRoot = () => {
+    if (quetDepth > 0) nav(-quetDepth);
+    else goScreen({ tab: "category" }, true);
+  };
+
+  // URL → state (chạy cả khi bấm Back/Forward, bấm thông báo lúc đang ở sẵn trang Quẹt, hay
+  // bấm lại tab Quẹt ở thanh dưới).
+  useEffect(() => {
+    const qTab = searchParams.get("tab");
+    const urlTab: ViewTab = VALID_TABS.includes(qTab as ViewTab) ? (qTab as ViewTab) : "category";
+    const qCat = searchParams.get("cat");
+    const urlCat = (["trao_doi", "lam_quen", "tim_viec", "game"] as NeedType[]).includes(qCat as NeedType)
+      ? (qCat as NeedType)
+      : null;
+    const qStep = searchParams.get("step");
+    if (urlTab === "swipe") {
+      if (urlCat) {
+        setActiveCategory(urlCat);
+        setTab("swipe");
+      } else setTab("category");
+    } else setTab(urlTab);
+    if (urlTab !== "category") return;
+    if (qStep === "form" && urlCat) {
+      // Form chỉ mở được bằng thao tác (cần nạp sẵn dữ liệu) — nạp lại trang / Forward tới
+      // mà form chưa mở thì hiện màn quản lý của mục đó.
+      setCategoryStep((cur) => (cur === "form" ? cur : "manage"));
+      setManageCategory(urlCat);
+    } else if ((qStep === "manage" || qStep === "form") && urlCat) {
+      setCategoryStep("manage");
+      setManageCategory(urlCat);
+      setEditingNeed(null);
+      setConfirmingDelete(false);
+    } else {
+      setCategoryStep("grid");
+      setManageCategory(null);
+      setEditingNeed(null);
+      setConfirmingDelete(false);
+    }
+  }, [searchParams]);
 
   const [loading, setLoading] = useState(true);
   const [candidates, setCandidates] = useState<SwipeNeed[]>([]);
@@ -515,6 +575,9 @@ export default function Quet() {
   const [detailFor, setDetailFor] = useState<DetailTarget | null>(null);
   // Ảnh đang xem trong khung "Chi tiết" (bấm vào ảnh nhỏ bên dưới để đổi ảnh chính).
   const [detailPhotoIndex, setDetailPhotoIndex] = useState(0);
+  // Back (Android) khi đang mở màn Kết nối / Chi tiết → chỉ đóng màn đó.
+  useBackToClose(!!matchInfo, () => setMatchInfo(null));
+  useBackToClose(!!detailFor, () => setDetailFor(null));
 
   // Hủy kết nối (unmatch) từ tab Kết nối.
   const [unmatchTarget, setUnmatchTarget] = useState<MatchRow | null>(null);
@@ -1003,17 +1066,14 @@ export default function Quet() {
   const handleCategoryClick = (type: NeedType) => {
     const hasActive = myNeeds.some((n) => n.need_type === type && n.is_active);
     if (hasActive) {
-      setActiveCategory(type);
-      setTab("swipe");
+      goScreen({ tab: "swipe", cat: type });
       return;
     }
-    setManageCategory(type);
-    setCategoryStep("manage");
+    goScreen({ tab: "category", step: "manage", cat: type });
   };
 
   const openManage = (type: NeedType) => {
-    setManageCategory(type);
-    setCategoryStep("manage");
+    goScreen({ tab: "category", step: "manage", cat: type });
   };
 
   const openCreateForm = (type: NeedType) => {
@@ -1021,6 +1081,7 @@ export default function Quet() {
     setEditingNeed(null);
     setConfirmingDelete(false);
     setCategoryStep("form");
+    goScreen({ tab: "category", step: "form", cat: type });
   };
 
   const openEdit = (need: SwipeNeed) => {
@@ -1028,6 +1089,7 @@ export default function Quet() {
     setEditingNeed(need);
     setConfirmingDelete(false);
     setCategoryStep("form");
+    goScreen({ tab: "category", step: "form", cat: need.need_type });
   };
 
   // Game/Trao đổi không còn field Tiêu đề riêng — bắt buộc phải có Mô tả/Giới thiệu thay thế.
@@ -1124,8 +1186,8 @@ export default function Quet() {
     setEditingNeed(null);
     // Round 35: quay về danh sách quản lý (không nhảy thẳng vào quẹt nữa) — vì giờ 1 mục có
     // thể có nhiều nhu cầu, người dùng có thể muốn thêm/sửa tiếp trước khi bắt đầu quẹt.
-    setManageCategory(formType);
-    setCategoryStep("manage");
+    // (thay thế mục lịch sử của form → Back từ màn quản lý không mở lại form đã lưu)
+    goScreen({ tab: "category", step: "manage", cat: formType }, true);
   };
 
   const togglePauseEditing = async () => {
@@ -1141,8 +1203,7 @@ export default function Quet() {
     const type = editingNeed.need_type;
     await db.from("swipe_needs").delete().eq("id", editingNeed.id);
     setEditingNeed(null);
-    setManageCategory(type);
-    setCategoryStep("manage");
+    goScreen({ tab: "category", step: "manage", cat: type }, true);
     void loadMyNeeds();
   };
 
@@ -1301,7 +1362,7 @@ export default function Quet() {
         className={cn("flex items-center justify-between transition", swipeFloating && "absolute top-3 inset-x-3 z-40")}
       >
         <h1
-          onClick={() => setTab("category")}
+          onClick={backToRoot}
           className={cn(
             "text-xl font-extrabold flex items-center gap-1.5 cursor-pointer",
             swipeFloating && "bg-black/35 backdrop-blur-sm rounded-full px-3 py-1.5 text-white",
@@ -1316,7 +1377,9 @@ export default function Quet() {
           )}
         >
           <button
-            onClick={() => setTab("category")}
+            onClick={() => {
+              if (tab === "matches" || tab === "swipe") backToRoot();
+            }}
             className={cn(
               "px-3 py-1.5 rounded-full transition",
               tab !== "matches"
@@ -1331,7 +1394,9 @@ export default function Quet() {
             {t("quet.tabSwipe")}
           </button>
           <button
-            onClick={() => setTab("matches")}
+            onClick={() => {
+              if (tab !== "matches") goScreen({ tab: "matches" });
+            }}
             className={cn(
               "px-3 py-1.5 rounded-full transition",
               tab === "matches"
@@ -1410,10 +1475,7 @@ export default function Quet() {
       {tab === "category" && categoryStep === "manage" && manageCategory && (
         <div className="space-y-3">
           <button
-            onClick={() => {
-              setCategoryStep("grid");
-              setManageCategory(null);
-            }}
+            onClick={() => backScreen({ tab: "category" })}
             className="flex items-center gap-1 text-xs font-semibold text-muted-foreground"
           >
             <ChevronLeft className="w-3.5 h-3.5" /> {t("quet.backToCategories")}
@@ -1482,12 +1544,7 @@ export default function Quet() {
       {tab === "category" && categoryStep === "form" && (
         <div className="space-y-3">
           <button
-            onClick={() => {
-              setCategoryStep("manage");
-              setManageCategory(formType);
-              setEditingNeed(null);
-              setConfirmingDelete(false);
-            }}
+            onClick={() => backScreen({ tab: "category", step: "manage", cat: formType })}
             className="flex items-center gap-1 text-xs font-semibold text-muted-foreground"
           >
             <ChevronLeft className="w-3.5 h-3.5" /> {t("quet.backToCategories")}
@@ -2238,14 +2295,14 @@ export default function Quet() {
 
           <div className="absolute top-14 inset-x-3 z-30 flex items-center gap-2">
             <button
-              onClick={() => setTab("category")}
+              onClick={backToRoot}
               aria-label={t("quet.backToCategories")}
               className="w-8 h-8 rounded-full bg-black/35 backdrop-blur-sm grid place-items-center text-white shrink-0"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
             <button
-              onClick={() => setTab("category")}
+              onClick={backToRoot}
               className="flex items-center gap-1.5 text-xs font-bold text-white bg-black/35 backdrop-blur-sm rounded-full px-2.5 py-1.5 shrink-0"
             >
               <CategoryIcon type={activeCategory} className="w-3.5 h-3.5" />

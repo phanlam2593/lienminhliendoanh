@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
+import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ArrowLeft, Check, RotateCcw, PartyPopper } from "lucide-react";
 import { useAuth } from "@/lib/auth";
@@ -1516,6 +1517,7 @@ const STORAGE_KEY = "lmld:questline:v3";
 const CATEGORIES = [...new Set(QUESTS.map((q) => q.category))];
 
 export default function Questline() {
+  const goBack = useGoBack();
   const { role, user } = useAuth();
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [loaded, setLoaded] = useState(false);
@@ -1597,13 +1599,14 @@ export default function Questline() {
   return (
     <div className="p-4 space-y-4 pb-10">
       <div className="flex items-center gap-2">
-        <Link
-          to="/ho-so"
+        <button
+          type="button"
+          onClick={() => goBack("/ho-so")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
           aria-label="Quay lại"
         >
           <ArrowLeft className="w-5 h-5" />
-        </Link>
+        </button>
         <h1 className="font-bold text-lg flex-1">🎯 Questline kiểm tra app</h1>
         <button
           onClick={reset}

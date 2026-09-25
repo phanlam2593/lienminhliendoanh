@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { TipAppCard } from "@/components/TipAppCard";
+import { useBackToClose } from "@/lib/navigation";
 import { toast } from "sonner";
 import {
   Star,
@@ -41,6 +43,7 @@ import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { FollowListDialog } from "@/components/FollowListDialog";
 import { BusinessGallery } from "@/components/BusinessGallery";
 import { useLanguage } from "@/lib/i18n";
+import { LoadingState, NotFoundState } from "@/components/LoadingState";
 
 interface ReviewMeta extends Review {
   profile?: { full_name: string; avatar_url: string | null } | null;
@@ -66,6 +69,8 @@ export default function BusinessDetail() {
   const [replies, setReplies] = useState<Map<string, ReplyMeta[]>>(new Map());
   const [reportOpen, setReportOpen] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
+  // Back (Android) khi đang mở hộp viết đánh giá → chỉ đóng hộp.
+  useBackToClose(reviewOpen, () => setReviewOpen(false));
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [reviewImage, setReviewImage] = useState<{ file: File; previewUrl: string } | null>(null);
@@ -87,8 +92,12 @@ export default function BusinessDetail() {
   const [avgRating, setAvgRating] = useState(0);
   const REVIEW_PAGE_SIZE = 10;
 
+  // loaded: đã tải xong lần đầu cho DN này → phân biệt "đang tải" với "không tìm thấy".
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    void load();
+    setLoaded(false);
+    setB(null);
+    void load().finally(() => setLoaded(true));
   }, [id]);
 
   useEffect(() => {
@@ -299,7 +308,7 @@ export default function BusinessDetail() {
     nav(`/tin-nhan/${b.owner_id}`);
   };
 
-  if (!b) return <div className="p-10 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
+  if (!b) return loaded ? <NotFoundState fallback="/kham-pha" /> : <LoadingState full />;
 
   const isOwner = !!user && user.id === b.owner_id;
   const canViewOffers = isOwner || isAdmin || !!(profile as any)?.is_member;
@@ -723,6 +732,7 @@ export default function BusinessDetail() {
                   </div>
                   <Countdown expiresAt={claim.expires_at} />
                   <p className="text-xs text-center text-muted-foreground">{t("biz.showCode")}</p>
+                  <TipAppCard source="offer_claim" refId={claim.id} compact />
                 </>
               )}
             </div>
@@ -843,7 +853,7 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
     setBusyId(null);
   };
 
-  if (loading) return <p className="text-sm text-muted-foreground text-center py-6">{t("common.loading")}</p>;
+  if (loading) return <LoadingState />;
   if (rows.length === 0)
     return <p className="text-sm text-muted-foreground text-center py-6">{t("biz.noOneClaimed")}</p>;
 

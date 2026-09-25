@@ -46,6 +46,7 @@ import { useOnlineUsers, useSetMyChannel } from "@/lib/onlineUsers";
 import { useLanguage } from "@/lib/i18n";
 import { extractArea } from "@/lib/location";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { LoadingState } from "@/components/LoadingState";
 
 interface ProfLite {
   id: string;
@@ -563,7 +564,7 @@ export default function Community() {
     };
   }, [user?.id, channelTopic]);
 
-  if (authLoading) return <div className="p-8 text-center text-sm text-muted-foreground">{t("common.loading")}</div>;
+  if (authLoading) return <LoadingState full />;
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
   if (!isApproved)
     return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needApproval")}</div>;
@@ -992,7 +993,7 @@ export default function Community() {
           )}
           <div ref={contentRef}>
             {msgsLoading ? (
-              <p className="text-center text-xs text-muted-foreground py-6">{t("common.loading")}</p>
+              <LoadingState />
             ) : msgs.length === 0 ? (
               <p className="text-center text-xs text-muted-foreground py-6">{t("community.noMessages")}</p>
             ) : (

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useGoBack } from "@/lib/navigation";
 import { ArrowLeft, Mail, Phone, MessageCircle, MoreVertical, Ban, ShieldCheck, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -21,6 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { LoadingState, NotFoundState } from "@/components/LoadingState";
 
 interface PubProfile {
   id: string;
@@ -46,6 +48,7 @@ interface WallPost {
 export default function UserProfile() {
   const { id } = useParams();
   const nav = useNavigate();
+  const goBack = useGoBack();
   const { user } = useAuth();
   const { t } = useLanguage();
   const [p, setP] = useState<PubProfile | null>(null);
@@ -172,7 +175,9 @@ export default function UserProfile() {
     toast.success(t("block.unblocked"));
   };
 
-  if (loading || !p) return <div className="p-6 text-sm text-muted-foreground">{t("common.loading")}</div>;
+  if (loading) return <LoadingState full />;
+  // Không tìm thấy (tài khoản đã xoá / chặn nhau) — trước đây kẹt "Đang tải…" mãi mãi.
+  if (!p) return <NotFoundState fallback="/" />;
 
   const isMe = user?.id === p.id;
 
@@ -180,7 +185,7 @@ export default function UserProfile() {
     <div className="max-w-xl mx-auto pb-6">
       <div className="relative pt-14">
         <button
-          onClick={() => nav(-1)}
+          onClick={() => goBack("/")}
           className="absolute top-3 left-3 w-9 h-9 rounded-full bg-muted hover:bg-accent text-foreground grid place-items-center"
           aria-label={t("common.back")}
         >
@@ -327,7 +332,7 @@ export default function UserProfile() {
 
         <div className="mt-3 space-y-2">
           {wallLoading ? (
-            <p className="text-center text-xs text-muted-foreground py-8">{t("common.loading")}</p>
+            <LoadingState />
           ) : posts.length === 0 ? (
             <p className="text-center text-xs text-muted-foreground py-8">{t("wall.noPosts")}</p>
           ) : (

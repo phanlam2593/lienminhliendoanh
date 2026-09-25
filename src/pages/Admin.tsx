@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Navigate, Link, useSearchParams } from "react-router-dom";
+import { Navigate, Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { invalidateBusinesses, invalidateReviews } from "@/lib/queryClient";
@@ -118,11 +118,23 @@ const VALID_TABS: TabKey[] = [
 
 export default function Admin() {
   const { user, isAdmin, loading } = useAuth();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const nav = useNavigate();
+  // Tab lấy THẲNG từ URL (25/09): trước đây chỉ đọc URL lúc mở trang → đang ở sẵn /admin mà bấm
+  // thông báo (/admin?tab=rides) thì không đổi tab; và Back Android thoát hẳn khỏi Quản trị
+  // thay vì về Tổng quan. Giờ mỗi tab con là 1 mục lịch sử.
   const tabFromUrl = searchParams.get("tab") as TabKey | null;
-  const [activeTab, setActiveTab] = useState<TabKey>(
-    tabFromUrl && VALID_TABS.includes(tabFromUrl) ? tabFromUrl : "overview",
-  );
+  const activeTab: TabKey = tabFromUrl && VALID_TABS.includes(tabFromUrl) ? tabFromUrl : "overview";
+  const setActiveTab = (k: TabKey) => {
+    if (k === activeTab) return;
+    if (k === "overview") {
+      if ((location.state as { adminSub?: boolean } | null)?.adminSub) nav(-1);
+      else setSearchParams({}, { replace: true });
+      return;
+    }
+    setSearchParams({ tab: k }, { state: { adminSub: true } });
+  };
   const [rows, setRows] = useState<MemberRow[]>([]);
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -524,22 +536,25 @@ function OverviewTab({
     businesses: 0,
     pending: 0,
     reports: 0,
+    drivers: 0,
   });
   const [statsLoading, setStatsLoading] = useState(true);
 
   const load = async () => {
-    const [mRes, bRes, pmRes, pbRes, rRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, rRes, dRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("reports").select("*", { count: "exact", head: true }),
+      (supabase as any).from("ride_drivers").select("*", { count: "exact", head: true }).eq("status", "pending"),
     ]);
     setStats({
       members: mRes.count ?? 0,
       businesses: bRes.count ?? 0,
       pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
       reports: rRes.count ?? 0,
+      drivers: dRes.count ?? 0,
     });
     setStatsLoading(false);
   };
@@ -566,6 +581,15 @@ function OverviewTab({
             colorClass="bg-rose-100 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400"
             onClick={() => onNavigate("reports")}
           />
+          {!statsLoading && stats.drivers > 0 && (
+            <StatRow
+              icon={Car}
+              label="Tài xế chờ duyệt"
+              value={stats.drivers}
+              colorClass="bg-amber-100 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
+              onClick={() => onNavigate("rides")}
+            />
+          )}
         </div>
       </div>
 
@@ -618,7 +642,7 @@ function OverviewTab({
           />
           <ToolRow
             icon={Car}
-            label="Đưa đón (tài xế & bảng giá)"
+            label="Đưa đón (tài xế, bảng giá, tip)"
             colorClass="bg-primary/10 text-primary"
             onClick={() => onNavigate("rides")}
           />

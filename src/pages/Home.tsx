@@ -12,6 +12,7 @@ import { StoredImage } from "@/components/StoredImage";
 import { OpenBadge } from "@/components/OpenBadge";
 import { MemberLevelBadge } from "@/components/MemberLevelBadge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { LoadingState } from "@/components/LoadingState";
 
 type StatKind = "members" | "businesses" | "offers";
 
@@ -408,7 +409,7 @@ function StatsModal({
         </div>
         <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2">
           {loading ? (
-            <p className="text-center py-8 text-sm text-muted-foreground">{t("common.loading")}</p>
+            <LoadingState />
           ) : filtered.length === 0 ? (
             <p className="text-center py-8 text-sm text-muted-foreground">{t("common.noResults")}</p>
           ) : kind === "members" ? (

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useGoBack } from "@/lib/navigation";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
@@ -20,6 +21,7 @@ import { Avatar } from "@/components/Avatar";
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { useLanguage } from "@/lib/i18n";
 import type { Report, ReportStatus } from "@/lib/types";
+import { LoadingState } from "@/components/LoadingState";
 
 const REPORT_STATUS_CLS: Record<ReportStatus, string> = {
   pending: "bg-amber-50 text-amber-700 dark:bg-amber-950/30",
@@ -475,6 +477,7 @@ function ReportCard({
 }
 
 export default function MyReports() {
+  const goBack = useGoBack();
   const { user } = useAuth();
   const { t } = useLanguage();
   const [tab, setTab] = useState<"reports" | "business">("reports");
@@ -639,13 +642,14 @@ export default function MyReports() {
   return (
     <div className="p-4 space-y-3">
       <div className="flex items-center gap-2">
-        <Link
-          to="/ho-so"
+        <button
+          type="button"
+          onClick={() => goBack("/ho-so")}
           className="w-9 h-9 rounded-full hover:bg-accent grid place-items-center"
           aria-label={t("common.back")}
         >
           <ArrowLeft className="w-5 h-5" />
-        </Link>
+        </button>
         <h1 className="font-bold text-lg">{t("reports.pageTitle")}</h1>
       </div>
 
@@ -669,7 +673,7 @@ export default function MyReports() {
       </div>
 
       {loading ? (
-        <p className="text-sm text-muted-foreground text-center py-8">{t("common.loading")}</p>
+        <LoadingState />
       ) : tab === "reports" ? (
         reports.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">{t("reports.noSentReports")}</p>
