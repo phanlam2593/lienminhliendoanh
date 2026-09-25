@@ -187,3 +187,93 @@
 .animate-float-up {
   animation: float-up 0.4s ease-out both;
 }
+
+/* ───────────────── Giao diện "hiện đại" (26/09) ───────────────── */
+
+/* Nút Quẹt ở thanh điều hướng: vầng sáng thở nhẹ khi đang ở trang Quẹt. */
+@keyframes nav-glow {
+  0%, 100% { box-shadow: 0 6px 18px -4px hsl(var(--primary) / 0.55); }
+  50% { box-shadow: 0 8px 26px -2px hsl(var(--primary-glow) / 0.75); }
+}
+.nav-glow {
+  animation: nav-glow 2.6s ease-in-out infinite;
+}
+
+/* Nền "aurora": các đốm màu mờ trôi rất chậm phía sau phần đầu trang chủ (CSS thuần, nhẹ). */
+.aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.aurora span {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.aurora span:nth-child(1) {
+  width: 55%; height: 70%; left: -10%; top: -20%;
+  background: #34f5c6;
+  animation: aurora-a 14s ease-in-out infinite alternate;
+}
+.aurora span:nth-child(2) {
+  width: 50%; height: 65%; right: -12%; top: 10%;
+  background: #7c8cff;
+  opacity: 0.45;
+  animation: aurora-b 18s ease-in-out infinite alternate;
+}
+.aurora span:nth-child(3) {
+  width: 45%; height: 55%; left: 30%; bottom: -30%;
+  background: #22d3ee;
+  animation: aurora-c 16s ease-in-out infinite alternate;
+}
+@keyframes aurora-a { to { transform: translate(35%, 25%) scale(1.15); } }
+@keyframes aurora-b { to { transform: translate(-30%, 15%) scale(0.9); } }
+@keyframes aurora-c { to { transform: translate(-25%, -30%) scale(1.2); } }
+/* Lưới chấm mờ phủ lên aurora cho cảm giác "công nghệ". */
+.aurora-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 95%);
+}
+
+/* Khung chờ tải: vệt sáng lướt qua thay vì chỉ nhấp nháy xám. */
+@keyframes shimmer {
+  from { background-position: 150% 0; }
+  to { background-position: -50% 0; }
+}
+.animate-pulse.bg-muted,
+.animate-pulse .bg-muted {
+  background-image: linear-gradient(100deg, transparent 20%, hsl(0 0% 100% / 0.55) 50%, transparent 80%);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: shimmer 1.3s linear infinite;
+}
+.dark .animate-pulse.bg-muted,
+.dark .animate-pulse .bg-muted {
+  background-image: linear-gradient(100deg, transparent 20%, hsl(0 0% 100% / 0.07) 50%, transparent 80%);
+}
+
+/* Thẻ/nút bấm: nảy nhẹ khi chạm. */
+.tap {
+  transition: transform 160ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tap:active {
+  transform: scale(0.96);
+}
+
+/* Người dùng bật "giảm chuyển động" trong máy → tắt hết hiệu ứng chạy liên tục. */
+@media (prefers-reduced-motion: reduce) {
+  .aurora span,
+  .nav-glow,
+  .animate-pulse.bg-muted,
+  .animate-pulse .bg-muted {
+    animation: none !important;
+  }
+}
