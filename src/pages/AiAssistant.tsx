@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { ArrowLeft, BookOpen, Maximize2, Send, Sparkles, Trash2, X, Zap } from "lucide-react";
+import { ArrowLeft, BookOpen, Maximize2, Send, Sparkles, Trash2, Volume2, VolumeX, X, Zap } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
 import { FAQS, FAQ_CATS, matchFaq, type Faq, type FaqCat } from "@/lib/lomiFaq";
 import { BUSINESS_TYPES } from "@/lib/types";
+import { lomiSound, lomiSoundOn, onLomiSoundChange, setLomiSound } from "@/lib/lomiSound";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn, 20 câu/ngày (giờ VN).
@@ -189,6 +190,8 @@ export function AiChat({
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [showFaq, setShowFaq] = useState(false);
+  const [soundOn, setSoundOn] = useState(lomiSoundOn);
+  useEffect(() => onLomiSoundChange(setSoundOn), []);
   const { lang } = useLanguage();
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -236,6 +239,7 @@ export function AiChat({
       { role: "user", content: q, local: true },
       { role: "assistant", content: lang === "en" ? f.a.en : f.a.vi, local: true, ask: asked },
     ]);
+    lomiSound("msg");
   };
 
   const send = async (text: string, forceAi = false) => {
@@ -295,6 +299,7 @@ export function AiChat({
       return;
     }
     const withReply: Msg[] = [...next, { role: "assistant", content: String(data.reply) }];
+    lomiSound("msg");
     setMsgs(withReply);
     saveHistory(user.id, withReply);
     if (quota && typeof data.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
@@ -325,6 +330,17 @@ export function AiChat({
             <div className="text-[11px] text-muted-foreground">{t("ai.left", { n: String(left), limit: String(quota.limit) })}</div>
           )}
         </div>
+        <button
+          onClick={() => {
+            setLomiSound(!soundOn);
+            if (!soundOn) window.setTimeout(() => lomiSound("pop"), 0);
+          }}
+          aria-label={t(soundOn ? "ai.soundOff" : "ai.soundOn")}
+          title={t(soundOn ? "ai.soundOff" : "ai.soundOn")}
+          className="p-2 text-muted-foreground"
+        >
+          {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+        </button>
         {msgs.length > 0 && (
           <button
             onClick={() => setShowFaq((v) => !v)}
@@ -355,7 +371,7 @@ export function AiChat({
         {msgs.length === 0 ? (
           <div className="py-3 space-y-4">
             <div className="text-center space-y-1 px-6">
-              <LomiMascot size={60} className="mx-auto mb-1" />
+              <LomiMascot size={60} className="mx-auto mb-1" track />
               <p className="text-sm font-semibold">{t("ai.welcome")}</p>
               <p className="text-xs text-muted-foreground">{t(nonMember ? "ai.welcomeDescFree" : "ai.welcomeDesc")}</p>
             </div>
@@ -483,9 +499,10 @@ export function AiChat({
 // dạng bảng trượt lên (không rời trang đang xem).
 // • Kéo THẢ Ở ĐÂU CŨNG ĐƯỢC (trong vùng giữa thanh tiêu đề và thanh điều hướng) — không tự dính mép.
 // • Thả SÁT MÉP trái/phải → Lomi nấp nửa người ở mép cho đỡ chiếm chỗ; chạm để ra lại.
-// • Biểu cảm theo thao tác: bị kéo → mắt tròn, miệng "Ô", người nghiêng theo hướng kéo; lắc qua
-//   lại mạnh → chóng mặt (mắt xoắn, sao quay); thả xuống → cười tít; chạm → mắt lấp lánh rồi mở
-//   chat; để yên lâu → ngủ gật "z z"; thỉnh thoảng liếc mắt nhìn quanh.
+// • Biểu cảm (robot, 27/09): bị kéo → mắt tròn xoe, người nghiêng theo hướng kéo; lắc qua lại
+//   mạnh → mắt xoắn ốc; thả xuống → mắt cười ^ ^; chạm → mắt trái tim rồi mở chat; để yên lâu →
+//   ngủ gật "z z"; mắt nhìn theo ngón tay/chuột, rảnh thì tự chớp/nheo/nháy mắt. Có tiếng nhỏ
+//   khi chạm/kéo (tắt được bằng nút loa trong khung chat — xem lib/lomiSound.ts).
 // • Vị trí lưu trên máy (localStorage). Ẩn ở trang có ô nhập phía dưới (chat, cộng đồng) và màn quẹt.
 // ─────────────────────────────────────────────────────────────────────────────
 const BUBBLE_KEY = "lmld:lomi-bubble-v3";
@@ -662,6 +679,7 @@ export function AiBubble() {
       window.clearTimeout(moodTimer.current);
       setMood("wee");
       setSay(null);
+      lomiSound("wee");
     }
     const now = performance.now();
     const dx = e.clientX - s.lastX;
@@ -675,6 +693,7 @@ export function AiBubble() {
     if (!s.dizzy && s.flips.length >= 4) {
       s.dizzy = true;
       setMood("dizzy");
+      lomiSound("dizzy");
       setSay(t("ai.dizzy"));
       try {
         navigator.vibrate?.([15, 40, 15]);
@@ -696,17 +715,20 @@ export function AiBubble() {
       // Chạm: đang nấp mép → ra lại; đang ngủ → thức dậy; bình thường → vui rồi mở chat.
       setSay(null);
       if (pos.tucked) {
+        lomiSound("pop");
         setPos({ ...pos, tucked: false });
         setMoodFor("happy", 900);
         return;
       }
       if (mood === "sleepy") {
         setMoodFor("excited", 900);
+        lomiSound("greet");
         setSay(t("ai.wake"));
         window.setTimeout(() => setSay(null), 1800);
         return;
       }
       setMoodFor("excited", 700);
+      lomiSound("pop");
       setHop(true);
       window.setTimeout(() => {
         setHop(false);
@@ -728,6 +750,7 @@ export function AiBubble() {
       window.setTimeout(() => setSay(null), 2200);
     } else {
       setMoodFor("happy", 1000);
+      lomiSound("happy");
     }
     try {
       navigator.vibrate?.(8);
@@ -772,7 +795,7 @@ export function AiBubble() {
               : `rotate(${peekTilt}deg)`,
           }}
         >
-          <LomiMascot size={SIZE} mood={mood} look={lookNow} />
+          <LomiMascot size={SIZE} mood={mood} look={lookNow} track={!drag && !pos.tucked} />
         </span>
         {say && !pos.tucked && (
           <span
