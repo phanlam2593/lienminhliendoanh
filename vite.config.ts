@@ -35,6 +35,9 @@ export default defineConfig(({ mode }) => ({
         // giờ thấy bản mới. Để HTML luôn đi qua NetworkFirst bên dưới, và offline rơi về
         // /offline.html (đã có trong includeAssets nên vẫn được precache).
         globPatterns: ["**/*.{js,css,ico,png,svg,webp,woff2}"],
+        // 60 sticker (~17MB) KHÔNG precache lúc cài SW (tốn data 4G lần đầu mở app) —
+        // vẫn được cache khi dùng qua runtimeCaching "lmld-images" bên dưới.
+        globIgnores: ["**/stickers/**"],
         importScripts: ["/push-sw.js"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,

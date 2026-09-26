@@ -767,7 +767,7 @@ interface OfferClaimRow {
 
 function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser: (uid: string) => void }) {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [rows, setRows] = useState<OfferClaimRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [myFollowing, setMyFollowing] = useState<Set<string>>(new Set());
@@ -868,7 +868,7 @@ function OfferClaimsList({ offerId, onOpenUser }: { offerId: string; onOpenUser:
               <Avatar path={r.avatar_url} name={r.full_name} size={32} />
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-semibold truncate">{r.full_name}</div>
-                <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at, useLanguage().lang)}</div>
+                <div className="text-[11px] text-muted-foreground">{timeAgo(r.claimed_at, lang)}</div>
               </div>
             </button>
             {!isMe && user && (
@@ -918,7 +918,7 @@ function ReviewItem({
   onDeleteReply: (id: string) => void;
   onReplied: () => void;
 }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [replyOpen, setReplyOpen] = useState(false);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
@@ -976,7 +976,7 @@ function ReviewItem({
           <div className="text-sm font-semibold truncate hover:text-primary">
             {r.profile?.full_name || t("common.anonymous")}
           </div>
-          <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at, useLanguage().lang)}</div>
+          <div className="text-[10px] text-muted-foreground">{timeAgo(r.created_at, lang)}</div>
         </button>
         <div className="flex text-yellow-500">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -1058,7 +1058,7 @@ function ReviewItem({
               <div className="flex items-center gap-1.5">
                 <Avatar path={rep.profile?.avatar_url} name={rep.profile?.full_name} size={20} />
                 <span className="font-semibold truncate">{rep.profile?.full_name || t("bizQuick.owner")}</span>
-                <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at, useLanguage().lang)}</span>
+                <span className="text-[10px] text-muted-foreground">{timeAgo(rep.created_at, lang)}</span>
                 {(isAdmin || rep.user_id === myId) && (
                   <button
                     onClick={() => onDeleteReply(rep.id)}
