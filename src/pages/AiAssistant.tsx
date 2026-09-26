@@ -508,7 +508,7 @@ export function AiChat({
 const BUBBLE_KEY = "lmld:lomi-bubble-v3";
 const GREET_KEY = "lmld:lomi-greet-day";
 type BubblePos = { x: number; y: number; tucked: false | "left" | "right" }; // x, y = tỉ lệ 0..1
-const SIZE = 60;
+const SIZE = 72; // 28/09: to hơn 1 chút theo ý Kir (trước 60)
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 function readPos(): BubblePos {
