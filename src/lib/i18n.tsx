@@ -1082,7 +1082,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s3Title": "3. Danh sách dữ liệu lưu trữ cục bộ",
     "cookiePage.s3Item1": "Ghi nhớ lựa chọn ngôn ngữ hiển thị (lưu trên thiết bị, đến khi bạn xoá)",
     "cookiePage.s3Item2": "Đánh dấu đã xem màn hình chào mừng (chỉ trong phiên truy cập hiện tại)",
-    "cookiePage.s3Item3": "Ghi nhớ kênh Cộng đồng bạn đang xem (chỉ trong phiên truy cập hiện tại)",
+    "cookiePage.s3Item3": "Ghi nhớ kênh Cộng đồng (khu vực + chủ đề) bạn xem lần cuối (lưu trên thiết bị, đến khi bạn chuyển kênh khác hoặc xoá)",
     "cookiePage.s3Item4": "Lưu tạm danh sách khu vực để tăng tốc tải trang (tự xoá sau 5 phút)",
     "cookiePage.s3Item5": "Ghi nhớ đã hỏi quyền thông báo đẩy (lưu trên thiết bị, đến khi bạn xoá)",
     "cookiePage.s3Footer":
@@ -2645,7 +2645,7 @@ const DICT: Record<Lang, Record<string, string>> = {
     "cookiePage.s3Title": "3. List of Local Storage Data",
     "cookiePage.s3Item1": "Remembers your display language choice (stored on device, until you clear it)",
     "cookiePage.s3Item2": "Marks that you've seen the welcome screen (current session only)",
-    "cookiePage.s3Item3": "Remembers the Community channel you're viewing (current session only)",
+    "cookiePage.s3Item3": "Remembers the last Community channel (area + topic) you viewed (stored on device until you switch or clear it)",
     "cookiePage.s3Item4": "Temporarily caches the area list to speed up page loads (auto-clears after 5 minutes)",
     "cookiePage.s3Item5":
       "Remembers that you were asked for notification permission (stored on device, until you clear it)",
