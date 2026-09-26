@@ -80,7 +80,10 @@ const LOCATIONS_CACHE_TTL = 5 * 60 * 1000; // 5 phút
 
 function readSavedChannel(): { location: string | null; topic: Topic } {
   try {
-    const raw = sessionStorage.getItem(CHANNEL_STORAGE_KEY);
+    // 28/09: nhớ kênh LÂU DÀI trên máy (localStorage) — lần sau vào Cộng đồng vẫn mở đúng kênh
+    // (khu vực + chủ đề) lần cuối, tới khi chuyển kênh khác. Đọc thêm sessionStorage để giữ kênh
+    // của bản cũ (trước đây chỉ nhớ trong phiên).
+    const raw = localStorage.getItem(CHANNEL_STORAGE_KEY) ?? sessionStorage.getItem(CHANNEL_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (TOPICS.includes(parsed.topic)) return { location: parsed.location ?? null, topic: parsed.topic };
@@ -402,7 +405,7 @@ export default function Community() {
     void loadPinnedMsgs(loc, topic);
     setMyChannel(loc, topic);
     try {
-      sessionStorage.setItem(CHANNEL_STORAGE_KEY, JSON.stringify({ location: loc, topic }));
+      localStorage.setItem(CHANNEL_STORAGE_KEY, JSON.stringify({ location: loc, topic }));
     } catch {}
   };
 
