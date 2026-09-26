@@ -12,7 +12,8 @@ export function MembershipCard({
   expiresAt?: string | null;
 }) {
   const { t, lang } = useLanguage();
-  const { current, next, pct } = getMemberTierProgress(points);
+  // 28/09: bỏ thanh tiến độ lên hạng tiếp theo (theo ý Kir) — chỉ hiện hạng hiện tại.
+  const { current } = getMemberTierProgress(points);
   const price = getMembershipPrice(points);
 
   return (
@@ -35,19 +36,6 @@ export function MembershipCard({
             {current ? `${current.emoji} ${t(`tier.${current.type}`)}` : t("membership.noTierYet")}
           </span>
         </div>
-        {next && (
-          <div className="space-y-1 pt-1">
-            <div className="flex items-center justify-between text-[11px] opacity-75">
-              <span>
-                {t("membership.toward")} {next.emoji} {t(`tier.${next.type}`)}
-              </span>
-              <span>{pct}%</span>
-            </div>
-            <div className="h-1.5 rounded-full bg-white/20 overflow-hidden">
-              <div className="h-full bg-white rounded-full" style={{ width: `${pct}%` }} />
-            </div>
-          </div>
-        )}
       </div>
 
       <div className="flex items-end gap-2">

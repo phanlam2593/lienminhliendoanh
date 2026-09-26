@@ -20,8 +20,8 @@ export function MemberLevelBadge({
       </span>
     );
   }
-  const { current, pct } = getMemberTierProgress(points);
-  const barWidth = size === "sm" ? "w-8" : "w-12";
+  // 28/09 theo ý Kir: bỏ thanh tiến độ level ở mọi nơi — chỉ còn nhãn hạng.
+  const { current } = getMemberTierProgress(points);
   return (
     <span className={`inline-flex items-center gap-1 shrink-0 ${size === "sm" ? "text-[10px]" : "text-xs"}`}>
       {current ? (
@@ -31,9 +31,6 @@ export function MemberLevelBadge({
       ) : (
         <span className="text-muted-foreground">{t("level.newMember")}</span>
       )}
-      <span className={`h-1.5 ${barWidth} rounded-full bg-muted overflow-hidden shrink-0`}>
-        <span className="h-full block rounded-full bg-primary" style={{ width: `${pct}%` }} />
-      </span>
     </span>
   );
 }
