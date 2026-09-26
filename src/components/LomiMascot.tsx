@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 // LINH VẬT "LOMI" — bản robot vector (27/09 theo ý Kir, chọn kiểu B "Neon tương lai").
 // Thân tối không viền, mặt là tấm kính đen, 2 mắt LED xanh ngọc phát sáng (to, không miệng).
 // Ăng-ten có mầm lá phát sáng ở đầu (giữ "mầm lá" nhận diện của Lomi).
+// Màu thân lấy từ biến CSS --lomi-b1/--lomi-b2/--lomi-hl (index.css) — giao diện tối dùng tông sáng hơn
+// để Lomi không chìm vào nền (28/09 theo ý Kir).
 // Cả gương mặt nằm ở đôi mắt — biểu cảm kiểu robot vector:
 //   idle    — mắt viên thuốc, tự chớp ngẫu nhiên, thỉnh thoảng chớp đôi / nheo nghi ngờ /
 //             nháy 1 mắt / cười tít / mở to tò mò; mắt nhìn theo ngón tay/chuột (track)
@@ -228,8 +230,8 @@ export function LomiMascot({
     >
       <defs>
         <linearGradient id={`lb${uid}`} x1="0.2" y1="0" x2="0.6" y2="1">
-          <stop offset="0%" stopColor="#24405e" />
-          <stop offset="100%" stopColor="#0a1220" />
+          <stop offset="0%" style={{ stopColor: "var(--lomi-b1, #24405e)" }} />
+          <stop offset="100%" style={{ stopColor: "var(--lomi-b2, #0a1220)" }} />
         </linearGradient>
         <linearGradient id={`lv${uid}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#02060c" />
@@ -253,7 +255,7 @@ export function LomiMascot({
       </g>
       {/* thân — không viền */}
       <path d="M50,18 C74,18 92,36 92,62 C92,86 74,98 50,98 C26,98 8,86 8,62 C8,36 26,18 50,18Z" fill={`url(#lb${uid})`} />
-      <ellipse cx="32" cy="32" rx="11" ry="5" fill="#fff" opacity=".1" transform="rotate(-28 32 32)" />
+      <ellipse cx="32" cy="32" rx="11" ry="5" fill="#fff" style={{ opacity: "var(--lomi-hl, 0.1)" }} transform="rotate(-28 32 32)" />
       {/* mặt kính */}
       <rect x="14" y="38" width="72" height="46" rx="23" fill={`url(#lv${uid})`} />
       {eye(L, "l")}
