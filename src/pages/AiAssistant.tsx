@@ -313,10 +313,10 @@ export function AiChat({
         quick: BUSINESS_TYPES.map(bizLabel),
       },
     ]);
-  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic) =>
+  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic, more = false) =>
     localReply(asked, {
       role: "assistant",
-      content: bizAnswer(ctx, topic),
+      content: bizAnswer(ctx, topic, more),
       local: true,
       biz: { type: ctx.type, noun: ctx.noun, topic },
       quick: followUpChips(topic),
@@ -368,8 +368,9 @@ export function AiChat({
           });
         const kind = detectBizKind(q);
         const ctx: BizCtx = { ...b, ...(kind.type ? kind : {}) };
-        const tp = topicFromChip(q) ?? (isMoreIdeas(q) ? (b.topic ?? "offer") : detectBizTopic(q));
-        if (tp) return bizReply(q, ctx, tp);
+        const more = !topicFromChip(q) && isMoreIdeas(q);
+        const tp = topicFromChip(q) ?? (more ? (b.topic ?? "offer") : detectBizTopic(q));
+        if (tp) return bizReply(q, ctx, tp, more);
         if (lastA.bizTopicPick || kind.type) return bizReply(q, ctx, "offer");
       }
 

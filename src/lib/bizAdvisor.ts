@@ -421,10 +421,25 @@ function writePosts(type: BusinessType | undefined, n: string): string {
   return `${body}\n\n🎯 Ưu đãi Lomi chọn cho mẫu: “${cap(offer.t)}” — ${offer.d} Bạn thay bằng ưu đãi thật của mình nha.\n\n💡 Mẹo: kèm 1–3 ảnh thật, sáng và rõ; ghi rõ thời hạn ưu đãi. Muốn đăng ưu đãi lên app: Hồ sơ → Doanh nghiệp → Ưu đãi (/ho-so?view=business).`;
 }
 
-/** Soạn câu trả lời tư vấn cho 1 chủ đề. */
-export function bizAnswer(ctx: BizCtx, topic: BizTopic): string {
+const MORE_INTRO = [
+  "Thêm vài ý nữa cho {n} nè 💡",
+  "Còn mấy cách này nữa, bạn xem thử nha:",
+  "Lomi nghĩ thêm được mấy ý nè:",
+  "Okie, thêm ý mới cho bạn đây 😊",
+];
+// Nhớ câu mở/kết vừa dùng để lần sau không nói lại y chang.
+let lastIntro = "";
+let lastClose = "";
+const pickNot = (arr: string[], prev: string) => {
+  const rest = arr.filter((x) => x !== prev);
+  return pick(rest.length ? rest : arr);
+};
+
+/** Soạn câu trả lời tư vấn cho 1 chủ đề. more = người dùng bấm/gõ "thêm ý khác". */
+export function bizAnswer(ctx: BizCtx, topic: BizTopic, more = false): string {
   const n = nounFor(ctx.type, ctx.noun);
-  const out: string[] = [fill(pick(INTRO[topic]), n)];
+  lastIntro = pickNot(more && topic !== "post" ? MORE_INTRO : INTRO[topic], lastIntro);
+  const out: string[] = [fill(lastIntro, n)];
   if (topic === "post") {
     out.push(writePosts(ctx.type, n));
     return out.join("\n\n");
@@ -446,7 +461,8 @@ export function bizAnswer(ctx: BizCtx, topic: BizTopic): string {
         ]),
       );
   }
-  out.push(fill(pick(CLOSE), n));
+  lastClose = pickNot(CLOSE, lastClose);
+  out.push(fill(lastClose, n));
   return out.join("\n\n");
 }
 
