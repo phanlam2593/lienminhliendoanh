@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { lomiSound } from "@/lib/lomiSound";
+import { supabase } from "@/integrations/supabase/client";
 import { TAROT_SPREADS, tarotCard, type TarotReading } from "@/lib/tarot";
 
-// Giao diện bói Tarot trong khung chat Lomi (30/09) — xem lib/tarot.ts. Lá bài tự vẽ bằng CSS +
-// emoji (không dùng ảnh bộ bài có bản quyền, không tốn dung lượng).
+// Giao diện bói Tarot trong khung chat Lomi (30/09) — xem lib/tarot.ts.
+// Hình lá bài (30/09 r3): bộ Rider–Waite–Smith bản gốc 1909 (Pamela Colman Smith, mất 1951 → đã thuộc
+// phạm vi công cộng), lấy từ Wikimedia Commons, thu nhỏ 240px WebP, lưu ở Storage bucket công khai
+// "tarot" (0.webp … 77.webp, cùng id với lib/tarot.ts). Ảnh lỗi/offline → hiện lá vẽ bằng emoji như cũ.
+const cardImg = (id: number) => supabase.storage.from("tarot").getPublicUrl(`${id}.webp`).data.publicUrl;
 
 /** Hàng lá bài. animate = lật lần lượt từng lá (chỉ với lượt vừa rút, lịch sử cũ hiện ngửa sẵn). */
 export function TarotCards({
@@ -35,6 +39,15 @@ export function TarotCards({
   }, []);
   // Nhãn vị trí: lượt bói mới lưu sẵn reading.pos; lịch sử cũ (trước 30/09 r2) tra theo spread.
   const pos = reading.pos ?? TAROT_SPREADS.find((s) => s.id === reading.spread)?.pos ?? [];
+  const [broken, setBroken] = useState<Record<number, boolean>>({});
+  // Tải trước ảnh ngay khi rút để lúc lật là hiện liền.
+  useEffect(() => {
+    reading.cards.forEach((d) => {
+      const im = new Image();
+      im.src = cardImg(d.id);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const done = shown >= reading.cards.length;
   useEffect(() => {
@@ -50,8 +63,8 @@ export function TarotCards({
         const up = i < shown;
         const major = c.suit === "major";
         return (
-          <div key={i} className="flex flex-col items-center gap-1 w-[76px]">
-            <div className="w-[76px] h-[118px] [perspective:600px]">
+          <div key={i} className="flex flex-col items-center gap-1 w-[80px]">
+            <div className="w-[80px] h-[134px] [perspective:600px]">
               <div
                 className="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d]"
                 style={{ transform: up ? "rotateY(180deg)" : "rotateY(0deg)" }}
@@ -68,6 +81,16 @@ export function TarotCards({
                     major ? "border-amber-400 bg-gradient-to-b from-amber-50 to-white dark:from-amber-950/60 dark:to-card" : "border-primary/60 bg-card",
                   )}
                 >
+                  {!broken[d.id] ? (
+                    <img
+                      src={cardImg(d.id)}
+                      alt={en ? c.name.en : c.name.vi}
+                      draggable={false}
+                      onError={() => setBroken((b) => ({ ...b, [d.id]: true }))}
+                      className="w-full h-full object-cover select-none"
+                      style={{ transform: d.rev ? "rotate(180deg)" : undefined }}
+                    />
+                  ) : (
                   <div
                     className="w-full h-full flex flex-col items-center justify-between py-1.5 px-1"
                     style={{ transform: d.rev ? "rotate(180deg)" : undefined }}
@@ -80,11 +103,13 @@ export function TarotCards({
                       {en ? c.name.en : c.name.vi}
                     </span>
                   </div>
+                  )}
                 </div>
               </div>
             </div>
             <div className="text-[10px] text-muted-foreground text-center leading-tight min-h-[24px]">
               {reading.cards.length > 1 && pos[i] && <div className="font-semibold line-clamp-2">{en ? pos[i].en : pos[i].vi}</div>}
+              {up && <div className="text-foreground/80 line-clamp-2">{en ? c.name.en : c.name.vi}</div>}
               {up && d.rev && <div className="text-rose-500">{en ? "Reversed" : "Ngược"}</div>}
             </div>
           </div>
