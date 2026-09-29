@@ -1,62 +1,10 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { lomiSound } from "@/lib/lomiSound";
-import {
-  TAROT_SPREADS,
-  TAROT_TOPICS,
-  tarotCard,
-  type TarotReading,
-  type TarotSpread,
-  type TarotTopic,
-} from "@/lib/tarot";
+import { TAROT_SPREADS, tarotCard, type TarotReading } from "@/lib/tarot";
 
 // Giao diện bói Tarot trong khung chat Lomi (30/09) — xem lib/tarot.ts. Lá bài tự vẽ bằng CSS +
 // emoji (không dùng ảnh bộ bài có bản quyền, không tốn dung lượng).
-
-/** Chọn chủ đề + kiểu trải bài. */
-export function TarotPicker({
-  lang,
-  initialTopic,
-  onPick,
-}: {
-  lang: "vi" | "en";
-  initialTopic?: TarotTopic;
-  onPick: (topic: TarotTopic, spread: TarotSpread) => void;
-}) {
-  const [topic, setTopic] = useState<TarotTopic>(initialTopic ?? "general");
-  const en = lang === "en";
-  return (
-    <div className="mt-2 w-full max-w-[85%] rounded-2xl border bg-card/80 p-3 space-y-2.5">
-      <div className="text-[11px] font-semibold text-muted-foreground">{en ? "1. Pick a topic" : "1. Chọn chủ đề"}</div>
-      <div className="flex flex-wrap gap-1.5">
-        {TAROT_TOPICS.map((tp) => (
-          <button
-            key={tp.id}
-            onClick={() => setTopic(tp.id)}
-            className={cn(
-              "text-[12px] px-2.5 py-1 rounded-full border transition active:scale-95",
-              tp.id === topic ? "bg-primary text-primary-foreground border-primary" : "bg-background",
-            )}
-          >
-            {tp.emoji} {en ? tp.en : tp.vi}
-          </button>
-        ))}
-      </div>
-      <div className="text-[11px] font-semibold text-muted-foreground">{en ? "2. Draw" : "2. Rút bài"}</div>
-      <div className="flex flex-col gap-1.5">
-        {TAROT_SPREADS.map((sp) => (
-          <button
-            key={sp.id}
-            onClick={() => onPick(topic, sp.id)}
-            className="w-full text-left text-[13px] font-semibold px-3 py-2 rounded-xl bg-gradient-brand text-white active:scale-[0.98] transition"
-          >
-            🔮 {en ? sp.en : sp.vi}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 /** Hàng lá bài. animate = lật lần lượt từng lá (chỉ với lượt vừa rút, lịch sử cũ hiện ngửa sẵn). */
 export function TarotCards({
@@ -85,7 +33,8 @@ export function TarotCards({
     return () => timers.forEach((t) => window.clearTimeout(t));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const sp = TAROT_SPREADS.find((s) => s.id === reading.spread);
+  // Nhãn vị trí: lượt bói mới lưu sẵn reading.pos; lịch sử cũ (trước 30/09 r2) tra theo spread.
+  const pos = reading.pos ?? TAROT_SPREADS.find((s) => s.id === reading.spread)?.pos ?? [];
 
   const done = shown >= reading.cards.length;
   useEffect(() => {
@@ -135,7 +84,7 @@ export function TarotCards({
               </div>
             </div>
             <div className="text-[10px] text-muted-foreground text-center leading-tight min-h-[24px]">
-              {reading.cards.length > 1 && sp && <div className="font-semibold">{en ? sp.pos[i].en : sp.pos[i].vi}</div>}
+              {reading.cards.length > 1 && pos[i] && <div className="font-semibold line-clamp-2">{en ? pos[i].en : pos[i].vi}</div>}
               {up && d.rev && <div className="text-rose-500">{en ? "Reversed" : "Ngược"}</div>}
             </div>
           </div>

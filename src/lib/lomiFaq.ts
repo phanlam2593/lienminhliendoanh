@@ -49,8 +49,8 @@ export const FAQS: Faq[] = [
     cat: "start",
     q: { vi: "Membership là gì, có mất phí không?", en: "What is Membership? Is it paid?" },
     a: {
-      vi: "Membership mở khoá các quyền lợi thành viên:\n• Nhận ưu đãi từ doanh nghiệp\n• Quẹt không giới hạn (tài khoản thường 10 lượt/ngày)\n• Hỏi Lomi AI 20 câu/ngày\nTài khoản mới được duyệt sẽ có 3 tháng Membership miễn phí. Xem hạn Membership trong Hồ sơ → Thông tin cá nhân (/ho-so?view=personal).",
-      en: "Membership unlocks member perks:\n• Claim business offers\n• Unlimited swipes (regular accounts: 10/day)\n• Ask Lomi AI 20 questions/day\nNewly approved accounts get 3 months of Membership free. Check your expiry in Profile → Personal info (/ho-so?view=personal).",
+      vi: "Membership mở khoá các quyền lợi thành viên:\n• Nhận ưu đãi từ doanh nghiệp\n• Quẹt không giới hạn (tài khoản thường 10 lượt/ngày)\n• Hỏi Lomi AI thoải mái\nTài khoản mới được duyệt sẽ có 3 tháng Membership miễn phí. Xem hạn Membership trong Hồ sơ → Thông tin cá nhân (/ho-so?view=personal).",
+      en: "Membership unlocks member perks:\n• Claim business offers\n• Unlimited swipes (regular accounts: 10/day)\n• Ask Lomi AI freely\nNewly approved accounts get 3 months of Membership free. Check your expiry in Profile → Personal info (/ho-so?view=personal).",
     },
     kw: ["membership", "membership la gi", "thanh vien", "hoi vien", "mat phi", "tra phi", "membership het han", "het han membership", "gia han", "mien phi 3 thang", "phi thanh vien", "dang ky membership"],
   },
@@ -413,8 +413,8 @@ export const FAQS: Faq[] = [
     cat: "account",
     q: { vi: "Lomi là ai, hỏi Lomi được gì?", en: "Who is Lomi?" },
     a: {
-      vi: "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱\n• Câu hỏi thường gặp: trả lời ngay, miễn phí cho mọi người\n• Câu khác (viết nội dung ưu đãi, bài đăng, mẹo kinh doanh…): Lomi AI trả lời, dành cho Membership, 20 câu/ngày\n• Bói Tarot vui: gõ “bói tarot” hoặc bấm nút 🔮 — miễn phí, bói thoải mái\nKéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng nha 😄",
-      en: "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱\n• FAQs: instant and free for everyone\n• Anything else (writing offers, posts, tips…): Lomi AI for Membership, 20/day\n• Fun tarot readings: type “tarot” or tap 🔮 — free & unlimited\nDrag me anywhere; drop me at the edge to hide 😄",
+      vi: "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱\n• Hỏi cách dùng app: trả lời ngay, miễn phí cho mọi người\n• Viết nội dung ưu đãi, bài đăng, mẹo kinh doanh…: Lomi AI trả lời, dành cho Membership\n• Bói Tarot vui: cứ gõ câu hỏi, vd “bói tarot xem khi nào mình có việc mới” — miễn phí, bói thoải mái\nKéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng nha 😄",
+      en: "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱\n• How-to questions: instant and free for everyone\n• Writing offers, posts, tips…: Lomi AI for Membership\n• Fun tarot: just ask, e.g. “tarot: when will I get a new job?” — free & unlimited\nDrag me anywhere; drop me at the edge to hide 😄",
     },
     kw: ["lomi la ai", "ban la ai", "tro ly", "hoi duoc gi", "who are you"],
   },

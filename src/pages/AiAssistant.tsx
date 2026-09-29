@@ -1,29 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { ArrowLeft, BookOpen, Maximize2, Send, Sparkles, Trash2, Volume2, VolumeX, X, Zap } from "lucide-react";
+import { ArrowLeft, Maximize2, Send, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
-import { FAQS, FAQ_CATS, matchFaq, type Faq, type FaqCat } from "@/lib/lomiFaq";
+import { matchFaq, normalizeVi, type Faq } from "@/lib/lomiFaq";
 import { BUSINESS_TYPES } from "@/lib/types";
 import { lomiSound, lomiSoundOn, onLomiSoundChange, setLomiSound } from "@/lib/lomiSound";
 import {
-  drawReading,
-  matchTarot,
+  TAROT_ASK,
+  TAROT_CANCEL,
+  TAROT_SUGGEST,
+  detectTarot,
+  drawClarifier,
+  drawForQuestion,
+  isDailyAsk,
+  isTarotCancel,
+  isTarotMore,
+  isTarotRedo,
   readingAiPrompt,
   readingText,
-  tarotRequestLabel,
   type TarotReading,
-  type TarotSpread,
-  type TarotTopic,
 } from "@/lib/tarot";
-import { TarotCards, TarotPicker } from "@/components/LomiTarot";
+import { TarotCards } from "@/components/LomiTarot";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn, 20 câu/ngày (giờ VN).
+// TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn. 30/09: bỏ giới hạn 20 câu/ngày theo ý Kir
+// (server chỉ còn chốt chống spam 200 câu/ngày, không hiện trên giao diện).
 // Server: edge function "ai-assistant" + RPC consume_ai_chat_quota / get_my_ai_quota.
 // Lịch sử chat chỉ lưu trên máy (localStorage, 30 tin gần nhất) — không lưu DB.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -37,7 +43,13 @@ type Msg = {
   ask?: string;
   note?: "member" | "limit";
   tarot?: TarotReading; // bói Tarot (30/09) — chạy trên máy, không tính lượt
-  tarotPick?: { topic?: TarotTopic }; // đang hỏi chọn chủ đề / kiểu trải bài
+  // Hội thoại nhiều bước (30/09 r2) — cờ đặt trên tin Lomi CUỐI CÙNG, tin kế tiếp của người dùng
+  // sẽ được hiểu theo ngữ cảnh đó:
+  tarotAwait?: boolean; // Lomi vừa hỏi "bạn muốn hỏi bài điều gì?"
+  bizPick?: boolean; // Lomi vừa hỏi loại hình doanh nghiệp (tư vấn ưu đãi)
+  bizAwait?: string; // đã biết loại hình, chờ người dùng kể chi tiết → gửi Lomi AI
+  quick?: string[]; // gợi ý trả lời nhanh (chip nhỏ dưới tin Lomi cuối)
+  aiContent?: string; // nội dung THẬT gửi cho AI (khác chữ hiển thị), vd kèm loại hình DN
 };
 type Quota = { member: boolean; limit: number; used: number };
 
@@ -89,86 +101,37 @@ export function openLomi(nav: (to: string) => void) {
   if (!ev.detail.handled) nav("/tro-ly-ai");
 }
 
-/** Bộ duyệt câu hỏi thường gặp: chip chủ đề + danh sách câu hỏi. */
-function FaqBrowser({
-  onPick,
-  onClose,
-  onTarot,
-}: {
-  onPick: (f: Faq) => void;
-  onClose?: () => void;
-  onTarot?: () => void;
-}) {
-  const { t, lang } = useLanguage();
-  const [cat, setCat] = useState<FaqCat>("start");
-  const [more, setMore] = useState(false);
-  const all = FAQS.filter((f) => f.cat === cat);
-  // Gọn: mỗi chủ đề hiện 3 câu đầu, bấm "Xem thêm" mới bung hết.
-  const list = more ? all : all.slice(0, 3);
+/** Chip trả lời nhanh dưới tin nhắn của Lomi — bấm = gửi đúng chữ đó như tự gõ. */
+function QuickReplies({ items, onPick }: { items: string[]; onPick: (v: string) => void }) {
   return (
-    <div className="rounded-2xl border bg-card/80 overflow-hidden">
-      <div className="flex items-center gap-2 px-3 pt-3">
-        <BookOpen className="w-4 h-4 text-primary" />
-        <div className="flex-1 text-xs font-bold">{t("ai.faqTitle")}</div>
-        <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 rounded-full px-2 py-0.5">
-          {t("ai.faqFree")}
-        </span>
-        {onClose && (
-          <button onClick={onClose} aria-label={t("common.close")} className="p-1 -mr-1 text-muted-foreground">
-            <X className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-      <div className="flex gap-1.5 overflow-x-auto px-3 py-2 scrollbar-hide">
-        {onTarot && (
-          <button
-            onClick={onTarot}
-            className="shrink-0 text-[11px] px-2.5 py-1 rounded-full border border-transparent bg-gradient-brand text-white font-semibold transition active:scale-95"
-          >
-            🔮 {lang === "en" ? "Tarot" : "Bói Tarot"}
-          </button>
-        )}
-        {FAQ_CATS.map((c) => (
-          <button
-            key={c.id}
-            onClick={() => {
-              setCat(c.id);
-              setMore(false);
-            }}
-            className={cn(
-              "shrink-0 text-[11px] px-2.5 py-1 rounded-full border transition active:scale-95",
-              c.id === cat ? "bg-primary text-primary-foreground border-primary" : "bg-background",
-            )}
-          >
-            {c.emoji} {lang === "en" ? c.en : c.vi}
-          </button>
-        ))}
-      </div>
-      <div className="divide-y border-t">
-        {list.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => onPick(f)}
-            className="w-full text-left text-[13px] px-3 py-2 active:bg-accent/60 transition-colors flex items-center gap-2"
-          >
-            <span className="flex-1">{lang === "en" ? f.q.en : f.q.vi}</span>
-            <span className="text-muted-foreground">›</span>
-          </button>
-        ))}
-      </div>
-      <div className="flex items-center justify-between border-t px-3 py-2 text-[11px] font-semibold">
-        {all.length > 3 ? (
-          <button onClick={() => setMore((v) => !v)} className="text-primary">
-            {more ? t("ai.faqLess") : t("ai.faqMore", { n: String(all.length - 3) })}
-          </button>
-        ) : (
-          <span />
-        )}
-        <Link to="/huong-dan" className="text-muted-foreground">
-          {t("ai.faqFullGuide")}
-        </Link>
-      </div>
+    <div className="flex flex-wrap gap-1.5 mt-1.5 max-w-[85%]">
+      {items.map((q) => (
+        <button
+          key={q}
+          onClick={() => onPick(q)}
+          className="text-[12px] px-2.5 py-1 rounded-full border border-primary/40 text-primary bg-background active:scale-95 transition"
+        >
+          {q}
+        </button>
+      ))}
     </div>
+  );
+}
+
+/** Thẻ gợi ý lớn trên màn chào của Lomi (Bói Tarot, Tư vấn ưu đãi). */
+function StarterCard({ emoji, title, desc, onClick }: { emoji: string; title: string; desc: string; onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full flex items-center gap-3 rounded-2xl bg-gradient-brand text-white px-4 py-3 text-left shadow-sm active:scale-[0.98] transition"
+    >
+      <span className="text-2xl">{emoji}</span>
+      <span className="flex-1 min-w-0">
+        <span className="block text-sm font-bold">{title}</span>
+        <span className="block text-[11px] opacity-90">{desc}</span>
+      </span>
+      <span>›</span>
+    </button>
   );
 }
 
@@ -218,7 +181,6 @@ export function AiChat({
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const [showFaq, setShowFaq] = useState(false);
   const [soundOn, setSoundOn] = useState(lomiSoundOn);
   useEffect(() => onLomiSoundChange(setSoundOn), []);
   const { lang } = useLanguage();
@@ -244,11 +206,13 @@ export function AiChat({
     if (!el) return;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
+    // Chỉ hiện thanh cuộn khi vượt max-h-32 (128px) — trước đây luôn lòi ▲▼ dù mới 1 dòng.
+    el.style.overflowY = el.scrollHeight > 128 ? "auto" : "hidden";
   }, [input]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [msgs.length, busy, showFaq]);
+  }, [msgs.length, busy]);
 
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
 
@@ -261,10 +225,10 @@ export function AiChat({
     return next;
   };
 
-  // Trả lời ngay từ danh sách soạn sẵn — không gọi AI, không tính lượt.
+  // Trả lời ngay từ danh sách soạn sẵn (lomiFaq) — không gọi AI. 30/09: bỏ mục "Câu hỏi thường gặp"
+  // trên giao diện theo ý Kir, nhưng vẫn âm thầm dùng để trả lời nhanh + đúng các câu về cách dùng app.
   const answerFaq = (f: Faq, asked?: string) => {
     setErr(null);
-    setShowFaq(false);
     const q = asked ?? (lang === "en" ? f.q.en : f.q.vi);
     push([
       { role: "user", content: q, local: true },
@@ -273,59 +237,117 @@ export function AiChat({
     lomiSound("msg");
   };
 
-  // Bói Tarot — hỏi chọn chủ đề + kiểu trải bài (asked = câu người dùng tự gõ, nếu có).
-  const startTarot = (asked?: string, topic?: TarotTopic) => {
+  const en = lang === "en";
+  const bizLabel = (k: string) => t(`type.${k}`);
+
+  // ── Bói Tarot kiểu hỏi – đáp (30/09 r2) ──
+  // Chưa có câu hỏi → Lomi hỏi lại bằng lời (kèm vài gợi ý nhỏ), tin kế tiếp được hiểu là câu hỏi.
+  const askTarot = (asked?: string) => {
     setErr(null);
-    setShowFaq(false);
-    const en = lang === "en";
     push([
       ...(asked ? [{ role: "user" as const, content: asked, local: true }] : []),
       {
         role: "assistant",
-        content: en
-          ? "Let's draw some tarot 🔮 What would you like to look at?"
-          : "Bói Tarot hả, để Lomi xáo bài nha 🔮 Bạn muốn xem về chuyện gì nè?",
+        content: en ? TAROT_ASK.en : TAROT_ASK.vi,
         local: true,
-        tarotPick: { topic },
+        tarotAwait: true,
+        quick: TAROT_SUGGEST.map((x) => (en ? x.en : x.vi)),
       },
     ]);
     lomiSound("pop");
   };
-
-  // Rút bài + giải ngay trên máy — không gọi AI, không tính lượt, bói thoải mái.
-  const doTarot = (topic: TarotTopic, spread: TarotSpread, asked?: string) => {
+  // Rút bài cho câu hỏi (rỗng = thông điệp hôm nay) và trả lời ngay trên máy.
+  const doTarot = (question: string, asked: string) => {
     setErr(null);
-    setShowFaq(false);
-    const r = drawReading(topic, spread);
+    const r = drawForQuestion(question);
     push([
-      { role: "user", content: asked ?? tarotRequestLabel(topic, spread, lang), local: true },
+      { role: "user", content: asked, local: true },
       { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang) },
     ]);
   };
+  const moreTarot = (prev: TarotReading, asked: string) => {
+    setErr(null);
+    const r = drawClarifier(prev);
+    push([
+      { role: "user", content: asked, local: true },
+      { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang) },
+    ]);
+  };
+  const localReply = (asked: string, reply: Msg) => {
+    setErr(null);
+    push([{ role: "user", content: asked, local: true }, reply]);
+    lomiSound("msg");
+  };
+
+  // ── Tư vấn ưu đãi (chỉ Membership) — cũng hỏi – đáp: loại hình → kể chi tiết → Lomi AI tư vấn ──
+  const askBiz = () =>
+    push([
+      {
+        role: "assistant",
+        content: en
+          ? "Sure! What kind of business is yours? 😊 Pick one below or just type it."
+          : "Okie! Doanh nghiệp của bạn thuộc loại hình nào nè? 😊 Chọn bên dưới hoặc gõ luôn cũng được.",
+        local: true,
+        bizPick: true,
+        quick: BUSINESS_TYPES.map(bizLabel),
+      },
+    ]);
 
   const send = async (text: string, forceAi = false) => {
     const q = text.trim();
     if (!q || busy) return;
     setErr(null);
     setInput("");
-    // 0) Muốn bói Tarot → bói ngay trên máy (miễn phí, không giới hạn). Kiểm tra TRƯỚC FAQ/AI để
-    //    câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI (regex CREATIVE bắt chữ "tư vấn").
+    const last = msgs[msgs.length - 1];
+    const lastA = last?.role === "assistant" ? last : undefined;
+    let aiContent: string | undefined;
+
     if (!forceAi) {
-      const tm = matchTarot(q);
-      if (tm) {
-        if (tm.topic && tm.spread) doTarot(tm.topic, tm.spread, q);
-        else startTarot(q, tm.topic);
-        return;
+      // a) Đang hỏi loại hình DN → nhận loại hình, hỏi tiếp chi tiết.
+      if (lastA?.bizPick) {
+        const nq = normalizeVi(q);
+        const key = BUSINESS_TYPES.find((k) => normalizeVi(bizLabel(k)) === nq);
+        const type = key ? bizLabel(key).toLowerCase() : q;
+        return localReply(q, {
+          role: "assistant",
+          content: en
+            ? `Got it — ${type}! 💡 Tell Lomi a bit more: what's your shop like, who are your customers, when is it quiet…? The more detail, the better the advice.`
+            : `Okie, ${type} nè! 💡 Kể thêm cho Lomi chút nha: quán/dịch vụ của bạn thế nào, khách chủ yếu là ai, lúc nào hay vắng khách… càng chi tiết Lomi tư vấn càng trúng.`,
+          local: true,
+          bizAwait: type,
+        });
+      }
+      // b) Đã có loại hình, đây là phần kể chi tiết → gửi Lomi AI kèm ngữ cảnh loại hình.
+      if (lastA?.bizAwait && !detectTarot(q)) aiContent = `${t("ai.bizAdvicePrompt", { type: lastA.bizAwait })}${q}`;
+
+      // c) Lomi vừa hỏi "muốn hỏi bài điều gì?" → tin này chính là câu hỏi.
+      if (!aiContent && lastA?.tarotAwait) {
+        if (isTarotCancel(q)) return localReply(q, { role: "assistant", content: en ? TAROT_CANCEL.en : TAROT_CANCEL.vi, local: true });
+        const d = detectTarot(q);
+        if (d && !d.question && !d.daily) return askTarot(q);
+        return doTarot(d ? d.question : isDailyAsk(q) ? "" : q, q);
+      }
+      // d) Vừa bói xong → "rút thêm" / "bói lại" / hỏi nối ("thế còn tình cảm thì sao?").
+      if (!aiContent && lastA?.tarot) {
+        const prev = lastA.tarot;
+        if (isTarotMore(q)) return moreTarot(prev, q);
+        if (isTarotRedo(q)) return doTarot(prev.question ?? "", q);
+        if (/(?<![a-z])(thi sao|the con|vay con|con chuyen|con ve)(?![a-z])/.test(normalizeVi(q)) && !detectTarot(q)) return doTarot(q, q);
+      }
+      // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
+      //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
+      if (!aiContent) {
+        const d = detectTarot(q);
+        if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
     }
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
-    if (!forceAi) {
+    if (!forceAi && !aiContent) {
       const f = matchFaq(q);
       if (f) return answerFaq(f, q);
     }
     // 2) Không phải Membership / hết lượt → báo ngay, không gọi server.
     if (quota && !quota.member) {
-      setShowFaq(false);
       push([
         { role: "user", content: q, local: true },
         { role: "assistant", content: t("ai.memberOnlyLocal"), local: true, note: "member" },
@@ -333,18 +355,19 @@ export function AiChat({
       return;
     }
     if (left === 0) {
-      setShowFaq(false);
       push([
         { role: "user", content: q, local: true },
         { role: "assistant", content: t("ai.limitLocal"), local: true, note: "limit" },
       ]);
       return;
     }
-    // 3) Gọi Lomi AI (tính 1 lượt). Chỉ gửi phần hội thoại với AI, bỏ các câu trả lời soạn sẵn.
-    setShowFaq(false);
-    const next = push([{ role: "user", content: q }]);
+    // 3) Gọi Lomi AI. Chỉ gửi phần hội thoại với AI, bỏ các câu trả lời soạn sẵn.
+    const next = push([{ role: "user", content: q, ...(aiContent ? { aiContent } : {}) }]);
     setBusy(true);
-    const ctx = next.filter((m) => !m.local).slice(-12).map(({ role, content }) => ({ role, content }));
+    const ctx = next
+      .filter((m) => !m.local)
+      .slice(-12)
+      .map(({ role, content, aiContent: ac }) => ({ role, content: ac ?? content }));
     const { data, error } = await supabase.functions.invoke("ai-assistant", { body: { messages: ctx } });
     setBusy(false);
     let code: string | null = null;
@@ -397,9 +420,6 @@ export function AiChat({
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold text-sm">{t("ai.title")}</div>
-          {quota?.member && left !== null && (
-            <div className="text-[11px] text-muted-foreground">{t("ai.left", { n: String(left), limit: String(quota.limit) })}</div>
-          )}
         </div>
         <button
           onClick={() => {
@@ -412,15 +432,6 @@ export function AiChat({
         >
           {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
         </button>
-        {msgs.length > 0 && (
-          <button
-            onClick={() => setShowFaq((v) => !v)}
-            aria-label={t("ai.faqTitle")}
-            className={cn("p-2 rounded-full", showFaq ? "text-primary bg-primary/10" : "text-muted-foreground")}
-          >
-            <BookOpen className="w-4 h-4" />
-          </button>
-        )}
         {msgs.length > 0 && (
           <button onClick={clear} aria-label={t("ai.clear")} className="p-2 text-muted-foreground">
             <Trash2 className="w-4 h-4" />
@@ -446,49 +457,20 @@ export function AiChat({
               <p className="text-sm font-semibold">{t("ai.welcome")}</p>
               <p className="text-xs text-muted-foreground">{t(nonMember ? "ai.welcomeDescFree" : "ai.welcomeDesc")}</p>
             </div>
-            <button
-              onClick={() => startTarot()}
-              className="w-full flex items-center gap-3 rounded-2xl bg-gradient-brand text-white px-4 py-3 text-left shadow-sm active:scale-[0.98] transition"
-            >
-              <span className="text-2xl">🔮</span>
-              <span className="flex-1 min-w-0">
-                <span className="block text-sm font-bold">{lang === "en" ? "Tarot reading" : "Bói Tarot cùng Lomi"}</span>
-                <span className="block text-[11px] opacity-90">
-                  {lang === "en" ? "Draw cards for love, work, money… free & unlimited" : "Tình cảm, công việc, tài chính… miễn phí, bói thoải mái"}
-                </span>
-              </span>
-              <span>›</span>
-            </button>
-            <FaqBrowser onPick={(f) => answerFaq(f)} onTarot={() => startTarot()} />
-            {/* Gợi ý nhờ Lomi AI tư vấn ưu đãi theo loại hình — chỉ hiện với Membership (không chào mời
-                Membership ngay khi mới mở; người chưa có chỉ được nhắc khi hỏi câu ngoài danh sách).
-                Bấm = điền sẵn câu hỏi để người dùng tự viết thêm chi tiết, chưa gửi (chưa tính lượt). */}
+            <StarterCard
+              emoji="🔮"
+              title={en ? "Tarot reading" : "Bói Tarot cùng Lomi"}
+              desc={en ? "Ask the cards anything — free & unlimited" : "Hỏi bài bất cứ điều gì — miễn phí, bói thoải mái"}
+              onClick={() => askTarot()}
+            />
+            {/* Tư vấn ưu đãi — chỉ hiện với Membership (dùng Lomi AI). */}
             {quota?.member && (
-              <div className="space-y-2 px-1">
-                <div className="flex items-center gap-1.5 text-xs font-semibold">
-                  <Sparkles className="w-3.5 h-3.5 text-primary" />
-                  {t("ai.bizAdviceTitle")}
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {BUSINESS_TYPES.map((k) => (
-                    <button
-                      key={k}
-                      onClick={() => {
-                        setInput(t("ai.bizAdvicePrompt", { type: t(`type.${k}`).toLowerCase() }));
-                        requestAnimationFrame(() => {
-                          const el = inputRef.current;
-                          if (!el) return;
-                          el.focus();
-                          el.setSelectionRange(el.value.length, el.value.length);
-                        });
-                      }}
-                      className="text-[11px] px-2.5 py-1 rounded-full border bg-card active:scale-95 transition"
-                    >
-                      {t(`type.${k}`)}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <StarterCard
+                emoji="💡"
+                title={en ? "Offer ideas with Lomi AI" : "Nhờ Lomi AI tư vấn ưu đãi"}
+                desc={en ? "Tell Lomi about your business, get tailored offer ideas" : "Kể về doanh nghiệp của bạn, Lomi gợi ý ưu đãi phù hợp"}
+                onClick={askBiz}
+              />
             )}
           </div>
         ) : (
@@ -512,44 +494,35 @@ export function AiChat({
                   m.content
                 )}
               </div>
-              {m.tarotPick && i === msgs.length - 1 && (
-                <TarotPicker lang={lang} initialTopic={m.tarotPick.topic} onPick={(tp, sp) => doTarot(tp, sp)} />
-              )}
+              {m.quick && i === msgs.length - 1 && !busy && <QuickReplies items={m.quick} onPick={(v) => void send(v)} />}
               {m.role === "assistant" && m.local && (
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 ml-1 text-[11px] text-muted-foreground">
-                  {!m.note && (
-                    <span className="inline-flex items-center gap-1">
-                      <Zap className="w-3 h-3 text-amber-500" />
-                      {t("ai.quickNote")}
-                    </span>
-                  )}
                   {m.note === "member" && (
                     <button onClick={() => nav("/ho-so?view=personal")} className="font-semibold text-primary">
                       {t("offers.viewMembership")} ›
                     </button>
                   )}
                   {m.tarot && i === msgs.length - 1 && (
-                    <button onClick={() => startTarot()} className="font-semibold text-primary">
-                      🔮 {lang === "en" ? "Draw again" : "Bói lại"}
-                    </button>
+                    <>
+                      {!!m.tarot.question && m.tarot.cards.length > 1 && (
+                        <button onClick={() => void send(en ? "One more card" : "Rút thêm 1 lá")} className="font-semibold text-primary">
+                          🔮 {en ? "One more card" : "Rút thêm 1 lá"}
+                        </button>
+                      )}
+                      <button onClick={() => void send(en ? "Draw again" : "Bói lại")} className="font-semibold text-primary">
+                        ↻ {en ? "Draw again" : "Bói lại"}
+                      </button>
+                    </>
                   )}
                   {!m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
                     <button onClick={() => void send(m.ask!, true)} className="font-semibold text-primary">
                       {t("ai.askAi")}
                     </button>
                   )}
-                  {(m.note || i === msgs.length - 1) && !showFaq && (
-                    <button onClick={() => setShowFaq(true)} className="font-semibold text-primary">
-                      {t("ai.moreFaq")}
-                    </button>
-                  )}
                 </div>
               )}
             </div>
           ))
-        )}
-        {showFaq && msgs.length > 0 && (
-          <FaqBrowser onPick={(f) => answerFaq(f)} onClose={() => setShowFaq(false)} onTarot={() => startTarot()} />
         )}
         {busy && (
           <div className="flex justify-start">
