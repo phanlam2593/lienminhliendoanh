@@ -413,8 +413,8 @@ export const FAQS: Faq[] = [
     cat: "account",
     q: { vi: "Lomi là ai, hỏi Lomi được gì?", en: "Who is Lomi?" },
     a: {
-      vi: "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱\n• Câu hỏi thường gặp: trả lời ngay, miễn phí cho mọi người\n• Câu khác (viết nội dung ưu đãi, bài đăng, mẹo kinh doanh…): Lomi AI trả lời, dành cho Membership, 20 câu/ngày\nKéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng nha 😄",
-      en: "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱\n• FAQs: instant and free for everyone\n• Anything else (writing offers, posts, tips…): Lomi AI for Membership, 20/day\nDrag me anywhere; drop me at the edge to hide 😄",
+      vi: "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱\n• Câu hỏi thường gặp: trả lời ngay, miễn phí cho mọi người\n• Câu khác (viết nội dung ưu đãi, bài đăng, mẹo kinh doanh…): Lomi AI trả lời, dành cho Membership, 20 câu/ngày\n• Bói Tarot vui: gõ “bói tarot” hoặc bấm nút 🔮 — miễn phí, bói thoải mái\nKéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng nha 😄",
+      en: "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱\n• FAQs: instant and free for everyone\n• Anything else (writing offers, posts, tips…): Lomi AI for Membership, 20/day\n• Fun tarot readings: type “tarot” or tap 🔮 — free & unlimited\nDrag me anywhere; drop me at the edge to hide 😄",
     },
     kw: ["lomi la ai", "ban la ai", "tro ly", "hoi duoc gi", "who are you"],
   },
