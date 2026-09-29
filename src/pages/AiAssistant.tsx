@@ -9,6 +9,21 @@ import { cn } from "@/lib/utils";
 import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
 import { matchFaq, normalizeVi, type Faq } from "@/lib/lomiFaq";
 import { BUSINESS_TYPES } from "@/lib/types";
+import {
+  TOPIC_CHIPS,
+  bizAiPrompt,
+  bizAnswer,
+  detectBizKind,
+  detectBizTopic,
+  followUpChips,
+  isMoreIdeas,
+  isThanks,
+  looksLikeBizQuestion,
+  nounFor,
+  topicFromChip,
+  type BizCtx,
+  type BizTopic,
+} from "@/lib/bizAdvisor";
 import { lomiSound, lomiSoundOn, onLomiSoundChange, setLomiSound } from "@/lib/lomiSound";
 import {
   TAROT_ASK,
@@ -46,14 +61,17 @@ type Msg = {
   // Hội thoại nhiều bước (30/09 r2) — cờ đặt trên tin Lomi CUỐI CÙNG, tin kế tiếp của người dùng
   // sẽ được hiểu theo ngữ cảnh đó:
   tarotAwait?: boolean; // Lomi vừa hỏi "bạn muốn hỏi bài điều gì?"
-  bizPick?: boolean; // Lomi vừa hỏi loại hình doanh nghiệp (tư vấn ưu đãi)
-  bizAwait?: string; // đã biết loại hình, chờ người dùng kể chi tiết → gửi Lomi AI
+  bizPick?: boolean; // Lomi vừa hỏi loại hình doanh nghiệp (tư vấn kinh doanh)
+  biz?: BizCtx; // đang trong cuộc tư vấn kinh doanh (loại hình, tên chỗ, chủ đề vừa nói)
+  bizTopicPick?: boolean; // Lomi vừa hỏi "muốn gợi ý về chuyện gì?"
   quick?: string[]; // gợi ý trả lời nhanh (chip nhỏ dưới tin Lomi cuối)
   aiContent?: string; // nội dung THẬT gửi cho AI (khác chữ hiển thị), vd kèm loại hình DN
 };
 type Quota = { member: boolean; limit: number; used: number };
 
 const db = supabase as any;
+// FAQ về CÁCH DÙNG app — luôn ưu tiên hơn tư vấn kinh doanh khi cả hai cùng khớp.
+const APP_HOWTO_FAQ = new Set(["claim", "claimexp", "offerbad", "bizcreate", "bizoffer", "bizstatus"]);
 const histKey = (uid: string) => `ai-assistant-history:${uid}`;
 
 function loadHistory(uid: string): Msg[] {
@@ -279,19 +297,31 @@ export function AiChat({
     lomiSound("msg");
   };
 
-  // ── Tư vấn ưu đãi (chỉ Membership) — cũng hỏi – đáp: loại hình → kể chi tiết → Lomi AI tư vấn ──
-  const askBiz = () =>
+  // ── Tư vấn kinh doanh (30/09 r4) — chạy trên máy như Tarot (lib/bizAdvisor.ts), ai cũng dùng được ──
+  // Hỏi loại hình → hỏi chủ đề → trả lời từ thư viện, xoay vòng ý để không lặp; hỏi nối "thêm ý khác".
+  const askBiz = (asked?: string, pending?: BizTopic) =>
     push([
+      ...(asked ? [{ role: "user" as const, content: asked, local: true }] : []),
       {
         role: "assistant",
-        content: en
-          ? "Sure! What kind of business is yours? 😊 Pick one below or just type it."
-          : "Okie! Doanh nghiệp của bạn thuộc loại hình nào nè? 😊 Chọn bên dưới hoặc gõ luôn cũng được.",
+        content: pending
+          ? "Lomi giúp liền nha! Chỗ của bạn kinh doanh gì nè? 😊 Chọn bên dưới hoặc gõ luôn, kiểu “quán cà phê”, “homestay”, “tiệm nail”…"
+          : "Okie! Chỗ của bạn kinh doanh gì nè? 😊 Chọn bên dưới hoặc gõ luôn, kiểu “quán cà phê”, “homestay”, “tiệm nail”…",
         local: true,
         bizPick: true,
+        ...(pending ? { biz: { topic: pending } } : {}),
         quick: BUSINESS_TYPES.map(bizLabel),
       },
     ]);
+  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic) =>
+    localReply(asked, {
+      role: "assistant",
+      content: bizAnswer(ctx, topic),
+      local: true,
+      biz: { type: ctx.type, noun: ctx.noun, topic },
+      quick: followUpChips(topic),
+      ask: bizAiPrompt(ctx, topic),
+    });
 
   const send = async (text: string, forceAi = false) => {
     const q = text.trim();
@@ -300,35 +330,58 @@ export function AiChat({
     setInput("");
     const last = msgs[msgs.length - 1];
     const lastA = last?.role === "assistant" ? last : undefined;
-    let aiContent: string | undefined;
 
     if (!forceAi) {
-      // a) Đang hỏi loại hình DN → nhận loại hình, hỏi tiếp chi tiết.
-      if (lastA?.bizPick) {
+      // a) Lomi vừa hỏi loại hình → nhận loại hình (chip hoặc gõ tự do), rồi hỏi chủ đề
+      //    (hoặc trả lời luôn nếu đã có chủ đề đang chờ / trong câu có sẵn chủ đề).
+      if (lastA?.bizPick && !detectTarot(q)) {
         const nq = normalizeVi(q);
         const key = BUSINESS_TYPES.find((k) => normalizeVi(bizLabel(k)) === nq);
-        const type = key ? bizLabel(key).toLowerCase() : q;
+        const kind = detectBizKind(q);
+        const ctx: BizCtx = { type: key ?? kind.type ?? "other", noun: kind.noun ?? (key ? undefined : q.length <= 30 ? q : undefined) };
+        const tp = lastA.biz?.topic ?? detectBizTopic(q);
+        if (tp) return bizReply(q, ctx, tp);
+        const n = nounFor(ctx.type, ctx.noun);
         return localReply(q, {
           role: "assistant",
-          content: en
-            ? `Got it — ${type}! 💡 Tell Lomi a bit more: what's your shop like, who are your customers, when is it quiet…? The more detail, the better the advice.`
-            : `Okie, ${type} nè! 💡 Kể thêm cho Lomi chút nha: quán/dịch vụ của bạn thế nào, khách chủ yếu là ai, lúc nào hay vắng khách… càng chi tiết Lomi tư vấn càng trúng.`,
+          content: `${n.charAt(0).toUpperCase() + n.slice(1)} hả, hay quá! Bạn muốn Lomi gợi ý về chuyện gì nè? Chọn bên dưới, hoặc kể tự nhiên kiểu “buổi sáng vắng khách quá” cũng được nha 😊`,
           local: true,
-          bizAwait: type,
+          biz: ctx,
+          bizTopicPick: true,
+          quick: TOPIC_CHIPS,
         });
       }
-      // b) Đã có loại hình, đây là phần kể chi tiết → gửi Lomi AI kèm ngữ cảnh loại hình.
-      if (lastA?.bizAwait && !detectTarot(q)) aiContent = `${t("ai.bizAdvicePrompt", { type: lastA.bizAwait })}${q}`;
+      // b) Đang trong cuộc tư vấn → hiểu tin này theo ngữ cảnh (chủ đề mới, "thêm ý khác", kể thêm chi tiết…).
+      if (lastA?.biz && !lastA.bizPick && !detectTarot(q)) {
+        const b = lastA.biz;
+        if (isThanks(q))
+          return localReply(q, {
+            role: "assistant",
+            content: [
+              "Không có gì nè 😊 Chúc chỗ của bạn đông khách nha! Cần thêm ý thì cứ hỏi Lomi.",
+              "Lomi vui vì giúp được bạn 💚 Muốn tìm hiểu thêm chủ đề nào cứ chọn bên dưới nha.",
+              "Hihi, có gì cứ hỏi tiếp nha, Lomi luôn ở đây 😊",
+            ][Math.floor(Math.random() * 3)],
+            local: true,
+            biz: b,
+            quick: followUpChips(b.topic ?? "offer"),
+          });
+        const kind = detectBizKind(q);
+        const ctx: BizCtx = { ...b, ...(kind.type ? kind : {}) };
+        const tp = topicFromChip(q) ?? (isMoreIdeas(q) ? (b.topic ?? "offer") : detectBizTopic(q));
+        if (tp) return bizReply(q, ctx, tp);
+        if (lastA.bizTopicPick || kind.type) return bizReply(q, ctx, "offer");
+      }
 
       // c) Lomi vừa hỏi "muốn hỏi bài điều gì?" → tin này chính là câu hỏi.
-      if (!aiContent && lastA?.tarotAwait) {
+      if (lastA?.tarotAwait) {
         if (isTarotCancel(q)) return localReply(q, { role: "assistant", content: en ? TAROT_CANCEL.en : TAROT_CANCEL.vi, local: true });
         const d = detectTarot(q);
         if (d && !d.question && !d.daily) return askTarot(q);
         return doTarot(d ? d.question : isDailyAsk(q) ? "" : q, q);
       }
       // d) Vừa bói xong → "rút thêm" / "bói lại" / hỏi nối ("thế còn tình cảm thì sao?").
-      if (!aiContent && lastA?.tarot) {
+      if (lastA?.tarot) {
         const prev = lastA.tarot;
         if (isTarotMore(q)) return moreTarot(prev, q);
         if (isTarotRedo(q)) return doTarot(prev.question ?? "", q);
@@ -336,15 +389,23 @@ export function AiChat({
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
-      if (!aiContent) {
+      {
         const d = detectTarot(q);
         if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
     }
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
-    if (!forceAi && !aiContent) {
-      const f = matchFaq(q);
-      if (f) return answerFaq(f, q);
+    //    Riêng câu hỏi chuyện kinh doanh (vd "làm sao giữ khách quen cho spa") thì ưu tiên tư vấn kinh
+    //    doanh (1b), trừ khi FAQ khớp đúng câu hỏi về CÁCH DÙNG app (nhận/đăng ưu đãi, tạo doanh nghiệp…).
+    const faq = forceAi ? null : matchFaq(q);
+    const bizQ = !forceAi && looksLikeBizQuestion(q);
+    if (faq && (!bizQ || APP_HOWTO_FAQ.has(faq.id))) return answerFaq(faq, q);
+    // 1b) Hỏi chuyện kinh doanh (vd "làm sao hút khách cho quán cà phê buổi sáng") → tư vấn tại chỗ.
+    if (bizQ) {
+      const kind = detectBizKind(q);
+      const tp = detectBizTopic(q) ?? "offer";
+      if (!kind.type && (tp === "offer" || tp === "post")) return askBiz(q, tp);
+      return bizReply(q, kind, tp);
     }
     // 2) Không phải Membership / hết lượt → báo ngay, không gọi server.
     if (quota && !quota.member) {
@@ -362,7 +423,7 @@ export function AiChat({
       return;
     }
     // 3) Gọi Lomi AI. Chỉ gửi phần hội thoại với AI, bỏ các câu trả lời soạn sẵn.
-    const next = push([{ role: "user", content: q, ...(aiContent ? { aiContent } : {}) }]);
+    const next = push([{ role: "user", content: q }]);
     setBusy(true);
     const ctx = next
       .filter((m) => !m.local)
@@ -463,15 +524,13 @@ export function AiChat({
               desc={en ? "Ask the cards anything — free & unlimited" : "Hỏi bài bất cứ điều gì — miễn phí, bói thoải mái"}
               onClick={() => askTarot()}
             />
-            {/* Tư vấn ưu đãi — chỉ hiện với Membership (dùng Lomi AI). */}
-            {quota?.member && (
-              <StarterCard
-                emoji="💡"
-                title={en ? "Offer ideas with Lomi AI" : "Nhờ Lomi AI tư vấn ưu đãi"}
-                desc={en ? "Tell Lomi about your business, get tailored offer ideas" : "Kể về doanh nghiệp của bạn, Lomi gợi ý ưu đãi phù hợp"}
-                onClick={askBiz}
-              />
-            )}
+            {/* Tư vấn kinh doanh — chạy trên máy (lib/bizAdvisor.ts), miễn phí nên mở cho mọi người. */}
+            <StarterCard
+              emoji="💡"
+              title={en ? "Business tips with Lomi" : "Tư vấn kinh doanh cùng Lomi"}
+              desc={en ? "Offer ideas, more customers, post writing… free (Vietnamese)" : "Ý tưởng ưu đãi, hút khách, viết bài đăng… miễn phí"}
+              onClick={() => askBiz()}
+            />
           </div>
         ) : (
           msgs.map((m, i) => (

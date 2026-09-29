@@ -110,7 +110,6 @@ export function TarotCards({
             <div className="text-[10px] text-muted-foreground text-center leading-tight min-h-[24px]">
               {reading.cards.length > 1 && pos[i] && <div className="font-semibold line-clamp-2">{en ? pos[i].en : pos[i].vi}</div>}
               {up && <div className="text-foreground/80 line-clamp-2">{en ? c.name.en : c.name.vi}</div>}
-              {up && d.rev && <div className="text-rose-500">{en ? "Reversed" : "Ngược"}</div>}
             </div>
           </div>
         );
