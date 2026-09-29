@@ -1,5 +1,10 @@
-// Trợ lý AI trong app — CHỈ dành cho thành viên (is_active_member), 20 câu/ngày.
-// Quota trừ qua RPC consume_ai_chat_quota (chạy bằng JWT của user); gọi AI lỗi thì hoàn lượt.
+// Trợ lý AI trong app — CHỈ dành cho thành viên (is_active_member). 30/09: bỏ giới hạn 20 câu/ngày,
+// RPC consume_ai_chat_quota chỉ còn chốt chống spam 200 câu/ngày; gọi AI lỗi thì hoàn lượt.
+//
+// NHÀ CUNG CẤP AI (30/09, theo ý Kir — không phụ thuộc số dư AI của Lovable):
+// • Có secret GEMINI_API_KEY (key Google AI Studio của Kir) → gọi THẲNG Google Gemini, không qua Lovable.
+//   Model lấy từ secret GEMINI_MODEL (nếu có), không thì thử lần lượt MODEL_FALLBACKS.
+// • Chưa có GEMINI_API_KEY → dùng cổng AI của Lovable như trước (LOVABLE_API_KEY).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 const corsHeaders = {
@@ -41,6 +46,53 @@ Quy tắc:
 
 type Msg = { role: "user" | "assistant"; content: string };
 
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions";
+const LOVABLE_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+// Google hay đổi/ngừng tên model → alias "latest" trước, rồi tên cố định làm dự phòng.
+const MODEL_FALLBACKS = ["gemini-flash-latest", "gemini-2.5-flash", "gemini-flash-lite-latest"];
+
+type AiResult = { reply: string } | { error: "AI_BUSY" | "AI_CREDITS" | "AI_ERROR" };
+
+async function callChat(url: string, key: string, model: string, messages: unknown[]): Promise<Response> {
+  return await fetch(url, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ model, messages }),
+  });
+}
+
+async function readReply(res: Response): Promise<string> {
+  const data = await res.json().catch(() => null);
+  return String(data?.choices?.[0]?.message?.content ?? "").trim();
+}
+
+async function askAi(messages: unknown[]): Promise<AiResult> {
+  const gemini = Deno.env.get("GEMINI_API_KEY");
+  if (gemini) {
+    const custom = Deno.env.get("GEMINI_MODEL");
+    const models = custom ? [custom, ...MODEL_FALLBACKS.filter((m) => m !== custom)] : MODEL_FALLBACKS;
+    for (const model of models) {
+      const res = await callChat(GEMINI_URL, gemini, model, messages);
+      if (res.ok) {
+        const reply = await readReply(res);
+        return reply ? { reply } : { error: "AI_ERROR" };
+      }
+      const detail = await res.text().catch(() => "");
+      console.error(`gemini ${model} -> ${res.status}: ${detail.slice(0, 300)}`);
+      if (res.status === 429) return { error: "AI_BUSY" }; // hết hạn mức miễn phí / quá nhanh
+      if (res.status === 400 || res.status === 404) continue; // model không tồn tại → thử model kế
+      return { error: "AI_ERROR" };
+    }
+    return { error: "AI_ERROR" };
+  }
+  const lovable = Deno.env.get("LOVABLE_API_KEY");
+  if (!lovable) return { error: "AI_ERROR" };
+  const res = await callChat(LOVABLE_URL, lovable, "google/gemini-2.5-flash", messages);
+  if (!res.ok) return { error: res.status === 429 ? "AI_BUSY" : res.status === 402 ? "AI_CREDITS" : "AI_ERROR" };
+  const reply = await readReply(res);
+  return reply ? { reply } : { error: "AI_ERROR" };
+}
+
 // Mốc thời gian thật (giờ Việt Nam) gắn vào cuối system prompt mỗi lần gọi — trước đây model
 // không biết hôm nay là ngày nào nên tự đoán sai.
 function nowLine(): string {
@@ -59,8 +111,7 @@ Deno.serve(async (req) => {
   const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const apiKey = Deno.env.get("LOVABLE_API_KEY");
-  if (!apiKey) return json({ error: "AI_UNAVAILABLE" }, 500);
+  if (!Deno.env.get("GEMINI_API_KEY") && !Deno.env.get("LOVABLE_API_KEY")) return json({ error: "AI_UNAVAILABLE" }, 500);
 
   const userClient = createClient(supabaseUrl, anonKey, { global: { headers: { Authorization: authHeader } } });
   const { data: authData } = await userClient.auth.getUser();
@@ -79,7 +130,7 @@ Deno.serve(async (req) => {
   }
   if (!messages.length || messages[messages.length - 1].role !== "user") return json({ error: "BAD_REQUEST" }, 400);
 
-  // Trừ lượt (kiểm tra membership + giới hạn 20/ngày nằm trong RPC).
+  // Trừ lượt (kiểm tra membership + chốt chống spam nằm trong RPC).
   const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_chat_quota");
   if (qErr) {
     const code = /MEMBER_ONLY/.test(qErr.message) ? "MEMBER_ONLY" : /AI_LIMIT/.test(qErr.message) ? "AI_LIMIT" : "QUOTA_ERROR";
@@ -92,27 +143,14 @@ Deno.serve(async (req) => {
   };
 
   try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [{ role: "system", content: SYSTEM_PROMPT + nowLine() }, ...messages],
-      }),
-    });
-    if (!res.ok) {
+    const out = await askAi([{ role: "system", content: SYSTEM_PROMPT + nowLine() }, ...messages]);
+    if ("error" in out) {
       await refund();
-      const code = res.status === 429 ? "AI_BUSY" : res.status === 402 ? "AI_CREDITS" : "AI_ERROR";
-      return json({ error: code }, 502);
+      return json({ error: out.error }, 502);
     }
-    const data = await res.json();
-    const reply: string = data?.choices?.[0]?.message?.content ?? "";
-    if (!reply) {
-      await refund();
-      return json({ error: "AI_ERROR" }, 502);
-    }
-    return json({ reply, remaining });
-  } catch {
+    return json({ reply: out.reply, remaining });
+  } catch (e) {
+    console.error("ai-assistant", e);
     await refund();
     return json({ error: "AI_ERROR" }, 502);
   }
