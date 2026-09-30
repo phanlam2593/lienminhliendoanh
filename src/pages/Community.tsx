@@ -47,6 +47,7 @@ import { useLanguage } from "@/lib/i18n";
 import { extractArea } from "@/lib/location";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { LoadingState } from "@/components/LoadingState";
+import { gifImgClass, gifLabel } from "@/lib/lomiStickers";
 
 interface ProfLite {
   id: string;
@@ -975,7 +976,7 @@ export default function Community() {
                   {pm.type === "text"
                     ? pm.content
                     : pm.type === "gif"
-                      ? "🎬 GIF"
+                      ? gifLabel(pm.content)
                       : pm.type === "voice"
                         ? `🎤 ${t("chat.voiceMessage")}`
                         : `📷 ${t("chat.imageAlt")}`}
@@ -1062,7 +1063,7 @@ export default function Community() {
                       {editingId !== m.id && m.reply_to_id && (
                         <div className="mt-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate">
                           {repliedMsg
-                            ? `${profMap.get(repliedMsg.user_id)?.full_name || t("community.member")}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
+                            ? `${profMap.get(repliedMsg.user_id)?.full_name || t("community.member")}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? gifLabel(repliedMsg.content) : "📷 Ảnh"}`
                             : t("msg.originalDeleted")}
                         </div>
                       )}
@@ -1094,7 +1095,7 @@ export default function Community() {
                           </button>
                         </div>
                       ) : m.type === "gif" ? (
-                        <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl mt-0.5" loading="lazy" />
+                        <img src={m.content} alt="GIF" className={gifImgClass(m.content, "mt-0.5")} loading="lazy" />
                       ) : m.type === "voice" ? (
                         <div className="mt-0.5">
                           <VoiceMessageBubble
@@ -1193,7 +1194,7 @@ export default function Community() {
                 {replyingTo.type === "text"
                   ? replyingTo.content
                   : replyingTo.type === "gif"
-                    ? "🎬 GIF"
+                    ? gifLabel(replyingTo.content)
                     : replyingTo.type === "voice"
                       ? `🎤 ${t("chat.voiceMessage")}`
                       : `📷 ${t("chat.imageAlt")}`}

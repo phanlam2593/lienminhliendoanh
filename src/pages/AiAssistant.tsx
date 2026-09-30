@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { ArrowLeft, Maximize2, Send, Trash2, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowLeft, Maximize2, Send, Smile, Trash2, Volume2, VolumeX, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -17,6 +17,8 @@ import {
   type Faq,
 } from "@/lib/lomiFaq";
 import { LomiPlaceCards } from "@/components/LomiPlaceCards";
+import { LomiStickerGrid } from "@/components/LomiStickerGrid";
+import { parseStickerToken, stickerReply, stickerToken, stickerUrl } from "@/lib/lomiStickers";
 import { LomiDailyCard, shouldShowDaily } from "@/components/LomiDailyCard";
 import {
   SIT_REPLY,
@@ -97,6 +99,7 @@ type Msg = {
   aiContent?: string; // nội dung THẬT gửi cho AI (khác chữ hiển thị), vd kèm loại hình DN
   places?: PlaceCard[]; // thẻ doanh nghiệp thật (Lomi tìm chỗ / "hôm nay ăn gì") — lib/lomiSearch
   search?: SearchIntent; // lần tìm vừa rồi (để "Đổi món khác" bốc lại chỗ khác)
+  sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
 };
 type Quota = { member: boolean; limit: number; used: number };
@@ -290,6 +293,7 @@ export function AiChat({
   const openedAt = useRef(Date.now());
   // Popup "Lá bài hôm nay" — mở Lomi lần đầu trong ngày (components/LomiDailyCard).
   const [daily, setDaily] = useState(false);
+  const [showStickers, setShowStickers] = useState(false);
 
   const loadQuota = async () => {
     const { data } = await db.rpc("get_my_ai_quota");
@@ -440,9 +444,25 @@ export function AiChat({
     });
   };
 
+  // Người dùng gửi sticker → Lomi đáp lại bằng sticker hợp cảm xúc + một câu ngắn (lib/lomiStickers).
+  const sendSticker = (id: string) => {
+    setShowStickers(false);
+    const r = stickerReply(id);
+    push([
+      { role: "user", content: stickerToken(id), local: true },
+      { role: "assistant", content: r.text, local: true, sticker: r.sticker, quick: r.quick },
+    ]);
+    lomiSound("msg");
+  };
+
   const send = async (text: string, forceAi = false) => {
     const raw = text.trim();
     if (!raw || busy) return;
+    const stk = parseStickerToken(raw);
+    if (stk) {
+      setInput("");
+      return sendSticker(stk);
+    }
     const q = expandTeen(raw);
     shownRef.current = q !== raw ? { from: q, to: raw } : null;
     setErr(null);
@@ -788,6 +808,13 @@ export function AiChat({
         ) : (
           msgs.map((m, i) => (
             <div key={i} className={cn("flex flex-col", m.role === "user" ? "items-end" : "items-start")}>
+              {m.role === "user" && parseStickerToken(m.content) ? (
+                <img src={stickerUrl(parseStickerToken(m.content)!)} alt="Sticker" className="w-24 h-auto" />
+              ) : (
+              <>
+              {m.role === "assistant" && m.sticker && (
+                <img src={stickerUrl(m.sticker)} alt="Sticker" className="w-20 h-auto mb-1 animate-in zoom-in-50 fade-in duration-300" />
+              )}
               <div
                 className={cn(
                   "max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap break-words",
@@ -806,6 +833,8 @@ export function AiChat({
                   m.content
                 )}
               </div>
+              </>
+              )}
               {m.places && <LomiPlaceCards places={m.places} />}
               {m.quick && i === msgs.length - 1 && !busy && <QuickReplies items={m.quick} onPick={(v) => void send(v)} />}
               {m.role === "assistant" && m.local && (
@@ -860,6 +889,12 @@ export function AiChat({
       </div>
 
       {(
+        <>
+        {showStickers && (
+          <div className="border-t bg-card animate-in slide-in-from-bottom-2 fade-in duration-200">
+            <LomiStickerGrid onPick={sendSticker} className="grid grid-cols-5 gap-1 p-2 max-h-56 overflow-y-auto" />
+          </div>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -867,6 +902,17 @@ export function AiChat({
           }}
           className="p-3 border-t flex items-end gap-2"
         >
+          <button
+            type="button"
+            onClick={() => setShowStickers((v) => !v)}
+            aria-label="Sticker"
+            className={cn(
+              "w-10 h-10 shrink-0 rounded-full grid place-items-center transition",
+              showStickers ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-accent",
+            )}
+          >
+            <Smile className="w-5 h-5" />
+          </button>
           <textarea
             ref={inputRef}
             value={input}
@@ -890,6 +936,7 @@ export function AiChat({
             <Send className="w-4 h-4" />
           </button>
         </form>
+        </>
       )}
     </div>
   );

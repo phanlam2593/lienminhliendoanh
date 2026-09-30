@@ -67,6 +67,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { LoadingState } from "@/components/LoadingState";
+import { gifImgClass, gifLabel } from "@/lib/lomiStickers";
 
 interface ConvoSummary {
   partnerId: string;
@@ -88,7 +89,7 @@ interface CallRow {
 
 function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) => string): string {
   if (m.type === "image") return `📷 ${tr("chat.imageAlt")}`;
-  if (m.type === "gif") return "🎬 GIF";
+  if (m.type === "gif") return gifLabel(m.content);
   if (m.type === "voice") return `🎤 ${tr("chat.voiceMessage")}`;
   if (m.type === "broadcast") return m.content.replace(/^📢\s*/, "📢 ");
   return m.content;
@@ -1728,7 +1729,7 @@ export function MessagesThread() {
                         download
                       />
                     ) : (
-                      <img src={m.content} alt="GIF" className="w-full h-full object-cover" loading="lazy" />
+                      <img src={m.content} alt="GIF" className="w-full h-full object-contain" loading="lazy" />
                     )}
                   </div>
                 ))}
@@ -1859,7 +1860,7 @@ export function MessagesThread() {
                         className={`mb-0.5 px-2 py-1 rounded-lg bg-muted/60 border-l-2 border-primary text-[11px] text-muted-foreground max-w-[220px] truncate ${mine ? "self-end" : "self-start"}`}
                       >
                         {repliedMsg
-                          ? `${repliedMsg.sender_id === user.id ? t("community.you") : partner?.full_name || ""}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? "🎬 GIF" : "📷 Ảnh"}`
+                          ? `${repliedMsg.sender_id === user.id ? t("community.you") : partner?.full_name || ""}: ${repliedMsg.type === "text" ? repliedMsg.content : repliedMsg.type === "gif" ? gifLabel(repliedMsg.content) : "📷 Ảnh"}`
                           : t("msg.originalDeleted")}
                       </div>
                     )}
@@ -1920,7 +1921,7 @@ export function MessagesThread() {
                         </div>
                       ) : m.type === "gif" ? (
                         <div className="flex flex-col items-center">
-                          <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
+                          <img src={m.content} alt="GIF" className={gifImgClass(m.content)} loading="lazy" />
                           <div className="text-[11px] text-muted-foreground mt-0.5">{timeAgo(m.created_at, lang)}</div>
                         </div>
                       ) : m.type === "voice" ? (
@@ -2036,7 +2037,7 @@ export function MessagesThread() {
               {replyingTo.type === "text"
                 ? replyingTo.content
                 : replyingTo.type === "gif"
-                  ? "🎬 GIF"
+                  ? gifLabel(replyingTo.content)
                   : replyingTo.type === "voice"
                     ? `🎤 ${t("chat.voiceMessage")}`
                     : `📷 ${t("chat.imageAlt")}`}

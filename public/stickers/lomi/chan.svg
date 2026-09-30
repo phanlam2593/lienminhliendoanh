@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -12 112 120" width="160" height="171"><style>
+.bob{animation:bob 1.8s ease-in-out infinite}
+.pulse{transform-box:fill-box;transform-origin:center;animation:pulse .9s ease-in-out infinite}
+.tear{animation:tear 1.1s ease-in infinite}
+.tear2{animation:tear 1.1s ease-in .55s infinite}
+.spin{transform-box:fill-box;transform-origin:center;animation:spin 1.6s linear infinite}
+.float{animation:float 2.2s ease-out infinite}
+.float2{animation:float 2.2s ease-out 1.1s infinite}
+.shake{animation:shake .18s linear infinite}
+.wave{transform-box:fill-box;transform-origin:20% 90%;animation:wave .7s ease-in-out infinite alternate}
+.tw{transform-box:fill-box;transform-origin:center;animation:tw 1.2s ease-in-out infinite}
+.sway{transform-origin:50px 98px;animation:sway 2s ease-in-out infinite}
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 3.2s infinite}
+.drip{animation:drip 1.6s ease-in infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes tear{0%{transform:translateY(0);opacity:1}100%{transform:translateY(16px);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{0%{transform:translateY(4px);opacity:0}25%{opacity:1}100%{transform:translateY(-14px);opacity:0}}
+@keyframes shake{0%,100%{transform:translateX(-1.2px)}50%{transform:translateX(1.2px)}}
+@keyframes wave{from{transform:rotate(-14deg)}to{transform:rotate(18deg)}}
+@keyframes tw{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.7);opacity:.6}}
+@keyframes sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes drip{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(12px);opacity:0}}
+</style><g class="bob"><defs>
+<linearGradient id="b" x1="0.2" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#2b4d70"/><stop offset="1" stop-color="#0c1626"/></linearGradient>
+<linearGradient id="v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02060c"/><stop offset="1" stop-color="#0a1626"/></linearGradient>
+<filter id="g" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<ellipse cx="50" cy="101" rx="25" ry="3.2" fill="#22d3ee" opacity=".18"/>
+<path d="M50,20 C50,13 52,9 56,6" stroke="#2dd4bf" stroke-width="2.6" fill="none" stroke-linecap="round" filter="url(#g)"/>
+<path d="M55,7 C57,0 65,-2 68,1 C65,6 60,8 55,7Z" fill="#34f5c5" filter="url(#g)"/>
+<path d="M50,18 C74,18 92,36 92,62 C92,86 74,98 50,98 C26,98 8,86 8,62 C8,36 26,18 50,18Z" fill="url(#b)"/>
+<ellipse cx="32" cy="32" rx="11" ry="5" fill="#fff" opacity=".14" transform="rotate(-28 32 32)"/>
+<rect x="14" y="38" width="72" height="46" rx="23" fill="url(#v)"/><rect x="30" y="54" width="14" height="8" rx="3" fill="#5eead4" filter="url(#g)"/><rect x="56" y="54" width="14" height="8" rx="3" fill="#5eead4" filter="url(#g)"/><path d="M28,53 L46,53 M54,53 L72,53" stroke="#5eead4" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#g)" /><path d="M43,74 L57,74" stroke="#5eead4" stroke-width="4.5" fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#g)" /></g><text class="" x="74" y="22" font-size="14" font-weight="800" font-family="Arial,sans-serif" fill="#94a3b8" filter="url(#g)">...</text></svg>

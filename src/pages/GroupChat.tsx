@@ -31,6 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { LoadingState } from "@/components/LoadingState";
+import { gifImgClass, gifLabel } from "@/lib/lomiStickers";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CHAT NHÓM (#24) — tối đa 50 người/nhóm (chốt ở server trong create_group_chat /
@@ -83,7 +84,7 @@ function lastPreview(g: GroupRow, t: (k: string, p?: Record<string, string>) => 
   if (g.last_type === "system") return t("group.sysGeneric");
   const who = g.last_sender_name ? `${g.last_sender_name.split(" ").slice(-1)[0]}: ` : "";
   if (g.last_type === "image") return `${who}📷 ${t("chat.imageAlt")}`;
-  if (g.last_type === "gif") return `${who}🎬 GIF`;
+  if (g.last_type === "gif") return `${who}${gifLabel(g.last_message)}`;
   return `${who}${g.last_message ?? ""}`;
 }
 
@@ -617,7 +618,7 @@ export default function GroupChat() {
                       />
                     </div>
                   ) : m.type === "gif" ? (
-                    <img src={m.content} alt="GIF" className="max-w-[180px] rounded-xl" loading="lazy" />
+                    <img src={m.content} alt="GIF" className={gifImgClass(m.content)} loading="lazy" />
                   ) : (
                     <div
                       className={`px-3 py-2 rounded-2xl text-sm whitespace-pre-wrap break-words ${mine ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-card border rounded-bl-sm"}`}

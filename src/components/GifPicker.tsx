@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useLanguage } from "@/lib/i18n";
+import { LomiStickerGrid } from "@/components/LomiStickerGrid";
+import { stickerUrl } from "@/lib/lomiStickers";
 
 interface GifResult {
   id: string;
@@ -12,13 +14,15 @@ interface GifResult {
 
 export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
   const { t } = useLanguage();
-  const [kind, setKind] = useState<"gifs" | "stickers">("stickers");
+  // "lomi" = bộ sticker Lomi của app (30/09) — mở sẵn tab này; 2 tab còn lại tìm trên GIPHY như cũ.
+  const [kind, setKind] = useState<"lomi" | "gifs" | "stickers">("lomi");
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<GifResult[]>([]);
   const [loading, setLoading] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const search = async (q: string, k: "gifs" | "stickers") => {
+  const search = async (q: string, k: "lomi" | "gifs" | "stickers") => {
+    if (k === "lomi") return;
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("giphy-search", { body: { q, kind: k } });
@@ -44,6 +48,12 @@ export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
     <div className="border-t bg-card">
       <div className="flex gap-1 px-2 pt-2">
         <button
+          onClick={() => setKind("lomi")}
+          className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "lomi" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
+        >
+          Lomi
+        </button>
+        <button
           onClick={() => setKind("stickers")}
           className={`px-3 py-1 rounded-full text-xs font-semibold ${kind === "stickers" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
         >
@@ -56,6 +66,10 @@ export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
           {t("gif.tabGif")}
         </button>
       </div>
+      {kind === "lomi" ? (
+        <LomiStickerGrid onPick={(id) => onSelect(stickerUrl(id))} className="grid grid-cols-5 gap-1 p-2 max-h-56 overflow-y-auto" />
+      ) : (
+      <>
       <div className="p-2 border-b">
         <div className="relative">
           <Search className="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
@@ -88,6 +102,8 @@ export function GifPicker({ onSelect }: { onSelect: (url: string) => void }) {
       <div className="px-2 pb-1.5 text-right">
         <span className="text-[10px] text-muted-foreground">{t("gif.poweredBy")}</span>
       </div>
+      </>
+      )}
     </div>
   );
 }
