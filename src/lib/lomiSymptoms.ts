@@ -14,6 +14,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { HEALTH, HEART, normStrict } from "@/lib/lomiAccent";
 
 type Sym = { id: string; label: string; re: RegExp; red?: string };
 
@@ -800,7 +801,7 @@ const KID_NOTE =
  * Trả null nếu tin này không có triệu chứng nào (để các luồng khác xử lý).
  */
 export function analyzeBody(text: string, prev: string[] = [], inHealth = false, force = false): BodyResult | null {
-  const n = normalizeVi(text);
+  const n = normStrict(text, HEALTH);
   const now = found(SYMPTOMS, n).map((s) => s.id);
   // Đang nói chuyện sức khoẻ → hiểu thêm chi tiết kể tiếp ("ở trên rốn, lúc đói", "38 độ rưỡi", "búa bổ", "2 ngày rồi").
   const notes: string[] = [];
@@ -907,7 +908,7 @@ export type MindResult = { text: string; mood: string[] };
  * 1 cảm giác thì để thư viện tâm sự (lib/lomiHeart) đáp tự nhiên hơn.
  */
 export function analyzeMind(text: string, prev: string[] = []): MindResult | null {
-  const n = normalizeVi(text);
+  const n = normStrict(text, HEART);
   const now = found(FEELS, n).map((s) => s.id);
   if (!now.length) return null;
   const all = Array.from(new Set([...prev, ...now]));
@@ -937,14 +938,14 @@ export function analyzeMind(text: string, prev: string[] = []): MindResult | nul
 // mà lại có nhiều cảm giác (áp lực, buồn…), ưu tiên phân tích tâm lý thay vì bệnh cơ thể.
 const SOFT = new Set(["fatigue", "insomnia", "sleepy", "noappetite", "sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"]);
 export function onlySoftSymptoms(text: string): boolean {
-  const n = normalizeVi(text);
+  const n = normStrict(text, HEALTH);
   return found(SYMPTOMS, n).every((s) => SOFT.has(s.id));
 }
 
 // Triệu chứng cơ thể hay đi cùng lo âu — khi đang tâm sự chuyện lo âu, căng thẳng thì hiểu theo hướng tâm lý.
 const ANX_BODY = new Set(["palp", "breath", "sweat", "insomnia", "fatigue", "dizzy", "stress"]);
 export function onlyAnxietyBody(text: string): boolean {
-  const f = found(SYMPTOMS, normalizeVi(text));
+  const f = found(SYMPTOMS, normStrict(text, HEALTH));
   return f.length > 0 && f.every((s) => ANX_BODY.has(s.id));
 }
 /** Chủ đề tâm sự → cảm giác tương ứng (để cộng dồn khi người dùng kể thêm cảm giác). */

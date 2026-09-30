@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { HEALTH, normStrict } from "@/lib/lomiAccent";
 
 type Fact = { id: string; re: RegExp; a: string };
 
@@ -114,7 +115,7 @@ const FACTS: Fact[] = [
 
 /** Câu hỏi kiến thức sức khoẻ ("… có sao không", "ăn gì …", "nên …") → trả lời, không thì null. */
 export function healthFact(text: string): string | null {
-  const n = ` ${normalizeVi(text)} `;
+  const n = ` ${normStrict(text, HEALTH)} `;
   const isQ = text.includes("?") || /\b(co sao|co hai|co tot|an gi|uong gi|nen|bao nhieu|the nao|lam sao|co nen|duoc khong|khong|la du|du chua|bao lau|may tieng|may ly|co map|co beo)\b/.test(n);
   if (!isQ) return null;
   const f = FACTS.find((x) => x.re.test(n));

@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { HEALTH, normStrict } from "@/lib/lomiAccent";
 
 /** 1 nhóm thực phẩm: chữ hiển thị + từ khoá (CÓ DẤU; cụm ≥2 chữ tự nhận thêm bản không dấu). */
 type Item = { t: string; k: string[]; why?: string };
@@ -333,6 +334,138 @@ const DIETS: Diet[] = [
     good: [I("sữa, sữa chua, phô mai", ["sữa", "sữa chua", "phô mai"]), I("cá nhỏ ăn cả xương, tôm tép", ["cá cơm", "cá nhỏ", "tép", "tôm", "tôm khô"]), I("đậu phụ, rau xanh đậm", ["đậu phụ", "đậu hũ", "rau", "rau xanh", "cải"]), I("trứng (có vitamin D) + phơi nắng sáng sớm", ["trứng"])],
     tip: "Vận động chịu sức (đi bộ, tập nhẹ) giúp xương chắc; viên canxi/vitamin D thì hỏi bác sĩ trước.",
   },
+  {
+    id: "asthma", name: "hen suyễn",
+    re: /\b(hen suyen|hen phe quan|suyen|bi hen)\b/,
+    avoid: [
+      I("món từng làm mình lên cơn hen hoặc dị ứng (hay gặp: hải sản, đậu phộng, trứng)", ["hải sản", "tôm", "cua", "đậu phộng", "lạc", "trứng"]),
+      I("đồ lạnh, nước đá, kem (với người hay lên cơn khi lạnh)", ["đá", "nước đá", "kem", "đồ lạnh"]),
+      I("đồ có nhiều chất bảo quản, phẩm màu (đồ khô tẩm, rượu vang, dưa muối đóng gói)", ["rượu vang", "đồ khô", "dưa muối", "mứt"]),
+      ALCOHOL,
+    ],
+    good: [VEG, I("trái cây tươi (táo, cam, chuối)", ["trái cây", "táo", "cam", "chuối"]), FISH, WATER],
+    tip: "Tránh khói thuốc, bụi, lông thú; mang theo thuốc cắt cơn bác sĩ kê. Khó thở nhiều, nói không thành câu → đi cấp cứu (115).",
+  },
+  {
+    id: "rhinitis", name: "viêm xoang / viêm mũi dị ứng",
+    re: /\b(viem xoang|viem mui|viem mui di ung|xoang mui|bi xoang)\b/,
+    avoid: [
+      I("đồ lạnh, nước đá", ["đá", "nước đá", "kem", "đồ lạnh", "trà đá"]),
+      I("đồ cay nóng, chiên rán (dễ kích ứng niêm mạc)", ["cay", "ớt", "chiên", "rán"]),
+      ALCOHOL,
+      I("món từng gây dị ứng cho mình", ["hải sản", "tôm", "cua"]),
+    ],
+    good: [I("nước ấm, canh, súp ấm", ["nước ấm", "canh", "súp", "cháo", "nước"]), I("trái cây nhiều vitamin C (cam, bưởi, ổi, kiwi)", ["cam", "bưởi", "ổi", "kiwi", "trái cây"]), I("gừng, tỏi, hành (dùng như gia vị)", ["gừng", "tỏi", "hành"]), VEG],
+    tip: "Rửa mũi bằng nước muối sinh lý, giữ ấm, đeo khẩu trang khi ra đường bụi.",
+  },
+  {
+    id: "thyroid", name: "bệnh tuyến giáp",
+    re: /\b(tuyen giap|buou co|cuong giap|suy giap|nhan giap|basedow)\b/,
+    avoid: [
+      I("tự ý uống thực phẩm chức năng, tảo biển liều cao, thuốc nam", ["thực phẩm chức năng", "tpcn", "thuốc nam", "tảo biển"]),
+      I("cà phê, nước tăng lực (nhất là cường giáp: tim đã đập nhanh)", ["cà phê", "cafe", "nước tăng lực", "sting", "redbull"]),
+      ALCOHOL,
+    ],
+    limit: [
+      I("muối i-ốt, rong biển, hải sản — ăn vừa phải, cường giáp hay suy giáp mỗi loại một khác", ["muối", "rong biển", "hải sản", "tôm", "cá biển"]),
+      I("đậu nành, bắp cải, súp lơ sống ăn quá nhiều (nấu chín thì ổn)", ["đậu nành", "đậu phụ", "bắp cải", "súp lơ", "bông cải"]),
+    ],
+    good: [VEG, FRUIT, I("đạm nạc: cá, thịt gà, trứng", ["cá", "thịt gà", "gà", "trứng", "thịt nạc"]), DAIRY],
+    tip: "Cường giáp và suy giáp cần chế độ i-ốt khác nhau, người đã mổ/điều trị i-ốt phóng xạ lại khác nữa — hỏi bác sĩ Nội tiết cho đúng loại của mình nha.",
+  },
+  {
+    id: "chickenpox", name: "thuỷ đậu / sởi",
+    re: /\b(thuy dau|trai rua|bi soi|benh soi|tay chan mieng)\b/,
+    avoid: [
+      I("đồ cay nóng, chiên rán", ["cay", "ớt", "chiên", "rán"]),
+      I("đồ quá ngọt, nước ngọt", ["kẹo", "nước ngọt", "đồ ngọt", "bánh kẹo"]),
+      I("đồ cứng, chua khi miệng có vết loét", ["chua", "đồ cứng", "chanh"]),
+    ],
+    good: [
+      I("cháo, súp, đồ mềm mát dễ nuốt", ["cháo", "súp", "canh"]),
+      I("uống nhiều nước, nước trái cây (cam, dừa)", ["nước", "nước lọc", "nước cam", "nước dừa", "cam", "dừa"]),
+      I("rau xanh, trái cây", ["rau", "rau xanh", "trái cây"]),
+      I("thịt, cá, trứng nấu chín (vẫn ăn bình thường)", ["thịt", "cá", "trứng", "gà", "thịt gà", "thịt bò", "bò", "hải sản", "tôm"]),
+    ],
+    myth: "Kiêng tắm, kiêng gió, kiêng tôm cá thịt gà là quan niệm dân gian — nên tắm nhẹ bằng nước ấm, lau khô để da sạch, đỡ bội nhiễm; vẫn ăn đủ đạm để mau hồi phục (trừ món mình dị ứng).",
+    tip: "Cắt móng tay, không gãi, không chọc vỡ nốt; sốt cao, lừ đừ, co giật, khó thở → đi khám ngay.",
+  },
+  {
+    id: "breastfeed", name: "đang cho con bú / sau sinh",
+    re: /\b(cho con bu|dang cho bu|sau sinh|moi sinh|vua sinh|o cu|me bim|it sua|mat sua|goi sua)\b/,
+    avoid: [
+      ALCOHOL,
+      I("cà phê, trà đặc nhiều (vào sữa, bé dễ quấy khó ngủ)", ["cà phê", "cafe", "trà đặc", "nước tăng lực"]),
+      I("cá nhiều thuỷ ngân (cá kiếm, cá mập, cá thu vua)", ["cá kiếm", "cá mập", "cá thu vua"]),
+      I("tự ý uống thuốc, thực phẩm chức năng, thuốc nam lợi sữa không rõ nguồn gốc", ["thuốc nam", "thực phẩm chức năng", "tpcn", "thuốc"]),
+    ],
+    limit: [I("đồ quá cay, quá nhiều tỏi hành (một số bé không thích mùi sữa)", ["cay", "ớt", "tỏi", "hành"]), I("rau ngót, lá lốt, bạc hà ăn thật nhiều (dân gian cho là giảm sữa)", ["rau ngót", "lá lốt", "bạc hà"])],
+    good: [
+      I("uống đủ nước, sữa, canh, súp (ví dụ canh rau ngót nấu thịt, móng giò hầm đu đủ)", ["nước", "nước lọc", "sữa", "canh", "súp", "móng giò", "chân giò", "đu đủ"]),
+      I("đạm: thịt, cá, trứng, đậu", ["thịt", "cá", "trứng", "đậu", "gà", "thịt bò", "bò", "tôm"]),
+      I("rau xanh, trái cây (đu đủ chín, chuối, cam)", ["rau", "rau xanh", "chuối", "cam", "trái cây"]),
+      I("ngũ cốc, gạo lứt, yến mạch", ["yến mạch", "gạo lứt", "ngũ cốc", "cơm"]),
+    ],
+    myth: "Kiêng tắm, kiêng rau, chỉ ăn thịt kho mặn cả tháng là quan niệm cũ — mẹ cần ăn đa dạng, đủ rau và tắm nhanh bằng nước ấm để sạch sẽ, đỡ viêm nhiễm.",
+    tip: "Cho bé bú thường xuyên là cách kích sữa tốt nhất; mẹ ngủ bù được lúc nào thì tranh thủ nha.",
+  },
+  {
+    id: "lowbp", name: "huyết áp thấp",
+    re: /\b(huyet ap thap|tut huyet ap|ha huyet ap)\b/,
+    avoid: [I("nhịn đói, bỏ bữa sáng", ["nhịn đói", "bỏ bữa"]), ALCOHOL, I("đứng dậy đột ngột, ở chỗ nóng lâu (không phải món ăn nhưng hay gây choáng)", [])],
+    limit: [I("bữa quá no nhiều tinh bột (dễ choáng sau ăn)", ["cơm", "bún", "phở", "xôi"])],
+    good: [
+      I("uống đủ nước (thiếu nước làm huyết áp tụt)", ["nước", "nước lọc", "oresol"]),
+      I("chia nhỏ nhiều bữa trong ngày", []),
+      I("thịt, cá, trứng, sữa; rau xanh và trái cây", ["thịt", "cá", "trứng", "sữa", "rau", "trái cây"]),
+      I("một ly trà/cà phê nhẹ buổi sáng (nếu hợp)", ["trà", "cà phê", "cafe", "trà gừng", "gừng"]),
+    ],
+    tip: "Choáng thì ngồi/nằm xuống ngay, kê cao chân. Ngất, đau ngực, khó thở → đi cấp cứu.",
+  },
+  {
+    id: "uti", name: "viêm đường tiết niệu / viêm bàng quang",
+    re: /\b(viem duong tiet nieu|nhiem trung tiet nieu|viem bang quang|tieu buot|tieu rat|tieu gat)\b/,
+    avoid: [
+      I("nhịn tiểu, uống ít nước", ["nhịn tiểu"]),
+      I("rượu bia, cà phê, nước có ga", ["bia", "rượu", "cà phê", "cafe", "nước ngọt", "coca", "nước có ga"]),
+      I("đồ cay, quá mặn", ["cay", "ớt", "mặn", "muối"]),
+      I("đồ quá ngọt", ["đồ ngọt", "kẹo", "trà sữa", "nước ngọt"]),
+    ],
+    good: [
+      I("uống nhiều nước lọc, đi tiểu đều, không nhịn", ["nước", "nước lọc", "uống nước"]),
+      I("rau xanh, trái cây nhiều nước (dưa hấu, dưa leo, bí đao)", ["rau", "dưa hấu", "dưa leo", "bí đao", "trái cây"]),
+      I("sữa chua", ["sữa chua"]),
+    ],
+    tip: "Sốt, đau hông lưng, tiểu ra máu hay đang mang thai → đi khám sớm, không tự mua kháng sinh.",
+  },
+  {
+    id: "insomnia", name: "hay mất ngủ",
+    re: /\b(mat ngu|kho ngu|khong ngu duoc|ngu khong ngon|hay thuc giac|tran troc)\b/,
+    avoid: [
+      I("cà phê, trà, nước tăng lực sau khoảng 2 giờ chiều", ["cà phê", "cafe", "trà", "trà sữa", "nước tăng lực", "sting", "redbull", "coca"]),
+      I("rượu bia (dễ ngủ lúc đầu nhưng hay thức giấc nửa đêm)", ["bia", "rượu", "nhậu"]),
+      I("bữa tối quá no, nhiều dầu mỡ, cay; ăn khuya", ["ăn khuya", "cay", "chiên", "rán", "lẩu"]),
+      I("sô cô la buổi tối", ["sô cô la", "socola", "chocolate"]),
+    ],
+    good: [
+      I("sữa ấm, sữa chua", ["sữa", "sữa ấm", "sữa chua"]),
+      I("chuối, yến mạch, các loại hạt", ["chuối", "yến mạch", "hạt", "hạnh nhân", "óc chó"]),
+      I("trà thảo mộc không caffeine (hoa cúc, tim sen)", ["trà hoa cúc", "hoa cúc", "tim sen", "trà thảo mộc"]),
+    ],
+    tip: "Đi ngủ – thức dậy giờ cố định, cất điện thoại trước khi ngủ 30–60 phút; mất ngủ kéo dài vài tuần thì nên đi khám.",
+  },
+  {
+    id: "migraine", name: "hay đau nửa đầu (migraine)",
+    re: /\b(dau nua dau|migraine|dau dau van mach|dau dau kinh nien|hay dau dau)\b/,
+    avoid: [
+      I("nhịn đói, bỏ bữa", ["nhịn đói", "bỏ bữa"]),
+      I("rượu vang đỏ, bia rượu", ["rượu vang", "bia", "rượu"]),
+      I("phô mai để lâu, thịt nguội, xúc xích, đồ nhiều bột ngọt (với người nhạy cảm)", ["phô mai", "thịt nguội", "xúc xích", "bột ngọt", "mì chính"]),
+      I("uống cà phê thất thường (lúc nhiều lúc bỏ)", ["cà phê", "cafe"]),
+    ],
+    good: [WATER, VEG, I("ăn đúng bữa, đủ đạm (cá, trứng, thịt nạc)", ["cá", "trứng", "thịt nạc", "thịt gà"]), I("các loại hạt, chuối, rau xanh đậm (nhiều magie)", ["hạt", "chuối", "rau xanh", "hạnh nhân"])],
+    tip: "Ghi nhật ký cơn đau (ăn gì, ngủ ra sao) để tìm “thủ phạm” riêng của mình. Đau đầu dữ dội đột ngột, yếu tay chân, nói ngọng → đi cấp cứu ngay.",
+  },
 ];
 
 const DIET_ASK = /\b(kieng|kieng gi|kieng cu|kieng khem|an gi|uong gi|an duoc|uong duoc|an dc|uong dc|duoc an|duoc uong|nen an|nen uong|khong nen an|khong nen uong|tranh an|tranh uong|tranh gi|thuc don|che do an|an uong|an co sao|uong co sao|co an duoc|co uong duoc|nen tranh|mon gi|do an|thuc pham)\b/;
@@ -378,7 +511,7 @@ export type DietResult = { text: string; diet: string };
  * `prevDiet`: bệnh đã nói ở tin trước — cho câu nối tiếp kiểu "còn bia thì sao", "ăn tôm được k".
  */
 export function dietReply(text: string, prevDiet?: string, inDiet = false): DietResult | null {
-  const n = ` ${normalizeVi(text)} `;
+  const n = ` ${normStrict(text, HEALTH)} `;
   let d = DIETS.find((x) => x.re.test(n));
   const condPhrase = d ? (n.match(d.re)?.[0] ?? "") : "";
   const fromPrev = !d && !!prevDiet;
@@ -408,6 +541,6 @@ export function dietReply(text: string, prevDiet?: string, inDiet = false): Diet
 
 /** Bệnh nhắc trong 1 câu (vd tin trước "mình bị đau dạ dày") — để câu sau "uống cà phê được không" hiểu đúng. */
 export function dietOf(text: string): string | undefined {
-  const n = ` ${normalizeVi(text)} `;
+  const n = ` ${normStrict(text, HEALTH)} `;
   return DIETS.find((x) => x.re.test(n))?.id;
 }

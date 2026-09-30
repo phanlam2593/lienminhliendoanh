@@ -9,6 +9,58 @@
 import type { Theme } from "@/lib/lomiHeart";
 
 export const MORE_THEMES: Theme[] = [
+  // ═══════════════════════ BỊ NÓI XẤU / HIỂU LẦM (01/10) ═══════════════════════
+  {
+    id: "gossip",
+    re: /\b(noi xau (minh|toi|em|tui|to|anh|chi|sau lung)|bi noi xau|noi sau lung|bi dat dieu|dat dieu cho minh|bi don|don dai ve minh|tung tin (don )?(bay|sai)|bi vu khong|vu khong minh|bi hieu lam|hieu lam minh|ai cung hieu lam|bi mang sau lung|xi xao ve minh|bi dem ra ban tan)\b/,
+    feel: [
+      "Bị nói xấu sau lưng khó chịu lắm, vừa tức vừa tủi, mà nhiều khi còn không biết giải thích với ai 😣",
+      "Bị hiểu lầm hay bị đặt điều là cảm giác bất lực ghê, Lomi hiểu mà 🫂",
+    ],
+    insight: [
+      "Người hay nói xấu thường nói về nhiều người chứ không riêng gì bạn. Lời họ nói phản ánh họ nhiều hơn là phản ánh bạn.",
+      "Mình không kiểm soát được miệng người khác, nhưng kiểm soát được cách mình phản ứng. Giữ bình tĩnh thường khiến tin đồn tự xẹp nhanh hơn.",
+      "Những người hiểu bạn thật sẽ không tin chỉ vì vài lời đồn đâu.",
+    ],
+    step: [
+      "Viết ra điều bạn nghe được và cảm xúc của mình trước khi phản ứng — đợi nguôi rồi hãy quyết.",
+      "Nếu là hiểu lầm với người quan trọng, hẹn nói chuyện riêng, bình tĩnh kể phía mình: “Mình nghe nói…, thật ra là…”.",
+      "Hạn chế chia sẻ chuyện riêng với người từng đem chuyện mình đi kể.",
+    ],
+    ask: ["Ai nói xấu bạn vậy — bạn bè, đồng nghiệp hay người quen?", "Chuyện họ nói có ảnh hưởng gì tới bạn không, hay chủ yếu là thấy tổn thương?"],
+    advice: [
+      "Nếu tin đồn ảnh hưởng tới công việc, uy tín: nói chuyện thẳng với người liên quan hoặc cấp trên, giữ bằng chứng nếu có.",
+      "Không cần thanh minh với tất cả mọi người — chỉ cần những người quan trọng với bạn hiểu đúng là đủ.",
+      "Bị bôi nhọ, xúc phạm nghiêm trọng trên mạng thì chụp màn hình lưu lại và báo cáo với nền tảng.",
+    ],
+  },
+  // ═══════════════════════ SỐ KHỔ / XUI XẺO (01/10) ═══════════════════════
+  {
+    id: "fate",
+    // "sox" = chữ "số" gõ có dấu (lib/lomiAccent đổi để không nhầm với "sợ").
+    re: /\b((so|sox) minh (kho|xui|den)|(so|sox) kho|doi minh kho|doi kho qua|sao minh kho the|sao minh kho vay|sao minh xui|xui xeo qua|xui qua troi|xui hoai|xui lien tuc|den dui|toan gap chuyen xui|lam gi cung that bai|lam gi cung hong|cai gi cung hong|cai gi cung do be|so phan|kiep nay kho|troi khong thuong|ong troi bat cong)\b/,
+    feel: [
+      "Nghe như dạo này mọi chuyện cứ dồn dập đổ lên đầu bạn, mệt lắm ha 😔",
+      "Cảm giác làm gì cũng hỏng, cứ như cả thế giới chống lại mình — Lomi hiểu mà 🫂",
+    ],
+    insight: [
+      "Khi đang buồn, não hay gom hết chuyện xui lại để chứng minh “mình khổ”, và bỏ qua những điều nhỏ vẫn đang ổn.",
+      "Xui xẻo thường đến thành đợt rồi qua. Giai đoạn này không định nghĩa cả cuộc đời bạn đâu.",
+      "Có những việc do mình, có những việc hoàn toàn ngoài tầm tay. Tách hai loại ra sẽ thấy nhẹ bớt phần tự trách.",
+    ],
+    step: [
+      "Viết ra 3 chuyện xui gần đây, cạnh mỗi chuyện ghi: “cái này mình làm được gì?”. Việc nào không làm được gì thì cho phép mình buông.",
+      "Tối nay thử ghi lại 1 điều nhỏ vẫn còn ổn — một bữa ăn ngon, một tin nhắn dễ thương.",
+      "Chọn một việc nhỏ chắc chắn làm được hôm nay và làm cho xong — lấy lại cảm giác “mình vẫn làm được”.",
+    ],
+    ask: ["Dạo này chuyện gì làm bạn thấy xui nhất?", "Mọi chuyện dồn tới từ khi nào vậy?"],
+    advice: [
+      "Đừng ra quyết định lớn lúc đang thấy mọi thứ tối om — chờ vài ngày cho đầu óc dịu lại đã.",
+      "Kể cho một người tin cậy nghe; nhiều khi chỉ cần nói ra là thấy chuyện nhỏ lại một nửa.",
+      "Ngủ đủ, ăn đủ — người mệt thì chuyện gì cũng thấy nặng gấp đôi.",
+    ],
+    heavy: true,
+  },
   // ═══════════════════════ TÌNH CẢM ═══════════════════════
   {
     id: "toxic",
@@ -97,7 +149,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "single",
-    re: /\b(doc than|chua co nguoi yeu|khong co nguoi yeu|chua ai yeu|khong ai yeu|chua tung yeu|chua yeu ai|e qua|bi e|e lau|e roi|fa lau|lam sao co nguoi yeu|muon co nguoi yeu|kiem nguoi yeu|tim nguoi yeu)\b/,
+    re: /\b(doc than|chua co nguoi yeu|khong co nguoi yeu|chua ai yeu|khong ai yeu|chua tung yeu|chua yeu ai|(?<!(?:ban|hang|quan|shop|tiem|khach|phong) )(?:e qua|bi e|e lau|e roi)|fa lau|lam sao co nguoi yeu|muon co nguoi yeu|kiem nguoi yeu|tim nguoi yeu)\b/,
     feel: ["Độc thân lâu đôi khi cũng thấy chạnh lòng ha, nhất là mùa lễ Tết 😅", "Muốn có một người để thương, để kể chuyện mỗi ngày — mong ước đó dễ thương mà 💕"],
     insight: [
       "Độc thân không có nghĩa là bạn thiếu gì. Nhiều khi chỉ là chưa gặp đúng người, hoặc vòng quen biết còn hẹp.",

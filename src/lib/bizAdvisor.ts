@@ -7,6 +7,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { BIZ, normStrict } from "@/lib/lomiAccent";
 import type { BusinessType } from "@/lib/types";
 
 export type BizTopic = "offer" | "slow" | "newcust" | "loyal" | "post" | "review" | "price" | "opening" | "holiday";
@@ -78,7 +79,7 @@ const SUBTYPES: { re: RegExp; type: BusinessType; noun: string }[] = [
 ];
 
 export function detectBizKind(text: string): { type?: BusinessType; noun?: string } {
-  const n = ` ${normalizeVi(text)} `;
+  const n = ` ${normStrict(text, BIZ)} `;
   for (const s of SUBTYPES) if (s.re.test(n)) return { type: s.type, noun: s.noun };
   return {};
 }
@@ -257,7 +258,7 @@ function upcomingHolidays(now = new Date()): typeof HOLIDAYS {
 const TOPIC_RE: [BizTopic, RegExp][] = [
   ["post", /\b(viet|caption|bai dang|dang bai|content|noi dung|slogan|quang cao cho)\b/],
   ["review", /\b(danh gia|review|phan nan|che |bi che|feedback|gop y)\b/],
-  ["slow", /\b(vang|e am|it khach|khong co khach|thap diem|mua thap|khong ai|ban cham|e hang)\b/],
+  ["slow", /\b(vang|e am|it khach|khong co khach|thap diem|mua thap|khong ai|ban cham|e hang|(buon ban|ban hang|quan|shop|tiem|phong) (bi |hoi |qua |)(e|am|cham|vang))\b/],
   ["holiday", /\b(dip le|ngay le|le tet|tet|noel|giang sinh|valentine|8 3|20 10|20 11|trung thu|halloween|black friday|mua le)\b/],
   ["opening", /\b(khai truong|moi mo|sap mo|mo quan|mo tiem|mo shop|mo cua hang|moi khai truong)\b/],
   ["price", /\b(dinh gia|tang gia|bang gia|dat gia|gia ban|gia ca|combo)\b/],
@@ -269,13 +270,13 @@ const BIZ_WORD =
   /\b(quan|tiem|shop|cua hang|homestay|khach san|spa|kinh doanh|buon ban|ban hang|doanh nghiep|khach hang|tour|dich vu|salon|nha hang|doanh thu|mo quan|chu quan|cua minh)\b/;
 
 export function detectBizTopic(text: string): BizTopic | undefined {
-  const n = ` ${normalizeVi(text)} `;
+  const n = ` ${normStrict(text, BIZ)} `;
   for (const [tp, re] of TOPIC_RE) if (re.test(n)) return tp;
   return undefined;
 }
 /** Câu gõ tự do (ngoài luồng tư vấn) có phải đang hỏi chuyện kinh doanh không. */
 export function looksLikeBizQuestion(text: string): boolean {
-  const n = ` ${normalizeVi(text)} `;
+  const n = ` ${normStrict(text, BIZ)} `;
   if (/\b(nen lam|lam|chay|len|nghi|goi y|tu van) (uu dai|khuyen mai|chuong trinh)\b/.test(n)) return true;
   return !!detectBizTopic(text) && (BIZ_WORD.test(n) || !!detectBizKind(text).type);
 }

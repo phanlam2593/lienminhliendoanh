@@ -7,6 +7,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
 import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
 
@@ -717,8 +718,11 @@ const BETTER = "😊 Mình ổn hơn rồi";
 function chipsFor(_t: Theme | undefined): string[] {
   return [];
 }
+// Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
+const FIRST = ["grief"];
 function themeOf(n: string): Theme | undefined {
-  return THEMES.find((t) => t.re.test(` ${n} `));
+  const m = ` ${n} `;
+  return THEMES.find((t) => FIRST.includes(t.id) && t.re.test(m)) ?? THEMES.find((t) => t.re.test(m));
 }
 function emotionOf(n: string): string | undefined {
   return EMOTIONS.find(([re]) => re.test(` ${n} `))?.[1];
@@ -779,7 +783,7 @@ function eventReply(ev: Ev, n: string, text: string): HeartReply {
  * Không bắt câu hỏi về cách dùng app (để FAQ trả lời).
  */
 export function heartStart(text: string, appQuestion: boolean): HeartReply | null {
-  const n = normalizeVi(text);
+  const n = normStrict(text, HEART);
   if (!n || appQuestion) return null;
   const chip = CHIP_THEME[text.trim()];
   if (chip) return themeReply(byId(chip)!, n, false);
@@ -798,7 +802,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
  * prev = chủ đề đang nói; listen = người dùng chỉ muốn được nghe (không khuyên); depth = số lượt đã tâm sự.
  */
 export function heartContinue(text: string, prev: string, listen: boolean, depth: number, lastText = "", story = ""): HeartReply {
-  const n = normalizeVi(text);
+  const n = normStrict(text, HEART);
   const cur = byId(prev);
   const chip = CHIP_THEME[text.trim()];
   if (chip) return themeReply(byId(chip)!, n, false);
@@ -975,5 +979,5 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
 
 /** Chủ đề tâm sự khớp với câu (để biết câu này là chuyện cụ thể hay chỉ là cảm xúc chung). */
 export function heartThemeOf(text: string): string | undefined {
-  return themeOf(normalizeVi(text))?.id;
+  return themeOf(normStrict(text, HEART))?.id;
 }
