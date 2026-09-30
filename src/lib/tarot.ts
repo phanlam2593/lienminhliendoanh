@@ -531,6 +531,201 @@ function yesnoPhrase(cards: TarotDraw[], en: boolean): string {
 }
 
 // ── Ghép lời giải ──
+// ── Từ khoá ý nghĩa của từng lá (cụm danh từ ngắn) — để ghép câu gắn với CHỦ ĐỀ người hỏi (30/09 r3) ──
+// [VI xuôi, VI ngược, EN xuôi, EN ngược]
+type KW = [string, string, string, string];
+const KW_MAJOR: KW[] = [
+  ["một khởi đầu mới, dám bước đi", "sự liều lĩnh hoặc chần chừ", "a fresh start", "recklessness or hesitation"],
+  ["sự chủ động và đủ khả năng", "năng lực chưa dùng đúng chỗ", "initiative and skill", "wasted potential"],
+  ["trực giác và tiếng nói bên trong", "những điều còn giấu kín", "intuition", "hidden things"],
+  ["sự đủ đầy, được chăm chút", "việc cho đi quá nhiều mà quên mình", "abundance and care", "neglecting yourself"],
+  ["kỷ luật và kế hoạch rõ ràng", "sự cứng nhắc hoặc mất kiểm soát", "discipline and structure", "rigidity or lost control"],
+  ["lời khuyên của người đi trước", "khuôn mẫu cũ không còn hợp", "trusted guidance", "outdated rules"],
+  ["sự hoà hợp và lựa chọn từ trái tim", "sự lệch nhịp, chọn chưa đúng", "harmony and a heartfelt choice", "misalignment"],
+  ["quyết tâm và đà tiến lên", "sự phân tán, mất phương hướng", "drive and momentum", "scattered direction"],
+  ["sự kiên nhẫn và mềm mỏng", "sự tự ti, cảm xúc lấn át", "patient strength", "self-doubt"],
+  ["một khoảng lặng để suy ngẫm", "sự thu mình quá lâu", "time to reflect", "too much isolation"],
+  ["vận may đang xoay chiều", "một giai đoạn lận đận tạm thời", "a lucky turn", "a temporary rough patch"],
+  ["sự công bằng, rõ ràng", "điều chưa sòng phẳng", "fairness", "unfairness"],
+  ["một khoảng dừng để nhìn góc khác", "sự trì hoãn không cần thiết", "a pause for perspective", "needless delay"],
+  ["một chương mới sau khi khép lại cái cũ", "sự níu kéo điều đã cũ", "an ending that makes room", "clinging to the past"],
+  ["sự cân bằng và kiên nhẫn", "sự quá đà", "balance and patience", "excess"],
+  ["những ràng buộc và cám dỗ", "việc thoát khỏi ràng buộc cũ", "attachments and temptation", "breaking free"],
+  ["một thay đổi bất ngờ", "sự né tránh thay đổi", "sudden change", "avoiding change"],
+  ["hy vọng và sự chữa lành", "chút mất niềm tin", "hope and healing", "shaken faith"],
+  ["những điều còn mơ hồ", "sự thật dần sáng tỏ", "uncertainty", "clarity returning"],
+  ["niềm vui và thành công", "chút mệt mỏi làm mờ niềm vui", "joy and success", "dimmed joy"],
+  ["sự thức tỉnh, cơ hội làm lại", "sự tự trách quá mức", "a wake-up call", "self-blame"],
+  ["sự hoàn thành trọn vẹn", "việc còn dang dở", "completion", "unfinished business"],
+];
+const KW_MINOR: Record<Exclude<TarotSuit, "major">, KW[]> = {
+  wands: [
+    ["một nguồn cảm hứng mới", "hứng khởi bị chững lại", "fresh inspiration", "stalled enthusiasm"],
+    ["việc lên kế hoạch cho bước tiếp theo", "nỗi ngại bước ra vùng an toàn", "planning ahead", "fear of leaving your comfort zone"],
+    ["những cơ hội mở rộng", "kết quả đến chậm", "room to expand", "slow results"],
+    ["niềm vui và sự ổn định", "chút lấn cấn trong nhà hoặc trong nhóm", "joy and stability", "friction at home or in the team"],
+    ["sự cạnh tranh, va chạm", "những tranh cãi không đáng", "competition", "pointless conflict"],
+    ["chiến thắng và sự công nhận", "cảm giác chưa được ghi nhận", "victory and recognition", "lack of recognition"],
+    ["việc giữ vững lập trường", "cảm giác quá tải", "standing your ground", "overwhelm"],
+    ["những chuyển động nhanh, tin tức dồn dập", "sự trễ hẹn, vội vàng", "fast movement and news", "delays or haste"],
+    ["sự kiên cường ở chặng cuối", "sự kiệt sức", "resilience near the finish", "exhaustion"],
+    ["gánh nặng trách nhiệm", "việc buông bớt gánh nặng", "heavy responsibility", "letting burdens go"],
+    ["tin vui và tinh thần khám phá", "ý tưởng hay nhưng thiếu kiên trì", "good news and curiosity", "ideas without follow-through"],
+    ["hành động mạnh mẽ, nhiệt huyết", "sự nóng vội, bốc đồng", "bold action", "impulsiveness"],
+    ["sự tự tin, cuốn hút", "chút ghen tị hoặc tự ti", "confidence and charm", "jealousy or insecurity"],
+    ["tầm nhìn và khả năng dẫn dắt", "sự độc đoán, kỳ vọng quá cao", "vision and leadership", "being domineering"],
+  ],
+  cups: [
+    ["một cảm xúc mới đang chớm nở", "những cảm xúc bị kìm nén", "new feelings", "bottled-up feelings"],
+    ["sự kết nối hai chiều", "chút lệch pha, hiểu lầm", "a mutual connection", "misunderstanding"],
+    ["niềm vui bạn bè, sum họp", "sự quá đà hoặc người thứ ba", "friendship and celebration", "overindulgence or a third party"],
+    ["sự chán nản, dễ bỏ lỡ", "việc mở lòng trở lại", "boredom and missed chances", "opening up again"],
+    ["sự tiếc nuối điều đã mất", "việc dần vượt qua nỗi buồn", "grief over a loss", "moving past sadness"],
+    ["kỷ niệm đẹp, người cũ", "sự mắc kẹt trong quá khứ", "sweet memories", "being stuck in the past"],
+    ["quá nhiều lựa chọn, dễ mơ mộng", "sự tỉnh táo trở lại", "too many options", "clarity returning"],
+    ["việc rời bỏ điều không còn hợp", "sự lưỡng lự chưa nỡ rời đi", "walking away", "reluctance to leave"],
+    ["một điều ước thành sự thật", "sự hài lòng chưa trọn", "a wish come true", "incomplete satisfaction"],
+    ["hạnh phúc trọn vẹn, gia đình êm ấm", "kỳ vọng và thực tế còn vênh", "complete happiness", "expectations vs reality"],
+    ["một tin nhắn dễ thương, lời tỏ tình", "cảm xúc non nớt, dễ tổn thương", "a sweet message", "fragile feelings"],
+    ["một lời mời lãng mạn, chân thành", "những lời hứa hẹn quá ngọt", "a sincere romantic offer", "empty promises"],
+    ["sự tinh tế, thấu cảm", "sự nhạy cảm quá mức", "empathy", "oversensitivity"],
+    ["sự cân bằng giữa lý trí và cảm xúc", "cảm xúc thất thường", "emotional balance", "moodiness"],
+  ],
+  swords: [
+    ["sự sáng tỏ, một sự thật được nói ra", "thông tin rối, nhiễu loạn", "clarity and truth", "confusion"],
+    ["sự phân vân giữa hai lựa chọn", "một quyết định không thể né thêm", "indecision", "a decision you can't avoid"],
+    ["một nỗi buồn cần được thừa nhận", "vết thương đang lành dần", "heartache", "healing"],
+    ["sự nghỉ ngơi, hồi phục", "việc quay lại sau thời gian nghỉ", "rest and recovery", "returning after a break"],
+    ["cái giá của tranh cãi", "sự làm hoà", "the cost of conflict", "making peace"],
+    ["việc rời xa khó khăn", "những vướng bận cũ", "moving on from trouble", "lingering baggage"],
+    ["sự thiếu minh bạch", "sự thật dần lộ ra", "hidden motives", "the truth coming out"],
+    ["cảm giác bị mắc kẹt", "việc thoát khỏi suy nghĩ tự trói mình", "feeling trapped", "breaking mental chains"],
+    ["nỗi lo âu, nghĩ quá nhiều", "nỗi lo đang vơi dần", "anxiety", "easing worries"],
+    ["một điểm chạm đáy trước khi đi lên", "sự hồi phục sau khó khăn", "hitting bottom", "recovery"],
+    ["sự tò mò, tin tức mới", "chuyện thị phi, nói nhiều làm ít", "curiosity and news", "gossip"],
+    ["hành động quyết liệt, nói thẳng", "sự hấp tấp trong lời nói", "decisive action", "rash words"],
+    ["sự sắc sảo, độc lập", "sự lạnh lùng, khắt khe", "sharp independence", "coldness"],
+    ["lý trí và nguyên tắc", "sự áp đặt bằng lý lẽ", "reason and principle", "controlling logic"],
+  ],
+  pentacles: [
+    ["một cơ hội mới về tiền bạc, công việc", "cơ hội dễ tuột mất", "a new money or work opportunity", "a slipping chance"],
+    ["sự xoay xở khéo léo", "sự quá tải, lịch trình rối", "skillful juggling", "overload"],
+    ["việc làm việc nhóm hiệu quả", "sự phối hợp chưa ăn ý", "teamwork", "poor coordination"],
+    ["sự giữ gìn, tiết kiệm", "sự khư khư hoặc chi tiêu quá tay", "saving and security", "hoarding or overspending"],
+    ["khó khăn tạm thời", "dấu hiệu khởi sắc", "temporary hardship", "things improving"],
+    ["sự cho và nhận", "sự cho đi chưa cân bằng", "giving and receiving", "unbalanced giving"],
+    ["sự kiên nhẫn chờ thành quả", "sự sốt ruột", "patience for results", "impatience"],
+    ["sự chăm chỉ rèn luyện", "sự làm cho có, thiếu tập trung", "diligent practice", "half-hearted effort"],
+    ["sự tự chủ, sung túc", "sự phụ thuộc hoặc tiêu xài quá tay", "independence and comfort", "dependence or overspending"],
+    ["sự ổn định lâu dài", "chút bất ổn tài chính trong nhà", "long-term stability", "family money worries"],
+    ["cơ hội nhỏ mà chắc", "sự chần chừ, thiếu thực tế", "small solid chances", "procrastination"],
+    ["sự đều đặn, chắc chắn", "sự trì trệ", "steady progress", "stagnation"],
+    ["sự chu đáo, biết vun vén", "việc lo toan cho người khác quá nhiều", "practical care", "over-caring for others"],
+    ["sự vững vàng về tài chính", "việc đặt nặng tiền bạc", "financial security", "money obsession"],
+  ],
+};
+function kwRow(d: TarotDraw): KW {
+  const c = tarotCard(d.id);
+  return c.suit === "major" ? KW_MAJOR[d.id] : KW_MINOR[c.suit][(d.id - 22) % 14];
+}
+function kw(d: TarotDraw, en: boolean): string {
+  const row = kwRow(d);
+  return en ? (d.rev ? row[3] : row[2]) : d.rev ? row[1] : row[0];
+}
+// Không phải lá ngược nào cũng xấu, lá xuôi nào cũng tốt (vd Năm Tiền ngược = khởi sắc, Chín Kiếm xuôi = lo âu).
+// Chọn câu dẫn theo "nặng/nhẹ" của từ khoá để lời giải không tự mâu thuẫn ("đang vướng sự hồi phục").
+const SOFT_REV = new Set([
+  "việc thoát khỏi ràng buộc cũ", "sự thật dần sáng tỏ", "việc buông bớt gánh nặng", "việc mở lòng trở lại",
+  "việc dần vượt qua nỗi buồn", "sự tỉnh táo trở lại", "vết thương đang lành dần", "việc quay lại sau thời gian nghỉ",
+  "sự làm hoà", "sự thật dần lộ ra", "việc thoát khỏi suy nghĩ tự trói mình", "nỗi lo đang vơi dần",
+  "sự hồi phục sau khó khăn", "dấu hiệu khởi sắc",
+]);
+const HARD_UP = new Set([
+  "những ràng buộc và cám dỗ", "những điều còn mơ hồ", "gánh nặng trách nhiệm", "sự cạnh tranh, va chạm",
+  "sự chán nản, dễ bỏ lỡ", "sự tiếc nuối điều đã mất", "quá nhiều lựa chọn, dễ mơ mộng", "sự phân vân giữa hai lựa chọn",
+  "một nỗi buồn cần được thừa nhận", "cái giá của tranh cãi", "sự thiếu minh bạch", "cảm giác bị mắc kẹt",
+  "nỗi lo âu, nghĩ quá nhiều", "khó khăn tạm thời",
+]);
+function hard(d: TarotDraw): boolean {
+  const row = kwRow(d);
+  return d.rev ? !SOFT_REV.has(row[1]) : HARD_UP.has(row[0]);
+}
+
+// ── Chủ đề người hỏi: bóc phần "lõi" của câu hỏi → "chuyện visa đi Úc" ──
+const Q_PHRASES = [
+  "khi nao", "bao gio", "bao lau", "luc nao", "the nao", "ra sao", "nhu the nao", "nhu nao", "co nen", "tai sao", "vi sao",
+  "lieu rang", "lieu", "co phai", "duoc khong", "hay khong", "co duoc khong", "sap toi", "bao nhieu",
+];
+const LEAD_W = new Set(["a", "e", "anh", "em", "minh", "toi", "tui", "t", "co", "thi", "nen", "se", "duoc", "ban", "hay", "la", "ve", "cua"]);
+const TRAIL_W = new Set(["khong", "ko", "k", "chua", "nhi", "nha", "vay", "the", "a", "sao", "nao", "nhe", "di", "ha", "ta", "day", "ne"]);
+const TOPIC_NOUN: Record<TarotTopic, string> = {
+  general: "chuyện này",
+  love: "chuyện tình cảm",
+  work: "chuyện công việc",
+  money: "chuyện tiền bạc",
+  travel: "chuyện đi xa, giấy tờ",
+  study: "chuyện học hành",
+};
+function subjectOf(q: string, topic: TarotTopic): string {
+  let w = q.replace(/[?!.,…"“”]+/g, " ").split(/\s+/).filter(Boolean);
+  const f = () => w.map((x) => fold(x).replace(/[^a-z0-9]/g, ""));
+  for (const ph of Q_PHRASES) {
+    const parts = ph.split(" ");
+    let fw = f();
+    for (let i = 0; i + parts.length <= fw.length; i++) {
+      if (parts.every((p, k) => fw[i + k] === p)) {
+        w.splice(i, parts.length);
+        fw = f();
+        i--;
+      }
+    }
+  }
+  let fw = f();
+  while (w.length && LEAD_W.has(fw[0])) (w.shift(), (fw = f()));
+  while (w.length && TRAIL_W.has(fw[fw.length - 1])) (w.pop(), (fw = f()));
+  if (w.length >= 2 && fw[w.length - 2] === "cua") w = w.slice(0, -2); // "... của mình"
+  if (!w.length || w.length > 9) return TOPIC_NOUN[topic];
+  const core = w.join(" ");
+  return fold(core).startsWith("chuyen") ? core : `chuyện ${core}`;
+}
+const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
+type Role = "now" | "todo" | "timing" | "obstacle" | "outcome" | "situation" | "challenge" | "advice" | "message" | "option" | "clarify";
+const ROLES: Record<Exclude<TarotKind, "choice">, Role[]> = {
+  daily: ["message"],
+  open: ["situation", "challenge", "advice"],
+  timing: ["now", "todo", "timing"],
+  yesno: ["now", "obstacle", "outcome"],
+};
+// Câu mở đầu cho từng vị trí — ghép chủ đề ({S}) + từ khoá lá ({k}); [VI xuôi, VI ngược, EN xuôi, EN ngược].
+const FRAME: Record<Role, [string, string, string, string]> = {
+  now: ["Lúc này, {S} đang mang năng lượng của {k}.", "Lúc này, {S} đang hơi vướng {k}.", "Right now this carries the energy of {k}.", "Right now this is tangled in {k}."],
+  todo: ["Để mọi thứ suôn sẻ, lá này nhắc bạn để tâm tới {k}.", "Để mọi thứ suôn sẻ, bạn cần gỡ bỏ {k}.", "To make it work, lean into {k}.", "To make it work, let go of {k}."],
+  timing: ["Về thời điểm, lá này mang tín hiệu của {k}.", "Về thời điểm, lá này còn vướng {k} nên có thể cần thêm chút thời gian.", "For timing, this card signals {k}.", "For timing, {k} may slow things a little."],
+  obstacle: ["Điều bạn cần lưu tâm trong {S} là {k}.", "Điều có thể cản trở {S} chính là {k}.", "What to watch in this is {k}.", "What may block this is {k}."],
+  outcome: ["Kết quả của {S} nghiêng về {k}.", "Kết quả của {S} có thể còn vướng {k}.", "The outcome leans toward {k}.", "The outcome may still carry {k}."],
+  situation: ["Tình hình {S} hiện đang xoay quanh {k}.", "Tình hình {S} hiện đang vướng {k}.", "The situation revolves around {k}.", "The situation is caught up in {k}."],
+  challenge: ["Điều thử thách bạn lúc này liên quan tới {k}.", "Thử thách lớn nhất ở đây là {k}.", "Your challenge relates to {k}.", "The biggest challenge is {k}."],
+  advice: ["Lời khuyên của bài: hãy để tâm tới {k}.", "Lời khuyên của bài: gỡ bỏ {k} là mọi thứ sẽ nhẹ hơn.", "The advice: lean into {k}.", "The advice: release {k} and things get lighter."],
+  message: ["Năng lượng hôm nay của bạn là {k}.", "Hôm nay bạn có thể hơi vướng {k}.", "Today's energy is {k}.", "Today you may bump into {k}."],
+  option: ["Nếu chọn “{O}”, bài cho thấy {k}.", "Nếu chọn “{O}”, có thể sẽ vướng {k}.", "If you choose “{O}”, the cards show {k}.", "If you choose “{O}”, watch out for {k}."],
+  clarify: ["Lá làm rõ cho {S}: {k}.", "Lá làm rõ cho {S}: cẩn thận {k}.", "The clarifier shows {k}.", "The clarifier warns of {k}."],
+};
+function frame(role: Role, d: TarotDraw, S: string, en: boolean, O = ""): string {
+  const t = FRAME[role][(en ? 2 : 0) + (hard(d) ? 1 : 0)];
+  return t.replace("{S}", S).replace("{k}", kw(d, en)).replace("{O}", O);
+}
+
+const TOPIC_INTRO: Record<TarotTopic, [string[], string[]]> = {
+  general: [["Lomi xáo bài rồi nè ✨", "Hít một hơi… Lomi đã rút bài cho bạn ✨", "Bài đã sẵn sàng, cùng xem nha 🔮"], ["Cards are shuffled ✨", "Here's your reading 🔮"]],
+  love: [["Chuyện tình cảm thì Lomi xáo bài thật kỹ nè 💞", "Để Lomi xem trái tim bạn đang được bài nói gì nha 💞"], ["Matters of the heart — Lomi shuffled carefully 💞"]],
+  work: [["Chuyện công việc hả, để Lomi xem bài nha 💼", "Sự nghiệp là chuyện lớn, Lomi rút bài kỹ nè 💼"], ["Work question — let's see what the cards say 💼"]],
+  money: [["Chuyện tiền bạc thì phải xem kỹ nè 💰", "Để Lomi xem túi tiền của bạn sắp tới thế nào nha 💰"], ["Money matters — let's take a careful look 💰"]],
+  travel: [["Chuyện đi xa, giấy tờ… Lomi rút bài liền nha ✈️", "Hành trình sắp tới của bạn đây, cùng xem nha ✈️"], ["Travel and paperwork — here's your reading ✈️"]],
+  study: [["Chuyện học hành hả, cố lên nha! Lomi xem bài nè 📚", "Để Lomi xem việc học của bạn sắp tới ra sao nha 📚"], ["Studies — let's see what the cards say 📚"]],
+};
+
+// ── Ghép lời giải: từng lá gắn với chủ đề + phần “Tóm lại” nối các lá thành một câu chuyện ──
 export function readingText(r: TarotReading, lang: L): string {
   const en = lang === "en";
   const kind = r.kind ?? "open";
@@ -538,51 +733,56 @@ export function readingText(r: TarotReading, lang: L): string {
   const clar = r.cards.length === 1 && !!q;
   const pos = r.pos ?? TAROT_SPREADS.find((s) => s.id === r.spread)?.pos ?? [];
   const nums = ["①", "②", "③"];
+  const S = en ? "this" : q ? subjectOf(q, r.topic) : TOPIC_NOUN[r.topic];
+  const roles: Role[] = clar ? ["clarify"] : kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
   const out: string[] = [];
 
+  // Mở đầu
   if (!q) out.push(en ? pick(["Here's today's message for you ✨", "Lomi drew today's card for you 🔮"]) : pick(["Thông điệp hôm nay của bạn nè ✨", "Lá bài hôm nay Lomi rút cho bạn đây 🔮"]));
-  else if (clar) out.push(en ? `One more card to clarify “${q}”:` : `Lomi rút thêm 1 lá để làm rõ “${q}” nè:`);
-  else
-    out.push(
-      en
-        ? pick([`Lomi shuffled the cards for “${q}” ✨`, `Your question: “${q}” — here's what the cards say 🔮`])
-        : pick([`Lomi xáo bài cho câu hỏi “${q}” rồi nè ✨`, `Câu hỏi của bạn: “${q}” — cùng xem các lá bài nói gì nha 🔮`, `Hít một hơi… Lomi đã rút bài cho “${q}” ✨`]),
-    );
+  else if (clar) out.push(en ? `One more card to clarify “${q}”:` : `Lomi rút thêm 1 lá để làm rõ ${S} nè:`);
+  else {
+    const [vi, enI] = TOPIC_INTRO[r.topic];
+    out.push(`${pick(en ? enI : vi)}\n${en ? "Your question" : "Câu hỏi của bạn"}: “${q}”`);
+  }
 
+  // Từng lá
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
     const name = en ? c.name.en : `${c.name.vi} (${c.name.en})`;
     const orient = d.rev ? (en ? " · reversed" : " · ngược") : "";
-    const label = kind === "choice" && r.question ? null : pos[i];
-    const head =
-      kind === "choice"
-        ? `${nums[i]} ${en ? "If you choose" : "Nếu chọn"} “${pos[i] ? (en ? pos[i].en : pos[i].vi) : ""}”: ${name}${orient}`
-        : r.cards.length > 1 && label
-          ? `${nums[i]} ${en ? label.en : label.vi}: ${name}${orient}`
-          : `${name}${orient}`;
-    let line = en ? (d.rev ? c.rev.en : c.up.en) : d.rev ? c.rev.vi : c.up.vi;
-    if (r.topic !== "general") {
-      const tl = TOPIC_LINE[c.suit][r.topic];
-      line += ` ${en ? (d.rev ? tl[3] : tl[2]) : d.rev ? tl[1] : tl[0]}`;
-    }
-    out.push(`${head}\n${line}`);
+    const label = pos[i] ? (en ? pos[i].en : pos[i].vi) : "";
+    const head = r.cards.length > 1 ? `${nums[i]} ${kind === "choice" ? (en ? "Option" : "Lựa chọn") + ` “${label}”` : label} — ${name}${orient}` : `${name}${orient}`;
+    const meaning = en ? (d.rev ? c.rev.en : c.up.en) : d.rev ? c.rev.vi : c.up.vi;
+    out.push(`${head}\n${frame(roles[i] ?? "situation", d, S, en, label)} ${meaning}`);
   });
 
-  // Trả lời thẳng câu hỏi theo loại.
+  // Trả lời thẳng câu hỏi + tóm lại
+  const [c1, c2, c3] = r.cards;
+  const nowPart = (d: TarotDraw) => (en ? (hard(d) ? `is tangled in ${kw(d, en)}` : `carries ${kw(d, en)}`) : hard(d) ? `đang hơi vướng ${kw(d, en)}` : `đang có ${kw(d, en)}`);
+  const goPart = (d: TarotDraw) => (en ? (hard(d) ? `let go of ${kw(d, en)}` : `lean into ${kw(d, en)}`) : hard(d) ? `gỡ bỏ ${kw(d, en)}` : `để tâm tới ${kw(d, en)}`);
+  const lastCard = r.cards[r.cards.length - 1];
+  const topicLine = () => {
+    if (r.topic === "general") return "";
+    const tl = TOPIC_LINE[tarotCard(lastCard.id).suit][r.topic];
+    return ` ${en ? (lastCard.rev ? tl[3] : tl[2]) : lastCard.rev ? tl[1] : tl[0]}`;
+  };
   if (clar) {
-    const sc = cardScore(r.cards[0]);
+    const sc = cardScore(c1);
     out.push(
       en
         ? `🔎 This card ${sc > 0 ? "tips things toward the bright side" : sc < 0 ? "asks you to be careful and patient" : "says it's still open — your next step decides"}.`
-        : `🔎 Lá này ${sc > 0 ? "kéo mọi thứ nghiêng về phía tích cực hơn" : sc < 0 ? "nhắc bạn cẩn thận và kiên nhẫn thêm chút" : "cho thấy mọi chuyện còn để ngỏ — bước tiếp theo của bạn sẽ quyết định"}.`,
+        : `🔎 Lá này ${sc > 0 ? `kéo ${S} nghiêng về phía tích cực hơn` : sc < 0 ? "nhắc bạn cẩn thận và kiên nhẫn thêm chút" : "cho thấy mọi chuyện còn để ngỏ — bước tiếp theo của bạn sẽ quyết định"}.`,
     );
-  } else if (kind === "timing") {
-    out.push(`⏳ ${en ? "Timing" : "Về thời điểm"}: ${timingPhrase(r.cards[r.cards.length - 1], en)}`);
-  } else if (kind === "yesno") {
+  } else if (kind === "timing" && c3) {
+    out.push(`⏳ ${en ? "Timing" : "Về thời điểm"}: ${timingPhrase(c3, en)}`);
+    out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; to move it forward, ${goPart(c2)}.` : `${capFirst(S)} ${nowPart(c1)}. Muốn mọi thứ thuận lợi thì hãy ${goPart(c2)} nha.`}${topicLine()}`);
+  } else if (kind === "yesno" && c3) {
     out.push(`🔎 ${en ? "The cards' answer" : "Lá bài trả lời"}: ${yesnoPhrase(r.cards, en)}`);
-  } else if (kind === "choice" && r.pos) {
-    const [a, b] = r.cards.map(cardScore);
+    out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; the key thing to watch is ${kw(c2, en)}.` : `${capFirst(S)} ${nowPart(c1)}, điều cần để ý nhất là ${kw(c2, en)}.`}${topicLine()}`);
+  } else if (kind === "choice" && r.pos && c2) {
+    const [a, b] = [cardScore(c1), cardScore(c2)];
     const [na, nb] = r.pos.map((p) => (en ? p.en : p.vi));
+    const win = a >= b ? c1 : c2;
     out.push(
       `⚖️ ${
         a === b
@@ -590,42 +790,30 @@ export function readingText(r: TarotReading, lang: L): string {
             ? "Both paths have their own merits — pick the one that makes your heart feel lighter."
             : "Cả hai đều có cái hay riêng — chọn cái khiến lòng bạn thấy nhẹ nhõm nhất nha."
           : en
-            ? `The cards lean toward “${a > b ? na : nb}”.`
-            : `Lá bài nghiêng về “${a > b ? na : nb}” hơn đó.`
+            ? `The cards lean toward “${a > b ? na : nb}” — that path carries ${kw(win, en)}.`
+            : `Lá bài nghiêng về “${a > b ? na : nb}” hơn — bên đó mang năng lượng của ${kw(win, en)}.`
       }`,
     );
-  } else if (r.cards.length >= 3) {
-    // Hỏi chung: nhận xét tổng.
-    const notes: string[] = [];
-    const suits = r.cards.map((d) => tarotCard(d.id).suit);
-    const majors = suits.filter((x) => x === "major").length;
-    const revs = r.cards.filter((d) => d.rev).length;
-    const counts: Partial<Record<TarotSuit, number>> = {};
-    suits.forEach((x) => (counts[x] = (counts[x] ?? 0) + 1));
-    const dom = (Object.keys(counts) as TarotSuit[]).find((x) => x !== "major" && (counts[x] ?? 0) >= 2);
+  } else if (kind === "open" && c3) {
+    out.push(
+      `🌿 ${en ? "In short" : "Tóm lại"}: ${
+        en ? `This ${nowPart(c1)}, the challenge is ${kw(c2, en)}, and the advice is to ${goPart(c3)}.` : `${capFirst(S)} ${nowPart(c1)}; thử thách là ${kw(c2, en)}, và bài khuyên bạn ${goPart(c3)}.`
+      }${topicLine()}`,
+    );
+    const majors = r.cards.filter((d) => tarotCard(d.id).suit === "major").length;
     if (majors >= 2)
-      notes.push(en ? "Several Major Arcana showed up — this is a meaningful phase; what you choose now matters for a while." : "Có nhiều lá Ẩn Chính — đây là giai đoạn khá quan trọng, lựa chọn lúc này sẽ ảnh hưởng lâu dài đó.");
-    if (dom) {
-      const m: Record<string, [string, string]> = {
-        wands: ["Chất Gậy nổi trội: năng lượng hành động và đam mê đang dẫn dắt bạn.", "Wands dominate: action and passion are leading you."],
-        cups: ["Chất Cốc nổi trội: chuyện cảm xúc và các mối quan hệ là trọng tâm.", "Cups dominate: feelings and relationships are the focus."],
-        swords: ["Chất Kiếm nổi trội: bạn đang suy nghĩ nhiều, có quyết định cần đưa ra.", "Swords dominate: lots of thinking, a decision to be made."],
-        pentacles: ["Chất Tiền nổi trội: chuyện thực tế — tiền bạc, công việc — đang chiếm phần lớn tâm trí.", "Pentacles dominate: practical matters — money, work — are on your mind."],
-      };
-      notes.push(en ? m[dom][1] : m[dom][0]);
-    }
-    if (revs === r.cards.length)
-      notes.push(en ? "All cards are reversed — energy feels blocked; slow down and look inward." : "Cả ba lá đều ngược — năng lượng đang hơi nghẽn, chậm lại và lắng nghe bản thân nha.");
-    else if (revs === 0) notes.push(en ? "All upright — the energy flows smoothly for you." : "Cả ba lá đều xuôi — năng lượng khá thông suốt đó!");
-    if (notes.length) out.push(`✨ ${en ? "Lomi notices" : "Lomi thấy"}: ${notes.join(" ")}`);
+      out.push(en ? "✨ Several Major Arcana showed up — this is a meaningful phase." : "✨ Có nhiều lá Ẩn Chính xuất hiện — đây là giai đoạn khá quan trọng với bạn đó.");
   }
 
   if (/(?<![a-z])(suc khoe|benh|mang thai|co bau|health|sick|pregnan)/.test(fold(q)))
     out.push(en ? "💚 For anything health-related, please check with a doctor too." : "💚 Chuyện sức khoẻ thì nhớ hỏi thêm bác sĩ nữa nha.");
 
-  const adviceCard = kind === "choice" && r.cards.length === 2 ? (cardScore(r.cards[0]) >= cardScore(r.cards[1]) ? r.cards[0] : r.cards[1]) : r.cards[r.cards.length - 1];
-  const adv = ADVICE[tarotCard(adviceCard.id).suit];
-  out.push(`💡 ${en ? "Advice" : "Lời khuyên"}: ${en ? (adviceCard.rev ? adv[3] : adv[2]) : adviceCard.rev ? adv[1] : adv[0]}`);
+  // Lời khuyên hành động (bỏ qua với kiểu hỏi chung — lá thứ 3 đã là lời khuyên)
+  if (kind !== "open" || clar || !q) {
+    const adviceCard = kind === "choice" && r.cards.length === 2 ? (cardScore(c1) >= cardScore(c2) ? c1 : c2) : lastCard;
+    const adv = ADVICE[tarotCard(adviceCard.id).suit];
+    out.push(`💡 ${en ? "Advice" : "Lời khuyên"}: ${en ? (adviceCard.rev ? adv[3] : adv[2]) : adviceCard.rev ? adv[1] : adv[0]}`);
+  }
 
   if (q && !clar)
     out.push(en ? "Want more clarity? Type “one more card” and Lomi will draw another 🔮" : "Muốn rõ hơn thì gõ “rút thêm” để Lomi rút thêm 1 lá nha 🔮");

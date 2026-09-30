@@ -13,10 +13,10 @@ import {
   matchFaq,
   normalizeVi,
   relatedFaqs,
-  smallTalk,
   suggestFaqs,
   type Faq,
 } from "@/lib/lomiFaq";
+import { Q_DAILY, chitChat, crisisReply, friendlyFallback, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -350,6 +350,9 @@ export function AiChat({
     const lastA = last?.role === "assistant" ? last : undefined;
 
     if (!forceAi) {
+      // 0) Người dùng nói muốn làm hại bản thân → ưu tiên hỗ trợ trước mọi luồng khác.
+      const cr = crisisReply(q, lang);
+      if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true });
       // a) Lomi vừa hỏi loại hình → nhận loại hình (chip hoặc gõ tự do), rồi hỏi chủ đề
       //    (hoặc trả lời luôn nếu đã có chủ đề đang chờ / trong câu có sẵn chủ đề).
       if (lastA?.bizPick && !detectTarot(q)) {
@@ -418,16 +421,13 @@ export function AiChat({
     //    doanh (1b), trừ khi FAQ khớp đúng câu hỏi về CÁCH DÙNG app (nhận/đăng ưu đãi, tạo doanh nghiệp…).
     // 0b) Chào hỏi, cảm ơn, tạm biệt… → đáp lại tự nhiên.
     if (!forceAi) {
-      const st = smallTalk(q, lang);
-      if (st)
+      const cc = chitChat(q, lang);
+      if (cc)
         return localReply(q, {
           role: "assistant",
-          content: st,
+          content: cc.text,
           local: true,
-          quick: POPULAR_FAQ_IDS.slice(0, 3).map((id) => {
-            const f = faqById(id)!;
-            return lang === "en" ? f.q.en : f.q.vi;
-          }),
+          quick: cc.quick,
         });
     }
     const faq = forceAi ? null : matchFaq(q);
@@ -445,7 +445,16 @@ export function AiChat({
     }
     // 1c) Chưa chắc hiểu câu hỏi → gợi ý vài câu gần nhất (không gọi AI, không trả lời bừa).
     if (!AI_ENABLED && !forceAi) {
-      const sug = suggestFaqs(q, 3);
+      // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
+      // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
+      const sug = looksLikeQuestion(q) || q.split(/\s+/).length <= 3 ? suggestFaqs(q, 3) : [];
+      if (!sug.length && !en)
+        return localReply(q, {
+          role: "assistant",
+          content: friendlyFallback(q),
+          local: true,
+          quick: [Q_DAILY, ...POPULAR_FAQ_IDS.slice(0, 2).map((id) => faqById(id)!.q.vi)],
+        });
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
         lang === "en" ? f.q.en : f.q.vi,
