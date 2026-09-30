@@ -522,7 +522,8 @@ export function AiChat({
     if (!forceAi) {
       // 0) Người dùng nói muốn làm hại bản thân → ưu tiên hỗ trợ trước mọi luồng khác.
       const cr = crisisReply(q, lang);
-      if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true });
+      // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
+      if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
       // 0a) Trí nhớ: người dùng kể tên / hoàn cảnh → Lomi ghi nhớ; hỏi "Lomi nhớ gì về mình?", "quên hết đi".
       if (isForgetMemory(q)) {
         clearMem(user.id);
