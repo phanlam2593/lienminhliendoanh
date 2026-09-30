@@ -7,7 +7,16 @@ import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { LomiMascot, type LomiMood } from "@/components/LomiMascot";
-import { matchFaq, normalizeVi, type Faq } from "@/lib/lomiFaq";
+import {
+  POPULAR_FAQ_IDS,
+  faqById,
+  matchFaq,
+  normalizeVi,
+  relatedFaqs,
+  smallTalk,
+  suggestFaqs,
+  type Faq,
+} from "@/lib/lomiFaq";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -70,8 +79,15 @@ type Msg = {
 type Quota = { member: boolean; limit: number; used: number };
 
 const db = supabase as any;
+// 30/09 (theo ý Kir: không phụ thuộc Lovable): Lomi trả lời hoàn toàn trên máy — thư viện hỏi–đáp về app,
+// tư vấn kinh doanh, bói Tarot. TẮT gọi AI qua edge function "ai-assistant" (số dư AI của Lovable).
+// Khi có key Gemini riêng (xem supabase/functions/ai-assistant) thì đổi thành true để bật lại cho Membership.
+const AI_ENABLED = false;
 // FAQ về CÁCH DÙNG app — luôn ưu tiên hơn tư vấn kinh doanh khi cả hai cùng khớp.
-const APP_HOWTO_FAQ = new Set(["claim", "claimexp", "offerbad", "bizcreate", "bizoffer", "bizstatus"]);
+const APP_HOWTO_FAQ = new Set([
+  "claim", "pin", "claimexp", "offerlocked", "offerlist", "offerbad", "bizcreate", "bizoffer", "bizbroadcast", "bizpin",
+  "bizedit", "bizphotos", "bizlocation", "bizonline", "bizmulti", "bizstatus", "reviewreply", "bizreports", "review",
+]);
 const histKey = (uid: string) => `ai-assistant-history:${uid}`;
 
 function loadHistory(uid: string): Msg[] {
@@ -248,9 +264,11 @@ export function AiChat({
   const answerFaq = (f: Faq, asked?: string) => {
     setErr(null);
     const q = asked ?? (lang === "en" ? f.q.en : f.q.vi);
+    // Gợi ý 2 câu liên quan (cùng nhóm) để hỏi tiếp cho mượt.
+    const rel = relatedFaqs(f, 2).map((x) => (lang === "en" ? x.q.en : x.q.vi));
     push([
       { role: "user", content: q, local: true },
-      { role: "assistant", content: lang === "en" ? f.a.en : f.a.vi, local: true, ask: asked },
+      { role: "assistant", content: lang === "en" ? f.a.en : f.a.vi, local: true, ask: AI_ENABLED ? asked : undefined, quick: rel },
     ]);
     lomiSound("msg");
   };
@@ -398,15 +416,56 @@ export function AiChat({
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
     //    Riêng câu hỏi chuyện kinh doanh (vd "làm sao giữ khách quen cho spa") thì ưu tiên tư vấn kinh
     //    doanh (1b), trừ khi FAQ khớp đúng câu hỏi về CÁCH DÙNG app (nhận/đăng ưu đãi, tạo doanh nghiệp…).
+    // 0b) Chào hỏi, cảm ơn, tạm biệt… → đáp lại tự nhiên.
+    if (!forceAi) {
+      const st = smallTalk(q, lang);
+      if (st)
+        return localReply(q, {
+          role: "assistant",
+          content: st,
+          local: true,
+          quick: POPULAR_FAQ_IDS.slice(0, 3).map((id) => {
+            const f = faqById(id)!;
+            return lang === "en" ? f.q.en : f.q.vi;
+          }),
+        });
+    }
     const faq = forceAi ? null : matchFaq(q);
     const bizQ = !forceAi && looksLikeBizQuestion(q);
-    if (faq && (!bizQ || APP_HOWTO_FAQ.has(faq.id))) return answerFaq(faq, q);
+    // Câu hỏi xin LỜI KHUYÊN kinh doanh (giữ khách, hút khách lúc vắng, giá, khai trương, dịp lễ, bài đăng)
+    // thì để tư vấn kinh doanh trả lời — trừ FAQ về cách dùng app rõ ràng (APP_HOWTO_FAQ).
+    const advisory = bizQ && ["loyal", "slow", "newcust", "price", "opening", "holiday", "post", "offer"].includes(detectBizTopic(q) ?? "");
+    if (faq && (!advisory || APP_HOWTO_FAQ.has(faq.id))) return answerFaq(faq, q);
     // 1b) Hỏi chuyện kinh doanh (vd "làm sao hút khách cho quán cà phê buổi sáng") → tư vấn tại chỗ.
     if (bizQ) {
       const kind = detectBizKind(q);
       const tp = detectBizTopic(q) ?? "offer";
       if (!kind.type && (tp === "offer" || tp === "post")) return askBiz(q, tp);
       return bizReply(q, kind, tp);
+    }
+    // 1c) Chưa chắc hiểu câu hỏi → gợi ý vài câu gần nhất (không gọi AI, không trả lời bừa).
+    if (!AI_ENABLED && !forceAi) {
+      const sug = suggestFaqs(q, 3);
+      const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+      const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
+        lang === "en" ? f.q.en : f.q.vi,
+      );
+      return localReply(q, {
+        role: "assistant",
+        content: sug.length
+          ? en
+            ? "Hmm, I'm not 100% sure what you mean 😅 Did you mean one of these?"
+            : pick([
+                "Hmm, câu này Lomi chưa chắc hiểu đúng ý bạn 😅 Có phải bạn muốn hỏi một trong mấy câu này không?",
+                "Lomi đoán bạn đang hỏi một trong mấy chuyện này nè, bấm vào câu đúng ý nha 👇",
+                "Để chắc ăn, bạn chọn giúp Lomi câu gần đúng nhất nha 😊",
+              ])
+          : en
+            ? "That's outside what Lomi knows 😅 I'm best at how to use the app, business tips and tarot. Try asking like “how do I claim an offer”, see the Guide (/huong-dan), or reach a human via Profile → ⋯ → Help & Contact."
+            : "Câu này nằm ngoài những gì Lomi biết rồi 😅 Lomi rành nhất về cách dùng Liên Minh Liên Doanh, tư vấn kinh doanh và bói Tarot. Bạn thử hỏi kiểu “làm sao nhận ưu đãi”, xem Hướng dẫn (/huong-dan), hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.",
+        local: true,
+        quick: chips,
+      });
     }
     // 2) Không phải Membership / hết lượt → báo ngay, không gọi server.
     if (quota && !quota.member) {
@@ -532,6 +591,25 @@ export function AiChat({
               desc={en ? "Offer ideas, more customers, post writing… free (Vietnamese)" : "Ý tưởng ưu đãi, hút khách, viết bài đăng… miễn phí"}
               onClick={() => askBiz()}
             />
+            {/* Hỏi nhanh — vài câu hay gặp, bấm là Lomi trả lời ngay (thư viện trên máy). */}
+            <div className="space-y-1.5 px-1">
+              <div className="text-xs font-semibold text-muted-foreground">{en ? "Quick questions" : "Hỏi nhanh"}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {POPULAR_FAQ_IDS.map((id) => {
+                  const f = faqById(id)!;
+                  const label = en ? f.q.en : f.q.vi;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => void send(label)}
+                      className="text-[12px] px-2.5 py-1 rounded-full border border-primary/40 text-primary bg-background active:scale-95 transition"
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         ) : (
           msgs.map((m, i) => (
@@ -574,7 +652,7 @@ export function AiChat({
                       </button>
                     </>
                   )}
-                  {!m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
+                  {AI_ENABLED && !m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
                     <button onClick={() => void send(m.ask!, true)} className="font-semibold text-primary">
                       {t("ai.askAi")}
                     </button>
