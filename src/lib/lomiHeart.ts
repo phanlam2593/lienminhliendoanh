@@ -767,6 +767,8 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   let t = themeOf(n);
   // Chủ đề chung chung (buồn, mệt, tình cảm nói chung) không đè lên chuyện cụ thể đang kể (vd chia tay).
   if (t && cur && GENERIC.has(t.id) && !GENERIC.has(cur.id)) t = undefined;
+  // Hỏi nghĩa ("YSL là gì?") → giải thích luôn, kể cả khi vẫn đang nói đúng chủ đề đó.
+  if (t?.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `)) return themeReply(t, n, false);
   // Chủ đề mới (vd đang buồn chung chung → kể ra là cãi nhau với người yêu) → trả lời theo chủ đề mới.
   if (t && t.id !== prev && !(listen && !adviceAsked)) return themeReply(t, n, adviceAsked);
   const th = t ?? cur;
