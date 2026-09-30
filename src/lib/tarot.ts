@@ -407,7 +407,7 @@ function detectTopic(f: string): TarotTopic {
   if (/(?<![a-z])(hoc|thi|du hoc|truong|dai hoc|bang cap|ielts|toeic|exam|study|school)(?![a-z])/.test(f)) return "study";
   if (/(?<![a-z])(visa|nuoc ngoai|du lich|xuat canh|dinh cu|xuat khau lao dong|ho chieu|chuyen di|di (uc|my|nhat|han|canada|duc|anh|phap|dai loan|sing|thai)|travel|trip|abroad|passport)(?![a-z])/.test(f))
     return "travel";
-  if (/(?<![a-z])(cong viec|su nghiep|viec lam|cong ty|sep|phong van|xin viec|thang chuc|nghi viec|chuyen viec|work|job|career|interview|promotion|boss)(?![a-z])/.test(f))
+  if (/(?<![a-z])(cong viec|su nghiep|viec lam|cong ty|sep|phong van|xin viec|tim viec|kiem viec|co viec|that nghiep|mat viec|di lam|thang chuc|nghi viec|chuyen viec|work|job|career|interview|promotion|boss)(?![a-z])/.test(f))
     return "work";
   if (/(?<![a-z])(tien|tai chinh|dau tu|kinh doanh|buon ban|mo quan|lam an|luong|thu nhap|money|invest|business|salary)(?![a-z])/.test(f))
     return "money";
@@ -790,6 +790,298 @@ const TOPIC_INTRO: Record<TarotTopic, [string[], string[]]> = {
   study: [["Chuyện học hành hả, cố lên nha! Lomi xem bài nè 📚", "Để Lomi xem việc học của bạn sắp tới ra sao nha 📚"], ["Studies — let's see what the cards say 📚"]],
 };
 
+// ── Bối cảnh cụ thể của câu hỏi (chi tiết hơn chủ đề): tìm việc khác đang đi làm, người cũ khác crush… ──
+type Scene = "jobseek" | "work" | "ex" | "crush" | "love" | "money" | "travel" | "study" | "health" | "fun" | "general";
+function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
+  const f = ` ${fold(`${context ?? ""} ${q}`)} `.replace(/[?!.,…"“”]/g, " ");
+  const has = (re: RegExp) => re.test(f);
+  if (topic === "health") return "health";
+  if (has(/ (that nghiep|tim viec|kiem viec|xin viec|co viec|mat viec|bi duoi|nghi viec roi|chua co viec|phong van|nop cv|nop ho so xin) /)) return "jobseek";
+  if (topic === "work") return "work";
+  if (has(/ (nguoi yeu cu|nguoi cu|ny cu|ex|quay lai|tai hop|chia tay) /)) return "ex";
+  if (has(/ (crush|nhan tin|to tinh|lam quen|bat chuyen|nguoi ay|thich (anh|em|ban|nguoi)|co thich minh) /)) return "crush";
+  if (topic === "love") return "love";
+  if (topic === "money" || topic === "travel" || topic === "study") return topic;
+  if (has(/ (nhau|ruou|bia|di choi|quay|tiec|bar|pub) /)) return "fun";
+  return "general";
+}
+type Tpl = [string, string]; // [bài thuận, bài thử thách]
+type SceneBank = { noun?: string; state: Tpl; action: Tpl; block: Tpl; result: Tpl; tip: Tpl };
+// {k} = ý chính của lá (cụm danh từ), {S} = chủ đề người hỏi ("chuyện visa đi Úc").
+const SCENE: Record<Scene, SceneBank> = {
+  jobseek: {
+    noun: "chuyện tìm việc",
+    state: [
+      "Áp vào chuyện tìm việc, lá này cho thấy bạn vẫn đang giữ được {k}. Về mặt tâm lý, đây là “vốn” quý nhất của người đang thất nghiệp: ai còn tin vào năng lực của mình thì thường kiên trì nộp hồ sơ lâu hơn — và kiên trì mới là thứ quyết định kết quả.",
+      "Áp vào chuyện tìm việc, lá này phản ánh bạn đang vướng {k}. Không có việc một thời gian, bị từ chối vài lần thì rất dễ tự nghi ngờ bản thân — đó là phản ứng tâm lý bình thường, không phải bằng chứng là bạn kém.",
+    ],
+    action: [
+      "Với việc tìm việc, lá này khuyên bạn dựa vào {k}. Cụ thể là chủ động hơn một chút: nhắn người quen trong ngành, chỉnh CV cho từng vị trí thay vì gửi một bản cho tất cả.",
+      "Với việc tìm việc, điều cần gỡ là {k}. Khi lo cả bức tranh lớn, đầu óc dễ quá tải và mình đâm ra trì hoãn; chia nhỏ mục tiêu mỗi ngày (vd 2 hồ sơ thật chỉn chu) sẽ giúp bạn thấy mình đang tiến lên.",
+    ],
+    block: [
+      "Điều cần để ý khi tìm việc là {k} — dùng đúng lúc, đây sẽ là điểm cộng khi đi phỏng vấn.",
+      "Thứ có thể cản bước bạn lúc này là {k}. Nhận diện được nó là đã gỡ được một nửa rồi.",
+    ],
+    result: [
+      "Kết quả nghiêng về {k} — tín hiệu khá tốt cho một công việc phù hợp đang tới.",
+      "Kết quả còn vướng {k}, nghĩa là có thể phải qua thêm vài vòng thử. Coi mỗi buổi phỏng vấn là một lần luyện tập, bạn sẽ khá lên thấy rõ.",
+    ],
+    tip: [
+      "Việc nên làm ngay: mỗi ngày gửi vài hồ sơ được chỉnh riêng cho từng chỗ, và nhắn hỏi thăm người quen — rất nhiều công việc đến từ lời giới thiệu.",
+      "Việc nên làm ngay: giữ nhịp sinh hoạt đều (dậy đúng giờ, vận động nhẹ) để tinh thần không đi xuống, rồi đặt một mục tiêu nhỏ mỗi ngày cho việc nộp hồ sơ.",
+    ],
+  },
+  work: {
+    noun: "chuyện công việc",
+    state: [
+      "Ở chỗ làm, lá này cho thấy bạn đang có {k}. Khi thấy mình làm chủ được công việc, người ta thường làm tốt hơn và dễ được ghi nhận hơn.",
+      "Ở chỗ làm, lá này phản ánh bạn đang vướng {k}. Áp lực kéo dài dễ khiến mình mệt và nhìn mọi thứ tiêu cực hơn thực tế.",
+    ],
+    action: [
+      "Trong công việc, bài khuyên bạn phát huy {k} — mạnh dạn đề xuất ý tưởng, nhận thêm phần việc bạn làm giỏi.",
+      "Trong công việc, điều cần gỡ là {k}. Thử nói chuyện thẳng thắn với sếp hoặc đồng nghiệp về điều đang làm bạn vướng.",
+    ],
+    block: ["Điều cần để ý là {k} — biết tận dụng sẽ giúp bạn nổi bật.", "Thứ có thể cản bạn là {k} — đừng để nó kéo tinh thần làm việc xuống."],
+    result: ["Kết quả nghiêng về {k} — công sức của bạn có khả năng được đền đáp.", "Kết quả còn vướng {k}, nên chuẩn bị thêm phương án dự phòng cho chắc."],
+    tip: [
+      "Ghi lại những việc bạn đã làm tốt — lúc cần đề xuất tăng lương hay chuyển vị trí sẽ có “bằng chứng” rõ ràng.",
+      "Sắp việc theo thứ tự ưu tiên, nghỉ ngắn giữa giờ, và đừng ôm hết mọi thứ một mình.",
+    ],
+  },
+  ex: {
+    noun: "chuyện với người cũ",
+    state: [
+      "Với người cũ, lá này cho thấy giữa hai người vẫn còn {k}. Tâm lý học gọi đây là “chuyện chưa khép lại” — cảm xúc cũ còn đó nên mình mới hay nghĩ tới.",
+      "Với người cũ, lá này phản ánh bạn đang vướng {k}. Khi một mối quan hệ kết thúc, mình vẫn quen có người đó trong cuộc sống — nên nhớ nhung là chuyện bình thường.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k}: nếu muốn nối lại, hãy bắt đầu nhẹ nhàng, như hai người bạn hỏi thăm nhau.",
+      "Điều cần gỡ là {k}. Trước khi nghĩ tới chuyện quay lại, hãy hỏi lòng mình: mình nhớ người đó, hay nhớ cảm giác không cô đơn?",
+    ],
+    block: ["Điều cần để ý là {k} — đó có thể là cầu nối giữa hai người.", "Thứ có thể cản là {k} — những lý do khiến hai người chia tay có thể vẫn còn đó."],
+    result: ["Kết quả nghiêng về {k} — cánh cửa chưa đóng hẳn đâu.", "Kết quả còn vướng {k} — có lẽ đây là lúc chăm cho bản thân hơn là chờ đợi."],
+    tip: [
+      "Nếu liên lạc lại, hãy nói chuyện thật lòng về điều từng khiến hai người xa nhau, đừng chỉ nhắc kỷ niệm đẹp.",
+      "Dành thời gian cho bạn bè, sở thích riêng — khi lòng nhẹ hơn, bạn sẽ biết rõ mình thật sự muốn gì.",
+    ],
+  },
+  crush: {
+    noun: "chuyện với người ấy",
+    state: [
+      "Trong chuyện với người ấy, lá này cho thấy đang có {k}. Khi thích ai đó, mình hay soi từng tín hiệu nhỏ — lần này năng lượng khá tích cực đó.",
+      "Trong chuyện với người ấy, lá này phản ánh bạn đang vướng {k}. Sợ bị từ chối là nỗi sợ rất tự nhiên — ai đứng trước người mình thích cũng vậy.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k}: chủ động một bước nhỏ và tự nhiên thôi — một tin nhắn hỏi thăm, một lời rủ đi cà phê.",
+      "Điều cần gỡ là {k}. Đừng đoán ý người ta quá nhiều; một câu hỏi thẳng mà nhẹ nhàng thường hiệu quả hơn cả tuần suy diễn.",
+    ],
+    block: ["Điều cần để ý là {k} — đó chính là điểm khiến bạn thu hút.", "Thứ có thể cản là {k} — cẩn thận kẻo mình tự làm khó mình."],
+    result: ["Kết quả nghiêng về {k} — khả năng người ta đáp lại là có đó.", "Kết quả còn vướng {k} — có thể cần thêm thời gian để hai người hiểu nhau hơn."],
+    tip: [
+      "Cứ là chính mình và giữ nhịp tự nhiên — sự thoải mái là điều hấp dẫn nhất.",
+      "Đừng dồn hết cảm xúc vào một người; giữ cuộc sống của mình thật vui, ai hợp sẽ tự đến gần.",
+    ],
+  },
+  love: {
+    noun: "chuyện tình cảm",
+    state: [
+      "Trong chuyện tình cảm, lá này cho thấy đang có {k}. Cảm giác an toàn và được thấu hiểu là nền móng của mọi mối quan hệ bền.",
+      "Trong chuyện tình cảm, lá này phản ánh đang vướng {k}. Khi thiếu cảm giác an toàn, mình dễ nghĩ nhiều và hiểu lầm cả những điều nhỏ.",
+    ],
+    action: [
+      "Bài khuyên dựa vào {k} — dành thời gian thật sự cho nhau, nói ra điều mình trân trọng ở đối phương.",
+      "Điều cần gỡ là {k}. Nói bằng “mình cảm thấy…” thay vì “bạn lúc nào cũng…” sẽ giúp hai người bớt phòng thủ.",
+    ],
+    block: ["Điều cần để ý là {k} — giữ được điều này thì tình cảm sẽ bền.", "Thứ có thể cản là {k} — đừng để nó tích tụ thành khoảng cách."],
+    result: ["Kết quả nghiêng về {k} — mối quan hệ có hướng đi tốt.", "Kết quả còn vướng {k} — cần cả hai cùng cố gắng thêm."],
+    tip: [
+      "Giữ những thói quen nhỏ: một lời hỏi thăm, một bữa ăn chung — tình cảm lớn lên từ những điều nhỏ.",
+      "Chọn một lúc bình tĩnh để nói chuyện thật lòng, lắng nghe nhiều hơn là tranh cãi đúng sai.",
+    ],
+  },
+  money: {
+    noun: "chuyện tiền bạc",
+    state: [
+      "Về tiền bạc, lá này cho thấy bạn đang có {k}. Cảm giác làm chủ được tài chính giúp mình quyết định sáng suốt hơn.",
+      "Về tiền bạc, lá này phản ánh đang vướng {k}. Lo về tiền làm đầu óc bị “chật”, dễ quyết định vội — nên bình tĩnh trước đã.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k} — lập kế hoạch rõ ràng cho khoản tiền sắp tới.",
+      "Điều cần gỡ là {k}. Ghi lại chi tiêu trong 1–2 tuần sẽ giúp bạn thấy tiền đang “chảy” đi đâu.",
+    ],
+    block: ["Điều cần để ý là {k} — tận dụng tốt sẽ giúp tiền sinh sôi.", "Thứ có thể cản là {k} — cẩn thận những khoản chi theo cảm xúc."],
+    result: ["Kết quả nghiêng về {k} — tài chính có chiều hướng khá lên.", "Kết quả còn vướng {k} — nên giữ một khoản dự phòng cho chắc."],
+    tip: [
+      "Trích một phần để tiết kiệm ngay khi nhận tiền, đừng đợi cuối tháng mới để dành.",
+      "Tạm hoãn khoản chi lớn, ưu tiên việc thiết yếu và tránh vay mượn thêm lúc này.",
+    ],
+  },
+  travel: {
+    state: [
+      "Với {S}, lá này cho thấy đang có {k} — mọi thứ đang chuyển động theo hướng tốt.",
+      "Với {S}, lá này phản ánh đang vướng {k}. Chờ kết quả giấy tờ là giai đoạn dễ sốt ruột nhất, vì phần lớn nằm ngoài tầm kiểm soát của mình.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k} — chủ động chuẩn bị trước những gì có thể: hồ sơ, tài chính, lịch trình.",
+      "Điều cần gỡ là {k}. Tập trung vào phần mình kiểm soát được (hồ sơ đầy đủ, đúng hạn), phần còn lại cứ để thời gian lo.",
+    ],
+    block: ["Điều cần để ý là {k} — đây là lợi thế của bạn.", "Thứ có thể cản là {k} — rà lại hồ sơ thật kỹ để khỏi bị trả về."],
+    result: ["Kết quả nghiêng về {k} — khả năng suôn sẻ là khá cao.", "Kết quả còn vướng {k} — có thể cần bổ sung giấy tờ hoặc chờ thêm một chút."],
+    tip: [
+      "Chuẩn bị sẵn bản sao giấy tờ và kế hoạch chi tiết để có tin là lên đường được ngay.",
+      "Lập danh sách giấy tờ cần có, kiểm tra từng mục, và hỏi thêm người đã từng làm để tránh sai sót.",
+    ],
+  },
+  study: {
+    noun: "chuyện học hành",
+    state: [
+      "Về học hành, lá này cho thấy bạn đang có {k} — tinh thần học đang tốt.",
+      "Về học hành, lá này phản ánh đang vướng {k}. Áp lực thi cử làm mình khó ghi nhớ hơn — nên bớt lo cũng là một cách học.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k} — tự kiểm tra bằng cách làm đề sẽ nhớ lâu hơn nhiều so với đọc đi đọc lại.",
+      "Điều cần gỡ là {k}. Học theo từng phiên ngắn (khoảng 25–30 phút rồi nghỉ) giúp tập trung tốt hơn ngồi lì cả buổi.",
+    ],
+    block: ["Điều cần để ý là {k} — đó là điểm mạnh khi đi thi.", "Thứ có thể cản là {k} — đừng để nó lấy mất giấc ngủ, vì ngủ đủ giúp não ghi nhớ bài."],
+    result: ["Kết quả nghiêng về {k} — công sức sẽ được đền đáp.", "Kết quả còn vướng {k} — cần đều đặn hơn một chút."],
+    tip: [
+      "Giữ lịch học đều mỗi ngày và ôn lại bài cũ theo chu kỳ, kiến thức sẽ nằm lâu hơn.",
+      "Ngủ đủ giấc, chia nhỏ bài, và nhờ bạn bè hoặc thầy cô giảng lại phần khó.",
+    ],
+  },
+  health: {
+    noun: "chuyện sức khoẻ",
+    state: [
+      "Về sức khoẻ, lá này mang năng lượng của {k}. Tinh thần tốt không thay được thuốc, nhưng giúp mình ăn được, ngủ ngon — nền tảng để hồi phục.",
+      "Về sức khoẻ, lá này phản ánh đang vướng {k}. Lúc mệt, mình hay lo nhiều hơn — mà lo lắng lại làm cơ thể căng thêm.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k} — uống thuốc đúng liều, ăn uống và nghỉ ngơi như bác sĩ dặn.",
+      "Điều cần gỡ là {k}. Có gì chưa yên tâm về cách điều trị thì cứ hỏi lại bác sĩ, hoặc đi khám thêm ở chỗ khác.",
+    ],
+    block: ["Điều cần để ý là {k} — giữ được điều này sẽ giúp hồi phục nhanh hơn.", "Thứ có thể cản là {k} — đừng cố sức hay tự ý bỏ thuốc giữa chừng nha."],
+    result: ["Kết quả nghiêng về {k} — tín hiệu tích cực cho việc hồi phục.", "Kết quả còn vướng {k} — cơ thể có thể cần thêm thời gian, đừng sốt ruột."],
+    tip: [
+      "Uống thuốc đúng giờ, uống đủ nước, ngủ sớm — mấy việc nhỏ này giúp cơ thể hồi phục rất nhiều.",
+      "Nếu vài hôm chưa đỡ hoặc thấy nặng hơn, quay lại bác sĩ hoặc khám ở nơi khác để có thêm ý kiến nha.",
+    ],
+  },
+  fun: {
+    state: [
+      "Với {S}, lá này mang năng lượng của {k} — tâm trạng đang khá hợp để vui chơi.",
+      "Với {S}, lá này phản ánh bạn đang vướng {k}. Đôi khi mình muốn đi chơi vì cần xả stress — cũng tốt, miễn đừng quá đà.",
+    ],
+    action: ["Bài khuyên bạn dựa vào {k} — vui có chừng mực mới là vui trọn vẹn.", "Điều cần gỡ là {k}. Hẹn giờ về trước khi đi sẽ giúp bạn không bị cuốn theo cuộc vui."],
+    block: ["Điều cần để ý là {k}.", "Thứ có thể cản là {k} — cẩn thận kẻo cuộc vui thành chuyện không vui."],
+    result: ["Kết quả nghiêng về {k} — một buổi vui vẻ đang chờ bạn.", "Kết quả còn vướng {k} — có khi hôm nay nghỉ ngơi thì hơn."],
+    tip: ["Vui thì vui, nhưng về nhà an toàn nha — đã uống thì gọi xe.", "Nếu đang mệt, ở nhà nghỉ một hôm cũng là cách tự thương mình đó."],
+  },
+  general: {
+    state: ["Với {S}, lá này cho thấy đang có {k} — một khởi điểm khá tốt.", "Với {S}, lá này phản ánh bạn đang vướng {k}. Nhận ra được điều này đã là một bước tiến rồi."],
+    action: ["Bài khuyên bạn dựa vào {k} để đi tiếp.", "Điều cần gỡ là {k} — bắt đầu từ một việc nhỏ nhất bạn làm được ngay hôm nay."],
+    block: ["Điều cần để ý là {k} — tận dụng cho tốt nha.", "Thứ có thể cản là {k} — nhận diện sớm để tránh."],
+    result: ["Kết quả nghiêng về {k} — chiều hướng khá tích cực.", "Kết quả còn vướng {k} — có thể cần thêm thời gian hoặc một cách làm khác."],
+    tip: ["Cứ tin vào cảm nhận của mình và bước từng bước chắc chắn.", "Chậm lại một nhịp, viết ra điều mình lo nhất rồi xử lý từng phần."],
+  },
+};
+type Group = "state" | "action" | "block" | "result" | "time";
+const ROLE_GROUP: Record<Role, Group> = {
+  now: "state", situation: "state", message: "state", clarify: "state",
+  todo: "action", advice: "action",
+  obstacle: "block", challenge: "block",
+  outcome: "result", option: "result",
+  timing: "time",
+};
+const TIME_TPL: Tpl = [
+  "Về thời điểm, lá này mang năng lượng của {k} — khi bạn đã sẵn sàng, {S} có thể đến nhanh hơn bạn nghĩ.",
+  "Về thời điểm, lá này còn vướng {k} — {S} có thể cần thêm chút thời gian, hãy dùng khoảng chờ này để chuẩn bị kỹ hơn.",
+];
+const CHOICE_TPL: [string[], string[]] = [
+  ["bạn sẽ có {k} — một hướng đi khá sáng.", "điểm cộng rõ nhất là {k} — lựa chọn này hợp với bạn đó."],
+  ["bạn có thể phải đối mặt với {k} — cân nhắc xem mình đã sẵn sàng chưa.", "có thể sẽ vướng {k}, nên chuẩn bị tinh thần trước."],
+];
+const fillT = (t: string, k: string, S: string) => t.replace("{k}", k).replace("{S}", S);
+const lcFirst = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
+
+/** Lời giải tiếng Việt kiểu kể chuyện: nghĩa lá → áp vào câu hỏi (góc nhìn tâm lý) → tóm lại có liên kết. */
+function readingNarrativeVi(r: TarotReading): string {
+  const kind = r.kind ?? "open";
+  const q = r.question ?? "";
+  const scene = sceneOf(q, r.topic, r.context);
+  const bank = SCENE[scene];
+  const sub = subjectOf(q, r.topic);
+  const S = bank.noun && (sub === TOPIC_NOUN[r.topic] || scene === "jobseek" || scene === "health") ? bank.noun : sub;
+  const pos = r.pos ?? [];
+  const roles: Role[] = kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
+  const nums = ["①", "②", "③"];
+  // Lá ngược mang nghĩa tốt (vd "nỗi lo đang vơi dần") vẫn tính là thuận; lá xuôi nặng (Toà Tháp) tính là thử thách.
+  const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
+  const out: string[] = [];
+
+  const [vi] = TOPIC_INTRO[r.topic];
+  const intro = scene === "jobseek" ? ["Tìm việc là chuyện lớn, Lomi rút bài thật kỹ cho bạn nè 💼", "Để Lomi xem con đường tìm việc của bạn sắp tới nha 💼"] : vi;
+  out.push(`${pick(intro)}\nCâu hỏi của bạn: “${q}”`);
+  out.push(`💭 ${insightText(q, r.topic, kind, r.context)}`);
+  const ansAt = out.length;
+
+  r.cards.forEach((d, i) => {
+    const c = tarotCard(d.id);
+    const label = pos[i]?.vi ?? "";
+    const head = `${nums[i]} ${kind === "choice" ? `Lựa chọn “${label}”` : label} — ${c.name.vi} (${c.name.en})${d.rev ? " · ngược" : ""}`;
+    const meaning = d.rev ? c.rev.vi : c.up.vi;
+    const g = ROLE_GROUP[roles[i] ?? "situation"];
+    const tpl = g === "time" ? TIME_TPL : bank[g];
+    let analysis = fillT(tpl[rough(d) ? 1 : 0], kw(d, false), S);
+    if (kind === "choice") analysis = `Nếu chọn “${label}”, ${fillT(CHOICE_TPL[rough(d) ? 1 : 0][i % 2], kw(d, false), S)}`;
+    out.push(`${head}\n🃏 Ý nghĩa lá: ${meaning}\n👉 ${analysis}`);
+  });
+
+  const [c1, c2, c3] = r.cards;
+  const total = toneTotal(r.cards);
+  const tip = bank.tip[total >= 1 ? 0 : 1];
+  const st = (d: TarotDraw) => (rough(d) ? `đang vướng ${kw(d, false)}` : `đang có ${kw(d, false)}`);
+  const go = (d: TarotDraw) => (rough(d) ? `gỡ bỏ ${kw(d, false)}` : `dựa vào ${kw(d, false)}`);
+  const res = (d: TarotDraw) => (rough(d) ? `còn vướng ${kw(d, false)}` : `nghiêng về ${kw(d, false)}`);
+  const Sc = capFirst(S);
+
+  if (kind === "timing" && c3) {
+    const tp = timingPhrase(c3, false);
+    out.splice(ansAt, 0, `⏳ Trả lời nhanh: ${tp}`);
+    out.push(
+      `🌿 Tóm lại: Hiện tại ${S} ${st(c1)}; để mọi thứ đến nhanh hơn, chìa khoá là ${go(c2)}. Về thời điểm, ${lcFirst(tp)} Nói cách khác, thời gian phụ thuộc khá nhiều vào những gì bạn làm từ bây giờ.\n${tip}`,
+    );
+  } else if (kind === "yesno" && c3) {
+    const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
+    const ans = r.topic === "health" ? healthAnswer(r.cards) : yesnoAnswer(r.cards, S, should);
+    out.splice(ansAt, 0, `🔎 Trả lời nhanh: ${ans}`);
+    const verdict = total >= 1 ? "câu trả lời nghiêng về phía tích cực" : total === 0 ? "mọi chuyện vẫn còn để ngỏ" : "bài khuyên bạn đừng vội";
+    out.push(
+      `🌿 Tóm lại: ${Sc} ${st(c1)}, điều cần để ý nhất là ${kw(c2, false)}, và kết quả ${res(c3)}. Gộp cả 3 lá lại thì ${verdict}.\n${tip}`,
+    );
+  } else if (kind === "choice" && c2) {
+    const [a, b] = [cardScore(c1), cardScore(c2)];
+    const [na, nb] = pos.map((p) => p.vi);
+    const win = a >= b ? c1 : c2;
+    out.splice(
+      ansAt,
+      0,
+      a === b
+        ? "⚖️ Trả lời nhanh: Cả hai đều có cái hay riêng — chọn cái khiến lòng bạn thấy nhẹ nhõm nhất nha."
+        : `⚖️ Trả lời nhanh: Lá bài nghiêng về “${a > b ? na : nb}” hơn — bên đó mang năng lượng của ${kw(win, false)}.`,
+    );
+    out.push(`🌿 Tóm lại: Mỗi lựa chọn đều có cái giá riêng — “${na}” ${st(c1)}, còn “${nb}” ${st(c2)}. ${tip}`);
+  } else if (c3) {
+    out.push(`🌿 Tóm lại: ${Sc} ${st(c1)}; thử thách lớn nhất là ${kw(c2, false)}, và lời khuyên là ${go(c3)}.\n${tip}`);
+  }
+
+  if (r.topic === "health")
+    out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
+  if (/(?<![a-z])(nhau|ruou|bia|say)(?![a-z])/.test(fold(q))) out.push("🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
+  out.push("Muốn rõ hơn thì gõ “rút thêm” để Lomi rút thêm 1 lá nha 🔮");
+  return out.join("\n\n");
+}
+
 // ── 💭 Đọc tâm lý người hỏi: câu hỏi nói lên điều gì về cảm xúc của họ ──
 // Dựa trên CÂU HỎI (không dựa vào lá rút ngẫu nhiên) nên hỏi lại / bói lại vẫn nhất quán, và luôn đúng trọng tâm.
 function hashStr(x: string): number {
@@ -799,6 +1091,7 @@ function hashStr(x: string): number {
 }
 function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: string): string {
   const f = ` ${fold(context ?? q)} `;
+  const scene = sceneOf(q, topic, context);
   const has = (re: RegExp) => re.test(f);
   const h = hashStr(fold(q));
   const one = (arr: string[]) => arr[h % arr.length];
@@ -827,6 +1120,11 @@ function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: st
     base = one([
       "Có một người đang chiếm khá nhiều suy nghĩ của bạn dạo này. Bạn muốn biết mối quan hệ đang đi về đâu để yên lòng hơn.",
       "Câu hỏi này cho thấy bạn đang cần cảm giác an toàn trong tình cảm — muốn biết mình có đang được trân trọng không.",
+    ]);
+  else if (scene === "jobseek")
+    base = one([
+      "Thất nghiệp là một trong những giai đoạn áp lực nhất — không chỉ chuyện tiền mà còn là cảm giác chững lại, mất phương hướng so với người khác. Nếu bạn đang thấy vậy thì hoàn toàn bình thường nha. Câu hỏi “bao giờ” cho thấy bạn đang rất mong một điểm sáng để bám vào.",
+      "Lomi hiểu cảm giác mỗi ngày mở điện thoại chờ tin phản hồi mà chưa thấy gì. Giai đoạn không có việc dễ làm mình tự ti, dù thật ra đó chỉ là một khúc quanh chứ không nói lên giá trị của bạn.",
     ]);
   else if (topic === "work")
     base = one([
@@ -916,6 +1214,8 @@ function trendLine(cards: TarotDraw[]): string {
 // ── Ghép lời giải: từng lá gắn với chủ đề + phần “Tóm lại” nối các lá thành một câu chuyện ──
 export function readingText(r: TarotReading, lang: L): string {
   const en = lang === "en";
+  // Tiếng Việt, có câu hỏi, trải 2–3 lá → lời giải kiểu kể chuyện (nghĩa lá → áp vào câu hỏi → tóm lại).
+  if (!en && r.question && r.cards.length >= 2) return readingNarrativeVi(r);
   const kind = r.kind ?? "open";
   const q = r.question ?? "";
   const clar = r.cards.length === 1 && !!q;
