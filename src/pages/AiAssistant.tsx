@@ -36,7 +36,8 @@ import {
 import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
-import { heartContinue, heartOpen, heartStart, type HeartReply } from "@/lib/lomiHeart";
+import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
+import { analyzeBody, analyzeMind } from "@/lib/lomiSymptoms";
 import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -106,6 +107,8 @@ type Msg = {
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
+  sx?: string[]; // triệu chứng cơ thể đã kể (cộng dồn qua các tin) — lib/lomiSymptoms
+  mood?: string[]; // cảm giác đã kể (cộng dồn) — lib/lomiSymptoms
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
 };
@@ -466,12 +469,13 @@ export function AiChat({
   };
 
   // Tâm sự cùng Lomi (30/09) — lắng nghe, an ủi, tư vấn tình cảm/tâm lý nhẹ (lib/lomiHeart, chạy trên máy).
-  const heartMsg = (h: HeartReply, depth: number): Msg => ({
+  const heartMsg = (h: HeartReply, depth: number, keep?: Msg): Msg => ({
     role: "assistant",
     content: h.text,
     local: true,
     quick: h.quick.length ? h.quick : undefined,
-    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth }),
+    // Giữ lại triệu chứng / cảm giác đã kể để lần sau cộng dồn.
+    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth, sx: keep?.sx, mood: keep?.mood }),
   });
   const askHeart = () => {
     setErr(null);
@@ -624,12 +628,34 @@ export function AiChat({
         const d = detectTarot(q);
         if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
+      // f0) Kể triệu chứng / cảm giác → tra từ điển (lib/lomiSymptoms): triệu chứng A, B, C → bệnh hay gặp,
+      //     nên làm / kiêng gì / khám khoa nào; cảm giác G, J, K → trạng thái tâm lý → nên làm gì.
+      //     Cộng dồn với những gì đã kể ở tin trước khi đang tâm sự.
+      if (!en && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+        const inTalk = !!lastA?.heart;
+        const depth = (lastA?.heartDepth ?? 0) + 1;
+        const body = analyzeBody(q, inTalk ? (lastA?.sx ?? []) : []);
+        if (body)
+          return localReply(q, { role: "assistant", content: body.text, local: true, heart: "health", heartDepth: depth, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
+        const th = heartThemeOf(q);
+        const mind = !th || GENERIC.has(th) ? analyzeMind(q, inTalk ? (lastA?.mood ?? []) : []) : null;
+        if (mind)
+          return localReply(q, {
+            role: "assistant",
+            content: mind.text,
+            local: true,
+            heart: inTalk && lastA?.heart !== "open" && lastA?.heart !== "health" ? lastA!.heart : "sad",
+            heartDepth: depth,
+            mood: mind.mood,
+            sx: inTalk ? lastA?.sx : undefined,
+          });
+      }
       // f) Đang tâm sự → hiểu tin này là kể tiếp (trừ khi rõ ràng hỏi cách dùng app / tìm quán).
       // Chỉ nhường cho tìm quán khi người dùng hỏi tìm RÕ RÀNG (vd "quán nào gần đây", "ăn gì giờ").
       const wantSearch = !!detectSearch(q) && /\b(tim|kiem|goi y|an gi|uong gi|o dau|gan day|gan minh|quan nao|di dau|cho nao)\b/.test(normalizeVi(q));
       if (lastA?.heart && !en && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
-        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth), depth));
+        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth), depth, lastA));
       }
     }
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).

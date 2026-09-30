@@ -633,7 +633,7 @@ const THEMES: Theme[] = [
   },
 ];
 
-const GENERIC = new Set(["sad", "tired", "love", "overthink", "anxiety", "lonely", "health"]);
+export const GENERIC = new Set(["sad", "tired", "love", "overthink", "anxiety", "lonely", "health"]);
 const byId = (id: string) => THEMES.find((t) => t.id === id);
 
 // Câu mở lời "muốn tâm sự" (chưa rõ chuyện gì).
@@ -816,4 +816,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   } else if (e) parts.push(pick("listen", LISTEN));
   if (th?.heavy && depth >= 3 && depth % 3 === 0) parts.push(PRO);
   return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+}
+
+/** Chủ đề tâm sự khớp với câu (để biết câu này là chuyện cụ thể hay chỉ là cảm xúc chung). */
+export function heartThemeOf(text: string): string | undefined {
+  return themeOf(normalizeVi(text))?.id;
 }
