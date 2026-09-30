@@ -64,13 +64,15 @@ export function detectSearch(text: string): SearchIntent | null {
   if (/\b(uong gi|di cafe dau|cafe o dau|ca phe o dau|uong o dau)\b/.test(n)) return { mode: "drink", near, offer: true, kind: KINDS[0] };
   if (/\b(di dau choi|choi o dau|di dau bay gio|cuoi tuan di dau|di choi dau)\b/.test(n)) return { mode: "go", near, offer: true };
   if (HOWTO.test(n)) return null;
-  const kind = KINDS.find((k) => k.re.test(n)) ?? (/\b(ngon|an|uong)\b/.test(n) ? KINDS.find((k) => k.noun === "quán ăn") : undefined);
+  const strictKind = KINDS.find((k) => k.re.test(n));
+  // "ăn/uống" đứng một mình chỉ là đoán — không đủ để hiểu là muốn tìm quán (vd "bác sĩ nào cũng cho thuốc uống không hết").
+  const kind = strictKind ?? (/\b(ngon|an|uong)\b/.test(n) ? KINDS.find((k) => k.noun === "quán ăn") : undefined);
   const offer = /\b(uu dai|khuyen mai|giam gia|sale|deal|voucher|re)\b/.test(n);
   const place = /\b(quan|tiem|shop|cua hang|cho nao|noi nao)\b/.test(n);
   const seek =
     SEEK.test(n) ||
     near ||
-    (/\b(nao|dau)\b/.test(n) && (!!kind || place)) || // "quán cà phê NÀO đang có ưu đãi"
+    (/\b(nao|dau)\b/.test(n) && (!!strictKind || place)) || // "quán cà phê NÀO đang có ưu đãi"
     (/\bco\b.*\bkhong\b/.test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
   if (!seek) return null;
   if (!kind && !offer && !place) return null;

@@ -625,7 +625,9 @@ export function AiChat({
         if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
       // f) Đang tâm sự → hiểu tin này là kể tiếp (trừ khi rõ ràng hỏi cách dùng app / tìm quán).
-      if (lastA?.heart && !en && !detectSearch(q) && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+      // Chỉ nhường cho tìm quán khi người dùng hỏi tìm RÕ RÀNG (vd "quán nào gần đây", "ăn gì giờ").
+      const wantSearch = !!detectSearch(q) && /\b(tim|kiem|goi y|an gi|uong gi|o dau|gan day|gan minh|quan nao|di dau|cho nao)\b/.test(normalizeVi(q));
+      if (lastA?.heart && !en && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
         return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth), depth));
       }

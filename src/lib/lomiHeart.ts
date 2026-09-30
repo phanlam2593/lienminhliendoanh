@@ -21,6 +21,7 @@ export type Theme = {
   advice: string[]; // khi người dùng xin lời khuyên
   tarot?: string; // câu bói hợp chủ đề (chip "Bói xem …")
   heavy?: boolean; // nhắc gặp chuyên gia nếu kéo dài
+  hint?: [RegExp, string][]; // câu nói trúng chi tiết người dùng kể (vd nhắc tên thuốc) → dùng thay góc nhìn ngẫu nhiên
   stepFirst?: boolean; // chuyện sức khoẻ → ngay lượt đầu đã chỉ bước nên làm (đi khám…)
   define?: string; // người dùng hỏi "X là gì" → giải thích ngắn trước
 };
@@ -732,7 +733,7 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean): HeartReply {
     parts.push(`Lomi gợi ý vài điều nha:\n• ${pick(`${t.id}:adv`, t.advice)}\n• ${pick(`${t.id}:adv`, t.advice)}\n• ${pick(`${t.id}:step`, t.step)}`);
   } else {
     if (!defined) parts.push(pick(`${t.id}:feel`, t.feel));
-    parts.push(pick(`${t.id}:ins`, t.insight));
+    parts.push(t.hint?.find(([re]) => re.test(` ${n} `))?.[1] ?? pick(`${t.id}:ins`, t.insight));
     if (t.stepFirst) parts.push(pick(`${t.id}:step`, t.step));
     parts.push(pick(`${t.id}:ask`, t.ask));
   }

@@ -534,6 +534,39 @@ export const MORE_THEMES: Theme[] = [
     stepFirst: true,
   },
   {
+    // Nghẹt mũi kéo dài / lệ thuộc thuốc xịt co mạch (Otilin, Otrivin, Naphazolin…) — thông tin phổ thông, không kê thuốc.
+    id: "nasal",
+    hint: [
+      [
+        /\b(otilin|otrivin|naphazolin|xylometazolin|xit mui)\b/,
+        "Có một điều quan trọng nè: thuốc xịt thông mũi như Otilin, Otrivin, Naphazolin chỉ nên dùng ngắn ngày (hộp thuốc thường ghi vài ngày). Xịt lâu dài dễ bị “nghẹt mũi dội ngược” — hết thuốc là nghẹt hơn, lại phải xịt tiếp, thành vòng lặp lệ thuộc thuốc (bác sĩ gọi là viêm mũi do thuốc). Có khi chính nó làm bạn mãi không dứt được đó.",
+      ],
+    ],
+    re: /\b(otilin|otrivin|naphazolin|xylometazolin|thuoc xit mui|xit mui hoai|xit mui hang ngay|xit mui moi ngay|khong xit khong tho duoc|nghet mui (keo dai|hoai|lau|quanh nam|man tinh|lau nam)|nghet mui hoai|ngat mui hoai|viem xoang|viem mui|di ung mui|polyp mui|kho tho bang mui)\b/,
+    feel: [
+      "Nghẹt mũi kéo dài khó chịu lắm luôn, ngủ không ngon, đầu óc cũng nặng theo 😣 Đi khám hoài mà không đỡ thì nản thật sự.",
+      "Lomi hiểu, uống thuốc hết đợt này tới đợt khác mà mũi vẫn nghẹt thì vừa mệt vừa bực ghê 🥺",
+    ],
+    insight: [
+      "Có một điều nhiều người không biết: các loại thuốc xịt thông mũi co mạch như Otilin, Otrivin, Naphazolin chỉ nên dùng ngắn ngày (hướng dẫn trên hộp thường ghi vài ngày). Dùng lâu dài dễ bị “nghẹt mũi dội ngược” — hết thuốc là nghẹt hơn, phải xịt tiếp, thành vòng lặp lệ thuộc thuốc (bác sĩ gọi là viêm mũi do thuốc).",
+      "Nghẹt mũi kéo dài hay gặp do viêm mũi dị ứng, viêm xoang, lệch vách ngăn hoặc polyp mũi — mỗi nguyên nhân chữa một kiểu, nên cần tìm đúng gốc thay vì chỉ uống thuốc cho đỡ triệu chứng.",
+      "Khí hậu lạnh ẩm như Đà Lạt, bụi nhà, mạt bụi, lông thú là những thứ hay làm mũi dị ứng nặng hơn.",
+    ],
+    step: [
+      "Đi khám bác sĩ chuyên khoa Tai Mũi Họng (ưu tiên bệnh viện lớn), xin nội soi mũi xoang để xem rõ nguyên nhân — và nhớ nói thật là bạn đang xịt Otilin thường xuyên, bao lâu rồi.",
+      "Mang theo danh sách (hoặc chụp hình) các thuốc đã dùng trước đây để bác sĩ không kê trùng những thứ không hiệu quả.",
+      "Rửa mũi bằng nước muối sinh lý giúp mũi thông thoáng hơn mà không gây lệ thuộc.",
+    ],
+    ask: ["Bạn xịt Otilin lâu chưa?", "Bạn bị nghẹt quanh năm, hay nặng hơn vào lúc trời lạnh / buổi sáng?", "Bạn đã được nội soi mũi lần nào chưa?"],
+    advice: [
+      "Đừng tự ngưng hay tự đổi thuốc đột ngột nha — hãy nhờ bác sĩ Tai Mũi Họng hướng dẫn cách giảm dần thuốc xịt co mạch và thay bằng cách điều trị phù hợp, an toàn hơn khi dùng lâu dài.",
+      "Nếu nghi dị ứng, có thể hỏi bác sĩ về xét nghiệm dị ứng để biết mình “kỵ” cái gì mà tránh.",
+      "Giữ phòng ngủ sạch bụi, giặt chăn gối thường xuyên, hạn chế thú cưng lên giường, đeo khẩu trang khi ra đường bụi hoặc trời lạnh.",
+      "Nếu đã khám nhiều nơi mà không đỡ, thử một bệnh viện chuyên khoa Tai Mũi Họng lớn để có ý kiến thứ hai.",
+    ],
+    stepFirst: true,
+  },
+  {
     id: "flu",
     re: /\b(bi cam cum|bi cam lanh|cam cum|cam lanh|bi cum|so mui|nghet mui|bi ho (khan|nhieu|hoai|dai|lau)|ho co dom|ho khan|ho nhieu|ho hoai|dau hong|viem hong|bi sot|sot cao|phat sot|hat hoi)\b/,
     feel: ["Ốm vậy mệt ghê, thương bạn 🤒 Nghỉ ngơi cho khoẻ nha.", "Thời tiết thay đổi dễ cảm lắm, nhất là Đà Lạt trời lạnh. Bạn giữ ấm nha 🧣"],
