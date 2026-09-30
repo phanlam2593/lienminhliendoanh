@@ -1198,7 +1198,66 @@ export function tarotFollowUps(r: TarotReading): string[] {
   if (!r.question || r.cards.length < 2) return [];
   return SCENE_NEXT[sceneOf(r.question, r.topic, r.context)];
 }
-const OPEN_LINE = ["Được nè 😌", "Okie 😌", "Được luôn 😌"];
+// ── Câu dẫn xoay vòng (30/09 r8, theo ý Kir): mở đầu, danh sách lá, "quá trình", kết luận đều có nhiều
+// cách nói; nhớ câu vừa dùng (trên máy) để 2 lần bói liền nhau không bị trùng.
+function rotate(key: string, n: number): number {
+  const k = `lmld:tarot-rot:${key}`;
+  let last = -1;
+  try {
+    last = Number(localStorage.getItem(k) ?? -1);
+  } catch {
+    /* không có localStorage (test) */
+  }
+  let i = randInt(n);
+  if (n > 1 && i === last) i = (i + 1 + randInt(n - 1)) % n;
+  try {
+    localStorage.setItem(k, String(i));
+  } catch {
+    /* bỏ qua */
+  }
+  return i;
+}
+const vary = (key: string, arr: string[]) => arr[rotate(key, arr.length)];
+const OPEN_BY_DOMAIN: Record<Domain, string[]> = {
+  career: [
+    "Chuyện công việc thì Lomi trải bài kỹ cho bạn nha 💼",
+    "Để Lomi xem con đường sự nghiệp sắp tới của bạn nè 💼",
+    "Hít một hơi thật sâu… bài về công việc của bạn đã sẵn sàng ✨",
+    "Okie, Lomi xáo bài xem chuyện làm ăn, công việc liền 🔮",
+  ],
+  love: [
+    "Chuyện trái tim thì Lomi xáo bài thật chậm nè 💞",
+    "Để Lomi xem các lá bài nói gì về chuyện tình cảm của bạn nha 💞",
+    "Hít một hơi thật sâu, nghĩ về điều bạn đang mong… bài đã sẵn sàng ✨",
+    "Okie, chuyện tình cảm là Lomi xem kỹ lắm nè 🔮",
+  ],
+  general: [
+    "Được nè 😌 Lomi xáo bài liền.",
+    "Hít một hơi thật sâu… bài đã sẵn sàng ✨",
+    "Okie, để Lomi xem các lá bài muốn nói gì với bạn nha 🔮",
+    "Lomi trải bài cho bạn đây ✨",
+  ],
+};
+const DISCLAIMER = [
+  "Mình đọc theo hướng định hướng – tâm lý, xem để tham khảo chứ không phải lời tiên tri chắc chắn nha.",
+  "Tarot giống một tấm gương để mình nhìn lại bản thân — nghe để tham khảo, quyết định vẫn là của bạn nha.",
+  "Bài không quyết định thay bạn được, nhưng có thể giúp bạn nhìn mọi chuyện rõ hơn một chút.",
+  "Xem như một góc nhìn thêm để tham khảo thôi nha, đừng coi là chắc chắn 100% 😉",
+];
+const LIST_LEAD = ["Lomi rút được {n} lá:", "{N} lá bài của bạn đây:", "Bài ra như sau:", "Đây là {n} lá vừa lật:"];
+const JOURNEY = [
+  "Điều thú vị là bộ {names} giống một quá trình:\n{stages}.",
+  "Nhìn cả {n} lá cạnh nhau, câu chuyện hiện ra khá rõ:\n{stages}.",
+  "Ghép {names} lại, Lomi thấy một mạch khá liền:\n{stages}.",
+  "Nếu đọc cả trải bài như một hành trình thì sẽ là:\n{stages}.",
+  "Cả {n} lá đang kể một câu chuyện nhỏ:\n{stages}.",
+];
+const VERDICT = [
+  "Nên nếu hỏi riêng “{q}?” thì trải bài này {lean}.",
+  "Quay lại câu hỏi “{q}?” — nhìn chung trải bài {lean}.",
+  "Trả lời thẳng câu “{q}?”: trải bài {lean}.",
+  "Tóm lại, với câu “{q}?” thì bài {lean}.",
+];
 
 /** Lời giải tiếng Việt theo mẫu Kir thích: liệt kê lá → giải từng lá theo chủ đề → quá trình của cả trải bài
  *  → khung thời gian cụ thể (nếu hỏi "bao giờ") → kết luận thẳng câu hỏi → gợi ý bói tiếp. */
@@ -1223,9 +1282,11 @@ function readingNarrativeVi(r: TarotReading): string {
   // 1) Mở đầu + câu hỏi + danh sách lá
   const qShow = capFirst(q.replace(/\s+/g, " ").replace(/[.!…]+$/, ""));
   out.push(
-    `${pick(OPEN_LINE)} Lomi bói ${r.cards.length} lá theo kiểu tarot định hướng – tâm lý, xem để tham khảo chứ không phải lời tiên tri chắc chắn nha.\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`,
+    `${vary(`open-${dom}`, OPEN_BY_DOMAIN[dom])} ${vary("disc", DISCLAIMER)}\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`,
   );
-  out.push(`Lomi rút được ${r.cards.length} lá:\n${r.cards.map((d, i) => `${i + 1}. ${posName(i)} — ${cardName(d)}`).join("\n")}`);
+  const nWord = ["", "Một", "Hai", "Ba"][r.cards.length] ?? String(r.cards.length);
+  const lead = vary("list", LIST_LEAD).replace("{n}", String(r.cards.length)).replace("{N}", nWord);
+  out.push(`${lead}\n${r.cards.map((d, i) => `${i + 1}. ${posName(i)} — ${cardName(d)}`).join("\n")}`);
 
   // 2) Từng lá: nghĩa lá → nghĩa theo lĩnh vực → áp vào hoàn cảnh người hỏi
   r.cards.forEach((d, i) => {
@@ -1256,7 +1317,23 @@ function readingNarrativeVi(r: TarotReading): string {
   // 3) Cả trải bài như một quá trình
   if (r.cards.length >= 3)
     out.push(
-      `Điều thú vị là bộ ${r.cards.map((d) => tarotCard(d.id).name.vi).join(" → ")} giống một quá trình:\n${r.cards.map((d) => kw(d, false)).join(" → ")}.`,
+      (() => {
+        const first = cardScore(r.cards[0]);
+        const lastS = cardScore(r.cards[r.cards.length - 1]);
+        // Nhận xét chiều đi của câu chuyện: đi lên / chững ở cuối / đều đều.
+        const arc =
+          lastS > first
+            ? vary("arc-up", [" Một mạch đi lên — tín hiệu khá dễ thương đó.", " Càng về sau càng sáng, đáng mừng nha.", " Khởi đầu hơi chật vật nhưng kết lại khá ổn."])
+            : lastS < first
+              ? vary("arc-down", [" Đoạn cuối cần bạn để tâm nhiều hơn một chút.", " Khởi đầu thuận nhưng về sau cần cẩn thận hơn nha."])
+              : "";
+        return (
+          vary("journey", JOURNEY)
+            .replace("{names}", r.cards.map((d) => tarotCard(d.id).name.vi).join(" → "))
+            .replace("{n}", String(r.cards.length))
+            .replace("{stages}", r.cards.map((d) => kw(d, false)).join(" → ")) + arc
+        );
+      })(),
     );
 
   // 4) Kết luận thẳng câu hỏi
@@ -1302,7 +1379,7 @@ function readingNarrativeVi(r: TarotReading): string {
                 ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
                 : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
     const tail = kind === "timing" ? "Tarot không thể xác nhận một ngày cụ thể đâu 😄" : "Quyết định cuối cùng vẫn là ở bạn 😄";
-    out.push(`Nên nếu hỏi riêng “${askQ}?” thì trải bài này ${lean}. ${tail}\n${bank.tip[total >= 1 ? 0 : 1]}`);
+    out.push(`${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", lean)} ${tail}\n${bank.tip[total >= 1 ? 0 : 1]}`);
   }
 
   if (r.topic === "health")
