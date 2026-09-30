@@ -1998,7 +1998,7 @@ function readingNarrativeVi(r: TarotReading): string {
             .replace("{go3}", rough(c3) ? `gỡ bỏ ${kw(c3, false)}` : `dựa vào ${kw(c3, false)}`)
             .replace("{res3}", rough(c3) ? `còn vướng ${kw(c3, false)}` : `nghiêng về ${kw(c3, false)}`)
         : null;
-    const leanUse = kind !== "timing" && it?.lean ? it.lean[total >= 1 ? 0 : total === 0 ? 1 : 2] : lean;
+    const leanUse = kind !== "timing" && it?.lean ? it.lean[total >= 1 && !arcDown ? 0 : total >= 0 ? 1 : 2] : lean; // bài đi xuống ở cuối → không kết "khá sáng" cho khỏi vênh với phần mối liên hệ
     verdictLine = answerText
       ? `${vary("answer", ANSWER_LEAD).replace("{q}", askQ)} ${answerText}`
       : `${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", leanUse)} ${tail}`;
