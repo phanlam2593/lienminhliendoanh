@@ -46,7 +46,7 @@ const SYMPTOMS: Sym[] = [
   { id: "light", label: "sợ ánh sáng / tiếng ồn", re: /\b(so anh sang|choi mat|so tieng on|kho chiu voi anh sang)\b/ },
   { id: "redeye", label: "đỏ mắt", re: /\b(do mat|mat do|mat bi do|ghen mat|nhieu ghen)\b/ },
   { id: "itcheye", label: "ngứa / chảy nước mắt", re: /\b(ngua mat|chay nuoc mat|cay mat|xot mat)\b/ },
-  { id: "dryeye", label: "khô mỏi mắt", re: /\b(kho mat|moi mat|mo mat khi nhin lau|nhuc mat)\b/ },
+  { id: "dryeye", label: "khô mỏi mắt", re: /\b(kho mat|(bi|hay|de) moi mat|moi mat (qua|khi|lam|hoai)|mat moi|mo mat khi nhin lau|nhuc mat)\b/ },
   { id: "earpain", label: "đau tai / ù tai", re: /\b(dau tai|u tai|chay mu tai|chay nuoc tai|nghe kem|nghe khong ro)\b/ },
   { id: "stuffy", label: "nghẹt mũi", re: /\b(nghet mui|ngat mui|tac mui|kho tho bang mui)\b/ },
   { id: "runny", label: "chảy nước mũi", re: /\b(chay mui|so mui|chay nuoc mui|nuoc mui trong)\b/ },
@@ -146,7 +146,7 @@ const CONDS: Cond[] = [
   },
   {
     id: "flu", name: "Cúm",
-    sx: { fever: 2, highfever: 3, bodyache: 3, chills: 2, fatigue: 2, headache: 2, cough: 2, sorethroat: 1, runny: 1 },
+    sx: { fever: 3, highfever: 3, bodyache: 4, chills: 3, fatigue: 2, headache: 2, cough: 2, sorethroat: 1, runny: 1 },
     need: ["fever", "highfever", "bodyache", "chills"],
     about: "do virus cúm, thường khởi phát đột ngột với sốt, đau nhức toàn thân, mệt nhiều hơn cảm lạnh.",
     do: ["Nghỉ ngơi hoàn toàn vài ngày", "Uống đủ nước, ăn đồ lỏng dễ tiêu", "Hỏi dược sĩ/bác sĩ về thuốc hạ sốt phù hợp", "Tiêm vắc xin cúm hằng năm để phòng"],
@@ -868,4 +868,12 @@ export function analyzeMind(text: string, prev: string[] = []): MindResult | nul
   out.push("Chuyện gì đang làm bạn thấy như vậy? Kể Lomi nghe thêm nha.");
   out.push(NOTE_MIND);
   return { text: out.join("\n\n"), mood: all };
+}
+
+// Triệu chứng "mềm" — hay đi cùng chuyện tâm lý (mệt, mất ngủ, chán ăn…). Nếu câu chỉ có những triệu chứng này
+// mà lại có nhiều cảm giác (áp lực, buồn…), ưu tiên phân tích tâm lý thay vì bệnh cơ thể.
+const SOFT = new Set(["fatigue", "insomnia", "sleepy", "noappetite", "sun", "screen", "coldweather", "alcohol", "stress", "afterfood"]);
+export function onlySoftSymptoms(text: string): boolean {
+  const n = normalizeVi(text);
+  return found(SYMPTOMS, n).every((s) => SOFT.has(s.id));
 }

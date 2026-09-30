@@ -37,7 +37,7 @@ import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/li
 import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
-import { analyzeBody, analyzeMind } from "@/lib/lomiSymptoms";
+import { analyzeBody, analyzeMind, onlySoftSymptoms } from "@/lib/lomiSymptoms";
 import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -634,11 +634,12 @@ export function AiChat({
       if (!en && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = !!lastA?.heart;
         const depth = (lastA?.heartDepth ?? 0) + 1;
-        const body = analyzeBody(q, inTalk ? (lastA?.sx ?? []) : []);
-        if (body)
-          return localReply(q, { role: "assistant", content: body.text, local: true, heart: "health", heartDepth: depth, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
         const th = heartThemeOf(q);
         const mind = !th || GENERIC.has(th) ? analyzeMind(q, inTalk ? (lastA?.mood ?? []) : []) : null;
+        // "mệt mỏi, mất ngủ, áp lực quá" là chuyện tâm lý, không phải bệnh cơ thể.
+        const body = mind && onlySoftSymptoms(q) ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : []);
+        if (body)
+          return localReply(q, { role: "assistant", content: body.text, local: true, heart: "health", heartDepth: depth, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
         if (mind)
           return localReply(q, {
             role: "assistant",
