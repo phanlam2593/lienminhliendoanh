@@ -635,7 +635,9 @@ export function AiChat({
         const inTalk = !!lastA?.heart;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const th = heartThemeOf(q);
-        const mind = !th || GENERIC.has(th) ? analyzeMind(q, inTalk ? (lastA?.mood ?? []) : []) : null;
+        const mind0 = analyzeMind(q, inTalk ? (lastA?.mood ?? []) : []);
+        // Chuyện cụ thể (vd công việc, người yêu) thì để thư viện tâm sự đáp — trừ khi kể từ 3 cảm giác trở lên.
+        const mind = mind0 && (!th || GENERIC.has(th) || mind0.mood.length >= 3) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" là chuyện tâm lý, không phải bệnh cơ thể.
         const body = mind && onlySoftSymptoms(q) ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : []);
         if (body)
