@@ -791,13 +791,16 @@ const TOPIC_INTRO: Record<TarotTopic, [string[], string[]]> = {
 };
 
 // ── Bối cảnh cụ thể của câu hỏi (chi tiết hơn chủ đề): tìm việc khác đang đi làm, người cũ khác crush… ──
-type Scene = "jobseek" | "work" | "ex" | "crush" | "love" | "money" | "travel" | "study" | "health" | "fun" | "general";
+type Scene = "jobseek" | "work" | "newlove" | "ex" | "crush" | "love" | "money" | "travel" | "study" | "health" | "fun" | "general";
 function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   const f = ` ${fold(`${context ?? ""} ${q}`)} `.replace(/[?!.,…"“”]/g, " ");
   const has = (re: RegExp) => re.test(f);
   if (topic === "health") return "health";
   if (has(/ (that nghiep|tim viec|kiem viec|xin viec|co viec|mat viec|bi duoi|nghi viec roi|chua co viec|phong van|nop cv|nop ho so xin) /)) return "jobseek";
   if (topic === "work") return "work";
+  // Độc thân / vừa thất tình muốn có người mới — khác hẳn hỏi chuyện quay lại với người cũ.
+  if (has(/ (nguoi yeu moi|co nguoi yeu|kiem nguoi yeu|tim nguoi yeu|doc than|bi e|e qua|van e|con e|gap dung nguoi|nguoi moi|chua co nguoi yeu|gap duoc ai) /) && !has(/ quay lai /))
+    return "newlove";
   if (has(/ (nguoi yeu cu|nguoi cu|ny cu|ex|quay lai|tai hop|chia tay) /)) return "ex";
   if (has(/ (crush|nhan tin|to tinh|lam quen|bat chuyen|nguoi ay|thich (anh|em|ban|nguoi)|co thich minh) /)) return "crush";
   if (topic === "love") return "love";
@@ -847,6 +850,23 @@ const SCENE: Record<Scene, SceneBank> = {
     tip: [
       "Ghi lại những việc bạn đã làm tốt — lúc cần đề xuất tăng lương hay chuyển vị trí sẽ có “bằng chứng” rõ ràng.",
       "Sắp việc theo thứ tự ưu tiên, nghỉ ngắn giữa giờ, và đừng ôm hết mọi thứ một mình.",
+    ],
+  },
+  newlove: {
+    noun: "chuyện tìm một người mới",
+    state: [
+      "Với chuyện tìm một người mới, lá này cho thấy bạn đang có {k}. Sau một lần tổn thương, việc lòng mình dần mở ra lại là dấu hiệu bạn đang hồi phục tốt.",
+      "Với chuyện tìm một người mới, lá này phản ánh bạn đang vướng {k}. Vừa trải qua chuyện buồn thì thu mình, nghi ngờ bản thân là phản ứng rất bình thường — trái tim cần thời gian để lành.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k}: mở rộng vòng bạn bè, nhận lời những buổi cà phê, đi chơi — người phù hợp thường đến từ những kết nối rất đời thường.",
+      "Điều cần gỡ là {k}. Đừng vội lao vào mối quan hệ mới chỉ để quên người cũ; chăm cho bản thân trước, bạn sẽ thu hút đúng người hơn.",
+    ],
+    block: ["Điều cần để ý là {k} — đó chính là điểm thu hút của bạn.", "Thứ có thể cản là {k} — đừng để vết thương cũ khiến bạn đóng cửa với người mới."],
+    result: ["Kết quả nghiêng về {k} — một người mới có thể sắp xuất hiện.", "Kết quả còn vướng {k} — có lẽ nên cho mình thêm thời gian chữa lành."],
+    tip: [
+      "Chăm chút bản thân, ra ngoài nhiều hơn, thử mục Làm quen trên Quẹt — gặp gỡ nhiều thì cơ hội gặp đúng người cũng nhiều hơn.",
+      "Cho mình thời gian buồn, ngủ đủ, gặp bạn bè thân — khi lòng nhẹ rồi thì người mới đến cũng trọn vẹn hơn.",
     ],
   },
   ex: {
@@ -1099,7 +1119,7 @@ const MINOR_DOMAIN: Record<Exclude<TarotSuit, "major">, [string, string, string,
 };
 type Domain = "career" | "love" | "general";
 const DOMAIN_OF: Record<Scene, Domain> = {
-  jobseek: "career", work: "career", money: "career",
+  jobseek: "career", work: "career", money: "career", newlove: "love",
   ex: "love", crush: "love", love: "love",
   travel: "general", study: "general", health: "general", fun: "general", general: "general",
 };
@@ -1154,7 +1174,7 @@ function calendarRange(w: { lo: number; hi: number; unit: "tuần" | "tháng" },
 
 // Câu hỏi có/không viết lại theo bối cảnh — để phần kết luận nói thẳng vào điều người hỏi muốn biết.
 const SCENE_ASK: Record<Scene, string> = {
-  jobseek: "có việc hay không", work: "công việc có thuận lợi không", ex: "người cũ có quay lại không",
+  jobseek: "có việc hay không", newlove: "có người yêu mới hay không", work: "công việc có thuận lợi không", ex: "người cũ có quay lại không",
   crush: "chuyện với người ấy có thành không", love: "tình cảm có tiến triển không", money: "tiền bạc có khá lên không",
   travel: "mọi chuyện có suôn sẻ không", study: "kết quả có tốt không", health: "có mau khoẻ không", fun: "có nên đi không",
   general: "chuyện này có thành không",
@@ -1163,6 +1183,7 @@ const SCENE_ASK: Record<Scene, string> = {
 const SCENE_NEXT: Record<Scene, string[]> = {
   jobseek: ["Bói tiếp: công việc sắp tới hợp ngành gì", "Bói tiếp: môi trường làm việc sắp tới thế nào", "Bói tiếp: thu nhập công việc mới có ổn không"],
   work: ["Bói tiếp: có nên nhảy việc không", "Bói tiếp: sếp đánh giá mình thế nào", "Bói tiếp: năm nay có tăng lương không"],
+  newlove: ["Bói tiếp: người sắp tới của mình là người thế nào", "Bói tiếp: mình đã sẵn sàng cho mối quan hệ mới chưa", "Bói tiếp: có nên quay lại với người cũ không"],
   ex: ["Bói tiếp: người cũ còn nghĩ về mình không", "Bói tiếp: mình có nên chủ động liên lạc không", "Bói tiếp: sắp tới tình cảm của mình thế nào"],
   crush: ["Bói tiếp: người ấy nghĩ gì về mình", "Bói tiếp: mình có nên tỏ tình không", "Bói tiếp: khi nào hai đứa thân hơn"],
   love: ["Bói tiếp: người ấy nghĩ gì về mình", "Bói tiếp: mối quan hệ này có lâu dài không", "Bói tiếp: khi nào mình gặp đúng người"],
@@ -1321,6 +1342,11 @@ function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: st
     base = one([
       "Lomi đoán bạn (hoặc người thân) đang mệt và mong mau khoẻ lắm. Lúc ốm, mình hay sốt ruột muốn biết “bao giờ mới hết” — cảm giác đó rất bình thường.",
       "Câu hỏi này cho thấy bạn đang lo cho sức khoẻ và muốn được yên tâm. Khi cơ thể chưa khoẻ, tâm trạng cũng dễ chùng xuống theo.",
+    ]);
+  else if (scene === "newlove")
+    base = one([
+      "Thất tình là một nỗi đau thật sự — có nghiên cứu còn cho thấy não xử lý nỗi đau chia tay khá giống đau thể chất. Việc bạn đã nghĩ tới chuyện có người mới cho thấy bạn đang dần muốn bước tiếp, và đó là tín hiệu tốt.",
+      "Lomi đoán bạn đang vừa buồn vừa mong có ai đó ở bên. Muốn được yêu thương là nhu cầu rất bình thường — chỉ cần mình đừng vội vì cô đơn mà chọn sai người.",
     ]);
   else if (topic === "love" && has(/ (nguoi cu|ex|quay lai|tai hop|chia tay) /))
     base = one([
