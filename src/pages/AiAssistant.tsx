@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { ArrowLeft, Maximize2, Send, Smile, Trash2, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowLeft, ChevronDown, Lightbulb, Maximize2, Send, Smile, Sparkles, Volume2, VolumeX, X } from "lucide-react";
+import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
+import { speak } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -29,13 +31,14 @@ import {
   forgetBiz,
   isAskMemory,
   isForgetMemory,
+  learnAddr,
   learnFromText,
   loadMem,
   memorySummary,
   rememberBiz,
   situationContext,
 } from "@/lib/lomiMemory";
-import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
+import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
@@ -110,6 +113,9 @@ type Msg = {
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
+  dishAsk?: { drink: boolean; shown: string[] }; // Lomi vừa gợi ý vài món — tin kế tiếp là món người dùng chọn
+  avoidIds?: string[]; // quán đã gợi ý cho món này (không lặp khi bấm "Quán khác")
+  dish?: string; // vừa tìm quán cho món này (bấm "Quán khác" để tìm tiếp)
   story?: string; // câu người dùng kể mở đầu câu chuyện đang tâm sự (để Lomi nhắc lại, không lạc mạch)
   sx?: string[]; // triệu chứng cơ thể đã kể (cộng dồn qua các tin) — lib/lomiSymptoms
   mood?: string[]; // cảm giác đã kể (cộng dồn) — lib/lomiSymptoms
@@ -136,7 +142,9 @@ const FOLLOW_TOPIC_Q: Record<string, string> = {
   study: "Chuyện học hành của mình sắp tới thế nào?",
 };
 // Chủ đề tâm sự thuần tâm lý — kể từ 2 cảm giác thì phân tích tâm lý (lib/lomiSymptoms) sát hơn.
+const LOVE_KEYS = new Set(["breakup", "ex", "cheat", "unrequited", "crush", "cold", "fight", "jealous", "longdist", "love", "toxic", "marriage", "single", "situationship", "newlove", "stayorgo", "parentsban", "lies", "spark"]);
 const PSY_THEMES = new Set(["insomnia", "overthink", "anxiety", "panic", "sad", "tired", "lonely", "depress", "selfworth", "angerself", "compare"]);
+const DISHES_BY_ID = Object.fromEntries(DISHES.map((d) => [d.id, d]));
 const pickOne = (a: string[]) => a[Math.floor(Math.random() * a.length)];
 // FAQ về CÁCH DÙNG app — luôn ưu tiên hơn tư vấn kinh doanh khi cả hai cùng khớp.
 const APP_HOWTO_FAQ = new Set([
@@ -247,21 +255,16 @@ function QuickReplies({ items, onPick }: { items: string[]; onPick: (v: string) 
   );
 }
 
-/** Thẻ gợi ý lớn trên màn chào của Lomi (Bói Tarot, Tư vấn ưu đãi). */
-function StarterCard({ emoji, title, desc, onClick }: { emoji: string; title: string; desc: string; onClick: () => void }) {
-  return (
-    <button
-      onClick={onClick}
-      className="group flex flex-col items-start gap-2 rounded-2xl border border-border/70 bg-card/60 backdrop-blur p-3 text-left shadow-sm hover:border-primary/50 active:scale-[0.97] transition"
-    >
-      <span className="w-9 h-9 rounded-xl bg-gradient-brand grid place-items-center text-lg shadow-sm group-hover:scale-105 transition-transform">{emoji}</span>
-      <span className="min-w-0">
-        <span className="block text-[13px] font-semibold leading-tight">{title}</span>
-        <span className="block text-[11px] text-muted-foreground leading-snug mt-0.5">{desc}</span>
-      </span>
-    </button>
-  );
-}
+// Gợi ý nhanh (01/10, theo ý Kir): gom vào nút "Gợi ý" thu gọn phía trên ô nhập; bấm thì hiện ra như tin nhắn
+// trong cùng khung chat (không còn cảm giác "sang trang khác").
+const SUGGESTS: { key: string; label: string }[] = [
+  { key: "tarot", label: "🔮 Bói Tarot" },
+  { key: "heart", label: "💬 Tâm sự" },
+  { key: "food", label: "🍜 Hôm nay ăn gì?" },
+  { key: "health", label: "🩺 Sức khoẻ" },
+  { key: "biz", label: "💡 Tư vấn kinh doanh" },
+  { key: "app", label: "📱 Hỏi về app" },
+];
 
 /** Dòng "Trợ lý AI" ghim đầu hộp thư. */
 export function AiAssistantRow() {
@@ -281,11 +284,12 @@ export function AiAssistantRow() {
 
 export default function AiAssistant() {
   const goBack = useGoBack();
+  // 01/10 (theo ý Kir): khung chat Lomi chiếm TOÀN MÀN HÌNH (che thanh tiêu đề + thanh điều hướng của app),
+  // cao theo --vvh để bàn phím mở không đè ô nhập.
   return (
-    <AiChat
-      onBack={() => goBack("/tin-nhan")}
-      className="h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))] max-w-2xl mx-auto"
-    />
+    <div className="fixed inset-x-0 top-0 z-50 bg-background" style={{ height: "var(--vvh, 100dvh)" }}>
+      <AiChat onBack={() => goBack("/tin-nhan")} className="h-full max-w-2xl mx-auto" />
+    </div>
   );
 }
 
@@ -322,6 +326,9 @@ export function AiChat({
   // Popup "Lá bài hôm nay" — mở Lomi lần đầu trong ngày (components/LomiDailyCard).
   const [daily, setDaily] = useState(false);
   const [showStickers, setShowStickers] = useState(false);
+  const [showSuggest, setShowSuggest] = useState(false);
+  const [showTop, setShowTop] = useState(false);
+  const [topList, setTopList] = useState<Topic[] | null>(null);
 
   const loadQuota = async () => {
     const { data } = await db.rpc("get_my_ai_quota");
@@ -356,6 +363,11 @@ export function AiChat({
   const push = (add: Msg[]) => {
     const sh = shownRef.current;
     if (sh) add = add.map((m) => (m.role === "user" && m.content === sh.from ? { ...m, content: sh.to } : m));
+    // Xưng hô đối xứng (anh/chị/em/bạn) theo cách người dùng tự xưng — lib/lomiAddress.
+    if (lang !== "en") {
+      const addr = loadMem(user.id).addr;
+      if (addr && addr !== "bạn") add = add.map((m) => (m.role === "assistant" ? { ...m, content: speak(m.content, addr) } : m));
+    }
     const next = [...msgs, ...add];
     setMsgs(next);
     saveHistory(user.id, next);
@@ -366,6 +378,7 @@ export function AiChat({
   // trên giao diện theo ý Kir, nhưng vẫn âm thầm dùng để trả lời nhanh + đúng các câu về cách dùng app.
   const answerFaq = (f: Faq, asked?: string) => {
     setErr(null);
+    topicHit(`faq:${f.id}`);
     const q = asked ?? (lang === "en" ? f.q.en : f.q.vi);
     // Gợi ý 2 câu liên quan (cùng nhóm) để hỏi tiếp cho mượt.
     const rel = relatedFaqs(f, 2).map((x) => (lang === "en" ? x.q.en : x.q.vi));
@@ -404,6 +417,7 @@ export function AiChat({
     const sit = situationContext(loadMem(user.id));
     if (question && sit && questionTopic(question) === "general") ctx = `${ctx ?? asked}. ${sit}`;
     const r = drawForQuestion(question, ctx);
+    topicHit(question ? "tarot" : "daily");
     // Thông điệp hôm nay = đúng lá của popup "Lá bài hôm nay" (cố định trong ngày).
     if (!question) r.cards = [dailyDraw(user.id)];
     push([
@@ -429,6 +443,7 @@ export function AiChat({
   // ── Tư vấn kinh doanh (30/09 r4) — chạy trên máy như Tarot (lib/bizAdvisor.ts), ai cũng dùng được ──
   // Hỏi loại hình → hỏi chủ đề → trả lời từ thư viện, xoay vòng ý để không lặp; hỏi nối "thêm ý khác".
   const askBiz = (asked?: string, pending?: BizTopic, force = false) => {
+    topicHit("biz");
     // Lomi nhớ loại hình người dùng đã nói lần trước → vào thẳng gợi ý, không hỏi lại.
     const mb = force ? undefined : loadMem(user.id).biz;
     if (mb?.type) {
@@ -461,6 +476,7 @@ export function AiChat({
     ]);
   };
   const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic, more = false) => {
+    topicHit("biz");
     rememberBiz(user.id, ctx);
     return localReply(asked, {
       role: "assistant",
@@ -492,10 +508,56 @@ export function AiChat({
     // Giữ lại triệu chứng / cảm giác đã kể để lần sau cộng dồn.
     ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth, sx: keep?.sx, mood: keep?.mood, story: h.story ?? keep?.story }),
   });
-  const askHeart = () => {
+  const askHeart = (asked?: string) => {
     setErr(null);
-    push([heartMsg(heartOpen(), 0)]);
+    topicHit("heart");
+    push([...(asked ? [{ role: "user" as const, content: asked, local: true }] : []), heartMsg(heartOpen(), 0)]);
     lomiSound("pop");
+  };
+  // Bấm gợi ý / chủ đề hot → hiện như tin nhắn của mình trong cùng khung chat rồi Lomi trả lời bên dưới.
+  const pickSuggest = (key: string, label: string, prompt?: string) => {
+    setShowSuggest(false);
+    setShowTop(false);
+    setShowStickers(false);
+    if (key === "tarot") return askTarot(label);
+    if (key === "heart") return askHeart(label);
+    if (key === "biz") return askBiz(label);
+    if (key === "app") return void send("📱 Hỏi về app");
+    if (key === "food") return void send("🍜 Hôm nay ăn gì?");
+    if (key === "health") return void send("🩺 Sức khoẻ");
+    return void send(prompt ?? label);
+  };
+  const openTop = () => {
+    setShowTop((v) => !v);
+    setShowSuggest(false);
+    if (!topList) void loadTopTopics(8).then(setTopList);
+  };
+
+  // ── Hôm nay ăn gì / uống gì (01/10): gợi ý món → chọn món → tìm quán có món đó ──
+  const replyDishes = (asked: string, drink: boolean, avoid: string[] = []) => {
+    topicHit(drink ? "drink" : "food");
+    const s = suggestDishes(drink, avoid);
+    return localReply(asked, {
+      role: "assistant",
+      content: s.text,
+      local: true,
+      quick: s.quick,
+      dishAsk: { drink, shown: [...avoid, ...s.dishes.map((d) => d.id)].slice(-12) },
+    });
+  };
+  const replyDishShops = async (asked: string, dishId: string, avoidIds: string[] = []) => {
+    const d = DISHES_BY_ID[dishId];
+    if (!d) return;
+    const shown = shownRef.current;
+    setBusy(true);
+    let res;
+    try {
+      res = await runDishSearch(d, avoidIds);
+    } finally {
+      setBusy(false);
+    }
+    shownRef.current = shown;
+    return localReply(asked, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: d.id, avoidIds });
   };
 
   const send = async (text: string, forceAi = false) => {
@@ -506,6 +568,8 @@ export function AiChat({
       setInput("");
       return sendSticker(stk);
     }
+    // Người dùng tự xưng anh/chị/em/mình → Lomi xưng hô đối xứng từ câu này trở đi.
+    if (!en) learnAddr(user.id, raw);
     let q = expandTeen(raw);
     shownRef.current = q !== raw ? { from: q, to: raw } : null;
     setErr(null);
@@ -543,6 +607,21 @@ export function AiChat({
       const cr = crisisReply(q, lang);
       // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
+      // Đang chọn món / vừa tìm quán cho một món → hiểu "🍜 Phở", "món khác", "quán khác".
+      {
+        const nq0 = normalizeVi(q);
+        const other = raw.startsWith("🎲") || /\b(mon khac|do uong khac|doi mon|mon nao khac|goi y khac)\b/.test(nq0);
+        if ((lastA?.dishAsk || lastA?.dish) && other) {
+          const drink = lastA.dishAsk?.drink ?? !!DISHES_BY_ID[lastA.dish ?? ""]?.drink;
+          return replyDishes(q, drink, lastA.dishAsk?.shown ?? (lastA.dish ? [lastA.dish] : []));
+        }
+        if (lastA?.dish && (raw.startsWith("🔁") || /\b(quan khac|doi quan|cho khac)\b/.test(nq0)))
+          return replyDishShops(q, lastA.dish, [...(lastA.places ?? []).map((p) => p.id), ...(lastA.avoidIds ?? [])]);
+        if (lastA?.dishAsk) {
+          const d = detectDish(q);
+          if (d) return replyDishShops(q, d.id);
+        }
+      }
       // Nút phạm vi ("🩺 Sức khoẻ", "📱 Hỏi về app") → Lomi hỏi tiếp đúng việc.
       if (SCOPE_CHIP_REPLY[raw]) return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY[raw], local: true, ...(raw.includes("Sức khoẻ") ? { heart: "health", heartDepth: 0 } : {}) });
       // 0a) Trí nhớ: người dùng kể tên / hoàn cảnh → Lomi ghi nhớ; hỏi "Lomi nhớ gì về mình?", "quên hết đi".
@@ -660,6 +739,7 @@ export function AiChat({
         const nq = ` ${normalizeVi(q)} `;
         // 0) Câu hỏi kiến thức sức khoẻ ("uống cà phê nhiều có sao k", "ăn gì để đẹp da") — lib/lomiHealthFacts.
         const fact = healthFact(q);
+        if (fact) topicHit("health");
         if (fact) return localReply(q, { role: "assistant", content: fact, local: true, heart: "health", heartDepth: depth, sx: inTalk ? lastA?.sx : undefined });
         const inHealth = inTalk && (lastA?.heart === "health" || !!lastA?.sx?.length);
         const th = heartThemeOf(q);
@@ -675,6 +755,8 @@ export function AiChat({
         // "hôm nay hơi mệt", "mất ngủ" nói bâng quơ (chưa nói chuyện sức khoẻ) → để phần tâm sự đáp ân cần hơn.
         const casualSoft = !inHealth && onlySoftSymptoms(q) && !askAdvice;
         const body = (mind && softBody) || casualSoft ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, inHealth && askAdvice);
+        if (body) topicHit("health");
+        else if (mind) topicHit("mind");
         if (body)
           return localReply(q, { role: "assistant", content: body.text, local: true, heart: "health", heartDepth: depth, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
         if (mind)
@@ -703,6 +785,13 @@ export function AiChat({
     // 0c) Tìm chỗ / ưu đãi THẬT trong app, "hôm nay ăn gì?" (đổi món → bốc chỗ khác, không trùng chỗ cũ).
     if (!forceAi && !en) {
       const it = detectSearch(q);
+      // "Hôm nay ăn gì / uống gì" → gợi ý món trước (chọn món rồi mới tìm quán).
+      if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q)) return replyDishes(q, it.mode === "drink");
+      // Hỏi thẳng một món ("quán phở nào ngon", "muốn ăn lẩu") → tìm quán có món đó luôn.
+      if (it && it.mode !== "go") {
+        const d = detectDish(q);
+        if (d) return replyDishShops(q, d.id);
+      }
       if (it) {
         const prevIds = lastA?.search?.mode === it.mode ? (lastA.places ?? []).map((p) => p.id) : [];
         const intent = it.mode !== "find" && lastA?.search && lastA.search.mode !== "find" && /doi|khac|lai/.test(normalizeVi(q)) ? lastA.search : it;
@@ -723,6 +812,7 @@ export function AiChat({
       // Người dùng vừa kể hoàn cảnh để Lomi nhớ (vd "mình đang thất nghiệp") thì để phần dưới đáp.
       if (!en && !memLearn?.newSits.length) {
         const h = heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
+        if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));
       }
       const cc = chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name));
@@ -780,7 +870,7 @@ export function AiChat({
       const sug = isAppish(q) ? suggestFaqs(q, 3) : [];
       if (!sug.length && !en) {
         const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
-        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q });
+        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q, sticker: fb.sticker });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
@@ -857,6 +947,17 @@ export function AiChat({
     if (quota && typeof data.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
   };
 
+  // Lời chào đầu khung chat (xưng hô theo cách người dùng tự xưng — lib/lomiAddress).
+  const greetLine = (() => {
+    const nm = displayName(loadMem(user.id), profile?.full_name);
+    const h = new Date().getHours();
+    const hi = h < 11 ? "Chào buổi sáng" : h < 14 ? "Trưa vui vẻ" : h < 18 ? "Chiều vui nha" : "Tối an lành";
+    return speak(
+      `${hi}${nm ? ` ${nm}` : ""} 👋 Hôm nay Lomi giúp gì cho bạn nè?\nLomi còn đang trong giai đoạn thử nghiệm nên rành chút chút mấy việc: 🔮 Tarot · 💬 Tâm sự · 🩺 Sức khoẻ · 📱 Hướng dẫn app. Bấm **Gợi ý** bên dưới hoặc cứ gõ tự nhiên nha!`,
+      loadMem(user.id).addr,
+    );
+  })();
+
   const clear = () => {
     setMsgs([]);
     saveHistory(user.id, []);
@@ -865,8 +966,8 @@ export function AiChat({
 
 
   return (
-    <div className={cn("flex flex-col", className)}>
-      <div className="flex items-center gap-2 p-3 border-b">
+    <div className={cn("relative flex flex-col", className)}>
+      <div className="flex items-center gap-2 p-3 border-b" style={{ paddingTop: "max(env(safe-area-inset-top), 0.75rem)" }}>
         {onBack && (
           <button onClick={onBack} aria-label={t("common.back")}>
             <ArrowLeft className="w-5 h-5" />
@@ -889,9 +990,23 @@ export function AiChat({
         >
           {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
         </button>
+        {!en && (
+          <button
+            onClick={openTop}
+            aria-label="Chủ đề hot"
+            title="Chủ đề được hỏi nhiều"
+            className={cn("p-2 rounded-full transition", showTop ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-accent")}
+          >
+            <Lightbulb className="w-4 h-4" />
+          </button>
+        )}
         {msgs.length > 0 && (
-          <button onClick={clear} aria-label={t("ai.clear")} className="p-2 text-muted-foreground">
-            <Trash2 className="w-4 h-4" />
+          <button
+            onClick={clear}
+            aria-label={t("ai.clear")}
+            className="ml-0.5 px-2.5 py-1 rounded-full border text-[11px] font-semibold text-muted-foreground hover:text-primary hover:border-primary/40 transition"
+          >
+            {en ? "Clear" : "Làm mới"}
           </button>
         )}
         {onExpand && (
@@ -906,32 +1021,44 @@ export function AiChat({
         )}
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-3">
-        {msgs.length === 0 ? (
-          <div className="py-4 space-y-5">
-            {/* Màn chào gọn (30/09 r2, theo ý Kir): lời chào ngắn + 4 ô lối tắt, bỏ danh sách "Hỏi nhanh". */}
-            <div className="flex flex-col items-center text-center gap-1 px-6">
-              <LomiMascot size={56} className="mb-1" track />
-              <p className="text-base font-bold">
-                {en ? "Hi there 👋" : (() => {
-                  const nm = displayName(loadMem(user.id), profile?.full_name);
-                  return nm ? `Chào ${nm} 👋` : "Chào bạn 👋";
-                })()}
-              </p>
-              <p className="text-xs text-muted-foreground">{en ? "How can Lomi help today?" : "Hôm nay Lomi giúp gì cho bạn nè?"}</p>
+      {showTop && !en && (
+        <div className="absolute right-3 top-[calc(max(env(safe-area-inset-top),0.75rem)+3.25rem)] z-20 w-72 max-w-[calc(100%-1.5rem)] rounded-2xl border bg-card shadow-xl p-2 animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-2 py-1.5 text-xs font-bold text-muted-foreground">💡 Chủ đề được hỏi nhiều</div>
+          {!topList ? (
+            <div className="px-2 py-3 text-xs text-muted-foreground animate-pulse">Đang tải…</div>
+          ) : (
+            <div className="flex flex-col">
+              {topList.map((tp, i) => (
+                <button
+                  key={tp.key}
+                  onClick={() => pickSuggest(tp.key.startsWith("faq:") ? "send" : tp.action === "send" ? tp.key : tp.action, tp.label, tp.prompt)}
+                  className="flex items-center gap-2 text-left text-sm px-2 py-2 rounded-xl hover:bg-accent active:scale-[0.98] transition"
+                >
+                  <span className="w-5 text-xs font-bold text-primary/70">{i + 1}</span>
+                  <span className="flex-1 min-w-0 truncate">{tp.label}</span>
+                </button>
+              ))}
             </div>
-            <div className="grid grid-cols-2 gap-2.5">
-              <StarterCard emoji="🔮" title={en ? "Tarot reading" : "Bói Tarot"} desc={en ? "1 · 3 · 5 · 10 cards, for fun" : "Suy ngẫm & giải trí · 1–10 lá"} onClick={() => askTarot()} />
-              {!en && <StarterCard emoji="💬" title="Tâm sự" desc="Lắng nghe, an ủi, tư vấn tình cảm" onClick={askHeart} />}
-              {/* Tư vấn kinh doanh — chạy trên máy (lib/bizAdvisor.ts), miễn phí nên mở cho mọi người. */}
-              <StarterCard emoji="💡" title={en ? "Business tips" : "Tư vấn kinh doanh"} desc={en ? "Offers, customers, posts" : "Ưu đãi, hút khách, bài đăng"} onClick={() => askBiz()} />
-              {!en && <StarterCard emoji="🍜" title="Hôm nay ăn gì?" desc="Lomi chọn quán giùm bạn" onClick={() => void send("Hôm nay ăn gì? 🎲")} />}
-            </div>
-            <p className="text-center text-[11px] text-muted-foreground/80 px-6">
-              {en ? "Or just type — ask anything about the app." : "Hoặc cứ gõ tự nhiên — hỏi về app, kể chuyện, hỏi gì cũng được 💚"}
-            </p>
+          )}
+        </div>
+      )}
+
+      <div className="flex-1 overflow-y-auto p-3 space-y-3" onClick={() => showTop && setShowTop(false)}>
+        {/* Lời chào luôn nằm đầu khung chat (01/10, theo ý Kir) — bấm gợi ý thì trả lời nối tiếp bên dưới,
+            không đổi màn hình. */}
+        <div className="flex items-end gap-2 pt-1">
+          <div className="w-9 h-9 rounded-full bg-primary/10 grid place-items-center shrink-0">
+            <LomiMascot size={28} animated={false} />
           </div>
-        ) : (
+          <div className="max-w-[85%] rounded-2xl rounded-bl-md bg-muted px-3 py-2 text-sm">
+            {en ? (
+              "Hi there 👋 How can Lomi help today?"
+            ) : (
+              <RichText text={greetLine} />
+            )}
+          </div>
+        </div>
+        {msgs.length === 0 ? null : (
           msgs.map((m, i) => (
             <div key={i} className={cn("flex flex-col", m.role === "user" ? "items-end" : "items-start")}>
               {m.role === "user" && parseStickerToken(m.content) ? (
@@ -1023,6 +1150,39 @@ export function AiChat({
 
       {(
         <>
+        {/* Gợi ý thu gọn (01/10, theo ý Kir): bấm "Gợi ý" mới hiện các lối tắt; chọn thì trả lời ngay trong khung chat. */}
+        {!en && (
+          <div className="px-3 pt-2 border-t">
+            <button
+              type="button"
+              onClick={() => {
+                setShowSuggest((v) => !v);
+                setShowTop(false);
+              }}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border transition",
+                showSuggest ? "bg-primary/10 text-primary border-primary/40" : "text-muted-foreground hover:text-primary hover:border-primary/40",
+              )}
+            >
+              <Sparkles className="w-3.5 h-3.5" /> Gợi ý
+              <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", showSuggest && "rotate-180")} />
+            </button>
+            {showSuggest && (
+              <div className="flex flex-wrap gap-1.5 pt-2 animate-in fade-in slide-in-from-bottom-1 duration-150">
+                {SUGGESTS.map((sg) => (
+                  <button
+                    key={sg.key}
+                    type="button"
+                    onClick={() => pickSuggest(sg.key, sg.label)}
+                    className="text-[12px] px-2.5 py-1 rounded-full border border-primary/40 text-primary bg-background active:scale-95 transition"
+                  >
+                    {sg.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
         {showStickers && (
           <div className="border-t bg-card animate-in slide-in-from-bottom-2 fade-in duration-200">
             <LomiStickerGrid onPick={sendSticker} className="grid grid-cols-5 gap-1 p-2 max-h-56 overflow-y-auto" />
@@ -1033,7 +1193,8 @@ export function AiChat({
             e.preventDefault();
             void send(input);
           }}
-          className="p-3 border-t flex items-end gap-2"
+          className={cn("p-3 flex items-end gap-2", en && "border-t")}
+          style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
         >
           <button
             type="button"
@@ -1394,7 +1555,8 @@ export function AiBubble() {
         <div className="fixed inset-0 z-50 bg-black/40 animate-in fade-in duration-200" onClick={() => setOpen(false)}>
           <div
             onClick={(e) => e.stopPropagation()}
-            className="absolute inset-x-0 bottom-0 mx-auto max-w-md h-[min(78vh,calc(var(--vvh,100dvh)-3rem))] bg-background rounded-t-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300"
+            className="absolute inset-x-0 top-0 mx-auto max-w-2xl bg-background shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300"
+            style={{ height: "var(--vvh, 100dvh)" }}
           >
             <AiChat
               className="h-full"

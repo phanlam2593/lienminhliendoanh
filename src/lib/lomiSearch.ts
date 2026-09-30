@@ -202,3 +202,142 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
     quick: ["Hôm nay ăn gì?", k?.type === "food" ? "Tìm spa có ưu đãi" : "Tìm quán cà phê có ưu đãi"],
   };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// "HÔM NAY ĂN GÌ / UỐNG GÌ" KIỂU MỚI (01/10, theo ý Kir): Lomi gợi ý vài MÓN hợp giờ này (Đà Lạt se lạnh)
+// → người dùng chọn món → Lomi tìm quán THẬT trong app có món đó (tên / mô tả / ưu đãi).
+// ─────────────────────────────────────────────────────────────────────────────
+export type Dish = {
+  id: string;
+  label: string; // có emoji, hiện trên nút
+  name: string; // tên món để nói
+  keys: string[]; // không dấu — tìm trong tên quán (name_unaccent)
+  vi: string[]; // có dấu — tìm trong mô tả / ưu đãi
+  re: RegExp; // nhận ra người dùng gõ món này (không dấu)
+  when: ("morning" | "noon" | "afternoon" | "evening" | "night")[];
+  drink?: boolean;
+};
+
+export const DISHES: Dish[] = [
+  { id: "pho", label: "🍜 Phở", name: "phở", keys: ["pho"], vi: ["phở"], re: /\bpho\b/, when: ["morning", "noon", "night"] },
+  { id: "bunbo", label: "🍜 Bún bò", name: "bún bò", keys: ["bun bo"], vi: ["bún bò"], re: /\bbun bo\b/, when: ["morning", "noon"] },
+  { id: "bundau", label: "🍱 Bún đậu", name: "bún đậu mắm tôm", keys: ["bun dau"], vi: ["bún đậu"], re: /\bbun dau\b/, when: ["noon", "afternoon"] },
+  { id: "bun", label: "🍜 Bún các loại", name: "bún", keys: ["bun"], vi: ["bún"], re: /\bbun\b/, when: ["morning", "noon"] },
+  { id: "hutieu", label: "🍜 Hủ tiếu", name: "hủ tiếu", keys: ["hu tieu"], vi: ["hủ tiếu"], re: /\bhu tieu\b/, when: ["morning", "night"] },
+  { id: "miquang", label: "🍜 Mì Quảng", name: "mì Quảng", keys: ["mi quang"], vi: ["mì quảng"], re: /\bmi quang\b/, when: ["morning", "noon"] },
+  { id: "banhcan", label: "🥞 Bánh căn", name: "bánh căn Đà Lạt", keys: ["banh can"], vi: ["bánh căn"], re: /\bbanh can\b/, when: ["morning", "afternoon", "evening"] },
+  { id: "banhmi", label: "🥖 Bánh mì xíu mại", name: "bánh mì (xíu mại)", keys: ["banh mi", "xiu mai"], vi: ["bánh mì", "xíu mại"], re: /\b(banh mi|xiu mai)\b/, when: ["morning", "night"] },
+  { id: "comtam", label: "🍛 Cơm tấm", name: "cơm tấm", keys: ["com tam"], vi: ["cơm tấm"], re: /\bcom tam\b/, when: ["morning", "noon", "evening"] },
+  { id: "com", label: "🍚 Cơm", name: "cơm", keys: ["com"], vi: ["cơm"], re: /\b(com|com trua|com van phong)\b/, when: ["noon", "evening"] },
+  { id: "chao", label: "🥣 Cháo", name: "cháo", keys: ["chao"], vi: ["cháo"], re: /\bchao (ga|long|vit|hau|ca|suon|bo)\b|\ban chao\b/, when: ["morning", "night"] },
+  { id: "lau", label: "🍲 Lẩu gà lá é", name: "lẩu (gà lá é, lẩu bò…)", keys: ["lau"], vi: ["lẩu"], re: /\blau\b/, when: ["evening", "night"] },
+  { id: "nuong", label: "🍢 Đồ nướng / BBQ", name: "đồ nướng", keys: ["nuong", "bbq"], vi: ["nướng", "bbq"], re: /\b(nuong|bbq)\b/, when: ["evening", "night"] },
+  { id: "banhtrang", label: "🫓 Bánh tráng nướng", name: "bánh tráng nướng / trộn", keys: ["banh trang"], vi: ["bánh tráng"], re: /\bbanh trang\b/, when: ["afternoon", "evening", "night"] },
+  { id: "oc", label: "🐚 Ốc", name: "ốc", keys: ["oc"], vi: ["ốc"], re: /\b(an oc|quan oc|oc)\b/, when: ["evening", "night"] },
+  { id: "banhxeo", label: "🥘 Bánh xèo", name: "bánh xèo", keys: ["banh xeo"], vi: ["bánh xèo"], re: /\bbanh xeo\b/, when: ["afternoon", "evening"] },
+  { id: "ga", label: "🍗 Gà rán / gà nướng", name: "gà", keys: ["ga "], vi: ["gà"], re: /\b(ga ran|ga nuong|com ga|ga)\b/, when: ["noon", "evening"] },
+  { id: "pizza", label: "🍕 Pizza / đồ Tây", name: "pizza, đồ Âu", keys: ["pizza", "steak", "burger"], vi: ["pizza", "bò bít tết"], re: /\b(pizza|steak|burger|do tay|mi y|spaghetti)\b/, when: ["noon", "evening"] },
+  { id: "anvat", label: "🍡 Ăn vặt", name: "đồ ăn vặt", keys: ["an vat"], vi: ["ăn vặt"], re: /\ban vat\b/, when: ["afternoon", "night"] },
+  { id: "che", label: "🍧 Chè / kem", name: "chè, kem", keys: ["che", "kem"], vi: ["chè", "kem"], re: /\b(an che|che|kem)\b/, when: ["afternoon", "evening"] },
+  // Đồ uống
+  { id: "cafe", label: "☕ Cà phê", name: "cà phê", keys: ["cafe", "coffee", "ca phe"], vi: ["cà phê", "cafe", "coffee"], re: /\b(ca phe|cafe|cf|coffee)\b/, when: ["morning", "noon", "afternoon"], drink: true },
+  { id: "trasua", label: "🧋 Trà sữa", name: "trà sữa", keys: ["tra sua"], vi: ["trà sữa"], re: /\btra sua\b/, when: ["afternoon", "evening"], drink: true },
+  { id: "tra", label: "🍵 Trà / trà trái cây", name: "trà", keys: ["tra"], vi: ["trà"], re: /\b(tra chanh|tra trai cay|tra dao|uong tra)\b/, when: ["noon", "afternoon"], drink: true },
+  { id: "daunanh", label: "🥛 Sữa đậu nành nóng", name: "sữa đậu nành nóng", keys: ["dau nanh"], vi: ["đậu nành"], re: /\b(dau nanh|sua dau)\b/, when: ["evening", "night"], drink: true },
+  { id: "sinhto", label: "🥤 Sinh tố / nước ép", name: "sinh tố, nước ép", keys: ["sinh to", "nuoc ep", "juice"], vi: ["sinh tố", "nước ép"], re: /\b(sinh to|nuoc ep|juice)\b/, when: ["noon", "afternoon"], drink: true },
+  { id: "cacao", label: "🍫 Ca cao nóng", name: "ca cao / sô-cô-la nóng", keys: ["cacao", "ca cao", "chocolate"], vi: ["ca cao", "cacao"], re: /\b(ca cao|cacao|socola nong|chocolate)\b/, when: ["evening", "night", "morning"], drink: true },
+  { id: "bia", label: "🍻 Bia / quán nhậu", name: "bia, đồ nhậu", keys: ["bia", "nhau", "pub", "bar"], vi: ["bia", "nhậu"], re: /\b(bia|nhau|quan nhau)\b/, when: ["evening", "night"], drink: true },
+];
+
+function partNow(h = new Date().getHours()): Dish["when"][number] {
+  if (h >= 5 && h < 10) return "morning";
+  if (h >= 10 && h < 14) return "noon";
+  if (h >= 14 && h < 17) return "afternoon";
+  if (h >= 17 && h < 21) return "evening";
+  return "night";
+}
+const PART_VI: Record<Dish["when"][number], string> = {
+  morning: "Sáng sớm Đà Lạt se lạnh",
+  noon: "Trưa rồi",
+  afternoon: "Chiều chiều",
+  evening: "Tối rồi, trời lạnh lạnh",
+  night: "Khuya rồi",
+};
+
+/** Người dùng gõ / bấm tên một món ("🍜 Phở", "ăn phở", "quán lẩu nào ngon"). */
+export function detectDish(text: string): Dish | undefined {
+  const t = text.trim();
+  const byLabel = DISHES.find((d) => d.label === t);
+  if (byLabel) return byLabel;
+  const n = ` ${normalizeVi(t)} `;
+  return DISHES.find((d) => d.re.test(n));
+}
+
+/** Gợi ý 3 món hợp giờ này (tránh lặp món vừa gợi ý). drink = đang hỏi "uống gì". */
+export function suggestDishes(drink: boolean, avoid: string[] = []): { text: string; dishes: Dish[]; quick: string[] } {
+  const part = partNow();
+  const pool = DISHES.filter((d) => !!d.drink === drink && !avoid.includes(d.id));
+  const fit = pool.filter((d) => d.when.includes(part));
+  const rest = pool.filter((d) => !d.when.includes(part));
+  const shuffled = [...fit].sort(() => Math.random() - 0.5).concat([...rest].sort(() => Math.random() - 0.5));
+  const dishes = (shuffled.length >= 3 ? shuffled : [...DISHES.filter((d) => !!d.drink === drink)].sort(() => Math.random() - 0.5)).slice(0, 3);
+  const names = dishes.map((d) => `**${d.name.charAt(0).toUpperCase() + d.name.slice(1)}**`);
+  const text = drink
+    ? pick([
+        `${PART_VI[part]}, uống gì cho đã nè 😋 Lomi gợi ý: ${names.join(", ")}. Bạn thích món nào? Chọn một cái, Lomi tìm quán có món đó cho liền!`,
+        `Khát rồi hả 🥤 Giờ này hợp nhất là ${names.join(", ")} nè. Bấm món bạn thích, Lomi kiếm quán giùm nha!`,
+      ])
+    : pick([
+        `${PART_VI[part]}, ăn gì cho ấm bụng nè 🤤 Lomi gợi ý: ${names.join(", ")}. Bạn thèm món nào? Chọn một món, Lomi tìm quán có món đó cho nha!`,
+        `Để Lomi nghĩ giùm nè 🎲 Giờ này hợp nhất là ${names.join(", ")}. Bạn chọn món nào, Lomi tìm quán ngon có món đó liền!`,
+        `Hôm nay thử đổi vị nha 😋 ${names.join(", ")} — món nào làm bạn thèm nhất? Bấm chọn, Lomi tìm quán cho!`,
+      ]);
+  return { text, dishes, quick: [...dishes.map((d) => d.label), drink ? "🎲 Đồ uống khác" : "🎲 Món khác"] };
+}
+
+/** Tìm quán THẬT có món này (tên quán, mô tả hoặc ưu đãi). avoidIds = quán đã gợi ý (bấm "Quán khác"). */
+export async function runDishSearch(d: Dish, avoidIds: string[] = []): Promise<SearchResult> {
+  const pos = await myPos(false);
+  const clean = (x: string) => x.replace(/[,()%]/g, "").trim();
+  const ors = [
+    ...d.keys.map((k) => `name_unaccent.ilike.%${clean(k)}%`),
+    ...d.vi.map((k) => `description.ilike.%${clean(k)}%`),
+    ...d.vi.map((k) => `latest_offer.ilike.%${clean(k)}%`),
+  ].join(",");
+  const { data } = await supabase
+    .from("businesses_explore_view")
+    .select(COLS)
+    .eq("status", "approved")
+    .eq("type", "food")
+    .or(ors)
+    .order("rating", { ascending: false, nullsFirst: false })
+    .limit(40);
+  let cards = ((data ?? []) as unknown as Row[]).map((r) => toCard(r, pos)).filter((c) => !avoidIds.includes(c.id));
+  const nm = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+  if (!cards.length) {
+    // Không có quán nào có đúng món → nói thật, gợi ý vài quán ăn/uống khác đang có ưu đãi.
+    const rows = await fetchRows("food", [], true);
+    const others = rows.map((r) => toCard(r, pos)).filter((c) => !avoidIds.includes(c.id)).sort(() => Math.random() - 0.5).slice(0, 3);
+    return {
+      text: avoidIds.length
+        ? `Lomi hết quán có **${nm}** để gợi ý rồi 😅 Thử mấy quán khác đang có ưu đãi nè 👇`
+        : `Hic, trong Liên Minh Liên Doanh chưa có quán nào ghi rõ món **${nm}** 🥲 Lomi gợi ý tạm mấy quán ${d.drink ? "nước" : "ăn"} đang có ưu đãi nha 👇`,
+      places: others,
+      quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"],
+    };
+  }
+  if (pos) {
+    cards.sort((a, b) => (a.distKm ?? 1e9) - (b.distKm ?? 1e9));
+    cards = cards.slice(0, 6).sort(() => Math.random() - 0.5);
+  } else cards = cards.slice(0, 8).sort(() => Math.random() - 0.5);
+  cards = cards.slice(0, 3);
+  return {
+    text: pick([
+      `Thèm **${nm}** hả, có ngay đây 😋 Mấy quán trong Liên Minh Liên Doanh nè 👇`,
+      `Chuẩn bài luôn! Đi ăn **${nm}** thì ghé mấy chỗ này nha 🤤`,
+      `Lomi tìm được mấy quán có **${nm}** nè${pos ? " (gần bạn)" : ""} 👇 Bấm vào thẻ để xem chi tiết và nhận ưu đãi nha!`,
+    ]),
+    places: cards,
+    quick: ["🔁 Quán khác", d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"],
+  };
+}

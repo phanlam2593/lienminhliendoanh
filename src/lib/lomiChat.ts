@@ -10,7 +10,7 @@
 
 import { normalizeVi } from "@/lib/lomiFaq";
 
-export type ChatReply = { text: string; quick?: string[] };
+export type ChatReply = { text: string; quick?: string[]; sticker?: string };
 type L = "vi" | "en";
 
 const rnd = (n: number) => Math.floor(Math.random() * n);
@@ -31,12 +31,32 @@ function partOfDay(h = new Date().getHours()): "morning" | "noon" | "afternoon" 
 }
 
 const GREET_TIME: Record<ReturnType<typeof partOfDay>, string[]> = {
-  morning: ["Chào buổi sáng nha ☀️", "Sáng tốt lành nè ☀️", "Hello buổi sáng! Uống cà phê chưa đó ☕"],
-  noon: ["Chào buổi trưa nha 🌤️ Ăn cơm chưa đó?", "Trưa rồi nè, nhớ ăn uống đầy đủ nha 🍚"],
-  afternoon: ["Chào buổi chiều nha 🌿", "Chiều rồi, làm ly nước cho tỉnh táo nè 🧋"],
-  evening: ["Chào buổi tối nha 🌙", "Tối vui vẻ nha 🌙 Hôm nay của bạn thế nào?"],
-  night: ["Khuya rồi mà bạn vẫn còn thức hả 🌙", "Giờ này còn gặp bạn, Lomi vui ghê 🌙 Nhớ ngủ sớm nha!"],
+  morning: [
+    "Chào buổi sáng nha ☀️",
+    "Sáng tốt lành nè ☀️",
+    "Hello buổi sáng! Uống cà phê chưa đó ☕",
+    "Ui sáng sớm đã gặp bạn, hên ghê 😆",
+    "Dậy sớm dữ ta 🌤️ Đà Lạt sáng nay se lạnh, nhớ mặc ấm nha!",
+  ],
+  noon: ["Chào buổi trưa nha 🌤️ Ăn cơm chưa đó?", "Trưa rồi nè, nhớ ăn uống đầy đủ nha 🍚", "Hí lô, trưa nay ăn gì chưa nè 😋"],
+  afternoon: ["Chào buổi chiều nha 🌿", "Chiều rồi, làm ly nước cho tỉnh táo nè 🧋", "Chiều chiều gặp nhau vui ghê 😄"],
+  evening: ["Chào buổi tối nha 🌙", "Tối vui vẻ nha 🌙 Hôm nay của bạn thế nào?", "Tối rồi nè, nghỉ ngơi chút đi 🌙", "Hé lô buổi tối 😄 Nay mệt không đó?"],
+  night: ["Khuya rồi mà bạn vẫn còn thức hả 🌙", "Giờ này còn gặp bạn, Lomi vui ghê 🌙 Nhớ ngủ sớm nha!", "Cú đêm hả 🦉 Lomi cũng thức nè!"],
 };
+// Chào vui kiểu teen (hí, hé lu, chèo, ê, ơi…) → đáp vui kiểu teen, không khuôn mẫu.
+const GREET_TEEN = [
+  "Hí hí 👋 Lomi đây nè!",
+  "Hé lu hé lu 😆",
+  "Chèo bạn nha 🙌",
+  "Ơi, Lomi nghe nè 👂",
+  "Yo yo 😎 Có Lomi đây!",
+  "Hellu ✨ Nay có gì vui kể Lomi nghe hông?",
+];
+// Lomi đang thử nghiệm — nói thật cho người dùng thông cảm (01/10, theo ý Kir).
+export const BETA_NOTE = [
+  "À mà Lomi còn đang trong giai đoạn thử nghiệm, “kinh tế eo hẹp” nên chưa biết nhiều đâu 🙈 Lomi rành chút chút mấy phần: Tarot, tâm sự, sức khoẻ, hướng dẫn app — chuyện khác thì mọi người thông cảm nha!",
+  "Nói trước cho khỏi hụt hẫng nè: Lomi đang thử nghiệm, vốn liếng còn mỏng 😅 nên chỉ biết chút chút về Tarot, tâm sự, sức khoẻ với cách dùng app thôi á.",
+];
 // Người dùng chào kèm buổi ("chào buổi sáng") thì đáp đúng buổi đó.
 function greetPart(n: string): ReturnType<typeof partOfDay> {
   if (/buoi sang|good morning/.test(n)) return "morning";
@@ -83,8 +103,18 @@ const RULES: Rule[] = [
   },
   // Chào hỏi (kể cả gõ vui: hiii, helo, hé lô, alo, yo, 222…)
   {
-    re: /^(x?in chao|chao|chao ca nha|chao moi nguoi|chao ban|chao em|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi|oi lomi|good (morning|afternoon|evening)|chao buoi (sang|trua|chieu|toi)|\d{2,4})( (lomi|ban|em|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
-    reply: (n = "") => ({ text: `${pick(GREET_TIME[greetPart(n)])} ${pick(GREET_TAIL)}`, quick: [Q_DAILY, Q_CLAIM, Q_NEARBY] }),
+    re: /^(x?in chao+|chao+|chao ca nha|chao moi nguoi|chao ban|chao em|chao anh|chao chi|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi+|oi lomi|good (morning|afternoon|evening)|morning|chao buoi (sang|trua|chieu|toi)|\d{2,4})( (lomi|ban|em|anh|chi|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
+    reply: (n = "") => ({ text: `${pick(GREET_TIME[greetPart(n)])} ${pick(GREET_TAIL)}`, quick: [Q_DAILY, "Hôm nay ăn gì? 🎲", "Tâm sự với mình nha"] }),
+  },
+  // Chào kiểu teen: hí, hí lô, hé lu, hế nhô, chèo, ê, ơi, hú, xin chàoo…
+  {
+    re: /^(hi hi|hihi lomi|hi lo|he lu|he nho|he nhoo|hello+ lomi|helu+|hellu+|cheo+|cheo lomi|chao xin|xin chao xin|e+|e lomi|oi+|oi oi|hu+|hu hu lomi|lo+|lo lomi|halo+|ha lo+|hey yo|yo lomi|gut mo ninh|gud morning|moning|bonjour|annyeong|konnichiwa|ni hao|hola)( (lomi|ban|em|anh|chi|nha|a|oi|ne))*$/,
+    reply: () => ({ text: `${pick(GREET_TEEN)} ${pick(GREET_TAIL)}`, quick: [Q_DAILY, "Hôm nay ăn gì? 🎲", "Tâm sự với mình nha"] }),
+  },
+  // "Lomi ơi" / gọi tên → dạ
+  {
+    re: /^(lomi|lomi a|lomi oi+ .*|lomi .*oi)$/,
+    reply: () => ({ text: pick(["Dạ, Lomi nghe nè 👂 Bạn cần gì nè?", "Có Lomi đây 🙋 Bạn nói đi nè!", "Dạaa 😄 Lomi đây!"]) }),
   },
   // "???", "..." → hỏi lại nhẹ nhàng, nói rõ Lomi giúp được gì
   {
@@ -449,6 +479,30 @@ export const SCOPE_CHIP_REPLY: Record<string, string> = {
  * Câu Lomi chưa hiểu / ngoài phạm vi (30/09 r6) — nói THẬT, không đáp chung chung cho có, không mời bói lung tung.
  * faqQ = câu hỏi về app Lomi vừa trả lời (câu hỏi nối không khớp thì nói rõ là chưa có hướng dẫn cho ý đó).
  */
+// Câu Lomi chưa hiểu / ngoài phạm vi — 6 kiểu xoay vòng + sticker (01/10, theo ý Kir: đừng rập khuôn).
+const UNKNOWN: { text: string; sticker: string }[] = [
+  { text: "Hic, câu này Lomi bí thiệt rồi 😵‍💫 Lomi còn đang thử nghiệm, “kinh tế eo hẹp” nên mới biết chút chút về Tarot, tâm sự, sức khoẻ với cách dùng app thôi. Bạn hỏi Lomi chuyện khác nha 🙏", sticker: "chongmat" },
+  { text: "Ui, cái này nằm ngoài vùng phủ sóng của Lomi rồi 📡😅 Lomi chỉ rành mấy chuyện: bói Tarot, tâm sự – tình cảm, sức khoẻ thường gặp, hướng dẫn dùng app. Chọn thử một cái bên dưới nha!", sticker: "toatmohoi" },
+  { text: "Lomi suy nghĩ nát óc mà chưa ra 🤔 Thông cảm cho Lomi nha, Lomi còn nhỏ, đang học từng ngày. Hỏi Lomi về Tarot, tâm sự, sức khoẻ hay app thì Lomi giúp liền!", sticker: "suynghi" },
+  { text: "Câu này khó quá, Lomi xin chịu thua 🙈 Không dám trả lời bừa đâu. Mấy chuyện Lomi làm được: bói bài, nghe bạn tâm sự, gợi ý sức khoẻ, chỉ cách dùng app — bạn cần cái nào nè?", sticker: "ngai" },
+  { text: "Lomi cạn lời thiệt sự luôn 😶 Lomi đang trong giai đoạn thử nghiệm nên kiến thức còn mỏng lắm. Bạn thông cảm hỏi Lomi chuyện khác giúp nha 💚", sticker: "canloi" },
+  { text: "Hmm… câu này vượt quá “trình” của Lomi rồi 😅 Nhưng nếu bạn muốn tâm sự, hỏi sức khoẻ, bói một lá hay hỏi về app thì Lomi luôn sẵn sàng nè!", sticker: "doi" },
+];
+const UNCLEAR: { text: string; sticker: string }[] = [
+  { text: "Lomi chưa hiểu ý bạn lắm 😅 Bạn nói rõ hơn chút giúp Lomi nha — muốn tâm sự, hỏi sức khoẻ, hỏi về app hay bói bài?", sticker: "suynghi" },
+  { text: "Ơ, Lomi chưa bắt kịp ý bạn 🤔 Kể thêm chút nữa được không, hoặc chọn việc bạn cần bên dưới nha.", sticker: "ngacnhien" },
+  { text: "Lomi nghe chưa rõ lắm nè 👂 Bạn nói lại theo cách khác giúp Lomi nha, Lomi đang cố hiểu đây!", sticker: "toatmohoi" },
+  { text: "Hihi, Lomi hơi “lag” một chút 😵‍💫 Bạn đang muốn Lomi giúp chuyện gì nè?", sticker: "chongmat" },
+  { text: "Câu này Lomi hiểu lờ mờ thôi 😅 Bạn kể cụ thể hơn chút nha, hoặc bấm một mục bên dưới cho nhanh.", sticker: "ngai" },
+];
+let lastUnknown = -1;
+let lastUnclear = -1;
+function rot<T>(arr: T[], prev: number): [T, number] {
+  let i = Math.floor(Math.random() * arr.length);
+  if (arr.length > 1 && i === prev) i = (i + 1) % arr.length;
+  return [arr[i], i];
+}
+
 export function scopedFallback(text: string, faqQ?: string): ChatReply {
   const n = ` ${normalizeVi(text)} `;
   const q = looksLikeQuestion(text);
@@ -467,21 +521,14 @@ export function scopedFallback(text: string, faqQ?: string): ChatReply {
     return {
       text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Bạn hỏi lại theo cách khác, hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.`,
     };
-  if (q || outTask)
-    return {
-      text: pick([
-        "Câu này nằm ngoài phạm vi của Lomi rồi 😅 Lomi chỉ giỏi mấy việc: 🔮 Bói Tarot · 💬 Tâm sự, tư vấn tình cảm – tâm lý · 🩺 Sức khoẻ thường gặp · 📱 Cách dùng Liên Minh Liên Doanh. Bạn cần Lomi giúp chuyện nào nè?",
-        "Hic, cái này Lomi không rành, không dám trả lời bừa đâu 🙏 Lomi giúp được bạn về Tarot, tâm sự – tình cảm – tâm lý, sức khoẻ thường gặp và cách dùng Liên Minh Liên Doanh nha.",
-      ]),
-      quick: SCOPE_CHIPS,
-    };
-  return {
-    text: pick([
-      "Lomi chưa hiểu ý bạn lắm 😅 Bạn nói rõ hơn chút giúp Lomi nha — bạn đang muốn tâm sự, hỏi về sức khoẻ, hỏi về app, hay bói bài?",
-      "Hmm, Lomi chưa bắt được ý bạn 🤔 Bạn kể thêm chút nha, hoặc chọn việc bạn cần bên dưới.",
-    ]),
-    quick: SCOPE_CHIPS,
-  };
+  if (q || outTask) {
+    const [u, i] = rot(UNKNOWN, lastUnknown);
+    lastUnknown = i;
+    return { text: u.text, quick: SCOPE_CHIPS, sticker: u.sticker };
+  }
+  const [u, i] = rot(UNCLEAR, lastUnclear);
+  lastUnclear = i;
+  return { text: u.text, quick: SCOPE_CHIPS, sticker: u.sticker };
 }
 
 /** Câu ngoài lề mà Lomi không biết — đáp thân thiện, đúng trọng tâm thay vì "ngoài khả năng". */

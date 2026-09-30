@@ -5,10 +5,11 @@
 // Người dùng hỏi "Lomi nhớ gì về mình?" để xem, "quên hết đi" để xoá.
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
+import { detectAddr, type Addr } from "@/lib/lomiAddress";
 import type { BizCtx } from "@/lib/bizAdvisor";
 
 export type Sit = "jobless" | "working" | "heartbroken" | "single" | "inlove" | "sick" | "student";
-export type LomiMem = { name?: string; sits?: Partial<Record<Sit, number>>; biz?: Pick<BizCtx, "type" | "noun"> };
+export type LomiMem = { name?: string; sits?: Partial<Record<Sit, number>>; biz?: Pick<BizCtx, "type" | "noun">; addr?: Addr };
 
 const KEY = (uid: string) => `lomi-mem:${uid}`;
 const TTL = 45 * 86400000;
@@ -181,4 +182,15 @@ export function displayName(mem: LomiMem, fullName?: string | null): string | un
   if (mem.name) return mem.name;
   const full = (fullName ?? "").trim().replace(/\s+/g, " ");
   return full && full.length <= 40 ? full : undefined;
+}
+
+/** Ghi nhớ cách người dùng tự xưng (anh / chị / em / bạn) để Lomi xưng hô đối xứng — lib/lomiAddress. */
+export function learnAddr(uid: string, raw: string): Addr | undefined {
+  const m = loadMem(uid);
+  const a = detectAddr(raw);
+  if (a && a !== m.addr) {
+    m.addr = a;
+    saveMem(uid, m);
+  }
+  return a ?? m.addr;
 }

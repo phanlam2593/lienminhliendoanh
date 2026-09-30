@@ -128,7 +128,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "breakup",
-    re: /\b(chia tay|that tinh|bi da|bi bo|nguoi yeu bo|bo roi|bo minh|khong con yeu|het yeu|tan vo|ket thuc roi|dut tinh)\b/,
+    re: /\b(chia tay|that tinh|bi da|bi bo|nguoi yeu bo|nguoi yeu (minh|toi|em|anh|a|e|tui) bo|bo (minh|toi|em|anh|a|e|tui) (roi|di)|bo roi|bo minh|khong con yeu|het yeu|tan vo|ket thuc roi|dut tinh)\b/,
     feel: [
       "Chia tay đau lắm, Lomi hiểu mà 🥺 Như có một phần thói quen hằng ngày tự nhiên biến mất vậy.",
       "Ôm bạn một cái thật chặt nè 🤗 Kết thúc một mối quan hệ chưa bao giờ là chuyện nhẹ nhàng.",
