@@ -726,7 +726,7 @@ export function AiChat({
         const nq = ` ${normalizeVi(q)} `;
         // 0a) Kiêng ăn uống theo bệnh ("gout kiêng gì", "huyết áp cao ăn mặn được k", nối tiếp "còn bia thì sao") — lib/lomiDiet.
         const prevUser = [...msgs].reverse().find((m) => m.role === "user")?.content;
-        const diet = dietReply(q, lastA?.diet ?? (prevUser ? dietOf(prevUser) : undefined));
+        const diet = dietReply(q, lastA?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet);
         if (diet) topicHit("health");
         if (diet) return localReply(q, { role: "assistant", content: diet.text, local: true, heart: "health", heartDepth: depth, diet: diet.diet, sx: inTalk ? lastA?.sx : undefined });
         // 0) Câu hỏi kiến thức sức khoẻ ("uống cà phê nhiều có sao k", "ăn gì để đẹp da") — lib/lomiHealthFacts.

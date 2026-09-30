@@ -377,7 +377,7 @@ export type DietResult = { text: string; diet: string };
  * "bị gout kiêng gì" → danh sách; "gout ăn thịt chó được không" → trả lời đúng món đó.
  * `prevDiet`: bệnh đã nói ở tin trước — cho câu nối tiếp kiểu "còn bia thì sao", "ăn tôm được k".
  */
-export function dietReply(text: string, prevDiet?: string): DietResult | null {
+export function dietReply(text: string, prevDiet?: string, inDiet = false): DietResult | null {
   const n = ` ${normalizeVi(text)} `;
   let d = DIETS.find((x) => x.re.test(n));
   const condPhrase = d ? (n.match(d.re)?.[0] ?? "") : "";
@@ -388,7 +388,9 @@ export function dietReply(text: string, prevDiet?: string): DietResult | null {
   const hit = findItem(text, all, condPhrase);
   // Nối tiếp từ tin trước: phải nhắc đúng 1 món hoặc hỏi kiểu "còn … thì sao / ăn gì nữa".
   if (fromPrev && !hit && !/\b(con gi nua|an gi nua|kieng gi nua|con nua|them nua)\b/.test(n)) return null;
-  if (!fromPrev && !hit && !DIET_ASK.test(n)) return null;
+  // Hỏi chung chung về bệnh ("bị sỏi thận thì sao?", "mỡ máu á") khi đang nói chuyện ăn uống / kiêng cữ → vẫn trả lời danh sách.
+  const vague = /\b(thi sao|the nao|lam sao|ra sao|sao a|sao ta|sao nhi|thi nhu nao|thi lam gi)\b/.test(n);
+  if (!fromPrev && !hit && !DIET_ASK.test(n) && !vague && !inDiet) return null;
   if (!fromPrev && hit && !DIET_ASK.test(n) && !CAN_ASK.test(n) && !/\b(thi sao|sao)\b/.test(n)) return null;
   if (!hit) return { text: fullList(d), diet: d.id };
 
