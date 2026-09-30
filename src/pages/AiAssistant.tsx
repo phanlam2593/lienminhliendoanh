@@ -333,9 +333,10 @@ export function AiChat({
     lomiSound("pop");
   };
   // Rút bài cho câu hỏi (rỗng = thông điệp hôm nay) và trả lời ngay trên máy.
-  const doTarot = (question: string, asked: string) => {
+  const doTarot = (question: string, asked: string, context?: string) => {
     setErr(null);
-    const r = drawForQuestion(question);
+    // Câu gõ đầy đủ (kể cả phần kể chuyện trước chữ "bói") giúp Lomi hiểu tâm trạng người hỏi.
+    const r = drawForQuestion(question, context ?? (question && asked.length > question.length ? asked : undefined));
     push([
       { role: "user", content: asked, local: true },
       { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang) },
@@ -446,7 +447,7 @@ export function AiChat({
       if (lastA?.tarot) {
         const prev = lastA.tarot;
         if (isTarotMore(q)) return moreTarot(prev, q);
-        if (isTarotRedo(q)) return doTarot(prev.question ?? "", q);
+        if (isTarotRedo(q)) return doTarot(prev.question ?? "", q, prev.context);
         if (/(?<![a-z])(thi sao|the con|vay con|con chuyen|con ve)(?![a-z])/.test(normalizeVi(q)) && !detectTarot(q)) return doTarot(q, q);
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.

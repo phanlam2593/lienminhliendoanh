@@ -26,6 +26,8 @@ export type TarotReading = {
   at: number;
   kind?: TarotKind;
   question?: string;
+  /** Cả câu người dùng gõ (có phần kể chuyện) — để đọc tâm lý đúng hơn. */
+  context?: string;
   pos?: T2[];
 };
 
@@ -445,11 +447,14 @@ const POS: Record<Exclude<TarotKind, "choice">, T2[]> = {
 const short = (x: string) => (x.length > 16 ? `${x.slice(0, 15).trim()}…` : x);
 
 /** Rút bài cho 1 câu hỏi (rỗng = thông điệp hôm nay). */
-export function drawForQuestion(question: string): TarotReading {
+export function drawForQuestion(question: string, context?: string): TarotReading {
   const q = question.trim();
   if (!q) return { topic: "general", spread: "one", cards: drawCards(1), at: Date.now(), kind: "daily", question: "", pos: POS.daily };
   const { kind, options } = detectKind(q);
-  const topic = detectTopic(fold(q));
+  const ctx = context?.trim() || undefined;
+  // Chủ đề đọc từ câu hỏi; nếu câu hỏi chung chung thì xem thêm phần kể chuyện xung quanh.
+  const t0 = detectTopic(fold(q));
+  const topic = t0 === "general" && ctx ? detectTopic(fold(ctx)) : t0;
   if (kind === "choice" && options)
     return {
       topic,
@@ -458,9 +463,10 @@ export function drawForQuestion(question: string): TarotReading {
       at: Date.now(),
       kind,
       question: q,
+      context: ctx,
       pos: options.map((o) => P(short(o), short(o))),
     };
-  return { topic, spread: "sca", cards: drawCards(3), at: Date.now(), kind, question: q, pos: POS[kind as Exclude<TarotKind, "choice">] };
+  return { topic, spread: "sca", cards: drawCards(3), at: Date.now(), kind, question: q, context: ctx, pos: POS[kind as Exclude<TarotKind, "choice">] };
 }
 
 /** Rút thêm 1 lá làm rõ cho lượt bói trước (không trùng các lá đã ra). */
@@ -791,13 +797,18 @@ function hashStr(x: string): number {
   for (let i = 0; i < x.length; i++) h = (h * 31 + x.charCodeAt(i)) >>> 0;
   return h;
 }
-function insightText(q: string, topic: TarotTopic, kind: TarotKind): string {
-  const f = ` ${fold(q)} `;
+function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: string): string {
+  const f = ` ${fold(context ?? q)} `;
   const has = (re: RegExp) => re.test(f);
   const h = hashStr(fold(q));
   const one = (arr: string[]) => arr[h % arr.length];
   let base: string;
-  if (topic === "health")
+  if (topic === "health" && has(/ (tao lao|qua loa|khong tin|khong yen tam|do te|te qua|kham dom|kham au|nghi ngo|so sai) /))
+    base = one([
+      "Lomi hiểu nè — đi khám mà thấy bác sĩ làm qua loa thì ai cũng bất an, uống thuốc cũng không yên lòng. Cảm giác nghi ngờ đó là bình thường, vì bạn đang lo cho sức khoẻ của mình. Nếu vẫn không yên tâm, bạn hoàn toàn có thể đi khám thêm ở một nơi khác để có ý kiến thứ hai.",
+      "Nghe là thấy bạn đang vừa mệt vừa bực rồi 🥺 Khi không tin người khám cho mình, mình sẽ cứ lấn cấn mãi. Bài chỉ giúp bạn nhẹ lòng thôi — muốn chắc ăn thì khám lại ở chỗ khác cũng là quyền của bạn nha.",
+    ]);
+  else if (topic === "health")
     base = one([
       "Lomi đoán bạn (hoặc người thân) đang mệt và mong mau khoẻ lắm. Lúc ốm, mình hay sốt ruột muốn biết “bao giờ mới hết” — cảm giác đó rất bình thường.",
       "Câu hỏi này cho thấy bạn đang lo cho sức khoẻ và muốn được yên tâm. Khi cơ thể chưa khoẻ, tâm trạng cũng dễ chùng xuống theo.",
@@ -923,7 +934,7 @@ export function readingText(r: TarotReading, lang: L): string {
   }
 
   // 💭 Lomi đọc tâm lý qua câu hỏi (trước khi vào bài).
-  if (q && !clar && !en) out.push(`💭 ${insightText(q, r.topic, kind)}`);
+  if (q && !clar && !en) out.push(`💭 ${insightText(q, r.topic, kind, r.context)}`);
   // Trả lời thẳng câu hỏi NGAY SAU phần mở đầu (người hỏi muốn biết kết quả trước, chi tiết từng lá sau).
   const ansAt = out.length;
   const usedLines = new Set<string>();
