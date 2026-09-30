@@ -12,7 +12,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 type L = "vi" | "en";
 type T2 = { vi: string; en: string };
 
-export type TarotTopic = "general" | "love" | "work" | "money" | "travel" | "study";
+export type TarotTopic = "general" | "love" | "work" | "money" | "travel" | "study" | "health";
 export type TarotSpread = "one" | "ppf" | "sca"; // 1 lá · Quá khứ–Hiện tại–Tương lai · Tình huống–Thử thách–Lời khuyên
 export type TarotSuit = "major" | "wands" | "cups" | "swords" | "pentacles";
 export type TarotDraw = { id: number; rev: boolean };
@@ -36,6 +36,7 @@ export const TAROT_TOPICS: { id: TarotTopic; emoji: string; vi: string; en: stri
   { id: "money", emoji: "💰", vi: "Tài chính", en: "Money" },
   { id: "travel", emoji: "✈️", vi: "Đi xa · giấy tờ", en: "Travel · paperwork" },
   { id: "study", emoji: "📚", vi: "Học tập", en: "Study" },
+  { id: "health", emoji: "💚", vi: "Sức khoẻ", en: "Health" },
 ];
 
 export const TAROT_SPREADS: { id: TarotSpread; n: number; vi: string; en: string; pos: T2[] }[] = [
@@ -207,6 +208,7 @@ const TOPIC_LINE: Record<TarotSuit, Record<Exclude<TarotTopic, "general">, [stri
     money: ["Về tiền bạc, sắp có thay đổi lớn — chuẩn bị tinh thần đón nhận nha.", "Về tiền bạc, nên xem lại tổng thể, đừng quyết định vội.", "Big changes in money — be ready.", "Review your finances as a whole; don't rush decisions."],
     travel: ["Về chuyện đi xa, giấy tờ, mọi thứ đang ở một bước chuyển lớn.", "Về hồ sơ, giấy tờ, nên rà lại thật kỹ, đừng nóng vội.", "Travel and paperwork are at a big turning point.", "Double-check your documents; don't rush."],
     study: ["Về học hành, bạn đang ở một bước ngoặt quan trọng.", "Về học hành, có lẽ nên thay đổi cách học một chút.", "Your studies are at an important turning point.", "Time to rethink how you study."],
+    health: ["Về sức khoẻ, cơ thể đang ở giai đoạn chuyển biến, tự điều chỉnh dần.", "Về sức khoẻ, bài nhắc bạn đừng chủ quan, làm đúng lời bác sĩ dặn nha.", "Health-wise, your body is in a turning phase, adjusting itself.", "Don't be careless with your health — follow your doctor."],
   },
   wands: {
     love: ["Chuyện tình cảm đang có lửa, nhiều hứng khởi và chủ động.", "Chuyện tình cảm dễ nóng giận hoặc nhanh chán — giữ lửa đều đều thôi nha.", "Love is fiery, exciting and proactive.", "Quick tempers or fading sparks — keep the fire steady."],
@@ -214,6 +216,7 @@ const TOPIC_LINE: Record<TarotSuit, Record<Exclude<TarotTopic, "general">, [stri
     money: ["Tiền bạc đến từ sự chủ động và dám làm.", "Về tiền, tránh đầu tư theo cảm hứng nhất thời.", "Money comes from initiative and boldness.", "Avoid impulse investments."],
     travel: ["Chuyện đi xa đang có năng lượng dịch chuyển mạnh — hợp để chủ động nộp hồ sơ, lên đường.", "Chuyện đi xa dễ vội vàng — kiểm tra kỹ giấy tờ trước khi nộp nha.", "Strong movement energy — a good time to apply and go.", "Easy to rush; check your papers before submitting."],
     study: ["Việc học đang hăng say, hợp để bắt đầu một khoá mới.", "Việc học dễ nản giữa chừng — chia nhỏ mục tiêu ra nha.", "Eager to learn — great time to start a new course.", "Easy to lose steam; break goals into small steps."],
+    health: ["Năng lượng sống đang lên, tinh thần tốt sẽ giúp mau khoẻ.", "Đừng cố sức quá, cơ thể cần được nghỉ để hồi phục.", "Your vitality is rising — a good mood helps recovery.", "Don't push too hard; your body needs rest."],
   },
   cups: {
     love: ["Tình cảm là điểm sáng lúc này — cứ mở lòng ra nha.", "Cảm xúc hai bên đang hơi rối, nói chuyện thật lòng sẽ ổn hơn.", "Love is the bright spot — open your heart.", "Feelings are tangled; an honest talk will help."],
@@ -221,6 +224,7 @@ const TOPIC_LINE: Record<TarotSuit, Record<Exclude<TarotTopic, "general">, [stri
     money: ["Tiền bạc đủ đầy, có thể thoải mái chi cho vài niềm vui nhỏ.", "Cẩn thận kiểu chi tiêu theo cảm xúc nha.", "Money is comfortable; room for small joys.", "Watch emotional spending."],
     travel: ["Chuyến đi hứa hẹn nhiều niềm vui và những kết nối mới.", "Bạn còn lăn tăn về chuyến đi — hỏi lòng mình thật kỹ.", "The trip brings joy and new connections.", "Mixed feelings about the trip; listen to your heart."],
     study: ["Học cùng bạn bè sẽ vui và tiến bộ nhanh hơn.", "Tâm trạng đang kéo việc học xuống, nghỉ ngơi chút rồi học tiếp.", "Learning with friends helps you grow.", "Your mood is affecting your studies."],
+    health: ["Tinh thần thoải mái, có người thân chăm lo — đó cũng là một liều thuốc tốt.", "Lo lắng đang làm bạn mệt thêm, thả lỏng tâm trí một chút nha.", "Being cared for and at ease is good medicine.", "Worry is wearing you out; let your mind relax."],
   },
   swords: {
     love: ["Trong mối quan hệ, cần nói chuyện rõ ràng, thẳng thắn với nhau.", "Dễ hiểu lầm vì lời nói — nhẹ nhàng với nhau hơn chút nha.", "Clear, honest communication is needed.", "Words may cause misunderstandings — be gentler."],
@@ -228,6 +232,7 @@ const TOPIC_LINE: Record<TarotSuit, Record<Exclude<TarotTopic, "general">, [stri
     money: ["Tính toán kỹ trước mọi khoản chi.", "Bạn lo chuyện tiền hơi nhiều — ghi lại chi tiêu sẽ thấy đỡ hơn.", "Think carefully before every expense.", "Money worries run high — tracking spending will help."],
     travel: ["Chuyện giấy tờ cần sắp xếp rõ ràng, chuẩn bị hồ sơ thật chỉn chu.", "Có thể vướng thủ tục, thông tin rối — hỏi thêm người có kinh nghiệm.", "Get your information in order and prepare a tidy file.", "Possible red tape — ask someone experienced."],
     study: ["Đầu óc đang minh mẫn, rất hợp để ôn thi.", "Áp lực thi cử đang cao — nhớ ngủ đủ nha.", "A clear mind — great for exam prep.", "Exam pressure is high; get enough sleep."],
+    health: ["Hiểu rõ tình trạng của mình và làm đúng hướng dẫn sẽ giúp khỏi nhanh hơn.", "Nghĩ nhiều quá dễ mất ngủ — ngủ đủ cũng là đang chữa bệnh đó.", "Understanding your condition and following advice speeds recovery.", "Overthinking costs sleep — and sleep is medicine."],
   },
   pentacles: {
     love: ["Tình cảm bền vững, xây từ những điều giản dị, thực tế.", "Đừng để chuyện tiền bạc chen vào tình cảm.", "Steady love built on practical things.", "Don't let money come between you."],
@@ -235,6 +240,7 @@ const TOPIC_LINE: Record<TarotSuit, Record<Exclude<TarotTopic, "general">, [stri
     money: ["Tài chính thuận lợi, hợp để tích luỹ.", "Nên siết lại chi tiêu và tránh rủi ro lúc này.", "Finances look good — time to save.", "Tighten spending and avoid risks."],
     travel: ["Tài chính và giấy tờ vững vàng thì mọi thứ sẽ thuận lợi.", "Chi phí, chứng minh tài chính cần chuẩn bị kỹ hơn.", "Solid finances and papers make things smooth.", "Costs or proof of funds need more preparation."],
     study: ["Chăm chỉ đều đặn sẽ cho kết quả chắc chắn.", "Việc học chưa đều, lập một lịch học cụ thể nha.", "Steady effort brings solid results.", "Inconsistent study; make a concrete schedule."],
+    health: ["Ăn uống, nghỉ ngơi điều độ là nền tảng để khoẻ lại.", "Cơ thể hồi phục chậm mà chắc, kiên nhẫn thêm chút nha.", "Regular meals and rest are the foundation of recovery.", "Recovery is slow but steady — be patient."],
   },
 };
 
@@ -333,7 +339,7 @@ function findTrigger(orig: string, f: string): { start: number; end: number } | 
 const LEAD =
   /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai|tarot|cai|cua|dc|duoc|hoi|nhu the nao)(?![a-z])|(?:1|mot|3|ba)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
 const TRAIL =
-  /(?:[\s,.:;!\-–—…]*(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
+  /(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
 
 /** Cắt bớt các chữ đệm ở 2 đầu ("xem giúp em …", "… nha") — làm trên bản bỏ dấu, cắt trên câu gốc. */
 function clean(orig: string): string {
@@ -392,6 +398,8 @@ export function isTarotCancel(text: string) {
 }
 
 function detectTopic(f: string): TarotTopic {
+  if (/(?<![a-z])(benh|het benh|khoi benh|bi om|om dau|om nang|uong thuoc|thuoc men|toa thuoc|don thuoc|thuoc nay|suc khoe|bac si|benh vien|kham benh|xet nghiem|phau thuat|mo tim|bi sot|sot cao|cam cum|bi cam|dau bung|dau dau|dau lung|nhuc dau|mang thai|co bau|health|sick|illness|medicine|doctor)(?![a-z])/.test(f))
+    return "health";
   if (/(?<![a-z])(tinh cam|tinh yeu|nguoi yeu|crush|nguoi ay|hen ho|yeu|ny|vo|chong|ket hon|cuoi|chia tay|quay lai|ex|love|dating|boyfriend|girlfriend|marry)(?![a-z])/.test(f))
     return "love";
   if (/(?<![a-z])(hoc|thi|du hoc|truong|dai hoc|bang cap|ielts|toeic|exam|study|school)(?![a-z])/.test(f)) return "study";
@@ -420,7 +428,7 @@ function detectKind(q: string): { kind: TarotKind; options?: [string, string] } 
   }
   if (/(?<![a-z])(khi nao|bao gio|bao lau|luc nao|thang nao|nam nao|may thang|bao nhieu lau|when|how long)(?![a-z])/.test(f)) return { kind: "timing" };
   if (
-    /(?<![a-z])(khong|ko|chua|k)\s*[?.!…]*\s*$/.test(f) ||
+    /(?<![a-z])(khong|ko|chua|k|hok|hong|hem|khum|hk|kh|hn|kg)\s*[?.!…]*\s*$/.test(f) ||
     /(?<![a-z])(lieu|co nen|nen khong|co phai|co duoc|duoc khong|will|should|can i|is it|am i|do i|does)(?![a-z])/.test(f)
   )
     return { kind: "yesno" };
@@ -509,7 +517,7 @@ function timingPhrase(d: TarotDraw, en: boolean): string {
       const monthly = c.suit === "cups" || c.suit === "pentacles";
       const unit = en ? (monthly ? (n > 1 ? "months" : "month") : n > 1 ? "weeks" : "week") : monthly ? "tháng" : "tuần";
       body = en ? `roughly within ${n} ${unit}` : `chuyện này có thể đến trong khoảng ${n} ${unit} tới`;
-      if (c.suit === "swords") body += en ? ", though things may feel rushed" : ", nhưng có thể hơi gấp gáp";
+      if (c.suit === "swords") body += en ? ", though things may feel rushed" : ", dù quãng chờ có thể hơi căng thẳng";
       body += d.rev ? (en ? " — reversed, so maybe a bit later than that." : " — lá ngược nên có thể trễ hơn chút.") : ".";
     } else {
       const court: [string, string][] = [
@@ -540,6 +548,15 @@ function yesnoAnswer(cards: TarotDraw[], S: string, should: boolean): string {
   if (total === 0) return `Chưa rõ ràng lắm — ${S} còn tuỳ vào những gì bạn làm từ giờ.`;
   if (total >= -2) return `Hiện tại ${S} hơi khó, có thể chưa phải lúc — đừng nản nha.`;
   return `Lá bài nói là chưa đâu 😅 ${capFirst(S)} có lẽ nên đổi cách, hoặc chờ thời điểm khác.`;
+}
+
+/** Hỏi chuyện bệnh có khỏi không → không phán “có/không”, chỉ nói năng lượng + nhắc làm đúng lời bác sĩ. */
+function healthAnswer(cards: TarotDraw[]): string {
+  const total = cards.reduce((acc, d, i) => acc + cardScore(d) * (i === cards.length - 1 ? 2 : 1), 0);
+  if (total >= 1)
+    return "Năng lượng bài khá tích cực — tinh thần tốt sẽ giúp mau khoẻ lại. Cứ uống thuốc đúng giờ, đúng liều, ăn uống nghỉ ngơi đầy đủ nha.";
+  if (total === 0) return "Bài cho thấy cơ thể cần thêm chút thời gian — khỏi bệnh là chuyện từ từ, đừng sốt ruột nha.";
+  return "Bài nhắc bạn kiên nhẫn và đừng chủ quan — uống thuốc đúng chỉ định, nếu vài hôm chưa đỡ hoặc thấy nặng hơn thì quay lại bác sĩ liền nha.";
 }
 
 function yesnoPhrase(cards: TarotDraw[], en: boolean): string {
@@ -682,7 +699,7 @@ const TIME_PHRASES = [
   "thang sau", "thang toi", "nam nay", "nam sau", "sap toi", "co nen", "nen",
 ];
 const LEAD_W = new Set(["a", "e", "anh", "em", "minh", "toi", "tui", "t", "co", "thi", "nen", "se", "duoc", "ban", "hay", "la", "ve", "cua"]);
-const TRAIL_W = new Set(["khong", "ko", "k", "chua", "nhi", "nha", "vay", "the", "a", "sao", "nao", "nhe", "di", "ha", "ta", "day", "ne"]);
+const TRAIL_W = new Set(["khong", "ko", "k", "hok", "hong", "hem", "khum", "hk", "kh", "chua", "nhi", "nha", "vay", "the", "a", "sao", "nao", "nhe", "di", "ha", "ta", "day", "ne"]);
 const TOPIC_NOUN: Record<TarotTopic, string> = {
   general: "chuyện này",
   love: "chuyện tình cảm",
@@ -690,6 +707,7 @@ const TOPIC_NOUN: Record<TarotTopic, string> = {
   money: "chuyện tiền bạc",
   travel: "chuyện đi xa, giấy tờ",
   study: "chuyện học hành",
+  health: "chuyện sức khoẻ",
 };
 function subjectOf(q: string, topic: TarotTopic): string {
   let w = q.replace(/[?!.,…"“”]+/g, " ").split(/\s+/).filter(Boolean);
@@ -721,7 +739,8 @@ function subjectOf(q: string, topic: TarotTopic): string {
   while (w.length && LEAD_W.has(fw[0])) (w.shift(), (fw = f()));
   while (w.length && TRAIL_W.has(fw[fw.length - 1])) (w.pop(), (fw = f()));
   if (w.length >= 2 && fw[w.length - 2] === "cua") w = w.slice(0, -2); // "... của mình"
-  if (!w.length || w.length > 9) return TOPIC_NOUN[topic];
+  // Câu dài, nhiều chữ nói kiểu miệng ("ổng cho uống uống hết bệnh") → dùng tên chủ đề cho gọn, dễ đọc.
+  if (!w.length || w.length > 5) return TOPIC_NOUN[topic];
   const core = w.join(" ");
   return fold(core).startsWith("chuyen") ? core : `chuyện ${core}`;
 }
@@ -761,8 +780,127 @@ const TOPIC_INTRO: Record<TarotTopic, [string[], string[]]> = {
   work: [["Chuyện công việc hả, để Lomi xem bài nha 💼", "Sự nghiệp là chuyện lớn, Lomi rút bài kỹ nè 💼"], ["Work question — let's see what the cards say 💼"]],
   money: [["Chuyện tiền bạc thì phải xem kỹ nè 💰", "Để Lomi xem túi tiền của bạn sắp tới thế nào nha 💰"], ["Money matters — let's take a careful look 💰"]],
   travel: [["Chuyện đi xa, giấy tờ… Lomi rút bài liền nha ✈️", "Hành trình sắp tới của bạn đây, cùng xem nha ✈️"], ["Travel and paperwork — here's your reading ✈️"]],
+  health: [["Lomi mong bạn mau khoẻ nè 💚 Cùng xem bài nói gì nha", "Chuyện sức khoẻ thì Lomi xem thật nhẹ nhàng nè 💚"], ["Wishing you good health 💚 Let's see the cards"]],
   study: [["Chuyện học hành hả, cố lên nha! Lomi xem bài nè 📚", "Để Lomi xem việc học của bạn sắp tới ra sao nha 📚"], ["Studies — let's see what the cards say 📚"]],
 };
+
+// ── 💭 Đọc tâm lý người hỏi: câu hỏi nói lên điều gì về cảm xúc của họ ──
+// Dựa trên CÂU HỎI (không dựa vào lá rút ngẫu nhiên) nên hỏi lại / bói lại vẫn nhất quán, và luôn đúng trọng tâm.
+function hashStr(x: string): number {
+  let h = 7;
+  for (let i = 0; i < x.length; i++) h = (h * 31 + x.charCodeAt(i)) >>> 0;
+  return h;
+}
+function insightText(q: string, topic: TarotTopic, kind: TarotKind): string {
+  const f = ` ${fold(q)} `;
+  const has = (re: RegExp) => re.test(f);
+  const h = hashStr(fold(q));
+  const one = (arr: string[]) => arr[h % arr.length];
+  let base: string;
+  if (topic === "health")
+    base = one([
+      "Lomi đoán bạn (hoặc người thân) đang mệt và mong mau khoẻ lắm. Lúc ốm, mình hay sốt ruột muốn biết “bao giờ mới hết” — cảm giác đó rất bình thường.",
+      "Câu hỏi này cho thấy bạn đang lo cho sức khoẻ và muốn được yên tâm. Khi cơ thể chưa khoẻ, tâm trạng cũng dễ chùng xuống theo.",
+    ]);
+  else if (topic === "love" && has(/ (nguoi cu|ex|quay lai|tai hop|chia tay) /))
+    base = one([
+      "Có vẻ bạn vẫn còn vương vấn chuyện cũ. Nhớ một người không có nghĩa là mình yếu đuối — chỉ là trái tim cần thêm thời gian.",
+      "Lomi cảm nhận bạn đang lưng chừng giữa buông và giữ. Câu hỏi này giống như bạn muốn biết mình còn nên hy vọng không.",
+    ]);
+  else if (topic === "love" && has(/ (nhan tin|to tinh|ruru|ru di|hen|lam quen|bat chuyen) /))
+    base = one([
+      "Bạn đang muốn tiến thêm một bước nhưng còn sợ bị từ chối — nên mới muốn chắc chắn trước khi làm. Ai cũng vậy hết á.",
+      "Lomi đoán bạn đã nghĩ tới chuyện này nhiều lần rồi. Phân vân lâu thường là vì mình thật sự để tâm tới người ta.",
+    ]);
+  else if (topic === "love")
+    base = one([
+      "Có một người đang chiếm khá nhiều suy nghĩ của bạn dạo này. Bạn muốn biết mối quan hệ đang đi về đâu để yên lòng hơn.",
+      "Câu hỏi này cho thấy bạn đang cần cảm giác an toàn trong tình cảm — muốn biết mình có đang được trân trọng không.",
+    ]);
+  else if (topic === "work")
+    base = one([
+      "Lomi đoán công việc đang tạo cho bạn chút áp lực, và bạn muốn biết nỗ lực của mình có được đền đáp không.",
+      "Có vẻ bạn đang đứng trước một thay đổi trong công việc — vừa muốn tiến lên, vừa ngại rủi ro. Cân nhắc kỹ là điều tốt.",
+    ]);
+  else if (topic === "money")
+    base = one([
+      "Chuyện tiền bạc đang làm bạn bận lòng một chút. Hỏi vậy là bạn muốn có cảm giác ổn định, an tâm hơn về tương lai.",
+      "Lomi đoán bạn đang tính toán cho một kế hoạch nào đó và muốn chắc là mình đi đúng hướng.",
+    ]);
+  else if (topic === "travel")
+    base = one([
+      "Bạn đang háo hức xen lẫn hồi hộp — chuẩn bị bao nhiêu thứ rồi nên rất mong mọi chuyện suôn sẻ.",
+      "Chờ kết quả giấy tờ là giai đoạn dễ sốt ruột nhất. Lomi hiểu cảm giác mỗi ngày mở điện thoại xem có tin gì chưa đó.",
+    ]);
+  else if (topic === "study")
+    base = one([
+      "Lomi đoán bạn đang chịu chút áp lực học hành, muốn biết công sức mình bỏ ra có xứng đáng không.",
+      "Câu hỏi này cho thấy bạn rất có trách nhiệm với việc học — chỉ là đang hơi lo về kết quả thôi.",
+    ]);
+  else if (has(/ (nhau|ruou|bia|di choi|quay|tiec) /))
+    base = one([
+      "Nghe là biết bạn đang cần xả hơi một chút sau mấy ngày bận rộn rồi 😄 Muốn vui mà vẫn hơi lăn tăn nên mới hỏi bài nè.",
+      "Lomi đoán trong lòng bạn đã muốn đi lắm rồi, chỉ cần thêm một cái gật đầu thôi 😄",
+    ]);
+  else
+    base = one([
+      "Lomi cảm nhận chuyện này đang nằm trong đầu bạn khá lâu rồi. Khi mình hỏi bài, thường là vì muốn có thêm chút chắc chắn.",
+      "Câu hỏi này cho thấy bạn đang cần một góc nhìn khác để quyết định cho nhẹ lòng.",
+    ]);
+  let tail = "";
+  if (kind === "timing") tail = " Chờ đợi mà chưa biết khi nào thì dễ sốt ruột lắm, nên mình xem bài để lòng nhẹ hơn nha.";
+  else if (kind === "choice") tail = " Đứng giữa hai ngả thì sợ chọn sai là chuyện thường — thật ra lựa chọn nào cũng dạy mình điều gì đó.";
+  else if (kind === "yesno" && has(/ (nen|co nen) /)) tail = " Thường thì khi hỏi “có nên không”, trong lòng mình đã nghiêng về một phía rồi đó.";
+  if (has(/ (lo|so|buon|met|chan|stress|ap luc|hoang) /)) tail += " Lomi thấy bạn đang hơi lo — hít sâu một hơi trước đã nha 💚";
+  return base + tail;
+}
+
+// Câu dẫn theo VỊ TRÍ + sắc thái lá (khi đã có chủ đề cụ thể, không ghép từ khoá của lá để tránh lạc đề
+// kiểu "chuyện sức khoẻ đang vướng chi tiêu quá tay").
+const ROLE_LEAD: Record<Role, [string, string]> = {
+  now: ["Hiện tại khá thuận:", "Hiện tại còn chút vướng:"],
+  todo: ["Điều giúp mọi thứ suôn sẻ:", "Điều cần điều chỉnh:"],
+  timing: ["Về thời điểm:", "Về thời điểm, có thể cần kiên nhẫn thêm:"],
+  obstacle: ["Điều cần lưu tâm:", "Điều có thể cản trở:"],
+  outcome: ["Kết quả khả quan:", "Kết quả còn chút trắc trở:"],
+  situation: ["Tình hình đang khá ổn:", "Tình hình đang hơi rối:"],
+  challenge: ["Thử thách nhẹ thôi:", "Thử thách lớn nhất:"],
+  advice: ["Lời khuyên:", "Lời khuyên:"],
+  message: ["Thông điệp:", "Thông điệp:"],
+  option: ["Nếu chọn “{O}” — khá ổn:", "Nếu chọn “{O}” — cần cân nhắc:"],
+  clarify: ["Lá làm rõ:", "Lá làm rõ:"],
+};
+// Câu hỏi chung (không rõ chủ đề) — câu theo chất bài, không dùng từ khoá chuyên biệt của lá (tiền, tình…).
+const GENERAL_LINE: Record<TarotSuit, [string, string, string, string]> = {
+  major: ["Đây là chuyện khá quan trọng với bạn — một bước chuyển đang tới.", "Có một bài học lớn trong chuyện này, đừng vội kết luận.", "", ""],
+  wands: ["Năng lượng chủ động đang cao — dám làm là có kết quả.", "Dễ hăng lúc đầu rồi nản — giữ nhịp đều đều nha.", "", ""],
+  cups: ["Cảm xúc đang tích cực, làm theo trái tim là ổn.", "Cảm xúc hơi rối, lắng lòng lại một chút trước đã.", "", ""],
+  swords: ["Suy nghĩ rõ ràng, quyết dứt khoát sẽ giúp bạn.", "Nghĩ nhiều dễ rối — bớt lo xa, tập trung việc trước mắt.", "", ""],
+  pentacles: ["Chắc chắn, thực tế và từ từ là thắng.", "Tính toán thực tế hơn, đừng để chuyện nhỏ thành lớn.", "", ""],
+};
+// Câu chốt theo chủ đề — [bài thuận, bài nhiều thử thách].
+const CLOSING: Record<TarotTopic, [string, string]> = {
+  general: ["Cứ bình tĩnh làm theo cảm nhận của mình, mọi chuyện sẽ ổn thôi.", "Chậm lại một nhịp, suy nghĩ kỹ rồi hãy quyết nha."],
+  love: ["Cứ chân thành và để mọi thứ tự nhiên, tình cảm sẽ đến đúng lúc.", "Đừng vội, cho nhau thêm thời gian và nói chuyện thật lòng nha."],
+  work: ["Cứ tự tin làm tốt phần mình, cơ hội đang mở ra đó.", "Giữ bình tĩnh, làm chắc từng việc nhỏ, giai đoạn khó rồi sẽ qua."],
+  money: ["Tình hình khá ổn, cứ chi tiêu có kế hoạch là yên tâm.", "Siết lại chi tiêu, tránh quyết định vội là sẽ ổn dần."],
+  travel: ["Chuẩn bị hồ sơ chỉn chu rồi thả lỏng chờ tin vui nha.", "Rà lại giấy tờ thật kỹ, kiên nhẫn thêm chút là được."],
+  study: ["Cứ đều đặn như vậy, kết quả sẽ xứng đáng với công sức.", "Chia nhỏ mục tiêu, nghỉ ngơi đủ rồi học tiếp, đừng tự ép mình quá."],
+  health: ["Giữ tinh thần lạc quan và làm đúng lời bác sĩ dặn, mọi thứ sẽ ổn dần nha.", "Nghỉ ngơi nhiều hơn, làm đúng lời bác sĩ, và đừng ngại đi khám lại nếu chưa đỡ nha."],
+};
+
+// Nhìn chung cả trải bài sáng hay tối — để phần Tóm lại có một câu kết luận rõ ràng.
+// Cùng một thước đo với phần "Trả lời nhanh" để kết luận trước sau như một.
+function toneTotal(cards: TarotDraw[]): number {
+  return cards.reduce((acc, d, i) => acc + cardScore(d) * (i === cards.length - 1 ? 2 : 1), 0);
+}
+function trendLine(cards: TarotDraw[]): string {
+  const t = toneTotal(cards);
+  if (t >= 3) return "Nhìn chung cả trải bài khá sáng sủa.";
+  if (t >= 1) return "Nhìn chung bài nghiêng về phía thuận, chỉ cần để ý một chút.";
+  if (t === 0) return "Bài có sáng có tối — kết quả phụ thuộc nhiều vào cách bạn xử lý.";
+  return "Bài đang nhắc bạn chậm lại và kiên nhẫn thêm một chút.";
+}
 
 // ── Ghép lời giải: từng lá gắn với chủ đề + phần “Tóm lại” nối các lá thành một câu chuyện ──
 export function readingText(r: TarotReading, lang: L): string {
@@ -784,8 +922,11 @@ export function readingText(r: TarotReading, lang: L): string {
     out.push(`${pick(en ? enI : vi)}\n${en ? "Your question" : "Câu hỏi của bạn"}: “${q}”`);
   }
 
+  // 💭 Lomi đọc tâm lý qua câu hỏi (trước khi vào bài).
+  if (q && !clar && !en) out.push(`💭 ${insightText(q, r.topic, kind)}`);
   // Trả lời thẳng câu hỏi NGAY SAU phần mở đầu (người hỏi muốn biết kết quả trước, chi tiết từng lá sau).
   const ansAt = out.length;
+  const usedLines = new Set<string>();
   // Từng lá
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
@@ -796,7 +937,20 @@ export function readingText(r: TarotReading, lang: L): string {
     const meaning = en ? (d.rev ? c.rev.en : c.up.en) : d.rev ? c.rev.vi : c.up.vi;
     // Câu dẫn đã nói ý chính của lá → chỉ giữ phần lời nhắn phía sau của nghĩa lá, tránh lặp ý.
     const rest = meaning.split(/(?<=[.!?])\s+/).slice(1).join(" ");
-    out.push(`${head}\n${frame(roles[i] ?? "situation", d, S, en, label)}${rest ? ` ${rest}` : ""}`);
+    // Có chủ đề cụ thể → nối lá với chủ đề ("Về sức khoẻ, …") thay cho lời nhắn chung chung của lá.
+    const role = roles[i] ?? "situation";
+    const tl = r.topic !== "general" ? TOPIC_LINE[c.suit][r.topic] : GENERAL_LINE[c.suit];
+    // Lá "nặng" theo nghĩa (vd Toà Tháp xuôi) cũng tính là thử thách, dù không ngược.
+    const rough = hard(d) || cardScore(d) < 0;
+    const apply = en ? "" : rough ? tl[1] : tl[0];
+    if (!en && q && !clar) {
+      // Trùng câu (2 lá cùng chất) → dùng câu đầu của nghĩa lá để vẫn có ý riêng.
+      const own = meaning.split(/(?<=[.!?])\s+/)[0];
+      const line = usedLines.has(apply) ? own : apply;
+      usedLines.add(line);
+      const lead = ROLE_LEAD[role][rough ? 1 : 0].replace("{O}", label);
+      out.push(`${head}\n${lead} ${line}`);
+    } else out.push(`${head}\n${frame(role, d, S, en, label)}${rest ? ` ${rest}` : ""}`);
   });
 
   // Trả lời thẳng câu hỏi + tóm lại
@@ -804,10 +958,12 @@ export function readingText(r: TarotReading, lang: L): string {
   const nowPart = (d: TarotDraw) => (en ? (hard(d) ? `is tangled in ${kw(d, en)}` : `carries ${kw(d, en)}`) : hard(d) ? `đang hơi vướng ${kw(d, en)}` : `đang có ${kw(d, en)}`);
   const goPart = (d: TarotDraw) => (en ? (hard(d) ? `let go of ${kw(d, en)}` : `lean into ${kw(d, en)}`) : hard(d) ? `gỡ bỏ ${kw(d, en)}` : `để tâm tới ${kw(d, en)}`);
   const lastCard = r.cards[r.cards.length - 1];
-  const topicLine = () => {
-    if (r.topic === "general") return "";
-    const tl = TOPIC_LINE[tarotCard(lastCard.id).suit][r.topic];
-    return ` ${en ? (lastCard.rev ? tl[3] : tl[2]) : lastCard.rev ? tl[1] : tl[0]}`;
+  // Mỗi lá đã có câu theo chủ đề → phần Tóm lại chốt bằng nhận định chung của cả trải bài.
+  const topicLine = () => (en || r.cards.length < 3 ? "" : ` ${trendLine(r.cards)}`);
+  const topicSummary = () => {
+    if (en || r.cards.length < 3) return null;
+    const good = toneTotal(r.cards) >= 1;
+    return `🌿 Tóm lại: ${trendLine(r.cards)} ${CLOSING[r.topic][good ? 0 : 1]}`;
   };
   if (clar) {
     const sc = cardScore(c1);
@@ -818,11 +974,16 @@ export function readingText(r: TarotReading, lang: L): string {
     );
   } else if (kind === "timing" && c3) {
     out.splice(ansAt, 0, `⏳ ${en ? "Timing" : "Trả lời nhanh"}: ${timingPhrase(c3, en)}`);
-    out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; to move it forward, ${goPart(c2)}.` : `${capFirst(S)} ${nowPart(c1)}. Muốn mọi thứ thuận lợi thì hãy ${goPart(c2)} nha.`}${topicLine()}`);
+    out.push(topicSummary() ?? `🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; to move it forward, ${goPart(c2)}.` : `${capFirst(S)} ${nowPart(c1)}. Muốn mọi thứ thuận lợi thì hãy ${goPart(c2)} nha.`}${topicLine()}`);
   } else if (kind === "yesno" && c3) {
     const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
-    out.splice(ansAt, 0, `🔎 ${en ? "The cards' answer" : "Trả lời nhanh"}: ${en ? yesnoPhrase(r.cards, en) : yesnoAnswer(r.cards, S, should)}`);
-    out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; the key thing to watch is ${kw(c2, en)}.` : `${capFirst(S)} ${nowPart(c1)}, điều cần để ý nhất là ${kw(c2, en)}, và kết quả ${hard(c3) ? "có thể còn vướng" : "nghiêng về"} ${kw(c3, en)}.`}${topicLine()}`);
+    const ans = en
+      ? yesnoPhrase(r.cards, en)
+      : r.topic === "health"
+        ? healthAnswer(r.cards)
+        : yesnoAnswer(r.cards, S, should);
+    out.splice(ansAt, 0, `🔎 ${en ? "The cards' answer" : "Trả lời nhanh"}: ${ans}`);
+    out.push(topicSummary() ?? `🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; the key thing to watch is ${kw(c2, en)}.` : `${capFirst(S)} ${nowPart(c1)}, điều cần để ý nhất là ${kw(c2, en)}, và kết quả ${hard(c3) ? "có thể còn vướng" : "nghiêng về"} ${kw(c3, en)}.`}${topicLine()}`);
   } else if (kind === "choice" && r.pos && c2) {
     const [a, b] = [cardScore(c1), cardScore(c2)];
     const [na, nb] = r.pos.map((p) => (en ? p.en : p.vi));
@@ -842,6 +1003,7 @@ export function readingText(r: TarotReading, lang: L): string {
     );
   } else if (kind === "open" && c3) {
     out.push(
+      topicSummary() ??
       `🌿 ${en ? "In short" : "Tóm lại"}: ${
         en ? `This ${nowPart(c1)}, the challenge is ${kw(c2, en)}, and the advice is to ${goPart(c3)}.` : `${capFirst(S)} ${nowPart(c1)}; thử thách là ${kw(c2, en)}, và bài khuyên bạn ${goPart(c3)}.`
       }${topicLine()}`,
@@ -852,12 +1014,17 @@ export function readingText(r: TarotReading, lang: L): string {
   }
 
   if (/(?<![a-z])(suc khoe|benh|mang thai|co bau|health|sick|pregnan)/.test(fold(q)))
-    out.push(en ? "💚 For anything health-related, please check with a doctor too." : "💚 Chuyện sức khoẻ thì nhớ hỏi thêm bác sĩ nữa nha.");
+    out.push(
+      en
+        ? "💚 For anything health-related, please check with a doctor too."
+        : "💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.",
+    );
   if (/(?<![a-z])(nhau|ruou|bia|say|drink|beer)(?![a-z])/.test(fold(q)))
     out.push(en ? "🍻 Whatever the cards say: drink in moderation, and never drive after drinking!" : "🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
 
   // Lời khuyên hành động (bỏ qua với kiểu hỏi chung — lá thứ 3 đã là lời khuyên)
-  if (kind !== "open" || clar || !q) {
+  // Có chủ đề cụ thể thì phần Tóm lại đã có lời khuyên hợp chủ đề → bỏ lời khuyên chung theo chất bài.
+  if (clar || !q || en) {
     const adviceCard = kind === "choice" && r.cards.length === 2 ? (cardScore(c1) >= cardScore(c2) ? c1 : c2) : lastCard;
     const adv = ADVICE[tarotCard(adviceCard.id).suit];
     out.push(`💡 ${en ? "Advice" : "Lời khuyên"}: ${en ? (adviceCard.rev ? adv[3] : adv[2]) : adviceCard.rev ? adv[1] : adv[0]}`);
