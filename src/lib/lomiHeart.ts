@@ -8,8 +8,9 @@
 
 import { normalizeVi } from "@/lib/lomiFaq";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
+import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
 
-export type HeartReply = { text: string; quick: string[]; theme: string; listen?: boolean; end?: boolean };
+export type HeartReply = { text: string; quick: string[]; theme: string; listen?: boolean; end?: boolean; story?: string };
 
 export type Theme = {
   id: string;
@@ -640,7 +641,7 @@ const byId = (id: string) => THEMES.find((t) => t.id === id);
 const START_RE =
   /\b(tam su|muon tam su|tam su voi|noi chuyen voi minh|nghe minh ke|nghe minh noi|ke lomi nghe|ke cho lomi|an ui minh|an ui toi|an ui em|tu van tinh cam|tu van tam ly|tu van tam li|cho minh loi khuyen|khuyen minh|chia se voi lomi|muon chia se|co ai nghe)\b/;
 // Xin lời khuyên trong câu ("làm sao để quên người cũ", "có nên quay lại không").
-const ADVICE_RE = /\b(lam sao|lam the nao|lam gi|nen lam gi|co nen|loi khuyen|khuyen|giup minh|cach nao|phai lam sao|lam cach nao)\b/;
+const ADVICE_RE = /\b(lam sao|lam the nao|lam gi|nen lam gi|co nen|loi khuyen|khuyen|giup minh|cach nao|phai lam sao|lam cach nao|tu van|goi y|chi minh|noi gi di|y kien)\b/;
 
 // Cảm xúc để phản chiếu lại khi người dùng kể tiếp.
 const EMOTIONS: [RegExp, string][] = [
@@ -741,6 +742,21 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean): HeartReply {
   return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
 }
 
+const storyOf = (text: string): string | undefined => {
+  const t = text.trim().replace(/\s+/g, " ");
+  if (t.split(" ").length < 5) return undefined; // câu quá ngắn ("buồn quá") thì không trích lại
+  return t.length > 90 ? t.slice(0, 88).trim() + "…" : t;
+};
+const capF = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+function eventReply(ev: Ev, n: string, text: string): HeartReply {
+  const act = activityOf(n);
+  const line = pick(`ev:${ev.id}:r`, ev.react)
+    .replace("{act}", act ? `đang ${act} ` : "")
+    .replace("{Act}", act ? capF(`đang ${act} `) : "Ra ngoài ");
+  // Tóm tắt chuyện bằng lời của Lomi ("đi ăn mà bị mắc mưa") thay vì trích nguyên câu người dùng gõ.
+  return { text: line, quick: [], theme: `ev:${ev.id}`, story: act && !ev.good ? `${act} mà ${ev.label}` : ev.label };
+}
+
 /**
  * Người dùng bắt đầu tâm sự (chưa ở chế độ tâm sự). Trả null nếu không phải chuyện tâm sự.
  * Không bắt câu hỏi về cách dùng app (để FAQ trả lời).
@@ -752,7 +768,10 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   if (chip) return themeReply(byId(chip)!, n, false);
   const t = themeOf(n);
   const start = START_RE.test(` ${n} `);
-  if (t) return themeReply(t, n, ADVICE_RE.test(` ${n} `));
+  if (t) return { ...themeReply(t, n, ADVICE_RE.test(` ${n} `)), story: storyOf(text) };
+  // Chuyện đời thường có diễn biến (mắc mưa, kẹt xe, có tin vui…) — lib/lomiTalk.
+  const ev = eventOf(n);
+  if (ev) return eventReply(ev, n, text);
   if (start) return heartOpen();
   return null;
 }
@@ -761,7 +780,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
  * Đang trong cuộc tâm sự → hiểu tin kế tiếp theo ngữ cảnh.
  * prev = chủ đề đang nói; listen = người dùng chỉ muốn được nghe (không khuyên); depth = số lượt đã tâm sự.
  */
-export function heartContinue(text: string, prev: string, listen: boolean, depth: number): HeartReply {
+export function heartContinue(text: string, prev: string, listen: boolean, depth: number, lastText = "", story = ""): HeartReply {
   const n = normalizeVi(text);
   const cur = byId(prev);
   const chip = CHIP_THEME[text.trim()];
@@ -778,8 +797,79 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       theme: prev,
       listen: true,
     };
+  // Người dùng than Lomi máy móc / "là sao?" → nhận lỗi, nhắc lại mình đang hiểu chuyện gì, hỏi bạn cần gì.
+  if (META_RE.test(` ${n} `))
+    return {
+      text: story
+        ? pick("meta", [
+            `Lomi xin lỗi nha, nãy giờ Lomi trả lời hơi máy móc thiệt 😅 Lomi đang hiểu là bạn kể: “${story}”. Bạn muốn Lomi góp ý cách xử lý, an ủi bạn, hay chỉ cần có người nghe thôi?`,
+            `Hic, Lomi lặp lại hoài thiệt, xin lỗi bạn 🙏 Mình quay lại chuyện “${story}” nha — giờ bạn đang thấy sao, và bạn cần Lomi giúp gì nhất?`,
+          ])
+        : "Lomi xin lỗi nha, Lomi chưa theo kịp ý bạn 😅 Bạn nói lại giúp Lomi theo cách khác được không? Lần này Lomi nghe kỹ hơn.",
+      quick: [],
+      theme: prev,
+      listen,
+    };
   const adviceAsked = text.trim() === HEART_ADVICE || ADVICE_RE.test(` ${n} `);
   let t = themeOf(n);
+  // Chuyện đời thường đang kể (vd mắc mưa) → hiểu câu kể tiếp theo đúng chuyện đó.
+  const evCur = prev.startsWith("ev:") ? eventById(prev.slice(3)) : undefined;
+  const evNew = eventOf(n);
+  if (evNew && evNew !== evCur && (!t || GENERIC.has(t.id))) return eventReply(evNew, n, text);
+  if (evCur && (!t || GENERIC.has(t.id))) {
+    const f = evCur.follow.find(([re]) => re.test(` ${n} `));
+    if (f) return { text: pick(`ev:${evCur.id}:f${evCur.follow.indexOf(f)}`, f[1]), quick: [], theme: prev };
+    if (adviceAsked || DUNNO_RE.test(` ${n} `))
+      return {
+        text: `${evCur.good ? "Gợi ý nhỏ của Lomi nè" : "Lomi gợi ý vài điều nha"}:\n• ${pick(`ev:${evCur.id}:a`, evCur.advice)}\n• ${pick(`ev:${evCur.id}:a`, evCur.advice)}\n\nCòn chuyện gì khác làm bạn bận lòng không, kể Lomi nghe tiếp nha.`,
+        quick: [],
+        theme: prev,
+      };
+  }
+  // Trả lời ngắn "có / không" → hiểu theo ĐÚNG câu hỏi Lomi vừa hỏi (câu cuối trong tin trước).
+  const asked = /\?\s*$/.test(lastText.trim());
+  const lastQ = lastText.trim().split(/(?<=[.!…])\s+|\n+/).pop() ?? "";
+  if (asked && evCur && !t) {
+    const map = YES_RE.test(n) ? evCur.yes : NO_RE.test(n) ? evCur.no : undefined;
+    const hit = map?.find(([re]) => re.test(lastQ));
+    if (hit) return { text: pick(`ev:${evCur.id}:yn${map!.indexOf(hit)}${YES_RE.test(n) ? "y" : "n"}`, hit[1]), quick: [], theme: prev };
+  }
+  // Câu hỏi có/không ("…không?", "…chưa?", "…hay…?") khác câu hỏi mở ("vì chuyện gì?").
+  const ynQ = /(không|chưa|hả|nhỉ|đúng không|phải không)\s*\?\s*$|\bhay\b/i.test(lastQ);
+  if (asked && !ynQ && NO_RE.test(n) && !t)
+    return {
+      text: pick("noOpen", [
+        "Ừm, không sao, bạn chưa muốn nói cũng được nha 🌿 Khi nào sẵn sàng thì kể Lomi nghe, Lomi vẫn ở đây.",
+        "Okie, mình không cần nói chi tiết đâu 😊 Giờ bạn đang thấy trong lòng thế nào?",
+      ]),
+      quick: [],
+      theme: prev,
+      listen,
+    };
+  if (asked && YES_RE.test(n) && !t) {
+    const heavyQ = /(bận lòng|buồn|khó chịu|nặng lòng|lo lắng|mệt|tệ)/.test(lastQ);
+    return {
+      text: heavyQ
+        ? pick("yesH", [
+            `Ừa, Lomi hiểu rồi 🥺 ${story ? `Chuyện “${story}” ` : "Chuyện này "}làm bạn khó chịu thật đó. Điều gì trong chuyện đó làm bạn thấy tệ nhất?`,
+            "Vậy là nó ảnh hưởng tới bạn nhiều thật 😔 Bạn muốn Lomi an ủi, góp ý cách xử lý, hay chỉ cần có người nghe thôi?",
+          ])
+        : pick("yes", ["À, vậy hả 😮 Rồi sao nữa, kể Lomi nghe tiếp đi!", "Ừm, Lomi hiểu rồi. Kể thêm chút cho Lomi nghe nha, lúc đó bạn thấy sao?"]),
+      quick: [],
+      theme: prev,
+      listen,
+    };
+  }
+  if (asked && ynQ && NO_RE.test(n) && !t)
+    return {
+      text: pick("no", [
+        "Vậy cũng đỡ ha 😊 Có gì cứ kể Lomi nghe nha, chuyện vui chuyện buồn gì cũng được.",
+        "Okie, không sao nè 🌿 Nếu muốn, bạn kể Lomi nghe thêm về ngày hôm nay của bạn đi.",
+      ]),
+      quick: [],
+      theme: prev,
+      listen,
+    };
   // Chủ đề chung chung (buồn, mệt, tình cảm nói chung) không đè lên chuyện cụ thể đang kể (vd chia tay).
   if (t && cur && GENERIC.has(t.id) && !GENERIC.has(cur.id)) t = undefined;
   // Hỏi nghĩa ("YSL là gì?") → giải thích luôn, kể cả khi vẫn đang nói đúng chủ đề đó.
@@ -788,9 +878,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   if (t && t.id !== prev && !(listen && !adviceAsked)) return themeReply(t, n, adviceAsked);
   const th = t ?? cur;
   if (adviceAsked && th) return themeReply(th, n, true);
-  if (adviceAsked)
+  if (adviceAsked || (DUNNO_RE.test(` ${n} `) && !th))
     return {
-      text: `Lomi gợi ý vài điều nha:\n• ${pick("gadv", byId("sad")!.advice)}\n• Viết ra điều đang làm bạn bận lòng, rồi chia nhỏ xem phần nào mình làm được ngay.\n• Cho mình nghỉ ngơi đủ trước khi quyết định chuyện lớn.`,
+      text: `${story ? `Về chuyện “${story}”, ` : ""}Lomi gợi ý vài điều nha:\n• ${pick("gadv", byId("sad")!.advice)}\n• Viết ra điều đang làm bạn bận lòng, rồi chia nhỏ xem phần nào mình làm được ngay.\n• Cho mình nghỉ ngơi đủ trước khi quyết định chuyện lớn.`,
       quick: chipsFor(th),
       theme: prev,
     };

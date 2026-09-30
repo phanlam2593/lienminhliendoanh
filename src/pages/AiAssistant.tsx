@@ -107,6 +107,7 @@ type Msg = {
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
+  story?: string; // câu người dùng kể mở đầu câu chuyện đang tâm sự (để Lomi nhắc lại, không lạc mạch)
   sx?: string[]; // triệu chứng cơ thể đã kể (cộng dồn qua các tin) — lib/lomiSymptoms
   mood?: string[]; // cảm giác đã kể (cộng dồn) — lib/lomiSymptoms
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
@@ -475,7 +476,7 @@ export function AiChat({
     local: true,
     quick: h.quick.length ? h.quick : undefined,
     // Giữ lại triệu chứng / cảm giác đã kể để lần sau cộng dồn.
-    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth, sx: keep?.sx, mood: keep?.mood }),
+    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth, sx: keep?.sx, mood: keep?.mood, story: h.story ?? keep?.story }),
   });
   const askHeart = () => {
     setErr(null);
@@ -658,7 +659,7 @@ export function AiChat({
       const wantSearch = !!detectSearch(q) && /\b(tim|kiem|goi y|an gi|uong gi|o dau|gan day|gan minh|quan nao|di dau|cho nao)\b/.test(normalizeVi(q));
       if (lastA?.heart && !en && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
-        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth), depth, lastA));
+        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth, lastA.content, lastA.story), depth, lastA));
       }
     }
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
