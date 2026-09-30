@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useBackToClose, useGoBack } from "@/lib/navigation";
-import { CircleHelp, RotateCcw, Send, Smile, Volume2, VolumeX, X } from "lucide-react";
+import { ArrowLeft, CircleHelp, RotateCcw, Send, Smile, Volume2, VolumeX } from "lucide-react";
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
@@ -255,35 +255,6 @@ function QuickReplies({ items, onPick }: { items: string[]; onPick: (v: string) 
   );
 }
 
-// Khung chat Lomi toàn màn hình bám theo "visual viewport" (01/10, theo ý Kir): trên iPhone, chạm vào ô nhập
-// thì bàn phím mở và trình duyệt tự cuộn cả trang lên → khung chat bị "đội lên", mất thanh trên. Đặt top = offsetTop,
-// cao = height của visualViewport để khung luôn khớp đúng phần màn hình đang thấy; khoá cuộn trang nền khi mở.
-function useViewportBox(): React.CSSProperties {
-  const [box, setBox] = useState<{ top: number; height: number } | null>(null);
-  useEffect(() => {
-    const vv = window.visualViewport;
-    const html = document.documentElement;
-    const body = document.body;
-    const prev = [html.style.overflow, body.style.overflow, body.style.overscrollBehavior];
-    html.style.overflow = "hidden";
-    body.style.overflow = "hidden";
-    body.style.overscrollBehavior = "none";
-    const update = () =>
-      setBox(vv ? { top: Math.max(0, vv.offsetTop), height: vv.height } : { top: 0, height: window.innerHeight });
-    update();
-    vv?.addEventListener("resize", update);
-    vv?.addEventListener("scroll", update);
-    window.addEventListener("resize", update);
-    return () => {
-      vv?.removeEventListener("resize", update);
-      vv?.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-      [html.style.overflow, body.style.overflow, body.style.overscrollBehavior] = prev;
-    };
-  }, []);
-  return box ? { top: box.top, height: box.height } : { top: 0, height: "var(--vvh, 100dvh)" };
-}
-
 /** Dòng "Trợ lý AI" ghim đầu hộp thư. */
 export function AiAssistantRow() {
   const { t } = useLanguage();
@@ -302,12 +273,11 @@ export function AiAssistantRow() {
 
 export default function AiAssistant() {
   const goBack = useGoBack();
-  const box = useViewportBox();
-  // 01/10 (theo ý Kir): khung chat Lomi chiếm TOÀN MÀN HÌNH (che thanh tiêu đề + thanh điều hướng của app),
-  // cao theo --vvh để bàn phím mở không đè ô nhập.
+  // 01/10 (theo ý Kir): khung chat Lomi nằm GIỮA thanh trên của app (logo, tin nhắn, thông báo) và thanh điều hướng
+  // dưới — cùng cách tính chiều cao với trang tin nhắn (--vvh, --header-h, --bottom-nav-h do Layout đo).
   return (
-    <div className="fixed inset-x-0 top-0 z-50 bg-background" style={box}>
-      <AiChat onBack={() => goBack("/tin-nhan")} className="h-full max-w-2xl mx-auto" />
+    <div className="flex flex-col h-[calc(var(--vvh,100dvh)-var(--header-h,3.5rem)-var(--bottom-nav-h,5rem))]">
+      <AiChat onBack={() => goBack("/tin-nhan")} className="h-full w-full max-w-2xl mx-auto" />
     </div>
   );
 }
@@ -962,13 +932,12 @@ export function AiChat({
     if (quota && typeof data.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
   };
 
-  // Lời chào đầu khung chat (xưng hô theo cách người dùng tự xưng — lib/lomiAddress).
+  // Lời chào đầu khung chat (01/10, theo ý Kir): linh vật + 1 câu in đậm, không kèm dòng chữ phụ.
+  // Xưng hô theo cách người dùng tự xưng (lib/lomiAddress).
   const greetLine = (() => {
-    const nm = displayName(loadMem(user.id), profile?.full_name);
-    const h = new Date().getHours();
-    const hi = h < 4 ? "Khuya rồi nè" : h < 11 ? "Chào buổi sáng" : h < 14 ? "Trưa vui vẻ" : h < 18 ? "Chiều vui nha" : h < 22 ? "Tối an lành" : "Khuya rồi nè";
-    // 01/10 (theo ý Kir): lời chào chỉ 1 câu; câu "Lomi đang thử nghiệm…" chỉ nói khi gặp câu Lomi chưa biết.
-    return speak(`**${hi}${nm ? ` ${nm}` : ""}** 👋\nHôm nay Lomi giúp gì được cho bạn nè?`, loadMem(user.id).addr);
+    const a = loadMem(user.id).addr;
+    if (a === "anh" || a === "chị") return `Xin chào ${a}, em là Lomi! Em giúp gì được cho ${a}?`;
+    return speak(t("ai.welcome"), a);
   })();
 
   const clear = () => {
@@ -980,13 +949,33 @@ export function AiChat({
 
   return (
     <div className={cn("relative flex flex-col", className)}>
-      <div className="flex items-center gap-2 p-3 border-b" style={{ paddingTop: "max(env(safe-area-inset-top), 0.75rem)" }}>
+      {/* 01/10 (theo ý Kir): góc trái mũi tên quay lại; góc phải làm mới · loa · "?". */}
+      <div className="flex items-center gap-2 px-3 py-2 border-b">
+        {(onClose ?? onBack) && (
+          <button onClick={onClose ?? onBack} aria-label={t("common.back")} className="p-1 -ml-1">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+        )}
         <div className="w-10 h-10 rounded-full bg-primary/10 grid place-items-center shrink-0">
           <LomiMascot size={30} animated={false} />
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold text-sm">{t("ai.title")}</div>
         </div>
+        {msgs.length > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              clear();
+              setShowTop(false);
+            }}
+            aria-label={t("ai.clear")}
+            title={en ? "Clear" : "Làm mới cuộc trò chuyện"}
+            className="p-2 rounded-full grid place-items-center text-muted-foreground hover:bg-accent transition"
+          >
+            <RotateCcw className="w-4 h-4" />
+          </button>
+        )}
         <button
           onClick={() => {
             setLomiSound(!soundOn);
@@ -994,30 +983,54 @@ export function AiChat({
           }}
           aria-label={t(soundOn ? "ai.soundOff" : "ai.soundOn")}
           title={t(soundOn ? "ai.soundOff" : "ai.soundOn")}
-          className="p-2 text-muted-foreground"
+          className="p-2 rounded-full text-muted-foreground hover:bg-accent"
         >
           {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
         </button>
-        {/* 01/10 (theo ý Kir): thanh trên chỉ còn loa + thoát. */}
-        {(onClose ?? onBack) && (
-          <button onClick={onClose ?? onBack} aria-label={t("common.close")} className="p-2 text-muted-foreground">
-            <X className="w-5 h-5" />
+        {!en && (
+          <button
+            type="button"
+            onClick={openTop}
+            aria-label="Lomi giúp được gì?"
+            title="Lomi giúp được gì?"
+            className={cn(
+              "p-2 rounded-full grid place-items-center transition",
+              showTop ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-accent",
+            )}
+          >
+            <CircleHelp className="w-[18px] h-[18px]" />
           </button>
         )}
       </div>
 
+      {showTop && !en && (
+        <div className="absolute right-3 top-14 z-20 max-h-[60%] overflow-y-auto w-72 max-w-[calc(100%-1.5rem)] rounded-2xl border bg-card shadow-xl p-2 animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="px-2 py-1.5 text-xs font-bold text-muted-foreground">🔥 Mọi người hay hỏi Lomi</div>
+          {!topList ? (
+            <div className="px-2 py-3 text-xs text-muted-foreground animate-pulse">Đang tải…</div>
+          ) : (
+            <div className="flex flex-col">
+              {topList.map((tp, i) => (
+                <button
+                  key={tp.key}
+                  onClick={() => pickSuggest(tp.key.startsWith("faq:") ? "send" : tp.action === "send" ? tp.key : tp.action, tp.label, tp.prompt)}
+                  className="flex items-center gap-2 text-left text-sm px-2 py-2 rounded-xl hover:bg-accent active:scale-[0.98] transition"
+                >
+                  <span className="w-5 text-xs font-bold text-primary/70">{i + 1}</span>
+                  <span className="flex-1 min-w-0 truncate">{tp.label}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       <div className="flex-1 overflow-y-auto p-3 space-y-3" onClick={() => showTop && setShowTop(false)}>
         {/* Lời chào luôn nằm đầu khung chat (01/10, theo ý Kir) — bấm gợi ý thì trả lời nối tiếp bên dưới,
             không đổi màn hình. */}
-        <div className="flex flex-col items-start pt-1">
-          <img src={stickerUrl("chao")} alt="Lomi vẫy chào" className="w-20 h-auto mb-1 animate-in zoom-in-50 fade-in duration-300" />
-          <div className="max-w-[85%] rounded-2xl rounded-tl-md border border-primary/20 bg-gradient-to-br from-emerald-50 to-sky-50 dark:from-emerald-950/40 dark:to-sky-950/40 px-3.5 py-2.5 text-sm leading-relaxed shadow-sm">
-            {en ? (
-              "Hi there 👋 How can Lomi help today?"
-            ) : (
-              <RichText text={greetLine} />
-            )}
-          </div>
+        <div className={cn("text-center px-6 space-y-2", msgs.length === 0 ? "min-h-[70%] flex flex-col items-center justify-center" : "pt-4 pb-2")}>
+          <LomiMascot size={64} className="mx-auto" track />
+          <p className="text-base font-bold leading-snug">{en ? t("ai.welcome") : greetLine}</p>
         </div>
         {msgs.length === 0 ? null : (
           msgs.map((m, i) => (
@@ -1121,31 +1134,8 @@ export function AiChat({
             e.preventDefault();
             void send(input);
           }}
-          className="relative p-3 flex items-end gap-1.5 border-t"
-          style={{ paddingBottom: "max(env(safe-area-inset-bottom), 0.75rem)" }}
+          className="p-3 flex items-end gap-2 border-t"
         >
-          {/* 01/10 (theo ý Kir): cạnh sticker là nút "?" (chủ đề hay hỏi) và nút làm mới dạng biểu tượng. */}
-              {showTop && !en && (
-            <div className="absolute left-3 bottom-full mb-2 z-20 max-h-[60vh] overflow-y-auto w-72 max-w-[calc(100%-1.5rem)] rounded-2xl border bg-card shadow-xl p-2 animate-in fade-in slide-in-from-bottom-2 duration-150">
-              <div className="px-2 py-1.5 text-xs font-bold text-muted-foreground">🔥 Mọi người hay hỏi Lomi</div>
-              {!topList ? (
-                <div className="px-2 py-3 text-xs text-muted-foreground animate-pulse">Đang tải…</div>
-              ) : (
-                <div className="flex flex-col">
-                  {topList.map((tp, i) => (
-                    <button
-                      key={tp.key}
-                      onClick={() => pickSuggest(tp.key.startsWith("faq:") ? "send" : tp.action === "send" ? tp.key : tp.action, tp.label, tp.prompt)}
-                      className="flex items-center gap-2 text-left text-sm px-2 py-2 rounded-xl hover:bg-accent active:scale-[0.98] transition"
-                    >
-                      <span className="w-5 text-xs font-bold text-primary/70">{i + 1}</span>
-                      <span className="flex-1 min-w-0 truncate">{tp.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
           <button
             type="button"
             onClick={() => {
@@ -1160,34 +1150,6 @@ export function AiChat({
           >
             <Smile className="w-5 h-5" />
           </button>
-          {!en && (
-            <button
-              type="button"
-              onClick={openTop}
-              aria-label="Lomi giúp được gì?"
-              title="Lomi giúp được gì?"
-              className={cn(
-                "w-9 h-10 shrink-0 rounded-full grid place-items-center transition",
-                showTop ? "bg-primary/15 text-primary" : "text-muted-foreground hover:bg-accent",
-              )}
-            >
-              <CircleHelp className="w-5 h-5" />
-            </button>
-          )}
-          {msgs.length > 0 && (
-            <button
-              type="button"
-              onClick={() => {
-                clear();
-                setShowTop(false);
-              }}
-              aria-label={t("ai.clear")}
-              title={en ? "Clear" : "Làm mới cuộc trò chuyện"}
-              className="w-9 h-10 shrink-0 rounded-full grid place-items-center text-muted-foreground hover:bg-accent transition"
-            >
-              <RotateCcw className="w-[18px] h-[18px]" />
-            </button>
-          )}
           <textarea
             ref={inputRef}
             value={input}
@@ -1246,14 +1208,17 @@ function readPos(): BubblePos {
   return { x: 1, y: 1, tucked: false };
 }
 
-/** Khung chat mở từ bong bóng — cũng bám visual viewport như trang /tro-ly-ai. */
+/** Khung chat mở từ bong bóng. */
 function BubblePanel({ onClose }: { onClose: () => void }) {
-  const box = useViewportBox();
+  // 01/10 (theo ý Kir): chừa thanh trên (logo, tin nhắn, thông báo) và thanh điều hướng dưới như trang /tro-ly-ai.
   return (
     <div
       onClick={(e) => e.stopPropagation()}
-      className="absolute inset-x-0 top-0 mx-auto max-w-2xl bg-background shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300"
-      style={box}
+      className="absolute inset-x-0 mx-auto max-w-2xl bg-background shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300"
+      style={{
+        top: "var(--header-h, 3.5rem)",
+        height: "calc(var(--vvh, 100dvh) - var(--header-h, 3.5rem) - var(--bottom-nav-h, 5rem))",
+      }}
     >
       <AiChat className="h-full" onClose={onClose} />
     </div>
