@@ -486,6 +486,7 @@ const TEEN: Record<string, string> = {
   mún: "muốn", zui: "vui", bùn: "buồn", thui: "thôi", hoy: "thôi", thoai: "thôi", lun: "luôn", đou: "đâu", nhìu: "nhiều",
   sr: "xin lỗi", xl: "xin lỗi", tks: "cảm ơn", thx: "cảm ơn", pp: "tạm biệt", sn: "sinh nhật", đt: "điện thoại",
   sđt: "số điện thoại", sdt: "số điện thoại", tk: "tài khoản", ad: "admin", hnay: "hôm nay", hqua: "hôm qua",
+  ysl: "yếu sinh lý", xts: "xuất tinh sớm",
   tgian: "thời gian", vc: "việc", uh: "ừ", uk: "ừ", uhm: "ừ", ah: "à", tr: "trời",
 };
 export function expandTeen(text: string): string {

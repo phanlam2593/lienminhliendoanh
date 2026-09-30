@@ -20,6 +20,8 @@ type Theme = {
   advice: string[]; // khi người dùng xin lời khuyên
   tarot?: string; // câu bói hợp chủ đề (chip "Bói xem …")
   heavy?: boolean; // nhắc gặp chuyên gia nếu kéo dài
+  stepFirst?: boolean; // chuyện sức khoẻ → ngay lượt đầu đã chỉ bước nên làm (đi khám…)
+  define?: string; // người dùng hỏi "X là gì" → giải thích ngắn trước
 };
 
 // Chọn câu không lặp lại gần đây (nhớ trong phiên).
@@ -41,6 +43,57 @@ const PRO =
   "Nếu cảm giác này kéo dài vài tuần, ảnh hưởng tới ăn ngủ hay công việc, bạn nên nói chuyện với một chuyên gia tâm lý nha — Lomi chỉ là robot nhỏ, không thay được người thật đâu 💚";
 
 const THEMES: Theme[] = [
+  {
+    // Sức khoẻ nam giới — nói tế nhị, đúng y khoa, khuyên gặp bác sĩ; không đi vào chi tiết nhạy cảm.
+    id: "menhealth",
+    stepFirst: true,
+    re: /\b(xuat tinh som|yeu sinh ly|yeu sinh li|roi loan cuong|kho cuong|khong cuong|liet duong|suy giam ham muon|giam ham muon|khong con ham muon|chuyen phong the|chuyen giuong chieu|sinh ly yeu|ban linh dan ong)\b/,
+    define:
+      "“YSL” là cách viết tắt của yếu sinh lý — cách gọi chung cho các vấn đề như giảm ham muốn, khó cương, hay xuất tinh sớm. Đây là chuyện sức khoẻ rất phổ biến, không có gì xấu hổ cả.",
+    feel: [
+      "Cảm ơn bạn đã tin mà chia sẻ chuyện tế nhị này với Lomi 💚 Nói ra được đã là bước quan trọng rồi.",
+      "Lomi hiểu, chuyện này khó mở lời lắm, nhiều bạn nam giữ trong lòng rất lâu. Bạn không cô đơn đâu.",
+      "Đây là chuyện sức khoẻ rất thường gặp, không phải lỗi của bạn và cũng không làm bạn kém đi chút nào.",
+    ],
+    insight: [
+      "Tình trạng này khá phổ biến ở nam giới, và rất hay liên quan tới căng thẳng, lo lắng, thiếu ngủ hoặc áp lực “phải làm tốt”. Càng lo thì thường càng nặng thêm — một vòng lặp của tâm lý.",
+      "Tin vui là đây là chuyện chữa được: bác sĩ có nhiều cách, từ tư vấn tâm lý, tập luyện đến điều trị bằng thuốc phù hợp với từng người.",
+      "Sức khoẻ tổng thể ảnh hưởng nhiều lắm: ngủ đủ, vận động đều, bớt rượu bia thuốc lá thường giúp cải thiện rõ.",
+    ],
+    step: [
+      "Đặt lịch khám bác sĩ Nam khoa (hoặc khoa Tiết niệu) ở bệnh viện uy tín — bác sĩ gặp chuyện này mỗi ngày nên bạn cứ yên tâm nói thật.",
+      "Tránh tự mua thuốc hay “thuốc bổ” quảng cáo trên mạng, dễ tiền mất tật mang và có thể hại sức khoẻ.",
+      "Nếu có người yêu, nói chuyện nhẹ nhàng với nhau — cảm giác được thấu hiểu giúp bớt áp lực đi rất nhiều.",
+    ],
+    ask: ["Chuyện này làm bạn lo lắng nhiều không?", "Bạn đã từng đi khám về chuyện này chưa?", "Dạo này bạn có hay căng thẳng, thiếu ngủ không?"],
+    advice: [
+      "Đi khám Nam khoa là cách nhanh và chắc nhất — bác sĩ sẽ tìm nguyên nhân (tâm lý hay thể chất) và hướng dẫn cách phù hợp riêng cho bạn.",
+      "Giảm áp lực “phải hoàn hảo”: chuyện chăn gối là sự gần gũi của hai người, không phải bài kiểm tra.",
+      "Ngủ đủ 7–8 tiếng, tập thể dục đều, hạn chế rượu bia, thuốc lá — những thói quen này hỗ trợ sức khoẻ sinh lý khá nhiều.",
+    ],
+  },
+  {
+    id: "health",
+    stepFirst: true,
+    re: /\b(bi benh|mac benh|om qua|dang om|bi om|benh hoai|dau bung|dau dau qua|dau lung|di kham|ket qua kham|nhap vien|nam vien|phau thuat|mo xong|sut can|tang can|beo phi|suc khoe yeu|suc khoe khong tot|lo ve suc khoe|ung thu|benh nan y)\b/,
+    feel: [
+      "Lomi thương bạn ghê 🥺 Có chuyện sức khoẻ thì lo lắng là đương nhiên.",
+      "Nghe bạn nói Lomi lo giùm bạn luôn đó. Sức khoẻ là chuyện lớn, bạn cứ kể Lomi nghe nha.",
+    ],
+    insight: [
+      "Lúc lo về sức khoẻ, đầu mình hay tưởng tượng ra điều tệ nhất — nhất là khi đọc tìm hiểu trên mạng. Bác sĩ mới là người trả lời chính xác được.",
+      "Chăm sóc tinh thần cũng là một phần của chữa bệnh: bớt lo được chút nào, cơ thể cũng hồi phục tốt hơn chút đó.",
+    ],
+    step: [
+      "Nếu triệu chứng kéo dài hoặc nặng lên, bạn nên đi khám sớm nha — đừng cố chịu.",
+      "Nhờ một người thân đi khám cùng, vừa đỡ lo vừa có người nhớ giùm lời bác sĩ dặn.",
+    ],
+    ask: ["Bạn bị vậy lâu chưa?", "Bạn đã đi khám bác sĩ chưa?"],
+    advice: [
+      "Ghi lại triệu chứng (bắt đầu khi nào, lúc nào nặng hơn) để kể bác sĩ cho đủ.",
+      "Nếu đau dữ dội, khó thở hay có dấu hiệu nguy hiểm, gọi 115 hoặc tới cơ sở y tế gần nhất ngay nha.",
+    ],
+  },
   {
     id: "cheat",
     re: /\b(ngoai tinh|cam sung|bi cam sung|phan boi|lua doi|bi lua|co nguoi khac|co ban gai khac|co ban trai khac|di voi nguoi khac|bat cha|bat gap .* nhan tin|tuesday|nguoi thu ba)\b/,
@@ -611,11 +664,10 @@ const REFLECT = [
   "Lomi hiểu mà, {e} như vậy khó chịu lắm.",
 ];
 const LISTEN = [
-  "Lomi đang nghe nè 🌿 Rồi sau đó sao nữa?",
-  "Ừm, Lomi hiểu. Lúc đó bạn cảm thấy thế nào?",
-  "Chuyện đó chắc làm bạn nghĩ nhiều lắm. Điều gì làm bạn bận lòng nhất?",
-  "Cảm ơn bạn đã tin mà kể Lomi nghe 💚 Kể tiếp đi, Lomi vẫn ở đây.",
-  "Lomi nghe rồi nè. Nếu được chọn, bạn mong mọi chuyện sẽ đi theo hướng nào?",
+  "Lomi đang nghe nè 🌿 Bạn kể thêm cho Lomi hiểu rõ hơn được không?",
+  "Ừm, Lomi nghe rồi. Chuyện này làm bạn bận lòng nhiều không?",
+  "Lomi vẫn ở đây nè 💚 Bạn cứ kể tiếp, từ từ thôi.",
+  "Lomi hiểu rồi. Giờ điều bạn mong nhất là gì nè?",
 ];
 const OPEN = [
   "Lomi đây, Lomi nghe nè 🌿 Bạn cứ kể từ từ, chuyện gì cũng được — Lomi không phán xét đâu. Đang có chuyện gì làm bạn bận lòng vậy?",
@@ -641,8 +693,9 @@ export const HEART_ADVICE = "💬 Cho mình lời khuyên";
 const LISTEN_ONLY = "🫶 Mình chỉ muốn được nghe";
 const BETTER = "😊 Mình ổn hơn rồi";
 
-function chipsFor(t: Theme | undefined): string[] {
-  return [HEART_ADVICE, LISTEN_ONLY, ...(t?.tarot ? [t.tarot.startsWith("Bói") ? t.tarot : `Bói xem ${t.tarot}`] : []), BETTER];
+// 30/09 r2 (theo ý Kir): khi đang tâm sự thì KHÔNG hiện nút gợi ý — để trò chuyện tự nhiên như nhắn tin.
+function chipsFor(_t: Theme | undefined): string[] {
+  return [];
 }
 function themeOf(n: string): Theme | undefined {
   return THEMES.find((t) => t.re.test(` ${n} `));
@@ -653,21 +706,23 @@ function emotionOf(n: string): string | undefined {
 
 /** Mở màn tâm sự (nút "Tâm sự cùng Lomi"). */
 export function heartOpen(): HeartReply {
-  return { text: pick("open", OPEN), quick: HEART_CHIPS, theme: "open" };
+  return { text: pick("open", OPEN), quick: [], theme: "open" };
 }
 
 function themeReply(t: Theme, n: string, adviceAsked: boolean): HeartReply {
   const parts: string[] = [];
+  const defined = !!t.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `);
+  if (defined) parts.push(t.define!);
   if (adviceAsked) {
     parts.push(pick(`${t.id}:feel`, t.feel));
     parts.push(`Lomi gợi ý vài điều nha:\n• ${pick(`${t.id}:adv`, t.advice)}\n• ${pick(`${t.id}:adv`, t.advice)}\n• ${pick(`${t.id}:step`, t.step)}`);
   } else {
-    parts.push(pick(`${t.id}:feel`, t.feel));
+    if (!defined) parts.push(pick(`${t.id}:feel`, t.feel));
     parts.push(pick(`${t.id}:ins`, t.insight));
+    if (t.stepFirst) parts.push(pick(`${t.id}:step`, t.step));
     parts.push(pick(`${t.id}:ask`, t.ask));
   }
   if (t.heavy && adviceAsked) parts.push(PRO);
-  void n;
   return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
 }
 
@@ -722,15 +777,26 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       quick: chipsFor(th),
       theme: prev,
     };
+  // Hỏi một điều Lomi không biết (không khớp chủ đề nào) → nói thật, không đáp đại cho có.
+  if (!t && /\?|\b(la gi|nghia la|hieu .* khong|biet .* khong|co biet)\b/.test(`${text} ${n} `))
+    return {
+      text: pick("unk", [
+        "Câu này Lomi chưa hiểu rõ lắm 😅 Bạn giải thích thêm một chút giúp Lomi được không?",
+        "Hmm, Lomi chưa chắc hiểu đúng ý bạn. Bạn nói rõ hơn xíu nha, Lomi nghe nè 🌿",
+      ]),
+      quick: [],
+      theme: prev,
+      listen,
+    };
   // Kể tiếp → phản chiếu cảm xúc + (nếu không chỉ muốn nghe) một góc nhìn / bước nhỏ + câu hỏi mở.
   const e = emotionOf(n);
   const parts: string[] = [];
   parts.push(e ? pick("reflect", REFLECT).replace("{e}", e) : pick("listen", LISTEN));
-  if (!listen && th) {
+  if (!listen && th && !(GENERIC.has(th.id) && !t && !e)) {
     if (depth % 2 === 1) parts.push(pick(`${th.id}:ins`, th.insight));
     else parts.push(pick(`${th.id}:step`, th.step));
     if (e) parts.push(pick(`${th.id}:ask`, th.ask));
   } else if (e) parts.push(pick("listen", LISTEN));
   if (th?.heavy && depth >= 3 && depth % 3 === 0) parts.push(PRO);
-  return { text: parts.join("\n\n"), quick: listen ? [BETTER] : chipsFor(th), theme: prev, listen };
+  return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
 }
