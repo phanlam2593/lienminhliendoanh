@@ -56,6 +56,7 @@ import {
 import { lomiSound, lomiSoundOn, onLomiSoundChange, setLomiSound } from "@/lib/lomiSound";
 import {
   TAROT_ASK,
+  TAROT_MODE,
   dailyDraw,
   questionTopic,
   tarotFollowUps,
@@ -100,6 +101,7 @@ type Msg = {
   aiContent?: string; // nội dung THẬT gửi cho AI (khác chữ hiển thị), vd kèm loại hình DN
   places?: PlaceCard[]; // thẻ doanh nghiệp thật (Lomi tìm chỗ / "hôm nay ăn gì") — lib/lomiSearch
   search?: SearchIntent; // lần tìm vừa rồi (để "Đổi món khác" bốc lại chỗ khác)
+  tarotSpread?: "five" | "celtic"; // người dùng vừa chọn trải 5 / 10 lá, đang chờ câu hỏi
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
 };
@@ -367,7 +369,7 @@ export function AiChat({
         content: en ? TAROT_ASK.en : TAROT_ASK.vi,
         local: true,
         tarotAwait: true,
-        quick: TAROT_SUGGEST.map((x) => (en ? x.en : x.vi)),
+        quick: TAROT_SUGGEST.map((x) => (en ? x.en : x.vi)).filter(Boolean),
       },
     ]);
     lomiSound("pop");
@@ -570,9 +572,23 @@ export function AiChat({
       // c) Lomi vừa hỏi "muốn hỏi bài điều gì?" → tin này chính là câu hỏi.
       if (lastA?.tarotAwait) {
         if (isTarotCancel(q)) return localReply(q, { role: "assistant", content: en ? TAROT_CANCEL.en : TAROT_CANCEL.vi, local: true });
+        // Chế độ bói: chủ đề → bói luôn; "một người cụ thể" / trải 5–10 lá → hỏi tiếp câu hỏi.
+        const mode = TAROT_MODE[raw];
+        if (mode?.q) return doTarot(mode.q, q, lastA.tarotSpread ? `${mode.q} ${lastA.tarotSpread === "five" ? "5 lá" : "10 lá"}` : undefined);
+        if (mode?.ask)
+          return localReply(q, {
+            role: "assistant",
+            content: mode.ask,
+            local: true,
+            tarotAwait: true,
+            tarotSpread: mode.spread ?? lastA.tarotSpread,
+            quick: mode.quick ?? ["❤️ Tình yêu", "💼 Công việc", "💰 Tài chính", "🔮 Tương lai gần"],
+          });
         const d = detectTarot(q);
         if (d && !d.question && !d.daily) return askTarot(q);
-        return doTarot(d ? d.question : isDailyAsk(q) ? "" : q, q);
+        const qq = d ? d.question : isDailyAsk(q) ? "" : q;
+        // Đã chọn trải 5 / 10 lá ở bước trước → ghép vào ngữ cảnh để rút đúng số lá.
+        return doTarot(qq, q, qq && lastA.tarotSpread ? `${q} ${lastA.tarotSpread === "five" ? "5 lá" : "10 lá"}` : undefined);
       }
       // d) Vừa bói xong → "rút thêm" / "bói lại" / hỏi nối ("thế còn tình cảm thì sao?").
       if (lastA?.tarot) {
@@ -797,7 +813,7 @@ export function AiChat({
             <StarterCard
               emoji="🔮"
               title={en ? "Tarot reading" : "Bói Tarot cùng Lomi"}
-              desc={en ? "Ask the cards anything — free & unlimited" : "Hỏi bài bất cứ điều gì — miễn phí, bói thoải mái"}
+              desc={en ? "Symbolic reflection for fun — free & unlimited" : "Góc nhìn để suy ngẫm & giải trí — 1, 3, 5 hay 10 lá, miễn phí"}
               onClick={() => askTarot()}
             />
             {/* Tư vấn kinh doanh — chạy trên máy (lib/bizAdvisor.ts), miễn phí nên mở cho mọi người. */}

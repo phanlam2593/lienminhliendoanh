@@ -32,7 +32,7 @@ export function TarotCards({
       window.setTimeout(() => {
         setShown(i + 1);
         lomiSound(i === reading.cards.length - 1 ? "happy" : "pop");
-      }, 450 + i * 650),
+      }, 450 + i * (reading.cards.length > 5 ? 380 : 650)),
     );
     return () => timers.forEach((t) => window.clearTimeout(t));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,6 +50,7 @@ export function TarotCards({
   }, []);
 
   const done = shown >= reading.cards.length;
+  const small = reading.cards.length > 3;
   useEffect(() => {
     if (animate && done) window.setTimeout(() => onDone?.(), 60);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,14 +58,15 @@ export function TarotCards({
 
   return (
     <>
-    <div className="flex justify-center gap-2 py-1 mb-2">
+    {/* Trải nhiều lá (5 lá, Celtic Cross 10 lá) → lá nhỏ lại và xuống dòng cho vừa khung chat. */}
+    <div className={cn("flex flex-wrap justify-center py-1 mb-2", small ? "gap-1.5" : "gap-2")}>
       {reading.cards.map((d, i) => {
         const c = tarotCard(d.id);
         const up = i < shown;
         const major = c.suit === "major";
         return (
-          <div key={i} className="flex flex-col items-center gap-1 w-[80px]">
-            <div className="w-[80px] h-[134px] [perspective:600px]">
+          <div key={i} className={cn("flex flex-col items-center gap-1", small ? "w-[56px]" : "w-[80px]")}>
+            <div className={cn("[perspective:600px]", small ? "w-[56px] h-[94px]" : "w-[80px] h-[134px]")}>
               <div
                 className="relative w-full h-full transition-transform duration-700 [transform-style:preserve-3d]"
                 style={{ transform: up ? "rotateY(180deg)" : "rotateY(0deg)" }}
@@ -107,7 +109,7 @@ export function TarotCards({
                 </div>
               </div>
             </div>
-            <div className="text-[10px] text-muted-foreground text-center leading-tight min-h-[24px]">
+            <div className={cn("text-muted-foreground text-center leading-tight min-h-[24px]", small ? "text-[9px]" : "text-[10px]")}>
               {reading.cards.length > 1 && pos[i] && <div className="font-semibold line-clamp-2">{en ? pos[i].en : pos[i].vi}</div>}
               {up && <div className="text-foreground/80 line-clamp-2">{en ? c.name.en : c.name.vi}</div>}
             </div>

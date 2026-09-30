@@ -13,7 +13,7 @@ type L = "vi" | "en";
 type T2 = { vi: string; en: string };
 
 export type TarotTopic = "general" | "love" | "work" | "money" | "travel" | "study" | "health";
-export type TarotSpread = "one" | "ppf" | "sca"; // 1 lá · Quá khứ–Hiện tại–Tương lai · Tình huống–Thử thách–Lời khuyên
+export type TarotSpread = "one" | "ppf" | "sca" | "five" | "celtic"; // 1 lá · QK–HT–TL · TH–TT–LK · 5 lá phân tích sâu · Celtic Cross 10 lá
 export type TarotSuit = "major" | "wands" | "cups" | "swords" | "pentacles";
 export type TarotDraw = { id: number; rev: boolean };
 // kind (30/09 r2): kiểu câu hỏi — daily (thông điệp hôm nay), open (hỏi chung), timing (khi nào),
@@ -54,6 +54,37 @@ export const TAROT_SPREADS: { id: TarotSpread; n: number; vi: string; en: string
       { vi: "Quá khứ", en: "Past" },
       { vi: "Hiện tại", en: "Present" },
       { vi: "Tương lai", en: "Future" },
+    ],
+  },
+  {
+    id: "five",
+    n: 5,
+    vi: "5 lá · Phân tích sâu",
+    en: "5 cards · Deep reading",
+    pos: [
+      { vi: "Hiện tại", en: "Present" },
+      { vi: "Nguyên nhân", en: "Cause" },
+      { vi: "Điều ẩn giấu", en: "Hidden factor" },
+      { vi: "Lời khuyên", en: "Advice" },
+      { vi: "Kết quả", en: "Outcome" },
+    ],
+  },
+  {
+    id: "celtic",
+    n: 10,
+    vi: "Celtic Cross · 10 lá chuyên sâu",
+    en: "Celtic Cross · 10 cards",
+    pos: [
+      { vi: "Hiện tại", en: "Present" },
+      { vi: "Thử thách", en: "Challenge" },
+      { vi: "Gốc rễ", en: "Foundation" },
+      { vi: "Quá khứ gần", en: "Recent past" },
+      { vi: "Điều tốt nhất có thể", en: "Best outcome" },
+      { vi: "Tương lai gần", en: "Near future" },
+      { vi: "Bản thân bạn", en: "Yourself" },
+      { vi: "Người xung quanh", en: "Environment" },
+      { vi: "Hy vọng & nỗi sợ", en: "Hopes & fears" },
+      { vi: "Kết quả", en: "Outcome" },
     ],
   },
   {
@@ -324,7 +355,7 @@ function fold(s: string): string {
 }
 
 const TRIG =
-  /(?<![a-z])(boi\s+tarot|xem\s+tarot|tarot|boi\s+bai|rut\s+bai|trai\s+bai|xem\s+boi|boi\s+toan|rut\s+(?:1|mot|3|ba)\s+la|boi\s+(?:1|mot|3|ba)\s+la|boi)(?![a-z])/g;
+  /(?<![a-z])(boi\s+tarot|xem\s+tarot|tarot|boi\s+bai|rut\s+bai|trai\s+bai|xem\s+boi|boi\s+toan|rut\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi)(?![a-z])/g;
 
 function findTrigger(orig: string, f: string): { start: number; end: number } | null {
   TRIG.lastIndex = 0;
@@ -341,7 +372,7 @@ function findTrigger(orig: string, f: string): { start: number; end: number } | 
 }
 
 const LEAD =
-  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai(?!\s+hoc)|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep(?=\s*:))(?![a-z])|(?:1|mot|3|ba)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
+  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai(?!\s+hoc)|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep(?=\s*:))(?![a-z])|(?:1|mot|3|ba|5|nam|10|muoi)\s+la(?![a-z])|celtic\s+cross(?![a-z])|celtic(?![a-z])|trai\s+(?:5|10|nam|muoi)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
 const TRAIL =
   /(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu|(?:\d+|mot|hai|ba|vai|may)\s+la(?:\s+bai)?)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
 
@@ -455,6 +486,19 @@ const POS: Record<Exclude<TarotKind, "choice">, T2[]> = {
 const short = (x: string) => (x.length > 16 ? `${x.slice(0, 15).trim()}…` : x);
 
 /** Rút bài cho 1 câu hỏi (rỗng = thông điệp hôm nay). */
+/** Người dùng xin trải bài riêng trong câu gõ: "5 lá", "10 lá / Celtic Cross", "quá khứ – hiện tại – tương lai". */
+export function spreadFromText(text: string): "five" | "celtic" | "ppf" | null {
+  const f = ` ${fold(text).replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ")} `;
+  if (/ (celtic|10 la|muoi la|chu thap) /.test(f)) return "celtic";
+  if (/ (5 la|nam la) /.test(f)) return "five";
+  if (/ qua khu .*hien tai .*tuong lai /.test(f)) return "ppf";
+  return null;
+}
+const SPREAD_GROUPS: Record<"five" | "celtic" | "ppf", Group[]> = {
+  ppf: ["state", "state", "result"],
+  five: ["state", "block", "block", "action", "result"],
+  celtic: ["state", "block", "state", "state", "result", "phase", "state", "state", "block", "result"],
+};
 export function drawForQuestion(question: string, context?: string): TarotReading {
   const q = question.trim();
   if (!q) return { topic: "general", spread: "one", cards: drawCards(1), at: Date.now(), kind: "daily", question: "", pos: POS.daily };
@@ -476,6 +520,12 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
       pos: options.map((o) => P(capFirst(short(o)), capFirst(short(o)))),
     };
   const it = detectIntent(q, kind);
+  // Trải bài riêng người dùng xin (5 lá / Celtic Cross / QK–HT–TL) được ưu tiên hơn vị trí theo ý câu hỏi.
+  const sp = spreadFromText(`${ctx ?? ""} ${q}`);
+  if (sp) {
+    const def = TAROT_SPREADS.find((x) => x.id === sp)!;
+    return { topic, spread: sp, cards: drawCards(def.n), at: Date.now(), kind, question: q, context: ctx, intent: it?.id, pos: def.pos };
+  }
   const ipos = it?.pos ? (typeof it.pos === "function" ? it.pos() : it.pos) : undefined;
   return {
     topic,
@@ -1307,6 +1357,7 @@ type Intent = {
   outro: string[];
   next?: string[];
   invest?: boolean;
+  generalOnly?: boolean; // chỉ dùng khi câu hỏi không nói rõ chủ đề (tình cảm / công việc / tiền…)
 };
 const monthOf = (add: number) => {
   const d = new Date();
@@ -1406,6 +1457,18 @@ const INTENTS: Intent[] = [
     ],
   },
   {
+    id: "lovefuture",
+    re: /^(?=.* (tinh cam|tinh yeu|chuyen yeu|duyen) )(?=.* (thoi gian toi|sap toi|thang toi|thang sau|nam nay|nam toi|vai thang|tuong lai) )/,
+    kinds: ["open", "yesno"],
+    scene: "love",
+    pos: ["Hiện tại", "Chuyển động sắp tới", "Kết quả"],
+    groups: ["state", "phase", "result"],
+    ask: "tình cảm thời gian tới thế nào",
+    lean: DIRECTION,
+    intro: ["Để Lomi xem trái tim bạn sắp bước sang mùa nào nha 🌸", "Chuyện tình cảm sắp tới hả… Lomi xáo bài thật chậm, thật kỹ nè 💞"],
+    outro: ["Tình yêu đến vào lúc mình vui vẻ với chính mình nhất — cứ sống rạng rỡ nha 🌸", "Dù mùa nào, bạn vẫn xứng đáng được thương một cách dịu dàng 💚"],
+  },
+  {
     id: "direction",
     re: / (di ve dau|se ra sao|co lau dai|lau dai khong|tuong lai cua (hai|chung)|co ben lau|di den dau|ket qua cua moi quan he|co ket qua) /,
     kinds: ["open", "yesno"],
@@ -1449,7 +1512,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "careerfuture",
-    re: / (su nghiep|cong viec) .*(thoi gian toi|sap toi|thay doi|nam nay|nam toi|tuong lai|vai thang) /,
+    re: /^(?=.* (su nghiep|cong viec|viec lam) )(?=.* (thoi gian toi|sap toi|thay doi|nam nay|nam toi|tuong lai|vai thang|thang toi|thang sau|nhu the nao|the nao|ra sao) )/,
     scene: "work",
     force: true,
     pos: ["Hiện tại", "Chuyển động sắp tới", "Kết quả"],
@@ -1498,7 +1561,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "moneyfuture",
-    re: / (tai chinh|tien bac|tien nong|thu nhap) .*(thang toi|vai thang|sap toi|nam nay|thoi gian toi|3 thang) /,
+    re: /^(?=.* (tai chinh|tien bac|tien nong|thu nhap) )(?=.* (thang toi|vai thang|sap toi|nam nay|thoi gian toi|3 thang) )/,
     scene: "money",
     force: true,
     pos: () => [`Tháng ${monthOf(1)}`, `Tháng ${monthOf(2)}`, `Tháng ${monthOf(3)}`],
@@ -1523,6 +1586,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "halfyear",
+    generalOnly: true,
     re: / (3 6 thang|3 den 6 thang|3 toi 6 thang|nua nam|6 thang toi|vai thang toi|thoi gian toi) /,
     scene: "future",
     pos: () => [`Tháng ${monthOf(1)}–${monthOf(2)}`, `Tháng ${monthOf(3)}–${monthOf(4)}`, `Tháng ${monthOf(5)}–${monthOf(6)}`],
@@ -1534,6 +1598,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "nextmonth",
+    generalOnly: true,
     re: / (thang toi|thang sau) /,
     scene: "future",
     pos: () => {
@@ -1548,6 +1613,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "prepare",
+    generalOnly: true,
     re: / (chuan bi (cho|gi)|can chuan bi|nen chuan bi) /,
     scene: "future",
     pos: ["Điều sắp đến", "Điều cần chuẩn bị", "Kết quả nếu sẵn sàng"],
@@ -1559,6 +1625,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "coming",
+    generalOnly: true,
     re: / (dieu gi sap|chuyen gi sap|sap xuat hien|sap den voi minh|dieu gi dang den|co gi moi) /,
     scene: "future",
     pos: ["Điều đang tới gần", "Cơ hội đi kèm", "Điều cần chú ý"],
@@ -1678,7 +1745,8 @@ function sceneOfReading(r: TarotReading): Scene {
 }
 function detectIntent(q: string, kind: TarotKind): Intent | undefined {
   const f = ` ${fold(q).replace(/[?!.,…"“”–-]/g, " ").replace(/\s+/g, " ")} `;
-  return INTENTS.find((it) => (it.kinds ? it.kinds.includes(kind) : kind !== "choice") && it.re.test(f));
+  const general = detectTopic(fold(q)) === "general";
+  return INTENTS.find((it) => (it.kinds ? it.kinds.includes(kind) : kind !== "choice") && (!it.generalOnly || general) && it.re.test(f));
 }
 const intentById = (id?: string) => (id ? INTENTS.find((x) => x.id === id) : undefined);
 const MYSTIC_OPEN = [
@@ -1772,8 +1840,14 @@ function readingNarrativeVi(r: TarotReading): string {
   const sub = subjectOf(q, r.topic);
   const S =
     bank.noun && (sub === TOPIC_NOUN[r.topic] || ["jobseek", "health", "future", "self", "others"].includes(scene)) ? bank.noun : sub;
-  const groups: Group[] =
-    kind !== "choice" && it?.groups ? it.groups : (kind === "choice" ? ["result", "result"] : ROLES[kind as Exclude<TarotKind, "choice">].map((x) => ROLE_GROUP[x]));
+  const special = r.spread === "five" || r.spread === "celtic" || r.spread === "ppf" ? r.spread : null;
+  const groups: Group[] = special
+    ? SPREAD_GROUPS[special].map((g, i, a) => (kind === "timing" && i === a.length - 1 ? "time" : g))
+    : kind !== "choice" && it?.groups
+      ? it.groups
+      : kind === "choice"
+        ? ["result", "result"]
+        : ROLES[kind as Exclude<TarotKind, "choice">].map((x) => ROLE_GROUP[x]);
   const pos = r.pos ?? [];
   const roles: Role[] = kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
   const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
@@ -1793,6 +1867,7 @@ function readingNarrativeVi(r: TarotReading): string {
   const lead = vary("list", LIST_LEAD).replace("{n}", String(r.cards.length)).replace("{N}", nWord);
   out.push(`${lead}\n${r.cards.map((d, i) => `${i + 1}. ${posName(i)} — ${cardName(d)}`).join("\n")}`);
 
+  const usedTails = new Set<string>();
   // 2) Từng lá: nghĩa lá → nghĩa theo lĩnh vực → áp vào hoàn cảnh người hỏi
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
@@ -1808,7 +1883,10 @@ function readingNarrativeVi(r: TarotReading): string {
       const tail = apply.split(/(?<=[.!?])\s+/).slice(1).join(" ");
       if (kind === "choice") lines.push(`${posName(i)}, ${apply}`);
       else if (g === "phase") lines.push(apply);
-      else if (tail && (g === "state" || g === "action")) lines.push(tail);
+      else if (tail && (g === "state" || g === "action") && !usedTails.has(tail)) {
+        usedTails.add(tail); // trải nhiều lá: không lặp lại cùng một câu nhận xét
+        lines.push(tail);
+      }
     } else lines.push(kind === "choice" ? `${posName(i)}, ${apply}` : apply);
     if (g === "time") {
       const w = timingWindow(d);
@@ -1820,39 +1898,64 @@ function readingNarrativeVi(r: TarotReading): string {
     out.push(lines.join("\n"));
   });
 
-  // 3) Cả trải bài như một quá trình
-  if (r.cards.length >= 3)
-    out.push(
-      (() => {
-        const first = cardScore(r.cards[0]);
-        const lastS = cardScore(r.cards[r.cards.length - 1]);
-        // Nhận xét chiều đi của câu chuyện: đi lên / chững ở cuối / đều đều.
-        const arc =
-          lastS > first
-            ? vary("arc-up", [" Một mạch đi lên — tín hiệu khá dễ thương đó.", " Càng về sau càng sáng, đáng mừng nha.", " Khởi đầu hơi chật vật nhưng kết lại khá ổn."])
-            : lastS < first
-              ? vary("arc-down", [" Đoạn cuối cần bạn để tâm nhiều hơn một chút.", " Khởi đầu thuận nhưng về sau cần cẩn thận hơn nha."])
-              : "";
-        return (
-          vary("journey", JOURNEY)
-            .replace("{names}", r.cards.map((d) => tarotCard(d.id).name.vi).join(" → "))
-            .replace("{n}", String(r.cards.length))
-            .replace("{stages}", r.cards.map((d) => kw(d, false)).join(" → ")) + arc
-        );
-      })(),
-    );
+  // 3) 🔗 Mối liên hệ giữa các lá — đọc cả trải bài như một câu chuyện
+  const firstS = cardScore(r.cards[0]);
+  const lastS = cardScore(r.cards[r.cards.length - 1]);
+  const arcUp = lastS > firstS;
+  const arcDown = lastS < firstS;
+  if (r.cards.length >= 3) {
+    const arc = arcUp
+      ? vary("arc-up", [" Một mạch đi lên — tín hiệu khá dễ thương đó.", " Càng về sau càng sáng, đáng mừng nha.", " Khởi đầu hơi chật vật nhưng kết lại khá ổn."])
+      : arcDown
+        ? vary("arc-down", [" Đoạn cuối cần bạn để tâm nhiều hơn một chút.", " Khởi đầu thuận nhưng về sau cần cẩn thận hơn nha."])
+        : "";
+    // Trải 10 lá: kể theo trục chính (Hiện tại → Thử thách → Tương lai gần → Kết quả) cho gọn, dễ theo.
+    const keyCards = r.spread === "celtic" ? [0, 1, 5, 9].map((i) => r.cards[i]) : r.cards;
+    const story =
+      vary("journey", JOURNEY)
+        .replace("{names}", keyCards.map((d) => tarotCard(d.id).name.vi).join(" → "))
+        .replace("{n}", String(r.cards.length))
+        .replace("{stages}", keyCards.map((d) => kw(d, false)).join(" → ")) + arc;
+    out.push(`**🔗 Mối liên hệ giữa các lá**\n${story}`);
+  }
 
-  // 4) Kết luận thẳng câu hỏi
+  // 4) 🔮 Tổng quan — nhận định cả trải bài + trả lời thẳng câu hỏi
   const total = toneTotal(r.cards);
   const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
+  const overview: string[] = [];
+  if (r.cards.length >= 3) {
+    const n = r.cards.length;
+    if (arcUp) overview.push(`Trải bài đi từ ${kw(r.cards[0], false)} tới ${kw(r.cards[n - 1], false)} — thiên về một quá trình phát triển dần hơn là thay đổi đột ngột.`);
+    else if (arcDown) overview.push(`Trải bài mở đầu khá thuận nhưng càng về sau càng cần chú ý, nhất là ${kw(r.cards[n - 1], false)}.`);
+    else overview.push("Năng lượng cả trải bài khá đều, không có bước ngoặt quá lớn — mọi thứ sẽ đi theo nhịp bạn giữ.");
+    const majors = r.cards.filter((d) => tarotCard(d.id).suit === "major").length;
+    if (majors * 2 >= n) overview.push("Nhiều lá Ẩn Chính xuất hiện — đây là giai đoạn có ý nghĩa lớn, không chỉ là chuyện nhất thời.");
+    const cnt: Partial<Record<TarotSuit, number>> = {};
+    r.cards.forEach((d) => {
+      const su = tarotCard(d.id).suit;
+      if (su !== "major") cnt[su] = (cnt[su] ?? 0) + 1;
+    });
+    const top = (Object.entries(cnt) as [TarotSuit, number][]).sort((a, b) => b[1] - a[1]);
+    if (top[0] && top[0][1] >= 2 && (!top[1] || top[0][1] > top[1][1]))
+      overview.push(
+        {
+          wands: "Bộ Gậy chiếm ưu thế: năng lượng hành động và sự chủ động đang dẫn dắt câu chuyện.",
+          cups: "Bộ Cốc chiếm ưu thế: cảm xúc và các mối quan hệ là trọng tâm lúc này.",
+          swords: "Bộ Kiếm chiếm ưu thế: suy nghĩ, quyết định và áp lực tinh thần đang chi phối nhiều.",
+          pentacles: "Bộ Tiền chiếm ưu thế: chuyện thực tế như tiền bạc, công việc, sự ổn định là trọng tâm.",
+          major: "",
+        }[top[0][0]],
+      );
+    if (r.cards.filter((d) => d.rev).length * 2 > n) overview.push("Khá nhiều lá ngược — năng lượng đang bị chặn hoặc hướng vào bên trong, cần thời gian gỡ dần.");
+  }
+  let verdictLine: string;
   if (kind === "choice" && r.cards.length === 2) {
     const [a, b] = [cardScore(r.cards[0]), cardScore(r.cards[1])];
     const [na, nb] = pos.map((p) => p.vi);
-    out.push(
+    verdictLine =
       a === b
-        ? `Nên nếu hỏi “chọn bên nào?” thì hai lựa chọn khá ngang nhau — chọn bên khiến lòng bạn thấy nhẹ nhõm nhất nha. ${bank.tip[0]}`
-        : `Nên nếu hỏi “chọn bên nào?” thì trải bài nghiêng về “${a > b ? na : nb}”, vì bên đó mang năng lượng của ${kw(a > b ? r.cards[0] : r.cards[1], false)}. Nhưng quyết định cuối cùng vẫn là ở bạn nha 😄`,
-    );
+        ? "Nếu hỏi “chọn bên nào?” thì hai lựa chọn khá ngang nhau — chọn bên khiến lòng bạn thấy nhẹ nhõm nhất nha."
+        : `Nếu hỏi “chọn bên nào?” thì trải bài nghiêng về “${a > b ? na : nb}”, vì bên đó mang năng lượng của ${kw(a > b ? r.cards[0] : r.cards[1], false)}. Nhưng quyết định cuối cùng vẫn là ở bạn nha 😄`;
   } else {
     const askQ = it?.ask ?? (should ? "có nên hay không" : SCENE_ASK[scene]);
     // Hỏi "bao giờ" → trả lời theo tốc độ (sớm / đúng khung / chậm hơn), không phán "không có".
@@ -1864,53 +1967,73 @@ function readingNarrativeVi(r: TarotReading): string {
             ? "nghiêng về CÓ, khoảng đúng khung thời gian ở trên nếu bạn giữ nhịp"
             : "vẫn là CÓ, chỉ là có thể chậm hơn khung trên một chút — đừng nản nha"
         : scene === "health"
-        ? total >= 1
-          ? "khá tích cực — tinh thần tốt sẽ giúp mau khoẻ"
-          : total === 0
-            ? "cho thấy cơ thể cần thêm thời gian"
-            : "nhắc bạn kiên nhẫn và đừng chủ quan"
-        : should
-          ? total >= 3
-            ? "nghiêng khá rõ về NÊN"
-            : total >= 1
-              ? "nghiêng về NÊN, miễn là bạn giữ chừng mực"
-              : total === 0
-                ? "còn lưng chừng — tuỳ vào cảm nhận của bạn"
-                : "nghiêng về CHƯA NÊN lúc này"
-          : total >= 3
-            ? "nghiêng khá rõ về CÓ"
-            : total >= 1
-              ? "nghiêng về CÓ nếu bạn chủ động thêm một chút"
-              : total === 0
-                ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
-                : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
+          ? total >= 1
+            ? "khá tích cực — tinh thần tốt sẽ giúp mau khoẻ"
+            : total === 0
+              ? "cho thấy cơ thể cần thêm thời gian"
+              : "nhắc bạn kiên nhẫn và đừng chủ quan"
+          : should
+            ? total >= 3
+              ? "nghiêng khá rõ về NÊN"
+              : total >= 1
+                ? "nghiêng về NÊN, miễn là bạn giữ chừng mực"
+                : total === 0
+                  ? "còn lưng chừng — tuỳ vào cảm nhận của bạn"
+                  : "nghiêng về CHƯA NÊN lúc này"
+            : total >= 3
+              ? "nghiêng khá rõ về CÓ"
+              : total >= 1
+                ? "nghiêng về CÓ nếu bạn chủ động thêm một chút"
+                : total === 0
+                  ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
+                  : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
     const tail = kind === "timing" ? "Tarot không thể xác nhận một ngày cụ thể đâu 😄" : "Quyết định cuối cùng vẫn là ở bạn 😄";
     const [c1, c2, c3] = r.cards;
-    const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
-    const answerText = it?.answer && c3
-      ? it.answer
-          .replace("{k1}", kw(c1, false))
-          .replace("{k2}", kw(c2, false))
-          .replace("{k3}", kw(c3, false))
-          .replace("{go3}", rough(c3) ? `gỡ bỏ ${kw(c3, false)}` : `dựa vào ${kw(c3, false)}`)
-          .replace("{res3}", rough(c3) ? `còn vướng ${kw(c3, false)}` : `nghiêng về ${kw(c3, false)}`)
-      : null;
+    const answerText =
+      it?.answer && c3 && !special
+        ? it.answer
+            .replace("{k1}", kw(c1, false))
+            .replace("{k2}", kw(c2, false))
+            .replace("{k3}", kw(c3, false))
+            .replace("{go3}", rough(c3) ? `gỡ bỏ ${kw(c3, false)}` : `dựa vào ${kw(c3, false)}`)
+            .replace("{res3}", rough(c3) ? `còn vướng ${kw(c3, false)}` : `nghiêng về ${kw(c3, false)}`)
+        : null;
     const leanUse = kind !== "timing" && it?.lean ? it.lean[total >= 1 ? 0 : total === 0 ? 1 : 2] : lean;
-    out.push(
-      answerText
-        ? `${vary("answer", ANSWER_LEAD).replace("{q}", askQ)} ${answerText}\n${bank.tip[total >= 1 ? 0 : 1]}`
-        : `${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", leanUse)} ${tail}\n${bank.tip[total >= 1 ? 0 : 1]}`,
-    );
+    verdictLine = answerText
+      ? `${vary("answer", ANSWER_LEAD).replace("{q}", askQ)} ${answerText}`
+      : `${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", leanUse)} ${tail}`;
   }
+  out.push(`**🔮 Tổng quan**\n${[...overview, verdictLine].join(" ")}`);
+
+  // 5) ⚠️ Điều cần lưu ý — lá “yếu” nhất trong trải bài (tránh kiểu phán chắc tương lai)
+  const weakest = r.cards.map((d, i) => ({ d, i, sc: cardScore(d) })).sort((a, b) => a.sc - b.sc)[0];
+  const cautionText =
+    weakest && rough(weakest.d)
+      ? `${vary("caution", [
+          "Đừng để {k} kéo bạn lại — đây là điểm cần giữ nhất trong trải bài (lá {n} ở vị trí “{p}”).",
+          "Lá {n} ở vị trí “{p}” nhắc bạn cẩn thận với {k}. Nhận ra sớm thì xử lý nhẹ nhàng hơn nhiều.",
+        ])
+          .replace("{k}", kw(weakest.d, false))
+          .replace("{n}", tarotCard(weakest.d.id).name.vi)
+          .replace("{p}", posName(weakest.i).replace(/^Nếu chọn “|”$/g, ""))}`
+      : kind === "timing"
+        ? "Đừng quá nóng vội tìm kết quả ngay lập tức — trải bài nhấn mạnh việc chuẩn bị nền tảng trước khi mong thành quả."
+        : "Bài khá thuận, nhưng đừng vì thế mà chủ quan — kết quả tốt vẫn cần bạn giữ nhịp đều đặn.";
+  out.push(`**⚠️ Điều cần lưu ý**\n${cautionText}`);
+
+  // 6) 💡 Lời khuyên — việc cụ thể theo bối cảnh + lời khuyên của lá cuối
+  const lastCard = r.cards[r.cards.length - 1];
+  const adv = ADVICE[tarotCard(lastCard.id).suit][rough(lastCard) ? 1 : 0];
+  out.push(`**💡 Lời khuyên**\n${bank.tip[total >= 1 ? 0 : 1]} ${adv}`);
 
   if (r.topic === "health")
     out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
   if (/(?<![a-z])(nhau|ruou|bia|say)(?![a-z])/.test(fold(q))) out.push("🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
-
   if (it?.invest)
     out.push("💡 Lá bài chỉ để tham khảo tinh thần thôi nha — quyết định bỏ vốn nên dựa trên số liệu thật, tìm hiểu kỹ và hỏi thêm người có kinh nghiệm.");
-  // Lời kết kiểu “thầy bói” theo đúng ý câu hỏi
-  out.push(`**Lời nhắn của Lomi:** ${it ? vary(`outro-${it.id}`, it.outro) : vary(`close-${dom}`, MYSTIC_CLOSE[dom])}`);
+
+  // 7) ✨ Thông điệp — một câu “chữ ký” theo đúng ý câu hỏi
+  out.push(`**✨ Thông điệp**\n“${(it ? vary(`outro-${it.id}`, it.outro) : vary(`close-${dom}`, MYSTIC_CLOSE[dom])).trim()}”`);
 
   // 5) Gợi ý bói tiếp
   const nx = (it?.next ?? SCENE_NEXT[scene]).filter((x) => x.startsWith("Bói tiếp")).map((x) => `“${x.replace("Bói tiếp: ", "")}”`);
@@ -2218,14 +2341,40 @@ export function readingAiPrompt(r: TarotReading, lang: L): string {
 
 // ── Lời Lomi hỏi lại khi người dùng chỉ gõ "bói tarot" ──
 export const TAROT_ASK: T2 = {
-  vi: "Okie, Lomi xáo bài nè 🔮 Bạn muốn hỏi bài điều gì? Cứ gõ tự nhiên như đang tâm sự nha — ví dụ “Khi nào mình có việc mới?”, “Mình có nên nhắn tin cho người ấy không?” hay “Nên đi Đà Lạt hay Nha Trang?”. Còn muốn nhận thông điệp chung cho hôm nay thì gõ “hôm nay” là được 😊",
+  vi: "Okie, Lomi xáo bài nè 🔮 Bạn muốn hỏi bài điều gì? Chọn một chủ đề bên dưới, hoặc gõ tự nhiên như đang tâm sự — ví dụ “Khi nào mình có việc mới?”, “Người ấy nghĩ gì về mình?” hay “Ở lại hay đi?”. Muốn xem sâu hơn thì chọn trải 5 lá hoặc Celtic Cross 10 lá nha 😊",
   en: "Okay, Lomi's shuffling 🔮 What would you like to ask the cards? Just type it naturally — e.g. “When will I get a new job?”, “Should I text them?” or “Da Lat or Nha Trang?”. For a general message for today, just type “today” 😊",
 };
 export const TAROT_SUGGEST: T2[] = [
-  { vi: "Thông điệp hôm nay", en: "Today's message" },
-  { vi: "Tình cảm sắp tới của mình thế nào?", en: "How will my love life go?" },
-  { vi: "Công việc tháng này ra sao?", en: "How will work go this month?" },
+  { vi: "❤️ Tình yêu", en: "How will my love life go?" },
+  { vi: "💼 Công việc", en: "How will work go this month?" },
+  { vi: "💰 Tài chính", en: "Today's message" },
+  { vi: "🌙 Bản thân", en: "" },
+  { vi: "🔮 Tương lai gần", en: "" },
+  { vi: "👤 Một người cụ thể", en: "" },
+  { vi: "🃏 Trải 5 lá", en: "" },
+  { vi: "🌟 Celtic Cross 10 lá", en: "" },
+  { vi: "Thông điệp hôm nay", en: "" },
 ];
+// Chế độ bói (30/09 r11): bấm chủ đề → Lomi bói luôn bằng câu hỏi mẫu; chọn trải 5/10 lá → Lomi hỏi câu hỏi rồi trải.
+export const TAROT_MODE: Record<string, { q?: string; ask?: string; quick?: string[]; spread?: "five" | "celtic" }> = {
+  "❤️ Tình yêu": { q: "Tình cảm của mình thời gian tới thế nào?" },
+  "💼 Công việc": { q: "Sự nghiệp của mình thời gian tới thay đổi thế nào?" },
+  "💰 Tài chính": { q: "Tài chính vài tháng tới thế nào?" },
+  "🌙 Bản thân": { q: "Mình nên tập trung vào điều gì?" },
+  "🔮 Tương lai gần": { q: "Tháng tới có chuyện gì đáng chú ý?" },
+  "👤 Một người cụ thể": {
+    ask: "Bạn muốn hỏi bài điều gì về người đó nè? 👤 Gõ tự nhiên nha, hoặc chọn một câu bên dưới:",
+    quick: ["Người ấy nghĩ gì về mình?", "Người đó có ý định gì?", "Mối quan hệ giữa mình và người đó sẽ thay đổi ra sao?", "Người ấy có tình cảm với mình không?"],
+  },
+  "🃏 Trải 5 lá": {
+    spread: "five",
+    ask: "Okie, trải 5 lá phân tích sâu nha 🃏 (Hiện tại · Nguyên nhân · Điều ẩn giấu · Lời khuyên · Kết quả). Giờ bạn gõ câu hỏi muốn xem nè:",
+  },
+  "🌟 Celtic Cross 10 lá": {
+    spread: "celtic",
+    ask: "Celtic Cross — trải bài chuyên sâu 10 lá 🌟, hợp với chuyện lớn cần nhìn toàn cảnh. Bạn gõ câu hỏi muốn xem nha:",
+  },
+};
 export const TAROT_CANCEL: T2 = {
   vi: "Okie, lúc nào muốn bói thì gọi Lomi nha 😊",
   en: "Okay! Call Lomi whenever you want a reading 😊",
