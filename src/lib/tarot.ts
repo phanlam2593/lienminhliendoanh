@@ -1702,3 +1702,52 @@ export const TAROT_CANCEL: T2 = {
   vi: "Okie, lúc nào muốn bói thì gọi Lomi nha 😊",
   en: "Okay! Call Lomi whenever you want a reading 😊",
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LÁ BÀI HÔM NAY (30/09 r9, theo ý Kir): mỗi người 1 lá CỐ ĐỊNH trong ngày (tính từ id người dùng + ngày),
+// mở Lomi lần đầu trong ngày thì hiện popup kèm lời chúc; hỏi "bói một lá cho hôm nay" cũng ra đúng lá này.
+// ─────────────────────────────────────────────────────────────────────────────
+export function dayKey(d = new Date()): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+function fnv(x: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < x.length; i++) {
+    h ^= x.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h >>> 0;
+}
+export function dailyDraw(uid: string, d = new Date()): TarotDraw {
+  const h = fnv(`${uid}|${dayKey(d)}`);
+  return { id: h % TAROT_DECK_SIZE, rev: (h >>> 11) % 10 < 3 }; // ~30% lá ngược cho ngày mới nhẹ nhàng
+}
+const WISH_GOOD = [
+  "Chúc bạn một ngày thật thuận lợi, gặp toàn người dễ thương và chuyện vui bất ngờ ✨",
+  "Hôm nay là ngày đẹp để bắt đầu một điều nhỏ mà bạn ấp ủ lâu rồi — cứ mạnh dạn nha 🌿",
+  "Chúc bạn làm gì cũng suôn sẻ, về nhà với nụ cười thật tươi 😊",
+  "Năng lượng hôm nay đang đứng về phía bạn — tận hưởng từng khoảnh khắc nhé 🌤️",
+  "Chúc bạn một ngày nhiều may mắn, ăn ngon, ngủ yên và có ai đó làm bạn cười 💚",
+  "Mong hôm nay mọi nỗ lực của bạn đều được đền đáp xứng đáng ✨",
+];
+const WISH_SOFT = [
+  "Hôm nay cứ đi chậm một chút cũng được — chăm sóc bản thân trước đã nha 💚",
+  "Nếu có gì chưa như ý, hít một hơi thật sâu — mọi chuyện rồi sẽ ổn thôi 🌿",
+  "Chúc bạn đủ bình tĩnh để vượt qua mọi thứ, và đủ dịu dàng với chính mình 🤍",
+  "Một ngày chưa hoàn hảo vẫn có thể là một ngày đáng nhớ — Lomi tin bạn làm được ✨",
+  "Hôm nay nhớ uống đủ nước, ăn đủ bữa, và đừng quên mỉm cười nha 😊",
+  "Chúc bạn tìm được một khoảnh khắc bình yên nho nhỏ giữa ngày bận rộn 🌙",
+];
+export function dailyMessage(uid: string, d = new Date()): { draw: TarotDraw; name: string; meaning: string; wish: string } {
+  const draw = dailyDraw(uid, d);
+  const c = tarotCard(draw.id);
+  const soft = draw.rev ? hard(draw) : hard(draw) || cardScore(draw) < 0;
+  const h = fnv(`${dayKey(d)}|${uid}|wish`);
+  const list = soft ? WISH_SOFT : WISH_GOOD;
+  return { draw, name: c.name.vi, meaning: draw.rev ? c.rev.vi : c.up.vi, wish: list[h % list.length] };
+}
+
+/** Chủ đề của câu hỏi (để biết có nên ghép thêm hoàn cảnh Lomi nhớ vào ngữ cảnh bói không). */
+export function questionTopic(q: string): TarotTopic {
+  return detectTopic(fold(q));
+}

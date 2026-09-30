@@ -105,7 +105,7 @@ const RULES: Rule[] = [
         "Lomi là robot nên chỉ “ăn” pin thôi 🔋😆 Bạn đói hả? Mở Khám phá (/kham-pha) → sắp xếp Gần đây xem quanh bạn có quán nào ngon nha 🍜",
         "Đói thì phải ăn liền chứ! 🍲 Vào Khám phá (/kham-pha) chọn Gần đây, biết đâu có quán đang có ưu đãi đó 😉",
       ]),
-      quick: [Q_NEARBY, Q_CLAIM],
+      quick: ["Hôm nay ăn gì? 🎲", "Tìm quán ăn gần mình"],
     }),
   },
   // Thời tiết
@@ -371,7 +371,7 @@ const RULES: Rule[] = [
 const EN_GREET = /^(hi+|hello+|hey+|yo|good (morning|afternoon|evening))( lomi)?$/;
 
 /** Trò chuyện thường ngày — trả về câu đáp, hoặc null nếu không phải chuyện phiếm. */
-export function chitChat(text: string, lang: L): ChatReply | null {
+export function chitChat(text: string, lang: L, name?: string): ChatReply | null {
   const n = normalizeVi(text) || text.trim();
   if (!n) return null;
   if (lang === "en") {
@@ -387,7 +387,12 @@ export function chitChat(text: string, lang: L): ChatReply | null {
   const words = n.split(" ").length;
   for (const r of RULES) {
     if (words > (r.max ?? 12)) continue;
-    if (has(n, r.re) || r.re.test(n)) return r.reply(n);
+    if (has(n, r.re) || r.re.test(n)) {
+      const rep = r.reply(n);
+      // Chào hỏi có tên người dùng (Lomi nhớ tên — lib/lomiMemory) → gọi tên cho thân.
+      if (name && r === RULES[1]) rep.text = `${name} ơi, ${rep.text.charAt(0).toLowerCase()}${rep.text.slice(1)}`;
+      return rep;
+    }
   }
   return null;
 }

@@ -8,7 +8,7 @@ import { TAROT_SPREADS, tarotCard, type TarotReading } from "@/lib/tarot";
 // Hình lá bài (30/09 r3): bộ Rider–Waite–Smith bản gốc 1909 (Pamela Colman Smith, mất 1951 → đã thuộc
 // phạm vi công cộng), lấy từ Wikimedia Commons, thu nhỏ 240px WebP, lưu ở Storage bucket công khai
 // "tarot" (0.webp … 77.webp, cùng id với lib/tarot.ts). Ảnh lỗi/offline → hiện lá vẽ bằng emoji như cũ.
-const cardImg = (id: number) => supabase.storage.from("tarot").getPublicUrl(`${id}.webp`).data.publicUrl;
+export const cardImg = (id: number) => supabase.storage.from("tarot").getPublicUrl(`${id}.webp`).data.publicUrl;
 
 /** Hàng lá bài. animate = lật lần lượt từng lá (chỉ với lượt vừa rút, lịch sử cũ hiện ngửa sẵn). */
 export function TarotCards({

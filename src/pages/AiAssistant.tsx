@@ -16,6 +16,23 @@ import {
   suggestFaqs,
   type Faq,
 } from "@/lib/lomiFaq";
+import { LomiPlaceCards } from "@/components/LomiPlaceCards";
+import { LomiDailyCard, shouldShowDaily } from "@/components/LomiDailyCard";
+import {
+  SIT_REPLY,
+  clearMem,
+  displayName,
+  forgetBiz,
+  isAskMemory,
+  isForgetMemory,
+  learnFromText,
+  loadMem,
+  memorySummary,
+  rememberBiz,
+  situationContext,
+} from "@/lib/lomiMemory";
+import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
+import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
 import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -36,6 +53,8 @@ import {
 import { lomiSound, lomiSoundOn, onLomiSoundChange, setLomiSound } from "@/lib/lomiSound";
 import {
   TAROT_ASK,
+  dailyDraw,
+  questionTopic,
   tarotFollowUps,
   TAROT_CANCEL,
   TAROT_SUGGEST,
@@ -76,6 +95,9 @@ type Msg = {
   bizTopicPick?: boolean; // Lomi vừa hỏi "muốn gợi ý về chuyện gì?"
   quick?: string[]; // gợi ý trả lời nhanh (chip nhỏ dưới tin Lomi cuối)
   aiContent?: string; // nội dung THẬT gửi cho AI (khác chữ hiển thị), vd kèm loại hình DN
+  places?: PlaceCard[]; // thẻ doanh nghiệp thật (Lomi tìm chỗ / "hôm nay ăn gì") — lib/lomiSearch
+  search?: SearchIntent; // lần tìm vừa rồi (để "Đổi món khác" bốc lại chỗ khác)
+  unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
 };
 type Quota = { member: boolean; limit: number; used: number };
 
@@ -250,7 +272,7 @@ export function AiChat({
 }) {
   const nav = useNavigate();
   const { t } = useLanguage();
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [quota, setQuota] = useState<Quota | null>(null);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
@@ -266,6 +288,8 @@ export function AiChat({
   const shownRef = useRef<{ from: string; to: string } | null>(null);
   // Lượt bói rút SAU thời điểm mở khung chat mới có hiệu ứng lật bài (lịch sử cũ hiện ngửa sẵn).
   const openedAt = useRef(Date.now());
+  // Popup "Lá bài hôm nay" — mở Lomi lần đầu trong ngày (components/LomiDailyCard).
+  const [daily, setDaily] = useState(false);
 
   const loadQuota = async () => {
     const { data } = await db.rpc("get_my_ai_quota");
@@ -276,6 +300,7 @@ export function AiChat({
     if (!user) return;
     setMsgs(loadHistory(user.id));
     void loadQuota();
+    setDaily(shouldShowDaily(user.id));
   }, [user?.id]);
 
   // Ô nhập tự cao theo nội dung (tối đa max-h-32) — câu gợi ý điền sẵn dài 2 dòng vẫn đọc được hết.
@@ -342,7 +367,13 @@ export function AiChat({
   const doTarot = (question: string, asked: string, context?: string) => {
     setErr(null);
     // Câu gõ đầy đủ (kể cả phần kể chuyện trước chữ "bói") giúp Lomi hiểu tâm trạng người hỏi.
-    const r = drawForQuestion(question, context ?? (question && asked.length > question.length ? asked : undefined));
+    let ctx = context ?? (question && asked.length > question.length ? asked : undefined);
+    // Câu hỏi chung chung ("bao giờ mọi chuyện ổn hơn") → ghép thêm hoàn cảnh Lomi nhớ (vd đang tìm việc).
+    const sit = situationContext(loadMem(user.id));
+    if (question && sit && questionTopic(question) === "general") ctx = `${ctx ?? asked}. ${sit}`;
+    const r = drawForQuestion(question, ctx);
+    // Thông điệp hôm nay = đúng lá của popup "Lá bài hôm nay" (cố định trong ngày).
+    if (!question) r.cards = [dailyDraw(user.id)];
     push([
       { role: "user", content: asked, local: true },
       // Gợi ý bói tiếp theo đúng bối cảnh (vd tìm việc → "hợp ngành gì", "thu nhập có ổn không").
@@ -365,8 +396,25 @@ export function AiChat({
 
   // ── Tư vấn kinh doanh (30/09 r4) — chạy trên máy như Tarot (lib/bizAdvisor.ts), ai cũng dùng được ──
   // Hỏi loại hình → hỏi chủ đề → trả lời từ thư viện, xoay vòng ý để không lặp; hỏi nối "thêm ý khác".
-  const askBiz = (asked?: string, pending?: BizTopic) =>
-    push([
+  const askBiz = (asked?: string, pending?: BizTopic, force = false) => {
+    // Lomi nhớ loại hình người dùng đã nói lần trước → vào thẳng gợi ý, không hỏi lại.
+    const mb = force ? undefined : loadMem(user.id).biz;
+    if (mb?.type) {
+      const ctx: BizCtx = { type: mb.type, noun: mb.noun };
+      const tp = pending ?? "offer";
+      return push([
+        ...(asked ? [{ role: "user" as const, content: asked, local: true }] : []),
+        {
+          role: "assistant",
+          content: `Lomi nhớ bạn đang kinh doanh ${nounFor(ctx.type, ctx.noun)} nè 😊 (khác thì bấm “Đổi loại hình” nha)\n\n${bizAnswer(ctx, tp, false)}`,
+          local: true,
+          biz: { ...ctx, topic: tp },
+          quick: [...followUpChips(tp), "Đổi loại hình"],
+          ask: bizAiPrompt(ctx, tp),
+        },
+      ]);
+    }
+    return push([
       ...(asked ? [{ role: "user" as const, content: asked, local: true }] : []),
       {
         role: "assistant",
@@ -379,8 +427,10 @@ export function AiChat({
         quick: BUSINESS_TYPES.map(bizLabel),
       },
     ]);
-  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic, more = false) =>
-    localReply(asked, {
+  };
+  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic, more = false) => {
+    rememberBiz(user.id, ctx);
+    return localReply(asked, {
       role: "assistant",
       content: bizAnswer(ctx, topic, more),
       local: true,
@@ -388,6 +438,7 @@ export function AiChat({
       quick: followUpChips(topic),
       ask: bizAiPrompt(ctx, topic),
     });
+  };
 
   const send = async (text: string, forceAi = false) => {
     const raw = text.trim();
@@ -398,11 +449,33 @@ export function AiChat({
     setInput("");
     const last = msgs[msgs.length - 1];
     const lastA = last?.role === "assistant" ? last : undefined;
+    let memLearn: ReturnType<typeof learnFromText> | null = null;
 
     if (!forceAi) {
       // 0) Người dùng nói muốn làm hại bản thân → ưu tiên hỗ trợ trước mọi luồng khác.
       const cr = crisisReply(q, lang);
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true });
+      // 0a) Trí nhớ: người dùng kể tên / hoàn cảnh → Lomi ghi nhớ; hỏi "Lomi nhớ gì về mình?", "quên hết đi".
+      if (isForgetMemory(q)) {
+        clearMem(user.id);
+        return localReply(q, { role: "assistant", content: "Okie, Lomi quên hết rồi nha 🙈 Mình làm quen lại từ đầu nè!", local: true });
+      }
+      if (isAskMemory(q)) {
+        const mm = loadMem(user.id);
+        return localReply(q, { role: "assistant", content: memorySummary(mm, mm.biz ? nounFor(mm.biz.type, mm.biz.noun) : undefined), local: true });
+      }
+      memLearn = learnFromText(user.id, q);
+      if (memLearn.newName && q.split(/\s+/).length <= 10)
+        return localReply(q, {
+          role: "assistant",
+          content: `Rất vui được làm quen với ${memLearn.newName} 😊 Lomi nhớ rồi nha! Hôm nay ${memLearn.newName} cần Lomi giúp gì nè?`,
+          local: true,
+          quick: ["Bói một lá cho hôm nay", "Hôm nay ăn gì? 🎲"],
+        });
+      if (normalizeVi(q) === "doi loai hinh") {
+        forgetBiz(user.id);
+        return askBiz(q, lastA?.biz?.topic, true);
+      }
       // a) Lomi vừa hỏi loại hình → nhận loại hình (chip hoặc gõ tự do), rồi hỏi chủ đề
       //    (hoặc trả lời luôn nếu đã có chủ đề đang chờ / trong câu có sẵn chủ đề).
       if (lastA?.bizPick && !detectTarot(q)) {
@@ -470,8 +543,26 @@ export function AiChat({
     //    Riêng câu hỏi chuyện kinh doanh (vd "làm sao giữ khách quen cho spa") thì ưu tiên tư vấn kinh
     //    doanh (1b), trừ khi FAQ khớp đúng câu hỏi về CÁCH DÙNG app (nhận/đăng ưu đãi, tạo doanh nghiệp…).
     // 0b) Chào hỏi, cảm ơn, tạm biệt… → đáp lại tự nhiên.
+    // 0c) Tìm chỗ / ưu đãi THẬT trong app, "hôm nay ăn gì?" (đổi món → bốc chỗ khác, không trùng chỗ cũ).
+    if (!forceAi && !en) {
+      const it = detectSearch(q);
+      if (it) {
+        const prevIds = lastA?.search?.mode === it.mode ? (lastA.places ?? []).map((p) => p.id) : [];
+        const intent = it.mode !== "find" && lastA?.search && lastA.search.mode !== "find" && /doi|khac|lai/.test(normalizeVi(q)) ? lastA.search : it;
+        setBusy(true);
+        const shown = shownRef.current;
+        let res;
+        try {
+          res = await runSearch(intent, prevIds);
+        } finally {
+          setBusy(false);
+        }
+        shownRef.current = shown;
+        return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, quick: res.quick });
+      }
+    }
     if (!forceAi) {
-      const cc = chitChat(q, lang);
+      const cc = chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name));
       if (cc)
         return localReply(q, {
           role: "assistant",
@@ -479,13 +570,23 @@ export function AiChat({
           local: true,
           quick: cc.quick,
         });
+      // Người dùng vừa kể hoàn cảnh ("mình đang thất nghiệp") → Lomi đáp lại và nhớ.
+      const ns = memLearn?.newSits[0];
+      if (ns && !en && q.split(/\s+/).length <= 14 && !matchFaq(q)) {
+        const sr = SIT_REPLY[ns];
+        return localReply(q, { role: "assistant", content: sr.text, local: true, quick: sr.quick });
+      }
     }
     const faq = forceAi ? null : matchFaq(q);
     const bizQ = !forceAi && looksLikeBizQuestion(q);
     // Câu hỏi xin LỜI KHUYÊN kinh doanh (giữ khách, hút khách lúc vắng, giá, khai trương, dịp lễ, bài đăng)
     // thì để tư vấn kinh doanh trả lời — trừ FAQ về cách dùng app rõ ràng (APP_HOWTO_FAQ).
     const advisory = bizQ && ["loyal", "slow", "newcust", "price", "opening", "holiday", "post", "offer"].includes(detectBizTopic(q) ?? "");
-    if (faq && (!advisory || APP_HOWTO_FAQ.has(faq.id))) return answerFaq(faq, q);
+    if (faq && (!advisory || APP_HOWTO_FAQ.has(faq.id))) {
+      // Lomi vừa bí câu trước, giờ người dùng chọn gợi ý / hỏi lại trúng → ghi nhớ để lần sau trả lời luôn.
+      if (lastA?.unk && learnKey(lastA.unk) !== learnKey(q)) learnAnswer(lastA.unk, faq.id);
+      return answerFaq(faq, q);
+    }
     // 1b) Hỏi chuyện kinh doanh (vd "làm sao hút khách cho quán cà phê buổi sáng") → tư vấn tại chỗ.
     if (bizQ) {
       const kind = detectBizKind(q);
@@ -495,13 +596,18 @@ export function AiChat({
     }
     // 1c) Chưa chắc hiểu câu hỏi → gợi ý vài câu gần nhất (không gọi AI, không trả lời bừa).
     if (!AI_ENABLED && !forceAi) {
+      // Câu này Lomi đã từng "học" (người dùng trước đã chỉ ra đúng câu hỏi) → trả lời luôn.
+      const learned = await lookupLearned(q);
+      const lf = learned ? faqById(learned) : undefined;
+      if (lf) return answerFaq(lf, q);
+      logUnanswered(q);
       // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
       // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
       //  Câu hỏi chuyện đời (không dính tới app) thì không đưa FAQ lạc đề — Lomi mời bói đúng câu đó.
       const sug = (looksLikeQuestion(q) && isAppish(q)) || q.split(/\s+/).length <= 3 ? suggestFaqs(q, 3) : [];
       if (!sug.length && !en) {
         const fb = friendlyFallback(q);
-        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick });
+        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
@@ -522,6 +628,7 @@ export function AiChat({
             : "Câu này nằm ngoài những gì Lomi biết rồi 😅 Lomi rành nhất về cách dùng Liên Minh Liên Doanh, tư vấn kinh doanh và bói Tarot. Bạn thử hỏi kiểu “làm sao nhận ưu đãi”, xem Hướng dẫn (/huong-dan), hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.",
         local: true,
         quick: chips,
+        unk: q,
       });
     }
     // 2) Không phải Membership / hết lượt → báo ngay, không gọi server.
@@ -652,6 +759,16 @@ export function AiChat({
             <div className="space-y-1.5 px-1">
               <div className="text-xs font-semibold text-muted-foreground">{en ? "Quick questions" : "Hỏi nhanh"}</div>
               <div className="flex flex-wrap gap-1.5">
+                {!en &&
+                  ["Hôm nay ăn gì? 🎲", "Quán cà phê nào đang có ưu đãi?"].map((label) => (
+                    <button
+                      key={label}
+                      onClick={() => void send(label)}
+                      className="text-[12px] px-2.5 py-1 rounded-full border border-primary/40 text-primary bg-background active:scale-95 transition"
+                    >
+                      {label}
+                    </button>
+                  ))}
                 {POPULAR_FAQ_IDS.map((id) => {
                   const f = faqById(id)!;
                   const label = en ? f.q.en : f.q.vi;
@@ -689,6 +806,7 @@ export function AiChat({
                   m.content
                 )}
               </div>
+              {m.places && <LomiPlaceCards places={m.places} />}
               {m.quick && i === msgs.length - 1 && !busy && <QuickReplies items={m.quick} onPick={(v) => void send(v)} />}
               {m.role === "assistant" && m.local && (
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 ml-1 text-[11px] text-muted-foreground">
@@ -718,6 +836,17 @@ export function AiChat({
               )}
             </div>
           ))
+        )}
+        {daily && !en && (
+          <LomiDailyCard
+            uid={user.id}
+            name={displayName(loadMem(user.id), profile?.full_name)}
+            onClose={() => setDaily(false)}
+            onDetail={() => {
+              setDaily(false);
+              void send("Bói một lá cho hôm nay");
+            }}
+          />
         )}
         {busy && (
           <div className="flex justify-start">
