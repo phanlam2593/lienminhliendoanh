@@ -16,7 +16,7 @@ import {
   suggestFaqs,
   type Faq,
 } from "@/lib/lomiFaq";
-import { Q_DAILY, chitChat, crisisReply, friendlyFallback, looksLikeQuestion } from "@/lib/lomiChat";
+import { chitChat, crisisReply, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -107,24 +107,64 @@ function saveHistory(uid: string, msgs: Msg[]) {
   }
 }
 
-// Hiển thị câu trả lời: bỏ dấu ** của markdown, biến "/duong-dan" nội bộ thành link bấm được.
-const ROUTE_RE = /(\/(?:kham-pha|uu-dai|quet|dua-don|cong-dong|tin-nhan|ho-so|thong-bao|huong-dan|bao-cao-cua-toi)(?:[/?][\w\-=&/]*)?)/g;
+// Hiển thị câu trả lời: chữ **đậm** giữ in đậm; đường dẫn nội bộ không hiện "/kham-pha" thô nữa mà thành
+// tên mục in đậm bấm được — "Vào Khám phá (/kham-pha)" → "Vào **Khám phá**" (bấm để mở).
+const ROUTES = "kham-pha|uu-dai|quet|dua-don|cong-dong|tin-nhan|ho-so|thong-bao|huong-dan|bao-cao-cua-toi";
+const RICH_RE = new RegExp(`( ?\\((\\/(?:${ROUTES})(?:[/?][\\w\\-=&/]*)?)\\))|(\\/(?:${ROUTES})(?:[/?][\\w\\-=&/]*)?)|\\*\\*(.+?)\\*\\*`, "g");
+// Tên các mục (dài trước ngắn) — [tiếng Việt, tiếng Anh].
+const ROUTE_LABEL: Record<string, [string[], string[]]> = {
+  "/kham-pha": [["Khám phá"], ["Explore"]],
+  "/uu-dai": [["Ưu đãi"], ["Offers"]],
+  "/quet": [["Quẹt"], ["Swipe"]],
+  "/dua-don": [["Đưa đón & Giao hàng", "Đưa đón"], ["Rides & Delivery", "Rides"]],
+  "/cong-dong": [["Cộng đồng"], ["Community"]],
+  "/tin-nhan": [["Tin nhắn"], ["Messages"]],
+  "/ho-so": [["Hồ sơ"], ["Profile"]],
+  "/thong-bao": [["Thông báo"], ["Notifications"]],
+  "/huong-dan": [["Hướng dẫn"], ["Guide"]],
+  "/bao-cao-cua-toi": [["Báo cáo của tôi"], ["My reports"]],
+};
+const LINK_CLS = "font-bold text-primary underline-offset-2 hover:underline";
 function RichText({ text }: { text: string }) {
-  const clean = text.replace(/\*\*(.+?)\*\*/g, "$1").replace(/^#{1,4}\s+/gm, "");
-  const parts = clean.split(ROUTE_RE);
-  return (
-    <>
-      {parts.map((p, i) =>
-        i % 2 === 1 ? (
-          <Link key={i} to={p} className="underline font-semibold">
-            {p}
-          </Link>
-        ) : (
-          <span key={i}>{p}</span>
-        ),
-      )}
-    </>
-  );
+  const { lang } = useLanguage();
+  const src = text.replace(/^#{1,4}\s+/gm, "");
+  const out: React.ReactNode[] = [];
+  let buf = "";
+  let last = 0;
+  const flush = () => {
+    if (buf) out.push(<span key={out.length}>{buf}</span>);
+    buf = "";
+  };
+  for (const m of src.matchAll(RICH_RE)) {
+    buf += src.slice(last, m.index);
+    last = (m.index ?? 0) + m[0].length;
+    if (m[4] !== undefined) {
+      flush();
+      out.push(<strong key={out.length}>{m[4]}</strong>);
+      continue;
+    }
+    const path = m[2] ?? m[3];
+    const base = "/" + path.split(/[/?]/)[1];
+    const [vi, enL] = ROUTE_LABEL[base] ?? [[], []];
+    const all = [...vi, ...enL];
+    const hit = m[2] ? all.find((l) => buf.toLowerCase().endsWith(l.toLowerCase())) : undefined;
+    const name = (lang === "en" ? enL[0] : vi[0]) ?? path;
+    if (hit) {
+      // Tên mục đã có ngay trước "(/…)" → biến chính tên đó thành link, bỏ phần đường dẫn.
+      const shown = buf.slice(buf.length - hit.length);
+      buf = buf.slice(0, buf.length - hit.length);
+      flush();
+      out.push(<Link key={out.length} to={path} className={LINK_CLS}>{shown}</Link>);
+    } else {
+      if (m[2]) buf += " (";
+      flush();
+      out.push(<Link key={out.length} to={path} className={LINK_CLS}>{name}</Link>);
+      if (m[2]) buf += ")";
+    }
+  }
+  buf += src.slice(last);
+  flush();
+  return <>{out}</>;
 }
 
 /** Mở Lomi (bảng nổi) từ bất kỳ đâu — vd mục "Hỏi Lomi · Hướng dẫn" trong menu. Không có bong bóng
@@ -447,14 +487,12 @@ export function AiChat({
     if (!AI_ENABLED && !forceAi) {
       // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
       // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
-      const sug = looksLikeQuestion(q) || q.split(/\s+/).length <= 3 ? suggestFaqs(q, 3) : [];
-      if (!sug.length && !en)
-        return localReply(q, {
-          role: "assistant",
-          content: friendlyFallback(q),
-          local: true,
-          quick: [Q_DAILY, ...POPULAR_FAQ_IDS.slice(0, 2).map((id) => faqById(id)!.q.vi)],
-        });
+      //  Câu hỏi chuyện đời (không dính tới app) thì không đưa FAQ lạc đề — Lomi mời bói đúng câu đó.
+      const sug = (looksLikeQuestion(q) && isAppish(q)) || q.split(/\s+/).length <= 3 ? suggestFaqs(q, 3) : [];
+      if (!sug.length && !en) {
+        const fb = friendlyFallback(q);
+        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick });
+      }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
         lang === "en" ? f.q.en : f.q.vi,

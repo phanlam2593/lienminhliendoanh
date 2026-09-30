@@ -110,6 +110,16 @@ const RULES: Rule[] = [
   },
   // Thời tiết
   {
+    // Hỏi dự báo thời tiết — Lomi không có dữ liệu thời tiết, nói thật và nhắc nhẹ.
+    re: /\b(thoi tiet (the nao|ra sao|hom nay|ngay mai)|troi co mua khong|co mua khong|mai co mua|du bao thoi tiet|may do)\b/,
+    reply: () => ({
+      text: pick([
+        "Lomi chưa xem được dự báo thời tiết nè 😅 Bạn mở app thời tiết trên điện thoại cho chắc nha. Đà Lạt thì trời đổi nhanh lắm, ra đường cứ mang theo áo khoác với áo mưa là yên tâm 🌦️",
+        "Cái này Lomi chịu thua, Lomi không có dự báo thời tiết 🥲 Xem app thời tiết giúp Lomi nha — mà mang sẵn áo mưa mỏng trong cốp xe là chắc ăn nhất đó!",
+      ]),
+    }),
+  },
+  {
     // Chỉ cụm chắc chắn là "mưa" (bỏ dấu thì "mưa" trùng "mua" — mua bán).
     re: /\b(troi mua|mua buon|mua hoai|mua to|mua lanh|dang mua|bua nay mua|hom nay mua|nay mua buon|mua mai|mua rao|mua phun|mua giong|mua bao|mua dam|mua tam ta)\b/,
     reply: () => ({
@@ -329,6 +339,17 @@ const RULES: Rule[] = [
     re: /^(tam biet|bye|bai bai|bb|goodbye|see you|hen gap lai|di day|out day)\b/,
     reply: () => ({ text: pick(["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Bye bye, chúc bạn một ngày thật vui 💚", "Hẹn gặp lại bạn nha 🌿"]) }),
   },
+  // Nhậu / cà phê / đi chơi — rủ rê cho vui
+  {
+    re: /\b(di nhau|nhau thoi|nhau khong|lam vai lon|lam vai chai|lam ly|uong bia|uong ruou|tang 2|di bar|di pub)\b/,
+    reply: () => ({
+      text: pick([
+        "Nghe là thấy vui rồi 🍻 Đi thì nhớ uống vừa phải, đã uống thì đừng lái xe nha! Muốn tìm quán gần đây có ưu đãi thì vào Khám phá (/kham-pha) → Gần đây.",
+        "Lomi không uống được nhưng cổ vũ nhiệt tình nè 🍻 Nhớ gọi xe hoặc nhờ người đưa về nếu đã uống nha. Quán ngon gần bạn thì xem ở Khám phá (/kham-pha) nè!",
+      ]),
+      quick: ["Bói xem hôm nay có nên đi nhậu không", Q_NEARBY],
+    }),
+  },
   // Ok / ừ
   {
     re: /^(ok|oke|okie|okay|uh|u|um|uhm|vang|da|duoc roi|hieu roi|roi|a|a ha)$/,
@@ -373,16 +394,54 @@ export function looksLikeQuestion(text: string): boolean {
   return text.includes("?") || /\b(la gi|the nao|o dau|bao nhieu|khi nao|co khong|duoc khong|lam sao|nhu nao|cach nao|sao khong|sao lai|tai sao|giup minh|huong dan)\b/.test(n);
 }
 
-/** Câu ngoài lề mà Lomi không biết — đáp thân thiện thay vì "ngoài khả năng". */
-export function friendlyFallback(text: string): string {
+// Từ khoá cho biết câu hỏi đang nói về APP (để gợi ý câu hỏi thường gặp), khác với chuyện đời thường.
+const APPISH =
+  /\b(app|ung dung|uu dai|ma uu dai|nhan ma|pin|tai khoan|mat khau|dang nhap|dang ky|dang bai|dang tin|doanh nghiep|cua hang|thanh vien|membership|diem|quet|dua don|giao hang|tin nhan|cong dong|ho so|thong bao|bao cao|chan|theo doi|ket ban|huong dan|admin|lomi)\b/;
+export function isAppish(text: string): boolean {
+  return APPISH.test(` ${normalizeVi(text)} `);
+}
+
+/** Chip bói cho đúng câu người dùng vừa hỏi (chip có chữ "Bói" nên khung chat tự hiểu là muốn bói). */
+function tarotChipFor(text: string): string {
+  const q = text.trim().replace(/\s+/g, " ");
+  return `Bói xem ${q.length > 60 ? q.slice(0, 58).trim() + "…" : q}`;
+}
+
+/** Câu ngoài lề mà Lomi không biết — đáp thân thiện, đúng trọng tâm thay vì "ngoài khả năng". */
+export function friendlyFallback(text: string): ChatReply {
+  const n = ` ${normalizeVi(text)} `;
+  if (looksLikeQuestion(text) && !isAppish(text)) {
+    // Câu hỏi chuyện đời ("hôm nay có nên đi nhậu không?") → Lomi không phán bừa, mời bói đúng câu đó.
+    const should = /\b(co nen|nen|duoc khong|co duoc)\b/.test(n);
+    return {
+      text: pick(
+        should
+          ? [
+              "Câu này thì tuỳ bạn cân nhắc thôi nè 😄 Nhưng nếu còn phân vân, để Lomi rút bài xem thử nha — bấm bên dưới là có ngay!",
+              "Hmm, nên hay không thì Lomi không dám quyết thay bạn 😅 Hay mình hỏi thử lá bài xem sao? Bấm bên dưới nha 🔮",
+            ]
+          : [
+              "Câu này Lomi không dám trả lời chắc đâu 😅 Nhưng nếu muốn, Lomi rút bài xem thử cho bạn nha — bấm bên dưới!",
+              "Chuyện này thì Lomi chưa biết chắc 🤔 Muốn Lomi bói thử đúng câu này cho vui không? Bấm bên dưới nha 🔮",
+            ],
+      ),
+      quick: [tarotChipFor(text), Q_DAILY],
+    };
+  }
   if (looksLikeQuestion(text))
-    return pick([
-      "Câu này Lomi chưa có câu trả lời chắc chắn nè 🤔 Nếu là chuyện về app thì bạn thử hỏi cách khác một chút, hoặc nhắn admin ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ để được giúp tận tình hơn nha.",
-      "Hmm, cái này Lomi chưa rành lắm 😅 Lomi giỏi nhất là chỉ cách dùng app, tư vấn kinh doanh và bói Tarot vui. Bạn muốn thử cái nào không?",
-    ]);
-  return pick([
-    "Lomi nghe nè 😊 Kể thêm cho Lomi nghe với! Còn nếu cần giúp gì về app, chuyện kinh doanh hay muốn bói một lá cho vui thì cứ nói nha.",
-    "Hihi, Lomi đang lắng nghe bạn đây 🌱 Có chuyện gì Lomi giúp được thì cứ nói nha!",
-    "Lomi hiểu rồi nè 😊 Bạn có muốn Lomi rút một lá bài xem thông điệp hôm nay cho vui không?",
-  ]);
+    return {
+      text: pick([
+        "Câu này Lomi chưa có câu trả lời chắc chắn nè 🤔 Bạn thử hỏi cách khác một chút, hoặc nhắn admin ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ để được giúp tận tình hơn nha.",
+        "Hmm, cái này Lomi chưa rành lắm 😅 Bạn xem thử mấy câu bên dưới, hoặc hỏi lại theo cách khác nha.",
+      ]),
+      quick: [Q_CLAIM, Q_NEARBY],
+    };
+  return {
+    text: pick([
+      "Lomi nghe nè 😊 Kể thêm cho Lomi nghe với! Còn nếu cần giúp gì về app, chuyện kinh doanh hay muốn bói một lá cho vui thì cứ nói nha.",
+      "Hihi, Lomi đang lắng nghe bạn đây 🌱 Có chuyện gì Lomi giúp được thì cứ nói nha!",
+      "Lomi hiểu rồi nè 😊 Bạn có muốn Lomi rút một lá bài xem thông điệp hôm nay cho vui không?",
+    ]),
+    quick: [Q_DAILY, Q_CLAIM],
+  };
 }

@@ -355,6 +355,8 @@ function clean(orig: string): string {
   return s.trim().replace(/^["“”']+|["“”']+$/g, "").trim();
 }
 
+const FILLER_RE =
+  /^((cho|giup|dum|gium|ho|minh|em|anh|toi|tui|ban|may|vai|\d+|mot|hai|ba|nam|la|bai|tarot|di|nha|nhe|voi|thu|coi|xem|cai|nao|ne|luon|lien|nhanh|phat|chut|xiu|coi thu|boi|rut)[\s,.!?…]*)*$/;
 const nWords = (x: string) => x.split(/\s+/).filter(Boolean).length;
 const DAILY_RE = /(?<![a-z])(hom nay|thong diep|1 la|mot la|today)(?![a-z])/;
 
@@ -363,8 +365,10 @@ export function detectTarot(text: string): { question: string; daily: boolean } 
   const f = fold(text);
   const m = findTrigger(text, f);
   if (!m) return null;
-  const after = clean(text.slice(m.end));
+  let after = clean(text.slice(m.end));
   const before = clean(text.slice(0, m.start));
+  // Phần sau chữ "bói" chỉ là chữ đệm ("… bói cho mấy lá đi", "bói giùm 3 lá") → câu hỏi nằm ở phía trước.
+  if (FILLER_RE.test(fold(after).trim())) after = "";
   let q = nWords(after) >= 2 ? after : nWords(before) >= 2 ? before : after || before;
   const fq = fold(q).trim();
   const dailyOnly = !fq || /^(cho )?(hom nay|thong diep( hom nay)?|ngay hom nay|today)\s*\??$/.test(fq);
@@ -521,6 +525,23 @@ function timingPhrase(d: TarotDraw, en: boolean): string {
   return en ? `The “${nm}” card suggests ${body}` : `Lá ${nm} cho thấy ${body}`;
 }
 
+/** Trả lời thẳng câu "có nên…/có… không" — gắn với chủ đề ({S}) để nghe như đang nói chuyện thật. */
+function yesnoAnswer(cards: TarotDraw[], S: string, should: boolean): string {
+  const total = cards.reduce((acc, d, i) => acc + cardScore(d) * (i === cards.length - 1 ? 2 : 1), 0);
+  if (should) {
+    if (total >= 3) return `NÊN nha! Bài khá ủng hộ ${S} đó 😄`;
+    if (total >= 1) return `Nghiêng về NÊN — ${S} ổn đó, miễn là bạn giữ chừng mực.`;
+    if (total === 0) return `Lưng chừng — ${S} làm cũng được mà không cũng chẳng sao, tuỳ tâm trạng bạn nha.`;
+    if (total >= -2) return `Chưa nên lắm — bài hơi ngại ${S} lúc này, cân nhắc thêm chút nha.`;
+    return `Lá bài bảo thôi, lần này bỏ qua ${S} đi nha 😅`;
+  }
+  if (total >= 3) return `Có vẻ là CÓ nha! Năng lượng quanh ${S} khá thuận đó.`;
+  if (total >= 1) return `Nghiêng về CÓ — nhưng ${S} cần bạn chủ động thêm chút nữa.`;
+  if (total === 0) return `Chưa rõ ràng lắm — ${S} còn tuỳ vào những gì bạn làm từ giờ.`;
+  if (total >= -2) return `Hiện tại ${S} hơi khó, có thể chưa phải lúc — đừng nản nha.`;
+  return `Lá bài nói là chưa đâu 😅 ${capFirst(S)} có lẽ nên đổi cách, hoặc chờ thời điểm khác.`;
+}
+
 function yesnoPhrase(cards: TarotDraw[], en: boolean): string {
   const total = cards.reduce((acc, d, i) => acc + cardScore(d) * (i === cards.length - 1 ? 2 : 1), 0);
   if (total >= 3) return en ? "Looks like a YES! The cards feel quite favorable." : "Có vẻ là CÓ nha! Năng lượng các lá khá thuận đó.";
@@ -656,6 +677,10 @@ const Q_PHRASES = [
   "khi nao", "bao gio", "bao lau", "luc nao", "the nao", "ra sao", "nhu the nao", "nhu nao", "co nen", "tai sao", "vi sao",
   "lieu rang", "lieu", "co phai", "duoc khong", "hay khong", "co duoc khong", "sap toi", "bao nhieu",
 ];
+const TIME_PHRASES = [
+  "hom nay", "toi nay", "sang nay", "chieu nay", "dem nay", "ngay mai", "tuan nay", "tuan sau", "tuan toi", "thang nay",
+  "thang sau", "thang toi", "nam nay", "nam sau", "sap toi", "co nen", "nen",
+];
 const LEAD_W = new Set(["a", "e", "anh", "em", "minh", "toi", "tui", "t", "co", "thi", "nen", "se", "duoc", "ban", "hay", "la", "ve", "cua"]);
 const TRAIL_W = new Set(["khong", "ko", "k", "chua", "nhi", "nha", "vay", "the", "a", "sao", "nao", "nhe", "di", "ha", "ta", "day", "ne"]);
 const TOPIC_NOUN: Record<TarotTopic, string> = {
@@ -680,6 +705,18 @@ function subjectOf(q: string, topic: TarotTopic): string {
       }
     }
   }
+  // Bỏ mốc thời gian ("hôm nay", "tháng này"…) và chữ "nên" để chủ đề gọn: "hôm nay mình nên đi nhậu" → "chuyện đi nhậu".
+  for (const ph of TIME_PHRASES) {
+    const parts = ph.split(" ");
+    let fw2 = f();
+    for (let i = 0; i + parts.length <= fw2.length; i++) {
+      if (parts.every((p, k) => fw2[i + k] === p) && w.length > parts.length) {
+        w.splice(i, parts.length);
+        fw2 = f();
+        i--;
+      }
+    }
+  }
   let fw = f();
   while (w.length && LEAD_W.has(fw[0])) (w.shift(), (fw = f()));
   while (w.length && TRAIL_W.has(fw[fw.length - 1])) (w.pop(), (fw = f()));
@@ -688,7 +725,9 @@ function subjectOf(q: string, topic: TarotTopic): string {
   const core = w.join(" ");
   return fold(core).startsWith("chuyen") ? core : `chuyện ${core}`;
 }
-const capFirst = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+function capFirst(s: string) {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
 
 type Role = "now" | "todo" | "timing" | "obstacle" | "outcome" | "situation" | "challenge" | "advice" | "message" | "option" | "clarify";
 const ROLES: Record<Exclude<TarotKind, "choice">, Role[]> = {
@@ -745,6 +784,8 @@ export function readingText(r: TarotReading, lang: L): string {
     out.push(`${pick(en ? enI : vi)}\n${en ? "Your question" : "Câu hỏi của bạn"}: “${q}”`);
   }
 
+  // Trả lời thẳng câu hỏi NGAY SAU phần mở đầu (người hỏi muốn biết kết quả trước, chi tiết từng lá sau).
+  const ansAt = out.length;
   // Từng lá
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
@@ -753,7 +794,9 @@ export function readingText(r: TarotReading, lang: L): string {
     const label = pos[i] ? (en ? pos[i].en : pos[i].vi) : "";
     const head = r.cards.length > 1 ? `${nums[i]} ${kind === "choice" ? (en ? "Option" : "Lựa chọn") + ` “${label}”` : label} — ${name}${orient}` : `${name}${orient}`;
     const meaning = en ? (d.rev ? c.rev.en : c.up.en) : d.rev ? c.rev.vi : c.up.vi;
-    out.push(`${head}\n${frame(roles[i] ?? "situation", d, S, en, label)} ${meaning}`);
+    // Câu dẫn đã nói ý chính của lá → chỉ giữ phần lời nhắn phía sau của nghĩa lá, tránh lặp ý.
+    const rest = meaning.split(/(?<=[.!?])\s+/).slice(1).join(" ");
+    out.push(`${head}\n${frame(roles[i] ?? "situation", d, S, en, label)}${rest ? ` ${rest}` : ""}`);
   });
 
   // Trả lời thẳng câu hỏi + tóm lại
@@ -774,16 +817,19 @@ export function readingText(r: TarotReading, lang: L): string {
         : `🔎 Lá này ${sc > 0 ? `kéo ${S} nghiêng về phía tích cực hơn` : sc < 0 ? "nhắc bạn cẩn thận và kiên nhẫn thêm chút" : "cho thấy mọi chuyện còn để ngỏ — bước tiếp theo của bạn sẽ quyết định"}.`,
     );
   } else if (kind === "timing" && c3) {
-    out.push(`⏳ ${en ? "Timing" : "Về thời điểm"}: ${timingPhrase(c3, en)}`);
+    out.splice(ansAt, 0, `⏳ ${en ? "Timing" : "Trả lời nhanh"}: ${timingPhrase(c3, en)}`);
     out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; to move it forward, ${goPart(c2)}.` : `${capFirst(S)} ${nowPart(c1)}. Muốn mọi thứ thuận lợi thì hãy ${goPart(c2)} nha.`}${topicLine()}`);
   } else if (kind === "yesno" && c3) {
-    out.push(`🔎 ${en ? "The cards' answer" : "Lá bài trả lời"}: ${yesnoPhrase(r.cards, en)}`);
-    out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; the key thing to watch is ${kw(c2, en)}.` : `${capFirst(S)} ${nowPart(c1)}, điều cần để ý nhất là ${kw(c2, en)}.`}${topicLine()}`);
+    const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
+    out.splice(ansAt, 0, `🔎 ${en ? "The cards' answer" : "Trả lời nhanh"}: ${en ? yesnoPhrase(r.cards, en) : yesnoAnswer(r.cards, S, should)}`);
+    out.push(`🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; the key thing to watch is ${kw(c2, en)}.` : `${capFirst(S)} ${nowPart(c1)}, điều cần để ý nhất là ${kw(c2, en)}, và kết quả ${hard(c3) ? "có thể còn vướng" : "nghiêng về"} ${kw(c3, en)}.`}${topicLine()}`);
   } else if (kind === "choice" && r.pos && c2) {
     const [a, b] = [cardScore(c1), cardScore(c2)];
     const [na, nb] = r.pos.map((p) => (en ? p.en : p.vi));
     const win = a >= b ? c1 : c2;
-    out.push(
+    out.splice(
+      ansAt,
+      0,
       `⚖️ ${
         a === b
           ? en
@@ -807,6 +853,8 @@ export function readingText(r: TarotReading, lang: L): string {
 
   if (/(?<![a-z])(suc khoe|benh|mang thai|co bau|health|sick|pregnan)/.test(fold(q)))
     out.push(en ? "💚 For anything health-related, please check with a doctor too." : "💚 Chuyện sức khoẻ thì nhớ hỏi thêm bác sĩ nữa nha.");
+  if (/(?<![a-z])(nhau|ruou|bia|say|drink|beer)(?![a-z])/.test(fold(q)))
+    out.push(en ? "🍻 Whatever the cards say: drink in moderation, and never drive after drinking!" : "🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
 
   // Lời khuyên hành động (bỏ qua với kiểu hỏi chung — lá thứ 3 đã là lời khuyên)
   if (kind !== "open" || clar || !q) {
