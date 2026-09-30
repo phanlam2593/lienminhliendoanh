@@ -11,6 +11,8 @@ import {
   POPULAR_FAQ_IDS,
   faqById,
   matchFaq,
+  matchFaqFollowUp,
+  answerFromPrev,
   normalizeVi,
   relatedFaqs,
   suggestFaqs,
@@ -37,8 +39,9 @@ import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/li
 import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
-import { analyzeBody, analyzeMind, onlySoftSymptoms } from "@/lib/lomiSymptoms";
-import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
+import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
+import { healthFact } from "@/lib/lomiHealthFacts";
+import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -111,6 +114,7 @@ type Msg = {
   sx?: string[]; // triệu chứng cơ thể đã kể (cộng dồn qua các tin) — lib/lomiSymptoms
   mood?: string[]; // cảm giác đã kể (cộng dồn) — lib/lomiSymptoms
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
+  faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này — câu hỏi nối ("còn … thì sao") hiểu theo ngữ cảnh đó
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
 };
 type Quota = { member: boolean; limit: number; used: number };
@@ -123,6 +127,16 @@ const AI_ENABLED = false;
 // Trải 3 lá theo buổi cho hôm nay (nút dưới lá bài hôm nay).
 const DAY3_Q = "Hôm nay của mình sẽ thế nào?";
 const DAY3_ASK = "Bói 3 lá: hôm nay của mình sẽ thế nào?";
+// Hỏi nối sau khi bói ("thế còn công việc thì sao") → câu hỏi chuẩn theo chủ đề.
+const FOLLOW_TOPIC_Q: Record<string, string> = {
+  love: "Tình cảm của mình thời gian tới thế nào?",
+  work: "Sự nghiệp của mình thời gian tới thay đổi thế nào?",
+  money: "Tài chính của mình thời gian tới thế nào?",
+  health: "Sức khoẻ của mình thời gian tới thế nào?",
+  study: "Chuyện học hành của mình sắp tới thế nào?",
+};
+// Chủ đề tâm sự thuần tâm lý — kể từ 2 cảm giác thì phân tích tâm lý (lib/lomiSymptoms) sát hơn.
+const PSY_THEMES = new Set(["insomnia", "overthink", "anxiety", "panic", "sad", "tired", "lonely", "depress", "selfworth", "angerself", "compare"]);
 const pickOne = (a: string[]) => a[Math.floor(Math.random() * a.length)];
 // FAQ về CÁCH DÙNG app — luôn ưu tiên hơn tư vấn kinh doanh khi cả hai cùng khớp.
 const APP_HOWTO_FAQ = new Set([
@@ -357,7 +371,7 @@ export function AiChat({
     const rel = relatedFaqs(f, 2).map((x) => (lang === "en" ? x.q.en : x.q.vi));
     push([
       { role: "user", content: q, local: true },
-      { role: "assistant", content: lang === "en" ? f.a.en : f.a.vi, local: true, ask: AI_ENABLED ? asked : undefined, quick: rel },
+      { role: "assistant", content: lang === "en" ? f.a.en : f.a.vi, local: true, ask: AI_ENABLED ? asked : undefined, quick: rel, faqId: f.id },
     ]);
     lomiSound("msg");
   };
@@ -529,6 +543,8 @@ export function AiChat({
       const cr = crisisReply(q, lang);
       // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
+      // Nút phạm vi ("🩺 Sức khoẻ", "📱 Hỏi về app") → Lomi hỏi tiếp đúng việc.
+      if (SCOPE_CHIP_REPLY[raw]) return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY[raw], local: true, ...(raw.includes("Sức khoẻ") ? { heart: "health", heartDepth: 0 } : {}) });
       // 0a) Trí nhớ: người dùng kể tên / hoàn cảnh → Lomi ghi nhớ; hỏi "Lomi nhớ gì về mình?", "quên hết đi".
       if (isForgetMemory(q)) {
         clearMem(user.id);
@@ -621,7 +637,13 @@ export function AiChat({
           if (!prev.question && !en) return doTarot(DAY3_Q, q);
           return doTarot(prev.question ?? "", q, prev.context);
         }
-        if (/(?<![a-z])(thi sao|the con|vay con|con chuyen|con ve)(?![a-z])/.test(normalizeVi(q)) && !detectTarot(q)) return doTarot(q, q);
+        if (/(?<![a-z])(thi sao|the con|vay con|con chuyen|con ve)(?![a-z])/.test(normalizeVi(q)) && !detectTarot(q)) {
+          // "Thế còn công việc thì sao?" → hỏi bài đúng chủ đề (câu hỏi chuẩn), không lấy nguyên câu cụt.
+          // Bỏ cụm "thế còn / thì sao" trước khi đoán chủ đề ("thì" bỏ dấu thành "thi" = thi cử).
+          const tp = questionTopic(q.replace(/(thế|vậy|thì|còn|sao|chuyện|về)(?=\s|$|\?)/giu, " "));
+          const std = FOLLOW_TOPIC_Q[tp];
+          return doTarot(std ?? q, q);
+        }
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
@@ -635,12 +657,24 @@ export function AiChat({
       if (!en && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = !!lastA?.heart;
         const depth = (lastA?.heartDepth ?? 0) + 1;
+        const nq = ` ${normalizeVi(q)} `;
+        // 0) Câu hỏi kiến thức sức khoẻ ("uống cà phê nhiều có sao k", "ăn gì để đẹp da") — lib/lomiHealthFacts.
+        const fact = healthFact(q);
+        if (fact) return localReply(q, { role: "assistant", content: fact, local: true, heart: "health", heartDepth: depth, sx: inTalk ? lastA?.sx : undefined });
+        const inHealth = inTalk && (lastA?.heart === "health" || !!lastA?.sx?.length);
         const th = heartThemeOf(q);
-        const mind0 = analyzeMind(q, inTalk ? (lastA?.mood ?? []) : []);
+        // Cảm xúc đã kể trước đó (hoặc suy từ chủ đề đang tâm sự) để cộng dồn — vd đang kể lo âu rồi nói "tim đập nhanh nữa".
+        const moodSeed = inTalk ? (lastA?.mood ?? THEME_MOOD[lastA?.heart ?? ""] ?? []) : [];
+        const mind0 = analyzeMind(q, moodSeed);
         // Chuyện cụ thể (vd công việc, người yêu) thì để thư viện tâm sự đáp — trừ khi kể từ 3 cảm giác trở lên.
-        const mind = mind0 && (!th || GENERIC.has(th) || mind0.mood.length >= 3) ? mind0 : null;
-        // "mệt mỏi, mất ngủ, áp lực quá" là chuyện tâm lý, không phải bệnh cơ thể.
-        const body = mind && onlySoftSymptoms(q) ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : []);
+        const psyTalk = inTalk && !inHealth && !!THEME_MOOD[lastA?.heart ?? ""];
+        const mind = mind0 && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
+        // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
+        const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
+        const askAdvice = /\b(nen lam gi|lam sao|lam gi|phai lam sao|tu van|khuyen|nen an gi|nen uong gi|co sao khong|co nguy hiem khong|cach nao|co cach|cho do|do hon|het dau|giam dau|can di vien|can di kham|co nen di kham|di vien|di kham|nguy hiem|co sao)\b/.test(nq);
+        // "hôm nay hơi mệt", "mất ngủ" nói bâng quơ (chưa nói chuyện sức khoẻ) → để phần tâm sự đáp ân cần hơn.
+        const casualSoft = !inHealth && onlySoftSymptoms(q) && !askAdvice;
+        const body = (mind && softBody) || casualSoft ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, inHealth && askAdvice);
         if (body)
           return localReply(q, { role: "assistant", content: body.text, local: true, heart: "health", heartDepth: depth, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
         if (mind)
@@ -706,7 +740,16 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: sr.text, local: true, quick: sr.quick });
       }
     }
-    const faq = forceAi ? null : matchFaq(q);
+    // Câu hỏi nối sau câu trả lời về app ("còn … thì sao", "1 ngày quẹt đc mấy lần") → hiểu theo câu trước.
+    // Câu cụt ("hết hạn rồi thì sao", "tối đa mấy người") → ưu tiên hiểu theo câu hỏi vừa rồi.
+    const cut = !!lastA?.faqId && (q.split(/\s+/).length <= 6 || /\b(thi sao|con|nua|vay)\b/.test(normalizeVi(q)));
+    const fu = !forceAi && lastA?.faqId ? matchFaqFollowUp(q, lastA.faqId, lastA.quick) : null;
+    const faq = forceAi ? null : cut ? (fu ?? matchFaq(q)) : (matchFaq(q) ?? fu);
+    // Ý hỏi đã có sẵn trong câu trả lời vừa rồi → chỉ lại đúng câu đó.
+    if (!faq && cut && lastA && !en) {
+      const back = answerFromPrev(q, lastA.content);
+      if (back) return localReply(q, { role: "assistant", content: `Như Lomi vừa nói ở trên nè: ${back}`, local: true, faqId: lastA.faqId, quick: lastA.quick });
+    }
     const bizQ = !forceAi && looksLikeBizQuestion(q);
     // Câu hỏi xin LỜI KHUYÊN kinh doanh (giữ khách, hút khách lúc vắng, giá, khai trương, dịp lễ, bài đăng)
     // thì để tư vấn kinh doanh trả lời — trừ FAQ về cách dùng app rõ ràng (APP_HOWTO_FAQ).
@@ -733,9 +776,10 @@ export function AiChat({
       // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
       // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
       //  Câu hỏi chuyện đời (không dính tới app) thì không đưa FAQ lạc đề — Lomi mời bói đúng câu đó.
-      const sug = (looksLikeQuestion(q) && isAppish(q)) || q.split(/\s+/).length <= 3 ? suggestFaqs(q, 3) : [];
+      // Chỉ gợi ý câu hỏi về app khi câu thật sự nói về app; còn lại nói thật là chưa hiểu / ngoài phạm vi.
+      const sug = isAppish(q) ? suggestFaqs(q, 3) : [];
       if (!sug.length && !en) {
-        const fb = friendlyFallback(q);
+        const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
         return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];

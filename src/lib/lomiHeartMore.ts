@@ -378,7 +378,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "eating",
-    re: /\b(nhin an|bo bua|an xong non|moc hong|so tang can qua|so an|an khong kiem soat|an vo do|an qua nhieu roi hoi han|chan an|bieng an|an uong roi loan|roi loan an uong|anorexia|bulimia)\b/,
+    re: /\b(nhin an de giam|nhin doi de giam|bo bua de giam can|an xong non|moc hong|so tang can qua|so an|an khong kiem soat|an vo do|an qua nhieu roi hoi han|chan an|bieng an|an uong roi loan|roi loan an uong|anorexia|bulimia)\b/,
     feel: ["Cảm ơn bạn đã tin kể với Lomi 🤍 Chuyện ăn uống gắn với cảm xúc nhiều hơn người ta nghĩ, và bạn không phải một mình.", "Lomi thương bạn. Những gì bạn đang trải qua nghe rất mệt mỏi."],
     insight: [
       "Mối quan hệ với đồ ăn thường phản ánh những cảm xúc khó nói — căng thẳng, lo âu, áp lực. Không phải do bạn yếu đuối hay thiếu ý chí.",
@@ -433,7 +433,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "compare",
-    re: /\b(so sanh voi nguoi khac|ai cung hon minh|ban be thanh cong|ban be deu co|thua ban bang|fomo|luot mang thay buon|nhin nguoi ta thay tui|thay minh cham chan|bang tuoi nguoi ta)\b/,
+    re: /\b(so sanh voi nguoi khac|ai cung hon minh|ai cung gioi hon|gioi hon minh|ban be thanh cong|ban be deu co|thua ban bang|fomo|luot mang thay buon|nhin nguoi ta thay tui|thay minh cham chan|bang tuoi nguoi ta)\b/,
     feel: ["Lướt mạng thấy ai cũng thành công, còn mình thì dậm chân — cảm giác đó khó chịu lắm, Lomi hiểu 😔"],
     insight: [
       "Mạng xã hội là “cuộn phim nổi bật” của người khác, không phải cuộc sống thật của họ.",

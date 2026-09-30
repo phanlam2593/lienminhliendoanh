@@ -23,8 +23,8 @@ const SYMPTOMS: Sym[] = [
   { id: "fever", label: "sốt", re: /\b((bi|dang|hoi|phat|con|van|lai|them|co) sot|sot (cao|nhe|hoai|lien|keo dai|ve dem|ve chieu|mien man|\d+)|nong sot|sot ret)\b/ },
   { id: "highfever", label: "sốt cao", re: /\b(sot cao|sot (39|40|41)|sot tren 39)\b/ },
   { id: "chills", label: "ớn lạnh", re: /\b(on lanh|lanh run|run minh|gai oc|rung minh)\b/ },
-  { id: "fatigue", label: "mệt mỏi", re: /\b(met moi|met lu|u oai|kiet suc|duoi suc|khong co suc|mat suc|met nhieu)\b/ },
-  { id: "bodyache", label: "đau nhức mình mẩy", re: /\b(dau nhuc (nguoi|minh|toan than|co)|nhuc moi|dau minh may|moi nguoi|nhuc xuong|dau co bap)\b/ },
+  { id: "fatigue", label: "mệt mỏi", re: /\b(met moi|met lu|u oai|kiet suc|duoi suc|khong co suc|mat suc|met nhieu|hoi met|thay met|bi met|dang met|met met|met ca nguoi|nguoi met)\b/ },
+  { id: "bodyache", label: "đau nhức mình mẩy", re: /\b(dau nhuc (nguoi|minh|toan than|co)|nhuc moi|dau minh may|moi het nguoi|dau nhuc|nhuc xuong|dau co bap|e am)\b/ },
   { id: "sweat", label: "đổ mồ hôi nhiều", re: /\b(do mo hoi|ra mo hoi nhieu|va mo hoi|mo hoi dem|toat mo hoi)\b/ },
   { id: "weightloss", label: "sụt cân", re: /\b(sut can|gay sut|giam can khong ro ly do|tu nhien gay)\b/ },
   { id: "thirst", label: "khát nước nhiều", re: /\b(khat nuoc nhieu|hay khat|khat lien tuc|luc nao cung khat)\b/ },
@@ -57,7 +57,7 @@ const SYMPTOMS: Sym[] = [
   { id: "spray", label: "dùng thuốc xịt thông mũi lâu", re: /\b(otilin|otrivin|naphazolin|xylometazolin|thuoc xit mui|xit mui (hoai|hang ngay|moi ngay|lau|thuong xuyen)|khong xit khong tho duoc)\b/ },
   { id: "sorethroat", label: "đau họng", re: /\b(dau hong(?! lung| ben| phai| trai| mot ben)|rat hong|viem hong|nuot dau|dau khi nuot|ngua hong|vuong hong)\b/ },
   { id: "hoarse", label: "khàn tiếng", re: /\b(khan tieng|mat tieng|khan giong)\b/ },
-  { id: "cough", label: "ho", re: /\b((bi|dang|con|hay|van|lai|them) ho|ho (khan|co dom|nhieu|hoai|dai|keo dai|ve dem|lien tuc|sac sua|khong dut|suot))\b/ },
+  { id: "cough", label: "ho", re: /\b((bi|dang|con|hay|van|lai|them|nay|may nay|mat) ho|ho (khan|co dom|nhieu|hoai|dai|keo dai|ve dem|lien tuc|sac sua|khong dut|suot|qua(?! dang)|ghe|lam|mai|hoai))\b/ },
   { id: "phlegm", label: "ho có đờm", re: /\b(ho co dom|khac dom|dom vang|dom xanh|nhieu dom|co dom)\b/ },
   { id: "wheeze", label: "thở khò khè", re: /\b(kho khe|tho rit|tho khe khe)\b/ },
   { id: "bloodcough", label: "ho ra máu", re: /\b(ho ra mau|khac ra mau)\b/, red: "ho ra máu" },
@@ -77,7 +77,8 @@ const SYMPTOMS: Sym[] = [
   { id: "analpain", label: "đau / sưng hậu môn", re: /\b(dau hau mon|sung hau mon|ngua hau mon|co cuc o hau mon|bi tri|noi tri|ngoai tri)\b/ },
   { id: "noappetite", label: "chán ăn", re: /\b(chan an|an khong ngon|bieng an|khong muon an)\b/ },
   { id: "yellow", label: "vàng da / vàng mắt", re: /\b(vang da|da vang|vang mat|mat vang|nuoc tieu sam)\b/ },
-  { id: "afterfood", label: "khó chịu sau khi ăn", re: /\b(sau khi an|an xong|an do an la|an do song|an hai san|an quan|an do de lau)\b/ },
+  { id: "afterfood", label: "khó chịu sau khi ăn", re: /\b(sau khi an|an xong|an do an la|an do song|an hai san|an quan|an do de lau|an oc|an goi|an tiet canh|an do de qua dem|an via he|an do la|an nham)\b/ },
+  { id: "skipmeal", label: "hay bỏ bữa", re: /\b(bo bua|bo an sang|nhin an sang|khong an sang|an uong that thuong|an khong dung bua)\b/ },
   // Tiết niệu, sinh dục
   { id: "painpee", label: "tiểu buốt, tiểu rắt", re: /\b(tieu buot|tieu rat|tieu gat|tieu dau|buot khi tieu|nong rat khi tieu|di tieu nhieu lan ma it)\b/ },
   { id: "peemuch", label: "tiểu nhiều", re: /\b(tieu nhieu|di tieu nhieu|tieu dem|hay di tieu|tieu lien tuc)\b/ },
@@ -94,9 +95,9 @@ const SYMPTOMS: Sym[] = [
   { id: "cramp", label: "chuột rút", re: /\b(chuot rut|vop be|rut co)\b/ },
   // Da, tóc
   { id: "itch", label: "ngứa da", re: /\b((bi|hay|de) ngua|ngua (qua|nhieu|khap nguoi|da|ngay|ran|hoai|ve dem)|ngua ngay)\b/ },
-  { id: "rash", label: "nổi mẩn, phát ban", re: /\b(noi man|phat ban|noi ban|man do|noi me day|me day|noi mun do|noi cuc|noi san)\b/ },
+  { id: "rash", label: "nổi mẩn, phát ban", re: /\b(di ung|noi man|phat ban|noi ban|man do|noi me day|me day|noi mun do|noi cuc|noi san)\b/ },
   { id: "blister", label: "mụn nước / phỏng nước", re: /\b(mun nuoc|phong nuoc|bong nuoc|mun rop)\b/ },
-  { id: "dryskin", label: "da khô, bong tróc", re: /\b(da kho|bong da|troc da|nut da|da san sui)\b/ },
+  { id: "dryskin", label: "da khô, bong tróc", re: /\b(da kho|bong troc|da bong|bong vay|troc da|nut da|da san sui)\b/ },
   { id: "acne", label: "nổi mụn", re: /\b(noi mun|bi mun|mun (viem|mu|boc|trung ca|an|dau den|nhieu)|mun o mat|mun tren mat)\b/ },
   { id: "ringworm", label: "mảng da tròn ngứa, bong vảy", re: /\b(hac lao|lang ben|nam da|vong tron ngua|mang da tron|nam ben)\b/ },
   { id: "hairloss", label: "rụng tóc", re: /\b(rung toc|toc rung|hoi dau|toc mong)\b/ },
@@ -264,7 +265,7 @@ const CONDS: Cond[] = [
   // Tiêu hoá
   {
     id: "gastritis", name: "Viêm / đau dạ dày",
-    sx: { epigastric: 3, bloat: 2, nausea: 1, heartburn: 1, stress: 1, alcohol: 1, noappetite: 1 },
+    sx: { epigastric: 3, bloat: 2, nausea: 1, heartburn: 1, stress: 1, alcohol: 1, noappetite: 1, skipmeal: 2 },
     need: ["epigastric"],
     about: "đau vùng trên rốn, hay đau khi đói hoặc sau ăn; dễ nặng khi căng thẳng, ăn uống thất thường, rượu bia, thuốc giảm đau.",
     do: ["Ăn đúng bữa, chia nhỏ bữa, nhai kỹ", "Ăn đồ mềm, dễ tiêu (cháo, súp, cơm mềm)", "Giảm căng thẳng, ngủ đủ"],
@@ -401,7 +402,7 @@ const CONDS: Cond[] = [
   },
   {
     id: "lowbp", name: "Huyết áp thấp / hạ đường huyết",
-    sx: { lowbp: 4, dizzy: 2, fatigue: 1, faint: 1, coldhands: 1, sweat: 1 },
+    sx: { lowbp: 4, dizzy: 2, fatigue: 1, faint: 1, coldhands: 1, sweat: 1, skipmeal: 3 },
     need: ["lowbp", "dizzy"],
     about: "choáng váng, hoa mắt khi đứng dậy nhanh, mệt, có khi vã mồ hôi — hay gặp khi thiếu ngủ, bỏ bữa, mất nước.",
     do: ["Ngồi/nằm xuống ngay khi choáng, uống nước, ăn chút gì ngọt nếu đang đói", "Ăn đủ bữa, uống đủ nước", "Đổi tư thế từ từ"],
@@ -599,7 +600,7 @@ const CONDS: Cond[] = [
 const FEELS: Sym[] = [
   { id: "sad", label: "buồn", re: /\b(buon(?! ban| non| ngu| cuoi)|chan nan|chan doi|khong vui|u sau)\b/ },
   { id: "anhedonia", label: "mất hứng thú", re: /\b(mat hung thu|khong con hung thu|khong thiet|chang thiet|khong muon lam gi|khong con thich gi)\b/ },
-  { id: "tired", label: "mệt mỏi, cạn năng lượng", re: /\b(met moi|kiet suc|duoi suc|can nang luong|het pin|met lam|met qua|met ghe)\b/ },
+  { id: "tired", label: "mệt mỏi, cạn năng lượng", re: /\b(met moi|kiet suc|duoi suc|can nang luong|het pin|met lam|met qua|met ghe|hoi met|thay met|met met)\b/ },
   { id: "insomnia", label: "mất ngủ", re: /\b(mat ngu|kho ngu|ngu khong ngon|thuc giac|trang dem|khong ngu duoc)\b/ },
   { id: "oversleep", label: "ngủ nhiều, không muốn dậy", re: /\b(ngu nhieu|ngu ca ngay|khong muon day|nam lien)\b/ },
   { id: "appetite", label: "ăn uống thay đổi", re: /\b(chan an|an khong ngon|an nhieu hon|an vo do|bo bua)\b/ },
@@ -621,7 +622,7 @@ const FEELS: Sym[] = [
   { id: "shame", label: "xấu hổ", re: /\b(xau ho|nhuc nha|mat mat|ngai ngung)\b/ },
   { id: "trauma", label: "ám ảnh chuyện cũ, ác mộng", re: /\b(am anh|ac mong|hoi tuong lai|giat minh|nho lai la run)\b/ },
   { id: "withdraw", label: "muốn tránh mọi người", re: /\b(ngai gap nguoi|tranh moi nguoi|thu minh|khong muon gap ai|khong muon noi chuyen)\b/ },
-  { id: "compare", label: "so sánh, thấy thua kém", re: /\b(so sanh|thua kem|ghen ti|khong bang ai)\b/ },
+  { id: "compare", label: "so sánh, thấy thua kém", re: /\b(so sanh|thua kem|ghen ti|khong bang ai|gioi hon minh|hon minh het|ai cung hon)\b/ },
   { id: "unmotivated", label: "mất động lực", re: /\b(mat dong luc|khong co dong luc|luoi|tri hoan|khong muon lam)\b/ },
 ];
 
@@ -774,19 +775,67 @@ const joinVi = (a: string[]) => (a.length <= 1 ? a.join("") : `${a.slice(0, -1).
 
 export type BodyResult = { text: string; sx: string[] };
 
+// Chi tiết người dùng kể thêm khi ĐANG nói chuyện sức khoẻ (30/09 r6): vị trí, nhiệt độ, mức độ, thời gian, trẻ em.
+const CTX_SYM: [RegExp, string][] = [
+  [/\b(ngoi may tinh|ngoi lau|ngoi nhieu|cui dien thoai|van phong)\b/, "screen"],
+  [/\b(tren ron|vung thuong vi|luc doi|khi doi)\b/, "epigastric"],
+  [/\b(duoi ben phai|bung duoi ben phai|ho chau phai)\b/, "rightlow"],
+  [/\b(sau xuong uc|nong rat nguc|rat nguc)\b/, "heartburn"],
+  [/\b(khac dom|co dom|dom vang|dom xanh)\b/, "phlegm"],
+  [/\b(so anh sang|choi mat)\b/, "light"],
+];
+function tempOf(n: string): number | null {
+  const m = n.match(/\b(3[5-9]|4[0-2])(?:\s*(?:do|oc|c))?(?:\s*(ruoi|[,.]?\s*(\d)))?\b/);
+  if (!m || !/\b(do|oc|sot|nhiet|ruoi)\b/.test(n)) return null;
+  return Number(m[1]) + (m[2] === "ruoi" ? 0.5 : m[3] ? Number(m[3]) / 10 : 0);
+}
+const KID_RE = /\b(con minh|con toi|con em|con tui|be nha|be minh|be con|em be|tre nho|chau minh|be bi|be \d+ tuoi|\d+ thang tuoi)\b/;
+const SEVERE_RE = /\b(bua bo|du doi|dau lam|dau qua troi|khong chiu noi|dau muon xiu|dau chet di duoc)\b/;
+const DUR_RE = /\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/;
+const KID_NOTE =
+  "👶 **Với trẻ nhỏ:** đưa bé đi khám ngay nếu bé dưới 3 tháng tuổi mà sốt, hoặc sốt cao khó hạ, li bì, bỏ bú/bỏ ăn, co giật, thở nhanh, phát ban, nôn nhiều. Thuốc hạ sốt cho bé phải tính theo cân nặng — hỏi bác sĩ/dược sĩ, không dùng thuốc của người lớn.";
+
 /**
  * Phân tích triệu chứng cơ thể. prev = triệu chứng đã kể ở các tin trước (cộng dồn).
  * Trả null nếu tin này không có triệu chứng nào (để các luồng khác xử lý).
  */
-export function analyzeBody(text: string, prev: string[] = []): BodyResult | null {
+export function analyzeBody(text: string, prev: string[] = [], inHealth = false, force = false): BodyResult | null {
   const n = normalizeVi(text);
   const now = found(SYMPTOMS, n).map((s) => s.id);
+  // Đang nói chuyện sức khoẻ → hiểu thêm chi tiết kể tiếp ("ở trên rốn, lúc đói", "38 độ rưỡi", "búa bổ", "2 ngày rồi").
+  const notes: string[] = [];
+  let detail = false;
+  if (inHealth) {
+    for (const [re, id] of CTX_SYM) if (re.test(` ${n} `) && !now.includes(id)) (now.push(id), (detail = true));
+    const t = tempOf(n);
+    if (t !== null) {
+      detail = true;
+      if (t >= 39) now.push("highfever", "fever"), notes.push(`🌡️ ${String(t).replace(".", ",")} độ là **sốt cao** rồi nha.`);
+      else if (t >= 37.5) now.push("fever"), notes.push(`🌡️ ${String(t).replace(".", ",")} độ là đang **sốt**.`);
+      else notes.push(`🌡️ ${String(t).replace(".", ",")} độ thì chưa tính là sốt đâu, cứ theo dõi thêm nha.`);
+    }
+    if (SEVERE_RE.test(` ${n} `)) {
+      detail = true;
+      notes.push("Đau dữ dội như vậy thì đừng chủ quan nha — nếu cơn đau đến **đột ngột**, kèm nôn ói, sốt cao, cứng cổ, yếu tay chân, nói khó hay lơ mơ thì gọi **115** ngay.");
+    }
+    const d = n.match(DUR_RE);
+    if (d) {
+      detail = true;
+      const long = /tuan|thang|nam/.test(d[2]) || Number(d[1]) >= 3 || ["ba", "bon", "nam", "may", "vai"].includes(d[1]);
+      const unit = ({ ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" } as Record<string, string>)[d[2]];
+      const num = ({ mot: "1", hai: "2", ba: "3", bon: "4", nam: "5", may: "mấy", vai: "vài", mo: "mấy" } as Record<string, string>)[d[1]] ?? d[1];
+      notes.push(long ? `Bị ${num} ${unit} rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài.` : `Mới ${num} ${unit} thì cứ theo dõi thêm, nhưng nặng lên là đi khám liền nha.`);
+    }
+  }
+  if (KID_RE.test(` ${n} `)) now.push("kid");
   // "đau đầu dữ dội đột ngột" đã bao gồm "đau đầu"; "sốt cao" bao gồm "sốt".
   if (now.includes("highfever") && !now.includes("fever")) now.push("fever");
   if (now.includes("suddenhead") && !now.includes("headache")) now.push("headache");
   if (now.includes("severebreath") && !now.includes("breath")) now.push("breath");
-  const real = now.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood"].includes(id));
-  if (!real.length) return null; // chỉ có hoàn cảnh (vd "trời lạnh") thì chưa phải kể bệnh
+  const real = now.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "kid", "skipmeal"].includes(id));
+  if (inHealth && now.some((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id))) detail = true;
+  // Chỉ có hoàn cảnh (vd "trời lạnh") thì chưa phải kể bệnh — trừ khi đang kể tiếp chi tiết cho triệu chứng trước.
+  if (!real.length && !(inHealth && prev.length && (detail || force || KID_RE.test(` ${n} `)))) return null;
   const all = Array.from(new Set([...prev, ...now]));
   const scored = CONDS.filter((c) => !c.need || c.need.some((id) => all.includes(id)))
     .map((c) => {
@@ -797,13 +846,19 @@ export function analyzeBody(text: string, prev: string[] = []): BodyResult | nul
     })
     .filter((x) => x.score >= 3)
     .sort((a, b) => b.score - a.score || b.fit - a.fit);
-  const reds = all.map(byIdSym).filter((s) => s.red);
-  const labels = all.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood"].includes(id)).map((id) => byIdSym(id).label);
-  const ctx = all.filter((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood"].includes(id)).map((id) => byIdSym(id).label);
+  const kid = all.includes("kid");
+  const syms = all.filter((id) => id !== "kid");
+  const reds = syms.map(byIdSym).filter((s) => s.red);
+  const labels = syms.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
+  const ctx = syms.filter((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const out: string[] = [];
   if (reds.length)
     out.push(`⚠️ **${joinVi(reds.map((s) => s.red!))}** là dấu hiệu cần đi cấp cứu. Gọi **115** hoặc tới cơ sở y tế gần nhất ngay nha, đừng chờ.`);
-  out.push(`Lomi ghi nhận bạn đang có: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
+  // Kể thêm chi tiết / hỏi "nên làm gì" mà không có triệu chứng mới → đáp gọn, không lặp lại cả bài phân tích.
+  const compact = inHealth && prev.length > 0 && !real.some((id) => !prev.includes(id));
+  if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
+  out.push(...notes);
+  if (kid && !prev.includes("kid")) out.push(KID_NOTE);
   if (!scored.length) {
     out.push(
       "Chừng này triệu chứng thì chưa đủ để Lomi đoán sát được 🤔 Bạn kể thêm giúp Lomi nha: bị bao lâu rồi, có sốt không, đau ở đâu, kèm dấu hiệu gì khác?",
@@ -812,6 +867,14 @@ export function analyzeBody(text: string, prev: string[] = []): BodyResult | nul
     return { text: out.join("\n\n"), sx: all };
   }
   const top = scored.slice(0, scored[0].score >= 6 && (scored[1]?.score ?? 0) < scored[0].score / 2 ? 1 : 3);
+  if (compact) {
+    const m = top[0].c;
+    out.push(`Với tình trạng **${m.name.toLowerCase()}** như vậy thì:\n💡 ${m.do.slice(0, 3).join("; ")}.\n🚫 Tránh: ${m.avoid.slice(0, 2).join("; ").toLowerCase()}.\n🩺 ${m.doctor}`);
+    if (kid && prev.includes("kid")) out.push("👶 Nhớ: bé li bì, bỏ bú/bỏ ăn, co giật, thở nhanh hay sốt cao khó hạ thì đưa đi khám ngay nha.");
+    out.push("Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha.");
+    out.push(NOTE_BODY);
+    return { text: out.join("\n\n"), sx: all };
+  }
   out.push(
     `Những triệu chứng này hay gặp ở:\n${top
       .map((x, i) => `${i === 0 ? "•" : "•"} **${x.c.name}** — ${x.c.about}`)
@@ -831,8 +894,8 @@ export function analyzeBody(text: string, prev: string[] = []): BodyResult | nul
     ),
   ).slice(0, 3);
   if (missing.length && top.length > 1)
-    out.push(`Để Lomi phân biệt rõ hơn: bạn có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không? Bị bao lâu rồi?`);
-  else out.push("Bạn bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.");
+    out.push(`Để Lomi phân biệt rõ hơn: bạn có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không?${DUR_RE.test(` ${n} `) ? "" : " Bị bao lâu rồi?"}`);
+  else out.push(DUR_RE.test(` ${n} `) || prev.length ? "Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha." : "Bạn bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.");
   out.push(NOTE_BODY);
   return { text: out.join("\n\n"), sx: all };
 }
@@ -872,8 +935,21 @@ export function analyzeMind(text: string, prev: string[] = []): MindResult | nul
 
 // Triệu chứng "mềm" — hay đi cùng chuyện tâm lý (mệt, mất ngủ, chán ăn…). Nếu câu chỉ có những triệu chứng này
 // mà lại có nhiều cảm giác (áp lực, buồn…), ưu tiên phân tích tâm lý thay vì bệnh cơ thể.
-const SOFT = new Set(["fatigue", "insomnia", "sleepy", "noappetite", "sun", "screen", "coldweather", "alcohol", "stress", "afterfood"]);
+const SOFT = new Set(["fatigue", "insomnia", "sleepy", "noappetite", "sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"]);
 export function onlySoftSymptoms(text: string): boolean {
   const n = normalizeVi(text);
   return found(SYMPTOMS, n).every((s) => SOFT.has(s.id));
 }
+
+// Triệu chứng cơ thể hay đi cùng lo âu — khi đang tâm sự chuyện lo âu, căng thẳng thì hiểu theo hướng tâm lý.
+const ANX_BODY = new Set(["palp", "breath", "sweat", "insomnia", "fatigue", "dizzy", "stress"]);
+export function onlyAnxietyBody(text: string): boolean {
+  const f = found(SYMPTOMS, normalizeVi(text));
+  return f.length > 0 && f.every((s) => ANX_BODY.has(s.id));
+}
+/** Chủ đề tâm sự → cảm giác tương ứng (để cộng dồn khi người dùng kể thêm cảm giác). */
+export const THEME_MOOD: Record<string, string[]> = {
+  anxiety: ["worry"], panic: ["panic"], overthink: ["overthink"], sad: ["sad"], tired: ["tired"], lonely: ["lonely"],
+  depress: ["empty"], work: ["pressure"], boss: ["pressure"], study: ["pressure"], money: ["pressure"], insomnia: ["insomnia"],
+  selfworth: ["worthless"], breakup: ["hurt"], ex: ["missing"], grief: ["missing"], jealous: ["jealous"], angerself: ["irritable"],
+};

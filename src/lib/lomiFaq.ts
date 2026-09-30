@@ -325,6 +325,14 @@ export const FAQS: Faq[] = [
     "Ở màn đăng nhập bấm Quên mật khẩu, nhập ĐÚNG cả email và số điện thoại đã đăng ký. App sẽ cho bạn xem tên đăng nhập và gợi ý mật khẩu (2 ký tự đầu + ký tự cuối). Nhập sai nhiều lần sẽ bị khoá tạm vài phút. Vẫn không nhớ thì liên hệ admin qua Email / Zalo / Facebook ngay trên màn đó.",
     "On the login screen tap Forgot password and enter BOTH your registered email and phone. You'll see your username and a password hint (first 2 + last character). Too many wrong tries lock it for a few minutes. Still stuck? Contact the admins from that screen.",
     ["quen mat khau", "khong dang nhap duoc", "mat tai khoan", "forgot password", "quen ten dang nhap", "lay lai mat khau", "quen mk"]),
+  F("forgotnoemail", "account", "Quên mật khẩu mà không nhớ email / số điện thoại?", "Forgot password and don't remember my email or phone?",
+    "Vì lý do bảo mật, lấy lại mật khẩu cần nhập đúng cả email và số điện thoại đã đăng ký. Nếu không nhớ (hoặc không còn dùng) email/SĐT đó, bạn liên hệ Ban quản trị qua Email / Zalo / Facebook ngay ở màn Quên mật khẩu — admin sẽ hỏi vài thông tin để xác minh đúng là bạn rồi hỗ trợ lấy lại tài khoản nha.",
+    "For security, password recovery needs BOTH your registered email and phone. If you don't remember them (or no longer use them), contact the admins via Email / Zalo / Facebook right on the Forgot password screen — they'll verify it's you and help you recover your account.",
+    ["khong co email", "khong nho email", "mat email", "quen email", "khong nho so dien thoai", "doi so dien thoai roi", "mat sim", "khong con dung email"]),
+  F("deleterestore", "account", "Xoá tài khoản rồi có lấy lại được không?", "Can a deleted account be restored?",
+    "Việc xoá tài khoản do Ban quản trị thực hiện theo yêu cầu của bạn. Muốn hỏi tài khoản đã xoá có khôi phục được không, bạn liên hệ Ban quản trị qua Hồ sơ → ⋯ → Trợ giúp & Liên hệ (hoặc Email / Zalo / Facebook ở màn đăng nhập) để được trả lời chính xác nha.",
+    "Account deletion is done by the admins on request. To ask whether a deleted account can be restored, contact the admins via Profile → ⋯ → Help & Contact (or Email / Zalo / Facebook on the login screen).",
+    ["xoa roi lay lai", "khoi phuc tai khoan", "lay lai tai khoan da xoa", "tai khoan bi xoa", "xoa roi co lay lai duoc khong", "mo lai tai khoan"]),
   F("notif", "account", "Tắt / bật thông báo thế nào?", "Turn notifications on/off?",
     "Hồ sơ → ⋯ → Cài đặt → Thông báo: bấm Bật thông báo đẩy, rồi chọn riêng từng loại: Tin nhắn mới, Người theo dõi mới, Ưu đãi mới từ doanh nghiệp đang theo dõi, Thông báo từ admin, Hoạt động khách quen, Được nhắc tên. Muốn tắt riêng một cuộc trò chuyện thì bấm ⋯ ở cuộc trò chuyện đó → Tắt thông báo.",
     "Profile → ⋯ → Settings → Notifications: enable push, then choose each type (messages, new followers, deals, admin, regulars activity, mentions). To mute one chat: ⋯ on that conversation → Mute.",
@@ -354,8 +362,8 @@ export const FAQS: Faq[] = [
     "Data is only used to run the service and never sold. Your birthday isn't public. See the Privacy Policy at the bottom of Home. Lomi never asks for your password or OTP 🔒",
     ["bao mat", "an toan thong tin", "du lieu ca nhan", "privacy", "rieng tu", "chinh sach"]),
   F("lomi", "account", "Lomi là ai, hỏi Lomi được gì?", "Who is Lomi?",
-    "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱\n• Hỏi mọi thứ về cách dùng app, trả lời ngay\n• Tư vấn kinh doanh: ý tưởng ưu đãi, hút khách, viết bài đăng…\n• Bói Tarot vui: cứ gõ câu hỏi, vd “bói tarot xem khi nào mình có việc mới”\nTất cả đều miễn phí nha! Kéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng 😄",
-    "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱 Ask anything about the app, get business tips, or a fun tarot reading — all free! Drag me anywhere; drop me at the edge to hide 😄",
+    "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱 Mình giỏi mấy việc này:\n• 🔮 Bói Tarot: cứ gõ câu hỏi, vd “bói xem khi nào mình có việc mới”\n• 💬 Tâm sự, tư vấn tình cảm – tâm lý: buồn, áp lực, cãi nhau với người yêu… kể mình nghe nha\n• 🩺 Sức khoẻ thường gặp: kể triệu chứng, mình gợi ý nên làm gì, kiêng gì, khám khoa nào\n• 📱 Cách dùng app, gợi ý quán ăn, tư vấn kinh doanh\nTất cả đều miễn phí nha! Kéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng 😄",
+    "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱 Tarot readings, a listening ear (love & wellbeing), common health tips, and help with the app — all free! Drag me anywhere; drop me at the edge to hide 😄",
     ["lomi la ai", "ban la ai", "tro ly", "hoi duoc gi", "who are you", "lomi lam duoc gi"]),
 ];
 
@@ -388,6 +396,11 @@ const SYN: [RegExp, string][] = [
   [/\b(k|ko|khong|hong|hok|hk)\b/g, "khong"],
   [/\b(dc|duoc|dk duoc)\b/g, "duoc"],
   [/\b(sao|tai sao|vi sao)\b/g, "sao"],
+  // 30/09 r6: cách hỏi đời thường ("1 ngày quẹt đc mấy lần", "admin duyệt lâu k")
+  [/\b(1 ngay|mot ngay|moi hom|1 hom)\b/g, "moi ngay"],
+  [/\b(may lan|bao nhieu lan|may luot|may cai)\b/g, "bao nhieu luot"],
+  [/\b(duyet lau|lau duyet|bao gio duoc duyet|khi nao duoc duyet|duyet bao lau|cho duyet lau)\b/g, "bao lau duoc duyet"],
+  [/\b(ad|quan tri vien|ban quan tri)\b/g, "admin"],
 ];
 // Từ đệm, không mang nghĩa khi so khớp.
 const STOP = new Set(
@@ -484,6 +497,51 @@ export function matchFaq(text: string): Faq | null {
   const clear = !second || best.score - second.score >= 1.5;
   if (best.score >= 6 || (best.score >= 3.5 && best.cover >= 0.5 && clear)) return best.f;
   return null;
+}
+
+/**
+ * Câu hỏi NỐI sau một câu trả lời FAQ (vd vừa hỏi "Quẹt là gì" rồi hỏi "1 ngày quẹt đc mấy lần",
+ * "còn đăng doanh nghiệp thì sao"): chỉ so với các câu cùng nhóm / các gợi ý vừa hiện, ngưỡng thấp hơn.
+ */
+export function matchFaqFollowUp(text: string, prevId: string, chips: string[] = []): Faq | null {
+  const prev = faqById(prevId);
+  if (!prev) return null;
+  const n = normalizeVi(text);
+  if (!n || CREATIVE.test(` ${n} `)) return null;
+  const chipIds = chips.map((c) => FAQS.find((f) => f.q.vi === c || f.q.en === c)?.id).filter(Boolean) as string[];
+  const pool = new Set([...FAQS.filter((f) => f.cat === prev.cat).map((f) => f.id), ...chipIds]);
+  pool.delete(prev.id);
+  // Ghép ngữ cảnh câu trước để hiểu câu cụt ("tin nhắn nữa", "k có email thì sao").
+  const withCtx = scoreAll(`${text} ${prev.q.vi}`).filter((x) => x.f.id !== prev.id);
+  const own = scoreAll(text).filter((x) => pool.has(x.f.id));
+  const best = [...own.map((x) => ({ ...x, score: x.score + 1 })), ...withCtx].sort((a, b) => b.score - a.score)[0];
+  return best && best.score >= 3 ? best.f : null;
+}
+
+/**
+ * Câu hỏi nối mà câu trả lời vừa rồi ĐÃ có sẵn ý đó (vd vừa nói "tối đa 50 người" rồi hỏi "tối đa mấy người")
+ * → trích đúng câu đó ra. Trả null nếu không có câu nào khớp đủ.
+ */
+export function answerFromPrev(text: string, prevAnswer: string): string | null {
+  const nq = canon(text);
+  // Chỉ từ có nghĩa rõ (≥3 chữ cái hoặc là số) — tránh "ho" (họ) trùng "hồ sơ"…
+  const qt = tokens(nq).filter((w) => (w.length >= 3 || /\d/.test(w)) && !["khong", "sao", "biet", "roi", "nua", "thi"].includes(w));
+  const qty = /\b(may|bao nhieu|toi da|toi thieu|bao lau)\b/.test(` ${nq} `);
+  if (!qt.length) return null;
+  const sents = prevAnswer.split(/(?<=[.!?])\s+|\n+/).map((x) => x.replace(/^[•\d.\s]+/, "").trim()).filter((x) => x.length > 8);
+  let best: { s: string; hit: number } | null = null;
+  for (const x of sents) {
+    const st = new Set(tokens(canon(x)));
+    const hit = qt.filter((w) => st.has(w)).length;
+    if (hit && (!best || hit > best.hit)) best = { s: x, hit };
+  }
+  // Hỏi số lượng ("tối đa mấy người") → câu có con số và trùng ít nhất 1 từ là đủ.
+  if (qty) {
+    const raw = nq.split(" ").filter((w) => w.length >= 2 && !["may", "bao", "nhieu", "la", "co", "khong", "duoc"].includes(w));
+    const num = sents.find((x) => /\d/.test(x) && raw.some((w) => ` ${canon(x)} `.includes(` ${w} `)));
+    if (num) return num;
+  }
+  return best && best.hit >= Math.min(2, qt.length) ? best.s : null;
 }
 
 /** Vài câu gần nhất để gợi ý khi chưa chắc người dùng hỏi gì. */

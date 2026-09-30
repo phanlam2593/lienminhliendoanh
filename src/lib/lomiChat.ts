@@ -48,7 +48,7 @@ function greetPart(n: string): ReturnType<typeof partOfDay> {
 const GREET_TAIL = [
   "Lomi giúp gì được cho bạn nè?",
   "Hôm nay bạn cần Lomi giúp chuyện gì nào? 😊",
-  "Cứ hỏi thoải mái nha — về app, chuyện kinh doanh hay bói một lá cho vui đều được!",
+  "Cứ nói thoải mái nha — tâm sự, hỏi sức khoẻ, hỏi về app hay bói một lá cho vui đều được!",
 ];
 
 // Gợi ý chip hay dùng
@@ -83,8 +83,18 @@ const RULES: Rule[] = [
   },
   // Chào hỏi (kể cả gõ vui: hiii, helo, hé lô, alo, yo, 222…)
   {
-    re: /^(x?in chao|chao|chao ca nha|chao moi nguoi|chao ban|chao em|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi|oi lomi|good (morning|afternoon|evening)|chao buoi (sang|trua|chieu|toi)|\d{2,4}|\.+|\?+)( (lomi|ban|em|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
+    re: /^(x?in chao|chao|chao ca nha|chao moi nguoi|chao ban|chao em|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi|oi lomi|good (morning|afternoon|evening)|chao buoi (sang|trua|chieu|toi)|\d{2,4})( (lomi|ban|em|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
     reply: (n = "") => ({ text: `${pick(GREET_TIME[greetPart(n)])} ${pick(GREET_TAIL)}`, quick: [Q_DAILY, Q_CLAIM, Q_NEARBY] }),
+  },
+  // "???", "..." → hỏi lại nhẹ nhàng, nói rõ Lomi giúp được gì
+  {
+    re: /^(\?+|\.+|hmm+|hm+|a+|e+)$/,
+    reply: () => ({ text: SCOPE_LINE, quick: SCOPE_CHIPS }),
+  },
+  // "Có ai không?" → có Lomi nè
+  {
+    re: /^(co ai (khong|o day|o do|khong vay|ko)|co ai|ai do|co nguoi khong)( .*)?$/,
+    reply: () => ({ text: pick(["Có Lomi ở đây nè 👋 Bạn cần gì cứ nói nha!", "Lomi đây, luôn trực 24/7 luôn 😄 Bạn muốn tâm sự, hỏi về app, sức khoẻ hay bói bài nè?"]) }),
   },
   // Hỏi thăm Lomi
   {
@@ -151,7 +161,7 @@ const RULES: Rule[] = [
     }),
   },
   {
-    re: /\b(troi dep|nang dep|troi mat|thoi tiet dep)\b/,
+    re: /\b(troi dep|nang dep|troi mat|thoi tiet dep|(troi|thoi tiet)( [a-z]+){0,3} (dep|mat me|trong xanh))\b/,
     reply: () => ({
       text: pick([
         "Trời đẹp vậy mà ở nhà thì phí lắm 😆 Ra ngoài dạo một vòng, ghé quán nào đó ngồi chơi nha!",
@@ -363,7 +373,7 @@ const RULES: Rule[] = [
   },
   // Ok / ừ
   {
-    re: /^(ok|oke|okie|okay|uh|u|um|uhm|vang|da|duoc roi|hieu roi|roi|a|a ha)$/,
+    re: /^(ok|oke|okie|okay|uh|u|um|uhm|vang|da|duoc roi|hieu roi|roi|a|a ha|khong|ko|k|thoi|khong co gi|khong can)$/,
     reply: () => ({ text: pick(["Okie 😊 Cần gì thêm cứ hỏi Lomi nha!", "Dạ, có gì cứ gọi Lomi nha 🌿"]) }),
   },
 ];
@@ -407,7 +417,7 @@ export function crisisReply(text: string, lang: L): ChatReply | null {
 /** Câu có dáng câu hỏi (để quyết định gợi ý FAQ hay chỉ trò chuyện). */
 export function looksLikeQuestion(text: string): boolean {
   const n = ` ${normalizeVi(text)} `;
-  return text.includes("?") || /\b(la gi|the nao|o dau|bao nhieu|khi nao|co khong|duoc khong|lam sao|nhu nao|cach nao|sao khong|sao lai|tai sao|giup minh|huong dan)\b/.test(n);
+  return text.includes("?") || /\b(la gi|the nao|o dau|bao nhieu|khi nao|co khong|duoc khong|lam sao|nhu nao|cach nao|sao khong|sao lai|tai sao|giup minh|huong dan|la ai|ai la|bang may|may gio|bao gio|nhu the nao|ra sao|nghia la gi)\b/.test(n);
 }
 
 // Từ khoá cho biết câu hỏi đang nói về APP (để gợi ý câu hỏi thường gặp), khác với chuyện đời thường.
@@ -421,6 +431,57 @@ export function isAppish(text: string): boolean {
 function tarotChipFor(text: string): string {
   const q = text.trim().replace(/\s+/g, " ");
   return `Bói xem ${q.length > 60 ? q.slice(0, 58).trim() + "…" : q}`;
+}
+
+// Phạm vi của Lomi (30/09 r6, theo ý Kir): chỉ gói gọn mấy việc này — ngoài phạm vi thì nói thật.
+export const SCOPE_CHIPS = ["🔮 Bói Tarot", "💬 Tâm sự", "🩺 Sức khoẻ", "📱 Hỏi về app"];
+const SCOPE_LINE =
+  "Bạn muốn Lomi giúp chuyện gì nè? 😊 Lomi giỏi mấy việc này: 🔮 Bói Tarot · 💬 Tâm sự, tư vấn tình cảm – tâm lý · 🩺 Sức khoẻ thường gặp · 📱 Cách dùng Liên Minh Liên Doanh (kèm gợi ý quán, tư vấn kinh doanh).";
+/** Nút phạm vi → câu Lomi hỏi tiếp cho đúng việc. */
+export const SCOPE_CHIP_REPLY: Record<string, string> = {
+  "🩺 Sức khoẻ":
+    "Bạn đang thấy trong người thế nào nè? 🩺 Kể Lomi nghe các triệu chứng (vd “đau đầu, sổ mũi 2 ngày nay”), hoặc hỏi kiểu “uống cà phê nhiều có sao không” cũng được nha.",
+  "📱 Hỏi về app":
+    "Bạn cứ hỏi tự nhiên về Liên Minh Liên Doanh nha 📱 Ví dụ: “làm sao nhận ưu đãi”, “quẹt là gì”, “đặt xe thế nào”, “đăng doanh nghiệp ra sao”, “sao không nhận được thông báo”…",
+};
+
+/**
+ * Câu Lomi chưa hiểu / ngoài phạm vi (30/09 r6) — nói THẬT, không đáp chung chung cho có, không mời bói lung tung.
+ * faqQ = câu hỏi về app Lomi vừa trả lời (câu hỏi nối không khớp thì nói rõ là chưa có hướng dẫn cho ý đó).
+ */
+export function scopedFallback(text: string, faqQ?: string): ChatReply {
+  const n = ` ${normalizeVi(text)} `;
+  const q = looksLikeQuestion(text);
+  // Câu hỏi quyết định chuyện đời ("hôm nay có nên đi nhậu không") → vẫn mời bói đúng câu đó (trong phạm vi Tarot).
+  if (/\b(co nen|nen .* khong|nen .* hay)\b/.test(n) && !isAppish(text))
+    return {
+      text: pick([
+        "Nên hay không thì Lomi không dám quyết thay bạn 😅 Nhưng nếu đang phân vân, Lomi rút bài xem thử cho bạn nha — bấm bên dưới!",
+        "Câu này tuỳ bạn cân nhắc thôi nè 😄 Muốn tham khảo thêm thì để Lomi bói thử đúng câu này nha 🔮",
+      ]),
+      quick: [tarotChipFor(text)],
+    };
+  // Nhờ làm việc ngoài phạm vi (dịch, viết code, giải toán, tìm tin…) → nói rõ là ngoài phạm vi.
+  const outTask = /\b(dich|viet code|code|lap trinh|giai toan|giai bai|lam bai tap|tinh giup|tim giup|tra cuu|ket qua bong da|xo so|chung khoan|gia vang|ty gia|tin tuc)\b/.test(n);
+  if (faqQ && !outTask)
+    return {
+      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Bạn hỏi lại theo cách khác, hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.`,
+    };
+  if (q || outTask)
+    return {
+      text: pick([
+        "Câu này nằm ngoài phạm vi của Lomi rồi 😅 Lomi chỉ giỏi mấy việc: 🔮 Bói Tarot · 💬 Tâm sự, tư vấn tình cảm – tâm lý · 🩺 Sức khoẻ thường gặp · 📱 Cách dùng Liên Minh Liên Doanh. Bạn cần Lomi giúp chuyện nào nè?",
+        "Hic, cái này Lomi không rành, không dám trả lời bừa đâu 🙏 Lomi giúp được bạn về Tarot, tâm sự – tình cảm – tâm lý, sức khoẻ thường gặp và cách dùng Liên Minh Liên Doanh nha.",
+      ]),
+      quick: SCOPE_CHIPS,
+    };
+  return {
+    text: pick([
+      "Lomi chưa hiểu ý bạn lắm 😅 Bạn nói rõ hơn chút giúp Lomi nha — bạn đang muốn tâm sự, hỏi về sức khoẻ, hỏi về app, hay bói bài?",
+      "Hmm, Lomi chưa bắt được ý bạn 🤔 Bạn kể thêm chút nha, hoặc chọn việc bạn cần bên dưới.",
+    ]),
+    quick: SCOPE_CHIPS,
+  };
 }
 
 /** Câu ngoài lề mà Lomi không biết — đáp thân thiện, đúng trọng tâm thay vì "ngoài khả năng". */

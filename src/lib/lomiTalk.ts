@@ -94,7 +94,7 @@ export const EVENTS: Ev[] = [
     re: /\b(hu xe|xe hu|xe bi hu|xep lop|thung lop|banh xe xep|xe chet may|het xang|xe khong no|xe khong chay|dut day sen|xe tat may)\b/,
     react: ["Ôi xui ghê 😣 Bạn có an toàn không, đang ở chỗ nào vậy?", "Trời, {act}mà hư xe thì hoảng lắm 😰 Có gần tiệm sửa nào không?"],
     follow: [
-      [/\b(khong co tiem|xa tiem|khong biet o dau|vang|dem)\b/, ["Vậy dắt xe vào lề chỗ sáng, an toàn trước nha. Gọi người thân hoặc đặt xe ở mục Đưa đón (/dua-don) để về trước, xe tính sau cũng được 🙏"]],
+      [/\b(khong co tiem|xa tiem|khong biet o dau|vang|dem|toi roi|troi toi|khuya)\b/, ["Vậy dắt xe vào lề chỗ sáng, an toàn trước nha. Gọi người thân hoặc đặt xe ở mục Đưa đón (/dua-don) để về trước, xe tính sau cũng được 🙏"]],
       [/\b(sua roi|sua xong|co tiem|gan tiem)\b/, ["May quá 😄 Sửa xong thì nhớ kiểm tra lại lốp, xăng trước khi đi xa nha."]],
     ],
     advice: ["Dắt xe vào lề, bật đèn cảnh báo nếu trời tối.", "Hỏi người dân gần đó tiệm sửa xe gần nhất.", "Cần về gấp thì đặt xe ở mục Đưa đón (/dua-don) trong app."],
@@ -197,6 +197,27 @@ export const EVENTS: Ev[] = [
     ],
     advice: ["Ngủ đủ đêm trước quan trọng hơn thức khuya ôn thêm.", "Chuẩn bị đồ, giấy tờ từ tối hôm trước.", "Hít thở chậm vài lần trước khi bắt đầu."],
   },
+  {
+    id: "bored",
+    label: "đang chán, không có gì làm",
+    re: /\b(chan qua|chan ghe|chan that|chan vay|chan ne|chan a|chan that su|buon chan|chan chet|ran qua|ran roi|khong co gi lam|ko co gi lam|ran ranh|boring|chan doi qua)\b/,
+    react: [
+      "Chán hả 😆 Vậy để Lomi bày trò nè: bói một lá Tarot xem hôm nay thế nào, lướt Quẹt (/quet) tìm bạn chơi game hay đi cà phê, hoặc Lomi tìm quán ngon gần đây cho bạn đi ăn — bạn thích cái nào?",
+      "Rảnh quá thì làm gì vui vui nha 😄 Bạn thích ở nhà hay ra ngoài?",
+    ],
+    follow: [
+      [/\b(o nha|nam nha|khong muon ra ngoai|luoi ra ngoai)\b/, ["Ở nhà thì thử: xem một bộ phim bạn để dành lâu rồi, nấu một món mới, dọn lại góc phòng, gọi video cho bạn cũ, hoặc để Lomi bói một lá cho vui nè 🔮"]],
+      [/\b(ra ngoai|di choi|di dau|ra duong)\b/, ["Ra ngoài thì đi dạo hồ, ghé quán cà phê có view đẹp, hay rủ bạn đi ăn nha 😋 Gõ “quán cà phê nào đang có ưu đãi” là Lomi tìm giùm liền!"]],
+      [/\b(game|choi game)\b/, ["Chơi game thì vào Quẹt (/quet) → mục Game, tìm đồng đội cùng game đang online nha 🎮"]],
+    ],
+    advice: [
+      "Bói một lá Tarot xem thông điệp hôm nay 🔮",
+      "Vào Quẹt (/quet) tìm bạn chơi game, đi cà phê, làm quen",
+      "Hỏi Lomi “hôm nay ăn gì” để Lomi chọn quán giùm",
+      "Ghé phòng chat Cộng đồng (/cong-dong) xem mọi người đang bàn gì",
+      "Tập một kỹ năng mới 20 phút: vẽ, nấu ăn, học vài câu tiếng Anh",
+    ],
+  },
 ];
 
 export function eventOf(n: string): Ev | undefined {
@@ -208,7 +229,7 @@ export function eventById(id: string): Ev | undefined {
 
 // Câu trả lời ngắn
 export const YES_RE = /^(co|co a|co ne|co chu|co lam|u|uh|um|uhm|uk|dung|dung roi|dung vay|vang|da|nhieu|nhieu lam|lam|roi|chac vay|chac la vay|ok)$/;
-export const NO_RE = /^(khong|ko|k|kh|hong|hem|khum|chua|chua co|khong co|khong dau|cung khong|khong lam|binh thuong)$/;
+export const NO_RE = /^(khong|ko|k|kh|hong|hem|khum|chua|chua co|khong co|khong dau|cung khong|khong lam|binh thuong)( (binh thuong|thoi|a|nha|lam|dau|co|het|gi|ca))*( thoi)?$/;
 export const DUNNO_RE = /\b(khong biet|hk bit|k biet|chiu|khong ro|biet dau|sao biet)\b/;
 // Người dùng than Lomi máy móc / không hiểu
 export const META_RE =
