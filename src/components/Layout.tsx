@@ -99,7 +99,8 @@ export function Layout() {
   // Trang Tin nhắn (1 đoạn chat cụ thể) và Cộng đồng tự tính chiều cao vừa khít màn hình
   // riêng (đã trừ sẵn phần header + nav) — không cần main cộng thêm pb-20 nữa, kẻo bị trừ
   // 2 lần, sinh khoảng trắng thừa + cuộn sai.
-  const isFullHeightPage = /^\/tin-nhan\/.+/.test(pathname) || pathname === "/cong-dong";
+  // 01/10: thêm trang chat Lomi (/tro-ly-ai) — trước đây thiếu nên main còn đệm pb-20 → trang cuộn lên xuống được.
+  const isFullHeightPage = /^\/tin-nhan\/.+/.test(pathname) || pathname === "/cong-dong" || pathname === "/tro-ly-ai";
 
   // Đo chiều cao THẬT của thanh điều hướng dưới cùng VÀ header trên cùng (khác nhau tuỳ
   // máy/kiểu điều hướng Android, cỡ chữ hệ thống...) thay vì đoán số cố định — số đoán sai

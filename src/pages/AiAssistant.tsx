@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useBackToClose, useGoBack } from "@/lib/navigation";
+import { useGoBack } from "@/lib/navigation";
 import { ArrowLeft, CircleHelp, RotateCcw, Send, Smile, Volume2, VolumeX } from "lucide-react";
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak } from "@/lib/lomiAddress";
@@ -44,6 +44,7 @@ import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
 import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
+import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -122,6 +123,7 @@ type Msg = {
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
   faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này — câu hỏi nối ("còn … thì sao") hiểu theo ngữ cảnh đó
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
+  diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
 };
 type Quota = { member: boolean; limit: number; used: number };
 
@@ -230,8 +232,8 @@ function RichText({ text }: { text: string }) {
   return <>{out}</>;
 }
 
-/** Mở Lomi (bảng nổi) từ bất kỳ đâu — vd mục "Hỏi Lomi · Hướng dẫn" trong menu. Không có bong bóng
- *  trên trang hiện tại (bị ẩn) → sang trang /tro-ly-ai. */
+/** Mở Lomi từ bất kỳ đâu — vd mục "Hỏi Lomi · Hướng dẫn" trong menu → sang trang chat /tro-ly-ai
+ *  (01/10: không còn bảng nổi nên không ai "handled" sự kiện này nữa). */
 export function openLomi(nav: (to: string) => void) {
   const ev = new CustomEvent<{ handled: boolean }>("lomi:open", { detail: { handled: false } });
   window.dispatchEvent(ev);
@@ -722,6 +724,11 @@ export function AiChat({
         const inTalk = !!lastA?.heart;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const nq = ` ${normalizeVi(q)} `;
+        // 0a) Kiêng ăn uống theo bệnh ("gout kiêng gì", "huyết áp cao ăn mặn được k", nối tiếp "còn bia thì sao") — lib/lomiDiet.
+        const prevUser = [...msgs].reverse().find((m) => m.role === "user")?.content;
+        const diet = dietReply(q, lastA?.diet ?? (prevUser ? dietOf(prevUser) : undefined));
+        if (diet) topicHit("health");
+        if (diet) return localReply(q, { role: "assistant", content: diet.text, local: true, heart: "health", heartDepth: depth, diet: diet.diet, sx: inTalk ? lastA?.sx : undefined });
         // 0) Câu hỏi kiến thức sức khoẻ ("uống cà phê nhiều có sao k", "ăn gì để đẹp da") — lib/lomiHealthFacts.
         const fact = healthFact(q);
         if (fact) topicHit("health");
@@ -1208,29 +1215,12 @@ function readPos(): BubblePos {
   return { x: 1, y: 1, tucked: false };
 }
 
-/** Khung chat mở từ bong bóng. */
-function BubblePanel({ onClose }: { onClose: () => void }) {
-  // 01/10 (theo ý Kir): chừa thanh trên (logo, tin nhắn, thông báo) và thanh điều hướng dưới như trang /tro-ly-ai.
-  return (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="absolute inset-x-0 mx-auto max-w-2xl bg-background shadow-2xl overflow-hidden animate-in slide-in-from-bottom duration-300"
-      style={{
-        top: "var(--header-h, 3.5rem)",
-        height: "calc(var(--vvh, 100dvh) - var(--header-h, 3.5rem) - var(--bottom-nav-h, 5rem))",
-      }}
-    >
-      <AiChat className="h-full" onClose={onClose} />
-    </div>
-  );
-}
-
 export function AiBubble() {
   const { user } = useAuth();
   const { t } = useLanguage();
   const { pathname, search } = useLocation();
+  const nav = useNavigate();
   const [pos, setPos] = useState<BubblePos>(readPos);
-  const [open, setOpen] = useState(false);
   const [drag, setDrag] = useState<{ x: number; y: number; tilt: number } | null>(null);
   const [mood, setMood] = useState<LomiMood>("idle");
   const [look, setLook] = useState(0);
@@ -1304,8 +1294,6 @@ export function AiBubble() {
     };
   }, []);
 
-  useBackToClose(open, () => setOpen(false));
-
   useEffect(() => {
     try {
       localStorage.setItem(BUBBLE_KEY, JSON.stringify(pos));
@@ -1313,9 +1301,6 @@ export function AiBubble() {
       /* bỏ qua */
     }
   }, [pos]);
-
-  // Đổi trang → đóng khung chat.
-  useEffect(() => setOpen(false), [pathname]);
 
   const hidden =
     !user ||
@@ -1325,18 +1310,6 @@ export function AiBubble() {
     pathname.startsWith("/cuoc-goi") ||
     pathname.startsWith("/auth") ||
     (pathname.startsWith("/quet") && /tab=swipe/.test(search));
-
-  // Mục "Hỏi Lomi · Hướng dẫn" trong menu → mở bảng chat ngay tại trang đang xem.
-  useEffect(() => {
-    if (hidden) return;
-    const onOpen = (e: Event) => {
-      const d = (e as CustomEvent<{ handled: boolean }>).detail;
-      if (d) d.handled = true;
-      setOpen(true);
-    };
-    window.addEventListener("lomi:open", onOpen);
-    return () => window.removeEventListener("lomi:open", onOpen);
-  }, [hidden]);
 
   if (hidden) return null;
 
@@ -1434,7 +1407,9 @@ export function AiBubble() {
       setHop(true);
       window.setTimeout(() => {
         setHop(false);
-        setOpen(true);
+        // 01/10 (theo ý Kir): chạm Lomi = mở trang chat riêng như mở đoạn chat với 1 người (không còn bảng nổi
+        // đè lên trang đang xem — trang nền không còn cuộn được phía sau).
+        nav("/tro-ly-ai");
       }, 300);
       return;
     }
@@ -1511,11 +1486,6 @@ export function AiBubble() {
         )}
       </button>
 
-      {open && (
-        <div className="fixed inset-0 z-50 bg-black/40 animate-in fade-in duration-200" onClick={() => setOpen(false)}>
-          <BubblePanel onClose={() => setOpen(false)} />
-        </div>
-      )}
     </>
   );
 }
