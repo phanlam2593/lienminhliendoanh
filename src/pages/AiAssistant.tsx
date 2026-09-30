@@ -951,7 +951,7 @@ export function AiChat({
   const greetLine = (() => {
     const nm = displayName(loadMem(user.id), profile?.full_name);
     const h = new Date().getHours();
-    const hi = h < 11 ? "Chào buổi sáng" : h < 14 ? "Trưa vui vẻ" : h < 18 ? "Chiều vui nha" : "Tối an lành";
+    const hi = h < 4 ? "Khuya rồi nè" : h < 11 ? "Chào buổi sáng" : h < 14 ? "Trưa vui vẻ" : h < 18 ? "Chiều vui nha" : h < 22 ? "Tối an lành" : "Khuya rồi nè";
     return speak(
       `${hi}${nm ? ` ${nm}` : ""} 👋 Hôm nay Lomi giúp gì cho bạn nè?\nLomi còn đang trong giai đoạn thử nghiệm nên rành chút chút mấy việc: 🔮 Tarot · 💬 Tâm sự · 🩺 Sức khoẻ · 📱 Hướng dẫn app. Bấm **Gợi ý** bên dưới hoặc cứ gõ tự nhiên nha!`,
       loadMem(user.id).addr,

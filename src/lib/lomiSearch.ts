@@ -299,8 +299,11 @@ export function suggestDishes(drink: boolean, avoid: string[] = []): { text: str
 export async function runDishSearch(d: Dish, avoidIds: string[] = []): Promise<SearchResult> {
   const pos = await myPos(false);
   const clean = (x: string) => x.replace(/[,()%]/g, "").trim();
+  // Tìm theo tên CÓ DẤU ("Phở" ≠ "Phố" — bỏ dấu thì trùng nhau); chỉ dùng tên không dấu cho từ khoá
+  // nhiều chữ, không lẫn được (vd "bun bo", "banh mi").
   const ors = [
-    ...d.keys.map((k) => `name_unaccent.ilike.%${clean(k)}%`),
+    ...d.vi.map((k) => `name.ilike.%${clean(k)}%`),
+    ...d.keys.filter((k) => clean(k).includes(" ")).map((k) => `name_unaccent.ilike.%${clean(k)}%`),
     ...d.vi.map((k) => `description.ilike.%${clean(k)}%`),
     ...d.vi.map((k) => `latest_offer.ilike.%${clean(k)}%`),
   ].join(",");
