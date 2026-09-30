@@ -492,7 +492,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "selfworth",
-    re: /\b(tu ti|that bai|vo dung|kem coi|khong bang ai|so sanh voi|thua kem|ghet ban than|chan ban than|khong lam duoc gi|khong co gia tri|minh te qua|minh do qua|khong ai thuong|xau xi|beo qua|khong du tot)\b/,
+    re: /\b(tu ti|that bai|vo dung|kem coi|khong bang ai|so sanh voi|thua kem|ghet ban ?than|chan ban ?than|khong lam duoc gi|khong co gia tri|minh te qua|minh do qua|khong ai thuong|xau xi|beo qua|khong du tot)\b/,
     feel: [
       "Nghe bạn nói vậy Lomi thương lắm 🥺 Cảm giác mình không đủ tốt nặng nề thật.",
       "Lomi hiểu, có những ngày mình nhìn đâu cũng thấy mình thua kém người ta.",

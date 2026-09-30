@@ -8,14 +8,18 @@
 
 import { normalizeVi } from "@/lib/lomiFaq";
 
-type Table = Record<string, string[]>;
+/** w: chữ bỏ dấu → cách viết có dấu đúng nghĩa; p: cụm có dấu hay bị nhầm → đổi thành chữ lạ trước khi so. */
+// bare: chữ mà khi cả câu gõ CÓ DẤU đầy đủ, viết không dấu nghĩa là đúng chữ không dấu đó (vd "nhớ nha" = nhớ nhé,
+// không phải "nhớ nhà") → cũng đổi thành chữ lạ.
+type Table = { w: Record<string, string[]>; p?: [string, string][]; bare?: string[] };
 
 /** Sức khoẻ (triệu chứng, kiến thức sức khoẻ, kiêng ăn uống). */
 export const HEALTH: Table = {
+  w: {
   dau: ["đau", "đầu", "dấu", "đậu"], // đâu, dâu, dầu, đấu… ≠ đau/đầu ("đậu" giữ cho "thuỷ đậu", "đậu phộng")
   ho: ["ho"], // họ, hồ, hổ, hộ, hò
   sot: ["sốt"], // sót, sọt
-  tim: ["tim"], // tìm
+  tim: ["tim", "tím"], // tìm  ("tím" = môi tím)
   chong: ["chóng"], // chồng, chống
   buon: ["buồn"], // buôn (bán)
   nhuc: ["nhức"], // nhục
@@ -24,9 +28,9 @@ export const HEALTH: Table = {
   ngua: ["ngứa"], // ngựa
   met: ["mệt"], // mét
   ngu: ["ngủ", "ngu"], // ngũ, ngư, ngừ
-  lanh: ["lạnh"], // lành, lãnh
+  lanh: ["lạnh", "lành"], // lãnh  ("lành" = lâu lành)
   nong: ["nóng"], // nông, nồng
-  so: ["sợ", "sọ"], // số, sổ, sở, sò
+  so: ["sợ", "sọ", "sổ"], // "sổ" = sổ mũi; // số, sổ, sở, sò
   lo: ["lo", "lơ"], // lò, lọ, lộ, lỗ, lố
   an: ["ăn", "an"], // ấn, ẩn, án, ân
   gian: ["giận", "giãn"], // giản (đơn giản), gián, giàn
@@ -34,13 +38,23 @@ export const HEALTH: Table = {
   mun: ["mụn"], // mùn
   nguc: ["ngực"], // ngục
   ngat: ["ngạt", "ngất"], // ngát
+  do: ["đỏ", "đổ", "do", "đồ", "độ", "đo"], // đỡ (đỡ rồi), đó, dở, dỗ
+  hong: ["họng", "hỏng"], // hông (đau hông = hông/thắt lưng) → "hongx"
+  mo: ["mổ", "mờ", "mơ", "mỡ", "mô", "mồ", "mộ", "mợ"], // mở
+  },
+  p: [
+    ["đỏ mặt", "do matx"],
+    ["mới mở", "moi mox"],
+    ["vừa mở", "vua mox"],
+  ],
 };
 
 /** Tâm lý – tình cảm – tâm sự. */
 export const HEART: Table = {
-  dau: ["đau", "đầu", "dấu"],
+  w: {
+  dau: ["đau", "đầu", "dấu", "dâu", "đậu"], // đâu ("dâu" = con dâu, "đậu" = thi đậu)
   buon: ["buồn"],
-  so: ["sợ", "sọ"],
+  so: ["sợ", "sọ", "sổ"],
   lo: ["lo", "lơ"],
   oi: ["ói", "ôi"], // ơi, ổi, ối
   gian: ["giận", "giãn"],
@@ -51,12 +65,30 @@ export const HEART: Table = {
   sot: ["sốt"],
   non: ["nôn"],
   ngua: ["ngứa"],
+  nha: ["nhà"], // "nhớ nha" (nhớ nhé) ≠ nhớ nhà
+  ghen: ["ghen"], // ghèn (gỉ mắt)
+  },
+  p: [
+    ["bản thân", "banthan"],
+    ["đồ ăn", "dox an"],
+    ["họ nhiều", "hox nhieu"],
+    ["thuốc là", "thuoc lax"],
+    ["đau hông", "dau hongx"],
+    ["quán đó", "quan dox"],
+  ],
+  bare: ["nha"],
 };
 
 /** Tư vấn kinh doanh / ưu đãi. */
 export const BIZ: Table = {
+  w: {
   buon: ["buôn"], // buồn
   gia: ["giá"], // giả, già
+  vang: ["vắng"], // vàng
+  viet: ["viết"], // Việt
+  },
+  p: [
+  ],
 };
 
 const WORD = /[\p{L}\p{M}]+/gu;
@@ -64,12 +96,15 @@ const HAS_MARK = /[^\u0000-\u007f]/;
 
 /** normalizeVi() nhưng chữ có dấu mang nghĩa khác bảng → đổi thành "<chữ>x" để không khớp nhầm. */
 export function normStrict(text: string, table: Table): string {
-  const t = text.normalize("NFC").toLowerCase();
+  let t = text.normalize("NFC").toLowerCase();
   if (!HAS_MARK.test(t)) return normalizeVi(t);
+  for (const [a, b] of table.p ?? []) t = t.split(a).join(` ${b} `);
+  const words = t.match(WORD) ?? [];
+  const accented = words.filter((w) => HAS_MARK.test(w)).length * 3 >= words.length;
   const fixed = t.replace(WORD, (w) => {
-    if (!HAS_MARK.test(w)) return w;
+    if (!HAS_MARK.test(w)) return accented && table.bare?.includes(w) ? `${w}x` : w;
     const bare = normalizeVi(w);
-    const ok = table[bare];
+    const ok = table.w[bare];
     return ok && !ok.includes(w) ? `${bare}x` : w;
   });
   return normalizeVi(fixed);

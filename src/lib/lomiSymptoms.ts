@@ -84,7 +84,7 @@ const SYMPTOMS: Sym[] = [
   { id: "painpee", label: "tiểu buốt, tiểu rắt", re: /\b(tieu buot|tieu rat|tieu gat|tieu dau|buot khi tieu|nong rat khi tieu|di tieu nhieu lan ma it)\b/ },
   { id: "peemuch", label: "tiểu nhiều", re: /\b(tieu nhieu|di tieu nhieu|tieu dem|hay di tieu|tieu lien tuc)\b/ },
   { id: "bloodpee", label: "tiểu ra máu", re: /\b(tieu ra mau|nuoc tieu do|nuoc tieu co mau)\b/ },
-  { id: "flankpain", label: "đau lưng vùng hông / thắt lưng một bên", re: /\b(dau hong lung|dau hong (ben|phai|trai|mot ben)|dau than|dau vung than|dau quan than|dau lung lan xuong bung|dau mot ben hong)\b/ },
+  { id: "flankpain", label: "đau lưng vùng hông / thắt lưng một bên", re: /\b(dau hongx? lung|dau hongx? (ben|phai|trai|mot ben)|dau hongx|dau than|dau vung than|dau quan than|dau lung lan xuong bung|dau mot ben hong)\b/ },
   // Cơ xương khớp
   { id: "backpain", label: "đau lưng", re: /\b(dau lung|moi lung|dau that lung|dau cot song|cung lung)\b/ },
   { id: "neckpain", label: "đau cổ vai gáy", re: /\b(dau co vai gay|moi co vai gay|dau vai gay|moi vai gay|cung co|vep co|dau co gay)\b/ },
@@ -613,7 +613,7 @@ const FEELS: Sym[] = [
   { id: "irritable", label: "cáu gắt, dễ nổi nóng", re: /\b(cau gat|de cau|nong nay|buc boi|gian du|de noi nong|hay noi nong|buc minh)\b/ },
   { id: "lonely", label: "cô đơn", re: /\b(co don|mot minh|khong ai hieu|lac long|le loi)\b/ },
   { id: "empty", label: "trống rỗng, tê liệt cảm xúc", re: /\b(trong rong|te liet cam xuc|vo cam|khong cam thay gi)\b/ },
-  { id: "worthless", label: "thấy mình vô dụng, tự trách", re: /\b(vo dung|tu trach|toi loi|thay minh te|khong co gia tri|minh that bai|minh kem coi|ghet ban than)\b/ },
+  { id: "worthless", label: "thấy mình vô dụng, tự trách", re: /\b(vo dung|tu trach|toi loi|thay minh te|khong co gia tri|minh that bai|minh kem coi|ghet ban ?than)\b/ },
   { id: "hopeless", label: "tuyệt vọng, bế tắc", re: /\b(tuyet vong|bat luc|khong con hy vong|be tac|khong loi thoat|khong con y nghia)\b/ },
   { id: "cry", label: "hay khóc", re: /\b(hay khoc|muon khoc|khoc mot minh|khoc hoai|khoc suot|de khoc)\b/ },
   { id: "pressure", label: "áp lực, căng thẳng", re: /\b(ap luc|cang thang|stress|qua tai|nhieu viec qua)\b/ },

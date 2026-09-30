@@ -469,7 +469,7 @@ const DIETS: Diet[] = [
 ];
 
 const DIET_ASK = /\b(kieng|kieng gi|kieng cu|kieng khem|an gi|uong gi|an duoc|uong duoc|an dc|uong dc|duoc an|duoc uong|nen an|nen uong|khong nen an|khong nen uong|tranh an|tranh uong|tranh gi|thuc don|che do an|an uong|an co sao|uong co sao|co an duoc|co uong duoc|nen tranh|mon gi|do an|thuc pham)\b/;
-const CAN_ASK = /\b(duoc (khong|ko|k|hong|hok|hk|kh|ha|chu|khum)|dc (khong|ko|k|hong|hok|hk|kh|khum)|duoc k|co sao|co sao khong|co sao ko|co hai|co anh huong|co bi sao|an nhieu|uong nhieu|co nen|nen khong|nen ko)\b/;
+const CAN_ASK = /\b(duoc (khong|ko|k|hongx?|hok|hk|kh|ha|chu|khum)|dc (khong|ko|k|hongx?|hok|hk|kh|khum)|duoc k|co sao|co sao khong|co sao ko|co hai|co anh huong|co bi sao|an nhieu|uong nhieu|co nen|nen khong|nen ko)\b/;
 
 const CHIP = (s: string) => s.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
 

@@ -12,7 +12,7 @@ export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ BỊ NÓI XẤU / HIỂU LẦM (01/10) ═══════════════════════
   {
     id: "gossip",
-    re: /\b(noi xau (minh|toi|em|tui|to|anh|chi|sau lung)|bi noi xau|noi sau lung|bi dat dieu|dat dieu cho minh|bi don|don dai ve minh|tung tin (don )?(bay|sai)|bi vu khong|vu khong minh|bi hieu lam|hieu lam minh|ai cung hieu lam|bi mang sau lung|xi xao ve minh|bi dem ra ban tan)\b/,
+    re: /\b(noi xau (minh|toi|em|tui|to|anh|chi|sau lung)|bi noi xau|noi sau lung|bi dat dieu|dat dieu cho minh|bi don|don dai ve minh|tung tin (don )?(bay|sai)|bi vu khong|vu khong minh|bi hieu lam|hieu lam minh|ai cung hieu lam|bi mang sau lung|xi xao ve minh|bi dem ra ban tan|(hox|ho|nguoi ta|may nguoi do|tui no|ba ay) nhieu chuyen|nhieu chuyen ve minh)\b/,
     feel: [
       "Bị nói xấu sau lưng khó chịu lắm, vừa tức vừa tủi, mà nhiều khi còn không biết giải thích với ai 😣",
       "Bị hiểu lầm hay bị đặt điều là cảm giác bất lực ghê, Lomi hiểu mà 🫂",
@@ -38,7 +38,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "fate",
     // "sox" = chữ "số" gõ có dấu (lib/lomiAccent đổi để không nhầm với "sợ").
-    re: /\b((so|sox) minh (kho|xui|den)|(so|sox) kho|doi minh kho|doi kho qua|sao minh kho the|sao minh kho vay|sao minh xui|xui xeo qua|xui qua troi|xui hoai|xui lien tuc|den dui|toan gap chuyen xui|lam gi cung that bai|lam gi cung hong|cai gi cung hong|cai gi cung do be|so phan|kiep nay kho|troi khong thuong|ong troi bat cong)\b/,
+    re: /\b((so|sox) minh (kho|xui|den)|(so|sox) kho|doi minh kho|doi kho qua|sao minh kho the|sao minh kho vay|sao minh xui|xui xeo qua|xui qua troi|xui hoai|xui lien tuc|den dui|toan gap chuyen xui|lam gi cung that bai|lam gi cung hong|cai gi cung hong|cai gi cung do be|(so|sox) phan|kiep nay kho|troi khong thuong|ong troi bat cong)\b/,
     feel: [
       "Nghe như dạo này mọi chuyện cứ dồn dập đổ lên đầu bạn, mệt lắm ha 😔",
       "Cảm giác làm gì cũng hỏng, cứ như cả thế giới chống lại mình — Lomi hiểu mà 🫂",
@@ -512,7 +512,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "confidence",
-    re: /\b(muon tu tin|lam sao tu tin|tu tin hon|thieu tu tin|muon thay doi ban than|phat trien ban than|muon tot hon|song tich cuc|lam sao de song vui|bat dau lai|lam lai tu dau)\b/,
+    re: /\b(muon tu tin|lam sao tu tin|tu tin hon|thieu tu tin|muon thay doi ban ?than|phat trien ban ?than|muon tot hon|song tich cuc|lam sao de song vui|bat dau lai|lam lai tu dau)\b/,
     feel: ["Muốn trở nên tốt hơn là một mong muốn rất đẹp, Lomi ủng hộ bạn hết mình 💪", "Ui, nghe bạn muốn thay đổi là Lomi thấy có năng lượng liền 🌱"],
     insight: [
       "Tự tin không phải là không sợ, mà là dám làm dù còn sợ. Nó được xây từ những lần mình giữ lời hứa với chính mình.",
