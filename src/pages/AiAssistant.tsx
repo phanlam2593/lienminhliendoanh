@@ -36,6 +36,7 @@ import {
 import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
+import { heartContinue, heartOpen, heartStart, type HeartReply } from "@/lib/lomiHeart";
 import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -103,6 +104,9 @@ type Msg = {
   search?: SearchIntent; // lần tìm vừa rồi (để "Đổi món khác" bốc lại chỗ khác)
   tarotSpread?: "five" | "celtic"; // người dùng vừa chọn trải 5 / 10 lá, đang chờ câu hỏi
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
+  heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
+  heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
+  heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
 };
 type Quota = { member: boolean; limit: number; used: number };
@@ -230,14 +234,13 @@ function StarterCard({ emoji, title, desc, onClick }: { emoji: string; title: st
   return (
     <button
       onClick={onClick}
-      className="w-full flex items-center gap-3 rounded-2xl bg-gradient-brand text-white px-4 py-3 text-left shadow-sm active:scale-[0.98] transition"
+      className="group flex flex-col items-start gap-2 rounded-2xl border border-border/70 bg-card/60 backdrop-blur p-3 text-left shadow-sm hover:border-primary/50 active:scale-[0.97] transition"
     >
-      <span className="text-2xl">{emoji}</span>
-      <span className="flex-1 min-w-0">
-        <span className="block text-sm font-bold">{title}</span>
-        <span className="block text-[11px] opacity-90">{desc}</span>
+      <span className="w-9 h-9 rounded-xl bg-gradient-brand grid place-items-center text-lg shadow-sm group-hover:scale-105 transition-transform">{emoji}</span>
+      <span className="min-w-0">
+        <span className="block text-[13px] font-semibold leading-tight">{title}</span>
+        <span className="block text-[11px] text-muted-foreground leading-snug mt-0.5">{desc}</span>
       </span>
-      <span>›</span>
     </button>
   );
 }
@@ -462,6 +465,20 @@ export function AiChat({
     lomiSound("msg");
   };
 
+  // Tâm sự cùng Lomi (30/09) — lắng nghe, an ủi, tư vấn tình cảm/tâm lý nhẹ (lib/lomiHeart, chạy trên máy).
+  const heartMsg = (h: HeartReply, depth: number): Msg => ({
+    role: "assistant",
+    content: h.text,
+    local: true,
+    quick: h.quick.length ? h.quick : undefined,
+    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth }),
+  });
+  const askHeart = () => {
+    setErr(null);
+    push([heartMsg(heartOpen(), 0)]);
+    lomiSound("pop");
+  };
+
   const send = async (text: string, forceAi = false) => {
     const raw = text.trim();
     if (!raw || busy) return;
@@ -480,7 +497,7 @@ export function AiChat({
 
     // Lomi vừa mời ("rút một lá cho nhẹ lòng không?") kèm nút gợi ý → người dùng gõ "ok / ờ / có"
     // thì làm luôn gợi ý đầu tiên (khung chat vẫn hiện đúng chữ họ gõ); "không / thôi" thì đáp nhẹ nhàng.
-    if (!forceAi && !en && lastA?.quick?.length && !lastA.bizPick && !lastA.bizTopicPick && !lastA.tarotAwait) {
+    if (!forceAi && !en && lastA?.quick?.length && !lastA.bizPick && !lastA.bizTopicPick && !lastA.tarotAwait && !lastA.heart) {
       // Chỉ khi tin trước thật sự là lời mời (có câu hỏi + động từ mời), tránh "ok" sau câu chào bị hiểu nhầm.
       const offered = /\?/.test(lastA.content) && /(muốn|thử|để Lomi|rút|bói|chọn giùm|chỉ cách|xem thử)/i.test(lastA.content);
       if (offered && isAffirm(q)) {
@@ -606,6 +623,11 @@ export function AiChat({
         const d = detectTarot(q);
         if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
+      // f) Đang tâm sự → hiểu tin này là kể tiếp (trừ khi rõ ràng hỏi cách dùng app / tìm quán).
+      if (lastA?.heart && !en && !detectSearch(q) && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+        const depth = (lastA.heartDepth ?? 0) + 1;
+        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth), depth));
+      }
     }
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
     //    Riêng câu hỏi chuyện kinh doanh (vd "làm sao giữ khách quen cho spa") thì ưu tiên tư vấn kinh
@@ -630,6 +652,12 @@ export function AiChat({
       }
     }
     if (!forceAi) {
+      // Bắt đầu tâm sự ("tâm sự với mình nha", "cãi nhau với người yêu mệt quá"…) — trước chuyện phiếm.
+      // Người dùng vừa kể hoàn cảnh để Lomi nhớ (vd "mình đang thất nghiệp") thì để phần dưới đáp.
+      if (!en && !memLearn?.newSits.length) {
+        const h = heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
+        if (h) return localReply(q, heartMsg(h, 1));
+      }
       const cc = chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name));
       if (cc)
         return localReply(q, {
@@ -758,7 +786,6 @@ export function AiChat({
     setErr(null);
   };
 
-  const nonMember = !!quota && !quota.member;
 
   return (
     <div className={cn("flex flex-col", className)}>
@@ -804,54 +831,28 @@ export function AiChat({
 
       <div className="flex-1 overflow-y-auto p-3 space-y-3">
         {msgs.length === 0 ? (
-          <div className="py-3 space-y-4">
-            <div className="text-center space-y-1 px-6">
-              <LomiMascot size={60} className="mx-auto mb-1" track />
-              <p className="text-sm font-semibold">{t("ai.welcome")}</p>
-              <p className="text-xs text-muted-foreground">{t(nonMember ? "ai.welcomeDescFree" : "ai.welcomeDesc")}</p>
+          <div className="py-4 space-y-5">
+            {/* Màn chào gọn (30/09 r2, theo ý Kir): lời chào ngắn + 4 ô lối tắt, bỏ danh sách "Hỏi nhanh". */}
+            <div className="flex flex-col items-center text-center gap-1 px-6">
+              <LomiMascot size={56} className="mb-1" track />
+              <p className="text-base font-bold">
+                {en ? "Hi there 👋" : (() => {
+                  const nm = displayName(loadMem(user.id), profile?.full_name);
+                  return nm ? `Chào ${nm} 👋` : "Chào bạn 👋";
+                })()}
+              </p>
+              <p className="text-xs text-muted-foreground">{en ? "How can Lomi help today?" : "Hôm nay Lomi giúp gì cho bạn nè?"}</p>
             </div>
-            <StarterCard
-              emoji="🔮"
-              title={en ? "Tarot reading" : "Bói Tarot cùng Lomi"}
-              desc={en ? "Symbolic reflection for fun — free & unlimited" : "Góc nhìn để suy ngẫm & giải trí — 1, 3, 5 hay 10 lá, miễn phí"}
-              onClick={() => askTarot()}
-            />
-            {/* Tư vấn kinh doanh — chạy trên máy (lib/bizAdvisor.ts), miễn phí nên mở cho mọi người. */}
-            <StarterCard
-              emoji="💡"
-              title={en ? "Business tips with Lomi" : "Tư vấn kinh doanh cùng Lomi"}
-              desc={en ? "Offer ideas, more customers, post writing… free (Vietnamese)" : "Ý tưởng ưu đãi, hút khách, viết bài đăng… miễn phí"}
-              onClick={() => askBiz()}
-            />
-            {/* Hỏi nhanh — vài câu hay gặp, bấm là Lomi trả lời ngay (thư viện trên máy). */}
-            <div className="space-y-1.5 px-1">
-              <div className="text-xs font-semibold text-muted-foreground">{en ? "Quick questions" : "Hỏi nhanh"}</div>
-              <div className="flex flex-wrap gap-1.5">
-                {!en &&
-                  ["Hôm nay ăn gì? 🎲", "Quán cà phê nào đang có ưu đãi?"].map((label) => (
-                    <button
-                      key={label}
-                      onClick={() => void send(label)}
-                      className="text-[12px] px-2.5 py-1 rounded-full border border-primary/40 text-primary bg-background active:scale-95 transition"
-                    >
-                      {label}
-                    </button>
-                  ))}
-                {POPULAR_FAQ_IDS.map((id) => {
-                  const f = faqById(id)!;
-                  const label = en ? f.q.en : f.q.vi;
-                  return (
-                    <button
-                      key={id}
-                      onClick={() => void send(label)}
-                      className="text-[12px] px-2.5 py-1 rounded-full border border-primary/40 text-primary bg-background active:scale-95 transition"
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
+            <div className="grid grid-cols-2 gap-2.5">
+              <StarterCard emoji="🔮" title={en ? "Tarot reading" : "Bói Tarot"} desc={en ? "1 · 3 · 5 · 10 cards, for fun" : "Suy ngẫm & giải trí · 1–10 lá"} onClick={() => askTarot()} />
+              {!en && <StarterCard emoji="💬" title="Tâm sự" desc="Lắng nghe, an ủi, tư vấn tình cảm" onClick={askHeart} />}
+              {/* Tư vấn kinh doanh — chạy trên máy (lib/bizAdvisor.ts), miễn phí nên mở cho mọi người. */}
+              <StarterCard emoji="💡" title={en ? "Business tips" : "Tư vấn kinh doanh"} desc={en ? "Offers, customers, posts" : "Ưu đãi, hút khách, bài đăng"} onClick={() => askBiz()} />
+              {!en && <StarterCard emoji="🍜" title="Hôm nay ăn gì?" desc="Lomi chọn quán giùm bạn" onClick={() => void send("Hôm nay ăn gì? 🎲")} />}
             </div>
+            <p className="text-center text-[11px] text-muted-foreground/80 px-6">
+              {en ? "Or just type — ask anything about the app." : "Hoặc cứ gõ tự nhiên — hỏi về app, kể chuyện, hỏi gì cũng được 💚"}
+            </p>
           </div>
         ) : (
           msgs.map((m, i) => (
