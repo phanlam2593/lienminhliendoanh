@@ -339,9 +339,9 @@ function findTrigger(orig: string, f: string): { start: number; end: number } | 
 }
 
 const LEAD =
-  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai|tarot|cai|cua|dc|duoc|hoi|nhu the nao)(?![a-z])|(?:1|mot|3|ba)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
+  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep|tiep theo)(?![a-z])|(?:1|mot|3|ba)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
 const TRAIL =
-  /(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
+  /(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu|(?:\d+|mot|hai|ba|vai|may)\s+la(?:\s+bai)?)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
 
 /** Cắt bớt các chữ đệm ở 2 đầu ("xem giúp em …", "… nha") — làm trên bản bỏ dấu, cắt trên câu gốc. */
 function clean(orig: string): string {
@@ -812,7 +812,7 @@ const SCENE: Record<Scene, SceneBank> = {
   jobseek: {
     noun: "chuyện tìm việc",
     state: [
-      "Áp vào chuyện tìm việc, lá này cho thấy bạn vẫn đang giữ được {k}. Về mặt tâm lý, đây là “vốn” quý nhất của người đang thất nghiệp: ai còn tin vào năng lực của mình thì thường kiên trì nộp hồ sơ lâu hơn — và kiên trì mới là thứ quyết định kết quả.",
+      "Áp vào chuyện tìm việc, lá này cho thấy bạn vẫn đang giữ được {k}. Về mặt tâm lý, giữ được tinh thần tích cực là “vốn” quý nhất của người đang tìm việc: ai còn tin vào năng lực của mình thì thường kiên trì lâu hơn — và kiên trì mới là thứ quyết định kết quả.",
       "Áp vào chuyện tìm việc, lá này phản ánh bạn đang vướng {k}. Không có việc một thời gian, bị từ chối vài lần thì rất dễ tự nghi ngờ bản thân — đó là phản ứng tâm lý bình thường, không phải bằng chứng là bạn kém.",
     ],
     action: [
@@ -852,7 +852,7 @@ const SCENE: Record<Scene, SceneBank> = {
   ex: {
     noun: "chuyện với người cũ",
     state: [
-      "Với người cũ, lá này cho thấy giữa hai người vẫn còn {k}. Tâm lý học gọi đây là “chuyện chưa khép lại” — cảm xúc cũ còn đó nên mình mới hay nghĩ tới.",
+      "Với người cũ, lá này cho thấy giữa hai người vẫn còn {k}. Tâm lý học gọi cảm giác còn vương vấn này là “chuyện chưa khép lại” — cảm xúc cũ còn đó nên mình mới hay nghĩ tới.",
       "Với người cũ, lá này phản ánh bạn đang vướng {k}. Khi một mối quan hệ kết thúc, mình vẫn quen có người đó trong cuộc sống — nên nhớ nhung là chuyện bình thường.",
     ],
     action: [
@@ -1004,81 +1004,297 @@ const CHOICE_TPL: [string[], string[]] = [
 const fillT = (t: string, k: string, S: string) => t.replace("{k}", k).replace("{S}", S);
 const lcFirst = (x: string) => x.charAt(0).toLowerCase() + x.slice(1);
 
-/** Lời giải tiếng Việt kiểu kể chuyện: nghĩa lá → áp vào câu hỏi (góc nhìn tâm lý) → tóm lại có liên kết. */
+// ── Nghĩa theo LĨNH VỰC (30/09 r7, theo mẫu Kir gửi): cùng một lá nhưng hỏi việc làm khác hỏi tình cảm ──
+// [việc làm xuôi, việc làm ngược, tình cảm xuôi, tình cảm ngược]
+const MAJOR_DOMAIN: [string, string, string, string][] = [
+  ["Trong công việc, đây là lá của khởi đầu mới — có thể là một ngành, một chỗ làm bạn chưa từng thử. Dám nhận cơ hội lạ chính là điểm mấu chốt.", "Về công việc, lá này nhắc đừng nhảy vào việc gì quá vội chỉ vì sốt ruột, nhưng cũng đừng chần chừ mãi mà không nộp hồ sơ.", "Trong tình cảm, đây là năng lượng mới mẻ, hồn nhiên — một mối quan hệ nhẹ nhàng, không toan tính.", "Trong tình cảm, có chút bồng bột hoặc chần chừ; nghĩ kỹ rồi hãy bước tiếp."],
+  ["Về công việc, bạn đã có đủ kỹ năng và “đồ nghề” — chỉ cần chủ động thể hiện. Đây là lá rất tốt cho phỏng vấn, tự giới thiệu bản thân.", "Về công việc, năng lực của bạn chưa được thể hiện đúng chỗ — có thể CV chưa làm nổi điểm mạnh, hoặc đang ứng tuyển chưa đúng hướng.", "Trong tình cảm, bạn có sức hút và biết cách bắt chuyện; chủ động là có kết quả.", "Trong tình cảm, cẩn thận những lời nói ngọt mà hành động không đi kèm."],
+  ["Về công việc, câu trả lời chưa lộ hết — có những chuyện đang âm thầm diễn ra phía sau (hồ sơ đang được xem, có người đang cân nhắc bạn). Tin vào trực giác khi chọn nơi làm.", "Về công việc, có điều bạn chưa được biết hết; hỏi rõ thông tin trước khi quyết định.", "Trong tình cảm, có những cảm xúc chưa nói ra — cả hai đều đang dè dặt quan sát nhau.", "Trong tình cảm, có điều đang bị giấu; cần thẳng thắn với nhau hơn."],
+  ["Về công việc, đây là lá của sinh sôi — nỗ lực bắt đầu đơm hoa, môi trường làm việc dễ chịu.", "Về công việc, bạn đang cho đi nhiều mà chưa nhận lại tương xứng; đừng tự hạ giá bản thân.", "Trong tình cảm, là sự ấm áp, được chăm sóc — mối quan hệ đang được nuôi dưỡng tốt.", "Trong tình cảm, bạn lo cho người kia mà quên chăm lo chính mình."],
+  ["Về công việc, lá này nói về quy củ, kỷ luật — hợp với công ty có tổ chức hoặc vị trí cần trách nhiệm.", "Về công việc, có thể gặp môi trường áp đặt, hoặc chính bạn đang quá cứng nhắc với tiêu chuẩn của mình.", "Trong tình cảm, là sự vững chãi, che chở — có người muốn nghiêm túc.", "Trong tình cảm, sự kiểm soát hoặc cứng nhắc đang làm người kia ngột ngạt."],
+  ["Về công việc, hợp với con đường quen thuộc: nơi ổn định, được người đi trước dìu dắt, hoặc cơ hội đến qua người giới thiệu.", "Về công việc, cách làm cũ không còn hợp; thử một hướng khác ngoài khuôn khổ quen thuộc.", "Trong tình cảm, hướng tới cam kết nghiêm túc, được gia đình ủng hộ.", "Trong tình cảm, hai người khác quan điểm hoặc chịu áp lực từ gia đình, khuôn mẫu."],
+  ["Về công việc, đây là lá của lựa chọn đúng với giá trị bản thân — một công việc bạn thật sự thấy hợp, hoặc một mối hợp tác tốt.", "Về công việc, điều bạn muốn và điều đang có còn lệch nhau; xem lại tiêu chí chọn việc.", "Trong tình cảm, đây là lá rất đẹp — sự hoà hợp, hai người chọn nhau bằng trái tim.", "Trong tình cảm, có lệch nhịp hoặc lựa chọn chưa đúng; cần nói chuyện thật lòng."],
+  ["Về công việc, đây là lá của quyết tâm và tiến lên — càng chủ động, kết quả càng đến nhanh.", "Về công việc, bạn đang bị kéo về quá nhiều hướng; chọn một mục tiêu rõ rồi dồn sức vào đó.", "Trong tình cảm, chủ động theo đuổi sẽ có kết quả.", "Trong tình cảm, mỗi người một hướng, thiếu sự đồng lòng."],
+  ["Về công việc, sức mạnh nằm ở sự kiên nhẫn và bình tĩnh — giữ vững tinh thần là vượt qua được giai đoạn khó.", "Về công việc, sự tự ti đang kéo bạn xuống nhiều hơn là thực lực — bạn giỏi hơn bạn nghĩ đó.", "Trong tình cảm, sự dịu dàng và kiên nhẫn sẽ cảm hoá được người kia.", "Trong tình cảm, cảm xúc đang lấn át lý trí, dễ tổn thương."],
+  ["Về công việc, đây là lúc lùi lại để nhìn rõ mình muốn gì — dùng thời gian này học thêm, định hướng lại là rất đáng.", "Về công việc, đừng thu mình quá lâu; cơ hội cần bạn bước ra và kết nối.", "Trong tình cảm, bạn đang cần khoảng lặng để hiểu mình trước khi hiểu người.", "Trong tình cảm, sự thu mình đang tạo khoảng cách."],
+  ["Về công việc, vận đang xoay chiều — một thay đổi thuận lợi có thể tới khá bất ngờ.", "Về công việc, đang ở vòng lận đận tạm thời — nhưng bánh xe nào rồi cũng quay.", "Trong tình cảm, duyên đang tới, có thể gặp đúng người vào lúc không ngờ.", "Trong tình cảm, chưa đúng thời điểm; đừng cố ép."],
+  ["Về công việc, làm đúng sẽ được đánh giá công bằng — hợp đồng, giấy tờ, thoả thuận rõ ràng.", "Về công việc, đọc kỹ hợp đồng và điều khoản; có điều chưa sòng phẳng.", "Trong tình cảm, cần sự công bằng — cho và nhận cân bằng.", "Trong tình cảm, có một bên đang chịu thiệt."],
+  ["Về công việc, đây là giai đoạn chờ có chủ đích — thử nhìn theo góc khác, có thể bạn đang tìm chưa đúng chỗ.", "Về công việc, đừng trì hoãn nữa; chờ thêm cũng không làm cơ hội tự tới.", "Trong tình cảm, tạm dừng để nhìn lại, bớt cái tôi một chút.", "Trong tình cảm, chờ đợi mà không rõ mình chờ điều gì."],
+  ["Về công việc, một chương cũ khép lại để mở chương mới — rất có thể là chuyển ngành hoặc một kiểu công việc khác trước đây.", "Về công việc, bạn đang níu hình mẫu công việc cũ; buông ra sẽ thấy nhiều lựa chọn hơn.", "Trong tình cảm, kết thúc cái cũ để bắt đầu lại — không phải điềm xấu đâu.", "Trong tình cảm, đang níu kéo điều đã hết."],
+  ["Về công việc, mọi thứ đến từ từ và cân bằng — kiên nhẫn, kết hợp nhiều kỹ năng sẽ tìm được chỗ phù hợp.", "Về công việc, đang có sự quá đà: nộp tràn lan, hoặc ngược lại buông hẳn — tìm lại nhịp vừa phải.", "Trong tình cảm, hoà hợp, nhẹ nhàng, hợp để đi lâu dài.", "Trong tình cảm, mất cân bằng — một người đang cho quá nhiều."],
+  ["Về công việc, cẩn thận những lời mời hấp dẫn quá mức, hoặc công việc giữ chân bằng tiền nhưng bào mòn bạn.", "Về công việc, bạn đang thoát khỏi một ràng buộc cũ — tự do chọn hướng mới.", "Trong tình cảm, có sự ràng buộc, ghen tuông hoặc phụ thuộc cảm xúc.", "Trong tình cảm, bạn đang dần gỡ được ràng buộc không lành mạnh."],
+  ["Về công việc, thay đổi đột ngột — có thể làm bạn chao đảo, nhưng dọn đường cho điều phù hợp hơn.", "Về công việc, bạn đang né một thay đổi không thể tránh; chủ động đón nhận sẽ đỡ sốc hơn.", "Trong tình cảm, một cú sốc hoặc một sự thật bất ngờ.", "Trong tình cảm, né tránh vấn đề chỉ làm nó lớn thêm."],
+  ["Về công việc, đây là lá của hy vọng — sau giai đoạn khó, mọi thứ bắt đầu sáng dần, bạn đang đi đúng hướng.", "Về công việc, bạn hơi mất niềm tin sau vài lần không như ý — đừng để nó dập tắt động lực.", "Trong tình cảm, là sự chữa lành và hy vọng.", "Trong tình cảm, niềm tin đang lung lay tạm thời."],
+  ["Về công việc, thông tin còn mơ hồ — đừng tin vội lời hứa hẹn, tìm hiểu kỹ nơi làm trước khi nhận.", "Về công việc, mọi thứ đang dần rõ ra; bạn sẽ sớm biết mình nên đi hướng nào.", "Trong tình cảm, còn nhiều mập mờ, dễ suy diễn.", "Trong tình cảm, sự thật đang dần sáng tỏ."],
+  ["Về công việc, đây là một trong những lá đẹp nhất — thành công, được công nhận, tin vui rõ ràng.", "Về công việc, kết quả vẫn tốt nhưng chậm hơn mong đợi; đừng để mệt mỏi làm mờ niềm vui.", "Trong tình cảm, vui vẻ, rõ ràng, đàng hoàng.", "Trong tình cảm, vẫn ổn nhưng hơi nhạt."],
+  ["Về công việc, một lời gọi mới — có thể là cơ hội quay lại lĩnh vực cũ, hoặc ai đó từ trước liên hệ lại.", "Về công việc, đừng tự trách vì những lựa chọn trước; bài học có rồi, giờ là lúc làm lại.", "Trong tình cảm, cơ hội làm lại, nhìn nhận lại mối quan hệ.", "Trong tình cảm, vẫn còn tự trách hoặc chưa tha thứ được."],
+  ["Về công việc, hoàn thành một giai đoạn, bước sang cấp độ mới — có thể là môi trường rộng hơn trước.", "Về công việc, còn việc dang dở cần khép lại trước khi bước tiếp.", "Trong tình cảm, viên mãn, trọn vẹn.", "Trong tình cảm, còn điều chưa trọn cần hoàn thiện."],
+];
+// Lá phụ: nghĩa theo từng lá cho VIỆC LÀM và TÌNH CẢM — [việc xuôi, việc ngược, tình xuôi, tình ngược] (Át → Vua)
+const MINOR_DOMAIN: Record<Exclude<TarotSuit, "major">, [string, string, string, string][]> = {
+  wands: [
+    ["Về công việc, một cơ hội hoặc ý tưởng mới đang nhen nhóm — hợp để bắt đầu ngay khi còn hứng khởi.", "Về công việc, có ý tưởng mà chưa bắt đầu được, hoặc cơ hội bị hoãn lại; đừng để hứng khởi nguội đi.", "Trong tình cảm, có một sự rung động mới, nhiều hào hứng.", "Trong tình cảm, lửa đang hơi nguội hoặc bắt đầu chưa đúng lúc."],
+    ["Về công việc, bạn đang lên kế hoạch cho bước tiếp theo và nhìn ra những lựa chọn xa hơn — kể cả việc ở nơi khác.", "Về công việc, ngại bước ra khỏi vùng an toàn nên cứ đứng yên ở chỗ cũ.", "Trong tình cảm, đang cân nhắc tương lai, tính chuyện lâu dài.", "Trong tình cảm, còn do dự, chưa dám quyết."],
+    ["Về công việc, những gì bạn gieo trước đây bắt đầu có hồi âm — cơ hội mở rộng, có khi từ nơi xa.", "Về công việc, phản hồi đến chậm hơn mong đợi; cần kiên nhẫn chờ.", "Trong tình cảm, mối quan hệ có triển vọng, hướng về tương lai.", "Trong tình cảm, mong đợi chưa được đáp lại như ý."],
+    ["Về công việc, có chuyện đáng ăn mừng — một cột mốc, hoặc một môi trường làm việc thân thiện.", "Về công việc, có chút lấn cấn trong nhóm, hoặc chưa thấy mình thuộc về nơi làm.", "Trong tình cảm, ấm cúng, có thể tính chuyện ra mắt, về chung.", "Trong tình cảm, có chút không yên giữa hai người hoặc trong nhà."],
+    ["Về công việc, cạnh tranh khá gắt, nhiều người cùng giành một vị trí — cần làm nổi bật điểm khác biệt của mình.", "Về công việc, tránh những tranh cãi không đáng, tập trung vào việc của mình.", "Trong tình cảm, hay cãi nhau vặt, mỗi người một ý.", "Trong tình cảm, những va chạm đang lắng xuống."],
+    ["Về công việc, đây là lá của chiến thắng và được công nhận — tin vui, được chọn.", "Về công việc, bạn thấy mình chưa được ghi nhận xứng đáng; đừng để nó làm nản lòng.", "Trong tình cảm, tự hào về nhau, mối quan hệ được công nhận.", "Trong tình cảm, cần được quan tâm, ghi nhận nhiều hơn."],
+    ["Về công việc, cần giữ vững lập trường, bảo vệ giá trị của mình (vd khi thương lượng lương).", "Về công việc, đang quá tải, dễ buông xuôi — chỉ chọn những “trận” đáng theo thôi.", "Trong tình cảm, cần bảo vệ mối quan hệ trước tác động bên ngoài.", "Trong tình cảm, mệt vì phải gồng quá lâu."],
+    ["Về công việc, mọi thứ chuyển động nhanh — tin tức, lời mời, lịch phỏng vấn có thể tới dồn dập.", "Về công việc, có sự trễ hẹn, chậm phản hồi; đừng vội kết luận.", "Trong tình cảm, tin nhắn qua lại nhiều, mọi thứ tiến triển nhanh.", "Trong tình cảm, dễ hiểu lầm vì vội vàng hoặc trễ hẹn."],
+    ["Về công việc, bạn đã đi gần tới đích — mệt nhưng đừng bỏ cuộc lúc này.", "Về công việc, đang kiệt sức; nghỉ một nhịp rồi tính tiếp.", "Trong tình cảm, còn chút phòng thủ vì từng tổn thương, nhưng vẫn kiên trì.", "Trong tình cảm, mệt mỏi, muốn buông."],
+    ["Về công việc, đang ôm quá nhiều trách nhiệm — cẩn thận nhận việc quá sức.", "Về công việc, bạn bắt đầu biết buông bớt gánh nặng, ưu tiên điều quan trọng.", "Trong tình cảm, một người đang gồng gánh quá nhiều.", "Trong tình cảm, cùng chia sẻ gánh nặng sẽ nhẹ hơn."],
+    ["Về công việc, có tin vui hoặc lời mời mới, hợp để học thêm một kỹ năng.", "Về công việc, ý tưởng nhiều mà thiếu kiên trì theo đến cùng.", "Trong tình cảm, một lời rủ rê, một tin nhắn thú vị.", "Trong tình cảm, cảm xúc thất thường, nhanh chán."],
+    ["Về công việc, hành động mạnh mẽ — hợp để chủ động nộp hồ sơ, đi gặp người.", "Về công việc, cẩn thận nóng vội, quyết định bốc đồng.", "Trong tình cảm, một người đầy nhiệt huyết, theo đuổi mạnh mẽ.", "Trong tình cảm, đến nhanh thì đi cũng nhanh."],
+    ["Về công việc, bạn tự tin và cuốn hút — thể hiện bản thân là điểm mạnh khi phỏng vấn.", "Về công việc, chút tự ti hoặc so sánh với người khác đang kéo bạn lại.", "Trong tình cảm, bạn đang rất thu hút và tự tin.", "Trong tình cảm, có chút ghen tuông hoặc bất an."],
+    ["Về công việc, tầm nhìn và khả năng dẫn dắt — hợp vị trí quản lý hoặc tự làm chủ.", "Về công việc, kỳ vọng quá cao hoặc độc đoán có thể gây mâu thuẫn.", "Trong tình cảm, một người chín chắn, dám cam kết.", "Trong tình cảm, muốn kiểm soát, áp đặt."],
+  ],
+  cups: [
+    ["Về công việc, một công việc khiến bạn thật sự thấy vui, đúng với điều mình thích.", "Về công việc, bạn đang làm vì phải làm chứ không vì thích, cảm xúc bị kìm nén.", "Trong tình cảm, một cảm xúc mới chớm nở, rất đẹp.", "Trong tình cảm, cảm xúc bị kìm nén, chưa dám mở lòng."],
+    ["Về công việc, một mối hợp tác hoặc đồng nghiệp rất hợp ý.", "Về công việc, lệch pha với đối tác hoặc đồng nghiệp.", "Trong tình cảm, hai người có sự kết nối hai chiều — lá rất đẹp cho chuyện tình cảm.", "Trong tình cảm, lệch pha, dễ hiểu lầm."],
+    ["Về công việc, môi trường vui vẻ, có bạn bè giới thiệu cơ hội.", "Về công việc, vui chơi quá đà đang ảnh hưởng tới việc.", "Trong tình cảm, vui vẻ, được bạn bè vun vào.", "Trong tình cảm, có người thứ ba hoặc sự xen vào."],
+    ["Về công việc, đang chững lại, chưa thấy cơ hội nào thật sự vừa ý — có khi cơ hội ở ngay đó mà mình chưa để ý.", "Về công việc, bạn bắt đầu mở lòng đón nhận lựa chọn mới.", "Trong tình cảm, hơi chán, thờ ơ, dễ bỏ lỡ tín hiệu từ người khác.", "Trong tình cảm, bắt đầu mở lòng trở lại."],
+    ["Về công việc, còn tiếc nuối một cơ hội đã mất — nhưng phía sau vẫn còn những cơ hội khác.", "Về công việc, bạn đang dần vượt qua thất vọng, sẵn sàng thử lại.", "Trong tình cảm, tiếc nuối, buồn vì điều đã mất.", "Trong tình cảm, vết thương đang lành dần."],
+    ["Về công việc, cơ hội có thể đến từ người quen cũ hoặc chỗ làm cũ.", "Về công việc, đừng mãi so sánh với công việc trước đây.", "Trong tình cảm, kỷ niệm đẹp — có thể người cũ quay lại.", "Trong tình cảm, đang mắc kẹt trong quá khứ."],
+    ["Về công việc, nhiều lựa chọn quá, dễ mơ mộng — cần chọn cái thực tế nhất.", "Về công việc, bạn đang tỉnh táo lại, nhìn rõ đâu là lựa chọn thật.", "Trong tình cảm, nhiều mộng tưởng, dễ lý tưởng hoá người kia.", "Trong tình cảm, tỉnh táo nhìn rõ mối quan hệ."],
+    ["Về công việc, rời bỏ điều không còn hợp để tìm hướng tốt hơn.", "Về công việc, biết là nên đổi mà vẫn chưa nỡ rời.", "Trong tình cảm, ra đi vì mối quan hệ không còn làm mình hạnh phúc.", "Trong tình cảm, lưỡng lự, chưa nỡ buông."],
+    ["Về công việc, điều ước dễ thành thật — hài lòng với kết quả.", "Về công việc, bề ngoài ổn nhưng bên trong vẫn thấy thiếu.", "Trong tình cảm, hài lòng, như ý.", "Trong tình cảm, hài lòng chưa trọn."],
+    ["Về công việc, một nơi làm như gia đình, cân bằng công việc và cuộc sống.", "Về công việc, kỳ vọng và thực tế còn vênh.", "Trong tình cảm, trọn vẹn, hướng tới gia đình — lá rất đẹp.", "Trong tình cảm, kỳ vọng và thực tế còn vênh."],
+    ["Về công việc, một lời mời dễ thương hoặc một ý tưởng sáng tạo.", "Về công việc, còn non kinh nghiệm, dễ tự ái khi bị góp ý.", "Trong tình cảm, một tin nhắn dễ thương, một lời tỏ tình.", "Trong tình cảm, cảm xúc còn non nớt."],
+    ["Về công việc, một lời mời hấp dẫn, hợp với việc sáng tạo.", "Về công việc, lời hứa hẹn ngọt quá — kiểm chứng kỹ trước khi nhận.", "Trong tình cảm, một lời mời lãng mạn, chân thành.", "Trong tình cảm, hứa hẹn quá ngọt, cẩn thận nha."],
+    ["Về công việc, sự tinh tế, thấu cảm là điểm mạnh — hợp nghề chăm sóc, dịch vụ.", "Về công việc, dễ bị cảm xúc chi phối, nhạy cảm quá mức.", "Trong tình cảm, thấu hiểu, dịu dàng.", "Trong tình cảm, nhạy cảm quá, dễ tổn thương."],
+    ["Về công việc, cân bằng lý trí và cảm xúc — xử lý mọi chuyện chín chắn.", "Về công việc, cảm xúc thất thường ảnh hưởng quyết định.", "Trong tình cảm, một người chín chắn, bao dung.", "Trong tình cảm, cảm xúc thất thường, khó đoán."],
+  ],
+  swords: [
+    ["Về công việc, sự sáng tỏ — bạn nhìn rõ mình muốn gì, có một quyết định dứt khoát.", "Về công việc, thông tin đang rối, đừng quyết vội.", "Trong tình cảm, một sự thật được nói ra rõ ràng.", "Trong tình cảm, hiểu lầm vì thông tin nhiễu."],
+    ["Về công việc, đang phân vân giữa hai lựa chọn và né quyết định.", "Về công việc, đến lúc phải chọn rồi, né thêm không được nữa.", "Trong tình cảm, né tránh cảm xúc thật, chưa dám đối diện.", "Trong tình cảm, buộc phải đưa ra quyết định."],
+    ["Về công việc, một nỗi thất vọng (bị từ chối, bị chê) cần được thừa nhận để đi tiếp.", "Về công việc, nỗi buồn đang qua dần.", "Trong tình cảm, tổn thương, đau lòng.", "Trong tình cảm, vết thương đang lành."],
+    ["Về công việc, cần nghỉ ngơi, nạp lại năng lượng trước khi tiếp tục.", "Về công việc, bạn đã sẵn sàng quay lại sau thời gian nghỉ.", "Trong tình cảm, cần một khoảng lặng.", "Trong tình cảm, sẵn sàng kết nối lại."],
+    ["Về công việc, thắng mà mất nhiều — cân nhắc xem có đáng tranh không.", "Về công việc, làm hoà, bỏ qua mâu thuẫn để đi tiếp.", "Trong tình cảm, cãi thắng mà mất lòng.", "Trong tình cảm, làm hoà."],
+    ["Về công việc, đang rời xa giai đoạn khó, chuyển sang chỗ yên ổn hơn.", "Về công việc, còn vướng bận chuyện cũ nên chưa đi tiếp được.", "Trong tình cảm, đang cùng nhau đi qua giai đoạn khó.", "Trong tình cảm, còn vướng bận chuyện cũ."],
+    ["Về công việc, cẩn thận thông tin chưa minh bạch, đọc kỹ điều khoản.", "Về công việc, sự thật dần lộ ra.", "Trong tình cảm, có điều chưa thật lòng.", "Trong tình cảm, sự thật dần lộ ra."],
+    ["Về công việc, cảm giác bị mắc kẹt — nhưng phần lớn là do mình tự giới hạn mình.", "Về công việc, bạn đang thoát ra khỏi suy nghĩ tự trói buộc.", "Trong tình cảm, thấy bế tắc, mắc kẹt.", "Trong tình cảm, đang dần thoát ra."],
+    ["Về công việc, lo âu, mất ngủ vì chuyện việc làm — nỗi lo thường lớn hơn thực tế.", "Về công việc, nỗi lo đang vơi dần.", "Trong tình cảm, suy nghĩ quá nhiều, lo lắng.", "Trong tình cảm, nỗi lo dịu đi."],
+    ["Về công việc, một điểm chạm đáy — nhưng đáy rồi thì chỉ còn đi lên.", "Về công việc, đang hồi phục sau cú vấp.", "Trong tình cảm, một kết thúc đau lòng.", "Trong tình cảm, hồi phục sau tổn thương."],
+    ["Về công việc, tò mò, ham học — có tin tức mới.", "Về công việc, cẩn thận chuyện thị phi, nói nhiều làm ít.", "Trong tình cảm, đang tìm hiểu, dò hỏi.", "Trong tình cảm, lời ra tiếng vào."],
+    ["Về công việc, hành động quyết liệt, nói thẳng.", "Về công việc, hấp tấp trong lời nói và quyết định.", "Trong tình cảm, thẳng thắn, chủ động.", "Trong tình cảm, dễ nói lời làm tổn thương."],
+    ["Về công việc, sắc sảo, độc lập — lợi thế ở vị trí cần phân tích.", "Về công việc, khắt khe quá với người khác và chính mình.", "Trong tình cảm, tỉnh táo, rõ ràng, không để cảm xúc che mắt.", "Trong tình cảm, lạnh lùng, khắt khe."],
+    ["Về công việc, lý trí, nguyên tắc — hợp vai trò chuyên môn.", "Về công việc, áp đặt bằng lý lẽ.", "Trong tình cảm, một người lý trí, đáng tin.", "Trong tình cảm, lạnh lùng, áp đặt."],
+  ],
+  pentacles: [
+    ["Về công việc, một cơ hội vật chất thực sự — offer, công việc mới hoặc nguồn thu mới. Đây là lá rất đẹp khi hỏi chuyện việc làm.", "Về công việc, cơ hội có đó nhưng dễ tuột nếu không chuẩn bị kỹ.", "Trong tình cảm, một khởi đầu vững chắc, thực tế.", "Trong tình cảm, còn tính toán, chưa chắc chắn."],
+    ["Về công việc, xoay xở khéo nhiều việc cùng lúc — có thể làm thêm việc tạm để giữ nhịp.", "Về công việc, quá tải, lịch trình rối.", "Trong tình cảm, cân bằng giữa tình cảm và cuộc sống.", "Trong tình cảm, bận quá nên xao nhãng nhau."],
+    ["Về công việc, làm việc nhóm hiệu quả, kỹ năng được đánh giá cao.", "Về công việc, phối hợp chưa ăn ý.", "Trong tình cảm, cùng nhau vun đắp.", "Trong tình cảm, chưa đồng lòng."],
+    ["Về công việc, giữ chặt thứ đang có — an toàn nhưng ít phát triển.", "Về công việc, chi tiêu hoặc giữ khư khư quá mức.", "Trong tình cảm, muốn giữ chặt, sợ mất.", "Trong tình cảm, chiếm hữu hoặc buông lỏng quá."],
+    ["Về công việc, khó khăn tài chính tạm thời — đừng ngại nhờ người quen giúp đỡ, giới thiệu.", "Về công việc, tình hình đang khởi sắc, qua cơn khó rồi.", "Trong tình cảm, cảm giác bị bỏ rơi.", "Trong tình cảm, đang dần ấm lại."],
+    ["Về công việc, có người giúp đỡ, nâng đỡ bạn.", "Về công việc, chuyện cho và nhận chưa cân bằng.", "Trong tình cảm, cho và nhận hài hoà.", "Trong tình cảm, một bên đang cho quá nhiều."],
+    ["Về công việc, kiên nhẫn chờ thành quả — bạn đã gieo đủ rồi.", "Về công việc, sốt ruột vì chưa thấy kết quả.", "Trong tình cảm, vun đắp chậm mà chắc.", "Trong tình cảm, sốt ruột, muốn nhanh."],
+    ["Về công việc, đây là lá của kỹ năng và bắt tay vào làm rất rõ — càng chủ động rèn nghề, gửi hồ sơ, hỏi người quen thì càng dễ kích hoạt cơ hội.", "Về công việc, làm cho có, thiếu tập trung.", "Trong tình cảm, chăm chút cho nhau từng chút.", "Trong tình cảm, đang lơ là nhau."],
+    ["Về công việc, tự chủ, sung túc — thành quả từ nỗ lực của chính mình.", "Về công việc, phụ thuộc hoặc tiêu xài quá tay.", "Trong tình cảm, tự tin, độc lập.", "Trong tình cảm, phụ thuộc cảm xúc."],
+    ["Về công việc, ổn định lâu dài, nơi làm có nền tảng vững.", "Về công việc, có bất ổn về tài chính.", "Trong tình cảm, bền vững, hướng tới gia đình.", "Trong tình cảm, lấn cấn chuyện tiền bạc, gia đình."],
+    ["Về công việc, cơ hội nhỏ mà chắc — một khoá học, một việc làm thử.", "Về công việc, chần chừ, thiếu thực tế.", "Trong tình cảm, tìm hiểu chậm rãi, nghiêm túc.", "Trong tình cảm, còn chần chừ."],
+    ["Về công việc, đều đặn, chắc chắn — tiến chậm mà chắc.", "Về công việc, trì trệ, an phận quá.", "Trong tình cảm, một người đáng tin, kiên định.", "Trong tình cảm, đều đều quá thành nhàm."],
+    ["Về công việc, chu đáo, biết vun vén — hợp việc quản lý, chăm sóc.", "Về công việc, lo toan quá nhiều cho người khác.", "Trong tình cảm, ấm áp, biết chăm lo.", "Trong tình cảm, quên chăm lo bản thân."],
+    ["Về công việc, vững vàng tài chính, có vị trí.", "Về công việc, đặt nặng tiền bạc quá.", "Trong tình cảm, một người vững chãi, có trách nhiệm.", "Trong tình cảm, thực dụng quá."],
+  ],
+};
+type Domain = "career" | "love" | "general";
+const DOMAIN_OF: Record<Scene, Domain> = {
+  jobseek: "career", work: "career", money: "career",
+  ex: "love", crush: "love", love: "love",
+  travel: "general", study: "general", health: "general", fun: "general", general: "general",
+};
+function domainText(d: TarotDraw, dom: Domain): string {
+  const c = tarotCard(d.id);
+  if (dom === "general") return "";
+  const j = (dom === "career" ? 0 : 2) + (d.rev ? 1 : 0);
+  return c.suit === "major" ? MAJOR_DOMAIN[d.id][j] : MINOR_DOMAIN[c.suit][(d.id - 22) % 14][j];
+}
+
+// Khung thời gian cụ thể (quy ra tháng/năm tính từ hôm nay) cho câu hỏi "bao giờ / khi nào".
+function timingWindow(d: TarotDraw): { lo: number; hi: number; unit: "tuần" | "tháng"; note: string } {
+  const c = tarotCard(d.id);
+  if (c.suit === "major")
+    return d.rev
+      ? { lo: 3, hi: 6, unit: "tháng", note: "lá Ẩn Chính ngược nên có thể lâu hơn bạn mong một chút" }
+      : { lo: 1, hi: 3, unit: "tháng", note: "đi kèm một bước ngoặt khá rõ" };
+  const k = (d.id - 22) % 14;
+  let w: { lo: number; hi: number; unit: "tuần" | "tháng"; note: string };
+  if (k <= 9) {
+    const n = k + 1;
+    const monthly = c.suit === "cups" || c.suit === "pentacles";
+    w = monthly ? { lo: n, hi: n + 2, unit: "tháng", note: "" } : { lo: n, hi: n + 2, unit: "tuần", note: "" };
+  } else
+    w = [
+      { lo: 2, hi: 4, unit: "tuần" as const, note: "để ý tin nhắn, email trong thời gian này" },
+      { lo: 1, hi: 3, unit: "tuần" as const, note: "mọi thứ chuyển động khá nhanh" },
+      { lo: 2, hi: 3, unit: "tháng" as const, note: "cần chút thời gian vun vén" },
+      { lo: 3, hi: 6, unit: "tháng" as const, note: "khi mọi thứ đã chín muồi" },
+    ][k - 10];
+  if (d.rev) w = { ...w, hi: w.hi + (w.unit === "tuần" ? 2 : 1), note: w.note || "lá ngược nên có thể trễ hơn chút" };
+  return w;
+}
+function monthLabel(dt: Date) {
+  return `tháng ${dt.getMonth() + 1}/${dt.getFullYear()}`;
+}
+function calendarRange(w: { lo: number; hi: number; unit: "tuần" | "tháng" }, now = new Date()): { from: string; range: string } {
+  const add = (n: number) => new Date(now.getTime() + n * (w.unit === "tuần" ? 7 : 30) * 86400000);
+  const a = add(w.lo);
+  const b = add(w.hi);
+  const part = now.getDate() <= 10 ? "đầu" : now.getDate() <= 20 ? "giữa" : "cuối";
+  const from = `${part} tháng ${now.getMonth() + 1}/${now.getFullYear()}`;
+  const sameYear = a.getFullYear() === b.getFullYear();
+  const range =
+    a.getMonth() === b.getMonth() && sameYear
+      ? `trong ${monthLabel(a)}`
+      : sameYear
+        ? `khoảng tháng ${a.getMonth() + 1} → tháng ${b.getMonth() + 1}/${b.getFullYear()}`
+        : `khoảng ${monthLabel(a)} → ${monthLabel(b)}`;
+  return { from, range };
+}
+
+// Câu hỏi có/không viết lại theo bối cảnh — để phần kết luận nói thẳng vào điều người hỏi muốn biết.
+const SCENE_ASK: Record<Scene, string> = {
+  jobseek: "có việc hay không", work: "công việc có thuận lợi không", ex: "người cũ có quay lại không",
+  crush: "chuyện với người ấy có thành không", love: "tình cảm có tiến triển không", money: "tiền bạc có khá lên không",
+  travel: "mọi chuyện có suôn sẻ không", study: "kết quả có tốt không", health: "có mau khoẻ không", fun: "có nên đi không",
+  general: "chuyện này có thành không",
+};
+// Gợi ý bói tiếp theo bối cảnh (hiện thành nút bấm; có chữ "Bói" nên bấm là bói luôn).
+const SCENE_NEXT: Record<Scene, string[]> = {
+  jobseek: ["Bói tiếp: công việc sắp tới hợp ngành gì", "Bói tiếp: môi trường làm việc sắp tới thế nào", "Bói tiếp: thu nhập công việc mới có ổn không"],
+  work: ["Bói tiếp: có nên nhảy việc không", "Bói tiếp: sếp đánh giá mình thế nào", "Bói tiếp: năm nay có tăng lương không"],
+  ex: ["Bói tiếp: người cũ còn nghĩ về mình không", "Bói tiếp: mình có nên chủ động liên lạc không", "Bói tiếp: sắp tới tình cảm của mình thế nào"],
+  crush: ["Bói tiếp: người ấy nghĩ gì về mình", "Bói tiếp: mình có nên tỏ tình không", "Bói tiếp: khi nào hai đứa thân hơn"],
+  love: ["Bói tiếp: người ấy nghĩ gì về mình", "Bói tiếp: mối quan hệ này có lâu dài không", "Bói tiếp: khi nào mình gặp đúng người"],
+  money: ["Bói tiếp: có nên đầu tư lúc này không", "Bói tiếp: khi nào tài chính ổn định hơn", "Bói tiếp: nguồn thu mới sẽ đến từ đâu"],
+  travel: ["Bói tiếp: chuyến đi có suôn sẻ không", "Bói tiếp: cần chuẩn bị gì thêm cho hồ sơ", "Bói tiếp: cuộc sống ở nơi mới thế nào"],
+  study: ["Bói tiếp: kỳ thi sắp tới thế nào", "Bói tiếp: mình có hợp ngành đang học không", "Bói tiếp: có nên học thêm không"],
+  health: ["Bói một lá cho hôm nay", "Bói tiếp: tinh thần mình dạo này thế nào"],
+  fun: ["Bói một lá cho hôm nay", "Bói tiếp: cuối tuần này có gì vui không"],
+  general: ["Bói một lá cho hôm nay", "Bói tiếp: tháng này của mình thế nào"],
+};
+export function tarotFollowUps(r: TarotReading): string[] {
+  if (!r.question || r.cards.length < 2) return [];
+  return SCENE_NEXT[sceneOf(r.question, r.topic, r.context)];
+}
+const OPEN_LINE = ["Được nè 😌", "Okie 😌", "Được luôn 😌"];
+
+/** Lời giải tiếng Việt theo mẫu Kir thích: liệt kê lá → giải từng lá theo chủ đề → quá trình của cả trải bài
+ *  → khung thời gian cụ thể (nếu hỏi "bao giờ") → kết luận thẳng câu hỏi → gợi ý bói tiếp. */
 function readingNarrativeVi(r: TarotReading): string {
   const kind = r.kind ?? "open";
   const q = r.question ?? "";
   const scene = sceneOf(q, r.topic, r.context);
   const bank = SCENE[scene];
+  const dom = DOMAIN_OF[scene];
   const sub = subjectOf(q, r.topic);
   const S = bank.noun && (sub === TOPIC_NOUN[r.topic] || scene === "jobseek" || scene === "health") ? bank.noun : sub;
   const pos = r.pos ?? [];
   const roles: Role[] = kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
-  const nums = ["①", "②", "③"];
-  // Lá ngược mang nghĩa tốt (vd "nỗi lo đang vơi dần") vẫn tính là thuận; lá xuôi nặng (Toà Tháp) tính là thử thách.
   const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
+  const cardName = (d: TarotDraw) => {
+    const c = tarotCard(d.id);
+    return `${c.name.vi} (${c.name.en})${d.rev ? " · ngược" : ""}`;
+  };
+  const posName = (i: number) => (kind === "choice" ? `Nếu chọn “${pos[i]?.vi ?? ""}”` : (pos[i]?.vi ?? ""));
   const out: string[] = [];
 
-  const [vi] = TOPIC_INTRO[r.topic];
-  const intro = scene === "jobseek" ? ["Tìm việc là chuyện lớn, Lomi rút bài thật kỹ cho bạn nè 💼", "Để Lomi xem con đường tìm việc của bạn sắp tới nha 💼"] : vi;
-  out.push(`${pick(intro)}\nCâu hỏi của bạn: “${q}”`);
-  out.push(`💭 ${insightText(q, r.topic, kind, r.context)}`);
-  const ansAt = out.length;
+  // 1) Mở đầu + câu hỏi + danh sách lá
+  const qShow = capFirst(q.replace(/\s+/g, " ").replace(/[.!…]+$/, ""));
+  out.push(
+    `${pick(OPEN_LINE)} Lomi bói ${r.cards.length} lá theo kiểu tarot định hướng – tâm lý, xem để tham khảo chứ không phải lời tiên tri chắc chắn nha.\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`,
+  );
+  out.push(`Lomi rút được ${r.cards.length} lá:\n${r.cards.map((d, i) => `${i + 1}. ${posName(i)} — ${cardName(d)}`).join("\n")}`);
 
+  // 2) Từng lá: nghĩa lá → nghĩa theo lĩnh vực → áp vào hoàn cảnh người hỏi
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
-    const label = pos[i]?.vi ?? "";
-    const head = `${nums[i]} ${kind === "choice" ? `Lựa chọn “${label}”` : label} — ${c.name.vi} (${c.name.en})${d.rev ? " · ngược" : ""}`;
     const meaning = d.rev ? c.rev.vi : c.up.vi;
     const g = ROLE_GROUP[roles[i] ?? "situation"];
-    const tpl = g === "time" ? TIME_TPL : bank[g];
-    let analysis = fillT(tpl[rough(d) ? 1 : 0], kw(d, false), S);
-    if (kind === "choice") analysis = `Nếu chọn “${label}”, ${fillT(CHOICE_TPL[rough(d) ? 1 : 0][i % 2], kw(d, false), S)}`;
-    out.push(`${head}\n🃏 Ý nghĩa lá: ${meaning}\n👉 ${analysis}`);
+    const tpl = kind === "choice" ? [CHOICE_TPL[0][i % 2], CHOICE_TPL[1][i % 2]] : g === "time" ? TIME_TPL : bank[g];
+    const apply = fillT(tpl[rough(d) ? 1 : 0], kw(d, false), S);
+    const lines = [`**🃏 ${i + 1}. ${cardName(d)} — ${posName(i)}**`, meaning];
+    const dt = domainText(d, dom);
+    if (dt) {
+      lines.push(dt);
+      // Đã có nghĩa theo lĩnh vực → chỉ thêm phần góc nhìn tâm lý / việc cụ thể (câu sau của mẫu), tránh lặp ý.
+      const tail = apply.split(/(?<=[.!?])\s+/).slice(1).join(" ");
+      if (kind === "choice") lines.push(`${posName(i)}, ${apply}`);
+      else if (tail && (g === "state" || g === "action")) lines.push(tail);
+    } else lines.push(kind === "choice" ? `${posName(i)}, ${apply}` : apply);
+    if (g === "time") {
+      const w = timingWindow(d);
+      const cal = calendarRange(w);
+      lines.push(
+        `Nếu quy về thời gian theo trải bài này, Lomi đọc là: khoảng ${w.lo}–${w.hi} ${w.unit} tới${w.note ? ` (${w.note})` : ""}.\nTức nếu tính từ ${cal.from}, khung Lomi đọc được là ${cal.range}.`,
+      );
+    }
+    out.push(lines.join("\n"));
   });
 
-  const [c1, c2, c3] = r.cards;
-  const total = toneTotal(r.cards);
-  const tip = bank.tip[total >= 1 ? 0 : 1];
-  const st = (d: TarotDraw) => (rough(d) ? `đang vướng ${kw(d, false)}` : `đang có ${kw(d, false)}`);
-  const go = (d: TarotDraw) => (rough(d) ? `gỡ bỏ ${kw(d, false)}` : `dựa vào ${kw(d, false)}`);
-  const res = (d: TarotDraw) => (rough(d) ? `còn vướng ${kw(d, false)}` : `nghiêng về ${kw(d, false)}`);
-  const Sc = capFirst(S);
+  // 3) Cả trải bài như một quá trình
+  if (r.cards.length >= 3)
+    out.push(
+      `Điều thú vị là bộ ${r.cards.map((d) => tarotCard(d.id).name.vi).join(" → ")} giống một quá trình:\n${r.cards.map((d) => kw(d, false)).join(" → ")}.`,
+    );
 
-  if (kind === "timing" && c3) {
-    const tp = timingPhrase(c3, false);
-    out.splice(ansAt, 0, `⏳ Trả lời nhanh: ${tp}`);
-    out.push(
-      `🌿 Tóm lại: Hiện tại ${S} ${st(c1)}; để mọi thứ đến nhanh hơn, chìa khoá là ${go(c2)}. Về thời điểm, ${lcFirst(tp)} Nói cách khác, thời gian phụ thuộc khá nhiều vào những gì bạn làm từ bây giờ.\n${tip}`,
-    );
-  } else if (kind === "yesno" && c3) {
-    const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
-    const ans = r.topic === "health" ? healthAnswer(r.cards) : yesnoAnswer(r.cards, S, should);
-    out.splice(ansAt, 0, `🔎 Trả lời nhanh: ${ans}`);
-    const verdict = total >= 1 ? "câu trả lời nghiêng về phía tích cực" : total === 0 ? "mọi chuyện vẫn còn để ngỏ" : "bài khuyên bạn đừng vội";
-    out.push(
-      `🌿 Tóm lại: ${Sc} ${st(c1)}, điều cần để ý nhất là ${kw(c2, false)}, và kết quả ${res(c3)}. Gộp cả 3 lá lại thì ${verdict}.\n${tip}`,
-    );
-  } else if (kind === "choice" && c2) {
-    const [a, b] = [cardScore(c1), cardScore(c2)];
+  // 4) Kết luận thẳng câu hỏi
+  const total = toneTotal(r.cards);
+  const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
+  if (kind === "choice" && r.cards.length === 2) {
+    const [a, b] = [cardScore(r.cards[0]), cardScore(r.cards[1])];
     const [na, nb] = pos.map((p) => p.vi);
-    const win = a >= b ? c1 : c2;
-    out.splice(
-      ansAt,
-      0,
+    out.push(
       a === b
-        ? "⚖️ Trả lời nhanh: Cả hai đều có cái hay riêng — chọn cái khiến lòng bạn thấy nhẹ nhõm nhất nha."
-        : `⚖️ Trả lời nhanh: Lá bài nghiêng về “${a > b ? na : nb}” hơn — bên đó mang năng lượng của ${kw(win, false)}.`,
+        ? `Nên nếu hỏi “chọn bên nào?” thì hai lựa chọn khá ngang nhau — chọn bên khiến lòng bạn thấy nhẹ nhõm nhất nha. ${bank.tip[0]}`
+        : `Nên nếu hỏi “chọn bên nào?” thì trải bài nghiêng về “${a > b ? na : nb}”, vì bên đó mang năng lượng của ${kw(a > b ? r.cards[0] : r.cards[1], false)}. Nhưng quyết định cuối cùng vẫn là ở bạn nha 😄`,
     );
-    out.push(`🌿 Tóm lại: Mỗi lựa chọn đều có cái giá riêng — “${na}” ${st(c1)}, còn “${nb}” ${st(c2)}. ${tip}`);
-  } else if (c3) {
-    out.push(`🌿 Tóm lại: ${Sc} ${st(c1)}; thử thách lớn nhất là ${kw(c2, false)}, và lời khuyên là ${go(c3)}.\n${tip}`);
+  } else {
+    const askQ = should ? "có nên hay không" : SCENE_ASK[scene];
+    // Hỏi "bao giờ" → trả lời theo tốc độ (sớm / đúng khung / chậm hơn), không phán "không có".
+    const lean =
+      kind === "timing" && scene !== "health"
+        ? total >= 1
+          ? "nghiêng về CÓ — và có thể còn sớm hơn khung trên nếu bạn chủ động"
+          : total === 0
+            ? "nghiêng về CÓ, khoảng đúng khung thời gian ở trên nếu bạn giữ nhịp"
+            : "vẫn là CÓ, chỉ là có thể chậm hơn khung trên một chút — đừng nản nha"
+        : scene === "health"
+        ? total >= 1
+          ? "khá tích cực — tinh thần tốt sẽ giúp mau khoẻ"
+          : total === 0
+            ? "cho thấy cơ thể cần thêm thời gian"
+            : "nhắc bạn kiên nhẫn và đừng chủ quan"
+        : should
+          ? total >= 3
+            ? "nghiêng khá rõ về NÊN"
+            : total >= 1
+              ? "nghiêng về NÊN, miễn là bạn giữ chừng mực"
+              : total === 0
+                ? "còn lưng chừng — tuỳ vào cảm nhận của bạn"
+                : "nghiêng về CHƯA NÊN lúc này"
+          : total >= 3
+            ? "nghiêng khá rõ về CÓ"
+            : total >= 1
+              ? "nghiêng về CÓ nếu bạn chủ động thêm một chút"
+              : total === 0
+                ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
+                : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
+    const tail = kind === "timing" ? "Tarot không thể xác nhận một ngày cụ thể đâu 😄" : "Quyết định cuối cùng vẫn là ở bạn 😄";
+    out.push(`Nên nếu hỏi riêng “${askQ}?” thì trải bài này ${lean}. ${tail}\n${bank.tip[total >= 1 ? 0 : 1]}`);
   }
 
   if (r.topic === "health")
     out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
   if (/(?<![a-z])(nhau|ruou|bia|say)(?![a-z])/.test(fold(q))) out.push("🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
-  out.push("Muốn rõ hơn thì gõ “rút thêm” để Lomi rút thêm 1 lá nha 🔮");
+
+  // 5) Gợi ý bói tiếp
+  const nx = SCENE_NEXT[scene].filter((x) => x.startsWith("Bói tiếp")).map((x) => `“${x.replace("Bói tiếp: ", "")}”`);
+  out.push(
+    nx.length
+      ? `Nếu muốn, Lomi có thể bói tiếp 3 lá riêng về ${nx.slice(0, 3).join(" / ")} — bấm bên dưới nha. Hoặc gõ “rút thêm” để rút thêm 1 lá làm rõ 🔮`
+      : "Muốn rõ hơn thì gõ “rút thêm” để Lomi rút thêm 1 lá nha 🔮",
+  );
   return out.join("\n\n");
 }
 

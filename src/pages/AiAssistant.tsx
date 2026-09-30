@@ -16,7 +16,7 @@ import {
   suggestFaqs,
   type Faq,
 } from "@/lib/lomiFaq";
-import { chitChat, crisisReply, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
+import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -36,6 +36,7 @@ import {
 import { lomiSound, lomiSoundOn, onLomiSoundChange, setLomiSound } from "@/lib/lomiSound";
 import {
   TAROT_ASK,
+  tarotFollowUps,
   TAROT_CANCEL,
   TAROT_SUGGEST,
   detectTarot,
@@ -260,6 +261,9 @@ export function AiChat({
   const { lang } = useLanguage();
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // Tin người dùng gõ teen code ("nyc có quay lại khum") → Lomi hiểu bằng bản chữ chuẩn, nhưng khung chat
+  // vẫn hiện đúng chữ họ gõ: push() đổi lại nội dung tin của người dùng từ bản chuẩn về bản gốc.
+  const shownRef = useRef<{ from: string; to: string } | null>(null);
   // Lượt bói rút SAU thời điểm mở khung chat mới có hiệu ứng lật bài (lịch sử cũ hiện ngửa sẵn).
   const openedAt = useRef(Date.now());
 
@@ -293,6 +297,8 @@ export function AiChat({
   const left = quota ? Math.max(0, quota.limit - quota.used) : null;
 
   const push = (add: Msg[]) => {
+    const sh = shownRef.current;
+    if (sh) add = add.map((m) => (m.role === "user" && m.content === sh.from ? { ...m, content: sh.to } : m));
     const next = [...msgs, ...add];
     setMsgs(next);
     saveHistory(user.id, next);
@@ -339,7 +345,8 @@ export function AiChat({
     const r = drawForQuestion(question, context ?? (question && asked.length > question.length ? asked : undefined));
     push([
       { role: "user", content: asked, local: true },
-      { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang) },
+      // Gợi ý bói tiếp theo đúng bối cảnh (vd tìm việc → "hợp ngành gì", "thu nhập có ổn không").
+      { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang), quick: en ? undefined : tarotFollowUps(r) },
     ]);
   };
   const moreTarot = (prev: TarotReading, asked: string) => {
@@ -383,8 +390,10 @@ export function AiChat({
     });
 
   const send = async (text: string, forceAi = false) => {
-    const q = text.trim();
-    if (!q || busy) return;
+    const raw = text.trim();
+    if (!raw || busy) return;
+    const q = expandTeen(raw);
+    shownRef.current = q !== raw ? { from: q, to: raw } : null;
     setErr(null);
     setInput("");
     const last = msgs[msgs.length - 1];

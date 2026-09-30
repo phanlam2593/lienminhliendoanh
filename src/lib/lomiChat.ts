@@ -339,6 +339,17 @@ const RULES: Rule[] = [
     re: /^(tam biet|bye|bai bai|bb|goodbye|see you|hen gap lai|di day|out day)\b/,
     reply: () => ({ text: pick(["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Bye bye, chúc bạn một ngày thật vui 💚", "Hẹn gặp lại bạn nha 🌿"]) }),
   },
+  // Người yêu cũ liên lạc lại / nhớ người cũ
+  {
+    re: /\b(nguoi yeu cu|nguoi cu) (nhan tin|nhan|goi|lien lac|ib|quay lai|tim|hoi tham|rep)|\b(nho nguoi yeu cu|nho nguoi cu|nho ex)\b/,
+    reply: () => ({
+      text: pick([
+        "Ui, người cũ liên lạc lại là lòng xao động liền ha 😳 Trước khi trả lời, bạn thử hỏi lòng mình: mình vui vì được nhớ tới, hay thật sự muốn bắt đầu lại? Không cần vội đâu nha.",
+        "Nhớ người cũ là chuyện bình thường lắm, vì mình đã từng có nhiều kỷ niệm với họ 🥺 Cứ cho phép mình cảm nhận, nhưng đừng vội quyết định gì khi cảm xúc đang lên cao nha.",
+      ]),
+      quick: ["Bói xem người yêu cũ có quay lại không", "Bói xem người cũ còn nghĩ về mình không"],
+    }),
+  },
   // Nhậu / cà phê / đi chơi — rủ rê cho vui
   {
     re: /\b(di nhau|nhau thoi|nhau khong|lam vai lon|lam vai chai|lam ly|uong bia|uong ruou|tang 2|di bar|di pub)\b/,
@@ -444,4 +455,42 @@ export function friendlyFallback(text: string): ChatReply {
     ]),
     quick: [Q_DAILY, Q_CLAIM],
   };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TEEN CODE / VIẾT TẮT (30/09, theo ý Kir) — đổi về chữ chuẩn TRƯỚC khi Lomi hiểu câu
+// (tin nhắn hiển thị vẫn giữ nguyên chữ người dùng gõ). Chỉ đổi nguyên TỪ, không đụng chữ nằm trong từ khác.
+// ─────────────────────────────────────────────────────────────────────────────
+const TEEN: Record<string, string> = {
+  // không
+  k: "không", ko: "không", kg: "không", kh: "không", hk: "không", hok: "không", hog: "không", hong: "không", hông: "không",
+  khum: "không", hum: "không", hem: "không", hăm: "không", hổng: "không", khom: "không", hơm: "không",
+  // người yêu, quan hệ
+  ny: "người yêu", nyc: "người yêu cũ", nym: "người yêu mới", ngiu: "người yêu", ngyeu: "người yêu", ghệ: "người yêu",
+  iu: "yêu", iêu: "yêu", ck: "chồng", vk: "vợ", ex: "người yêu cũ", bff: "bạn thân", fa: "độc thân",
+  ng: "người", ngta: "người ta", mn: "mọi người", mng: "mọi người", ae: "anh em", b: "bạn", gđ: "gia đình",
+  // đại từ
+  mk: "mình", mik: "mình", mjk: "mình", mh: "mình", mjh: "mình", mềnh: "mình",
+  // hay gặp
+  dc: "được", đc: "được", dk: "được", đk: "được", j: "gì", gi: "gì", z: "vậy", v: "vậy", zậy: "vậy", dzậy: "vậy", zị: "vậy",
+  ntn: "như thế nào", cx: "cũng", cg: "cũng", cũg: "cũng", cũm: "cũng", bt: "biết", bít: "biết", bik: "biết", bjk: "biết",
+  bth: "bình thường", bthg: "bình thường", kbt: "không biết", kbiet: "không biết", hiu: "hiểu", hỉu: "hiểu",
+  ms: "mới", r: "rồi", rùi: "rồi", ùi: "rồi", gòi: "rồi", oy: "rồi", h: "giờ", ns: "nói", nt: "nhắn tin", ib: "nhắn tin",
+  nch: "nói chuyện", nc: "nói chuyện", rep: "trả lời", lm: "làm", ik: "đi", trc: "trước", thik: "thích", thix: "thích",
+  vs: "với", wa: "quá", wá: "quá", qá: "quá", vl: "quá", vcl: "quá", chx: "chưa", hc: "học", đg: "đang", dg: "đang",
+  mún: "muốn", zui: "vui", bùn: "buồn", thui: "thôi", hoy: "thôi", thoai: "thôi", lun: "luôn", đou: "đâu", nhìu: "nhiều",
+  sr: "xin lỗi", xl: "xin lỗi", tks: "cảm ơn", thx: "cảm ơn", pp: "tạm biệt", sn: "sinh nhật", đt: "điện thoại",
+  sđt: "số điện thoại", sdt: "số điện thoại", tk: "tài khoản", ad: "admin", hnay: "hôm nay", hqua: "hôm qua",
+  tgian: "thời gian", vc: "việc", uh: "ừ", uk: "ừ", uhm: "ừ", ah: "à", tr: "trời",
+};
+export function expandTeen(text: string): string {
+  let s = text.normalize("NFC");
+  // Cụm cần xét ngữ cảnh — xử lý trước khi đổi từng từ.
+  s = s.replace(/(^|[^\p{L}])(hum|hôm|bữa) (nay|ni)(?![\p{L}])/giu, "$1hôm nay");
+  s = s.replace(/(^|[^\p{L}])(quên|đổi|lấy lại|nhập|sai|reset|đặt lại) (mk|mật khẩu)(?![\p{L}])/giu, "$1$2 mật khẩu");
+  s = s.replace(/(^|[^\p{L}])bn (tiền|tuổi|lâu|ngày|năm|tháng|giờ|cái|người|điểm|lần|k)(?![\p{L}])/giu, "$1bao nhiêu $2");
+  s = s.replace(/(^|[^\p{L}])(ng|người) (iu|yêu)(?![\p{L}])/giu, "$1người yêu");
+  s = s.replace(/(^|[^\p{L}])bn(?![\p{L}])/giu, "$1bạn");
+  // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
+  return s.replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)));
 }
