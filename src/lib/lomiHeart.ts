@@ -7,10 +7,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { MORE_THEMES } from "@/lib/lomiHeartMore";
 
 export type HeartReply = { text: string; quick: string[]; theme: string; listen?: boolean; end?: boolean };
 
-type Theme = {
+export type Theme = {
   id: string;
   re: RegExp;
   feel: string[]; // công nhận cảm xúc
@@ -42,7 +43,9 @@ function pick(key: string, arr: string[]): string {
 const PRO =
   "Nếu cảm giác này kéo dài vài tuần, ảnh hưởng tới ăn ngủ hay công việc, bạn nên nói chuyện với một chuyên gia tâm lý nha — Lomi chỉ là robot nhỏ, không thay được người thật đâu 💚";
 
+// Chủ đề mở rộng (lib/lomiHeartMore) đứng trước — từ khoá cụ thể hơn nên được ưu tiên.
 const THEMES: Theme[] = [
+  ...MORE_THEMES,
   {
     // Sức khoẻ nam giới — nói tế nhị, đúng y khoa, khuyên gặp bác sĩ; không đi vào chi tiết nhạy cảm.
     id: "menhealth",
@@ -458,7 +461,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "grief",
-    re: /\b(mat nguoi than|qua doi|tang le|dam tang|ong mat|ba mat|bo mat|me mat|mat me|mat bo|mat ong|mat ba|mat di mot nguoi|thu cung mat|cho mat|meo mat|con cho chet|con meo chet)\b/,
+    re: /\b(mat nguoi than|qua doi|tang le|dam tang|ong mat|ba mat|bo mat|me mat|mat me|mat bo|mat ong|mat ba|mat di mot nguoi|(chong|vo|con|ban than) (minh |toi |em )?(mat|qua doi|mat roi)|thu cung mat|cho mat|meo mat|con cho chet|con meo chet)\b/,
     feel: [
       "Lomi rất tiếc về sự mất mát của bạn 🤍 Không lời nào đủ để xoa dịu nỗi đau này.",
       "Mất đi người (hay bé cưng) mình thương là nỗi đau rất lớn. Lomi ở đây với bạn.",
