@@ -632,7 +632,7 @@ const THEMES: Theme[] = [
   },
 ];
 
-const GENERIC = new Set(["sad", "tired", "love"]);
+const GENERIC = new Set(["sad", "tired", "love", "overthink", "anxiety", "lonely", "health"]);
 const byId = (id: string) => THEMES.find((t) => t.id === id);
 
 // Câu mở lời "muốn tâm sự" (chưa rõ chuyện gì).
@@ -712,11 +712,22 @@ export function heartOpen(): HeartReply {
   return { text: pick("open", OPEN), quick: [], theme: "open" };
 }
 
+const advGiven = new Map<string, number>(); // số lần đã đưa lời khuyên theo chủ đề (trong phiên)
 function themeReply(t: Theme, n: string, adviceAsked: boolean): HeartReply {
   const parts: string[] = [];
   const defined = !!t.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `);
   if (defined) parts.push(t.define!);
+  // Đã khuyên hết ý của chủ đề này rồi mà người dùng hỏi tiếp → đổi sang góc nhìn + bước làm khác, không lặp lời khuyên.
+  const given = advGiven.get(t.id) ?? 0;
+  if (adviceAsked && given * 2 >= t.advice.length) {
+    advGiven.set(t.id, 0);
+    parts.push(pick(`${t.id}:ins`, t.insight));
+    parts.push(`Thêm vài bước nhỏ bạn thử nha:\n• ${pick(`${t.id}:step`, t.step)}\n• ${pick(`${t.id}:step`, t.step)}`);
+    parts.push(pick(`${t.id}:ask`, t.ask));
+    return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
+  }
   if (adviceAsked) {
+    advGiven.set(t.id, given + 1);
     parts.push(pick(`${t.id}:feel`, t.feel));
     parts.push(`Lomi gợi ý vài điều nha:\n• ${pick(`${t.id}:adv`, t.advice)}\n• ${pick(`${t.id}:adv`, t.advice)}\n• ${pick(`${t.id}:step`, t.step)}`);
   } else {
