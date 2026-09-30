@@ -88,7 +88,7 @@ export function LomiDailyCard({ uid, name, onClose, onDetail }: { uid: string; n
             </div>
             {/* mặt sau */}
             <div
-              className="absolute inset-0 flex items-center justify-center rounded-xl gradient-brand text-3xl text-white shadow-lg"
+              className="absolute inset-0 flex items-center justify-center rounded-xl bg-gradient-brand text-3xl text-white shadow-lg"
               style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
             >
               ✦
@@ -104,7 +104,7 @@ export function LomiDailyCard({ uid, name, onClose, onDetail }: { uid: string; n
             <button onClick={() => close(onDetail)} className="flex-1 rounded-full border border-primary/50 py-2 text-sm font-semibold text-primary active:scale-95 transition">
               Xem giải chi tiết
             </button>
-            <button onClick={() => close()} className="flex-1 rounded-full gradient-brand py-2 text-sm font-semibold text-white active:scale-95 transition">
+            <button onClick={() => close()} className="flex-1 rounded-full bg-gradient-brand py-2 text-sm font-semibold text-white active:scale-95 transition">
               Nhận lời chúc 💚
             </button>
           </div>

@@ -49,8 +49,10 @@ const KINDS: Kind[] = [
 
 export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean };
 
+// Động từ "tìm" rõ ràng. (Chữ "ưu đãi", "rẻ", "ngon" chỉ là điều kiện lọc, không tự kích hoạt tìm —
+// tránh "ưu đãi hết hạn gia hạn được không?" bị hiểu thành đi tìm quán.)
 const SEEK =
-  /\b(tim|kiem|o dau|dau co|gan day|gan minh|gan nhat|quanh day|quanh minh|co quan nao|quan nao|cho nao|tiem nao|noi nao|goi y|gioi thieu|recommend|review|ngon|re|dang giam|uu dai|khuyen mai|sale|giam gia|muon di|muon an|muon uong|can tim|co ai ban|co ai lam)\b/;
+  /\b(tim|kiem|o dau|dau co|gan day|gan minh|gan nhat|quanh day|quanh minh|goi y|gioi thieu|recommend|muon di|muon an|muon uong|can tim|co ai ban|co ai lam)\b/;
 const HOWTO = /\b(lam sao|cach|the nao|nhu the nao|huong dan|la gi|tai sao|bao nhieu diem|tao uu dai|cua toi|cua minh|da nhan|da luu|ma uu dai)\b/;
 
 /** Nhận ý "tìm chỗ/ưu đãi thật" hoặc "hôm nay ăn gì". Câu hỏi cách dùng app thì trả null để FAQ lo. */
@@ -64,8 +66,14 @@ export function detectSearch(text: string): SearchIntent | null {
   if (HOWTO.test(n)) return null;
   const kind = KINDS.find((k) => k.re.test(n)) ?? (/\b(ngon|an|uong)\b/.test(n) ? KINDS.find((k) => k.noun === "quán ăn") : undefined);
   const offer = /\b(uu dai|khuyen mai|giam gia|sale|deal|voucher|re)\b/.test(n);
-  if (!SEEK.test(n)) return null;
-  if (!kind && !offer && !/\b(quan|tiem|cho|shop|cua hang|doanh nghiep)\b/.test(n)) return null;
+  const place = /\b(quan|tiem|shop|cua hang|cho nao|noi nao)\b/.test(n);
+  const seek =
+    SEEK.test(n) ||
+    near ||
+    (/\b(nao|dau)\b/.test(n) && (!!kind || place)) || // "quán cà phê NÀO đang có ưu đãi"
+    (/\bco\b.*\bkhong\b/.test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
+  if (!seek) return null;
+  if (!kind && !offer && !place) return null;
   return { mode: "find", kind, near, offer };
 }
 
@@ -157,7 +165,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
           : pick(["Đi chơi hả? Lomi gợi ý ghé", "Cuối tuần thử ghé"]);
     const offer = c.offer ? ` Đang có ưu đãi: “${c.offer}” 🎁` : "";
     return {
-      text: `${lead} **${c.name}**${km(c.distKm)} nha!${offer}\nKhông ưng thì bấm “Đổi chỗ khác” để Lomi bốc lại 😄`,
+      text: `${lead} **${c.name}**${km(c.distKm)} nha!${offer}\nKhông ưng thì bấm “${it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác"}” để Lomi bốc lại 😄`,
       places: [c],
       quick: [it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác", "Tìm quán cà phê có ưu đãi", "Tìm quán ăn gần mình"],
     };

@@ -14,7 +14,7 @@ export function LomiPlaceCards({ places }: { places: PlaceCard[] }) {
           className="flex items-center gap-2.5 rounded-xl border bg-background p-2 active:scale-[0.98] transition animate-in fade-in slide-in-from-bottom-2"
           style={{ animationDelay: `${i * 70}ms`, animationFillMode: "both" }}
         >
-          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg gradient-brand">
+          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-gradient-brand">
             {p.cover && <img src={p.cover} alt="" loading="lazy" className="h-full w-full object-cover" />}
           </div>
           <div className="min-w-0 flex-1">
