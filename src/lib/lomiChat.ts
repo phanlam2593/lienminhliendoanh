@@ -499,3 +499,14 @@ export function expandTeen(text: string): string {
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
   return s.replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)));
 }
+
+
+// Trả lời ngắn kiểu đồng ý / từ chối (khi Lomi vừa mời làm gì đó).
+export function isAffirm(text: string): boolean {
+  return /^(ok|oke|okie|okay|okela|u|uh|um|uhm|uk|o|a|co|co chu|duoc|dc|dong y|muon|yes|yep|yeah|chac roi|tat nhien|di|lam di|rut di|boi di|xem di|ok luon|ok nha|ok lomi|vang|da|gat|ok di)( (nha|nhe|lomi|luon|di|ne|a|chu))*$/.test(
+    normalizeVi(text),
+  );
+}
+export function isDecline(text: string): boolean {
+  return /^(khong|ko|k|thoi|khoi|khong can|de sau|no|nope|thoi khoi|khong dau|thoi nha)( (nha|nhe|lomi|a|dau))*$/.test(normalizeVi(text));
+}

@@ -28,6 +28,8 @@ export type TarotReading = {
   question?: string;
   /** Cả câu người dùng gõ (có phần kể chuyện) — để đọc tâm lý đúng hơn. */
   context?: string;
+  /** Ý câu hỏi (vd "feelings", "quit", "nextmonth") — quyết định tên vị trí lá & cách chốt (xem INTENTS). */
+  intent?: string;
   pos?: T2[];
 };
 
@@ -339,7 +341,7 @@ function findTrigger(orig: string, f: string): { start: number; end: number } | 
 }
 
 const LEAD =
-  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep|tiep theo)(?![a-z])|(?:1|mot|3|ba)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
+  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai(?!\s+hoc)|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep(?=\s*:))(?![a-z])|(?:1|mot|3|ba)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
 const TRAIL =
   /(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu|(?:\d+|mot|hai|ba|vai|may)\s+la(?:\s+bai)?)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
 
@@ -418,14 +420,20 @@ function detectKind(q: string): { kind: TarotKind; options?: [string, string] } 
   const f = fold(q);
   // A hay B — chỉ khi có dấu hiệu lựa chọn (chữ "hay" còn nghĩa là "thường": "mình hay cãi nhau…").
   const cm = f.match(/^(.*?)\s+(hay la|hoac la|hay|hoac|or)\s+(.+)$/);
-  if (cm && !/^(khong|ko|k|chua|not)(?![a-z])/.test(cm[3]) && (/(hay la|hoac|or)/.test(cm[2]) || /(?<![a-z])(nen|chon|giua|which|should|choose)(?![a-z])/.test(f))) {
+  // "Ở lại hay đi?", "Công việc A hay B?" — chữ "hay" đứng giữa 2 vế ngắn cũng là câu chọn, trừ khi "hay" nghĩa là
+  // "thường" (đứng sau đại từ: "mình hay cãi nhau…").
+  const shortChoice =
+    !!cm && /\?\s*$/.test(q) && cm[2] === "hay" && !/(?<![a-z])(minh|toi|em|anh|ban|ho|nguoi ay|no|chung ta)$/.test(cm[1].trim()) &&
+    cm[1].trim().split(/\s+/).length <= 6 && cm[3].trim().split(/\s+/).length <= 6;
+  if (cm && !/^(khong|ko|k|chua|not)(?![a-z])/.test(cm[3]) && (shortChoice || /(hay la|hoac|or)/.test(cm[2]) || /(?<![a-z])(nen|chon|giua|which|should|choose)(?![a-z])/.test(f))) {
     const cut = cm[1].length;
     let a = q.slice(0, cut);
     let b = q.slice(cut + cm[0].length - cm[1].length - cm[3].length);
     a = a.replace(/^.*?(?:nên chọn|nen chon|nên|nen|chọn|chon|giữa|giua|should i|choose)\s+/i, "");
     b = b.replace(/\s*(thì tốt hơn|thi tot hon|tốt hơn|tot hon|hơn|nhỉ|nhi|ạ|đây|day)?\s*[?.!…]*\s*$/i, "");
+    const rawB = b.replace(/[?.!…]+$/, "").trim();
     a = clean(a);
-    b = clean(b);
+    b = clean(b) || rawB; // "Ở lại hay đi?" — chữ "đi" không phải chữ đệm ở đây
     if (nWords(a) >= 1 && nWords(b) >= 1 && nWords(a) <= 8 && nWords(b) <= 8) return { kind: "choice", options: [a, b] };
   }
   if (/(?<![a-z])(khi nao|bao gio|bao lau|luc nao|thang nao|nam nao|may thang|bao nhieu lau|when|how long)(?![a-z])/.test(f)) return { kind: "timing" };
@@ -464,9 +472,22 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
       kind,
       question: q,
       context: ctx,
-      pos: options.map((o) => P(short(o), short(o))),
+      intent: detectIntent(q, kind)?.id,
+      pos: options.map((o) => P(capFirst(short(o)), capFirst(short(o)))),
     };
-  return { topic, spread: "sca", cards: drawCards(3), at: Date.now(), kind, question: q, context: ctx, pos: POS[kind as Exclude<TarotKind, "choice">] };
+  const it = detectIntent(q, kind);
+  const ipos = it?.pos ? (typeof it.pos === "function" ? it.pos() : it.pos) : undefined;
+  return {
+    topic,
+    spread: "sca",
+    cards: drawCards(3),
+    at: Date.now(),
+    kind,
+    question: q,
+    context: ctx,
+    intent: it?.id,
+    pos: ipos ? ipos.map((x) => P(x, x)) : POS[kind as Exclude<TarotKind, "choice">],
+  };
 }
 
 /** Rút thêm 1 lá làm rõ cho lượt bói trước (không trùng các lá đã ra). */
@@ -791,12 +812,17 @@ const TOPIC_INTRO: Record<TarotTopic, [string[], string[]]> = {
 };
 
 // ── Bối cảnh cụ thể của câu hỏi (chi tiết hơn chủ đề): tìm việc khác đang đi làm, người cũ khác crush… ──
-type Scene = "jobseek" | "work" | "newlove" | "ex" | "crush" | "love" | "money" | "travel" | "study" | "health" | "fun" | "general";
+type Scene =
+  | "jobseek" | "work" | "business" | "newlove" | "ex" | "crush" | "love" | "money" | "travel" | "study" | "health"
+  | "fun" | "future" | "self" | "others" | "general";
 function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   const f = ` ${fold(`${context ?? ""} ${q}`)} `.replace(/[?!.,…"“”]/g, " ");
   const has = (re: RegExp) => re.test(f);
   if (topic === "health") return "health";
   if (has(/ (that nghiep|tim viec|kiem viec|xin viec|co viec|mat viec|bi duoi|nghi viec roi|chua co viec|phong van|nop cv|nop ho so xin) /)) return "jobseek";
+  if (has(/ (tim duoc viec|kiem duoc viec|co viec lam|bao gio co viec|khi nao co viec) /)) return "jobseek";
+  // Làm ăn / đầu tư / dự án / cửa hàng (hỏi chuyện kinh doanh, khác hỏi chuyện đi làm)
+  if (has(/ (dau tu|lam an|hun von|gop von|mo quan|kinh doanh|buon ban|startup|du an|cua hang|quan cua minh|tiem cua minh|shop cua minh) /)) return "business";
   if (topic === "work") return "work";
   // Độc thân / vừa thất tình muốn có người mới — khác hẳn hỏi chuyện quay lại với người cũ.
   if (has(/ (nguoi yeu moi|co nguoi yeu|kiem nguoi yeu|tim nguoi yeu|doc than|bi e|e qua|van e|con e|gap dung nguoi|nguoi moi|chua co nguoi yeu|gap duoc ai) /) && !has(/ quay lai /))
@@ -806,6 +832,12 @@ function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   if (topic === "love") return "love";
   if (topic === "money" || topic === "travel" || topic === "study") return topic;
   if (has(/ (nhau|ruou|bia|di choi|quay|tiec|bar|pub) /)) return "fun";
+  // Người khác (sếp, bạn bè, đồng nghiệp, "người đó"…) — không phải chuyện tình cảm
+  if (has(/ (nguoi do|nguoi kia|sep|dong nghiep|ban be|ban than|nguoi a|anh a|chi a|ho nghi|ho nhin|y dinh|bien mat|mat lien lac) /)) return "others";
+  // Bản thân / hướng đi
+  if (has(/ (mac ket|be tac|can tro|tap trung vao|bai hoc|huong di|ban than minh|phu hop voi minh|hop voi minh|dinh huong|dam chan) /)) return "self";
+  // Tương lai gần
+  if (has(/ (thang toi|thang sau|sap toi|vai thang|nua nam|nam toi|nam sau|tuong lai|sap xuat hien|chuan bi cho|hom nay cua minh) /)) return "future";
   return "general";
 }
 type Tpl = [string, string]; // [bài thuận, bài thử thách]
@@ -850,6 +882,56 @@ const SCENE: Record<Scene, SceneBank> = {
     tip: [
       "Ghi lại những việc bạn đã làm tốt — lúc cần đề xuất tăng lương hay chuyển vị trí sẽ có “bằng chứng” rõ ràng.",
       "Sắp việc theo thứ tự ưu tiên, nghỉ ngắn giữa giờ, và đừng ôm hết mọi thứ một mình.",
+    ],
+  },
+  business: {
+    noun: "chuyện làm ăn",
+    state: [
+      "Với chuyện làm ăn, lá này cho thấy đang có {k} — nền tảng khá ổn để phát triển.",
+      "Với chuyện làm ăn, lá này phản ánh đang vướng {k}. Kinh doanh nào cũng có lúc chững, quan trọng là nhìn đúng chỗ nghẽn.",
+    ],
+    action: [
+      "Bài khuyên bạn dựa vào {k}: thử một chương trình nhỏ trước, xem khách phản hồi ra sao rồi mới làm lớn.",
+      "Điều cần gỡ là {k}. Xem lại chi phí, bớt những khoản không mang lại khách — giữ được tiền cũng là lời.",
+    ],
+    block: ["Điều cần để ý là {k} — đó có thể là lợi thế cạnh tranh của bạn.", "Rủi ro nằm ở {k} — tính kỹ trước khi rót thêm vốn."],
+    result: ["Kết quả nghiêng về {k} — có khả năng phát triển tốt.", "Kết quả còn vướng {k}, nên đi từng bước nhỏ và giữ vốn dự phòng."],
+    tip: [
+      "Ghi chép thu – chi mỗi tuần; số liệu rõ ràng thì quyết định mới chắc.",
+      "Đừng dồn hết vốn một lần — chia nhỏ, thử nghiệm, cái nào hiệu quả mới mở rộng.",
+    ],
+  },
+  future: {
+    noun: "thời gian tới",
+    state: ["Thời gian tới mở đầu bằng năng lượng của {k} — một khởi điểm khá dễ chịu.", "Thời gian tới có thể mở đầu hơi vướng {k}. Biết trước để chuẩn bị là đã thắng một nửa rồi."],
+    action: ["Điều nên chuẩn bị là {k} — càng sẵn sàng, cơ hội tới càng dễ nắm.", "Điều cần gỡ trước là {k}; dọn dẹp xong thì đường sẽ thoáng hơn."],
+    block: ["Điều đáng chú ý là {k}.", "Cần để ý {k} — đừng để nó làm bạn bất ngờ."],
+    result: ["Xa hơn một chút, mọi thứ nghiêng về {k}.", "Xa hơn một chút có thể còn vướng {k}, nên giữ sẵn phương án dự phòng."],
+    tip: [
+      "Viết ra 3 mục tiêu nhỏ cho thời gian tới và bắt đầu từ cái dễ nhất.",
+      "Giữ sức khoẻ và một khoản tiền dự phòng — nền vững thì chuyện gì tới cũng xoay xở được.",
+    ],
+  },
+  self: {
+    noun: "hướng đi của bạn",
+    state: ["Nhìn vào bên trong, lá này cho thấy bạn đang có {k} — đó là điểm tựa của bạn.", "Nhìn vào bên trong, lá này cho thấy bạn đang vướng {k}. Nhận ra được điều này là bước đầu để thay đổi."],
+    action: ["Điều nên tập trung là {k} — dồn sức vào đây bạn sẽ thấy mình tiến lên rõ.", "Điều cần buông bớt là {k}; nhẹ đi một chút thì mới bước nhanh được."],
+    block: ["Điều cần để ý trong mình là {k}.", "Thứ đang cản bạn chính là {k} — nó thường nằm trong suy nghĩ nhiều hơn ngoài đời."],
+    result: ["Nếu đi đúng hướng, bạn sẽ chạm tới {k}.", "Nếu cứ giữ nguyên như cũ, bạn có thể còn vướng {k} — đổi một thói quen nhỏ thôi cũng khác nhiều."],
+    tip: [
+      "Mỗi tối dành 5 phút ghi lại một điều mình làm tốt trong ngày — sự tự tin lớn lên từ đó.",
+      "Chọn MỘT việc nhỏ để thay đổi trong tuần này và làm đều đặn — thay đổi lớn bắt đầu từ việc nhỏ.",
+    ],
+  },
+  others: {
+    noun: "mối quan hệ này",
+    state: ["Trong mắt người đó, lá này cho thấy {k}. Nhìn chung họ khá thiện cảm với bạn.", "Trong mắt người đó, lá này phản ánh {k}. Có thể giữa hai người còn điều chưa hiểu nhau."],
+    action: ["Để mối quan hệ tốt hơn, hãy dựa vào {k}.", "Để mối quan hệ nhẹ nhàng hơn, cần gỡ bớt {k}."],
+    block: ["Điều cần để ý giữa hai người là {k}.", "Thứ có thể tạo khoảng cách là {k}."],
+    result: ["Mối quan hệ nghiêng về {k} — chiều hướng khá ổn.", "Mối quan hệ có thể còn vướng {k}, cần thêm thời gian và sự rõ ràng."],
+    tip: [
+      "Chủ động hỏi han, cảm ơn hoặc giúp một việc nhỏ — thiện cảm lớn lên từ những điều nhỏ.",
+      "Giữ khoảng cách vừa đủ, nói chuyện rõ ràng, đừng đoán ý người khác quá nhiều.",
     ],
   },
   newlove: {
@@ -1005,7 +1087,7 @@ const SCENE: Record<Scene, SceneBank> = {
     tip: ["Cứ tin vào cảm nhận của mình và bước từng bước chắc chắn.", "Chậm lại một nhịp, viết ra điều mình lo nhất rồi xử lý từng phần."],
   },
 };
-type Group = "state" | "action" | "block" | "result" | "time";
+type Group = "state" | "action" | "block" | "result" | "time" | "phase";
 const ROLE_GROUP: Record<Role, Group> = {
   now: "state", situation: "state", message: "state", clarify: "state",
   todo: "action", advice: "action",
@@ -1013,6 +1095,11 @@ const ROLE_GROUP: Record<Role, Group> = {
   outcome: "result", option: "result",
   timing: "time",
 };
+// Vị trí theo mốc thời gian (sáng/chiều/tối, đầu/giữa/cuối tháng, từng cặp tháng…)
+const PHASE_TPL: Tpl = [
+  "Khoảng này mang năng lượng của {k} — mọi thứ khá thuận, cứ mạnh dạn.",
+  "Khoảng này có thể vướng {k} — nên chậm lại và cẩn thận hơn một chút.",
+];
 const TIME_TPL: Tpl = [
   "Về thời điểm, lá này mang năng lượng của {k} — một tín hiệu tốt: khi bạn đã chuẩn bị đủ, {S} sẽ đến đúng lúc.",
   "Về thời điểm, lá này còn vướng {k} — {S} có thể cần thêm chút thời gian, hãy dùng khoảng chờ này để chuẩn bị kỹ hơn.",
@@ -1119,7 +1206,8 @@ const MINOR_DOMAIN: Record<Exclude<TarotSuit, "major">, [string, string, string,
 };
 type Domain = "career" | "love" | "general";
 const DOMAIN_OF: Record<Scene, Domain> = {
-  jobseek: "career", work: "career", money: "career", newlove: "love",
+  jobseek: "career", work: "career", money: "career", business: "career", newlove: "love",
+  future: "general", self: "general", others: "general",
   ex: "love", crush: "love", love: "love",
   travel: "general", study: "general", health: "general", fun: "general", general: "general",
 };
@@ -1174,7 +1262,8 @@ function calendarRange(w: { lo: number; hi: number; unit: "tuần" | "tháng" },
 
 // Câu hỏi có/không viết lại theo bối cảnh — để phần kết luận nói thẳng vào điều người hỏi muốn biết.
 const SCENE_ASK: Record<Scene, string> = {
-  jobseek: "có việc hay không", newlove: "có người yêu mới hay không", work: "công việc có thuận lợi không", ex: "người cũ có quay lại không",
+  jobseek: "có việc hay không", business: "chuyện làm ăn có phát triển không", future: "thời gian tới có gì sáng sủa không",
+  self: "mình nên đi hướng nào", others: "mối quan hệ này sẽ ra sao", newlove: "có người yêu mới hay không", work: "công việc có thuận lợi không", ex: "người cũ có quay lại không",
   crush: "chuyện với người ấy có thành không", love: "tình cảm có tiến triển không", money: "tiền bạc có khá lên không",
   travel: "mọi chuyện có suôn sẻ không", study: "kết quả có tốt không", health: "có mau khoẻ không", fun: "có nên đi không",
   general: "chuyện này có thành không",
@@ -1183,6 +1272,10 @@ const SCENE_ASK: Record<Scene, string> = {
 const SCENE_NEXT: Record<Scene, string[]> = {
   jobseek: ["Bói tiếp: công việc sắp tới hợp ngành gì", "Bói tiếp: môi trường làm việc sắp tới thế nào", "Bói tiếp: thu nhập công việc mới có ổn không"],
   work: ["Bói tiếp: có nên nhảy việc không", "Bói tiếp: sếp đánh giá mình thế nào", "Bói tiếp: năm nay có tăng lương không"],
+  business: ["Bói tiếp: có nên mở rộng kinh doanh không", "Bói tiếp: tài chính vài tháng tới thế nào", "Bói tiếp: khách hàng sắp tới thế nào"],
+  future: ["Bói tiếp: tháng tới có chuyện gì đáng chú ý", "Bói tiếp: mình cần chuẩn bị cho điều gì", "Bói tiếp: 3–6 tháng tới cuộc sống thay đổi thế nào"],
+  self: ["Bói tiếp: điều gì đang cản trở mình", "Bói tiếp: mình nên tập trung vào điều gì", "Bói tiếp: hướng đi nào phù hợp với mình"],
+  others: ["Bói tiếp: người đó có ý định gì", "Bói tiếp: mối quan hệ giữa mình và người đó sẽ thay đổi ra sao", "Bói một lá cho hôm nay"],
   newlove: ["Bói tiếp: người sắp tới của mình là người thế nào", "Bói tiếp: mình đã sẵn sàng cho mối quan hệ mới chưa", "Bói tiếp: có nên quay lại với người cũ không"],
   ex: ["Bói tiếp: người cũ còn nghĩ về mình không", "Bói tiếp: mình có nên chủ động liên lạc không", "Bói tiếp: sắp tới tình cảm của mình thế nào"],
   crush: ["Bói tiếp: người ấy nghĩ gì về mình", "Bói tiếp: mình có nên tỏ tình không", "Bói tiếp: khi nào hai đứa thân hơn"],
@@ -1194,9 +1287,416 @@ const SCENE_NEXT: Record<Scene, string[]> = {
   fun: ["Bói một lá cho hôm nay", "Bói tiếp: cuối tuần này có gì vui không"],
   general: ["Bói một lá cho hôm nay", "Bói tiếp: tháng này của mình thế nào"],
 };
+// ─────────────────────────────────────────────────────────────────────────────
+// Ý CÂU HỎI (30/09 r10, theo danh sách câu hay hỏi Kir gửi) — mỗi kiểu câu hỏi có trải bài riêng:
+// tên vị trí lá, cách đọc từng vị trí, câu mở/kết kiểu “thầy bói – phù thủy”, cách chốt câu trả lời.
+// ─────────────────────────────────────────────────────────────────────────────
+type Lean = [string, string, string]; // [bài thuận, lưng chừng, nhiều thử thách]
+type Intent = {
+  id: string;
+  re: RegExp; // so trên câu hỏi đã bỏ dấu, có khoảng trắng 2 đầu
+  kinds?: TarotKind[]; // chỉ áp dụng cho các kiểu này (mặc định: mọi kiểu trừ choice)
+  scene?: Scene; // bối cảnh khi câu hỏi chưa rõ bối cảnh
+  force?: boolean; // luôn dùng scene này
+  pos?: string[] | (() => string[]);
+  groups?: Group[];
+  ask?: string;
+  lean?: Lean;
+  answer?: string; // chốt kiểu “chỉ ra điều gì” — {k1} {k2} {k3} {go3} {res3}
+  intro: string[];
+  outro: string[];
+  next?: string[];
+  invest?: boolean;
+};
+const monthOf = (add: number) => {
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + add);
+  return d.getMonth() + 1;
+};
+const DIRECTION: Lean = [
+  "đang đi theo chiều hướng khá sáng — chỉ cần bạn tiếp tục vun",
+  "đang ở một ngã rẽ — hướng đi phụ thuộc nhiều vào lựa chọn của bạn",
+  "đang có khá nhiều thử thách — nên chậm lại và điều chỉnh một chút",
+];
+const INTENTS: Intent[] = [
+  // ❤️ Tình cảm
+  {
+    id: "third",
+    re: / (nguoi thu ba|tuesday|ngoai tinh|co ai khac|bat ca hai tay|lang nhang|co nguoi khac|them ai|phan boi) /,
+    scene: "love",
+    pos: ["Hiện tại của mối quan hệ", "Điều đang ẩn giấu", "Sự thật sẽ lộ ra"],
+    groups: ["state", "block", "result"],
+    ask: "có người thứ ba không",
+    lean: [
+      "nghiêng về KHÔNG có ai chen vào — mối quan hệ khá an toàn",
+      "chưa rõ ràng — có điều hai người cần nói chuyện thẳng thắn",
+      "có dấu hiệu bất ổn — nên nói chuyện rõ ràng với nhau thay vì tự đoán",
+    ],
+    intro: ["Câu hỏi này nặng lòng lắm… Lomi thắp nến, soi thật kỹ nha 🕯️", "Để Lomi lật từng lớp màn xem có bóng ai khác không nha 🔍"],
+    outro: [
+      "Đừng vội kết luận chỉ vì một trải bài — nói chuyện thẳng thắn vẫn là cách rõ nhất 🌙",
+      "Niềm tin giống ly nước đầy, giữ thì khó mà làm đổ thì dễ — cẩn thận với cả nghi ngờ lẫn im lặng nha 💧",
+    ],
+  },
+  {
+    id: "whenlove",
+    re: / (khi nao|bao gio|luc nao) .*(nguoi yeu|gap dung nguoi|co doi|lay chong|lay vo|ket hon|co nguoi thuong|thoat e) /,
+    kinds: ["timing"],
+    scene: "newlove",
+    force: true,
+    pos: ["Bạn lúc này", "Điều cần mở lòng", "Thời điểm duyên tới"],
+    groups: ["state", "action", "time"],
+    ask: "khi nào gặp người thương",
+    intro: ["Sợi chỉ đỏ của bạn đang được kéo về phía nào đây… Lomi xem nha 🧶", "Để Lomi hỏi thử các vì sao xem người ấy đang ở đâu trên đường tới nha ✨"],
+    outro: [
+      "Duyên đến vào lúc mình sống vui nhất — cứ rạng rỡ là người đúng sẽ nhận ra bạn 🌸",
+      "Người đúng không đến sớm, cũng không đến muộn — mà đến đúng lúc bạn sẵn sàng 🌙",
+    ],
+  },
+  {
+    id: "feelings",
+    re: / (co tinh cam|thich minh|yeu minh|co y voi minh|co thuong minh|con yeu minh|con thuong minh|de y minh|co cam tinh|thuong minh khong) /,
+    scene: "crush",
+    pos: ["Cảm xúc của người ấy", "Điều người ấy giữ trong lòng", "Hướng đi của hai người"],
+    groups: ["state", "block", "result"],
+    ask: "người ấy có tình cảm với mình không",
+    intro: ["Lòng người khó đoán, nhưng lá bài thì hay nói thật lắm 🌙", "Để Lomi lắng nghe xem trái tim người ấy đang đập theo nhịp nào nha 💓"],
+    outro: [
+      "Tình cảm thật thì không cần đoán quá lâu — nó sẽ tự lộ ra qua hành động 🌙",
+      "Dù bài nói gì, bạn vẫn xứng đáng được thương một cách rõ ràng và trọn vẹn 💚",
+    ],
+  },
+  {
+    id: "thinks",
+    re: / (nghi gi ve minh|nghi sao ve minh|nhin minh the nao|nhin nhan minh|danh gia minh|an tuong ve minh|nghi ve minh the nao|thay minh the nao) /,
+    scene: "others",
+    pos: ["Ấn tượng bên ngoài", "Cảm nhận bên trong", "Điều họ chưa nói ra"],
+    groups: ["state", "state", "block"],
+    ask: "người đó nghĩ gì về mình",
+    answer: "người đó nhìn bạn qua lăng kính của {k1}, trong lòng thì có {k2}, còn điều họ chưa nói ra là {k3}.",
+    intro: ["Để Lomi thử bước vào suy nghĩ của người ấy một chút nha… suỵt 🤫", "Mỗi người là một cuốn sách — để Lomi mở trang viết về bạn ra xem nha 📖"],
+    outro: [
+      "Người khác nghĩ gì là việc của họ, còn bạn là ai là do bạn chọn — đừng để một ánh nhìn định nghĩa mình nha 🌿",
+      "Muốn biết chắc nhất thì một câu hỏi nhẹ nhàng, thật lòng vẫn hơn trăm lần đoán 🌙",
+    ],
+  },
+  {
+    id: "comeback",
+    re: / (bien mat|mat lien lac|khong lien lac|roi xa minh|bo di|khong con lien lac|bat vo am tin) /,
+    scene: "others",
+    pos: ["Lý do rời đi", "Hiện tại của họ", "Khả năng quay lại"],
+    groups: ["block", "state", "result"],
+    ask: "người đó có quay lại không",
+    intro: ["Có những người đi mà chưa kịp nói lời tạm biệt… để Lomi tìm dấu chân họ nha 👣"],
+    outro: ["Người đến rồi đi là chuyện của duyên — giữ lòng mình nhẹ nhàng, ai thuộc về mình sẽ tự quay về 🌙"],
+  },
+  {
+    id: "exback",
+    re: / (quay lai|tai hop|nguoi cu|nguoi yeu cu|ny cu) /,
+    kinds: ["yesno", "open"],
+    scene: "ex",
+    pos: ["Điều còn đọng lại", "Điều ngăn cách", "Khả năng quay lại"],
+    groups: ["state", "block", "result"],
+    ask: "có khả năng quay lại không",
+    intro: ["Chuyện cũ thường để lại dư âm lâu hơn mình nghĩ… để Lomi xem sợi dây ấy còn không nha 🕯️", "Để Lomi gõ cửa quá khứ một chút, xem còn ai đứng chờ không nha 🚪"],
+    outro: [
+      "Có người quay lại để ở lâu, có người quay lại chỉ để mình học cách buông — cả hai đều đáng nha 🌙",
+      "Dù cửa mở hay đóng, bạn vẫn luôn có quyền chọn bình yên cho mình 💚",
+    ],
+  },
+  {
+    id: "direction",
+    re: / (di ve dau|se ra sao|co lau dai|lau dai khong|tuong lai cua (hai|chung)|co ben lau|di den dau|ket qua cua moi quan he|co ket qua) /,
+    kinds: ["open", "yesno"],
+    scene: "love",
+    pos: ["Hiện tại của mối quan hệ", "Thử thách phía trước", "Hướng đi sắp tới"],
+    groups: ["state", "block", "result"],
+    ask: "mối quan hệ này sẽ đi về đâu",
+    lean: DIRECTION,
+    intro: ["Để Lomi trải con đường của hai bạn ra xem nó dẫn về đâu nha 🛤️", "Mỗi mối quan hệ là một hành trình — cùng xem chặng tiếp theo của hai bạn nè 🌙"],
+    outro: [
+      "Tình cảm như cây non, không tự lớn nếu không ai tưới — bài chỉ nói hướng, còn vun là việc của hai người 🌱",
+      "Điều quan trọng không phải là đi được bao xa, mà là đi cùng nhau có vui không 💞",
+    ],
+  },
+  // 💼 Công việc
+  {
+    id: "quit",
+    re: / (nghi viec|chuyen viec|nhay viec|doi viec|bo viec|nghi lam|doi cong ty|chuyen cong ty) /,
+    scene: "work",
+    force: true,
+    pos: ["Nếu ở lại", "Nếu ra đi", "Lời khuyên"],
+    groups: ["result", "result", "action"],
+    ask: "có nên nghỉ việc / chuyển việc không",
+    next: ["Bói tiếp: công việc mới có phù hợp không", "Bói tiếp: sự nghiệp thời gian tới thay đổi thế nào", "Bói tiếp: tài chính vài tháng tới thế nào"],
+    intro: ["Ở hay đi luôn là câu hỏi khó nhất… để Lomi đặt hai con đường lên bàn cho bạn xem 🕯️", "Để Lomi soi thử cả hai cánh cửa — cửa đang mở và cửa sắp mở nha 🚪"],
+    outro: [
+      "Đừng rời đi chỉ vì mệt một ngày, cũng đừng ở lại chỉ vì sợ thay đổi — chọn vì con người bạn muốn trở thành 🌿",
+      "Trước khi quyết, thử viết ra 3 điều bạn cần nhất ở một công việc — câu trả lời thường nằm sẵn trong đó 📝",
+    ],
+  },
+  {
+    id: "newjob",
+    re: / (cong viec moi|cho lam moi|cong ty moi|viec moi) .*(phu hop|hop|on|tot|the nao) /,
+    scene: "work",
+    force: true,
+    pos: ["Bạn và công việc mới", "Điều cần thích nghi", "Triển vọng"],
+    groups: ["state", "block", "result"],
+    ask: "công việc mới có phù hợp không",
+    intro: ["Công việc mới như đôi giày mới — để Lomi xem có vừa chân bạn không nha 👟", "Để Lomi xem duyên giữa bạn và chỗ làm mới thế nào nè 💼"],
+    outro: ["Tháng đầu ở chỗ mới ai cũng lóng ngóng — cho mình ba tháng rồi hẵng đánh giá nha 🌱", "Hợp hay không, bạn sẽ cảm nhận rõ nhất qua việc sáng thứ Hai mình có muốn đi làm không đó 😄"],
+  },
+  {
+    id: "careerfuture",
+    re: / (su nghiep|cong viec) .*(thoi gian toi|sap toi|thay doi|nam nay|nam toi|tuong lai|vai thang) /,
+    scene: "work",
+    force: true,
+    pos: ["Hiện tại", "Chuyển động sắp tới", "Kết quả"],
+    groups: ["state", "phase", "result"],
+    ask: "sự nghiệp sắp tới thay đổi thế nào",
+    lean: DIRECTION,
+    intro: ["Để Lomi xem bản đồ sự nghiệp của bạn đang vẽ tiếp những đường nào nha 🗺️", "Các lá bài về công việc đã xếp hàng — cùng xem chặng tới nha 💼"],
+    outro: ["Sự nghiệp là cuộc chạy đường dài — giữ sức, giữ lửa, và đừng so với ai cả 🏃", "Cơ hội thường đến với người đã chuẩn bị sẵn — học thêm một kỹ năng nhỏ ngay từ tuần này nha 📚"],
+  },
+  // 💰 Tiền bạc & làm ăn
+  {
+    id: "invest",
+    re: / (dau tu|lam an|hun von|gop von|mo quan|mo tiem|mo shop|startup|khoi nghiep) /,
+    scene: "business",
+    force: true,
+    pos: ["Thời cơ hiện tại", "Rủi ro cần tính", "Kết quả có thể"],
+    groups: ["state", "block", "result"],
+    ask: "có nên đầu tư / làm ăn không",
+    invest: true,
+    intro: ["Chuyện tiền nong làm ăn thì Lomi soi kỹ lắm nè 🪙", "Để Lomi gieo quẻ xem thời vận làm ăn của bạn ra sao nha 💰"],
+    outro: ["Buôn có bạn, bán có phường — đừng đi một mình, hỏi thêm người có kinh nghiệm nha 🤝", "Tiền vào từ từ mà chắc vẫn hơn vào nhanh ra nhanh — chắc tay trước, lớn sau 🌱"],
+  },
+  {
+    id: "bizgrowth",
+    re: / (kinh doanh|cua hang|quan|tiem|shop|doanh nghiep|du an) .*(phat trien|dong khach|on dinh|khoi sac|lam an|thanh cong|co tien) /,
+    scene: "business",
+    force: true,
+    pos: ["Sức khoẻ kinh doanh hiện tại", "Điểm cần cải thiện", "Triển vọng"],
+    groups: ["state", "action", "result"],
+    ask: "việc kinh doanh có phát triển không",
+    lean: DIRECTION,
+    intro: ["Để Lomi xem vận làm ăn của chỗ bạn đang lên hay đang lắng nha 📈", "Lomi xáo bài cầu cho chỗ bạn đông khách nè 🧧"],
+    outro: ["Khách quen là vốn quý nhất — giữ được một khách quen còn hơn kéo mười khách lạ 💚", "Muốn đông khách thì đăng ưu đãi trên Liên Minh Liên Doanh thử xem, Lomi giúp nghĩ ý tưởng cho nè 😉"],
+    next: ["Tư vấn ưu đãi cho chỗ mình", "Bói tiếp: tài chính vài tháng tới thế nào"],
+  },
+  {
+    id: "bigmoney",
+    re: / (khoan tien lon|tien lon|trung so|lam giau|phat tai|giau to|hoanh tai|co tien lon) /,
+    scene: "money",
+    force: true,
+    pos: ["Vận tiền hiện tại", "Cơ hội sắp đến", "Điều cần giữ"],
+    groups: ["state", "result", "block"],
+    ask: "có cơ hội kiếm được khoản tiền lớn không",
+    intro: ["Để Lomi lắc thử cây tiền xem có quả nào sắp rụng không nha 🌳💰", "Thần tài có ghé nhà bạn không đây… Lomi xem liền 🧧"],
+    outro: ["Tiền lớn thường đến từ nhiều dòng tiền nhỏ được giữ kỹ — giữ được mới là của mình 💰", "Nhớ nha: cơ hội thật hiếm khi hứa lời nhanh — cái gì hứa quá hời thì cẩn thận 🔍"],
+  },
+  {
+    id: "moneyfuture",
+    re: / (tai chinh|tien bac|tien nong|thu nhap) .*(thang toi|vai thang|sap toi|nam nay|thoi gian toi|3 thang) /,
+    scene: "money",
+    force: true,
+    pos: () => [`Tháng ${monthOf(1)}`, `Tháng ${monthOf(2)}`, `Tháng ${monthOf(3)}`],
+    groups: ["phase", "phase", "phase"],
+    ask: "tài chính vài tháng tới thế nào",
+    lean: DIRECTION,
+    intro: ["Để Lomi mở sổ tài chính của vũ trụ ra xem vài tháng tới của bạn nha 📒", "Lomi lật từng tháng một, xem túi tiền của bạn đi lên hay đi xuống nè 💰"],
+    outro: ["Tiền không lớn vì kiếm nhiều, mà lớn vì giữ được — trích để dành ngay khi nhận lương nha 🐷", "Tháng nào bài hơi tối thì tháng đó chi tiêu chậm lại chút là được, đừng lo quá 🌿"],
+  },
+  // 🔮 Tương lai gần
+  {
+    id: "today",
+    re: / (hom nay cua minh|ngay hom nay (se|the nao|ra sao)|hom nay (se|the nao|ra sao)) /,
+    scene: "future",
+    force: true,
+    pos: ["Buổi sáng", "Buổi chiều", "Buổi tối"],
+    groups: ["phase", "phase", "phase"],
+    ask: "hôm nay của mình thế nào",
+    lean: DIRECTION,
+    intro: ["Lomi chia ngày của bạn làm ba khúc — sáng, chiều, tối — xem mỗi khúc mang màu gì nha ☀️🌤️🌙", "Ba lá cho ba buổi trong ngày, cùng xem hôm nay bạn gặp gì nha ✨"],
+    outro: ["Buổi nào bài hơi tối thì buổi đó làm chậm lại, uống ly nước, hít thở sâu là ổn 🌿", "Chúc bạn một ngày gặp toàn người dễ thương 💚"],
+  },
+  {
+    id: "halfyear",
+    re: / (3 6 thang|3 den 6 thang|3 toi 6 thang|nua nam|6 thang toi|vai thang toi|thoi gian toi) /,
+    scene: "future",
+    pos: () => [`Tháng ${monthOf(1)}–${monthOf(2)}`, `Tháng ${monthOf(3)}–${monthOf(4)}`, `Tháng ${monthOf(5)}–${monthOf(6)}`],
+    groups: ["phase", "phase", "phase"],
+    ask: "vài tháng tới cuộc sống thay đổi thế nào",
+    lean: DIRECTION,
+    intro: ["Để Lomi nhìn xa hơn một chút — nửa năm tới của bạn trông thế nào nha 🔭", "Ba lá, ba chặng đường — cùng xem nửa năm tới của bạn nè 🗺️"],
+    outro: ["Nửa năm trôi nhanh lắm — đặt một mục tiêu nhỏ cho mỗi chặng là thấy mình đi xa rồi 🌱", "Tương lai không cố định đâu, bài chỉ vẽ hướng gió — tay lái vẫn là của bạn ⛵"],
+  },
+  {
+    id: "nextmonth",
+    re: / (thang toi|thang sau) /,
+    scene: "future",
+    pos: () => {
+      const m = monthOf(1);
+      return [`Đầu tháng ${m}`, `Giữa tháng ${m}`, `Cuối tháng ${m}`];
+    },
+    groups: ["phase", "phase", "phase"],
+    ask: "tháng tới có chuyện gì đáng chú ý",
+    lean: DIRECTION,
+    intro: ["Lomi lật lịch sang tháng mới, xem các vì sao sắp xếp gì cho bạn nè 🌙", "Tháng mới, trang mới — để Lomi đọc trước vài dòng cho bạn nha 📅"],
+    outro: ["Tháng nào cũng có ngày mưa ngày nắng — biết trước để mang dù là được rồi ☂️", "Đánh dấu vài ngày quan trọng trong tháng và chuẩn bị sớm một chút nha 📌"],
+  },
+  {
+    id: "prepare",
+    re: / (chuan bi (cho|gi)|can chuan bi|nen chuan bi) /,
+    scene: "future",
+    pos: ["Điều sắp đến", "Điều cần chuẩn bị", "Kết quả nếu sẵn sàng"],
+    groups: ["phase", "action", "result"],
+    ask: "mình cần chuẩn bị cho điều gì",
+    answer: "điều bạn cần chuẩn bị nhất là {k2} — sẵn sàng rồi thì kết quả sẽ nghiêng về {k3}.",
+    intro: ["Người khôn chuẩn bị trước cơn mưa — để Lomi xem trời sắp đổi gió gì nha 🌬️"],
+    outro: ["Chuẩn bị không phải để lo, mà để khi chuyện tới mình mỉm cười được 😊"],
+  },
+  {
+    id: "coming",
+    re: / (dieu gi sap|chuyen gi sap|sap xuat hien|sap den voi minh|dieu gi dang den|co gi moi) /,
+    scene: "future",
+    pos: ["Điều đang tới gần", "Cơ hội đi kèm", "Điều cần chú ý"],
+    groups: ["phase", "result", "block"],
+    ask: "điều gì sắp xuất hiện trong cuộc sống",
+    answer: "thứ đang tới gần bạn mang dáng dấp của {k1}, đi kèm cơ hội {k2} — chỉ cần để ý {k3}.",
+    intro: ["Có gì đó đang gõ cửa nhà bạn… để Lomi hé mắt nhìn trước nha 👀", "Quả cầu pha lê đang hiện lên vài hình ảnh mờ mờ… Lomi đọc cho bạn nè 🔮"],
+    outro: ["Điều mới đến thường mang hình dạng lạ — mở lòng một chút là nhận ra nó thôi 🌸"],
+  },
+  // 🧠 Bản thân
+  {
+    id: "stuck",
+    re: / (mac ket|be tac|dam chan tai cho|luan quan|ket o dau) /,
+    scene: "self",
+    force: true,
+    pos: ["Gốc rễ", "Điều đang giữ chân", "Lối ra"],
+    groups: ["state", "block", "action"],
+    ask: "mình đang bị mắc kẹt ở đâu",
+    answer: "chỗ bạn đang kẹt bắt nguồn từ {k1}, bị giữ chân bởi {k2} — còn lối ra nằm ở {k3}.",
+    intro: ["Mắc kẹt giống như lạc trong sương — để Lomi thắp đèn soi đường cho bạn nha 🏮", "Để Lomi gỡ từng nút thắt một nha, từ từ thôi 🧶"],
+    outro: ["Đôi khi không phải mình kẹt, mà là mình đang đứng yên chờ đủ can đảm — và bạn có đủ mà 💚"],
+  },
+  {
+    id: "blocker",
+    re: / (can tro|ngan can|dieu gi dang can|dang ngan|dieu gi dang giu) /,
+    scene: "self",
+    force: true,
+    pos: ["Điều cản bên ngoài", "Điều cản bên trong", "Cách vượt qua"],
+    groups: ["block", "block", "action"],
+    ask: "điều gì đang cản trở mình",
+    answer: "thứ cản bạn nhiều nhất là {k2} ở bên trong mình; muốn vượt qua, hãy {go3}.",
+    intro: ["Để Lomi soi xem hòn đá nào đang chắn đường bạn nha 🪨", "Có khi thứ cản mình lại nằm ngay trong túi mình… Lomi xem thử nè 🔍"],
+    outro: ["Nhận ra được vật cản là đã bước qua được nửa đường rồi đó 🌿"],
+  },
+  {
+    id: "focus",
+    re: / (tap trung vao|nen tap trung|uu tien gi|nen lam gi|nen uu tien) /,
+    scene: "self",
+    force: true,
+    pos: ["Điều bạn đang dồn sức", "Điều nên buông bớt", "Điều đáng tập trung"],
+    groups: ["state", "block", "action"],
+    ask: "mình nên tập trung vào điều gì",
+    answer: "điều đáng tập trung nhất lúc này là {k3}; còn {k2} thì nên buông bớt.",
+    intro: ["Ôm nhiều quá thì tay nào cũng mỏi — để Lomi chỉ ra đâu là thứ đáng giữ nha 🎯"],
+    outro: ["Làm ít mà đúng vẫn hơn làm nhiều mà rối — chọn một việc và làm thật tốt nha ✨"],
+  },
+  {
+    id: "lesson",
+    re: / (bai hoc) /,
+    scene: "self",
+    force: true,
+    pos: ["Bài học", "Vì sao nó đến", "Cách vượt qua"],
+    groups: ["state", "block", "action"],
+    ask: "bài học hiện tại của mình là gì",
+    answer: "bài học của bạn lúc này là {k1}; nó đến vì {k2}, và cách vượt qua là {go3}.",
+    intro: ["Vũ trụ hay gửi bài học trong những hình dạng lạ lắm… để Lomi dịch giùm nha 📜"],
+    outro: ["Bài học nào học xong rồi thì sẽ không phải học lại nữa — bạn đang lớn lên đó 🌱"],
+  },
+  {
+    id: "path",
+    re: / (huong di|hop voi minh|phu hop voi minh|nen di duong nao|lam nghe gi|dinh huong|con duong nao) /,
+    scene: "self",
+    force: true,
+    pos: ["Điểm mạnh của bạn", "Điều cần tránh", "Hướng nên đi"],
+    groups: ["state", "block", "action"],
+    ask: "hướng đi nào phù hợp với mình",
+    answer: "hướng hợp với bạn gắn với {k3}, dựa trên điểm mạnh là {k1} — chỉ cần tránh {k2}.",
+    intro: ["Để Lomi trải tấm bản đồ đời bạn ra, xem mũi tên đang chỉ về đâu nha 🧭", "Mỗi người có một con đường riêng — cùng xem đường của bạn nè 🛤️"],
+    outro: ["Đường nào cũng có dốc — chọn con đường mà lúc mệt bạn vẫn muốn đi tiếp nha 🌄"],
+  },
+  // 👥 Người khác
+  {
+    id: "theirintent",
+    re: / (y dinh|muon gi o minh|co y do|dinh lam gi|co ac y|co y gi|toan tinh) /,
+    scene: "others",
+    pos: ["Mục đích bề ngoài", "Cảm xúc thật", "Hành động sắp tới"],
+    groups: ["state", "state", "result"],
+    ask: "người đó có ý định gì",
+    answer: "bề ngoài họ thể hiện {k1}, bên trong là {k2}, và sắp tới có thể {res3}.",
+    intro: ["Để Lomi nhìn qua lớp vỏ bên ngoài, xem người ấy thật sự nghĩ gì nha 🎭"],
+    outro: ["Hãy tin vào hành động nhiều hơn lời nói — thời gian sẽ cho bạn câu trả lời rõ nhất ⏳"],
+  },
+  {
+    id: "relchange",
+    re: / (moi quan he|quan he) .*(thay doi|ra sao|the nao|di ve dau) /,
+    kinds: ["open", "yesno"],
+    scene: "others",
+    pos: ["Hiện tại", "Điều sẽ thay đổi", "Kết quả"],
+    groups: ["state", "phase", "result"],
+    ask: "mối quan hệ này sẽ thay đổi ra sao",
+    lean: DIRECTION,
+    intro: ["Mối quan hệ nào cũng có mùa — để Lomi xem hai bạn đang ở mùa nào nha 🍂"],
+    outro: ["Mối quan hệ tốt không tự nhiên mà có — chỉ cần một bên chủ động là mọi thứ khác liền 🌿"],
+  },
+  // 🎯 Hai lựa chọn — chỉ đổi lời mở/kết
+  {
+    id: "choice",
+    re: / /,
+    kinds: ["choice"],
+    next: ["Bói tiếp: mình nên tập trung vào điều gì", "Bói tiếp: điều gì đang cản trở mình", "Bói một lá cho hôm nay"],
+    intro: [
+      "Đứng giữa hai ngả đường thì ai cũng phân vân — để Lomi đặt hai lá lên cân nha ⚖️",
+      "Hai con đường, hai lá bài — cùng xem bên nào đang vẫy tay với bạn nè 🛤️",
+    ],
+    outro: [
+      "Có khi bài không chọn giùm, mà chỉ giúp bạn nghe rõ tiếng lòng mình hơn thôi 🕯️",
+      "Tung đồng xu cũng được — lúc đồng xu đang bay, bạn sẽ biết mình mong mặt nào 😉",
+    ],
+  },
+];
+/** Bối cảnh của lượt bói: ý câu hỏi có bối cảnh riêng thì ưu tiên khi câu chưa rõ bối cảnh (hoặc luôn, nếu force). */
+function sceneOfReading(r: TarotReading): Scene {
+  const base = sceneOf(r.question ?? "", r.topic, r.context);
+  const it = intentById(r.intent);
+  if (it?.scene && (it.force || base === "general" || (base === "love" && it.scene === "crush"))) return it.scene;
+  return base;
+}
+function detectIntent(q: string, kind: TarotKind): Intent | undefined {
+  const f = ` ${fold(q).replace(/[?!.,…"“”–-]/g, " ").replace(/\s+/g, " ")} `;
+  return INTENTS.find((it) => (it.kinds ? it.kinds.includes(kind) : kind !== "choice") && it.re.test(f));
+}
+const intentById = (id?: string) => (id ? INTENTS.find((x) => x.id === id) : undefined);
+const MYSTIC_OPEN = [
+  "Lomi thắp nến, xáo bài ba lần… các lá bài đã chọn bạn rồi đó 🕯️",
+  "Quả cầu pha lê của Lomi vừa sáng lên một chút ✨",
+  "Gió lùa qua bộ bài, vài lá tự trượt ra — mình cùng xem nha 🌙",
+  "Hít một hơi thật sâu, nghĩ thật rõ về câu hỏi… bài đã lật 🔮",
+];
+const MYSTIC_CLOSE: Record<Domain, string[]> = {
+  career: ["Bài chỉ gợi đường, còn bước chân là của bạn — cứ vững vàng mà đi nha 💼", "Công sức không bao giờ mất đi đâu cả, nó chỉ đang chờ đúng lúc để nở hoa 🌱"],
+  love: ["Trái tim biết đường của nó — bài chỉ cầm đèn soi giùm thôi 💞", "Thương mình trước, rồi người đúng sẽ thương bạn đúng cách 🌙"],
+  general: ["Lá bài đã nói xong phần của nó, phần còn lại là của bạn đó ✨", "Mong những lá bài hôm nay giúp lòng bạn nhẹ đi một chút 🌿"],
+};
+
 export function tarotFollowUps(r: TarotReading): string[] {
   if (!r.question || r.cards.length < 2) return [];
-  return SCENE_NEXT[sceneOf(r.question, r.topic, r.context)];
+  const it = intentById(r.intent);
+  return it?.next ?? SCENE_NEXT[sceneOfReading(r)];
 }
 // ── Câu dẫn xoay vòng (30/09 r8, theo ý Kir): mở đầu, danh sách lá, "quá trình", kết luận đều có nhiều
 // cách nói; nhớ câu vừa dùng (trên máy) để 2 lần bói liền nhau không bị trùng.
@@ -1252,6 +1752,7 @@ const JOURNEY = [
   "Nếu đọc cả trải bài như một hành trình thì sẽ là:\n{stages}.",
   "Cả {n} lá đang kể một câu chuyện nhỏ:\n{stages}.",
 ];
+const ANSWER_LEAD = ["Nên nếu hỏi riêng “{q}?” thì bài trả lời:", "Quay lại câu hỏi “{q}?” —", "Trả lời thẳng câu “{q}?”:", "Gom cả trải bài lại, với câu “{q}?” thì"];
 const VERDICT = [
   "Nên nếu hỏi riêng “{q}?” thì trải bài này {lean}.",
   "Quay lại câu hỏi “{q}?” — nhìn chung trải bài {lean}.",
@@ -1264,11 +1765,15 @@ const VERDICT = [
 function readingNarrativeVi(r: TarotReading): string {
   const kind = r.kind ?? "open";
   const q = r.question ?? "";
-  const scene = sceneOf(q, r.topic, r.context);
+  const it = intentById(r.intent);
+  const scene = sceneOfReading(r);
   const bank = SCENE[scene];
   const dom = DOMAIN_OF[scene];
   const sub = subjectOf(q, r.topic);
-  const S = bank.noun && (sub === TOPIC_NOUN[r.topic] || scene === "jobseek" || scene === "health") ? bank.noun : sub;
+  const S =
+    bank.noun && (sub === TOPIC_NOUN[r.topic] || ["jobseek", "health", "future", "self", "others"].includes(scene)) ? bank.noun : sub;
+  const groups: Group[] =
+    kind !== "choice" && it?.groups ? it.groups : (kind === "choice" ? ["result", "result"] : ROLES[kind as Exclude<TarotKind, "choice">].map((x) => ROLE_GROUP[x]));
   const pos = r.pos ?? [];
   const roles: Role[] = kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
   const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
@@ -1282,7 +1787,7 @@ function readingNarrativeVi(r: TarotReading): string {
   // 1) Mở đầu + câu hỏi + danh sách lá
   const qShow = capFirst(q.replace(/\s+/g, " ").replace(/[.!…]+$/, ""));
   out.push(
-    `${vary(`open-${dom}`, OPEN_BY_DOMAIN[dom])} ${vary("disc", DISCLAIMER)}\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`,
+    `${it ? vary(`intro-${it.id}`, it.intro) : vary(`open-${dom}`, [...OPEN_BY_DOMAIN[dom], ...MYSTIC_OPEN])} ${vary("disc", DISCLAIMER)}\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`,
   );
   const nWord = ["", "Một", "Hai", "Ba"][r.cards.length] ?? String(r.cards.length);
   const lead = vary("list", LIST_LEAD).replace("{n}", String(r.cards.length)).replace("{N}", nWord);
@@ -1292,8 +1797,8 @@ function readingNarrativeVi(r: TarotReading): string {
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
     const meaning = d.rev ? c.rev.vi : c.up.vi;
-    const g = ROLE_GROUP[roles[i] ?? "situation"];
-    const tpl = kind === "choice" ? [CHOICE_TPL[0][i % 2], CHOICE_TPL[1][i % 2]] : g === "time" ? TIME_TPL : bank[g];
+    const g = groups[i] ?? "state";
+    const tpl = kind === "choice" ? [CHOICE_TPL[0][i % 2], CHOICE_TPL[1][i % 2]] : g === "time" ? TIME_TPL : g === "phase" ? PHASE_TPL : bank[g];
     const apply = fillT(tpl[rough(d) ? 1 : 0], kw(d, false), S);
     const lines = [`**🃏 ${i + 1}. ${cardName(d)} — ${posName(i)}**`, meaning];
     const dt = domainText(d, dom);
@@ -1302,6 +1807,7 @@ function readingNarrativeVi(r: TarotReading): string {
       // Đã có nghĩa theo lĩnh vực → chỉ thêm phần góc nhìn tâm lý / việc cụ thể (câu sau của mẫu), tránh lặp ý.
       const tail = apply.split(/(?<=[.!?])\s+/).slice(1).join(" ");
       if (kind === "choice") lines.push(`${posName(i)}, ${apply}`);
+      else if (g === "phase") lines.push(apply);
       else if (tail && (g === "state" || g === "action")) lines.push(tail);
     } else lines.push(kind === "choice" ? `${posName(i)}, ${apply}` : apply);
     if (g === "time") {
@@ -1348,7 +1854,7 @@ function readingNarrativeVi(r: TarotReading): string {
         : `Nên nếu hỏi “chọn bên nào?” thì trải bài nghiêng về “${a > b ? na : nb}”, vì bên đó mang năng lượng của ${kw(a > b ? r.cards[0] : r.cards[1], false)}. Nhưng quyết định cuối cùng vẫn là ở bạn nha 😄`,
     );
   } else {
-    const askQ = should ? "có nên hay không" : SCENE_ASK[scene];
+    const askQ = it?.ask ?? (should ? "có nên hay không" : SCENE_ASK[scene]);
     // Hỏi "bao giờ" → trả lời theo tốc độ (sớm / đúng khung / chậm hơn), không phán "không có".
     const lean =
       kind === "timing" && scene !== "health"
@@ -1379,15 +1885,35 @@ function readingNarrativeVi(r: TarotReading): string {
                 ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
                 : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
     const tail = kind === "timing" ? "Tarot không thể xác nhận một ngày cụ thể đâu 😄" : "Quyết định cuối cùng vẫn là ở bạn 😄";
-    out.push(`${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", lean)} ${tail}\n${bank.tip[total >= 1 ? 0 : 1]}`);
+    const [c1, c2, c3] = r.cards;
+    const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
+    const answerText = it?.answer && c3
+      ? it.answer
+          .replace("{k1}", kw(c1, false))
+          .replace("{k2}", kw(c2, false))
+          .replace("{k3}", kw(c3, false))
+          .replace("{go3}", rough(c3) ? `gỡ bỏ ${kw(c3, false)}` : `dựa vào ${kw(c3, false)}`)
+          .replace("{res3}", rough(c3) ? `còn vướng ${kw(c3, false)}` : `nghiêng về ${kw(c3, false)}`)
+      : null;
+    const leanUse = kind !== "timing" && it?.lean ? it.lean[total >= 1 ? 0 : total === 0 ? 1 : 2] : lean;
+    out.push(
+      answerText
+        ? `${vary("answer", ANSWER_LEAD).replace("{q}", askQ)} ${answerText}\n${bank.tip[total >= 1 ? 0 : 1]}`
+        : `${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", leanUse)} ${tail}\n${bank.tip[total >= 1 ? 0 : 1]}`,
+    );
   }
 
   if (r.topic === "health")
     out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
   if (/(?<![a-z])(nhau|ruou|bia|say)(?![a-z])/.test(fold(q))) out.push("🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
 
+  if (it?.invest)
+    out.push("💡 Lá bài chỉ để tham khảo tinh thần thôi nha — quyết định bỏ vốn nên dựa trên số liệu thật, tìm hiểu kỹ và hỏi thêm người có kinh nghiệm.");
+  // Lời kết kiểu “thầy bói” theo đúng ý câu hỏi
+  out.push(`**Lời nhắn của Lomi:** ${it ? vary(`outro-${it.id}`, it.outro) : vary(`close-${dom}`, MYSTIC_CLOSE[dom])}`);
+
   // 5) Gợi ý bói tiếp
-  const nx = SCENE_NEXT[scene].filter((x) => x.startsWith("Bói tiếp")).map((x) => `“${x.replace("Bói tiếp: ", "")}”`);
+  const nx = (it?.next ?? SCENE_NEXT[scene]).filter((x) => x.startsWith("Bói tiếp")).map((x) => `“${x.replace("Bói tiếp: ", "")}”`);
   out.push(
     nx.length
       ? `Nếu muốn, Lomi có thể bói tiếp 3 lá riêng về ${nx.slice(0, 3).join(" / ")} — bấm bên dưới nha. Hoặc gõ “rút thêm” để rút thêm 1 lá làm rõ 🔮`
@@ -1535,6 +2061,8 @@ export function readingText(r: TarotReading, lang: L): string {
   const en = lang === "en";
   // Tiếng Việt, có câu hỏi, trải 2–3 lá → lời giải kiểu kể chuyện (nghĩa lá → áp vào câu hỏi → tóm lại).
   if (!en && r.question && r.cards.length >= 2) return readingNarrativeVi(r);
+  // Lá bài hôm nay (1 lá, không câu hỏi) → bản giải CHI TIẾT theo từng mặt, khác với popup (chỉ có nghĩa ngắn).
+  if (!en && !r.question && r.cards.length === 1) return dailyDetailVi(r.cards[0]);
   const kind = r.kind ?? "open";
   const q = r.question ?? "";
   const clar = r.cards.length === 1 && !!q;
@@ -1750,4 +2278,50 @@ export function dailyMessage(uid: string, d = new Date()): { draw: TarotDraw; na
 /** Chủ đề của câu hỏi (để biết có nên ghép thêm hoàn cảnh Lomi nhớ vào ngữ cảnh bói không). */
 export function questionTopic(q: string): TarotTopic {
   return detectTopic(fold(q));
+}
+
+
+// ── Giải chi tiết lá hôm nay (30/09 r10, theo ý Kir: popup đã có nghĩa ngắn → bấm "Xem giải chi tiết"
+// phải ra nội dung sâu hơn: từng mặt tình cảm / công việc / tiền / sức khoẻ + gợi ý may mắn trong ngày). ──
+const LUCKY_COLOR: Record<TarotSuit, string[]> = {
+  wands: ["đỏ", "cam", "vàng nắng"],
+  cups: ["xanh dương", "bạc", "xanh ngọc"],
+  swords: ["trắng", "xám bạc", "vàng nhạt"],
+  pentacles: ["xanh lá", "nâu đất", "vàng đồng"],
+  major: ["tím", "vàng kim", "xanh ngọc", "hồng pastel", "trắng ngà"],
+};
+const DAILY_OPEN = [
+  "Lomi đã thắp nến và lật lá bài của bạn hôm nay 🕯️",
+  "Quả cầu pha lê vừa sáng lên — đây là lá bài dẫn đường cho bạn hôm nay 🔮",
+  "Lá bài hôm nay đã chọn bạn rồi nè ✨",
+];
+const DAILY_CLOSE = [
+  "Chúc bạn một ngày thật xinh — có gì cứ quay lại kể Lomi nghe nha 💚",
+  "Bài chỉ gợi đường, còn bước đi là của bạn. Chúc hôm nay thật nhiều điều dễ thương 🌙",
+  "Nhớ mỉm cười nhiều hơn hôm qua một chút nha — năng lượng tốt sẽ tự tìm đến 🌿",
+];
+export function dailyDetailVi(d: TarotDraw, day = new Date()): string {
+  const c = tarotCard(d.id);
+  const rough = d.rev ? hard(d) : hard(d) || cardScore(d) < 0;
+  const j = d.rev ? 1 : 0;
+  const career = c.suit === "major" ? MAJOR_DOMAIN[d.id][j] : MINOR_DOMAIN[c.suit][(d.id - 22) % 14][j];
+  const love = c.suit === "major" ? MAJOR_DOMAIN[d.id][2 + j] : MINOR_DOMAIN[c.suit][(d.id - 22) % 14][2 + j];
+  const tl = TOPIC_LINE[c.suit];
+  const money = rough ? tl.money[1] : tl.money[0];
+  const health = rough ? tl.health[1] : tl.health[0];
+  const h = fnv(`${dayKey(day)}|${d.id}`);
+  const colors = LUCKY_COLOR[c.suit];
+  const num = c.suit === "major" ? (d.id % 9) + 1 : ((d.id - 22) % 14) + 1;
+  const hour = 7 + (h % 12);
+  const adv = ADVICE[c.suit][rough ? 1 : 0];
+  const strip = (x: string) => x.replace(/^(Về công việc|Trong công việc|Trong tình cảm|Về tình cảm),\s*/i, "");
+  const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+  return [
+    `${DAILY_OPEN[h % DAILY_OPEN.length]}\n**${c.name.vi} (${c.name.en})**${d.rev ? " · ngược" : ""}\n${d.rev ? c.rev.vi : c.up.vi}`,
+    `Năng lượng chủ đạo hôm nay là ${kw(d, false)}. ${rough ? "Hôm nay có thể có vài chuyện chưa như ý — cứ đi chậm, giữ bình tĩnh là qua." : "Một ngày khá thuận để bạn làm điều mình muốn."}`,
+    `**💞 Tình cảm:** ${cap(strip(love))}\n**💼 Công việc:** ${cap(strip(career))}\n**💰 Tiền bạc:** ${money}\n**🌿 Sức khoẻ & tinh thần:** ${health}`,
+    `**✨ May mắn hôm nay:** màu ${colors[h % colors.length]} · con số ${num} · giờ đẹp khoảng ${hour}h–${hour + 1}h`,
+    `**💡 Lời khuyên:** ${adv}`,
+    `${DAILY_CLOSE[(h >>> 4) % DAILY_CLOSE.length]}\nMuốn xem kỹ hơn từng buổi thì bấm “Bói 3 lá cho hôm nay” nha 🔮`,
+  ].join("\n\n");
 }

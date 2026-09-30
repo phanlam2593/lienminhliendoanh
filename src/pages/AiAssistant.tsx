@@ -35,6 +35,7 @@ import {
 } from "@/lib/lomiMemory";
 import { detectSearch, runSearch, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
+import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { chitChat, crisisReply, expandTeen, friendlyFallback, isAppish, looksLikeQuestion } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -109,6 +110,10 @@ const db = supabase as any;
 // tư vấn kinh doanh, bói Tarot. TẮT gọi AI qua edge function "ai-assistant" (số dư AI của Lovable).
 // Khi có key Gemini riêng (xem supabase/functions/ai-assistant) thì đổi thành true để bật lại cho Membership.
 const AI_ENABLED = false;
+// Trải 3 lá theo buổi cho hôm nay (nút dưới lá bài hôm nay).
+const DAY3_Q = "Hôm nay của mình sẽ thế nào?";
+const DAY3_ASK = "Bói 3 lá: hôm nay của mình sẽ thế nào?";
+const pickOne = (a: string[]) => a[Math.floor(Math.random() * a.length)];
 // FAQ về CÁCH DÙNG app — luôn ưu tiên hơn tư vấn kinh doanh khi cả hai cùng khớp.
 const APP_HOWTO_FAQ = new Set([
   "claim", "pin", "claimexp", "offerlocked", "offerlist", "offerbad", "bizcreate", "bizoffer", "bizbroadcast", "bizpin",
@@ -463,13 +468,37 @@ export function AiChat({
       setInput("");
       return sendSticker(stk);
     }
-    const q = expandTeen(raw);
+    let q = expandTeen(raw);
     shownRef.current = q !== raw ? { from: q, to: raw } : null;
     setErr(null);
     setInput("");
     const last = msgs[msgs.length - 1];
     const lastA = last?.role === "assistant" ? last : undefined;
     let memLearn: ReturnType<typeof learnFromText> | null = null;
+
+    // Lomi vừa mời ("rút một lá cho nhẹ lòng không?") kèm nút gợi ý → người dùng gõ "ok / ờ / có"
+    // thì làm luôn gợi ý đầu tiên (khung chat vẫn hiện đúng chữ họ gõ); "không / thôi" thì đáp nhẹ nhàng.
+    if (!forceAi && !en && lastA?.quick?.length && !lastA.bizPick && !lastA.bizTopicPick && !lastA.tarotAwait) {
+      // Chỉ khi tin trước thật sự là lời mời (có câu hỏi + động từ mời), tránh "ok" sau câu chào bị hiểu nhầm.
+      const offered = /\?/.test(lastA.content) && /(muốn|thử|để Lomi|rút|bói|chọn giùm|chỉ cách|xem thử)/i.test(lastA.content);
+      if (offered && isAffirm(q)) {
+        // Chọn đúng nút ứng với lời mời: mời "rút/bói" → nút có chữ Bói; mời "tìm quán" → nút Tìm/ăn.
+        const qk = lastA.quick;
+        const chip =
+          (/(rút|bói)/i.test(lastA.content) && qk.find((x) => /bói/i.test(x))) ||
+          (/(quán|tìm)/i.test(lastA.content) && qk.find((x) => /(tìm|ăn gì)/i.test(x))) ||
+          qk[0];
+        const pickQ = expandTeen(chip);
+        shownRef.current = { from: pickQ, to: raw };
+        q = pickQ;
+      } else if (isDecline(q) && /\?/.test(lastA.content)) {
+        return localReply(q, {
+          role: "assistant",
+          content: pickOne(["Okie, không sao nè 😊 Khi nào cần cứ gọi Lomi nha!", "Dạ, vậy để lúc khác nha 🌿 Lomi vẫn ở đây nè.", "Hihi okie, bạn muốn nói chuyện gì khác cũng được nha 😄"]),
+          local: true,
+        });
+      }
+    }
 
     if (!forceAi) {
       // 0) Người dùng nói muốn làm hại bản thân → ưu tiên hỗ trợ trước mọi luồng khác.
@@ -549,7 +578,10 @@ export function AiChat({
       if (lastA?.tarot) {
         const prev = lastA.tarot;
         if (isTarotMore(q)) return moreTarot(prev, q);
-        if (isTarotRedo(q)) return doTarot(prev.question ?? "", q, prev.context);
+        if (isTarotRedo(q)) {
+          if (!prev.question && !en) return doTarot(DAY3_Q, q);
+          return doTarot(prev.question ?? "", q, prev.context);
+        }
         if (/(?<![a-z])(thi sao|the con|vay con|con chuyen|con ve)(?![a-z])/.test(normalizeVi(q)) && !detectTarot(q)) return doTarot(q, q);
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
@@ -851,9 +883,16 @@ export function AiChat({
                           🔮 {en ? "One more card" : "Rút thêm 1 lá"}
                         </button>
                       )}
-                      <button onClick={() => void send(en ? "Draw again" : "Bói lại")} className="font-semibold text-primary">
-                        ↻ {en ? "Draw again" : "Bói lại"}
-                      </button>
+                      {m.tarot.kind === "daily" && !en ? (
+                        // Lá hôm nay cố định trong ngày → "bói lại" không có gì mới; mời trải 3 lá theo buổi.
+                        <button onClick={() => void send(DAY3_ASK)} className="font-semibold text-primary">
+                          🔮 Bói 3 lá cho hôm nay
+                        </button>
+                      ) : (
+                        <button onClick={() => void send(en ? "Draw again" : "Bói lại")} className="font-semibold text-primary">
+                          ↻ {en ? "Draw again" : "Bói lại"}
+                        </button>
+                      )}
                     </>
                   )}
                   {AI_ENABLED && !m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (

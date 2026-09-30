@@ -175,10 +175,10 @@ export const SIT_REPLY: Record<Sit, { text: string; quick: string[] }> = {
   },
 };
 
-/** Tên gọi: ưu tiên tên người dùng tự nói với Lomi, không có thì lấy tên (chữ cuối) trong hồ sơ. */
+/** Tên gọi: ưu tiên tên người dùng tự nói với Lomi, không có thì lấy ĐỦ họ tên trong hồ sơ
+ *  (30/09 theo ý Kir: cắt chữ cuối dễ ra "Hello Trị" với tên như "Ban Quản Trị"). */
 export function displayName(mem: LomiMem, fullName?: string | null): string | undefined {
   if (mem.name) return mem.name;
-  const w = (fullName ?? "").trim().split(/\s+/).filter(Boolean);
-  const last = w[w.length - 1];
-  return last && last.length <= 15 ? last : undefined;
+  const full = (fullName ?? "").trim().replace(/\s+/g, " ");
+  return full && full.length <= 40 ? full : undefined;
 }
