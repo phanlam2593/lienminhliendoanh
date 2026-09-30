@@ -994,7 +994,7 @@ const ROLE_GROUP: Record<Role, Group> = {
   timing: "time",
 };
 const TIME_TPL: Tpl = [
-  "Về thời điểm, lá này mang năng lượng của {k} — khi bạn đã sẵn sàng, {S} có thể đến nhanh hơn bạn nghĩ.",
+  "Về thời điểm, lá này mang năng lượng của {k} — một tín hiệu tốt: khi bạn đã chuẩn bị đủ, {S} sẽ đến đúng lúc.",
   "Về thời điểm, lá này còn vướng {k} — {S} có thể cần thêm chút thời gian, hãy dùng khoảng chờ này để chuẩn bị kỹ hơn.",
 ];
 const CHOICE_TPL: [string[], string[]] = [
