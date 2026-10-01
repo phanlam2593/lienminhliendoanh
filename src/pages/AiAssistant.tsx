@@ -41,13 +41,12 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
-import { understand } from "@/lib/lomiUnderstand";
+import { GATE_ASK_BACK, gate, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
 import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
-import { gate, GATE_ASK_BACK } from "@/lib/lomiUnderstand";
 import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
