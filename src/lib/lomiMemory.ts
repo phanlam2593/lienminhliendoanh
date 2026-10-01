@@ -127,7 +127,7 @@ export function situationContext(mem: LomiMem): string {
 }
 
 export function isAskMemory(text: string) {
-  return /\b(nho gi ve (minh|toi|tui|em|anh)|biet gi ve (minh|toi|tui|em|anh)|con nho (minh|toi|tui|em|anh) khong|nho ten (minh|toi|tui|em|anh)|ten (minh|toi|tui|em|anh) la gi)\b/.test(
+  return /\b(nho gi ve (minh|toi|tui|em|anh)|biet gi ve (minh|toi|tui|em|anh)|(con |co )?nho (minh|toi|tui|em|anh)( la ai)? (khong|ko|k|hong|hem)|nho ten (minh|toi|tui|em|anh)|ten (minh|toi|tui|em|anh) la gi)\b/.test(
     normalizeVi(text),
   );
 }

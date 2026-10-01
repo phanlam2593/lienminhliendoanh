@@ -41,6 +41,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
+import { understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
@@ -128,6 +129,7 @@ type Msg = {
   diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
   reported?: boolean; // người dùng đã bấm ⁉️ gửi câu này cho ban quản trị (01/10)
   taught?: boolean; // câu trả lời do admin dạy (lib/lomiLearn → lomi_taught)
+  issue?: string; // Lomi vừa hỏi thêm về lỗi app (lib/lomiUnderstand) — tin kế tiếp là chi tiết máy / màn hình
 };
 type Quota = { member: boolean; limit: number; used: number };
 
@@ -839,6 +841,13 @@ export function AiChat({
         const sr = SIT_REPLY[ns];
         return localReply(q, { role: "assistant", content: sr.text, local: true, quick: sr.quick });
       }
+    }
+    // Hiểu ý định đời thường (01/10, lib/lomiUnderstand): mở lời, báo lỗi app, không thấy nút, chưa hiểu,
+    // câu cụt "cái này?", rủ đi chơi… — dùng ngữ cảnh tin Lomi vừa nói, không bắt người dùng nói lại.
+    if (!forceAi && !en) {
+      const prevUser = [...msgs].reverse().find((m) => m.role === "user")?.content;
+      const u = understand(q, raw, { lastText: lastA?.content, faqId: lastA?.faqId, issue: lastA?.issue, lastUser: prevUser }, matchFaq(q)?.id);
+      if (u) return localReply(q, { role: "assistant", content: u.text, local: true, quick: u.quick, issue: u.issue });
     }
     // Câu hỏi nối sau câu trả lời về app ("còn … thì sao", "1 ngày quẹt đc mấy lần") → hiểu theo câu trước.
     // Câu cụt ("hết hạn rồi thì sao", "tối đa mấy người") → ưu tiên hiểu theo câu hỏi vừa rồi.

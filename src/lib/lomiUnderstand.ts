@@ -1,0 +1,292 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// LOMI HIỂU TIẾNG VIỆT ĐỜI THƯỜNG (01/10, theo tài liệu yêu cầu của Kir)
+// Lomi chạy trên máy (không có AI) nên "hiểu" bằng 3 lớp, ưu tiên Ý ĐỊNH hơn từ khoá:
+//   1. tone()      — đọc cảm xúc từ emoji / :)) / =)) / 🥲 …, tách riêng với ý định
+//                    (":))" không có nghĩa là câu hỏi đùa — "app bị gì v :))" vẫn là báo lỗi).
+//   2. understand() — nhận ý định: mở lời ("cho tui hỏi cái này vs"), báo lỗi app (lag, văng, trắng
+//                    màn hình, không vào được), không tìm thấy nút, chưa hiểu, câu cụt ("cái này?",
+//                    "rồi sao", "ủa?"), rủ đi chơi ("có ai đi đà lạt hong"), cà khịa vui…
+//   3. ngữ cảnh    — dùng tin Lomi vừa nói (issue / faqId / nội dung) để hiểu câu cụt và câu nối
+//                    ("android", "đang ở trang ưu đãi") thay vì bắt người dùng nói lại từ đầu.
+// Không bao giờ bắt người dùng viết lại cho chuẩn. Thật sự mơ hồ thì hỏi lại MỘT câu ngắn, tự nhiên.
+// ─────────────────────────────────────────────────────────────────────────────
+import { normalizeVi } from "@/lib/lomiFaq";
+import type { ChatReply } from "@/lib/lomiChat";
+
+export type Tone = "laugh" | "sad" | "mad" | "shock" | "love" | "neutral";
+
+const rnd = (n: number) => Math.floor(Math.random() * n);
+let lastPicked = "";
+function pick(arr: string[]): string {
+  const pool = arr.length > 1 ? arr.filter((x) => x !== lastPicked) : arr;
+  lastPicked = pool[rnd(pool.length)];
+  return lastPicked;
+}
+
+/** Cảm xúc đi kèm câu (emoji, mặt cười chữ, "haha", "huhu"…). */
+export function tone(raw: string): Tone {
+  const s = raw.toLowerCase();
+  if (/(😭|🥲|😢|😞|😔|😥|😿|💔|:\(+|huhu|hic+\b)/u.test(s)) return "sad";
+  if (/(😤|😡|🤬|🙄|😠|💢)/u.test(s)) return "mad";
+  if (/(😳|😱|😮|😯|🫢|😧)/u.test(s)) return "shock";
+  if (/(🥰|😍|❤️|❤|💕|💖|😘|🫶)/u.test(s)) return "love";
+  if (/(:\)+|=\)+|:d\b|xd\b|😂|🤣|😆|😁|😄|🤭|\bhaha|\bhihi|\bhehe|\bkk+)/u.test(s)) return "laugh";
+  return "neutral";
+}
+
+/** Trả lời khi người dùng CHỈ gửi emoji — đọc đúng cảm xúc thay vì đáp một kiểu. */
+export function emojiOnlyReply(raw: string): string | null {
+  const t = raw.trim();
+  if (!t || !/^[\p{Extended_Pictographic}‍️\s]+$/u.test(t)) return null;
+  switch (tone(t)) {
+    case "sad":
+      return pick(["Ơ sao vậy nè 🥺 Có chuyện gì kể Lomi nghe nha.", "Ôm một cái nè 🤗 Bạn ổn không?"]);
+    case "mad":
+      return pick(["Ai làm bạn bực vậy 😤 Kể Lomi nghe coi!", "Hít sâu một hơi nha 🌿 Có chuyện gì vậy?"]);
+    case "shock":
+      return pick(["Gì vậy gì vậy 😳", "Ủa có chuyện gì hả? 😯"]);
+    case "love":
+      return pick(["Lomi thương lại nè 🥰", "Ui ngại ghê ☺️💚"]);
+    case "laugh":
+      return pick(["Hihi 😆", "Cười gì đó, kể Lomi cười chung với 😄", "😆😆"]);
+    default:
+      return pick(["👍😄", "Lomi thấy rồi nha 😊", "Hehe 🤭"]);
+  }
+}
+
+export type UCtx = {
+  lastText?: string; // câu Lomi vừa nói
+  faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này
+  issue?: string; // Lomi vừa hỏi thêm về lỗi app (lag/crash/blank/login/find/generic)
+  lastUser?: string; // câu người dùng nói trước đó
+};
+export type UReply = ChatReply & { issue?: string; intent: string };
+
+const has = (n: string, re: RegExp) => re.test(` ${n} `);
+const words = (n: string) => (n ? n.split(" ").length : 0);
+
+// ── Báo lỗi app ──
+const APP_REF = /\b(app|ung dung|trang|web|man hinh|cai nay|no|he thong|lomi)\b/;
+const ISSUE: [string, RegExp][] = [
+  ["crash", /\b(bi vang|vang ra|vang app|vang hoai|vang mat|tu vang|vang hoai luon|tu thoat|tu tat|tu dong tat|thoat ra|crash|out ra|dang xai thi tat)\b/],
+  ["blank", /\b(trang tron|man hinh trang|trang xoa|trang bach|den thui|man hinh den|khong hien gi|khong hien thi gi|trong tron|khong co gi het|khong thay gi het)\b/],
+  ["lag", /\b(lag|giat lag|bi giat|giat qua|bi do|(?<!thai )do qua|(?<!thai )do luon|do man hinh|dung hinh|treo|bi treo|cham qua|cham ri|cham the|cham vay|load lau|load mai|load hoai|xoay hoai|xoay mai|quay hoai|quay mai|loading mai|khong load|khong len|mai khong len|load khong len)\b/],
+  ["login", /\b(khong vao duoc|vao khong duoc|khong dang nhap duoc|dang nhap khong duoc|khong login duoc|bi da ra|bi out|bi dang xuat)\b/],
+  ["generic", /\b(bi gi|bi sao|bi loi|loi roi|loi gi|bao loi|hien loi|bug|hu roi|hu ha|khong chay|khong hoat dong|khong dung duoc|xai khong duoc|dung khong duoc|khong bam duoc|bam khong duoc|bam khong an|khong gui duoc|gui khong duoc|khong tai duoc|khong mo duoc|mo khong duoc|khong luu duoc|luu khong duoc)\b|\bkhong (gui|tai|mo|luu|bam|load|xem|nghe|goi|dang|up|doi|chon|tim|thay doi|cap nhat|cai)\b.{0,30}\bduoc\b/],
+];
+const ISSUE_TIP: Record<string, string> = {
+  crash: "App tự văng ra hả 😥",
+  blank: "Màn hình trắng trơn hả 😥",
+  lag: "App đang chậm / đơ hả 😥",
+  login: "Không vào được app hả 😥",
+  generic: "App đang trục trặc hả 😥",
+};
+function issueSteps(kind: string): string {
+  const base = [
+    "1. Vuốt tắt hẳn app rồi mở lại",
+    "2. Kiểm tra mạng — đổi qua lại wifi ↔ 4G thử",
+    kind === "login"
+      ? "3. Chắc chắn gõ đúng tên đăng nhập; quên mật khẩu thì bấm “Quên mật khẩu” ở màn đăng nhập"
+      : "3. Vẫn bị thì xoá app ngoài màn hình chính rồi cài lại từ liendoanh.world (dữ liệu không mất đâu)",
+  ];
+  return base.join("\n");
+}
+
+/** Câu mở đầu nhắc lại đúng việc người dùng đang kẹt ("Không gửi tin nhắn được hả") — cho thấy Lomi hiểu. */
+function issueHead(q: string, kind: string): string {
+  const m = q.match(/(?:^|\s)(?:không|ko|k|hông|chẳng|chả) ((?:\p{L}+ ){0,4}?\p{L}+) được/iu);
+  if (kind === "generic" && m && m[1].split(" ").length <= 5) return `Không ${m[1].toLowerCase()} được hả 😥`;
+  return ISSUE_TIP[kind];
+}
+
+function detectIssue(n: string): string | null {
+  for (const [k, re] of ISSUE) if (has(n, re)) return k;
+  return null;
+}
+
+// Trả lời tiếp khi Lomi vừa hỏi "đang ở màn nào, Android hay iPhone".
+const DEVICE = /\b(android|samsung|oppo|xiaomi|redmi|vivo|realme|huawei|nokia|iphone|ios|ip|ipad|may tinh|laptop|pc|chrome|safari|zalo|facebook|fb)\b/;
+const SCREEN: [RegExp, string][] = [
+  [/\b(uu dai|ma uu dai|nhan ma)\b/, "Ưu đãi"],
+  [/\b(quet|ket noi)\b/, "Quẹt"],
+  [/\b(tin nhan|chat|nhan tin|goi)\b/, "Tin nhắn"],
+  [/\b(cong dong)\b/, "Cộng đồng"],
+  [/\b(ho so|trang ca nhan|anh dai dien)\b/, "Hồ sơ"],
+  [/\b(dua don|dat xe|giao hang|tai xe)\b/, "Đưa đón"],
+  [/\b(kham pha|tim quan|ban do)\b/, "Khám phá"],
+  [/\b(thong bao)\b/, "Thông báo"],
+  [/\b(dang nhap|dang ky)\b/, "Đăng nhập"],
+  [/\b(trang chu)\b/, "Trang chủ"],
+  [/\b(lomi|tro ly)\b/, "Trợ lý Lomi"],
+];
+
+const DEV_NAME: Record<string, string> = { android: "Android", samsung: "Samsung", oppo: "OPPO", xiaomi: "Xiaomi", redmi: "Redmi", vivo: "vivo", realme: "realme", huawei: "Huawei", nokia: "Nokia", iphone: "iPhone", ios: "iPhone", ip: "iPhone", ipad: "iPad", "may tinh": "máy tính", laptop: "laptop", pc: "máy tính", chrome: "Chrome", safari: "Safari", zalo: "Zalo", facebook: "Facebook", fb: "Facebook" };
+const devName = (d: string) => DEV_NAME[d] ?? d;
+
+// ── Mở lời, chưa vào việc ("cho tui hỏi cái này vs", "giúp mình với", "help") ──
+const OPENER =
+  /^(e |oi |lomi oi |lomi |ad oi |bro |ban oi |em oi |anh oi |chi oi )?(cho (tui|toi|minh|em|anh|chi|tao|t|to) hoi( (cai nay|cai|chut|xiu|ti|ty|chut xiu|ti xiu|mot chut|mot cau|cau nay|nay))?|hoi (chut|xiu|ti|cai nay|cai|mot chut|cai ne)|minh hoi (chut|xiu|cai nay|cai)|giup (minh|toi|tui|em|anh|chi|tao|t|to)?( voi| cai| chut| xiu| di)?|giup voi|giup|help( me)?|cuu (minh|toi|tui|em|voi)|cuu|co viec nho|nho ti|nho chut|nho xiu)( (voi|vs|nha|nhe|ne|di|lomi|duoc khong|dc khong|khong|a|nhen|cai))*$/;
+
+// ── Câu cụt / tham chiếu mơ hồ ──
+const VAGUE =
+  /^(e |oi |ua |bro |lomi )?(cai nay|cai do|cai kia|cai nay sao|cai do sao|cai nay la sao|cai nay la gi|vay sao|sao vay|sao ta|sao the|sao the nhi|sao z|roi sao|roi sao nua|roi sao do|con cai kia|con cai nay|con gi nua|o dau|o dau vay|dau vay|dau|dau roi|sao khong co|sao khong thay|sao khong duoc|lam sao|lam sao ta|lam sao day|lam sao vay|lam the nao|the nao|ra sao|gi vay|gi day|gi the|gi z|la sao|la gi|ua|ua sao|ua gi|ua la sao|ha|hm|hmm|vay la sao|nghia la sao|y la sao|cai nay lam sao|cai nay bi gi|cai nay bi sao|sao|sao ma|ui|uii|au|oa|wow|oi|ui da|oi troi oi)( (vay|z|day|ta|nhi|nha|a|lomi|ban|troi|ha|vay ta|the))*$/;
+
+// ── Không tìm thấy nút / chỗ ──
+const NOT_FOUND =
+  /\b(khong thay (nut|cho|muc|cai|o|nut do|phan|tab|dau)|khong tim thay|tim khong ra|tim hoai khong thay|kiem khong ra|khong kiem thay|khong thay dau|nut (do|nay|kia|.{0,20}) (o dau|dau)|cho nao de|bam vao dau|bam o dau|nhan vao dau|vao dau de|o dau de)\b/;
+
+// ── Chưa hiểu câu Lomi vừa nói ──
+const CONFUSED =
+  /\b(khong hieu (gi|cho nay|lam|lam luon|gi het|gi luon|y|cho do|nha|a|ban noi gi|lomi noi gi)|kho hieu|chua hieu|hieu chet lien|noi gi vay|noi gi z|noi gi the|noi gi zay|la sao ta|rối|roi qua|lu qua|lu luon|khong hieu)\b/;
+
+/**
+ * Ý định của câu (chạy SAU chitChat, TRƯỚC câu hỏi thường gặp). Trả null để luồng cũ xử lý tiếp.
+ * faqHit = id câu hỏi thường gặp khớp với câu này (nếu có) — để không giành câu FAQ trả lời đúng hơn.
+ */
+export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): UReply | null {
+  const n = normalizeVi(q);
+  const tn = tone(raw);
+  const w = words(n);
+  const soft = tn === "sad" ? "Ui đừng buồn nha 🥲 " : tn === "mad" ? "Bình tĩnh nha, để Lomi gỡ cùng bạn 💪 " : tn === "laugh" ? "Hihi " : "";
+
+  // 0) Lomi vừa hỏi thêm về lỗi → câu này là thông tin bổ sung (máy, màn hình).
+  if (ctx.issue && ctx.issue !== "find" && w <= 14) {
+    const dev = n.match(DEVICE)?.[0];
+    const scr = SCREEN.find(([re]) => has(n, re))?.[1];
+    if (dev || scr) {
+      const ios = dev && /iphone|ios|ip|ipad|safari/.test(dev);
+      const tip = ios
+        ? "Trên iPhone, app chạy qua Safari: vào Cài đặt → Safari → Xoá lịch sử và dữ liệu trang web, rồi mở lại app nha (tài khoản vẫn còn, chỉ cần đăng nhập lại)."
+        : dev && /may tinh|laptop|pc|chrome/.test(dev)
+          ? "Trên máy tính thì bấm Ctrl + Shift + R để tải lại hẳn trang nha."
+          : dev
+            ? "Trên Android: giữ icon app → Thông tin ứng dụng → Bộ nhớ → Xoá bộ nhớ đệm (cache), rồi mở lại nha. Nhớ tắt chế độ tiết kiệm pin cho app luôn."
+            : "";
+      return {
+        intent: "issue_detail",
+        issue: ctx.issue,
+        text:
+          `Okie, Lomi ghi nhận rồi nè 📝${scr || dev ? ` (${[scr && `mục ${scr}`, dev && devName(dev)].filter(Boolean).join(", ")})` : ""}` +
+          (tip ? `\n\n${tip}` : "") +
+          "\n\nNếu vẫn chưa được, bạn bấm ⁉️ dưới câu này để gửi ban quản trị, hoặc nhắn trực tiếp ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha — kể giống vừa kể với Lomi là admin hiểu liền 💚",
+      };
+    }
+  }
+
+  // 0b) "ib mình nha" — muốn Lomi nhắn riêng.
+  if (/^(nhan tin|ib|inbox) (minh|toi|tui|em|anh|chi|t|tao|to)( (nha|nhe|di|voi|lien|nhen|lomi))*$/.test(n))
+    return {
+      intent: "ib",
+      text: "Lomi chỉ nói chuyện được ở đây thôi nè 😄 Bạn cứ nhắn ngay khung này là Lomi trả lời liền. Còn muốn nhắn riêng với người khác thì vào Tin nhắn (/tin-nhan) nha!",
+    };
+  // 0c) "m đi đâu z", "lomi ở đâu" — hỏi Lomi đi đâu.
+  if (/^((may|lomi|ban|em|ong|ba|bro) )?(di dau|o dau|dau roi|di dau roi|di dau vay|dang o dau|tron dau)( (vay|z|roi|the|ta|ha|nay|lomi))*$/.test(n) && /^(may|lomi|ban|em|ong|ba|bro|di dau|dang o dau|tron dau)/.test(n))
+    return { intent: "where_lomi", text: pick(["Lomi ở đây suốt nè, có đi đâu đâu 😆 Gọi là có mặt liền!", "Lomi “sống” trong app luôn á 🤖 Bạn cần gì nè?"]) };
+  // 0d) Hướng dẫn dùng app chung chung.
+  if (/\b(huong dan|chi|chi cach|day) (dung|su dung|xai|choi) (app|ung dung)\b|^(app|ung dung)( nay)? (dung|xai|su dung) (sao|the nao|nhu nao|ra sao)/.test(n))
+    return {
+      intent: "guide",
+      text: "Có trang Hướng dẫn (/huong-dan) chỉ từng phần của app luôn nè 📖 Hoặc bạn hỏi Lomi từng việc cụ thể kiểu “nhận ưu đãi sao”, “quẹt là gì”, “đặt xe thế nào” là Lomi chỉ liền!",
+      quick: ["Làm sao để nhận ưu đãi?", "Quẹt là gì, dùng thế nào?"],
+    };
+  // 0e) Phàn nàn quán / nhân viên (trước báo lỗi app: "thái độ" bỏ dấu có chữ "đơ").
+  if (/\b(nhan vien|quan|cua hang|shop|chu quan|tiem)\b.*\b(thai do|chui|lua|lua dao|khong giu|khong nhan|te qua|do qua|chan qua|bat nat|lam gia|khong dung|mat lich su|hach)\b/.test(n))
+    return {
+      intent: "biz_complaint",
+      text:
+        "Nghe bực thiệt 😤 Bạn có thể viết đánh giá cho quán đó (vào trang quán → Đánh giá) để mọi người biết, hoặc bấm ⋯ → Báo cáo nếu quán làm sai — ban quản trị sẽ xem và xử lý nha.",
+      quick: ["Quán không giữ đúng ưu đãi thì sao?", "Báo cáo nội dung hoặc người dùng thế nào?"],
+    };
+
+  // 1) Mở lời: "ê cho tui hỏi cái này vs", "giúp mình với" → mời nói tiếp, không đoán bừa.
+  if (OPENER.test(n))
+    return {
+      intent: "opener",
+      text: pick(["Dạ, bạn hỏi đi nè 😄 Lomi nghe đây.", "Có Lomi đây 🙋 Bạn cứ nói tự nhiên nha.", "Okie, chuyện gì nè? Lomi sẵn sàng rồi 👂", "Hỏi thoải mái luôn nha 😊"]),
+    };
+
+  // 2) Báo lỗi app — ý định trước, tone sau (":))" vẫn có thể là lỗi thật).
+  const PROBLEM_FAQ = new Set(["notifmissing", "update", "logout", "offerlocked", "approve", "forgot", "forgotnoemail", "bizstatus"]);
+  const kind = detectIssue(n);
+  if (kind && !(faqHit && PROBLEM_FAQ.has(faqHit)) && (has(n, APP_REF) || w <= 7)) {
+    return {
+      intent: "issue",
+      issue: kind,
+      text:
+        `${soft}${issueHead(q, kind)} Bạn thử nhanh mấy bước này nha:\n${issueSteps(kind)}\n\n` +
+        "Vẫn bị thì nói Lomi biết bạn đang ở mục nào và dùng Android hay iPhone nhé 🙏",
+    };
+  }
+
+  // 3) Không tìm thấy nút / chỗ.
+  if (has(n, NOT_FOUND) && !faqHit) {
+    const prev = ctx.lastText && /bấm|nút|vào|mục|chọn/i.test(ctx.lastText);
+    return {
+      intent: "notfound",
+      issue: "find",
+      text: prev
+        ? pick([
+            "Chỗ đó khó thấy thiệt ha 😅 Bạn đang đứng ở màn nào vậy? Nói Lomi nghe để Lomi chỉ đường từ chỗ bạn đang đứng nha 🧭",
+            "Không thấy hả 🤔 Có thể app chưa cập nhật bản mới — vuốt tắt hẳn app rồi mở lại thử nha. Vẫn không thấy thì nói Lomi biết bạn đang ở mục nào nhé!",
+          ])
+        : "Bạn đang tìm nút gì nè? 🧭 Nói Lomi việc muốn làm (vd “nhận ưu đãi”, “đổi ảnh đại diện”, “tạo nhóm chat”) là Lomi chỉ đường liền!",
+    };
+  }
+
+  // 4) Chưa hiểu câu Lomi vừa nói.
+  if (has(n, CONFUSED) && w <= 10 && !faqHit) {
+    return {
+      intent: "confused",
+      text: ctx.lastText
+        ? pick([
+            "Ui, chắc Lomi nói hơi rối 😅 Bạn chưa rõ đoạn nào nè? Chỉ Lomi chỗ đó, Lomi giải thích lại gọn hơn nha.",
+            "Lomi xin lỗi nha 🙏 Bạn kẹt ở bước nào? Nói Lomi nghe, mình đi từng bước một.",
+          ])
+        : "Chỗ nào chưa hiểu nè? 🤔 Bạn nói Lomi nghe đang muốn làm gì, Lomi chỉ từ từ cho nha.",
+    };
+  }
+
+  // 5) Câu cụt / tham chiếu mơ hồ ("cái này?", "rồi sao", "ở đâu vậy", "ủa?").
+  //    Có ngữ cảnh câu hỏi về app → để phần câu hỏi nối xử lý; không có → hỏi lại 1 câu ngắn.
+  if (w <= 6 && VAGUE.test(n) && !ctx.faqId) {
+    if (/^(ua|ha|hm|hmm|e|ui|uii|au|oa|wow|oi)( |$)/.test(n) && w <= 2)
+      return { intent: "vague", text: pick(["Sao vậy nè? 😯", "Ủa gì vậy bạn? 😄", "Hửm, có gì hả? 👀"]) };
+    return {
+      intent: "vague",
+      text: ctx.lastText
+        ? pick([
+            "Bạn đang nói tới cái nào nè? Nói Lomi thêm chút xíu nha 😄",
+            "Hmm, “cái này” là cái gì vậy bạn? 👀 Kể Lomi nghe thêm chút nha.",
+          ])
+        : pick([
+            "Cái nào nè? 👀 Nói Lomi thêm chút xíu là Lomi hiểu liền!",
+            "Bạn đang hỏi về chuyện gì vậy? Kể Lomi nghe thêm chút nha 😄",
+          ]),
+    };
+  }
+
+  // 6) Rủ đi đâu / tìm bạn đi cùng ("có ai đi đà lạt hong", "ai đi cafe không").
+  if (/\b(co ai|ai|ai do|co nguoi nao|ai ranh)\b.*\b(di|choi|an|uong|cafe|ca phe|nhau|du lich|phuot|chay bo|da banh|da bong|game|choi game|xem phim)\b/.test(n) && w <= 14)
+    return {
+      intent: "seek_company",
+      text: pick([
+        "Lomi thì chỉ ở trong app thôi nè 😆 Muốn tìm bạn đi cùng thì đăng lên Cộng đồng (/cong-dong) hoặc vào Quẹt (/quet) → Làm quen / Game, nhiều người quanh bạn đang tìm bạn y vậy đó!",
+        "Nghe vui ghê 😄 Bạn thử đăng một tin ở Cộng đồng (/cong-dong) rủ mọi người, hoặc lướt Quẹt (/quet) tìm người cùng sở thích nha!",
+      ]),
+      quick: ["Cộng đồng dùng để làm gì?", "Quẹt là gì, dùng thế nào?"],
+    };
+
+  // 8) Cà khịa / gọi thân mật ("nay ông căng vậy", "m khùng hả", "cha nội").
+  if (/^(nay )?(ong|ba|may|m|lomi|ban|bro|cha noi|ma|troi)?( nay)? ?(cang|gat|kho tinh|khung|dien|xao|lay loi|choi khum|lam lo|ba dao|lay)( (vay|the|z|ha|qua|ghe|ta|lam))*$/.test(n) ||
+    /^(cha noi|ba noi|ong noi|ong oi|ba oi|bro oi|bro|ma oi|troi dat)( (oi|a|lomi|ha))*$/.test(n))
+    return {
+      intent: "banter",
+      text: pick([
+        "Đâu có căng đâu nè 😆 Lomi hiền khô à. Có gì nói Lomi nghe nè!",
+        "Hihi Lomi bị oan á 🙈 Có chuyện gì vậy bạn?",
+        "Lomi đây, Lomi đây 😄 Gọi chi đó?",
+      ]),
+    };
+
+  return null;
+}

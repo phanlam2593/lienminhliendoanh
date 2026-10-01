@@ -9,6 +9,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { emojiOnlyReply, tone } from "@/lib/lomiUnderstand";
 
 export type ChatReply = { text: string; quick?: string[]; sticker?: string };
 type L = "vi" | "en";
@@ -98,7 +99,7 @@ const GREET_SHORT = ["Chào bạn nha 👋", "Hé lô 👋", "Chào chào 😄",
 const GREET_HEAD =
   /^(xin chao|chao buoi (sang|trua|chieu|toi)|chao xin|chao|hi hi|hi lo|hi|hello|helo|hellu|hellou|helu|he lo|he lu|he nho|hey yo|hey|alo|halo|ha lo|yo|sup|cheo|good (morning|afternoon|evening)|morning|gut mo ninh|gud morning|moning|bonjour|annyeong|konnichiwa|ni hao|hola|lomi oi|oi lomi)\b/;
 // Từ chào "yếu" (dễ trùng câu khác: "ôi buồn quá", "ê sao kì vậy") — chỉ tính là chào khi đứng một mình.
-const GREET_WEAK = /^(e|oi|hu|lo|a|ui)\b/;
+const GREET_WEAK = /^(e|hu|lo)\b/;
 const FILLER = new Set(
   "lomi ban em anh chi nha nhe nhen nghen ne na a ah ha he hen ho do day oi ca nha moi nguoi minh toi tui cau bro sis nhau iu yeu cute xinh dep be con vui ve hom nay nay buoi sang trua chieu toi lai lan nua nhieu dang yeu cua tro ly ai thi".split(" "),
 );
@@ -167,7 +168,7 @@ const RULES: Rule[] = [
   },
   // "Lomi ơi" / gọi tên → dạ
   {
-    re: /^(lomi|lomi a|lomi oi+ .*|lomi .*oi)$/,
+    re: /^(lomi|lomi a|lomi oi+( .*)?|lomi .* oi)$/,
     reply: () => ({ text: pick(["Dạ, Lomi nghe nè 👂 Bạn cần gì nè?", "Có Lomi đây 🙋 Bạn nói đi nè!", "Dạaa 😄 Lomi đây!"]) }),
   },
   // "???", "..." → hỏi lại nhẹ nhàng, nói rõ Lomi giúp được gì
@@ -177,7 +178,7 @@ const RULES: Rule[] = [
   },
   // "Có ai không?" → có Lomi nè
   {
-    re: /^(co ai (khong|o day|o do|khong vay|ko)|co ai|ai do|co nguoi khong)( .*)?$/,
+    re: /^(co ai (khong|o day|o do|khong vay|ko)|co ai|ai do|co nguoi khong)( (khong|o day|o do|vay|ne|a|ta|lomi))*$/,
     reply: () => ({ text: pick(["Có Lomi ở đây nè 👋 Bạn cần gì cứ nói nha!", "Lomi đây, trực 24/7 luôn nè 😄"]) }),
   },
   // Hỏi thăm Lomi
@@ -193,14 +194,42 @@ const RULES: Rule[] = [
   },
   // Đói / ăn uống
   {
-    re: /\b(an com chua|an gi chua|an chua|doi bung|doi qua|dang doi|an gi bay gio|nen an gi|an gi ngon)\b/,
-    reply: () => ({
+    re: /\b(an com chua|an gi chua|an chua|an sang chua|an trua chua|an toi chua|doi bung|doi qua|dang doi|an gi bay gio|nen an gi|an gi ngon)\b/,
+    reply: (n = "") => /\b(an com chua|an gi chua|an chua|an (sang|trua|toi) chua)\b/.test(n) && !/\bdoi\b/.test(n)
+      ? { text: pick(["Lomi là robot nên chỉ “ăn” pin thôi nè 🔋😆 Còn bạn ăn chưa đó?", "Lomi vừa sạc đầy bụng rồi nè 🔋 Bạn ăn gì chưa?", "Hihi Lomi ăn điện thôi á 😆 Bạn nhớ ăn uống đầy đủ nha!"]) }
+      : ({
       text: pick([
         "Lomi là robot nên chỉ “ăn” pin thôi 🔋😆 Bạn đói hả? Mở Khám phá (/kham-pha) → sắp xếp Gần đây xem quanh bạn có quán nào ngon nha 🍜",
         "Đói thì phải ăn liền chứ! 🍲 Vào Khám phá (/kham-pha) chọn Gần đây, biết đâu có quán đang có ưu đãi đó 😉",
       ]),
       quick: ["Hôm nay ăn gì? 🎲", "Tìm quán ăn gần mình"],
     }),
+  },
+  // Lomi ngủ chưa
+  {
+    re: /\b(ngu chua|chua ngu|sao chua ngu|lomi ngu chua|di ngu chua|co ngu khong|lomi co ngu)\b/,
+    reply: () => ({ text: pick(["Lomi là robot nên không cần ngủ nè 😆 Còn bạn, khuya rồi thì nghỉ sớm nha 🌙", "Lomi thức 24/7 luôn á 🦉 Bạn chưa ngủ hả?"]) }),
+  },
+  // Hôm nay làm gì / rảnh không
+  {
+    re: /^((nay|hom nay|bua nay|gio|dang) )?(lam gi|lam gi vay|lam gi day|lam gi z|lam gi the|lam gi do)( (vay|z|day|do|lomi|ban|ne|ta|a))*$|^((lomi|ban|em|may) )?(ranh khong|co ranh khong|ranh hong|ranh ko)( (lomi|ban|ne|a))*$/,
+    reply: () => ({ text: pick(["Lomi đang ngồi chờ bạn tới nói chuyện nè 😄 Còn bạn nay làm gì vui không?", "Rảnh re luôn nè 😆 Lomi lúc nào cũng rảnh cho bạn. Nay bạn sao rồi?", "Lomi đang “trực” app nè 🤖 Bạn thì sao, hôm nay bận không?"]) }),
+  },
+  // "Có gì vui không", "kể gì đi"
+  {
+    re: /^(co gi vui khong|co gi hay khong|co gi moi khong|ke gi di|noi gi vui vui di|ke gi nghe di)( (lomi|ban|ne|a|nha))*$/,
+    reply: () => ({ text: pick(["Vui nè: Đà Lạt hôm nay lúc nắng lúc mưa, y chang tâm trạng crush luôn 😆 Còn bạn có gì vui kể Lomi nghe với!", "Lomi mới học được câu đùa nè: vì sao điện thoại hay mệt? Vì ngày nào cũng bị người ta “sạc” 🔋😆 Bạn kể Lomi nghe chuyện vui của bạn đi!"]) }),
+  },
+  // "Để tui coi thử", "để xem"
+  {
+    re: /^(de (tui|toi|minh|em|anh|chi|t|tao) )?(coi thu|xem thu|coi|xem|thu xem|thu coi|tinh|suy nghi|nghi them|xem lai|coi lai|thu)( (thu|da|nha|nhe|xem|coi|cai|di|ne|sao))*$/,
+    max: 7,
+    reply: () => ({ text: pick(["Okie, cứ từ từ nha 😊", "Dạ, bạn cứ xem thử, có gì hỏi Lomi liền nha 👌", "Okie la, Lomi chờ nè 😄"]) }),
+  },
+  // Lomi biết gì / làm được gì → ngắn gọn, chỉ nút ❓
+  {
+    re: /^(lomi|ban|em)? ?(biet gi|biet lam gi|lam duoc gi|giup duoc gi|biet nhung gi|lam gi duoc)( (vay|z|khong|ne|ta|het))*$/,
+    reply: () => ({ text: "Lomi rành mấy chuyện có ích cho cộng đồng nè: tư vấn sức khoẻ, tâm sự – tâm lý, chỉ cách dùng app, gợi ý quán, và bói Tarot cho vui 🔮 Bấm nút ❓ ở góc trên để xem mọi người hay hỏi gì nha!" }),
   },
   // Thời tiết
   {
@@ -343,7 +372,7 @@ const RULES: Rule[] = [
   },
   // Cười
   {
-    re: /^(haha+|hihi+|hehe+|hoho+|kkk+|kaka+|lol|=\)+|:\)+|:d+|xd+)( .*)?$/,
+    re: /^(haha+|hihi+|hehe+|hoho+|kk+|kaka+|lol|=\)+|:\)+|:d+|xd+|ha ha|hi hi|he he)( .*)?$/,
     reply: () => ({ text: pick(["Hihi 😄", "Cười lên là thấy đời tươi liền ha 😆", "Hehe, bạn vui là Lomi vui 😁"]) }),
   },
   // Muốn được khen / động viên
@@ -382,7 +411,7 @@ const RULES: Rule[] = [
   },
   // Chê Lomi
   {
-    re: /\b(lomi ngu|ban ngu|(?<!buon )ngu qua|do ngoc|vo dung|te qua|chan lomi|lomi dot|kem qua|khong hieu gi)\b/,
+    re: /\b(lomi ngu|ban ngu|(?<!buon )ngu qua|do ngoc|vo dung|te qua|chan lomi|lomi dot|kem qua|lomi khong hieu gi|lomi chang hieu gi)\b/,
     reply: () => ({
       text: pick([
         "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Câu nào Lomi trả lời chưa ổn, bạn bấm nút ⁉️ dưới câu đó để gửi ban quản trị dạy lại Lomi nha!",
@@ -455,7 +484,7 @@ const RULES: Rule[] = [
   },
   // Ok / ừ
   {
-    re: /^(ok|oke|okie|okay|uh|u|um|uhm|vang|da|duoc roi|hieu roi|roi|a|a ha|khong|ko|k|thoi|khong co gi|khong can)$/,
+    re: /^(ok|oke|okie|okay|okla|oki|okela|ok la|uh|u|um|uhm|o|vang|vang a|da|da vang|duoc roi|hieu roi|roi|a|a ha|khong|ko|k|thoi|khong co gi|khong can|uk|ukm|ok luon|ok ok)$/,
     reply: () => ({ text: pick(["Okie 😊", "Dạ 🌿", "Ừa nè 😄", "Okie la 👌"]) }),
   },
   // ── Nói chuyện đơn giản hằng ngày (01/10, theo ý Kir) ──
@@ -529,7 +558,7 @@ const RULES: Rule[] = [
   },
   // "Thật hả / vậy hả / thế à"
   {
-    re: /^(that ha|that khong|thiet ha|thiet hong|vay ha|vay sao|the a|the ha|that a|that luon|ghe vay|ghe ha|sao vay|ua)( (lomi|ban|ta|tr|troi))*$/,
+    re: /^(that ha|that khong|thiet ha|thiet hong|vay ha|the a|the ha|that a|that luon|ghe vay|ghe ha)( (lomi|ban|ta|tr|troi))*$/,
     reply: () => ({ text: pick(["Thiệt mà 😄", "Thật đó nha 😆", "Lomi không xạo đâu 🤭"]) }),
   },
   // Lomi tên gì / sở thích
@@ -582,10 +611,13 @@ const withName = (name: string | undefined, t: string) => (name ? `${name} ơi, 
 
 export function chitChat(text: string, lang: L, name?: string): ChatReply | null {
   // Chỉ gửi emoji (😂, 🥰, 👍…) → đáp lại cho vui.
-  if (lang === "vi" && /^[\p{Extended_Pictographic}\u200d\ufe0f\s]+$/u.test(text.trim()) && text.trim())
-    return quiet({ text: pick(["Hihi 😄", "😆😆", "Lomi thấy rồi nha 🥰", "👍😄", "Hehe 🤭"]) });
+  const eo = lang === "vi" ? emojiOnlyReply(text) : null;
+  if (eo) return quiet({ text: eo });
   const n = squash(normalizeVi(text)) || text.trim();
   if (!n) return null;
+  // Cảm thán kèm emoji buồn ("trời ơi 😭", "huhu") → hỏi han, không đáp kiểu đùa.
+  if (lang === "vi" && tone(text) === "sad" && /^(troi oi|troi dat oi|oi troi|huhu|hu hu|hic|hic hic|chan qua|met qua|ui|oi|that luon|toang|toang roi|thoi xong)( .*)?$/.test(n) && n.split(" ").length <= 5)
+    return quiet({ text: pick(["Ơ sao vậy nè 🥺 Có chuyện gì buồn hả? Kể Lomi nghe nha.", "Ôm bạn một cái nè 🤗 Chuyện gì vậy?"]) });
   if (lang === "en") {
     if (RULES[0].re.test(` ${n} `))
       return {
@@ -790,6 +822,9 @@ const TEEN: Record<string, string> = {
   sđt: "số điện thoại", sdt: "số điện thoại", tk: "tài khoản", ad: "admin", hnay: "hôm nay", hqua: "hôm qua",
   ysl: "yếu sinh lý", xts: "xuất tinh sớm",
   tgian: "thời gian", vc: "việc", uh: "ừ", uk: "ừ", uhm: "ừ", ah: "à", tr: "trời",
+  // 01/10 (theo tài liệu Kir): thêm cách nói đời thường
+  lmj: "làm gì", lmgi: "làm gì", okla: "ok", oki: "ok", okee: "ok", okeee: "ok", ò: "ừ", ừa: "ừ", ùm: "ừ", ừm: "ừ",
+  dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo",
 };
 export function expandTeen(text: string): string {
   let s = text.normalize("NFC");
@@ -799,6 +834,11 @@ export function expandTeen(text: string): string {
   s = s.replace(/(^|[^\p{L}])bn (tiền|tuổi|lâu|ngày|năm|tháng|giờ|cái|người|điểm|lần|k)(?![\p{L}])/giu, "$1bao nhiêu $2");
   s = s.replace(/(^|[^\p{L}])(ng|người) (iu|yêu)(?![\p{L}])/giu, "$1người yêu");
   s = s.replace(/(^|[^\p{L}])bn(?![\p{L}])/giu, "$1bạn");
+  // "lm j", "làm j" → làm gì; "m/t + động từ" là mày/tao (khác "5 m" = mét); "nv quán" = nhân viên.
+  s = s.replace(/(^|[^\p{L}])(lm|làm) (j|gi)(?![\p{L}])/giu, "$1làm gì");
+  s = s.replace(/(^|[^\p{L}\p{N}])m (đi|làm|ăn|ngủ|ở|có|biết|nói|bị|khùng|điên|ơi|rảnh|thích|nghĩ|hiểu|đang)(?![\p{L}])/giu, "$1mày $2");
+  s = s.replace(/(^|[^\p{L}\p{N}])t (đi|làm|ăn|ngủ|ở|có|biết|nói|bị|muốn|thích|nghĩ|hiểu|đang|hỏi|thấy|không|ko|k)(?![\p{L}])/giu, "$1tao $2");
+  s = s.replace(/(^|[^\p{L}])nv (quán|cửa hàng|bán hàng|phục vụ|shop|ở|tiệm|công ty|chỗ)(?![\p{L}])/giu, "$1nhân viên $2");
   // "đau hông", "mỏi hông", "bên hông" là cái hông (bộ phận cơ thể), không phải "không" (01/10).
   s = s.replace(/(^|[^\p{L}])(đau|mỏi|nhức|bên|vùng|eo|khớp|xương|sườn|ê|tê|sưng|mông|lưng) (hông)(?![\p{L}])/giu, "$1$2 hông_body");
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).

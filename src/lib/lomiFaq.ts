@@ -381,7 +381,9 @@ export function normalizeVi(s: string): string {
 
 // Từ đồng nghĩa / viết tắt hay gặp → quy về một cách viết.
 const SYN: [RegExp, string][] = [
-  [/\b(khuyen mai|voucher|deal|coupon|giam gia)\b/g, "uu dai"],
+  [/\b(khuyen mai|voucher|deal|coupon|giam gia|offer|sale)\b/g, "uu dai"],
+  [/\b(app nay de lam gi|app de lam gi|app nay dung de lam gi|ung dung nay de lam gi|app nay lam duoc gi|app nay co gi)\b/g, "lien minh lien doanh la gi"],
+  [/\b(ton phi|mat tien|tra phi|co phi|ton tien|tinh phi|thu phi|free khong|mien phi khong)\b/g, "mat phi"],
   [/\b(mk|pass word|password|pw)\b/g, "mat khau"],
   [/\b(tk|acc|account)\b/g, "tai khoan"],
   [/\b(sdt|so dt|dt)\b/g, "so dien thoai"],
