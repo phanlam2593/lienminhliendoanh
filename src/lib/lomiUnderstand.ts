@@ -26,7 +26,8 @@ function pick(arr: string[]): string {
 /** Cảm xúc đi kèm câu (emoji, mặt cười chữ, "haha", "huhu"…). */
 export function tone(raw: string): Tone {
   const s = raw.toLowerCase();
-  if (/(😭|🥲|😢|😞|😔|😥|😿|💔|:\(+|huhu|hic+\b)/u.test(s)) return "sad";
+  // "híc", "hic", "hix", "hức", "hu hu" — có dấu hay không đều là buồn (01/10: "Híc" bị bỏ sót).
+  if (/(😭|🥲|😢|😞|😔|😥|😿|💔|:\(+|hu ?hu|(^|[^\p{L}])(h[iíì]c+|hix+|hức+)(?![\p{L}]))/u.test(s)) return "sad";
   if (/(😤|😡|🤬|🙄|😠|💢)/u.test(s)) return "mad";
   if (/(😳|😱|😮|😯|🫢|😧)/u.test(s)) return "shock";
   if (/(🥰|😍|❤️|❤|💕|💖|😘|🫶)/u.test(s)) return "love";

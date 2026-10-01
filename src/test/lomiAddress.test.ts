@@ -37,3 +37,19 @@ describe("11.13 xưng hô", () => {
     expect(speak("Lomi giúp bạn liền nha", "anh")).toBe("Em giúp anh liền nha");
   });
 });
+
+// 01/10 r3 — lỗi Kir gặp: "Xưng hô anh - em nha. Lomi là e, ban quản trị là anh" bị hiểu thành hỏi liên hệ BQT.
+describe("xưng hô nói rõ kiểu tự nhiên", () => {
+  const cases: [string, ReturnType<typeof explicitAddr>][] = [
+    ["Xưng hô anh - em nha. Lomi là e, ban quản trị là anh", "anh"],
+    ["xưng hô anh/em nhé", "anh"],
+    ["xưng hô chị-em nha", "chị"],
+    ["lomi là em, tui là anh", "anh"],
+    ["admin là chị nha", "chị"],
+    ["lomi xưng em nha", "bạn-em"],
+    ["ban quản trị là ai vậy", null],
+    ["liên hệ ban quản trị thế nào", null],
+    ["tui là anh của nó", null],
+  ];
+  for (const [text, want] of cases) it(text, () => expect(explicitAddr(text)).toBe(want));
+});

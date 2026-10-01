@@ -792,7 +792,9 @@ export function scopedFallback(text: string, faqQ?: string): ChatReply {
     };
   // Nhờ làm việc ngoài phạm vi (dịch, viết code, giải toán, tìm tin…) → nói rõ là ngoài phạm vi.
   const outTask = /\b(dich|viet code|code|lap trinh|giai toan|giai bai|lam bai tap|tinh giup|tim giup|tra cuu|ket qua bong da|xo so|chung khoan|gia vang|ty gia|tin tuc)\b/.test(n);
-  if (faqQ && !outTask)
+  // Chỉ nói "Về chuyện <câu app vừa hỏi>…" khi câu mới thật sự là câu hỏi nối tiếp — câu cảm thán/phản ứng
+  // ("híc", "ủa", "thôi") không phải hỏi tiếp về app (01/10: "Híc" bị đáp "Về chuyện Liên hệ Ban quản trị…").
+  if (faqQ && !outTask && (looksLikeQuestion(text) || isAppish(text)))
     return {
       text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Ấy bấm ⁉️ dưới câu này để ban quản trị bổ sung cho Lomi nha, còn cần người thật hỗ trợ liền thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ.`,
     };

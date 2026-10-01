@@ -37,14 +37,29 @@ const CALL_LOMI_AC = /(^|\s)(lomi\s+(anh|a|chị|c)|(anh|a|chị|c)\s+ơi+)(?=\s
 
 /** Người dùng NÓI RÕ muốn xưng hô thế nào — ưu tiên tuyệt đối, khoá lại. */
 export function explicitAddr(raw: string): Addr | null {
-  const t = raw.normalize("NFC").toLowerCase();
+  // Gom các cách viết "anh - em", "anh/em", "anh-em", "xưng hô anh em" về một dạng (01/10 lỗi Kir gặp:
+  // "Xưng hô anh - em nha. Lomi là e, ban quản trị là anh" bị hiểu thành câu hỏi "liên hệ ban quản trị").
+  const t = raw
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/(anh|chị|em)\s*[-–—/&]\s*(anh|chị|em)/gu, "$1 $2")
+    .replace(/xưng\s+hô/gu, "xưng");
+  // Người dùng TỰ nói mình là ai: "tui là anh nha", "ban quản trị là anh", "admin là chị".
+  const WHO = "(?:tui|tôi|mình|tớ|tao|t|admin|ad|ban quản trị|bqt|người dùng)";
+  const END = "(?=\\s*(?:$|[,.!?]|nha|nhé|nhe|nghen|đó|nè|á|nhaa))";
+  const selfIs = t.match(new RegExp(`(?:^|[\\s,.!?])${WHO}\\s+là\\s+(anh|a|chị|c)${END}`, "u"));
+  const userAC: Addr | null = selfIs ? (selfIs[1].startsWith("a") ? "anh" : "chị") : null;
+  // Người dùng nói Lomi là "em": "lomi là e", "lomi xưng em", "em là lomi".
+  const lomiEm = new RegExp(`(lomi\\s+(là|xưng)\\s+(em|e)|(em|e)\\s+là\\s+lomi)${END}`, "u").test(t);
   if (/(đừng|thôi|bỏ|khỏi|không cần)\s+(xưng|gọi)\s+(anh em|anh|chị|em|chị em)/u.test(t) || /(gọi|kêu)\s+(tui|tôi|mình|tớ|t)\s+(là|bằng)\s+bạn/u.test(t) || /xưng\s+(bạn|mình)\s+(bạn|với)/u.test(t))
     return "bạn";
   const m = t.match(/(gọi|kêu)\s+(tui|tôi|mình|tớ|t|tao)\s+(là|bằng)\s+(anh|chị|em)(?=\s|$|[,.!?])/u);
   if (m) return m[4] as Addr;
+  if (userAC) return userAC;
   const x = t.match(/xưng\s+(anh|chị)\s+em/u);
   if (x) return x[1] as Addr; // "xưng anh em với tui nha" → người dùng là anh, Lomi là em
   if (/xưng\s+em\s+(anh|chị)/u.test(t)) return "em";
+  if (lomiEm) return "bạn-em"; // chỉ biết Lomi là em, chưa biết người dùng là anh hay chị
   return null;
 }
 
