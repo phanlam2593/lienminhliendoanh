@@ -8,16 +8,22 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { HEALTH, normStrict } from "@/lib/lomiAccent";
 
-type Fact = { id: string; re: RegExp; a: string };
+// cue = chủ đề chỉ là TÊN đồ uống ("cà phê", "trà sữa") → phải có thêm ý hỏi về sức khoẻ mới trả lời kiến thức,
+// để "cf?", "đi cà phê không", "trà sữa ở đâu ngon" không bị đáp thành bài sức khoẻ (01/10 r3, test thật trên app).
+type Fact = { id: string; re: RegExp; a: string; cue?: boolean };
+const HEALTH_CUE =
+  /\b(co sao|co hai|co tot|tot khong|hai khong|tac hai|loi ich|anh huong|suc khoe|uong nhieu|nhieu qua|qua nhieu|moi ngay|bao nhieu|may ly|may coc|luc nao|buoi toi|buoi sang|khi doi|bung doi|da day|mat ngu|kho ngu|tim dap|huyet ap|mang thai|co bau|cho con bu|tre em|beo|map|tang can|giam can|duong|nghien|cai|bo duoc|nong trong|loi tieu|nen uong|co nen uong|uong duoc khong)\b/;
 
 const FACTS: Fact[] = [
   {
     id: "coffee",
+    cue: true,
     re: /\b(ca phe|cafe|cf|caffeine|cafein)\b/,
     a: "☕ **Cà phê:** với người lớn khoẻ mạnh, uống vừa phải (khoảng 1–3 ly nhỏ/ngày) thường không sao, còn giúp tỉnh táo.\n• Uống **nhiều** dễ bị: tim đập nhanh, bồn chồn, mất ngủ, đau/xót dạ dày, đi tiểu nhiều.\n• Nên: uống sau khi ăn, tránh uống sau 2–3 giờ chiều, uống thêm nước lọc.\n• Nên hạn chế nếu: đau dạ dày, trào ngược, mất ngủ, lo âu, tim mạch/huyết áp cao, đang mang thai (hỏi bác sĩ).\n• Để ý lượng đường, sữa đặc trong ly cà phê nữa nha 😄",
   },
   {
     id: "tea",
+    cue: true,
     re: /\b(tra sua|uong tra|tra xanh|tra dac)\b/,
     a: "🍵 **Trà / trà sữa:** trà xanh, trà thảo mộc uống vừa phải khá tốt. Trà sữa thì thường **nhiều đường và chất béo**, trân châu nhiều tinh bột — nên xem là món thỉnh thoảng thôi.\n• Chọn ít đường (30–50%), ít topping.\n• Trà đặc cũng có caffeine, tránh uống buổi tối nếu khó ngủ.",
   },
@@ -118,6 +124,6 @@ export function healthFact(text: string): string | null {
   const n = ` ${normStrict(text, HEALTH)} `;
   const isQ = text.includes("?") || /\b(co sao|co hai|co tot|an gi|uong gi|nen|bao nhieu|the nao|lam sao|co nen|duoc khong|khong|la du|du chua|bao lau|may tieng|may ly|co map|co beo)\b/.test(n);
   if (!isQ) return null;
-  const f = FACTS.find((x) => x.re.test(n));
+  const f = FACTS.find((x) => x.re.test(n) && (!x.cue || HEALTH_CUE.test(n)));
   return f ? `${f.a}\n\n(Kiến thức tham khảo chung — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺)` : null;
 }

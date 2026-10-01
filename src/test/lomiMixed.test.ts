@@ -100,3 +100,21 @@ describe("9. câu ngắn vẫn hiểu — thiếu ngữ cảnh thì hỏi lại 
     expect(UNKNOWN_FULL).toMatch(/Lomi/);
   });
 });
+
+import { healthFact } from "@/lib/lomiHealthFacts";
+describe("cà phê: chỉ đáp kiến thức sức khoẻ khi thật sự hỏi về sức khoẻ (test thật 01/10)", () => {
+  for (const t of ["cf?", "cà phê?", "đi cf không", "trà sữa ở đâu ngon?"]) it(`không: ${t}`, () => expect(healthFact(expandTeen(t))).toBeNull());
+  for (const t of ["uống cà phê nhiều có sao không", "cf có hại dạ dày k", "trà sữa có béo không"]) it(`có: ${t}`, () => expect(healthFact(expandTeen(t))).not.toBeNull());
+});
+
+import { questionTopic } from "@/lib/tarot";
+describe("bói: chủ đề đúng (test thật 01/10)", () => {
+  const cases: [string, string][] = [
+    ["khi nào mình nên khai trương tiệm", "money"],
+    ["thị trường năm nay thế nào", "general"],
+    ["kỳ thi sắp tới thế nào", "study"],
+    ["mình có đậu đại học không", "study"],
+    ["chuyển trường được không", "study"],
+  ];
+  for (const [q, t] of cases) it(q, () => expect(questionTopic(q)).toBe(t));
+});

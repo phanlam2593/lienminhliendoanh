@@ -449,7 +449,10 @@ function detectTopic(f: string): TarotTopic {
     return "health";
   if (/(?<![a-z])(tinh cam|tinh yeu|nguoi yeu|crush|nguoi ay|hen ho|yeu|ny|vo|chong|ket hon|cuoi|chia tay|quay lai|ex|love|dating|boyfriend|girlfriend|marry)(?![a-z])/.test(f))
     return "love";
-  if (/(?<![a-z])(hoc|thi|du hoc|truong|dai hoc|bang cap|ielts|toeic|exam|study|school)(?![a-z])/.test(f)) return "study";
+  // "khai trương", "thị trường" không phải trường học; "thì" bỏ dấu cũng thành "thi" — chỉ nhận "thi" khi rõ là thi cử
+  // (01/10 r3: "khi nào nên khai trương tiệm" bị bói thành chuyện học hành — Claude test thật trên app).
+  if (/(?<![a-z])(khai truong|mo tiem|mo quan|mo cua hang|mo shop|mo spa|mo tiem)(?![a-z])/.test(f)) return "money";
+  if (/(?<![a-z])(hoc|du hoc|dai hoc|bang cap|ielts|toeic|exam|study|school|thi cu|thi dau|thi do|thi rot|thi truot|ky thi|di thi|on thi|bai thi|thi tot nghiep|thi dai hoc|thi bang)(?![a-z])|(?<![a-z])(?<!khai |thi )truong(?! hop| phong| nhom| ban| doan| ca| hop)(?![a-z])/.test(f)) return "study";
   if (/(?<![a-z])(visa|nuoc ngoai|du lich|xuat canh|dinh cu|xuat khau lao dong|ho chieu|chuyen di|di (uc|my|nhat|han|canada|duc|anh|phap|dai loan|sing|thai)|travel|trip|abroad|passport)(?![a-z])/.test(f))
     return "travel";
   if (/(?<![a-z])(cong viec|su nghiep|viec lam|cong ty|sep|phong van|xin viec|tim viec|kiem viec|co viec|that nghiep|mat viec|di lam|thang chuc|nghi viec|chuyen viec|work|job|career|interview|promotion|boss)(?![a-z])/.test(f))
