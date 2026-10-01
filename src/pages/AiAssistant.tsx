@@ -39,7 +39,9 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { learnAnswer, learnKey, logUnanswered, lookupLearned } from "@/lib/lomiLearn";
+import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
 import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
@@ -124,6 +126,8 @@ type Msg = {
   faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này — câu hỏi nối ("còn … thì sao") hiểu theo ngữ cảnh đó
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
   diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
+  reported?: boolean; // người dùng đã bấm ⁉️ gửi câu này cho ban quản trị (01/10)
+  taught?: boolean; // câu trả lời do admin dạy (lib/lomiLearn → lomi_taught)
 };
 type Quota = { member: boolean; limit: number; used: number };
 
@@ -299,6 +303,11 @@ export function AiChat({
   const { user, profile } = useAuth();
   const [quota, setQuota] = useState<Quota | null>(null);
   const [msgs, setMsgs] = useState<Msg[]>([]);
+  // Nút ⁉️ (01/10): tin Lomi đang được báo cáo (vị trí trong msgs).
+  const [fbIdx, setFbIdx] = useState<number | null>(null);
+  const [fbReason, setFbReason] = useState<FeedbackReason>("unknown");
+  const [fbNote, setFbNote] = useState("");
+  const [fbBusy, setFbBusy] = useState(false);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -327,6 +336,7 @@ export function AiChat({
     if (!user) return;
     setMsgs(loadHistory(user.id));
     void loadQuota();
+    void loadTaught();
     setDaily(shouldShowDaily(user.id));
   }, [user?.id]);
 
@@ -594,6 +604,14 @@ export function AiChat({
       const cr = crisisReply(q, lang);
       // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
+      // Câu admin đã dạy, khớp y câu → trả lời luôn (ưu tiên hơn mọi luồng, kể cả câu Lomi từng đáp sai).
+      if (!en) {
+        const tg = matchTaught(q, true) ?? (raw !== q ? matchTaught(raw, true) : null);
+        if (tg) {
+          taughtHit(tg.id);
+          return localReply(q, { role: "assistant", content: tg.answer, local: true, taught: true });
+        }
+      }
       // Đang chọn món / vừa tìm quán cho một món → hiểu "🍜 Phở", "món khác", "quán khác".
       {
         const nq0 = normalizeVi(q);
@@ -851,6 +869,12 @@ export function AiChat({
     // 1c) Chưa chắc hiểu câu hỏi → gợi ý vài câu gần nhất (không gọi AI, không trả lời bừa).
     if (!AI_ENABLED && !forceAi) {
       // Câu này Lomi đã từng "học" (người dùng trước đã chỉ ra đúng câu hỏi) → trả lời luôn.
+      // Câu admin đã dạy, khớp gần đúng (vd khác vài chữ) → trả lời bằng câu đó.
+      const tg = en ? null : matchTaught(q);
+      if (tg) {
+        taughtHit(tg.id);
+        return localReply(q, { role: "assistant", content: tg.answer, local: true, taught: true });
+      }
       const learned = await lookupLearned(q);
       const lf = learned ? faqById(learned) : undefined;
       if (lf) return answerFaq(lf, q);
@@ -1097,6 +1121,21 @@ export function AiChat({
                       )}
                     </>
                   )}
+                  {!en && !m.note && (
+                    <button
+                      onClick={() => {
+                        if (m.reported) return void toast("Câu này đã được gửi cho ban quản trị rồi nha 💚");
+                        setFbReason(/chưa được tiếp thu|chưa được học|chưa biết|chưa có hướng dẫn/.test(m.content) ? "unknown" : "wrong");
+                        setFbNote("");
+                        setFbIdx(i);
+                      }}
+                      aria-label="Báo câu trả lời chưa ổn cho ban quản trị"
+                      title="Lomi trả lời chưa đúng / chưa biết? Gửi ban quản trị"
+                      className={cn("font-semibold", m.reported ? "text-muted-foreground/60" : "text-amber-600 dark:text-amber-400")}
+                    >
+                      ⁉️ {m.reported ? "Đã gửi" : "Báo"}
+                    </button>
+                  )}
                   {AI_ENABLED && !m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
                     <button onClick={() => void send(m.ask!, true)} className="font-semibold text-primary">
                       {t("ai.askAi")}
@@ -1128,6 +1167,70 @@ export function AiChat({
         {err && <div className="text-center text-xs text-destructive px-4">{err}</div>}
         <div ref={endRef} />
       </div>
+
+      {/* ⁉️ Báo câu trả lời cho ban quản trị (01/10) — admin xem ở Quản trị → Lomi học hỏi và dạy lại Lomi. */}
+      <Dialog open={fbIdx !== null} onOpenChange={(o) => !o && !fbBusy && setFbIdx(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>⁉️ Giúp Lomi học hỏi</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground -mt-2">Câu này sẽ được gửi cho ban quản trị để dạy lại Lomi. Cảm ơn ấy nhiều nha 🍀</p>
+          <div className="grid grid-cols-2 gap-2">
+            {(
+              [
+                ["unknown", "🤔 Lomi chưa biết"],
+                ["wrong", "❌ Trả lời sai"],
+                ["offtopic", "🙃 Lạc đề, không đúng ý"],
+                ["other", "💬 Khác"],
+              ] as [FeedbackReason, string][]
+            ).map(([k, label]) => (
+              <button
+                key={k}
+                onClick={() => setFbReason(k)}
+                className={cn(
+                  "text-xs rounded-xl border px-2 py-2 text-left transition",
+                  fbReason === k ? "border-primary bg-primary/10 text-primary font-semibold" : "hover:bg-accent",
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <textarea
+            value={fbNote}
+            onChange={(e) => setFbNote(e.target.value.slice(0, 500))}
+            placeholder="Ấy muốn Lomi trả lời thế nào? (không bắt buộc)"
+            rows={3}
+            className="w-full rounded-xl border bg-background px-3 py-2 text-sm resize-none"
+          />
+          <button
+            disabled={fbBusy}
+            onClick={async () => {
+              if (fbIdx === null) return;
+              const m = msgs[fbIdx];
+              const askedQ = [...msgs.slice(0, fbIdx)].reverse().find((x) => x.role === "user")?.content ?? "";
+              setFbBusy(true);
+              const ok = await sendFeedback(askedQ, m?.content ?? "", fbReason, fbNote);
+              setFbBusy(false);
+              if (!ok) return void toast.error("Gửi chưa được, ấy thử lại sau nha 🥲");
+              setMsgs((prev) => {
+                const next = prev.map((x, j) => (j === fbIdx ? { ...x, reported: true } : x));
+                try {
+                  saveHistory(user.id, next);
+                } catch {
+                  /* bỏ qua */
+                }
+                return next;
+              });
+              setFbIdx(null);
+              toast.success("Đã gửi ban quản trị rồi nè! Cảm ơn ấy đã giúp Lomi học hỏi 🙂‍↕️");
+            }}
+            className="w-full h-10 rounded-xl bg-primary text-primary-foreground font-semibold text-sm disabled:opacity-60"
+          >
+            {fbBusy ? "Đang gửi…" : "Gửi cho ban quản trị"}
+          </button>
+        </DialogContent>
+      </Dialog>
 
       {(
         <>

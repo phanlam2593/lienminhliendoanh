@@ -55,6 +55,7 @@ import { ReportRepliesPanel, ReportStatusBadge } from "@/components/ReportReplie
 import { ProfileQuickView } from "@/components/ProfileQuickView";
 import { BusinessQuickView } from "@/components/BusinessQuickView";
 import { RideAdminPanel } from "./Rides";
+import { LomiLearnPanel } from "@/components/LomiLearnPanel";
 import { exportTableToCSV } from "@/lib/csvExport";
 
 interface MemberRow extends Profile {
@@ -89,7 +90,8 @@ type TabKey =
   | "hidden"
   | "broadcast"
   | "usage"
-  | "rides";
+  | "rides"
+  | "lomi";
 
 const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   members: "Thành viên",
@@ -101,6 +103,7 @@ const TAB_TITLES: Record<Exclude<TabKey, "overview">, string> = {
   broadcast: "Phát thông báo",
   usage: "Dung lượng",
   rides: "Đưa đón",
+  lomi: "Lomi học hỏi",
 };
 
 const VALID_TABS: TabKey[] = [
@@ -114,6 +117,7 @@ const VALID_TABS: TabKey[] = [
   "broadcast",
   "usage",
   "rides",
+  "lomi",
 ];
 
 export default function Admin() {
@@ -405,6 +409,7 @@ export default function Admin() {
       {activeTab === "usage" && <UsageTab />}
 
       {activeTab === "rides" && <RideAdminPanel />}
+      {activeTab === "lomi" && <LomiLearnPanel />}
 
       <MemberDetail
         row={selected}
@@ -537,17 +542,19 @@ function OverviewTab({
     pending: 0,
     reports: 0,
     drivers: 0,
+    lomi: 0,
   });
   const [statsLoading, setStatsLoading] = useState(true);
 
   const load = async () => {
-    const [mRes, bRes, pmRes, pbRes, rRes, dRes] = await Promise.all([
+    const [mRes, bRes, pmRes, pbRes, rRes, dRes, lRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("businesses").select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("businesses").select("*", { count: "exact", head: true }).eq("status", "pending"),
       supabase.from("reports").select("*", { count: "exact", head: true }),
       (supabase as any).from("ride_drivers").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      (supabase as any).from("lomi_feedback").select("*", { count: "exact", head: true }).eq("status", "new"),
     ]);
     setStats({
       members: mRes.count ?? 0,
@@ -555,6 +562,7 @@ function OverviewTab({
       pending: (pmRes.count ?? 0) + (pbRes.count ?? 0),
       reports: rRes.count ?? 0,
       drivers: dRes.count ?? 0,
+      lomi: lRes.count ?? 0,
     });
     setStatsLoading(false);
   };
@@ -590,6 +598,13 @@ function OverviewTab({
               onClick={() => onNavigate("rides")}
             />
           )}
+          <StatRow
+            icon={Lightbulb}
+            label="Lomi học hỏi (⁉️ người dùng báo)"
+            value={statsLoading ? undefined : stats.lomi}
+            colorClass="bg-primary/10 text-primary"
+            onClick={() => onNavigate("lomi")}
+          />
         </div>
       </div>
 

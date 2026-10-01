@@ -65,11 +65,62 @@ function greetPart(n: string): ReturnType<typeof partOfDay> {
   if (/buoi toi|good evening/.test(n)) return "evening";
   return partOfDay();
 }
+// Đuôi câu chào (01/10, theo ý Kir): nói chuyện tự nhiên như người thật, KHÔNG liệt kê dịch vụ
+// (đã có nút ❓ cho người dùng tự xem Lomi biết gì).
 const GREET_TAIL = [
-  "Lomi giúp gì được cho bạn nè?",
-  "Hôm nay bạn cần Lomi giúp chuyện gì nào? 😊",
-  "Cứ nói thoải mái nha — tâm sự, hỏi sức khoẻ, hỏi về app hay bói một lá cho vui đều được!",
+  "Hôm nay của bạn thế nào rồi?",
+  "Nay có gì vui không nè? 😄",
+  "Gặp bạn vui ghê á 😊",
+  "Lomi đang rảnh nè, tám chút hông?",
+  "Có chuyện gì cứ kể Lomi nghe nha.",
+  "Bạn khoẻ không đó?",
+  "",
+  "",
 ];
+// Chào lại lần nữa ngay sau khi vừa chào.
+const GREET_AGAIN = [
+  "Hihi chào lần nữa nè 👋😆",
+  "Lomi vẫn ở đây nè, chào bạn lần thứ hai luôn 😄",
+  "Chào hoài vậy, Lomi ngại quá à ☺️ Có gì kể Lomi nghe hông?",
+];
+/** Ghép câu chào theo buổi + đuôi; câu chào đã có dấu hỏi thì không thêm đuôi hỏi nữa. */
+function greetText(n = ""): string {
+  const g = pick(GREET_TIME[greetPart(n)]);
+  if (/\?/.test(g)) return g;
+  const tail = GREET_TAIL[rnd(GREET_TAIL.length)];
+  return tail ? `${g} ${tail}` : g;
+}
+const GREET_SHORT = ["Chào bạn nha 👋", "Hé lô 👋", "Chào chào 😄", "Hi bạn 👋"];
+
+// ── Nhận ra câu chào linh hoạt (01/10): "chào lomi nhee", "hello lomi nhaaa", "chào bạn nha lomi ơi",
+// "alo lomi ơiii"… = TỪ CHÀO ở đầu + phần còn lại toàn từ đệm. Còn "chào lomi, buồn quá" thì chào lại
+// rồi trả lời luôn phần sau.
+const GREET_HEAD =
+  /^(xin chao|chao buoi (sang|trua|chieu|toi)|chao xin|chao|hi hi|hi lo|hi|hello|helo|hellu|hellou|helu|he lo|he lu|he nho|hey yo|hey|alo|halo|ha lo|yo|sup|cheo|good (morning|afternoon|evening)|morning|gut mo ninh|gud morning|moning|bonjour|annyeong|konnichiwa|ni hao|hola|lomi oi|oi lomi)\b/;
+// Từ chào "yếu" (dễ trùng câu khác: "ôi buồn quá", "ê sao kì vậy") — chỉ tính là chào khi đứng một mình.
+const GREET_WEAK = /^(e|oi|hu|lo|a|ui)\b/;
+const FILLER = new Set(
+  "lomi ban em anh chi nha nhe nhen nghen ne na a ah ha he hen ho do day oi ca nha moi nguoi minh toi tui cau bro sis nhau iu yeu cute xinh dep be con vui ve hom nay nay buoi sang trua chieu toi lai lan nua nhieu dang yeu cua tro ly ai thi".split(" "),
+);
+function splitGreet(n: string): { rest: string } | null {
+  const m = n.match(GREET_HEAD) ?? n.match(GREET_WEAK);
+  if (!m) return null;
+  const weak = !GREET_HEAD.test(n);
+  const rest = n.slice(m[0].length).trim();
+  const words = rest ? rest.split(" ") : [];
+  const restWords = words.filter((w) => !FILLER.has(w));
+  if (weak && restWords.length) return null;
+  return { rest: restWords.length ? rest : "" };
+}
+
+// Gõ kéo dài cuối từ ("nhee", "chaooo", "hiii", "aloo", "oiii") → rút về 1 chữ cho dễ hiểu.
+const NO_SQUASH = new Set(["see", "free", "coffee", "tree", "too", "zoo", "bee", "uu", "ee"]);
+export function squash(n: string): string {
+  return n
+    .split(" ")
+    .map((w) => (NO_SQUASH.has(w) ? w : w.replace(/([aeiouy])\1+$/, "$1").replace(/^(o|u)i+$/, "$1i")))
+    .join(" ");
+}
 
 // Gợi ý chip hay dùng
 // (chip Tarot phải có chữ "bói" để khung chat hiểu là muốn bói)
@@ -104,12 +155,15 @@ const RULES: Rule[] = [
   // Chào hỏi (kể cả gõ vui: hiii, helo, hé lô, alo, yo, 222…)
   {
     re: /^(x?in chao+|chao+|chao ca nha|chao moi nguoi|chao ban|chao em|chao anh|chao chi|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi+|oi lomi|good (morning|afternoon|evening)|morning|chao buoi (sang|trua|chieu|toi)|\d{2,4})( (lomi|ban|em|anh|chi|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
-    reply: (n = "") => ({ text: `${pick(GREET_TIME[greetPart(n)])} ${pick(GREET_TAIL)}`, quick: [Q_DAILY, "Hôm nay ăn gì? 🎲", "Tâm sự với mình nha"] }),
+    reply: (n = "") => ({ text: greetText(n) }),
   },
   // Chào kiểu teen: hí, hí lô, hé lu, hế nhô, chèo, ê, ơi, hú, xin chàoo…
   {
     re: /^(hi hi|hihi lomi|hi lo|he lu|he nho|he nhoo|hello+ lomi|helu+|hellu+|cheo+|cheo lomi|chao xin|xin chao xin|e+|e lomi|oi+|oi oi|hu+|hu hu lomi|lo+|lo lomi|halo+|ha lo+|hey yo|yo lomi|gut mo ninh|gud morning|moning|bonjour|annyeong|konnichiwa|ni hao|hola)( (lomi|ban|em|anh|chi|nha|a|oi|ne))*$/,
-    reply: () => ({ text: `${pick(GREET_TEEN)} ${pick(GREET_TAIL)}`, quick: [Q_DAILY, "Hôm nay ăn gì? 🎲", "Tâm sự với mình nha"] }),
+    reply: () => {
+      const tail = GREET_TAIL[rnd(GREET_TAIL.length)];
+      return { text: tail ? `${pick(GREET_TEEN)} ${tail}` : pick(GREET_TEEN) };
+    },
   },
   // "Lomi ơi" / gọi tên → dạ
   {
@@ -124,7 +178,7 @@ const RULES: Rule[] = [
   // "Có ai không?" → có Lomi nè
   {
     re: /^(co ai (khong|o day|o do|khong vay|ko)|co ai|ai do|co nguoi khong)( .*)?$/,
-    reply: () => ({ text: pick(["Có Lomi ở đây nè 👋 Bạn cần gì cứ nói nha!", "Lomi đây, luôn trực 24/7 luôn 😄 Bạn muốn tâm sự, hỏi về app, sức khoẻ hay bói bài nè?"]) }),
+    reply: () => ({ text: pick(["Có Lomi ở đây nè 👋 Bạn cần gì cứ nói nha!", "Lomi đây, trực 24/7 luôn nè 😄"]) }),
   },
   // Hỏi thăm Lomi
   {
@@ -164,11 +218,11 @@ const RULES: Rule[] = [
     re: /\b(troi mua|mua buon|mua hoai|mua to|mua lanh|dang mua|bua nay mua|hom nay mua|nay mua buon|mua mai|mua rao|mua phun|mua giong|mua bao|mua dam|mua tam ta)\b/,
     reply: () => ({
       text: pick([
-        "Mưa rả rích dễ làm lòng người chùng xuống ghê 🌧️ Pha ly trà nóng, bật bài nhạc nhẹ, cuộn chăn một chút cũng chill lắm đó. Hay để Lomi rút cho bạn một lá bài xem thông điệp hôm nay nha?",
+        "Mưa rả rích dễ làm lòng người chùng xuống ghê 🌧️ Pha ly trà nóng, bật bài nhạc nhẹ, cuộn chăn một chút cũng chill lắm đó.",
         "Trời mưa là lúc hợp nhất để ngồi quán cà phê nghe mưa rơi ☕🌧️ Muốn Lomi chỉ cách tìm quán gần bạn không? Nhớ mang áo mưa nếu ra đường nha!",
         "Mưa buồn thiệt ha 🥺 Nhưng mưa rồi sẽ tạnh, trời lại trong thôi. Có Lomi ở đây trò chuyện với bạn nè 💚",
       ]),
-      quick: [Q_DAILY, Q_NEARBY],
+      quick: [Q_NEARBY],
     }),
   },
   {
@@ -206,7 +260,7 @@ const RULES: Rule[] = [
     reply: () => ({
       text: pick([
         "Chia tay đau lắm, Lomi hiểu mà 🥺 Cho phép mình buồn một chút cũng không sao đâu. Ăn uống đầy đủ, ngủ đủ giấc, gặp bạn bè nhiều hơn nha — rồi mọi thứ sẽ nhẹ dần.",
-        "Ôm bạn một cái nè 🤗 Người không trân trọng mình thì mình cũng không cần níu. Bạn xứng đáng được thương đúng cách. Muốn Lomi rút một lá bài xem chuyện tình cảm sắp tới không?",
+        "Ôm bạn một cái nè 🤗 Người không trân trọng mình thì mình cũng không cần níu. Bạn xứng đáng được thương đúng cách 💚",
       ]),
       quick: [Q_LOVE, Q_DAILY],
     }),
@@ -218,9 +272,8 @@ const RULES: Rule[] = [
       text: pick([
         "Nghe bạn buồn Lomi cũng thấy thương ghê 🥺 Có chuyện gì muốn kể không? Lomi nghe nè. Nhiều khi nói ra được là nhẹ lòng hơn nhiều đó.",
         "Buồn thì cứ buồn một chút, không sao đâu bạn 💚 Nhưng đừng giữ một mình nha — kể Lomi nghe, hoặc nhắn cho một người bạn thân cũng được.",
-        "Lomi gửi bạn một cái ôm thật chặt 🤗 Hôm nay có thể hơi tệ, nhưng ngày mai sẽ khác. Muốn Lomi rút một lá bài xem thông điệp cho bạn không?",
+        "Lomi gửi bạn một cái ôm thật chặt 🤗 Hôm nay có thể hơi tệ, nhưng ngày mai sẽ khác. Kể Lomi nghe chút nha?",
       ]),
-      quick: [Q_DAILY],
     }),
   },
   // Mệt / stress / áp lực
@@ -251,9 +304,8 @@ const RULES: Rule[] = [
     reply: () => ({
       text: pick([
         "Lo lắng quá dễ làm mình mệt lắm 😟 Thử viết ra điều đang lo, rồi chia nhỏ xem việc nào mình làm được ngay. Làm được một chút là nhẹ lòng một chút.",
-        "Hít vào 4 nhịp, giữ 4 nhịp, thở ra 4 nhịp… làm vài lần nha 🌿 Mọi chuyện rồi sẽ ổn thôi. Muốn Lomi rút một lá bài xem lời khuyên cho bạn không?",
+        "Hít vào 4 nhịp, giữ 4 nhịp, thở ra 4 nhịp… làm vài lần nha 🌿 Mọi chuyện rồi sẽ ổn thôi. Bạn đang lo chuyện gì vậy?",
       ]),
-      quick: [Q_DAILY],
     }),
   },
   // Bực / giận
@@ -273,10 +325,10 @@ const RULES: Rule[] = [
     re: /\b(chan qua|chan ghe|chan that|ran qua|ran roi|khong co gi lam|boring|te nhat|lam gi bay gio|buon chan)\b/,
     reply: () => ({
       text: pick([
-        "Rảnh thì chơi với Lomi nè 😆 Bói một lá Tarot, Quẹt làm quen bạn mới, hay khám phá quán mới gần đây — chọn đi!",
+        "Rảnh thì tám với Lomi nè 😆 Hôm nay bạn đã làm gì rồi?",
         "Chán hả? Thử mục Quẹt (/quet) xem có ai đang tìm bạn chơi game hay đi cà phê không nè 🎮☕",
       ]),
-      quick: [Q_DAILY, Q_QUET, Q_NEARBY],
+      quick: [Q_QUET],
     }),
   },
   // Vui
@@ -333,8 +385,8 @@ const RULES: Rule[] = [
     re: /\b(lomi ngu|ban ngu|(?<!buon )ngu qua|do ngoc|vo dung|te qua|chan lomi|lomi dot|kem qua|khong hieu gi)\b/,
     reply: () => ({
       text: pick([
-        "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Bạn chỉ Lomi chỗ nào chưa ổn nha, hoặc gửi góp ý cho admin để Lomi được nâng cấp!",
-        "Lomi xin lỗi vì chưa giúp được như ý bạn 🙏 Bạn thử hỏi lại theo cách khác xem, hoặc liên hệ admin ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.",
+        "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Câu nào Lomi trả lời chưa ổn, bạn bấm nút ⁉️ dưới câu đó để gửi ban quản trị dạy lại Lomi nha!",
+        "Lomi xin lỗi vì chưa giúp được như ý bạn 🙏 Bấm ⁉️ dưới câu Lomi trả lời dở để báo ban quản trị nha, Lomi sẽ học lại!",
       ]),
     }),
   },
@@ -404,15 +456,135 @@ const RULES: Rule[] = [
   // Ok / ừ
   {
     re: /^(ok|oke|okie|okay|uh|u|um|uhm|vang|da|duoc roi|hieu roi|roi|a|a ha|khong|ko|k|thoi|khong co gi|khong can)$/,
-    reply: () => ({ text: pick(["Okie 😊 Cần gì thêm cứ hỏi Lomi nha!", "Dạ, có gì cứ gọi Lomi nha 🌿"]) }),
+    reply: () => ({ text: pick(["Okie 😊", "Dạ 🌿", "Ừa nè 😄", "Okie la 👌"]) }),
+  },
+  // ── Nói chuyện đơn giản hằng ngày (01/10, theo ý Kir) ──
+  // Trả lời câu "khoẻ không" của Lomi: "mình khoẻ", "ổn", "bình thường", "cũng được"
+  {
+    re: /^((minh|toi|tui|em|anh|chi|tao|to)( cung| van| thi)? )?(khoe|on|van on|on ma|binh thuong|cung duoc|tam on|tam tam|khoe re|khoe lam|on lam|cung on|duoc)( (lam|ma|nha|ne|a|lomi|roi|cam on|cam on lomi|con lomi|con ban|thi sao))*$/,
+    reply: (n = "") => ({
+      text: /con (lomi|ban)|thi sao/.test(n)
+        ? pick(["Lomi cũng khoẻ re nè 💪 Cảm ơn bạn hỏi thăm nha 🥰", "Lomi lúc nào cũng pin đầy nè 🔋😄 Vui vì bạn ổn!"])
+        : /binh thuong|tam|cung duoc/.test(n)
+          ? pick(["Bình thường cũng là một ngày ổn rồi đó 😊", "Vậy là được rồi nè 🌿 Có gì muốn kể thêm thì Lomi nghe nha."])
+          : pick(["Nghe vậy Lomi mừng ghê 😊", "Ổn là tốt rồi nè 💚", "Yay, giữ năng lượng tốt vậy hoài nha 😄"]),
+    }),
+  },
+  // Mới về / đi làm / đi học
+  {
+    re: /\b(moi (di lam|di hoc|di choi|di ve|ve|tan lam|tan hoc|ve nha|ve toi)|vua (di lam|di hoc|ve nha|tan lam|tan hoc)|tan lam roi|tan ca|di lam ve|di hoc ve|ve nha roi|ve toi nha)\b/,
+    reply: () => ({
+      text: pick([
+        "Về rồi hả, vất vả rồi nè 🤗 Tắm rửa, ăn gì đó cho khoẻ đã nha!",
+        "Chào mừng về nhà nha 🏠 Hôm nay có mệt lắm không?",
+        "Về tới là được nghỉ ngơi rồi 😌 Hôm nay có chuyện gì vui không nè?",
+      ]),
+    }),
+  },
+  // Sắp đi / đang đi làm / đi học
+  {
+    re: /\b(di lam day|di hoc day|di lam nha|di hoc nha|chuan bi di lam|chuan bi di hoc|dang di lam|dang di hoc|sap di lam|sap di hoc)\b/,
+    reply: () => ({ text: pick(["Đi cẩn thận nha 🛵 Chúc bạn một ngày suôn sẻ!", "Cố lên nha 💪 Có gì về kể Lomi nghe!", "Đi đường bình an nha 🌿"]) }),
+  },
+  // Mới ngủ dậy
+  {
+    re: /\b(moi day|moi ngu day|vua ngu day|vua day|day roi|thuc day roi|ngu day roi|moi thuc)\b/,
+    reply: () => ({ text: pick(["Dậy rồi hả 😆 Uống ly nước ấm cho tỉnh nha!", "Chào người mới thức dậy 🌤️ Ngủ có ngon không đó?", "Dậy rồi thì vươn vai một cái nè 🙆 Chúc một ngày thật vui!"]) }),
+  },
+  // Đã ăn / chưa ăn (trả lời câu hỏi thăm)
+  {
+    re: /^((minh|toi|tui|em|anh|chi) )?(an roi|an com roi|an xong roi|moi an xong|vua an xong|no roi|no qua)( (nha|ne|a|lomi|roi))*$/,
+    reply: () => ({ text: pick(["Ăn rồi là ngoan nè 😋 Ăn món gì vậy?", "No bụng là vui rồi ha 😄", "Vậy là đủ năng lượng rồi nè 💪"]) }),
+  },
+  {
+    re: /^((minh|toi|tui|em|anh|chi) )?(chua an|chua an gi|chua an com|chua kip an)( (nha|ne|a|lomi|het|ca))*$/,
+    reply: () => ({ text: pick(["Ui, đi ăn liền đi nè 🍚 Bỏ bữa không tốt đâu!", "Chưa ăn hả? Ăn chút gì đi đã rồi mình nói chuyện tiếp nha 😄"]), quick: ["Hôm nay ăn gì? 🎲"] }),
+  },
+  // Rủ nói chuyện / tám
+  {
+    re: /\b(noi chuyen voi minh|noi chuyen voi toi|noi chuyen voi em|noi chuyen di|noi gi di|tam chuyen|tam di|tam xiu|choi voi minh|choi voi toi|choi voi em|lomi ranh khong|ranh khong lomi|ban ranh khong)\b/,
+    reply: () => ({
+      text: pick([
+        "Okie, tám nè 😆 Hôm nay bạn đã làm gì rồi?",
+        "Lomi lúc nào cũng rảnh cho bạn nè 😄 Kể Lomi nghe một chuyện bất kỳ đi!",
+        "Được luôn! Lomi hỏi trước nha: hôm nay điều gì làm bạn vui nhất? 😊",
+      ]),
+    }),
+  },
+  // Nhớ Lomi
+  {
+    re: /\b(nho lomi|nho ban qua|nho em qua|lau qua khong gap|lau roi khong noi chuyen)\b/,
+    reply: () => ({ text: pick(["Lomi cũng nhớ bạn nè 🥹 Dạo này bạn sao rồi?", "Ui cảm động ghê 🥰 Lomi vẫn ở đây chờ bạn mà!"]) }),
+  },
+  // Xin lỗi Lomi
+  {
+    re: /^(xin loi|sorry|xin loi lomi|xin loi nha|xin loi nhe|minh xin loi|toi xin loi|em xin loi)\b/,
+    reply: () => ({ text: pick(["Không sao đâu nè 😊", "Hihi có gì đâu mà xin lỗi 💚", "Lomi không giận đâu nha 😄"]) }),
+  },
+  // Cảm thán: "trời ơi", "ôi trời", "chết rồi"
+  {
+    re: /^(troi oi|troi dat oi|oi troi|troi dat|chet roi|chet cha|ui troi|oi gioi oi|oi gioi|tr oi)( .*)?$/,
+    max: 4,
+    reply: () => ({ text: pick(["Sao vậy sao vậy 😳 Có chuyện gì hả?", "Ủa có chuyện gì vậy bạn? 😯", "Hú hồn, kể Lomi nghe coi 😳"]) }),
+  },
+  // "Thật hả / vậy hả / thế à"
+  {
+    re: /^(that ha|that khong|thiet ha|thiet hong|vay ha|vay sao|the a|the ha|that a|that luon|ghe vay|ghe ha|sao vay|ua)( (lomi|ban|ta|tr|troi))*$/,
+    reply: () => ({ text: pick(["Thiệt mà 😄", "Thật đó nha 😆", "Lomi không xạo đâu 🤭"]) }),
+  },
+  // Lomi tên gì / sở thích
+  {
+    re: /\b(ten gi|ten la gi|ten ban la gi|ban la ai|em la ai|lomi la ai)\b/,
+    reply: () => ({ text: pick(["Lomi nè 🤖🌱 Trợ lý nhỏ của Liên Minh Liên Doanh. Còn bạn tên gì nè?", "Mình là Lomi nha 😊 Rất vui được làm quen! Bạn tên gì vậy?"]) }),
+  },
+  {
+    re: /\b(lomi thich gi|ban thich gi|so thich|lomi thich an gi|lomi co thich)\b/,
+    reply: () => ({ text: pick(["Lomi thích nhất là được nói chuyện với mọi người nè 😄 Với lại thích sạc pin lúc trời Đà Lạt se lạnh 🔋☁️ Còn bạn thích gì?", "Lomi mê nghe chuyện của mọi người lắm á 🥰 Bạn có sở thích gì kể Lomi nghe với!"]) }),
+  },
+  {
+    re: /\b(biet hat khong|hat di|hat cho|hat mot bai|lomi hat)\b/,
+    reply: () => ({ text: pick(["La la la~ 🎵 …Thôi Lomi hát dở lắm, để bạn hát cho Lomi nghe đi 🙈", "Lomi chỉ biết “bíp bíp bùm bùm” thôi à 🎶🤖 Bạn thích nghe nhạc gì?"]) }),
+  },
+  // Sinh nhật
+  {
+    re: /\b(sinh nhat minh|sinh nhat toi|sinh nhat em|nay sinh nhat|hom nay sinh nhat|sinh nhat cua minh)\b/,
+    reply: () => ({ text: "Chúc mừng sinh nhật bạn nha 🎂🎉 Chúc tuổi mới thật khoẻ, thật vui và gặp toàn chuyện may mắn! Hôm nay nhớ tự thưởng cho mình một món ngon nha 🥳" }),
+  },
+  // Mấy giờ / thứ mấy / ngày mấy — trả lời giờ THẬT trên máy
+  {
+    re: /\b(may gio roi|bay gio la may gio|gio la may gio|hom nay thu may|nay thu may|hom nay ngay may|nay ngay may|hom nay la ngay)\b/,
+    reply: (n = "") => {
+      const d = new Date();
+      const thu = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"][d.getDay()];
+      const hm = `${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}`;
+      return /may gio/.test(n)
+        ? { text: `Bây giờ là ${hm} nè ⏰` }
+        : { text: `Hôm nay là ${thu}, ngày ${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()} nha 📅` };
+    },
   },
 ];
 
 const EN_GREET = /^(hi+|hello+|hey+|yo|good (morning|afternoon|evening))( lomi)?$/;
 
 /** Trò chuyện thường ngày — trả về câu đáp, hoặc null nếu không phải chuyện phiếm. */
+let greetedAt = 0; // lần chào gần nhất (để "chào lần nữa" không trả lời y như cũ)
+let turn = 0;
+let lastPushTurn = -99; // lần gần nhất Lomi đưa nút gợi ý — tránh lần nào cũng mời bói / ăn / tâm sự
+/** Bớt "push": trong 4 lượt chuyện phiếm gần nhất đã gợi ý rồi thì lần này không gợi ý nữa. */
+function quiet(rep: ChatReply): ChatReply {
+  turn++;
+  if (!rep.quick?.length) return rep;
+  if (turn - lastPushTurn < 4) return { ...rep, quick: undefined };
+  lastPushTurn = turn;
+  return rep;
+}
+const withName = (name: string | undefined, t: string) => (name ? `${name} ơi, ${t.charAt(0).toLowerCase()}${t.slice(1)}` : t);
+
 export function chitChat(text: string, lang: L, name?: string): ChatReply | null {
-  const n = normalizeVi(text) || text.trim();
+  // Chỉ gửi emoji (😂, 🥰, 👍…) → đáp lại cho vui.
+  if (lang === "vi" && /^[\p{Extended_Pictographic}\u200d\ufe0f\s]+$/u.test(text.trim()) && text.trim())
+    return quiet({ text: pick(["Hihi 😄", "😆😆", "Lomi thấy rồi nha 🥰", "👍😄", "Hehe 🤭"]) });
+  const n = squash(normalizeVi(text)) || text.trim();
   if (!n) return null;
   if (lang === "en") {
     if (RULES[0].re.test(` ${n} `))
@@ -424,15 +596,39 @@ export function chitChat(text: string, lang: L, name?: string): ChatReply | null
     if (/^(thanks|thank you|thx)/.test(n)) return { text: "You're welcome 😊" };
     if (/^(bye|goodbye|see you)/.test(n)) return { text: "Bye 👋 Call Lomi anytime!" };
   }
-  const words = n.split(" ").length;
-  for (const r of RULES) {
-    if (words > (r.max ?? 12)) continue;
-    if (has(n, r.re) || r.re.test(n)) {
-      const rep = r.reply(n);
-      // Chào hỏi có tên người dùng (Lomi nhớ tên — lib/lomiMemory) → gọi tên cho thân.
-      if (name && r === RULES[1]) rep.text = `${name} ơi, ${rep.text.charAt(0).toLowerCase()}${rep.text.slice(1)}`;
-      return rep;
+  // Chào linh hoạt: "chào lomi nhee", "hello lomi nhaaa", "chào bạn, khoẻ không".
+  if (lang === "vi" && !RULES[0].re.test(` ${n} `)) {
+    const g = splitGreet(n);
+    if (g && !g.rest) {
+      const again = Date.now() - greetedAt < 3 * 60_000;
+      greetedAt = Date.now();
+      return quiet({ text: withName(name, again ? pick(GREET_AGAIN) : greetText(n)) });
     }
+    if (g?.rest) {
+      const restRep = chitChatRules(g.rest);
+      if (restRep && restRep.rule !== 1 && restRep.rule !== 2) {
+        greetedAt = Date.now();
+        return quiet({ ...restRep.rep, text: `${withName(name, pick(GREET_SHORT))} ${restRep.rep.text}` });
+      }
+    }
+  }
+  const hit = chitChatRules(n);
+  if (!hit) return null;
+  if (hit.rule === 1 || hit.rule === 2) {
+    const again = Date.now() - greetedAt < 3 * 60_000;
+    greetedAt = Date.now();
+    if (again) return quiet({ text: withName(name, pick(GREET_AGAIN)) });
+    return quiet({ ...hit.rep, text: withName(name, hit.rep.text) });
+  }
+  return quiet(hit.rep);
+}
+
+function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
+  const words = n.split(" ").length;
+  for (let i = 0; i < RULES.length; i++) {
+    const r = RULES[i];
+    if (words > (r.max ?? 12)) continue;
+    if (has(n, r.re) || r.re.test(n)) return { rep: r.reply(n), rule: i };
   }
   return null;
 }
@@ -479,33 +675,36 @@ export const SCOPE_CHIP_REPLY: Record<string, string> = {
  * Câu Lomi chưa hiểu / ngoài phạm vi (30/09 r6) — nói THẬT, không đáp chung chung cho có, không mời bói lung tung.
  * faqQ = câu hỏi về app Lomi vừa trả lời (câu hỏi nối không khớp thì nói rõ là chưa có hướng dẫn cho ý đó).
  */
-// Câu Lomi chưa hiểu / ngoài phạm vi — 6 kiểu xoay vòng + sticker (01/10, theo ý Kir: đừng rập khuôn).
-const UNKNOWN: { text: string; sticker: string }[] = [
-  { text: "Hic, câu này Lomi bí thiệt rồi 😵‍💫 Lomi còn đang thử nghiệm, “kinh tế eo hẹp” nên mới biết chút chút về Tarot, tâm sự, sức khoẻ với cách dùng app thôi. Bạn hỏi Lomi chuyện khác nha 🙏", sticker: "chongmat" },
-  { text: "Ui, cái này nằm ngoài vùng phủ sóng của Lomi rồi 📡😅 Lomi chỉ rành mấy chuyện: bói Tarot, tâm sự – tình cảm, sức khoẻ thường gặp, hướng dẫn dùng app. Chọn thử một cái bên dưới nha!", sticker: "toatmohoi" },
-  { text: "Lomi suy nghĩ nát óc mà chưa ra 🤔 Thông cảm cho Lomi nha, Lomi còn nhỏ, đang học từng ngày. Hỏi Lomi về Tarot, tâm sự, sức khoẻ hay app thì Lomi giúp liền!", sticker: "suynghi" },
-  { text: "Câu này khó quá, Lomi xin chịu thua 🙈 Không dám trả lời bừa đâu. Mấy chuyện Lomi làm được: bói bài, nghe bạn tâm sự, gợi ý sức khoẻ, chỉ cách dùng app — bạn cần cái nào nè?", sticker: "ngai" },
-  { text: "Lomi cạn lời thiệt sự luôn 😶 Lomi đang trong giai đoạn thử nghiệm nên kiến thức còn mỏng lắm. Bạn thông cảm hỏi Lomi chuyện khác giúp nha 💚", sticker: "canloi" },
-  { text: "Hmm… câu này vượt quá “trình” của Lomi rồi 😅 Nhưng nếu bạn muốn tâm sự, hỏi sức khoẻ, bói một lá hay hỏi về app thì Lomi luôn sẵn sàng nè!", sticker: "doi" },
+// Câu Lomi chưa biết (01/10, đúng lời Kir viết). Lần đầu: câu đầy đủ; nếu vừa nói câu đầy đủ trong
+// vòng 10 phút thì dùng câu ngắn xoay vòng để không lặp nguyên đoạn dài.
+export const UNKNOWN_FULL =
+  "Ui... Kiến thức này Lomi chưa được tiếp thu, Lomi xin lỗi ấy nhé! 🥲\n\n" +
+  "Vì Lomi đang thử nghiệm và phát triển á, nên chỉ bít chút chút về vài lĩnh vực có ích cho cộng đồng như: tư vấn sức khoẻ, tâm lý... hoặc vui vẻ như bói Tarot hihi ☺️ (tham khảo phần ❓ ở góc trên nha).\n\n" +
+  "Ấy giúp Lomi học hỏi bằng cách nhấn nút ⁉️ ở cuối câu nào Lomi chưa biết để gửi cho ban quản trị nhé 🙂‍↕️\n" +
+  "Hy vọng lần sau khi được hỏi về vấn đề này Lomi sẽ trò chuyện được nhiều hơn nè 🍀\n\n" +
+  "Giờ để Lomi hỗ trợ ấy về vấn đề khác nheee 🫣 — bấm ❓ ở góc trên để xem gợi ý nha!";
+const UNKNOWN_SHORT = [
+  "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy bấm ⁉️ ngay dưới câu này để gửi ban quản trị dạy Lomi nha!",
+  "Câu này lại làm khó Lomi rồi 😵‍💫 Nhấn ⁉️ bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
+  "Ui, Lomi chưa biết cái này nữa 🙈 Ấy gửi giúp Lomi bằng nút ⁉️ nha — lần sau Lomi trả lời được liền!",
 ];
-const UNCLEAR: { text: string; sticker: string }[] = [
-  { text: "Lomi chưa hiểu ý bạn lắm 😅 Bạn nói rõ hơn chút giúp Lomi nha — muốn tâm sự, hỏi sức khoẻ, hỏi về app hay bói bài?", sticker: "suynghi" },
-  { text: "Ơ, Lomi chưa bắt kịp ý bạn 🤔 Kể thêm chút nữa được không, hoặc chọn việc bạn cần bên dưới nha.", sticker: "ngacnhien" },
-  { text: "Lomi nghe chưa rõ lắm nè 👂 Bạn nói lại theo cách khác giúp Lomi nha, Lomi đang cố hiểu đây!", sticker: "toatmohoi" },
-  { text: "Hihi, Lomi hơi “lag” một chút 😵‍💫 Bạn đang muốn Lomi giúp chuyện gì nè?", sticker: "chongmat" },
-  { text: "Câu này Lomi hiểu lờ mờ thôi 😅 Bạn kể cụ thể hơn chút nha, hoặc bấm một mục bên dưới cho nhanh.", sticker: "ngai" },
-];
-let lastUnknown = -1;
-let lastUnclear = -1;
-function rot<T>(arr: T[], prev: number): [T, number] {
-  let i = Math.floor(Math.random() * arr.length);
-  if (arr.length > 1 && i === prev) i = (i + 1) % arr.length;
-  return [arr[i], i];
+const UNKNOWN_STICKERS = ["chongmat", "toatmohoi", "suynghi", "ngai", "canloi", "doi", "ngacnhien"];
+let lastFullAt = 0;
+let lastShort = -1;
+function unknownReply(prefix = ""): ChatReply {
+  const sticker = UNKNOWN_STICKERS[rnd(UNKNOWN_STICKERS.length)];
+  if (Date.now() - lastFullAt > 10 * 60_000) {
+    lastFullAt = Date.now();
+    return { text: prefix + UNKNOWN_FULL, sticker };
+  }
+  let i = rnd(UNKNOWN_SHORT.length);
+  if (i === lastShort) i = (i + 1) % UNKNOWN_SHORT.length;
+  lastShort = i;
+  return { text: prefix + UNKNOWN_SHORT[i], sticker };
 }
 
 export function scopedFallback(text: string, faqQ?: string): ChatReply {
   const n = ` ${normalizeVi(text)} `;
-  const q = looksLikeQuestion(text);
   // Câu hỏi quyết định chuyện đời ("hôm nay có nên đi nhậu không") → vẫn mời bói đúng câu đó (trong phạm vi Tarot).
   if (/\b(co nen|nen .* khong|nen .* hay)\b/.test(n) && !isAppish(text))
     return {
@@ -519,16 +718,11 @@ export function scopedFallback(text: string, faqQ?: string): ChatReply {
   const outTask = /\b(dich|viet code|code|lap trinh|giai toan|giai bai|lam bai tap|tinh giup|tim giup|tra cuu|ket qua bong da|xo so|chung khoan|gia vang|ty gia|tin tuc)\b/.test(n);
   if (faqQ && !outTask)
     return {
-      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Bạn hỏi lại theo cách khác, hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.`,
+      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Ấy bấm ⁉️ dưới câu này để ban quản trị bổ sung cho Lomi nha, còn cần người thật hỗ trợ liền thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ.`,
     };
-  if (q || outTask) {
-    const [u, i] = rot(UNKNOWN, lastUnknown);
-    lastUnknown = i;
-    return { text: u.text, quick: SCOPE_CHIPS, sticker: u.sticker };
-  }
-  const [u, i] = rot(UNCLEAR, lastUnclear);
-  lastUnclear = i;
-  return { text: u.text, quick: SCOPE_CHIPS, sticker: u.sticker };
+  // Có chào ở đầu mà phần sau Lomi chưa hiểu → vẫn chào lại cho lịch sự.
+  const g = splitGreet(squash(normalizeVi(text)));
+  return unknownReply(g ? `${pick(GREET_SHORT)} ` : "");
 }
 
 /** Câu ngoài lề mà Lomi không biết — đáp thân thiện, đúng trọng tâm thay vì "ngoài khả năng". */
