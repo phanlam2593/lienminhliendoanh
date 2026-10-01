@@ -101,9 +101,12 @@ const GREET_HEAD =
 // Từ chào "yếu" (dễ trùng câu khác: "ôi buồn quá", "ê sao kì vậy") — chỉ tính là chào khi đứng một mình.
 const GREET_WEAK = /^(e|hu|lo)\b/;
 const FILLER = new Set(
-  "lomi ban em anh chi nha nhe nhen nghen ne na a ah ha he hen ho do day oi ca nha moi nguoi minh toi tui cau bro sis nhau iu yeu cute xinh dep be con vui ve hom nay nay buoi sang trua chieu toi lai lan nua nhieu dang yeu cua tro ly ai thi".split(" "),
+  "lomi ban em anh chi nha nhe nhen nghen ne na a ah ha he hen ho do day oi ca nha moi nguoi minh toi tui cau bro sis nhau iu yeu cute xinh dep be con vui ve hom nay nay buoi sang trua chieu toi lai lan nua nhieu dang yeu cua tro ly ai thi cung there everyone all guys guy friend fen ban oi admin ad mn ae anh em cac".split(" "),
 );
-function splitGreet(n: string): { rest: string } | null {
+// Thán từ / gọi trước câu chào ("ê chào", "ơi hello", "ủa hi") — bỏ đi rồi mới xét từ chào (01/10 r3).
+const GREET_LEAD = /^(e|ey|oi|ua|a|o|nay|yo|lomi|lomi oi|em oi|ban oi|anh oi|chi oi|bro)\s+(?=(xin chao|chao|hi|hello|helo|hellu|he lo|hey|alo|halo|good)\b)/;
+function splitGreet(n0: string): { rest: string } | null {
+  const n = n0.replace(GREET_LEAD, "");
   const m = n.match(GREET_HEAD) ?? n.match(GREET_WEAK);
   if (!m) return null;
   const weak = !GREET_HEAD.test(n);
@@ -111,7 +114,10 @@ function splitGreet(n: string): { rest: string } | null {
   const words = rest ? rest.split(" ") : [];
   const restWords = words.filter((w) => !FILLER.has(w));
   if (weak && restWords.length) return null;
-  return { rest: restWords.length ? rest : "" };
+  // Bỏ từ gọi / từ đệm ở ĐẦU phần còn lại ("hi em, nay làm gì" → "nay làm gì") để hiểu đúng ý phía sau.
+  let i = 0;
+  while (i < words.length && FILLER.has(words[i]) && !["nay", "hom", "buoi"].includes(words[i])) i++;
+  return { rest: restWords.length ? words.slice(i).join(" ") : "" };
 }
 
 // Gõ kéo dài cuối từ ("nhee", "chaooo", "hiii", "aloo", "oiii") → rút về 1 chữ cho dễ hiểu.
@@ -724,7 +730,7 @@ export function looksLikeQuestion(text: string): boolean {
 
 // Từ khoá cho biết câu hỏi đang nói về APP (để gợi ý câu hỏi thường gặp), khác với chuyện đời thường.
 const APPISH =
-  /\b(app|ung dung|uu dai|ma uu dai|nhan ma|pin|tai khoan|mat khau|dang nhap|dang ky|dang bai|dang tin|doanh nghiep|cua hang|thanh vien|membership|diem|quet|dua don|giao hang|tin nhan|cong dong|ho so|thong bao|bao cao|chan|theo doi|ket ban|huong dan|admin|lomi)\b/;
+  /\b(app|ung dung|uu dai|ma uu dai|nhan ma|pin|tai khoan|mat khau|dang nhap|dang ky|dang bai|dang tin|doanh nghiep|cua hang|thanh vien|membership|diem|quet|dua don|giao hang|tin nhan|cong dong|ho so|thong bao|bao cao|chan|theo doi|ket ban|huong dan|admin|lomi|login|logout|log in|log out|profile|account|acc|password|voucher|offer|member|comment|share|post|follow|link|info|support|update|online|offline|call|review|user|code|ad)\b/;
 export function isAppish(text: string): boolean {
   return APPISH.test(` ${normalizeVi(text)} `);
 }
@@ -905,6 +911,18 @@ export function expandTeen(text: string): string {
   s = s.replace(/(^|[^\p{L}])nv (quán|cửa hàng|bán hàng|phục vụ|shop|ở|tiệm|công ty|chỗ)(?![\p{L}])/giu, "$1nhân viên $2");
   // "đau hông", "mỏi hông", "bên hông" là cái hông (bộ phận cơ thể), không phải "không" (01/10).
   s = s.replace(/(^|[^\p{L}])(đau|mỏi|nhức|bên|vùng|eo|khớp|xương|sườn|ê|tê|sưng|mông|lưng) (hông)(?![\p{L}])/giu, "$1$2 hông_body");
+  // Viết tắt NHIỀU NGHĨA (01/10 r3, theo tài liệu Kir) — chỉ đổi khi ngữ cảnh rõ, không đổi bừa:
+  //  • "cf": đi kèm uống/đi/quán/ly/đá/sữa/ngon… hoặc đứng một mình hỏi ("cf?") → cà phê; còn lại giữ nguyên.
+  s = s.replace(/(^|[^\p{L}])(uống|đi|quán|ly|cốc|tiệm|chỗ|hẹn|rủ|làm|ghé|thèm|mua|order)( (ly|cốc|chút|miếng|tí))? (cf|cafe|caphe|cofe)(?![\p{L}])/giu, "$1$2$3 cà phê");
+  s = s.replace(/(^|[^\p{L}])(cf|cafe|caphe|cofe) (sữa|đá|đen|muối|trứng|nóng|phin|ngon|view|chill|đẹp|sáng|không|hong|ko|k|nha|nhé|đi|ở đâu|gần|nào)(?![\p{L}])/giu, "$1cà phê $3");
+  s = s.replace(/^\s*(cf|cafe|caphe)\s*(\?+)?\s*$/iu, "cà phê$2");
+  //  • "tt": "tt cá nhân / cập nhật tt / xin tt" → thông tin; "tt tiền / tt online / chuyển khoản tt" → thanh toán.
+  s = s.replace(/(^|[^\p{L}])tt (cá nhân|liên hệ|tài khoản|quán|doanh nghiệp|chi tiết)(?![\p{L}])/giu, "$1thông tin $2");
+  s = s.replace(/(^|[^\p{L}])(xin|cập nhật|sửa|đổi|gửi|cho)( mình| tui| em)? tt(?![\p{L}])/giu, "$1$2$3 thông tin");
+  s = s.replace(/(^|[^\p{L}])tt (tiền|online|qua|bằng|chuyển khoản|tiền mặt|chuyến|cước)(?![\p{L}])/giu, "$1thanh toán $2");
+  //  • "pass": "đổi / quên / sai / nhập pass" → mật khẩu; "pass nhầm", "pass người này" (Quẹt) → bỏ qua.
+  s = s.replace(/(^|[^\p{L}])(đổi|quên|sai|nhập|lấy lại|đặt|reset|cái|mã) pass(word)?(?![\p{L}])/giu, "$1$2 mật khẩu");
+  s = s.replace(/(^|[^\p{L}])pass (nhầm|lộn|người|thẻ|hết)(?![\p{L}])/giu, "$1bỏ qua $2");
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
   return s
     .replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)))

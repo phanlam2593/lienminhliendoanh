@@ -86,7 +86,7 @@ const ISSUE: [string, RegExp][] = [
   ["blank", /\b(trang tron|man hinh trang|trang xoa|trang bach|den thui|man hinh den|khong hien gi|khong hien thi gi|trong tron|khong co gi het|khong thay gi het)\b/],
   ["lag", /\b(lag|giat lag|bi giat|giat qua|bi do|(?<!thai )do qua|(?<!thai )do luon|do man hinh|dung hinh|treo|bi treo|cham qua|cham ri|cham the|cham vay|load lau|load mai|load hoai|xoay hoai|xoay mai|quay hoai|quay mai|loading mai|khong load|khong len|mai khong len|load khong len)\b/],
   ["login", /\b(khong vao duoc|vao khong duoc|khong dang nhap duoc|dang nhap khong duoc|khong login duoc|bi da ra|bi out|bi dang xuat)\b/],
-  ["generic", /\b(bi gi|bi sao|bi loi|loi roi|loi gi|bao loi|hien loi|bug|hu roi|hu ha|khong chay|khong hoat dong|khong dung duoc|xai khong duoc|dung khong duoc|khong bam duoc|bam khong duoc|bam khong an|khong gui duoc|gui khong duoc|khong tai duoc|khong mo duoc|mo khong duoc|khong luu duoc|luu khong duoc)\b|\bkhong (gui|tai|mo|luu|bam|load|xem|nghe|goi|dang|up|doi|chon|tim|thay doi|cap nhat|cai)\b.{0,30}\bduoc\b/],
+  ["generic", /\b(bi gi|bi sao|bi loi|loi roi|loi gi|bao loi|hien loi|bug|hu roi|hu ha|khong chay|khong hoat dong|khong dung duoc|xai khong duoc|dung khong duoc|khong bam duoc|bam khong duoc|bam khong an|khong gui duoc|gui khong duoc|khong tai duoc|khong mo duoc|mo khong duoc|khong luu duoc|luu khong duoc|bi offline|hien offline|bao offline|mat mang|mat ket noi|khong co mang)\b|\bkhong (gui|tai|mo|luu|bam|load|xem|nghe|goi|dang|up|doi|chon|tim|thay doi|cap nhat|cai)\b.{0,30}\bduoc\b/],
 ];
 const ISSUE_TIP: Record<string, string> = {
   crash: "App tự văng ra hả 😥",
@@ -211,6 +211,68 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
         "Nghe bực thiệt 😤 Bạn có thể viết đánh giá cho quán đó (vào trang quán → Đánh giá) để mọi người biết, hoặc bấm ⋯ → Báo cáo nếu quán làm sai — ban quản trị sẽ xem và xử lý nha.",
       quick: ["Quán không giữ đúng ưu đãi thì sao?", "Báo cáo nội dung hoặc người dùng thế nào?"],
     };
+
+  // 0f) (01/10 r3, theo tài liệu Kir) Câu Việt chen từ tiếng Anh / viết tắt — hiểu theo Ý, không bắt viết lại.
+  // Rủ Lomi làm gì đó ("tối nay chơi game không?", "đi cà phê hong", "xem phim đi") — không có "ai" (đó là tìm bạn, mục 6).
+  const invite = n.match(/^((toi nay|chieu nay|sang nay|trua nay|mai|toi mai|cuoi tuan|nay|gio|lat nua|di|e|oi|lomi|em|ban|bro|ui) )*(choi game|choi|lam van game|lam tran|di cafe|di ca phe|uong ca phe|uong cafe|di an|di choi|di nhau|nhau|di dao|xem phim|di phuot|di da lat|hat karaoke|di hat|da banh|chay bo|tam su|nc|noi chuyen)( (khong|hong|ko|k|chu|nha|nhe|di|hok|ha|voi|voi minh|voi tui|cung minh|chung|khum|ne|lomi|em|ban|bro|ta|nao|ko ta))*$/);
+  if (invite && !/\b(ai|co ai)\b/.test(n) && w <= 10) {
+    const act = invite[3];
+    const game = /game|van|tran/.test(act) || act === "choi";
+    const coffee = /ca ?phe|cafe/.test(act);
+    const talk = /tam su|nc|noi chuyen/.test(act);
+    if (talk) return { intent: "invite_talk", text: pick(["Okie, Lomi rảnh nè 😄 Kể Lomi nghe đi!", "Chịu luôn 🙌 Bạn muốn nói chuyện gì nè?"]) };
+    return {
+      intent: "invite",
+      text: game
+        ? pick([
+            "Lomi muốn lắm mà không có tay cầm điện thoại 😆 Bạn kiếm đồng đội ở Quẹt → Game (/quet) nha, nhiều người đang tìm bạn chơi chung lắm!",
+            "Game hả, nghe cuốn ghê 🎮 Lomi thì chỉ ngồi cổ vũ được thôi 🤭 Muốn tìm người chơi chung thì vào Quẹt → Game (/quet) nha.",
+          ])
+        : coffee
+          ? pick([
+              "Lomi mà uống cà phê chắc chập mạch luôn 😆☕ Nhưng Lomi tìm quán cho bạn được nè!",
+              "Ui Lomi thèm mà hông uống được 🥲 Để Lomi kiếm quán cà phê xinh cho bạn nha ☕",
+            ])
+          : pick([
+              "Lomi chỉ ở trong app thôi nè 😆 Nhưng nghe vui ghê, đi đâu kể Lomi nghe với!",
+              "Hihi Lomi đi không được rồi 🙈 Muốn rủ bạn đi cùng thì đăng ở Cộng đồng (/cong-dong) hoặc Quẹt → Làm quen (/quet) nha!",
+            ]),
+      quick: coffee ? ["Tìm quán cà phê gần đây"] : undefined,
+    };
+  }
+  // Xin thông tin / link chung chung ("cho mình xin info", "cho mình link với").
+  if (/^((cho|gui|xin|send) )?(minh|toi|tui|em|anh|chi|t|tao|to|minh xin|toi xin|tui xin|em xin|xin)? ?(xin )?(info|infor|thong tin|link|lien ket)( (voi|di|nha|nhe|duoc khong|dc khong|khong|ne|lomi|ban|em|app|cua app|app nay|cai))*$/.test(n) && /\b(info|infor|thong tin|link|lien ket)\b/.test(n)) {
+    if (/\b(link|lien ket)\b/.test(n))
+      return {
+        intent: "ask_link",
+        text: "Link app nè: liendoanh.world 🌐 Gửi bạn bè mở bằng trình duyệt trên điện thoại, rồi bấm “Thêm vào màn hình chính” là xài như app luôn. Còn bạn cần link của chỗ nào khác thì nói Lomi nha!",
+      };
+    return { intent: "ask_info", text: "Bạn cần thông tin về gì nè? 😊 Một quán / doanh nghiệp, ưu đãi, hay về app Liên Minh Liên Doanh? Nói Lomi nghe là có liền." };
+  }
+  // "để mình check", "mình check thử" — người dùng tự đi kiểm tra; "check giúp mình cái này" — nhờ Lomi xem.
+  if (/^(de |cho )?(minh|toi|tui|em|anh|chi|t|tao|to)?( de)? ?(check|kiem tra|coi|xem) (thu|lai|cai|da|xiu|chut|ti|sau)( (nha|nhe|da|di|cai|xiu|chut|ti|roi bao|nghe))*$|^(de |cho )(minh|toi|tui|em|anh|chi|t|tao|to) (check|kiem tra|coi lai|xem lai)( (nha|nhe|da|thu|cai|xiu|chut|ti))*$/.test(n))
+    return { intent: "user_check", text: pick(["Okie, bạn check đi nha, có gì cứ hỏi Lomi 😊", "Dạ, bạn xem thử nha. Kẹt chỗ nào thì nói Lomi liền 👌"]) };
+  if (/^(check|kiem tra|coi|xem) (giup|ho|dum|giùm|gium) ?(minh|toi|tui|em|anh|chi|t|to)?( (cai nay|cai|chut|xiu|voi|vs|nha|nhe|di|ti))*$/.test(n))
+    return { intent: "opener", text: pick(["Dạ, bạn muốn Lomi xem cái gì nè? Kể hoặc dán vào đây nha 👀", "Okie, cái gì vậy bạn? Nói Lomi nghe thử nha 👀"]) };
+  // Một từ + dấu hỏi ("game?", "app?", "link?", "info?", "cà phê?", "còn không?") — hiểu theo câu trước nếu có,
+  // không đủ ngữ cảnh thì hỏi lại MỘT câu ngắn (không bắt viết thành câu hoàn chỉnh).
+  if (w <= 3 && !ctx.faqId) {
+    const prev = normalizeVi(ctx.lastText ?? "");
+    if (/^(game|choi game)( (a|ha|ne|sao))?$/.test(n))
+      return { intent: "short_game", text: /quet|game/.test(prev) ? "Ừa, Game nằm trong Quẹt (/quet) nè 🎮 Chọn thẻ Game là thấy người tìm bạn chơi chung, hoặc mua bán đồ game." : "Game hả 🎮 Bạn muốn tìm bạn chơi chung (Quẹt → Game, /quet) hay đang hỏi chuyện gì khác về game nè?" };
+    if (/^(app|ung dung)( (a|ha|ne|sao|nay))?$/.test(n))
+      return { intent: "short_app", text: "Bạn muốn hỏi gì về app nè? 📱 Cứ nói tự nhiên kiểu “nhận ưu đãi sao”, “đặt xe ở đâu” là Lomi chỉ liền." };
+    if (/^(link|lien ket)( (a|ha|ne|dau|app))?$/.test(n))
+      return { intent: "ask_link", text: "Link app nè: liendoanh.world 🌐 Còn bạn cần link chỗ khác thì nói Lomi nha!" };
+    if (/^(info|infor|thong tin)( (a|ha|ne|gi))?$/.test(n))
+      return { intent: "ask_info", text: "Thông tin về gì nè bạn? Quán nào, ưu đãi, hay về app? 😊" };
+    if (/^(ca phe|cafe)( (a|ha|ne|khong|hong|ko|k|di|nha))?$/.test(n))
+      return /quan|uong|ca phe|cafe|an gi/.test(prev)
+        ? { intent: "short_coffee", text: "Cà phê nha ☕ Bấm bên dưới Lomi tìm quán cà phê cho bạn liền!", quick: ["Tìm quán cà phê gần đây"] }
+        : { intent: "short_coffee", text: "Cà phê hả ☕ Bạn muốn rủ đi uống hay cần Lomi tìm quán nè?", quick: ["Tìm quán cà phê gần đây"] };
+    if (/^(con khong|con hong|con ko|con k|het chua|het roi a|con han khong)( (vay|z|ban|lomi|a|ha))?$/.test(n))
+      return { intent: "vague", text: prev ? "Bạn hỏi còn cái nào nè? Nói Lomi tên quán / ưu đãi đó nha 👀" : "Còn gì nè bạn? 👀 Nói Lomi thêm chút xíu là hiểu liền." };
+  }
 
   // 1) Mở lời: "ê cho tui hỏi cái này vs", "giúp mình với" → mời nói tiếp, không đoán bừa.
   if (OPENER.test(n))
