@@ -424,7 +424,7 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
 
   // 1) Sửa lại / bác câu trước.
   const m = q.match(CORR_RE) ?? q.match(CORR2_RE) ?? q.match(CORR_NEG_RE);
-  if (m && m[0].trim()) {
+  if (m && m[0].trim() && ctx.lastText) {
     const rest = q.slice(m[0].length).trim();
     const rn = normalizeVi(rest);
     if (!rn || OTHER_RE.test(rn) || FILLER.test(rn))
@@ -456,6 +456,7 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
         return { action: "reply", reply: { intent: "followup_tarot", text: "Dạ, tính luôn nha 🔮 Lá ngược vẫn được giải nghĩa — chỉ là đọc theo nghĩa ngược (chậm lại, bị chặn, cần nhìn lại) thay vì nghĩa xuôi.", quick: ["Bói một lá cho hôm nay"] } };
       return { action: "reply", reply: { intent: "followup_tarot", text: "Bạn hỏi tiếp về trải bài vừa rồi đúng không? 🔮 Bạn muốn Lomi giải kỹ lá nào, rút thêm lá, hay hỏi bài chuyện khác nè?", quick: ["Bói một lá cho hôm nay"] } };
     }
+    if (topic === "faq") return { action: "skip", intent: "followup_faq" }; // để phần câu hỏi nối của FAQ hiểu
     if (topic) return null; // sức khoẻ, tâm sự, kinh doanh, FAQ… → mạch hiện có tự hiểu theo ngữ cảnh.
     return { action: "skip", intent: "followup_nocontext" };
   }
