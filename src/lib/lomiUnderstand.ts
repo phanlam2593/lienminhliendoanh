@@ -383,11 +383,11 @@ export type Gate =
   | { action: "skip"; intent: string }; // không cho module chuyên biệt bắt câu này
 
 const PRON = "(?:a|anh|em|mình|tôi|tui|chị|t|tớ|tao|e|c)";
-const CORR_RE = new RegExp(
-  `^(?:(?:không phải|ko phải|k phải|hông phải|không|ko|hông|hong|k)(?:\\s+(?:đâu|mà|nha))?[\\s,.!]+)?` +
-    `(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:đang\\s+)?(?:hỏi|muốn hỏi|nói)(?:\\s+là)?|ý\\s+là)[\\s,:]*`,
-  "iu",
-);
+const NEG = "(?:không phải|ko phải|k phải|hông phải|không|ko|hông|hong|k)(?:\\s+(?:đâu|mà|nha))?[\\s,.!]+";
+// Có chữ phủ định đứng đầu: "không, a hỏi…", "không phải, ý mình là…".
+const CORR_RE = new RegExp(`^${NEG}(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:đang\\s+)?(?:muốn\\s+)?hỏi(?:\\s+là)?|${PRON}\\s+nói\\s+là)[\\s,:]*`, "iu");
+// Không có phủ định thì phải rõ ý sửa: "ý a là…", "a hỏi là…", "a hỏi cái kia".
+const CORR2_RE = new RegExp(`^(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:muốn\\s+)?hỏi\\s+là|${PRON}\\s+hỏi(?=\\s+(?:cái kia|cái khác|chuyện khác)))[\\s,:]*`, "iu");
 const CORR_NEG_RE = /^(?:không phải|ko phải|k phải|hông phải)(?:\s+(?:đâu|vậy|thế|nha|mà))*[\s,.!]+/iu;
 const OTHER_RE = /^(cai kia|cai khac|chuyen khac|cai do|y khac|cai truoc)( (nha|ma|a|do|ne))*$/;
 const FILLER = /^(ua|ok|oke|okie|okay|oki|u|uh|um|uhm|uk|uhm|ui|ha|haha|hahaha|hihi|hehe|kk|kkk|troi|troi oi|troi dat|haiz|haizz|hmm|hm|a|o|oh|wow)$/;
@@ -423,7 +423,7 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
   const lastAsked = /\?\s*$|\?[^?]{0,12}$/.test(ctx.lastText ?? "");
 
   // 1) Sửa lại / bác câu trước.
-  const m = q.match(CORR_RE) ?? q.match(CORR_NEG_RE);
+  const m = q.match(CORR_RE) ?? q.match(CORR2_RE) ?? q.match(CORR_NEG_RE);
   if (m && m[0].trim()) {
     const rest = q.slice(m[0].length).trim();
     const rn = normalizeVi(rest);
@@ -454,7 +454,7 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
     if (topic === "tarot") {
       if (/ngược/i.test(ctx.lastText ?? "") && /\b(tinh|tinh luon|co tinh)\b/.test(n))
         return { action: "reply", reply: { intent: "followup_tarot", text: "Dạ, tính luôn nha 🔮 Lá ngược vẫn được giải nghĩa — chỉ là đọc theo nghĩa ngược (chậm lại, bị chặn, cần nhìn lại) thay vì nghĩa xuôi.", quick: ["Bói một lá cho hôm nay"] } };
-      return { action: "reply", reply: { intent: "followup_tarot", text: "Bạn hỏi tiếp về trải bài vừa rồi đúng không? 🔮 Bạn muốn Lomi giải kỹ lá nào, rút thêm lá, hay hỏi bài chuyện khác nè?", quick: ["Rút thêm một lá", "Bói lại"] } };
+      return { action: "reply", reply: { intent: "followup_tarot", text: "Bạn hỏi tiếp về trải bài vừa rồi đúng không? 🔮 Bạn muốn Lomi giải kỹ lá nào, rút thêm lá, hay hỏi bài chuyện khác nè?", quick: ["Bói một lá cho hôm nay"] } };
     }
     if (topic) return null; // sức khoẻ, tâm sự, kinh doanh, FAQ… → mạch hiện có tự hiểu theo ngữ cảnh.
     return { action: "skip", intent: "followup_nocontext" };
