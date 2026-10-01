@@ -883,6 +883,138 @@ export type Database = {
           },
         ]
       }
+      lomi_feedback: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          note: string | null
+          question: string
+          reason: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          question: string
+          reason?: string
+          status?: string
+          user_id?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          note?: string | null
+          question?: string
+          reason?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lomi_learned: {
+        Row: {
+          created_at: string
+          faq_id: string
+          key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          faq_id: string
+          key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          faq_id?: string
+          key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lomi_taught: {
+        Row: {
+          active: boolean
+          answer: string
+          created_at: string
+          created_by: string | null
+          hits: number
+          id: string
+          key: string
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          answer: string
+          created_at?: string
+          created_by?: string | null
+          hits?: number
+          id?: string
+          key: string
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          answer?: string
+          created_at?: string
+          created_by?: string | null
+          hits?: number
+          id?: string
+          key?: string
+          question?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lomi_topic_stats: {
+        Row: {
+          hits: number
+          key: string
+          updated_at: string
+        }
+        Insert: {
+          hits?: number
+          key: string
+          updated_at?: string
+        }
+        Update: {
+          hits?: number
+          key?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lomi_unanswered: {
+        Row: {
+          ask_count: number
+          first_at: string
+          key: string
+          last_at: string
+          sample: string
+        }
+        Insert: {
+          ask_count?: number
+          first_at?: string
+          key: string
+          last_at?: string
+          sample: string
+        }
+        Update: {
+          ask_count?: number
+          first_at?: string
+          key?: string
+          last_at?: string
+          sample?: string
+        }
+        Relationships: []
+      }
       member_badges: {
         Row: {
           badge_type: string
@@ -2628,6 +2760,24 @@ export type Database = {
         Args: { _gid: string; _uid: string }
         Returns: boolean
       }
+      lomi_learn: {
+        Args: { _faq_id: string; _key: string }
+        Returns: undefined
+      }
+      lomi_log_unanswered: {
+        Args: { _key: string; _sample: string }
+        Returns: undefined
+      }
+      lomi_lookup: { Args: { _key: string }; Returns: string }
+      lomi_taught_hit: { Args: { _id: string }; Returns: undefined }
+      lomi_top_topics: {
+        Args: { _n?: number }
+        Returns: {
+          hits: number
+          key: string
+        }[]
+      }
+      lomi_topic_hit: { Args: { _key: string }; Returns: undefined }
       mask_profanity: { Args: { _t: string }; Returns: string }
       notif_pref_allowed: {
         Args: { _key: string; _user_id: string }

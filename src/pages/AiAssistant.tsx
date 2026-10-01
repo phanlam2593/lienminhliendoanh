@@ -41,7 +41,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
-import { understand } from "@/lib/lomiUnderstand";
+import { GATE_ASK_BACK, gate, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
@@ -575,7 +575,16 @@ export function AiChat({
     setErr(null);
     setInput("");
     const last = msgs[msgs.length - 1];
-    const lastA = last?.role === "assistant" ? last : undefined;
+    const lastA0 = last?.role === "assistant" ? last : undefined;
+    // Understanding Gate (01/10) — câu sửa lại ("không, a hỏi…", "ý mình là…") → bỏ ngữ cảnh cũ, hiểu phần sau như câu mới.
+    const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content }, true) : null;
+    if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
+    if (corr?.action === "rewrite") {
+      q = corr.q;
+      shownRef.current = { from: q, to: raw };
+    }
+    const lastA = corr?.action === "rewrite" ? undefined : lastA0;
+    let gateSkip: string | null = null; // Gate bảo "đừng cho module chuyên biệt bắt câu này"
     let memLearn: ReturnType<typeof learnFromText> | null = null;
     // Người dùng nói rõ cách xưng hô ("gọi tui là anh nha", "thôi gọi mình là bạn") → xác nhận ngắn gọn.
     if (addrNow.explicit && q.split(/\s+/).length <= 14) {
@@ -752,9 +761,17 @@ export function AiChat({
           return doTarot(std ?? q, q);
         }
       }
+      // Understanding Gate (01/10): filler / follow-up / mơ hồ / hỏi luật Tarot — xác định ý trước khi module chuyên biệt bắt câu.
+      if (!en) {
+        const inFlow = !!(lastA?.heart || lastA?.dishAsk || lastA?.bizPick || lastA?.bizTopicPick || lastA?.issue || lastA?.biz);
+        const topic = lastA?.tarot ? "tarot" : lastA?.heart === "health" ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.faqId ? "faq" : undefined;
+        const g = gate(q, { lastText: lastA?.content, faqId: lastA?.faqId, topic, inFlow });
+        if (g?.action === "reply") return localReply(q, { role: "assistant", content: g.reply.text, local: true, quick: g.reply.quick });
+        if (g?.action === "skip") gateSkip = g.intent;
+      }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
-      {
+      if (!gateSkip) {
         // Hỏi Lomi có biết bói không → trả lời "có" + mời hỏi, KHÔNG rút bài ngay (01/10 r2).
         if (!en && isTarotAbilityAsk(q))
           return askTarot(
@@ -770,7 +787,7 @@ export function AiChat({
       // f0) Kể triệu chứng / cảm giác → tra từ điển (lib/lomiSymptoms): triệu chứng A, B, C → bệnh hay gặp,
       //     nên làm / kiêng gì / khám khoa nào; cảm giác G, J, K → trạng thái tâm lý → nên làm gì.
       //     Cộng dồn với những gì đã kể ở tin trước khi đang tâm sự.
-      if (!en && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+      if (!en && !gateSkip && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = !!lastA?.heart;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const nq = ` ${normalizeVi(q)} `;
@@ -815,7 +832,7 @@ export function AiChat({
       // f) Đang tâm sự → hiểu tin này là kể tiếp (trừ khi rõ ràng hỏi cách dùng app / tìm quán).
       // Chỉ nhường cho tìm quán khi người dùng hỏi tìm RÕ RÀNG (vd "quán nào gần đây", "ăn gì giờ").
       const wantSearch = !!detectSearch(q) && /\b(tim|kiem|goi y|an gi|uong gi|o dau|gan day|gan minh|quan nao|di dau|cho nao)\b/.test(normalizeVi(q));
-      if (lastA?.heart && !en && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+      if (lastA?.heart && !en && !gateSkip && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
         return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth, lastA.content, lastA.story), depth, lastA));
       }
@@ -825,7 +842,7 @@ export function AiChat({
     //    doanh (1b), trừ khi FAQ khớp đúng câu hỏi về CÁCH DÙNG app (nhận/đăng ưu đãi, tạo doanh nghiệp…).
     // 0b) Chào hỏi, cảm ơn, tạm biệt… → đáp lại tự nhiên.
     // 0c) Tìm chỗ / ưu đãi THẬT trong app, "hôm nay ăn gì?" (đổi món → bốc chỗ khác, không trùng chỗ cũ).
-    if (!forceAi && !en) {
+    if (!forceAi && !en && !gateSkip) {
       const it = detectSearch(q);
       // "Hôm nay ăn gì / uống gì" → gợi ý món trước (chọn món rồi mới tìm quán).
       if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q)) return replyDishes(q, it.mode === "drink");
@@ -852,7 +869,7 @@ export function AiChat({
     if (!forceAi) {
       // Bắt đầu tâm sự ("tâm sự với mình nha", "cãi nhau với người yêu mệt quá"…) — trước chuyện phiếm.
       // Người dùng vừa kể hoàn cảnh để Lomi nhớ (vd "mình đang thất nghiệp") thì để phần dưới đáp.
-      if (!en && !memLearn?.newSits.length) {
+      if (!en && !gateSkip && !memLearn?.newSits.length) {
         const h = heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
         if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));
@@ -878,6 +895,8 @@ export function AiChat({
       const prevUser = [...msgs].reverse().find((m) => m.role === "user")?.content;
       const u = understand(q, raw, { lastText: lastA?.content, faqId: lastA?.faqId, issue: lastA?.issue, lastUser: prevUser }, matchFaq(q)?.id);
       if (u) return localReply(q, { role: "assistant", content: u.text, local: true, quick: u.quick, issue: u.issue });
+      // Gate: filler / câu mơ hồ không có ngữ cảnh mà không luồng nào hiểu → hỏi lại, không đoán bừa.
+      if (gateSkip === "filler" || gateSkip === "followup_nocontext") return localReply(q, { role: "assistant", content: GATE_ASK_BACK, local: true });
     }
     // Câu hỏi nối sau câu trả lời về app ("còn … thì sao", "1 ngày quẹt đc mấy lần") → hiểu theo câu trước.
     // Câu cụt ("hết hạn rồi thì sao", "tối đa mấy người") → ưu tiên hiểu theo câu hỏi vừa rồi.

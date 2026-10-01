@@ -366,3 +366,102 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
 
   return null;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UNDERSTANDING GATE (01/10) — lớp hiểu nhẹ chạy TRƯỚC các module chuyên biệt (sức khoẻ, tarot, kinh doanh…)
+// để tránh "module nào bắt được trước thì trả lời". Không gọi AI. Trả null = để luồng cũ xử lý như cũ.
+//  • correction: "không phải…", "ý a là…", "không, a hỏi…" → bỏ ngữ cảnh cũ, hiểu phần sau như câu mới.
+//  • reaction/filler: "ủa", "ok", "haha", "haiz"… → không cho vào module kiến thức (skip).
+//  • follow-up / mơ hồ: "vậy sao?", "thế còn?", "cái này?", "tính sao?" → theo ngữ cảnh trước; không đủ → hỏi lại.
+//  • tên đồ uống trống ("cà phê?") → không cho vào module sức khoẻ (skip, để understand() đáp).
+// ─────────────────────────────────────────────────────────────────────────────
+export type GateTopic = "tarot" | "health" | "biz" | "faq" | "heart" | "flow";
+export type GateCtx = UCtx & { topic?: GateTopic };
+export type Gate =
+  | { action: "reply"; reply: UReply }
+  | { action: "rewrite"; q: string } // câu sửa lại — dùng q mới, BỎ ngữ cảnh tin trước
+  | { action: "skip"; intent: string }; // không cho module chuyên biệt bắt câu này
+
+const PRON = "(?:a|anh|em|mình|tôi|tui|chị|t|tớ|tao|e|c)";
+const NEG = "(?:không phải|ko phải|k phải|hông phải|không|ko|hông|hong|k)(?:\\s+(?:đâu|mà|nha))?[\\s,.!]+";
+// Có chữ phủ định đứng đầu: "không, a hỏi…", "không phải, ý mình là…".
+const CORR_RE = new RegExp(`^${NEG}(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:đang\\s+)?(?:muốn\\s+)?hỏi(?:\\s+là)?|${PRON}\\s+nói\\s+là)[\\s,:]*`, "iu");
+// Không có phủ định thì phải rõ ý sửa: "ý a là…", "a hỏi là…", "a hỏi cái kia".
+const CORR2_RE = new RegExp(`^(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:muốn\\s+)?hỏi\\s+là|${PRON}\\s+hỏi(?=\\s+(?:cái kia|cái khác|chuyện khác)))[\\s,:]*`, "iu");
+const CORR_NEG_RE = /^(?:không phải|ko phải|k phải|hông phải)(?:\s+(?:đâu|vậy|thế|nha|mà))*[\s,.!]+/iu;
+const OTHER_RE = /^(cai kia|cai khac|chuyen khac|cai do|y khac|cai truoc)( (nha|ma|a|do|ne))*$/;
+const FILLER = /^(ua|ok|oke|okie|okay|oki|u|uh|um|uhm|uk|uhm|ui|ha|haha|hahaha|hihi|hehe|kk|kkk|troi|troi oi|troi dat|haiz|haizz|hmm|hm|a|o|oh|wow)$/;
+const FOLLOW_TOK = new Set(["vay", "the", "con", "roi", "sao", "y", "la", "cai", "nay", "do", "kia", "tinh", "luon", "ha", "a", "nua", "thi", "gi", "z", "nhi", "ta", "nao", "ne", "sau"]);
+const FOLLOW_HEAD = new Set(["vay", "the", "con", "roi", "y", "cai", "tinh"]);
+const DRINK_ONLY = /^(ca phe|cafe|tra sua|tra|bia|ruou)( (a|ha|ne|khong|hong|ko|k|di|nha))?$/;
+
+/** Câu có phải follow-up / mơ hồ ngắn ("vậy sao?", "còn cái này?", "tính luôn hả?") không. */
+export function isShortFollowUp(q: string): boolean {
+  const n = normalizeVi(q);
+  const t = n ? n.split(" ") : [];
+  return t.length > 0 && t.length <= 5 && t.every((x) => FOLLOW_TOK.has(x)) && t.some((x) => FOLLOW_HEAD.has(x));
+}
+
+/** Câu hỏi VỀ Tarot (luật bài), không phải xin bói: "tarot có bài ngược hả?", "tarot bao nhiêu lá". */
+function tarotInfo(n: string): UReply | null {
+  if (!/\b(tarot|la bai|bo bai)\b/.test(n)) return null;
+  if (/\b(nguoc|xuoi|lat nguoc)\b/.test(n))
+    return { intent: "tarot_info", text: "Có nè 🔮 Trong Tarot, lá rút ra bị lộn đầu gọi là **lá ngược**. Lomi tính cả lá ngược: mỗi lá có nghĩa xuôi và nghĩa ngược riêng — lá ngược thường là năng lượng bị chặn, chậm lại hoặc cần nhìn lại, chứ không phải lúc nào cũng xấu. Muốn rút thử một lá không?", quick: ["Bói một lá cho hôm nay"] };
+  if (/\b(bao nhieu la|may la|78)\b/.test(n))
+    return { intent: "tarot_info", text: "Bộ Tarot có **78 lá**: 22 lá Ẩn Chính và 56 lá Ẩn Phụ (4 chất Gậy, Cốc, Kiếm, Tiền) 🔮 Lomi trải 1, 3, 5 hoặc 10 lá tuỳ bạn nha.", quick: ["Bói một lá cho hôm nay"] };
+  if (/\b(la gi|co that khong|co dung khong|co chinh xac khong|tin duoc khong)\b/.test(n))
+    return { intent: "tarot_info", text: "Tarot là bộ 78 lá bài dùng để suy ngẫm, nhìn lại chuyện của mình từ góc khác 🔮 Lomi bói cho vui và để bạn có thêm góc nhìn thôi nha — quyết định quan trọng vẫn là ở bạn.", quick: ["Bói một lá cho hôm nay"] };
+  return null;
+}
+
+/**
+ * Chạy TRƯỚC module chuyên biệt. `correctionOnly` = chỉ xét câu sửa lại (gọi sớm, trước mọi mạch).
+ * inFlow = đang ở một mạch có câu hỏi chờ (tâm sự, chọn món, chọn loại hình…) → không chặn filler/follow-up.
+ */
+export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionOnly = false): Gate | null {
+  const n = normalizeVi(q);
+  const lastAsked = /\?\s*$|\?[^?]{0,12}$/.test(ctx.lastText ?? "");
+
+  // 1) Sửa lại / bác câu trước.
+  const m = q.match(CORR_RE) ?? q.match(CORR2_RE) ?? q.match(CORR_NEG_RE);
+  if (m && m[0].trim() && ctx.lastText) {
+    const rest = q.slice(m[0].length).trim();
+    const rn = normalizeVi(rest);
+    if (!rn || OTHER_RE.test(rn) || FILLER.test(rn))
+      return { action: "reply", reply: { intent: "correction", text: "Dạ, chắc Lomi hiểu nhầm rồi 🙏 Bạn muốn hỏi chuyện gì nè? Nói Lomi thêm chút xíu nha." } };
+    return { action: "rewrite", q: rest };
+  }
+  // "không" / "không phải" đứng một mình, mà Lomi không vừa hỏi gì → bạn đang bác câu trả lời.
+  if (/^(khong|ko|k|hong|khong phai|ko phai|khong dung|sai roi|khong phai vay)( (ma|dau|nha|lomi|a))*$/.test(n) && !lastAsked && !ctx.inFlow && ctx.lastText)
+    return { action: "reply", reply: { intent: "correction", text: "Dạ, chắc Lomi hiểu nhầm rồi 🙏 Bạn muốn hỏi chuyện gì nè? Nói Lomi thêm chút xíu nha." } };
+  if (correctionOnly) return null;
+
+  // 2) Hỏi về luật Tarot → trả lời kiến thức Tarot (không rút bài với câu hỏi "có bài ngược hả?").
+  const ti = tarotInfo(n);
+  if (ti) return { action: "reply", reply: ti };
+
+  if (ctx.inFlow) return null;
+
+  // 3) Tiếng cảm thán / phản ứng → không vào module kiến thức.
+  if (FILLER.test(n)) return { action: "skip", intent: "filler" };
+
+  // 4) Chỉ có tên đồ uống ("cà phê?") → không phải câu hỏi sức khoẻ.
+  if (DRINK_ONLY.test(n)) return { action: "skip", intent: "drink_only" };
+
+  // 5) Follow-up / mơ hồ ngắn.
+  if (isShortFollowUp(q)) {
+    const topic = ctx.topic ?? (/tarot|lá bài|trải bài|🔮/i.test(ctx.lastText ?? "") ? "tarot" : undefined);
+    if (topic === "tarot") {
+      if (/ngược/i.test(ctx.lastText ?? "") && /\b(tinh|tinh luon|co tinh)\b/.test(n))
+        return { action: "reply", reply: { intent: "followup_tarot", text: "Dạ, tính luôn nha 🔮 Lá ngược vẫn được giải nghĩa — chỉ là đọc theo nghĩa ngược (chậm lại, bị chặn, cần nhìn lại) thay vì nghĩa xuôi.", quick: ["Bói một lá cho hôm nay"] } };
+      return { action: "reply", reply: { intent: "followup_tarot", text: "Bạn hỏi tiếp về trải bài vừa rồi đúng không? 🔮 Bạn muốn Lomi giải kỹ lá nào, rút thêm lá, hay hỏi bài chuyện khác nè?", quick: ["Bói một lá cho hôm nay"] } };
+    }
+    if (topic === "faq") return { action: "skip", intent: "followup_faq" }; // để phần câu hỏi nối của FAQ hiểu
+    if (topic) return null; // sức khoẻ, tâm sự, kinh doanh, FAQ… → mạch hiện có tự hiểu theo ngữ cảnh.
+    return { action: "skip", intent: "followup_nocontext" };
+  }
+  return null;
+}
+
+/** Câu trả lời khi Lomi chưa chắc hiểu — hỏi lại, không đoán bừa. */
+export const GATE_ASK_BACK = "Lomi chưa chắc hiểu ý bạn 😅 Bạn nói rõ thêm chút được không — đang hỏi về app, một quán/ưu đãi, sức khoẻ hay bói bài nè?";
