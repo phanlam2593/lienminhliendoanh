@@ -9,7 +9,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
-import { emojiOnlyReply, tone } from "@/lib/lomiUnderstand";
+import { emojiOnlyReply, expressive, tone } from "@/lib/lomiUnderstand";
 
 export type ChatReply = { text: string; quick?: string[]; sticker?: string };
 type L = "vi" | "en";
@@ -484,13 +484,13 @@ const RULES: Rule[] = [
   },
   // Ok / ừ
   {
-    re: /^(ok|oke|okie|okay|okla|oki|okela|ok la|uh|u|um|uhm|o|vang|vang a|da|da vang|duoc roi|hieu roi|roi|a|a ha|khong|ko|k|thoi|khong co gi|khong can|uk|ukm|ok luon|ok ok)$/,
+    re: /^(ok|oke|okie|okay|okla|oki|okela|ok la|duoc|uh|u|um|uhm|o|vang|vang a|da|da vang|duoc roi|hieu roi|roi|a|a ha|khong|ko|k|thoi|khong co gi|khong can|uk|ukm|ok luon|ok ok)$/,
     reply: () => ({ text: pick(["Okie 😊", "Dạ 🌿", "Ừa nè 😄", "Okie la 👌"]) }),
   },
   // ── Nói chuyện đơn giản hằng ngày (01/10, theo ý Kir) ──
   // Trả lời câu "khoẻ không" của Lomi: "mình khoẻ", "ổn", "bình thường", "cũng được"
   {
-    re: /^((minh|toi|tui|em|anh|chi|tao|to)( cung| van| thi)? )?(khoe|on|van on|on ma|binh thuong|cung duoc|tam on|tam tam|khoe re|khoe lam|on lam|cung on|duoc)( (lam|ma|nha|ne|a|lomi|roi|cam on|cam on lomi|con lomi|con ban|thi sao))*$/,
+    re: /^((minh|toi|tui|em|anh|chi|tao|to)( cung| van| thi)? )?(khoe|on|van on|on ma|binh thuong|cung duoc|tam on|tam tam|khoe re|khoe lam|on lam|cung on)( (lam|ma|nha|ne|a|lomi|roi|cam on|cam on lomi|con lomi|con ban|thi sao))*$/,
     reply: (n = "") => ({
       text: /con (lomi|ban)|thi sao/.test(n)
         ? pick(["Lomi cũng khoẻ re nè 💪 Cảm ơn bạn hỏi thăm nha 🥰", "Lomi lúc nào cũng pin đầy nè 🔋😄 Vui vì bạn ổn!"])
@@ -552,7 +552,7 @@ const RULES: Rule[] = [
   },
   // Cảm thán: "trời ơi", "ôi trời", "chết rồi"
   {
-    re: /^(troi oi|troi dat oi|oi troi|troi dat|chet roi|chet cha|ui troi|oi gioi oi|oi gioi|tr oi)( .*)?$/,
+    re: /^(troi oi|troi dat oi|oi troi|troi dat|troi|troi a|chet roi|chet cha|ui troi|oi gioi oi|oi gioi|tr oi)( .*)?$/,
     max: 4,
     reply: () => ({ text: pick(["Sao vậy sao vậy 😳 Có chuyện gì hả?", "Ủa có chuyện gì vậy bạn? 😯", "Hú hồn, kể Lomi nghe coi 😳"]) }),
   },
@@ -609,7 +609,51 @@ function quiet(rep: ChatReply): ChatReply {
 }
 const withName = (name: string | undefined, t: string) => (name ? `${name} ơi, ${t.charAt(0).toLowerCase()}${t.slice(1)}` : t);
 
-export function chitChat(text: string, lang: L, name?: string): ChatReply | null {
+export function chitChat(text: string, lang: L, name?: string, raw = text): ChatReply | null {
+  const r = lang === "vi" ? expressiveReply(text, raw) : null;
+  if (r) return quiet(r);
+  return chitChatCore(text, lang, name, raw);
+}
+
+// Trạng thái/cảm xúc → câu đáp khi người dùng NHẤN MẠNH ("chánnnn", "mệttttt 😭", "đóiiii").
+const STRESS: [RegExp, string[]][] = [
+  [/^(chan|chan qua|chan ghe|chan that|chan wa)$/, ["Chán dữ vậy luôn hả 😭 Có chuyện gì kể Lomi nghe nè!", "Chán tới mức kéo dài chữ luôn ha 😆 Kể Lomi nghe sao chán vậy?"]],
+  [/^(met|met qua|met ghe|met xiu|met that)$/, ["Mệt lắm luôn hả 🥺 Nghỉ tay chút đi, uống ngụm nước nha. Có chuyện gì vậy?", "Nghe là thấy đuối rồi 😮‍💨 Hôm nay vất vả lắm hả?"]],
+  [/^(buon|buon qua|buon ghe|buon that)$/, ["Buồn nhiều lắm hả 🥺 Lomi ở đây nè, kể Lomi nghe nha.", "Ôm một cái thật chặt nè 🤗 Chuyện gì làm bạn buồn vậy?"]],
+  [/^(doi|doi qua|doi bung)$/, ["Đói meo luôn hả 😆 Đi ăn liền đi nè! Muốn Lomi gợi ý món không?"]],
+  [/^(dep|dep qua|dep ghe|xinh qua)$/, ["Đẹp thiệt luôn ha 😍", "Công nhận đẹp xỉu 😍"]],
+  [/^(vui|vui qua|vui ghe)$/, ["Vui dữ ha 😆 Có gì vui kể Lomi nghe với!"]],
+];
+/** Đọc độ nhấn + dấu câu + emoji của câu gốc để đáp đúng sắc thái (không phân tích cho người dùng thấy). */
+export function expressiveReply(text: string, raw: string): ChatReply | null {
+  const n = squash(normalizeVi(text));
+  if (!n) return null;
+  const ex = expressive(raw);
+  const tn = tone(raw);
+  const w = n.split(" ").length;
+  // Thở dài: "haiz", "haizzzz", "aizz"
+  if (/^(haiz|haizz|haiza|hai za|aiz|aizz|haizz|hazz|haz|ai da|aida|haizaa)( .*)?$/.test(n) && w <= 4)
+    return { text: pick(["Thở dài chi vậy nè 😥 Có chuyện gì hả?", "Haiz gì đó, kể Lomi nghe coi 🥺"]) };
+  // Hừm / hmm: đang nghĩ, phân vân
+  if (/^(hum|hm|hmm|um|ưm|uhm)$/.test(n))
+    return { text: ex.trail ? pick(["Đang phân vân gì hả? 🤔 Nói Lomi nghe thử nha.", "Hửm, có gì chưa chắc hả? 👀"]) : pick(["Đang nghĩ gì đó? 🤔", "Hửm? 👀"]) };
+  // "ơiiii" gọi Lomi
+  if (/^(oi|oi oi|lomi oi)$/.test(n) && ex.stretched)
+    return { text: tn === "sad" ? pick(["Dạ Lomi đây 🥺 Sao vậy nè?", "Có Lomi đây, có chuyện gì hả? 🤗"]) : pick(["Dạaa, Lomi nghe nèee 👂", "Lomi đâyyy 🙋"]) };
+  // ok / được / ừ / không — cùng chữ nhưng khác sắc thái
+  if (/^(ok|oke|okie|okay|duoc|duoc roi|u|uh|um|uk|da|vang)$/.test(n)) {
+    if (ex.trail || tn === "sad") return { text: pick(["Nghe hơi miễn cưỡng ha 😅 Có gì chưa ổn thì nói Lomi nghe nha.", "Okie… mà có gì khó thì cứ nói Lomi nha 🤗"]) };
+    if (ex.stretched || tn === "laugh" || ex.bang) return { text: pick(["Okiee 😆", "Chốt luôn nha 👌😄", "Yeahh 🙌"]) };
+    return null;
+  }
+  if (/^(khong|ko|k|hong|khum|thoi)$/.test(n) && (ex.strong || tn === "sad"))
+    return { text: tn === "sad" ? pick(["Ơ sao vậy nè 🥺 Không thích chỗ nào nói Lomi nghe nha.", "Okie okie, không thì thôi nha 🤗 Có gì buồn hả?"]) : pick(["Okie, không thì thôi nha 😆", "Rồi rồi, Lomi hiểu rồi 🙈"]) };
+  // Trạng thái nhấn mạnh
+  for (const [re, arr] of STRESS) if (re.test(n) && (ex.strong || tn === "sad" || /^(dep|vui)/.test(n))) return { text: pick(arr) };
+  return null;
+}
+
+function chitChatCore(text: string, lang: L, name: string | undefined, raw: string): ChatReply | null {
   // Chỉ gửi emoji (😂, 🥰, 👍…) → đáp lại cho vui.
   const eo = lang === "vi" ? emojiOnlyReply(text) : null;
   if (eo) return quiet({ text: eo });
@@ -826,8 +870,26 @@ const TEEN: Record<string, string> = {
   lmj: "làm gì", lmgi: "làm gì", okla: "ok", oki: "ok", okee: "ok", okeee: "ok", ò: "ừ", ừa: "ừ", ùm: "ừ", ừm: "ừ",
   dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo",
 };
+// ── Chữ kéo dài để biểu cảm (01/10 r2, theo tài liệu Kir): "okkkk", "chánnnn", "khônggg", "đượcccc",
+// "trờiiii", "haizzzz", "hahaahah" → về từ gốc để HIỂU nghĩa; còn độ nhấn thì đọc riêng bằng
+// expressive() ở lib/lomiUnderstand (từ câu gốc), không bị mất. Không đụng chữ lặp thật ("coffee", "uu đãi").
+const KEEP_DOUBLE = new Set(["coffee", "free", "see", "tree", "too", "zoo", "good", "book", "cool", "all", "off", "will", "kiss", "miss", "boss", "pass", "class", "uu", "kk", "xoong", "boong", "loong", "soong", "app", "egg", "inn", "add", "odd", "ill", "mall", "hall", "call", "bill", "fill", "kill", "tall", "wall", "well", "tell", "sell", "hell", "doll", "jazz", "buzz", "mess", "less", "chess", "dress", "grass", "glass", "cross", "staff", "stuff", "cliff", "ball", "bell", "full", "pull"]);
+export function unstretch(text: string): string {
+  return text.replace(/[\p{L}\p{M}]+/gu, (w) => {
+    const lw = w.toLowerCase();
+    if (KEEP_DOUBLE.has(lw)) return w;
+    // haha / hihi / hehe / ahaha / hahaahah → "haha"
+    if (/^(a?h?[aá]){3,}h?$/iu.test(lw) && lw.length >= 5) return "haha";
+    // 3+ chữ giống nhau liền → 1 ("okkkk", "chánnnn", "trờiiii") — riêng "kkkk" (cười) giữ "kk".
+    let x = /^k{3,}$/i.test(w) ? "kk" : w.replace(/(\p{L}\p{M}*)\1{2,}/gu, "$1");
+    // 2 chữ giống nhau ở CUỐI từ (tiếng Việt không có từ nào tận cùng bằng 2 chữ giống nhau): "chánn", "okk".
+    if (x.length >= 3 && !KEEP_DOUBLE.has(x.toLowerCase())) x = x.replace(/(\p{L}\p{M}*)\1$/u, "$1");
+    return x;
+  });
+}
+
 export function expandTeen(text: string): string {
-  let s = text.normalize("NFC");
+  let s = unstretch(text.normalize("NFC"));
   // Cụm cần xét ngữ cảnh — xử lý trước khi đổi từng từ.
   s = s.replace(/(^|[^\p{L}])(hum|hôm|bữa) (nay|ni)(?![\p{L}])/giu, "$1hôm nay");
   s = s.replace(/(^|[^\p{L}])(quên|đổi|lấy lại|nhập|sai|reset|đặt lại) (mk|mật khẩu)(?![\p{L}])/giu, "$1$2 mật khẩu");

@@ -5,11 +5,11 @@
 // Người dùng hỏi "Lomi nhớ gì về mình?" để xem, "quên hết đi" để xoá.
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
-import { detectAddr, type Addr } from "@/lib/lomiAddress";
+import { detectAddr, explicitAddr, type Addr } from "@/lib/lomiAddress";
 import type { BizCtx } from "@/lib/bizAdvisor";
 
 export type Sit = "jobless" | "working" | "heartbroken" | "single" | "inlove" | "sick" | "student";
-export type LomiMem = { name?: string; sits?: Partial<Record<Sit, number>>; biz?: Pick<BizCtx, "type" | "noun">; addr?: Addr };
+export type LomiMem = { name?: string; sits?: Partial<Record<Sit, number>>; biz?: Pick<BizCtx, "type" | "noun">; addr?: Addr; addrLocked?: boolean };
 
 const KEY = (uid: string) => `lomi-mem:${uid}`;
 const TTL = 45 * 86400000;
@@ -184,13 +184,23 @@ export function displayName(mem: LomiMem, fullName?: string | null): string | un
   return full && full.length <= 40 ? full : undefined;
 }
 
-/** Ghi nhớ cách người dùng tự xưng (anh / chị / em / bạn) để Lomi xưng hô đối xứng — lib/lomiAddress. */
-export function learnAddr(uid: string, raw: string): Addr | undefined {
+/** Ghi nhớ cách người dùng tự xưng (anh / chị / em / bạn) để Lomi xưng hô đối xứng — lib/lomiAddress.
+ *  Người dùng nói rõ ("gọi tui là anh nha") → khoá; đã khoá thì câu bình thường không đổi được nữa.
+ *  Trả về explicit = true khi vừa đổi theo yêu cầu rõ ràng (để Lomi xác nhận lại). */
+export function learnAddr(uid: string, raw: string): { addr?: Addr; explicit?: Addr } {
   const m = loadMem(uid);
-  const a = detectAddr(raw);
-  if (a && a !== m.addr) {
+  const ex = explicitAddr(raw);
+  if (ex) {
+    m.addr = ex;
+    m.addrLocked = true;
+    saveMem(uid, m);
+    return { addr: ex, explicit: ex };
+  }
+  const a = m.addrLocked ? null : detectAddr(raw);
+  // "bạn-em" (chỉ biết người dùng gọi Lomi là em) không ghi đè cách xưng rõ hơn đã biết (anh/chị).
+  if (a && a !== m.addr && !(a === "bạn-em" && (m.addr === "anh" || m.addr === "chị"))) {
     m.addr = a;
     saveMem(uid, m);
   }
-  return a ?? m.addr;
+  return { addr: m.addr };
 }

@@ -48,7 +48,7 @@ import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type Heart
 import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { dietOf, dietReply } from "@/lib/lomiDiet";
-import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -75,6 +75,7 @@ import {
   TAROT_CANCEL,
   TAROT_SUGGEST,
   detectTarot,
+  isTarotAbilityAsk,
   drawClarifier,
   drawForQuestion,
   isDailyAsk,
@@ -394,13 +395,13 @@ export function AiChat({
 
   // ── Bói Tarot kiểu hỏi – đáp (30/09 r2) ──
   // Chưa có câu hỏi → Lomi hỏi lại bằng lời (kèm vài gợi ý nhỏ), tin kế tiếp được hiểu là câu hỏi.
-  const askTarot = (asked?: string) => {
+  const askTarot = (asked?: string, intro?: string) => {
     setErr(null);
     push([
       ...(asked ? [{ role: "user" as const, content: asked, local: true }] : []),
       {
         role: "assistant",
-        content: en ? TAROT_ASK.en : TAROT_ASK.vi,
+        content: intro ?? (en ? TAROT_ASK.en : TAROT_ASK.vi),
         local: true,
         tarotAwait: true,
         quick: TAROT_SUGGEST.map((x) => (en ? x.en : x.vi)).filter(Boolean),
@@ -568,7 +569,7 @@ export function AiChat({
       return sendSticker(stk);
     }
     // Người dùng tự xưng anh/chị/em/mình → Lomi xưng hô đối xứng từ câu này trở đi.
-    if (!en) learnAddr(user.id, raw);
+    const addrNow = en ? { explicit: undefined } : learnAddr(user.id, raw);
     let q = expandTeen(raw);
     shownRef.current = q !== raw ? { from: q, to: raw } : null;
     setErr(null);
@@ -576,6 +577,20 @@ export function AiChat({
     const last = msgs[msgs.length - 1];
     const lastA = last?.role === "assistant" ? last : undefined;
     let memLearn: ReturnType<typeof learnFromText> | null = null;
+    // Người dùng nói rõ cách xưng hô ("gọi tui là anh nha", "thôi gọi mình là bạn") → xác nhận ngắn gọn.
+    if (addrNow.explicit && q.split(/\s+/).length <= 14) {
+      const a = addrNow.explicit;
+      return localReply(q, {
+        role: "assistant",
+        content:
+          a === "anh" || a === "chị"
+            ? `Dạ, từ giờ em gọi ${a} là ${a} nha 😊`
+            : a === "em"
+              ? "Okie, từ giờ Lomi gọi em là em nha 😊"
+              : "Okie, từ giờ mình gọi nhau là bạn với Lomi nha 😊",
+        local: true,
+      });
+    }
 
     // Lomi vừa mời ("rút một lá cho nhẹ lòng không?") kèm nút gợi ý → người dùng gõ "ok / ờ / có"
     // thì làm luôn gợi ý đầu tiên (khung chat vẫn hiện đúng chữ họ gõ); "không / thôi" thì đáp nhẹ nhàng.
@@ -606,6 +621,12 @@ export function AiChat({
       const cr = crisisReply(q, lang);
       // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
+      // Câu ngắn có nhấn mạnh / sắc thái ("chánnnn 😭", "okkk 😂", "ok......", "haizzz") → đáp đúng sắc thái,
+      // trừ khi đang trong một mạch (tâm sự, bói, tư vấn, chọn món) thì để mạch đó hiểu tiếp.
+      if (!en && q.split(/\s+/).length <= 4 && !lastA?.heart && !lastA?.tarotAwait && !lastA?.bizPick && !lastA?.bizTopicPick && !lastA?.dishAsk && !lastA?.issue) {
+        const xr = expressiveReply(q, raw);
+        if (xr) return localReply(q, { role: "assistant", content: xr.text, local: true });
+      }
       // Câu admin đã dạy, khớp y câu → trả lời luôn (ưu tiên hơn mọi luồng, kể cả câu Lomi từng đáp sai).
       if (!en) {
         const tg = matchTaught(q, true) ?? (raw !== q ? matchTaught(raw, true) : null);
@@ -734,6 +755,15 @@ export function AiChat({
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
       {
+        // Hỏi Lomi có biết bói không → trả lời "có" + mời hỏi, KHÔNG rút bài ngay (01/10 r2).
+        if (!en && isTarotAbilityAsk(q))
+          return askTarot(
+            q,
+            pickOne([
+              "Biết chứ 😄 Lomi bói Tarot được nè — bộ bài 78 lá, trải 1, 3, 5 hoặc 10 lá tuỳ bạn. Bạn muốn hỏi bài chuyện gì? Chọn chủ đề bên dưới hoặc gõ tự nhiên kiểu “người ấy nghĩ gì về mình?” nha 🔮",
+              "Có nè 🔮 Lomi rành bói Tarot lắm á! Tình yêu, công việc, tiền bạc hay thông điệp hôm nay đều được. Bạn muốn hỏi bài điều gì nè?",
+            ]),
+          );
         const d = detectTarot(q);
         if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
@@ -827,7 +857,7 @@ export function AiChat({
         if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));
       }
-      const cc = chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name));
+      const cc = chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name), raw);
       if (cc)
         return localReply(q, {
           role: "assistant",
@@ -977,6 +1007,7 @@ export function AiChat({
   const greetLine = (() => {
     const a = loadMem(user.id).addr;
     if (a === "anh" || a === "chị") return `Xin chào ${a}, em là Lomi! Em giúp gì được cho ${a}?`;
+    if (a === "bạn-em") return "Xin chào, em là Lomi! Em giúp gì được cho bạn?";
     return speak(t("ai.welcome"), a);
   })();
 
@@ -1142,7 +1173,7 @@ export function AiChat({
                       title="Lomi trả lời chưa đúng / chưa biết? Gửi ban quản trị"
                       className={cn("font-semibold", m.reported ? "text-muted-foreground/60" : "text-amber-600 dark:text-amber-400")}
                     >
-                      ⁉️ {m.reported ? "Đã gửi" : "Báo"}
+                      ⁉️ {m.reported ? "Đã gửi" : "Báo cáo"}
                     </button>
                   )}
                   {AI_ENABLED && !m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (

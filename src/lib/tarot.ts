@@ -411,10 +411,22 @@ export function detectTarot(text: string): { question: string; daily: boolean } 
   // Phần sau chữ "bói" chỉ là chữ đệm ("… bói cho mấy lá đi", "bói giùm 3 lá") → câu hỏi nằm ở phía trước.
   if (FILLER_RE.test(fold(after).trim())) after = "";
   let q = nWords(after) >= 2 ? after : nWords(before) >= 2 ? before : after || before;
+  // Phần còn lại chỉ là chữ hỏi / phủ định ("không", "hk", "được không", "chưa") → chưa có câu hỏi thật
+  // (01/10 r2: "lomi biết bói toán hk" từng bị rút 3 lá với câu hỏi "không").
+  if (/^(toan|khong|ko|k|hk|hong|hok|hem|khum|chua|duoc khong|dc khong|duoc ko|duoc|ha|hả|chu|nhi|a|vay|khong vay|khong ta|khong ha|nua|nua khong|di|nha|nhe|giup|cho|minh|toi|tui|em|anh|chi|ban|lomi|biet|co biet|co|gioi|hay|the nao|ra sao|sao|[\s?!.,…])*$/.test(fold(q).trim())) q = "";
   const fq = fold(q).trim();
   const dailyOnly = !fq || /^(cho )?(hom nay|thong diep( hom nay)?|ngay hom nay|today)\s*\??$/.test(fq);
   if (dailyOnly) q = "";
   return { question: q, daily: !q && DAILY_RE.test(f) };
+}
+
+/** Hỏi Lomi CÓ BIẾT bói không ("lomi biết bói toán hk", "bạn xem tarot được không", "có bói bài không")
+ *  — là hỏi khả năng, KHÔNG phải nhờ bói ngay; đừng rút bài. */
+export function isTarotAbilityAsk(text: string): boolean {
+  const f = fold(text).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim();
+  return /(^|\s)(biet|co biet|co the|co|lam duoc|ranh|gioi|hieu|xai duoc|dung duoc)\s+(boi|xem boi|boi toan|boi bai|xem tarot|boi tarot|tarot|rut bai|xem bai)(\s+(toan|tarot|bai))?(\s+(khong|ko|k|hk|hong|hok|hem|khum|ha|chu|duoc khong|dc khong|duoc ko|that khong|thiet hong|khong vay|khong ta))?\s*$/.test(f)
+    || /(^|\s)(boi|xem boi|boi toan|boi bai|xem tarot|tarot|rut bai)(\s+(toan|tarot|bai))?\s+(duoc khong|dc khong|duoc ko|duoc hong|duoc hk)\s*$/.test(f) && !/\b(cho|giup|dum|gium|ho)\b/.test(f)
+    || /(^|\s)(tarot|boi toan|boi tarot)\s+(la gi|la sao|nghia la gi|hoat dong sao|co dung khong|co that khong|co chinh xac khong|co tin duoc khong)\s*$/.test(f);
 }
 
 /** Đang chờ người dùng nói câu hỏi → câu này có phải "thông điệp hôm nay" không. */

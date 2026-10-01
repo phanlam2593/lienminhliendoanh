@@ -34,6 +34,19 @@ export function tone(raw: string): Tone {
   return "neutral";
 }
 
+/** Tín hiệu biểu cảm ở câu GỐC (độ nhấn KHÔNG bị mất khi đã đưa chữ về gốc để hiểu nghĩa):
+ *  stretched = có chữ kéo dài ("chánnnn", "okkkk"); trail = "..." (do dự / miễn cưỡng / bất lực);
+ *  bang = "!" (dứt khoát / hào hứng); repeatEmoji = 😭😭😭. Chỉ là TÍN HIỆU — luôn đọc cùng tone() và ngữ cảnh. */
+export type Expr = { stretched: boolean; trail: boolean; bang: boolean; repeatEmoji: boolean; strong: boolean };
+export function expressive(raw: string): Expr {
+  const t = raw.normalize("NFC");
+  const stretched = /(\p{L})\1{2,}/u.test(t.replace(/\b(coffee|free|see|too|good|book|cool|all|off|kk+)\b/giu, "")) || /(\p{L}{2,})(\p{L})\2(?![\p{L}])/u.test(t.replace(/\b(coffee|free|see|too|good|book|cool|all|off|will|kiss|miss|boss|pass|class)\b/giu, ""));
+  const trail = /(\.{2,}|…)\s*$/u.test(t.replace(/[\p{Extended_Pictographic}\ufe0f\s]+$/u, ""));
+  const bang = /!+\s*[\p{Extended_Pictographic}\ufe0f\s]*$/u.test(t);
+  const repeatEmoji = /(\p{Extended_Pictographic})\ufe0f?\s*\1/u.test(t);
+  return { stretched, trail, bang, repeatEmoji, strong: stretched || repeatEmoji };
+}
+
 /** Trả lời khi người dùng CHỈ gửi emoji — đọc đúng cảm xúc thay vì đáp một kiểu. */
 export function emojiOnlyReply(raw: string): string | null {
   const t = raw.trim();
