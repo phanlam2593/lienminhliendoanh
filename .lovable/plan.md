@@ -1,87 +1,71 @@
-## Đợt A — Đồng bộ màu Teal & nút Đăng nhập nổi bật
+# Audit Tarot của Lomi — vì sao kém "trúng mạch" hơn trợ lý AI
 
-Phạm vi: chỉ `Logo.tsx` và `Layout.tsx` (Welcome screen).
+Chỉ audit, chưa sửa file nào. Phần dưới là kết luận và hướng cải thiện để anh chọn.
 
-- **Logo.tsx**: thay constant `GREEN = "#18a974"` bằng màu primary từ design token (`hsl(var(--primary))`). Logo & chữ trên header dùng cùng tông teal với UI còn lại.
-- **Layout.tsx → WelcomeScreen**:
-  - Bỏ constant `GREEN = "#1a5c35"`. Dùng `text-primary`, `bg-primary`, `border-primary`, `bg-accent`.
-  - Đảo thứ tự CTA: **"Đăng nhập"** ở trên (gradient-brand, đậm), **"Tham gia ngay"** ở dưới (outline).
-  - Stats card / icon container chuyển sang `bg-accent text-primary`.
-- **KHÔNG** đụng layout, nội dung text, contact footer, features list.
+## Cách Lomi đang tạo một lần bói (tóm tắt)
 
-Test: mở `/` chưa login → màu logo + welcome đồng bộ tông teal hiện tại; Đăng nhập là nút nổi bật nhất.
-
-## Đợt B — Avatar tương tác + Profile popup
-
-### B1. Avatar hiển thị & đổi được
-- Tạo component mới `src/components/Avatar.tsx`: wrap `StoredImage` + initials fallback. Props: `path`, `name`, `size`, `onClick?`, `className?`.
-- **Layout header** (avatar góc phải): dùng `<Avatar>` thay khối chữ cái → hiện avatar thực.
-- **Profile.tsx**: avatar 16x16 click được. Click → `<input type="file">` → `uploadImage(file, "avatars", uid)` → update `profiles.avatar_url` → `refresh()`. Toast thành công.
-- **BusinessDetail.tsx** (block reviews): thay div chữ cái bằng `<Avatar>` để hiện avatar người đánh giá.
-
-### B2. Profile quick-view popup
-- Tạo `src/components/ProfileQuickView.tsx`: Dialog hiển thị avatar lớn, tên, `@username`, role (member/admin), email & phone (luôn hiển thị nếu có; không có ô "công khai" trong schema), nút **Follow / Đang theo dõi**, nút **Xem hồ sơ đầy đủ** (chuyển `/ho-so` cho chính chủ, hoặc đóng popup cho người khác — vì hiện chưa có trang profile public, sẽ ẩn nút này khi không phải self để không tạo route ảo).
-- Trigger: click avatar/tên trong review block ở `BusinessDetail.tsx`.
-- Nút Follow gọi follows table (xem C0).
-
-### C0 (chia sẻ với B2). Bảng `follows` tối giản
-Polymorphic để hỗ trợ cả popup (user→user) và nhu cầu tương lai (user→business):
+```text
+câu hỏi -> detectKind (yes/no, timing, choice, open)
+        -> detectTopic + sceneOf (love/ex/crush/jobseek/business/...)
+        -> detectIntent (regex trong ~40 INTENTS: "người thứ ba", ...)
+        -> drawCards: xáo 78 lá thật (crypto), mỗi lá 50% ngược
+        -> readingNarrativeVi: ghép 7 khối
+           mở đầu | danh sách lá | từng lá | mối liên hệ | tổng quan | lưu ý | lời khuyên | thông điệp
 ```
-follows(id, follower_id uuid, followee_user_id uuid NULL, followee_business_id uuid NULL,
-        created_at, CHECK (num_nonnulls(followee_user_id, followee_business_id) = 1),
-        UNIQUE (follower_id, followee_user_id),
-        UNIQUE (follower_id, followee_business_id))
-```
-RLS: anyone authenticated SELECT (để đếm); follower_id = auth.uid() cho INSERT/DELETE. Grants chuẩn.
 
-Trigger `notify_new_follow`: tạo notification type `new_follower` cho followee_user_id khi có follow user→user. (Không spam với follow business.)
+Mỗi khối được ghép từ các mảnh viết sẵn: nghĩa lá (xuôi/ngược) + câu theo lĩnh vực (domainText) + mẫu câu theo scene với `{k}` = từ khoá lá và `{S}` = "chuyện ..." rút từ câu hỏi. Kết luận dựa trên tổng điểm `cardScore` (xuôi +1, ngược -1, vài lá sáng/nặng điều chỉnh).
 
-Thêm `NotifType` mới: `new_follower`.
+## 7 điểm chính làm Tarot kém tự nhiên
 
-Test: 
-- Avatar hiển thị đúng sau upload, refresh, đăng xuất/đăng nhập lại
-- Click avatar trong review → popup hiện, Follow toggle hoạt động, người được follow nhận notification.
+1. **Mỗi lá được giải ĐỘC LẬP, không biết các lá khác.** Đoạn của lá 2 không biết lá 1 nói gì. Phần "Mối liên hệ" chỉ nối từ khoá bằng mũi tên (`Tháp -> Ngôi Sao -> Mặt Trời`) và một câu cung đi lên/đi xuống. Ví dụ với Ba Kiếm, Ngôi Sao, Hai Cốc: AI sẽ kể "vết thương -> hồi phục -> mở lòng với người mới". Lomi thì đưa ra 3 đoạn riêng rẽ, rồi một dòng "đau lòng -> hy vọng -> kết nối. Một mạch đi lên".
 
-## Đợt C — Báo cáo 2 chiều & Duyệt thành viên có phản hồi
+2. **"Hiểu câu hỏi" chỉ là gắn nhãn, không giữ chi tiết.** Hệ thống chỉ còn lại kind + scene + intent (+ chuỗi `{S}` tối đa 5 chữ, câu dài hơn thì quay về tên chủ đề như "chuyện tình cảm"). Ví dụ "anh ấy hứa tháng 3 về mà giờ im lặng, mình nên đợi không": các chi tiết hứa, tháng 3, im lặng, đợi đều mất. Lời giải chỉ còn nói "chuyện tình cảm" chung chung. AI thì nhắc lại đúng hoàn cảnh đó.
 
-### C1. Schema
-- `reports.status` enum mới `report_status` (`pending`, `replied`, `resolved`, `closed`). Default `pending`. Backfill: `resolved=true` → `resolved`, ngược lại `pending`. Giữ cột `resolved` để tương thích, không xóa.
-- Bảng mới `report_replies(id, report_id, author_id, body text, created_at)`.
-- `profiles.admin_note text NULL` — lưu lý do duyệt/từ chối gần nhất.
-- RLS `report_replies`:
-  - SELECT: admin, reporter (report.user_id = auth.uid()), hoặc owner của business target (nếu target_type='business').
-  - INSERT: cùng tập trên + author_id = auth.uid().
-- Trigger `notify_report_reply`: notify reporter (nếu author là admin/business owner) và notify business owner (nếu author là reporter/admin) — kèm type mới `report_reply`.
-- Cập nhật `notify_profile_status`: kèm `admin_note` vào body khi rejected/approved.
-- Thêm NotifType: `report_reply`.
+3. **Kết luận theo phép cộng điểm, không theo ý nghĩa.** Câu chốt CÓ/KHÔNG/NÊN chỉ lấy từ `toneTotal`. Hai trải bài cùng tổng điểm nhưng câu chuyện ngược nhau vẫn ra cùng một câu chốt. Lá ngược luôn bị tính -1 (dù đã có danh sách SOFT_REV/HARD_UP ngoại lệ), nên rút được nhiều lá ngược là gần như chắc chắn ra câu chốt tiêu cực.
 
-### C2. UI Admin
-- `Admin.tsx → ReportsSection`:
-  - Hiển thị badge status (pending/replied/resolved/closed) thay vì checkbox resolved.
-  - Mở rộng từng report: list `report_replies` (avatar + tên + body + time), input + nút "Gửi phản hồi".
-  - Dropdown thay đổi status. "Đã xử lý" set `resolved=true` + `status='resolved'`.
-- `Admin.tsx → MemberDetail` khi pending:
-  - Nút Duyệt giữ nguyên (kèm `admin_note` tùy chọn).
-  - Nút Từ chối: bắt buộc nhập lý do (textarea inline). Save `admin_note` rồi `status='rejected'`.
+4. **Vị trí lá không thật sự đổi cách đọc lá.** `posName` chỉ là nhãn; nội dung vẫn là nghĩa chung của lá + mẫu câu theo nhóm (state/action/block/result). Cùng là Ngôi Sao, ở vị trí "Điều cản trở" vẫn đọc gần giống ở "Kết quả", nên người đọc thấy lạ, mâu thuẫn.
 
-### C3. UI Doanh nghiệp (Profile.tsx ReportsInbox)
-- Hiển thị status badge, list replies, ô nhập + nút "Trả lời".
-- Nút "Đánh dấu đã xử lý" → set `status='resolved'`, `resolved=true`.
+5. **Ghép câu từ nhiều kho viết riêng → giọng văn lẫn lộn và dễ lặp.** Cùng một lá có thể đi qua nghĩa lá, domainText, phần đuôi mẫu scene, ROLE_LEAD, ADVICE theo chất, `bank.tip`. Mỗi kho do một người/một lần viết riêng, nên có lúc lặp ý ("hy vọng ... tin tưởng ... hy vọng"), có lúc đổi giọng giữa câu. `usedTails`/`rotate` chỉ chống lặp đúng nguyên câu, không chống lặp ý.
 
-### C4. UI người báo cáo
-- Trang `Notifications`: khi type=`report_reply`, click chuyển đến… (chưa có trang chi tiết report). Giải pháp tối thiểu: hiển thị body notification kèm preview reply (đã có từ trigger). Không tạo trang mới để không phình scope.
+6. **Không nhớ cuộc trò chuyện xung quanh.** `context` chỉ được dùng khi topic là "general", và chỉ để đoán scene. Những gì người dùng đã kể trước đó (đang thất nghiệp, vừa chia tay, tên người ấy) không đi vào lời giải. Hỏi nối kiểu "thế còn công việc?" sẽ rút một trải mới với câu hỏi mẫu chuẩn (`FOLLOW_TOPIC_Q`), không nối với trải trước. "Rút thêm" chỉ thêm một lá làm rõ với câu chốt 1 dòng theo điểm.
 
-Test E2E:
-1. Member gửi report → admin thấy status `pending`.
-2. Admin trả lời → reporter nhận notification `report_reply`, status đổi `replied`.
-3. Reporter trả lời lại từ Profile (nếu là DN owner cũng có thể). Admin thấy reply mới.
-4. Admin "Đánh dấu đã xử lý" → status `resolved`.
-5. Duyệt member: từ chối yêu cầu lý do, member nhận notification với lý do trong body.
+7. **Đọc dài và theo khuôn cố định.** Lần nào cũng đủ 7 khối, kể cả câu hỏi nhẹ. AI thì trả lời thẳng trước, độ dài vừa với câu hỏi. Khối "Thông điệp" và "Mở đầu" huyền bí (thắp nến, quả cầu) xoay vòng giữa vài câu, đọc 2–3 lần là thấy lặp.
 
-## Ngoài phạm vi đợt này (sẽ làm sau theo yêu cầu)
-- Mục 5 (tắt auto-notify offer), 7 (khu vực động), 9 đầy đủ, 10 (DN tự quản offer), 11 (lịch giờ/thứ), 12 chi tiết hơn.
+8. (Phụ) **Hai luồng giải song song.** `readingNarrativeVi` cho tiếng Việt từ 2 lá trở lên, còn `readingText` cũ cho tiếng Anh/1 lá/lá làm rõ. Luồng cũ dùng cách đọc khác (TOPIC_LINE, ROLE_LEAD), nên chất lượng không đồng đều giữa các kiểu bói.
 
-## Kỹ thuật
-- Tất cả migration tuân thủ GRANT + RLS chuẩn.
-- Không sửa `types.ts` auto-gen của Supabase (sẽ regenerate sau migration). `src/lib/types.ts` (manual) sẽ cập nhật theo schema mới.
-- Không động `index.css` token (đã chuẩn teal).
+## Hướng cải thiện
+
+### Mức A — không dùng AI, vẫn chạy trên máy
+
+1. **Bước "kể chuyện" trước khi viết:** gom cả trải bài thành một mạch (ví dụ khó -> gỡ -> sáng, thuận -> vướng, ...) từ điểm từng lá + vị trí, rồi chọn MỘT mẫu câu cho cả mạch, cài từ khoá 3 lá vào đó. Mẫu câu này thay cho dòng mũi tên hiện tại.
+2. **Nghĩa theo vị trí:** với 22 lá Ẩn Chính + nhóm Ẩn Phụ theo chất/số, thêm câu ngắn theo vai (cản trở / lời khuyên / kết quả). Có câu riêng thì dùng thay cho nghĩa chung.
+3. **Giữ chi tiết câu hỏi:** tách 1–3 cụm chi tiết (người, mốc thời gian, hành động: "đợi", "nhắn tin", "nghỉ việc") rồi chèn lại vào phần trả lời thẳng và lời khuyên. Cụm dài thì cắt gọn thay vì bỏ hết.
+4. **Kết luận theo mạch, không chỉ theo tổng điểm:** lá ở vị trí "kết quả" và "cản trở" có trọng số lớn hơn. Lá ngược có trong SOFT_REV không bị trừ điểm.
+5. **Dùng ngữ cảnh đã nhớ:** đưa hoàn cảnh từ bộ nhớ của Lomi (thất nghiệp, chia tay, loại hình kinh doanh) và câu người dùng vừa kể vào `context` mọi lúc, không chỉ khi topic là "general".
+6. **Độ dài theo câu hỏi:** bản rút gọn (trả lời thẳng + 3 lá ngắn + lời khuyên) làm mặc định, có nút "Xem giải chi tiết" để mở đủ 7 khối.
+7. **Hỏi nối nối với trải cũ:** "thế còn công việc?" rút 1–3 lá mới nhưng nhắc lại lá trước ("lá Tháp lúc nãy ...").
+
+Ưu: miễn phí, chạy offline, giữ quy tắc #61/#62. Nhược: tốn công viết nội dung; vẫn có giới hạn với câu hỏi lạ.
+
+### Mức B — hybrid: rút bài trên máy, AI chỉ diễn giải
+
+1. Việc rút bài vẫn ở `drawForQuestion` (ngẫu nhiên thật, không để AI chọn lá).
+2. Gửi sang AI một gói đã cấu trúc: câu hỏi gốc, ngữ cảnh gần (2–3 tin), kind/scene/intent, từng lá + vị trí + xuôi/ngược + từ khoá + nghĩa trong kho, và điểm/hướng kết luận do Lomi tính sẵn. Nâng cấp `readingAiPrompt` hiện có thành gói này.
+3. Ràng buộc trong prompt: không đổi lá, không đổi xuôi/ngược, không hứa chắc, không bàn chuyện sức khoẻ/đầu tư ngoài nhắc nhở; độ dài theo câu hỏi.
+4. Dự phòng: AI lỗi, hết lượt hoặc không phải thành viên → hiện lời giải trên máy như bây giờ. Lá bài và hiệu ứng lật vẫn hiện ngay; lời giải AI đến sau.
+5. Chi phí và tuân thủ: dùng edge function `ai-assistant` đã có (đang tắt, `AI_ENABLED=false`), chỉ cho thành viên và có giới hạn lượt/ngày. Việc này trái với quyết định #62 ("Gemini: Kir bỏ"), nên cần anh quyết lại trước khi làm.
+
+## Đề xuất thứ tự
+
+1. Làm A1 + A3 + A4 trước: tác động lớn nhất tới cảm giác "trúng mạch", phạm vi chỉ trong `src/lib/tarot.ts`, thêm test cho các trải bài mẫu.
+2. Sau đó làm A6 (rút gọn mặc định), đụng tới phần hiển thị trong khung chat.
+3. Chỉ cân nhắc B nếu anh đồng ý mở lại AI.
+
+## Chi tiết kỹ thuật (tham chiếu)
+
+- Rút bài: `drawCards` (Fisher–Yates + `crypto.getRandomValues`), `rev = randInt(2)`.
+- Hiểu câu hỏi: `detectKind`, `detectTopic`, `sceneOf`, `detectIntent` (regex), `subjectOf` (tối đa 5 chữ, không thì dùng `TOPIC_NOUN`).
+- Lời giải: `readingNarrativeVi` (khối 1–7), `cardScore`/`toneTotal`/`rough`/`hard`, `kw`, `domainText`, `SCENE[scene][group]`, `ADVICE`, `vary`/`rotate` (chống lặp nguyên câu, lưu trên máy).
+- Nối tiếp: `isTarotMore` -> `drawClarifier` (1 lá), `FOLLOW_TOPIC_Q`, `tarotFollowUps`.
+- Hiển thị: `LomiTarot.tsx` chỉ lo hình lá + hiệu ứng lật; không có logic giải.
+- Định tuyến: `AiAssistant.tsx` các bước c/d/e (chờ câu hỏi, hỏi nối, nhận diện bói). Bước kiểm tra trong `lomiUnderstand.ts` trả lời câu hỏi luật Tarot trước khi bói.
