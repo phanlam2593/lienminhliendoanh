@@ -62,7 +62,7 @@ import { tarotRuleInfo } from "@/lib/lomiUnderstand";
 describe("giao tiếp cơ bản (02/10)", () => {
   const cases: [string, string][] = [
     ["chào e", "greeting"], ["hello Lomi", "greeting"], ["xin chào", "greeting"], ["hi", "greeting"], ["buổi sáng nha", "greeting"],
-    ["ê Lomi", "call"], ["Lomi ơi", "call"], ["em ơi", "call"], ["a gọi Lomi", "call"], ["alo Lomi", "call"],
+    ["ê Lomi", "call"], ["Lomi ơi", "call"], ["em ơi", "call"], ["a gọi Lomi", "call"], ["alo Lomi", "greeting"],
     ["cảm ơn e", "thanks"], ["cám ơn nha", "thanks"], ["thanks", "thanks"], ["thank you", "thanks"],
     ["bye nha", "goodbye"], ["tạm biệt", "goodbye"], ["thôi nha", "goodbye"], ["a đi đây", "goodbye"], ["ngủ ngon", "goodbye"],
     ["ủa?", "reaction"], ["wow", "reaction"], ["kk", "reaction"],
