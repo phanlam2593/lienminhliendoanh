@@ -41,7 +41,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
-import { GATE_ASK_BACK, gate, understand } from "@/lib/lomiUnderstand";
+import { GATE_ASK_BACK, gate, tarotRuleInfo, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartOpen, heartStart, heartThemeOf, type HeartReply } from "@/lib/lomiHeart";
@@ -577,7 +577,7 @@ export function AiChat({
     const last = msgs[msgs.length - 1];
     const lastA0 = last?.role === "assistant" ? last : undefined;
     // Understanding Gate (01/10) — câu sửa lại ("không, a hỏi…", "ý mình là…") → bỏ ngữ cảnh cũ, hiểu phần sau như câu mới.
-    const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content }, true) : null;
+    const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content, inFlow: !!(lastA0?.heart || lastA0?.dishAsk || lastA0?.bizPick || lastA0?.bizTopicPick || lastA0?.issue || lastA0?.tarotAwait) }, true) : null;
     if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
     if (corr?.action === "rewrite") {
       q = corr.q;
@@ -726,6 +726,9 @@ export function AiChat({
 
       // c) Lomi vừa hỏi "muốn hỏi bài điều gì?" → tin này chính là câu hỏi.
       if (lastA?.tarotAwait) {
+        // Hỏi luật Tarot ("tarot có bài ngược hả?") lúc đang chờ câu hỏi → trả lời luật, vẫn chờ câu hỏi bói.
+        const ti = en ? null : tarotRuleInfo(q);
+        if (ti) return localReply(q, { role: "assistant", content: ti.text, local: true, tarotAwait: true, tarotSpread: lastA.tarotSpread, quick: lastA.quick });
         if (isTarotCancel(q)) return localReply(q, { role: "assistant", content: en ? TAROT_CANCEL.en : TAROT_CANCEL.vi, local: true });
         // Chế độ bói: chủ đề → bói luôn; "một người cụ thể" / trải 5–10 lá → hỏi tiếp câu hỏi.
         const mode = TAROT_MODE[raw];
@@ -768,6 +771,11 @@ export function AiChat({
         const g = gate(q, { lastText: lastA?.content, faqId: lastA?.faqId, topic, inFlow });
         if (g?.action === "reply") return localReply(q, { role: "assistant", content: g.reply.text, local: true, quick: g.reply.quick });
         if (g?.action === "skip") gateSkip = g.intent;
+        // Giao tiếp cơ bản: ưu tiên câu đáp sẵn của chitChat (nhớ tên, chào theo giờ…), không có thì dùng câu của gate.
+        if (g?.action === "social") {
+          const cc = g.preferChit ? chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name), raw) : null;
+          return localReply(q, { role: "assistant", content: cc?.text ?? g.reply.text, local: true, quick: cc?.quick });
+        }
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
