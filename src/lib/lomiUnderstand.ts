@@ -380,7 +380,31 @@ export type GateCtx = UCtx & { topic?: GateTopic };
 export type Gate =
   | { action: "reply"; reply: UReply }
   | { action: "rewrite"; q: string } // câu sửa lại — dùng q mới, BỎ ngữ cảnh tin trước
-  | { action: "skip"; intent: string }; // không cho module chuyên biệt bắt câu này
+  | { action: "skip"; intent: string } // không cho module chuyên biệt bắt câu này
+  | { action: "social"; reply: UReply; preferChit: boolean }; // giao tiếp cơ bản — preferChit: ưu tiên câu đáp sẵn của chitChat
+
+// ── Giao tiếp cơ bản (02/10): chào, gọi Lomi, cảm ơn, tạm biệt, xác nhận, cảm thán, có/không, hỏi thăm ──
+const TAIL = "( (e|em|lomi|ban|anh|chi|nha|nhe|nhen|ne|a|oi|ha|nhieu|lam|qua|roi|luon|vay|z|ta|ca nha|mn|moi nguoi|bro|cung|you))*$";
+const SOCIAL: [string, RegExp, string[], boolean][] = [
+  ["greeting", new RegExp(`^(e |oi )?(chao|xin chao|hello|helo|hi|hey|alo|a lo|he lo|yo|chao buoi (sang|trua|chieu|toi)|buoi (sang|trua|chieu|toi)( vui ve| tot lanh)?|good (morning|afternoon|evening))${TAIL}`), ["Chào bạn nè 👋 Hôm nay Lomi giúp gì được bạn?", "Hello 😄 Lomi đây, bạn cần gì nè?"], true],
+  ["call", new RegExp(`^(e |alo |oi )?(lomi|em|e)( oi)+${TAIL}|^(e|alo|oi|hey|hi) lomi${TAIL}|^(a|anh|chi|c|minh|tui|toi|em|e|t) (goi|keu) (lomi|em|e)${TAIL}`), ["Dạ, Lomi nghe nè 🙋 Bạn cần gì nè?", "Có Lomi đây 😄 Bạn nói đi nha."], true],
+  ["thanks", new RegExp(`^(cam on|cam on nhieu|thanks|thank|thank you|thanks nhieu|tks|thx|camon|cmon|cam on nha)${TAIL}`), ["Không có gì nè 😊 Cần gì cứ hỏi Lomi nha!", "Lomi vui vì giúp được bạn 💚"], true],
+  ["goodbye", new RegExp(`^(bye|bai|bye bye|bb|pp|tam biet|thoi nha|thoi nhe|thoi bye|thoi di ngu|ngu ngon|di ngu|di ngu day|off nha|out nha|hen gap lai|gap lai sau|(a|anh|em|e|minh|tui|toi|chi|c|t) (di|ngu|off|out|di ngu|di lam) (day|nha|nhe|roi|nhen|truoc))${TAIL}`), ["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Okie, hẹn gặp lại bạn nha 💚"], true],
+  ["smalltalk", new RegExp(`^((lomi|em|e|ban) )?((hom nay|dao nay|nay) )?(sao roi|the nao roi|on khong|khoe khong|vui khong|ra sao|co do khong|con do khong|co o do khong|online khong|dang lam gi|lam gi do|ranh khong|co ranh khong|an com chua|ngu chua)${TAIL}`), ["Lomi vẫn ở đây, khoẻ re nè 😄 Còn bạn hôm nay sao rồi?", "Có Lomi đây nè 🙋 Bạn kể Lomi nghe hôm nay thế nào đi!"], true],
+  ["opener", new RegExp(`^(cho )?(a|anh|chi|c|em|e|minh|tui|toi|t|to)( muon| can)? hoi( (cai nay|cai|chut|xiu|ti|cau nay|mot chut|mot cau|voi|vs|nha|nhe|ne|lomi|duoc khong|dc khong))*$`), ["Dạ, bạn hỏi đi nè 😄 Lomi nghe đây.", "Hỏi thoải mái luôn nha 😊"], false],
+  ["ack", /^(ok|oke|okie|oki|okay|ok la|okela|u|uk|uh|um|uhm|duoc|dc|duoc roi|on|on roi|hay|hay do|hay qua|hay ghe|good|nice|chuan|dung roi|vang|da|da vang)( (nha|nhe|e|em|lomi|ne|a|roi|luon|qua|ghe|vay))*$/, ["Okie 😊", "Dạ 👌", "Hihi okie nè 😄"], true],
+  ["reaction", /^(ua|ua vay|wow|oa|oi|ui|oh|o|haha+|hahaha+|hihi|hehe|kk+|hm+|troi|troi oi|troi dat|haiz+|that ha|that luon|ghe vay)( (vay|ta|z|ha|troi|luon))*$/, ["Sao vậy nè? 😯", "Hihi 😄", "Hửm, có gì hả? 👀"], true],
+  ["yes", /^(co|co chu|co a|u co|co nha|muon|co muon)$/, ["Okie 😄 Bạn nói thêm chút để Lomi làm đúng ý nha?"], false],
+  ["no", /^(khong|ko|k|hong|khum|thoi|khoi|khong can|thoi khoi)( (nha|nhe|a|dau|lomi))*$/, ["Dạ okie, không sao nè 😊 Cần gì cứ nói Lomi nha."], false],
+];
+const pickS = (a: string[]) => a[Math.floor(Math.random() * a.length)];
+
+/** Giao tiếp cơ bản — trả intent + câu đáp ngắn, hoặc null. */
+export function socialIntent(q: string): { intent: string; text: string; preferChit: boolean } | null {
+  const n = normalizeVi(q);
+  for (const [intent, re, texts, preferChit] of SOCIAL) if (re.test(n)) return { intent, text: pickS(texts), preferChit };
+  return null;
+}
 
 const PRON = "(?:a|anh|em|mình|tôi|tui|chị|t|tớ|tao|e|c)";
 const NEG = "(?:không phải|ko phải|k phải|hông phải|không|ko|hông|hong|k)(?:\\s+(?:đâu|mà|nha))?[\\s,.!]+";
@@ -403,6 +427,9 @@ export function isShortFollowUp(q: string): boolean {
 }
 
 /** Câu hỏi VỀ Tarot (luật bài), không phải xin bói: "tarot có bài ngược hả?", "tarot bao nhiêu lá". */
+export function tarotRuleInfo(q: string): UReply | null {
+  return tarotInfo(normalizeVi(q));
+}
 function tarotInfo(n: string): UReply | null {
   if (!/\b(tarot|la bai|bo bai)\b/.test(n)) return null;
   if (/\b(nguoc|xuoi|lat nguoc)\b/.test(n))
@@ -441,6 +468,11 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
   if (ti) return { action: "reply", reply: ti };
 
   if (ctx.inFlow) return null;
+
+  // 2b) Giao tiếp cơ bản. Lomi vừa hỏi một câu (có "?") mà người dùng đáp có/không → để luồng hiện có hiểu theo câu hỏi.
+  const so = socialIntent(q);
+  if (so && !((so.intent === "yes" || so.intent === "no") && lastAsked))
+    return { action: "social", reply: { intent: so.intent, text: so.text }, preferChit: so.preferChit };
 
   // 3) Tiếng cảm thán / phản ứng → không vào module kiến thức.
   if (FILLER.test(n)) return { action: "skip", intent: "filler" };
