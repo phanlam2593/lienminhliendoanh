@@ -1,7 +1,7 @@
 # Roadmap
 
-## Đang làm
-- Cải thiện Tarot local (10 mục audit): giữ chi tiết câu hỏi, đọc theo vị trí, mối liên hệ giữa lá, story arc, kết luận không chỉ theo điểm, ngược ≠ xấu, giảm template, reading ngắn hội thoại, follow-up giữ context, giữ draw/API. Tests + typecheck + commit SHA.
+## Xong
+- Cải thiện Tarot local (10 mục audit): chi tiết câu hỏi, đọc theo vị trí, mối liên hệ giữa lá, story arc, kết luận theo mạch+vị trí, ngược mềm ≠ xấu, giảm template, reading ngắn hơn, follow-up giữ context. 233 test đạt, typecheck sạch, build OK.
 
 ## Chờ anh quyết (blocker)
 - Hybrid AI diễn giải Tarot (mức B) — trái quyết định #62 (bỏ Gemini), chờ Kir duyệt.
