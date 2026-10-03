@@ -77,6 +77,11 @@ describe("tarot QA vòng cuối", () => {
     expect(tail(soft)).not.toBe(tail(bright));
     expect(tail(soft)).not.toBe(tail(hard));
     expect(soft).not.toContain("CHƯA NÊN");
+    expect(soft).not.toContain("nghiêng về NÊN");
+    expect(soft).toMatch(/lưng chừng|để ngỏ|tuỳ vào/);
+    const plain = readingText(mk([SOFT_REV, SOFT_REV, SOFT_REV], "chuyện này có thành không?", "sca", { kind: "yesno" } as any), "vi");
+    expect(plain).not.toContain("nghiêng về CÓ");
+    expect(plain).not.toContain("chưa phải lúc");
   });
   it("b) spread 1/2/3/5/10 lá không crash", () => {
     const ids = [0, 5, 19, 52, 30, 40, 60, 70, 12, 3];
