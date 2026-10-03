@@ -1845,6 +1845,80 @@ const VERDICT = [
 
 /** Lời giải tiếng Việt theo mẫu Kir thích: liệt kê lá → giải từng lá theo chủ đề → quá trình của cả trải bài
  *  → khung thời gian cụ thể (nếu hỏi "bao giờ") → kết luận thẳng câu hỏi → gợi ý bói tiếp. */
+// ── 03/10: đọc bài như một người đọc thật — giữ chi tiết câu hỏi, đọc theo vị trí,
+// đọc MỐI LIÊN HỆ giữa các lá và MẠCH CÂU CHUYỆN của cả trải, thay vì cộng điểm từng lá rời ──
+
+/** Chi tiết hữu ích trong câu hỏi: người, hành động/tình huống, mốc thời gian. */
+type QDetails = { person?: string; action?: string; time?: string };
+const DET_PERSON = /(người ấy|người đó|anh ấy|chị ấy|em ấy|crush|người yêu cũ|người yêu|chồng|vợ|sếp|đồng nghiệp|gia đình|ba mẹ|con mình)/iu;
+const DET_ACTION =
+  /(đợi|chờ đợi|nhắn tin|gọi điện|quay lại|tỏ tình|nghỉ việc|xin việc|phỏng vấn|đầu tư|mở quán|mở shop|chuyển nhà|đi xa|kết hôn|chia tay|đi thi|học lại|mua nhà|bán hàng)/iu;
+const DET_TIME = /(tháng \d{1,2}|tháng này|tháng sau|tháng tới|tuần này|tuần sau|tuần tới|cuối năm|đầu năm|giữa năm|năm nay|năm sau|hôm nay)/iu;
+function extractDetails(q: string): QDetails {
+  const d: QDetails = {};
+  const p = q.match(DET_PERSON);
+  if (p) d.person = p[1];
+  const a = q.match(DET_ACTION);
+  if (a) d.action = a[1];
+  const t = q.match(DET_TIME);
+  if (t) d.time = t[1];
+  return d;
+}
+
+/**
+ * Nghiêng sáng / trung lập / vướng của một lá.
+ * Lá NGƯỢC mềm (SOFT_REV — vd "sự thật dần sáng tỏ") KHÔNG tính là xấu: chỉ tính trung lập.
+ * Đây là tín hiệu chính cho mạch câu chuyện & kết luận; điểm số chỉ còn là tín hiệu phụ.
+ */
+function cardLean(d: TarotDraw): 1 | 0 | -1 {
+  if (hard(d)) return -1; // lá vướng thật (HARD_UP xuôi, hoặc ngược cứng)
+  return cardScore(d) > 0 ? 1 : 0;
+}
+
+/** Mạch câu chuyện của cả trải bài — khung diễn giải, không phải dự đoán chắc chắn. */
+type Arc = "up" | "down" | "bright" | "heavy" | "open";
+function storyArc(cards: TarotDraw[]): Arc {
+  const first = cardLean(cards[0]);
+  const last = cardLean(cards[cards.length - 1]);
+  if (last > first) return "up"; // vướng → sáng: áp lực → nhận ra → hành động
+  if (last < first) return "down"; // thuận → vướng: cần chậm lại ở đoạn cuối
+  if (first > 0) return "bright";
+  if (first < 0) return "heavy";
+  return "open"; // mạch còn ngỏ — hướng đi do bước tiếp theo của bạn
+}
+
+/** Câu nối giữa hai lá liền nhau: lá sau bổ nghĩa / chuyển hướng / làm rõ lá trước. */
+function linkPhrase(prev: TarotDraw, cur: TarotDraw): string {
+  const a = cardLean(prev);
+  const b = cardLean(cur);
+  if (b > a)
+    return vary("link-up", ["Nhưng rồi mọi thứ bắt đầu chuyển —", "Điểm ngoặt nằm ở đây —", "Từ đó, câu chuyện đổi hướng —"]);
+  if (b < a)
+    return vary("link-down", ["Tuy nhiên, có điều cần để ý —", "Chỉ là đường tới đó có đoạn hơi khúc khuỷu —", "Nhưng chưa hết —"]);
+  return vary("link-same", ["Cùng một mạch với lá trước —", "Lá này nói tiếp đúng điều lá trước đang nói —", "Nối tiếp mạch đó,"]);
+}
+
+/** Một mẫu câu chuyện cho CẢ trải bài (thay cho việc chỉ nối từ khoá bằng mũi tên). */
+const ARC_STORY: Record<Arc, string[]> = {
+  up: [
+    "Câu chuyện của bạn đi từ {k1}, qua {k2}, và mở ra ở {k3} — kiểu “áp lực → nhận ra → hành động”: đoạn đầu hơi chật vật nhưng càng về sau càng sáng.",
+    "Mạch bài đi lên rõ rệt: bắt đầu với {k1}, lật mặt vấn đề ở {k2}, và kết lại bằng {k3}. Những gì đang nặng sẽ dần được gỡ.",
+  ],
+  down: [
+    "Khởi đầu với {k1} khá thuận, nhưng {k2} cho thấy điểm cần chậm lại, và {k3} nhắc rằng kết quả phụ thuộc vào cách bạn xử lý đoạn giữa.",
+    "Câu chuyện mở đầu sáng ({k1}) rồi gặp nút ở {k2}; {k3} ở cuối không phải dấu xấu — là lời nhắc đừng chạy quá nhanh qua đoạn đó.",
+  ],
+  bright: [
+    "Cả trải bài cùng một mạch sáng: {k1} → {k2} → {k3}. Mọi thứ đang đi đúng nhịp — việc của bạn là giữ đều, đừng tự làm phức tạp thêm.",
+  ],
+  heavy: [
+    "Cả trải bài đang nói về một giai đoạn cần gỡ: {k1} → {k2} → {k3}. Không phải dấu xấu đâu — là lời nhắc đi chậm lại và xử lý từng nút một.",
+  ],
+  open: [
+    "Mạch bài còn để ngỏ: {k1} → {k2} → {k3}. Bài không chốt hộ bạn — hướng đi sẽ rõ theo bước tiếp theo bạn chọn.",
+  ],
+};
+
 function readingNarrativeVi(r: TarotReading): string {
   const kind = r.kind ?? "open";
   const q = r.question ?? "";
@@ -1864,33 +1938,39 @@ function readingNarrativeVi(r: TarotReading): string {
         ? ["result", "result"]
         : ROLES[kind as Exclude<TarotKind, "choice">].map((x) => ROLE_GROUP[x]);
   const pos = r.pos ?? [];
-  const roles: Role[] = kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
-  const rough = (d: TarotDraw) => (d.rev ? hard(d) : hard(d) || cardScore(d) < 0);
+  const rough = (d: TarotDraw) => cardLean(d) < 0;
   const cardName = (d: TarotDraw) => {
     const c = tarotCard(d.id);
     return `${c.name.vi} (${c.name.en})${d.rev ? " · ngược" : ""}`;
   };
   const posName = (i: number) => (kind === "choice" ? `Nếu chọn “${pos[i]?.vi ?? ""}”` : (pos[i]?.vi ?? ""));
+  const arc = storyArc(r.cards);
+  const det = extractDetails(q);
   const out: string[] = [];
 
-  // 1) Mở đầu + câu hỏi + danh sách lá
+  // 1) Mở đầu ngắn — vào thẳng vấn đề, giữ nguyên câu hỏi và các chi tiết (người / việc / mốc thời gian)
   const qShow = capFirst(q.replace(/\s+/g, " ").replace(/[.!…]+$/, ""));
-  out.push(
-    `${it ? vary(`intro-${it.id}`, it.intro) : vary(`open-${dom}`, [...OPEN_BY_DOMAIN[dom], ...MYSTIC_OPEN])} ${vary("disc", DISCLAIMER)}\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`,
-  );
+  let intro = `${r.context ? `${vary("ctx-nod", ["Nối tiếp chuyện mình đang nói lúc nãy —", "Vẫn mạch chuyện nãy giờ của mình —"])} ` : ""}${
+    it ? vary(`intro-${it.id}`, it.intro) : vary(`open-${dom}`, [...OPEN_BY_DOMAIN[dom], ...MYSTIC_OPEN])
+  } ${vary("disc", DISCLAIMER)}\nCâu hỏi: “${qShow}${/[?]$/.test(qShow) ? "" : "?"}”`;
+  const detBits = [det.person && `về ${det.person}`, det.action && `chuyện ${det.action}`, det.time && `trong ${det.time}`].filter(Boolean);
+  if (detBits.length) intro += `\nLomi nghe rõ bạn đang hỏi ${detBits.join(", ")} — bài sẽ đọc theo đúng chuyện đó nha.`;
+  out.push(intro);
   const nWord = ["", "Một", "Hai", "Ba"][r.cards.length] ?? String(r.cards.length);
   const lead = vary("list", LIST_LEAD).replace("{n}", String(r.cards.length)).replace("{N}", nWord);
   out.push(`${lead}\n${r.cards.map((d, i) => `${i + 1}. ${posName(i)} — ${cardName(d)}`).join("\n")}`);
 
   const usedTails = new Set<string>();
-  // 2) Từng lá: nghĩa lá → nghĩa theo lĩnh vực → áp vào hoàn cảnh người hỏi
+  // 2) Từng lá: đọc THEO VỊ TRÍ (hiện trạng / trở ngại / lời khuyên / kết quả…), lá sau nối mạch lá trước
   r.cards.forEach((d, i) => {
     const c = tarotCard(d.id);
     const meaning = d.rev ? c.rev.vi : c.up.vi;
     const g = groups[i] ?? "state";
     const tpl = kind === "choice" ? [CHOICE_TPL[0][i % 2], CHOICE_TPL[1][i % 2]] : g === "time" ? TIME_TPL : g === "phase" ? PHASE_TPL : bank[g];
     const apply = fillT(tpl[rough(d) ? 1 : 0], kw(d, false), S);
-    const lines = [`**🃏 ${i + 1}. ${cardName(d)} — ${posName(i)}**`, meaning];
+    const lines = [`**🃏 ${i + 1}. ${cardName(d)} — ${posName(i)}**`];
+    if (i > 0) lines.push(linkPhrase(r.cards[i - 1], d));
+    lines.push(meaning);
     const dt = domainText(d, dom);
     if (dt) {
       lines.push(dt);
@@ -1913,36 +1993,30 @@ function readingNarrativeVi(r: TarotReading): string {
     out.push(lines.join("\n"));
   });
 
-  // 3) 🔗 Mối liên hệ giữa các lá — đọc cả trải bài như một câu chuyện
-  const firstS = cardScore(r.cards[0]);
-  const lastS = cardScore(r.cards[r.cards.length - 1]);
-  const arcUp = lastS > firstS;
-  const arcDown = lastS < firstS;
+  // 3) 🔗 Mạch câu chuyện — một câu chuyện cho cả trải bài (áp lực → nhận ra → hành động…)
   if (r.cards.length >= 3) {
-    const arc = arcUp
-      ? vary("arc-up", [" Một mạch đi lên — tín hiệu khá dễ thương đó.", " Càng về sau càng sáng, đáng mừng nha.", " Khởi đầu hơi chật vật nhưng kết lại khá ổn."])
-      : arcDown
-        ? vary("arc-down", [" Đoạn cuối cần bạn để tâm nhiều hơn một chút.", " Khởi đầu thuận nhưng về sau cần cẩn thận hơn nha."])
-        : "";
     // Trải 10 lá: kể theo trục chính (Hiện tại → Thử thách → Tương lai gần → Kết quả) cho gọn, dễ theo.
     const keyCards = r.spread === "celtic" ? [0, 1, 5, 9].map((i) => r.cards[i]) : r.cards;
-    const story =
-      vary("journey", JOURNEY)
-        .replace("{names}", keyCards.map((d) => tarotCard(d.id).name.vi).join(" → "))
-        .replace("{n}", String(r.cards.length))
-        .replace("{stages}", keyCards.map((d) => kw(d, false)).join(" → ")) + arc;
-    out.push(`**🔗 Mối liên hệ giữa các lá**\n${story}`);
+    const story = vary(`arc-${arc}`, ARC_STORY[arc])
+      .replace("{k1}", kw(keyCards[0], false))
+      .replace("{k2}", kw(keyCards[1], false))
+      .replace("{k3}", kw(keyCards[2], false));
+    out.push(`**🔗 Mạch câu chuyện**\n${story}\n(${keyCards.map((d) => tarotCard(d.id).name.vi).join(" → ")})`);
   }
 
-  // 4) 🔮 Tổng quan — nhận định cả trải bài + trả lời thẳng câu hỏi
+  // 4) 🔮 Kết luận — dựa vào mạch câu chuyện + vị trí kết quả; điểm số chỉ là tín hiệu phụ
   const total = toneTotal(r.cards);
+  const resIdx = groups.lastIndexOf("result");
+  const resLean = cardLean(r.cards[resIdx >= 0 ? resIdx : r.cards.length - 1]);
+  // bucket: 0 = sáng, 1 = lưng chừng, 2 = vướng — quyết định bởi mạch chuyện & lá kết quả, không chỉ tổng điểm
+  const bucket: 0 | 1 | 2 =
+    arc === "up" || arc === "bright" || (arc === "open" && resLean >= 0) ? 0 : (arc === "down" || arc === "heavy") && resLean < 0 ? 2 : 1;
   const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
   const overview: string[] = [];
   if (r.cards.length >= 3) {
     const n = r.cards.length;
-    if (arcUp) overview.push(`Trải bài đi từ ${kw(r.cards[0], false)} tới ${kw(r.cards[n - 1], false)} — thiên về một quá trình phát triển dần hơn là thay đổi đột ngột.`);
-    else if (arcDown) overview.push(`Trải bài mở đầu khá thuận nhưng càng về sau càng cần chú ý, nhất là ${kw(r.cards[n - 1], false)}.`);
-    else overview.push("Năng lượng cả trải bài khá đều, không có bước ngoặt quá lớn — mọi thứ sẽ đi theo nhịp bạn giữ.");
+    if (arc === "up") overview.push(`Trải bài đi từ ${kw(r.cards[0], false)} tới ${kw(r.cards[n - 1], false)} — thiên về một quá trình phát triển dần hơn là thay đổi đột ngột.`);
+    else if (arc === "down") overview.push(`Trải bài mở đầu khá thuận nhưng càng về sau càng cần chú ý, nhất là ${kw(r.cards[n - 1], false)}.`);
     const majors = r.cards.filter((d) => tarotCard(d.id).suit === "major").length;
     if (majors * 2 >= n) overview.push("Nhiều lá Ẩn Chính xuất hiện — đây là giai đoạn có ý nghĩa lớn, không chỉ là chuyện nhất thời.");
     const cnt: Partial<Record<TarotSuit, number>> = {};
@@ -1976,32 +2050,28 @@ function readingNarrativeVi(r: TarotReading): string {
     // Hỏi "bao giờ" → trả lời theo tốc độ (sớm / đúng khung / chậm hơn), không phán "không có".
     const lean =
       kind === "timing" && scene !== "health"
-        ? total >= 1
+        ? bucket === 0
           ? "nghiêng về CÓ — và có thể còn sớm hơn khung trên nếu bạn chủ động"
-          : total === 0
+          : bucket === 1
             ? "nghiêng về CÓ, khoảng đúng khung thời gian ở trên nếu bạn giữ nhịp"
             : "vẫn là CÓ, chỉ là có thể chậm hơn khung trên một chút — đừng nản nha"
         : scene === "health"
-          ? total >= 1
+          ? bucket === 0
             ? "khá tích cực — tinh thần tốt sẽ giúp mau khoẻ"
-            : total === 0
+            : bucket === 1
               ? "cho thấy cơ thể cần thêm thời gian"
               : "nhắc bạn kiên nhẫn và đừng chủ quan"
           : should
-            ? total >= 3
-              ? "nghiêng khá rõ về NÊN"
-              : total >= 1
-                ? "nghiêng về NÊN, miễn là bạn giữ chừng mực"
-                : total === 0
-                  ? "còn lưng chừng — tuỳ vào cảm nhận của bạn"
-                  : "nghiêng về CHƯA NÊN lúc này"
-            : total >= 3
-              ? "nghiêng khá rõ về CÓ"
-              : total >= 1
-                ? "nghiêng về CÓ nếu bạn chủ động thêm một chút"
-                : total === 0
-                  ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
-                  : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
+            ? bucket === 0
+              ? "nghiêng về NÊN, miễn là bạn giữ chừng mực"
+              : bucket === 1
+                ? "còn lưng chừng — tuỳ vào cảm nhận của bạn"
+                : "nghiêng về CHƯA NÊN lúc này"
+            : bucket === 0
+              ? "nghiêng về CÓ nếu bạn chủ động thêm một chút"
+              : bucket === 1
+                ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
+                : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
     const tail = kind === "timing" ? "Tarot không thể xác nhận một ngày cụ thể đâu 😄" : "Quyết định cuối cùng vẫn là ở bạn 😄";
     const [c1, c2, c3] = r.cards;
     const answerText =
@@ -2013,33 +2083,31 @@ function readingNarrativeVi(r: TarotReading): string {
             .replace("{go3}", rough(c3) ? `gỡ bỏ ${kw(c3, false)}` : `dựa vào ${kw(c3, false)}`)
             .replace("{res3}", rough(c3) ? `còn vướng ${kw(c3, false)}` : `nghiêng về ${kw(c3, false)}`)
         : null;
-    const leanUse = kind !== "timing" && it?.lean ? it.lean[total >= 1 && !arcDown ? 0 : total >= 0 ? 1 : 2] : lean; // bài đi xuống ở cuối → không kết "khá sáng" cho khỏi vênh với phần mối liên hệ
+    const leanUse = kind !== "timing" && it?.lean ? it.lean[bucket] : lean;
     verdictLine = answerText
       ? `${vary("answer", ANSWER_LEAD).replace("{q}", askQ)} ${answerText}`
       : `${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", leanUse)} ${tail}`;
   }
-  out.push(`**🔮 Tổng quan**\n${[...overview, verdictLine].join(" ")}`);
+  out.push(`**🔮 Kết luận**\n${[...overview, verdictLine].join(" ")}`);
 
-  // 5) ⚠️ Điều cần lưu ý — lá “yếu” nhất trong trải bài (tránh kiểu phán chắc tương lai)
+  // 5) ⚠️ Điều cần lưu ý — chỉ nhắc khi thật sự có lá vướng (lá ngược mềm không tính là vướng)
   const weakest = r.cards.map((d, i) => ({ d, i, sc: cardScore(d) })).sort((a, b) => a.sc - b.sc)[0];
-  const cautionText =
-    weakest && rough(weakest.d)
-      ? `${vary("caution", [
-          "Đừng để {k} kéo bạn lại — đây là điểm cần giữ nhất trong trải bài (lá {n} ở vị trí “{p}”).",
-          "Lá {n} ở vị trí “{p}” nhắc bạn cẩn thận với {k}. Nhận ra sớm thì xử lý nhẹ nhàng hơn nhiều.",
-        ])
-          .replace("{k}", kw(weakest.d, false))
-          .replace("{n}", tarotCard(weakest.d.id).name.vi)
-          .replace("{p}", posName(weakest.i).replace(/^Nếu chọn “|”$/g, ""))}`
-      : kind === "timing"
-        ? "Đừng quá nóng vội tìm kết quả ngay lập tức — trải bài nhấn mạnh việc chuẩn bị nền tảng trước khi mong thành quả."
-        : "Bài khá thuận, nhưng đừng vì thế mà chủ quan — kết quả tốt vẫn cần bạn giữ nhịp đều đặn.";
-  out.push(`**⚠️ Điều cần lưu ý**\n${cautionText}`);
+  if (weakest && rough(weakest.d))
+    out.push(
+      `**⚠️ Điều cần lưu ý**\n${vary("caution", [
+        "Đừng để {k} kéo bạn lại — đây là điểm cần giữ nhất trong trải bài (lá {n} ở vị trí “{p}”).",
+        "Lá {n} ở vị trí “{p}” nhắc bạn cẩn thận với {k}. Nhận ra sớm thì xử lý nhẹ nhàng hơn nhiều.",
+      ])
+        .replace("{k}", kw(weakest.d, false))
+        .replace("{n}", tarotCard(weakest.d.id).name.vi)
+        .replace("{p}", posName(weakest.i).replace(/^Nếu chọn “|”$/g, ""))}`,
+    );
 
-  // 6) 💡 Lời khuyên — việc cụ thể theo bối cảnh + lời khuyên của lá cuối
+  // 6) 💡 Lời khuyên — việc cụ thể theo bối cảnh + lời khuyên của lá cuối + câu chốt
   const lastCard = r.cards[r.cards.length - 1];
   const adv = ADVICE[tarotCard(lastCard.id).suit][rough(lastCard) ? 1 : 0];
-  out.push(`**💡 Lời khuyên**\n${bank.tip[total >= 1 ? 0 : 1]} ${adv}`);
+  const outro = (it ? vary(`outro-${it.id}`, it.outro) : vary(`close-${dom}`, MYSTIC_CLOSE[dom])).trim();
+  out.push(`**💡 Lời khuyên**\n${bank.tip[total >= 1 ? 0 : 1]} ${adv}\n“${outro}”`);
 
   if (r.topic === "health")
     out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
@@ -2047,10 +2115,7 @@ function readingNarrativeVi(r: TarotReading): string {
   if (it?.invest)
     out.push("💡 Lá bài chỉ để tham khảo tinh thần thôi nha — quyết định bỏ vốn nên dựa trên số liệu thật, tìm hiểu kỹ và hỏi thêm người có kinh nghiệm.");
 
-  // 7) ✨ Thông điệp — một câu “chữ ký” theo đúng ý câu hỏi
-  out.push(`**✨ Thông điệp**\n“${(it ? vary(`outro-${it.id}`, it.outro) : vary(`close-${dom}`, MYSTIC_CLOSE[dom])).trim()}”`);
-
-  // 5) Gợi ý bói tiếp
+  // 7) Gợi ý bói tiếp
   const nx = (it?.next ?? SCENE_NEXT[scene]).filter((x) => x.startsWith("Bói tiếp")).map((x) => `“${x.replace("Bói tiếp: ", "")}”`);
   out.push(
     nx.length
