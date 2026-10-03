@@ -565,6 +565,7 @@ export function drawClarifier(prev: TarotReading): TarotReading {
     kind: "open",
     question: prev.question ?? "",
     pos: [P("Lá làm rõ", "Clarifier")],
+    ...(prev.context ? { context: prev.context } : {}),
   };
 }
 
@@ -2010,7 +2011,7 @@ function readingNarrativeVi(r: TarotReading): string {
   const resLean = cardLean(r.cards[resIdx >= 0 ? resIdx : r.cards.length - 1]);
   // bucket: 0 = sáng, 1 = lưng chừng, 2 = vướng — quyết định bởi mạch chuyện & lá kết quả, không chỉ tổng điểm
   const bucket: 0 | 1 | 2 =
-    arc === "up" || arc === "bright" || (arc === "open" && resLean >= 0) ? 0 : (arc === "down" || arc === "heavy") && resLean < 0 ? 2 : 1;
+    arc === "up" || arc === "bright" || (arc === "open" && resLean > 0) ? 0 : (arc === "down" || arc === "heavy") && resLean < 0 ? 2 : 1;
   const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
   const overview: string[] = [];
   if (r.cards.length >= 3) {
