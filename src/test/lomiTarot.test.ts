@@ -63,3 +63,46 @@ describe("tarot narrative — giữ ngữ cảnh hỏi tiếp", () => {
     expect(t).toMatch(/lúc nãy|nãy giờ/);
   });
 });
+
+import { drawClarifier } from "@/lib/tarot";
+
+describe("tarot QA vòng cuối", () => {
+  it("a) 3 lá ngược mềm → kết luận lưng chừng, không nghiêng CÓ/KHÔNG", () => {
+    const soft = readingText(mk([SOFT_REV, SOFT_REV, SOFT_REV], "em có nên nhắn tin cho người ấy không?"), "vi");
+    const bright = readingText(mk([BRIGHT1, BRIGHT2, BRIGHT1], "em có nên nhắn tin cho người ấy không?"), "vi");
+    const hard = readingText(mk([HARD, HARD, HARD], "em có nên nhắn tin cho người ấy không?"), "vi");
+    expect(soft).not.toBe(bright);
+    // phần kết luận khác hẳn cả trải sáng lẫn trải vướng
+    const tail = (t: string) => t.slice(t.indexOf("Mạch câu chuyện"));
+    expect(tail(soft)).not.toBe(tail(bright));
+    expect(tail(soft)).not.toBe(tail(hard));
+    expect(soft).not.toContain("CHƯA NÊN");
+    expect(soft).not.toContain("nghiêng về NÊN");
+    expect(soft).toMatch(/lưng chừng|để ngỏ|tuỳ vào/);
+    const plain = readingText(mk([SOFT_REV, SOFT_REV, SOFT_REV], "chuyện này có thành không?", "sca", { kind: "yesno" } as any), "vi");
+    expect(plain).not.toContain("nghiêng về CÓ");
+    expect(plain).not.toContain("chưa phải lúc");
+  });
+  it("b) spread 1/2/3/5/10 lá không crash", () => {
+    const ids = [0, 5, 19, 52, 30, 40, 60, 70, 12, 3];
+    for (const [sp, n] of [["sca", 3], ["ppf", 3], ["five", 5], ["celtic", 10], ["one", 1]] as const) {
+      const p = TAROT_SPREADS.find((s) => s.id === sp);
+      if (!p) continue;
+      const cards = ids.slice(0, n).map((id, i) => ({ id, rev: i % 2 === 1 }));
+      const t = readingText(mk(cards, "công việc tháng này thế nào?", sp as TarotSpread), "vi");
+      expect(t).not.toContain("undefined");
+    }
+    const two = [{ id: 0, rev: false }, { id: 52, rev: true }];
+    const t2 = readingText({ ...mk(two, "chọn A hay B?"), pos: posOf("sca").slice(0, 2) }, "vi");
+    expect(t2).not.toContain("undefined");
+  });
+  it("c) lá làm rõ giữ nguyên context của trải trước", () => {
+    const prev = mk([BRIGHT1, HARD, BRIGHT2], "công việc?", "sca", { context: "em vừa nghỉ việc" });
+    expect(drawClarifier(prev).context).toBe("em vừa nghỉ việc");
+    expect(drawClarifier(mk([BRIGHT1, HARD, BRIGHT2], "công việc?")).context).toBeUndefined();
+  });
+  it("d) chỉ nhắc 'lúc nãy' khi có context thật", () => {
+    const t = readingText(mk([BRIGHT1, HARD, BRIGHT2], "thế còn chuyện công việc thì sao?"), "vi");
+    expect(t).not.toMatch(/lúc nãy|nãy giờ/);
+  });
+});
