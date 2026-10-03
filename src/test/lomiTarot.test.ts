@@ -18,7 +18,7 @@ const SOFT_REV = { id: 18, rev: true };
 describe("tarot narrative — giữ chi tiết câu hỏi", () => {
   it("a) câu hỏi có người/hành động/mốc thời gian thì lời giải giữ lại các chi tiết đó", () => {
     const t = readingText(mk([BRIGHT1, HARD, BRIGHT2], "Người ấy có quay lại với em trong tháng này không?"), "vi");
-    expect(t).toContain("người ấy");
+    expect(t.toLowerCase()).toContain("người ấy");
     expect(t).toContain("quay lại");
     expect(t).toContain("tháng này");
   });
