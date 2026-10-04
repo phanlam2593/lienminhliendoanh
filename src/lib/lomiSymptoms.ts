@@ -860,7 +860,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   // Kể thêm chi tiết / hỏi "nên làm gì" mà không có triệu chứng mới → đáp gọn, không lặp lại cả bài phân tích.
   const compact = inHealth && prev.length > 0 && !real.some((id) => !prev.includes(id));
   // 04/10: câu hỏi KIẾN THỨC ("đau đầu là do đâu?") ≠ đang bị → không gán triệu chứng cho người hỏi.
-  const knowledge = !inHealth && !prev.length && !kid && !SELF_RE.test(` ${n} `) && KNOW_RE.test(` ${n} `);
+  const knowledge = !inHealth && !prev.length && !kid && !SELF_RE.test(` ${normalizeVi(text)} `) && KNOW_RE.test(` ${normalizeVi(text)} `);
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
   if (!knowledge && !inHealth && !prev.length && !kid && labels.length === 1 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
     out.push(`Bạn đang bị **${labels[0]}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• Bị bao lâu rồi, đau/khó chịu ở mức nào?\n• Có kèm sốt, nôn, hay triệu chứng nào khác không?`);
