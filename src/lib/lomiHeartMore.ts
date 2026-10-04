@@ -267,7 +267,7 @@ export const MORE_THEMES: Theme[] = [
     id: "depress",
     re: /\b(tram cam|bi tram cam|mat hung thu|khong con hung thu|khong muon lam gi|khong thiet gi|song khong muc dich|vo nghia qua|cuoc song vo nghia|te liet cam xuc|khong cam thay gi|buon keo dai|buon lau roi|khong thiet song)\b/,
     feel: [
-      "Lomi thương bạn nhiều lắm 🤍 Cảm giác trống rỗng, chẳng thiết gì kéo dài như vậy nặng nề thật sự.",
+      "Cảm giác trống rỗng, chẳng thiết gì kéo dài như vậy nặng nề thật sự.",
       "Cảm ơn bạn đã nói ra với Lomi. Khi mọi thứ đều mất màu, việc bạn vẫn tìm người để kể đã là một điều rất can đảm.",
     ],
     insight: [
@@ -431,7 +431,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "eating",
     re: /\b(nhin an de giam|nhin doi de giam|bo bua de giam can|an xong non|moc hong|so tang can qua|so an|an khong kiem soat|an vo do|an qua nhieu roi hoi han|chan an|bieng an|an uong roi loan|roi loan an uong|anorexia|bulimia)\b/,
-    feel: ["Cảm ơn bạn đã tin kể với Lomi 🤍 Chuyện ăn uống gắn với cảm xúc nhiều hơn người ta nghĩ, và bạn không phải một mình.", "Lomi thương bạn. Những gì bạn đang trải qua nghe rất mệt mỏi."],
+    feel: ["Cảm ơn bạn đã tin kể với Lomi 🤍 Chuyện ăn uống gắn với cảm xúc nhiều hơn người ta nghĩ, và bạn không phải một mình.", "Những gì bạn đang trải qua nghe rất mệt mỏi."],
     insight: [
       "Mối quan hệ với đồ ăn thường phản ánh những cảm xúc khó nói — căng thẳng, lo âu, áp lực. Không phải do bạn yếu đuối hay thiếu ý chí.",
       "Đây là chuyện sức khoẻ cần được hỗ trợ đúng cách, và có thể hồi phục được.",
@@ -448,7 +448,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "bullied",
     re: /\b(bi bat nat|bat nat minh|bi che gieu|bi cuoi nhao|bi treu choc|bi treu|bi chui tren mang|bi boc phot|bi xuc pham tren mang|bi bat nat online|bi nhom ban tay chay|bi co lap o lop|bi danh o truong)\b/,
-    feel: ["Bị bắt nạt, chế giễu là trải nghiệm rất tổn thương, Lomi thương bạn lắm 🥺", "Không ai đáng bị đối xử như vậy. Lỗi không nằm ở bạn đâu."],
+    feel: ["Bị bắt nạt, chế giễu là trải nghiệm rất tổn thương", "Không ai đáng bị đối xử như vậy. Lỗi không nằm ở bạn đâu."],
     insight: [
       "Người bắt nạt thường muốn thấy mình mạnh hơn bằng cách làm người khác nhỏ đi. Điều đó nói về họ, không phải về bạn.",
       "Im lặng chịu đựng một mình làm vết thương sâu hơn. Nói ra với người có thể giúp là việc can đảm, không phải “mách lẻo”.",
