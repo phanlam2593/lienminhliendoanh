@@ -83,8 +83,8 @@ const THEMES: Theme[] = [
     stepFirst: true,
     re: /\b(bi benh|mac benh|om qua|dang om|bi om|benh hoai|dau bung|dau dau qua|dau lung|di kham|ket qua kham|nhap vien|nam vien|phau thuat|mo xong|sut can|tang can|beo phi|suc khoe yeu|suc khoe khong tot|lo ve suc khoe|ung thu|benh nan y)\b/,
     feel: [
-      "Lomi thương bạn ghê 🥺 Có chuyện sức khoẻ thì lo lắng là đương nhiên.",
-      "Nghe bạn nói Lomi lo giùm bạn luôn đó. Sức khoẻ là chuyện lớn, bạn cứ kể Lomi nghe nha.",
+      "Có chuyện sức khoẻ thì lo lắng là đương nhiên.",
+      "Sức khoẻ là chuyện đáng để ý. Bạn kể rõ hơn để Lomi gợi ý sát hơn nha.",
     ],
     insight: [
       "Lúc lo về sức khoẻ, đầu mình hay tưởng tượng ra điều tệ nhất — nhất là khi đọc tìm hiểu trên mạng. Bác sĩ mới là người trả lời chính xác được.",
@@ -104,7 +104,7 @@ const THEMES: Theme[] = [
     id: "cheat",
     re: /\b(ngoai tinh|cam sung|bi cam sung|phan boi|lua doi|bi lua|co nguoi khac|co ban gai khac|co ban trai khac|di voi nguoi khac|bat cha|bat gap .* nhan tin|tuesday|nguoi thu ba)\b/,
     feel: [
-      "Bị người mình tin tưởng lừa dối là một trong những nỗi đau khó chịu nhất — Lomi thương bạn thật sự 🥺",
+      "Bị người mình tin tưởng lừa dối là một trong những nỗi đau khó chịu nhất",
       "Ôi… chuyện này chắc làm bạn chết lặng luôn. Cảm giác bị phản bội đau lắm, không phải ai cũng chịu nổi đâu 💔",
       "Lomi nghe mà thấy nghẹn thay bạn. Tin tưởng ai đó rồi bị phụ lòng — đau là đương nhiên, bạn không yếu đuối chút nào.",
     ],
@@ -132,8 +132,8 @@ const THEMES: Theme[] = [
     re: /\b(chia tay|that tinh|bi da|bi bo|nguoi yeu bo|nguoi yeu (minh|toi|em|anh|a|e|tui) bo|bo (minh|toi|em|anh|a|e|tui) (roi|di)|bo roi|bo minh|khong con yeu|het yeu|tan vo|ket thuc roi|dut tinh)\b/,
     feel: [
       "Chia tay đau lắm, Lomi hiểu mà 🥺 Như có một phần thói quen hằng ngày tự nhiên biến mất vậy.",
-      "Ôm bạn một cái thật chặt nè 🤗 Kết thúc một mối quan hệ chưa bao giờ là chuyện nhẹ nhàng.",
-      "Lomi thương bạn ghê. Mất đi một người từng rất thân thì trống trải là đương nhiên.",
+      "Kết thúc một mối quan hệ chưa bao giờ là chuyện nhẹ nhàng.",
+      "Mất đi một người từng rất thân thì trống trải là đương nhiên.",
     ],
     insight: [
       "Tâm lý học gọi đây là một kiểu “mất mát” — mình không chỉ mất một người, mà mất cả những kế hoạch, thói quen đã có với họ. Nên buồn lâu một chút cũng không sao.",
