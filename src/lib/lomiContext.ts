@@ -148,7 +148,12 @@ export function contextReply(text: string, ctxSubject?: string): ContextReply | 
     // "ý là cái kia á" → người dùng nói tới thứ KHÁC chủ thể đang nói → hỏi lại đúng 1 câu, không đoán.
     if (OTHER_RE.test(n)) return { text: `À, bạn đang nói tới chuyện khác ngoài ${s.label} hả? Bạn gõ rõ tên cái đó giúp Lomi nha.`, anchor };
     // "cái đó thì sao?", "vậy còn cái này?" → hiểu là vẫn hỏi về chủ thể đang nói.
-    if (!VAGUE_RE.test(n) && !/\b(thi sao|the con|vay con|con)\b/.test(n)) return null;
+    if (!VAGUE_RE.test(n) && !/\b(thi sao|the con|vay con|con)\b/.test(n)) {
+      // "có được không?" — biết đang nói về chủ thể nào nhưng chưa rõ việc gì → hỏi đúng 1 câu còn thiếu.
+      if (/\b(duoc khong|ok khong|on khong|sao khong)\b/.test(n) || text.includes("?"))
+        return { text: `Bạn hỏi việc gì có được không trong chuyện ${s.label} nè — ăn, uống, hay dùng thuốc?`, anchor };
+      return null;
+    }
   }
   anchor.aspect = asp ?? s.main;
   return { text: s.aspects[anchor.aspect](anchor), anchor, urgent: anchor.aspect === "overdose" };

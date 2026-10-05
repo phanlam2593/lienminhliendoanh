@@ -890,7 +890,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
     return {
       text: heavyQ
         ? pick("yesH", [
-            `Ừa, Lomi hiểu rồi 🥺 ${story ? `Chuyện “${story}” ` : "Chuyện này "}làm bạn khó chịu thật đó. Điều gì trong chuyện đó làm bạn thấy tệ nhất?`,
+            `Ừm, ${story ? `Chuyện “${story}” ` : "Chuyện này "}làm bạn khó chịu thật đó. Điều gì trong chuyện đó làm bạn thấy tệ nhất?`,
             "Vậy là nó ảnh hưởng tới bạn nhiều thật 😔 Bạn muốn Lomi an ủi, góp ý cách xử lý, hay chỉ cần có người nghe thôi?",
           ])
         : pick("yes", ["À, vậy hả 😮 Rồi sao nữa, kể Lomi nghe tiếp đi!", "Ừm, Lomi hiểu rồi. Kể thêm chút cho Lomi nghe nha, lúc đó bạn thấy sao?"]),
@@ -957,8 +957,8 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   if (!t && /\?|\b(la gi|nghia la|hieu .* khong|biet .* khong|co biet)\b/.test(`${text} ${n} `))
     return {
       text: pick("unk", [
-        "Câu này Lomi chưa hiểu rõ lắm 😅 Bạn giải thích thêm một chút giúp Lomi được không?",
-        "Hmm, Lomi chưa chắc hiểu đúng ý bạn. Bạn nói rõ hơn xíu nha, Lomi nghe nè 🌿",
+        "Ừa, Lomi nghe nè. Bạn nói thêm một chút để Lomi bắt đúng ý nha.",
+        "Lomi chưa bắt chắc ý bạn. Bạn đang hỏi về chuyện nào — nói rõ tên chuyện đó giúp Lomi nha.",
       ]),
       quick: [],
       theme: prev,
