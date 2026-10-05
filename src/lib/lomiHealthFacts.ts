@@ -19,7 +19,7 @@ const FACTS: Fact[] = [
     // 04/10: hỏi thuốc / tác dụng phụ / liều → không kê thuốc, không đưa liều cho cá nhân.
     id: "meds",
     re: /\b(tac dung phu|uong thuoc gi|thuoc gi|dung thuoc gi|lieu dung|lieu luong|uong may vien|uong bao nhieu vien|thuoc nao tot|thuoc nao hieu qua|uong thuoc .* duoc khong|uong chung (voi|thuoc))\b/,
-    a: "💊 **Về thuốc:** Lomi không kê thuốc hay đưa liều cho từng người được, vì thuốc nào hợp và liều bao nhiêu phụ thuộc tuổi, cân nặng, bệnh nền và thuốc khác đang dùng.\n• Hỏi trực tiếp **dược sĩ** ở nhà thuốc hoặc bác sĩ — mang theo tên các thuốc đang uống.\n• Đọc kỹ tờ hướng dẫn đi kèm (liều tối đa, chống chỉ định, tác dụng phụ thường gặp).\n• Ngưng thuốc và đi khám nếu sau khi uống bị nổi mẩn, ngứa nhiều; **gọi 115 ngay** nếu khó thở, sưng môi/lưỡi/họng, choáng váng.\nBạn đang hỏi cho mình hay cho người nhà, và đang dùng để trị triệu chứng gì?",
+    a: "💊 **Về thuốc:** Lomi chưa có thông tin riêng về thuốc này, và không kê thuốc hay đưa liều cho từng người được, vì thuốc nào hợp và liều bao nhiêu phụ thuộc tuổi, cân nặng, bệnh nền và thuốc khác đang dùng.\n• Hỏi trực tiếp **dược sĩ** ở nhà thuốc hoặc bác sĩ — mang theo tên các thuốc đang uống.\n• Đọc kỹ tờ hướng dẫn đi kèm (liều tối đa, chống chỉ định, tác dụng phụ thường gặp).\n• Ngưng thuốc và đi khám nếu sau khi uống bị nổi mẩn, ngứa nhiều; **gọi 115 ngay** nếu khó thở, sưng môi/lưỡi/họng, choáng váng.\nBạn đang hỏi cho mình hay cho người nhà, và đang dùng để trị triệu chứng gì?",
   },
   {
     id: "coffee",

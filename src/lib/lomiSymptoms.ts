@@ -792,6 +792,7 @@ function tempOf(n: string): number | null {
 }
 const KID_RE = /\b(con minh|con toi|con em|con tui|be nha|be minh|be con|em be|tre nho|chau minh|be bi|be \d+ tuoi|\d+ thang tuoi)\b/;
 const SEVERE_RE = /\b(bua bo|du doi|dau lam|dau qua troi|khong chiu noi|dau muon xiu|dau chet di duoc)\b/;
+const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SELF_RE = /\b(minh bi|toi bi|em bi|anh bi|tui bi|dang bi|bi hoai|bi suot|minh dang|toi dang|nay bi|hom nay bi|tu sang|tu qua)\b/;
 const KNOW_RE = /\b(la do dau|do dau ma|nguyen nhan|la benh gi|la dau hieu|la gi|thuong do|vi sao bi|tai sao bi|tai sao lai|co nguy hiem khong)\b/;
 const DUR_RE = /\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/;
@@ -862,14 +863,23 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   // 04/10: câu hỏi KIẾN THỨC ("đau đầu là do đâu?") ≠ đang bị → không gán triệu chứng cho người hỏi.
   const knowledge = !inHealth && !prev.length && !kid && !SELF_RE.test(` ${normalizeVi(text)} `) && KNOW_RE.test(` ${normalizeVi(text)} `);
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
-  if (!knowledge && !inHealth && !prev.length && !kid && labels.length === 1 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
-    out.push(`Bạn đang bị **${labels[0]}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• Bị bao lâu rồi, đau/khó chịu ở mức nào?\n• Có kèm sốt, nôn, hay triệu chứng nào khác không?`);
+  if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
+    out.push(`Bạn đang bị **${joinVi(labels)}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• Bị bao lâu rồi, đau/khó chịu ở mức nào?\n• Có kèm sốt, nôn, hay triệu chứng nào khác không?`);
     out.push("Nếu thấy đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay, đừng chờ.");
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };
   }
-  if (knowledge) out.push(`Về **${joinVi(labels)}** nói chung (kiến thức tham khảo, không phải chẩn đoán):`);
-  else if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
+  if (knowledge) {
+    // Chỉ nêu các nguyên nhân thường gặp — KHÔNG chọn một nguyên nhân cho người hỏi (họ chưa nói mình bị).
+    const names = scored.slice(0, 6).map((x) => x.c.name.replace(/\s*\(.*?\)\s*/g, "").toLowerCase());
+    out.push(
+      `**${cap1(joinVi(labels))}** nói chung có nhiều nguyên nhân${names.length ? `, thường gặp như: ${joinVi(names)}` : ""}. Chỉ từ câu này thì chưa xác định được nguyên nhân cụ thể.`,
+    );
+    out.push("Nếu bạn đang bị thì kể Lomi nghe bị bao lâu, mức độ và có triệu chứng gì đi kèm, Lomi giúp xem tiếp nha.");
+    out.push(NOTE_BODY);
+    return { text: out.join("\n\n"), sx: [] };
+  }
+  if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
   out.push(...notes);
   if (kid && !prev.includes("kid")) out.push(KID_NOTE);
   if (!scored.length) {

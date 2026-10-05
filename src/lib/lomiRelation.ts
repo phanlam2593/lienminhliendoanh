@@ -9,7 +9,7 @@
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import type { HeartReply } from "@/lib/lomiHeart";
 
-export type RelIntent = "mind_read" | "silence_advice" | "texting";
+export type RelIntent = "mind_read" | "silence_advice" | "silence" | "texting" | "advice";
 
 const SUBJ: [RegExp, string][] = [
   [/\b(nguoi ay|nguoi do)\b/, "người ấy"],
@@ -40,6 +40,22 @@ export function relationIntent(text: string): { intent: RelIntent; subject: stri
   if (TEXT_RE.test(n)) return { intent: "texting", subject };
   if (SILENT_RE.test(n) && ASK_ADV_RE.test(n)) return { intent: "silence_advice", subject };
   if (MIND_RE.test(n)) return { intent: "mind_read", subject };
+  if (SILENT_RE.test(n)) return { intent: "silence", subject };
+  return null;
+}
+
+/**
+ * Câu hỏi nối không nêu chủ thể ("Vậy mình nên làm gì?") khi đang nói về một người cụ thể.
+ * ctx = "<chủ thể>|<ý định trước>" lưu ở tin trước. Không có ctx → null (không tự bịa ai là "người ấy").
+ */
+export function relationFollow(text: string, ctx?: string): { intent: RelIntent; subject: string } | null {
+  const own = relationIntent(text);
+  if (own || !ctx) return own;
+  const [subject, prev] = ctx.split("|");
+  const n = ` ${normStrict(text, HEART)} `;
+  if (n.trim().split(/\s+/).length > 10 || !subject) return null;
+  if (TEXT_RE.test(n)) return { intent: "texting", subject };
+  if (ASK_ADV_RE.test(n) || /\b(nen sao|gio sao|lam gi)\b/.test(n)) return { intent: prev === "silence" || prev === "silence_advice" ? "silence_advice" : "advice" as RelIntent, subject };
   return null;
 }
 
@@ -47,11 +63,30 @@ let turn = 0;
 const pick = (xs: string[]) => xs[turn++ % xs.length];
 
 /** Trả lời bám đúng câu hỏi. theme dùng để giữ mạch tâm sự (tình cảm). */
-export function relationReply(text: string): HeartReply | null {
-  const r = relationIntent(text);
+export function relationReply(text: string, ctx?: string): (HeartReply & { rel: string }) | null {
+  const r = relationFollow(text, ctx);
   if (!r) return null;
+  const out = build(r, text);
+  return { ...out, rel: `${r.subject}|${r.intent}` };
+}
+
+function build(r: { intent: RelIntent; subject: string }, text: string): HeartReply {
   const s = r.subject;
   const S = s.charAt(0).toUpperCase() + s.slice(1);
+  const dm = ` ${normStrict(text, HEART)} `.match(/\b(\d+|mot|hai|ba|may|vai)\s*(ngay|hom|tuan|thang)\b/);
+  const dur = dm ? `${({ mot: "1", hai: "2", ba: "3", may: "mấy", vai: "vài" } as Record<string, string>)[dm[1]] ?? dm[1]} ${({ ngay: "ngày", hom: "hôm", tuan: "tuần", thang: "tháng" } as Record<string, string>)[dm[2]]}` : undefined;
+  if (r.intent === "silence")
+    return {
+      theme: "cold",
+      quick: [],
+      text: `${S} im lặng${dur ? ` ${dur}` : ""} thì chờ đợi không biết vì sao là thấy bứt rứt thật. Có thể ${s} đang bận, đang né một chuyện khó nói, hoặc đã có thay đổi trong lòng — từ bên ngoài chưa biết chắc được.\n\nTrước khi im lặng, hai người có chuyện gì không, hay mọi thứ vẫn bình thường?`,
+    };
+  if (r.intent === "advice")
+    return {
+      theme: "love",
+      quick: [],
+      text: `Với chuyện của bạn và ${s}, vài hướng bạn có thể cân nhắc:\n• Nhìn vào hành động của ${s} vài tuần gần đây hơn là một lời nói.\n• Nếu cần biết rõ, hỏi thẳng một cách nhẹ nhàng thay vì đoán.\n• Tự hỏi mình đang cần gì từ mối quan hệ này — quyết định là ở bạn.\n\nHiện tại điều làm bạn băn khoăn nhất về ${s} là gì?`,
+    };
   if (r.intent === "mind_read") {
     const n = ` ${normStrict(text, HEART)} `;
     const what = /nghi gi/.test(n) ? `${s} đang nghĩ gì về bạn` : /thich|de y|quan tam/.test(n) ? `${s} có để ý bạn không` : `${s} còn tình cảm hay không`;
@@ -70,7 +105,7 @@ export function relationReply(text: string): HeartReply | null {
       theme: "cold",
       quick: [],
       text: [
-        `${S} im lặng thì có nhiều khả năng: đang bận hay mệt, đang tránh một chuyện khó nói, hoặc tình cảm đã nguội — từ bên ngoài khó biết chắc là cái nào.`,
+        `${S} im lặng${dur ? ` ${dur}` : ""} thì có nhiều khả năng: đang bận hay mệt, đang tránh một chuyện khó nói, hoặc tình cảm đã nguội — từ bên ngoài khó biết chắc là cái nào.`,
         `Vài cách bạn có thể cân nhắc:\n• Nhắn một tin ngắn, rõ ràng, không trách móc — kiểu “Dạo này thấy bạn im hơn, có chuyện gì không? Khi nào tiện thì nói mình nghe.”\n• Sau đó cho ${s} thời gian, tránh nhắn dồn dập.\n• Tự đặt cho mình một mốc: im lặng kéo dài tới đâu thì bạn cần một câu trả lời thẳng.`,
         `${S} im lặng bao lâu rồi, và trước đó hai người có chuyện gì không?`,
       ].join("\n\n"),
