@@ -49,6 +49,7 @@ import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply } from "@/lib/lomiRelation";
+import { contextReply } from "@/lib/lomiContext";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -117,6 +118,8 @@ type Msg = {
   search?: SearchIntent; // lần tìm vừa rồi (để "Đổi món khác" bốc lại chỗ khác)
   tarotSpread?: "five" | "celtic"; // người dùng vừa chọn trải 5 / 10 lá, đang chờ câu hỏi
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
+  hsub?: string; // chủ thể sức khoẻ đang nói (lib/lomiContext) — để hiểu câu hỏi nối
+  rel?: string; // "<chủ thể>|<ý định>" chuyện tình cảm đang nói (lib/lomiRelation)
   heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
   dishAsk?: { drink: boolean; shown: string[] }; // Lomi vừa gợi ý vài món — tin kế tiếp là món người dùng chọn
@@ -800,6 +803,10 @@ export function AiChat({
         const inTalk = !!lastA?.heart;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const nq = ` ${normalizeVi(q)} `;
+        // 00) Chủ thể sức khoẻ cụ thể (xét nghiệm máu, paracetamol…) + câu hỏi nối theo chủ thể đang nói — lib/lomiContext.
+        const cx = contextReply(q, lastA?.hsub);
+        if (cx) topicHit("health");
+        if (cx) return localReply(q, { role: "assistant", content: cx.text, local: true, heart: "health", heartDepth: depth, hsub: cx.anchor.subject, sx: inTalk ? lastA?.sx : undefined });
         // 0a) Kiêng ăn uống theo bệnh ("gout kiêng gì", "huyết áp cao ăn mặn được k", nối tiếp "còn bia thì sao") — lib/lomiDiet.
         const prevUser = [...msgs].reverse().find((m) => m.role === "user")?.content;
         const diet = dietReply(q, lastA?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet);
@@ -843,8 +850,8 @@ export function AiChat({
       const wantSearch = !!detectSearch(q) && /\b(tim|kiem|goi y|an gi|uong gi|o dau|gan day|gan minh|quan nao|di dau|cho nao)\b/.test(normalizeVi(q));
       if (lastA?.heart && !en && !gateSkip && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
-        const rel = relationReply(q);
-        if (rel) return localReply(q, heartMsg(rel, depth, lastA));
+        const rel = relationReply(q, lastA.rel);
+        if (rel) return localReply(q, { ...heartMsg(rel, depth, lastA), rel: rel.rel });
         return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth, lastA.content, lastA.story), depth, lastA));
       }
     }
@@ -883,7 +890,7 @@ export function AiChat({
       if (!en && !gateSkip && !memLearn?.newSits.length) {
         const rel = relationReply(q);
         if (rel) topicHit("love");
-        if (rel) return localReply(q, heartMsg(rel, 1));
+        if (rel) return localReply(q, { ...heartMsg(rel, 1), rel: rel.rel });
         const h = heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
         if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));

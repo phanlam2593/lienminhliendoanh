@@ -890,7 +890,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
     return {
       text: heavyQ
         ? pick("yesH", [
-            `Ừm, ${story ? `Chuyện “${story}” ` : "Chuyện này "}làm bạn khó chịu thật đó. Điều gì trong chuyện đó làm bạn thấy tệ nhất?`,
+            `Ừm, ${story ? `chuyện “${story}” ` : "chuyện này "}làm bạn khó chịu thật đó. Điều gì trong chuyện đó làm bạn thấy tệ nhất?`,
             "Vậy là nó ảnh hưởng tới bạn nhiều thật 😔 Bạn muốn Lomi an ủi, góp ý cách xử lý, hay chỉ cần có người nghe thôi?",
           ])
         : pick("yes", ["À, vậy hả 😮 Rồi sao nữa, kể Lomi nghe tiếp đi!", "Ừm, Lomi hiểu rồi. Kể thêm chút cho Lomi nghe nha, lúc đó bạn thấy sao?"]),
