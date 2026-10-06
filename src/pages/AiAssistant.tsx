@@ -49,6 +49,7 @@ import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply } from "@/lib/lomiRelation";
+import { capabilityAsk, foodChoice } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
@@ -122,6 +123,7 @@ type Msg = {
   rel?: string; // "<chủ thể>|<ý định>" chuyện tình cảm đang nói (lib/lomiRelation)
   heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
+  dishPick?: boolean; // Lomi vừa hỏi khẩu vị cho một món cụ thể (lib/lomiIntent foodChoice)
   dishAsk?: { drink: boolean; shown: string[] }; // Lomi vừa gợi ý vài món — tin kế tiếp là món người dùng chọn
   avoidIds?: string[]; // quán đã gợi ý cho món này (không lặp khi bấm "Quán khác")
   dish?: string; // vừa tìm quán cho món này (bấm "Quán khác" để tìm tiếp)
@@ -130,6 +132,7 @@ type Msg = {
   mood?: string[]; // cảm giác đã kể (cộng dồn) — lib/lomiSymptoms
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
   faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này — câu hỏi nối ("còn … thì sao") hiểu theo ngữ cảnh đó
+  raw?: string; // tin người dùng: câu gõ NGUYÊN VĂN (trước khi chuẩn hoá) — dùng khi báo cáo / Dạy Lomi
   unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
   diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
   reported?: boolean; // người dùng đã bấm ⁉️ gửi câu này cho ban quản trị (01/10)
@@ -439,9 +442,10 @@ export function AiChat({
       { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang) },
     ]);
   };
+  const rawRef = useRef<string | null>(null); // câu người dùng gõ nguyên văn của lượt đang xử lý
   const localReply = (asked: string, reply: Msg) => {
     setErr(null);
-    push([{ role: "user", content: asked, local: true }, reply]);
+    push([{ role: "user", content: asked, local: true, raw: rawRef.current ?? asked }, reply]);
     lomiSound("msg");
   };
 
@@ -567,6 +571,7 @@ export function AiChat({
   const send = async (text: string, forceAi = false) => {
     const raw = text.trim();
     if (!raw || busy) return;
+    rawRef.current = raw;
     const stk = parseStickerToken(raw);
     if (stk) {
       setInput("");
@@ -781,6 +786,17 @@ export function AiChat({
           return localReply(q, { role: "assistant", content: cc?.text ?? g.reply.text, local: true, quick: cc?.quick });
         }
       }
+      // e0) Hỏi khả năng của Lomi ("e tư vấn sức khỏe a đc k") / thèm–chọn một món ("thèm pizza mà k biết ăn pizza gì").
+      //     Không chạy khi đang ở mạch chờ trả lời (tâm sự, chọn món, tư vấn…) để không cướp ngữ cảnh.
+      if (!en && !gateSkip && !lastA?.tarotAwait && !lastA?.bizPick && !lastA?.bizTopicPick) {
+        const cap = capabilityAsk(q);
+        if (cap) return localReply(q, { role: "assistant", content: cap.text, local: true, ...(cap.domain === "health" ? { heart: "health", heartDepth: 0 } : {}) });
+        const fc = foodChoice(q);
+        if (fc?.intent === "food_place") return replyDishShops(q, fc.dish);
+        if (fc?.intent === "food_choice") return localReply(q, { role: "assistant", content: fc.text!, local: true, quick: fc.quick, dish: fc.dish, dishPick: true });
+        // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
+        if (lastA?.dishPick && lastA.dish && q.split(/\s+/).length <= 8 && !detectDish(q) && !capabilityAsk(q)) return replyDishShops(q, lastA.dish);
+      }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
       if (!gateSkip) {
@@ -957,7 +973,8 @@ export function AiChat({
       const learned = await lookupLearned(q);
       const lf = learned ? faqById(learned) : undefined;
       if (lf) return answerFaq(lf, q);
-      logUnanswered(q);
+      // Chỉ tới đây khi MỌI luồng (xã giao, sức khoẻ, Tarot, ngữ cảnh, món ăn, FAQ, câu đã dạy/đã học) đều không đáp được.
+      logUnanswered(raw, q);
       // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
       // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
       //  Câu hỏi chuyện đời (không dính tới app) thì không đưa FAQ lạc đề — Lomi mời bói đúng câu đó.
@@ -1201,11 +1218,11 @@ export function AiChat({
                       )}
                     </>
                   )}
-                  {!en && !m.note && (
+                  {!en && !m.note && !!m.unk && (
                     <button
                       onClick={() => {
                         if (m.reported) return void toast("Câu này đã được gửi cho ban quản trị rồi nha 💚");
-                        setFbReason(/chưa được tiếp thu|chưa được học|chưa biết|chưa có hướng dẫn/.test(m.content) ? "unknown" : "wrong");
+                        setFbReason("unknown");
                         setFbNote("");
                         setFbIdx(i);
                       }}
@@ -1213,7 +1230,7 @@ export function AiChat({
                       title="Lomi trả lời chưa đúng / chưa biết? Gửi ban quản trị"
                       className={cn("font-semibold", m.reported ? "text-muted-foreground/60" : "text-amber-600 dark:text-amber-400")}
                     >
-                      ⁉️ {m.reported ? "Đã gửi" : "Báo cáo"}
+                      💡 {m.reported ? "Đã gửi" : "Dạy Lomi"}
                     </button>
                   )}
                   {AI_ENABLED && !m.note && m.ask && quota?.member && left !== 0 && i === msgs.length - 1 && (
@@ -1288,7 +1305,9 @@ export function AiChat({
             onClick={async () => {
               if (fbIdx === null) return;
               const m = msgs[fbIdx];
-              const askedQ = [...msgs.slice(0, fbIdx)].reverse().find((x) => x.role === "user")?.content ?? "";
+              const um = [...msgs.slice(0, fbIdx)].reverse().find((x) => x.role === "user");
+              // Câu người dùng gõ NGUYÊN VĂN là nguồn gốc — không gửi câu đã chuẩn hoá.
+              const askedQ = um?.raw ?? um?.content ?? "";
               setFbBusy(true);
               const ok = await sendFeedback(askedQ, m?.content ?? "", fbReason, fbNote);
               setFbBusy(false);
