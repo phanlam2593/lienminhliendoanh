@@ -57,7 +57,7 @@ export function foodChoice(text: string): FoodChoice | null {
   if (!d) return null;
   const n = ` ${normalizeVi(text)} `;
   if (HEALTHY.test(n)) return null;
-  const label = (d as { name?: string; label?: string }).name ?? (d as { label?: string }).label ?? d.id;
+  const label = d.name;
   if (PLACE.test(n)) return { intent: "food_place", dish: d.id, label };
   if (!CHOICE.test(n)) return null;
   const style = STYLES[d.id];

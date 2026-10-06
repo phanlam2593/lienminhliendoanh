@@ -37,10 +37,11 @@ export async function lookupLearned(text: string): Promise<string | null> {
   }
 }
 
-export function logUnanswered(text: string) {
-  const key = learnKey(text);
+/** raw = câu người dùng gõ NGUYÊN VĂN (lưu làm mẫu cho admin xem); keyText = câu đã chuẩn hoá để gộp câu trùng. */
+export function logUnanswered(raw: string, keyText: string = raw) {
+  const key = learnKey(keyText);
   if (key.length < 3) return;
-  void db.rpc("lomi_log_unanswered", { _key: key, _sample: text.trim().slice(0, 300) }).then(
+  void db.rpc("lomi_log_unanswered", { _key: key, _sample: raw.trim().slice(0, 300) }).then(
     () => undefined,
     () => undefined,
   );
