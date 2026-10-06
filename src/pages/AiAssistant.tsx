@@ -123,6 +123,7 @@ type Msg = {
   rel?: string; // "<chủ thể>|<ý định>" chuyện tình cảm đang nói (lib/lomiRelation)
   heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
+  dishPick?: boolean; // Lomi vừa hỏi khẩu vị cho một món cụ thể (lib/lomiIntent foodChoice)
   dishAsk?: { drink: boolean; shown: string[] }; // Lomi vừa gợi ý vài món — tin kế tiếp là món người dùng chọn
   avoidIds?: string[]; // quán đã gợi ý cho món này (không lặp khi bấm "Quán khác")
   dish?: string; // vừa tìm quán cho món này (bấm "Quán khác" để tìm tiếp)
@@ -792,7 +793,9 @@ export function AiChat({
         if (cap) return localReply(q, { role: "assistant", content: cap.text, local: true, ...(cap.domain === "health" ? { heart: "health", heartDepth: 0 } : {}) });
         const fc = foodChoice(q);
         if (fc?.intent === "food_place") return replyDishShops(q, fc.dish);
-        if (fc?.intent === "food_choice") return localReply(q, { role: "assistant", content: fc.text!, local: true, quick: fc.quick, dishAsk: { drink: false, shown: [fc.dish] } as Msg["dishAsk"] });
+        if (fc?.intent === "food_choice") return localReply(q, { role: "assistant", content: fc.text!, local: true, quick: fc.quick, dish: fc.dish, dishPick: true });
+        // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
+        if (lastA?.dishPick && lastA.dish && q.split(/\s+/).length <= 8 && !detectDish(q) && !capabilityAsk(q)) return replyDishShops(q, lastA.dish);
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
