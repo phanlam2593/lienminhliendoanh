@@ -108,6 +108,8 @@ export function askedKind(content: string): Convo["asked"] {
 
 /** Tin của Lomi có phải LỜI MỜI làm một việc ("Muốn Lomi tìm quán không?") để "ừ" = làm luôn gợi ý đầu. */
 export function isOffer(content: string): boolean {
+  // 09/10: lời mời không có dấu hỏi ("Để Lomi kiếm quán cà phê xinh cho bạn nha ☕", "Lomi tìm quán cho bạn được nè!") cũng là lời mời.
+  if (/(để (Lomi|em) (kiếm|tìm)|(Lomi|em) tìm quán[^.!?]* được)/i.test(content)) return true;
   return /\?/.test(content) && /(muốn|thử|để Lomi|để em|rút|bói|chọn giùm|chỉ cách|xem thử)/i.test(content);
 }
 
@@ -288,6 +290,20 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   if (c.talk && !ask && words <= 6 && !detectDish(q) && detectSearch(q) && isTalkCont(raw) && !/\b(tim|kiem|goi y|gioi thieu|chi|muon|can|them|cho (minh|a|anh|em|e|toi|tui))\b/.test(n)) {
     const r = talkContinue(raw, c.talk);
     return { kind: "reply", keep: false, talk: true, why: "talk:cont", reply: { text: r.text } };
+  }
+
+  // 4d) "còn cái đó thì sao?", "cái đó á?" khi đang nói về MỘT MÓN hay MỘT BỆNH → nói rõ Lomi hiểu "cái đó" là gì rồi hỏi đúng phần
+  //     còn thiếu, giữ nguyên mạch (trước đây câu này bị coi như câu trả lời khẩu vị và Lomi tự đi tìm quán).
+  if (REF_THING.test(n)) {
+    const hl = (last.health as { label?: string; diet?: string } | undefined)?.label;
+    if (c.topic === "health" && hl)
+      return { kind: "reply", keep: true, why: "ref:health-subject", reply: { text: `Bạn đang hỏi tiếp về **${hl}** đúng không? Bạn muốn biết ${hl} là gì, nên xử lý thế nào hay ăn uống cần kiêng gì?`, quick: [`${cap(hl)} là gì?`, `${cap(hl)} nên làm gì?`, `${cap(hl)} kiêng gì?`] } };
+    if (c.dish && (c.topic === "food" || !c.topic || c.topic === "talk")) {
+      const d = c.dish.label.toLowerCase();
+      return last.dishPick
+        ? { kind: "reply", keep: true, why: "ref:dish-pick", reply: { text: `Ý bạn là **${d}** đúng không 😄 Bạn chọn một kiểu giúp Lomi, hoặc để Lomi tìm quán ${d} luôn nha.`, quick: [`🔎 Tìm quán ${d}`] } }
+        : { kind: "reply", keep: true, why: "ref:dish", reply: { text: `Bạn đang hỏi về **${d}** đúng không? Bạn muốn Lomi tìm quán ${d}, hay đổi sang món khác?`, quick: [`Tìm quán ${d} gần đây`, "🎲 Món khác"] } };
+    }
   }
 
   // 5) Đang nói chuyện ăn uống / tìm quán.

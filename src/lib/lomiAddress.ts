@@ -92,7 +92,7 @@ export function detectAddr(raw: string): Addr | null {
 
 // "bạn" là danh từ (bạn bè, bạn thân, người bạn…) thì giữ nguyên.
 const BAN_NOUN_AFTER = "(?:bè|thân|cũ|mới|trai|gái|ấy|cùng|học|đời|đồng|ruột|nhỏ|hàng|nhậu|chat|thật|khác|bên|của họ|của người|đó|kia|tốt|thân thiết|online|game)";
-const BAN_NOUN_BEFORE = "(?:người|những|các|mấy|kết|một|vài|nhiều|cô|bác|hai|ba|bốn|nhóm|đám|hội)";
+const BAN_NOUN_BEFORE = "(?:người|những|các|mấy|kết|một|vài|nhiều|cô|bác|hai|ba|bốn|nhóm|đám|hội|đứa|thằng)";
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 /** "Lomi" (Lomi tự gọi mình) → "em". */
@@ -106,15 +106,18 @@ function lomiAsEm(text: string): string {
 /** Đổi "bạn" / "Lomi" trong câu Lomi nói cho khớp cách xưng hô của người dùng. */
 export function speak(text: string, addr?: Addr | null): string {
   if (!addr || addr === "bạn") return text;
-  if (addr === "bạn-em") return lomiAsEm(text);
+  // (đầu câu / sau emoji thì "em" viết hoa)
+  if (addr === "bạn-em") return lomiAsEm(text).replace(/([.!?]\s+|\p{Extended_Pictographic}\uFE0F?\s+|\n\s*|^)em(?=\s)/gu, (_m, p: string) => `${p}Em`);
   const you = addr; // anh | chị | em
   let out = text.replace(
-    new RegExp(`(?<!${BAN_NOUN_BEFORE})(^|[^\\p{L}])(bạn|Bạn)(?!\\s${BAN_NOUN_AFTER})(?=[^\\p{L}]|$)`, "giu"),
+    // (?![\\p{L}]) sau danh sách: "bạn đó" được giữ, còn "bạn đói", "bạn đời sống…" thì không bị giữ nhầm (09/10).
+    new RegExp(`(?<!${BAN_NOUN_BEFORE})(^|[^\\p{L}])(bạn|Bạn)(?!\\s${BAN_NOUN_AFTER}(?![\\p{L}]))(?=[^\\p{L}]|$)`, "giu"),
     (_m, pre: string, w: string) => `${pre}${w === "Bạn" ? cap(you) : you}`,
   );
   // Người dùng là anh/chị → Lomi xưng "em" (trừ tên riêng trong đường dẫn, tiêu đề).
   if (addr === "anh" || addr === "chị") out = lomiAsEm(out);
   // Sau khi đổi, đầu câu viết hoa lại (vd "…nha. em hiểu" → "Em hiểu").
-  out = out.replace(/([.!?]\s+|\n\s*|^)(em|anh|chị)(?=\s)/gu, (_m, p: string, w: string) => `${p}${cap(w)}`);
+  // (09/10: sau emoji cũng là đầu câu — "… ngại quá 😳 em là robot" → "… 😳 Em là robot")
+  out = out.replace(/([.!?]\s+|\p{Extended_Pictographic}\uFE0F?\s+|\n\s*|^)(em|anh|chị)(?=\s)/gu, (_m, p: string, w: string) => `${p}${cap(w)}`);
   return out;
 }

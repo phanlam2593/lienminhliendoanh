@@ -190,12 +190,14 @@ const RULES: Rule[] = [
   // Hỏi thăm Lomi
   {
     re: /\b(khoe khong|khoe ko|co khoe|the nao roi|on khong|dang lam gi|lam gi do|lam gi the|hom nay the nao|how are you)\b/,
-    reply: () => ({
-      text: pick([
-        "Lomi khoẻ re nè 💪 Pin đầy, tinh thần phơi phới! Còn bạn thì sao, hôm nay thế nào?",
-        "Lomi đang ngồi chờ bạn hỏi chuyện nè 😄 Bạn hôm nay ổn không?",
-        "Lomi vẫn ổn, cảm ơn bạn đã hỏi thăm 🥰 Bạn thì sao, có chuyện gì vui kể Lomi nghe với!",
-      ]),
+    // 09/10: "đang làm gì" là hỏi Lomi đang LÀM gì — không đáp "Lomi khoẻ re".
+    reply: (n = "") => ({
+      text: /\blam gi\b/.test(n)
+        ? pick(["Lomi đang ngồi chờ bạn hỏi chuyện nè 😄 Còn bạn đang làm gì đó?", "Lomi đang “trực” app nè 🤖 Còn bạn thì sao, đang làm gì vậy?"])
+        : pick([
+            "Lomi khoẻ re nè 💪 Pin đầy, tinh thần phơi phới! Còn bạn thì sao, hôm nay thế nào?",
+            "Lomi vẫn ổn, cảm ơn bạn đã hỏi thăm 🥰 Bạn thì sao, có chuyện gì vui kể Lomi nghe với!",
+          ]),
     }),
   },
   // Đói / ăn uống
@@ -587,7 +589,8 @@ const RULES: Rule[] = [
   },
   // Mấy giờ / thứ mấy / ngày mấy — trả lời giờ THẬT trên máy
   {
-    re: /\b(may gio roi|bay gio la may gio|gio la may gio|hom nay thu may|nay thu may|hom nay ngay may|nay ngay may|hom nay la ngay)\b/,
+    // 09/10: (hôm nay / nay / bữa nay) + (là) + thứ mấy / ngày mấy — "hôm nay là thứ mấy" trước đây thiếu chữ "là" nên Lomi bí.
+    re: /\b(may gio roi|bay gio la may gio|gio la may gio|(hom nay|bua nay|nay)( la)? (thu may|ngay may|ngay bao nhieu|ngay nao)|hom nay la ngay)\b/,
     reply: (n = "") => {
       const d = new Date();
       const thu = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"][d.getDay()];

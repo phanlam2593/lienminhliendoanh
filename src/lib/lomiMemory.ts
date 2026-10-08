@@ -187,7 +187,7 @@ export function displayName(mem: LomiMem, fullName?: string | null): string | un
 /** Ghi nhớ cách người dùng tự xưng (anh / chị / em / bạn) để Lomi xưng hô đối xứng — lib/lomiAddress.
  *  Người dùng nói rõ ("gọi tui là anh nha") → khoá; đã khoá thì câu bình thường không đổi được nữa.
  *  Trả về explicit = true khi vừa đổi theo yêu cầu rõ ràng (để Lomi xác nhận lại). */
-export function learnAddr(uid: string, raw: string): { addr?: Addr; explicit?: Addr } {
+export function learnAddr(uid: string, raw: string, hint: { force?: Addr; fallback?: Addr } = {}): { addr?: Addr; explicit?: Addr } {
   const m = loadMem(uid);
   const ex = explicitAddr(raw);
   if (ex) {
@@ -196,7 +196,11 @@ export function learnAddr(uid: string, raw: string): { addr?: Addr; explicit?: A
     saveMem(uid, m);
     return { addr: ex, explicit: ex };
   }
-  const a = m.addrLocked ? null : detectAddr(raw);
+  // hint (09/10) từ lớp đọc cấu trúc câu (lib/lomiParse):
+  //  • force: "e / em" trong câu này là GỌI Lomi ("e ăn tối chưa", "chúc e ngủ ngon") chứ không phải người dùng tự xưng em
+  //    → dùng kết luận đó thay cho phép đoán theo "e + động từ";
+  //  • fallback: chủ ngữ câu là người nói tự xưng anh / chị với một động từ phép đoán cũ không biết ("a cưới", "chị nghỉ phép").
+  const a = m.addrLocked ? null : (hint.force ?? detectAddr(raw) ?? hint.fallback ?? null);
   // "bạn-em" (chỉ biết người dùng gọi Lomi là em) không ghi đè cách xưng rõ hơn đã biết (anh/chị).
   if (a && a !== m.addr && !(a === "bạn-em" && (m.addr === "anh" || m.addr === "chị"))) {
     m.addr = a;

@@ -492,7 +492,8 @@ export function talkContinue(raw: string, depth: number): SenseReply {
   const neg = TALK_NEG.test(s) || /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
   const pos = !neg && TALK_POS.test(s);
   // Mẩu chi tiết ngắn ("xe máy", "ở Đà Lạt") → nhắc lại đúng mẩu đó cho thấy Lomi theo kịp.
-  const frag = words.length <= 3 && !neg && !pos ? `${cap(words.join(" "))} hả 😄` : "";
+  // (chữ "bạn" trong mẩu nhắc lại là NGƯỜI BẠN của người dùng — viết "bạn bè" để lúc hiển thị không bị đổi thành anh / chị)
+  const frag = words.length <= 3 && !neg && !pos ? `${cap(words.join(" ").replace(/(?<![\p{L}])bạn(?![\p{L}])(?! (bè|thân|gái|trai))/gu, "bạn bè"))} hả 😄` : "";
   const ack = neg
     ? pick(["Ui, nghe mà thương ghê 🥺", "Hic, vậy thì khó chịu thiệt ha.", "Trời, tội ghê 😣"])
     : pos

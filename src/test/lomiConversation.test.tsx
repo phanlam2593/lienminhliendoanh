@@ -421,3 +421,225 @@ describe("Lỗi câu đơn lộ ra khi chạy chuỗi (đã sửa kèm)", () => 
     expect(explicitAddr("tui là anh nha")).toBe("anh");
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 09/10 — HIỂU THEO CẤU TRÚC CÂU (lib/lomiParse + lib/lomiFrame), chạy qua khung chat thật.
+// Các câu ở đây không có câu mẫu riêng trong code: Lomi đọc chủ ngữ / phủ định / thời gian / loại câu rồi ghép câu đáp.
+// ─────────────────────────────────────────────────────────────────────────────
+const mem = () => JSON.parse(localStorage.getItem("lomi-mem:test-user") ?? "{}") as { addr?: string; sits?: Record<string, number> };
+
+describe("Cấu trúc câu — câu Kir gặp và các câu cùng kiểu", () => {
+  it("“Chào e bữa tối nhé” → chào lại buổi tối, không báo “chưa tiếp thu”", async () => {
+    const m = await last(["Chào e bữa tối nhé"]);
+    expect(m.unk).toBeUndefined();
+    expect(m.content).toMatch(/^Chào buổi tối nha/);
+  }, T);
+  it("chào → kể chuyện đã qua → chúc ngủ ngon: không lượt nào bị bí, không lượt nào đáp lạc đề", async () => {
+    const r = await chat(["Chào e bữa tối nhé", "tối qua a ngủ ngon lắm", "mai a đi Đà Nẵng chơi", "chúc e ngủ ngon nha"]);
+    for (const m of r) expect(m.unk).toBeUndefined();
+    expect(r[1].content).toMatch(/^Tối qua ngủ ngon hả/); // không phải lời chúc ngủ ngon
+    expect(r[1].content).not.toMatch(/Mơ đẹp|Chúc (anh|bạn) ngủ/);
+    expect(r[2].content).toMatch(/^Mai đi Đà Nẵng chơi hả/);
+    expect(r[3].content).toMatch(/Anh cũng ngủ thật ngon/); // người dùng xưng "a" → Lomi gọi anh; "e" là Lomi
+  }, T);
+  it("lời chúc có dịp bất kỳ → cảm ơn + chúc lại đúng dịp đó", async () => {
+    expect((await last(["chúc e cuối tuần vui vẻ nhé"])).content).toMatch(/cuối tuần vui vẻ/);
+    expect((await last(["buổi tối an lành nha e"])).content).toMatch(/buổi tối an lành/);
+  }, T);
+});
+
+describe("Cấu trúc câu — phủ định", () => {
+  it("“a chưa đói” không bị mời ăn; lát sau “giờ đói rồi” thì mới mời", async () => {
+    const r = await chat(["a chưa đói", "giờ đói rồi", "ăn gì giờ"]);
+    expect(r[0].content).toMatch(/^Chưa đói/);
+    expect(r[0].dishAsk).toBeUndefined();
+    expect(r[0].quick ?? []).toHaveLength(0);
+    expect(r[1].content).toMatch(/Đói thì ăn|Bụng réo/);
+    expect(r[2].dishAsk).toBeTruthy();
+  }, T);
+  it("“a không buồn đâu” không bị an ủi như đang buồn", async () => {
+    const m = await last(["a không buồn đâu"]);
+    expect(m.heart).toBeUndefined();
+    expect(m.content).toMatch(/Không buồn là tốt/);
+  }, T);
+  it("“a không thèm pizza” không bị hỏi chọn loại pizza", async () => {
+    const m = await last(["a không thèm pizza"]);
+    expect(m.dishPick).toBeUndefined();
+    expect(m.content).toMatch(/Không thèm pizza hả/);
+  }, T);
+  it("“hôm nay a không khoẻ” → mở chuyện sức khoẻ, kể triệu chứng là vào đúng mạch", async () => {
+    const r = await chat(["hôm nay a không khoẻ", "a bị đau đầu"]);
+    expect(r[0].health).toBeTruthy();
+    expect(r[0].heart).toBeUndefined();
+    expect(r[1].sx).toContain("headache");
+  }, T);
+  it("còn “a không vui lắm” vẫn là chuyện buồn → mạch tâm sự như cũ", async () => expect((await last(["a không vui lắm"])).heart).toBe("sad"), T);
+});
+
+describe("Cấu trúc câu — chủ ngữ không phải người nói", () => {
+  it("khen con mèo nhà mình → Lomi không nhận vơ", async () => {
+    const m = await last(["con mèo nhà a dễ thương lắm"]);
+    expect(m.content).toMatch(/^Con mèo nhà anh dễ thương/);
+    expect(m.content).not.toMatch(/đỏ mặt|Lomi vui cả ngày/);
+  }, T);
+  it("còn khen Lomi thì vẫn là khen Lomi", async () => expect((await last(["lomi giỏi quá"])).content).toMatch(/đỏ mặt|vui cả ngày|cố gắng giỏi hơn|dễ thương lắm/), T);
+  it("“xe a hư rồi” không phải báo lỗi app; “app bị lag quá” thì vẫn là lỗi app", async () => {
+    const m = await last(["xe a hư rồi"]);
+    expect(m.issue).toBeUndefined();
+    expect(m.content).toMatch(/^Xe anh hư/);
+    expect((await last(["app bị lag quá"])).issue).toBe("lag");
+  }, T);
+  it("mẹ ốm → “bị cảm thôi” vẫn là nói về mẹ → rồi “a lo quá” mới là tâm sự", async () => {
+    const r = await chat(["mẹ a đang ốm", "bị cảm thôi", "a lo quá"]);
+    expect(r[0].content).toMatch(/^Mẹ anh ốm hả/);
+    expect(r[0].about).toEqual({ text: "mẹ anh", kind: "third" });
+    expect(r[1].content).toMatch(/mẹ anh mau khoẻ/);
+    expect(r[1].content).not.toMatch(/Thương anh ghê|mong anh mau khoẻ/i); // người ốm là mẹ, không phải người dùng
+    expect(r[2].heart).toBeTruthy();
+  }, T);
+  it("con sốt → lớp sức khoẻ trả lời nhưng nói đúng người bệnh; “từ tối qua” là câu trả lời cho “bị bao lâu rồi?”", async () => {
+    const r = await chat(["con a bị sốt", "từ tối qua"]);
+    expect(r[0].sx).toContain("fever");
+    expect(r[0].content).toMatch(/^Con anh đang bị \*\*sốt\*\*/);
+    expect(r[1].unk).toBeUndefined();
+    expect(r[1].content).toMatch(/bị từ tối qua rồi hả/);
+    expect(r[1].sx).toContain("fever"); // vẫn ở mạch sức khoẻ
+  }, T);
+  it("chuyện của người khác không bị ghi vào trí nhớ như hoàn cảnh của người dùng", async () => {
+    await chat(["bạn a mới chia tay"]);
+    expect(mem().sits ?? {}).not.toHaveProperty("heartbroken");
+    await chat(["mẹ a đang ốm"]);
+    expect(mem().sits ?? {}).not.toHaveProperty("sick");
+    await chat(["a mới chia tay"]);
+    expect(mem().sits).toHaveProperty("heartbroken"); // còn chuyện của chính mình thì vẫn nhớ
+  }, T);
+});
+
+describe("Cấu trúc câu — trong lúc tâm sự", () => {
+  it("thú cưng mất → chia buồn (không phải lời khuyên mỏi mắt vì chữ “mất” bỏ dấu thành “mắt”), vẫn giữ mạch tâm sự", async () => {
+    const r = await chat(["a buồn quá", "con mèo nhà a mới mất"]);
+    expect(r[1].heart).toBe("sad");
+    expect(r[1].content).toMatch(/chia buồn/);
+    expect(r[1].content).not.toMatch(/màn hình|mỏi mắt/);
+  }, T);
+  it("“a không muốn nói nữa” → dừng lại, không hỏi dồn; chúc ngủ ngon thì chúc lại", async () => {
+    const r = await chat(["a buồn quá", "a không muốn nói nữa", "chúc e ngủ ngon"]);
+    expect(r[1].content).toMatch(/dừng ở đây/);
+    expect(r[1].heart).toBeUndefined();
+    expect(r[2].content).toMatch(/ngủ thật ngon/);
+  }, T);
+  it("còn kể tiếp chuyện buồn thì mạch tâm sự vẫn chạy như cũ", async () => {
+    const r = await chat(["a buồn quá", "mẹ a khó tính lắm"]);
+    expect(r[1].heart).toBeTruthy();
+  }, T);
+});
+
+describe("Cấu trúc câu — tham chiếu “cái đó” theo ngữ cảnh", () => {
+  it("đang chọn khẩu vị pizza → “Còn cái đó thì sao?” → Lomi nói rõ đang hiểu là pizza, chưa tự đi tìm quán", async () => {
+    const r = await chat(["a đang thèm pizza quá", "Còn cái đó thì sao?", "nhiều phô mai"]);
+    expect(r[1].content).toMatch(/\*\*pizza\*\*/);
+    expect(r[1].dishPick).toBe(true);
+    expect(r[1].places ?? []).toHaveLength(0);
+    expect(r[2].dish).toBe("pizza"); // câu trả lời khẩu vị sau đó vẫn dùng được
+    expect((r[2].places ?? []).length).toBeGreaterThan(0);
+  }, T);
+  it("đang nói về gout → “còn cái đó thì sao” → hỏi lại đúng về gout, giữ mạch sức khoẻ", async () => {
+    const r = await chat(["E biết cách chữa bệnh gout k", "còn cái đó thì sao", "Gout kiêng gì?"]);
+    expect(r[1].content).toMatch(/\*\*gout\*\*/);
+    expect(r[1].health?.diet).toBe("gout");
+    expect(r[2].diet).toBe("gout");
+  }, T);
+});
+
+describe("Cấu trúc câu — rủ, dự định, chỗ chơi", () => {
+  it("rủ đi ăn lẩu → Lomi mời tìm quán lẩu → “ừ” → tìm quán lẩu", async () => {
+    const r = await chat(["tối nay đi ăn lẩu không e", "ừ"]);
+    expect(r[0].unk).toBeUndefined();
+    expect(r[0].content).toMatch(/quán lẩu/);
+    expect(r[1].dish).toBe("lau");
+  }, T);
+  it("rủ đi cà phê → “ừ” → quán cà phê → “yên tĩnh” → lọc lại", async () => {
+    const r = await chat(["Tối nay đi cf không?", "ừ", "yên tĩnh"]);
+    expect(r[1].dish).toBe("cafe");
+    expect(r[2].dish).toBe("cafe");
+    expect(r[2].content).toMatch(/yên tĩnh/);
+  }, T);
+  it("“muốn đi đâu đó chơi” → gợi ý chỗ chơi (không phải câu hỏi về app)", async () => {
+    const m = await last(["cuối tuần này a muốn đi đâu đó chơi"]);
+    expect(m.faqId).toBeUndefined();
+    expect(m.search?.mode).toBe("go");
+  }, T);
+  it("“cuối tuần không biết làm gì” là chuyện chọn việc lúc rảnh, không phải tâm lý → chip dẫn tới gợi ý chỗ chơi", async () => {
+    const r = await chat(["Cuối tuần không biết làm gì", "Cuối tuần đi đâu chơi?"]);
+    expect(r[0].heart).toBeUndefined();
+    expect(r[0].content).toMatch(/chưa biết làm gì/);
+    expect(r[1].search?.mode).toBe("go");
+  }, T);
+  it("kể dự định rồi kể tiếp: vẫn là một mạch nghe kể", async () => {
+    const r = await chat(["mai a đi Đà Nẵng chơi", "đi với vợ", "cuối tuần a về"]);
+    expect(r[0].talk).toBe(1);
+    expect(r[1].talk).toBe(2);
+    expect(r[2].content).toMatch(/^Cuối tuần về hả/);
+    for (const m of r) expect(m.unk).toBeUndefined();
+  }, T);
+  it("“chiều nay a đi đá bóng” không phải triệu chứng da bong tróc", async () => {
+    const m = await last(["chiều nay a đi đá bóng"]);
+    expect(m.sx ?? []).toHaveLength(0);
+    expect(m.content).toMatch(/đi đá bóng hả/);
+  }, T);
+  it("“a đang ngồi ở quán cà phê” là kể mình đang ở đâu, không phải nhờ tìm quán; “a đang tìm quán cà phê” thì vẫn tìm", async () => {
+    const a = await last(["a đang ngồi ở quán cà phê"]);
+    expect(a.dish).toBeUndefined();
+    expect(a.content).toMatch(/^Đang ngồi quán cà phê hả/);
+    expect((await last(["a đang tìm quán cà phê"])).dish).toBe("cafe");
+  }, T);
+});
+
+describe("Cấu trúc câu — hỏi thăm Lomi và xưng hô", () => {
+  it("“e có buồn không” là hỏi Lomi, không phải người dùng đang buồn", async () => {
+    const m = await last(["e có buồn không"]);
+    expect(m.heart).toBeUndefined();
+    expect(m.content).toMatch(/robot/);
+  }, T);
+  it("“tối nay rảnh không e” → Lomi trả lời về mình", async () => expect((await last(["tối nay rảnh không e"])).content).toMatch(/lúc nào cũng rảnh/), T);
+  it("Lomi hỏi “ăn chưa” → “a ăn rồi” → đáp đúng là đã ăn", async () => {
+    const r = await chat(["e ăn tối chưa", "a ăn rồi"]);
+    expect(r[1].content).toMatch(/^Ăn rồi hả/);
+  }, T);
+  it("gọi Lomi là “e” trong câu hỏi / lời chúc không biến người dùng thành “em”", async () => {
+    await chat(["e ăn tối chưa"]);
+    expect(mem().addr).toBe("bạn-em");
+    const m = await last(["chúc e ngủ ngon nhé"]);
+    expect(mem().addr).toBe("bạn-em");
+    expect(m.content).not.toMatch(/Chúc em ngủ|Em cũng ngủ/);
+    await chat(["tháng sau a cưới"]); // tự xưng "a" với động từ lạ → vẫn học được là anh
+    expect(mem().addr).toBe("anh");
+  }, T);
+});
+
+describe("Cấu trúc câu — không làm hỏng các mạch sẵn có", () => {
+  it("câu thuộc lớp chuyên môn vẫn đi đúng lớp đó", async () => {
+    expect((await last(["a đang thèm pizza quá"])).dishPick).toBe(true);
+    expect((await last(["hôm nay a mệt ghê"])).heart).toBe("tired");
+    expect((await last(["a bị đau đầu"])).sx).toContain("headache");
+    expect((await last(["làm sao để nhận ưu đãi"])).faqId).toBe("claim");
+    expect((await last(["bói cho a một lá đi"])).tarot).toBeTruthy();
+    expect((await last(["quán a vắng khách lắm"])).biz).toBeTruthy();
+    expect((await last(["đau đầu là do đâu?"])).health).toBeTruthy();
+    expect((await last(["rụng tóc"])).sx).toContain("hairloss");
+  }, T);
+  it("câu Lomi thật sự không biết vẫn nói thật là chưa biết (kèm nút 💡)", async () => {
+    expect((await last(["bitcoin hôm nay lên 100k"])).unk).toBeTruthy();
+    expect((await last(["thủ đô nước pháp là gì"])).unk).toBeTruthy();
+  }, T);
+  it("đang chọn khẩu vị thì câu phủ định là câu trả lời khẩu vị, không bị đáp theo khung", async () => {
+    const r = await chat(["a thèm pizza", "a không thích hải sản"]);
+    expect(r[1].dish).toBe("pizza");
+  }, T);
+  it("đang nói chuyện sức khoẻ: lời chào chen ngang không làm mất bệnh đang nói; câu kể vẫn là chi tiết sức khoẻ", async () => {
+    const r = await chat(["Gout kiêng gì?", "chào e buổi tối nha", "a không uống bia"]);
+    expect(r[1].content).toMatch(/^Chào buổi tối/);
+    expect(r[1].health?.diet).toBe("gout");
+    expect(r[2].diet).toBe("gout");
+  }, T);
+});

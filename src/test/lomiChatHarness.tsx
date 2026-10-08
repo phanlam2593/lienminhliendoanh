@@ -43,6 +43,7 @@ export type Turn = {
   quick?: string[];
   heart?: string;
   health?: { subject?: string; label?: string; diet?: string; cond?: string };
+  about?: { text: string; kind: string };
   rel?: string;
   hsub?: string;
   sx?: string[];
