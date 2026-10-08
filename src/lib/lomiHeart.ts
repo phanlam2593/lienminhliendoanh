@@ -13,6 +13,35 @@ import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type 
 
 export type HeartReply = { text: string; quick: string[]; theme: string; listen?: boolean; end?: boolean; story?: string };
 
+/**
+ * 10/10 — điều lớp hội thoại biết về lượt này, để câu đáp BÁM NỘI DUNG vừa nghe thay vì xoay vòng mấy câu "kể thêm đi".
+ * (Trước đây phần "kể tiếp" chỉ bốc ngẫu nhiên 4 câu: “Lomi đang nghe nè…”, “Chuyện này làm bạn bận lòng nhiều không?”,
+ *  “Bạn cứ kể tiếp…”, “Giờ điều bạn mong nhất là gì?” — câu nào cũng tử tế nhưng không câu nào nói tới điều người dùng vừa kể.)
+ */
+export type HeartCtx = {
+  /** Mẩu nhắc lại câu vừa nghe, đã đổi ngôi ("vợ anh không nói chuyện với anh") — lib/lomiParse.mirrorOf. */
+  mirror?: string | null;
+  /** Điều vừa kể nghiêng về xấu (-1), tốt (1) hay chưa rõ (0) — theo khung câu. */
+  val?: number;
+  /** Vài tin gần nhất của Lomi (mới nhất trước) — không dùng lại câu / câu hỏi đã nói. */
+  recent?: string[];
+  /** Các mẩu người dùng đã kể trong mạch này, gồm cả mẩu vừa rồi — để tóm lại cho thấy Lomi theo kịp. */
+  details?: string[];
+  /** Câu nói về một NGƯỜI KHÁC (con, mẹ, bạn…) → không đọc chữ "thi", "học", "gia đình" thành chuyện của chính người dùng. */
+  third?: boolean;
+  /** Người đang được nhắc trong chuyện tình cảm ("người ấy", "anh ấy"). */
+  person?: string;
+  /** Câu vừa nghe là một mệnh đề (có vị ngữ / phủ định / mức độ), không chỉ gọi tên một chủ đề — lib/lomiFrame.isClause. */
+  clause?: boolean;
+  /** Chủ ngữ của câu vừa nghe là chính người dùng ("a xin lỗi rồi"). */
+  self?: boolean;
+  /** Câu vừa nghe là câu HỎI / có phủ định ("sếp không nói gì") — theo khung câu. */
+  ask?: boolean;
+  neg?: boolean;
+  /** Đổi một câu mẫu sang cách xưng hô đang dùng (lịch sử lưu câu ĐÃ đổi "bạn" → "anh"…) — để so "đã nói câu này chưa". */
+  say?: (x: string) => string;
+};
+
 export type Theme = {
   id: string;
   re: RegExp;
@@ -210,7 +239,7 @@ const THEMES: Theme[] = [
   {
     id: "crush",
     hint: [[/\b(dong nghiep|cung cong ty|cung cho lam)\b/, "Thích đồng nghiệp thì hơi “nhạy cảm” một chút ha 😄 Cứ từ từ làm bạn trước, giữ chuyên nghiệp ở chỗ làm; nếu tỏ tình thì chọn lúc riêng tư ngoài giờ, và chuẩn bị tinh thần cư xử tự nhiên dù kết quả thế nào nha."], [/\b(cung lop|ban hoc|cung truong)\b/, "Thích bạn cùng lớp thì có lợi thế là gặp nhau hằng ngày nè 😄 Rủ học nhóm, hỏi bài, đi ăn sau giờ học — gần gũi tự nhiên trước rồi hẵng tính chuyện tỏ tình nha."]],
-    re: /\b(crush|thich mot nguoi|thich mot ban|dang thich|tham thuong|cam nang|co nen to tinh|to tinh|lam quen voi|muon lam quen|bat chuyen|nhan tin lam quen|ho co thich minh)\b/,
+    re: /\b(crush|thich mot nguoi|thich 1 nguoi|thich mot ban|thich 1 ban|dang thich|tham thuong|cam nang|co nen to tinh|to tinh|lam quen voi|muon lam quen|bat chuyen|nhan tin lam quen|ho co thich minh)\b/,
     feel: [
       "Ui, đang cảm nắng ai đó hả 😳 Cảm giác tim đập loạn xạ này dễ thương ghê!",
       "Thích một người là cảm giác vừa vui vừa hồi hộp ha 🥰",
@@ -684,12 +713,47 @@ const REFLECT = [
   "Ai ở vị trí của bạn chắc cũng sẽ thấy {e} thôi, bạn không làm quá đâu.",
   "Lomi hiểu mà, {e} như vậy khó chịu lắm.",
 ];
+// Mấy câu "đang nghe" chung chung. 10/10: KHÔNG còn là câu đáp mặc định — chỉ dùng khi Lomi không nhắc lại được điều vừa nghe
+// (câu quá dài / không đọc được), và không bao giờ dùng hai lượt liền nhau (xem follow()).
 const LISTEN = [
   "Lomi đang nghe nè 🌿 Bạn kể thêm cho Lomi hiểu rõ hơn được không?",
   "Ừm, Lomi nghe rồi. Chuyện này làm bạn bận lòng nhiều không?",
   "Lomi vẫn ở đây nè 💚 Bạn cứ kể tiếp, từ từ thôi.",
   "Lomi hiểu rồi. Giờ điều bạn mong nhất là gì nè?",
 ];
+// Nhóm cảm xúc của chủ đề đang nói — để lời đáp sau khi nhắc lại đúng tông (mệt / căng thẳng với ai đó / buồn / lo).
+type Fam = "tired" | "conflict" | "sad" | "worry" | "mishap";
+// Chỉ những chủ đề mà lời đáp theo nhóm luôn hợp nghĩa; chủ đề khác (mất ngủ, công việc, học hành…) thì chỉ nhắc lại, không đoán cảm xúc.
+const FAM: Record<string, Fam> = {
+  tired: "tired",
+  fight: "conflict", boss: "conflict", toxic: "conflict", gossip: "conflict", bullied: "conflict", inlaw: "conflict", parentsban: "conflict", lies: "conflict",
+  anxiety: "worry", caregiver: "worry", panic: "worry",
+  sad: "sad", lonely: "sad", grief: "sad", breakup: "sad", ex: "sad", unrequited: "sad", homesick: "sad", cheat: "sad", friends: "sad", family: "sad", selfworth: "sad", depress: "sad",
+};
+const REACT: Record<Fam, string[]> = {
+  tired: ["Nghe thôi đã thấy đuối thay bạn.", "Vậy thì oải thật.", "Cứ vậy hoài thì ai mà không mệt."],
+  conflict: ["Vậy thì khó chịu thật.", "Ở trong cảnh đó ai cũng thấy bức bối.", "Nghe là thấy căng rồi."],
+  sad: ["Nghe mà thương bạn ghê.", "Vậy thì buồn thật.", "Chuyện đó để trong lòng thì nặng lắm."],
+  worry: ["Hèn gì bạn lo.", "Vậy thì thấp thỏm là phải.", "Lo như vậy cũng dễ hiểu."],
+  mishap: ["Nghe mà oải thay bạn.", "Xui ghê ha."],
+};
+// Câu hỏi ĐI TIẾP câu chuyện (hỏi một ý cụ thể), dùng khi câu hỏi mở đầu của chủ đề đã hỏi rồi.
+const PROGRESS: Record<Fam | "any", string[]> = {
+  tired: ["Có ai phụ bạn một tay không?", "Trong mấy việc đó, việc nào bạn bớt được trước?"],
+  conflict: ["Rồi bên kia phản ứng sao?", "Bạn muốn chuyện này đi theo hướng nào?"],
+  sad: ["Chuyện này xảy ra lâu chưa bạn?"],
+  worry: ["Bạn lo nhất là điều gì trong chuyện này?"],
+  mishap: ["Rồi sau đó có sao không bạn?"],
+  any: ["Rồi sau đó sao nữa bạn?", "Giờ bạn tính sao?"],
+};
+// Chuyện tình cảm đang nói về MỘT NGƯỜI cụ thể ({p}) — góc nhìn / câu hỏi bám đúng người đó, không hỏi lại "bạn đang thích ai".
+const REL_INSIGHT = [
+  "Một tin hỏi thăm ngắn thì không phiền đâu — {p} có trả lời hay không, bạn cũng biết thêm được một chút.",
+  "Mình không điều khiển được {p} nghĩ gì, chỉ chọn được cách mình cư xử cho đàng hoàng thôi.",
+  "Bạn đặt cho mình một mốc nha: chờ tới đâu thì cần một câu trả lời rõ ràng.",
+];
+const REL_ASK = ["Điều bạn ngại nhất nếu chủ động với {p} là gì?", "Nếu {p} trả lời, bạn mong nghe điều gì nhất?"];
+const LOVEISH = new Set(["love", "cold", "crush", "unrequited", "ex", "situationship", "spark", "longdist"]);
 const OPEN = [
   "Lomi đây, Lomi nghe nè 🌿 Bạn cứ kể từ từ, chuyện gì cũng được — Lomi không phán xét đâu. Đang có chuyện gì làm bạn bận lòng vậy?",
   "Okie, mình tâm sự nha 🤗 Lomi luôn sẵn sàng lắng nghe. Chuyện tình cảm, gia đình, công việc hay chỉ là một ngày tệ — kể Lomi nghe đi.",
@@ -734,7 +798,7 @@ export function heartOpen(): HeartReply {
 }
 
 const advGiven = new Map<string, number>(); // số lần đã đưa lời khuyên theo chủ đề (trong phiên)
-function themeReply(t: Theme, n: string, adviceAsked: boolean): HeartReply {
+function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp): HeartReply {
   const parts: string[] = [];
   const defined = !!t.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `);
   if (defined) parts.push(t.define!);
@@ -757,7 +821,9 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean): HeartReply {
     if (!defined && !hint) parts.push(pick(`${t.id}:feel`, t.feel));
     parts.push(hint ?? pick(`${t.id}:ins`, t.insight));
     if (t.stepFirst) parts.push(pick(`${t.id}:step`, t.step));
-    parts.push(pick(`${t.id}:ask`, t.ask));
+    // Người dùng vừa nói rõ điều đó rồi ("chia tay 2 năm rồi") thì không hỏi lại "chia tay lâu chưa?".
+    const asks = avoidAsk ? t.ask.filter((x) => !avoidAsk.test(x)) : t.ask;
+    if (asks.length) parts.push(pick(`${t.id}:ask${avoidAsk ? ":f" : ""}`, asks));
   }
   if (t.heavy && adviceAsked) parts.push(PRO);
   return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
@@ -801,7 +867,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
  * Đang trong cuộc tâm sự → hiểu tin kế tiếp theo ngữ cảnh.
  * prev = chủ đề đang nói; listen = người dùng chỉ muốn được nghe (không khuyên); depth = số lượt đã tâm sự.
  */
-export function heartContinue(text: string, prev: string, listen: boolean, depth: number, lastText = "", story = ""): HeartReply {
+export function heartContinue(text: string, prev: string, listen: boolean, depth: number, lastText = "", story = "", ctx: HeartCtx = {}): HeartReply {
   const n = normStrict(text, HEART);
   const cur = byId(prev);
   const chip = CHIP_THEME[text.trim()];
@@ -826,7 +892,8 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       listen: true,
     };
   // Người dùng than Lomi máy móc / "là sao?" → nhận lỗi, nhắc lại mình đang hiểu chuyện gì, hỏi bạn cần gì.
-  if (META_RE.test(` ${n} `))
+  //   (câu có chủ ngữ là người dùng / người khác — "c nói hoài mà ảnh không nghe" — là đang KỂ, không phải chê Lomi lặp lại.)
+  if (META_RE.test(` ${n} `) && !ctx.self && !ctx.third)
     return {
       text: story
         ? pick("meta", [
@@ -844,10 +911,21 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // Chi tiết ngắn kể thêm cho chuyện đang nói ("bạn ấy là đồng nghiệp", "cả với bạn bè của mình") → KHÔNG đổi chủ đề.
   const detailOnly = !!(t && cur && t.id !== cur.id && !GENERIC.has(cur.id) && NOUNISH.has(t.id) && words <= 9 && !emotionOf(n) && !adviceAsked);
   if (detailOnly) t = undefined;
+  // Đang nói một cảm xúc chung (buồn, lo, cô đơn…) mà kể thêm một MỆNH ĐỀ có nhắc "bạn bè / công việc / gia đình" ("bạn bè ai cũng bận",
+  // "công việc nhiều quá") → đó là chi tiết của chính nỗi buồn / lo đó, không phải mở chuyện "mâu thuẫn với bạn bè". (Chỉ nói trống tên
+  // chủ đề — "chuyện công việc" — thì vẫn chuyển sang chủ đề đó như trước.)
+  if (t && cur && t.id !== cur.id && GENERIC.has(cur.id) && NOUNISH.has(t.id) && !!ctx.mirror && !!ctx.clause && words <= 9 && !emotionOf(n) && !adviceAsked && !DUNNO_RE.test(` ${n} `) && depth >= 2 && prev !== "open") t = undefined;
+  // Đang nói về MỘT NGƯỜI cụ thể ("người ấy im lặng") mà kể thêm một chi tiết về hai người ("tụi a mới quen") → vẫn là chuyện đó.
+  if (ctx.person && t && cur && t.id !== cur.id && (LOVEISH.has(t.id) || t.id === "newlove" || t.id === "single") && words <= 8 && !adviceAsked) t = undefined;
+  // Câu kể về một NGƯỜI KHÁC ("con a sắp thi", "mẹ a ở quê") trong lúc đang tâm sự → chữ "thi", "học", "gia đình" không phải chuyện của người dùng.
+  if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n)) t = undefined;
   // Chuyện đời thường đang kể (vd mắc mưa) → hiểu câu kể tiếp theo đúng chuyện đó.
   const evCur = prev.startsWith("ev:") ? eventById(prev.slice(3)) : undefined;
   const evNew = eventOf(n);
-  if (evNew && evNew !== evCur && (!t || GENERIC.has(t.id))) return eventReply(evNew, n, text);
+  //   (chuyện của một người khác — "con a sắp thi" — không phải chuyện đời thường của chính người dùng.)
+  //   Đang kể một chuyện CỤ THỂ (bị sếp mắng) mà thêm một mẩu ngắn ("vì đi trễ", "mà e bị kẹt xe") → đó là chi tiết của chuyện đó.
+  const detailOfStory = !!cur && !GENERIC.has(cur.id) && !evCur && words <= 8;
+  if (evNew && evNew !== evCur && (!t || GENERIC.has(t.id)) && !ctx.third && !detailOfStory) return eventReply(evNew, n, text);
   if (evCur && (!t || GENERIC.has(t.id))) {
     const f = evCur.follow.find(([re]) => re.test(` ${n} `));
     // Nói lại đúng chuyện đang kể (vd đang "chán" rồi nói "không có gì làm") → gợi ý luôn thay vì hỏi lại.
@@ -924,17 +1002,31 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // Hỏi nghĩa ("YSL là gì?") → giải thích luôn, kể cả khi vẫn đang nói đúng chủ đề đó.
   if (t?.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `)) return themeReply(t, n, false);
   // Chủ đề mới (vd đang buồn chung chung → kể ra là cãi nhau với người yêu) → trả lời theo chủ đề mới.
-  if (t && t.id !== prev && !(listen && !adviceAsked)) return themeReply(t, n, adviceAsked);
+  if (t && t.id !== prev && !(listen && !adviceAsked))
+    return themeReply(t, n, adviceAsked, /\b(\d+|mot|hai|ba|may|vai)\s*(ngay|hom|tuan|thang|nam)\b/.test(n) ? /lâu chưa|bao lâu|từ khi nào|lâu rồi/ : undefined);
   const th = t ?? cur;
   // Câu kể trúng chi tiết mà chủ đề có sẵn lời đáp riêng (vd crush là đồng nghiệp, tính nghỉ việc) → đáp đúng ý đó.
   const hintHit = th?.hint?.find(([re]) => re.test(` ${n} `));
   if (hintHit && !adviceAsked) return { text: `${hintHit[1]}\n\n${pick(`${th!.id}:ask`, th!.ask)}`, quick: [], theme: th!.id, listen };
   if (adviceAsked && th) return themeReply(th, n, true);
+  // "a không biết nói sao", "chẳng biết phải làm thế nào" — bí, đang cần gợi ý (không phải câu hỏi kiến thức) → đưa lời khuyên của đúng chuyện đang nói.
+  if (DUNNO_RE.test(` ${n} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true);
   // Kể thời gian ("3 năm rồi đó", "2 tuần nay") → đáp theo đúng chuyện đang nói.
   const dur = n.match(/\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/);
-  if (dur && th && !t) {
+  // Chỉ khi câu NÓI RIÊNG khoảng thời gian đã qua ("3 năm rồi đó", "từ 2 tuần nay"): "làm được 5 năm" là kể việc khác, "còn 2 tuần nữa thi"
+  // là chuyện sắp tới — mấy câu đó để phần kể tiếp nhắc lại đúng nội dung.
+  const bareDur = !!dur && !n.replace(dur[0], " ").split(" ").some((w) => w && !/^(roi|do|nay|ne|a|luon|thoi|khoang|gan|hon|ca|tu|toi|den|gio|troi|lan|chac|cung|tam)$/.test(w));
+  if (dur && bareDur && th && !t) {
     const span = `${dur[1] === "mo" ? "mấy" : dur[1]} ${({ ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" } as Record<string, string>)[dur[2]]}`;
     const love = LOVE_THEMES.has(th.id);
+    // Đang nói về MỘT NGƯỜI cụ thể ("người ấy im lặng" → "2 ngày rồi") → đáp đúng chuyện với người đó, không hỏi lại "bạn đang thích ai".
+    if (ctx.person && LOVEISH.has(th.id))
+      return {
+        text: `${capF(span)} rồi hả 😔 Từng ấy thời gian cứ phải đoán ý ${ctx.person} thì mệt thật. Nếu bạn muốn chủ động, một tin ngắn, nhẹ nhàng là đủ — không cần giải thích dài.`,
+        quick: [],
+        theme: prev,
+        listen,
+      };
     return {
       text: love
         ? `${span} là cả một chặng đường dài đó 🥺 Gắn bó từng ấy thời gian thì buồn, hụt hẫng là đương nhiên — có biết bao kỷ niệm và thói quen chung mà. ${pick(`${th.id}:ask`, th.ask)}`
@@ -945,8 +1037,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
     };
   }
   // Chi tiết ngắn → nhắc lại cho người dùng thấy Lomi đang nghe đúng chuyện, rồi đi tiếp chuyện đang nói.
-  if (detailOnly && th)
-    return { text: `À, ${echo(text)} hả 🤔 ${pick(`${th.id}:ins`, th.insight)}\n\n${pick(`${th.id}:ask`, th.ask)}`, quick: [], theme: prev, listen };
+  if (detailOnly && th) return ctx.mirror ? follow(n, th, prev, listen, depth, lastText, story, ctx) : { text: `À, ${echo(text)} hả 🤔 ${pick(`${th.id}:ins`, th.insight)}\n\n${pick(`${th.id}:ask`, th.ask)}`, quick: [], theme: prev, listen };
   if (adviceAsked || (DUNNO_RE.test(` ${n} `) && !th))
     return {
       text: `${story ? `Về chuyện “${story}”, ` : ""}Lomi gợi ý vài điều nha:\n• ${pick("gadv", byId("sad")!.advice)}\n• Viết ra điều đang làm bạn bận lòng, rồi chia nhỏ xem phần nào mình làm được ngay.\n• Cho mình nghỉ ngơi đủ trước khi quyết định chuyện lớn.`,
@@ -954,7 +1045,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       theme: prev,
     };
   // Hỏi một điều Lomi không biết (không khớp chủ đề nào) → nói thật, không đáp đại cho có.
-  if (!t && /\?|\b(la gi|nghia la|hieu .* khong|biet .* khong|co biet)\b/.test(`${text} ${n} `))
+  if (!t && !NO_RE.test(n) && !YES_RE.test(n) && ((ctx.ask && !emotionOf(n)) || /\?|\b(la gi|nghia la|hieu .* khong|biet .* khong|co biet)\b/.test(`${text} ${n} `)))
     return {
       text: pick("unk", [
         "Ừa, Lomi nghe nè. Bạn nói thêm một chút để Lomi bắt đúng ý nha.",
@@ -964,17 +1055,124 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       theme: prev,
       listen,
     };
-  // Kể tiếp → phản chiếu cảm xúc + (nếu không chỉ muốn nghe) một góc nhìn / bước nhỏ + câu hỏi mở.
+  return follow(n, th, prev, listen, depth, lastText, story, ctx, !!t);
+}
+
+/**
+ * KỂ TIẾP (10/10) — đáp bám nội dung:
+ *   1. nhắc lại đúng điều vừa nghe (hoặc gọi tên cảm xúc người dùng vừa nói ra);
+ *   2. xoay kiểu đi tiếp theo lượt: một góc nhìn → một câu hỏi CỤ THỂ → một bước nhỏ / chỉ ở bên — không phải lượt nào cũng hỏi,
+ *      và không hỏi dồn khi lượt trước Lomi vừa hỏi;
+ *   3. kể được vài ý rồi thì TÓM LẠI các ý đó và hỏi bạn cần gợi ý hay chỉ cần người nghe;
+ *   4. không dùng lại câu đã nói trong mấy tin gần đây. Mấy câu "đang nghe" chung chung chỉ là phương án cuối, không dùng hai lượt liền.
+ */
+function follow(n: string, th: Theme | undefined, prev: string, listen: boolean, depth: number, lastText: string, story: string, ctx: HeartCtx, newTheme = false): HeartReply {
+  const recent = ctx.recent ?? (lastText ? [lastText] : []);
+  const lowR = recent.map((r) => r.toLowerCase());
+  const said = (x: string) => lowR.some((r) => r.includes(x.toLowerCase()) || (!!ctx.say && r.includes(ctx.say(x).toLowerCase())));
+  // Chọn câu CHƯA nói; trong số đó ưu tiên câu có chung từ với điều người dùng vừa kể ("sợ làm phiền" → câu nói về "không phiền").
+  const keyWords = (x: string) => normalizeVi(x).split(" ").filter((w) => w.length >= 4 && !STOP.has(w));
+  const mine = new Set(keyWords(ctx.mirror ?? ""));
+  const fresh = (key: string, arr: string[] | undefined) => {
+    const pool = (arr ?? []).filter((x) => !said(x));
+    if (!pool.length) return undefined;
+    const near = mine.size ? pool.filter((x) => keyWords(x).some((w) => mine.has(w))) : [];
+    return near.length ? near[0] : pick(key, pool);
+  };
+  const evCur = prev.startsWith("ev:") ? eventById(prev.slice(3)) : undefined;
+  const fam: Fam | undefined = evCur ? (evCur.good ? undefined : "mishap") : th ? FAM[th.id] : undefined;
   const e = emotionOf(n);
+  const m = ctx.mirror?.trim();
+  const p = ctx.person && th && LOVEISH.has(th.id) ? ctx.person : undefined;
+  const lastAsked = /\?\s*$/.test(lastText.trim());
+  const good = (ctx.val ?? 0) > 0;
+  const bad = (ctx.val ?? 0) < 0;
   const parts: string[] = [];
-  parts.push(e ? pick("reflect", REFLECT).replace("{e}", e) : pick("listen", LISTEN));
-  if (!listen && th && !(GENERIC.has(th.id) && !t && !e)) {
-    if (depth % 2 === 1) parts.push(pick(`${th.id}:ins`, th.insight));
-    else parts.push(pick(`${th.id}:step`, th.step));
-    if (e) parts.push(pick(`${th.id}:ask`, th.ask));
-  } else if (e) parts.push(pick("listen", LISTEN));
-  if (th?.heavy && depth >= 3 && depth % 3 === 0) parts.push(PRO);
+
+  // 3) Tóm lại khi đã kể được vài ý.
+  const det = (ctx.details ?? []).filter(Boolean);
+  const sumMark = "hay chỉ cần có người nghe thôi";
+  //   (lượt trước Lomi vừa hỏi thì lời mời ở cuối là câu KỂ, không thêm một câu hỏi nữa — không hỏi dồn.)
+  if (th && !evCur && det.length >= 4 && depth >= 5 && !said("từng đó") && !said(sumMark) && !good) {
+    const list = det.slice(-4).join(", ");
+    parts.push(`${capF(list)} — từng đó chuyện dồn lại thì ai mà không ${fam === "tired" ? "kiệt sức" : fam === "worry" ? "lo" : "nặng lòng"} 🥺`);
+    if (!listen) parts.push(lastAsked ? "Bạn cần Lomi gợi ý gì thì cứ nói nha, còn không thì Lomi cứ ngồi đây nghe bạn." : `Bạn muốn Lomi gợi ý vài cách cho nhẹ bớt, ${sumMark}?`);
+    return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+  }
+
+  // "thôi kệ", "bỏ đi", "ừ", "vậy thôi" sau một câu Lomi không hỏi gì → người dùng đang khép lại: đáp nhẹ, không hỏi dồn, không "kể thêm đi".
+  if (!lastAsked && !e && CLOSE_RE.test(n)) {
+    const soft = "Khi nào muốn nói tiếp thì cứ nhắn Lomi nha.";
+    return { text: said(soft) ? "Dạ 🌿" : `Dạ 🌿 ${soft}`, quick: [], theme: prev, listen };
+  }
+  let reacted = false;
+  // 1) Mở đầu: nhắc lại điều vừa nghe / gọi tên cảm xúc.
+  if (m) {
+    // Mặt buồn chỉ khi điều vừa kể là chuyện không vui; việc bình thường của chính người dùng ("tụi a mới quen", "a xin lỗi rồi") thì không.
+    const mark = good ? " 😊" : ctx.neg && fam === "mishap" ? "" : bad || e || ((fam || th) && !ctx.self && !evCur?.good) ? (fam === "mishap" ? " 😩" : " 😔") : "";
+    const head = `${capF(m)} hả${mark || "."}`;
+    // Đã nhắc lại đúng lời người dùng thì không cần gọi tên cảm xúc thêm lần nữa; chỉ thêm một lời đáp đúng tông (không lặp câu đã nói).
+    //   (câu có phủ định — "sếp không nói gì" — là chuyện KHÔNG xảy ra, chưa chắc là điều tệ → chỉ nhắc lại.)
+    //   Lời đáp đó chỉ dành cho điều xảy đến với người dùng ("làm cả ngày", "vợ a không nói chuyện với a"); còn việc chính họ làm / muốn
+    //   ("a xin lỗi rồi", "a muốn nghỉ") thì chỉ nhắc lại, không phán "vậy thì khó chịu thật".
+    const react = good ? "Nghe vậy cũng nhẹ được một chút ha." : fam && !p && !(ctx.neg && fam === "mishap") && (!ctx.self || bad) ? fresh(`react:${fam}`, REACT[fam]) : undefined;
+    reacted = !!react;
+    // Chỉ nhắc lại trơ trọi mà lượt này không nói thêm gì nữa (đang "chỉ nghe") thì thêm một lời ngắn cho thấy Lomi vẫn theo kịp.
+    const lone = !react && (listen || good) ? fresh("support", SUPPORT) : undefined;
+    parts.push([head, react, lone].filter(Boolean).join(" "));
+  } else if (e) parts.push(fresh("reflect", REFLECT.map((x) => x.replace("{e}", e))) ?? `Lomi hiểu, ${e} như vậy khó chịu lắm.`);
+  else {
+    // Phương án cuối: câu "đang nghe" — không dùng hai lượt liền nhau.
+    const justListened = LISTEN.some((x) => said(x) && ((lowR[0] ?? "").includes(x.toLowerCase()) || (!!ctx.say && (lowR[0] ?? "").includes(ctx.say(x).toLowerCase()))));
+    parts.push(
+      justListened
+        ? story && !lastAsked
+          ? `Ừm. Trong chuyện “${story}”, điều gì làm bạn khó chịu nhất?`
+          : "Ừm, Lomi hiểu."
+        : (fresh("listen", LISTEN) ?? "Ừm, Lomi hiểu."),
+    );
+    if (!justListened || !th) return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+  }
+  if (listen || good) return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+
+  // 2) Đi tiếp: xoay kiểu theo lượt.
+  // Chủ đề chung chung (buồn, mệt, lo…) mà người dùng chỉ đang KỂ chi tiết, không nói ra cảm xúc → không chen bài "góc nhìn / bước nhỏ"
+  // (kể "con học không tốt" mà được khuyên "hít thở 4 nhịp" là tư vấn tâm lý không ai hỏi). Chỉ nhắc lại + hỏi tiếp một ý cụ thể.
+  const calmDetail = !!th && GENERIC.has(th.id) && !newTheme && !e;
+  const insight = () => (p ? fresh("rel:ins", REL_INSIGHT.map((x) => x.split("{p}").join(p))) : th && !calmDetail ? fresh(`${th.id}:ins`, th.insight) : undefined);
+  const step = () => (th && !p && !calmDetail ? fresh(`${th.id}:step`, th.step) : undefined);
+  const ask = () => {
+    if (lastAsked) return undefined; // lượt trước vừa hỏi → lượt này không hỏi dồn
+    if (p) return fresh("rel:ask", REL_ASK.map((x) => x.split("{p}").join(p)));
+    // Câu hỏi mở đầu của chủ đề ("Có chuyện gì làm bạn buồn vậy?") chỉ hợp lúc mới vào chuyện; sau đó hỏi một ý cụ thể để đi tiếp.
+    const opening = th && depth <= 2 && !GENERIC.has(th.id) ? fresh(`${th.id}:ask`, th.ask) : undefined;
+    return opening ?? (fam ? fresh(`prog:${fam}`, PROGRESS[fam]) : undefined) ?? fresh("prog:any", PROGRESS.any);
+  };
+  // Ý có CHUNG TỪ với điều vừa kể thì dùng ngay (đó là đáp đúng nội dung); còn lại xoay theo lượt và dè dặt với "bài học chung":
+  //   lượt 1 hỏi tiếp một ý cụ thể · lượt 2 chỉ ghi nhận (có nói ra cảm xúc thì thêm một góc nhìn) · lượt 3 một bước nhỏ / góc nhìn.
+  const nearOf = (arr: string[] | undefined) => (mine.size ? (arr ?? []).filter((x) => !said(x) && keyWords(x).some((w) => mine.has(w)))[0] : undefined);
+  const relevant = p ? nearOf(REL_INSIGHT.map((x) => x.split("{p}").join(p))) : th && !calmDetail ? (nearOf(th.insight) ?? nearOf(th.step)) : undefined;
+  const k = depth % 3;
+  //   Người dùng CHỈ ĐANG KỂ (không nói ra cảm xúc) thì Lomi nghe: nhắc lại, thỉnh thoảng hỏi tiếp một ý — không chen lời khuyên không ai hỏi
+  //   (lời khuyên có khi người dùng xin, hoặc khi Lomi tóm lại và mời). Có nói ra cảm xúc thì mới thêm một góc nhìn / bước nhỏ.
+  const extra = relevant ?? (e || p ? (k === 0 && !p ? (step() ?? insight()) : (insight() ?? ask())) : k === 1 || (k === 2 && !reacted) ? ask() : undefined);
+  const added = !!extra;
+  if (extra) parts.push(extra);
+  // Chỉ nhắc lại trơ trọi thì cụt quá → thêm một lời ngắn cho thấy Lomi vẫn theo kịp (không lặp câu vừa dùng).
+  if (!added && m && parts.length === 1 && !reacted) {
+    const s = fresh("support", SUPPORT);
+    if (s) parts[0] = `${parts[0]} ${s}`;
+  }
+  if (th?.heavy && e && depth >= 3 && depth % 3 === 0 && !said(PRO)) parts.push(PRO);
   return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+}
+const CLOSE_RE = /^(khong|ko|hong|khong co|thoi|thoi ke|ke di|ke no|ke|bo di|thoi bo di|thoi bo qua|bo qua di|khong sao|khong co gi|vay thoi|the thoi|vay do|u|uh|um|uhm|ok|oke|okie|da|vang|ua)( (nha|nhe|a|di|em|e|lomi|vay|thoi))*$/;
+const SUPPORT = ["Lomi hiểu.", "Ra là vậy."];
+const STOP = new Set("khong nhung nhieu duoc nguoi minh chuyen muon dang thoi cung nhau biet nghe thay luon chua".split(" "));
+
+/** Kể tiếp một chuyện đời thường không vui (kẹt xe, mắc mưa…) bằng một mẩu ngắn không khớp bài nào → đáp bám nội dung, đúng tông. */
+export function heartFollow(text: string, prev: string, listen: boolean, depth: number, lastText = "", story = "", ctx: HeartCtx = {}): HeartReply {
+  return follow(normStrict(text, HEART), byId(prev), prev, listen, depth, lastText, story, ctx);
 }
 
 /** Chủ đề tâm sự khớp với câu (để biết câu này là chuyện cụ thể hay chỉ là cảm xúc chung). */

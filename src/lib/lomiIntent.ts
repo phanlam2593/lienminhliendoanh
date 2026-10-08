@@ -116,7 +116,7 @@ export function foodChoice(text: string): FoodChoice | null {
     return null;
   }
   // Tên nhóm món có thể là "pizza, đồ Âu" — nói với người dùng thì chỉ dùng tên món chính.
-  const label = d.name.split(",")[0].trim();
+  const label = d.name.split(/[,(]/)[0].trim(); // "Lẩu (gà lá é, lẩu bò…)" → "Lẩu"
   // Đang KỂ một chuyện đã qua có nhắc món ("hôm qua tụi em đi ăn pizza rồi cãi nhau…") → không phải nhờ chọn món.
   if (STORY.test(n)) return null;
   if (PLACE.test(n)) return { intent: "food_place", dish: d.id, label };

@@ -65,7 +65,7 @@ const Q_START = /^(ai|gì|nào|đâu|sao|thế nào|bao nhiêu|mấy|tại sao|v
 // Trừ khi phía trước là phủ định — "a chưa ăn gì", "mình không sao đâu", "không biết làm gì" là câu kể.
 const WH_END = /(?<![\p{L}])(gì|chi|đâu|bao nhiêu|bao lâu|bao giờ|khi nào|mấy|ai|thế nào|ra sao|làm sao|kiểu gì|cái gì|là gì|như nào|sao ta)\s*[!.…]*\s*$/u;
 const NEG_BEFORE = /(?<![\p{L}])(không|ko|hông|hok|khum|chưa|chẳng|chả|đâu có|đừng|k)(?![\p{L}])/u;
-const DIRECTIVE = /^(cho|nói|chỉ|giải thích|cho biết|tìm|tra|dịch|viết|tính|giúp|hãy|làm|kể|hướng dẫn|tư vấn|gợi ý|đề xuất|xin|mách|bảo|rút|bói|lựa|chọn|cho hỏi|hỏi)\b/u;
+const DIRECTIVE = /^(cho|nói|chỉ|giải thích|cho biết|tìm|tra|dịch|viết|tính|giúp|hãy|làm(?= (giúp|giùm|dùm|hộ|cho|ơn|bài|thơ|văn|toán|phép|sao|thế nào|gì|như|theo|thử|lại|đi|một|cái|câu))|kể|hướng dẫn|tư vấn|gợi ý|đề xuất|xin|mách|bảo|rút|bói|lựa|chọn|cho hỏi|hỏi)\b/u;
 export function isAskLike(raw: string): boolean {
   const s = low(raw);
   if (s.includes("?")) return true;
@@ -440,7 +440,7 @@ const META: [string, RegExp, string[]][] = [
   ],
   [
     "meta_understand",
-    /\b(hieu (a|anh|chi|c|minh|toi|tui|khong|ko|chua)( noi)?( gi)?|co hieu|hieu gi khong|hieu hong|biet gi (khong|ko)|chua biet (ha|a|sao)|chang biet gi|ngu (qua|vay|the)|do ngoc|ngo ngan|dot qua|khong hieu gi het|sao cu (bat|hoi)|bat (minh|toi|tui|a|anh) (hoi|noi|viet) (hoai|mai|quai|lai)|(hoi|noi|lap) (hoai|mai|quai|di lap lai)|lap lai)\b/,
+    /\b(hieu (a|anh|chi|c|minh|toi|tui|khong|ko|chua)( noi)?( gi)?|co hieu|hieu gi khong|hieu hong|biet gi (khong|ko)|chua biet (ha|a|sao)|chang biet gi|ngu (qua|vay|the)|do ngoc|ngo ngan|dot qua|khong hieu gi het|sao cu (bat|hoi)|bat (minh|toi|tui|a|anh) (hoi|noi|viet) (hoai|mai|quai|lai)|(hoi|noi|lap) (hoai|mai|quai|di lap lai)(?! (ma )?(khong|ko|chang|cha|chua) (chiu )?nghe)|lap lai)\b/,
     [
       "Dạ xin lỗi bạn, chắc Lomi hiểu chưa đúng ý 🙏 Lomi còn đang tập hiểu cách mọi người nói chuyện. Bạn thử nói ngắn một ý nha — chuyện sức khoẻ, tâm sự, tình cảm, bói bài hay dùng app — Lomi sẽ cố hết sức!",
       "Hic, Lomi xin lỗi vì chưa theo kịp bạn 🥲 Bạn nói lại bằng vài chữ ngắn gọn giúp Lomi nha. Lomi sẽ học dần để hiểu bạn hơn nha!",
@@ -458,8 +458,10 @@ const TOPIC_ONLY: [RegExp, string][] = [
 
 const REACTION = /^(buon cuoi|mac cuoi|hai|hai huoc|vui|de thuong|dinh|xin|ghe|ky|la|hay|tuyet|ngau|chat|cha|chu choa|chu cha|oa|wow|ua|ui|oi)( (cha|ghe|qua|that|thiet|vay|du|vai|luon|a|ha|nha|ta|troi|lam|the|ne))*$/;
 // ── Đáp lời KỂ TIẾP: bám vào điều vừa kể (vui / xui / một mẩu chi tiết) thay vì một câu mẫu cố định ──
-const TALK_POS = W("vui|đã|thích|ngon|đẹp|to|nhiều|được|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
-const TALK_NEG = W("mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress");
+const TALK_POS = W("vui|đã ghê|đã quá|thích|ngon|đẹp|được thưởng|được khen|được nghỉ|được tăng|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
+// Từ hay gặp trong câu KỂ TIẾP ("câu được mấy con cá to") — đủ để biết là đang kể, nhưng chưa đủ để nói đó là chuyện vui.
+const TALK_MORE = W("đã|to|nhiều|được");
+const TALK_NEG = W("mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư");
 const ACT_STOP = new Set("với cùng ở tại rồi nè nha mà thì và hôm lúc xong về cho để nên quá lắm ghê luôn á ạ nhưng mới vừa đang mấy nhiều hoài suốt nữa đó".split(" "));
 /** Việc vừa kể: "hôm qua anh đi câu cá với mấy đứa bạn" → "đi câu cá" (động từ + tối đa 3 từ, dừng ở từ nối). */
 function echoAct(s: string): string {
@@ -473,13 +475,13 @@ function echoAct(s: string): string {
   return out.length ? `${m[1]} ${out.join(" ")}` : "";
 }
 // Từ mở đầu của một câu kể tiếp lược chủ ngữ: từ nối, phó từ, động từ thường gặp — không phải một danh từ / tên riêng mới.
-const CONT_HEAD = new Set("xong roi sau ma tai vi nen voi con luc hoi toi den ve di an uong choi ngoi nam ngu lam mua gap thay duoc bi co khong chua dang moi vua cung lai toan chi ca het them nhung ai ngo ai de".split(" "));
+const CONT_HEAD = new Set("xong roi sau ma tai vi nen voi con luc hoi toi den ve di an uong choi ngoi nam ngu lam mua gap thay duoc bi co khong chua dang moi vua cung lai toan chi ca het them nhung ai ngo ai de o".split(" "));
 /** Đang nghe kể: tin này có phải KỂ TIẾP không (để đáp theo mạch thay vì coi là câu độc lập). */
 export function isTalkCont(raw: string): boolean {
   const s = low(raw);
   const t = trimLead(tokens(raw)); // bỏ "hôm qua", "sáng nay"… ở đầu rồi mới xét
   if (!t.length || isAskLike(raw)) return false;
-  return isPersonalTalk(raw) || t.length <= 3 || TALK_POS.test(s) || TALK_NEG.test(s) || CONT_HEAD.has(t[0]);
+  return isPersonalTalk(raw) || t.length <= 3 || TALK_POS.test(s) || TALK_MORE.test(s) || TALK_NEG.test(s) || CONT_HEAD.has(t[0]);
 }
 /** Câu kể vui / nhẹ nhàng (không có dấu hiệu buồn, mệt, xui) — để chuyện vui không bị đọc thành tâm sự nặng nề. */
 export function isUpbeat(raw: string): boolean {
@@ -493,7 +495,9 @@ export function talkContinue(raw: string, depth: number): SenseReply {
   const pos = !neg && TALK_POS.test(s);
   // Mẩu chi tiết ngắn ("xe máy", "ở Đà Lạt") → nhắc lại đúng mẩu đó cho thấy Lomi theo kịp.
   // (chữ "bạn" trong mẩu nhắc lại là NGƯỜI BẠN của người dùng — viết "bạn bè" để lúc hiển thị không bị đổi thành anh / chị)
-  const frag = words.length <= 3 && !neg && !pos ? `${cap(words.join(" ").replace(/(?<![\p{L}])bạn(?![\p{L}])(?! (bè|thân|gái|trai))/gu, "bạn bè"))} hả 😄` : "";
+  //   (bỏ từ tự xưng ở đầu — "a ăn với vợ" → "Ăn với vợ hả" — vì đây là lời Lomi nhắc lại.)
+  const fw = /^(a|anh|c|chị|e|em|mình|tui|tôi|tớ)$/.test(words[0] ?? "") ? words.slice(1) : words;
+  const frag = words.length <= 4 && fw.length >= 1 && !neg && !pos ? `${cap(fw.join(" ").replace(/(?<![\p{L}])bạn(?![\p{L}])(?! (bè|thân|gái|trai))/gu, "bạn bè"))} hả 😄` : "";
   const ack = neg
     ? pick(["Ui, nghe mà thương ghê 🥺", "Hic, vậy thì khó chịu thiệt ha.", "Trời, tội ghê 😣"])
     : pos

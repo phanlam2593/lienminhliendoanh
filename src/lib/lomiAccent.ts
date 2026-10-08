@@ -43,6 +43,7 @@ export const HEALTH: Table = {
   mo: ["mổ", "mờ", "mơ", "mỡ", "mô", "mồ", "mộ", "mợ"], // mở
   },
   p: [
+    ["mọi người", "moix nguoi"], // "trước mặt mọi người" ≠ mỏi mắt
     ["đỏ mặt", "do matx"],
     ["mới mở", "moi mox"],
     ["vừa mở", "vua mox"],

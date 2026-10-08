@@ -44,6 +44,7 @@ export type Turn = {
   heart?: string;
   health?: { subject?: string; label?: string; diet?: string; cond?: string };
   about?: { text: string; kind: string };
+  thread?: { kind: string; who: { text: string; kind: string }; facts: Record<string, string | boolean>; asked: string[]; done: string[]; idle?: number; closed?: boolean };
   rel?: string;
   hsub?: string;
   sx?: string[];

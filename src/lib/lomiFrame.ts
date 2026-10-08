@@ -17,10 +17,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { expandTeen, isAppish, type ChatReply } from "@/lib/lomiChat";
 import type { Addr } from "@/lib/lomiAddress";
-import { YOU_MARK, type Frame, type SubjectKind } from "@/lib/lomiParse";
+import { YOU_MARK, mirrorOf, type Frame, type SubjectKind } from "@/lib/lomiParse";
 import { detectDish, detectSearch } from "@/lib/lomiSearch";
 import { senseState } from "@/lib/lomiSense";
-import { analyzeBody } from "@/lib/lomiSymptoms";
+import { analyzeBody, analyzeMind, onlySoftSymptoms } from "@/lib/lomiSymptoms";
 import { healthSubjectOf } from "@/lib/lomiHealthTopic";
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { dietOf } from "@/lib/lomiDiet";
@@ -52,6 +52,12 @@ export type FrameCtx = {
   food?: boolean;
   /** Câu rủ mà lớp cũ đã có câu đáp riêng (rủ chơi game → Quẹt…). */
   legacyInvite?: ChatReply | null;
+  /** Lớp "cảm giác tâm lý" (lib/lomiSymptoms.analyzeMind) nhận câu này. */
+  mind?: boolean;
+  /** Lomi vừa hỏi chuyện ở bệnh viện / người nhà bị sao. */
+  hospitalCtx?: boolean;
+  /** Triệu chứng trong câu chỉ là loại "nhẹ, nói bâng quơ" (cảm, mệt, ho…) — lớp sức khoẻ không phân tích câu kể kiểu đó. */
+  softOnly?: boolean;
 };
 export type FrameReply = ChatReply & {
   intent: string;
@@ -65,6 +71,8 @@ export type FrameReply = ChatReply & {
   about?: { text: string; kind: SubjectKind };
   /** Đang tâm sự mà câu này vẫn thuộc mạch đó (tin buồn về người thân) → router giữ nguyên mạch tâm sự. */
   keepHeart?: boolean;
+  /** Người dùng vừa nói ra một cảm xúc không vui ("a đang lo") → mở mạch tâm sự với chủ đề này để câu sau được nghe tiếp. */
+  openHeart?: string;
 };
 
 const MIN_CONF = 0.75;
@@ -213,6 +221,9 @@ function askLomi(f: Frame): FrameReply | null {
 // Chủ đề của thư viện tâm sự thuộc loại "chuyện giữa mình với người đó".
 const REL_THEMES = new Set("cheat breakup ex cold fight jealous longdist family friends boss work toxic marriage inlaw situationship stayorgo lies spark parentsban gossip bullied love".split(" "));
 
+const HOSPITAL = /^(nhập viện|nằm viện|vào viện|vô viện|cấp cứu|đi cấp cứu|phải mổ|đi mổ|mổ|phẫu thuật)$/;
+const DIAGNOSED = /^(trầm cảm|tai biến|đột quỵ|ung thư|tiểu đường|cao huyết áp|huyết áp cao|viêm phổi|sốt xuất huyết)$/;
+const HOSPITAL_PLACE = /(^| )(bệnh viện|viện|phòng khám|trạm xá|phòng cấp cứu)( |$)/;
 // ── Kể chuyện người / con vật / đồ vật khác ───────────────────────────────────
 function third(f: Frame, c: FrameCtx): FrameReply | null {
   const p = f.pred!;
@@ -223,9 +234,21 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   const pet = f.subject === "pet";
   if (p.cls === "death" && (person || pet))
     return { intent: "frame:third_loss", talk: true, keepHeart: true, text: `${subj} ${p.recent ? "mới " : ""}${p.head} hả 🥺 Lomi chia buồn với bạn nha. ${pet ? "Bé ở với bạn lâu chưa?" : "Bạn đang thấy thế nào, kể Lomi nghe với."}` };
+  // "ba a nhập viện rồi", "mẹ a mới mổ" — đã ở trong tay bác sĩ: hỏi bác sĩ nói sao, không hỏi "đi khám chưa".
+  //   Đã nói rõ mổ / cấp cứu vì gì ("mẹ a mổ ruột thừa") thì hỏi giờ sao rồi, không hỏi lại "bị gì".
+  if ((person || pet) && HOSPITAL.test(p.head)) {
+    const lowS = pet ? "bé" : subj.charAt(0).toLowerCase() + subj.slice(1);
+    const what2 = join(p.recent ? "mới" : "", p.head, p.objCore ?? p.obj, p.done ? "rồi" : "");
+    return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `${subj} ${what2} hả 🥺 Thương ghê. ${p.obj ? `Giờ ${lowS} sao rồi bạn, đỡ hơn chưa?` : `Bác sĩ có nói ${lowS} bị gì không?`}` };
+  }
+  // Bệnh đã có tên, tức là đã được chẩn đoán ("mẹ a bị ung thư", "ba e bị tiểu đường") → hỏi đang điều trị ra sao, không hỏi "đi khám chưa".
+  if ((person || pet) && p.cls === "ill" && DIAGNOSED.test(p.head)) {
+    const lowS = pet ? "bé" : subj.charAt(0).toLowerCase() + subj.slice(1);
+    return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `${subj} bị ${p.head} hả 🥺 Thương ghê. Giờ ${lowS} đang điều trị sao rồi bạn?` };
+  }
   if (p.cls === "ill") {
     // Có triệu chứng cụ thể thì lớp sức khoẻ trả lời (router đổi chủ ngữ cho đúng); ở đây là "đang ốm", "bị bệnh" chung chung.
-    if (c.symptom) return null;
+    if (c.symptom && !c.softOnly) return null;
     // "bị cảm thôi", "hơi sốt nhẹ" — nói là nhẹ thì mừng cùng, không hỏi dồn "có nặng không".
     if (f.degree === "low" || f.toks.some((t) => t.t === "thôi" || t.t === "nhẹ")) return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `Chỉ ${what} thôi thì đỡ lo rồi 😊 Mong ${subj.charAt(0).toLowerCase() + subj.slice(1)} mau khoẻ nha!` };
     return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `${subj} ${what} hả 🥺 Thương ghê. ${pet ? "Bé bị sao vậy, bạn đưa đi thú y chưa?" : "Có nặng không bạn, đã đi khám chưa?"}` };
@@ -234,7 +257,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
     // Chuyện đời sống thư viện tâm sự đã có lời hỏi han riêng (cúp điện, kẹt xe…) hoặc chuyện với sếp / người yêu → để lớp đó đáp.
     //  • chuyện đời sống (cúp điện, kẹt xe…) chỉ áp cho đồ vật / nơi chốn — với người thì mấy bài đó lạc đề ("vợ a nấu ăn dở" ≠ quán dở);
     //  • chuyện tình cảm / công việc với vợ chồng, người yêu, sếp → thư viện tâm sự (khi nó nhận đúng loại chuyện đó).
-    if (c.heart && (person || pet ? (f.subjectCls === "partner" || f.subjectCls === "boss") && (c.heart === "rel" || REL_THEMES.has(c.heart)) : c.heart.startsWith("ev:"))) return null;
+    //  • nhưng một tai nạn / chuyện xui của người đó ("sếp a mới bị tai nạn") thì không phải chuyện "với sếp" → vẫn hỏi han ở đây.
+    if (c.heart && (person || pet ? (f.subjectCls === "partner" || f.subjectCls === "boss") && (c.heart === "rel" || REL_THEMES.has(c.heart)) && p.kind !== "event" : c.heart.startsWith("ev:"))) return null;
     // Chê một nét của người đó ("lười lắm", "nấu ăn dở lắm") → hỏi chuyện; gặp chuyện không may ("mới chia tay") → hỏi han.
     if (person && (p.kind === "quality" || !!p.qual)) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 😅 Chuyện sao vậy bạn, kể Lomi nghe với.` };
     if (person) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 🥺 ${pick(["Nghe mà thương. Giờ sao rồi bạn?", "Chuyện sao vậy bạn, kể Lomi nghe với."])}` };
@@ -405,7 +429,7 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   // Đang tâm sự: chỉ tin người thân / thú cưng ốm, mất và lời "không muốn nói nữa" là đáp theo khung; còn lại để mạch tâm sự lo.
   if (c.mode === "heart") {
     if (f.act !== "statement" || !f.pred || f.conf < MIN_CONF || f.multi) return null;
-    if ((f.subject === "third" || f.subject === "pet") && !f.neg && (f.pred.cls === "death" || f.pred.cls === "ill")) return third(f, c);
+    if ((f.subject === "third" || f.subject === "pet") && !f.neg && (f.pred.cls === "death" || f.pred.cls === "ill" || HOSPITAL.test(f.pred.head))) return third(f, c);
     if (f.subject === "self" && f.neg && f.pred.kind === "desire" && /^(nói|kể|nhắc|tâm sự|bàn|nghĩ)( |$)/.test(f.pred.obj)) return selfNeg(f, c);
     return null;
   }
@@ -421,7 +445,7 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   if (c.appish || c.biz) return null;
   const p = f.pred;
 
-  if (f.subject === "third" || f.subject === "pet" || f.subject === "thing" || f.subject === "place") return f.neg || (c.medical && p.cls !== "ill") ? null : third(f, c);
+  if (f.subject === "third" || f.subject === "pet" || f.subject === "thing" || f.subject === "place") return f.neg || (c.medical && p.cls !== "ill" && !HOSPITAL.test(p.head)) ? null : third(f, c);
   // "hôm nay trời không mưa" — thời tiết + phủ định (câu khẳng định đã có lớp cũ đáp theo từng kiểu thời tiết).
   if (f.subject === "weather") {
     if (p.kind !== "quality") return null;
@@ -434,13 +458,20 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
 
   // Từ đây: người nói (hoặc câu lược chủ ngữ có mốc thời gian / phủ định rõ).
   const elided = f.subject === "none";
+  // "a đang chăm mẹ", "chăm con ốm" — đang chăm một người thân: hỏi thăm NGƯỜI ĐÓ (mở mạch chuyện về người đó), không đáp kiểu chuyện phiếm.
+  //   (chỉ khi rõ là chăm người ỐM: có chữ ốm / bệnh / viện, người được chăm là bậc trên, hoặc Lomi vừa hỏi chuyện ở bệnh viện —
+  //    "a đang chăm con" thường ngày thì không hỏi "con bị sao".)
+  if (p.cls === "care" && !f.neg && f.toks.some((t) => t.r === "KIN") && (c.hospitalCtx || /(ốm|bệnh|viện)/.test(p.obj) || /(^| )(mẹ|má|bố|ba|cha|ông|bà|nội|ngoại)( |$)/.test(p.obj))) {
+    const whoTxt = (p.objCore ?? p.obj).replace(/\s+(ốm|bệnh|bị ốm|bị bệnh|nằm viện|ở viện)$/u, "").trim();
+    if (whoTxt) return { intent: "frame:third_ill", talk: true, keepHeart: true, about: { text: whoTxt, kind: "third" }, text: `${cap(join(p.ongoing ? "đang" : "", p.head, whoTxt))} hả 🥺 Vất vả cho bạn rồi. ${cap(whoTxt)} bị sao vậy bạn?` };
+  }
   if (elided && !(f.time?.explicit || f.neg || p.planned)) return null;
   if (f.neg) {
     // Sở thích ("không thích ăn ngọt") và chuyện một món cụ thể ("không thèm pizza") không phải câu hỏi sức khoẻ.
     const taste = p.kind === "desire" && (/^(thích|khoái|ưa|mê|ghiền|ghét)$/.test(p.head) || !!detectDish(f.raw));
     return (c.health || c.medical) && p.cls !== "well" && !taste ? null : selfNeg(f, c);
   }
-  if (c.health || c.medical) return null;
+  if ((c.health || c.medical) && !(p.kind === "location" && HOSPITAL_PLACE.test(p.place || p.obj))) return null;
   // Nói với Lomi là nhớ / thương Lomi ("a nhớ e quá") — không phải than cô đơn.
   if (!elided && /^Lomi$/i.test(p.obj.trim()) && (p.kind === "desire" || p.head === "nhớ")) {
     if (p.head === "nhớ") return { intent: "frame:to_lomi", text: pick(["Lomi cũng nhớ bạn nè 🥹 Dạo này bạn sao rồi?", "Ui cảm động ghê 🥰 Lomi vẫn ở đây chờ bạn mà!"]) };
@@ -464,11 +495,24 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
     return p.cls === "free"
       ? { intent: "frame:free", talk: true, text: `${timeCap(f)} rảnh hả 😄 Bạn tính làm gì cho vui — đi chơi, cà phê hay ở nhà nghỉ ngơi?`, quick: ["Cuối tuần đi đâu chơi?", "Tìm quán cà phê gần đây"] }
       : { intent: "frame:busy", talk: true, text: `${timeCap(f)} bận hả 💪 Cố lên nha, xong việc nhớ nghỉ ngơi đó!` };
+  // "a đang lo", "a hơi sợ" — nói ra một cảm xúc không vui mà thư viện tâm sự chưa có bài riêng → hỏi ĐÚNG chuyện đó (không hỏi
+  // "chuyện này làm bạn thấy sao?") và mở mạch tâm sự để câu kể sau được nghe tiếp.
+  //   (cảm giác lớp cũ đã có câu đáp riêng — "a đang chán", "a đuối quá" — thì vẫn để lớp đó đáp.)
+  //   Có nói rõ với ai ("a giận vợ a") thì nhắc lại đúng người đó và mở mạch tâm sự hợp chuyện (vợ chồng / sếp / người nhà).
+  if (p.kind === "state" && p.cls === "feel" && p.val < 0 && !c.heart && !c.mind && !elided && !f.time?.explicit && !senseState(f.raw)) {
+    const worry = /^(lo|sợ|hồi hộp|căng thẳng|bất an|rối|hoang mang)/.test(p.head);
+    const kin = f.toks.find((t) => t.r === "KIN");
+    if (!p.obj) return { intent: "frame:feel", openHeart: worry ? "anxiety" : /^(mệt|đuối|oải|kiệt sức)/.test(p.head) ? "tired" : "sad", text: worry ? `Bạn đang ${p.head} chuyện gì vậy 🥺 Kể Lomi nghe với.` : `Bạn ${p.ongoing ? "đang " : ""}${p.head} hả 🥺 Có chuyện gì vậy, kể Lomi nghe với.` };
+    if (kin && p.obj.split(" ").length <= 5)
+      return { intent: "frame:feel", openHeart: worry ? "anxiety" : kin.cls === "partner" ? "fight" : kin.cls === "boss" ? "boss" : "family", text: `Bạn ${p.ongoing ? "đang " : ""}${p.head} ${p.obj} hả 🥺 Có chuyện gì vậy, kể Lomi nghe với.` };
+  }
   if (p.kind === "state" || p.kind === "quality") {
     // Trạng thái khẳng định ("a mệt", "a vui") đã có lớp cũ; riêng điều tốt đẹp ĐÃ QUA ("tối qua a ngủ ngon lắm") thì đáp như chuyện đã qua.
     if (f.time?.explicit && f.time.rel === "past" && p.val > 0 && p.cls !== "feel") return selfPast(f);
     return null;
   }
+  // "a đang ở bệnh viện" — không phải chỗ để khen "thích ghê": hỏi thăm có chuyện gì.
+  if (p.kind === "location" && HOSPITAL_PLACE.test(p.place || p.obj) && !elided) return { intent: "frame:location", talk: true, text: `Đang ở ${p.place || p.obj} hả 🥺 Có chuyện gì vậy bạn — bạn hay người nhà bị sao?` };
   // "a đang ở …", "tối nay a ở nhà thôi". Câu lược chủ ngữ ("hôm nay ở Đà Lạt lạnh quá") là tả nơi đó, không phải kể mình đang ở đâu.
   if (p.kind === "location") return (c.search && !p.ongoing) || (elided && !p.ongoing) || /(^| )(nóng|lạnh|mưa|nắng|gió|rét|oi)( |$)/.test(p.obj) ? null : selfLocation(f);
   if (p.cls === "seek" || (c.search && !p.recent && !(f.time?.explicit && f.time.rel === "past"))) return null;
@@ -491,6 +535,8 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
 /** Chủ ngữ khi câu kể bệnh của NGƯỜI KHÁC ("con a bị sốt", "mẹ a đau lưng") — để lớp sức khoẻ không nói "Bạn đang bị…". */
 export function patientOf(f: Frame, addr?: Addr | null): string | null {
   if (!((f.subject === "third" || f.subject === "pet") && f.subjectText && f.conf >= 0.4)) return null;
+  // "bác sĩ nói viêm họng", "bác sĩ bảo bị viêm xoang" — bác sĩ là người NÓI, không phải người bệnh.
+  if (/^(bác sĩ|bs|y tá|điều dưỡng|dược sĩ)( |$)/.test(f.subjectText)) return null;
   return cap(f.subjectText.split(YOU_MARK).join(youOf(addr)));
 }
 
@@ -535,7 +581,9 @@ export function healthClaim(q: string, f: Frame, flow: FrameFlow): boolean {
  * khung f đọc từ câu GỐC. Trả null = để các lớp sẵn có xử lý như trước.
  */
 export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | null {
-  if (flow.mode === "off" || f.conf < 0.7) return null;
+  // "vợ a đang bầu mà bị cảm" — câu hai vế về một NGƯỜI KHÁC, có vế nói người đó ốm → vẫn là tin người thân ốm (không phải người dùng ốm).
+  const illTok = f.multi && (f.subject === "third" || f.subject === "pet") && f.subjectText && f.act === "statement" && !f.neg ? f.toks.find((t) => t.cls === "ill") : undefined;
+  if (flow.mode === "off" || (f.conf < 0.7 && !illTok)) return null;
   // Hỏi Lomi LÀM ĐƯỢC GÌ trong phạm vi của mình ("e tư vấn kinh doanh được không") — lớp hỏi-khả-năng trả lời, không phải chuyện phiếm về Lomi.
   if (f.act === "question" && capabilityAsk(q)) return null;
   const speechAct = f.act === "greet" || f.act === "wish" || f.act === "thanks" || f.act === "leave" || f.act === "hold";
@@ -553,16 +601,32 @@ export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | nu
     search: !!detectSearch(q),
     food: !!foodChoice(q),
     legacyInvite: u && /^(invite|seek_company)/.test(u.intent) ? u : null,
+    mind: !!analyzeMind(q),
+    softOnly: onlySoftSymptoms(q),
+    hospitalCtx: /(bệnh viện|người nhà bị sao)/.test(flow.lastText ?? ""),
   };
-  const r = frameReply(f, c);
+  const fUse: Frame = illTok ? { ...f, multi: false, conf: Math.max(f.conf, 0.8), pred: { kind: "state", head: illTok.t, cls: "ill", obj: "", val: -1, known: true } } : f;
+  const r = frameReply(fUse, c);
   if (!r) return null;
   const you = youOf(flow.addr);
   const text = r.text
     .split(YOU_MARK)
     .join(you).replace(/(^|[.!?]\s+)(anh|chị|em|bạn)(?=\s)/gu, (_m, a: string, w: string) => `${a}${cap(w)}`);
-  const about = /^frame:third/.test(r.intent) && f.subjectText ? { text: f.subjectText.split(YOU_MARK).join(you), kind: f.subject } : undefined;
+  const about = r.about ? { ...r.about, text: r.about.text.split(YOU_MARK).join(you) } : /^frame:third/.test(r.intent) && f.subjectText ? { text: f.subjectText.split(YOU_MARK).join(you), kind: f.subject } : undefined;
   // "chào e, a mới đi làm về" — chào lại rồi mới đáp phần sau.
   return { ...r, about, text: f.greeted && !speechAct && text ? `Chào bạn nha 👋 ${text}` : text };
+}
+
+/** Mẩu NHẮC LẠI điều vừa nghe, đã đổi ngôi theo cách xưng hô ("vợ a không nói chuyện với a" → "vợ anh không nói chuyện với anh"). */
+export function mirrorText(f: Frame | null, addr?: Addr | null, max = 10): string | null {
+  // Nhắc lại chỉ là xếp lại đúng chữ người dùng gõ nên không cần khung chắc; riêng câu gõ KHÔNG DẤU thì từ có thể bị đọc nhầm → cần chắc.
+  const m = f && (!f.loose || f.conf >= 0.7) ? mirrorOf(f, max) : null;
+  return m ? m.split(YOU_MARK).join(youOf(addr)) : null;
+}
+
+/** Câu là một MỆNH ĐỀ (có vị ngữ / phủ định / mức độ: "bạn bè ai cũng bận", "công việc nhiều quá") chứ không chỉ gọi tên một chủ đề ("chuyện công việc"). */
+export function isClause(f: Frame | null): boolean {
+  return !!f && (!!f.pred || f.toks.some((t) => ["DEGREE", "NEG", "STATE", "ADJ", "VERB", "MOTION", "ASPECT", "DESIRE", "COG"].includes(t.r)));
 }
 
 /** Câu lược chủ ngữ ngay sau khi đang nói về một người / con vật ("mẹ a đang ốm" → "bị cảm thôi") → vẫn là nói về người đó. */

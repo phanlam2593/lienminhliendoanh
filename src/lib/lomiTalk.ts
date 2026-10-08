@@ -233,4 +233,4 @@ export const NO_RE = /^(khong|ko|k|kh|hong|hem|khum|chua|chua co|khong co|khong 
 export const DUNNO_RE = /\b(khong biet|hk bit|k biet|chiu|khong ro|biet daux?|sao biet)\b/;
 // Người dùng than Lomi máy móc / không hiểu
 export const META_RE =
-  /\b(sao cu noi vay|cu noi vay hoai|noi hoai|noi vay hoai|lap lai|lap di lap lai|may moc|nhu robot|nhu cai may|khong hieu gi|khong hieu minh|noi gi vay|la sao|y la sao|y gi|hieu khong vay|tra loi gi ky|tra loi ky vay|lac de|khong lien quan)\b|\bla sao+\b|^(sao+|he|ha|hmm+)$/;
+  /\b(sao cu noi vay|cu noi vay hoai|noi hoai(?! (ma )?(khong|ko|chang|cha|chua) (chiu )?nghe)|noi vay hoai|lap lai|lap di lap lai|may moc|nhu robot|nhu cai may|khong hieu gi|khong hieu minh|noi gi vay|la sao|y la sao|y gi|hieu khong vay|tra loi gi ky|tra loi ky vay|lac de|khong lien quan)\b|\bla sao+\b|^(sao+|he|ha|hmm+)$/;

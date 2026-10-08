@@ -246,6 +246,25 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     };
   }
 
+  // 3b) Vừa bói xong, hỏi NGHĨA của chính lá vừa rút ("lá này nghĩa là sao?", "giải thích thêm đi") → giải lá đó, vẫn giữ trải bài
+  //     (để câu sau "thế còn tình cảm thì sao?" vẫn là hỏi bài).
+  if (c.reading && words <= 9 && !detectTarot(q) && /\b(nghia la|y nghia|nghia gi|nghia sao|la sao|giai thich|noi ro|noi them|noi ky|hieu sao|noi ve gi|la gi)\b/.test(n) && (/\b(la|bai|no|cai nay|cai do|them|hon)\b/.test(n) || words <= 4)) {
+    const r = c.reading;
+    const cards = r.cards.slice(0, 3).map((d) => {
+      const k = tarotCard(d.id);
+      return `• **${k.name.vi}** (${d.rev ? "ngược" : "xuôi"}): ${d.rev ? k.rev.vi : k.up.vi}`;
+    });
+    return {
+      kind: "reply",
+      keep: true,
+      why: "tarot:meaning",
+      reply: {
+        text: `${r.cards.length > 1 ? "Mấy lá bạn vừa rút" : "Lá bạn vừa rút"} nói thế này nè 🔮\n\n${cards.join("\n")}${r.cards.length > 3 ? "\n• … (các lá còn lại đọc theo cách đó)" : ""}\n\nNói gọn: bài không phán số phận, mà chỉ ra năng lượng đang nổi lên để bạn tự chọn cách đi tiếp. Bạn muốn xem kỹ hơn về mảng nào?`,
+        quick: ["Thế còn tình cảm thì sao?", "Thế còn công việc thì sao?", "Rút thêm"],
+      },
+    };
+  }
+
   // 4) Câu trả lời cho câu Lomi vừa hỏi.
   const softTopic = !c.topic || c.topic === "talk" || c.topic === "food" || c.topic === "app";
   if (yes || wrong || no) {
@@ -313,6 +332,8 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     // "quán nào ổn?" (đang nói cà phê) → quán cà phê. Chỉ khi ngoài cụm hỏi chỗ ra câu không còn ý riêng nào.
     if (c.dish && !own && !otherKind && PLACE_Q.test(n) && words <= 7 && !n.replace(PLACE_Q, " ").split(" ").some((w) => w && !PLACE_FILL.has(w)))
       return { kind: "rewrite", why: "food:place", q: `tìm quán ${c.dish.label}` };
+    // Đang nói về một món mà hỏi "loại nào ngon?", "kiểu nào?", "vị nào?" → vẫn là món đó: hỏi khẩu vị cho đúng món.
+    if (c.dish && !own && !otherKind && words <= 6 && /\b(loai|kieu|vi|size|co|phan|topping|nhan) (nao|gi)\b/.test(n)) return { kind: "rewrite", why: "food:kind", q: `${c.dish.label} loại nào ngon` };
     // Vừa than đói, giờ chỉ gõ tên món ("pizza") → tìm quán món đó.
     if (own && words <= 3 && c.foodTalk && !last.dishAsk && !last.dishPick && !ask) return { kind: "rewrite", why: "food:dish", q: `tìm quán ${dishLabel(own)}` };
     // Vừa có kết quả tìm quán cho một món, giờ thêm điều kiện ("gần mình", "có ưu đãi không?", "yên tĩnh").

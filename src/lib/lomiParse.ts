@@ -218,6 +218,7 @@ add("MOTION", "đi|về|ra|vô|vào|tới|đến|lên|xuống|ghé|sang|bay");
 add("VERB", "câu cá|đá bóng|đá banh|leo núi|du lịch|cắm trại|xem phim|coi phim|nghe nhạc|ăn cưới|nghỉ phép|nghỉ ngơi|dạo phố|đi dạo|chạy bộ|tập gym|tập thể dục|bơi|phượt|chơi|hát|nhậu|nghỉ|cưới", { cls: "leisure" });
 add("VERB", "làm việc|công tác|tăng ca|phỏng vấn|thuyết trình|báo cáo|kiểm tra|đi làm|đi học|họp|thi|học|trực|làm|khám", { cls: "duty" });
 add("VERB", "nhắn lại|gọi lại|nói chuyện sau|nói sau", { cls: "return" });
+add("VERB", "chăm sóc|chăm nom|chăm|nuôi bệnh", { cls: "care" });
 add("VERB", "có hẹn|hẹn hò|hẹn", { cls: "leisure" });
 add("VERB", "thức khuya|dậy sớm|dậy trễ|dậy muộn|ngủ trưa|ngủ nướng|rửa chén|rửa bát|quét nhà|lau nhà|phơi đồ|giặt đồ|chuyển nhà|dọn nhà|rửa|quét|lau|phơi|chuyển", { cls: "daily" });
 add("VERB", "nấu ăn|nấu cơm|cắt tóc|ăn sáng|ăn trưa|ăn tối|ăn khuya|ăn đêm|ăn vặt|ăn cơm|ăn|uống|ngủ|dậy|thức|nấu|tắm|giặt|dọn|sửa|mua|bán|gặp|đón|đưa|chờ|đợi|xem|coi|nghe|đọc|viết|vẽ|chụp|gọi|nhắn|nói|kể|mang|lấy|trồng|nuôi|thăm|chăm|trông|ngồi|nằm|đứng|sống|lái|chở|tập|chạy|dắt|dẫn", { cls: "daily" });
@@ -231,11 +232,11 @@ add("STATE", "bận rộn|bận", { cls: "busy", v: 0 });
 add("STATE", "mệt mỏi|lo lắng|căng thẳng|cô đơn|thất vọng|hoang mang|khó chịu|áp lực|buồn|chán|mệt|lo|sợ|giận|bực|tức|stress|tủi|nản|đuối", { cls: "feel", v: -1 });
 add("STATE", "hạnh phúc|thoải mái|phấn khích|hào hứng|yên tâm|vui", { cls: "feel", v: 1 });
 add("STATE", "khoẻ|khỏe|ổn|đỡ", { cls: "well", v: 1 });
-add("STATE", "mất ngủ|ốm yếu|ốm|bệnh|đau|sốt|cảm|ho", { cls: "ill", v: -1 });
+add("STATE", "mất ngủ|ốm yếu|ốm|bệnh|đau|sốt|cảm|ho|bỏ ăn|biếng ăn|bỏ bú|tiêu chảy|co giật|khó thở|trầm cảm|tai biến|đột quỵ|ung thư|tiểu đường|cao huyết áp|huyết áp cao|viêm phổi|sốt xuất huyết", { cls: "ill", v: -1 });
 add("STATE", "hết pin|hết xăng|hết tiền|mất điện|cúp điện|kẹt xe|chia tay|cãi nhau|hư|hỏng|bể|vỡ|rớt|thua|mất|quên", { cls: "bad", v: -1 });
 add("STATE", "qua đời|chết", { cls: "death", v: -1 });
-add("STATE", "thất nghiệp|mất việc|nghỉ việc|tai nạn|nhập viện|nằm viện|phẫu thuật|ly hôn|ly dị|phá sản|đám tang|đám ma|bị đuổi", { cls: "bad", v: -1 });
-add("STATE", "thắng|đậu|đỗ|trúng", { cls: "good", v: 1 });
+add("STATE", "thất nghiệp|mất việc|nghỉ việc|tai nạn|nhập viện|nằm viện|vào viện|vô viện|cấp cứu|đi cấp cứu|phải mổ|đi mổ|mổ|phẫu thuật|sảy thai|té xe|ngã xe|té|ngã|bị thương|gãy tay|gãy chân|ly hôn|ly dị|phá sản|đám tang|đám ma|bị đuổi", { cls: "bad", v: -1 });
+add("STATE", "thắng|đậu|đỗ|trúng|tăng lương|lên lương|thăng chức|lên chức|trúng thưởng", { cls: "good", v: 1 });
 add("ADJ", "dễ thương|đáng yêu|thông minh|vui tính|dễ chịu|yên tĩnh|đẹp|xinh|cute|ngon|giỏi|tốt|xịn|đỉnh|tuyệt|ngoan|hiền|siêng|sạch|rộng|rẻ|ấm|mát|êm|chill|thơm|ngầu|hay", { v: 1 });
 add("ADJ", "khó tính|xấu|dở|tệ|lười|dơ|bẩn|chật|cũ|đắt|mắc|ồn|hôi|dữ|trễ|muộn|chậm", { v: -1 });
 add("ADJ", "to|nhỏ|lớn|cao|thấp|dài|ngắn|ít|sớm|nhanh|xa|gần", { v: 0 });
@@ -243,7 +244,7 @@ add("ADJ", "âm u|u ám|mát mẻ|se lạnh|oi bức|nắng gắt|mưa phùn|mư
 add("PREP", "ở|tại", { cls: "loc" });
 add("PREP", "cùng|cho|của|từ|trong|ngoài|trên|dưới|bằng|để");
 add("CONJ", "tại vì|nhưng|vì|do|nên|và|hoặc");
-add("FILL", "buổi|bữa|tự nhiên|thật ra|hình như|có lẽ|chắc là|thì|là|cũng|lại|cứ|chỉ|toàn|đều|còn|nữa|hết|ơ|à|ờ|ừ|ủa|ui|ôi|chắc|có|bị|được|một|vẫn");
+add("FILL", "một mình|ai cũng|ai nấy|buổi|bữa|tự nhiên|thật ra|hình như|có lẽ|chắc là|thì|là|cũng|lại|cứ|chỉ|toàn|đều|còn|nữa|hết|ơ|à|ờ|ừ|ủa|ui|ôi|chắc|có|bị|được|một|vẫn");
 
 // Từ không dấu dễ trùng với từ khác NGOÀI từ điển — gặp ở vị trí then chốt thì hạ độ chắc.
 const LOOSE_RISK = new Set("toi ban chua dau qua moi an la da co ma no voi thi cho nao ve sang roi nho ngu lam that buon kho doi khoe con day bua mua chan lo so to mat ho cam hay de di ra nha ba bo gap coi nghe".split(" "));
@@ -294,6 +295,8 @@ function disambiguate(tk: Tok[], loose = false) {
   for (let i = 0; i + 1 < tk.length; i++) {
     const n = tk[i + 1];
     if (TITLE.has(tk[i].t) && n.r === "UNK" && n.o && /^\p{Lu}\p{Ll}/u.test(n.o)) Object.assign(tk[i], { r: "KIN", cls: "person" });
+    // "chị a đang bệnh", "anh e mới cưới", "em a sắp thi" — anh / chị / em + người nói (viết gọn) là NGƯỜI THÂN của người nói.
+    else if (/^(chị|anh|em)$/.test(tk[i].t) && is(n, "SELF", "EM") && /^(a|e|c|mình|tôi|tui|tớ)$/.test(n.t) && n.t !== tk[i].t && i + 2 < tk.length && (i === 0 || is(tk[i - 1], "TIME", "VOC", "FILL"))) Object.assign(tk[i], { r: "KIN", cls: "person" });
   }
   if (loose) {
     for (let i = 0; i < tk.length; i++) {
@@ -335,6 +338,8 @@ function disambiguate(tk: Tok[], loose = false) {
     else if (t.t === "đâu" && i >= end && tk.slice(0, i).some((x) => x.r === "NEG")) t.r = "PART";
     // "gì / đâu / sao" sau phủ định = phiếm chỉ ("a chưa ăn gì", "không biết làm gì", "không sao").
     else if (t.r === "QWORD" && tk.slice(0, i).some((x) => x.r === "NEG") && !tk.slice(i + 1).some((x) => x.r === "QPART")) t.r = "INDEF";
+    // "đi xem mắt mấy lần rồi", "a ăn mấy chén rồi" — "mấy … rồi" là "vài … rồi" (kể), không phải hỏi bao nhiêu — trừ khi đang hỏi Lomi.
+    else if (t.t === "mấy" && t.r === "QWORD" && i < end && tk.slice(i + 1).some((x) => x.r === "ASPECT" && x.cls === "post") && !tk.some((x) => is(x, "EM", "YOU", "QPART"))) t.r = "INDEF";
     // "làm gì đó", "nghĩ gì đấy" cuối câu, không có "muốn / thèm" phía trước = hỏi "gì" + tiểu từ "đó" (khác "ăn gì đó cay cay").
     else if (t.r === "INDEF" && /^gì (đó|đấy)$/.test(t.t) && i >= end && !tk.slice(0, i).some((x) => is(x, "DESIRE", "NEG", "SELF")) && is(prev, "VERB", "COG")) Object.assign(t, { r: "QWORD", cls: "what" });
     // "con": trước con vật / danh từ lạ là loại từ; còn lại là "con" (đứa con).
@@ -447,6 +452,8 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     if (opts.addr === "em") return "self";
     const i = tk.findIndex((t) => t.r === "EM");
     if (i < 0) return "you";
+    // "con mèo nhà e", "mẹ nhà em" — "nhà e" là nhà của người nói (Lomi không có nhà); "tại e bận quá", "vì e…" — "e" mở đầu vế chỉ lý do là người nói.
+    if (i > 0 && /^(nhà|tại|vì|do|bởi)$/.test(tk[i - 1].t) && !nfc.includes("?")) return "self";
     if (is(tk[i + 1], "VOC") || i === tk.length - 1 || tk.slice(i + 1).every((t) => is(t, "PART", "VOC"))) return "you";
     if (is(tk[i - 1], "GREET", "WISH", "THANK", "VERB", "DESIRE", "PREP")) return "you";
     // Lời giục ("e nói lại đi", "em kể tiếp đi") là nói với Lomi.
@@ -615,7 +622,9 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
       const head = np.find((t) => is(t, "KIN", "NOUN")) ?? np.find((t) => t.r === "UNK");
       const after = rest[j];
       const predNext = is(after, ...PRED_START, "FILL", "PREP") || !after;
-      if (head && predNext && j < rest.length) {
+      // Cụm chỉ NGƯỜI / CON VẬT đứng một mình ("mẹ a á", "con mèo nhà a") vẫn cho biết đang nói về ai — câu không có vị ngữ nên độ chắc thấp.
+      const bareNp = j >= rest.length && j > i && (head?.r === "KIN" || head?.cls === "pet");
+      if (head && predNext && (j < rest.length || bareNp)) {
         subjToks = np;
         const named = np[0].t === "con" && np[0].r === "CLS" && head.r === "UNK"; // "con Mực nhà a" — con vật có tên
         f.subject = head.r === "KIN" ? "third" : head.cls === "pet" || named ? "pet" : head.cls === "place" ? "place" : head.cls === "weather" ? "weather" : "thing";
@@ -717,9 +726,14 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     // "mẹ a mất rồi", "con mèo nhà a mới mất" — với người / con vật, "mất" là qua đời (với đồ vật là thất lạc).
     if (h.t === "mất" && (f.subject === "third" || f.subject === "pet") && !after.some((t) => is(t, "NOUN", "UNK"))) cls = "death";
     let val = 0;
-    for (const t of body) if (is(t, "STATE", "ADJ", "GOOD", "DESIRE") && t.v) val += t.v;
+    // Phủ định nằm TRONG vị ngữ ("học không tốt lắm", "ăn không ngon") đảo nghĩa đúng từ đứng sau nó.
+    const negAt = (k: number) => k > 0 && (body[k - 1].r === "NEG" || (k > 1 && body[k - 2].r === "NEG" && is(body[k - 1], "FILL", "DEGREE")));
+    body.forEach((t, k) => {
+      if (is(t, "STATE", "ADJ", "GOOD", "DESIRE") && t.v) val += negAt(k) ? -t.v : t.v;
+    });
     if (neg && is(h, "STATE", "ADJ", "GOOD", "DESIRE")) val = h.v ? -h.v : val;
     const qualTok = [...after].reverse().find((t) => is(t, "ADJ", "STATE", "GOOD") && t.v !== undefined);
+    const qualNeg = !!qualTok && negAt(body.indexOf(qualTok));
     const placeTok = body.find((t, k) => (is(t, "NOUN") && t.cls === "place") || (k > 0 && is(body[k - 1], "PREP") && body[k - 1].cls === "loc"));
     const obj = render(objToks, emIs);
     const lastObj = objToks[objToks.length - 1];
@@ -737,7 +751,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
       done: predToks.slice(pe).some((t) => t.r === "ASPECT" && t.cls === "post") || body.some((t) => t.t === "xong") || undefined,
       ongoing: ongoing || undefined,
       planned: planned || undefined,
-      qual: qualTok?.t,
+      qual: qualTok ? (qualNeg ? `không ${qualTok.t}` : qualTok.t) : undefined,
     };
     if (planned && !f.time) f.time = { rel: "future", label: "", explicit: false };
   }
@@ -749,7 +763,9 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   const qpart = tk.some((t) => t.r === "QPART");
   // "chẳng buồn ngủ tí nào", "không vui chút nào" — "nào" ở đây nhấn mạnh phủ định, không phải hỏi.
   const atAll = neg && tk.some((t) => t.cls === "atall");
-  ask = (ask0 && !atAll) || !!qword || qpart;
+  // "a sợ mẹ có chuyện gì", "a lo có gì không hay" — sau "sợ / lo", "gì" là "điều gì đó", không phải câu hỏi (trừ khi có dấu ?).
+  const fearIndef = f.subject === "self" && f.pred?.cls === "feel" && /^(sợ|lo|ngại|e)( |$)/.test(f.pred.head) && !!f.pred.obj && !nfc.includes("?");
+  ask = !fearIndef && ((ask0 && !atAll) || !!qword || qpart);
   if (ask) f.ask = qword?.cls ? ASK_KIND[qword.cls] : "yesno";
 
   // Độ chắc: phần nào của câu đã được xếp vai. Từ lạ trong bổ ngữ / cụm chủ ngữ là bình thường.
@@ -859,6 +875,25 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     if (ask) out.add("QUESTION");
     return [...out];
   }
+}
+
+/**
+ * NHẮC LẠI điều vừa nghe theo ngôi của Lomi ("tại a về trễ" → "tại ⟦you⟧ về trễ", "vợ a không nói chuyện với a" → "vợ ⟦you⟧ không nói
+ * chuyện với ⟦you⟧") — để câu đáp bám đúng nội dung thay vì một câu mẫu. Bỏ lời gọi, từ nối mở đầu ("mà", "rồi", "còn"…) và tiểu từ cuối câu.
+ * Trả null khi câu là câu hỏi / lời chào – chúc – cảm ơn, quá dài, hoặc không còn gì để nhắc.
+ */
+const LEAD_DROP = /^(mà|nhưng|rồi|xong|còn|thì|với lại|và|à|ờ|ừ|ủa|ui|ôi|dạ|thật ra)$/;
+const END_DROP = /^(nha|nhé|nhen|nghen|nhá|nè|nà|á|ạ|dạ|vậy|thế|hen|ha|ta|đây|mà|đã|cái)$/;
+export function mirrorOf(f: Frame, max = 10): string | null {
+  if (f.ask || f.act === "question" || f.act === "greet" || f.act === "wish" || f.act === "thanks" || f.act === "request" || f.act === "invite") return null;
+  let tk = f.toks.filter((t) => t.r !== "VOC");
+  //   ("còn" chỉ là từ nối khi đứng trước một ý khác — "còn vợ a thì…"; trước con số / thời gian — "còn 2 tuần nữa thi" — thì giữ.)
+  while (tk.length && ((LEAD_DROP.test(tk[0].t) && !(tk[0].t === "còn" && (is(tk[1], "NUM", "TIME") || /^\d/.test(tk[1]?.t ?? "")))) || (is(tk[0], "EM", "YOU") && f.addressee && f.em !== "self"))) tk = tk.slice(1);
+  // (chỉ bỏ tiểu từ thuần cuối câu; "giúp", "với", "luôn", "thôi" ở cuối thường mang nghĩa — "chẳng ai giúp", "mệt thôi")
+  while (tk.length && ((is(tk[tk.length - 1], "PART") && END_DROP.test(tk[tk.length - 1].t)) || is(tk[tk.length - 1], "QPART") || (is(tk[tk.length - 1], "EM", "YOU") && f.addressee && f.em !== "self"))) tk = tk.slice(0, -1);
+  const words = tk.reduce((n, t) => n + t.t.split(" ").length, 0);
+  if (!tk.length || words > max || !tk.some((t) => !is(t, "SELF", "EM", "YOU", "FILL", "DEGREE", "PART", "ASPECT", "NEG", "CONJ"))) return null;
+  return render(tk, f.em ?? "you");
 }
 
 /** Nhãn thời gian để nhắc lại ở đầu câu đáp ("Tối qua", "Mai", "Cuối tuần"). */

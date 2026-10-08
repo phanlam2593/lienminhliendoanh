@@ -161,7 +161,7 @@ const RULES: Rule[] = [
   },
   // Chào hỏi (kể cả gõ vui: hiii, helo, hé lô, alo, yo, 222…)
   {
-    re: /^(x?in chao+|chao+|chao ca nha|chao moi nguoi|chao ban|chao em|chao anh|chao chi|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi+|oi lomi|good (morning|afternoon|evening)|morning|chao buoi (sang|trua|chieu|toi)|\d{2,4})( (lomi|ban|em|anh|chi|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
+    re: /^(x?in chao+|chao+|chao ca nha|chao moi nguoi|chao ban|chao em|chao anh|chao chi|chao lomi|hi+|hii+|hello+|helo+|hellu|hellou|he lo|hey+|alo+|alo alo|yo+|sup|hi lomi|hello lomi|lomi oi+|oi lomi|good (morning|afternoon|evening)|morning|chao buoi (sang|trua|chieu|toi)|2{2,4})( (lomi|ban|em|anh|chi|nha|nhe|a|oi|ne|ca nha|moi nguoi))*$/,
     reply: (n = "") => ({ text: greetText(n) }),
   },
   // Chào kiểu teen: hí, hí lô, hé lu, hế nhô, chèo, ê, ơi, hú, xin chàoo…

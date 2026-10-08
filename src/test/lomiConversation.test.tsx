@@ -493,16 +493,20 @@ describe("Cấu trúc câu — chủ ngữ không phải người nói", () => {
     const r = await chat(["mẹ a đang ốm", "bị cảm thôi", "a lo quá"]);
     expect(r[0].content).toMatch(/^Mẹ anh ốm hả/);
     expect(r[0].about).toEqual({ text: "mẹ anh", kind: "third" });
-    expect(r[1].content).toMatch(/mẹ anh mau khoẻ/);
+    expect(r[1].content).toMatch(/Mong mẹ( anh)? mau khoẻ/);
     expect(r[1].content).not.toMatch(/Thương anh ghê|mong anh mau khoẻ/i); // người ốm là mẹ, không phải người dùng
-    expect(r[2].heart).toBeTruthy();
+    // 10/10: "a lo quá" → an ủi, và vẫn nhớ người đang ốm là mẹ (mạch chuyện lib/lomiStory), không phải bài "lo âu" chung chung.
+    expect(r[2].content).toMatch(/Mẹ anh ốm thì lo là phải/);
+    expect(r[2].thread?.who.text).toBe("mẹ anh");
   }, T);
   it("con sốt → lớp sức khoẻ trả lời nhưng nói đúng người bệnh; “từ tối qua” là câu trả lời cho “bị bao lâu rồi?”", async () => {
     const r = await chat(["con a bị sốt", "từ tối qua"]);
     expect(r[0].sx).toContain("fever");
     expect(r[0].content).toMatch(/^Con anh đang bị \*\*sốt\*\*/);
     expect(r[1].unk).toBeUndefined();
-    expect(r[1].content).toMatch(/bị từ tối qua rồi hả/);
+    // 10/10: ghi nhận câu trả lời rồi hỏi tiếp điều còn thiếu VỀ ĐÚNG NGƯỜI BỆNH (trước đây: "Còn triệu chứng nào kèm theo không bạn?").
+    expect(r[1].content).toMatch(/^Từ tối qua rồi hả/);
+    expect(r[1].content).toMatch(/Con anh đã đi khám chưa/);
     expect(r[1].sx).toContain("fever"); // vẫn ở mạch sức khoẻ
   }, T);
   it("chuyện của người khác không bị ghi vào trí nhớ như hoàn cảnh của người dùng", async () => {
@@ -641,5 +645,415 @@ describe("Cấu trúc câu — không làm hỏng các mạch sẵn có", () => 
     expect(r[1].content).toMatch(/^Chào buổi tối/);
     expect(r[1].health?.diet).toBe("gout");
     expect(r[2].diet).toBe("gout");
+  }, T);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 10/10 — LỖI "VÒNG LẶP CÂU MẪU": Lomi đáp tử tế nhưng không theo nội dung
+//   “Chuyện này làm anh bận lòng nhiều không?” → “Em vẫn ở đây nè, anh cứ kể tiếp...” → “Giờ điều anh mong nhất là gì?” → …
+// Sáu chuỗi bắt buộc + các chuỗi kiểm tra chống lặp. Mỗi chuỗi chạy qua khung chat thật.
+// ─────────────────────────────────────────────────────────────────────────────
+const LOOP_LINES = /đang nghe nè 🌿|cứ kể tiếp, từ từ thôi|điều (anh|bạn|chị|em) mong nhất là gì|bận lòng nhiều không|kể thêm cho (em|Lomi) hiểu rõ hơn/;
+const lastQuestion = (x: string) => (x.match(/[^.!?\n]*\?/g) ?? []).pop()?.trim() ?? "";
+
+describe("CHAIN 1 — mẹ ốm → đi khám rồi → bác sĩ nói viêm họng → uống thuốc rồi (người bệnh vẫn là mẹ)", () => {
+  it("mỗi câu trả lời được ghi vào đúng điều Lomi vừa hỏi, rồi Lomi hỏi tiếp điều còn thiếu", async () => {
+    const r = await chat(["Mẹ a đang ốm", "Đi khám rồi", "Bác sĩ nói viêm họng", "Uống thuốc rồi"]);
+    // Lomi hỏi "nặng không + khám chưa" → mở mạch chuyện về MẸ
+    expect(r[0].thread).toMatchObject({ kind: "care", who: { text: "mẹ anh" }, asked: ["severity", "doctor"] });
+    // "Đi khám rồi" = câu trả lời cho "đã đi khám chưa" → hỏi tiếp bác sĩ nói gì (không hỏi lại "đi khám chưa", không "bận lòng nhiều không")
+    expect(r[1].thread?.facts.doctor).toBe(true);
+    expect(r[1].content).toMatch(/Bác sĩ có nói mẹ anh bị gì không\?/);
+    expect(r[1].content).not.toMatch(/đã đi khám chưa/);
+    expect(r[1].heart).toBeUndefined(); // không biến thành tâm sự
+    // "Bác sĩ nói viêm họng" = chẩn đoán CỦA MẸ, không phải triệu chứng của người dùng
+    expect(r[2].thread?.facts.dx).toBe("viêm họng");
+    expect(r[2].sx ?? []).toHaveLength(0);
+    expect(r[2].content).not.toMatch(/anh đang (bị|có)|Bác sĩ đang bị/i);
+    expect(r[2].content).toMatch(/thuốc/); // hỏi tiếp về thuốc
+    // "Uống thuốc rồi" → đủ thông tin: khép lại bằng lời động viên, KHÔNG hỏi thêm
+    expect(r[3].thread?.facts.meds).toBe(true);
+    expect(r[3].thread?.who.text).toBe("mẹ anh");
+    expect(r[3].content).toMatch(/mẹ anh được khám và có thuốc rồi/);
+    expect(r[3].content).not.toMatch(/\?/);
+    for (const m of r) {
+      expect(m.unk, m.content).toBeUndefined();
+      expect(m.content).not.toMatch(LOOP_LINES);
+    }
+  }, T);
+  it("không hỏi lại điều đã có câu trả lời", async () => {
+    const r = await chat(["Mẹ a đang ốm", "Đi khám rồi", "Bác sĩ nói viêm họng", "Uống thuốc rồi", "đỡ rồi"]);
+    const qs = r.map((m) => lastQuestion(m.content)).filter(Boolean);
+    expect(new Set(qs).size).toBe(qs.length); // không câu hỏi nào lặp lại
+    expect(r.slice(1).map((m) => m.content).join(" ")).not.toMatch(/đã đi khám chưa/);
+    expect(r[4].content).toMatch(/mừng/);
+    expect(r[4].content).toMatch(/Mẹ anh đỡ rồi/);
+  }, T);
+  it("“Mẹ a á, không phải a” là SỬA CHỦ THỂ: người bệnh là mẹ, và Lomi vẫn nhớ những gì đã biết", async () => {
+    const r = await chat(["Mẹ a đang ốm", "Đi khám rồi", "Bác sĩ nói viêm họng", "Uống thuốc rồi", "Mẹ a á, không phải a"]);
+    expect(r[4].unk).toBeUndefined();
+    expect(r[4].content).toMatch(/người đang ốm là mẹ anh, không phải anh/);
+    expect(r[4].content).toMatch(/đã đi khám, bác sĩ nói viêm họng, có thuốc uống rồi/);
+    expect(r[4].thread?.who.text).toBe("mẹ anh");
+  }, T);
+  it("Lomi lỡ đọc triệu chứng thành của người dùng → “Mẹ a á, không phải a” đổi người bệnh sang mẹ", async () => {
+    const r = await chat(["a bị đau họng", "Mẹ a á, không phải a", "2 hôm rồi"]);
+    expect(r[1].content).toMatch(/người bị là mẹ anh, không phải anh/);
+    expect(r[1].thread?.who.text).toBe("mẹ anh");
+    expect(r[2].content).toMatch(/Mẹ anh đã đi khám chưa/);
+  }, T);
+  it("câu trả lời cụt (“chưa”, “rồi”, “có”) được hiểu theo đúng câu Lomi vừa hỏi", async () => {
+    const a = await chat(["Mẹ a đang ốm", "chưa"]);
+    expect(a[1].thread?.facts.doctor).toBe(false);
+    expect(a[1].content).toMatch(/Chưa đi khám hả/);
+    const b = await chat(["con chó nhà a bị ốm", "rồi"]);
+    expect(b[1].thread?.facts.doctor).toBe(true);
+    expect(b[1].content).toMatch(/thú y có nói bé bị gì không/);
+    const c = await chat(["bố e bị bệnh", "nặng lắm"]);
+    expect(c[1].thread?.facts.severity).toBe(true);
+    expect(c[1].content).toMatch(/bố em đã đi khám chưa/); // hỏi nốt điều còn lại trong hai điều vừa hỏi
+  }, T);
+  it("gõ không dấu vẫn theo được cả chuỗi", async () => {
+    const r = await chat(["me a dang om", "di kham roi", "bac si noi viem hong", "uong thuoc roi"]);
+    expect(r[1].thread?.facts.doctor).toBe(true);
+    expect(r[2].thread?.facts.dx).toBe("viem hong");
+    expect(r[3].content).toMatch(/mẹ anh được khám và có thuốc rồi/);
+    for (const m of r) expect(m.unk, m.content).toBeUndefined();
+  }, T);
+  it("hỏi kiến thức giữa chừng vẫn được lớp sức khoẻ trả lời, rồi quay lại đúng mạch về mẹ", async () => {
+    const r = await chat(["Mẹ a đang ốm", "Đi khám rồi", "Bác sĩ nói viêm họng", "Uống thuốc rồi", "viêm họng kiêng gì?", "đỡ rồi"]);
+    expect(r[4].diet).toBeTruthy();
+    expect(r[4].thread?.who.text).toBe("mẹ anh"); // mạch chuyện vẫn được giữ
+    expect(r[5].content).toMatch(/Mẹ anh đỡ rồi/);
+  }, T);
+});
+
+describe("CHAIN 2 — mẹ ốm → “A lo quá”: an ủi nhưng vẫn nhớ người bệnh là mẹ", () => {
+  it("an ủi có nhắc tới mẹ; câu sau vẫn theo chuyện của mẹ", async () => {
+    const r = await chat(["Mẹ a đang ốm", "A lo quá", "bà ấy lớn tuổi rồi", "đi khám rồi"]);
+    expect(r[1].content).toMatch(/Mẹ anh ốm thì lo là phải/);
+    expect(r[1].content).toMatch(/thương mẹ/);
+    expect(r[1].thread?.who.text).toBe("mẹ anh");
+    expect(r[1].content).not.toMatch(/Lo âu làm mình|căng dây đàn/); // không phải bài "lo âu" chung chung
+    expect(r[2].content).toMatch(/lớn tuổi/);
+    expect(r[2].content).toMatch(/mẹ( anh)? đã đi khám chưa/); // điều Lomi hỏi từ đầu mà chưa được trả lời
+    expect(r[3].content).toMatch(/Bác sĩ có nói mẹ anh bị gì không/);
+    for (const m of r) expect(m.content).not.toMatch(LOOP_LINES);
+  }, T);
+  it("“Mẹ a đang ốm” KHÔNG tự thành tâm sự (không hỏi “bận lòng nhiều không”)", async () => {
+    const m = await last(["Mẹ a đang ốm"]);
+    expect(m.heart).toBeUndefined();
+    expect(m.content).not.toMatch(LOOP_LINES);
+  }, T);
+  it("người dùng tiếp tục nói ra nỗi lo → mạch tâm sự (chăm người bệnh) nghe tiếp, vẫn giữ mạch chuyện về mẹ", async () => {
+    const r = await chat(["Mẹ a đang ốm", "A lo quá", "a sợ mẹ có chuyện gì", "đi khám rồi"]);
+    expect(r[2].unk).toBeUndefined();
+    expect(r[2].heart).toBe("caregiver");
+    expect(r[3].content).toMatch(/Bác sĩ có nói mẹ anh bị gì không/);
+  }, T);
+});
+
+describe("CHAIN 3 — “Người ấy im lặng” → “A có nên nhắn không?”: vẫn là chuyện với người ấy", () => {
+  it("các câu nối đều bám người ấy, không rơi về câu tâm sự chung chung", async () => {
+    const r = await chat(["Người ấy im lặng", "A có nên nhắn không?", "2 ngày rồi", "a sợ làm phiền", "vậy nhắn gì giờ"]);
+    expect(r[0].rel).toBe("người ấy|silence");
+    expect(r[1].rel).toBe("người ấy|texting");
+    expect(r[1].content).toMatch(/Nhắn cho người ấy|liên quan tới người ấy/);
+    // "2 ngày rồi" → vẫn nói về người ấy (trước đây: "Anh đang có người yêu, hay đang thích ai đó?")
+    expect(r[2].content).toMatch(/người ấy/);
+    expect(r[2].content).not.toMatch(/đang có người yêu, hay đang thích ai/);
+    expect(r[2].rel).toBe("người ấy|texting");
+    // "a sợ làm phiền" → nhắc lại đúng nỗi lo đó + góc nhìn về chính chuyện nhắn cho người ấy
+    expect(r[3].content).toMatch(/^Anh sợ làm phiền hả/);
+    expect(r[3].content).toMatch(/người ấy/);
+    expect(r[3].content).not.toMatch(/Chuyện tình cảm của (anh|bạn) đang thế nào/);
+    expect(r[4].rel).toBe("người ấy|texting");
+    for (const m of r) {
+      expect(m.heart, m.content).toBeTruthy();
+      expect(m.content).not.toMatch(LOOP_LINES);
+    }
+  }, T);
+});
+
+describe("CHAIN 4 — “Đói quá” → “Pizza” → “loại nào ngon?”: vẫn là chuyện pizza", () => {
+  it("hỏi loại nào ngon → Lomi hỏi khẩu vị cho đúng món pizza → trả lời khẩu vị → tìm quán pizza", async () => {
+    const r = await chat(["Đói quá", "Pizza", "loại nào ngon?", "nhiều phô mai"]);
+    expect(r[1].dish).toBe("pizza");
+    expect(r[2].dish).toBe("pizza");
+    expect(r[2].dishPick).toBe(true);
+    expect(r[2].content).toMatch(/pizza/i);
+    expect(r[2].content).not.toMatch(/hỏi về chuyện nào/);
+    expect(r[3].dish).toBe("pizza");
+  }, T);
+  it("đang nói một món khác cũng vậy (không riêng pizza)", async () => {
+    const r = await chat(["a thèm trà sữa quá", "vị nào ngon?"]);
+    expect(r[1].content).not.toMatch(/hỏi về chuyện nào/);
+    expect(r[1].dish ?? r[1].dishAsk).toBeTruthy();
+  }, T);
+});
+
+describe("CHAIN 5 — “Đi cf không?” → “Quán nào?”: vẫn là chuyện cà phê", () => {
+  it("quán nào → quán cà phê; thêm điều kiện vẫn là quán cà phê", async () => {
+    const r = await chat(["Đi cf không?", "Quán nào?", "gần đây thôi"]);
+    expect(r[0].content).toMatch(/cà phê/i);
+    expect(r[1].dish).toBe("cafe");
+    expect(r[2].dish).toBe("cafe");
+  }, T);
+});
+
+describe("CHAIN 6 — bói bài → hỏi nối → vẫn là chuyện Tarot", () => {
+  it("“lá này nghĩa là sao” giải đúng lá vừa rút; “thế còn tình cảm thì sao?” vẫn là hỏi bài", async () => {
+    const r = await chat(["bói một lá cho hôm nay", "lá này nghĩa là sao", "thế còn tình cảm thì sao?"]);
+    expect(r[0].tarot).toBeTruthy();
+    expect(r[1].unk).toBeUndefined();
+    expect(r[1].content).toMatch(/Lá bạn vừa rút/);
+    expect(r[1].content).toMatch(/\((xuôi|ngược)\)/);
+    expect(r[1].tarot).toBeUndefined(); // không rút bài mới
+    expect(r[2].tarot).toBeTruthy(); // hỏi nối theo chủ đề → vẫn là bói
+    expect(r[2].unk).toBeUndefined();
+  }, T);
+  it("các cách hỏi nghĩa khác cũng vậy", async () => {
+    for (const s of ["giải thích thêm đi", "ý nghĩa lá này là gì", "nói rõ hơn đi"]) {
+      const m = await last(["bói một lá cho hôm nay", s]);
+      expect(m.unk, s).toBeUndefined();
+      expect(m.content, s).toMatch(/vừa rút/);
+    }
+  }, T);
+});
+
+describe("Chống vòng lặp câu mẫu trong mạch tâm sự", () => {
+  const CHAINS: string[][] = [
+    ["a mệt quá", "làm cả ngày", "về còn phải nấu cơm", "con thì quậy", "chẳng ai giúp"],
+    ["tâm sự với a chút", "a mới cãi nhau với vợ", "tại a về trễ", "vợ a không nói chuyện với a", "từ tối qua", "a xin lỗi rồi", "mà vợ a vẫn giận"],
+    ["a buồn quá", "hôm nay bị sếp la", "trước mặt mọi người", "a làm sai báo cáo", "sếp nói a vô dụng"],
+    ["a đang lo", "con a sắp thi", "nó học không tốt lắm", "a sợ nó rớt"],
+    ["a thấy cô đơn", "ở một mình", "bạn bè ai cũng bận"],
+  ];
+  it("không còn xoay vòng “đang nghe nè / cứ kể tiếp / mong nhất là gì / bận lòng nhiều không”", async () => {
+    for (const c of CHAINS) {
+      const r = await chat(c);
+      for (const [i, m] of r.entries()) expect(m.content, `${c[i]} → ${m.content}`).not.toMatch(LOOP_LINES);
+    }
+  }, 60000);
+  it("câu đáp NHẮC LẠI đúng điều vừa kể", async () => {
+    const r = await chat(["a mệt quá", "làm cả ngày", "về còn phải nấu cơm", "con thì quậy"]);
+    expect(r[1].content).toMatch(/^Làm cả ngày hả/);
+    expect(r[2].content).toMatch(/^Về còn phải nấu cơm hả/);
+    expect(r[3].content).toMatch(/^Con thì quậy hả/);
+    const f = await chat(["a mới cãi nhau với vợ", "tại a về trễ", "vợ a không nói chuyện với a"]);
+    expect(f[1].content).toMatch(/^Tại anh về trễ hả/);
+    expect(f[2].content).toMatch(/^Vợ anh không nói chuyện với anh hả/);
+  }, T);
+  it("không lặp lại một câu / một câu hỏi trong cùng cuộc trò chuyện; không hỏi dồn hai lượt liền", async () => {
+    for (const c of CHAINS) {
+      const r = await chat(c);
+      const sentences = r.flatMap((m) => m.content.split(/(?<=[.!?…])\s+|\n+/).map((x) => x.trim()).filter((x) => x.length > 25));
+      const dup = sentences.filter((x, i) => sentences.indexOf(x) !== i);
+      expect(dup, c.join(" | ")).toEqual([]);
+      // Từ lượt thứ 3: hai tin liền nhau không cùng kết bằng câu hỏi (không hỏi dồn).
+      for (let i = 3; i < r.length; i++) expect(/\?\s*$/.test(r[i].content.trim()) && /\?\s*$/.test(r[i - 1].content.trim()), `${c[i]} → ${r[i].content}`).toBe(false);
+    }
+  }, 60000);
+  it("kể được vài ý thì Lomi TÓM LẠI đúng các ý đó", async () => {
+    const r = await chat(["a mệt quá", "làm cả ngày", "về còn phải nấu cơm", "con thì quậy", "chẳng ai giúp", "gợi ý đi"]);
+    expect(r[4].content).toMatch(/Làm cả ngày, về còn phải nấu cơm, con thì quậy, chẳng ai giúp/);
+    expect(r[4].content).toMatch(/gợi ý/);
+    expect(r[5].content).toMatch(/gợi ý vài điều/); // "gợi ý đi" → lời khuyên của đúng chủ đề
+  }, T);
+  it("chuyện của người khác kể trong lúc lo không bị đọc thành chuyện của người dùng", async () => {
+    const r = await chat(["a đang lo", "con a sắp thi", "nó học không tốt lắm"]);
+    expect(r[0].content).toMatch(/Anh đang lo chuyện gì vậy/);
+    expect(r[0].heart).toBe("anxiety");
+    expect(r[1].content).toMatch(/^Con anh sắp thi hả/);
+    expect(r[1].heart).toBe("anxiety"); // không nhảy sang "sắp tới công chuyện lớn hả 💪"
+    expect(r[2].content).toMatch(/^Nó học không tốt lắm hả/);
+    expect(r[2].content).not.toMatch(/Thích ghê|tự hào|Hít vào chậm/); // không khen nhầm, không chen bài hít thở
+  }, T);
+  it("“trước mặt mọi người” không phải “mỏi mắt”; kể tiếp vẫn ở mạch tâm sự", async () => {
+    const r = await chat(["a buồn quá", "hôm nay bị sếp la", "trước mặt mọi người", "a làm sai báo cáo"]);
+    expect(r[2].sx ?? []).toHaveLength(0);
+    expect(r[2].heart).toBeTruthy();
+    expect(r[2].content).toMatch(/^Trước mặt mọi người hả/);
+    expect(r[3].faqId).toBeUndefined();
+    expect(r[3].heart).toBeTruthy();
+  }, T);
+  it("“ừ”, “thôi kệ” sau khi Lomi không hỏi gì → đáp nhẹ, không hỏi dồn", async () => {
+    const r = await chat(["a mệt quá", "làm cả ngày", "ừ", "thôi kệ"]);
+    expect(r[1].content).not.toMatch(/\?\s*$/); // Lomi vừa hỏi ở tin đầu nên tin này chỉ ghi nhận, không hỏi tiếp
+    expect(r[2].content).toMatch(/^Dạ 🌿/);
+    expect(r[3].content).toMatch(/^Dạ 🌿/);
+    expect(r[2].content + r[3].content).not.toMatch(/\?/);
+  }, T);
+  it("người dùng chỉ muốn được nghe → Lomi chỉ nhắc lại, không khuyên, không hỏi", async () => {
+    const r = await chat(["tâm sự với a chút", "chỉ muốn được nghe thôi", "a bị điểm kém", "bố mẹ la"]);
+    expect(r[2].content).toMatch(/^Anh bị điểm kém hả/);
+    expect(r[3].content).toMatch(/^Bố mẹ la hả/);
+    expect(r[2].content + r[3].content).not.toMatch(/\?|gợi ý|thử/);
+  }, T);
+});
+
+describe("Chuyện đời thường không tự thành tư vấn tâm lý", () => {
+  it("“A đang ăn pizza” → nói chuyện ăn uống, kể tiếp vẫn là chuyện phiếm", async () => {
+    const r = await chat(["a đang ăn pizza", "ngon lắm", "ở quán gần nhà"]);
+    for (const m of r) {
+      expect(m.heart, m.content).toBeUndefined();
+      expect(m.content).not.toMatch(/cảm thấy thế nào|bận lòng/);
+    }
+    expect(r[2].search).toBeUndefined(); // "ở quán gần nhà" là kể tiếp, không phải nhờ tìm quán
+    expect(r[2].content).toMatch(/Ở quán gần nhà hả/);
+  }, T);
+  it("chuyện xui đời thường: kể tiếp bằng mẩu ngắn được nhắc lại đúng tông, không “😄 À à”", async () => {
+    const r = await chat(["hôm nay a bị kẹt xe", "2 tiếng"]);
+    expect(r[1].content).toMatch(/^2 tiếng hả 😩/);
+  }, T);
+  it("thú cưng mới mất: Lomi nhớ đã nuôi bao lâu, vì sao mất, và an ủi theo đúng những điều đó", async () => {
+    const r = await chat(["con mèo nhà a mới mất", "nuôi 5 năm rồi", "nó bị bệnh", "a nhớ nó quá"]);
+    expect(r[0].thread).toMatchObject({ kind: "loss", asked: ["dur"] });
+    expect(r[1].content).toMatch(/^5 năm/);
+    expect(r[1].unk).toBeUndefined();
+    expect(r[2].content).not.toMatch(/đã đi khám chưa/); // bé mất rồi, không hỏi "đi khám chưa"
+    expect(r[2].thread?.facts.cause).toBe("ill");
+    expect(r[3].content).toMatch(/5 năm bên nhau/);
+    expect(r[3].content).not.toMatch(/Ra là vậy 😄/);
+  }, T);
+  it("người thân nhập viện → hỏi bác sĩ nói gì (không hỏi “đi khám chưa”), nhớ người bệnh là ba", async () => {
+    const r = await chat(["ba a nhập viện rồi", "bác sĩ nói bị tai biến", "a rối quá"]);
+    expect(r[0].content).toMatch(/Bác sĩ có nói ba anh bị gì không/);
+    expect(r[0].heart).toBeUndefined();
+    expect(r[1].thread?.facts.dx).toBe("tai biến");
+    expect(r[1].content).toMatch(/^Tai biến hả 🥺/);
+    expect(r[2].content).toMatch(/Ba anh nằm viện thì lo là phải/);
+  }, T);
+  it("vừa kể chia tay (Lomi đáp câu ghi nhớ hoàn cảnh) → “3 năm” vẫn là kể tiếp chuyện đó", async () => {
+    const r = await chat(["a chia tay rồi", "3 năm"]);
+    expect(r[0].heart).toBe("breakup");
+    expect(r[1].content).toMatch(/^3 năm là cả một chặng đường/);
+  }, T);
+  it("nói chuyện khác xen vào thì mạch chuyện về mẹ không giành lấy câu đó", async () => {
+    const r = await chat(["Mẹ a đang ốm", "bố a cũng ốm", "rồi"]);
+    expect(r[1].thread?.who.text).toBe("bố anh"); // người mới → mạch mới
+    expect(r[2].content).toMatch(/Bác sĩ có nói bố anh bị gì không/);
+    const s = await chat(["Mẹ a đang ốm", "hôm nay ăn gì"]);
+    expect(s[1].dishAsk).toBeTruthy();
+    expect(s[1].thread).toBeUndefined(); // sang việc khác hẳn thì bỏ mạch
+  }, T);
+});
+
+// Các chuỗi CHƯA TỪNG dùng lúc viết (thử "mù" sau khi sửa) — giữ lại làm test để các lỗi lộ ra ở đó không quay lại.
+describe("Chuỗi thử mù — theo được chuyện với câu chưa từng gặp", () => {
+  it("ông ốm nặng → vô viện → bác sĩ bảo viêm phổi: không hỏi “có thuốc chưa” khi đang nằm viện; “thương ông quá” → an ủi có nhắc ông", async () => {
+    const r = await chat(["ông nội e bị ốm", "nặng lắm e ạ", "đưa vô viện rồi", "bác sĩ bảo viêm phổi", "e thương ông quá"]);
+    expect(r[1].content).toMatch(/ông nội em đã đi khám chưa/);
+    expect(r[2].thread?.facts).toMatchObject({ doctor: true, stay: true });
+    expect(r[2].content).toMatch(/Bác sĩ có nói ông nội em bị gì không/);
+    expect(r[3].thread?.facts.dx).toBe("viêm phổi");
+    expect(r[3].content).not.toMatch(/kê thuốc/);
+    expect(r[4].content).toMatch(/ông nội/);
+    expect(r[4].content).toMatch(/xót|thương/);
+  }, T);
+  it("“chị a đang bệnh” là chị CỦA người nói (không phải người nói bị bệnh); tên bệnh nói trống được ghi nhận", async () => {
+    const r = await chat(["chị a đang bệnh", "sốt xuất huyết", "nằm viện 3 ngày rồi"]);
+    expect(r[0].content).toMatch(/^Chị anh bệnh hả/);
+    expect(r[0].content).not.toMatch(/mong anh mau khoẻ/i);
+    expect(r[1].thread?.facts.dx).toBe("sốt xuất huyết");
+    expect(r[2].thread?.facts.stay).toBe(true);
+    expect(r[2].content).not.toMatch(/bị gì không/); // đã biết bị gì rồi
+  }, T);
+  it("“vợ a đang bầu mà bị cảm” → người ốm là vợ", async () => {
+    const m = await last(["vợ a đang bầu mà bị cảm"]);
+    expect(m.content).toMatch(/^Vợ anh/);
+    expect(m.content).not.toMatch(/mong anh mau khoẻ|Thương anh ghê/i);
+    expect(m.thread?.who.text).toBe("vợ anh");
+  }, T);
+  it("người thân mắc bệnh có tên → câu sau “nên kiêng gì” trả lời được ngay", async () => {
+    const a = await chat(["ba e bị tiểu đường", "nên kiêng gì"]);
+    expect(a[0].content).toMatch(/^Ba em/);
+    expect(a[1].diet).toBe("dm");
+    const b = await chat(["mẹ a bị cao huyết áp", "nên kiêng gì"]);
+    expect(b[1].diet).toBe("htn");
+  }, T);
+  it("hỏi điều Lomi chưa có kiến thức khi đang theo chuyện người ốm → nói thật theo đúng mạch (vẫn ghi lại câu chưa trả lời được)", async () => {
+    const r = await chat(["con gái c bị ho", "1 tuần rồi", "khám rồi", "bs nói viêm phế quản", "đang uống kháng sinh", "c nên cho bé ăn gì"]);
+    expect(r[4].thread?.facts.meds).toBe(true);
+    expect(r[5].unk).toBeTruthy();
+    expect(r[5].content).toMatch(/hỏi thẳng bác sĩ/);
+    expect(r[5].content).toMatch(/Con gái chị/);
+  }, T);
+  it("đang ở bệnh viện → chăm mẹ → mẹ mổ ruột thừa → mổ xong rồi → bác sĩ nói ổn: không câu nào bị đáp kiểu chuyện phiếm", async () => {
+    const r = await chat(["a đang ở bệnh viện", "chăm mẹ", "mẹ mổ ruột thừa", "mổ xong rồi", "bác sĩ nói ổn"]);
+    expect(r[0].content).toMatch(/Đang ở bệnh viện hả 🥺/);
+    expect(r[1].content).toMatch(/Chăm mẹ hả 🥺/);
+    expect(r[1].thread?.who.text).toBe("mẹ");
+    expect(r[2].thread?.facts.dx).toBe("mổ ruột thừa");
+    expect(r[3].content).toMatch(/Mổ xong rồi hả 🙏/);
+    expect(r[4].content).toMatch(/nhẹ cả người/);
+    for (const m of r) expect(m.content, m.content).not.toMatch(/😄|😆|thích ghê|À à/);
+  }, T);
+  it("người kể ở xa, không ai chăm: ghi nhận từng điều một lần, không lặp lại câu cũ, không đáp “Thích vậy trời”", async () => {
+    const r = await chat(["mẹ e ốm", "e đang ở xa", "không ai chăm mẹ", "e muốn về mà không được"]);
+    expect(r[1].content).toMatch(/Ở xa mà nghe mẹ ốm/);
+    expect(r[2].content).toMatch(/Không có ai ở bên/);
+    expect(r[3].content).not.toBe(r[1].content);
+    expect(r[3].content).not.toMatch(/Thích vậy|🤩|😄/);
+  }, T);
+  it("người thân mất: mẩu kể thêm được nhắc lại với giọng chia sẻ; “khóc cả đêm” là nỗi buồn chứ không phải “ở với nhau cả đêm”", async () => {
+    const a = await chat(["bố a mất năm ngoái", "a vẫn nhớ", "sắp tới giỗ đầu"]);
+    expect(a[2].content).toMatch(/^Sắp tới giỗ đầu hả 🥺/);
+    const b = await chat(["con chó nhà c mới mất", "già rồi", "c khóc cả đêm"]);
+    expect(b[1].thread?.facts.cause).toBe("old");
+    expect(b[2].content).toMatch(/Buồn là phải/);
+    expect(b[2].content).not.toMatch(/từng ấy thời gian/);
+  }, T);
+  it("“a giận vợ a” → hỏi đúng chuyện đó và nghe tiếp (không “chuyện này làm anh thấy sao?” rồi “Thích vậy trời”)", async () => {
+    const r = await chat(["a giận vợ a", "cô ấy tiêu tiền nhiều quá", "giờ a phải làm sao"]);
+    expect(r[0].content).toMatch(/^Anh giận vợ anh hả/);
+    expect(r[0].heart).toBe("fight");
+    expect(r[1].content).toMatch(/^Cô ấy tiêu tiền nhiều quá hả 😔/);
+    expect(r[2].content).toMatch(/gợi ý vài điều/);
+    expect(r[2].unk).toBeUndefined();
+  }, T);
+  it("đang kể chuyện bị sếp mắng: “vì đi trễ”, “mà e bị kẹt xe” là chi tiết của chuyện đó, không mở chuyện “trễ giờ / kẹt xe” mới", async () => {
+    const r = await chat(["e bị sếp mắng", "vì đi trễ", "mà e bị kẹt xe", "sếp không nghe giải thích"]);
+    for (const m of r) expect(m.heart).toBe("boss");
+    expect(r[1].content).toMatch(/^Vì đi trễ hả/);
+    expect(r[2].content).toMatch(/bị kẹt xe hả/);
+  }, T);
+  it("“c nói hoài không nghe” là kể chuyện, không phải chê Lomi lặp lại", async () => {
+    const r = await chat(["c buồn chồng c quá", "ảnh đi nhậu suốt", "c nói hoài không nghe"]);
+    expect(r[2].content).not.toMatch(/xin lỗi|lặp lại hoài/);
+    expect(r[2].content).toMatch(/nói hoài không nghe hả/);
+  }, T);
+  it("khoảng thời gian không tự là “đã chịu đựng bao lâu”: “còn 2 tuần nữa thi”, “làm được 5 năm” được nhắc lại đúng ý", async () => {
+    const a = await chat(["e stress vì thi cử", "còn 2 tuần nữa thi"]);
+    expect(a[1].content).toMatch(/^Còn 2 tuần nữa thi hả/);
+    expect(a[1].content).not.toMatch(/kéo dài vậy chắc/);
+    const b = await chat(["a mới bị đuổi việc", "làm được 5 năm"]);
+    expect(b[1].content).toMatch(/^Làm được 5 năm hả/);
+    expect(b[1].content).not.toMatch(/kéo dài vậy chắc|chưa bắt chắc ý/);
+  }, T);
+  it("vừa xem bài xong mà hỏi một câu quyết định → vẫn là hỏi bài", async () => {
+    const r = await chat(["bói cho a 3 lá về công việc", "lá thứ 2 là sao", "vậy a có nên nghỉ việc không", "rút thêm 1 lá"]);
+    expect(r[1].content).toMatch(/vừa rút/);
+    expect(r[2].tarot).toBeTruthy();
+    expect(r[2].heart).toBeUndefined();
+    expect(r[3].tarot).toBeTruthy();
+  }, T);
+  it("đang hỏi khẩu vị lẩu → “lẩu thái” là câu trả lời khẩu vị → “quán nào gần đây” vẫn là quán lẩu", async () => {
+    const r = await chat(["a thèm lẩu quá", "lẩu thái", "quán nào gần đây"]);
+    expect(r[0].content).toMatch(/^Thèm lẩu mà/); // không còn "lẩu (gà lá é"
+    expect(r[1].dish).toBe("lau");
+    expect(r[2].dish).toBe("lau");
+  }, T);
+  it("“a mệt” → “không” → “ừ”: Lomi không hỏi dồn, không đáp “chưa bắt chắc ý”", async () => {
+    const r = await chat(["a mệt", "không", "ừ"]);
+    expect(r[0].heart).toBe("tired");
+    expect(r[1].content).toMatch(/^Dạ 🌿/);
+    expect(r[2].content).toMatch(/^Dạ 🌿/);
+  }, T);
+  it("câu chữ không đổi nhầm “bạn” (bạn bè) thành cách gọi: “tình bạn”, “làm bạn trước”", async () => {
+    const { speak } = await import("@/lib/lomiAddress");
+    expect(speak("Tình bạn cũng thay đổi theo thời gian.", "anh")).toBe("Tình bạn cũng thay đổi theo thời gian.");
+    expect(speak("Cứ từ từ làm bạn trước, rồi tính.", "anh")).toBe("Cứ từ từ làm bạn trước, rồi tính.");
+    expect(speak("Điều đó làm bạn khó chịu hả?", "anh")).toBe("Điều đó làm anh khó chịu hả?");
   }, T);
 });

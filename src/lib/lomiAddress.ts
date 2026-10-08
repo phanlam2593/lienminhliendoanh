@@ -92,7 +92,7 @@ export function detectAddr(raw: string): Addr | null {
 
 // "bạn" là danh từ (bạn bè, bạn thân, người bạn…) thì giữ nguyên.
 const BAN_NOUN_AFTER = "(?:bè|thân|cũ|mới|trai|gái|ấy|cùng|học|đời|đồng|ruột|nhỏ|hàng|nhậu|chat|thật|khác|bên|của họ|của người|đó|kia|tốt|thân thiết|online|game)";
-const BAN_NOUN_BEFORE = "(?:người|những|các|mấy|kết|một|vài|nhiều|cô|bác|hai|ba|bốn|nhóm|đám|hội|đứa|thằng)";
+const BAN_NOUN_BEFORE = "(?:người|những|các|mấy|kết|một|vài|nhiều|cô|bác|hai|ba|bốn|nhóm|đám|hội|đứa|thằng|tình|[Tt]ình)";
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 /** "Lomi" (Lomi tự gọi mình) → "em". */
@@ -109,11 +109,14 @@ export function speak(text: string, addr?: Addr | null): string {
   // (đầu câu / sau emoji thì "em" viết hoa)
   if (addr === "bạn-em") return lomiAsEm(text).replace(/([.!?]\s+|\p{Extended_Pictographic}\uFE0F?\s+|\n\s*|^)em(?=\s)/gu, (_m, p: string) => `${p}Em`);
   const you = addr; // anh | chị | em
-  let out = text.replace(
+  // "làm bạn trước", "kết bạn với…" — "bạn" ở đây là BẠN BÈ, không phải lời gọi → giữ nguyên (đánh dấu tạm rồi trả lại).
+  const KEEP_BAN = "\uE000";
+  let out = text.replace(/((?:^|[^\p{L}])(?:làm|là|thành) )bạn(?=( (?:trước|với|thôi|đã|nha|nhé|bè|tốt|thân))|[,.!?…]|$)/giu, `$1b${KEEP_BAN}n`).replace(
     // (?![\\p{L}]) sau danh sách: "bạn đó" được giữ, còn "bạn đói", "bạn đời sống…" thì không bị giữ nhầm (09/10).
     new RegExp(`(?<!${BAN_NOUN_BEFORE})(^|[^\\p{L}])(bạn|Bạn)(?!\\s${BAN_NOUN_AFTER}(?![\\p{L}]))(?=[^\\p{L}]|$)`, "giu"),
     (_m, pre: string, w: string) => `${pre}${w === "Bạn" ? cap(you) : you}`,
   );
+  out = out.split(`b${KEEP_BAN}n`).join("bạn");
   // Người dùng là anh/chị → Lomi xưng "em" (trừ tên riêng trong đường dẫn, tiêu đề).
   if (addr === "anh" || addr === "chị") out = lomiAsEm(out);
   // Sau khi đổi, đầu câu viết hoa lại (vd "…nha. em hiểu" → "Em hiểu").
