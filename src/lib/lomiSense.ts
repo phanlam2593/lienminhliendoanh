@@ -13,7 +13,8 @@
 //   4. isAskLike()   — phân biệt câu hỏi / yêu cầu với câu kể (dùng chung).
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
-import type { ChatReply } from "@/lib/lomiChat";
+import { detectDish } from "@/lib/lomiSearch";
+import { expandTeen, type ChatReply } from "@/lib/lomiChat";
 
 export type SenseReply = ChatReply & { intent: string };
 
@@ -59,6 +60,10 @@ function hasSelfSubject(raw: string): boolean {
 const Q_END = /(?<![\p{L}])(không|ko|hông|hok|chưa|hả|hở|nhỉ|nhể|à|ư|sao|chứ|nào|vậy|thế)\s*[?!.…]*\s*$/u;
 const TRAIL_VOC = /\s+(nha|nhé|nè|nhen|đi|đó|á|ạ|e|em|lomi|ơi|bạn|anh|chị)\s*$/u;
 const Q_START = /^(ai|gì|nào|đâu|sao|thế nào|bao nhiêu|mấy|tại sao|vì sao|làm sao|làm thế nào|có phải|liệu|bao giờ|khi nào|có nên|nên)\b/u;
+// 08/10: từ để hỏi đứng CUỐI câu ("máy này bao nhiêu", "giờ ăn gì", "quán này ở đâu") cũng là câu hỏi dù không có "?".
+// Trừ khi phía trước là phủ định — "a chưa ăn gì", "mình không sao đâu", "không biết làm gì" là câu kể.
+const WH_END = /(?<![\p{L}])(gì|chi|đâu|bao nhiêu|bao lâu|bao giờ|khi nào|mấy|ai|thế nào|ra sao|làm sao|kiểu gì|cái gì|là gì|như nào|sao ta)\s*[!.…]*\s*$/u;
+const NEG_BEFORE = /(?<![\p{L}])(không|ko|hông|hok|khum|chưa|chẳng|chả|đâu có|đừng|k)(?![\p{L}])/u;
 const DIRECTIVE = /^(cho|nói|chỉ|giải thích|cho biết|tìm|tra|dịch|viết|tính|giúp|hãy|làm|kể|hướng dẫn|tư vấn|gợi ý|đề xuất|xin|mách|bảo|rút|bói|lựa|chọn|cho hỏi|hỏi)\b/u;
 export function isAskLike(raw: string): boolean {
   const s = low(raw);
@@ -68,7 +73,11 @@ export function isAskLike(raw: string): boolean {
   if (/(^|\s)có\b.+\b(không|chưa|hông|ko)\b/u.test(s)) return true;
   let body2 = s;
   for (let i = 0; i < 3; i++) body2 = body2.replace(TRAIL_VOC, "");
-  return Q_END.test(body2);
+  if (Q_END.test(body2)) return true;
+  // "bạn làm gì rồi", "ăn gì giờ ta" — bỏ thêm từ đệm cuối câu rồi mới tìm từ để hỏi.
+  const body3 = body2.replace(/(\s+(rồi|vậy|thế|ta|nhỉ|hả|ha|giờ|đây|luôn|nữa|trời))+\s*$/u, "");
+  const wh = body3.match(WH_END);
+  return !!wh && !NEG_BEFORE.test(body3.slice(0, wh.index));
 }
 
 // ── 1) CANON: đồng nghĩa + đảo từ → thêm từ khoá thư viện đã biết ──────────────
@@ -81,11 +90,11 @@ const SYN: [RegExp, string][] = [
   [/\b(day hoi|chuong bung|an khong tieu|day bung)\b/, "khó tiêu"],
   // tâm lý
   [/\b(ap luc|nang ne|ngop tho|kiet que|khong chiu noi nua|chiu hong noi|sap dat|qua suc)\b/, "áp lực quá"],
-  [/\b(khong biet (lam gi|phai lam gi|lam sao|di dau ve dau)|bi quan|mat phuong huong|chang con gi|hoang mang)\b/, "hoang mang"],
+  // 08/10: "không biết làm gì" trần ("cuối tuần không biết làm gì", "rảnh quá không biết làm gì") là đang rảnh / chán,
+  // KHÔNG phải hoang mang. Chỉ nhận khi có dấu hiệu bế tắc thật: "không biết PHẢI làm gì/sao", "… nữa", "mất phương hướng".
+  [/\b(khong biet phai lam (gi|sao)|khong biet (lam gi|lam sao) (nua|bay gio day|day nua)|khong biet di dau ve dau|bi quan|mat phuong huong|chang con gi|hoang mang)\b/, "hoang mang"],
   [/\b(that vong ve ban than|minh vo dung|khong ra gi|chang gioi gi|ghet ban than)\b/, "tự ti"],
-  [/\b(nho nha|nho gia dinh|nho ba me|nho me|nho bo)\b/, "cô đơn"],
   [/\b(stress|cang thang|met moi|kiet suc|ap luc)\b.*\b(cong viec|di lam|sep|deadline|kpi|tang ca)\b|\b(cong viec|di lam|deadline|kpi)\b.*\b(stress|cang thang|ap luc|kiet suc)\b/, "áp lực công việc"],
-  [/\b(khong biet (lam gi|phai lam gi|lam sao)( nua)?|chang biet lam gi)\b/, "hoang mang quá"],
   // tình cảm
   [/\b(thich|yeu|me|phai long|cam nang|crush)\b.*\b(nguoi (ay|do|ta)|chi ay|anh ay|co ay|cau ay|ban ay|em ay|ho)\b.*\b(khong (de y|biet|dap lai|thich lai|quan tam|de tam|ngo|nhin|coi|hay biet)|chi coi|chang de y|vo tam|chua bao gio)\b/, "thích đơn phương"],
   [/\b(nguoi (ay|do)|chi ay|anh ay|co ay|cau ay)\b.*\b(khong thich|khong yeu|khong de y|chi coi)\b.*\b(minh|toi|a|anh|em|e)\b/, "thích đơn phương"],
@@ -115,19 +124,27 @@ const V_FIND = "(?:lua|chon|tim|kiem|goi y|de xuat|gioi thieu|chi|mach|cho biet|
 const FILL = "(?:giup|gium|giumd|dum|ho|cho|voi|vs)?";
 const WHO = "(?:a|anh|chi|c|em|e|minh|tui|toi|t|to)?";
 const POL = "(?: (?:di|nha|nhe|nhen|ne|a|voi|vs|xiu|chut|ti|duoc khong|nao|ha|nhi))*";
+// Phần còn lại sau cụm "tìm + quán/món" chỉ gồm từ đệm, người nhờ, "gần đây", loại quán đã đọc → không còn chi tiết riêng.
+const REQ_FILLER = new Set("cho giup gium dum ho voi vs a anh chi c em e minh tui toi t to di nha nhe nhen ne xiu chut ti nao ha nhi duoc khong ko k gan day minh quanh nay ngon nao do an uong ca phe cafe tra sua nhau trua toi sang chieu hom nay gio bay luon".split(" "));
+const hasExtra = (rest: string) => rest.split(" ").filter(Boolean).some((w) => !REQ_FILLER.has(w));
 function canonRequest(q: string, n: string): string | null {
   const w = n.split(" ").length;
   if (w > 12) return null;
   // Tìm / chọn quán, chỗ, món
-  const f = n.match(new RegExp(`^(?:e |em |lomi |oi )*${V_FIND} ${FILL} ?${WHO} ?(?:mot |1 |may |vai )?(quan an|quan nhau|quan cafe|quan ca phe|quan tra sua|quan|nha hang|tiem|cho an|cho uong|cho choi|cho ngoi|cafe|ca phe|do an|mon an|mon|do uong)${POL}`));
-  if (f) {
+  const f = n.match(new RegExp(`^(?:e |em |lomi |oi )*${V_FIND} ${FILL} ?${WHO} ?(?:mot |1 |may |vai )?(quan an|quan nhau|quan cafe|quan ca phe|quan tra sua|quan|nha hang|cho an|cho uong|cho choi|cho ngoi|cafe|ca phe|do an|mon an|mon|do uong)${POL}`));
+  // 08/10: chỉ đổi về câu chuẩn khi yêu cầu KHÔNG còn chi tiết riêng. "tìm quán pizza", "tìm quán cà phê yên tĩnh để làm việc"
+  // phải giữ nguyên văn để lớp sau đọc đúng món / yêu cầu — đổi thành "tìm quán ăn gần đây" là làm mất ý người dùng.
+  if (f && !hasExtra(n.slice(f[0].length))) {
     const o = /ca phe|cafe/.test(n) ? "cafe" : /tra sua/.test(n) ? "tra sua" : /nhau/.test(n) ? "nhau" : f[1];
-    if (/mon|do an|do uong/.test(o)) return /uong/.test(o) ? "hôm nay uống gì" : "hôm nay ăn gì";
-    if (/cafe|ca phe/.test(o)) return "tìm quán cà phê gần đây";
-    if (/nhau/.test(o)) return "tìm quán nhậu gần đây";
-    if (/tra sua/.test(o)) return "tìm quán trà sữa gần đây";
-    if (/uong/.test(o)) return "tìm chỗ uống gần đây";
-    return "tìm quán ăn gần đây";
+    let out = "tìm quán ăn gần đây";
+    if (/mon|do an|do uong/.test(o)) out = /uong/.test(o) ? "hôm nay uống gì" : "hôm nay ăn gì";
+    else if (/cafe|ca phe/.test(o)) out = "tìm quán cà phê gần đây";
+    else if (/nhau/.test(o)) out = "tìm quán nhậu gần đây";
+    else if (/tra sua/.test(o)) out = "tìm quán trà sữa gần đây";
+    else if (/uong/.test(o)) out = "tìm chỗ uống gần đây";
+    // Câu gốc có nhắc một món mà câu chuẩn làm mất món đó ("tìm quán pizza") → giữ nguyên văn.
+    const dish = detectDish(q);
+    if (!dish || detectDish(out)?.id === dish.id) return out;
   }
   // Rút / bói một lá
   if (new RegExp(`^(?:e |em |lomi |oi )*(?:rut|lat|boc|xin|boi|xem) ${FILL} ?${WHO} ?(?:mot |1 |may |vai )?(la bai|la tarot|la|bai|tarot)${POL}`).test(n))
@@ -138,7 +155,8 @@ function canonRequest(q: string, n: string): string | null {
   // Nói chuyện / tâm sự / tư vấn tình cảm
   if (new RegExp(`^(?:e |em |lomi |oi )*(?:noi chuyen|tro chuyen|tam|chat|tam su|ke chuyen|nc) (?:voi|cung) ${WHO}${POL}$`).test(n))
     return /tam su/.test(n) ? "tâm sự với mình nha" : "nói chuyện với mình đi";
-  if (/^(?:e |em |lomi |oi )*(?:tu van|khuyen|cho (?:\w+ )?loi khuyen|giup)( \w+){0,3} (tinh cam|tinh yeu|chuyen yeu|chuyen tinh|chuyen vo chong|tam ly)\b/.test(n))
+  // "e tư vấn tình cảm được không?" là HỎI KHẢ NĂNG (lib/lomiIntent trả lời), không phải lời nhờ tư vấn ngay.
+  if (!/\b(duoc|dc) (khong|ko|k|hong|chu|ha)\b|\b(khong|ko|hong)$/.test(n) && /^(?:e |em |lomi |oi )*(?:tu van|khuyen|cho (?:\w+ )?loi khuyen|giup)( \w+){0,3} (tinh cam|tinh yeu|chuyen yeu|chuyen tinh|chuyen vo chong|tam ly)\b/.test(n))
     return /tam ly/.test(n) ? "tư vấn tâm lý" : "tư vấn tình cảm";
   return null;
 }
@@ -262,7 +280,7 @@ const STATES: StateDef[] = [
   },
   {
     id: "free",
-    re: W("(đang |đỡ |khá |hơi )?rảnh( rỗi| quá| lắm| nè| ghê)?|không có gì làm|chả có gì làm|nhàn quá|thừa thời gian"),
+    re: W("(đang |đỡ |khá |hơi )?rảnh( rỗi| quá| lắm| nè| ghê)?|không có gì làm|chả có gì làm|(không|chưa|chả|chẳng|ko|hông) biết làm gì|nhàn quá|thừa thời gian"),
     reply: () => ({
       text: pick([
         "Rảnh thì tám với Lomi nè 😄 Hoặc bạn thử bói một lá cho vui, hay ghé Quẹt xem có ai đang tìm bạn chơi không?",
@@ -314,6 +332,9 @@ const STATES: StateDef[] = [
   },
 ];
 
+// Phần đứng trước trạng thái chỉ gồm từ đệm, gọi trống, thời gian, nơi chốn chung — tức là trạng thái mở đầu câu.
+const LEAD_ONLY = /^((trời|thời tiết|ngoài kia|ngoài đường|ngoài|hôm nay|bữa nay|nay|cuối tuần|tuần này|bây giờ|giờ|lúc này|sáng|trưa|chiều|tối|đêm|khuya|ở đà lạt|đà lạt|ở đây|dạo này|mấy nay|e|em|lomi|ơi|ui|ôi|ủa|sao|mà|đang|vừa|mới|hơi|thấy|cảm thấy|lại|cũng|vẫn|a|anh|chị|mình|tui|tôi|tớ)\s+)*$/u;
+
 /** Câu "a thích em / a yêu e" → Lomi thân thiện nhưng rõ mình là robot (không tình tứ). */
 const LOVE_LOMI = /^(a|anh|chi|c|minh|tui|toi|t)\s+(thich|yeu|thuong|nho|me)\s+(em|e|lomi|ban)(\s+(roi|lam|qua|do|nha|nhe|nhieu|ghe))*$/;
 
@@ -333,9 +354,16 @@ export function senseState(raw: string, only?: string[]): SenseReply | null {
     if (!m) continue;
     // Có người nói rõ ràng thì tin; không có thì chỉ nhận câu ngắn mà trạng thái đứng đầu câu ("đói quá", "mưa quá").
     const idx = m.index ?? 0;
-    const okShort = !selfSub && words <= 6 && idx <= 12 && !/^(con|vợ|chồng|bạn|ông|bà|mẹ|ba|bố|cô|dì|chú|bác|anh ấy|chị ấy|nó)(?![\p{L}])/u.test(s);
+    // 08/10: câu lược chủ ngữ chỉ nhận khi trạng thái đứng ĐẦU câu (trước nó chỉ có từ đệm / thời gian): "đói quá", "hôm nay mệt ghê".
+    // "máy lạnh hư rồi", "điện thoại hết pin" có danh từ khác đứng trước → đang nói về đồ vật, không phải kể về mình.
+    const lead = LEAD_ONLY.test(s.slice(0, idx));
+    const okShort = !selfSub && words <= 6 && idx <= 12 && lead && !/^(con|vợ|chồng|bạn|ông|bà|mẹ|ba|bố|cô|dì|chú|bác|anh ấy|chị ấy|nó)(?![\p{L}])/u.test(s);
     // "vắng/đông khách" có thể là chuyện quán của người khác — vẫn nhận (người dùng kể chuyện kinh doanh).
-    if (selfSub || okShort || d.id === "biz_state" || d.id === "weather") {
+    // Thời tiết: nhận khi đứng đầu câu ("mưa quá", "hôm nay ở Đà Lạt lạnh ghê") — "máy lạnh inverter tiết kiệm điện" không phải kể thời tiết.
+    // Chuyện buôn bán ("sáng đông khách lắm, chiều thì ế") nhận ở bất kỳ vị trí nào, nhưng phải thật sự nói về khách / quán / bán —
+    // "điện thoại hết pin", "nhiều việc quá" có chữ "hết", "nhiều" mà không phải chuyện kinh doanh.
+    const bizTalk = d.id === "biz_state" && /(?<![\p{L}])(khách|đơn|doanh thu|quán|tiệm|bán|ế)(?![\p{L}])/u.test(s);
+    if (d.id === "weather" ? lead : selfSub || okShort || bizTalk) {
       const r = d.reply(m, s);
       return { ...r, intent: `state:${d.id}` };
     }
@@ -394,7 +422,33 @@ const META: [string, RegExp, string[]][] = [
     ],
   ],
 ];
-const VOCATIVE_ONLY = /^(e|em|lomi|anh|chi|a|c|ban|oi|alo|ê)( (oi|ơi|a|ạ|ne|nè|nhe|nha))*$/;
+const VOCATIVE_ONLY = /^(e|em|lomi|anh|chi|a|c|ban|oi|alo|ê|mn|moi nguoi|ca nha)( (oi|ơi|a|ạ|ne|nè|nhe|nha))*$/;
+// Chỉ gõ tên một chủ đề Lomi rành ("sức khoẻ", "tình cảm") → mời nói cụ thể, không báo "chưa tiếp thu".
+const TOPIC_ONLY: [RegExp, string][] = [
+  [/^(ve |chuyen |van de )?(suc khoe|benh tat)( (a|nha|nhe|di|ne))?$/, "sức khoẻ"],
+  [/^(ve |chuyen |van de )?(tam ly|tam li|tam su)( (a|nha|nhe|di|ne))?$/, "tâm lý"],
+  [/^(ve |chuyen |van de )?(tinh cam|tinh yeu|chuyen tinh)( (a|nha|nhe|di|ne))?$/, "tình cảm"],
+  [/^(ve |chuyen |van de )?(cong viec|gia dinh|hoc hanh|tien bac)( (a|nha|nhe|di|ne))?$/, "chuyện này"],
+];
+
+const REACTION = /^(buon cuoi|mac cuoi|hai|hai huoc|vui|de thuong|dinh|xin|ghe|ky|la|hay|tuyet|ngau|chat|cha|chu choa|chu cha|oa|wow|ua|ui|oi)( (cha|ghe|qua|that|thiet|vay|du|vai|luon|a|ha|nha|ta|troi|lam|the|ne))*$/;
+const CLOSER = /^(thoi|vay thoi|thoi vay|the thoi|thoi ke|ke di|thoi ke di|ke no|khong co gi|ko co gi|khong sao|khong sao dau|vay ha|vay a|the a|the ha|u thi|thi thoi|chiu|chiu thoi|bo di|thoi bo di|sao cung duoc|gi cung duoc|tuy|de sau|de sau di|luc khac|thoi de sau|biet roi|hieu roi|ra vay|ra la vay|co vay thoi)( (nha|nhe|ne|a|e|em|lomi|di|ha|vay|ma|luon|thoi))*$/;
+// Dấu hiệu "đang kể chuyện của mình" — đọc theo CẤU TRÚC, không theo danh sách câu:
+//  • có người kể (tôi/mình/anh/chị/em… — chữ có dấu để "tối" không lẫn "tôi"; không dấu thì xét từ đầu câu),
+//  • nhắc người thân / người trong chuyện (mẹ, vợ, sếp, người yêu, anh ấy…),
+//  • từ cảm xúc / cảm nhận (thấy, buồn, vui, mệt, lo, nhớ…) hoặc biểu cảm buồn,
+//  • câu lược chủ ngữ mở đầu bằng từ chỉ việc đang / vừa / chưa làm ("mới ngủ dậy nè", "chưa ngủ mà").
+const TALK_SELF = W("tôi|mình|tui|tớ|tao|anh|chị|em|tụi mình|bọn mình|nhà mình|tụi em|tụi anh");
+const TALK_PEOPLE = W("mẹ|má|bố|ba mẹ|vợ|chồng|con trai|con gái|con mình|bạn thân|bạn trai|bạn gái|bạn mình|sếp|người yêu|ny|crush|bồ|anh ấy|chị ấy|cô ấy|nó|tụi nó|đồng nghiệp|khách");
+const TALK_FEEL = W("thấy|cảm thấy|cảm giác|buồn(?! cười| ngủ| nôn)|vui|mệt|chán|lo|sợ|tức|bực|nhớ|thương|ghét|thích|ngại|hồi hộp|áp lực|stress|khó chịu|thoải mái|tủi|cô đơn|hạnh phúc|tiếc|hối hận");
+const TALK_ASPECT = new Set(["moi", "vua", "dang", "chua", "sap", "dinh", "lai", "van", "muon", "them", "bi"]);
+export function isPersonalTalk(raw: string): boolean {
+  const s = low(raw);
+  if (hasSelfSubject(raw) || TALK_SELF.test(s) || TALK_PEOPLE.test(s) || TALK_FEEL.test(s)) return true;
+  if (/(😭|🥲|😢|😞|🥺|:\(+|huhu|hic)/iu.test(raw)) return true;
+  const t = trimLead(tokens(raw));
+  return t.length >= 2 && TALK_ASPECT.has(t[0]);
+}
 
 /** Lưới cuối. Trả null = đây là câu HỎI KIẾN THỨC Lomi chưa có → để Lomi nói "chưa tiếp thu" + nút Dạy Lomi. */
 export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseReply | null {
@@ -407,6 +461,8 @@ export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseRe
   // Chỉ gọi trống ("anh", "em ơi", "lomi") — đáp "dạ", mời nói tiếp.
   if (VOCATIVE_ONLY.test(n))
     return { intent: "vocative", text: pick(["Dạ, Lomi nghe nè 🙋 Bạn cần gì nè?", "Dạ? Có Lomi đây 😊 Bạn nói đi nha!", "Dạ bạn nói đi, Lomi nghe nè 👂"]) };
+  for (const [re, label] of TOPIC_ONLY)
+    if (re.test(n)) return { intent: "topic", text: `Bạn muốn nói về ${label} hả 😊 Bạn đang gặp chuyện gì, kể Lomi nghe cụ thể hơn chút nha.` };
   const ask = isAskLike(raw);
   // Câu hỏi cụt, không rõ nói về gì ("thiệt không?", "sao vui á?") → hỏi lại một câu ngắn, không đoán.
   if (ask && words <= 4 && !/\b(la gi|co gi|o dau|bao nhieu|khi nao)\b/.test(n))
@@ -416,8 +472,15 @@ export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseRe
         ? pick(["Bạn đang hỏi về chuyện nào vậy nè? Nói rõ thêm chút giúp Lomi nha 😅", "Lomi chưa theo kịp ý bạn 🙈 Bạn nói rõ hơn một chút được không?"])
         : pick(["Bạn hỏi về chuyện gì vậy nè? Nói thêm chút xíu là Lomi hiểu liền 😊", "Lomi chưa chắc hiểu ý bạn 😅 Bạn nói rõ thêm giúp Lomi nha?"]),
     };
-  // Câu KỂ chưa nhận ra → lắng nghe, hỏi nối (không đẩy nút, không liệt kê dịch vụ).
-  if (!ask && words >= 2) {
+  if (ask) return null; // câu hỏi kiến thức Lomi chưa có → "chưa tiếp thu" + nút 💡 Dạy Lomi
+  // Tiếng cảm thán / phản ứng ngắn ("chà chà", "buồn cười ghê", "đỉnh thật") = từ cảm thán + từ nhấn → hỏi nối, không báo "chưa tiếp thu".
+  if (words <= 4 && REACTION.test(n)) return { intent: "reaction", text: pick(["Hihi 😄 Có chuyện gì vậy, kể Lomi nghe với!", "Hửm, có gì hay hả? 👀 Kể Lomi nghe nha!"]) };
+  // Lời khép lại / cho qua ("thôi kệ đi", "vậy thôi", "không có gì") → đáp nhẹ, không hỏi dồn.
+  if (CLOSER.test(n)) return { intent: "closer", text: pick(["Okie nè 😊 Khi nào cần thì cứ gọi Lomi nha.", "Dạ 🌿 Lomi vẫn ở đây, bạn muốn nói gì cứ nói nha."]) };
+  // 08/10: CHỈ lắng nghe khi nhận ra đây là lời kể chuyện của người dùng (có người kể / người thân / cảm xúc / việc đang làm).
+  // Câu không nhận ra được gì ("bitcoin hôm nay lên 100k", "asdf qwer") thì trả null — nói thật là chưa hiểu, ghi vào
+  // "Lomi bí" và hiện nút 💡 Dạy Lomi, chứ không giả vờ "Lomi nghe nè".
+  if (words >= 2 && isPersonalTalk(raw)) {
     const sad = /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
     return {
       intent: "listen",
@@ -426,5 +489,18 @@ export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseRe
         : pick(["Ừa, Lomi nghe nè 😊 Bạn kể thêm cho Lomi nghe được không?", "Lomi đang nghe nè 🌿 Bạn kể thêm chút được không?", "Lomi nghe nè 😄 Rồi sau đó thế nào vậy bạn?"]),
     };
   }
+  // Mẩu câu rất ngắn mà không nhận ra được gì ("quay lại", "tháng này") → hỏi lại một câu, vì chưa đủ ý để mà "bí".
+  if (words <= 3) return { intent: "clarify", text: pick(["Lomi chưa chắc hiểu ý bạn 😅 Bạn nói rõ thêm giúp Lomi nha?", "Ý bạn là sao ta 🤔 Bạn nói thêm chút xíu để Lomi hiểu nha."]) };
   return null;
+}
+
+/**
+ * 08/10 — QUYẾT ĐỊNH CUỐI, gọi khi mọi luồng khác (xã giao, sức khoẻ, Tarot, món ăn, FAQ, câu đã dạy) đều không đáp được.
+ * Thứ tự: senseState → senseLate. Có câu đáp ⇒ Lomi HIỂU, không ghi "Lomi bí", không hiện nút 💡.
+ * Trả null ⇒ thật sự bí: lúc đó (và chỉ lúc đó) AiAssistant mới logUnanswered + gắn `unk`.
+ * hasSuggest = câu nói về app và đã có gợi ý câu hỏi gần đúng → không dùng lưới "lắng nghe / hỏi lại" (đưa gợi ý tốt hơn).
+ */
+export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean } = {}): SenseReply | null {
+  // senseState đọc câu NGUYÊN VĂN (giữ :( và chữ kéo dài); senseLate đọc câu đã đổi teen code ("đc k" → "được không").
+  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText }));
 }

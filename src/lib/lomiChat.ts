@@ -234,7 +234,7 @@ const RULES: Rule[] = [
   },
   // Lomi biết gì / làm được gì → ngắn gọn, chỉ nút ❓
   {
-    re: /^(lomi|ban|em)? ?(biet gi|biet lam gi|lam duoc gi|giup duoc gi|biet nhung gi|lam gi duoc)( (vay|z|khong|ne|ta|het))*$/,
+    re: /^((cho|chu|the|vay|the thi|vay thi|roi|ua) )?(lomi|ban|em|e)? ?(biet gi|biet cai gi|biet lam gi|lam duoc gi|giup duoc gi|biet nhung gi|lam gi duoc)( (vay|z|khong|ne|ta|het))*$/,
     reply: () => ({ text: "Lomi rành mấy chuyện có ích cho cộng đồng nè: tư vấn sức khoẻ, tâm sự – tâm lý, chỉ cách dùng app, gợi ý quán, và bói Tarot cho vui 🔮 Bấm nút ❓ ở góc trên để xem mọi người hay hỏi gì nha!" }),
   },
   // Thời tiết
@@ -876,7 +876,7 @@ const TEEN: Record<string, string> = {
   tgian: "thời gian", vc: "việc", uh: "ừ", uk: "ừ", uhm: "ừ", ah: "à", tr: "trời",
   // 01/10 (theo tài liệu Kir): thêm cách nói đời thường
   lmj: "làm gì", lmgi: "làm gì", okla: "ok", oki: "ok", okee: "ok", okeee: "ok", ò: "ừ", ừa: "ừ", ùm: "ừ", ừm: "ừ",
-  dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo", qtqd: "quá",
+  dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo", qtqd: "quá", sk: "sức khỏe",
 };
 // ── Chữ kéo dài để biểu cảm (01/10 r2, theo tài liệu Kir): "okkkk", "chánnnn", "khônggg", "đượcccc",
 // "trờiiii", "haizzzz", "hahaahah" → về từ gốc để HIỂU nghĩa; còn độ nhấn thì đọc riêng bằng

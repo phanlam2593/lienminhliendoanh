@@ -620,7 +620,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "sad",
-    re: /\b(buon(?! ban)|buon qua|buon ghe|dang buon|thay buon|buon hiu|chan doi|tui than|muon khoc|dang khoc|khoc qua|tam trang te|tam trang khong tot|down|bi down|nang long|trong rong|that vong|khong vui)\b/,
+    re: /\b(buon(?! ban| cuoi| ngu| non)|buon qua|buon ghe|dang buon|thay buon|buon hiu|chan doi|tui than|muon khoc|dang khoc|khoc qua|tam trang te|tam trang khong tot|down|bi down|nang long|trong rong|that vong|khong vui)\b/,
     feel: [
       "Nghe bạn buồn, Lomi thương ghê 🥺",
       "Lomi gửi bạn một cái ôm thật chặt nè 🤗",

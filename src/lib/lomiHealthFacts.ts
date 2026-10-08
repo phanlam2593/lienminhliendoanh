@@ -34,6 +34,13 @@ const FACTS: Fact[] = [
     a: "🍵 **Trà / trà sữa:** trà xanh, trà thảo mộc uống vừa phải khá tốt. Trà sữa thì thường **nhiều đường và chất béo**, trân châu nhiều tinh bột — nên xem là món thỉnh thoảng thôi.\n• Chọn ít đường (30–50%), ít topping.\n• Trà đặc cũng có caffeine, tránh uống buổi tối nếu khó ngủ.",
   },
   {
+    // 08/10: "pizza ăn nhiều có hại không?" là hỏi SỨC KHOẺ (không phải nhờ chọn món). Kiến thức phổ thông, không số liệu riêng.
+    id: "fastfood",
+    // Phải có ý hỏi sức khoẻ đi kèm tên món — "pizza bao nhiêu tiền", "tìm quán gà rán" không phải câu hỏi sức khoẻ.
+    re: /\b(pizza|ga ran|burger|hamburger|khoai tay chien|do an nhanh|fast food|fastfood|xuc xich|do chien ran|do chien)\b(?=.*\b(co hai|co sao|co tot|tot khong|hai khong|tac hai|anh huong|suc khoe|an nhieu|nhieu qua|qua nhieu|thuong xuyen|moi ngay|hang ngay|beo|map|tang can|calo|mo mau)\b)|\b(co hai|co sao|co tot|tac hai|anh huong|suc khoe|an nhieu|thuong xuyen|moi ngay|hang ngay|beo|map|tang can|calo)\b(?=.*\b(pizza|ga ran|burger|hamburger|khoai tay chien|do an nhanh|fast food|fastfood|xuc xich|do chien ran|do chien)\b)/,
+    a: "🍕 **Đồ ăn nhanh (pizza, gà rán, burger, khoai tây chiên…):** thỉnh thoảng ăn thì không sao. Ăn **nhiều và thường xuyên** thì dễ dư năng lượng, nhiều chất béo, muối và tinh bột — lâu dài dễ tăng cân, ảnh hưởng mỡ máu, huyết áp, và hay bị đầy bụng, khó tiêu.\n• Ăn kèm rau, chọn phần vừa phải, bớt nước ngọt đi kèm.\n• Xen kẽ với bữa cơm nhà có rau, cá, đạm nạc.",
+  },
+  {
     id: "water",
     re: /\b(uong bao nhieu nuoc|uong nuoc bao nhieu|uong du nuoc|uong it nuoc|uong nhieu nuoc|nuoc loc|thieu nuoc)\b/,
     a: "💧 **Uống nước:** mỗi người cần khác nhau tuỳ cân nặng, thời tiết, vận động. Cách dễ nhất: uống rải rác cả ngày, **nước tiểu vàng nhạt** là đủ; vàng sẫm là đang thiếu.\n• Uống nhiều hơn khi trời nóng, tập thể dục, sốt, tiêu chảy.\n• Người bệnh thận, tim nên hỏi bác sĩ lượng nước phù hợp.",

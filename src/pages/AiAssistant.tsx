@@ -49,9 +49,9 @@ import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply } from "@/lib/lomiRelation";
-import { capabilityAsk, foodChoice } from "@/lib/lomiIntent";
+import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
-import { senseCanon, senseLate, senseState } from "@/lib/lomiSense";
+import { senseCanon, senseLast, senseState } from "@/lib/lomiSense";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -134,7 +134,10 @@ type Msg = {
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
   faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này — câu hỏi nối ("còn … thì sao") hiểu theo ngữ cảnh đó
   raw?: string; // tin người dùng: câu gõ NGUYÊN VĂN (trước khi chuẩn hoá) — dùng khi báo cáo / Dạy Lomi
-  unk?: string; // câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn)
+  // Câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn).
+  // Đây là KHOÁ so khớp nội bộ nên giữ câu đã chuẩn hoá (cùng dạng với lookupLearned / logUnanswered dùng để tra);
+  // câu NGUYÊN VĂN người dùng gõ nằm ở Msg.raw của tin người dùng — báo cáo 💡 và mẫu "Lomi bí" đều lấy từ đó.
+  unk?: string;
   diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
   reported?: boolean; // người dùng đã bấm ⁉️ gửi câu này cho ban quản trị (01/10)
   taught?: boolean; // câu trả lời do admin dạy (lib/lomiLearn → lomi_taught)
@@ -788,13 +791,16 @@ export function AiChat({
         }
       }
       // e0) Hỏi khả năng của Lomi ("e tư vấn sức khỏe a đc k") / thèm–chọn một món ("thèm pizza mà k biết ăn pizza gì").
-      //     Không chạy khi đang ở mạch chờ trả lời (tâm sự, chọn món, tư vấn…) để không cướp ngữ cảnh.
-      if (!en && !gateSkip && !lastA?.tarotAwait && !lastA?.bizPick && !lastA?.bizTopicPick) {
-        const cap = capabilityAsk(q);
-        if (cap) return localReply(q, { role: "assistant", content: cap.text, local: true, ...(cap.domain === "health" ? { heart: "health", heartDepth: 0 } : {}) });
-        const fc = foodChoice(q);
-        if (fc?.intent === "food_place") return replyDishShops(q, fc.dish);
-        if (fc?.intent === "food_choice") return localReply(q, { role: "assistant", content: fc.text!, local: true, quick: fc.quick, dish: fc.dish, dishPick: true });
+      //     08/10: luật "không cướp mạch đang nói" (đang bói, tâm sự, sức khoẻ, chọn món, tư vấn kinh doanh) nằm trong
+      //     earlyIntent (lib/lomiIntent) để test được — ở đây chỉ báo cho nó biết tin trước đang ở mạch nào.
+      if (!en && !gateSkip) {
+        const talk = lastA?.tarot ? "tarot" : lastA?.heart === "health" || lastA?.sx?.length ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.dishAsk || lastA?.dishPick ? "dish" : undefined;
+        const ei = earlyIntent(q, { waiting: !!(lastA?.tarotAwait || lastA?.bizPick || lastA?.bizTopicPick), talk });
+        if (ei?.intent === "capability") return localReply(q, { role: "assistant", content: ei.text, local: true, ...(ei.domain === "health" ? { heart: "health", heartDepth: 0 } : {}) });
+        if (ei?.intent === "food_place") return replyDishShops(q, ei.dish);
+        if (ei?.intent === "food_choice") return localReply(q, { role: "assistant", content: ei.text!, local: true, quick: ei.quick, dish: ei.dish, dishPick: true });
+        // Chưa nhắc món nào ("giờ ăn gì", "a đói mà không biết ăn gì") → gợi ý món, như "Hôm nay ăn gì".
+        if (ei?.intent === "food_suggest") return replyDishes(q, ei.drink);
         // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
         if (lastA?.dishPick && lastA.dish && q.split(/\s+/).length <= 8 && !detectDish(q) && !capabilityAsk(q)) return replyDishShops(q, lastA.dish);
       }
@@ -977,23 +983,19 @@ export function AiChat({
       const lf = learned ? faqById(learned) : undefined;
       if (lf) return answerFaq(lf, q);
       // Chỉ tới đây khi MỌI luồng (xã giao, sức khoẻ, Tarot, ngữ cảnh, món ăn, FAQ, câu đã dạy/đã học) đều không đáp được.
-      // 06/10 (lib/lomiSense): câu KỂ về mình ("a đói bụng", "anh đang uống cf") → ghi nhận + hỏi nối, không báo "chưa tiếp thu"
-      // và KHÔNG ghi vào "Lomi bí" (đã đáp được rồi).
-      if (!en) {
-        const ss = senseState(raw);
-        if (ss) return localReply(q, { role: "assistant", content: ss.text, local: true, quick: ss.quick });
-      }
-      logUnanswered(raw, q);
-      // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
-      // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
-      //  Câu hỏi chuyện đời (không dính tới app) thì không đưa FAQ lạc đề — Lomi mời bói đúng câu đó.
       // Chỉ gợi ý câu hỏi về app khi câu thật sự nói về app; còn lại nói thật là chưa hiểu / ngoài phạm vi.
       const sug = isAppish(q) ? suggestFaqs(q, 3) : [];
-      if (!sug.length && !en) {
-        // Chào kèm lời chúc, hỏi về chính Lomi, gọi trống, câu cụt, câu kể chưa nhận ra → đáp tự nhiên.
-        // Chỉ CÂU HỎI KIẾN THỨC ngoài hiểu biết mới rơi xuống "chưa tiếp thu" + nút 💡 Dạy Lomi.
-        const sl = senseLate(raw, { lastText: lastA?.content });
+      // 08/10 — thứ tự đúng: senseState → senseLate → CHỈ KHI thật sự bí mới logUnanswered + gắn unk (nút 💡 Dạy Lomi).
+      // senseLast (lib/lomiSense) gộp hai bước đầu: câu KỂ về mình ("a đói bụng"), chào kèm lời chúc, hỏi về chính Lomi,
+      // gọi trống, câu cụt, lời kể nhận ra được → Lomi đáp tự nhiên và KHÔNG ghi vào "Lomi bí".
+      // (Trước đây logUnanswered chạy trước senseLate nên câu Lomi đã đáp được vẫn bị ghi là "bí".)
+      if (!en) {
+        const sl = senseLast(raw, { lastText: lastA?.content, hasSuggest: sug.length > 0 });
         if (sl) return localReply(q, { role: "assistant", content: sl.text, local: true, quick: sl.quick });
+      }
+      // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
+      logUnanswered(raw, q);
+      if (!sug.length && !en) {
         const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
         return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q, sticker: fb.sticker });
       }
