@@ -26,6 +26,8 @@ export type ConvoMsg = {
   raw?: string;
   quick?: string[];
   heart?: string;
+  /** Mạch SỨC KHOẺ (lib/lomiHealthTopic) — tách khỏi mạch tâm sự (heart). */
+  health?: unknown;
   rel?: string;
   hsub?: string;
   sx?: string[];
@@ -81,8 +83,10 @@ const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 function topicOf(m: ConvoMsg): Topic | undefined {
   if (m.tarot || m.tarotRef || m.tarotAwait) return "tarot";
-  if (m.heart === "health" || m.sx?.length || m.hsub || m.diet) return "health";
-  if (m.heart) return "heart";
+  if (m.health && !m.heart) return "health";
+  // Có cả hai = đang tâm sự VỀ một chuyện sức khoẻ → là mạch tâm sự. (Lịch sử cũ: heart "health" kèm triệu chứng = mạch sức khoẻ.)
+  if (m.heart) return m.heart === "health" && !m.health && (m.sx?.length || m.hsub || m.diet) ? "health" : "heart";
+  if (m.sx?.length || m.hsub || m.diet) return "health";
   if (m.biz || m.bizPick || m.bizTopicPick) return "biz";
   if (m.dish || m.dishAsk || m.dishPick || m.search) return "food";
   if (m.faqId || m.issue) return "app";
@@ -247,7 +251,7 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     if (wrong && (softTopic || c.topic === "health" || (c.topic === "heart" && c.asked !== "yesno")))
       return { kind: "reply", keep: false, why: "answer:wrong", reply: { text: c.topic === "health" ? "Dạ, vậy là Lomi hiểu chưa đúng rồi 🙏 Bạn kể lại giúp Lomi là đang bị sao nha." : "Dạ, vậy là Lomi hiểu chưa đúng rồi 🙏 Ý bạn là sao, nói Lomi nghe thêm chút nha." } };
     // Lomi hỏi "A, B hay C?" mà bạn đáp "ừ" → chưa biết chọn cái nào, hỏi lại đúng phần đó (không tự chọn giùm).
-    if (yes && c.asked === "choice" && (last.quick?.length ?? 0) >= 2 && softTopic)
+    if (yes && c.asked === "choice" && (last.quick?.length ?? 0) >= 2 && (softTopic || c.topic === "health" || c.topic === "heart"))
       return { kind: "reply", keep: true, why: "answer:choice", reply: { text: "Bạn chọn giúp Lomi một cái nha 😄", quick: last.quick } };
     // Lomi hỏi mở ("Bạn muốn hỏi chuyện gì về sức khoẻ nè?") mà bạn đáp "ừ" → mời nói cụ thể, kèm ví dụ đúng chủ đề.
     if (yes && c.asked === "open" && c.topic !== "tarot" && c.topic !== "biz") {

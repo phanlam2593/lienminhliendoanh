@@ -53,6 +53,7 @@ import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
 import { isUpbeat, senseCanon, senseLast, senseState, talkContinue } from "@/lib/lomiSense";
 import { convoOf, isOffer, otherPlace, resolveTurn } from "@/lib/lomiConvo";
+import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -123,7 +124,10 @@ type Msg = {
   sticker?: string; // Lomi đáp lại bằng sticker (id trong lib/lomiStickers) — hiện phía trên câu chữ
   hsub?: string; // chủ thể sức khoẻ đang nói (lib/lomiContext) — để hiểu câu hỏi nối
   rel?: string; // "<chủ thể>|<ý định>" chuyện tình cảm đang nói (lib/lomiRelation)
-  heart?: string; // đang tâm sự với Lomi (chủ đề) — lib/lomiHeart
+  heart?: string; // đang TÂM SỰ với Lomi (chủ đề cảm xúc) — lib/lomiHeart. KHÔNG dùng làm cờ "đang nói chuyện sức khoẻ" nữa (08/10).
+  // Đang nói chuyện SỨC KHOẺ (kiến thức / triệu chứng / kiêng cữ) + bệnh đang nói tới nếu có — lib/lomiHealthTopic.
+  // Tách khỏi heart: hỏi "bệnh gout" là hỏi kiến thức, không phải tâm sự. Có cả heart lẫn health = đang tâm sự VỀ chuyện sức khoẻ.
+  health?: HealthCtx;
   heartListen?: boolean; // người dùng chỉ muốn được nghe, Lomi không khuyên
   dishPick?: boolean; // Lomi vừa hỏi khẩu vị cho một món cụ thể (lib/lomiIntent foodChoice)
   dishAsk?: { drink: boolean; shown: string[] }; // Lomi vừa gợi ý vài món — tin kế tiếp là món người dùng chọn
@@ -148,6 +152,8 @@ type Msg = {
   issue?: string; // Lomi vừa hỏi thêm về lỗi app (lib/lomiUnderstand) — tin kế tiếp là chi tiết máy / màn hình
 };
 type Quota = { member: boolean; limit: number; used: number };
+/** Mạch sức khoẻ đang mở ở tin này. Lịch sử lưu trước 08/10 còn dùng heart "health" làm cờ sức khoẻ → vẫn đọc được. */
+const healthOf = (m?: Msg): HealthCtx | undefined => m?.health ?? (m?.heart === "health" && (m.heartDepth === 0 || m.sx?.length || m.hsub || m.diet) ? {} : undefined);
 
 const db = supabase as any;
 // 30/09 (theo ý Kir: không phụ thuộc Lovable): Lomi trả lời hoàn toàn trên máy — thư viện hỏi–đáp về app,
@@ -526,7 +532,8 @@ export function AiChat({
     local: true,
     quick: h.quick.length ? h.quick : undefined,
     // Giữ lại triệu chứng / cảm giác đã kể để lần sau cộng dồn.
-    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth, sx: keep?.sx, mood: keep?.mood, story: h.story ?? keep?.story }),
+    // health: đang tâm sự về một chuyện sức khoẻ thì vẫn nhớ bệnh đang nói tới (để hỏi lại kiến thức là có ngay).
+    ...(h.end ? {} : { heart: h.theme, heartListen: h.listen, heartDepth: depth, sx: keep?.sx, mood: keep?.mood, story: h.story ?? keep?.story, health: keep?.health }),
   });
   const askHeart = (asked?: string) => {
     setErr(null);
@@ -603,6 +610,12 @@ export function AiChat({
       shownRef.current = { from: q, to: raw };
     }
     const lastA = corr?.action === "rewrite" ? undefined : lastA0;
+    // 08/10 — hai mạch TÁCH RIÊNG: hCtx = đang nói chuyện sức khoẻ; heartOn = đang tâm sự thật (có cảm xúc).
+    // Chỉ heartOn mới được đưa tin kế tiếp vào heartContinue(); mạch sức khoẻ có đường xử lý riêng ở mục f0.
+    const hCtx = healthOf(lastA);
+    const heartOn = !!lastA?.heart && !(hCtx && !lastA?.health);
+    // Câu đáp không thuộc lớp sức khoẻ (cảm ơn, xã giao, chưa hiểu…) khi đang ở mạch sức khoẻ thì vẫn giữ mạch + bệnh đang nói.
+    const keepHealth: Partial<Msg> = hCtx && !heartOn ? { health: hCtx, sx: lastA?.sx, diet: lastA?.diet, hsub: lastA?.hsub } : {};
     let gateSkip: string | null = null; // Gate bảo "đừng cho module chuyên biệt bắt câu này"
     let memLearn: ReturnType<typeof learnFromText> | null = null;
     // Người dùng nói rõ cách xưng hô ("gọi tui là anh nha", "thôi gọi mình là bạn") → xác nhận ngắn gọn.
@@ -635,7 +648,7 @@ export function AiChat({
         quick: rt.reply.quick,
         ...(rt.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}),
         ...(k
-          ? { heart: k.heart, heartListen: k.heartListen, heartDepth: k.heartDepth, rel: k.rel, hsub: k.hsub, sx: k.sx, mood: k.mood, story: k.story, diet: k.diet, dish: k.dish, avoidIds: k.avoidIds, search: k.search, biz: k.biz, faqId: k.faqId, talk: k.talk, tarotRef: k.tarot ?? k.tarotRef }
+          ? { heart: k.heart, health: k.health, heartListen: k.heartListen, heartDepth: k.heartDepth, rel: k.rel, hsub: k.hsub, sx: k.sx, mood: k.mood, story: k.story, diet: k.diet, dish: k.dish, avoidIds: k.avoidIds, search: k.search, biz: k.biz, faqId: k.faqId, talk: k.talk, tarotRef: k.tarot ?? k.tarotRef }
           : {}),
       });
     }
@@ -649,7 +662,7 @@ export function AiChat({
 
     // Lomi vừa mời ("rút một lá cho nhẹ lòng không?") kèm nút gợi ý → người dùng gõ "ok / ờ / có"
     // thì làm luôn gợi ý đầu tiên (khung chat vẫn hiện đúng chữ họ gõ); "không / thôi" thì đáp nhẹ nhàng.
-    if (!forceAi && !en && lastA?.quick?.length && !lastA.bizPick && !lastA.bizTopicPick && !lastA.tarotAwait && !lastA.heart) {
+    if (!forceAi && !en && lastA?.quick?.length && !lastA.bizPick && !lastA.bizTopicPick && !lastA.tarotAwait && !lastA.heart && !hCtx) {
       // Chỉ khi tin trước thật sự là lời mời (có câu hỏi + động từ mời), tránh "ok" sau câu chào bị hiểu nhầm.
       const offered = isOffer(lastA.content);
       if (offered && isAffirm(q)) {
@@ -678,7 +691,7 @@ export function AiChat({
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
       // Câu ngắn có nhấn mạnh / sắc thái ("chánnnn 😭", "okkk 😂", "ok......", "haizzz") → đáp đúng sắc thái,
       // trừ khi đang trong một mạch (tâm sự, bói, tư vấn, chọn món) thì để mạch đó hiểu tiếp.
-      if (!en && q.split(/\s+/).length <= 4 && !lastA?.heart && !lastA?.tarotAwait && !lastA?.bizPick && !lastA?.bizTopicPick && !lastA?.dishAsk && !lastA?.issue) {
+      if (!en && q.split(/\s+/).length <= 4 && !lastA?.heart && !hCtx && !lastA?.tarotAwait && !lastA?.bizPick && !lastA?.bizTopicPick && !lastA?.dishAsk && !lastA?.issue) {
         const xr = expressiveReply(q, raw);
         if (xr) return localReply(q, { role: "assistant", content: xr.text, local: true });
       }
@@ -708,7 +721,7 @@ export function AiChat({
       // Nút phạm vi ("🩺 Sức khoẻ", "📱 Hỏi về app") → Lomi hỏi tiếp đúng việc.
       // (q khi người dùng gõ "ừ" nhận lời Lomi mời quay lại một chủ đề — lúc đó q đã là chữ trên nút.)
       const scope = SCOPE_CHIP_REPLY[raw] ? raw : SCOPE_CHIP_REPLY[q] ? q : null;
-      if (scope) return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY[scope], local: true, ...(scope.includes("Sức khoẻ") ? { heart: "health", heartDepth: 0 } : {}) });
+      if (scope) return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY[scope], local: true, ...(scope.includes("Sức khoẻ") ? { health: {} } : {}) });
       // 0a) Trí nhớ: người dùng kể tên / hoàn cảnh → Lomi ghi nhớ; hỏi "Lomi nhớ gì về mình?", "quên hết đi".
       if (isForgetMemory(q)) {
         clearMem(user.id);
@@ -818,24 +831,32 @@ export function AiChat({
       }
       // Understanding Gate (01/10): filler / follow-up / mơ hồ / hỏi luật Tarot — xác định ý trước khi module chuyên biệt bắt câu.
       if (!en) {
-        const inFlow = !!(lastA?.heart || lastA?.dishAsk || lastA?.dishPick || lastA?.bizPick || lastA?.bizTopicPick || lastA?.issue || lastA?.biz);
-        const topic = lastA?.tarot || lastA?.tarotRef ? "tarot" : lastA?.heart === "health" ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.faqId ? "faq" : undefined;
+        const inFlow = !!(lastA?.heart || hCtx || lastA?.dishAsk || lastA?.dishPick || lastA?.bizPick || lastA?.bizTopicPick || lastA?.issue || lastA?.biz);
+        const topic = lastA?.tarot || lastA?.tarotRef ? "tarot" : hCtx && !heartOn ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.faqId ? "faq" : undefined;
         const g = gate(q, { lastText: lastA?.content, faqId: lastA?.faqId, topic, inFlow });
-        if (g?.action === "reply") return localReply(q, { role: "assistant", content: g.reply.text, local: true, quick: g.reply.quick });
+        if (g?.action === "reply") return localReply(q, { role: "assistant", content: g.reply.text, local: true, quick: g.reply.quick, ...keepHealth });
         if (g?.action === "skip") gateSkip = g.intent;
         // Giao tiếp cơ bản: ưu tiên câu đáp sẵn của chitChat (nhớ tên, chào theo giờ…), không có thì dùng câu của gate.
         if (g?.action === "social") {
           const cc = g.preferChit ? chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name), raw) : null;
-          return localReply(q, { role: "assistant", content: cc?.text ?? g.reply.text, local: true, quick: cc?.quick });
+          return localReply(q, { role: "assistant", content: cc?.text ?? g.reply.text, local: true, quick: cc?.quick, ...keepHealth });
         }
       }
       // e0) Hỏi khả năng của Lomi ("e tư vấn sức khỏe a đc k") / thèm–chọn một món ("thèm pizza mà k biết ăn pizza gì").
       //     08/10: luật "không cướp mạch đang nói" (đang bói, tâm sự, sức khoẻ, chọn món, tư vấn kinh doanh) nằm trong
       //     earlyIntent (lib/lomiIntent) để test được — ở đây chỉ báo cho nó biết tin trước đang ở mạch nào.
       if (!en && !gateSkip) {
-        const talk = lastA?.tarot || lastA?.tarotRef ? "tarot" : lastA?.heart === "health" || lastA?.sx?.length ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.dishAsk || lastA?.dishPick ? "dish" : undefined;
+        const talk = lastA?.tarot || lastA?.tarotRef ? "tarot" : (hCtx && !heartOn) || lastA?.sx?.length ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.dishAsk || lastA?.dishPick ? "dish" : undefined;
         const ei = earlyIntent(q, { waiting: !!(lastA?.tarotAwait || lastA?.bizPick || lastA?.bizTopicPick), talk });
-        if (ei?.intent === "capability") return localReply(q, { role: "assistant", content: ei.text, local: true, ...(ei.domain === "health" ? { heart: "health", heartDepth: 0 } : {}) });
+        if (ei?.intent === "capability" && ei.domain === "health") {
+          // 08/10: hỏi khả năng mà đã nêu luôn bệnh ("e biết cách chữa bệnh gout k") → trả lời "có" trong giới hạn RỒI nói luôn phần được hỏi
+          // (hoặc hỏi muốn biết phần nào), và nhớ bệnh đó cho các câu sau. Mở mạch SỨC KHOẺ, không phải mạch tâm sự.
+          const ht = healthTopicReply(q, undefined, "aspect") ?? healthTopicReply(q.replace(/\b(biết|rành|hiểu)\b/giu, " "), undefined, "menu");
+          const hs = healthSubjectOf(q, true);
+          if (ht) return localReply(q, { role: "assistant", content: `Được chứ 😄 Lomi chia sẻ được kiến thức sức khoẻ phổ thông ở mức tham khảo — không thay bác sĩ và không kê thuốc nha.\n\n${ht.text}`, local: true, quick: ht.quick, health: ht.health });
+          return localReply(q, { role: "assistant", content: ei.text, local: true, health: hs ? { subject: hs.subject, label: hs.label, diet: hs.diet, cond: hs.cond } : {} });
+        }
+        if (ei?.intent === "capability") return localReply(q, { role: "assistant", content: ei.text, local: true });
         if (ei?.intent === "food_place") return replyDishShops(q, ei.dish);
         if (ei?.intent === "food_choice") return localReply(q, { role: "assistant", content: ei.text!, local: true, quick: ei.quick, dish: ei.dish, dishPick: true });
         // Chưa nhắc món nào ("giờ ăn gì", "a đói mà không biết ăn gì") → gợi ý món, như "Hôm nay ăn gì".
@@ -865,29 +886,39 @@ export function AiChat({
       //     nên làm / kiêng gì / khám khoa nào; cảm giác G, J, K → trạng thái tâm lý → nên làm gì.
       //     Cộng dồn với những gì đã kể ở tin trước khi đang tâm sự.
       if (!en && !gateSkip && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
-        const inTalk = !!lastA?.heart;
+        const inTalk = heartOn || !!hCtx;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const nq = ` ${normalizeVi(q)} `;
         // 00) Chủ thể sức khoẻ cụ thể (xét nghiệm máu, paracetamol…) + câu hỏi nối theo chủ thể đang nói — lib/lomiContext.
         const cx = contextReply(q, lastA?.hsub);
         if (cx) topicHit("health");
-        if (cx) return localReply(q, { role: "assistant", content: cx.text, local: true, heart: "health", heartDepth: depth, hsub: cx.anchor.subject, sx: inTalk ? lastA?.sx : undefined });
+        if (cx) return localReply(q, { role: "assistant", content: cx.text, local: true, health: hCtx ?? {}, hsub: cx.anchor.subject, sx: inTalk ? lastA?.sx : undefined });
+        // 00b) Hỏi một KHÍA CẠNH của một bệnh / tình trạng ("bệnh gout là gì", "cách chữa bệnh gout", "vậy khám ở đâu?") — lib/lomiHealthTopic.
+        //      Câu nối không nhắc lại tên bệnh thì dùng bệnh đang nói. Câu hỏi ăn uống / kiêng cữ vẫn để lib/lomiDiet ở dưới trả lời.
+        const ha = healthTopicReply(q, hCtx, "aspect");
+        if (ha) topicHit("health");
+        //      (Câu có kèm triệu chứng — "đau dạ dày nên làm gì" — thì vẫn ghi nhớ triệu chứng đó cho các câu sau.)
+        if (ha) return localReply(q, { role: "assistant", content: ha.text, local: true, quick: ha.quick, health: ha.health, sx: Array.from(new Set([...(inTalk ? (lastA?.sx ?? []) : []), ...(analyzeBody(q)?.sx ?? [])])) });
         // 0a) Kiêng ăn uống theo bệnh ("gout kiêng gì", "huyết áp cao ăn mặn được k", nối tiếp "còn bia thì sao") — lib/lomiDiet.
         const prevUser = [...msgs].reverse().find((m) => m.role === "user")?.content;
-        const diet = dietReply(q, lastA?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet);
+        // Đang nói về một bệnh mà hỏi trống "kiêng gì?" / "ăn gì được?" → ghép tên bệnh đang nói vào cho đủ ý.
+        const dq = hCtx?.diet && hCtx.label && !dietOf(q) && isDietAsk(q) ? `${hCtx.label} ${q}` : q;
+        // (inDiet chỉ khi câu nhắc một bệnh KHÁC bệnh đang nói — "mỡ máu á" — còn nhắc lại đúng bệnh đang nói thì không lặp cả bảng kiêng cữ.)
+        const diet = dietReply(dq, lastA?.diet ?? hCtx?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet && dietOf(q) !== lastA.diet);
         if (diet) topicHit("health");
-        if (diet) return localReply(q, { role: "assistant", content: diet.text, local: true, heart: "health", heartDepth: depth, diet: diet.diet, sx: inTalk ? lastA?.sx : undefined });
+        if (diet) return localReply(q, { role: "assistant", content: diet.text, local: true, health: healthCtxOfDiet(diet.diet), diet: diet.diet, sx: inTalk ? lastA?.sx : undefined });
         // 0) Câu hỏi kiến thức sức khoẻ ("uống cà phê nhiều có sao k", "ăn gì để đẹp da") — lib/lomiHealthFacts.
         const fact = healthFact(q);
         if (fact) topicHit("health");
-        if (fact) return localReply(q, { role: "assistant", content: fact, local: true, heart: "health", heartDepth: depth, sx: inTalk ? lastA?.sx : undefined });
-        const inHealth = inTalk && (lastA?.heart === "health" || !!lastA?.sx?.length);
+        if (fact) return localReply(q, { role: "assistant", content: fact, local: true, health: hCtx ?? {}, sx: inTalk ? lastA?.sx : undefined });
+        // Đang nói chuyện sức khoẻ (không phải đang tâm sự) hoặc đã kể triệu chứng → đọc tin này như chi tiết sức khoẻ.
+        const inHealth = (!!hCtx && !heartOn) || !!lastA?.sx?.length || lastA?.heart === "health";
         const th = heartThemeOf(q);
         // Cảm xúc đã kể trước đó (hoặc suy từ chủ đề đang tâm sự) để cộng dồn — vd đang kể lo âu rồi nói "tim đập nhanh nữa".
         const moodSeed = inTalk ? (lastA?.mood ?? THEME_MOOD[lastA?.heart ?? ""] ?? []) : [];
         const mind0 = analyzeMind(q, moodSeed);
         // Chuyện cụ thể (vd công việc, người yêu) thì để thư viện tâm sự đáp — trừ khi kể từ 3 cảm giác trở lên.
-        const psyTalk = inTalk && !inHealth && !!THEME_MOOD[lastA?.heart ?? ""];
+        const psyTalk = heartOn && !inHealth && !!THEME_MOOD[lastA?.heart ?? ""];
         const mind = mind0 && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
         const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
@@ -898,32 +929,55 @@ export function AiChat({
         if (body) topicHit("health");
         else if (mind) topicHit("mind");
         if (body)
-          return localReply(q, { role: "assistant", content: body.text, local: true, heart: "health", heartDepth: depth, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
+          return localReply(q, { role: "assistant", content: body.text, local: true, health: hCtx ?? {}, sx: body.sx, mood: inTalk ? lastA?.mood : undefined });
         if (mind)
           return localReply(q, {
             role: "assistant",
             content: mind.text,
             local: true,
-            heart: inTalk && lastA?.heart !== "open" && lastA?.heart !== "health" ? lastA!.heart : "sad",
+            heart: heartOn && lastA?.heart !== "open" && lastA?.heart !== "health" ? lastA!.heart : "sad",
             heartDepth: depth,
             mood: mind.mood,
             sx: inTalk ? lastA?.sx : undefined,
+            health: hCtx,
           });
+        // 0c) CẢM XÚC + sức khoẻ ("a lo quá vì bệnh này", "a buồn vì bệnh gout", "a lo vì bị gout") → lúc này mới mở mạch tâm sự,
+        //     và vẫn nhớ bệnh đang nói để hỏi lại kiến thức là có ngay. Đang tâm sự sẵn rồi thì mạch tâm sự (mục f) tự lo.
+        const hsNow = healthSubjectOf(q, !!hCtx);
+        if (!heartOn && healthFeeling(raw) && (hsNow || hCtx || /\b(benh|suc khoe|om|kham)\b/.test(nq))) {
+          const hh = heartStart(q, false) ?? heartStart("lo về sức khoẻ", false);
+          const ctx: HealthCtx = hsNow ? { subject: hsNow.subject, label: hsNow.label, diet: hsNow.diet, cond: hsNow.cond } : (hCtx ?? {});
+          if (hh) {
+            topicHit("mind");
+            const back = ctx.label ? `\n\nCòn về **${ctx.label}**, khi nào muốn biết nên làm gì hay ăn uống kiêng gì thì cứ hỏi Lomi nha 🩺` : "";
+            return localReply(q, { ...heartMsg({ ...hh, text: hh.text + back }, 1), sx: lastA?.sx, health: ctx });
+          }
+        }
+        // 0d) Chỉ NHẮC tên một bệnh ("a hỏi về bệnh gout", "bệnh gút á", "a bị gout") → vẫn là chuyện sức khoẻ: hỏi muốn biết phần nào.
+        //     Đang tâm sự chuyện khác (buồn, lo…) thì một lần nhắc tên bệnh chưa phải là hỏi kiến thức — để mạch tâm sự đáp, chỉ ghi nhớ bệnh đó.
+        const hm = !heartOn || lastA?.heart === "health" || /\b(hoi ve|tu van ve|noi ve)\b/.test(nq) ? healthTopicReply(q, hCtx, "menu") : null;
+        if (hm) topicHit("health");
+        if (hm) return localReply(q, { role: "assistant", content: hm.text, local: true, quick: hm.quick, health: hm.health, sx: inTalk ? lastA?.sx : undefined });
       }
       // f) Đang tâm sự → hiểu tin này là kể tiếp (trừ khi rõ ràng hỏi cách dùng app / tìm quán).
       // Chỉ nhường cho tìm quán khi người dùng hỏi tìm RÕ RÀNG (vd "quán nào gần đây", "ăn gì giờ").
       const wantSearch = !!detectSearch(q) && /\b(tim|kiem|goi y|an gi|uong gi|o dau|gan day|gan minh|quan nao|di dau|cho nao)\b/.test(normalizeVi(q));
-      if (lastA?.heart && !en && !gateSkip && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+      //    08/10: chỉ khi đang TÂM SỰ thật (heartOn). Mạch sức khoẻ không còn đi vào đây — trước đó "a hỏi về bệnh gout" sau một câu
+      //    trả lời sức khoẻ bị đáp "Chuyện này làm anh bận lòng nhiều không?".
+      if (heartOn && lastA?.heart && !en && !gateSkip && !wantSearch && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
         const rel = relationReply(q, lastA.rel);
         if (rel) return localReply(q, { ...heartMsg(rel, depth, lastA), rel: rel.rel });
+        // Trong lúc tâm sự có nhắc tên một bệnh ("tại bệnh gout đó") → vẫn là tâm sự, nhưng nhớ bệnh đó để lát hỏi kiến thức là có ngay.
+        const hsHeart = healthSubjectOf(q, !!hCtx);
+        const keepH: Msg = hsHeart ? { ...lastA, health: { subject: hsHeart.subject, label: hsHeart.label, diet: hsHeart.diet, cond: hsHeart.cond } } : lastA;
         // 08/10: đang kể một chuyện ĐỜI THƯỜNG vui (vừa có tin vui, đi chơi…) mà kể tiếp một ý vui ("sếp khen nữa") → mừng cùng,
         // không đọc chữ "sếp", "gia đình" thành chuyện áp lực để an ủi.
         if (lastA.heart.startsWith("ev:") && isUpbeat(raw) && q.split(/\s+/).length <= 8) {
           const tc = talkContinue(raw, depth);
-          return localReply(q, { role: "assistant", content: tc.text, local: true, heart: lastA.heart, heartDepth: depth, story: lastA.story });
+          return localReply(q, { role: "assistant", content: tc.text, local: true, heart: lastA.heart, heartDepth: depth, story: lastA.story, health: lastA.health });
         }
-        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth, lastA.content, lastA.story), depth, lastA));
+        return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth, lastA.content, lastA.story), depth, keepH));
       }
     }
     // 1) Câu hỏi thường gặp → trả lời tại chỗ (miễn phí).
@@ -961,12 +1015,14 @@ export function AiChat({
       if (!en && !gateSkip && !memLearn?.newSits.length) {
         const sl0 = senseState(raw, ["sleepy"]);
         if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick, talk: (convo?.talk ?? 0) + 1 });
-        const rel = relationReply(q);
+        // Đang nói chuyện sức khoẻ mà câu không có tín hiệu cảm xúc → không mở mạch tâm sự (để phần "chưa biết" bên dưới nói thật).
+        const calmHealth = !!hCtx && !heartOn && !healthFeeling(raw);
+        const rel = calmHealth ? null : relationReply(q);
         if (rel) topicHit("love");
         if (rel) return localReply(q, { ...heartMsg(rel, 1), rel: rel.rel });
         // 08/10: Lomi đang nghe kể chuyện vui ("a đang tính đi Nha Trang" → "đi với gia đình") thì một chữ "gia đình", "sếp"
         // không biến câu kể thành tâm sự chuyện buồn — chỉ mở mạch tâm sự khi câu có dấu hiệu buồn / mệt / hỏi xin lời khuyên.
-        const casual = !!convo?.talk && isUpbeat(raw);
+        const casual = (!!convo?.talk && isUpbeat(raw)) || calmHealth;
         const h = casual ? null : heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
         if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));
@@ -978,6 +1034,7 @@ export function AiChat({
           content: cc.text,
           local: true,
           quick: cc.quick,
+          ...keepHealth,
         });
       // Người dùng vừa kể hoàn cảnh ("mình đang thất nghiệp") → Lomi đáp lại và nhớ.
       const ns = memLearn?.newSits[0];
@@ -1048,15 +1105,19 @@ export function AiChat({
       // senseLast (lib/lomiSense) gộp hai bước đầu: câu KỂ về mình ("a đói bụng"), chào kèm lời chúc, hỏi về chính Lomi,
       // gọi trống, câu cụt, lời kể nhận ra được → Lomi đáp tự nhiên và KHÔNG ghi vào "Lomi bí".
       // (Trước đây logUnanswered chạy trước senseLate nên câu Lomi đã đáp được vẫn bị ghi là "bí".)
+      // Đang nói chuyện sức khoẻ: câu Lomi không nhận ra thì nói thật là chưa biết (kèm nút 💡), không đáp kiểu "kể thêm đi".
+      // Câu hỏi về một bệnh / thuốc Lomi chưa có ("a hỏi về bệnh lupus") cũng vậy — và mở luôn mạch sức khoẻ.
+      const askHealth = !en && !keepHealth.health && !heartOn && looksLikeHealthTopic(q);
       if (!en) {
-        const sl = senseLast(raw, { lastText: lastA?.content, hasSuggest: sug.length > 0, talk: convo?.talk });
+        const slAny = senseLast(raw, { lastText: lastA?.content, hasSuggest: sug.length > 0, talk: convo?.talk });
+        const sl = (keepHealth.health || askHealth) && slAny && ["listen", "continue", "clarify"].includes(slAny.intent) ? null : slAny;
         if (sl) return localReply(q, { role: "assistant", content: sl.text, local: true, quick: sl.quick, ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
       }
       // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
       logUnanswered(raw, q);
       if (!sug.length && !en) {
         const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
-        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: raw, unkKey: q, sticker: fb.sticker });
+        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: raw, unkKey: q, sticker: fb.sticker, ...keepHealth, ...(askHealth ? { health: {} } : {}) });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>

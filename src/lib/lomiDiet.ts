@@ -539,6 +539,11 @@ export function dietReply(text: string, prevDiet?: string, inDiet = false): Diet
   return { text: `${head}${more}\n\n${NOTE}`, diet: d.id };
 }
 
+/** Tên gọi của một bệnh trong bảng kiêng cữ (vd "bị gout (gút)", "huyết áp cao") — lib/lomiHealthTopic dùng làm chủ thể sức khoẻ. */
+export function dietName(id: string): string | undefined {
+  return DIETS.find((x) => x.id === id)?.name;
+}
+
 /** Bệnh nhắc trong 1 câu (vd tin trước "mình bị đau dạ dày") — để câu sau "uống cà phê được không" hiểu đúng. */
 export function dietOf(text: string): string | undefined {
   const n = ` ${normStrict(text, HEALTH)} `;

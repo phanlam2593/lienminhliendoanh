@@ -851,6 +851,31 @@ export function generalSymptomInfo(text: string): string | null {
   return out.join("\n\n");
 }
 
+// ── Tra một TÌNH TRẠNG theo tên (08/10, cho lib/lomiHealthTopic) ──
+// Bảng CONDS vốn chỉ được dùng khi người dùng KỂ TRIỆU CHỨNG. Khi họ gọi thẳng tên bệnh ("bệnh gout là gì", "a hỏi về tiểu đường")
+// thì cùng kiến thức đó (biểu hiện, nên làm, nên tránh, khám ở đâu) cũng phải tra được — không cần viết thêm kiến thức mới.
+export type CondInfo = { id: string; name: string; about: string; do: string[]; avoid: string[]; doctor: string };
+// Nhóm tâm lý – cảm xúc để thư viện tâm sự lo, không tính là "chủ thể sức khoẻ" ở đây.
+const MIND_CONDS = new Set(["insomnia", "stress", "anxiety", "panic", "depression", "burnout", "lonely", "grief", "heartbreak", "insecure", "lowworth", "overthink", "anger", "trauma", "socialanx", "unmotivated"]);
+export function condInfo(id: string): CondInfo | undefined {
+  const c = CONDS.find((x) => x.id === id);
+  return c && { id: c.id, name: c.name, about: c.about, do: c.do, avoid: c.avoid, doctor: c.doctor };
+}
+/** Tên một tình trạng (không thuộc nhóm tâm lý) xuất hiện trong câu → id + đúng tên người dùng gọi. Tên 1 chữ phải khớp CÓ DẤU ("trĩ" ≠ "trị"). */
+export function condByName(text: string): { id: string; label: string } | undefined {
+  const acc = ` ${text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ")} `;
+  const n = ` ${normalizeVi(text)} `;
+  for (const c of CONDS) {
+    if (MIND_CONDS.has(c.id)) continue;
+    for (const part of c.name.split(/[(/–)]/)) {
+      const p = part.trim().toLowerCase();
+      if (p.length < 3 || /^(cần|hoặc|do|vấn đề)\b/.test(p) || /cần (kiểm tra|loại trừ|khám|được)/.test(p)) continue;
+      if (acc.includes(` ${p} `) || (p.includes(" ") && n.includes(` ${normalizeVi(p)} `))) return { id: c.id, label: p };
+    }
+  }
+  return undefined;
+}
+
 /**
  * Phân tích triệu chứng cơ thể. prev = triệu chứng đã kể ở các tin trước (cộng dồn).
  * Trả null nếu tin này không có triệu chứng nào (để các luồng khác xử lý).
