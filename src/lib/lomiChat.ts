@@ -732,7 +732,8 @@ export function looksLikeQuestion(text: string): boolean {
 const APPISH =
   /\b(app|ung dung|uu dai|ma uu dai|nhan ma|pin|tai khoan|mat khau|dang nhap|dang ky|dang bai|dang tin|doanh nghiep|cua hang|thanh vien|membership|diem|quet|dua don|giao hang|tin nhan|cong dong|ho so|thong bao|bao cao|chan|theo doi|ket ban|huong dan|admin|lomi|login|logout|log in|log out|profile|account|acc|password|voucher|offer|member|comment|share|post|follow|link|info|support|update|online|offline|call|review|user|code|ad)\b/;
 export function isAppish(text: string): boolean {
-  return APPISH.test(` ${normalizeVi(text)} `);
+  // 08/10: "chán" bỏ dấu trùng "chặn" (chặn người dùng) — "a đang chán" không phải câu hỏi về app.
+  return APPISH.test(` ${normalizeVi(text.normalize("NFC").replace(/(?<![\p{L}])chán(?![\p{L}])/giu, " "))} `);
 }
 
 /** Chip bói cho đúng câu người dùng vừa hỏi (chip có chữ "Bói" nên khung chat tự hiểu là muốn bói). */

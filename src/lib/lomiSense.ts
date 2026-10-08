@@ -16,7 +16,8 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { detectDish } from "@/lib/lomiSearch";
 import { expandTeen, type ChatReply } from "@/lib/lomiChat";
 
-export type SenseReply = ChatReply & { intent: string };
+/** talk = câu đáp này mở / giữ mạch "nghe kể": tin kế tiếp của người dùng là kể tiếp, không phải câu độc lập (lib/lomiConvo). */
+export type SenseReply = ChatReply & { intent: string; talk?: boolean };
 
 const rnd = (n: number) => Math.floor(Math.random() * n);
 let lastPick = "";
@@ -33,7 +34,7 @@ const low = (raw: string) => raw.normalize("NFC").toLowerCase().trim();
 const SELF = new Set(["a", "anh", "chi", "c", "minh", "tui", "toi", "to", "t", "tao", "tớ"]);
 const SELF2 = new Set(["em", "e"]);
 const VOC = new Set(["e", "em", "lomi", "ban", "oi", "ui", "ua", "ê", "alo"]);
-const TIME_ADV = new Set(["hom", "nay", "bua", "sang", "trua", "chieu", "toi", "dem", "khuya", "mai", "luc", "gio", "dao", "doan", "tuan", "thang"]);
+const TIME_ADV = new Set(["hom", "nay", "qua", "bua", "sang", "trua", "chieu", "toi", "dem", "khuya", "mai", "luc", "gio", "dao", "doan", "tuan", "thang"]);
 
 function tokens(raw: string): string[] {
   return normalizeVi(raw).split(" ").filter(Boolean);
@@ -146,17 +147,20 @@ function canonRequest(q: string, n: string): string | null {
     const dish = detectDish(q);
     if (!dish || detectDish(out)?.id === dish.id) return out;
   }
+  // 08/10: các câu chuẩn dưới đây cũng chỉ dùng khi câu gốc KHÔNG còn ý riêng phía sau. Trước đó "bói tarot xem người ấy
+  // có còn tình cảm với mình không" bị đổi thành "bói một lá cho hôm nay" — mất luôn câu hỏi của người dùng.
+  const bare = (m: RegExpMatchArray | null) => !!m && !hasExtra(n.slice((m.index ?? 0) + m[0].length));
   // Rút / bói một lá
-  if (new RegExp(`^(?:e |em |lomi |oi )*(?:rut|lat|boc|xin|boi|xem) ${FILL} ?${WHO} ?(?:mot |1 |may |vai )?(la bai|la tarot|la|bai|tarot)${POL}`).test(n))
+  if (bare(n.match(new RegExp(`^(?:e |em |lomi |oi )*(?:rut|lat|boc|xin|boi|xem) ${FILL} ?${WHO} ?(?:mot |1 |may |vai )?(la bai|la tarot|la|bai|tarot)${POL}`))))
     return "bói một lá cho hôm nay";
   // Hướng dẫn dùng app
-  if (/^(?:e |em |lomi |oi )*(huong dan|chi|chi cach|day|chi giup|huong dan giup)( \w+){0,2} (xai|dung|su dung|choi|thao tac) (app|ung dung|lomi|lien minh lien doanh)\b/.test(n))
+  if (bare(n.match(/^(?:e |em |lomi |oi )*(huong dan|chi|chi cach|day|chi giup|huong dan giup)( \w+){0,2} (xai|dung|su dung|choi|thao tac) (app|ung dung|lomi|lien minh lien doanh)\b/)))
     return "hướng dẫn dùng app";
   // Nói chuyện / tâm sự / tư vấn tình cảm
   if (new RegExp(`^(?:e |em |lomi |oi )*(?:noi chuyen|tro chuyen|tam|chat|tam su|ke chuyen|nc) (?:voi|cung) ${WHO}${POL}$`).test(n))
     return /tam su/.test(n) ? "tâm sự với mình nha" : "nói chuyện với mình đi";
   // "e tư vấn tình cảm được không?" là HỎI KHẢ NĂNG (lib/lomiIntent trả lời), không phải lời nhờ tư vấn ngay.
-  if (!/\b(duoc|dc) (khong|ko|k|hong|chu|ha)\b|\b(khong|ko|hong)$/.test(n) && /^(?:e |em |lomi |oi )*(?:tu van|khuyen|cho (?:\w+ )?loi khuyen|giup)( \w+){0,3} (tinh cam|tinh yeu|chuyen yeu|chuyen tinh|chuyen vo chong|tam ly)\b/.test(n))
+  if (!/\b(duoc|dc) (khong|ko|k|hong|chu|ha)\b|\b(khong|ko|hong)$/.test(n) && bare(n.match(/^(?:e |em |lomi |oi )*(?:tu van|khuyen|cho (?:\w+ )?loi khuyen|giup)( \w+){0,3} (tinh cam|tinh yeu|chuyen yeu|chuyen tinh|chuyen vo chong|tam ly)\b/)))
     return /tam ly/.test(n) ? "tư vấn tâm lý" : "tư vấn tình cảm";
   return null;
 }
@@ -175,6 +179,21 @@ function tail(s: string, after: RegExp): string {
 }
 
 const STATES: StateDef[] = [
+  {
+    // 08/10: DỰ ĐỊNH ("a đang tính đi cf", "định đi ăn lẩu") — ghi nhận + mời bước tiếp theo, để câu sau ("quán nào ổn?")
+    // có ngữ cảnh mà nối. Đứng trước các trạng thái "đang ăn / đang uống" vì đây là việc CHƯA làm.
+    id: "plan",
+    re: W("(đang |đang có |có )?(tính|định|sắp|chuẩn bị|dự định)( là| sẽ)? (đi|ra|ghé|qua|làm|ăn|uống|kiếm|mua)( [\\p{L}\\d]+){0,4}"),
+    reply: (m, s) => {
+      const d = detectDish(expandTeen(s));
+      if (d) {
+        const label = d.name.split(/[,(]/)[0].trim();
+        return { text: `${d.drink ? `Đi ${label} hả ☕` : `${cap(label)} hả 😋`} Nghe thích đó! Muốn Lomi tìm quán ${label} cho không?`, quick: [`Tìm quán ${label} gần đây`] };
+      }
+      const what = tail(s, /(tính|định|sắp|chuẩn bị|dự định)( là| sẽ)? /u);
+      return { text: what ? `${cap(what)} hả 😄 Nghe hay đó! Kế hoạch sao rồi nè?` : "Nghe hay đó 😄 Kế hoạch sao rồi nè?" };
+    },
+  },
   {
     id: "sleepy",
     re: W("buồn ngủ|muốn ngủ|thèm ngủ|ngái ngủ|díp mắt|ngủ gật|ngáp( ngắn ngáp dài)?|buon ngu|muon ngu|ngai ngu"),
@@ -295,6 +314,12 @@ const STATES: StateDef[] = [
     reply: () => ({ text: pick(["Wow chúc mừng bạn nha 🎉🥳 Tin vui vậy là phải ăn mừng chút xíu rồi! Kể Lomi nghe chi tiết đi nào!", "Hay quá trời luôn 🎊 Lomi vui lây nè! Bạn định ăn mừng thế nào vậy?"]) }),
   },
   {
+    // "a đang chán", "chán quá" — hỏi thăm một câu, không đẩy dịch vụ.
+    id: "bored",
+    re: W("(đang |hơi |thấy |cảm thấy )?(chán|buồn chán|nhàm chán|nhạt)( quá| ghê| lắm| thật| thiệt| vãi| ghê á| xỉu| kinh)?"),
+    reply: () => ({ text: pick(["Chán hả 😶 Có chuyện gì làm bạn chán vậy, hay chỉ là hôm nay hơi nhạt thôi?", "Ui, chán thiệt ha 🥱 Hôm nay của bạn có gì không vui hả?"]) }),
+  },
+  {
     id: "happy",
     re: W("vui( quá| lắm| ghê| thật| vl| vãi| lắm luôn)?|hạnh phúc|phấn khích|hào hứng|yêu đời|tâm trạng tốt|happy"),
     reply: () => ({ text: pick(["Nghe bạn vui là Lomi vui lây liền 😆 Có chuyện gì hay kể Lomi nghe với!", "Yay 🎉 Giữ năng lượng này cả ngày nha! Chuyện gì làm bạn vui vậy nè?"]) }),
@@ -363,9 +388,9 @@ export function senseState(raw: string, only?: string[]): SenseReply | null {
     // Chuyện buôn bán ("sáng đông khách lắm, chiều thì ế") nhận ở bất kỳ vị trí nào, nhưng phải thật sự nói về khách / quán / bán —
     // "điện thoại hết pin", "nhiều việc quá" có chữ "hết", "nhiều" mà không phải chuyện kinh doanh.
     const bizTalk = d.id === "biz_state" && /(?<![\p{L}])(khách|đơn|doanh thu|quán|tiệm|bán|ế)(?![\p{L}])/u.test(s);
-    if (d.id === "weather" ? lead : selfSub || okShort || bizTalk) {
+    if (d.id === "weather" ? lead : d.id === "biz_state" ? bizTalk : selfSub || okShort) {
       const r = d.reply(m, s);
-      return { ...r, intent: `state:${d.id}` };
+      return { ...r, intent: `state:${d.id}`, talk: true };
     }
   }
   return null;
@@ -432,6 +457,59 @@ const TOPIC_ONLY: [RegExp, string][] = [
 ];
 
 const REACTION = /^(buon cuoi|mac cuoi|hai|hai huoc|vui|de thuong|dinh|xin|ghe|ky|la|hay|tuyet|ngau|chat|cha|chu choa|chu cha|oa|wow|ua|ui|oi)( (cha|ghe|qua|that|thiet|vay|du|vai|luon|a|ha|nha|ta|troi|lam|the|ne))*$/;
+// ── Đáp lời KỂ TIẾP: bám vào điều vừa kể (vui / xui / một mẩu chi tiết) thay vì một câu mẫu cố định ──
+const TALK_POS = W("vui|đã|thích|ngon|đẹp|to|nhiều|được|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
+const TALK_NEG = W("mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress");
+const ACT_STOP = new Set("với cùng ở tại rồi nè nha mà thì và hôm lúc xong về cho để nên quá lắm ghê luôn á ạ nhưng mới vừa đang mấy nhiều hoài suốt nữa đó".split(" "));
+/** Việc vừa kể: "hôm qua anh đi câu cá với mấy đứa bạn" → "đi câu cá" (động từ + tối đa 3 từ, dừng ở từ nối). */
+function echoAct(s: string): string {
+  const m = s.match(/(?<![\p{L}])(đi|chơi|xem|coi|ăn|uống|mua|làm|học|gặp|ghé|nấu|tập|chạy|đá|leo|bơi|dọn|sửa|bán|thi|nhận|trồng)\s+([\p{L}\d ]+)/u);
+  if (!m) return "";
+  const out: string[] = [];
+  for (const w of m[2].split(/\s+/)) {
+    if (!w || ACT_STOP.has(w) || out.length >= 3) break;
+    out.push(w);
+  }
+  return out.length ? `${m[1]} ${out.join(" ")}` : "";
+}
+// Từ mở đầu của một câu kể tiếp lược chủ ngữ: từ nối, phó từ, động từ thường gặp — không phải một danh từ / tên riêng mới.
+const CONT_HEAD = new Set("xong roi sau ma tai vi nen voi con luc hoi toi den ve di an uong choi ngoi nam ngu lam mua gap thay duoc bi co khong chua dang moi vua cung lai toan chi ca het them nhung ai ngo ai de".split(" "));
+/** Đang nghe kể: tin này có phải KỂ TIẾP không (để đáp theo mạch thay vì coi là câu độc lập). */
+export function isTalkCont(raw: string): boolean {
+  const s = low(raw);
+  const t = trimLead(tokens(raw)); // bỏ "hôm qua", "sáng nay"… ở đầu rồi mới xét
+  if (!t.length || isAskLike(raw)) return false;
+  return isPersonalTalk(raw) || t.length <= 3 || TALK_POS.test(s) || TALK_NEG.test(s) || CONT_HEAD.has(t[0]);
+}
+/** Câu kể vui / nhẹ nhàng (không có dấu hiệu buồn, mệt, xui) — để chuyện vui không bị đọc thành tâm sự nặng nề. */
+export function isUpbeat(raw: string): boolean {
+  const s = low(raw);
+  return !TALK_NEG.test(s) && !/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) && !isAskLike(raw);
+}
+export function talkContinue(raw: string, depth: number): SenseReply {
+  const s = low(raw).replace(/[.!…,]+$/u, "");
+  const words = s.split(/\s+/).filter(Boolean);
+  const neg = TALK_NEG.test(s) || /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
+  const pos = !neg && TALK_POS.test(s);
+  // Mẩu chi tiết ngắn ("xe máy", "ở Đà Lạt") → nhắc lại đúng mẩu đó cho thấy Lomi theo kịp.
+  const frag = words.length <= 3 && !neg && !pos ? `${cap(words.join(" "))} hả 😄` : "";
+  const ack = neg
+    ? pick(["Ui, nghe mà thương ghê 🥺", "Hic, vậy thì khó chịu thiệt ha.", "Trời, tội ghê 😣"])
+    : pos
+      ? pick(["Nghe đã ghê 😆", "Quá xịn luôn 😄", "Thích vậy trời 🤩"])
+      : frag
+        ? `${frag} ${pick(["Ra là vậy.", "À à."])}`
+        : pick(["Ra là vậy 😄", "À, vậy hả 😮", "Ồ, vậy luôn 😄"]);
+  // Lượt lẻ hỏi nối một câu; lượt chẵn chỉ đáp lại — không phải câu nào cũng kết bằng "kể thêm đi".
+  const tailQ =
+    depth % 2 === 1
+      ? pick(neg ? ["Rồi giờ sao rồi bạn?", "Có chuyện gì vậy, kể Lomi nghe với."] : ["Rồi sao nữa nè?", "Kể tiếp đi, Lomi đang nghe nè."])
+      : depth >= 4
+        ? "Nghe bạn kể mà Lomi thấy như được đi cùng luôn."
+        : "";
+  return { intent: "continue", talk: true, text: [ack, tailQ].filter(Boolean).join(" ") };
+}
+
 const CLOSER = /^(thoi|vay thoi|thoi vay|the thoi|thoi ke|ke di|thoi ke di|ke no|khong co gi|ko co gi|khong sao|khong sao dau|vay ha|vay a|the a|the ha|u thi|thi thoi|chiu|chiu thoi|bo di|thoi bo di|sao cung duoc|gi cung duoc|tuy|de sau|de sau di|luc khac|thoi de sau|biet roi|hieu roi|ra vay|ra la vay|co vay thoi)( (nha|nhe|ne|a|e|em|lomi|di|ha|vay|ma|luon|thoi))*$/;
 // Dấu hiệu "đang kể chuyện của mình" — đọc theo CẤU TRÚC, không theo danh sách câu:
 //  • có người kể (tôi/mình/anh/chị/em… — chữ có dấu để "tối" không lẫn "tôi"; không dấu thì xét từ đầu câu),
@@ -451,7 +529,7 @@ export function isPersonalTalk(raw: string): boolean {
 }
 
 /** Lưới cuối. Trả null = đây là câu HỎI KIẾN THỨC Lomi chưa có → để Lomi nói "chưa tiếp thu" + nút Dạy Lomi. */
-export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseReply | null {
+export function senseLate(raw: string, ctx: { lastText?: string; talk?: number } = {}): SenseReply | null {
   const n = normalizeVi(raw);
   if (!n) return null;
   const words = n.split(" ").length;
@@ -474,19 +552,31 @@ export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseRe
     };
   if (ask) return null; // câu hỏi kiến thức Lomi chưa có → "chưa tiếp thu" + nút 💡 Dạy Lomi
   // Tiếng cảm thán / phản ứng ngắn ("chà chà", "buồn cười ghê", "đỉnh thật") = từ cảm thán + từ nhấn → hỏi nối, không báo "chưa tiếp thu".
-  if (words <= 4 && REACTION.test(n)) return { intent: "reaction", text: pick(["Hihi 😄 Có chuyện gì vậy, kể Lomi nghe với!", "Hửm, có gì hay hả? 👀 Kể Lomi nghe nha!"]) };
+  if (words <= 4 && REACTION.test(n)) return { intent: "reaction", talk: true, text: pick(["Hihi 😄 Có chuyện gì vậy, kể Lomi nghe với!", "Hửm, có gì hay hả? 👀 Kể Lomi nghe nha!"]) };
   // Lời khép lại / cho qua ("thôi kệ đi", "vậy thôi", "không có gì") → đáp nhẹ, không hỏi dồn.
   if (CLOSER.test(n)) return { intent: "closer", text: pick(["Okie nè 😊 Khi nào cần thì cứ gọi Lomi nha.", "Dạ 🌿 Lomi vẫn ở đây, bạn muốn nói gì cứ nói nha."]) };
   // 08/10: CHỈ lắng nghe khi nhận ra đây là lời kể chuyện của người dùng (có người kể / người thân / cảm xúc / việc đang làm).
   // Câu không nhận ra được gì ("bitcoin hôm nay lên 100k", "asdf qwer") thì trả null — nói thật là chưa hiểu, ghi vào
   // "Lomi bí" và hiện nút 💡 Dạy Lomi, chứ không giả vờ "Lomi nghe nè".
+  // 08/10: Lomi ĐANG nghe kể (tin trước là lời "nghe kể") → tin này là kể tiếp: đáp theo nội dung vừa kể rồi mới (đôi khi) hỏi nối,
+  // không coi là câu độc lập để báo "chưa tiếp thu", và không lặp "kể thêm cho Lomi nghe" ở mọi lượt.
+  // Vẫn phải nhận ra đây là lời kể (có người kể / cảm xúc / mẩu chi tiết ngắn / câu nối "xong…", "rồi…", "mà…");
+  // một câu dài nói chuyện khác hẳn ("bitcoin hôm nay lên 100k") thì không giả vờ hiểu.
+  if (ctx.talk && isTalkCont(raw)) return talkContinue(raw, ctx.talk);
   if (words >= 2 && isPersonalTalk(raw)) {
-    const sad = /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
+    const s = low(raw);
+    const sad = /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) || TALK_NEG.test(s);
+    const act = echoAct(s);
     return {
       intent: "listen",
+      talk: true,
       text: sad
-        ? pick(["Ừ, Lomi nghe nè 🥺 Bạn kể thêm cho Lomi nghe được không?", "Lomi ở đây với bạn nè 💚 Chuyện này làm bạn thấy sao?"])
-        : pick(["Ừa, Lomi nghe nè 😊 Bạn kể thêm cho Lomi nghe được không?", "Lomi đang nghe nè 🌿 Bạn kể thêm chút được không?", "Lomi nghe nè 😄 Rồi sau đó thế nào vậy bạn?"]),
+        ? act
+          ? `${cap(act)} hả 🥺 Rồi có sao không bạn?`
+          : pick(["Ừ, Lomi nghe nè 🥺 Chuyện sao vậy bạn?", "Lomi ở đây với bạn nè 💚 Chuyện này làm bạn thấy sao?"])
+        : act
+          ? pick([`${cap(act)} hả 😄 Rồi sao, kể Lomi nghe với!`, `Ồ, ${act} luôn hả 😄 Sao rồi nè?`])
+          : pick(["Ừa, Lomi nghe nè 😊 Rồi sao nữa?", "Vậy hả 😄 Chuyện sao vậy bạn, kể Lomi nghe với.", "Lomi nghe nè 🌿 Bạn kể thêm chút được không?"]),
     };
   }
   // Mẩu câu rất ngắn mà không nhận ra được gì ("quay lại", "tháng này") → hỏi lại một câu, vì chưa đủ ý để mà "bí".
@@ -500,7 +590,7 @@ export function senseLate(raw: string, ctx: { lastText?: string } = {}): SenseRe
  * Trả null ⇒ thật sự bí: lúc đó (và chỉ lúc đó) AiAssistant mới logUnanswered + gắn `unk`.
  * hasSuggest = câu nói về app và đã có gợi ý câu hỏi gần đúng → không dùng lưới "lắng nghe / hỏi lại" (đưa gợi ý tốt hơn).
  */
-export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean } = {}): SenseReply | null {
+export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean; talk?: number } = {}): SenseReply | null {
   // senseState đọc câu NGUYÊN VĂN (giữ :( và chữ kéo dài); senseLate đọc câu đã đổi teen code ("đc k" → "được không").
-  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText }));
+  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText, talk: ctx.talk }));
 }

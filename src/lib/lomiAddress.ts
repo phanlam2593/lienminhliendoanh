@@ -47,7 +47,8 @@ export function explicitAddr(raw: string): Addr | null {
   // Người dùng TỰ nói mình là ai: "tui là anh nha", "ban quản trị là anh", "admin là chị".
   const WHO = "(?:tui|tôi|mình|tớ|tao|t|admin|ad|ban quản trị|bqt|người dùng)";
   const END = "(?=\\s*(?:$|[,.!?]|nha|nhé|nhe|nghen|đó|nè|á|nhaa))";
-  const selfIs = t.match(new RegExp(`(?:^|[\\s,.!?])${WHO}\\s+là\\s+(anh|a|chị|c)${END}`, "u"));
+  // (?![\\p{L}]): "ý mình là cái lúc nãy" KHÔNG phải "mình là c(hị)" — chữ c phải đứng riêng một từ (08/10).
+  const selfIs = t.match(new RegExp(`(?:^|[\\s,.!?])${WHO}\\s+là\\s+(anh|a|chị|c)(?![\\p{L}])${END}`, "u"));
   const userAC: Addr | null = selfIs ? (selfIs[1].startsWith("a") ? "anh" : "chị") : null;
   // Người dùng nói Lomi là "em": "lomi là e", "lomi xưng em", "em là lomi".
   const lomiEm = new RegExp(`(lomi\\s+(là|xưng)\\s+(em|e)|(em|e)\\s+là\\s+lomi)${END}`, "u").test(t);

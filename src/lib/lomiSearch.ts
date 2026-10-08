@@ -270,7 +270,10 @@ export function detectDish(text: string): Dish | undefined {
   const byLabel = DISHES.find((d) => d.label === t);
   if (byLabel) return byLabel;
   const n = ` ${normalizeVi(t)} `;
-  return DISHES.find((d) => d.re.test(n));
+  // 08/10: "phô mai", "phố đi bộ" bỏ dấu cũng ra "pho" — gõ CÓ DẤU mà không phải "phở" thì không tính là món phở
+  // (gõ không dấu "pho" vẫn hiểu là phở như trước).
+  const notPho = /(?<![\p{L}])ph[ôốồổỗộóòỏõọ](?![\p{L}])/u.test(t.normalize("NFC").toLowerCase()) && !/phở/iu.test(t.normalize("NFC"));
+  return DISHES.find((d) => d.re.test(n) && !(d.id === "pho" && notPho));
 }
 
 /** Gợi ý 3 món hợp giờ này (tránh lặp món vừa gợi ý). drink = đang hỏi "uống gì". */
@@ -295,9 +298,16 @@ export function suggestDishes(drink: boolean, avoid: string[] = []): { text: str
   return { text, dishes, quick: [...dishes.map((d) => d.label), drink ? "🎲 Đồ uống khác" : "🎲 Món khác"] };
 }
 
-/** Tìm quán THẬT có món này (tên quán, mô tả hoặc ưu đãi). avoidIds = quán đã gợi ý (bấm "Quán khác"). */
-export async function runDishSearch(d: Dish, avoidIds: string[] = []): Promise<SearchResult> {
-  const pos = await myPos(false);
+/** Điều kiện thêm khi người dùng nói tiếp sau kết quả tìm quán ("gần mình", "có ưu đãi không?", "yên tĩnh") — lib/lomiConvo. */
+export type DishWant = { text?: string; offer?: boolean; near?: boolean };
+
+/**
+ * Tìm quán THẬT có món này (tên quán, mô tả hoặc ưu đãi). avoidIds = quán đã gợi ý (bấm "Quán khác").
+ * want (08/10) = điều kiện thêm: lọc theo quán đang có ưu đãi / theo chữ người dùng muốn ("yên tĩnh") có trong tên, mô tả,
+ * ưu đãi hoặc đánh giá mới nhất của quán. Không có quán nào khớp thì NÓI THẬT rồi vẫn đưa các quán có món đó.
+ */
+export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: DishWant): Promise<SearchResult> {
+  const pos = await myPos(!!want?.near);
   const clean = (x: string) => x.replace(/[,()%]/g, "").trim();
   // Tìm theo tên CÓ DẤU ("Phở" ≠ "Phố" — bỏ dấu thì trùng nhau); chỉ dùng tên không dấu cho từ khoá
   // nhiều chữ, không lẫn được (vd "bun bo", "banh mi").
@@ -309,14 +319,36 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = []): Promise<S
   ].join(",");
   const { data } = await supabase
     .from("businesses_explore_view")
-    .select(COLS)
+    .select(want?.text ? `${COLS},description,latest_review_comment` : COLS)
     .eq("status", "approved")
     .eq("type", "food")
     .or(ors)
     .order("rating", { ascending: false, nullsFirst: false })
     .limit(40);
-  let cards = ((data ?? []) as unknown as Row[]).map((r) => toCard(r, pos)).filter((c) => !avoidIds.includes(c.id));
-  const nm = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+  type WRow = Row & { description?: string | null; latest_review_comment?: string | null };
+  let rows = ((data ?? []) as unknown as WRow[]).filter((r) => !avoidIds.includes(r.id));
+  // Điều kiện thêm: lọc được thì ghi rõ đã lọc theo gì (met); không quán nào khớp thì ghi lại (miss) để nói thật.
+  const met: string[] = [];
+  const miss: string[] = [];
+  if (want?.offer) {
+    const f = rows.filter((r) => (r.offer_count ?? 0) > 0);
+    if (f.length) {
+      rows = f;
+      met.push("đang có ưu đãi");
+    } else if (rows.length) miss.push("đang có ưu đãi");
+  }
+  if (want?.text) {
+    const k = normalizeVi(want.text);
+    const f = rows.filter((r) => normalizeVi(`${r.name} ${r.description ?? ""} ${r.latest_offer ?? ""} ${r.latest_review_comment ?? ""}`).includes(k));
+    if (f.length) {
+      rows = f;
+      met.push(`có nhắc “${want.text}”`);
+    } else if (rows.length) miss.push(`ghi rõ “${want.text}” trong mô tả hay đánh giá`);
+  }
+  let cards = rows.map((r) => toCard(r, pos));
+  // Tên nhóm món có thể là "pizza, đồ Âu" / "lẩu (gà lá é, lẩu bò…)" — nói với người dùng chỉ dùng tên món chính.
+  const main = d.name.split(/[,(]/)[0].trim();
+  const nm = main.charAt(0).toUpperCase() + main.slice(1);
   if (!cards.length) {
     // Không có quán nào có đúng món → nói thật, gợi ý vài quán ăn/uống khác đang có ưu đãi.
     const rows = await fetchRows("food", [], true);
@@ -334,6 +366,16 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = []): Promise<S
     cards = cards.slice(0, 6).sort(() => Math.random() - 0.5);
   } else cards = cards.slice(0, 8).sort(() => Math.random() - 0.5);
   cards = cards.slice(0, 3);
+  if (want && (met.length || miss.length || want.near)) {
+    const nearNote = want.near ? (pos ? " (xếp gần bạn trước)" : "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)") : "";
+    return {
+      text: miss.length
+        ? `Lomi chưa thấy quán **${nm}** nào ${miss.join(", ")} 🥲 Đây là mấy quán ${nm} khác${met.length ? ` ${met.join(", ")}` : ""}, bạn xem thử nha 👇${nearNote}`
+        : `Mấy quán **${nm}**${met.length ? ` ${met.join(", ")}` : ""} nè 👇${nearNote}`,
+      places: cards,
+      quick: ["🔁 Quán khác", d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"],
+    };
+  }
   return {
     text: pick([
       `Thèm **${nm}** hả, có ngay đây 😋 Mấy quán trong Liên Minh Liên Doanh nè 👇`,

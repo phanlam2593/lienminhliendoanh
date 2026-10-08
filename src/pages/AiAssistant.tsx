@@ -38,7 +38,7 @@ import {
   rememberBiz,
   situationContext,
 } from "@/lib/lomiMemory";
-import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
+import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, understand } from "@/lib/lomiUnderstand";
@@ -51,7 +51,8 @@ import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
-import { senseCanon, senseLast, senseState } from "@/lib/lomiSense";
+import { isUpbeat, senseCanon, senseLast, senseState, talkContinue } from "@/lib/lomiSense";
+import { convoOf, isOffer, otherPlace, resolveTurn } from "@/lib/lomiConvo";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -134,10 +135,13 @@ type Msg = {
   heartDepth?: number; // số lượt đã tâm sự (để đổi cách đáp, nhắc gặp chuyên gia khi cần)
   faqId?: string; // Lomi vừa trả lời câu hỏi thường gặp này — câu hỏi nối ("còn … thì sao") hiểu theo ngữ cảnh đó
   raw?: string; // tin người dùng: câu gõ NGUYÊN VĂN (trước khi chuẩn hoá) — dùng khi báo cáo / Dạy Lomi
-  // Câu Lomi vừa bí — nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học (lib/lomiLearn).
-  // Đây là KHOÁ so khớp nội bộ nên giữ câu đã chuẩn hoá (cùng dạng với lookupLearned / logUnanswered dùng để tra);
-  // câu NGUYÊN VĂN người dùng gõ nằm ở Msg.raw của tin người dùng — báo cáo 💡 và mẫu "Lomi bí" đều lấy từ đó.
+  // Câu Lomi vừa bí — CÂU NGUYÊN VĂN người dùng gõ (08/10). Có cờ này thì hiện nút 💡 Dạy Lomi.
   unk?: string;
+  // Khoá so khớp của câu vừa bí (câu đã chuẩn hoá, cùng dạng với lookupLearned / logUnanswered dùng để tra):
+  // nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học "khoá này = câu hỏi kia" (lib/lomiLearn).
+  unkKey?: string;
+  talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
+  tarotRef?: TarotReading; // trải bài đang được nói tới (không vẽ lại lá) — để hỏi nối sau một câu giải thích vẫn đúng trải đó
   diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
   reported?: boolean; // người dùng đã bấm ⁉️ gửi câu này cho ban quản trị (01/10)
   taught?: boolean; // câu trả lời do admin dạy (lib/lomiLearn → lomi_taught)
@@ -424,7 +428,10 @@ export function AiChat({
   const doTarot = (question: string, asked: string, context?: string) => {
     setErr(null);
     // Câu gõ đầy đủ (kể cả phần kể chuyện trước chữ "bói") giúp Lomi hiểu tâm trạng người hỏi.
-    let ctx = context ?? (question && asked.length > question.length ? asked : undefined);
+    // 08/10: chỉ coi là "có chuyện kể kèm" khi ngoài câu hỏi và mấy chữ nhờ bói ra còn ít nhất vài từ — nếu không,
+    // "bói tarot xem người ấy còn tình cảm không" (câu đầu tiên) bị mở đầu bằng "Nối tiếp chuyện mình đang nói lúc nãy".
+    const extra = normalizeVi(asked).replace(normalizeVi(question), " ").replace(/\b(boi|tarot|xem|rut|bai|la|trai|giup|gium|dum|cho|minh|em|e|a|anh|chi|lomi|di|nha|nhe|thu|coi|ve|chuyen|mot|ba|nam|muoi|1|3|5|10|oi|voi)\b/g, " ").trim();
+    let ctx = context ?? (question && extra.split(/\s+/).filter(Boolean).length >= 3 ? asked : undefined);
     // Câu hỏi chung chung ("bao giờ mọi chuyện ổn hơn") → ghép thêm hoàn cảnh Lomi nhớ (vd đang tìm việc).
     const sit = situationContext(loadMem(user.id));
     if (question && sit && questionTopic(question) === "general") ctx = `${ctx ?? asked}. ${sit}`;
@@ -557,14 +564,14 @@ export function AiChat({
       dishAsk: { drink, shown: [...avoid, ...s.dishes.map((d) => d.id)].slice(-12) },
     });
   };
-  const replyDishShops = async (asked: string, dishId: string, avoidIds: string[] = []) => {
+  const replyDishShops = async (asked: string, dishId: string, avoidIds: string[] = [], want?: DishWant) => {
     const d = DISHES_BY_ID[dishId];
     if (!d) return;
     const shown = shownRef.current;
     setBusy(true);
     let res;
     try {
-      res = await runDishSearch(d, avoidIds);
+      res = await runDishSearch(d, avoidIds, want);
     } finally {
       setBusy(false);
     }
@@ -591,7 +598,6 @@ export function AiChat({
     const lastA0 = last?.role === "assistant" ? last : undefined;
     // Understanding Gate (01/10) — câu sửa lại ("không, a hỏi…", "ý mình là…") → bỏ ngữ cảnh cũ, hiểu phần sau như câu mới.
     const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content, inFlow: !!(lastA0?.heart || lastA0?.dishAsk || lastA0?.bizPick || lastA0?.bizTopicPick || lastA0?.issue || lastA0?.tarotAwait) }, true) : null;
-    if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
     if (corr?.action === "rewrite") {
       q = corr.q;
       shownRef.current = { from: q, to: raw };
@@ -614,11 +620,38 @@ export function AiChat({
       });
     }
 
+    // 08/10 — NGỮ CẢNH (lib/lomiConvo): đọc 2–5 lượt gần nhất rồi hiểu tin này như câu NỐI TIẾP nếu đúng là vậy:
+    // "quán nào ổn?" (đang nói cà phê) → tìm quán cà phê; "yên tĩnh" (vừa tìm quán) → thêm điều kiện; "ừ" sau câu hỏi
+    // chọn một trong nhiều thứ → hỏi lại đúng phần còn thiếu; "người đó thì sao?" → người đang nói tới…
+    const convo = !forceAi && !en ? convoOf(msgs) : null;
+    const rt = convo ? resolveTurn(q, raw, convo, { correcting: corr?.action === "rewrite" }) : null;
+    if (rt?.kind === "reply") {
+      // keep: giữ nguyên mạch đang nói (tâm sự, sức khoẻ, trải bài vừa rút…) qua một lượt hỏi lại / giải thích.
+      const k = rt.keep ? lastA0 : undefined;
+      return localReply(q, {
+        role: "assistant",
+        content: rt.reply.text,
+        local: true,
+        quick: rt.reply.quick,
+        ...(rt.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}),
+        ...(k
+          ? { heart: k.heart, heartListen: k.heartListen, heartDepth: k.heartDepth, rel: k.rel, hsub: k.hsub, sx: k.sx, mood: k.mood, story: k.story, diet: k.diet, dish: k.dish, avoidIds: k.avoidIds, search: k.search, biz: k.biz, faqId: k.faqId, talk: k.talk, tarotRef: k.tarot ?? k.tarotRef }
+          : {}),
+      });
+    }
+    if (rt?.kind === "refine") return replyDishShops(q, rt.dish, [], rt.want);
+    // Câu bác lại trống ("không", "không phải") mà ngữ cảnh ở trên không giải thích được → Lomi nhận là mình hiểu nhầm.
+    if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
+    if (rt?.kind === "rewrite") {
+      q = rt.q;
+      shownRef.current = { from: q, to: raw };
+    }
+
     // Lomi vừa mời ("rút một lá cho nhẹ lòng không?") kèm nút gợi ý → người dùng gõ "ok / ờ / có"
     // thì làm luôn gợi ý đầu tiên (khung chat vẫn hiện đúng chữ họ gõ); "không / thôi" thì đáp nhẹ nhàng.
     if (!forceAi && !en && lastA?.quick?.length && !lastA.bizPick && !lastA.bizTopicPick && !lastA.tarotAwait && !lastA.heart) {
       // Chỉ khi tin trước thật sự là lời mời (có câu hỏi + động từ mời), tránh "ok" sau câu chào bị hiểu nhầm.
-      const offered = /\?/.test(lastA.content) && /(muốn|thử|để Lomi|rút|bói|chọn giùm|chỉ cách|xem thử)/i.test(lastA.content);
+      const offered = isOffer(lastA.content);
       if (offered && isAffirm(q)) {
         // Chọn đúng nút ứng với lời mời: mời "rút/bói" → nút có chữ Bói; mời "tìm quán" → nút Tìm/ăn.
         const qk = lastA.quick;
@@ -673,7 +706,9 @@ export function AiChat({
         }
       }
       // Nút phạm vi ("🩺 Sức khoẻ", "📱 Hỏi về app") → Lomi hỏi tiếp đúng việc.
-      if (SCOPE_CHIP_REPLY[raw]) return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY[raw], local: true, ...(raw.includes("Sức khoẻ") ? { heart: "health", heartDepth: 0 } : {}) });
+      // (q khi người dùng gõ "ừ" nhận lời Lomi mời quay lại một chủ đề — lúc đó q đã là chữ trên nút.)
+      const scope = SCOPE_CHIP_REPLY[raw] ? raw : SCOPE_CHIP_REPLY[q] ? q : null;
+      if (scope) return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY[scope], local: true, ...(scope.includes("Sức khoẻ") ? { heart: "health", heartDepth: 0 } : {}) });
       // 0a) Trí nhớ: người dùng kể tên / hoàn cảnh → Lomi ghi nhớ; hỏi "Lomi nhớ gì về mình?", "quên hết đi".
       if (isForgetMemory(q)) {
         clearMem(user.id);
@@ -734,7 +769,11 @@ export function AiChat({
         const more = !topicFromChip(q) && isMoreIdeas(q);
         const tp = topicFromChip(q) ?? (more ? (b.topic ?? "offer") : detectBizTopic(q));
         if (tp) return bizReply(q, ctx, tp, more);
-        if (lastA.bizTopicPick || kind.type) return bizReply(q, ctx, "offer");
+        // 08/10: người dùng chỉ nói thêm LOẠI HÌNH ("quán cà phê") → trả lời lại đúng chủ đề đang hỏi (vd vắng khách) cho loại hình đó,
+        // không tự đổi sang "ý tưởng ưu đãi".
+        if (lastA.bizTopicPick || kind.type) return bizReply(q, ctx, b.topic ?? "offer");
+        // Mẩu chi tiết ngắn không phải câu hỏi ("buổi sáng", "khách toàn sinh viên") → vẫn là chuyện đang tư vấn: gợi ý thêm ý cho chủ đề đó.
+        if (b.topic && q.split(/\s+/).length <= 6 && !looksLikeQuestion(q) && !isAffirm(q) && !isDecline(q) && !detectSearch(q) && !matchFaq(q)) return bizReply(q, ctx, b.topic, true);
       }
 
       // c) Lomi vừa hỏi "muốn hỏi bài điều gì?" → tin này chính là câu hỏi.
@@ -762,8 +801,8 @@ export function AiChat({
         return doTarot(qq, q, qq && lastA.tarotSpread ? `${q} ${lastA.tarotSpread === "five" ? "5 lá" : "10 lá"}` : undefined);
       }
       // d) Vừa bói xong → "rút thêm" / "bói lại" / hỏi nối ("thế còn tình cảm thì sao?").
-      if (lastA?.tarot) {
-        const prev = lastA.tarot;
+      if (lastA?.tarot ?? lastA?.tarotRef) {
+        const prev = (lastA.tarot ?? lastA.tarotRef)!;
         if (isTarotMore(q)) return moreTarot(prev, q);
         if (isTarotRedo(q)) {
           if (!prev.question && !en) return doTarot(DAY3_Q, q);
@@ -779,8 +818,8 @@ export function AiChat({
       }
       // Understanding Gate (01/10): filler / follow-up / mơ hồ / hỏi luật Tarot — xác định ý trước khi module chuyên biệt bắt câu.
       if (!en) {
-        const inFlow = !!(lastA?.heart || lastA?.dishAsk || lastA?.bizPick || lastA?.bizTopicPick || lastA?.issue || lastA?.biz);
-        const topic = lastA?.tarot ? "tarot" : lastA?.heart === "health" ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.faqId ? "faq" : undefined;
+        const inFlow = !!(lastA?.heart || lastA?.dishAsk || lastA?.dishPick || lastA?.bizPick || lastA?.bizTopicPick || lastA?.issue || lastA?.biz);
+        const topic = lastA?.tarot || lastA?.tarotRef ? "tarot" : lastA?.heart === "health" ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.faqId ? "faq" : undefined;
         const g = gate(q, { lastText: lastA?.content, faqId: lastA?.faqId, topic, inFlow });
         if (g?.action === "reply") return localReply(q, { role: "assistant", content: g.reply.text, local: true, quick: g.reply.quick });
         if (g?.action === "skip") gateSkip = g.intent;
@@ -794,7 +833,7 @@ export function AiChat({
       //     08/10: luật "không cướp mạch đang nói" (đang bói, tâm sự, sức khoẻ, chọn món, tư vấn kinh doanh) nằm trong
       //     earlyIntent (lib/lomiIntent) để test được — ở đây chỉ báo cho nó biết tin trước đang ở mạch nào.
       if (!en && !gateSkip) {
-        const talk = lastA?.tarot ? "tarot" : lastA?.heart === "health" || lastA?.sx?.length ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.dishAsk || lastA?.dishPick ? "dish" : undefined;
+        const talk = lastA?.tarot || lastA?.tarotRef ? "tarot" : lastA?.heart === "health" || lastA?.sx?.length ? "health" : lastA?.heart ? "heart" : lastA?.biz ? "biz" : lastA?.dishAsk || lastA?.dishPick ? "dish" : undefined;
         const ei = earlyIntent(q, { waiting: !!(lastA?.tarotAwait || lastA?.bizPick || lastA?.bizTopicPick), talk });
         if (ei?.intent === "capability") return localReply(q, { role: "assistant", content: ei.text, local: true, ...(ei.domain === "health" ? { heart: "health", heartDepth: 0 } : {}) });
         if (ei?.intent === "food_place") return replyDishShops(q, ei.dish);
@@ -802,7 +841,8 @@ export function AiChat({
         // Chưa nhắc món nào ("giờ ăn gì", "a đói mà không biết ăn gì") → gợi ý món, như "Hôm nay ăn gì".
         if (ei?.intent === "food_suggest") return replyDishes(q, ei.drink);
         // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
-        if (lastA?.dishPick && lastA.dish && q.split(/\s+/).length <= 8 && !detectDish(q) && !capabilityAsk(q)) return replyDishShops(q, lastA.dish);
+        //     (Câu tự nói rõ một loại chỗ khác — "quán nào gần đây có spa?" — thì không phải trả lời khẩu vị.)
+        if (lastA?.dishPick && lastA.dish && q.split(/\s+/).length <= 8 && !detectDish(q) && !capabilityAsk(q) && !otherPlace(q)) return replyDishShops(q, lastA.dish);
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
@@ -816,6 +856,8 @@ export function AiChat({
               "Có nè 🔮 Lomi rành bói Tarot lắm á! Tình yêu, công việc, tiền bạc hay thông điệp hôm nay đều được. Bạn muốn hỏi bài điều gì nè?",
             ]),
           );
+        // "bói lại" khi chưa có trải bài nào trước đó → rút lá hôm nay (không lấy chữ "lại" làm câu hỏi).
+        if (!en && isTarotRedo(q)) return doTarot("", q);
         const d = detectTarot(q);
         if (d) return d.question || d.daily ? doTarot(d.question, q) : askTarot(q);
       }
@@ -875,6 +917,12 @@ export function AiChat({
         const depth = (lastA.heartDepth ?? 0) + 1;
         const rel = relationReply(q, lastA.rel);
         if (rel) return localReply(q, { ...heartMsg(rel, depth, lastA), rel: rel.rel });
+        // 08/10: đang kể một chuyện ĐỜI THƯỜNG vui (vừa có tin vui, đi chơi…) mà kể tiếp một ý vui ("sếp khen nữa") → mừng cùng,
+        // không đọc chữ "sếp", "gia đình" thành chuyện áp lực để an ủi.
+        if (lastA.heart.startsWith("ev:") && isUpbeat(raw) && q.split(/\s+/).length <= 8) {
+          const tc = talkContinue(raw, depth);
+          return localReply(q, { role: "assistant", content: tc.text, local: true, heart: lastA.heart, heartDepth: depth, story: lastA.story });
+        }
         return localReply(q, heartMsg(heartContinue(q, lastA.heart, !!lastA.heartListen, depth, lastA.content, lastA.story), depth, lastA));
       }
     }
@@ -912,11 +960,14 @@ export function AiChat({
       // Người dùng vừa kể hoàn cảnh để Lomi nhớ (vd "mình đang thất nghiệp") thì để phần dưới đáp.
       if (!en && !gateSkip && !memLearn?.newSits.length) {
         const sl0 = senseState(raw, ["sleepy"]);
-        if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick });
+        if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick, talk: (convo?.talk ?? 0) + 1 });
         const rel = relationReply(q);
         if (rel) topicHit("love");
         if (rel) return localReply(q, { ...heartMsg(rel, 1), rel: rel.rel });
-        const h = heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
+        // 08/10: Lomi đang nghe kể chuyện vui ("a đang tính đi Nha Trang" → "đi với gia đình") thì một chữ "gia đình", "sếp"
+        // không biến câu kể thành tâm sự chuyện buồn — chỉ mở mạch tâm sự khi câu có dấu hiệu buồn / mệt / hỏi xin lời khuyên.
+        const casual = !!convo?.talk && isUpbeat(raw);
+        const h = casual ? null : heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
         if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));
       }
@@ -944,6 +995,12 @@ export function AiChat({
       // Gate: filler / câu mơ hồ không có ngữ cảnh mà không luồng nào hiểu → hỏi lại, không đoán bừa.
       if (gateSkip === "filler" || gateSkip === "followup_nocontext") return localReply(q, { role: "assistant", content: GATE_ASK_BACK, local: true });
     }
+    // 08/10: câu KỂ về mình, không có dáng câu hỏi và không nói gì về app ("a đang tính đi Nha Trang", "a đang chán") → đáp như
+    // người nghe TRƯỚC khi dò câu hỏi thường gặp. Bỏ dấu thì "đang"/"đăng", "chán"/"chặn" trùng nhau nên phần dò FAQ dễ bắt nhầm.
+    if (!forceAi && !en && !isAppish(q) && !looksLikeQuestion(q) && !lastA?.faqId && !looksLikeBizQuestion(q)) {
+      const ss = senseState(raw);
+      if (ss && ss.intent !== "state:biz_state") return localReply(q, { role: "assistant", content: ss.text, local: true, quick: ss.quick, talk: (convo?.talk ?? 0) + 1 });
+    }
     // Câu hỏi nối sau câu trả lời về app ("còn … thì sao", "1 ngày quẹt đc mấy lần") → hiểu theo câu trước.
     // Câu cụt ("hết hạn rồi thì sao", "tối đa mấy người") → ưu tiên hiểu theo câu hỏi vừa rồi.
     const cut = !!lastA?.faqId && (q.split(/\s+/).length <= 6 || /\b(thi sao|con|nua|vay)\b/.test(normalizeVi(q)));
@@ -960,7 +1017,9 @@ export function AiChat({
     const advisory = bizQ && ["loyal", "slow", "newcust", "price", "opening", "holiday", "post", "offer"].includes(detectBizTopic(q) ?? "");
     if (faq && (!advisory || APP_HOWTO_FAQ.has(faq.id))) {
       // Lomi vừa bí câu trước, giờ người dùng chọn gợi ý / hỏi lại trúng → ghi nhớ để lần sau trả lời luôn.
-      if (lastA?.unk && learnKey(lastA.unk) !== learnKey(q)) learnAnswer(lastA.unk, faq.id);
+      // Khoá học = câu đã chuẩn hoá (unkKey); lịch sử cũ chỉ có unk thì dùng tạm unk.
+      const uk = lastA?.unkKey ?? lastA?.unk;
+      if (uk && learnKey(uk) !== learnKey(q)) learnAnswer(uk, faq.id);
       return answerFaq(faq, q);
     }
     // 1b) Hỏi chuyện kinh doanh (vd "làm sao hút khách cho quán cà phê buổi sáng") → tư vấn tại chỗ.
@@ -990,14 +1049,14 @@ export function AiChat({
       // gọi trống, câu cụt, lời kể nhận ra được → Lomi đáp tự nhiên và KHÔNG ghi vào "Lomi bí".
       // (Trước đây logUnanswered chạy trước senseLate nên câu Lomi đã đáp được vẫn bị ghi là "bí".)
       if (!en) {
-        const sl = senseLast(raw, { lastText: lastA?.content, hasSuggest: sug.length > 0 });
-        if (sl) return localReply(q, { role: "assistant", content: sl.text, local: true, quick: sl.quick });
+        const sl = senseLast(raw, { lastText: lastA?.content, hasSuggest: sug.length > 0, talk: convo?.talk });
+        if (sl) return localReply(q, { role: "assistant", content: sl.text, local: true, quick: sl.quick, ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
       }
       // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
       logUnanswered(raw, q);
       if (!sug.length && !en) {
         const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
-        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q, sticker: fb.sticker });
+        return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: raw, unkKey: q, sticker: fb.sticker });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
@@ -1018,7 +1077,8 @@ export function AiChat({
             : "Câu này nằm ngoài những gì Lomi biết rồi 😅 Lomi rành nhất về cách dùng Liên Minh Liên Doanh, tư vấn kinh doanh và bói Tarot. Bạn thử hỏi kiểu “làm sao nhận ưu đãi”, xem Hướng dẫn (/huong-dan), hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.",
         local: true,
         quick: chips,
-        unk: q,
+        unk: raw,
+        unkKey: q,
       });
     }
     // 2) Không phải Membership / hết lượt → báo ngay, không gọi server.
