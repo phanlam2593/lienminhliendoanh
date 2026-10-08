@@ -113,7 +113,7 @@ export function LomiLearnPanel() {
   };
 
   const tabs: [View, string, number | undefined][] = [
-    ["feedback", "⁉️ Báo cáo", showDone ? undefined : fb?.length],
+    ["feedback", "💡 Người dùng gửi", showDone ? undefined : fb?.length],
     ["unanswered", "🤔 Lomi bí", un?.length],
     ["taught", "🎓 Đã dạy", tg?.length],
   ];
@@ -121,7 +121,7 @@ export function LomiLearnPanel() {
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">
-        Người dùng bấm ⁉️ dưới câu Lomi trả lời chưa ổn → hiện ở đây. Bấm <b>Dạy Lomi</b>, viết câu trả lời đúng — Lomi sẽ dùng câu đó cho mọi người.
+        Người dùng bấm 💡 Dạy Lomi dưới câu Lomi chưa biết → hiện ở đây. Bấm <b>Dạy Lomi</b>, viết câu trả lời đúng — Lomi sẽ dùng câu đó cho mọi người.
       </p>
       <div className="flex gap-1.5 overflow-x-auto">
         {tabs.map(([k, label, n]) => (

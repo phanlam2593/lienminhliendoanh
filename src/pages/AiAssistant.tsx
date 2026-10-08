@@ -51,6 +51,7 @@ import { dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply } from "@/lib/lomiRelation";
 import { capabilityAsk, foodChoice } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
+import { senseCanon, senseLate, senseState } from "@/lib/lomiSense";
 import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
@@ -579,7 +580,7 @@ export function AiChat({
     }
     // Người dùng tự xưng anh/chị/em/mình → Lomi xưng hô đối xứng từ câu này trở đi.
     const addrNow = en ? { explicit: undefined } : learnAddr(user.id, raw);
-    let q = expandTeen(raw);
+    let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
     shownRef.current = q !== raw ? { from: q, to: raw } : null;
     setErr(null);
     setInput("");
@@ -904,6 +905,8 @@ export function AiChat({
       // Bắt đầu tâm sự ("tâm sự với mình nha", "cãi nhau với người yêu mệt quá"…) — trước chuyện phiếm.
       // Người dùng vừa kể hoàn cảnh để Lomi nhớ (vd "mình đang thất nghiệp") thì để phần dưới đáp.
       if (!en && !gateSkip && !memLearn?.newSits.length) {
+        const sl0 = senseState(raw, ["sleepy"]);
+        if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick });
         const rel = relationReply(q);
         if (rel) topicHit("love");
         if (rel) return localReply(q, { ...heartMsg(rel, 1), rel: rel.rel });
@@ -974,6 +977,12 @@ export function AiChat({
       const lf = learned ? faqById(learned) : undefined;
       if (lf) return answerFaq(lf, q);
       // Chỉ tới đây khi MỌI luồng (xã giao, sức khoẻ, Tarot, ngữ cảnh, món ăn, FAQ, câu đã dạy/đã học) đều không đáp được.
+      // 06/10 (lib/lomiSense): câu KỂ về mình ("a đói bụng", "anh đang uống cf") → ghi nhận + hỏi nối, không báo "chưa tiếp thu"
+      // và KHÔNG ghi vào "Lomi bí" (đã đáp được rồi).
+      if (!en) {
+        const ss = senseState(raw);
+        if (ss) return localReply(q, { role: "assistant", content: ss.text, local: true, quick: ss.quick });
+      }
       logUnanswered(raw, q);
       // Chỉ gợi ý FAQ khi tin có dáng câu hỏi hoặc là vài từ khoá ngắn (vd "điểm thưởng");
       // còn câu tâm sự / nói chuyện phiếm thì Lomi đáp tự nhiên.
@@ -981,6 +990,10 @@ export function AiChat({
       // Chỉ gợi ý câu hỏi về app khi câu thật sự nói về app; còn lại nói thật là chưa hiểu / ngoài phạm vi.
       const sug = isAppish(q) ? suggestFaqs(q, 3) : [];
       if (!sug.length && !en) {
+        // Chào kèm lời chúc, hỏi về chính Lomi, gọi trống, câu cụt, câu kể chưa nhận ra → đáp tự nhiên.
+        // Chỉ CÂU HỎI KIẾN THỨC ngoài hiểu biết mới rơi xuống "chưa tiếp thu" + nút 💡 Dạy Lomi.
+        const sl = senseLate(raw, { lastText: lastA?.content });
+        if (sl) return localReply(q, { role: "assistant", content: sl.text, local: true, quick: sl.quick });
         const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
         return localReply(q, { role: "assistant", content: fb.text, local: true, quick: fb.quick, unk: q, sticker: fb.sticker });
       }
@@ -1226,8 +1239,8 @@ export function AiChat({
                         setFbNote("");
                         setFbIdx(i);
                       }}
-                      aria-label="Báo câu trả lời chưa ổn cho ban quản trị"
-                      title="Lomi trả lời chưa đúng / chưa biết? Gửi ban quản trị"
+                      aria-label="Dạy Lomi câu này"
+                      title="Lomi chưa biết câu này? Dạy Lomi nha"
                       className={cn("font-semibold", m.reported ? "text-muted-foreground/60" : "text-amber-600 dark:text-amber-400")}
                     >
                       💡 {m.reported ? "Đã gửi" : "Dạy Lomi"}
@@ -1269,7 +1282,7 @@ export function AiChat({
       <Dialog open={fbIdx !== null} onOpenChange={(o) => !o && !fbBusy && setFbIdx(null)}>
         <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle>⁉️ Giúp Lomi học hỏi</DialogTitle>
+            <DialogTitle>💡 Dạy Lomi</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-muted-foreground -mt-2">Câu này sẽ được gửi cho ban quản trị để dạy lại Lomi. Cảm ơn ấy nhiều nha 🍀</p>
           <div className="grid grid-cols-2 gap-2">

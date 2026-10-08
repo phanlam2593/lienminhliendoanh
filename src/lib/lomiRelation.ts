@@ -16,6 +16,8 @@ const SUBJ: [RegExp, string][] = [
   [/\b(anh ay|anh do)\b/, "anh ấy"],
   [/\b(co ay|co do|em ay)\b/, "cô ấy"],
   [/\bcrush\b/, "crush"],
+  [/\b(nguoi yeu cu|ny cu)\b/, "người yêu cũ"],
+  [/\b(chi ay|chi do)\b/, "chị ấy"],
   [/\b(nguoi yeu|ny)\b/, "người yêu bạn"],
   [/\bban trai\b/, "bạn trai bạn"],
   [/\bban gai\b/, "bạn gái bạn"],

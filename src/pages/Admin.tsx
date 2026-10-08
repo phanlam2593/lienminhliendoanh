@@ -600,7 +600,7 @@ function OverviewTab({
           )}
           <StatRow
             icon={Lightbulb}
-            label="Lomi học hỏi (⁉️ người dùng báo)"
+            label="Lomi học hỏi (💡 người dùng gửi)"
             value={statsLoading ? undefined : stats.lomi}
             colorClass="bg-primary/10 text-primary"
             onClick={() => onNavigate("lomi")}

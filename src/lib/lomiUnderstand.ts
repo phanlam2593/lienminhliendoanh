@@ -182,7 +182,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
         text:
           `Okie, Lomi ghi nhận rồi nè 📝${scr || dev ? ` (${[scr && `mục ${scr}`, dev && devName(dev)].filter(Boolean).join(", ")})` : ""}` +
           (tip ? `\n\n${tip}` : "") +
-          "\n\nNếu vẫn chưa được, bạn bấm ⁉️ dưới câu này để gửi ban quản trị, hoặc nhắn trực tiếp ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha — kể giống vừa kể với Lomi là admin hiểu liền 💚",
+          "\n\nNếu vẫn chưa được, bạn nhắn trực tiếp ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha — kể giống vừa kể với Lomi là admin hiểu liền 💚",
       };
     }
   }
@@ -214,7 +214,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
 
   // 0f) (01/10 r3, theo tài liệu Kir) Câu Việt chen từ tiếng Anh / viết tắt — hiểu theo Ý, không bắt viết lại.
   // Rủ Lomi làm gì đó ("tối nay chơi game không?", "đi cà phê hong", "xem phim đi") — không có "ai" (đó là tìm bạn, mục 6).
-  const invite = n.match(/^((toi nay|chieu nay|sang nay|trua nay|mai|toi mai|cuoi tuan|nay|gio|lat nua|di|e|oi|lomi|em|ban|bro|ui) )*(choi game|choi|lam van game|lam tran|di cafe|di ca phe|uong ca phe|uong cafe|di an|di choi|di nhau|nhau|di dao|xem phim|di phuot|di da lat|hat karaoke|di hat|da banh|chay bo|tam su|nc|noi chuyen)( (khong|hong|ko|k|chu|nha|nhe|di|hok|ha|voi|voi minh|voi tui|cung minh|chung|khum|ne|lomi|em|ban|bro|ta|nao|ko ta))*$/);
+  const invite = n.match(/^((toi nay|chieu nay|sang nay|trua nay|mai|toi mai|cuoi tuan|nay|gio|lat nua|di|e|oi|lomi|em|ban|bro|ui) )*(choi game|choi|lam van game|lam tran|di cafe|di ca phe|uong ca phe|uong cafe|di an|di choi|di nhau|nhau|di dao|xem phim|di phuot|di da lat|hat karaoke|di hat|da banh|chay bo|tam su|nc|noi chuyen)( (khong|hong|ko|k|chu|nha|nhe|di|hok|ha|voi|voi minh|voi tui|cung minh|chung|khum|ne|lomi|em|e|ban|bro|ta|nao|ko ta))*$/);
   if (invite && !/\b(ai|co ai)\b/.test(n) && w <= 10) {
     const act = invite[3];
     const game = /game|van|tran/.test(act) || act === "choi";
@@ -386,7 +386,7 @@ export type Gate =
 // ── Giao tiếp cơ bản (02/10): chào, gọi Lomi, cảm ơn, tạm biệt, xác nhận, cảm thán, có/không, hỏi thăm ──
 const TAIL = "( (e|em|lomi|ban|anh|chi|nha|nhe|nhen|ne|a|oi|ha|nhieu|lam|qua|roi|luon|vay|z|ta|ca nha|mn|moi nguoi|bro|cung|you))*$";
 const SOCIAL: [string, RegExp, string[], boolean][] = [
-  ["greeting", new RegExp(`^(e |oi )?(chao|xin chao|hello|helo|hi|hey|alo|a lo|he lo|yo|chao buoi (sang|trua|chieu|toi)|buoi (sang|trua|chieu|toi)( vui ve| tot lanh)?|good (morning|afternoon|evening))${TAIL}`), ["Chào bạn nè 👋 Hôm nay Lomi giúp gì được bạn?", "Hello 😄 Lomi đây, bạn cần gì nè?"], true],
+  ["greeting", new RegExp(`^(e |oi )?(chao|xin chao|hello|helo|hi|hey|alo|aloha|he lo|yo|chao buoi (sang|trua|chieu|toi)|buoi (sang|trua|chieu|toi)( vui ve| tot lanh)?|good (morning|afternoon|evening))${TAIL}`), ["Chào bạn nè 👋 Hôm nay Lomi giúp gì được bạn?", "Hello 😄 Lomi đây, bạn cần gì nè?"], true],
   ["call", new RegExp(`^(e |alo |oi )?(lomi|em|e)( oi)+${TAIL}|^(e|alo|oi|hey|hi) lomi${TAIL}|^(a|anh|chi|c|minh|tui|toi|em|e|t) (goi|keu) (lomi|em|e)${TAIL}`), ["Dạ, Lomi nghe nè 🙋 Bạn cần gì nè?", "Có Lomi đây 😄 Bạn nói đi nha."], true],
   ["thanks", new RegExp(`^(cam on|cam on nhieu|thanks|thank|thank you|thanks nhieu|tks|thx|camon|cmon|cam on nha)${TAIL}`), ["Không có gì nè 😊 Cần gì cứ hỏi Lomi nha!", "Lomi vui vì giúp được bạn 💚"], true],
   ["goodbye", new RegExp(`^(bye|bai|bye bye|bb|pp|tam biet|thoi nha|thoi nhe|thoi bye|thoi di ngu|ngu ngon|di ngu|di ngu day|off nha|out nha|hen gap lai|gap lai sau|(a|anh|em|e|minh|tui|toi|chi|c|t) (di|ngu|off|out|di ngu|di lam) (day|nha|nhe|roi|nhen|truoc))${TAIL}`), ["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Okie, hẹn gặp lại bạn nha 💚"], true],

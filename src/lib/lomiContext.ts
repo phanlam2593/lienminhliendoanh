@@ -67,6 +67,16 @@ const SUBJECTS: Subject[] = [
     },
   },
   {
+    id: "atiso",
+    label: "trà atiso",
+    re: /\b(tra atiso|atiso|actiso)\b/,
+    main: "info",
+    aspects: {
+      info: () =>
+        "🍵 **Trà atiso** thường được dùng trong dân gian để hỗ trợ tiêu hoá, \"mát gan\", lợi tiểu nhẹ.\n• Bằng chứng khoa học còn hạn chế — không thay được thuốc hay điều trị bệnh gan.\n• Thận trọng nếu bạn đang mang thai/cho con bú, bị sỏi hoặc tắc mật, dị ứng họ cúc (hoa cúc, cúc tây…), hoặc đang dùng thuốc điều trị (hỏi bác sĩ/dược sĩ).\n• Uống quá nhiều có thể gây đầy bụng, đi lỏng.\n\nĐây là kiến thức tham khảo chung, không phải lời khuyên riêng cho bạn.",
+    },
+  },
+  {
     id: "endoscopy",
     label: "nội soi",
     re: /\b(noi soi)\b/,

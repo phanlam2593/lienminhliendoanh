@@ -104,7 +104,7 @@ const THEMES: Theme[] = [
     id: "cheat",
     re: /\b(ngoai tinh|cam sung|bi cam sung|phan boi|lua doi|bi lua|co nguoi khac|co ban gai khac|co ban trai khac|di voi nguoi khac|bat cha|bat gap .* nhan tin|tuesday|nguoi thu ba)\b/,
     feel: [
-      "Bị người mình tin tưởng lừa dối là một trong những nỗi đau khó chịu nhất",
+      "Bị người mình tin tưởng lừa dối là một trong những nỗi đau khó chịu nhất.",
       "Ôi… chuyện này chắc làm bạn chết lặng luôn. Cảm giác bị phản bội đau lắm, không phải ai cũng chịu nổi đâu 💔",
       "Lomi nghe mà thấy nghẹn thay bạn. Tin tưởng ai đó rồi bị phụ lòng — đau là đương nhiên, bạn không yếu đuối chút nào.",
     ],

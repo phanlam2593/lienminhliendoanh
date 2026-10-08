@@ -420,8 +420,8 @@ const RULES: Rule[] = [
     re: /\b(lomi ngu|ban ngu|(?<!buon )ngu qua|do ngoc|vo dung|te qua|chan lomi|lomi dot|kem qua|lomi khong hieu gi|lomi chang hieu gi)\b/,
     reply: () => ({
       text: pick([
-        "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Câu nào Lomi trả lời chưa ổn, bạn bấm nút ⁉️ dưới câu đó để gửi ban quản trị dạy lại Lomi nha!",
-        "Lomi xin lỗi vì chưa giúp được như ý bạn 🙏 Bấm ⁉️ dưới câu Lomi trả lời dở để báo ban quản trị nha, Lomi sẽ học lại!",
+        "Hic, Lomi còn đang học thêm mỗi ngày 🥲 Câu nào Lomi chưa biết, bạn bấm nút 💡 Dạy Lomi dưới câu đó để gửi ban quản trị dạy Lomi nha!",
+        "Lomi xin lỗi vì chưa giúp được như ý bạn 🙏 Lomi còn đang học thêm mỗi ngày, bạn nhắn lại cách khác giúp Lomi nha!",
       ]),
     }),
   },
@@ -762,13 +762,13 @@ export const SCOPE_CHIP_REPLY: Record<string, string> = {
 export const UNKNOWN_FULL =
   "Ui... Kiến thức này Lomi chưa được tiếp thu, Lomi xin lỗi ấy nhé! 🥲\n\n" +
   "Vì Lomi đang thử nghiệm và phát triển á, nên chỉ bít chút chút về vài lĩnh vực có ích cho cộng đồng như: tư vấn sức khoẻ, tâm lý... hoặc vui vẻ như bói Tarot hihi ☺️ (tham khảo phần ❓ ở góc trên nha).\n\n" +
-  "Ấy giúp Lomi học hỏi bằng cách nhấn nút ⁉️ ở cuối câu nào Lomi chưa biết để gửi cho ban quản trị nhé 🙂‍↕️\n" +
+  "Ấy giúp Lomi học hỏi bằng cách nhấn nút 💡 Dạy Lomi ngay dưới câu Lomi chưa biết để gửi cho ban quản trị nhé 🙂‍↕️\n" +
   "Hy vọng lần sau khi được hỏi về vấn đề này Lomi sẽ trò chuyện được nhiều hơn nè 🍀\n\n" +
   "Giờ để Lomi hỗ trợ ấy về vấn đề khác nheee 🫣 — bấm ❓ ở góc trên để xem gợi ý nha!";
 const UNKNOWN_SHORT = [
-  "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy bấm ⁉️ ngay dưới câu này để gửi ban quản trị dạy Lomi nha!",
-  "Câu này lại làm khó Lomi rồi 😵‍💫 Nhấn ⁉️ bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
-  "Ui, Lomi chưa biết cái này nữa 🙈 Ấy gửi giúp Lomi bằng nút ⁉️ nha — lần sau Lomi trả lời được liền!",
+  "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy bấm 💡 Dạy Lomi ngay dưới câu này để gửi ban quản trị dạy Lomi nha!",
+  "Câu này lại làm khó Lomi rồi 😵‍💫 Nhấn 💡 Dạy Lomi bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
+  "Ui, Lomi chưa biết cái này nữa 🙈 Ấy gửi giúp Lomi bằng nút 💡 Dạy Lomi nha — lần sau Lomi trả lời được liền!",
 ];
 const UNKNOWN_STICKERS = ["chongmat", "toatmohoi", "suynghi", "ngai", "canloi", "doi", "ngacnhien"];
 let lastFullAt = 0;
@@ -802,7 +802,7 @@ export function scopedFallback(text: string, faqQ?: string): ChatReply {
   // ("híc", "ủa", "thôi") không phải hỏi tiếp về app (01/10: "Híc" bị đáp "Về chuyện Liên hệ Ban quản trị…").
   if (faqQ && !outTask && (looksLikeQuestion(text) || isAppish(text)))
     return {
-      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Ấy bấm ⁉️ dưới câu này để ban quản trị bổ sung cho Lomi nha, còn cần người thật hỗ trợ liền thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ.`,
+      text: `Về chuyện “${faqQ.replace(/\?$/, "")}”, ý này Lomi chưa có hướng dẫn cụ thể 😅 Ấy bấm 💡 Dạy Lomi dưới câu này để ban quản trị bổ sung cho Lomi nha, còn cần người thật hỗ trợ liền thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ.`,
     };
   // Có chào ở đầu mà phần sau Lomi chưa hiểu → vẫn chào lại cho lịch sự.
   const g = splitGreet(squash(normalizeVi(text)));
@@ -876,12 +876,12 @@ const TEEN: Record<string, string> = {
   tgian: "thời gian", vc: "việc", uh: "ừ", uk: "ừ", uhm: "ừ", ah: "à", tr: "trời",
   // 01/10 (theo tài liệu Kir): thêm cách nói đời thường
   lmj: "làm gì", lmgi: "làm gì", okla: "ok", oki: "ok", okee: "ok", okeee: "ok", ò: "ừ", ừa: "ừ", ùm: "ừ", ừm: "ừ",
-  dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo",
+  dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo", qtqd: "quá",
 };
 // ── Chữ kéo dài để biểu cảm (01/10 r2, theo tài liệu Kir): "okkkk", "chánnnn", "khônggg", "đượcccc",
 // "trờiiii", "haizzzz", "hahaahah" → về từ gốc để HIỂU nghĩa; còn độ nhấn thì đọc riêng bằng
 // expressive() ở lib/lomiUnderstand (từ câu gốc), không bị mất. Không đụng chữ lặp thật ("coffee", "uu đãi").
-const KEEP_DOUBLE = new Set(["coffee", "free", "see", "tree", "too", "zoo", "good", "book", "cool", "all", "off", "will", "kiss", "miss", "boss", "pass", "class", "uu", "kk", "xoong", "boong", "loong", "soong", "app", "egg", "inn", "add", "odd", "ill", "mall", "hall", "call", "bill", "fill", "kill", "tall", "wall", "well", "tell", "sell", "hell", "doll", "jazz", "buzz", "mess", "less", "chess", "dress", "grass", "glass", "cross", "staff", "stuff", "cliff", "ball", "bell", "full", "pull"]);
+const KEEP_DOUBLE = new Set(["coffee", "free", "see", "tree", "too", "zoo", "good", "book", "cool", "all", "off", "will", "kiss", "miss", "boss", "pass", "class", "uu", "kk", "xoong", "boong", "loong", "soong", "app", "egg", "inn", "add", "odd", "ill", "mall", "hall", "call", "bill", "fill", "kill", "tall", "wall", "well", "tell", "sell", "hell", "doll", "jazz", "buzz", "mess", "less", "chess", "dress", "grass", "glass", "cross", "staff", "stuff", "cliff", "stress", "success", "address", "express", "press", "bless", "fitness", "business", "process", "progress", "ball", "bell", "full", "pull"]);
 export function unstretch(text: string): string {
   return text.replace(/[\p{L}\p{M}]+/gu, (w) => {
     const lw = w.toLowerCase();

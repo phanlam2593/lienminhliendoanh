@@ -794,10 +794,62 @@ const KID_RE = /\b(con minh|con toi|con em|con tui|be nha|be minh|be con|em be|t
 const SEVERE_RE = /\b(bua bo|du doi|dau lam|dau qua troi|khong chiu noi|dau muon xiu|dau chet di duoc)\b/;
 const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SELF_RE = /\b(minh bi|toi bi|em bi|anh bi|tui bi|dang bi|bi hoai|bi suot|minh dang|toi dang|nay bi|hom nay bi|tu sang|tu qua)\b/;
-const KNOW_RE = /\b(la do dau|do dau ma|nguyen nhan|la benh gi|la dau hieu|la gi|thuong do|vi sao bi|tai sao bi|tai sao lai|co nguy hiem khong)\b/;
+const KNOW_RE = /\b(la bi gi|la do dau|do dau|do dau ma|nguyen nhan|la benh gi|la dau hieu|dau hieu cua|la gi|thuong do|vi sao|tai sao|co nguy hiem khong|co phai la|co nghia la|la sao|bi la sao|do dau|tu dau)\b/;
 const DUR_RE = /\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/;
 const KID_NOTE =
   "👶 **Với trẻ nhỏ:** đưa bé đi khám ngay nếu bé dưới 3 tháng tuổi mà sốt, hoặc sốt cao khó hạ, li bì, bỏ bú/bỏ ăn, co giật, thở nhanh, phát ban, nôn nhiều. Thuốc hạ sốt cho bé phải tính theo cân nặng — hỏi bác sĩ/dược sĩ, không dùng thuốc của người lớn.";
+
+
+// ── KIẾN THỨC CHUNG về một triệu chứng (05/10) ──
+// "Đau đầu là do đâu?" ≠ "Mình bị đau đầu". Câu hỏi kiến thức chỉ liệt kê NHIỀU nguyên nhân thường gặp, nói rõ
+// câu hỏi chưa đủ để xác định nguyên nhân, và KHÔNG chọn một nguyên nhân làm của người hỏi.
+// Bảng nhỏ theo triệu chứng; triệu chứng chưa có trong bảng thì lấy tên các nhóm nguyên nhân từ CONDS.
+const COMMON_CAUSES: Record<string, string> = {
+  headache: "thiếu ngủ, mất nước, căng thẳng, mỏi mắt do nhìn màn hình, đau nửa đầu (migraine), nghẹt mũi/viêm xoang, cảm cúm hoặc nhiễm trùng, tư thế cổ vai gáy xấu, dùng thuốc giảm đau quá thường xuyên",
+  dizzy: "thiếu ngủ, mất nước, hạ đường huyết khi nhịn đói, huyết áp thấp, đứng dậy quá nhanh, thiếu máu, rối loạn tiền đình, lo âu",
+  fatigue: "thiếu ngủ, căng thẳng kéo dài, ăn uống thiếu chất, thiếu máu, cảm cúm hoặc nhiễm trùng, rối loạn giấc ngủ, vấn đề tuyến giáp, trầm buồn",
+  fever: "nhiễm virus hoặc vi khuẩn (cảm cúm, viêm họng, nhiễm trùng tiểu…), sốt xuất huyết, phản ứng sau tiêm, say nắng; mỗi nguyên nhân cần xử lý khác nhau",
+  cough: "cảm lạnh, viêm họng, dị ứng, hít khói bụi, trào ngược dạ dày, hen, viêm phế quản",
+  sorethroat: "virus (cảm lạnh), vi khuẩn (viêm họng, viêm amidan), dị ứng, khô họng, trào ngược dạ dày, nói nhiều",
+  bellyache: "khó tiêu, ăn uống không hợp, táo bón/tiêu chảy, viêm dạ dày, hội chứng ruột kích thích, nhiễm trùng đường ruột; đôi khi là vấn đề cần can thiệp sớm nên vị trí và dấu hiệu đi kèm rất quan trọng",
+  nausea: "ăn uống không hợp, nhiễm trùng đường tiêu hoá, đau nửa đầu, say tàu xe, mang thai, tác dụng phụ của thuốc, lo âu",
+  diarrhea: "nhiễm trùng đường ruột, ngộ độc thức ăn, không dung nạp thức ăn, tác dụng phụ của thuốc (kháng sinh), căng thẳng",
+  insomnia: "căng thẳng/lo âu, thói quen ngủ không đều, dùng caffeine hoặc màn hình muộn, môi trường ngủ, đau/khó chịu cơ thể, một số thuốc",
+  backpain: "ngồi sai tư thế, mang vác nặng, căng cơ, thoái hoá cột sống, thoát vị đĩa đệm, ít vận động",
+  palp: "lo âu, thiếu ngủ, caffeine, sốt, thiếu máu, rối loạn nhịp tim, tuyến giáp",
+  breath: "lo âu, nghẹt mũi, hen, nhiễm trùng hô hấp, thiếu máu, bệnh tim phổi",
+};
+export function generalSymptomInfo(text: string): string | null {
+  const n = normStrict(text, HEALTH);
+  const SKIP = ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"];
+  let ids = found(SYMPTOMS, n).map((s) => s.id).filter((id) => !SKIP.includes(id));
+  // Câu hỏi kiến thức hay nhắc TÊN triệu chứng trần ("chóng mặt là do đâu?", "ho là do đâu?") — bộ nhận diện kể bệnh cần thêm "bị/hay…" nên bỏ sót.
+  if (!ids.length) {
+    const padded = ` ${n} `;
+    ids = SYMPTOMS.filter((s) => {
+      const L = normalizeVi(s.label);
+      return !SKIP.includes(s.id) && !!COMMON_CAUSES[s.id] && (L.length >= 4 ? padded.includes(` ${L} `) : n.startsWith(`${L} `));
+    }).map((s) => s.id);
+  }
+  if (!ids.length) return null;
+  const main = ids.find((id) => COMMON_CAUSES[id]) ?? ids[0];
+  const label = byIdSym(main).label;
+  let causes = COMMON_CAUSES[main];
+  if (!causes) {
+    const names = CONDS.filter((c) => (c.sx[main] ?? 0) >= 2).map((c) => c.name.replace(/\s*\(.*?\)/g, "")).slice(0, 6);
+    causes = names.length ? names.join(", ").toLowerCase() : "nhiều tình trạng khác nhau, từ nhẹ đến cần khám";
+  }
+  const red = byIdSym(main).red;
+  const out = [
+    `**${cap1(label)}** nói chung có thể do nhiều nguyên nhân khác nhau, ví dụ: ${causes}.`,
+    `Chỉ riêng câu hỏi này thì **chưa xác định được nguyên nhân cụ thể** nào cả — vì còn tuỳ bạn bị lúc nào, bao lâu, mức độ ra sao và kèm triệu chứng gì.`,
+  ];
+  if (red) out.push(`⚠️ Riêng **${red}** là dấu hiệu cần đi cấp cứu — gọi **115** ngay, đừng chờ.`);
+  else out.push("Nếu triệu chứng dữ dội, đột ngột, kéo dài hoặc ngày càng nặng thì nên đi khám để tìm đúng nguyên nhân.");
+  out.push(`Nếu bạn đang bị ${label}, Lomi có thể hỏi thêm **thời gian, mức độ và triệu chứng đi kèm** — bạn kể nhé.`);
+  out.push("(Kiến thức tham khảo chung, không phải chẩn đoán cho riêng bạn 🩺)");
+  return out.join("\n\n");
+}
 
 /**
  * Phân tích triệu chứng cơ thể. prev = triệu chứng đã kể ở các tin trước (cộng dồn).
@@ -806,6 +858,13 @@ const KID_NOTE =
 export function analyzeBody(text: string, prev: string[] = [], inHealth = false, force = false): BodyResult | null {
   const n = normStrict(text, HEALTH);
   const now = found(SYMPTOMS, n).map((s) => s.id);
+  if (!now.length && !inHealth && !prev.length && !force) {
+    const nn = ` ${normalizeVi(text)} `;
+    if (KNOW_RE.test(nn) && !SELF_RE.test(nn)) {
+      const g = generalSymptomInfo(text);
+      if (g) return { text: g, sx: [] };
+    }
+  }
   // Đang nói chuyện sức khoẻ → hiểu thêm chi tiết kể tiếp ("ở trên rốn, lúc đói", "38 độ rưỡi", "búa bổ", "2 ngày rồi").
   const notes: string[] = [];
   let detail = false;
@@ -862,6 +921,10 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   const compact = inHealth && prev.length > 0 && !real.some((id) => !prev.includes(id));
   // 04/10: câu hỏi KIẾN THỨC ("đau đầu là do đâu?") ≠ đang bị → không gán triệu chứng cho người hỏi.
   const knowledge = !inHealth && !prev.length && !kid && !SELF_RE.test(` ${normalizeVi(text)} `) && KNOW_RE.test(` ${normalizeVi(text)} `);
+  if (knowledge && !reds.length) {
+    const g = generalSymptomInfo(text);
+    if (g) return { text: g, sx: [] };
+  }
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
   if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
     out.push(`Bạn đang bị **${joinVi(labels)}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• Bị bao lâu rồi, đau/khó chịu ở mức nào?\n• Có kèm sốt, nôn, hay triệu chứng nào khác không?`);
@@ -899,7 +962,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     return { text: out.join("\n\n"), sx: all };
   }
   out.push(
-    `Những triệu chứng này hay gặp ở:\n${top
+    `Những triệu chứng này hay gặp ở một số tình trạng như (**chưa đủ để kết luận**, chỉ để bạn tham khảo):\n${top
       .map((x, i) => `${i === 0 ? "•" : "•"} **${x.c.name}** — ${x.c.about}`)
       .join("\n")}`,
   );

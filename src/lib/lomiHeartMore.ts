@@ -448,7 +448,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "bullied",
     re: /\b(bi bat nat|bat nat minh|bi che gieu|bi cuoi nhao|bi treu choc|bi treu|bi chui tren mang|bi boc phot|bi xuc pham tren mang|bi bat nat online|bi nhom ban tay chay|bi co lap o lop|bi danh o truong)\b/,
-    feel: ["Bị bắt nạt, chế giễu là trải nghiệm rất tổn thương", "Không ai đáng bị đối xử như vậy. Lỗi không nằm ở bạn đâu."],
+    feel: ["Bị bắt nạt, chế giễu là trải nghiệm rất tổn thương.", "Không ai đáng bị đối xử như vậy. Lỗi không nằm ở bạn đâu."],
     insight: [
       "Người bắt nạt thường muốn thấy mình mạnh hơn bằng cách làm người khác nhỏ đi. Điều đó nói về họ, không phải về bạn.",
       "Im lặng chịu đựng một mình làm vết thương sâu hơn. Nói ra với người có thể giúp là việc can đảm, không phải “mách lẻo”.",

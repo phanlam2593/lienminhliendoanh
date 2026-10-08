@@ -1920,6 +1920,18 @@ const ARC_STORY: Record<Arc, string[]> = {
   ],
 };
 
+/** 06/10 (question anchor): câu hỏi có/không của CHÍNH người dùng, dùng nguyên văn ở phần kết luận —
+ *  để "người ấy có còn tình cảm với mình không?" được trả lời đúng câu đó, không bị thay bằng mẫu theo bối cảnh
+ *  ("chuyện với người ấy có thành không"). Không dùng cho câu hỏi "bao giờ / ở đâu / thế nào…" (đã có cách đọc riêng). */
+function ownYesNoAsk(q: string): string | null {
+  const s = q.replace(/[?？!.…\s]+$/u, "").trim();
+  const words = s.split(/\s+/).filter(Boolean).length;
+  if (words < 3 || words > 16) return null;
+  if (/(bao giờ|khi nào|lúc nào|mấy|bao nhiêu|ở đâu|là ai|như thế nào|ra sao|thế nào|vì sao|tại sao)/iu.test(s)) return null;
+  if (!/(không|chưa|hông)$/iu.test(s)) return null;
+  return s.charAt(0).toLowerCase() + s.slice(1);
+}
+
 function readingNarrativeVi(r: TarotReading): string {
   const kind = r.kind ?? "open";
   const q = r.question ?? "";
@@ -2047,7 +2059,7 @@ function readingNarrativeVi(r: TarotReading): string {
         ? "Nếu hỏi “chọn bên nào?” thì hai lựa chọn khá ngang nhau — chọn bên khiến lòng bạn thấy nhẹ nhõm nhất nha."
         : `Nếu hỏi “chọn bên nào?” thì trải bài nghiêng về “${a > b ? na : nb}”, vì bên đó mang năng lượng của ${kw(a > b ? r.cards[0] : r.cards[1], false)}. Nhưng quyết định cuối cùng vẫn là ở bạn nha 😄`;
   } else {
-    const askQ = it?.ask ?? (should ? "có nên hay không" : SCENE_ASK[scene]);
+    const askQ = ownYesNoAsk(q) ?? it?.ask ?? (should ? "có nên hay không" : SCENE_ASK[scene]);
     // Hỏi "bao giờ" → trả lời theo tốc độ (sớm / đúng khung / chậm hơn), không phán "không có".
     const lean =
       kind === "timing" && scene !== "health"
