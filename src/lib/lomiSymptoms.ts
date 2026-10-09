@@ -325,7 +325,7 @@ const CONDS: Cond[] = [
     need: ["rightlow"],
     about: "đau thường bắt đầu quanh rốn rồi khu trú xuống bụng dưới bên phải, tăng dần, có thể kèm sốt, buồn nôn.",
     do: ["Đi khám cấp cứu ngay để được chẩn đoán"],
-    avoid: ["Tự uống thuốc giảm đau rồi chờ (dễ che triệu chứng)", "Chườm nóng, xoa bóp bụng"],
+    avoid: ["Tự uống thuốc giảm đau rồi chờ", "Chườm nóng, xoa bóp bụng"],
     doctor: "Đi cấp cứu ngay — đây là tình huống cần bác sĩ khám trực tiếp.",
   },
   {
@@ -372,7 +372,7 @@ const CONDS: Cond[] = [
     need: ["headache"],
     about: "kiểu đau đầu phổ biến nhất — đau như bó chặt hai bên đầu hoặc sau gáy, hay do căng thẳng, thiếu ngủ, ngồi sai tư thế.",
     do: ["Nghỉ ngơi, ngủ đủ, uống đủ nước", "Thư giãn cổ vai gáy, xoa bóp nhẹ", "Đứng dậy vận động sau mỗi giờ ngồi"],
-    avoid: ["Thức khuya, bỏ bữa", "Lạm dụng thuốc giảm đau (dùng quá thường xuyên còn gây đau đầu dội ngược)", "Nhìn màn hình liên tục"],
+    avoid: ["Thức khuya, bỏ bữa", "Lạm dụng thuốc giảm đau (dùng quá nhiều cũng là một nguyên nhân gây đau đầu)", "Nhìn màn hình liên tục"],
     doctor: "Khám Nội thần kinh nếu đau đầu thường xuyên, ngày càng nặng, hoặc có dấu hiệu bất thường.",
   },
   {
@@ -500,7 +500,7 @@ const CONDS: Cond[] = [
     need: ["ringworm"],
     about: "mảng da tròn, viền rõ, ngứa, bong vảy; hay ở vùng ẩm, ra mồ hôi.",
     do: ["Giữ da khô thoáng, thay đồ khi ra mồ hôi", "Dùng khăn, quần áo riêng"],
-    avoid: ["Bôi thuốc có corticoid (làm nấm lan rộng)", "Mặc đồ ẩm, bó sát"],
+    avoid: ["Tự bôi thuốc có corticoid khi chưa được khám", "Mặc đồ ẩm, bó sát"],
     doctor: "Khám Da liễu để được kê thuốc chống nấm đúng loại.",
   },
   {
@@ -1029,7 +1029,9 @@ export function analyzeMind(text: string, prev: string[] = []): MindResult | nul
   if (!now.length) return null;
   const all = Array.from(new Set([...prev, ...now]));
   // Chỉ 1 cảm giác thì để thư viện tâm sự đáp — trừ cảm giác rất đặc trưng (ám ảnh, tuyệt vọng, hoảng loạn).
-  if (all.length < 2 && !["trauma", "hopeless", "panic"].includes(all[0])) return null;
+  //   12/10: "a sợ quá" một mình thì CHƯA đủ để nói tới "cơn hoảng loạn" (không gắn tên một trạng thái tâm lý qua một dữ kiện) —
+  //   chỉ khi người dùng tự nói rõ là hoảng loạn.
+  if (all.length < 2 && !(["trauma", "hopeless"].includes(all[0]) || (all[0] === "panic" && /\b(hoang loan|panic)\b/.test(n)))) return null;
   const scored = STATES.map((s) => {
     const hit = Object.keys(s.f).filter((id) => all.includes(id));
     return { s, score: hit.reduce((a, id) => a + s.f[id], 0), hit };

@@ -52,7 +52,9 @@ export type Theme = {
   advice: string[]; // khi người dùng xin lời khuyên
   tarot?: string; // câu bói hợp chủ đề (chip "Bói xem …")
   heavy?: boolean; // nhắc gặp chuyên gia nếu kéo dài
-  hint?: [RegExp, string][]; // câu nói trúng chi tiết người dùng kể (vd nhắc tên thuốc) → dùng thay góc nhìn ngẫu nhiên
+  hint?: [RegExp, string][];
+  /** Như hint, nhưng CHỈ dùng khi người dùng xin lời khuyên (câu kể thì vẫn hỏi han trước, chưa khuyên vội). */
+  adviceHint?: [RegExp, string][]; // câu nói trúng chi tiết người dùng kể (vd nhắc tên thuốc) → dùng thay góc nhìn ngẫu nhiên
   stepFirst?: boolean; // chuyện sức khoẻ → ngay lượt đầu đã chỉ bước nên làm (đi khám…)
   define?: string; // người dùng hỏi "X là gì" → giải thích ngắn trước
 };
@@ -117,7 +119,7 @@ const THEMES: Theme[] = [
     ],
     insight: [
       "Lúc lo về sức khoẻ, đầu mình hay tưởng tượng ra điều tệ nhất — nhất là khi đọc tìm hiểu trên mạng. Bác sĩ mới là người trả lời chính xác được.",
-      "Chăm sóc tinh thần cũng là một phần của chữa bệnh: bớt lo được chút nào, cơ thể cũng hồi phục tốt hơn chút đó.",
+      "Lo cho sức khoẻ đã đủ mệt rồi, đừng để mình phải lo một mình — có người cùng nghe lời bác sĩ dặn thì nhẹ hơn nhiều.",
     ],
     step: [
       "Nếu triệu chứng kéo dài hoặc nặng lên, bạn nên đi khám sớm nha — đừng cố chịu.",
@@ -127,6 +129,11 @@ const THEMES: Theme[] = [
     advice: [
       "Ghi lại triệu chứng (bắt đầu khi nào, lúc nào nặng hơn) để kể bác sĩ cho đủ.",
       "Nếu đau dữ dội, khó thở hay có dấu hiệu nguy hiểm, gọi 115 hoặc tới cơ sở y tế gần nhất ngay nha.",
+    ],
+    // 12/10: "a mới đi khám về" — đã đi khám rồi thì hỏi bác sĩ nói sao, không nhắc "nên đi khám sớm" hay hỏi "đã đi khám chưa".
+    hint: [
+      [/ (bac si|bs) (noi|bao|keu) (\S+ ){0,3}(khong sao|binh thuong|on|khong co gi|tot|khong van de gi) /, "Bác sĩ nói không sao thì mừng rồi 💚 Nghe vậy bạn thấy nhẹ người hơn chưa?"],
+      [/ (moi (di )?kham|vua (di )?kham|di kham (ve|roi)|kham (xong|ve)|tai kham (ve|roi|xong)) /, "Đi khám về rồi hả. Bác sĩ nói sao bạn — có điều gì làm bạn lo không?"],
     ],
   },
   {
@@ -598,6 +605,13 @@ const THEMES: Theme[] = [
       "Hít vào chậm bằng mũi 4 nhịp, thở ra bằng miệng 6 nhịp. Làm 5 lần.",
     ],
     ask: ["Điều gì đang làm bạn lo nhất?", "Cảm giác lo này đến thường xuyên, hay chỉ gần đây?"],
+    // 12/10: lo trước một BUỔI QUAN TRỌNG (phỏng vấn, thi, thuyết trình) mà hỏi cách bớt run → gợi ý cho đúng chuyện đó, không đọc bài lo âu chung.
+    adviceHint: [
+      [
+        / (phong van|thuyet trinh|mai thi|sap thi|ky thi|buoi thi|len san khau|phat bieu) /,
+        "Hồi hộp trước một buổi quan trọng là chuyện rất bình thường — nó cho thấy bạn coi trọng việc này.\n• Chuẩn bị trước vài ý chính và tập nói thành tiếng một hai lần; có sẵn câu mở đầu là đỡ run nhiều.\n• Ngay trước khi vào: thở chậm vài nhịp, thả lỏng vai, uống một ngụm nước.\n• Tới sớm một chút để quen chỗ, khỏi cuống.\n• Lỡ vấp thì dừng một nhịp rồi nói tiếp — người nghe ít để ý hơn mình tưởng.",
+      ],
+    ],
     advice: [
       "Viết điều mình lo ra, rồi tự hỏi: khả năng nó xảy ra thật là bao nhiêu? Nếu xảy ra, mình sẽ làm gì? Có kế hoạch là bớt sợ.",
       "Giảm cà phê, ngủ đủ, vận động đều — nghe cơ bản nhưng ảnh hưởng tới lo âu nhiều lắm.",
@@ -710,7 +724,8 @@ const DX_MARK = "Lomi không chẩn đoán được";
 const DX_SRC = DX_WORD.map(([re]) => re.source.replace(/\\b/g, "")).join("|");
 // Dáng câu TỰ HỎI: "có phải / liệu / không biết có … <tên>", hoặc "(bị / là) <tên> không / hả / nhỉ".
 const DX_ASK_A = new RegExp(`\\b(co phai|phai chang|lieu|khong biet co|co khi nao|hay la|chac la|so la|nghi la)\\b.{0,30}(?:${DX_SRC})\\b`);
-const DX_ASK_B = new RegExp(`\\b(bi|mac|la|co)\\s+(?:benh\\s+)?(?:${DX_SRC})\\s+(?:roi\\s+)?(khong|ko|k|ha|nhi|chua|phai khong|dung khong|chang|u)\\b`);
+//   ("c có bị trầm cảm SAU SINH không" — vài chữ nói rõ thêm sau tên vẫn là câu tự hỏi đó.)
+const DX_ASK_B = new RegExp(`\\b(bi|mac|la|co)\\s+(?:benh\\s+)?(?:${DX_SRC})(?:\\s+\\S+){0,3}?\\s+(?:roi\\s+)?(khong|ko|k|ha|nhi|chua|phai khong|dung khong|chang|u)\\b`);
 /** Câu tự hỏi mình có mắc một vấn đề tâm lý không (để lớp khác không đáp thay bằng bài phân tích cảm giác). */
 export function selfDxAsk(text: string): boolean {
   return !!selfDx(text, normStrict(text, HEART), {});
@@ -874,7 +889,24 @@ export function heartOpen(): HeartReply {
 }
 
 const advGiven = new Map<string, number>(); // số lần đã đưa lời khuyên theo chủ đề (trong phiên)
-function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp, said: (x: string) => boolean = () => false): HeartReply {
+// 12/10: câu vừa nghe đã nói rõ điều gì thì không hỏi lại điều đó — "2 năm rồi" → không hỏi "lâu chưa?"; nêu rõ người ("ba mẹ thất
+// vọng về e") → không hỏi "xảy ra với ai trong nhà vậy?".
+const NAMED_WHO = /\b(ba me|bo me|cha me|bo|me|ma|cha|chong|vo|con trai|con gai|ong ba|sep|me chong|me vo|ba chong|bo chong|anh trai|chi gai|em trai|em gai)\b/;
+function avoidAskFor(n: string, span: boolean): RegExp | undefined {
+  //   ("a mới đi khám về", "bác sĩ nói…" → không hỏi "đã đi khám bác sĩ chưa?")
+  const seenDoctor = /\b(di kham (ve|roi)|kham (roi|xong|ve)|moi (di )?kham|vua (di )?kham|bac si (noi|bao|keu|ke|chan doan)|ket qua kham|tai kham|nhap vien|nam vien|mo xong)\b/.test(` ${n} `);
+  const parts = [span ? "lâu chưa|bao lâu|từ khi nào|lâu rồi|từ lâu chưa" : "", NAMED_WHO.test(` ${n} `) ? "với ai|ai trong nhà|là ai vậy" : "", seenDoctor ? "đi khám bác sĩ chưa|đi khám chưa" : ""].filter(Boolean);
+  return parts.length ? new RegExp(parts.join("|")) : undefined;
+}
+/** Chọn một câu hỏi của chủ đề: bỏ câu hỏi về điều người dùng vừa nói rõ (avoid) và câu đã hỏi trong cuộc trò chuyện này (said). */
+function pickAsk(t: Theme, said: (x: string) => boolean, avoid?: RegExp): string | undefined {
+  const kept = avoid ? t.ask.filter((x) => !avoid.test(x)) : t.ask;
+  const fresh = kept.filter((x) => !said(x));
+  const asks = fresh.length ? fresh : kept;
+  return asks.length ? pick(`${t.id}:ask${asks.length !== t.ask.length ? `:${asks.length}` : ""}`, asks) : undefined;
+}
+/** lead = câu mở thay cho lời đồng cảm chung của chủ đề (vd nhắc lại đúng điều vừa nghe khi chuyện rẽ sang một ý mới). */
+function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp, said: (x: string) => boolean = () => false, lead?: string): HeartReply {
   const parts: string[] = [];
   // Ý chủ đề có sẵn lời đáp riêng cho đúng điều vừa hỏi / kể — bỏ qua ý đã nói rồi (không đọc lại y nguyên một đoạn).
   const hintOf = () => t.hint?.find(([re, x]) => re.test(` ${n} `) && !said(x))?.[1];
@@ -893,7 +925,7 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp
     advGiven.set(t.id, given + 1);
     // 11/10: câu xin lời khuyên trúng một ý chủ đề có sẵn lời đáp riêng ("nói sao cho vợ hết giận", "có nên uống thuốc ngủ không")
     // → trả lời thẳng ý đó trước, rồi mới thêm gợi ý chung (trước đây chỉ ra ba gạch đầu dòng chung chung, không đụng tới câu hỏi).
-    const hintA = hintOf();
+    const hintA = hintOf() ?? t.adviceHint?.find(([re, x]) => re.test(` ${n} `) && !said(x))?.[1];
     parts.push(hintA ?? pick(`${t.id}:feel`, t.feel));
     //   (ý riêng đã đủ dài và đủ ý thì không kèm thêm gợi ý chung — dễ nói ngược lại chính ý đó.)
     if (hintA && hintA.length > 220) return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
@@ -901,12 +933,15 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp
   } else {
     const hint = hintOf();
     // Câu kể trúng chi tiết có lời đáp riêng → đáp thẳng ý đó (không mở đầu chung chung dễ lệch ý).
-    if (!defined && !hint) parts.push(pick(`${t.id}:feel`, t.feel));
+    if (!defined && !hint) parts.push(lead ?? pick(`${t.id}:feel`, t.feel));
     parts.push(hint ?? pick(`${t.id}:ins`, t.insight));
-    if (t.stepFirst) parts.push(pick(`${t.id}:step`, t.step));
+    // Lời đáp riêng đã kết bằng một câu hỏi ("Bác sĩ nói sao bạn?") thì dừng ở đó — không chêm bước làm, không hỏi thêm câu thứ hai.
+    const hintAsks = !!hint && /\?\s*$/.test(hint);
+    if (t.stepFirst && !hintAsks) parts.push(pick(`${t.id}:step`, t.step));
     // Người dùng vừa nói rõ điều đó rồi ("chia tay 2 năm rồi") thì không hỏi lại "chia tay lâu chưa?".
-    const asks = avoidAsk ? t.ask.filter((x) => !avoidAsk.test(x)) : t.ask;
-    if (asks.length) parts.push(pick(`${t.id}:ask${avoidAsk ? ":f" : ""}`, asks));
+    //   Câu hỏi đã hỏi trong cuộc trò chuyện này cũng không hỏi lại.
+    const q1 = hintAsks ? undefined : pickAsk(t, said, avoidAsk);
+    if (q1) parts.push(q1);
   }
   if (t.heavy && adviceAsked) parts.push(PRO);
   return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
@@ -952,7 +987,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   if (t) {
     // Câu mở đầu đã nói rõ bao lâu ("mất ngủ nhiều tuần rồi") → không hỏi lại "lâu chưa?"; kéo dài từ hai tuần thì nhắc đi khám.
     const sp = n.match(SPAN_RE);
-    const r = themeReply(t, n, asksAdvice(n), sp ? /lâu chưa|bao lâu|từ khi nào|lâu rồi|từ lâu chưa/ : undefined);
+    const r = themeReply(t, n, asksAdvice(n), avoidAskFor(n, !!sp));
     const note = sp && longSpan(sp) && t.heavy && !r.text.includes(PRO) ? `\n\nKéo dài ${spanOf(sp)} rồi thì bạn nên đi khám để tìm đúng nguyên nhân nha, đừng ráng chịu một mình.` : "";
     // (lời nhắc đi khám đặt TRƯỚC câu hỏi cuối, để tin kết thúc bằng câu hỏi chứ không phải bằng lời dặn.)
     const ps = r.text.split("\n\n");
@@ -1031,7 +1066,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
         listen,
       };
   }
-  const adviceAsked = text.trim() === HEART_ADVICE || asksAdvice(n);
+  //   ("ăn kiêng sao e", "bắt đầu thế nào" — câu HỎI kết bằng "sao / thế nào" là hỏi CÁCH làm → cũng là xin gợi ý; "sao ảnh làm vậy" thì không.)
+  const howAtEnd = !!ctx.ask && !ctx.third && /\b(sao|the nao|nhu the nao|kieu gi|cach nao)( (e|em|a|anh|chi|ban|lomi|nhi|ta|day|gio|bay gio|nua|duoc))*$/.test(n) && !/\b(tai sao|vi sao|thi sao|co sao|khong sao|ra sao|sao roi)\b/.test(n) && !/\b(khong|ko|k|chang|cha|hong|hk) (biet|bit|ro|hieu)\b/.test(n);
+  const adviceAsked = text.trim() === HEART_ADVICE || asksAdvice(n) || howAtEnd;
   // Câu mẫu đã nói trong mấy tin gần đây (so cả bản đã đổi xưng hô) — để không đọc lại y nguyên một đoạn.
   const saidR = (x: string) => (ctx.recent ?? []).some((r) => r.includes(x.slice(0, 48)) || (!!ctx.say && r.includes(ctx.say(x).slice(0, 48))));
   // "nhiều lúc c muốn buông xuôi hết" — có thể chỉ là quá mệt, cũng có thể là dấu hiệu nặng hơn → hỏi thẳng một cách nhẹ nhàng.
@@ -1077,7 +1114,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   //   (chuyện của một người khác — "con a sắp thi" — không phải chuyện đời thường của chính người dùng.)
   //   Đang kể một chuyện CỤ THỂ (bị sếp mắng) mà thêm một mẩu ngắn ("vì đi trễ", "mà e bị kẹt xe") → đó là chi tiết của chuyện đó.
   const detailOfStory = !!cur && !GENERIC.has(cur.id) && !evCur && words <= 8;
-  if (evNew && evNew !== evCur && (!t || GENERIC.has(t.id)) && !ctx.third && !detailOfStory) return eventReply(evNew, n, text);
+  //   Câu nêu LÝ DO cho cảm xúc đang nói ("chắc tại trời mưa", "tại a ngủ ít") cũng là chi tiết của chuyện đó — không rẽ sang "mắc mưa".
+  const reasonLead = !!cur && words <= 8 && /^(chac (la )?(tai|do|vi)|co le (tai|do|vi)|tai vi|boi vi|tai|do|vi) /.test(n);
+  if (evNew && evNew !== evCur && (!t || GENERIC.has(t.id)) && !ctx.third && !detailOfStory && !reasonLead) return eventReply(evNew, n, text);
   if (evCur && (!t || GENERIC.has(t.id))) {
     const f = evCur.follow.find(([re]) => re.test(` ${n} `));
     // Nói lại đúng chuyện đang kể (vd đang "chán" rồi nói "không có gì làm") → gợi ý luôn thay vì hỏi lại.
@@ -1155,17 +1194,25 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // Hỏi nghĩa ("YSL là gì?") → giải thích luôn, kể cả khi vẫn đang nói đúng chủ đề đó.
   if (t?.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `)) return themeReply(t, n, false);
   // Chủ đề mới (vd đang buồn chung chung → kể ra là cãi nhau với người yêu) → trả lời theo chủ đề mới.
-  if (t && t.id !== prev && !(listen && !adviceAsked))
-    return themeReply(t, n, adviceAsked, /\b(\d+|mot|hai|ba|may|vai)\s*(ngay|hom|tuan|thang|nam)\b/.test(n) ? /lâu chưa|bao lâu|từ khi nào|lâu rồi/ : undefined, saidR);
+  //   Đang kể dở mà rẽ sang ý mới ("ba mẹ thất vọng về e") → mở bằng chính điều vừa nghe, không đọc lại lời đồng cảm chung của chủ đề mới.
+  if (t && t.id !== prev && !(listen && !adviceAsked)) {
+    const mw = ctx.mirror?.split(" ").length ?? 0;
+    const lead = depth >= 2 && ctx.mirror && mw >= 3 && mw <= 10 && !ctx.ask ? `${ctx.mirror.charAt(0).toUpperCase() + ctx.mirror.slice(1)} hả 😔` : undefined;
+    return themeReply(t, n, adviceAsked, avoidAskFor(n, /\b(\d+|mot|hai|ba|may|vai)\s*(ngay|hom|tuan|thang|nam)\b/.test(n)), saidR, lead);
+  }
   const th = t ?? cur;
   // Câu kể trúng chi tiết mà chủ đề có sẵn lời đáp riêng (vd crush là đồng nghiệp, tính nghỉ việc) → đáp đúng ý đó.
   //   (đang ở chế độ CHỈ NGHE thì không chen lời khuyên; ý đã nói rồi thì không đọc lại.)
   const hintHit = listen ? undefined : th?.hint?.find(([re, x]) => re.test(` ${n} `) && !saidR(x));
-  if (hintHit && !adviceAsked) return { text: `${hintHit[1]}${/\?\s*$/.test(lastText.trim()) ? "" : `\n\n${pick(`${th!.id}:ask`, th!.ask)}`}`, quick: [], theme: th!.id, listen };
+  if (hintHit && !adviceAsked) return { text: `${hintHit[1]}${/\?\s*$/.test(lastText.trim()) ? "" : `\n\n${pickAsk(th!, saidR) ?? ""}`}`.trim(), quick: [], theme: th!.id, listen };
   //   (lời khuyên xét cả điều vừa kể ở 1–2 lượt trước: "ảnh có người yêu rồi" → "e nên làm sao" phải đáp đúng hoàn cảnh đó.)
   if (adviceAsked && th) return themeReply(th, `${n} ${(ctx.details ?? []).slice(-3).map((d) => normalizeVi(d)).join(" ")}`.trim(), true, undefined, saidR);
   // "a không biết nói sao", "chẳng biết phải làm thế nào" — bí, đang cần gợi ý (không phải câu hỏi kiến thức) → đưa lời khuyên của đúng chuyện đang nói.
   //   (chỉ khi là bí CÁCH LÀM — "không biết nói sao", "chẳng biết tính sao nữa"; còn "e không biết e sai gì" là đang kể nỗi băn khoăn.)
+  //   Lomi vừa hỏi "chuyện gì / vì sao…" mà người dùng đáp "không biết (sao) nữa" → là KHÔNG RÕ VÌ SAO mình thấy vậy, không phải bí cách làm
+  //   → không dội ba gạch đầu dòng lời khuyên.
+  if (/^(khong|ko|k|chang|cha|hong|hk) (biet|bit|ro|hieu)( (sao|vi sao|tai sao|nua|luon|gi|nx))*$/.test(n) && /\?\s*$/.test(lastText.trim()) && /(chuyện gì|điều gì|vì sao|tại sao|sao vậy)/i.test(lastText.trim().split("\n").pop() ?? ""))
+    return { text: "Không rõ vì sao mà vẫn thấy vậy thì cũng không sao đâu — không phải cảm xúc nào cũng có lý do rõ ràng 💚 Bạn không cần tìm ra ngay.\n\nBạn thấy như vậy mới hôm nay, hay mấy hôm rồi?", quick: [], theme: prev, listen };
   if (DUNNO_RE.test(` ${n} `) && HOW_DUNNO.test(` ${n} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true, undefined, saidR);
   // Kể thời gian ("3 năm rồi đó", "2 tuần nay") → đáp theo đúng chuyện đang nói.
   const dur = n.match(/\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/);

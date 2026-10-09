@@ -395,6 +395,8 @@ const SOCIAL: [string, RegExp, string[], boolean][] = [
   ["opener", new RegExp(`^(cho )?(a|anh|chi|c|em|e|minh|tui|toi|t|to)( muon| can)? hoi( (cai nay|cai|chut|xiu|ti|cau nay|mot chut|mot cau|voi|vs|nha|nhe|ne|lomi|duoc khong|dc khong))*$`), ["Dạ, bạn hỏi đi nè 😄 Lomi nghe đây.", "Hỏi thoải mái luôn nha 😊"], false],
   ["ack", /^(ok|oke|okie|oki|okay|ok la|okela|u|uk|uh|um|uhm|duoc|dc|duoc roi|on|on roi|hay|hay do|hay qua|hay ghe|good|nice|chuan|dung roi|vang|da|da vang)( (nha|nhe|e|em|lomi|ne|a|roi|luon|qua|ghe|vay))*$/, ["Okie 😊", "Dạ 👌", "Hihi okie nè 😄"], true],
   ["reaction", /^(ua|ua vay|wow|oa|oi|ui|oh|o|haha+|hahaha+|hihi|hehe|kk+|hm+|troi|troi oi|troi dat|haiz+|that ha|that luon|ghe vay)( (vay|ta|z|ha|troi|luon))*$/, ["Sao vậy nè? 😯", "Hihi 😄", "Hửm, có gì hả? 👀"], true],
+  // "a kể chuyện này nha", "để c kể cho e nghe" — người dùng xin phép KỂ → mời kể.
+  ["opener", /^(de )?(a|anh|chi|c|em|e|minh|tui|toi|to)( muon)? ke( cho (e|em|lomi|ban))?( nghe)?( (chuyen|cai) nay| mot chuyen| 1 chuyen| chuyen)?( cho (e|em|lomi|ban))?( nghe)?( (nha|nhe|ne|nghe|duoc khong|dc khong))*$/, ["Dạ, bạn kể đi, Lomi nghe nè 😊", "Kể đi bạn, Lomi đang nghe nè 👂"], false],
   ["yes", /^(co|co chu|co a|u co|co nha|muon|co muon)$/, ["Okie 😄 Bạn nói thêm chút để Lomi làm đúng ý nha?"], false],
   ["no", /^(khong|ko|k|hong|khum|thoi|khoi|khong can|thoi khoi)( (nha|nhe|a|dau|lomi))*$/, ["Dạ okie, không sao nè 😊 Cần gì cứ nói Lomi nha."], false],
 ];
@@ -409,6 +411,14 @@ export function socialIntent(q: string): { intent: string; text: string; preferC
   const n2 = n.replace(/^(?:e|em|lomi|ban|be) oi\s+(?=\S)/, "");
   if (n2 !== n) for (const [intent, re, texts, preferChit] of SOCIAL) if (intent === "opener" && re.test(n2)) return { intent, text: pickS(texts), preferChit };
   return null;
+}
+/** 12/10: MỞ LỜI có nêu đề tài nhưng chưa hỏi gì ("a hỏi về ibuprofen", "cho e hỏi chuyện đặt bàn") → mời hỏi tiếp và nhắc đúng đề tài,
+ *  không đáp "Chuyện sao vậy, kể Lomi nghe với" như một lời tâm sự. Router chỉ gọi khi KHÔNG lớp chuyên môn nào nhận câu này
+ *  ("a hỏi về bệnh gout" đã có lớp sức khoẻ trả lời). */
+export function topicOpener(q: string): string | null {
+  const mt = q.trim().match(/^(?:(?:e|em|lomi|bạn|bé) ơi[\s,]+)?(?:cho\s+)?(?:a|anh|chị|c|em|e|mình|tui|tôi|tớ)(?:\s+(?:muốn|cần))?\s+hỏi(?:\s+(?:chút|xíu|tí|một chút))?\s+(?:về|chuyện)\s+(.{2,40})$/iu);
+  if (!mt || /\b(gi|sao|khong|ko|nao|bao nhieu|may|the nao|chua|ha|nhi)\b/.test(normalizeVi(mt[1]))) return null;
+  return `Dạ, về ${mt[1].replace(/[.!…\s]+$/u, "")} thì bạn muốn hỏi điều gì nè? Bạn cứ hỏi, Lomi biết tới đâu nói tới đó 😊`;
 }
 
 const PRON = "(?:a|anh|em|mình|tôi|tui|chị|t|tớ|tao|e|c)";

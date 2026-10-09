@@ -104,7 +104,16 @@ const timeCap = (f: Frame) => (f.time?.label ? cap(f.time.label) : "");
 /** Nhắc lại việc vừa nói: động từ + bổ ngữ, tối đa 7 tiếng. keepQual = giữ nhận xét cuối câu ("…về trễ"). */
 function echo(f: Frame, keepQual = true): string {
   const p = f.pred!;
-  return join(p.head, keepQual ? p.obj : (p.objCore ?? p.obj))
+  // "a ĐƯỢC (sếp) khen" — giữ "được" + người làm việc đó (trước đây nhắc lại thành "Hôm nay khen hả").
+  const hi = f.toks.findIndex((t) => t.t === p.head.split(" ")[0]);
+  let k = hi - 1;
+  const by: string[] = [];
+  while (k >= 0 && (f.toks[k].cls === "agent" || f.toks[k].cls === "agentOf")) {
+    if (f.toks[k].cls === "agent") by.unshift(f.toks[k].t === "bạn" ? "bạn bè" : f.toks[k].t);
+    k--;
+  }
+  const duoc = hi > 0 && k >= 0 && f.toks[k].t === "được" ? join("được", by.join(" ")) : "";
+  return join(duoc, p.head, keepQual ? p.obj : (p.objCore ?? p.obj))
     .split(" ")
     .slice(0, 7)
     .join(" ")
@@ -293,6 +302,10 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   // Than một nét của VỢ / CHỒNG / NGƯỜI YÊU ("chồng e ít nói lắm", "vợ a lạnh nhạt lắm") là mở đầu một chuyện tình cảm → nhắc lại đúng điều đó,
   // hỏi chuyện, và nghe tiếp ở mạch tâm sự — để câu sau ("về nhà là ôm điện thoại") được hiểu là kể tiếp chứ không phải một câu rời.
   //   (câu hỏi thẳng về người đó mà lớp "bám câu hỏi tình cảm" đã nhận — "người yêu mình dạo này lạnh nhạt quá" — thì để lớp đó đáp và nhớ người.)
+  //   ("người yêu a hay giận", "vợ a hay dỗi" — cảm xúc lặp đi lặp lại của người đó cũng là than về chuyện hai người, không phải tin người đó gặp nạn.)
+  const habit = p.cls === "feel" && p.kind === "state" && f.toks.some((t) => t.t === "hay" || t.t === "suốt" || t.t === "toàn");
+  if (p.val < 0 && person && f.subjectCls === "partner" && habit && c.heart !== "rel")
+    return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : "fight", text: `${subj} hay ${p.head} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   if (p.val < 0 && person && f.subjectCls === "partner" && p.kind === "quality" && TRAIT.test(p.head) && c.heart !== "rel")
     return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : /^(Vợ|Chồng|Bà xã|Ông xã)/.test(subj) ? "marriage" : "love", text: `${subj} ${what} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   if (p.val < 0 || adverse) {
@@ -303,7 +316,7 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
     //  • việc NGƯỜI KHÁC làm với người đó ("vợ a bị sếp mắng") cũng vậy: đó là chuyện của vợ với sếp, không phải của người nói với vợ.
     if (c.heart && (person || pet ? (f.subjectCls === "partner" || f.subjectCls === "boss") && (c.heart === "rel" || REL_THEMES.has(c.heart)) && p.kind !== "event" && !(adverse && agent) : c.heart.startsWith("ev:"))) return null;
     // Chê một nét của người đó ("lười lắm", "nấu ăn dở lắm") → hỏi chuyện; gặp chuyện không may ("mới chia tay") → hỏi han.
-    if (person && (p.kind === "quality" || !!p.qual)) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 😅 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+    if (person && (p.kind === "quality" || !!p.qual || habit)) return { intent: "frame:third_neg", talk: true, text: `${subj} ${habit ? `hay ${p.head}` : what} hả 😅 Chuyện sao vậy bạn, kể Lomi nghe với.` };
     if (person) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 🥺 ${pick(["Nghe mà thương. Giờ sao rồi bạn?", "Chuyện sao vậy bạn, kể Lomi nghe với."])}` };
     if (pet) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 🥺 Tội bé ghê. Giờ sao rồi bạn?` };
     return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 😣 ${p.kind === "quality" ? "Nghe là thấy bực rồi ha." : "Xui ghê ha."} Giờ bạn tính sao?` };
@@ -326,6 +339,11 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
 // ── Người nói + phủ định ─────────────────────────────────────────────────────
 function selfNeg(f: Frame, c: FrameCtx): FrameReply | null {
   const p = f.pred!;
+  // "a không biết vợ nghĩ gì", "e chẳng hiểu chồng e muốn gì" — không đọc được NGƯỜI THƯƠNG đang nghĩ gì là mở đầu một chuyện tình cảm:
+  // nhắc lại đúng điều đó và nghe tiếp ở mạch tâm sự (trước đây: "Ra là vậy 😄").
+  const partner = f.toks.find((t) => t.r === "KIN" && t.cls === "partner");
+  if (p.kind === "cognition" && /^(biết|hiểu|rõ)$/.test(p.head) && partner && p.indef && !c.heart && p.obj.split(" ").length <= 6)
+    return { intent: "frame:neg_know", openHeart: /^(vợ|chồng|bà xã|ông xã)$/.test(partner.t) ? "marriage" : "love", text: `Không ${p.head} ${p.obj} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   const no = f.negWord ?? "không";
   const No = cap(no);
   if (p.kind === "state") {
@@ -711,7 +729,8 @@ export function withAbout(f: Frame, about?: { text: string; kind: SubjectKind } 
     const s = f.subjectText.toLowerCase().trim();
     if (ANAPHOR.some(([pro, who]) => pro.test(s) && (who.test(about.text.toLowerCase()) || about.kind === "pet"))) return { ...f, subject: about.kind, subjectText: about.text };
   }
-  if (!about || (about.kind !== "third" && about.kind !== "pet") || f.subject !== "none" || !f.pred || f.act !== "statement" || f.multi) return f;
+  // Câu lược chủ ngữ mới được hiểu là nói tiếp về người đó; câu có nhắc chính người nói ("chắc tại A ít nói") thì không.
+  if (!about || (about.kind !== "third" && about.kind !== "pet") || f.subject !== "none" || !f.pred || f.act !== "statement" || f.multi || f.toks.some((t) => t.r === "SELF")) return f;
   return { ...f, subject: about.kind, subjectText: about.text, conf: Math.max(f.conf, 0.8) };
 }
 

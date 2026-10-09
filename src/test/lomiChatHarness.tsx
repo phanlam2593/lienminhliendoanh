@@ -59,6 +59,8 @@ export type Turn = {
   tarotAwait?: boolean;
   harm?: { kind: string; victim: string; actor?: string; whom?: string; setting?: string };
   heartListen?: boolean;
+  drug?: { kind: string; name?: string; id?: string };
+  tarotGate?: "medical";
   biz?: unknown;
   faqId?: string;
   unk?: string;

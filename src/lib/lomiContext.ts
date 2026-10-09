@@ -8,6 +8,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { drugById, renderDrug, sourceLine } from "@/lib/lomiDrugData";
+
+const PARA = drugById("paracetamol")!;
 
 export type Anchor = {
   subject: string; // id chủ thể
@@ -89,26 +92,30 @@ const SUBJECTS: Subject[] = [
     },
   },
   {
-    id: "paracetamol",
+    // Kiến thức về paracetamol lấy từ lib/lomiDrugData (mỗi ý có nguồn + ngày đối chiếu) — ở đây chỉ còn việc chọn KHÍA CẠNH được hỏi.
+    id: PARA.id,
     label: "paracetamol",
-    re: /\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/,
+    re: PARA.match,
     main: "info",
     aspects: {
-      info: () =>
-        "💊 **Paracetamol** (Panadol, Efferalgan, Hapacol…) là thuốc giảm đau, hạ sốt thông dụng.\n• Dùng đúng liều thì tác dụng phụ **ít gặp**: có thể buồn nôn, nổi mẩn, ngứa.\n• Hiếm nhưng nặng: dị ứng (sưng môi mặt, khó thở) hoặc phản ứng da nghiêm trọng (phồng rộp, bong da) → ngưng thuốc và đi cấp cứu.\n• Điểm quan trọng nhất: **quá liều gây tổn thương gan**, có thể nguy hiểm tính mạng — dễ xảy ra khi uống nhiều loại thuốc cùng chứa paracetamol (thuốc cảm, thuốc ho…), uống sát giờ, hoặc uống kèm rượu bia.\n• Người có bệnh gan, uống rượu nhiều, đang mang thai, trẻ nhỏ thì cần hỏi bác sĩ/dược sĩ trước.",
+      info: () => renderDrug(PARA, "info"),
+      // Liều: không có con số nào ở đây — chỉ nói liều phụ thuộc vào đâu và hỏi ai.
       dose: (a) =>
-        `Lomi không đưa liều cụ thể${a.personal ? " cho từng người" : ""} được, vì liều paracetamol phụ thuộc **tuổi, cân nặng** (nhất là với trẻ em), bệnh gan và các thuốc khác đang dùng.\n• Làm theo tờ hướng dẫn trên hộp thuốc hoặc hỏi dược sĩ/bác sĩ.\n• Không tự tăng liều, không uống thêm thuốc cảm/thuốc ho có chứa paracetamol cùng lúc.\n\nBạn hỏi cho người lớn hay trẻ em (bao nhiêu tuổi, khoảng bao nhiêu ký), và đang uống loại viên bao nhiêu mg?`,
-      kid: () => "Trẻ em dùng paracetamol được nhưng **liều phải tính theo cân nặng** của bé, dùng loại dành cho trẻ (siro, gói bột, viên đặt), không bẻ thuốc người lớn tự chia. Bạn hỏi dược sĩ/bác sĩ kèm cân nặng của bé nha. Bé dưới 3 tháng mà sốt, hoặc li bì, co giật, khó thở → đưa đi khám ngay.",
+        `Lomi không đưa liều cụ thể${a.personal ? " cho từng người" : ""} được, vì liều paracetamol phụ thuộc **tuổi, cân nặng** (nhất là với trẻ em), bệnh gan và các thuốc khác đang dùng.\n• Làm theo tờ hướng dẫn trên hộp thuốc hoặc hỏi dược sĩ/bác sĩ.\n• Không tự tăng liều, không uống thêm thuốc cảm/thuốc ho có chứa paracetamol cùng lúc.\n\nBạn hỏi cho người lớn hay trẻ em (bao nhiêu tuổi, khoảng bao nhiêu ký)? Có thông tin đó thì dược sĩ tư vấn được ngay.`,
+      kid: () => `${renderDrug(PARA, "children")}\n\nBé dưới 3 tháng mà sốt từ 38°C thì cần được nhân viên y tế xem sớm; bé li bì, co giật, khó thở → đưa đi cấp cứu ngay.`,
       overdose: () =>
-        "⚠️ Uống quá nhiều paracetamol cần **đi cấp cứu ngay / gọi 115**, kể cả khi bây giờ thấy bình thường — tổn thương gan thường chưa có triệu chứng trong những giờ đầu, và điều trị càng sớm càng hiệu quả.\n• Mang theo vỏ hộp thuốc, nhớ khoảng bao nhiêu viên và uống lúc mấy giờ.\n• Không tự gây nôn, không chờ xem có sao không.\nNếu bạn uống nhiều vì đang thấy quá sức chịu đựng, bạn có thể gọi đường dây hỗ trợ **1900 1267** sau khi đã an toàn nha.",
-      alcohol: () => "Không nên uống paracetamol cùng rượu bia hoặc khi uống rượu nhiều thường xuyên — cả hai đều đè lên gan, tăng nguy cơ tổn thương gan. Nếu đang uống rượu nhiều, hỏi dược sĩ thuốc giảm đau phù hợp hơn.",
+        `${renderDrug(PARA, "overdose")}\n\nKhông tự gây nôn nha. Nếu bạn uống nhiều vì đang thấy quá sức chịu đựng: sau khi đã an toàn, bạn có thể gọi đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật), hoặc nói với một người bạn tin.`,
+      alcohol: () => {
+        const x = PARA.interactions.find((i) => i.id === "alcohol")!;
+        return `🍺 Paracetamol và rượu bia: ${x.note}\n\n${sourceLine(PARA, x.src)}`;
+      },
     },
   },
 ];
 
 // Khía cạnh — thứ tự = độ ưu tiên.
 const ASPECTS: [string, RegExp][] = [
-  ["overdose", /\b(qua lieu|uong qua nhieu|uong nham|uong nhieu qua|lo uong|uong ca vi|uong ca hop)\b/],
+  ["overdose", /\b(qua lieu|uong qua nhieu|uong nham|uong nhieu qua|uong nhieu|lo uong|uong ca vi|uong ca hop|hai gan|ton thuong gan|suy gan)\b/],
   ["kid", /\b(tre|be|em be|con minh|tre em|\d+ tuoi)\b/],
   ["dose", /\b(bao nhieu vien|may vien|lieu|bao nhieu mg|uong bao nhieu|cach uong|uong may lan|may tieng uong)\b/],
   ["alcohol", /\b(ruou|bia)\b/],

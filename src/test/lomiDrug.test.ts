@@ -54,7 +54,7 @@ describe("drugAsk — nội dung lời đáp", () => {
     const r = drugAsk("thuốc này uống với bia được không")!;
     expect(r.text).toMatch(/không có dữ liệu tương tác thuốc/);
     expect(r.text).toMatch(/rượu bia/);
-    expect(drugAsk("ibuprofen uống chung với paracetamol được không")!.text).toMatch(/xem thành phần trên hộp/);
+    expect(r.text).toMatch(/chưa xác minh được/);
   });
   it("uống nhầm / quá liều là việc gấp: 115, không tự gây nôn", () => {
     const r = drugAsk("a uống nhầm thuốc của vợ")!;

@@ -441,7 +441,8 @@ const RULES: Rule[] = [
   },
   // Chuyện cười
   {
-    re: /\b(ke chuyen cuoi|chuyen cuoi|ke chuyen|joke|lam lomi cuoi|lam minh cuoi|choc cuoi)\b/,
+    // ("a kể chuyện này nha", "để c kể cho nghe" — người DÙNG muốn kể → không phải xin Lomi kể chuyện cười.)
+    re: /\b(ke chuyen cuoi|chuyen cuoi|(?<!\b(a|anh|chi|c|minh|toi|tui|to|de|muon) )ke chuyen(?! (nay|kia|do|cua|ve|voi|cho (e|em|lomi|ban)|hom|luc|hoi))|joke|lam lomi cuoi|lam minh cuoi|choc cuoi)\b/,
     reply: () => ({
       text: pick([
         "Chuyện là: con robot đi khám bệnh. Bác sĩ hỏi “Bị sao?”. Robot đáp: “Dạ em bị… mất kết nối cảm xúc” 🤖💔 …Hic, Lomi kể dở hả 😅",
@@ -774,7 +775,7 @@ export const UNKNOWN_FULL =
   "Giờ để Lomi hỗ trợ ấy về vấn đề khác nheee 🫣 — bấm ❓ ở góc trên để xem gợi ý nha!";
 const UNKNOWN_SHORT = [
   "Hic, cái này Lomi cũng chưa được học luôn 🥲 Ấy bấm 💡 Dạy Lomi ngay dưới câu này để gửi ban quản trị dạy Lomi nha!",
-  "Câu này lại làm khó Lomi rồi 😵‍💫 Nhấn 💡 Dạy Lomi bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
+  "Chuyện này Lomi chưa có kiến thức để trả lời rồi 😵‍💫 Nhấn 💡 Dạy Lomi bên dưới giúp Lomi nha, ban quản trị sẽ dạy Lomi sau 🍀",
   "Ui, Lomi chưa biết cái này nữa 🙈 Ấy gửi giúp Lomi bằng nút 💡 Dạy Lomi nha — lần sau Lomi trả lời được liền!",
 ];
 const UNKNOWN_STICKERS = ["chongmat", "toatmohoi", "suynghi", "ngai", "canloi", "doi", "ngacnhien"];

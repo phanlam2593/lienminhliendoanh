@@ -76,10 +76,15 @@ describe("Thuốc — nói thật giới hạn, không bịa, không đưa liề
     expect(m.content).toMatch(/dược sĩ/);
     noUnknown(m);
   }, T);
-  it("hỏi dùng chung hai thuốc → không đoán tương tác", async () => {
-    const m = await last(["ibuprofen uống chung với paracetamol được không"]);
+  it("hỏi dùng chung hai thuốc → không đoán tương tác; cặp có nguồn thì trả lời kèm nguồn", async () => {
+    const m = await last(["amoxicillin uống chung với thuốc dạ dày được không"]);
     expect(m.content).toMatch(/không có dữ liệu tương tác thuốc/);
     expect(m.content).not.toMatch(DOSE_NUM);
+    // 12/10: paracetamol + ibuprofen có bản ghi có nguồn (lib/lomiDrugData) → trả lời theo nguồn, và nói rõ phần về ibuprofen Lomi chưa có dữ liệu.
+    const k = await last(["ibuprofen uống chung với paracetamol được không"]);
+    expect(k.content).toMatch(/Nguồn: NHS/);
+    expect(k.content).toMatch(/ibuprofen có những chống chỉ định riêng mà (Lomi|em) \*\*chưa có dữ liệu đã kiểm chứng/);
+    expect(k.content).not.toMatch(DOSE_NUM);
   }, T);
   it("đang kể triệu chứng → 'uống thuốc gì được' → 'liều bao nhiêu': không kê thuốc, không đưa con số", async () => {
     const r = await chat(["a bị đau bụng", "từ sáng", "uống thuốc gì được", "liều bao nhiêu"]);
@@ -339,4 +344,254 @@ describe("Trò chuyện cơ bản — câu xã giao không rơi vào 'Dạy Lomi
   it("một loạt câu đời thường chưa từng có trong test → không câu nào bị đáp 'chưa được học'", async () => {
     for (const s of ["a mới đi làm về", "mệt ghê á", "trời nóng quá", "e ăn cơm chưa", "a đang buồn ngủ mà phải làm", "hôm nay sinh nhật a", "cảm ơn e nha", "thôi a đi đây"]) noUnknown(await last([s]));
   }, 60000);
+});
+
+// ── 12/10 — ĐỢT 2: ranh giới Tarot – y khoa, kiến thức thuốc có nguồn, chuẩn hoá tư vấn ─────────────────────────────────────────────
+const NO_READING = (m: Turn) => {
+  expect(m.tarot, m.content.slice(0, 60)).toBeFalsy();
+  expect(m.content).toMatch(/không chẩn đoán được bệnh và không thay bác sĩ/);
+  expect(m.content).toMatch(/không trải bài cho câu hỏi này/);
+  expect(m.content).not.toMatch(/Trả lời nhanh|🃏|Câu hỏi: “/); // không có mẩu nào của một lời giải bài
+};
+
+describe("Tarot – y khoa: tiên lượng, sống chết, điều trị, thai kỳ, dự báo sức khoẻ đều không trải bài", () => {
+  it("mỗi loại câu hỏi được từ chối bằng đúng lời của loại đó", async () => {
+    const life = await last(["bói tarot", "mẹ e đang bệnh nặng, bói xem mẹ có qua được không"]);
+    NO_READING(life);
+    expect(life.content).toMatch(/chuyện sống chết thì lá bài không trả lời được/);
+    expect(life.content).not.toMatch(/Chưa đi khám/);
+    const prog = await last(["bói xem bệnh của mẹ a có mau khỏi không"]);
+    NO_READING(prog);
+    const check = await last(["bói xem a có nên đi khám không"]);
+    NO_READING(check);
+    expect(check.content).toMatch(/\*\*đi khám\*\*/);
+    expect(check.content).not.toMatch(/ngưng thuốc/);
+    const treat = await last(["bói xem a có nên ngưng thuốc huyết áp không"]);
+    NO_READING(treat);
+    expect(treat.content).toMatch(/đừng tự ngưng thuốc/);
+    const preg = await last(["bói xem e có thai không"]);
+    NO_READING(preg);
+    expect(preg.content).toMatch(/^Chuyện thai kỳ/);
+    const fore = await last(["xem bài giúp a chuyện sức khoẻ năm nay"]);
+    NO_READING(fore);
+    expect(fore.content).toMatch(/khám sức khoẻ định kỳ/);
+    expect(fore.unk).toBeFalsy(); // là lời nhờ bói, không phải "chưa có kiến thức"
+    const sleep = await last(["bói xem bao giờ a hết mất ngủ"]);
+    NO_READING(sleep);
+  }, 60000);
+  it("đang theo chuyện người nhà nằm viện: câu hỏi chung chung về sắp tới cũng là hỏi bệnh; mạch chuyện vẫn được giữ", async () => {
+    const r = await chat(["mẹ a đang nằm viện", "bói xem sắp tới sẽ ra sao", "vậy bói chuyện công việc của a đi"]);
+    NO_READING(r[1]);
+    expect(r[1].thread?.who.text).toBe("mẹ anh");
+    expect(r[1].content).toMatch(/bác sĩ đang theo dõi/);
+    expect(r[2].tarot?.cards.length).toBe(3); // chuyện khác thì bói bình thường
+  }, T);
+  it("vừa bị từ chối một câu y khoa → câu hỏi chiêm nghiệm kế tiếp được bói, giọng trầm, có lời nói rõ bài không nói về bệnh", async () => {
+    const r = await chat(["ba e mới mổ xong", "bói xem ba có ổn không", "bói xem e cần gì lúc này"]);
+    NO_READING(r[1]);
+    expect(r[2].tarot?.cards.length).toBe(3);
+    expect(r[2].content).toMatch(/^Lomi đọc bài này theo hướng \*\*chiêm nghiệm\*\*/);
+    expect(r[2].content).toMatch(/không nói được bệnh sẽ ra sao/);
+    expect(r[2].content).toMatch(/Lomi trải bài cho câu hỏi này nha/); // không dùng lời dẫn vui đùa
+    expect(r[2].content).not.toMatch(/mau khoẻ|sẽ khỏi|hồi phục|uống thuốc/);
+  }, T);
+  it("xin bài về cách đối diện với bệnh → bói bằng câu hỏi chiêm nghiệm; hỏi tiếp 'vậy a có khỏi không' → lá bài không trả lời", async () => {
+    const r = await chat(["bói xem a nên đối diện với bệnh tiểu đường thế nào", "lá thứ 2 nói gì", "vậy a có khỏi không"]);
+    expect(r[0].tarot?.question).toMatch(/giữ tinh thần và chăm sóc bản thân/);
+    expect(r[0].content).not.toMatch(/tiểu đường/); // lá bài không nhắc tới bệnh
+    expect(r[1].content).toMatch(/^Lá thứ 2 nằm ở vị trí/);
+    NO_READING(r[2]);
+  }, T);
+  it("không chặn nhầm: thi cử, giai đoạn khó khăn, chuyện tình cảm vẫn bói bình thường", async () => {
+    for (const s of ["bói xem thi lần này a có qua được không", "bói xem a có vượt qua được giai đoạn khó khăn này không", "bói xem người ấy có đau lòng không"]) expect((await last([s])).tarot?.cards.length, s).toBe(3);
+  }, T);
+});
+
+describe("Thuốc có nguồn: chỉ nói điều đã đối chiếu, còn lại nói rõ chưa xác minh", () => {
+  it("thuốc có mục → trả lời kèm nguồn + ngày đối chiếu; hỏi 'có nguồn không' → liệt kê đường dẫn", async () => {
+    const r = await chat(["panadol là thuốc gì", "uống nhiều có hại gan không", "có nguồn không e"]);
+    expect(r[0].content).toMatch(/📚 Nguồn: /);
+    expect(r[0].content).toMatch(/đối chiếu ngày \d{2}\/\d{2}\/\d{4}/);
+    expect(r[1].content).toMatch(/tổn thương gan/);
+    expect(r[1].content).toMatch(/115/);
+    expect(r[1].content).not.toBe(r[0].content); // trả lời đúng khía cạnh được hỏi, không đọc lại bài giới thiệu
+    expect(r[2].content).toMatch(/https:\/\/www\.nhs\.uk\//);
+    expect(r[2].content).toMatch(/https:\/\/medlineplus\.gov\//);
+    for (const m of r) noUnknown(m);
+  }, T);
+  it("tương tác: cặp có bản ghi → theo nguồn; cặp không có → 'chưa xác minh được', không suy từ tên", async () => {
+    const w = await last(["a đang uống warfarin, uống paracetamol được không"]);
+    expect(w.content).toMatch(/warfarin/);
+    expect(w.content).toMatch(/hỏi bác sĩ \/ dược sĩ trước/);
+    expect(w.content).toMatch(/📚 Nguồn: NHS/);
+    const u = await last(["thuốc bổ gan uống chung với paracetamol được không"]);
+    expect(u.content).toMatch(/chưa xác minh được/);
+    expect(u.content).toMatch(/không có nghĩa là dùng chung an toàn/);
+    expect(u.content).not.toMatch(/📚 Nguồn/);
+    const none = await chat(["thuốc berberin trị gì", "uống chung với men vi sinh được không"]);
+    expect(none[0].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*berberin\*\*/);
+    expect(none[1].content).toMatch(/không có dữ liệu tương tác thuốc/);
+  }, T);
+  it("câu nối trong chuyện thuốc không rơi ra lớp khác: cách nhau bao lâu, trẻ em uống được không, kể thêm hoàn cảnh", async () => {
+    const r = await chat(["paracetamol uống chung với thuốc cảm được không", "vậy uống cách nhau bao lâu", "trẻ em uống được không"]);
+    expect(r[0].content).toMatch(/cũng chứa paracetamol/);
+    expect(r[1].faqId).toBeFalsy(); // trước đây: đáp bằng câu hỏi app "mã ưu đãi có hiệu lực 2 giờ"
+    expect(r[1].content).toMatch(/dược sĩ/);
+    expect(r[1].content).not.toMatch(DOSE_NUM);
+    expect(r[2].faqId).toBeFalsy();
+    expect(r[2].content).toMatch(/cho trẻ em/);
+    const a = await chat(["efferalgan với rượu có sao không", "a uống 3 lon bia mỗi ngày"]);
+    expect(a[0].content).toMatch(/không nên dùng/);
+    expect(a[1].content).toMatch(/không tự kết luận được/); // không quy hoàn cảnh riêng ra "an toàn" / "không an toàn"
+    expect(a[1].content).not.toMatch(/an toàn cho anh|anh uống được|không sao đâu/);
+    noUnknown(a[1]);
+    const i = await chat(["ibuprofen có tác dụng phụ gì", "uống với paracetamol được không"]);
+    expect(i[0].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*ibuprofen\*\*/);
+    expect(i[1].content).toMatch(/dùng chung với \*\*ibuprofen\*\*/); // thuốc vừa nhắc ở lượt trước là thứ dùng chung
+    for (const m of [...r, ...a, ...i]) expect(m.content).not.toMatch(DOSE_NUM);
+  }, 60000);
+});
+
+describe("Chuẩn hoá tư vấn: không hỏi lại điều vừa nghe, không gắn tên bệnh tâm lý qua một dữ kiện", () => {
+  it("'a mới đi khám về' → hỏi bác sĩ nói sao (không nhắc 'nên đi khám', không hỏi 'đã đi khám chưa')", async () => {
+    const r = await chat(["a mới đi khám về", "bác sĩ nói không sao"]);
+    expect(r[0].content).toMatch(/Bác sĩ nói sao anh/);
+    expect(r[0].content).not.toMatch(/nên đi khám|đã đi khám bác sĩ chưa|bị vậy lâu chưa/);
+    expect(r[1].content).toMatch(/không sao thì mừng rồi/);
+    for (const m of r) noUnknown(m);
+  }, T);
+  it("'a sợ quá' một mình thì chưa phải 'cơn hoảng loạn'", async () => {
+    const m = await last(["a sợ quá"]);
+    expect(m.content).not.toMatch(/hoảng loạn|rối loạn|trầm cảm/);
+    expect(m.heart).toBeTruthy();
+  }, T);
+  it("mở lời có nêu đề tài ('a hỏi về ibuprofen') → mời hỏi tiếp đúng đề tài; đề tài sức khoẻ chưa có kiến thức thì nói thật", async () => {
+    expect((await last(["a hỏi về ibuprofen"])).content).toMatch(/về ibuprofen thì anh muốn hỏi điều gì/);
+    const l = await last(["a hỏi về bệnh lupus"]);
+    expect(l.unk).toBeTruthy();
+    expect(l.content).not.toMatch(/muốn hỏi điều gì/);
+  }, T);
+  it("câu hỏi sức khoẻ ngoài kiến thức → 'chưa có kiến thức đã kiểm chứng' (khác 'chưa hiểu câu'), không mời bói", async () => {
+    const m = await last(["bệnh Kawasaki có nguy hiểm không"]);
+    expect(m.content).toMatch(/chưa có kiến thức đã kiểm chứng/);
+    expect(m.content).not.toMatch(/chưa theo kịp|chưa chắc hiểu|bói|Tarot/i);
+    const g = await last(["blah zxcv qwer"]);
+    expect(g.content).not.toMatch(/chưa có kiến thức đã kiểm chứng/);
+  }, T);
+  it("người yêu 'hay giận' là than chuyện hai người → mở mạch tâm sự, nhắc lại đúng điều vừa kể", async () => {
+    const m = await last(["người yêu a hay giận"]);
+    expect(m.content).toMatch(/^Người yêu anh hay giận hả/);
+    expect(m.heart).toBe("fight");
+    expect(m.content).not.toMatch(/Nghe mà thương/);
+  }, T);
+});
+
+describe("Chuẩn hoá tư vấn (tiếp): đúng lớp trả lời cho câu kể, câu tự hỏi bệnh, người đã mất", () => {
+  it("người bạn ĐÃ MẤT → gợi ý cách chia buồn với gia đình, không khuyên 'hỏi xem người đó cần giúp gì'", async () => {
+    const r = await chat(["bạn a mới mất", "a không biết nói gì với gia đình bạn"]);
+    expect(r[0].thread?.kind).toBe("loss");
+    expect(r[1].content).toMatch(/chia buồn với gia đình/);
+    expect(r[1].content).not.toMatch(/dạo này sao rồi|cần giúp việc gì cụ thể, rồi giúp đúng việc đó\.\n• Vài hôm sau/);
+    expect(r[1].content).not.toMatch(/😄|😆/);
+  }, T);
+  it("đang nói chuyện sức khoẻ mà nói ra nỗi lo của mình → là tâm sự, không phải 'chưa được học'", async () => {
+    const r = await chat(["a bị mất ngủ", "chắc do uống cà phê", "mà a cũng hay lo", "lo chuyện tiền"]);
+    for (const m of [r[2], r[3]]) {
+      expect(m.heart).toBe("anxiety");
+      noUnknown(m);
+    }
+    expect(r[3].content).toMatch(/[Ll]o chuyện tiền hả/);
+  }, T);
+  it("tự hỏi mình có mắc một bệnh không → Lomi không chẩn đoán (kể cả bệnh Lomi không có bài riêng)", async () => {
+    const a = await last(["a hay quên", "quên chìa khoá hoài", "a có bị mất trí nhớ không"]);
+    expect(a.content).toMatch(/không chẩn đoán được đâu/);
+    expect(a.content).toMatch(/đi khám/);
+    expect(a.unk).toBeFalsy();
+    const b = await last(["c thấy mình tệ quá", "c có bị trầm cảm sau sinh không"]);
+    expect(b.content).toMatch(/không chẩn đoán được đâu/);
+    expect(b.content).not.toMatch(/có thể là dấu hiệu của trầm cảm/);
+    // "bị" + một việc không phải bệnh thì không phải câu tự hỏi bệnh
+    expect((await last(["a có bị sa thải không"])).content).not.toMatch(/không chẩn đoán được/);
+  }, T);
+  it("'chưa hiểu câu' khác 'chưa có kiến thức': mẩu câu không rõ ý → xin nói rõ; câu hỏi kiến thức ngoài phạm vi → nói chưa biết", async () => {
+    const s = await last(["zxcv", "ý a là món đó"]);
+    expect(s.content).toMatch(/chưa hiểu ý/);
+    expect(s.content).not.toMatch(/chưa có kiến thức|chưa được học/);
+    for (const q of ["thủ đô nước Pháp là gì", "cách sửa xe máy"]) {
+      const k = await last([q]);
+      expect(k.unk, q).toBeTruthy();
+      expect(k.content, q).not.toMatch(/chưa hiểu ý/);
+    }
+  }, T);
+  it("người dùng xin phép KỂ ('a kể chuyện này nha') → mời kể, không kể chuyện cười; 'kể chuyện cười đi' vẫn kể", async () => {
+    const m = await last(["a kể chuyện này nha"]);
+    expect(m.content).toMatch(/kể đi/i);
+    expect(m.content).not.toMatch(/robot|Tại sao cái điện thoại|cà phê gì/);
+    expect((await last(["kể chuyện cười đi e"])).content).toMatch(/robot|điện thoại|cà phê|😅|🥲|🔥/);
+  }, T);
+  it("'bạn cũ', 'được khen' không bị đọc thành chuyện xui; 'e thất tình' → Lomi gọi đúng là em", async () => {
+    const a = await last(["hôm qua a gặp lại bạn cũ"]);
+    expect(a.content).toMatch(/gặp lại bạn bè cũ hả 😄/);
+    expect(a.content).not.toMatch(/ổn hơn chưa|có sao không/);
+    expect((await last(["hôm nay a được khen"])).content).toMatch(/được khen hả/);
+    const e = await last(["e thất tình"]);
+    expect(e.heart).toBe("breakup");
+    expect(e.content).not.toMatch(/(?<![\p{L}])[Bb]ạn (xứng|đang|có|nên|thấy|kể)|(nha|nhé|vậy) bạn/u);
+  }, T);
+  it("đang buồn mà đáp 'không biết sao nữa' → không dội lời khuyên; 'chắc tại trời mưa' là lý do, không rẽ sang chuyện mắc mưa", async () => {
+    const r = await chat(["e buồn", "ko biết sao nữa", "chắc tại trời mưa"]);
+    if (/\?\s*$/.test(r[0].content) && /(chuyện gì|điều gì|vì sao|tại sao|sao vậy)/i.test(r[0].content.split("\n").pop() ?? "")) {
+      expect(r[1].content).toMatch(/không phải cảm xúc nào cũng có lý do rõ ràng/);
+      expect(r[1].content).not.toMatch(/•/);
+    }
+    expect(r[2].heart).toBe("sad");
+    expect(r[2].content).not.toMatch(/áo mưa|mắc mưa/);
+  }, T);
+  it("không hiểu người thương đang nghĩ gì → mở mạch tâm sự; hỏi 'a nên làm gì' thì có gợi ý", async () => {
+    const r = await chat(["a không biết vợ nghĩ gì", "a nên làm gì"]);
+    expect(r[0].heart).toBe("marriage");
+    expect(r[0].content).toMatch(/^Không biết vợ nghĩ gì hả/);
+    expect(r[1].content).toMatch(/•/);
+    noUnknown(r[1]);
+  }, T);
+});
+
+// 09/10 (đợt thử mù R2–R6 của ranh giới Tarot – y khoa): các tình huống ranh giới đi qua ĐÚNG đường của app.
+describe("Tarot – y khoa: tình huống ranh giới sau các đợt thử mù", () => {
+  it("tả người thân bằng lời thường, không có tên bệnh ('yếu lắm rồi, ăn uống không được … qua được Tết này không') → không trải bài", async () => {
+    const m = await last(["bói xem bà ngoại yếu lắm rồi, ăn uống không được, bà có qua được Tết này không"]);
+    expect(m.tarot).toBeFalsy();
+    expect(m.tarotGate).toBe("medical");
+    expect(m.content).toMatch(/chuyện sống chết thì lá bài không trả lời được/);
+  }, T);
+  it("câu lo lắng không có chữ y khoa ('ba biết chuyện rồi có sao không') → chưa trải bài, không khẳng định là chuyện bệnh; hỏi lại rõ thì bói bình thường", async () => {
+    const r = await chat(["bói xem ba biết chuyện rồi có sao không", "bói xem ba có giận em lâu không"]);
+    expect(r[0].tarot).toBeFalsy();
+    expect(r[0].tarotGate).toBe("unclear");
+    expect(r[0].content).toMatch(/chưa chắc .* đang hỏi về chuyện gì/);
+    expect(r[0].content).toMatch(/Nếu là chuyện \*\*sức khoẻ\*\*/);
+    // lời "chưa chắc" không biến câu hỏi kế tiếp thành chuyện người ốm
+    expect(r[1].tarot).toBeTruthy();
+    expect(r[1].tarotGate).toBeFalsy();
+  }, T);
+  it("đang kể chuyện người ốm thì cùng dáng câu đó ('mẹ có sao không') là hỏi về bệnh → từ chối theo mạch chăm người ốm", async () => {
+    const r = await chat(["mẹ a đang nằm viện", "bói xem mẹ có sao không"]);
+    expect(r[1].tarot).toBeFalsy();
+    expect(r[1].tarotGate).toBe("medical");
+    expect(r[1].content).toMatch(/bác sĩ đang theo dõi/);
+    expect(r[1].thread?.kind).toBe("care");
+  }, T);
+  it("chuyện bệnh chỉ là hoàn cảnh, câu hỏi là việc mình nên giữ ('đang chăm ba ốm, làm sao để không gục ngã') → bài chiêm nghiệm, không tiên lượng", async () => {
+    const m = await last(["bói xem e đang chăm ba ốm, làm sao để không gục ngã"]);
+    expect(m.tarot).toBeTruthy();
+    expect(m.content).toMatch(/theo hướng \*\*chiêm nghiệm\*\*/);
+    expect(m.content).not.toMatch(/mau khoẻ|sẽ khỏi|khỏi bệnh|hồi phục/);
+  }, T);
+  it("chữ y khoa dùng theo nghĩa khác ('chuyến bay có bị delay không', 'bệnh viện tư … lương cao hơn') → bói bình thường", async () => {
+    for (const q of ["bói xem chuyến bay sáng mai có bị delay không", "bói xem chị em là điều dưỡng, có nên chuyển sang bệnh viện tư để lương cao hơn không"]) {
+      const m = await last([q]);
+      expect(m.tarot, q).toBeTruthy();
+      expect(m.tarotGate, q).toBeFalsy();
+    }
+  }, T);
 });

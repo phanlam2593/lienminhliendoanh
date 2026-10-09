@@ -187,7 +187,7 @@ export function displayName(mem: LomiMem, fullName?: string | null): string | un
 /** Ghi nhớ cách người dùng tự xưng (anh / chị / em / bạn) để Lomi xưng hô đối xứng — lib/lomiAddress.
  *  Người dùng nói rõ ("gọi tui là anh nha") → khoá; đã khoá thì câu bình thường không đổi được nữa.
  *  Trả về explicit = true khi vừa đổi theo yêu cầu rõ ràng (để Lomi xác nhận lại). */
-export function learnAddr(uid: string, raw: string, hint: { force?: Addr; fallback?: Addr } = {}): { addr?: Addr; explicit?: Addr } {
+export function learnAddr(uid: string, raw: string, hint: { force?: Addr; fallback?: Addr; /** đang kể chuyện tình cảm — đại từ lạ trong câu nhiều khả năng là người kia, không phải người nói */ hold?: boolean } = {}): { addr?: Addr; explicit?: Addr } {
   const m = loadMem(uid);
   const ex = explicitAddr(raw);
   if (ex) {
@@ -200,7 +200,16 @@ export function learnAddr(uid: string, raw: string, hint: { force?: Addr; fallba
   //  • force: "e / em" trong câu này là GỌI Lomi ("e ăn tối chưa", "chúc e ngủ ngon") chứ không phải người dùng tự xưng em
   //    → dùng kết luận đó thay cho phép đoán theo "e + động từ";
   //  • fallback: chủ ngữ câu là người nói tự xưng anh / chị với một động từ phép đoán cũ không biết ("a cưới", "chị nghỉ phép").
-  const a = m.addrLocked ? null : (hint.force ?? detectAddr(raw) ?? hint.fallback ?? null);
+  let a = m.addrLocked ? null : (hint.force ?? detectAddr(raw) ?? hint.fallback ?? null);
+  // 12/10 — GIỮ xưng hô ổn định: đã biết người dùng xưng anh / chị / em thì một câu có đại từ khác đi với động từ chưa đủ để đổi —
+  // người xưng "em" kể "a không nhắn cho e 3 ngày rồi" là đang nói về NGƯỜI YÊU; người xưng "anh" kể "e không trả lời a" cũng vậy.
+  // Chỉ đổi khi câu KHÔNG còn chữ tự xưng cũ và chữ tự xưng mới đứng đầu câu (hoặc người dùng nói rõ — explicitAddr ở trên).
+  const KNOWN: Record<string, RegExp> = { anh: /(?<![\p{L}])(a|anh)(?![\p{L}])/iu, chị: /(?<![\p{L}])(c|chị)(?![\p{L}])/iu, em: /(?<![\p{L}])(e|em)(?![\p{L}])/iu };
+  if (a && m.addr && KNOWN[m.addr] && KNOWN[a] && a !== m.addr) {
+    const hasOld = KNOWN[m.addr].test(raw);
+    const startsNew = new RegExp(`^\\s*${a === "anh" ? "(a|anh)" : a === "chị" ? "(c|chị)" : "(e|em)"}(?![\\p{L}])`, "iu").test(raw);
+    if (hasOld || !startsNew || hint.hold) a = null;
+  }
   // "bạn-em" (chỉ biết người dùng gọi Lomi là em) không ghi đè cách xưng rõ hơn đã biết (anh/chị).
   if (a && a !== m.addr && !(a === "bạn-em" && (m.addr === "anh" || m.addr === "chị"))) {
     m.addr = a;

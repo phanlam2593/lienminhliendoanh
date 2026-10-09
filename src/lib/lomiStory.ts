@@ -70,14 +70,19 @@ export type StoryEnv = {
 
 // ── Đọc chữ: có dấu thì so có dấu, gõ không dấu thì so không dấu (tránh "đỡ" / "đó", "khám" / "kham") ─────────────
 const bare = (x: string) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
-export type Txt = { s: string; b: string; loose: boolean; words: number };
+export type Txt = { s: string; b: string; loose: boolean; words: number; /** gần như không dấu — xem txt() */ mixed?: boolean };
 export function txt(raw: string): Txt {
   const clean = (x: string) => ` ${x.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim()} `;
   // Câu gõ KHÔNG DẤU thì giữ nguyên chữ người dùng gõ (không đổi teen code — "hong" trong "viem hong" không phải "không").
   const base = clean(raw);
   const loose = base === bare(base);
   const s = loose ? base : clean(expandTeen(raw));
-  return { s, b: bare(s), loose, words: s.trim() ? s.trim().split(" ").length : 0 };
+  // 09/10: câu GẦN NHƯ không dấu — người dùng gõ không dấu nhưng chữ tắt đã được đổi ở bước trước ("ko" → "không", "r" → "rồi", "gi" → "gì"),
+  // hoặc gõ lẫn vài chữ có dấu ("me e hoa tri dot 2 rồi, co dap ung không"). Trước đây cả câu bị coi là CÓ DẤU nên mọi chữ không dấu
+  // trong đó ("hoa tri", "nam vien", "benh") không được nhận ra. Giờ: chữ có dấu vẫn so có dấu trước, không khớp thì so thêm bản không dấu.
+  const ws = s.trim() ? s.trim().split(" ") : [];
+  const mixed = !loose && ws.length >= 3 && ws.filter((w) => w !== bare(w)).length / ws.length < 0.4;
+  return { s, b: bare(s), loose, words: ws.length, mixed };
 }
 /** Mẫu viết CÓ DẤU, tự sinh bản không dấu. (?<!L) / (?!L): ranh giới từ cho chữ có dấu. */
 export function P(src: string, looseSrc?: string) {
@@ -85,7 +90,14 @@ export function P(src: string, looseSrc?: string) {
   const a = wrap(src);
   // looseSrc: bản riêng cho câu gõ KHÔNG DẤU khi chữ bỏ dấu dễ trùng nghĩa khác ("đỡ" → "do", "nhẹ" → "nhe" = nhé, "già" → "gia").
   const b = wrap(looseSrc ?? bare(src));
-  return (t: Txt) => (t.loose ? t.b.match(b) : t.s.match(a));
+  return (t: Txt) => {
+    if (t.loose) return t.b.match(b);
+    const ma = t.s.match(a);
+    // Câu gần như không dấu: chỉ tin bản CÓ DẤU khi chỗ khớp thật sự có dấu ("mổ", "bệnh"); chữ vốn không dấu ("ho", "u", "thai") trong
+    // một câu như vậy là chữ gõ thiếu dấu ("ho dang nghi gì" = họ đang nghĩ gì) → xét theo bản không dấu, vốn đã loại các chữ dễ trùng.
+    if (!t.mixed || (ma && ma[0] !== bare(ma[0]))) return ma;
+    return t.b.match(b);
+  };
 }
 const NEG_WORD = P("chưa|không|ko|chẳng|chả|đâu có|đã đâu|hông|hổng", "chua|khong|ko|k|chang|dau co|hok");
 /** Từ khoá có bị phủ định không: có từ phủ định trong 3 tiếng đứng ngay trước ("chưa đi khám", "không chịu uống thuốc"). */

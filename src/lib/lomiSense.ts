@@ -316,7 +316,7 @@ const STATES: StateDef[] = [
   },
   {
     id: "goodnews",
-    re: W("(vừa|mới) (trúng|được|đậu|đỗ|nhận|thắng|lên)( \\p{L}+)*( số| giải| lương| chức| việc| điểm| tiền| học bổng| đại học| phỏng vấn)|trúng số|đậu (đại học|phỏng vấn|rồi)|được (tăng lương|thăng chức|nhận việc|điểm cao|khen)"),
+    re: W("(vừa|mới) (trúng|được|đậu|đỗ|nhận|thắng|lên)( \\p{L}+)*( số| giải| lương| chức| việc| điểm| tiền| học bổng| đại học| phỏng vấn)|trúng số|đậu (đại học|phỏng vấn|rồi)|được (tăng lương|thăng chức|nhận việc|điểm cao|khen)|(vừa |mới )sinh (em bé|con trai|con gái|con|bé)|sinh em bé rồi"),
     reply: () => ({ text: pick(["Wow chúc mừng bạn nha 🎉🥳 Tin vui vậy là phải ăn mừng chút xíu rồi! Kể Lomi nghe chi tiết đi nào!", "Hay quá trời luôn 🎊 Lomi vui lây nè! Bạn định ăn mừng thế nào vậy?"]) }),
   },
   {
@@ -467,7 +467,7 @@ const REACTION = /^(buon cuoi|mac cuoi|hai|hai huoc|vui|de thuong|dinh|xin|ghe|k
 const TALK_POS = W("vui|đã ghê|đã quá|thích|ngon|đẹp|được thưởng|được khen|được nghỉ|được tăng|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
 // Từ hay gặp trong câu KỂ TIẾP ("câu được mấy con cá to") — đủ để biết là đang kể, nhưng chưa đủ để nói đó là chuyện vui.
 const TALK_MORE = W("đã|to|nhiều|được");
-const TALK_NEG = W("không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư");
+const TALK_NEG = W("cáu gắt|nổi nóng|cáu|quên|không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư");
 const ACT_STOP = new Set("với cùng ở tại rồi nè nha mà thì và hôm lúc xong về cho để nên quá lắm ghê luôn á ạ nhưng mới vừa đang mấy nhiều hoài suốt nữa đó".split(" "));
 /** Việc vừa kể: "hôm qua anh đi câu cá với mấy đứa bạn" → "đi câu cá" (động từ + tối đa 3 từ, dừng ở từ nối). */
 function echoAct(s: string): string {
@@ -501,7 +501,7 @@ export function isUpbeat(raw: string): boolean {
   return !TALK_NEG.test(s) && !negatedPos(s) && !/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) && !isAskLike(raw);
 }
 /** sober = đang nói chuyện không vui của một người (Lomi vừa đáp bằng giọng chia sẻ) → lời đáp ngắn không kèm mặt cười. */
-export function talkContinue(raw: string, depth: number, sober = false, lastText = ""): SenseReply {
+export function talkContinue(raw: string, depth: number, sober = false, lastText = "", mirror: string | null = null): SenseReply {
   const s = low(raw).replace(/[.!…,]+$/u, "");
   const words = s.split(/\s+/).filter(Boolean);
   const neg = TALK_NEG.test(s) || negatedPos(s) || /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
@@ -518,14 +518,19 @@ export function talkContinue(raw: string, depth: number, sober = false, lastText
       : frag
         ? `${frag} ${pick(["Ra là vậy.", "À à."])}`
         : sober
-          ? pick(["Vậy hả…", "Ừm, ra vậy.", "Lomi nghe nè."])
+          ? // 12/10: đang nghe chuyện không vui mà chỉ đáp "Vậy hả…" là câu cụt — có mẩu nhắc lại điều vừa nghe thì nhắc lại đúng điều đó.
+            mirror
+            ? `${cap(mirror)} hả 😔 ${pick(["Lomi hiểu.", "Nghe là thấy mệt rồi."])}`
+            : pick(["Vậy hả…", "Ừm, ra vậy.", "Lomi nghe nè."])
           : pick(["Ra là vậy 😄", "À, vậy hả 😮", "Ồ, vậy luôn 😄"]);
   // Lượt lẻ hỏi nối một câu; lượt chẵn chỉ đáp lại — không phải câu nào cũng kết bằng "kể thêm đi".
   const tailQ =
     depth % 2 === 1
       ? // Lomi vừa mời "kể … nghe với" và người dùng đang kể rồi thì không hỏi lại "có chuyện gì vậy" lần nữa.
         /kể \S+ nghe với/.test(lastText)
-        ? "Rồi giờ sao rồi bạn?"
+        ? neg || sober
+          ? "Rồi giờ sao rồi bạn?"
+          : "Rồi sao nữa nè?"
         : pick(neg || sober ? ["Rồi giờ sao rồi bạn?", "Có chuyện gì vậy, kể Lomi nghe với."] : ["Rồi sao nữa nè?", "Kể tiếp đi, Lomi đang nghe nè."])
       : depth >= 4
         ? "Nghe bạn kể mà Lomi thấy như được đi cùng luôn."
@@ -552,7 +557,7 @@ export function isPersonalTalk(raw: string): boolean {
 }
 
 /** Lưới cuối. Trả null = đây là câu HỎI KIẾN THỨC Lomi chưa có → để Lomi nói "chưa tiếp thu" + nút Dạy Lomi. */
-export function senseLate(raw: string, ctx: { lastText?: string; talk?: number } = {}): SenseReply | null {
+export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; mirror?: string | null } = {}): SenseReply | null {
   const n = normalizeVi(raw);
   if (!n) return null;
   const words = n.split(" ").length;
@@ -585,7 +590,7 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number }
   // không coi là câu độc lập để báo "chưa tiếp thu", và không lặp "kể thêm cho Lomi nghe" ở mọi lượt.
   // Vẫn phải nhận ra đây là lời kể (có người kể / cảm xúc / mẩu chi tiết ngắn / câu nối "xong…", "rồi…", "mà…");
   // một câu dài nói chuyện khác hẳn ("bitcoin hôm nay lên 100k") thì không giả vờ hiểu.
-  if (ctx.talk && isTalkCont(raw)) return talkContinue(raw, ctx.talk, /🥺|😔|😣/u.test(ctx.lastText ?? ""), ctx.lastText ?? "");
+  if (ctx.talk && isTalkCont(raw)) return talkContinue(raw, ctx.talk, /🥺|😔|😣/u.test(ctx.lastText ?? ""), ctx.lastText ?? "", ctx.mirror ?? null);
   if (words >= 2 && isPersonalTalk(raw)) {
     const s = low(raw);
     const sad = /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) || TALK_NEG.test(s);
@@ -613,7 +618,7 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number }
  * Trả null ⇒ thật sự bí: lúc đó (và chỉ lúc đó) AiAssistant mới logUnanswered + gắn `unk`.
  * hasSuggest = câu nói về app và đã có gợi ý câu hỏi gần đúng → không dùng lưới "lắng nghe / hỏi lại" (đưa gợi ý tốt hơn).
  */
-export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean; talk?: number } = {}): SenseReply | null {
+export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean; talk?: number; mirror?: string | null } = {}): SenseReply | null {
   // senseState đọc câu NGUYÊN VĂN (giữ :( và chữ kéo dài); senseLate đọc câu đã đổi teen code ("đc k" → "được không").
-  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText, talk: ctx.talk }));
+  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText, talk: ctx.talk, mirror: ctx.mirror }));
 }
