@@ -21,7 +21,8 @@ type Sym = { id: string; label: string; re: RegExp; red?: string };
 // ═══════════════════════ TRIỆU CHỨNG CƠ THỂ ═══════════════════════
 const SYMPTOMS: Sym[] = [
   // Toàn thân
-  { id: "fever", label: "sốt", re: /\b((bi|dang|hoi|phat|con|van|lai|them|co) sot|sot (cao|nhe|hoai|lien|keo dai|ve dem|ve chieu|mien man|\d+)|nong sot|sot ret)\b/ },
+  // 11/10: "con a sốt từ tối qua", "bé sốt cả đêm" — "sốt" đứng sau người bệnh / trước mốc thời gian cũng là sốt ("sốt ruột", "sốt sắng" thì không).
+  { id: "fever", label: "sốt", re: /\b((bi|dang|hoi|phat|con|van|lai|them|co) sot|sot (cao|nhe|hoai|lien|keo dai|ve dem|ve chieu|mien man|\d+)|nong sot|sot ret|(a|anh|e|em|c|chi|minh|toi|tui|be|chau|me|ma|bo|vo|chong|no) sot(?! ruot| sang)|sot (tu|ca|may|hon|gan|suot|roi))\b/ },
   { id: "highfever", label: "sốt cao", re: /\b(sot cao|sot (39|40|41)|sot tren 39)\b/ },
   { id: "chills", label: "ớn lạnh", re: /\b(on lanh|lanh run|run minh|gai oc|rung minh)\b/ },
   { id: "fatigue", label: "mệt mỏi", re: /\b(met moi|met lu|u oai|kiet suc|duoi suc|khong co suc|mat suc|met nhieu|hoi met|thay met|bi met|dang met|met met|met ca nguoi|nguoi met)\b/ },
@@ -58,7 +59,7 @@ const SYMPTOMS: Sym[] = [
   { id: "spray", label: "dùng thuốc xịt thông mũi lâu", re: /\b(otilin|otrivin|naphazolin|xylometazolin|thuoc xit mui|xit mui (hoai|hang ngay|moi ngay|lau|thuong xuyen)|khong xit khong tho duoc)\b/ },
   { id: "sorethroat", label: "đau họng", re: /\b(dau hong(?! lung| ben| phai| trai| mot ben)|rat hong|viem hong|nuot dau|dau khi nuot|ngua hong|vuong hong)\b/ },
   { id: "hoarse", label: "khàn tiếng", re: /\b(khan tieng|mat tieng|khan giong)\b/ },
-  { id: "cough", label: "ho", re: /\b((bi|dang|con|hay|van|lai|them|nay|may nay|mat) ho|ho (khan|co dom|nhieu|hoai|dai|keo dai|ve dem|lien tuc|sac sua|khong dut|suot|qua(?! dang)|ghe|lam|mai|hoai))\b/ },
+  { id: "cough", label: "ho", re: /\b((bi|dang|con|hay|van|lai|them|nay|may nay|mat) ho|(a|anh|e|em|c|chi|minh|toi|tui|be) ho(?! (a|anh|e|em|c|chi|minh|toi|tui|hang|noi|ngoai|nha|cua|ten|ho)\b)(?= |$)|ho (khan|co dom|nhieu|hoai|dai|keo dai|ve dem|lien tuc|sac sua|khong dut|suot|qua(?! dang)|ghe|lam|mai|hoai)|ho (ca |hon |gan |duoc )?(\d+|mot|hai|ba|may|vai) (ngay|hom|dem|tuan|thang)|ho tu (hom|tuan|thang|toi|sang|dem)|ho (thi (nen|uong|kieng|lam)|nen (uong|lam|an|kieng)|co sao khong|co nguy hiem))\b/ },
   { id: "phlegm", label: "ho có đờm", re: /\b(ho co dom|khac dom|dom vang|dom xanh|nhieu dom|co dom)\b/ },
   { id: "wheeze", label: "thở khò khè", re: /\b(kho khe|tho rit|tho khe khe)\b/ },
   { id: "bloodcough", label: "ho ra máu", re: /\b(ho ra mau|khac ra mau)\b/, red: "ho ra máu" },
@@ -952,7 +953,12 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   }
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
   if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
-    out.push(`Bạn đang bị **${joinVi(labels)}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• Bị bao lâu rồi, đau/khó chịu ở mức nào?\n• Có kèm sốt, nôn, hay triệu chứng nào khác không?`);
+    // 11/10: hỏi đúng điều CÒN THIẾU — đã nói "từ tối qua" thì không hỏi lại "bao lâu rồi"; đang kể sốt thì hỏi mấy độ, không hỏi "có kèm sốt không".
+    const since = /\b(tu (toi|sang|chieu|trua|dem|hom|tuan|thang)|hom qua|toi qua|sang nay|chieu nay|toi nay|dem qua|may hom nay|may ngay nay|ca (ngay|dem|tuan|thang)|(\d+|mot|hai|ba|may|vai) (ngay|hom|tuan|thang) nay)\b/.test(` ${n} `);
+    const fev = all.includes("fever");
+    const q1 = fev ? `Sốt khoảng bao nhiêu độ${since ? "" : ", bị bao lâu rồi"}?` : since ? "Mức độ ra sao — nhẹ, vừa hay dữ dội?" : "Bị bao lâu rồi, đau/khó chịu ở mức nào?";
+    const q2 = fev ? "Có kèm ho, nôn, đau đầu, hay triệu chứng nào khác không?" : "Có kèm sốt, nôn, hay triệu chứng nào khác không?";
+    out.push(`Bạn đang bị **${joinVi(labels)}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• ${q1}\n• ${q2}`);
     out.push("Nếu thấy đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay, đừng chờ.");
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };

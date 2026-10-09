@@ -355,7 +355,7 @@ function fold(s: string): string {
 }
 
 const TRIG =
-  /(?<![a-z])(boi\s+tarot|xem\s+tarot|tarot|boi\s+bai|rut\s+bai|trai\s+bai|xem\s+boi|boi\s+toan|rut\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi)(?![a-z])/g;
+  /(?<![a-z])(boi\s+tarot|xem\s+tarot|tarot|boi\s+bai|rut\s+bai|trai\s+bai|xem\s+bai\s+(?:(?:1|mot|3|ba|5|nam|10|muoi)\s+la|tarot)|xem\s+boi|boi\s+toan|rut\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|trai\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi)(?![a-z])/g;
 
 function findTrigger(orig: string, f: string): { start: number; end: number } | null {
   TRIG.lastIndex = 0;
@@ -435,13 +435,29 @@ export function isDailyAsk(text: string) {
   return /^(cho |xem |rut )?(thong diep( hom nay)?|hom nay|ngay hom nay|1 la|mot la|today('s message)?)\s*[?.!]*$/.test(f);
 }
 export function isTarotMore(text: string) {
-  return /(?<![a-z])(rut them|them 1 la|them mot la|lam ro|rut 1 la nua|rut them 1 la|draw one more|one more card)(?![a-z])/.test(fold(text));
+  return /(?<![a-z])(rut them|them 1 la|them mot la|lam ro|rut 1 la nua|rut them 1 la|rut tiep|boc them|lat them|them la nua|draw one more|one more card)(?![a-z])/.test(fold(text));
 }
 export function isTarotRedo(text: string) {
   return /(?<![a-z])(boi lai|rut lai|xao lai|redraw|draw again)(?![a-z])/.test(fold(text));
 }
 export function isTarotCancel(text: string) {
   return /^(thoi|khong|ko|huy|khoi|de sau|no|cancel|stop)(?![a-z])/.test(fold(text).trim());
+}
+/** 11/10 — "thôi không bói nữa", "đừng bói nữa", "khỏi rút bài" — người dùng muốn DỪNG bói: có chữ "bói" nhưng không phải nhờ bói.
+ *  (Trước đây câu này bị rút luôn 3 lá cho câu hỏi "Thôi không?".) */
+export function isTarotStop(text: string): boolean {
+  const f = fold(text).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim();
+  if (f.split(" ").length > 9) return false;
+  return /(?<![a-z])(thoi|khong|ko|k|dung|khoi|chua|het|ngung|nghi|chan)( (muon|can|co|them|phai))?( (xem|rut|trai))? (boi|bai|tarot|la nao)(?![a-z])/.test(f) && !/(?<![a-z])(sao|tai sao|vi sao|duoc khong|dc khong|co nen)(?![a-z])/.test(f);
+}
+/** 11/10 — câu hỏi bài mang tính CHẨN ĐOÁN ("mình có bị bệnh gì không", "tarot nói a bị ung thư hả", "có thai không", "sống được bao lâu"):
+ *  lá bài không trả lời được chuyện có bệnh hay không → Lomi nói thẳng điều đó thay vì trải bài. Câu hỏi tinh thần / hồi phục
+ *  ("bao giờ khoẻ lại", "bệnh có mau khỏi không") vẫn bói như cũ với lời nhắc hỏi bác sĩ. */
+export function tarotMedicalAsk(question: string): boolean {
+  const f = ` ${fold(question).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim()} `;
+  if (/ (bi|mac|dinh|co) (benh|ung thu|khoi u|u ac|u nao|tieu duong|hiv|sida|lao|tram cam|vo sinh|ung buou|tai bien|dot quy|benh nan y)( gi| nao| nang)? /.test(f) && !/ (khoi|het|qua khoi|binh phuc|hoi phuc|do hon|khoe lai) /.test(f)) return true;
+  if (/ (benh gi|bi gi vay|bi sao vay|co thai khong|co bau khong|co thai chua|co bau chua|dinh bau|song duoc bao lau|con song bao lau|bao gio chet|khi nao chet|co chet khong|chan doan) /.test(f)) return true;
+  return false;
 }
 
 function detectTopic(f: string): TarotTopic {
@@ -509,6 +525,12 @@ export function spreadFromText(text: string): "five" | "celtic" | "ppf" | null {
   if (/ qua khu .*hien tai .*tuong lai /.test(f)) return "ppf";
   return null;
 }
+/** 11/10: người dùng xin đúng MỘT lá cho một câu hỏi ("rút 1 lá xem hôm nay sao") — trước đây vẫn ra 3 lá. */
+export function oneCardAsk(text: string): boolean {
+  const f = ` ${fold(text).replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ")} `;
+  return / (1|mot) la /.test(f) && !/ (them|nua) /.test(f);
+}
+const ONE_POS = "Lá trả lời";
 const SPREAD_GROUPS: Record<"five" | "celtic" | "ppf", Group[]> = {
   ppf: ["state", "state", "result"],
   five: ["state", "block", "block", "action", "result"],
@@ -518,10 +540,16 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
   const q = question.trim();
   if (!q) return { topic: "general", spread: "one", cards: drawCards(1), at: Date.now(), kind: "daily", question: "", pos: POS.daily };
   const { kind, options } = detectKind(q);
-  const ctx = context?.trim() || undefined;
+  const ctxAll = context?.trim() || undefined;
+  // 11/10: phần đi kèm chỉ để báo SỐ LÁ ("trải 5 lá về tiền bạc", "… 10 lá") không phải "chuyện đang kể" → vẫn dùng để chọn trải bài,
+  // nhưng không ghi vào context (lời giải khỏi mở đầu "Nối tiếp chuyện mình đang nói lúc nãy" khi chưa hề có chuyện nào).
+  const told = ctxAll
+    ? fold(ctxAll).replace(fold(q), " ").replace(/(?<![a-z0-9])(boi|tarot|xem|rut|trai|bai|la|celtic|cross|\d+|mot|ba|nam|muoi|ve|chuyen|cho|giup|gium|minh|em|anh|a|e|di|nha|nhe|thu|coi)(?![a-z0-9])/g, " ").replace(/[^a-z]+/g, " ").trim().split(" ").filter(Boolean).length >= 2
+    : false;
+  const ctx = told ? ctxAll : undefined;
   // Chủ đề đọc từ câu hỏi; nếu câu hỏi chung chung thì xem thêm phần kể chuyện xung quanh.
   const t0 = detectTopic(fold(q));
-  const topic = t0 === "general" && ctx ? detectTopic(fold(ctx)) : t0;
+  const topic = t0 === "general" && ctxAll ? detectTopic(fold(ctxAll)) : t0;
   if (kind === "choice" && options)
     return {
       topic,
@@ -536,11 +564,12 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
     };
   const it = detectIntent(q, kind);
   // Trải bài riêng người dùng xin (5 lá / Celtic Cross / QK–HT–TL) được ưu tiên hơn vị trí theo ý câu hỏi.
-  const sp = spreadFromText(`${ctx ?? ""} ${q}`);
+  const sp = spreadFromText(`${ctxAll ?? ""} ${q}`);
   if (sp) {
     const def = TAROT_SPREADS.find((x) => x.id === sp)!;
     return { topic, spread: sp, cards: drawCards(def.n), at: Date.now(), kind, question: q, context: ctx, intent: it?.id, pos: def.pos };
   }
+  if (oneCardAsk(`${ctxAll ?? ""} ${q}`)) return { topic, spread: "one", cards: drawCards(1), at: Date.now(), kind, question: q, context: ctx, intent: it?.id, pos: [P(ONE_POS, "Answer")] };
   const ipos = it?.pos ? (typeof it.pos === "function" ? it.pos() : it.pos) : undefined;
   return {
     topic,
@@ -2285,11 +2314,14 @@ export function readingText(r: TarotReading, lang: L): string {
   const pos = r.pos ?? TAROT_SPREADS.find((s) => s.id === r.spread)?.pos ?? [];
   const nums = ["①", "②", "③"];
   const S = en ? "this" : q ? subjectOf(q, r.topic) : TOPIC_NOUN[r.topic];
-  const roles: Role[] = clar ? ["clarify"] : kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
+  // Một lá cho một câu hỏi (không phải lá "rút thêm"): lời mở đầu và vai của lá khác với lá làm rõ.
+  const single = clar && r.pos?.[0]?.vi === ONE_POS;
+  const roles: Role[] = single ? ["situation"] : clar ? ["clarify"] : kind === "choice" ? ["option", "option"] : ROLES[kind as Exclude<TarotKind, "choice">];
   const out: string[] = [];
 
   // Mở đầu
   if (!q) out.push(en ? pick(["Here's today's message for you ✨", "Lomi drew today's card for you 🔮"]) : pick(["Thông điệp hôm nay của bạn nè ✨", "Lá bài hôm nay Lomi rút cho bạn đây 🔮"]));
+  else if (single) out.push(en ? `One card for “${q}”:` : `Lomi rút 1 lá cho câu hỏi “${q.replace(/[?？\s]+$/u, "")}” nè 🔮 Xem để tham khảo thôi nha, quyết định vẫn là của bạn.`);
   else if (clar) out.push(en ? `One more card to clarify “${q}”:` : `Lomi rút thêm 1 lá để làm rõ ${S} nè:`);
   else {
     const [vi, enI] = TOPIC_INTRO[r.topic];
@@ -2404,7 +2436,7 @@ export function readingText(r: TarotReading, lang: L): string {
     out.push(`💡 ${en ? "Advice" : "Lời khuyên"}: ${en ? (adviceCard.rev ? adv[3] : adv[2]) : adviceCard.rev ? adv[1] : adv[0]}`);
   }
 
-  if (q && !clar)
+  if (q && (!clar || single))
     out.push(en ? "Want more clarity? Type “one more card” and Lomi will draw another 🔮" : "Muốn rõ hơn thì gõ “rút thêm” để Lomi rút thêm 1 lá nha 🔮");
   else
     out.push(
@@ -2565,5 +2597,40 @@ export function dailyDetailVi(d: TarotDraw, day = new Date()): string {
     `**✨ May mắn hôm nay:** màu ${colors[h % colors.length]} · con số ${num} · giờ đẹp khoảng ${hour}h–${hour + 1}h`,
     `**💡 Lời khuyên:** ${adv}`,
     `${DAILY_CLOSE[(h >>> 4) % DAILY_CLOSE.length]}\nMuốn xem kỹ hơn từng buổi thì bấm “Bói 3 lá cho hôm nay” nha 🔮`,
+  ].join("\n\n");
+}
+
+// ── 11/10 — HỎI NỐI VỀ CHÍNH TRẢI BÀI VỪA RÚT (không rút bài mới). Dùng lại đúng cách chấm điểm của phần giải bài ở trên. ──
+/** Nhắc lại KẾT LUẬN của trải bài theo đúng câu hỏi gốc ("vậy là chọn A hả?", "tóm lại là sao?"). */
+export function readingRecap(r: TarotReading, short = false): string {
+  const q = (r.question ?? "").replace(/[?？\s]+$/u, "");
+  const kind = r.kind ?? "open";
+  const cards = r.cards;
+  const names = cards.map((d, i) => `${r.pos?.[i]?.vi ? `${r.pos[i].vi}: ` : ""}**${tarotCard(d.id).name.vi}**${d.rev ? " (ngược)" : ""}`).join(" · ");
+  let verdict: string;
+  if (kind === "choice" && r.pos && cards.length >= 2) {
+    const [a, b] = [cardScore(cards[0]), cardScore(cards[1])];
+    const [na, nb] = r.pos.map((p) => p.vi);
+    verdict = a === b ? `Hai lá ngang nhau — bài không nghiêng hẳn về “${na}” hay “${nb}”. Bạn chọn bên nào khiến lòng mình nhẹ hơn nha.` : `Bài nghiêng về “${a > b ? na : nb}” hơn — nhưng là nghiêng thôi, không phải bắt buộc.`;
+  } else if (kind === "yesno" && cards.length >= 3) {
+    verdict = r.topic === "health" ? healthAnswer(cards) : yesnoAnswer(cards, q ? subjectOf(q, r.topic) : TOPIC_NOUN[r.topic], /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q)));
+  } else if (kind === "timing" && cards.length >= 3) verdict = timingPhrase(cards[2], false);
+  else verdict = cards.length >= 3 ? trendLine(cards) : cardScore(cards[0]) > 0 ? "Lá này nghiêng về hướng tích cực." : cardScore(cards[0]) < 0 ? "Lá này nhắc bạn chậm lại và cẩn thận hơn." : "Lá này cho thấy mọi chuyện còn để ngỏ.";
+  // short: Lomi vừa tóm lại rồi mà người dùng hỏi xác nhận thêm lần nữa ("vậy là tốt hả") → chỉ nhắc đúng câu kết luận, không lặp cả đoạn.
+  if (short) return `Ừa, đúng như Lomi vừa tóm lại đó 🔮 ${verdict}\n\nMuốn rõ hơn nữa thì rút thêm một lá nha.`;
+  return `${q ? `Với câu hỏi “${q}” thì trải bài vừa rồi nói gọn lại là vầy 🔮` : "Lá bài vừa rồi nói gọn lại là vầy 🔮"}\n\n${names}\n\n${verdict}\n\nBài chỉ là một góc nhìn để tham khảo — quyết định vẫn là của bạn nha.`;
+}
+/** Giải riêng MỘT lá trong trải bài vừa rút (i tính từ 0) theo đúng vị trí của nó và câu hỏi gốc. */
+export function readingCardAt(r: TarotReading, i: number): string | null {
+  const d = r.cards[i];
+  if (!d) return null;
+  const c = tarotCard(d.id);
+  const pos = r.pos?.[i]?.vi;
+  const q = (r.question ?? "").replace(/[?？\s]+$/u, "");
+  const sc = cardScore(d);
+  return [
+    `Lá thứ ${i + 1}${pos ? ` nằm ở vị trí **${r.kind === "choice" ? `Nếu chọn “${pos}”` : pos}**` : ""}: **${c.name.vi}** (${c.name.en})${d.rev ? " — ra ngược" : " — ra xuôi"} 🔮`,
+    d.rev ? c.rev.vi : c.up.vi,
+    `${q ? `Đặt vào câu hỏi “${q}”: ` : ""}${sc > 0 ? "ở vị trí này lá bài là một tín hiệu thuận." : sc < 0 ? "ở vị trí này lá bài là lời nhắc cẩn thận, chưa phải lúc vội." : "ở vị trí này lá bài để ngỏ — còn tuỳ bước tiếp theo của bạn."}`,
   ].join("\n\n");
 }

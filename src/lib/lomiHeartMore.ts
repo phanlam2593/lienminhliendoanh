@@ -63,6 +63,30 @@ export const MORE_THEMES: Theme[] = [
   },
   // ═══════════════════════ TÌNH CẢM ═══════════════════════
   {
+    // 11/10: NGHI người mình thương có người khác (chưa biết thật hư). Trước đây câu "a nghi vợ a ngoại tình" được đáp bằng bài "bị phản bội"
+    // ("Việc họ phản bội nói lên cách họ chọn sống…") — coi điều đang nghi là sự thật. Chủ đề này không khẳng định gì về người kia.
+    id: "suspect",
+    re: /\b(nghi|nghi ngo|linh cam|so|hinh nhu|khong biet co|co khi nao|co ve|chac la|doan la|lo la)\b.{0,40}\b(ngoai tinh|co nguoi khac|co ai khac|co bo|lua doi|phan boi|cam sung|say nang|thay long|co nguoi moi|co con khac|co thang khac)\b/,
+    feel: [
+      "Nghi ngờ người mình thương mà chưa biết thật hư ra sao — cái lơ lửng đó hành mình ghê lắm 😔",
+      "Sống trong nghi ngờ mệt lắm, vì lúc nào đầu cũng phải chạy hai kịch bản cùng lúc 😔",
+    ],
+    insight: [
+      "Lomi không biết được chuyện gì đang thật sự xảy ra, và nghi ngờ thì chưa phải là sự thật. Nhưng cảm giác bất an của bạn là có thật — nó đáng được nói ra thay vì ôm một mình mà đoán.",
+      "Khi đã nghi, mình rất dễ chỉ nhìn thấy những gì khớp với nỗi nghi đó. Thử tách riêng: điều gì bạn tận mắt thấy, điều gì là bạn suy ra?",
+    ],
+    step: [
+      "Viết ra hai cột: “điều mình biết chắc” và “điều mình đang đoán”. Nhìn hai cột đó rồi hẵng tính bước tiếp theo.",
+      "Chọn lúc cả hai bình tĩnh để nói bằng cảm giác của mình — “Dạo này mình thấy bất an vì…, mình muốn nghe từ chính người mình thương.” — đừng mở đầu bằng lời buộc tội.",
+    ],
+    ask: ["Điều gì khiến bạn bắt đầu nghi vậy?", "Bạn đã thử nói thẳng nỗi lo này với người ấy chưa?"],
+    advice: [
+      "Trước khi kết luận, nói chuyện thẳng thắn một lần: kể điều bạn thấy và cảm giác của bạn, rồi nghe người ấy giải thích.",
+      "Hạn chế lén kiểm tra điện thoại hay theo dõi — nó hiếm khi cho câu trả lời rõ ràng, mà làm mình mệt và mất lòng tin thêm.",
+      "Dù sự thật là gì, bạn có quyền cần sự rõ ràng. Nói chuyện rồi mà vẫn thấy bị lảng tránh thì một buổi tư vấn cho cả hai có thể giúp hai người nói được với nhau.",
+    ],
+  },
+  {
     id: "toxic",
     re: /\b(thao tung|gaslight|bi kiem soat|kiem soat minh|hay kiem soat|kiem soat dien thoai|cam minh (di|gap|choi)|doc hai|toxic|bi danh dap|danh dap|bi (nguoi yeu|chong|vo|ban trai|ban gai) danh|danh minh|bao luc|bi chui boi|xuc pham minh|bi de doa|de doa minh|ghen tuong qua muc|coi dien thoai minh)\b/,
     feel: [

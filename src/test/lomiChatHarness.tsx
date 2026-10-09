@@ -53,8 +53,12 @@ export type Turn = {
   dishPick?: boolean;
   dishAsk?: { drink: boolean; shown: string[] };
   search?: { mode: string; kind?: { noun?: string } };
-  tarot?: { question?: string; cards: unknown[] };
+  tarot?: { question?: string; cards: unknown[]; spread?: string; kind?: string };
+  tarotRef?: { question?: string; cards: unknown[] };
+  tarotBack?: { r: { question?: string; cards: unknown[] }; n: number };
   tarotAwait?: boolean;
+  harm?: { kind: string; victim: string; actor?: string; whom?: string; setting?: string };
+  heartListen?: boolean;
   biz?: unknown;
   faqId?: string;
   unk?: string;

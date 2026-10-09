@@ -77,7 +77,9 @@ describe("Tình cảm — giữ đúng người đang nói tới", () => {
   it("người ấy im lặng → 'còn nên nhắn không?' → trả lời chuyện nhắn cho NGƯỜI ẤY", async () => {
     const r = await chat(["người ấy im lặng mấy ngày rồi", "còn nên nhắn không?"]);
     expect(r[0].rel).toMatch(/^người ấy\|/);
-    expect(r[1].rel).toBe("người ấy|texting");
+    // 11/10: hỏi CÓ NÊN nhắn không → trả lời thẳng có / không (ý "decide") thay cho bài "nhắn thì nên ngắn…" không đụng tới câu hỏi.
+    expect(r[1].rel).toMatch(/^người ấy\|decide/);
+    expect(r[1].content).toMatch(/Nhắn trước được chứ/);
     expect(r[1].heart).toBeTruthy();
   }, T);
   it("'người đó thì sao?' → hỏi đúng phần còn thiếu, vẫn trong mạch; bấm gợi ý thì đi tiếp", async () => {
@@ -757,17 +759,19 @@ describe("CHAIN 3 — “Người ấy im lặng” → “A có nên nhắn kh�
   it("các câu nối đều bám người ấy, không rơi về câu tâm sự chung chung", async () => {
     const r = await chat(["Người ấy im lặng", "A có nên nhắn không?", "2 ngày rồi", "a sợ làm phiền", "vậy nhắn gì giờ"]);
     expect(r[0].rel).toBe("người ấy|silence");
-    expect(r[1].rel).toBe("người ấy|texting");
-    expect(r[1].content).toMatch(/Nhắn cho người ấy|liên quan tới người ấy/);
+    expect(r[1].rel).toMatch(/^người ấy\|decide/);
+    expect(r[1].content).toMatch(/Nhắn trước được chứ/);
     // "2 ngày rồi" → vẫn nói về người ấy (trước đây: "Anh đang có người yêu, hay đang thích ai đó?")
     expect(r[2].content).toMatch(/người ấy/);
     expect(r[2].content).not.toMatch(/đang có người yêu, hay đang thích ai/);
-    expect(r[2].rel).toBe("người ấy|texting");
+    expect(r[2].rel).toBe("người ấy|decide");
     // "a sợ làm phiền" → nhắc lại đúng nỗi lo đó + góc nhìn về chính chuyện nhắn cho người ấy
     expect(r[3].content).toMatch(/^Anh sợ làm phiền hả/);
     expect(r[3].content).toMatch(/người ấy/);
     expect(r[3].content).not.toMatch(/Chuyện tình cảm của (anh|bạn) đang thế nào/);
-    expect(r[4].rel).toBe("người ấy|texting");
+    // "vậy nhắn gì giờ" → đã biết hoàn cảnh (người ấy im lặng) nên ra luôn câu nhắn MẪU, không hỏi lại "hai người đang ở mức nào".
+    expect(r[4].rel).toBe("người ấy|draft");
+    expect(r[4].content).toMatch(/“[^”]+”/);
     for (const m of r) {
       expect(m.heart, m.content).toBeTruthy();
       expect(m.content).not.toMatch(LOOP_LINES);
@@ -1033,7 +1037,9 @@ describe("Chuỗi thử mù — theo được chuyện với câu chưa từng g
   }, T);
   it("vừa xem bài xong mà hỏi một câu quyết định → vẫn là hỏi bài", async () => {
     const r = await chat(["bói cho a 3 lá về công việc", "lá thứ 2 là sao", "vậy a có nên nghỉ việc không", "rút thêm 1 lá"]);
-    expect(r[1].content).toMatch(/vừa rút/);
+    // 11/10: hỏi riêng lá thứ 2 → giải đúng lá đó theo vị trí của nó (trước đây: giải chung cả trải bài).
+    expect(r[1].content).toMatch(/^Lá thứ 2 nằm ở vị trí/);
+    expect(r[1].tarotRef).toBeTruthy();
     expect(r[2].tarot).toBeTruthy();
     expect(r[2].heart).toBeUndefined();
     expect(r[3].tarot).toBeTruthy();

@@ -311,3 +311,45 @@ describe("câu sinh theo tổ hợp → đáp đúng theo cấu trúc", () => {
     expect(T("hôm qua a quẩy tới sáng")?.text).not.toMatch(/😄|🥺/);
   });
 });
+
+// 11/10 — CÂU BỊ ĐỘNG về một NGƯỜI KHÁC: "X bị (ai đó) làm gì" là chuyện không may của X, không phải của người đang gõ.
+// Đọc theo cấu trúc "chủ ngữ + bị + người gây ra + việc" nên việc xảy ra không cần có trong từ điển ("bỏ", "đá", "la").
+describe("câu bị động: việc xảy đến với ai thì hỏi han đúng người đó", () => {
+  it("108 câu: người thân × người gây ra × việc → nhắc lại 'bị <ai> <việc>' về đúng người thân đó", () => {
+    const subj: Record<string, RegExp> = { "mẹ a": /^Mẹ anh /, "chị a": /^Chị anh /, "con a": /^Con anh /, "em gái a": /^Em gái anh /, "vợ a": /^Vợ anh /, "bạn a": /^Người bạn của anh / };
+    const agents: Record<string, string> = { sếp: "sếp", chồng: "chồng", bạn: "bạn bè", "cô giáo": "cô giáo", "người ta": "người ta", "mẹ chồng": "mẹ chồng" };
+    for (const [who, by, what] of cross(Object.keys(subj), Object.keys(agents), ["mắng", "chê", "la"])) {
+      // (bỏ tổ hợp vô nghĩa: "vợ a bị chồng …" — chồng của vợ anh chính là người đang gõ)
+      if (who === "vợ a" && by === "chồng") continue;
+      const s = `${who} bị ${by} ${what}`;
+      const r = T(s);
+      expect(r?.intent, s).toBe("frame:third_neg");
+      expect(r!.text, s).toMatch(subj[who]);
+      expect(r!.text, s).toContain(`bị ${agents[by]} ${what} hả`);
+      expect(r!.text, s).not.toMatch(/😄|😆|😅/);
+    }
+  });
+  it("việc chưa có trong từ điển vẫn đọc được nhờ cấu trúc", () => {
+    expect(T("chị a bị chồng bỏ")?.text).toMatch(/^Chị anh bị chồng bỏ hả 🥺/);
+    expect(T("em gái a bị người yêu đá")?.text).toMatch(/^Em gái anh bị người yêu đá hả 🥺/);
+    expect(T("bạn a bị lừa tiền")?.text).toMatch(/^Người bạn của anh bị lừa tiền hả 🥺/);
+    expect(T("con a bị bạn bắt nạt")?.text).toMatch(/^Con anh bị bạn bè bắt nạt hả 🥺/); // "bạn" là bạn học — không bị đổi thành "anh"
+  });
+  it("người gây ra không bị đọc thành chủ ngữ / người bệnh", () => {
+    const f = P("con a bị bạn đánh ở trường");
+    expect(f.subject).toBe("third");
+    expect(f.subjectText).toMatch(/^con /);
+    expect(f.pred?.head).toBe("đánh");
+    expect(f.toks.find((t) => t.t === "bạn")?.cls).toBe("agent");
+  });
+  it("chính người nói bị ai đó làm gì → nhắc lại đúng việc đó; chuyện ốm đau vẫn để lớp sức khoẻ", () => {
+    expect(T("a bị vợ la")).toMatchObject({ intent: "frame:passive" });
+    expect(T("a bị vợ la")!.text).toMatch(/^Bạn bị vợ la hả 🥺/);
+    expect(T("a bị zona")).toBeNull();
+    expect(T("a bị đau bụng")).toBeNull();
+  });
+  it("người thân ỐM vẫn là tin người thân ốm (không bị coi là 'bị ai đó làm gì')", () => {
+    expect(T("mẹ a bị ốm")?.intent).toBe("frame:third_ill");
+    expect(T("ba a bị ngã")?.intent).toBe("frame:third_ill");
+  });
+});

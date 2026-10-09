@@ -92,8 +92,29 @@ export const BIZ: Table = {
   ],
 };
 
+/** Hỏi về app (câu hỏi thường gặp): "chặn" người dùng, "quẹt" — gõ CÓ DẤU thành chữ khác ("đau chân lắm", "quét nhà") thì không phải chuyện app. */
+export const APP: Table = {
+  w: {
+  chan: ["chặn"], // chân, chán, chăn, chắn
+  quet: ["quẹt"], // quét
+  },
+};
+
 const WORD = /[\p{L}\p{M}]+/gu;
 const HAS_MARK = /[^\u0000-\u007f]/;
+
+/** Giữ nguyên câu, chỉ đổi những chữ CÓ DẤU mang nghĩa khác bảng thành chữ lạ ("chân" → "chanx") — cho các lớp tự chuẩn hoá bên trong. */
+export function maskStrict(text: string, table: Table): string {
+  const t = text.normalize("NFC");
+  if (!HAS_MARK.test(t)) return text;
+  return t.replace(WORD, (w) => {
+    const lw = w.toLowerCase();
+    if (!HAS_MARK.test(lw)) return w;
+    const bare = normalizeVi(lw);
+    const ok = table.w[bare];
+    return ok && !ok.includes(lw) ? `${bare}x` : w;
+  });
+}
 
 /** normalizeVi() nhưng chữ có dấu mang nghĩa khác bảng → đổi thành "<chữ>x" để không khớp nhầm. */
 export function normStrict(text: string, table: Table): string {

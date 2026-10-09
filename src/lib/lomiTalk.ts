@@ -15,6 +15,8 @@ export type Ev = {
   advice: string[];
   good?: boolean; // tin vui
   label: string; // tóm tắt chuyện để Lomi nhắc lại ("bị mắc mưa")
+  /** 11/10: chỉ là chuyện của CHÍNH người nói ("a chán quá") — "công việc chán quá", "phim này chán ghê" là chê một thứ khác, không phải đang rảnh. */
+  selfOnly?: boolean;
   yes?: [RegExp, string[]][]; // người dùng đáp "có/ừ" cho câu hỏi khớp RegExp (câu Lomi vừa hỏi)
   no?: [RegExp, string[]][]; // người dùng đáp "không/chưa"
 };
@@ -80,7 +82,7 @@ export const EVENTS: Ev[] = [
   {
     id: "traffic",
     label: "bị kẹt xe",
-    re: /\b(ket xe|tac duong|ket cung|ket xe qua|dong xe qua|ket o)\b/,
+    re: /\b(ket xe|tac duong|ket cung|ket xe qua|dong xe qua|ket o (duong|ngoai duong|nga tu|nga ba|cau|ham|quoc lo|cao toc))\b/,
     react: ["Kẹt xe là mệt nhất luôn 😮‍💨 Bạn đang kẹt lâu chưa, có gấp giờ không?", "Ui, {act}mà kẹt xe thì nản ghê 😩 Có trễ hẹn gì không?"],
     follow: [
       [/\b(tre|muon|gap|tre hen|tre gio)\b/, ["Trễ thì nhắn báo trước một tiếng cho người ta yên tâm nha. Chạy chậm, an toàn là trên hết 🙏"]],
@@ -199,6 +201,7 @@ export const EVENTS: Ev[] = [
   },
   {
     id: "bored",
+    selfOnly: true,
     label: "đang chán, không có gì làm",
     re: /\b(chan qua|chan ghe|chan that|chan vay|chan ne|chan a|chan that su|buon chan|chan chet|ran qua|ran roi|khong co gi lam|ko co gi lam|ran ranh|boring|chan doi qua)\b/,
     react: [
@@ -220,8 +223,16 @@ export const EVENTS: Ev[] = [
   },
 ];
 
+// Những chữ có thể đứng TRƯỚC cụm trạng thái mà câu vẫn là nói về chính mình ("hôm nay a đang chán quá", "ở nhà một mình chán ghê").
+const SELF_LEAD = new Set("oix a anh e em c chi minh toi tui to t tao dang thay cam hom nay bua gio toi sang trua chieu dem qua lai cu hoi o nha mot ma sao troi oi ui haiz haizz u thi that su day dao luc nay may bay hay van con cung luon".split(" "));
 export function eventOf(n: string): Ev | undefined {
-  return EVENTS.find((e) => e.re.test(` ${n} `));
+  const s = ` ${n} `;
+  return EVENTS.find((e) => {
+    const m = e.re.exec(s);
+    if (!m) return false;
+    // Chuyện của chính người nói: trước cụm đó không có một danh từ khác làm chủ ngữ ("công việc", "phim này", "quán đó"…).
+    return !e.selfOnly || s.slice(0, m.index).trim().split(" ").every((w) => !w || SELF_LEAD.has(w));
+  });
 }
 export function eventById(id: string): Ev | undefined {
   return EVENTS.find((e) => e.id === id);

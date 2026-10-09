@@ -106,6 +106,17 @@ function lomiAsEm(text: string): string {
 /** Đổi "bạn" / "Lomi" trong câu Lomi nói cho khớp cách xưng hô của người dùng. */
 export function speak(text: string, addr?: Addr | null): string {
   if (!addr || addr === "bạn") return text;
+  // 11/10: chữ trong ngoặc kép “…” là lời TRÍCH (câu người dùng gõ) hoặc tin nhắn MẪU để gửi cho người khác
+  // (“Dạo này thấy bạn im hơn, có chuyện gì không?”) — "bạn" trong đó không phải lời Lomi gọi người dùng → giữ nguyên.
+  if (text.includes("“")) {
+    const parts = text.split(/(“[^”]*”)/u);
+    if (parts.length > 1)
+      return parts.map((seg, i) => (i % 2 ? seg : speakPlain(seg, addr))).join("");
+  }
+  return speakPlain(text, addr);
+}
+function speakPlain(text: string, addr: Addr): string {
+  if (!text.trim()) return text;
   // (đầu câu / sau emoji thì "em" viết hoa)
   if (addr === "bạn-em") return lomiAsEm(text).replace(/([.!?]\s+|\p{Extended_Pictographic}\uFE0F?\s+|\n\s*|^)em(?=\s)/gu, (_m, p: string) => `${p}Em`);
   const you = addr; // anh | chị | em

@@ -86,7 +86,7 @@ const NOTE = "(Kiến thức tham khảo chung — không thay được chẩn �
 // Chỉ câu hỏi TRỐNG, ngắn ("kiêng gì?", "nên ăn gì") — "hôm nay ăn gì" là nhờ gợi ý món, không phải hỏi kiêng cữ của bệnh.
 export const isDietAsk = (text: string) => {
   const n = ` ${normalizeVi(text)} `;
-  return ASK_DIET.test(n) && n.trim().split(" ").length <= 5 && !/\b(hom nay|toi nay|trua nay|sang nay|chieu nay|bay gio|gio nay|lat nua)\b/.test(n);
+  return ASK_DIET.test(n) && n.trim().split(" ").length <= 7 && !/\b(hom nay|toi nay|trua nay|sang nay|chieu nay|bay gio|gio nay|lat nua)\b/.test(n);
 };
 
 function aspectOf(n: string, raw: string): Exclude<HealthAspect, "menu"> | null {

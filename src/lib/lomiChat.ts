@@ -9,6 +9,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { APP, maskStrict } from "@/lib/lomiAccent";
 import { emojiOnlyReply, expressive, tone } from "@/lib/lomiUnderstand";
 
 export type ChatReply = { text: string; quick?: string[]; sticker?: string };
@@ -326,7 +327,8 @@ const RULES: Rule[] = [
   },
   // Cô đơn
   {
-    re: /\b(co don|mot minh|khong ai choi|khong co ban|khong ai hieu|le loi|lonely)\b/,
+    // (11/10: "một mình nuôi con", "đi một mình" là kể hoàn cảnh — chỉ "một mình" kèm buồn / ở / thấy mới là than cô đơn.)
+    re: /\b(co don|(o|song|thay|buon|chi co|lui thui|lai) mot minh|mot minh (qua|hoai|suot|buon|chan|co don)|khong ai choi|khong co ban|khong ai hieu|le loi|lonely)\b|^mot minh( (qua|hoai|thoi|a|ne))*$/,
     reply: () => ({
       text: pick([
         "Cô đơn là cảm giác ai cũng có lúc gặp… Bạn thử ghé Cộng đồng (/cong-dong) trò chuyện với mọi người quanh khu vực, hay vào Quẹt → Làm quen tìm bạn mới xem sao? Còn giờ thì có Lomi ở đây nè 🤗",
@@ -571,7 +573,7 @@ const RULES: Rule[] = [
   },
   // Lomi tên gì / sở thích
   {
-    re: /\b(ten gi|ten la gi|ten ban la gi|ban la ai|em la ai|lomi la ai)\b/,
+    re: /\b(ten gi|ten la gi|ten ban la gi|ban la ai|em la ai|e la ai|lomi la ai)\b/,
     reply: () => ({ text: pick(["Lomi nè 🤖🌱 Trợ lý nhỏ của Liên Minh Liên Doanh. Còn bạn tên gì nè?", "Mình là Lomi nha 😊 Rất vui được làm quen! Bạn tên gì vậy?"]) }),
   },
   {
@@ -736,7 +738,8 @@ const APPISH =
   /\b(app|ung dung|uu dai|ma uu dai|nhan ma|pin|tai khoan|mat khau|dang nhap|dang ky|dang bai|dang tin|doanh nghiep|cua hang|thanh vien|membership|diem|quet|dua don|giao hang|tin nhan|cong dong|ho so|thong bao|bao cao|chan|theo doi|ket ban|huong dan|admin|lomi|login|logout|log in|log out|profile|account|acc|password|voucher|offer|member|comment|share|post|follow|link|info|support|update|online|offline|call|review|user|code|ad)\b/;
 export function isAppish(text: string): boolean {
   // 08/10: "chán" bỏ dấu trùng "chặn" (chặn người dùng) — "a đang chán" không phải câu hỏi về app.
-  return APPISH.test(` ${normalizeVi(text.normalize("NFC").replace(/(?<![\p{L}])chán(?![\p{L}])/giu, " "))} `);
+  //        11/10: mở rộng cho mọi cách viết có dấu khác nghĩa ("đau chân lắm", "quét nhà") — lib/lomiAccent.
+  return APPISH.test(` ${normalizeVi(maskStrict(text, APP))} `);
 }
 
 /** Chip bói cho đúng câu người dùng vừa hỏi (chip có chữ "Bói" nên khung chat tự hiểu là muốn bói). */

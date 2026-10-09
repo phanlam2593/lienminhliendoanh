@@ -64,12 +64,14 @@ export type StoryEnv = {
   claimed?: boolean;
   /** Đang tâm sự: mạch chuyện chỉ ghi nhận điều mới, phần cảm xúc để mạch tâm sự đáp. */
   inHeart?: boolean;
+  /** Lớp sức khoẻ đang giữ một triệu chứng / bệnh cụ thể → câu "nên làm gì" để lớp đó trả lời cho đúng bệnh. */
+  inHealth?: boolean;
 };
 
 // ── Đọc chữ: có dấu thì so có dấu, gõ không dấu thì so không dấu (tránh "đỡ" / "đó", "khám" / "kham") ─────────────
 const bare = (x: string) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
-type Txt = { s: string; b: string; loose: boolean; words: number };
-function txt(raw: string): Txt {
+export type Txt = { s: string; b: string; loose: boolean; words: number };
+export function txt(raw: string): Txt {
   const clean = (x: string) => ` ${x.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim()} `;
   // Câu gõ KHÔNG DẤU thì giữ nguyên chữ người dùng gõ (không đổi teen code — "hong" trong "viem hong" không phải "không").
   const base = clean(raw);
@@ -78,7 +80,7 @@ function txt(raw: string): Txt {
   return { s, b: bare(s), loose, words: s.trim() ? s.trim().split(" ").length : 0 };
 }
 /** Mẫu viết CÓ DẤU, tự sinh bản không dấu. (?<!L) / (?!L): ranh giới từ cho chữ có dấu. */
-function P(src: string, looseSrc?: string) {
+export function P(src: string, looseSrc?: string) {
   const wrap = (x: string) => new RegExp(`(?<![\\p{L}\\p{N}])(?:${x})(?![\\p{L}\\p{N}])`, "u");
   const a = wrap(src);
   // looseSrc: bản riêng cho câu gõ KHÔNG DẤU khi chữ bỏ dấu dễ trùng nghĩa khác ("đỡ" → "do", "nhẹ" → "nhe" = nhé, "già" → "gia").
@@ -87,7 +89,7 @@ function P(src: string, looseSrc?: string) {
 }
 const NEG_WORD = P("chưa|không|ko|chẳng|chả|đâu có|đã đâu|hông|hổng", "chua|khong|ko|k|chang|dau co|hok");
 /** Từ khoá có bị phủ định không: có từ phủ định trong 3 tiếng đứng ngay trước ("chưa đi khám", "không chịu uống thuốc"). */
-function negated(t: Txt, m: RegExpMatchArray | null): boolean {
+export function negated(t: Txt, m: RegExpMatchArray | null): boolean {
   if (!m || m.index === undefined) return false;
   const before = (t.loose ? t.b : t.s).slice(0, m.index).trim().split(" ").slice(-3).join(" ");
   return !!NEG_WORD(txt(before));
@@ -120,6 +122,7 @@ const FEEL = P(
 );
 const FEEL_WORRY = P("lo|lo lắng|sợ|rối|hoang mang|căng thẳng|không biết làm sao|không biết phải làm sao|hết cách|bó tay", "lo qua|lo lam|lo lang|dang lo|so qua|so lam|hoang mang|cang thang|khong biet lam sao|khong biet phai lam sao|het cach|bo tay");
 const HELPLESS = P("(?:không|chẳng|chả|chưa) biết(?: \\S+){0,3} (?:sao|gì|thế nào|cách nào)|biết làm sao (?:giờ|đây|bây giờ)|hết cách|bó tay");
+const CARE_ASK = P("nên làm gì|nên làm sao|phải làm sao|phải làm gì|cần làm gì|làm sao (?:bây giờ|giờ|đây)|làm gì (?:bây giờ|giờ|đây)|giúp (?:được )?gì|chăm (?:sao|thế nào|như thế nào)", "nen lam gi|nen lam sao|phai lam sao|phai lam gi|can lam gi|lam sao (?:bay gio|gio|day)|lam gi (?:bay gio|gio|day)|giup (?:duoc )?gi|cham (?:sao|the nao|nhu the nao)");
 const FEEL_MISS = P("nhớ|trống vắng|hụt hẫng", "nho qua|nho lam|trong vang|hut hang");
 const FEEL_GUILT = P("day dứt|hối hận|tự trách|giá mà|lẽ ra|phải chi");
 const KEEP = P("nuôi|ở với|sống với|bên nhau|theo|gắn bó|quen|yêu|cưới|lấy nhau");
@@ -151,6 +154,8 @@ function shortOf(who: Who): string {
 }
 const slotsAsked = (th: Thread, ...xs: Slot[]): Thread => ({ ...th, asked: xs, done: [...new Set([...th.done, ...xs])] });
 
+// Người kể nói mình CŨNG đang có bệnh ("a bị gout nữa", "e cũng đang bị cảm") — không phải lời kể về người đang ốm.
+const SELF_ILL = P("(?:a|anh|e|em|c|chị|mình|tui|tôi|tớ) (?:thì |cũng |còn |lại |đang |mới |vừa |hay )*(?:bị|mắc)(?! gì| sao| la| mắng| chửi)", "(?:a|anh|e|em|c|chi|minh|tui|toi|to) (?:thi |cung |con |lai |dang |moi |vua |hay )*(?:bi|mac)(?! gi| sao| la| mang| chui)");
 /** Câu vừa nghe có sửa lại chủ thể không: "Mẹ a á, không phải a", "không phải a, là mẹ a". Trả về người được nói tới (nếu câu có nêu). */
 const NOT_ME = P("(?:không|ko|k|hông|đâu) phải(?: là)? (?:a|anh|c|chị|e|em|mình|tôi|tui|tớ)(?: bị| ốm| bệnh| đau)?(?: đâu| nha| á| mà)*");
 export function subjectFix(raw: string, addr?: Addr | null): { who?: Who } | null {
@@ -163,8 +168,10 @@ export function subjectFix(raw: string, addr?: Addr | null): { who?: Who } | nul
     const tf = parseVi(tail, { addr });
     if (!((tf.subject === "third" || tf.subject === "pet") && !tf.pred)) return null;
   }
-  for (const part of raw.split(/[,;.!?…\n]+|\s-\s|(?<![\p{L}])(?:mà là|chứ|là)(?![\p{L}])/u)) {
-    if (!part.trim() || NOT_ME(txt(part))) continue;
+  for (const part0 of raw.split(/[,;.!?…\n]+|\s-\s|(?<![\p{L}])(?:mà là|chứ|là)(?![\p{L}])/u)) {
+    if (!part0.trim() || NOT_ME(txt(part0))) continue;
+    // "A đang nói mẹ a, không phải a" / "e hỏi cho ba e" — phần nêu người được nói tới nằm sau "đang nói / hỏi (về, cho)".
+    const part = part0.trim().replace(/^(?:(?:a|anh|c|chị|e|em|mình|tôi|tui|tớ)\s+)?(?:đang\s+)?(?:nói|hỏi|kể|nhắc|noi|hoi|ke|nhac)(?:\s+(?:về|tới|đến|chuyện|cho|ve|toi|den|chuyen))*\s+/iu, "");
     const f = parseVi(part.trim(), { addr });
     if ((f.subject === "third" || f.subject === "pet") && f.subjectText) return { who: { text: f.subjectText.split(YOU_MARK).join(youOf(addr)), kind: f.subject } };
   }
@@ -190,7 +197,10 @@ export function storyOpen(intent: string, who: Who, text: string, illness?: stri
   return undefined;
 }
 /** Mở mạch khi lớp sức khoẻ vừa phân tích triệu chứng của NGƯỜI KHÁC ("con a bị sốt") — Lomi vừa hỏi "bị bao lâu rồi". */
-export function storyOpenSymptom(who: Who): Thread {
+export function storyOpenSymptom(who: Who, raw = ""): Thread {
+  // 11/10: câu mở đầu đã nói bao lâu ("con gái c ho cả tuần nay") → ghi nhận luôn, không hỏi lại "ốm mấy hôm rồi".
+  const d = raw ? DUR(txt(raw)) : null;
+  if (d) return { kind: "care", who, facts: { dur: d[0].trim() }, asked: [], done: ["dur"] };
   return slotsAsked({ kind: "care", who, facts: {}, asked: [], done: [] }, "dur");
 }
 
@@ -348,6 +358,31 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
     return { why: "fix", text: [lead, body, nx?.q].filter(Boolean).join(" "), thread: out };
   }
 
+  // 11/10: "à, a bị gout nữa", "a cũng đang bị cảm" — người dùng nói về BỆNH CỦA CHÍNH MÌNH: không ghi vào mạch của người đang ốm
+  //   (trước đây: "Anh bị gout hả. Bác sĩ có kê thuốc cho mẹ uống chưa?"). Lớp sức khoẻ trả lời cho đúng người; mạch vẫn được giữ.
+  if (th0.kind === "care" && f?.selfWord && f.subject === "self" && SELF_ILL(t) && !feelingOf(t, f) && !CARER(t)) return null;
+
+  // 11/10: đang theo chuyện một người ốm mà hỏi trống "a nên làm gì", "giờ phải làm sao" → việc NGƯỜI CHĂM làm được (hỏi bác sĩ cho rõ,
+  //   ở bên, dấu hiệu cần báo ngay, giữ sức) — trước đây: "Em chưa theo kịp ý anh". Câu có triệu chứng / thuốc cụ thể thì lớp sức khoẻ trả lời.
+  if (th0.kind === "care" && !env.inHealth && t.words <= 8 && CARE_ASK(t) && !HELPLESS(t) && !MEDS(t) && !(analyzeBody(raw)?.sx.length ?? 0)) {
+    const s0 = shortOf(th0.who);
+    const seen = th0.facts.doctor === true || th0.facts.stay === true;
+    const doc = pet ? "thú y" : "bác sĩ";
+    return {
+      why: "advice",
+      thread: { ...th0, idle: 0 },
+      text: [
+        `Lúc ${s0} đang ${th0.facts.stay === true ? "nằm viện" : "như vậy"} thì mấy việc này giúp được nhiều nhất nè:`,
+        [
+          seen ? `• Hỏi ${doc} cho rõ: ${s0} bị gì, điều trị bao lâu, cần chăm và theo dõi những gì — ghi lại để khỏi quên.` : `• Chưa đi khám thì nên đưa ${s0} đi ${pet ? "thú y" : "khám"} sớm để biết rõ bị gì — nhất là khi đã kéo dài hoặc nặng dần.`,
+          `• Ở bên và lo giùm mấy việc nhỏ (ăn uống, ${pet ? "chỗ nằm ấm" : "giấy tờ"}, thuốc theo đơn) để ${s0} yên tâm nghỉ.`,
+          pet ? `• Thấy ${s0} bỏ ăn, lừ đừ hơn hẳn thì báo thú y ngay.` : `• Thấy ${s0} mệt hơn hẳn, khó thở, lơ mơ thì báo bác sĩ hoặc gọi **115** ngay.`,
+          pet ? "• Bạn cũng đừng lo quá mà quên ăn ngủ nha 💚" : "• Bạn cũng nhớ ăn ngủ giữ sức nha — chăm người ốm là đường dài.",
+        ].join("\n"),
+      ].join("\n"),
+    };
+  }
+
   // Câu hỏi, lời nhờ, lời chào / chúc / cảm ơn… không phải câu kể tiếp → lớp khác trả lời (mạch vẫn được giữ).
   // (Riêng câu đáp cụt cho câu Lomi vừa hỏi — "chưa", "rồi", "không" — nhìn giống câu hỏi nhưng chính là câu trả lời.)
   const nb = t.b.trim();
@@ -385,7 +420,8 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
     for (const k of Object.keys(g) as (keyof Got)[]) if (k !== "frail" && k !== "dur" && th0.facts[k as Slot] !== undefined && th0.facts[k as Slot] === g[k as Slot]) delete g[k];
     const keys = Object.keys(g) as (keyof Got)[];
     // Triệu chứng cụ thể ("sốt cao với ho") mà không phải lời bác sĩ / câu trả lời cho ô vừa hỏi → lớp sức khoẻ phân tích (cho đúng người bệnh).
-    const sym = (analyzeBody(raw)?.sx.length ?? 0) > 0;
+    //   (nhiệt độ đo được — "39 độ" — cũng vậy: lớp sức khoẻ biết đó là sốt cao hay chưa.)
+    const sym = (analyzeBody(raw)?.sx.length ?? 0) > 0 || /(?<![\p{L}\d])(3[5-9]|4[0-2])([.,]\d)?\s*(độ|do|°)/u.test(raw.normalize("NFC").toLowerCase());
     if (sym && g.dx === undefined && g.doctor === undefined && g.meds === undefined && g.better === undefined && !feel) return null;
     if (!keys.length && !feel) {
       // Không có điều gì mới cho mạch: chỉ đáp khi câu là một mẩu kể ngắn về chính người đó, không thuộc lớp nào khác.

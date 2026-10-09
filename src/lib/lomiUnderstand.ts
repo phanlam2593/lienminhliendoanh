@@ -12,6 +12,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import type { ChatReply } from "@/lib/lomiChat";
+import { TAROT_SPREADS } from "@/lib/tarot";
 
 export type Tone = "laugh" | "sad" | "mad" | "shock" | "love" | "neutral";
 
@@ -403,6 +404,10 @@ const pickS = (a: string[]) => a[Math.floor(Math.random() * a.length)];
 export function socialIntent(q: string): { intent: string; text: string; preferChit: boolean } | null {
   const n = normalizeVi(q);
   for (const [intent, re, texts, preferChit] of SOCIAL) if (re.test(n)) return { intent, text: pickS(texts), preferChit };
+  // 11/10: lời GỌI ở đầu không đổi ý một câu MỞ LỜI ("e ơi cho a hỏi", "lomi ơi a hỏi cái này") → bỏ lời gọi ra rồi so khuôn mở lời.
+  //        (lời chào kèm buổi — "e ơi chào buổi trưa" — vẫn để lớp khung câu đáp đúng buổi.)
+  const n2 = n.replace(/^(?:e|em|lomi|ban|be) oi\s+(?=\S)/, "");
+  if (n2 !== n) for (const [intent, re, texts, preferChit] of SOCIAL) if (intent === "opener" && re.test(n2)) return { intent, text: pickS(texts), preferChit };
   return null;
 }
 
@@ -431,11 +436,24 @@ export function tarotRuleInfo(q: string): UReply | null {
   return tarotInfo(normalizeVi(q));
 }
 function tarotInfo(n: string): UReply | null {
-  if (!/\b(tarot|la bai|bo bai)\b/.test(n)) return null;
+  // 11/10: hỏi luật mà không nhắc chữ "tarot" ("bài ngược là sao", "trải celtic là gì", "ẩn chính là gì") vẫn là hỏi về Tarot.
+  const asksWhat = /\b(la gi|la sao|nghia la|nghia gi|y nghia|la the nao|nhu the nao|gom nhung gi|khac gi)\b/.test(n);
+  if (asksWhat && /\b(celtic|chu thap|trai (5|nam|10|muoi|3|ba|1|mot) la|trai bai|kieu trai|cach trai)\b/.test(n))
+    return {
+      intent: "tarot_info",
+      text: `Trải bài là cách xếp các lá — mỗi VỊ TRÍ mang một ý riêng 🔮 Lomi có mấy kiểu:\n${TAROT_SPREADS.map((x) => `• **${x.vi.split(" · ")[0]}** — ${x.pos.map((p) => p.vi).join(" · ")}`).join("\n")}\n\nKhi bạn hỏi một câu cụ thể, tên vị trí của trải 3 lá đổi theo câu hỏi (vd Hiện tại · Trở ngại · Kết quả). Muốn thử thì gõ kiểu “trải 5 lá về công việc” nha.`,
+      quick: ["Bói một lá cho hôm nay"],
+    };
+  if (asksWhat && /\b(an chinh|an phu|major arcana|minor arcana)\b/.test(n))
+    return { intent: "tarot_info", text: "Bộ Tarot có 78 lá 🔮 **22 lá Ẩn Chính** (Chàng Khờ, Tình Nhân, Mặt Trời…) nói về những bài học, bước ngoặt lớn; **56 lá Ẩn Phụ** chia 4 chất — Gậy (hành động), Cốc (cảm xúc), Kiếm (suy nghĩ), Tiền (vật chất) — nói về chuyện thường ngày.", quick: ["Bói một lá cho hôm nay"] };
+  if (!/\b(tarot|la bai|bo bai)\b/.test(n) && !(/\b(bai|la) (nguoc|xuoi)\b/.test(n) && n.split(" ").length <= 7)) return null;
   if (/\b(nguoc|xuoi|lat nguoc)\b/.test(n))
     return { intent: "tarot_info", text: "Có nè 🔮 Trong Tarot, lá rút ra bị lộn đầu gọi là **lá ngược**. Lomi tính cả lá ngược: mỗi lá có nghĩa xuôi và nghĩa ngược riêng — lá ngược thường là năng lượng bị chặn, chậm lại hoặc cần nhìn lại, chứ không phải lúc nào cũng xấu. Muốn rút thử một lá không?", quick: ["Bói một lá cho hôm nay"] };
   if (/\b(bao nhieu la|may la|78)\b/.test(n))
     return { intent: "tarot_info", text: "Bộ Tarot có **78 lá**: 22 lá Ẩn Chính và 56 lá Ẩn Phụ (4 chất Gậy, Cốc, Kiếm, Tiền) 🔮 Lomi trải 1, 3, 5 hoặc 10 lá tuỳ bạn nha.", quick: ["Bói một lá cho hôm nay"] };
+  // Tarot KHÔNG chẩn đoán bệnh, không thay bác sĩ, không đoán chắc tương lai — hỏi thẳng thì nói thẳng.
+  if (/\b(chan doan|chua benh|biet benh|doan benh|thay bac si|thay thuoc|doan truoc|tien tri|biet truoc tuong lai|doan tuong lai|chac chan)\b/.test(n))
+    return { intent: "tarot_info", text: "Không đâu bạn 🙏 Tarot **không chẩn đoán được bệnh, không thay bác sĩ**, và cũng không nói chắc được tương lai. Lá bài chỉ là một cách nhìn lại chuyện của mình để suy ngẫm; chuyện sức khoẻ thì đi khám, chuyện quan trọng thì bạn vẫn là người quyết định nha.", quick: ["Bói một lá cho hôm nay"] };
   if (/\b(la gi|co that khong|co dung khong|co chinh xac khong|tin duoc khong)\b/.test(n))
     return { intent: "tarot_info", text: "Tarot là bộ 78 lá bài dùng để suy ngẫm, nhìn lại chuyện của mình từ góc khác 🔮 Lomi bói cho vui và để bạn có thêm góc nhìn thôi nha — quyết định quan trọng vẫn là ở bạn.", quick: ["Bói một lá cho hôm nay"] };
   return null;

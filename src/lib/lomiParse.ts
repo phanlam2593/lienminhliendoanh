@@ -246,6 +246,15 @@ add("PREP", "cùng|cho|của|từ|trong|ngoài|trên|dưới|bằng|để");
 add("CONJ", "tại vì|nhưng|vì|do|nên|và|hoặc");
 add("FILL", "một mình|ai cũng|ai nấy|buổi|bữa|tự nhiên|thật ra|hình như|có lẽ|chắc là|thì|là|cũng|lại|cứ|chỉ|toàn|đều|còn|nữa|hết|ơ|à|ờ|ừ|ủa|ui|ôi|chắc|có|bị|được|một|vẫn");
 
+// 11/10 — thêm SAU CÙNG, để khi gõ không dấu các từ có sẵn vẫn được ưu tiên ("cam" = cảm, "mang" = mang, "nghi" = nghỉ, "cai" = cái):
+// • việc người ta làm VỚI NHAU — trước đây là từ lạ nên "mà sếp không khen", "ảnh còn doạ đánh e" không đọc ra chủ ngữ / vị ngữ;
+// • nét tính cách hay bị than về một người ("chồng e ít nói lắm", "sếp a gia trưởng") — là lời chê, không phải câu trung tính.
+add("VERB", "xin lỗi|làm lành|nói dối|ngoại tình|kiểm soát|nghi ngờ|la mắng|khen|chê|mắng|chửi|trách|ghen|nghi|than|giấu|cấm|doạ|dọa|đánh|lừa|cãi", { cls: "social" });
+add("STATE", "sốt ruột|hay khóc|khóc", { cls: "feel", v: -1 });
+add("STATE", "có bầu|có thai|mang thai|mang bầu|bầu bí|bầu", { cls: "preg", v: 0 });
+add("STATE", "bị bắt nạt|bắt nạt|bị ăn hiếp|ăn hiếp|bị tẩy chay|tẩy chay|bị cô lập|bị trêu chọc|bị xúc phạm", { cls: "bad", v: -1 });
+add("ADJ", "ít nói|lạnh nhạt|lạnh lùng|vô tâm|cộc cằn|nóng tính|gia trưởng|ích kỷ|ích kỉ|keo kiệt|bừa bộn|hay ghen|ghen tuông|vô trách nhiệm", { v: -1 });
+
 // Từ không dấu dễ trùng với từ khác NGOÀI từ điển — gặp ở vị trí then chốt thì hạ độ chắc.
 const LOOSE_RISK = new Set("toi ban chua dau qua moi an la da co ma no voi thi cho nao ve sang roi nho ngu lam that buon kho doi khoe con day bua mua chan lo so to mat ho cam hay de di ra nha ba bo gap coi nghe".split(" "));
 
@@ -312,10 +321,25 @@ function disambiguate(tk: Tok[], loose = false) {
       else if (t.t === "nha" && (is(prev, "PREP", "MOTION") || (is(prev, "NOUN", "KIN", "UNK") && is(next, "SELF", "EM")))) to("nhà");
       // "qua": sau trạng thái / tính từ = quá (mặc định); sau người nói ở đầu câu + động từ = qua (đi qua) — giữ "quá".
       else if (t.t === "bạn" && is(prev, "STATE", "ADJ") && !next) to("bận");
+      // "ma": trước một người khác ("ma sep ko khen" = mà sếp không khen) là từ nối "mà"; trước người nói ("ma a dang om") vẫn là "má".
+      else if (t.t === "má" && is(next, "KIN", "THIRD")) to("mà");
     }
   }
   // Đuôi câu: bỏ qua tiểu từ, gọi trống ("… nha e", "… không e ơi") để tìm từ nội dung cuối cùng.
   let end = tk.length - 1;
+  const passiveAgents = () => {
+    // CÂU BỊ ĐỘNG: "bị BẠN bắt nạt", "bị SẾP mắng", "bị MẸ A chê", "bị CHỒNG bỏ" — người đứng giữa "bị" và việc xảy ra là NGƯỜI GÂY RA,
+    // không phải chủ ngữ / vị ngữ của câu. Việc xảy ra có thể là một từ chưa có trong từ điển ("bị vợ la") — cấu trúc đã đủ rõ.
+    for (let i = 1; i < end; i++) {
+      if (tk[i - 1].t !== "bị" || !is(tk[i], "KIN", "THIRD")) continue;
+      let k = i + 1;
+      if (is(tk[k], "KIN") && k < end) k++; // "bị MẸ CHỒNG mắng", "bị ANH TRAI la"
+      const own = k;
+      if (is(tk[k], "SELF", "EM") && k < end && /^(a|e|c|anh|em|chị|mình|tôi|tui|tớ)$/.test(tk[k].t)) k++; // "bị mẹ A chê"
+      if (k > end || !is(tk[k], "VERB", "STATE", "UNK")) continue;
+      for (let m = i; m < k; m++) Object.assign(tk[m], { r: "FILL", cls: m < own ? "agent" : "agentOf" });
+    }
+  };
   while (end > 0 && (is(tk[end], "PART", "VOC", "DEGREE") || (is(tk[end], "EM", "YOU") && end > 1 && tk[end].t !== "bạn"))) end--;
   for (let i = 0; i < tk.length; i++) {
     const t = tk[i];
@@ -336,16 +360,21 @@ function disambiguate(tk: Tok[], loose = false) {
     else if (t.t === "đi" && i > 0 && (i >= end || is(next, "PART", "VOC", "EM", "YOU")) && !is(prev, "SELF", "EM", "YOU", "TIME", "ASPECT", "NEG", "FILL", "COG", "DESIRE")) Object.assign(t, { r: "PART", cls: "urge" });
     // "đâu": sau phủ định ở cuối câu là nhấn mạnh phủ định ("a không buồn đâu").
     else if (t.t === "đâu" && i >= end && tk.slice(0, i).some((x) => x.r === "NEG")) t.r = "PART";
+    // 11/10: từ hỏi + "cũng" = TẤT CẢ ("cái gì cũng làm không xong", "ở đâu cũng vậy", "lúc nào a cũng mệt") — là câu kể, không phải câu hỏi.
+    else if (t.r === "QWORD" && tk.slice(i + 1, i + 4).some((x) => x.t === "cũng") && !tk.slice(i + 1).some((x) => x.r === "QPART")) t.r = "INDEF";
     // "gì / đâu / sao" sau phủ định = phiếm chỉ ("a chưa ăn gì", "không biết làm gì", "không sao").
     else if (t.r === "QWORD" && tk.slice(0, i).some((x) => x.r === "NEG") && !tk.slice(i + 1).some((x) => x.r === "QPART")) t.r = "INDEF";
     // "đi xem mắt mấy lần rồi", "a ăn mấy chén rồi" — "mấy … rồi" là "vài … rồi" (kể), không phải hỏi bao nhiêu — trừ khi đang hỏi Lomi.
     else if (t.t === "mấy" && t.r === "QWORD" && i < end && tk.slice(i + 1).some((x) => x.r === "ASPECT" && x.cls === "post") && !tk.some((x) => is(x, "EM", "YOU", "QPART"))) t.r = "INDEF";
+    // "bỏ mấy lần không được", "nói mấy lần rồi mà không nghe" — "mấy" + phủ định phía sau là "vài", không phải hỏi bao nhiêu.
+    else if (t.t === "mấy" && t.r === "QWORD" && tk.slice(i + 1).some((x) => x.r === "NEG") && !tk.some((x) => x.r === "QPART")) t.r = "INDEF";
     // "làm gì đó", "nghĩ gì đấy" cuối câu, không có "muốn / thèm" phía trước = hỏi "gì" + tiểu từ "đó" (khác "ăn gì đó cay cay").
     else if (t.r === "INDEF" && /^gì (đó|đấy)$/.test(t.t) && i >= end && !tk.slice(0, i).some((x) => is(x, "DESIRE", "NEG", "SELF")) && is(prev, "VERB", "COG")) Object.assign(t, { r: "QWORD", cls: "what" });
     // "con": trước con vật / danh từ lạ là loại từ; còn lại là "con" (đứa con).
     else if (t.t === "con" && t.r === "CLS" && !(is(next, "NOUN") && next!.cls === "pet") && !is(next, "UNK")) Object.assign(t, { r: "KIN", cls: "person" });
     // "bạn": có người sở hữu phía sau ("bạn a"), hoặc đứng sau động từ / giới từ ("chờ bạn", "với bạn") là người bạn.
-    else if (t.t === "bạn" && t.r === "YOU" && (is(next, "SELF") || (is(next, "EM") && i + 1 < end) || is(prev, "VERB", "MOTION", "PREP", "CLS", "NUM") || prev?.t === "với")) Object.assign(t, { r: "KIN", cls: "person" });
+    //   ("bị bạn bắt nạt", "bị bạn chơi xấu" — sau "bị" cũng là người bạn.)
+    else if (t.t === "bạn" && t.r === "YOU" && (is(next, "SELF") || (is(next, "EM") && i + 1 < end) || is(prev, "VERB", "MOTION", "PREP", "CLS", "NUM") || prev?.t === "với" || (prev?.t === "bị" && is(next, "VERB", "STATE", "UNK")))) Object.assign(t, { r: "KIN", cls: "person" });
     // Người nói xưng anh / chị (gọi Lomi là em) thì "bạn" trong câu là người bạn: "đi sinh nhật bạn", "ghé quán bạn chơi".
     else if (t.t === "bạn" && t.r === "YOU" && tk.some((x) => x.r === "SELF" && /^(a|anh|chị|c)$/.test(x.t))) Object.assign(t, { r: "KIN", cls: "person" });
     // "tí / chút / xíu" đầu câu hoặc ngay trước người nói = lát nữa ("tí a quay lại").
@@ -360,6 +389,7 @@ function disambiguate(tk: Tok[], loose = false) {
     else if (t.t === "nhà" && is(prev, "NOUN", "KIN", "UNK") && is(next, "SELF", "EM")) Object.assign(t, { r: "PREP", cls: "of" });
     // Tính từ thời tiết chỉ là thời tiết khi nói về trời; "máy lạnh", "nước nóng" đã là cụm riêng.
   }
+  passiveAgents();
 }
 
 const PROPER = new Set("đà lạt|sài gòn|hà nội|đà nẵng|nha trang|phú quốc|vũng tàu|hội an|huế".split("|"));
@@ -373,7 +403,7 @@ function render(tk: Tok[], emIs: "you" | "self"): string {
     .map((t, i) => {
       if (t.r === "EM") return emIs === "you" ? "Lomi" : YOU_MARK;
       // "bạn" là NGƯỜI BẠN (không phải lời gọi): viết thành "người bạn của …" / "bạn bè" / "cô bạn" để speak() không đổi thành anh / chị.
-      if (t.r === "KIN" && t.t === "bạn") return is(tk[i + 1], "SELF", "EM") ? "người bạn của" : "bạn bè";
+      if ((t.r === "KIN" || t.cls === "agent") && t.t === "bạn") return is(tk[i + 1], "SELF", "EM") ? "người bạn của" : "bạn bè";
       if (t.r === "KIN" && t.t === "con bạn") return "cô bạn";
       // Tên riêng: địa danh đã biết viết hoa; từ lạ giữ đúng kiểu người dùng gõ ("Phú Quốc", "con Mực").
       if (t.r === "NOUN" && PROPER.has(t.t)) return t.t.replace(/(^|\s)\p{L}/gu, (x) => x.toUpperCase());
@@ -411,7 +441,9 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   const expO = expandTeen(nfc);
   const exp = expO.toLowerCase();
   if (!/\p{L}/u.test(exp)) return base;
-  const loose = !DIACRITIC.test(exp);
+  // 11/10: xét theo câu người dùng GÕ, không theo câu đã đổi teen code — "hnay a met wa" gõ không dấu, nhưng sau khi đổi
+  // ("hôm nay a met quá") lại có dấu nên "met" từng bị coi là từ lạ ("Hôm nay met hả?").
+  const loose = !DIACRITIC.test(nfc.toLowerCase());
   // Tách mệnh đề theo dấu câu; mệnh đề chỉ gồm lời gọi / lời chào / từ đệm thì gộp vào phần mở đầu.
   const clauses = expO
     .split(/[,.;!?…\n]+|\s-\s/u)
@@ -685,7 +717,12 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   const knownHead = head && is(head, "DESIRE", "MOTION", "VERB", "COG", "STATE", "ADJ", "GOOD", "PREP");
   // Từ lạ đứng sau từ chỉ thì ("đang …", "sẽ …", "mới …") hoặc sau chủ ngữ rõ + mốc thời gian vẫn là việc làm.
   const unkVerb = head?.r === "UNK" && (recent || ongoing || planned || (f.subject === "self" && !!f.time?.explicit));
-  if (body.length && (knownHead || unkVerb)) {
+  // "chị e bị chồng BỎ", "con a bị ĐIỂM KÉM", "a bị vợ LA" — sau "bị" (+ người gây ra) là VIỆC XẢY ĐẾN với chủ ngữ, kể cả khi từ đó chưa có
+  // trong từ điển. Với người nói thì chỉ nhận khi có người gây ra ("a bị zona" để lớp sức khoẻ lo).
+  const lead = rest.slice(0, j);
+  const hasAgent = lead.some((t) => t.cls === "agent");
+  const passiveUnk = head?.r === "UNK" && !unkVerb && lead.some((t) => t.t === "bị") && (hasAgent || f.subject === "third" || f.subject === "pet");
+  if (body.length && (knownHead || unkVerb || passiveUnk)) {
     const h = body[0];
     const after = body.slice(1);
     let kind: PredKind = "activity";
@@ -776,6 +813,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   // "hôm nay e thế nào", "e sao rồi" — hỏi thăm trống: chủ ngữ + từ hỏi "thế nào / sao", ngoài ra chỉ có thời gian / từ đệm.
   if (!f.pred && f.subject === "you" && (qword?.cls === "how" || qword?.cls === "where") && rest.every((t) => is(t, "EM", "YOU", "QWORD", "FILL", "PART", "ASPECT"))) conf = 0.85;
   if (unkVerb) conf *= 0.8;
+  if (passiveUnk && !hasAgent) conf *= 0.9;
   if (loose && (head?.amb || subjToks.some((t) => t.amb))) conf *= 0.85;
   // "… mà chưa được duyệt", "… nhưng …" — có vế sau: khung chỉ đọc vế đầu.
   if (core.some((t, k) => k >= 2 && (t.r === "CONJ" || (t.t === "mà" && k < core.length - 1)))) f.multi = true;

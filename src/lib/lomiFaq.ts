@@ -8,6 +8,7 @@
 //   Không chắc → Lomi gợi ý vài câu gần nhất để người dùng chọn (suggestFaqs) thay vì trả lời bừa.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { APP, maskStrict } from "@/lib/lomiAccent";
 export type FaqCat = "start" | "offers" | "explore" | "biz" | "quet" | "rides" | "chat" | "profile" | "account";
 export type Faq = { id: string; cat: FaqCat; q: { vi: string; en: string }; a: { vi: string; en: string }; kw: string[] };
 
@@ -478,7 +479,9 @@ function index(): Indexed[] {
   return INDEX;
 }
 
-function scoreAll(text: string): { f: Faq; score: number; cover: number }[] {
+function scoreAll(text0: string): { f: Faq; score: number; cover: number }[] {
+  // 11/10: "đau chân lắm" gõ có dấu không phải hỏi cách "chặn" người dùng (bỏ dấu thì trùng) — lib/lomiAccent.
+  const text = maskStrict(text0, APP);
   const n = ` ${canon(text)} `;
   // Câu toàn từ phổ biến ("lomi là ai", "app này là gì") → vẫn so từng từ, không bỏ từ đệm.
   const qt0 = tokens(n.trim());

@@ -115,6 +115,12 @@ export function senseCanon(q: string): string {
   const n = normalizeVi(q);
   const add: string[] = [];
   for (const [re, canon] of SYN) if (re.test(n) && !n.includes(normalizeVi(canon))) add.push(canon);
+  // 11/10: "dạ dày e đau quá", "lưng a cứ đau hoài" — bộ phận đứng TRƯỚC chữ "đau" → thêm cụm chuẩn "đau <bộ phận>" cho lớp triệu chứng.
+  const bp = n.match(/\b(da day|bao tu|bung|lung|rang|hong|nguc|dau)( (cua )?(e|em|a|anh|c|chi|minh|tui|toi|con|be))?( (bi|dang|cu|hay|lai|van))* dau\b/);
+  if (bp) {
+    const part = ({ "da day": "dạ dày", "bao tu": "bao tử", bung: "bụng", lung: "lưng", rang: "răng", hong: "họng", nguc: "ngực", dau: "đầu" } as Record<string, string>)[bp[1]];
+    if (part && !n.includes(`dau ${bp[1]}`)) add.push(`đau ${part}`);
+  }
   const req = canonRequest(q, n);
   if (req) return req;
   return add.length ? `${q} ${add.join(" ")}` : q;
@@ -461,7 +467,7 @@ const REACTION = /^(buon cuoi|mac cuoi|hai|hai huoc|vui|de thuong|dinh|xin|ghe|k
 const TALK_POS = W("vui|đã ghê|đã quá|thích|ngon|đẹp|được thưởng|được khen|được nghỉ|được tăng|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
 // Từ hay gặp trong câu KỂ TIẾP ("câu được mấy con cá to") — đủ để biết là đang kể, nhưng chưa đủ để nói đó là chuyện vui.
 const TALK_MORE = W("đã|to|nhiều|được");
-const TALK_NEG = W("mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư");
+const TALK_NEG = W("không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư");
 const ACT_STOP = new Set("với cùng ở tại rồi nè nha mà thì và hôm lúc xong về cho để nên quá lắm ghê luôn á ạ nhưng mới vừa đang mấy nhiều hoài suốt nữa đó".split(" "));
 /** Việc vừa kể: "hôm qua anh đi câu cá với mấy đứa bạn" → "đi câu cá" (động từ + tối đa 3 từ, dừng ở từ nối). */
 function echoAct(s: string): string {
@@ -483,15 +489,22 @@ export function isTalkCont(raw: string): boolean {
   if (!t.length || isAskLike(raw)) return false;
   return isPersonalTalk(raw) || t.length <= 3 || TALK_POS.test(s) || TALK_MORE.test(s) || TALK_NEG.test(s) || CONT_HEAD.has(t[0]);
 }
+// 11/10: từ vui đứng ngay sau phủ định ("mà sếp không khen", "chẳng vui gì") là điều KHÔNG có — không phải chuyện vui để mừng "Quá xịn luôn 😄".
+const NEG_TAIL = /(?<![\p{L}])(không|ko|k|chưa|chẳng|chả|hổng|hông|đâu có|khong|chua|chang|hok)\s+(?:\S+\s+)?$/iu;
+function negatedPos(s: string): boolean {
+  const m = TALK_POS.exec(s);
+  return !!m && NEG_TAIL.test(s.slice(0, m.index));
+}
 /** Câu kể vui / nhẹ nhàng (không có dấu hiệu buồn, mệt, xui) — để chuyện vui không bị đọc thành tâm sự nặng nề. */
 export function isUpbeat(raw: string): boolean {
   const s = low(raw);
-  return !TALK_NEG.test(s) && !/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) && !isAskLike(raw);
+  return !TALK_NEG.test(s) && !negatedPos(s) && !/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) && !isAskLike(raw);
 }
-export function talkContinue(raw: string, depth: number): SenseReply {
+/** sober = đang nói chuyện không vui của một người (Lomi vừa đáp bằng giọng chia sẻ) → lời đáp ngắn không kèm mặt cười. */
+export function talkContinue(raw: string, depth: number, sober = false, lastText = ""): SenseReply {
   const s = low(raw).replace(/[.!…,]+$/u, "");
   const words = s.split(/\s+/).filter(Boolean);
-  const neg = TALK_NEG.test(s) || /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
+  const neg = TALK_NEG.test(s) || negatedPos(s) || /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw);
   const pos = !neg && TALK_POS.test(s);
   // Mẩu chi tiết ngắn ("xe máy", "ở Đà Lạt") → nhắc lại đúng mẩu đó cho thấy Lomi theo kịp.
   // (chữ "bạn" trong mẩu nhắc lại là NGƯỜI BẠN của người dùng — viết "bạn bè" để lúc hiển thị không bị đổi thành anh / chị)
@@ -504,11 +517,16 @@ export function talkContinue(raw: string, depth: number): SenseReply {
       ? pick(["Nghe đã ghê 😆", "Quá xịn luôn 😄", "Thích vậy trời 🤩"])
       : frag
         ? `${frag} ${pick(["Ra là vậy.", "À à."])}`
-        : pick(["Ra là vậy 😄", "À, vậy hả 😮", "Ồ, vậy luôn 😄"]);
+        : sober
+          ? pick(["Vậy hả…", "Ừm, ra vậy.", "Lomi nghe nè."])
+          : pick(["Ra là vậy 😄", "À, vậy hả 😮", "Ồ, vậy luôn 😄"]);
   // Lượt lẻ hỏi nối một câu; lượt chẵn chỉ đáp lại — không phải câu nào cũng kết bằng "kể thêm đi".
   const tailQ =
     depth % 2 === 1
-      ? pick(neg ? ["Rồi giờ sao rồi bạn?", "Có chuyện gì vậy, kể Lomi nghe với."] : ["Rồi sao nữa nè?", "Kể tiếp đi, Lomi đang nghe nè."])
+      ? // Lomi vừa mời "kể … nghe với" và người dùng đang kể rồi thì không hỏi lại "có chuyện gì vậy" lần nữa.
+        /kể \S+ nghe với/.test(lastText)
+        ? "Rồi giờ sao rồi bạn?"
+        : pick(neg || sober ? ["Rồi giờ sao rồi bạn?", "Có chuyện gì vậy, kể Lomi nghe với."] : ["Rồi sao nữa nè?", "Kể tiếp đi, Lomi đang nghe nè."])
       : depth >= 4
         ? "Nghe bạn kể mà Lomi thấy như được đi cùng luôn."
         : "";
@@ -567,7 +585,7 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number }
   // không coi là câu độc lập để báo "chưa tiếp thu", và không lặp "kể thêm cho Lomi nghe" ở mọi lượt.
   // Vẫn phải nhận ra đây là lời kể (có người kể / cảm xúc / mẩu chi tiết ngắn / câu nối "xong…", "rồi…", "mà…");
   // một câu dài nói chuyện khác hẳn ("bitcoin hôm nay lên 100k") thì không giả vờ hiểu.
-  if (ctx.talk && isTalkCont(raw)) return talkContinue(raw, ctx.talk);
+  if (ctx.talk && isTalkCont(raw)) return talkContinue(raw, ctx.talk, /🥺|😔|😣/u.test(ctx.lastText ?? ""), ctx.lastText ?? "");
   if (words >= 2 && isPersonalTalk(raw)) {
     const s = low(raw);
     const sad = /(😭|🥲|😢|😞|:\(+|huhu|hic)/iu.test(raw) || TALK_NEG.test(s);

@@ -17,7 +17,7 @@ import { DISHES, detectDish, detectSearch, type Dish } from "@/lib/lomiSearch";
 import { expandTeen, isAffirm, isAppish, isDecline, type ChatReply } from "@/lib/lomiChat";
 import { isAskLike, isTalkCont, senseLate, senseState, talkContinue } from "@/lib/lomiSense";
 import { socialIntent } from "@/lib/lomiUnderstand";
-import { detectTarot, tarotCard, type TarotReading } from "@/lib/tarot";
+import { detectTarot, readingCardAt, readingRecap, tarotCard, type TarotReading } from "@/lib/tarot";
 
 /** Phần của một tin trong lịch sử mà ngữ cảnh cần đọc (khớp các cờ trên Msg của AiAssistant). */
 export type ConvoMsg = {
@@ -38,6 +38,8 @@ export type ConvoMsg = {
   search?: unknown;
   tarot?: TarotReading;
   tarotRef?: TarotReading;
+  /** Trải bài rút cách đây vài lượt (chuyện khác đã chen vào) — vẫn hỏi lại được khi câu nhắc rõ "lá / bài". */
+  tarotBack?: { r: TarotReading; n: number };
   tarotAwait?: boolean;
   bizPick?: boolean;
   bizTopicPick?: boolean;
@@ -63,6 +65,8 @@ export type Convo = {
   person?: string;
   symptoms: string[];
   reading?: TarotReading;
+  /** Trải bài rút cách đây 1–3 lượt, giữa chừng đã nói sang chuyện khác. */
+  readingBack?: TarotReading;
   /** Số lượt Lomi đang "nghe kể" liên tục (0 = không). */
   talk: number;
   /** Kiểu câu trả lời Lomi đang chờ cho câu hỏi vừa hỏi. */
@@ -129,6 +133,7 @@ export function convoOf(history: ConvoMsg[]): Convo {
   c.person = last.rel?.split("|")[0] || undefined;
   c.symptoms = last.sx ?? [];
   c.reading = last.tarot ?? last.tarotRef;
+  c.readingBack = last.tarotBack?.r;
   c.asked = askedKind(last.content);
   // Đang nghe kể: tin Lomi gần nhất là lời "nghe kể", hoặc là một câu đáp xã giao ngắn chen giữa mạch kể.
   const prevA = as[as.length - 2];
@@ -224,12 +229,31 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
         reply: { text: `Bạn đang hỏi về ${p} đúng không? Bạn muốn biết ${p} đang nghĩ gì, hay bạn nên làm gì tiếp theo?`, quick: [`${cap(mine(p))} đang nghĩ gì về mình?`, "Mình nên làm gì bây giờ?"] },
       };
     if (CONTACT.test(n) && ask && !named && words <= 9)
-      return { kind: "rewrite", why: "heart:contact", q: /\b(nhan gi|noi gi|mo loi sao|bat chuyen sao)\b/.test(n) ? `nên nhắn gì cho ${mine(p)}` : `có nên nhắn cho ${mine(p)} không` };
+      return { kind: "rewrite", why: "heart:contact", q: /\b(nhan gi|noi gi|mo loi sao|bat chuyen sao|nhan sao|nhan the nao|nhan nhu the nao|noi sao|noi the nao|viet gi|viet sao|cau nao)\b/.test(n) ? `nên nhắn gì cho ${mine(p)}` : `có nên nhắn cho ${mine(p)} không` };
   }
 
+  // 11/10: trải bài rút cách đây vài lượt (đã nói sang chuyện khác) vẫn là trải bài đang nói tới khi câu nhắc rõ "lá / bài"
+  //        ("Nếu lá ngược thì sao?" sau hai câu kể thêm về người ấy) — trước đây Lomi đáp "chưa bắt chắc ý bạn".
+  const tWord = /\b(la|bai|la bai|trai bai|tarot)\b/.test(n);
+  const rd = c.reading ?? (tWord ? c.readingBack : undefined);
+  // 3a) Hỏi riêng MỘT lá theo thứ tự ("lá thứ 3 nói gì?", "lá đầu tiên là sao?", "lá cuối nghĩa gì?") → giải đúng lá đó theo vị trí của nó.
+  const nth = rd && words <= 10 && !detectTarot(q) ? n.match(/\bla (?:bai )?(?:(?:thu|so) (\d+|nhat|hai|ba|tu|bon|nam|sau|bay|tam|chin|muoi)|(dau tien|dau|cuoi cung|cuoi|giua))\b/) : null;
+  if (rd && nth) {
+    const ORD: Record<string, number> = { nhat: 1, hai: 2, ba: 3, tu: 4, bon: 4, nam: 5, sau: 6, bay: 7, tam: 8, chin: 9, muoi: 10 };
+    const i = nth[1] ? (ORD[nth[1]] ?? Number(nth[1])) - 1 : /^dau/.test(nth[2]) ? 0 : /^cuoi/.test(nth[2]) ? rd.cards.length - 1 : Math.floor((rd.cards.length - 1) / 2);
+    const one = readingCardAt(rd, i);
+    return {
+      kind: "reply",
+      keep: true,
+      why: "tarot:card",
+      reply: one
+        ? { text: one, quick: ["Rút thêm", "Bói lại"] }
+        : { text: `Trải bài vừa rồi chỉ có ${rd.cards.length} lá thôi nè 🔮 Bạn muốn Lomi giải kỹ lá nào trong ${rd.cards.length} lá đó, hay rút thêm một lá?`, quick: ["Rút thêm"] },
+    };
+  }
   // 3) Vừa bói xong, hỏi nghĩa xuôi / ngược của CHÍNH các lá vừa rút → giải theo trải bài đó, không rút bài mới.
-  if (c.reading && /\b(nguoc|xuoi)\b/.test(n) && words <= 10 && !detectTarot(q)) {
-    const r = c.reading;
+  if (rd && /\b(nguoc|xuoi)\b/.test(n) && words <= 10 && !detectTarot(q)) {
+    const r = rd;
     const cards = r.cards.slice(0, 3).map((d) => {
       const k = tarotCard(d.id);
       return d.rev ? `• **${k.name.vi}** đang ra ngược: ${k.rev.vi}\n  Nếu ra xuôi thì nghiêng về: ${k.up.vi}` : `• **${k.name.vi}** đang ra xuôi: ${k.up.vi}\n  Nếu ra ngược thì nghiêng về: ${k.rev.vi}`;
@@ -248,8 +272,12 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
 
   // 3b) Vừa bói xong, hỏi NGHĨA của chính lá vừa rút ("lá này nghĩa là sao?", "giải thích thêm đi") → giải lá đó, vẫn giữ trải bài
   //     (để câu sau "thế còn tình cảm thì sao?" vẫn là hỏi bài).
-  if (c.reading && words <= 9 && !detectTarot(q) && /\b(nghia la|y nghia|nghia gi|nghia sao|la sao|giai thich|noi ro|noi them|noi ky|hieu sao|noi ve gi|la gi)\b/.test(n) && (/\b(la|bai|no|cai nay|cai do|them|hon)\b/.test(n) || words <= 4)) {
-    const r = c.reading;
+  // 3c) Hỏi lại KẾT LUẬN của trải bài ("vậy chọn A hả?", "tóm lại là sao?", "vậy là có hay không?") → nhắc lại kết luận theo đúng câu hỏi gốc,
+  //     không rút bài mới và không đổi câu hỏi.
+  if (c.reading && words <= 9 && !detectTarot(q) && (/\b(tom lai|noi gon|ket luan|chot lai|rot cuoc|noi chung la sao|vay la sao|vay la (co|khong|nen|duoc|on|tot|xau|chua)|vay (la )?(co|khong) (ha|a|nhi)|cai nao (tot|hon|on)|ben nao (tot|hon|on)|nghieng ve)\b/.test(n) || (c.reading.kind === "choice" && /\b(chon|nen chon|vay chon|theo) \S+/.test(n) && ask)))
+    return { kind: "reply", keep: true, why: "tarot:recap", reply: { text: readingRecap(c.reading, /nói gọn lại là vầy|vừa tóm lại đó/.test(last.content)), quick: ["Rút thêm", "Bói lại"] } };
+  if (rd && (c.reading || tWord) && words <= 9 && !detectTarot(q) && /\b(nghia la|y nghia|nghia gi|nghia sao|la sao|giai thich|noi ro|noi them|noi ky|hieu sao|noi ve gi|noi gi|la gi)\b/.test(n) && (/\b(la|bai|no|cai nay|cai do|them|hon)\b/.test(n) || words <= 4)) {
+    const r = rd;
     const cards = r.cards.slice(0, 3).map((d) => {
       const k = tarotCard(d.id);
       return `• **${k.name.vi}** (${d.rev ? "ngược" : "xuôi"}): ${d.rev ? k.rev.vi : k.up.vi}`;
@@ -307,7 +335,7 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   }
   // 4c) Lomi đang nghe kể, bạn đáp một mẩu ngắn có chữ "quán / gần…" ("quán gần nhà") → là KỂ TIẾP, không phải nhờ tìm quán.
   if (c.talk && !ask && words <= 6 && !detectDish(q) && detectSearch(q) && isTalkCont(raw) && !/\b(tim|kiem|goi y|gioi thieu|chi|muon|can|them|cho (minh|a|anh|em|e|toi|tui))\b/.test(n)) {
-    const r = talkContinue(raw, c.talk);
+    const r = talkContinue(raw, c.talk, /🥺|😔|😣/u.test(last.content), last.content);
     return { kind: "reply", keep: false, talk: true, why: "talk:cont", reply: { text: r.text } };
   }
 
