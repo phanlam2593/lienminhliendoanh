@@ -22,7 +22,7 @@
 {"text":"Uống quá nhiều vitamin D kéo dài (hầu như luôn do thực phẩm bổ sung, không phải do nắng) có thể gây tăng canxi máu, làm yếu xương, tổn thương thận và tim.","src":[0,2]}
 ],
 "care":[
-{"text":"Ánh nắng là nguồn chính để cơ thể tạo vitamin D, nhưng nắng quá nhiều có thể gây lão hoá da và ung thư da; nên bảo vệ da khi ở nắng lâu.","src":[0,1,2]},
+{"text":"Cơ thể tạo vitamin D khi da tiếp xúc ánh nắng, nhưng nắng quá nhiều có thể gây lão hoá da và ung thư da; nên bảo vệ da khi ở nắng lâu.","src":[0,1,2]},
 {"text":"Vitamin D bổ sung có dạng D2 và D3; D3 có thể làm tăng nồng độ cao hơn và lâu hơn. Uống cùng bữa ăn có chút chất béo sẽ hấp thu tốt hơn.","src":[1,2]},
 {"text":"Hãy hỏi bác sĩ xem có cần bổ sung không và dùng bao nhiêu. Bác sĩ có thể cho xét nghiệm vitamin D để biết mức trong máu.","src":[1,2]},
 {"text":"Ở Anh (ít nắng vào thu đông), NHS khuyên mọi người cân nhắc bổ sung vào mùa thu và đông; nhóm nguy cơ cao nên bổ sung quanh năm.","src":[0]},
@@ -36,7 +36,7 @@
 {"text":"NHS khuyên phụ nữ mang thai tránh ăn gan.","src":[0]}
 ],
 "foods":[
-{"name":"cá béo","aliases":["cá hồi","cá thu","cá ngừ","cá trích","cá mòi","cá hồi vân","dầu gan cá"],"verdict":"good","note":"NHS nêu cá hồi, cá mòi, cá hồi vân, cá trích, cá thu; NIH nêu cá hồi vân, cá hồi, cá ngừ, cá thu và dầu gan cá là nguồn tự nhiên tốt nhất.","src":[0,2]},
+{"name":"cá béo","aliases":["cá hồi","cá thu","cá ngừ","cá trích","cá mòi","cá hồi vân","dầu gan cá"],"verdict":"good","note":"NHS nêu cá hồi, cá mòi, cá hồi vân, cá trích, cá thu; NIH nêu cá hồi vân, cá hồi, cá ngừ, cá thu và dầu gan cá là một trong những nguồn tự nhiên tốt nhất.","src":[0,2]},
 {"name":"lòng đỏ trứng","aliases":["trứng","lòng đỏ","trứng gà"],"verdict":"good","note":"NHS, MedlinePlus và NIH đều nêu lòng đỏ trứng chứa một ít vitamin D.","src":[0,1,2]},
 {"name":"gan","aliases":["gan bò","gan heo","gan lợn","gan gà"],"verdict":"ok","note":"Gan là nguồn có vitamin D (NHS, MedlinePlus; NIH nêu gan bò), nhưng NHS khuyên phụ nữ mang thai nên tránh ăn gan.","src":[0,1,2]},
 {"name":"thịt đỏ","aliases":["thịt bò","thịt heo","thịt lợn"],"verdict":"ok","note":"NHS nêu thịt đỏ là một nguồn có vitamin D.","src":[0]},

@@ -21,7 +21,7 @@
 ],
 "course":[
 {"text":"Thiếu B12 và folate gặp nhiều hơn ở người lớn tuổi; NHS nêu khoảng 1/10 người từ 75 tuổi và 1/20 người 65–74 tuổi bị ảnh hưởng.","src":[0]},
-{"text":"Biến chứng ít gặp nhưng có thể xảy ra, nhất là sau thời gian thiếu dài: tổn thương thần kinh (đôi khi không hồi phục), vô sinh tạm thời, bệnh tim, biến chứng thai kỳ và dị tật bẩm sinh.","src":[0]},
+{"text":"Biến chứng ít gặp nhưng có thể xảy ra, nhất là sau thời gian thiếu dài: vấn đề về hệ thần kinh (đôi khi vĩnh viễn), vô sinh tạm thời, bệnh tim, biến chứng thai kỳ và dị tật bẩm sinh.","src":[0]},
 {"text":"Người lớn bị thiếu máu nặng cũng có thể bị suy tim.","src":[0]},
 {"text":"Trẻ sơ sinh của mẹ ăn thuần chay nghiêm ngặt khi mang thai hoặc cho con bú có thể bị ảnh hưởng.","src":[2]},
 {"text":"Tổn thương thần kinh có thể xảy ra ngay cả khi chưa thiếu máu, nên điều trị sớm rất quan trọng.","src":[2]}
@@ -29,7 +29,7 @@
 "care":[
 {"text":"Phần lớn trường hợp dễ điều trị bằng thuốc tiêm hoặc thuốc viên, tuỳ nguyên nhân; thuốc B12 thường tiêm trước. Có thể ngưng khi nồng độ hồi phục hoặc phải dùng suốt đời, do bác sĩ quyết định.","src":[0]},
 {"text":"Cải thiện chế độ ăn có thể giúp điều trị và phòng tái phát.","src":[0]},
-{"text":"Nhiều triệu chứng cải thiện sau điều trị, nhưng một số vấn đề do bệnh gây ra không hồi phục được nếu phát hiện muộn.","src":[0]},
+{"text":"Nhiều triệu chứng cải thiện sau điều trị, nhưng một số vấn đề do bệnh gây ra có thể không hồi phục được.","src":[0]},
 {"text":"NHS: chưa đủ bằng chứng về tác động của B12 bổ sung liều cao, nên lấy B12 từ chế độ ăn đa dạng và đừng dùng quá nhiều. NIH nêu B12 chưa được chứng minh gây hại ngay cả ở liều cao.","src":[1,2]},
 {"text":"Hãy báo bác sĩ hoặc dược sĩ về mọi thuốc và thực phẩm bổ sung đang dùng, vì một số thuốc ảnh hưởng hấp thu B12.","src":[2]}
 ],
@@ -44,7 +44,7 @@
 {"name":"thực phẩm tăng cường B12","aliases":["ngũ cốc ăn sáng","men dinh dưỡng"],"verdict":"good","note":"NHS và NIH: một số ngũ cốc ăn sáng và men dinh dưỡng được bổ sung B12; chỉ tính khi nhãn có ghi.","src":[1,2]}
 ]},
 "doctor":[
-{"text":"Nên đi khám nếu nghĩ mình có thể thiếu B12. Chẩn đoán thường dựa vào triệu chứng và xét nghiệm máu.","src":[0]},
+{"text":"Nên đi khám nếu nghĩ mình có thể thiếu B12. Thường có thể chẩn đoán dựa vào triệu chứng và xét nghiệm máu.","src":[0]},
 {"text":"Chẩn đoán sớm quan trọng vì một số vấn đề do bệnh gây ra không hồi phục được, dù nhiều triệu chứng cải thiện sau điều trị.","src":[0]}
 ],
 "emergency":[],

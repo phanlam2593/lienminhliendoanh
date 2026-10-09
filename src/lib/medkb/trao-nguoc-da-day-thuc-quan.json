@@ -6,7 +6,7 @@
 {"text":"Ợ nóng (heartburn) là cảm giác nóng rát ở giữa ngực do acid dạ dày trào lên phía cổ họng; nếu cứ tái diễn thì có thể gọi là bệnh trào ngược (GORD/GERD).","src":[0]}
 ],
 "signs":[
-{"text":"Triệu chứng hay gặp nhất: ợ nóng (nóng rát sau xương ức) và ợ trớ (thức ăn hoặc dịch chua trào lên họng, miệng). Một số người bị GERD không có cả hai.","src":[3,4]},
+{"text":"Triệu chứng thường gặp: ợ nóng (cảm giác nóng rát ở ngực) và ợ trớ (thức ăn hoặc dịch chua trào lên họng, miệng). Một số người bị GERD không có cả hai.","src":[3,4]},
 {"text":"Có thể thấy vị chua khó chịu trong miệng; đôi khi kèm ho dai dẳng hoặc nấc, khàn tiếng, hơi thở hôi, đầy hơi, buồn nôn.","src":[0]},
 {"text":"Triệu chứng thường nặng hơn sau khi ăn, khi nằm xuống và khi cúi người.","src":[0]},
 {"text":"Cũng có thể gặp khó nuốt hoặc đau khi nuốt, cảm giác vướng ở họng, đau ngực hoặc đau bụng trên.","src":[3,4]},
@@ -40,13 +40,13 @@
 ],
 "ok":[
 {"text":"Ăn bữa nhỏ hơn nhưng nhiều bữa hơn.","src":[0]},
-{"text":"NIDDK không nêu món cụ thể nào giúp giảm trào ngược; nếu thừa cân, bác sĩ có thể gợi ý chế độ ăn để giảm cân. Hãy trao đổi với bác sĩ món nào làm bạn khó chịu.","src":[2]}
+{"text":"NIDDK không nêu món cụ thể nào giúp giảm trào ngược; nếu thừa cân, bác sĩ có thể khuyên giảm cân để giảm triệu chứng. Hãy trao đổi với bác sĩ món nào làm bạn khó chịu.","src":[2]}
 ],
 "foods":[
 {"name":"cà phê và đồ uống chứa caffeine","aliases":["cà phê","cafe","trà","cola","coca","nước tăng lực"],"verdict":"limit","note":"NHS, NIDDK và Mayo Clinic nêu cà phê/caffeine là thứ có thể gây hoặc làm nặng triệu chứng trào ngược ở một số người.","src":[0,2,3]},
 {"name":"cà chua","aliases":["sốt cà chua","tương cà"],"verdict":"limit","note":"NHS và NIDDK nêu cà chua là thứ có thể kích triệu chứng ở một số người.","src":[0,2]},
 {"name":"cam quýt","aliases":["cam","quýt","chanh","bưởi","nước cam","nước ép cam"],"verdict":"limit","note":"NIDDK nêu thực phẩm có tính acid như cam quýt có thể làm triệu chứng nặng hơn ở một số người.","src":[2]},
-{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"NHS, NIDDK và Mayo Clinic nêu rượu bia có thể gây hoặc làm nặng triệu chứng trào ngược.","src":[0,2,3]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS, NIDDK và Mayo Clinic nêu rượu bia có thể gây hoặc làm nặng triệu chứng trào ngược; NHS khuyên đừng uống quá nhiều.","src":[0,2,3]},
 {"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS và NIDDK nêu sô-cô-la có thể kích triệu chứng ở một số người.","src":[0,2]},
 {"name":"đồ nhiều dầu mỡ","aliases":["đồ chiên","đồ chiên rán","đồ béo","đồ rán"],"verdict":"limit","note":"NHS, NIDDK và Mayo Clinic nêu đồ nhiều dầu mỡ/chiên rán có thể làm triệu chứng nặng hơn.","src":[0,2,3]},
 {"name":"bạc hà","aliases":["mint","kẹo bạc hà","trà bạc hà"],"verdict":"limit","note":"NIDDK nêu bạc hà là một thứ có thể làm triệu chứng trào ngược nặng hơn ở một số người.","src":[2]},

@@ -17,10 +17,10 @@
 {"text":"Thường do cơ thể có vấn đề với insulin (hormone đưa đường vào tế bào): hoặc kháng insulin, hoặc không tạo đủ insulin, nên đường ứ lại trong máu.","src":[0,2]},
 {"text":"Nguyên nhân chính xác chưa rõ; di truyền và tiền sử gia đình có vai trò quan trọng.","src":[2]},
 {"text":"Thừa cân và ít vận động được xem là các yếu tố đóng góp chính.","src":[0]},
-{"text":"Yếu tố nguy cơ: thừa cân (nhất là mỡ bụng), vòng bụng lớn, ít vận động, hút thuốc, người thân bị tiểu đường, từng bị tiểu đường thai kỳ, buồng trứng đa nang, ngưng thở khi ngủ, huyết áp cao, mỡ máu bất thường, hội chứng chuyển hoá.","src":[0,1,2]},
+{"text":"Yếu tố nguy cơ: thừa cân, vòng bụng lớn, ít vận động, hút thuốc, người thân bị tiểu đường, từng bị tiểu đường thai kỳ, buồng trứng đa nang, ngưng thở khi ngủ, huyết áp cao, mỡ máu bất thường, hội chứng chuyển hoá.","src":[0,1,2]},
 {"text":"Ăn nhiều thịt đỏ, đồ chế biến sẵn, chất béo bão hoà hoặc đường cũng là yếu tố nguy cơ.","src":[2]},
 {"text":"Nguy cơ tăng theo tuổi; nhóm người châu Á, gốc Phi, Latin... có tỉ lệ cao hơn trong thống kê của Hoa Kỳ.","src":[0,1,2]},
-{"text":"Một số thuốc (như glucocorticoid, vài thuốc chống loạn thần, vài thuốc HIV) dùng lâu dài cũng làm tăng nguy cơ.","src":[1,2]}
+{"text":"Một số thuốc (như glucocorticoid, vài thuốc chống loạn thần, vài thuốc HIV) dùng lâu dài cũng làm tăng nguy cơ.","src":[1]}
 ],
 "course":[
 {"text":"Tiền tiểu đường liên quan đến tổn thương lâu dài ở tim, mạch máu và thận, kể cả trước khi thành tiểu đường type 2.","src":[2]},
@@ -35,12 +35,12 @@
 {"text":"Nên chọn cách ăn mà bạn có thể duy trì lâu dài, có món bạn thích và phù hợp truyền thống ăn uống của mình.","src":[3]},
 {"text":"Mayo Clinic lưu ý các chế độ ăn \"thời thượng\" (như ăn theo chỉ số đường huyết, paleo, keto) có thể giúp giảm cân nhưng còn ít nghiên cứu về lợi ích dài hạn trong phòng tiểu đường.","src":[3]},
 {"text":"Tránh giảm cân quá mạnh vì có thể có hại. Kiểm soát huyết áp và mỡ máu.","src":[2]},
-{"text":"Bác sĩ có thể kê metformin (thuốc tiểu đường) hoặc thuốc cho các bệnh đi kèm như huyết áp cao, mỡ máu cao. Trong một số trường hợp có thể cân nhắc thuốc giảm cân hoặc phẫu thuật. Do bác sĩ quyết định.","src":[0,1,2]}
+{"text":"Bác sĩ có thể kê metformin (thuốc tiểu đường) hoặc thuốc hạ huyết áp, hạ triglyceride. Trong một số trường hợp có thể cân nhắc thuốc giảm cân hoặc phẫu thuật giảm cân. Do bác sĩ quyết định.","src":[0,1,2]}
 ],
 "diet":{
 "avoid":[
 {"text":"Tránh carbohydrate nhiều đường mà ít chất xơ và dinh dưỡng.","src":[3]},
-{"text":"Hạn chế bánh mì trắng, bánh ngọt, mì làm từ bột trắng, nước ép trái cây, đồ chế biến sẵn có đường hoặc siro bắp fructose cao, nhiều món ăn béo nhiều năng lượng.","src":[3]},
+{"text":"Tránh bánh mì trắng, bánh ngọt, mì làm từ bột trắng, nước ép trái cây, đồ chế biến sẵn có đường hoặc siro bắp fructose cao; tránh ăn nhiều món béo nhiều năng lượng.","src":[3]},
 {"text":"Chất béo bão hoà từ sữa và thịt chỉ nên chiếm phần nhỏ; Mayo Clinic gợi ý thay bằng sữa ít béo, thịt gà nạc và thịt heo nạc.","src":[3]}
 ],
 "ok":[
@@ -50,14 +50,14 @@
 "foods":[
 {"name":"rau không tinh bột","aliases":["rau","rau xanh","bông cải xanh","súp lơ","rau lá xanh"],"verdict":"good","note":"Mayo Clinic nêu rau không tinh bột như rau lá xanh, bông cải xanh, súp lơ nên chiếm khoảng nửa đĩa cùng trái cây.","src":[3]},
 {"name":"trái cây","aliases":["trái cây tươi","cà chua","ớt chuông"],"verdict":"good","note":"Mayo Clinic nêu trái cây (kể cả cà chua, ớt chuông và trái cây trên cây) trong nhóm nên ăn.","src":[3]},
-{"name":"nước ép trái cây","aliases":["nước ép","nước trái cây","nước cam"],"verdict":"limit","note":"Mayo Clinic xếp nước ép trái cây vào nhóm nên hạn chế hoặc tránh.","src":[3]},
+{"name":"nước ép trái cây","aliases":["nước ép","nước trái cây","nước cam"],"verdict":"avoid","note":"Mayo Clinic xếp nước ép trái cây vào nhóm carbohydrate nhiều đường, ít chất xơ nên tránh.","src":[3]},
 {"name":"các loại đậu","aliases":["đậu","đậu gà","đậu lăng","đậu hạt"],"verdict":"good","note":"Mayo Clinic nêu các loại đậu (đậu, đậu gà, đậu lăng) là thực phẩm nên ăn và là nguồn đạm.","src":[3]},
 {"name":"ngũ cốc nguyên hạt","aliases":["gạo lứt","yến mạch","bánh mì nguyên cám","mì nguyên cám","diêm mạch","quinoa"],"verdict":"good","note":"Mayo Clinic nêu bánh mì và mì nguyên cám, gạo nguyên hạt (gạo lứt), yến mạch, quinoa là nhóm nên ăn.","src":[3]},
-{"name":"bánh mì trắng và bánh ngọt","aliases":["bánh mì trắng","bánh ngọt","bánh nướng","pastry","mì làm từ bột trắng"],"verdict":"limit","note":"Mayo Clinic: hạn chế/tránh bánh mì trắng, bánh ngọt và mì làm từ bột trắng.","src":[3]},
+{"name":"bánh mì trắng và bánh ngọt","aliases":["bánh mì trắng","bánh ngọt","bánh nướng","pastry","mì làm từ bột trắng"],"verdict":"avoid","note":"Mayo Clinic: tránh bánh mì trắng, bánh ngọt và mì làm từ bột trắng (carbohydrate nhiều đường, ít chất xơ).","src":[3]},
 {"name":"chất béo lành mạnh","aliases":["dầu ô liu","quả bơ","trái bơ","hạnh nhân","đậu phộng","hạt","hạt lanh"],"verdict":"good","note":"Mayo Clinic nêu các loại dầu như ô liu, hướng dương, cải; quả bơ; và các loại hạt, đậu phộng (peanuts), hạt lanh, hạt bí là chất béo lành mạnh.","src":[3]},
 {"name":"cá béo","aliases":["cá hồi","cá thu","cá mòi","cá ngừ","cá tuyết"],"verdict":"good","note":"Mayo Clinic nêu cá hồi, cá thu, cá mòi, cá ngừ, cá tuyết là nguồn đạm tốt.","src":[3]},
-{"name":"đồ chế biến sẵn có đường","aliases":["đồ chế biến sẵn","đồ ngọt","nước ngọt","bánh kẹo"],"verdict":"avoid","note":"Mayo Clinic: hạn chế thực phẩm chế biến sẵn có đường hoặc siro bắp fructose cao; đồ ăn nhiều đường và ít chất xơ nên tránh.","src":[3]},
-{"name":"thịt đỏ và chất béo bão hoà","aliases":["thịt đỏ","thịt bò","thịt heo","thịt lợn","sữa nguyên kem"],"verdict":"limit","note":"Mayo Clinic nêu chế độ ăn nhiều thịt đỏ, đồ chế biến, chất béo bão hoà hoặc đường là yếu tố nguy cơ; chất béo bão hoà từ sữa và thịt chỉ nên chiếm phần nhỏ.","src":[2,3]}
+{"name":"đồ chế biến sẵn có đường","aliases":["đồ chế biến sẵn","đồ ngọt","nước ngọt","bánh kẹo"],"verdict":"avoid","note":"Mayo Clinic: tránh thực phẩm chế biến sẵn có đường hoặc siro bắp fructose cao; đồ ăn nhiều đường và ít chất xơ nên tránh.","src":[3]},
+{"name":"thịt đỏ và chất béo bão hoà","aliases":["thịt đỏ","thịt bò","sữa nguyên kem"],"verdict":"limit","note":"Mayo Clinic nêu chế độ ăn nhiều thịt đỏ, đồ chế biến, chất béo bão hoà hoặc đường là yếu tố nguy cơ; chất béo bão hoà từ sữa và thịt chỉ nên chiếm phần nhỏ.","src":[2,3]}
 ]},
 "doctor":[
 {"text":"Nếu bạn lo về tiểu đường, hoặc có triệu chứng của tiểu đường type 2, hãy gặp chuyên gia y tế.","src":[2]},

@@ -23,7 +23,7 @@
 "care":[
 {"text":"Đa số sỏi được điều trị tại nhà bằng thuốc, có thể gồm thuốc giảm đau, thuốc chống buồn nôn và thuốc giúp sỏi ra dễ hơn — do bác sĩ quyết định.","src":[0]},
 {"text":"Bạn có thể được dặn hứng lại viên sỏi đã ra để đem đi kiểm tra.","src":[0]},
-{"text":"Sỏi lớn có thể cần can thiệp tại bệnh viện: tán sỏi bằng sóng xung kích (không cần gây mê), hoặc đưa ống nhỏ lên qua niệu đạo hoặc qua vết rạch nhỏ ở lưng dưới gây mê toàn thân.","src":[0]},
+{"text":"Sỏi lớn có thể cần can thiệp tại bệnh viện: tán sỏi bằng sóng xung kích (không cần gây mê), hoặc đưa ống nhỏ lên qua niệu đạo hoặc qua vết rạch nhỏ ở lưng, gây mê toàn thân.","src":[0]},
 {"text":"NIDDK: điều trị là lấy sỏi ra hoặc làm vỡ sỏi thành mảnh nhỏ; phòng ngừa có thể gồm uống đủ nước, thay đổi ăn uống hoặc dùng thuốc.","src":[1]},
 {"text":"Phòng ngừa: giữ cơ thể đủ nước (nước tiểu sẫm màu là dấu hiệu thiếu nước), ăn ít muối, và đừng thay đổi chế độ ăn nhiều khi chưa hỏi bác sĩ.","src":[0]}
 ],
@@ -31,12 +31,12 @@
 "avoid":[
 {"text":"NHS: hạn chế đồ uống có ga, đồ uống chứa caffeine và rượu bia.","src":[0]},
 {"text":"NHS: ăn ít muối; chế độ nhiều đạm, ít chất xơ làm tăng nguy cơ sỏi tái phát.","src":[0]},
-{"text":"NIDDK: với sỏi canxi oxalat, nên giảm thực phẩm giàu oxalat (hạt và các sản phẩm từ hạt, đậu phộng, đại hoàng, rau bina, cám lúa mì) và hạn chế đạm động vật.","src":[2]},
-{"text":"NIDDK: nên xác nhận loại sỏi của mình với bác sĩ trước khi đổi chế độ ăn, vì khuyến nghị khác nhau tuỳ loại sỏi.","src":[2]}
+{"text":"NIDDK: với sỏi canxi oxalat, nên giảm thực phẩm giàu oxalat (hạt và các sản phẩm từ hạt, đậu phộng, đại hoàng, rau bina, cám lúa mì); bác sĩ cũng có thể dặn hạn chế đạm động vật.","src":[2]},
+{"text":"NIDDK: hãy hỏi bác sĩ bạn bị loại sỏi nào, vì thay đổi ăn uống phù hợp tuỳ theo loại sỏi.","src":[2]}
 ],
 "ok":[
 {"text":"NHS: uống nhiều nước — người lớn khoảng 2,5 đến 3 lít mỗi ngày, trẻ em khoảng 1 đến 2 lít; có thể vắt thêm nước chanh tươi vào nước.","src":[0]},
-{"text":"NIDDK: uống đủ chất lỏng, chủ yếu là nước, là bước quan trọng nhất để phòng sỏi; nhiều chuyên gia gợi ý khoảng sáu đến tám ly (mỗi ly khoảng 8 ounce) mỗi ngày, trừ khi bạn bị suy thận. Hãy hỏi bác sĩ bạn cần uống bao nhiêu.","src":[2]},
+{"text":"NIDDK: uống đủ chất lỏng, chủ yếu là nước, là bước quan trọng nhất để phòng sỏi; nhiều nhân viên y tế gợi ý sáu đến tám ly 8 ounce mỗi ngày, trừ khi bạn bị suy thận. Hãy hỏi bác sĩ bạn cần uống bao nhiêu.","src":[2]},
 {"text":"NHS: đảm bảo đủ canxi trong chế độ ăn. NIDDK: nên lấy canxi từ thực phẩm chứ không phải kiêng canxi.","src":[0,2]},
 {"text":"NIDDK: chế độ ăn DASH liên quan đến nguy cơ sỏi thận thấp hơn; thừa cân làm tăng nguy cơ.","src":[2]},
 {"text":"NHS: hãy hỏi bác sĩ trước khi thay đổi chế độ ăn nhiều.","src":[0]}
@@ -48,15 +48,14 @@
 {"name":"đồ uống chứa caffeine","aliases":["cà phê","trà","cafe"],"verdict":"limit","note":"NHS khuyên hạn chế đồ uống chứa caffeine khi muốn phòng sỏi thận.","src":[0]},
 {"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên hạn chế rượu bia khi muốn phòng sỏi thận.","src":[0]},
 {"name":"muối","aliases":["ăn mặn","muối ăn","bột ngọt","mì chính","đồ hộp","đồ chế biến sẵn","đồ ăn nhanh"],"verdict":"limit","note":"NHS và NIDDK khuyên ăn ít muối/natri. NIDDK nêu nguồn natri chính là đồ hộp, đồ đóng gói, đồ ăn nhanh, gia vị, thịt; cần để ý cả bột nở, bột ngọt (MSG) và một số phụ gia chứa natri.","src":[0,2]},
-{"name":"đạm động vật","aliases":["thịt bò","thịt gà","thịt heo","thịt lợn","nội tạng","trứng","cá","hải sản","sữa","phô mai","sữa chua"],"verdict":"limit","note":"NIDDK (với sỏi canxi oxalat/canxi phosphat/acid uric): hạn chế đạm động vật gồm thịt bò, gà, heo (nhất là nội tạng), trứng, cá và hải sản, sữa và chế phẩm sữa. Xác nhận loại sỏi với bác sĩ trước.","src":[2]},
+{"name":"đạm động vật","aliases":["thịt bò","thịt gà","thịt heo","thịt lợn","nội tạng","trứng","cá","hải sản","sữa","phô mai","sữa chua"],"verdict":"limit","note":"NIDDK (với sỏi canxi oxalat/canxi phosphat/acid uric): bác sĩ có thể dặn hạn chế đạm động vật gồm thịt bò, gà, heo (nhất là nội tạng), trứng, cá và hải sản, sữa và chế phẩm sữa. Xác nhận loại sỏi với bác sĩ.","src":[2]},
 {"name":"thực phẩm giàu oxalat","aliases":["rau bina","cải bó xôi","đại hoàng","cám lúa mì","đậu phộng","lạc","các loại hạt","hạt"],"verdict":"limit","note":"NIDDK (với sỏi canxi oxalat): giảm hạt và sản phẩm từ hạt, đậu phộng, đại hoàng, rau bina, cám lúa mì.","src":[2]},
-{"name":"đậu, đậu hạt khô và đậu lăng","aliases":["đậu lăng","đậu hạt","đậu khô","đậu Hà Lan khô"],"verdict":"good","note":"NIDDK: có thể thay đạm động vật bằng đậu, đậu hạt khô, đậu lăng — nhiều đạm, ít oxalat.","src":[2]},
+{"name":"đậu, đậu hạt khô và đậu lăng","aliases":["đậu lăng","đậu hạt","đậu khô","đậu Hà Lan khô"],"verdict":"good","note":"NIDDK (với sỏi canxi oxalat): có thể thay đạm động vật bằng đậu, đậu hạt khô, đậu lăng — nhiều đạm, ít oxalat.","src":[2]},
 {"name":"canxi từ thực phẩm","aliases":["canxi","thực phẩm giàu canxi"],"verdict":"good","note":"NHS: đảm bảo đủ canxi trong chế độ ăn; NIDDK: lấy canxi từ thực phẩm, đừng kiêng canxi.","src":[0,2]}
 ]
 },
 "doctor":[
-{"text":"Bất kỳ viên sỏi thận nào gây triệu chứng cũng cần được chăm sóc y tế sớm.","src":[0]},
-{"text":"Nên đi khám khi bị đau, nước tiểu đục, đi tiểu nhiều lần, buồn nôn hoặc nôn.","src":[0]},
+{"text":"Bất kỳ viên sỏi thận nào gây triệu chứng (như đau, nước tiểu đục, đi tiểu nhiều lần, buồn nôn hoặc nôn) cũng cần được trợ giúp y tế khẩn.","src":[0]},
 {"text":"Cần xin khám gấp hoặc gọi đường dây y tế nếu đau dữ dội, hoặc sốt hay thấy nóng, lạnh, run.","src":[0]}
 ],
 "emergency":[],

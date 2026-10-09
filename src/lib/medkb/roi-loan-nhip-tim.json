@@ -10,17 +10,17 @@
 {"text":"**Rung nhĩ** là loại phổ biến nhất, gây nhịp tim không đều, thường nhanh. Đó là do trục trặc ở hệ thống điện của tim.","src":[0,1]}
 ],
 "signs":[
-{"text":"Nhiều người không có triệu chứng, bác sĩ có thể phát hiện khi khám định kỳ.","src":[0,1]},
+{"text":"Có thể không có triệu chứng rõ; bác sĩ có thể phát hiện khi khám định kỳ.","src":[0,1]},
 {"text":"Có thể gặp: mạch không đều; hồi hộp, tim đập thình thịch, dồn dập, rung hoặc hẫng nhịp, kéo dài vài giây đến vài phút; tim đập nhanh hoặc chậm.","src":[0,1]},
 {"text":"Mệt mỏi, giảm khả năng gắng sức; đau hoặc tức ngực; khó thở, choáng váng, chóng mặt, suýt ngất; đổ mồ hôi.","src":[0,1]},
-{"text":"Rung nhĩ có thể từng đợt rồi tự hết, kéo dài đến khi được điều trị, hoặc liên tục.","src":[0]}
+{"text":"Rung nhĩ có thể từng đợt rồi tự hết, có thể chỉ hết sau khi điều trị, hoặc kéo dài vĩnh viễn với triệu chứng thường xuyên.","src":[0]}
 ],
 "causes":[
 {"text":"Nhiều yếu tố có thể ảnh hưởng nhịp tim: nhồi máu cơ tim, hút thuốc, dị tật tim bẩm sinh, căng thẳng.","src":[1]},
 {"text":"Nguy cơ cao hơn khi có người thân bị loạn nhịp, bệnh tim mạch, bệnh phổi, bệnh thận, béo phì, ngưng thở khi ngủ, tuổi cao, sau phẫu thuật tim/phổi/họng gần đây, một số thuốc, hoặc dùng ma tuý.","src":[1]},
 {"text":"Với rung nhĩ: từ 55 tuổi, nam giới, thừa cân, hút thuốc, chơi thể thao sức bền (chạy đường dài, đạp xe...) làm tăng khả năng mắc.","src":[0]},
 {"text":"Các bệnh đi kèm rung nhĩ: huyết áp cao, suy tim, bệnh van tim (van hai lá), nhồi máu cơ tim, bệnh thận mạn, cường giáp, tiểu đường, ngưng thở khi ngủ. Một số thuốc (như thuốc tuyến giáp, lithium, vài thuốc hen) cũng có thể liên quan.","src":[0]},
-{"text":"Tình huống làm tim chịu áp lực, tăng huyết áp hoặc căng thẳng cảm xúc mạnh có thể gây một cơn loạn nhịp.","src":[1]}
+{"text":"Nếu bạn có yếu tố nguy cơ, tình huống làm tim phải làm việc nhiều hơn, tăng huyết áp hoặc căng thẳng cảm xúc mạnh có thể gây một cơn loạn nhịp.","src":[1]}
 ],
 "course":[
 {"text":"Rung nhĩ có thể gây cục máu đông, đột quỵ và suy tim.","src":[0]},
@@ -28,24 +28,24 @@
 {"text":"Rung nhĩ không có thuốc chữa dứt, nhưng điều trị giúp kiểm soát triệu chứng và giảm biến chứng. Hầu hết hoạt động bình thường, kể cả tập thể dục, thường vẫn tiếp tục được.","src":[0]}
 ],
 "care":[
-{"text":"Mục tiêu điều trị là đưa nhịp tim về bình thường hoặc kiểm soát nhịp. Có thể gồm thuốc, máy tạo nhịp hoặc máy khử rung cấy ghép (ICD), đôi khi phẫu thuật.","src":[1]},
+{"text":"Mục tiêu điều trị là đưa nhịp tim về bình thường. Có thể gồm thuốc, máy tạo nhịp hoặc máy khử rung cấy ghép (ICD), đôi khi phẫu thuật.","src":[1]},
 {"text":"Với rung nhĩ: thuốc kiểm soát nhịp/tốc độ tim, thuốc chống đông để giảm nguy cơ cục máu đông và đột quỵ; thủ thuật như đốt điện (ablation), sốc điện chuyển nhịp. Do bác sĩ tim mạch quyết định.","src":[0]},
 {"text":"Điều trị bệnh nền hoặc ngưng thuốc gây ra có thể làm giảm triệu chứng; kiểm tra định kỳ để theo dõi.","src":[0]},
 {"text":"Nên tránh các yếu tố khởi phát: cà phê/caffeine, đồ cay, căng thẳng, mất nước, ngủ kém; giữ cân nặng hợp lý và ăn uống cân đối.","src":[0]},
-{"text":"Vận động vừa phải khoảng 150 phút mỗi tuần nhưng tránh tập quá sức và không tập khi đang có triệu chứng. Không hút thuốc, uống ít rượu bia hơn.","src":[0]},
+{"text":"Vận động vừa phải ít nhất khoảng 150 phút mỗi tuần nhưng tránh tập quá sức và không tập khi đang có triệu chứng. Không hút thuốc, không uống quá nhiều rượu bia.","src":[0]},
 {"text":"Lối sống tim mạch lành mạnh và điều trị các bệnh có thể gây loạn nhịp có thể giúp phòng ngừa.","src":[1]}
 ],
 "diet":{
 "avoid":[
-{"text":"Đối với rung nhĩ, NHS nêu các thứ nên tránh nếu gây khởi phát cơn gồm caffeine và đồ cay, cùng với uống ít rượu bia hơn.","src":[0]}
+{"text":"Đối với rung nhĩ, NHS nêu các thứ nên tránh nếu gây khởi phát cơn gồm caffeine và đồ cay, cùng với không uống quá nhiều rượu bia.","src":[0]}
 ],
 "ok":[
 {"text":"NHS khuyên ăn uống cân đối, giữ cân nặng hợp lý và tránh mất nước.","src":[0]}
 ],
 "foods":[
-{"name":"cà phê, caffeine","aliases":["cà phê","cafe"],"verdict":"limit","note":"NHS (về rung nhĩ) nêu caffeine là một trong các yếu tố nên tránh vì có thể khởi phát triệu chứng; nguồn không nêu trà hay nước tăng lực cụ thể.","src":[0]},
-{"name":"đồ cay","aliases":["ớt","thức ăn cay"],"verdict":"limit","note":"NHS (về rung nhĩ) nêu đồ ăn cay là một trong các yếu tố nên tránh vì có thể khởi phát triệu chứng.","src":[0]},
-{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS (về rung nhĩ) khuyên uống ít rượu bia hơn.","src":[0]}
+{"name":"cà phê, caffeine","aliases":["cà phê","cafe"],"verdict":"avoid","note":"NHS (về rung nhĩ) nêu caffeine là một trong các yếu tố nên tránh vì có thể khởi phát triệu chứng; nguồn không nêu trà hay nước tăng lực cụ thể.","src":[0]},
+{"name":"đồ cay","aliases":["ớt","thức ăn cay"],"verdict":"avoid","note":"NHS (về rung nhĩ) nêu đồ ăn cay là một trong các yếu tố nên tránh vì có thể khởi phát triệu chứng.","src":[0]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS (về rung nhĩ) khuyên không uống quá nhiều rượu bia.","src":[0]}
 ]},
 "doctor":[
 {"text":"Nên đi khám (không khẩn cấp) nếu nghĩ mình có triệu chứng rung nhĩ, nếu hồi hộp xảy ra liên tục hoặc nặng dần, hoặc đã được chẩn đoán nhưng điều trị chưa giúp ích.","src":[0]},

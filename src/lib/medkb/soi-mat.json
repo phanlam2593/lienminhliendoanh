@@ -2,7 +2,7 @@
 "id":"soi-mat","kind":"condition",
 "names":["sỏi mật","sỏi túi mật","sạn mật","sạn túi mật","gallstones","gallstone","sỏi ống mật"],
 "about":[
-{"text":"Sỏi mật là những viên sỏi nhỏ hình thành trong túi mật hoặc trong ống mật (ống nối túi mật với gan và tuỵ). Đa số người có sỏi mật không có triệu chứng.","src":[0]},
+{"text":"Sỏi mật là những viên sỏi nhỏ hình thành trong túi mật; sỏi có thể nằm trong túi mật hoặc trong ống mật. Đa số người có sỏi mật không có triệu chứng.","src":[0]},
 {"text":"NIDDK: sỏi mật là những mảnh cứng như viên sỏi hình thành trong túi mật, thường làm từ cholesterol hoặc bilirubin.","src":[1]}
 ],
 "signs":[
@@ -34,12 +34,12 @@
 "ok":[
 {"text":"NIDDK (về phòng ngừa sỏi mật): ăn nhiều chất xơ gồm trái cây, rau, các loại đậu, và ngũ cốc nguyên hạt như gạo lứt, yến mạch, bánh mì nguyên cám.","src":[2]},
 {"text":"NIDDK: chọn chất béo tốt như dầu cá và dầu ô liu giúp túi mật co bóp và tống mật đều đặn.","src":[2]},
-{"text":"Mayo Clinic: giảm cân từ từ, giữ cân nặng hợp lý, ăn nhiều trái cây, rau, ngũ cốc nguyên hạt và hạn chế món nhiều chất béo, ít chất xơ.","src":[4]},
+{"text":"Mayo Clinic: giảm cân từ từ, giữ cân nặng hợp lý, ăn nhiều trái cây, rau, ngũ cốc nguyên hạt; món nhiều chất béo, ít chất xơ có thể làm tăng nguy cơ sỏi mật.","src":[4]},
 {"text":"NIDDK khuyên trao đổi với bác sĩ trước khi thay đổi chế độ ăn.","src":[1,2]}
 ],
 "foods":[
 {"name":"đồ chiên rán","aliases":["đồ chiên","đồ rán","đồ ăn chiên"],"verdict":"avoid","note":"NIDDK khuyên tránh chất béo không tốt thường có trong đồ chiên rán và món tráng miệng (để phòng sỏi mật).","src":[2]},
-{"name":"đồ ăn nhiều chất béo","aliases":["đồ béo","đồ nhiều dầu mỡ","mỡ"],"verdict":"limit","note":"NHS khuyên ăn ít chất béo khi đang có triệu chứng sỏi mật; Mayo Clinic khuyên hạn chế món nhiều chất béo, ít chất xơ.","src":[0,4]},
+{"name":"đồ ăn nhiều chất béo","aliases":["đồ béo","đồ nhiều dầu mỡ","mỡ"],"verdict":"limit","note":"NHS: trong lúc chờ điều trị, bạn có thể được khuyên ăn ít chất béo; Mayo Clinic nêu món nhiều chất béo, ít chất xơ có thể làm tăng nguy cơ sỏi mật.","src":[0,4]},
 {"name":"đường và carbohydrate tinh chế","aliases":["đường","đồ ngọt","bánh kẹo ngọt"],"verdict":"limit","note":"NIDDK khuyên ăn ít carbohydrate tinh chế và ít đường để giúp phòng sỏi mật.","src":[2]},
 {"name":"thực phẩm giàu chất xơ","aliases":["rau","trái cây","gạo lứt","yến mạch","bánh mì nguyên cám","đậu hạt","đậu Hà Lan"],"verdict":"good","note":"NIDDK khuyên ăn nhiều chất xơ: trái cây, rau, đậu, đậu Hà Lan và ngũ cốc nguyên hạt như gạo lứt, yến mạch, bánh mì nguyên cám.","src":[2,4]},
 {"name":"dầu ô liu và dầu cá","aliases":["dầu oliu","dầu ô-liu","olive","dầu cá"],"verdict":"good","note":"NIDDK nêu chất béo tốt như dầu cá và dầu ô liu giúp túi mật co bóp và tống mật đều đặn.","src":[2]}

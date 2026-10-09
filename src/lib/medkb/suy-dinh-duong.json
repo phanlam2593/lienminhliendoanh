@@ -10,7 +10,7 @@
 {"text":"MedlinePlus: có thể thiếu đạm - năng lượng (như kwashiorkor, marasmus), thiếu vitamin/khoáng chất, hoặc chậm lớn ở trẻ (failure to thrive).","src":[2]}
 ],
 "signs":[
-{"text":"Dấu hiệu chính của người lớn là sụt cân không chủ ý; cân nặng thấp, ít muốn ăn uống, mệt và yếu liên tục, hay ốm và lâu hồi phục.","src":[0,2]},
+{"text":"Một trong các dấu hiệu chính là sụt cân không chủ ý; cân nặng thấp, ít muốn ăn uống, mệt và yếu liên tục, hay ốm và lâu hồi phục.","src":[0,2]},
 {"text":"Ở trẻ: không lớn hoặc không tăng cân như mong đợi, chậm phát triển.","src":[0,2]},
 {"text":"MedlinePlus nêu thêm: chóng mặt, da khô, tóc và móng giòn, phù chân, bàn chân hoặc bụng. Có người không có triệu chứng.","src":[2]}
 ],
@@ -22,8 +22,8 @@
 {"text":"Ở trẻ em theo WHO: thiếu thức ăn, bệnh nhiễm trùng, điều kiện kinh tế xã hội kém, sức khoẻ và dinh dưỡng của mẹ kém, cách cho ăn không phù hợp ở trẻ nhỏ.","src":[1]}
 ],
 "course":[
-{"text":"Theo WHO, thiếu dinh dưỡng khiến trẻ dễ mắc bệnh và nặng hơn nhiều; thể thấp còi hạn chế tiềm năng thể chất và trí tuệ của trẻ.","src":[1]},
-{"text":"Trẻ gầy còm có nguy cơ tử vong cao hơn nhưng có thể điều trị được.","src":[1]}
+{"text":"Theo WHO, thiếu dinh dưỡng khiến trẻ dễ mắc bệnh và tử vong hơn nhiều; thể thấp còi hạn chế tiềm năng thể chất và trí tuệ của trẻ.","src":[1]},
+{"text":"Trẻ nhỏ gầy còm mức vừa hoặc nặng có nguy cơ tử vong cao hơn nhưng có thể điều trị được.","src":[1]}
 ],
 "care":[
 {"text":"Điều trị gồm cải thiện chế độ ăn, bổ sung chất còn thiếu và điều trị nguyên nhân nền.","src":[2]},
@@ -38,7 +38,7 @@
 "ok":[
 {"text":"NHS khuyên ăn thực phẩm tăng cường giàu năng lượng, giàu đạm; ăn nhẹ giữa các bữa; uống đồ uống nhiều năng lượng.","src":[0]},
 {"text":"NHS nêu các nhóm: trái cây và rau; tinh bột như bánh mì, cơm, khoai tây, mì ống; sữa và chế phẩm (hoặc sản phẩm thay thế không sữa); đạm từ thịt, cá, trứng, đậu.","src":[0]},
-{"text":"Nếu có bệnh nền hoặc ăn kiêng đặc biệt, hãy hỏi bác sĩ hoặc chuyên gia dinh dưỡng trước.","src":[0]}
+{"text":"Nếu có bệnh lý làm tăng nguy cơ suy dinh dưỡng, hãy trao đổi với bác sĩ hoặc chuyên gia.","src":[0]}
 ],
 "foods":[
 {"name":"thực phẩm giàu năng lượng và đạm","aliases":["thực phẩm tăng cường","đồ uống nhiều năng lượng"],"verdict":"good","note":"NHS: lời khuyên ban đầu là ăn thực phẩm tăng cường giàu năng lượng và đạm, ăn nhẹ giữa bữa, uống đồ uống nhiều năng lượng.","src":[0]},
