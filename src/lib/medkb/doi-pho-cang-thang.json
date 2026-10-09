@@ -1,1 +1,193 @@
-{"id":"doi-pho-cang-thang","kind":"mental","names":["đối phó căng thẳng","kỹ năng đối phó căng thẳng","giảm căng thẳng","cách đối phó với stress","cách giảm stress","coping with stress","stress management","quản lý stress"],"about":[{"text":"Căng thẳng (stress) là phản ứng của cơ thể khi cảm thấy bị đe doạ hoặc chịu áp lực. Một chút stress có thể giúp tập trung, nhưng quá nhiều ảnh hưởng tâm trạng, cơ thể và các mối quan hệ.","src":[0]},{"text":"Stress dài hạn hoặc nặng có thể dẫn tới kiệt sức (burnout).","src":[0]},{"text":"CDC: ai cũng có lúc căng thẳng, đó là một phần bình thường của cuộc sống.","src":[2]},{"text":"NIMH: stress thường nguôi khi tình huống được giải quyết, còn lo âu có thể kéo dài.","src":[3]}],"signs":[{"text":"Cảm xúc: cáu gắt, giận, hay khóc, lo lắng, thấy choáng ngợp, khó ra quyết định.","src":[0]},{"text":"Cơ thể: đau bụng, đau đầu, đau cơ, nổi mẩn trên da, chóng mặt.","src":[0]},{"text":"Hành vi: thay đổi ăn uống, vận động, rượu, thuốc lá hoặc chất khác; tránh người và hoạt động.","src":[0]},{"text":"CDC thêm: khó tập trung, ác mộng hoặc khó ngủ, bệnh mạn tính nặng hơn.","src":[2]}],"causes":[{"text":"Mỗi người một khác; stress thường xuất hiện khi ta thấy thiếu nguồn lực đối phó với một thử thách.","src":[0]},{"text":"Hay gặp: áp lực công việc, học tập, gia đình; bệnh tật; rắc rối quan hệ; thay đổi lớn; mất người thân; lo tiền bạc; nuôi con; cô đơn.","src":[0]}],"course":[],"care":[{"text":"Vận động (đi bộ, chạy, làm vườn, bơi, đạp xe) giúp nâng tâm trạng và bớt bực bội.","src":[1]},{"text":"Ăn uống lành mạnh; hạn chế caffeine và rượu; tránh thuốc lá, ăn quá nhiều và ma tuý vì chúng có thể làm stress tăng.","src":[1]},{"text":"Ngủ đủ: Mayo nêu đa số người lớn cần khoảng 7–9 giờ/đêm; CDC nêu từ 7 giờ trở lên.","src":[1,2]},{"text":"Hít thở sâu, duỗi người, thiền, chánh niệm; viết nhật ký; nghe nhạc, làm điều sáng tạo hay sở thích.","src":[1,2]},{"text":"Cười nhiều hơn, kết nối bạn bè gia đình, tham gia cộng đồng hoặc làm tình nguyện.","src":[1]},{"text":"Tập nói \"không\" và nhờ người khác san sẻ việc, đặt ranh giới lành mạnh.","src":[1]},{"text":"NHS Every Mind Matters: chia việc lớn thành bước nhỏ, lên kế hoạch cho ngày hoặc sự kiện căng thẳng, thử kỹ thuật CBT tự giúp, liệt kê mỗi ngày ba điều biết ơn.","src":[0]},{"text":"CDC: hạn chế đọc tin tức và mạng xã hội nếu chúng khiến bạn khó chịu.","src":[2]},{"text":"NIMH: xác định điều gây stress và cách hợp với mình (có thể phải thử), ghi nhật ký, thách thức suy nghĩ tiêu cực, nhờ cậy bạn bè gia đình giúp đối phó tích cực.","src":[3]}],"diet":null,"doctor":[{"text":"Mayo: cân nhắc trị liệu hoặc tham vấn khi stress mới làm bạn khó đối phó, tự chăm sóc không giúp được, thấy choáng ngợp/bế tắc, lo lắng rất nhiều hoặc khó làm việc nhà, công việc, học tập.","src":[1]},{"text":"NHS: đi khám nếu triệu chứng khiến bạn lo hoặc stress nặng; đau ngực hay huyết áp cao do stress nên nguôi khi hết stress, nếu kéo dài cần kiểm tra.","src":[0]},{"text":"NIMH: tìm chuyên gia nếu bạn khó đối phó hoặc triệu chứng căng thẳng, lo âu không hết.","src":[3]}],"emergency":[{"text":"NHS: nếu không thể chờ gặp bác sĩ và thấy không thể chống đỡ hoặc giữ an toàn cho bản thân, hãy tìm hỗ trợ khẩn cấp ngay.","src":[0]}],"sources":[{"title":"Dealing with stress","publisher":"NHS (Anh) - Every Mind Matters","url":"https://www.nhs.uk/every-mind-matters/mental-health-issues/stress/"},{"title":"Stress relievers: Tips to tame stress","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/stress-relievers/art-20047257","reviewed":"2023-08-03"},{"title":"Managing stress","publisher":"CDC (Hoa Kỳ)","url":"https://www.cdc.gov/mental-health/living-with/index.html","reviewed":"2026-05-12"},{"title":"I'm so stressed out! Fact sheet","publisher":"NIMH (Hoa Kỳ)","url":"https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet"}],"verifiedAt":"2026-10-09"}
+{
+ "id": "doi-pho-cang-thang",
+ "kind": "mental",
+ "names": [
+  "đối phó căng thẳng",
+  "kỹ năng đối phó căng thẳng",
+  "giảm căng thẳng",
+  "cách đối phó với stress",
+  "cách giảm stress",
+  "coping with stress",
+  "stress management",
+  "quản lý stress"
+ ],
+ "about": [
+  {
+   "text": "Căng thẳng (stress) là phản ứng của cơ thể khi cảm thấy bị đe doạ hoặc chịu áp lực. Một chút stress có thể giúp tập trung, nhưng quá nhiều ảnh hưởng tâm trạng, cơ thể và các mối quan hệ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Stress dài hạn hoặc nặng có thể dẫn tới kiệt sức (burnout).",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "CDC: ai cũng có lúc căng thẳng, đó là một phần bình thường của cuộc sống.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "NIMH: stress thường nguôi khi tình huống được giải quyết, còn lo âu có thể kéo dài.",
+   "src": [
+    3
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Cảm xúc: cáu gắt, giận, hay khóc, lo lắng, thấy choáng ngợp, khó ra quyết định.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Cơ thể: đau bụng, đau đầu, đau cơ, nổi mẩn trên da, chóng mặt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Hành vi: thay đổi ăn uống, vận động, rượu, thuốc lá hoặc chất khác; tránh người và hoạt động.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "CDC thêm: khó tập trung, ác mộng hoặc khó ngủ, bệnh mạn tính nặng hơn.",
+   "src": [
+    2
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Mỗi người một khác; stress thường xuất hiện khi ta thấy thiếu nguồn lực đối phó với một thử thách.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Hay gặp: áp lực công việc, học tập, gia đình; bệnh tật; rắc rối quan hệ; thay đổi lớn; mất người thân; lo tiền bạc; nuôi con; cô đơn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Vận động (đi bộ, chạy, làm vườn, bơi, đạp xe) giúp nâng tâm trạng và bớt bực bội.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Ăn uống lành mạnh; tránh dùng quá nhiều caffeine hoặc rượu, tránh thuốc lá, ăn quá nhiều và ma tuý vì chúng có thể làm stress tăng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Ngủ đủ: Mayo nêu đa số người lớn cần khoảng 7–9 giờ/đêm; CDC nêu từ 7 giờ trở lên.",
+   "src": [
+    1,
+    2
+   ]
+  },
+  {
+   "text": "Hít thở sâu, duỗi người, thiền, chánh niệm; viết nhật ký; nghe nhạc, làm điều sáng tạo hay sở thích.",
+   "src": [
+    1,
+    2
+   ]
+  },
+  {
+   "text": "Cười nhiều hơn, kết nối bạn bè gia đình, tham gia cộng đồng hoặc làm tình nguyện.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Tập nói \"không\" và nhờ người khác san sẻ việc, đặt ranh giới lành mạnh.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "NHS Every Mind Matters: chia việc lớn thành bước nhỏ, lên kế hoạch cho ngày hoặc sự kiện căng thẳng, thử kỹ thuật CBT tự giúp, liệt kê mỗi ngày ba điều biết ơn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "CDC: nghỉ xem tin tức và mạng xã hội nếu chúng khiến bạn khó chịu.",
+   "src": [
+    2
+   ]
+  },
+  {
+   "text": "NIMH: xác định điều gây stress và cách hợp với mình (có thể phải thử), ghi nhật ký, thách thức suy nghĩ tiêu cực, nhờ cậy bạn bè gia đình giúp đối phó tích cực.",
+   "src": [
+    3
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Mayo: cân nhắc trị liệu hoặc tham vấn khi stress mới làm bạn khó đối phó, tự chăm sóc không giúp được, thấy choáng ngợp/bế tắc, lo lắng rất nhiều hoặc khó làm việc nhà, công việc, học tập.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "NHS: đi khám nếu triệu chứng khiến bạn lo hoặc stress nặng; đau ngực hay huyết áp cao do stress nên nguôi khi hết stress.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "NIMH: tìm chuyên gia nếu bạn khó đối phó hoặc triệu chứng căng thẳng, lo âu không hết.",
+   "src": [
+    3
+   ]
+  }
+ ],
+ "emergency": [
+  {
+   "text": "NHS: nếu không thể chờ gặp bác sĩ và thấy không thể chống đỡ hoặc giữ an toàn cho bản thân, hãy tìm hỗ trợ khẩn cấp ngay.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "title": "Dealing with stress",
+   "publisher": "NHS (Anh) - Every Mind Matters",
+   "url": "https://www.nhs.uk/every-mind-matters/mental-health-issues/stress/"
+  },
+  {
+   "title": "Stress relievers: Tips to tame stress",
+   "publisher": "Mayo Clinic (Hoa Kỳ)",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/stress-management/in-depth/stress-relievers/art-20047257",
+   "reviewed": "2023-08-03"
+  },
+  {
+   "title": "Managing stress",
+   "publisher": "CDC (Hoa Kỳ)",
+   "url": "https://www.cdc.gov/mental-health/living-with/index.html",
+   "reviewed": "2026-05-12"
+  },
+  {
+   "title": "I'm so stressed out! Fact sheet",
+   "publisher": "NIMH (Hoa Kỳ)",
+   "url": "https://www.nimh.nih.gov/health/publications/so-stressed-out-fact-sheet"
+  }
+ ],
+ "verifiedAt": "2026-10-09"
+}

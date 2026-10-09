@@ -1,1 +1,204 @@
-{"id":"tieu-duong-thai-ky","kind":"women","names":["tiểu đường thai kỳ","đái tháo đường thai kỳ","tiểu đường khi mang thai","đường huyết cao khi mang thai","gestational diabetes"],"about":[{"text":"Tiểu đường thai kỳ là tình trạng đường huyết cao xuất hiện trong lúc mang thai, ở người trước đó chưa bị tiểu đường. Thường hết sau khi sinh.","src":[0,2]},{"text":"Bệnh xảy ra khi cơ thể không tạo đủ insulin để đáp ứng nhu cầu tăng thêm của thai kỳ.","src":[0,2]},{"text":"Bệnh có thể ảnh hưởng đến cả mẹ và bé; kiểm soát tốt giúp bảo vệ cả hai.","src":[1,2]}],"signs":[{"text":"Thường không có triệu chứng; đa số được phát hiện qua tầm soát.","src":[0,1,2]},{"text":"Nếu có thường nhẹ: khát nước hơn, đi tiểu nhiều hơn. NHS nêu thêm khô miệng, mệt, nhìn mờ, ngứa vùng kín hoặc nấm; những biểu hiện này cũng có thể gặp ở thai kỳ bình thường.","src":[0,1,2]},{"text":"CDC: chỉ có xét nghiệm mới xác nhận được bệnh.","src":[2]}],"causes":[{"text":"Thay đổi hormone của thai kỳ làm cơ thể dùng insulin kém hiệu quả hơn; gen và thừa cân cũng có thể góp phần.","src":[1,2]},{"text":"Yếu tố nguy cơ theo NHS: trên 40 tuổi, BMI trên 30, từng sinh con nặng từ 4,5 kg trở lên, từng bị tiểu đường thai kỳ, cha mẹ hoặc anh chị em ruột bị tiểu đường, đã mổ giảm cân (như cắt dạ dày), gốc Nam Á, da đen, Caribe gốc Phi hoặc Trung Đông.","src":[0]},{"text":"CDC nêu thêm: gia đình có người bị tiểu đường type 2, hội chứng buồng trứng đa nang (PCOS), thừa cân, từng sinh con nặng trên 9 pound.","src":[2]}],"course":[{"text":"Bệnh thường hết sau sinh, nhưng cần xét nghiệm đường huyết sau sinh. NHS: xét nghiệm máu kiểm tra tiểu đường từ 6 đến 13 tuần sau sinh; nếu bình thường thì lặp lại mỗi năm.","src":[0]},{"text":"Người từng bị có nguy cơ cao hơn bị tiểu đường thai kỳ lần sau và tiểu đường type 2; CDC cho biết khoảng một nửa số người từng bị sẽ mắc tiểu đường type 2 về sau.","src":[0,2]},{"text":"NIDDK: con của người từng bị cũng dễ béo phì hoặc tiểu đường type 2 hơn.","src":[1]},{"text":"Giữ cân nặng hợp lý, ăn uống lành mạnh và vận động đều giúp giảm nguy cơ này.","src":[0,1]}],"care":[{"text":"Cốt lõi là chế độ ăn lành mạnh và vận động đều đặn; nếu chưa đủ, có thể cần thuốc viên hoặc insulin do bác sĩ quyết định.","src":[0,1,2]},{"text":"Vận động nhẹ như đi bộ, bơi, yoga cho bà bầu giúp giảm đường huyết. Hãy báo nữ hộ sinh/bác sĩ trước khi bắt đầu hoạt động bạn chưa từng làm.","src":[0]},{"text":"Có thể được cấp máy thử đường huyết tại nhà; kiểm tra đường huyết đều đặn, đi khám thai đầy đủ và làm theo kế hoạch điều trị.","src":[0,2]},{"text":"NHS: được theo dõi sát hơn trong thai kỳ và lúc sinh; khuyến nghị sinh trước 41 tuần, nếu chưa chuyển dạ có thể được khởi phát hoặc mổ lấy thai. Nếu có vấn đề sức khỏe khác, có thể sinh sớm hơn.","src":[0]},{"text":"CDC: nên hỏi bác sĩ cách giảm nguy cơ bị tiểu đường type 2 về sau và bao lâu nên kiểm tra đường huyết một lần.","src":[2]}],"diet":{"avoid":[{"text":"CDC: không cố giảm cân trong thai kỳ; hãy hỏi bác sĩ mức tăng cân phù hợp.","src":[2]}],"ok":[{"text":"NHS: đổi chế độ ăn và vận động nhiều hơn (nếu có thể) có thể giúp hạ đường huyết.","src":[0]},{"text":"NIDDK: thực hiện một kế hoạch ăn uống lành mạnh; CDC: ăn thực phẩm lành mạnh với lượng và thời điểm phù hợp.","src":[1,2]}],"foods":[]},"doctor":[{"text":"NHS: nếu có triệu chứng đường huyết cao sau sinh, hãy đi khám bác sĩ, đừng đợi đến lần xét nghiệm kế tiếp.","src":[0]},{"text":"Sinh con xong vẫn nên xét nghiệm lại đường huyết theo lịch bác sĩ dặn.","src":[0]}],"emergency":[],"sources":[{"title":"Gestational diabetes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/gestational-diabetes/","reviewed":"2022-12-08"},{"title":"Gestational Diabetes","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes/gestational","reviewed":"2017-05"},{"title":"Gestational Diabetes","publisher":"CDC (Hoa Kỳ)","url":"https://www.cdc.gov/diabetes/about/gestational-diabetes.html","reviewed":"2023-12-22"}],"verifiedAt":"2026-10-09"}
+{
+  "id": "tieu-duong-thai-ky",
+  "kind": "women",
+  "names": [
+    "tiểu đường thai kỳ",
+    "đái tháo đường thai kỳ",
+    "tiểu đường khi mang thai",
+    "đường huyết cao khi mang thai",
+    "gestational diabetes"
+  ],
+  "about": [
+    {
+      "text": "Tiểu đường thai kỳ là tình trạng đường huyết cao xuất hiện trong lúc mang thai, ở người trước đó chưa bị tiểu đường. Thường hết sau khi sinh.",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Bệnh xảy ra khi cơ thể không tạo đủ insulin để đáp ứng nhu cầu tăng thêm của thai kỳ.",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Bệnh có thể ảnh hưởng đến cả mẹ và bé; kiểm soát tốt có thể giúp bảo vệ cả hai.",
+      "src": [
+        1,
+        2
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường không có triệu chứng; đa số được phát hiện qua tầm soát.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Nếu có thường nhẹ: khát nước hơn, đi tiểu nhiều hơn. NHS nêu thêm khô miệng, mệt, nhìn mờ, ngứa vùng kín hoặc nấm; những biểu hiện này cũng có thể gặp ở thai kỳ bình thường.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "CDC: chỉ có xét nghiệm mới xác nhận được bệnh.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thay đổi hormone của thai kỳ đôi khi làm cơ thể dùng insulin kém hiệu quả hơn; gen và thừa cân cũng có thể góp phần.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Yếu tố nguy cơ theo NHS: trên 40 tuổi, BMI trên 30, từng sinh con nặng từ 4,5 kg trở lên, từng bị tiểu đường thai kỳ, cha mẹ hoặc anh chị em ruột bị tiểu đường, đã mổ giảm cân (như nối tắt dạ dày), gốc Nam Á, da đen, Caribe gốc Phi hoặc Trung Đông.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "CDC nêu thêm: gia đình có người bị tiểu đường type 2, hội chứng buồng trứng đa nang (PCOS), thừa cân, từng sinh con nặng trên 9 pound.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Bệnh thường hết sau sinh, nhưng cần xét nghiệm đường huyết sau sinh. NHS: xét nghiệm máu kiểm tra tiểu đường từ 6 đến 13 tuần sau sinh; nếu bình thường thì lặp lại mỗi năm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Người từng bị có nguy cơ cao hơn bị tiểu đường thai kỳ lần sau và tiểu đường type 2; CDC cho biết khoảng một nửa số người từng bị sẽ mắc tiểu đường type 2 về sau.",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "NIDDK: con của người từng bị cũng dễ béo phì hoặc tiểu đường type 2 hơn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Giữ cân nặng hợp lý, ăn uống lành mạnh và vận động đều có thể giúp giảm nguy cơ này.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Cốt lõi là chế độ ăn lành mạnh và vận động đều đặn; nếu chưa đủ, có thể cần thuốc viên hoặc insulin do bác sĩ quyết định.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Vận động nhẹ như đi bộ, bơi, yoga cho bà bầu có thể giúp giảm đường huyết. Hãy báo nữ hộ sinh/bác sĩ trước khi bắt đầu hoạt động bạn chưa từng làm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bạn sẽ được cấp bộ thử đường huyết để theo dõi điều trị; hãy đi khám thai đầy đủ và làm theo kế hoạch điều trị.",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "NHS: được theo dõi sát hơn trong thai kỳ và lúc sinh; khuyến nghị sinh trước 41 tuần, nếu chưa chuyển dạ có thể được khởi phát hoặc mổ lấy thai. Có thể sinh sớm hơn nếu lo ngại về sức khỏe mẹ hoặc bé.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "CDC: nên hỏi bác sĩ cách giảm nguy cơ bị tiểu đường type 2 về sau và bao lâu nên kiểm tra đường huyết một lần.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "CDC: không cố giảm cân trong thai kỳ; hãy hỏi bác sĩ mức tăng cân phù hợp.",
+        "src": [
+          2
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "NHS: đổi chế độ ăn và vận động nhiều hơn (nếu có thể) có thể giúp hạ đường huyết.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "NIDDK: thực hiện một kế hoạch ăn uống lành mạnh; CDC: ăn thực phẩm lành mạnh với lượng và thời điểm phù hợp.",
+        "src": [
+          1,
+          2
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "NHS: nếu có triệu chứng đường huyết cao sau sinh, hãy đi khám bác sĩ, đừng đợi đến lần xét nghiệm kế tiếp.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Sinh con xong vẫn nên xét nghiệm lại đường huyết theo lịch bác sĩ dặn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Gestational diabetes",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/gestational-diabetes/",
+      "reviewed": "2022-12-08"
+    },
+    {
+      "title": "Gestational Diabetes",
+      "publisher": "NIDDK (NIH, Hoa Kỳ)",
+      "url": "https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes/gestational",
+      "reviewed": "2017-05"
+    },
+    {
+      "title": "Gestational Diabetes",
+      "publisher": "CDC (Hoa Kỳ)",
+      "url": "https://www.cdc.gov/diabetes/about/gestational-diabetes.html",
+      "reviewed": "2023-12-22"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

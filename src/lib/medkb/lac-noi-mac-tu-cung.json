@@ -1,33 +1,168 @@
-{"id":"lac-noi-mac-tu-cung","kind":"women","names":["lạc nội mạc tử cung","bệnh lạc nội mạc tử cung","lạc nội mạc","endometriosis"],
-"about":[
-{"text":"Lạc nội mạc tử cung là bệnh trong đó mô giống lớp niêm mạc tử cung mọc ở những nơi khác trong cơ thể.","src":[0,1]},
-{"text":"Mô này thường nằm trên hoặc dưới buồng trứng, ở vòi trứng, phía sau tử cung, hoặc trên ruột, bàng quang.","src":[1]},
-{"text":"Bệnh thường được chẩn đoán từ tuổi dậy thì đến mãn kinh, nhưng có thể gặp ở bất kỳ ai có hoặc từng có tử cung. Bệnh có thể ảnh hưởng nhiều đến cuộc sống hằng ngày.","src":[0]}],
-"signs":[
-{"text":"Đau bụng kinh dữ dội đến mức không sinh hoạt bình thường; đau vùng chậu (bụng dưới và lưng).","src":[0,1]},
-{"text":"Kinh nhiều, phải thay băng/tampon mỗi 1–2 giờ; ra máu giữa kỳ.","src":[0,1]},
-{"text":"Đau khi đi cầu, đi tiểu, đau trong hoặc sau khi quan hệ; mệt mỏi kéo dài.","src":[0,1]},
-{"text":"Khó có thai; một số người thấy buồn bã hoặc lo âu. Triệu chứng tiêu hóa cũng có thể xuất hiện.","src":[0,1]},
-{"text":"NHS: hiếm hơn, đau hoặc chảy máu ở nơi khác như ngực, có thể gây khó thở và ho ra máu.","src":[0]}],
-"causes":[
-{"text":"Cả NHS và MedlinePlus đều nói chưa biết nguyên nhân gây bệnh.","src":[0,1]},
-{"text":"MedlinePlus: nguy cơ cao hơn nếu có người thân ruột thịt bị bệnh hoặc bắt đầu có kinh trước 11 tuổi.","src":[1]}],
-"course":[
-{"text":"Hiện chưa có thuốc chữa khỏi hẳn, nhưng điều trị giúp kiểm soát triệu chứng.","src":[0,1]},
-{"text":"NHS: việc chẩn đoán có thể mất nhiều thời gian.","src":[0]},
-{"text":"Khó có thai là một triệu chứng được ghi nhận của bệnh.","src":[0,1]}],
-"care":[
-{"text":"Thuốc thường dùng đầu tiên: thuốc giảm đau (như paracetamol, ibuprofen) và thuốc nội tiết như thuốc tránh thai kết hợp; nội tiết không dùng khi đang cố có thai. Do bác sĩ quyết định.","src":[0]},
-{"text":"MedlinePlus nêu các nhóm điều trị: thuốc giảm đau, liệu pháp nội tiết (thuốc tránh thai, progestin, thuốc GnRH); đau nặng đôi khi cần thuốc mạnh hơn do bác sĩ kê.","src":[1]},
-{"text":"Phẫu thuật được cân nhắc khi các cách khác không hiệu quả, bệnh lan rộng hoặc ảnh hưởng khả năng sinh sản: cắt bỏ các ổ lạc nội mạc hoặc u nang, đôi khi cắt tử cung.","src":[0,1]},
-{"text":"Nếu hiếm muộn do bệnh, có thể mổ nội soi gỡ các ổ bệnh hoặc thụ tinh trong ống nghiệm (IVF).","src":[1]},
-{"text":"Nếu điều trị không hiệu quả hoặc triệu chứng nặng, bạn có thể được chuyển đến dịch vụ chuyên khoa; NHS cũng gợi ý các tổ chức hỗ trợ người bệnh.","src":[0]}],
-"diet":null,
-"doctor":[
-{"text":"NHS: nên đi khám nếu bạn nghĩ mình có thể bị lạc nội mạc tử cung.","src":[0]},
-{"text":"Nên đi khám nếu triệu chứng ảnh hưởng cuộc sống, công việc hay các mối quan hệ, hoặc không đỡ/nặng hơn dù đã điều trị.","src":[0]}],
-"emergency":[],
-"sources":[
-{"title":"Endometriosis","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/endometriosis/","reviewed":"2024-08-27"},
-{"title":"Endometriosis","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/endometriosis.html","reviewed":"2025-03-27"}],
-"verifiedAt":"2026-10-09"}
+{
+  "id": "lac-noi-mac-tu-cung",
+  "kind": "women",
+  "names": [
+    "lạc nội mạc tử cung",
+    "bệnh lạc nội mạc tử cung",
+    "lạc nội mạc",
+    "endometriosis"
+  ],
+  "about": [
+    {
+      "text": "Lạc nội mạc tử cung là bệnh trong đó mô giống lớp niêm mạc tử cung mọc ở những nơi khác trong cơ thể.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Mô này thường nằm trên hoặc dưới buồng trứng, ở vòi trứng, phía sau tử cung, hoặc trên ruột, bàng quang.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Bệnh thường được chẩn đoán từ tuổi dậy thì đến mãn kinh, nhưng có thể gặp ở bất kỳ ai có hoặc từng có tử cung. Bệnh có thể ảnh hưởng nhiều đến cuộc sống hằng ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau bụng kinh dữ dội đến mức không sinh hoạt bình thường; đau vùng chậu (bụng dưới và lưng).",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Kinh nhiều, phải thay băng/tampon mỗi 1–2 giờ; ra máu giữa kỳ.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Đau khi đi cầu, đi tiểu, đau trong hoặc sau khi quan hệ; mệt mỏi kéo dài.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Khó có thai; một số người thấy tâm trạng thấp hoặc lo âu. Triệu chứng tiêu hóa cũng có thể xuất hiện.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "NHS: đôi khi mô bệnh nằm ngoài vùng chậu, như ở ngực, và có thể gây đau hoặc chảy máu, dẫn tới khó thở và ho ra máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Cả NHS và MedlinePlus đều nói chưa biết nguyên nhân gây bệnh.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "MedlinePlus: nguy cơ cao hơn nếu mẹ, chị/em gái hoặc con gái bị bệnh, hoặc nếu bắt đầu có kinh trước 11 tuổi.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Hiện chưa có thuốc chữa khỏi hẳn, nhưng điều trị giúp kiểm soát triệu chứng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "NHS: việc chẩn đoán có thể mất nhiều thời gian.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khó có thai là một triệu chứng được ghi nhận của bệnh.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Thuốc thường dùng đầu tiên: thuốc giảm đau (như paracetamol, ibuprofen) và thuốc nội tiết như thuốc tránh thai kết hợp; nội tiết không dùng khi đang cố có thai. Do bác sĩ quyết định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "MedlinePlus nêu các nhóm điều trị: thuốc giảm đau, liệu pháp nội tiết (thuốc tránh thai, progestin, thuốc GnRH); đau nặng đôi khi cần thuốc mạnh hơn do bác sĩ kê.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Phẫu thuật được cân nhắc khi các cách khác không hiệu quả, bệnh lan rộng hoặc ảnh hưởng khả năng sinh sản: cắt bỏ các ổ lạc nội mạc hoặc u nang, đôi khi cắt tử cung.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Nếu hiếm muộn do bệnh, có thể mổ nội soi gỡ các ổ bệnh hoặc thụ tinh trong ống nghiệm (IVF).",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nếu điều trị không hiệu quả hoặc triệu chứng nặng, bạn có thể được chuyển đến dịch vụ chuyên khoa; NHS cũng gợi ý các tổ chức hỗ trợ người bệnh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "NHS: nên đi khám nếu bạn nghĩ mình có thể bị lạc nội mạc tử cung.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nên đi khám nếu triệu chứng ảnh hưởng cuộc sống, công việc hay các mối quan hệ, hoặc không đỡ/nặng hơn dù đã điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Endometriosis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/endometriosis/",
+      "reviewed": "2024-08-27"
+    },
+    {
+      "title": "Endometriosis",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/endometriosis.html",
+      "reviewed": "2025-03-27"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

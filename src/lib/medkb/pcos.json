@@ -1,62 +1,279 @@
 {
-"id":"pcos",
-"kind":"women",
-"names":["buồng trứng đa nang","hội chứng buồng trứng đa nang","PCOS","PMOS","hội chứng PMOS","polycystic ovary syndrome","polycystic ovarian syndrome","polyendocrine metabolic ovarian syndrome"],
-"about":[
-{"text":"Buồng trứng đa nang (PCOS) là một rối loạn nội tiết tố có thể ảnh hưởng đến lông tóc, kinh nguyệt, khả năng sinh sản và tâm trạng.","src":[0,1]},
-{"text":"NHS và Mayo Clinic nay dùng tên mới là PMOS (hội chứng buồng trứng chuyển hoá nội tiết đa tuyến), trước đây gọi là PCOS; MedlinePlus cũng nêu tên PMOS.","src":[0,1,2]},
-{"text":"Chưa có cách chữa dứt điểm, nhưng điều trị và thay đổi lối sống có thể giúp ích.","src":[0]},
-{"text":"Thường được chẩn đoán khi có ít nhất hai trong ba dấu hiệu: rụng trứng không đều hoặc không có, nồng độ androgen cao, và buồng trứng đa nang (nhiều nang nhỏ). Có người không có nang buồng trứng.","src":[1,2]}
-],
-"signs":[
-{"text":"Kinh nguyệt không đều hoặc cách nhau rất lâu; có người mất kinh.","src":[0,1,2]},
-{"text":"Lông mọc nhiều ở mặt, ngực, bụng, đùi (rậm lông) hoặc rụng tóc; mụn trứng cá, da dầu.","src":[0,1,2]},
-{"text":"Tăng cân hoặc khó giảm cân; mệt mỏi; trầm cảm hoặc lo âu.","src":[0,1]},
-{"text":"Mảng da dày, sẫm màu, thường ở cổ hoặc nách (gai đen, acanthosis nigricans).","src":[0,1,2]},
-{"text":"Khó mang thai; PCOS là một trong những nguyên nhân phổ biến nhất gây vô sinh, nhưng nhiều người vẫn có thể có thai.","src":[0,1,2]},
-{"text":"Thường bắt đầu quanh tuổi dậy thì (khoảng kỳ kinh đầu) nhưng có thể muộn hơn; mức độ khác nhau, có người ít hoặc không có triệu chứng.","src":[0,1,2]}
-],
-"causes":[
-{"text":"Chưa rõ nguyên nhân chính xác. Có thể liên quan đến insulin và hormone androgen (như testosterone) hoạt động không bình thường, và di truyền (hay gặp trong gia đình).","src":[0,1,2]},
-{"text":"**Kháng insulin**: tế bào đáp ứng kém với insulin nên đường huyết có thể tăng.","src":[1,2]},
-{"text":"Nguy cơ cao hơn nếu có người thân bị PCOS, thừa cân hoặc béo phì, kháng insulin; NHS nêu thêm người gốc châu Á.","src":[0,2]}
-],
-"course":[
-{"text":"Có thể làm tăng nguy cơ tiểu đường type 2 (hoặc tiền tiểu đường), tăng huyết áp, bệnh tim mạch và gan nhiễm mỡ.","src":[0,1,2]},
-{"text":"MedlinePlus và Mayo Clinic còn nêu nguy cơ ngưng thở khi ngủ.","src":[1,2]},
-{"text":"Cholesterol có thể bất thường (LDL cao, HDL thấp) và có thể bị hội chứng chuyển hoá.","src":[1,2]},
-{"text":"Có thể làm dày niêm mạc tử cung, tăng nguy cơ ung thư nội mạc tử cung (ung thư tử cung).","src":[0,1,2]},
-{"text":"Khi mang thai, nguy cơ tiểu đường thai kỳ, tăng huyết áp, sảy thai và sinh non cao hơn.","src":[2]},
-{"text":"Có thể đi kèm trầm cảm, lo âu và rối loạn ăn uống.","src":[1,2]},
-{"text":"Khám định kỳ có thể giúp giảm các rủi ro này. Béo phì thường gặp ở PCOS và có thể làm biến chứng nặng hơn.","src":[0,2]}
-],
-"care":[
-{"text":"Thay đổi lối sống: ăn uống lành mạnh cân đối, vận động đều đặn, giảm cân nếu thừa cân.","src":[0,1]},
-{"text":"Thuốc tuỳ triệu chứng, do bác sĩ quyết định: thuốc tránh thai hoặc vòng tránh thai nội tiết để điều hoà kinh nguyệt, thuốc kích thích rụng trứng khi muốn có thai, thuốc giảm rậm lông, thuốc cho da mụn.","src":[0,1]},
-{"text":"Bác sĩ có thể cho thuốc điều trị tiểu đường type 2 (như metformin) để giúp giảm mệt và vấn đề cân nặng, hoặc cải thiện kháng insulin.","src":[0,1]},
-{"text":"Thuốc hormone tránh thai chỉ phù hợp khi chưa muốn có thai; thuốc kháng androgen có thể gây vấn đề trong thai kỳ nên thường đi kèm biện pháp tránh thai.","src":[1]},
-{"text":"Nếu các cách khác không hiệu quả, bác sĩ có thể đề nghị phẫu thuật nội soi đốt buồng trứng để hỗ trợ khả năng có thai.","src":[0]},
-{"text":"Loại bỏ lông không mong muốn: cạo, tẩy lông, kem làm rụng lông, điện phân hoặc laser. Có thể cân nhắc tâm lý trị liệu nếu thấy trầm cảm hoặc lo âu.","src":[0,1]},
-{"text":"Nếu không muốn có thai, hãy dùng biện pháp tránh thai, vì vẫn có thể mang thai.","src":[2]}
-],
-"diet":{
-"avoid":[],
-"ok":[
-{"text":"NHS và MedlinePlus khuyên ăn uống lành mạnh, cân đối và giữ cân nặng khoẻ mạnh; nguồn không nêu món cụ thể nên tránh hay nên ăn.","src":[0,1]}
-],
-"foods":[]
-},
-"doctor":[
-{"text":"Nên đi khám (không khẩn cấp) khi nghĩ mình có thể bị PCOS, hoặc triệu chứng ảnh hưởng đến sinh hoạt, công việc, các mối quan hệ.","src":[0]},
-{"text":"Mayo Clinic: đi khám nếu lo về kinh nguyệt, khó có thai, hoặc có dấu hiệu thừa androgen như lông mặt hoặc thân mới mọc, mụn, rụng tóc kiểu nam.","src":[2]},
-{"text":"Các triệu chứng này rất phổ biến và có thể do nhiều nguyên nhân khác, nên cần được kiểm tra.","src":[0]},
-{"text":"Không có một xét nghiệm duy nhất; bác sĩ dựa vào khám, bệnh sử gia đình, xét nghiệm máu (hormone, kháng insulin) và siêu âm buồng trứng (NHS: chỉ làm khi trên 18 tuổi).","src":[0,1]}
-],
-"emergency":[],
-"sources":[
-{"title":"Polyendocrine metabolic ovarian syndrome (PMOS), previously PCOS","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/polycystic-ovary-syndrome-pcos/","reviewed":"2026-06-30"},
-{"title":"Polycystic Ovary Syndrome","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/polycysticovarysyndrome.html","reviewed":"2026-09-22"},
-{"title":"Polyendocrine metabolic ovarian syndrome (PMOS)","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/pcos/symptoms-causes/syc-20353439","reviewed":"2026-05-21"}
-],
-"verifiedAt":"2026-10-09"
+  "id": "pcos",
+  "kind": "women",
+  "names": [
+    "buồng trứng đa nang",
+    "hội chứng buồng trứng đa nang",
+    "PCOS",
+    "PMOS",
+    "hội chứng PMOS",
+    "polycystic ovary syndrome",
+    "polycystic ovarian syndrome",
+    "polyendocrine metabolic ovarian syndrome"
+  ],
+  "about": [
+    {
+      "text": "Buồng trứng đa nang (PCOS) là một rối loạn nội tiết tố có thể ảnh hưởng đến lông tóc, kinh nguyệt, khả năng sinh sản và tâm trạng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "NHS và Mayo Clinic nay dùng tên mới là PMOS (hội chứng buồng trứng chuyển hoá nội tiết đa tuyến), trước đây gọi là PCOS; MedlinePlus cũng nêu tên PMOS.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Chưa có cách chữa dứt điểm, nhưng điều trị và thay đổi lối sống có thể giúp ích.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thường được chẩn đoán khi có ít nhất hai trong ba dấu hiệu: rụng trứng không đều hoặc không có, nồng độ androgen cao, và buồng trứng đa nang (nhiều nang nhỏ). Có người không có nang buồng trứng.",
+      "src": [
+        1,
+        2
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Kinh nguyệt không đều hoặc cách nhau rất lâu; có người mất kinh.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Lông mọc nhiều ở mặt, ngực, bụng, đùi (rậm lông) hoặc rụng tóc; mụn trứng cá, da dầu.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Tăng cân hoặc khó giảm cân; mệt mỏi; trầm cảm hoặc lo âu.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Mảng da dày, sẫm màu, thường ở cổ hoặc nách (gai đen, acanthosis nigricans).",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Khó mang thai, nhưng vẫn có thể mang thai.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Thường bắt đầu quanh tuổi dậy thì (khoảng kỳ kinh đầu) nhưng có thể muộn hơn; mức độ khác nhau, có người ít hoặc không có triệu chứng.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Chưa rõ nguyên nhân chính xác. Có thể liên quan đến insulin và hormone androgen (như testosterone) hoạt động không bình thường, và di truyền (hay gặp trong gia đình).",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "**Kháng insulin**: cơ thể không dùng insulin đúng cách nên đường huyết có thể tăng.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn nếu có người thân bị PCOS, thừa cân hoặc béo phì, kháng insulin; NHS nêu thêm người gốc châu Á.",
+      "src": [
+        0,
+        2
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Có thể làm tăng nguy cơ tiểu đường type 2 (hoặc tiền tiểu đường), tăng huyết áp, bệnh tim mạch và gan nhiễm mỡ.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "MedlinePlus và Mayo Clinic còn nêu nguy cơ ngưng thở khi ngủ.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Mỡ máu/cholesterol có thể bất thường và có thể bị hội chứng chuyển hoá.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Có thể làm dày niêm mạc tử cung, tăng nguy cơ ung thư nội mạc tử cung (ung thư tử cung).",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Khi mang thai, nguy cơ tiểu đường thai kỳ, tăng huyết áp, sảy thai và sinh non cao hơn.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Có thể đi kèm trầm cảm, lo âu và rối loạn ăn uống.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Khám định kỳ có thể giúp giảm các rủi ro này. Béo phì thường gặp ở PCOS và có thể làm biến chứng nặng hơn.",
+      "src": [
+        0,
+        2
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Thay đổi lối sống: ăn uống lành mạnh cân đối, vận động đều đặn, giảm cân nếu thừa cân.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thuốc tuỳ triệu chứng, do bác sĩ quyết định: thuốc tránh thai hoặc vòng tránh thai nội tiết để điều hoà kinh nguyệt, thuốc kích thích rụng trứng khi muốn có thai, thuốc giảm rậm lông, thuốc cho da mụn.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể cho thuốc điều trị tiểu đường type 2 (như metformin) để giúp giảm mệt và vấn đề cân nặng, hoặc cải thiện kháng insulin.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thuốc hormone tránh thai chỉ phù hợp khi chưa muốn có thai; thuốc kháng androgen có thể gây vấn đề trong thai kỳ nên thường đi kèm biện pháp tránh thai.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nếu các cách khác không hiệu quả, bác sĩ có thể đề nghị phẫu thuật nội soi đốt buồng trứng để hỗ trợ khả năng có thai.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Loại bỏ lông không mong muốn: cạo, tẩy lông, kem làm rụng lông, điện phân hoặc laser. Có thể cân nhắc tâm lý trị liệu nếu thấy trầm cảm hoặc lo âu.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Nếu không muốn có thai, hãy dùng biện pháp tránh thai, vì vẫn có thể mang thai.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "NHS và MedlinePlus khuyên ăn uống lành mạnh, cân đối và giữ cân nặng khoẻ mạnh; nguồn không nêu món cụ thể nên tránh hay nên ăn.",
+        "src": [
+          0,
+          1
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám (không khẩn cấp) khi nghĩ mình có thể bị PCOS, hoặc triệu chứng ảnh hưởng đến sinh hoạt, công việc, các mối quan hệ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mayo Clinic: đi khám nếu lo về kinh nguyệt, khó có thai, hoặc có dấu hiệu thừa androgen như lông mặt hoặc thân mới mọc, mụn, rụng tóc kiểu nam.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Các triệu chứng này phổ biến và có thể do nhiều nguyên nhân khác, nên cần được kiểm tra.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Không có một xét nghiệm duy nhất; bác sĩ dựa vào khám, bệnh sử gia đình, xét nghiệm máu (hormone, kháng insulin) và siêu âm buồng trứng (NHS: chỉ làm khi trên 18 tuổi).",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Polyendocrine metabolic ovarian syndrome (PMOS), previously PCOS",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/polycystic-ovary-syndrome-pcos/",
+      "reviewed": "2026-06-30"
+    },
+    {
+      "title": "Polycystic Ovary Syndrome",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/polycysticovarysyndrome.html",
+      "reviewed": "2026-09-22"
+    },
+    {
+      "title": "Polyendocrine metabolic ovarian syndrome (PMOS)",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/diseases-conditions/pcos/symptoms-causes/syc-20353439",
+      "reviewed": "2026-05-21"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
 }

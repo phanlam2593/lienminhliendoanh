@@ -1,38 +1,200 @@
-{"id":"tac-tia-sua","kind":"women","names":["tắc tia sữa","viêm vú","viêm tuyến vú","tắc sữa","nghẽn tia sữa","áp xe vú","mastitis","blocked milk duct"],
-"about":[
-{"text":"Viêm vú (mastitis) là tình trạng mô vú bị viêm và đau; đôi khi chuyển thành nhiễm trùng. Có thể kèm đau nhức, mệt, triệu chứng giống cúm hoặc sốt.","src":[0]},
-{"text":"Bệnh chủ yếu gặp ở phụ nữ cho con bú, thường trong 3 tháng đầu sau sinh. Người không cho con bú cũng có thể bị khi vú nhiễm trùng.","src":[0]}],
-"signs":[
-{"text":"Thường ở một bên vú, đôi khi cả hai: vùng vú sưng, nóng, đau, có thể đỏ từng mảng (trên da nâu và đen khó thấy đỏ hơn).","src":[0,1]},
-{"text":"Đau rát vú, có thể chỉ khi cho bú hoặc đau liên tục; có cục hoặc vùng vú cứng, dày lên.","src":[0,1,2]},
-{"text":"Mệt, cảm giác không khỏe, sốt.","src":[0,1]},
-{"text":"Tiết dịch núm vú (có thể màu trắng hoặc lẫn máu theo NHS; MedlinePlus: có thể có mủ).","src":[0,2]},
-{"text":"MedlinePlus nêu thêm: ngứa, buồn nôn/nôn, hạch nách cùng bên sưng đau.","src":[2]}],
-"causes":[
-{"text":"Khi cho con bú, thường do sữa ứ đọng nhanh hơn lượng được lấy ra, gây tắc ống dẫn sữa.","src":[0,1]},
-{"text":"NHS: bé ngậm bắt vú không đúng, bỏ cữ hoặc cho bú thưa, chỉ cho bú một bên, hoặc chấn thương ống/tuyến sữa.","src":[0]},
-{"text":"Mayo Clinic: vi khuẩn từ da hoặc miệng bé có thể vào ống sữa qua núm vú nứt rồi phát triển trong sữa không được hút hết.","src":[1]},
-{"text":"Nguy cơ cao hơn: từng bị viêm vú, núm vú đau/nứt, vú bị ép chặt (áo ngực chật, dây an toàn), cách cho bú chưa đúng, mệt mỏi/căng thẳng, ăn uống kém, hút thuốc.","src":[1]},
-{"text":"Khi không cho con bú, thường do nhiễm trùng, có thể sau núm vú nứt hoặc xỏ khuyên núm vú.","src":[0]}],
-"course":[
-{"text":"NHS: viêm vú giai đoạn sớm điều trị nhanh và dễ.","src":[0]},
-{"text":"Mayo Clinic: nếu không điều trị, hoặc do tắc ống sữa, có thể thành áp xe (túi mủ trong vú), thường cần dẫn lưu bằng phẫu thuật.","src":[1]},
-{"text":"MedlinePlus: kháng sinh rất hiệu quả; ở người không cho con bú, viêm vú hiếm khi có thể là dấu hiệu của ung thư vú.","src":[2]}],
-"care":[
-{"text":"NHS: cứ tiếp tục cho con bú dù đau, vì ngừng bú làm tắc nặng hơn. Bú không gây hại cho bé, dù sữa có thể hơi mặn.","src":[0]},
-{"text":"Cho bú theo nhu cầu của bé, cho bú khi vú căng khó chịu; kiểm tra tư thế ngậm bắt vú và nhờ nữ hộ sinh hoặc chuyên gia hỗ trợ bú nếu cần.","src":[0]},
-{"text":"Có thể dùng paracetamol hoặc ibuprofen giảm đau; chườm ấm hoặc tắm nước ấm giúp sữa chảy; chườm lạnh làm dịu đau; uống nhiều nước và nghỉ ngơi.","src":[0]},
-{"text":"MedlinePlus: chườm ẩm nóng lên vú khoảng 15–20 phút mỗi lần, dùng thuốc giảm đau nếu cần; tiếp tục cho bú hoặc hút sữa để bớt sưng.","src":[2]},
-{"text":"NHS khuyên tránh: quần áo/áo ngực chật, aspirin, dầu, kem, ấn mạnh lên vú; không vắt quá nhiều sữa so với nhu cầu của bé và không ngừng bú đột ngột.","src":[0]},
-{"text":"Bác sĩ có thể kê kháng sinh, thường hết nhiễm trùng trong vài ngày; nếu có áp xe thì có thể chọc hút dưới siêu âm hoặc rạch dẫn lưu.","src":[0,2]}],
-"diet":null,
-"doctor":[
-{"text":"NHS: nếu sau 12–24 giờ chăm sóc tại nhà mà triệu chứng không đỡ, hãy đi khám bác sĩ.","src":[0]},
-{"text":"Mayo Clinic: nên liên hệ nhân viên y tế ngay khi có triệu chứng viêm vú để giảm nguy cơ biến chứng.","src":[1]},
-{"text":"MedlinePlus: liên hệ nhân viên y tế khi vú đỏ, đau, sưng hoặc nóng, khi đang cho con bú mà sốt cao, hoặc khi hạch nách sưng đau.","src":[2]}],
-"emergency":[],
-"sources":[
-{"title":"Mastitis","publisher":"NHS (Anh)","url":"https://www.nhs.uk/best-start-in-life/baby/feeding-your-baby/breastfeeding/breastfeeding-challenges/mastitis/","reviewed":"2026-01-28"},
-{"title":"Mastitis","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/mastitis/symptoms-causes/syc-20374829","reviewed":"2024-08-13"},
-{"title":"Breast infection (mastitis)","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/ency/article/001490.htm","reviewed":"2024-10-17"}],
-"verifiedAt":"2026-10-09"}
+{
+  "id": "tac-tia-sua",
+  "kind": "women",
+  "names": [
+    "tắc tia sữa",
+    "viêm vú",
+    "viêm tuyến vú",
+    "tắc sữa",
+    "nghẽn tia sữa",
+    "áp xe vú",
+    "mastitis",
+    "blocked milk duct"
+  ],
+  "about": [
+    {
+      "text": "Viêm vú (mastitis) là tình trạng mô vú bị viêm và đau; đôi khi chuyển thành nhiễm trùng. Có thể kèm đau nhức, mệt, triệu chứng giống cúm hoặc sốt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bệnh chủ yếu gặp ở phụ nữ cho con bú, thường trong 3 tháng đầu sau sinh. Người không cho con bú cũng có thể bị khi vú nhiễm trùng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường ở một bên vú, đôi khi cả hai: vùng vú sưng, nóng, đau, có thể đỏ từng mảng (trên da nâu và đen khó thấy đỏ hơn).",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Đau rát vú, có thể chỉ khi cho bú hoặc đau liên tục; có cục hoặc vùng vú cứng, dày lên.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Mệt, cảm giác không khỏe, sốt.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tiết dịch núm vú (có thể màu trắng hoặc lẫn máu theo NHS; MedlinePlus: có thể có mủ).",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "MedlinePlus nêu thêm: ngứa, buồn nôn/nôn, hạch nách cùng bên sưng đau.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Khi cho con bú, thường do sữa ứ đọng nhanh hơn lượng được lấy ra, gây tắc ống dẫn sữa.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "NHS: bé ngậm bắt vú không đúng, bỏ cữ hoặc cho bú thưa, cho bú một bên nhiều hơn bên kia, hoặc chấn thương ống/tuyến sữa.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mayo Clinic: vi khuẩn từ da hoặc miệng bé có thể vào ống sữa qua núm vú nứt rồi phát triển trong sữa không được hút hết.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn: từng bị viêm vú, núm vú đau/nứt, vú bị ép chặt (áo ngực chật, dây an toàn), cách cho bú chưa đúng, mệt mỏi/căng thẳng, ăn uống kém, hút thuốc.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Khi không cho con bú, có thể do nhiễm trùng, ví dụ sau núm vú nứt hoặc xỏ khuyên núm vú.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "NHS: viêm vú giai đoạn sớm điều trị nhanh và dễ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mayo Clinic: nếu không điều trị, hoặc do tắc ống sữa, có thể thành áp xe (túi mủ trong vú), thường cần dẫn lưu bằng phẫu thuật.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "MedlinePlus: kháng sinh rất hiệu quả; viêm vú không liên quan đến cho bú đôi khi có thể do một dạng ung thư vú hiếm gặp.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "NHS: cứ tiếp tục cho con bú dù đau, vì ngừng bú làm tắc nặng hơn. Bú không gây hại cho bé, dù sữa có thể hơi mặn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cho bú theo nhu cầu của bé, cho bú khi vú căng khó chịu; kiểm tra tư thế ngậm bắt vú và nhờ nữ hộ sinh hoặc chuyên gia hỗ trợ bú nếu cần.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể dùng paracetamol hoặc ibuprofen giảm đau; chườm ấm hoặc tắm nước ấm có thể cải thiện dòng sữa; chườm lạnh làm dịu đau; uống nhiều nước và nghỉ ngơi.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "MedlinePlus: chườm ẩm nóng lên vú 15–20 phút mỗi lần, dùng thuốc giảm đau nếu cần; khi đang dùng kháng sinh, tiếp tục cho bú hoặc hút sữa để bớt sưng.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "NHS khuyên tránh: quần áo/áo ngực chật, aspirin, dầu, kem, ấn mạnh lên vú; không vắt quá nhiều sữa so với nhu cầu của bé và không ngừng bú đột ngột.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể kê kháng sinh, thường hết nhiễm trùng trong vài ngày; nếu có áp xe thì có thể chọc hút dưới siêu âm, và nếu không đỡ thì rạch dẫn lưu.",
+      "src": [
+        0,
+        2
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "NHS: nếu sau 12–24 giờ chăm sóc tại nhà mà triệu chứng không đỡ, hãy đi khám bác sĩ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mayo Clinic: nên liên hệ nhân viên y tế ngay khi có triệu chứng viêm vú để giảm nguy cơ biến chứng.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "MedlinePlus: liên hệ nhân viên y tế khi vú đỏ, đau, sưng hoặc nóng, khi đang cho con bú mà sốt cao, hoặc khi hạch nách sưng đau.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Mastitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/best-start-in-life/baby/feeding-your-baby/breastfeeding/breastfeeding-challenges/mastitis/",
+      "reviewed": "2026-01-28"
+    },
+    {
+      "title": "Mastitis",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/diseases-conditions/mastitis/symptoms-causes/syc-20374829",
+      "reviewed": "2024-08-13"
+    },
+    {
+      "title": "Breast infection (mastitis)",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/001490.htm",
+      "reviewed": "2024-10-17"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

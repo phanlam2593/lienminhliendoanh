@@ -1,1 +1,196 @@
-{"id":"dau-buon-mat-mat","kind":"mental","names":["đau buồn mất mát","đau buồn","tang quyến","mất người thân","nỗi đau mất người thân","grief","bereavement","prolonged grief disorder","rối loạn đau buồn kéo dài"],"about":[{"text":"Tang quyến (bereavement) là giai đoạn đau buồn và để tang sau một cái chết; đau buồn là một phần của quá trình bình thường khi phản ứng với mất mát.","src":[1]},{"text":"Đau buồn cũng có thể theo sau những mất mát khác như kết thúc một mối quan hệ, mất việc, mất nhà, hoặc người thân mắc bệnh nặng.","src":[0]}],"signs":[{"text":"Sốc và tê dại, thường được mô tả là “như trong cơn mê”, là phản ứng đầu tiên thường gặp.","src":[0]},{"text":"Buồn bã dâng trào và hay khóc; mệt mỏi, kiệt sức.","src":[0]},{"text":"Giận người đã mất hoặc nguyên nhân gây ra mất mát; mặc cảm tội lỗi về những điều đã nói hay chưa nói, hoặc vì đã tức giận.","src":[0]},{"text":"Phản ứng tinh thần có thể gồm giận, tội lỗi, lo âu, buồn và tuyệt vọng.","src":[1]},{"text":"Phản ứng cơ thể có thể gồm khó ngủ, thay đổi cảm giác thèm ăn, vấn đề thể chất hoặc bệnh.","src":[1]},{"text":"Có thể trải qua các giai đoạn như phủ nhận, giận dữ, chán nản, mặc cả, chấp nhận; nhưng không nhất thiết theo thứ tự và không phải ai cũng trải qua tất cả.","src":[0]}],"causes":[],"course":[{"text":"Đau buồn kéo dài bao lâu có thể phụ thuộc vào mức độ thân thiết với người mất và cái chết có được dự đoán trước hay không.","src":[1]},{"text":"Rối loạn đau buồn kéo dài: buồn hay tội lỗi dữ dội không dịu đi sau nhiều tháng, khó chấp nhận cái chết, không trở lại sinh hoạt thường ngày được, có thể có ý nghĩ tự tử.","src":[0]},{"text":"Khả năng này cao hơn sau một cái chết mang tính sang chấn, đột ngột hoặc bất ngờ.","src":[0]}],"care":[{"text":"Nói chuyện với người bạn tin cậy, nhân viên y tế hoặc chuyên viên tư vấn; hỗ trợ đồng đẳng, nơi mọi người chia sẻ trải nghiệm, cũng là một lựa chọn.","src":[0]},{"text":"Tập thể dục đều đặn có thể cải thiện tâm trạng và giấc ngủ.","src":[0]},{"text":"Đặt những mục tiêu nhỏ có thể đạt được và tập trung vào điều bạn có thể tác động.","src":[0]},{"text":"Tránh dùng rượu, thuốc lá, cờ bạc hoặc ma tuý để đối phó vì có thể làm sức khoẻ tâm thần tệ hơn.","src":[0]},{"text":"Bạn bè, gia đình và niềm tin tâm linh có thể nâng đỡ; tư vấn hoặc trị liệu đau buồn giúp một số người.","src":[1]}],"diet":{"avoid":[{"text":"Tránh dùng rượu để đối phó với đau buồn vì có thể làm sức khoẻ tâm thần tệ hơn.","src":[0]}],"ok":[{"text":"Ăn uống lành mạnh với các bữa đều đặn là một phần tự chăm sóc được NHS nêu.","src":[0]}],"foods":[{"name":"rượu bia","aliases":["rượu","bia","đồ uống có cồn"],"verdict":"avoid","note":"NHS khuyên tránh dùng rượu để đối phó với đau buồn.","src":[0]}]},"doctor":[{"text":"Nên gặp bác sĩ nếu bạn khó đối phó với căng thẳng, lo âu hoặc tâm trạng thấp, nếu tâm trạng thấp kéo dài hơn 2 tuần, hoặc nếu tự giúp bản thân chưa hiệu quả.","src":[0]},{"text":"Nếu các triệu chứng của rối loạn đau buồn kéo dài, hãy đi khám.","src":[0]},{"text":"Hãy liên hệ nhân viên y tế nếu bạn có thắc mắc về sức khoẻ của mình.","src":[1]}],"emergency":[{"text":"NHS nhắc rằng có hỗ trợ nếu bạn hoặc người quen đang trong khủng hoảng sức khoẻ tâm thần; hãy tìm giúp đỡ khẩn cấp tại nơi mình ở.","src":[0]}],"sources":[{"title":"Grief, bereavement and loss","publisher":"NHS (Anh)","url":"https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/feelings-and-symptoms/grief-bereavement-loss/","reviewed":"2026-07-14"},{"title":"Bereavement","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/bereavement.html","reviewed":"2017-10-19"}],"verifiedAt":"2026-10-09"}
+{
+ "id": "dau-buon-mat-mat",
+ "kind": "mental",
+ "names": [
+  "đau buồn mất mát",
+  "đau buồn",
+  "tang quyến",
+  "mất người thân",
+  "nỗi đau mất người thân",
+  "grief",
+  "bereavement",
+  "prolonged grief disorder",
+  "rối loạn đau buồn kéo dài"
+ ],
+ "about": [
+  {
+   "text": "Tang quyến (bereavement) là giai đoạn đau buồn và để tang sau một cái chết; đau buồn là một phần của quá trình bình thường khi phản ứng với mất mát.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Đau buồn cũng có thể theo sau những mất mát khác như kết thúc một mối quan hệ, mất việc, mất nhà, hoặc người thân mắc bệnh nặng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Sốc và tê dại, thường được mô tả là “như trong cơn mê”, là phản ứng đầu tiên thường gặp.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Buồn bã dâng trào và hay khóc; mệt mỏi, kiệt sức.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Giận người đã mất hoặc nguyên nhân gây ra mất mát; mặc cảm tội lỗi về những điều đã nói hay chưa nói, hoặc vì đã tức giận.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Phản ứng tinh thần có thể gồm giận, tội lỗi, lo âu, buồn và tuyệt vọng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Phản ứng cơ thể có thể gồm khó ngủ, thay đổi cảm giác thèm ăn, vấn đề thể chất hoặc bệnh.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có thể trải qua các giai đoạn như phủ nhận, giận dữ, chán nản, mặc cả, chấp nhận; nhưng không nhất thiết theo thứ tự và không phải ai cũng trải qua tất cả.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [],
+ "course": [
+  {
+   "text": "Đau buồn kéo dài bao lâu có thể phụ thuộc vào mức độ thân thiết với người mất và cái chết có được dự đoán trước hay không.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Nếu nỗi buồn hay tội lỗi dữ dội không dịu đi sau nhiều tháng, bạn khó chấp nhận cái chết hoặc không trở lại sinh hoạt thường ngày được, hãy tìm giúp đỡ; có thể kèm ý nghĩ tự tử.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Khả năng này cao hơn sau một cái chết mang tính sang chấn, đột ngột hoặc bất ngờ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Nói chuyện với người bạn tin cậy, nhân viên y tế hoặc chuyên viên tư vấn; hỗ trợ đồng đẳng, nơi mọi người chia sẻ trải nghiệm, cũng là một lựa chọn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Tập thể dục đều đặn có thể cải thiện tâm trạng và giấc ngủ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Đặt những mục tiêu nhỏ có thể đạt được và tập trung vào điều bạn có thể tác động.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Tránh dùng rượu, thuốc lá, cờ bạc hoặc ma tuý để đối phó vì có thể làm sức khoẻ tâm thần tệ hơn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Bạn bè, gia đình và niềm tin tâm linh có thể nâng đỡ; tư vấn hoặc trị liệu đau buồn giúp một số người.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "diet": {
+  "avoid": [
+   {
+    "text": "Tránh dùng rượu để đối phó với đau buồn vì có thể làm sức khoẻ tâm thần tệ hơn.",
+    "src": [
+     0
+    ]
+   }
+  ],
+  "ok": [
+   {
+    "text": "Ăn uống lành mạnh với các bữa đều đặn là một phần tự chăm sóc được NHS nêu.",
+    "src": [
+     0
+    ]
+   }
+  ],
+  "foods": [
+   {
+    "name": "rượu bia",
+    "aliases": [
+     "rượu",
+     "bia",
+     "đồ uống có cồn"
+    ],
+    "verdict": "avoid",
+    "note": "NHS khuyên tránh dùng rượu để đối phó với đau buồn.",
+    "src": [
+     0
+    ]
+   }
+  ]
+ },
+ "doctor": [
+  {
+   "text": "Nên gặp bác sĩ nếu bạn khó đối phó với căng thẳng, lo âu hoặc tâm trạng thấp, nếu tâm trạng thấp kéo dài hơn 2 tuần, hoặc nếu tự giúp bản thân chưa hiệu quả.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Nếu các triệu chứng của rối loạn đau buồn kéo dài, hãy đi khám.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Hãy liên hệ nhân viên y tế nếu bạn có thắc mắc về sức khoẻ của mình.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "emergency": [
+  {
+   "text": "NHS nhắc rằng có hỗ trợ nếu bạn hoặc người quen đang trong khủng hoảng sức khoẻ tâm thần; hãy tìm giúp đỡ khẩn cấp tại nơi mình ở.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "title": "Grief, bereavement and loss",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/mental-health/feelings-symptoms-behaviours/feelings-and-symptoms/grief-bereavement-loss/",
+   "reviewed": "2026-07-14"
+  },
+  {
+   "title": "Bereavement",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/bereavement.html",
+   "reviewed": "2017-10-19"
+  }
+ ],
+ "verifiedAt": "2026-10-09"
+}
