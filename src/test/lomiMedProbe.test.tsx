@@ -78,6 +78,16 @@ describe("kho kiến thức y khoa qua khung chat", () => {
     expect((await last(["a bị đau đầu"])).sx).toContain("headache");
     expect((await last(["Lomi có tư vấn sức khỏe không?", "đau dạ dày"])).sx?.length).toBeGreaterThan(0);
   }, T);
+  it("câu hỏi Claude chạy thử (10/10) bị bí trước khi sửa: lây khi ăn chung, có từ hỏi mà không rõ khía cạnh, uống nước gì, khác gì", async () => {
+    const r = await chat(["HP dạ dày có lây không", "ăn chung có lây không"]);
+    for (const m of r) expect(m.med).toEqual({ id: "nhiem-hp", aspect: "spread" });
+    expect((await last(["ADHD người lớn có không"])).med?.id).toBe("adhd");
+    expect((await last(["tay chân miệng ở người lớn có không"])).med?.id).toBe("tay-chan-mieng");
+    expect((await last(["sỏi thận uống nước gì tốt"])).med).toEqual({ id: "soi-than", aspect: "diet" });
+    expect((await last(["bác sĩ tâm lý với bác sĩ tâm thần khác gì"])).med?.id).toBe("khac-biet-bac-si-tam-than-nha-tam-ly");
+    // tự hỏi chẩn đoán về chính mình → không phải câu hỏi kiến thức
+    expect((await last(["có phải a bị trầm cảm không"])).med).toBeUndefined();
+  }, T);
   it("đang nói về bệnh mà nhờ gợi ý món hôm nay → vẫn là gợi ý món", async () => {
     expect((await last(["huyết áp cao kiêng gì", "hôm nay ăn gì"])).dishAsk).toBeTruthy();
   }, T);

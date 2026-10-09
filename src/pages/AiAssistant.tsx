@@ -1250,8 +1250,9 @@ export function AiChat({
         //   hỏi khám KHOA NÀO / ở đâu (thẻ không có, bảng cũ có), hay đang theo chuyện người ốm mà thẻ không có phần được hỏi
         //   (mạch chăm người ốm nói "chưa có kiến thức" đúng người, đúng chuyện).
         const mk = parseMedAsk(q, lastA?.med ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "" } : undefined));
+        //   Tự hỏi "có phải a bị trầm cảm không" là câu hỏi CHẨN ĐOÁN về chính mình → mạch tâm sự / sức khoẻ trả lời "Lomi không chẩn đoán".
         const mkSkip =
-          !!mk && ((mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length) || (mk.aspect === "doctor" && /\b(kham o dau|o dau kham|khoa nao|kham khoa)\b/.test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
+          !!mk && (selfDxAsk(q) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length) || (mk.aspect === "doctor" && /\b(kham o dau|o dau kham|khoa nao|kham khoa)\b/.test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
         if (mk?.id && !mkSkip) {
           const mt = await loadMedTopic(mk.id);
           const mr = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined) : null;
