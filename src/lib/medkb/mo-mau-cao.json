@@ -13,7 +13,7 @@
 ],
 "causes":[
 {"text":"Các yếu tố lối sống: ăn nhiều đồ béo, ít vận động, thừa cân, hút thuốc, uống rượu bia.","src":[0]},
-{"text":"MedlinePlus nêu thêm chế độ ăn nhiều chất béo bão hoà, căng thẳng kéo dài và uống rượu nhiều. Chất béo bão hoà có trong thịt đỏ, sữa nguyên kem, sô-cô-la, một số loại bánh, đồ chiên và đồ chế biến sẵn.","src":[2]},
+{"text":"MedlinePlus nêu thêm chế độ ăn nhiều chất béo bão hoà, căng thẳng và uống quá nhiều rượu. Chất béo bão hoà có trong thịt đỏ, đồ sữa nguyên kem, sô-cô-la, một số loại bánh, nhiều đồ chiên ngập dầu và đồ chế biến sẵn.","src":[2]},
 {"text":"Nguy cơ cao hơn khi trên 50 tuổi, là nam giới, sau mãn kinh, có người thân bị cholesterol cao, hoặc gốc Nam Á hay châu Phi cận Sahara.","src":[0]},
 {"text":"Di truyền cũng có thể gây cholesterol rất cao, như bệnh tăng cholesterol máu gia đình (FH), khởi phát từ khi còn trẻ.","src":[0,2]},
 {"text":"Một số bệnh (tiểu đường, bệnh thận mạn, HIV, lupus) và một số loại thuốc cũng có thể làm tăng LDL hoặc giảm HDL.","src":[2]}
@@ -28,7 +28,7 @@
 {"text":"Hút thuốc làm tăng cholesterol và nguy cơ nhồi máu cơ tim, đột quỵ; bỏ thuốc có hỗ trợ từ dịch vụ cai thuốc.","src":[1]},
 {"text":"Rượu bia: tránh uống đều đặn quá 14 \"đơn vị\" mỗi tuần, chia ra uống từ 3 ngày trở lên và có nhiều ngày không uống.","src":[1]},
 {"text":"Nếu lối sống chưa đủ, bác sĩ có thể kê thuốc hạ cholesterol như nhóm statin (do bác sĩ quyết định). Tiếp tục giữ lối sống lành mạnh khi đang dùng thuốc.","src":[2]},
-{"text":"Một số người bị FH nặng có thể được lọc LDL ra khỏi máu bằng máy (lipoprotein apheresis).","src":[2]},
+{"text":"Một số người bị FH có thể được lọc LDL ra khỏi máu bằng máy (lipoprotein apheresis).","src":[2]},
 {"text":"Nếu định dùng thực phẩm bổ sung (chất xơ, omega-3, dầu cá), hãy hỏi chuyên gia y tế trước.","src":[3]}
 ],
 "diet":{
@@ -51,7 +51,7 @@
 {"name":"yến mạch","aliases":["oat","oats","cám yến mạch","bột yến mạch"],"verdict":"good","note":"Mayo Clinic nêu yến mạch và cám yến mạch là nguồn chất xơ hoà tan giúp giảm LDL; có thể thêm chuối hoặc quả mọng vào.","src":[3]},
 {"name":"các loại đậu","aliases":["đậu","đậu lăng","đậu gà","đậu đen","đậu đỏ","đậu nành"],"verdict":"good","note":"Mayo Clinic: đậu, đậu lăng, đậu gà là nguồn chất xơ và đạm thực vật, có thể thay bớt đạm động vật; đậu nành (soy) cũng được nêu.","src":[3]},
 {"name":"trái cây và rau","aliases":["rau","rau xanh","trái cây","táo","lê","cam","bông cải xanh","súp lơ xanh","quả mọng"],"verdict":"good","note":"NHS khuyên ăn nhiều trái cây và rau. Mayo Clinic nêu táo, lê, rau lá xanh, quả mọng, cam quýt, bông cải xanh.","src":[1,3]},
-{"name":"cá béo","aliases":["cá hồi","cá thu","cá ngừ","cá trích","cá mòi"],"verdict":"good","note":"NHS và Mayo Clinic nêu cá béo (cá thu, cá hồi, cá ngừ, cá trích) nên ăn vài lần mỗi tuần, nướng hoặc áp chảo; omega-3 chủ yếu giúp giảm triglyceride.","src":[1,3]},
+{"name":"cá béo","aliases":["cá hồi","cá thu","cá ngừ","cá trích"],"verdict":"good","note":"NHS nêu cá béo như cá thu, cá hồi; Mayo Clinic nêu cá hồi, cá ngừ, cá trích, cá thu, nên ăn cá vài lần mỗi tuần, nướng thay vì chiên. Omega-3 không giảm LDL nhưng có thể giảm triglyceride.","src":[1,3]},
 {"name":"dầu ô liu","aliases":["dầu olive","olive oil"],"verdict":"good","note":"NHS và Mayo Clinic nêu dầu ô liu là chất béo lành mạnh; NHS còn nêu dầu hạt cải (rapeseed).","src":[1,3]},
 {"name":"bơ (quả) và các loại hạt","aliases":["trái bơ","quả bơ","avocado","hạt","hạt óc chó","hạnh nhân","các loại hạt"],"verdict":"good","note":"Mayo Clinic nêu quả bơ, các loại hạt (kể cả óc chó) và hạt giống là chất béo lành mạnh.","src":[1,3]},
 {"name":"ngũ cốc nguyên hạt","aliases":["gạo lứt","bánh mì nguyên cám","mì nguyên cám","lúa mạch","diêm mạch","quinoa"],"verdict":"good","note":"NHS và Mayo Clinic khuyên chọn ngũ cốc nguyên hạt (gạo lứt, bánh mì nguyên cám, mì nguyên cám) thay cho loại tinh chế.","src":[1,3]},

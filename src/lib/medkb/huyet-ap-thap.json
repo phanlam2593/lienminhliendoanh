@@ -5,7 +5,7 @@
 "about":[
 {"text":"Huyết áp thấp là khi lực máu đẩy lên thành động mạch quá thấp. Thường coi là thấp khi số đo dưới 90/60 mmHg, nhưng mức \"thấp\" khác nhau tuỳ người.","src":[0,1]},
 {"text":"Có thể không gây triệu chứng nào, hoặc gây chóng mặt, ngất; đôi khi có thể đe doạ tính mạng.","src":[0,1]},
-{"text":"Phần lớn chuyên gia y tế chỉ coi huyết áp là quá thấp khi nó gây triệu chứng. Có người luôn có số đo thấp mà không sao.","src":[1]}
+{"text":"Phần lớn chuyên gia y tế chỉ coi huyết áp là quá thấp khi nó gây triệu chứng. Có người thường có số đo thấp mà vẫn thấy khoẻ.","src":[1]}
 ],
 "signs":[
 {"text":"Choáng váng, chóng mặt; buồn nôn; nhìn mờ; thấy yếu người; lú lẫn; ngất.","src":[0,1]},
@@ -25,13 +25,13 @@
 {"text":"Huyết áp quá thấp có thể làm giảm oxy trong cơ thể, dẫn đến tổn thương tim và não. Sụt giảm lớn đột ngột có thể nguy hiểm.","src":[1]}
 ],
 "care":[
-{"text":"Nếu không có triệu chứng hoặc chỉ nhẹ, thường hiếm khi cần điều trị. Nếu do thuốc, bác sĩ có thể đổi hoặc chỉnh thuốc; đừng tự ngưng hay đổi thuốc khi chưa hỏi bác sĩ.","src":[0,2]},
-{"text":"Đứng dậy từ từ khi đang ngồi, nằm hoặc ngồi xổm; khi xuống giường hãy chuyển từ nằm sang ngồi rồi mới đứng. Tránh ngồi hay đứng lâu, tránh cúi hoặc đổi tư thế đột ngột.","src":[0,2]},
+{"text":"Nếu không có triệu chứng hoặc chỉ nhẹ, thường hiếm khi cần điều trị. Nếu do thuốc, bác sĩ có thể đổi hoặc chỉnh thuốc; đừng tự ngưng hay đổi thuốc khi chưa hỏi bác sĩ.","src":[2]},
+{"text":"Đứng dậy từ từ khi đang ngồi, nằm hoặc ngồi xổm. Tránh ngồi hay đứng lâu, tránh cúi hoặc đổi tư thế đột ngột.","src":[0,2]},
 {"text":"Uống nhiều nước hơn; hạn chế rượu bia vì cồn gây mất nước và có thể làm tụt huyết áp.","src":[0,2]},
 {"text":"Ăn các bữa nhỏ, chia nhiều lần; nằm hoặc ngồi yên một lúc sau ăn cũng có thể giúp.","src":[0,2]},
 {"text":"Vớ ép giúp máu từ chân về tim tốt hơn; một số người dùng đai bụng.","src":[0,2]},
 {"text":"Khi triệu chứng bắt đầu lúc đang đứng: bắt chéo hai đùi rồi siết lại, hoặc đặt một chân lên bậc rồi nghiêng người về trước để máu về tim.","src":[2]},
-{"text":"Thuốc nâng huyết áp hiếm khi cần, vì thay đổi lối sống hoặc điều trị nguyên nhân thường đã hiệu quả; nếu cần do bác sĩ quyết định.","src":[0,2]},
+{"text":"Thuốc nâng huyết áp hiếm khi cần, vì thay đổi lối sống hoặc điều trị nguyên nhân thường đã hiệu quả; nếu cần do bác sĩ quyết định.","src":[0]},
 {"text":"Ghi lại triệu chứng, thời điểm xảy ra và lúc đó bạn đang làm gì có thể giúp bác sĩ tìm nguyên nhân.","src":[1]}
 ],
 "diet":{

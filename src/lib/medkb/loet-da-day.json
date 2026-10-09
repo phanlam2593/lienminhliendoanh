@@ -22,16 +22,16 @@
 "course":[
 {"text":"Nếu không điều trị, loét có thể chảy máu (dẫn đến thiếu máu), thủng thành dạ dày/ruột gây viêm phúc mạc, hoặc làm tắc đường đi của thức ăn.","src":[0,3]},
 {"text":"Nhiễm H. pylori không điều trị làm tăng nguy cơ ung thư dạ dày.","src":[0,3]},
-{"text":"Điều trị thường kéo dài từ 1 tuần đến 2 tháng, kèm xét nghiệm kiểm tra lại xem đã khỏi chưa; nếu triệu chứng quay lại, bác sĩ có thể đổi thuốc hoặc kéo dài điều trị.","src":[0]},
+{"text":"Điều trị thường kéo dài từ 1 tuần đến 2 tháng tuỳ nguyên nhân; có thể cần xét nghiệm sau điều trị để xem thuốc đã hiệu quả chưa. Nếu triệu chứng quay lại, có thể phải đổi thuốc hoặc dùng lâu hơn.","src":[0]},
 {"text":"Nếu loét không lành, có thể cần phẫu thuật.","src":[2]}
 ],
 "care":[
-{"text":"Điều trị tuỳ nguyên nhân: kháng sinh để diệt H. pylori và thuốc giảm acid dạ dày như thuốc ức chế bơm proton — do bác sĩ quyết định.","src":[0,1,2]},
+{"text":"Điều trị tuỳ nguyên nhân: kháng sinh để diệt H. pylori và thuốc giảm acid dạ dày như thuốc ức chế bơm proton — do bác sĩ quyết định.","src":[0,2]},
 {"text":"Nếu loét do thuốc kháng viêm NSAID, bác sĩ có thể đổi thuốc cho bạn.","src":[1]},
 {"text":"Thuốc kháng acid và sữa không làm lành được vết loét.","src":[2]},
 {"text":"Nên: ăn bữa nhỏ hơn, ăn tối cách giờ đi ngủ 3–4 giờ, giữ cân nặng hợp lý, kiểm soát căng thẳng.","src":[0]},
 {"text":"Không nên: tự dùng thuốc giảm đau kháng viêm như ibuprofen khi chưa hỏi bác sĩ, hút thuốc, uống nhiều rượu.","src":[0]},
-{"text":"Bỏ thuốc lá và tránh rượu bia có thể giúp loét mau lành hơn và giảm nguy cơ bị loét.","src":[2,5]},
+{"text":"Bỏ thuốc lá có thể giảm nguy cơ bị loét và giúp vết loét mau lành; MedlinePlus cũng nói tránh rượu bia có thể giúp ích.","src":[2,5]},
 {"text":"Nếu bắt buộc phải dùng NSAID đều đặn: uống cùng bữa ăn, dùng liều thấp nhất có hiệu quả, không uống rượu, và hỏi bác sĩ về thuốc bảo vệ dạ dày.","src":[3]}
 ],
 "diet":{
@@ -44,9 +44,9 @@
 ],
 "foods":[
 {"name":"đồ ăn cay","aliases":["ớt","cay","đồ cay"],"verdict":"limit","note":"MedlinePlus và Mayo: đồ cay không gây loét nhưng có thể làm loét nặng hơn; NHS nêu đồ cay là món dễ gây triệu chứng. NIDDK không khuyên kiêng món cụ thể.","src":[0,2,3]},
-{"name":"đồ ăn béo","aliases":["đồ béo","đồ nhiều dầu mỡ"],"verdict":"limit","note":"NHS nêu đồ ăn béo là món dễ gây triệu chứng nên tránh; NIDDK thì nói không cần ăn kiêng đặc biệt.","src":[0,1]},
-{"name":"cà phê","aliases":["cafe","cà phê đen","cà phê sữa"],"verdict":"limit","note":"NHS nêu cà phê là một trong những món dễ gây triệu chứng nên tránh.","src":[0]},
-{"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS nêu sô-cô-la là một trong những món dễ gây triệu chứng nên tránh.","src":[0]},
+{"name":"đồ ăn béo","aliases":["đồ béo","đồ nhiều dầu mỡ"],"verdict":"limit","note":"NHS nêu đồ ăn béo có thể là thứ gây triệu chứng; nên tránh nếu nó làm bạn khó chịu. NIDDK thì nói không cần ăn kiêng đặc biệt.","src":[0,1]},
+{"name":"cà phê","aliases":["cafe","cà phê đen","cà phê sữa"],"verdict":"limit","note":"NHS nêu cà phê có thể là thứ gây triệu chứng; nên tránh nếu nó làm bạn khó chịu.","src":[0]},
+{"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS nêu sô-cô-la có thể là thứ gây triệu chứng; nên tránh nếu nó làm bạn khó chịu.","src":[0]},
 {"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"MedlinePlus: tránh rượu có thể giúp ích; Mayo: rượu làm loét nặng hơn; NHS: đừng uống quá nhiều rượu.","src":[0,2,3]}
 ]
 },

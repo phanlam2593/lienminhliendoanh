@@ -8,7 +8,7 @@
 ],
 "signs":[
 {"text":"Sau khi ăn hoặc uống có thể bị: ợ nóng (nóng rát đau ở ngực, thường sau ăn); cảm giác no và đầy bụng; buồn nôn; ợ hơi và đánh rắm; trào thức ăn hoặc dịch đắng lên miệng.","src":[0]},
-{"text":"Đau bụng hoặc đau lưng thường không phải khó tiêu; đó có thể là dấu hiệu táo bón.","src":[0]},
+{"text":"Đau bụng hoặc đau lưng thường không phải triệu chứng khó tiêu; nếu bị vậy, có thể bạn đang bị táo bón.","src":[0]},
 {"text":"Mayo Clinic: no sớm khi ăn hoặc không ăn hết bữa như thường; no lâu sau ăn; đau từ nhẹ đến nặng hoặc rát ở bụng trên; đầy, căng ở bụng trên; buồn nôn hoặc nôn; ợ hơi, kể cả ợ thức ăn lên.","src":[1]}
 ],
 "causes":[
@@ -24,25 +24,25 @@
 ],
 "care":[
 {"text":"Nên: giảm trà, cà phê, cola hoặc rượu; kê cao đầu và vai khi nằm để acid khó trào lên lúc ngủ; giảm cân nếu thừa cân.","src":[0]},
-{"text":"Không nên: ăn trong 3–4 giờ trước khi đi ngủ; ăn đồ nhiều dầu mỡ, cay; dùng ibuprofen hoặc aspirin trừ khi được kê (chúng có thể làm khó tiêu nặng hơn — hãy hỏi dược sĩ hoặc bác sĩ nếu bạn đang dùng); hút thuốc.","src":[0]},
+{"text":"Không nên: ăn trong 3–4 giờ trước khi đi ngủ; ăn đồ béo ngậy, cay hoặc nhiều dầu mỡ; dùng ibuprofen hoặc aspirin trừ khi được kê đơn cho bạn; hút thuốc.","src":[0]},
 {"text":"Dược sĩ có thể gợi ý thuốc cho cảm giác nóng rát hoặc đau: thuốc kháng acid, alginate, thuốc ức chế bơm proton. Một số nên uống sau ăn; hãy đọc tờ hướng dẫn.","src":[0]},
-{"text":"Khó tiêu rất hay gặp khi mang thai, từ khoảng tuần thứ 27 trở đi; hãy hỏi dược sĩ loại thuốc phù hợp khi mang thai.","src":[0]}
+{"text":"Khó tiêu rất hay gặp khi mang thai, từ tuần thứ 27 trở đi; hãy hỏi dược sĩ loại thuốc phù hợp khi mang thai.","src":[0]}
 ],
 "diet":{
 "avoid":[
 {"text":"NHS: bớt trà, cà phê, cola, rượu; tránh đồ ăn béo ngậy, cay, nhiều dầu mỡ; không ăn trong 3–4 giờ trước khi ngủ.","src":[0]},
-{"text":"Mayo Clinic: những thứ hay gây khó tiêu gồm đồ béo, nhiều dầu mỡ, cay, đồ chua như cà chua và cam; đồ uống chứa caffeine, rượu, đồ uống có ga; ăn quá nhanh hoặc quá nhiều.","src":[1]}
+{"text":"Mayo Clinic: những thứ có thể góp phần gây hoặc làm nặng khó tiêu gồm đồ béo, nhiều dầu mỡ, cay, đồ chua như cà chua và cam; quá nhiều đồ uống có cồn, caffeine hoặc có ga; ăn quá nhanh hoặc quá nhiều.","src":[1]}
 ],
 "ok":[],
 "foods":[
-{"name":"cà phê, trà và cola","aliases":["cà phê","trà","cola","coca","cafe"],"verdict":"limit","note":"NHS khuyên bớt trà, cà phê, cola khi bị khó tiêu; Mayo Clinic nêu đồ uống chứa caffeine hay gây khó tiêu.","src":[0,1]},
-{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên bớt rượu; Mayo Clinic nêu uống nhiều rượu hay gây khó tiêu.","src":[0,1]},
-{"name":"đồ cay","aliases":["ớt","cay","đồ ăn cay"],"verdict":"limit","note":"NHS khuyên không ăn đồ cay khi bị khó tiêu; Mayo Clinic cũng nêu đồ cay hay gây khó tiêu.","src":[0,1]},
-{"name":"đồ béo, nhiều dầu mỡ","aliases":["đồ béo","đồ chiên","đồ nhiều dầu mỡ","đồ chiên rán"],"verdict":"limit","note":"NHS khuyên tránh đồ ăn béo ngậy, cay, nhiều dầu mỡ; Mayo Clinic cũng nêu đồ béo, nhiều dầu mỡ hay gây khó tiêu.","src":[0,1]},
+{"name":"cà phê, trà và cola","aliases":["cà phê","trà","cola","coca","cafe"],"verdict":"limit","note":"NHS khuyên bớt trà, cà phê, cola khi bị khó tiêu; Mayo Clinic nêu đồ uống chứa caffeine có thể góp phần gây khó tiêu.","src":[0,1]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên bớt rượu; Mayo Clinic nêu uống quá nhiều đồ uống có cồn có thể góp phần gây khó tiêu.","src":[0,1]},
+{"name":"đồ cay","aliases":["ớt","cay","đồ ăn cay"],"verdict":"avoid","note":"NHS khuyên không ăn đồ cay khi bị khó tiêu; Mayo Clinic cũng nêu đồ cay có thể góp phần gây khó tiêu.","src":[0,1]},
+{"name":"đồ béo, nhiều dầu mỡ","aliases":["đồ béo","đồ chiên","đồ nhiều dầu mỡ","đồ chiên rán"],"verdict":"avoid","note":"NHS khuyên không ăn đồ béo ngậy, cay, nhiều dầu mỡ; Mayo Clinic cũng nêu đồ béo, nhiều dầu mỡ có thể góp phần gây khó tiêu.","src":[0,1]},
 {"name":"cà chua","aliases":["sốt cà chua"],"verdict":"limit","note":"NHS và Mayo Clinic nêu cà chua là thứ có thể gây khó tiêu ở một số người.","src":[0,1]},
 {"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS nêu sô-cô-la là thứ có thể gây khó tiêu ở một số người.","src":[0]},
 {"name":"cam","aliases":["nước cam","cam quýt"],"verdict":"limit","note":"Mayo Clinic nêu đồ chua như cà chua và cam có thể gây khó tiêu ở một số người.","src":[1]},
-{"name":"đồ uống có ga","aliases":["nước có ga","nước ngọt có ga","soda"],"verdict":"limit","note":"Mayo Clinic nêu đồ uống có ga hay gây khó tiêu.","src":[1]}
+{"name":"đồ uống có ga","aliases":["nước có ga","nước ngọt có ga","soda"],"verdict":"limit","note":"Mayo Clinic nêu uống quá nhiều đồ uống có ga có thể góp phần gây khó tiêu.","src":[1]}
 ]
 },
 "doctor":[
