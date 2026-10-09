@@ -1,0 +1,69 @@
+{
+"id":"huyet-ap-thap",
+"kind":"condition",
+"names":["huyết áp thấp","hạ huyết áp","tụt huyết áp","huyết áp thấp tư thế","hạ huyết áp tư thế đứng","low blood pressure","hypotension","orthostatic hypotension","postural hypotension"],
+"about":[
+{"text":"Huyết áp thấp là khi lực máu đẩy lên thành động mạch quá thấp. Thường coi là thấp khi số đo dưới 90/60 mmHg, nhưng mức \"thấp\" khác nhau tuỳ người.","src":[0,1]},
+{"text":"Có thể không gây triệu chứng nào, hoặc gây chóng mặt, ngất; đôi khi có thể đe doạ tính mạng.","src":[0,1]},
+{"text":"Phần lớn chuyên gia y tế chỉ coi huyết áp là quá thấp khi nó gây triệu chứng. Có người luôn có số đo thấp mà không sao.","src":[1]}
+],
+"signs":[
+{"text":"Choáng váng, chóng mặt; buồn nôn; nhìn mờ; thấy yếu người; lú lẫn; ngất.","src":[0,1]},
+{"text":"Mayo Clinic còn nêu mệt mỏi, khó tập trung, khó chịu bụng.","src":[1]},
+{"text":"Nếu các triệu chứng xuất hiện khi đứng dậy hoặc đổi tư thế đột ngột thì có thể là huyết áp thấp tư thế.","src":[0]},
+{"text":"Dấu hiệu sốc do huyết áp cực thấp: lú lẫn, da lạnh ẩm, nhợt nhạt, thở nhanh nông, mạch yếu và nhanh.","src":[1]}
+],
+"causes":[
+{"text":"Huyết áp thay đổi theo thời gian trong ngày, hoạt động và cảm xúc. Có thể thấp vì cơ thể khoẻ, do di truyền từ cha mẹ, hoặc gặp nhiều hơn khi lớn tuổi.","src":[0,1]},
+{"text":"Cũng có thể do mang thai, bệnh lý như tiểu đường, hoặc một số loại thuốc.","src":[0]},
+{"text":"Mayo Clinic nêu thêm: bệnh tim và van tim, mất nước (sốt, nôn, tiêu chảy nặng, tập nặng), mất máu, nhiễm trùng nặng, phản vệ nặng, thiếu vitamin B12, folate hoặc sắt, hạ đường huyết, bệnh Addison.","src":[1]},
+{"text":"Thuốc có thể gây huyết áp thấp gồm mọi thuốc điều trị huyết áp cao, một số thuốc điều trị Parkinson, thuốc chống trầm cảm ba vòng và thuốc điều trị rối loạn cương dương.","src":[1]},
+{"text":"Huyết áp tụt khi đứng dậy hoặc sau ăn chủ yếu gặp ở người trên 65 tuổi; dạng tụt sau khi đứng lâu hay gặp ở trẻ em và người trẻ. Rượu bia và ma tuý cũng là yếu tố nguy cơ.","src":[1]}
+],
+"course":[
+{"text":"Biến chứng có thể gồm chóng mặt, yếu, ngất và chấn thương do té ngã.","src":[1]},
+{"text":"Huyết áp quá thấp có thể làm giảm oxy trong cơ thể, dẫn đến tổn thương tim và não. Sụt giảm lớn đột ngột có thể nguy hiểm.","src":[1]}
+],
+"care":[
+{"text":"Nếu không có triệu chứng hoặc chỉ nhẹ, thường hiếm khi cần điều trị. Nếu do thuốc, bác sĩ có thể đổi hoặc chỉnh thuốc; đừng tự ngưng hay đổi thuốc khi chưa hỏi bác sĩ.","src":[0,2]},
+{"text":"Đứng dậy từ từ khi đang ngồi, nằm hoặc ngồi xổm; khi xuống giường hãy chuyển từ nằm sang ngồi rồi mới đứng. Tránh ngồi hay đứng lâu, tránh cúi hoặc đổi tư thế đột ngột.","src":[0,2]},
+{"text":"Uống nhiều nước hơn; hạn chế rượu bia vì cồn gây mất nước và có thể làm tụt huyết áp.","src":[0,2]},
+{"text":"Ăn các bữa nhỏ, chia nhiều lần; nằm hoặc ngồi yên một lúc sau ăn cũng có thể giúp.","src":[0,2]},
+{"text":"Vớ ép giúp máu từ chân về tim tốt hơn; một số người dùng đai bụng.","src":[0,2]},
+{"text":"Khi triệu chứng bắt đầu lúc đang đứng: bắt chéo hai đùi rồi siết lại, hoặc đặt một chân lên bậc rồi nghiêng người về trước để máu về tim.","src":[2]},
+{"text":"Thuốc nâng huyết áp hiếm khi cần, vì thay đổi lối sống hoặc điều trị nguyên nhân thường đã hiệu quả; nếu cần do bác sĩ quyết định.","src":[0,2]},
+{"text":"Ghi lại triệu chứng, thời điểm xảy ra và lúc đó bạn đang làm gì có thể giúp bác sĩ tìm nguyên nhân.","src":[1]}
+],
+"diet":{
+"avoid":[
+{"text":"Hạn chế rượu bia vì cồn gây mất nước và có thể làm huyết áp tụt, kể cả khi uống vừa phải.","src":[0,2]},
+{"text":"Mayo Clinic gợi ý hạn chế thực phẩm nhiều tinh bột như khoai tây, cơm, mì ống và bánh mì.","src":[2]}
+],
+"ok":[
+{"text":"Uống nhiều nước để tăng thể tích máu và tránh mất nước.","src":[0,2]},
+{"text":"Chia nhỏ bữa ăn thành nhiều bữa trong ngày.","src":[0,2]},
+{"text":"Tăng muối (natri) có thể giúp, nhưng phải hỏi bác sĩ trước vì quá nhiều có thể dẫn đến suy tim, nhất là ở người lớn tuổi. NHS không đưa lời khuyên về muối.","src":[0,2]}
+],
+"foods":[
+{"name":"nước lọc","aliases":["nước","nước uống"],"verdict":"good","note":"NHS và Mayo Clinic khuyên uống nhiều nước hơn; nước làm tăng thể tích máu và giúp tránh mất nước.","src":[0,2]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS khuyên không uống quá nhiều rượu; Mayo Clinic khuyên hạn chế rượu vì cồn gây mất nước và có thể làm tụt huyết áp, kể cả mức vừa phải.","src":[0,2]},
+{"name":"muối","aliases":["mặn","thức ăn mặn","natri"],"verdict":"ok","note":"Mayo Clinic: tăng muối có thể giúp nâng huyết áp nhưng phải hỏi bác sĩ trước vì quá nhiều có thể dẫn đến suy tim, nhất là ở người lớn tuổi.","src":[2]},
+{"name":"thực phẩm nhiều tinh bột","aliases":["khoai tây","cơm","gạo","mì ống","bánh mì","pasta"],"verdict":"limit","note":"Mayo Clinic nêu hạn chế thực phẩm nhiều carbohydrate như khoai tây, gạo, mì ống, bánh mì.","src":[2]},
+{"name":"cà phê, trà có caffeine","aliases":["cà phê","trà","cafe"],"verdict":"ok","note":"Mayo Clinic: bác sĩ có thể gợi ý một đến hai tách cà phê hoặc trà có caffeine vào bữa sáng, kèm nhiều nước không caffeine; hãy hỏi bác sĩ.","src":[2]}
+]},
+"doctor":[
+{"text":"Nên đi khám (không khẩn cấp) nếu hay bị chóng mặt, ngất hoặc các triệu chứng khác; cần kiểm tra huyết áp.","src":[0,1]},
+{"text":"Dù thỉnh thoảng chóng mặt nhẹ có thể do nhiều nguyên nhân (như nắng nóng), vẫn nên gặp chuyên gia y tế để tìm nguyên nhân.","src":[1]},
+{"text":"Nếu số đo thường thấp mà bạn vẫn khoẻ thì có thể không cần điều trị; bác sĩ có thể theo dõi trong các lần khám định kỳ.","src":[1]},
+{"text":"Có thể đo huyết áp ở hiệu thuốc, tại phòng khám hoặc bằng máy đo tại nhà.","src":[0]}
+],
+"emergency":[
+{"text":"Có triệu chứng của huyết áp cực thấp hoặc sốc (lú lẫn, da lạnh ẩm, nhợt nhạt, thở nhanh nông, mạch yếu nhanh): gọi cấp cứu.","src":[1]}
+],
+"sources":[
+{"title":"Low blood pressure (hypotension)","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/low-blood-pressure-hypotension/","reviewed":"2023-07-11"},
+{"title":"Low blood pressure (hypotension): Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/low-blood-pressure/symptoms-causes/syc-20355465","reviewed":"2024-06-13"},
+{"title":"Low blood pressure (hypotension): Diagnosis and treatment","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/low-blood-pressure/diagnosis-treatment/drc-20355470","reviewed":"2024-06-13"}
+],
+"verifiedAt":"2026-10-09"
+}

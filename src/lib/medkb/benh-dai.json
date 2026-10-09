@@ -1,0 +1,190 @@
+{
+  "id": "benh-dai",
+  "kind": "infection",
+  "names": [
+    "bệnh dại",
+    "virus dại",
+    "chó dại",
+    "rabies"
+  ],
+  "about": [
+    {
+      "text": "Dại là bệnh hiếm nhưng nghiêm trọng, thường mắc do bị động vật nhiễm bệnh cắn hoặc cào.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dại là vấn đề sức khỏe cộng đồng nghiêm trọng, chủ yếu ở châu Á và châu Phi.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Triệu chứng thường xuất hiện 3–12 tuần sau phơi nhiễm, nhưng có thể sau vài ngày, hoặc sau nhiều tháng đến nhiều năm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Gồm tê hoặc ngứa ran ở chỗ bị cắn hay cào, ảo giác, lo âu hoặc hưng phấn bất thường, khó nuốt hoặc khó thở, liệt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dấu hiệu ban đầu thường chung chung: sốt, đau, ngứa ran hoặc rát ở vết thương.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Thể hung dữ gây tăng hoạt động, ảo giác, sợ nước; tử vong thường trong vài ngày.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Thể liệt (khoảng 20% ca) gây liệt dần từ chỗ vết thương rồi hôn mê và tử vong; thể này thường bị chẩn đoán nhầm.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Chó, dơi, gấu mèo, cáo và các động vật có vú khác có thể lây bệnh dại.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Lây qua vết cắn, vết cào, hoặc khi con vật nhiễm bệnh liếm vào mắt, mũi, miệng hoặc vết thương hở.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Chó cắn và cào gây ra tới 99% số ca dại ở người; virus lây qua nước bọt.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Chưa ghi nhận trường hợp lây từ người sang người được xác nhận.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Khi đã có triệu chứng, bệnh dại hầu như luôn tử vong, nhưng có thể phòng được nếu bắt đầu điều trị kịp thời.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "WHO nêu: khi virus đã đến hệ thần kinh trung ương và có triệu chứng thì bệnh dại gây tử vong ở 100% ca; tử vong có thể phòng được nhờ điều trị dự phòng sau phơi nhiễm kịp thời.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Khi đã có triệu chứng thì không thể điều trị bệnh dại.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Nếu bị cắn hoặc cào: rửa vết thương ngay bằng xà phòng và nước, rồi đi khám ngay.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "WHO: luôn rửa vết thương ngay bằng nước và xà phòng ít nhất 15 phút rồi đến cơ sở y tế.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Điều trị dự phòng sau phơi nhiễm gồm rửa kỹ vết thương, tiêm một đợt vắc xin dại và, khi có chỉ định, globulin miễn dịch hoặc kháng thể đơn dòng vào vết thương; do bác sĩ quyết định.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Phơi nhiễm loại II (xước nhẹ không chảy máu) và loại III (vết cắn, tiếp xúc niêm mạc hoặc da trầy) đều cần tiêm vắc xin; loại III cần thêm globulin hoặc kháng thể.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Bác sĩ thường tiêm từ hai mũi vắc xin dại trở lên; globulin chỉ cần nếu bạn chưa từng tiêm vắc xin hoặc suy giảm miễn dịch.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh chạm vào hay lại gần động vật hoang dã, chó mèo hoang dù trông khỏe mạnh; đừng cho chúng ăn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tiêm phòng dại hàng loạt cho chó là chiến lược hiệu quả nhất về chi phí để phòng dại cho người.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Vắc xin phòng trước phơi nhiễm được khuyến cáo cho nhóm nguy cơ cao như nhân viên phòng thí nghiệm, kiểm lâm; cũng có thể được khuyên khi đi nơi có dại phổ biến.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nếu bị động vật có thể nhiễm bệnh cắn, cào hoặc liếm, hãy đi khám ngay lập tức.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu đang ở nước ngoài, hãy đi khám càng sớm càng tốt, đừng chờ về nước.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bị dơi cắn hoặc cào cũng cần đi khám, kể cả khi đã tiêm vắc xin.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Rabies",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/rabies/",
+      "reviewed": "2026-08-03"
+    },
+    {
+      "title": "Rabies",
+      "publisher": "WHO",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/rabies",
+      "reviewed": "2026-09-17"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

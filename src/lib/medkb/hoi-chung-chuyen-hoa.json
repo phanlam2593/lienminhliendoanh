@@ -1,0 +1,61 @@
+{
+"id":"hoi-chung-chuyen-hoa",
+"kind":"condition",
+"names":["hội chứng chuyển hoá","hội chứng chuyển hóa","hội chứng X","kháng insulin","hội chứng đề kháng insulin","metabolic syndrome","insulin resistance syndrome"],
+"about":[
+{"text":"Hội chứng chuyển hoá là một nhóm vấn đề sức khoẻ đi cùng nhau, làm tăng nguy cơ tiểu đường type 2 và bệnh tim mạch.","src":[0,1,2]},
+{"text":"Nhóm này gồm: vòng bụng lớn, triglyceride (mỡ máu) cao, HDL (cholesterol \"tốt\") thấp, huyết áp cao và đường huyết lúc đói cao.","src":[1,2]},
+{"text":"Có từ 3 yếu tố trở lên thì được chẩn đoán hội chứng chuyển hoá; chỉ một yếu tố cũng đã làm tăng nguy cơ bệnh nặng.","src":[1,2]}
+],
+"signs":[
+{"text":"Nhiều người không có triệu chứng; thường phát hiện qua xét nghiệm máu hoặc khám sức khoẻ.","src":[0,1]},
+{"text":"Dấu hiệu dễ thấy duy nhất của các yếu tố này là vòng bụng lớn (dáng người \"quả táo\", mỡ tập trung ở bụng).","src":[1,2]},
+{"text":"Nếu đường huyết cao, có thể có triệu chứng kiểu tiểu đường: khát nhiều, đi tiểu nhiều, mệt, nhìn mờ.","src":[2]}
+],
+"causes":[
+{"text":"Liên quan chặt chẽ đến thừa cân, béo phì (nhất là béo bụng), ít vận động và **kháng insulin** (tế bào đáp ứng kém với insulin nên đường trong máu tăng).","src":[0,1,2]},
+{"text":"NHS cho biết hội chứng này rất phổ biến và nguyên nhân chính xác chưa rõ.","src":[0]},
+{"text":"Nguy cơ cao hơn khi lớn tuổi, ăn nhiều chất béo bão hoà, hút thuốc, uống nhiều rượu bia, hoặc có yếu tố di truyền và gia đình.","src":[0,1]},
+{"text":"Cũng gặp nhiều hơn ở người từng bị tiểu đường thai kỳ, có người thân bị tiểu đường, buồng trứng đa nang, gan nhiễm mỡ hoặc ngưng thở khi ngủ.","src":[1,2]}
+],
+"course":[
+{"text":"Hội chứng làm tăng nguy cơ bệnh tim mạch, đột quỵ và tiểu đường type 2.","src":[0,1,2]},
+{"text":"NHS cho biết còn có thể tăng nguy cơ gan nhiễm mỡ không do rượu, thoái hoá khớp, gout, một số ung thư, và đôi khi ảnh hưởng khả năng sinh sản.","src":[0]},
+{"text":"Thay đổi lối sống lành mạnh có thể làm chậm hoặc ngăn chặn các tác động của hội chứng.","src":[2]}
+],
+"care":[
+{"text":"Lối sống lành mạnh là cách chính để phòng, điều trị và tránh biến chứng.","src":[0,1]},
+{"text":"Giảm cân nếu thừa cân; ăn ít chất béo bão hoà, thịt và sữa béo hơn, ăn nhiều trái cây, rau và ngũ cốc nguyên hạt.","src":[0]},
+{"text":"Vận động ít nhất 150 phút mỗi tuần ở mức vừa đến mạnh, chia ra ít nhất 4–5 ngày. Tránh ngồi lâu.","src":[0]},
+{"text":"Bỏ hoặc giảm hút thuốc (hoặc không bắt đầu).","src":[0,1]},
+{"text":"MedlinePlus nêu thêm việc quản lý căng thẳng và giữ cân nặng khỏe mạnh.","src":[1]},
+{"text":"Nếu thay đổi lối sống chưa đủ, bác sĩ có thể cho thuốc hỗ trợ giảm cân, hạ đường huyết, mỡ máu hoặc huyết áp, do bác sĩ quyết định.","src":[0,1]}
+],
+"diet":{
+"avoid":[
+{"text":"Hạn chế chất béo bão hoà và chất béo chuyển hoá; cũng hạn chế đường và muối.","src":[1,2]},
+{"text":"NHS khuyên ăn ít chất béo bão hoà, thịt và sữa hơn.","src":[0]}
+],
+"ok":[
+{"text":"Ăn nhiều trái cây, rau, ngũ cốc nguyên hạt; MedlinePlus và Mayo Clinic nêu thêm thịt nạc/đạm nạc.","src":[0,1,2]}
+],
+"foods":[
+{"name":"trái cây, rau và ngũ cốc nguyên hạt","aliases":["rau","rau xanh","trái cây","gạo lứt","bánh mì nguyên cám"],"verdict":"good","note":"NHS, MedlinePlus và Mayo Clinic đều khuyên ăn nhiều trái cây, rau và ngũ cốc nguyên hạt.","src":[0,1,2]},
+{"name":"thịt nạc","aliases":["thịt nạc","đạm nạc"],"verdict":"good","note":"MedlinePlus và Mayo Clinic khuyên chọn thịt/đạm nạc.","src":[1,2]},
+{"name":"thịt và sữa nhiều chất béo","aliases":["thịt mỡ","sữa nguyên kem","phô mai","bơ động vật"],"verdict":"limit","note":"NHS khuyên ăn ít chất béo bão hoà, thịt và sản phẩm từ sữa hơn; nguồn không nêu từng món cụ thể.","src":[0]},
+{"name":"đường","aliases":["đồ ngọt","nước ngọt","bánh kẹo"],"verdict":"limit","note":"Mayo Clinic khuyên hạn chế đường (cùng chất béo bão hoà và muối).","src":[2]},
+{"name":"muối","aliases":["đồ mặn","thức ăn mặn"],"verdict":"limit","note":"Mayo Clinic khuyên hạn chế muối trong lối ăn phòng hội chứng chuyển hoá.","src":[2]}
+]},
+"doctor":[
+{"text":"NHS: nếu nghĩ mình có nguy cơ, hãy đi khám (không khẩn cấp).","src":[0]},
+{"text":"Mayo Clinic: nếu đã có một trong các yếu tố (như huyết áp cao), hãy hỏi bác sĩ về việc xét nghiệm các yếu tố còn lại.","src":[2]},
+{"text":"Chẩn đoán dựa trên hỏi bệnh sử, khám, đo vòng bụng và huyết áp, cùng xét nghiệm máu (đường huyết, mỡ máu); có thể được dặn nhịn ăn trước khi lấy máu.","src":[0,1]}
+],
+"emergency":[],
+"sources":[
+{"title":"Metabolic syndrome","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/metabolic-syndrome/","reviewed":"2023-11-16"},
+{"title":"Metabolic Syndrome","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/metabolicsyndrome.html","reviewed":"2024-03-25"},
+{"title":"Metabolic syndrome: Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/metabolic-syndrome/symptoms-causes/syc-20351916","reviewed":"2025-04-01"}
+],
+"verifiedAt":"2026-10-09"
+}

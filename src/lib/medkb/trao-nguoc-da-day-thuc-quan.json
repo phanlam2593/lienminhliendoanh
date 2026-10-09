@@ -1,0 +1,74 @@
+{
+"id":"trao-nguoc-da-day-thuc-quan","kind":"condition",
+"names":["trào ngược dạ dày thực quản","trào ngược dạ dày","bệnh trào ngược dạ dày thực quản","trào ngược","GERD","GORD","acid reflux","ợ nóng","ợ chua","heartburn","reflux","bệnh trào ngược"],
+"about":[
+{"text":"Trào ngược dạ dày thực quản (GER) là khi chất trong dạ dày trào ngược lên thực quản. GERD là dạng nặng hơn và kéo dài: trào ngược gây triệu chứng lặp lại hoặc biến chứng theo thời gian.","src":[1]},
+{"text":"Ợ nóng (heartburn) là cảm giác nóng rát ở giữa ngực do acid dạ dày trào lên phía cổ họng; nếu cứ tái diễn thì có thể gọi là bệnh trào ngược (GORD/GERD).","src":[0]}
+],
+"signs":[
+{"text":"Triệu chứng hay gặp nhất: ợ nóng (nóng rát sau xương ức) và ợ trớ (thức ăn hoặc dịch chua trào lên họng, miệng). Một số người bị GERD không có cả hai.","src":[3,4]},
+{"text":"Có thể thấy vị chua khó chịu trong miệng; đôi khi kèm ho dai dẳng hoặc nấc, khàn tiếng, hơi thở hôi, đầy hơi, buồn nôn.","src":[0]},
+{"text":"Triệu chứng thường nặng hơn sau khi ăn, khi nằm xuống và khi cúi người.","src":[0]},
+{"text":"Cũng có thể gặp khó nuốt hoặc đau khi nuốt, cảm giác vướng ở họng, đau ngực hoặc đau bụng trên.","src":[3,4]},
+{"text":"Trào ngược về đêm có thể gây ho kéo dài, viêm thanh quản hoặc làm hen mới xuất hiện hay nặng hơn.","src":[3]}
+],
+"causes":[
+{"text":"GERD có thể xảy ra khi cơ vòng thực quản dưới (van ở cuối thực quản) yếu hoặc giãn ra không đúng lúc, khiến acid trào ngược lên thực quản.","src":[1,3,4]},
+{"text":"Yếu tố nguy cơ: thừa cân hoặc béo phì, mang thai, hút thuốc (kể cả hít khói thuốc), thoát vị khe thực quản (một phần dạ dày trồi lên ngực).","src":[0,3,4]},
+{"text":"Một số thuốc có thể gây hoặc làm nặng thêm, như thuốc giảm đau kháng viêm (NSAID), aspirin, thuốc chẹn kênh canxi, một số thuốc hen, thuốc nhóm benzodiazepine, thuốc chống trầm cảm ba vòng.","src":[3,4]},
+{"text":"NHS còn nêu căng thẳng, lo âu, thay đổi nội tiết, loét dạ dày và nhiễm khuẩn dạ dày trong số các lý do gây ợ nóng.","src":[0]},
+{"text":"Bữa ăn lớn, ăn khuya, đồ chiên rán hoặc nhiều dầu mỡ, rượu và cà phê làm trào ngược dễ xảy ra hơn.","src":[3]}
+],
+"course":[
+{"text":"Trào ngược kéo dài có thể gây viêm thực quản (có thể loét, chảy máu), hẹp thực quản do sẹo, và thực quản Barrett (mô thay đổi, liên quan nguy cơ ung thư thực quản cao hơn).","src":[3]},
+{"text":"Phần lớn người bệnh kiểm soát được bằng thay đổi lối sống và thuốc; phẫu thuật ít khi cần.","src":[3]}
+],
+"care":[
+{"text":"Ăn bữa nhỏ, chia làm nhiều bữa; không ăn trong vòng 3–4 giờ trước khi đi ngủ; tránh quần áo chật quanh eo.","src":[0]},
+{"text":"Kê cao đầu giường khoảng 10–20 cm (bằng gỗ, gạch hoặc sách); đừng chỉ kê thêm gối vì có thể làm nặng hơn.","src":[0]},
+{"text":"Giảm cân nếu thừa cân, bỏ thuốc lá, không uống quá nhiều rượu, tìm cách thư giãn.","src":[0]},
+{"text":"Thuốc kháng acid hoặc alginate có thể làm dịu triệu chứng, nên dùng cùng bữa ăn hoặc ngay sau ăn; chúng không chữa dứt bệnh và không nên dùng thường xuyên kéo dài.","src":[0]},
+{"text":"Bác sĩ có thể kê thuốc ức chế bơm proton (PPI) dùng trong vài tuần; nếu không đỡ có thể thử nhóm thuốc chẹn H2 — do bác sĩ quyết định. Đừng ngưng thuốc đã kê khi chưa hỏi bác sĩ.","src":[0]},
+{"text":"Nếu nặng hoặc thuốc không giúp được: có thể cần nội soi tìm nguyên nhân, hoặc phẫu thuật dạ dày/thực quản để chặn trào ngược.","src":[0]},
+{"text":"Cách điều trị gồm thay đổi lối sống, thuốc không kê đơn hoặc có kê đơn, phẫu thuật, hoặc kết hợp.","src":[1]}
+],
+"diet":{
+"avoid":[
+{"text":"NIDDK: một số người thấy triệu chứng nặng hơn khi ăn/uống đồ chua như cam quýt và cà chua, rượu bia, sô-cô-la, cà phê và nguồn caffeine khác, đồ nhiều chất béo, bạc hà, đồ cay.","src":[2]},
+{"text":"NHS khuyên tránh những thứ hay kích triệu chứng như cà phê, cà chua, rượu, sô-cô-la, đồ béo hoặc cay.","src":[0]},
+{"text":"Đừng ăn sát giờ ngủ: NHS khuyên cách 3–4 giờ; NIDDK khuyên ăn cách giờ nằm ít nhất 3 giờ.","src":[0,2]}
+],
+"ok":[
+{"text":"Ăn bữa nhỏ hơn nhưng nhiều bữa hơn.","src":[0]},
+{"text":"NIDDK không nêu món cụ thể nào giúp giảm trào ngược; nếu thừa cân, bác sĩ có thể gợi ý chế độ ăn để giảm cân. Hãy trao đổi với bác sĩ món nào làm bạn khó chịu.","src":[2]}
+],
+"foods":[
+{"name":"cà phê và đồ uống chứa caffeine","aliases":["cà phê","cafe","trà","cola","coca","nước tăng lực"],"verdict":"limit","note":"NHS, NIDDK và Mayo Clinic nêu cà phê/caffeine là thứ có thể gây hoặc làm nặng triệu chứng trào ngược ở một số người.","src":[0,2,3]},
+{"name":"cà chua","aliases":["sốt cà chua","tương cà"],"verdict":"limit","note":"NHS và NIDDK nêu cà chua là thứ có thể kích triệu chứng ở một số người.","src":[0,2]},
+{"name":"cam quýt","aliases":["cam","quýt","chanh","bưởi","nước cam","nước ép cam"],"verdict":"limit","note":"NIDDK nêu thực phẩm có tính acid như cam quýt có thể làm triệu chứng nặng hơn ở một số người.","src":[2]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"NHS, NIDDK và Mayo Clinic nêu rượu bia có thể gây hoặc làm nặng triệu chứng trào ngược.","src":[0,2,3]},
+{"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS và NIDDK nêu sô-cô-la có thể kích triệu chứng ở một số người.","src":[0,2]},
+{"name":"đồ nhiều dầu mỡ","aliases":["đồ chiên","đồ chiên rán","đồ béo","đồ rán"],"verdict":"limit","note":"NHS, NIDDK và Mayo Clinic nêu đồ nhiều dầu mỡ/chiên rán có thể làm triệu chứng nặng hơn.","src":[0,2,3]},
+{"name":"bạc hà","aliases":["mint","kẹo bạc hà","trà bạc hà"],"verdict":"limit","note":"NIDDK nêu bạc hà là một thứ có thể làm triệu chứng trào ngược nặng hơn ở một số người.","src":[2]},
+{"name":"đồ cay","aliases":["ớt","cay","đồ ăn cay"],"verdict":"limit","note":"NHS và NIDDK nêu đồ cay có thể kích triệu chứng ở một số người.","src":[0,2]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu đã đổi lối sống và dùng thuốc ở hiệu thuốc mà không đỡ, ợ nóng gần như hằng ngày, hoặc kèm nuốt vướng nghẹn, buồn nôn/nôn thường xuyên, sụt cân không rõ lý do.","src":[0]},
+{"text":"Nên đi khám nếu triệu chứng nặng hoặc xảy ra thường xuyên, hoặc bạn phải dùng thuốc ợ nóng không kê đơn nhiều hơn hai lần mỗi tuần.","src":[3]},
+{"text":"Hãy đi khám nếu có đau ngực, chán ăn, nôn kéo dài, khó hoặc đau khi nuốt, sụt cân không rõ lý do.","src":[4]},
+{"text":"Nôn ra máu hoặc chất nôn như bã cà phê, phân có máu hoặc đen như hắc ín là dấu hiệu chảy máu tiêu hoá, cần đi khám.","src":[4]},
+{"text":"Nếu triệu chứng ngày càng nặng, hãy liên hệ bác sĩ hoặc đường dây y tế.","src":[0]}
+],
+"emergency":[
+{"text":"Đau ngực, nhất là kèm khó thở hoặc đau lan lên hàm, cánh tay, có thể là dấu hiệu nhồi máu cơ tim: cần cấp cứu ngay.","src":[3]}
+],
+"sources":[
+{"title":"Heartburn and acid reflux","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/heartburn-and-acid-reflux/","reviewed":"2023-11-20"},
+{"title":"Acid Reflux (GER & GERD) in Adults","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults","reviewed":"2020-07"},
+{"title":"Eating, Diet, & Nutrition for Acid Reflux (GER & GERD) in Adults","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/eating-diet-nutrition","reviewed":"2020-07"},
+{"title":"Gastroesophageal reflux disease (GERD) - Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/gerd/symptoms-causes/syc-20361940","reviewed":"2025-04-23"},
+{"title":"Symptoms & Causes of Acid Reflux (GER & GERD) in Adults","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/acid-reflux-ger-gerd-adults/symptoms-causes","reviewed":"2020-07"}
+],
+"verifiedAt":"2026-10-09"
+}

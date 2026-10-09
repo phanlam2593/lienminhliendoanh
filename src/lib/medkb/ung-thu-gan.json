@@ -1,0 +1,235 @@
+{
+  "id": "ung-thu-gan",
+  "kind": "cancer",
+  "names": [
+    "ung thư gan",
+    "bệnh ung thư gan",
+    "liver cancer",
+    "ung thu gan",
+    "K gan",
+    "ung thư tế bào gan",
+    "ung thư biểu mô tế bào gan"
+  ],
+  "about": [
+    {
+      "text": "Ung thư gan là ung thư xuất hiện ở bất kỳ phần nào của gan. Gan là cơ quan nội tạng lớn nhất, giúp tiêu hoá, dự trữ năng lượng và loại bỏ chất độc.",
+      "src": [
+        0,
+        4
+      ]
+    },
+    {
+      "text": "**Ung thư gan nguyên phát** bắt đầu ngay tại gan. **Ung thư gan thứ phát** (di căn) bắt đầu ở nơi khác rồi lan đến gan.",
+      "src": [
+        2,
+        4
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ung thư gan có thể **không có triệu chứng**, hoặc triệu chứng khó nhận ra; có thể không có gì cho đến khi bệnh đã tiến triển.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Vàng da hoặc vàng mắt, ngứa da, nước tiểu sẫm màu, phân nhạt màu.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Chán ăn hoặc sụt cân không rõ lý do, mệt mỏi, người không khoẻ như bị cúm.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Sờ thấy khối u ở bên phải bụng, đau vùng bụng trên bên phải hoặc vai phải.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Buồn nôn hoặc nôn, nhanh no khi ăn, bụng chướng không liên quan bữa ăn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Các triệu chứng giống nhau dù ung thư bắt đầu ở gan hay lan đến gan, và có nhiều nguyên nhân khác. Có triệu chứng **không chắc chắn là ung thư gan**.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Ai cũng có thể bị ung thư gan nguyên phát và không phải lúc nào cũng rõ nguyên nhân.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn ở người trên 60 tuổi và ở nam giới.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Bệnh đi kèm làm tăng nguy cơ: viêm gan (MedlinePlus nêu viêm gan B hoặc C), xơ gan, tiểu đường, sỏi mật, HIV, nhiễm sán lá gan.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "MedlinePlus còn nêu uống nhiều rượu, béo phì và bệnh nhiễm sắt (hemochromatosis).",
+      "src": [
+        4
+      ]
+    },
+    {
+      "text": "Có anh chị em hoặc cha mẹ từng bị ung thư gan nguyên phát cũng là yếu tố nguy cơ.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "NHS: nhiều ung thư gan còn liên quan đến lối sống.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Trong và sau điều trị, bạn sẽ được tái khám, làm xét nghiệm và chụp chiếu đều đặn.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Phẫu thuật cắt gan cần thời gian hồi phục khá dài.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Các hướng điều trị gồm phẫu thuật cắt một phần hoặc toàn bộ gan (cắt toàn bộ thì cần ghép gan), ghép gan, đốt u (nhiệt, vi sóng), hoá trị tắc mạch, xạ trị, thuốc nhắm trúng đích, liệu pháp miễn dịch.",
+      "src": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "text": "Với khối rất nhỏ phát hiện khi tầm soát, bác sĩ có thể chỉ theo dõi sát mà chưa điều trị, và điều trị nếu kết quả xấu đi.",
+      "src": [
+        5
+      ]
+    },
+    {
+      "text": "Lựa chọn điều trị còn tuỳ giai đoạn bệnh (khu trú, tiến triển tại chỗ/di căn, tái phát). Bác sĩ chuyên khoa quyết định cùng bạn.",
+      "src": [
+        5
+      ]
+    },
+    {
+      "text": "Đội điều trị giải thích lợi ích, tác dụng phụ và xây dựng kế hoạch cùng bạn. Có thể giúp xử lý tác dụng phụ, kể cả điều chỉnh ăn uống để dễ tiêu hoá.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Khi ung thư tiến triển không chữa khỏi được, đội giảm nhẹ/kiểm soát triệu chứng giúp bạn thoải mái hơn và hỗ trợ gia đình.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Giảm nguy cơ: giảm cân nếu thừa cân, hạn chế rượu bia, bỏ thuốc lá, mặc đồ bảo hộ và đeo khẩu trang nếu công việc tiếp xúc hoá chất độc hại. Không phải lúc nào cũng phòng được.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Thử nghiệm lâm sàng thử những cách điều trị mới, có thể là một lựa chọn.",
+      "src": [
+        5
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Hãy đi khám nếu sờ thấy khối u ở bụng, sụt cân nhiều không rõ lý do, hoặc triệu chứng nặng lên/không đỡ sau 2 tuần.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Cần xin khám gấp nếu da hoặc mắt bị vàng, hoặc nôn kéo dài hơn 2 ngày.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nếu bác sĩ nghi ngờ ung thư, bạn có thể được hẹn xét nghiệm hoặc gặp chuyên khoa gấp; việc được chuyển khám chưa có nghĩa là chắc chắn bị ung thư.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Đang điều trị mà thấy triệu chứng đáng lo thì liên hệ bác sĩ, đừng chờ đến lần tái khám.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Liver cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/liver-cancer/"
+    },
+    {
+      "title": "Liver cancer - Symptoms",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/liver-cancer/symptoms/",
+      "reviewed": "2023-06-13"
+    },
+    {
+      "title": "Liver cancer - Causes",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/liver-cancer/causes/",
+      "reviewed": "2023-06-13"
+    },
+    {
+      "title": "Liver cancer - Treatment",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/liver-cancer/treatment/",
+      "reviewed": "2023-06-13"
+    },
+    {
+      "title": "Liver Cancer",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/livercancer.html",
+      "reviewed": "2025-11-22"
+    },
+    {
+      "title": "Liver Cancer Treatment (PDQ) - Patient Version",
+      "publisher": "NCI (cancer.gov, Hoa Kỳ)",
+      "url": "https://www.cancer.gov/types/liver/patient/adult-liver-treatment-pdq",
+      "reviewed": "2025-05-08"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

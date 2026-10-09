@@ -1,0 +1,35 @@
+{"id":"dau-bung-kinh","kind":"women","names":["đau bụng kinh","đau bụng kinh nguyệt","thống kinh","đau bụng khi hành kinh","đau khi có kinh","menstrual cramps","period pain","dysmenorrhea"],
+"about":[
+{"text":"Đau hoặc khó chịu trước và trong kỳ kinh là chuyện thường gặp; một số cách tự chăm sóc có thể làm dịu.","src":[0]},
+{"text":"Đau xảy ra khi tử cung co bóp trong kỳ kinh và thường là một phần bình thường của chu kỳ kinh nguyệt.","src":[0]}],
+"signs":[
+{"text":"Đau bụng dưới lúc bắt đầu kỳ kinh hoặc ngay trước đó, có thể là đau nhói hoặc âm ỉ; cơn đau có thể lan ra lưng và đùi.","src":[0,1]},
+{"text":"Cơn đau thường kéo dài tới khoảng 3 ngày và có thể ảnh hưởng sinh hoạt hằng ngày.","src":[0]},
+{"text":"Mayo Clinic: đau thường bắt đầu 1–3 ngày trước kỳ kinh, đỉnh điểm khoảng 24 giờ sau khi ra máu và giảm trong 2–3 ngày.","src":[1]},
+{"text":"Một số người còn buồn nôn, đi phân lỏng, đau đầu hoặc chóng mặt.","src":[1]}],
+"causes":[
+{"text":"Tử cung co bóp để bong lớp niêm mạc; các chất giống hormone tên **prostaglandin** thúc đẩy các cơn co này, nồng độ càng cao thì đau càng nhiều.","src":[1]},
+{"text":"Đôi khi có bệnh nền gây đau: lạc nội mạc tử cung, bệnh tuyến cơ tử cung, u xơ tử cung, viêm vùng chậu.","src":[0,1]},
+{"text":"Mayo Clinic còn nêu hẹp cổ tử cung làm máu kinh khó thoát.","src":[1]},
+{"text":"Vòng tránh thai (IUD) có thể gây đau bụng kinh, nhất là 3–6 tháng đầu sau khi đặt.","src":[0]},
+{"text":"Yếu tố nguy cơ theo Mayo Clinic: dưới 30 tuổi, dậy thì từ 11 tuổi trở xuống, kinh nhiều, ra máu bất thường, gia đình có người bị, hút thuốc.","src":[1]}],
+"course":[
+{"text":"Mayo Clinic: bản thân đau bụng kinh không gây biến chứng y khoa khác nhưng có thể ảnh hưởng việc học, làm việc, sinh hoạt xã hội.","src":[1]},
+{"text":"Các bệnh gây đau có thể có biến chứng riêng, ví dụ lạc nội mạc tử cung có thể ảnh hưởng khả năng sinh sản.","src":[1]}],
+"care":[
+{"text":"Tắm nước ấm, chườm ấm lên bụng (bọc khăn), xoa bóp bụng và lưng.","src":[0]},
+{"text":"Vận động nhẹ như yoga, bơi, đi bộ, đạp xe; giảm rượu bia và bỏ thuốc lá cũng có thể giúp.","src":[0]},
+{"text":"Có thể dùng thuốc giảm đau như paracetamol hoặc ibuprofen (theo hướng dẫn trên bao bì hoặc dược sĩ).","src":[0]},
+{"text":"Nếu đau nặng, bác sĩ có thể đề nghị thuốc kháng viêm, máy TENS (xung điện nhẹ) hoặc thuốc tránh thai nội tiết làm kinh nhẹ và bớt đau; do bác sĩ quyết định.","src":[0]},
+{"text":"Nếu đau không đỡ hoặc nghi có bệnh nền như u xơ, bác sĩ có thể chuyển khám phụ khoa và siêu âm; điều trị bệnh nền sẽ giúp giảm đau.","src":[0]}],
+"diet":null,
+"doctor":[
+{"text":"NHS: nên đi khám khi kinh trở nên đau hơn, nhiều hơn hoặc không đều; đau bụng kinh khiến bạn không sinh hoạt như thường.","src":[0]},
+{"text":"Cũng nên khám nếu đau khi quan hệ, khi đi tiểu hoặc đi cầu, ra máu giữa kỳ, đổi thói quen đi tiểu/đi cầu, bụng sưng to, chán ăn hoặc sụt cân không rõ lý do.","src":[0]},
+{"text":"Mayo Clinic: nên khám nếu đau làm xáo trộn cuộc sống mỗi tháng, ngày càng nặng, hoặc đau dữ dội xuất hiện lần đầu sau 25 tuổi.","src":[1]}],
+"emergency":[
+{"text":"NHS: nếu đau vùng chậu hoặc đau bụng kinh dữ dội, hoặc nặng hơn thường lệ mà thuốc giảm đau không đỡ, hãy xin khám gấp hoặc gọi đường dây y tế khẩn (NHS 111 ở Anh).","src":[0]}],
+"sources":[
+{"title":"Period pain","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/period-pain/","reviewed":"2026-03-18"},
+{"title":"Menstrual cramps","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/menstrual-cramps/symptoms-causes/syc-20374938","reviewed":"2022-04-30"}],
+"verifiedAt":"2026-10-09"}

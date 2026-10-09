@@ -1,0 +1,61 @@
+{
+"id":"tri","kind":"condition",
+"names":["trĩ","bệnh trĩ","hemorrhoids","haemorrhoids","piles","trĩ nội","trĩ ngoại","búi trĩ"],
+"about":[
+{"text":"Trĩ (hemorrhoids, piles) là các búi tĩnh mạch sưng, viêm quanh hậu môn hoặc ở phần dưới trực tràng; tạo thành các cục trong và quanh hậu môn.","src":[0,1,2]},
+{"text":"Trĩ ngoại hình thành dưới da quanh hậu môn; trĩ nội hình thành ở lớp niêm mạc của hậu môn và trực tràng thấp.","src":[1,2]},
+{"text":"Trĩ thường tự đỡ trong vài ngày.","src":[0]}
+],
+"signs":[
+{"text":"Chảy máu đỏ tươi sau khi đi cầu; ngứa hậu môn; cảm giác vẫn muốn đi cầu sau khi đã đi; có nhầy dính ở quần lót hoặc giấy vệ sinh.","src":[0]},
+{"text":"Có cục quanh hậu môn (cỡ hạt đậu, màu hồng hoặc tím; nặng có thể to cỡ quả nho); đau quanh hậu môn.","src":[0]},
+{"text":"Trĩ ngoại: ngứa, cục cứng và đau gần hậu môn, đau khi ngồi. Trĩ nội: chảy máu đỏ tươi sau đi cầu và có thể sa ra ngoài; trĩ nội thường không đau trừ khi bị sa.","src":[2]}
+],
+"causes":[
+{"text":"Nguyên nhân chính xác chưa rõ. Dễ bị trĩ hơn khi: táo bón, rặn mạnh khi đi cầu, nâng vật nặng, mang thai, lớn tuổi, thừa cân.","src":[0]},
+{"text":"Áp lực lên tĩnh mạch quanh hậu môn do: rặn khi đi cầu, ngồi toilet lâu, táo bón hoặc tiêu chảy kéo dài, ăn ít chất xơ, mô nâng đỡ yếu đi (do tuổi hoặc mang thai), thường xuyên nâng vật nặng.","src":[2]},
+{"text":"NIDDK: thói quen đi vệ sinh, táo bón, ăn ít chất xơ và tuổi tác có thể gây trĩ.","src":[1]}
+],
+"course":[
+{"text":"Điều trị không phải lúc nào cũng ngăn được trĩ tái phát.","src":[0]},
+{"text":"Trĩ ngoại thường hết sau vài ngày.","src":[2]}
+],
+"care":[
+{"text":"Nếu đẩy được, có thể nhẹ nhàng đẩy búi trĩ vào trong. Chườm đá bọc khăn để dịu đau; ngâm nước ấm giúp dịu ngứa và đau.","src":[0]},
+{"text":"Giữ vùng hậu môn sạch và khô, thấm khô nhẹ nhàng chứ đừng chà xát.","src":[0]},
+{"text":"Có thể dùng paracetamol khi đau. Không dùng thuốc giảm đau có codein vì dễ gây táo bón; không dùng ibuprofen nếu trĩ đang chảy máu.","src":[0]},
+{"text":"Đừng nhịn đi cầu, đừng rặn mạnh, đừng ngồi toilet lâu hơn cần thiết.","src":[0,2]},
+{"text":"Dược sĩ có thể gợi ý kem giảm đau, ngứa, sưng; thuốc nhuận tràng làm mềm phân; túi chườm lạnh.","src":[0]},
+{"text":"Tại nhà: ăn nhiều chất xơ, dùng thuốc làm mềm phân hoặc bổ sung chất xơ, uống đủ nước, ngâm nước ấm, dùng thuốc giảm đau không kê đơn, kem/thuốc đặt cho trĩ ngoại.","src":[2]},
+{"text":"Nếu điều trị tại nhà không đủ, bác sĩ có thể làm thủ thuật không phẫu thuật như thắt vòng cao su, tiêm xơ, điện trị liệu hoặc đốt hồng ngoại; thường về trong ngày.","src":[0]},
+{"text":"Nếu các cách trên không hiệu quả hoặc búi trĩ lớn, có thể cần phẫu thuật như cắt trĩ, khâu treo trĩ bằng máy hoặc thắt động mạch trĩ.","src":[0]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS: giảm rượu bia và giảm caffeine (trà, cà phê, cola) để tránh táo bón.","src":[0]}
+],
+"ok":[
+{"text":"NHS: uống nhiều nước và ăn nhiều chất xơ để phân mềm. NIDDK và MedlinePlus cũng khuyên ăn nhiều chất xơ để điều trị và phòng trĩ.","src":[0,1,2]},
+{"text":"NIDDK: uống nước và chất lỏng khác như nước ép trái cây, súp trong giúp chất xơ phát huy tác dụng.","src":[1]}
+],
+"foods":[
+{"name":"cà phê, trà và cola","aliases":["cà phê","trà","cola","coca","cafe"],"verdict":"limit","note":"NHS khuyên giảm caffeine (trà, cà phê, cola) để tránh táo bón khi bị trĩ.","src":[0]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên giảm rượu bia khi bị trĩ.","src":[0]},
+{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS, NIDDK và MedlinePlus khuyên uống đủ nước và chất lỏng khi bị trĩ.","src":[0,1,2]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu triệu chứng nặng dần hoặc không đỡ sau khi tự điều trị tại nhà; hay bị trĩ lặp lại; hoặc thấy vùng hậu môn có thay đổi bất thường.","src":[0]},
+{"text":"Nên khám gấp nếu bị trĩ và: sốt rất cao hoặc thấy nóng, lạnh, run, mệt lả; chảy máu hậu môn mà không đau; hoặc có mủ chảy ra từ búi trĩ.","src":[0]},
+{"text":"MedlinePlus: đi khám nếu triệu chứng còn sau một tuần điều trị tại nhà, hoặc có chảy máu trực tràng — vì Crohn, viêm loét đại tràng, ung thư đại trực tràng và ung thư hậu môn cũng có thể gây chảy máu.","src":[2]}
+],
+"emergency":[
+{"text":"Chảy máu không ngừng, ra nhiều máu hoặc có cục máu đông to, hoặc đau dữ dội: cần đến cấp cứu ngay; đừng tự lái xe.","src":[0]}
+],
+"sources":[
+{"title":"Piles (haemorrhoids)","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/piles-haemorrhoids/","reviewed":"2026-04-01"},
+{"title":"Hemorrhoids","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/hemorrhoids","reviewed":"2016-10"},
+{"title":"Hemorrhoids","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/hemorrhoids.html","reviewed":"2023-11-13"}
+],
+"verifiedAt":"2026-10-09"
+}

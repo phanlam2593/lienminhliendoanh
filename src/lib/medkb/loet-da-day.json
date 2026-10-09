@@ -1,0 +1,72 @@
+{
+"id":"loet-da-day","kind":"condition",
+"names":["loét dạ dày","loét dạ dày tá tràng","loét tá tràng","viêm loét dạ dày","viêm loét dạ dày tá tràng","peptic ulcer","stomach ulcer","gastric ulcer","duodenal ulcer","loét dạ dày – tá tràng"],
+"about":[
+{"text":"Loét dạ dày – tá tràng (peptic ulcer) là vết loét ở lớp niêm mạc dạ dày hoặc tá tràng (đoạn đầu của ruột non).","src":[1,2,3]},
+{"text":"Bệnh có thể nghiêm trọng, nhưng đa số người hồi phục khi được điều trị.","src":[0]}
+],
+"signs":[
+{"text":"Triệu chứng chính là đau bụng trên, có thể rát bỏng, hay đau nhiều hơn về đêm.","src":[0]},
+{"text":"Cơn đau thường bắt đầu giữa các bữa ăn hoặc ban đêm, đỡ tạm thời sau khi ăn hoặc uống thuốc kháng acid, kéo dài vài phút đến vài giờ và lúc có lúc không trong nhiều ngày hoặc nhiều tuần.","src":[2]},
+{"text":"Có thể kèm khó tiêu, ợ nóng, đầy hơi, ợ hơi, buồn nôn hoặc nôn.","src":[0,3]},
+{"text":"Nhiều người không có triệu chứng cho đến khi xuất hiện biến chứng.","src":[3,4]}
+],
+"causes":[
+{"text":"Hai nguyên nhân thường gặp nhất là nhiễm vi khuẩn **H. pylori** và dùng thuốc giảm đau kháng viêm (NSAID như ibuprofen, naproxen, aspirin).","src":[0,1,2,4]},
+{"text":"Hút thuốc làm tăng nguy cơ bị loét, và nguy cơ cũng tăng dần theo tuổi.","src":[0]},
+{"text":"Căng thẳng và đồ ăn cay không gây ra loét nhưng có thể làm loét nặng hơn.","src":[2,3]},
+{"text":"Hút thuốc (nhất là khi có H. pylori) và rượu bia cũng làm loét nặng thêm dù không phải nguyên nhân.","src":[3]},
+{"text":"Nguy cơ cao hơn ở người trên 60 tuổi, từng bị loét, dùng NSAID liều cao hoặc nhiều loại NSAID, hoặc dùng NSAID cùng thuốc steroid, thuốc làm loãng máu, một số thuốc chống trầm cảm SSRI.","src":[3]},
+{"text":"Nguyên nhân ít gặp hơn: một số nhiễm trùng khác, thuốc như corticosteroid, bệnh Crohn, bệnh nặng, và hội chứng Zollinger-Ellison (khối u làm dạ dày tiết quá nhiều acid).","src":[4]}
+],
+"course":[
+{"text":"Nếu không điều trị, loét có thể chảy máu (dẫn đến thiếu máu), thủng thành dạ dày/ruột gây viêm phúc mạc, hoặc làm tắc đường đi của thức ăn.","src":[0,3]},
+{"text":"Nhiễm H. pylori không điều trị làm tăng nguy cơ ung thư dạ dày.","src":[0,3]},
+{"text":"Điều trị thường kéo dài từ 1 tuần đến 2 tháng, kèm xét nghiệm kiểm tra lại xem đã khỏi chưa; nếu triệu chứng quay lại, bác sĩ có thể đổi thuốc hoặc kéo dài điều trị.","src":[0]},
+{"text":"Nếu loét không lành, có thể cần phẫu thuật.","src":[2]}
+],
+"care":[
+{"text":"Điều trị tuỳ nguyên nhân: kháng sinh để diệt H. pylori và thuốc giảm acid dạ dày như thuốc ức chế bơm proton — do bác sĩ quyết định.","src":[0,1,2]},
+{"text":"Nếu loét do thuốc kháng viêm NSAID, bác sĩ có thể đổi thuốc cho bạn.","src":[1]},
+{"text":"Thuốc kháng acid và sữa không làm lành được vết loét.","src":[2]},
+{"text":"Nên: ăn bữa nhỏ hơn, ăn tối cách giờ đi ngủ 3–4 giờ, giữ cân nặng hợp lý, kiểm soát căng thẳng.","src":[0]},
+{"text":"Không nên: tự dùng thuốc giảm đau kháng viêm như ibuprofen khi chưa hỏi bác sĩ, hút thuốc, uống nhiều rượu.","src":[0]},
+{"text":"Bỏ thuốc lá và tránh rượu bia có thể giúp loét mau lành hơn và giảm nguy cơ bị loét.","src":[2,5]},
+{"text":"Nếu bắt buộc phải dùng NSAID đều đặn: uống cùng bữa ăn, dùng liều thấp nhất có hiệu quả, không uống rượu, và hỏi bác sĩ về thuốc bảo vệ dạ dày.","src":[3]}
+],
+"diet":{
+"avoid":[
+{"text":"MedlinePlus và Mayo Clinic: đồ ăn cay không gây loét nhưng có thể làm loét nặng hơn; rượu bia cũng làm triệu chứng nặng hơn.","src":[2,3]},
+{"text":"NHS khuyên tránh những món ăn thức uống làm bạn khó chịu; NHS nêu ví dụ: đồ béo, đồ cay, cà phê, sô-cô-la.","src":[0]}
+],
+"ok":[
+{"text":"NIDDK: chế độ ăn chưa được thấy có vai trò quan trọng trong việc gây ra, ngừa hay điều trị loét; bác sĩ không khuyên ăn kiêng đặc biệt hay tránh món cụ thể nào.","src":[1,5]}
+],
+"foods":[
+{"name":"đồ ăn cay","aliases":["ớt","cay","đồ cay"],"verdict":"limit","note":"MedlinePlus và Mayo: đồ cay không gây loét nhưng có thể làm loét nặng hơn; NHS nêu đồ cay là món dễ gây triệu chứng. NIDDK không khuyên kiêng món cụ thể.","src":[0,2,3]},
+{"name":"đồ ăn béo","aliases":["đồ béo","đồ nhiều dầu mỡ"],"verdict":"limit","note":"NHS nêu đồ ăn béo là món dễ gây triệu chứng nên tránh; NIDDK thì nói không cần ăn kiêng đặc biệt.","src":[0,1]},
+{"name":"cà phê","aliases":["cafe","cà phê đen","cà phê sữa"],"verdict":"limit","note":"NHS nêu cà phê là một trong những món dễ gây triệu chứng nên tránh.","src":[0]},
+{"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS nêu sô-cô-la là một trong những món dễ gây triệu chứng nên tránh.","src":[0]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"MedlinePlus: tránh rượu có thể giúp ích; Mayo: rượu làm loét nặng hơn; NHS: đừng uống quá nhiều rượu.","src":[0,2,3]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu khó tiêu không đỡ dù đã điều trị, hoặc đau bụng cứ tái đi tái lại.","src":[0]},
+{"text":"Nên đi khám gấp nếu: đau ngày càng nặng hoặc không dứt, chán ăn hoặc nhanh no dù ăn rất ít, sụt cân không rõ lý do, sờ thấy cục ở bụng, khó hoặc đau khi nuốt, nôn dai dẳng, mệt mỏi liên tục.","src":[0]},
+{"text":"Đi khám nếu cơn đau quay lại sau khi thuốc kháng acid hoặc thuốc chẹn acid từng làm dịu.","src":[3]}
+],
+"emergency":[
+{"text":"Nôn ra máu đỏ tươi hoặc chất nôn như bã cà phê; đi ngoài ra máu hoặc phân đen, dính, mùi rất hôi: cần cấp cứu ngay, đừng tự lái xe.","src":[0,3,4]},
+{"text":"Đau bụng dữ dội hoặc bụng đau khi chạm vào, hoặc đau ngực đột ngột: cần cấp cứu.","src":[0,4]},
+{"text":"Chóng mặt, choáng váng, ngất hoặc mạch nhanh kèm các dấu hiệu chảy máu trên: cần đi khám ngay.","src":[3,4]}
+],
+"sources":[
+{"title":"Stomach ulcer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/stomach-ulcer/","reviewed":"2025-08-12"},
+{"title":"Peptic Ulcers (Stomach or Duodenal Ulcers)","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers","reviewed":"2022-09"},
+{"title":"Peptic Ulcer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/pepticulcer.html","reviewed":"2024-01-25"},
+{"title":"Peptic ulcer - Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/peptic-ulcer/symptoms-causes/syc-20354223","reviewed":"2024-08-16"},
+{"title":"Symptoms & Causes of Peptic Ulcers","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers/symptoms-causes","reviewed":"2022-09"},
+{"title":"Eating, Diet, & Nutrition for Peptic Ulcers","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/peptic-ulcers-stomach-ulcers/eating-diet-nutrition","reviewed":"2022-09"}
+],
+"verifiedAt":"2026-10-09"
+}

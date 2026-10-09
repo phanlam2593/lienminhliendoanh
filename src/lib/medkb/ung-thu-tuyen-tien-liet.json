@@ -1,0 +1,50 @@
+{
+"id":"ung-thu-tuyen-tien-liet","kind":"cancer",
+"names":["ung thư tuyến tiền liệt","ung thư tiền liệt tuyến","bệnh ung thư tuyến tiền liệt","prostate cancer","ung thư prostate","ung thu tuyen tien liet"],
+"about":[
+{"text":"Ung thư tuyến tiền liệt bắt đầu từ các tế bào của tuyến tiền liệt, tuyến nằm dưới bàng quang, tạo ra một phần tinh dịch.","src":[0,4,5]},
+{"text":"NHS: bệnh thường gặp ở nam giới trên 50 tuổi. MedlinePlus: bệnh thường phát triển chậm, nhưng có dạng phát triển nhanh và lan.","src":[0,4]}
+],
+"signs":[
+{"text":"Ung thư tuyến tiền liệt thường **không có triệu chứng ở giai đoạn đầu**; triệu chứng về tiểu thường chỉ xuất hiện khi khối u đã lớn hoặc lan.","src":[1,4]},
+{"text":"Về đi tiểu: khó bắt đầu tiểu hoặc phải rặn, tia nước yếu, tiểu ngắt quãng, buồn tiểu gấp hoặc nhiều lần, cảm giác tiểu chưa hết, tiểu đêm.","src":[1,4,5]},
+{"text":"Cũng có thể gặp: rối loạn cương, có máu trong nước tiểu hoặc tinh dịch.","src":[1,4]},
+{"text":"Đau lưng dưới, hông hoặc vùng chậu kéo dài và sụt cân ngoài ý muốn có thể là dấu hiệu bệnh đã tiến triển.","src":[1,4,5]},
+{"text":"Nhiều triệu chứng này cũng do phì đại tuyến tiền liệt (lành tính, rất thường gặp) gây ra, **không chắc là ung thư**.","src":[1,4,5]}
+],
+"causes":[
+{"text":"MedlinePlus: nguyên nhân thường không rõ; bệnh xảy ra khi DNA thay đổi, một số thay đổi có thể di truyền.","src":[4]},
+{"text":"Nguy cơ tăng theo tuổi và bệnh hiếm gặp ở người dưới 50 tuổi (MedlinePlus); NHS ghi bệnh chủ yếu ở nam trên 50.","src":[2,4]},
+{"text":"Có cha, anh em hoặc con từng bị ung thư tuyến tiền liệt làm tăng nguy cơ; có người thân gần bị ung thư tuỵ, vú hoặc buồng trứng (nhất là khi còn trẻ) cũng vậy theo NHS.","src":[2,4]},
+{"text":"Bệnh đôi khi liên quan đến gen di truyền như gen BRCA2 bị lỗi.","src":[2]}
+],
+"course":[
+{"text":"NHS: ung thư tuyến tiền liệt không phải lúc nào cũng cần điều trị ngay. Có thể chỉ theo dõi khi khối u nhỏ và không gây triệu chứng.","src":[3]},
+{"text":"NHS: có nhiều cách điều trị và bệnh thường có thể chữa khỏi nếu phát hiện sớm.","src":[0]}
+],
+"care":[
+{"text":"Có hai cách theo dõi: chờ đợi có theo dõi (khám và xét nghiệm máu đều) hoặc giám sát tích cực (xét nghiệm và chụp chiếu định kỳ ở bệnh viện). Nếu u lớn lên hoặc gây triệu chứng thì bàn điều trị.","src":[3]},
+{"text":"Điều trị gồm phẫu thuật cắt tuyến tiền liệt, xạ trị, liệu pháp nội tiết (chặn hoặc ngừng tạo testosterone), hoá trị (cho bệnh tiến triển).","src":[3]},
+{"text":"Còn có HIFU (siêu âm hội tụ cường độ cao) và áp lạnh, nhưng có thể không có ở mọi nơi.","src":[3]},
+{"text":"MedlinePlus nêu thêm thuốc nhắm trúng đích và liệu pháp miễn dịch. Lựa chọn tuỳ tuổi, sức khoẻ chung và mức độ nặng của bệnh; bác sĩ quyết định.","src":[4]},
+{"text":"Với bệnh tiến triển, đội giảm nhẹ giúp kiểm soát triệu chứng; y tá chuyên khoa hỗ trợ bạn và gia đình.","src":[3]},
+{"text":"MedlinePlus: lối sống lành mạnh (giữ cân hợp lý, bỏ thuốc lá, tập thể dục, ăn uống lành mạnh) có thể giúp phòng một số trường hợp.","src":[4]},
+{"text":"Xét nghiệm gồm khám trực tràng bằng tay, xét nghiệm máu PSA, siêu âm hoặc MRI; sinh thiết là cách duy nhất để chẩn đoán xác định.","src":[4]}
+],
+"diet":null,
+"doctor":[
+{"text":"Hãy đi khám nếu bạn khó đi tiểu hoặc có triệu chứng nghi ung thư tuyến tiền liệt, hoặc lo về nguy cơ của mình.","src":[1]},
+{"text":"Bạn có thể hỏi bác sĩ về xét nghiệm máu PSA ngay cả khi không có triệu chứng.","src":[1]},
+{"text":"NHS: nam từ 40 tuổi có xét nghiệm di truyền cho thấy gen BRCA2 bị lỗi nên đi khám.","src":[1]},
+{"text":"Nếu bác sĩ nghi ngờ ung thư hoặc PSA cao hơn bình thường, bạn có thể được hẹn xét nghiệm hoặc gặp chuyên khoa gấp; chưa có nghĩa chắc chắn bị ung thư.","src":[1]}
+],
+"emergency":[],
+"sources":[
+{"title":"Prostate cancer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/prostate-cancer/"},
+{"title":"Prostate cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/prostate-cancer/symptoms/","reviewed":"2025-07-31"},
+{"title":"Prostate cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/prostate-cancer/causes/","reviewed":"2025-07-31"},
+{"title":"Prostate cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/prostate-cancer/treatment/","reviewed":"2025-07-31"},
+{"title":"Prostate Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/prostatecancer.html","reviewed":"2024-03-28"},
+{"title":"Prostate Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/prostate/patient/prostate-treatment-pdq"}
+],
+"verifiedAt":"2026-10-09"}

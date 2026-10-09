@@ -1,0 +1,32 @@
+{"id":"u-nang-buong-trung","kind":"women","names":["u nang buồng trứng","nang buồng trứng","kén buồng trứng","bướu nang buồng trứng","ovarian cyst","ovarian cysts"],
+"about":[
+{"text":"U nang buồng trứng là túi chứa dịch nằm trong hoặc trên buồng trứng. Phần lớn là lành tính, hay gặp và thường tự biến mất.","src":[0,1]},
+{"text":"NHS chia hai loại: nang **cơ năng** hình thành theo chu kỳ kinh (phổ biến nhất, thường vô hại, tồn tại ngắn) và nang **bệnh lý** do tế bào phát triển bất thường (ít gặp hơn nhiều).","src":[0]},
+{"text":"NHS: đại đa số là không phải ung thư; nang ác tính gặp nhiều hơn sau mãn kinh.","src":[0]}],
+"signs":[
+{"text":"Phần lớn nang nhỏ và không gây triệu chứng nên thường phát hiện khi khám phụ khoa.","src":[1]},
+{"text":"NHS: nang thường chỉ gây triệu chứng khi vỡ, rất to, hoặc xoắn làm tắc nguồn máu nuôi buồng trứng.","src":[0]},
+{"text":"Có thể đau vùng chậu (từ cảm giác nặng âm ỉ đến đau nhói đột ngột), đau khi quan hệ, khó đi cầu, tiểu nhiều lần.","src":[0]},
+{"text":"Kinh nhiều, không đều hoặc nhẹ hơn thường lệ; đầy bụng, bụng to hoặc mau no.","src":[0]},
+{"text":"MedlinePlus: có thể thấy tức nặng, đầy hơi, sưng, hoặc đau bụng dưới ở bên có nang.","src":[1]}],
+"causes":[
+{"text":"Nang thường hình thành khi buồng trứng phóng noãn; nang cơ năng hình thành theo chu kỳ kinh.","src":[0,1]},
+{"text":"NHS: nang đôi khi do bệnh nền như lạc nội mạc tử cung.","src":[0]}],
+"course":[
+{"text":"Phần lớn nang tự biến mất sau vài tháng; có thể siêu âm theo dõi để xác nhận.","src":[0]},
+{"text":"NHS: khả năng sinh sản thường không bị ảnh hưởng, dù khó có thai có thể là một triệu chứng.","src":[0]}],
+"care":[
+{"text":"Cách xử trí tùy kích thước, hình dạng nang, có triệu chứng hay không, và đã mãn kinh chưa.","src":[0]},
+{"text":"Nhiều trường hợp chỉ cần theo dõi xem nang có to lên không. Sau mãn kinh, thường được khuyên siêu âm và xét nghiệm máu định kỳ trong khoảng một năm.","src":[0,1]},
+{"text":"Có thể cần phẫu thuật nếu nang to, gây triệu chứng, không tự hết, ở người đã mãn kinh, hoặc nghi ung thư; bác sĩ cố gắng giữ khả năng sinh sản.","src":[0,1]},
+{"text":"MedlinePlus: thuốc tránh thai có thể giúp ngừa nang mới hình thành.","src":[1]}],
+"diet":null,
+"doctor":[
+{"text":"NHS: nên đi khám nếu bạn có triệu chứng nghi u nang buồng trứng.","src":[0]}],
+"emergency":[
+{"text":"NHS: đau vùng chậu đột ngột, dữ dội, hoặc đau bụng kèm buồn nôn/nôn thì cần xin khám gấp hoặc gọi đường dây y tế khẩn (NHS 111 ở Anh).","src":[0]},
+{"text":"MedlinePlus: nếu nang vỡ hoặc gây chảy máu, cần được chăm sóc y tế ngay.","src":[1]}],
+"sources":[
+{"title":"Ovarian cyst","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/ovarian-cyst/","reviewed":"2023-06-21"},
+{"title":"Ovarian Cysts","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/ovariancysts.html","reviewed":"2024-08-13"}],
+"verifiedAt":"2026-10-09"}

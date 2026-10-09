@@ -1,0 +1,69 @@
+{
+"id":"xa-tri","kind":"term",
+"names":["xạ trị","xạ trị liệu","chiếu xạ","radiotherapy","radiation therapy","chiếu tia","xạ trị ung thư"],
+"about":[
+{"text":"Xạ trị (radiotherapy) là cách điều trị ung thư dùng bức xạ liều cao để tiêu diệt tế bào ung thư và thu nhỏ khối u.","src":[0,2,3]},
+{"text":"Có thể dùng từ sớm hoặc khi ung thư đã lan, nhằm chữa khỏi, hỗ trợ cách điều trị khác, giảm nguy cơ tái phát sau mổ, hoặc làm nhẹ triệu chứng.","src":[0]},
+{"text":"Thường kết hợp với phẫu thuật, hoá trị hoặc liệu pháp miễn dịch.","src":[3]},
+{"text":"Bức xạ làm hư DNA của tế bào ung thư; phải mất nhiều ngày đến vài tuần điều trị thì tế bào ung thư mới chết.","src":[2]},
+{"text":"**Xạ ngoài**: máy chiếu tia từ bên ngoài vào chỗ ung thư; máy không chạm vào bạn nhưng có thể di chuyển quanh người bạn.","src":[0,2]},
+{"text":"**Xạ trong**: đặt nguồn phóng xạ vào trong cơ thể gần khối u (hạt, ống, nang), hoặc dùng chất lỏng phóng xạ uống/tiêm theo máu đi khắp cơ thể.","src":[0,2]},
+{"text":"Thường điều trị hằng ngày (hoặc chia nhỏ hai lần mỗi ngày) trong vài tuần. Kế hoạch tuỳ loại, kích thước, vị trí ung thư, mô nhạy cảm gần đó, sức khoẻ chung.","src":[3]},
+{"text":"Xạ trị thường làm ở bệnh viện; sau xạ ngoài bạn thường về nhà sớm.","src":[0]}
+],
+"signs":[],
+"causes":[],
+"course":[
+{"text":"Ngoài tế bào ung thư, xạ trị có thể làm tổn thương một số tế bào lành ở vùng được chiếu, nên gây tác dụng phụ.","src":[0,3]},
+{"text":"NHS liệt kê: da đau rát, mệt, rụng tóc ở vùng được xạ, buồn nôn, chán ăn, đau miệng, tiêu chảy. Tác dụng phụ còn tuỳ vùng cơ thể được xạ.","src":[0,3]},
+{"text":"Nhiều tác dụng phụ có thể điều trị hoặc phòng ngừa, và phần lớn sẽ hết sau khi ngừng điều trị. MedlinePlus ghi hầu hết hết sau vài tháng.","src":[0,3]},
+{"text":"Da có thể đau rát, đổi màu (đỏ, sáng hoặc sẫm hơn bình thường), thường bắt đầu 1–2 tuần sau khi bắt đầu xạ và thường ổn sau 2–4 tuần kể từ khi kết thúc.","src":[0,1]},
+{"text":"Rụng tóc chỉ ở vùng được xạ, thường bắt đầu 2–3 tuần sau khi bắt đầu điều trị.","src":[1]},
+{"text":"Xạ ngoài không làm bạn nhiễm phóng xạ. Với cấy nguồn hoặc tiêm chất phóng xạ, có thể phải nằm viện vài ngày và hạn chế tiếp xúc gần; sau khi về nhà một thời gian ngắn nên tránh gần trẻ em và phụ nữ có thai.","src":[0]}
+],
+"care":[
+{"text":"Hãy báo đội điều trị về mọi chỗ da đau rát hoặc thay đổi.","src":[1]},
+{"text":"Mệt: nghỉ ngơi, tránh việc bạn không thấy khoẻ để làm, đi bộ nhẹ, nhờ người khác giúp.","src":[1]},
+{"text":"Buồn nôn: báo đội điều trị, họ có thể kê thuốc chống nôn; buồn nôn thường hết ngay sau khi kết thúc điều trị.","src":[1]},
+{"text":"Đau miệng: đội điều trị có thể gợi ý thuốc giảm đau hoặc nước súc miệng đặc biệt.","src":[1]},
+{"text":"Khó chịu khi nuốt: đội điều trị có thể gợi ý đổi chế độ ăn và dùng thuốc; một số ít trường hợp cần ống nuôi ăn tạm thời.","src":[1]},
+{"text":"Tiêu chảy: có thuốc giúp. Hãy báo bác sĩ nếu không đỡ sau vài tuần hoặc thấy máu trong phân.","src":[1]},
+{"text":"Cứng khớp, cơ: tập duỗi và vận động đều có thể giúp; đội điều trị có thể giới thiệu vật lý trị liệu.","src":[1]},
+{"text":"Chăm sóc da (NHS): rửa da mỗi ngày bằng xà phòng quen dùng, thấm khô thay vì chà, thoa kem dưỡng ẩm mỗi ngày.","src":[1]},
+{"text":"Tránh cạo vùng da đó nếu có thể; không dùng laser, tẩy lông, wax hay kem tẩy lông; tránh túi chườm nóng hoặc lạnh.","src":[1]},
+{"text":"Mặc đồ rộng bằng chất liệu tự nhiên như cotton, lụa. Dùng kem chống nắng (NHS nêu chỉ số SPF từ 50 trở lên) và tiếp tục ít nhất một năm sau khi điều trị.","src":[1]},
+{"text":"Hãy hỏi đội điều trị xem có nên tạm ngừng bơi không vì clo có thể làm da tệ hơn; ngừng dùng sản phẩm bôi da nếu da bị rách.","src":[1]},
+{"text":"Về sinh sản: tuỳ nguy cơ, có thể lưu trữ trứng, mô buồng trứng hoặc tinh trùng trước điều trị; hãy hỏi đội điều trị.","src":[1]},
+{"text":"Về cảm xúc: hãy nói chuyện với đội điều trị hoặc tham gia nhóm hỗ trợ.","src":[1]},
+{"text":"Phù bạch huyết: chăm sóc da và tập thể dục đều có thể làm giảm nguy cơ; nếu xuất hiện, có cách điều trị giúp kiểm soát triệu chứng.","src":[1]}
+],
+"diet":{
+"avoid":[
+{"text":"Nếu miệng đau, NHS khuyên tránh đồ ăn cay, mặn hoặc có vị gắt.","src":[1]}
+],
+"ok":[
+{"text":"NHS: cố gắng ăn uống lành mạnh và giữ cân nặng; báo đội điều trị nếu bạn ăn không đủ.","src":[1]},
+{"text":"Ăn nhiều bữa nhỏ thay cho ba bữa lớn.","src":[1]},
+{"text":"Nếu nuốt khó chịu, ăn đồ mềm hoặc lỏng.","src":[1]},
+{"text":"Có thể hỏi đội điều trị để được giới thiệu chuyên gia dinh dưỡng.","src":[1]},
+{"text":"NCI: xạ trị có thể gây buồn nôn, loét miệng, viêm thực quản làm khó ăn; bạn có thể cần thêm đạm và năng lượng và nên nhờ chuyên gia dinh dưỡng giúp.","src":[2,4]}
+],
+"foods":[
+{"name":"đồ ăn cay","aliases":["cay","ớt","đồ cay"],"verdict":"avoid","note":"NHS: nếu miệng đau do xạ trị, nên tránh đồ ăn cay, mặn hoặc có vị gắt.","src":[1]},
+{"name":"đồ ăn mặn","aliases":["mặn","đồ mặn","muối"],"verdict":"avoid","note":"NHS: nếu miệng đau do xạ trị, nên tránh đồ ăn cay, mặn hoặc có vị gắt.","src":[1]},
+{"name":"đồ ăn mềm hoặc lỏng","aliases":["đồ mềm","đồ lỏng","thức ăn mềm"],"verdict":"good","note":"NHS: nếu nuốt khó chịu, nên ăn đồ mềm hoặc lỏng.","src":[1]}
+]},
+"doctor":[
+{"text":"Hãy báo đội điều trị nếu bạn đột nhiên rất mệt kèm hụt hơi, vì có thể là thiếu máu.","src":[1]},
+{"text":"Hãy báo bác sĩ nếu tiêu chảy không đỡ sau vài tuần hoặc có máu trong phân.","src":[1]},
+{"text":"Nếu có thắc mắc hoặc lo lắng về tác dụng phụ, hãy hỏi đội điều trị.","src":[1,3]}
+],
+"emergency":[],
+"sources":[
+{"title":"Radiotherapy","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/radiotherapy/","reviewed":"2023-06-05"},
+{"title":"Radiotherapy - Side effects","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/radiotherapy/side-effects/","reviewed":"2023-06-05"},
+{"title":"Radiation Therapy to Treat Cancer","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy","reviewed":"2025-05-15"},
+{"title":"Radiation Therapy","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/radiationtherapy.html","reviewed":"2025-03-20"},
+{"title":"Nutrition in Cancer Care (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/about-cancer/treatment/side-effects/appetite-loss/nutrition-pdq","reviewed":"2024-10-15"}
+],
+"verifiedAt":"2026-10-09"}

@@ -1,0 +1,52 @@
+{
+"id":"huyet-khoi-tinh-mach-sau",
+"kind":"condition",
+"names":["huyết khối tĩnh mạch sâu","huyết khối tĩnh mạch chân","cục máu đông ở chân","tắc tĩnh mạch sâu","DVT","deep vein thrombosis","blood clot in leg"],
+"about":[
+{"text":"Huyết khối tĩnh mạch sâu (DVT) là cục máu đông hình thành trong tĩnh mạch sâu, thường ở cẳng chân hoặc đùi.","src":[1,2]},
+{"text":"Bệnh có thể nguy hiểm nên cần đi khám sớm nếu nghi ngờ.","src":[0]}
+],
+"signs":[
+{"text":"Thường ở một chân (hiếm khi cả hai): đau nhói theo nhịp, thường ở bắp chân hoặc đùi; sưng chân; da quanh vùng đau đỏ, xanh hoặc sẫm màu (khó thấy hơn trên da nâu hoặc đen); tĩnh mạch sưng.","src":[0,1,2]},
+{"text":"Có thể thấy chuột rút hoặc đau nhức, và chân nóng hơn ở vùng bị ảnh hưởng.","src":[1,2]},
+{"text":"Cục máu đông ở tay thì triệu chứng xuất hiện ở tay.","src":[0]},
+{"text":"Đôi khi chỉ đau bụng dưới (có thể là huyết khối tĩnh mạch chậu, hiếm gặp). Cũng có thể không có triệu chứng rõ.","src":[0,2]}
+],
+"causes":[
+{"text":"Bất cứ điều gì làm cản trở dòng máu bình thường hoặc làm máu đông bất thường đều có thể gây cục máu đông; nguyên nhân chính là tổn thương tĩnh mạch do phẫu thuật, viêm, nhiễm trùng hoặc chấn thương.","src":[2]},
+{"text":"Ngồi yên lâu có thể làm dễ bị DVT. Một số thuốc và rối loạn làm tăng nguy cơ đông máu cũng có thể gây DVT.","src":[1]},
+{"text":"Người dễ bị hơn: trên 60 tuổi, thừa cân/béo phì, hút thuốc, từng bị DVT, ung thư hoặc suy tim, giãn tĩnh mạch, bệnh viêm ruột, máu dễ đông.","src":[0,2]},
+{"text":"Dùng thuốc tránh thai phối hợp hoặc liệu pháp hormone thay thế (và loại có estrogen khác như miếng dán, vòng đặt âm đạo) cũng làm tăng nguy cơ.","src":[0,2]},
+{"text":"Tình huống nguy cơ cao: nằm viện hoặc vừa ra viện, đang hoặc vừa phẫu thuật, nằm liệt giường từ 3 ngày, đi xa hơn 4 giờ bằng máy bay/xe, mang thai hoặc trong 6 tuần sau sinh, mất nước.","src":[0,2]},
+{"text":"DVT cũng có thể xảy ra mà không rõ lý do.","src":[0,2]}
+],
+"course":[
+{"text":"Biến chứng chính là **thuyên tắc phổi**: cục máu đông bong ra, theo máu lên động mạch phổi; có thể đe doạ tính mạng.","src":[0,1,2]},
+{"text":"Hội chứng hậu huyết khối (postphlebitic): tĩnh mạch tổn thương làm máu về kém, gây đau chân, sưng, đổi màu da, loét da.","src":[2]},
+{"text":"Thuốc chống đông có thể gây chảy máu nên cần xét nghiệm máu định kỳ.","src":[2]}
+],
+"care":[
+{"text":"Điều trị chính là thuốc chống đông (làm loãng máu), thường là thuốc viên, thường dùng ít nhất 3 tháng để giảm nguy cơ có cục máu đông mới. Do bác sĩ quyết định.","src":[0]},
+{"text":"Khi mang thai, thường dùng thuốc chống đông dạng tiêm đến hết thai kỳ và đến khi bé được 6 tuần tuổi.","src":[0]},
+{"text":"MedlinePlus nêu thêm các cách điều trị: thuốc giảm đau và viêm, thuốc làm tan cục máu và ngừa cục máu mới, kê cao chi và chườm nóng ẩm.","src":[1]},
+{"text":"Trong lúc hồi phục: vận động và đi bộ đều đặn khi có thể, kê cao chân khi ngồi. Hoãn các chuyến bay/đi xa cho đến ít nhất 2 tuần sau khi bắt đầu thuốc chống đông.","src":[0]},
+{"text":"Phòng ngừa: giữ cân nặng hợp lý, vận động, uống đủ nước, đứng dậy đi lại khoảng mỗi giờ, không hút thuốc, tránh uống nhiều rượu bia.","src":[0]},
+{"text":"Khi đi xa: nghỉ giữa chặng, đi bộ hoặc duỗi chân, mặc đồ rộng, uống nhiều nước; nếu không đi được thì tập cử động cẳng chân. Tránh bắt chéo chân khi ngồi.","src":[0,1,2]},
+{"text":"Sau phẫu thuật hoặc nằm viện, đội ngũ y tế sẽ đánh giá nguy cơ và có thể cho thuốc hoặc vớ ép phòng ngừa.","src":[0]}
+],
+"diet":null,
+"doctor":[
+{"text":"Nếu nghĩ mình bị DVT, cần đi khám sớm: NHS khuyên hẹn khám khẩn với bác sĩ gia đình hoặc gọi dịch vụ y tế khẩn (NHS 111).","src":[0,2]},
+{"text":"Nếu bác sĩ nghi ngờ, bạn nên được chuyển đến bệnh viện trong 24 giờ để siêu âm kiểm tra dòng máu trong tĩnh mạch.","src":[0]}
+],
+"emergency":[
+{"text":"Có triệu chứng DVT kèm **khó thở hoặc đau ngực**: có thể là thuyên tắc phổi, cần gọi cấp cứu hoặc đến cấp cứu ngay. NHS dặn đừng tự lái xe.","src":[0]},
+{"text":"Dấu hiệu thuyên tắc phổi theo Mayo Clinic: khó thở đột ngột; đau ngực nặng hơn khi hít sâu hoặc ho; choáng váng; ngất; mạch nhanh; thở nhanh; ho ra máu.","src":[2]}
+],
+"sources":[
+{"title":"Deep vein thrombosis (DVT)","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/","reviewed":"2026-04-30"},
+{"title":"Deep Vein Thrombosis","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/deepveinthrombosis.html","reviewed":"2025-11-20"},
+{"title":"Deep vein thrombosis (DVT): Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/deep-vein-thrombosis/symptoms-causes/syc-20352557","reviewed":"2022-06-11"}
+],
+"verifiedAt":"2026-10-09"
+}

@@ -1,0 +1,67 @@
+{
+"id":"benh-mach-vanh",
+"kind":"condition",
+"names":["bệnh mạch vành","bệnh động mạch vành","đau thắt ngực","cơn đau thắt ngực","bệnh tim mạch vành","bệnh tim thiếu máu cục bộ","hẹp động mạch vành","angina","coronary artery disease","coronary heart disease","ischaemic heart disease"],
+"disambiguation":"Thẻ này nói về bệnh mạch vành và đau thắt ngực (angina). Nhồi máu cơ tim có thẻ riêng.",
+"about":[
+{"text":"Bệnh mạch vành xảy ra khi máu nuôi tim bị cản trở hoặc gián đoạn do chất béo tích tụ trong động mạch vành. Bệnh còn gọi là bệnh tim thiếu máu cục bộ.","src":[0,2]},
+{"text":"Các động mạch vành đưa máu và oxy đến cơ tim; khi bị tổn thương hoặc bệnh, tim không nhận đủ máu.","src":[2]},
+{"text":"**Đau thắt ngực** (angina) là cơn đau hoặc tức ngực do tim không nhận đủ máu; thường do bệnh mạch vành.","src":[1]},
+{"text":"Bệnh mạch vành là nguyên nhân gây tử vong hàng đầu ở Anh và trên thế giới.","src":[0]}
+],
+"signs":[
+{"text":"Đau hoặc tức ngực (đau thắt ngực), khó thở, đau lan lên cổ, vai, hàm hoặc tay, cảm giác choáng, buồn nôn. Có người không có triệu chứng nào trước khi được chẩn đoán.","src":[0,2]},
+{"text":"Cơn đau thắt ngực có thể như bị bóp chặt, đè nặng hoặc đau âm ỉ; có thể kèm buồn nôn, khó thở, chóng mặt, đổ mồ hôi.","src":[1]},
+{"text":"Thường xuất hiện khi gắng sức, căng thẳng, xúc động mạnh hoặc trời lạnh, đôi khi không rõ nguyên nhân. Cơn thường dưới 10 phút và đỡ khi nghỉ hoặc dùng thuốc.","src":[1,2]},
+{"text":"MedlinePlus nêu thêm mệt bất thường; triệu chứng có thể nặng dần khi mảng bám tiếp tục dày lên.","src":[2]}
+],
+"causes":[
+{"text":"Theo thời gian, mảng chất béo (xơ vữa) tích tụ trên thành động mạch vành làm hẹp lòng mạch; quá trình này gọi là xơ vữa động mạch.","src":[0,2]},
+{"text":"Yếu tố nguy cơ: hút thuốc, uống nhiều rượu bia, cholesterol cao, huyết áp cao, tiểu đường.","src":[0,1,2]},
+{"text":"MedlinePlus nêu thêm: ăn nhiều chất béo bão hoà, ít vận động, thừa cân/béo phì, người thân (cha mẹ hoặc anh chị em) bị bệnh tim sớm, tuổi cao; nam giới thường bị sớm hơn nữ.","src":[2]},
+{"text":"NHS nêu nguy cơ cao hơn ở nam từ 45 tuổi, nữ từ 55 tuổi, và người từng bị nhồi máu cơ tim hoặc rối loạn nhịp tim.","src":[1]},
+{"text":"Một dạng khác là bệnh vi mạch vành (tổn thương các mạch rất nhỏ của tim), gặp nhiều hơn ở nữ giới.","src":[2]}
+],
+"course":[
+{"text":"Bệnh mạch vành không chữa khỏi được, nhưng điều trị giúp kiểm soát triệu chứng và giảm nguy cơ nhồi máu cơ tim.","src":[0]},
+{"text":"Biến chứng: đau thắt ngực, nhồi máu cơ tim, suy tim, rối loạn nhịp tim.","src":[2]},
+{"text":"Người bị đau thắt ngực có nguy cơ nhồi máu cơ tim hoặc đột quỵ cao hơn, nên điều trị và thay đổi lối sống rất quan trọng.","src":[1]},
+{"text":"Khi được kiểm soát tốt, đau thắt ngực thường không ảnh hưởng nhiều đến sinh hoạt, kể cả tập thể dục.","src":[1]}
+],
+"care":[
+{"text":"Khi lên cơn đau thắt ngực: dừng việc đang làm và nghỉ ngơi, rồi dùng thuốc đã được kê theo đúng hướng dẫn của bác sĩ.","src":[1]},
+{"text":"Điều trị gồm thay đổi lối sống, thuốc, và có thể nong mạch đặt stent (angioplasty) hoặc phẫu thuật bắc cầu động mạch vành. Do bác sĩ tim mạch quyết định.","src":[0,1,2]},
+{"text":"Nhóm thuốc có thể dùng: thuốc cắt cơn đau, thuốc giảm số cơn (như thuốc chẹn beta), thuốc giảm nguy cơ nhồi máu và đột quỵ (như statin, aspirin liều thấp), thuốc hạ huyết áp, hạ cholesterol, kiểm soát đường huyết.","src":[1,2]},
+{"text":"Phục hồi chức năng tim giúp cải thiện chất lượng sống và phòng các vấn đề tim sau này.","src":[2]},
+{"text":"Tránh các yếu tố khởi phát nếu được: căng thẳng, lạnh, bữa ăn quá no. Luôn mang theo thuốc bên người.","src":[1]},
+{"text":"Bỏ thuốc lá, giữ cân nặng hợp lý, vận động trong khả năng cho phép, giảm rượu bia; kiểm soát cholesterol và đường huyết.","src":[0,1,2]},
+{"text":"MedlinePlus còn nêu: tránh khói thuốc thụ động, quản lý căng thẳng và ngủ đủ, ngủ ngon.","src":[2]},
+{"text":"Hãy hỏi bác sĩ trước khi bắt đầu hoạt động mới hoặc nếu lo ngại về việc tập thể dục.","src":[1]}
+],
+"diet":{
+"avoid":[
+{"text":"Chế độ ăn nhiều chất béo bão hoà là một yếu tố nguy cơ của bệnh mạch vành.","src":[2]},
+{"text":"NHS nêu bữa ăn quá no là một trong các yếu tố có thể khởi phát cơn đau thắt ngực, nên tránh nếu được.","src":[1]}
+],
+"ok":[
+{"text":"NHS và MedlinePlus khuyên ăn uống lành mạnh, cân đối, chọn thực phẩm tốt cho tim; nguồn không nêu món cụ thể.","src":[0,1,2]}
+],
+"foods":[]
+},
+"doctor":[
+{"text":"NHS: nếu nghĩ mình có thể bị đau thắt ngực, hãy đến gặp bác sĩ sớm nhất có thể; bác sĩ có thể giới thiệu đến bác sĩ tim mạch.","src":[1]},
+{"text":"Gọi dịch vụ y tế khẩn (NHS 111 ở Anh) nếu đau ngực lúc có lúc không, hoặc cơn đau thắt ngực nặng hơn, thường xuyên hơn, lâu hơn hay xảy ra cả lúc nghỉ.","src":[1]},
+{"text":"Các xét nghiệm có thể gồm: xét nghiệm máu, điện tâm đồ, siêu âm tim, chụp mạch vành, chụp CT hoặc MRI.","src":[0,1]}
+],
+"emergency":[
+{"text":"Đau ngực hoặc khó chịu đột ngột không hết (bóp chặt, đè nặng, bỏng rát hay như khó tiêu), nhất là khi lan ra tay, cổ, hàm, vai, bụng hoặc lưng: có thể là nhồi máu cơ tim. Gọi cấp cứu ngay.","src":[1,2]},
+{"text":"Đau ngực kèm đổ mồ hôi, buồn nôn, choáng váng hoặc khó thở cũng cần gọi cấp cứu; NHS dặn đừng tự lái xe đến bệnh viện.","src":[1]},
+{"text":"Đã được chẩn đoán đau thắt ngực mà cơn đau vẫn không dứt sau khi nghỉ ngơi và dùng thuốc theo đúng hướng dẫn: gọi cấp cứu.","src":[1]}
+],
+"sources":[
+{"title":"Coronary heart disease","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/coronary-heart-disease/","reviewed":"2024-01-17"},
+{"title":"Angina","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/angina/","reviewed":"2025-03-18"},
+{"title":"Coronary Artery Disease","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/coronaryarterydisease.html","reviewed":"2026-07-31"}
+],
+"verifiedAt":"2026-10-09"
+}

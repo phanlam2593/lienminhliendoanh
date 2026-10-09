@@ -1,0 +1,544 @@
+{
+  "id": "gout",
+  "kind": "condition",
+  "names": [
+    "gout",
+    "gút",
+    "bệnh gút",
+    "bệnh gout",
+    "thống phong",
+    "gouty arthritis"
+  ],
+  "about": [
+    {
+      "text": "Gout (gút) là một dạng **viêm khớp** gây đau khớp dữ dội, đột ngột, thường ở ngón chân cái; bệnh đến từng đợt (cơn gout).",
+      "src": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Cơn đau xảy ra khi các tinh thể urat (từ axit uric) hình thành trong và quanh khớp.",
+      "src": [
+        0,
+        4
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau khớp dữ dội, xuất hiện đột ngột, thường ở ngón chân cái; cũng có thể ở bàn chân, cổ chân, bàn tay, cổ tay, khuỷu tay hoặc đầu gối.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Khớp sưng, nóng, đỏ. Trên da nâu hoặc đen, vùng đỏ có thể khó thấy hơn.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Cơn thường khởi phát đột ngột vào ban đêm, kéo dài khoảng một đến hai tuần rồi hết triệu chứng giữa các cơn.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Gout lâu không điều trị có thể tạo **tophi** (cục cứng dưới da do tinh thể urat), ban đầu không đau nhưng về sau có thể đau và làm hỏng khớp.",
+      "src": [
+        1,
+        4
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Axit uric trong máu quá cao: cơ thể tạo ra quá nhiều hoặc thải ra quá ít. Axit uric sinh ra khi cơ thể phân hủy purin, có trong mô cơ thể và nhiều loại thức ăn.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn ở nam giới (nhất là khi lớn tuổi), phụ nữ sau mãn kinh, người thừa cân/béo phì, và người trong gia đình có người bị gout.",
+      "src": [
+        0,
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Các bệnh đi kèm làm tăng nguy cơ: tăng huyết áp, bệnh thận mạn, tiểu đường, mỡ máu cao, suy tim, hội chứng chuyển hóa.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Một số thuốc có thể làm tăng nguy cơ, ví dụ thuốc lợi tiểu và aspirin liều thấp.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Cơn gout có thể bị khởi phát bởi uống nhiều rượu bia, bữa ăn quá lớn, mất nước, chấn thương khớp, bệnh có sốt cao hoặc một số loại thuốc.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Rượu bia và đồ uống có đường (như nước ngọt) là yếu tố nguy cơ; chế độ ăn nhiều thực phẩm giàu purin, chủ yếu từ động vật, cũng vậy.",
+      "src": [
+        1,
+        4
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Gout hay tái phát: khoảng 60% người bị cơn thứ hai trong vòng 1 năm và 80% trong vòng 3 năm.",
+      "src": [
+        5
+      ]
+    },
+    {
+      "text": "Chẩn đoán sớm, điều trị và thay đổi lối sống giúp kiểm soát gout; một số người có thể không còn bị cơn nữa.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Không điều trị, cơn có thể nhiều hơn và dài hơn, dẫn đến tophi, hỏng khớp, sỏi thận.",
+      "src": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Gout đôi khi có tính gia đình.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Khi lên cơn: nghỉ ngơi, kê cao chi đau, chườm lạnh (gói đá bọc khăn) tối đa 20 phút mỗi lần, uống nhiều nước nếu bác sĩ không dặn khác.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh để chăn đắp đè lên khớp đau và tránh dồn sức lên khớp đó.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu bác sĩ đã kê thuốc cắt cơn, dùng càng sớm càng tốt khi cơn bắt đầu; thuốc thường bắt đầu có tác dụng trong vòng 2 ngày.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu bác sĩ kê thuốc hạ axit uric, hãy dùng đều đặn, kể cả lúc không còn đau.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giảm cân nếu thừa cân nhưng **tránh ăn kiêng cấp tốc**; tập thể dục đều, tránh tập quá sức; uống đủ nước; bỏ thuốc lá.",
+      "src": [
+        0,
+        3
+      ]
+    },
+    {
+      "text": "Có những ngày trong tuần không uống rượu bia. Có thể hỏi bác sĩ về việc bổ sung vitamin C.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Chỉ ăn uống thôi thường chưa đủ để hạ axit uric đến mức điều trị gout, nên nhiều người vẫn cần dùng thuốc.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Hạn chế thực phẩm giàu purin: thịt đỏ, nội tạng, một số loại hải sản; hạn chế rượu bia và thực phẩm/đồ uống chứa đường fructose.",
+        "src": [
+          1,
+          2
+        ]
+      },
+      {
+        "text": "Tránh đồ ăn vặt và đồ uống nhiều đường; tránh ăn quá nhiều trong một bữa vì có thể khởi phát cơn.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "Bia và rượu mạnh: nên tránh trong lúc đang lên cơn, và hạn chế khi giữa các cơn.",
+        "src": [
+          3
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Nên ăn nhiều trái cây, rau và ngũ cốc nguyên hạt; chọn đạm từ thịt nạc, gia cầm, sữa ít béo và các loại đậu.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "text": "Uống đủ nước để tránh mất nước, vì mất nước có thể khởi phát cơn.",
+        "src": [
+          0,
+          3
+        ]
+      },
+      {
+        "text": "Cách ăn gần với kiểu Địa Trung Hải hoặc DASH, ăn vừa phải, được Mayo Clinic gợi ý cho người bị gout.",
+        "src": [
+          3
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "nội tạng",
+        "aliases": [
+          "gan",
+          "thận",
+          "lòng",
+          "nội tạng động vật"
+        ],
+        "verdict": "avoid",
+        "note": "Mayo Clinic ghi rõ không nên ăn nội tạng (gan, thận, tuyến ức...) vì giàu purin; CDC và MedlinePlus cũng khuyên hạn chế/tránh.",
+        "src": [
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "name": "thịt đỏ",
+        "aliases": [
+          "thịt bò",
+          "thịt heo",
+          "thịt lợn",
+          "thịt cừu",
+          "thịt dê"
+        ],
+        "verdict": "limit",
+        "note": "Mayo Clinic nêu thịt bò, cừu, heo: nên hạn chế, ăn khẩu phần nhỏ. CDC và MedlinePlus cũng khuyên hạn chế thịt đỏ.",
+        "src": [
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "name": "hải sản",
+        "aliases": [
+          "tôm",
+          "cua",
+          "sò",
+          "ốc",
+          "nghêu",
+          "cá cơm",
+          "cá mòi",
+          "cá ngừ",
+          "cá hồi vân",
+          "vẹm",
+          "sò điệp"
+        ],
+        "verdict": "limit",
+        "note": "Mayo Clinic: hạn chế phần lớn hải sản (cá cơm, động vật có vỏ, cá mòi, cá tuyết); vẫn có thể ăn ít cá. CDC nêu thêm vẹm, sò điệp, cá hồi vân (trout), cá ngừ.",
+        "src": [
+          3,
+          2,
+          1
+        ]
+      },
+      {
+        "name": "bia",
+        "aliases": [
+          "bia hơi",
+          "bia chai"
+        ],
+        "verdict": "limit",
+        "note": "Mayo Clinic: nên tránh khi đang lên cơn và hạn chế giữa các cơn, bia được nhắc riêng vì liên quan nguy cơ cao hơn. CDC cũng khuyên hạn chế rượu bia, nhất là bia.",
+        "src": [
+          3,
+          2,
+          5
+        ]
+      },
+      {
+        "name": "rượu mạnh",
+        "aliases": [
+          "rượu",
+          "rượu trắng",
+          "rượu mạnh chưng cất"
+        ],
+        "verdict": "limit",
+        "note": "Rượu mạnh nên tránh khi đang lên cơn và hạn chế giữa các cơn; nói chung nên giảm rượu bia và có vài ngày không uống mỗi tuần.",
+        "src": [
+          3,
+          2,
+          0
+        ]
+      },
+      {
+        "name": "đồ uống có đường",
+        "aliases": [
+          "nước ngọt",
+          "soda"
+        ],
+        "verdict": "limit",
+        "note": "NHS khuyên tránh uống nhiều đồ uống và đồ ăn vặt nhiều đường; CDC khuyên hạn chế; CDC, NIAMS và StatPearls nêu đồ uống ngọt (nhất là siro ngô fructose cao) làm tăng nguy cơ.",
+        "src": [
+          0,
+          2,
+          4,
+          5
+        ]
+      },
+      {
+        "name": "nước ép trái cây",
+        "aliases": [
+          "nước ép",
+          "nước trái cây"
+        ],
+        "verdict": "limit",
+        "note": "Mayo Clinic khuyên hạn chế nước ép trái cây, kể cả loại không thêm đường.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "thực phẩm có siro ngô fructose cao",
+        "aliases": [
+          "bánh kẹo ngọt",
+          "ngũ cốc có đường",
+          "nước sốt trộn có đường"
+        ],
+        "verdict": "limit",
+        "note": "Mayo Clinic: hạn chế thực phẩm có siro ngô fructose cao (ngũ cốc, bánh nướng, nước sốt trộn salad, súp đóng hộp) và đồ ngọt nói chung.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "thực phẩm nhiều chất béo bão hòa",
+        "aliases": [
+          "da gia cầm",
+          "da gà",
+          "sữa nguyên kem",
+          "sữa béo"
+        ],
+        "verdict": "limit",
+        "note": "Mayo Clinic khuyên cắt giảm thực phẩm nhiều chất béo bão hòa như thịt đỏ, da gia cầm, sữa nhiều béo.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "trái cây",
+        "aliases": [
+          "dâu",
+          "việt quất",
+          "táo",
+          "đào",
+          "dưa lưới"
+        ],
+        "verdict": "good",
+        "note": "Mayo Clinic khuyến khích ăn nhiều trái cây, ví dụ quả mọng, táo, đào, dưa lưới (cantaloupe).",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "anh đào",
+        "aliases": [
+          "cherry",
+          "cherries",
+          "quả anh đào"
+        ],
+        "verdict": "ok",
+        "note": "Mayo Clinic: một số nghiên cứu cho thấy ăn anh đào liên quan đến ít cơn gout hơn.",
+        "src": [
+          3,
+          5
+        ]
+      },
+      {
+        "name": "rau và ngũ cốc nguyên hạt",
+        "aliases": [
+          "rau",
+          "rau xanh",
+          "gạo lứt",
+          "yến mạch"
+        ],
+        "verdict": "good",
+        "note": "Mayo Clinic khuyến khích ăn nhiều rau và ngũ cốc nguyên hạt.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "các loại đậu",
+        "aliases": [
+          "đậu",
+          "đậu gà",
+          "đậu lăng",
+          "đậu hạt"
+        ],
+        "verdict": "good",
+        "note": "Mayo Clinic liệt kê các loại đậu (đậu, đậu gà, đậu lăng) là nguồn đạm nên chọn.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "sữa ít béo",
+        "aliases": [
+          "sữa tách béo",
+          "sữa không béo",
+          "sữa ít béo và chế phẩm"
+        ],
+        "verdict": "good",
+        "note": "Mayo Clinic khuyên chọn sữa ít béo làm nguồn đạm; StatPearls ghi ăn nhiều sữa liên quan đến ít gout hơn ở nam giới.",
+        "src": [
+          3,
+          5
+        ]
+      },
+      {
+        "name": "thịt nạc và gia cầm",
+        "aliases": [
+          "thịt gà",
+          "thịt gà bỏ da",
+          "thịt nạc"
+        ],
+        "verdict": "good",
+        "note": "Mayo Clinic coi thịt nạc và gia cầm là nguồn đạm phù hợp (nên bỏ da gia cầm vì nhiều chất béo bão hòa).",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "rau giàu purin",
+        "aliases": [
+          "đậu Hà Lan",
+          "măng tây",
+          "rau bina",
+          "cải bó xôi"
+        ],
+        "verdict": "ok",
+        "note": "Mayo Clinic: đậu Hà Lan, măng tây, rau bina tuy giàu purin nhưng các nghiên cứu không thấy làm tăng nguy cơ gout.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "cà phê",
+        "aliases": [
+          "cafe",
+          "cà phê đen"
+        ],
+        "verdict": "ok",
+        "note": "Mayo Clinic: một số nghiên cứu liên hệ cà phê với nguy cơ thấp hơn, nhưng có thể không hợp với mọi người nên hỏi bác sĩ.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "name": "nước lọc",
+        "aliases": [
+          "nước",
+          "nước uống"
+        ],
+        "verdict": "good",
+        "note": "NHS và Mayo Clinic khuyên uống đủ nước để tránh mất nước, vì mất nước có thể khởi phát cơn.",
+        "src": [
+          0,
+          3
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám khi lần đầu có triệu chứng giống gout.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nên đi khám khi đã bị gout mà cách điều trị thường dùng không còn giúp được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau và sưng khớp đột ngột kèm đau tăng nhanh, sốt rất cao hoặc ớn lạnh, buồn nôn hay không ăn được: có thể là nhiễm trùng khớp, cần khám gấp hoặc gọi đường dây y tế khẩn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Gout",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/gout/",
+      "reviewed": "2023-08-24"
+    },
+    {
+      "title": "Gout",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/gout.html",
+      "reviewed": "2024-02-26"
+    },
+    {
+      "title": "Gout",
+      "publisher": "CDC (Hoa Kỳ)",
+      "url": "https://www.cdc.gov/arthritis/types/gout.html",
+      "reviewed": "2024-01-26"
+    },
+    {
+      "title": "Gout diet: What's allowed, what's not",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/diseases-conditions/gout/in-depth/gout-diet/art-20048524",
+      "reviewed": "2025-02-28"
+    },
+    {
+      "title": "Gout",
+      "publisher": "NIAMS (NIH, Hoa Kỳ)",
+      "url": "https://www.niams.nih.gov/health-topics/gout"
+    },
+    {
+      "title": "Gout - StatPearls",
+      "publisher": "NCBI Bookshelf (NIH, Hoa Kỳ)",
+      "url": "https://www.ncbi.nlm.nih.gov/books/NBK546606/",
+      "reviewed": "2026-04-12"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

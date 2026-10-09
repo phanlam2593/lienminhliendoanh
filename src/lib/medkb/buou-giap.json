@@ -1,0 +1,58 @@
+{
+"id":"buou-giap",
+"kind":"condition",
+"names":["bướu giáp","bướu cổ","bướu giáp đơn thuần","tuyến giáp to","goitre","goiter","simple goiter"],
+"disambiguation":"Thẻ này nói về tuyến giáp bị to (bướu cổ). Khối u ở cổ có thể do nhiều nguyên nhân khác nhau, nên cần được bác sĩ khám.",
+"about":[
+{"text":"Bướu giáp (bướu cổ) là sưng hoặc khối u ở phía trước cổ do tuyến giáp to ra.","src":[0,2]},
+{"text":"Mayo Clinic mô tả đó là tuyến giáp phát triển bất thường: to đều toàn bộ hoặc có một hay nhiều cục (nhân giáp).","src":[1]},
+{"text":"Bướu giáp có thể đi kèm chức năng tuyến giáp bình thường, cường giáp hoặc suy giáp.","src":[1]},
+{"text":"Bướu giáp thường không nghiêm trọng, nhưng nên được bác sĩ kiểm tra. Bướu giáp đơn thuần thường không phải khối u hay ung thư.","src":[0,2]}
+],
+"signs":[
+{"text":"Dấu hiệu chính là sưng ở phía trước cổ, thường không đau; có thể mịn hoặc sần, có thể chỉ một bên.","src":[0,1,2]},
+{"text":"Phần lớn người bị bướu giáp không có dấu hiệu nào khác ngoài vùng cổ sưng.","src":[1]},
+{"text":"Nếu bướu chèn ép: ho dai dẳng, khàn tiếng hoặc đổi giọng, cảm giác nghẹn ở họng, khò khè, khó nuốt hoặc khó thở.","src":[0,1,2]},
+{"text":"Có thể kèm triệu chứng suy giáp (mệt, sợ lạnh, buồn ngủ, da khô, táo bón...) hoặc cường giáp (sụt cân, tim đập nhanh, sợ nóng, ra mồ hôi nhiều, run tay...).","src":[1,2]}
+],
+"causes":[
+{"text":"Thiếu iod là nguyên nhân phổ biến nhất trên thế giới; ít gặp ở những nơi dùng muối ăn có iod.","src":[1,2]},
+{"text":"Các nguyên nhân khác: cường giáp hoặc suy giáp, bệnh tự miễn (Hashimoto, Graves), viêm tuyến giáp, nhân giáp (thường lành tính), thay đổi nội tiết tố khi dậy thì, mang thai hoặc mãn kinh.","src":[0,1,2]},
+{"text":"Một số thuốc (như lithium, amiodarone), hút thuốc cũng được nêu là nguyên nhân hoặc yếu tố nguy cơ.","src":[1,2]},
+{"text":"Ung thư tuyến giáp là nguyên nhân hiếm gặp; Mayo Clinic nêu khoảng 5% người có nhân giáp được phát hiện có ung thư.","src":[0,1]},
+{"text":"Nguy cơ cao hơn ở nữ giới, người trên 40 tuổi, người có tiền sử gia đình bị bướu giáp hoặc bệnh tuyến giáp, người từng xạ trị vùng cổ hoặc ngực, và người sống ở nơi thiếu iod.","src":[1,2]}
+],
+"course":[
+{"text":"Bướu giáp đơn thuần có thể biến mất, giữ nguyên hoặc lớn dần. Có thể dẫn đến suy giáp, hoặc ít gặp hơn là cường giáp.","src":[2]},
+{"text":"Bướu giáp thường không gây biến chứng tự nó, dù hình thức có thể làm người bệnh lo lắng hoặc ngại.","src":[1]},
+{"text":"Bướu lớn có thể chèn ép đường thở và thanh quản.","src":[1]},
+{"text":"Đa số bướu giáp nhỏ, không gây vấn đề, đôi khi không cần điều trị.","src":[0,1]}
+],
+"care":[
+{"text":"Chẩn đoán có thể gồm khám cổ, xét nghiệm máu, siêu âm; đôi khi cần xạ hình tuyến giáp hoặc sinh thiết (chọc kim).","src":[0,2]},
+{"text":"Chỉ điều trị khi bướu gây triệu chứng. Nếu do suy giáp hoặc cường giáp, thường điều trị bằng thuốc.","src":[0,2]},
+{"text":"Tuỳ nguyên nhân, bác sĩ có thể cân nhắc viên hormone tuyến giáp, bổ sung iod (khi thiếu iod), iod phóng xạ (khi cường giáp) hoặc phẫu thuật cắt một phần hay toàn bộ tuyến giáp.","src":[2]},
+{"text":"Nếu bướu gây khó thở hoặc khó nuốt, phẫu thuật cắt một phần hoặc toàn bộ tuyến giáp có thể được xem xét. Do bác sĩ chuyên khoa quyết định.","src":[0]},
+{"text":"Dùng muối ăn có iod giúp phòng phần lớn bướu giáp đơn thuần.","src":[2]}
+],
+"diet":{
+"avoid":[],
+"ok":[
+{"text":"Thiếu iod là nguyên nhân hàng đầu của bướu giáp; muối ăn có iod giúp phòng phần lớn bướu giáp đơn thuần.","src":[1,2]}
+],
+"foods":[
+{"name":"muối ăn có iod","aliases":["muối iod","muối i-ốt","muối iốt","muối i ốt"],"verdict":"good","note":"MedlinePlus: dùng muối ăn có iod giúp phòng hầu hết bướu giáp đơn thuần; Mayo Clinic nêu thiếu iod ít gặp ở Mỹ nhờ muối có iod.","src":[1,2]}
+]},
+"doctor":[
+{"text":"Nên đi khám khi thấy sưng ở phía trước cổ hoặc nghĩ mình có bướu giáp, dù thường không nghiêm trọng.","src":[0,2]}
+],
+"emergency":[
+{"text":"Khó thở hoặc thở khò khè: gọi cấp cứu hoặc đến khoa cấp cứu ngay (theo NHS, đừng tự lái xe).","src":[0]}
+],
+"sources":[
+{"title":"Goitre","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/goitre/","reviewed":"2026-03-11"},
+{"title":"Goiter: Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/goiter/symptoms-causes/syc-20351829","reviewed":"2025-04-29"},
+{"title":"Simple goiter","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/ency/article/001178.htm","reviewed":"2026-01-25"}
+],
+"verifiedAt":"2026-10-09"
+}

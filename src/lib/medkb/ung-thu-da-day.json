@@ -1,0 +1,67 @@
+{
+"id":"ung-thu-da-day","kind":"cancer",
+"names":["ung thư dạ dày","bệnh ung thư dạ dày","ung thư bao tử","stomach cancer","gastric cancer","ung thu da day","K dạ dày"],
+"about":[
+{"text":"Ung thư dạ dày là ung thư xuất hiện ở bất kỳ phần nào của dạ dày; NHS cho biết bệnh không quá phổ biến ở Anh.","src":[0]},
+{"text":"Dạ dày nằm giữa thực quản và ruột non, trộn thức ăn với axit dạ dày và giúp tiêu hoá chất đạm.","src":[4]},
+{"text":"Bệnh chủ yếu gặp ở người lớn tuổi: theo MedlinePlus, hai phần ba số người mắc trên 65 tuổi.","src":[4]}
+],
+"signs":[
+{"text":"Có nhiều triệu chứng có thể gặp nhưng khó nhận ra. Ban đầu thường chỉ là khó tiêu hoặc khó chịu ở dạ dày, mà nhiều bệnh khác cũng gây ra.","src":[1,4]},
+{"text":"Về tiêu hoá: ợ nóng/trào ngược axit, nuốt khó, buồn nôn hoặc nôn, khó tiêu (hay ợ hơi), nhanh no khi ăn.","src":[1]},
+{"text":"Ngoài ra: chán ăn hoặc sụt cân ngoài ý muốn, khối u hoặc đau ở phần trên bụng, mệt mỏi, phân sẫm màu hơn bình thường.","src":[1]},
+{"text":"Ở giai đoạn muộn có thể gặp đi cầu ra máu, nôn, sụt cân không rõ lý do, vàng da hoặc nuốt khó.","src":[4]},
+{"text":"Có các triệu chứng này **không chắc chắn là ung thư dạ dày**, nhưng nên được bác sĩ kiểm tra.","src":[1]}
+],
+"causes":[
+{"text":"Không phải lúc nào cũng rõ nguyên nhân. Nguy cơ cao hơn ở người trên 50 tuổi và nam giới.","src":[2,4]},
+{"text":"Nhiễm vi khuẩn **Helicobacter pylori (H. pylori)** lâu dài làm tăng nguy cơ.","src":[2,4]},
+{"text":"Một số bệnh dạ dày: trào ngược axit nặng kéo dài, viêm dạ dày, thiếu máu ác tính.","src":[2,4]},
+{"text":"Có anh chị em hoặc cha mẹ từng bị ung thư dạ dày; hút thuốc lá cũng làm tăng nguy cơ.","src":[2,4]},
+{"text":"Ăn nhiều đồ ướp muối, hun khói hoặc muối chua cũng được liệt kê là yếu tố làm tăng nguy cơ.","src":[4]},
+{"text":"NHS: nhiều ung thư dạ dày còn liên quan đến lối sống.","src":[2]}
+],
+"course":[
+{"text":"Khi ung thư chưa chữa khỏi được, phẫu thuật có thể dùng để giải quyết tắc nghẽn nhằm cải thiện triệu chứng thay vì chữa khỏi hẳn.","src":[3]}
+],
+"care":[
+{"text":"Các hướng điều trị: phẫu thuật cắt một phần hoặc toàn bộ dạ dày, hoá trị, xạ trị, thuốc nhắm trúng đích, liệu pháp miễn dịch. Thường phối hợp, tuỳ giai đoạn và sức khoẻ; bác sĩ quyết định.","src":[3,4,5]},
+{"text":"Ung thư rất sớm trong lớp niêm mạc có thể được cắt bỏ qua nội soi mà không cần mổ lớn.","src":[5]},
+{"text":"Hoá trị có thể dùng trước hoặc sau mổ, hoặc để giảm triệu chứng khi bệnh tiến triển. Xạ trị thường kết hợp với hoá trị.","src":[3]},
+{"text":"Đội điều trị giúp bạn xử lý tác dụng phụ, kể cả thay đổi chế độ ăn. Có triệu chứng đáng lo thì báo ngay, đừng chờ đến lần tái khám.","src":[3]},
+{"text":"Nếu bệnh không chữa khỏi được, đội giảm nhẹ giúp kiểm soát triệu chứng và làm bạn thoải mái hơn.","src":[3]},
+{"text":"Giảm nguy cơ: bỏ thuốc lá, giảm cân nếu thừa cân, hạn chế rượu bia, giảm ăn mặn, bảo hộ nếu làm việc tiếp xúc hoá chất độc hại.","src":[2]},
+{"text":"Sau điều trị có thể cần chụp chiếu và xét nghiệm theo dõi để xem đáp ứng và phát hiện tái phát.","src":[5]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS khuyên giảm lượng muối ăn vào để giảm nguy cơ.","src":[2]},
+{"text":"MedlinePlus nêu ăn nhiều thực phẩm ướp muối, hun khói hoặc muối chua là yếu tố làm tăng nguy cơ.","src":[4]}
+],
+"ok":[
+{"text":"NHS khuyên ăn ít nhất 5 phần trái cây và rau đa dạng mỗi ngày.","src":[2]},
+{"text":"Trong lúc điều trị, đội chăm sóc có thể giúp bạn điều chỉnh ăn uống để xử lý tác dụng phụ.","src":[3]}
+],
+"foods":[
+{"name":"muối ăn","aliases":["ăn mặn","đồ mặn","muối"],"verdict":"limit","note":"NHS khuyên giảm lượng muối ăn vào để giảm nguy cơ ung thư dạ dày.","src":[2]},
+{"name":"thực phẩm ướp muối, hun khói, muối chua","aliases":["dưa muối","cà muối","cá muối","thịt hun khói","đồ muối chua","dưa chua","khô"],"verdict":"limit","note":"MedlinePlus liệt kê ăn nhiều thực phẩm ướp muối, hun khói hoặc muối chua là yếu tố làm tăng nguy cơ.","src":[4]},
+{"name":"trái cây và rau","aliases":["rau","rau củ","trái cây","hoa quả","rau xanh"],"verdict":"good","note":"NHS khuyên ăn ít nhất 5 phần trái cây và rau đa dạng mỗi ngày.","src":[2]}
+]},
+"doctor":[
+{"text":"Hãy đi khám nếu bạn bị nuốt khó, sờ thấy khối u ở bụng, hoặc sụt cân mà không do thay đổi ăn uống hay tập luyện.","src":[1]},
+{"text":"Hãy đi khám nếu triệu chứng nặng lên hoặc không đỡ sau 3 tuần, hoặc triệu chứng tiêu hoá từ một bệnh đã biết không đỡ sau 3 tuần điều trị thông thường.","src":[1]},
+{"text":"Nếu triệu chứng thay đổi, nặng hơn hoặc thấy khác với bình thường của bạn, hãy để bác sĩ kiểm tra.","src":[1]},
+{"text":"Nếu bác sĩ nghĩ có thể là ung thư, bạn có thể được hẹn xét nghiệm hoặc gặp chuyên khoa gấp.","src":[1]}
+],
+"emergency":[
+{"text":"Nếu bạn nôn kéo dài hơn 2 ngày, hãy xin khám gấp hoặc gọi đường dây y tế khẩn.","src":[1]}
+],
+"sources":[
+{"title":"Stomach cancer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/stomach-cancer/"},
+{"title":"Stomach cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/stomach-cancer/symptoms/","reviewed":"2026-08-20"},
+{"title":"Stomach cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/stomach-cancer/causes/","reviewed":"2023-02-14"},
+{"title":"Stomach cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/stomach-cancer/treatment/","reviewed":"2026-08-20"},
+{"title":"Stomach Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/stomachcancer.html","reviewed":"2018-06-12"},
+{"title":"Stomach Cancer Treatment","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/stomach/patient/stomach-treatment-pdq","reviewed":"2025-04-10"}
+],
+"verifiedAt":"2026-10-09"}

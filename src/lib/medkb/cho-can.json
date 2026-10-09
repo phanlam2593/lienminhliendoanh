@@ -1,0 +1,242 @@
+{
+  "id": "cho-can",
+  "kind": "other",
+  "names": [
+    "chó cắn",
+    "mèo cắn",
+    "chó mèo cắn",
+    "bị chó cắn",
+    "bị mèo cắn",
+    "động vật cắn",
+    "animal bite",
+    "dog bite"
+  ],
+  "about": [
+    {
+      "text": "Vết cắn làm rách da có thể dẫn đến nhiễm trùng; vết đâm sâu dễ nhiễm trùng hơn, và mèo cắn có nguy cơ nhiễm trùng cao hơn chó cắn (MedlinePlus).",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Bệnh dại hiếm nhưng gần như luôn tử vong khi đã có triệu chứng; vắc xin dại rất hiệu quả nếu tiêm đủ sớm (MedlinePlus).",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "WHO: chó cắn và cào gây tới 99% ca dại ở người; dại lây qua nước bọt, thường qua vết cắn, vết cào hoặc tiếp xúc niêm mạc (mắt, miệng) hay vết thương hở; trẻ 5 đến 14 tuổi hay bị.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Mayo Clinic: động vật hoang có thể mang dại gồm sói đồng cỏ, cáo, gấu mèo, chồn hôi và dơi; thú cưng nuôi ngoài trời có thể mang dại nếu ốm, chưa tiêm phòng, đi lạc hoặc ở nơi có dại ở thú nuôi.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Dơi có thể truyền bệnh mà không để lại dấu vết vết cắn rõ; CDC khuyên ai tiếp xúc với dơi nên xin tư vấn y tế về tiêm dại dù không nghĩ mình bị cắn (theo Mayo Clinic).",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "WHO: một khi triệu chứng dại xuất hiện, bệnh gần như 100% tử vong.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "MedlinePlus: biến chứng có thể gồm nhiễm trùng lan nhanh, tổn thương gân hoặc khớp; nguy cơ nhiễm trùng cao hơn ở người suy giảm miễn dịch, tiểu đường hoặc bệnh động mạch ngoại biên.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "NHS: rửa vết thương bằng xà phòng và nước ấm; bóp nhẹ cho chảy ít máu nếu chưa chảy, vì có thể giảm nguy cơ nhiễm trùng; thấm khô và che bằng băng sạch.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NHS: nếu chảy máu nhiều, ép băng khô hoặc vải sạch chặt lên vết thương.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "MedlinePlus: cầm máu bằng cách ép trực tiếp bằng vải sạch khô; rửa vết thương bằng xà phòng dịu và nước ấm chảy trong 3 đến 5 phút; bôi thuốc mỡ kháng khuẩn; che bằng băng khô vô trùng.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "WHO: rửa vết thương ngay bằng xà phòng và nước ít nhất 15 phút sau khi bị phơi nhiễm.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Mayo Clinic, vết cắn nhỏ chỉ rách da: rửa bằng xà phòng và nước, bôi kem hoặc thuốc mỡ kháng sinh rồi che bằng băng sạch; nếu da rách nặng, dập hoặc chảy nhiều máu thì ép cầm máu trước.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "NHS: thuốc giảm đau như paracetamol hoặc ibuprofen giúp giảm đau, sưng; trẻ dưới 16 tuổi không dùng aspirin.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NHS: nếu bộ phận cơ thể bị đứt rời, bọc trong khăn giấy sạch, cho vào túi nhựa, đặt túi vào đá rồi mang theo.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "MedlinePlus: liên hệ cơ quan kiểm soát động vật hoặc công an địa phương nếu bị động vật hành xử lạ, thú nuôi lạ hoặc chưa tiêm phòng, hay động vật hoang, đi lạc cắn; mô tả con vật và vị trí.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "WHO: nếu có thể, con vật cắn nên được xét nghiệm.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Phòng ngừa (MedlinePlus): dạy trẻ không lại gần động vật lạ; không trêu chọc; tránh động vật hành xử lạ hoặc hung dữ và đừng tự bắt chúng.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "WHO: tiêm phòng dại cho chó là cách hiệu quả nhất về chi phí để ngăn dại ở người; giết chó thả rông không hiệu quả.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "MedlinePlus: vết cắn làm rách da nên được chăm sóc y tế càng sớm càng tốt, và khám trong vòng 24 giờ.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "MedlinePlus: liên hệ bác sĩ ngay nếu vết cắn ở cổ, đầu, mặt, bàn tay, ngón tay hoặc bàn chân.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "MedlinePlus: liên hệ bác sĩ hoặc đi cấp cứu nếu sưng, đỏ hoặc có mủ; vết cắn sâu hoặc lớn; lộ cơ hoặc xương; vệt đỏ lan ra từ vết thương; hoặc chảy máu không dừng sau vài phút.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "NHS: xin tư vấn y tế khẩn nếu nghĩ trong vết thương có răng, tóc hoặc bụi bẩn; vết cắn nóng, sưng, đau, đỏ; sốt hoặc cảm thấy nóng, lạnh, rét run; có dịch rỉ ra hoặc mùi khó chịu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NHS: cũng xin tư vấn nếu vết cắn ở bàn tay, bàn chân, mặt hoặc đầu; do người cắn; hoặc bạn chưa tiêm uốn ván trong 10 năm qua.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mayo Clinic: đi khám sớm nếu vết đâm sâu hoặc bạn không chắc mức độ nghiêm trọng; da rách nặng, dập hoặc chảy máu nhiều; sưng tăng, đổi màu, đau nặng hơn hoặc rỉ dịch (dấu hiệu nhiễm trùng); hoặc không chắc con vật có dại không.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Uốn ván: vết cắn sâu hoặc bẩn mà chưa tiêm uốn ván trong 5 năm qua, bác sĩ có thể khuyên tiêm nhắc, nên tiêm trong vòng 48 giờ sau chấn thương (Mayo Clinic); MedlinePlus cũng nhắc liên hệ bác sĩ nếu chưa tiêm trong 5 năm.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể làm sạch kỹ, khâu hoặc để hở, kê kháng sinh, và đánh giá nguy cơ uốn ván và dại để điều trị phòng ngừa nếu cần (NHS).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "NHS: đến khoa cấp cứu nếu bị động vật hoặc người cắn và vết thương lớn hoặc sâu, hoặc không cầm được máu; đừng tự lái xe.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "MedlinePlus: chảy máu nặng thì gọi cấp cứu.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "WHO: bị động vật nghi dại cắn hoặc cào, hãy tìm chăm sóc y tế ngay, kể cả khi đã tiêm dự phòng trước phơi nhiễm.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "WHO: phơi nhiễm loại II (gặm da trần, cào nhẹ không chảy máu) cần rửa vết thương và tiêm vắc xin ngay.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "WHO: loại III (cắn hoặc cào xuyên da, nước bọt dính niêm mạc hay da tổn thương, tiếp xúc trực tiếp với dơi) cần rửa, tiêm vắc xin ngay, và dùng globulin miễn dịch nếu có chỉ định.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Animal and human bites",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/animal-and-human-bites/",
+      "reviewed": "2025-10-27"
+    },
+    {
+      "title": "Animal bites: First aid",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/first-aid/first-aid-animal-bites/basics/art-20056591",
+      "reviewed": "2024-05-10"
+    },
+    {
+      "title": "Animal bites - self-care (Medical Encyclopedia)",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/patientinstructions/000734.htm",
+      "reviewed": "2026-04-13"
+    },
+    {
+      "title": "Rabies",
+      "publisher": "WHO",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/rabies",
+      "reviewed": "2026-09-17"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

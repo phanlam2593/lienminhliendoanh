@@ -1,0 +1,51 @@
+{
+"id":"ung-thu","kind":"cancer",
+"names":["ung thư","bệnh ung thư","cancer","ung thư là gì","ung thu","dấu hiệu ung thư","triệu chứng ung thư"],
+"about":[
+{"text":"Ung thư là bệnh mà một số tế bào của cơ thể **phát triển không kiểm soát** và có thể lan sang các phần khác của cơ thể.","src":[0,1]},
+{"text":"Ung thư không phải một bệnh mà là nhiều bệnh; có hơn 100 loại, thường được gọi theo cơ quan hoặc mô nơi bệnh bắt đầu.","src":[0,2]},
+{"text":"Khối u có thể là ác tính (ung thư) hoặc lành tính. U lành thường không xâm lấn vào mô xung quanh.","src":[0]}
+],
+"signs":[
+{"text":"Một số dấu hiệu chung (NHS): khối u hoặc chỗ sưng mới ở bất kỳ đâu, đổ mồ hôi ban đêm hoặc sốt kéo dài/hay tái lại, mệt bất thường.","src":[1]},
+{"text":"Cũng có thể gặp: bầm tím hoặc chảy máu bất thường, đau không rõ nguyên nhân, sụt cân ngoài ý muốn hoặc ăn kém, thay đổi khi đi tiểu.","src":[1]},
+{"text":"Theo NCI còn có: ho dai dẳng hoặc khàn tiếng, nuốt khó, ợ nóng/khó tiêu không hết, đại tiện ra máu hoặc đổi thói quen đi cầu, máu trong nước tiểu.","src":[3]},
+{"text":"NCI cũng nêu: nốt ruồi mới hoặc đổi khác, vết loét lâu lành, vàng da, chỗ sưng hoặc cục ở cổ, nách, bụng, bẹn, thay đổi ở vú, vết trắng hoặc đỏ trong miệng.","src":[3]},
+{"text":"Phần lớn các dấu hiệu này rất thường gặp và thường do bệnh khác, chấn thương hay u lành gây ra, **không có nghĩa chắc chắn là ung thư**.","src":[1,3]},
+{"text":"Ung thư thường không gây đau.","src":[2,3]}
+],
+"causes":[
+{"text":"Ung thư là bệnh liên quan đến gen: do thay đổi ở những gen điều khiển cách tế bào lớn lên và phân chia.","src":[0,2]},
+{"text":"Những thay đổi này có thể do sai sót khi tế bào phân chia, do DNA bị tổn thương bởi chất có hại trong môi trường (như hoá chất trong khói thuốc lá, tia cực tím từ nắng), hoặc do gen di truyền từ cha mẹ.","src":[0]},
+{"text":"Chỉ một số ung thư là do gen di truyền từ cha mẹ.","src":[2]},
+{"text":"Nguy cơ cao hơn khi lớn tuổi, một phần vì khả năng sửa chữa tổn thương của cơ thể giảm dần theo tuổi.","src":[0]},
+{"text":"NHS: ai cũng có thể bị ung thư và không phải lúc nào cũng rõ nguyên nhân. Yếu tố nguy cơ gồm tuổi cao, tiền sử gia đình, hút thuốc, thừa cân, nắng, uống nhiều rượu bia.","src":[1]},
+{"text":"NHS còn nêu một số virus (như HPV, viêm gan), một số bệnh di truyền (như hội chứng Lynch) và môi trường (như amiăng, ô nhiễm không khí).","src":[1]}
+],
+"course":[
+{"text":"Quá trình tế bào ung thư lan sang các phần khác của cơ thể gọi là **di căn**.","src":[0,2]},
+{"text":"Một số thay đổi ở mô (tăng sản, loạn sản, ung thư biểu mô tại chỗ) chưa phải ung thư nhưng có thể được theo dõi hoặc điều trị vì có thể trở thành ung thư.","src":[0]},
+{"text":"Với ung thư đã di căn, điều trị có thể kéo dài cuộc sống, hoặc nhằm kiểm soát sự phát triển của bệnh và giảm triệu chứng.","src":[0]}
+],
+"care":[
+{"text":"Cách điều trị tuỳ loại ung thư. Thường gặp là phẫu thuật, hoá trị, xạ trị; ngoài ra có liệu pháp miễn dịch và liệu pháp nội tiết.","src":[1,2]},
+{"text":"Một số kế hoạch điều trị còn gồm liệu pháp sinh học khác hoặc ghép tế bào gốc, tuỳ loại và mức độ của bệnh. Bác sĩ chuyên khoa là người quyết định.","src":[2]},
+{"text":"Có những thuốc nhắm trúng đích vào các đột biến gen tìm thấy trong ung thư, và có phương pháp giúp hệ miễn dịch nhận diện, tiêu diệt tế bào ung thư tốt hơn.","src":[0]},
+{"text":"NHS khuyên ăn uống cân bằng và hạn chế rượu bia.","src":[1]}
+],
+"diet":{"avoid":[{"text":"NHS khuyên hạn chế uống rượu bia.","src":[1]}],"ok":[{"text":"NHS khuyên ăn uống cân bằng (trang không nêu cụ thể món nào).","src":[1]}],"foods":[]},
+"doctor":[
+{"text":"Hãy đi khám nếu bạn thấy dấu hiệu nào **không bình thường với mình** hoặc thay đổi khiến bạn lo là ung thư.","src":[1]},
+{"text":"Nếu triệu chứng không đỡ sau vài tuần, hãy đi khám để được chẩn đoán và điều trị sớm nếu cần.","src":[3,2]},
+{"text":"Ung thư thường không đau, nên đừng chờ đến lúc đau mới đi khám.","src":[3,2]},
+{"text":"Chỉ bác sĩ mới xác định được triệu chứng có do ung thư hay do vấn đề khác.","src":[3]},
+{"text":"Nếu bác sĩ nghi ngờ ung thư, bạn có thể được hẹn khám gấp để làm xét nghiệm hoặc gặp bác sĩ chuyên khoa.","src":[1]}
+],
+"emergency":[],
+"sources":[
+{"title":"What Is Cancer?","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/about-cancer/understanding/what-is-cancer","reviewed":"2026-08-28"},
+{"title":"Cancer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/cancer/","reviewed":"2025-05-27"},
+{"title":"Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/cancer.html","reviewed":"2025-03-19"},
+{"title":"Cancer Signs and Symptoms","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/about-cancer/diagnosis-staging/symptoms","reviewed":"2019-05-16"}
+],
+"verifiedAt":"2026-10-09"}

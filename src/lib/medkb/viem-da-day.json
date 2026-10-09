@@ -1,0 +1,72 @@
+{
+"id":"viem-da-day","kind":"condition",
+"names":["viêm dạ dày","đau dạ dày","gastritis","viêm niêm mạc dạ dày","viêm dạ dày cấp","viêm dạ dày mạn","viêm dạ dày mạn tính"],
+"disambiguation":"“Đau dạ dày” có thể do nhiều nguyên nhân (viêm, loét...). Thẻ này nói về viêm dạ dày; loét dạ dày – tá tràng có thẻ riêng.",
+"about":[
+{"text":"Viêm dạ dày (gastritis) là khi lớp niêm mạc dạ dày bị kích ứng và viêm, có thể gây đau bụng, khó tiêu và buồn nôn.","src":[0,1,2]},
+{"text":"Đây là tên chung của một nhóm tình trạng cùng có viêm niêm mạc dạ dày; có thể đến đột ngột (cấp) hoặc từ từ (mạn). Với đa số người bệnh không nặng và nhanh đỡ khi điều trị.","src":[1]}
+],
+"signs":[
+{"text":"Triệu chứng hay gặp: đau bụng, khó tiêu, cảm giác đầy hơi, buồn nôn, nôn, ăn kém ngon miệng.","src":[0]},
+{"text":"Có thể đau âm ỉ hoặc rát ở bụng trên, đau có thể đỡ hoặc nặng hơn sau ăn; cảm giác đầy ở bụng trên sau khi ăn.","src":[1]},
+{"text":"Viêm dạ dày không phải lúc nào cũng có triệu chứng: nhiều người không có dấu hiệu gì, một số chỉ bị khó tiêu hoặc chảy máu trong dạ dày.","src":[1,2]}
+],
+"causes":[
+{"text":"Nguyên nhân thường gặp nhất là nhiễm vi khuẩn **H. pylori**.","src":[0,1,2]},
+{"text":"Dùng thường xuyên thuốc giảm đau kháng viêm (như ibuprofen, naproxen) hoặc aspirin có thể làm tổn thương niêm mạc dạ dày.","src":[0,1]},
+{"text":"Uống nhiều rượu bia cũng có thể gây viêm dạ dày.","src":[0,1]},
+{"text":"Bệnh nặng hoặc cơ thể chịu căng thẳng lớn (như sau đại phẫu, chấn thương, bỏng, nhiễm trùng nặng) có thể gây viêm dạ dày cấp.","src":[0,1]},
+{"text":"Phẫu thuật dạ dày (ví dụ mổ nối tắt dạ dày) cũng là một nguyên nhân; hoá trị hoặc xạ trị cũng làm tăng nguy cơ.","src":[0,1]},
+{"text":"Viêm dạ dày tự miễn: hệ miễn dịch tấn công tế bào niêm mạc dạ dày; hay gặp hơn ở người bị bệnh Hashimoto hoặc tiểu đường type 1, và có thể liên quan đến thiếu vitamin B12.","src":[0,1]},
+{"text":"Người lớn tuổi dễ bị hơn vì niêm mạc dạ dày mỏng dần theo tuổi.","src":[1]},
+{"text":"Một số bệnh làm tăng nguy cơ: bệnh Crohn, bệnh celiac, HIV/AIDS, sarcoidosis và nhiễm ký sinh trùng.","src":[1]}
+],
+"course":[
+{"text":"Nếu không điều trị, viêm dạ dày có thể nặng hơn và dẫn đến loét dạ dày, thậm chí chảy máu dạ dày.","src":[0,1]},
+{"text":"Hiếm khi, một số dạng viêm dạ dày mạn có thể làm tăng nguy cơ ung thư dạ dày, nhất là khi niêm mạc mỏng nhiều và tế bào niêm mạc bị thay đổi.","src":[1]},
+{"text":"Điều trị tuỳ loại và nguyên nhân, giúp cải thiện triệu chứng và giảm nguy cơ biến chứng.","src":[2]}
+],
+"care":[
+{"text":"Điều trị tuỳ nguyên nhân, có thể gồm kháng sinh (nếu do H. pylori) và thuốc giảm acid dạ dày như thuốc kháng acid, thuốc ức chế bơm proton, alginate — do bác sĩ quyết định.","src":[0]},
+{"text":"Nếu đang dùng thuốc giảm đau kháng viêm hoặc aspirin, hãy trao đổi với bác sĩ xem có nên ngưng và chuyển sang thuốc khác không.","src":[0]},
+{"text":"Nếu nguyên nhân là rượu bia thì cần ngưng uống rượu bia.","src":[0]},
+{"text":"Tự chăm sóc: bớt đồ uống có caffeine, giảm cân nếu thừa cân, không ăn trong 3–4 giờ trước khi đi ngủ, tránh rượu bia và thuốc lá.","src":[0]},
+{"text":"Với khó tiêu nhẹ, dược sĩ có thể gợi ý thuốc kháng acid, alginate hoặc thuốc ức chế bơm proton; hãy đọc tờ hướng dẫn xem nên uống trước hay sau ăn.","src":[0]},
+{"text":"Nếu viêm dạ dày tự miễn, bác sĩ có thể khuyên bổ sung sắt, folic acid, vitamin B12; trước khi dùng bất kỳ thực phẩm bổ sung nào nên hỏi bác sĩ.","src":[3]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS khuyên tránh đồ ăn thức uống có tính acid (ví dụ nước cam), đồ uống có ga, đồ cay và đồ nhiều dầu mỡ.","src":[0]},
+{"text":"Giảm đồ uống có caffeine như trà, cà phê, cola, nước tăng lực; tránh rượu bia và thuốc lá.","src":[0]},
+{"text":"Không ăn trong 3–4 giờ trước khi đi ngủ.","src":[0]}
+],
+"ok":[
+{"text":"NIDDK ghi nhận: chế độ ăn uống chưa được thấy có vai trò quan trọng trong đa số trường hợp viêm dạ dày. Hãy hỏi bác sĩ nếu muốn thay đổi ăn uống.","src":[2]},
+{"text":"NIDDK: một số dạng viêm dạ dày làm cơ thể hấp thu kém sắt (do H. pylori) hoặc sắt và vitamin B12 (viêm dạ dày tự miễn).","src":[2]}
+],
+"foods":[
+{"name":"đồ ăn thức uống có tính acid","aliases":["nước cam","nước ép cam"],"verdict":"avoid","note":"NHS nêu đồ ăn thức uống có tính acid (ví dụ nước cam) là món nên tránh khi bị viêm dạ dày.","src":[0]},
+{"name":"đồ ăn cay","aliases":["ớt","cay","đồ cay"],"verdict":"avoid","note":"NHS khuyên tránh đồ cay khi bị viêm dạ dày.","src":[0]},
+{"name":"đồ ăn nhiều dầu mỡ","aliases":["đồ béo","đồ nhiều dầu mỡ"],"verdict":"avoid","note":"NHS khuyên tránh đồ ăn nhiều dầu mỡ khi bị viêm dạ dày.","src":[0]},
+{"name":"đồ uống có ga","aliases":["nước có ga","nước ngọt có ga","soda"],"verdict":"avoid","note":"NHS khuyên tránh đồ uống có ga khi bị viêm dạ dày.","src":[0]},
+{"name":"đồ uống có caffeine","aliases":["cà phê","trà","cola","coca","nước tăng lực","cafe"],"verdict":"limit","note":"NHS khuyên giảm đồ uống có caffeine: trà, cà phê, cola, nước tăng lực.","src":[0]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"NHS khuyên tránh rượu bia; uống nhiều rượu có thể gây viêm dạ dày (Mayo Clinic).","src":[0,1]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu đau bụng hoặc khó tiêu kéo dài hơn 1 tuần, nặng dần hoặc cứ tái đi tái lại.","src":[0,1]},
+{"text":"Nên đi khám sớm nếu kèm: chán ăn, nhanh no dù ăn rất ít, sụt cân không rõ lý do, sờ thấy cục ở bụng, khó hoặc đau khi nuốt, nôn nhiều lần.","src":[0]},
+{"text":"Hãy báo bác sĩ nếu triệu chứng không đỡ dù đã điều trị, hoặc khó chịu ở bụng xuất hiện sau khi dùng thuốc, nhất là aspirin và thuốc giảm đau.","src":[1]}
+],
+"emergency":[
+{"text":"Nôn ra máu đỏ tươi hoặc chất nôn như bã cà phê; đi ngoài phân đen, dính, mùi rất hôi; đau bụng hoặc đau ngực dữ dội đột ngột: cần cấp cứu ngay, đừng tự lái xe.","src":[0]},
+{"text":"Đi khám ngay nếu đau dữ dội, nôn đến mức không giữ được thức ăn, thấy choáng váng, hoặc nôn ra máu / đi ngoài phân có máu hay phân đen.","src":[1]}
+],
+"sources":[
+{"title":"Gastritis","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/gastritis/","reviewed":"2026-08-05"},
+{"title":"Gastritis - Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/gastritis/symptoms-causes/syc-20355807","reviewed":"2024-02-14"},
+{"title":"Gastritis & Gastropathy","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/gastritis-gastropathy","reviewed":"2019-08"},
+{"title":"Eating, Diet, & Nutrition for Gastritis & Gastropathy","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/gastritis-gastropathy/eating-diet-nutrition","reviewed":"2019-08"}
+],
+"verifiedAt":"2026-10-09"
+}

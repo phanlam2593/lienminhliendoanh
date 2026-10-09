@@ -1,0 +1,58 @@
+{
+"id":"ung-thu-than","kind":"cancer",
+"names":["ung thư thận","bệnh ung thư thận","ung thư tế bào thận","kidney cancer","renal cell carcinoma","renal cell cancer","ung thu than","K thận"],
+"about":[
+{"text":"Thận lọc và làm sạch máu, loại bỏ chất thải và tạo nước tiểu. Ung thư thận hình thành ở lớp lót các ống rất nhỏ bên trong thận.","src":[3]},
+{"text":"NCI: ung thư biểu mô tế bào thận là loại ung thư thận thường gặp nhất ở người lớn.","src":[4]}
+],
+"signs":[
+{"text":"Ung thư thận thường **không có triệu chứng rõ ràng**, và hay được phát hiện khi làm xét nghiệm cho bệnh khác.","src":[0,3,4]},
+{"text":"Khi có triệu chứng: có máu trong nước tiểu; có cục hoặc chỗ sưng ở lưng, dưới sườn hoặc cổ (NHS), hoặc cục ở bụng (MedlinePlus, NCI).","src":[0,3,4]},
+{"text":"Đau kéo dài ở vùng giữa sườn và hông/lưng không hết.","src":[0,3,4]},
+{"text":"Chán ăn hoặc sụt cân không rõ lý do; mệt mỏi; sốt kéo dài; đổ mồ hôi nhiều, kể cả ban đêm.","src":[0]},
+{"text":"NCI còn nêu thiếu máu. Các triệu chứng này có thể giống nhiễm trùng thận và **chưa chắc là ung thư thận**.","src":[0,4]}
+],
+"causes":[
+{"text":"Ai cũng có thể bị ung thư thận, nhưng một số yếu tố làm tăng nguy cơ.","src":[1]},
+{"text":"Hút thuốc; thừa cân/béo phì; tăng huyết áp.","src":[1,4]},
+{"text":"Có người thân gần từng bị ung thư thận; một số bệnh di truyền (như xơ cứng củ, bệnh von Hippel-Lindau).","src":[1,4]},
+{"text":"Chạy thận lâu dài do bệnh thận mạn.","src":[1]},
+{"text":"MedlinePlus và NCI nêu thêm việc lạm dụng thuốc giảm đau lâu dài (kể cả loại không cần kê đơn).","src":[3,4]},
+{"text":"Nguy cơ tăng theo tuổi (MedlinePlus). Có yếu tố nguy cơ **không có nghĩa chắc chắn sẽ bị**.","src":[3,4]}
+],
+"course":[
+{"text":"Phẫu thuật thường là lựa chọn khi ung thư thận được phát hiện sớm và chưa lan.","src":[2]},
+{"text":"Cách điều trị tuỳ tuổi, sức khoẻ chung và mức độ tiến triển của ung thư.","src":[3]}
+],
+"care":[
+{"text":"Phẫu thuật: cắt cả quả thận, hoặc chỉ cắt phần ung thư và giữ lại càng nhiều thận càng tốt; có thể cắt cả hạch lân cận.","src":[2,4]},
+{"text":"Nếu sức khoẻ chưa đủ để mổ, có thể làm tắc mạch máu nuôi u để thu nhỏ và kiểm soát triệu chứng.","src":[2]},
+{"text":"Với u nhỏ khi mổ không phù hợp, có thể dùng áp lạnh (đóng băng tế bào ung thư) hoặc đốt sóng cao tần (dùng sóng radio diệt tế bào ung thư).","src":[2]},
+{"text":"Thuốc nhắm trúng đích dùng khi ung thư đã lan hoặc quay lại. NCI nêu thêm liệu pháp miễn dịch.","src":[2,4]},
+{"text":"Xạ trị và hoá trị hiếm khi dùng; xạ trị đôi khi dùng để kiểm soát triệu chứng.","src":[2]},
+{"text":"Đội điều trị giải thích lợi ích, tác dụng phụ, lập kế hoạch cùng bạn và hỗ trợ trong lúc mổ, hồi phục. Với bệnh không chữa khỏi được, đội giảm nhẹ giúp kiểm soát triệu chứng.","src":[2]},
+{"text":"Giảm nguy cơ: giảm cân nếu thừa cân, bỏ thuốc lá, và thay đổi lối sống nếu bị tăng huyết áp (ăn ít muối, giảm rượu bia và caffeine).","src":[1]}
+],
+"diet":{
+"avoid":[{"text":"NHS: nếu bị tăng huyết áp, thay đổi lối sống như ăn ít muối, giảm rượu bia và caffeine có thể giúp giảm nguy cơ ung thư thận.","src":[1]}],
+"ok":[],
+"foods":[
+{"name":"muối ăn","aliases":["ăn mặn","đồ mặn","muối"],"verdict":"limit","note":"NHS nêu ăn ít muối là một thay đổi lối sống khi bị tăng huyết áp, giúp giảm nguy cơ ung thư thận.","src":[1]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS nêu giảm rượu bia (cùng caffeine) trong các thay đổi lối sống khi bị tăng huyết áp.","src":[1]},
+{"name":"caffeine","aliases":["cà phê","cafe","trà","nước tăng lực"],"verdict":"limit","note":"NHS nêu giảm caffeine trong các thay đổi lối sống khi bị tăng huyết áp. Nguồn không nói riêng về từng loại đồ uống.","src":[1]}
+]},
+"doctor":[
+{"text":"Hãy đi khám nếu thấy sụt cân đáng kể, sốt kéo dài, hoặc mệt lả không có sức.","src":[0]},
+{"text":"Cần xin khám sớm nếu nước tiểu có máu, có mùi hoặc đục; đi tiểu đau hoặc buồn tiểu gấp/nhiều lần; đau lưng hoặc đau dưới sườn kéo dài; đau vùng sinh dục; hoặc có cục/chỗ sưng ở lưng, dưới sườn, cổ.","src":[0]},
+{"text":"NHS nhấn mạnh nên đi khám sớm vì các dấu hiệu này có thể giống nhiễm trùng thận.","src":[0]},
+{"text":"Bác sĩ có thể khám chỗ sưng, cho xét nghiệm nước tiểu hoặc máu; nếu nghi ngờ có thể hẹn khám chuyên khoa gấp, chưa có nghĩa chắc chắn bị ung thư.","src":[0]}
+],
+"emergency":[],
+"sources":[
+{"title":"Kidney cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/kidney-cancer/symptoms/","reviewed":"2023-05-31"},
+{"title":"Kidney cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/kidney-cancer/causes/","reviewed":"2023-05-31"},
+{"title":"Kidney cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/kidney-cancer/treatment/","reviewed":"2023-05-31"},
+{"title":"Kidney Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/kidneycancer.html","reviewed":"2020-08-11"},
+{"title":"Renal Cell Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/kidney/patient/kidney-treatment-pdq","reviewed":"2025-05-12"}
+],
+"verifiedAt":"2026-10-09"}

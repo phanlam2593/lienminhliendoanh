@@ -65,7 +65,11 @@ export type DrugEntry = {
 };
 
 /** Tên miền nguồn được chấp nhận. Thêm tên miền mới phải là cơ quan y tế / thư viện y khoa chính thống. */
-export const TRUSTED = ["nhs.uk", "medlineplus.gov", "who.int", "fda.gov", "moh.gov.vn", "dav.gov.vn", "cdc.gov"];
+export const TRUSTED = [
+  "nhs.uk", "medlineplus.gov", "who.int", "fda.gov", "moh.gov.vn", "dav.gov.vn", "cdc.gov",
+  // 09/10: mở rộng cho kho kiến thức y khoa (lib/lomiMedData) — cơ quan y tế quốc gia Hoa Kỳ / Anh, hiệp hội tâm lý, bệnh viện học thuật phi lợi nhuận.
+  "nih.gov", "cancer.gov", "samhsa.gov", "nice.org.uk", "apa.org", "mayoclinic.org",
+];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;
 
@@ -318,7 +322,7 @@ export function sourceList(d: DrugEntry): string {
 }
 
 /** Dòng nguồn đặt cuối lời đáp: tên cơ quan + ngày nguồn rà soát + ngày Lomi đối chiếu. `now` để test. */
-export function sourceLine(d: DrugEntry, src: number[], now = Date.now()): string {
+export function sourceLine(d: Pick<DrugEntry, "sources" | "verifiedAt">, src: number[], now = Date.now()): string {
   const used = Array.from(new Set(src)).sort((a, b) => a - b).map((i) => d.sources[i]);
   const byPub = new Map<string, string | undefined>();
   for (const s of used) {
@@ -327,7 +331,7 @@ export function sourceLine(d: DrugEntry, src: number[], now = Date.now()): strin
   }
   const list = [...byPub.entries()].map(([p, r]) => (r ? `${p}, rà soát ${dmy(r)}` : p)).join(" · ");
   const stale = (now - Date.parse(d.verifiedAt)) / 86_400_000 > REVIEW_AFTER_DAYS;
-  return `📚 Nguồn: ${list}. Lomi đối chiếu ngày ${dmy(d.verifiedAt)}${stale ? " — đã hơn một năm, bạn nên hỏi lại dược sĩ để có thông tin mới nhất" : ""}. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ / dược sĩ.`;
+  return `📚 Nguồn: ${list}. Lomi đối chiếu ngày ${dmy(d.verifiedAt)}${stale ? " — đã hơn một năm, bạn nên hỏi lại dược sĩ / bác sĩ để có thông tin mới nhất" : ""}. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ / dược sĩ.`;
 }
 
 const srcOf = (...groups: { src: number[] }[][]) => groups.flat().flatMap((f) => f.src);

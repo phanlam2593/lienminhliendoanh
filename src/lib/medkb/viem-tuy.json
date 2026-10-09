@@ -1,0 +1,64 @@
+{
+"id":"viem-tuy","kind":"condition",
+"names":["viêm tụy","viêm tuỵ","viêm tụy cấp","viêm tuỵ cấp","viêm tụy mạn","viêm tuỵ mạn","pancreatitis"],
+"about":[
+{"text":"Viêm tuỵ cấp là tình trạng nghiêm trọng khi tuỵ đột ngột sưng và đau (viêm). Cần được điều trị khẩn tại bệnh viện.","src":[0]},
+{"text":"Khác với viêm tuỵ mạn, là bệnh kéo dài khiến tuỵ bị tổn thương vĩnh viễn. Tuỵ nằm giữa bụng, giúp tiêu hoá thức ăn và tạo hormone như insulin.","src":[0]},
+{"text":"NIDDK: viêm tuỵ là tình trạng viêm của tuỵ. Viêm tuỵ cấp ngắn hạn và có thể hết sau vài ngày điều trị; viêm tuỵ mạn kéo dài hơn, có thể nặng dần và gây tổn thương lâu dài.","src":[1]}
+],
+"signs":[
+{"text":"Triệu chứng chính là đau bụng; thường kèm sốt, buồn nôn hoặc nôn.","src":[0]},
+{"text":"Cơn đau có thể đến đột ngột và không dứt, dữ dội, như dao đâm; ở bụng trên, một bên hoặc cả bụng; có thể lan ra hai bên sườn và ra sau lưng.","src":[0]},
+{"text":"Đau có thể nặng hơn sau ăn, khi cử động hoặc nằm; dịu hơn khi cúi người về trước hoặc co gối lên ngực.","src":[0]},
+{"text":"NIDDK: đau bụng trên có thể lan ra sau lưng, buồn nôn và nôn, sốt, mạch nhanh và sụt cân.","src":[1]}
+],
+"causes":[
+{"text":"Nguyên nhân thường gặp nhất là sỏi mật (có thể chặn lối ra của tuỵ) và uống nhiều rượu.","src":[0]},
+{"text":"Ít gặp hơn: chấn thương tuỵ (như trong phẫu thuật); một số thuốc (như vài loại steroid, thuốc tim, thuốc động kinh); các bệnh khác như lupus, quai bị, ung thư tuỵ hoặc canxi trong máu cao.","src":[0]},
+{"text":"NIDDK: nguyên nhân gồm sỏi mật, uống nhiều rượu, một số thuốc và rối loạn di truyền của tuỵ.","src":[1]}
+],
+"course":[
+{"text":"Đa số người bắt đầu đỡ trong vòng khoảng một tuần và xuất viện sau 5–10 ngày; ca nặng có thể ở viện lâu hơn. Đa số hồi phục hoàn toàn.","src":[0]},
+{"text":"Có thể bị lại sau một đợt viêm tuỵ cấp. Nếu các đợt cứ tái diễn có thể thành viêm tuỵ mạn.","src":[0]},
+{"text":"Biến chứng có thể gồm: nang nhỏ ở tuỵ (thường tự hết, nhưng có thể phải loại bỏ nếu nhiễm trùng), hoại tử tuỵ (mô tuỵ chết, cần phẫu thuật và kháng sinh để tránh nhiễm trùng huyết).","src":[0]},
+{"text":"Viêm tuỵ cấp có thể đe doạ tính mạng, nên người bệnh được theo dõi sát tại bệnh viện.","src":[0]}
+],
+"care":[
+{"text":"Chẩn đoán bằng xét nghiệm máu và đôi khi chụp CT. Người bệnh được theo dõi mức độ nặng và các vấn đề khác như nhiễm trùng.","src":[0]},
+{"text":"Điều trị tại bệnh viện có thể gồm truyền dịch và dinh dưỡng qua đường tĩnh mạch, thuốc giảm đau, và kháng sinh nếu có nhiễm trùng — do bác sĩ quyết định.","src":[0,1]},
+{"text":"Có thể cần điều trị nguyên nhân, như phẫu thuật sỏi mật hoặc hỗ trợ bỏ rượu.","src":[0]},
+{"text":"Để giảm nguy cơ bị lại: uống ít rượu hoặc không uống, bỏ thuốc lá, ăn uống lành mạnh ít chất béo.","src":[0]},
+{"text":"NIDDK: đôi khi cần phẫu thuật để xử lý biến chứng.","src":[1]}
+],
+"diet":{
+"avoid":[
+{"text":"NIDDK: người bị viêm tuỵ nên tránh hoàn toàn rượu bia, kể cả khi viêm tuỵ nhẹ.","src":[2]},
+{"text":"NIDDK: hạn chế caffeine.","src":[2]},
+{"text":"NIDDK: chế độ ăn nhiều chất béo và nhiều calo làm tăng mỡ máu và nguy cơ viêm tuỵ.","src":[2]},
+{"text":"Trong lúc điều trị, bác sĩ có thể bảo bạn tạm ngưng ăn uống và dùng ống nuôi ăn thay thế.","src":[2]}
+],
+"ok":[
+{"text":"NIDDK: khi ăn lại được, hãy theo chế độ ăn lành mạnh, ít chất béo với các bữa nhỏ và thường xuyên.","src":[2]},
+{"text":"NIDDK: uống nhiều nước. NHS: ăn uống lành mạnh, ít chất béo để giảm nguy cơ bị lại (không nêu món cụ thể).","src":[0,2]}
+],
+"foods":[
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"NIDDK: các chuyên gia khuyên người bị viêm tuỵ không uống bất kỳ loại rượu nào, kể cả khi viêm tuỵ nhẹ; NHS khuyên uống ít hoặc không uống.","src":[0,2]},
+{"name":"đồ uống chứa caffeine","aliases":["cà phê","trà","cafe"],"verdict":"limit","note":"NIDDK khuyên hạn chế caffeine khi bị viêm tuỵ.","src":[2]},
+{"name":"đồ ăn nhiều chất béo","aliases":["đồ béo","đồ chiên","đồ nhiều dầu mỡ","mỡ"],"verdict":"limit","note":"NHS và NIDDK khuyên ăn ít chất béo; NIDDK: chế độ ăn nhiều chất béo, nhiều calo làm tăng nguy cơ viêm tuỵ.","src":[0,2]},
+{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NIDDK khuyên uống nhiều nước khi bị viêm tuỵ.","src":[2]}
+]
+},
+"doctor":[
+{"text":"Nếu bị đau bụng dữ dội đột ngột mà cơn đau không hết hoặc cứ tái đi tái lại, hoặc sốt cao / thấy nóng, lạnh, run: cần xin khám gấp hoặc gọi đường dây y tế.","src":[0]},
+{"text":"Nếu bác sĩ nghi viêm tuỵ cấp, bạn sẽ được chuyển ngay đến bệnh viện làm xét nghiệm.","src":[0]}
+],
+"emergency":[
+{"text":"Đau bụng đột ngột, dữ dội kèm: đau lan ra sau lưng; đầy bụng không hết hoặc tái diễn; tim đập nhanh hoặc khó thở; da xanh tím hoặc bầm quanh rốn, eo hay đùi ngoài: cần đến cấp cứu ngay, đừng tự lái xe.","src":[0]}
+],
+"sources":[
+{"title":"Pancreatitis","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/pancreatitis/","reviewed":"2026-03-11"},
+{"title":"Pancreatitis","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/pancreatitis","reviewed":"2017-11"},
+{"title":"Eating, Diet, & Nutrition for Pancreatitis","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/pancreatitis/eating-diet-nutrition","reviewed":"2017-11"}
+],
+"verifiedAt":"2026-10-09"
+}

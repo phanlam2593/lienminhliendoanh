@@ -1,0 +1,49 @@
+{
+"id":"viem-tui-mat","kind":"condition",
+"names":["viêm túi mật","cholecystitis","viêm túi mật cấp","viêm túi mật mạn"],
+"about":[
+{"text":"Viêm túi mật (cholecystitis) là tình trạng túi mật bị sưng và kích ứng (viêm). Túi mật nằm dưới gan, ở phía trên bên phải bụng, và chứa mật là dịch giúp tiêu hoá.","src":[0]}
+],
+"signs":[
+{"text":"Đau dữ dội ở bụng trên bên phải hoặc giữa bụng; cơn đau có thể lan lên vai phải hoặc ra sau lưng.","src":[0]},
+{"text":"Bụng đau khi sờ vào, buồn nôn và nôn, sốt.","src":[0]},
+{"text":"Triệu chứng thường bắt đầu sau bữa ăn, nhất là bữa ăn nhiều hoặc nhiều chất béo.","src":[0]}
+],
+"causes":[
+{"text":"Nguyên nhân thường gặp nhất là sỏi mật: sỏi có thể chặn ống túi mật khiến mật bị ứ lại và túi mật sưng lên.","src":[0]},
+{"text":"Các nguyên nhân khác: khối u làm tắc đường dẫn mật; tắc ống mật do sỏi, mật đặc, cặn mật hoặc hẹp / sẹo; nhiễm trùng (kể cả AIDS và các nhiễm virus khác); bệnh nặng làm giảm máu đến túi mật.","src":[0]},
+{"text":"Yếu tố nguy cơ chính là bị sỏi mật.","src":[0]}
+],
+"course":[
+{"text":"Nếu không điều trị, có thể bị nhiễm trùng mật bên trong túi mật; hoại tử (mô túi mật chết, hay gặp hơn ở người lớn tuổi, người điều trị muộn và người tiểu đường); hoặc thủng túi mật, có thể vỡ.","src":[0]},
+{"text":"NHS: viêm túi mật là biến chứng hiếm gặp của sỏi mật.","src":[1]}
+],
+"care":[
+{"text":"NHS nêu với biến chứng của sỏi mật như viêm túi mật, điều trị thường là giảm đau và cắt túi mật — do bác sĩ quyết định.","src":[1]},
+{"text":"Phòng ngừa (liên quan sỏi mật): giảm cân từ từ vì giảm cân nhanh có thể làm tăng nguy cơ sỏi mật; giữ cân nặng hợp lý bằng ăn uống lành mạnh và tập thể dục.","src":[0]}
+],
+"diet":{
+"avoid":[
+{"text":"Mayo Clinic: hạn chế món nhiều chất béo, ít chất xơ vì có thể làm tăng nguy cơ sỏi mật (nguyên nhân thường gặp của viêm túi mật).","src":[0]}
+],
+"ok":[
+{"text":"Mayo Clinic: ăn nhiều trái cây, rau và ngũ cốc nguyên hạt để phòng sỏi mật.","src":[0]}
+],
+"foods":[
+{"name":"đồ ăn nhiều chất béo, ít chất xơ","aliases":["đồ béo","đồ nhiều dầu mỡ","đồ chiên"],"verdict":"limit","note":"Mayo Clinic: hạn chế món nhiều chất béo, ít chất xơ vì làm tăng nguy cơ sỏi mật; triệu chứng viêm túi mật cũng hay bắt đầu sau bữa ăn nhiều chất béo.","src":[0]},
+{"name":"trái cây, rau và ngũ cốc nguyên hạt","aliases":["rau","trái cây","gạo lứt","yến mạch"],"verdict":"good","note":"Mayo Clinic: ăn nhiều trái cây, rau và ngũ cốc nguyên hạt để phòng sỏi mật.","src":[0]}
+]
+},
+"doctor":[
+{"text":"Hãy đặt lịch khám nếu bạn có những triệu chứng khiến bạn lo lắng.","src":[0]}
+],
+"emergency":[
+{"text":"Đi cấp cứu nếu cơn đau dữ dội đến mức bạn không ngồi yên hay tìm được tư thế thoải mái. Hãy nhờ người chở đi, đừng tự lái xe.","src":[0]},
+{"text":"NHS (nói về sỏi mật): đau bụng đột ngột dữ dội, đau lan ra sau lưng kèm nôn, sốt rất cao hoặc ớn lạnh, vàng da hoặc vàng mắt cần cấp cứu ngay.","src":[1]}
+],
+"sources":[
+{"title":"Cholecystitis - Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/cholecystitis/symptoms-causes/syc-20364867","reviewed":"2024-10-23"},
+{"title":"Gallstones","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/gallstones/","reviewed":"2025-08-11"}
+],
+"verifiedAt":"2026-10-09"
+}

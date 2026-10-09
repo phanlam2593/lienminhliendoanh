@@ -1,0 +1,75 @@
+{
+"id":"tien-tieu-duong",
+"kind":"condition",
+"names":["tiền tiểu đường","tiền đái tháo đường","tiền tiểu đường type 2","prediabetes","pre-diabetes","pre diabetes","kháng insulin và tiền tiểu đường"],
+"about":[
+{"text":"Tiền tiểu đường là khi đường huyết cao hơn bình thường nhưng chưa đủ cao để chẩn đoán tiểu đường.","src":[0,1,2]},
+{"text":"Nếu không thay đổi lối sống, người tiền tiểu đường dễ tiến triển thành tiểu đường type 2, bệnh tim và đột quỵ.","src":[0,2]},
+{"text":"Ăn uống lành mạnh, vận động đều và giữ cân nặng hợp lý có thể đưa đường huyết trở lại thấp hơn.","src":[2]},
+{"text":"Kháng insulin là khi cơ thể đáp ứng kém với insulin, có thể làm đường huyết tăng.","src":[1]}
+],
+"signs":[
+{"text":"Hầu hết không có triệu chứng và không biết mình đang bị; thường được phát hiện khi khám định kỳ hoặc xét nghiệm máu.","src":[0,1,2]},
+{"text":"Một số người có vùng da sẫm màu ở cổ, nách hoặc bẹn (gai đen), hoặc nhiều mụn thịt nhỏ ở các vùng này.","src":[0,2]},
+{"text":"Dấu hiệu có thể đã tiến triển thành tiểu đường type 2: khát nước, tiểu nhiều, đói nhiều, mệt, nhìn mờ, tê hoặc châm chích tay chân, hay nhiễm trùng, vết thương lâu lành, sụt cân không rõ lý do.","src":[2]}
+],
+"causes":[
+{"text":"Thường do cơ thể có vấn đề với insulin (hormone đưa đường vào tế bào): hoặc kháng insulin, hoặc không tạo đủ insulin, nên đường ứ lại trong máu.","src":[0,2]},
+{"text":"Nguyên nhân chính xác chưa rõ; di truyền và tiền sử gia đình có vai trò quan trọng.","src":[2]},
+{"text":"Thừa cân và ít vận động được xem là các yếu tố đóng góp chính.","src":[0]},
+{"text":"Yếu tố nguy cơ: thừa cân (nhất là mỡ bụng), vòng bụng lớn, ít vận động, hút thuốc, người thân bị tiểu đường, từng bị tiểu đường thai kỳ, buồng trứng đa nang, ngưng thở khi ngủ, huyết áp cao, mỡ máu bất thường, hội chứng chuyển hoá.","src":[0,1,2]},
+{"text":"Ăn nhiều thịt đỏ, đồ chế biến sẵn, chất béo bão hoà hoặc đường cũng là yếu tố nguy cơ.","src":[2]},
+{"text":"Nguy cơ tăng theo tuổi; nhóm người châu Á, gốc Phi, Latin... có tỉ lệ cao hơn trong thống kê của Hoa Kỳ.","src":[0,1,2]},
+{"text":"Một số thuốc (như glucocorticoid, vài thuốc chống loạn thần, vài thuốc HIV) dùng lâu dài cũng làm tăng nguy cơ.","src":[1,2]}
+],
+"course":[
+{"text":"Tiền tiểu đường liên quan đến tổn thương lâu dài ở tim, mạch máu và thận, kể cả trước khi thành tiểu đường type 2.","src":[2]},
+{"text":"Cũng liên quan đến các cơn nhồi máu cơ tim \"thầm lặng\" với ít hoặc không điển hình triệu chứng.","src":[2]},
+{"text":"Có thể đi kèm huyết áp cao, mỡ máu bất thường, hội chứng chuyển hoá, gan nhiễm mỡ và béo phì.","src":[1]},
+{"text":"Người tiền tiểu đường có khả năng cao tiến triển thành tiểu đường type 2 trong khoảng 5–10 năm.","src":[1]}
+],
+"care":[
+{"text":"Thay đổi lối sống có thể trì hoãn hoặc ngăn tiểu đường type 2, thậm chí đảo ngược tiền tiểu đường: giảm cân nếu thừa cân, vận động đều, ăn uống lành mạnh.","src":[0,1,2]},
+{"text":"Trong nghiên cứu lớn được NIDDK nêu, giảm khoảng 5–7% cân nặng ban đầu giúp giảm nguy cơ tiểu đường. Ngủ đủ giấc và không hút thuốc cũng có ích.","src":[1,2]},
+{"text":"Bắt đầu từ thay đổi nhỏ và nhờ gia đình, bạn bè, nhân viên y tế hỗ trợ sẽ có ích.","src":[1]},
+{"text":"Nên chọn cách ăn mà bạn có thể duy trì lâu dài, có món bạn thích và phù hợp truyền thống ăn uống của mình.","src":[3]},
+{"text":"Mayo Clinic lưu ý các chế độ ăn \"thời thượng\" (như ăn theo chỉ số đường huyết, paleo, keto) có thể giúp giảm cân nhưng còn ít nghiên cứu về lợi ích dài hạn trong phòng tiểu đường.","src":[3]},
+{"text":"Tránh giảm cân quá mạnh vì có thể có hại. Kiểm soát huyết áp và mỡ máu.","src":[2]},
+{"text":"Bác sĩ có thể kê metformin (thuốc tiểu đường) hoặc thuốc cho các bệnh đi kèm như huyết áp cao, mỡ máu cao. Trong một số trường hợp có thể cân nhắc thuốc giảm cân hoặc phẫu thuật. Do bác sĩ quyết định.","src":[0,1,2]}
+],
+"diet":{
+"avoid":[
+{"text":"Tránh carbohydrate nhiều đường mà ít chất xơ và dinh dưỡng.","src":[3]},
+{"text":"Hạn chế bánh mì trắng, bánh ngọt, mì làm từ bột trắng, nước ép trái cây, đồ chế biến sẵn có đường hoặc siro bắp fructose cao, nhiều món ăn béo nhiều năng lượng.","src":[3]},
+{"text":"Chất béo bão hoà từ sữa và thịt chỉ nên chiếm phần nhỏ; Mayo Clinic gợi ý thay bằng sữa ít béo, thịt gà nạc và thịt heo nạc.","src":[3]}
+],
+"ok":[
+{"text":"Mayo Clinic nêu cách chia đĩa ăn: nửa đĩa là rau không tinh bột và trái cây, một phần tư là ngũ cốc nguyên hạt, một phần tư là thực phẩm giàu đạm như đậu, cá hoặc thịt nạc.","src":[3]},
+{"text":"MedlinePlus khuyên ăn theo kế hoạch lành mạnh, ít năng lượng; trang không nêu món cụ thể.","src":[0]}
+],
+"foods":[
+{"name":"rau không tinh bột","aliases":["rau","rau xanh","bông cải xanh","súp lơ","rau lá xanh"],"verdict":"good","note":"Mayo Clinic nêu rau không tinh bột như rau lá xanh, bông cải xanh, súp lơ nên chiếm khoảng nửa đĩa cùng trái cây.","src":[3]},
+{"name":"trái cây","aliases":["trái cây tươi","cà chua","ớt chuông"],"verdict":"good","note":"Mayo Clinic nêu trái cây (kể cả cà chua, ớt chuông và trái cây trên cây) trong nhóm nên ăn.","src":[3]},
+{"name":"nước ép trái cây","aliases":["nước ép","nước trái cây","nước cam"],"verdict":"limit","note":"Mayo Clinic xếp nước ép trái cây vào nhóm nên hạn chế hoặc tránh.","src":[3]},
+{"name":"các loại đậu","aliases":["đậu","đậu gà","đậu lăng","đậu hạt"],"verdict":"good","note":"Mayo Clinic nêu các loại đậu (đậu, đậu gà, đậu lăng) là thực phẩm nên ăn và là nguồn đạm.","src":[3]},
+{"name":"ngũ cốc nguyên hạt","aliases":["gạo lứt","yến mạch","bánh mì nguyên cám","mì nguyên cám","diêm mạch","quinoa"],"verdict":"good","note":"Mayo Clinic nêu bánh mì và mì nguyên cám, gạo nguyên hạt (gạo lứt), yến mạch, quinoa là nhóm nên ăn.","src":[3]},
+{"name":"bánh mì trắng và bánh ngọt","aliases":["bánh mì trắng","bánh ngọt","bánh nướng","pastry","mì làm từ bột trắng"],"verdict":"limit","note":"Mayo Clinic: hạn chế/tránh bánh mì trắng, bánh ngọt và mì làm từ bột trắng.","src":[3]},
+{"name":"chất béo lành mạnh","aliases":["dầu ô liu","quả bơ","trái bơ","hạnh nhân","đậu phộng","hạt","hạt lanh"],"verdict":"good","note":"Mayo Clinic nêu các loại dầu như ô liu, hướng dương, cải; quả bơ; và các loại hạt, đậu phộng (peanuts), hạt lanh, hạt bí là chất béo lành mạnh.","src":[3]},
+{"name":"cá béo","aliases":["cá hồi","cá thu","cá mòi","cá ngừ","cá tuyết"],"verdict":"good","note":"Mayo Clinic nêu cá hồi, cá thu, cá mòi, cá ngừ, cá tuyết là nguồn đạm tốt.","src":[3]},
+{"name":"đồ chế biến sẵn có đường","aliases":["đồ chế biến sẵn","đồ ngọt","nước ngọt","bánh kẹo"],"verdict":"avoid","note":"Mayo Clinic: hạn chế thực phẩm chế biến sẵn có đường hoặc siro bắp fructose cao; đồ ăn nhiều đường và ít chất xơ nên tránh.","src":[3]},
+{"name":"thịt đỏ và chất béo bão hoà","aliases":["thịt đỏ","thịt bò","thịt heo","thịt lợn","sữa nguyên kem"],"verdict":"limit","note":"Mayo Clinic nêu chế độ ăn nhiều thịt đỏ, đồ chế biến, chất béo bão hoà hoặc đường là yếu tố nguy cơ; chất béo bão hoà từ sữa và thịt chỉ nên chiếm phần nhỏ.","src":[2,3]}
+]},
+"doctor":[
+{"text":"Nếu bạn lo về tiểu đường, hoặc có triệu chứng của tiểu đường type 2, hãy gặp chuyên gia y tế.","src":[2]},
+{"text":"Nếu có yếu tố nguy cơ, hãy hỏi bác sĩ về xét nghiệm đường huyết; thường cân nhắc cho người từ khoảng 35 tuổi hoặc thừa cân kèm yếu tố nguy cơ khác.","src":[1,2]},
+{"text":"Chẩn đoán bằng xét nghiệm máu (đường huyết lúc đói, A1C hoặc nghiệm pháp dung nạp glucose). Nếu đã bị tiền tiểu đường thì cần xét nghiệm lại hằng năm để xem đã thành tiểu đường chưa.","src":[0,1]}
+],
+"emergency":[],
+"sources":[
+{"title":"Prediabetes","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/prediabetes.html","reviewed":"2025-09-28"},
+{"title":"Insulin Resistance & Prediabetes","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes/prediabetes-insulin-resistance","reviewed":"2025-03"},
+{"title":"Prediabetes: Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/prediabetes/symptoms-causes/syc-20355278","reviewed":"2026-09-10"},
+{"title":"Diabetes prevention: 5 tips for taking control","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/prediabetes/in-depth/prediabetes-diet/art-20047639","reviewed":"2025-03-12"}
+],
+"verifiedAt":"2026-10-09"
+}

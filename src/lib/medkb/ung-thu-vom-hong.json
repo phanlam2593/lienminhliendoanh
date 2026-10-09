@@ -1,0 +1,50 @@
+{
+"id":"ung-thu-vom-hong","kind":"cancer",
+"names":["ung thư vòm họng","ung thư vòm","bệnh ung thư vòm họng","ung thư vòm mũi họng","nasopharyngeal cancer","nasopharyngeal carcinoma","ung thu vom hong"],
+"disambiguation":"\"Vòm họng\" ở đây là phần trên của họng, nằm sau mũi (nasopharynx).",
+"about":[
+{"text":"Ung thư vòm họng là một loại ung thư đầu cổ bắt đầu ở mô vòm họng, phần trên của họng, nằm sau mũi.","src":[0]},
+{"text":"Theo NHS đây là loại ung thư hiếm gặp, nằm ở phần họng nối phía sau mũi với phía sau miệng.","src":[1]}
+],
+"signs":[
+{"text":"NHS: nhiều người **không có triệu chứng** cho đến khi bệnh đã ở giai đoạn muộn.","src":[1]},
+{"text":"Dấu hiệu sớm: có hạch hoặc cục ở cổ; đau hoặc ù tai, thay đổi thính lực; đau họng; nghẹt mũi; chảy máu mũi.","src":[0,1]},
+{"text":"NHS nêu thêm: cục ở cổ không mất đi, nghe kém (thường một bên tai), nghẹt một bên mũi, đau đầu, song thị, tê mặt, nuốt khó, khàn giọng, sụt cân ngoài ý muốn.","src":[1]},
+{"text":"Giai đoạn muộn có thể thêm mắt lệch, nhìn đôi, đau đầu, tê hoặc yếu một bên mặt.","src":[0]},
+{"text":"Các dấu hiệu này cũng có thể do nguyên nhân khác; NHS nói rất ít khả năng là do ung thư này nhưng vẫn nên được kiểm tra.","src":[0,1]}
+],
+"causes":[
+{"text":"NHS: chưa rõ nguyên nhân chính xác của ung thư vòm họng.","src":[1]},
+{"text":"Nhiễm **virus Epstein-Barr (EBV)** là một yếu tố nguy cơ.","src":[0,1]},
+{"text":"Yếu tố nguy cơ khác: sống hoặc có gốc gác ở một số vùng của châu Á, Bắc Phi và Bắc Cực; có người thân mắc bệnh.","src":[0,1]},
+{"text":"Dùng thuốc lá hoặc hít khói thuốc, uống nhiều rượu bia thường xuyên (NCI).","src":[0]},
+{"text":"Chế độ ăn nhiều cá và thịt muối (muối chua phơi), có thể chứa chất nitrosamine gây ung thư.","src":[0,1]},
+{"text":"NHS còn nêu tiếp xúc thường xuyên với bụi gỗ cứng hoặc formaldehyde. Nam gặp nhiều hơn nữ.","src":[0,1]}
+],
+"course":[
+{"text":"Sau điều trị, bạn cần tái khám và chụp chiếu định kỳ để kiểm tra bệnh có quay lại không.","src":[1]},
+{"text":"Nuốt khó là một ảnh hưởng muộn có thể gặp sau điều trị.","src":[0]}
+],
+"care":[
+{"text":"Điều trị chính là xạ trị và hoá trị, thường phối hợp. Xạ trị là phương pháp phổ biến nhất và có thể dùng một mình cho bệnh rất sớm.","src":[0,1]},
+{"text":"Hoá trị có thể dùng trước hoặc cùng xạ trị cho bệnh nặng hơn. Phẫu thuật chủ yếu dùng cho hạch còn ung thư hoặc bệnh không đáp ứng xạ trị.","src":[0,1]},
+{"text":"Liệu pháp miễn dịch có thể dùng cho bệnh di căn hoặc tái phát. Thử nghiệm lâm sàng có thể là một lựa chọn. Bác sĩ quyết định.","src":[0]},
+{"text":"Nếu bạn hút thuốc, nên bỏ thuốc, vì hút thuốc làm tăng nguy cơ tái phát và tác dụng phụ của điều trị.","src":[1]},
+{"text":"Đội chăm sóc có thể có chuyên gia dinh dưỡng.","src":[0]}
+],
+"diet":{
+"avoid":[{"text":"Chế độ ăn nhiều cá và thịt muối là yếu tố nguy cơ của ung thư vòm họng.","src":[0,1]}],
+"ok":[],
+"foods":[
+{"name":"cá muối và thịt muối","aliases":["cá muối","thịt muối","mắm","khô","cá khô","đồ muối","cá mặn","thịt xông khói"],"verdict":"limit","note":"NCI và NHS nêu chế độ ăn rất nhiều cá, thịt ướp muối là yếu tố nguy cơ (có thể chứa nitrosamine). Nguồn không bàn về từng món cụ thể.","src":[0,1]}
+]},
+"doctor":[
+{"text":"Hãy đi khám nếu có các triệu chứng kể trên, nhất là khi chưa đỡ sau 3 tuần.","src":[1]},
+{"text":"Cục ở cổ không mất đi sau 3 tuần cần được bác sĩ kiểm tra.","src":[1]}
+],
+"emergency":[],
+"sources":[
+{"title":"Nasopharyngeal Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/head-and-neck/patient/adult/nasopharyngeal-treatment-pdq","reviewed":"2025-05-12"},
+{"title":"Nasopharyngeal cancer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/nasopharyngeal-cancer/","reviewed":"2021-11-04"}
+],
+"verifiedAt":"2026-10-09"}

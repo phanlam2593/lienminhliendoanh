@@ -1,0 +1,35 @@
+{"id":"nam-am-dao","kind":"women","names":["viêm nấm âm đạo","nấm âm đạo","nấm candida âm đạo","nấm men âm đạo","nấm phụ khoa","vaginal thrush","vaginal yeast infection","vulvovaginal candidiasis"],
+"disambiguation":"Thẻ này nói về nấm âm đạo (nấm men Candida), khác với viêm âm đạo do vi khuẩn.",
+"about":[
+{"text":"Nấm âm đạo (thrush) là nhiễm nấm men thường gặp, thường vô hại nhưng có thể khó chịu và hay tái phát. NHS: không xếp vào bệnh lây qua đường tình dục.","src":[0]},
+{"text":"CDC gọi là nhiễm nấm Candida ở âm đạo và âm hộ, thường do *Candida albicans*.","src":[1]}],
+"signs":[
+{"text":"Ở phụ nữ: khí hư trắng, thường vón cục như phô mai, thường không mùi; ngứa và kích ứng âm hộ, âm đạo; đau rát khi quan hệ hoặc khi đi tiểu.","src":[0]},
+{"text":"CDC: ngứa, đau rát âm đạo, đau khi quan hệ, tiểu buốt, khí hư bất thường; các dấu hiệu này không đặc hiệu riêng cho nấm. Có thể thấy âm hộ sưng, đỏ, khí hư đặc dạng sữa đông.","src":[1]},
+{"text":"NHS: nấm cũng có thể gặp ở nam giới (kích ứng, đỏ ở đầu dương vật) hoặc ở da vùng nách, bẹn, kẽ tay; một số người không có triệu chứng.","src":[0]}],
+"causes":[
+{"text":"Do nấm *candida*, thường vô hại, phát triển ở nơi ấm ẩm khi cân bằng vi khuẩn bị thay đổi.","src":[0]},
+{"text":"NHS nêu nguy cơ: da bị kích ứng hoặc tổn thương, dùng kháng sinh, tiểu đường kiểm soát kém, suy giảm miễn dịch (như HIV, hóa trị), liệu pháp hormone thay thế, mang thai.","src":[0]},
+{"text":"Quan hệ tình dục có thể khởi phát nấm, hoặc ít gặp hơn là lây giữa bạn tình.","src":[0]},
+{"text":"CDC: phần lớn phụ nữ khỏe mạnh bị nấm đơn giản không tìm ra yếu tố khởi phát. Dùng kháng sinh thường xuyên được nêu là nguyên nhân gây tái phát.","src":[1]}],
+"course":[
+{"text":"NHS: nấm thường hết trong 7–14 ngày sau khi bắt đầu điều trị; bạn tình không cần điều trị trừ khi có triệu chứng.","src":[0]},
+{"text":"Nấm hay tái phát. Nếu bị nhiều hơn 4 lần trong 12 tháng có thể cần điều trị kéo dài đến 6 tháng, bác sĩ có thể tìm yếu tố khởi phát như kinh nguyệt hoặc quan hệ.","src":[0]},
+{"text":"CDC: thuốc nhóm azole làm hết triệu chứng ở khoảng 80–90% người điều trị đủ liệu trình.","src":[1]}],
+"care":[
+{"text":"Điều trị bằng thuốc kháng nấm dạng viên uống, viên đặt âm đạo hoặc kem; do bác sĩ/dược sĩ quyết định.","src":[0,1]},
+{"text":"Nhà thuốc có thể bán thuốc kháng nấm nếu trước đó bạn đã được chẩn đoán nấm; không nên dùng quá hai lần trong 6 tháng mà không hỏi dược sĩ hoặc bác sĩ.","src":[0]},
+{"text":"CDC: phụ nữ mang thai chỉ nên dùng thuốc kháng nấm bôi tại chỗ, và không nên dùng thuốc uống một liều.","src":[1]},
+{"text":"Kem kháng nấm có thể làm hỏng bao cao su và màng ngăn tránh thai nên tránh thai có thể thất bại trong lúc điều trị.","src":[0]},
+{"text":"Rửa vùng bị bằng nước và chất làm dịu da thay xà phòng, lau thật khô; mặc đồ lót cotton; tránh đồ lót và quần tất chật.","src":[0]},
+{"text":"Tránh xà phòng, sữa tắm, dung dịch thụt rửa và chất khử mùi ở vùng kín; nếu khó chịu thì tránh quan hệ cho đến khi hết nấm.","src":[0]},
+{"text":"CDC: chưa có bằng chứng đáng kể cho thấy men vi sinh hay các phương pháp vi lượng đồng căn có hiệu quả.","src":[1]}],
+"diet":null,
+"doctor":[
+{"text":"NHS: nên đi khám khi bị lần đầu, dưới 16 hoặc trên 60 tuổi, nấm cứ tái phát (hơn 4 lần trong 12 tháng), điều trị không hiệu quả.","src":[0]},
+{"text":"Cũng nên đi khám khi đang mang thai hoặc cho con bú, hoặc khi miễn dịch yếu (ví dụ do tiểu đường, HIV, hóa trị). Phòng khám sức khỏe tình dục cũng có thể hỗ trợ.","src":[0]}],
+"emergency":[],
+"sources":[
+{"title":"Thrush in men and women","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/vaginal-thrush/","reviewed":"2023-07-28"},
+{"title":"Vulvovaginal Candidiasis - STI Treatment Guidelines","publisher":"CDC (Hoa Kỳ)","url":"https://www.cdc.gov/std/treatment-guidelines/candidiasis.htm","reviewed":"2021-07-22"}],
+"verifiedAt":"2026-10-09"}

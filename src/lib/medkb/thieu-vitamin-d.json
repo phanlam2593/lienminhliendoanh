@@ -1,0 +1,58 @@
+{
+"id":"thieu-vitamin-d",
+"kind":"condition",
+"names":["thiếu vitamin D","vitamin D thấp","thiếu vitamin d","thiếu hụt vitamin D","vitamin D","vitamin d","vitamin D deficiency","low vitamin D"],
+"about":[
+{"text":"Vitamin D giúp cơ thể hấp thu canxi (chất cấu tạo chính của xương), giúp xương, răng và cơ khoẻ mạnh.","src":[0,1,2]},
+{"text":"Vitamin D còn liên quan đến hoạt động của cơ, dẫn truyền thần kinh và hệ miễn dịch.","src":[1,2]}
+],
+"signs":[
+{"text":"Ở trẻ em, thiếu vitamin D có thể gây **còi xương**: xương mềm, yếu, biến dạng và đau.","src":[0,2]},
+{"text":"Ở thanh thiếu niên và người lớn, có thể gây **nhuyễn xương** (xương mềm), gây đau xương và yếu cơ.","src":[0,2]}
+],
+"causes":[
+{"text":"Cơ thể tự tạo vitamin D khi da tiếp xúc với ánh nắng. Mây, ô nhiễm, tuổi cao và da sẫm màu làm giảm lượng tạo ra; kính cửa sổ chặn quá trình này.","src":[0,2]},
+{"text":"Nguy cơ thấp vitamin D cao hơn ở người lớn tuổi, ít ra ngoài trời hoặc che kín da, người da sẫm màu, và trẻ bú mẹ.","src":[0,1,2]},
+{"text":"Người mắc bệnh làm giảm hấp thu chất béo (như bệnh Crohn, celiac, viêm loét đại tràng) cũng dễ thiếu.","src":[1,2]},
+{"text":"Người béo phì hoặc từng phẫu thuật cắt dạ dày nối tắt có thể cần nhiều vitamin D hơn.","src":[1,2]},
+{"text":"Rất ít thực phẩm có sẵn vitamin D; phần lớn lượng nạp vào đến từ thực phẩm được tăng cường.","src":[1,2]}
+],
+"course":[
+{"text":"Thiếu vitamin D lâu dài có thể dẫn tới bệnh xương như loãng xương hoặc còi xương.","src":[1]},
+{"text":"Uống quá nhiều vitamin D kéo dài (hầu như luôn do thực phẩm bổ sung, không phải do nắng) có thể gây tăng canxi máu, làm yếu xương, tổn thương thận và tim.","src":[0,2]}
+],
+"care":[
+{"text":"Ánh nắng là nguồn chính để cơ thể tạo vitamin D, nhưng nắng quá nhiều có thể gây lão hoá da và ung thư da; nên bảo vệ da khi ở nắng lâu.","src":[0,1,2]},
+{"text":"Vitamin D bổ sung có dạng D2 và D3; D3 có thể làm tăng nồng độ cao hơn và lâu hơn. Uống cùng bữa ăn có chút chất béo sẽ hấp thu tốt hơn.","src":[1,2]},
+{"text":"Hãy hỏi bác sĩ xem có cần bổ sung không và dùng bao nhiêu. Bác sĩ có thể cho xét nghiệm vitamin D để biết mức trong máu.","src":[1,2]},
+{"text":"Ở Anh (ít nắng vào thu đông), NHS khuyên mọi người cân nhắc bổ sung vào mùa thu và đông; nhóm nguy cơ cao nên bổ sung quanh năm.","src":[0]},
+{"text":"Một số thuốc có thể ảnh hưởng vitamin D, ví dụ thuốc giảm cân orlistat làm giảm hấp thu, thuốc steroid có thể làm giảm nồng độ. Hãy báo bác sĩ hoặc dược sĩ về mọi thuốc và thực phẩm bổ sung đang dùng.","src":[2]},
+{"text":"NHS cho biết chưa đủ bằng chứng để dùng vitamin D chỉ nhằm phòng hay chữa COVID-19.","src":[0]}
+],
+"diet":{
+"avoid":[],
+"ok":[
+{"text":"Rất ít thực phẩm tự nhiên chứa vitamin D. Nguồn tự nhiên gồm cá béo, lòng đỏ trứng, gan; thực phẩm tăng cường như sữa, ngũ cốc, sữa chua cũng cung cấp.","src":[0,1,2]},
+{"text":"NHS khuyên phụ nữ mang thai tránh ăn gan.","src":[0]}
+],
+"foods":[
+{"name":"cá béo","aliases":["cá hồi","cá thu","cá ngừ","cá trích","cá mòi","cá hồi vân","dầu gan cá"],"verdict":"good","note":"NHS nêu cá hồi, cá mòi, cá hồi vân, cá trích, cá thu; NIH nêu cá hồi vân, cá hồi, cá ngừ, cá thu và dầu gan cá là nguồn tự nhiên tốt nhất.","src":[0,2]},
+{"name":"lòng đỏ trứng","aliases":["trứng","lòng đỏ","trứng gà"],"verdict":"good","note":"NHS, MedlinePlus và NIH đều nêu lòng đỏ trứng chứa một ít vitamin D.","src":[0,1,2]},
+{"name":"gan","aliases":["gan bò","gan heo","gan lợn","gan gà"],"verdict":"ok","note":"Gan là nguồn có vitamin D (NHS, MedlinePlus; NIH nêu gan bò), nhưng NHS khuyên phụ nữ mang thai nên tránh ăn gan.","src":[0,1,2]},
+{"name":"thịt đỏ","aliases":["thịt bò","thịt heo","thịt lợn"],"verdict":"ok","note":"NHS nêu thịt đỏ là một nguồn có vitamin D.","src":[0]},
+{"name":"sữa, sữa chua, ngũ cốc tăng cường vitamin D","aliases":["sữa","sữa chua","ngũ cốc ăn sáng","sữa đậu nành","sữa hạnh nhân","nước cam","bơ thực vật"],"verdict":"good","note":"MedlinePlus và NIH: phần lớn vitamin D trong khẩu phần đến từ thực phẩm được tăng cường (sữa, ngũ cốc, sữa chua, sữa thực vật, nước cam, bơ thực vật). Chỉ tính khi nhãn ghi có bổ sung vitamin D.","src":[1,2]},
+{"name":"phô mai","aliases":["pho mát","cheese"],"verdict":"ok","note":"NIH: phô mai có một lượng nhỏ vitamin D.","src":[2]},
+{"name":"nấm","aliases":["nấm"],"verdict":"ok","note":"NIH: nấm cho một ít vitamin D, và một số loại được chiếu tia UV để tăng hàm lượng; nguồn không nêu từng loại nấm.","src":[2]}
+]},
+"doctor":[
+{"text":"Hãy hỏi bác sĩ nếu thuộc nhóm nguy cơ (người lớn tuổi, ít ra nắng, da sẫm màu, có bệnh kém hấp thu chất béo, béo phì) để biết có cần xét nghiệm hoặc bổ sung không.","src":[1,2]},
+{"text":"Người có bệnh lý riêng nên hỏi bác sĩ về lượng vitamin D phù hợp, vì có thể không dùng được nhiều như người khác.","src":[0]}
+],
+"emergency":[],
+"sources":[
+{"title":"Vitamin D","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-d/","reviewed":"2020-08-03"},
+{"title":"Vitamin D","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/vitamind.html","reviewed":"2024-05-10"},
+{"title":"Vitamin D - Consumer fact sheet","publisher":"NIH Office of Dietary Supplements (Hoa Kỳ)","url":"https://ods.od.nih.gov/factsheets/VitaminD-Consumer/","reviewed":"2022-11-08"}
+],
+"verifiedAt":"2026-10-09"
+}

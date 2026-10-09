@@ -1,0 +1,57 @@
+{
+"id":"thieu-vitamin-b12",
+"kind":"condition",
+"names":["thiếu vitamin B12","thiếu B12","vitamin B12 thấp","thiếu máu do thiếu B12","vitamin B12 deficiency","B12 deficiency"],
+"about":[
+{"text":"Vitamin B12 giúp cơ thể tạo hồng cầu, giữ cho hệ thần kinh khoẻ mạnh, giải phóng năng lượng từ thức ăn và sử dụng folate.","src":[1]},
+{"text":"Thiếu B12 hoặc folate (vitamin B9) khiến cơ thể tạo hồng cầu lớn bất thường và hoạt động kém, gây **thiếu máu**.","src":[0]}
+],
+"signs":[
+{"text":"Mệt lả, ít năng lượng; tê hoặc như kim châm ở tay chân; lưỡi đỏ, đau; loét miệng; yếu cơ; vấn đề về thị lực.","src":[0]},
+{"text":"Có thể có vấn đề tâm lý, từ trầm cảm hoặc lo âu nhẹ đến lú lẫn và sa sút trí tuệ, kèm các vấn đề về trí nhớ, hiểu và phán đoán.","src":[0]},
+{"text":"Một số dấu hiệu này có thể xuất hiện khi thiếu B12 dù chưa thiếu máu.","src":[0]},
+{"text":"Ở người lớn, NIH còn nêu da xanh xao, hồi hộp tim đập nhanh, chán ăn, sụt cân, mất thăng bằng.","src":[2]},
+{"text":"Cơ thể dự trữ nhiều B12 nên triệu chứng có thể mất nhiều năm mới xuất hiện.","src":[2]}
+],
+"causes":[
+{"text":"**Thiếu máu ác tính** (pernicious anaemia): hệ miễn dịch tấn công tế bào dạ dày nên B12 từ thức ăn không được hấp thu. Đây là nguyên nhân hay gặp nhất ở Anh.","src":[0,2]},
+{"text":"Ăn quá ít B12 ít gặp hơn, nhưng có thể xảy ra khi ăn thuần chay mà không bổ sung B12 hay dùng thực phẩm tăng cường, hoặc ăn kiêng khắt khe lâu dài.","src":[0,1,2]},
+{"text":"Một số thuốc có thể làm giảm hấp thu: thuốc chống co giật và thuốc ức chế bơm proton (PPI). NIH cũng nêu thuốc giảm axit dạ dày, và metformin có thể làm giảm B12 trong máu.","src":[0,2]},
+{"text":"Một số nguyên nhân khác do NIH nêu: ít axit dạ dày ở người lớn tuổi, viêm teo dạ dày, phẫu thuật dạ dày hoặc ruột (kể cả phẫu thuật giảm cân), bệnh celiac, bệnh Crohn.","src":[2]}
+],
+"course":[
+{"text":"Thiếu B12 và folate gặp nhiều hơn ở người lớn tuổi; NHS nêu khoảng 1/10 người từ 75 tuổi và 1/20 người 65–74 tuổi bị ảnh hưởng.","src":[0]},
+{"text":"Biến chứng ít gặp nhưng có thể xảy ra, nhất là sau thời gian thiếu dài: tổn thương thần kinh (đôi khi không hồi phục), vô sinh tạm thời, bệnh tim, biến chứng thai kỳ và dị tật bẩm sinh.","src":[0]},
+{"text":"Người lớn bị thiếu máu nặng cũng có thể bị suy tim.","src":[0]},
+{"text":"Trẻ sơ sinh của mẹ ăn thuần chay nghiêm ngặt khi mang thai hoặc cho con bú có thể bị ảnh hưởng.","src":[2]},
+{"text":"Tổn thương thần kinh có thể xảy ra ngay cả khi chưa thiếu máu, nên điều trị sớm rất quan trọng.","src":[2]}
+],
+"care":[
+{"text":"Phần lớn trường hợp dễ điều trị bằng thuốc tiêm hoặc thuốc viên, tuỳ nguyên nhân; thuốc B12 thường tiêm trước. Có thể ngưng khi nồng độ hồi phục hoặc phải dùng suốt đời, do bác sĩ quyết định.","src":[0]},
+{"text":"Cải thiện chế độ ăn có thể giúp điều trị và phòng tái phát.","src":[0]},
+{"text":"Nhiều triệu chứng cải thiện sau điều trị, nhưng một số vấn đề do bệnh gây ra không hồi phục được nếu phát hiện muộn.","src":[0]},
+{"text":"NHS: chưa đủ bằng chứng về tác động của B12 bổ sung liều cao, nên lấy B12 từ chế độ ăn đa dạng và đừng dùng quá nhiều. NIH nêu B12 chưa được chứng minh gây hại ngay cả ở liều cao.","src":[1,2]},
+{"text":"Hãy báo bác sĩ hoặc dược sĩ về mọi thuốc và thực phẩm bổ sung đang dùng, vì một số thuốc ảnh hưởng hấp thu B12.","src":[2]}
+],
+"diet":{
+"avoid":[],
+"ok":[
+{"text":"Nguồn B12 tự nhiên là thực phẩm từ động vật. Trái cây, rau và ngũ cốc không có B12 tự nhiên.","src":[1,2]}
+],
+"foods":[
+{"name":"thịt, cá, trứng, sữa và chế phẩm từ sữa","aliases":["thịt","thịt bò","thịt heo","thịt lợn","thịt gà","cá","trứng","sữa","phô mai","pho mát","sữa chua"],"verdict":"good","note":"NHS và NIH nêu thịt, cá, gia cầm, trứng, sữa và các sản phẩm từ sữa là nguồn có B12.","src":[0,1,2]},
+{"name":"nghêu, hàu, gan bò","aliases":["nghêu","hàu","gan bò"],"verdict":"good","note":"NIH nêu nghêu (clam), hàu (oyster) và gan bò là một trong những nguồn B12 tốt nhất.","src":[2]},
+{"name":"thực phẩm tăng cường B12","aliases":["ngũ cốc ăn sáng","men dinh dưỡng"],"verdict":"good","note":"NHS và NIH: một số ngũ cốc ăn sáng và men dinh dưỡng được bổ sung B12; chỉ tính khi nhãn có ghi.","src":[1,2]}
+]},
+"doctor":[
+{"text":"Nên đi khám nếu nghĩ mình có thể thiếu B12. Chẩn đoán thường dựa vào triệu chứng và xét nghiệm máu.","src":[0]},
+{"text":"Chẩn đoán sớm quan trọng vì một số vấn đề do bệnh gây ra không hồi phục được, dù nhiều triệu chứng cải thiện sau điều trị.","src":[0]}
+],
+"emergency":[],
+"sources":[
+{"title":"Vitamin B12 or folate deficiency anaemia","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/vitamin-b12-or-folate-deficiency-anaemia/","reviewed":"2023-02-20"},
+{"title":"Vitamin B","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-b/","reviewed":"2020-08-03"},
+{"title":"Vitamin B12 - Consumer fact sheet","publisher":"NIH Office of Dietary Supplements (Hoa Kỳ)","url":"https://ods.od.nih.gov/factsheets/VitaminB12-Consumer/","reviewed":"2023-12-15"}
+],
+"verifiedAt":"2026-10-09"
+}

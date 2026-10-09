@@ -1,0 +1,67 @@
+{
+"id":"suy-giap",
+"kind":"condition",
+"names":["suy giáp","bệnh suy giáp","suy tuyến giáp","giảm năng tuyến giáp","bệnh Hashimoto","viêm tuyến giáp Hashimoto","hypothyroidism","underactive thyroid","Hashimoto's disease"],
+"about":[
+{"text":"Suy giáp là khi tuyến giáp (tuyến nhỏ hình con bướm ở phía trước cổ) không tạo đủ hormone cho nhu cầu của cơ thể.","src":[0,1,2]},
+{"text":"Hormone tuyến giáp điều hoà cách cơ thể dùng năng lượng và ảnh hưởng đến nhịp tim, cân nặng, tiêu hoá, tâm trạng.","src":[1,2]},
+{"text":"Tình trạng này khá phổ biến và có thể kiểm soát được bằng điều trị.","src":[0,2]}
+],
+"signs":[
+{"text":"Triệu chứng thường nhẹ, khó nhận ra, tiến triển chậm; nhiều người không để ý trong nhiều tháng hoặc nhiều năm.","src":[0,1,2]},
+{"text":"Hay gặp: rất mệt, sợ lạnh hơn bình thường, tăng cân, táo bón, khó tập trung, tâm trạng thấp hoặc trầm cảm.","src":[0,1]},
+{"text":"Da khô, tóc khô hoặc rụng tóc, giọng khàn, mặt phù; đau khớp và cơ; nhịp tim chậm.","src":[0,1,2]},
+{"text":"Phụ nữ có thể bị kinh nguyệt không đều hoặc ra nhiều, và gặp khó khăn về khả năng sinh sản.","src":[0,1,2]},
+{"text":"Mệt và tăng cân rất hay gặp và chưa chắc là do tuyến giáp; không thể chẩn đoán chỉ bằng triệu chứng.","src":[2]},
+{"text":"Có thể có bướu cổ (tuyến giáp to, cổ trông sưng, đôi khi ảnh hưởng thở hoặc nuốt).","src":[1]}
+],
+"causes":[
+{"text":"Nguyên nhân phổ biến nhất là **bệnh Hashimoto**, một bệnh tự miễn: hệ miễn dịch tấn công tuyến giáp.","src":[0,1,2]},
+{"text":"Hashimoto gặp nhiều ở nữ giới và thường khởi phát khoảng 30–50 tuổi, nhưng ai cũng có thể bị suy giáp.","src":[0]},
+{"text":"Các nguyên nhân khác: viêm tuyến giáp, phẫu thuật hoặc xạ trị vùng cổ/tuyến giáp (cắt toàn bộ tuyến giáp luôn gây suy giáp), điều trị cường giáp, một số loại thuốc, suy giáp bẩm sinh.","src":[0,1,2]},
+{"text":"Hiếm gặp hơn: bệnh lý tuyến yên hoặc dùng quá ít hoặc quá nhiều iod. Thiếu iod rất hiếm ở Anh và Mỹ (theo NHS và NIDDK).","src":[0,1,2]},
+{"text":"Nguy cơ cao hơn ở nữ giới, người trên 60 tuổi, người có tiền sử bệnh tuyến giáp hoặc người thân bị bệnh tuyến giáp, mới sinh trong 6 tháng qua, hoặc có một số bệnh tự miễn (như tiểu đường type 1, viêm khớp dạng thấp, lupus).","src":[0,1,2]}
+],
+"course":[
+{"text":"Nếu điều trị đúng, bệnh thường không nghiêm trọng và bạn có thể sống bình thường. Thường dùng thuốc suốt đời để triệu chứng không quay lại.","src":[0]},
+{"text":"Không điều trị, hoặc dùng sai liều thuốc, làm tăng nguy cơ bệnh tim (bệnh mạch vành, suy tim) và vấn đề về xương như loãng xương.","src":[0]},
+{"text":"Suy giáp có thể góp phần làm cholesterol cao. Nếu cholesterol cao, nên được kiểm tra suy giáp.","src":[1,2]},
+{"text":"Thai kỳ: suy giáp không điều trị có thể gây tiền sản giật, dị tật bẩm sinh, sinh non, sảy thai; điều trị thường giúp phòng ngừa. Cần báo bác sĩ ngay khi có thai hoặc dự định có thai.","src":[0,1,2]},
+{"text":"Suy giáp bẩm sinh không điều trị có thể gây chậm phát triển trí tuệ và thể chất; hầu hết trẻ sơ sinh ở Mỹ được tầm soát.","src":[2]}
+],
+"care":[
+{"text":"Điều trị chính là uống thuốc thay thế hormone tuyến giáp mỗi ngày (thường là levothyroxine) theo chỉ định của bác sĩ.","src":[0,1,2]},
+{"text":"Bác sĩ có thể dặn uống thuốc vào buổi sáng trước khi ăn.","src":[2]},
+{"text":"Xét nghiệm máu sau khoảng 6–8 tuần kể từ khi bắt đầu thuốc để chỉnh liều, rồi xét nghiệm lại sau mỗi lần chỉnh; khi ổn định thì lặp lại khoảng 6 tháng, sau đó mỗi năm.","src":[1,2]},
+{"text":"**Đừng tự ý ngưng thuốc** khi chưa hỏi bác sĩ. Dùng thuốc đúng chỉ định thường kiểm soát được bệnh.","src":[1,2]},
+{"text":"Liều không phù hợp có thể gây tác dụng phụ như buồn nôn, tiêu chảy, đau đầu, khó ngủ; nếu gặp, hãy hỏi bác sĩ hoặc dược sĩ.","src":[0]},
+{"text":"Dùng quá nhiều hormone tuyến giáp có thể gây vấn đề nghiêm trọng như rung nhĩ và loãng xương.","src":[2]}
+],
+"diet":{
+"avoid":[
+{"text":"Thực phẩm rất nhiều iod như tảo bẹ (kelp), dulse và các loại rong biển khác có thể gây hoặc làm nặng thêm suy giáp; thực phẩm bổ sung iod cũng vậy.","src":[2]}
+],
+"ok":[
+{"text":"NHS không đưa lời khuyên ăn uống chung cho suy giáp.","src":[0]},
+{"text":"Người bị Hashimoto hoặc bệnh tự miễn tuyến giáp khác có thể nhạy cảm với tác hại của iod; hãy hỏi bác sĩ nên hạn chế hoặc tránh thực phẩm, thực phẩm bổ sung và thuốc nào.","src":[1,2]},
+{"text":"Phụ nữ mang thai cần nhiều iod hơn vì em bé nhận iod từ chế độ ăn của mẹ; hãy hỏi bác sĩ lượng phù hợp.","src":[1,2]}
+],
+"foods":[
+{"name":"rong biển","aliases":["tảo bẹ","kelp","dulse","tảo biển","rong biển khô"],"verdict":"limit","note":"NIDDK: thực phẩm rất nhiều iod như tảo bẹ (kelp), dulse hay rong biển có thể gây hoặc làm nặng suy giáp; hãy hỏi đội ngũ y tế nên hạn chế món nào.","src":[2]},
+{"name":"thực phẩm bổ sung iod và siro ho có iod","aliases":["viên iod","iod","siro ho"],"verdict":"limit","note":"NIDDK: thực phẩm bổ sung iod có thể gây hoặc làm nặng suy giáp; siro ho có thể chứa iod, hãy hỏi bác sĩ.","src":[2]}
+]},
+"doctor":[
+{"text":"Nên đi khám (không khẩn cấp) nếu nghĩ mình có thể bị suy giáp, vì nhiều triệu chứng cũng có thể do nguyên nhân khác nên cần được kiểm tra.","src":[0]},
+{"text":"Chẩn đoán dựa trên hỏi bệnh sử, khám cổ và xét nghiệm máu đo TSH và T4; có thể được chuyển đến bác sĩ chuyên khoa nội tiết.","src":[0,2]},
+{"text":"Phụ nữ gặp khó khăn khi mang thai thường được xét nghiệm tuyến giáp.","src":[2]}
+],
+"emergency":[
+{"text":"Hiếm gặp: suy giáp nặng không điều trị có thể gây **hôn mê phù niêm** (myxoedema), cấp cứu đe doạ tính mạng cần điều trị ngay tại bệnh viện; gặp nhiều hơn ở người lớn tuổi.","src":[0,2]}
+],
+"sources":[
+{"title":"Underactive thyroid (hypothyroidism)","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/underactive-thyroid-hypothyroidism/","reviewed":"2025-04-28"},
+{"title":"Hypothyroidism","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/hypothyroidism.html","reviewed":"2026-08-05"},
+{"title":"Hypothyroidism (Underactive Thyroid)","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/endocrine-diseases/hypothyroidism","reviewed":"2021-03"}
+],
+"verifiedAt":"2026-10-09"
+}

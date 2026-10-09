@@ -1,0 +1,60 @@
+{
+"id":"ung-thu-tuy","kind":"cancer",
+"names":["ung thư tuỵ","ung thư tụy","ung thư tuyến tụy","ung thư tuyến tuỵ","pancreatic cancer","ung thu tuy","K tụy"],
+"about":[
+{"text":"Tuỵ là tuyến nằm sau dạ dày, tạo ra dịch tiêu hoá và hormone giúp kiểm soát đường huyết. Ung thư tuỵ thường bắt đầu ở các tế bào tạo dịch tiêu hoá.","src":[3]},
+{"text":"Tuỵ nằm sau các cơ quan khác nên khối u không thể nhìn hoặc sờ thấy khi khám thông thường.","src":[3]}
+],
+"signs":[
+{"text":"Ung thư tuỵ có thể **không có triệu chứng**, hoặc triệu chứng mơ hồ, khó nhận ra.","src":[0,3]},
+{"text":"Vàng da hoặc vàng lòng trắng mắt, thường kèm ngứa da, nước tiểu sẫm màu, phân nhạt màu.","src":[0,3]},
+{"text":"Chán ăn hoặc sụt cân ngoài ý muốn; mệt mỏi, không có sức; sốt, hoặc cảm giác nóng, lạnh, run.","src":[0,3]},
+{"text":"Triệu chứng tiêu hoá: buồn nôn hoặc nôn, tiêu chảy, táo bón hoặc thay đổi thói quen đi cầu, chướng bụng giống khó tiêu.","src":[0]},
+{"text":"Đau bụng trên lan ra sau lưng, có thể đỡ hơn khi nghiêng người về phía trước.","src":[0,3]},
+{"text":"Những triệu chứng này thường gặp và hay do nguyên nhân khác, **không đủ để khẳng định ung thư**.","src":[0]}
+],
+"causes":[
+{"text":"NHS: ai cũng có thể bị ung thư tuỵ và không phải lúc nào cũng rõ nguyên nhân. Nhiều trường hợp liên quan đến lối sống.","src":[1]},
+{"text":"Nguy cơ cao hơn ở người trên 65 tuổi; ít gặp ở người dưới 40.","src":[1]},
+{"text":"Viêm tuỵ mạn, tiểu đường lâu năm và một số bệnh di truyền làm tăng nguy cơ.","src":[1,3]},
+{"text":"Có người thân từng bị ung thư tuỵ; hút thuốc.","src":[1,3]}
+],
+"course":[
+{"text":"Điều trị tuỳ kích thước, loại, vị trí ung thư, mức lan và sức khoẻ chung của bạn.","src":[2]},
+{"text":"Ung thư tuỵ giai đoạn muộn thường gây sụt cân, yếu, đau, buồn nôn, nôn hoặc không ăn được; chăm sóc giảm nhẹ giúp kiểm soát các triệu chứng này.","src":[4]}
+],
+"care":[
+{"text":"Bốn hướng chính: phẫu thuật, hoá trị, xạ trị và chăm sóc hỗ trợ. Bác sĩ chuyên khoa quyết định.","src":[2]},
+{"text":"Phẫu thuật có thể cắt một phần tuỵ, hoặc toàn bộ tuỵ ở số ít trường hợp. Khi không cắt được u, mổ có thể giúp giảm triệu chứng như thông hoặc nối vòng ống mật, tá tràng.","src":[2]},
+{"text":"Hoá trị có thể dùng trước hoặc sau mổ, dùng riêng hoặc phối hợp với xạ trị. Xạ trị ít được dùng cho ung thư tuỵ; có thể dùng kèm hoá trị hoặc để giảm triệu chứng.","src":[2]},
+{"text":"MedlinePlus nêu thêm liệu pháp nhắm trúng đích. NCI thường phối hợp nhiều cách và thử nghiệm lâm sàng cũng là một lựa chọn.","src":[3,4]},
+{"text":"Chăm sóc hỗ trợ giúp giảm triệu chứng, gồm khó ăn, sụt cân, đau, mệt, buồn nôn. Đội giảm nhẹ giúp bạn và gia đình khi bệnh không chữa khỏi được.","src":[2]},
+{"text":"Đội điều trị có thể hướng dẫn thay đổi ăn uống để dễ tiêu hoá hơn, và bác sĩ có thể kê men tiêu hoá dạng viên.","src":[2]},
+{"text":"Sau phẫu thuật Whipple, phần tuỵ còn lại vẫn tạo dịch tiêu hoá và insulin, nhưng bạn có thể cần dùng men tiêu hoá khi ăn để hỗ trợ dinh dưỡng.","src":[4]},
+{"text":"Giảm nguy cơ: giảm cân nếu thừa cân, ăn ít thịt đỏ và thịt chế biến sẵn (như giăm bông, thịt xông khói, salami), hạn chế rượu bia, bỏ thuốc lá.","src":[1]}
+],
+"diet":{
+"avoid":[{"text":"NHS khuyên ăn ít thịt đỏ và thịt chế biến sẵn như giăm bông, thịt xông khói, salami để giảm nguy cơ ung thư tuỵ.","src":[1]}],
+"ok":[
+{"text":"Khi ăn uống khó khăn hoặc sụt cân, đội điều trị có thể giúp thay đổi chế độ ăn để dễ tiêu hoá, và bác sĩ có thể kê men tiêu hoá.","src":[2]}
+],
+"foods":[
+{"name":"thịt đỏ và thịt chế biến sẵn","aliases":["thịt bò","thịt heo","thịt lợn","xúc xích","thịt xông khói","giăm bông","lạp xưởng","giò chả","thịt nguội"],"verdict":"limit","note":"NHS khuyên ăn ít thịt đỏ và thịt chế biến sẵn (giăm bông, thịt xông khói, salami) để giảm nguy cơ.","src":[1]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS khuyên hạn chế rượu bia để giảm nguy cơ ung thư tuỵ.","src":[1]}
+]},
+"doctor":[
+{"text":"Hãy đi khám nếu sụt cân đáng kể, hoặc các triệu chứng khác nặng lên/không đỡ sau 2 tuần.","src":[0]},
+{"text":"Hãy đi khám nếu bệnh tiêu hoá đã có không đỡ sau 2 tuần điều trị thông thường.","src":[0]},
+{"text":"NHS khuyên đi khám bất kỳ triệu chứng nào, ngay cả khi bạn không nghĩ mình thuộc nhóm nguy cơ cao. Phát hiện sớm có thể giúp dễ điều trị hơn.","src":[0,1]}
+],
+"emergency":[
+{"text":"Cần xin khám gấp hoặc gọi đường dây y tế khẩn nếu mắt hoặc da vàng, nôn hơn 2 ngày, hoặc tiêu chảy hơn 7 ngày.","src":[0]}
+],
+"sources":[
+{"title":"Pancreatic cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/pancreatic-cancer/symptoms/","reviewed":"2023-06-09"},
+{"title":"Pancreatic cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/pancreatic-cancer/causes/","reviewed":"2023-06-09"},
+{"title":"Pancreatic cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/pancreatic-cancer/treatment/","reviewed":"2023-06-09"},
+{"title":"Pancreatic Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/pancreaticcancer.html","reviewed":"2025-09-27"},
+{"title":"Pancreatic Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/pancreatic/patient/pancreatic-treatment-pdq"}
+],
+"verifiedAt":"2026-10-09"}

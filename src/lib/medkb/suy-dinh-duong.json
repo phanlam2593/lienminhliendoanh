@@ -1,0 +1,62 @@
+{
+"id":"suy-dinh-duong",
+"kind":"condition",
+"names":["suy dinh dưỡng","thiếu dinh dưỡng","suy dinh dưỡng thấp còi","thấp còi","malnutrition","undernutrition","stunting","wasting"],
+"disambiguation":"Thẻ này chủ yếu nói về suy dinh dưỡng do thiếu chất (undernutrition) ở người lớn và trẻ em.",
+"about":[
+{"text":"Suy dinh dưỡng là tình trạng nghiêm trọng do chế độ ăn thiếu lượng chất dinh dưỡng phù hợp.","src":[0]},
+{"text":"Theo WHO, \"malnutrition\" gồm thiếu hụt, dư thừa hoặc mất cân bằng năng lượng và chất dinh dưỡng: thiếu dinh dưỡng, thiếu vi chất, và thừa cân béo phì cùng các bệnh liên quan chế độ ăn.","src":[1]},
+{"text":"Thiếu dinh dưỡng có các dạng: **gầy còm** (cân nặng thấp so với chiều cao, thường do sụt cân nặng gần đây), **thấp còi** (chiều cao thấp so với tuổi, do thiếu dinh dưỡng kéo dài hoặc lặp lại), **nhẹ cân**, và thiếu vitamin, khoáng chất.","src":[1]},
+{"text":"MedlinePlus: có thể thiếu đạm - năng lượng (như kwashiorkor, marasmus), thiếu vitamin/khoáng chất, hoặc chậm lớn ở trẻ (failure to thrive).","src":[2]}
+],
+"signs":[
+{"text":"Dấu hiệu chính của người lớn là sụt cân không chủ ý; cân nặng thấp, ít muốn ăn uống, mệt và yếu liên tục, hay ốm và lâu hồi phục.","src":[0,2]},
+{"text":"Ở trẻ: không lớn hoặc không tăng cân như mong đợi, chậm phát triển.","src":[0,2]},
+{"text":"MedlinePlus nêu thêm: chóng mặt, da khô, tóc và móng giòn, phù chân, bàn chân hoặc bụng. Có người không có triệu chứng.","src":[2]}
+],
+"causes":[
+{"text":"Ở người lớn thường liên quan đến: bệnh mạn tính ảnh hưởng đến khẩu vị, cân nặng hoặc hấp thu chất dinh dưỡng (như bệnh Crohn), khó nuốt, bị cô lập, hạn chế vận động hoặc thu nhập thấp.","src":[0,2]},
+{"text":"Nhu cầu năng lượng cao hơn (như xơ nang, hồi phục sau chấn thương/bỏng nặng) cũng làm tăng nguy cơ.","src":[0]},
+{"text":"Người từ 65 tuổi trở lên và trẻ dưới 5 tuổi có nguy cơ cao hơn, dù sụt cân không phải điều tất yếu của tuổi già.","src":[0]},
+{"text":"MedlinePlus nêu thêm: chế độ ăn thiếu đa dạng, sa sút trí tuệ, rối loạn ăn uống, trầm cảm, rối loạn sử dụng rượu, ung thư, vấn đề nhai nuốt/răng miệng, thuốc làm đổi vị.","src":[2]},
+{"text":"Ở trẻ em theo WHO: thiếu thức ăn, bệnh nhiễm trùng, điều kiện kinh tế xã hội kém, sức khoẻ và dinh dưỡng của mẹ kém, cách cho ăn không phù hợp ở trẻ nhỏ.","src":[1]}
+],
+"course":[
+{"text":"Theo WHO, thiếu dinh dưỡng khiến trẻ dễ mắc bệnh và nặng hơn nhiều; thể thấp còi hạn chế tiềm năng thể chất và trí tuệ của trẻ.","src":[1]},
+{"text":"Trẻ gầy còm có nguy cơ tử vong cao hơn nhưng có thể điều trị được.","src":[1]}
+],
+"care":[
+{"text":"Điều trị gồm cải thiện chế độ ăn, bổ sung chất còn thiếu và điều trị nguyên nhân nền.","src":[2]},
+{"text":"Lời khuyên ban đầu của NHS: ăn thực phẩm tăng cường giàu năng lượng và đạm, ăn nhẹ giữa các bữa, uống đồ uống nhiều năng lượng.","src":[0]},
+{"text":"Nếu chỉ đổi chế độ ăn chưa đủ, có thể dùng đồ uống hoặc thực phẩm bổ sung dinh dưỡng. Nếu ăn rất khó khăn, có thể cho ăn qua ống hoặc nuôi dưỡng qua tĩnh mạch; do bác sĩ quyết định.","src":[0]},
+{"text":"Một số người cần hỗ trợ thêm về chăm sóc tại nhà hoặc liệu pháp hoạt động; gia đình, người chăm sóc trẻ suy dinh dưỡng có thể cần được tư vấn và hỗ trợ.","src":[0]},
+{"text":"Ăn uống lành mạnh, đa dạng giúp phòng suy dinh dưỡng. Hãy trao đổi với nhân viên y tế nếu lo về chế độ ăn, sụt cân hoặc sự phát triển của trẻ.","src":[2]},
+{"text":"WHO nhấn mạnh dinh dưỡng tốt trong 1.000 ngày đầu (từ lúc thụ thai đến khi trẻ tròn 2 tuổi) mang lại khởi đầu tốt nhất cho trẻ.","src":[1]}
+],
+"diet":{
+"avoid":[],
+"ok":[
+{"text":"NHS khuyên ăn thực phẩm tăng cường giàu năng lượng, giàu đạm; ăn nhẹ giữa các bữa; uống đồ uống nhiều năng lượng.","src":[0]},
+{"text":"NHS nêu các nhóm: trái cây và rau; tinh bột như bánh mì, cơm, khoai tây, mì ống; sữa và chế phẩm (hoặc sản phẩm thay thế không sữa); đạm từ thịt, cá, trứng, đậu.","src":[0]},
+{"text":"Nếu có bệnh nền hoặc ăn kiêng đặc biệt, hãy hỏi bác sĩ hoặc chuyên gia dinh dưỡng trước.","src":[0]}
+],
+"foods":[
+{"name":"thực phẩm giàu năng lượng và đạm","aliases":["thực phẩm tăng cường","đồ uống nhiều năng lượng"],"verdict":"good","note":"NHS: lời khuyên ban đầu là ăn thực phẩm tăng cường giàu năng lượng và đạm, ăn nhẹ giữa bữa, uống đồ uống nhiều năng lượng.","src":[0]},
+{"name":"thịt, cá, trứng, đậu","aliases":["thịt","cá","trứng","đậu","đạm"],"verdict":"good","note":"NHS nêu thịt, cá, trứng, đậu là nhóm đạm trong chế độ ăn cân đối.","src":[0]},
+{"name":"cơm, bánh mì, khoai, mì","aliases":["cơm","gạo","bánh mì","khoai tây","mì ống","tinh bột"],"verdict":"good","note":"NHS nêu các thực phẩm giàu tinh bột như bánh mì, cơm, khoai tây, mì ống là một phần chế độ ăn.","src":[0]},
+{"name":"sữa và chế phẩm từ sữa","aliases":["sữa","sữa chua","phô mai"],"verdict":"good","note":"NHS nêu sữa và các chế phẩm từ sữa (hoặc sản phẩm thay thế không sữa) là một nhóm trong chế độ ăn.","src":[0]},
+{"name":"trái cây và rau","aliases":["rau","trái cây","rau củ"],"verdict":"good","note":"NHS nêu trái cây và rau là một nhóm trong chế độ ăn cân đối.","src":[0]}
+]},
+"doctor":[
+{"text":"Nên đi khám nếu sụt cân nhiều ngoài ý muốn trong khoảng 3–6 tháng, hoặc có các dấu hiệu suy dinh dưỡng khác.","src":[0]},
+{"text":"Cũng nên đi khám nếu bạn lo một người bạn đang chăm sóc (như trẻ em hoặc người cao tuổi) bị suy dinh dưỡng.","src":[0]},
+{"text":"Bác sĩ có thể đo cân nặng và chiều cao, hỏi về bệnh lý và thay đổi cân nặng, khẩu vị gần đây, làm xét nghiệm máu tìm thiếu chất, và có thể chuyển đến chuyên gia dinh dưỡng.","src":[0,2]}
+],
+"emergency":[],
+"sources":[
+{"title":"Malnutrition","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/malnutrition/","reviewed":"2023-05-23"},
+{"title":"Malnutrition","publisher":"WHO","url":"https://www.who.int/news-room/fact-sheets/detail/malnutrition","reviewed":"2024-03-01"},
+{"title":"Malnutrition","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/malnutrition.html","reviewed":"2025-08-29"}
+],
+"verifiedAt":"2026-10-09"
+}

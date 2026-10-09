@@ -49,6 +49,8 @@ export type Turn = {
   hsub?: string;
   sx?: string[];
   diet?: string;
+  med?: { id: string; aspect?: string }; // 09/10: trả lời từ kho kiến thức y khoa có nguồn
+  stuck?: string; // 09/10: loại "bí" (ghi nhật ký lomi_stuck_log)
   dish?: string;
   dishPick?: boolean;
   dishAsk?: { drink: boolean; shown: string[] };
@@ -74,6 +76,7 @@ const history = (): Turn[] => JSON.parse(localStorage.getItem(`ai-assistant-hist
 
 /** Gõ lần lượt các tin vào khung chat thật; trả về các tin LOMI đáp (theo thứ tự), kèm cờ ngữ cảnh. */
 export async function chat(turns: string[]): Promise<Turn[]> {
+  await import("@/lib/lomiMedData"); // kho kiến thức y khoa là 1 chunk nạp động — nạp sẵn để lượt đầu không vượt thời gian chờ
   cleanup();
   localStorage.clear();
   Element.prototype.scrollIntoView = () => {};

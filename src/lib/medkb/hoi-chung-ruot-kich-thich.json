@@ -1,0 +1,87 @@
+{
+"id":"hoi-chung-ruot-kich-thich","kind":"condition",
+"names":["hội chứng ruột kích thích","ruột kích thích","IBS","irritable bowel syndrome","bệnh ruột kích thích","hội chứng kích thích ruột"],
+"about":[
+{"text":"Hội chứng ruột kích thích (IBS) là tình trạng thường gặp của hệ tiêu hoá, gây đau quặn bụng, đầy hơi, tiêu chảy và táo bón; triệu chứng lúc có lúc không, có thể kéo dài nhiều ngày, nhiều tuần hoặc nhiều tháng.","src":[0]},
+{"text":"NIDDK: IBS là nhóm triệu chứng đi cùng nhau — đau bụng lặp lại và thay đổi thói quen đi cầu (tiêu chảy, táo bón hoặc cả hai) — mà không thấy tổn thương hay bệnh rõ ràng ở đường tiêu hoá.","src":[3]},
+{"text":"Mayo Clinic: IBS không làm thay đổi mô ruột và không làm tăng nguy cơ ung thư đại trực tràng.","src":[5]}
+],
+"signs":[
+{"text":"Đau hoặc co thắt ở bụng, thường nặng hơn sau khi ăn và dịu bớt sau khi đi cầu.","src":[1]},
+{"text":"Bụng đầy hơi, căng; tiêu chảy (phân lỏng, đôi khi buồn đi gấp); táo bón (phải rặn, cảm giác đi chưa hết).","src":[1]},
+{"text":"Triệu chứng có lúc dịu, có lúc bùng phát. Bùng phát có thể xảy ra mà không rõ lý do.","src":[1]},
+{"text":"Có thể kèm: đầy hơi, nhầy trong phân, mệt, buồn nôn, đau lưng, tiểu nhiều hoặc tiểu gấp, đau vùng chậu.","src":[1]},
+{"text":"IBS được chia kiểu theo dạng phân: thiên về táo bón (IBS-C), thiên về tiêu chảy (IBS-D) hoặc hỗn hợp (IBS-M).","src":[3]}
+],
+"causes":[
+{"text":"Nguyên nhân chính xác chưa rõ. NHS liên hệ với thức ăn đi qua ruột quá nhanh hoặc quá chậm, ruột quá nhạy cảm, căng thẳng, từng bị viêm dạ dày ruột (gastroenteritis) và tiền sử gia đình có người bị IBS.","src":[0]},
+{"text":"NIDDK: IBS liên quan đến rối loạn tương tác giữa não và ruột, làm ruột nhạy cảm hơn và thay đổi cách cơ ruột co bóp.","src":[3]},
+{"text":"NIDDK: yếu tố nguy cơ gồm tiền sử gia đình, trải nghiệm khó khăn thời thơ ấu, từng bị nhiễm trùng đường tiêu hoá nặng; nữ giới và người dưới 50 tuổi dễ mắc hơn.","src":[3]},
+{"text":"Các thứ có thể làm bùng phát: rượu, caffeine, một số thức ăn (như đồ cay hoặc béo), căng thẳng, lo âu, dùng kháng sinh thường xuyên.","src":[1]},
+{"text":"Mayo Clinic: căng thẳng có thể làm triệu chứng nặng hơn nhưng không gây ra IBS.","src":[5]}
+],
+"course":[
+{"text":"IBS thường là vấn đề lâu dài (suốt đời), nhưng thay đổi ăn uống và thuốc thường giúp kiểm soát triệu chứng.","src":[0]},
+{"text":"NIDDK: IBS hay đi kèm một số tình trạng khác như bệnh đau mạn tính (đau cơ xơ hoá, đau vùng chậu mạn), khó tiêu, trào ngược dạ dày thực quản, lo âu và trầm cảm.","src":[3]},
+{"text":"Mayo Clinic: IBS có thể gây trĩ do táo bón hoặc tiêu chảy kéo dài, và làm giảm chất lượng cuộc sống.","src":[5]}
+],
+"care":[
+{"text":"Ghi nhật ký ăn uống và triệu chứng để tìm thứ khiến bạn bùng phát, rồi cố tránh chúng.","src":[2]},
+{"text":"Tìm cách thư giãn và vận động nhiều. Có thể thử men vi sinh (probiotic) trong một tháng xem có đỡ không.","src":[2]},
+{"text":"Dược sĩ có thể gợi ý các nhóm thuốc: chống co thắt, dầu bạc hà (cho đầy hơi, co thắt), thuốc cầm tiêu chảy, thuốc nhuận tràng cho táo bón — do dược sĩ hoặc bác sĩ quyết định.","src":[2]},
+{"text":"Mayo Clinic: quản lý ăn uống (tránh thức ăn gây triệu chứng) và quản lý căng thẳng giúp giảm bùng phát; trường hợp nặng hơn có thể dùng thuốc và tư vấn tâm lý.","src":[5]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS: đừng bỏ bữa hay ăn quá nhanh; hạn chế đồ béo, cay và thức ăn chế biến sẵn.","src":[2]},
+{"text":"NHS: không ăn quá 3 phần trái cây tươi mỗi ngày; không uống quá 3 tách trà, cà phê hay đồ uống chứa caffeine mỗi ngày; tránh nhiều rượu và nước có ga.","src":[2]},
+{"text":"Mayo Clinic: thức ăn hay gây triệu chứng gồm lúa mì, sữa và chế phẩm, cam quýt, các loại đậu, bắp cải và đồ uống có ga.","src":[5]},
+{"text":"NIDDK: ăn quá nhiều chất xơ một lúc có thể sinh hơi và gây triệu chứng; một số người IBS nặng hơn sau khi ăn gluten dù không bị bệnh celiac.","src":[4]}
+],
+"ok":[
+{"text":"NHS: ăn uống lành mạnh, cân đối; uống khoảng 1,5 lít (8–10 cốc) nước hoặc đồ uống không caffeine như trà thảo mộc mỗi ngày.","src":[2]},
+{"text":"NHS: khi đầy bụng hoặc co thắt, ăn yến mạch đều đặn và dùng hạt lanh (tối đa một muỗng canh mỗi ngày); tránh sản phẩm chứa chất tạo ngọt sorbitol.","src":[2]},
+{"text":"NHS: khi tiêu chảy, bớt thực phẩm nhiều chất xơ như ngũ cốc nguyên hạt, các loại hạt; uống nhiều nước.","src":[2]},
+{"text":"NHS: khi táo bón, uống nhiều nước và ăn thêm chất xơ hoà tan như yến mạch, các loại đậu, cà rốt, khoai tây gọt vỏ, hạt lanh.","src":[2]},
+{"text":"NIDDK: chất xơ hoà tan (đậu, trái cây, yến mạch) hợp với IBS hơn chất xơ không hoà tan; nên tăng chất xơ từ từ.","src":[4]},
+{"text":"NIDDK: có thể thử chế độ low FODMAP trong vài tuần rồi thêm lại từng nhóm thức ăn; nên có chuyên viên dinh dưỡng hỗ trợ.","src":[4]}
+],
+"foods":[
+{"name":"yến mạch","aliases":["cháo yến mạch","oat","oatmeal","bột yến mạch"],"verdict":"good","note":"NHS: ăn yến mạch (như cháo yến mạch) đều đặn giúp khi đầy bụng, co thắt, và là chất xơ hoà tan hữu ích khi táo bón. NIDDK nêu yến mạch là chất xơ hoà tan.","src":[2,4]},
+{"name":"hạt lanh","aliases":["linseed","flaxseed"],"verdict":"good","note":"NHS: dùng tối đa một muỗng canh hạt lanh (nguyên hạt hoặc xay) mỗi ngày giúp khi đầy bụng, co thắt; cũng được nêu là chất xơ hoà tan khi táo bón.","src":[2]},
+{"name":"bắp cải và các loại rau họ cải","aliases":["bắp cải","cải bắp","súp lơ","bông cải xanh","bông cải trắng","cải brussels"],"verdict":"limit","note":"NHS: khi đầy hơi, co thắt nên tránh các món khó tiêu như bắp cải, bông cải xanh, súp lơ, cải brussels. NIDDK xếp bắp cải, súp lơ vào nhóm FODMAP cao.","src":[2,4]},
+{"name":"hành tây","aliases":["onion"],"verdict":"limit","note":"NHS: khi đầy hơi, co thắt nên tránh hành tây. NIDDK xếp hành tây vào nhóm FODMAP cao.","src":[2,4]},
+{"name":"tỏi","aliases":["garlic"],"verdict":"limit","note":"NIDDK xếp tỏi và muối tỏi vào nhóm thực phẩm FODMAP cao có thể gây triệu chứng.","src":[4]},
+{"name":"các loại đậu","aliases":["các loại đậu","đậu hạt","đậu lăng","đậu đen","đậu đỏ"],"verdict":"limit","note":"NHS: khi đầy hơi nên tránh đậu, nhưng khi táo bón NHS lại gợi ý đậu (pulses) là chất xơ hoà tan. NIDDK xếp đậu và đậu lăng vào nhóm FODMAP cao.","src":[2,4]},
+{"name":"sữa và chế phẩm từ sữa","aliases":["sữa","sữa tươi","sữa chua","phô mai mềm","kem lạnh"],"verdict":"limit","note":"Mayo Clinic nêu sữa và chế phẩm từ sữa là thức ăn hay gây triệu chứng; NIDDK xếp sữa, sữa chua, phô mai mềm, kem vào nhóm FODMAP cao.","src":[4,5]},
+{"name":"lúa mì và gluten","aliases":["bột mì","bánh mì","mì ống","pasta","lúa mạch","lúa mạch đen"],"verdict":"limit","note":"Mayo Clinic nêu lúa mì là thức ăn hay gây triệu chứng; NIDDK: một số người IBS nặng hơn sau khi ăn gluten (lúa mì, lúa mạch, lúa mạch đen) và có thể thử bỏ gluten để xem có đỡ không.","src":[4,5]},
+{"name":"trái cây tươi","aliases":["trái cây","hoa quả"],"verdict":"limit","note":"NHS: không ăn quá 3 phần trái cây tươi mỗi ngày.","src":[2]},
+{"name":"trái cây nhóm FODMAP cao","aliases":["táo","mơ","anh đào","xoài","lê","mận","dưa hấu","mâm xôi đen"],"verdict":"limit","note":"NIDDK liệt kê táo, mơ, mâm xôi đen, anh đào, xoài, lê, mận, dưa hấu và nước ép các loại này vào nhóm FODMAP cao.","src":[4]},
+{"name":"mật ong","aliases":["honey"],"verdict":"limit","note":"NIDDK xếp mật ong và thực phẩm chứa siro ngô fructose cao vào nhóm FODMAP cao.","src":[4]},
+{"name":"chất tạo ngọt sorbitol và các chất kết thúc bằng “-ol”","aliases":["sorbitol","xylitol","kẹo cao su không đường","kẹo không đường"],"verdict":"avoid","note":"NHS: tránh sản phẩm chứa sorbitol khi đầy hơi hoặc tiêu chảy. NIDDK: kẹo, kẹo cao su có chất tạo ngọt như sorbitol, mannitol, xylitol, maltitol thuộc nhóm FODMAP cao.","src":[2,4]},
+{"name":"ngũ cốc nguyên hạt và các loại hạt","aliases":["gạo lứt","bánh mì nâu","các loại hạt"],"verdict":"limit","note":"NHS: khi tiêu chảy nên bớt thực phẩm nhiều chất xơ như bánh mì nâu, gạo lứt, các loại hạt. NIDDK: chất xơ không hoà tan có trong ngũ cốc nguyên hạt; chất xơ nói chung có thể giúp khi táo bón.","src":[2,4]},
+{"name":"cà rốt","aliases":["carrot"],"verdict":"good","note":"NHS nêu cà rốt là nguồn chất xơ hoà tan hữu ích khi táo bón.","src":[2]},
+{"name":"khoai tây gọt vỏ","aliases":["khoai tây"],"verdict":"good","note":"NHS nêu khoai tây gọt vỏ là nguồn chất xơ hoà tan hữu ích khi táo bón.","src":[2]},
+{"name":"đồ uống chứa caffeine","aliases":["cà phê","trà","cafe","trà đặc"],"verdict":"limit","note":"NHS: không uống quá 3 tách trà, cà phê hay đồ uống chứa caffeine mỗi ngày; caffeine cũng là thứ có thể làm bùng phát triệu chứng.","src":[1,2]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS: tránh uống nhiều rượu; rượu có thể làm bùng phát triệu chứng.","src":[1,2]},
+{"name":"đồ uống có ga","aliases":["nước có ga","nước ngọt có ga","soda"],"verdict":"limit","note":"NHS khuyên tránh uống nhiều đồ uống có ga; Mayo Clinic nêu đồ uống có ga hay gây triệu chứng.","src":[2,5]},
+{"name":"đồ cay và đồ nhiều dầu mỡ","aliases":["đồ cay","ớt","đồ béo","đồ chiên rán"],"verdict":"limit","note":"NHS khuyên hạn chế đồ béo, cay và chế biến sẵn; đây cũng là thứ có thể làm bùng phát triệu chứng.","src":[1,2]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu nghĩ mình bị IBS và triệu chứng kéo dài hơn 4 tuần, để bác sĩ kiểm tra và loại trừ các bệnh khác.","src":[1]},
+{"text":"Nên đi khám nếu đổi ăn uống và thuốc mua ở hiệu thuốc không giúp được, hoặc phải kiêng rất nhiều món mới kiểm soát được triệu chứng.","src":[2]},
+{"text":"Nên khám gấp nếu sụt cân đáng kể không rõ lý do, chảy máu trực tràng hoặc tiêu chảy ra máu, sờ thấy cục cứng hoặc sưng ở bụng, khó thở, tim đập nhanh hoặc da xanh xao bất thường — có thể là bệnh nghiêm trọng hơn.","src":[1]},
+{"text":"Mayo Clinic: thay đổi thói quen đi cầu kéo dài có thể là dấu hiệu bệnh khác như ung thư đại tràng. Hãy khám nếu sụt cân, tiêu chảy ban đêm, chảy máu trực tràng, thiếu máu thiếu sắt, nôn không rõ lý do, hoặc đau không đỡ khi trung tiện hay đi cầu.","src":[5]}
+],
+"emergency":[],
+"sources":[
+{"title":"Irritable bowel syndrome (IBS) - What is IBS","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/irritable-bowel-syndrome-ibs/what-is-ibs/","reviewed":"2025-03-17"},
+{"title":"Irritable bowel syndrome (IBS) - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/irritable-bowel-syndrome-ibs/symptoms/","reviewed":"2025-03-17"},
+{"title":"Irritable bowel syndrome (IBS) - Diet, lifestyle and medicines","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/irritable-bowel-syndrome-ibs/diet-lifestyle-and-medicines/","reviewed":"2025-03-17"},
+{"title":"Definition & Facts for Irritable Bowel Syndrome","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/irritable-bowel-syndrome/definition-facts","reviewed":"2017-11"},
+{"title":"Eating, Diet, & Nutrition for Irritable Bowel Syndrome","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/irritable-bowel-syndrome/eating-diet-nutrition","reviewed":"2017-11"},
+{"title":"Irritable bowel syndrome - Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/irritable-bowel-syndrome/symptoms-causes/syc-20360016","reviewed":"2024-10-11"}
+],
+"verifiedAt":"2026-10-09"
+}

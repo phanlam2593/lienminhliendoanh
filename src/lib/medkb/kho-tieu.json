@@ -1,0 +1,60 @@
+{
+"id":"kho-tieu","kind":"condition",
+"names":["khó tiêu","đầy hơi khó tiêu","chứng khó tiêu","dyspepsia","indigestion","ăn không tiêu","đầy bụng khó tiêu","đầy bụng"],
+"about":[
+{"text":"Hầu hết mọi người đều bị khó tiêu (dyspepsia) vào lúc nào đó. Thường không phải dấu hiệu của bệnh nặng hơn và có thể điều trị tại nhà.","src":[0]},
+{"text":"Khó tiêu là đau hoặc khó chịu ở bụng trên, hoặc sau xương ức (ợ nóng).","src":[0]},
+{"text":"Mayo Clinic: khó tiêu là khó chịu hoặc đau ở bụng, có thể kèm rát, cảm giác no sớm trong bữa ăn hoặc no lâu sau ăn; có thể thỉnh thoảng hoặc thường xuyên.","src":[1]}
+],
+"signs":[
+{"text":"Sau khi ăn hoặc uống có thể bị: ợ nóng (nóng rát đau ở ngực, thường sau ăn); cảm giác no và đầy bụng; buồn nôn; ợ hơi và đánh rắm; trào thức ăn hoặc dịch đắng lên miệng.","src":[0]},
+{"text":"Đau bụng hoặc đau lưng thường không phải khó tiêu; đó có thể là dấu hiệu táo bón.","src":[0]},
+{"text":"Mayo Clinic: no sớm khi ăn hoặc không ăn hết bữa như thường; no lâu sau ăn; đau từ nhẹ đến nặng hoặc rát ở bụng trên; đầy, căng ở bụng trên; buồn nôn hoặc nôn; ợ hơi, kể cả ợ thức ăn lên.","src":[1]}
+],
+"causes":[
+{"text":"Acid dạ dày kích ứng niêm mạc dạ dày hoặc họng (trào ngược acid); một số thức ăn, đồ uống (cà phê, cà chua, rượu, sô-cô-la, đồ béo hoặc cay); thừa cân; hút thuốc; mang thai; căng thẳng, lo âu.","src":[0]},
+{"text":"Một số thuốc, như thuốc giảm đau kháng viêm (ibuprofen); thoát vị khe thực quản; loét dạ dày; ít gặp hơn là ung thư dạ dày.","src":[0]},
+{"text":"Mayo Clinic: thường không có nguyên nhân bệnh lý rõ ràng; khó tiêu kéo dài hoặc tái diễn mà không có nguyên nhân gọi là khó tiêu chức năng.","src":[1]},
+{"text":"Mayo Clinic: các bệnh có thể gây khó tiêu theo tuổi gồm nhiễm H. pylori, trào ngược dạ dày thực quản, loét dạ dày hoặc ruột non, thuốc giảm đau, và ở người trên 60 tuổi có thể là ung thư dạ dày.","src":[1]},
+{"text":"Mayo Clinic: ăn quá nhiều hoặc quá nhanh, một số kháng sinh và thuốc giảm đau, lo âu, trầm cảm, sang chấn tâm lý và hút thuốc có thể góp phần hoặc làm nặng thêm khó tiêu chức năng.","src":[1]}
+],
+"course":[
+{"text":"Mayo Clinic: khó tiêu thường không nghiêm trọng nhưng có thể làm giảm chất lượng cuộc sống, khiến bạn ăn ít hơn, nghỉ làm hoặc nghỉ học.","src":[1]},
+{"text":"Mayo Clinic: khó tiêu thường xuyên hoặc kéo dài có thể cải thiện nhờ thay đổi ăn uống và lối sống, trị liệu tâm lý hoặc dùng thuốc.","src":[1]}
+],
+"care":[
+{"text":"Nên: giảm trà, cà phê, cola hoặc rượu; kê cao đầu và vai khi nằm để acid khó trào lên lúc ngủ; giảm cân nếu thừa cân.","src":[0]},
+{"text":"Không nên: ăn trong 3–4 giờ trước khi đi ngủ; ăn đồ nhiều dầu mỡ, cay; dùng ibuprofen hoặc aspirin trừ khi được kê (chúng có thể làm khó tiêu nặng hơn — hãy hỏi dược sĩ hoặc bác sĩ nếu bạn đang dùng); hút thuốc.","src":[0]},
+{"text":"Dược sĩ có thể gợi ý thuốc cho cảm giác nóng rát hoặc đau: thuốc kháng acid, alginate, thuốc ức chế bơm proton. Một số nên uống sau ăn; hãy đọc tờ hướng dẫn.","src":[0]},
+{"text":"Khó tiêu rất hay gặp khi mang thai, từ khoảng tuần thứ 27 trở đi; hãy hỏi dược sĩ loại thuốc phù hợp khi mang thai.","src":[0]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS: bớt trà, cà phê, cola, rượu; tránh đồ ăn béo ngậy, cay, nhiều dầu mỡ; không ăn trong 3–4 giờ trước khi ngủ.","src":[0]},
+{"text":"Mayo Clinic: những thứ hay gây khó tiêu gồm đồ béo, nhiều dầu mỡ, cay, đồ chua như cà chua và cam; đồ uống chứa caffeine, rượu, đồ uống có ga; ăn quá nhanh hoặc quá nhiều.","src":[1]}
+],
+"ok":[],
+"foods":[
+{"name":"cà phê, trà và cola","aliases":["cà phê","trà","cola","coca","cafe"],"verdict":"limit","note":"NHS khuyên bớt trà, cà phê, cola khi bị khó tiêu; Mayo Clinic nêu đồ uống chứa caffeine hay gây khó tiêu.","src":[0,1]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên bớt rượu; Mayo Clinic nêu uống nhiều rượu hay gây khó tiêu.","src":[0,1]},
+{"name":"đồ cay","aliases":["ớt","cay","đồ ăn cay"],"verdict":"limit","note":"NHS khuyên không ăn đồ cay khi bị khó tiêu; Mayo Clinic cũng nêu đồ cay hay gây khó tiêu.","src":[0,1]},
+{"name":"đồ béo, nhiều dầu mỡ","aliases":["đồ béo","đồ chiên","đồ nhiều dầu mỡ","đồ chiên rán"],"verdict":"limit","note":"NHS khuyên tránh đồ ăn béo ngậy, cay, nhiều dầu mỡ; Mayo Clinic cũng nêu đồ béo, nhiều dầu mỡ hay gây khó tiêu.","src":[0,1]},
+{"name":"cà chua","aliases":["sốt cà chua"],"verdict":"limit","note":"NHS và Mayo Clinic nêu cà chua là thứ có thể gây khó tiêu ở một số người.","src":[0,1]},
+{"name":"sô-cô-la","aliases":["chocolate","socola","sô cô la"],"verdict":"limit","note":"NHS nêu sô-cô-la là thứ có thể gây khó tiêu ở một số người.","src":[0]},
+{"name":"cam","aliases":["nước cam","cam quýt"],"verdict":"limit","note":"Mayo Clinic nêu đồ chua như cà chua và cam có thể gây khó tiêu ở một số người.","src":[1]},
+{"name":"đồ uống có ga","aliases":["nước có ga","nước ngọt có ga","soda"],"verdict":"limit","note":"Mayo Clinic nêu đồ uống có ga hay gây khó tiêu.","src":[1]}
+]
+},
+"doctor":[
+{"text":"NHS: nên đi khám nếu hay bị khó tiêu, đau nhiều, sụt cân nhiều không rõ lý do, khó nuốt, nôn nhiều lần, thiếu máu thiếu sắt, cảm giác có cục trong bụng, hoặc nôn ra máu / phân có máu.","src":[0]},
+{"text":"Mayo Clinic: nên đi khám nếu triệu chứng kéo dài hơn 2 tuần; đau bụng nặng hoặc liên tục; sụt cân hoặc chán ăn không chủ ý; nôn nhiều lần hoặc nôn ra máu; phân đen như hắc ín; khó nuốt; mệt mỏi, yếu; vàng da hoặc vàng mắt.","src":[1]}
+],
+"emergency":[
+{"text":"Mayo Clinic: khó thở, đổ mồ hôi, hoặc đau ngực lan lên hàm, cổ hay cánh tay, hoặc đau ngực khi gắng sức hay căng thẳng có thể là dấu hiệu nhồi máu cơ tim: cần cấp cứu ngay.","src":[1]}
+],
+"sources":[
+{"title":"Indigestion","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/indigestion/","reviewed":"2023-05-05"},
+{"title":"Indigestion - Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/indigestion/symptoms-causes/syc-20352211","reviewed":"2025-07-03"}
+],
+"verifiedAt":"2026-10-09"
+}

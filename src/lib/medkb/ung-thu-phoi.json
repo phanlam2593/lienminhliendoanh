@@ -1,0 +1,53 @@
+{
+"id":"ung-thu-phoi","kind":"cancer",
+"names":["ung thư phổi","bệnh ung thư phổi","lung cancer","ung thu phoi","K phổi","ung thư phế quản"],
+"about":[
+{"text":"Ung thư phổi là ung thư bắt đầu ở phổi; NHS cho biết đây là một trong những loại ung thư thường gặp nhất ở Anh.","src":[0]},
+{"text":"Ung thư phổi hình thành ở mô phổi, thường ở tế bào lót đường dẫn khí.","src":[4]},
+{"text":"Có hai loại chính: **ung thư phổi tế bào nhỏ** và **không phải tế bào nhỏ**; loại không phải tế bào nhỏ phổ biến hơn.","src":[4,5]}
+],
+"signs":[
+{"text":"Ở giai đoạn đầu bạn có thể **không thấy triệu chứng gì**; đôi khi bệnh được phát hiện tình cờ qua phim X-quang ngực chụp vì lý do khác.","src":[1,4]},
+{"text":"Thường gặp: ho mãi không hết, khó thở, ho ra máu, đau ngực hoặc vai, hay bị nhiễm trùng ngực hoặc một đợt nhiễm trùng không khỏi.","src":[1]},
+{"text":"Cũng thường gặp: sụt cân ngoài ý muốn, ăn kém, mệt mỏi liên tục.","src":[1]},
+{"text":"Ít gặp hơn: sưng mặt hoặc cổ, nuốt khó, khàn giọng kéo dài, đầu ngón tay đổi hình dạng (ngón tay dùi trống).","src":[1,5]},
+{"text":"Các dấu hiệu này có thể do nguyên nhân khác và **không có nghĩa chắc chắn là ung thư phổi**, nhưng nên để bác sĩ kiểm tra.","src":[1]}
+],
+"causes":[
+{"text":"Hút thuốc lá là yếu tố nguy cơ quan trọng nhất; hút thuốc hiện tại hay đã từng hút đều làm tăng nguy cơ.","src":[2,4,5]},
+{"text":"MedlinePlus nêu hút thuốc gây khoảng 9/10 ca ung thư phổi ở nam và 8/10 ở nữ. Bỏ thuốc làm giảm nguy cơ nhưng không về bằng người chưa từng hút.","src":[4]},
+{"text":"Hít khói thuốc của người khác (hút thuốc thụ động) trong thời gian dài cũng làm tăng nguy cơ.","src":[2,4,5]},
+{"text":"Các yếu tố khác: bệnh phổi tắc nghẽn mạn tính (COPD), người thân ruột thịt từng bị ung thư phổi, hít ô nhiễm không khí lâu dài.","src":[2,4]},
+{"text":"Làm việc tiếp xúc amiăng (như ngành xây dựng) hoặc các chất như asen, crom, niken, bồ hóng, hắc ín cũng làm tăng nguy cơ.","src":[2,4,5]},
+{"text":"Khí radon tích tụ trong một số toà nhà, tia xạ vùng ngực và nhiễm HIV cũng được nêu là yếu tố nguy cơ.","src":[2,4,5]},
+{"text":"Có yếu tố nguy cơ **không có nghĩa chắc chắn sẽ bị** ung thư phổi.","src":[5]}
+],
+"course":[
+{"text":"Cách điều trị tuỳ loại ung thư, mức độ đã lan, sức khoẻ chung của người bệnh và các yếu tố khác; có thể phối hợp nhiều phương pháp.","src":[4,5]},
+{"text":"Với ung thư đã tiến triển không chữa khỏi được, đội chăm sóc triệu chứng/giảm nhẹ có thể giúp kiểm soát triệu chứng và hỗ trợ người bệnh lẫn gia đình.","src":[3]}
+],
+"care":[
+{"text":"Ung thư phổi không phải tế bào nhỏ có thể được điều trị bằng phẫu thuật, xạ trị, hoá trị, thuốc nhắm trúng đích, liệu pháp miễn dịch, cùng vài kỹ thuật khác. Bác sĩ quyết định.","src":[4,5]},
+{"text":"Phẫu thuật có thể cắt một phần hoặc toàn bộ phổi. Hoá trị có thể dùng khi không mổ được, trước mổ để thu nhỏ khối u hoặc sau mổ để giảm khả năng tái phát.","src":[3]},
+{"text":"Xạ trị có thể dùng khi không mổ được, sau mổ, hoặc khi ung thư đã lan. Thuốc nhắm trúng đích và liệu pháp miễn dịch đôi khi dùng cho ung thư đã lan.","src":[3]},
+{"text":"Đội điều trị sẽ giải thích lợi ích, tác dụng phụ từng phương pháp và giúp bạn kiểm soát tác dụng phụ. Có thắc mắc hay lo lắng cứ hỏi họ.","src":[3]},
+{"text":"Giảm nguy cơ: bỏ thuốc lá, năng vận động, ăn uống lành mạnh.","src":[2]},
+{"text":"Các phương pháp mới đang được thử nghiệm trong các thử nghiệm lâm sàng.","src":[5]}
+],
+"diet":{"avoid":[],"ok":[{"text":"NHS khuyên ăn uống lành mạnh với ít nhất 5 phần trái cây và rau mỗi ngày như một cách giảm nguy cơ.","src":[2]}],"foods":[{"name":"trái cây và rau","aliases":["rau","rau củ","trái cây","hoa quả","rau xanh"],"verdict":"good","note":"NHS: ăn ít nhất 5 phần trái cây và rau mỗi ngày nằm trong lời khuyên giảm nguy cơ ung thư phổi.","src":[2]}]},
+"doctor":[
+{"text":"Hãy đi khám nếu bạn ho kéo dài hơn 3 tuần hoặc có bất kỳ triệu chứng nào kể trên.","src":[1]},
+{"text":"Nếu ho ra máu (hoặc thấy máu trên khăn giấy khi ho), cần xin khám gấp.","src":[1]}
+],
+"emergency":[
+{"text":"Khó thở nặng (nghẹn, thở hổn hển, không nói được) hoặc đau ngực/đau lưng trên: gọi cấp cứu. Đừng tự lái xe đến bệnh viện, hãy nhờ người chở hoặc gọi xe cấp cứu.","src":[1]}
+],
+"sources":[
+{"title":"Lung cancer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/lung-cancer/"},
+{"title":"Lung cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/lung-cancer/symptoms/","reviewed":"2026-08-20"},
+{"title":"Lung cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/lung-cancer/causes/","reviewed":"2026-08-20"},
+{"title":"Lung cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/lung-cancer/treatment/","reviewed":"2026-08-20"},
+{"title":"Lung Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/lungcancer.html","reviewed":"2025-05-05"},
+{"title":"Non-Small Cell Lung Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/lung/patient/non-small-cell-lung-treatment-pdq"}
+],
+"verifiedAt":"2026-10-09"}

@@ -2,6 +2,8 @@
 // QUẢN TRỊ → LOMI HỌC HỎI (01/10, theo ý Kir)
 //  • ⁉️ Báo cáo: câu người dùng bấm ⁉️ (Lomi chưa biết / sai / lạc đề) → admin "Dạy Lomi" hoặc "Bỏ qua".
 //  • Lomi bí: câu Lomi tự ghi nhận là chưa trả lời được (gộp trùng, đếm số lần hỏi).
+//  • Hội thoại bí (09/10): mỗi lần Lomi bí khi ADMIN chat thử → lưu cả câu hỏi, câu Lomi đáp và các lượt trước đó
+//    (bảng lomi_stuck_log, lib/lomiStuckLog) để xem vấn đề nằm ở đâu rồi sửa đúng chỗ.
 //  • Đã dạy: các câu trả lời admin đã dạy — bật/tắt, sửa, xoá. Lomi dùng ngay cho mọi người
 //    (máy người dùng tải lại danh sách mỗi 5 phút / mỗi lần mở trang Lomi).
 // ─────────────────────────────────────────────────────────────────────────────
@@ -17,7 +19,8 @@ const db = supabase as any;
 type Feedback = { id: string; question: string; answer: string; reason: string; note: string | null; status: string; created_at: string };
 type Unanswered = { key: string; sample: string; ask_count: number; last_at: string };
 type Taught = { id: string; key: string; question: string; answer: string; active: boolean; hits: number; updated_at: string };
-type View = "feedback" | "unanswered" | "taught";
+type Stuck = { id: string; created_at: string; source: string; kind: string; question: string; reply: string; context: { r: "u" | "a"; t: string }[]; status: string };
+type View = "feedback" | "unanswered" | "stuck" | "taught";
 type TeachSrc = { feedbackId?: string; unansweredKey?: string; taughtId?: string };
 
 const REASON: Record<string, string> = {
@@ -25,6 +28,16 @@ const REASON: Record<string, string> = {
   wrong: "❌ Trả lời sai",
   offtopic: "🙃 Lạc đề",
   other: "💬 Khác",
+};
+const STUCK_KIND: Record<string, string> = {
+  unknown_med: "🩺 Hỏi y khoa chưa có kiến thức",
+  unknown_care: "🤒 Chuyện người ốm — chưa có kiến thức",
+  not_understood: "😵 Không hiểu câu",
+  fallback: "🌫️ Đáp chung chung",
+  suggest: "🔀 Chỉ đoán câu hỏi thường gặp",
+  generic_listen: "👂 Chỉ “nghe nè”, không nhận ra nội dung",
+  health_detail: "📝 Chi tiết sức khoẻ chưa có dữ liệu",
+  kb_partial: "📚 Có thẻ nhưng thiếu phần được hỏi",
 };
 const fmt = (s: string) => new Date(s).toLocaleString("vi-VN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" });
 
@@ -34,6 +47,8 @@ export function LomiLearnPanel() {
   const [un, setUn] = useState<Unanswered[] | null>(null);
   const [tg, setTg] = useState<Taught[] | null>(null);
   const [showDone, setShowDone] = useState(false);
+  const [st, setSt] = useState<Stuck[] | null>(null);
+  const [stDone, setStDone] = useState(false);
   const [teach, setTeach] = useState<{ q: string; a: string; src: TeachSrc } | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -54,10 +69,24 @@ export function LomiLearnPanel() {
   useEffect(() => {
     void loadFb();
   }, [showDone]);
+  const loadSt = async () => {
+    let q = db.from("lomi_stuck_log").select("*").order("created_at", { ascending: false }).limit(200);
+    q = stDone ? q.neq("status", "new") : q.eq("status", "new");
+    const { data } = await q;
+    setSt(data ?? []);
+  };
+  useEffect(() => {
+    void loadSt();
+  }, [stDone]);
   useEffect(() => {
     void loadUn();
     void loadTg();
   }, []);
+  const markSt = async (id: string, status: "fixed" | "ignored") => {
+    const { error } = await db.from("lomi_stuck_log").update({ status }).eq("id", id);
+    if (error) return void toast.error(error.message);
+    setSt((p) => p?.filter((x) => x.id !== id) ?? p);
+  };
 
   const dismiss = async (id: string) => {
     const { error } = await db.from("lomi_feedback").update({ status: "dismissed" }).eq("id", id);
@@ -115,6 +144,7 @@ export function LomiLearnPanel() {
   const tabs: [View, string, number | undefined][] = [
     ["feedback", "💡 Người dùng gửi", showDone ? undefined : fb?.length],
     ["unanswered", "🤔 Lomi bí", un?.length],
+    ["stuck", "🧪 Hội thoại bí", stDone ? undefined : st?.length],
     ["taught", "🎓 Đã dạy", tg?.length],
   ];
 
@@ -212,6 +242,68 @@ export function LomiLearnPanel() {
                 <button onClick={() => void delUn(u.key)} className="h-8 px-2 rounded-lg border text-xs flex-shrink-0" aria-label="Xoá">
                   ✕
                 </button>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {view === "stuck" && (
+        <div className="space-y-2">
+          <p className="text-[11px] text-muted-foreground">Tự lưu mỗi lần Lomi bí khi admin chat thử (kèm các lượt trước) — xem vấn đề nằm ở đâu để sửa đúng chỗ.</p>
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <input type="checkbox" checked={stDone} onChange={(e) => setStDone(e.target.checked)} /> Xem mục đã xử lý
+          </label>
+          {!st ? (
+            <Skel />
+          ) : !st.length ? (
+            <Empty text={stDone ? "Chưa có mục nào đã xử lý" : "Chưa có hội thoại bí mới 🎉"} />
+          ) : (
+            st.map((x) => (
+              <div key={x.id} className="bg-card border rounded-xl p-3 space-y-2">
+                <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                  <span className="px-2 py-0.5 rounded-full bg-muted font-semibold">{STUCK_KIND[x.kind] ?? x.kind}</span>
+                  {x.source !== "app" && <span>🤖 Claude test</span>}
+                  <span className="ml-auto">{fmt(x.created_at)}</span>
+                </div>
+                <div className="text-sm">
+                  <span className="text-muted-foreground">Hỏi: </span>
+                  <b className="break-words">{x.question}</b>
+                </div>
+                <details className="text-xs text-muted-foreground">
+                  <summary className="cursor-pointer">Lomi đã đáp</summary>
+                  <div className="mt-1 whitespace-pre-wrap bg-muted rounded-lg p-2">{x.reply}</div>
+                </details>
+                {x.context?.length > 0 && (
+                  <details className="text-xs text-muted-foreground">
+                    <summary className="cursor-pointer">Hội thoại trước đó ({x.context.length} lượt)</summary>
+                    <div className="mt-1 space-y-1">
+                      {x.context.map((c, i) => (
+                        <div key={i} className={cn("rounded-lg px-2 py-1 whitespace-pre-wrap", c.r === "u" ? "bg-primary/10 ml-6" : "bg-muted mr-6")}>
+                          {c.t}
+                        </div>
+                      ))}
+                    </div>
+                  </details>
+                )}
+                {x.status === "new" ? (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setTeach({ q: x.question, a: "", src: {} })}
+                      className="flex-1 h-8 rounded-lg bg-primary text-primary-foreground text-xs font-semibold"
+                    >
+                      🎓 Dạy Lomi
+                    </button>
+                    <button onClick={() => void markSt(x.id, "fixed")} className="h-8 px-3 rounded-lg border text-xs">
+                      ✅ Đã sửa
+                    </button>
+                    <button onClick={() => void markSt(x.id, "ignored")} className="h-8 px-3 rounded-lg border text-xs">
+                      Bỏ qua
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-[11px] text-muted-foreground">{x.status === "fixed" ? "✅ đã sửa" : "🚫 bỏ qua"}</div>
+                )}
               </div>
             ))
           )}

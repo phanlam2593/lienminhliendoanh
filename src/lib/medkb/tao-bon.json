@@ -1,0 +1,74 @@
+{
+"id":"tao-bon","kind":"condition",
+"names":["táo bón","constipation","bị táo bón","táo bón mạn tính","táo bón kéo dài"],
+"about":[
+{"text":"Táo bón là khi thói quen đi cầu thay đổi: đi ít lần hơn hoặc khó đi. Rất thường gặp ở mọi lứa tuổi và thường điều trị được tại nhà.","src":[0]},
+{"text":"NIDDK: táo bón nghĩa là đi cầu dưới 3 lần mỗi tuần, hoặc phân cứng, khô, vón cục, khó hay đau khi đi, hoặc cảm giác chưa đi hết phân.","src":[1]}
+],
+"signs":[
+{"text":"Có thể bạn bị táo bón nếu đi cầu ít hơn bình thường, phân khô cứng hoặc vón cục, quá to hoặc quá nhỏ.","src":[0]},
+{"text":"Phải rặn hoặc đau khi đi cầu, hoặc cảm giác ruột chưa được làm sạch hết.","src":[0]},
+{"text":"Có thể kèm đau bụng, đầy bụng hoặc buồn nôn.","src":[0]},
+{"text":"Ở người lớn tuổi hoặc người bị sa sút trí tuệ, táo bón dễ bị bỏ sót; những thay đổi hành vi như lú lẫn có thể là dấu hiệu họ đang đau hoặc khó chịu.","src":[0]}
+],
+"causes":[
+{"text":"Nhiều khi không có nguyên nhân rõ ràng. Thường gặp: ăn ít chất xơ (có trong trái cây, rau, ngũ cốc), uống ít nước, ít vận động hoặc ngồi nằm lâu.","src":[0]},
+{"text":"Hay nhịn đi cầu, thay đổi chế độ ăn hoặc sinh hoạt thường ngày, tác dụng phụ của thuốc, căng thẳng, lo âu hoặc trầm cảm.","src":[0]},
+{"text":"Táo bón cũng hay gặp khi mang thai và sau sinh, và hay gặp hơn ở người trên 65 tuổi.","src":[0]},
+{"text":"Ít gặp hơn, táo bón do một bệnh lý như bệnh túi thừa đại tràng hoặc ung thư ruột.","src":[0]}
+],
+"course":[
+{"text":"Táo bón kéo dài có thể gây ứ đọng phân cứng ở trực tràng (táo bón nặng gây tắc phân); triệu chứng chính là tiêu chảy rỉ quanh khối phân cứng.","src":[0]},
+{"text":"Các biện pháp tự chăm sóc đơn giản được xem là an toàn khi mang thai. Có thể đỡ sau vài ngày, đôi khi cần vài tuần.","src":[0]}
+],
+"care":[
+{"text":"Đi cầu vào giờ và nơi cố định, dành nhiều thời gian, không nhịn khi buồn đi; kê chân lên ghế thấp để đầu gối cao hơn hông có thể giúp đi dễ hơn.","src":[0]},
+{"text":"Đi bộ hoặc chạy bộ mỗi ngày có thể giúp đi cầu đều hơn.","src":[0]},
+{"text":"Nếu đổi chế độ ăn và lối sống không đỡ, hãy hỏi dược sĩ để chọn thuốc nhuận tràng phù hợp. Đa số có tác dụng trong khoảng 3 ngày và chỉ nên dùng ngắn hạn.","src":[0]},
+{"text":"NIDDK: thay đổi ăn uống và lượng nước, tăng vận động và thuốc không kê đơn có thể phòng hoặc giảm táo bón; nếu không đỡ, bác sĩ có thể kê thuốc, hướng dẫn phản hồi sinh học hoặc cân nhắc phẫu thuật.","src":[1]},
+{"text":"Nếu đang dùng thuốc kê đơn, đừng ngưng thuốc khi chưa hỏi bác sĩ.","src":[0]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS: tránh rượu bia.","src":[0]},
+{"text":"NIDDK: để phòng hoặc giảm táo bón, tránh thực phẩm ít chất xơ như khoai tây chiên lát, đồ ăn nhanh, thịt, đồ chế biến sẵn (một số món ăn liền đông lạnh, đồ ăn vặt) và thực phẩm siêu chế biến (xúc xích, bữa ăn lò vi sóng).","src":[2]}
+],
+"ok":[
+{"text":"NHS: ăn uống cân đối, uống nhiều nước và các loại chất lỏng khác, tăng chất xơ từ từ.","src":[0]},
+{"text":"NIDDK: người lớn nên ăn khoảng 22 đến 34 gam chất xơ mỗi ngày tuỳ tuổi và giới; thêm từ từ để cơ thể quen dần.","src":[2]},
+{"text":"NIDDK: uống nước và các chất lỏng khác giúp chất xơ hoạt động tốt hơn và làm mềm phân; nước ép trái cây ngọt tự nhiên và súp trong cũng được. Hỏi bác sĩ nên uống bao nhiêu mỗi ngày.","src":[2]},
+{"text":"NHS: thêm cám lúa mì, yến mạch hoặc hạt lanh vào chế độ ăn.","src":[0]}
+],
+"foods":[
+{"name":"táo","aliases":["quả táo","táo tây"],"verdict":"good","note":"NHS nêu táo là trái cây chứa sorbitol có thể giúp khi táo bón; NIDDK nêu táo (ăn cả vỏ) là nguồn chất xơ.","src":[0,2]},
+{"name":"mơ","aliases":["quả mơ"],"verdict":"good","note":"NHS nêu mơ là trái cây chứa sorbitol có thể giúp khi táo bón.","src":[0]},
+{"name":"nho","aliases":["nho khô","nho tươi","raisin"],"verdict":"good","note":"NHS nêu nho (và nho khô) là trái cây chứa sorbitol có thể giúp khi táo bón.","src":[0]},
+{"name":"quả mọng","aliases":["mâm xôi","dâu tây","dâu","việt quất","berries"],"verdict":"good","note":"NHS nêu mâm xôi, dâu tây là trái cây chứa sorbitol có thể giúp khi táo bón; NIDDK nêu các loại quả mọng là nguồn chất xơ.","src":[0,2]},
+{"name":"cam và lê","aliases":["cam","lê"],"verdict":"good","note":"NIDDK nêu cam và lê là trái cây giàu chất xơ.","src":[2]},
+{"name":"yến mạch","aliases":["cháo yến mạch","oat","oatmeal"],"verdict":"good","note":"NHS khuyên thêm yến mạch vào chế độ ăn khi táo bón; NIDDK nêu bột yến mạch là ngũ cốc nguyên hạt giàu chất xơ.","src":[0,2]},
+{"name":"cám lúa mì","aliases":["bran","ngũ cốc cám"],"verdict":"good","note":"NHS khuyên thêm cám lúa mì vào chế độ ăn khi táo bón; NIDDK nêu ngũ cốc dạng cám là nguồn chất xơ.","src":[0,2]},
+{"name":"hạt lanh","aliases":["linseed","flaxseed"],"verdict":"good","note":"NHS khuyên thêm hạt lanh vào chế độ ăn khi táo bón.","src":[0]},
+{"name":"ngũ cốc nguyên hạt","aliases":["bánh mì nguyên cám","mì ống nguyên cám"],"verdict":"good","note":"NIDDK nêu bánh mì và mì ống nguyên cám, bột yến mạch, ngũ cốc cám là nguồn chất xơ tốt.","src":[2]},
+{"name":"các loại đậu","aliases":["đậu lăng","đậu đen","đậu đỏ","đậu nành","đậu gà"],"verdict":"good","note":"NIDDK nêu đậu lăng, đậu đen, đậu đỏ, đậu nành, đậu gà là nguồn chất xơ.","src":[2]},
+{"name":"rau giàu chất xơ","aliases":["cà rốt","bông cải xanh","súp lơ xanh","đậu Hà Lan"],"verdict":"good","note":"NIDDK nêu cà rốt, bông cải xanh, đậu Hà Lan, cải collard là rau giàu chất xơ.","src":[2]},
+{"name":"các loại hạt","aliases":["hạnh nhân","đậu phộng","lạc","hồ đào"],"verdict":"good","note":"NIDDK nêu hạnh nhân, đậu phộng, hồ đào (pecan) là nguồn chất xơ.","src":[2]},
+{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS và NIDDK khuyên uống nhiều nước và chất lỏng khác khi táo bón.","src":[0,2]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"avoid","note":"NHS khuyên tránh rượu bia khi táo bón.","src":[0]},
+{"name":"đồ ăn nhanh và đồ chế biến sẵn","aliases":["fast food","xúc xích","hot dog","thức ăn chế biến sẵn","đồ ăn nhanh","khoai tây chiên"],"verdict":"limit","note":"NIDDK liệt kê khoai tây chiên lát, đồ ăn nhanh, đồ chế biến sẵn và thực phẩm siêu chế biến (xúc xích, bữa ăn lò vi sóng) là thực phẩm ít chất xơ nên tránh để phòng táo bón.","src":[2]},
+{"name":"thịt","aliases":["thịt bò","thịt heo","thịt lợn","thịt gà"],"verdict":"limit","note":"NIDDK liệt kê thịt trong nhóm thực phẩm ít chất xơ nên tránh để phòng hoặc giảm táo bón.","src":[2]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu vẫn táo bón dù đã tự điều trị, thường xuyên bị táo bón hoặc đầy bụng.","src":[0]},
+{"text":"Nên đi khám nếu có máu trong phân, sụt cân không rõ lý do, táo bón kèm mệt liên tục, thay đổi thói quen đi cầu đột ngột, hoặc đau bụng.","src":[0]},
+{"text":"Nên đi khám nếu đang dùng thuốc gây táo bón (như thuốc giảm đau nhóm opioid); đừng tự ngưng thuốc kê đơn.","src":[0]},
+{"text":"NIDDK: cũng nên đi khám khi táo bón kéo dài, hoặc có chảy máu trực tràng, đau bụng dai dẳng hay dấu hiệu bệnh lý khác.","src":[1]}
+],
+"emergency":[],
+"sources":[
+{"title":"Constipation","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/constipation/","reviewed":"2023-10-26"},
+{"title":"Constipation","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/constipation","reviewed":"2018-05"},
+{"title":"Eating, Diet, & Nutrition for Constipation","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/constipation/eating-diet-nutrition","reviewed":"2018-05"}
+],
+"verifiedAt":"2026-10-09"
+}

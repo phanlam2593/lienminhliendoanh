@@ -1,0 +1,71 @@
+{
+"id":"mo-mau-cao",
+"kind":"condition",
+"names":["mỡ máu cao","cholesterol cao","rối loạn lipid máu","mỡ trong máu","máu nhiễm mỡ","tăng cholesterol","high cholesterol","hypercholesterolemia","dyslipidemia"],
+"disambiguation":"Thẻ này nói về cholesterol cao trong máu (thường gọi là mỡ máu cao).",
+"about":[
+{"text":"Cholesterol cao nghĩa là trong máu có quá nhiều cholesterol, một chất béo. Cholesterol tích tụ có thể làm tắc mạch máu.","src":[0]},
+{"text":"Cholesterol là chất giống sáp có trong mọi tế bào; cơ thể tự tạo đủ lượng cần dùng. Cholesterol thừa trong máu có thể tạo mảng bám trên thành động mạch.","src":[2]},
+{"text":"**LDL** (\"xấu\") làm mảng bám dày lên; **HDL** (\"tốt\") đưa cholesterol về gan để thải đi.","src":[2]}
+],
+"signs":[
+{"text":"Cholesterol cao thường không gây triệu chứng nào. Cách duy nhất để biết là xét nghiệm máu.","src":[0,2]}
+],
+"causes":[
+{"text":"Các yếu tố lối sống: ăn nhiều đồ béo, ít vận động, thừa cân, hút thuốc, uống rượu bia.","src":[0]},
+{"text":"MedlinePlus nêu thêm chế độ ăn nhiều chất béo bão hoà, căng thẳng kéo dài và uống rượu nhiều. Chất béo bão hoà có trong thịt đỏ, sữa nguyên kem, sô-cô-la, một số loại bánh, đồ chiên và đồ chế biến sẵn.","src":[2]},
+{"text":"Nguy cơ cao hơn khi trên 50 tuổi, là nam giới, sau mãn kinh, có người thân bị cholesterol cao, hoặc gốc Nam Á hay châu Phi cận Sahara.","src":[0]},
+{"text":"Di truyền cũng có thể gây cholesterol rất cao, như bệnh tăng cholesterol máu gia đình (FH), khởi phát từ khi còn trẻ.","src":[0,2]},
+{"text":"Một số bệnh (tiểu đường, bệnh thận mạn, HIV, lupus) và một số loại thuốc cũng có thể làm tăng LDL hoặc giảm HDL.","src":[2]}
+],
+"course":[
+{"text":"Mảng bám có thể làm hẹp hoặc tắc động mạch, làm tăng nguy cơ bệnh tim và đột quỵ.","src":[0,2]},
+{"text":"Nếu không điều trị, mảng bám có thể vỡ gây cục máu đông, dẫn đến đau thắt ngực hoặc nhồi máu cơ tim.","src":[2]}
+],
+"care":[
+{"text":"Ăn uống lành mạnh và vận động nhiều hơn có thể giúp hạ cholesterol. Một số người còn cần dùng thuốc.","src":[0,1]},
+{"text":"Nên vận động ít nhất 150 phút mỗi tuần ở mức vừa phải (hoặc 75 phút nếu mạnh). Có thể bắt đầu bằng đi bộ nhanh, bơi hoặc đạp xe.","src":[1]},
+{"text":"Hút thuốc làm tăng cholesterol và nguy cơ nhồi máu cơ tim, đột quỵ; bỏ thuốc có hỗ trợ từ dịch vụ cai thuốc.","src":[1]},
+{"text":"Rượu bia: tránh uống đều đặn quá 14 \"đơn vị\" mỗi tuần, chia ra uống từ 3 ngày trở lên và có nhiều ngày không uống.","src":[1]},
+{"text":"Nếu lối sống chưa đủ, bác sĩ có thể kê thuốc hạ cholesterol như nhóm statin (do bác sĩ quyết định). Tiếp tục giữ lối sống lành mạnh khi đang dùng thuốc.","src":[2]},
+{"text":"Một số người bị FH nặng có thể được lọc LDL ra khỏi máu bằng máy (lipoprotein apheresis).","src":[2]},
+{"text":"Nếu định dùng thực phẩm bổ sung (chất xơ, omega-3, dầu cá), hãy hỏi chuyên gia y tế trước.","src":[3]}
+],
+"diet":{
+"avoid":[
+{"text":"Ăn ít đồ béo, nhất là thực phẩm nhiều chất béo bão hoà; chất béo không bão hoà là lựa chọn tốt hơn.","src":[1]},
+{"text":"Mayo Clinic khuyên hạn chế chất béo bão hoà, chất béo chuyển hoá (ghi trên nhãn là \"dầu thực vật hydro hoá một phần\"), thịt đỏ, thịt chế biến, đồ chiên, bánh nướng và sữa nguyên kem.","src":[3]}
+],
+"ok":[
+{"text":"Ăn nhiều chất xơ và chất béo lành mạnh. Mayo Clinic lưu ý không có \"siêu thực phẩm\" nào tự làm được việc này; tổng thể cách ăn mới quan trọng nhất.","src":[3]},
+{"text":"Gợi ý đổi món: ăn yến mạch vào bữa sáng, dùng dầu ô liu thay bơ, ăn trái cây hoặc hạt làm bữa phụ, chọn thịt nạc, ăn ít đồ chế biến, và để rau chiếm nửa đĩa.","src":[3]},
+{"text":"Mayo Clinic nêu kiểu ăn Địa Trung Hải (thực phẩm nguyên bản, chất béo lành mạnh, nhiều chất xơ) là cách ăn đáng chú ý.","src":[3]}
+],
+"foods":[
+{"name":"thịt béo, xúc xích, bánh nhân thịt","aliases":["thịt mỡ","xúc xích","thịt chế biến","thịt đỏ","thịt bò","thịt heo","thịt lợn"],"verdict":"limit","note":"NHS khuyên ăn ít bánh nhân thịt (meat pie), xúc xích, thịt béo. Mayo Clinic khuyên hạn chế thịt đỏ và thịt chế biến.","src":[1,3]},
+{"name":"bơ động vật, mỡ lợn, bơ ghee","aliases":["bơ động vật","mỡ heo","mỡ lợn","ghee"],"verdict":"limit","note":"NHS khuyên ăn ít bơ, mỡ lợn (lard) và ghee. Mayo Clinic cũng khuyên dùng dầu ô liu thay bơ.","src":[1,3]},
+{"name":"kem, phô mai và sữa nguyên kem","aliases":["phô mai","pho mát","sữa nguyên kem","kem tươi","sữa béo"],"verdict":"limit","note":"NHS khuyên ăn ít kem và phô mai; Mayo Clinic khuyên hạn chế phô mai và sữa nguyên kem (nhiều chất béo bão hoà).","src":[1,3]},
+{"name":"bánh ngọt, bánh quy","aliases":["bánh ngọt","bánh quy","bánh kem","bánh nướng","cookie"],"verdict":"limit","note":"NHS khuyên ăn ít bánh ngọt và bánh quy; Mayo Clinic cũng khuyên hạn chế bánh nướng (nhất là loại chứa chất béo chuyển hoá).","src":[1,3]},
+{"name":"dầu dừa, dầu cọ","aliases":["dầu cọ","dầu dừa"],"verdict":"limit","note":"NHS khuyên ăn ít thực phẩm chứa dầu dừa hoặc dầu cọ.","src":[1]},
+{"name":"đồ chiên rán","aliases":["đồ chiên","đồ rán","khoai tây chiên","gà rán","chiên giòn"],"verdict":"limit","note":"Mayo Clinic nêu đồ chiên trong nhóm thực phẩm nên hạn chế để giảm cholesterol.","src":[3]},
+{"name":"yến mạch","aliases":["oat","oats","cám yến mạch","bột yến mạch"],"verdict":"good","note":"Mayo Clinic nêu yến mạch và cám yến mạch là nguồn chất xơ hoà tan giúp giảm LDL; có thể thêm chuối hoặc quả mọng vào.","src":[3]},
+{"name":"các loại đậu","aliases":["đậu","đậu lăng","đậu gà","đậu đen","đậu đỏ","đậu nành"],"verdict":"good","note":"Mayo Clinic: đậu, đậu lăng, đậu gà là nguồn chất xơ và đạm thực vật, có thể thay bớt đạm động vật; đậu nành (soy) cũng được nêu.","src":[3]},
+{"name":"trái cây và rau","aliases":["rau","rau xanh","trái cây","táo","lê","cam","bông cải xanh","súp lơ xanh","quả mọng"],"verdict":"good","note":"NHS khuyên ăn nhiều trái cây và rau. Mayo Clinic nêu táo, lê, rau lá xanh, quả mọng, cam quýt, bông cải xanh.","src":[1,3]},
+{"name":"cá béo","aliases":["cá hồi","cá thu","cá ngừ","cá trích","cá mòi"],"verdict":"good","note":"NHS và Mayo Clinic nêu cá béo (cá thu, cá hồi, cá ngừ, cá trích) nên ăn vài lần mỗi tuần, nướng hoặc áp chảo; omega-3 chủ yếu giúp giảm triglyceride.","src":[1,3]},
+{"name":"dầu ô liu","aliases":["dầu olive","olive oil"],"verdict":"good","note":"NHS và Mayo Clinic nêu dầu ô liu là chất béo lành mạnh; NHS còn nêu dầu hạt cải (rapeseed).","src":[1,3]},
+{"name":"bơ (quả) và các loại hạt","aliases":["trái bơ","quả bơ","avocado","hạt","hạt óc chó","hạnh nhân","các loại hạt"],"verdict":"good","note":"Mayo Clinic nêu quả bơ, các loại hạt (kể cả óc chó) và hạt giống là chất béo lành mạnh.","src":[1,3]},
+{"name":"ngũ cốc nguyên hạt","aliases":["gạo lứt","bánh mì nguyên cám","mì nguyên cám","lúa mạch","diêm mạch","quinoa"],"verdict":"good","note":"NHS và Mayo Clinic khuyên chọn ngũ cốc nguyên hạt (gạo lứt, bánh mì nguyên cám, mì nguyên cám) thay cho loại tinh chế.","src":[1,3]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS khuyên tránh uống thường xuyên quá 14 đơn vị mỗi tuần và có nhiều ngày không uống.","src":[1]}
+]},
+"doctor":[
+{"text":"Vì thường không có triệu chứng, chỉ xét nghiệm máu mới biết. MedlinePlus nêu lịch xét nghiệm theo tuổi (trẻ em từ 9–11 tuổi, người lớn khoảng 5 năm một lần, người lớn tuổi thường xuyên hơn); hãy hỏi bác sĩ.","src":[0,2]}
+],
+"emergency":[],
+"sources":[
+{"title":"High cholesterol","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/high-cholesterol/","reviewed":"2026-03-13"},
+{"title":"How to lower your cholesterol","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/high-cholesterol/how-to-lower-your-cholesterol/","reviewed":"2026-03-13"},
+{"title":"Cholesterol","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/cholesterol.html","reviewed":"2025-03-18"},
+{"title":"Cholesterol: Top foods to improve your numbers","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/high-blood-cholesterol/in-depth/cholesterol/art-20045192","reviewed":"2026-07-15"}
+],
+"verifiedAt":"2026-10-09"
+}

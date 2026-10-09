@@ -1,0 +1,38 @@
+{"id":"say-thai","kind":"women","names":["sảy thai","xảy thai","sẩy thai","sảy thai tự nhiên","mất thai","miscarriage"],
+"about":[
+{"text":"Sảy thai là mất thai ngoài ý muốn sớm trong thai kỳ. NHS tính là trước 24 tuần; MedlinePlus tính là trước tuần thứ 20.","src":[0,1]},
+{"text":"MedlinePlus: phần lớn xảy ra rất sớm, thường là trước khi người phụ nữ biết mình có thai.","src":[1]},
+{"text":"NHS: ai nghĩ mình đang sảy thai nên đi khám để được hỗ trợ y tế.","src":[0]}],
+"signs":[
+{"text":"Dấu hiệu chính là ra máu âm đạo, từ ra ít (chấm máu) đến ra nhiều.","src":[0,1]},
+{"text":"Có thể đau quặn bụng dưới (NHS), hoặc đau bụng/đau lưng dưới (MedlinePlus).","src":[0,1]},
+{"text":"Có thể thấy mô màu hồng, xám hoặc trắng ra từ âm đạo, hoặc ra nước đột ngột; MedlinePlus còn nêu khí hư màu sẫm.","src":[0,1]},
+{"text":"Một số người không có triệu chứng và chỉ biết khi siêu âm (NHS gọi là sảy thai lưu).","src":[0]}],
+"causes":[
+{"text":"Nguyên nhân thường không rõ, hay liên quan đến việc thai phát triển không bình thường; MedlinePlus: thường do bất thường nhiễm sắc thể.","src":[0,1]},
+{"text":"Yếu tố có thể tăng nguy cơ theo NHS: mẹ từ 35 tuổi hoặc cha từ 45 tuổi, hội chứng buồng trứng đa nang (PMOS), tiểu đường, rối loạn đông máu, bệnh tuyến giáp, bất thường tử cung, thiếu vitamin D.","src":[0]},
+{"text":"NHS còn nêu: hút thuốc, dùng nhiều caffeine hoặc rượu, béo phì hoặc thiếu cân, tiếp xúc hóa chất độc hại hoặc ô nhiễm không khí cao.","src":[0]},
+{"text":"MedlinePlus nêu thêm: bất thường cổ tử cung, bệnh mạn tính, tiểu đường không kiểm soát, suy dinh dưỡng nặng, dùng chất gây nghiện.","src":[1]}],
+"course":[
+{"text":"NHS: sảy thai đã bắt đầu thì không thể ngăn lại.","src":[0]},
+{"text":"Sau sảy thai, đau bụng có thể kéo dài vài ngày, ra máu hoặc chấm máu có thể kéo dài đến 2 tuần; hồi phục về cảm xúc có thể lâu hơn.","src":[0]},
+{"text":"Kinh có thể trở lại sau tối đa khoảng 8 tuần và mất vài tháng mới đều.","src":[0]},
+{"text":"Hầu hết phụ nữ từng sảy thai vẫn có thai kỳ thành công về sau.","src":[0,1]}],
+"care":[
+{"text":"Cách xử trí tùy tuổi thai. Trước 14 tuần: chờ tự ra (thường khoảng 2 tuần, đôi khi lâu hơn), dùng thuốc để đẩy thai ra, hoặc thủ thuật hút nhẹ dưới gây mê.","src":[0]},
+{"text":"Từ 14 đến 23 tuần: đội ngũ y tế sẽ trao đổi các lựa chọn; chuyển dạ có thể tự bắt đầu hoặc dùng thuốc khởi phát. Do bác sĩ quyết định.","src":[0]},
+{"text":"MedlinePlus: sảy thai rất sớm có thể không cần điều trị; nếu còn sót mô và không nhiễm trùng, bác sĩ có thể cho chờ tự ra, hoặc dùng thuốc/thủ thuật (nạo, hút).","src":[1]},
+{"text":"Nếu mang thai từ 12 tuần trở lên và nhóm máu Rh âm, có thể được tiêm phòng (anti-D) để tránh vấn đề cho các lần mang thai sau.","src":[0,1]},
+{"text":"Khi hồi phục: nghỉ ngơi, có thể dùng paracetamol giảm đau, chia sẻ với người thân; tránh quan hệ cho đến khi hết triệu chứng vì nguy cơ nhiễm trùng.","src":[0]},
+{"text":"Có thể thử có thai lại khi bạn sẵn sàng và triệu chứng đã hết. Tư vấn tâm lý có thể giúp vượt qua nỗi đau mất mát; có hỗ trợ cho cả bạn đời.","src":[0,1]}],
+"diet":null,
+"doctor":[
+{"text":"NHS: nếu đang mang thai và ra ít máu hoặc chấm máu mà không đau hoặc chỉ đau bụng nhẹ, hoặc ra khí hư lạ/rỉ dịch, hãy liên hệ khoa sản; không liên lạc được thì gọi đường dây y tế (111 ở Anh).","src":[0]},
+{"text":"MedlinePlus khuyên liên hệ nhân viên y tế ngay khi bị ra máu bất kỳ.","src":[1]},
+{"text":"NHS: sau từ 3 lần sảy thai trở lên (sảy thai liên tiếp), hãy đi khám để làm xét nghiệm và được hỗ trợ.","src":[0]}],
+"emergency":[
+{"text":"NHS: đang mang thai, ra máu âm đạo và có đau bụng dữ dội đến mức không làm được việc hằng ngày, đau vai, buồn nôn/choáng/chóng mặt hoặc ngất, hoặc ra máu nhiều thấm băng rất nhanh thì gọi cấp cứu (999 ở Anh).","src":[0]}],
+"sources":[
+{"title":"Miscarriage","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/miscarriage/","reviewed":"2026-03-31"},
+{"title":"Miscarriage","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/miscarriage.html","reviewed":"2025-07-02"}],
+"verifiedAt":"2026-10-09"}

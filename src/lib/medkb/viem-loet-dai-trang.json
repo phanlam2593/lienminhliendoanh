@@ -1,0 +1,66 @@
+{
+"id":"viem-loet-dai-trang","kind":"condition",
+"names":["viêm loét đại tràng","viêm loét đại trực tràng","ulcerative colitis","viêm loét kết tràng","UC","viêm đại tràng loét"],
+"about":[
+{"text":"Viêm loét đại tràng là tình trạng viêm ở một phần của đại tràng (ruột già) và trực tràng; thuộc nhóm bệnh viêm ruột (IBD).","src":[0]},
+{"text":"Đây là bệnh kéo dài suốt đời; điều trị có thể làm dịu triệu chứng và giảm khả năng tái phát. Bệnh hiếm khi đe doạ tính mạng.","src":[0]},
+{"text":"NIDDK: bệnh viêm ruột mạn tính, do phản ứng miễn dịch bất thường gây viêm và loét ở lớp lót trong của ruột già. Có thể gặp ở mọi lứa tuổi, nhiều nhất từ 15–30 tuổi.","src":[1]}
+],
+"signs":[
+{"text":"Thường gặp: tiêu chảy (có thể lẫn máu, nhầy hoặc mủ); đau bụng, chủ yếu bụng dưới bên trái, có thể dịu bớt sau khi đi cầu; đi cầu nhiều lần, gấp, hoặc vào ban đêm.","src":[0]},
+{"text":"Cảm giác muốn đi cầu dù ruột đã trống; chảy máu hậu môn; đầy hơi.","src":[0]},
+{"text":"Có thể kèm táo bón, mệt, chán ăn, sụt cân không chủ ý.","src":[0]},
+{"text":"Triệu chứng có thể lui rồi bùng phát trở lại, một đợt kéo dài vài ngày đến vài tháng. Lúc bùng phát có thể đau hoặc sưng khớp, sốt, mảng da đỏ sưng, mắt đỏ ngứa hoặc đau, loét miệng.","src":[0]},
+{"text":"NIDDK: có thể gồm tiêu chảy, máu trong phân, đau quặn bụng, nhầy hoặc mủ trong phân, cảm giác buồn đi cầu liên tục (tenesmus), đi cầu gấp.","src":[3]}
+],
+"causes":[
+{"text":"Nguyên nhân chính xác chưa rõ; được cho là bệnh tự miễn, tức hệ miễn dịch tấn công chính mô khoẻ của cơ thể.","src":[0]},
+{"text":"Nguy cơ có thể cao hơn nếu có người thân bị bệnh hoặc bạn từng hút thuốc.","src":[0]},
+{"text":"Các yếu tố có thể làm bùng phát: căng thẳng, nhiễm trùng, thay đổi thuốc, thuốc giảm đau kháng viêm NSAID (như ibuprofen, aspirin) và một số thức ăn; đôi khi không rõ yếu tố nào.","src":[0]},
+{"text":"NIDDK: gen, phản ứng miễn dịch bất thường, hệ vi sinh đường ruột và môi trường đều được cho là có vai trò.","src":[1,3]}
+],
+"course":[
+{"text":"Biến chứng có thể gồm: thiếu vitamin và khoáng chất do tiêu hoá kém, thiếu máu, loãng xương, tăng nguy cơ ung thư ruột (nên được tầm soát định kỳ), trầm cảm và lo âu; trẻ em có thể dậy thì muộn hoặc chậm lớn.","src":[0]},
+{"text":"Đợt bùng phát rất nặng có thể phải điều trị cấp cứu tại bệnh viện.","src":[0]}
+],
+"care":[
+{"text":"Các nhóm thuốc: thuốc chống viêm nhóm aminosalicylate (như mesalazine, sulfasalazine), steroid thường dùng ngắn hạn khi bùng phát, thuốc ức chế miễn dịch, thuốc sinh học — do bác sĩ chuyên khoa quyết định.","src":[0]},
+{"text":"Có thể cần thuốc giảm đau quặn, thuốc nhuận tràng hoặc cầm tiêu chảy, thuốc giảm đau, và thực phẩm bổ sung như canxi, vitamin B12.","src":[0]},
+{"text":"Có thể cần phẫu thuật cắt một phần hoặc toàn bộ đại tràng (kèm mở thông hồi tràng ra da hoặc làm túi hồi tràng - hậu môn) khi bệnh ảnh hưởng nhiều tới cuộc sống, ruột tổn thương nặng, hoặc điều trị khác thất bại.","src":[0]},
+{"text":"Nên: dùng thuốc đều đặn kể cả khi thấy khoẻ; ghi nhật ký ăn uống; uống nhiều nước khi tiêu chảy; tiêm vắc-xin phù hợp; đi tầm soát ung thư ruột theo hẹn; kiểm soát căng thẳng; vận động đều.","src":[0]},
+{"text":"Không nên: dùng NSAID như ibuprofen hay aspirin trừ khi bác sĩ kê; uống rượu quá mức vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
+{"text":"NIDDK: bác sĩ thường dùng thuốc giảm viêm ở ruột già để gây và duy trì lui bệnh; phẫu thuật có thể được đề nghị ở một số trường hợp.","src":[1]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS: tránh một số thức ăn làm bạn bùng phát triệu chứng (NHS không nêu tên món cụ thể); hãy ghi nhật ký ăn uống và trao đổi với bác sĩ trước khi đổi chế độ ăn.","src":[0]},
+{"text":"NHS: hạn chế rượu bia vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
+{"text":"NIDDK: các nhà nghiên cứu chưa thấy món cụ thể nào gây ra hoặc làm nặng viêm loét đại tràng; bác sĩ có thể gợi ý ghi nhật ký ăn uống để tìm món làm bạn khó chịu.","src":[2]}
+],
+"ok":[
+{"text":"NHS: ăn uống cân đối; uống nhiều nước nếu bị tiêu chảy.","src":[0]},
+{"text":"NHS: bệnh có thể khiến cơ thể hấp thu vitamin và khoáng chất kém từ thức ăn nên đôi khi cần bổ sung canxi, vitamin B12.","src":[0]},
+{"text":"NIDDK: nên ăn uống lành mạnh, cân đối; triệu chứng có thể làm bạn ăn kém và không đủ dưỡng chất. Chế độ ăn lành mạnh có liên quan đến nguy cơ mắc bệnh viêm ruột thấp hơn.","src":[1,2]},
+{"text":"NIDDK: bác sĩ có thể đề nghị đổi chế độ ăn tuỳ triệu chứng và thuốc đang dùng, và có thể khuyên dùng thực phẩm bổ sung.","src":[2]}
+],
+"foods":[
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên hạn chế rượu bia vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
+{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS khuyên uống nhiều nước khi bị tiêu chảy.","src":[0]}
+]
+},
+"doctor":[
+{"text":"Nên đi khám nếu bạn nghĩ mình có triệu chứng của viêm loét đại tràng.","src":[0]},
+{"text":"Khám gấp (hẹn khám gấp hoặc gọi đường dây y tế) nếu: tiêu chảy rất nặng hoặc ra máu; sốt hoặc cảm thấy nóng, lạnh, run; tim đập nhanh; không đánh rắm hay đi cầu được.","src":[0]},
+{"text":"Nếu đã được chẩn đoán và đang bùng phát nặng, hãy liên hệ đội ngũ chăm sóc của bạn.","src":[0]}
+],
+"emergency":[
+{"text":"Đau bụng dữ dội; chảy máu hậu môn liên tục; đi cầu ra nhiều máu hoặc cục máu lớn; nôn ra máu hoặc chất nôn như bã cà phê: cần đến cấp cứu ngay, đừng tự lái xe.","src":[0]}
+],
+"sources":[
+{"title":"Ulcerative colitis","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/ulcerative-colitis/","reviewed":"2026-08-20"},
+{"title":"Ulcerative Colitis","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/ulcerative-colitis","reviewed":"2020-09"},
+{"title":"Eating, Diet, & Nutrition for Ulcerative Colitis","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/ulcerative-colitis/eating-diet-nutrition","reviewed":"2020-09"},
+{"title":"Symptoms & Causes of Ulcerative Colitis","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/digestive-diseases/ulcerative-colitis/symptoms-causes","reviewed":"2020-09"}
+],
+"verifiedAt":"2026-10-09"
+}

@@ -931,6 +931,8 @@ export function expandTeen(text: string): string {
   //  • "pass": "đổi / quên / sai / nhập pass" → mật khẩu; "pass nhầm", "pass người này" (Quẹt) → bỏ qua.
   s = s.replace(/(^|[^\p{L}])(đổi|quên|sai|nhập|lấy lại|đặt|reset|cái|mã) pass(word)?(?![\p{L}])/giu, "$1$2 mật khẩu");
   s = s.replace(/(^|[^\p{L}])pass (nhầm|lộn|người|thẻ|hết)(?![\p{L}])/giu, "$1bỏ qua $2");
+  // 09/10: chữ cái là TÊN LOẠI trong y khoa — "viêm gan b", "vitamin k", "nhóm máu a" — không phải "bạn" / "không": viết hoa để giữ nguyên.
+  s = s.replace(/(^|[^\p{L}])(viêm gan|viem gan|vitamin|vitamine|nhóm máu|nhom mau|cúm|cum) ([abcdek])(?![\p{L}\p{N}])/giu, (_m, a: string, b: string, c: string) => `${a}${b} ${c.toUpperCase()}`);
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
   return s
     .replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)))

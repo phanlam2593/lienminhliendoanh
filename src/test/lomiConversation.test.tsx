@@ -232,10 +232,15 @@ describe("Sức khoẻ ≠ tâm sự — chuỗi bệnh gout", () => {
       expect(m.unk).toBeUndefined();
     }
     expect(r[1].content).toMatch(/gout/i);
-    expect(r[1].quick).toEqual(["Gout là gì?", "Gout nên làm gì?", "Gout kiêng gì?"]);
-    expect(r[2].quick).toEqual(r[1].quick); // "Bệnh gút á" → vẫn bệnh gout, không lặp cả bảng kiêng cữ
+    // 09/10: trả lời từ kho kiến thức có nguồn (lib/lomiMed) — chip theo phần thẻ có.
+    expect(r[1].quick?.slice(0, 3)).toEqual(["Gout là gì?", "Gout nên làm gì?", "Gout kiêng gì?"]);
+    expect(r[1].content).toMatch(/📚 Nguồn:/);
+    expect(r[2].quick).toEqual(r[1].quick); // "Bệnh gút á" → vẫn bệnh gout, không đọc lại cả bài
+    expect(r[2].content).toMatch(/vẫn là \*\*gout\*\*/i);
     expect(r[3].diet).toBe("gout");
-    expect(r[4].content).toMatch(/tránh bia/);
+    // Nguồn (Mayo, CDC): bia nên TRÁNH khi đang lên cơn, HẠN CHẾ giữa các cơn — không phán "tránh hẳn".
+    expect(r[4].content).toMatch(/\*\*bia\*\* nên \*\*hạn chế\*\*/);
+    expect(r[4].content).toMatch(/đang lên cơn/);
     // 6) có tín hiệu cảm xúc → LÚC NÀY mới mở mạch tâm sự, và vẫn nhớ đang nói về gout
     expect(r[5].heart).toBeTruthy();
     expect(r[5].health?.subject).toBe("diet:gout");
@@ -252,7 +257,7 @@ describe("Sức khoẻ ≠ tâm sự — chuỗi bệnh gout", () => {
     expect((await last(["a bị gout"])).content).toMatch(/đang bị \*\*gout\*\*/);
   }, T);
   it("hỏi kiến thức → trả lời kiến thức", async () => {
-    expect((await last(["bệnh gout là gì?"])).content).toMatch(/Gút \(gout\).*khớp/s);
+    expect((await last(["bệnh gout là gì?"])).content).toMatch(/Gout \(gút\).*viêm khớp.*📚 Nguồn:/s);
     expect((await last(["cách chữa bệnh gout"])).content).toMatch(/không kê thuốc/);
     expect((await last(["đang bị gout thì uống bia được không?"])).diet).toBe("gout");
     expect((await last(["gout có đáng sợ không"])).heart).toBeUndefined(); // hỏi mức độ nguy hiểm, không phải kể cảm xúc
@@ -302,7 +307,7 @@ describe("Sức khoẻ ≠ tâm sự — không riêng gì gout", () => {
       expect(m.heart).toBeUndefined();
       expect(m.unk).toBeUndefined();
     }
-    expect(r[1].content).toMatch(/Tiểu đường.*đường huyết/s);
+    expect(r[1].content).toMatch(/Tiểu đường.*đường \(glucose\) trong máu/s);
     expect(r[2].content).toMatch(/không kê thuốc/);
     expect(r[3].content).toMatch(/Nội tiết/);
     expect(r[4].diet).toBe("dm");
@@ -977,11 +982,18 @@ describe("Chuỗi thử mù — theo được chuyện với câu chưa từng g
     expect(b[1].diet).toBe("htn");
   }, T);
   it("hỏi điều Lomi chưa có kiến thức khi đang theo chuyện người ốm → nói thật theo đúng mạch (vẫn ghi lại câu chưa trả lời được)", async () => {
+    // 09/10: viêm phế quản đã có thẻ kiến thức có nguồn (NHS) → trả lời từ thẻ, vẫn giữ mạch "con gái chị",
+    // và lời dặn an toàn trong ghi chú món (mật ong: không dùng cho trẻ dưới 1 tuổi) không được rơi mất khi tóm theo món.
     const r = await chat(["con gái c bị ho", "1 tuần rồi", "khám rồi", "bs nói viêm phế quản", "đang uống kháng sinh", "c nên cho bé ăn gì"]);
     expect(r[4].thread?.facts.meds).toBe(true);
-    expect(r[5].unk).toBeTruthy();
-    expect(r[5].content).toMatch(/hỏi thẳng bác sĩ/);
-    expect(r[5].content).toMatch(/Con gái chị/);
+    expect(r[5].thread?.who.text).toBe("con gái chị");
+    expect(r[5].content).toMatch(/Viêm phế quản/);
+    expect(r[5].content).toMatch(/mật ong \(không dùng cho trẻ dưới 1 tuổi\)/);
+    // Bệnh chưa có thẻ → vẫn nói thật theo đúng mạch chăm người ốm.
+    const u = await chat(["con gái c bị ốm", "khám rồi", "bs nói bị bệnh kawasaki", "đang uống thuốc", "c nên cho bé ăn gì"]);
+    expect(u[4].unk).toBeTruthy();
+    expect(u[4].content).toMatch(/hỏi thẳng bác sĩ/);
+    expect(u[4].content).toMatch(/Con gái chị/);
   }, T);
   it("đang ở bệnh viện → chăm mẹ → mẹ mổ ruột thừa → mổ xong rồi → bác sĩ nói ổn: không câu nào bị đáp kiểu chuyện phiếm", async () => {
     const r = await chat(["a đang ở bệnh viện", "chăm mẹ", "mẹ mổ ruột thừa", "mổ xong rồi", "bác sĩ nói ổn"]);

@@ -1,0 +1,337 @@
+{
+  "id": "benh-than-man",
+  "kind": "condition",
+  "names": [
+    "bệnh thận mạn",
+    "bệnh thận mạn tính",
+    "suy thận mạn",
+    "suy thận mạn tính",
+    "suy thận",
+    "CKD",
+    "chronic kidney disease",
+    "bệnh thận mãn tính",
+    "suy thận mãn tính"
+  ],
+  "disambiguation": "Thẻ này nói về bệnh thận mạn (diễn tiến lâu dài). Suy thận cấp, xảy ra đột ngột, hiện chưa có thẻ riêng.",
+  "about": [
+    {
+      "text": "Bệnh thận mạn (CKD) là tình trạng lâu dài, trong đó thận hoạt động kém hơn bình thường. Bệnh thường gặp, hay liên quan đến tuổi tác và có thể gặp ở bất kỳ ai.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NIDDK: CKD nghĩa là thận bị tổn thương hoặc có vấn đề về cấu trúc nên không lọc máu được như bình thường. Suy thận là khi thận mất phần lớn khả năng hoạt động.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "MedlinePlus: tổn thương diễn ra chậm qua nhiều năm khiến chất thải tích tụ trong cơ thể; chỉ xét nghiệm máu và nước tiểu mới xác nhận được bệnh.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Giai đoạn sớm thường không có triệu chứng, nên bệnh hay được phát hiện nhờ xét nghiệm máu hoặc nước tiểu làm vì lý do khác.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giai đoạn muộn hơn có thể có: mệt mỏi, sưng mắt cá chân, bàn chân hoặc bàn tay, khó thở, buồn nôn, tiểu ra máu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "MedlinePlus: nhiều người không có triệu chứng cho đến khi bệnh thận đã rất nặng.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do các bệnh khác làm thận bị quá tải, hay phối hợp với nhau: huyết áp cao, tiểu đường, mỡ máu cao, nhiễm trùng thận, viêm cầu thận, bệnh thận đa nang di truyền, tắc nghẽn đường nước tiểu (như sỏi thận tái phát hoặc phì đại tuyến tiền liệt).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dùng lâu dài một số thuốc như lithium hoặc thuốc giảm đau kháng viêm (NSAID) cũng có thể gây bệnh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NIDDK và MedlinePlus: tiểu đường và huyết áp cao là hai nguyên nhân thường gặp nhất ở người lớn. NIDDK nêu thêm bệnh tim và tiền sử gia đình bị bệnh thận là yếu tố nguy cơ.",
+      "src": [
+        1,
+        3
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "CKD không chữa khỏi được, nhưng điều trị có thể làm giảm triệu chứng và làm bệnh tiến triển chậm lại. Bệnh có thể nặng dần, thận có thể ngừng hoạt động nhưng điều này không phổ biến. Nhiều người sống lâu với CKD.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Suy thận (thận ngừng hoạt động) chỉ xảy ra ở khoảng 2 trên 100 người bị CKD. Bệnh làm tăng nguy cơ bệnh tim mạch (nhồi máu cơ tim, đột quỵ); tim mạch là một trong những nguyên nhân tử vong chính ở người bệnh thận.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phần lớn người bệnh kiểm soát được CKD bằng thuốc và khám định kỳ. Lối sống lành mạnh và thuốc có thể giảm nguy cơ tim mạch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị tuỳ mức độ nặng: thay đổi lối sống; thuốc kiểm soát huyết áp, mỡ máu; thuốc giúp thận làm việc lâu hơn; khám định kỳ. Giai đoạn nặng có thể cần lọc máu hoặc ghép thận — do bác sĩ quyết định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NIDDK: kiểm soát huyết áp là bước quan trọng nhất. Khi thận suy, có thể thay thế chức năng thận bằng lọc máu hoặc ghép thận; hãy cùng đội ngũ chăm sóc và gia đình chọn cách phù hợp.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "MedlinePlus: kiểm soát huyết áp, đường huyết nếu bị tiểu đường, hạn chế rượu, giữ cân nặng hợp lý, vận động đều, không hút thuốc.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "NIDDK: người có nguy cơ (tiểu đường, huyết áp cao, bệnh tim, tiền sử gia đình suy thận) nên đi xét nghiệm; phát hiện sớm giúp điều trị sớm.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "NIDDK (natri): hạn chế thực phẩm nhiều natri — đồ hộp và một số đồ đông lạnh, hầu hết thịt chế biến, snack khoai tây và bánh quy giòn, muối ăn, một số gia vị, tương cà, mù tạt, sốt thịt nướng, nước tương, sốt teriyaki.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "text": "NIDDK (kali): đội ngũ chăm sóc có thể yêu cầu hạn chế khẩu phần thực phẩm chứa kali; dùng thảo mộc, gia vị thay muối thay thế (có thể nhiều kali) và hạn chế thực phẩm có kali clorua.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "text": "NIDDK (phospho): phospho có sẵn trong thịt, sữa và đậu; nên hạn chế đồ chế biến có thêm phospho như thịt nguội, đồ uống có hương vị, và ăn khẩu phần nhỏ hơn món giàu phospho.",
+        "src": [
+          2
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "NIDDK: chọn thực phẩm đồ uống lành mạnh giúp thận giữ cân bằng muối và khoáng chất, giúp bạn thấy khoẻ hơn và có thể ngăn hoặc làm chậm một số vấn đề do CKD. Hãy hỏi bác sĩ hoặc chuyên viên dinh dưỡng.",
+        "src": [
+          1,
+          2
+        ]
+      },
+      {
+        "text": "NIDDK: chọn thịt chưa chế biến, trái cây và rau tươi, đông lạnh hoặc đóng hộp không thêm muối hay sốt; rửa kỹ đồ hộp để giảm natri; nêm bằng thảo mộc, gia vị hoặc nước chanh; đọc nhãn thực phẩm.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "text": "NIDDK (protein): lượng đạm cần điều chỉnh cùng đội ngũ chăm sóc vì nhu cầu mỗi người khác nhau và thay đổi theo thời gian; có thể chọn đạm thực vật và thịt nạc ít phospho. Người lọc máu có thể cần nhiều đạm hơn.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "text": "MedlinePlus: chọn thực phẩm ít natri (muối) và các món tốt cho tim như trái cây, rau, ngũ cốc nguyên hạt, sữa ít béo.",
+        "src": [
+          3
+        ]
+      },
+      {
+        "text": "Mức natri, kali, phospho và đạm bạn cần tuỳ giai đoạn bệnh, do đội ngũ chăm sóc quyết định.",
+        "src": [
+          2
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "muối",
+        "aliases": [
+          "ăn mặn",
+          "muối ăn",
+          "natri"
+        ],
+        "verdict": "limit",
+        "note": "NIDDK và MedlinePlus: nên ăn ít natri (muối); đội ngũ chăm sóc sẽ đặt mức giới hạn cho bạn, thường thấp hơn mức khuyến nghị chung cho người lớn.",
+        "src": [
+          2,
+          3
+        ]
+      },
+      {
+        "name": "đồ hộp và thịt chế biến sẵn",
+        "aliases": [
+          "đồ hộp",
+          "thịt chế biến",
+          "xúc xích",
+          "thịt nguội",
+          "giăm bông",
+          "khoai tây chiên lát",
+          "bánh quy giòn"
+        ],
+        "verdict": "limit",
+        "note": "NIDDK nêu đồ hộp, một số đồ đông lạnh, hầu hết thịt chế biến, snack khoai tây và bánh quy giòn là thực phẩm nhiều natri cần hạn chế; thịt nguội cũng có thể chứa phospho thêm vào.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "name": "nước tương và các loại sốt mặn",
+        "aliases": [
+          "nước tương",
+          "xì dầu",
+          "tương cà",
+          "tương mù tạt",
+          "sốt teriyaki",
+          "sốt thịt nướng"
+        ],
+        "verdict": "limit",
+        "note": "NIDDK nêu tương cà, mù tạt, sốt thịt nướng, nước tương, sốt teriyaki là gia vị nhiều natri.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "name": "muối thay thế",
+        "aliases": [
+          "muối kali",
+          "muối ít natri"
+        ],
+        "verdict": "avoid",
+        "note": "NIDDK khuyên tránh muối thay thế và hạn chế thực phẩm có kali clorua trong thành phần.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "name": "thịt và sữa",
+        "aliases": [
+          "thịt bò",
+          "thịt heo",
+          "thịt lợn",
+          "thịt gà",
+          "sữa",
+          "phô mai",
+          "sữa chua"
+        ],
+        "verdict": "limit",
+        "note": "NIDDK: thịt và sữa là nguồn phospho tự nhiên; đội ngũ chăm sóc có thể khuyên hạn chế thịt và sữa. Cơ thể hấp thu phospho từ thịt, gia cầm nhiều hơn từ đậu, hạt. Lượng cụ thể do đội ngũ chăm sóc đặt.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "name": "đồ uống có hương vị (có thêm phospho)",
+        "aliases": [
+          "nước ngọt",
+          "nước uống có hương vị"
+        ],
+        "verdict": "limit",
+        "note": "NIDDK nêu đồ uống có hương vị là thực phẩm chế biến có thể có phospho thêm vào; hãy đọc thành phần ghi “phosphorus”, “PHOS” (như phosphoric acid, disodium phosphate).",
+        "src": [
+          2
+        ]
+      },
+      {
+        "name": "trái cây và rau",
+        "aliases": [
+          "rau",
+          "trái cây",
+          "rau xanh",
+          "rau củ"
+        ],
+        "verdict": "good",
+        "note": "NIDDK: trái cây, rau ít phospho nên có thể chọn khẩu phần lớn hơn. Riêng kali, hãy theo hướng dẫn của đội ngũ chăm sóc vì họ có thể yêu cầu hạn chế khẩu phần thực phẩm chứa kali.",
+        "src": [
+          2
+        ]
+      },
+      {
+        "name": "đạm thực vật",
+        "aliases": [
+          "đậu hạt",
+          "đậu",
+          "hạt"
+        ],
+        "verdict": "ok",
+        "note": "NIDDK khuyên chọn đạm thực vật và thịt nạc ít phospho; đậu và hạt giàu phospho nhưng cơ thể hấp thu ít hơn so với thịt. Lượng đạm cần điều chỉnh cùng đội ngũ chăm sóc.",
+        "src": [
+          2
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám nếu có triệu chứng dai dẳng hoặc đáng lo có thể do bệnh thận. Người nguy cơ cao (như bị huyết áp cao hoặc tiểu đường) có thể được khuyên xét nghiệm định kỳ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "NIDDK: nên xét nghiệm kiểm tra thận nếu bạn bị tiểu đường, huyết áp cao, bệnh tim hoặc có người thân bị suy thận.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Chronic kidney disease",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/kidney-disease/",
+      "reviewed": "2023-03-22"
+    },
+    {
+      "title": "Chronic Kidney Disease (CKD)",
+      "publisher": "NIDDK (NIH, Hoa Kỳ)",
+      "url": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd",
+      "reviewed": "2016-10"
+    },
+    {
+      "title": "Healthy Eating for Adults with Chronic Kidney Disease",
+      "publisher": "NIDDK (NIH, Hoa Kỳ)",
+      "url": "https://www.niddk.nih.gov/health-information/kidney-disease/chronic-kidney-disease-ckd/eating-nutrition",
+      "reviewed": "2025-01"
+    },
+    {
+      "title": "Chronic Kidney Disease",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/chronickidneydisease.html",
+      "reviewed": "2025-09-21"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

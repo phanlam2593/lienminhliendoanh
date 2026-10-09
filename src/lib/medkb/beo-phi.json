@@ -1,0 +1,76 @@
+{
+"id":"beo-phi",
+"kind":"condition",
+"names":["béo phì","thừa cân","thừa cân béo phì","bệnh béo phì","obesity","overweight","béo bụng","giảm cân"],
+"about":[
+{"text":"Thừa cân và béo phì nghĩa là cơ thể có nhiều mỡ hơn mức cần thiết. Tình trạng này có thể dẫn đến nhiều vấn đề sức khoẻ nghiêm trọng, nhưng thay đổi lối sống và điều trị có thể giúp ích.","src":[0]},
+{"text":"MedlinePlus gọi béo phì là một bệnh, nghĩa là cơ thể có quá nhiều mỡ.","src":[1]},
+{"text":"**BMI** thường dùng để ước tính nguy cơ nhưng không phân biệt cơ với mỡ, nên người nhiều cơ có thể bị xếp vào nhóm cao hơn thực tế. Vòng bụng cũng cho thêm thông tin.","src":[0,1,2]}
+],
+"signs":[
+{"text":"Hằng ngày có thể gặp: thở hụt hơi, khó đi lại, mệt mỏi, đau khớp và đau lưng, ngáy, tâm trạng thấp hoặc trầm cảm.","src":[0]},
+{"text":"Mỡ tập trung quanh bụng làm tăng nguy cơ các vấn đề sức khoẻ liên quan đến cân nặng.","src":[1,2]}
+],
+"causes":[
+{"text":"Nguyên nhân chính: ăn uống nhiều hơn nhu cầu (nhất là đồ nhiều chất béo và đường) và vận động không đủ để tiêu hao năng lượng. Phần thừa được cơ thể tích trữ thành mỡ.","src":[0,1,2]},
+{"text":"Còn có yếu tố di truyền, thói quen ăn uống, giới tính, mức vận động, một số loại thuốc và bệnh lý.","src":[1,2]},
+{"text":"Một số bệnh khiến khó giữ cân nặng khỏe mạnh hơn: suy giáp, hội chứng Cushing, buồng trứng đa nang, các rối loạn ăn uống, trầm cảm.","src":[0,2]},
+{"text":"Một số thuốc (như thuốc steroid, một số thuốc chống trầm cảm, thuốc chẹn beta) có thể gây tăng cân nếu không điều chỉnh ăn uống và vận động.","src":[0,2]},
+{"text":"Ngủ quá ít hoặc quá nhiều, căng thẳng và ăn theo cảm xúc, tăng cân khi mang thai mà sau đó không giảm, cũng là yếu tố nguy cơ.","src":[2]},
+{"text":"Có yếu tố nguy cơ không có nghĩa chắc chắn sẽ béo phì; ăn uống, vận động, thay đổi hành vi, thuốc và thủ thuật có thể giúp bù lại phần lớn các yếu tố này.","src":[2]}
+],
+"course":[
+{"text":"Thừa cân, béo phì làm tăng nguy cơ tiểu đường type 2, bệnh tim, đột quỵ, tăng huyết áp, hội chứng chuyển hoá, thoái hoá khớp, ngưng thở khi ngủ và gan nhiễm mỡ.","src":[0,1,2]},
+{"text":"Cũng tăng nguy cơ một số ung thư (như vú, tử cung, đại trực tràng) và có thể ảnh hưởng khả năng sinh sản.","src":[0,1,2]},
+{"text":"NHS cho biết béo phì có thể làm giảm tuổi thọ.","src":[0]},
+{"text":"Giảm khoảng 5–10% cân nặng có thể cải thiện sức khoẻ, trì hoãn hoặc ngăn một số bệnh nói trên.","src":[0,1]},
+{"text":"Về đời sống, béo phì có thể hạn chế hoạt động, khiến người bệnh né chỗ đông người, bị kỳ thị, và đi kèm trầm cảm, xấu hổ, cô lập.","src":[2]}
+],
+"care":[
+{"text":"Nguyên tắc cơ bản: ăn uống ít năng lượng hơn mức cơ thể tiêu hao và vận động nhiều hơn.","src":[0]},
+{"text":"Vận động: NHS gợi ý khoảng 45–60 phút mỗi ngày, có thể chia nhỏ, kèm bài tập sức mạnh. Mayo Clinic: tối thiểu 30 phút vận động nhịp điệu (như đi bộ nhanh) hầu hết các ngày, và tập sức mạnh ít nhất 2 lần/tuần.","src":[0,3]},
+{"text":"Tăng vận động trong ngày: đi cầu thang, đỗ xe xa hơn, đứng khi nghe điện thoại.","src":[3]},
+{"text":"Chỉ cần 10 phút mỗi ngày cũng có ích. Ngủ kém thì dễ chọn đồ nhiều năng lượng và mệt, không muốn vận động.","src":[4]},
+{"text":"Mục tiêu giảm khoảng 0,5–1 kg mỗi tuần; mục tiêu khởi đầu khoảng 5% cân nặng hiện tại. Đặt mục tiêu thực tế, cân đều đặn và kiên nhẫn với bản thân.","src":[0,3]},
+{"text":"Ăn chậm, ăn có chủ ý, tránh vừa ăn vừa xem tivi hoặc điện thoại.","src":[3]},
+{"text":"Bác sĩ có thể giới thiệu chương trình quản lý cân nặng (huấn luyện cá nhân, liệu pháp nhận thức hành vi, nhóm hỗ trợ, tư vấn ăn uống).","src":[0,1]},
+{"text":"Tuỳ từng người, bác sĩ có thể cân nhắc thuốc giảm cân (nhóm làm giảm thèm ăn hoặc giảm hấp thu chất béo) dùng kèm chế độ ăn và lối sống; chỉ dùng khi có chỉ định.","src":[0,1]},
+{"text":"Với béo phì nặng hoặc có bệnh nặng đi kèm, có thể xem xét phẫu thuật giảm cân (làm nhỏ dạ dày), do bác sĩ chuyên khoa quyết định.","src":[0,1]},
+{"text":"Chế độ ăn rất ít năng lượng chỉ nên thực hiện dưới sự giám sát của chuyên gia dinh dưỡng và không phù hợp với mọi người.","src":[0]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS khuyên cắt giảm đồ ăn nhiều chất béo và đường, uống ít rượu bia vì cồn có nhiều năng lượng, và giảm đường trong đồ uống.","src":[0,4]},
+{"text":"Mayo Clinic khuyên hạn chế ngũ cốc tinh chế, đồ ăn và thức uống thêm đường, và thực phẩm chế biến sẵn (thường nhiều chất béo, đường hoặc muối).","src":[3]}
+],
+"ok":[
+{"text":"NHS khuyên ăn cân bằng, nhiều trái cây và rau, uống đủ nước mỗi ngày.","src":[0,4]},
+{"text":"Mayo Clinic khuyên ăn nhiều thực phẩm từ thực vật (rau, trái cây, ngũ cốc nguyên hạt), thực phẩm tươi chưa chế biến, và sữa ít béo hoặc không béo.","src":[3]},
+{"text":"Nếu có bệnh nền, đang ăn kiêng đặc biệt hoặc từng bị rối loạn ăn uống, hãy hỏi bác sĩ trước khi thay đổi chế độ.","src":[4]}
+],
+"foods":[
+{"name":"rau","aliases":["rau xanh","rau củ","rau cải"],"verdict":"good","note":"Mayo Clinic: rau ít năng lượng, nhiều chất xơ; gợi ý khoảng 4 phần mỗi ngày. NHS khuyên ăn nhiều trái cây và rau.","src":[0,3]},
+{"name":"trái cây","aliases":["trái cây tươi","hoa quả"],"verdict":"good","note":"Mayo Clinic: trái cây ít năng lượng, nhiều chất xơ; gợi ý khoảng 3 phần mỗi ngày, có thể dùng làm bữa phụ. Đường tự nhiên trong trái cây thì chấp nhận được.","src":[0,3]},
+{"name":"ngũ cốc nguyên hạt","aliases":["gạo lứt","lúa mạch","bánh mì nguyên cám","mì nguyên cám"],"verdict":"good","note":"Mayo Clinic nêu gạo lứt, lúa mạch, bánh mì và mì nguyên cám là lựa chọn nên ăn.","src":[3]},
+{"name":"gạo trắng và bánh mì trắng","aliases":["cơm trắng","gạo trắng","bánh mì trắng"],"verdict":"limit","note":"Mayo Clinic xếp ngũ cốc tinh chế như gạo trắng và bánh mì trắng vào nhóm nên hạn chế (không dùng từ \"tránh\").","src":[3]},
+{"name":"chất béo lành mạnh","aliases":["dầu ô liu","quả bơ","trái bơ","các loại hạt","bơ hạt","dầu thực vật"],"verdict":"ok","note":"Mayo Clinic: dầu ô liu, dầu thực vật, quả bơ, các loại hạt vẫn tốt nhưng nhiều năng lượng nên cần ăn có chừng mực.","src":[3]},
+{"name":"sữa ít béo","aliases":["sữa tách béo","sữa không béo"],"verdict":"good","note":"Mayo Clinic khuyên chọn sữa và chế phẩm từ sữa ít béo hoặc không béo.","src":[3]},
+{"name":"đồ ngọt và nước ngọt","aliases":["nước ngọt","soda","bánh kẹo","kẹo","tráng miệng","thạch"],"verdict":"limit","note":"Mayo Clinic: hạn chế đồ ăn và thức uống thêm đường như đồ tráng miệng, thạch, nước ngọt. NHS khuyên giảm đường và năng lượng từ đồ uống.","src":[3,4]},
+{"name":"đồ chế biến sẵn","aliases":["đồ ăn nhanh","mì gói","xúc xích","đồ hộp","fast food"],"verdict":"limit","note":"Mayo Clinic khuyên hạn chế thực phẩm chế biến sẵn vì thường nhiều chất béo, đường hoặc muối; nguồn không nêu từng món cụ thể.","src":[3]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS: rượu bia nhiều năng lượng và dễ uống quá mức mà không nhận ra, nên chọn đồ uống lành mạnh hơn.","src":[0,4]}
+]},
+"doctor":[
+{"text":"Nên đi khám nếu bạn lo lắng về cân nặng hoặc các bệnh liên quan đến cân nặng.","src":[2]},
+{"text":"NHS: khám (không khẩn) khi muốn được giúp giảm cân, vòng bụng lớn hơn nửa chiều cao, hoặc đã có tiền tiểu đường/tiểu đường, huyết áp cao, đau khớp, mỡ máu cao, ngưng thở khi ngủ, bệnh tim mạch.","src":[0]},
+{"text":"Cũng nên đi khám nếu có người thân bị béo phì, hoặc bạn đang có, hoặc nghi ngờ mình có, rối loạn ăn uống như ăn vô độ.","src":[0]}
+],
+"emergency":[],
+"sources":[
+{"title":"Overweight and obesity in adults","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/obesity/","reviewed":"2026-04-29"},
+{"title":"Obesity","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/obesity.html","reviewed":"2025-09-02"},
+{"title":"Obesity: Symptoms and causes","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/diseases-conditions/obesity/symptoms-causes/syc-20375742","reviewed":"2025-12-02"},
+{"title":"Weight loss","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/healthy-lifestyle/weight-loss/in-depth/weight-loss/art-20047752","reviewed":"2024-06-22"},
+{"title":"Lose weight","publisher":"NHS (Anh)","url":"https://www.nhs.uk/better-health/lose-weight/"}
+],
+"verifiedAt":"2026-10-09"
+}

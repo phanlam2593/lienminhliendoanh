@@ -1,0 +1,66 @@
+{
+"id":"hoa-tri","kind":"term",
+"names":["hoá trị","hóa trị","hoá trị liệu","hóa trị liệu","hoá chất trị ung thư","chemotherapy","chemo","truyền hóa chất"],
+"about":[
+{"text":"Hoá trị là cách điều trị ung thư bằng thuốc để tiêu diệt tế bào ung thư.","src":[0,2,3]},
+{"text":"Hoá trị có thể nhằm chữa khỏi ung thư, giảm khả năng ung thư quay lại, thu nhỏ hoặc ngăn ung thư lan, hay giảm triệu chứng. Có thể dùng một mình hoặc cùng xạ trị, phẫu thuật.","src":[0]},
+{"text":"Thuốc giết hoặc làm chậm các tế bào phát triển nhanh, nên cũng có thể ảnh hưởng đến tế bào lành phân chia nhanh như lớp lót miệng và ruột.","src":[2]},
+{"text":"Hoá trị cũng có thể dùng trước mổ hoặc xạ trị để thu nhỏ khối u, hoặc để diệt tế bào còn sót lại sau điều trị.","src":[2]},
+{"text":"Cách đưa thuốc: truyền hoặc tiêm vào tĩnh mạch (cách phổ biến nhất), tiêm bắp hay dưới da, hoặc dạng viên/nang uống. Một số loại uống được ở nhà.","src":[0,2]},
+{"text":"Hoá trị thường được chia thành các \"đợt\" kéo dài vài tháng, có quãng nghỉ giữa các lần điều trị.","src":[0,2]}
+],
+"signs":[],
+"causes":[],
+"course":[
+{"text":"Hầu hết người bệnh có một số tác dụng phụ, nhưng không ai gặp tất cả.","src":[1]},
+{"text":"Thường gặp: mệt, buồn nôn/nôn, đau miệng họng, hệ miễn dịch yếu đi, thiếu máu, dễ bầm tím hoặc chảy máu, đi cầu thay đổi, rụng tóc tạm thời.","src":[0,1]},
+{"text":"Cũng có thể gặp tê hoặc ngứa ran ở tay chân, khó nhớ hay khó tập trung, và cục máu đông.","src":[0,1]},
+{"text":"Mệt mỏi là tác dụng phụ phổ biến nhất.","src":[2]},
+{"text":"Tác dụng phụ thường khỏi dần sau khi kết thúc hoá trị, vì tế bào lành thường hồi phục; một số tác dụng phụ có thể chỉ bắt đầu sau khi hết điều trị.","src":[0,2,3]},
+{"text":"Tác dụng phụ không cho biết hoá trị có hiệu quả hay không.","src":[2]},
+{"text":"Một số thuốc có thể gây vấn đề về khả năng sinh sản, tạm thời hoặc lâu dài. Hãy hỏi đội điều trị trước về việc lưu trữ trứng hoặc tinh trùng.","src":[0,1]},
+{"text":"Thuốc hoá trị có thể rất hại cho thai nhi. Bạn cần dùng biện pháp tránh thai trong lúc điều trị; nghi ngờ mang thai thì báo đội điều trị sớm nhất.","src":[0]}
+],
+"care":[
+{"text":"Hãy cho đội điều trị biết khi có tác dụng phụ; họ có thể có cách điều trị và lời khuyên giúp bạn.","src":[1]},
+{"text":"Với mệt mỏi: nhờ người đưa đón, lên kế hoạch nghỉ ngơi và nhờ giúp nấu ăn, trông con.","src":[2]},
+{"text":"Nếu có ống thông hoặc cổng truyền, hãy để ý dấu hiệu nhiễm trùng quanh vị trí đó.","src":[2]}
+],
+"diet":{
+"avoid":[
+{"text":"Nếu khô miệng, nên tránh rượu bia, thuốc lá và thực phẩm làm kích ứng miệng (hướng dẫn dinh dưỡng của NCI khi điều trị ung thư).","src":[4]}
+],
+"ok":[
+{"text":"Hoá trị có thể gây khó ăn. Hãy báo bác sĩ hoặc y tá; chuyên gia dinh dưỡng có thể giúp.","src":[2]},
+{"text":"NCI: ăn uống tốt khi điều trị giúp bạn giữ sức; bạn có thể cần thêm chất đạm và năng lượng, và chuyên gia dinh dưỡng có thể giúp bạn ăn đủ.","src":[4]},
+{"text":"Khi chán ăn hoặc nhanh no: uống phần lớn nước giữa các bữa, ăn 5–6 bữa nhỏ mỗi ngày, ăn đồ giàu đạm trước.","src":[4]},
+{"text":"Khi không thích đồ rắn, có thể thử sinh tố, súp.","src":[4]},
+{"text":"Khi khô miệng: nhấp nước đều trong ngày, làm ẩm thức ăn bằng nước sốt.","src":[4]},
+{"text":"Khi loét miệng: ăn đồ nguội hoặc nhiệt độ phòng, chọn đồ mềm, cắt nhỏ, uống bằng ống hút.","src":[4]},
+{"text":"Giữ an toàn thực phẩm khi điều trị: giữ thức ăn ở nhiệt độ an toàn, rửa kỹ rau quả sống, dùng dao thớt riêng cho thịt sống.","src":[4]}
+],
+"foods":[
+{"name":"đồ ăn nóng","aliases":["đồ nóng","thức ăn nóng","món nóng"],"verdict":"limit","note":"NCI: khi bị loét miệng, nên ăn đồ nguội hoặc nhiệt độ phòng vì đồ nóng có thể làm đau miệng.","src":[4]},
+{"name":"sinh tố và súp","aliases":["sinh tố","smoothie","súp","soup"],"verdict":"ok","note":"NCI: khi không thích đồ rắn hoặc chán ăn, có thể thử sinh tố, súp.","src":[4]},
+{"name":"đồ ăn mềm","aliases":["đồ mềm","thức ăn mềm"],"verdict":"good","note":"NCI: khi loét miệng hoặc nuốt khó, chọn đồ ăn mềm, cắt nhỏ.","src":[4]},
+{"name":"thực phẩm giàu đạm","aliases":["đồ nhiều đạm","protein","chất đạm"],"verdict":"good","note":"NCI: khi điều trị bạn có thể cần thêm đạm và năng lượng; khi nhanh no, ăn đồ giàu đạm trước.","src":[4]},
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NCI: khi khô miệng nên tránh rượu bia (cùng thuốc lá và đồ kích ứng miệng). Trang không bàn rượu bia ngoài tình huống này.","src":[4]}
+]},
+"doctor":[
+{"text":"Hãy gọi đội điều trị ngay nếu bạn bị sốt cao, hoặc thấy nóng, lạnh, ra mồ hôi, run rẩy.","src":[0,1]},
+{"text":"Hãy gọi ngay nếu có dấu hiệu nhiễm trùng khác như đau họng, ho, tiêu chảy, đi tiểu nhiều lần hoặc đau khi tiểu; những dấu hiệu này có thể cần xử lý nhanh.","src":[0,1]},
+{"text":"Nếu không biết liên hệ đội điều trị bằng cách nào, hãy gọi đường dây tư vấn y tế khẩn của nơi bạn ở.","src":[0,1]},
+{"text":"Hãy báo bác sĩ hoặc y tá nếu bạn khó ăn.","src":[2]}
+],
+"emergency":[
+{"text":"Đau kiểu nhói hoặc chuột rút, sưng và ấm ở một chân hoặc tay: có thể là cục máu đông, cần gọi đội điều trị ngay.","src":[0,1]},
+{"text":"Khó thở đột ngột, đau ngực nhói, hoặc ho ra máu: cần gọi ngay đội điều trị hoặc đường dây y tế khẩn.","src":[0,1]}
+],
+"sources":[
+{"title":"Chemotherapy","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/chemotherapy/","reviewed":"2025-02-14"},
+{"title":"Chemotherapy - Side effects","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/chemotherapy/side-effects/","reviewed":"2025-02-14"},
+{"title":"Chemotherapy to Treat Cancer","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/about-cancer/treatment/types/chemotherapy","reviewed":"2025-05-15"},
+{"title":"Cancer Chemotherapy","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/cancerchemotherapy.html","reviewed":"2025-04-07"},
+{"title":"Nutrition in Cancer Care (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/about-cancer/treatment/side-effects/appetite-loss/nutrition-pdq","reviewed":"2024-10-15"}
+],
+"verifiedAt":"2026-10-09"}

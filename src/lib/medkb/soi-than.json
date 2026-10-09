@@ -1,0 +1,69 @@
+{
+"id":"soi-than","kind":"condition",
+"names":["sỏi thận","sạn thận","kidney stones","kidney stone","sỏi thận tiết niệu","sỏi đường tiết niệu"],
+"about":[
+{"text":"Sỏi thận là những cục cứng hình thành trong thận. Sỏi nhỏ thường không gây triệu chứng và có thể theo nước tiểu ra ngoài mà không hay biết; sỏi lớn có thể rất đau và cần được kiểm tra khẩn.","src":[0]},
+{"text":"NIDDK: sỏi thận là mảnh rắn cứng như viên sỏi hình thành ở một hoặc cả hai thận khi một số khoáng chất trong nước tiểu ở mức cao. Khi được điều trị, sỏi hiếm khi gây tổn thương vĩnh viễn.","src":[1]}
+],
+"signs":[
+{"text":"Đau dữ dội, thường bắt đầu ở bên hông bụng hoặc lưng dưới, có thể lan xuống bẹn, tinh hoàn hoặc vùng quanh cơ quan sinh dục nữ.","src":[0]},
+{"text":"Cơn đau lúc dữ dội, lúc dịu hoặc hết hẳn.","src":[0]},
+{"text":"Các triệu chứng khác: sốt hoặc cảm thấy nóng, lạnh, run; buồn nôn hoặc nôn; đi tiểu thường xuyên; nước tiểu đục.","src":[0]},
+{"text":"NIDDK: đau nhói ở lưng, hông, bụng dưới hoặc bẹn, hoặc tiểu ra máu. Sỏi nhỏ ra dễ dàng có thể không gây triệu chứng.","src":[1]}
+],
+"causes":[
+{"text":"Sỏi hình thành khi các chất hoá học bình thường có trong nước tiểu tích tụ thành cục cứng trong thận.","src":[0]},
+{"text":"Nguy cơ cao hơn khi: uống không đủ nước; có bệnh làm tăng một số chất trong cơ thể (như hội chứng chuyển hoá); dùng một số thuốc (như aspirin, thuốc kháng acid, thuốc lợi tiểu, kháng sinh).","src":[0]},
+{"text":"Dễ bị tái phát khi: ăn nhiều đạm ít chất xơ; ít vận động hoặc nằm một chỗ lâu; hay bị nhiễm trùng thận hoặc tiểu; có người thân ruột thịt bị sỏi thận; đã từng bị sỏi thận.","src":[0]}
+],
+"course":[
+{"text":"Sỏi có thể mất vài tuần mới ra hết.","src":[0]},
+{"text":"Nguy cơ tái phát cao ở một số người (xem phần nguyên nhân). NIDDK: việc xét nghiệm có thể giúp tìm ra vấn đề đã gây sỏi.","src":[0,1]}
+],
+"care":[
+{"text":"Đa số sỏi được điều trị tại nhà bằng thuốc, có thể gồm thuốc giảm đau, thuốc chống buồn nôn và thuốc giúp sỏi ra dễ hơn — do bác sĩ quyết định.","src":[0]},
+{"text":"Bạn có thể được dặn hứng lại viên sỏi đã ra để đem đi kiểm tra.","src":[0]},
+{"text":"Sỏi lớn có thể cần can thiệp tại bệnh viện: tán sỏi bằng sóng xung kích (không cần gây mê), hoặc đưa ống nhỏ lên qua niệu đạo hoặc qua vết rạch nhỏ ở lưng dưới gây mê toàn thân.","src":[0]},
+{"text":"NIDDK: điều trị là lấy sỏi ra hoặc làm vỡ sỏi thành mảnh nhỏ; phòng ngừa có thể gồm uống đủ nước, thay đổi ăn uống hoặc dùng thuốc.","src":[1]},
+{"text":"Phòng ngừa: giữ cơ thể đủ nước (nước tiểu sẫm màu là dấu hiệu thiếu nước), ăn ít muối, và đừng thay đổi chế độ ăn nhiều khi chưa hỏi bác sĩ.","src":[0]}
+],
+"diet":{
+"avoid":[
+{"text":"NHS: hạn chế đồ uống có ga, đồ uống chứa caffeine và rượu bia.","src":[0]},
+{"text":"NHS: ăn ít muối; chế độ nhiều đạm, ít chất xơ làm tăng nguy cơ sỏi tái phát.","src":[0]},
+{"text":"NIDDK: với sỏi canxi oxalat, nên giảm thực phẩm giàu oxalat (hạt và các sản phẩm từ hạt, đậu phộng, đại hoàng, rau bina, cám lúa mì) và hạn chế đạm động vật.","src":[2]},
+{"text":"NIDDK: nên xác nhận loại sỏi của mình với bác sĩ trước khi đổi chế độ ăn, vì khuyến nghị khác nhau tuỳ loại sỏi.","src":[2]}
+],
+"ok":[
+{"text":"NHS: uống nhiều nước — người lớn khoảng 2,5 đến 3 lít mỗi ngày, trẻ em khoảng 1 đến 2 lít; có thể vắt thêm nước chanh tươi vào nước.","src":[0]},
+{"text":"NIDDK: uống đủ chất lỏng, chủ yếu là nước, là bước quan trọng nhất để phòng sỏi; nhiều chuyên gia gợi ý khoảng sáu đến tám ly (mỗi ly khoảng 8 ounce) mỗi ngày, trừ khi bạn bị suy thận. Hãy hỏi bác sĩ bạn cần uống bao nhiêu.","src":[2]},
+{"text":"NHS: đảm bảo đủ canxi trong chế độ ăn. NIDDK: nên lấy canxi từ thực phẩm chứ không phải kiêng canxi.","src":[0,2]},
+{"text":"NIDDK: chế độ ăn DASH liên quan đến nguy cơ sỏi thận thấp hơn; thừa cân làm tăng nguy cơ.","src":[2]},
+{"text":"NHS: hãy hỏi bác sĩ trước khi thay đổi chế độ ăn nhiều.","src":[0]}
+],
+"foods":[
+{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS và NIDDK: uống đủ nước là cách quan trọng nhất để phòng sỏi thận (trừ khi bác sĩ dặn khác, ví dụ khi bị suy thận).","src":[0,2]},
+{"name":"nước chanh","aliases":["chanh","nước cốt chanh","chanh tươi"],"verdict":"good","note":"NHS gợi ý thêm nước chanh tươi vào nước uống để phòng sỏi.","src":[0]},
+{"name":"nước ngọt có ga","aliases":["nước có ga","soda","nước ngọt","coca"],"verdict":"limit","note":"NHS khuyên hạn chế đồ uống có ga khi muốn phòng sỏi thận.","src":[0]},
+{"name":"đồ uống chứa caffeine","aliases":["cà phê","trà","cafe"],"verdict":"limit","note":"NHS khuyên hạn chế đồ uống chứa caffeine khi muốn phòng sỏi thận.","src":[0]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên hạn chế rượu bia khi muốn phòng sỏi thận.","src":[0]},
+{"name":"muối","aliases":["ăn mặn","muối ăn","bột ngọt","mì chính","đồ hộp","đồ chế biến sẵn","đồ ăn nhanh"],"verdict":"limit","note":"NHS và NIDDK khuyên ăn ít muối/natri. NIDDK nêu nguồn natri chính là đồ hộp, đồ đóng gói, đồ ăn nhanh, gia vị, thịt; cần để ý cả bột nở, bột ngọt (MSG) và một số phụ gia chứa natri.","src":[0,2]},
+{"name":"đạm động vật","aliases":["thịt bò","thịt gà","thịt heo","thịt lợn","nội tạng","trứng","cá","hải sản","sữa","phô mai","sữa chua"],"verdict":"limit","note":"NIDDK (với sỏi canxi oxalat/canxi phosphat/acid uric): hạn chế đạm động vật gồm thịt bò, gà, heo (nhất là nội tạng), trứng, cá và hải sản, sữa và chế phẩm sữa. Xác nhận loại sỏi với bác sĩ trước.","src":[2]},
+{"name":"thực phẩm giàu oxalat","aliases":["rau bina","cải bó xôi","đại hoàng","cám lúa mì","đậu phộng","lạc","các loại hạt","hạt"],"verdict":"limit","note":"NIDDK (với sỏi canxi oxalat): giảm hạt và sản phẩm từ hạt, đậu phộng, đại hoàng, rau bina, cám lúa mì.","src":[2]},
+{"name":"đậu, đậu hạt khô và đậu lăng","aliases":["đậu lăng","đậu hạt","đậu khô","đậu Hà Lan khô"],"verdict":"good","note":"NIDDK: có thể thay đạm động vật bằng đậu, đậu hạt khô, đậu lăng — nhiều đạm, ít oxalat.","src":[2]},
+{"name":"canxi từ thực phẩm","aliases":["canxi","thực phẩm giàu canxi"],"verdict":"good","note":"NHS: đảm bảo đủ canxi trong chế độ ăn; NIDDK: lấy canxi từ thực phẩm, đừng kiêng canxi.","src":[0,2]}
+]
+},
+"doctor":[
+{"text":"Bất kỳ viên sỏi thận nào gây triệu chứng cũng cần được chăm sóc y tế sớm.","src":[0]},
+{"text":"Nên đi khám khi bị đau, nước tiểu đục, đi tiểu nhiều lần, buồn nôn hoặc nôn.","src":[0]},
+{"text":"Cần xin khám gấp hoặc gọi đường dây y tế nếu đau dữ dội, hoặc sốt hay thấy nóng, lạnh, run.","src":[0]}
+],
+"emergency":[],
+"sources":[
+{"title":"Kidney stones","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/kidney-stones/","reviewed":"2026-09-17"},
+{"title":"Kidney Stones","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones","reviewed":"2017-05"},
+{"title":"Eating, Diet, & Nutrition for Kidney Stones","publisher":"NIDDK (NIH, Hoa Kỳ)","url":"https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition","reviewed":"2017-05"}
+],
+"verifiedAt":"2026-10-09"
+}

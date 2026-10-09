@@ -1,0 +1,261 @@
+{
+  "id": "ung-thu-vu",
+  "kind": "cancer",
+  "names": [
+    "ung thư vú",
+    "bệnh ung thư vú",
+    "breast cancer",
+    "ung thu vu",
+    "K vú",
+    "u vú ác tính"
+  ],
+  "about": [
+    {
+      "text": "Ung thư vú là ung thư bắt đầu ở vú, khi các tế bào mô vú phát triển ngoài tầm kiểm soát và có thể tạo thành khối u.",
+      "src": [
+        4
+      ]
+    },
+    {
+      "text": "Ai cũng có thể bị ung thư vú. MedlinePlus ghi bệnh hiếm khi gặp ở nam giới.",
+      "src": [
+        0,
+        4
+      ]
+    },
+    {
+      "text": "Có loại ung thư vú còn tại chỗ (\"in situ\"), có loại xâm lấn có thể lan sang mô lân cận, hạch bạch huyết hoặc các nơi khác trong cơ thể.",
+      "src": [
+        4
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Dấu hiệu chính: có khối u hoặc chỗ sưng ở vú, ngực hoặc nách; hoặc vùng vú dày lên bất thường.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Da vú lõm xuống, có thể trông hoặc sờ như vỏ cam; da vú đổi màu (cách nhìn thấy có thể khác tuỳ màu da).",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Kích thước hoặc hình dạng một hoặc hai bên vú thay đổi.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Núm vú tiết dịch (có thể lẫn máu) khi bạn không mang thai hay cho con bú; núm vú thụt vào hoặc nổi ban.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Da vú hoặc núm vú có thể đỏ, sưng hoặc bong vảy.",
+      "src": [
+        4
+      ]
+    },
+    {
+      "text": "Các dấu hiệu trên có thể kèm đau hoặc không. Chỉ đau vú đơn độc thường không phải dấu hiệu của ung thư vú.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Khi ung thư lan đến nơi khác (thường là xương, gan, phổi, não), có thể thấy mệt, ăn kém hoặc sụt cân, buồn nôn/nôn, khó ngủ, cảm giác không khoẻ không rõ lý do.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Ai cũng có thể bị ung thư vú và không phải lúc nào cũng rõ nguyên nhân.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn khi lớn tuổi (NHS nêu trên 50), mô vú đặc, hoặc có bệnh vú lành tính hay từng bị ung thư vú.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "Người thân bị ung thư vú hoặc buồng trứng có thể liên quan đến gen lỗi như **BRCA1/BRCA2**; gen này làm tăng nguy cơ.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "Tiếp xúc estrogen lâu hơn trong đời làm tăng nguy cơ: dậy thì sớm (trước 12 tuổi), mãn kinh muộn (sau 55), không sinh con hoặc sinh con đầu sau 30 tuổi, không cho con bú.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "Thuốc tránh thai mới dùng gần đây và liệu pháp hormone mãn kinh liên quan đến nguy cơ tăng nhẹ. NHS nói với nhiều người lợi ích vẫn lớn hơn rủi ro; hãy hỏi bác sĩ nếu lo.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "Các yếu tố khác: thừa cân/béo phì, uống rượu bia, hút thuốc, từng xạ trị vùng ngực.",
+      "src": [
+        2,
+        4
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phát hiện sớm có thể giúp ung thư dễ điều trị hơn.",
+      "src": [
+        1,
+        4
+      ]
+    },
+    {
+      "text": "Ung thư vú thứ phát (đã lan) thường ảnh hưởng đến xương, gan, phổi hoặc não.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị chính thường là **phẫu thuật**: cắt phần vú có bệnh, hoặc cắt toàn bộ vú, có thể kèm cắt hạch nách; sau cắt vú có thể tái tạo vú.",
+      "src": [
+        3,
+        4
+      ]
+    },
+    {
+      "text": "Các phương pháp khác: xạ trị (thường sau mổ), hoá trị (trước hoặc sau mổ), liệu pháp nội tiết (giảm hoặc chặn hormone), thuốc nhắm trúng đích, liệu pháp miễn dịch.",
+      "src": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "text": "Cách chọn phụ thuộc loại và giai đoạn ung thư vú; có thể phối hợp nhiều phương pháp. Bác sĩ chuyên khoa cùng bạn lên kế hoạch.",
+      "src": [
+        5
+      ]
+    },
+    {
+      "text": "Thử nghiệm lâm sàng có thể là một lựa chọn.",
+      "src": [
+        3,
+        5
+      ]
+    },
+    {
+      "text": "Nếu lo về triệu chứng hoặc tác dụng phụ khi điều trị, hãy nói với đội ngũ chuyên khoa. Đội giảm nhẹ có thể giúp kiểm soát triệu chứng và hỗ trợ cả gia đình.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Không phải lúc nào cũng phòng được ung thư vú, nhưng đi chụp nhũ ảnh khi được mời giúp phát hiện sớm khối u nhỏ chưa sờ thấy.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "Giảm nguy cơ: hạn chế rượu bia, giảm cân nếu thừa cân, bỏ thuốc lá. MedlinePlus thêm tập thể dục và cho con bú.",
+      "src": [
+        2,
+        4
+      ]
+    },
+    {
+      "text": "Người nguy cơ cao do gen có thể được xét nghiệm gen, dùng thuốc hoặc (nguy cơ rất cao) phẫu thuật dự phòng; bác sĩ tư vấn.",
+      "src": [
+        2,
+        4
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Hãy đi khám nếu thấy khối u hoặc chỗ sưng ở vú, ngực hay nách.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Hãy đi khám nếu vú hoặc núm vú có thay đổi mà không giống bình thường của bạn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Hãy đi khám nếu đau vú hoặc nách và trong gia đình có người từng bị ung thư vú hoặc buồng trứng.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Có các dấu hiệu trên **không chắc chắn là ung thư vú**, nhưng nên để bác sĩ kiểm tra.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Breast cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/breast-cancer/"
+    },
+    {
+      "title": "Breast cancer - Symptoms",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/breast-cancer/symptoms/",
+      "reviewed": "2024-03-04"
+    },
+    {
+      "title": "Breast cancer - Causes",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/breast-cancer/causes/",
+      "reviewed": "2024-03-04"
+    },
+    {
+      "title": "Breast cancer - Treatment",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/breast-cancer/treatment/",
+      "reviewed": "2024-03-04"
+    },
+    {
+      "title": "Breast Cancer",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/breastcancer.html",
+      "reviewed": "2026-08-03"
+    },
+    {
+      "title": "Breast Cancer Treatment",
+      "publisher": "NCI (cancer.gov, Hoa Kỳ)",
+      "url": "https://www.cancer.gov/types/breast/patient/breast-treatment-pdq"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}
