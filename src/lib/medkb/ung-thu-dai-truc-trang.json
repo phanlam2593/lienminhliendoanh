@@ -1,61 +1,312 @@
 {
-"id":"ung-thu-dai-truc-trang","kind":"cancer",
-"names":["ung thư đại trực tràng","bệnh ung thư đại trực tràng","ung thư đại tràng","ung thư trực tràng","ung thư ruột già","colorectal cancer","bowel cancer","colon cancer","ung thu dai truc trang"],
-"about":[
-{"text":"Ung thư đại trực tràng là ung thư ở ruột già, gồm đại tràng (colon) và trực tràng. NHS cho biết đây là một trong những ung thư thường gặp nhất ở Anh.","src":[0,4]},
-{"text":"Ung thư bắt đầu ở đại tràng gọi là ung thư đại tràng, bắt đầu ở trực tràng gọi là ung thư trực tràng.","src":[4]}
+"id": "ung-thu-dai-truc-trang",
+"kind": "cancer",
+"names": [
+"ung thư đại trực tràng",
+"bệnh ung thư đại trực tràng",
+"ung thư đại tràng",
+"ung thư trực tràng",
+"ung thư ruột già",
+"colorectal cancer",
+"bowel cancer",
+"colon cancer",
+"ung thu dai truc trang"
 ],
-"signs":[
-{"text":"Ung thư đại trực tràng có thể **không gây triệu chứng**, nhất là lúc đầu.","src":[4]},
-{"text":"Thay đổi đi cầu không giống thường ngày của bạn: phân mềm hơn, tiêu chảy hoặc táo bón; đi nhiều hơn hoặc ít hơn bình thường.","src":[1,4]},
-{"text":"Có máu trong phân (đỏ hoặc đen) hoặc chảy máu hậu môn.","src":[1,5]},
-{"text":"Buồn đi cầu liên tục dù vừa đi xong; cảm giác đi chưa hết.","src":[1,5]},
-{"text":"Đau bụng, bụng có khối u, đầy hơi, chướng bụng hoặc co thắt.","src":[1,5]},
-{"text":"Sụt cân ngoài ý muốn, mệt hoặc thở nhanh/hụt hơi (có thể là dấu hiệu thiếu máu).","src":[1,4]},
-{"text":"Các dấu hiệu này khá thường gặp và có thể do bệnh khác, **không chắc chắn là ung thư**.","src":[1]}
+"about": [
+{
+"text": "Ung thư đại trực tràng là ung thư ở ruột già, gồm đại tràng (colon) và trực tràng. NHS cho biết đây là một trong những ung thư thường gặp nhất ở Anh.",
+"src": [
+0,
+4
+]
+},
+{
+"text": "Ung thư bắt đầu ở đại tràng gọi là ung thư đại tràng, bắt đầu ở trực tràng gọi là ung thư trực tràng.",
+"src": [
+4
+]
+}
 ],
-"causes":[
-{"text":"Do thay đổi gen, lối sống và môi trường; nguyên nhân chính xác thường không rõ. Hầu hết thay đổi gen xảy ra trong đời, một số có di truyền.","src":[2,4]},
-{"text":"Nguy cơ cao hơn khi trên 50 tuổi (NHS), hút thuốc, thừa cân/béo phì, người thân ruột thịt từng bị ung thư đại trực tràng.","src":[2,4,5]},
-{"text":"Bệnh viêm ruột (Crohn, viêm loét đại tràng, kéo dài từ 8 năm trở lên theo NCI/MedlinePlus), polyp đại tràng, hội chứng Lynch, bệnh đa polyp có tính gia đình (FAP).","src":[2,4,5]},
-{"text":"Uống rượu bia nhiều (từ 3 ly mỗi ngày trở lên theo NCI/MedlinePlus) cũng là yếu tố nguy cơ.","src":[4,5]},
-{"text":"Có yếu tố nguy cơ **không có nghĩa chắc chắn sẽ bị** ung thư.","src":[5]}
+"signs": [
+{
+"text": "Ung thư đại trực tràng có thể **không gây triệu chứng**, nhất là lúc đầu.",
+"src": [
+4
+]
+},
+{
+"text": "Thay đổi đi cầu không giống thường ngày của bạn: phân mềm hơn, tiêu chảy hoặc táo bón; đi nhiều hơn hoặc ít hơn bình thường.",
+"src": [
+1,
+4
+]
+},
+{
+"text": "Có máu trong phân (đỏ hoặc đen) hoặc chảy máu hậu môn.",
+"src": [
+1,
+5
+]
+},
+{
+"text": "Buồn đi cầu liên tục dù vừa đi xong; cảm giác đi chưa hết.",
+"src": [
+1,
+5
+]
+},
+{
+"text": "Đau bụng, bụng có khối u, đầy hơi, chướng bụng hoặc co thắt.",
+"src": [
+1,
+5
+]
+},
+{
+"text": "Sụt cân ngoài ý muốn, mệt hoặc thở nhanh/hụt hơi (có thể là dấu hiệu thiếu máu).",
+"src": [
+1,
+4
+]
+},
+{
+"text": "Các dấu hiệu này khá thường gặp và có thể do bệnh khác, **không chắc chắn là ung thư**.",
+"src": [
+1
+]
+}
 ],
-"course":[
-{"text":"Một số polyp (u tuyến) không phải ung thư nhưng có thể dần trở thành ung thư; cắt polyp đi trước khi đó là một cách phòng ngừa.","src":[4]},
-{"text":"Ung thư đại tràng được chia giai đoạn 0 đến IV và có thể tái phát sau điều trị.","src":[5]}
+"causes": [
+{
+"text": "Do thay đổi gen, lối sống và môi trường; nguyên nhân chính xác thường không rõ. Hầu hết thay đổi gen xảy ra trong đời, một số có di truyền.",
+"src": [
+2,
+4
+]
+},
+{
+"text": "Nguy cơ cao hơn khi trên 50 tuổi (NHS), hút thuốc, thừa cân/béo phì, người thân ruột thịt từng bị ung thư đại trực tràng.",
+"src": [
+2,
+4,
+5
+]
+},
+{
+"text": "Bệnh viêm ruột (Crohn, viêm loét đại tràng, kéo dài từ 8 năm trở lên theo NCI/MedlinePlus), polyp đại tràng, hội chứng Lynch, bệnh đa polyp có tính gia đình (FAP).",
+"src": [
+2,
+4,
+5
+]
+},
+{
+"text": "Uống rượu bia nhiều (từ 3 ly mỗi ngày trở lên theo NCI/MedlinePlus) cũng là yếu tố nguy cơ.",
+"src": [
+4,
+5
+]
+},
+{
+"text": "Có yếu tố nguy cơ **không có nghĩa chắc chắn sẽ bị** ung thư.",
+"src": [
+5
+]
+}
 ],
-"care":[
-{"text":"Phẫu thuật là cách điều trị phổ biến nhất ở mọi giai đoạn ung thư đại tràng. Còn có hoá trị, xạ trị, thuốc nhắm trúng đích, liệu pháp miễn dịch, tuỳ từng trường hợp.","src":[3,5]},
-{"text":"Với ung thư trực tràng, MedlinePlus còn nêu theo dõi chủ động như một lựa chọn; với đại tràng có thêm đốt sóng cao tần, áp lạnh. Bác sĩ quyết định.","src":[4]},
-{"text":"Cách điều trị tuỳ kích thước, vị trí (đại tràng hay trực tràng), mức lan, thay đổi gen, tuổi và sức khoẻ của bạn.","src":[3,4]},
-{"text":"Sau mổ bạn có thể cần mở hậu môn nhân tạo (colostomy hoặc ileostomy), tạm thời hoặc vĩnh viễn, để hỗ trợ hồi phục.","src":[3]},
-{"text":"Đội điều trị sẽ giải thích tác dụng phụ và giúp bạn xử lý. Với bệnh không chữa khỏi được, đội giảm nhẹ giúp kiểm soát triệu chứng và hỗ trợ gia đình.","src":[3]},
-{"text":"Giảm nguy cơ: ăn uống cân bằng, vận động, giữ cân nặng hợp lý, bỏ thuốc lá, uống ít rượu bia. Không phải lúc nào cũng phòng được.","src":[2,4]},
-{"text":"Tầm soát giúp phát hiện sớm: MedlinePlus nêu hầu hết chuyên gia khuyên bắt đầu từ 45 tuổi và tiếp tục ít nhất đến 75 tuổi. Người nguy cơ cao hãy hỏi bác sĩ.","src":[4]}
+"course": [
+{
+"text": "Một số polyp (u tuyến) không phải ung thư nhưng có thể dần trở thành ung thư; cắt polyp đi trước khi đó là một cách phòng ngừa.",
+"src": [
+4
+]
+},
+{
+"text": "Ung thư đại tràng được chia giai đoạn 0 đến IV và có thể tái phát sau điều trị.",
+"src": [
+5
+]
+}
 ],
-"diet":{
-"avoid":[{"text":"NHS khuyên ăn ít thịt đỏ và thịt chế biến sẵn, và uống ít rượu bia, để giảm nguy cơ.","src":[2]}],
-"ok":[{"text":"NHS khuyên ăn uống lành mạnh với ít nhất 5 phần trái cây và rau mỗi ngày.","src":[2]}],
-"foods":[
-{"name":"thịt đỏ và thịt chế biến sẵn","aliases":["thịt bò","thịt heo","thịt lợn","xúc xích","thịt xông khói","lạp xưởng","giò chả","thịt nguội"],"verdict":"limit","note":"NHS khuyên ăn ít thịt đỏ và thịt chế biến sẵn để giảm nguy cơ ung thư đại trực tràng.","src":[2]},
-{"name":"trái cây và rau","aliases":["rau","rau củ","trái cây","hoa quả","rau xanh"],"verdict":"good","note":"NHS khuyên ăn ít nhất 5 phần trái cây và rau mỗi ngày.","src":[2]},
-{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NHS khuyên uống ít rượu bia; NCI/MedlinePlus nêu uống nhiều rượu bia là yếu tố nguy cơ.","src":[2,4,5]}
-]},
-"doctor":[
-{"text":"Hãy đi khám nếu bạn có bất kỳ triệu chứng nào của ung thư đại trực tràng kể trên.","src":[1]},
-{"text":"Cần xin khám gấp nếu phân đen hoặc đỏ sẫm, hoặc bị tiêu chảy ra máu.","src":[1]},
-{"text":"Triệu chứng hoặc kết quả tầm soát bất thường là lý do để làm thêm xét nghiệm.","src":[4]}
+"care": [
+{
+"text": "Phẫu thuật là cách điều trị phổ biến nhất ở mọi giai đoạn ung thư đại tràng. Còn có hoá trị, xạ trị, thuốc nhắm trúng đích, liệu pháp miễn dịch, tuỳ từng trường hợp.",
+"src": [
+3,
+5
+]
+},
+{
+"text": "Với ung thư trực tràng, MedlinePlus còn nêu theo dõi chủ động như một lựa chọn; với đại tràng có thêm đốt sóng cao tần, áp lạnh. Bác sĩ quyết định.",
+"src": [
+4
+]
+},
+{
+"text": "Cách điều trị tuỳ kích thước, vị trí (đại tràng hay trực tràng), mức lan, thay đổi gen, tuổi và sức khoẻ của bạn.",
+"src": [
+3,
+4
+]
+},
+{
+"text": "Sau mổ bạn có thể cần mở hậu môn nhân tạo (colostomy hoặc ileostomy), tạm thời hoặc vĩnh viễn, để hỗ trợ hồi phục.",
+"src": [
+3
+]
+},
+{
+"text": "Đội điều trị sẽ giải thích tác dụng phụ và giúp bạn xử lý. Với bệnh không chữa khỏi được, đội giảm nhẹ giúp kiểm soát triệu chứng và hỗ trợ gia đình.",
+"src": [
+3
+]
+},
+{
+"text": "Giảm nguy cơ: ăn uống cân bằng, vận động, giữ cân nặng hợp lý, bỏ thuốc lá, uống ít rượu bia. Không phải lúc nào cũng phòng được.",
+"src": [
+2,
+4
+]
+},
+{
+"text": "Tầm soát giúp phát hiện sớm: MedlinePlus nêu hầu hết chuyên gia khuyên bắt đầu từ 45 tuổi và tiếp tục ít nhất đến 75 tuổi. Người nguy cơ cao hãy hỏi bác sĩ.",
+"src": [
+4
+]
+}
 ],
-"emergency":[
-{"text":"Chảy máu hậu môn không ngừng, hoặc ra nhiều máu/cục máu lớn khi đi cầu: gọi cấp cứu. Đừng tự lái xe đến bệnh viện.","src":[1]}
+"diet": {
+"avoid": [
+{
+"text": "NHS khuyên ăn ít thịt đỏ và thịt chế biến sẵn, và uống ít rượu bia, để giảm nguy cơ.",
+"src": [
+2
+]
+}
 ],
-"sources":[
-{"title":"Bowel cancer","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/bowel-cancer/"},
-{"title":"Bowel cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/bowel-cancer/symptoms/","reviewed":"2026-09-04"},
-{"title":"Bowel cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/bowel-cancer/causes/","reviewed":"2026-09-04"},
-{"title":"Bowel cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/bowel-cancer/treatment/","reviewed":"2026-09-04"},
-{"title":"Colorectal Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/colorectalcancer.html","reviewed":"2024-03-05"},
-{"title":"Colon Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/colorectal/patient/colon-treatment-pdq","reviewed":"2025-05-16"}
+"ok": [
+{
+"text": "NHS khuyên ăn uống lành mạnh với ít nhất 5 phần trái cây và rau mỗi ngày.",
+"src": [
+2
+]
+}
 ],
-"verifiedAt":"2026-10-09"}
+"foods": [
+{
+"name": "thịt đỏ và thịt chế biến sẵn",
+"aliases": [
+"thịt bò",
+"thịt heo",
+"thịt lợn",
+"xúc xích",
+"thịt xông khói",
+"lạp xưởng",
+"giò chả",
+"thịt nguội"
+],
+"verdict": "limit",
+"note": "NHS khuyên ăn ít thịt đỏ và thịt chế biến sẵn để giảm nguy cơ ung thư đại trực tràng.",
+"src": [
+2
+]
+},
+{
+"name": "trái cây và rau",
+"aliases": [
+"rau",
+"rau củ",
+"trái cây",
+"hoa quả",
+"rau xanh"
+],
+"verdict": "good",
+"note": "NHS khuyên ăn ít nhất 5 phần trái cây và rau mỗi ngày.",
+"src": [
+2
+]
+},
+{
+"name": "rượu bia",
+"aliases": [
+"bia",
+"rượu",
+"đồ uống có cồn"
+],
+"verdict": "limit",
+"note": "NHS khuyên uống ít rượu bia; NCI/MedlinePlus nêu uống nhiều rượu bia là yếu tố nguy cơ.",
+"src": [
+2,
+4,
+5
+]
+}
+]
+},
+"doctor": [
+{
+"text": "Hãy đi khám nếu bạn có bất kỳ triệu chứng nào của ung thư đại trực tràng kể trên.",
+"src": [
+1
+]
+},
+{
+"text": "Cần xin khám gấp nếu phân đen hoặc đỏ sẫm, hoặc bị tiêu chảy ra máu.",
+"src": [
+1
+]
+},
+{
+"text": "Triệu chứng hoặc kết quả tầm soát bất thường có thể cần làm thêm xét nghiệm.",
+"src": [
+4
+]
+}
+],
+"emergency": [
+{
+"text": "Chảy máu hậu môn không ngừng, hoặc ra nhiều máu/cục máu lớn khi đi cầu: gọi cấp cứu. Đừng tự lái xe đến bệnh viện.",
+"src": [
+1
+]
+}
+],
+"sources": [
+{
+"title": "Bowel cancer",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/bowel-cancer/"
+},
+{
+"title": "Bowel cancer - Symptoms",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/bowel-cancer/symptoms/",
+"reviewed": "2026-09-04"
+},
+{
+"title": "Bowel cancer - Causes",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/bowel-cancer/causes/",
+"reviewed": "2026-09-04"
+},
+{
+"title": "Bowel cancer - Treatment",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/bowel-cancer/treatment/",
+"reviewed": "2026-09-04"
+},
+{
+"title": "Colorectal Cancer",
+"publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+"url": "https://medlineplus.gov/colorectalcancer.html",
+"reviewed": "2024-03-05"
+},
+{
+"title": "Colon Cancer Treatment (PDQ) - Patient Version",
+"publisher": "NCI (cancer.gov, Hoa Kỳ)",
+"url": "https://www.cancer.gov/types/colorectal/patient/colon-treatment-pdq",
+"reviewed": "2025-05-16"
+}
+],
+"verifiedAt": "2026-10-09"
+}

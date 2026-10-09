@@ -1,61 +1,296 @@
 {
-"id":"ung-thu-da","kind":"cancer",
-"names":["ung thư da","bệnh ung thư da","skin cancer","ung thư hắc tố","ung thư hắc tố da","melanoma","ung thư tế bào đáy","ung thư tế bào vảy","ung thu da","nốt ruồi ung thư"],
-"about":[
-{"text":"Ung thư da là bệnh trong đó các tế bào ác tính (ung thư) hình thành ở mô da.","src":[7]},
-{"text":"Hai loại thường gặp nhất là **ung thư tế bào đáy** và **tế bào vảy** (gọi chung là ung thư da không phải hắc tố).","src":[6,7]},
-{"text":"**U hắc tố (melanoma)** ít gặp hơn nhưng nguy hiểm hơn, dễ xâm lấn mô lân cận và lan đi hơn các loại kia; bắt đầu ở tế bào tạo màu da.","src":[6,7,8]}
+"id": "ung-thu-da",
+"kind": "cancer",
+"names": [
+"ung thư da",
+"bệnh ung thư da",
+"skin cancer",
+"ung thư hắc tố",
+"ung thư hắc tố da",
+"melanoma",
+"ung thư tế bào đáy",
+"ung thư tế bào vảy",
+"ung thu da",
+"nốt ruồi ung thư"
 ],
-"signs":[
-{"text":"Ung thư da không phải hắc tố: dấu hiệu chính là một chỗ mọc hoặc mảng da bất thường, hay gặp ở vùng da ra nắng như đầu, mặt, tai, cổ, vai, lưng, tay, cẳng chân.","src":[3]},
-{"text":"Chỗ mọc có thể khác nhau về màu, kích thước, kết cấu: có chỗ nổi mịn viền rõ, có chỗ sần, thô hoặc đóng vảy. Đôi khi bắt đầu là mảng phẳng đổi màu (trên da nâu/đen có thể sẫm hơn).","src":[3]},
-{"text":"NCI nêu thêm: vết loét không lành, vùng bóng như ngọc trai nổi lên, mảng cứng giống sẹo, vùng đỏ nổi, chỗ đóng vảy, chảy máu hoặc đóng mày.","src":[7]},
-{"text":"U hắc tố: nốt ruồi mới hoặc nốt ruồi đã có bị thay đổi. Có thể ở bất kỳ đâu trên cơ thể, thường hơn ở vùng hay ra nắng.","src":[0]},
-{"text":"Hình dạng không đều, viền không đều; trộn từ 2 màu trở lên; thường lớn hơn 6 mm; nốt ruồi đổi kích thước, hình dạng hoặc màu.","src":[0]},
-{"text":"Nốt ruồi sưng, đau, chảy máu, ngứa hoặc đóng mày cũng là dấu hiệu cảnh báo.","src":[0]},
-{"text":"Nốt ruồi bình thường thường tròn, viền nhẵn, một màu, nhỏ (cỡ đầu bút chì hoặc nhỏ hơn) và không đổi theo thời gian.","src":[0]},
-{"text":"NCI nhắc quy tắc ABCDE: Asymmetry (không đối xứng), Border (viền), Color (màu), Diameter (đường kính), Evolving (thay đổi).","src":[8]}
+"about": [
+{
+"text": "Ung thư da là bệnh trong đó các tế bào ác tính (ung thư) hình thành ở mô da.",
+"src": [
+7
+]
+},
+{
+"text": "Hai loại thường gặp nhất là **ung thư tế bào đáy** và **tế bào vảy** (gọi chung là ung thư da không phải hắc tố).",
+"src": [
+6,
+7
+]
+},
+{
+"text": "**U hắc tố (melanoma)** ít gặp hơn nhưng nguy hiểm hơn, dễ xâm lấn mô lân cận và lan đi hơn các loại kia; bắt đầu ở tế bào tạo màu da.",
+"src": [
+6,
+7,
+8
+]
+}
 ],
-"causes":[
-{"text":"**Tia cực tím (UV)** từ ánh nắng và từ giường tắm nắng là nguyên nhân thường gặp nhất của cả ung thư da không phải hắc tố lẫn u hắc tố.","src":[1,4]},
-{"text":"Yếu tố nguy cơ: da trắng dễ bị cháy nắng, tóc đỏ hoặc vàng, mắt xanh, nhiều tàn nhang hoặc nốt ruồi, phơi nắng nhiều, từng bị cháy nắng nhiều lần, hay dùng giường tắm nắng.","src":[1,4,7]},
-{"text":"Có người thân hoặc bản thân từng bị ung thư da cũng làm tăng nguy cơ.","src":[1,4,6,7]},
-{"text":"Tuổi cao là yếu tố nguy cơ chính của ung thư da không phải hắc tố, nhưng người trẻ vẫn có thể bị.","src":[4]},
-{"text":"Người da nâu hoặc da đen ít bị hơn nhưng **vẫn có thể bị**. NHS ghi u hắc tố ở họ hay xuất hiện ở lòng bàn chân, lòng bàn tay hoặc dưới móng.","src":[1,4,7]},
-{"text":"NCI còn nêu viêm da kéo dài, suy giảm miễn dịch, tiếp xúc asen, từng xạ trị là yếu tố nguy cơ của ung thư da không phải hắc tố.","src":[7]}
+"signs": [
+{
+"text": "Ung thư da không phải hắc tố: dấu hiệu chính là một chỗ mọc hoặc mảng da bất thường, hay gặp ở vùng da ra nắng như đầu, mặt, tai, cổ, vai, lưng, bàn tay, cẳng chân.",
+"src": [
+3
+]
+},
+{
+"text": "Chỗ mọc có thể khác nhau về màu, kích thước, kết cấu: có chỗ nổi mịn viền rõ, có chỗ sần, thô hoặc đóng mày. Đôi khi bắt đầu là mảng phẳng đổi màu (trên da nâu/đen có thể sẫm hơn).",
+"src": [
+3
+]
+},
+{
+"text": "NCI nêu thêm: vết loét không lành, vùng bóng như ngọc trai nổi lên, mảng cứng giống sẹo, vùng đỏ nổi, chỗ đóng vảy, chảy máu hoặc đóng mày.",
+"src": [
+7
+]
+},
+{
+"text": "U hắc tố: nốt ruồi mới hoặc nốt ruồi đã có bị thay đổi. Có thể ở bất kỳ đâu trên cơ thể, thường hơn ở vùng hay ra nắng.",
+"src": [
+0
+]
+},
+{
+"text": "Hình dạng không đều, viền không đều; trộn từ 2 màu trở lên; thường lớn hơn 6 mm; nốt ruồi đổi kích thước, hình dạng hoặc màu.",
+"src": [
+0
+]
+},
+{
+"text": "Nốt ruồi đổi theo thời gian mà sưng và đau, chảy máu, ngứa hoặc đóng mày cũng là dấu hiệu cần để ý.",
+"src": [
+0
+]
+},
+{
+"text": "Nốt ruồi bình thường thường tròn, viền nhẵn, một màu, nhỏ (cỡ đầu bút chì hoặc nhỏ hơn) và không đổi theo thời gian.",
+"src": [
+0
+]
+},
+{
+"text": "NCI nhắc quy tắc ABCDE: Asymmetry (không đối xứng), Border (viền), Color (màu), Diameter (đường kính), Evolving (thay đổi).",
+"src": [
+8
+]
+}
 ],
-"course":[
-{"text":"NCI: ung thư tế bào đáy và tế bào vảy nếu tái phát thì thường trong vòng 5 năm đầu sau điều trị.","src":[7]},
-{"text":"Phát hiện u hắc tố càng sớm càng dễ điều trị.","src":[0]},
-{"text":"Tổn thương \"dày sừng ánh sáng\" (actinic keratosis) là tình trạng da đôi khi có thể trở thành ung thư tế bào vảy.","src":[7]}
+"causes": [
+{
+"text": "**Tia cực tím (UV)** từ ánh nắng và từ giường tắm nắng là nguyên nhân thường gặp nhất của cả ung thư da không phải hắc tố lẫn u hắc tố.",
+"src": [
+1,
+4
+]
+},
+{
+"text": "Yếu tố nguy cơ: da trắng dễ bị cháy nắng, tóc đỏ hoặc sáng màu, mắt xanh dương hoặc xanh lục, nhiều tàn nhang hoặc nốt ruồi, phơi nắng nhiều, từng bị cháy nắng nhiều lần, hay dùng giường tắm nắng.",
+"src": [
+1,
+4,
+7
+]
+},
+{
+"text": "Có người thân hoặc bản thân từng bị ung thư da cũng làm tăng nguy cơ.",
+"src": [
+1,
+4,
+6,
+7
+]
+},
+{
+"text": "Ung thư da không phải hắc tố gặp nhiều hơn ở người lớn tuổi, nhưng người trẻ vẫn có thể bị.",
+"src": [
+4
+]
+},
+{
+"text": "Người da nâu hoặc da đen ít bị hơn nhưng **vẫn có thể bị**. NHS ghi u hắc tố ở họ hay xuất hiện ở lòng bàn chân, lòng bàn tay hoặc dưới móng.",
+"src": [
+1,
+4,
+7
+]
+},
+{
+"text": "NCI còn nêu viêm da kéo dài, suy giảm miễn dịch, tiếp xúc asen, từng xạ trị là yếu tố nguy cơ của ung thư da không phải hắc tố.",
+"src": [
+7
+]
+}
 ],
-"care":[
-{"text":"Phẫu thuật là điều trị chính của cả ung thư da không phải hắc tố và u hắc tố, nhất là khi phát hiện sớm. Có thể cắt cùng một ít da lành xung quanh; vùng rộng có thể cần ghép da.","src":[2,5,8]},
-{"text":"Ung thư da không phải hắc tố còn có thể điều trị bằng áp lạnh (đóng băng da), phẫu thuật Mohs (cắt từng lớp mỏng, soi từng lớp dưới kính hiển vi), xạ trị, liệu pháp quang động, kem hoá trị cho tổn thương nông.","src":[5,7]},
-{"text":"U hắc tố không mổ được hoặc đã lan: có thể dùng thuốc nhắm trúng đích và liệu pháp miễn dịch (thường xét nghiệm gen trước). Xạ trị đôi khi dùng để thu nhỏ khối u và giảm triệu chứng.","src":[2]},
-{"text":"Hoá trị dùng chủ yếu cho u hắc tố tiến triển; NHS ghi hiệu quả kém hơn thuốc nhắm trúng đích và miễn dịch. Bác sĩ chuyên khoa quyết định.","src":[2]},
-{"text":"Đội điều trị giải thích lợi ích và tác dụng phụ, hẹn tái khám đều; lo lắng thì cứ liên hệ, không cần chờ lần tái khám.","src":[2,5]},
-{"text":"Bảo vệ khi ra nắng là cách tốt nhất giảm nguy cơ: tránh nắng gắt nhất trong ngày (NHS Anh nêu 11h–15h), che tay chân, đội mũ rộng vành, đeo kính chống UV.","src":[1,4]},
-{"text":"Dùng kem chống nắng chỉ số SPF ít nhất 30 và bảo vệ UVA ít nhất 4 sao, thoa lại thường xuyên; bảo vệ trẻ em và em bé vì da nhạy cảm hơn.","src":[1,4]}
+"course": [
+{
+"text": "NCI: ung thư tế bào đáy và tế bào vảy nếu tái phát thì thường trong vòng 5 năm sau điều trị lần đầu.",
+"src": [
+7
+]
+},
+{
+"text": "NHS: phát hiện u hắc tố sớm có thể giúp điều trị dễ hơn.",
+"src": [
+0
+]
+},
+{
+"text": "Tổn thương \"dày sừng ánh sáng\" (actinic keratosis) là tình trạng da đôi khi có thể trở thành ung thư tế bào vảy.",
+"src": [
+7
+]
+}
 ],
-"diet":null,
-"doctor":[
-{"text":"Hãy đi khám nếu nốt ruồi đổi kích thước, hình dạng hoặc màu; đau, ngứa, viêm, chảy máu hoặc đóng mày.","src":[0]},
-{"text":"Hãy đi khám nếu có vết hoặc mảng da lạ mới không mất sau vài tuần (kể cả ở lòng bàn tay/chân), hoặc vệt sẫm màu dưới móng không do chấn thương.","src":[0]},
-{"text":"Hãy đi khám nếu có chỗ mọc trên da lớn dần hoặc đổi màu/kết cấu, hoặc vùng da đau, ngứa, chảy máu, đóng mày trên 4 tuần.","src":[3]},
-{"text":"MedlinePlus: nên để bác sĩ kiểm tra mọi vết da đáng ngờ và mọi thay đổi ở da. Phát hiện sớm giúp điều trị hiệu quả hơn.","src":[6]},
-{"text":"Nếu bác sĩ nghi ngờ ung thư, bạn có thể được hẹn xét nghiệm hoặc gặp chuyên khoa gấp; điều này chưa có nghĩa chắc chắn bị ung thư.","src":[0,3]}
+"care": [
+{
+"text": "Phẫu thuật là điều trị chính của cả ung thư da không phải hắc tố và u hắc tố, nhất là khi phát hiện sớm. Có thể cắt cùng một ít da lành xung quanh; vùng rộng có thể cần ghép da.",
+"src": [
+2,
+5,
+8
+]
+},
+{
+"text": "Ung thư da không phải hắc tố còn có thể điều trị bằng áp lạnh (đóng băng da), phẫu thuật Mohs (cắt từng lớp mỏng, soi từng lớp dưới kính hiển vi), xạ trị, liệu pháp quang động, kem hoá trị cho tổn thương nông.",
+"src": [
+5,
+7
+]
+},
+{
+"text": "U hắc tố không mổ được hoặc đã lan: có thể dùng thuốc nhắm trúng đích và liệu pháp miễn dịch (thường xét nghiệm gen trước khi dùng thuốc nhắm trúng đích). Xạ trị đôi khi dùng để thu nhỏ khối u lớn và giảm triệu chứng.",
+"src": [
+2
+]
+},
+{
+"text": "Hoá trị đôi khi dùng cho u hắc tố tiến triển; NHS ghi hiệu quả kém hơn thuốc nhắm trúng đích và miễn dịch. Bạn cùng đội chuyên khoa lập kế hoạch điều trị.",
+"src": [
+2
+]
+},
+{
+"text": "Đội điều trị giải thích lợi ích và tác dụng phụ, hẹn tái khám đều; lo lắng thì cứ liên hệ, không cần chờ lần tái khám.",
+"src": [
+2,
+5
+]
+},
+{
+"text": "Bảo vệ khi ra nắng là cách tốt nhất giảm nguy cơ: tránh nắng gắt nhất trong ngày (NHS Anh nêu 11h–15h), che tay chân, đội mũ rộng vành, đeo kính chống UV.",
+"src": [
+1,
+4
+]
+},
+{
+"text": "Dùng kem chống nắng chỉ số SPF ít nhất 30 và bảo vệ UVA ít nhất 4 sao, thoa lại thường xuyên; bảo vệ trẻ em và em bé vì da nhạy cảm hơn.",
+"src": [
+1,
+4
+]
+}
 ],
-"emergency":[],
-"sources":[
-{"title":"Melanoma skin cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/melanoma-skin-cancer/symptoms/","reviewed":"2026-07-15"},
-{"title":"Melanoma skin cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/melanoma-skin-cancer/causes/","reviewed":"2026-07-15"},
-{"title":"Melanoma skin cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/melanoma-skin-cancer/treatment/","reviewed":"2026-07-15"},
-{"title":"Non-melanoma skin cancer - Symptoms","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/non-melanoma-skin-cancer/symptoms/","reviewed":"2026-09-16"},
-{"title":"Non-melanoma skin cancer - Causes","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/non-melanoma-skin-cancer/causes/","reviewed":"2026-09-16"},
-{"title":"Non-melanoma skin cancer - Treatment","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/non-melanoma-skin-cancer/treatment/","reviewed":"2026-09-16"},
-{"title":"Skin Cancer","publisher":"MedlinePlus (NIH, Hoa Kỳ)","url":"https://medlineplus.gov/skincancer.html","reviewed":"2025-08-09"},
-{"title":"Skin Cancer Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/skin/patient/skin-treatment-pdq"},
-{"title":"Melanoma Treatment (PDQ) - Patient Version","publisher":"NCI (cancer.gov, Hoa Kỳ)","url":"https://www.cancer.gov/types/skin/patient/melanoma-treatment-pdq","reviewed":"2025-05-16"}
+"diet": null,
+"doctor": [
+{
+"text": "Hãy đi khám nếu nốt ruồi đổi kích thước, hình dạng hoặc màu; đau, ngứa, viêm, chảy máu hoặc đóng mày.",
+"src": [
+0
+]
+},
+{
+"text": "Hãy đi khám nếu có vết hoặc mảng da lạ mới không mất sau vài tuần (kể cả ở lòng bàn tay/chân), hoặc vùng sẫm màu dưới móng không do chấn thương.",
+"src": [
+0
+]
+},
+{
+"text": "Hãy đi khám nếu có chỗ mọc trên da lớn dần hoặc đổi màu/kết cấu, hoặc vùng da đau, ngứa, chảy máu, đóng mày trên 4 tuần.",
+"src": [
+3
+]
+},
+{
+"text": "MedlinePlus: nên để bác sĩ kiểm tra mọi vết da đáng ngờ và mọi thay đổi ở da. Phát hiện sớm giúp điều trị hiệu quả hơn.",
+"src": [
+6
+]
+},
+{
+"text": "Nếu bác sĩ nghi ngờ ung thư, bạn có thể được hẹn xét nghiệm hoặc gặp chuyên khoa gấp; điều này chưa có nghĩa chắc chắn bị ung thư.",
+"src": [
+0,
+3
+]
+}
 ],
-"verifiedAt":"2026-10-09"}
+"emergency": [],
+"sources": [
+{
+"title": "Melanoma skin cancer - Symptoms",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/melanoma-skin-cancer/symptoms/",
+"reviewed": "2026-07-15"
+},
+{
+"title": "Melanoma skin cancer - Causes",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/melanoma-skin-cancer/causes/",
+"reviewed": "2026-07-15"
+},
+{
+"title": "Melanoma skin cancer - Treatment",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/melanoma-skin-cancer/treatment/",
+"reviewed": "2026-07-15"
+},
+{
+"title": "Non-melanoma skin cancer - Symptoms",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/non-melanoma-skin-cancer/symptoms/",
+"reviewed": "2026-09-16"
+},
+{
+"title": "Non-melanoma skin cancer - Causes",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/non-melanoma-skin-cancer/causes/",
+"reviewed": "2026-09-16"
+},
+{
+"title": "Non-melanoma skin cancer - Treatment",
+"publisher": "NHS (Anh)",
+"url": "https://www.nhs.uk/conditions/non-melanoma-skin-cancer/treatment/",
+"reviewed": "2026-09-16"
+},
+{
+"title": "Skin Cancer",
+"publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+"url": "https://medlineplus.gov/skincancer.html",
+"reviewed": "2025-08-09"
+},
+{
+"title": "Skin Cancer Treatment (PDQ) - Patient Version",
+"publisher": "NCI (cancer.gov, Hoa Kỳ)",
+"url": "https://www.cancer.gov/types/skin/patient/skin-treatment-pdq"
+},
+{
+"title": "Melanoma Treatment (PDQ) - Patient Version",
+"publisher": "NCI (cancer.gov, Hoa Kỳ)",
+"url": "https://www.cancer.gov/types/skin/patient/melanoma-treatment-pdq",
+"reviewed": "2025-05-16"
+}
+],
+"verifiedAt": "2026-10-09"
+}
