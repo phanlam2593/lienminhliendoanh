@@ -9,14 +9,14 @@
 {"text":"Thay đổi lối sống có thể giúp ngăn bệnh nặng lên.","src":[0]}
 ],
 "signs":[
-{"text":"Giai đoạn đầu thường không có triệu chứng. Triệu chứng có thể xuất hiện khi cơ thể cần nhiều oxy hơn, như lúc gắng sức hoặc căng thẳng.","src":[0,1]},
-{"text":"NHS nêu: đau ngực, đau tay hoặc chân khi vận động, khó thở, mệt liên tục, yếu và lú lẫn.","src":[0]},
+{"text":"Giai đoạn đầu thường không có triệu chứng. Triệu chứng có thể xuất hiện khi cơ thể cần nhiều oxy hơn, như lúc căng thẳng thể chất hoặc tinh thần.","src":[0,1]},
+{"text":"NHS nêu triệu chứng có thể gồm: đau ngực, đau tay hoặc chân nhất là khi vận động, khó thở, mệt liên tục, thấy yếu và lú lẫn.","src":[0]},
 {"text":"Động mạch vành: đau thắt ngực, hồi hộp, khó thở.","src":[1]},
 {"text":"Động mạch cảnh (ở cổ): có thể nghe tiếng thổi bằng ống nghe, hoặc có cơn thiếu máu não thoáng qua (đột quỵ nhẹ).","src":[1]},
 {"text":"Động mạch chân: đau, nhức, nặng hoặc chuột rút ở chân khi đi bộ hay leo cầu thang.","src":[1]},
 {"text":"Động mạch nuôi não phía sau: vấn đề về trí nhớ/tư duy, yếu hoặc tê một bên, rối loạn thị lực.","src":[1]},
 {"text":"Động mạch ruột: đau dữ dội sau bữa ăn, sụt cân, tiêu chảy.","src":[1]},
-{"text":"Ở nam giới, rối loạn cương dương có thể là dấu hiệu cảnh báo sớm của nguy cơ cao hơn.","src":[1]}
+{"text":"Ở nam giới, rối loạn cương dương là dấu hiệu cảnh báo sớm rằng bạn có thể có nguy cơ cao hơn bị xơ vữa động mạch và biến chứng.","src":[1]}
 ],
 "causes":[
 {"text":"Nguyên nhân chính xác chưa rõ. Mảng bám được cho là hình thành sau khi động mạch bị tổn thương, do lối sống không lành mạnh, các bệnh lý và gen. Mảng bám thường bắt đầu từ thời thơ ấu và nặng lên theo tuổi.","src":[1]},
@@ -27,11 +27,11 @@
 "course":[
 {"text":"Mảng bám vỡ có thể tạo cục máu đông chặn mạch hoặc theo máu đi nơi khác; có thể dẫn đến nhồi máu cơ tim, đột quỵ, sa sút trí tuệ do mạch máu hoặc mất chi.","src":[1]},
 {"text":"NHS nêu thêm bệnh động mạch ngoại biên và các bệnh tim mạch khác nếu không điều trị và không thay đổi lối sống.","src":[0]},
-{"text":"Không có điều trị nào làm xơ vữa động mạch lùi lại hoàn toàn, nhưng thuốc có thể giảm nguy cơ nhồi máu và đột quỵ.","src":[0]}
+{"text":"Hiện chưa có điều trị làm xơ vữa động mạch lùi lại, nhưng bạn có thể được cho thuốc để giảm nguy cơ nhồi máu cơ tim và đột quỵ.","src":[0]}
 ],
 "care":[
-{"text":"Điều trị tuỳ động mạch bị ảnh hưởng và mức độ tắc nghẽn: thay đổi lối sống, thuốc kiểm soát yếu tố nguy cơ, thủ thuật hoặc phẫu thuật khi có biến chứng, và phục hồi chức năng tim.","src":[1]},
-{"text":"NHS nêu các nhóm thuốc: statin hạ cholesterol, thuốc huyết áp, thuốc chống đông máu và thuốc kiểm soát đường huyết; phẫu thuật đôi khi cải thiện dòng máu. Do bác sĩ quyết định.","src":[0]},
+{"text":"Điều trị tuỳ động mạch bị ảnh hưởng và mức độ tắc nghẽn: thay đổi lối sống, thuốc kiểm soát yếu tố nguy cơ, thủ thuật hoặc phẫu thuật, và phục hồi chức năng tim nếu đã có biến chứng.","src":[1]},
+{"text":"NHS nêu các loại thuốc: hạ cholesterol (thường là statin), hạ huyết áp, giảm nguy cơ cục máu đông và hạ đường huyết nếu bị tiểu đường; đôi khi cần phẫu thuật cải thiện dòng máu. Do bác sĩ quyết định.","src":[0]},
 {"text":"Ăn uống lành mạnh với ít chất béo bão hoà và đường hơn; vận động đều, giữ cân nặng hợp lý.","src":[0,1]},
 {"text":"Không hút thuốc, tránh khói thuốc thụ động; giữ rượu bia trong mức giới hạn.","src":[0,1]},
 {"text":"MedlinePlus nêu thêm: quản lý căng thẳng, ngủ đủ và ngon, và hỏi bác sĩ về mức tập luyện phù hợp.","src":[1]},
@@ -55,7 +55,7 @@
 {"text":"Bác sĩ chẩn đoán dựa trên tiền sử, khám, xét nghiệm máu và các xét nghiệm tim mạch.","src":[1]}
 ],
 "emergency":[
-{"text":"Gọi cấp cứu khi có dấu hiệu nhồi máu cơ tim (đau ngực như bị siết chặt, nặng), đột quỵ (méo mặt, không giơ được hai tay, nói khó), khó thở nặng hoặc đột ngột lú lẫn. Đừng tự lái xe đến cấp cứu.","src":[0]}
+{"text":"Gọi cấp cứu khi có dấu hiệu nhồi máu cơ tim (đau ngực như bị siết chặt, nặng), đột quỵ (méo mặt, không giơ được hai tay, nói khó), khó thở hoặc đột ngột lú lẫn. Đừng tự lái xe đến cấp cứu.","src":[0]}
 ],
 "sources":[
 {"title":"Atherosclerosis","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/atherosclerosis/","reviewed":"2026-07-29"},

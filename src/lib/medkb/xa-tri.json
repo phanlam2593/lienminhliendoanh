@@ -2,13 +2,13 @@
 "id":"xa-tri","kind":"term",
 "names":["xạ trị","xạ trị liệu","chiếu xạ","radiotherapy","radiation therapy","chiếu tia","xạ trị ung thư"],
 "about":[
-{"text":"Xạ trị (radiotherapy) là cách điều trị ung thư dùng bức xạ liều cao để tiêu diệt tế bào ung thư và thu nhỏ khối u.","src":[0,2,3]},
+{"text":"Xạ trị (radiotherapy) là cách điều trị ung thư dùng bức xạ liều cao để tiêu diệt tế bào ung thư và ngăn chúng lan rộng.","src":[0,2,3]},
 {"text":"Có thể dùng từ sớm hoặc khi ung thư đã lan, nhằm chữa khỏi, hỗ trợ cách điều trị khác, giảm nguy cơ tái phát sau mổ, hoặc làm nhẹ triệu chứng.","src":[0]},
-{"text":"Thường kết hợp với phẫu thuật, hoá trị hoặc liệu pháp miễn dịch.","src":[3]},
+{"text":"Đôi khi được dùng cùng phẫu thuật, hoá trị hoặc liệu pháp miễn dịch.","src":[3]},
 {"text":"Bức xạ làm hư DNA của tế bào ung thư; phải mất nhiều ngày đến vài tuần điều trị thì tế bào ung thư mới chết.","src":[2]},
 {"text":"**Xạ ngoài**: máy chiếu tia từ bên ngoài vào chỗ ung thư; máy không chạm vào bạn nhưng có thể di chuyển quanh người bạn.","src":[0,2]},
 {"text":"**Xạ trong**: đặt nguồn phóng xạ vào trong cơ thể gần khối u (hạt, ống, nang), hoặc dùng chất lỏng phóng xạ uống/tiêm theo máu đi khắp cơ thể.","src":[0,2]},
-{"text":"Thường điều trị hằng ngày (hoặc chia nhỏ hai lần mỗi ngày) trong vài tuần. Kế hoạch tuỳ loại, kích thước, vị trí ung thư, mô nhạy cảm gần đó, sức khoẻ chung.","src":[3]},
+{"text":"Có thể điều trị mỗi ngày một lần hoặc chia liều nhỏ hai lần mỗi ngày trong vài tuần. Kế hoạch tuỳ loại, kích thước, vị trí ung thư, mô nhạy cảm gần đó, sức khoẻ chung.","src":[3]},
 {"text":"Xạ trị thường làm ở bệnh viện; sau xạ ngoài bạn thường về nhà sớm.","src":[0]}
 ],
 "signs":[],

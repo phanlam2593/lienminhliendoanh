@@ -24,27 +24,27 @@
 {"text":"Đợt bùng phát rất nặng có thể phải điều trị cấp cứu tại bệnh viện.","src":[0]}
 ],
 "care":[
-{"text":"Các nhóm thuốc: thuốc chống viêm nhóm aminosalicylate (như mesalazine, sulfasalazine), steroid thường dùng ngắn hạn khi bùng phát, thuốc ức chế miễn dịch, thuốc sinh học — do bác sĩ chuyên khoa quyết định.","src":[0]},
-{"text":"Có thể cần thuốc giảm đau quặn, thuốc nhuận tràng hoặc cầm tiêu chảy, thuốc giảm đau, và thực phẩm bổ sung như canxi, vitamin B12.","src":[0]},
+{"text":"Các nhóm thuốc: thuốc chống viêm nhóm aminosalicylate (như mesalazine, sulfasalazine), steroid thường dùng ngắn hạn khi bùng phát, thuốc ức chế miễn dịch, thuốc sinh học; tuỳ triệu chứng và mức độ ruột bị ảnh hưởng.","src":[0]},
+{"text":"Bác sĩ có thể gợi ý thêm thuốc giảm đau quặn, thuốc nhuận tràng, thuốc giảm đau, và thực phẩm bổ sung như canxi, vitamin B12.","src":[0]},
 {"text":"Có thể cần phẫu thuật cắt một phần hoặc toàn bộ đại tràng (kèm mở thông hồi tràng ra da hoặc làm túi hồi tràng - hậu môn) khi bệnh ảnh hưởng nhiều tới cuộc sống, ruột tổn thương nặng, hoặc điều trị khác thất bại.","src":[0]},
 {"text":"Nên: dùng thuốc đều đặn kể cả khi thấy khoẻ; ghi nhật ký ăn uống; uống nhiều nước khi tiêu chảy; tiêm vắc-xin phù hợp; đi tầm soát ung thư ruột theo hẹn; kiểm soát căng thẳng; vận động đều.","src":[0]},
-{"text":"Không nên: dùng NSAID như ibuprofen hay aspirin trừ khi bác sĩ kê; uống rượu quá mức vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
+{"text":"Không nên: dùng NSAID như ibuprofen hay aspirin trừ khi bác sĩ kê; uống quá 14 đơn vị cồn mỗi tuần vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
 {"text":"NIDDK: bác sĩ thường dùng thuốc giảm viêm ở ruột già để gây và duy trì lui bệnh; phẫu thuật có thể được đề nghị ở một số trường hợp.","src":[1]}
 ],
 "diet":{
 "avoid":[
-{"text":"NHS: tránh một số thức ăn làm bạn bùng phát triệu chứng (NHS không nêu tên món cụ thể); hãy ghi nhật ký ăn uống và trao đổi với bác sĩ trước khi đổi chế độ ăn.","src":[0]},
-{"text":"NHS: hạn chế rượu bia vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
+{"text":"NHS: một số thức ăn có thể làm bùng phát triệu chứng (NHS không nêu tên món cụ thể); hãy ghi nhật ký ăn uống và trao đổi với bác sĩ trước khi đổi chế độ ăn.","src":[0]},
+{"text":"NHS: không uống quá 14 đơn vị cồn mỗi tuần vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
 {"text":"NIDDK: các nhà nghiên cứu chưa thấy món cụ thể nào gây ra hoặc làm nặng viêm loét đại tràng; bác sĩ có thể gợi ý ghi nhật ký ăn uống để tìm món làm bạn khó chịu.","src":[2]}
 ],
 "ok":[
 {"text":"NHS: ăn uống cân đối; uống nhiều nước nếu bị tiêu chảy.","src":[0]},
-{"text":"NHS: bệnh có thể khiến cơ thể hấp thu vitamin và khoáng chất kém từ thức ăn nên đôi khi cần bổ sung canxi, vitamin B12.","src":[0]},
+{"text":"NHS: bệnh có thể khiến bạn không nhận đủ vitamin và khoáng chất từ thức ăn; bác sĩ có thể gợi ý bổ sung như canxi, vitamin B12.","src":[0]},
 {"text":"NIDDK: nên ăn uống lành mạnh, cân đối; triệu chứng có thể làm bạn ăn kém và không đủ dưỡng chất. Chế độ ăn lành mạnh có liên quan đến nguy cơ mắc bệnh viêm ruột thấp hơn.","src":[1,2]},
 {"text":"NIDDK: bác sĩ có thể đề nghị đổi chế độ ăn tuỳ triệu chứng và thuốc đang dùng, và có thể khuyên dùng thực phẩm bổ sung.","src":[2]}
 ],
 "foods":[
-{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên hạn chế rượu bia vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
+{"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên không uống quá 14 đơn vị cồn mỗi tuần vì rượu có thể kích ứng hệ tiêu hoá.","src":[0]},
 {"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS khuyên uống nhiều nước khi bị tiêu chảy.","src":[0]}
 ]
 },

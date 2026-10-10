@@ -13,7 +13,7 @@
 "causes":[],
 "course":[
 {"text":"Hầu hết người bệnh có một số tác dụng phụ, nhưng không ai gặp tất cả.","src":[1]},
-{"text":"Thường gặp: mệt, buồn nôn/nôn, đau miệng họng, hệ miễn dịch yếu đi, thiếu máu, dễ bầm tím hoặc chảy máu, đi cầu thay đổi, rụng tóc tạm thời.","src":[0,1]},
+{"text":"Thường gặp: mệt, buồn nôn/nôn, đau miệng họng, hệ miễn dịch yếu đi, thiếu năng lượng hoặc hụt hơi do thiếu máu, dễ bầm tím hoặc chảy máu, táo bón hoặc tiêu chảy, rụng tóc tạm thời.","src":[0,1]},
 {"text":"Cũng có thể gặp tê hoặc ngứa ran ở tay chân, khó nhớ hay khó tập trung, và cục máu đông.","src":[0,1]},
 {"text":"Mệt mỏi là tác dụng phụ phổ biến nhất.","src":[2]},
 {"text":"Tác dụng phụ thường khỏi dần sau khi kết thúc hoá trị, vì tế bào lành thường hồi phục; một số tác dụng phụ có thể chỉ bắt đầu sau khi hết điều trị.","src":[0,2,3]},
@@ -37,14 +37,14 @@
 {"text":"Khi không thích đồ rắn, có thể thử sinh tố, súp.","src":[4]},
 {"text":"Khi khô miệng: nhấp nước đều trong ngày, làm ẩm thức ăn bằng nước sốt.","src":[4]},
 {"text":"Khi loét miệng: ăn đồ nguội hoặc nhiệt độ phòng, chọn đồ mềm, cắt nhỏ, uống bằng ống hút.","src":[4]},
-{"text":"Giữ an toàn thực phẩm khi điều trị: giữ thức ăn ở nhiệt độ an toàn, rửa kỹ rau quả sống, dùng dao thớt riêng cho thịt sống.","src":[4]}
+{"text":"Giữ an toàn thực phẩm khi điều trị: giữ thức ăn ở nhiệt độ an toàn, chà rửa kỹ rau quả sống, dùng dụng cụ, đĩa và thớt riêng khi sơ chế thịt và rau quả.","src":[4]}
 ],
 "foods":[
 {"name":"đồ ăn nóng","aliases":["đồ nóng","thức ăn nóng","món nóng"],"verdict":"limit","note":"NCI: khi bị loét miệng, nên ăn đồ nguội hoặc nhiệt độ phòng vì đồ nóng có thể làm đau miệng.","src":[4]},
 {"name":"sinh tố và súp","aliases":["sinh tố","smoothie","súp","soup"],"verdict":"ok","note":"NCI: khi không thích đồ rắn hoặc chán ăn, có thể thử sinh tố, súp.","src":[4]},
 {"name":"đồ ăn mềm","aliases":["đồ mềm","thức ăn mềm"],"verdict":"good","note":"NCI: khi loét miệng hoặc nuốt khó, chọn đồ ăn mềm, cắt nhỏ.","src":[4]},
 {"name":"thực phẩm giàu đạm","aliases":["đồ nhiều đạm","protein","chất đạm"],"verdict":"good","note":"NCI: khi điều trị bạn có thể cần thêm đạm và năng lượng; khi nhanh no, ăn đồ giàu đạm trước.","src":[4]},
-{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"limit","note":"NCI: khi khô miệng nên tránh rượu bia (cùng thuốc lá và đồ kích ứng miệng). Trang không bàn rượu bia ngoài tình huống này.","src":[4]}
+{"name":"rượu bia","aliases":["bia","rượu","đồ uống có cồn"],"verdict":"avoid","note":"NCI: khi khô miệng nên tránh rượu bia (cùng thuốc lá và đồ kích ứng miệng). Trang không bàn rượu bia ngoài tình huống này.","src":[4]}
 ]},
 "doctor":[
 {"text":"Hãy gọi đội điều trị ngay nếu bạn bị sốt cao, hoặc thấy nóng, lạnh, ra mồ hôi, run rẩy.","src":[0,1]},
@@ -53,8 +53,8 @@
 {"text":"Hãy báo bác sĩ hoặc y tá nếu bạn khó ăn.","src":[2]}
 ],
 "emergency":[
-{"text":"Đau kiểu nhói hoặc chuột rút, sưng và ấm ở một chân hoặc tay: có thể là cục máu đông, cần gọi đội điều trị ngay.","src":[0,1]},
-{"text":"Khó thở đột ngột, đau ngực nhói, hoặc ho ra máu: cần gọi ngay đội điều trị hoặc đường dây y tế khẩn.","src":[0,1]}
+{"text":"Đau kiểu nhói hoặc chuột rút, sưng và ấm ở một chân hoặc tay: có thể là dấu hiệu nhiễm trùng hoặc cục máu đông, cần gọi đội điều trị ngay.","src":[0,1]},
+{"text":"Khó thở đột ngột, đau ngực nhói, hoặc ho ra máu: cần gọi ngay đội điều trị.","src":[0,1]}
 ],
 "sources":[
 {"title":"Chemotherapy","publisher":"NHS (Anh)","url":"https://www.nhs.uk/conditions/chemotherapy/","reviewed":"2025-02-14"},

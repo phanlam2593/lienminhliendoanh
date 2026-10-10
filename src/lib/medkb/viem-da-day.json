@@ -12,10 +12,10 @@
 {"text":"Viêm dạ dày không phải lúc nào cũng có triệu chứng: nhiều người không có dấu hiệu gì, một số chỉ bị khó tiêu hoặc chảy máu trong dạ dày.","src":[1,2]}
 ],
 "causes":[
-{"text":"Nguyên nhân thường gặp nhất là nhiễm vi khuẩn **H. pylori**.","src":[0,1,2]},
+{"text":"Nguyên nhân thường gặp nhất là nhiễm vi khuẩn **H. pylori**.","src":[1,2]},
 {"text":"Dùng thường xuyên thuốc giảm đau kháng viêm (như ibuprofen, naproxen) hoặc aspirin có thể làm tổn thương niêm mạc dạ dày.","src":[0,1]},
 {"text":"Uống nhiều rượu bia cũng có thể gây viêm dạ dày.","src":[0,1]},
-{"text":"Bệnh nặng hoặc cơ thể chịu căng thẳng lớn (như sau đại phẫu, chấn thương, bỏng, nhiễm trùng nặng) có thể gây viêm dạ dày cấp.","src":[0,1]},
+{"text":"Bệnh nặng hoặc cơ thể chịu căng thẳng lớn (như sau đại phẫu, chấn thương, bỏng, nhiễm trùng nặng) có thể gây viêm dạ dày cấp.","src":[1]},
 {"text":"Phẫu thuật dạ dày (ví dụ mổ nối tắt dạ dày) cũng là một nguyên nhân; hoá trị hoặc xạ trị cũng làm tăng nguy cơ.","src":[0,1]},
 {"text":"Viêm dạ dày tự miễn: hệ miễn dịch tấn công tế bào niêm mạc dạ dày; hay gặp hơn ở người bị bệnh Hashimoto hoặc tiểu đường type 1, và có thể liên quan đến thiếu vitamin B12.","src":[0,1]},
 {"text":"Người lớn tuổi dễ bị hơn vì niêm mạc dạ dày mỏng dần theo tuổi.","src":[1]},
@@ -27,7 +27,7 @@
 {"text":"Điều trị tuỳ loại và nguyên nhân, giúp cải thiện triệu chứng và giảm nguy cơ biến chứng.","src":[2]}
 ],
 "care":[
-{"text":"Điều trị tuỳ nguyên nhân, có thể gồm kháng sinh (nếu do H. pylori) và thuốc giảm acid dạ dày như thuốc kháng acid, thuốc ức chế bơm proton, alginate — do bác sĩ quyết định.","src":[0]},
+{"text":"Điều trị tuỳ nguyên nhân, có thể gồm kháng sinh và thuốc giảm acid dạ dày như thuốc kháng acid, thuốc ức chế bơm proton, alginate — do bác sĩ quyết định.","src":[0]},
 {"text":"Nếu đang dùng thuốc giảm đau kháng viêm hoặc aspirin, hãy trao đổi với bác sĩ xem có nên ngưng và chuyển sang thuốc khác không.","src":[0]},
 {"text":"Nếu nguyên nhân là rượu bia thì cần ngưng uống rượu bia.","src":[0]},
 {"text":"Tự chăm sóc: bớt đồ uống có caffeine, giảm cân nếu thừa cân, không ăn trong 3–4 giờ trước khi đi ngủ, tránh rượu bia và thuốc lá.","src":[0]},
@@ -41,7 +41,7 @@
 {"text":"Không ăn trong 3–4 giờ trước khi đi ngủ.","src":[0]}
 ],
 "ok":[
-{"text":"NIDDK ghi nhận: chế độ ăn uống chưa được thấy có vai trò quan trọng trong đa số trường hợp viêm dạ dày. Hãy hỏi bác sĩ nếu muốn thay đổi ăn uống.","src":[2]},
+{"text":"NIDDK ghi nhận: chế độ ăn uống không đóng vai trò quan trọng trong việc gây ra đa số trường hợp viêm dạ dày.","src":[2,3]},
 {"text":"NIDDK: một số dạng viêm dạ dày làm cơ thể hấp thu kém sắt (do H. pylori) hoặc sắt và vitamin B12 (viêm dạ dày tự miễn).","src":[2]}
 ],
 "foods":[
@@ -55,7 +55,7 @@
 },
 "doctor":[
 {"text":"Nên đi khám nếu đau bụng hoặc khó tiêu kéo dài hơn 1 tuần, nặng dần hoặc cứ tái đi tái lại.","src":[0,1]},
-{"text":"Nên đi khám sớm nếu kèm: chán ăn, nhanh no dù ăn rất ít, sụt cân không rõ lý do, sờ thấy cục ở bụng, khó hoặc đau khi nuốt, nôn nhiều lần.","src":[0]},
+{"text":"Nên đi khám gấp (hẹn khám gấp hoặc gọi đường dây y tế) nếu kèm: chán ăn, nhanh no dù ăn rất ít, sụt cân không rõ lý do, sờ thấy cục ở bụng, khó hoặc đau khi nuốt, nôn nhiều lần.","src":[0]},
 {"text":"Hãy báo bác sĩ nếu triệu chứng không đỡ dù đã điều trị, hoặc khó chịu ở bụng xuất hiện sau khi dùng thuốc, nhất là aspirin và thuốc giảm đau.","src":[1]}
 ],
 "emergency":[
