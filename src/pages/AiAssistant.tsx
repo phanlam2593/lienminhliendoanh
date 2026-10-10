@@ -41,6 +41,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { findMedTopicId as findMedId, foodDisplay, hasQuestion, isSelfStatement, loadMedTopic, nameAsTyped, parseMedAsk, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
+import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
@@ -398,6 +399,10 @@ export function AiChat({
     void loadQuota();
     void loadTaught();
     setDaily(shouldShowDaily(user.id));
+    // 10/10: tải sẵn từ điển khôi phục dấu (chunk riêng ~330 KB nén) lúc rảnh, để câu không dấu đầu tiên không phải chờ.
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    if (w.requestIdleCallback) w.requestIdleCallback(() => void loadViModel());
+    else setTimeout(() => void loadViModel(), 1500);
   }, [user?.id]);
 
   // Ô nhập tự cao theo nội dung (tối đa max-h-32) — câu gợi ý điền sẵn dài 2 dòng vẫn đọc được hết.
@@ -666,13 +671,21 @@ export function AiChat({
   };
 
   const send = async (text: string, forceAi = false) => {
-    const raw = text.trim();
-    if (!raw || busy) return;
-    rawRef.current = raw;
-    const stk = parseStickerToken(raw);
+    const typed = text.trim(); // câu NGUYÊN VĂN người dùng gõ — hiện trong bong bóng, gửi khi báo cáo / Dạy Lomi
+    if (!typed || busy) return;
+    rawRef.current = typed;
+    const stk = parseStickerToken(typed);
     if (stk) {
       setInput("");
       return sendSticker(stk);
+    }
+    // 10/10 — KHÔI PHỤC DẤU (lib/lomiViRestore): câu gõ không dấu / gần như không dấu được đoán lại dấu TRƯỚC khi các lớp đọc câu
+    // ("con em bi chong mat" → "con em bị chóng mặt", không còn thành "chồng mất"). Bỏ dấu câu đã khôi phục luôn trùng câu gốc nên các
+    // lớp so không dấu không đổi gì. Chữ người dùng đã gõ dấu giữ nguyên. Bong bóng vẫn hiện đúng câu người dùng gõ.
+    let raw = typed;
+    if (!en && isLooseVi(typed)) {
+      await loadViModel();
+      raw = restoreVi(typed);
     }
     // Người dùng tự xưng anh/chị/em/mình → Lomi xưng hô đối xứng từ câu này trở đi.
     // 09/10 — KHUNG CÂU (lib/lomiParse): đọc câu GỐC một lần thành chủ ngữ / phủ định / thời gian / loại câu / vị ngữ.
@@ -708,7 +721,7 @@ export function AiChat({
     const lastMsg0 = msgs[msgs.length - 1];
     const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
-    shownRef.current = q !== raw ? { from: q, to: raw } : null;
+    shownRef.current = q !== typed ? { from: q, to: typed } : null;
     setErr(null);
     setInput("");
     const last = msgs[msgs.length - 1];
@@ -717,7 +730,7 @@ export function AiChat({
     const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content, inFlow: !!(lastA0?.heart || lastA0?.dishAsk || lastA0?.bizPick || lastA0?.bizTopicPick || lastA0?.issue || lastA0?.tarotAwait) }, true) : null;
     if (corr?.action === "rewrite") {
       q = corr.q;
-      shownRef.current = { from: q, to: raw };
+      shownRef.current = { from: q, to: typed };
     }
     const lastA = corr?.action === "rewrite" ? undefined : lastA0;
     // 08/10 — hai mạch TÁCH RIÊNG: hCtx = đang nói chuyện sức khoẻ; heartOn = đang tâm sự thật (có cảm xúc).
@@ -892,7 +905,7 @@ export function AiChat({
     if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
     if (rt?.kind === "rewrite") {
       q = rt.q;
-      shownRef.current = { from: q, to: raw };
+      shownRef.current = { from: q, to: typed };
     }
 
     // Lomi vừa mời ("rút một lá cho nhẹ lòng không?") kèm nút gợi ý → người dùng gõ "ok / ờ / có"
@@ -908,7 +921,7 @@ export function AiChat({
           (/(quán|tìm)/i.test(lastA.content) && qk.find((x) => /(tìm|ăn gì)/i.test(x))) ||
           qk[0];
         const pickQ = expandTeen(chip);
-        shownRef.current = { from: pickQ, to: raw };
+        shownRef.current = { from: pickQ, to: typed };
         q = pickQ;
       } else if (isDecline(q) && /\?/.test(lastA.content)) {
         return localReply(q, {
@@ -1120,7 +1133,7 @@ export function AiChat({
         const hsFx = fx?.intent === "frame:third_ill" ? healthSubjectOf(q, true) : null;
         if (fx?.redirect) {
           q = fx.redirect;
-          shownRef.current = { from: q, to: raw };
+          shownRef.current = { from: q, to: typed };
         } else if (fx)
           return localReply(q, {
             role: "assistant",
@@ -1671,7 +1684,7 @@ export function AiChat({
           ? "Câu này Lomi chưa hiểu ý lắm 😅 Bạn nói rõ hơn một chút giúp Lomi nha? (Nếu là điều Lomi nên biết mà chưa biết, bạn bấm 💡 Dạy Lomi bên dưới để gửi ban quản trị.)"
           : null;
         const unkText = careUnk ?? medUnk ?? notGot;
-        return localReply(q, { role: "assistant", content: unkText ?? fb.text, local: true, quick: unkText ? undefined : fb.quick, unk: raw, unkKey: q, stuck: (careUnk ? "unknown_care" : medUnk ? "unknown_med" : notGot ? "not_understood" : "fallback") as StuckKind, sticker: unkText ? undefined : fb.sticker, ...keepHealth, ...(askHealth ? { health: {} } : {}) });
+        return localReply(q, { role: "assistant", content: unkText ?? fb.text, local: true, quick: unkText ? undefined : fb.quick, unk: typed, unkKey: q, stuck: (careUnk ? "unknown_care" : medUnk ? "unknown_med" : notGot ? "not_understood" : "fallback") as StuckKind, sticker: unkText ? undefined : fb.sticker, ...keepHealth, ...(askHealth ? { health: {} } : {}) });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
@@ -1692,7 +1705,7 @@ export function AiChat({
             : "Câu này nằm ngoài những gì Lomi biết rồi 😅 Lomi rành nhất về cách dùng Liên Minh Liên Doanh, tư vấn kinh doanh và bói Tarot. Bạn thử hỏi kiểu “làm sao nhận ưu đãi”, xem Hướng dẫn (/huong-dan), hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.",
         local: true,
         quick: chips,
-        unk: raw,
+        unk: typed,
         unkKey: q,
         stuck: "suggest",
       });

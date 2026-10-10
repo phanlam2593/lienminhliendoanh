@@ -1,0 +1,262 @@
+# Cụm từ chat đời thường (có dấu) — bổ sung cho từ điển khôi phục dấu (scripts/vi-accent-build.py).
+# Văn bản trong app chủ yếu là lời của Lomi; tệp này thêm GIỌNG NGƯỜI DÙNG: xưng hô, than thở, hỏi han, kể chuyện.
+# Mỗi dòng một câu. Thêm câu mới thì chạy lại: python3 scripts/vi-accent-build.py
+anh mệt quá
+em buồn quá
+tui chán quá
+chị lo quá
+mình mệt quá trời
+hôm nay nóng quá
+trời lạnh quá
+đói bụng quá
+khát nước quá
+buồn ngủ quá
+đau đầu quá
+đau bụng quá
+đau răng quá
+đau lưng quá
+đau chân quá
+ngứa quá
+mỏi quá
+chán quá đi
+vui quá trời
+thích quá
+nhớ quá
+sợ quá
+tức quá
+giận quá
+cô đơn quá
+áp lực quá
+bận quá
+nhiều việc quá
+ít khách quá
+vắng khách quá
+ế quá
+đắt quá
+rẻ quá
+ngon quá
+dở quá
+mấy hôm nay
+mấy ngày nay
+mấy tuần nay
+cả tuần nay
+cả tháng nay
+dạo này
+gần đây
+từ hôm qua
+từ sáng tới giờ
+tối qua
+sáng nay
+hôm nay
+hôm qua
+năm nay
+tháng này
+tuần này
+ngày mai
+anh bị đau đầu
+em bị sốt
+tui bị ho
+chị bị cảm
+mình bị đau bụng
+con em bị sốt
+bé nhà em bị ho
+mẹ em bị đau lưng
+ba em bị đau chân
+vợ anh bị ốm
+chồng chị bị cảm
+ông nội em bị yếu
+bà ngoại em bị đau khớp
+ho khan
+ho có đờm
+ho về đêm
+sổ mũi
+nghẹt mũi
+đau họng
+viêm họng
+chóng mặt
+buồn nôn
+tiêu chảy
+táo bón
+chán ăn
+mất ngủ
+khó ngủ
+khó thở
+tức ngực
+đau ngực
+tim đập nhanh
+run tay
+tê tay
+nổi mẩn
+ngứa da
+phát ban
+sốt cao
+sốt nhẹ
+đau mắt
+mỏi mắt
+nhức đầu
+đau nửa đầu
+đi khám
+đi bác sĩ
+uống thuốc
+uống nước
+ăn cháo
+nghỉ ngơi
+bệnh gì
+có sao không
+có nguy hiểm không
+có lây không
+có khỏi không
+có chữa được không
+kiêng gì
+ăn gì
+uống gì
+ăn được không
+uống được không
+nên làm gì
+phải làm sao
+làm sao bây giờ
+là sao
+là gì
+tại sao
+vì sao
+bao lâu
+bao nhiêu
+cúm là gì
+bị cúm
+bệnh trĩ
+bị trĩ
+bệnh gút
+bệnh gout
+tiểu đường
+huyết áp cao
+mỡ máu
+gan nhiễm mỡ
+đau dạ dày
+trầm cảm
+lo âu
+căng thẳng
+em buồn
+em khóc
+em cô đơn
+em chán
+em mệt mỏi
+em áp lực
+em thất tình
+em mới chia tay
+người yêu em
+người yêu cũ
+crush em
+em thích một người
+em nhớ người yêu
+anh nhớ em
+em giận anh
+cãi nhau với người yêu
+cãi nhau với ba mẹ
+bị ba mẹ mắng
+bị mẹ mắng
+bị sếp mắng
+bị cô giáo la
+bị bạn bè cô lập
+bị bắt nạt
+bị người yêu tát
+bị chồng đánh
+bị đánh
+em sợ
+em lo
+em tự ti
+em vô dụng
+em thấy trống rỗng
+em thấy chán
+em không muốn sống
+em muốn chết
+đau lòng quá
+tổn thương
+cảm nắng
+cảm nắng một người
+thích thầm
+tỏ tình
+hẹn hò
+đám đông
+sợ đám đông
+ngại giao tiếp
+em đậu đại học
+em mới đậu đại học
+thi đậu
+thi rớt
+được thưởng tết
+được tăng lương
+được thưởng
+mới mua xe
+mới cưới
+mới sinh em bé
+em vui
+anh vui
+hôm nay vui lắm
+cảm ơn em
+cảm ơn nhiều
+dễ thương quá
+ăn gì bây giờ
+uống gì bây giờ
+đi ăn đâu
+quán nào ngon
+quán ăn ngon
+quán cà phê
+quán phở
+quán bún
+quán lẩu
+quán nướng
+quán em
+tiệm em
+shop em
+homestay em
+spa em
+ít khách
+vắng khách
+khách quen
+khách mới
+hút khách
+giữ khách
+khuyến mãi
+ưu đãi
+giảm giá
+tăng giá
+mùa này
+mùa mưa
+mùa lễ
+dịp lễ
+khai trương
+đăng bài
+viết bài
+đánh giá
+khách chê
+khách khen
+mất phí
+miễn phí
+đăng nhập
+mật khẩu
+tài khoản
+bói bài
+bói tarot
+bói tình yêu
+rút bài
+lá bài
+xem bói
+công việc
+tình yêu
+tiền bạc
+sức khoẻ
+gia đình
+bạn bè
+đồng nghiệp
+anh ấy
+cô ấy
+chị ấy
+họ hàng
+họ nói
+nhà em
+xe em
+con em
+con mèo
+con chó
+còn em thì sao
+còn anh thì sao

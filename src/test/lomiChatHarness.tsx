@@ -77,6 +77,7 @@ const history = (): Turn[] => JSON.parse(localStorage.getItem(`ai-assistant-hist
 /** Gõ lần lượt các tin vào khung chat thật; trả về các tin LOMI đáp (theo thứ tự), kèm cờ ngữ cảnh. */
 export async function chat(turns: string[]): Promise<Turn[]> {
   await import("@/lib/lomiMedData"); // kho kiến thức y khoa là 1 chunk nạp động — nạp sẵn để lượt đầu không vượt thời gian chờ
+  await (await import("@/lib/lomiViRestore")).loadViModel(); // từ điển khôi phục dấu (10/10) — app tải sẵn lúc mở trang
   cleanup();
   localStorage.clear();
   Element.prototype.scrollIntoView = () => {};

@@ -1,0 +1,2866 @@
+[
+{
+"q": "em bị đau đầu mấy ngày nay",
+"ok": [
+"health"
+],
+"id": "v000"
+},
+{
+"q": "em đau bụng quá",
+"ok": [
+"health"
+],
+"id": "v001"
+},
+{
+"q": "em bị chóng mặt",
+"ok": [
+"health"
+],
+"id": "v002"
+},
+{
+"q": "em bị nôn",
+"ok": [
+"health"
+],
+"id": "v003"
+},
+{
+"q": "em tim đập nhanh",
+"ok": [
+"health"
+],
+"id": "v004"
+},
+{
+"q": "em đau khớp gối",
+"ok": [
+"health"
+],
+"id": "v005"
+},
+{
+"q": "anh sốt 38 độ",
+"ok": [
+"health"
+],
+"id": "v006"
+},
+{
+"q": "anh đau họng",
+"ok": [
+"health"
+],
+"id": "v007"
+},
+{
+"q": "anh nổi mề đay khắp người",
+"ok": [
+"health"
+],
+"id": "v008"
+},
+{
+"q": "anh mất ngủ cả tuần nay",
+"ok": [
+"health"
+],
+"id": "v009"
+},
+{
+"q": "anh bị sổ mũi",
+"ok": [
+"health"
+],
+"id": "v010"
+},
+{
+"q": "mẹ em ho có đờm",
+"ok": [
+"health"
+],
+"id": "v011"
+},
+{
+"q": "mẹ em bị tiêu chảy",
+"ok": [
+"health"
+],
+"id": "v012"
+},
+{
+"q": "mẹ em đau lưng dưới",
+"ok": [
+"health"
+],
+"id": "v013"
+},
+{
+"q": "mẹ em đau răng quá",
+"ok": [
+"health"
+],
+"id": "v014"
+},
+{
+"q": "mẹ em khó thở",
+"ok": [
+"health"
+],
+"id": "v015"
+},
+{
+"q": "con em bị đau đầu mấy ngày nay",
+"ok": [
+"health"
+],
+"id": "v016"
+},
+{
+"q": "con em đau bụng quá",
+"ok": [
+"health"
+],
+"id": "v017"
+},
+{
+"q": "con em bị chóng mặt",
+"ok": [
+"health"
+],
+"id": "v018"
+},
+{
+"q": "con em bị nôn",
+"ok": [
+"health"
+],
+"id": "v019"
+},
+{
+"q": "con em tim đập nhanh",
+"ok": [
+"health"
+],
+"id": "v020"
+},
+{
+"q": "con em đau khớp gối",
+"ok": [
+"health"
+],
+"id": "v021"
+},
+{
+"q": "bé nhà em sốt 38 độ",
+"ok": [
+"health"
+],
+"id": "v022"
+},
+{
+"q": "bé nhà em đau họng",
+"ok": [
+"health"
+],
+"id": "v023"
+},
+{
+"q": "bé nhà em nổi mề đay khắp người",
+"ok": [
+"health"
+],
+"id": "v024"
+},
+{
+"q": "bé nhà em mất ngủ cả tuần nay",
+"ok": [
+"health"
+],
+"id": "v025"
+},
+{
+"q": "bé nhà em bị sổ mũi",
+"ok": [
+"health"
+],
+"id": "v026"
+},
+{
+"q": "ba anh ho có đờm",
+"ok": [
+"health"
+],
+"id": "v027"
+},
+{
+"q": "ba anh bị tiêu chảy",
+"ok": [
+"health"
+],
+"id": "v028"
+},
+{
+"q": "ba anh đau lưng dưới",
+"ok": [
+"health"
+],
+"id": "v029"
+},
+{
+"q": "ba anh đau răng quá",
+"ok": [
+"health"
+],
+"id": "v030"
+},
+{
+"q": "ba anh khó thở",
+"ok": [
+"health"
+],
+"id": "v031"
+},
+{
+"q": "bà nội em bị đau đầu mấy ngày nay",
+"ok": [
+"health"
+],
+"id": "v032"
+},
+{
+"q": "bà nội em đau bụng quá",
+"ok": [
+"health"
+],
+"id": "v033"
+},
+{
+"q": "bà nội em bị chóng mặt",
+"ok": [
+"health"
+],
+"id": "v034"
+},
+{
+"q": "bà nội em bị nôn",
+"ok": [
+"health"
+],
+"id": "v035"
+},
+{
+"q": "bà nội em tim đập nhanh",
+"ok": [
+"health"
+],
+"id": "v036"
+},
+{
+"q": "bà nội em đau khớp gối",
+"ok": [
+"health"
+],
+"id": "v037"
+},
+{
+"q": "vợ anh sốt 38 độ",
+"ok": [
+"health"
+],
+"id": "v038"
+},
+{
+"q": "vợ anh đau họng",
+"ok": [
+"health"
+],
+"id": "v039"
+},
+{
+"q": "vợ anh nổi mề đay khắp người",
+"ok": [
+"health"
+],
+"id": "v040"
+},
+{
+"q": "vợ anh mất ngủ cả tuần nay",
+"ok": [
+"health"
+],
+"id": "v041"
+},
+{
+"q": "vợ anh bị sổ mũi",
+"ok": [
+"health"
+],
+"id": "v042"
+},
+{
+"q": "bệnh gout ăn nhộng được không",
+"ok": [
+"health"
+],
+"id": "v043"
+},
+{
+"q": "tiểu đường ăn trái cây gì",
+"ok": [
+"health"
+],
+"id": "v044"
+},
+{
+"q": "cao huyết áp kiêng gì",
+"ok": [
+"health"
+],
+"id": "v045"
+},
+{
+"q": "trầm cảm là gì",
+"ok": [
+"health"
+],
+"id": "v046"
+},
+{
+"q": "rối loạn lo âu có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v047"
+},
+{
+"q": "sốt xuất huyết có lây không",
+"ok": [
+"health"
+],
+"id": "v048"
+},
+{
+"q": "viêm gan b ăn gì",
+"ok": [
+"health"
+],
+"id": "v049"
+},
+{
+"q": "đau dạ dày nên ăn gì",
+"ok": [
+"health"
+],
+"id": "v050"
+},
+{
+"q": "thủy đậu kiêng gì",
+"ok": [
+"health"
+],
+"id": "v051"
+},
+{
+"q": "zona thần kinh là bệnh gì",
+"ok": [
+"health"
+],
+"id": "v052"
+},
+{
+"q": "đột quỵ có dấu hiệu gì",
+"ok": [
+"health"
+],
+"id": "v053"
+},
+{
+"q": "tự kỷ có chữa được không",
+"ok": [
+"health"
+],
+"id": "v054"
+},
+{
+"q": "ám thị tự kỉ là gì",
+"ok": [
+"health"
+],
+"id": "v055"
+},
+{
+"q": "bà bầu ăn sushi được không",
+"ok": [
+"health"
+],
+"id": "v056"
+},
+{
+"q": "mang thai uống cà phê được không",
+"ok": [
+"health"
+],
+"id": "v057"
+},
+{
+"q": "paracetamol uống mấy viên",
+"ok": [
+"health"
+],
+"id": "v058"
+},
+{
+"q": "ibuprofen có hại dạ dày không",
+"ok": [
+"health"
+],
+"id": "v059"
+},
+{
+"q": "uống thuốc kháng sinh có được uống sữa không",
+"ok": [
+"health"
+],
+"id": "v060"
+},
+{
+"q": "sốt bao nhiêu độ thì đi viện",
+"ok": [
+"health"
+],
+"id": "v061"
+},
+{
+"q": "bị chó cắn phải làm sao",
+"ok": [
+"health"
+],
+"id": "v062"
+},
+{
+"q": "bỏng nước sôi xử lý thế nào",
+"ok": [
+"health"
+],
+"id": "v063"
+},
+{
+"q": "trẻ chậm nói có sao không",
+"ok": [
+"health"
+],
+"id": "v064"
+},
+{
+"q": "đau nửa đầu là bệnh gì",
+"ok": [
+"health"
+],
+"id": "v065"
+},
+{
+"q": "loãng xương nên uống sữa gì",
+"ok": [
+"health"
+],
+"id": "v066"
+},
+{
+"q": "viêm xoang có khỏi hẳn không",
+"ok": [
+"health"
+],
+"id": "v067"
+},
+{
+"q": "táo bón lâu ngày phải làm sao",
+"ok": [
+"health"
+],
+"id": "v068"
+},
+{
+"q": "huyết áp thấp ăn gì",
+"ok": [
+"health"
+],
+"id": "v069"
+},
+{
+"q": "mỡ máu cao ăn trứng được không",
+"ok": [
+"health"
+],
+"id": "v070"
+},
+{
+"q": "sỏi thận nên uống nước gì",
+"ok": [
+"health"
+],
+"id": "v071"
+},
+{
+"q": "trào ngược dạ dày nên ăn gì",
+"ok": [
+"health"
+],
+"id": "v072"
+},
+{
+"q": "khi nào cần gặp bác sĩ tâm lý",
+"ok": [
+"health"
+],
+"id": "v073"
+},
+{
+"q": "mất ngủ kéo dài phải làm sao",
+"ok": [
+"health"
+],
+"id": "v074"
+},
+{
+"q": "bệnh trĩ kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v075"
+},
+{
+"q": "hen suyễn có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v076"
+},
+{
+"q": "nám da có hết không",
+"ok": [
+"health"
+],
+"id": "v077"
+},
+{
+"q": "viêm họng ăn kem được không",
+"ok": [
+"health"
+],
+"id": "v078"
+},
+{
+"q": "tay chân miệng lây thế nào",
+"ok": [
+"health"
+],
+"id": "v079"
+},
+{
+"q": "covid có còn nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v080"
+},
+{
+"q": "thiếu máu nên ăn gì",
+"ok": [
+"health"
+],
+"id": "v081"
+},
+{
+"q": "mất ngủ quá",
+"ok": [
+"health",
+"heart"
+],
+"id": "v082"
+},
+{
+"q": "dạo này hay mệt mỏi",
+"ok": [
+"health",
+"heart"
+],
+"id": "v083"
+},
+{
+"q": "căng thẳng quá đau đầu luôn",
+"ok": [
+"health",
+"heart"
+],
+"id": "v084"
+},
+{
+"q": "em buồn quá",
+"ok": [
+"heart"
+],
+"id": "v085"
+},
+{
+"q": "anh chán quá",
+"ok": [
+"heart"
+],
+"id": "v086"
+},
+{
+"q": "mình mệt mỏi với mọi thứ",
+"ok": [
+"heart"
+],
+"id": "v087"
+},
+{
+"q": "tui cô đơn quá",
+"ok": [
+"heart"
+],
+"id": "v088"
+},
+{
+"q": "em thấy mình vô dụng",
+"ok": [
+"heart"
+],
+"id": "v089"
+},
+{
+"q": "anh lo lắng về tương lai",
+"ok": [
+"heart"
+],
+"id": "v090"
+},
+{
+"q": "mình áp lực công việc quá",
+"ok": [
+"heart"
+],
+"id": "v091"
+},
+{
+"q": "tui không muốn gặp ai",
+"ok": [
+"heart"
+],
+"id": "v092"
+},
+{
+"q": "em hay tự trách bản thân",
+"ok": [
+"heart"
+],
+"id": "v093"
+},
+{
+"q": "anh thấy trống rỗng",
+"ok": [
+"heart"
+],
+"id": "v094"
+},
+{
+"q": "mình làm gì cũng thấy chán",
+"ok": [
+"heart"
+],
+"id": "v095"
+},
+{
+"q": "tui hay so sánh mình với người khác",
+"ok": [
+"heart"
+],
+"id": "v096"
+},
+{
+"q": "em sợ đám đông",
+"ok": [
+"heart"
+],
+"id": "v097"
+},
+{
+"q": "anh hay giận dữ mất kiểm soát",
+"ok": [
+"heart"
+],
+"id": "v098"
+},
+{
+"q": "em mới chia tay, buồn lắm",
+"ok": [
+"heart"
+],
+"id": "v099"
+},
+{
+"q": "người yêu em lạnh nhạt quá",
+"ok": [
+"heart"
+],
+"id": "v100"
+},
+{
+"q": "em cãi nhau với ba mẹ suốt",
+"ok": [
+"heart"
+],
+"id": "v101"
+},
+{
+"q": "crush không rep tin nhắn",
+"ok": [
+"heart"
+],
+"id": "v102"
+},
+{
+"q": "em bị bạn bè cô lập",
+"ok": [
+"heart"
+],
+"id": "v103"
+},
+{
+"q": "sếp em hay mắng em trước mặt mọi người",
+"ok": [
+"heart"
+],
+"id": "v104"
+},
+{
+"q": "em không biết mình muốn gì trong cuộc sống",
+"ok": [
+"heart"
+],
+"id": "v105"
+},
+{
+"q": "ba em mất rồi, em không chịu nổi",
+"ok": [
+"heart"
+],
+"id": "v106"
+},
+{
+"q": "con mèo nhà em mới chết",
+"ok": [
+"heart"
+],
+"id": "v107"
+},
+{
+"q": "em ế lâu rồi",
+"ok": [
+"heart"
+],
+"id": "v108"
+},
+{
+"q": "làm sao để quên người yêu cũ",
+"ok": [
+"heart"
+],
+"id": "v109"
+},
+{
+"q": "em thích một người mà không dám nói",
+"ok": [
+"heart"
+],
+"id": "v110"
+},
+{
+"q": "vợ anh dạo này hay cáu",
+"ok": [
+"heart"
+],
+"id": "v111"
+},
+{
+"q": "chồng em đi nhậu suốt",
+"ok": [
+"heart"
+],
+"id": "v112"
+},
+{
+"q": "làm sao để kiểm soát cơn giận",
+"ok": [
+"heart"
+],
+"id": "v113"
+},
+{
+"q": "làm sao để vượt qua nỗi buồn",
+"ok": [
+"heart"
+],
+"id": "v114"
+},
+{
+"q": "em có nên tỏ tình không",
+"ok": [
+"heart"
+],
+"id": "v115"
+},
+{
+"q": "đau lòng quá",
+"ok": [
+"heart"
+],
+"id": "v116"
+},
+{
+"q": "em cảm nắng một người",
+"ok": [
+"heart"
+],
+"id": "v117"
+},
+{
+"q": "anh nhớ người yêu cũ quá",
+"ok": [
+"heart"
+],
+"id": "v118"
+},
+{
+"q": "em hay bị hồi hộp trước khi thuyết trình",
+"ok": [
+"heart"
+],
+"id": "v119"
+},
+{
+"q": "người yêu em hay kiểm soát điện thoại",
+"ok": [
+"safety",
+"heart"
+],
+"id": "v120"
+},
+{
+"q": "chồng em đánh em",
+"ok": [
+"safety"
+],
+"id": "v121"
+},
+{
+"q": "em bị người yêu tát",
+"ok": [
+"safety"
+],
+"id": "v122"
+},
+{
+"q": "ba em hay đánh mẹ em",
+"ok": [
+"safety"
+],
+"id": "v123"
+},
+{
+"q": "em mệt mỏi với mọi thứ, không muốn sống nữa",
+"ok": [
+"safety"
+],
+"id": "v124"
+},
+{
+"q": "em muốn chết",
+"ok": [
+"safety"
+],
+"id": "v125"
+},
+{
+"q": "em bị đe doạ tung ảnh",
+"ok": [
+"safety"
+],
+"id": "v126"
+},
+{
+"q": "em bị bạn cùng lớp đánh",
+"ok": [
+"safety"
+],
+"id": "v127"
+},
+{
+"q": "hôm nay ăn gì",
+"ok": [
+"food"
+],
+"id": "v128"
+},
+{
+"q": "đói quá giờ ăn gì",
+"ok": [
+"food"
+],
+"id": "v129"
+},
+{
+"q": "quán phở nào ngon",
+"ok": [
+"food"
+],
+"id": "v130"
+},
+{
+"q": "tối nay uống gì",
+"ok": [
+"food"
+],
+"id": "v131"
+},
+{
+"q": "muốn ăn lẩu",
+"ok": [
+"food"
+],
+"id": "v132"
+},
+{
+"q": "gần đây có quán cà phê nào yên tĩnh",
+"ok": [
+"food"
+],
+"id": "v133"
+},
+{
+"q": "trưa nay ăn gì ta",
+"ok": [
+"food"
+],
+"id": "v134"
+},
+{
+"q": "tìm quán bún bò",
+"ok": [
+"food"
+],
+"id": "v135"
+},
+{
+"q": "có quán nào bán pizza không",
+"ok": [
+"food"
+],
+"id": "v136"
+},
+{
+"q": "khát nước quá uống gì giờ",
+"ok": [
+"food"
+],
+"id": "v137"
+},
+{
+"q": "đi ăn nướng ở đâu",
+"ok": [
+"food"
+],
+"id": "v138"
+},
+{
+"q": "ăn sáng gì giờ",
+"ok": [
+"food"
+],
+"id": "v139"
+},
+{
+"q": "quán em vắng khách quá",
+"ok": [
+"biz"
+],
+"id": "v140"
+},
+{
+"q": "quán e dạo này ế quá",
+"ok": [
+"biz"
+],
+"id": "v141"
+},
+{
+"q": "làm sao hút khách cho spa",
+"ok": [
+"biz"
+],
+"id": "v142"
+},
+{
+"q": "nên làm ưu đãi gì cho quán cà phê",
+"ok": [
+"biz"
+],
+"id": "v143"
+},
+{
+"q": "viết giúp em bài đăng khai trương",
+"ok": [
+"biz"
+],
+"id": "v144"
+},
+{
+"q": "làm sao giữ khách quen cho tiệm tóc",
+"ok": [
+"biz"
+],
+"id": "v145"
+},
+{
+"q": "homestay em mùa này ít khách",
+"ok": [
+"biz"
+],
+"id": "v146"
+},
+{
+"q": "nên tăng giá không",
+"ok": [
+"biz"
+],
+"id": "v147"
+},
+{
+"q": "khách chê đồ ăn dở phải làm sao",
+"ok": [
+"biz"
+],
+"id": "v148"
+},
+{
+"q": "sắp tới lễ nên làm khuyến mãi gì",
+"ok": [
+"biz"
+],
+"id": "v149"
+},
+{
+"q": "mới mở tiệm bánh nên làm gì",
+"ok": [
+"biz"
+],
+"id": "v150"
+},
+{
+"q": "làm sao để có nhiều đánh giá tốt",
+"ok": [
+"biz"
+],
+"id": "v151"
+},
+{
+"q": "bói tarot cho em",
+"ok": [
+"tarot"
+],
+"id": "v152"
+},
+{
+"q": "rút một lá bài",
+"ok": [
+"tarot"
+],
+"id": "v153"
+},
+{
+"q": "bói tình yêu cho em",
+"ok": [
+"tarot"
+],
+"id": "v154"
+},
+{
+"q": "xem tarot công việc tháng này",
+"ok": [
+"tarot"
+],
+"id": "v155"
+},
+{
+"q": "bói xem crush có thích em không",
+"ok": [
+"tarot"
+],
+"id": "v156"
+},
+{
+"q": "bói 3 lá cho hôm nay",
+"ok": [
+"tarot"
+],
+"id": "v157"
+},
+{
+"q": "làm sao đăng ưu đãi",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v158"
+},
+{
+"q": "đổi mật khẩu ở đâu",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v159"
+},
+{
+"q": "làm sao tạo doanh nghiệp trên app",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v160"
+},
+{
+"q": "app này dùng sao",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v161"
+},
+{
+"q": "làm sao nhận ưu đãi",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v162"
+},
+{
+"q": "quên mật khẩu thì làm sao",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v163"
+},
+{
+"q": "làm sao viết đánh giá cho quán",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v164"
+},
+{
+"q": "sao em không đăng nhập được",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v165"
+},
+{
+"q": "làm sao đổi ảnh đại diện",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v166"
+},
+{
+"q": "app có mất phí không",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v167"
+},
+{
+"q": "làm sao xoá tài khoản",
+"ok": [
+"faq",
+"biz",
+"chat"
+],
+"id": "v168"
+},
+{
+"q": "tự ti về ngoại hình phải làm sao",
+"ok": [
+"heart",
+"health"
+],
+"id": "v169"
+},
+{
+"q": "em hay tự ti",
+"ok": [
+"heart",
+"health"
+],
+"id": "v170"
+},
+{
+"q": "em sợ thất bại",
+"ok": [
+"heart",
+"health"
+],
+"id": "v171"
+},
+{
+"q": "chào lomi",
+"ok": [
+"chat"
+],
+"id": "v172"
+},
+{
+"q": "cảm ơn nha",
+"ok": [
+"chat"
+],
+"id": "v173"
+},
+{
+"q": "lomi ăn cơm chưa",
+"ok": [
+"chat"
+],
+"id": "v174"
+},
+{
+"q": "chúc ngủ ngon",
+"ok": [
+"chat"
+],
+"id": "v175"
+},
+{
+"q": "trời Đà Lạt hôm nay lạnh ghê",
+"ok": [
+"chat"
+],
+"id": "v176"
+},
+{
+"q": "lomi dễ thương quá",
+"ok": [
+"chat"
+],
+"id": "v177"
+},
+{
+"q": "vâng ạ",
+"ok": [
+"chat"
+],
+"id": "v178"
+},
+{
+"q": "ok nha",
+"ok": [
+"chat"
+],
+"id": "v179"
+},
+{
+"q": "tạm biệt",
+"ok": [
+"chat"
+],
+"id": "v180"
+},
+{
+"q": "lomi là ai vậy",
+"ok": [
+"chat"
+],
+"id": "v181"
+},
+{
+"q": "hôm nay anh vui lắm",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v182"
+},
+{
+"q": "hôm nay a vui lắm hehe",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v183"
+},
+{
+"q": "hôm nay em được tăng lương",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v184"
+},
+{
+"q": "em mới đậu đại học",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v185"
+},
+{
+"q": "em vừa được thưởng tết",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v186"
+},
+{
+"q": "cuối tuần này em đi Đà Lạt chơi",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v187"
+},
+{
+"q": "con em mới biết đi",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v188"
+},
+{
+"q": "em mới mua được xe máy",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v189"
+},
+{
+"q": "hôm nay trời đẹp ghê",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v190"
+},
+{
+"q": "em vừa nhận được việc mới",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v191"
+},
+{
+"q": "em hay bị tim đập nhanh rồi run tay là sao",
+"ok": [
+"health"
+],
+"id": "v192"
+},
+{
+"q": "không dung nạp lactose uống sữa chua được không",
+"ok": [
+"health",
+"food"
+],
+"id": "v193"
+},
+{
+"q": "bầu cử là gì",
+"ok": [
+"chat",
+"fix",
+"unknown"
+],
+"id": "v194"
+},
+{
+"q": "cảm ơn em nhiều lắm",
+"ok": [
+"heart",
+"chat"
+],
+"id": "v195"
+},
+{
+"q": "em cảm nắng bạn cùng lớp",
+"ok": [
+"heart"
+],
+"id": "v196"
+},
+{
+"q": "bị say nắng phải làm sao",
+"ok": [
+"health"
+],
+"id": "v197"
+},
+{
+"q": "ba em mua cho em con xe mới",
+"ok": [
+"heart",
+"chat"
+],
+"id": "v198"
+},
+{
+"q": "là sao? sao lại liên quan e tự hào?",
+"ok": [
+"fix"
+],
+"pre": [
+"hôm nay a vui lắm hehe"
+],
+"id": "v199"
+},
+{
+"q": "ý em không phải vậy",
+"ok": [
+"fix",
+"chat",
+"heart"
+],
+"pre": [
+"em buồn quá"
+],
+"id": "v200"
+},
+{
+"q": "hôm nay a vui lắm hehe",
+"ok": [
+"chat",
+"heart"
+],
+"pre": [
+"em buồn quá"
+],
+"addr": "anh",
+"id": "v201"
+},
+{
+"q": "a không nhắn cho e 3 ngày rồi",
+"ok": [
+"heart"
+],
+"pre": [
+"em buồn quá"
+],
+"addr": "em",
+"id": "v202"
+},
+{
+"q": "mất ngủ 2 tuần nay rồi",
+"ok": [
+"health",
+"heart"
+],
+"id": "v203"
+},
+{
+"q": "nhà em mất điện",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v204"
+},
+{
+"q": "em bị ám ảnh chuyện cũ",
+"ok": [
+"health",
+"heart"
+],
+"id": "v205"
+},
+{
+"q": "bệnh này có lây qua đường ăn uống không",
+"ok": [
+"health"
+],
+"pre": [
+"viêm gan b là gì"
+],
+"id": "v206"
+},
+{
+"q": "em ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v207"
+},
+{
+"q": "em chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v208"
+},
+{
+"q": "em đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v209"
+},
+{
+"q": "em đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v210"
+},
+{
+"q": "anh ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v211"
+},
+{
+"q": "anh chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v212"
+},
+{
+"q": "anh đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v213"
+},
+{
+"q": "anh đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v214"
+},
+{
+"q": "chị ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v215"
+},
+{
+"q": "chị chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v216"
+},
+{
+"q": "chị đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v217"
+},
+{
+"q": "chị đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v218"
+},
+{
+"q": "mình ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v219"
+},
+{
+"q": "mình chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v220"
+},
+{
+"q": "mình đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v221"
+},
+{
+"q": "mình đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v222"
+},
+{
+"q": "tui ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v223"
+},
+{
+"q": "tui chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v224"
+},
+{
+"q": "tui đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v225"
+},
+{
+"q": "tui đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v226"
+},
+{
+"q": "mẹ em ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v227"
+},
+{
+"q": "mẹ em chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v228"
+},
+{
+"q": "mẹ em đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v229"
+},
+{
+"q": "mẹ em đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v230"
+},
+{
+"q": "ba em ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v231"
+},
+{
+"q": "ba em chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v232"
+},
+{
+"q": "ba em đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v233"
+},
+{
+"q": "ba em đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v234"
+},
+{
+"q": "con em ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v235"
+},
+{
+"q": "con em chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v236"
+},
+{
+"q": "con em đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v237"
+},
+{
+"q": "con em đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v238"
+},
+{
+"q": "bé nhà chị ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v239"
+},
+{
+"q": "bé nhà chị chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v240"
+},
+{
+"q": "bé nhà chị đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v241"
+},
+{
+"q": "bé nhà chị đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v242"
+},
+{
+"q": "ông nội em ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v243"
+},
+{
+"q": "ông nội em chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v244"
+},
+{
+"q": "ông nội em đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v245"
+},
+{
+"q": "ông nội em đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v246"
+},
+{
+"q": "chồng chị ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v247"
+},
+{
+"q": "chồng chị chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v248"
+},
+{
+"q": "chồng chị đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v249"
+},
+{
+"q": "chồng chị đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v250"
+},
+{
+"q": "người yêu em ho khan về đêm",
+"ok": [
+"health"
+],
+"id": "v251"
+},
+{
+"q": "người yêu em chán ăn mấy hôm nay",
+"ok": [
+"health"
+],
+"id": "v252"
+},
+{
+"q": "người yêu em đau bụng đi ngoài",
+"ok": [
+"health"
+],
+"id": "v253"
+},
+{
+"q": "người yêu em đau ngực khi thở",
+"ok": [
+"health"
+],
+"id": "v254"
+},
+{
+"q": "gout có lây không",
+"ok": [
+"health"
+],
+"id": "v255"
+},
+{
+"q": "gout có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v256"
+},
+{
+"q": "nguyên nhân bị gout",
+"ok": [
+"health"
+],
+"id": "v257"
+},
+{
+"q": "tiểu đường là gì",
+"ok": [
+"health"
+],
+"id": "v258"
+},
+{
+"q": "triệu chứng của tiểu đường",
+"ok": [
+"health"
+],
+"id": "v259"
+},
+{
+"q": "bị tiểu đường nên làm gì",
+"ok": [
+"health"
+],
+"id": "v260"
+},
+{
+"q": "cao huyết áp kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v261"
+},
+{
+"q": "cao huyết áp có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v262"
+},
+{
+"q": "cao huyết áp có lây không",
+"ok": [
+"health"
+],
+"id": "v263"
+},
+{
+"q": "viêm gan b có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v264"
+},
+{
+"q": "nguyên nhân bị viêm gan b",
+"ok": [
+"health"
+],
+"id": "v265"
+},
+{
+"q": "viêm gan b là gì",
+"ok": [
+"health"
+],
+"id": "v266"
+},
+{
+"q": "triệu chứng của thủy đậu",
+"ok": [
+"health"
+],
+"id": "v267"
+},
+{
+"q": "bị thủy đậu nên làm gì",
+"ok": [
+"health"
+],
+"id": "v268"
+},
+{
+"q": "thủy đậu kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v269"
+},
+{
+"q": "sốt xuất huyết có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v270"
+},
+{
+"q": "sốt xuất huyết có lây không",
+"ok": [
+"health"
+],
+"id": "v271"
+},
+{
+"q": "sốt xuất huyết có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v272"
+},
+{
+"q": "nguyên nhân bị zona",
+"ok": [
+"health"
+],
+"id": "v273"
+},
+{
+"q": "zona là gì",
+"ok": [
+"health"
+],
+"id": "v274"
+},
+{
+"q": "triệu chứng của zona",
+"ok": [
+"health"
+],
+"id": "v275"
+},
+{
+"q": "bị trầm cảm nên làm gì",
+"ok": [
+"health"
+],
+"id": "v276"
+},
+{
+"q": "trầm cảm kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v277"
+},
+{
+"q": "trầm cảm có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v278"
+},
+{
+"q": "đau dạ dày có lây không",
+"ok": [
+"health"
+],
+"id": "v279"
+},
+{
+"q": "đau dạ dày có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v280"
+},
+{
+"q": "nguyên nhân bị đau dạ dày",
+"ok": [
+"health"
+],
+"id": "v281"
+},
+{
+"q": "viêm xoang là gì",
+"ok": [
+"health"
+],
+"id": "v282"
+},
+{
+"q": "triệu chứng của viêm xoang",
+"ok": [
+"health"
+],
+"id": "v283"
+},
+{
+"q": "bị viêm xoang nên làm gì",
+"ok": [
+"health"
+],
+"id": "v284"
+},
+{
+"q": "hen suyễn kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v285"
+},
+{
+"q": "hen suyễn có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v286"
+},
+{
+"q": "hen suyễn có lây không",
+"ok": [
+"health"
+],
+"id": "v287"
+},
+{
+"q": "sỏi thận có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v288"
+},
+{
+"q": "nguyên nhân bị sỏi thận",
+"ok": [
+"health"
+],
+"id": "v289"
+},
+{
+"q": "sỏi thận là gì",
+"ok": [
+"health"
+],
+"id": "v290"
+},
+{
+"q": "triệu chứng của thoái hóa khớp",
+"ok": [
+"health"
+],
+"id": "v291"
+},
+{
+"q": "bị thoái hóa khớp nên làm gì",
+"ok": [
+"health"
+],
+"id": "v292"
+},
+{
+"q": "thoái hóa khớp kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v293"
+},
+{
+"q": "rối loạn lo âu có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v294"
+},
+{
+"q": "rối loạn lo âu có lây không",
+"ok": [
+"health"
+],
+"id": "v295"
+},
+{
+"q": "rối loạn lo âu có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v296"
+},
+{
+"q": "nguyên nhân bị mất ngủ",
+"ok": [
+"health"
+],
+"id": "v297"
+},
+{
+"q": "mất ngủ là gì",
+"ok": [
+"health"
+],
+"id": "v298"
+},
+{
+"q": "triệu chứng của mất ngủ",
+"ok": [
+"health"
+],
+"id": "v299"
+},
+{
+"q": "bị táo bón nên làm gì",
+"ok": [
+"health"
+],
+"id": "v300"
+},
+{
+"q": "táo bón kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v301"
+},
+{
+"q": "táo bón có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v302"
+},
+{
+"q": "tay chân miệng có lây không",
+"ok": [
+"health"
+],
+"id": "v303"
+},
+{
+"q": "tay chân miệng có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v304"
+},
+{
+"q": "nguyên nhân bị tay chân miệng",
+"ok": [
+"health"
+],
+"id": "v305"
+},
+{
+"q": "cúm là gì",
+"ok": [
+"health"
+],
+"id": "v306"
+},
+{
+"q": "triệu chứng của cúm",
+"ok": [
+"health"
+],
+"id": "v307"
+},
+{
+"q": "bị cúm nên làm gì",
+"ok": [
+"health"
+],
+"id": "v308"
+},
+{
+"q": "viêm phổi kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v309"
+},
+{
+"q": "viêm phổi có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v310"
+},
+{
+"q": "viêm phổi có lây không",
+"ok": [
+"health"
+],
+"id": "v311"
+},
+{
+"q": "đau nửa đầu có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v312"
+},
+{
+"q": "nguyên nhân bị đau nửa đầu",
+"ok": [
+"health"
+],
+"id": "v313"
+},
+{
+"q": "đau nửa đầu là gì",
+"ok": [
+"health"
+],
+"id": "v314"
+},
+{
+"q": "triệu chứng của trĩ",
+"ok": [
+"health"
+],
+"id": "v315"
+},
+{
+"q": "bị trĩ nên làm gì",
+"ok": [
+"health"
+],
+"id": "v316"
+},
+{
+"q": "trĩ kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v317"
+},
+{
+"q": "mỡ máu cao có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v318"
+},
+{
+"q": "mỡ máu cao có lây không",
+"ok": [
+"health"
+],
+"id": "v319"
+},
+{
+"q": "mỡ máu cao có nguy hiểm không",
+"ok": [
+"health"
+],
+"id": "v320"
+},
+{
+"q": "nguyên nhân bị thiếu máu",
+"ok": [
+"health"
+],
+"id": "v321"
+},
+{
+"q": "thiếu máu là gì",
+"ok": [
+"health"
+],
+"id": "v322"
+},
+{
+"q": "triệu chứng của thiếu máu",
+"ok": [
+"health"
+],
+"id": "v323"
+},
+{
+"q": "bị viêm da cơ địa nên làm gì",
+"ok": [
+"health"
+],
+"id": "v324"
+},
+{
+"q": "viêm da cơ địa kiêng ăn gì",
+"ok": [
+"health"
+],
+"id": "v325"
+},
+{
+"q": "viêm da cơ địa có chữa khỏi không",
+"ok": [
+"health"
+],
+"id": "v326"
+},
+{
+"q": "em dạo này hay khóc một mình",
+"ok": [
+"heart"
+],
+"id": "v327"
+},
+{
+"q": "anh thấy không ai hiểu mình",
+"ok": [
+"heart"
+],
+"id": "v328"
+},
+{
+"q": "mình bị người yêu cắm sừng",
+"ok": [
+"heart"
+],
+"id": "v329"
+},
+{
+"q": "tui nhớ nhà quá",
+"ok": [
+"heart"
+],
+"id": "v330"
+},
+{
+"q": "chị bị bố mẹ ép cưới",
+"ok": [
+"heart"
+],
+"id": "v331"
+},
+{
+"q": "em muốn nghỉ việc mà sợ",
+"ok": [
+"heart"
+],
+"id": "v332"
+},
+{
+"q": "anh không có động lực làm gì",
+"ok": [
+"heart"
+],
+"id": "v333"
+},
+{
+"q": "mình thấy bất an khi người yêu đi chơi với bạn",
+"ok": [
+"heart"
+],
+"id": "v334"
+},
+{
+"q": "tui bị đồng nghiệp nói xấu",
+"ok": [
+"heart"
+],
+"id": "v335"
+},
+{
+"q": "chị thấy mình thất bại",
+"ok": [
+"heart"
+],
+"id": "v336"
+},
+{
+"q": "em cãi nhau với bạn thân",
+"ok": [
+"heart"
+],
+"id": "v337"
+},
+{
+"q": "anh bị ghosting",
+"ok": [
+"heart"
+],
+"id": "v338"
+},
+{
+"q": "mình thấy áp lực vì đồng trang lứa",
+"ok": [
+"heart"
+],
+"id": "v339"
+},
+{
+"q": "tui muốn làm lại cuộc đời",
+"ok": [
+"heart"
+],
+"id": "v340"
+},
+{
+"q": "chị không biết có nên chia tay không",
+"ok": [
+"heart"
+],
+"id": "v341"
+},
+{
+"q": "em ngại giao tiếp",
+"ok": [
+"heart"
+],
+"id": "v342"
+},
+{
+"q": "anh bị bạn bè bỏ rơi",
+"ok": [
+"heart"
+],
+"id": "v343"
+},
+{
+"q": "mình thấy cuộc sống nhạt nhẽo",
+"ok": [
+"heart"
+],
+"id": "v344"
+},
+{
+"q": "tui hay suy nghĩ tiêu cực",
+"ok": [
+"heart"
+],
+"id": "v345"
+},
+{
+"q": "chị lo lắng vì nợ nần",
+"ok": [
+"heart"
+],
+"id": "v346"
+},
+{
+"q": "ăn tối gì bây giờ",
+"ok": [
+"food"
+],
+"id": "v347"
+},
+{
+"q": "gợi ý món ăn vặt",
+"ok": [
+"food"
+],
+"id": "v348"
+},
+{
+"q": "quán nào có ưu đãi hôm nay",
+"ok": [
+"food"
+],
+"id": "v349"
+},
+{
+"q": "muốn uống trà sữa",
+"ok": [
+"food"
+],
+"id": "v350"
+},
+{
+"q": "có chỗ nào ăn chay không",
+"ok": [
+"food"
+],
+"id": "v351"
+},
+{
+"q": "tìm quán lẩu gà lá é",
+"ok": [
+"food"
+],
+"id": "v352"
+},
+{
+"q": "quán cơm gần đây",
+"ok": [
+"food"
+],
+"id": "v353"
+},
+{
+"q": "uống gì cho mát",
+"ok": [
+"food"
+],
+"id": "v354"
+},
+{
+"q": "đói bụng quá",
+"ok": [
+"food"
+],
+"id": "v355"
+},
+{
+"q": "muốn ăn bánh căn",
+"ok": [
+"food"
+],
+"id": "v356"
+},
+{
+"q": "quán cà phê của em nên làm khuyến mãi gì",
+"ok": [
+"biz"
+],
+"id": "v357"
+},
+{
+"q": "làm sao để khách quay lại",
+"ok": [
+"biz"
+],
+"id": "v358"
+},
+{
+"q": "spa em mới mở nên quảng cáo sao",
+"ok": [
+"biz"
+],
+"id": "v359"
+},
+{
+"q": "giá phòng homestay bao nhiêu là hợp lý",
+"ok": [
+"biz"
+],
+"id": "v360"
+},
+{
+"q": "bị khách review 1 sao phải làm sao",
+"ok": [
+"biz"
+],
+"id": "v361"
+},
+{
+"q": "làm sao để bán hàng online tốt hơn",
+"ok": [
+"biz"
+],
+"id": "v362"
+},
+{
+"q": "làm combo gì cho quán ăn",
+"ok": [
+"biz"
+],
+"id": "v363"
+},
+{
+"q": "dịp trung thu nên làm ưu đãi gì cho tiệm bánh",
+"ok": [
+"biz"
+],
+"id": "v364"
+},
+{
+"q": "viết caption cho quán trà sữa",
+"ok": [
+"biz"
+],
+"id": "v365"
+},
+{
+"q": "tiệm nail của em ít khách quá",
+"ok": [
+"biz"
+],
+"id": "v366"
+},
+{
+"q": "mùa mưa quán vắng phải làm sao",
+"ok": [
+"biz"
+],
+"id": "v367"
+},
+{
+"q": "làm thẻ tích điểm cho khách có nên không",
+"ok": [
+"biz"
+],
+"id": "v368"
+},
+{
+"q": "bói cho em một quẻ",
+"ok": [
+"tarot"
+],
+"id": "v369"
+},
+{
+"q": "rút bài tarot xem tình duyên",
+"ok": [
+"tarot"
+],
+"id": "v370"
+},
+{
+"q": "xem bói công việc năm nay",
+"ok": [
+"tarot"
+],
+"id": "v371"
+},
+{
+"q": "bói xem em có nên nghỉ việc không",
+"ok": [
+"tarot"
+],
+"id": "v372"
+},
+{
+"q": "trải bài tarot giúp em",
+"ok": [
+"tarot"
+],
+"id": "v373"
+},
+{
+"q": "lá bài hôm nay của em là gì",
+"ok": [
+"tarot"
+],
+"id": "v374"
+},
+{
+"q": "bói tình duyên tháng này",
+"ok": [
+"tarot"
+],
+"id": "v375"
+},
+{
+"q": "xem tarot về tiền bạc",
+"ok": [
+"tarot"
+],
+"id": "v376"
+},
+{
+"q": "em bị bạo hành",
+"ok": [
+"safety"
+],
+"id": "v377"
+},
+{
+"q": "chồng em hay đánh đập em",
+"ok": [
+"safety"
+],
+"id": "v378"
+},
+{
+"q": "em không muốn sống nữa",
+"ok": [
+"safety"
+],
+"id": "v379"
+},
+{
+"q": "em muốn tự tử",
+"ok": [
+"safety"
+],
+"id": "v380"
+},
+{
+"q": "người yêu doạ đánh em",
+"ok": [
+"safety"
+],
+"id": "v381"
+},
+{
+"q": "em bị bắt nạt ở trường",
+"ok": [
+"safety"
+],
+"id": "v382"
+},
+{
+"q": "con em bị chóng mặt",
+"ok": [
+"health"
+],
+"id": "v383"
+},
+{
+"q": "bé nhà em bị sổ mũi",
+"ok": [
+"health"
+],
+"id": "v384"
+},
+{
+"q": "anh đau họng",
+"ok": [
+"health"
+],
+"id": "v385"
+},
+{
+"q": "em bị đau răng khôn",
+"ok": [
+"health"
+],
+"id": "v386"
+},
+{
+"q": "mẹ em bị đau mắt",
+"ok": [
+"health"
+],
+"id": "v387"
+},
+{
+"q": "ba em bị đau chân",
+"ok": [
+"health"
+],
+"id": "v388"
+},
+{
+"q": "em bị mẩn ngứa",
+"ok": [
+"health"
+],
+"id": "v389"
+},
+{
+"q": "sếp em hay mắng em trước mặt mọi người",
+"ok": [
+"heart"
+],
+"id": "v390"
+},
+{
+"q": "em bị mẹ mắng",
+"ok": [
+"heart"
+],
+"id": "v391"
+},
+{
+"q": "em bị cô giáo la",
+"ok": [
+"heart"
+],
+"id": "v392"
+},
+{
+"q": "em mới đậu đại học",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v393"
+},
+{
+"q": "em được điểm cao",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v394"
+},
+{
+"q": "em vừa được tăng lương",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v395"
+},
+{
+"q": "em mới cưới vợ",
+"ok": [
+"chat",
+"heart"
+],
+"id": "v396"
+},
+{
+"q": "bói tình yêu cho em",
+"ok": [
+"tarot"
+],
+"id": "v397"
+},
+{
+"q": "bói xem crush có thích em không",
+"ok": [
+"tarot"
+],
+"id": "v398"
+}
+]

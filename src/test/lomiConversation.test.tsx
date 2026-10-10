@@ -723,7 +723,8 @@ describe("CHAIN 1 — mẹ ốm → đi khám rồi → bác sĩ nói viêm họ
   it("gõ không dấu vẫn theo được cả chuỗi", async () => {
     const r = await chat(["me a dang om", "di kham roi", "bac si noi viem hong", "uong thuoc roi"]);
     expect(r[1].thread?.facts.doctor).toBe(true);
-    expect(r[2].thread?.facts.dx).toBe("viem hong");
+    // (10/10: câu không dấu được khôi phục dấu trước — lib/lomiViRestore — nên chẩn đoán ghi đúng "viêm họng")
+    expect(r[2].thread?.facts.dx).toMatch(/^vi[eê]m h[oọ]ng$/);
     expect(r[3].content).toMatch(/mẹ anh được khám và có thuốc rồi/);
     for (const m of r) expect(m.unk, m.content).toBeUndefined();
   }, T);
