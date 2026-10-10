@@ -919,6 +919,9 @@ export function expandTeen(text: string): string {
   s = s.replace(/(^|[^\p{L}])nv (quán|cửa hàng|bán hàng|phục vụ|shop|ở|tiệm|công ty|chỗ)(?![\p{L}])/giu, "$1nhân viên $2");
   // "đau hông", "mỏi hông", "bên hông" là cái hông (bộ phận cơ thể), không phải "không" (01/10).
   s = s.replace(/(^|[^\p{L}])(đau|mỏi|nhức|bên|vùng|eo|khớp|xương|sườn|ê|tê|sưng|mông|lưng) (hông)(?![\p{L}])/giu, "$1$2 hông_body");
+  // "hăm tã", "bé bị hăm", "hăm dọa" là chữ hăm thật (hăm da / đe doạ), không phải "không" (10/10).
+  s = s.replace(/(^|[^\p{L}])(hăm)(?= (?:tã|bỉm|đít|da|háng|mông|nách|cổ|kẽ|dọa|doạ)(?![\p{L}]))/giu, "$1hăm_keep");
+  s = s.replace(/(^|[^\p{L}])(bị|nổi|chống|trị|kem) hăm(?![\p{L}])/giu, "$1$2 hăm_keep");
   // Viết tắt NHIỀU NGHĨA (01/10 r3, theo tài liệu Kir) — chỉ đổi khi ngữ cảnh rõ, không đổi bừa:
   //  • "cf": đi kèm uống/đi/quán/ly/đá/sữa/ngon… hoặc đứng một mình hỏi ("cf?") → cà phê; còn lại giữ nguyên.
   s = s.replace(/(^|[^\p{L}])(uống|đi|quán|ly|cốc|tiệm|chỗ|hẹn|rủ|làm|ghé|thèm|mua|order)( (ly|cốc|chút|miếng|tí))? (cf|cafe|caphe|cofe)(?![\p{L}])/giu, "$1$2$3 cà phê");
@@ -936,7 +939,8 @@ export function expandTeen(text: string): string {
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
   return s
     .replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)))
-    .replace(/hông_body/g, "hông");
+    .replace(/hông_body/g, "hông")
+    .replace(/hăm_keep/g, "hăm");
 }
 
 

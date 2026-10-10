@@ -1,0 +1,134 @@
+{
+  "id": "hiem-muon",
+  "kind": "condition",
+  "names": [
+    "vô sinh hiếm muộn",
+    "vô sinh",
+    "hiếm muộn",
+    "khó có con",
+    "khó có thai",
+    "chậm có con",
+    "lâu có con",
+    "vô sinh nam",
+    "vô sinh nữ",
+    "vô sinh thứ phát",
+    "infertility"
+  ],
+  "about": [
+    {
+      "text": "Vô sinh (hiếm muộn) là khi không có thai sau **12 tháng trở lên** quan hệ đều đặn không dùng biện pháp tránh thai.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nguyên nhân có thể từ phía nam, phía nữ, hoặc không giải thích được. Vô sinh nguyên phát là chưa từng có thai; thứ phát là đã từng có thai ít nhất một lần.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Khá thường gặp: NHS ước khoảng 1/7 cặp đôi khó có thai; WHO ước khoảng 1/6 người trong độ tuổi sinh sản gặp vô sinh trong đời.",
+      "src": [0, 1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Dấu hiệu chính là chưa có thai dù đã quan hệ đều đặn, không tránh thai một thời gian dài.",
+      "src": [0, 1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguyên nhân thường gặp: không rụng trứng đều, chất lượng tinh dịch kém, vòi trứng bị tắc hoặc tổn thương, lạc nội mạc tử cung. Khoảng 1/4 trường hợp không tìm ra nguyên nhân.",
+      "src": [0]
+    },
+    {
+      "text": "Phía nữ (theo WHO): tắc vòi trứng (liên quan bệnh lây qua đường tình dục không điều trị, phá thai không an toàn, nhiễm trùng sau sinh, mổ vùng chậu), u xơ, dị dạng tử cung, buồng trứng đa nang, rối loạn nội tiết.",
+      "src": [1]
+    },
+    {
+      "text": "Phía nam (theo WHO): tắc đường dẫn tinh (thường do chấn thương, nhiễm trùng), rối loạn nội tiết, tinh hoàn không tạo tinh trùng (như giãn tĩnh mạch thừng tinh, sau hóa trị), tinh trùng bất thường.",
+      "src": [1]
+    },
+    {
+      "text": "Dùng steroid đồng hóa (loại hay dùng để tăng cơ) có thể ảnh hưởng chất lượng tinh trùng.",
+      "src": [1]
+    },
+    {
+      "text": "Tuổi: khả năng sinh sản **giảm dần theo tuổi**.",
+      "src": [0]
+    },
+    {
+      "text": "Thừa cân, béo phì làm giảm khả năng sinh sản; ở nữ, thừa cân hoặc quá gầy có thể ảnh hưởng rụng trứng.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Hút thuốc (kể cả hút thuốc thụ động) ảnh hưởng khả năng có thai và có thể làm giảm chất lượng tinh dịch; uống quá nhiều rượu bia cũng ảnh hưởng khả năng sinh sản và chất lượng tinh trùng.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Một số bệnh lây qua đường tình dục như chlamydia có thể gây vô sinh.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Căng thẳng nặng có thể ảnh hưởng rụng trứng và tạo tinh trùng; tiếp xúc thuốc trừ sâu, dung môi, kim loại và chất ô nhiễm cũng liên quan giảm khả năng sinh sản.",
+      "src": [0, 1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phụ nữ dưới 40 tuổi có khả năng cao tự có thai trong vòng một năm. Nếu đã cố hơn 3 năm, khả năng có thai trong năm tiếp theo thấp hơn (khoảng 1/4 hoặc thấp hơn).",
+      "src": [0]
+    },
+    {
+      "text": "Vô sinh có thể gây căng thẳng, trầm cảm, lo âu, tự ti; phụ nữ thường chịu thêm kỳ thị xã hội, thậm chí bạo lực hoặc ly hôn.",
+      "src": [1]
+    },
+    {
+      "text": "WHO cho biết vô sinh thường có thể phòng ngừa được, ví dụ bằng lối sống lành mạnh và phòng, điều trị sớm bệnh lây qua đường tình dục.",
+      "src": [1]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị tùy nguyên nhân: thuốc giúp rụng trứng, phẫu thuật (như điều trị lạc nội mạc, sửa vòi trứng, gỡ dính), hoặc hỗ trợ sinh sản như **bơm tinh trùng (IUI)**, **thụ tinh ống nghiệm (IVF)** — do bác sĩ quyết định.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nếu điều trị ở cơ sở tư nhân: chi phí có thể cao và không bảo đảm thành công; nên chọn cơ sở được cấp phép và hỏi ý kiến bác sĩ.",
+      "src": [0]
+    },
+    {
+      "text": "IVF làm tăng nguy cơ đa thai (song thai…) — vốn rủi ro hơn cho mẹ và bé — và tăng nhẹ nguy cơ thai ngoài tử cung.",
+      "src": [0]
+    },
+    {
+      "text": "Lối sống: nên bỏ thuốc lá; NHS cho rằng cách an toàn nhất là không uống rượu bia để giảm tối đa rủi ro cho em bé.",
+      "src": [0]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám nếu đã cố gắng **một năm** mà chưa có thai.",
+      "src": [0]
+    },
+    {
+      "text": "Phụ nữ từ 36 tuổi trở lên, hoặc ai đã biết mình có vấn đề sinh sản, nên đi khám sớm hơn.",
+      "src": [0]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Infertility",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/infertility/",
+      "reviewed": "2023-08-09"
+    },
+    {
+      "title": "Infertility (fact sheet)",
+      "publisher": "WHO",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/infertility",
+      "reviewed": "2025-11-28"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

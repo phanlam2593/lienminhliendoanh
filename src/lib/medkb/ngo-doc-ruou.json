@@ -1,0 +1,146 @@
+{
+  "id": "ngo-doc-ruou",
+  "kind": "other",
+  "names": [
+    "ngộ độc rượu",
+    "ngộ độc rượu bia",
+    "say rượu nặng",
+    "say xỉn nặng",
+    "ngộ độc cồn",
+    "say rượu bất tỉnh",
+    "uống rượu quá liều",
+    "alcohol poisoning",
+    "alcohol overdose"
+  ],
+  "disambiguation": "Thẻ này nói về ngộ độc do uống quá nhiều rượu bia trong thời gian ngắn. Nghiện rượu (uống kéo dài) có thẻ riêng.",
+  "about": [
+    {
+      "text": "Ngộ độc rượu xảy ra khi uống **nhiều rượu bia trong thời gian ngắn**, nhanh hơn khả năng cơ thể xử lý.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Ngộ độc rượu ảnh hưởng đến nhịp thở, nhịp tim, thân nhiệt và phản xạ nôn, có thể dẫn đến hôn mê hoặc **tử vong**.",
+      "src": [1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Lú lẫn, nói lắp hoặc không nói được, đi đứng loạng choạng, nôn ói, tiểu tiện không tự chủ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Thở chậm hoặc không đều; da tái, xám hoặc tím tái (người da sẫm dễ thấy hơn ở môi, nướu, dưới móng tay); thân nhiệt hạ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Co giật; khó giữ tỉnh táo, ngất hoặc không gọi dậy được.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Không cần có đủ mọi dấu hiệu trên mới đi cấp cứu.",
+      "src": [1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do **uống dồn dập** (nhậu nhiều trong một lần). Mỗi người chịu rượu khác nhau, nên cùng một lượng mà người này ít bị ảnh hưởng hơn người kia.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Yếu tố làm tăng nguy cơ: chiều cao, cân nặng, bệnh làm cơ thể xử lý rượu kém, độ cồn của đồ uống, uống nhanh và nhiều, uống chung với thuốc hoặc chất khác.",
+      "src": [1]
+    },
+    {
+      "text": "Ăn no **không ngăn được** ngộ độc khi uống dồn dập. Nồng độ cồn trong máu vẫn có thể tiếp tục tăng sau khi đã ngừng uống.",
+      "src": [1]
+    },
+    {
+      "text": "Ngoài rượu uống, cồn còn có trong nước súc miệng, một số thuốc, sản phẩm gia dụng; methanol hoặc ethylene glycol (có trong chất chống đông, sơn, dung môi) cũng là những dạng cồn gây ngộ độc.",
+      "src": [1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Biến chứng: sặc chất nôn vào phổi có thể làm ngừng thở; mất nước nặng; co giật do hạ đường huyết; hạ thân nhiệt; rối loạn nhịp tim, ngừng tim; tổn thương não vĩnh viễn; tử vong.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Ngộ độc rượu có thể gây suy gan, suy tim, có thể dẫn đến tử vong.",
+      "src": [0]
+    },
+    {
+      "text": "Người bị ngộ độc rượu cần vào viện để theo dõi; có thể được truyền dịch và hỗ trợ thở cho đến khi hết tác dụng của rượu.",
+      "src": [0]
+    }
+  ],
+  "care": [
+    {
+      "text": "Trong lúc chờ cấp cứu: **ở bên cạnh** người bị nạn vì họ có thể sặc chất nôn hoặc ngừng thở.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nếu tỉnh, cho ngồi dậy. Nếu đã ngất, đặt nằm **tư thế nằm nghiêng an toàn** (đầu nghiêng sang bên) và kiểm tra xem còn thở bình thường không.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nếu người đó tỉnh, nuốt được và không nôn, có thể cho nhấp từng ngụm nước. Giữ ấm bằng áo khoác hoặc chăn.",
+      "src": [0]
+    },
+    {
+      "text": "**Không** cho uống thêm rượu, không cho ăn (dễ sặc), không cho uống cà phê hay đồ uống có caffeine (gây mất nước thêm).",
+      "src": [0]
+    },
+    {
+      "text": "**Không** tắm hay dội nước lạnh (dễ bị lạnh, té ngã, ngất), và **không** cố làm cho họ nôn.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Đừng bao giờ nghĩ người đó “ngủ một giấc là tỉnh”. Nếu biết, hãy báo cho nhân viên cấp cứu loại rượu, lượng uống và thời điểm uống.",
+      "src": [1]
+    },
+    {
+      "text": "Phòng ngừa: uống có chừng mực hoặc không uống; không uống rượu khi đang dùng một số thuốc; nói chuyện với con tuổi teen về tác hại của nhậu dồn dập.",
+      "src": [1]
+    },
+    {
+      "text": "Cất rượu, mỹ phẩm, nước súc miệng, thuốc và chất tẩy rửa xa tầm tay trẻ em.",
+      "src": [1]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Sau khi qua cơn, có thể hỏi về chăm sóc tiếp theo như gặp chuyên gia tư vấn về lệ thuộc chất.",
+      "src": [1]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu ngay khi nghĩ ai đó bị ngộ độc rượu — đặc biệt khi họ co giật, ngất, không gọi dậy được hoặc ngừng thở.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Người đã ngất hoặc không đánh thức được **có thể tử vong** — cần trợ giúp y tế ngay cả khi không có đủ các dấu hiệu điển hình.",
+      "src": [1]
+    },
+    {
+      "text": "Không tự lái xe đến phòng cấp cứu.",
+      "src": [0]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Alcohol poisoning",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/alcohol-poisoning/",
+      "reviewed": "2026-06-04"
+    },
+    {
+      "title": "Alcohol poisoning - Symptoms and causes",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/diseases-conditions/alcohol-poisoning/symptoms-causes/syc-20354386",
+      "reviewed": "2023-04-29"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

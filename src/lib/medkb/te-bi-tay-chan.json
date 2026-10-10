@@ -1,0 +1,61 @@
+{
+  "id": "te-bi-tay-chan",
+  "kind": "condition",
+  "names": ["bệnh thần kinh ngoại biên", "bệnh lý thần kinh ngoại biên", "tổn thương thần kinh ngoại biên", "tê bì tay chân", "tê bì chân tay", "tê tay chân", "tê chân tay", "bệnh đa dây thần kinh", "peripheral neuropathy"],
+  "disambiguation": "Thẻ này nói về bệnh thần kinh ngoại biên (tổn thương các dây thần kinh ngoài não và tủy sống), có thể gây tê bì tay chân. Tê tay do chèn ép ở cổ tay có thẻ riêng (hội chứng ống cổ tay).",
+  "about": [
+    {"text": "Bệnh thần kinh ngoại biên là tổn thương các **dây thần kinh ngoại biên** (nằm ngoài não và tủy sống), ví dụ ở bàn tay, bàn chân, cánh tay.", "src": [0, 2]},
+    {"text": "Dây thần kinh ngoại biên gồm loại cảm giác (đau, chạm, nóng lạnh), vận động (điều khiển cơ) và tự chủ (huyết áp, tim, tiêu hóa, bàng quang).", "src": [0, 2]},
+    {"text": "Thể hay gặp nhất là bệnh đa dây thần kinh: thường bắt đầu ở bàn chân, lan dần lên rồi về sau đến bàn tay.", "src": [0]}
+  ],
+  "signs": [
+    {"text": "**Tê và châm chích** (kiến bò) ở bàn chân hoặc bàn tay; đau rát bỏng, đau như dao đâm hoặc đau nhói từng cơn.", "src": [0, 2]},
+    {"text": "Giảm cảm nhận nóng, lạnh hoặc vết thương; đau cả khi chạm nhẹ.", "src": [2]},
+    {"text": "Mất thăng bằng, phối hợp kém, yếu cơ (nhất là ở bàn chân), chuột rút, giật cơ, teo cơ.", "src": [0, 2]},
+    {"text": "Khi thần kinh tự chủ bị ảnh hưởng: nhịp tim bất thường, khó nuốt, đổ mồ hôi quá nhiều hoặc quá ít, rối loạn tiêu hóa, tiểu tiện hoặc tình dục.", "src": [2]},
+    {"text": "Triệu chứng thường kéo dài liên tục nhưng có thể lúc có lúc không; có thể đến đột ngột hoặc từ từ.", "src": [0, 2]}
+  ],
+  "causes": [
+    {"text": "**Tiểu đường** (type 1 và type 2) là nguyên nhân thường gặp nhất; nguy cơ tăng khi mắc lâu năm, đường huyết kiểm soát kém, hút thuốc, uống nhiều rượu.", "src": [0, 1, 2]},
+    {"text": "Uống nhiều rượu lâu năm; thiếu vitamin B12 hoặc vitamin khác; chấn thương hay phẫu thuật làm tổn thương dây thần kinh.", "src": [0, 1, 2]},
+    {"text": "Bệnh khác: suy giáp, bệnh gan hoặc thận mạn, nhiễm trùng (như zona, HIV), bệnh tự miễn (viêm khớp dạng thấp, lupus, celiac), một số ung thư.", "src": [1, 2]},
+    {"text": "Tác dụng phụ của một số thuốc, như một số thuốc hóa trị hoặc kháng sinh dùng nhiều tháng; nhiễm độc chì, thủy ngân, asen; bệnh di truyền.", "src": [1, 2]},
+    {"text": "Đôi khi không tìm được nguyên nhân.", "src": [1, 2]}
+  ],
+  "course": [
+    {"text": "Diễn tiến tùy người: một số đỡ khi nguyên nhân được điều trị, một số có thể vĩnh viễn hoặc nặng dần.", "src": [0, 2]},
+    {"text": "Không điều trị, loét bàn chân có thể nhiễm trùng, dẫn đến hoại tử; trường hợp nặng có thể phải cắt cụt.", "src": [0]},
+    {"text": "Tổn thương thần kinh tự chủ có thể ảnh hưởng tim và tuần hoàn.", "src": [0]},
+    {"text": "Phát hiện sớm giúp có cơ hội hạn chế tổn thương và phòng biến chứng tốt hơn.", "src": [0]}
+  ],
+  "care": [
+    {"text": "Điều trị tùy nguyên nhân và triệu chứng; cần chữa bệnh gốc gây tổn thương thần kinh — trong một số trường hợp, điều này giúp dây thần kinh lành dần.", "src": [0, 2]},
+    {"text": "Với tiểu đường: kiểm soát đường huyết tốt hơn, **bỏ thuốc lá**, giảm rượu bia.", "src": [0, 2]},
+    {"text": "Đau thần kinh thường không đỡ với thuốc giảm đau thông thường; bác sĩ có thể kê thuốc trị đau thần kinh.", "src": [0, 2]},
+    {"text": "Yếu cơ có thể tập vật lý trị liệu, dùng dụng cụ hỗ trợ đi lại, nẹp. Có thể dùng miếng dán, kem bôi hoặc liệu pháp không dùng thuốc.", "src": [0, 2]},
+    {"text": "Phòng ngừa và tự chăm sóc: kiểm soát tiểu đường, phòng té ngã và chấn thương, tránh chất độc, hạn chế tư thế hay động tác lặp lại đè ép dây thần kinh, tập thể dục.", "src": [2]},
+    {"text": "Người có nguy cơ cao như người tiểu đường nên khám định kỳ.", "src": [0]}
+  ],
+  "diet": {
+    "avoid": [
+      {"text": "Hạn chế rượu bia; uống nhiều rượu là một nguyên nhân gây bệnh.", "src": [0, 2]}
+    ],
+    "ok": [
+      {"text": "Ăn uống cân bằng là một phần của việc phòng ngừa và tự chăm sóc.", "src": [2]}
+    ],
+    "foods": [
+      {"name": "rượu bia", "aliases": ["rượu", "bia", "đồ uống có cồn"], "verdict": "limit", "note": "NHS và MedlinePlus nêu uống nhiều rượu là một nguyên nhân gây bệnh thần kinh ngoại biên và khuyên giảm/hạn chế rượu.", "src": [0, 1, 2]}
+    ]
+  },
+  "doctor": [
+    {"text": "Nên đi khám khi có dấu hiệu sớm: đau, châm chích hoặc mất cảm giác ở bàn chân, mất thăng bằng hoặc yếu.", "src": [0]},
+    {"text": "Nên đi khám khi có vết cắt hoặc vết loét ở bàn chân lâu không lành.", "src": [0]}
+  ],
+  "emergency": [],
+  "sources": [
+    {"title": "Peripheral neuropathy", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/", "reviewed": "2022-10-10"},
+    {"title": "Peripheral neuropathy - Causes", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/causes/"},
+    {"title": "Peripheral Nerve Disorders", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/peripheralnervedisorders.html", "reviewed": "2024-06-27"}
+  ],
+  "verifiedAt": "2026-10-09"
+}

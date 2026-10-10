@@ -1,0 +1,42 @@
+{
+  "id": "noi-lap",
+  "kind": "child",
+  "names": ["nói lắp", "tật nói lắp", "nói cà lăm", "cà lăm", "trẻ nói lắp", "nói lắp ở trẻ", "stammering", "stuttering"],
+  "about": [
+    {"text": "Nói lắp (cà lăm) là tình trạng lời nói bị ngắt quãng: lặp lại âm hoặc tiếng, kéo dài một âm, hoặc bị kẹt, dừng đột ngột giữa chừng.", "src": [0, 1]},
+    {"text": "Nói lắp khá phổ biến ở trẻ nhỏ và có thể kéo dài đến tuổi trưởng thành. Mức độ khác nhau tùy người và tùy hoàn cảnh; có lúc nói trôi chảy xen kẽ.", "src": [0]},
+    {"text": "Loại hay gặp nhất là **nói lắp phát triển**, xuất hiện khi trẻ nhỏ đang học nói. Hiếm hơn là nói lắp khởi phát muộn ở trẻ lớn và người lớn.", "src": [0, 1]}
+  ],
+  "signs": [
+    {"text": "Lặp âm hoặc từ, kéo dài âm, kẹt chữ; có thể kèm gật đầu, chớp mắt nhanh hoặc run môi.", "src": [0, 1]},
+    {"text": "Nói lắp thường nặng hơn khi căng thẳng, phấn khích, mệt, cảm thấy bị áp lực hoặc có nhiều điều muốn nói.", "src": [0, 1]}
+  ],
+  "causes": [
+    {"text": "Không thể nói chắc vì sao một đứa trẻ bắt đầu nói lắp, và **cha mẹ không phải là người gây ra**.", "src": [0]},
+    {"text": "Yếu tố di truyền, sự phát triển và khác biệt nhỏ ở cách các vùng não phụ trách lời nói hoạt động có thể góp phần. Khoảng 2/3 người nói lắp có người nhà cũng bị.", "src": [0, 1]},
+    {"text": "Bé trai bị nhiều hơn bé gái. Ở người lớn, nam bị nhiều hơn nữ khoảng 3–4 lần.", "src": [0, 1]},
+    {"text": "Nói lắp khởi phát muộn có thể xảy ra sau chấn thương đầu, đột quỵ, bệnh thần kinh tiến triển, do một số thuốc hoặc sang chấn tâm lý.", "src": [0, 1]}
+  ],
+  "course": [
+    {"text": "Khoảng 1/12 trẻ nhỏ trải qua một giai đoạn nói lắp; phần lớn sau đó nói trôi chảy, nhưng khó đoán trước khi nào.", "src": [0, 1]},
+    {"text": "Phần lớn trẻ nói lắp sẽ khỏi dần; với số còn lại, nói lắp có thể kéo dài suốt đời.", "src": [0, 1]}
+  ],
+  "care": [
+    {"text": "**Trị liệu ngôn ngữ** giúp nói dễ hơn: bạn cùng chuyên viên chọn kế hoạch phù hợp, tạo môi trường thoải mái, dạy cách nói trôi chảy hơn và xử lý cảm giác sợ, lo âu khi nói.", "src": [0, 1]},
+    {"text": "Trẻ nhỏ có thể chưa cần trị liệu ngay; cha mẹ và giáo viên có thể học cách giúp trẻ tập nói trong không khí bình tĩnh, không vội vàng.", "src": [1]},
+    {"text": "Trị liệu có thể gồm nói chậm lại, điều khiển hơi thở, đi từ câu trả lời ngắn đến câu dài dần.", "src": [1]},
+    {"text": "Điều trị nói lắp thường thành công ở trẻ trước tuổi đi học, nên cần hỏi ý kiến chuyên môn càng sớm càng tốt.", "src": [0]},
+    {"text": "Người lớn có thể tham gia nhóm tự lực để được hỗ trợ. Thuốc không được chấp thuận để điều trị nói lắp và hay gây tác dụng phụ.", "src": [1]}
+  ],
+  "diet": null,
+  "doctor": [
+    {"text": "Nên hỏi bác sĩ hoặc nhân viên y tế khi bạn lo về sự phát triển lời nói của con; trẻ có thể được giới thiệu đến chuyên viên trị liệu ngôn ngữ.", "src": [0, 1]},
+    {"text": "Người lớn nói lắp ảnh hưởng nhiều đến đời sống xã hội và công việc có thể nhờ bác sĩ giới thiệu trị liệu ngôn ngữ.", "src": [0]}
+  ],
+  "emergency": [],
+  "sources": [
+    {"title": "Stammering", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/stammering/", "reviewed": "2023-03-17"},
+    {"title": "Stuttering", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/stuttering.html", "reviewed": "2021-05-05"}
+  ],
+  "verifiedAt": "2026-10-09"
+}

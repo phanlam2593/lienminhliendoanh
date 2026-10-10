@@ -1,0 +1,45 @@
+{
+  "id": "ham-ta",
+  "kind": "child",
+  "names": ["hăm tã", "bé bị hăm", "trẻ bị hăm tã", "hăm tã ở trẻ", "hăm bỉm", "hăm đít", "nappy rash", "diaper rash"],
+  "about": [
+    {"text": "Hăm tã là vấn đề da xuất hiện ở vùng dưới tã (bỉm) của bé.", "src": [0]},
+    {"text": "Hay gặp ở bé khoảng 4–15 tháng tuổi, và có thể dễ thấy hơn khi bé bắt đầu ăn dặm.", "src": [0]}
+  ],
+  "signs": [
+    {"text": "Ban đỏ tươi lan rộng hoặc to dần; các mảng đỏ nhỏ lớn lên rồi liền với nhau.", "src": [0]},
+    {"text": "Bé trai: da bìu và dương vật rất đỏ, bong vảy. Bé gái: da môi âm hộ và âm đạo đỏ hoặc bong vảy.", "src": [0]},
+    {"text": "Có thể có mụn, mụn nước, vết loét, sẩn to hoặc mụn mủ. Bé lớn hơn có thể gãi khi tháo tã.", "src": [0]},
+    {"text": "Hăm tã thường chỉ nằm trong phạm vi vùng mặc tã.", "src": [0]}
+  ],
+  "causes": [
+    {"text": "Nhiễm **nấm men (Candida)** rất hay gặp: nấm phát triển ở chỗ ấm, ẩm như trong tã, nhất là khi da không được giữ sạch, khô.", "src": [0]},
+    {"text": "Nguy cơ nhiễm nấm cao hơn khi bé hoặc mẹ đang cho bú dùng kháng sinh, hoặc khi bé đi ngoài nhiều lần.", "src": [0]},
+    {"text": "Axit trong phân (dễ gặp khi tiêu chảy), amoniac sinh ra khi vi khuẩn phân hủy nước tiểu, tã chật cọ xát da.", "src": [0]},
+    {"text": "Xà phòng và sản phẩm dùng giặt tã vải có thể gây kích ứng da.", "src": [0]}
+  ],
+  "course": [
+    {"text": "Hăm tã thường đáp ứng tốt với điều trị.", "src": [0]}
+  ],
+  "care": [
+    {"text": "Giữ da **sạch và khô**; cho bé không mặc tã bất cứ khi nào có thể.", "src": [0]},
+    {"text": "Thay tã thường xuyên, càng sớm càng tốt sau khi bé tè hoặc đi ngoài; rửa tay trước và sau khi thay tã.", "src": [0]},
+    {"text": "Mỗi lần thay, lau nhẹ bằng nước và khăn mềm hoặc bông; thấm khô hoặc để da tự khô. Không chà xát mạnh.", "src": [0]},
+    {"text": "Đóng tã lỏng tay, dùng tã thấm hút tốt; với tã vải dùng lớp bọc thoáng khí, không dùng quần nhựa hay cao su bọc ngoài.", "src": [0]},
+    {"text": "Tránh khăn ướt có cồn hoặc hương liệu, tránh phấn rôm (talc) vì bé có thể hít vào phổi, tránh nước xả vải.", "src": [0]},
+    {"text": "Tã vải nên xả nước 2–3 lần nếu bé đang hoặc từng bị hăm.", "src": [0]},
+    {"text": "Kem hoặc thuốc mỡ có kẽm oxit hay vaseline thoa lên da thật sạch, khô giúp giữ hơi ẩm tránh xa da bé; hỏi bác sĩ nên dùng loại nào.", "src": [0]},
+    {"text": "Hăm do nấm có thể cần kem chống nấm; hăm nặng đôi khi dùng thuốc mỡ corticoid. Tuy mua được không cần đơn, nên hỏi bác sĩ trước.", "src": [0]}
+  ],
+  "diet": null,
+  "doctor": [
+    {"text": "Nên đưa bé đi khám khi hăm nặng hơn hoặc không đỡ sau 2–3 ngày.", "src": [0]},
+    {"text": "Nên đi khám khi ban lan ra bụng, lưng, tay hoặc mặt, hoặc có mụn mủ, mụn nước, vết loét, sẩn to.", "src": [0]},
+    {"text": "Nên đi khám khi bé bị sốt, hoặc khi ban xuất hiện trong 6 tuần đầu sau sinh.", "src": [0]}
+  ],
+  "emergency": [],
+  "sources": [
+    {"title": "Diaper rash", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/000964.htm", "reviewed": "2025-07-01"}
+  ],
+  "verifiedAt": "2026-10-09"
+}

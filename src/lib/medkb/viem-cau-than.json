@@ -1,0 +1,154 @@
+{
+  "id": "viem-cau-than",
+  "kind": "condition",
+  "names": [
+    "viêm cầu thận",
+    "viêm cầu thận cấp",
+    "viêm cầu thận mạn",
+    "bệnh cầu thận",
+    "viêm cầu thận IgA",
+    "bệnh thận IgA",
+    "glomerulonephritis"
+  ],
+  "about": [
+    {
+      "text": "Viêm cầu thận là tình trạng tổn thương các **bộ lọc nhỏ trong thận** (cầu thận) — bộ phận lọc chất thải và nước khỏi máu — khiến máu và đạm bị lọt ra nước tiểu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Bệnh thường do hệ miễn dịch tấn công nhầm mô lành, dù nhiều khi không rõ nguyên nhân. Có thể chỉ tạm thời và hồi phục, hoặc nặng dần.",
+      "src": [0, 1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Trường hợp nhẹ có thể không có triệu chứng, thường phát hiện tình cờ khi xét nghiệm nước tiểu hoặc máu vì lý do khác.",
+      "src": [0, 1]
+    },
+    {
+      "text": "**Nước tiểu sẫm màu** (nâu, màu gỉ sắt) do có máu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "**Nước tiểu có bọt** do có nhiều đạm.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Phù ở mặt, quanh mắt, mắt cá, bàn chân, chân hoặc bụng.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Tùy nguyên nhân có thể kèm: phát ban, đau khớp, đau bụng, sốt, khó thở, mệt mỏi, chán ăn sụt cân, tiểu ít; một số người bị tăng huyết áp.",
+      "src": [0, 1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Bệnh lý miễn dịch như lupus, viêm mạch máu; các bệnh như bệnh thận IgA, ban xuất huyết Henoch-Schönlein.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nhiễm trùng: nhiễm liên cầu khuẩn, virus (như HIV, viêm gan B, C), nhiễm trùng van tim, áp xe.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Một số bệnh ung thư, một số thuốc (kể cả dùng nhiều thuốc giảm đau kháng viêm), tiếp xúc dung môi hữu cơ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Có thể không tìm ra nguyên nhân. Có loại di truyền — bác sĩ có thể tư vấn về nguy cơ và tầm soát cho người nhà.",
+      "src": [0, 1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Viêm cầu thận có thể tạm thời và hồi phục, nhưng cũng có thể tiến triển, có dạng mất chức năng thận chỉ trong vài tuần đến vài tháng.",
+      "src": [1]
+    },
+    {
+      "text": "Biến chứng: tăng huyết áp, mỡ máu cao, cục máu đông, tổn thương cơ quan khác, **bệnh thận mạn** và suy thận.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nếu tiến triển đến suy thận giai đoạn cuối, có thể cần lọc máu hoặc ghép thận.",
+      "src": [1]
+    }
+  ],
+  "care": [
+    {
+      "text": "Chẩn đoán bằng xét nghiệm máu (đạm, creatinine), nước tiểu (máu, đạm), có thể siêu âm và sinh thiết thận.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Điều trị tùy nguyên nhân và mức độ; kiểm soát huyết áp thường rất quan trọng, và điều trị bệnh gốc có thể giúp ích.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Thuốc có thể gồm thuốc huyết áp giúp bảo vệ thận (nhóm ức chế men chuyển, ARB), corticoid, thuốc ức chế miễn dịch, thuốc hạ mỡ máu hoặc chống đông — do bác sĩ quyết định.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Một số trường hợp liên quan miễn dịch có thể được lọc huyết tương; cần theo dõi sát chức năng thận.",
+      "src": [1]
+    },
+    {
+      "text": "Phần lớn trường hợp không phòng được; một số có thể phòng bằng cách tránh hoặc hạn chế tiếp xúc dung môi hữu cơ, thủy ngân và thuốc kháng viêm giảm đau.",
+      "src": [1]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Ăn **ít muối** hơn để giảm gánh nặng cho thận.",
+        "src": [0, 1]
+      },
+      {
+        "text": "Có thể cần hạn chế nước, đạm (protein) và một số chất khác — mức độ cụ thể do bác sĩ quyết định.",
+        "src": [1]
+      }
+    ],
+    "ok": [],
+    "foods": [
+      {
+        "name": "muối",
+        "aliases": ["đồ mặn", "natri", "sodium"],
+        "verdict": "limit",
+        "note": "NHS và MedlinePlus khuyên ăn ít muối (natri) để giảm gánh nặng cho thận.",
+        "src": [0, 1]
+      },
+      {
+        "name": "thực phẩm giàu đạm",
+        "aliases": ["đạm", "protein"],
+        "verdict": "limit",
+        "note": "MedlinePlus: có thể cần hạn chế đạm — mức cụ thể do bác sĩ quyết định tùy từng người.",
+        "src": [1]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám khi có **máu trong nước tiểu** — không phải lúc nào cũng do viêm cầu thận nhưng cần tìm nguyên nhân.",
+      "src": [0]
+    },
+    {
+      "text": "Nên đi khám khi có triệu chứng như đau khớp, mệt mỏi, khó thở, hoặc khi bạn có bệnh làm tăng nguy cơ viêm cầu thận.",
+      "src": [0, 1]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Glomerulonephritis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/glomerulonephritis/",
+      "reviewed": "2023-04-13"
+    },
+    {
+      "title": "Glomerulonephritis",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000484.htm",
+      "reviewed": "2025-09-02"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

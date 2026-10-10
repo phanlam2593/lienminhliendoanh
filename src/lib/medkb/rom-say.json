@@ -1,0 +1,165 @@
+{
+  "id": "rom-say",
+  "kind": "condition",
+  "names": [
+    "rôm sảy",
+    "rôm sẩy",
+    "nổi rôm",
+    "nổi rôm sảy",
+    "bé bị rôm sảy",
+    "heat rash",
+    "prickly heat",
+    "miliaria"
+  ],
+  "about": [
+    {
+      "text": "Rôm sảy (heat rash) gây khó chịu nhưng **thường vô hại**, và thường tự đỡ sau vài ngày.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Rôm sảy **không lây**. Triệu chứng ở người lớn và trẻ em thường giống nhau.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Nốt nhỏ nổi gồ, cảm giác ngứa hoặc châm chích như kim, hơi sưng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Nốt rôm khoảng vài milimét, một số nốt có thể chứa dịch.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Trên da trắng nốt có màu đỏ; trên da nâu, đen khó thấy hơn, có thể trông xám hoặc trắng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Có thể nổi ở bất kỳ đâu trên cơ thể và lan rộng.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do **ra mồ hôi nhiều** làm tắc tuyến mồ hôi; mồ hôi bị kẹt lại gây nổi ban, thường vài ngày sau đó.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Em bé hay bị rôm sảy vì không điều hòa thân nhiệt tốt bằng trẻ lớn và người lớn.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Rôm sảy thường tự cải thiện sau vài ngày.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Giữ mát, tránh đổ mồ hôi: mặc đồ cotton rộng rãi, dùng chăn mỏng nhẹ, tắm nước mát, uống nhiều nước.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Giảm ngứa: chườm khăn ướt mát hoặc túi đá bọc khăn tối đa 20 phút; vỗ nhẹ lên chỗ ngứa thay vì gãi.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tránh sữa tắm và kem dưỡng có hương liệu.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Dược sĩ có thể tư vấn thuốc bôi hoặc uống như calamine, thuốc kháng histamin, kem hydrocortisone.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Kem hydrocortisone không dùng cho trẻ dưới 10 tuổi (và phụ nữ mang thai) trừ khi bác sĩ khuyên.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Uống nhiều nước để giữ mát và tránh mất nước.",
+        "src": [
+          0,
+          1
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám khi rôm sảy không đỡ sau vài ngày.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Nên đi khám khi em bé bị nổi ban mà bạn lo lắng.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Heat rash (prickly heat)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/heat-rash-prickly-heat/",
+      "reviewed": "2024-05-09"
+    },
+    {
+      "title": "Prickly heat (heat rash)",
+      "publisher": "NHS 111 Wales (Vương quốc Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/p/article/pricklyheat(heatrash)/",
+      "reviewed": "2025-11-11"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

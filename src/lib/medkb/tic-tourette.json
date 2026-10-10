@@ -1,0 +1,218 @@
+{
+  "id": "tic-tourette",
+  "kind": "child",
+  "names": [
+    "tật máy cơ",
+    "chứng tic",
+    "rối loạn tic",
+    "tic ở trẻ",
+    "tic vận động",
+    "tic âm thanh",
+    "hội chứng Tourette",
+    "Tourette",
+    "Tourette's syndrome",
+    "Tourette syndrome",
+    "tics",
+    "tic"
+  ],
+  "about": [
+    {
+      "text": "Tic (tật máy cơ) là những cử động cơ nhanh, lặp đi lặp lại gây giật người đột ngột, hoặc những âm thanh mà người có tic khó kiểm soát.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Tic khá phổ biến ở trẻ em, thường xuất hiện khoảng 5 tuổi, rất ít khi bắt đầu ở người lớn. Tic thường không nghiêm trọng.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "**Hội chứng Tourette** là khi tic kéo dài (từ một năm trở lên) và có cả tic âm thanh lẫn tic vận động, bắt đầu trước 18 tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Tic vận động: chớp mắt, đảo mắt, nhăn mũi, nhăn mặt, nhún vai, giật đầu, búng tay, gồng bụng, nhảy, chạm vào người hoặc đồ vật.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tic âm thanh: ho, hắng giọng, khụt khịt, ậm ừ, huýt sáo, kêu tiếng con vật, lặp lại một âm, từ hoặc câu. Chửi tục hiếm gặp.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tic thường đi trước bởi một cảm giác khó chịu tăng dần, làm tic xong thì đỡ; đôi khi có thể kìm được một phần.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Căng thẳng, phấn khích hay mệt mỏi có thể khởi phát tic (căng thẳng làm tic nặng hơn); lo âu, vui quá cũng hay đi kèm tic. Bị nói đến hoặc để ý nhiều làm tic nặng hơn.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Hội chứng Tourette thường bắt đầu khoảng 6 tuổi, có thể rõ hơn quanh 10 tuổi, và gặp ở bé trai nhiều hơn bé gái.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Chưa rõ nguyên nhân chính xác; tic được cho là liên quan đến thay đổi ở vùng não điều khiển vận động.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tic hay có tính gia đình; nếu cha hoặc mẹ có hội chứng Tourette thì con dễ có hơn.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tic thường đi kèm **ADHD** (tăng động giảm chú ý) hoặc **OCD** (rối loạn ám ảnh cưỡng chế).",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Ít gặp hơn, tic có thể do ma túy như cocaine, amphetamine, hoặc do bệnh nặng như bại não, bệnh Huntington.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn tic cải thiện dần hoặc hết hẳn; có tic chỉ vài tháng, có tic lúc có lúc không trong vài năm.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Tic thường nặng nhất từ khoảng 8 tuổi đến tuổi thiếu niên, và hay đỡ sau tuổi dậy thì.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Hội chứng Tourette chưa chữa khỏi được, nhưng điều trị có thể giúp kiểm soát tic.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Tic nhẹ, không gây vấn đề gì thường không cần điều trị.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Tránh căng thẳng và mệt mỏi; cố gắng **đừng tập trung chú ý** vào tic vì như vậy dễ làm tic nặng hơn.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Giữ nếp sinh hoạt đều đặn, vận động nhiều; giữ nếp đi ngủ đều đặn, êm dịu và tránh điện thoại, thiết bị điện tử trước giờ ngủ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể báo cho nhà trường biết để giáo viên hỗ trợ trẻ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu quay video tic để cho bác sĩ xem, hãy cẩn thận đừng gây chú ý nhiều vào tic khi quay, vì như vậy có thể làm tic nặng hơn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Khi cần điều trị, chủ yếu là **liệu pháp hành vi**: đảo ngược thói quen (habit reversal), CBiT, phơi nhiễm và ngăn phản ứng (ERP).",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thuốc có thể được cân nhắc khi liệu pháp hành vi chưa giúp được; thuốc có thể có tác dụng phụ.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thảo dược, thực phẩm bổ sung: có rất ít bằng chứng cho thấy giúp được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám (không gấp) nếu nghĩ bạn hoặc con có thể bị hội chứng Tourette.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nên đi khám khi tic xảy ra rất thường xuyên, ngày càng nhiều hoặc nặng hơn, hoặc gây đau, khó chịu (có tic khiến người bệnh vô tình tự làm mình bị thương).",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nên đi khám khi tic gây khó khăn về cảm xúc, quan hệ (xấu hổ, bị bắt nạt, bị cô lập) hoặc ảnh hưởng việc học, việc làm.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nên đi khám khi tic đi kèm giận dữ, trầm cảm hoặc tự làm hại bản thân.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Tourette's syndrome",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/tourettes-syndrome/",
+      "reviewed": "2025-05-20"
+    },
+    {
+      "title": "Tics",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/tics/",
+      "reviewed": "2023-04-05"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

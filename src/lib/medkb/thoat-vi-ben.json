@@ -1,0 +1,142 @@
+{
+  "id": "thoat-vi-ben",
+  "kind": "condition",
+  "names": [
+    "thoát vị bẹn",
+    "sa đì",
+    "thoát vị vùng bẹn",
+    "thoát vị bẹn bìu",
+    "thoát vị thành bụng",
+    "inguinal hernia",
+    "groin hernia"
+  ],
+  "disambiguation": "Thẻ này nói chủ yếu về thoát vị bẹn (và thoát vị thành bụng nói chung). Thoát vị đĩa đệm là bệnh cột sống khác, có thẻ riêng.",
+  "about": [
+    {
+      "text": "Thoát vị bẹn là khối phồng ở vùng bẹn (chỗ đùi nối với bụng), do mô hoặc một phần ruột chui qua chỗ yếu của thành bụng.",
+      "src": [0, 1, 2]
+    },
+    {
+      "text": "Thoát vị bẹn hay gặp ở nam giới và bé trai; trẻ nhỏ cũng có thể bị, có khi đến lớn mới thấy triệu chứng.",
+      "src": [2]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Khối phồng ở bẹn, **to lên khi ho, hắt hơi, rặn hoặc khóc** và nhỏ lại khi nằm xuống.",
+      "src": [1, 2]
+    },
+    {
+      "text": "Cảm giác nặng, kéo trì xuống ở chân; da trên khối phồng có thể căng.",
+      "src": [1]
+    },
+    {
+      "text": "Có thể khó chịu hoặc đau, nặng hơn khi đứng, rặn hay mang vác. Khối thoát vị lớn trông khó chịu nhưng có khi lại không đau.",
+      "src": [1, 2]
+    },
+    {
+      "text": "Ở trẻ nhỏ, khối phồng có thể chỉ thấy khi bé khóc hoặc ho.",
+      "src": [2]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường không có nguyên nhân rõ ràng. Mang vác nặng, rặn khi đi tiêu và những gì làm tăng áp lực trong bụng có thể là yếu tố khởi phát.",
+      "src": [2]
+    },
+    {
+      "text": "Yếu tố góp phần: táo bón lâu ngày, ho hoặc hắt hơi kéo dài, phì đại tuyến tiền liệt, thừa cân, hút thuốc, suy dinh dưỡng, làm việc quá sức, tinh hoàn ẩn.",
+      "src": [2]
+    },
+    {
+      "text": "Một số người có tiền sử gia đình; thoát vị có thể có từ lúc sinh nhưng đến sau này mới phát hiện.",
+      "src": [2]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thoát vị bẹn không gây triệu chứng có thể chưa cần điều trị. Phẫu thuật là cách duy nhất chữa dứt điểm.",
+      "src": [0, 2]
+    },
+    {
+      "text": "Biến chứng nguy hiểm là **thoát vị nghẹt**: ruột bị kẹt và mất máu nuôi, gây đau, sưng, buồn nôn, nôn, không trung tiện, không đi tiêu được — cần mổ ngay.",
+      "src": [0, 2]
+    },
+    {
+      "text": "Thoát vị cũng có thể gây tắc ruột. Sau mổ, thoát vị hiếm khi tái phát.",
+      "src": [0, 2]
+    }
+  ],
+  "care": [
+    {
+      "text": "Mổ có thể được đề nghị khi có triệu chứng (như đau) hoặc để phòng tắc ruột, thoát vị nghẹt — do bác sĩ quyết định.",
+      "src": [0]
+    },
+    {
+      "text": "Có hai cách mổ: mổ nội soi (vài vết nhỏ) hoặc mổ mở (một đường ở bẹn); khối thoát vị được đẩy vào và giữ bằng lưới hoặc khâu. Đa số về nhà trong ngày.",
+      "src": [0, 2]
+    },
+    {
+      "text": "Sau mổ, thường mất khoảng 4–6 tuần để hồi phục; tránh mang vác nặng và vận động mạnh ít nhất 4–6 tuần.",
+      "src": [0]
+    },
+    {
+      "text": "Không tự lái xe sau mổ; thường nghỉ làm ít nhất 1–2 tuần (đến 6 tuần nếu công việc phải mang vác nặng).",
+      "src": [0]
+    },
+    {
+      "text": "Biến chứng sau mổ không thường gặp: nhiễm trùng vết mổ, bầm tím, đau hoặc tê vùng bẹn kéo dài, thoát vị tái phát, cục máu đông.",
+      "src": [0, 2]
+    },
+    {
+      "text": "Giảm nguy cơ: giữ cân nặng hợp lý, vận động đều, bỏ thuốc lá, nâng vật đúng tư thế, phòng táo bón (ăn chất xơ, uống đủ nước, đi tiêu khi buồn).",
+      "src": [1, 2]
+    },
+    {
+      "text": "Nam giới phải rặn khi đi tiểu nên đi khám, vì có thể là dấu hiệu phì đại tuyến tiền liệt.",
+      "src": [2]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám khi nghĩ mình bị thoát vị, hoặc có đau, sưng, khối phồng ở bẹn hay quanh rốn.",
+      "src": [1, 2]
+    },
+    {
+      "text": "Cần khám gấp khi đang có thoát vị mà bị đau tại chỗ, chướng bụng, buồn nôn hoặc nôn, táo bón, sốt hoặc ớn lạnh, hay đột nhiên lú lẫn.",
+      "src": [1, 2]
+    },
+    {
+      "text": "Có thoát vị mà nôn ra máu hoặc chất nôn trông như bã cà phê: cần được khám gấp.",
+      "src": [1]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Khối thoát vị **đau mà không đẩy vào được** khi nằm và ấn nhẹ, hoặc chuyển đỏ, tím, sẫm màu: cần liên hệ bác sĩ ngay.",
+      "src": [2]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Inguinal hernia repair",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/inguinal-hernia-repair/",
+      "reviewed": "2025-02-28"
+    },
+    {
+      "title": "Hernia",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/hernia/",
+      "reviewed": "2026-05-19"
+    },
+    {
+      "title": "Hernia",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000960.htm",
+      "reviewed": "2024-09-30"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

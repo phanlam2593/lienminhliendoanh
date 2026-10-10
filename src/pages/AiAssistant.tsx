@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { findMedTopicId as findMedId, foodDisplay, isSelfStatement, loadMedTopic, nameAsTyped, parseMedAsk, renderMed } from "@/lib/lomiMed";
+import { findMedTopicId as findMedId, foodDisplay, hasQuestion, isSelfStatement, loadMedTopic, nameAsTyped, parseMedAsk, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
@@ -1249,13 +1249,15 @@ export function AiChat({
         //   Nhường lớp cũ khi: chỉ nêu một TRIỆU CHỨNG ("a bị đau đầu", "đau dạ dày" — để mạch triệu chứng hỏi han / theo dõi),
         //   hỏi khám KHOA NÀO / ở đâu (thẻ không có, bảng cũ có), hay đang theo chuyện người ốm mà thẻ không có phần được hỏi
         //   (mạch chăm người ốm nói "chưa có kiến thức" đúng người, đúng chuyện).
-        const mk = parseMedAsk(q, lastA?.med ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "" } : undefined));
+        const mk = parseMedAsk(q, lastA?.med ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
         //   Tự hỏi "có phải a bị trầm cảm không" là câu hỏi CHẨN ĐOÁN về chính mình → mạch tâm sự / sức khoẻ trả lời "Lomi không chẩn đoán".
         const mkSkip =
-          !!mk && (selfDxAsk(q) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length) || (mk.aspect === "doctor" && /\b(kham o dau|o dau kham|khoa nao|kham khoa)\b/.test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
+          !!mk && (selfDxAsk(q) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length && (isSelfStatement(q) || !hasQuestion(q))) || (mk.aspect === "doctor" && /\b(kham o dau|o dau kham|khoa nao|kham khoa)\b/.test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
         if (mk?.id && !mkSkip) {
           const mt = await loadMedTopic(mk.id);
-          const mr = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined) : null;
+          const mr0 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined) : null;
+          // Câu nối chung chung theo chủ đề đang nói: chỉ trả lời khi thẻ có đúng ý được hỏi, không thì để các lớp sau xử lý.
+          const mr = mk.focusOnly && mr0?.aspect !== "focus" ? null : mr0;
           // Người dùng nói CHÍNH MÌNH đang bị một vấn đề tâm lý ("a bị trầm cảm") → đó là lời tâm sự: để mạch tâm sự lắng nghe trước,
           // không đổ ngay một bài kiến thức (hỏi "trầm cảm là gì" thì vẫn trả lời kiến thức).
           const mentalSelf = mt?.kind === "mental" && mk.aspect === "overview" && isSelfStatement(q);
@@ -1267,7 +1269,7 @@ export function AiChat({
             // "a bị gout" — người dùng nói về chính mình: ghi nhận trước, rồi mới đưa kiến thức.
             const ack = mk.aspect === "overview" && typed && isSelfStatement(q) ? `Bạn đang bị **${typed}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n` : "";
             // Nhắc lại đúng chủ đề vừa tóm tắt ("Bệnh gút á") → không đọc lại cả bài, chỉ mời chọn phần muốn xem.
-            const again = mk.aspect === "overview" && !ack && lastA?.med?.id === mt.id && lastA.med.aspect === "overview";
+            const again = mr.aspect === "overview" && !ack && lastA?.med?.id === mt.id && lastA.med.aspect === "overview";
             if (again) mr.text = `Dạ đúng rồi, vẫn là **${mt.names[0]}** nè 🩺 Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇`;
             topicHit("health");
             return localReply(q, {

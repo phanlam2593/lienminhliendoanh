@@ -1,0 +1,188 @@
+{
+  "id": "bo-thuoc-la",
+  "kind": "other",
+  "names": [
+    "bỏ thuốc lá",
+    "cai thuốc lá",
+    "nghiện thuốc lá",
+    "bỏ hút thuốc",
+    "hút thuốc lá",
+    "tác hại thuốc lá",
+    "nghiện nicotine",
+    "thèm thuốc lá",
+    "quit smoking",
+    "smoking cessation",
+    "stop smoking",
+    "thuốc lá điện tử",
+    "thuốc lá",
+    "vape"
+  ],
+  "about": [
+    {
+      "text": "Thuốc lá gây hại cho **gần như mọi cơ quan** trong cơ thể; không có mức tiếp xúc nào với thuốc lá hay khói thuốc thụ động là an toàn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nicotine **gây nghiện mạnh** và có hại, nhất là với trẻ em, thanh thiếu niên và người trẻ có não đang phát triển.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bỏ thuốc lá mang lại lợi ích rất sớm: theo NHS, khoảng 20 phút sau điếu cuối mạch đã bắt đầu trở về bình thường; MedlinePlus nêu nhịp tim, huyết áp giảm và tuần hoàn tốt hơn.",
+      "src": [
+        1,
+        3
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Khi ngưng hoặc giảm hút, có thể gặp triệu chứng cai ngắn hạn: cáu gắt, lo âu, tâm trạng thất thường, tăng cân, khó ngủ. Nhân viên y tế có thể giúp bạn vượt qua.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thuốc lá gây ung thư, bệnh tim, đột quỵ, bệnh phổi, giảm khả năng sinh sản, suy giảm miễn dịch và tử vong sớm. Thuốc lá giết hơn 7 triệu người mỗi năm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "**Khói thuốc thụ động** gây bệnh tim mạch và hô hấp nghiêm trọng, kể cả bệnh mạch vành và ung thư phổi; hơn 1,6 triệu người không hút thuốc chết mỗi năm vì khói thuốc thụ động.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thuốc lá làm nóng vẫn chứa thuốc lá và thải ra chất độc tương tự khói thuốc lá thường; WHO cho biết chúng không giúp người hút bỏ thuốc.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "WHO cho biết thuốc lá điện tử có hại và không an toàn; túi nicotine (dù quảng cáo “không thuốc lá”) có khả năng gây nghiện cao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Sau bỏ thuốc: khoảng 20 phút mạch bắt đầu về bình thường; khoảng 48 giờ khí CO trong máu về mức người không hút, vị giác và khứu giác tốt lên.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Khoảng 72 giờ thở dễ hơn; 2–12 tuần tuần hoàn cải thiện; 3–9 tháng ho, khò khè, khó thở giảm.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Sau 1 năm, nguy cơ nhồi máu cơ tim giảm còn khoảng một nửa so với người hút; sau 10 năm, nguy cơ tử vong do ung thư phổi giảm khoảng một nửa.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Về lâu dài, bỏ thuốc có thể kéo dài tuổi thọ; nguy cơ ung thư giảm dần qua mỗi năm không hút.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Nếu bạn giữ được **28 ngày** không hút, khả năng bỏ hẳn cao gấp khoảng 5 lần.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Theo MedlinePlus, kết hợp **tư vấn và thuốc hỗ trợ cai** là cách tốt nhất; WHO cho biết tư vấn và thuốc có thể làm tăng hơn gấp đôi khả năng bỏ thuốc thành công.",
+      "src": [
+        0,
+        3
+      ]
+    },
+    {
+      "text": "Dịch vụ cai thuốc giúp bạn chọn ngày bỏ thuốc, hỗ trợ trong vài tháng đầu, giúp nhận ra tình huống dễ hút lại và cách đối phó.",
+      "src": [
+        2,
+        3
+      ]
+    },
+    {
+      "text": "Có sản phẩm thay thế nicotine (miếng dán, kẹo cao su, viên ngậm, ống hít, xịt) và một số thuốc kê đơn; theo MedlinePlus, chúng giúp giảm lệ thuộc nicotine. Hãy trao đổi với bác sĩ hoặc dịch vụ cai thuốc.",
+      "src": [
+        2,
+        3
+      ]
+    },
+    {
+      "text": "Thuốc hỗ trợ cai có thể không phù hợp với người mang thai, cho con bú, thanh thiếu niên, người có một số bệnh hoặc đang dùng một số thuốc — hãy hỏi bác sĩ.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Có thể bỏ hẳn một lần hoặc giảm dần số điếu mỗi ngày; có khi phải thử nhiều cách mới thành công.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Về thuốc lá điện tử, các nguồn chưa thống nhất: NHS (Anh) cho rằng có bằng chứng giúp bỏ thuốc; MedlinePlus nói chưa chứng minh được; WHO coi là có hại, không an toàn.",
+      "src": [
+        0,
+        2,
+        3
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Khi muốn bỏ thuốc, hãy nói với bác sĩ, dược sĩ hoặc dịch vụ cai thuốc; theo MedlinePlus, bác sĩ có thể cùng bạn tìm cách bỏ phù hợp và giảm triệu chứng cai.",
+      "src": [
+        2,
+        3
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Tobacco (fact sheet)",
+      "publisher": "WHO",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/tobacco",
+      "reviewed": "2026-06-26"
+    },
+    {
+      "title": "Quit smoking (Better Health)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/better-health/quit-smoking/",
+      "reviewed": "2026-09-17"
+    },
+    {
+      "title": "NHS stop smoking services help you quit",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/live-well/quit-smoking/nhs-stop-smoking-services-help-you-quit/",
+      "reviewed": "2026-09-01"
+    },
+    {
+      "title": "Quitting Smoking",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/quittingsmoking.html",
+      "reviewed": "2025-07-21"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

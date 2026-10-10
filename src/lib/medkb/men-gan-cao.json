@@ -1,0 +1,118 @@
+{
+  "id": "men-gan-cao",
+  "kind": "term",
+  "names": [
+    "men gan cao",
+    "tăng men gan",
+    "men gan tăng",
+    "chỉ số men gan cao",
+    "men gan",
+    "xét nghiệm men gan",
+    "xét nghiệm chức năng gan",
+    "chức năng gan",
+    "ALT cao",
+    "AST cao",
+    "GGT cao",
+    "SGOT SGPT",
+    "elevated liver enzymes",
+    "liver function tests",
+    "liver panel"
+  ],
+  "about": [
+    {
+      "text": "Men gan cao là khi xét nghiệm máu thấy các enzyme gan như **ALT (SGPT), AST (SGOT), ALP, GGT** cao hơn bình thường — thường là dấu hiệu tế bào gan đang bị viêm hoặc tổn thương.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Xét nghiệm chức năng gan là nhóm xét nghiệm máu đo các chất do gan tạo ra (men gan, albumin, protein, bilirubin, thời gian đông máu…), cho biết gan hoạt động ra sao hoặc có thể bị tổn thương không.",
+      "src": [1]
+    },
+    {
+      "text": "Đây là kết quả xét nghiệm, **không phải chẩn đoán**: xét nghiệm gan thường không tự xác định được bệnh cụ thể, và kết quả bất thường không phải lúc nào cũng là bệnh gan.",
+      "src": [0, 1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Men gan cao có thể được phát hiện khi xét nghiệm máu định kỳ.",
+      "src": [0]
+    },
+    {
+      "text": "Bác sĩ có thể cho xét nghiệm gan khi có triệu chứng như buồn nôn, nôn, chán ăn, mệt, yếu, vàng da, đau hoặc chướng bụng, phù chân, nước tiểu sẫm, phân bạc màu, ngứa nhiều.",
+      "src": [1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguyên nhân thường gặp: thuốc giảm đau không kê đơn (nhất là paracetamol/acetaminophen), một số thuốc kê đơn như statin trị mỡ máu, uống rượu bia.",
+      "src": [0]
+    },
+    {
+      "text": "Cũng thường gặp: gan nhiễm mỡ, béo phì, viêm gan A, B, C, suy tim.",
+      "src": [0]
+    },
+    {
+      "text": "Nguyên nhân khác ít gặp hơn: viêm gan do rượu, viêm gan tự miễn, bệnh celiac, nhiễm virus (như EBV, CMV), rối loạn tuyến giáp, nhiễm trùng huyết, ung thư gan, bệnh Wilson, bệnh ứ sắt…",
+      "src": [0]
+    },
+    {
+      "text": "Chỉ số bất thường **không phải lúc nào cũng do gan**: ví dụ ALP cao có thể do bệnh xương. Bệnh vừa khỏi cũng có thể làm chỉ số tạm thời bất thường.",
+      "src": [1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn trường hợp men gan chỉ **tăng nhẹ và tạm thời**, thường không phải dấu hiệu bệnh gan mạn tính nặng.",
+      "src": [0]
+    },
+    {
+      "text": "Kết quả bất thường tạm thời có thể tự trở lại bình thường; bác sĩ có thể cho xét nghiệm lại.",
+      "src": [1]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bác sĩ đánh giá dựa trên toàn bộ các chỉ số cùng lúc, kèm triệu chứng, tiền sử, yếu tố nguy cơ và thuốc đang dùng — không dựa vào một con số riêng lẻ.",
+      "src": [1]
+    },
+    {
+      "text": "Có thể cần thêm xét nghiệm để tìm nguyên nhân.",
+      "src": [0]
+    },
+    {
+      "text": "Trước khi xét nghiệm có thể phải nhịn ăn; làm theo hướng dẫn cụ thể của nơi xét nghiệm.",
+      "src": [1]
+    },
+    {
+      "text": "Báo bác sĩ mọi thuốc bạn đang dùng, nhưng **đừng tự ngưng thuốc** khi chưa được bác sĩ đồng ý.",
+      "src": [1]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nếu xét nghiệm máu cho thấy men gan cao, hãy hỏi bác sĩ kết quả đó có ý nghĩa gì với bạn.",
+      "src": [0]
+    },
+    {
+      "text": "Người có yếu tố nguy cơ (gia đình có bệnh gan, nghiện rượu, béo phì, tiểu đường, dùng thuốc ảnh hưởng gan, từng phơi nhiễm viêm gan) có thể cần kiểm tra gan — hỏi bác sĩ.",
+      "src": [1]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Elevated liver enzymes",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/symptoms/elevated-liver-enzymes/basics/definition/sym-20050830",
+      "reviewed": "2024-03-29"
+    },
+    {
+      "title": "Liver Function Tests",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/lab-tests/liver-function-tests/",
+      "reviewed": "2023-12-05"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

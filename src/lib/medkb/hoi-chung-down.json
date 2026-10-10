@@ -1,0 +1,42 @@
+{
+  "id": "hoi-chung-down",
+  "kind": "child",
+  "names": ["hội chứng Down", "hội chứng Đao", "bệnh Down", "Down syndrome", "Down's syndrome", "trisomy 21", "tam nhiễm sắc thể 21", "trẻ bị Down"],
+  "about": [
+    {"text": "Hội chứng Down là khi một người sinh ra có **thêm một nhiễm sắc thể** (thêm một bản hoặc một phần nhiễm sắc thể số 21), còn gọi là trisomy 21.", "src": [0, 1]},
+    {"text": "Điều này ảnh hưởng đến cách cơ thể và não phát triển. Mỗi người mang hội chứng Down có khả năng riêng, tính cách, sở thích riêng.", "src": [0, 1]}
+  ],
+  "signs": [
+    {"text": "Người mang hội chứng Down thường có một mức độ **khuyết tật học tập** nào đó; khả năng rất khác nhau giữa từng người.", "src": [0, 1]},
+    {"text": "Phần lớn có khuyết tật trí tuệ mức nhẹ đến vừa, thường chậm phát triển, ví dụ biết nói muộn hơn.", "src": [1]},
+    {"text": "Một số nét cơ thể thường gặp: mặt phẳng, mắt xếch lên, cổ ngắn, bàn tay bàn chân nhỏ, trương lực cơ thấp, khớp lỏng.", "src": [1]},
+    {"text": "Biểu hiện khác nhau ở mỗi người và có thể thay đổi theo thời gian.", "src": [1]}
+  ],
+  "causes": [
+    {"text": "Thường xảy ra **ngẫu nhiên** do một thay đổi ở tinh trùng hoặc trứng, hoặc lỗi phân chia tế bào sớm khi thai phát triển.", "src": [0, 1]},
+    {"text": "Không phải do điều gì cha mẹ đã làm trước hay trong khi mang thai.", "src": [0]},
+    {"text": "Hầu như không di truyền trong gia đình. Lý do chính xác vì sao xảy ra vẫn chưa được hiểu hết.", "src": [0, 1]},
+    {"text": "Khả năng sinh con mang hội chứng Down tăng theo tuổi người mẹ (rõ hơn từ 35 tuổi), nhưng ai cũng có thể sinh con mang hội chứng này.", "src": [0, 1]}
+  ],
+  "course": [
+    {"text": "Nhiều người mang hội chứng Down khỏe mạnh; có người sống rất tự lập và đi làm, có người cần được chăm sóc thường xuyên hơn.", "src": [0, 1]},
+    {"text": "Một số người có dị tật bẩm sinh hoặc bệnh đi kèm: giảm thính lực, ngưng thở khi ngủ, viêm tai, bệnh về mắt, tim bẩm sinh, vấn đề tiêu hóa, vấn đề ở phần trên cột sống, béo phì.", "src": [1]}
+  ],
+  "care": [
+    {"text": "Không có một cách điều trị chuẩn chung; việc chăm sóc được thiết kế theo nhu cầu và khả năng của từng người.", "src": [1]},
+    {"text": "Can thiệp sớm như **trị liệu ngôn ngữ, hoạt động trị liệu, vật lý trị liệu** giúp trẻ phát triển; ở trường có thể cần hỗ trợ thêm.", "src": [1]},
+    {"text": "Nên khám sức khỏe định kỳ và làm một số xét nghiệm tầm soát vì nguy cơ các bệnh đi kèm cao hơn.", "src": [1]},
+    {"text": "Khi mang thai có thể làm xét nghiệm sàng lọc (kết hợp siêu âm và xét nghiệm máu); việc sàng lọc là tự nguyện. Nếu nguy cơ cao, có xét nghiệm chẩn đoán thêm.", "src": [0, 1]},
+    {"text": "Xét nghiệm chẩn đoán trước sinh giúp khẳng định hoặc loại trừ, nhưng có một nguy cơ sảy thai nhỏ. Sau sinh, bác sĩ xác định bằng xét nghiệm nhiễm sắc thể từ mẫu máu.", "src": [1]}
+  ],
+  "diet": null,
+  "doctor": [
+    {"text": "Nếu lo lắng về khả năng sinh con mang hội chứng Down, bạn có thể trao đổi với bác sĩ; bác sĩ có thể giới thiệu đến chuyên gia tư vấn di truyền.", "src": [0]}
+  ],
+  "emergency": [],
+  "sources": [
+    {"title": "Down's syndrome", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/downs-syndrome/", "reviewed": "2023-02-17"},
+    {"title": "Down Syndrome", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/downsyndrome.html", "reviewed": "2024-01-26"}
+  ],
+  "verifiedAt": "2026-10-09"
+}

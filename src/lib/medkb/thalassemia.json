@@ -1,0 +1,264 @@
+{
+  "id": "thalassemia",
+  "kind": "condition",
+  "names": [
+    "tan máu bẩm sinh",
+    "bệnh tan máu bẩm sinh",
+    "thalassemia",
+    "thalassaemia",
+    "thiếu máu tan máu bẩm sinh",
+    "mang gen thalassemia",
+    "người mang gen tan máu bẩm sinh",
+    "Cooley's anemia",
+    "thiếu máu Địa Trung Hải"
+  ],
+  "about": [
+    {
+      "text": "Tan máu bẩm sinh (thalassemia) là nhóm bệnh **di truyền** ảnh hưởng đến huyết sắc tố (hemoglobin), chất trong hồng cầu giúp mang oxy, gây thiếu máu.",
+      "src": [
+        0,
+        3
+      ]
+    },
+    {
+      "text": "Có hai nhóm chính là alpha và beta. Thể nặng nhất là beta thalassemia thể nặng; ngoài ra có beta thể trung gian, alpha thể nặng và bệnh HbH.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bệnh có mức độ từ nhẹ đến nặng; theo MedlinePlus, thể nặng hay gặp nhất ở Mỹ gọi là thiếu máu Cooley.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Người **mang gen** (thalassemia trait) mang ít nhất một gen lỗi, không bị bệnh và thường không gặp vấn đề sức khỏe.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Phần lớn người bệnh bắt đầu có vấn đề sức khỏe từ vài tháng sau sinh (thể nặng Cooley thường lộ trong 2 năm đầu); thể nhẹ có thể đến cuối tuổi thơ hoặc khi trưởng thành mới lộ.",
+      "src": [
+        0,
+        3
+      ]
+    },
+    {
+      "text": "Dấu hiệu thiếu máu: mệt, yếu, khó thở, hồi hộp đánh trống ngực, da xanh xao.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể chậm lớn, dậy thì muộn, xương yếu (loãng xương), giảm khả năng sinh sản.",
+      "src": [
+        0,
+        3
+      ]
+    },
+    {
+      "text": "Một số người không có triệu chứng hoặc chỉ thiếu máu nhẹ. Người mang gen có thể thiếu máu nhẹ; đây **không phải thiếu máu thiếu sắt** và không cần điều trị.",
+      "src": [
+        0,
+        3
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do gen lỗi ảnh hưởng việc tạo huyết sắc tố. Trẻ chỉ bị bệnh khi nhận gen lỗi từ **cả bố và mẹ**; bố mẹ của trẻ bệnh thường là người mang gen.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu cả bố và mẹ đều mang gen beta thalassemia, mỗi lần sinh con có 1/4 khả năng con bị bệnh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Người mang gen chỉ có nguy cơ sinh con bị bệnh khi người kia cũng mang gen.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bệnh gặp nhiều ở người gốc Địa Trung Hải, Nam Á, Đông Nam Á, Trung Đông và châu Phi.",
+      "src": [
+        0,
+        3
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thể nặng cần chăm sóc chuyên khoa suốt đời. Nhờ điều trị tiến bộ, nhiều người bệnh nặng nay sống đến 50, 60 tuổi hoặc hơn.",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Không theo dõi và điều trị, thể nặng có thể gây tổn thương nặng ở các cơ quan như tim, gan, lách, xương.",
+      "src": [
+        0,
+        3
+      ]
+    },
+    {
+      "text": "Truyền máu thường xuyên làm **ứ sắt** trong cơ thể; sắt quá nhiều có thể hại tim, gan và nội tiết tố nếu không điều trị.",
+      "src": [
+        0,
+        2
+      ]
+    },
+    {
+      "text": "Kể cả thể nhẹ cũng có nguy cơ truyền thể nặng hơn cho con.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "**Truyền máu** để điều trị và phòng thiếu máu; thể nặng có thể cần khoảng mỗi tháng một lần, thể nhẹ chỉ thỉnh thoảng.",
+      "src": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "text": "**Thải sắt** (chelation) để loại bỏ sắt thừa do truyền máu; đội ngũ điều trị sẽ giúp bạn chọn loại thuốc phù hợp.",
+      "src": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "text": "Ghép tế bào gốc hoặc tủy xương là cách duy nhất có thể chữa khỏi, nhưng ít khi làm vì nhiều rủi ro. Người nhẹ hoặc không triệu chứng có thể không cần điều trị.",
+      "src": [
+        0,
+        2,
+        3
+      ]
+    },
+    {
+      "text": "Có thể cần điều trị thêm: vắc xin và kháng sinh phòng/chữa nhiễm trùng, thuốc nội tiết giúp khởi phát dậy thì, thuốc giúp xương chắc, theo dõi tim thường xuyên.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Tập thể dục đều, nhất là bài chịu trọng lực, giúp xương chắc; không hút thuốc; rửa tay thường xuyên, tránh tiếp xúc gần người ốm, tiêm vắc xin đầy đủ.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Dùng thuốc đúng hướng dẫn và đi tái khám đầy đủ. Trước khi phẫu thuật gây mê, báo cho bác sĩ phẫu thuật biết bạn bị thalassemia.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Có thể xét nghiệm máu ở bất kỳ tuổi nào để biết mình có bệnh hoặc mang gen hay không. Khi mang thai có sàng lọc.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phụ nữ bị thể nặng vẫn có thể mang thai khỏe mạnh nhưng nguy cơ gặp vấn đề cao hơn; nên hỏi ý kiến đội ngũ điều trị trước.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Tránh uống nhiều rượu bia vì có thể ảnh hưởng xương và tim.",
+        "src": [
+          1
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Ăn uống lành mạnh, cân bằng; thường **không cần chế độ ăn đặc biệt**.",
+        "src": [
+          1
+        ]
+      },
+      {
+        "text": "Đôi khi bạn có thể được khuyên bổ sung axit folic, canxi hoặc vitamin D.",
+        "src": [
+          1
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia",
+          "đồ uống có cồn"
+        ],
+        "verdict": "limit",
+        "note": "NHS khuyên tránh uống nhiều rượu vì có thể ảnh hưởng xương và tim.",
+        "src": [
+          1
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nếu muốn biết mình có mang gen không, có thể đề nghị bác sĩ cho làm xét nghiệm máu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bệnh có thể gây vấn đề nghiêm trọng xảy ra đột ngột, nên cần biết khi nào phải đi khám và đi đâu.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Thalassaemia",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/thalassaemia/",
+      "reviewed": "2022-10-17"
+    },
+    {
+      "title": "Thalassaemia - Living with",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/thalassaemia/living-with/",
+      "reviewed": "2022-10-17"
+    },
+    {
+      "title": "Thalassaemia - Treatment",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/thalassaemia/treatment/",
+      "reviewed": "2022-10-17"
+    },
+    {
+      "title": "Thalassemia",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/thalassemia.html",
+      "reviewed": "2025-08-06"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

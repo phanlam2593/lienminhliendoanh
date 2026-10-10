@@ -1,0 +1,146 @@
+{
+  "id": "viem-am-dao",
+  "kind": "women",
+  "names": [
+    "viêm âm đạo do vi khuẩn",
+    "viêm âm đạo",
+    "viêm âm đạo vi khuẩn",
+    "khí hư bất thường",
+    "huyết trắng bất thường",
+    "khí hư có mùi",
+    "khí hư mùi tanh",
+    "huyết trắng có mùi",
+    "bacterial vaginosis",
+    "vaginal discharge"
+  ],
+  "disambiguation": "Khí hư (huyết trắng) bất thường có nhiều nguyên nhân: viêm âm đạo do vi khuẩn, nấm âm đạo, trùng roi, chlamydia, lậu, herpes… Thẻ này nói về viêm âm đạo do vi khuẩn và khí hư nói chung; nấm âm đạo có thẻ riêng.",
+  "about": [
+    {
+      "text": "Viêm âm đạo do vi khuẩn (bacterial vaginosis, BV) là nguyên nhân thường gặp gây **khí hư bất thường**, xảy ra khi các vi khuẩn trong âm đạo bị mất cân bằng.",
+      "src": [0]
+    },
+    {
+      "text": "BV không được xếp vào bệnh lây qua đường tình dục, nhưng quan hệ tình dục có thể khởi phát hoặc truyền bệnh.",
+      "src": [0]
+    },
+    {
+      "text": "Khí hư bình thường là dịch giúp âm đạo sạch, ẩm và chống nhiễm trùng: trong hoặc trắng, đặc dính hoặc trơn ướt, không có mùi nặng khó chịu.",
+      "src": [1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Khí hư bất thường có **mùi tanh** (như mùi cá) rõ, nhất là sau khi quan hệ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Khí hư chuyển sang màu trắng xám, loãng và lỏng như nước.",
+      "src": [0]
+    },
+    {
+      "text": "Khoảng một nửa phụ nữ bị BV không có triệu chứng gì. BV thường không gây đau rát hay ngứa.",
+      "src": [0]
+    },
+    {
+      "text": "Khí hư đặc, trắng như bã đậu thường gợi ý nấm âm đạo; khí hư xanh, vàng hoặc có bọt có thể do trùng roi.",
+      "src": [1]
+    },
+    {
+      "text": "Khí hư kèm đau vùng chậu hoặc ra máu có thể do chlamydia hoặc lậu; kèm mụn nước, vết loét có thể do herpes sinh dục. Đừng tự chẩn đoán, hãy đi khám.",
+      "src": [1]
+    },
+    {
+      "text": "Lượng khí hư thay đổi tùy lúc: thường nhiều hơn khi mang thai, khi có hoạt động tình dục hoặc dùng biện pháp tránh thai; quanh thời điểm rụng trứng thường trong và ướt hơn.",
+      "src": [1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguyên nhân chính xác của BV chưa được biết rõ.",
+      "src": [0]
+    },
+    {
+      "text": "Nguy cơ cao hơn nếu có hoạt động tình dục hoặc thay đổi bạn tình, nhưng người chưa từng quan hệ vẫn có thể bị.",
+      "src": [0]
+    },
+    {
+      "text": "Đặt vòng tránh thai (dụng cụ tử cung) và dùng sản phẩm có mùi thơm trong hoặc quanh âm đạo cũng làm tăng nguy cơ.",
+      "src": [0]
+    }
+  ],
+  "course": [
+    {
+      "text": "BV hay **tái phát**, thường trong vòng vài tháng sau điều trị.",
+      "src": [0]
+    },
+    {
+      "text": "BV có thể làm âm đạo bớt tính axit và yếu hàng rào bảo vệ tự nhiên, từ đó tăng nguy cơ mắc bệnh lây qua đường tình dục.",
+      "src": [0]
+    },
+    {
+      "text": "Khi mang thai, BV có một nguy cơ nhỏ gây sinh non hoặc sảy thai, dù phần lớn thai kỳ không bị ảnh hưởng gì.",
+      "src": [0]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bác sĩ hoặc phòng khám sức khỏe tình dục sẽ xác định BV và loại trừ bệnh lây qua đường tình dục, có thể khám và lấy mẫu khí hư bằng que bông.",
+      "src": [0]
+    },
+    {
+      "text": "Điều trị thường là **kháng sinh** dạng viên uống, gel hoặc kem, do bác sĩ quyết định. Bạn tình nữ (người có âm đạo) có thể cũng cần điều trị.",
+      "src": [0]
+    },
+    {
+      "text": "Nếu tái phát nhiều lần trong năm, bác sĩ có thể cho dùng gel kháng sinh đặt âm đạo trong vài tháng và giúp tìm yếu tố khởi phát (như quan hệ, kỳ kinh).",
+      "src": [0]
+    },
+    {
+      "text": "Rửa vùng kín nhẹ nhàng bằng nước ấm và xà phòng thường không mùi; nên tắm vòi sen thay vì ngâm bồn.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Tránh xà phòng, sữa tắm, dung dịch có mùi thơm, khăn ướt có mùi, chất sát khuẩn cho vào bồn tắm, và chất tẩy mạnh khi giặt đồ lót.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Không thụt rửa bên trong âm đạo, không dùng xịt khử mùi hay dung dịch vệ sinh âm đạo. Tránh hút thuốc lá.",
+      "src": [0, 1]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám (bác sĩ hoặc phòng khám sức khỏe tình dục) khi nghĩ mình bị BV; nếu đang mang thai thì việc điều trị càng quan trọng.",
+      "src": [0]
+    },
+    {
+      "text": "Nên đi khám khi khí hư đổi màu, mùi, độ đặc, ra nhiều hơn bình thường, hoặc kèm ngứa, đau rát.",
+      "src": [1]
+    },
+    {
+      "text": "Nên đi khám khi ra máu giữa kỳ kinh hoặc sau quan hệ, đau khi đi tiểu, hoặc đau vùng chậu.",
+      "src": [1]
+    },
+    {
+      "text": "Đang mang thai mà khí hư thay đổi: nên báo bác sĩ hoặc nữ hộ sinh.",
+      "src": [0]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Bacterial vaginosis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/bacterial-vaginosis/",
+      "reviewed": "2026-06-19"
+    },
+    {
+      "title": "Vaginal discharge",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/vaginal-discharge/",
+      "reviewed": "2024-02-15"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

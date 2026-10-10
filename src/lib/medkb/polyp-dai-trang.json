@@ -1,0 +1,185 @@
+{
+  "id": "polyp-dai-trang",
+  "kind": "condition",
+  "names": [
+    "polyp đại tràng",
+    "polyp đại trực tràng",
+    "polyp ruột",
+    "polyp ruột già",
+    "polyp trực tràng",
+    "pô líp đại tràng",
+    "polip đại tràng",
+    "bowel polyps",
+    "colon polyps",
+    "colorectal polyps",
+    "colonic polyps"
+  ],
+  "about": [
+    {
+      "text": "Polyp đại tràng là những khối mọc nhỏ trên niêm mạc ruột già (đại tràng) hoặc trực tràng. Phần lớn là **lành tính** và hay gặp hơn khi lớn tuổi.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Có nhiều loại: polyp tuyến (adenoma) là loại thường gặp; polyp tăng sản hầu như không bao giờ thành ung thư; polyp răng cưa ít gặp hơn nhưng có thể thành ung thư theo thời gian.",
+      "src": [1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường **không có triệu chứng**, nên đa số người không biết mình có polyp; hay được phát hiện khi nội soi đại tràng.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Hiếm khi polyp lớn gây: phân có nhầy hoặc máu, chảy máu hậu môn, thay đổi thói quen đi tiêu (tiêu chảy hoặc táo bón), sụt cân không rõ lý do.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Mất máu kéo dài từ polyp có thể gây mệt mỏi.",
+      "src": [1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguyên nhân chính xác chưa rõ; có thể do cơ thể tạo quá nhiều tế bào ở niêm mạc ruột, gom lại thành khối.",
+      "src": [0]
+    },
+    {
+      "text": "Nguy cơ cao hơn khi trên 50 tuổi (khoảng 1/4 người trên 50 có ít nhất một polyp), hoặc trong gia đình có người bị polyp hay ung thư đại tràng.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Người bị bệnh viêm ruột (viêm loét đại tràng, bệnh Crohn), thừa cân hoặc hút thuốc cũng có nguy cơ cao hơn.",
+      "src": [0]
+    },
+    {
+      "text": "Một số ít trường hợp liên quan bệnh di truyền như bệnh đa polyp tuyến gia đình (FAP), hội chứng Lynch.",
+      "src": [1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Polyp thường vô hại, nhưng một số ít có thể **thành ung thư** sau nhiều năm; polyp từ 1 cm trở lên có nguy cơ cao hơn polyp nhỏ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Sau khi cắt bỏ polyp, tiên lượng rất tốt. Polyp để lại có thể thành ung thư theo thời gian.",
+      "src": [1]
+    },
+    {
+      "text": "Polyp cắt ra được gửi xét nghiệm để xem đã lấy hết chưa, có thể mọc lại không, và có tế bào ung thư không.",
+      "src": [0]
+    }
+  ],
+  "care": [
+    {
+      "text": "Polyp thường được phát hiện bằng **nội soi đại tràng** (có thể hơi khó chịu nhưng không nên đau), chụp CT đại tràng, hoặc xét nghiệm phân tìm máu ẩn.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Polyp thường được cắt bỏ ngay trong lúc nội soi bằng thòng lọng (cắt polyp), không đau. Hiếm khi cần mổ cắt một đoạn ruột.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Người có polyp tuyến cần nội soi lại sau một thời gian; thời điểm tùy tuổi, số lượng, kích thước, loại polyp và tiền sử gia đình — do bác sĩ quyết định.",
+      "src": [1]
+    },
+    {
+      "text": "Tầm soát ung thư đại tràng giúp tìm và cắt polyp dễ thành ung thư; MedlinePlus ghi người lớn nên bắt đầu tầm soát từ 45 tuổi.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Phòng ngừa: không hút thuốc, tránh uống nhiều rượu, giữ cân nặng hợp lý, tập thể dục đều.",
+      "src": [1]
+    },
+    {
+      "text": "Không tự uống aspirin hay thuốc giảm đau kháng viêm để phòng polyp: có thể gây chảy máu dạ dày, ruột và bệnh tim — phải hỏi bác sĩ.",
+      "src": [1]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Để phòng polyp, MedlinePlus khuyên ăn ít chất béo hơn và tránh uống nhiều rượu.",
+        "src": [1]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Ăn nhiều trái cây, rau và chất xơ hơn.",
+        "src": [1]
+      }
+    ],
+    "foods": [
+      {
+        "name": "trái cây",
+        "aliases": ["hoa quả", "trái cây tươi"],
+        "verdict": "good",
+        "note": "MedlinePlus khuyên ăn nhiều trái cây hơn để giúp phòng polyp đại tràng.",
+        "src": [1]
+      },
+      {
+        "name": "rau",
+        "aliases": ["rau xanh", "rau củ"],
+        "verdict": "good",
+        "note": "MedlinePlus khuyên ăn nhiều rau hơn để giúp phòng polyp đại tràng.",
+        "src": [1]
+      },
+      {
+        "name": "thực phẩm giàu chất xơ",
+        "aliases": ["chất xơ"],
+        "verdict": "good",
+        "note": "MedlinePlus khuyên ăn nhiều chất xơ hơn để giúp phòng polyp đại tràng.",
+        "src": [1]
+      },
+      {
+        "name": "đồ ăn nhiều chất béo",
+        "aliases": ["đồ béo", "đồ nhiều mỡ", "chất béo"],
+        "verdict": "limit",
+        "note": "MedlinePlus khuyên chế độ ăn ít chất béo hơn để giúp phòng polyp.",
+        "src": [1]
+      },
+      {
+        "name": "rượu bia",
+        "aliases": ["rượu", "bia", "đồ uống có cồn"],
+        "verdict": "limit",
+        "note": "MedlinePlus khuyên tránh uống quá nhiều rượu để giúp phòng polyp.",
+        "src": [1]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám khi phân có nhầy hoặc máu từ 3 tuần trở lên, thói quen đi tiêu khác thường, táo bón không đỡ khi điều trị hoặc tái đi tái lại, sụt cân rõ không rõ lý do.",
+      "src": [0]
+    },
+    {
+      "text": "MedlinePlus khuyên liên hệ bác sĩ khi thấy máu trong phân hoặc thói quen đi tiêu thay đổi.",
+      "src": [1]
+    },
+    {
+      "text": "Cần khám gấp khi tiêu chảy hơn 7 ngày, phân đen hoặc đỏ sẫm, hoặc tiêu chảy ra máu.",
+      "src": [0]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Chảy máu hậu môn **không ngừng**, hoặc ra nhiều máu (nước bồn cầu đỏ, cục máu đông lớn): cần đi cấp cứu ngay.",
+      "src": [0]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bowel polyps",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/bowel-polyps/",
+      "reviewed": "2023-07-28"
+    },
+    {
+      "title": "Colorectal polyps",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000266.htm",
+      "reviewed": "2025-04-21"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

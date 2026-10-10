@@ -1,0 +1,277 @@
+{
+  "id": "viem-tieu-phe-quan",
+  "kind": "child",
+  "names": [
+    "viêm tiểu phế quản",
+    "viêm tiểu phế quản ở trẻ",
+    "viêm tiểu phế quản cấp",
+    "trẻ bị viêm tiểu phế quản",
+    "bronchiolitis"
+  ],
+  "disambiguation": "Viêm tiểu phế quản (bronchiolitis) gặp ở trẻ dưới 2 tuổi, khác với viêm phế quản (bronchitis) có thể gặp ở mọi lứa tuổi.",
+  "about": [
+    {
+      "text": "Viêm tiểu phế quản là nhiễm trùng đường hô hấp dưới thường gặp ở **trẻ dưới 2 tuổi**, làm sưng và ứ đờm ở các ống dẫn khí nhỏ nhất trong phổi.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thường nhẹ và chăm sóc được ở nhà, nhưng có thể trở nặng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bệnh khác với viêm phế quản: viêm phế quản có thể gặp ở mọi lứa tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ban đầu giống cảm lạnh: hắt hơi, sổ mũi hoặc nghẹt mũi, sốt nhẹ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Sau vài ngày có thể ho, thở nhanh, thở khò khè hoặc có tiếng lọc xọc, bú hoặc ăn kém, quấy khóc.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Triệu chứng thường nặng nhất vào khoảng ngày 3–5; ho thường đỡ trong khoảng 3 tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do **virus hợp bào hô hấp (RSV)**; các virus khác như adenovirus, cúm, á cúm cũng có thể gây bệnh.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Virus lây dễ qua ho, hắt hơi, và qua đồ chơi, đồ vật người bệnh đã chạm vào.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Dễ bị nặng hơn: trẻ dưới 6 tháng, trẻ sinh non, trẻ suy giảm miễn dịch hoặc có bệnh phổi, tim lâu dài.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Yếu tố nguy cơ khác: tiếp xúc khói thuốc lá, sống chỗ đông đúc, không được bú mẹ.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn trẻ khỏi ở nhà; một số cần vào viện. Không có thuốc điều trị đặc hiệu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hiếm khi dẫn đến viêm phổi hoặc khó thở nặng hơn. Một số trẻ về sau bị khò khè hoặc hen suyễn.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Kháng sinh không có tác dụng với virus.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Cho trẻ uống đủ nước: trẻ nhỏ cho bú ít một nhưng nhiều lần hơn; trẻ lớn hơn cho uống nước.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Giữ trẻ ở tư thế thẳng khi thức, và thường xuyên kiểm tra trẻ, cả ban đêm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể nhỏ nước muối sinh lý rồi hút mũi khi trẻ nghẹt mũi; dùng máy tạo ẩm; cho trẻ nghỉ ngơi đủ.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nếu trẻ khó chịu, có thể dùng paracetamol (từ 2 tháng tuổi) hoặc ibuprofen (từ 3 tháng tuổi) dạng cho trẻ em, không dùng cùng lúc; **không cho trẻ dưới 16 tuổi dùng aspirin**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Không hút thuốc gần trẻ (trong nhà, trên xe). Không lau người bằng nước mát hay cởi hết đồ để hạ sốt.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Giảm lây: rửa tay thường xuyên, lau chùi đồ chơi và bề mặt, không dùng chung muỗng cốc, bỏ khăn giấy ngay, giữ trẻ sơ sinh tránh xa người đang cảm cúm.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Ở bệnh viện, trẻ có thể được thở oxy và truyền dịch.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Cho trẻ uống đủ nước; trẻ nhỏ nên bú ít một nhưng nhiều lần hơn.",
+        "src": [
+          0,
+          1
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "sữa mẹ và sữa công thức",
+        "aliases": [
+          "sữa mẹ",
+          "sữa công thức",
+          "cho bú"
+        ],
+        "verdict": "good",
+        "note": "MedlinePlus: với trẻ dưới 12 tháng, sữa mẹ hoặc sữa công thức là phù hợp; NHS khuyên cho bú ít một nhưng nhiều lần hơn.",
+        "src": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "nước lọc",
+        "aliases": [
+          "nước",
+          "nước uống"
+        ],
+        "verdict": "good",
+        "note": "NHS khuyên cho trẻ lớn hơn uống nước để đủ nước.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "nước ép pha loãng",
+        "aliases": [
+          "nước trái cây pha loãng"
+        ],
+        "verdict": "ok",
+        "note": "NHS nêu có thể cho trẻ lớn hơn uống nước ép pha loãng.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "dung dịch điện giải",
+        "aliases": [
+          "nước điện giải",
+          "Pedialyte"
+        ],
+        "verdict": "ok",
+        "note": "MedlinePlus: đồ uống điện giải (như Pedialyte) cũng dùng được cho trẻ nhỏ.",
+        "src": [
+          1
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên khám gấp khi cảm lạnh nặng dần, trẻ bú/ăn kém hẳn, hoặc không ướt tã từ 12 giờ trở lên hay có dấu hiệu mất nước khác.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Nên khám gấp khi trẻ dưới 3 tháng sốt từ 38°C, trẻ lớn hơn sốt từ 39°C, hoặc trẻ nóng, vã mồ hôi, run lạnh bất thường.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nên khám gấp khi trẻ mệt hoặc quấy bất thường, không giống mọi khi, hoặc khi bạn lo lắng về trẻ.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu khi trẻ **khó thở**: thở rên, bụng hóp vào dưới xương sườn mỗi lần thở, thở rất nhanh, cánh mũi phập phồng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Gọi cấp cứu khi trẻ có những lúc ngừng thở.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Gọi cấp cứu khi da, môi, lưỡi hoặc móng tay trẻ tím tái hay xám.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Gọi cấp cứu khi trẻ mềm nhũn, không đánh thức được hoặc không tỉnh táo được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bronchiolitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/bronchiolitis/",
+      "reviewed": "2026-02-19"
+    },
+    {
+      "title": "Bronchiolitis",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000975.htm",
+      "reviewed": "2025-07-01"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

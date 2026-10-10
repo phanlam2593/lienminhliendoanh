@@ -1,0 +1,163 @@
+{
+  "id": "nut-ke-hau-mon",
+  "kind": "condition",
+  "names": [
+    "nứt kẽ hậu môn",
+    "nứt hậu môn",
+    "nứt ống hậu môn",
+    "rách hậu môn",
+    "rách niêm mạc hậu môn",
+    "anal fissure"
+  ],
+  "disambiguation": "Thẻ này nói về nứt kẽ hậu môn; bệnh trĩ có thẻ riêng. Đừng tự chẩn đoán, nên để bác sĩ khám.",
+  "about": [
+    {
+      "text": "Nứt kẽ hậu môn là một vết rách nhỏ ở hậu môn (lớp niêm mạc cuối trực tràng gần hậu môn), gây đau khi đi tiêu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Phần lớn vết nứt **tự lành** mà không cần điều trị.",
+      "src": [0, 1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau nhói, dữ dội khi đi tiêu; sau đó có thể đau rát kéo dài vài giờ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Thấy **máu đỏ tươi** trong bồn cầu hoặc trên giấy vệ sinh sau khi đi tiêu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Triệu chứng có thể xuất hiện đột ngột hoặc từ từ.",
+      "src": [1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Không phải lúc nào cũng rõ nguyên nhân. Có thể do đi tiêu phân to, cứng (táo bón) hoặc tiêu chảy kéo dài.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Hay gặp ở người 15–40 tuổi và trẻ nhỏ (rất thường gặp ở trẻ sơ sinh); ở trẻ em, táo bón là nguyên nhân thường gặp.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nguy cơ khác: mang thai, sinh thường, bệnh viêm ruột (bệnh Crohn, viêm loét đại tràng), một số bệnh lây qua đường tình dục như giang mai, herpes.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Cơ thắt hậu môn quá căng và máu nuôi vùng hậu môn kém cũng góp phần.",
+      "src": [1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Vết nứt thường lành nhanh, không để lại vấn đề gì; nhưng người đã từng bị thì dễ bị lại hơn.",
+      "src": [1]
+    },
+    {
+      "text": "Nhịn đi tiêu vì sợ đau làm phân cứng hơn và vết nứt có thể nặng thêm.",
+      "src": [1]
+    }
+  ],
+  "care": [
+    {
+      "text": "Uống nhiều nước và ăn nhiều **chất xơ** để phân mềm; đừng nhịn khi buồn đi tiêu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Ngâm hậu môn trong nước ấm (ngâm mông, chậu nước ấm nông) sau khi đi tiêu để đỡ đau; giữ vùng hậu môn sạch và khô.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Có thể dùng thuốc giảm đau thông thường như paracetamol; hỏi bác sĩ về kem bôi giảm đau, làm lành nếu đau làm khó đi tiêu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Bác sĩ có thể cho thuốc nhuận tràng nếu táo bón, thuốc giảm đau quặn sau đi tiêu, hoặc kem giúp lành vết nứt — do bác sĩ quyết định.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Nếu không đỡ hoặc hay tái phát, bác sĩ có thể đề nghị tiêm thuốc làm giãn cơ hậu môn hoặc tiểu phẫu rạch nhỏ cơ để giảm căng.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Với trẻ sơ sinh: thay tã thường xuyên và lau rửa vùng hậu môn nhẹ nhàng.",
+      "src": [1]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Ăn nhiều chất xơ (trái cây, rau, ngũ cốc) và uống nhiều nước để phân mềm, tránh táo bón.",
+        "src": [0, 1]
+      }
+    ],
+    "foods": [
+      {
+        "name": "thực phẩm giàu chất xơ",
+        "aliases": ["chất xơ"],
+        "verdict": "good",
+        "note": "NHS và MedlinePlus khuyên ăn nhiều chất xơ để phân mềm, tránh phân cứng.",
+        "src": [0, 1]
+      },
+      {
+        "name": "trái cây",
+        "aliases": ["hoa quả", "trái cây tươi"],
+        "verdict": "good",
+        "note": "MedlinePlus nêu trái cây là nguồn chất xơ giúp tránh phân cứng và táo bón.",
+        "src": [1]
+      },
+      {
+        "name": "rau",
+        "aliases": ["rau xanh", "rau củ"],
+        "verdict": "good",
+        "note": "MedlinePlus nêu rau là nguồn chất xơ giúp tránh phân cứng và táo bón.",
+        "src": [1]
+      },
+      {
+        "name": "ngũ cốc",
+        "aliases": ["ngũ cốc nguyên hạt", "yến mạch", "gạo lứt"],
+        "verdict": "good",
+        "note": "MedlinePlus nêu ngũ cốc là nguồn chất xơ giúp tránh phân cứng và táo bón.",
+        "src": [1]
+      },
+      {
+        "name": "nước",
+        "aliases": ["nước lọc", "nước uống", "chất lỏng"],
+        "verdict": "good",
+        "note": "NHS và MedlinePlus khuyên uống nhiều nước để phân mềm.",
+        "src": [0, 1]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám khi triệu chứng nặng dần (cả ở trẻ em), hoặc tự chăm sóc 7 ngày mà không đỡ.",
+      "src": [0]
+    },
+    {
+      "text": "Khi khám, bác sĩ sẽ hỏi triệu chứng và xem vùng hậu môn; có thể nội soi thêm; nếu chưa chắc chẩn đoán hoặc nghi bệnh nghiêm trọng, có thể được khám chuyên khoa dưới gây mê.",
+      "src": [0, 1]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Anal fissure",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/anal-fissure/",
+      "reviewed": "2025-06-26"
+    },
+    {
+      "title": "Anal fissure",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/001130.htm",
+      "reviewed": "2026-04-11"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

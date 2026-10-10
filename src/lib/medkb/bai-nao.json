@@ -1,0 +1,47 @@
+{
+  "id": "bai-nao",
+  "kind": "child",
+  "names": ["bại não", "bệnh bại não", "trẻ bại não", "bại não ở trẻ", "cerebral palsy"],
+  "about": [
+    {"text": "Bại não là một nhóm tình trạng **kéo dài suốt đời** ảnh hưởng đến vận động, thăng bằng, tư thế và sự phối hợp.", "src": [0, 2]},
+    {"text": "Nguyên nhân là tổn thương hoặc bất thường ở não đang phát triển, xảy ra trước, trong hoặc ngay sau khi sinh.", "src": [0, 2]},
+    {"text": "Có các thể chính: thể co cứng (hay gặp nhất, cơ cứng), thể loạn động (cử động không kiểm soát), thể thất điều (kém thăng bằng, phối hợp) và thể hỗn hợp.", "src": [1, 2]}
+  ],
+  "signs": [
+    {"text": "Dấu hiệu thường không rõ ngay sau sinh mà lộ ra từ sớm, thường trong những tháng đầu đời.", "src": [0, 1, 2]},
+    {"text": "Chậm đạt các mốc vận động, ví dụ chưa biết ngồi lúc 8 tháng hoặc chưa biết đi lúc 18 tháng.", "src": [1]},
+    {"text": "Cơ quá cứng hoặc quá mềm nhũn, tay chân yếu, hay thiên về dùng một bên cơ thể.", "src": [1, 2]},
+    {"text": "Cử động giật, vụng về hoặc không tự chủ, co thắt cơ, run tay, đi kiễng mũi chân.", "src": [1, 2]},
+    {"text": "Có thể kèm: khó nuốt, chảy dãi, táo bón, khó nói, co giật (động kinh), khó ngủ, trào ngược, cong vẹo cột sống, giảm thị lực, giảm thính lực.", "src": [1]},
+    {"text": "Khoảng một nửa trẻ bại não có khuyết tật học tập. Mức độ nặng nhẹ rất khác nhau giữa các trẻ.", "src": [1]},
+    {"text": "Trẻ không bị bại não cũng có thể có những dấu hiệu này, nên cần được nhân viên y tế đánh giá.", "src": [2]}
+  ],
+  "causes": [
+    {"text": "Các nguyên nhân có thể: chảy máu trong não hoặc não bị giảm máu và oxy, nhiễm trùng hoặc sốt khi mẹ mang thai, thiếu oxy khi sinh khó, dị tật não, thay đổi gen.", "src": [0, 2]},
+    {"text": "Bại não khởi phát sau sinh có thể do viêm màng não, đột quỵ hoặc chấn thương đầu nặng.", "src": [0, 2]},
+    {"text": "Nguy cơ cao hơn khi trẻ sinh non hoặc nhẹ cân, sinh đôi/sinh nhiều, vàng da sơ sinh nặng, hoặc sinh có biến chứng.", "src": [2]},
+    {"text": "Nhiều trường hợp không tìm được nguyên nhân chính xác.", "src": [0, 2]}
+  ],
+  "course": [
+    {"text": "Tổn thương não là vĩnh viễn và **không nặng thêm**, nhưng cơ thể có thể bị quá tải theo thời gian, ví dụ đau khớp khi lớn tuổi.", "src": [0, 2]},
+    {"text": "Phần lớn trẻ sống đến tuổi trưởng thành; nhiều người sống đầy đủ, tự lập. Nhiều trẻ học trường bình thường, một số hợp với trường chuyên biệt.", "src": [0]},
+    {"text": "Những khó khăn hằng ngày có thể góp phần gây ra các vấn đề như trầm cảm.", "src": [0]}
+  ],
+  "care": [
+    {"text": "Chưa có cách chữa khỏi, nhưng điều trị giúp người bệnh vận động và tự lập tốt hơn; nên bắt đầu càng sớm càng tốt.", "src": [0, 2]},
+    {"text": "Các hình thức hỗ trợ: **vật lý trị liệu**, trị liệu ngôn ngữ và nuốt, hoạt động trị liệu, dụng cụ hỗ trợ (nẹp, khung tập đi).", "src": [0, 2]},
+    {"text": "Có thể dùng thuốc giảm co cứng cơ và đôi khi phẫu thuật.", "src": [0, 2]},
+    {"text": "Một nhóm nhân viên y tế sẽ cùng bạn lập kế hoạch điều trị phù hợp với nhu cầu của bạn hoặc của con.", "src": [0, 2]}
+  ],
+  "diet": null,
+  "doctor": [
+    {"text": "Nếu bạn lo lắng về sức khỏe hay sự phát triển của con, hãy hỏi nhân viên y tế hoặc bác sĩ; trẻ có thể được giới thiệu đến chuyên khoa phát triển trẻ em.", "src": [0, 1]}
+  ],
+  "emergency": [],
+  "sources": [
+    {"title": "Cerebral palsy", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/cerebral-palsy/", "reviewed": "2023-05-31"},
+    {"title": "Cerebral palsy - Symptoms", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/cerebral-palsy/symptoms/"},
+    {"title": "Cerebral Palsy", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/cerebralpalsy.html", "reviewed": "2025-11-23"}
+  ],
+  "verifiedAt": "2026-10-09"
+}

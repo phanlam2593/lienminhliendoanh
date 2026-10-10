@@ -319,7 +319,7 @@ describe("Sức khoẻ ≠ tâm sự — không riêng gì gout", () => {
     expect(m.content).toMatch(/chưa có thông tin riêng/);
   }, T);
   it("bệnh Lomi chưa có kiến thức → nói thật là chưa biết (kèm 💡), vẫn ở mạch sức khoẻ — không đáp như nghe tâm sự", async () => {
-    const r = await chat(["a hỏi về bệnh lupus", "lupus á"]);
+    const r = await chat(["a hỏi về bệnh Kawasaki", "Kawasaki á"]);
     for (const m of r) {
       expect(m.unk).toBeTruthy();
       expect(m.health).toBeTruthy();

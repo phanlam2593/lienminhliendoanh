@@ -1,0 +1,209 @@
+{
+  "id": "sot-co-giat",
+  "kind": "child",
+  "names": [
+    "co giật do sốt ở trẻ",
+    "sốt co giật",
+    "trẻ sốt co giật",
+    "bé sốt co giật",
+    "co giật khi sốt",
+    "febrile seizures",
+    "febrile convulsions"
+  ],
+  "disambiguation": "Thẻ này nói riêng về co giật do sốt ở trẻ nhỏ theo NHS và MedlinePlus. Cách xử trí co giật nói chung xem thẻ co giật; bệnh động kinh là chuyện khác, có thẻ riêng.",
+  "about": [
+    {
+      "text": "Co giật do sốt (sốt co giật) là cơn co giật xảy ra khi trẻ bị **sốt cao**, thường ở trẻ khoảng 6 tháng đến 5–6 tuổi.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thường không nghiêm trọng và khó gây hại hay để lại ảnh hưởng lâu dài.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Co giật do sốt **không giống** bệnh động kinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Trẻ có thể gồng cứng người, co giật hoặc giật tay chân, đảo mắt, mất ý thức, không đáp lại khi gọi, nôn hoặc tè dầm.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Cơn thường kéo dài 2–3 phút và hiếm khi quá 10 phút.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Sau cơn, trẻ có thể buồn ngủ, cáu kỉnh hoặc lơ mơ đến khoảng một giờ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cơn kéo dài trên 15 phút, chỉ một phần cơ thể bị giật, hoặc lặp lại trong cùng đợt bệnh thì không phải cơn co giật do sốt điển hình.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Xảy ra khi trẻ bị nhiễm trùng và sốt cao; cảm lạnh hoặc bệnh do virus có thể gây ra cơn.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Phần lớn cơn xảy ra trong 24 giờ đầu của bệnh, không nhất thiết lúc sốt cao nhất. Co giật do sốt hay có tính gia đình.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Co giật do sốt đơn thuần được xem là vô hại: không liên quan đến tử vong, tổn thương não hay khó khăn học tập.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Phần lớn trẻ hết bị khi khoảng 5 tuổi. Rất hiếm khi trẻ bị lặp lại nhiều lần.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Trẻ từng bị co giật do sốt có khả năng mắc động kinh sau này cao hơn một chút, nhưng điều này hiếm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Trong cơn: ghi lại giờ bắt đầu và kết thúc; che đỡ đầu trẻ bằng tay hoặc vật mềm; dẹp vật nguy hiểm xung quanh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đặt trẻ nằm chỗ an toàn, thông thoáng; nới lỏng quần áo chật, nhất là quanh cổ; đừng để trẻ một mình.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "**Không** cho bất cứ thứ gì vào miệng trẻ; **không** giữ chặt hay cố ghì cho trẻ hết giật; chỉ di chuyển trẻ nếu đang ở chỗ nguy hiểm.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Không cố hạ sốt trong cơn bằng cách cởi đồ hay lau người trẻ bằng nước lạnh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Sau cơn: cho trẻ nằm nghiêng ở tư thế hồi phục và kiểm tra không có gì chặn miệng, họng. Nếu trẻ nôn hay nhiều đờm dãi, cho nằm nghiêng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Sau lần co giật đầu tiên, trẻ sẽ được kiểm tra ở bệnh viện và có thể phải nằm lại bệnh viện ít lâu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thuốc hạ sốt có thể được khuyên dùng, nhưng **không ngăn được** cơn co giật do sốt về sau. Phần lớn trường hợp không cần điều trị gì thêm.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Co giật do sốt thường không phòng ngừa được. Nếu trẻ bị lặp lại, bác sĩ có thể kê thuốc dùng khi lên cơn và hướng dẫn cách dùng.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám nếu trẻ bị co giật lặp lại trong cùng một đợt bệnh, hoặc cơn trông khác với các lần trước.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Báo bác sĩ nếu trước hoặc sau cơn có dấu hiệu khác như cử động bất thường, run, mất phối hợp, kích động, lơ mơ, buồn nôn hoặc phát ban.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu hoặc đưa trẻ đi cấp cứu nếu đây là **lần đầu** trẻ bị co giật.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cần cấp cứu khi cơn kéo dài trên 5 phút, trẻ khó thở, chỉ giật hoặc cứng một bên người, hoặc bị hơn một cơn trong 24 giờ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cần cấp cứu khi trẻ buồn ngủ hơn bình thường quá một giờ sau khi hết cơn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu trẻ vẫn đang co giật hoặc bất tỉnh, hãy gọi cấp cứu thay vì tự chở trẻ đi; mang theo thuốc trẻ đang dùng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Febrile seizures",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/febrile-seizures/",
+      "reviewed": "2023-06-21"
+    },
+    {
+      "title": "Febrile seizures",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000980.htm",
+      "reviewed": "2026-01-01"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

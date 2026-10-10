@@ -1,0 +1,179 @@
+{
+  "id": "phi-dai-tuyen-tien-liet",
+  "kind": "condition",
+  "names": [
+    "phì đại lành tính tuyến tiền liệt",
+    "phì đại tuyến tiền liệt",
+    "tăng sản lành tính tuyến tiền liệt",
+    "u xơ tuyến tiền liệt",
+    "tuyến tiền liệt to",
+    "phì đại tiền liệt tuyến",
+    "u phì đại tuyến tiền liệt",
+    "BPH",
+    "benign prostatic hyperplasia",
+    "enlarged prostate",
+    "benign prostate enlargement"
+  ],
+  "about": [
+    {
+      "text": "Phì đại lành tính tuyến tiền liệt là khi tuyến tiền liệt to ra. Bệnh thường gặp, thường không nguy hiểm và **không phải ung thư**.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Tuyến tiền liệt là tuyến nhỏ nằm dưới bàng quang, tạo một phần tinh dịch. Khi to ra, nó có thể chèn ép niệu đạo, làm dòng tiểu chậm hoặc bị tắc.",
+      "src": [0, 1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Khó bắt đầu tiểu, phải rặn; dòng tiểu yếu, ngắt quãng, tiểu lâu mới xong.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Cảm giác **tiểu không hết**, nhỏ giọt sau khi tiểu xong.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Tiểu nhiều lần, tiểu gấp, phải thức dậy ban đêm để đi tiểu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Triệu chứng thường xuất hiện từ từ và có thể nặng dần theo tuổi.",
+      "src": [0]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguyên nhân chưa rõ hoàn toàn, được cho là liên quan thay đổi nội tiết khi lớn tuổi.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Thường gặp nhất ở nam giới trên 50 tuổi; nguy cơ cao hơn nếu trong gia đình có người bị.",
+      "src": [0, 1]
+    },
+    {
+      "text": "MedlinePlus nêu thêm yếu tố nguy cơ: béo phì, bệnh tim hoặc tuần hoàn, tiểu đường type 2, rối loạn cương dương, ít vận động.",
+      "src": [1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phì đại tuyến tiền liệt **không làm tăng nguy cơ** ung thư tuyến tiền liệt.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Tuy vậy, các triệu chứng tiểu tiện đôi khi do bệnh nặng hơn như ung thư tuyến tiền liệt, nên vẫn cần đi khám để kiểm tra.",
+      "src": [0]
+    },
+    {
+      "text": "Biến chứng có thể gặp: bí tiểu cấp (cấp cứu), nhiễm trùng tiểu, tổn thương hoặc sỏi bàng quang, tổn thương thận.",
+      "src": [1]
+    }
+  ],
+  "care": [
+    {
+      "text": "Không phải ai cũng cần điều trị; tùy mức độ triệu chứng ảnh hưởng đến cuộc sống. Triệu chứng nhẹ thường thử thay đổi lối sống trước.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Bác sĩ có thể khám bụng, dương vật, thăm trực tràng, xét nghiệm nước tiểu, máu PSA; có thể nhờ bạn ghi nhật ký uống và tiểu ít nhất 3 ngày.",
+      "src": [0]
+    },
+    {
+      "text": "Triệu chứng vừa hoặc nặng có thể dùng thuốc giúp tiểu dễ hoặc giảm tiểu gấp; thuốc làm tuyến ngừng to ra chỉ dùng khi nguy cơ bệnh nặng thêm cao — do bác sĩ quyết định, cần tái khám định kỳ.",
+      "src": [0]
+    },
+    {
+      "text": "Nếu thuốc không hiệu quả hoặc triệu chứng nặng, có thể phẫu thuật (phổ biến nhất là cắt đốt nội soi qua niệu đạo – TURP) hoặc các thủ thuật khác.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Giảm rượu bia và caffeine; uống ít nước trước khi ngủ hoặc ra ngoài nhưng vẫn uống đủ trong ngày.",
+      "src": [0]
+    },
+    {
+      "text": "Ăn đủ chất xơ để tránh táo bón; giữ cân nặng hợp lý.",
+      "src": [0]
+    },
+    {
+      "text": "Sau khi tiểu, đợi một chút rồi thử tiểu tiếp; ấn nhẹ phía sau bìu để đẩy hết giọt cuối.",
+      "src": [0]
+    },
+    {
+      "text": "Hỏi bác sĩ hoặc dược sĩ xem thuốc khác bạn đang dùng có làm triệu chứng nặng hơn không. Đừng uống quá ít nước vì dễ bị nhiễm trùng tiểu.",
+      "src": [0]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Nên giảm rượu bia và đồ uống có caffeine.",
+        "src": [0]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Ăn đủ chất xơ để tránh táo bón; vẫn uống đủ nước trong ngày, chỉ bớt uống trước khi đi ngủ hoặc ra ngoài.",
+        "src": [0]
+      }
+    ],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": ["rượu", "bia", "đồ uống có cồn"],
+        "verdict": "limit",
+        "note": "NHS khuyên người bị phì đại tuyến tiền liệt nên giảm rượu bia để đỡ triệu chứng tiểu tiện.",
+        "src": [0]
+      },
+      {
+        "name": "đồ uống có caffeine",
+        "aliases": ["cà phê", "cafe", "trà", "caffeine"],
+        "verdict": "limit",
+        "note": "NHS khuyên giảm caffeine để đỡ triệu chứng tiểu tiện.",
+        "src": [0]
+      },
+      {
+        "name": "thực phẩm giàu chất xơ",
+        "aliases": ["chất xơ", "rau", "rau xanh"],
+        "verdict": "good",
+        "note": "NHS khuyên ăn đủ chất xơ để tránh táo bón.",
+        "src": [0]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nên đi khám khi khó tiểu hoặc phải đi tiểu nhiều lần hơn, đừng ngại, vì bệnh khác cũng có thể gây ra các triệu chứng này.",
+      "src": [0]
+    },
+    {
+      "text": "Cần khám gấp khi có máu trong nước tiểu hoặc đau khi tiểu.",
+      "src": [0, 1]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Hoàn toàn **không tiểu được**: cần được giúp ngay — bí tiểu cấp là tình trạng cấp cứu.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Sốt, ớn lạnh kèm tiểu đau, tiểu nhiều, tiểu gấp, hoặc đau ở bụng dưới và đường tiết niệu: MedlinePlus khuyên đi khám ngay.",
+      "src": [1]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Enlarged prostate",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/prostate-enlargement/",
+      "reviewed": "2025-04-08"
+    },
+    {
+      "title": "Enlarged Prostate (BPH)",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/enlargedprostatebph.html",
+      "reviewed": "2023-12-15"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

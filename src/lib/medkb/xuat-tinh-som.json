@@ -1,0 +1,109 @@
+{
+  "id": "xuat-tinh-som",
+  "kind": "condition",
+  "names": [
+    "xuất tinh sớm",
+    "xuất tinh quá sớm",
+    "xuất tinh nhanh",
+    "chưa quan hệ đã xuất tinh",
+    "premature ejaculation",
+    "rapid ejaculation"
+  ],
+  "about": [
+    {
+      "text": "Xuất tinh sớm là khi nam giới xuất tinh sớm hơn mong muốn của mình hoặc bạn tình trong lúc quan hệ.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Đây là vấn đề tình dục **thường gặp** ở nam giới; Mayo Clinic cho biết có đến khoảng 1/3 người từng gặp lúc nào đó.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Thỉnh thoảng bị là thường gặp, không đáng lo. Nếu nó xảy ra nhiều hơn bạn muốn và gây phiền lòng, điều trị có thể giúp ích.",
+      "src": [0, 1]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Dấu hiệu chính là luôn hoặc gần như luôn không thể kìm xuất tinh lâu hơn khoảng 1–3 phút sau khi vào, kèm cảm giác bức bối hoặc né tránh chuyện gần gũi.",
+      "src": [1]
+    },
+    {
+      "text": "Có thể bị **từ lần quan hệ đầu tiên** (dạng suốt đời), hoặc mới xuất hiện sau một thời gian quan hệ bình thường (dạng mắc phải).",
+      "src": [1]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguyên nhân chính xác chưa rõ; hiện được cho là do cả yếu tố tâm lý lẫn sinh học.",
+      "src": [1]
+    },
+    {
+      "text": "Yếu tố tâm lý: trầm cảm, căng thẳng, trục trặc trong quan hệ tình cảm, lo lắng về khả năng “chuyện ấy”, nhất là lúc mới quen hoặc từng gặp trục trặc trước đó.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Thói quen hình thành từ trải nghiệm ban đầu (như vội vàng khi thủ dâm vì sợ bị phát hiện), trải nghiệm tình dục từng gây sang chấn, hoặc niềm tin khắt khe về tình dục.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Yếu tố thể chất: bệnh tuyến tiền liệt (viêm, nhiễm trùng), cường giáp hoặc suy giáp, rối loạn nội tiết, dùng chất kích thích.",
+      "src": [0, 1]
+    },
+    {
+      "text": "Rối loạn cương dương cũng là yếu tố nguy cơ: sợ mất cương khiến bạn vội vàng.",
+      "src": [1]
+    }
+  ],
+  "course": [
+    {
+      "text": "Biến chứng thường gặp là căng thẳng trong quan hệ vợ chồng/người yêu.",
+      "src": [1]
+    },
+    {
+      "text": "Đôi khi xuất tinh sớm có thể làm khó có thai, nếu xuất tinh không diễn ra trong âm đạo.",
+      "src": [1]
+    }
+  ],
+  "care": [
+    {
+      "text": "Tự áp dụng: thủ dâm một–hai giờ trước khi quan hệ; dùng bao cao su dày hơn để giảm cảm giác; để bạn tình ở trên, khi cần bạn tình có thể rút ra kịp lúc.",
+      "src": [0]
+    },
+    {
+      "text": "Tư vấn tâm lý tình dục có thể hướng dẫn kỹ thuật **“bóp”** và **“dừng – tiếp”**; cả hai cần luyện tập nhiều.",
+      "src": [0]
+    },
+    {
+      "text": "Bác sĩ có thể cân nhắc thuốc (một số thuốc nhóm SSRI giúp làm chậm xuất tinh, hoặc sildenafil) — do bác sĩ quyết định, không phải ai cũng dùng được.",
+      "src": [0]
+    },
+    {
+      "text": "Thuốc tê bôi tại chỗ giúp giảm cảm giác nhưng có thể truyền sang làm giảm cảm giác của bạn tình; bao cao su cũng hiệu quả, nhất là khi dùng kèm thuốc tê — nên hỏi bác sĩ.",
+      "src": [0]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám khi tình trạng kéo dài, hoặc khi phần lớn các lần quan hệ đều xuất tinh sớm hơn mong muốn. Bác sĩ có thể khám hoặc giới thiệu chuyên khoa.",
+      "src": [0, 1]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Ejaculation problems",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/ejaculation-problems/",
+      "reviewed": "2023-02-09"
+    },
+    {
+      "title": "Premature ejaculation - Symptoms and causes",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/diseases-conditions/premature-ejaculation/symptoms-causes/syc-20354900",
+      "reviewed": "2025-12-23"
+    }
+  ],
+  "verifiedAt": "2026-10-09"
+}

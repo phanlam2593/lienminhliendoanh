@@ -1,0 +1,60 @@
+{
+  "id": "roi-loan-tien-dinh",
+  "kind": "condition",
+  "names": ["rối loạn tiền đình", "tiền đình", "bệnh tiền đình", "bị tiền đình", "viêm mê đạo", "viêm dây thần kinh tiền đình", "viêm tai trong", "labyrinthitis", "vestibular neuritis"],
+  "disambiguation": "Thẻ này chỉ nói về viêm mê đạo và viêm dây thần kinh tiền đình theo NHS và MedlinePlus; các nguyên nhân chóng mặt khác chưa có trong thẻ này (xem thẻ chóng mặt).",
+  "about": [
+    {"text": "**Viêm mê đạo** là viêm các ống chứa dịch trong tai trong (mê đạo). **Viêm dây thần kinh tiền đình** là viêm dây thần kinh trong tai trong có nhiệm vụ đưa tín hiệu lên não.", "src": [0, 1]},
+    {"text": "Cả hai ảnh hưởng đến thăng bằng và thường tự khỏi trong vài tuần.", "src": [0, 1]},
+    {"text": "Triệu chứng hai bệnh rất giống nhau; nếu có thêm **giảm thính lực hoặc ù tai** thì nghiêng về viêm mê đạo, vì mê đạo liên quan đến cả nghe.", "src": [0, 1]}
+  ],
+  "signs": [
+    {"text": "Chóng mặt, cảm giác mọi thứ quay cuồng (vertigo) kể cả khi đứng yên; loạng choạng, mất thăng bằng, hay ngả về một bên.", "src": [0, 1]},
+    {"text": "Buồn nôn hoặc nôn.", "src": [0, 1]},
+    {"text": "Với viêm mê đạo: giảm thính lực (thường một bên tai) và ù tai. Mắt có thể giật không tự chủ, khó nhìn tập trung.", "src": [0, 1]},
+    {"text": "Triệu chứng có thể đến đột ngột, có khi có ngay lúc thức dậy và nặng dần trong ngày.", "src": [0]}
+  ],
+  "causes": [
+    {"text": "Thường do **nhiễm virus**, ví dụ cảm lạnh hoặc cúm; một số ca do vi khuẩn, ít hơn là do viêm tai.", "src": [0, 1]},
+    {"text": "Yếu tố nguy cơ: uống nhiều rượu, mệt mỏi, căng thẳng, hút thuốc, tiền sử dị ứng, mới bị nhiễm trùng hô hấp hoặc tai, một số thuốc (như aspirin).", "src": [1]}
+  ],
+  "course": [
+    {"text": "Triệu chứng thường đỡ sau vài ngày, triệu chứng nặng thường hết trong khoảng một tuần; bệnh thường khỏi dần trong 2–6 tuần, có khi lâu hơn.", "src": [0, 1]},
+    {"text": "Phần lớn người bệnh hồi phục hoàn toàn trong 2–3 tháng. Người lớn tuổi dễ bị chóng mặt kéo dài hơn. Mất thính lực vĩnh viễn rất hiếm.", "src": [1]},
+    {"text": "Chóng mặt nặng kèm nôn nhiều có thể gây mất nước.", "src": [1]},
+    {"text": "Chưa có cách nào được biết để phòng ngừa viêm mê đạo.", "src": [1]}
+  ],
+  "care": [
+    {"text": "Khi chóng mặt nhiều: nằm yên trong phòng tối, tránh cử động và đổi tư thế đột ngột; hạn chế tiếng ồn, ánh sáng mạnh, TV, đọc sách.", "src": [0, 1]},
+    {"text": "Nếu đang nôn, nhấp từng ngụm nước nhỏ nhưng thường xuyên. Ngủ đủ giấc.", "src": [0]},
+    {"text": "Bắt đầu đi bộ ngoài trời càng sớm càng tốt (có người đi cùng nếu cần); khi ra ngoài, nhìn cố định vào một vật đứng yên.", "src": [0, 1]},
+    {"text": "**Không lái xe**, đi xe đạp, leo trèo hay dùng máy móc khi đang chóng mặt; MedlinePlus khuyên tránh cả một tuần sau khi hết triệu chứng.", "src": [0, 1]},
+    {"text": "Bác sĩ có thể kê thuốc kháng histamin, thuốc chống say tàu xe hoặc chống nôn trong thời gian ngắn — dùng lâu có thể làm chậm hồi phục.", "src": [0, 1]},
+    {"text": "Kháng sinh không chữa được nhiễm virus; bác sĩ chỉ kê nếu nghi do vi khuẩn. Nôn nhiều có thể cần nằm viện.", "src": [0, 1]},
+    {"text": "Rối loạn thăng bằng kéo dài nhiều tháng có thể tập **phục hồi chức năng tiền đình** dưới hướng dẫn của chuyên gia (vật lý trị liệu, thính học).", "src": [0, 1]}
+  ],
+  "diet": {
+    "avoid": [
+      {"text": "Không uống rượu bia khi đang bị, vì có thể làm triệu chứng nặng hơn; uống nhiều rượu cũng là yếu tố nguy cơ.", "src": [0, 1]}
+    ],
+    "ok": [
+      {"text": "Nếu đang nôn, nhấp từng ngụm nước nhỏ nhưng thường xuyên.", "src": [0]}
+    ],
+    "foods": [
+      {"name": "rượu bia", "aliases": ["rượu", "bia", "đồ uống có cồn"], "verdict": "avoid", "note": "NHS khuyên không uống rượu khi đang bị viêm mê đạo/viêm dây thần kinh tiền đình vì có thể làm triệu chứng nặng hơn.", "src": [0]}
+    ]
+  },
+  "doctor": [
+    {"text": "Nên đi khám khi triệu chứng không đỡ sau vài ngày hoặc nặng dần, hoặc đã điều trị một tuần mà chưa đỡ.", "src": [0]},
+    {"text": "Cần khám **gấp** nếu đột ngột giảm thính lực một bên tai.", "src": [0]}
+  ],
+  "emergency": [
+    {"text": "Gọi cấp cứu nếu có triệu chứng nặng: co giật, nhìn đôi, ngất, nói ngọng/nói líu, yếu hoặc liệt, hoặc nôn rất nhiều.", "src": [1]},
+    {"text": "Gọi cấp cứu nếu chóng mặt quay cuồng kèm sốt trên 38,3°C.", "src": [1]}
+  ],
+  "sources": [
+    {"title": "Labyrinthitis and vestibular neuritis", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/labyrinthitis/", "reviewed": "2026-08-06"},
+    {"title": "Labyrinthitis", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/ency/article/001054.htm", "reviewed": "2025-07-17"}
+  ],
+  "verifiedAt": "2026-10-09"
+}

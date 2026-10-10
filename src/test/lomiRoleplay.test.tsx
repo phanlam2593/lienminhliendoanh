@@ -467,7 +467,7 @@ describe("Chuẩn hoá tư vấn: không hỏi lại điều vừa nghe, không 
   }, T);
   it("mở lời có nêu đề tài ('a hỏi về ibuprofen') → mời hỏi tiếp đúng đề tài; đề tài sức khoẻ chưa có kiến thức thì nói thật", async () => {
     expect((await last(["a hỏi về ibuprofen"])).content).toMatch(/về ibuprofen thì anh muốn hỏi điều gì/);
-    const l = await last(["a hỏi về bệnh lupus"]);
+    const l = await last(["a hỏi về bệnh Kawasaki"]);
     expect(l.unk).toBeTruthy();
     expect(l.content).not.toMatch(/muốn hỏi điều gì/);
   }, T);

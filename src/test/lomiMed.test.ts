@@ -130,6 +130,17 @@ describe("kho kiến thức y khoa", () => {
     expect(aspectOf("khi nào cần đi khám")).toBe("doctor");
   });
 
+  it("chữ đã gõ dấu thì dấu phải khớp; gõ không dấu / đặt dấu kiểu cũ vẫn nhận", () => {
+    expect(findMedTopicId("gout ăn đậu rang được không")).toBe("gout");
+    expect(findMedTopicId("bị đau răng phải làm sao")).toBe("dau-rang");
+    expect(findMedTopicId("dau rang qua")).toBe("dau-rang");
+    expect(findMedTopicId("nám da có hết không")).toBe("nam-da-mat");
+    expect(findMedTopicId("nấm da có lây không")).toBe("nam-da");
+    expect(findMedTopicId("hoá trị có mệt không")).toBe("hoa-tri");
+    expect(findMedTopicId("hóa trị có mệt không")).toBe("hoa-tri");
+    expect(findMedTopicId("tự kỉ là gì")).toBe("tu-ky");
+  });
+
   it("câu KỂ (không phải câu hỏi kiến thức) không bị kéo vào kho", () => {
     for (const q of ["hôm nay a bị đau đầu", "a hay lo âu quá", "a bị mất ngủ mấy hôm nay", "mẹ em bị tiểu đường", "ông nội mới bị tai biến"])
       expect(parseMedAsk(q), q).toBeNull();
