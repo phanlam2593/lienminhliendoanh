@@ -88,7 +88,7 @@ const SYMPTOMS: Sym[] = [
   { id: "flankpain", label: "đau lưng vùng hông / thắt lưng một bên", re: /\b(dau hongx? lung|dau hongx? (ben|phai|trai|mot ben)|dau hongx|dau than|dau vung than|dau quan than|dau lung lan xuong bung|dau mot ben hong)\b/ },
   // Cơ xương khớp
   { id: "backpain", label: "đau lưng", re: /\b(dau lung|moi lung|dau that lung|dau cot song|cung lung)\b/ },
-  { id: "neckpain", label: "đau cổ vai gáy", re: /\b(dau co vai gay|moi co vai gay|dau vai gay|moi vai gay|cung co|vep co|dau co gay)\b/ },
+  { id: "neckpain", label: "đau cổ vai gáy", re: /\b(dau co vai gay|moi co vai gay|dau vai gay|moi vai gay|cung co|vep co|dau co gay|treo co|sai co|bi treo co|bi sai co)\b/ },
   { id: "radiate", label: "đau / tê lan xuống tay chân", re: /\b(dau lan xuong chan|te lan xuong chan|dau lan xuong tay|te lan xuong tay|dau than kinh toa)\b/ },
   { id: "numb", label: "tê bì tay chân", re: /\b(te tay|te chan|te bi|kien bo|te dau ngon)\b/ },
   { id: "jointpain", label: "đau khớp", re: /\b(dau khop|nhuc khop|dau goi|dau dau goi|dau co tay|dau ngon chan cai|dau khop ngon)\b/ },

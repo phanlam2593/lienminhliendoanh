@@ -11,6 +11,7 @@
 // Không bao giờ bắt người dùng viết lại cho chuẩn. Thật sự mơ hồ thì hỏi lại MỘT câu ngắn, tự nhiên.
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
+import { APP, normStrict } from "@/lib/lomiAccent";
 import type { ChatReply } from "@/lib/lomiChat";
 import { TAROT_SPREADS } from "@/lib/tarot";
 
@@ -85,7 +86,7 @@ const APP_REF = /\b(app|ung dung|trang|web|man hinh|cai nay|no|he thong|lomi)\b/
 const ISSUE: [string, RegExp][] = [
   ["crash", /\b(bi vang|vang ra|vang app|vang hoai|vang mat|tu vang|vang hoai luon|tu thoat|tu tat|tu dong tat|thoat ra|crash|out ra|dang xai thi tat)\b/],
   ["blank", /\b(trang tron|man hinh trang|trang xoa|trang bach|den thui|man hinh den|khong hien gi|khong hien thi gi|trong tron|khong co gi het|khong thay gi het)\b/],
-  ["lag", /\b(lag|giat lag|bi giat|giat qua|bi do|(?<!thai )do qua|(?<!thai )do luon|do man hinh|dung hinh|treo|bi treo|cham qua|cham ri|cham the|cham vay|load lau|load mai|load hoai|xoay hoai|xoay mai|quay hoai|quay mai|loading mai|khong load|khong len|mai khong len|load khong len)\b/],
+  ["lag", /\b(lag|giat lag|bi giat|giat qua|bi do|(?<!thai )do qua|(?<!thai )do luon|do man hinh|dung hinh|treo(?! co\b)|bi treo(?! co\b)|cham qua|cham ri|cham the|cham vay|load lau|load mai|load hoai|xoay hoai|xoay mai|quay hoai|quay mai|loading mai|khong load|khong len|mai khong len|load khong len)\b/],
   ["login", /\b(khong vao duoc|vao khong duoc|khong dang nhap duoc|dang nhap khong duoc|khong login duoc|bi da ra|bi out|bi dang xuat)\b/],
   ["generic", /\b(bi gi|bi sao|bi loi|loi roi|loi gi|bao loi|hien loi|bug|hu roi|hu ha|khong chay|khong hoat dong|khong dung duoc|xai khong duoc|dung khong duoc|khong bam duoc|bam khong duoc|bam khong an|khong gui duoc|gui khong duoc|khong tai duoc|khong mo duoc|mo khong duoc|khong luu duoc|luu khong duoc|bi offline|hien offline|bao offline|mat mang|mat ket noi|khong co mang)\b|\bkhong (gui|tai|mo|luu|bam|load|xem|nghe|goi|dang|up|doi|chon|tim|thay doi|cap nhat|cai)\b.{0,30}\bduoc\b/],
 ];
@@ -284,7 +285,8 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
 
   // 2) Báo lỗi app — ý định trước, tone sau (":))" vẫn có thể là lỗi thật).
   const PROBLEM_FAQ = new Set(["notifmissing", "update", "logout", "offerlocked", "approve", "forgot", "forgotnoemail", "bizstatus"]);
-  const kind = detectIssue(n);
+  // 10/10: "a bị trẹo cổ" bỏ dấu = "bi treo" → tưởng app bị treo. Chữ gõ CÓ DẤU khác nghĩa ("trẹo", "chân"…) bị che trước khi so (lib/lomiAccent APP).
+  const kind = detectIssue(` ${normStrict(raw || q, APP)} `);
   if (kind && !(faqHit && PROBLEM_FAQ.has(faqHit)) && (has(n, APP_REF) || w <= 7)) {
     return {
       intent: "issue",

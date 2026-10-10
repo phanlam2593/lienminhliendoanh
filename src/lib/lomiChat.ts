@@ -148,7 +148,7 @@ const has = (n: string, re: RegExp) => re.test(` ${n} `);
 const RULES: Rule[] = [
   // ⚠️ Khủng hoảng — luôn kiểm tra đầu tiên, không giới hạn độ dài câu.
   {
-    re: /\b(muon chet|tu tu|tu sat|khong muon song|chan song|song lam gi nua|khong con ly do (de )?song|ket thuc cuoc doi|tu lam dau|tu hai ban than|lam hai ban than|muon bien mat|chet cho xong)\b/,
+    re: /\b(muon chet|tu tu|tu sat|khong muon song|chan song|song lam gi nua|khong con ly do (de )?song|ket thuc cuoc doi|tu lam dau|tu hai ban than|lam hai ban than|muon bien mat|chet cho xong|(muon|dinh|se|tinh|chi muon|di) treo co|treo co (tu tu|chet|cho xong|cho roi)|(muon|dinh|se|tinh) nhay (cau|lau)|(muon|dinh|se|tinh) uong thuoc (ngu|chuot) (cho|de) chet)\b/,
     max: 999,
     reply: () => ({
       text:

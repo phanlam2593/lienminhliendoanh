@@ -41,7 +41,9 @@ export const HEALTH: Table = {
   do: ["đỏ", "đổ", "do", "đồ", "độ", "đo"], // đỡ (đỡ rồi), đó, dở, dỗ
   hong: ["họng", "hỏng"], // hông (đau hông = hông/thắt lưng) → "hongx"
   mo: ["mổ", "mờ", "mơ", "mỡ", "mô", "mồ", "mộ", "mợ"], // mở
+  treo: ["trẹo"], // 10/10: trẹo cổ / trẹo chân (sức khoẻ) ≠ treo
   },
+  bare: ["treo"], // câu có dấu mà gõ "treo" trơn là treo thật (treo cổ, treo đồ), không phải trẹo
   p: [
     ["mọi người", "moix nguoi"], // "trước mặt mọi người" ≠ mỏi mắt
     ["đỏ mặt", "do matx"],
@@ -104,6 +106,7 @@ export const APP: Table = {
   w: {
   chan: ["chặn"], // chân, chán, chăn, chắn
   quet: ["quẹt"], // quét
+  treo: ["treo"], // trẹo (trẹo cổ, trẹo chân) — 10/10
   },
 };
 

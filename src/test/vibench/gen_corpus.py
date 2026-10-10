@@ -108,6 +108,10 @@ add([HE], "sếp em hay mắng em trước mặt mọi người", "em bị mẹ 
 add([CH, HE], "em mới đậu đại học", "em được điểm cao", "em vừa được tăng lương", "em mới cưới vợ")
 add([T], "bói tình yêu cho em", "bói xem crush có thích em không")
 
+# Kir chụp 10/10 chiều
+add(H, "ừm anh bị trẹo cổ", "ngủ dậy bị sái cổ")
+add([Q, CH], "app bị treo hoài")
+
 for i, c in enumerate(C): c["id"] = f"v{i:03d}"
 json.dump(C, open(__file__.replace("gen_corpus.py", "corpus.json"), "w"), ensure_ascii=False, indent=0)
 from collections import Counter

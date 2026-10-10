@@ -2862,5 +2862,27 @@
 "tarot"
 ],
 "id": "v398"
+},
+{
+"q": "ừm anh bị trẹo cổ",
+"ok": [
+"health"
+],
+"id": "v399"
+},
+{
+"q": "ngủ dậy bị sái cổ",
+"ok": [
+"health"
+],
+"id": "v400"
+},
+{
+"q": "app bị treo hoài",
+"ok": [
+"faq",
+"chat"
+],
+"id": "v401"
 }
 ]

@@ -1,1 +1,143 @@
-{"id": "dau-vai-gay", "kind": "condition", "names": ["đau vai gáy", "đau mỏi vai gáy", "cứng cổ", "đau cứng cổ", "đau mỏi cổ", "neck pain", "stiff neck"], "about": [{"text": "Đau cổ và cứng cổ thường gặp, thường không nghiêm trọng; đa số chỉ kéo dài vài tuần.", "src": [0]}, {"text": "MedlinePlus: bất kỳ phần nào của cổ (cơ, xương, khớp, gân, dây chằng, dây thần kinh) đều có thể gây vấn đề; đau vùng cổ cũng có thể liên quan đến vai, hàm, đầu hoặc cánh tay trên.", "src": [1]}], "signs": [{"text": "Đau hoặc cứng cổ. Ngứa ran như kim châm hoặc lạnh cánh tay là những triệu chứng khác cần bác sĩ chú ý.", "src": [0]}], "causes": [{"text": "Ngủ với cổ ở tư thế gượng ép; tư thế xấu như ngồi bàn làm việc lâu; dây thần kinh bị chèn; chấn thương như whiplash do tai nạn giao thông hoặc té ngã.", "src": [0]}, {"text": "MedlinePlus: căng cơ hoặc căng thẳng thường gây đau cổ, thường do dùng quá mức như ngồi máy tính quá lâu; đôi khi do ngủ sai tư thế, tập quá sức; té ngã hoặc tai nạn cũng hay gặp.", "src": [1]}], "course": [{"text": "Đa số đau cổ chỉ kéo dài vài tuần.", "src": [0]}], "care": [{"text": "Có thể dùng thuốc giảm đau paracetamol hoặc ibuprofen, hoặc gel ibuprofen bôi lên cổ.", "src": [0]}, {"text": "Dùng gối thấp, chắc; tập các bài giúp cổ linh hoạt.", "src": [0]}, {"text": "Chườm lạnh bằng túi đậu đông lạnh bọc khăn khoảng 5 phút, hoặc chườm nóng bằng chai nước nóng bọc khăn khoảng 20 phút.", "src": [0]}, {"text": "Tránh đeo nẹp cổ và giữ cổ cử động, trừ khi bác sĩ dặn khác.", "src": [0]}, {"text": "Tránh những việc không an toàn khi cổ không xoay được, như lái xe hoặc đạp xe.", "src": [0]}, {"text": "Phòng ngừa: khi ngủ giữ đầu thẳng hàng với cơ thể và dùng nệm chắc; ngồi thẳng, nhẹ nhàng đưa vai ra sau.", "src": [0]}, {"text": "Tránh giữ một tư thế quá lâu, tránh nằm sấp hoặc xoay vặn cổ khi nằm.", "src": [0]}, {"text": "MedlinePlus: điều trị tùy nguyên nhân, có thể gồm chườm đá, thuốc giảm đau, vật lý trị liệu hoặc đeo nẹp cổ; hiếm khi cần phẫu thuật.", "src": [1]}], "diet": null, "doctor": [{"text": "Nên đi khám nếu đau hoặc cứng cổ không hết sau vài tuần, thuốc giảm đau không giúp, hoặc bạn lo lắng.", "src": [0]}, {"text": "Nên đi khám nếu kèm ngứa ran như kim châm hoặc lạnh cánh tay, vì có thể là dấu hiệu của vấn đề nghiêm trọng hơn.", "src": [0]}], "emergency": [], "disambiguation": "Thẻ này dựa trên nguồn về đau và cứng cổ; các nguồn đã đọc chưa nói riêng về đau vai.", "sources": [{"title": "Neck pain and stiff neck", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/neck-pain/", "reviewed": "2023-04-27"}, {"title": "Neck Injuries and Disorders", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/neckinjuriesanddisorders.html", "reviewed": "2026-08-04"}], "verifiedAt": "2026-10-09"}
+{
+ "id": "dau-vai-gay",
+ "kind": "condition",
+ "names": [
+  "đau vai gáy",
+  "đau mỏi vai gáy",
+  "cứng cổ",
+  "đau cứng cổ",
+  "đau mỏi cổ",
+  "neck pain",
+  "stiff neck",
+  "trẹo cổ",
+  "sái cổ",
+  "bị trẹo cổ",
+  "bị sái cổ"
+ ],
+ "about": [
+  {
+   "text": "Đau cổ và cứng cổ thường gặp, thường không nghiêm trọng; đa số chỉ kéo dài vài tuần.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "MedlinePlus: bất kỳ phần nào của cổ (cơ, xương, khớp, gân, dây chằng, dây thần kinh) đều có thể gây vấn đề; đau vùng cổ cũng có thể liên quan đến vai, hàm, đầu hoặc cánh tay trên.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Đau hoặc cứng cổ. Ngứa ran như kim châm hoặc lạnh cánh tay là những triệu chứng khác cần bác sĩ chú ý.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Ngủ với cổ ở tư thế gượng ép; tư thế xấu như ngồi bàn làm việc lâu; dây thần kinh bị chèn; chấn thương như whiplash do tai nạn giao thông hoặc té ngã.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "MedlinePlus: căng cơ hoặc căng thẳng thường gây đau cổ, thường do dùng quá mức như ngồi máy tính quá lâu; đôi khi do ngủ sai tư thế, tập quá sức; té ngã hoặc tai nạn cũng hay gặp.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "course": [
+  {
+   "text": "Đa số đau cổ chỉ kéo dài vài tuần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Có thể dùng thuốc giảm đau paracetamol hoặc ibuprofen, hoặc gel ibuprofen bôi lên cổ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Dùng gối thấp, chắc; tập các bài giúp cổ linh hoạt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Chườm lạnh bằng túi đậu đông lạnh bọc khăn khoảng 5 phút, hoặc chườm nóng bằng chai nước nóng bọc khăn khoảng 20 phút.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Tránh đeo nẹp cổ và giữ cổ cử động, trừ khi bác sĩ dặn khác.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Tránh những việc không an toàn khi cổ không xoay được, như lái xe hoặc đạp xe.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Phòng ngừa: khi ngủ giữ đầu thẳng hàng với cơ thể và dùng nệm chắc; ngồi thẳng, nhẹ nhàng đưa vai ra sau.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Tránh giữ một tư thế quá lâu, tránh nằm sấp hoặc xoay vặn cổ khi nằm.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "MedlinePlus: điều trị tùy nguyên nhân, có thể gồm chườm đá, thuốc giảm đau, vật lý trị liệu hoặc đeo nẹp cổ; hiếm khi cần phẫu thuật.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên đi khám nếu đau hoặc cứng cổ không hết sau vài tuần, thuốc giảm đau không giúp, hoặc bạn lo lắng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Nên đi khám nếu kèm ngứa ran như kim châm hoặc lạnh cánh tay, vì có thể là dấu hiệu của vấn đề nghiêm trọng hơn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "disambiguation": "Thẻ này dựa trên nguồn về đau và cứng cổ; các nguồn đã đọc chưa nói riêng về đau vai.",
+ "sources": [
+  {
+   "title": "Neck pain and stiff neck",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/conditions/neck-pain/",
+   "reviewed": "2023-04-27"
+  },
+  {
+   "title": "Neck Injuries and Disorders",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/neckinjuriesanddisorders.html",
+   "reviewed": "2026-08-04"
+  }
+ ],
+ "verifiedAt": "2026-10-09"
+}
