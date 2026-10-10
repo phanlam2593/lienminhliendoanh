@@ -678,7 +678,9 @@ export function AiChat({
     // 09/10 — KHUNG CÂU (lib/lomiParse): đọc câu GỐC một lần thành chủ ngữ / phủ định / thời gian / loại câu / vị ngữ.
     // Câu hỏi mở đầu bằng "e / em" mà chủ ngữ là Lomi ("e ăn tối chưa") → người dùng đang GỌI Lomi là em, không phải tự xưng em.
     const addr0 = en ? undefined : loadMem(user.id).addr;
-    const fr0 = en ? null : parseVi(raw, { addr: addr0 });
+    // (mấy lượt gần đây có nói về người yêu / chồng / "anh ấy" không — để "a" trong câu của người đang xưng "em" được hiểu là người đó)
+    const partnerCtx = msgs.slice(-4).some((m) => /\b(nguoi yeu|ny|ban trai|chong|anh ay|anh ta|crush|ong xa|anh nguoi yeu|ex|nguoi cu)\b/.test(normalizeVi(m.content))) || (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })();
+    const fr0 = en ? null : parseVi(raw, { addr: addr0, partnerCtx });
     //   ("e có người yêu chưa" — hỏi chuyện riêng của Lomi — cũng vậy, dù khung không có vị ngữ.)
     const callsLomiEm = (!!fr0 && asksLomiLove(fr0)) || !!fr0 && fr0.conf >= 0.7 && fr0.em === "you" && !fr0.toks.some((t) => t.r === "SELF") && (fr0.subject === "you" || fr0.act === "greet" || fr0.act === "wish" || fr0.act === "thanks" || fr0.act === "invite");
     const selfAC = fr0 && fr0.conf >= 0.75 && fr0.pred && !fr0.multi ? (/^(a|anh)$/.test(fr0.selfWord ?? "") ? "anh" : /^(c|chị)$/.test(fr0.selfWord ?? "") ? "chị" : undefined) : undefined;
@@ -701,7 +703,7 @@ export function AiChat({
         : undefined;
     const addrNow = en ? { explicit: undefined } : learnAddr(user.id, raw, { force: callsLomiEm ? "bạn-em" : fr0?.addressee && fr0.em === "you" && selfAC ? selfAC : undefined, fallback: selfAC ?? shortAC ?? selfEm, hold: (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })() });
     // Câu này vừa cho biết cách xưng hô mới ("a đang…") → đọc lại khung với cách xưng hô đó ("e" trong câu là Lomi).
-    const fr1 = fr0 && loadMem(user.id).addr !== addr0 ? parseVi(raw, { addr: loadMem(user.id).addr }) : fr0;
+    const fr1 = fr0 && loadMem(user.id).addr !== addr0 ? parseVi(raw, { addr: loadMem(user.id).addr, partnerCtx }) : fr0;
     // Tin trước đang nói về một người / con vật → câu lược chủ ngữ này vẫn nói về người đó ("mẹ a đang ốm" → "bị cảm thôi").
     const lastMsg0 = msgs[msgs.length - 1];
     const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;

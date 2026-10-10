@@ -239,7 +239,8 @@ export function eventById(id: string): Ev | undefined {
 }
 
 // Câu trả lời ngắn
-export const YES_RE = /^(co|co a|co ne|co chu|co lam|u|uh|um|uhm|uk|dung|dung roi|dung vay|vang|da|nhieu|nhieu lam|lam|roi|chac vay|chac la vay|ok)$/;
+// 10/10: nhận cả tiếng đệm cuối câu ("vâng ạ", "dạ vâng", "có nha") — trước đây "vâng ạ" không được hiểu là "có" nên bị nhắc lại "Vâng hả 😔".
+export const YES_RE = /^(co|co a|co ne|co chu|co lam|u|uh|um|uhm|uk|dung|dung roi|dung vay|vang|da|da vang|vang a|nhieu|nhieu lam|lam|roi|chac vay|chac la vay|ok|oke|okie)( (a|nha|nhe|roi|luon|chu|ne|em|e|lomi|vay|a))*$/;
 export const NO_RE = /^(khong|ko|k|kh|hong|hem|khum|chua|chua co|khong co|khong daux?|cung khong|khong lam|binh thuong)( (binh thuong|thoi|a|nha|lam|dau|co|het|gi|ca))*( thoi)?$/;
 export const DUNNO_RE = /\b(khong biet|hk bit|k biet|chiu|khong ro|biet daux?|sao biet)\b/;
 // Người dùng than Lomi máy móc / không hiểu

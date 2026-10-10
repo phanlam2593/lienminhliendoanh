@@ -207,7 +207,9 @@ export function learnAddr(uid: string, raw: string, hint: { force?: Addr; fallba
   const KNOWN: Record<string, RegExp> = { anh: /(?<![\p{L}])(a|anh)(?![\p{L}])/iu, chị: /(?<![\p{L}])(c|chị)(?![\p{L}])/iu, em: /(?<![\p{L}])(e|em)(?![\p{L}])/iu };
   if (a && m.addr && KNOWN[m.addr] && KNOWN[a] && a !== m.addr) {
     const hasOld = KNOWN[m.addr].test(raw);
-    const startsNew = new RegExp(`^\\s*${a === "anh" ? "(a|anh)" : a === "chị" ? "(c|chị)" : "(e|em)"}(?![\\p{L}])`, "iu").test(raw);
+    // (10/10: cho phép từ chỉ thời gian đứng trước — "hôm nay a vui lắm", "dạo này e mệt")
+    const TIME0 = "(?:(?:hôm nay|hôm qua|bữa nay|nay|tối nay|tối qua|sáng nay|trưa nay|chiều nay|giờ|bây giờ|dạo này|mấy nay|mới|vừa|rồi|thật ra|thiệt ra)\\s+)?";
+    const startsNew = new RegExp(`^\\s*${TIME0}${a === "anh" ? "(a|anh)" : a === "chị" ? "(c|chị)" : "(e|em)"}(?![\\p{L}])`, "iu").test(raw);
     if (hasOld || !startsNew || hint.hold) a = null;
   }
   // "bạn-em" (chỉ biết người dùng gọi Lomi là em) không ghi đè cách xưng rõ hơn đã biết (anh/chị).

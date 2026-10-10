@@ -85,3 +85,27 @@ describe("kho y khoa + tâm lý — chạy thử 10/10", () => {
     expect((await last(["em ngủ không được, đầu cứ nghĩ linh tinh"])).content).not.toMatch(/em hỏi thì các nguồn/);
   }, T);
 });
+
+// 10/10 (chiều) — Kir chụp màn hình: "hôm nay a vui lắm hehe" → "Anh ấy vui lắm hehe vậy hả… Em chắc tự hào lắm ha?",
+// rồi "là sao? sao lại liên quan e tự hào?" → tư vấn quán vắng khách.
+describe("xưng hô + câu thắc mắc lại Lomi", () => {
+  it("đã xưng em mà câu 'a …' đứng một mình → người nói đổi xưng anh, không phải 'anh ấy'", async () => {
+    const r = await chat(["em buồn quá", "hôm nay a vui lắm hehe"]);
+    const a = r[r.length - 1].content;
+    expect(a).not.toMatch(/anh ấy|Anh ấy|hehe hả/);
+    expect(a).toMatch(/anh/);
+  }, T);
+  it("vẫn hiểu 'a' là người yêu khi trong câu có 'e' ('a không nhắn cho e 3 ngày rồi')", async () => {
+    const r = await chat(["em buồn quá", "a không nhắn cho e 3 ngày rồi"]);
+    expect(r[r.length - 1].content).not.toMatch(/^Nghe anh/);
+  }, T);
+  it("'là sao? sao lại liên quan e tự hào?' → Lomi nhận đáp lạc, không tư vấn quán vắng khách", async () => {
+    const m = (await chat(["hôm nay a vui lắm hehe", "là sao? sao lại liên quan e tự hào?"])).pop()!;
+    expect(m.content).not.toMatch(/vắng|khách|kinh doanh/);
+    expect(m.content).toMatch(/đáp lạc/);
+  }, T);
+  it("'quán e dạo này ế quá' là quán vắng khách, không phải ế người yêu; 'vâng ạ' là đồng ý, không nhắc lại", async () => {
+    expect((await last(["quán e dạo này ế quá"])).content).not.toMatch(/người yêu|người để thương/);
+    expect((await chat(["em buồn quá", "vâng ạ"])).pop()!.content).not.toMatch(/Vâng hả/);
+  }, T);
+});

@@ -448,7 +448,7 @@ function partNow(h: number): number {
   return 4;
 }
 
-export type ParseOpts = { /** Cách người dùng đang tự xưng (để biết "e" là ai). */ addr?: Addr | null; /** Giờ hiện tại 0–23 (để đọc "tối nay"); mặc định lấy đồng hồ máy. */ hour?: number };
+export type ParseOpts = { /** Cách người dùng đang tự xưng (để biết "e" là ai). */ addr?: Addr | null; /** Giờ hiện tại 0–23 (để đọc "tối nay"); mặc định lấy đồng hồ máy. */ hour?: number; /** Mấy lượt gần đây đang nói về người yêu / chồng / "anh ấy" (để biết "a" có phải người đó không). */ partnerCtx?: boolean };
 
 /** Đọc một câu thành KHUNG. Không bao giờ ném lỗi; câu không đọc được thì conf thấp. */
 export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
@@ -494,7 +494,10 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     if (dem) {
       Object.assign(t, { r: "THIRD", t: `${full} ${dem}`, cls: undefined });
       tk.splice(i + 1, 1);
-    } else if (opts.addr === "em" && full === "anh") Object.assign(t, { r: "THIRD", t: "anh ấy", cls: undefined });
+    } else if (opts.addr === "em" && full === "anh" && (opts.partnerCtx || tk.some((x, j) => j !== i && /^(e|em)$/.test(x.t))))
+      // 10/10: chỉ khi trong câu còn có "e / em" ("a không nhắn cho e") hoặc đang nói chuyện người yêu / chồng. "hôm nay a vui lắm hehe" đứng
+      // một mình là người nói ĐỔI cách xưng (trước đây bị đọc thành "Anh ấy vui lắm hehe vậy hả… Em chắc tự hào lắm ha?").
+      Object.assign(t, { r: "THIRD", t: "anh ấy", cls: undefined });
   }
   const f: Frame = { ...base, toks: tk, loose, greeted, multi: content.filter((c) => c.length >= 2).length > 1 };
   // (khai báo sớm: tagsOf() ở cuối hàm đọc các biến này, kể cả khi câu được nhận là lời chào / chúc và trả về sớm)

@@ -707,7 +707,9 @@ export function mirrorText(f: Frame | null, addr?: Addr | null, max = 10): strin
   // Nhắc lại chỉ là xếp lại đúng chữ người dùng gõ nên không cần khung chắc; riêng câu gõ KHÔNG DẤU thì từ có thể bị đọc nhầm → cần chắc.
   //   (11/10: câu không dấu còn TỪ LẠ thì không nhắc lại — "toi con phai trong con" từng thành "Tối con phai trong con hả".)
   const m = f && (!f.loose || (f.conf >= 0.7 && !f.toks.some((t) => t.r === "UNK" && !/^\d/.test(t.t)))) ? mirrorOf(f, max) : null;
-  return m ? m.split(YOU_MARK).join(youOf(addr)) : null;
+  // 10/10: bỏ tiếng cười / thán từ ở cuối khi nhắc lại ("a vui lắm hehe" → "anh vui lắm hả", không phải "anh vui lắm hehe hả")
+  const clean = m?.replace(/(\s+(?:hehe+|hihi+|haha+|hoho+|kaka+|keke+|=\)+|:\)+|:d|xd|nè|á|ha))+\s*$/iu, "").trim();
+  return clean ? clean.split(YOU_MARK).join(youOf(addr)) : null;
 }
 
 /** Câu là một MỆNH ĐỀ (có vị ngữ / phủ định / mức độ: "bạn bè ai cũng bận", "công việc nhiều quá") chứ không chỉ gọi tên một chủ đề ("chuyện công việc"). */

@@ -173,7 +173,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "single",
-    re: /\b(doc than|chua co nguoi yeu|khong co nguoi yeu|chua ai yeu|khong ai yeu|chua tung yeu|chua yeu ai|(?<!(?:ban|hang|quan|shop|tiem|khach|phong) )(?:e qua|bi e|e lau|e roi)|fa lau|lam sao co nguoi yeu|muon co nguoi yeu|kiem nguoi yeu|tim nguoi yeu)\b/,
+    re: /\b(doc than|chua co nguoi yeu|khong co nguoi yeu|chua ai yeu|khong ai yeu|chua tung yeu|chua yeu ai|(?<!(?:ban|hang|quan|shop|tiem|khach|phong|cua hang|buon ban|ban hang|homestay|spa)\b.{0,40})(?:e qua|bi e|e lau|e roi)|fa lau|lam sao co nguoi yeu|muon co nguoi yeu|kiem nguoi yeu|tim nguoi yeu)\b/,
     feel: ["Độc thân lâu đôi khi cũng thấy chạnh lòng ha, nhất là mùa lễ Tết 😅", "Muốn có một người để thương, để kể chuyện mỗi ngày — mong ước đó dễ thương mà 💕"],
     insight: [
       "Độc thân không có nghĩa là bạn thiếu gì. Nhiều khi chỉ là chưa gặp đúng người, hoặc vòng quen biết còn hẹp.",

@@ -473,6 +473,7 @@ function tarotInfo(n: string): UReply | null {
  * Chạy TRƯỚC module chuyên biệt. `correctionOnly` = chỉ xét câu sửa lại (gọi sớm, trước mọi mạch).
  * inFlow = đang ở một mạch có câu hỏi chờ (tâm sự, chọn món, chọn loại hình…) → không chặn filler/follow-up.
  */
+const WHAT_RE = /^ (la sao|y la sao|y gi|noi gi vay|noi gi the|noi gi ky|tra loi gi vay|gi vay troi|cai gi vay|hai) ?$|^ (la sao|y la sao) .{0,6}?(sao lai|lien quan)| (sao lai lien quan|lien quan gi|co lien quan gi|dau co lien quan|lien quan cho nao|lac de|tra loi lac|hieu sai roi|hieu nham roi|hieu lam roi|dau co hoi|minh dau co hoi|a dau co hoi|e dau co hoi|em dau co hoi) /;
 export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionOnly = false): Gate | null {
   const n = normalizeVi(q);
   const lastAsked = /\?\s*$|\?[^?]{0,12}$/.test(ctx.lastText ?? "");
@@ -489,6 +490,10 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
   // "không" / "không phải" đứng một mình, mà Lomi không vừa hỏi gì → bạn đang bác câu trả lời.
   if (/^(khong|ko|k|hong|khong phai|ko phai|khong dung|sai roi|khong phai vay)( (ma|dau|nha|lomi|a))*$/.test(n) && !lastAsked && !ctx.inFlow && ctx.lastText)
     return { action: "reply", reply: { intent: "correction", text: "Dạ, chắc Lomi hiểu nhầm rồi 🙏 Bạn muốn hỏi chuyện gì nè? Nói Lomi thêm chút xíu nha." } };
+  // 10/10: thắc mắc chính câu Lomi vừa đáp ("là sao? sao lại liên quan e tự hào?", "liên quan gì", "nói gì vậy") → Lomi đáp lạc,
+  // nhận lỗi và hỏi lại — trước đây câu này bị đoán sang chủ đề khác (bỏ dấu "liên quan e" = "quán ế" → tư vấn quán vắng khách).
+  if (ctx.lastText && n.split(" ").length <= 12 && WHAT_RE.test(` ${n} `))
+    return { action: "reply", reply: { intent: "correction", text: "À, Lomi đáp lạc ý bạn rồi, xin lỗi nha 🙏 Lomi hiểu chưa đúng câu vừa rồi. Bạn nói lại giúp Lomi một chút được không?" } };
   if (correctionOnly) return null;
 
   // 2) Hỏi về luật Tarot → trả lời kiến thức Tarot (không rút bài với câu hỏi "có bài ngược hả?").

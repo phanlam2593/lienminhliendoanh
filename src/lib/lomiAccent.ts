@@ -87,7 +87,14 @@ export const BIZ: Table = {
   gia: ["giá"], // giả, già
   vang: ["vắng"], // vàng
   viet: ["viết"], // Việt
+  // 10/10: "liên quan e tự hào" bỏ dấu thành "quan e" = "quán ế" → tưởng hỏi quán vắng khách.
+  quan: ["quán"], // quan (liên quan, cơ quan…), quần, quận
+  e: ["ế"], // é, è, ê…
+  am: ["ẩm"], // ấm, âm
+  cham: ["chậm"], // chăm, chấm, chạm
   },
+  // câu gõ CÓ DẤU mà các chữ này để trơn thì người dùng gõ đúng như vậy ("liên quan", "e" = em) — không phải "quán", "ế"
+  bare: ["quan", "e"],
   p: [
   ],
 };
