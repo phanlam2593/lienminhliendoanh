@@ -12,7 +12,7 @@ const items: Item[] = JSON.parse(readFileSync(`${DIR}/corpus.json`, "utf8"));
 it("bộ đo tiếng Việt: không tụt so với mốc", async () => {
   const score: Record<Form, { ok: number; n: number }> = { acc: { ok: 0, n: 0 }, bare: { ok: 0, n: 0 }, teen: { ok: 0, n: 0 }, bareTeen: { ok: 0, n: 0 } };
   const rows: unknown[] = [];
-  for (const it0 of items)
+  for (const [ii, it0] of items.entries())
     for (const f of FORMS) {
       const q = variant(it0.q, f);
       if (f !== "acc" && q === variant(it0.q, f === "bareTeen" ? "bare" : "acc")) continue; // dạng trùng (câu không có chữ viết tắt) — không đếm 2 lần
@@ -20,7 +20,7 @@ it("bộ đo tiếng Việt: không tụt so với mốc", async () => {
       let a = "";
       let ad = true;
       try {
-        const r = await chat([...(it0.pre ?? []).map((p) => variant(p, f)), q]);
+        const r = await chat([...(it0.pre ?? []).map((p) => variant(p, f)), q], { seed: 7 + ii });
         const m = r[r.length - 1];
         got = classify(m);
         a = m.content.replace(/\s+/g, " ").slice(0, 160);
@@ -53,8 +53,8 @@ it("câu mới: gõ không dấu được hiểu giống gõ có dấu", async (
     let same = 0;
     const diff: string[] = [];
     for (const q of hold) {
-      const a = classify((await chat([q])).pop()!);
-      const b = classify((await chat([variant(q, "bare")])).pop()!);
+      const a = classify((await chat([q], { seed: 99 })).pop()!);
+      const b = classify((await chat([variant(q, "bare")], { seed: 99 })).pop()!);
       if (a === b) same++;
       else diff.push(`${q}: có dấu=${a}, không dấu=${b}`);
     }

@@ -47,7 +47,17 @@ const KINDS: Kind[] = [
   { re: /\b(nha dat|bat dong san|bds|thue nha|mua nha)\b/, type: "broker", names: [], noun: "văn phòng nhà đất" },
 ];
 
-export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean };
+export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number };
+
+/** 10/10: lọc theo bán kính người dùng nói. Có vị trí thì lọc thật; không có thì nói rõ là chưa lọc được. */
+function byRadius<T extends { distKm?: number }>(cards: T[], pos: unknown, maxKm?: number): { cards: T[]; note: string } {
+  if (!maxKm) return { cards, note: "" };
+  const k = Number.isInteger(maxKm) ? String(maxKm) : maxKm.toFixed(1).replace(".", ",");
+  if (!pos) return { cards, note: `\n(Lomi chưa biết bạn đang ở đâu nên chưa lọc được trong ${k}km — bật quyền vị trí cho app là Lomi lọc liền nha.)` };
+  const inR = cards.filter((c) => c.distKm != null && c.distKm <= maxKm);
+  if (inR.length) return { cards: inR, note: `\n(Chỉ lấy chỗ trong khoảng ${k}km quanh bạn.)` };
+  return { cards, note: `\n(Chưa thấy chỗ nào trong ${k}km quanh bạn — đây là mấy chỗ gần bạn nhất.)` };
+}
 
 // Động từ "tìm" rõ ràng. (Chữ "ưu đãi", "rẻ", "ngon" chỉ là điều kiện lọc, không tự kích hoạt tìm —
 // tránh "ưu đãi hết hạn gia hạn được không?" bị hiểu thành đi tìm quán.)
@@ -182,7 +192,8 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
   let cards = rows.map((r) => toCard(r, pos));
   if (pos) cards.sort((a, b) => (a.distKm ?? 1e9) - (b.distKm ?? 1e9));
   else cards.sort((a, b) => b.rating - a.rating || b.offerCount - a.offerCount);
-  cards = cards.slice(0, 5);
+  const rad = byRadius(cards, pos, it.maxKm);
+  cards = rad.cards.slice(0, 5);
   const noun = k?.noun ?? "chỗ";
   if (!cards.length)
     return {
@@ -195,7 +206,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
     `Lomi tìm được mấy ${noun}${it.offer ? " đang có ưu đãi" : ""} nè (${how}) 👇`,
     `Có ngay đây! Mấy ${noun}${it.offer ? " đang có ưu đãi" : ""} trong Liên Minh Liên Doanh (${how}):`,
   ]);
-  const hint = pos ? "" : it.near ? "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)" : "";
+  const hint = rad.note || (pos ? "" : it.near ? "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)" : "");
   return {
     text: `${intro}${hint}\nBấm vào thẻ để xem chi tiết và nhận ưu đãi nha. Muốn xem nhiều hơn thì vào Khám phá (/kham-pha).`,
     places: cards,
@@ -299,7 +310,7 @@ export function suggestDishes(drink: boolean, avoid: string[] = []): { text: str
 }
 
 /** Điều kiện thêm khi người dùng nói tiếp sau kết quả tìm quán ("gần mình", "có ưu đãi không?", "yên tĩnh") — lib/lomiConvo. */
-export type DishWant = { text?: string; offer?: boolean; near?: boolean };
+export type DishWant = { text?: string; offer?: boolean; near?: boolean; maxKm?: number };
 
 /**
  * Tìm quán THẬT có món này (tên quán, mô tả hoặc ưu đãi). avoidIds = quán đã gợi ý (bấm "Quán khác").
@@ -361,13 +372,15 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: Dis
       quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"],
     };
   }
+  const rad = byRadius(cards, pos, want?.maxKm);
+  cards = rad.cards;
   if (pos) {
     cards.sort((a, b) => (a.distKm ?? 1e9) - (b.distKm ?? 1e9));
     cards = cards.slice(0, 6).sort(() => Math.random() - 0.5);
   } else cards = cards.slice(0, 8).sort(() => Math.random() - 0.5);
   cards = cards.slice(0, 3);
   if (want && (met.length || miss.length || want.near)) {
-    const nearNote = want.near ? (pos ? " (xếp gần bạn trước)" : "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)") : "";
+    const nearNote = rad.note || (want.near ? (pos ? " (xếp gần bạn trước)" : "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)") : "");
     return {
       text: miss.length
         ? `Lomi chưa thấy quán **${nm}** nào ${miss.join(", ")} 🥲 Đây là mấy quán ${nm} khác${met.length ? ` ${met.join(", ")}` : ""}, bạn xem thử nha 👇${nearNote}`

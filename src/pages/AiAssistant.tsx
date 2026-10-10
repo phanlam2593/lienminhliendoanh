@@ -66,7 +66,7 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -901,6 +901,18 @@ export function AiChat({
       });
     }
     if (rt?.kind === "refine") return replyDishShops(q, rt.dish, [], rt.want);
+    // 10/10: thêm điều kiện cho lần tìm chỗ vừa rồi ("giới hạn 5km thôi") → tìm lại đúng loại chỗ đó, lọc theo bán kính.
+    if (rt?.kind === "research" && lastA0?.search) {
+      const intent: SearchIntent = { ...lastA0.search, mode: "find", near: rt.want.near ?? lastA0.search.near, offer: rt.want.offer ?? lastA0.search.offer, maxKm: rt.want.maxKm };
+      setBusy(true);
+      let res;
+      try {
+        res = await runSearch(intent, []);
+      } finally {
+        setBusy(false);
+      }
+      return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, quick: res.quick });
+    }
     // Câu bác lại trống ("không", "không phải") mà ngữ cảnh ở trên không giải thích được → Lomi nhận là mình hiểu nhầm.
     if (corr?.action === "reply") return localReply(q, { role: "assistant", content: corr.reply.text, local: true, quick: corr.reply.quick });
     if (rt?.kind === "rewrite") {
@@ -1659,6 +1671,9 @@ export function AiChat({
       // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
       logUnanswered(raw, q);
       if (!sug.length && !en) {
+        // 10/10: phân vân chuyện ăn uống ("nên mua tôm ăn không nhỉ") là câu Lomi trả lời được — không tính là bí.
+        const fdr = foodDecisionReply(q);
+        if (fdr) return localReply(q, { role: "assistant", content: fdr.text, local: true, quick: fdr.quick });
         const fb = scopedFallback(q, lastA?.faqId ? faqById(lastA.faqId)?.q.vi : undefined);
         // Đang theo chuyện một người / con vật ốm (lib/lomiStory) mà hỏi điều Lomi chưa có kiến thức → nói thật theo đúng mạch đó
         // (vẫn ghi lại câu chưa trả lời được + hiện nút 💡 như thường), không buông một câu "chưa được học" lạc lõng.

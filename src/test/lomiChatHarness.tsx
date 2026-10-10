@@ -75,11 +75,37 @@ export type Turn = {
 const history = (): Turn[] => JSON.parse(localStorage.getItem(`ai-assistant-history:${UID}`) ?? "[]");
 
 /** Gõ lần lượt các tin vào khung chat thật; trả về các tin LOMI đáp (theo thứ tự), kèm cờ ngữ cảnh. */
-export async function chat(turns: string[]): Promise<Turn[]> {
+export type ChatOpts = {
+  /** Lịch sử dựng sẵn (vd đúng câu Lomi đã nói trong một hội thoại thật) — để tái hiện chính xác ngữ cảnh. */
+  history?: Partial<Turn>[];
+  /** Cố định phần ngẫu nhiên (Lomi chọn ngẫu nhiên giữa vài câu đáp) — để bộ đo cho cùng kết quả mỗi lần chạy. */
+  seed?: number;
+};
+function seeded(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+export async function chat(turns: string[], opts: ChatOpts = {}): Promise<Turn[]> {
+  const rnd = opts.seed !== undefined ? vi.spyOn(Math, "random").mockImplementation(seeded(opts.seed)) : null;
+  try {
+    return await chat0(turns, opts);
+  } finally {
+    rnd?.mockRestore();
+  }
+}
+async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
   await import("@/lib/lomiMedData"); // kho kiến thức y khoa là 1 chunk nạp động — nạp sẵn để lượt đầu không vượt thời gian chờ
   await (await import("@/lib/lomiViRestore")).loadViModel(); // từ điển khôi phục dấu (10/10) — app tải sẵn lúc mở trang
   cleanup();
   localStorage.clear();
+  const pre = opts.history ?? [];
+  if (pre.length) localStorage.setItem(`ai-assistant-history:${UID}`, JSON.stringify(pre));
   Element.prototype.scrollIntoView = () => {};
   const { container } = render(
     <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
@@ -95,10 +121,10 @@ export async function chat(turns: string[]): Promise<Turn[]> {
       fireEvent.keyDown(box, { key: "Enter", code: "Enter" });
     });
     await waitFor(() => {
-      if (history().length < (i + 1) * 2) throw new Error(`Lomi chưa đáp tin thứ ${i + 1}: "${turns[i]}"`);
+      if (history().length < pre.length + (i + 1) * 2) throw new Error(`Lomi chưa đáp tin thứ ${i + 1}: "${turns[i]}"`);
     });
   }
-  const out = history().filter((m) => m.role === "assistant");
+  const out = history().slice(pre.length).filter((m) => m.role === "assistant");
   cleanup();
   return out;
 }

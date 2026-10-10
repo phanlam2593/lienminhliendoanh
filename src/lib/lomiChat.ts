@@ -208,7 +208,8 @@ const RULES: Rule[] = [
       ? { text: pick(["Lomi là robot nên chỉ “ăn” pin thôi nè 🔋😆 Còn bạn ăn chưa đó?", "Lomi vừa sạc đầy bụng rồi nè 🔋 Bạn ăn gì chưa?", "Hihi Lomi ăn điện thôi á 😆 Bạn nhớ ăn uống đầy đủ nha!"]) }
       : ({
       text: pick([
-        "Lomi là robot nên chỉ “ăn” pin thôi 🔋😆 Bạn đói hả? Mở Khám phá (/kham-pha) → sắp xếp Gần đây xem quanh bạn có quán nào ngon nha 🍜",
+        // 10/10: bỏ câu đùa "Lomi chỉ ăn pin" ở đây — người dùng nói MÌNH đói, không hỏi Lomi ăn chưa.
+        "Đói bụng hả 🍜 Ăn liền cho có sức nha! Để Lomi gợi ý vài món cho bạn chọn nha?",
         "Đói thì phải ăn liền chứ! 🍲 Vào Khám phá (/kham-pha) chọn Gần đây, biết đâu có quán đang có ưu đãi đó 😉",
       ]),
       quick: ["Hôm nay ăn gì? 🎲", "Tìm quán ăn gần mình"],
@@ -793,8 +794,25 @@ function unknownReply(prefix = ""): ChatReply {
   return { text: prefix + UNKNOWN_SHORT[i], sticker };
 }
 
+/** 10/10: phân vân chuyện ĂN UỐNG ("hôm nay nên mua tôm ăn không nhỉ") — đáp như bạn bè, không mời bói bài. null nếu không phải. */
+export function foodDecisionReply(text: string): ChatReply | null {
+  const n = ` ${normalizeVi(text)} `;
+  const fd = n.match(/\b(?:co nen|nen) (?:mua|an|uong|nau|goi|dat|order|lam) ((?:\S+ ){0,3}?\S+?)(?: an| uong)? (?:khong|ko|k|hong)(?: (?:nhi|ta|ha|a|ne|ta))*\s*$/);
+  if (!fd || isAppish(text)) return null;
+  const w = fd[1].split(" ").filter((x) => !/^(mot|it|chut|xiu|nhieu|cai|mon|bua|di)$/.test(x));
+  const orig = text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
+  const at = orig.findIndex((_, i) => w.length > 0 && w.every((y, j) => normalizeVi(orig[i + j] ?? "") === y));
+  const what = at >= 0 ? orig.slice(at, at + w.length).join(" ") : "món đó";
+  return {
+    text: `Thèm **${what}** thì làm một bữa cho vui miệng thôi 😋 Chỉ cần lưu ý: nếu đang phải kiêng (gout, dị ứng, dạ dày…) thì hỏi Lomi “${what} có ăn được không” trước nha. Hay để Lomi gợi ý món khác cho đổi vị?`,
+    quick: ["Hôm nay ăn gì? 🎲"],
+  };
+}
+
 export function scopedFallback(text: string, faqQ?: string): ChatReply {
   const n = ` ${normalizeVi(text)} `;
+  const fdr = foodDecisionReply(text);
+  if (fdr) return fdr;
   // Câu hỏi quyết định chuyện đời ("hôm nay có nên đi nhậu không") → vẫn mời bói đúng câu đó (trong phạm vi Tarot).
   if (/\b(co nen|nen .* khong|nen .* hay)\b/.test(n) && !isAppish(text))
     return {

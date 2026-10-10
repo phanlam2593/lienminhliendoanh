@@ -475,6 +475,14 @@ function tarotInfo(n: string): UReply | null {
  * Chạy TRƯỚC module chuyên biệt. `correctionOnly` = chỉ xét câu sửa lại (gọi sớm, trước mọi mạch).
  * inFlow = đang ở một mạch có câu hỏi chờ (tâm sự, chọn món, chọn loại hình…) → không chặn filler/follow-up.
  */
+/** 10/10: menu mẹo (dùng khi người dùng xin "mẹo" mà chưa nói chuyện gì) — lib/lomiConvo dùng chung. */
+export const TIP_MENU: UReply = {
+  intent: "tip_menu",
+  text: "Lomi có mẹo ở mấy mảng này nè 😄 Bạn muốn mẹo về chuyện nào?\n• 🩺 Sức khoẻ: ngủ ngon, đỡ đau đầu, ăn uống theo bệnh…\n• 💚 Tinh thần: bớt lo âu, căng thẳng, suy nghĩ nhiều\n• 🏪 Kinh doanh: hút khách, giữ khách quen, làm ưu đãi\n• 🍜 Ăn gì hôm nay",
+  quick: ["Mất ngủ nên làm gì?", "Làm sao bớt căng thẳng?", "Làm sao hút khách cho quán?", "Hôm nay ăn gì?"],
+};
+// 10/10: than phiền CÁCH Lomi trả lời ("sao e cứ vậy hoài", "thấy 1 câu chứ mấy", "trả lời giống nhau hoài") → xin lỗi, hỏi lại.
+const COMPLAIN_RE = / (sao (e|em|lomi|ban|may) (cu |lai |toan |hay )?(vay|the|nhu vay|nhu the|ky vay|ky the) (hoai|mai|vay|the|hoai vay)|(cu|toan|lai) (tra loi|noi|hoi|dap) (giong nhau|giong het|y chang|hoai|mai|lap lai|mot cau)|lap lai hoai|lap di lap lai|lap lai mai|noi hoai (mot|1) cau|tra loi giong nhau|thay (1|mot) cau (chu|thoi)|(e|em|lomi) (do|ngu|kem|lo) (qua|the|vay|ghe)|sao (e|em|lomi) (khong|ko|k|cha|chang) hieu (gi|ji|j)|(e|em|lomi|ban|may) (khong|ko|k|cha|chang) hieu (gi|ji|j)( het| ca| luon| tron)?|(noi|tra loi|hoi|dap) (gi )?(ky|la|lam|ngo|vo duyen) (vay|the|qua|ghe|zay)|hoi di hoi lai) /;
 const WHAT_RE = /^ (la sao|y la sao|y gi|noi gi vay|noi gi the|noi gi ky|tra loi gi vay|gi vay troi|cai gi vay|hai) ?$|^ (la sao|y la sao) .{0,6}?(sao lai|lien quan)| (sao lai lien quan|lien quan gi|co lien quan gi|dau co lien quan|lien quan cho nao|lac de|tra loi lac|hieu sai roi|hieu nham roi|hieu lam roi|dau co hoi|minh dau co hoi|a dau co hoi|e dau co hoi|em dau co hoi) /;
 export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionOnly = false): Gate | null {
   const n = normalizeVi(q);
@@ -494,6 +502,14 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
     return { action: "reply", reply: { intent: "correction", text: "Dạ, chắc Lomi hiểu nhầm rồi 🙏 Bạn muốn hỏi chuyện gì nè? Nói Lomi thêm chút xíu nha." } };
   // 10/10: thắc mắc chính câu Lomi vừa đáp ("là sao? sao lại liên quan e tự hào?", "liên quan gì", "nói gì vậy") → Lomi đáp lạc,
   // nhận lỗi và hỏi lại — trước đây câu này bị đoán sang chủ đề khác (bỏ dấu "liên quan e" = "quán ế" → tư vấn quán vắng khách).
+  // 10/10: xin mẹo mà chưa nói chuyện gì ("E biết mẹo gì k?", "có bí kíp gì hay không") — có ngữ cảnh thì lib/lomiConvo đã xử lý trước.
+  if (/^((e|em|lomi|ban|may) )?(co )?(biet|co) (meo|bi kip|tips?)( (gi|nao|hay))*( (khong|ko|k|hong|ne|a|ha|ta|nao))*$/.test(n))
+    return { action: "reply", reply: TIP_MENU };
+  // 10/10: nhờ "tư vấn" mà chưa nói chuyện gì ("Tư vấn chona", "tư vấn cho a đi") → mời chọn mảng, không đoán.
+  if (/^(tu van|tv|tu van gium|tu van giup)( (cho|giup|gium))?( (a|anh|e|em|minh|toi|tui|chi|c|ban))?( (nha|di|voi|xiu|chut|ne|cai|nhe))*$|^tu van chona( (nha|di|voi|xiu|chut|ne))*$/.test(n))
+    return { action: "reply", reply: { intent: "consult_menu", text: "Được chứ 😄 Lomi tư vấn được mấy chuyện này nè — bạn muốn nói chuyện nào?\n• 💚 Tâm sự, tình cảm, áp lực\n• 🩺 Sức khoẻ (kiến thức tham khảo, có nguồn)\n• 🏪 Kinh doanh: hút khách, làm ưu đãi\n• 🍜 Ăn gì, đi đâu", quick: ["Tâm sự với Lomi", "🩺 Sức khoẻ", "Tư vấn kinh doanh", "Hôm nay ăn gì?"] } };
+  if (ctx.lastText && n.split(" ").length <= 14 && COMPLAIN_RE.test(` ${n} `))
+    return { action: "reply", reply: { intent: "correction", text: "Dạ, Lomi xin lỗi nha 🙏 Chắc Lomi trả lời chưa đúng ý bạn. Bạn nói Lomi nghe bạn đang cần gì — một chuyện cụ thể thôi cũng được — Lomi sẽ cố hiểu cho đúng." } };
   if (ctx.lastText && n.split(" ").length <= 12 && WHAT_RE.test(` ${n} `))
     return { action: "reply", reply: { intent: "correction", text: "À, Lomi đáp lạc ý bạn rồi, xin lỗi nha 🙏 Lomi hiểu chưa đúng câu vừa rồi. Bạn nói lại giúp Lomi một chút được không?" } };
   if (correctionOnly) return null;

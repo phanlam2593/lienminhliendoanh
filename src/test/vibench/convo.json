@@ -1,0 +1,459 @@
+[
+{
+"g": "đồng ý kèm chữ",
+"t": [
+"Bạn tâm sự với mình được không",
+"Ừa 8 chút cũng đc"
+],
+"good": "kể|nghe"
+},
+{
+"g": "đồng ý kèm chữ",
+"t": [
+"hôm nay ăn gì",
+"ok luôn nha"
+]
+},
+{
+"g": "đồng ý kèm chữ",
+"t": [
+"em buồn quá",
+"ừa cũng được"
+]
+},
+{
+"g": "đồng ý kèm chữ",
+"t": [
+"chào lomi",
+"ừm cũng được á"
+]
+},
+{
+"g": "đồng ý kèm chữ",
+"t": [
+"a đói bụng",
+"được luôn e"
+]
+},
+{
+"g": "đồng ý kèm chữ",
+"t": [
+"a đói bụng",
+"ừ thì gợi ý đi"
+],
+"good": "món|quán|[Ăă]n"
+},
+{
+"g": "từ chối kèm chữ",
+"t": [
+"a đói bụng",
+"thôi khỏi cũng được"
+],
+"good": "không sao|lúc khác|Okie|okie|Dạ"
+},
+{
+"g": "từ chối kèm chữ",
+"t": [
+"hôm nay ăn gì",
+"để lúc khác đi"
+],
+"good": "không sao|lúc khác|Okie|okie|Dạ"
+},
+{
+"g": "từ chối kèm chữ",
+"t": [
+"a đói bụng",
+"thôi khỏi nha e"
+],
+"good": "không sao|lúc khác|Okie|okie|Dạ"
+},
+{
+"g": "than phiền Lomi",
+"t": [
+"chào e",
+"Haizzz sao e cứ vậy hoài á lomi ơi"
+],
+"good": "xin lỗi"
+},
+{
+"g": "than phiền Lomi",
+"t": [
+"e lựa quán cho a đi",
+"Thấy 1 câu chứ mấy"
+],
+"good": "xin lỗi"
+},
+{
+"g": "than phiền Lomi",
+"t": [
+"em buồn",
+"sao lomi trả lời kỳ vậy"
+],
+"good": "xin lỗi"
+},
+{
+"g": "than phiền Lomi",
+"t": [
+"hôm nay ăn gì",
+"e lặp lại hoài vậy"
+],
+"good": "xin lỗi"
+},
+{
+"g": "than phiền Lomi",
+"t": [
+"a vui",
+"e nói gì vậy trời"
+],
+"good": "xin lỗi|đáp lạc"
+},
+{
+"g": "than phiền Lomi",
+"t": [
+"chào lomi",
+"sao cứ trả lời giống nhau vậy"
+],
+"good": "xin lỗi"
+},
+{
+"g": "xin mẹo",
+"t": [
+"chào e",
+"E biết mẹo gì k?"
+],
+"good": "mẹo"
+},
+{
+"g": "xin mẹo",
+"t": [
+"bị mất ngủ phải làm sao",
+"còn mẹo nào khác không"
+]
+},
+{
+"g": "xin mẹo",
+"t": [
+"đau dạ dày nên ăn gì",
+"có mẹo gì không"
+]
+},
+{
+"g": "xin mẹo",
+"t": [
+"quán em vắng khách quá",
+"có mẹo gì không e"
+]
+},
+{
+"g": "xin mẹo",
+"t": [
+"em hay lo lắng",
+"có cách nào cho đỡ không"
+]
+},
+{
+"g": "khoảng cách",
+"t": [
+"E lựa quán cho a đi",
+"Giới hạn 5km thôi"
+],
+"good": "km|vị trí|gần",
+"bad": "ghi rõ|nhắc “"
+},
+{
+"g": "khoảng cách",
+"t": [
+"tìm quán cà phê",
+"trong vòng 3km thôi"
+],
+"good": "km|vị trí|gần",
+"bad": "ghi rõ|nhắc “"
+},
+{
+"g": "khoảng cách",
+"t": [
+"quán phở nào ngon",
+"gần thôi"
+],
+"good": "gần|vị trí",
+"bad": "ghi rõ|nhắc “"
+},
+{
+"g": "khoảng cách",
+"t": [
+"tìm quán lẩu",
+"dưới 2 cây số thôi"
+],
+"good": "km|vị trí|gần",
+"bad": "ghi rõ|nhắc “"
+},
+{
+"g": "quyết định ăn uống",
+"t": [
+"hôm nay mình nên mua tôm ăn không nhỉ?"
+],
+"bad": "bói|🔮|rút bài"
+},
+{
+"g": "quyết định ăn uống",
+"t": [
+"tối nay có nên ăn lẩu không"
+],
+"bad": "bói|🔮|rút bài"
+},
+{
+"g": "quyết định ăn uống",
+"t": [
+"có nên uống trà sữa không ta"
+],
+"bad": "bói|🔮|rút bài"
+},
+{
+"g": "câu thật khác",
+"t": [
+"Sao vui á?"
+],
+"h": [
+{
+"role": "user",
+"content": "Chào e bữa tối nhé"
+},
+{
+"role": "assistant",
+"content": "Chào buổi tối nha 🌙 Hôm nay của bạn có gì vui không nè?"
+}
+],
+"good": "hỏi thăm"
+},
+{
+"g": "câu thật khác",
+"t": [
+"Hướng dẫn a xài app đi",
+"Thiệt không?"
+]
+},
+{
+"g": "câu thật khác",
+"t": [
+"chào e",
+"Tư vấn chona"
+],
+"good": "tâm sự|sức khoẻ|kinh doanh|tư vấn"
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"bói xem em có nên nghỉ việc không"
+],
+"good": "🔮|lá|bài"
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"hôm nay ăn gì",
+"phở"
+],
+"good": "[Pp]hở"
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"tìm quán cà phê",
+"yên tĩnh"
+],
+"good": "yên tĩnh|[Cc]à phê"
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"em buồn quá",
+"không"
+]
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"e lựa quán cho a đi",
+"có ưu đãi không"
+]
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"a bị đau đầu",
+"ừ"
+]
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"mẹ a đang ốm",
+"đi khám rồi"
+]
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"chào lomi",
+"ok"
+]
+},
+{
+"g": "giữ đúng (không được hỏng)",
+"t": [
+"hôm nay a vui lắm",
+"là sao? sao lại liên quan e tự hào?"
+],
+"good": "đáp lạc|xin lỗi"
+},
+{
+"g": "đồng ý kèm chữ (bộ 2)",
+"t": [
+"mình muốn tâm sự xíu",
+"ừ kể nè"
+]
+},
+{
+"g": "đồng ý kèm chữ (bộ 2)",
+"t": [
+"anh đói quá",
+"ok gợi ý đi e"
+],
+"good": "món|quán|[Ăă]n"
+},
+{
+"g": "đồng ý kèm chữ (bộ 2)",
+"t": [
+"hôm nay ăn gì",
+"được luôn"
+]
+},
+{
+"g": "từ chối kèm chữ (bộ 2)",
+"t": [
+"anh đói quá",
+"thôi để lát nữa"
+],
+"good": "không sao|lúc khác|Okie|okie|Dạ"
+},
+{
+"g": "từ chối kèm chữ (bộ 2)",
+"t": [
+"e lựa quán cho a đi",
+"thôi khỏi luôn"
+],
+"good": "không sao|lúc khác|Okie|okie|Dạ"
+},
+{
+"g": "than phiền Lomi (bộ 2)",
+"t": [
+"chào lomi",
+"lomi nói gì kỳ vậy"
+],
+"good": "xin lỗi"
+},
+{
+"g": "than phiền Lomi (bộ 2)",
+"t": [
+"hôm nay ăn gì",
+"sao cứ hỏi đi hỏi lại vậy"
+],
+"good": "xin lỗi"
+},
+{
+"g": "than phiền Lomi (bộ 2)",
+"t": [
+"em buồn",
+"lomi chẳng hiểu gì hết"
+],
+"good": "xin lỗi"
+},
+{
+"g": "xin mẹo (bộ 2)",
+"t": [
+"chào lomi",
+"có bí kíp gì hay không"
+],
+"good": "mẹo"
+},
+{
+"g": "xin mẹo (bộ 2)",
+"t": [
+"bị đau đầu nên làm gì",
+"còn cách nào khác không"
+]
+},
+{
+"g": "xin mẹo (bộ 2)",
+"t": [
+"homestay của em ít khách",
+"có cách nào khác không"
+]
+},
+{
+"g": "khoảng cách (bộ 2)",
+"t": [
+"tìm quán ăn gần đây",
+"chỉ trong 1km thôi"
+],
+"good": "km|vị trí"
+},
+{
+"g": "khoảng cách (bộ 2)",
+"t": [
+"e lựa quán cho a đi",
+"bán kính 3 km nha"
+],
+"good": "km|vị trí"
+},
+{
+"g": "khoảng cách (bộ 2)",
+"t": [
+"tìm quán bún bò",
+"gần gần thôi"
+],
+"good": "gần|vị trí"
+},
+{
+"g": "ưu đãi (bộ 2)",
+"t": [
+"tìm quán ăn gần đây",
+"quán nào có khuyến mãi không"
+]
+},
+{
+"g": "quyết định ăn uống (bộ 2)",
+"t": [
+"có nên ăn ốc tối nay không"
+],
+"bad": "bói|🔮|rút bài"
+},
+{
+"g": "quyết định ăn uống (bộ 2)",
+"t": [
+"nên mua cua về nấu không ta"
+],
+"bad": "bói|🔮|rút bài"
+},
+{
+"g": "hỏi lại / xác nhận (bộ 2)",
+"t": [
+"làm sao nhận ưu đãi",
+"thật hả"
+]
+},
+{
+"g": "tư vấn chung (bộ 2)",
+"t": [
+"tư vấn giúp em với"
+],
+"good": "tâm sự|sức khoẻ|kinh doanh|tư vấn"
+},
+{
+"g": "hỏi thăm (bộ 2)",
+"t": [
+"chào lomi",
+"cũng bình thường"
+]
+}
+]
