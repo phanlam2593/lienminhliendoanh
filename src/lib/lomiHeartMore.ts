@@ -289,7 +289,7 @@ export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ TÂM LÝ ═══════════════════════
   {
     id: "depress",
-    re: /\b(tram cam|bi tram cam|mat hung thu|khong con hung thu|khong muon lam gi|khong thiet gi|song khong muc dich|vo nghia qua|cuoc song vo nghia|te liet cam xuc|khong cam thay gi|buon keo dai|buon lau roi|khong thiet song)\b/,
+    re: /\b(tram cam|bi tram cam|mat hung thu|lam gi cung (thay )?chan|chan het moi thu|chan moi thu|cai gi cung chan|khong thay vui gi|khong con hung thu|khong muon lam gi|khong thiet gi|song khong muc dich|vo nghia qua|cuoc song vo nghia|te liet cam xuc|khong cam thay gi|buon keo dai|buon lau roi|khong thiet song)\b/,
     feel: [
       "Cảm giác trống rỗng, chẳng thiết gì kéo dài như vậy nặng nề thật sự.",
       "Cảm ơn bạn đã nói ra với Lomi. Khi mọi thứ đều mất màu, việc bạn vẫn tìm người để kể đã là một điều rất can đảm.",
@@ -332,7 +332,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "angerself",
-    re: /\b(nong tinh|hay noi nong|de noi nong|khong kiem che duoc|mat kiem soat khi gian|hay gian|hay cau|hay quat|noi nong voi|to tieng voi|hay la het)\b/,
+    re: /\b(nong tinh|hay noi nong|de noi nong|khong kiem che duoc|mat kiem soat khi gian|hay gian|hay cau|hay quat|noi nong voi|to tieng voi|hay la het|kiem soat (con )?(gian|nong|tuc gian|cam xuc)|kiem che (con )?(gian|nong|tuc gian|cam xuc)|bot nong|bot gian|de gian|gian du|cach het gian|het gian)\b/,
     feel: ["Lomi hiểu, nổi nóng xong nhiều khi mình còn thấy hối hận hơn cả người kia 😔", "Việc bạn nhận ra và muốn thay đổi đã là bước rất đáng quý rồi đó."],
     insight: [
       "Tức giận là cảm xúc bình thường, thường là “lớp vỏ” bên ngoài của mệt mỏi, tổn thương hay cảm giác không được tôn trọng.",
@@ -509,7 +509,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "compare",
-    re: /\b(so sanh voi nguoi khac|ai cung hon minh|ai cung gioi hon|gioi hon minh|ban be thanh cong|ban be deu co|thua ban bang|fomo|luot mang thay buon|nhin nguoi ta thay tui|thay minh cham chan|bang tuoi nguoi ta)\b/,
+    re: /\b(so sanh voi nguoi khac|(hay |cu |luon )?so sanh (minh|ban than|em|toi|tui|anh|chi) voi|ai cung hon minh|ai cung gioi hon|gioi hon minh|ban be thanh cong|ban be deu co|thua ban bang|fomo|luot mang thay buon|nhin nguoi ta thay tui|thay minh cham chan|bang tuoi nguoi ta)\b/,
     feel: ["Lướt mạng thấy ai cũng thành công, còn mình thì dậm chân — cảm giác đó khó chịu lắm, Lomi hiểu 😔"],
     insight: [
       "Mạng xã hội là “cuộn phim nổi bật” của người khác, không phải cuộc sống thật của họ.",
@@ -550,7 +550,9 @@ export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ SỨC KHOẺ ═══════════════════════
   {
     id: "pregnant",
-    re: /\b(co thai|mang thai|co bau|lo co bau|so co bau|tre kinh|chua co kinh|que thu thai|thu thai|vo ke hoach|lo dinh bau|so dinh bau)\b/,
+    // 10/10: chỉ khi LO / NGHI có thai ("sợ có bầu", "trễ kinh", "có thai không ta") — câu hỏi kiến thức thai kỳ ("mang thai mấy tuần thì
+    // siêu âm được") không phải lo trễ kinh.
+    re: /\b((lo|so|nghi|hay la|chac la|lieu) (minh |em |e |chi |c |toi |tui |vo |ban gai |ny |nguoi yeu )?(da |bi )?(co thai|co bau|mang thai|dinh bau)|(co thai|co bau|dinh bau) (roi )?(khong|ko|k|chua|ha|a)|lo co bau|so co bau|tre kinh|chua co kinh|que thu thai|thu thai|vo ke hoach|lo dinh bau|so dinh bau)\b/,
     feel: ["Lomi hiểu, lo lắng chuyện này làm mình bồn chồn không yên 🤍", "Bình tĩnh nha, Lomi ở đây với bạn. Mình cùng xem nên làm gì trước."],
     insight: [
       "Trễ kinh có thể do nhiều lý do: căng thẳng, thay đổi cân nặng, thiếu ngủ, rối loạn nội tiết… chứ không chỉ do có thai.",

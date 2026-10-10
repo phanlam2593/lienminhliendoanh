@@ -327,7 +327,7 @@ const THEMES: Theme[] = [
   {
     id: "jealous",
     hint: [[/\b(ban be|ban cua minh|ban than|dong nghiep)\b/, "Ghen cả với bạn bè của bạn thì dễ làm bạn thấy ngột ngạt lắm 😔 Người ấy có thể đang bất an. Thử nói rõ: bạn bè là một phần cuộc sống của bạn và bạn cần được tin tưởng — đồng thời hỏi xem điều gì làm họ lo để cùng tìm cách."]],
-    re: /\b(ghen|ghen tuong|hay ghen|bi ghen|nghi ngo nguoi yeu|kiem soat)\b/,
+    re: /\b(ghen|ghen tuong|hay ghen|bi ghen|nghi ngo nguoi yeu|(nguoi yeu|ny|ban trai|ban gai|chong|vo|anh ay|co ay) (\S+ ){0,3}kiem soat)\b/, // 10/10: "kiểm soát" một mình không phải ghen ("kiểm soát cơn giận")
     feel: [
       "Ghen là cảm xúc rất người — ai thương thật cũng có lúc ghen hết á 😅",
       "Cảm giác bất an khi thấy người thương thân với ai khác khó chịu lắm, Lomi hiểu.",
@@ -508,7 +508,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "grief",
-    re: /\b(mat nguoi than|qua doi|tang le|dam tang|ong mat|ba mat|bo mat|me mat|mat me|mat bo|mat ong|mat ba|mat di mot nguoi|(chong|vo|con|ban than) (minh |toi |em )?(mat|qua doi|mat roi)|thu cung mat|cho mat|meo mat|con cho chet|con meo chet)\b/,
+    re: /\b(mat nguoi than|qua doi|tang le|dam tang|ong mat|ba mat|bo mat|me mat|mat me|mat bo|mat ong|mat ba|mat di mot nguoi|(chong|vo|con|ban than) (minh |toi |em )?(mat|qua doi|mat roi)|thu cung mat|cho mat|meo mat|con cho chet|con meo chet|(ba|bo|me|ma|cha|ong|ba noi|ba ngoai|ong noi|ong ngoai|chong|vo|con|anh trai|chi gai|em trai|em gai|ban than) (em |minh |toi |tui |a |anh |chi |c |e )?(mat roi|qua doi|da mat|vua mat|moi mat|ra di roi|da ra di|vua ra di|moi ra di|vua qua doi|da qua doi))\b/,
     feel: [
       "Lomi rất tiếc về sự mất mát của bạn 🤍 Không lời nào đủ để xoa dịu nỗi đau này.",
       "Mất đi người (hay bé cưng) mình thương là nỗi đau rất lớn. Lomi ở đây với bạn.",

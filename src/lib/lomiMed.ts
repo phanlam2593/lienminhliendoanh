@@ -25,10 +25,14 @@ export type MedTopic = {
   doctor: DrugFact[];
   emergency: DrugFact[];
   disambiguation?: string;
+  /** Thẻ chỉ nói về ăn uống (vd ăn uống khi mang thai) — chỉ nhận câu hỏi ăn uống / hỏi món, câu khác về chủ đề này để lớp khác đáp. */
+  dietOnly?: boolean;
+  /** id thẻ riêng cho trẻ em của cùng chủ đề (vd sot → sot-o-tre-em): câu nói tới con / bé / trẻ thì dùng thẻ đó. */
+  child?: string;
   sources: DrugSource[];
   verifiedAt: string;
 };
-type IndexRow = { id: string; kind: MedTopic["kind"]; names: string[] };
+type IndexRow = { id: string; kind: MedTopic["kind"]; names: string[]; dietOnly?: boolean; child?: string };
 const ROWS = INDEX as IndexRow[];
 
 // ── Nạp thẻ theo nhu cầu ── (cả kho là MỘT chunk — lib/lomiMedData — tải ở lần hỏi y khoa đầu tiên)
@@ -93,9 +97,23 @@ function accentAgrees(textAcc: string, nameAcc: string): boolean {
 export function findMedTopicId(text: string): string | null {
   const b = bare(text);
   const a = acc(text);
-  for (const k of NAME_KEYS) if (k.short ? a.includes(k.acc) : b.includes(k.bare) && accentAgrees(a, k.acc)) return k.id;
+  for (const k of NAME_KEYS) {
+    if (!(k.short ? a.includes(k.acc) : b.includes(k.bare) && accentAgrees(a, k.acc))) continue;
+    // Thẻ chỉ nói ăn uống ("bầu", "mang thai") chỉ nhận khi câu nói tới ăn uống — "bầu cử là gì" không phải.
+    if (DIET_ONLY.has(k.id) && !DIET_CUE.test(b)) continue;
+    // Thẻ người lớn có thẻ riêng cho trẻ ("con bị sốt bao nhiêu độ" → sốt ở trẻ em).
+    const kid = CHILD_OF.get(k.id);
+    if (kid && (a === b ? KID_CUE_B.test(b) : KID_CUE.test(a))) return kid;
+    return k.id;
+  }
   return null;
 }
+const DIET_ONLY = new Set(ROWS.filter((r) => r.dietOnly).map((r) => r.id));
+const DIET_CUE = / (an|uong|kieng|thuc pham|mon|do an|thuc an|nhau|bia|ruou|ca phe) /;
+const CHILD_OF = new Map(ROWS.filter((r) => r.child).map((r) => [r.id, r.child!]));
+// ("con" có dấu là "còn" → xét trên chữ có dấu; câu gõ không dấu thì đành xét bản không dấu)
+const KID_CUE = / (con|bé|trẻ|em bé|cháu|sơ sinh|nhi|bé con) /u;
+const KID_CUE_B = / (con|be|tre|em be|chau|so sinh) /;
 
 // ── Khía cạnh được hỏi ──
 export type MedAspect = "define" | "signs" | "causes" | "course" | "spread" | "care" | "diet" | "food" | "doctor" | "emergency" | "meds";
@@ -107,7 +125,7 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["signs", /\b(trieu chung|dau hieu|bieu hien|nhan biet|nhan ra|co nhung dau hieu|co hien tuong gi|bi sao|bi nhu the nao|lam sao biet|sao biet|lam sao de biet|biet minh bi|biet co bi)\b/],
   ["causes", /\b(nguyen nhan|tai sao|vi sao|do dau|yeu to nguy co|dan den|gay ra|tai sao bi|vi sao bi|do cai gi|bi do gi|di truyen)\b/],
   ["doctor", /\b(di kham|kham o dau|kham khoa nao|khoa nao|can kham|nen kham|khi nao.*(kham|gap bac si|di vien)|gap bac si|bac si nao|di vien)\b/],
-  ["course", /\b(co khoi|khoi duoc|khoi han|chua khoi|bao lau khoi|co lay|lay khong|lay qua|co nguy hiem|co het|het khong|het ko|het duoc|co sao khong|co sao ko|nguy hiem khong|tien trien|keo dai|tai phat|bien chung|co chet|co nang khong|nang khong|co tu khoi|tu khoi|kho chua|co chua duoc|chua duoc khong|vinh vien)\b/],
+  ["course", /\b(co khoi|khoi duoc|khoi han|chua khoi|bao lau khoi|co lay|lay khong|lay qua|co nguy hiem|co het|het khong|het ko|het duoc|co sao khong|co sao ko|nguy hiem khong|tien trien|keo dai bao lau|keo dai khong|co keo dai|bi bao lau|tai phat|bien chung|co chet|co nang khong|nang khong|co tu khoi|tu khoi|kho chua|co chua duoc|chua duoc khong|vinh vien)\b/],
   ["care", /\b(cach chua|chua sao|chua the nao|chua nhu the nao|chua benh|chua tri|dieu tri|cach tri|lam sao|lam gi|phai lam gi|nen lam gi|cham soc|phong ngua|phong tranh|giam dau|cho do|cai thien|tu xu ly|xu ly|xu tri|so cuu|tap luyen|van dong|sinh hoat|boi gi|boi thuoc|boi kem|thoa gi)\b/],
   ["define", /\b(la gi|la benh gi|la sao|nghia la gi|co nghia|hieu nhu the nao|khai niem|dinh nghia|co phai la|giai thich|khac gi|khac nhau|phan biet)\b/],
 ];
@@ -170,7 +188,9 @@ export function aspectOf(text: string): MedAspect | null {
 
 // ── Câu hỏi KIẾN THỨC hay đang KỂ chuyện của mình? ──
 const SELF_STATE = /^(?:\s)?(?:a|anh|e|em|c|chi|minh|toi|tui|to)\s+(?:dang |cung |hay |bi |moi |vua |lai |van |thuong )*(?:bi|mac|co|hay|thay|cam thay|dang|bi)\b/;
-const QWORD = /\b(gi|la gi|the nao|nhu nao|ra sao|sao khong|duoc khong|co khong|co duoc|khong\b|ko\b|\bk\b|hong\b|chua|nen|nguyen nhan|trieu chung|dau hieu|kieng|lam sao|bao lau|co nguy hiem|co lay|co khoi|co phai|tai sao|vi sao|khi nao|o dau|nghia|giai thich|tim hieu|hoi ve|noi ve)\b/;
+const QWORD0 = /\b(gi|la gi|the nao|nhu nao|ra sao|sao khong|duoc khong|co khong|co duoc|nen|nguyen nhan|trieu chung|dau hieu|kieng|lam sao|bao lau|co nguy hiem|co lay|co khoi|co phai|tai sao|vi sao|khi nao|o dau|nghia|giai thich|tim hieu|hoi ve|noi ve)\b/;
+// "không / chưa" giữa câu là phủ định ("ngủ không được, đầu cứ nghĩ…"); chỉ đứng CUỐI câu mới là từ hỏi ("ăn nhộng đc k").
+const QWORD = { test: (x: string) => QWORD0.test(x) || /(?:^| )(?:khong|ko|k|hong|chua) *$/.test(x) };
 /** Có phải câu HỎI kiến thức (không phải câu kể "a bị gout" hay tâm sự "a hay lo âu")? Có ? / từ hỏi / khía cạnh rõ / chỉ nêu tên chủ đề. */
 export function isMedQuestion(text: string, topicNames: string[] = []): boolean {
   const n = normalizeVi(text);
@@ -183,6 +203,8 @@ export function isMedQuestion(text: string, topicNames: string[] = []): boolean 
   // chỉ nêu tên: "bệnh gout", "tự kỷ ám thị", "gout á"
   const rest = topicNames.reduce((acc2, nm) => acc2.replace(normalizeVi(nm), " "), n).replace(/\b(benh|chung|hoi chung|roi loan|a|ha|nha|nhe|ne|do|vay|the|la|cai|viec|tinh trang|bi)\b/g, " ").replace(/\s+/g, " ").trim();
   if (topicNames.length && rest === "" && words <= 4) return true;
+  // tên + cụm bổ nghĩa ngắn: "tăng động giảm chú ý ở người lớn", "trầm cảm sau sinh", "gout cho người già"
+  if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && /^(?:o|cho|khi|tren|sau|truoc|trong) \S+(?: \S+){0,2}$/.test(rest)) return true;
   // có từ hỏi + tên chủ đề nhưng không rõ khía cạnh ("ADHD người lớn có không", "tay chân miệng ở người lớn có không") → tóm tắt chủ đề.
   if (hasQ && topicNames.length && !SELF_STATE.test(n) && !foodPhrase(text)) return true;
   // câu kể có hỏi kèm ("a bị gout ăn nhộng được không") — phần hỏi là món
@@ -297,7 +319,8 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   }
   if (aspect === "diet") {
     if (!t.diet || !(t.diet.avoid.length || t.diet.ok.length || t.diet.foods.length)) {
-      const eat = t.care.filter((f) => /(^|[^\p{L}])(ăn|uống|bú|thức ăn|đồ ăn|bù nước|oresol)(?![\p{L}])/iu.test(f.text));
+      // (bỏ các ý về thuốc: "corticoid uống" không phải chuyện ăn uống)
+      const eat = t.care.filter((f) => /(^|[^\p{L}])(ăn|uống|bú|thức ăn|đồ ăn|bù nước|oresol)(?![\p{L}])/iu.test(f.text) && !/thuốc|corticoid|kháng sinh|kháng virus/iu.test(f.text));
       if (eat.length)
         return out([`Các nguồn y khoa Lomi đã đối chiếu **không có danh sách kiêng cữ riêng** cho ${N}. Phần chăm sóc có nhắc tới ăn uống thế này:`, bl(eat, 5), "Muốn chắc về món cụ thể, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.", end([eat])].join("\n\n"), "diet", true);
       return out(`Các nguồn y khoa Lomi đã đối chiếu **không nêu cách ăn uống riêng** cho ${N}, nên Lomi không đưa ra danh sách kiêng cữ. Nếu bạn lo về ăn uống, hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.`, "diet", true);
@@ -399,18 +422,25 @@ export type MedAsk = { id: string; aspect: MedAspect | "overview"; food: string 
 /** Câu này có phải câu hỏi kiến thức về một chủ đề trong kho không? prev = chủ đề đang nói ở tin trước (cho câu nối). */
 export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   const own = findMedTopicId(text);
-  const asp = aspectOf(text);
   const words = normalizeVi(text).split(" ").length;
   if (own) {
-    const names = ROWS.find((r) => r.id === own)!.names;
+    const row = ROWS.find((r) => r.id === own)!;
+    const names = row.names;
     if (!isMedQuestion(text, names)) return null;
+    // Khía cạnh xét trên phần câu NGOÀI tên chủ đề: "rối loạn ăn uống là gì" — chữ "ăn uống" là tên bệnh, không phải hỏi kiêng cữ.
+    const rest0 = names.reduce((acc2, nm) => acc2.replace(` ${normalizeVi(nm)} `, " "), ` ${normalizeVi(text)} `);
+    const aspR = aspectOf(rest0);
+    // (tên chủ đề tự chứa khía cạnh — "đi khám tâm lý", "dấu hiệu cần hỗ trợ tâm lý" — thì vẫn lấy khía cạnh trong tên)
+    const asp = aspR ?? aspectOf(text);
     const topicLike = foodPhrase(text, null);
     // Khía cạnh xét trên phần câu NGOÀI tên món: "uống sữa chua được không" bỏ dấu dễ thành "chữa được không".
-    const aspF = topicLike ? aspectOf(` ${normalizeVi(text)} `.replace(` ${topicLike} `, " ")) : asp;
+    const aspF = topicLike ? aspectOf(rest0.replace(` ${topicLike} `, " ")) : asp;
     const a: MedAspect | "overview" = topicLike && aspF !== "spread" && (!aspF || aspF === "diet" || aspF === "define") && /\b(an|uong|dung)\b/.test(normalizeVi(text)) && !/\b(kieng|an gi|uong gi|nen an|tranh an)\b/.test(normalizeVi(text)) ? "food" : (asp ?? "overview");
+    if (row.dietOnly && a !== "food" && a !== "diet") return null;
     return { id: own, aspect: a, food: a === "food" ? topicLike : null };
   }
   // câu nối không nhắc lại tên: "còn nhộng thì sao", "vậy ăn gì được", "triệu chứng?"
+  const asp = aspectOf(text);
   if (prev?.id && words <= 9) {
     const n = normalizeVi(text);
     if (MEAL_SUGGEST.test(` ${n} `) && !/\b(kieng|nen an|tranh)\b/.test(n)) return null;

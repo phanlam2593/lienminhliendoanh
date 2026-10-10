@@ -252,6 +252,8 @@ add("FILL", "một mình|ai cũng|ai nấy|buổi|bữa|tự nhiên|thật ra|h�
 add("VERB", "xin lỗi|làm lành|nói dối|ngoại tình|kiểm soát|nghi ngờ|la mắng|khen|chê|mắng|chửi|trách|ghen|nghi|than|giấu|cấm|doạ|dọa|đánh|lừa|cãi", { cls: "social" });
 add("STATE", "sốt ruột|hay khóc|khóc", { cls: "feel", v: -1 });
 add("STATE", "có bầu|có thai|mang thai|mang bầu|bầu bí|bầu", { cls: "preg", v: 0 });
+// 10/10: "bầu" trong các từ khác nghĩa ("bầu cử", "bầu trời", "quả bầu") không phải có bầu — cụm dài hơn thắng khi đọc câu.
+add("NOUN", "bầu cử|bầu chọn|bầu trời|bầu bạn|bầu không khí|bầu rượu|quả bầu|trái bầu|canh bầu|bí bầu|bầu sao", { cls: "thing" });
 add("STATE", "bị bắt nạt|bắt nạt|bị ăn hiếp|ăn hiếp|bị tẩy chay|tẩy chay|bị cô lập|bị trêu chọc|bị xúc phạm", { cls: "bad", v: -1 });
 add("ADJ", "ít nói|lạnh nhạt|lạnh lùng|vô tâm|cộc cằn|nóng tính|gia trưởng|ích kỷ|ích kỉ|keo kiệt|bừa bộn|hay ghen|ghen tuông|vô trách nhiệm", { v: -1 });
 // 12/10 (benchmark P1) — thêm ở CUỐI để từ cũ vẫn giữ ưu tiên khi gõ không dấu:

@@ -44,3 +44,44 @@ describe("kho y khoa — câu hỏi thật", () => {
     expect(r[r.length - 1].content).not.toMatch(/Lupus/);
   }, T);
 });
+
+// 10/10 — lỗi tìm ra khi Claude chạy thử đợt 2 (sức khoẻ + tâm lý)
+describe("kho y khoa + tâm lý — chạy thử 10/10", () => {
+  it("'tim đập nhanh' không bị hiểu là bị đánh ('đập' ≠ 'đạp')", async () => {
+    const m = await last(["em hay bị tim đập nhanh rồi run tay là sao"]);
+    expect(m.content).not.toMatch(/Bị đánh|không phải lỗi của em/);
+  }, T);
+  it("ăn uống khi mang thai trả lời theo NHS; món nguồn không nêu (rau ngót, dứa) thì nói thẳng chưa xác minh", async () => {
+    expect((await last(["bà bầu ăn sushi được không"])).content).toMatch(/cá và hải sản sống\*\* nên \*\*tránh\*\*/);
+    expect((await last(["mang thai ăn pate được không"])).content).toMatch(/gan và sản phẩm từ gan/);
+    expect((await last(["bà bầu ăn rau ngót được không"])).content).toMatch(/\*\*rau ngót\*\* thì Lomi \*\*chưa xác minh được\*\*/);
+    expect((await last(["bầu ăn dứa được không"])).content).toMatch(/\*\*dứa\*\* thì Lomi \*\*chưa xác minh được\*\*/);
+  }, T);
+  it("'bầu cử', 'mang thai mấy tuần thì siêu âm' không bị coi là hỏi ăn uống / lo trễ kinh", async () => {
+    expect((await last(["bầu cử là gì"])).content).not.toMatch(/kiến thức đã kiểm chứng|chuyện sức khoẻ mà nói sai|mang thai/);
+    expect((await last(["mang thai mấy tuần thì siêu âm được"])).content).not.toMatch(/trễ kinh|chu kỳ|que thử/);
+  }, T);
+  it("sốt: hỏi bao nhiêu độ → mốc đi khám có nguồn; nói tới con / bé → thẻ sốt ở trẻ", async () => {
+    expect((await last(["sốt bao nhiêu độ thì đi viện"])).content).toMatch(/Sốt ở người lớn[\s\S]*39,4°C/);
+    expect((await last(["con bị sốt bao nhiêu độ thì đi viện"])).content).toMatch(/Sốt ở trẻ em/);
+  }, T);
+  it("khía cạnh xét ngoài tên bệnh; 'kéo dài' không phải hỏi diễn tiến; tên + cụm bổ nghĩa vẫn là hỏi", async () => {
+    expect((await last(["rối loạn ăn uống là gì"])).content).toMatch(/📖 \*\*Rối loạn ăn uống\*\* là gì/);
+    expect((await last(["mất ngủ kéo dài phải làm sao"])).content).toMatch(/🌿 Với \*\*Mất ngủ\*\*/);
+    expect((await last(["tăng động giảm chú ý ở người lớn"])).content).toMatch(/Tăng động giảm chú ý/);
+    expect((await last(["kiệt sức vì công việc phải làm sao"])).content).toMatch(/Kiệt sức nghề nghiệp/);
+  }, T);
+  it("hỏi khi nào cần gặp bác sĩ tâm lý → dấu hiệu cần tìm trợ giúp (có nguồn)", async () => {
+    expect((await last(["khi nào cần gặp bác sĩ tâm lý"])).content).toMatch(/MedlinePlus/);
+    expect((await last(["em có nên đi khám tâm lý không"])).content).toMatch(/dấu hiệu cảnh báo sớm/);
+  }, T);
+  it("bệnh chưa có thẻ + 'ăn gì' không bị gợi ý quán ăn", async () => {
+    expect((await last(["thoái hóa cột sống ăn gì"])).content).not.toMatch(/tìm quán|Bấm chọn/);
+  }, T);
+  it("tâm sự: mất người thân, chán mọi thứ, kiểm soát cơn giận, ngủ không được → đúng mạch", async () => {
+    expect((await last(["ba em mất rồi, em không chịu nổi"])).content).toMatch(/mất mát|mình thương|Đau buồn/);
+    expect((await last(["em làm gì cũng thấy chán"])).content).not.toMatch(/chưa được tiếp thu/);
+    expect((await last(["làm sao để kiểm soát cơn giận"])).content).not.toMatch(/ghen|người thương thân với ai/);
+    expect((await last(["em ngủ không được, đầu cứ nghĩ linh tinh"])).content).not.toMatch(/em hỏi thì các nguồn/);
+  }, T);
+});

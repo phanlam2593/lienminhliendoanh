@@ -635,6 +635,9 @@ export function AiChat({
     if (!topList) void loadTopTopics(8).then(setTopList);
   };
 
+  // 10/10: "thoái hóa cột sống ăn gì", "viêm xoang kiêng gì" — câu nêu một bệnh / tình trạng (kể cả bệnh chưa có trong kho) là hỏi
+  // ăn uống theo bệnh, không phải nhờ gợi ý quán.
+  const illMeal = (x: string) => /\b(benh|thoai hoa|viem|suy|ung thu|hoi chung|roi loan|dau|mo mau|tieu duong|huyet ap|sau mo|mang thai|co bau|ba bau|kieng|chua benh|chua tri)\b/.test(normalizeVi(x));
   // ── Hôm nay ăn gì / uống gì (01/10): gợi ý món → chọn món → tìm quán có món đó ──
   const replyDishes = (asked: string, drink: boolean, avoid: string[] = []) => {
     topicHit(drink ? "drink" : "food");
@@ -1163,7 +1166,7 @@ export function AiChat({
         // 09/10: đang theo chuyện người ốm mà hỏi "nên cho bé ăn gì" / "nên ăn gì" → là hỏi ăn uống cho người bệnh, không phải nhờ gợi ý quán.
         const sickMeal = th0?.kind === "care" && (th0.idle ?? 0) < 2 && /\b(nen|cho .{1,15} an|kieng|duoc an)\b/.test(normalizeVi(q));
         // ("thiếu vitamin D nên ăn gì", "gout nên ăn gì" — nêu một bệnh / tình trạng có trong kho kiến thức thì là hỏi ăn uống theo bệnh.)
-        if (ei?.intent === "food_suggest" && !sickMeal && !findMedId(q)) return replyDishes(q, ei.drink);
+        if (ei?.intent === "food_suggest" && !sickMeal && !findMedId(q) && !illMeal(q)) return replyDishes(q, ei.drink);
         // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
         //     (Câu tự nói rõ một loại chỗ khác — "quán nào gần đây có spa?" — thì không phải trả lời khẩu vị.)
         //     (Nhắc lại chính món đó kèm kiểu — "lẩu thái" khi đang hỏi khẩu vị lẩu — cũng là câu trả lời khẩu vị.)
@@ -1442,7 +1445,7 @@ export function AiChat({
     if (!forceAi && !en && !gateSkip) {
       const it = detectSearch(q);
       // "Hôm nay ăn gì / uống gì" → gợi ý món trước (chọn món rồi mới tìm quán).
-      if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q)) return replyDishes(q, it.mode === "drink");
+      if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q) && !illMeal(q)) return replyDishes(q, it.mode === "drink");
       // Hỏi thẳng một món ("quán phở nào ngon", "muốn ăn lẩu") → tìm quán có món đó luôn.
       if (it && it.mode !== "go") {
         const d = detectDish(q);

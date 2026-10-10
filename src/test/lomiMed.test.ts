@@ -95,7 +95,8 @@ describe("kho kiến thức y khoa", () => {
     for (const t of all) {
       for (const n of t.names) {
         if (normalizeVi(n).replace(/ /g, "").length < 4) continue; // tên ngắn chỉ nhận khi gõ đúng dấu
-        const got = findMedTopicId(`${n} là gì`);
+        // thẻ chỉ nói ăn uống (dietOnly) chỉ nhận câu có nói tới ăn uống
+        const got = findMedTopicId(t.dietOnly ? `${n} ăn gì` : `${n} là gì`);
         // một thẻ có thể nhường cho thẻ có tên dài hơn chứa nó (vd "tiểu đường type 2")
         expect(got, `"${n}" (${t.id}) → ${got}`).toBeTruthy();
       }

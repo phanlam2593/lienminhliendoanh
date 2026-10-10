@@ -168,3 +168,19 @@ Mỗi mục là điều người dùng có thể hỏi mà các nguồn chính t
 - trang MedlinePlus không liệt kê dấu hiệu cấp cứu cụ thể, chỉ nói là cấp cứu y khoa
 - chưa có nguồn về ăn uống/nhịn ăn trước mổ, hồi phục, ai hay mắc, trẻ em/mang thai
 - ngày 2025-12-02 là ngày cập nhật, không phải ngày rà soát
+
+## ăn uống khi mang thai (`an-uong-khi-mang-thai`) — 10/10
+- Nguồn duy nhất là NHS "Foods to avoid in pregnancy" (rà soát 15/06/2026). NHS không nêu riêng dứa (thơm), rau ngót, đu đủ xanh, trà sữa, nước dừa, mướp đắng — các quan niệm kiêng dân gian ở Việt Nam chưa có nguồn nên Lomi nói "chưa xác minh được".
+- Lời khuyên về trứng của NHS gắn với tem British Lion của Anh; ở Việt Nam không có tem này nên thẻ ghi "các loại trứng khác phải nấu chín kỹ".
+- Bảng cũ không nguồn (lib/lomiDiet "pregnant") từng nói "tránh rau ngót" — thẻ có nguồn được xét trước nên câu đó không còn được nói.
+- Chưa có nguồn về các câu hỏi thai kỳ khác (siêu âm, khám thai, vitamin) — thẻ chỉ nhận câu hỏi ăn uống (dietOnly).
+
+## sức khoẻ tâm thần — khi nào cần tìm trợ giúp (`tim-ho-tro-tam-ly`) — 10/10
+- Không đọc được trang NIMH "My Mental Health: Do I Need Help?" và NHS "How to access mental health services" (lỗi tải). Dùng MedlinePlus Mental Health + NHS urgent help.
+- Đường dây hỗ trợ Việt Nam không nằm trong danh sách tên miền tin cậy của kho nên không ghi vào thẻ (mạch khủng hoảng của Lomi đã có số đã kiểm chứng riêng).
+
+## sốt ở người lớn (`sot`) — bổ sung 10/10
+- Trang NHS về sốt người lớn quá hạn rà soát (hẹn 24/05/2026, chưa cập nhật); đã thêm MedlinePlus "Fever" (ency, 31/07/2024) cho mốc nhiệt độ và dấu hiệu cấp cứu.
+
+## Câu hỏi CHƯA có thẻ (phát hiện khi chạy thử 10/10)
+- Thoái hoá cột sống thắt lưng (kho mới có cột sống cổ), các câu hỏi thai kỳ ngoài ăn uống (siêu âm, khám thai), axit uric cao không kèm gout.

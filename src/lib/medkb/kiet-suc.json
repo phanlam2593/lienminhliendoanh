@@ -1,1 +1,207 @@
-{"id":"kiet-suc","kind":"mental","names":["kiệt sức nghề nghiệp","kiệt sức do công việc","burnout","burn-out","burn out","hội chứng burnout","job burnout"],"about":[{"text":"WHO định nghĩa kiệt sức nghề nghiệp (burn-out) là hội chứng do **căng thẳng mạn tính ở nơi làm việc chưa được kiểm soát tốt**.","src":[0]},{"text":"WHO xếp burn-out là hiện tượng nghề nghiệp, không phải một tình trạng bệnh lý; định nghĩa chỉ dùng cho bối cảnh công việc.","src":[0]},{"text":"Mayo Clinic mô tả đó là căng thẳng liên quan công việc khiến kiệt quệ về thể chất hoặc cảm xúc, có thể kèm cảm giác vô dụng, bất lực, trống rỗng.","src":[1]},{"text":"Burnout không phải chẩn đoán y khoa; một số chuyên gia cho rằng các tình trạng như trầm cảm có thể nằm phía sau.","src":[1]}],"signs":[{"text":"Ba nhóm biểu hiện theo WHO: cạn năng lượng, kiệt sức; xa cách với công việc, thấy tiêu cực hoặc hoài nghi về nó; hiệu quả công việc giảm.","src":[0]},{"text":"Nghi ngờ giá trị công việc của mình, khó bắt đầu làm việc hoặc phải lê bước đi làm.","src":[1]},{"text":"Thấy tách rời khỏi công việc và đồng nghiệp, mất kiên nhẫn với đồng nghiệp hoặc khách hàng.","src":[1]},{"text":"Ít năng lượng để làm tốt việc, khó tập trung, ít thấy thoả mãn với thành quả.","src":[1]},{"text":"Thấy công việc làm mình thất vọng hoặc nghi ngờ khả năng của bản thân.","src":[1]},{"text":"Dùng thức ăn, ma tuý hoặc rượu để thấy khá hơn hay để làm tê cảm xúc.","src":[1]},{"text":"Thay đổi giấc ngủ; đau đầu, rối loạn dạ dày, ruột hoặc các than phiền cơ thể không rõ nguyên nhân.","src":[1]}],"causes":[{"text":"Ít quyền kiểm soát lịch làm việc, nhiệm vụ, khối lượng việc hoặc nguồn lực cần có.","src":[1]},{"text":"Kỳ vọng từ sếp hoặc người khác không rõ ràng.","src":[1]},{"text":"Xung đột với đồng nghiệp, bị bắt nạt, hoặc sếp can thiệp quá nhiều.","src":[1]},{"text":"Quá nhiều việc, hoặc việc quá nhàm chán đến mức rút cạn năng lượng.","src":[1]},{"text":"Thiếu hỗ trợ ở nơi làm việc hay trong đời sống cá nhân.","src":[1]},{"text":"Công việc chiếm quá nhiều thời gian và sức lực, còn rất ít cho gia đình và bạn bè.","src":[1]},{"text":"Nguy cơ cao hơn khi khối lượng việc lớn, làm nhiều giờ, khó cân bằng công việc và cuộc sống, hoặc làm nghề chăm sóc người khác như y tế.","src":[1]}],"course":[{"text":"Hệ quả có thể là kiệt sức, không đối phó nổi, khó ngủ, buồn, giận, cáu gắt hoặc thờ ơ.","src":[1]},{"text":"Có thể dùng rượu hoặc chất nhiều hơn; nguy cơ bệnh tim, tăng huyết áp, đái tháo đường type 2 và dễ ốm hơn.","src":[1]},{"text":"Burnout có thể làm tăng nguy cơ trầm cảm, nhưng hai tình trạng này khác nhau và cần cách điều trị khác nhau.","src":[1]}],"care":[{"text":"Trao đổi mối lo với sếp, cùng tìm giải pháp, đặt mục tiêu thực tế, xác định việc nào có thể để sau.","src":[1]},{"text":"Nếu công việc khó thay đổi, cân nhắc một công việc phù hợp hơn.","src":[1]},{"text":"Tìm hỗ trợ từ đồng nghiệp, bạn bè, người thân; xem nơi làm có chương trình hỗ trợ nhân viên không.","src":[1]},{"text":"Thử các hoạt động thư giãn như yoga, thiền, thái cực quyền, hoặc hít thở sâu vài lần mỗi ngày.","src":[1]},{"text":"Tập thể dục đều, ưu tiên giấc ngủ, thực hành chánh niệm.","src":[1]}],"diet":null,"doctor":[{"text":"Nếu bạn thấy mình có các dấu hiệu trên, hãy cân nhắc nói chuyện với nhân viên y tế hoặc chuyên gia sức khoẻ tâm thần, vì các triệu chứng này cũng có thể liên quan đến trầm cảm.","src":[1]}],"emergency":[],"sources":[{"title":"Burn-out an “occupational phenomenon”: International Classification of Diseases","publisher":"WHO","url":"https://www.who.int/news/item/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases","reviewed":"2019-05-28"},{"title":"Job burnout: How to spot it and take action","publisher":"Mayo Clinic (Hoa Kỳ)","url":"https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/burnout/art-20046642","reviewed":"2023-11-30"}],"verifiedAt":"2026-10-09"}
+{
+ "id": "kiet-suc",
+ "kind": "mental",
+ "names": [
+  "kiệt sức nghề nghiệp",
+  "kiệt sức do công việc",
+  "burnout",
+  "burn-out",
+  "burn out",
+  "hội chứng burnout",
+  "job burnout",
+  "kiệt sức vì công việc",
+  "kiệt sức công việc",
+  "kiệt sức vì làm việc"
+ ],
+ "about": [
+  {
+   "text": "WHO định nghĩa kiệt sức nghề nghiệp (burn-out) là hội chứng do **căng thẳng mạn tính ở nơi làm việc chưa được kiểm soát tốt**.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "WHO xếp burn-out là hiện tượng nghề nghiệp, không phải một tình trạng bệnh lý; định nghĩa chỉ dùng cho bối cảnh công việc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Mayo Clinic mô tả đó là căng thẳng liên quan công việc khiến kiệt quệ về thể chất hoặc cảm xúc, có thể kèm cảm giác vô dụng, bất lực, trống rỗng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Burnout không phải chẩn đoán y khoa; một số chuyên gia cho rằng các tình trạng như trầm cảm có thể nằm phía sau.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Ba nhóm biểu hiện theo WHO: cạn năng lượng, kiệt sức; xa cách với công việc, thấy tiêu cực hoặc hoài nghi về nó; hiệu quả công việc giảm.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Nghi ngờ giá trị công việc của mình, khó bắt đầu làm việc hoặc phải lê bước đi làm.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Thấy tách rời khỏi công việc và đồng nghiệp, mất kiên nhẫn với đồng nghiệp hoặc khách hàng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Ít năng lượng để làm tốt việc, khó tập trung, ít thấy thoả mãn với thành quả.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Thấy công việc làm mình thất vọng hoặc nghi ngờ khả năng của bản thân.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Dùng thức ăn, ma tuý hoặc rượu để thấy khá hơn hay để làm tê cảm xúc.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Thay đổi giấc ngủ; đau đầu, rối loạn dạ dày, ruột hoặc các than phiền cơ thể không rõ nguyên nhân.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Ít quyền kiểm soát lịch làm việc, nhiệm vụ, khối lượng việc hoặc nguồn lực cần có.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Kỳ vọng từ sếp hoặc người khác không rõ ràng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Xung đột với đồng nghiệp, bị bắt nạt, hoặc sếp can thiệp quá nhiều.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Quá nhiều việc, hoặc việc quá nhàm chán đến mức rút cạn năng lượng.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Thiếu hỗ trợ ở nơi làm việc hay trong đời sống cá nhân.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Công việc chiếm quá nhiều thời gian và sức lực, còn rất ít cho gia đình và bạn bè.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Nguy cơ cao hơn khi khối lượng việc lớn, làm nhiều giờ, khó cân bằng công việc và cuộc sống, hoặc làm nghề chăm sóc người khác như y tế.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "course": [
+  {
+   "text": "Hệ quả có thể là kiệt sức, không đối phó nổi, khó ngủ, buồn, giận, cáu gắt hoặc thờ ơ.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Có thể dùng rượu hoặc chất nhiều hơn; nguy cơ bệnh tim, tăng huyết áp, đái tháo đường type 2 và dễ ốm hơn.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Burnout có thể làm tăng nguy cơ trầm cảm, nhưng hai tình trạng này khác nhau và cần cách điều trị khác nhau.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Trao đổi mối lo với sếp, cùng tìm giải pháp, đặt mục tiêu thực tế, xác định việc nào có thể để sau.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Nếu công việc khó thay đổi, cân nhắc một công việc phù hợp hơn.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Tìm hỗ trợ từ đồng nghiệp, bạn bè, người thân; xem nơi làm có chương trình hỗ trợ nhân viên không.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Thử các hoạt động thư giãn như yoga, thiền, thái cực quyền, hoặc hít thở sâu vài lần mỗi ngày.",
+   "src": [
+    1
+   ]
+  },
+  {
+   "text": "Tập thể dục đều, ưu tiên giấc ngủ, thực hành chánh niệm.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nếu bạn thấy mình có các dấu hiệu trên, hãy cân nhắc nói chuyện với nhân viên y tế hoặc chuyên gia sức khoẻ tâm thần, vì các triệu chứng này cũng có thể liên quan đến trầm cảm.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Burn-out an “occupational phenomenon”: International Classification of Diseases",
+   "publisher": "WHO",
+   "url": "https://www.who.int/news/item/28-05-2019-burn-out-an-occupational-phenomenon-international-classification-of-diseases",
+   "reviewed": "2019-05-28"
+  },
+  {
+   "title": "Job burnout: How to spot it and take action",
+   "publisher": "Mayo Clinic (Hoa Kỳ)",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/in-depth/burnout/art-20046642",
+   "reviewed": "2023-11-30"
+  }
+ ],
+ "verifiedAt": "2026-10-09"
+}

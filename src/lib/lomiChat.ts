@@ -298,7 +298,7 @@ const RULES: Rule[] = [
     reply: () => ({
       text: pick([
         "Chia tay đau lắm, Lomi hiểu mà 🥺 Cho phép mình buồn một chút cũng không sao đâu. Ăn uống đầy đủ, ngủ đủ giấc, gặp bạn bè nhiều hơn nha — rồi mọi thứ sẽ nhẹ dần.",
-        "Ôm bạn một cái nè 🤗 Người không trân trọng mình thì mình cũng không cần níu. Bạn xứng đáng được thương đúng cách 💚",
+        "Ôm bạn một cái nè 🤗 Kết thúc một mối quan hệ thì dù là ai nói lời chia tay cũng đều đau. Bạn muốn kể Lomi nghe chuyện của hai người không? 💚",
       ]),
       quick: [Q_LOVE, Q_DAILY],
     }),

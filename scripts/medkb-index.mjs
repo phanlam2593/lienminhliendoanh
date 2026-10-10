@@ -10,7 +10,10 @@ const rows = fs
   .map((f) => {
     const t = JSON.parse(fs.readFileSync(path.join(dir, f), "utf8"));
     if (`${t.id}.json` !== f) throw new Error(`${f}: id "${t.id}" không khớp tên file`);
-    return { id: t.id, kind: t.kind, names: t.names };
+    const row = { id: t.id, kind: t.kind, names: t.names };
+    if (t.dietOnly) row.dietOnly = true;
+    if (t.child) row.child = t.child;
+    return row;
   });
 fs.writeFileSync(path.join(dir, "index.json"), JSON.stringify(rows));
 console.log(`medkb index: ${rows.length} thẻ`);

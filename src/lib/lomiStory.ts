@@ -70,7 +70,14 @@ export type StoryEnv = {
 
 // ── Đọc chữ: có dấu thì so có dấu, gõ không dấu thì so không dấu (tránh "đỡ" / "đó", "khám" / "kham") ─────────────
 const bare = (x: string) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
-export type Txt = { s: string; b: string; loose: boolean; words: number; /** gần như không dấu — xem txt() */ mixed?: boolean };
+export type Txt = {
+  s: string;
+  b: string;
+  loose: boolean;
+  words: number;
+  /** gần như không dấu — xem txt() */ mixed?: boolean;
+  /** (câu mixed) các chữ CÓ DẤU do chính người dùng gõ — xem P() */ typed?: Set<string>;
+};
 export function txt(raw: string): Txt {
   const clean = (x: string) => ` ${x.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim()} `;
   // Câu gõ KHÔNG DẤU thì giữ nguyên chữ người dùng gõ (không đổi teen code — "hong" trong "viem hong" không phải "không").
@@ -82,7 +89,9 @@ export function txt(raw: string): Txt {
   // trong đó ("hoa tri", "nam vien", "benh") không được nhận ra. Giờ: chữ có dấu vẫn so có dấu trước, không khớp thì so thêm bản không dấu.
   const ws = s.trim() ? s.trim().split(" ") : [];
   const mixed = !loose && ws.length >= 3 && ws.filter((w) => w !== bare(w)).length / ws.length < 0.4;
-  return { s, b: bare(s), loose, words: ws.length, mixed };
+  // 10/10: chữ người dùng ĐÃ gõ có dấu ("tim đập nhanh") thì không được bỏ dấu để so ("dap" = "đạp" → tưởng bị đánh). Ghi lại các chữ đó.
+  const typed = mixed ? new Set(base.trim().split(" ").filter((w) => w !== bare(w))) : undefined;
+  return { s, b: bare(s), loose, words: ws.length, mixed, typed };
 }
 /** Mẫu viết CÓ DẤU, tự sinh bản không dấu. (?<!L) / (?!L): ranh giới từ cho chữ có dấu. */
 export function P(src: string, looseSrc?: string) {
@@ -96,7 +105,13 @@ export function P(src: string, looseSrc?: string) {
     // Câu gần như không dấu: chỉ tin bản CÓ DẤU khi chỗ khớp thật sự có dấu ("mổ", "bệnh"); chữ vốn không dấu ("ho", "u", "thai") trong
     // một câu như vậy là chữ gõ thiếu dấu ("ho dang nghi gì" = họ đang nghĩ gì) → xét theo bản không dấu, vốn đã loại các chữ dễ trùng.
     if (!t.mixed || (ma && ma[0] !== bare(ma[0]))) return ma;
-    return t.b.match(b);
+    const mb = t.b.match(b);
+    // 10/10: chỗ khớp bản không dấu mà có chữ người dùng đã gõ CÓ DẤU ("bị tim đập" khớp "bi … dap") → không tin (s và b cùng độ dài).
+    if (mb && mb.index !== undefined && t.typed?.size) {
+      const seg = t.s.slice(mb.index, mb.index + mb[0].length).trim().split(" ");
+      if (seg.some((w) => w !== bare(w) && t.typed!.has(w))) return ma;
+    }
+    return mb;
   };
 }
 const NEG_WORD = P("chưa|không|ko|chẳng|chả|đâu có|đã đâu|hông|hổng", "chua|khong|ko|k|chang|dau co|hok");

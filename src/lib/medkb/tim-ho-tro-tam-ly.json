@@ -1,0 +1,109 @@
+{
+ "id": "tim-ho-tro-tam-ly",
+ "kind": "mental",
+ "names": [
+  "sức khoẻ tâm thần (khi nào cần tìm trợ giúp)",
+  "khi nào cần gặp bác sĩ tâm lý",
+  "gặp bác sĩ tâm lý",
+  "đi khám tâm lý",
+  "khám tâm lý",
+  "khi nào cần đi khám tâm lý",
+  "gặp chuyên gia tâm lý",
+  "đi gặp chuyên gia tâm lý",
+  "cần gặp bác sĩ tâm lý",
+  "dấu hiệu cần hỗ trợ tâm lý",
+  "tìm hỗ trợ tâm lý",
+  "đi khám tâm thần",
+  "getting help for mental health"
+ ],
+ "disambiguation": "“Bác sĩ tâm lý” ở đây Lomi hiểu là người làm chuyên môn sức khoẻ tâm thần nói chung (bác sĩ tâm thần, nhà tâm lý…).",
+ "about": [
+  {
+   "text": "MedlinePlus: nếu nghĩ mình có thể đang có vấn đề sức khoẻ tâm thần, hãy tìm trợ giúp — liệu pháp trò chuyện (tâm lý trị liệu) và/hoặc thuốc có thể điều trị các rối loạn tâm thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Dấu hiệu cảnh báo sớm (MedlinePlus): ăn hoặc ngủ thay đổi; thu mình khỏi mọi người và việc từng thích; ít hoặc không còn sức; thấy tê dại, như không còn gì quan trọng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Đau nhức không rõ lý do; thấy bất lực, vô vọng; hút thuốc, uống rượu hoặc dùng chất nhiều hơn thường lệ; thấy lú lẫn, hay quên, giận dữ, lo lắng hay sợ hãi bất thường.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Tâm trạng lên xuống thất thường làm căng thẳng các mối quan hệ; suy nghĩ, ký ức cứ bám lấy không dứt; nghe thấy tiếng nói hoặc tin vào điều không có thật.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Có ý nghĩ làm hại bản thân hoặc người khác; khó làm việc hằng ngày như chăm con, đi làm, đi học.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [],
+ "course": [],
+ "care": [
+  {
+   "text": "Chưa biết bắt đầu từ đâu thì liên hệ bác sĩ chăm sóc ban đầu (bác sĩ gia đình / phòng khám) — họ có thể tư vấn cách điều trị và giới thiệu tới dịch vụ sức khoẻ tâm thần.",
+   "src": [
+    0,
+    1
+   ]
+  },
+  {
+   "text": "Hai cách điều trị chính là liệu pháp trò chuyện (tâm lý trị liệu) và thuốc, có thể dùng riêng hoặc kết hợp, do chuyên gia quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "MedlinePlus: nếu bạn nhận ra ở mình các dấu hiệu cảnh báo sớm (ăn ngủ thay đổi, thu mình, mất sức, thấy vô vọng, khó làm việc hằng ngày…) thì nên tìm trợ giúp chuyên môn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "NHS: cần trợ giúp gấp cho sức khoẻ tâm thần thì xin khám khẩn — sức khoẻ tâm thần khẩn cấp cần được coi trọng như bệnh thể chất.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "emergency": [
+  {
+   "text": "NHS: gọi cấp cứu hoặc tới khoa cấp cứu ngay khi tính mạng có nguy cơ (như tự gây thương tích nặng hoặc dùng quá liều), hoặc khi bạn thấy không thể giữ an toàn cho mình hay người khác.",
+   "src": [
+    1
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "title": "Mental Health",
+   "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+   "url": "https://medlineplus.gov/mentalhealth.html",
+   "reviewed": "2024-04-15"
+  },
+  {
+   "title": "Where to get urgent help for mental health",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/nhs-services/mental-health-services/where-to-get-urgent-help-for-mental-health/",
+   "reviewed": "2023-04-26"
+  }
+ ],
+ "verifiedAt": "2026-10-10"
+}

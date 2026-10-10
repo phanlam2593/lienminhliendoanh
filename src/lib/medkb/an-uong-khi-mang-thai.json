@@ -1,0 +1,455 @@
+{
+ "id": "an-uong-khi-mang-thai",
+ "kind": "women",
+ "dietOnly": true,
+ "names": [
+  "ăn uống khi mang thai",
+  "mang thai",
+  "đang mang thai",
+  "có thai",
+  "có bầu",
+  "mang bầu",
+  "đang bầu",
+  "bà bầu",
+  "mẹ bầu",
+  "bầu",
+  "thai kỳ",
+  "thực phẩm cần tránh khi mang thai",
+  "foods to avoid in pregnancy"
+ ],
+ "disambiguation": "Thẻ này chỉ nói về **ăn uống khi mang thai** (theo NHS). Câu hỏi khác về thai kỳ thì bạn hỏi bác sĩ Sản nha.",
+ "about": [
+  {
+   "text": "NHS liệt kê những món nên tránh hoặc cần cẩn thận khi mang thai, vì một số món có thể làm bạn ốm (như nhiễm khuẩn listeria) hoặc hại em bé.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Nhiễm listeria có thể gây sảy thai, thai chết lưu hoặc làm em bé sơ sinh ốm nặng — nên chú ý nhất với đồ sống và sữa chưa tiệt trùng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [],
+ "causes": [],
+ "course": [],
+ "care": [],
+ "diet": {
+  "avoid": [
+   {
+    "text": "Tránh rượu bia: có thể gây hại lâu dài cho em bé.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Tránh thịt sống hoặc chưa chín kỹ (có nguy cơ nhỏ nhiễm toxoplasma, có thể gây sảy thai); tránh gan và sản phẩm từ gan vì quá nhiều vitamin A có thể hại em bé.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Tránh cá và hải sản sống, kể cả sushi làm từ cá sống (dù đã cấp đông); tránh cá kiếm, cá mập, cá cờ (marlin).",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Tránh sữa, kem, sữa chua, bơ chưa tiệt trùng (nguy cơ listeria); phô mai mềm có lớp mốc trắng (brie, camembert) hoặc phô mai xanh mềm chỉ ăn khi nấu chín kỹ.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Trứng: NHS chỉ cho ăn sống/lòng đào với trứng gà có tem an toàn của Anh; trứng khác (kể cả trứng vịt, ngỗng, cút) phải nấu chín kỹ vì nguy cơ salmonella.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Tránh trà thảo mộc có rễ cam thảo vì có thể ảnh hưởng sự phát triển của em bé.",
+    "src": [
+     0
+    ]
+   }
+  ],
+  "ok": [
+   {
+    "text": "Hầu hết rau và trái cây đều ăn được — rửa thật kỹ trước khi ăn; nấm kim châm phải nấu chín kỹ.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Thịt gà, heo, bò, vịt nấu chín kỹ; tôm, cua, mực, vẹm, sò điệp, nghêu đã nấu chín; sữa, sữa chua, bơ, kem đã tiệt trùng và phô mai cứng đều ăn được.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Hạn chế caffeine (cà phê, trà, cola, nước tăng lực, sô-cô-la): NHS giới hạn 200 miligam mỗi ngày — một cốc cà phê hoà tan khoảng 100, một cốc trà khoảng 75.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Cá ngừ không quá 4 hộp hoặc 2 miếng cá ngừ tươi mỗi tuần; cá béo (cá hồi, cá thu, cá mòi, cá trích) không quá 2 phần mỗi tuần, vì có chất ô nhiễm như thuỷ ngân.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "text": "Trà thảo mộc như bạc hà, hoa cúc: không quá 4 cốc mỗi ngày (chưa có nhiều nghiên cứu khi mang thai). Đậu phộng và các loại hạt ăn được, trừ khi bị dị ứng hoặc bác sĩ dặn tránh.",
+    "src": [
+     0
+    ]
+   }
+  ],
+  "foods": [
+   {
+    "name": "rượu bia",
+    "aliases": [
+     "rượu",
+     "bia",
+     "bia rượu",
+     "đồ uống có cồn",
+     "rượu vang",
+     "nhậu"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: rượu bia có thể gây hại lâu dài cho em bé.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "gan và sản phẩm từ gan",
+    "aliases": [
+     "gan",
+     "gan heo",
+     "gan lợn",
+     "gan gà",
+     "gan bò",
+     "pa tê gan",
+     "pate gan",
+     "pa tê",
+     "pate",
+     "pa-tê"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: gan và sản phẩm từ gan (như pa tê gan) có nhiều vitamin A, có thể hại em bé.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "thịt sống, thịt tái",
+    "aliases": [
+     "thịt tái",
+     "bò tái",
+     "phở tái",
+     "thịt sống",
+     "thịt chưa chín",
+     "bít tết tái",
+     "thịt nướng tái"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: thịt sống hoặc chưa chín kỹ có nguy cơ nhỏ nhiễm toxoplasma, có thể gây sảy thai — nấu chín kỹ.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "cá và hải sản sống",
+    "aliases": [
+     "sushi",
+     "sashimi",
+     "gỏi cá",
+     "cá sống",
+     "hàu sống",
+     "hải sản sống",
+     "tôm sống",
+     "sushi cá sống"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: tránh cá và hải sản sống (kể cả sushi cá sống, dù đã cấp đông) vì nguy cơ listeria và ngộ độc thực phẩm. Sushi làm từ cá/hải sản đã nấu chín thì được.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "cá kiếm, cá mập, cá cờ",
+    "aliases": [
+     "cá kiếm",
+     "cá mập",
+     "cá cờ",
+     "cá marlin"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: tránh cá kiếm, cá mập và cá cờ (marlin) khi mang thai.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "sữa chưa tiệt trùng",
+    "aliases": [
+     "sữa chưa tiệt trùng",
+     "sữa sống",
+     "sữa tươi vắt",
+     "sữa dê chưa tiệt trùng"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: sữa, kem, sữa chua, bơ chưa tiệt trùng có nguy cơ listeria — có thể gây sảy thai, thai chết lưu hoặc em bé ốm nặng.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "trứng sống, trứng lòng đào",
+    "aliases": [
+     "trứng lòng đào",
+     "trứng sống",
+     "trứng chần",
+     "trứng chưa chín"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: chỉ trứng gà có tem an toàn của Anh mới được ăn sống/lòng đào; các loại trứng khác phải nấu chín kỹ vì nguy cơ salmonella.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "trứng nấu chín kỹ",
+    "aliases": [
+     "trứng",
+     "trứng gà",
+     "trứng luộc",
+     "trứng chín",
+     "trứng vịt",
+     "trứng cút",
+     "trứng chiên",
+     "trứng ốp la chín"
+    ],
+    "verdict": "ok",
+    "note": "NHS: trứng nấu chín kỹ ăn được; trứng vịt, ngỗng, cút phải nấu chín kỹ.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "cà phê và đồ uống có caffeine",
+    "aliases": [
+     "cà phê",
+     "cafe",
+     "cà phê sữa",
+     "cafe sữa",
+     "trà",
+     "trà đặc",
+     "trà xanh",
+     "cola",
+     "coca",
+     "nước tăng lực",
+     "sô-cô-la",
+     "socola",
+     "chocolate"
+    ],
+    "verdict": "limit",
+    "note": "NHS: giới hạn caffeine 200 miligam mỗi ngày (một cốc cà phê hoà tan khoảng 100, một cốc trà khoảng 75, một lon cola khoảng 40) — nhiều hơn liên quan nguy cơ sảy thai, thai chết lưu cao hơn.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "cá ngừ",
+    "aliases": [
+     "cá ngừ hộp",
+     "cá ngừ tươi"
+    ],
+    "verdict": "limit",
+    "note": "NHS: không quá 4 hộp hoặc 2 miếng cá ngừ tươi mỗi tuần vì chất ô nhiễm như thuỷ ngân.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "cá béo",
+    "aliases": [
+     "cá hồi",
+     "cá thu",
+     "cá mòi",
+     "cá trích",
+     "cá béo"
+    ],
+    "verdict": "limit",
+    "note": "NHS: cá béo (cá hồi, cá thu, cá mòi, cá trích) không quá 2 phần mỗi tuần vì chất ô nhiễm.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "hải sản nấu chín",
+    "aliases": [
+     "tôm",
+     "cua",
+     "mực",
+     "nghêu",
+     "vẹm",
+     "sò điệp",
+     "tôm hùm",
+     "hải sản nấu chín",
+     "hải sản",
+     "tôm luộc",
+     "cua hấp"
+    ],
+    "verdict": "ok",
+    "note": "NHS: tôm, cua, tôm hùm, mực, vẹm, sò điệp, nghêu đã nấu chín đều ăn được.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "thịt nấu chín kỹ",
+    "aliases": [
+     "thịt",
+     "thịt gà",
+     "gà",
+     "thịt heo",
+     "thịt lợn",
+     "thịt bò",
+     "thịt vịt",
+     "vịt",
+     "thịt băm",
+     "xúc xích",
+     "thịt hộp"
+    ],
+    "verdict": "ok",
+    "note": "NHS: thịt gà, heo, bò, cừu, vịt nấu chín kỹ (kể cả thịt băm, xúc xích) và thịt hộp ăn được.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "rau và trái cây",
+    "aliases": [
+     "rau",
+     "rau xanh",
+     "trái cây",
+     "hoa quả",
+     "salad",
+     "rau củ",
+     "rau sống"
+    ],
+    "verdict": "ok",
+    "note": "NHS: hầu hết rau và trái cây đều ăn được — rửa thật kỹ trước khi ăn vì đất có thể mang vi khuẩn.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "nấm kim châm",
+    "aliases": [
+     "nấm kim châm",
+     "nấm enoki"
+    ],
+    "verdict": "ok",
+    "note": "NHS: nấm kim châm phải nấu chín kỹ.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "sữa và chế phẩm đã tiệt trùng",
+    "aliases": [
+     "sữa",
+     "sữa tươi tiệt trùng",
+     "sữa tiệt trùng",
+     "sữa chua",
+     "kem",
+     "bơ",
+     "phô mai cứng",
+     "phô mai",
+     "sữa bò"
+    ],
+    "verdict": "ok",
+    "note": "NHS: sữa, sữa chua, kem, bơ đã tiệt trùng (bò, cừu, dê) và phô mai cứng ăn được; phô mai mềm có mốc trắng hoặc phô mai xanh mềm thì phải nấu chín kỹ.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "phô mai mềm có mốc",
+    "aliases": [
+     "phô mai brie",
+     "phô mai camembert",
+     "brie",
+     "camembert",
+     "phô mai xanh",
+     "phô mai mốc"
+    ],
+    "verdict": "limit",
+    "note": "NHS: phô mai mềm có lớp mốc trắng (brie, camembert) và phô mai xanh mềm chỉ ăn khi nấu chín kỹ vì nguy cơ listeria.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "đậu phộng và các loại hạt",
+    "aliases": [
+     "đậu phộng",
+     "lạc",
+     "hạt",
+     "các loại hạt",
+     "hạt điều",
+     "hạnh nhân",
+     "óc chó"
+    ],
+    "verdict": "ok",
+    "note": "NHS: ăn được, trừ khi bạn bị dị ứng hoặc bác sĩ, nữ hộ sinh dặn tránh.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "trà thảo mộc",
+    "aliases": [
+     "trà bạc hà",
+     "trà hoa cúc",
+     "trà thảo mộc",
+     "trà gừng"
+    ],
+    "verdict": "limit",
+    "note": "NHS: trà thảo mộc như bạc hà, hoa cúc không quá 4 cốc mỗi ngày vì chưa có nhiều nghiên cứu khi mang thai.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "name": "trà cam thảo",
+    "aliases": [
+     "cam thảo",
+     "trà cam thảo",
+     "rễ cam thảo"
+    ],
+    "verdict": "avoid",
+    "note": "NHS: tránh trà thảo mộc có rễ cam thảo vì có thể ảnh hưởng sự phát triển của em bé.",
+    "src": [
+     0
+    ]
+   }
+  ]
+ },
+ "doctor": [],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Foods to avoid in pregnancy",
+   "publisher": "NHS (Anh)",
+   "url": "https://www.nhs.uk/pregnancy/keeping-well/foods-to-avoid/",
+   "reviewed": "2026-06-15"
+  }
+ ],
+ "verifiedAt": "2026-10-10"
+}
