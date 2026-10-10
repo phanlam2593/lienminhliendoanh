@@ -405,7 +405,9 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     const names = ROWS.find((r) => r.id === own)!.names;
     if (!isMedQuestion(text, names)) return null;
     const topicLike = foodPhrase(text, null);
-    const a: MedAspect | "overview" = topicLike && asp !== "spread" && (!asp || asp === "diet" || asp === "define") && /\b(an|uong|dung)\b/.test(normalizeVi(text)) && !/\b(kieng|an gi|uong gi|nen an|tranh an)\b/.test(normalizeVi(text)) ? "food" : (asp ?? "overview");
+    // Khía cạnh xét trên phần câu NGOÀI tên món: "uống sữa chua được không" bỏ dấu dễ thành "chữa được không".
+    const aspF = topicLike ? aspectOf(` ${normalizeVi(text)} `.replace(` ${topicLike} `, " ")) : asp;
+    const a: MedAspect | "overview" = topicLike && aspF !== "spread" && (!aspF || aspF === "diet" || aspF === "define") && /\b(an|uong|dung)\b/.test(normalizeVi(text)) && !/\b(kieng|an gi|uong gi|nen an|tranh an)\b/.test(normalizeVi(text)) ? "food" : (asp ?? "overview");
     return { id: own, aspect: a, food: a === "food" ? topicLike : null };
   }
   // câu nối không nhắc lại tên: "còn nhộng thì sao", "vậy ăn gì được", "triệu chứng?"

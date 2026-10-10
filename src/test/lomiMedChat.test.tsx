@@ -16,6 +16,9 @@ describe("kho y khoa — câu hỏi thật", () => {
     expect((await last(["hạ đường huyết xử lý sao"])).content).toMatch(/Với \*\*Hạ đường huyết\*\*, theo các nguồn y khoa nên/);
     expect((await last(["say rượu nặng thì xử lý sao"])).content).toMatch(/Ngộ độc rượu/);
   }, T);
+  it("'sữa chua được không' (không dấu) là hỏi món, không phải 'chữa được không'", async () => {
+    expect((await last(["khong dung nap lactose uong sua chua dc ko"])).content).toMatch(/\*\*sữa chua\*\*/);
+  }, T);
   it("'hăm tã' không bị đổi thành 'không tã'", async () => {
     expect((await last(["bé bị hăm tã bôi gì"])).content).toMatch(/Hăm tã/);
   }, T);

@@ -19,7 +19,7 @@ const db = supabase as any;
 type Feedback = { id: string; question: string; answer: string; reason: string; note: string | null; status: string; created_at: string };
 type Unanswered = { key: string; sample: string; ask_count: number; last_at: string };
 type Taught = { id: string; key: string; question: string; answer: string; active: boolean; hits: number; updated_at: string };
-type Stuck = { id: string; created_at: string; source: string; kind: string; question: string; reply: string; context: { r: "u" | "a"; t: string }[]; status: string };
+type Stuck = { id: string; created_at: string; source: string; kind: string; question: string; reply: string; context: { r: "u" | "a"; t: string }[]; status: string; note?: string | null };
 type View = "feedback" | "unanswered" | "stuck" | "taught";
 type TeachSrc = { feedbackId?: string; unansweredKey?: string; taughtId?: string };
 
@@ -38,6 +38,10 @@ const STUCK_KIND: Record<string, string> = {
   generic_listen: "👂 Chỉ “nghe nè”, không nhận ra nội dung",
   health_detail: "📝 Chi tiết sức khoẻ chưa có dữ liệu",
   kb_partial: "📚 Có thẻ nhưng thiếu phần được hỏi",
+  // Claude ghi khi chạy thử (nguồn claude-test): Lomi có trả lời nhưng trả lời sai chỗ
+  wrong_match: "🎯 Khớp nhầm món / chủ đề",
+  wrong_aspect: "🧭 Hiểu sai điều được hỏi",
+  wrong_route: "🔀 Lớp trả lời sai",
 };
 const fmt = (s: string) => new Date(s).toLocaleString("vi-VN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" });
 
@@ -270,6 +274,7 @@ export function LomiLearnPanel() {
                   <span className="text-muted-foreground">Hỏi: </span>
                   <b className="break-words">{x.question}</b>
                 </div>
+                {x.note && <div className="text-xs rounded-lg bg-primary/10 px-2 py-1 break-words">📝 {x.note}</div>}
                 <details className="text-xs text-muted-foreground">
                   <summary className="cursor-pointer">Lomi đã đáp</summary>
                   <div className="mt-1 whitespace-pre-wrap bg-muted rounded-lg p-2">{x.reply}</div>
