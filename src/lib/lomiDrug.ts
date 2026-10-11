@@ -16,7 +16,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { healthSubjectOf } from "@/lib/lomiHealthTopic";
-import { drugById, findDrug, findInteraction, renderDrug, sourceLine, sourceList } from "@/lib/lomiDrugData";
+import { drugById, findDrug, findDrugs, findInteraction, renderDrug, sourceLine, sourceList } from "@/lib/lomiDrugData";
 
 export type DrugKind = "interact" | "overdose" | "dose" | "stop" | "side" | "what" | "which" | "should" | "pet" | "source" | "kid";
 export type DrugReply = {
@@ -79,6 +79,34 @@ function nameOf(raw: string): string | undefined {
   return n;
 }
 
+// 11/10 — "Uống aspirin để làm gì" (không có chữ "thuốc"): tên đứng sau một ĐỘNG TỪ DÙNG THUỐC (uống / tiêm / bôi / xịt / nhỏ / ngậm)
+// và câu hỏi nó dùng để làm gì → vẫn là hỏi về thuốc đó. Không có danh sách tên thuốc, nên chỉ nhận khi tên là CHỮ NGOẠI LAI
+// (không phải một tiếng Việt: "aspirin", "omeprazol", "collagen") — "uống nước / uống bia / uống trà để làm gì" không lọt vào đây.
+const VI_SYL = /^(ngh|ng|nh|ch|gh|gi|kh|ph|qu|th|tr|[bcdghklmnpqrstvx])?(uye|uya|uyu|oai|oay|oeo|uay|uoi|uou|ieu|yeu|ai|ao|au|ay|eo|eu|ia|ie|iu|oa|oe|oi|oo|ua|ue|ui|uo|uu|uy|ye|[aeiouy])(ng|nh|ch|[cmnpt])?$/;
+const isForeign = (w: string) => /^[a-z][a-z0-9-]{3,24}$/i.test(w) && !VI_SYL.test(w.toLowerCase());
+function takenNameOf(raw: string): string | undefined {
+  const t = raw.normalize("NFC").replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
+  const m = t.match(
+    /^(?:(?:cho )?(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |vậy |thế |còn |mà |ủa )*(?:(?:a|anh|e|em|c|chị|mình|tui|tôi|người ta|bác sĩ kê) )?(?:uống|tiêm|chích|bôi|thoa|xịt|nhỏ|ngậm)\s+(?:thuốc\s+)?([\p{L}\d][\p{L}\d-]{3,24}(?:\s(?!(?:để|làm|có|là|thì|trị|chữa|tác|công)\s)[\p{L}\d-]{1,12})?)\s+(?:là\s+)?(?:để\s+làm\s+(?:gì|chi)|để\s+chi|làm\s+gì|(?:có\s+)?(?:tác|công)\s+dụng\s+gì|trị\s+(?:bệnh\s+)?gì|chữa\s+(?:bệnh\s+)?gì)/iu,
+  );
+  const n = m?.[1]?.trim();
+  if (!n || !isForeign(n.split(" ")[0])) return undefined;
+  if (healthSubjectOf(n, true)) return undefined;
+  return n;
+}
+// Tên ngoại lai + hỏi công dụng mà không có động từ đứng trước: "omeprazol trị gì", "berberin uống để làm gì".
+// loose (đang nói chuyện sức khoẻ / vừa nói về một thuốc): nhận cả "omeprazol để làm gì", "omeprazol có tác dụng gì".
+function bareNameOf(raw: string, loose: boolean): string | undefined {
+  const t = raw.normalize("NFC").replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
+  const strict = "(?:trị|chữa)\\s+(?:bệnh\\s+)?gì|(?:uống|bôi|thoa|tiêm|chích|xịt|nhỏ|ngậm)\\s+(?:vào\\s+)?(?:là\\s+)?(?:để\\s+làm\\s+(?:gì|chi)|để\\s+chi|làm\\s+gì)";
+  const more = "|(?:dùng\\s+)?để\\s+làm\\s+(?:gì|chi)|(?:có\\s+)?(?:tác|công)\\s+dụng\\s+gì";
+  const m = t.match(new RegExp(`^(?:(?:cho )?(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |vậy |thế |còn |mà |ủa )*([\\p{L}\\d][\\p{L}\\d-]{3,24}(?:\\s(?!(?:để|làm|có|là|thì|trị|chữa|uống|dùng|bôi|thoa|tiêm|chích|xịt|nhỏ|ngậm|tác|công)\\s)[\\p{L}\\d-]{1,12})?)\\s+(?:thì\\s+)?(?:${strict}${loose ? more : ""})`, "iu"));
+  const n = m?.[1]?.trim();
+  if (!n || !isForeign(n.split(" ")[0])) return undefined;
+  if (healthSubjectOf(n, true)) return undefined;
+  return n;
+}
+
 const ASK_PHARM = "Cách chắc nhất: hỏi **dược sĩ** ở nhà thuốc hoặc bác sĩ, và đọc tờ hướng dẫn trong hộp thuốc.";
 
 /** Câu có phải đang hỏi về thuốc theo một trong các dáng ở trên không; có thì trả lời trong giới hạn của Lomi. */
@@ -119,7 +147,10 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
 
   // Dùng chung / tương tác. Lomi CHỈ nói về một cặp khi có bản ghi có nguồn cho đúng cặp đó (lib/lomiDrugData); còn lại nói rõ là
   // chưa xác minh được — không suy ra từ tên thuốc hay nhóm thuốc.
-  const known = findDrug(text) ?? (ctx.drugId && words <= 9 ? drugById(ctx.drugId) : null);
+  //   (11/10: câu nhắc HAI thuốc đều có mục — "paracetamol uống chung với aspirin" — thì bản ghi tương tác có thể nằm ở mục của thuốc
+  //   nào cũng được: lấy mục có bản ghi cho đúng cặp đó.)
+  const paired = findDrugs(text).find((d) => findInteraction(d, text));
+  const known = paired ?? findDrug(text) ?? (ctx.drugId && words <= 9 ? drugById(ctx.drugId) : null);
   // 12/10: vừa nghe Lomi nói về một thuốc mà hỏi "có nguồn không", "lấy ở đâu ra" → đưa đủ nguồn (kèm đường dẫn); thuốc chưa có mục thì
   //   nói rõ chính vì chưa có nguồn nên Lomi mới không trả lời.
   if (ctx.afterDrug && words <= 9 && /\b(nguon|lay (o|tu) dau|o dau ra|dua vao dau|tin duoc khong|co chac khong|ai noi)\b/.test(n)) {
@@ -212,11 +243,13 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       text: `Lomi chưa có dữ liệu đã kiểm chứng về ${name ? `**${name}**` : "thuốc này"}, nên không liệt kê bừa tác dụng phụ được.\n• ${ASK_PHARM}\n• Dù là thuốc gì: uống vào mà nổi mẩn, ngứa nhiều thì ngưng và đi khám; **khó thở, sưng môi / lưỡi / họng, choáng váng thì gọi 115 ngay**.`,
     };
 
-  if (named && WHAT.test(n) && /\b(thuoc)\b/.test(n))
+  // Tên đứng sau động từ dùng thuốc ("uống aspirin để làm gì") cũng là hỏi về chính thuốc đó, dù câu không có chữ "thuốc".
+  const taken = takenNameOf(text) ?? bareNameOf(text, !!ctx.inHealth || !!ctx.afterDrug);
+  if ((named && WHAT.test(n) && /\b(thuoc)\b/.test(n)) || taken)
     return {
       kind: "what",
-      name: named,
-      text: `Lomi chưa có dữ liệu đã kiểm chứng về **${name}**, nên không dám nói đại là thuốc gì, trị gì hay dùng thế nào — nói sai chuyện thuốc thì nguy hiểm lắm.\n• ${ASK_PHARM}\n• Nếu là thuốc bác sĩ kê${forWho}, hỏi lại bác sĩ thuốc đó để làm gì và uống bao lâu.`,
+      name: taken ?? named,
+      text: `Lomi chưa có dữ liệu đã kiểm chứng về **${taken ?? name}**, nên không dám nói đại là thuốc gì, trị gì hay dùng thế nào — nói sai chuyện thuốc thì nguy hiểm lắm.\n• ${ASK_PHARM}\n• Nếu là thuốc bác sĩ kê${forWho}, hỏi lại bác sĩ thuốc đó để làm gì và uống bao lâu.`,
     };
 
   // Vừa hỏi chuyện thuốc rồi nói thêm hoàn cảnh ("e đang cho con bú", "a đang mang thai") → càng phải hỏi bác sĩ trước.

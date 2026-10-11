@@ -126,7 +126,7 @@ describe("tương tác: chỉ nói khi có bản ghi có nguồn cho ĐÚNG cặ
     }
   });
   it("cặp KHÔNG có bản ghi → nói rõ chưa xác minh được, không suy ra từ tên thuốc", () => {
-    for (const other of ["thuốc huyết áp", "amoxicillin", "thuốc tiểu đường", "aspirin", "thuốc tránh thai", "thuốc dạ dày"]) {
+    for (const other of ["thuốc huyết áp", "amoxicillin", "thuốc tiểu đường", "omeprazol", "thuốc tránh thai", "thuốc dạ dày"]) {
       expect(findInteraction(para, `uống chung với ${other}`), other).toBeNull();
       const r = drugAsk(`paracetamol uống chung với ${other} được không`)!;
       expect(r.kind, other).toBe("interact");
@@ -134,6 +134,21 @@ describe("tương tác: chỉ nói khi có bản ghi có nguồn cho ĐÚNG cặ
       expect(r.text, other).toMatch(/không có nghĩa là dùng chung an toàn/);
       expect(r.text, other).not.toMatch(/có thể dùng|dùng chung được|không sao/);
     }
+  });
+  it("câu nhắc HAI thuốc đều có mục → lấy bản ghi của đúng cặp đó, dù bản ghi nằm ở mục của thuốc nào (11/10)", () => {
+    const asp = drugById("aspirin")!;
+    const note = asp.interactions.find((x) => x.id === "paracetamol")!.note;
+    for (const q of ["paracetamol uống chung với aspirin được không", "aspirin uống chung với paracetamol được không"]) {
+      const r = drugAsk(q)!;
+      expect(r.kind, q).toBe("interact");
+      expect(r.drugId, q).toBe("aspirin");
+      expect(r.text, q).toContain(note);
+      expect(r.text, q).toMatch(/📚 Nguồn: /);
+    }
+    // aspirin với thứ không có bản ghi → vẫn nói rõ chưa xác minh được
+    const r = drugAsk("aspirin uống chung với amoxicillin được không")!;
+    expect(r.drugId).toBe("aspirin");
+    expect(r.text).toMatch(/chưa xác minh được/);
   });
   it("hai thuốc đều không có mục → không có dữ liệu tương tác, không đoán", () => {
     for (const q of ["amoxicillin uống chung với omeprazol được không", "thuốc huyết áp uống chung với thuốc cảm được không", "thuốc này uống với bia được không"]) {

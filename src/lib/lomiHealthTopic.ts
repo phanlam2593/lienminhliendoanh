@@ -92,7 +92,8 @@ export const isDietAsk = (text: string) => {
 function aspectOf(n: string, raw: string): Exclude<HealthAspect, "menu"> | null {
   if (ASK_DIET.test(n)) return null;
   if (ASK_DOCTOR.test(n)) return "doctor";
-  if (ASK_CARE.test(n) || ASK_CARE_ACC.test(raw.normalize("NFC").toLowerCase())) return "care";
+  // 11/10: "… để làm gì" hỏi MỤC ĐÍCH của một thứ ("uống nước để làm gì"), không phải hỏi "nên làm gì" với bệnh đang nói.
+  if (ASK_CARE.test(n.replace(/\bde lam (gi|chi)\b/g, " ")) || ASK_CARE_ACC.test(raw.normalize("NFC").toLowerCase())) return "care";
   if (ASK_WHAT.test(n)) return "what";
   return null;
 }

@@ -93,12 +93,40 @@ function accentAgrees(textAcc: string, nameAcc: string): boolean {
   return false;
 }
 
+// 11/10 — tên MỘT TIẾNG ("cảm", "lao", "lậu"…) cũng là một tiếng trong nhiều TỪ GHÉP không liên quan tới bệnh: "tình cảm là gì",
+// "cảm xúc là gì", "cảm ơn" từng bị đáp bằng bài Cảm lạnh. Tiếng đó chỉ là tên bệnh khi KHÔNG đứng trong một từ ghép như vậy
+// (tiếng đứng trước / đứng sau liệt kê ở đây). Tên dài hơn ("trầm cảm", "cảm nắng", "lao phổi") đã thắng từ trước nên không cần liệt kê.
+const set = (x: string) => new Set(x.split(" ").filter(Boolean));
+const COMPOUND: Record<string, { before: Set<string>; after: Set<string> }> = {
+  cảm: {
+    before: set("tình thông đồng linh thiện ác mặc nhạy đa tự giao xúc thương dũng quả mẫn truyền gợi khoái hảo phản biểu vô tri trực dự mỹ mĩ rung thiện tâm thấu thụ hàm ngoại nội bi thẩm"),
+    after: set("ơn xúc giác thấy nhận động tình thông hứng kích phục mến thương tưởng quan tính ứng biến nghĩ tạ hóa hoá thụ tác thán khái tử hoài phiền thấu ứng"),
+  },
+  lao: { before: set("cần gian công nhọc"), after: set("động công lực đao tù vào tới xuống ra lên xao đầu tâm khổ") },
+  lậu: { before: set("hàng buôn trốn nhập rượu xăng thuốc đồ phim nhạc sách"), after: set("thuế vé") },
+  ghẻ: { before: set("mẹ dì con cha bố bà"), after: set("lạnh") },
+  bỏng: { before: set("nóng"), after: set("ngô gạo mắt") },
+  trĩ: { before: set("ấu"), after: set("") },
+  nghẹn: { before: set(""), after: set("ngào lời") },
+  ngất: { before: set("cao"), after: set("ngây ngưởng") },
+  chàm: { before: set("màu xanh áo"), after: set("") },
+  thiền: { before: set(""), after: set("sư viện tông môn") },
+};
+/** Tên một tiếng có đứng riêng (không nằm trong từ ghép khác nghĩa) ở ít nhất một chỗ trong câu không? */
+function standsAlone(a: string, name: string): boolean {
+  const c = COMPOUND[name];
+  if (!c) return true;
+  const w = a.trim().split(" ");
+  return w.some((x, i) => x === name && !c.before.has(w[i - 1] ?? "") && !c.after.has(w[i + 1] ?? ""));
+}
+
 /** Chủ đề được nhắc trong câu (tên dài nhất thắng). Tên ngắn / dễ lẫn (< 4 chữ cái) chỉ nhận khi GÕ ĐÚNG DẤU. */
 export function findMedTopicId(text: string): string | null {
   const b = bare(text);
   const a = acc(text);
   for (const k of NAME_KEYS) {
     if (!(k.short ? a.includes(k.acc) : b.includes(k.bare) && accentAgrees(a, k.acc))) continue;
+    if (!standsAlone(a, k.acc.trim())) continue;
     // Thẻ chỉ nói ăn uống ("bầu", "mang thai") chỉ nhận khi câu nói tới ăn uống — "bầu cử là gì" không phải.
     if (DIET_ONLY.has(k.id) && !DIET_CUE.test(b)) continue;
     // Thẻ người lớn có thẻ riêng cho trẻ ("con bị sốt bao nhiêu độ" → sốt ở trẻ em).
@@ -178,7 +206,9 @@ export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood 
 }
 
 export function aspectOf(text: string): MedAspect | null {
-  const n = ` ${normalizeVi(text)} `; // không qua canon(): canon đổi "xử lý" thành "xu li" làm lọt khía cạnh "xử lý"
+  // không qua canon(): canon đổi "xử lý" thành "xu li" làm lọt khía cạnh "xử lý".
+  // 11/10: "… để làm gì" hỏi MỤC ĐÍCH của một thứ ("uống aspirin để làm gì", "đo huyết áp để làm gì") — không phải hỏi "nên làm gì" với bệnh.
+  const n = ` ${normalizeVi(text)} `.replace(/ de lam (gi|chi) /g, " ");
   // "có chữa khỏi không", "bao lâu thì khỏi" là hỏi DIỄN TIẾN (có khỏi không), không phải hỏi cách chữa.
   if (/\b(chua khoi|khoi duoc|khoi khong|khoi han|co khoi|bao lau khoi|bao lau thi khoi|khoi chua)\b/.test(n)) return "course";
   if (CHARS_ACC_CHUA.test(text.normalize("NFC").toLowerCase())) return "care";

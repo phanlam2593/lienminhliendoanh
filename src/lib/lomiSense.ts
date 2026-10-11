@@ -105,7 +105,8 @@ const SYN: [RegExp, string][] = [
   [/\b(nguoi yeu|ny|bo|gau|chong|vo)\b.*\b(noi doi|noi xau|giau minh|co nguoi khac|nhan tin voi (ai|co|anh|nguoi)|di voi (ai|co|anh|nguoi) khac)\b/, "nghi ngoại tình"],
   [/\b(nho (anh|co|chi|cau|nguoi) (ay|do|ta)|khong quen duoc (nguoi|anh|co|chi))\b/, "nhớ người cũ"],
   // công việc / tiền / gia đình
-  [/\b(sep|quan ly|truong phong)\b.*\b(la|mang|chui|ep|soi|bat ne|khong ghi nhan|ghet|doi xu)\b/, "bị sếp mắng"],
+  // (11/10: chữ "la" (la mắng) xét riêng ở senseCanon trên câu CÓ DẤU — "sếp em là nữ", "trưởng phòng là ai" không phải bị mắng.)
+  [/\b(sep|quan ly|truong phong)\b.*\b(mang|chui|ep|soi|bat ne|khong ghi nhan|ghet|doi xu)\b/, "bị sếp mắng"],
   [/\b(het tien|can tui|kho khan ve tien|khong du song|tien thue|tien tro)\b/, "thiếu tiền"],
   [/\b(ba|me|bo|cha)\b.*\b(khong hieu|ep|ap dat|mang|so sanh|cam)\b/, "gia đình áp đặt"],
 ];
@@ -115,6 +116,8 @@ export function senseCanon(q: string): string {
   const n = normalizeVi(q);
   const add: string[] = [];
   for (const [re, canon] of SYN) if (re.test(n) && !n.includes(normalizeVi(canon))) add.push(canon);
+  // "sếp la a hoài": "la" = la mắng chỉ khi người dùng gõ đúng chữ "la" — chữ "là" bỏ dấu cũng thành "la" nhưng không phải bị mắng.
+  if (/\b(sep|quan ly|truong phong)\b.*\bla\b/.test(n) && /(^|\s)la(\s|$)/.test(q.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ")) && !add.includes("bị sếp mắng") && !n.includes("bi sep mang")) add.push("bị sếp mắng");
   // 11/10: "dạ dày e đau quá", "lưng a cứ đau hoài" — bộ phận đứng TRƯỚC chữ "đau" → thêm cụm chuẩn "đau <bộ phận>" cho lớp triệu chứng.
   const bp = n.match(/\b(da day|bao tu|bung|lung|rang|hong|nguc|dau)( (cua )?(e|em|a|anh|c|chi|minh|tui|toi|con|be))?( (bi|dang|cu|hay|lai|van))* dau\b/);
   if (bp) {

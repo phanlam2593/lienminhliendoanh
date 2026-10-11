@@ -18,6 +18,7 @@ import { expandTeen, isAffirm, isAppish, isDecline, type ChatReply } from "@/lib
 import { isAskLike, isTalkCont, senseLate, senseState, talkContinue } from "@/lib/lomiSense";
 import { TIP_MENU, socialIntent } from "@/lib/lomiUnderstand";
 import { detectTarot, readingCardAt, readingRecap, tarotCard, type TarotReading } from "@/lib/tarot";
+import { findMedTopicId } from "@/lib/lomiMed";
 
 /** Phần của một tin trong lịch sử mà ngữ cảnh cần đọc (khớp các cờ trên Msg của AiAssistant). */
 export type ConvoMsg = {
@@ -216,6 +217,37 @@ export function otherPlace(q: string): boolean {
 }
 const mine = (p: string) => p.replace(/ bạn$/, " mình");
 
+// 11/10 — "LÁ" (lá bài) ≠ "LÀ". Bỏ dấu thì hai chữ trùng nhau, nên trước đây MỌI câu có chữ "là" ("Tăng huyết áp là gì?") đều bị
+// coi là đang nhắc tới lá bài vừa rút. Đọc trên câu CÓ DẤU: "lá" / "bài" / "tarot" mới là nhắc tới bài; "là" thì không.
+// Câu gõ không dấu ("la nay nghia la gi"): chữ "la" chỉ tính là lá bài khi đi với từ chỉ định / số đếm ("la nay", "la thu 2", "may la").
+const CARD_DET = new Set("nay do kia ay bai thu so dau cuoi giua nguoc xuoi vua tren".split(" "));
+const CARD_NUM = new Set("may cac nhung tung moi mot hai ba bon nam sau bay tam chin muoi 1 2 3 4 5 6 7 8 9 10".split(" "));
+export function mentionsCard(text: string): boolean {
+  const w = text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
+  return w.some((t, i) => {
+    if (t === "tarot" || t === "lá" || t === "bài" || t === "bai") return true;
+    if (t !== "la") return false;
+    return CARD_DET.has(normalizeVi(w[i + 1] ?? "")) || CARD_NUM.has(normalizeVi(w[i - 1] ?? ""));
+  });
+}
+// Câu hỏi NGHĨA có chủ ngữ riêng ("X là gì?", "X nghĩa là sao?"): X phải là chính lá bài / trải bài (hoặc bỏ trống: "là sao?",
+// "nghĩa là gì?") thì mới là hỏi nghĩa lá bài. X là một thứ khác ("tăng huyết áp", "điểm thưởng") → câu hỏi mới, không phải hỏi bài.
+const MEAN_HEAD = /^(.*?)\b(?:co nghia la|nghia la|co nghia|y nghia|nghia|la)(?: benh| cai)? (?:gi|sao)\b/;
+const REF_WORDS = new Set(
+  "vay the roi con ua a o ma y la thi lomi e em oi cho hoi anh chi minh toi tui ban no nay do kia ay cai dieu chuyen cau viec tren vua rut ra bai tarot trai quan nguoc xuoi thu so dau tien cuoi cung giua may cac nhung nhu noi chung tom lai ket qua thong diep loi khuyen vi tri hien tai qua khu tuong lai tinh cam yeu cong su nghiep tien bac tai chinh ha nhi vay".split(" "),
+);
+function foreignSubject(n: string, r: TarotReading): boolean {
+  const m = n.match(MEAN_HEAD);
+  if (!m) return false;
+  const own = new Set<string>();
+  for (const d of r.cards) {
+    const k = tarotCard(d.id);
+    for (const x of `${normalizeVi(k.name.vi)} ${normalizeVi(k.name.en)}`.split(" ")) own.add(x);
+  }
+  for (const x of normalizeVi(`${r.question ?? ""} ${(r.pos ?? []).map((p) => p.vi).join(" ")}`).split(" ")) if (x) own.add(x);
+  return m[1].split(" ").some((x) => x && !REF_WORDS.has(x) && !own.has(x) && !/^\d+$/.test(x));
+}
+
 /**
  * Hiểu tin này theo ngữ cảnh gần nhất. q = câu đã chuẩn hoá (teen code, cách nói khác); raw = câu gõ nguyên văn.
  * Trả null khi tin này không phải câu nối tiếp (hoặc chưa có ngữ cảnh) → các lớp hiểu câu đơn xử lý như thường.
@@ -259,7 +291,7 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
 
   // 11/10: trải bài rút cách đây vài lượt (đã nói sang chuyện khác) vẫn là trải bài đang nói tới khi câu nhắc rõ "lá / bài"
   //        ("Nếu lá ngược thì sao?" sau hai câu kể thêm về người ấy) — trước đây Lomi đáp "chưa bắt chắc ý bạn".
-  const tWord = /\b(la|bai|la bai|trai bai|tarot)\b/.test(n);
+  const tWord = mentionsCard(raw);
   const rd = c.reading ?? (tWord ? c.readingBack : undefined);
   // 3a) Hỏi riêng MỘT lá theo thứ tự ("lá thứ 3 nói gì?", "lá đầu tiên là sao?", "lá cuối nghĩa gì?") → giải đúng lá đó theo vị trí của nó.
   const nth = rd && words <= 10 && !detectTarot(q) ? n.match(/\bla (?:bai )?(?:(?:thu|so) (\d+|nhat|hai|ba|tu|bon|nam|sau|bay|tam|chin|muoi)|(dau tien|dau|cuoi cung|cuoi|giua))\b/) : null;
@@ -301,7 +333,10 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   //     không rút bài mới và không đổi câu hỏi.
   if (c.reading && words <= 9 && !detectTarot(q) && (/\b(tom lai|noi gon|ket luan|chot lai|rot cuoc|noi chung la sao|vay la sao|vay la (co|khong|nen|duoc|on|tot|xau|chua)|vay (la )?(co|khong) (ha|a|nhi)|cai nao (tot|hon|on)|ben nao (tot|hon|on)|nghieng ve)\b/.test(n) || (c.reading.kind === "choice" && /\b(chon|nen chon|vay chon|theo) \S+/.test(n) && ask)))
     return { kind: "reply", keep: true, why: "tarot:recap", reply: { text: readingRecap(c.reading, /nói gọn lại là vầy|vừa tóm lại đó/.test(last.content)), quick: ["Rút thêm", "Bói lại"] } };
-  if (rd && (c.reading || tWord) && words <= 9 && !detectTarot(q) && /\b(nghia la|y nghia|nghia gi|nghia sao|la sao|giai thich|noi ro|noi them|noi ky|hieu sao|noi ve gi|noi gi|la gi)\b/.test(n) && (/\b(la|bai|no|cai nay|cai do|them|hon)\b/.test(n) || words <= 4)) {
+  //     11/10: chỉ khi câu thật sự nói về lá bài — "Tăng huyết áp là gì?" sau một trải bài là câu hỏi MỚI (chữ "là" không phải "lá",
+  //     và chủ ngữ là một thứ khác), nhường cho lớp kiến thức trả lời.
+  const otherAsk = !!rd && !tWord && (foreignSubject(n, rd) || !!findMedTopicId(q));
+  if (rd && (c.reading || tWord) && !otherAsk && words <= 9 && !detectTarot(q) && /\b(nghia la|y nghia|nghia gi|nghia sao|la sao|giai thich|noi ro|noi them|noi ky|hieu sao|noi ve gi|noi gi|la gi)\b/.test(n) && (tWord || /\b(no|cai nay|cai do|them|hon)\b/.test(n) || words <= 4)) {
     const r = rd;
     const cards = r.cards.slice(0, 3).map((d) => {
       const k = tarotCard(d.id);

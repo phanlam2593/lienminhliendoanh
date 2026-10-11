@@ -139,6 +139,78 @@ export const DRUGS: DrugEntry[] = [
       { text: "Lượng dùng cho trẻ tính theo **cân nặng** (theo bảng trên nhãn); không chắc thì hỏi bác sĩ của trẻ.", src: [1] },
     ],
   },
+  {
+    // 11/10/2026 — thêm sau khi Lomi đáp sai câu "Uống aspirin để làm gì" (đọc lại bài tăng huyết áp). Mỗi ý đối chiếu với hai trang dưới.
+    id: "aspirin",
+    ingredient: "aspirin (acid acetylsalicylic)",
+    names: ["aspirin", "acid acetylsalicylic"],
+    match: /\b(aspirin|aspirine|acid acetylsalicylic|axit acetylsalicylic|acetylsalicylic)\b/,
+    group: "thuốc kháng viêm không steroid (NSAID), thuộc nhóm salicylat",
+    sources: [
+      // (11/10/2026: các trang cũ "aspirin for pain relief" / "low-dose aspirin" của NHS nay gộp về một trang này.)
+      { title: "Aspirin: medicine for pain relief or preventing blood clots", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/aspirin/", reviewed: "2026-07-03" },
+      { title: "Aspirin", publisher: "MedlinePlus (Thư viện Y khoa Quốc gia Hoa Kỳ)", url: "https://medlineplus.gov/druginfo/meds/a682878.html", reviewed: "2025-11-15" },
+    ],
+    verifiedAt: "2026-10-11",
+    uses: [
+      { text: "giảm đau mức nhẹ đến vừa, hạ sốt và giảm viêm (dùng khi cần)", src: [0, 1] },
+      { text: "ở liều thấp uống đều hằng ngày, thường là lâu dài, để giảm nguy cơ hình thành cục máu đông — phòng nhồi máu cơ tim và đột quỵ", src: [0, 1] },
+    ],
+    sideEffects: {
+      common: [{ text: "Thường gặp: khó tiêu, đau bụng, ợ nóng, buồn nôn; **dễ chảy máu hơn** bình thường.", src: [0, 1] }],
+      serious: [
+        { text: "Loét hoặc chảy máu dạ dày: đau bụng, da tái nhợt, nôn ra máu (hoặc chất nôn giống bã cà phê), phân đen như hắc ín hoặc có máu đỏ tươi → liên hệ bác sĩ / đi khám **ngay**.", src: [0, 1] },
+        { text: "Dị ứng nặng: sưng họng, lưỡi, môi hoặc mặt, nổi ban gồ và ngứa, khó thở hoặc thở khò khè → **gọi 115 / đi cấp cứu**.", src: [0, 1] },
+        { text: "Ù tai hoặc nghe kém đi, tim đập nhanh hoặc thở nhanh, da lạnh và ẩm → báo bác sĩ ngay.", src: [1] },
+      ],
+    },
+    contraindications: [
+      { text: "Người dùng là trẻ từ 15 tuổi trở xuống — **không cho trẻ dùng aspirin**, vì hiếm gặp nhưng thuốc có thể gây hội chứng Reye, một tình trạng nặng.", src: [0, 1] },
+      { text: "Từng dị ứng hoặc bị tác dụng phụ nặng với aspirin, ibuprofen hay thuốc kháng viêm NSAID khác.", src: [0] },
+      { text: "Đang hoặc từng bị loét dạ dày, bị hen suyễn, suy tim, có bệnh gan / thận hoặc rối loạn đông máu.", src: [0, 1] },
+      { text: "Đang mang thai hoặc cho con bú — aspirin liều giảm đau không được khuyên dùng khi mang thai.", src: [0] },
+      { text: "Sắp phẫu thuật, kể cả phẫu thuật răng miệng.", src: [1] },
+      { text: "Ngày nào cũng uống từ ba ly rượu bia trở lên.", src: [1] },
+    ],
+    interactions: [
+      {
+        id: "nsaid",
+        match: /\b(ibuprofen|naproxen|nsaid|nsaids|khang viem khong steroid)\b/,
+        with: "ibuprofen, naproxen và các thuốc kháng viêm NSAID khác",
+        note: "NHS xếp các thuốc NSAID khác (như ibuprofen, naproxen) vào nhóm **có thể không hợp** khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước. Riêng người đang uống aspirin đều đặn để phòng nhồi máu cơ tim, đột quỵ: MedlinePlus ghi không tự uống ibuprofen để giảm đau, hạ sốt khi chưa hỏi bác sĩ.",
+        src: [0, 1],
+      },
+      { id: "anticoagulant", match: /\b(warfarin|rivaroxaban|thuoc chong dong|chong dong mau)\b/, with: "thuốc chống đông (như warfarin, rivaroxaban)", note: "Thuốc chống đông (như warfarin, rivaroxaban) nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — phải báo bác sĩ trước khi dùng.", src: [0] },
+      { id: "bp", match: /\b(thuoc huyet ap|thuoc ha huyet ap|thuoc ha ap|thuoc tang huyet ap|thuoc cao huyet ap)\b/, with: "thuốc hạ huyết áp", note: "Một số thuốc hạ huyết áp nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — đang uống thuốc huyết áp thì báo bác sĩ / dược sĩ trước khi dùng aspirin.", src: [0] },
+      { id: "steroid", match: /\b(steroid|steroids|corticoid|corticosteroid)\b/, with: "một số thuốc steroid (corticoid)", note: "Một số thuốc steroid nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
+      { id: "antidepressant", match: /\b(thuoc chong tram cam|chong tram cam|thuoc tram cam|antidepressant)\b/, with: "một số thuốc chống trầm cảm", note: "Một số thuốc chống trầm cảm nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
+      { id: "methotrexate", match: /\bmethotrexat(e)?\b/, with: "methotrexate", note: "Methotrexate nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — phải hỏi bác sĩ trước.", src: [0] },
+      {
+        id: "paracetamol",
+        match: /\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/,
+        with: "paracetamol",
+        note: "Theo NHS, **có thể** dùng aspirin cùng lúc với paracetamol nếu cần; nếu chỉ để giảm đau thì nên thử riêng từng thuốc trước. (Người không dùng được aspirin — ví dụ trẻ từ 15 tuổi trở xuống — thì vẫn không dùng.)",
+        src: [0],
+      },
+      {
+        id: "alcohol",
+        match: /\b(ruou|bia|nhau|do uong co con)\b/,
+        with: "rượu bia",
+        note: "NHS khuyên **hạn chế rượu bia** khi dùng aspirin vì rượu bia làm tăng nguy cơ gặp tác dụng phụ. MedlinePlus ghi: ngày nào cũng uống từ ba ly rượu bia trở lên thì hỏi bác sĩ xem có nên dùng aspirin không.",
+        src: [0, 1],
+      },
+    ],
+    overdose: [
+      { text: "Uống quá nhiều aspirin **có thể nguy hiểm** — lỡ uống nhiều hơn hướng dẫn trên hộp / trong đơn thì cần hỏi ý kiến y tế ngay.", src: [0] },
+      { text: "Dấu hiệu có thể gặp: đau rát họng hoặc dạ dày, nôn, tiểu ít, sốt, bồn chồn, lú lẫn, chóng mặt, nhìn đôi, run, co giật, lơ mơ hoặc bất tỉnh.", src: [1] },
+      { text: "Người bị ngã quỵ, co giật, khó thở hoặc gọi không tỉnh → gọi cấp cứu ngay.", src: [1] },
+      { text: "Mang theo vỏ hộp / tờ hướng dẫn, phần thuốc còn lại và các thuốc khác đang dùng.", src: [0] },
+    ],
+    children: [
+      { text: "**Không cho trẻ từ 15 tuổi trở xuống dùng aspirin**: hiếm gặp nhưng thuốc có thể gây hội chứng Reye, một tình trạng nặng.", src: [0] },
+      { text: "Nguy cơ hội chứng Reye cao hơn khi trẻ đang nhiễm virus như thuỷ đậu hoặc cúm; với thiếu niên cũng phải hỏi bác sĩ trước.", src: [1] },
+    ],
+  },
 ];
 
 /**
@@ -302,6 +374,11 @@ const bare = (x: string) => ` ${x.normalize("NFD").replace(/[̀-ͯ]/g, "").repla
 export function findDrug(text: string): DrugEntry | null {
   const n = bare(text);
   return DRUGS.find((d) => d.match.test(n)) ?? null;
+}
+/** MỌI thuốc có dữ liệu được nhắc trong câu (câu hỏi dùng chung thường nhắc hai thuốc). */
+export function findDrugs(text: string): DrugEntry[] {
+  const n = bare(text);
+  return DRUGS.filter((d) => d.match.test(n));
 }
 export const drugById = (id?: string): DrugEntry | null => DRUGS.find((d) => d.id === id) ?? null;
 
