@@ -8,6 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { normalizeVi } from "@/lib/lomiFaq";
+import { VR, VN } from "@/lib/viMatch";
 
 type L = "vi" | "en";
 type T2 = { vi: string; en: string };
@@ -357,7 +358,7 @@ function fold(s: string): string {
 }
 
 const TRIG =
-  /(?<![a-z])(boi\s+tarot|xem\s+tarot|tarot|boi\s+bai|rut\s+bai|trai\s+bai|xem\s+bai\s+(?:(?:1|mot|3|ba|5|nam|10|muoi)\s+la|tarot)|xem\s+bai(?=\s+(?:giup|gium|dum|cho)\s)|xem\s+boi|boi\s+toan|rut\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|trai\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi\s+(?:1|mot|3|ba|5|nam|10|muoi)\s+la|boi)(?![a-z])/g;
+  VN(/(?<![a-z])(bói\s+tarot|xem\s+tarot|tarot|bói\s+bài|rút\s+bài|trải\s+bài|xem\s+bài\s+(?:(?:1|một|3|ba|5|năm|10|mười)\s+lá|tarot)|xem\s+bài(?=\s+(?:giúp|giùm|dùm|cho)\s)|xem\s+bói|bói\s+toán|rút\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|trải\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|bói\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|bói)(?![a-z])/g);
 
 function findTrigger(orig: string, f: string): { start: number; end: number } | null {
   TRIG.lastIndex = 0;
@@ -374,9 +375,9 @@ function findTrigger(orig: string, f: string): { start: number; end: number } | 
 }
 
 const LEAD =
-  /^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai(?!\s+hoc)|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep(?=\s*:))(?![a-z])|(?:1|mot|3|ba|5|nam|10|muoi)\s+la(?![a-z])|celtic\s+cross(?![a-z])|celtic(?![a-z])|trai\s+(?:5|10|nam|muoi)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/;
+  VR(/^[\s,.:;!?\-–—…"“”'()]*(?:(?:xem|giup|dum|gium|ho|cho|em|anh|a|e|minh|toi|tui|voi|thu|coi|ve|la|muon|oi|lomi|ban|chi|bai(?!\s+hoc)|tarot|cai|cua|dc|duoc|hoi|nhu the nao|tiep(?=\s*:))(?![a-z])|(?:1|mot|3|ba|5|nam|10|muoi)\s+la(?![a-z])|celtic\s+cross(?![a-z])|celtic(?![a-z])|trai\s+(?:5|10|nam|muoi)\s+la(?![a-z])|[\s,.:;!?\-–—…"“”'()]+)/);
 const TRAIL =
-  /(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu|(?:\d+|mot|hai|ba|vai|may)\s+la(?:\s+bai)?)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/;
+  VR(/(?:(?:^|[\s,.:;!\-–—…]+)(?:(?:giup|dum|gium|ho|voi)(?:\s+(?:em|anh|minh|toi|tui|mk|a|e|t))?|nha|nhe|ne|di|nhen|hen|lomi|oi|ik|xem|coi|thu|(?:\d+|mot|hai|ba|vai|may)\s+la(?:\s+bai)?)(?![a-z]))+[\s,.:;!\-–—…]*$|[\s,.:;!\-–—…]+$/);
 
 /** Cắt bớt các chữ đệm ở 2 đầu ("xem giúp em …", "… nha") — làm trên bản bỏ dấu, cắt trên câu gốc. */
 function clean(orig: string): string {
@@ -399,9 +400,9 @@ function clean(orig: string): string {
 }
 
 const FILLER_RE =
-  /^((cho|giup|dum|gium|ho|minh|em|anh|toi|tui|ban|may|vai|\d+|mot|hai|ba|nam|la|bai|tarot|di|nha|nhe|voi|thu|coi|xem|cai|nao|ne|luon|lien|nhanh|phat|chut|xiu|coi thu|boi|rut)[\s,.!?…]*)*$/;
+  VR(/^((cho|giup|dum|gium|ho|minh|em|anh|toi|tui|ban|may|vai|\d+|mot|hai|ba|nam|la|bai|tarot|di|nha|nhe|voi|thu|coi|xem|cai|nao|ne|luon|lien|nhanh|phat|chut|xiu|coi thu|boi|rut)[\s,.!?…]*)*$/);
 const nWords = (x: string) => x.split(/\s+/).filter(Boolean).length;
-const DAILY_RE = /(?<![a-z])(hom nay|thong diep|1 la|mot la|today)(?![a-z])/;
+const DAILY_RE = VN(/(?<![a-z])(hôm nay|thông điệp|1 lá|một lá|today)(?![a-z])/);
 
 /** Câu gõ có ý muốn bói không? Trả về câu hỏi bóc ra (rỗng nếu chưa hỏi gì cụ thể). */
 export function detectTarot(text: string): { question: string; daily: boolean } | null {
@@ -415,9 +416,9 @@ export function detectTarot(text: string): { question: string; daily: boolean } 
   let q = nWords(after) >= 2 ? after : nWords(before) >= 2 ? before : after || before;
   // Phần còn lại chỉ là chữ hỏi / phủ định ("không", "hk", "được không", "chưa") → chưa có câu hỏi thật
   // (01/10 r2: "lomi biết bói toán hk" từng bị rút 3 lá với câu hỏi "không").
-  if (/^(toan|khong|ko|k|hk|hong|hok|hem|khum|chua|duoc khong|dc khong|duoc ko|duoc|ha|hả|chu|nhi|a|vay|khong vay|khong ta|khong ha|nua|nua khong|di|nha|nhe|giup|cho|minh|toi|tui|em|anh|chi|ban|lomi|biet|co biet|co|gioi|hay|the nao|ra sao|sao|[\s?!.,…])*$/.test(fold(q).trim())) q = "";
+  if (VR(/^(toan|khong|ko|k|hk|hong|hok|hem|khum|chua|duoc khong|dc khong|duoc ko|duoc|ha|hả|chu|nhi|a|vay|khong vay|khong ta|khong ha|nua|nua khong|di|nha|nhe|giup|cho|minh|toi|tui|em|anh|chi|ban|lomi|biet|co biet|co|gioi|hay|the nao|ra sao|sao|[\s?!.,…])*$/).test(fold(q).trim())) q = "";
   const fq = fold(q).trim();
-  const dailyOnly = !fq || /^(cho )?(hom nay|thong diep( hom nay)?|ngay hom nay|today)\s*\??$/.test(fq);
+  const dailyOnly = !fq || VN(/^(cho )?(hôm nay|thông điệp( hôm nay)?|ngày hôm nay|today)\s*\??$/).test(fq);
   if (dailyOnly) q = "";
   return { question: q, daily: !q && DAILY_RE.test(f) };
 }
@@ -426,56 +427,56 @@ export function detectTarot(text: string): { question: string; daily: boolean } 
  *  — là hỏi khả năng, KHÔNG phải nhờ bói ngay; đừng rút bài. */
 export function isTarotAbilityAsk(text: string): boolean {
   const f = fold(text).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim();
-  return /(^|\s)(biet|co biet|co the|co|lam duoc|ranh|gioi|hieu|xai duoc|dung duoc)\s+(boi|xem boi|boi toan|boi bai|xem tarot|boi tarot|tarot|rut bai|xem bai)(\s+(toan|tarot|bai))?(\s+(khong|ko|k|hk|hong|hok|hem|khum|ha|chu|duoc khong|dc khong|duoc ko|that khong|thiet hong|khong vay|khong ta))?\s*$/.test(f)
-    || /(^|\s)(boi|xem boi|boi toan|boi bai|xem tarot|tarot|rut bai)(\s+(toan|tarot|bai))?\s+(duoc khong|dc khong|duoc ko|duoc hong|duoc hk)\s*$/.test(f) && !/\b(cho|giup|dum|gium|ho)\b/.test(f)
-    || /(^|\s)(tarot|boi toan|boi tarot)\s+(la gi|la sao|nghia la gi|hoat dong sao|co dung khong|co that khong|co chinh xac khong|co tin duoc khong)\s*$/.test(f);
+  return VN(/(^|\s)(biết|có biết|có thể|có|làm được|rảnh|giỏi|hiểu|xài được|dùng được)\s+(bói|xem bói|bói toán|bói bài|xem tarot|bói tarot|tarot|rút bài|xem bài)(\s+(toán|tarot|bài))?(\s+(không|ko|k|hk|hông|hong|hok|hem|khum|hả|ha|chứ|chu|được không|đc không|được ko|thật không|thiệt hông|thiệt hong|không vậy|không ta))?\s*$/).test(f)
+    || VN(/(^|\s)(bói|xem bói|bói toán|bói bài|xem tarot|tarot|rút bài)(\s+(toán|tarot|bài))?\s+(được không|đc không|được ko|được hông|được hong|được hk)\s*$/).test(f) && !VN(/\b(cho|giúp|dùm|giùm|hộ)\b/).test(f)
+    || VN(/(^|\s)(tarot|bói toán|bói tarot)\s+(là gì|là sao|nghĩa là gì|hoạt động sao|có đúng không|có thật không|có chính xác không|có tin được không)\s*$/).test(f);
 }
 
 /** Đang chờ người dùng nói câu hỏi → câu này có phải "thông điệp hôm nay" không. */
 export function isDailyAsk(text: string) {
   const f = fold(text).trim();
-  return /^(cho |xem |rut )?(thong diep( hom nay)?|hom nay|ngay hom nay|1 la|mot la|today('s message)?)\s*[?.!]*$/.test(f);
+  return VN(/^(cho |xem |rút )?(thông điệp( hôm nay)?|hôm nay|ngày hôm nay|1 lá|một lá|today('s message)?)\s*[?.!]*$/).test(f);
 }
 export function isTarotMore(text: string) {
-  return /(?<![a-z])(rut them|them 1 la|them mot la|lam ro|rut 1 la nua|rut them 1 la|rut tiep|boc them|lat them|them la nua|draw one more|one more card)(?![a-z])/.test(fold(text));
+  return VN(/(?<![a-z])(rút thêm|thêm 1 lá|thêm một lá|làm rõ|rút 1 lá nữa|rút thêm 1 lá|rút tiếp|bốc thêm|lật thêm|thêm lá nữa|draw one more|one more card)(?![a-z])/).test(fold(text));
 }
 export function isTarotRedo(text: string) {
-  return /(?<![a-z])(boi lai|rut lai|xao lai|redraw|draw again)(?![a-z])/.test(fold(text));
+  return VN(/(?<![a-z])(bói lại|rút lại|xáo lại|redraw|draw again)(?![a-z])/).test(fold(text));
 }
 export function isTarotCancel(text: string) {
-  return /^(thoi|khong|ko|huy|khoi|de sau|no|cancel|stop)(?![a-z])/.test(fold(text).trim());
+  return VN(/^(thôi|không|ko|hủy|khỏi|để sau|no|cancel|stop)(?![a-z])/).test(fold(text).trim());
 }
 /** 11/10 — "thôi không bói nữa", "đừng bói nữa", "khỏi rút bài" — người dùng muốn DỪNG bói: có chữ "bói" nhưng không phải nhờ bói.
  *  (Trước đây câu này bị rút luôn 3 lá cho câu hỏi "Thôi không?".) */
 export function isTarotStop(text: string): boolean {
   const f = fold(text).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim();
   if (f.split(" ").length > 9) return false;
-  return /(?<![a-z])(thoi|khong|ko|k|dung|khoi|chua|het|ngung|nghi|chan)( (muon|can|co|them|phai))?( (xem|rut|trai))? (boi|bai|tarot|la nao)(?![a-z])/.test(f) && !/(?<![a-z])(sao|tai sao|vi sao|duoc khong|dc khong|co nen)(?![a-z])/.test(f);
+  return VN(/(?<![a-z])(thôi|không|ko|k|dừng|khỏi|chưa|hết|ngưng|nghỉ|chán)( (muốn|cần|có|thêm|phải))?( (xem|rút|trải))? (bói|bài|tarot|lá nào)(?![a-z])/).test(f) && !VN(/(?<![a-z])(sao|tại sao|vì sao|được không|đc không|có nên)(?![a-z])/).test(f);
 }
 /** 11/10 — câu hỏi bài mang tính CHẨN ĐOÁN ("mình có bị bệnh gì không", "tarot nói a bị ung thư hả", "có thai không", "sống được bao lâu"):
  *  lá bài không trả lời được chuyện có bệnh hay không → Lomi nói thẳng điều đó thay vì trải bài. Câu hỏi tinh thần / hồi phục
  *  ("bao giờ khoẻ lại", "bệnh có mau khỏi không") vẫn bói như cũ với lời nhắc hỏi bác sĩ. */
 export function tarotMedicalAsk(question: string): boolean {
   const f = ` ${fold(question).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim()} `;
-  if (/ (bi|mac|dinh|co) (benh|ung thu|khoi u|u ac|u nao|tieu duong|hiv|sida|lao|tram cam|vo sinh|ung buou|tai bien|dot quy|benh nan y)( gi| nao| nang)? /.test(f) && !/ (khoi|het|qua khoi|binh phuc|hoi phuc|do hon|khoe lai) /.test(f)) return true;
-  if (/ (benh gi|bi gi vay|bi sao vay|co thai khong|co bau khong|co thai chua|co bau chua|dinh bau|song duoc bao lau|con song bao lau|bao gio chet|khi nao chet|co chet khong|chan doan) /.test(f)) return true;
+  if (VN(/ (bị|mắc|dính|có) (bệnh|ung thư|khối u|u ác|u não|tiểu đường|hiv|sida|lao|trầm cảm|vô sinh|ung bướu|tai biến|đột quỵ|bệnh nan y)( gì| nào| nặng)? /).test(f) && !VN(/ (khỏi|hết|qua khỏi|bình phục|hồi phục|đỡ hơn|khỏe lại) /).test(f)) return true;
+  if (VN(/ (bệnh gì|bị gì vậy|bị sao vậy|có thai không|có bầu không|có thai chưa|có bầu chưa|dính bầu|sống được bao lâu|còn sống bao lâu|bao giờ chết|khi nào chết|có chết không|chẩn đoán) /).test(f)) return true;
   return false;
 }
 
 function detectTopic(f: string): TarotTopic {
-  if (/(?<![a-z])(benh|het benh|khoi benh|bi om|om dau|om nang|uong thuoc|thuoc men|toa thuoc|don thuoc|thuoc nay|suc khoe|bac si|benh vien|kham benh|xet nghiem|phau thuat|mo tim|bi sot|sot cao|cam cum|bi cam|dau bung|dau dau|dau lung|nhuc dau|mang thai|co bau|health|sick|illness|medicine|doctor)(?![a-z])/.test(f))
+  if (VN(/(?<![a-z])(bệnh|hết bệnh|khỏi bệnh|bị ốm|ốm đau|ốm nặng|uống thuốc|thuốc men|toa thuốc|đơn thuốc|thuốc này|sức khỏe|bác sĩ|bệnh viện|khám bệnh|xét nghiệm|phẫu thuật|mổ tim|bị sốt|sốt cao|cảm cúm|bị cảm|đau bụng|đau đầu|đau lưng|nhức đầu|mang thai|có bầu|health|sick|illness|medicine|doctor)(?![a-z])/).test(f))
     return "health";
-  if (/(?<![a-z])(tinh cam|tinh yeu|nguoi yeu|crush|nguoi ay|hen ho|yeu|ny|vo|chong|ket hon|cuoi|chia tay|quay lai|ex|love|dating|boyfriend|girlfriend|marry)(?![a-z])/.test(f))
+  if (VN(/(?<![a-z])(tình cảm|tình yêu|người yêu|crush|người ấy|hẹn hò|yêu|ny|vợ|chồng|kết hôn|cưới|chia tay|quay lại|ex|love|dating|boyfriend|girlfriend|marry)(?![a-z])/).test(f))
     return "love";
   // "khai trương", "thị trường" không phải trường học; "thì" bỏ dấu cũng thành "thi" — chỉ nhận "thi" khi rõ là thi cử
   // (01/10 r3: "khi nào nên khai trương tiệm" bị bói thành chuyện học hành — Claude test thật trên app).
-  if (/(?<![a-z])(khai truong|mo tiem|mo quan|mo cua hang|mo shop|mo spa|mo tiem)(?![a-z])/.test(f)) return "money";
-  if (/(?<![a-z])(hoc|du hoc|dai hoc|bang cap|ielts|toeic|exam|study|school|thi cu|thi dau|thi do|thi rot|thi truot|ky thi|di thi|on thi|bai thi|thi tot nghiep|thi dai hoc|thi bang)(?![a-z])|(?<![a-z])(?<!khai |thi )truong(?! hop| phong| nhom| ban| doan| ca| hop)(?![a-z])/.test(f)) return "study";
-  if (/(?<![a-z])(visa|nuoc ngoai|du lich|xuat canh|dinh cu|xuat khau lao dong|ho chieu|chuyen di|di (uc|my|nhat|han|canada|duc|anh|phap|dai loan|sing|thai)|travel|trip|abroad|passport)(?![a-z])/.test(f))
+  if (VN(/(?<![a-z])(khai trương|mở tiệm|mở quán|mở cửa hàng|mở shop|mở spa|mở tiệm)(?![a-z])/).test(f)) return "money";
+  if (VN(/(?<![a-z])(học|du học|đại học|bằng cấp|ielts|toeic|exam|study|school|thi cử|thi đậu|thi đỗ|thi rớt|thi trượt|kỳ thi|đi thi|ôn thi|bài thi|thi tốt nghiệp|thi đại học|thi bằng)(?![a-z])|(?<![a-z])(?<!khai |thi )trường(?! hợp| phòng| nhóm| ban| đoàn| ca| hợp)(?![a-z])/).test(f)) return "study";
+  if (VN(/(?<![a-z])(visa|nước ngoài|du lịch|xuất cảnh|định cư|xuất khẩu lao động|hộ chiếu|chuyến đi|đi (úc|mỹ|nhật|hàn|canada|đức|anh|pháp|đài loan|sing|thái)|travel|trip|abroad|passport)(?![a-z])/).test(f))
     return "travel";
-  if (/(?<![a-z])(cong viec|su nghiep|viec lam|cong ty|sep|phong van|xin viec|tim viec|kiem viec|co viec|that nghiep|mat viec|di lam|thang chuc|nghi viec|chuyen viec|work|job|career|interview|promotion|boss)(?![a-z])/.test(f))
+  if (VN(/(?<![a-z])(công việc|sự nghiệp|việc làm|công ty|sếp|phỏng vấn|xin việc|tìm việc|kiếm việc|có việc|thất nghiệp|mất việc|đi làm|thăng chức|nghỉ việc|chuyển việc|work|job|career|interview|promotion|boss)(?![a-z])/).test(f))
     return "work";
-  if (/(?<![a-z])(tien|tai chinh|dau tu|kinh doanh|buon ban|mo quan|lam an|luong|thu nhap|money|invest|business|salary)(?![a-z])/.test(f))
+  if (VN(/(?<![a-z])(tiền|tài chính|đầu tư|kinh doanh|buôn bán|mở quán|làm ăn|lương|thu nhập|money|invest|business|salary)(?![a-z])/).test(f))
     return "money";
   return "general";
 }
@@ -483,27 +484,27 @@ function detectTopic(f: string): TarotTopic {
 function detectKind(q: string): { kind: TarotKind; options?: [string, string] } {
   const f = fold(q);
   // A hay B — chỉ khi có dấu hiệu lựa chọn (chữ "hay" còn nghĩa là "thường": "mình hay cãi nhau…").
-  const cm = f.match(/^(.*?)\s+(hay la|hoac la|hay|hoac|or)\s+(.+)$/);
+  const cm = f.match(VN(/^(.*?)\s+(hay là|hoặc là|hay|hoặc|or)\s+(.+)$/));
   // "Ở lại hay đi?", "Công việc A hay B?" — chữ "hay" đứng giữa 2 vế ngắn cũng là câu chọn, trừ khi "hay" nghĩa là
   // "thường" (đứng sau đại từ: "mình hay cãi nhau…").
   const shortChoice =
-    !!cm && /\?\s*$/.test(q) && cm[2] === "hay" && !/(?<![a-z])(minh|toi|em|anh|ban|ho|nguoi ay|no|chung ta)$/.test(cm[1].trim()) &&
+    !!cm && /\?\s*$/.test(q) && cm[2] === "hay" && !VN(/(?<![a-z])(mình|tôi|em|anh|bạn|họ|người ấy|nó|chúng ta)$/).test(cm[1].trim()) &&
     cm[1].trim().split(/\s+/).length <= 6 && cm[3].trim().split(/\s+/).length <= 6;
-  if (cm && !/^(khong|ko|k|chua|not)(?![a-z])/.test(cm[3]) && (shortChoice || /(hay la|hoac|or)/.test(cm[2]) || /(?<![a-z])(nen|chon|giua|which|should|choose)(?![a-z])/.test(f))) {
+  if (cm && !VN(/^(không|ko|k|chưa|not)(?![a-z])/).test(cm[3]) && (shortChoice || VN(/(hay là|hoặc|or)/).test(cm[2]) || VN(/(?<![a-z])(nên|chọn|giữa|which|should|choose)(?![a-z])/).test(f))) {
     const cut = cm[1].length;
     let a = q.slice(0, cut);
     let b = q.slice(cut + cm[0].length - cm[1].length - cm[3].length);
-    a = a.replace(/^.*?(?:nên chọn|nen chon|nên|nen|chọn|chon|giữa|giua|should i|choose)\s+/i, "");
-    b = b.replace(/\s*(thì tốt hơn|thi tot hon|tốt hơn|tot hon|hơn|nhỉ|nhi|ạ|đây|day)?\s*[?.!…]*\s*$/i, "");
+    a = a.replace(VR(/^.*?(?:nên chọn|nen chon|nên|nen|chọn|chon|giữa|giua|should i|choose)\s+/i), "");
+    b = b.replace(VR(/\s*(thì tốt hơn|thi tot hon|tốt hơn|tot hon|hơn|nhỉ|nhi|ạ|đây|day)?\s*[?.!…]*\s*$/i), "");
     const rawB = b.replace(/[?.!…]+$/, "").trim();
     a = clean(a);
     b = clean(b) || rawB; // "Ở lại hay đi?" — chữ "đi" không phải chữ đệm ở đây
     if (nWords(a) >= 1 && nWords(b) >= 1 && nWords(a) <= 8 && nWords(b) <= 8) return { kind: "choice", options: [a, b] };
   }
-  if (/(?<![a-z])(khi nao|bao gio|bao lau|luc nao|thang nao|nam nao|may thang|bao nhieu lau|when|how long)(?![a-z])/.test(f)) return { kind: "timing" };
+  if (VN(/(?<![a-z])(khi nào|bao giờ|bao lâu|lúc nào|tháng nào|năm nào|mấy tháng|bao nhiêu lâu|when|how long)(?![a-z])/).test(f)) return { kind: "timing" };
   if (
-    /(?<![a-z])(khong|ko|chua|k|hok|hong|hem|khum|hk|kh|hn|kg)\s*[?.!…]*\s*$/.test(f) ||
-    /(?<![a-z])(lieu|co nen|nen khong|co phai|co duoc|duoc khong|will|should|can i|is it|am i|do i|does)(?![a-z])/.test(f)
+    VR(/(?<![a-z])(khong|ko|chua|k|hok|hong|hem|khum|hk|kh|hn|kg)\s*[?.!…]*\s*$/).test(f) ||
+    VN(/(?<![a-z])(liệu|có nên|nên không|có phải|có được|được không|will|should|can i|is it|am i|do i|does)(?![a-z])/).test(f)
   )
     return { kind: "yesno" };
   return { kind: "open" };
@@ -521,16 +522,16 @@ const short = (x: string) => (x.length > 16 ? `${x.slice(0, 15).trim()}…` : x)
 /** Rút bài cho 1 câu hỏi (rỗng = thông điệp hôm nay). */
 /** Người dùng xin trải bài riêng trong câu gõ: "5 lá", "10 lá / Celtic Cross", "quá khứ – hiện tại – tương lai". */
 export function spreadFromText(text: string): "five" | "celtic" | "ppf" | null {
-  const f = ` ${fold(text).replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ")} `;
-  if (/ (celtic|10 la|muoi la|chu thap) /.test(f)) return "celtic";
-  if (/ (5 la|nam la) /.test(f)) return "five";
-  if (/ qua khu .*hien tai .*tuong lai /.test(f)) return "ppf";
+  const f = ` ${fold(text).replace(VR(/[^a-z0-9 ]+/g), " ").replace(/\s+/g, " ")} `;
+  if (VN(/ (celtic|10 lá|mười lá|chữ thập) /).test(f)) return "celtic";
+  if (VN(/ (5 lá|năm lá) /).test(f)) return "five";
+  if (VN(/ quá khứ .*hiện tại .*tương lai /).test(f)) return "ppf";
   return null;
 }
 /** 11/10: người dùng xin đúng MỘT lá cho một câu hỏi ("rút 1 lá xem hôm nay sao") — trước đây vẫn ra 3 lá. */
 export function oneCardAsk(text: string): boolean {
-  const f = ` ${fold(text).replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ")} `;
-  return / (1|mot) la /.test(f) && !/ (them|nua) /.test(f);
+  const f = ` ${fold(text).replace(VR(/[^a-z0-9 ]+/g), " ").replace(/\s+/g, " ")} `;
+  return VN(/ (1|một) lá /).test(f) && !VN(/ (thêm|nữa) /).test(f);
 }
 const ONE_POS = "Lá trả lời";
 const SPREAD_GROUPS: Record<"five" | "celtic" | "ppf", Group[]> = {
@@ -546,7 +547,7 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
   // 11/10: phần đi kèm chỉ để báo SỐ LÁ ("trải 5 lá về tiền bạc", "… 10 lá") không phải "chuyện đang kể" → vẫn dùng để chọn trải bài,
   // nhưng không ghi vào context (lời giải khỏi mở đầu "Nối tiếp chuyện mình đang nói lúc nãy" khi chưa hề có chuyện nào).
   const told = ctxAll
-    ? fold(ctxAll).replace(fold(q), " ").replace(/(?<![a-z0-9])(boi|tarot|xem|rut|trai|bai|la|celtic|cross|\d+|mot|ba|nam|muoi|ve|chuyen|cho|giup|gium|minh|em|anh|a|e|di|nha|nhe|thu|coi)(?![a-z0-9])/g, " ").replace(/[^a-z]+/g, " ").trim().split(" ").filter(Boolean).length >= 2
+    ? fold(ctxAll).replace(fold(q), " ").replace(VN(/(?<![a-z0-9])(bói|tarot|xem|rút|trải|bài|lá|celtic|cross|\d+|một|ba|năm|mười|về|chuyện|cho|giúp|giùm|mình|em|anh|a|à|ạ|e|đi|nha|nhé|nhe|thử|coi)(?![a-z0-9])/g), " ").replace(VR(/[^a-z]+/g), " ").trim().split(" ").filter(Boolean).length >= 2
     : false;
   const ctx = told ? ctxAll : undefined;
   // Chủ đề đọc từ câu hỏi; nếu câu hỏi chung chung thì xem thêm phần kể chuyện xung quanh.
@@ -840,7 +841,7 @@ const TOPIC_NOUN: Record<TarotTopic, string> = {
 };
 function subjectOf(q: string, topic: TarotTopic): string {
   let w = q.replace(/[?!.,…"“”]+/g, " ").split(/\s+/).filter(Boolean);
-  const f = () => w.map((x) => fold(x).replace(/[^a-z0-9]/g, ""));
+  const f = () => w.map((x) => fold(x).replace(VR(/[^a-z0-9]/g), ""));
   for (const ph of Q_PHRASES) {
     const parts = ph.split(" ");
     let fw = f();
@@ -921,25 +922,25 @@ function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   const f = ` ${fold(`${context ?? ""} ${q}`)} `.replace(/[?!.,…"“”]/g, " ");
   const has = (re: RegExp) => re.test(f);
   if (topic === "health") return "health";
-  if (has(/ (that nghiep|tim viec|kiem viec|xin viec|co viec|mat viec|bi duoi|nghi viec roi|chua co viec|phong van|nop cv|nop ho so xin) /)) return "jobseek";
-  if (has(/ (tim duoc viec|kiem duoc viec|co viec lam|bao gio co viec|khi nao co viec) /)) return "jobseek";
+  if (has(VN(/ (thất nghiệp|tìm việc|kiếm việc|xin việc|có việc|mất việc|bị đuổi|nghỉ việc rồi|chưa có việc|phỏng vấn|nộp cv|nộp hồ sơ xin) /))) return "jobseek";
+  if (has(VN(/ (tìm được việc|kiếm được việc|có việc làm|bao giờ có việc|khi nào có việc) /))) return "jobseek";
   // Làm ăn / đầu tư / dự án / cửa hàng (hỏi chuyện kinh doanh, khác hỏi chuyện đi làm)
-  if (has(/ (dau tu|lam an|hun von|gop von|mo quan|kinh doanh|buon ban|startup|du an|cua hang|quan cua minh|tiem cua minh|shop cua minh) /)) return "business";
+  if (has(VN(/ (đầu tư|làm ăn|hùn vốn|góp vốn|mở quán|kinh doanh|buôn bán|startup|dự án|cửa hàng|quán của mình|tiệm của mình|shop của mình) /))) return "business";
   if (topic === "work") return "work";
   // Độc thân / vừa thất tình muốn có người mới — khác hẳn hỏi chuyện quay lại với người cũ.
-  if (has(/ (nguoi yeu moi|co nguoi yeu|kiem nguoi yeu|tim nguoi yeu|doc than|bi e|e qua|van e|con e|gap dung nguoi|nguoi moi|chua co nguoi yeu|gap duoc ai) /) && !has(/ quay lai /))
+  if (has(VN(/ (người yêu mới|có người yêu|kiếm người yêu|tìm người yêu|độc thân|bị ế|ế quá|vẫn ế|còn ế|gặp đúng người|người mới|chưa có người yêu|gặp được ai) /)) && !has(VN(/ quay lại /)))
     return "newlove";
-  if (has(/ (nguoi yeu cu|nguoi cu|ny cu|ex|quay lai|tai hop|chia tay) /)) return "ex";
-  if (has(/ (crush|nhan tin|to tinh|lam quen|bat chuyen|nguoi ay|thich (anh|em|ban|nguoi)|co thich minh) /)) return "crush";
+  if (has(VN(/ (người yêu cũ|người cũ|ny cũ|ex|quay lại|tái hợp|chia tay) /))) return "ex";
+  if (has(VN(/ (crush|nhắn tin|tỏ tình|làm quen|bắt chuyện|người ấy|thích (anh|em|bạn|người)|có thích mình) /))) return "crush";
   if (topic === "love") return "love";
   if (topic === "money" || topic === "travel" || topic === "study") return topic;
-  if (has(/ (nhau|ruou|bia|di choi|quay|tiec|bar|pub) /)) return "fun";
+  if (has(VN(/ (nhậu|rượu|bia|đi chơi|quẩy|tiệc|bar|pub) /))) return "fun";
   // Người khác (sếp, bạn bè, đồng nghiệp, "người đó"…) — không phải chuyện tình cảm
-  if (has(/ (nguoi do|nguoi kia|sep|dong nghiep|ban be|ban than|nguoi a|anh a|chi a|ho nghi|ho nhin|y dinh|bien mat|mat lien lac) /)) return "others";
+  if (has(VN(/ (người đó|người kia|sếp|đồng nghiệp|bạn bè|bạn thân|người a|anh a|chị a|họ nghĩ|họ nhìn|ý định|biến mất|mất liên lạc) /))) return "others";
   // Bản thân / hướng đi
-  if (has(/ (mac ket|be tac|can tro|tap trung vao|bai hoc|huong di|ban than minh|phu hop voi minh|hop voi minh|dinh huong|dam chan) /)) return "self";
+  if (has(VN(/ (mắc kẹt|bế tắc|cản trở|tập trung vào|bài học|hướng đi|bản thân mình|phù hợp với mình|hợp với mình|định hướng|dậm chân) /))) return "self";
   // Tương lai gần
-  if (has(/ (thang toi|thang sau|sap toi|vai thang|nua nam|nam toi|nam sau|tuong lai|sap xuat hien|chuan bi cho|hom nay cua minh) /)) return "future";
+  if (has(VN(/ (tháng tới|tháng sau|sắp tới|vài tháng|nửa năm|năm tới|năm sau|tương lai|sắp xuất hiện|chuẩn bị cho|hôm nay của mình) /))) return "future";
   return "general";
 }
 type Tpl = [string, string]; // [bài thuận, bài thử thách]
@@ -1426,7 +1427,7 @@ const INTENTS: Intent[] = [
   // ❤️ Tình cảm
   {
     id: "third",
-    re: / (nguoi thu ba|tuesday|ngoai tinh|co ai khac|bat ca hai tay|lang nhang|co nguoi khac|them ai|phan boi) /,
+    re: VN(/ (người thứ ba|tuesday|ngoại tình|có ai khác|bắt cá hai tay|lăng nhăng|lằng nhằng|có người khác|thêm ai|phản bội) /),
     scene: "love",
     pos: ["Hiện tại của mối quan hệ", "Điều đang ẩn giấu", "Sự thật sẽ lộ ra"],
     groups: ["state", "block", "result"],
@@ -1444,7 +1445,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "whenlove",
-    re: / (khi nao|bao gio|luc nao) .*(nguoi yeu|gap dung nguoi|co doi|lay chong|lay vo|ket hon|co nguoi thuong|thoat e) /,
+    re: VN(/ (khi nào|bao giờ|lúc nào) .*(người yêu|gặp đúng người|có đôi|lấy chồng|lấy vợ|kết hôn|có người thương|thoát ế) /),
     kinds: ["timing"],
     scene: "newlove",
     force: true,
@@ -1459,7 +1460,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "feelings",
-    re: / (co tinh cam|thich minh|yeu minh|co y voi minh|co thuong minh|con yeu minh|con thuong minh|de y minh|co cam tinh|thuong minh khong) /,
+    re: VN(/ (có tình cảm|thích mình|yêu mình|có ý với mình|có thương mình|còn yêu mình|còn thương mình|để ý mình|có cảm tình|thương mình không) /),
     scene: "crush",
     pos: ["Cảm xúc của người ấy", "Điều người ấy giữ trong lòng", "Hướng đi của hai người"],
     groups: ["state", "block", "result"],
@@ -1472,7 +1473,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "thinks",
-    re: / (nghi gi ve minh|nghi sao ve minh|nhin minh the nao|nhin nhan minh|danh gia minh|an tuong ve minh|nghi ve minh the nao|thay minh the nao) /,
+    re: VN(/ (nghĩ gì về mình|nghĩ sao về mình|nhìn mình thế nào|nhìn nhận mình|đánh giá mình|ấn tượng về mình|nghĩ về mình thế nào|thấy mình thế nào) /),
     scene: "others",
     pos: ["Ấn tượng bên ngoài", "Cảm nhận bên trong", "Điều họ chưa nói ra"],
     groups: ["state", "state", "block"],
@@ -1486,7 +1487,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "comeback",
-    re: / (bien mat|mat lien lac|khong lien lac|roi xa minh|bo di|khong con lien lac|bat vo am tin) /,
+    re: VN(/ (biến mất|mất liên lạc|không liên lạc|rời xa mình|bỏ đi|không còn liên lạc|bặt vô âm tín) /),
     scene: "others",
     pos: ["Lý do rời đi", "Hiện tại của họ", "Khả năng quay lại"],
     groups: ["block", "state", "result"],
@@ -1496,7 +1497,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "exback",
-    re: / (quay lai|tai hop|nguoi cu|nguoi yeu cu|ny cu) /,
+    re: VN(/ (quay lại|tái hợp|người cũ|người yêu cũ|ny cũ) /),
     kinds: ["yesno", "open"],
     scene: "ex",
     pos: ["Điều còn đọng lại", "Điều ngăn cách", "Khả năng quay lại"],
@@ -1510,7 +1511,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "lovefuture",
-    re: /^(?=.* (tinh cam|tinh yeu|chuyen yeu|duyen) )(?=.* (thoi gian toi|sap toi|thang toi|thang sau|nam nay|nam toi|vai thang|tuong lai) )/,
+    re: VN(/^(?=.* (tình cảm|tình yêu|chuyện yêu|duyên) )(?=.* (thời gian tới|sắp tới|tháng tới|tháng sau|năm nay|năm tới|vài tháng|tương lai) )/),
     kinds: ["open", "yesno"],
     scene: "love",
     pos: ["Hiện tại", "Chuyển động sắp tới", "Kết quả"],
@@ -1522,7 +1523,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "direction",
-    re: / (di ve dau|se ra sao|co lau dai|lau dai khong|tuong lai cua (hai|chung)|co ben lau|di den dau|ket qua cua moi quan he|co ket qua) /,
+    re: VN(/ (đi về đâu|sẽ ra sao|có lâu dài|lâu dài không|tương lai của (hai|chúng)|có bền lâu|đi đến đâu|kết quả của mối quan hệ|có kết quả) /),
     kinds: ["open", "yesno"],
     scene: "love",
     pos: ["Hiện tại của mối quan hệ", "Thử thách phía trước", "Hướng đi sắp tới"],
@@ -1538,7 +1539,7 @@ const INTENTS: Intent[] = [
   // 💼 Công việc
   {
     id: "quit",
-    re: / (nghi viec|chuyen viec|nhay viec|doi viec|bo viec|nghi lam|doi cong ty|chuyen cong ty) /,
+    re: VN(/ (nghỉ việc|chuyển việc|nhảy việc|đổi việc|bỏ việc|nghỉ làm|đổi công ty|chuyển công ty) /),
     scene: "work",
     force: true,
     pos: ["Nếu ở lại", "Nếu ra đi", "Lời khuyên"],
@@ -1553,7 +1554,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "newjob",
-    re: / (cong viec moi|cho lam moi|cong ty moi|viec moi) .*(phu hop|hop|on|tot|the nao) /,
+    re: VN(/ (công việc mới|chỗ làm mới|công ty mới|việc mới) .*(phù hợp|hợp|ổn|tốt|thế nào) /),
     scene: "work",
     force: true,
     pos: ["Bạn và công việc mới", "Điều cần thích nghi", "Triển vọng"],
@@ -1564,7 +1565,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "careerfuture",
-    re: /^(?=.* (su nghiep|cong viec|viec lam) )(?=.* (thoi gian toi|sap toi|thay doi|nam nay|nam toi|tuong lai|vai thang|thang toi|thang sau|nhu the nao|the nao|ra sao) )/,
+    re: VN(/^(?=.* (sự nghiệp|công việc|việc làm) )(?=.* (thời gian tới|sắp tới|thay đổi|năm nay|năm tới|tương lai|vài tháng|tháng tới|tháng sau|như thế nào|thế nào|ra sao) )/),
     scene: "work",
     force: true,
     pos: ["Hiện tại", "Chuyển động sắp tới", "Kết quả"],
@@ -1577,7 +1578,7 @@ const INTENTS: Intent[] = [
   // 💰 Tiền bạc & làm ăn
   {
     id: "invest",
-    re: / (dau tu|lam an|hun von|gop von|mo quan|mo tiem|mo shop|startup|khoi nghiep) /,
+    re: VN(/ (đầu tư|làm ăn|hùn vốn|góp vốn|mở quán|mở tiệm|mở shop|startup|khởi nghiệp) /),
     scene: "business",
     force: true,
     pos: ["Thời cơ hiện tại", "Rủi ro cần tính", "Kết quả có thể"],
@@ -1589,7 +1590,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "bizgrowth",
-    re: / (kinh doanh|cua hang|quan|tiem|shop|doanh nghiep|du an) .*(phat trien|dong khach|on dinh|khoi sac|lam an|thanh cong|co tien) /,
+    re: VN(/ (kinh doanh|cửa hàng|quán|tiệm|shop|doanh nghiệp|dự án) .*(phát triển|đông khách|ổn định|khởi sắc|làm ăn|thành công|có tiền) /),
     scene: "business",
     force: true,
     pos: ["Sức khoẻ kinh doanh hiện tại", "Điểm cần cải thiện", "Triển vọng"],
@@ -1602,7 +1603,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "bigmoney",
-    re: / (khoan tien lon|tien lon|trung so|lam giau|phat tai|giau to|hoanh tai|co tien lon) /,
+    re: VN(/ (khoản tiền lớn|tiền lớn|trúng số|làm giàu|phát tài|giàu to|hoạnh tài|có tiền lớn) /),
     scene: "money",
     force: true,
     pos: ["Vận tiền hiện tại", "Cơ hội sắp đến", "Điều cần giữ"],
@@ -1613,7 +1614,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "moneyfuture",
-    re: /^(?=.* (tai chinh|tien bac|tien nong|thu nhap) )(?=.* (thang toi|vai thang|sap toi|nam nay|thoi gian toi|3 thang) )/,
+    re: VN(/^(?=.* (tài chính|tiền bạc|tiền nong|thu nhập) )(?=.* (tháng tới|vài tháng|sắp tới|năm nay|thời gian tới|3 tháng) )/),
     scene: "money",
     force: true,
     pos: () => [`Tháng ${monthOf(1)}`, `Tháng ${monthOf(2)}`, `Tháng ${monthOf(3)}`],
@@ -1626,7 +1627,7 @@ const INTENTS: Intent[] = [
   // 🔮 Tương lai gần
   {
     id: "today",
-    re: / (hom nay cua minh|ngay hom nay (se|the nao|ra sao)|hom nay (se|the nao|ra sao)) /,
+    re: VN(/ (hôm nay của mình|ngày hôm nay (sẽ|thế nào|ra sao)|hôm nay (sẽ|thế nào|ra sao)) /),
     scene: "future",
     force: true,
     pos: ["Buổi sáng", "Buổi chiều", "Buổi tối"],
@@ -1639,7 +1640,7 @@ const INTENTS: Intent[] = [
   {
     id: "halfyear",
     generalOnly: true,
-    re: / (3 6 thang|3 den 6 thang|3 toi 6 thang|nua nam|6 thang toi|vai thang toi|thoi gian toi) /,
+    re: VN(/ (3 6 tháng|3 đến 6 tháng|3 tới 6 tháng|nửa năm|6 tháng tới|vài tháng tới|thời gian tới) /),
     scene: "future",
     pos: () => [`Tháng ${monthOf(1)}–${monthOf(2)}`, `Tháng ${monthOf(3)}–${monthOf(4)}`, `Tháng ${monthOf(5)}–${monthOf(6)}`],
     groups: ["phase", "phase", "phase"],
@@ -1651,7 +1652,7 @@ const INTENTS: Intent[] = [
   {
     id: "nextmonth",
     generalOnly: true,
-    re: / (thang toi|thang sau) /,
+    re: VN(/ (tháng tới|tháng sau) /),
     scene: "future",
     pos: () => {
       const m = monthOf(1);
@@ -1666,7 +1667,7 @@ const INTENTS: Intent[] = [
   {
     id: "prepare",
     generalOnly: true,
-    re: / (chuan bi (cho|gi)|can chuan bi|nen chuan bi) /,
+    re: VN(/ (chuẩn bị (cho|gì)|cần chuẩn bị|nên chuẩn bị) /),
     scene: "future",
     pos: ["Điều sắp đến", "Điều cần chuẩn bị", "Kết quả nếu sẵn sàng"],
     groups: ["phase", "action", "result"],
@@ -1678,7 +1679,7 @@ const INTENTS: Intent[] = [
   {
     id: "coming",
     generalOnly: true,
-    re: / (dieu gi sap|chuyen gi sap|sap xuat hien|sap den voi minh|dieu gi dang den|co gi moi) /,
+    re: VN(/ (điều gì sắp|chuyện gì sắp|sắp xuất hiện|sắp đến với mình|điều gì đang đến|có gì mới) /),
     scene: "future",
     pos: ["Điều đang tới gần", "Cơ hội đi kèm", "Điều cần chú ý"],
     groups: ["phase", "result", "block"],
@@ -1690,7 +1691,7 @@ const INTENTS: Intent[] = [
   // 🧠 Bản thân
   {
     id: "stuck",
-    re: / (mac ket|be tac|dam chan tai cho|luan quan|ket o dau) /,
+    re: VN(/ (mắc kẹt|bế tắc|dậm chân tại chỗ|luẩn quẩn|kẹt ở đâu) /),
     scene: "self",
     force: true,
     pos: ["Gốc rễ", "Điều đang giữ chân", "Lối ra"],
@@ -1702,7 +1703,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "blocker",
-    re: / (can tro|ngan can|dieu gi dang can|dang ngan|dieu gi dang giu) /,
+    re: VN(/ (cản trở|ngăn cản|điều gì đang cản|đang ngăn|điều gì đang giữ) /),
     scene: "self",
     force: true,
     pos: ["Điều cản bên ngoài", "Điều cản bên trong", "Cách vượt qua"],
@@ -1714,7 +1715,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "focus",
-    re: / (tap trung vao|nen tap trung|uu tien gi|nen lam gi|nen uu tien) /,
+    re: VN(/ (tập trung vào|nên tập trung|ưu tiên gì|nên làm gì|nên ưu tiên) /),
     scene: "self",
     force: true,
     pos: ["Điều bạn đang dồn sức", "Điều nên buông bớt", "Điều đáng tập trung"],
@@ -1726,7 +1727,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "lesson",
-    re: / (bai hoc) /,
+    re: VN(/ (bài học) /),
     scene: "self",
     force: true,
     pos: ["Bài học", "Vì sao nó đến", "Cách vượt qua"],
@@ -1738,7 +1739,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "path",
-    re: / (huong di|hop voi minh|phu hop voi minh|nen di duong nao|lam nghe gi|dinh huong|con duong nao) /,
+    re: VN(/ (hướng đi|hợp với mình|phù hợp với mình|nên đi đường nào|làm nghề gì|định hướng|con đường nào) /),
     scene: "self",
     force: true,
     pos: ["Điểm mạnh của bạn", "Điều cần tránh", "Hướng nên đi"],
@@ -1751,7 +1752,7 @@ const INTENTS: Intent[] = [
   // 👥 Người khác
   {
     id: "theirintent",
-    re: / (y dinh|muon gi o minh|co y do|dinh lam gi|co ac y|co y gi|toan tinh) /,
+    re: VN(/ (ý định|muốn gì ở mình|có ý đồ|định làm gì|có ác ý|có ý gì|toan tính) /),
     scene: "others",
     pos: ["Mục đích bề ngoài", "Cảm xúc thật", "Hành động sắp tới"],
     groups: ["state", "state", "result"],
@@ -1762,7 +1763,7 @@ const INTENTS: Intent[] = [
   },
   {
     id: "relchange",
-    re: / (moi quan he|quan he) .*(thay doi|ra sao|the nao|di ve dau) /,
+    re: VN(/ (mối quan hệ|quan hệ) .*(thay đổi|ra sao|thế nào|đi về đâu) /),
     kinds: ["open", "yesno"],
     scene: "others",
     pos: ["Hiện tại", "Điều sẽ thay đổi", "Kết quả"],
@@ -1887,10 +1888,10 @@ const VERDICT = [
 
 /** Chi tiết hữu ích trong câu hỏi: người, hành động/tình huống, mốc thời gian. */
 type QDetails = { person?: string; action?: string; time?: string };
-const DET_PERSON = /(người ấy|người đó|anh ấy|chị ấy|em ấy|crush|người yêu cũ|người yêu|chồng|vợ|sếp|đồng nghiệp|gia đình|ba mẹ|con mình)/iu;
+const DET_PERSON = VR(/(người ấy|người đó|anh ấy|chị ấy|em ấy|crush|người yêu cũ|người yêu|chồng|vợ|sếp|đồng nghiệp|gia đình|ba mẹ|con mình)/iu);
 const DET_ACTION =
-  /(đợi|chờ đợi|nhắn tin|gọi điện|quay lại|tỏ tình|nghỉ việc|xin việc|phỏng vấn|đầu tư|mở quán|mở shop|chuyển nhà|đi xa|kết hôn|chia tay|đi thi|học lại|mua nhà|bán hàng)/iu;
-const DET_TIME = /(tháng \d{1,2}|tháng này|tháng sau|tháng tới|tuần này|tuần sau|tuần tới|cuối năm|đầu năm|giữa năm|năm nay|năm sau|hôm nay)/iu;
+  VR(/(đợi|chờ đợi|nhắn tin|gọi điện|quay lại|tỏ tình|nghỉ việc|xin việc|phỏng vấn|đầu tư|mở quán|mở shop|chuyển nhà|đi xa|kết hôn|chia tay|đi thi|học lại|mua nhà|bán hàng)/iu);
+const DET_TIME = VR(/(tháng \d{1,2}|tháng này|tháng sau|tháng tới|tuần này|tuần sau|tuần tới|cuối năm|đầu năm|giữa năm|năm nay|năm sau|hôm nay)/iu);
 function extractDetails(q: string): QDetails {
   const d: QDetails = {};
   const p = q.match(DET_PERSON);
@@ -1963,8 +1964,8 @@ function ownYesNoAsk(q: string): string | null {
   const s = q.replace(/[?？!.…\s]+$/u, "").trim();
   const words = s.split(/\s+/).filter(Boolean).length;
   if (words < 3 || words > 16) return null;
-  if (/(bao giờ|khi nào|lúc nào|mấy|bao nhiêu|ở đâu|là ai|như thế nào|ra sao|thế nào|vì sao|tại sao)/iu.test(s)) return null;
-  if (!/(không|chưa|hông)$/iu.test(s)) return null;
+  if (VR(/(bao giờ|khi nào|lúc nào|mấy|bao nhiêu|ở đâu|là ai|như thế nào|ra sao|thế nào|vì sao|tại sao)/iu).test(s)) return null;
+  if (!VR(/(không|chưa|hông)$/iu).test(s)) return null;
   return s.charAt(0).toLowerCase() + s.slice(1);
 }
 
@@ -2060,7 +2061,7 @@ function readingNarrativeVi(r: TarotReading): string {
   // bucket: 0 = sáng, 1 = lưng chừng, 2 = vướng — quyết định bởi mạch chuyện & lá kết quả, không chỉ tổng điểm
   const bucket: 0 | 1 | 2 =
     arc === "up" || arc === "bright" || (arc === "open" && resLean > 0) ? 0 : (arc === "down" || arc === "heavy") && resLean < 0 ? 2 : 1;
-  const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
+  const should = VN(/(?<![a-z])(nên|should)(?![a-z])/).test(fold(q));
   const overview: string[] = [];
   if (r.cards.length >= 3) {
     const n = r.cards.length;
@@ -2149,7 +2150,7 @@ function readingNarrativeVi(r: TarotReading): string {
       ])
         .replace("{k}", kw(weakest.d, false))
         .replace("{n}", tarotCard(weakest.d.id).name.vi)
-        .replace("{p}", posName(weakest.i).replace(/^Nếu chọn “|”$/g, ""))}`,
+        .replace("{p}", posName(weakest.i).replace(VR(/^Nếu chọn “|”$/g), ""))}`,
     );
 
   // 6) 💡 Lời khuyên — việc cụ thể theo bối cảnh + lời khuyên của lá cuối + câu chốt
@@ -2160,7 +2161,7 @@ function readingNarrativeVi(r: TarotReading): string {
 
   if (r.topic === "health")
     out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
-  if (/(?<![a-z])(nhau|ruou|bia|say)(?![a-z])/.test(fold(q))) out.push("🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
+  if (VN(/(?<![a-z])(nhậu|rượu|bia|say)(?![a-z])/).test(fold(q))) out.push("🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
   if (it?.invest)
     out.push("💡 Lá bài chỉ để tham khảo tinh thần thôi nha — quyết định bỏ vốn nên dựa trên số liệu thật, tìm hiểu kỹ và hỏi thêm người có kinh nghiệm.");
 
@@ -2188,7 +2189,7 @@ function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: st
   const h = hashStr(fold(q));
   const one = (arr: string[]) => arr[h % arr.length];
   let base: string;
-  if (topic === "health" && has(/ (tao lao|qua loa|khong tin|khong yen tam|do te|te qua|kham dom|kham au|nghi ngo|so sai) /))
+  if (topic === "health" && has(VN(/ (tào lao|qua loa|không tin|không yên tâm|dở tệ|tệ quá|kham dom|kham au|nghi ngờ|sơ sài) /)))
     base = one([
       "Lomi hiểu nè — đi khám mà thấy bác sĩ làm qua loa thì ai cũng bất an, uống thuốc cũng không yên lòng. Cảm giác nghi ngờ đó là bình thường, vì bạn đang lo cho sức khoẻ của mình. Nếu vẫn không yên tâm, bạn hoàn toàn có thể đi khám thêm ở một nơi khác để có ý kiến thứ hai.",
       "Nghe là thấy bạn đang vừa mệt vừa bực rồi 🥺 Khi không tin người khám cho mình, mình sẽ cứ lấn cấn mãi. Bài chỉ giúp bạn nhẹ lòng thôi — muốn chắc ăn thì khám lại ở chỗ khác cũng là quyền của bạn nha.",
@@ -2203,12 +2204,12 @@ function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: st
       "Thất tình là một nỗi đau thật sự — có nghiên cứu còn cho thấy não xử lý nỗi đau chia tay khá giống đau thể chất. Việc bạn đã nghĩ tới chuyện có người mới cho thấy bạn đang dần muốn bước tiếp, và đó là tín hiệu tốt.",
       "Lomi đoán bạn đang vừa buồn vừa mong có ai đó ở bên. Muốn được yêu thương là nhu cầu rất bình thường — chỉ cần mình đừng vội vì cô đơn mà chọn sai người.",
     ]);
-  else if (topic === "love" && has(/ (nguoi cu|ex|quay lai|tai hop|chia tay) /))
+  else if (topic === "love" && has(VN(/ (người cũ|ex|quay lại|tái hợp|chia tay) /)))
     base = one([
       "Có vẻ bạn vẫn còn vương vấn chuyện cũ. Nhớ một người không có nghĩa là mình yếu đuối — chỉ là trái tim cần thêm thời gian.",
       "Lomi cảm nhận bạn đang lưng chừng giữa buông và giữ. Câu hỏi này giống như bạn muốn biết mình còn nên hy vọng không.",
     ]);
-  else if (topic === "love" && has(/ (nhan tin|to tinh|ruru|ru di|hen|lam quen|bat chuyen) /))
+  else if (topic === "love" && has(VN(/ (nhắn tin|tỏ tình|ruru|rủ đi|hẹn|làm quen|bắt chuyện) /)))
     base = one([
       "Bạn đang muốn tiến thêm một bước nhưng còn sợ bị từ chối — nên mới muốn chắc chắn trước khi làm. Ai cũng vậy hết á.",
       "Lomi đoán bạn đã nghĩ tới chuyện này nhiều lần rồi. Phân vân lâu thường là vì mình thật sự để tâm tới người ta.",
@@ -2243,7 +2244,7 @@ function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: st
       "Lomi đoán bạn đang chịu chút áp lực học hành, muốn biết công sức mình bỏ ra có xứng đáng không.",
       "Câu hỏi này cho thấy bạn rất có trách nhiệm với việc học — chỉ là đang hơi lo về kết quả thôi.",
     ]);
-  else if (has(/ (nhau|ruou|bia|di choi|quay|tiec) /))
+  else if (has(VN(/ (nhậu|rượu|bia|đi chơi|quẩy|tiệc) /)))
     base = one([
       "Nghe là biết bạn đang cần xả hơi một chút sau mấy ngày bận rộn rồi 😄 Muốn vui mà vẫn hơi lăn tăn nên mới hỏi bài nè.",
       "Lomi đoán trong lòng bạn đã muốn đi lắm rồi, chỉ cần thêm một cái gật đầu thôi 😄",
@@ -2256,8 +2257,8 @@ function insightText(q: string, topic: TarotTopic, kind: TarotKind, context?: st
   let tail = "";
   if (kind === "timing") tail = " Chờ đợi mà chưa biết khi nào thì dễ sốt ruột lắm, nên mình xem bài để lòng nhẹ hơn nha.";
   else if (kind === "choice") tail = " Đứng giữa hai ngả thì sợ chọn sai là chuyện thường — thật ra lựa chọn nào cũng dạy mình điều gì đó.";
-  else if (kind === "yesno" && has(/ (nen|co nen) /)) tail = " Thường thì khi hỏi “có nên không”, trong lòng mình đã nghiêng về một phía rồi đó.";
-  if (has(/ (lo|so|buon|met|chan|stress|ap luc|hoang) /)) tail += " Lomi thấy bạn đang hơi lo — hít sâu một hơi trước đã nha 💚";
+  else if (kind === "yesno" && has(VN(/ (nên|có nên) /))) tail = " Thường thì khi hỏi “có nên không”, trong lòng mình đã nghiêng về một phía rồi đó.";
+  if (has(VN(/ (lo|sợ|buồn|mệt|chán|stress|áp lực|hoảng) /))) tail += " Lomi thấy bạn đang hơi lo — hít sâu một hơi trước đã nha 💚";
   return base + tail;
 }
 
@@ -2313,14 +2314,14 @@ function trendLine(cards: TarotDraw[]): string {
 // hồi phục", Mười Kiếm ngược: "đang hồi phục sau khó khăn", Ngôi Sao: "hy vọng và chữa lành"). Ở mạch này mấy chữ đó dễ bị nghe thành
 // lời đoán bệnh sẽ khỏi → đổi sang chữ chỉ nói về tinh thần. (Thấy ở test chuỗi: khoảng 1/13 lần rút trúng các lá đó.)
 const SOBER_WORDS: [RegExp, string][] = [
-  [/nghỉ ngơi để hồi phục năng lượng/g, "nghỉ ngơi để nạp lại năng lượng"],
-  [/sự nghỉ ngơi, hồi phục/g, "sự nghỉ ngơi, lấy lại thăng bằng"],
-  [/sự hồi phục sau khó khăn/g, "việc đứng dậy sau khó khăn"],
-  [/đang hồi phục sau/g, "đang đứng dậy sau"],
-  [/hồi phục/g, "lấy lại thăng bằng"],
-  [/sự chữa lành/g, "sự xoa dịu"],
-  [/chữa lành/g, "xoa dịu"],
-  [/mau khoẻ|mau khỏe/g, "vững lòng"],
+  [VR(/nghỉ ngơi để hồi phục năng lượng/g), "nghỉ ngơi để nạp lại năng lượng"],
+  [VR(/sự nghỉ ngơi, hồi phục/g), "sự nghỉ ngơi, lấy lại thăng bằng"],
+  [VR(/sự hồi phục sau khó khăn/g), "việc đứng dậy sau khó khăn"],
+  [VR(/đang hồi phục sau/g), "đang đứng dậy sau"],
+  [VR(/hồi phục/g), "lấy lại thăng bằng"],
+  [VR(/sự chữa lành/g), "sự xoa dịu"],
+  [VR(/chữa lành/g), "xoa dịu"],
+  [VR(/mau khoẻ|mau khỏe/g), "vững lòng"],
 ];
 const soberText = (r: TarotReading, text: string) => (r.sober ? SOBER_WORDS.reduce((x, [re, to]) => x.replace(re, to), text) : text);
 export function readingText(r: TarotReading, lang: L): string {
@@ -2407,7 +2408,7 @@ function readingTextRaw(r: TarotReading, lang: L): string {
     out.splice(ansAt, 0, `⏳ ${en ? "Timing" : "Trả lời nhanh"}: ${timingPhrase(c3, en)}`);
     out.push(topicSummary() ?? `🌿 ${en ? "In short" : "Tóm lại"}: ${en ? `This ${nowPart(c1)}; to move it forward, ${goPart(c2)}.` : `${capFirst(S)} ${nowPart(c1)}. Muốn mọi thứ thuận lợi thì hãy ${goPart(c2)} nha.`}${topicLine()}`);
   } else if (kind === "yesno" && c3) {
-    const should = /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q));
+    const should = VN(/(?<![a-z])(nên|should)(?![a-z])/).test(fold(q));
     const ans = en
       ? yesnoPhrase(r.cards, en)
       : r.topic === "health"
@@ -2444,13 +2445,13 @@ function readingTextRaw(r: TarotReading, lang: L): string {
       out.push(en ? "✨ Several Major Arcana showed up — this is a meaningful phase." : "✨ Có nhiều lá Ẩn Chính xuất hiện — đây là giai đoạn khá quan trọng với bạn đó.");
   }
 
-  if (/(?<![a-z])(suc khoe|benh|mang thai|co bau|health|sick|pregnan)/.test(fold(q)))
+  if (VN(/(?<![a-z])(sức khỏe|bệnh|mang thai|có bầu|health|sick|pregnan)/).test(fold(q)))
     out.push(
       en
         ? "💚 For anything health-related, please check with a doctor too."
         : "💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.",
     );
-  if (/(?<![a-z])(nhau|ruou|bia|say|drink|beer)(?![a-z])/.test(fold(q)))
+  if (VN(/(?<![a-z])(nhậu|rượu|bia|say|drink|beer)(?![a-z])/).test(fold(q)))
     out.push(en ? "🍻 Whatever the cards say: drink in moderation, and never drive after drinking!" : "🍻 Bài nói gì thì nói, đi nhậu nhớ uống vừa phải và đã uống thì đừng lái xe nha!");
 
   // Lời khuyên hành động (bỏ qua với kiểu hỏi chung — lá thứ 3 đã là lời khuyên)
@@ -2613,7 +2614,7 @@ export function dailyDetailVi(d: TarotDraw, day = new Date()): string {
   const num = c.suit === "major" ? (d.id % 9) + 1 : ((d.id - 22) % 14) + 1;
   const hour = 7 + (h % 12);
   const adv = ADVICE[c.suit][rough ? 1 : 0];
-  const strip = (x: string) => x.replace(/^(Về công việc|Trong công việc|Trong tình cảm|Về tình cảm),\s*/i, "");
+  const strip = (x: string) => x.replace(VR(/^(Về công việc|Trong công việc|Trong tình cảm|Về tình cảm),\s*/i), "");
   const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
   return [
     `${DAILY_OPEN[h % DAILY_OPEN.length]}\n**${c.name.vi} (${c.name.en})**${d.rev ? " · ngược" : ""}\n${d.rev ? c.rev.vi : c.up.vi}`,
@@ -2641,7 +2642,7 @@ function readingRecapRaw(r: TarotReading, short = false): string {
     const [na, nb] = r.pos.map((p) => p.vi);
     verdict = a === b ? `Hai lá ngang nhau — bài không nghiêng hẳn về “${na}” hay “${nb}”. Bạn chọn bên nào khiến lòng mình nhẹ hơn nha.` : `Bài nghiêng về “${a > b ? na : nb}” hơn — nhưng là nghiêng thôi, không phải bắt buộc.`;
   } else if (kind === "yesno" && cards.length >= 3) {
-    verdict = r.topic === "health" ? healthAnswer(cards) : yesnoAnswer(cards, q ? subjectOf(q, r.topic) : TOPIC_NOUN[r.topic], /(?<![a-z])(nen|should)(?![a-z])/.test(fold(q)));
+    verdict = r.topic === "health" ? healthAnswer(cards) : yesnoAnswer(cards, q ? subjectOf(q, r.topic) : TOPIC_NOUN[r.topic], VN(/(?<![a-z])(nên|should)(?![a-z])/).test(fold(q)));
   } else if (kind === "timing" && cards.length >= 3) verdict = timingPhrase(cards[2], false);
   else verdict = cards.length >= 3 ? trendLine(cards) : cardScore(cards[0]) > 0 ? "Lá này nghiêng về hướng tích cực." : cardScore(cards[0]) < 0 ? "Lá này nhắc bạn chậm lại và cẩn thận hơn." : "Lá này cho thấy mọi chuyện còn để ngỏ.";
   // short: Lomi vừa tóm lại rồi mà người dùng hỏi xác nhận thêm lần nữa ("vậy là tốt hả") → chỉ nhắc đúng câu kết luận, không lặp cả đoạn.

@@ -31,6 +31,7 @@ import { capabilityAsk, foodChoice } from "@/lib/lomiIntent";
 import { understand } from "@/lib/lomiUnderstand";
 import { detectTarot, isTarotAbilityAsk } from "@/lib/tarot";
 import { looksLikeBizQuestion } from "@/lib/bizAdvisor";
+import { VR, VN } from "@/lib/viMatch";
 
 export type FrameCtx = {
   /** full = bối cảnh trung tính; speech = đang ở mạch khác (sức khoẻ, hỏi app) → chỉ nhận lời chào / chúc / cảm ơn / xin phép + hỏi thăm Lomi;
@@ -79,8 +80,8 @@ const MIN_CONF = 0.75;
 // 11/10: "không muốn nói NỮA / kể tiếp" là xin dừng; còn "chẳng muốn nói VỚI AI", "không muốn kể cho ai nghe" là thu mình lại —
 // một điều đang kể, không phải lời bảo Lomi dừng (trước đây Lomi đáp "Mình dừng ở đây nha" rồi bỏ luôn mạch tâm sự).
 // Nét tính cách hay bị than trong chuyện tình cảm (khác lời chê vui kiểu "nấu ăn dở", "lười").
-const TRAIT = /^(ít nói|lạnh nhạt|lạnh lùng|vô tâm|cộc cằn|nóng tính|gia trưởng|ích kỷ|ích kỉ|keo kiệt|hay ghen|ghen tuông|vô trách nhiệm)$/;
-const STOP_OBJ = /^(nói|kể|nhắc|tâm sự|bàn|nghĩ)( (nữa|tiếp|thêm|gì|lại|tới|đến|về|chuyện|này|đó|ấy|đâu|nha|nhé|hết|cả|luôn))*$/;
+const TRAIT = VR(/^(ít nói|lạnh nhạt|lạnh lùng|vô tâm|cộc cằn|nóng tính|gia trưởng|ích kỷ|ích kỉ|keo kiệt|hay ghen|ghen tuông|vô trách nhiệm)$/);
+const STOP_OBJ = VR(/^(nói|kể|nhắc|tâm sự|bàn|nghĩ)( (nữa|tiếp|thêm|gì|lại|tới|đến|về|chuyện|này|đó|ấy|đâu|nha|nhé|hết|cả|luôn))*$/);
 /** Cách gọi người dùng khi tự đổi dấu YOU_MARK (không qua speak()). */
 const youOf = (addr?: Addr | null) => (addr === "anh" || addr === "chị" || addr === "em" ? addr : "bạn");
 let lastPick = "";
@@ -95,8 +96,8 @@ const PART_EMO: Record<string, string> = { "sáng": "☀️", "trưa": "🌤️"
 
 /** "bữa tối" / "ban tối" / "tối" → "buổi tối"; dịp khác giữ nguyên ("cuối tuần", "tối thứ sáu"). */
 function occasionOf(f: Frame): string {
-  const l = (f.time?.label ?? "").replace(/^(bữa|ban) /, "buổi ");
-  if (/^(sáng|trưa|chiều|tối|đêm|khuya)$/.test(l)) return `buổi ${l}`;
+  const l = (f.time?.label ?? "").replace(VR(/^(bữa|ban) /), "buổi ");
+  if (VR(/^(sáng|trưa|chiều|tối|đêm|khuya)$/).test(l)) return `buổi ${l}`;
   return l;
 }
 /** Nhãn thời gian đứng đầu câu đáp: "Tối qua", "Mai", "Cuối tuần này". */
@@ -118,15 +119,15 @@ function echo(f: Frame, keepQual = true): string {
     .slice(0, 7)
     .join(" ")
     // mốc thời gian đã tách ra chỗ khác thì bỏ giới từ còn sót lại ở cuối ("sốt từ [tối qua]" → "sốt").
-    .replace(/( (từ|lúc|hồi|vào|tới|đến|khoảng|trong|ở|với|cho))+$/u, "");
+    .replace(VR(/( (từ|lúc|hồi|vào|tới|đến|khoảng|trong|ở|với|cho))+$/u), "");
 }
 
 /** Tên món để nói lại: ưu tiên đúng chữ người dùng gõ ("kem", "nhậu") khi đó là cả phần bổ ngữ, không thì tên nhóm món. */
 function dishWord(f: Frame, groupName: string): string {
   const p = f.pred;
-  const said = (p?.objCore ?? p?.obj ?? "").trim().replace(/^(ăn|uống|đi ăn|đi uống)\s+/u, "").replace(/\s+hơn$/u, "");
+  const said = (p?.objCore ?? p?.obj ?? "").trim().replace(VR(/^(ăn|uống|đi ăn|đi uống)\s+/u), "").replace(VR(/\s+hơn$/u), "");
   if (said && said.split(" ").length <= 2 && detectDish(said)) return said.toLowerCase();
-  if (p && /(^| )nhậu( |$)/.test(`${p.head} ${p.obj}`)) return "nhậu";
+  if (p && VR(/(^| )nhậu( |$)/).test(`${p.head} ${p.obj}`)) return "nhậu";
   return groupName.split(/[,(]/)[0].trim().toLowerCase();
 }
 
@@ -135,13 +136,13 @@ function greet(f: Frame): FrameReply {
   const part = f.time?.part;
   const occ = f.time?.occasion;
   const head = part ? `Chào buổi ${part === "đêm" ? "tối" : part} nha ${PART_EMO[part]}` : "Chào bạn nha 👋";
-  const extra = f.wish ? `Cảm ơn bạn, chúc bạn ${join(occasionOf(f), f.wish.good)} luôn nè!` : occ && !/^(cả|một) /.test(occ) ? `${cap(occ)} vui vẻ nha!` : "";
+  const extra = f.wish ? `Cảm ơn bạn, chúc bạn ${join(occasionOf(f), f.wish.good)} luôn nè!` : occ && !VR(/^(cả|một) /).test(occ) ? `${cap(occ)} vui vẻ nha!` : "";
   const ask =
     part === "sáng" || occ === "ngày mới" || occ === "đầu tuần"
       ? pick(["Hôm nay bạn có dự định gì không nè?", "Hôm nay của bạn bắt đầu thế nào rồi?"])
       : part === "trưa"
         ? "Bạn ăn trưa chưa đó?"
-        : occ && /cuối tuần|thứ bảy|chủ nhật|ngày nghỉ|kỳ nghỉ/.test(occ)
+        : occ && VR(/cuối tuần|thứ bảy|chủ nhật|ngày nghỉ|kỳ nghỉ/).test(occ)
           ? "Bạn có dự định gì chưa?"
           : pick(["Hôm nay của bạn thế nào rồi?", "Hôm nay của bạn có gì vui không nè?"]);
   return { intent: "frame:greet", text: join(head, extra, ask) };
@@ -150,12 +151,12 @@ function greet(f: Frame): FrameReply {
 function wish(f: Frame): FrameReply {
   const w = f.wish!;
   const good = w.good;
-  const sleep = /ngủ ngon|ngon giấc|mơ đẹp/.test(good);
+  const sleep = VR(/ngủ ngon|ngon giấc|mơ đẹp/).test(good);
   if (w.to === "self") {
     // "chúc a ngủ ngon đi", "e chúc a may mắn đi" → Lomi chúc lại đúng điều đó.
     if (sleep) return { intent: "frame:wish_me", text: "Chúc bạn ngủ thật ngon, sáng mai thức dậy thật khoẻ nha 😴💚" };
     // "e chúc a đi" — nhờ Lomi chúc mà không nói chúc gì ("đi" là lời giục, không phải điều được chúc).
-    const g = /^(đi|nha|nhé|với|cái|một câu|1 câu|gì đi|câu gì đi)?$/.test(good.trim()) ? "" : good;
+    const g = VR(/^(đi|nha|nhé|với|cái|một câu|1 câu|gì đi|câu gì đi)?$/).test(good.trim()) ? "" : good;
     return { intent: "frame:wish_me", text: `Chúc bạn ${join(occasionOf(f), g || "mọi điều suôn sẻ")} nha 🍀 Lomi luôn cổ vũ bạn!` };
   }
   if (sleep) return { intent: "frame:wish", text: "Bạn cũng ngủ thật ngon nha 😴💚 Mai gặp lại Lomi nè!" };
@@ -173,8 +174,8 @@ function leave(f: Frame): FrameReply {
   if (f.leave === "brb") return { intent: "frame:leave", text: pick(["Dạ, Lomi chờ nè 😊 Bạn cứ thong thả nha.", "Okie, bạn đi đi nha — Lomi vẫn ở đây 🌿"]) };
   const p = f.pred!;
   const act = echo(f);
-  if (/ngủ/.test(act)) return { intent: "frame:leave", text: "Dạ, bạn ngủ ngon nha 🌙 Mai gặp lại Lomi nè!" };
-  const tail = p.cls === "duty" ? "Chúc bạn mọi việc suôn sẻ 💪" : /(^| )(ăn|nhậu|uống)( |$)/.test(act) ? "Ăn ngon miệng nha 😋" : "Lát rảnh ghé nói chuyện với Lomi tiếp nè!";
+  if (VR(/ngủ/).test(act)) return { intent: "frame:leave", text: "Dạ, bạn ngủ ngon nha 🌙 Mai gặp lại Lomi nè!" };
+  const tail = p.cls === "duty" ? "Chúc bạn mọi việc suôn sẻ 💪" : VR(/(^| )(ăn|nhậu|uống)( |$)/).test(act) ? "Ăn ngon miệng nha 😋" : "Lát rảnh ghé nói chuyện với Lomi tiếp nè!";
   return { intent: "frame:leave", text: `Dạ, bạn ${act} đi nha 😊 ${tail}` };
 }
 
@@ -218,23 +219,23 @@ function askLomi(f: Frame): FrameReply | null {
     if (p.cls === "feel" || p.cls === "need" || p.cls === "ill")
       return { intent: "frame:ask_lomi", text: `Lomi là robot nên không ${p.head} như người đâu 😄 Nhưng được bạn hỏi thăm là Lomi vui lắm! Còn bạn thì sao, có ${p.head} không?` };
     // "e ngủ ngon không" — hỏi thăm, không phải lời chúc ngủ ngon.
-    if (/^ngủ/.test(p.head)) return { intent: "frame:ask_lomi", text: "Lomi là robot nên không cần ngủ nè 😆 Còn bạn thì sao, dạo này ngủ có ngon không?" };
+    if (VR(/^ngủ/).test(p.head)) return { intent: "frame:ask_lomi", text: "Lomi là robot nên không cần ngủ nè 😆 Còn bạn thì sao, dạo này ngủ có ngon không?" };
     return null;
   }
   // "e có lạnh không", "e có nóng không"
   if (p.kind === "quality" && p.cls === "weather" && f.ask === "yesno") return { intent: "frame:ask_lomi", text: `Lomi là robot nên không biết ${p.head} là gì luôn 😄 Còn bạn thì sao, có ${p.head} không?` };
   // "e có thích mèo không" — hỏi sở thích của Lomi
-  if (p.kind === "desire" && /^(thích|mê|khoái|ưa|ghiền|ghét)$/.test(p.head) && f.ask === "yesno" && p.obj && !/lomi/i.test(p.obj) && !p.obj.includes(YOU_MARK))
+  if (p.kind === "desire" && VR(/^(thích|mê|khoái|ưa|ghiền|ghét)$/).test(p.head) && f.ask === "yesno" && p.obj && !VR(/lomi/i).test(p.obj) && !p.obj.includes(YOU_MARK))
     return { intent: "frame:ask_lomi", text: `Lomi là robot nên chưa biết ${p.head} là thế nào nữa 😄 Còn bạn thì sao, bạn có ${p.head} ${p.obj} không?` };
   // "e biết nấu ăn không", "e biết bơi không" — việc đời thường Lomi không làm được (hỏi Lomi làm được gì trong app thì lớp khác trả lời)
-  if (p.kind === "cognition" && p.head === "biết" && f.ask === "yesno" && /^(nấu|bơi|hát|lái|chạy|đá|chơi|vẽ|nhảy|bay|ăn|uống|ngủ|yêu|khóc|cười)( |$)/.test(p.obj))
+  if (p.kind === "cognition" && p.head === "biết" && f.ask === "yesno" && VR(/^(nấu|bơi|hát|lái|chạy|đá|chơi|vẽ|nhảy|bay|ăn|uống|ngủ|yêu|khóc|cười)( |$)/).test(p.obj))
     return { intent: "frame:ask_lomi", text: `Lomi chưa biết ${p.obj} đâu 😅 Lomi chỉ rành mấy việc trong app thôi: gợi ý quán, bói bài, tâm sự, hỏi đáp sức khoẻ. Còn bạn thì sao, ${p.obj} giỏi không?` };
   // "e đang làm gì đó / vậy"
-  if (p.kind === "activity" && f.ask === "what" && /^làm/.test(p.head)) return { intent: "frame:ask_lomi", text: pick(["Lomi đang ngồi chờ bạn tới nói chuyện nè 😄 Còn bạn đang làm gì đó?", "Lomi đang “trực” app nè 🤖 Còn bạn thì sao, đang làm gì vậy?"]) };
+  if (p.kind === "activity" && f.ask === "what" && VR(/^làm/).test(p.head)) return { intent: "frame:ask_lomi", text: pick(["Lomi đang ngồi chờ bạn tới nói chuyện nè 😄 Còn bạn đang làm gì đó?", "Lomi đang “trực” app nè 🤖 Còn bạn thì sao, đang làm gì vậy?"]) };
   // "e thích ăn gì", "e thích gì nhất"
   if (p.kind === "desire" && (f.ask === "what" || f.ask === "which")) {
-    if (/(^| )(ăn|uống)( |$)/.test(p.obj)) return { intent: "frame:ask_lomi", text: `Lomi là robot nên chỉ “ăn” pin thôi 🔋😆 Còn bạn ${p.head} ${p.obj.replace(/\s*(nhất|vậy)$/u, "")} nhất?` };
-    return { intent: "frame:ask_lomi", text: `Lomi ${p.head} nhất là được nói chuyện với bạn nè 😄 Còn bạn ${p.head} ${p.obj.replace(/\s*(nhất|vậy)$/u, "")}?` };
+    if (VR(/(^| )(ăn|uống)( |$)/).test(p.obj)) return { intent: "frame:ask_lomi", text: `Lomi là robot nên chỉ “ăn” pin thôi 🔋😆 Còn bạn ${p.head} ${p.obj.replace(VR(/\s*(nhất|vậy)$/u), "")} nhất?` };
+    return { intent: "frame:ask_lomi", text: `Lomi ${p.head} nhất là được nói chuyện với bạn nè 😄 Còn bạn ${p.head} ${p.obj.replace(VR(/\s*(nhất|vậy)$/u), "")}?` };
   }
   return null;
 }
@@ -243,10 +244,10 @@ function askLomi(f: Frame): FrameReply | null {
 const REL_THEMES = new Set("cheat breakup ex cold fight jealous longdist family friends boss work toxic marriage inlaw situationship stayorgo lies spark parentsban gossip bullied love".split(" "));
 
 // Chấn thương của một người ("bà nội e bị ngã gãy chân") — hỏi han như tin người thân ốm, không đáp "😅 chuyện sao vậy".
-const INJURY = /(^| )(ngã|té|té xe|ngã xe|gãy tay|gãy chân|gãy|tai nạn|bị thương|bỏng|phỏng|đứt tay|trật khớp|bong gân)( |$)/;
-const HOSPITAL = /^(nhập viện|nằm viện|vào viện|vô viện|cấp cứu|đi cấp cứu|phải mổ|đi mổ|mổ|phẫu thuật)$/;
-const DIAGNOSED = /^(trầm cảm|tai biến|đột quỵ|ung thư|tiểu đường|cao huyết áp|huyết áp cao|viêm phổi|sốt xuất huyết)$/;
-const HOSPITAL_PLACE = /(^| )(bệnh viện|viện|phòng khám|trạm xá|phòng cấp cứu)( |$)/;
+const INJURY = VR(/(^| )(ngã|té|té xe|ngã xe|gãy tay|gãy chân|gãy|tai nạn|bị thương|bỏng|phỏng|đứt tay|trật khớp|bong gân)( |$)/);
+const HOSPITAL = VR(/^(nhập viện|nằm viện|vào viện|vô viện|cấp cứu|đi cấp cứu|phải mổ|đi mổ|mổ|phẫu thuật)$/);
+const DIAGNOSED = VR(/^(trầm cảm|tai biến|đột quỵ|ung thư|tiểu đường|cao huyết áp|huyết áp cao|viêm phổi|sốt xuất huyết)$/);
+const HOSPITAL_PLACE = VR(/(^| )(bệnh viện|viện|phòng khám|trạm xá|phòng cấp cứu)( |$)/);
 /** Câu bị động: "bị" đứng ngay trước việc xảy ra (giữa hai bên chỉ có người gây ra). agent = " bạn bè" / " sếp" / "". */
 function passiveOf(f: Frame): { agent: string; happened: boolean } {
   const bi = f.toks.findIndex((t) => t.t === "bị");
@@ -267,7 +268,7 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   if (!subj) return null;
   // "con a bị bạn bắt nạt" → nhắc lại "bị bắt nạt" (không phải "con anh bắt nạt"): giữ "bị" + người gây ra khi việc đó XẢY ĐẾN với người này.
   const { agent, happened } = passiveOf(f);
-  const passive = happened && p.cls !== "ill" && !HOSPITAL.test(p.head) && (p.cls === "bad" || p.cls === "social" || !p.known) && !/^bị /.test(p.head);
+  const passive = happened && p.cls !== "ill" && !HOSPITAL.test(p.head) && (p.cls === "bad" || p.cls === "social" || !p.known) && !VR(/^bị /).test(p.head);
   // Việc người khác làm với người này ("mẹ a bị sếp mắng", "chị e bị chồng bỏ", "bạn a bị lừa tiền") là chuyện KHÔNG MAY của NGƯỜI ĐÓ —
   // hỏi han về người đó, không đáp như thể chính người nói bị sếp mắng / bị bỏ / bị lừa.
   const adverse = passive && p.val === 0 && p.cls !== "good" && (f.subject === "third" || f.subject === "pet");
@@ -307,7 +308,7 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   if (p.val < 0 && person && f.subjectCls === "partner" && habit && c.heart !== "rel")
     return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : "fight", text: `${subj} hay ${p.head} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   if (p.val < 0 && person && f.subjectCls === "partner" && p.kind === "quality" && TRAIT.test(p.head) && c.heart !== "rel")
-    return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : /^(Vợ|Chồng|Bà xã|Ông xã)/.test(subj) ? "marriage" : "love", text: `${subj} ${what} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+    return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : VR(/^(Vợ|Chồng|Bà xã|Ông xã)/).test(subj) ? "marriage" : "love", text: `${subj} ${what} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   if (p.val < 0 || adverse) {
     // Chuyện đời sống thư viện tâm sự đã có lời hỏi han riêng (cúp điện, kẹt xe…) hoặc chuyện với sếp / người yêu → để lớp đó đáp.
     //  • chuyện đời sống (cúp điện, kẹt xe…) chỉ áp cho đồ vật / nơi chốn — với người thì mấy bài đó lạc đề ("vợ a nấu ăn dở" ≠ quán dở);
@@ -329,7 +330,7 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   }
   // "con a đói bụng", "con mèo nhà a khát nước" — nhu cầu của người / con vật đó (không phải Lomi, không phải người nói).
   if ((person || pet) && p.kind === "state" && p.cls === "need")
-    return { intent: "frame:third_need", talk: true, text: `${subj} ${what} hả 😄 Vậy bạn lo cho ${pet || /^(Con|Bé|Cháu|Nhóc)/.test(subj) ? "bé" : "người nhà"} trước đi nha, lát rảnh nói chuyện tiếp với Lomi!` };
+    return { intent: "frame:third_need", talk: true, text: `${subj} ${what} hả 😄 Vậy bạn lo cho ${pet || VR(/^(Con|Bé|Cháu|Nhóc)/).test(subj) ? "bé" : "người nhà"} trước đi nha, lát rảnh nói chuyện tiếp với Lomi!` };
   // Không khen không chê: kể một việc của người đó ("mẹ a mới lên chơi", "con a tuần sau thi").
   if ((person || pet) && (p.kind === "activity" || p.kind === "motion" || (p.kind === "cognition" && !!p.recent)) && (p.recent || p.ongoing || p.planned || f.time?.explicit))
     return { intent: "frame:third_event", talk: true, text: !p.known ? `${cap(join(f.time?.explicit ? timeCap(f) : "", f.time?.explicit ? subj.charAt(0).toLowerCase() + subj.slice(1) : subj, p.recent ? "mới" : p.ongoing ? "đang" : "", what))} hả? Rồi sao nữa bạn, kể Lomi nghe với.` : `${join(f.time?.explicit ? timeCap(f) : "", f.time?.explicit ? subj.charAt(0).toLowerCase() + subj.slice(1) : subj, p.recent ? "mới" : p.ongoing ? "đang" : "", what)} hả 😄 ${pick(["Rồi sao nữa, kể Lomi nghe với!", "Nghe vui đó!"])}` };
@@ -342,8 +343,8 @@ function selfNeg(f: Frame, c: FrameCtx): FrameReply | null {
   // "a không biết vợ nghĩ gì", "e chẳng hiểu chồng e muốn gì" — không đọc được NGƯỜI THƯƠNG đang nghĩ gì là mở đầu một chuyện tình cảm:
   // nhắc lại đúng điều đó và nghe tiếp ở mạch tâm sự (trước đây: "Ra là vậy 😄").
   const partner = f.toks.find((t) => t.r === "KIN" && t.cls === "partner");
-  if (p.kind === "cognition" && /^(biết|hiểu|rõ)$/.test(p.head) && partner && p.indef && !c.heart && p.obj.split(" ").length <= 6)
-    return { intent: "frame:neg_know", openHeart: /^(vợ|chồng|bà xã|ông xã)$/.test(partner.t) ? "marriage" : "love", text: `Không ${p.head} ${p.obj} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+  if (p.kind === "cognition" && VR(/^(biết|hiểu|rõ)$/).test(p.head) && partner && p.indef && !c.heart && p.obj.split(" ").length <= 6)
+    return { intent: "frame:neg_know", openHeart: VR(/^(vợ|chồng|bà xã|ông xã)$/).test(partner.t) ? "marriage" : "love", text: `Không ${p.head} ${p.obj} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   const no = f.negWord ?? "không";
   const No = cap(no);
   if (p.kind === "state") {
@@ -357,7 +358,7 @@ function selfNeg(f: Frame, c: FrameCtx): FrameReply | null {
         : { intent: "frame:neg_feel", text: `${No} ${p.head} là tốt rồi nè 😊 ${pick(["Vậy hôm nay của bạn thế nào?", "Có gì vui kể Lomi nghe với!"])}` };
     }
     if (p.cls === "need") {
-      const tail = /đói/.test(p.head) ? "Lomi gợi ý món cho!" : /khát/.test(p.head) ? "Lomi tìm quán nước cho!" : "nhớ đừng thức khuya quá nha 🌙";
+      const tail = VR(/đói/).test(p.head) ? "Lomi gợi ý món cho!" : VR(/khát/).test(p.head) ? "Lomi tìm quán nước cho!" : "nhớ đừng thức khuya quá nha 🌙";
       return { intent: "frame:neg_need", text: `${No} ${p.head} thì cứ từ từ nha 😄 Khi nào ${p.head} thì nói Lomi, ${tail}` };
     }
     if (p.cls === "free") return { intent: "frame:neg_free", text: "Bận quá hả 😅 Vậy bạn cứ lo việc đi nha, khi nào rảnh ghé nói chuyện với Lomi nè!" };
@@ -368,39 +369,39 @@ function selfNeg(f: Frame, c: FrameCtx): FrameReply | null {
     // "a không muốn nói nữa", "thôi không kể nữa đâu" → tôn trọng, dừng lại.
     if (STOP_OBJ.test(p.obj)) return { intent: "frame:stop", text: "Dạ, không sao đâu 💚 Mình dừng ở đây nha. Khi nào bạn muốn nói tiếp thì Lomi vẫn ở đây." };
     // "chẳng muốn nói với ai", "không muốn gặp ai" — đang thu mình lại: hỏi han và mở mạch tâm sự, không coi là lời bảo dừng.
-    if (/^(nói|kể|gặp|tiếp xúc|nói chuyện|tâm sự)( \S+){0,2} ai( |$)/.test(p.obj)) return { intent: "frame:withdraw", openHeart: "lonely", text: `${No} ${p.head} ${p.obj} hả 🥺 Có chuyện gì làm bạn muốn thu mình lại vậy? Kể Lomi nghe cũng được, Lomi không phán xét đâu.` };
-    if (/(^| )(lomi)( |$)/i.test(p.obj) || !p.obj) return null;
+    if (VR(/^(nói|kể|gặp|tiếp xúc|nói chuyện|tâm sự)( \S+){0,2} ai( |$)/).test(p.obj)) return { intent: "frame:withdraw", openHeart: "lonely", text: `${No} ${p.head} ${p.obj} hả 🥺 Có chuyện gì làm bạn muốn thu mình lại vậy? Kể Lomi nghe cũng được, Lomi không phán xét đâu.` };
+    if (VR(/(^| )(lomi)( |$)/i).test(p.obj) || !p.obj) return null;
     // "không ghét cà phê" là không chê, không phải không thích.
     if (p.head === "ghét") return { intent: "frame:neg_desire", text: `Không ghét ${p.obj} là được rồi 😄 Vậy cũng thích chút chút hả?` };
     // "chưa muốn ăn", "không muốn uống gì" (không nói món nào) = chưa đói / chưa khát.
-    if (/^(ăn|uống)( gì| uống)?$/.test(p.obj)) return { intent: "frame:neg_need", text: `${No} ${p.head} ${p.obj.split(" ")[0]} thì cứ từ từ nha 😄 Khi nào thấy ${/^ăn/.test(p.obj) ? "đói" : "khát"} thì nói Lomi, Lomi gợi ý cho!` };
+    if (VR(/^(ăn|uống)( gì| uống)?$/).test(p.obj)) return { intent: "frame:neg_need", text: `${No} ${p.head} ${p.obj.split(" ")[0]} thì cứ từ từ nha 😄 Khi nào thấy ${VR(/^ăn/).test(p.obj) ? "đói" : "khát"} thì nói Lomi, Lomi gợi ý cho!` };
     const d = detectDish(f.raw);
     if (d) {
       const label = dishWord(f, d.name);
       return { intent: "frame:neg_desire", text: `${No} ${p.head} ${label} hả 😄 Vậy bạn muốn đổi món khác không, Lomi gợi ý cho!`, quick: ["Hôm nay ăn gì? 🎲"] };
     }
-    const v = p.obj.match(/^(ăn|uống)( |$)/)?.[1];
+    const v = p.obj.match(VR(/^(ăn|uống)( |$)/))?.[1];
     if (v) return { intent: "frame:neg_desire", text: `À, bạn ${no} ${p.head} ${p.obj} ha 😄 Vậy bạn thích ${v} gì hơn nè?` };
-    if (/^ngủ/.test(p.obj)) return { intent: "frame:neg_desire", talk: true, text: `${No} ${p.head} ngủ hả 🌙 Vậy tám với Lomi chút nha — bạn đang nghĩ gì đó?` };
+    if (VR(/^ngủ/).test(p.obj)) return { intent: "frame:neg_desire", talk: true, text: `${No} ${p.head} ngủ hả 🌙 Vậy tám với Lomi chút nha — bạn đang nghĩ gì đó?` };
     return { intent: "frame:neg_desire", talk: true, text: `${No} ${p.head} ${p.obj} hả? Sao vậy bạn, kể Lomi nghe với.` };
   }
-  if (p.kind === "cognition" && /^(biết|chắc|rõ)$/.test(p.head)) {
+  if (p.kind === "cognition" && VR(/^(biết|chắc|rõ)$/).test(p.head)) {
     // "không biết ăn gì" → lớp chọn món; "không biết làm gì / đi đâu" → gợi ý chỗ chơi; "không biết nữa" → cứ từ từ.
-    if (/(^| )(ăn|uống)( |$)/.test(p.obj)) return null;
-    if (/(làm gì|đi đâu|chơi gì|chơi đâu)/.test(p.obj)) {
+    if (VR(/(^| )(ăn|uống)( |$)/).test(p.obj)) return null;
+    if (VR(/(làm gì|đi đâu|chơi gì|chơi đâu)/).test(p.obj)) {
       const t = f.time?.label ? `${timeCap(f)} ` : "";
       return {
         intent: "frame:undecided",
-        text: `${t ? `${t}chưa` : "Chưa"} biết ${p.obj.replace(/\s*nữa$/u, "")} hả 😄 Để Lomi gợi ý vài chỗ đi chơi, hay bạn muốn tìm quán ngồi chill?`,
+        text: `${t ? `${t}chưa` : "Chưa"} biết ${p.obj.replace(VR(/\s*nữa$/u), "")} hả 😄 Để Lomi gợi ý vài chỗ đi chơi, hay bạn muốn tìm quán ngồi chill?`,
         quick: ["Cuối tuần đi đâu chơi?", "Tìm quán cà phê gần đây"],
       };
     }
-    if (!p.obj || /^nữa$/.test(p.obj)) return { intent: "frame:unsure", text: "Chưa chắc cũng không sao nè 😊 Bạn cứ từ từ nghĩ, cần Lomi gợi ý gì thì nói nha." };
+    if (!p.obj || VR(/^nữa$/).test(p.obj)) return { intent: "frame:unsure", text: "Chưa chắc cũng không sao nè 😊 Bạn cứ từ từ nghĩ, cần Lomi gợi ý gì thì nói nha." };
     return null;
   }
   if (p.kind === "activity" || p.kind === "motion") {
     if (c.food || c.search || p.cls === "seek") return null;
-    return { intent: "frame:neg_act", talk: true, text: `${join(f.time?.explicit ? timeCap(f) : "", f.time?.explicit ? no : No, echo(f).replace(/\s*(gì|đâu|nữa)$/u, ""))} hả 😮 Sao vậy bạn?` };
+    return { intent: "frame:neg_act", talk: true, text: `${join(f.time?.explicit ? timeCap(f) : "", f.time?.explicit ? no : No, echo(f).replace(VR(/\s*(gì|đâu|nữa)$/u), ""))} hả 😮 Sao vậy bạn?` };
   }
   return null;
 }
@@ -409,13 +410,13 @@ function selfNeg(f: Frame, c: FrameCtx): FrameReply | null {
 function selfLocation(f: Frame): FrameReply {
   const place = f.pred!.place || f.pred!.obj;
   // Đà Lạt là "sân nhà" của app — lớp cũ có câu đáp riêng kèm gợi ý quán.
-  const old = /đà lạt/i.test(place) ? senseState(f.raw) : null;
+  const old = VR(/đà lạt/i).test(place) ? senseState(f.raw) : null;
   if (old?.intent === "state:place") return { intent: "frame:location", talk: true, text: old.text, quick: old.quick };
   const future = f.time?.explicit && f.time.rel === "future";
-  if (/^nhà( |$)/.test(place))
+  if (VR(/^nhà( |$)/).test(place))
     return { intent: "frame:location", talk: true, text: future ? `${timeCap(f)} ở nhà thôi hả 😄 Ở nhà nghỉ ngơi cũng thích mà. Bạn định làm gì cho vui?` : "Ở nhà hả 😄 Đang nghỉ ngơi hay làm gì đó bạn?" };
-  if (/^(công ty|cơ quan|văn phòng|chỗ làm)/.test(place)) return { intent: "frame:location", talk: true, text: "Đang ở chỗ làm hả 💪 Hôm nay công việc ổn không bạn?" };
-  if (/^(quán|tiệm|nhà hàng)/.test(place)) return { intent: "frame:location", talk: true, text: `Đang ngồi ${place} hả 😄 Quán có chill không, bạn đi với ai đó?` };
+  if (VR(/^(công ty|cơ quan|văn phòng|chỗ làm)/).test(place)) return { intent: "frame:location", talk: true, text: "Đang ở chỗ làm hả 💪 Hôm nay công việc ổn không bạn?" };
+  if (VR(/^(quán|tiệm|nhà hàng)/).test(place)) return { intent: "frame:location", talk: true, text: `Đang ngồi ${place} hả 😄 Quán có chill không, bạn đi với ai đó?` };
   return { intent: "frame:location", talk: true, text: `${future ? `${timeCap(f)} ở` : "Đang ở"} ${place} hả 😄 Bạn tới đó chơi hay có việc vậy?` };
 }
 
@@ -427,9 +428,9 @@ function selfPast(f: Frame): FrameReply {
   const timed = !!f.time?.explicit && f.time.rel === "past";
   // "a ăn rồi", "a thi xong rồi" — việc đã xong, không có "mới / vừa": nhắc lại kèm "rồi".
   if (!timed && !p.recent && p.done) {
-    const e = `${cap(echo(f))}${/xong$/.test(echo(f)) ? "" : " rồi"}`;
+    const e = `${cap(echo(f))}${VN(/xong$/).test(echo(f)) ? "" : " rồi"}`;
     if (!p.known) return { intent: "frame:echo", talk: true, text: `${e} hả? Rồi sao nữa bạn, kể Lomi nghe với.` };
-    if (/^(ăn|uống)/.test(p.head)) return { intent: "frame:done", talk: true, text: `${e} hả 😋 ${p.obj ? "Ngon không bạn?" : "Ăn món gì vậy bạn?"}` };
+    if (VR(/^(ăn|uống)/).test(p.head)) return { intent: "frame:done", talk: true, text: `${e} hả 😋 ${p.obj ? "Ngon không bạn?" : "Ăn món gì vậy bạn?"}` };
     return { intent: "frame:done", talk: true, text: `${e} hả 😄 ${p.cls === "duty" ? "Vất vả rồi nè, nghỉ ngơi chút đi nha!" : "Vậy là xong một việc rồi ha!"}` };
   }
   const T = timed ? timeCap(f) : "Mới";
@@ -437,13 +438,13 @@ function selfPast(f: Frame): FrameReply {
   if (p.val < 0) return { intent: "frame:past", talk: true, text: `${T} ${echo(f)} hả 😅 ${pick(["Rồi có sao không bạn?", "Giờ ổn hơn chưa bạn?"])}` };
   // Khen ở cuối câu ("…vui lắm", "…hay lắm") thì không cần nhắc lại; nhận xét trung tính ("ngủ sớm") thì giữ.
   const e = echo(f, p.val === 0);
-  const going = p.kind === "motion" || /^đi( |$)/.test(p.head);
-  if (/^mua( |$)/.test(p.head)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 Xịn ghê! Dùng thấy sao bạn?` };
+  const going = p.kind === "motion" || VR(/^đi( |$)/).test(p.head);
+  if (VN(/^mua( |$)/).test(p.head)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 Xịn ghê! Dùng thấy sao bạn?` };
   if (p.cls === "duty") return { intent: "frame:past", talk: true, text: `${T} ${e} hả 🤗 Vất vả rồi nè. ${pick(["Mọi việc ổn không bạn?", "Giờ nghỉ ngơi chút đi nha!"])}` };
-  if (/(^| )(ăn|uống|nhậu)( |$)/.test(p.head) && detectDish(f.raw)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😋 Ngon không bạn?` };
+  if (VR(/(^| )(ăn|uống|nhậu)( |$)/).test(p.head) && detectDish(f.raw)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😋 Ngon không bạn?` };
   if (p.val > 0) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 ${pick(["Nghe đã ghê!", "Thích ghê!"])} ${p.cls === "leisure" || going ? "Kể Lomi nghe thêm đi!" : "Vậy là hôm nay có thêm năng lượng rồi ha?"}` };
   if (p.cls === "leisure" || going) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 ${timed ? pick(["Rồi sao, vui không bạn?", "Kể Lomi nghe với!"]) : pick(["Có gì vui kể Lomi nghe với!", "Rồi sao nữa nè?"])}` };
-  return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 ${timed && !/nãy|nay|giờ/.test(f.time?.label ?? "") ? "Rồi hôm nay bạn thế nào?" : "Rồi sao nữa nè?"}` };
+  return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 ${timed && !VR(/nãy|nay|giờ/).test(f.time?.label ?? "") ? "Rồi hôm nay bạn thế nào?" : "Rồi sao nữa nè?"}` };
 }
 
 function selfPlan(f: Frame): FrameReply {
@@ -453,15 +454,15 @@ function selfPlan(f: Frame): FrameReply {
   if (!p.known) return neutral(T, f);
   if (p.val < 0) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🥺 Bạn giữ sức nha, có gì cứ nói với Lomi.` };
   const d = detectDish(f.raw);
-  if (d && /(^| )(ăn|uống|nhậu|cà phê)( |$)/.test(e)) {
+  if (d && VR(/(^| )(ăn|uống|nhậu|cà phê)( |$)/).test(e)) {
     const label = dishWord(f, d.name);
     return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 😋 Nghe thích ghê! Muốn Lomi tìm quán ${label} cho không?`, quick: [`Tìm quán ${label} gần đây`] };
   }
-  const going = p.kind === "motion" || /^đi( |$)/.test(p.head);
+  const going = p.kind === "motion" || VR(/^đi( |$)/).test(p.head);
   if (p.cls === "duty") return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 💪 ${pick(["Chúc bạn mọi việc suôn sẻ nha!", "Cố lên nha, xong việc nhớ nghỉ ngơi đó!"])}` };
-  if (/(^| )cưới( |$)/.test(e) && !/ăn cưới/.test(e)) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🎉 Chúc mừng bạn nha! Chuẩn bị tới đâu rồi?` };
+  if (VR(/(^| )cưới( |$)/).test(e) && !VR(/ăn cưới/).test(e)) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🎉 Chúc mừng bạn nha! Chuẩn bị tới đâu rồi?` };
   // "tí a về", "lát a ghé" — sắp đi ngay: dặn đi đường, không hỏi "chuẩn bị gì chưa".
-  if (/^về( |$)/.test(p.head)) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 😄 Về cẩn thận nha!` };
+  if (VR(/^về( |$)/).test(p.head)) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 😄 Về cẩn thận nha!` };
   if (f.time?.soon && (going || p.kind === "motion")) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 😄 Bạn đi cẩn thận nha!` };
   if (p.cls === "leisure") return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 😄 Nghe thích ghê! ${going ? pick(["Bạn đi với ai vậy?", "Chuẩn bị gì chưa bạn?"]) : "Bạn định làm gì cho vui?"}` };
   // "đi" + nơi / việc chưa rõ vui hay nghiêm túc ("đi Đà Nẵng", "đi phỏng vấn") → hỏi nối, không khen bừa.
@@ -502,7 +503,7 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   if (c.tarot) return null;
   if (f.act === "question") {
     // "e đi cà phê với a không", "e đi cùng không" — RỦ Lomi đi (kể cả khi có nhắc món / quán): Lomi không đi được, mời tìm quán giùm.
-    if (f.subject === "you" && !f.neg && !c.health && !c.appish && f.conf >= MIN_CONF && c.mode === "full" && f.pred && f.ask === "yesno" && (f.pred.kind === "motion" || f.pred.cls === "leisure") && f.toks[f.toks.length - 1]?.t === "không" && !/(chưa|rồi)/.test(f.pred.obj) && (f.pred.obj.split(" ").filter(Boolean).length <= 3 || /(^| )(với|cùng|chung)( |$)/.test(f.pred.obj)))
+    if (f.subject === "you" && !f.neg && !c.health && !c.appish && f.conf >= MIN_CONF && c.mode === "full" && f.pred && f.ask === "yesno" && (f.pred.kind === "motion" || f.pred.cls === "leisure") && f.toks[f.toks.length - 1]?.t === "không" && !VR(/(chưa|rồi)/).test(f.pred.obj) && (f.pred.obj.split(" ").filter(Boolean).length <= 3 || VR(/(^| )(với|cùng|chung)( |$)/).test(f.pred.obj)))
       return invite(f, c);
     // Hỏi thăm Lomi (không phải hỏi Lomi làm được gì / nhờ Lomi làm gì — mấy câu đó có lớp riêng).
     if (f.subject === "you" && !f.neg && !c.health && !c.appish && !c.search && f.conf >= MIN_CONF) return askLomi(f);
@@ -520,7 +521,7 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
     if (p.kind !== "quality") return null;
     if (f.neg) return { intent: "frame:weather", text: `${cap(f.subjectText ?? "trời")} không ${p.head} là dễ chịu rồi ha 🌤️ Bạn có định đi đâu chơi không?` };
     // Kiểu thời tiết lớp cũ chưa có câu đáp riêng ("trời hôm nay âm u ghê").
-    if (f.subjectText && !/^(mưa|nắng|gió|lạnh|nóng|oi|mát|rét|đẹp|xanh|trong|quang)$/.test(p.head)) return { intent: "frame:weather", text: `${cap(f.subjectText)} ${p.head} vậy hả 🌥️ Bạn ra ngoài nhớ chuẩn bị cho hợp thời tiết nha. Hôm nay bạn có định đi đâu không?` };
+    if (f.subjectText && !VR(/^(mưa|nắng|gió|lạnh|nóng|oi|mát|rét|đẹp|xanh|trong|quang)$/).test(p.head)) return { intent: "frame:weather", text: `${cap(f.subjectText)} ${p.head} vậy hả 🌥️ Bạn ra ngoài nhớ chuẩn bị cho hợp thời tiết nha. Hôm nay bạn có định đi đâu không?` };
     return null;
   }
   if (f.subject === "you") return null;
@@ -530,21 +531,21 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   // "a đang chăm mẹ", "chăm con ốm" — đang chăm một người thân: hỏi thăm NGƯỜI ĐÓ (mở mạch chuyện về người đó), không đáp kiểu chuyện phiếm.
   //   (chỉ khi rõ là chăm người ỐM: có chữ ốm / bệnh / viện, người được chăm là bậc trên, hoặc Lomi vừa hỏi chuyện ở bệnh viện —
   //    "a đang chăm con" thường ngày thì không hỏi "con bị sao".)
-  if (p.cls === "care" && !f.neg && f.toks.some((t) => t.r === "KIN") && (c.hospitalCtx || /(ốm|bệnh|viện)/.test(p.obj) || /(^| )(mẹ|má|bố|ba|cha|ông|bà|nội|ngoại)( |$)/.test(p.obj))) {
-    const whoTxt = (p.objCore ?? p.obj).replace(/\s+(ốm|bệnh|bị ốm|bị bệnh|nằm viện|ở viện)$/u, "").trim();
+  if (p.cls === "care" && !f.neg && f.toks.some((t) => t.r === "KIN") && (c.hospitalCtx || VR(/(ốm|bệnh|viện)/).test(p.obj) || VR(/(^| )(mẹ|má|bố|ba|cha|ông|bà|nội|ngoại)( |$)/).test(p.obj))) {
+    const whoTxt = (p.objCore ?? p.obj).replace(VR(/\s+(ốm|bệnh|bị ốm|bị bệnh|nằm viện|ở viện)$/u), "").trim();
     if (whoTxt) return { intent: "frame:third_ill", talk: true, keepHeart: true, about: { text: whoTxt, kind: "third" }, text: `${cap(join(p.ongoing ? "đang" : "", p.head, whoTxt))} hả 🥺 Vất vả cho bạn rồi. ${cap(whoTxt)} bị sao vậy bạn?` };
   }
   if (elided && !(f.time?.explicit || f.neg || p.planned)) return null;
   // "từ hôm qua", "với ai" — mẩu chỉ có giới từ + mốc thời gian không phải một câu kể việc (từng bị đáp "Hôm qua từ hả 😄").
-  if (elided && !p.obj && /^(từ|với|cho|của|ở|tại|bằng|trong|ngoài|trên|dưới|để)$/.test(p.head)) return null;
+  if (elided && !p.obj && VR(/^(từ|với|cho|của|ở|tại|bằng|trong|ngoài|trên|dưới|để)$/).test(p.head)) return null;
   if (f.neg) {
     // Sở thích ("không thích ăn ngọt") và chuyện một món cụ thể ("không thèm pizza") không phải câu hỏi sức khoẻ.
-    const taste = p.kind === "desire" && (/^(thích|khoái|ưa|mê|ghiền|ghét)$/.test(p.head) || !!detectDish(f.raw));
+    const taste = p.kind === "desire" && (VR(/^(thích|khoái|ưa|mê|ghiền|ghét)$/).test(p.head) || !!detectDish(f.raw));
     return (c.health || c.medical) && p.cls !== "well" && !taste ? null : selfNeg(f, c);
   }
   if ((c.health || c.medical) && !(p.kind === "location" && HOSPITAL_PLACE.test(p.place || p.obj))) return null;
   // Nói với Lomi là nhớ / thương Lomi ("a nhớ e quá") — không phải than cô đơn.
-  if (!elided && /^Lomi$/i.test(p.obj.trim()) && (p.kind === "desire" || p.head === "nhớ")) {
+  if (!elided && VR(/^Lomi$/i).test(p.obj.trim()) && (p.kind === "desire" || p.head === "nhớ")) {
     if (p.head === "nhớ") return { intent: "frame:to_lomi", text: pick(["Lomi cũng nhớ bạn nè 🥹 Dạo này bạn sao rồi?", "Ui cảm động ghê 🥰 Lomi vẫn ở đây chờ bạn mà!"]) };
     const old = senseState(f.raw);
     return old?.intent === "state:love_lomi" ? { intent: "frame:to_lomi", text: old.text } : null;
@@ -552,9 +553,9 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   if (p.kind === "cognition") return p.cls === "joke" ? { intent: "frame:joke", text: pick(["Hihi, làm Lomi tưởng thật 😆", "Trời, bạn làm Lomi hết hồn 🤭"]) } : null;
   if (p.kind === "desire") {
     // "muốn đi đâu đó chơi" → tìm chỗ chơi; mong muốn khác (thèm món, muốn mua…) để lớp chọn món / lắng nghe.
-    if (p.indef && /(^| )đi( |$)/.test(p.obj) && !c.food) return { intent: "frame:leisure", text: "", redirect: "đi đâu chơi" };
+    if (p.indef && VR(/(^| )đi( |$)/).test(p.obj) && !c.food) return { intent: "frame:leisure", text: "", redirect: "đi đâu chơi" };
     // "a thích ăn phở", "a thích trà sữa hơn" — nói SỞ THÍCH về một món (khác "thèm / muốn ăn": mấy câu đó lớp chọn món lo).
-    const d = !elided && !f.time?.explicit && /^(thích|khoái|ưa|mê|ghiền)$/.test(p.head) ? detectDish(f.raw) : null;
+    const d = !elided && !f.time?.explicit && VR(/^(thích|khoái|ưa|mê|ghiền)$/).test(p.head) ? detectDish(f.raw) : null;
     if (d) {
       const label = dishWord(f, d.name);
       return { intent: "frame:taste", text: `${cap(label)} hả 😋 Chuẩn gu luôn! Muốn Lomi tìm quán ${label} ngon cho bạn không?`, quick: [`Tìm quán ${label} gần đây`] };
@@ -572,9 +573,9 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   //   Có nói rõ với ai ("a giận vợ a") thì nhắc lại đúng người đó và mở mạch tâm sự hợp chuyện (vợ chồng / sếp / người nhà).
   //   ("dạo này e hay khóc" — mốc "dạo này / hôm nay" vẫn là đang nói cảm xúc lúc này.)
   if (p.kind === "state" && p.cls === "feel" && p.val < 0 && !c.heart && !c.mind && !elided && (!f.time?.explicit || f.time.rel === "now") && !senseState(f.raw)) {
-    const worry = /^(lo|sợ|hồi hộp|căng thẳng|bất an|rối|hoang mang|sốt ruột)/.test(p.head);
+    const worry = VR(/^(lo|sợ|hồi hộp|căng thẳng|bất an|rối|hoang mang|sốt ruột)/).test(p.head);
     const kin = f.toks.find((t) => t.r === "KIN");
-    if (!p.obj) return { intent: "frame:feel", openHeart: worry ? "anxiety" : /^(mệt|đuối|oải|kiệt sức)/.test(p.head) ? "tired" : "sad", text: worry ? `Bạn đang ${p.head} chuyện gì vậy 🥺 Kể Lomi nghe với.` : `Bạn ${p.ongoing ? "đang " : ""}${p.head} hả 🥺 Có chuyện gì vậy, kể Lomi nghe với.` };
+    if (!p.obj) return { intent: "frame:feel", openHeart: worry ? "anxiety" : VR(/^(mệt|đuối|oải|kiệt sức)/).test(p.head) ? "tired" : "sad", text: worry ? `Bạn đang ${p.head} chuyện gì vậy 🥺 Kể Lomi nghe với.` : `Bạn ${p.ongoing ? "đang " : ""}${p.head} hả 🥺 Có chuyện gì vậy, kể Lomi nghe với.` };
     if (kin && p.obj.split(" ").length <= 5)
       return { intent: "frame:feel", openHeart: worry ? "anxiety" : kin.cls === "partner" ? "fight" : kin.cls === "boss" ? "boss" : "family", text: `Bạn ${p.ongoing ? "đang " : ""}${p.head} ${p.obj} hả 🥺 Có chuyện gì vậy, kể Lomi nghe với.` };
   }
@@ -586,7 +587,7 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
   // "a đang ở bệnh viện" — không phải chỗ để khen "thích ghê": hỏi thăm có chuyện gì.
   if (p.kind === "location" && HOSPITAL_PLACE.test(p.place || p.obj) && !elided) return { intent: "frame:location", talk: true, text: `Đang ở ${p.place || p.obj} hả 🥺 Có chuyện gì vậy bạn — bạn hay người nhà bị sao?` };
   // "a đang ở …", "tối nay a ở nhà thôi". Câu lược chủ ngữ ("hôm nay ở Đà Lạt lạnh quá") là tả nơi đó, không phải kể mình đang ở đâu.
-  if (p.kind === "location") return (c.search && !p.ongoing) || (elided && !p.ongoing) || /(^| )(nóng|lạnh|mưa|nắng|gió|rét|oi)( |$)/.test(p.obj) ? null : selfLocation(f);
+  if (p.kind === "location") return (c.search && !p.ongoing) || (elided && !p.ongoing) || VR(/(^| )(nóng|lạnh|mưa|nắng|gió|rét|oi)( |$)/).test(p.obj) ? null : selfLocation(f);
   if (p.cls === "seek" || (c.search && !p.recent && !(f.time?.explicit && f.time.rel === "past"))) return null;
   // Chuyện không may thư viện tâm sự đã có lời hỏi han riêng (kẹt xe, trễ giờ, cúp điện…).
   if (c.heart && (p.val < 0 || !f.time?.explicit) && !(f.time?.explicit && f.time.rel === "future")) return null;
@@ -613,7 +614,7 @@ export function frameReply(f: Frame, c: FrameCtx): FrameReply | null {
 export function patientOf(f: Frame, addr?: Addr | null): string | null {
   if (!((f.subject === "third" || f.subject === "pet") && f.subjectText && f.conf >= 0.4)) return null;
   // "bác sĩ nói viêm họng", "bác sĩ bảo bị viêm xoang" — bác sĩ là người NÓI, không phải người bệnh.
-  if (/^(bác sĩ|bs|y tá|điều dưỡng|dược sĩ)( |$)/.test(f.subjectText)) return null;
+  if (VR(/^(bác sĩ|bs|y tá|điều dưỡng|dược sĩ)( |$)/).test(f.subjectText)) return null;
   return cap(f.subjectText.split(YOU_MARK).join(youOf(addr)));
 }
 
@@ -637,7 +638,7 @@ function maskPhrases(f: Frame): string {
   for (const t of f.toks) if (t.t.includes(" ") && (MASKED.has(t.r) || (t.r === "NOUN" && t.cls === "place")) && t.cls !== "ill") s = s.split(` ${t.t} `).join("  ");
   return s;
 }
-const MEDICAL = /(?<![\p{L}])(thuốc|bác sĩ|bệnh|khám|viện|xét nghiệm|triệu chứng|mổ|phẫu thuật|tiêm|vắc xin|huyết áp|tiểu đường|ung thư|cấp cứu|đau|sốt|chữa|điều trị)(?![\p{L}])/u;
+const MEDICAL = VR(/(?<![\p{L}])(thuốc|bác sĩ|bệnh|khám|viện|xét nghiệm|triệu chứng|mổ|phẫu thuật|tiêm|vắc xin|huyết áp|tiểu đường|ung thư|cấp cứu|đau|sốt|chữa|điều trị)(?![\p{L}])/u);
 const namedHealth = (q: string, flow: FrameFlow) => (analyzeBody(q)?.sx.length ?? 0) > 0 || !!healthSubjectOf(q, !!flow.inHealth) || !!dietOf(q);
 
 /** Triệu chứng chỉ khớp nhờ một cụm khác nghĩa bị bỏ dấu (câu gõ CÓ DẤU): "chiều nay a đi đá bóng" ≠ "da bong tróc". */
@@ -685,10 +686,10 @@ export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | nu
     biz: looksLikeBizQuestion(q),
     search: !!detectSearch(q),
     food: !!foodChoice(q),
-    legacyInvite: u && /^(invite|seek_company)/.test(u.intent) ? u : null,
+    legacyInvite: u && VR(/^(invite|seek_company)/).test(u.intent) ? u : null,
     mind: !!analyzeMind(q),
     softOnly: onlySoftSymptoms(q),
-    hospitalCtx: /(bệnh viện|người nhà bị sao)/.test(flow.lastText ?? ""),
+    hospitalCtx: VR(/(bệnh viện|người nhà bị sao)/).test(flow.lastText ?? ""),
   };
   const fUse: Frame = illTok ? { ...f, multi: false, conf: Math.max(f.conf, 0.8), pred: { kind: "state", head: illTok.t, cls: "ill", obj: "", val: -1, known: true } } : f;
   const r = frameReply(fUse, c);
@@ -696,8 +697,8 @@ export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | nu
   const you = youOf(flow.addr);
   const text = r.text
     .split(YOU_MARK)
-    .join(you).replace(/(^|[.!?]\s+)(anh|chị|em|bạn)(?=\s)/gu, (_m, a: string, w: string) => `${a}${cap(w)}`);
-  const about = r.about ? { ...r.about, text: r.about.text.split(YOU_MARK).join(you) } : /^frame:third/.test(r.intent) && f.subjectText ? { text: f.subjectText.split(YOU_MARK).join(you), kind: f.subject } : undefined;
+    .join(you).replace(VR(/(^|[.!?]\s+)(anh|chị|em|bạn)(?=\s)/gu), (_m, a: string, w: string) => `${a}${cap(w)}`);
+  const about = r.about ? { ...r.about, text: r.about.text.split(YOU_MARK).join(you) } : VR(/^frame:third/).test(r.intent) && f.subjectText ? { text: f.subjectText.split(YOU_MARK).join(you), kind: f.subject } : undefined;
   // "chào e, a mới đi làm về" — chào lại rồi mới đáp phần sau.
   return { ...r, about, text: f.greeted && !speechAct && text ? `Chào bạn nha 👋 ${text}` : text };
 }
@@ -708,7 +709,7 @@ export function mirrorText(f: Frame | null, addr?: Addr | null, max = 10): strin
   //   (11/10: câu không dấu còn TỪ LẠ thì không nhắc lại — "toi con phai trong con" từng thành "Tối con phai trong con hả".)
   const m = f && (!f.loose || (f.conf >= 0.7 && !f.toks.some((t) => t.r === "UNK" && !/^\d/.test(t.t)))) ? mirrorOf(f, max) : null;
   // 10/10: bỏ tiếng cười / thán từ ở cuối khi nhắc lại ("a vui lắm hehe" → "anh vui lắm hả", không phải "anh vui lắm hehe hả")
-  const clean = m?.replace(/(\s+(?:hehe+|hihi+|haha+|hoho+|kaka+|keke+|=\)+|:\)+|:d|xd|nè|á|ha))+\s*$/iu, "").trim();
+  const clean = m?.replace(VR(/(\s+(?:hehe+|hihi+|haha+|hoho+|kaka+|keke+|=\)+|:\)+|:d|xd|nè|á|ha))+\s*$/iu), "").trim();
   return clean ? clean.split(YOU_MARK).join(youOf(addr)) : null;
 }
 
@@ -720,11 +721,11 @@ export function isClause(f: Frame | null): boolean {
 /** Câu lược chủ ngữ ngay sau khi đang nói về một người / con vật ("mẹ a đang ốm" → "bị cảm thôi") → vẫn là nói về người đó. */
 // 11/10: đại từ thay cho người vừa nhắc ("ba a…" → "ông bị tai biến năm ngoái"): cùng một người, không phải người mới.
 const ANAPHOR: [RegExp, RegExp][] = [
-  [/^(ông|ổng|ông ấy|ông cụ|cụ)$/, /^(ba|bố|cha|ông|chú|bác|dượng|chồng|sếp|thầy|cậu)( |$)/],
-  [/^(bà|bả|bà ấy|bà cụ|cụ)$/, /^(mẹ|má|bà|cô|dì|vợ|thím|mợ|bác)( |$)/],
-  [/^(ảnh|anh ấy|ổng|chồng)$/, /^(chồng|bạn trai|người yêu|anh|ông xã)( |$)/],
-  [/^(cổ|cô ấy|chỉ|chị ấy|bả)$/, /^(vợ|bạn gái|người yêu|chị|cô|bà xã)( |$)/],
-  [/^(nó|bé|ẻm|em ấy|thằng bé|con bé|cháu)$/, /^(con|em|cháu|bé|đứa|thằng|chó|mèo|cún)( |$)/],
+  [VR(/^(ông|ổng|ông ấy|ông cụ|cụ)$/), VR(/^(ba|bố|cha|ông|chú|bác|dượng|chồng|sếp|thầy|cậu)( |$)/)],
+  [VR(/^(bà|bả|bà ấy|bà cụ|cụ)$/), VR(/^(mẹ|má|bà|cô|dì|vợ|thím|mợ|bác)( |$)/)],
+  [VR(/^(ảnh|anh ấy|ổng|chồng)$/), VR(/^(chồng|bạn trai|người yêu|anh|ông xã)( |$)/)],
+  [VR(/^(cổ|cô ấy|chỉ|chị ấy|bả)$/), VR(/^(vợ|bạn gái|người yêu|chị|cô|bà xã)( |$)/)],
+  [VR(/^(nó|bé|ẻm|em ấy|thằng bé|con bé|cháu)$/), VR(/^(con|em|cháu|bé|đứa|thằng|chó|mèo|cún)( |$)/)],
 ];
 export function withAbout(f: Frame, about?: { text: string; kind: SubjectKind } | null): Frame {
   if (about && (about.kind === "third" || about.kind === "pet") && (f.subject === "third" || f.subject === "pet") && f.subjectText && f.pred && !f.multi) {
@@ -737,7 +738,7 @@ export function withAbout(f: Frame, about?: { text: string; kind: SubjectKind } 
 }
 
 /** Câu chỉ nói KHOẢNG THỜI GIAN ("từ tối qua", "2 ngày rồi", "từ sáng tới giờ") — trả lời cho câu Lomi hỏi "bị bao lâu rồi?". */
-const DUR_WORD = /^(từ|tới|đến|rồi|được|khoảng|cả|mấy|vài|hơn|gần|chừng|ngày|tuần|tháng|năm|hôm|tiếng|giờ|phút|đêm|bữa|nay|qua|lúc|hồi|mới)$/;
+const DUR_WORD = VR(/^(từ|tới|đến|rồi|được|khoảng|cả|mấy|vài|hơn|gần|chừng|ngày|tuần|tháng|năm|hôm|tiếng|giờ|phút|đêm|bữa|nay|qua|lúc|hồi|mới)$/);
 export function durationOf(f: Frame): string | null {
   const t = f.toks.filter((x) => x.r !== "PART" && x.r !== "VOC");
   if (!t.length || t.length > 7 || f.ask) return null;

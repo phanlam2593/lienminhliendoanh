@@ -70,7 +70,12 @@ let off = false;
 export function setViRestoreOff(x: boolean) {
   off = x;
 }
-export function restoreVi(text: string): string {
+/**
+ * opts.keepBare (14/10, bộ đọc câu lib/viMatch): câu người dùng ĐÃ gõ dấu mà có chữ không dấu — chữ không dấu đó vốn là một chữ
+ * tiếng Việt có thật ("di" trong "di truyền", "la" trong "la mắng", "a" viết tắt "anh") thì giữ nguyên, chỉ đoán dấu cho chữ không
+ * dấu mà bản thân nó không phải chữ nào ("dau" → "đau", "nhe" → "nhé").
+ */
+export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): string {
   if (!idx || off) return text;
   const { m, forms, total } = idx;
   // lẻ: chữ hoặc SỐ (số tính như một chữ "num" để "sốt 38 độ" vẫn nối được ngữ cảnh), chẵn: phần giữa (khoảng trắng, dấu câu…)
@@ -85,6 +90,10 @@ export function restoreVi(text: string): string {
     if (HAS_MARK.test(w)) return [w]; // người dùng gõ dấu → giữ
     const f = forms.get(w);
     if (!f) return [w];
+    if (opts.keepBare && m.u[w]) {
+      const tot = f.reduce((a, x) => a + (m.u[x] ?? 0), 0) + (f.includes(w) ? 0 : m.u[w]);
+      if (m.u[w] / Math.max(1, tot) >= 0.05) return [w];
+    }
     return m.u[w] && !f.includes(w) ? [w, ...f] : f;
   });
   // Điểm: log P(c | a b) — có bộ ba thì theo bộ ba, không thì cặp chữ, không nữa thì tần suất chữ (stupid backoff 0.4).

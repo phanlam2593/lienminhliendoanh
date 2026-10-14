@@ -7,6 +7,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { detectAddr, explicitAddr, type Addr } from "@/lib/lomiAddress";
 import type { BizCtx } from "@/lib/bizAdvisor";
+import { VR, VN } from "@/lib/viMatch";
 
 export type Sit = "jobless" | "working" | "heartbroken" | "single" | "inlove" | "sick" | "student";
 export type LomiMem = { name?: string; sits?: Partial<Record<Sit, number>>; biz?: Pick<BizCtx, "type" | "noun">; addr?: Addr; addrLocked?: boolean };
@@ -39,13 +40,13 @@ export function clearMem(uid: string) {
 }
 
 const SIT_RE: [Sit, RegExp][] = [
-  ["jobless", /\b(that nghiep|mat viec|dang tim viec|nghi viec roi|bi duoi viec|chua co viec|khong co viec|dang kiem viec)\b/],
-  ["working", /\b(moi co viec|da co viec|dang di lam|moi di lam|vua co viec)\b/],
-  ["heartbroken", /\b(that tinh|vua chia tay|bi da|bi bo roi|chia tay roi|bi nguoi yeu bo|moi chia tay)\b/],
-  ["single", /\b(doc than|dang e|fa|chua co nguoi yeu|khong co nguoi yeu)\b/],
-  ["inlove", /\b(co nguoi yeu roi|dang yeu|moi co nguoi yeu|dang hen ho)\b/],
-  ["sick", /\b(dang om|bi om|bi benh|dang benh|bi sot|bi cam|dang dieu tri)\b/],
-  ["student", /\b(sinh vien|hoc sinh|dang on thi|sap thi|dang di hoc|mua thi)\b/],
+  ["jobless", VN(/\b(thất nghiệp|mất việc|đang tìm việc|nghỉ việc rồi|bị đuổi việc|chưa có việc|không có việc|đang kiếm việc)\b/)],
+  ["working", VN(/\b(mới có việc|đã có việc|đang đi làm|mới đi làm|vừa có việc)\b/)],
+  ["heartbroken", VN(/\b(thất tình|vừa chia tay|bị đá|bị bỏ rồi|chia tay rồi|bị người yêu bỏ|mới chia tay)\b/)],
+  ["single", VN(/\b(độc thân|đang ế|fa|chưa có người yêu|không có người yêu)\b/)],
+  ["inlove", VN(/\b(có người yêu rồi|đang yêu|mới có người yêu|đang hẹn hò)\b/)],
+  ["sick", VN(/\b(đang ốm|bị ốm|bị bệnh|đang bệnh|bị sốt|bị cảm|đang điều trị)\b/)],
+  ["student", VN(/\b(sinh viên|học sinh|đang ôn thi|sắp thi|đang đi học|mùa thi)\b/)],
 ];
 const CONFLICT: Partial<Record<Sit, Sit[]>> = {
   working: ["jobless"],
@@ -73,7 +74,7 @@ const SIT_LABEL: Record<Sit, string> = {
   student: "đang đi học / ôn thi",
 };
 
-const SELF = /(^| )(minh|toi|tui|em|anh|chi|to|t|tao|bo may|nay|dang|vua|moi|bi|hien)( |$)/;
+const SELF = VN(/(^| )(mình|tôi|tui|em|anh|chị|tớ|t|tao|bố mày|nay|đang|vừa|mới|bị|hiện)( |$)/);
 const NAME_BAD = new Set(["gì", "gi", "là", "chi", "đó", "ai", "nè", "nha", "đi"]);
 
 /** Đọc câu người dùng → cập nhật trí nhớ. Trả về tên mới (nếu vừa giới thiệu) và hoàn cảnh mới thêm. */
@@ -82,8 +83,8 @@ export function learnFromText(uid: string, raw: string): { mem: LomiMem; newName
   const newSits: Sit[] = [];
   let newName: string | undefined;
   const m =
-    raw.match(/(?:^|\s)(?:mình|tôi|tui|em|anh|chị|tớ|t)\s+tên(?:\s+là)?\s+([\p{L}]+(?:\s+[\p{L}]+)?)/iu) ??
-    raw.match(/(?:gọi|kêu)\s+(?:mình|tôi|tui|em|anh|chị|tớ)\s+là\s+([\p{L}]+(?:\s+[\p{L}]+)?)/iu);
+    raw.match(VR(/(?:^|\s)(?:mình|tôi|tui|em|anh|chị|tớ|t)\s+tên(?:\s+là)?\s+([\p{L}]+(?:\s+[\p{L}]+)?)/iu)) ??
+    raw.match(VR(/(?:gọi|kêu)\s+(?:mình|tôi|tui|em|anh|chị|tớ)\s+là\s+([\p{L}]+(?:\s+[\p{L}]+)?)/iu));
   if (m) {
     const words = m[1].split(/\s+/).filter((w) => !NAME_BAD.has(w.toLowerCase()));
     const nm = words
@@ -127,12 +128,12 @@ export function situationContext(mem: LomiMem): string {
 }
 
 export function isAskMemory(text: string) {
-  return /\b(nho gi ve (minh|toi|tui|em|anh)|biet gi ve (minh|toi|tui|em|anh)|(con |co )?nho (minh|toi|tui|em|anh)( la ai)? (khong|ko|k|hong|hem)|nho ten (minh|toi|tui|em|anh)|ten (minh|toi|tui|em|anh) la gi)\b/.test(
+  return VN(/\b(nhớ gì về (mình|tôi|tui|em|anh)|biết gì về (mình|tôi|tui|em|anh)|(còn |có )?nhớ (mình|tôi|tui|em|anh)( là ai)? (không|ko|k|hông|hong|hem)|nhớ tên (mình|tôi|tui|em|anh)|tên (mình|tôi|tui|em|anh) là gì)\b/).test(
     normalizeVi(text),
   );
 }
 export function isForgetMemory(text: string) {
-  return /\b(quen het di|quen het nha|xoa tri nho|dung nho nua|quen minh di|quen toi di|xoa het tri nho)\b/.test(normalizeVi(text));
+  return VN(/\b(quên hết đi|quên hết nha|xoá trí nhớ|đừng nhớ nữa|quên mình đi|quên tôi đi|xoá hết trí nhớ)\b/).test(normalizeVi(text));
 }
 export function memorySummary(mem: LomiMem, bizNoun?: string): string {
   const lines: string[] = [];
@@ -204,12 +205,12 @@ export function learnAddr(uid: string, raw: string, hint: { force?: Addr; fallba
   // 12/10 — GIỮ xưng hô ổn định: đã biết người dùng xưng anh / chị / em thì một câu có đại từ khác đi với động từ chưa đủ để đổi —
   // người xưng "em" kể "a không nhắn cho e 3 ngày rồi" là đang nói về NGƯỜI YÊU; người xưng "anh" kể "e không trả lời a" cũng vậy.
   // Chỉ đổi khi câu KHÔNG còn chữ tự xưng cũ và chữ tự xưng mới đứng đầu câu (hoặc người dùng nói rõ — explicitAddr ở trên).
-  const KNOWN: Record<string, RegExp> = { anh: /(?<![\p{L}])(a|anh)(?![\p{L}])/iu, chị: /(?<![\p{L}])(c|chị)(?![\p{L}])/iu, em: /(?<![\p{L}])(e|em)(?![\p{L}])/iu };
+  const KNOWN: Record<string, RegExp> = { anh: VN(/(?<![\p{L}])(a|anh)(?![\p{L}])/iu), chị: VR(/(?<![\p{L}])(c|chị)(?![\p{L}])/iu), em: VR(/(?<![\p{L}])(e|em)(?![\p{L}])/iu) };
   if (a && m.addr && KNOWN[m.addr] && KNOWN[a] && a !== m.addr) {
     const hasOld = KNOWN[m.addr].test(raw);
     // (10/10: cho phép từ chỉ thời gian đứng trước — "hôm nay a vui lắm", "dạo này e mệt")
     const TIME0 = "(?:(?:hôm nay|hôm qua|bữa nay|nay|tối nay|tối qua|sáng nay|trưa nay|chiều nay|giờ|bây giờ|dạo này|mấy nay|mới|vừa|rồi|thật ra|thiệt ra)\\s+)?";
-    const startsNew = new RegExp(`^\\s*${TIME0}${a === "anh" ? "(a|anh)" : a === "chị" ? "(c|chị)" : "(e|em)"}(?![\\p{L}])`, "iu").test(raw);
+    const startsNew = VR(new RegExp(`^\\s*${TIME0}${a === "anh" ? "(a|anh)" : a === "chị" ? "(c|chị)" : "(e|em)"}(?![\\p{L}])`, "iu")).test(raw);
     if (hasOld || !startsNew || hint.hold) a = null;
   }
   // "bạn-em" (chỉ biết người dùng gọi Lomi là em) không ghi đè cách xưng rõ hơn đã biết (anh/chị).

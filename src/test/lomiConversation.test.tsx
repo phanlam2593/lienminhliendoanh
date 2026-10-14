@@ -1076,3 +1076,19 @@ describe("Chuỗi thử mù — theo được chuyện với câu chưa từng g
     expect(speak("Điều đó làm bạn khó chịu hả?", "anh")).toBe("Điều đó làm anh khó chịu hả?");
   }, T);
 });
+
+describe("Đáp lại sau câu trả lời y khoa (14/10)", () => {
+  it("'ừ đúng rồi nha' sau bài ăn uống → đáp nhận, không đọc 'rồi' thành món ăn", async () => {
+    const m = await last(["tăng huyết áp ăn gì", "ừ đúng rồi nha"]);
+    expect(m.content).not.toMatch(/chưa xác minh|\*\*rồi\*\*/);
+    expect(m.content.length).toBeLessThan(40);
+  }, T);
+  it("'ok cảm ơn' sau câu trả lời → cảm ơn, không phải 'Lomi chưa biết'", async () => {
+    const m = await last(["Uống aspirin để làm gì", "ok cảm ơn"]);
+    expect(m.content).not.toMatch(/chưa (biết|được học|có kiến thức|được tiếp thu)/);
+  }, T);
+  it("gõ có dấu: 'a bị trẹo cổ' là đau cổ, 'app bị treo' là lỗi app", async () => {
+    expect((await last(["a bị trẹo cổ"])).content).toMatch(/cổ/);
+    expect((await last(["app bị treo hoài"])).content).toMatch(/[Aa]pp/);
+  }, T);
+});

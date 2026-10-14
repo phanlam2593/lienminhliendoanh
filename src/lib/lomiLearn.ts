@@ -8,6 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeVi } from "@/lib/lomiFaq";
+import { VR } from "@/lib/viMatch";
 
 const db = supabase as unknown as {
   rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
@@ -16,7 +17,7 @@ const db = supabase as unknown as {
 /** Khoá so khớp: bỏ dấu, bỏ ký tự đặc biệt, gộp khoảng trắng. */
 export function learnKey(text: string): string {
   return normalizeVi(text)
-    .replace(/[^a-z0-9 ]+/g, " ")
+    .replace(VR(/[^a-z0-9 ]+/g), " ")
     .replace(/\s+/g, " ")
     .trim()
     .slice(0, 200);
@@ -49,7 +50,7 @@ export function logUnanswered(raw: string, keyText: string = raw) {
 
 export function learnAnswer(unknownText: string, faqId: string) {
   const key = learnKey(unknownText);
-  if (key.length < 3 || !/^[a-z0-9_-]{1,40}$/.test(faqId)) return;
+  if (key.length < 3 || !VR(/^[a-z0-9_-]{1,40}$/).test(faqId)) return;
   void db.rpc("lomi_learn", { _key: key, _faq_id: faqId }).then(
     () => undefined,
     () => undefined,

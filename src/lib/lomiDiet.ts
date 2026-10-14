@@ -7,6 +7,7 @@
 
 import { normalizeVi } from "@/lib/lomiFaq";
 import { HEALTH, normStrict } from "@/lib/lomiAccent";
+import { VR, VN } from "@/lib/viMatch";
 
 /** 1 nhóm thực phẩm: chữ hiển thị + từ khoá (CÓ DẤU; cụm ≥2 chữ tự nhận thêm bản không dấu). */
 type Item = { t: string; k: string[]; why?: string };
@@ -43,7 +44,7 @@ const DAIRY = I("sữa, sữa chua ít đường", ["sữa", "sữa chua", "sữ
 const DIETS: Diet[] = [
   {
     id: "gout", name: "bị gout (gút)",
-    re: /\b(gout|gut|goute|thong phong|axit uric|acid uric|a xit uric|uric)\b/,
+    re: VN(/\b(gout|gút|gut|goute|thống phong|axit uric|acid uric|a xít uric|uric)\b/),
     avoid: [
       I("nội tạng động vật (gan, lòng, cật, óc)", ["nội tạng", "lòng", "gan", "cật", "óc", "lòng lợn", "lòng heo", "dồi", "phèo"], "nội tạng rất nhiều purin — chất tạo ra axit uric"),
       I("thịt đỏ, thịt thú (bò, dê, trâu, chó, mèo, ngựa…)", ["thịt bò", "bò", "thịt dê", "dê", "thịt trâu", "trâu", "thịt chó", "chó", "cầy", "thịt mèo", "mèo", "thịt ngựa", "ngựa", "thịt đỏ", "thịt thú", "thịt rừng", "bê", "thịt bê"], "thịt đỏ nhiều purin, dễ làm axit uric tăng và khởi phát cơn đau"),
@@ -69,7 +70,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "htn", name: "huyết áp cao",
-    re: /\b(huyet ap cao|cao huyet ap|tang huyet ap|huyet ap(?! thap))\b/,
+    re: VN(/\b(huyết áp cao|cao huyết áp|tăng huyết áp|huyết áp(?! thấp))\b/),
     avoid: [
       I("đồ mặn: muối, nước mắm chấm đậm, dưa cà muối, cá khô, mắm", ["mặn", "muối", "nước mắm", "dưa muối", "cà muối", "dưa cà", "khô cá", "cá khô", "mắm", "mắm tôm", "đồ mặn", "bim bim", "snack", "khô bò", "mực khô"], "muối (natri) giữ nước, làm huyết áp tăng"),
       PROCESSED, ALCOHOL,
@@ -82,7 +83,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "dm", name: "tiểu đường (đường huyết cao)",
-    re: /\b(tieu duong|dai thao duong|duong huyet cao|duong mau cao|tien tieu duong|duong huyet|tieu ngot)\b/,
+    re: VN(/\b(tiểu đường|đái tháo đường|đường huyết cao|đường máu cao|tiền tiểu đường|đường huyết|tiểu ngọt)\b/),
     avoid: [
       I("nước ngọt, trà sữa, nước ép đóng chai, cà phê nhiều đường/sữa đặc", ["nước ngọt", "coca", "pepsi", "nước có ga", "trà sữa", "sting", "nước tăng lực", "nước ép", "nước mía", "cà phê sữa", "cafe sữa", "sinh tố"], "đường dạng nước hấp thu rất nhanh, làm đường huyết vọt lên"),
       I("bánh kẹo, chè, kem, mứt, bánh ngọt", ["bánh kẹo", "kẹo", "chè", "bánh ngọt", "đồ ngọt", "kem", "bánh kem", "mứt", "sô cô la", "socola", "chocolate", "bánh flan", "bánh bông lan"]),
@@ -105,7 +106,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "lipid", name: "mỡ máu cao",
-    re: /\b(mo mau|mo trong mau|cholesterol|choresteron|colesterol|triglyceride|roi loan mo mau|roi loan lipid|mau nhiem mo)\b/,
+    re: VN(/\b(mỡ máu|mỡ trong máu|cholesterol|choresteron|colesterol|triglyceride|rối loạn mỡ máu|rối loạn lipid|máu nhiễm mỡ)\b/),
     avoid: [
       I("mỡ động vật, da gà, da heo, thịt ba chỉ", ["mỡ heo", "mỡ động vật", "da gà", "da heo", "thịt mỡ", "ba chỉ", "tóp mỡ", "mỡ hành"]),
       ORGAN, FRIED,
@@ -118,7 +119,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "stomach", name: "đau dạ dày / trào ngược",
-    re: /\b(dau da day|viem da day|loet da day|benh da day|bi da day|dau bao tu|viem bao tu|bao tu|trao nguoc|o chua|o nong|nong rat thuong vi|viem hang vi|hp da day)\b/,
+    re: VN(/\b(đau dạ dày|viêm dạ dày|loét dạ dày|bệnh dạ dày|bị dạ dày|đau bao tử|viêm bao tử|bao tử|trào ngược|ợ chua|ợ nóng|nóng rát thượng vị|viêm hang vị|hp dạ dày)\b/),
     avoid: [
       SPICY,
       I("đồ chua (chanh, giấm, dưa muối, cóc, xoài xanh), nhất là lúc đói", ["đồ chua", "chanh", "giấm", "dưa muối", "cóc", "xoài xanh", "me", "nước chanh"]),
@@ -140,7 +141,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "kidney", name: "bệnh thận / sỏi thận",
-    re: /\b(soi than|suy than|benh than|viem than|than yeu|yeu than|soi tiet nieu)\b/,
+    re: VN(/\b(sỏi thận|suy thận|bệnh thận|viêm thận|thận yếu|yếu thận|sỏi tiết niệu)\b/),
     avoid: [
       I("đồ mặn, đồ chế biến sẵn, mì gói", ["mặn", "muối", "nước mắm", "dưa muối", "cà muối", "mắm", "xúc xích", "lạp xưởng", "mì gói", "mì tôm", "đồ hộp", "bim bim", "snack"], "muối làm thận làm việc nặng hơn, dễ tạo sỏi"),
       I("nước ngọt có ga (nhất là cola)", ["nước ngọt", "coca", "pepsi", "nước có ga", "soda"]),
@@ -160,7 +161,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "liver", name: "bệnh gan (gan nhiễm mỡ, viêm gan, men gan cao)",
-    re: /\b(gan nhiem mo|viem gan|men gan cao|men gan|xo gan|benh gan|gan yeu|nong gan|viem gan b|viem gan c)\b/,
+    re: VN(/\b(gan nhiễm mỡ|viêm gan|men gan cao|men gan|xơ gan|bệnh gan|gan yếu|nóng gan|viêm gan b|viêm gan c)\b/),
     avoid: [
       I("bia, rượu (tuyệt đối)", ["bia", "rượu", "nhậu", "bia rượu", "rượu bia", "rượu vang", "rượu đế"], "cồn trực tiếp làm tổn thương tế bào gan"),
       SODA, SWEETS, FRIED,
@@ -173,7 +174,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "heart", name: "bệnh tim mạch",
-    re: /\b(benh tim|tim mach|suy tim|mach vanh|thieu mau co tim|dot quy)\b/,
+    re: VN(/\b(bệnh tim|tim mạch|suy tim|mạch vành|thiếu máu cơ tim|đột quỵ)\b/),
     avoid: [
       I("đồ mặn, nước mắm chấm đậm, dưa cà muối", ["mặn", "muối", "nước mắm", "dưa muối", "cà muối", "mắm", "đồ mặn"]),
       PROCESSED,
@@ -187,7 +188,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "anemia", name: "thiếu máu (thiếu sắt)",
-    re: /\b(thieu mau(?! nao| co tim)|thieu sat)\b/,
+    re: VN(/\b(thiếu máu(?! não| cơ tim)|thiếu sắt)\b/),
     avoid: [I("uống trà, cà phê ngay trong hoặc sau bữa ăn", ["trà", "cà phê", "cafe", "trà đặc"], "làm giảm hấp thu sắt — nên uống cách bữa ăn 1–2 tiếng")],
     limit: [I("sữa, canxi uống cùng lúc với bữa giàu sắt", ["sữa", "canxi"])],
     good: [
@@ -200,7 +201,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "dengue", name: "sốt xuất huyết",
-    re: /\b(sot xuat huyet|sxh|dengue)\b/,
+    re: VR(/\b(sot xuat huyet|sxh|dengue)\b/),
     avoid: [
       I("đồ ăn uống màu đỏ, đen, nâu (thanh long ruột đỏ, củ dền, sô cô la, coca, cà phê)", ["thanh long", "thanh long đỏ", "củ dền", "sô cô la", "socola", "coca", "cà phê", "cafe", "nước ngọt", "tiết", "tiết canh"], "để không nhầm với dấu hiệu xuất huyết khi nôn ra hoặc đi ngoài"),
       I("đồ cay nóng, chiên rán, khó tiêu", ["cay", "chiên", "rán", "ớt", "đồ chiên"]),
@@ -214,7 +215,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "cold", name: "cảm cúm, sốt, ho, viêm họng",
-    re: /\b(cam cum|cam lanh|bi cum|bi cam lanh|dang sot|bi sot|viem hong|dau hong|bi ho|dang ho|ho khan|ho co dom|ho dom|ho nhieu|so mui|nghet mui|bi cam (nen|an|uong|kieng|thi))\b/,
+    re: VN(/\b(cảm cúm|cảm lạnh|bị cúm|bị cảm lạnh|đang sốt|bị sốt|viêm họng|đau họng|bị ho|đang ho|ho khan|ho có đờm|ho đờm|ho nhiều|sổ mũi|nghẹt mũi|bị cảm (nên|ăn|uống|kiêng|thì))\b/),
     avoid: [
       I("đồ lạnh, nước đá, kem", ["đá", "nước đá", "kem", "đồ lạnh", "trà đá", "trà sữa"]),
       I("đồ chiên rán, cay nóng (dễ kích thích họng)", ["chiên", "rán", "cay", "ớt", "gà rán", "đồ chiên", "khoai tây chiên"]),
@@ -230,7 +231,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "diarrhea", name: "tiêu chảy, rối loạn tiêu hoá",
-    re: /\b(tieu chay|di ngoai nhieu|di ngoai long|ngo doc thuc an|roi loan tieu hoa|dau bung di ngoai|di cau long|bi tao thao)\b/,
+    re: VN(/\b(tiêu chảy|đi ngoài nhiều|đi ngoài lỏng|ngộ độc thức ăn|rối loạn tiêu hoá|đau bụng đi ngoài|đi cầu lỏng|bị tào tháo)\b/),
     avoid: [
       I("sữa tươi, đồ nhiều dầu mỡ", ["sữa", "sữa tươi", "dầu mỡ", "chiên", "rán", "mỡ heo"]),
       I("rau sống, đồ sống, đồ lên men (mắm, dưa chua)", ["rau sống", "gỏi", "sushi", "tái", "mắm", "dưa chua", "dưa muối", "đồ sống"]),
@@ -246,7 +247,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "constip", name: "táo bón",
-    re: /\b(tao bon|kho di ngoai|kho di cau|lau di cau)\b/,
+    re: VN(/\b(táo bón|khó đi ngoài|khó đi cầu|lâu đi cầu)\b/),
     avoid: [
       I("đồ chiên rán, đồ ăn nhanh", ["chiên", "rán", "gà rán", "đồ ăn nhanh", "fast food"]),
       I("ổi xanh, hồng xiêm (sapoche) xanh, chuối xanh", ["ổi", "hồng xiêm", "sapoche", "chuối xanh"]),
@@ -263,14 +264,14 @@ const DIETS: Diet[] = [
   },
   {
     id: "hemorrhoid", name: "bệnh trĩ",
-    re: /\b(benh tri|bi tri|tri noi|tri ngoai|tri hon hop)\b/,
+    re: VN(/\b(bệnh trĩ|bị trĩ|trĩ nội|trĩ ngoại|trĩ hỗn hợp)\b/),
     avoid: [SPICY, ALCOHOL, I("đồ chiên, đồ ăn nhanh, ít rau", ["chiên", "rán", "gà rán", "đồ ăn nhanh"]), I("cà phê, trà đặc", ["cà phê", "cafe", "trà đặc"])],
     good: [I("rau xanh, trái cây nhiều chất xơ (đu đủ, chuối chín, thanh long)", ["rau", "rau xanh", "đu đủ", "chuối", "thanh long", "trái cây"]), I("khoai lang, yến mạch, gạo lứt", ["khoai lang", "yến mạch", "gạo lứt"]), WATER],
     tip: "Tránh ngồi lâu, rặn mạnh; chảy máu nhiều hay búi trĩ không tự co lên → khám Hậu môn – Trực tràng.",
   },
   {
     id: "allergy", name: "dị ứng, nổi mề đay",
-    re: /\b(di ung|me day|noi me day|noi man ngua|man ngua|noi man do)\b/,
+    re: VN(/\b(dị ứng|mề đay|nổi mề đay|nổi mẩn ngứa|mẩn ngứa|nổi mẩn đỏ)\b/),
     avoid: [
       I("món từng làm mình nổi dị ứng", []),
       I("hải sản (nhất là tôm, cua, ghẹ, sò) khi đang nổi", ["hải sản", "tôm", "cua", "ghẹ", "sò", "ốc", "mực", "nghêu", "hàu"]),
@@ -283,7 +284,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "acne", name: "da nổi mụn",
-    re: /\b(noi mun|bi mun|mun trung ca|mun an|mun viem|mun boc|da mun)\b/,
+    re: VN(/\b(nổi mụn|bị mụn|mụn trứng cá|mụn ẩn|mụn viêm|mụn bọc|da mụn)\b/),
     avoid: [I("đồ ngọt, trà sữa, nước ngọt", ["đồ ngọt", "trà sữa", "nước ngọt", "bánh kẹo", "kẹo", "chè"]), I("đồ chiên rán, cay nóng", ["chiên", "rán", "cay", "gà rán"])],
     limit: [I("sữa bò (với một số người làm mụn nhiều hơn)", ["sữa", "sữa bò", "sữa tươi"])],
     good: [VEG, FRUIT, FISH, WATER],
@@ -291,7 +292,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "ibs", name: "viêm đại tràng / hội chứng ruột kích thích",
-    re: /\b(dai trang|viem dai trang|ruot kich thich|ibs)\b/,
+    re: VN(/\b(đại tràng|viêm đại tràng|ruột kích thích|ibs)\b/),
     avoid: [
       I("đồ sống, tái, rau sống", ["gỏi", "sushi", "tái", "rau sống", "đồ sống"]),
       SPICY, I("rượu bia, cà phê, nước có ga", ["bia", "rượu", "cà phê", "cafe", "nước ngọt", "nước có ga"]),
@@ -304,7 +305,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "pregnant", name: "đang mang thai",
-    re: /\b(mang thai|co bau|co thai|bau bi|dang bau|ba bau|mang bau|thai ky|bau (an|uong|co duoc|nen|kieng))\b/,
+    re: VN(/\b(mang thai|có bầu|có thai|bầu bí|đang bầu|bà bầu|mang bầu|thai kỳ|thai kì|bầu (ăn|uống|có được|nên|kiêng))\b/),
     avoid: [
       ALCOHOL,
       I("đồ sống, tái (gỏi, sushi, thịt tái, trứng lòng đào), pa tê, phô mai mềm chưa tiệt trùng", ["gỏi", "sushi", "sashimi", "tái", "phở tái", "bò tái", "trứng lòng đào", "pate", "pa tê", "phô mai", "đồ sống", "hàu sống"], "nguy cơ nhiễm khuẩn (Listeria), ký sinh trùng hại thai"),
@@ -317,7 +318,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "wound", name: "có vết thương / mới mổ / mới xăm",
-    re: /\b(vet thuong|sau mo|moi mo|vua mo|vet mo|moi xam|vua xam|bi thuong|sau sinh mo|moi nho rang|vet dut|tray xuoc)\b/,
+    re: VN(/\b(vết thương|sau mổ|mới mổ|vừa mổ|vết mổ|mới xăm|vừa xăm|bị thương|sau sinh mổ|mới nhổ răng|vết đứt|trầy xước)\b/),
     avoid: [ALCOHOL, I("thuốc lá", ["thuốc lá", "hút thuốc"]), I("đồ sống, đồ để lâu không vệ sinh", ["đồ sống", "gỏi", "tái"])],
     limit: [I("đồ nếp, đồ quá cay (với một số người làm vết thương ngứa, sưng hơn)", ["nếp", "xôi", "cay", "ớt"])],
     good: [
@@ -329,14 +330,14 @@ const DIETS: Diet[] = [
   },
   {
     id: "osteo", name: "loãng xương / thiếu canxi",
-    re: /\b(loang xuong|thieu canxi|thieu can xi|xuong yeu)\b/,
+    re: VN(/\b(loãng xương|thiếu canxi|thiếu can xi|xương yếu)\b/),
     avoid: [I("đồ mặn", ["mặn", "muối", "nước mắm", "mắm"]), I("nước có ga, cà phê nhiều", ["nước ngọt", "coca", "nước có ga", "cà phê", "cafe"]), ALCOHOL],
     good: [I("sữa, sữa chua, phô mai", ["sữa", "sữa chua", "phô mai"]), I("cá nhỏ ăn cả xương, tôm tép", ["cá cơm", "cá nhỏ", "tép", "tôm", "tôm khô"]), I("đậu phụ, rau xanh đậm", ["đậu phụ", "đậu hũ", "rau", "rau xanh", "cải"]), I("trứng (có vitamin D) + phơi nắng sáng sớm", ["trứng"])],
     tip: "Vận động chịu sức (đi bộ, tập nhẹ) giúp xương chắc; viên canxi/vitamin D thì hỏi bác sĩ trước.",
   },
   {
     id: "asthma", name: "hen suyễn",
-    re: /\b(hen suyen|hen phe quan|suyen|bi hen)\b/,
+    re: VN(/\b(hen suyễn|hen phế quản|suyễn|bị hen)\b/),
     avoid: [
       I("món từng làm mình lên cơn hen hoặc dị ứng (hay gặp: hải sản, đậu phộng, trứng)", ["hải sản", "tôm", "cua", "đậu phộng", "lạc", "trứng"]),
       I("đồ lạnh, nước đá, kem (với người hay lên cơn khi lạnh)", ["đá", "nước đá", "kem", "đồ lạnh"]),
@@ -348,7 +349,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "rhinitis", name: "viêm xoang / viêm mũi dị ứng",
-    re: /\b(viem xoang|viem mui|viem mui di ung|xoang mui|bi xoang)\b/,
+    re: VN(/\b(viêm xoang|viêm mũi|viêm mũi dị ứng|xoang mũi|bị xoang)\b/),
     avoid: [
       I("đồ lạnh, nước đá", ["đá", "nước đá", "kem", "đồ lạnh", "trà đá"]),
       I("đồ cay nóng, chiên rán (dễ kích ứng niêm mạc)", ["cay", "ớt", "chiên", "rán"]),
@@ -360,7 +361,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "thyroid", name: "bệnh tuyến giáp",
-    re: /\b(tuyen giap|buou co|cuong giap|suy giap|nhan giap|basedow)\b/,
+    re: VN(/\b(tuyến giáp|bướu cổ|cường giáp|suy giáp|nhân giáp|basedow)\b/),
     avoid: [
       I("tự ý uống thực phẩm chức năng, tảo biển liều cao, thuốc nam", ["thực phẩm chức năng", "tpcn", "thuốc nam", "tảo biển"]),
       I("cà phê, nước tăng lực (nhất là cường giáp: tim đã đập nhanh)", ["cà phê", "cafe", "nước tăng lực", "sting", "redbull"]),
@@ -375,7 +376,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "chickenpox", name: "thuỷ đậu / sởi",
-    re: /\b(thuy dau|trai rua|bi soi|benh soi|tay chan mieng)\b/,
+    re: VN(/\b(thuỷ đậu|trai rua|bị sởi|bệnh sởi|tay chân miệng)\b/),
     avoid: [
       I("đồ cay nóng, chiên rán", ["cay", "ớt", "chiên", "rán"]),
       I("đồ quá ngọt, nước ngọt", ["kẹo", "nước ngọt", "đồ ngọt", "bánh kẹo"]),
@@ -392,7 +393,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "breastfeed", name: "đang cho con bú / sau sinh",
-    re: /\b(cho con bu|dang cho bu|sau sinh|moi sinh|vua sinh|o cu|me bim|it sua|mat sua|goi sua)\b/,
+    re: VN(/\b(cho con bú|đang cho bú|sau sinh|mới sinh|vừa sinh|ở cữ|mẹ bỉm|ít sữa|mất sữa|gọi sữa)\b/),
     avoid: [
       ALCOHOL,
       I("cà phê, trà đặc nhiều (vào sữa, bé dễ quấy khó ngủ)", ["cà phê", "cafe", "trà đặc", "nước tăng lực"]),
@@ -411,7 +412,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "lowbp", name: "huyết áp thấp",
-    re: /\b(huyet ap thap|tut huyet ap|ha huyet ap)\b/,
+    re: VN(/\b(huyết áp thấp|tụt huyết áp|hạ huyết áp)\b/),
     avoid: [I("nhịn đói, bỏ bữa sáng", ["nhịn đói", "bỏ bữa"]), ALCOHOL, I("đứng dậy đột ngột, ở chỗ nóng lâu (không phải món ăn nhưng hay gây choáng)", [])],
     limit: [I("bữa quá no nhiều tinh bột (dễ choáng sau ăn)", ["cơm", "bún", "phở", "xôi"])],
     good: [
@@ -424,7 +425,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "uti", name: "viêm đường tiết niệu / viêm bàng quang",
-    re: /\b(viem duong tiet nieu|nhiem trung tiet nieu|viem bang quang|tieu buot|tieu rat|tieu gat)\b/,
+    re: VN(/\b(viêm đường tiết niệu|nhiễm trùng tiết niệu|viêm bàng quang|tiểu buốt|tiểu rắt|tiểu gắt)\b/),
     avoid: [
       I("nhịn tiểu, uống ít nước", ["nhịn tiểu"]),
       I("rượu bia, cà phê, nước có ga", ["bia", "rượu", "cà phê", "cafe", "nước ngọt", "coca", "nước có ga"]),
@@ -440,7 +441,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "insomnia", name: "hay mất ngủ",
-    re: /\b(mat ngu|kho ngu|khong ngu duoc|ngu khong ngon|hay thuc giac|tran troc)\b/,
+    re: VN(/\b(mất ngủ|khó ngủ|không ngủ được|ngủ không ngon|hay thức giấc|trằn trọc)\b/),
     avoid: [
       I("cà phê, trà, nước tăng lực sau khoảng 2 giờ chiều", ["cà phê", "cafe", "trà", "trà sữa", "nước tăng lực", "sting", "redbull", "coca"]),
       I("rượu bia (dễ ngủ lúc đầu nhưng hay thức giấc nửa đêm)", ["bia", "rượu", "nhậu"]),
@@ -456,7 +457,7 @@ const DIETS: Diet[] = [
   },
   {
     id: "migraine", name: "hay đau nửa đầu (migraine)",
-    re: /\b(dau nua dau|migraine|dau dau van mach|dau dau kinh nien|hay dau dau)\b/,
+    re: VN(/\b(đau nửa đầu|migraine|đau đầu vận mạch|đau đầu kinh niên|hay đau đầu)\b/),
     avoid: [
       I("nhịn đói, bỏ bữa", ["nhịn đói", "bỏ bữa"]),
       I("rượu vang đỏ, bia rượu", ["rượu vang", "bia", "rượu"]),
@@ -468,8 +469,8 @@ const DIETS: Diet[] = [
   },
 ];
 
-const DIET_ASK = /\b(kieng|kieng gi|kieng cu|kieng khem|an gi|uong gi|an duoc|uong duoc|an dc|uong dc|duoc an|duoc uong|nen an|nen uong|khong nen an|khong nen uong|tranh an|tranh uong|tranh gi|thuc don|che do an|an uong|an co sao|uong co sao|co an duoc|co uong duoc|nen tranh|mon gi|do an|thuc pham)\b/;
-const CAN_ASK = /\b(duoc (khong|ko|k|hongx?|hok|hk|kh|ha|chu|khum)|dc (khong|ko|k|hongx?|hok|hk|kh|khum)|duoc k|co sao|co sao khong|co sao ko|co hai|co anh huong|co bi sao|an nhieu|uong nhieu|co nen|nen khong|nen ko)\b/;
+const DIET_ASK = VN(/\b(kiêng|kiêng gì|kiêng cữ|kiêng khem|ăn gì|uống gì|ăn được|uống được|ăn dc|uống dc|ăn đc|uống đc|được ăn|được uống|nên ăn|nên uống|không nên ăn|không nên uống|tránh ăn|tránh uống|tránh gì|thực đơn|chế độ ăn|ăn uống|ăn có sao|uống có sao|có ăn được|có uống được|nên tránh|món gì|đồ ăn|thực phẩm)\b/);
+const CAN_ASK = VN(/\b(được (không|ko|k|hong|hongx|hông|hok|hk|kh|hả|ha|chứ|khum)|(?:dc|đc) (không|ko|k|hong|hongx|hông|hok|hk|kh|khum)|được k|có sao|có sao không|có sao ko|có hại|có ảnh hưởng|có bị sao|ăn nhiều|uống nhiều|có nên|nên không|nên ko)\b/);
 
 const CHIP = (s: string) => s.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
 
@@ -520,15 +521,15 @@ export function dietReply(text: string, prevDiet?: string, inDiet = false): Diet
   const all = [...d.avoid, ...(d.limit ?? []), ...d.good];
   const hit = findItem(text, all, condPhrase);
   // Nối tiếp từ tin trước: phải nhắc đúng 1 món hoặc hỏi kiểu "còn … thì sao / ăn gì nữa".
-  if (fromPrev && !hit && !/\b(con gi nua|an gi nua|kieng gi nua|con nua|them nua)\b/.test(n)) return null;
+  if (fromPrev && !hit && !VN(/\b(còn gì nữa|ăn gì nữa|kiêng gì nữa|còn nữa|thêm nữa)\b/).test(n)) return null;
   // Hỏi chung chung về bệnh ("bị sỏi thận thì sao?", "mỡ máu á") khi đang nói chuyện ăn uống / kiêng cữ → vẫn trả lời danh sách.
-  const vague = /\b(thi sao|the nao|lam sao|ra sao|sao a|sao ta|sao nhi|thi nhu nao|thi lam gi)\b/.test(n);
+  const vague = VN(/\b(thì sao|thế nào|làm sao|ra sao|sao ạ|sao à|sao ta|sao nhỉ|thì như nào|thì làm gì)\b/).test(n);
   if (!fromPrev && !hit && !DIET_ASK.test(n) && !vague && !inDiet) return null;
-  if (!fromPrev && hit && !DIET_ASK.test(n) && !CAN_ASK.test(n) && !/\b(thi sao|sao)\b/.test(n)) return null;
+  if (!fromPrev && hit && !DIET_ASK.test(n) && !CAN_ASK.test(n) && !VN(/\b(thì sao|sao)\b/).test(n)) return null;
   if (!hit) return { text: fullList(d), diet: d.id };
 
   const w = hit.word;
-  const verb = /\b(uong|nhau)\b/.test(n) ? "uống" : "ăn";
+  const verb = VR(/\b(uong|nhau)\b/).test(n) ? "uống" : "ăn";
   const why = hit.item.why ? ` — ${hit.item.why}` : "";
   let head: string;
   if (d.avoid.includes(hit.item)) head = `🚫 **${cap(d.name)} thì nên tránh ${w} nha.** Món này thuộc nhóm ${hit.item.t}${why}.`;

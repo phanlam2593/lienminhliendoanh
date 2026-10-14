@@ -1,3 +1,4 @@
+import { VR, VN } from "@/lib/viMatch";
 // ─────────────────────────────────────────────────────────────────────────────
 // KIẾN THỨC THUỐC CÓ NGUỒN (12/10) — dữ liệu, không phải bộ nhận diện câu hỏi.
 //
@@ -78,7 +79,7 @@ export const DRUGS: DrugEntry[] = [
     id: "paracetamol",
     ingredient: "paracetamol (acetaminophen)",
     names: ["paracetamol", "acetaminophen", "Panadol", "Efferalgan", "Hapacol"],
-    match: /\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/,
+    match: VR(/\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/),
     group: "thuốc giảm đau, hạ sốt",
     sources: [
       // (09/10/2026: bốn trang con cũ của NHS — About / Side effects / Taking with other medicines / Common questions — nay gộp về một trang này.)
@@ -105,24 +106,24 @@ export const DRUGS: DrugEntry[] = [
     interactions: [
       {
         id: "same",
-        match: /\b(thuoc cam|thuoc cum|thuoc ho)\b/,
+        match: VN(/\b(thuốc cảm|thuốc cúm|thuốc ho)\b/),
         with: "thuốc cảm, thuốc cúm, thuốc ho (nhiều loại cũng chứa paracetamol)",
         note: "Tránh uống cùng lúc với sản phẩm khác **cũng chứa paracetamol** (ví dụ thuốc cảm cúm) — cộng lại có thể thành uống quá nhiều paracetamol, điều này nguy hiểm. Xem dòng thành phần trên hộp trước khi uống.",
         src: [0, 1],
       },
       {
         id: "ibuprofen",
-        match: /\bibuprofen\b/,
+        match: VR(/\bibuprofen\b/),
         with: "ibuprofen",
         note: "Theo nguồn, **người lớn** có thể dùng paracetamol cùng ibuprofen nếu cần; nên thử từng thuốc riêng trước, và dùng mức thấp nhất còn hiệu quả, ngưng khi hết đau. Lưu ý: ibuprofen có những chống chỉ định riêng mà Lomi **chưa có dữ liệu đã kiểm chứng** — phần đó phải hỏi dược sĩ / bác sĩ.",
         src: [0],
       },
-      { id: "warfarin", match: /\bwarfarin\b/, with: "warfarin (thuốc chống đông)", note: "Đang dùng warfarin thì phải hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },
-      { id: "antisick", match: /\b(metoclopramide|metoclopramid|domperidone|domperidon)\b/, with: "metoclopramide, domperidone (thuốc chống nôn)", note: "Đang dùng metoclopramide hoặc domperidone thì hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },
-      { id: "flucloxacillin", match: /\bflucloxacillin\b/, with: "flucloxacillin (kháng sinh)", note: "Đang dùng flucloxacillin thì hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },
+      { id: "warfarin", match: VR(/\bwarfarin\b/), with: "warfarin (thuốc chống đông)", note: "Đang dùng warfarin thì phải hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },
+      { id: "antisick", match: VR(/\b(metoclopramide|metoclopramid|domperidone|domperidon)\b/), with: "metoclopramide, domperidone (thuốc chống nôn)", note: "Đang dùng metoclopramide hoặc domperidone thì hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },
+      { id: "flucloxacillin", match: VR(/\bflucloxacillin\b/), with: "flucloxacillin (kháng sinh)", note: "Đang dùng flucloxacillin thì hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },
       {
         id: "alcohol",
-        match: /\b(ruou|bia|nhau|do uong co con)\b/,
+        match: VN(/\b(rượu|bia|nhậu|đồ uống có cồn)\b/),
         with: "rượu bia",
         note: "Theo NHS, khi dùng paracetamol vẫn có thể ăn uống bình thường, kể cả rượu bia. Nhưng người nghiện rượu hoặc hay uống rất nhiều một lần thì paracetamol có thể không phù hợp, và MedlinePlus ghi **không nên dùng** paracetamol nếu ngày nào cũng uống từ 3 ly rượu bia trở lên. Đang uống nhiều thì hỏi dược sĩ / bác sĩ trước.",
         src: [0, 1],
@@ -144,7 +145,7 @@ export const DRUGS: DrugEntry[] = [
     id: "aspirin",
     ingredient: "aspirin (acid acetylsalicylic)",
     names: ["aspirin", "acid acetylsalicylic"],
-    match: /\b(aspirin|aspirine|acid acetylsalicylic|axit acetylsalicylic|acetylsalicylic)\b/,
+    match: VR(/\b(aspirin|aspirine|acid acetylsalicylic|axit acetylsalicylic|acetylsalicylic)\b/),
     group: "thuốc kháng viêm không steroid (NSAID), thuộc nhóm salicylat",
     sources: [
       // (11/10/2026: các trang cũ "aspirin for pain relief" / "low-dose aspirin" của NHS nay gộp về một trang này.)
@@ -175,26 +176,26 @@ export const DRUGS: DrugEntry[] = [
     interactions: [
       {
         id: "nsaid",
-        match: /\b(ibuprofen|naproxen|nsaid|nsaids|khang viem khong steroid)\b/,
+        match: VR(/\b(ibuprofen|naproxen|nsaid|nsaids|khang viem khong steroid)\b/),
         with: "ibuprofen, naproxen và các thuốc kháng viêm NSAID khác",
         note: "NHS xếp các thuốc NSAID khác (như ibuprofen, naproxen) vào nhóm **có thể không hợp** khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước. Riêng người đang uống aspirin đều đặn để phòng nhồi máu cơ tim, đột quỵ: MedlinePlus ghi không tự uống ibuprofen để giảm đau, hạ sốt khi chưa hỏi bác sĩ.",
         src: [0, 1],
       },
-      { id: "anticoagulant", match: /\b(warfarin|rivaroxaban|thuoc chong dong|chong dong mau)\b/, with: "thuốc chống đông (như warfarin, rivaroxaban)", note: "Thuốc chống đông (như warfarin, rivaroxaban) nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — phải báo bác sĩ trước khi dùng.", src: [0] },
-      { id: "bp", match: /\b(thuoc huyet ap|thuoc ha huyet ap|thuoc ha ap|thuoc tang huyet ap|thuoc cao huyet ap)\b/, with: "thuốc hạ huyết áp", note: "Một số thuốc hạ huyết áp nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — đang uống thuốc huyết áp thì báo bác sĩ / dược sĩ trước khi dùng aspirin.", src: [0] },
-      { id: "steroid", match: /\b(steroid|steroids|corticoid|corticosteroid)\b/, with: "một số thuốc steroid (corticoid)", note: "Một số thuốc steroid nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
-      { id: "antidepressant", match: /\b(thuoc chong tram cam|chong tram cam|thuoc tram cam|antidepressant)\b/, with: "một số thuốc chống trầm cảm", note: "Một số thuốc chống trầm cảm nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
-      { id: "methotrexate", match: /\bmethotrexat(e)?\b/, with: "methotrexate", note: "Methotrexate nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — phải hỏi bác sĩ trước.", src: [0] },
+      { id: "anticoagulant", match: VN(/\b(warfarin|rivaroxaban|thuốc chống đông|chống đông máu)\b/), with: "thuốc chống đông (như warfarin, rivaroxaban)", note: "Thuốc chống đông (như warfarin, rivaroxaban) nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — phải báo bác sĩ trước khi dùng.", src: [0] },
+      { id: "bp", match: VN(/\b(thuốc huyết áp|thuốc hạ huyết áp|thuốc hạ áp|thuốc tăng huyết áp|thuốc cao huyết áp)\b/), with: "thuốc hạ huyết áp", note: "Một số thuốc hạ huyết áp nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — đang uống thuốc huyết áp thì báo bác sĩ / dược sĩ trước khi dùng aspirin.", src: [0] },
+      { id: "steroid", match: VR(/\b(steroid|steroids|corticoid|corticosteroid)\b/), with: "một số thuốc steroid (corticoid)", note: "Một số thuốc steroid nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
+      { id: "antidepressant", match: VN(/\b(thuốc chống trầm cảm|chống trầm cảm|thuốc trầm cảm|antidepressant)\b/), with: "một số thuốc chống trầm cảm", note: "Một số thuốc chống trầm cảm nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
+      { id: "methotrexate", match: VR(/\bmethotrexat(e)?\b/), with: "methotrexate", note: "Methotrexate nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — phải hỏi bác sĩ trước.", src: [0] },
       {
         id: "paracetamol",
-        match: /\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/,
+        match: VR(/\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/),
         with: "paracetamol",
         note: "Theo NHS, **có thể** dùng aspirin cùng lúc với paracetamol nếu cần; nếu chỉ để giảm đau thì nên thử riêng từng thuốc trước. (Người không dùng được aspirin — ví dụ trẻ từ 15 tuổi trở xuống — thì vẫn không dùng.)",
         src: [0],
       },
       {
         id: "alcohol",
-        match: /\b(ruou|bia|nhau|do uong co con)\b/,
+        match: VN(/\b(rượu|bia|nhậu|đồ uống có cồn)\b/),
         with: "rượu bia",
         note: "NHS khuyên **hạn chế rượu bia** khi dùng aspirin vì rượu bia làm tăng nguy cơ gặp tác dụng phụ. MedlinePlus ghi: ngày nào cũng uống từ ba ly rượu bia trở lên thì hỏi bác sĩ xem có nên dùng aspirin không.",
         src: [0, 1],
@@ -368,7 +369,7 @@ export const DRUG_CLAIMS_UNVERIFIED: { id: string; claim: string; where: string[
   { id: "herbal-liver", claim: "Không tự dùng thuốc nam, thực phẩm chức năng “mát gan” không rõ nguồn gốc.", where: ["lomiSymptoms: liver (avoid)", "lomiDiet"], note: "Lời dặn thận trọng, chưa có nguồn riêng." },
 ];
 
-const bare = (x: string) => ` ${x.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d").replace(/Đ/g, "D").toLowerCase().replace(/[^a-z0-9\s-]/g, " ").replace(/\s+/g, " ").trim()} `;
+const bare = (x: string) => ` ${x.normalize("NFD").replace(VR(/[̀-ͯ]/g), "").replace(VR(/đ/g), "d").replace(VR(/Đ/g), "D").toLowerCase().replace(VR(/[^a-z0-9\s-]/g), " ").replace(/\s+/g, " ").trim()} `;
 
 /** Thuốc có dữ liệu đã kiểm chứng được nhắc trong câu (null nếu không có). */
 export function findDrug(text: string): DrugEntry | null {

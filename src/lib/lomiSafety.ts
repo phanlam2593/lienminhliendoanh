@@ -20,6 +20,7 @@
 import { P, negated, txt, type Txt } from "@/lib/lomiStory";
 import { YOU_MARK, type Frame } from "@/lib/lomiParse";
 import type { Addr } from "@/lib/lomiAddress";
+import { VR, VN } from "@/lib/viMatch";
 
 export type HarmKind = "violence" | "threat" | "control";
 export type Harm = {
@@ -67,7 +68,7 @@ const CONTROL = P(
   `(?:kiểm tra|coi|xem|đọc|lục|soi|check)(?: lén| trộm)? (?:điện thoại|tin nhắn|zalo|facebook|messenger|máy|đt)(?: của)? ${SELF}|(?:không cho|ko cho|k cho|cấm|không muốn cho|chẳng cho) ${SELF}(?: \\S+){0,2} (?:đi|gặp|chơi|làm|học|mặc|nói chuyện|liên lạc|ra ngoài|kết bạn|về)|bắt ${SELF}(?: \\S+){0,2} (?:nghỉ|xoá|xóa|ở nhà|báo cáo|đưa|chặn|block|bỏ)|kiểm soát ${SELF}|${SELF} bị kiểm soát|theo dõi ${SELF}|định vị ${SELF}|giữ (?:hết )?(?:tiền lương|tiền|lương|giấy tờ|điện thoại|thẻ)(?: của)? ${SELF}|đòi (?:mật khẩu|pass)`,
   `(?:kiem tra|coi|xem|doc|luc|soi|check)(?: len| trom)? (?:dien thoai|tin nhan|zalo|facebook|messenger|may|dt)(?: cua)? ${SELF_B}|(?:khong cho|ko cho|k cho|cam|khong muon cho|chang cho) ${SELF_B}(?: \\S+){0,2} (?:di|gap|choi|lam|hoc|mac|noi chuyen|lien lac|ra ngoai|ket ban|ve)|bat ${SELF_B}(?: \\S+){0,2} (?:nghi|xoa|o nha|bao cao|dua|chan|block|bo)|kiem soat ${SELF_B}|${SELF_B} bi kiem soat|theo doi ${SELF_B}|dinh vi ${SELF_B}|giu (?:het )?(?:tien luong|tien|luong|giay to|dien thoai|the)(?: cua)? ${SELF_B}|doi (?:mat khau|pass)`,
 );
-const NEG_IN = / (chưa|không|ko|chẳng|chả|hông|hổng|chua|khong|chang|đâu có|dau co) /u;
+const NEG_IN = VR(/ (chưa|không|ko|chẳng|chả|hông|hổng|chua|khong|chang|đâu có|dau co) /u);
 const HAS_PARTNER = P(PARTNER, PARTNER_B);
 const HAS_KIN = P(KIN, KIN_B);
 // Câu giả định / đùa / kể phim — không phải chuyện đang xảy ra với người kể.
@@ -100,10 +101,10 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
 
   // Người KỂ là người làm ("a lỡ doạ đánh nó") thì không phải chuyện người kể bị hại → để lớp khác đáp.
   const body = t.loose ? t.b : t.s;
-  const selfActs = f?.subject === "self" && !/ (bị|bi) /.test(body);
+  const selfActs = f?.subject === "self" && !VR(/ (bị|bi) /).test(body);
   // "ảnh còn doạ đánh e" là bị DOẠ (chưa bị đánh) → xét trước, để lời đáp nói đúng chuyện.
   const th0 = hit(THREAT(t));
-  if (th0 && !selfActs && !/(?:^| )(bị|bi) (?:\S+ ){0,2}(?:đánh|danh|tát|tat|đấm|dam)(?: |$)/u.test(body.slice(0, th0.index ?? 0))) return { kind: "threat", victim: "self", actor };
+  if (th0 && !selfActs && !VR(/(?:^| )(bị|bi) (?:\S+ ){0,2}(?:đánh|danh|tát|tat|đấm|dam)(?: |$)/u).test(body.slice(0, th0.index ?? 0))) return { kind: "threat", victim: "self", actor };
   const vObj = hit(V_OBJ(t));
   const vPas = hit(V_PASSIVE(t));
   // "ảnh CHƯA BAO GIỜ đánh e" — từ phủ định nằm GIỮA người làm và việc làm → không phải kể chuyện bị đánh.
@@ -117,7 +118,7 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
   if (vAct && !selfActs) {
     // "ba a hay đánh mẹ a" — sau động từ là một người khác trong nhà → người bị là người đó; "chồng e hay đánh đập" → chính người kể.
     const after = body.slice((vAct.index ?? 0) + vAct[0].length).trim().split(" ")[0] ?? "";
-    const other = /^(mẹ|má|ba|bố|con|chị|bà|vợ|em|me|ma|bo|chi|vo|cháu|chau)$/u.test(after);
+    const other = VR(/^(mẹ|má|ba|bố|con|chị|bà|vợ|em|me|ma|bo|chi|vo|cháu|chau)$/u).test(after);
     return { kind: "violence", victim: other ? "other" : "self", actor };
   }
   const th = hit(THREAT(t));
@@ -191,7 +192,7 @@ const HOW_SAY = P("nói sao|nói gì|nói thế nào|nên làm gì|làm sao|làm
 export function boundaryAdvice(raw: string, h: Harm, lastText: string): string | null {
   if (h.kind !== "control" || h.victim !== "self") return null;
   const t = txt(raw);
-  const yesToOffer = /cách nói ra ranh giới của mình/.test(lastText) && /^(co|u|uh|um|uhm|ok|oke|duoc|muon|goi y di|da|vang)( |$)/.test(t.b.trim());
+  const yesToOffer = VR(/cách nói ra ranh giới của mình/).test(lastText) && VN(/^(có|ừ|u|uh|ừm|um|uhm|ok|oke|được|muốn|gợi ý đi|dạ|vâng)( |$)/).test(t.b.trim());
   if (!HOW_SAY(t) && !yesToOffer) return null;
   return [
     "Nói ra ranh giới thì nên ngắn, bình tĩnh, và nói về cảm giác của mình thay vì buộc tội. Ví dụ:",
@@ -230,32 +231,32 @@ export function safetyFollow(raw: string, lastText: string): string | null {
   const t = txt(raw);
   if (t.words > 8) return null;
   const b = t.b.trim();
-  const yes = /^(co|u|uh|um|uhm|da|vang|roi|co chu|co roi|nhieu lan|hay lam|thuong xuyen)( |$)/.test(b);
-  const no = /^(khong|ko|k|hong|chua|chua bao gio|khong co)( |$)/.test(b);
+  const yes = VN(/^(có|ừ|u|uh|ừm|um|uhm|dạ|vâng|rồi|có chứ|có rồi|nhiều lần|hay làm|thường xuyên)( |$)/).test(b);
+  const no = VN(/^(không|ko|k|hông|hong|chưa|chưa bao giờ|không có)( |$)/).test(b);
   // Lomi vừa hỏi "người đó có bao giờ nặng lời hay doạ nạt … không?"
-  if (/nặng lời hay doạ nạt \S+ không\?\s*$/.test(lastText.trim())) {
+  if (VR(/nặng lời hay doạ nạt \S+ không\?\s*$/).test(lastText.trim())) {
     if (yes) return `Vậy là ngoài chuyện bị quản, bạn còn bị nặng lời, doạ nạt nữa — điều đó không ổn chút nào, và **không phải lỗi của bạn**.\n\nAn toàn là trước hết:\n${HELP(false)}\n\n${SAFE_Q}`;
     if (no) return "Vậy cũng đỡ một phần 💚 Nhưng bị quản từng chút vẫn là điều bạn có quyền không chấp nhận.\n\nBạn muốn Lomi gợi ý cách nói ra ranh giới của mình, hay chỉ cần có người nghe thôi?";
     return null;
   }
   // Lomi vừa hỏi "… có bị thương ở đâu không?" (chuyện bị bạn bè đánh ở trường).
-  if (/có bị thương ở đâu không(?: \S+)?\?\s*$/.test(lastText.trim())) {
+  if (VR(/có bị thương ở đâu không(?: \S+)?\?\s*$/).test(lastText.trim())) {
     const tail = "Chuyện này xảy ra lần đầu hay đã nhiều lần rồi bạn?";
     if (no) return `Không bị thương là đỡ lo một phần 💚 Nhưng chuyện này vẫn cần người lớn và nhà trường biết để không lặp lại.\n\n${tail}`;
-    if (yes || /(dau|sung|bam|tim|chay mau|tray|xuoc|gay|u dau|rach)/.test(b))
+    if (yes || VN(/(đau|sưng|bầm|tím|chảy máu|trầy|xước|gãy|u đầu|rách)/).test(b))
       return `Vậy nên đi khám sớm cho yên tâm, và giữ lại giấy khám để khi làm việc với nhà trường có căn cứ rõ ràng. Bị đánh vào đầu mà sau đó đau đầu nhiều, nôn, lơ mơ thì đi viện ngay nha.\n\n${tail}`;
     return null;
   }
   // Lomi vừa hỏi "có ai ở gần … ở cùng / cho ở nhờ không?"
-  if (/(ở cùng mấy hôm này|cho bạn ở nhờ|cho (anh|chị|em) ở nhờ) không\?\s*$/.test(lastText.trim())) {
+  if (VR(/(ở cùng mấy hôm này|cho bạn ở nhờ|cho (anh|chị|em) ở nhờ) không\?\s*$/).test(lastText.trim())) {
     if (no) return "Vậy mình tính cách khác nha: khoá cửa cẩn thận, giữ điện thoại luôn có pin và lưu sẵn số **113**; báo cho một người bạn tin (dù ở xa) biết tình hình và hẹn giờ gọi cho nhau mỗi ngày. Cần chỗ tạm lánh thì gọi **Ngôi nhà Bình yên 1900 969 680** để được tư vấn.";
     if (yes) return "Vậy tốt rồi 💚 Bạn nhắn cho người đó biết chuyện ngay hôm nay nha, đừng chờ tới lúc có chuyện mới nói.";
     return null;
   }
-  if (!/có đang ở chỗ an toàn không\?\s*$/.test(lastText.trim())) return null;
-  if (/^(khong|ko|k|hong|chua|khong an toan|chua an toan|khong biet|khong chac|so lam|dang so)( |$)/.test(b))
+  if (!VR(/có đang ở chỗ an toàn không\?\s*$/).test(lastText.trim())) return null;
+  if (VN(/^(không|ko|k|hông|hong|chưa|không an toàn|chưa an toàn|không biết|không chắc|sợ lắm|đáng sợ)( |$)/).test(b))
     return "Vậy việc đầu tiên là tới chỗ có người khác: nhà người thân, hàng xóm, chỗ đông người — và gọi **113** nếu người đó còn ở gần hoặc bạn thấy sắp có chuyện. Mang theo điện thoại và giấy tờ nếu kịp.\n\nBạn có ai ở gần để qua ngay bây giờ không?";
-  if (/^(co|u|uh|um|uhm|da|vang|roi|on|an toan|dang an toan|tam on|co chu|dang o nha (me|ban|ngoai))( |$)/.test(b))
+  if (VN(/^(có|ừ|u|uh|ừm|um|uhm|dạ|vâng|rồi|ổn|an toàn|đang an toàn|tạm ổn|có chứ|đang ở nhà (mẹ|bạn|ngoại))( |$)/).test(b))
     return "Vậy Lomi đỡ lo một chút 💚 Bạn giữ mấy số ở trên nha — lúc nào thấy không an toàn thì đừng chần chừ gọi **113**.\n\nGiờ bạn muốn kể thêm chuyện đã xảy ra, hay muốn Lomi gợi ý vài cách tự bảo vệ mình?";
   return null;
 }

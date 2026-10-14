@@ -15,6 +15,7 @@
 
 import { normalizeVi } from "@/lib/lomiFaq";
 import { HEALTH, HEART, normStrict } from "@/lib/lomiAccent";
+import { VR, VN } from "@/lib/viMatch";
 
 type Sym = { id: string; label: string; re: RegExp; red?: string };
 
@@ -22,107 +23,107 @@ type Sym = { id: string; label: string; re: RegExp; red?: string };
 const SYMPTOMS: Sym[] = [
   // Toàn thân
   // 11/10: "con a sốt từ tối qua", "bé sốt cả đêm" — "sốt" đứng sau người bệnh / trước mốc thời gian cũng là sốt ("sốt ruột", "sốt sắng" thì không).
-  { id: "fever", label: "sốt", re: /\b((bi|dang|hoi|phat|con|van|lai|them|co) sot|sot (cao|nhe|hoai|lien|keo dai|ve dem|ve chieu|mien man|\d+)|nong sot|sot ret|(a|anh|e|em|c|chi|minh|toi|tui|be|chau|me|ma|bo|vo|chong|no) sot(?! ruot| sang)|sot (tu|ca|may|hon|gan|suot|roi))\b/ },
-  { id: "highfever", label: "sốt cao", re: /\b(sot cao|sot (39|40|41)|sot tren 39)\b/ },
-  { id: "chills", label: "ớn lạnh", re: /\b(on lanh|lanh run|run minh|gai oc|rung minh)\b/ },
-  { id: "fatigue", label: "mệt mỏi", re: /\b(met moi|met lu|u oai|kiet suc|duoi suc|khong co suc|mat suc|met nhieu|hoi met|thay met|bi met|dang met|met met|met ca nguoi|nguoi met)\b/ },
-  { id: "bodyache", label: "đau nhức mình mẩy", re: /\b(dau nhuc (nguoi|minh|toan than|co)|nhuc moi|dau minh may|moi het nguoi|dau nhuc|nhuc xuong|dau co bap|e am)\b/ },
-  { id: "sweat", label: "đổ mồ hôi nhiều", re: /\b(do mo hoi|ra mo hoi nhieu|va mo hoi|mo hoi dem|toat mo hoi)\b/ },
-  { id: "weightloss", label: "sụt cân", re: /\b(sut can|gay sut|giam can khong ro ly do|tu nhien gay)\b/ },
-  { id: "thirst", label: "khát nước nhiều", re: /\b(khat nuoc nhieu|hay khat|khat lien tuc|luc nao cung khat)\b/ },
-  { id: "pale", label: "da xanh xao", re: /\b(xanh xao|da xanh|nhot nhat|mat xanh)\b/ },
-  { id: "dizzy", label: "chóng mặt", re: /\b((bi|hay|de|hoi) chong mat|chong mat (qua|hoa mat|buon non|khi dung|khi quay|khi doi tu the)|hoa mat|choang vang|xay xam|quay cuong)\b/ },
-  { id: "faint", label: "ngất xỉu", re: /\b(ngat xiu|bi ngat|xiu di|ngat di|bat tinh|lim di)\b/, red: "ngất, bất tỉnh" },
-  { id: "chestpain", label: "đau ngực", re: /\b(dau nguc|tuc nguc|nang nguc|dau that nguc|dau nhoi nguc)\b/, red: "đau hoặc tức ngực" },
-  { id: "palp", label: "tim đập nhanh", re: /\b(tim dap nhanh|tim dap manh|tim dap loan|hoi hop danh trong nguc|danh trong nguc)\b/ },
-  { id: "breath", label: "khó thở", re: /\b(kho tho|tho doc|hut hoi|tho khong noi|nghet tho|tho kho khan)\b/ },
-  { id: "severebreath", label: "khó thở nặng", re: /\b(kho tho (nang|du doi|lam|qua)|tim tai|moi tim|khong tho duoc)\b/, red: "khó thở nặng, tím môi" },
-  { id: "stroke", label: "yếu / tê nửa người, méo miệng, nói khó", re: /\b(yeu nua nguoi|liet nua nguoi|te nua nguoi|meo mieng|meo mat|noi ngong|noi kho dot ngot|noi lap bap dot ngot)\b/, red: "yếu liệt nửa người, méo miệng, nói khó (dấu hiệu đột quỵ)" },
-  { id: "seizure", label: "co giật", re: /\b(co giat|len con giat)\b/, red: "co giật" },
-  { id: "swellface", label: "sưng môi / mặt", re: /\b(sung moi|sung mat|phu mat|sung mi mat|sung hong)\b/ },
-  { id: "bleed", label: "chảy máu bất thường", re: /\b(chay mau cam|chay mau chan rang|cham do tren da|xuat huyet duoi da|bam tim de|chay mau khong cam)\b/ },
+  { id: "fever", label: "sốt", re: VN(/\b((bị|đang|hơi|phát|còn|vẫn|lại|thêm|có) sốt|sốt (cao|nhẹ|hoài|liền|kéo dài|về đêm|về chiều|miên man|\d+)|nóng sốt|sốt rét|(a|anh|e|em|c|chị|mình|tôi|tui|bé|cháu|mẹ|má|bố|vợ|chồng|nó) sốt(?! ruột| sắng)|sốt (từ|cả|mấy|hơn|gần|suốt|rồi))\b/) },
+  { id: "highfever", label: "sốt cao", re: VN(/\b(sốt cao|sốt (39|40|41)|sốt trên 39)\b/) },
+  { id: "chills", label: "ớn lạnh", re: VN(/\b(ớn lạnh|lạnh run|run mình|gai ốc|rùng mình)\b/) },
+  { id: "fatigue", label: "mệt mỏi", re: VN(/\b(mệt mỏi|mệt lử|u oai|uể oải|kiệt sức|đuối sức|không có sức|mất sức|mệt nhiều|hơi mệt|thấy mệt|bị mệt|đang mệt|mệt mệt|mệt cả người|người mệt)\b/) },
+  { id: "bodyache", label: "đau nhức mình mẩy", re: VN(/\b(đau nhức (người|mình|toàn thân|cơ)|nhức mỏi|đau mình mẩy|mỏi hết người|đau nhức|nhức xương|đau cơ bắp|ê ẩm)\b/) },
+  { id: "sweat", label: "đổ mồ hôi nhiều", re: VN(/\b(đổ mồ hôi|ra mồ hôi nhiều|vã mồ hôi|mồ hôi đêm|toát mồ hôi)\b/) },
+  { id: "weightloss", label: "sụt cân", re: VN(/\b(sụt cân|gầy sút|giảm cân không rõ lý do|tự nhiên gầy)\b/) },
+  { id: "thirst", label: "khát nước nhiều", re: VN(/\b(khát nước nhiều|hay khát|khát liên tục|lúc nào cũng khát)\b/) },
+  { id: "pale", label: "da xanh xao", re: VN(/\b(xanh xao|da xanh|nhợt nhạt|mặt xanh)\b/) },
+  { id: "dizzy", label: "chóng mặt", re: VN(/\b((bị|hay|dễ|hơi) chóng mặt|chóng mặt (quá|hoa mắt|buồn nôn|khi đứng|khi quay|khi đổi tư thế)|hoa mắt|choáng váng|xây xẩm|quay cuồng)\b/) },
+  { id: "faint", label: "ngất xỉu", re: VN(/\b(ngất xỉu|bị ngất|xỉu đi|ngất đi|bất tỉnh|lịm đi)\b/), red: "ngất, bất tỉnh" },
+  { id: "chestpain", label: "đau ngực", re: VN(/\b(đau ngực|tức ngực|nặng ngực|đau thắt ngực|đau nhói ngực)\b/), red: "đau hoặc tức ngực" },
+  { id: "palp", label: "tim đập nhanh", re: VN(/\b(tim đập nhanh|tim đập mạnh|tim đập loạn|hồi hộp đánh trống ngực|đánh trống ngực)\b/) },
+  { id: "breath", label: "khó thở", re: VN(/\b(khó thở|thở dốc|hụt hơi|thở không nổi|nghẹt thở|thở khó khăn)\b/) },
+  { id: "severebreath", label: "khó thở nặng", re: VN(/\b(khó thở (nặng|dữ dội|lắm|quá)|tím tái|môi tím|không thở được)\b/), red: "khó thở nặng, tím môi" },
+  { id: "stroke", label: "yếu / tê nửa người, méo miệng, nói khó", re: VN(/\b(yếu nửa người|liệt nửa người|tê nửa người|méo miệng|méo mặt|nói ngọng|nói khó đột ngột|nói lắp bắp đột ngột)\b/), red: "yếu liệt nửa người, méo miệng, nói khó (dấu hiệu đột quỵ)" },
+  { id: "seizure", label: "co giật", re: VN(/\b(co giật|lên cơn giật)\b/), red: "co giật" },
+  { id: "swellface", label: "sưng môi / mặt", re: VN(/\b(sưng môi|sưng mặt|phù mặt|sưng mí mắt|sưng họng)\b/) },
+  { id: "bleed", label: "chảy máu bất thường", re: VN(/\b(chảy máu cam|chảy máu chân răng|chấm đỏ trên da|xuất huyết dưới da|bầm tím dễ|chảy máu không cầm)\b/) },
   // Đầu, mắt, tai, mũi, họng
-  { id: "headache", label: "đau đầu", re: /\b(dau dau|nhuc dau|dau nua dau|dau vung tran|dau vung dinh|dau sau gay|dau bua bo)\b/ },
-  { id: "suddenhead", label: "đau đầu dữ dội đột ngột", re: /\b(dau dau (du doi|dot ngot|nhu bua bo|nhat tu truoc toi gio))\b/, red: "đau đầu dữ dội đột ngột" },
-  { id: "eyepain", label: "đau hốc mắt", re: /\b(dau hoc mat|dau sau mat|nhuc hoc mat)\b/ },
-  { id: "light", label: "sợ ánh sáng / tiếng ồn", re: /\b(so anh sang|choi mat|so tieng on|kho chiu voi anh sang)\b/ },
-  { id: "redeye", label: "đỏ mắt", re: /\b(do mat|mat do|mat bi do|ghen mat|nhieu ghen)\b/ },
-  { id: "itcheye", label: "ngứa / chảy nước mắt", re: /\b(ngua mat|chay nuoc mat|cay mat|xot mat)\b/ },
-  { id: "dryeye", label: "khô mỏi mắt", re: /\b(kho mat|(bi|hay|de) moi mat|moi mat (qua|khi|lam|hoai)|mat moi|mo mat khi nhin lau|nhuc mat)\b/ },
-  { id: "earpain", label: "đau tai / ù tai", re: /\b(dau tai|u tai|chay mu tai|chay nuoc tai|nghe kem|nghe khong ro)\b/ },
-  { id: "stuffy", label: "nghẹt mũi", re: /\b(nghet mui|ngat mui|tac mui|kho tho bang mui)\b/ },
-  { id: "runny", label: "chảy nước mũi", re: /\b(chay mui|so mui|chay nuoc mui|nuoc mui trong)\b/ },
-  { id: "sneeze", label: "hắt hơi", re: /\b(hat hoi|hat xi)\b/ },
-  { id: "yellowmucus", label: "dịch mũi vàng xanh", re: /\b(mui vang|mui xanh|dich mui vang|dich mui xanh|nuoc mui vang|nuoc mui xanh|chay mu mui)\b/ },
-  { id: "facepain", label: "đau nhức vùng mặt / trán", re: /\b(dau nhuc mat|nhuc vung mat|dau vung ma|dau nhuc tran|nang mat|dau quanh mui)\b/ },
-  { id: "smell", label: "mất mùi / vị", re: /\b(mat khu giac|mat vi giac|khong ngui duoc mui|khong ngui thay mui|an khong co vi|mat mui)\b/ },
-  { id: "spray", label: "dùng thuốc xịt thông mũi lâu", re: /\b(otilin|otrivin|naphazolin|xylometazolin|thuoc xit mui|xit mui (hoai|hang ngay|moi ngay|lau|thuong xuyen)|khong xit khong tho duoc)\b/ },
-  { id: "sorethroat", label: "đau họng", re: /\b(dau hong(?! lung| ben| phai| trai| mot ben)|rat hong|viem hong|nuot dau|dau khi nuot|ngua hong|vuong hong)\b/ },
-  { id: "hoarse", label: "khàn tiếng", re: /\b(khan tieng|mat tieng|khan giong)\b/ },
-  { id: "cough", label: "ho", re: /\b((bi|dang|con|hay|van|lai|them|nay|may nay|mat) ho|(a|anh|e|em|c|chi|minh|toi|tui|be) ho(?! (a|anh|e|em|c|chi|minh|toi|tui|hang|noi|ngoai|nha|cua|ten|ho)\b)(?= |$)|ho (khan|co dom|nhieu|hoai|dai|keo dai|ve dem|lien tuc|sac sua|khong dut|suot|qua(?! dang)|ghe|lam|mai|hoai)|ho (ca |hon |gan |duoc )?(\d+|mot|hai|ba|may|vai) (ngay|hom|dem|tuan|thang)|ho tu (hom|tuan|thang|toi|sang|dem)|ho (thi (nen|uong|kieng|lam)|nen (uong|lam|an|kieng)|co sao khong|co nguy hiem))\b/ },
-  { id: "phlegm", label: "ho có đờm", re: /\b(ho co dom|khac dom|dom vang|dom xanh|nhieu dom|co dom)\b/ },
-  { id: "wheeze", label: "thở khò khè", re: /\b(kho khe|tho rit|tho khe khe)\b/ },
-  { id: "bloodcough", label: "ho ra máu", re: /\b(ho ra mau|khac ra mau)\b/, red: "ho ra máu" },
-  { id: "mouthulcer", label: "loét miệng", re: /\b(loet mieng|nhiet mieng|lo mieng|nhiet luoi)\b/ },
-  { id: "toothache", label: "đau răng / chảy máu chân răng", re: /\b(dau rang|e buot rang|sung loi|sung nuou|chay mau nuou|sau rang|rang e)\b/ },
+  { id: "headache", label: "đau đầu", re: VN(/\b(đau đầu|nhức đầu|đau nửa đầu|đau vùng trán|đau vùng đỉnh|đau sau gáy|đau búa bổ)\b/) },
+  { id: "suddenhead", label: "đau đầu dữ dội đột ngột", re: VN(/\b(đau đầu (dữ dội|đột ngột|như búa bổ|nhất từ trước tới giờ))\b/), red: "đau đầu dữ dội đột ngột" },
+  { id: "eyepain", label: "đau hốc mắt", re: VN(/\b(đau hốc mắt|đau sau mắt|nhức hốc mắt)\b/) },
+  { id: "light", label: "sợ ánh sáng / tiếng ồn", re: VN(/\b(sợ ánh sáng|chói mắt|sợ tiếng ồn|khó chịu với ánh sáng)\b/) },
+  { id: "redeye", label: "đỏ mắt", re: VN(/\b(đỏ mắt|mắt đỏ|mắt bị đỏ|ghèn mắt|nhiều ghèn)\b/) },
+  { id: "itcheye", label: "ngứa / chảy nước mắt", re: VN(/\b(ngứa mắt|chảy nước mắt|cay mắt|xót mắt)\b/) },
+  { id: "dryeye", label: "khô mỏi mắt", re: VN(/\b(khô mắt|(bị|hay|dễ) mỏi mắt|mỏi mắt (quá|khi|lắm|hoài)|mắt mỏi|mờ mắt khi nhìn lâu|nhức mắt)\b/) },
+  { id: "earpain", label: "đau tai / ù tai", re: VN(/\b(đau tai|ù tai|chảy mủ tai|chảy nước tai|nghe kém|nghe không rõ)\b/) },
+  { id: "stuffy", label: "nghẹt mũi", re: VN(/\b(nghẹt mũi|ngạt mũi|tắc mũi|khó thở bằng mũi)\b/) },
+  { id: "runny", label: "chảy nước mũi", re: VN(/\b(chảy mũi|sổ mũi|chảy nước mũi|nước mũi trong)\b/) },
+  { id: "sneeze", label: "hắt hơi", re: VN(/\b(hắt hơi|hắt xì)\b/) },
+  { id: "yellowmucus", label: "dịch mũi vàng xanh", re: VN(/\b(mũi vàng|mũi xanh|dịch mũi vàng|dịch mũi xanh|nước mũi vàng|nước mũi xanh|chảy mủ mũi)\b/) },
+  { id: "facepain", label: "đau nhức vùng mặt / trán", re: VN(/\b(đau nhức mặt|nhức vùng mặt|đau vùng má|đau nhức trán|nặng mặt|đau quanh mũi)\b/) },
+  { id: "smell", label: "mất mùi / vị", re: VN(/\b(mất khứu giác|mất vị giác|không ngửi được mùi|không ngửi thấy mùi|ăn không có vị|mất mùi)\b/) },
+  { id: "spray", label: "dùng thuốc xịt thông mũi lâu", re: VN(/\b(otilin|otrivin|naphazolin|xylometazolin|thuốc xịt mũi|xịt mũi (hoài|hàng ngày|mỗi ngày|lâu|thường xuyên)|không xịt không thở được)\b/) },
+  { id: "sorethroat", label: "đau họng", re: VN(/\b(đau họng(?! lưng| bên| phải| trái| một bên)|rát họng|viêm họng|nuốt đau|đau khi nuốt|ngứa họng|vướng họng)\b/) },
+  { id: "hoarse", label: "khàn tiếng", re: VN(/\b(khàn tiếng|mất tiếng|khàn giọng)\b/) },
+  { id: "cough", label: "ho", re: VN(/\b((bị|đang|còn|hay|vẫn|lại|thêm|này|mấy nay|mất) ho|(a|anh|e|em|c|chị|mình|tôi|tui|bé) ho(?! (a|anh|e|em|c|chị|mình|tôi|tui|hàng|nội|ngoại|nhà|của|tên|ho|họ)\b)(?= |$)|ho (khan|có đờm|nhiều|hoài|dai|kéo dài|về đêm|liên tục|sặc sụa|không dứt|suốt|quá(?! đáng)|ghê|lắm|mãi|hoài)|ho (cả |hơn |gần |được )?(\d+|một|hai|ba|mấy|vài) (ngày|hôm|đêm|tuần|tháng)|ho từ (hôm|tuần|tháng|tối|sáng|đêm)|ho (thì (nên|uống|kiêng|làm)|nên (uống|làm|ăn|kiêng)|có sao không|có nguy hiểm))\b/) },
+  { id: "phlegm", label: "ho có đờm", re: VN(/\b(ho có đờm|khạc đờm|đờm vàng|đờm xanh|nhiều đờm|có đờm)\b/) },
+  { id: "wheeze", label: "thở khò khè", re: VN(/\b(khò khè|thở rít|thở khè khè)\b/) },
+  { id: "bloodcough", label: "ho ra máu", re: VN(/\b(ho ra máu|khạc ra máu)\b/), red: "ho ra máu" },
+  { id: "mouthulcer", label: "loét miệng", re: VN(/\b(loét miệng|nhiệt miệng|lở miệng|nhiệt lưỡi)\b/) },
+  { id: "toothache", label: "đau răng / chảy máu chân răng", re: VN(/\b(đau răng|ê buốt răng|sưng lợi|sưng nướu|chảy máu nướu|sâu răng|răng ê)\b/) },
   // Tiêu hoá
-  { id: "nausea", label: "buồn nôn / nôn", re: /\b(buon non|oi mua|muon oi|(bi|dang|hay|muon) non|non (ra|mua|nhieu|hoai|lien tuc|oi)|oi ra)\b/ },
-  { id: "vomitblood", label: "nôn ra máu", re: /\b(non ra mau|oi ra mau)\b/, red: "nôn ra máu" },
-  { id: "epigastric", label: "đau vùng thượng vị (trên rốn)", re: /\b(dau thuong vi|dau vung thuong vi|dau tren ron|dau bao tu|dau da day|cuon ruot|xot ruot|dau bung luc doi|dau bung khi doi)\b/ },
-  { id: "heartburn", label: "ợ chua / nóng rát ngực", re: /\b(o chua|o nong|o hoi|trao nguoc|nong rat (nguc|thuong vi|co hong)|dang mieng|chua mieng)\b/ },
-  { id: "bloat", label: "đầy bụng, khó tiêu", re: /\b(day bung|chuong bung|kho tieu|an khong tieu|bung anh ach|xi hoi nhieu)\b/ },
-  { id: "bellyache", label: "đau bụng", re: /\b(dau bung|quan bung|dau quan bung|dau tuc bung)\b/ },
-  { id: "rightlow", label: "đau bụng dưới bên phải", re: /\b(dau bung duoi ben phai|dau ho chau phai|dau bung phai|dau quanh ron roi lan xuong ben phai)\b/, red: "đau bụng dưới bên phải tăng dần (cần loại trừ ruột thừa)" },
-  { id: "diarrhea", label: "tiêu chảy", re: /\b(tieu chay|di ngoai nhieu|phan long|di cau nhieu|di toilet lien tuc|dau bung di ngoai)\b/ },
-  { id: "constip", label: "táo bón", re: /\b(tao bon|kho di ngoai|lau khong di ngoai|phan cung|di cau kho)\b/ },
-  { id: "bloodstool", label: "đi ngoài ra máu / phân đen", re: /\b(di ngoai ra mau|phan co mau|phan den|di cau ra mau)\b/, red: "đi ngoài ra máu hoặc phân đen" },
-  { id: "analpain", label: "đau / sưng hậu môn", re: /\b(dau hau mon|sung hau mon|ngua hau mon|co cuc o hau mon|bi tri|noi tri|ngoai tri)\b/ },
-  { id: "noappetite", label: "chán ăn", re: /\b(chan an|an khong ngon|bieng an|khong muon an)\b/ },
-  { id: "yellow", label: "vàng da / vàng mắt", re: /\b(vang da|da vang|vang mat|mat vang|nuoc tieu sam)\b/ },
-  { id: "afterfood", label: "khó chịu sau khi ăn", re: /\b(sau khi an|an xong|an do an la|an do song|an hai san|an quan|an do de lau|an oc|an goi|an tiet canh|an do de qua dem|an via he|an do la|an nham)\b/ },
-  { id: "skipmeal", label: "hay bỏ bữa", re: /\b(bo bua|bo an sang|nhin an sang|khong an sang|an uong that thuong|an khong dung bua)\b/ },
+  { id: "nausea", label: "buồn nôn / nôn", re: VN(/\b(buồn nôn|ói mửa|muốn ói|(bị|đang|hay|muốn) nôn|nôn (ra|mửa|nhiều|hoài|liên tục|ói)|ói ra)\b/) },
+  { id: "vomitblood", label: "nôn ra máu", re: VN(/\b(nôn ra máu|ói ra máu)\b/), red: "nôn ra máu" },
+  { id: "epigastric", label: "đau vùng thượng vị (trên rốn)", re: VN(/\b(đau thượng vị|đau vùng thượng vị|đau trên rốn|đau bao tử|đau dạ dày|cuộn ruột|xót ruột|đau bụng lúc đói|đau bụng khi đói)\b/) },
+  { id: "heartburn", label: "ợ chua / nóng rát ngực", re: VN(/\b(ợ chua|ợ nóng|ợ hơi|trào ngược|nóng rát (ngực|thượng vị|cổ họng)|đắng miệng|chua miệng)\b/) },
+  { id: "bloat", label: "đầy bụng, khó tiêu", re: VN(/\b(đầy bụng|chướng bụng|khó tiêu|ăn không tiêu|bụng ành ạch|xì hơi nhiều)\b/) },
+  { id: "bellyache", label: "đau bụng", re: VN(/\b(đau bụng|quặn bụng|đau quặn bụng|đau tức bụng)\b/) },
+  { id: "rightlow", label: "đau bụng dưới bên phải", re: VN(/\b(đau bụng dưới bên phải|đau hố chậu phải|đau bụng phải|đau quanh rốn rồi lan xuống bên phải)\b/), red: "đau bụng dưới bên phải tăng dần (cần loại trừ ruột thừa)" },
+  { id: "diarrhea", label: "tiêu chảy", re: VN(/\b(tiêu chảy|đi ngoài nhiều|phân lỏng|đi cầu nhiều|đi toilet liên tục|đau bụng đi ngoài)\b/) },
+  { id: "constip", label: "táo bón", re: VN(/\b(táo bón|khó đi ngoài|lâu không đi ngoài|phân cứng|đi cầu khó)\b/) },
+  { id: "bloodstool", label: "đi ngoài ra máu / phân đen", re: VN(/\b(đi ngoài ra máu|phân có máu|phân đen|đi cầu ra máu)\b/), red: "đi ngoài ra máu hoặc phân đen" },
+  { id: "analpain", label: "đau / sưng hậu môn", re: VN(/\b(đau hậu môn|sưng hậu môn|ngứa hậu môn|có cục ở hậu môn|bị trĩ|nội trĩ|ngoại trĩ)\b/) },
+  { id: "noappetite", label: "chán ăn", re: VN(/\b(chán ăn|ăn không ngon|biếng ăn|không muốn ăn)\b/) },
+  { id: "yellow", label: "vàng da / vàng mắt", re: VN(/\b(vàng da|da vàng|vàng mắt|mắt vàng|nước tiểu sẫm)\b/) },
+  { id: "afterfood", label: "khó chịu sau khi ăn", re: VN(/\b(sau khi ăn|ăn xong|ăn đồ ăn lạ|ăn đồ sống|ăn hải sản|ăn quán|ăn đồ để lâu|ăn ốc|ăn gỏi|ăn tiết canh|ăn đồ để qua đêm|ăn vỉa hè|ăn đồ lạ|ăn nhầm)\b/) },
+  { id: "skipmeal", label: "hay bỏ bữa", re: VN(/\b(bỏ bữa|bỏ ăn sáng|nhịn ăn sáng|không ăn sáng|ăn uống thất thường|ăn không đúng bữa)\b/) },
   // Tiết niệu, sinh dục
-  { id: "painpee", label: "tiểu buốt, tiểu rắt", re: /\b(tieu buot|tieu rat|tieu gat|tieu dau|buot khi tieu|nong rat khi tieu|di tieu nhieu lan ma it)\b/ },
-  { id: "peemuch", label: "tiểu nhiều", re: /\b(tieu nhieu|di tieu nhieu|tieu dem|hay di tieu|tieu lien tuc)\b/ },
-  { id: "bloodpee", label: "tiểu ra máu", re: /\b(tieu ra mau|nuoc tieu do|nuoc tieu co mau)\b/ },
-  { id: "flankpain", label: "đau lưng vùng hông / thắt lưng một bên", re: /\b(dau hongx? lung|dau hongx? (ben|phai|trai|mot ben)|dau hongx|dau than|dau vung than|dau quan than|dau lung lan xuong bung|dau mot ben hong)\b/ },
+  { id: "painpee", label: "tiểu buốt, tiểu rắt", re: VN(/\b(tiểu buốt|tiểu rát|tiểu gắt|tiểu đau|buốt khi tiểu|nóng rát khi tiểu|đi tiểu nhiều lần mà ít)\b/) },
+  { id: "peemuch", label: "tiểu nhiều", re: VN(/\b(tiểu nhiều|đi tiểu nhiều|tiểu đêm|hay đi tiểu|tiểu liên tục)\b/) },
+  { id: "bloodpee", label: "tiểu ra máu", re: VN(/\b(tiểu ra máu|nước tiểu đỏ|nước tiểu có máu)\b/) },
+  { id: "flankpain", label: "đau lưng vùng hông / thắt lưng một bên", re: VN(/\b(đau (?:hông|hongx) lưng|đau (?:hông|hongx) (bên|phải|trái|một bên)|đau hongx|đau thận|đau vùng thận|đau quặn thận|đau lưng lan xuống bụng|đau một bên hông)\b/) },
   // Cơ xương khớp
-  { id: "backpain", label: "đau lưng", re: /\b(dau lung|moi lung|dau that lung|dau cot song|cung lung)\b/ },
-  { id: "neckpain", label: "đau cổ vai gáy", re: /\b(dau co vai gay|moi co vai gay|dau vai gay|moi vai gay|cung co|vep co|dau co gay|treo co|sai co|bi treo co|bi sai co)\b/ },
-  { id: "radiate", label: "đau / tê lan xuống tay chân", re: /\b(dau lan xuong chan|te lan xuong chan|dau lan xuong tay|te lan xuong tay|dau than kinh toa)\b/ },
-  { id: "numb", label: "tê bì tay chân", re: /\b(te tay|te chan|te bi|kien bo|te dau ngon)\b/ },
-  { id: "jointpain", label: "đau khớp", re: /\b(dau khop|nhuc khop|dau goi|dau dau goi|dau co tay|dau ngon chan cai|dau khop ngon)\b/ },
-  { id: "jointswell", label: "sưng nóng đỏ khớp", re: /\b(sung khop|khop sung|sung do khop|sung ngon chan|ngon chan cai (sung|do|dau)|khop do nong|sung nong do|sung do dau)\b/ },
-  { id: "morningstiff", label: "cứng khớp buổi sáng", re: /\b(cung khop buoi sang|sang day cung khop|cung khop)\b/ },
-  { id: "cramp", label: "chuột rút", re: /\b(chuot rut|vop be|rut co)\b/ },
+  { id: "backpain", label: "đau lưng", re: VN(/\b(đau lưng|mỏi lưng|đau thắt lưng|đau cột sống|cứng lưng)\b/) },
+  { id: "neckpain", label: "đau cổ vai gáy", re: VN(/\b(đau cổ vai gáy|mỏi cổ vai gáy|đau vai gáy|mỏi vai gáy|cứng cổ|vẹo cổ|đau cổ gáy|trẹo cổ|sái cổ|bị trẹo cổ|bị sái cổ)\b/) },
+  { id: "radiate", label: "đau / tê lan xuống tay chân", re: VN(/\b(đau lan xuống chân|tê lan xuống chân|đau lan xuống tay|tê lan xuống tay|đau thần kinh tọa)\b/) },
+  { id: "numb", label: "tê bì tay chân", re: VN(/\b(tê tay|tê chân|tê bì|kiến bò|tê đầu ngón)\b/) },
+  { id: "jointpain", label: "đau khớp", re: VN(/\b(đau khớp|nhức khớp|đau gối|đau đầu gối|đau cổ tay|đau ngón chân cái|đau khớp ngón)\b/) },
+  { id: "jointswell", label: "sưng nóng đỏ khớp", re: VN(/\b(sưng khớp|khớp sưng|sưng đỏ khớp|sưng ngón chân|ngón chân cái (sưng|đỏ|đau)|khớp đỏ nóng|sưng nóng đỏ|sưng đỏ đau)\b/) },
+  { id: "morningstiff", label: "cứng khớp buổi sáng", re: VN(/\b(cứng khớp buổi sáng|sáng dậy cứng khớp|cứng khớp)\b/) },
+  { id: "cramp", label: "chuột rút", re: VN(/\b(chuột rút|vọp bẻ|rút cơ)\b/) },
   // Da, tóc
-  { id: "itch", label: "ngứa da", re: /\b((bi|hay|de) ngua|ngua (qua|nhieu|khap nguoi|da|ngay|ran|hoai|ve dem)|ngua ngay)\b/ },
-  { id: "rash", label: "nổi mẩn, phát ban", re: /\b(di ung|noi man|phat ban|noi ban|man do|noi me day|me day|noi mun do|noi cuc|noi san)\b/ },
-  { id: "blister", label: "mụn nước / phỏng nước", re: /\b(mun nuoc|phong nuoc|bong nuoc|mun rop)\b/ },
-  { id: "dryskin", label: "da khô, bong tróc", re: /\b(da kho|bong troc|da bong|bong vay|troc da|nut da|da san sui)\b/ },
-  { id: "acne", label: "nổi mụn", re: /\b(noi mun|bi mun|mun (viem|mu|boc|trung ca|an|dau den|nhieu)|mun o mat|mun tren mat)\b/ },
-  { id: "ringworm", label: "mảng da tròn ngứa, bong vảy", re: /\b(hac lao|lang ben|nam da|vong tron ngua|mang da tron|nam ben)\b/ },
-  { id: "hairloss", label: "rụng tóc", re: /\b(rung toc|toc rung|hoi dau|toc mong)\b/ },
+  { id: "itch", label: "ngứa da", re: VN(/\b((bị|hay|dễ) ngứa|ngứa (quá|nhiều|khắp người|da|ngáy|ran|hoài|về đêm)|ngứa ngáy)\b/) },
+  { id: "rash", label: "nổi mẩn, phát ban", re: VN(/\b(dị ứng|nổi mẩn|phát ban|nổi ban|mẩn đỏ|nổi mề đay|mề đay|nổi mụn đỏ|nổi cục|nổi sẩn)\b/) },
+  { id: "blister", label: "mụn nước / phỏng nước", re: VN(/\b(mụn nước|phồng nước|bóng nước|mụn rộp)\b/) },
+  { id: "dryskin", label: "da khô, bong tróc", re: VN(/\b(da khô|bong tróc|da bong|bong vảy|tróc da|nứt da|da sần sùi)\b/) },
+  { id: "acne", label: "nổi mụn", re: VN(/\b(nổi mụn|bị mụn|mụn (viêm|mủ|bọc|trứng cá|ẩn|đầu đen|nhiều)|mụn ở mặt|mụn trên mặt)\b/) },
+  { id: "ringworm", label: "mảng da tròn ngứa, bong vảy", re: VN(/\b(hắc lào|lang ben|nấm da|vòng tròn ngứa|mảng da tròn|nấm bẹn)\b/) },
+  { id: "hairloss", label: "rụng tóc", re: VN(/\b(rụng tóc|tóc rụng|hói đầu|tóc mỏng)\b/) },
   // Nội tiết, tim mạch
-  { id: "coldhands", label: "tay chân lạnh", re: /\b(tay chan lanh|lanh tay chan|chan tay lanh|so lanh)\b/ },
-  { id: "hotintol", label: "sợ nóng, run tay", re: /\b(so nong|run tay|tay run|nong trong nguoi|buc rut)\b/ },
-  { id: "highbp", label: "huyết áp cao", re: /\b(huyet ap cao|tang huyet ap|cao huyet ap|huyet ap len)\b/ },
-  { id: "lowbp", label: "huyết áp thấp", re: /\b(huyet ap thap|tut huyet ap|ha huyet ap|tut ap)\b/ },
-  { id: "slowheal", label: "vết thương lâu lành", re: /\b(vet thuong lau lanh|lau lanh|nhiem trung hoai)\b/ },
+  { id: "coldhands", label: "tay chân lạnh", re: VN(/\b(tay chân lạnh|lạnh tay chân|chân tay lạnh|sợ lạnh)\b/) },
+  { id: "hotintol", label: "sợ nóng, run tay", re: VN(/\b(sợ nóng|run tay|tay run|nóng trong người|bức rức|bứt rứt)\b/) },
+  { id: "highbp", label: "huyết áp cao", re: VN(/\b(huyết áp cao|tăng huyết áp|cao huyết áp|huyết áp lên)\b/) },
+  { id: "lowbp", label: "huyết áp thấp", re: VN(/\b(huyết áp thấp|tụt huyết áp|hạ huyết áp|tụt áp)\b/) },
+  { id: "slowheal", label: "vết thương lâu lành", re: VN(/\b(vết thương lâu lành|lâu lành|nhiễm trùng hoài)\b/) },
   // Giấc ngủ
-  { id: "insomnia", label: "mất ngủ", re: /\b(mat ngu|kho ngu|khong ngu duoc|ngu khong ngon|thuc giac giua dem|trang dem)\b/ },
-  { id: "snore", label: "ngáy to, ngưng thở khi ngủ", re: /\b(ngay to|ngu ngay|ngung tho khi ngu|giat minh vi nghet tho)\b/ },
-  { id: "sleepy", label: "buồn ngủ cả ngày", re: /\b(buon ngu ca ngay|ngu nhieu ma van met|lo mo ca ngay|ngu gat)\b/ },
+  { id: "insomnia", label: "mất ngủ", re: VN(/\b(mất ngủ|khó ngủ|không ngủ được|ngủ không ngon|thức giấc giữa đêm|trắng đêm)\b/) },
+  { id: "snore", label: "ngáy to, ngưng thở khi ngủ", re: VN(/\b(ngáy to|ngủ ngáy|ngưng thở khi ngủ|giật mình vì nghẹt thở)\b/) },
+  { id: "sleepy", label: "buồn ngủ cả ngày", re: VN(/\b(buồn ngủ cả ngày|ngủ nhiều mà vẫn mệt|lơ mơ cả ngày|ngủ gật)\b/) },
   // Phụ khoa
-  { id: "periodpain", label: "đau bụng kinh", re: /\b(dau bung kinh|dau khi co kinh|dau bung khi den thang)\b/ },
-  { id: "irregular", label: "kinh nguyệt không đều", re: /\b(kinh khong deu|kinh nguyet khong deu|tre kinh|mat kinh|rong kinh|cuong kinh)\b/ },
-  { id: "discharge", label: "khí hư bất thường", re: /\b(khi hu|huyet trang|ra dich bat thuong|ngua vung kin|vung kin co mui)\b/ },
+  { id: "periodpain", label: "đau bụng kinh", re: VN(/\b(đau bụng kinh|đau khi có kinh|đau bụng khi đến tháng)\b/) },
+  { id: "irregular", label: "kinh nguyệt không đều", re: VN(/\b(kinh không đều|kinh nguyệt không đều|trễ kinh|mất kinh|rong kinh|cường kinh)\b/) },
+  { id: "discharge", label: "khí hư bất thường", re: VN(/\b(khí hư|huyết trắng|ra dịch bất thường|ngứa vùng kín|vùng kín có mùi)\b/) },
   // Hoàn cảnh (tăng/giảm điểm một số bệnh)
-  { id: "sun", label: "sau khi ở ngoài nắng nóng", re: /\b(di nang|ngoai nang|nang nong|phoi nang|lam ngoai troi)\b/ },
-  { id: "screen", label: "nhìn màn hình nhiều", re: /\b(nhin man hinh|ngoi may tinh|dung dien thoai nhieu|ngoi lau)\b/ },
-  { id: "coldweather", label: "khi trời lạnh / bụi", re: /\b(troi lanh|thoi tiet lanh|gio lanh|bui|phan hoa|long cho|long meo|am moc)\b/ },
-  { id: "alcohol", label: "sau khi uống rượu bia", re: /\b(uong ruou|uong bia|di nhau|nhau xong|say ruou|say xin)\b/ },
-  { id: "stress", label: "đang căng thẳng", re: /\b(cang thang|stress|ap luc|lo lang)\b/ },
+  { id: "sun", label: "sau khi ở ngoài nắng nóng", re: VN(/\b(đi nắng|ngoài nắng|nắng nóng|phơi nắng|làm ngoài trời)\b/) },
+  { id: "screen", label: "nhìn màn hình nhiều", re: VN(/\b(nhìn màn hình|ngồi máy tính|dùng điện thoại nhiều|ngồi lâu)\b/) },
+  { id: "coldweather", label: "khi trời lạnh / bụi", re: VN(/\b(trời lạnh|thời tiết lạnh|gió lạnh|bụi|phấn hoa|lông chó|lông mèo|ẩm mốc)\b/) },
+  { id: "alcohol", label: "sau khi uống rượu bia", re: VN(/\b(uống rượu|uống bia|đi nhậu|nhậu xong|say rượu|say xỉn)\b/) },
+  { id: "stress", label: "đang căng thẳng", re: VN(/\b(căng thẳng|stress|áp lực|lo lắng)\b/) },
 ];
 
 type Cond = {
@@ -600,32 +601,32 @@ const CONDS: Cond[] = [
 
 // ═══════════════════════ CẢM XÚC / TÂM LÝ ═══════════════════════
 const FEELS: Sym[] = [
-  { id: "sad", label: "buồn", re: /\b(buon(?! ban| non| ngu| cuoi)|chan nan|chan doi|khong vui|u sau)\b/ },
-  { id: "anhedonia", label: "mất hứng thú", re: /\b(mat hung thu|khong con hung thu|khong thiet|chang thiet|khong muon lam gi|khong con thich gi)\b/ },
-  { id: "tired", label: "mệt mỏi, cạn năng lượng", re: /\b(met moi|kiet suc|duoi suc|can nang luong|het pin|met lam|met qua|met ghe|hoi met|thay met|met met)\b/ },
-  { id: "insomnia", label: "mất ngủ", re: /\b(mat ngu|kho ngu|ngu khong ngon|thuc giac|trang dem|khong ngu duoc)\b/ },
-  { id: "oversleep", label: "ngủ nhiều, không muốn dậy", re: /\b(ngu nhieu|ngu ca ngay|khong muon day|nam lien)\b/ },
-  { id: "appetite", label: "ăn uống thay đổi", re: /\b(chan an|an khong ngon|an nhieu hon|an vo do|bo bua)\b/ },
-  { id: "worry", label: "lo lắng, bất an", re: /\b(lo lang|lo au|bat an|bon chon|thap thom|lo qua|lo so)\b/ },
-  { id: "bodyanx", label: "hồi hộp, tim đập nhanh, run", re: /\b(tim dap nhanh|hoi hop|run tay|toat mo hoi|tuc nguc|kho tho)\b/ },
-  { id: "panic", label: "hoảng sợ", re: /\b(hoang loan|hoang so|so hai|so qua|so chet)\b/ },
-  { id: "overthink", label: "suy nghĩ nhiều", re: /\b(suy nghi nhieu|nghi nhieu|overthink|dau oc cu chay|khong ngung nghi|nghi lung tung|nghi linh tinh)\b/ },
-  { id: "focus", label: "khó tập trung", re: /\b(kho tap trung|mat tap trung|hay quen|dau oc mo|khong tap trung)\b/ },
-  { id: "irritable", label: "cáu gắt, dễ nổi nóng", re: /\b(cau gat|de cau|nong nay|buc boi|gian du|de noi nong|hay noi nong|buc minh)\b/ },
-  { id: "lonely", label: "cô đơn", re: /\b(co don|mot minh|khong ai hieu|lac long|le loi)\b/ },
-  { id: "empty", label: "trống rỗng, tê liệt cảm xúc", re: /\b(trong rong|te liet cam xuc|vo cam|khong cam thay gi)\b/ },
-  { id: "worthless", label: "thấy mình vô dụng, tự trách", re: /\b(vo dung|tu trach|toi loi|thay minh te|khong co gia tri|minh that bai|minh kem coi|ghet ban ?than)\b/ },
-  { id: "hopeless", label: "tuyệt vọng, bế tắc", re: /\b(tuyet vong|bat luc|khong con hy vong|be tac|khong loi thoat|khong con y nghia)\b/ },
-  { id: "cry", label: "hay khóc", re: /\b(hay khoc|muon khoc|khoc mot minh|khoc hoai|khoc suot|de khoc)\b/ },
-  { id: "pressure", label: "áp lực, căng thẳng", re: /\b(ap luc|cang thang|stress|qua tai|nhieu viec qua)\b/ },
-  { id: "missing", label: "nhớ nhung, tiếc nuối", re: /\b(nho nguoi|nho anh|nho em|nho ho|tiec nuoi|mat mat|nho nhung|hoi han)\b/ },
-  { id: "jealous", label: "ghen, sợ mất người ta", re: /\b(ghen|so mat nguoi ta|so bi bo roi|so mat ho|so bi phan boi)\b/ },
-  { id: "hurt", label: "tủi thân, tổn thương", re: /\b(tui than|ton thuong|bi phu long|dau long|uat uc)\b/ },
-  { id: "shame", label: "xấu hổ", re: /\b(xau ho|nhuc nha|mat mat|ngai ngung)\b/ },
-  { id: "trauma", label: "ám ảnh chuyện cũ, ác mộng", re: /\b(am anh|ac mong|hoi tuong lai|giat minh|nho lai la run)\b/ },
-  { id: "withdraw", label: "muốn tránh mọi người", re: /\b(ngai gap nguoi|tranh moi nguoi|thu minh|khong muon gap ai|khong muon noi chuyen)\b/ },
-  { id: "compare", label: "so sánh, thấy thua kém", re: /\b(so sanh|thua kem|ghen ti|khong bang ai|gioi hon minh|hon minh het|ai cung hon)\b/ },
-  { id: "unmotivated", label: "mất động lực", re: /\b(mat dong luc|khong co dong luc|luoi|tri hoan|khong muon lam)\b/ },
+  { id: "sad", label: "buồn", re: VN(/\b(buồn(?! bán| nôn| ngủ| cười)|chán nản|chán đời|không vui|u sầu)\b/) },
+  { id: "anhedonia", label: "mất hứng thú", re: VN(/\b(mất hứng thú|không còn hứng thú|không thiết|chẳng thiết|không muốn làm gì|không còn thích gì)\b/) },
+  { id: "tired", label: "mệt mỏi, cạn năng lượng", re: VN(/\b(mệt mỏi|kiệt sức|đuối sức|cạn năng lượng|hết pin|mệt lắm|mệt quá|mệt ghê|hơi mệt|thấy mệt|mệt mệt)\b/) },
+  { id: "insomnia", label: "mất ngủ", re: VN(/\b(mất ngủ|khó ngủ|ngủ không ngon|thức giấc|trắng đêm|không ngủ được)\b/) },
+  { id: "oversleep", label: "ngủ nhiều, không muốn dậy", re: VN(/\b(ngủ nhiều|ngủ cả ngày|không muốn dậy|nằm liền)\b/) },
+  { id: "appetite", label: "ăn uống thay đổi", re: VN(/\b(chán ăn|ăn không ngon|ăn nhiều hơn|ăn vô độ|bỏ bữa)\b/) },
+  { id: "worry", label: "lo lắng, bất an", re: VN(/\b(lo lắng|lo âu|bất an|bồn chồn|thấp thỏm|lo quá|lo sợ)\b/) },
+  { id: "bodyanx", label: "hồi hộp, tim đập nhanh, run", re: VN(/\b(tim đập nhanh|hồi hộp|run tay|toát mồ hôi|tức ngực|khó thở)\b/) },
+  { id: "panic", label: "hoảng sợ", re: VN(/\b(hoảng loạn|hoảng sợ|sợ hãi|sợ quá|sợ chết)\b/) },
+  { id: "overthink", label: "suy nghĩ nhiều", re: VN(/\b(suy nghĩ nhiều|nghĩ nhiều|overthink|đầu óc cứ chạy|không ngừng nghĩ|nghĩ lung tung|nghĩ linh tinh)\b/) },
+  { id: "focus", label: "khó tập trung", re: VN(/\b(khó tập trung|mất tập trung|hay quên|đầu óc mờ|không tập trung)\b/) },
+  { id: "irritable", label: "cáu gắt, dễ nổi nóng", re: VN(/\b(cáu gắt|dễ cáu|nóng nảy|bực bội|giận dữ|dễ nổi nóng|hay nổi nóng|bực mình)\b/) },
+  { id: "lonely", label: "cô đơn", re: VN(/\b(cô đơn|một mình|không ai hiểu|lạc lõng|lẻ loi)\b/) },
+  { id: "empty", label: "trống rỗng, tê liệt cảm xúc", re: VN(/\b(trống rỗng|tê liệt cảm xúc|vô cảm|không cảm thấy gì)\b/) },
+  { id: "worthless", label: "thấy mình vô dụng, tự trách", re: VN(/\b(vô dụng|tự trách|tội lỗi|thấy mình tệ|không có giá trị|mình thất bại|mình kém cỏi|ghét bản ?thân)\b/) },
+  { id: "hopeless", label: "tuyệt vọng, bế tắc", re: VN(/\b(tuyệt vọng|bất lực|không còn hy vọng|bế tắc|không lối thoát|không còn ý nghĩa)\b/) },
+  { id: "cry", label: "hay khóc", re: VN(/\b(hay khóc|muốn khóc|khóc một mình|khóc hoài|khóc suốt|dễ khóc)\b/) },
+  { id: "pressure", label: "áp lực, căng thẳng", re: VN(/\b(áp lực|căng thẳng|stress|quá tải|nhiều việc quá)\b/) },
+  { id: "missing", label: "nhớ nhung, tiếc nuối", re: VN(/\b(nhớ người|nhớ anh|nhớ em|nhớ họ|tiếc nuối|mất mát|nhớ nhung|hối hận)\b/) },
+  { id: "jealous", label: "ghen, sợ mất người ta", re: VN(/\b(ghen|sợ mất người ta|sợ bị bỏ rơi|sợ mất họ|sợ bị phản bội)\b/) },
+  { id: "hurt", label: "tủi thân, tổn thương", re: VN(/\b(tủi thân|tổn thương|bị phụ lòng|đau lòng|uất ức)\b/) },
+  { id: "shame", label: "xấu hổ", re: VN(/\b(xấu hổ|nhục nhã|mất mặt|ngại ngùng)\b/) },
+  { id: "trauma", label: "ám ảnh chuyện cũ, ác mộng", re: VN(/\b(ám ảnh|ác mộng|hồi tưởng lại|giật mình|nhớ lại là run)\b/) },
+  { id: "withdraw", label: "muốn tránh mọi người", re: VN(/\b(ngại gặp người|tránh mọi người|thu mình|không muốn gặp ai|không muốn nói chuyện)\b/) },
+  { id: "compare", label: "so sánh, thấy thua kém", re: VN(/\b(so sánh|thua kém|ghen tị|không bằng ai|giỏi hơn mình|hơn mình hết|ai cũng hơn)\b/) },
+  { id: "unmotivated", label: "mất động lực", re: VN(/\b(mất động lực|không có động lực|lười|trì hoãn|không muốn làm)\b/) },
 ];
 
 type State = {
@@ -779,24 +780,24 @@ export type BodyResult = { text: string; sx: string[] };
 
 // Chi tiết người dùng kể thêm khi ĐANG nói chuyện sức khoẻ (30/09 r6): vị trí, nhiệt độ, mức độ, thời gian, trẻ em.
 const CTX_SYM: [RegExp, string][] = [
-  [/\b(ngoi may tinh|ngoi lau|ngoi nhieu|cui dien thoai|van phong)\b/, "screen"],
-  [/\b(tren ron|vung thuong vi|luc doi|khi doi)\b/, "epigastric"],
-  [/\b(duoi ben phai|bung duoi ben phai|ho chau phai)\b/, "rightlow"],
-  [/\b(sau xuong uc|nong rat nguc|rat nguc)\b/, "heartburn"],
-  [/\b(khac dom|co dom|dom vang|dom xanh)\b/, "phlegm"],
-  [/\b(so anh sang|choi mat)\b/, "light"],
+  [VN(/\b(ngồi máy tính|ngồi lâu|ngồi nhiều|cúi điện thoại|văn phòng)\b/), "screen"],
+  [VN(/\b(trên rốn|vùng thượng vị|lúc đói|khi đói)\b/), "epigastric"],
+  [VN(/\b(dưới bên phải|bụng dưới bên phải|hố chậu phải)\b/), "rightlow"],
+  [VN(/\b(sau xương ức|nóng rát ngực|rát ngực)\b/), "heartburn"],
+  [VN(/\b(khạc đờm|có đờm|đờm vàng|đờm xanh)\b/), "phlegm"],
+  [VN(/\b(sợ ánh sáng|chói mắt)\b/), "light"],
 ];
 function tempOf(n: string): number | null {
-  const m = n.match(/\b(3[5-9]|4[0-2])(?:\s*(?:do|oc|c))?(?:\s*(ruoi|[,.]?\s*(\d)))?\b/);
-  if (!m || !/\b(do|oc|sot|nhiet|ruoi)\b/.test(n)) return null;
+  const m = n.match(VN(/\b(3[5-9]|4[0-2])(?:\s*(?:độ|oc|c))?(?:\s*(rưỡi|[,.]?\s*(\d)))?\b/));
+  if (!m || !VN(/\b(độ|oc|sốt|nhiệt|rưỡi)\b/).test(n)) return null;
   return Number(m[1]) + (m[2] === "ruoi" ? 0.5 : m[3] ? Number(m[3]) / 10 : 0);
 }
-const KID_RE = /\b(con minh|con toi|con em|con tui|be nha|be minh|be con|em be|tre nho|chau minh|be bi|be \d+ tuoi|\d+ thang tuoi)\b/;
-const SEVERE_RE = /\b(bua bo|du doi|dau lam|dau qua troi|khong chiu noi|dau muon xiu|dau chet di duoc)\b/;
+const KID_RE = VN(/\b(con mình|con tôi|con em|con tui|bé nhà|bé mình|bé con|em bé|trẻ nhỏ|cháu mình|bé bi|bé \d+ tuổi|\d+ tháng tuổi)\b/);
+const SEVERE_RE = VN(/\b(búa bổ|dữ dội|đau lắm|đau quá trời|không chịu nổi|đau muốn xỉu|đau chết đi được)\b/);
 const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
-const SELF_RE = /\b(minh bi|toi bi|em bi|anh bi|tui bi|dang bi|bi hoai|bi suot|minh dang|toi dang|nay bi|hom nay bi|tu sang|tu qua)\b/;
-const KNOW_RE = /\b(la bi gi|la do dau|do dau|do dau ma|nguyen nhan|la benh gi|la dau hieu|dau hieu cua|la gi|thuong do|vi sao|tai sao|co nguy hiem khong|co phai la|co nghia la|la sao|bi la sao|do dau|tu dau)\b/;
-const DUR_RE = /\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/;
+const SELF_RE = VN(/\b(mình bị|tôi bị|em bị|anh bị|tui bị|đang bị|bị hoài|bị suốt|mình đang|tôi đang|nay bị|này bị|hôm nay bị|từ sáng|từ qua)\b/);
+const KNOW_RE = VN(/\b(là bị gì|là do đâu|do đâu|do đâu mà|nguyên nhân|là bệnh gì|là dấu hiệu|dấu hiệu của|là gì|thường do|vì sao|tại sao|có nguy hiểm không|có phải là|có nghĩa là|là sao|bị là sao|do đâu|từ đâu)\b/);
+const DUR_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
 const KID_NOTE =
   "👶 **Với trẻ nhỏ:** đưa bé đi khám ngay nếu bé dưới 3 tháng tuổi mà sốt, hoặc sốt cao khó hạ, li bì, bỏ bú/bỏ ăn, co giật, thở nhanh, phát ban, nôn nhiều. Thuốc hạ sốt cho bé phải tính theo cân nặng — hỏi bác sĩ/dược sĩ, không dùng thuốc của người lớn.";
 
@@ -870,7 +871,7 @@ export function condByName(text: string): { id: string; label: string } | undefi
     if (MIND_CONDS.has(c.id)) continue;
     for (const part of c.name.split(/[(/–)]/)) {
       const p = part.trim().toLowerCase();
-      if (p.length < 3 || /^(cần|hoặc|do|vấn đề)\b/.test(p) || /cần (kiểm tra|loại trừ|khám|được)/.test(p)) continue;
+      if (p.length < 3 || VR(/^(cần|hoặc|do|vấn đề)\b/).test(p) || VR(/cần (kiểm tra|loại trừ|khám|được)/).test(p)) continue;
       if (acc.includes(` ${p} `) || (p.includes(" ") && n.includes(` ${normalizeVi(p)} `))) return { id: c.id, label: p };
     }
   }
@@ -910,7 +911,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     const d = n.match(DUR_RE);
     if (d) {
       detail = true;
-      const long = /tuan|thang|nam/.test(d[2]) || Number(d[1]) >= 3 || ["ba", "bon", "nam", "may", "vai"].includes(d[1]);
+      const long = VN(/tuần|tháng|năm/).test(d[2]) || Number(d[1]) >= 3 || ["ba", "bon", "nam", "may", "vai"].includes(d[1]);
       const unit = ({ ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" } as Record<string, string>)[d[2]];
       const num = ({ mot: "1", hai: "2", ba: "3", bon: "4", nam: "5", may: "mấy", vai: "vài", mo: "mấy" } as Record<string, string>)[d[1]] ?? d[1];
       notes.push(long ? `Bị ${num} ${unit} rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài.` : `Mới ${num} ${unit} thì cứ theo dõi thêm, nhưng nặng lên là đi khám liền nha.`);
@@ -954,7 +955,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
   if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
     // 11/10: hỏi đúng điều CÒN THIẾU — đã nói "từ tối qua" thì không hỏi lại "bao lâu rồi"; đang kể sốt thì hỏi mấy độ, không hỏi "có kèm sốt không".
-    const since = /\b(tu (toi|sang|chieu|trua|dem|hom|tuan|thang)|hom qua|toi qua|sang nay|chieu nay|toi nay|dem qua|may hom nay|may ngay nay|ca (ngay|dem|tuan|thang)|(\d+|mot|hai|ba|may|vai) (ngay|hom|tuan|thang) nay)\b/.test(` ${n} `);
+    const since = VN(/\b(từ (tối|sáng|chiều|trưa|đêm|hôm|tuần|tháng)|hôm qua|tối qua|sáng nay|chiều nay|tối nay|đêm qua|mấy hôm nay|mấy ngày nay|cả (ngày|đêm|tuần|tháng)|(\d+|một|hai|ba|mấy|vài) (ngày|hôm|tuần|tháng) nay)\b/).test(` ${n} `);
     const fev = all.includes("fever");
     const q1 = fev ? `Sốt khoảng bao nhiêu độ${since ? "" : ", bị bao lâu rồi"}?` : since ? "Mức độ ra sao — nhẹ, vừa hay dữ dội?" : "Bị bao lâu rồi, đau/khó chịu ở mức nào?";
     const q2 = fev ? "Có kèm ho, nôn, đau đầu, hay triệu chứng nào khác không?" : "Có kèm sốt, nôn, hay triệu chứng nào khác không?";
@@ -1031,7 +1032,7 @@ export function analyzeMind(text: string, prev: string[] = []): MindResult | nul
   // Chỉ 1 cảm giác thì để thư viện tâm sự đáp — trừ cảm giác rất đặc trưng (ám ảnh, tuyệt vọng, hoảng loạn).
   //   12/10: "a sợ quá" một mình thì CHƯA đủ để nói tới "cơn hoảng loạn" (không gắn tên một trạng thái tâm lý qua một dữ kiện) —
   //   chỉ khi người dùng tự nói rõ là hoảng loạn.
-  if (all.length < 2 && !(["trauma", "hopeless"].includes(all[0]) || (all[0] === "panic" && /\b(hoang loan|panic)\b/.test(n)))) return null;
+  if (all.length < 2 && !(["trauma", "hopeless"].includes(all[0]) || (all[0] === "panic" && VN(/\b(hoảng loạn|panic)\b/).test(n)))) return null;
   const scored = STATES.map((s) => {
     const hit = Object.keys(s.f).filter((id) => all.includes(id));
     return { s, score: hit.reduce((a, id) => a + s.f[id], 0), hit };

@@ -9,6 +9,7 @@
 
 import { normalizeVi } from "@/lib/lomiFaq";
 import { drugById, renderDrug, sourceLine } from "@/lib/lomiDrugData";
+import { VR, VN } from "@/lib/viMatch";
 
 const PARA = drugById("paracetamol")!;
 
@@ -31,21 +32,21 @@ type Subject = {
 };
 
 const OBJECTS: [RegExp, string][] = [
-  [/\btra atiso\b|\batiso\b/, "trà atiso"],
-  [/\btra sua\b/, "trà sữa"],
-  [/\btra\b/, "trà"],
-  [/\b(ca phe|cafe|cf)\b/, "cà phê"],
-  [/\bsua\b/, "sữa"],
-  [/\bnuoc ngot\b/, "nước ngọt"],
-  [/\b(ruou|bia)\b/, "rượu bia"],
-  [/\bnuoc loc\b/, "nước lọc"],
+  [VN(/\btrà atiso\b|\batiso\b/), "trà atiso"],
+  [VN(/\btrà sữa\b/), "trà sữa"],
+  [VN(/\btrà\b/), "trà"],
+  [VN(/\b(cà phê|cafe|cf)\b/), "cà phê"],
+  [VN(/\bsữa\b/), "sữa"],
+  [VN(/\bnước ngọt\b/), "nước ngọt"],
+  [VN(/\b(rượu|bia)\b/), "rượu bia"],
+  [VN(/\bnước lọc\b/), "nước lọc"],
 ];
-const TIME_RE = /\b(sang mai|chieu mai|toi mai|ngay mai|mai|tuan sau|tuan toi|hom nay|toi nay|sang nay|chieu nay)\b/;
+const TIME_RE = VN(/\b(sáng mai|chiều mai|tối mai|ngày mai|mai|tuần sau|tuần tới|hôm nay|tối nay|sáng nay|chiều nay)\b/);
 const TIME_LABEL: Record<string, string> = {
   "sang mai": "sáng mai", "chieu mai": "chiều mai", "toi mai": "tối mai", "ngay mai": "ngày mai", mai: "mai",
   "tuan sau": "tuần sau", "tuan toi": "tuần tới", "hom nay": "hôm nay", "toi nay": "tối nay", "sang nay": "sáng nay", "chieu nay": "chiều nay",
 };
-const SELF_RE = /\b(minh|toi|tui|em|anh|chi|be|con|nguoi nha|me minh|ba minh)\b/;
+const SELF_RE = VN(/\b(mình|tôi|tui|em|anh|chị|bé|con|người nhà|mẹ mình|ba mình)\b/);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const FAST_NOTE =
@@ -56,7 +57,7 @@ const SUBJECTS: Subject[] = [
   {
     id: "bloodtest",
     label: "xét nghiệm máu",
-    re: /\b(xet nghiem mau|thu mau|lay mau|xn mau|kiem tra mau|test mau)\b/,
+    re: VN(/\b(xét nghiệm máu|thử máu|lấy máu|xn máu|kiểm tra máu|test máu)\b/),
     main: "prep",
     aspects: {
       drink: (a) =>
@@ -72,7 +73,7 @@ const SUBJECTS: Subject[] = [
   {
     id: "atiso",
     label: "trà atiso",
-    re: /\b(tra atiso|atiso|actiso)\b/,
+    re: VN(/\b(trà atiso|atiso|actiso)\b/),
     main: "info",
     aspects: {
       info: () =>
@@ -82,7 +83,7 @@ const SUBJECTS: Subject[] = [
   {
     id: "endoscopy",
     label: "nội soi",
-    re: /\b(noi soi)\b/,
+    re: VN(/\b(nội soi)\b/),
     main: "prep",
     aspects: {
       prep: () => "Chuẩn bị nội soi tuỳ loại (dạ dày hay đại tràng) và nơi làm sẽ dặn cụ thể. Thường gặp: nhịn ăn khoảng 6–8 tiếng trước nội soi dạ dày; nội soi đại tràng thì cần ăn nhẹ và uống thuốc làm sạch ruột theo hướng dẫn. Báo bác sĩ thuốc đang dùng (nhất là thuốc chống đông) và đi cùng người thân nếu nội soi có gây mê.",
@@ -115,20 +116,20 @@ const SUBJECTS: Subject[] = [
 
 // Khía cạnh — thứ tự = độ ưu tiên.
 const ASPECTS: [string, RegExp][] = [
-  ["overdose", /\b(qua lieu|uong qua nhieu|uong nham|uong nhieu qua|uong nhieu|lo uong|uong ca vi|uong ca hop|hai gan|ton thuong gan|suy gan)\b/],
-  ["kid", /\b(tre|be|em be|con minh|tre em|\d+ tuoi)\b/],
-  ["dose", /\b(bao nhieu vien|may vien|lieu|bao nhieu mg|uong bao nhieu|cach uong|uong may lan|may tieng uong)\b/],
-  ["alcohol", /\b(ruou|bia)\b/],
-  ["why", /\b(de lam gi|tai sao|vi sao|nham muc dich)\b/],
-  ["time", /\b(bao lau|may tieng|khi nao co|bao gio co|mat bao lau)\b/],
-  ["prep", /\b(chuan bi|can gi|luu y|can lam gi|phai lam gi|mang gi|nen lam gi)\b/],
-  ["eat", /\b(an|nhin an|an sang|an toi|an uong)\b/],
-  ["drink", /\b(uong|nuoc|tra|ca phe|cafe|cf|sua|atiso)\b/],
-  ["info", /\b(tac dung phu|tac dung|la thuoc gi|co hai|cong dung|la gi)\b/],
+  ["overdose", VN(/\b(quá liều|uống quá nhiều|uống nhầm|uống nhiều quá|uống nhiều|lỡ uống|uống cả vỉ|uống cả hộp|hại gan|tổn thương gan|suy gan)\b/)],
+  ["kid", VN(/\b(trẻ|bé|em bé|con mình|trẻ em|\d+ tuổi)\b/)],
+  ["dose", VN(/\b(bao nhiêu viên|mấy viên|liều|bao nhiêu mg|uống bao nhiêu|cách uống|uống mấy lần|mấy tiếng uống)\b/)],
+  ["alcohol", VN(/\b(rượu|bia)\b/)],
+  ["why", VN(/\b(để làm gì|tại sao|vì sao|nhằm mục đích)\b/)],
+  ["time", VN(/\b(bao lâu|mấy tiếng|khi nào có|bao giờ có|mất bao lâu)\b/)],
+  ["prep", VN(/\b(chuẩn bị|cần gì|lưu ý|cần làm gì|phải làm gì|mang gì|nên làm gì)\b/)],
+  ["eat", VN(/\b(ăn|nhịn ăn|ăn sáng|ăn tối|ăn uống)\b/)],
+  ["drink", VN(/\b(uống|nước|trà|cà phê|cafe|cf|sữa|atiso)\b/)],
+  ["info", VN(/\b(tác dụng phụ|tác dụng|là thuốc gì|có hại|công dụng|là gì)\b/)],
 ];
 // Hỏi nối ngắn tham chiếu mơ hồ ("cái đó thì sao", "ý là cái kia á", "vậy còn cái này?").
-const VAGUE_RE = /\b(cai do|cai kia|cai nay|vu do|chuyen do|no)\b/;
-const OTHER_RE = /\b(cai kia|cai khac|chuyen khac)\b/;
+const VAGUE_RE = VN(/\b(cái đó|cái kia|cái này|vụ đó|chuyện đó|nó)\b/);
+const OTHER_RE = VN(/\b(cái kia|cái khác|chuyện khác)\b/);
 
 function aspectOf(n: string, s: Subject): string | undefined {
   return ASPECTS.find(([k, re]) => s.aspects[k] && re.test(n))?.[0];
@@ -165,9 +166,9 @@ export function contextReply(text: string, ctxSubject?: string): ContextReply | 
     // "ý là cái kia á" → người dùng nói tới thứ KHÁC chủ thể đang nói → hỏi lại đúng 1 câu, không đoán.
     if (OTHER_RE.test(n)) return { text: `À, bạn đang nói tới chuyện khác ngoài ${s.label} hả? Bạn gõ rõ tên cái đó giúp Lomi nha.`, anchor };
     // "cái đó thì sao?", "vậy còn cái này?" → hiểu là vẫn hỏi về chủ thể đang nói.
-    if (!VAGUE_RE.test(n) && !/\b(thi sao|the con|vay con|con)\b/.test(n)) {
+    if (!VAGUE_RE.test(n) && !VN(/\b(thì sao|thế còn|vậy còn|còn)\b/).test(n)) {
       // "có được không?" — biết đang nói về chủ thể nào nhưng chưa rõ việc gì → hỏi đúng 1 câu còn thiếu.
-      if (/\b(duoc khong|ok khong|on khong|sao khong)\b/.test(n) || text.includes("?"))
+      if (VN(/\b(được không|ok không|ổn không|sao không)\b/).test(n) || text.includes("?"))
         return { text: `Bạn hỏi việc gì có được không trong chuyện ${s.label} nè — ăn, uống, hay dùng thuốc?`, anchor };
       return null;
     }

@@ -11,6 +11,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { detectDish } from "@/lib/lomiSearch";
 import { analyzeBody } from "@/lib/lomiSymptoms";
 import { detectTarot } from "@/lib/tarot";
+import { VR, VN } from "@/lib/viMatch";
 
 export type CapDomain = "health" | "heart" | "biz" | "food";
 export type Capability = { intent: "capability"; domain: CapDomain; text: string };
@@ -19,22 +20,22 @@ export type Capability = { intent: "capability"; domain: CapDomain; text: string
 // hoặc người dùng xin phép hỏi Lomi ("hỏi Lomi về sức khoẻ được không"). Chỉ có "động từ + có…không" ở đâu đó trong
 // câu là CHƯA đủ — "thuốc này có giúp hết đau không", "bác sĩ có biết bệnh này không", "anh ấy có biết tình cảm của
 // mình không" là hỏi chuyện thật, không phải hỏi Lomi làm được gì.
-const LOMI_DOES = /^(?:(?:lomi|em|e|ban|bot) )?(?:co the |co biet |co |biet )*(?:tu van|ho tro|giup|biet|chia se|giai dap|tra loi) /;
-const ASK_LOMI = /^(?:(?:a|anh|chi|c|minh|toi|tui|em|e|t|to) )?(?:co the |co |muon |cho )*(?:hoi|tam su|noi chuyen)(?: (?:lomi|em|e|ban))?(?: (?:ve chuyen|ve|chuyen))? /;
-const WHAT_CAN = /\b(lam duoc gi|lam gi duoc|lam duoc nhung gi|biet lam gi|giup duoc gi)\b/;
+const LOMI_DOES = VN(/^(?:(?:lomi|em|e|bạn|bot) )?(?:có thể |có biết |có |biết )*(?:tư vấn|hỗ trợ|giúp|biết|chia sẻ|giải đáp|trả lời) /);
+const ASK_LOMI = VN(/^(?:(?:a|anh|chị|c|mình|tôi|tui|em|e|t|tớ) )?(?:có thể |có |muốn |cho )*(?:hỏi|tâm sự|nói chuyện)(?: (?:lomi|em|e|bạn))?(?: (?:về chuyện|về|chuyện))? /);
+const WHAT_CAN = VN(/\b(làm được gì|làm gì được|làm được những gì|biết làm gì|giúp được gì)\b/);
 // "ơ a tưởng e tư vấn sức khoẻ được mà" — người dùng NGỠ là Lomi làm được (câu thật trong nhật ký "Lomi bí" 05/10).
-const EXPECT = /^(?:(?:o|a|ua|oi|ui) )*(?:(?:a|anh|chi|c|minh|tui|toi|em|e|t) )?(?:tuong la|tuong|nghe noi|nghe bao|thay bao) (?=(?:lomi|em|e|ban) )/;
-const ABLE_END = /\b(khong|ko|k|hong|chua|chu|ha)$/;
-const ABLE_OK = /\b(duoc|dc) (khong|ko|k|hong|chu|ha)$/;
+const EXPECT = VN(/^(?:(?:ơ|à|a|ủa|ôi|ơi|ui) )*(?:(?:a|anh|chị|c|mình|tui|tôi|em|e|t) )?(?:tưởng là|tưởng|nghe nói|nghe bảo|thấy bảo) (?=(?:lomi|em|e|bạn) )/);
+const ABLE_END = VN(/\b(không|ko|k|hông|hong|chưa|chứ|hả|ha)$/);
+const ABLE_OK = VN(/\b(được|dc|đc) (không|ko|k|hông|hong|chứ|hả|ha)$/);
 // Nhắc tới người thứ ba → đang kể / hỏi chuyện của họ, không phải hỏi khả năng của Lomi.
-const THIRD = /\b(anh ay|chi ay|co ay|nguoi ay|nguoi do|nguoi ta|crush|bac si|bs|duoc si)\b/;
+const THIRD = VN(/\b(anh ấy|chị ấy|cô ấy|người ấy|người đó|người ta|crush|bác sĩ|bs|dược sĩ)\b/);
 // Người dùng đang kể mình bị gì → không phải hỏi khả năng, để luồng sức khoẻ lo.
-const PERSONAL = /\b(minh bi|toi bi|em bi|anh bi|tui bi|dang bi|bi dau|bi sot|bi ho)\b/;
+const PERSONAL = VN(/\b(mình bị|tôi bị|em bị|anh bị|tui bị|đang bị|bị đau|bị sốt|bị ho)\b/);
 const DOMAINS: [CapDomain, RegExp][] = [
-  ["health", /\b(suc khoe|benh|thuoc|trieu chung|y te|bac si)\b/],
-  ["heart", /\b(tam su|tinh cam|tam ly|tam li|chuyen tinh)\b/],
-  ["biz", /\b(kinh doanh|ban hang|mo quan|buon ban)\b/],
-  ["food", /\b(an gi|mon an|quan an|goi y mon)\b/],
+  ["health", VN(/\b(sức khoẻ|bệnh|thuốc|triệu chứng|y tế|bác sĩ)\b/)],
+  ["heart", VN(/\b(tâm sự|tình cảm|tâm lý|tâm lí|chuyện tình)\b/)],
+  ["biz", VN(/\b(kinh doanh|bán hàng|mở quán|buôn bán)\b/)],
+  ["food", VN(/\b(ăn gì|món ăn|quán ăn|gợi ý món)\b/)],
 ];
 /** Lĩnh vực được nhắc trong vài từ đầu (ngay sau động từ) — không tính lĩnh vực nằm tít cuối câu. */
 function domainNear(rest: string, maxWords: number): CapDomain | null {
@@ -51,13 +52,13 @@ const CAP_TEXT: Record<CapDomain, string> = {
 
 /** "Lomi có tư vấn sức khoẻ không?", "có hỏi về thuốc được không?" → khả năng của Lomi. */
 export function capabilityAsk(text: string): Capability | null {
-  const n0 = normalizeVi(text).replace(/^(lomi|em|e|ban) oi /, "$1 ");
+  const n0 = normalizeVi(text).replace(VN(/^(lomi|em|e|bạn) ơi /), "$1 ");
   if (PERSONAL.test(n0)) return null;
-  const expect = EXPECT.test(n0) && /\b(duoc|dc)( (ma|chu|co ma|ma ta))?$/.test(n0);
+  const expect = EXPECT.test(n0) && VN(/\b(được|dc|đc)( (mà|chứ|cơ mà|mà ta))?$/).test(n0);
   // "tưởng e tư vấn sức khoẻ được mà" đọc như "e tư vấn sức khoẻ được không".
-  const n = expect ? n0.replace(EXPECT, "").replace(/( (ma|chu|co ma|ma ta))?$/, " khong") : n0;
+  const n = expect ? n0.replace(EXPECT, "").replace(VN(/( (mà|chứ|cơ mà|mà ta))?$/), " khong") : n0;
   // Bỏ từ đệm / xưng hô ở cuối ("… được không nha", "… không e") để đọc đúng dáng câu hỏi.
-  const tail = n.replace(/( (nha|nhe|ne|vay|ta|nhi|a|lomi|em|e|ban))+$/, "");
+  const tail = n.replace(VN(/( (nha|nhé|nhe|nè|vậy|ta|nhỉ|à|a|ạ|lomi|em|e|bạn))+$/), "");
   const m1 = n.match(LOMI_DOES);
   const m2 = n.match(ASK_LOMI);
   // Phần câu tính từ động từ ("tư vấn sức khoẻ…", "hỏi về thuốc…") — "tâm sự" vừa là động từ vừa là lĩnh vực.
@@ -80,21 +81,21 @@ export type FoodChoice =
   | { intent: "food_choice" | "food_place"; dish: string; label: string; text?: string; quick?: string[] }
   | { intent: "food_suggest"; drink: boolean };
 
-const PLACE = /\b(quan|tim|gan day|gan minh|o dau|cho nao|dia chi|tiem)\b/;
-const HEALTHY = /\b(co hai|co sao|tot khong|co tot|beo khong|map khong|tang can|nhieu co|an nhieu|calo|bao nhieu calo|suc khoe)\b/;
+const PLACE = VN(/\b(quán|tìm|gần đây|gần mình|ở đâu|chỗ nào|địa chỉ|tiệm)\b/);
+const HEALTHY = VN(/\b(có hại|có sao|tốt không|có tốt|béo không|mập không|tăng cân|nhiều có|ăn nhiều|calo|bao nhiêu calo|sức khoẻ)\b/);
 // 08/10: có bệnh / triệu chứng / kiêng khem trong câu → là câu hỏi sức khoẻ ("đau bụng có nên ăn phở không"), không phải chọn món.
 // "đau" / "đâu" bỏ dấu giống nhau nên từ dễ lẫn đọc theo chữ CÓ DẤU; từ không lẫn thì đọc cả dạng không dấu.
-const ILL_ACC = /(?<![\p{L}])(đau|bị sốt|sốt cao|bệnh|bị ốm|đang ốm|kiêng|viêm|thuốc|dạ dày|bao tử)(?![\p{L}])/u;
-const ILL = /\b(dau bung|dau da day|dau bao tu|bi benh|di ung|ngo doc|tieu chay|tao bon|gout|tieu duong|huyet ap|mo mau|mang thai|co bau|giam can|an kieng)\b/;
-const STORY = /\b(hom qua|hom kia|toi qua|hoi do|luc do|cai nhau|chia tay)\b/;
-const CHOICE = /\b(them|chon|nen an|an gi|gi ta|gi day|gi ngon|nao ngon|loai nao|vi nao|khong biet an|goi y|muon an)\b/;
+const ILL_ACC = VR(/(?<![\p{L}])(đau|bị sốt|sốt cao|bệnh|bị ốm|đang ốm|kiêng|viêm|thuốc|dạ dày|bao tử)(?![\p{L}])/u);
+const ILL = VN(/\b(đau bụng|đau dạ dày|đau bao tử|bị bệnh|dị ứng|ngộ độc|tiêu chảy|táo bón|gout|tiểu đường|huyết áp|mỡ máu|mang thai|có bầu|giảm cân|ăn kiêng)\b/);
+const STORY = VN(/\b(hôm qua|hôm kia|tối qua|hồi đó|lúc đó|cãi nhau|chia tay)\b/);
+const CHOICE = VN(/\b(thèm|thêm|chọn|nên ăn|ăn gì|gì ta|gì đây|gì dậy|gì ngon|nào ngon|loại nào|vị nào|không biết ăn|gợi ý|muốn ăn)\b/);
 // 08/10: chưa nhắc món nào mà hỏi "ăn gì / uống gì" theo đủ kiểu ("nay ăn gì ta", "giờ ăn gì", "a đói mà không biết ăn gì",
 // "chọn món giúp a") → Lomi gợi ý món (luồng "Hôm nay ăn gì" sẵn có). Nhận theo CẤU TRÚC: (thời điểm) + ăn/uống + gì,
 // hoặc không/chưa biết + ăn/uống + gì, hoặc chọn/gợi ý + món — không phải danh sách câu.
-const EAT_ASK = /\b(an|uong|nhau|an sang|an trua|an toi|an vat|an dem|an khuya) (gi|mon gi|cai gi)\b/;
-const EAT_PICK = /\b(chon|lua|goi y|de xuat|boc|random|chi)( (giup|gium|dum|ho|cho))?( (a|anh|chi|c|minh|toi|tui|em|e))?( (mot|1|vai|may))? (mon|do an|do uong)\b/;
+const EAT_ASK = VN(/\b(ăn|uống|nhậu|ăn sáng|ăn trưa|ăn tối|ăn vặt|ăn đêm|ăn khuya) (gì|món gì|cái gì)\b/);
+const EAT_PICK = VN(/\b(chọn|lựa|gợi ý|đề xuất|bốc|random|chỉ)( (giúp|giùm|dùm|hộ|cho))?( (a|anh|chị|c|mình|tôi|tui|em|e))?( (một|1|vài|mấy))? (món|đồ ăn|đồ uống)\b/);
 // Không phải nhờ chọn món: hỏi kiến thức ("ăn gì để đẹp da"), hỏi thăm ("e ăn gì chưa"), hỏi Lomi ("Lomi thích ăn gì"), chuyện đã qua.
-const EAT_NOT = /\b(an gi cung|uong gi cung|an gi de|uong gi de|an gi cho|uong gi cho|an gi tot|uong gi tot|an gi ma|uong gi ma|nen kieng|khong nen an gi|khong duoc an gi|vua an gi|da an gi|moi an gi|an gi chua|uong gi chua|an gi roi|hom qua|toi qua|hoi nay|hoi sang|luc nay)\b|\b(lomi|em|e|ban) (thich |hay |muon |dang |co |se |da )*(an|uong) gi\b/;
+const EAT_NOT = VN(/\b(ăn gì cũng|uống gì cũng|ăn gì để|uống gì để|ăn gì cho|uống gì cho|ăn gì tốt|uống gì tốt|ăn gì mà|uống gì mà|nên kiêng|không nên ăn gì|không được ăn gì|vừa ăn gì|đã ăn gì|mới ăn gì|ăn gì chưa|uống gì chưa|ăn gì rồi|hôm qua|tối qua|hồi nãy|hồi sáng|lúc nãy)\b|\b(lomi|em|e|bạn) (thích |hay |muốn |đang |có |sẽ |đã )*(ăn|uống) gì\b/);
 // Vài món có kiểu chọn quen thuộc; món khác dùng câu hỏi khẩu vị chung.
 const STYLES: Record<string, string> = {
   pizza: "nhiều thịt (bò, xúc xích), hải sản, nhiều phô mai, hay rau củ thanh nhẹ",
@@ -112,7 +113,7 @@ export function foodChoice(text: string): FoodChoice | null {
   const d = detectDish(text);
   if (!d) {
     if (EAT_NOT.test(n) || n.trim().split(" ").length > 12) return null;
-    if (EAT_ASK.test(n) || EAT_PICK.test(n)) return { intent: "food_suggest", drink: /\b(uong|do uong)\b/.test(n) && !/\b(an|mon an|do an)\b/.test(n) };
+    if (EAT_ASK.test(n) || EAT_PICK.test(n)) return { intent: "food_suggest", drink: VN(/\b(uống|đồ uống)\b/).test(n) && !VN(/\b(ăn|món ăn|đồ ăn)\b/).test(n) };
     return null;
   }
   // Tên nhóm món có thể là "pizza, đồ Âu" — nói với người dùng thì chỉ dùng tên món chính.
@@ -141,7 +142,7 @@ export type Flow = {
   talk?: "tarot" | "heart" | "health" | "biz" | "dish";
 };
 // Câu có người khác / chuyện quán / chuyện đã qua / cảm xúc → đang KỂ, không phải nhờ chọn món.
-const NARRATIVE = /\b(anh ay|chi ay|co ay|nguoi ay|nguoi yeu|ny|vo|chong|ban trai|ban gai|crush|sep|dong nghiep|khach|quan (minh|em|anh|tui|toi|a)|tiem (minh|em|anh|tui|toi|a)|shop|ban hang|doanh thu|hom qua|hom kia|hoi do|luc do|cai nhau|gian|buon|chan|khoc|met|stress|ap luc)\b/;
+const NARRATIVE = VN(/\b(anh ấy|chị ấy|cô ấy|người ấy|người yêu|ny|vợ|chồng|bạn trai|bạn gái|crush|sếp|đồng nghiệp|khách|quán (mình|em|anh|tui|tôi|a)|tiệm (mình|em|anh|tui|tôi|a)|shop|bán hàng|doanh thu|hôm qua|hôm kia|hồi đó|lúc đó|cãi nhau|giận|buồn|chán|khóc|mệt|stress|áp lực)\b/);
 
 export function earlyIntent(text: string, flow: Flow = {}): Capability | FoodChoice | null {
   if (flow.waiting) return null;

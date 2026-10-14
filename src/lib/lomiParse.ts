@@ -27,6 +27,7 @@
 import { expandTeen } from "@/lib/lomiChat";
 import { isAskLike } from "@/lib/lomiSense";
 import type { Addr } from "@/lib/lomiAddress";
+import { VR, VN } from "@/lib/viMatch";
 
 export type Role =
   | "SELF" // người nói: a, anh, chị, mình, tui…
@@ -116,8 +117,8 @@ export type Frame = {
 const strip = (s: string) =>
   s
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
-    .replace(/đ/g, "d");
+    .replace(VR(/[̀-ͯ]/g), "")
+    .replace(VR(/đ/g), "d");
 const LEX = new Map<string, Ent>();
 const LEX_U = new Map<string, Ent & { amb?: boolean }>();
 let MAXLEN = 1;
@@ -273,7 +274,7 @@ for (const [u, w] of Object.entries(LOOSE_PREF)) {
 }
 
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
-const DIACRITIC = /[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/;
+const DIACRITIC = VR(/[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]/);
 
 /** Tách từ: thử cụm dài nhất trước (tối đa MAXLEN tiếng), không có thì từng tiếng. */
 function tokenize(syl: string[], loose: boolean, orig: string[] = syl): Tok[] {
@@ -291,7 +292,7 @@ function tokenize(syl: string[], loose: boolean, orig: string[] = syl): Tok[] {
         len = n;
       }
     }
-    if (!hit) hit = { r: /^\d+([.,/:h]\d*)?$/.test(syl[i]) ? "NUM" : "UNK", t: syl[i] };
+    if (!hit) hit = { r: VR(/^\d+([.,/:h]\d*)?$/).test(syl[i]) ? "NUM" : "UNK", t: syl[i] };
     hit.o = orig.slice(i, i + len).join(" ");
     if (i === 0) hit.init = true;
     out.push(hit);
@@ -313,7 +314,7 @@ function disambiguate(tk: Tok[], loose = false) {
     const n = tk[i + 1];
     if (TITLE.has(tk[i].t) && n.r === "UNK" && n.o && /^\p{Lu}\p{Ll}/u.test(n.o)) Object.assign(tk[i], { r: "KIN", cls: "person" });
     // "chị a đang bệnh", "anh e mới cưới", "em a sắp thi" — anh / chị / em + người nói (viết gọn) là NGƯỜI THÂN của người nói.
-    else if (/^(chị|anh|em)$/.test(tk[i].t) && is(n, "SELF", "EM") && /^(a|e|c|mình|tôi|tui|tớ)$/.test(n.t) && n.t !== tk[i].t && i + 2 < tk.length && (i === 0 || is(tk[i - 1], "TIME", "VOC", "FILL"))) Object.assign(tk[i], { r: "KIN", cls: "person" });
+    else if (VR(/^(chị|anh|em)$/).test(tk[i].t) && is(n, "SELF", "EM") && VR(/^(a|e|c|mình|tôi|tui|tớ)$/).test(n.t) && n.t !== tk[i].t && i + 2 < tk.length && (i === 0 || is(tk[i - 1], "TIME", "VOC", "FILL"))) Object.assign(tk[i], { r: "KIN", cls: "person" });
   }
   if (loose) {
     for (let i = 0; i < tk.length; i++) {
@@ -331,7 +332,7 @@ function disambiguate(tk: Tok[], loose = false) {
       else if (t.t === "bạn" && is(prev, "STATE", "ADJ") && !next) to("bận");
       // "ho" đứng đầu mệnh đề (không có ai đứng trước làm chủ ngữ) + trợ từ / động từ nghĩ – nói – thích ("ho co thich minh khong",
       //   "ho dang nghi gi") = HỌ; "a ho hoai", "ho ra mau", "ho co dom" vẫn là ho.
-      else if (t.t === "ho" && t.r === "STATE" && !is(prev, "SELF", "EM", "KIN", "ASPECT", "NEG", "DEGREE") && prev?.t !== "bị" && next && HO_AUX.has(next.t) && !/^(đờm|dom|máu|mau|khan)$/.test(tk[i + 2]?.t ?? "")) to("họ");
+      else if (t.t === "ho" && t.r === "STATE" && !is(prev, "SELF", "EM", "KIN", "ASPECT", "NEG", "DEGREE") && prev?.t !== "bị" && next && HO_AUX.has(next.t) && !VR(/^(đờm|dom|máu|mau|khan)$/).test(tk[i + 2]?.t ?? "")) to("họ");
       // "cam" + một người ("ba cam em yeu som" = ba CẤM em yêu sớm) là cấm, không phải bị cảm ("ba cam roi", "ba bi cam" vẫn là cảm).
       else if (t.t === "cảm" && t.r === "STATE" && prev && prev.t !== "bị" && is(next, "SELF", "EM", "KIN", "THIRD")) Object.assign(t, { r: "VERB", t: "cấm", cls: undefined, v: undefined, amb: true });
       // "ma": trước một người khác ("ma sep ko khen" = mà sếp không khen) là từ nối "mà"; trước người nói ("ma a dang om") vẫn là "má".
@@ -349,7 +350,7 @@ function disambiguate(tk: Tok[], loose = false) {
       let k = i + 1;
       if (is(tk[k], "KIN") && k < end) k++; // "bị MẸ CHỒNG mắng", "bị ANH TRAI la"
       const own = k;
-      if (is(tk[k], "SELF", "EM") && k < end && /^(a|e|c|anh|em|chị|mình|tôi|tui|tớ)$/.test(tk[k].t)) k++; // "bị mẹ A chê"
+      if (is(tk[k], "SELF", "EM") && k < end && VR(/^(a|e|c|anh|em|chị|mình|tôi|tui|tớ)$/).test(tk[k].t)) k++; // "bị mẹ A chê"
       if (k > end || !is(tk[k], "VERB", "STATE", "UNK")) continue;
       for (let m = i; m < k; m++) Object.assign(tk[m], { r: "FILL", cls: m < own ? "agent" : "agentOf" });
     }
@@ -383,7 +384,7 @@ function disambiguate(tk: Tok[], loose = false) {
     // "bỏ mấy lần không được", "nói mấy lần rồi mà không nghe" — "mấy" + phủ định phía sau là "vài", không phải hỏi bao nhiêu.
     else if (t.t === "mấy" && t.r === "QWORD" && tk.slice(i + 1).some((x) => x.r === "NEG") && !tk.some((x) => x.r === "QPART")) t.r = "INDEF";
     // "làm gì đó", "nghĩ gì đấy" cuối câu, không có "muốn / thèm" phía trước = hỏi "gì" + tiểu từ "đó" (khác "ăn gì đó cay cay").
-    else if (t.r === "INDEF" && /^gì (đó|đấy)$/.test(t.t) && i >= end && !tk.slice(0, i).some((x) => is(x, "DESIRE", "NEG", "SELF")) && is(prev, "VERB", "COG")) Object.assign(t, { r: "QWORD", cls: "what" });
+    else if (t.r === "INDEF" && VR(/^gì (đó|đấy)$/).test(t.t) && i >= end && !tk.slice(0, i).some((x) => is(x, "DESIRE", "NEG", "SELF")) && is(prev, "VERB", "COG")) Object.assign(t, { r: "QWORD", cls: "what" });
     // "con": trước con vật / danh từ lạ là loại từ; còn lại là "con" (đứa con).
     // "bạn CŨ", "sếp CŨ", "người yêu CŨ" — "cũ" sau một người là "trước đây", không phải lời chê (trước đây "gặp lại bạn cũ" bị đọc là chuyện xui).
     else if (t.t === "cũ" && is(prev, "KIN")) Object.assign(t, { r: "FILL", v: undefined });
@@ -392,7 +393,7 @@ function disambiguate(tk: Tok[], loose = false) {
     //   ("bị bạn bắt nạt", "bị bạn chơi xấu" — sau "bị" cũng là người bạn.)
     else if (t.t === "bạn" && t.r === "YOU" && (is(next, "SELF") || (is(next, "EM") && i + 1 < end) || is(prev, "VERB", "MOTION", "PREP", "CLS", "NUM") || prev?.t === "với" || (prev?.t === "bị" && is(next, "VERB", "STATE", "UNK")))) Object.assign(t, { r: "KIN", cls: "person" });
     // Người nói xưng anh / chị (gọi Lomi là em) thì "bạn" trong câu là người bạn: "đi sinh nhật bạn", "ghé quán bạn chơi".
-    else if (t.t === "bạn" && t.r === "YOU" && tk.some((x) => x.r === "SELF" && /^(a|anh|chị|c)$/.test(x.t))) Object.assign(t, { r: "KIN", cls: "person" });
+    else if (t.t === "bạn" && t.r === "YOU" && tk.some((x) => x.r === "SELF" && VR(/^(a|anh|chị|c)$/).test(x.t))) Object.assign(t, { r: "KIN", cls: "person" });
     // "tí / chút / xíu" đầu câu hoặc ngay trước người nói = lát nữa ("tí a quay lại").
     else if (t.r === "DEGREE" && t.low && ["tí", "chút", "xíu", "tẹo"].includes(t.t) && (i === 0 || is(next, "SELF", "EM")) && is(next, "SELF", "EM", "MOTION", "VERB")) Object.assign(t, { r: "TIME", rel: "future", cls: "soon", low: undefined });
     // "hay": trước mức độ / cuối câu = hay (tốt); còn lại = hay (thường / hoặc).
@@ -488,13 +489,13 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   //    — trước đây bị đọc thành người nói, nên Lomi nhắc lại thành "Lomi nhớ em hả" và tự đổi sang xưng "em" với người dùng.
   for (let i = 0; i < tk.length; i++) {
     const t = tk[i];
-    if (t.r !== "SELF" || !/^(a|anh|c|chị)$/.test(t.t)) continue;
-    const full = /^(a|anh)$/.test(t.t) ? "anh" : "chị";
-    const dem = tk[i + 1] && /^(ấy|ta)$/.test(tk[i + 1].t) ? tk[i + 1].t : "";
+    if (t.r !== "SELF" || !VR(/^(a|anh|c|chị)$/).test(t.t)) continue;
+    const full = VN(/^(a|anh)$/).test(t.t) ? "anh" : "chị";
+    const dem = tk[i + 1] && VR(/^(ấy|ta)$/).test(tk[i + 1].t) ? tk[i + 1].t : "";
     if (dem) {
       Object.assign(t, { r: "THIRD", t: `${full} ${dem}`, cls: undefined });
       tk.splice(i + 1, 1);
-    } else if (opts.addr === "em" && full === "anh" && (opts.partnerCtx || tk.some((x, j) => j !== i && /^(e|em)$/.test(x.t))))
+    } else if (opts.addr === "em" && full === "anh" && (opts.partnerCtx || tk.some((x, j) => j !== i && VR(/^(e|em)$/).test(x.t))))
       // 10/10: chỉ khi trong câu còn có "e / em" ("a không nhắn cho e") hoặc đang nói chuyện người yêu / chồng. "hôm nay a vui lắm hehe" đứng
       // một mình là người nói ĐỔI cách xưng (trước đây bị đọc thành "Anh ấy vui lắm hehe vậy hả… Em chắc tự hào lắm ha?").
       Object.assign(t, { r: "THIRD", t: "anh ấy", cls: undefined });
@@ -518,7 +519,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     const i = tk.findIndex((t) => t.r === "EM");
     if (i < 0) return "you";
     // "con mèo nhà e", "mẹ nhà em" — "nhà e" là nhà của người nói (Lomi không có nhà); "tại e bận quá", "vì e…" — "e" mở đầu vế chỉ lý do là người nói.
-    if (i > 0 && /^(nhà|tại|vì|do|bởi)$/.test(tk[i - 1].t) && !nfc.includes("?")) return "self";
+    if (i > 0 && VR(/^(nhà|tại|vì|do|bởi)$/).test(tk[i - 1].t) && !nfc.includes("?")) return "self";
     if (is(tk[i + 1], "VOC") || i === tk.length - 1 || tk.slice(i + 1).every((t) => is(t, "PART", "VOC"))) return "you";
     if (is(tk[i - 1], "GREET", "WISH", "THANK", "VERB", "DESIRE", "PREP")) return "you";
     // Lời giục ("e nói lại đi", "em kể tiếp đi") là nói với Lomi.
@@ -560,7 +561,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   // (phần lõi = tk[a..b) — tiểu từ cuối câu vẫn giữ trong tk để đọc phép lịch sự / kiểu câu)
   const tailParts = tk.slice(b).filter((t) => t.r === "PART").map((t) => t.t);
   const core = tk.slice(a, b);
-  f.polite = tk.some((t) => t.r === "PART" && /^(nha|nhé|nhen|nghen|nhá|ạ|dạ|giùm|giúp|hộ|dùm)$/.test(t.t)) || tk.some((t) => t.r === "THANK");
+  f.polite = tk.some((t) => t.r === "PART" && VR(/^(nha|nhé|nhen|nghen|nhá|ạ|dạ|giùm|giúp|hộ|dùm)$/).test(t.t)) || tk.some((t) => t.r === "THANK");
 
   // ── Thời gian ──
   // Dịp / buổi đứng SAU động từ là bổ ngữ của động từ đó ("đi sinh nhật bạn", "thức tới khuya"), không phải mốc thời gian của câu.
@@ -578,7 +579,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     let occasion: string | undefined;
     for (const t of times) {
       part = part ?? t.part;
-      if (t.cls === "occasion" || t.cls === "day" || /^cuối (tuần|tháng|năm)/.test(t.t)) occasion = occasion ?? t.t;
+      if (t.cls === "occasion" || t.cls === "day" || VR(/^cuối (tuần|tháng|năm)/).test(t.t)) occasion = occasion ?? t.t;
       if (t.rel) rel = rel ?? t.rel;
       else if (t.today && t.part) {
         const d = TODAY_ORDER[t.part] - partNow(hour);
@@ -661,7 +662,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     f.subject = s0.r === "SELF" || emIs === "self" ? "self" : "you";
     i++;
     // "a với vợ", "mình và mấy đứa bạn" — chủ ngữ ghép, vẫn là chuyện của người nói.
-    if (f.subject === "self" && /^(với|và|cùng)$/.test(rest[i]?.t ?? "") && is(rest[i + 1], "KIN", "THIRD", "EM", "YOU")) {
+    if (f.subject === "self" && VR(/^(với|và|cùng)$/).test(rest[i]?.t ?? "") && is(rest[i + 1], "KIN", "THIRD", "EM", "YOU")) {
       subjToks = rest.slice(i - 1, i + 2);
       i += 2;
     }
@@ -719,7 +720,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
       if (t.rel === "future") planned = true;
     } else if (t.r === "NEG") {
       neg = true;
-      f.negWord = /^chưa/.test(t.t) ? "chưa" : "không";
+      f.negWord = VR(/^chưa/).test(t.t) ? "chưa" : "không";
     } else if (t.r === "DEGREE") {
       if (t.low) degLow = true;
       else degHigh = true;
@@ -740,7 +741,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   }
   body = predToks.slice(0, pe);
   // "không … lắm" = chỉ hơi hơi.
-  if (neg && degHigh && core.some((t) => t.r === "DEGREE" && /^(lắm|mấy)$/.test(t.t))) {
+  if (neg && degHigh && core.some((t) => t.r === "DEGREE" && VR(/^(lắm|mấy)$/).test(t.t))) {
     degLow = true;
     degHigh = false;
   }
@@ -787,7 +788,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     } else if (h.r === "VERB") {
       kind = "activity";
       // "ngồi / nằm / đứng / sống + ở X" là đang ở đâu.
-      if (/^(ngồi|nằm|đứng|sống)$/.test(h.t) && is(after[0], "PREP") && after[0].cls === "loc") {
+      if (VR(/^(ngồi|nằm|đứng|sống)$/).test(h.t) && is(after[0], "PREP") && after[0].cls === "loc") {
         kind = "location";
         objToks = after.slice(1);
       }
@@ -834,7 +835,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   // "chẳng buồn ngủ tí nào", "không vui chút nào" — "nào" ở đây nhấn mạnh phủ định, không phải hỏi.
   const atAll = neg && tk.some((t) => t.cls === "atall");
   // "a sợ mẹ có chuyện gì", "a lo có gì không hay" — sau "sợ / lo", "gì" là "điều gì đó", không phải câu hỏi (trừ khi có dấu ?).
-  const fearIndef = f.subject === "self" && f.pred?.cls === "feel" && /^(sợ|lo|ngại|e)( |$)/.test(f.pred.head) && !!f.pred.obj && !nfc.includes("?");
+  const fearIndef = f.subject === "self" && f.pred?.cls === "feel" && VR(/^(sợ|lo|ngại|e)( |$)/).test(f.pred.head) && !!f.pred.obj && !nfc.includes("?");
   ask = !fearIndef && ((ask0 && !atAll) || !!qword || qpart);
   if (ask) f.ask = qword?.cls ? ASK_KIND[qword.cls] : "yesno";
 
@@ -851,7 +852,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   // "… mà chưa được duyệt", "… nhưng …" — có vế sau: khung chỉ đọc vế đầu.
   if (core.some((t, k) => k >= 2 && (t.r === "CONJ" || (t.t === "mà" && k < core.length - 1)))) f.multi = true;
   // "… nói với em là mai đi", "… bảo là …" — lời thuật lại: vế sau "là" mới là ý chính.
-  if (core.some((t, k) => t.t === "là" && k >= 2 && core.slice(0, k).some((x) => /^(nói|kể|nhắn|hỏi|nghĩ|tưởng|thấy)$/.test(x.t) || x.t === "bảo"))) f.multi = true;
+  if (core.some((t, k) => t.t === "là" && k >= 2 && core.slice(0, k).some((x) => VR(/^(nói|kể|nhắn|hỏi|nghĩ|tưởng|thấy)$/).test(x.t) || x.t === "bảo"))) f.multi = true;
   if (f.multi) conf *= 0.6;
 
   // Chủ ngữ là một từ lạ không có loại từ đi trước ("bitcoin hôm nay lên 100k") → chưa chắc đó là chủ ngữ.
@@ -865,10 +866,10 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   // Xin phép đi: người nói + (đi …) + "đây / đã / cái / trước" — hoặc "tí a quay lại".
   if (p && !ask && !neg && f.subject === "self" && !recent && (!f.time || f.time.soon || f.time.rel === "now") && tk.length <= 9) {
     const leaveMark = lastPart?.cls === "leave" || last?.t === "trước" || tk.some((t) => t.cls === "leave");
-    const softMark = !!lastPart && /^(nha|nhé|nhen|nghen)$/.test(lastPart.t);
-    const back = p.cls === "return" || /^(quay lại|trở lại|ghé lại|vào lại)/.test(p.head);
+    const softMark = !!lastPart && VR(/^(nha|nhé|nhen|nghen)$/).test(lastPart.t);
+    const back = p.cls === "return" || VR(/^(quay lại|trở lại|ghé lại|vào lại)/).test(p.head);
     // "a đi công chuyện tí", "a ra ngoài chút" — đi một lát.
-    const aBit = /^(tí|chút|xíu|tẹo|một tí|một chút|một xíu|một lát)$/.test(last?.t ?? "") && /^(đi|ra)( |$)/.test(p.head) && !f.time;
+    const aBit = VR(/^(tí|chút|xíu|tẹo|một tí|một chút|một xíu|một lát)$/).test(last?.t ?? "") && VR(/^(đi|ra)( |$)/).test(p.head) && !f.time;
     if (aBit) {
       f.leave = "brb";
       return finish("leave", conf);
@@ -877,7 +878,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
       f.leave = "brb";
       return finish("leave", conf);
     }
-    if ((p.kind === "motion" || p.kind === "activity") && (leaveMark || (softMark && /^đi( |$)/.test(p.head) && !f.time))) {
+    if ((p.kind === "motion" || p.kind === "activity") && (leaveMark || (softMark && VR(/^đi( |$)/).test(p.head) && !f.time))) {
       f.leave = f.time?.soon ? "brb" : "go";
       return finish("leave", conf);
     }
@@ -890,7 +891,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     return finish("hold", act.some((t) => t.r === "UNK") ? 0.7 : 0.9);
   }
   // Nhờ Lomi làm: không chủ ngữ + động từ nhờ vả ("tìm…", "bói…"), hoặc động từ + "cho / giúp / giùm" + người nói.
-  const forMe = core.some((t, k) => /^(cho|giúp|giùm|dùm|hộ)$/.test(t.t) && is(core[k + 1], "SELF", "EM"));
+  const forMe = core.some((t, k) => VR(/^(cho|giúp|giùm|dùm|hộ)$/).test(t.t) && is(core[k + 1], "SELF", "EM"));
   //   (câu cầu khiến không phải câu hỏi — chỉ tính là hỏi khi có từ hỏi / "không" cuối câu / dấu ?)
   const realQ = nfc.includes("?") || !!qword || qpart;
   if (p && (f.subject === "none" || f.subject === "you") && (p.cls === "seek" || (forMe && p.kind === "activity"))) return finish(realQ ? "question" : "request", conf);
@@ -899,13 +900,13 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   //     ("ăn gan được không", "có nên quay lại không") hay câu nối ("thế còn ăn?");
   //   • dạng hỏi: kết bằng "không / hông" trần; dạng mời: "mai đi cà phê nha" (có mốc thời gian + "đi").
   if (p && !neg && (p.kind === "motion" || p.kind === "activity") && p.cls !== "seek" && !times.some((t) => t.rel === "past") && !recent && !ongoing) {
-    const inclWe = f.subject === "self" && /^(mình|tụi mình|bọn mình|chúng mình|chúng ta)$/.test(s0?.t ?? "");
+    const inclWe = f.subject === "self" && VR(/^(mình|tụi mình|bọn mình|chúng mình|chúng ta)$/).test(s0?.t ?? "");
     const incl = f.subject === "none" || inclWe;
-    const softEnd = !!lastPart && /^(nha|nhé|nhen|nghen)$/.test(lastPart.t);
-    const going = /^đi( |$)/.test(p.head) || (p.kind === "motion" && /^(ghé|ra|qua|về)$/.test(p.head));
-    const fun = p.cls === "leisure" || /^(ăn|uống|nhậu)/.test(p.head);
-    const modal = core.some((t) => /^(được|nên|phải|có|cho|hỏi|thể|còn|thế|vậy|thì)$/.test(t.t) || t.r === "CONJ");
-    const bareQ = f.ask === "yesno" && !qword && tk.some((t) => t.r === "QPART" && /^(không|ko|k|chứ)$/.test(t.t));
+    const softEnd = !!lastPart && VR(/^(nha|nhé|nhen|nghen)$/).test(lastPart.t);
+    const going = VR(/^đi( |$)/).test(p.head) || (p.kind === "motion" && VR(/^(ghé|ra|qua|về)$/).test(p.head));
+    const fun = p.cls === "leisure" || VR(/^(ăn|uống|nhậu)/).test(p.head);
+    const modal = core.some((t) => VR(/^(được|nên|phải|có|cho|hỏi|thể|còn|thế|vậy|thì)$/).test(t.t) || t.r === "CONJ");
+    const bareQ = f.ask === "yesno" && !qword && tk.some((t) => t.r === "QPART" && VR(/^(không|ko|k|chứ)$/).test(t.t));
     if (incl && !modal && bareQ && (going || (fun && (!!f.time?.explicit || inclWe || f.addressee)))) return finish("invite", conf);
     if (f.subject === "none" && !modal && softEnd && !ask && going && !!f.time?.explicit) return finish("invite", conf);
   }
@@ -927,7 +928,7 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
       else if (t.r === "NEG") tag(t, "NEGATION");
       else if (t.r === "DEGREE") tag(t, "DEGREE");
       else if (t.r === "QWORD" || t.r === "QPART") tag(t, "QUESTION");
-      else if (t.r === "THANK" || (t.r === "PART" && /^(nha|nhé|nhen|nghen|nhá|ạ|dạ|giùm|giúp|hộ|dùm|với)$/.test(t.t))) tag(t, "POLITENESS");
+      else if (t.r === "THANK" || (t.r === "PART" && VR(/^(nha|nhé|nhen|nghen|nhá|ạ|dạ|giùm|giúp|hộ|dùm|với)$/).test(t.t))) tag(t, "POLITENESS");
       else if (is(t, "SELF", "EM", "YOU", "THIRD", "KIN")) {
         tag(t, subjToks.includes(t) || (t === s0 && fr.subject !== "none") ? "SUBJECT" : "PERSON");
         out.add("PERSON");
@@ -953,8 +954,8 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
  * chuyện với ⟦you⟧") — để câu đáp bám đúng nội dung thay vì một câu mẫu. Bỏ lời gọi, từ nối mở đầu ("mà", "rồi", "còn"…) và tiểu từ cuối câu.
  * Trả null khi câu là câu hỏi / lời chào – chúc – cảm ơn, quá dài, hoặc không còn gì để nhắc.
  */
-const LEAD_DROP = /^(mà|nhưng|rồi|xong|còn|thì|với lại|và|à|ờ|ừ|ủa|ui|ôi|dạ|thật ra)$/;
-const END_DROP = /^(nha|nhé|nhen|nghen|nhá|nè|nà|á|ạ|dạ|vậy|thế|hen|ha|ta|đây|mà|đã|cái)$/;
+const LEAD_DROP = VR(/^(mà|nhưng|rồi|xong|còn|thì|với lại|và|à|ờ|ừ|ủa|ui|ôi|dạ|thật ra)$/);
+const END_DROP = VR(/^(nha|nhé|nhen|nghen|nhá|nè|nà|á|ạ|dạ|vậy|thế|hen|ha|ta|đây|mà|đã|cái)$/);
 export function mirrorOf(f: Frame, max = 10): string | null {
   if (f.ask || f.act === "question" || f.act === "greet" || f.act === "wish" || f.act === "thanks" || f.act === "request" || f.act === "invite") return null;
   let tk = f.toks.filter((t) => t.r !== "VOC");

@@ -27,6 +27,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { expandTeen } from "@/lib/lomiChat";
 import { parseVi } from "@/lib/lomiParse";
 import { P, txt, type Txt } from "@/lib/lomiStory";
+import { VR, VN } from "@/lib/viMatch";
 
 export type TarotGate = "medical" | "reflect";
 /** Loại câu hỏi y khoa — để lời từ chối nói đúng điều người dùng đang hỏi. */
@@ -66,8 +67,8 @@ export const REFLECT_Q = "Lúc này mình nên giữ tinh thần và chăm sóc 
 // "tình" ≠ "tỉnh"); câu gõ KHÔNG dấu mới so bản bỏ dấu — và chữ nào bỏ dấu dễ trùng thì có bản riêng chỉ nhận khi đi cùng chữ làm rõ nghĩa.
 
 // Thành ngữ mượn chữ y khoa — gỡ khỏi câu trước khi xét.
-const IDIOM_ACC = /say nắng|ốm đòn|đau ví|(?:đất|giá|vàng|nhà đất|thị trường|cổ phiếu|chứng khoán) (?:\p{L}+ ){0,3}sốt(?: lại)?|như (?:bị )?điên|(?:là|như) (?:một )?liều thuốc(?: \p{L}+)?(?: hay thuốc \p{L}+)?|phát điên|tức điên|điên (?:lên|đầu|tiết|cuồng|rồ)|dị ứng (?:với|vs) (?:sếp|anh|chị|ông|bà|thằng|con|nó|đồng nghiệp|công ty|môi trường)|sốt vé|sốt hàng|cháy vé|mổ (?:lợn|heo|gà|bò|vịt|cá)|tiêm phòng rủi ro|bắt bệnh|dị ứng với (?:kiểu|người|mấy|những|sự|việc|tính|cái)|gọi (?:\p{L}+ ){0,2}là bác sĩ|(?:xe|máy) (?:\p{L}+ ){0,2}đi khám|khám (?:xe|máy|phá)|(?:hồi|phát|tái|học) sinh|(?:khỏi |hết |thoát )?bệnh (?:lười|nghèo|sĩ|thành tích|ngôi sao|hình thức|ảo tưởng|nghề nghiệp|sạch sẽ)|vết thương lòng|liều thuốc (?:tinh thần|bổ tinh thần)|cắm sừng|(đau|nhức) đầu vì|viêm màng túi|đau lòng|đau khổ|đau thương|đau tim vì|sốt ruột|sốt đất|sốt giá|cơn sốt (đất|giá|vé)|mổ xẻ|thai nghén|cấp cứu (dự án|công ty|tình|kế hoạch|doanh số)|chết (mê|mệt|đứng|cười|tiệt)|sống (ảo|chết với)|tê liệt|liệt kê|liều (mình|lĩnh|mạng|một phen)|gãy gánh|u mê|trái tim|tim (a|e|anh|em|mình|tui|tôi)? ?(còn|vẫn|đã|chỉ|thuộc|rung)/giu;
-const IDIOM_BARE = /\b(say nang|om don|om (?:hang|do|tien|no|dat|lo|von|mong|ap|han)|dau vi|benh vuc|duong tinh (?:duyen|yeu|cam|toi|em|anh|minh|a|e)|bau (?:lop truong|chon|cu|ban|ra)|ho hang|nhu (?:bi )?dien|(?:cu|cung|hay|luon|toan|chi|co|lai|di|dung|ra) benh (?:thang|con|chi|anh|em|vo|chong|nguoi|ban|no|ai|ben|me|ba)|sot (?:cau|bai|ten|don|hang|mon|phan|viec|y nao)|phat dien|tuc dien|dien (?:len|dau|tiet)|sot ve|chay ve|mo (?:lon|heo|ga|bo|vit)|tiem phong rui ro|bat benh|di ung voi (?:kieu|nguoi|may|nhung|su|viec|tinh|cai)|(?:xe|may) (?:\S+ ){0,2}di kham|kham (?:xe|may|pha)|(?:hoi|phat|tai|hoc) sinh|(?:khoi |het |thoat )?benh (?:luoi|ngheo|si|thanh tich|ngoi sao|hinh thuc|ao tuong|nghe nghiep)|vet thuong long|lieu thuoc tinh than|cam sung|(dau|nhuc) dau vi|viem mang tui|dau long|dau kho|sot ruot|sot dat|sot gia|mo xe|thai nghen|cap cuu (du an|cong ty|tinh|ke hoach|doanh so)|chet (me|met|dung|cuoi|tiet)|song ao|te liet|liet ke|trai tim)\b/g;
+const IDIOM_ACC = VR(/say nắng|ốm đòn|đau ví|(?:đất|giá|vàng|nhà đất|thị trường|cổ phiếu|chứng khoán) (?:\p{L}+ ){0,3}sốt(?: lại)?|như (?:bị )?điên|(?:là|như) (?:một )?liều thuốc(?: \p{L}+)?(?: hay thuốc \p{L}+)?|phát điên|tức điên|điên (?:lên|đầu|tiết|cuồng|rồ)|dị ứng (?:với|vs) (?:sếp|anh|chị|ông|bà|thằng|con|nó|đồng nghiệp|công ty|môi trường)|sốt vé|sốt hàng|cháy vé|mổ (?:lợn|heo|gà|bò|vịt|cá)|tiêm phòng rủi ro|bắt bệnh|dị ứng với (?:kiểu|người|mấy|những|sự|việc|tính|cái)|gọi (?:\p{L}+ ){0,2}là bác sĩ|(?:xe|máy) (?:\p{L}+ ){0,2}đi khám|khám (?:xe|máy|phá)|(?:hồi|phát|tái|học) sinh|(?:khỏi |hết |thoát )?bệnh (?:lười|nghèo|sĩ|thành tích|ngôi sao|hình thức|ảo tưởng|nghề nghiệp|sạch sẽ)|vết thương lòng|liều thuốc (?:tinh thần|bổ tinh thần)|cắm sừng|(đau|nhức) đầu vì|viêm màng túi|đau lòng|đau khổ|đau thương|đau tim vì|sốt ruột|sốt đất|sốt giá|cơn sốt (đất|giá|vé)|mổ xẻ|thai nghén|cấp cứu (dự án|công ty|tình|kế hoạch|doanh số)|chết (mê|mệt|đứng|cười|tiệt)|sống (ảo|chết với)|tê liệt|liệt kê|liều (mình|lĩnh|mạng|một phen)|gãy gánh|u mê|trái tim|tim (a|e|anh|em|mình|tui|tôi)? ?(còn|vẫn|đã|chỉ|thuộc|rung)/giu);
+const IDIOM_BARE = VN(/\b(say nắng|ôm đơn|ôm (?:hàng|đồ|tiền|nợ|đất|lỗ|vốn|mộng|ấp|hận)|đau ví|bênh vực|dương tính (?:duyên|yêu|cảm|tôi|em|anh|mình|a|e)|bầu (?:lớp trưởng|chọn|cử|bạn|ra)|họ hàng|như (?:bị )?điên|(?:cứ|cũng|hay|luôn|toàn|chỉ|cố|có|lại|đi|đừng|ra) bênh (?:thằng|con|chị|anh|em|vợ|chồng|người|bạn|nó|ai|bên|mẹ|ba|bà)|sót (?:câu|bài|tên|đơn|hàng|môn|phần|việc|ý nào)|phát điên|tức điên|điên (?:lên|đầu|tiết)|sốt vé|cháy vé|mỡ (?:lợn|heo|gà|bò|vịt)|tiêm phòng rủi ro|bắt bệnh|dị ứng với (?:kiểu|người|mấy|những|sự|việc|tính|cái)|(?:xe|máy) (?:\S+ ){0,2}đi khám|khám (?:xe|máy|phá)|(?:hồi|phát|tái|học) sinh|(?:khỏi |hết |thoát )?bệnh (?:lười|nghèo|sĩ|thành tích|ngôi sao|hình thức|ảo tưởng|nghề nghiệp)|vết thương lòng|liều thuốc tinh thần|cắm sừng|(đau|nhức) đầu vì|viêm màng túi|đau lòng|đau khổ|sốt ruột|sốt đất|sốt giá|mổ xẻ|thai nghén|cấp cứu (dự án|công ty|tình|kế hoạch|doanh số)|chết (mẹ|mệt|đứng|cười|tiệt)|sống ảo|tê liệt|liệt kê|trái tim)\b/g);
 // Chuyện NGHỀ / HỌC / KINH DOANH ngành y — không phải chuyện sức khoẻ ("con a có nên học bác sĩ không", "a có nên mở tiệm thuốc không").
 const CAREER = P("(?:là|học|thi|thi vào|ngành|nghề|làm|theo|trường|đại học|tốt nghiệp|xin việc) (?:\\S+ ){0,2}(?:bác sĩ|y khoa|ngành y|dược sĩ|ngành dược|điều dưỡng|y sĩ|nha khoa|y tế)");
 const BUSINESS = P("(?:mở|bán|kinh doanh|buôn|đầu tư(?: vào)?|làm (?:ở|tại|cho)|xin (?:vào|việc)|nhận việc|thuê|sang (?:nhượng|lại)|quản lý|hùn vốn|góp vốn|làm (?:\\S+ ){1,3}(?:ở|tại|cho)|đồ án|đề tài|khoá luận|khóa luận|dự án|phần mềm|app) (?:\\S+ ){0,3}(?:tiệm thuốc|nhà thuốc|quán thuốc|hiệu thuốc|thuốc (?:tây|bắc|nam)|bệnh viện|phòng khám|nha khoa|dược phẩm|thiết bị y tế|spa)");
@@ -123,50 +124,50 @@ const FUNC = P(
 // Hỏi chung về thể trạng: "a có khoẻ không", "sức khoẻ năm nay", "cơ thể a có ổn không".
 const WELL = P("sức khoẻ|sức khỏe|sk|khoẻ mạnh|khỏe mạnh|(?:có )?(?:khoẻ|khỏe) (?:không|ko|k)|cơ thể|sức đề kháng|thể trạng|thể lực");
 // Bộ phận cơ thể + tình trạng (chỉ so trên câu gõ có dấu — bỏ dấu thì "mat / tai / tay / da / co" trùng quá nhiều chữ khác).
-const BODY_ACC = /(?<![\p{L}])(tim|gan|thận|phổi|mắt|tai|chân|tay|da|tóc|não|xương|khớp|răng|mũi|họng|ruột|lưng|cổ|vai|đầu gối|bụng|ngực|cơ thể|chỉ số \p{L}+|cân nặng)(?![\p{L}])(?: \p{L}+){0,4}? (?:có )?(vấn đề|bị|lành|sáng lại|mù|điếc|cử động|mọc lại|hết|khoẻ|khỏe|yếu|ổn|sao không|giảm được|về bình thường)(?![\p{L}])/u;
+const BODY_ACC = VR(/(?<![\p{L}])(tim|gan|thận|phổi|mắt|tai|chân|tay|da|tóc|não|xương|khớp|răng|mũi|họng|ruột|lưng|cổ|vai|đầu gối|bụng|ngực|cơ thể|chỉ số \p{L}+|cân nặng)(?![\p{L}])(?: \p{L}+){0,4}? (?:có )?(vấn đề|bị|lành|sáng lại|mù|điếc|cử động|mọc lại|hết|khoẻ|khỏe|yếu|ổn|sao không|giảm được|về bình thường)(?![\p{L}])/u);
 
 // Hỏi có nên ĐI KHÁM / xét nghiệm không — cũng không phải việc của lá bài, nhưng lời đáp khác hẳn chuyện mổ hay ngưng thuốc.
-const CHECKUP = /\b(co nen|nen|co can|can|co phai|phai) (\S+ ){0,3}(di kham|kham|tai kham|xet nghiem|di vien|di benh vien|di bv|nhap vien|sieu am|chup (phim|ct|mri)|thu y)\b/;
+const CHECKUP = VN(/\b(có nên|nên|có cần|cần|có phải|phải) (\S+ ){0,3}(đi khám|khám|tái khám|xét nghiệm|đi viện|đi bệnh viện|đi bv|nhập viện|siêu âm|chụp (phim|ct|mri)|thú y)\b/);
 const SURGERY = P("mổ|phẫu thuật|hoá trị|hóa trị|xạ trị", "phau thuat|hoa tri|xa tri|ca mo|(?:co nen|nen|phai|can) mo(?: (?:khong|ko|k|hk|chua))* $");
 // Quyết định điều trị: nên / có nên + một việc y khoa; hoặc hỏi một thủ thuật có thành công / hiệu quả không.
-const DECIDE = /\b(co nen|nen|co can|can|co phai|phai|nen hay)\b/;
-const TREAT_WORD = /\b(uong|ngung|bo thuoc|doi thuoc|doi (bac si|bs|benh vien|bv)|chuyen vien|nghe loi (bac si|bs))\b/;
+const DECIDE = VN(/\b(có nên|nên|có cần|cần|có phải|phải|nên hay)\b/);
+const TREAT_WORD = VN(/\b(uống|ngưng|bỏ thuốc|đổi thuốc|đổi (bác sĩ|bs|bệnh viện|bv)|chuyển viện|nghe lời (bác sĩ|bs))\b/);
 const TREAT_NOUN = P("ca mổ|ca ghép|ca sinh|phác đồ|liều|hoá trị|hóa trị|xạ trị|điều trị|chạy thận|lọc máu", "ca mo|ca ghep|ca sinh|phac do|lieu thuoc|hoa tri|xa tri|dieu tri|chay than|loc mau");
 // Đang nói chuyện một người ốm mà hỏi bài một câu chung chung về sắp tới → vẫn là hỏi bệnh sẽ ra sao.
-const FUTURE = /\b(sap toi|thoi gian toi|tuong lai|roi se|se ra sao|se the nao|ra sao|co on khong|co sao khong|moi chuyen|tai qua nan khoi)\b/;
+const FUTURE = VN(/\b(sắp tới|thời gian tới|tương lai|rồi sẽ|sẽ ra sao|sẽ thế nào|ra sao|có ổn không|có sao không|mọi chuyện|tai qua nạn khỏi)\b/);
 
-const FUTURE_STRICT = /\b(sap toi|thoi gian toi|tuong lai|roi se|se ra sao|se the nao|co on khong|co sao khong|moi chuyen|tai qua nan khoi)\b/;
+const FUTURE_STRICT = VN(/\b(sắp tới|thời gian tới|tương lai|rồi sẽ|sẽ ra sao|sẽ thế nào|có ổn không|có sao không|mọi chuyện|tai qua nạn khỏi)\b/);
 
 // ── KHUNG ──
 // "(có) bị <…> không", "… là bị gì", "bị sao vậy".
-const DX_FRAME = /\b(?:co (?:phai )?(?:dang )?(?:bi|mac|dinh)|co khi nao (?:bi|mac)|lieu co (?:bi|mac)|(?:a|anh|e|em|c|chi|minh|toi|tui|no|me|ba|bo|con|vo|chong|ong|ba noi|ba ngoai) (?:bi|mac)) ((?:\S+ ){1,4}?)(?:khong|ko|k|hk|hong|chua|ha|nhi)\s*$/;
-const DX_WHAT = /\b(la )?bi (gi|sao|lam sao|benh gi)( (vay|the|day|nhi|ha|ta))*\s*$|\b(bi|mac) (gi|benh gi|sao) ma\b/;
+const DX_FRAME = VN(/\b(?:có (?:phải )?(?:đang )?(?:bị|mắc|dính)|có khi nào (?:bị|mắc)|liệu có (?:bị|mắc)|(?:a|anh|e|em|c|chị|mình|tôi|tui|nó|mẹ|ba|bà|bố|con|vợ|chồng|ông|bà nội|bà ngoại) (?:bị|mắc)) ((?:\S+ ){1,4}?)(?:không|ko|k|hk|hông|hong|chưa|hả|ha|nhỉ)\s*$/);
+const DX_WHAT = VN(/\b(là )?bị (gì|sao|làm sao|bệnh gì)( (vậy|thế|dậy|đây|nhỉ|hả|ha|ta))*\s*$|\b(bị|mắc) (gì|bệnh gì|sao) mà\b/);
 // <điều đó> là chuyện công việc / tiền / tình cảm / đời thường → không phải hỏi bệnh.
-const NOT_ILL = /\b(delay|hoan|huy|lo|phat hien|bat gap|hack|ket|cam|khoa|danh rot|tre chuyen|sa thai|duoi|cho nghi|mat viec|giang chuc|ky luat|phat|lua|quyt|giat|xu ep|pha san|lo von|thua lo|no|phan boi|bo( roi)?|da|chia tay|ghet|noi xau|choi xau|ham hai|hai|kien|bat|di tu|tu|truot|rot|loai|tu choi|ghost|block|chan|theo doi|ghen|nghi ngo|oan|trach|mang|chui|la|danh gia|soi|de y|thay the|qua mat|ep|ap luc|lam phien|quay roi|trom|cuop|mat (tien|do|xe|viec|cap)|tre|muon|ket xe|lac|quen|hieu lam|coi thuong|xem thuong|loi dung|dua|troll|stress)\b/;
+const NOT_ILL = VN(/\b(delay|hoãn|huỷ|lộ|phát hiện|bắt gặp|hack|kẹt|cấm|khoá|đánh rớt|trễ chuyến|sa thải|đuổi|cho nghỉ|mất việc|giáng chức|kỷ luật|kỉ luật|phạt|lừa|quỵt|giật|xử ép|phá sản|lỗ vốn|thua lỗ|nợ|phản bội|bỏ( rơi)?|đá|chia tay|ghét|nói xấu|chơi xấu|hãm hại|hại|kiện|bắt|đi tù|tù|trượt|rớt|loại|từ chối|ghost|block|chặn|theo dõi|ghen|nghi ngờ|oan|trách|mắng|chửi|la|đánh giá|soi|để ý|thay thế|qua mặt|ép|áp lực|làm phiền|quấy rối|trộm|cướp|mất (tiền|đồ|xe|việc|cắp)|trễ|muộn|kẹt xe|lạc|quên|hiểu lầm|coi thường|xem thường|lợi dụng|đùa|troll|stress)\b/);
 
 // Khung LO LẮNG về một người: "… có sao không", "có nguy hiểm không", "trong người đang có chuyện gì", "bị chi rứa", "còn kịp không",
 // "lành hay dữ". Người dùng tả một tình trạng bằng lời thường (không có tên bệnh nào) rồi hỏi lá bài như vậy thì gần như luôn là hỏi sức khoẻ.
 // Chỉ tính khi câu không thuộc chủ đề tình cảm / công việc / tiền / học / đi lại và không nói về một việc / vật.
 //   (đo trên 322 câu Tarot thường của các đợt thử: không chặn nhầm câu nào; trên 43 câu y khoa tả bằng lời thường từng lọt: bắt thêm 17.)
-const CONCERN = /\b(co sao khong|co bi (gi|sao|lam sao|chi|rang) khong|co (lam sao|rang) khong|bi (gi|chi|sao|lam sao)\b|co nguy hiem|nguy hiem khong|co dang (lo|so)|co van de gi|trong nguoi|mac chung gi|con kip|het cuu|tro lai binh thuong|binh thuong lai (duoc )?khong|lanh hay (du|ac)|thu du khong|tot hay xau|co hai gi|hu chua)\b/;
+const CONCERN = VN(/\b(có sao không|có bị (gì|sao|làm sao|chi|răng) không|có (làm sao|răng) không|bị (gì|chi|sao|làm sao)\b|có nguy hiểm|nguy hiểm không|có đáng (lo|sợ)|có vấn đề gì|trong người|mắc chứng gì|còn kịp|hết cứu|trở lại bình thường|bình thường lại (được )?không|lành hay (dữ|ác)|(?:thứ|thư|thu) (?:dữ|du) không|tốt hay xấu|có hại gì|hư chưa)\b/);
 
 // Lời xin chiêm nghiệm: hỏi CÁCH (thế nào / ra sao / làm sao / điều gì) + nói về tinh thần, đối diện, ở bên, chăm sóc.
 const REFLECT =
-  /\b(doi dien|doi mat|giu tinh than|tinh than|binh tinh|binh an|chap nhan|manh me|vung vang|bot lo|do lo|het lo|bot so|do so|het so|dong hanh|o ben|cham soc|yeu thuong ban than|giu vung|thong diep|loi nhan|can gi luc nay|nang do|dong vien|an ui|yen tam|an long|vuot qua (noi so|giai doan|chuyen nay|luc nay)|(de|cho) (\S+ ){0,3}vui|ho tro tinh than|binh tam|vung long|vung tin|guc nga|nhe long|thanh than|niem vui|y nghia|tran trong|nuoi duong|tam the|thai do|bot co don|do co don|kien nhan|hy vong|niem tin|nhan gi|nhan nhu|bai hoc|long minh|giu long|chan nan|nan long|buong|long yen|yen long|biet on|nuong tua|chu tam|hoi tiec|di tiep|buoc tiep|cho dua|cam xuc|day (em|a|anh|chi|minh|toi|tui) (dieu|bai))\b/;
-const HOW = /\b(the nao|ra sao|lam sao|nhu the nao|dieu gi|can gi|nen lam gi|nen nghi gi|thong diep|loi nhan|cach nao|\S+ nao|o dau|tu dau|vao dau|suc dau|sao cho|sao de|lam gi|gi|(cho|xin) (\S+ ){0,3}(mot |1 )?(loi|thong diep))\b/;
+  VN(/\b(đối diện|đối mặt|giữ tinh thần|tinh thần|bình tĩnh|bình an|chấp nhận|mạnh mẽ|vững vàng|bớt lo|đỡ lo|hết lo|bớt sợ|đỡ sợ|hết sợ|đồng hành|ở bên|chăm sóc|yêu thương bản thân|giữ vững|thông điệp|lời nhắn|cần gì lúc này|nâng đỡ|động viên|an ủi|yên tâm|an lòng|vượt qua (nỗi sợ|giai đoạn|chuyện này|lúc này)|(để|cho) (\S+ ){0,3}vui|hỗ trợ tinh thần|bình tâm|vững lòng|vững tin|gục ngã|nhẹ lòng|thanh thản|niềm vui|ý nghĩa|trân trọng|nuôi dưỡng|tâm thế|thái độ|bớt cô đơn|đỡ cô đơn|kiên nhẫn|hy vọng|niềm tin|nhắn gì|nhắn nhủ|bài học|lòng mình|giữ lòng|chán nản|nản lòng|buông|lòng yên|yên lòng|biết ơn|nương tựa|chú tâm|hối tiếc|đi tiếp|bước tiếp|chỗ dựa|cảm xúc|dạy (em|a|anh|chị|mình|tôi|tui) (điều|bài))\b/);
+const HOW = VN(/\b(thế nào|ra sao|làm sao|như thế nào|điều gì|cần gì|nên làm gì|nên nghĩ gì|thông điệp|lời nhắn|cách nào|\S+ nào|ở đâu|từ đâu|vào đâu|sức đâu|sao cho|sao để|làm gì|gì|(cho|xin) (\S+ ){0,3}(một |1 )?(lời|thông điệp))\b/);
 // Mệnh đề hỏi là lời hỏi về VIỆC MÌNH NÊN LÀM / NÊN GIỮ ("em nên…", "làm sao để…", "tôi tìm … ở đâu"), không phải hỏi chuyện sẽ ra sao.
-const SELF_ACT = /\b(nen|can|phai|lam sao de|lam the nao de|lam gi de|lam gi cho|tim|hoc cach|co the)\b/;
+const SELF_ACT = VN(/\b(nên|cần|phải|làm sao để|làm thế nào để|làm gì để|làm gì cho|tìm|học cách|có thể)\b/);
 // Ranh giới mệnh đề: dấu câu, hoặc chữ nối hoàn cảnh ("… khi mẹ đang nằm viện", "… trong thời gian nằm viện").
-const CLAUSE = /[,;.!?…]+|\s(?:khi|trong lúc|trong luc|trong thời gian|trong thoi gian|giữa lúc|giua luc|trong những ngày|trong nhung ngay)\s/giu;
+const CLAUSE = VR(/[,;.!?…]+|\s(?:khi|trong lúc|trong luc|trong thời gian|trong thoi gian|giữa lúc|giua luc|trong những ngày|trong nhung ngay)\s/giu);
 // Hỏi KẾT QUẢ: câu có / không, hỏi mốc thời gian, hoặc câu quyết định "có nên…".
-const YESNO = /\b(khong|ko|k|hk|hong|hok|khum|chua|ha|nhi|phai khong|dung khong)\s*$/;
-const WHEN = /\b(bao gio|khi nao|bao lau|may (thang|nam)(?! (roi|nay|qua|truoc|lien))|luc nao|chung nao)\b/;
+const YESNO = VN(/\b(không|ko|k|hk|hông|hong|hok|khum|chưa|hả|ha|nhỉ|phải không|đúng không)\s*$/);
+const WHEN = VN(/\b(bao giờ|khi nào|bao lâu|mấy (tháng|năm)(?! (rồi|nay|qua|trước|liền))|lúc nào|chừng nào)\b/);
 
 // Chủ ngữ là một VIỆC / VẬT ("công ty a", "tình yêu này", "dự án", "shop e") → chữ MỀM không mang nghĩa y khoa.
-const THING = /^(?:(?:boi|xem|coi|thu|giup|cho|a|e|c|anh|em|chi|minh) )*(?:(?:cai|chuyen|viec|cuoc|moi|con) )?(cong ty|du an|shop|quan|tiem|cua hang|tinh yeu|tinh cam|quan he|chuyen tinh|hon nhan|kinh doanh|doanh thu|doanh so|cong viec|su nghiep|vi|tai khoan|thi truong|co phieu|nha (?:nay|do|moi|cu|dat|tro|thue)|xe|dien thoai|may|ke hoach|y tuong|hop dong|vu nay|team|nhom|lop|truong|app|web|kenh|page|thuong hieu|san pham|don hang|luong|tien)\b/;
+const THING = VN(/^(?:(?:bói|xem|coi|thử|giúp|cho|a|e|c|anh|em|chị|mình) )*(?:(?:cái|chuyện|việc|cuộc|mối|con) )?(công ty|dự án|shop|quán|tiệm|cửa hàng|tình yêu|tình cảm|quan hệ|chuyện tình|hôn nhân|kinh doanh|doanh thu|doanh số|công việc|sự nghiệp|ví|tài khoản|thị trường|cổ phiếu|nhà (?:này|đó|mới|cũ|đất|trọ|thuê)|xe|điện thoại|máy|kế hoạch|ý tưởng|hợp đồng|vụ này|team|nhóm|lớp|trường|app|web|kênh|page|thương hiệu|sản phẩm|đơn hàng|lương|tiền)\b/);
 
-const ABSTRACT = /^(?:(?:boi|xem|coi|thu|giup|cho) )*(?:(?:cai|chuyen|viec|cuoc|moi) )?(cong ty|du an|shop|cua hang|tinh yeu|tinh cam|quan he|chuyen tinh|hon nhan|kinh doanh|doanh thu|doanh so|cong viec|su nghiep|thi truong|co phieu|thuong hieu|san pham|team|con xe|chiec xe)\b/;
-const THING_NEAR = /\b(kinh te|tai chinh|cong ty|du an|shop|quan|tiem|cua hang|tinh yeu|tinh cam|quan he|chuyen tinh|hon nhan|kinh doanh|doanh thu|doanh so|cong viec|su nghiep|thi truong|co phieu|chung khoan|bat dong san|gia vang|gia dat|don hang|thuong hieu|niem tin|long tin)\b/;
+const ABSTRACT = VN(/^(?:(?:bói|xem|coi|thử|giúp|cho) )*(?:(?:cái|chuyện|việc|cuộc|mối) )?(công ty|dự án|shop|cửa hàng|tình yêu|tình cảm|quan hệ|chuyện tình|hôn nhân|kinh doanh|doanh thu|doanh số|công việc|sự nghiệp|thị trường|cổ phiếu|thương hiệu|sản phẩm|team|con xe|chiếc xe)\b/);
+const THING_NEAR = VN(/\b(kinh tế|tài chính|công ty|dự án|shop|quán|tiệm|cửa hàng|tình yêu|tình cảm|quan hệ|chuyện tình|hôn nhân|kinh doanh|doanh thu|doanh số|công việc|sự nghiệp|thị trường|cổ phiếu|chứng khoán|bất động sản|giá vàng|giá đất|đơn hàng|thương hiệu|niềm tin|lòng tin)\b/);
 const norm = (x: string) => ` ${normalizeVi(expandTeen(x)).replace(/[?!.,…]/g, " ").replace(/\s+/g, " ").trim()} `;
 
 type Evidence = { hard: boolean; soft: boolean; life: boolean; preg: boolean; dx: boolean; named: boolean; /** chỉ có DÁNG câu lo lắng / "(có) bị … không", không có chữ y khoa nào */ weak?: boolean; /** bằng chứng duy nhất là một triệu chứng thoáng qua */ sxOnly?: boolean };
@@ -187,7 +188,7 @@ function evidenceOf(question: string): Evidence & { n: string; t: Txt; why: stri
   // Chủ ngữ là một VIỆC trừu tượng ("công ty em đang ốm yếu quá", "hôn nhân của em như đang nằm phòng cấp cứu", "team em hấp hối") và sau đó
   // không nhắc tới người thân nào → chữ y khoa trong câu là lối nói ví von, không phải chuyện sức khoẻ.
   const abs = n.trim().match(ABSTRACT);
-  const kinAfter = t.loose || t.mixed ? /\b(ba|bo|me|ma|ong|vo|chong|con|be|chau|ngoai|bac|chu)\b/.test(n.trim().slice(abs?.[0].length ?? 0)) : /(?<![\p{L}])(ba|bố|mẹ|má|ông|bà|vợ|chồng|con|bé|cháu|nội|ngoại|bác|chú|dì|cậu)(?![\p{L}])/u.test(t.s);
+  const kinAfter = t.loose || t.mixed ? VN(/\b(ba|bà|bố|mẹ|má|ông|vợ|chồng|con|bé|cháu|ngoại|bác|chú)\b/).test(n.trim().slice(abs?.[0].length ?? 0)) : VR(/(?<![\p{L}])(ba|bố|mẹ|má|ông|bà|vợ|chồng|con|bé|cháu|nội|ngoại|bác|chú|dì|cậu)(?![\p{L}])/u).test(t.s);
   if (abs && !kinAfter) return { hard: false, soft: false, life: false, preg: false, dx: false, named: false, n, t, why: [] };
   // Bộ nhận triệu chứng / tên bệnh / chủ đề của các lớp khác so trên chữ ĐÃ BỎ DẤU ("đâu có" → "đau cổ", "bênh vợ" → "bệnh") — chỉ dùng thêm
   // khi câu gõ không dấu; câu gõ có dấu thì đã có vốn từ có dấu ở trên.
@@ -196,7 +197,7 @@ function evidenceOf(question: string): Evidence & { n: string; t: Txt; why: stri
   const body = L && (analyzeBody(acc)?.sx.length ?? 0) > 0 && !onlySoftSymptoms(acc);
   // Vốn từ sức khoẻ của bộ đọc câu (lib/lomiParse): ốm, mổ, có bầu… đã được gắn loại ở đó.
   //   (câu gần như không dấu thì đưa bản bỏ dấu cho bộ đọc câu, để nó đọc theo lối không dấu: "ho co thich minh không" = họ có thích…)
-  const f = parseVi(t.mixed ? acc.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d").normalize("NFC") : acc, { hour: 12 });
+  const f = parseVi(t.mixed ? acc.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(VR(/đ/g), "d").normalize("NFC") : acc, { hour: 12 });
   //   (chỉ tính khi đó là VỊ NGỮ của câu — "tình cảm" có chữ "cảm" nhưng không phải bị cảm.)
   const parsed = !!f.pred && (f.pred.cls === "ill" || f.pred.cls === "preg") && f.subject !== "thing" && f.subject !== "place";
   const topic = questionTopic(acc);
@@ -204,18 +205,18 @@ function evidenceOf(question: string): Evidence & { n: string; t: Txt; why: stri
   const named = (L && !!healthSubjectOf(acc)) || body || !!DISEASE(t) || !!MEDS(t);
   // Bộ phận cơ thể + tình trạng ("tim a có vấn đề gì không", "tóc e có mọc lại không") cũng là bằng chứng cứng.
   const bodyPart = !t.loose && BODY_ACC.test(t.s);
-  const kin = f.toks.some((x) => x.r === "KIN") || /\b(be|chau|noi|ngoai|ong|ba|bo|me|ma)\b/.test(n);
+  const kin = f.toks.some((x) => x.r === "KIN") || VN(/\b(bé|cháu|nội|ngoại|ông|ba|bà|bố|mẹ|má)\b/).test(n);
   const func = kin && !!FUNC(t);
   const hard = named || parsed || preg || bodyPart || func || !!PROC(t) || !!PLACE(t) || (L && topic === "health") || tarotMedicalAsk(acc);
   // Chữ MỀM chỉ tính khi không phải chuyện của một việc / vật (danh sách danh từ chỉ việc ở đầu câu).
   const nonPerson = THING.test(n.trim());
   const plain = topic === "general" || topic === "health";
   //   ("tụi e còn được bao lâu" — nói về HAI NGƯỜI thì "còn được bao lâu" là chuyện tình cảm, không phải chuyện sống chết.)
-  const us = /^(tui|bon|chung (minh|ta|toi|em)|hai (dua|nguoi|ta)|vo chong) /.test(n.trim());
+  const us = VN(/^(tụi|bọn|chúng (mình|ta|tôi|em)|hai (đứa|người|ta)|vợ chồng) /).test(n.trim());
   //   "… có qua nổi / qua được không" đứng trống: chỉ là chuyện sống chết khi nói về một người lớn tuổi trong nhà ("ba a có qua nổi không");
   //   "thi lần này a có qua được không" thì không.
   //   Tương tự "còn được bao lâu": nói về cha mẹ / ông bà thì là chuyện sống chết dù câu có chữ "chồng", "vợ" ("mẹ chồng em còn được bao lâu nữa").
-  const elder = /^(?:(?:boi|xem|coi|thu|giup|cho|bai oi) )*(?:\S+ )?(ba|bo|me|ma|cha|ong|ba noi|ba ngoai|noi|ngoai|bac|chu|co|di) /.test(n.trim());
+  const elder = VN(/^(?:(?:bói|xem|coi|thử|giúp|cho|bài ơi) )*(?:\S+ )?(ba|bà|bố|mẹ|má|cha|ông|bà nội|bà ngoại|nội|ngoại|bác|chú|cô|dì) /).test(n.trim());
   const life = !nonPerson && (!!LIFE(t) || (elder && !!QUA(t)) || ((plain || elder) && !us && !!LIFE_WEAK(t)));
   //   Chữ "hồi phục / khoẻ lại" đứng ngay sau một danh từ chỉ VIỆC ("kinh tế nhà em bao giờ hồi phục") cũng không phải chuyện sức khoẻ.
   const rec = RECOVER(t) ?? WELL(t);
@@ -288,8 +289,8 @@ export function tarotHealthGate(question: string, context?: string, opts: { sick
   // Hỏi KẾT QUẢ / xin QUYẾT ĐỊNH: câu có–không, hỏi mốc thời gian, "có nên…", "… có thành công / hiệu quả không".
   //   (câu hỏi CÁCH — "nên giữ tinh thần thế nào khi ba đang hoá trị" — có nhắc tên bệnh hay thủ thuật vẫn không phải hỏi kết quả.)
   //   ("bài có lời nhắn gì cho tinh thần của em … không" kết thúc bằng "không" nhưng là xin một lời nhắn, không phải hỏi có / không.)
-  const msgAsk = /\bco (\S+ ){0,2}(loi nhan|thong diep|loi nao|loi gi|dieu gi)\b/.test(n);
-  const asksOutcome = (YESNO.test(n.trim()) && !msgAsk) || WHEN.test(n) || /\b(co nen|nen hay|thanh cong|hieu qua|bao nhieu phan tram|co on khong|co sao khong)\b/.test(n);
+  const msgAsk = VN(/\bcó (\S+ ){0,2}(lời nhắn|thông điệp|lời nào|lời gì|điều gì)\b/).test(n);
+  const asksOutcome = (YESNO.test(n.trim()) && !msgAsk) || WHEN.test(n) || VN(/\b(có nên|nên hay|thành công|hiệu quả|bao nhiêu phần trăm|có ổn không|có sao không)\b/).test(n);
   //   (đang nói dở chuyện một người ốm thì câu lo lắng chung chung — "có sao không" — chính là hỏi về người đó.)
   if (kind === "unclear" && opts.sick) kind = "prognosis";
   if (kind === "unclear") return { gate: "medical", kind };

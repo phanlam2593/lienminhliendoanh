@@ -1,3 +1,4 @@
+import { VR } from "@/lib/viMatch";
 // ─────────────────────────────────────────────────────────────────────────────
 // BỘ STICKER LOMI (30/09, theo ý Kir — hoài niệm kiểu biểu cảm game online ngày xưa).
 // Nhân vật là linh vật Lomi của app, biểu cảm tự vẽ bằng SVG có hoạt ảnh nhẹ, lưu ở public/stickers/lomi/.
@@ -41,12 +42,12 @@ export const LOMI_STICKERS: LomiSticker[] = [
 
 export const stickerUrl = (id: string) => `/stickers/lomi/${id}.svg`;
 /** Tin nhắn (gif) này có phải sticker Lomi không — để hiện "Sticker" thay vì "GIF" ở phần xem trước. */
-export const isLomiStickerUrl = (url?: string | null) => !!url && /\/stickers\/lomi\/[a-z]+\.svg$/.test(url);
+export const isLomiStickerUrl = (url?: string | null) => !!url && VR(/\/stickers\/lomi\/[a-z]+\.svg$/).test(url);
 
 // Khung chat Lomi: tin người dùng gửi sticker lưu dạng "[sticker:id]".
 export const stickerToken = (id: string) => `[sticker:${id}]`;
 export function parseStickerToken(text: string): string | null {
-  const m = text.trim().match(/^\[sticker:([a-z]+)\]$/);
+  const m = text.trim().match(VR(/^\[sticker:([a-z]+)\]$/));
   return m && LOMI_STICKERS.some((s) => s.id === m[1]) ? m[1] : null;
 }
 

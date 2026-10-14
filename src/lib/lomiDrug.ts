@@ -17,6 +17,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { healthSubjectOf } from "@/lib/lomiHealthTopic";
 import { drugById, findDrug, findDrugs, findInteraction, renderDrug, sourceLine, sourceList } from "@/lib/lomiDrugData";
+import { VR, VN } from "@/lib/viMatch";
 
 export type DrugKind = "interact" | "overdose" | "dose" | "stop" | "side" | "what" | "which" | "should" | "pet" | "source" | "kid";
 export type DrugReply = {
@@ -49,20 +50,20 @@ export type DrugCtx = {
 };
 
 // "thuốc" cũng là thuốc lá / thuốc lào / thuốc nhuộm… — mấy thứ đó không phải thuốc chữa bệnh.
-const NOT_MED = /\b(thuoc la|thuoc lao|hut thuoc|thuoc nhuom|thuoc tay|thuoc no|thuoc sung|thuoc diet|thuoc tru sau|thuoc chuot)\b/;
-const MED_WORD = /\b(thuoc|khang sinh|toa|don thuoc|vien uong|siro|giam dau|ha sot|thuoc bo|thuoc nam|thuoc bac|thuoc tay)\b/;
-const INTERACT = /\b(tuong tac|ky nhau|ki nhau|ky thuoc|ki thuoc|uong chung|dung chung|uong cung|dung cung|uong kem|dung kem|uong lan|ket hop voi|uong voi|uong cung luc|chung voi thuoc|cung voi thuoc)\b/;
-const OVERDOSE = /\b(qua lieu|uong nham thuoc|uong nham|uong lo|lo uong|uong qua nhieu thuoc|uong ca vi|uong ca hop|uong ca lo)\b/;
-const DOSE = /\b(lieu|may vien|bao nhieu vien|uong bao nhieu|ngay may lan|may lan mot ngay|may lan 1 ngay|bao nhieu mg|bao nhieu ml|may goi|cach nhau may tieng|uong may)\b/;
-const STOP = /\b(ngung thuoc|ngung uong|bo thuoc|nghi thuoc|dung thuoc lai|tu ngung|quen uong|quen lieu|quen thuoc|uong bu|uong thieu|het thuoc)\b/;
-const SIDE = /\b(tac dung phu|phan ung phu|co hai gi|hai gan|hai than|hai da day|co gay nghien)\b/;
-const WHAT = /\b(la thuoc gi|thuoc gi vay|la gi|tri gi|chua gi|tri benh gi|chua benh gi|de lam gi|dung de lam gi|tac dung gi|cong dung|co tac dung)\b/;
-const WHICH = /\b(uong thuoc gi|thuoc gi|thuoc nao|mua thuoc gi|dung thuoc gi|co thuoc nao|uong gi cho (do|het|khoi|bot)|boi thuoc gi|xit thuoc gi|nho thuoc gi)\b/;
-const ASKS = /\b(khong|ko|k|duoc|sao|gi|nao|the nao|bao nhieu|may|ha|nhi|chua)\b/;
+const NOT_MED = VN(/\b(thuốc lá|thuốc lào|hút thuốc|thuốc nhuộm|thuốc tẩy|thuốc nổ|thuốc súng|thuốc diệt|thuốc trừ sâu|thuốc chuột)\b/);
+const MED_WORD = VN(/\b(thuốc|kháng sinh|toa|đơn thuốc|viên uống|siro|giảm đau|hạ sốt|thuốc bổ|thuốc nam|thuốc bắc|thuốc tây)\b/);
+const INTERACT = VN(/\b(tương tác|kỵ nhau|kị nhau|kỵ thuốc|kị thuốc|uống chung|dùng chung|uống cùng|dùng cùng|uống kèm|dùng kèm|uống lẫn|kết hợp với|uống với|uống cùng lúc|chung với thuốc|cùng với thuốc)\b/);
+const OVERDOSE = VN(/\b(quá liều|uống nhầm thuốc|uống nhầm|uống lố|lỡ uống|uống quá nhiều thuốc|uống cả vỉ|uống cả hộp|uống cả lọ)\b/);
+const DOSE = VN(/\b(liều|mấy viên|bao nhiêu viên|uống bao nhiêu|ngày mấy lần|mấy lần một ngày|mấy lần 1 ngày|bao nhiêu mg|bao nhiêu ml|mấy gói|cách nhau mấy tiếng|uống mấy)\b/);
+const STOP = VN(/\b(ngưng thuốc|ngưng uống|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
+const SIDE = VN(/\b(tác dụng phụ|phản ứng phụ|có hại gì|hại gan|hại thận|hại dạ dày|có gây nghiện)\b/);
+const WHAT = VN(/\b(là thuốc gì|thuốc gì vậy|là gì|trị gì|chữa gì|trị bệnh gì|chữa bệnh gì|để làm gì|dùng để làm gì|tác dụng gì|công dụng|có tác dụng)\b/);
+const WHICH = VN(/\b(uống thuốc gì|thuốc gì|thuốc nào|mua thuốc gì|dùng thuốc gì|có thuốc nào|uống gì cho (đỡ|hết|khỏi|bớt)|bôi thuốc gì|xịt thuốc gì|nhỏ thuốc gì)\b/);
+const ASKS = VN(/\b(không|ko|k|được|sao|gì|nào|thế nào|bao nhiêu|mấy|hả|ha|nhỉ|chưa)\b/);
 // Hỏi CÓ NÊN dùng thuốc không ("có nên uống kháng sinh không", "uống thuốc ngủ được không").
-const SHOULD = /\b(co nen|nen|co can|can|co duoc|duoc) (uong|dung|mua|xai|tiem|chich|boi|xit|nho)\b|\b(uong|dung|xai|tiem|chich|boi)( \S+){1,3} (duoc khong|dc khong|duoc ko|co sao khong|co duoc khong|co nen khong|duoc chua)\b/;
-const RX_ONLY = /\b(khang sinh|thuoc ngu|thuoc an than|corticoid|thuoc giam dau manh)\b/;
-const ALCOHOL = /\b(ruou|bia|nhau)\b/;
+const SHOULD = VN(/\b(có nên|nên|có cần|cần|có được|được) (uống|dùng|mua|xài|tiêm|chích|bôi|xịt|nhỏ)\b|\b(uống|dùng|xài|tiêm|chích|bôi)( \S+){1,3} (được không|dc không|đc không|được ko|có sao không|có được không|có nên không|được chưa)\b/);
+const RX_ONLY = VN(/\b(kháng sinh|thuốc ngủ|thuốc an thần|corticoid|thuốc giảm đau mạnh)\b/);
+const ALCOHOL = VN(/\b(rượu|bia|nhậu)\b/);
 
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
@@ -70,10 +71,10 @@ const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 function nameOf(raw: string): string | undefined {
   const t = raw.normalize("NFC").replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
   const m =
-    t.match(/^(?:cho (?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi )?(?:thuốc\s+)?([\p{L}\d][\p{L}\d-]{2,24}(?:\s[\p{L}\d-]{2,16})?)\s+(?:là\s+thuốc\s+gì|có\s+tác\s+dụng\s+phụ|trị\s+(?:bệnh\s+)?gì|chữa\s+(?:bệnh\s+)?gì|dùng\s+để\s+làm\s+gì)/iu) ??
-    t.match(/thuốc\s+([\p{L}\d][\p{L}\d-]{2,24})\s+(?:là\s+gì|là\s+thuốc\s+gì|trị|chữa|có\s+tác\s+dụng|dùng\s+để|uống\s+sao)/iu);
+    t.match(VR(/^(?:cho (?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi )?(?:thuốc\s+)?([\p{L}\d][\p{L}\d-]{2,24}(?:\s[\p{L}\d-]{2,16})?)\s+(?:là\s+thuốc\s+gì|có\s+tác\s+dụng\s+phụ|trị\s+(?:bệnh\s+)?gì|chữa\s+(?:bệnh\s+)?gì|dùng\s+để\s+làm\s+gì)/iu)) ??
+    t.match(VR(/thuốc\s+([\p{L}\d][\p{L}\d-]{2,24})\s+(?:là\s+gì|là\s+thuốc\s+gì|trị|chữa|có\s+tác\s+dụng|dùng\s+để|uống\s+sao)/iu));
   const n = m?.[1]?.trim();
-  if (!n || /^(này|đó|kia|ấy|gì|nào|đang|bác|em|anh|chị|mình|của|thuốc|loại|cái|viên|trị|chữa)(\s|$)/iu.test(n)) return undefined;
+  if (!n || VR(/^(này|đó|kia|ấy|gì|nào|đang|bác|em|anh|chị|mình|của|thuốc|loại|cái|viên|trị|chữa)(\s|$)/iu).test(n)) return undefined;
   // "thuốc gout là gì" — sau chữ "thuốc" là TÊN BỆNH, không phải tên thuốc.
   if (healthSubjectOf(n, true)) return undefined;
   return n;
@@ -82,12 +83,12 @@ function nameOf(raw: string): string | undefined {
 // 11/10 — "Uống aspirin để làm gì" (không có chữ "thuốc"): tên đứng sau một ĐỘNG TỪ DÙNG THUỐC (uống / tiêm / bôi / xịt / nhỏ / ngậm)
 // và câu hỏi nó dùng để làm gì → vẫn là hỏi về thuốc đó. Không có danh sách tên thuốc, nên chỉ nhận khi tên là CHỮ NGOẠI LAI
 // (không phải một tiếng Việt: "aspirin", "omeprazol", "collagen") — "uống nước / uống bia / uống trà để làm gì" không lọt vào đây.
-const VI_SYL = /^(ngh|ng|nh|ch|gh|gi|kh|ph|qu|th|tr|[bcdghklmnpqrstvx])?(uye|uya|uyu|oai|oay|oeo|uay|uoi|uou|ieu|yeu|ai|ao|au|ay|eo|eu|ia|ie|iu|oa|oe|oi|oo|ua|ue|ui|uo|uu|uy|ye|[aeiouy])(ng|nh|ch|[cmnpt])?$/;
-const isForeign = (w: string) => /^[a-z][a-z0-9-]{3,24}$/i.test(w) && !VI_SYL.test(w.toLowerCase());
+const VI_SYL = VR(/^(ngh|ng|nh|ch|gh|gi|kh|ph|qu|th|tr|[bcdghklmnpqrstvx])?(uye|uya|uyu|oai|oay|oeo|uay|uoi|uou|ieu|yeu|ai|ao|au|ay|eo|eu|ia|ie|iu|oa|oe|oi|oo|ua|ue|ui|uo|uu|uy|ye|[aeiouy])(ng|nh|ch|[cmnpt])?$/);
+const isForeign = (w: string) => VR(/^[a-z][a-z0-9-]{3,24}$/i).test(w) && !VI_SYL.test(w.toLowerCase());
 function takenNameOf(raw: string): string | undefined {
   const t = raw.normalize("NFC").replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
   const m = t.match(
-    /^(?:(?:cho )?(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |vậy |thế |còn |mà |ủa )*(?:(?:a|anh|e|em|c|chị|mình|tui|tôi|người ta|bác sĩ kê) )?(?:uống|tiêm|chích|bôi|thoa|xịt|nhỏ|ngậm)\s+(?:thuốc\s+)?([\p{L}\d][\p{L}\d-]{3,24}(?:\s(?!(?:để|làm|có|là|thì|trị|chữa|tác|công)\s)[\p{L}\d-]{1,12})?)\s+(?:là\s+)?(?:để\s+làm\s+(?:gì|chi)|để\s+chi|làm\s+gì|(?:có\s+)?(?:tác|công)\s+dụng\s+gì|trị\s+(?:bệnh\s+)?gì|chữa\s+(?:bệnh\s+)?gì)/iu,
+    VR(/^(?:(?:cho )?(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |vậy |thế |còn |mà |ủa )*(?:(?:a|anh|e|em|c|chị|mình|tui|tôi|người ta|bác sĩ kê) )?(?:uống|tiêm|chích|bôi|thoa|xịt|nhỏ|ngậm)\s+(?:thuốc\s+)?([\p{L}\d][\p{L}\d-]{3,24}(?:\s(?!(?:để|làm|có|là|thì|trị|chữa|tác|công)\s)[\p{L}\d-]{1,12})?)\s+(?:là\s+)?(?:để\s+làm\s+(?:gì|chi)|để\s+chi|làm\s+gì|(?:có\s+)?(?:tác|công)\s+dụng\s+gì|trị\s+(?:bệnh\s+)?gì|chữa\s+(?:bệnh\s+)?gì)/iu),
   );
   const n = m?.[1]?.trim();
   if (!n || !isForeign(n.split(" ")[0])) return undefined;
@@ -100,7 +101,7 @@ function bareNameOf(raw: string, loose: boolean): string | undefined {
   const t = raw.normalize("NFC").replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
   const strict = "(?:trị|chữa)\\s+(?:bệnh\\s+)?gì|(?:uống|bôi|thoa|tiêm|chích|xịt|nhỏ|ngậm)\\s+(?:vào\\s+)?(?:là\\s+)?(?:để\\s+làm\\s+(?:gì|chi)|để\\s+chi|làm\\s+gì)";
   const more = "|(?:dùng\\s+)?để\\s+làm\\s+(?:gì|chi)|(?:có\\s+)?(?:tác|công)\\s+dụng\\s+gì";
-  const m = t.match(new RegExp(`^(?:(?:cho )?(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |vậy |thế |còn |mà |ủa )*([\\p{L}\\d][\\p{L}\\d-]{3,24}(?:\\s(?!(?:để|làm|có|là|thì|trị|chữa|uống|dùng|bôi|thoa|tiêm|chích|xịt|nhỏ|ngậm|tác|công)\\s)[\\p{L}\\d-]{1,12})?)\\s+(?:thì\\s+)?(?:${strict}${loose ? more : ""})`, "iu"));
+  const m = t.match(VR(new RegExp(`^(?:(?:cho )?(?:a|anh|e|em|c|chị|mình|tui|tôi) hỏi |vậy |thế |còn |mà |ủa )*([\\p{L}\\d][\\p{L}\\d-]{3,24}(?:\\s(?!(?:để|làm|có|là|thì|trị|chữa|uống|dùng|bôi|thoa|tiêm|chích|xịt|nhỏ|ngậm|tác|công)\\s)[\\p{L}\\d-]{1,12})?)\\s+(?:thì\\s+)?(?:${strict}${loose ? more : ""})`, "iu")));
   const n = m?.[1]?.trim();
   if (!n || !isForeign(n.split(" ")[0])) return undefined;
   if (healthSubjectOf(n, true)) return undefined;
@@ -126,13 +127,13 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       text: `Đừng tự cho bé uống thuốc của người nha — nhiều thuốc người dùng bình thường lại độc với chó mèo, và liều cho thú cưng tính rất khác. Lomi không có dữ liệu thuốc thú y nên không gợi ý thuốc được.\n\nBé cần thuốc gì thì để bác sĩ thú y khám rồi kê là an toàn nhất.`,
     };
   // Đang nói chuyện uống nhầm mà bảo "giờ thấy bình thường" → không trấn an: triệu chứng có thể tới muộn (NHS — xem DRUG_CLAIMS.poison-first-aid).
-  if (ctx.afterOverdose && words <= 9 && !/\?/.test(text) && /\b(binh thuong|chua thay gi|khong thay gi|khong sao|van on|van khoe|chua bi gi|khong bi gi)\b/.test(n))
+  if (ctx.afterOverdose && words <= 9 && !/\?/.test(text) && VN(/\b(bình thường|chưa thấy gì|không thấy gì|không sao|vẫn ổn|vẫn khoẻ|chưa bị gì|không bị gì)\b/).test(n))
     return {
       kind: "overdose",
       urgent: true,
       text: "Lúc này thấy bình thường thì cũng chưa chắc là ổn đâu — triệu chứng ngộ độc thuốc có thể vài giờ, thậm chí vài ngày sau mới xuất hiện. Lomi không biết đó là thuốc gì nên không nói được là an toàn; bạn vẫn nên gọi **115** hoặc hỏi ngay bác sĩ / dược sĩ, đọc cho họ tên thuốc, số viên và giờ uống. Trong lúc đó đừng ở một mình nha.",
     };
-  if (ctx.afterOverdose && words <= 8 && !/\?/.test(text) && /\b(\d+|mot|hai|ba|may|vai|nua) (vien|goi|ong|muong|ml|mg|lo|vi)\b|\b(moi uong|vua uong|luc nay|hoi nay|sang nay|toi qua|khong biet thuoc gi|khong nho)\b/.test(n))
+  if (ctx.afterOverdose && words <= 8 && !/\?/.test(text) && VN(/\b(\d+|một|hai|ba|mấy|vài|nửa) (viên|gói|ống|muỗng|ml|mg|lọ|vỉ)\b|\b(mới uống|vừa uống|lúc nãy|hồi nãy|sáng nay|tối qua|không biết thuốc gì|không nhớ)\b/).test(n))
     return {
       kind: "overdose",
       urgent: true,
@@ -153,7 +154,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   const known = paired ?? findDrug(text) ?? (ctx.drugId && words <= 9 ? drugById(ctx.drugId) : null);
   // 12/10: vừa nghe Lomi nói về một thuốc mà hỏi "có nguồn không", "lấy ở đâu ra" → đưa đủ nguồn (kèm đường dẫn); thuốc chưa có mục thì
   //   nói rõ chính vì chưa có nguồn nên Lomi mới không trả lời.
-  if (ctx.afterDrug && words <= 9 && /\b(nguon|lay (o|tu) dau|o dau ra|dua vao dau|tin duoc khong|co chac khong|ai noi)\b/.test(n)) {
+  if (ctx.afterDrug && words <= 9 && VN(/\b(nguồn|lấy (ở|từ) đâu|ở đâu ra|dựa vào đâu|tin được không|có chắc không|ai nói)\b/).test(n)) {
     const d = ctx.drugId ? drugById(ctx.drugId) : null;
     return d
       ? { kind: "source", drugId: d.id, name: d.names[0], text: sourceList(d) }
@@ -172,7 +173,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       name: known.names[0],
       text: `Với hoàn cảnh bạn vừa kể thì Lomi **không tự kết luận được** là dùng ${known.names[0]} có ổn hay không — nguồn Lomi đối chiếu chỉ nói chung như ở trên, không nói cho từng người.\n\nBạn nói đúng điều này với dược sĩ / bác sĩ (đang dùng ${hit0.with.replace(/ \(.*\)$/, "")} thế nào, thường xuyên cỡ nào) để họ tư vấn cho đúng trường hợp của bạn nha.`,
     };
-  if ((INTERACT.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || /\b(\S+) (uong|dung) (chung|cung|kem) (voi )?\S+/.test(n)) && ASKS.test(n)) {
+  if ((INTERACT.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || VN(/\b(\S+) (uống|dùng) (chung|cùng|kèm) (với )?\S+/).test(n)) && ASKS.test(n)) {
     const hit = hit0;
     if (known && hit)
       return {
@@ -211,14 +212,14 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
     };
 
   // Vừa nói về một thuốc mà hỏi "trẻ em uống được không" → thuốc có mục thì đáp theo dữ liệu; không thì nói rõ là chưa có dữ liệu.
-  if (ctx.afterDrug && words <= 9 && /\b(tre em|tre con|tre nho|em be|con nit|cho be|be uong|con uong)\b/.test(n) && ASKS.test(n)) {
+  if (ctx.afterDrug && words <= 9 && VN(/\b(trẻ em|trẻ con|trẻ nhỏ|em bé|con nít|cho bé|bé uống|con uống)\b/).test(n) && ASKS.test(n)) {
     const d = ctx.drugId ? drugById(ctx.drugId) : null;
     return d
       ? { kind: "kid", drugId: d.id, name: d.names[0], text: renderDrug(d, "children") }
       : { kind: "kid", name: ctx.name, text: `Lomi chưa có dữ liệu đã kiểm chứng để nói ${ctx.name ? `**${ctx.name}**` : "thuốc đó"} trẻ em dùng được hay không. Thuốc cho trẻ phải theo tuổi và cân nặng — bạn hỏi dược sĩ / bác sĩ kèm tuổi, cân nặng của bé, và đừng tự chia thuốc của người lớn cho bé nha.` };
   }
   // "uống trước hay sau ăn", "uống mấy ngày" — cách dùng cũng tuỳ từng thuốc.
-  if (/\b(cach nhau (bao lau|may gio|may tieng)|cach (may|bao nhieu) (gio|tieng)|bao lau uong (mot|1) lan|may tieng uong (mot|1) lan|truoc hay sau (khi )?an|uong (truoc|sau) (khi )?an|uong luc nao|uong khi nao|uong buoi nao|uong sang hay toi|uong (trong )?(bao lau|may ngay|may tuan)|(uong|dung|xai) (sao|the nao|nhu the nao|nhu nao|lam sao)|cach (uong|dung|xai))\b/.test(n) && (med || ctx.inHealth || ctx.afterDrug))
+  if (VN(/\b(cách nhau (bao lâu|mấy giờ|mấy tiếng)|cách (mấy|bao nhiêu) (giờ|tiếng)|bao lâu uống (một|1) lần|mấy tiếng uống (một|1) lần|trước hay sau (khi )?ăn|uống (trước|sau) (khi )?ăn|uống lúc nào|uống khi nào|uống buổi nào|uống sáng hay tối|uống (trong )?(bao lâu|mấy ngày|mấy tuần)|(uống|dùng|xài) (sao|thế nào|như thế nào|như nào|làm sao)|cách (uống|dùng|xài))\b/).test(n) && (med || ctx.inHealth || ctx.afterDrug))
     return {
       kind: "dose",
       text: `Uống trước hay sau ăn, uống lúc nào và trong bao lâu thì mỗi thuốc mỗi khác — Lomi không có dữ liệu riêng cho thuốc ${who ? `của ${who}` : "đó"} nên không nói bừa được.\n• Có đơn bác sĩ: làm đúng như đơn ghi.\n• Thuốc tự mua: xem tờ hướng dẫn trong hộp, hoặc hỏi dược sĩ lúc mua.`,
@@ -236,7 +237,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // Tên thuốc: lấy trong câu; câu hỏi nối không nhắc lại tên ("nó có tác dụng phụ gì không") thì dùng thuốc vừa hỏi ở lượt trước.
   const named = nameOf(text);
   const name = named ?? (ctx.afterDrug && words <= 9 ? ctx.name : undefined);
-  if ((SIDE.test(n) && (med || !!name)) || (ctx.afterDrug && /\b(co hai khong|co hai gi|co sao khong|co anh huong gi|co nguy hiem khong|co tot khong)\b/.test(n) && words <= 7))
+  if ((SIDE.test(n) && (med || !!name)) || (ctx.afterDrug && VN(/\b(có hại không|có hại gì|có sao không|có ảnh hưởng gì|có nguy hiểm không|có tốt không)\b/).test(n) && words <= 7))
     return {
       kind: "side",
       name,
@@ -245,7 +246,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
 
   // Tên đứng sau động từ dùng thuốc ("uống aspirin để làm gì") cũng là hỏi về chính thuốc đó, dù câu không có chữ "thuốc".
   const taken = takenNameOf(text) ?? bareNameOf(text, !!ctx.inHealth || !!ctx.afterDrug);
-  if ((named && WHAT.test(n) && /\b(thuoc)\b/.test(n)) || taken)
+  if ((named && WHAT.test(n) && VN(/\b(thuốc)\b/).test(n)) || taken)
     return {
       kind: "what",
       name: taken ?? named,
@@ -253,14 +254,14 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
     };
 
   // Vừa hỏi chuyện thuốc rồi nói thêm hoàn cảnh ("e đang cho con bú", "a đang mang thai") → càng phải hỏi bác sĩ trước.
-  if (ctx.afterDrug && words <= 8 && /\b(cho con bu|mang thai|co bau|co thai|dang bau)\b/.test(n))
+  if (ctx.afterDrug && words <= 8 && VN(/\b(cho con bú|mang thai|có bầu|có thai|đang bầu)\b/).test(n))
     return {
       kind: "should",
       med: true,
       text: "Đang mang thai hoặc cho con bú thì càng phải hỏi bác sĩ / dược sĩ **trước khi** uống bất kỳ thuốc gì nha — phần lớn thuốc uống khi mang thai đi qua nhau thai tới em bé, và một lượng nhỏ thuốc có thể qua sữa mẹ (theo NHS). Lomi không có dữ liệu để nói thuốc nào an toàn cho giai đoạn này, nên bạn nói rõ hoàn cảnh với người kê / bán thuốc để họ chọn loại phù hợp.",
     };
   // "có nên uống kháng sinh không", "uống thuốc ngủ được không" — Lomi không quyết thay; thuốc kê đơn thì không tự mua uống.
-  if (SHOULD.test(n) && (med || RX_ONLY.test(n) || (ctx.inHealth && /\b(uong|dung|xai|tiem|chich)\b/.test(n))) && ASKS.test(n) && words <= 14)
+  if (SHOULD.test(n) && (med || RX_ONLY.test(n) || (ctx.inHealth && VN(/\b(uống|dùng|xài|tiêm|chích)\b/).test(n))) && ASKS.test(n) && words <= 14)
     return {
       kind: "should",
       med: med || RX_ONLY.test(n),
@@ -268,7 +269,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
     };
 
   // "uống thuốc gì (được)?", "thuốc nào tốt?" — Lomi không kê thuốc; đang kể triệu chứng thì nói theo đúng mạch đó.
-  if (WHICH.test(n) && !/\b(la thuoc gi)\b/.test(n) && words <= 14) {
+  if (WHICH.test(n) && !VN(/\b(là thuốc gì)\b/).test(n) && words <= 14) {
     const about = ctx.label ? `${cap(ctx.label)} thì ` : "";
     return {
       kind: "which",

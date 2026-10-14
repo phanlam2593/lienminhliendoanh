@@ -6,6 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeVi } from "@/lib/lomiFaq";
 import type { BusinessType } from "@/lib/types";
+import { VR, VN } from "@/lib/viMatch";
 
 export type PlaceCard = {
   id: string;
@@ -22,29 +23,29 @@ export type PlaceCard = {
 type Kind = { re: RegExp; type: BusinessType; names: string[]; noun: string };
 // names = chữ không dấu để tìm trong tên doanh nghiệp (name_unaccent)
 const KINDS: Kind[] = [
-  { re: /\b(ca phe|cafe|coffee|cf)\b/, type: "food", names: ["cafe", "coffee", "ca phe"], noun: "quán cà phê" },
-  { re: /\b(tra sua|tra chanh|milk tea)\b/, type: "food", names: ["tra sua", "tea", "tra"], noun: "quán trà sữa" },
-  { re: /\b(banh|bakery|tiem banh)\b/, type: "food", names: ["banh", "bakery"], noun: "tiệm bánh" },
-  { re: /\b(lau|nuong|bbq)\b/, type: "food", names: ["lau", "nuong", "bbq"], noun: "quán lẩu nướng" },
-  { re: /\b(an vat|che|kem)\b/, type: "food", names: ["an vat", "che", "kem"], noun: "quán ăn vặt" },
-  { re: /\b(bar|pub|quan nhau|bia|nhau)\b/, type: "food", names: ["bar", "pub", "bia", "nhau"], noun: "quán nhậu" },
-  { re: /\b(pho|bun|com|mi quang|hu tieu|quan an|nha hang|do an|an uong|cho an)\b/, type: "food", names: [], noun: "quán ăn" },
-  { re: /\b(spa|massage|goi dau)\b/, type: "service", names: ["spa", "massage"], noun: "spa" },
-  { re: /\b(nail|mong)\b/, type: "service", names: ["nail"], noun: "tiệm nail" },
-  { re: /\b(toc|salon|barber)\b/, type: "service", names: ["toc", "salon", "barber", "hair"], noun: "tiệm tóc" },
-  { re: /\b(gym|yoga|phong tap)\b/, type: "service", names: ["gym", "yoga", "fitness"], noun: "phòng tập" },
-  { re: /\b(homestay)\b/, type: "stay", names: ["homestay"], noun: "homestay" },
-  { re: /\b(khach san|hotel|resort)\b/, type: "stay", names: ["hotel", "khach san", "resort"], noun: "khách sạn" },
-  { re: /\b(villa)\b/, type: "stay", names: ["villa"], noun: "villa" },
-  { re: /\b(cho o|cho nghi|luu tru|phong nghi|nha nghi)\b/, type: "stay", names: [], noun: "chỗ ở" },
-  { re: /\b(tour|du lich)\b/, type: "travel", names: ["tour"], noun: "tour du lịch" },
-  { re: /\b(thue xe|xe may)\b/, type: "travel", names: ["xe", "thue"], noun: "chỗ thuê xe" },
-  { re: /\b(chup anh|photo|studio)\b/, type: "freelance", names: ["photo", "studio", "chup"], noun: "dịch vụ chụp ảnh" },
-  { re: /\b(quan ao|thoi trang|shop)\b/, type: "shopping", names: ["shop", "fashion"], noun: "shop" },
-  { re: /\b(my pham|skincare)\b/, type: "shopping", names: ["cosmetic", "my pham"], noun: "shop mỹ phẩm" },
-  { re: /\b(hoa tuoi|tiem hoa|shop hoa)\b/, type: "shopping", names: ["hoa", "flower"], noun: "tiệm hoa" },
-  { re: /\b(dac san)\b/, type: "shopping", names: ["dac san"], noun: "shop đặc sản" },
-  { re: /\b(nha dat|bat dong san|bds|thue nha|mua nha)\b/, type: "broker", names: [], noun: "văn phòng nhà đất" },
+  { re: VN(/\b(cà phê|cafe|coffee|cf)\b/), type: "food", names: ["cafe", "coffee", "ca phe"], noun: "quán cà phê" },
+  { re: VN(/\b(trà sữa|trà chanh|milk tea)\b/), type: "food", names: ["tra sua", "tea", "tra"], noun: "quán trà sữa" },
+  { re: VN(/\b(bánh|bakery|tiệm bánh)\b/), type: "food", names: ["banh", "bakery"], noun: "tiệm bánh" },
+  { re: VN(/\b(lẩu|nướng|bbq)\b/), type: "food", names: ["lau", "nuong", "bbq"], noun: "quán lẩu nướng" },
+  { re: VN(/\b(ăn vặt|chè|kem)\b/), type: "food", names: ["an vat", "che", "kem"], noun: "quán ăn vặt" },
+  { re: VN(/\b(bar|pub|quán nhậu|bia|nhậu)\b/), type: "food", names: ["bar", "pub", "bia", "nhau"], noun: "quán nhậu" },
+  { re: VN(/\b(phở|bún|cơm|mì quảng|hủ tiếu|quán ăn|nhà hàng|đồ ăn|ăn uống|chỗ ăn)\b/), type: "food", names: [], noun: "quán ăn" },
+  { re: VN(/\b(spa|massage|gội đầu)\b/), type: "service", names: ["spa", "massage"], noun: "spa" },
+  { re: VN(/\b(nail|móng)\b/), type: "service", names: ["nail"], noun: "tiệm nail" },
+  { re: VN(/\b(tóc|salon|barber)\b/), type: "service", names: ["toc", "salon", "barber", "hair"], noun: "tiệm tóc" },
+  { re: VN(/\b(gym|yoga|phòng tập)\b/), type: "service", names: ["gym", "yoga", "fitness"], noun: "phòng tập" },
+  { re: VR(/\b(homestay)\b/), type: "stay", names: ["homestay"], noun: "homestay" },
+  { re: VN(/\b(khách sạn|hotel|resort)\b/), type: "stay", names: ["hotel", "khach san", "resort"], noun: "khách sạn" },
+  { re: VR(/\b(villa)\b/), type: "stay", names: ["villa"], noun: "villa" },
+  { re: VN(/\b(chỗ ở|chỗ nghỉ|lưu trú|phòng nghỉ|nhà nghỉ)\b/), type: "stay", names: [], noun: "chỗ ở" },
+  { re: VN(/\b(tour|du lịch)\b/), type: "travel", names: ["tour"], noun: "tour du lịch" },
+  { re: VN(/\b(thuê xe|xe máy)\b/), type: "travel", names: ["xe", "thue"], noun: "chỗ thuê xe" },
+  { re: VN(/\b(chụp ảnh|photo|studio)\b/), type: "freelance", names: ["photo", "studio", "chup"], noun: "dịch vụ chụp ảnh" },
+  { re: VN(/\b(quần áo|thời trang|shop)\b/), type: "shopping", names: ["shop", "fashion"], noun: "shop" },
+  { re: VN(/\b(mỹ phẩm|skincare)\b/), type: "shopping", names: ["cosmetic", "my pham"], noun: "shop mỹ phẩm" },
+  { re: VN(/\b(hoa tươi|tiệm hoa|shop hoa)\b/), type: "shopping", names: ["hoa", "flower"], noun: "tiệm hoa" },
+  { re: VN(/\b(đặc sản)\b/), type: "shopping", names: ["dac san"], noun: "shop đặc sản" },
+  { re: VN(/\b(nhà đất|bất động sản|bds|thuê nhà|mua nhà)\b/), type: "broker", names: [], noun: "văn phòng nhà đất" },
 ];
 
 export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number };
@@ -62,28 +63,28 @@ function byRadius<T extends { distKm?: number }>(cards: T[], pos: unknown, maxKm
 // Động từ "tìm" rõ ràng. (Chữ "ưu đãi", "rẻ", "ngon" chỉ là điều kiện lọc, không tự kích hoạt tìm —
 // tránh "ưu đãi hết hạn gia hạn được không?" bị hiểu thành đi tìm quán.)
 const SEEK =
-  /\b(tim|kiem|o dau|dau co|gan day|gan minh|gan nhat|quanh day|quanh minh|goi y|gioi thieu|recommend|muon di|muon an|muon uong|can tim|co ai ban|co ai lam)\b/;
-const HOWTO = /\b(lam sao|cach|the nao|nhu the nao|huong dan|la gi|tai sao|bao nhieu diem|tao uu dai|cua toi|cua minh|da nhan|da luu|ma uu dai)\b/;
+  VN(/\b(tìm|kiếm|ở đâu|đâu có|gần đây|gần mình|gần nhất|quanh đây|quanh mình|gợi ý|giới thiệu|recommend|muốn đi|muốn ăn|muốn uống|cần tìm|có ai bán|có ai làm)\b/);
+const HOWTO = VN(/\b(làm sao|cách|thế nào|như thế nào|hướng dẫn|là gì|tại sao|bao nhiêu điểm|tạo ưu đãi|của tôi|của mình|đã nhận|đã lưu|mã ưu đãi)\b/);
 
 /** Nhận ý "tìm chỗ/ưu đãi thật" hoặc "hôm nay ăn gì". Câu hỏi cách dùng app thì trả null để FAQ lo. */
 export function detectSearch(text: string): SearchIntent | null {
   const n = ` ${normalizeVi(text)} `;
-  const near = /\b(gan|quanh|lan can|nearby)\b/.test(n);
-  if (/\b(hom nay an gi|an gi bay gio|an gi day|nen an gi|trua nay an gi|toi nay an gi|sang nay an gi|an gi ta|an gi gio|doi mon|mon khac|chon lai quan|quan khac)\b/.test(n))
+  const near = VN(/\b(gần|quanh|lân cận|nearby)\b/).test(n);
+  if (VN(/\b(hôm nay ăn gì|ăn gì bây giờ|ăn gì đây|nên ăn gì|trưa nay ăn gì|tối nay ăn gì|sáng nay ăn gì|ăn gì ta|ăn gì giờ|đổi món|món khác|chọn lại quán|quán khác)\b/).test(n))
     return { mode: "eat", near, offer: true };
-  if (/\b(uong gi|di cafe dau|cafe o dau|ca phe o dau|uong o dau)\b/.test(n)) return { mode: "drink", near, offer: true, kind: KINDS[0] };
-  if (/\b(di dau choi|choi o dau|di dau bay gio|cuoi tuan di dau|di choi dau)\b/.test(n)) return { mode: "go", near, offer: true };
+  if (VN(/\b(uống gì|đi cafe đâu|cafe ở đâu|cà phê ở đâu|uống ở đâu)\b/).test(n)) return { mode: "drink", near, offer: true, kind: KINDS[0] };
+  if (VN(/\b(đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu)\b/).test(n)) return { mode: "go", near, offer: true };
   if (HOWTO.test(n)) return null;
   const strictKind = KINDS.find((k) => k.re.test(n));
   // "ăn/uống" đứng một mình chỉ là đoán — không đủ để hiểu là muốn tìm quán (vd "bác sĩ nào cũng cho thuốc uống không hết").
-  const kind = strictKind ?? (/\b(ngon|an|uong)\b/.test(n) ? KINDS.find((k) => k.noun === "quán ăn") : undefined);
-  const offer = /\b(uu dai|khuyen mai|giam gia|sale|deal|voucher|re)\b/.test(n);
-  const place = /\b(quan|tiem|shop|cua hang|cho nao|noi nao)\b/.test(n);
+  const kind = strictKind ?? (VN(/\b(ngon|ăn|uống)\b/).test(n) ? KINDS.find((k) => k.noun === "quán ăn") : undefined);
+  const offer = VN(/\b(ưu đãi|khuyến mãi|giảm giá|sale|deal|voucher|rẻ)\b/).test(n);
+  const place = VN(/\b(quán|tiệm|shop|cửa hàng|chỗ nào|nơi nào)\b/).test(n);
   const seek =
     SEEK.test(n) ||
     near ||
-    (/\b(nao|dau)\b/.test(n) && (!!strictKind || place)) || // "quán cà phê NÀO đang có ưu đãi"
-    (/\bco\b.*\bkhong\b/.test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
+    (VN(/\b(nào|đâu)\b/).test(n) && (!!strictKind || place)) || // "quán cà phê NÀO đang có ưu đãi"
+    (VN(/\bcó\b.*\bkhông\b/).test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
   if (!seek) return null;
   if (!kind && !offer && !place) return null;
   return { mode: "find", kind, near, offer };
@@ -230,34 +231,34 @@ export type Dish = {
 };
 
 export const DISHES: Dish[] = [
-  { id: "pho", label: "🍜 Phở", name: "phở", keys: ["pho"], vi: ["phở"], re: /\bpho\b/, when: ["morning", "noon", "night"] },
-  { id: "bunbo", label: "🍜 Bún bò", name: "bún bò", keys: ["bun bo"], vi: ["bún bò"], re: /\bbun bo\b/, when: ["morning", "noon"] },
-  { id: "bundau", label: "🍱 Bún đậu", name: "bún đậu mắm tôm", keys: ["bun dau"], vi: ["bún đậu"], re: /\bbun dau\b/, when: ["noon", "afternoon"] },
-  { id: "bun", label: "🍜 Bún các loại", name: "bún", keys: ["bun"], vi: ["bún"], re: /\bbun\b/, when: ["morning", "noon"] },
-  { id: "hutieu", label: "🍜 Hủ tiếu", name: "hủ tiếu", keys: ["hu tieu"], vi: ["hủ tiếu"], re: /\bhu tieu\b/, when: ["morning", "night"] },
-  { id: "miquang", label: "🍜 Mì Quảng", name: "mì Quảng", keys: ["mi quang"], vi: ["mì quảng"], re: /\bmi quang\b/, when: ["morning", "noon"] },
-  { id: "banhcan", label: "🥞 Bánh căn", name: "bánh căn Đà Lạt", keys: ["banh can"], vi: ["bánh căn"], re: /\bbanh can\b/, when: ["morning", "afternoon", "evening"] },
-  { id: "banhmi", label: "🥖 Bánh mì xíu mại", name: "bánh mì (xíu mại)", keys: ["banh mi", "xiu mai"], vi: ["bánh mì", "xíu mại"], re: /\b(banh mi|xiu mai)\b/, when: ["morning", "night"] },
-  { id: "comtam", label: "🍛 Cơm tấm", name: "cơm tấm", keys: ["com tam"], vi: ["cơm tấm"], re: /\bcom tam\b/, when: ["morning", "noon", "evening"] },
-  { id: "com", label: "🍚 Cơm", name: "cơm", keys: ["com"], vi: ["cơm"], re: /\b(com|com trua|com van phong)\b/, when: ["noon", "evening"] },
-  { id: "chao", label: "🥣 Cháo", name: "cháo", keys: ["chao"], vi: ["cháo"], re: /\bchao (ga|long|vit|hau|ca|suon|bo)\b|\ban chao\b/, when: ["morning", "night"] },
-  { id: "lau", label: "🍲 Lẩu gà lá é", name: "lẩu (gà lá é, lẩu bò…)", keys: ["lau"], vi: ["lẩu"], re: /\blau\b/, when: ["evening", "night"] },
-  { id: "nuong", label: "🍢 Đồ nướng / BBQ", name: "đồ nướng", keys: ["nuong", "bbq"], vi: ["nướng", "bbq"], re: /\b(nuong|bbq)\b/, when: ["evening", "night"] },
-  { id: "banhtrang", label: "🫓 Bánh tráng nướng", name: "bánh tráng nướng / trộn", keys: ["banh trang"], vi: ["bánh tráng"], re: /\bbanh trang\b/, when: ["afternoon", "evening", "night"] },
-  { id: "oc", label: "🐚 Ốc", name: "ốc", keys: ["oc"], vi: ["ốc"], re: /\b(an oc|quan oc|oc)\b/, when: ["evening", "night"] },
-  { id: "banhxeo", label: "🥘 Bánh xèo", name: "bánh xèo", keys: ["banh xeo"], vi: ["bánh xèo"], re: /\bbanh xeo\b/, when: ["afternoon", "evening"] },
-  { id: "ga", label: "🍗 Gà rán / gà nướng", name: "gà", keys: ["ga "], vi: ["gà"], re: /\b(ga ran|ga nuong|com ga|ga)\b/, when: ["noon", "evening"] },
-  { id: "pizza", label: "🍕 Pizza / đồ Tây", name: "pizza, đồ Âu", keys: ["pizza", "steak", "burger"], vi: ["pizza", "bò bít tết"], re: /\b(pizza|steak|burger|do tay|mi y|spaghetti)\b/, when: ["noon", "evening"] },
-  { id: "anvat", label: "🍡 Ăn vặt", name: "đồ ăn vặt", keys: ["an vat"], vi: ["ăn vặt"], re: /\ban vat\b/, when: ["afternoon", "night"] },
-  { id: "che", label: "🍧 Chè / kem", name: "chè, kem", keys: ["che", "kem"], vi: ["chè", "kem"], re: /\b(an che|che|kem)\b/, when: ["afternoon", "evening"] },
+  { id: "pho", label: "🍜 Phở", name: "phở", keys: ["pho"], vi: ["phở"], re: VN(/\bphở\b/), when: ["morning", "noon", "night"] },
+  { id: "bunbo", label: "🍜 Bún bò", name: "bún bò", keys: ["bun bo"], vi: ["bún bò"], re: VN(/\bbún bò\b/), when: ["morning", "noon"] },
+  { id: "bundau", label: "🍱 Bún đậu", name: "bún đậu mắm tôm", keys: ["bun dau"], vi: ["bún đậu"], re: VN(/\bbún đậu\b/), when: ["noon", "afternoon"] },
+  { id: "bun", label: "🍜 Bún các loại", name: "bún", keys: ["bun"], vi: ["bún"], re: VN(/\bbún\b/), when: ["morning", "noon"] },
+  { id: "hutieu", label: "🍜 Hủ tiếu", name: "hủ tiếu", keys: ["hu tieu"], vi: ["hủ tiếu"], re: VN(/\bhủ tiếu\b/), when: ["morning", "night"] },
+  { id: "miquang", label: "🍜 Mì Quảng", name: "mì Quảng", keys: ["mi quang"], vi: ["mì quảng"], re: VN(/\bmì quảng\b/), when: ["morning", "noon"] },
+  { id: "banhcan", label: "🥞 Bánh căn", name: "bánh căn Đà Lạt", keys: ["banh can"], vi: ["bánh căn"], re: VN(/\bbánh căn\b/), when: ["morning", "afternoon", "evening"] },
+  { id: "banhmi", label: "🥖 Bánh mì xíu mại", name: "bánh mì (xíu mại)", keys: ["banh mi", "xiu mai"], vi: ["bánh mì", "xíu mại"], re: VN(/\b(bánh mì|xíu mại)\b/), when: ["morning", "night"] },
+  { id: "comtam", label: "🍛 Cơm tấm", name: "cơm tấm", keys: ["com tam"], vi: ["cơm tấm"], re: VN(/\bcơm tấm\b/), when: ["morning", "noon", "evening"] },
+  { id: "com", label: "🍚 Cơm", name: "cơm", keys: ["com"], vi: ["cơm"], re: VN(/\b(cơm|cơm trưa|cơm văn phòng)\b/), when: ["noon", "evening"] },
+  { id: "chao", label: "🥣 Cháo", name: "cháo", keys: ["chao"], vi: ["cháo"], re: VN(/\bcháo (gà|lòng|vịt|hàu|cá|sườn|bò)\b|\băn cháo\b/), when: ["morning", "night"] },
+  { id: "lau", label: "🍲 Lẩu gà lá é", name: "lẩu (gà lá é, lẩu bò…)", keys: ["lau"], vi: ["lẩu"], re: VR(/\blau\b/), when: ["evening", "night"] },
+  { id: "nuong", label: "🍢 Đồ nướng / BBQ", name: "đồ nướng", keys: ["nuong", "bbq"], vi: ["nướng", "bbq"], re: VN(/\b(nướng|bbq)\b/), when: ["evening", "night"] },
+  { id: "banhtrang", label: "🫓 Bánh tráng nướng", name: "bánh tráng nướng / trộn", keys: ["banh trang"], vi: ["bánh tráng"], re: VN(/\bbánh tráng\b/), when: ["afternoon", "evening", "night"] },
+  { id: "oc", label: "🐚 Ốc", name: "ốc", keys: ["oc"], vi: ["ốc"], re: VN(/\b(ăn ốc|quán ốc|ốc)\b/), when: ["evening", "night"] },
+  { id: "banhxeo", label: "🥘 Bánh xèo", name: "bánh xèo", keys: ["banh xeo"], vi: ["bánh xèo"], re: VN(/\bbánh xèo\b/), when: ["afternoon", "evening"] },
+  { id: "ga", label: "🍗 Gà rán / gà nướng", name: "gà", keys: ["ga "], vi: ["gà"], re: VN(/\b(gà rán|gà nướng|cơm gà|gà)\b/), when: ["noon", "evening"] },
+  { id: "pizza", label: "🍕 Pizza / đồ Tây", name: "pizza, đồ Âu", keys: ["pizza", "steak", "burger"], vi: ["pizza", "bò bít tết"], re: VN(/\b(pizza|steak|burger|đồ tây|mì ý|spaghetti)\b/), when: ["noon", "evening"] },
+  { id: "anvat", label: "🍡 Ăn vặt", name: "đồ ăn vặt", keys: ["an vat"], vi: ["ăn vặt"], re: VN(/\băn vặt\b/), when: ["afternoon", "night"] },
+  { id: "che", label: "🍧 Chè / kem", name: "chè, kem", keys: ["che", "kem"], vi: ["chè", "kem"], re: VN(/\b(ăn chè|chè|kem)\b/), when: ["afternoon", "evening"] },
   // Đồ uống
-  { id: "cafe", label: "☕ Cà phê", name: "cà phê", keys: ["cafe", "coffee", "ca phe"], vi: ["cà phê", "cafe", "coffee"], re: /\b(ca phe|cafe|cf|coffee)\b/, when: ["morning", "noon", "afternoon"], drink: true },
-  { id: "trasua", label: "🧋 Trà sữa", name: "trà sữa", keys: ["tra sua"], vi: ["trà sữa"], re: /\btra sua\b/, when: ["afternoon", "evening"], drink: true },
-  { id: "tra", label: "🍵 Trà / trà trái cây", name: "trà", keys: ["tra"], vi: ["trà"], re: /\b(tra chanh|tra trai cay|tra dao|uong tra)\b/, when: ["noon", "afternoon"], drink: true },
-  { id: "daunanh", label: "🥛 Sữa đậu nành nóng", name: "sữa đậu nành nóng", keys: ["dau nanh"], vi: ["đậu nành"], re: /\b(dau nanh|sua dau)\b/, when: ["evening", "night"], drink: true },
-  { id: "sinhto", label: "🥤 Sinh tố / nước ép", name: "sinh tố, nước ép", keys: ["sinh to", "nuoc ep", "juice"], vi: ["sinh tố", "nước ép"], re: /\b(sinh to|nuoc ep|juice)\b/, when: ["noon", "afternoon"], drink: true },
-  { id: "cacao", label: "🍫 Ca cao nóng", name: "ca cao / sô-cô-la nóng", keys: ["cacao", "ca cao", "chocolate"], vi: ["ca cao", "cacao"], re: /\b(ca cao|cacao|socola nong|chocolate)\b/, when: ["evening", "night", "morning"], drink: true },
-  { id: "bia", label: "🍻 Bia / quán nhậu", name: "bia, đồ nhậu", keys: ["bia", "nhau", "pub", "bar"], vi: ["bia", "nhậu"], re: /\b(bia|nhau|quan nhau)\b/, when: ["evening", "night"], drink: true },
+  { id: "cafe", label: "☕ Cà phê", name: "cà phê", keys: ["cafe", "coffee", "ca phe"], vi: ["cà phê", "cafe", "coffee"], re: VN(/\b(cà phê|cafe|cf|coffee)\b/), when: ["morning", "noon", "afternoon"], drink: true },
+  { id: "trasua", label: "🧋 Trà sữa", name: "trà sữa", keys: ["tra sua"], vi: ["trà sữa"], re: VN(/\btrà sữa\b/), when: ["afternoon", "evening"], drink: true },
+  { id: "tra", label: "🍵 Trà / trà trái cây", name: "trà", keys: ["tra"], vi: ["trà"], re: VN(/\b(trà chanh|trà trái cây|trà đào|uống trà)\b/), when: ["noon", "afternoon"], drink: true },
+  { id: "daunanh", label: "🥛 Sữa đậu nành nóng", name: "sữa đậu nành nóng", keys: ["dau nanh"], vi: ["đậu nành"], re: VN(/\b(đậu nành|sữa đậu)\b/), when: ["evening", "night"], drink: true },
+  { id: "sinhto", label: "🥤 Sinh tố / nước ép", name: "sinh tố, nước ép", keys: ["sinh to", "nuoc ep", "juice"], vi: ["sinh tố", "nước ép"], re: VN(/\b(sinh tố|nước ép|juice)\b/), when: ["noon", "afternoon"], drink: true },
+  { id: "cacao", label: "🍫 Ca cao nóng", name: "ca cao / sô-cô-la nóng", keys: ["cacao", "ca cao", "chocolate"], vi: ["ca cao", "cacao"], re: VN(/\b(ca cao|cacao|socola nóng|chocolate)\b/), when: ["evening", "night", "morning"], drink: true },
+  { id: "bia", label: "🍻 Bia / quán nhậu", name: "bia, đồ nhậu", keys: ["bia", "nhau", "pub", "bar"], vi: ["bia", "nhậu"], re: VN(/\b(bia|nhậu|quán nhậu)\b/), when: ["evening", "night"], drink: true },
 ];
 
 function partNow(h = new Date().getHours()): Dish["when"][number] {
@@ -283,7 +284,7 @@ export function detectDish(text: string): Dish | undefined {
   const n = ` ${normalizeVi(t)} `;
   // 08/10: "phô mai", "phố đi bộ" bỏ dấu cũng ra "pho" — gõ CÓ DẤU mà không phải "phở" thì không tính là món phở
   // (gõ không dấu "pho" vẫn hiểu là phở như trước).
-  const notPho = /(?<![\p{L}])ph[ôốồổỗộóòỏõọ](?![\p{L}])/u.test(t.normalize("NFC").toLowerCase()) && !/phở/iu.test(t.normalize("NFC"));
+  const notPho = VR(/(?<![\p{L}])ph[ôốồổỗộóòỏõọ](?![\p{L}])/u).test(t.normalize("NFC").toLowerCase()) && !VR(/phở/iu).test(t.normalize("NFC"));
   return DISHES.find((d) => d.re.test(n) && !(d.id === "pho" && notPho));
 }
 

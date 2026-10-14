@@ -7,12 +7,13 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import type { Theme } from "@/lib/lomiHeart";
+import { VR, VN } from "@/lib/viMatch";
 
 export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ BỊ NÓI XẤU / HIỂU LẦM (01/10) ═══════════════════════
   {
     id: "gossip",
-    re: /\b(noi xau (minh|toi|em|tui|to|anh|chi|sau lung)|bi noi xau|noi sau lung|bi dat dieu|dat dieu cho minh|bi don|don dai ve minh|tung tin (don )?(bay|sai)|bi vu khong|vu khong minh|bi hieu lam|hieu lam minh|ai cung hieu lam|bi mang sau lung|xi xao ve minh|bi dem ra ban tan|(hox|ho|nguoi ta|may nguoi do|tui no|ba ay) nhieu chuyen|nhieu chuyen ve minh)\b/,
+    re: VN(/\b(nói xấu (mình|tôi|em|tui|tớ|anh|chị|sau lưng)|bị nói xấu|nói sau lưng|bị đặt điều|đặt điều cho mình|bị đồn|đồn đại về mình|tung tin (đồn )?(bậy|sai)|bị vu khống|vu khống mình|bị hiểu lầm|hiểu lầm mình|ai cũng hiểu lầm|bị mắng sau lưng|xì xào về mình|bị đem ra bàn tán|(hox|họ|người ta|mấy người đó|tụi nó|bà ấy) nhiều chuyện|nhiều chuyện về mình)\b/),
     feel: [
       "Bị nói xấu sau lưng khó chịu lắm, vừa tức vừa tủi, mà nhiều khi còn không biết giải thích với ai 😣",
       "Bị hiểu lầm hay bị đặt điều là cảm giác bất lực ghê, Lomi hiểu mà 🫂",
@@ -38,7 +39,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "fate",
     // "sox" = chữ "số" gõ có dấu (lib/lomiAccent đổi để không nhầm với "sợ").
-    re: /\b((so|sox) minh (kho|xui|den)|(so|sox) kho|doi minh kho|doi kho qua|sao minh kho the|sao minh kho vay|sao minh xui|xui xeo qua|xui qua troi|xui hoai|xui lien tuc|den dui|toan gap chuyen xui|lam gi cung that bai|lam gi cung hong|cai gi cung hong|cai gi cung do be|(so|sox) phan|kiep nay kho|troi khong thuong|ong troi bat cong)\b/,
+    re: VN(/\b((số|sox) mình (khổ|xui|đen)|(số|sox) khổ|đời mình khổ|đời khổ quá|sao mình khổ thế|sao mình khổ vậy|sao mình xui|xui xẻo quá|xui quá trời|xui hoài|xui liên tục|đen đủi|toàn gặp chuyện xui|làm gì cũng thất bại|làm gì cũng hỏng|cái gì cũng hỏng|cái gì cũng đổ bể|(số|sox) phận|kiếp này khổ|trời không thương|ông trời bất công)\b/),
     feel: [
       "Nghe như dạo này mọi chuyện cứ dồn dập đổ lên đầu bạn, mệt lắm ha 😔",
       "Cảm giác làm gì cũng hỏng, cứ như cả thế giới chống lại mình — Lomi hiểu mà 🫂",
@@ -66,7 +67,7 @@ export const MORE_THEMES: Theme[] = [
     // 11/10: NGHI người mình thương có người khác (chưa biết thật hư). Trước đây câu "a nghi vợ a ngoại tình" được đáp bằng bài "bị phản bội"
     // ("Việc họ phản bội nói lên cách họ chọn sống…") — coi điều đang nghi là sự thật. Chủ đề này không khẳng định gì về người kia.
     id: "suspect",
-    re: /\b(nghi|nghi ngo|linh cam|so|hinh nhu|khong biet co|co khi nao|co ve|chac la|doan la|lo la)\b.{0,40}\b(ngoai tinh|co nguoi khac|co ai khac|co bo|lua doi|phan boi|cam sung|say nang|thay long|co nguoi moi|co con khac|co thang khac)\b/,
+    re: VN(/\b(nghi|nghi ngờ|linh cảm|sợ|hình như|không biết có|có khi nào|có vẻ|chắc là|đoán là|lo là)\b.{0,40}\b(ngoại tình|có người khác|có ai khác|có bồ|lừa dối|phản bội|cắm sừng|say nắng|thay lòng|có người mới|có con khác|có thằng khác)\b/),
     feel: [
       "Nghi ngờ người mình thương mà chưa biết thật hư ra sao — cái lơ lửng đó hành mình ghê lắm 😔",
       "Sống trong nghi ngờ mệt lắm, vì lúc nào đầu cũng phải chạy hai kịch bản cùng lúc 😔",
@@ -88,7 +89,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "toxic",
-    re: /\b(thao tung|gaslight|bi kiem soat|kiem soat minh|hay kiem soat|kiem soat dien thoai|cam minh (di|gap|choi)|doc hai|toxic|bi danh dap|danh dap|bi (nguoi yeu|chong|vo|ban trai|ban gai) danh|danh minh|bao luc|bi chui boi|xuc pham minh|bi de doa|de doa minh|ghen tuong qua muc|coi dien thoai minh)\b/,
+    re: VN(/\b(thao túng|gaslight|bị kiểm soát|kiểm soát mình|hay kiểm soát|kiểm soát điện thoại|cấm mình (đi|gặp|chơi)|độc hại|toxic|bị đánh đập|đánh đập|bị (người yêu|chồng|vợ|bạn trai|bạn gái) đánh|đánh mình|bạo lực|bị chửi bới|xúc phạm mình|bị đe doạ|đe doạ mình|ghen tuông quá mức|coi điện thoại mình)\b/),
     feel: [
       "Lomi nghe mà lo cho bạn ghê 🥺 Không ai đáng bị đối xử như vậy cả, kể cả trong tình yêu.",
       "Cảm ơn bạn đã dám kể. Sống trong một mối quan hệ làm mình sợ hãi, ngột ngạt là rất mệt mỏi.",
@@ -113,7 +114,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "marriage",
-    re: /\b(vo chong (cai nhau|gian nhau|nhat|lanh nhat|bat hoa|xa cach)|hon nhan|ly hon|ly than|chong minh|vo minh|chong em|vo em|chong toi|vo toi|lay nhau roi|sau khi cuoi|nhat nheo|chan chong|chan vo)\b/,
+    re: VN(/\b(vợ chồng (cãi nhau|giận nhau|nhạt|lạnh nhạt|bất hoà|xa cách)|hôn nhân|ly hôn|ly thân|chồng mình|vợ mình|chồng em|vợ em|chồng tôi|vợ tôi|lấy nhau rồi|sau khi cưới|nhạt nhẽo|chán chồng|chán vợ)\b/),
     feel: [
       "Chuyện vợ chồng là chuyện khó nói nhất, vì nó gắn với cả cuộc sống hằng ngày 😔",
       "Lomi hiểu, sống chung mà thấy xa cách thì còn cô đơn hơn cả ở một mình.",
@@ -138,7 +139,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "inlaw",
-    re: /\b(me chong|bo chong|nha chong|me vo|bo vo|nha vo|nang dau|con dau|con re|ve nha chong|song chung voi nha chong|o chung nha chong)\b/,
+    re: VN(/\b(mẹ chồng|bố chồng|nhà chồng|mẹ vợ|bố vợ|nhà vợ|nàng dâu|con dâu|con rể|về nhà chồng|sống chung với nhà chồng|ở chung nhà chồng)\b/),
     feel: ["Chuyện với nhà chồng / nhà vợ là nỗi niềm của rất nhiều người, Lomi hiểu mà 😔", "Làm dâu, làm rể mà không được thấu hiểu thì mệt mỏi và tủi thân lắm."],
     insight: [
       "Hai gia đình có thói quen, cách nghĩ khác nhau là chuyện tự nhiên. Mâu thuẫn thường đến từ khác biệt, không hẳn vì ai xấu.",
@@ -157,7 +158,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "marrypressure",
-    re: /\b(hoi cuoi|giuc cuoi|thuc cuoi|ep cuoi|bi ep cuoi|bao gio cuoi|khi nao cuoi|chua lay chong|chua lay vo|lon tuoi chua|ap luc lay chong|ap luc lay vo|ap luc ket hon|bi hoi chuyen chong|bi hoi chuyen vo|e chong|e vo)\b/,
+    re: VN(/\b(hỏi cưới|giục cưới|thúc cưới|ép cưới|bị ép cưới|bao giờ cưới|khi nào cưới|chưa lấy chồng|chưa lấy vợ|lớn tuổi chưa|áp lực lấy chồng|áp lực lấy vợ|áp lực kết hôn|bị hỏi chuyện chồng|bị hỏi chuyện vợ|ế chồng|ế vợ)\b/),
     feel: ["Bị hỏi “bao giờ cưới” hoài mệt ghê ha 😮‍💨 Lomi hiểu mà.", "Áp lực chuyện cưới xin từ gia đình, họ hàng làm nhiều người thấy ngột ngạt lắm."],
     insight: [
       "Mỗi người có một thời điểm riêng. Cưới vì áp lực thường khó hạnh phúc hơn là chờ đúng người, đúng lúc.",
@@ -173,7 +174,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "single",
-    re: /\b(doc than|chua co nguoi yeu|khong co nguoi yeu|chua ai yeu|khong ai yeu|chua tung yeu|chua yeu ai|(?<!(?:ban|hang|quan|shop|tiem|khach|phong|cua hang|buon ban|ban hang|homestay|spa)\b.{0,40})(?:e qua|bi e|e lau|e roi)|fa lau|lam sao co nguoi yeu|muon co nguoi yeu|kiem nguoi yeu|tim nguoi yeu)\b/,
+    re: VN(/\b(độc thân|chưa có người yêu|không có người yêu|chưa ai yêu|không ai yêu|chưa từng yêu|chưa yêu ai|(?<!(?:bán|hàng|quán|shop|tiệm|khách|phòng|cửa hàng|buôn bán|bán hàng|homestay|spa)\b.{0,40})(?:ế quá|bị ế|ế lâu|ế rồi)|fa lâu|làm sao có người yêu|muốn có người yêu|kiếm người yêu|tìm người yêu)\b/),
     feel: ["Độc thân lâu đôi khi cũng thấy chạnh lòng ha, nhất là mùa lễ Tết 😅", "Muốn có một người để thương, để kể chuyện mỗi ngày — mong ước đó dễ thương mà 💕"],
     insight: [
       "Độc thân không có nghĩa là bạn thiếu gì. Nhiều khi chỉ là chưa gặp đúng người, hoặc vòng quen biết còn hẹp.",
@@ -192,7 +193,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "situationship",
-    re: /\b(map mo|moi quan he map mo|moi quan he khong ro rang|khong ro rang voi nhau|chua xac dinh|khong danh phan|chua co danh phan|nua voi|ban cung khong phai|nguoi yeu cung khong phai|tren muc ban be)\b/,
+    re: VN(/\b(mập mờ|mối quan hệ mập mờ|mối quan hệ không rõ ràng|không rõ ràng với nhau|chưa xác định|không danh phận|chưa có danh phận|nửa vời|bạn cũng không phải|người yêu cũng không phải|trên mức bạn bè)\b/),
     feel: ["Mập mờ là kiểu quan hệ làm mình vừa vui vừa bất an ghê 😵‍💫", "Lomi hiểu, không biết mình là gì của người ta thì lòng cứ lơ lửng hoài."],
     insight: [
       "Mập mờ kéo dài thường thiệt nhất cho người thương nhiều hơn. Bạn có quyền được biết rõ vị trí của mình.",
@@ -208,7 +209,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "newlove",
-    re: /\b(moi quen|moi yeu|moi hen ho|hen ho lan dau|buoi hen dau|lan dau hen|di hen|nhan tin the nao|nen nhan gi|noi chuyen gi voi|cach giu nguoi yeu|lam sao de nguoi ay thich)\b/,
+    re: VN(/\b(mới quen|mới yêu|mới hẹn hò|hẹn hò lần đầu|buổi hẹn đầu|lần đầu hẹn|đi hẹn|nhắn tin thế nào|nên nhắn gì|nói chuyện gì với|cách giữ người yêu|làm sao để người ấy thích)\b/),
     feel: ["Mới quen là giai đoạn ngọt ngào mà hồi hộp nhất luôn 😆", "Ui, đang trong giai đoạn tìm hiểu hả, dễ thương ghê 💕"],
     insight: [
       "Giai đoạn đầu, điều quan trọng nhất là cả hai thấy thoải mái khi ở cạnh nhau — hơn là phải thật ấn tượng.",
@@ -228,7 +229,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "stayorgo",
-    re: /\b(co nen tiep tuc|nen tiep tuc hay|nen chia tay khong|co nen chia tay|muon chia tay|dinh chia tay|khong biet nen o lai|nen o lai hay|het yeu roi thi sao|khong con cam xuc|so lam ho ton thuong)\b/,
+    re: VN(/\b(có nên tiếp tục|nên tiếp tục hay|nên chia tay không|có nên chia tay|muốn chia tay|định chia tay|không biết nên ở lại|nên ở lại hay|hết yêu rồi thì sao|không còn cảm xúc|sợ làm họ tổn thương)\b/),
     feel: ["Đứng giữa ở lại hay rời đi là một trong những quyết định khó nhất, Lomi hiểu 😔", "Nghĩ tới chuyện kết thúc mà vẫn còn thương, vẫn sợ làm người kia đau — chắc bạn rối lắm."],
     insight: [
       "Không có quyết định nào hoàn toàn không đau. Câu hỏi là: nỗi đau nào mình chấp nhận được về lâu dài?",
@@ -244,7 +245,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "parentsban",
-    re: /\b(gia dinh (khong cho|ngan cam|cam|phan doi)|bo me (khong cho|ngan cam|cam|phan doi)|ba me (khong cho|ngan cam|cam|phan doi)|khong duoc gia dinh ung ho|chenh lech tuoi|hon nhieu tuoi|khac ton giao|mon dang ho doi)\b/,
+    re: VN(/\b(gia đình (không cho|ngăn cấm|cấm|phản đối)|bố mẹ (không cho|ngăn cấm|cấm|phản đối)|ba mẹ (không cho|ngăn cấm|cấm|phản đối)|không được gia đình ủng hộ|chênh lệch tuổi|hơn nhiều tuổi|khác tôn giáo|môn đăng hộ đối)\b/),
     feel: ["Thương nhau mà gia đình ngăn cấm thì khổ tâm lắm, kẹt ở giữa không biết theo bên nào 😔"],
     insight: [
       "Bố mẹ phản đối thường vì lo — về tương lai, tài chính, khác biệt. Hiểu được nỗi lo đó là bước đầu để thuyết phục.",
@@ -259,7 +260,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "lies",
-    re: /\b(noi doi|bi noi doi|giau minh|giau diem|khong trung thuc|mat niem tin|khong tin tuong nua|khong con tin)\b/,
+    re: VN(/\b(nói dối|bị nói dối|giấu mình|giấu diếm|không trung thực|mất niềm tin|không tin tưởng nữa|không còn tin)\b/),
     feel: ["Bị người thân thiết nói dối làm mình hụt hẫng lắm, Lomi hiểu 😔", "Niềm tin mà lung lay thì mọi thứ khác cũng chông chênh theo."],
     insight: [
       "Người ta nói dối có khi vì sợ làm mình buồn, sợ mâu thuẫn — nhưng dù lý do gì, cảm giác bị giấu vẫn rất thật.",
@@ -271,7 +272,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "spark",
-    re: /\b(ham nong|nham chan|het lua|mat lua|khong con lang man|yeu lau nam|yeu lau roi|tinh cam nhat|nhat qua|lam moi tinh cam|lam sao de lang man)\b/,
+    re: VN(/\b(hâm nóng|nhàm chán|hết lửa|mất lửa|không còn lãng mạn|yêu lâu năm|yêu lâu rồi|tình cảm nhạt|nhạt quá|làm mới tình cảm|làm sao để lãng mạn)\b/),
     feel: ["Yêu lâu thấy nhạt là chuyện rất nhiều cặp gặp, bạn không phải người duy nhất đâu 😄"],
     insight: [
       "Giai đoạn “say nắng” ban đầu tự nhiên sẽ lắng xuống — thay vào đó là sự thân quen. Muốn giữ lửa thì cần chủ động thêm củi.",
@@ -289,7 +290,7 @@ export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ TÂM LÝ ═══════════════════════
   {
     id: "depress",
-    re: /\b(tram cam|bi tram cam|mat hung thu|lam gi cung (thay )?chan|chan het moi thu|chan moi thu|cai gi cung chan|khong thay vui gi|khong con hung thu|khong muon lam gi|khong thiet gi|song khong muc dich|vo nghia qua|cuoc song vo nghia|te liet cam xuc|khong cam thay gi|buon keo dai|buon lau roi|khong thiet song)\b/,
+    re: VN(/\b(trầm cảm|bị trầm cảm|mất hứng thú|làm gì cũng (thấy )?chán|chán hết mọi thứ|chán mọi thứ|cái gì cũng chán|không thấy vui gì|không còn hứng thú|không muốn làm gì|không thiết gì|sống không mục đích|vô nghĩa quá|cuộc sống vô nghĩa|tê liệt cảm xúc|không cảm thấy gì|buồn kéo dài|buồn lâu rồi|không thiết sống)\b/),
     feel: [
       "Cảm giác trống rỗng, chẳng thiết gì kéo dài như vậy nặng nề thật sự.",
       "Cảm ơn bạn đã nói ra với Lomi. Khi mọi thứ đều mất màu, việc bạn vẫn tìm người để kể đã là một điều rất can đảm.",
@@ -312,7 +313,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "panic",
-    re: /\b(hoang loan|len con hoang|con hoang so|panic|panic attack|kho tho vi lo|tim dap thinh thich|tuong minh sap chet|run het nguoi|nghet tho)\b/,
+    re: VN(/\b(hoảng loạn|lên cơn hoảng|cơn hoảng sợ|panic|panic attack|khó thở vì lo|tim đập thình thịch|tưởng mình sắp chết|run hết người|nghẹt thở)\b/),
     feel: ["Cơn hoảng loạn đáng sợ lắm, như thể mất kiểm soát hoàn toàn — Lomi hiểu 🥺", "Lomi ở đây với bạn nè. Mình cùng thở chậm lại nha."],
     insight: [
       "Cơn hoảng loạn thường lên đỉnh trong vài phút rồi tự dịu xuống. Nó rất khó chịu, nhưng tự nó không gây hại cho bạn.",
@@ -332,7 +333,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "angerself",
-    re: /\b(nong tinh|hay noi nong|de noi nong|khong kiem che duoc|mat kiem soat khi gian|hay gian|hay cau|hay quat|noi nong voi|to tieng voi|hay la het|kiem soat (con )?(gian|nong|tuc gian|cam xuc)|kiem che (con )?(gian|nong|tuc gian|cam xuc)|bot nong|bot gian|de gian|gian du|cach het gian|het gian)\b/,
+    re: VN(/\b(nóng tính|hay nổi nóng|dễ nổi nóng|không kiềm chế được|mất kiểm soát khi giận|hay giận|hay cáu|hay quát|nổi nóng với|to tiếng với|hay la hét|kiểm soát (cơn )?(giận|nóng|tức giận|cảm xúc)|kiềm chế (cơn )?(giận|nóng|tức giận|cảm xúc)|bớt nóng|bớt giận|dễ giận|giận dữ|cách hết giận|hết giận)\b/),
     feel: ["Lomi hiểu, nổi nóng xong nhiều khi mình còn thấy hối hận hơn cả người kia 😔", "Việc bạn nhận ra và muốn thay đổi đã là bước rất đáng quý rồi đó."],
     insight: [
       "Tức giận là cảm xúc bình thường, thường là “lớp vỏ” bên ngoài của mệt mỏi, tổn thương hay cảm giác không được tôn trọng.",
@@ -351,7 +352,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "procrast",
-    re: /\b(tri hoan|hay tri hoan|luoi qua|luoi bieng|luoi hoc|luoi lam|khong co dong luc|khong the tap trung|mat tap trung|kho tap trung|de xao nhang|cu de mai|nuoc den chan moi nhay)\b/,
+    re: VN(/\b(trì hoãn|hay trì hoãn|lười quá|lười biếng|lười học|lười làm|không có động lực|không thể tập trung|mất tập trung|khó tập trung|dễ xao nhãng|cứ để mai|nước đến chân mới nhảy)\b/),
     feel: ["Ai cũng có lúc trì hoãn hết á, bạn không lười đâu 😄", "Lomi hiểu, biết phải làm mà cứ không bắt đầu được thì khó chịu với chính mình lắm."],
     insight: [
       "Trì hoãn ít khi do lười — thường là do việc đó làm mình thấy ngợp, chán, hoặc sợ làm không tốt.",
@@ -371,7 +372,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "lost",
-    re: /\b(mat phuong huong|khong biet minh muon gi|khong biet lam gi voi cuoc doi|khung hoang tuoi|dinh huong|chon nganh|chon nghe|khong biet theo nghe gi|khong biet hoc gi|bat dinh|bi lac loi|khong co muc tieu)\b/,
+    re: VN(/\b(mất phương hướng|không biết mình muốn gì|không biết làm gì với cuộc đời|khủng hoảng tuổi|định hướng|chọn ngành|chọn nghề|không biết theo nghề gì|không biết học gì|bất định|bị lạc lối|không có mục tiêu)\b/),
     feel: ["Cảm giác lạc lối, không biết mình muốn gì — rất nhiều người trẻ đang trải qua giống bạn đó 🌱", "Lomi hiểu, đứng giữa nhiều ngã rẽ mà không biết chọn đường nào thì hoang mang lắm."],
     insight: [
       "Ít ai biết rõ mình muốn gì ngay từ đầu. Đam mê thường được tìm thấy qua việc thử, chứ không phải ngồi nghĩ ra.",
@@ -390,7 +391,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "social",
-    re: /\b(ngai giao tiep|so giao tiep|so dam dong|so noi truoc dam dong|huong noi|ngai noi chuyen|khong biet noi chuyen|vung ve|kho hoa nhap|run khi noi|so bi danh gia|so nguoi khac nghi)\b/,
+    re: VN(/\b(ngại giao tiếp|sợ giao tiếp|sợ đám đông|sợ nói trước đám đông|hướng nội|ngại nói chuyện|không biết nói chuyện|vụng về|khó hoà nhập|run khi nói|sợ bị đánh giá|sợ người khác nghĩ)\b/),
     feel: ["Ngại giao tiếp không phải lỗi của bạn đâu, rất nhiều người cũng như vậy 🌿", "Lomi hiểu, cảm giác lo bị đánh giá làm mình muốn thu mình lại."],
     insight: [
       "Mình thường nghĩ người khác để ý mình nhiều hơn thực tế — ai cũng đang bận lo về bản thân họ.",
@@ -406,7 +407,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "perfect",
-    re: /\b(cau toan|hoan hao|so that bai|so sai|so lam sai|phai lam tot nhat|khong cho phep minh sai|ap luc phai gioi|ky vong qua cao|so lam nguoi khac that vong)\b/,
+    re: VN(/\b(cầu toàn|hoàn hảo|sợ thất bại|sợ sai|sợ làm sai|phải làm tốt nhất|không cho phép mình sai|áp lực phải giỏi|kỳ vọng quá cao|kì vọng quá cao|sợ làm người khác thất vọng)\b/),
     feel: ["Lúc nào cũng phải thật hoàn hảo thì mệt lắm, Lomi hiểu 😮‍💨"],
     insight: [
       "Cầu toàn thường xuất phát từ nỗi sợ không đủ tốt. Nhưng “đủ tốt” nhiều khi đã là rất tốt rồi.",
@@ -418,7 +419,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "addict",
-    re: /\b(nghien game|nghien dien thoai|nghien mang xa hoi|nghien tiktok|nghien facebook|luot dien thoai|nghien ruou|nghien bia|nghien thuoc|nghien co bac|co bac|ca do|choi lo de|nghien mua sam|khong bo duoc)\b/,
+    re: VN(/\b(nghiện game|nghiện điện thoại|nghiện mạng xã hội|nghiện tiktok|nghiện facebook|lướt điện thoại|nghiện rượu|nghiện bia|nghiện thuốc|nghiện cờ bạc|cờ bạc|cá độ|chơi lô đề|nghiện mua sắm|không bỏ được)\b/),
     feel: ["Muốn bỏ mà mãi không bỏ được thì bức bối lắm, Lomi hiểu 😔", "Việc bạn nhận ra và muốn thay đổi đã là bước khó nhất rồi đó 💪"],
     insight: [
       "Thói quen khó bỏ vì não đã quen với “phần thưởng” nhanh. Không phải bạn thiếu ý chí.",
@@ -438,7 +439,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "bodyimage",
-    re: /\b(tu ti ngoai hinh|bi che beo|bi che gay|bi che xau|bi che map|body shame|chan than hinh|ghet ngoai hinh|khong thich ngoai hinh|minh xau qua|minh beo qua|minh gay qua|mat xau)\b/,
+    re: VN(/\b(tự ti ngoại hình|bị chê béo|bị chê gầy|bị chê xấu|bị chê mập|body shame|chán thân hình|ghét ngoại hình|không thích ngoại hình|mình xấu quá|mình béo quá|mình gầy quá|mặt xấu)\b/),
     feel: ["Bị chê về ngoại hình đau lắm, nhất là khi nghe từ người quen 🥺", "Lomi hiểu, nhìn gương mà không thích mình thì buồn thật sự."],
     insight: [
       "Tiêu chuẩn “đẹp” trên mạng phần lớn đã qua chỉnh sửa, góc máy, ánh sáng. So với nó thì ai cũng thấy mình thiếu.",
@@ -454,7 +455,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "eating",
-    re: /\b(nhin an de giam|nhin doi de giam|bo bua de giam can|an xong non|moc hong|so tang can qua|so an|an khong kiem soat|an vo do|an qua nhieu roi hoi han|chan an|bieng an|an uong roi loan|roi loan an uong|anorexia|bulimia)\b/,
+    re: VN(/\b(nhịn ăn để giảm|nhịn đói để giảm|bỏ bữa để giảm cân|ăn xong nôn|móc họng|sợ tăng cân quá|sợ ăn|ăn không kiểm soát|ăn vô độ|ăn quá nhiều rồi hối hận|chán ăn|biếng ăn|ăn uống rối loạn|rối loạn ăn uống|anorexia|bulimia)\b/),
     feel: ["Cảm ơn bạn đã tin kể với Lomi 🤍 Chuyện ăn uống gắn với cảm xúc nhiều hơn người ta nghĩ, và bạn không phải một mình.", "Những gì bạn đang trải qua nghe rất mệt mỏi."],
     insight: [
       "Mối quan hệ với đồ ăn thường phản ánh những cảm xúc khó nói — căng thẳng, lo âu, áp lực. Không phải do bạn yếu đuối hay thiếu ý chí.",
@@ -471,7 +472,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "bullied",
-    re: /\b(bi bat nat|bat nat minh|bi che gieu|bi cuoi nhao|bi treu choc|bi treu|bi chui tren mang|bi boc phot|bi xuc pham tren mang|bi bat nat online|bi nhom ban tay chay|bi co lap o lop|bi danh o truong)\b/,
+    re: VN(/\b(bị bắt nạt|bắt nạt mình|bị chế giễu|bị cười nhạo|bị trêu chọc|bị trêu|bị chửi trên mạng|bị bóc phốt|bị xúc phạm trên mạng|bị bắt nạt online|bị nhóm bạn tẩy chay|bị cô lập ở lớp|bị đánh ở trường)\b/),
     feel: ["Bị bắt nạt, chế giễu là trải nghiệm rất tổn thương.", "Không ai đáng bị đối xử như vậy. Lỗi không nằm ở bạn đâu."],
     insight: [
       "Người bắt nạt thường muốn thấy mình mạnh hơn bằng cách làm người khác nhỏ đi. Điều đó nói về họ, không phải về bạn.",
@@ -488,7 +489,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "homesick",
-    re: /\b(nho nha|xa nha|nho bo me|nho me|nho gia dinh|du hoc|song mot minh o|len thanh pho|moi chuyen den|moi chuyen nha|chua quen noi moi|lac long o noi moi)\b/,
+    re: VN(/\b(nhớ nhà|xa nhà|nhớ bố mẹ|nhớ mẹ|nhớ gia đình|du học|sống một mình ở|lên thành phố|mới chuyển đến|mới chuyển nhà|chưa quen nơi mới|lạc lõng ở nơi mới)\b/),
     feel: ["Nhớ nhà là cảm giác chênh vênh ai xa nhà cũng từng trải qua 🥺", "Lomi hiểu, ở nơi mới chưa có ai thân thì những buổi tối thấy trống trải lắm."],
     insight: ["Nhớ nhà cho thấy bạn có một nơi để thương, để quay về — đó là điều may mắn.", "Làm quen với nơi ở mới thường mất vài tháng. Cảm giác lạc lõng sẽ nhạt dần."],
     step: ["Gọi video cho gia đình vào một giờ cố định, có điều để mong chờ mỗi ngày.", "Tạo vài thói quen quen thuộc ở chỗ mới: nấu món ở nhà hay nấu, trang trí góc nhỏ của mình."],
@@ -497,7 +498,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "regret",
-    re: /\b(hoi han|hoi tiec|tiec nuoi|gia nhu|lam sai roi|sai lam lon|khong the tha thu cho minh|tu trach|dan vat|cam thay co loi)\b/,
+    re: VN(/\b(hối hận|hối tiếc|tiếc nuối|giá như|làm sai rồi|sai lầm lớn|không thể tha thứ cho mình|tự trách|dằn vặt|cảm thấy có lỗi)\b/),
     feel: ["Hối hận là cảm giác nặng nề lắm, cứ lặp đi lặp lại trong đầu hoài 😔", "Lomi hiểu, tự trách mình là kiểu đau âm ỉ mà khó buông."],
     insight: [
       "Hối hận chứng tỏ bạn có lương tâm và biết điều gì quan trọng với mình.",
@@ -509,7 +510,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "compare",
-    re: /\b(so sanh voi nguoi khac|(hay |cu |luon )?so sanh (minh|ban than|em|toi|tui|anh|chi) voi|ai cung hon minh|ai cung gioi hon|gioi hon minh|ban be thanh cong|ban be deu co|thua ban bang|fomo|luot mang thay buon|nhin nguoi ta thay tui|thay minh cham chan|bang tuoi nguoi ta)\b/,
+    re: VN(/\b(so sánh với người khác|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
     feel: ["Lướt mạng thấy ai cũng thành công, còn mình thì dậm chân — cảm giác đó khó chịu lắm, Lomi hiểu 😔"],
     insight: [
       "Mạng xã hội là “cuộn phim nổi bật” của người khác, không phải cuộc sống thật của họ.",
@@ -521,7 +522,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "lgbt",
-    re: /\b(dong tinh|les|lgbt|song tinh|chuyen gioi|come out|comeout|cong khai xu huong|xu huong tinh duc|gioi tinh that|khong duoc chap nhan gioi tinh)\b/,
+    re: VN(/\b(đồng tính|les|lgbt|song tính|chuyển giới|come out|comeout|công khai xu hướng|xu hướng tính dục|giới tính thật|không được chấp nhận giới tính)\b/),
     feel: ["Cảm ơn bạn đã tin tưởng chia sẻ với Lomi 🌈 Bạn được là chính mình, và bạn xứng đáng được yêu thương như bất kỳ ai.", "Lomi hiểu, sống thật với bản thân mà sợ không được chấp nhận thì áp lực lắm 🤍"],
     insight: [
       "Xu hướng tính dục hay bản dạng giới là một phần tự nhiên của con người, không phải bệnh hay lỗi của ai cả.",
@@ -536,7 +537,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "confidence",
-    re: /\b(muon tu tin|lam sao tu tin|tu tin hon|thieu tu tin|muon thay doi ban ?than|phat trien ban ?than|muon tot hon|song tich cuc|lam sao de song vui|bat dau lai|lam lai tu dau)\b/,
+    re: VN(/\b(muốn tự tin|làm sao tự tin|tự tin hơn|thiếu tự tin|muốn thay đổi bản ?thân|phát triển bản ?thân|muốn tốt hơn|sống tích cực|làm sao để sống vui|bắt đầu lại|làm lại từ đầu)\b/),
     feel: ["Muốn trở nên tốt hơn là một mong muốn rất đẹp, Lomi ủng hộ bạn hết mình 💪", "Ui, nghe bạn muốn thay đổi là Lomi thấy có năng lượng liền 🌱"],
     insight: [
       "Tự tin không phải là không sợ, mà là dám làm dù còn sợ. Nó được xây từ những lần mình giữ lời hứa với chính mình.",
@@ -552,7 +553,7 @@ export const MORE_THEMES: Theme[] = [
     id: "pregnant",
     // 10/10: chỉ khi LO / NGHI có thai ("sợ có bầu", "trễ kinh", "có thai không ta") — câu hỏi kiến thức thai kỳ ("mang thai mấy tuần thì
     // siêu âm được") không phải lo trễ kinh.
-    re: /\b((lo|so|nghi|hay la|chac la|lieu) (minh |em |e |chi |c |toi |tui |vo |ban gai |ny |nguoi yeu )?(da |bi )?(co thai|co bau|mang thai|dinh bau)|(co thai|co bau|dinh bau) (roi )?(khong|ko|k|chua|ha|a)|lo co bau|so co bau|tre kinh|chua co kinh|que thu thai|thu thai|vo ke hoach|lo dinh bau|so dinh bau)\b/,
+    re: VN(/\b((lo|sợ|nghi|hay là|chắc là|liệu) (mình |em |e |chị |c |tôi |tui |vợ |bạn gái |ny |người yêu )?(đã |bị )?(có thai|có bầu|mang thai|dính bầu)|(có thai|có bầu|dính bầu) (rồi )?(không|ko|k|chưa|hả|ha|à|a)|lo có bầu|sợ có bầu|trễ kinh|chưa có kinh|que thử thai|thử thai|vỡ kế hoạch|lo dính bầu|sợ dính bầu)\b/),
     feel: ["Lomi hiểu, lo lắng chuyện này làm mình bồn chồn không yên 🤍", "Bình tĩnh nha, Lomi ở đây với bạn. Mình cùng xem nên làm gì trước."],
     insight: [
       "Trễ kinh có thể do nhiều lý do: căng thẳng, thay đổi cân nặng, thiếu ngủ, rối loạn nội tiết… chứ không chỉ do có thai.",
@@ -572,7 +573,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "period",
-    re: /\b(dau bung kinh|den thang|kinh nguyet|chu ky kinh|kinh khong deu|rong kinh|ky kinh|tien kinh nguyet|pms)\b/,
+    re: VN(/\b(đau bụng kinh|đến tháng|kinh nguyệt|chu kỳ kinh|chu kì kinh|kinh không đều|rong kinh|kỳ kinh|kì kinh|tiền kinh nguyệt|pms)\b/),
     feel: ["Mấy ngày “đèn đỏ” mệt lắm ha 🥺 Thương bạn.", "Lomi hiểu, đau bụng kinh có khi làm mình chẳng muốn làm gì luôn."],
     insight: ["Đau bụng kinh nhẹ đến vừa là khá phổ biến. Nhưng đau dữ dội, kéo dài, hay chu kỳ thất thường nhiều tháng thì nên đi khám.", "Hormone thay đổi trước kỳ kinh có thể làm tâm trạng lên xuống — bạn không “khó ở vô cớ” đâu."],
     step: ["Chườm ấm bụng dưới, uống nước ấm, nghỉ ngơi nhiều hơn một chút.", "Vận động nhẹ như đi bộ, giãn cơ giúp giảm co thắt."],
@@ -585,7 +586,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "headache",
-    re: /\b(dau dau|nhuc dau|dau nua dau|dau nua dau dau|dau dau hoai|dau dau lien tuc|bi chong mat|hay chong mat|chong mat qua|choang vang|hoa mat|xay xam)\b/,
+    re: VN(/\b(đau đầu|nhức đầu|đau nửa đầu|đau nửa đầu đau|đau đầu hoài|đau đầu liên tục|bị chóng mặt|hay chóng mặt|chóng mặt quá|choáng váng|hoa mắt|xây xẩm)\b/),
     feel: ["Đau đầu khó chịu lắm, làm gì cũng không tập trung được 😣", "Thương bạn, chóng mặt đau đầu thì mệt cả người."],
     insight: ["Đau đầu hay liên quan tới thiếu ngủ, căng thẳng, uống ít nước, nhìn màn hình lâu hoặc bỏ bữa.", "Nếu đau đầu dữ dội đột ngột, kèm nôn, sốt cao, yếu tay chân, nói khó hay nhìn mờ — đó là dấu hiệu cần đi cấp cứu ngay."],
     step: ["Uống một ly nước, nghỉ ngơi ở chỗ yên tĩnh, ít ánh sáng một chút.", "Rời màn hình, nhắm mắt thư giãn, xoa nhẹ thái dương và vai gáy."],
@@ -599,7 +600,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "stomach",
-    re: /\b(dau da day|dau bao tu|trao nguoc|o chua|o nong|day bung|kho tieu|tieu chay|di ngoai nhieu|tao bon|dau bung hoai|buon non|ngo doc thuc pham)\b/,
+    re: VN(/\b(đau dạ dày|đau bao tử|trào ngược|ợ chua|ợ nóng|đầy bụng|khó tiêu|tiêu chảy|đi ngoài nhiều|táo bón|đau bụng hoài|buồn nôn|ngộ độc thực phẩm)\b/),
     feel: ["Đau bụng, khó tiêu thì khó chịu cả ngày luôn 😣", "Thương bạn, bụng dạ không yên thì ăn gì cũng không ngon."],
     insight: ["Dạ dày rất “nhạy cảm” với căng thẳng, ăn uống thất thường, đồ cay nóng, rượu bia, cà phê.", "Nếu đau dữ dội, nôn ra máu, đi ngoài phân đen, sốt cao hay mất nước — cần đi khám ngay."],
     step: ["Ăn chậm, chia nhỏ bữa, tránh đồ cay, chua, dầu mỡ vài hôm.", "Không nằm ngay sau khi ăn, bữa tối nên cách giờ ngủ vài tiếng."],
@@ -616,11 +617,11 @@ export const MORE_THEMES: Theme[] = [
     id: "nasal",
     hint: [
       [
-        /\b(otilin|otrivin|naphazolin|xylometazolin|xit mui)\b/,
+        VN(/\b(otilin|otrivin|naphazolin|xylometazolin|xịt mũi)\b/),
         "Có một điều quan trọng nè: thuốc xịt thông mũi như Otilin, Otrivin, Naphazolin chỉ nên dùng ngắn ngày (hộp thuốc thường ghi vài ngày). Xịt lâu dài dễ bị “nghẹt mũi dội ngược” — hết thuốc là nghẹt hơn, lại phải xịt tiếp, thành vòng lặp lệ thuộc thuốc (bác sĩ gọi là viêm mũi do thuốc). Có khi chính nó làm bạn mãi không dứt được đó.",
       ],
     ],
-    re: /\b(otilin|otrivin|naphazolin|xylometazolin|thuoc xit mui|xit mui hoai|xit mui hang ngay|xit mui moi ngay|khong xit khong tho duoc|nghet mui (keo dai|hoai|lau|quanh nam|man tinh|lau nam)|nghet mui hoai|ngat mui hoai|viem xoang|viem mui|di ung mui|polyp mui|kho tho bang mui)\b/,
+    re: VN(/\b(otilin|otrivin|naphazolin|xylometazolin|thuốc xịt mũi|xịt mũi hoài|xịt mũi hằng ngày|xịt mũi hàng ngày|xịt mũi mỗi ngày|không xịt không thở được|nghẹt mũi (kéo dài|hoài|lâu|quanh năm|mãn tính|lâu năm)|nghẹt mũi hoài|ngạt mũi hoài|viêm xoang|viêm mũi|dị ứng mũi|polyp mũi|khó thở bằng mũi)\b/),
     feel: [
       "Nghẹt mũi kéo dài khó chịu lắm luôn, ngủ không ngon, đầu óc cũng nặng theo 😣 Đi khám hoài mà không đỡ thì nản thật sự.",
       "Lomi hiểu, uống thuốc hết đợt này tới đợt khác mà mũi vẫn nghẹt thì vừa mệt vừa bực ghê 🥺",
@@ -646,7 +647,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "flu",
-    re: /\b(bi cam cum|bi cam lanh|cam cum|cam lanh|bi cum|so mui|nghet mui|bi ho (khan|nhieu|hoai|dai|lau)|ho co dom|ho khan|ho nhieu|ho hoai|dau hong|viem hong|bi sot|sot cao|phat sot|hat hoi)\b/,
+    re: VN(/\b(bị cảm cúm|bị cảm lạnh|cảm cúm|cảm lạnh|bị cúm|sổ mũi|nghẹt mũi|bị ho (khan|nhiều|hoài|dai|lâu)|ho có đờm|ho khan|ho nhiều|ho hoài|đau họng|viêm họng|bị sốt|sốt cao|phát sốt|hắt hơi)\b/),
     feel: ["Ốm vậy mệt ghê, thương bạn 🤒 Nghỉ ngơi cho khoẻ nha.", "Thời tiết thay đổi dễ cảm lắm, nhất là Đà Lạt trời lạnh. Bạn giữ ấm nha 🧣"],
     insight: ["Cảm cúm thông thường hay tự khỏi sau khoảng một tuần nếu nghỉ ngơi, ăn uống đủ.", "Sốt cao không hạ, khó thở, đau ngực, lừ đừ, hay ho kéo dài nhiều tuần thì cần đi khám."],
     step: ["Nghỉ ngơi, uống nhiều nước ấm, ăn cháo súp dễ tiêu.", "Súc miệng nước muối, giữ ấm cổ và ngực, đeo khẩu trang để không lây cho người khác."],
@@ -660,7 +661,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "backpain",
-    re: /\b(dau lung|moi lung|dau co gay|moi co gay|cung co|dau vai gay|moi vai gay|dau co vai gay|thoat vi|dau khop|ngoi lau dau|dau cot song)\b/,
+    re: VN(/\b(đau lưng|mỏi lưng|đau cổ gáy|mỏi cổ gáy|cứng cổ|đau vai gáy|mỏi vai gáy|đau cổ vai gáy|thoát vị|đau khớp|ngồi lâu đau|đau cột sống)\b/),
     feel: ["Đau lưng mỏi cổ là “bệnh nghề nghiệp” của dân ngồi nhiều đó 😣", "Thương bạn, đau nhức kéo dài làm người uể oải lắm."],
     insight: ["Ngồi sai tư thế, cúi điện thoại nhiều, ít vận động là nguyên nhân thường gặp nhất.", "Đau lan xuống chân, tê bì, yếu tay chân thì cần đi khám sớm."],
     step: ["Cứ 45–60 phút đứng dậy đi lại, vươn vai vài phút.", "Chỉnh màn hình ngang tầm mắt, ghế có tựa lưng, hai chân chạm sàn."],
@@ -670,7 +671,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "eyes",
-    re: /\b(moi mat|kho mat|nhuc mat|mo mat|can thi tang|nhin man hinh nhieu|dau mat|chay nuoc mat)\b/,
+    re: VN(/\b(mỏi mắt|khô mắt|nhức mắt|mờ mắt|cận thị tăng|nhìn màn hình nhiều|đau mắt|chảy nước mắt)\b/),
     feel: ["Nhìn màn hình nhiều thì mắt mỏi là chuyện thường gặp lắm 😵", "Thương đôi mắt làm việc chăm chỉ của bạn ghê."],
     insight: ["Khi nhìn màn hình, mình chớp mắt ít hơn hẳn nên mắt dễ khô và mỏi."],
     step: ["Áp dụng quy tắc 20-20-20: cứ 20 phút, nhìn xa khoảng 6 mét trong 20 giây.", "Chỉnh độ sáng màn hình vừa phải, không dùng điện thoại trong bóng tối."],
@@ -680,7 +681,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "weight",
-    re: /\b(muon giam can|giam can|giam mo|muon tang can|tang can|beo phi|thua can|an kieng|che do an|an sao cho khoe|an uong lanh manh|eat clean)\b/,
+    re: VN(/\b(muốn giảm cân|giảm cân|giảm mỡ|muốn tăng cân|tăng cân|béo phì|thừa cân|ăn kiêng|chế độ ăn|ăn sao cho khoẻ|ăn uống lành mạnh|eat clean)\b/),
     feel: ["Muốn chăm sóc cơ thể là một điều rất đáng khen 💪", "Lomi ủng hộ bạn sống khoẻ hơn nè 🌱"],
     insight: [
       "Cơ thể khoẻ quan trọng hơn con số trên cân. Thay đổi từ từ, bền vững tốt hơn nhiều so với ăn kiêng khắt khe.",
@@ -696,7 +697,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "skin",
-    re: /\b(noi mun|bi mun|mun trung ca|mun an|da mun|mun nhieu|tham mun|da xau|kho da|di ung da|rung toc|hoi dau|toc rung nhieu)\b/,
+    re: VN(/\b(nổi mụn|bị mụn|mụn trứng cá|mụn ẩn|da mụn|mụn nhiều|thâm mụn|da xấu|khô da|dị ứng da|rụng tóc|hói đầu|tóc rụng nhiều)\b/),
     feel: ["Da nổi mụn hay tóc rụng nhiều làm mình mất tự tin ghê, Lomi hiểu 😔"],
     insight: ["Mụn và rụng tóc hay bị ảnh hưởng bởi căng thẳng, thiếu ngủ, nội tiết và thói quen chăm sóc.", "Nặn mụn bằng tay dễ để lại thâm sẹo và nhiễm trùng hơn."],
     step: ["Giữ vệ sinh da nhẹ nhàng, không chà xát mạnh; thay vỏ gối thường xuyên.", "Ngủ đủ và bớt thức khuya — da và tóc “hồi phục” khi mình ngủ."],
@@ -706,7 +707,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "hangover",
-    re: /\b(say ruou|say xin|xin qua|con say|nhuc dau sau khi nhau|met sau khi nhau|uong nhieu qua|dau dau vi ruou|giai ruou)\b/,
+    re: VN(/\b(say rượu|say xỉn|xỉn quá|còn say|nhức đầu sau khi nhậu|mệt sau khi nhậu|uống nhiều quá|đau đầu vì rượu|giải rượu)\b/),
     feel: ["Hôm qua “chiến” căng quá hả 😅 Mệt ghê, thương bạn.", "Say xỉn xong sáng ra khó chịu lắm ha."],
     insight: ["Rượu làm cơ thể mất nước và rối loạn giấc ngủ, nên sáng ra mới mệt, đau đầu như vậy."],
     step: ["Uống nhiều nước lọc, nước điện giải, ăn chút cháo hay súp nhẹ bụng.", "Nghỉ ngơi thêm, và tuyệt đối không lái xe khi còn hơi men nha."],
@@ -719,7 +720,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "smoking",
-    re: /\b(bo thuoc|cai thuoc|hut thuoc|thuoc la|thuoc la dien tu|vape)\b/,
+    re: VN(/\b(bỏ thuốc|cai thuốc|hút thuốc|thuốc lá|thuốc lá điện tử|vape)\b/),
     feel: ["Muốn bỏ thuốc là một quyết định tuyệt vời, Lomi ủng hộ bạn hết mình 💪"],
     insight: ["Cơn thèm thuốc thường chỉ kéo dài vài phút rồi qua. Vượt qua được từng cơn là thắng từng chút một.", "Nhiều người phải thử vài lần mới bỏ hẳn được — tái nghiện không có nghĩa là thất bại."],
     step: ["Chọn một ngày bắt đầu, báo cho người thân để có người động viên.", "Khi thèm, thử uống nước, nhai kẹo cao su, đi bộ vài phút để qua cơn."],
@@ -728,7 +729,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "caregiver",
-    re: /\b((bo|me|ba|cha|ong|ba noi|ba ngoai|ong noi|ong ngoai|con|vo|chong) (minh |toi |em )?(bi benh|om|nam vien|nhap vien|dang benh|benh nang|phai mo)|cham nguoi benh|nuoi benh|lo cho bo me|lo cho suc khoe cua (bo|me))\b/,
+    re: VN(/\b((bố|mẹ|ba|bà|cha|ông|bà nội|bà ngoại|ông nội|ông ngoại|con|vợ|chồng) (mình |tôi |em )?(bị bệnh|ốm|nằm viện|nhập viện|đang bệnh|bệnh nặng|phải mổ)|chăm người bệnh|nuôi bệnh|lo cho bố mẹ|lo cho sức khoẻ của (bố|mẹ))\b/),
     feel: ["Người thân bị bệnh thì mình lo đứng ngồi không yên, Lomi hiểu lắm 🤍", "Vừa lo cho người thân vừa phải lo cho mọi thứ khác — chắc bạn mệt lắm."],
     insight: ["Chăm người bệnh rất hao sức và hao tâm. Mệt mỏi, cáu gắt, thậm chí kiệt sức là chuyện bình thường.", "Muốn chăm tốt cho người thân thì bạn cũng cần giữ sức cho chính mình."],
     step: ["Chia sẻ việc chăm sóc với người nhà khác, đừng ôm hết một mình.", "Ghi lại lời bác sĩ dặn, lịch khám, lịch thuốc để đỡ rối."],

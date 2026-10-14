@@ -38,6 +38,7 @@ const STUCK_KIND: Record<string, string> = {
   generic_listen: "👂 Chỉ “nghe nè”, không nhận ra nội dung",
   health_detail: "📝 Chi tiết sức khoẻ chưa có dữ liệu",
   kb_partial: "📚 Có thẻ nhưng thiếu phần được hỏi",
+  mismatch: "🛑 Đáp lạc chủ đề — đã chặn, mời hỏi lại",
   // Claude ghi khi chạy thử (nguồn claude-test): Lomi có trả lời nhưng trả lời sai chỗ
   wrong_match: "🎯 Khớp nhầm món / chủ đề",
   wrong_aspect: "🧭 Hiểu sai điều được hỏi",

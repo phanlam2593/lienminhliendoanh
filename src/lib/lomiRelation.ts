@@ -8,6 +8,7 @@
 
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import type { HeartReply } from "@/lib/lomiHeart";
+import { VR, VN } from "@/lib/viMatch";
 
 export type RelIntent = "mind_read" | "silence_advice" | "silence" | "texting" | "advice" | "after_fight" | "decide" | "draft";
 // 11/10 — trạng thái của chuyện đang nói về một người, lưu trong rel = "<người>|<ý định>|<cờ>":
@@ -17,30 +18,30 @@ export type RelIntent = "mind_read" | "silence_advice" | "silence" | "texting" |
 type RelHit = { intent: RelIntent; subject: string; flags?: string[] };
 
 const SUBJ: [RegExp, string][] = [
-  [/\b(nguoi ay|nguoi do)\b/, "người ấy"],
-  [/\b(anh ay|anh do)\b/, "anh ấy"],
-  [/\b(co ay|co do|em ay)\b/, "cô ấy"],
-  [/\bcrush\b/, "crush"],
-  [/\b(nguoi yeu cu|ny cu)\b/, "người yêu cũ"],
-  [/\b(chi ay|chi do)\b/, "chị ấy"],
-  [/\b(nguoi yeu|ny)\b/, "người yêu bạn"],
-  [/\bban trai\b/, "bạn trai bạn"],
-  [/\bban gai\b/, "bạn gái bạn"],
-  [/\bnguoi yeu cu\b/, "người yêu cũ"],
-  [/\b(vo minh|vo toi|vo em|vo anh|vo a|vo e|vo tui|ba xa)\b/, "vợ bạn"],
-  [/\b(chong minh|chong toi|chong em|chong chi|chong e|chong c|chong tui|ong xa)\b/, "chồng bạn"],
-  [/\b(cho|voi) vo\b/, "vợ bạn"],
-  [/\b(cho|voi) chong\b/, "chồng bạn"],
+  [VN(/\b(người ấy|người đó)\b/), "người ấy"],
+  [VN(/\b(anh ấy|anh đó)\b/), "anh ấy"],
+  [VN(/\b(cô ấy|cô đó|em ấy)\b/), "cô ấy"],
+  [VR(/\bcrush\b/), "crush"],
+  [VN(/\b(người yêu cũ|ny cũ)\b/), "người yêu cũ"],
+  [VN(/\b(chị ấy|chị đó)\b/), "chị ấy"],
+  [VN(/\b(người yêu|ny)\b/), "người yêu bạn"],
+  [VN(/\bbạn trai\b/), "bạn trai bạn"],
+  [VN(/\bbạn gái\b/), "bạn gái bạn"],
+  [VN(/\bngười yêu cũ\b/), "người yêu cũ"],
+  [VN(/\b(vợ mình|vợ tôi|vợ em|vợ anh|vợ a|vợ e|vợ tui|bà xã)\b/), "vợ bạn"],
+  [VN(/\b(chồng mình|chồng tôi|chồng em|chồng chị|chồng e|chồng c|chồng tui|ông xã)\b/), "chồng bạn"],
+  [VN(/\b(cho|với) vợ\b/), "vợ bạn"],
+  [VN(/\b(cho|với) chồng\b/), "chồng bạn"],
 ];
-const MIND_RE = /\b(het thich|het thuong|het yeu|het tinh cam|khong con thich|khong con yeu|con tinh cam|con yeu|con thuong|co yeu|co thuong|co thich|thich minh khong|yeu minh khong|nghi gi ve minh|nghi gi ve toi|nghi gi ve em|nghi gi ve anh|co de y|co quan tam|that long khong|co nghiem tuc)\b/;
-const SILENT_RE = /\b(im lang|khong nhan tin|khong rep|khong tra loi|seen khong rep|da xem|lanh nhat|ghost|bien mat|it nhan|khong lien lac)\b/;
-const ASK_ADV_RE = /\b(nen lam gi|lam sao|phai lam sao|lam gi bay gio|nen the nao|co nen|xu ly sao|lam the nao)\b/;
-const TEXT_RE = /\b(nen nhan gi|nhan gi|nhan tin the nao|nhan the nao|mo loi sao|bat chuyen sao|nhan truoc khong|co nen nhan)\b/;
+const MIND_RE = VN(/\b(hết thích|hết thương|hết yêu|hết tình cảm|không còn thích|không còn yêu|còn tình cảm|còn yêu|còn thương|có yêu|có thương|có thích|thích mình không|yêu mình không|nghĩ gì về mình|nghĩ gì về tôi|nghĩ gì về em|nghĩ gì về anh|có để ý|có quan tâm|thật lòng không|có nghiêm túc)\b/);
+const SILENT_RE = VN(/\b(im lặng|không nhắn tin|không rep|không trả lời|seen không rep|đã xem|lạnh nhạt|ghost|biến mất|ít nhắn|không liên lạc)\b/);
+const ASK_ADV_RE = VN(/\b(nên làm gì|làm sao|phải làm sao|làm gì bây giờ|nên thế nào|có nên|xử lý sao|xử lí sao|làm thế nào)\b/);
+const TEXT_RE = VN(/\b(nên nhắn gì|nhắn gì|nhắn tin thế nào|nhắn thế nào|mở lời sao|bắt chuyện sao|nhắn trước không|có nên nhắn)\b/);
 // Hỏi CÓ NÊN chủ động không (quyết định) — khác hỏi NHẮN GÌ (soạn câu).
-const DECIDE_RE = /\b(nhan truoc|co nen nhan|nen nhan khong|co nen goi|goi truoc|chu dong (nhan|goi|lien lac|truoc|noi chuyen)|lien lac truoc|mo loi truoc|lam lanh truoc|xin loi truoc)\b/;
-const DRAFT_RE = /\b(hoi sao|hoi the nao|hoi nhu the nao|nhan sao|nhan gi|nhan the nao|nhan nhu the nao|nhan tin the nao|noi sao|noi gi|noi the nao|viet gi|viet sao|mo loi sao|mo loi the nao|bat chuyen sao|cau nao|goi y (vai |may )?cau|mau tin nhan|tin nhan mau|soan (giup|ho|gium))\b/;
-const FOUGHT_RE = /\b(cai nhau|cai lon|cai vo|gian nhau|to tieng|lo loi|nang loi|gian doi|hieu lam|lam (nguoi ay|co ay|anh ay|ho|ban ay) gian)\b/;
-const YES_RE = /^(co|co chu|u|uh|um|uhm|ok|oke|okie|duoc|dc|muon|goi y di|co nha|u goi y di|da|vang)( (a|nha|nhe|di|e|em|lomi))*$/;
+const DECIDE_RE = VN(/\b(nhắn trước|có nên nhắn|nên nhắn không|có nên gọi|gọi trước|chủ động (nhắn|gọi|liên lạc|trước|nói chuyện)|liên lạc trước|mở lời trước|làm lành trước|xin lỗi trước)\b/);
+const DRAFT_RE = VN(/\b(hỏi sao|hỏi thế nào|hỏi như thế nào|nhắn sao|nhắn gì|nhắn thế nào|nhắn như thế nào|nhắn tin thế nào|nói sao|nói gì|nói thế nào|viết gì|viết sao|mở lời sao|mở lời thế nào|bắt chuyện sao|câu nào|gợi ý (vài |mấy )?câu|mẫu tin nhắn|tin nhắn mẫu|soạn (giúp|hộ|giùm))\b/);
+const FOUGHT_RE = VN(/\b(cãi nhau|cãi lộn|cãi vã|giận nhau|to tiếng|lỡ lời|nặng lời|giận dỗi|hiểu lầm|làm (người ấy|cô ấy|anh ấy|họ|bạn ấy) giận)\b/);
+const YES_RE = VN(/^(có|có chứ|ừ|u|uh|ừm|um|uhm|ok|oke|okie|được|dc|đc|muốn|gợi ý đi|có nha|ừ gợi ý đi|u gợi ý đi|dạ|vâng)( (ạ|à|a|nha|nhé|nhe|đi|e|em|lomi))*$/);
 
 function subjectOf(n: string): string | undefined {
   return SUBJ.find(([re]) => re.test(n))?.[1];
@@ -76,9 +77,9 @@ export function relationFollow(text: string, ctx?: string): RelHit | null {
   // Câu tự nêu một người KHÁC người đang nói ("còn crush thì sao") → chuyện mới; cùng người thì giữ điều đã biết.
   if (own && own.subject !== subject) return own;
   if (!subject || words > 14) return own;
-  const asks = /\?/.test(text) || / (khong|ko|k|sao|gi|nao|the nao|ha|nhi|chua) $/.test(n) || ASK_ADV_RE.test(n);
+  const asks = /\?/.test(text) || VN(/ (không|ko|k|sao|gì|nào|thế nào|hả|ha|nhỉ|chưa) $/).test(n) || ASK_ADV_RE.test(n);
   // "Trước đó tụi a có cãi nhau" — trả lời câu "trước khi im lặng hai người có chuyện gì không?".
-  if (FOUGHT_RE.test(n) && !asks && words <= 10 && !/ (khong|ko|chua|chang) (he |co )?(cai|gian|to tieng) /.test(n)) return { intent: "after_fight", subject, flags: [...new Set([...flags, "fight"])] };
+  if (FOUGHT_RE.test(n) && !asks && words <= 10 && !VN(/ (không|ko|chưa|chẳng) (hề |có )?(cãi|giận|to tiếng) /).test(n)) return { intent: "after_fight", subject, flags: [...new Set([...flags, "fight"])] };
   if (DECIDE_RE.test(n) && asks) return { intent: "decide", subject, flags };
   // Hỏi nhắn GÌ / nhắn SAO khi đã biết hoàn cảnh (im lặng, vừa cãi nhau), hoặc "ừ" sau khi Lomi mời gợi ý câu nhắn → soạn câu mẫu.
   const knows = prev === "silence" || prev === "silence_advice" || prev === "after_fight" || prev === "decide" || prev === "draft" || flags.includes("fight");
@@ -88,7 +89,7 @@ export function relationFollow(text: string, ctx?: string): RelHit | null {
   if (MIND_RE.test(n) && words <= 12) return { intent: "mind_read", subject, flags };
   if (words > 10) return null;
   if (TEXT_RE.test(n)) return { intent: "texting", subject, flags };
-  if (ASK_ADV_RE.test(n) || /\b(nen sao|gio sao|lam gi)\b/.test(n)) return { intent: prev === "silence" || prev === "silence_advice" ? "silence_advice" : ("advice" as RelIntent), subject, flags };
+  if (ASK_ADV_RE.test(n) || VN(/\b(nên sao|giờ sao|làm gì)\b/).test(n)) return { intent: prev === "silence" || prev === "silence_advice" ? "silence_advice" : ("advice" as RelIntent), subject, flags };
   return null;
 }
 
@@ -132,7 +133,7 @@ function build(r: RelHit, text: string): HeartReply {
         : `Vài câu mở lời nhẹ nhàng — bạn chọn câu hợp giọng mình rồi sửa lại nha:\n• “Dạo này thấy im ắng quá, có chuyện gì không? Khi nào tiện thì nói mình nghe nha.”\n• “Mình không hỏi dồn đâu, chỉ muốn biết là mọi thứ vẫn ổn.”\n• “Hôm nay tự nhiên nhớ tới chuyện tụi mình hay nói, nên nhắn hỏi thăm.”\n\nNhắn một câu thôi, rồi cho ${s} thời gian trả lời — đừng nhắn dồn.`,
     };
   const S = s.charAt(0).toUpperCase() + s.slice(1);
-  const dm = ` ${normStrict(text, HEART)} `.match(/\b(\d+|mot|hai|ba|may|vai|ca)\s*(ngay|hom|tuan|thang)\b/);
+  const dm = ` ${normStrict(text, HEART)} `.match(VN(/\b(\d+|một|hai|ba|mấy|vài|cả)\s*(ngày|hôm|tuần|tháng)\b/));
   const dur = dm ? `${({ mot: "1", hai: "2", ba: "3", may: "mấy", vai: "vài", ca: "cả" } as Record<string, string>)[dm[1]] ?? dm[1]} ${({ ngay: "ngày", hom: "hôm", tuan: "tuần", thang: "tháng" } as Record<string, string>)[dm[2]]}` : undefined;
   if (r.intent === "silence")
     return {
@@ -148,12 +149,12 @@ function build(r: RelHit, text: string): HeartReply {
     };
   if (r.intent === "mind_read") {
     const n = ` ${normStrict(text, HEART)} `;
-    const what = /nghi gi/.test(n) ? `${s} đang nghĩ gì về bạn` : /het (thich|thuong|yeu|tinh cam)|khong con|con (thich|thuong|yeu|tinh cam)/.test(n) ? `${s} còn tình cảm hay không` : /thich|de y|quan tam/.test(n) ? `${s} có để ý bạn không` : `${s} còn tình cảm hay không`;
+    const what = VN(/nghĩ gì/).test(n) ? `${s} đang nghĩ gì về bạn` : VN(/hết (thích|thương|yêu|tình cảm)|không còn|còn (thích|thương|yêu|tình cảm)/).test(n) ? `${s} còn tình cảm hay không` : VN(/thích|để ý|quan tâm/).test(n) ? `${s} có để ý bạn không` : `${s} còn tình cảm hay không`;
     return {
       theme: "love",
       quick: [],
       text: [
-        `${/(?<![\p{L}])(sợ|lo|lỡ|nhỡ|so|lo so)(?![\p{L}])/iu.test(text) ? (fight ? "Sau một trận cãi nhau mà sợ như vậy là dễ hiểu lắm 🥺 " : "Nỗi sợ đó dễ hiểu mà 🥺 ") : ""}Thật lòng thì chỉ ${s} mới biết chắc ${what}. Lomi không đọc được suy nghĩ người khác, nhưng có thể cùng bạn nhìn vào những gì ${s} đang thể hiện.`,
+        `${VR(/(?<![\p{L}])(sợ|lo|lỡ|nhỡ|so|lo so)(?![\p{L}])/iu).test(text) ? (fight ? "Sau một trận cãi nhau mà sợ như vậy là dễ hiểu lắm 🥺 " : "Nỗi sợ đó dễ hiểu mà 🥺 ") : ""}Thật lòng thì chỉ ${s} mới biết chắc ${what}. Lomi không đọc được suy nghĩ người khác, nhưng có thể cùng bạn nhìn vào những gì ${s} đang thể hiện.`,
         `Vài dấu hiệu hay đáng để ý hơn lời nói: ${s} có chủ động hỏi han, giữ lời hẹn, dành thời gian cho bạn không — hay chỉ xuất hiện khi rảnh/khi cần? Hành động lặp lại theo thời gian thường nói nhiều hơn một tin nhắn.`,
         `Dạo gần đây ${s} cư xử với bạn thế nào, có gì thay đổi so với trước không?`,
       ].join("\n\n"),

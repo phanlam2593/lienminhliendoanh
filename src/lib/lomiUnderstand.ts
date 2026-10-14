@@ -14,6 +14,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { APP, normStrict } from "@/lib/lomiAccent";
 import type { ChatReply } from "@/lib/lomiChat";
 import { TAROT_SPREADS } from "@/lib/tarot";
+import { VR, VN } from "@/lib/viMatch";
 
 export type Tone = "laugh" | "sad" | "mad" | "shock" | "love" | "neutral";
 
@@ -29,11 +30,11 @@ function pick(arr: string[]): string {
 export function tone(raw: string): Tone {
   const s = raw.toLowerCase();
   // "híc", "hic", "hix", "hức", "hu hu" — có dấu hay không đều là buồn (01/10: "Híc" bị bỏ sót).
-  if (/(😭|🥲|😢|😞|😔|😥|😿|💔|:\(+|hu ?hu|(^|[^\p{L}])(h[iíì]c+|hix+|hức+)(?![\p{L}]))/u.test(s)) return "sad";
+  if (VR(/(😭|🥲|😢|😞|😔|😥|😿|💔|:\(+|hu ?hu|(^|[^\p{L}])(h[iíì]c+|hix+|hức+)(?![\p{L}]))/u).test(s)) return "sad";
   if (/(😤|😡|🤬|🙄|😠|💢)/u.test(s)) return "mad";
   if (/(😳|😱|😮|😯|🫢|😧)/u.test(s)) return "shock";
   if (/(🥰|😍|❤️|❤|💕|💖|😘|🫶)/u.test(s)) return "love";
-  if (/(:\)+|=\)+|:d\b|xd\b|😂|🤣|😆|😁|😄|🤭|\bhaha|\bhihi|\bhehe|\bkk+)/u.test(s)) return "laugh";
+  if (VR(/(:\)+|=\)+|:d\b|xd\b|😂|🤣|😆|😁|😄|🤭|\bhaha|\bhihi|\bhehe|\bkk+)/u).test(s)) return "laugh";
   return "neutral";
 }
 
@@ -43,7 +44,7 @@ export function tone(raw: string): Tone {
 export type Expr = { stretched: boolean; trail: boolean; bang: boolean; repeatEmoji: boolean; strong: boolean };
 export function expressive(raw: string): Expr {
   const t = raw.normalize("NFC");
-  const stretched = /(\p{L})\1{2,}/u.test(t.replace(/\b(coffee|free|see|too|good|book|cool|all|off|kk+)\b/giu, "")) || /(\p{L}{2,})(\p{L})\2(?![\p{L}])/u.test(t.replace(/\b(coffee|free|see|too|good|book|cool|all|off|will|kiss|miss|boss|pass|class)\b/giu, ""));
+  const stretched = /(\p{L})\1{2,}/u.test(t.replace(VR(/\b(coffee|free|see|too|good|book|cool|all|off|kk+)\b/giu), "")) || /(\p{L}{2,})(\p{L})\2(?![\p{L}])/u.test(t.replace(VR(/\b(coffee|free|see|too|good|book|cool|all|off|will|kiss|miss|boss|pass|class)\b/giu), ""));
   const trail = /(\.{2,}|…)\s*$/u.test(t.replace(/[\p{Extended_Pictographic}\ufe0f\s]+$/u, ""));
   const bang = /!+\s*[\p{Extended_Pictographic}\ufe0f\s]*$/u.test(t);
   const repeatEmoji = /(\p{Extended_Pictographic})\ufe0f?\s*\1/u.test(t);
@@ -82,13 +83,13 @@ const has = (n: string, re: RegExp) => re.test(` ${n} `);
 const words = (n: string) => (n ? n.split(" ").length : 0);
 
 // ── Báo lỗi app ──
-const APP_REF = /\b(app|ung dung|trang|web|man hinh|cai nay|no|he thong|lomi)\b/;
+const APP_REF = VN(/\b(app|ứng dụng|trang|web|màn hình|cái này|nó|hệ thống|lomi)\b/);
 const ISSUE: [string, RegExp][] = [
-  ["crash", /\b(bi vang|vang ra|vang app|vang hoai|vang mat|tu vang|vang hoai luon|tu thoat|tu tat|tu dong tat|thoat ra|crash|out ra|dang xai thi tat)\b/],
-  ["blank", /\b(trang tron|man hinh trang|trang xoa|trang bach|den thui|man hinh den|khong hien gi|khong hien thi gi|trong tron|khong co gi het|khong thay gi het)\b/],
-  ["lag", /\b(lag|giat lag|bi giat|giat qua|bi do|(?<!thai )do qua|(?<!thai )do luon|do man hinh|dung hinh|treo(?! co\b)|bi treo(?! co\b)|cham qua|cham ri|cham the|cham vay|load lau|load mai|load hoai|xoay hoai|xoay mai|quay hoai|quay mai|loading mai|khong load|khong len|mai khong len|load khong len)\b/],
-  ["login", /\b(khong vao duoc|vao khong duoc|khong dang nhap duoc|dang nhap khong duoc|khong login duoc|bi da ra|bi out|bi dang xuat)\b/],
-  ["generic", /\b(bi gi|bi sao|bi loi|loi roi|loi gi|bao loi|hien loi|bug|hu roi|hu ha|khong chay|khong hoat dong|khong dung duoc|xai khong duoc|dung khong duoc|khong bam duoc|bam khong duoc|bam khong an|khong gui duoc|gui khong duoc|khong tai duoc|khong mo duoc|mo khong duoc|khong luu duoc|luu khong duoc|bi offline|hien offline|bao offline|mat mang|mat ket noi|khong co mang)\b|\bkhong (gui|tai|mo|luu|bam|load|xem|nghe|goi|dang|up|doi|chon|tim|thay doi|cap nhat|cai)\b.{0,30}\bduoc\b/],
+  ["crash", VN(/\b(bị văng|văng ra|văng app|văng hoài|văng mất|tự văng|văng hoài luôn|tự thoát|tự tắt|tự động tắt|thoát ra|crash|out ra|đang xài thì tắt)\b/)],
+  ["blank", VN(/\b(trắng trơn|màn hình trắng|trắng xoá|trắng bạch|đen thui|màn hình đen|không hiện gì|không hiển thị gì|trống trơn|không có gì hết|không thấy gì hết)\b/)],
+  ["lag", VN(/\b(lag|giật lag|bị giật|giật quá|bị đơ|(?<!thái )đơ quá|(?<!thái )đơ luôn|đơ màn hình|đứng hình|treo(?! cổ\b)|bị treo(?! cổ\b)|chậm quá|chậm rì|chậm thế|chậm vậy|load lâu|load mãi|load hoài|xoay hoài|xoay mãi|quay hoài|quay mãi|loading mãi|không load|không lên|mãi không lên|load không lên)\b/)],
+  ["login", VN(/\b(không vào được|vào không được|không đăng nhập được|đăng nhập không được|không login được|bị đá ra|bị out|bị đăng xuất)\b/)],
+  ["generic", VN(/\b(bị gì|bị sao|bị lỗi|lỗi rồi|lỗi gì|báo lỗi|hiện lỗi|bug|hư rồi|hư hả|không chạy|không hoạt động|không dùng được|xài không được|dùng không được|không bấm được|bấm không được|bấm không ăn|không gửi được|gửi không được|không tải được|không mở được|mở không được|không lưu được|lưu không được|bị offline|hiện offline|báo offline|mất mạng|mất kết nối|không có mạng)\b|\bkhông (gửi|tải|mở|lưu|bấm|load|xem|nghe|gọi|đăng|up|đổi|chọn|tìm|thay đổi|cập nhật|cài)\b.{0,30}\bđược\b/)],
 ];
 const ISSUE_TIP: Record<string, string> = {
   crash: "App tự văng ra hả 😥",
@@ -110,7 +111,7 @@ function issueSteps(kind: string): string {
 
 /** Câu mở đầu nhắc lại đúng việc người dùng đang kẹt ("Không gửi tin nhắn được hả") — cho thấy Lomi hiểu. */
 function issueHead(q: string, kind: string): string {
-  const m = q.match(/(?:^|\s)(?:không|ko|k|hông|chẳng|chả) ((?:\p{L}+ ){0,4}?\p{L}+) được/iu);
+  const m = q.match(VR(/(?:^|\s)(?:không|ko|k|hông|chẳng|chả) ((?:\p{L}+ ){0,4}?\p{L}+) được/iu));
   if (kind === "generic" && m && m[1].split(" ").length <= 5) return `Không ${m[1].toLowerCase()} được hả 😥`;
   return ISSUE_TIP[kind];
 }
@@ -121,19 +122,19 @@ function detectIssue(n: string): string | null {
 }
 
 // Trả lời tiếp khi Lomi vừa hỏi "đang ở màn nào, Android hay iPhone".
-const DEVICE = /\b(android|samsung|oppo|xiaomi|redmi|vivo|realme|huawei|nokia|iphone|ios|ip|ipad|may tinh|laptop|pc|chrome|safari|zalo|facebook|fb)\b/;
+const DEVICE = VN(/\b(android|samsung|oppo|xiaomi|redmi|vivo|realme|huawei|nokia|iphone|ios|ip|ipad|máy tính|laptop|pc|chrome|safari|zalo|facebook|fb)\b/);
 const SCREEN: [RegExp, string][] = [
-  [/\b(uu dai|ma uu dai|nhan ma)\b/, "Ưu đãi"],
-  [/\b(quet|ket noi)\b/, "Quẹt"],
-  [/\b(tin nhan|chat|nhan tin|goi)\b/, "Tin nhắn"],
-  [/\b(cong dong)\b/, "Cộng đồng"],
-  [/\b(ho so|trang ca nhan|anh dai dien)\b/, "Hồ sơ"],
-  [/\b(dua don|dat xe|giao hang|tai xe)\b/, "Đưa đón"],
-  [/\b(kham pha|tim quan|ban do)\b/, "Khám phá"],
-  [/\b(thong bao)\b/, "Thông báo"],
-  [/\b(dang nhap|dang ky)\b/, "Đăng nhập"],
-  [/\b(trang chu)\b/, "Trang chủ"],
-  [/\b(lomi|tro ly)\b/, "Trợ lý Lomi"],
+  [VN(/\b(ưu đãi|mã ưu đãi|nhận mã)\b/), "Ưu đãi"],
+  [VN(/\b(quẹt|kết nối)\b/), "Quẹt"],
+  [VN(/\b(tin nhắn|chat|nhắn tin|gọi)\b/), "Tin nhắn"],
+  [VN(/\b(cộng đồng)\b/), "Cộng đồng"],
+  [VN(/\b(hồ sơ|trang cá nhân|ảnh đại diện)\b/), "Hồ sơ"],
+  [VN(/\b(đưa đón|đặt xe|giao hàng|tài xế)\b/), "Đưa đón"],
+  [VN(/\b(khám phá|tìm quán|bản đồ)\b/), "Khám phá"],
+  [VN(/\b(thông báo)\b/), "Thông báo"],
+  [VN(/\b(đăng nhập|đăng ký)\b/), "Đăng nhập"],
+  [VN(/\b(trang chủ)\b/), "Trang chủ"],
+  [VN(/\b(lomi|trợ lý)\b/), "Trợ lý Lomi"],
 ];
 
 const DEV_NAME: Record<string, string> = { android: "Android", samsung: "Samsung", oppo: "OPPO", xiaomi: "Xiaomi", redmi: "Redmi", vivo: "vivo", realme: "realme", huawei: "Huawei", nokia: "Nokia", iphone: "iPhone", ios: "iPhone", ip: "iPhone", ipad: "iPad", "may tinh": "máy tính", laptop: "laptop", pc: "máy tính", chrome: "Chrome", safari: "Safari", zalo: "Zalo", facebook: "Facebook", fb: "Facebook" };
@@ -141,19 +142,19 @@ const devName = (d: string) => DEV_NAME[d] ?? d;
 
 // ── Mở lời, chưa vào việc ("cho tui hỏi cái này vs", "giúp mình với", "help") ──
 const OPENER =
-  /^(e |oi |lomi oi |lomi |ad oi |bro |ban oi |em oi |anh oi |chi oi )?(cho (tui|toi|minh|em|anh|chi|tao|t|to) hoi( (cai nay|cai|chut|xiu|ti|ty|chut xiu|ti xiu|mot chut|mot cau|cau nay|nay))?|hoi (chut|xiu|ti|cai nay|cai|mot chut|cai ne)|minh hoi (chut|xiu|cai nay|cai)|giup (minh|toi|tui|em|anh|chi|tao|t|to)?( voi| cai| chut| xiu| di)?|giup voi|giup|help( me)?|cuu (minh|toi|tui|em|voi)|cuu|co viec nho|nho ti|nho chut|nho xiu)( (voi|vs|nha|nhe|ne|di|lomi|duoc khong|dc khong|khong|a|nhen|cai))*$/;
+  VN(/^(e |ơi |lomi ơi |lomi |ad ơi |bro |bạn ơi |em ơi |anh ơi |chị ơi )?(cho (tui|tôi|mình|em|anh|chị|tao|t|tớ) hỏi( (cái này|cái|chút|xíu|tí|ti|ty|chút xíu|tí xíu|một chút|một câu|câu này|này))?|hỏi (chút|xíu|tí|ti|cái này|cái|một chút|cái nè)|mình hỏi (chút|xíu|cái này|cái)|giúp (mình|tôi|tui|em|anh|chị|tao|t|tớ)?( với| cái| chút| xíu| đi)?|giúp với|giúp|help( me)?|cứu (mình|tôi|tui|em|với)|cứu|có việc nhờ|nhờ tí|nhờ chút|nhờ xíu)( (với|vs|nha|nhé|nhe|nè|đi|lomi|được không|đc không|không|à|ạ|a|nhen|cái))*$/);
 
 // ── Câu cụt / tham chiếu mơ hồ ──
 const VAGUE =
-  /^(e |oi |ua |bro |lomi )?(cai nay|cai do|cai kia|cai nay sao|cai do sao|cai nay la sao|cai nay la gi|vay sao|sao vay|sao ta|sao the|sao the nhi|sao z|roi sao|roi sao nua|roi sao do|con cai kia|con cai nay|con gi nua|o dau|o dau vay|dau vay|dau|dau roi|sao khong co|sao khong thay|sao khong duoc|lam sao|lam sao ta|lam sao day|lam sao vay|lam the nao|the nao|ra sao|gi vay|gi day|gi the|gi z|la sao|la gi|ua|ua sao|ua gi|ua la sao|ha|hm|hmm|vay la sao|nghia la sao|y la sao|cai nay lam sao|cai nay bi gi|cai nay bi sao|sao|sao ma|ui|uii|au|oa|wow|oi|ui da|oi troi oi)( (vay|z|day|ta|nhi|nha|a|lomi|ban|troi|ha|vay ta|the))*$/;
+  VN(/^(e |ơi |ủa |bro |lomi )?(cái này|cái đó|cái kia|cái này sao|cái đó sao|cái này là sao|cái này là gì|vậy sao|sao vậy|sao ta|sao thế|sao thế nhỉ|sao z|rồi sao|rồi sao nữa|rồi sao đó|còn cái kia|còn cái này|còn gì nữa|ở đâu|ở đâu vậy|đâu vậy|đâu|đâu rồi|sao không có|sao không thấy|sao không được|làm sao|làm sao ta|làm sao đây|làm sao vậy|làm thế nào|thế nào|ra sao|gì vậy|gì đây|gì đấy|gì thế|gì z|là sao|là gì|ủa|ủa sao|ủa gì|ủa là sao|hả|ha|hm|hmm|vậy là sao|nghĩa là sao|ý là sao|cái này làm sao|cái này bị gì|cái này bị sao|sao|sao mà|ui|uii|áu|au|oa|oà|wow|ơi|ôi|ui da|ôi trời ơi)( (vậy|z|đây|đấy|dậy|ta|nhỉ|nha|à|ạ|a|lomi|bạn|trời|hả|ha|vậy ta|thế))*$/);
 
 // ── Không tìm thấy nút / chỗ ──
 const NOT_FOUND =
-  /\b(khong thay (nut|cho|muc|cai|o|nut do|phan|tab|dau)|khong tim thay|tim khong ra|tim hoai khong thay|kiem khong ra|khong kiem thay|khong thay dau|nut (do|nay|kia|.{0,20}) (o dau|dau)|cho nao de|bam vao dau|bam o dau|nhan vao dau|vao dau de|o dau de)\b/;
+  VN(/\b(không thấy (nút|chỗ|mục|cái|ô|nút đó|phần|tab|đâu)|không tìm thấy|tìm không ra|tìm hoài không thấy|kiếm không ra|không kiếm thấy|không thấy đâu|nút (đó|này|kia|.{0,20}) (ở đâu|đâu)|chỗ nào để|bấm vào đâu|bấm ở đâu|nhấn vào đâu|vào đâu để|ở đâu để)\b/);
 
 // ── Chưa hiểu câu Lomi vừa nói ──
 const CONFUSED =
-  /\b(khong hieu (gi|cho nay|lam|lam luon|gi het|gi luon|y|cho do|nha|a|ban noi gi|lomi noi gi)|kho hieu|chua hieu|hieu chet lien|noi gi vay|noi gi z|noi gi the|noi gi zay|la sao ta|rối|roi qua|lu qua|lu luon|khong hieu)\b/;
+  VR(/\b(khong hieu (gi|cho nay|lam|lam luon|gi het|gi luon|y|cho do|nha|a|ban noi gi|lomi noi gi)|kho hieu|chua hieu|hieu chet lien|noi gi vay|noi gi z|noi gi the|noi gi zay|la sao ta|rối|roi qua|lu qua|lu luon|khong hieu)\b/);
 
 /**
  * Ý định của câu (chạy SAU chitChat, TRƯỚC câu hỏi thường gặp). Trả null để luồng cũ xử lý tiếp.
@@ -170,10 +171,10 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
     const dev = n.match(DEVICE)?.[0];
     const scr = SCREEN.find(([re]) => has(n, re))?.[1];
     if (dev || scr) {
-      const ios = dev && /iphone|ios|ip|ipad|safari/.test(dev);
+      const ios = dev && VR(/iphone|ios|ip|ipad|safari/).test(dev);
       const tip = ios
         ? "Trên iPhone, app chạy qua Safari: vào Cài đặt → Safari → Xoá lịch sử và dữ liệu trang web, rồi mở lại app nha (tài khoản vẫn còn, chỉ cần đăng nhập lại)."
-        : dev && /may tinh|laptop|pc|chrome/.test(dev)
+        : dev && VN(/máy tính|laptop|pc|chrome/).test(dev)
           ? "Trên máy tính thì bấm Ctrl + Shift + R để tải lại hẳn trang nha."
           : dev
             ? "Trên Android: giữ icon app → Thông tin ứng dụng → Bộ nhớ → Xoá bộ nhớ đệm (cache), rồi mở lại nha. Nhớ tắt chế độ tiết kiệm pin cho app luôn."
@@ -190,23 +191,23 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
   }
 
   // 0b) "ib mình nha" — muốn Lomi nhắn riêng.
-  if (/^(nhan tin|ib|inbox) (minh|toi|tui|em|anh|chi|t|tao|to)( (nha|nhe|di|voi|lien|nhen|lomi))*$/.test(n))
+  if (VN(/^(nhắn tin|ib|inbox) (mình|tôi|tui|em|anh|chị|t|tao|tớ)( (nha|nhé|nhe|đi|với|liền|nhen|lomi))*$/).test(n))
     return {
       intent: "ib",
       text: "Lomi chỉ nói chuyện được ở đây thôi nè 😄 Bạn cứ nhắn ngay khung này là Lomi trả lời liền. Còn muốn nhắn riêng với người khác thì vào Tin nhắn (/tin-nhan) nha!",
     };
   // 0c) "m đi đâu z", "lomi ở đâu" — hỏi Lomi đi đâu.
-  if (/^((may|lomi|ban|em|ong|ba|bro) )?(di dau|o dau|dau roi|di dau roi|di dau vay|dang o dau|tron dau)( (vay|z|roi|the|ta|ha|nay|lomi))*$/.test(n) && /^(may|lomi|ban|em|ong|ba|bro|di dau|dang o dau|tron dau)/.test(n))
+  if (VN(/^((mày|lomi|bạn|em|ông|bà|bro) )?(đi đâu|ở đâu|đâu rồi|đi đâu rồi|đi đâu vậy|đang ở đâu|trốn đâu)( (vậy|z|rồi|thế|ta|hả|ha|này|nãy|nay|lomi))*$/).test(n) && VN(/^(mày|lomi|bạn|em|ông|bà|bro|đi đâu|đang ở đâu|trốn đâu)/).test(n))
     return { intent: "where_lomi", text: pick(["Lomi ở đây suốt nè, có đi đâu đâu 😆 Gọi là có mặt liền!", "Lomi “sống” trong app luôn á 🤖 Bạn cần gì nè?"]) };
   // 0d) Hướng dẫn dùng app chung chung.
-  if (/\b(huong dan|chi|chi cach|day) (dung|su dung|xai|choi) (app|ung dung)\b|^(app|ung dung)( nay)? (dung|xai|su dung) (sao|the nao|nhu nao|ra sao)/.test(n))
+  if (VN(/\b(hướng dẫn|chỉ|chỉ cách|dạy) (dùng|sử dụng|xài|chơi) (app|ứng dụng)\b|^(app|ứng dụng)( này)? (dùng|xài|sử dụng) (sao|thế nào|như nào|ra sao)/).test(n))
     return {
       intent: "guide",
       text: "Có trang Hướng dẫn (/huong-dan) chỉ từng phần của app luôn nè 📖 Hoặc bạn hỏi Lomi từng việc cụ thể kiểu “nhận ưu đãi sao”, “quẹt là gì”, “đặt xe thế nào” là Lomi chỉ liền!",
       quick: ["Làm sao để nhận ưu đãi?", "Quẹt là gì, dùng thế nào?"],
     };
   // 0e) Phàn nàn quán / nhân viên (trước báo lỗi app: "thái độ" bỏ dấu có chữ "đơ").
-  if (/\b(nhan vien|quan|cua hang|shop|chu quan|tiem)\b.*\b(thai do|chui|lua|lua dao|khong giu|khong nhan|te qua|do qua|chan qua|bat nat|lam gia|khong dung|mat lich su|hach)\b/.test(n))
+  if (VN(/\b(nhân viên|quán|cửa hàng|shop|chủ quán|tiệm)\b.*\b(thái độ|chửi|lừa|lừa đảo|không giữ|không nhận|tệ quá|dở quá|chán quá|bắt nạt|làm giá|không đúng|mất lịch sự|hách)\b/).test(n))
     return {
       intent: "biz_complaint",
       text:
@@ -216,12 +217,12 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
 
   // 0f) (01/10 r3, theo tài liệu Kir) Câu Việt chen từ tiếng Anh / viết tắt — hiểu theo Ý, không bắt viết lại.
   // Rủ Lomi làm gì đó ("tối nay chơi game không?", "đi cà phê hong", "xem phim đi") — không có "ai" (đó là tìm bạn, mục 6).
-  const invite = n.match(/^((toi nay|chieu nay|sang nay|trua nay|mai|toi mai|cuoi tuan|nay|gio|lat nua|di|e|oi|lomi|em|ban|bro|ui) )*(choi game|choi|lam van game|lam tran|di cafe|di ca phe|uong ca phe|uong cafe|di an|di choi|di nhau|nhau|di dao|xem phim|di phuot|di da lat|hat karaoke|di hat|da banh|chay bo|tam su|nc|noi chuyen)( (khong|hong|ko|k|chu|nha|nhe|di|hok|ha|voi|voi minh|voi tui|cung minh|chung|khum|ne|lomi|em|e|ban|bro|ta|nao|ko ta))*$/);
-  if (invite && !/\b(ai|co ai)\b/.test(n) && w <= 10) {
+  const invite = n.match(VN(/^((tối nay|chiều nay|sáng nay|trưa nay|mai|tối mai|cuối tuần|nay|giờ|lát nữa|đi|e|ơi|lomi|em|bạn|bro|ui) )*(chơi game|chơi|làm ván game|làm trận|đi cafe|đi cà phê|uống cà phê|uống cafe|đi ăn|đi chơi|đi nhậu|nhậu|đi dạo|xem phim|đi phượt|đi đà lạt|hát karaoke|đi hát|đá banh|chạy bộ|tâm sự|nc|nói chuyện)( (không|hông|hong|ko|k|chứ|chớ|nha|nhé|nhe|đi|hok|hả|ha|với|với mình|với tui|cùng mình|chung|khum|nè|lomi|em|e|bạn|bro|ta|nào|ko ta))*$/));
+  if (invite && !VN(/\b(ai|có ai)\b/).test(n) && w <= 10) {
     const act = invite[3];
-    const game = /game|van|tran/.test(act) || act === "choi";
-    const coffee = /ca ?phe|cafe/.test(act);
-    const talk = /tam su|nc|noi chuyen/.test(act);
+    const game = VN(/game|ván|trận/).test(act) || act === "choi";
+    const coffee = VN(/cà ?phê|cafe/).test(act);
+    const talk = VN(/tâm sự|nc|nói chuyện/).test(act);
     if (talk) return { intent: "invite_talk", text: pick(["Okie, Lomi rảnh nè 😄 Kể Lomi nghe đi!", "Chịu luôn 🙌 Bạn muốn nói chuyện gì nè?"]) };
     return {
       intent: "invite",
@@ -243,8 +244,8 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
     };
   }
   // Xin thông tin / link chung chung ("cho mình xin info", "cho mình link với").
-  if (/^((cho|gui|xin|send) )?(minh|toi|tui|em|anh|chi|t|tao|to|minh xin|toi xin|tui xin|em xin|xin)? ?(xin )?(info|infor|thong tin|link|lien ket)( (voi|di|nha|nhe|duoc khong|dc khong|khong|ne|lomi|ban|em|app|cua app|app nay|cai))*$/.test(n) && /\b(info|infor|thong tin|link|lien ket)\b/.test(n)) {
-    if (/\b(link|lien ket)\b/.test(n))
+  if (VN(/^((cho|gửi|xin|send) )?(mình|tôi|tui|em|anh|chị|t|tao|tớ|mình xin|tôi xin|tui xin|em xin|xin)? ?(xin )?(info|infor|thông tin|link|liên kết)( (với|đi|nha|nhé|nhe|được không|đc không|không|nè|lomi|bạn|em|app|của app|app này|cái))*$/).test(n) && VN(/\b(info|infor|thông tin|link|liên kết)\b/).test(n)) {
+    if (VN(/\b(link|liên kết)\b/).test(n))
       return {
         intent: "ask_link",
         text: "Link app nè: liendoanh.world 🌐 Gửi bạn bè mở bằng trình duyệt trên điện thoại, rồi bấm “Thêm vào màn hình chính” là xài như app luôn. Còn bạn cần link của chỗ nào khác thì nói Lomi nha!",
@@ -252,27 +253,27 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
     return { intent: "ask_info", text: "Bạn cần thông tin về gì nè? 😊 Một quán / doanh nghiệp, ưu đãi, hay về app Liên Minh Liên Doanh? Nói Lomi nghe là có liền." };
   }
   // "để mình check", "mình check thử" — người dùng tự đi kiểm tra; "check giúp mình cái này" — nhờ Lomi xem.
-  if (/^(de |cho )?(minh|toi|tui|em|anh|chi|t|tao|to)?( de)? ?(check|kiem tra|coi|xem) (thu|lai|cai|da|xiu|chut|ti|sau)( (nha|nhe|da|di|cai|xiu|chut|ti|roi bao|nghe))*$|^(de |cho )(minh|toi|tui|em|anh|chi|t|tao|to) (check|kiem tra|coi lai|xem lai)( (nha|nhe|da|thu|cai|xiu|chut|ti))*$/.test(n))
+  if (VN(/^(để |cho )?(mình|tôi|tui|em|anh|chị|t|tao|tớ)?( để)? ?(check|kiểm tra|coi|xem) (thử|lại|cái|đã|xíu|chút|tí|ti|sau)( (nha|nhé|nhe|đã|đi|cái|xíu|chút|tí|ti|rồi báo|nghe))*$|^(để |cho )(mình|tôi|tui|em|anh|chị|t|tao|tớ) (check|kiểm tra|coi lại|xem lại)( (nha|nhé|nhe|đã|thử|cái|xíu|chút|tí|ti))*$/).test(n))
     return { intent: "user_check", text: pick(["Okie, bạn check đi nha, có gì cứ hỏi Lomi 😊", "Dạ, bạn xem thử nha. Kẹt chỗ nào thì nói Lomi liền 👌"]) };
-  if (/^(check|kiem tra|coi|xem) (giup|ho|dum|giùm|gium) ?(minh|toi|tui|em|anh|chi|t|to)?( (cai nay|cai|chut|xiu|voi|vs|nha|nhe|di|ti))*$/.test(n))
+  if (VR(/^(check|kiem tra|coi|xem) (giup|ho|dum|giùm|gium) ?(minh|toi|tui|em|anh|chi|t|to)?( (cai nay|cai|chut|xiu|voi|vs|nha|nhe|di|ti))*$/).test(n))
     return { intent: "opener", text: pick(["Dạ, bạn muốn Lomi xem cái gì nè? Kể hoặc dán vào đây nha 👀", "Okie, cái gì vậy bạn? Nói Lomi nghe thử nha 👀"]) };
   // Một từ + dấu hỏi ("game?", "app?", "link?", "info?", "cà phê?", "còn không?") — hiểu theo câu trước nếu có,
   // không đủ ngữ cảnh thì hỏi lại MỘT câu ngắn (không bắt viết thành câu hoàn chỉnh).
   if (w <= 3 && !ctx.faqId) {
     const prev = normalizeVi(ctx.lastText ?? "");
-    if (/^(game|choi game)( (a|ha|ne|sao))?$/.test(n))
-      return { intent: "short_game", text: /quet|game/.test(prev) ? "Ừa, Game nằm trong Quẹt (/quet) nè 🎮 Chọn thẻ Game là thấy người tìm bạn chơi chung, hoặc mua bán đồ game." : "Game hả 🎮 Bạn muốn tìm bạn chơi chung (Quẹt → Game, /quet) hay đang hỏi chuyện gì khác về game nè?" };
-    if (/^(app|ung dung)( (a|ha|ne|sao|nay))?$/.test(n))
+    if (VN(/^(game|chơi game)( (à|a|hả|ha|nè|sao))?$/).test(n))
+      return { intent: "short_game", text: VN(/quẹt|game/).test(prev) ? "Ừa, Game nằm trong Quẹt (/quet) nè 🎮 Chọn thẻ Game là thấy người tìm bạn chơi chung, hoặc mua bán đồ game." : "Game hả 🎮 Bạn muốn tìm bạn chơi chung (Quẹt → Game, /quet) hay đang hỏi chuyện gì khác về game nè?" };
+    if (VN(/^(app|ứng dụng)( (à|a|hả|ha|nè|sao|này))?$/).test(n))
       return { intent: "short_app", text: "Bạn muốn hỏi gì về app nè? 📱 Cứ nói tự nhiên kiểu “nhận ưu đãi sao”, “đặt xe ở đâu” là Lomi chỉ liền." };
-    if (/^(link|lien ket)( (a|ha|ne|dau|app))?$/.test(n))
+    if (VN(/^(link|liên kết)( (à|a|hả|ha|nè|đâu|app))?$/).test(n))
       return { intent: "ask_link", text: "Link app nè: liendoanh.world 🌐 Còn bạn cần link chỗ khác thì nói Lomi nha!" };
-    if (/^(info|infor|thong tin)( (a|ha|ne|gi))?$/.test(n))
+    if (VN(/^(info|infor|thông tin)( (à|a|hả|ha|nè|gì))?$/).test(n))
       return { intent: "ask_info", text: "Thông tin về gì nè bạn? Quán nào, ưu đãi, hay về app? 😊" };
-    if (/^(ca phe|cafe)( (a|ha|ne|khong|hong|ko|k|di|nha))?$/.test(n))
-      return /quan|uong|ca phe|cafe|an gi/.test(prev)
+    if (VN(/^(cà phê|cafe)( (à|a|hả|ha|nè|không|hông|hong|ko|k|đi|nha))?$/).test(n))
+      return VN(/quán|uống|cà phê|cafe|ăn gì/).test(prev)
         ? { intent: "short_coffee", text: "Cà phê nha ☕ Bấm bên dưới Lomi tìm quán cà phê cho bạn liền!", quick: ["Tìm quán cà phê gần đây"] }
         : { intent: "short_coffee", text: "Cà phê hả ☕ Bạn muốn rủ đi uống hay cần Lomi tìm quán nè?", quick: ["Tìm quán cà phê gần đây"] };
-    if (/^(con khong|con hong|con ko|con k|het chua|het roi a|con han khong)( (vay|z|ban|lomi|a|ha))?$/.test(n))
+    if (VN(/^(còn không|còn hông|còn hong|còn ko|còn k|hết chưa|hết rồi à|hết rồi a|còn hạn không)( (vậy|z|bạn|lomi|à|a|hả|ha))?$/).test(n))
       return { intent: "vague", text: prev ? "Bạn hỏi còn cái nào nè? Nói Lomi tên quán / ưu đãi đó nha 👀" : "Còn gì nè bạn? 👀 Nói Lomi thêm chút xíu là hiểu liền." };
   }
 
@@ -299,7 +300,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
 
   // 3) Không tìm thấy nút / chỗ.
   if (has(n, NOT_FOUND) && !faqHit) {
-    const prev = ctx.lastText && /bấm|nút|vào|mục|chọn/i.test(ctx.lastText);
+    const prev = ctx.lastText && VR(/bấm|nút|vào|mục|chọn/i).test(ctx.lastText);
     return {
       intent: "notfound",
       issue: "find",
@@ -328,7 +329,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
   // 5) Câu cụt / tham chiếu mơ hồ ("cái này?", "rồi sao", "ở đâu vậy", "ủa?").
   //    Có ngữ cảnh câu hỏi về app → để phần câu hỏi nối xử lý; không có → hỏi lại 1 câu ngắn.
   if (w <= 6 && VAGUE.test(n) && !ctx.faqId) {
-    if (/^(ua|ha|hm|hmm|e|ui|uii|au|oa|wow|oi)( |$)/.test(n) && w <= 2)
+    if (VN(/^(ủa|hả|ha|hm|hmm|e|ui|uii|áu|au|oa|oà|wow|ơi|ôi)( |$)/).test(n) && w <= 2)
       return { intent: "vague", text: pick(["Sao vậy nè? 😯", "Ủa gì vậy bạn? 😄", "Hửm, có gì hả? 👀"]) };
     return {
       intent: "vague",
@@ -345,7 +346,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
   }
 
   // 6) Rủ đi đâu / tìm bạn đi cùng ("có ai đi đà lạt hong", "ai đi cafe không").
-  if (/\b(co ai|ai|ai do|co nguoi nao|ai ranh)\b.*\b(di|choi|an|uong|cafe|ca phe|nhau|du lich|phuot|chay bo|da banh|da bong|game|choi game|xem phim)\b/.test(n) && w <= 14)
+  if (VN(/\b(có ai|ai|ai đó|có người nào|ai rảnh)\b.*\b(đi|chơi|ăn|uống|cafe|cà phê|nhậu|du lịch|phượt|chạy bộ|đá banh|đá bóng|game|chơi game|xem phim)\b/).test(n) && w <= 14)
     return {
       intent: "seek_company",
       text: pick([
@@ -356,8 +357,8 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
     };
 
   // 8) Cà khịa / gọi thân mật ("nay ông căng vậy", "m khùng hả", "cha nội").
-  if (/^(nay )?(ong|ba|may|m|lomi|ban|bro|cha noi|ma|troi)?( nay)? ?(cang|gat|kho tinh|khung|dien|xao|lay loi|choi khum|lam lo|ba dao|lay)( (vay|the|z|ha|qua|ghe|ta|lam))*$/.test(n) ||
-    /^(cha noi|ba noi|ong noi|ong oi|ba oi|bro oi|bro|ma oi|troi dat)( (oi|a|lomi|ha))*$/.test(n))
+  if (VN(/^(nay |này )?(ông|bà|mày|m|lomi|bạn|bro|cha nội|má|trời)?( này| nay)? ?(căng|gắt|khó tính|khùng|điên|xạo|lầy lội|chơi khum|làm lố|bá đạo|lầy)( (vậy|thế|z|hả|ha|quá|ghê|ta|lắm))*$/).test(n) ||
+    VN(/^(cha nội|bà nội|ông nội|ông ơi|bà ơi|bro ơi|bro|má ơi|trời đất)( (ơi|à|a|lomi|hả|ha))*$/).test(n))
     return {
       intent: "banter",
       text: pick([
@@ -389,18 +390,18 @@ export type Gate =
 // ── Giao tiếp cơ bản (02/10): chào, gọi Lomi, cảm ơn, tạm biệt, xác nhận, cảm thán, có/không, hỏi thăm ──
 const TAIL = "( (e|em|lomi|ban|anh|chi|nha|nhe|nhen|ne|a|oi|ha|nhieu|lam|qua|roi|luon|vay|z|ta|ca nha|mn|moi nguoi|bro|cung|you))*$";
 const SOCIAL: [string, RegExp, string[], boolean][] = [
-  ["greeting", new RegExp(`^(e |oi )?(chao|xin chao|hello|helo|hi|hey|alo|aloha|he lo|yo|chao buoi (sang|trua|chieu|toi)|buoi (sang|trua|chieu|toi)( vui ve| tot lanh)?|good (morning|afternoon|evening))${TAIL}`), ["Chào bạn nè 👋 Hôm nay Lomi giúp gì được bạn?", "Hello 😄 Lomi đây, bạn cần gì nè?"], true],
-  ["call", new RegExp(`^(e |alo |oi )?(lomi|em|e)( oi)+${TAIL}|^(e|alo|oi|hey|hi) lomi${TAIL}|^(a|anh|chi|c|minh|tui|toi|em|e|t) (goi|keu) (lomi|em|e)${TAIL}`), ["Dạ, Lomi nghe nè 🙋 Bạn cần gì nè?", "Có Lomi đây 😄 Bạn nói đi nha."], true],
-  ["thanks", new RegExp(`^(cam on|cam on nhieu|thanks|thank|thank you|thanks nhieu|tks|thx|camon|cmon|cam on nha)${TAIL}`), ["Không có gì nè 😊 Cần gì cứ hỏi Lomi nha!", "Lomi vui vì giúp được bạn 💚"], true],
-  ["goodbye", new RegExp(`^(bye|bai|bye bye|bb|pp|tam biet|thoi nha|thoi nhe|thoi bye|thoi di ngu|ngu ngon|di ngu|di ngu day|off nha|out nha|hen gap lai|gap lai sau|(a|anh|em|e|minh|tui|toi|chi|c|t) (di|ngu|off|out|di ngu|di lam) (day|nha|nhe|roi|nhen|truoc))${TAIL}`), ["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Okie, hẹn gặp lại bạn nha 💚"], true],
-  ["smalltalk", new RegExp(`^((lomi|em|e|ban) )?((hom nay|dao nay|nay) )?(sao roi|the nao roi|on khong|khoe khong|vui khong|ra sao|co do khong|con do khong|co o do khong|online khong|dang lam gi|lam gi do|ranh khong|co ranh khong|an com chua|ngu chua)${TAIL}`), ["Lomi vẫn ở đây, khoẻ re nè 😄 Còn bạn hôm nay sao rồi?", "Có Lomi đây nè 🙋 Bạn kể Lomi nghe hôm nay thế nào đi!"], true],
-  ["opener", new RegExp(`^(cho )?(a|anh|chi|c|em|e|minh|tui|toi|t|to)( muon| can)? hoi( (cai nay|cai|chut|xiu|ti|cau nay|mot chut|mot cau|voi|vs|nha|nhe|ne|lomi|duoc khong|dc khong))*$`), ["Dạ, bạn hỏi đi nè 😄 Lomi nghe đây.", "Hỏi thoải mái luôn nha 😊"], false],
-  ["ack", /^(ok|oke|okie|oki|okay|ok la|okela|u|uk|uh|um|uhm|duoc|dc|duoc roi|on|on roi|hay|hay do|hay qua|hay ghe|good|nice|chuan|dung roi|vang|da|da vang)( (nha|nhe|e|em|lomi|ne|a|roi|luon|qua|ghe|vay))*$/, ["Okie 😊", "Dạ 👌", "Hihi okie nè 😄"], true],
-  ["reaction", /^(ua|ua vay|wow|oa|oi|ui|oh|o|haha+|hahaha+|hihi|hehe|kk+|hm+|troi|troi oi|troi dat|haiz+|that ha|that luon|ghe vay)( (vay|ta|z|ha|troi|luon))*$/, ["Sao vậy nè? 😯", "Hihi 😄", "Hửm, có gì hả? 👀"], true],
+  ["greeting", VR(new RegExp(`^(e |oi )?(chao|xin chao|hello|helo|hi|hey|alo|aloha|he lo|yo|chao buoi (sang|trua|chieu|toi)|buoi (sang|trua|chieu|toi)( vui ve| tot lanh)?|good (morning|afternoon|evening))${TAIL}`)), ["Chào bạn nè 👋 Hôm nay Lomi giúp gì được bạn?", "Hello 😄 Lomi đây, bạn cần gì nè?"], true],
+  ["call", VR(new RegExp(`^(e |alo |oi )?(lomi|em|e)( oi)+${TAIL}|^(e|alo|oi|hey|hi) lomi${TAIL}|^(a|anh|chi|c|minh|tui|toi|em|e|t) (goi|keu) (lomi|em|e)${TAIL}`)), ["Dạ, Lomi nghe nè 🙋 Bạn cần gì nè?", "Có Lomi đây 😄 Bạn nói đi nha."], true],
+  ["thanks", VR(new RegExp(`^(cam on|cam on nhieu|thanks|thank|thank you|thanks nhieu|tks|thx|camon|cmon|cam on nha)${TAIL}`)), ["Không có gì nè 😊 Cần gì cứ hỏi Lomi nha!", "Lomi vui vì giúp được bạn 💚"], true],
+  ["goodbye", VR(new RegExp(`^(bye|bai|bye bye|bb|pp|tam biet|thoi nha|thoi nhe|thoi bye|thoi di ngu|ngu ngon|di ngu|di ngu day|off nha|out nha|hen gap lai|gap lai sau|(a|anh|em|e|minh|tui|toi|chi|c|t) (di|ngu|off|out|di ngu|di lam) (day|nha|nhe|roi|nhen|truoc))${TAIL}`)), ["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Okie, hẹn gặp lại bạn nha 💚"], true],
+  ["smalltalk", VR(new RegExp(`^((lomi|em|e|ban) )?((hom nay|dao nay|nay) )?(sao roi|the nao roi|on khong|khoe khong|vui khong|ra sao|co do khong|con do khong|co o do khong|online khong|dang lam gi|lam gi do|ranh khong|co ranh khong|an com chua|ngu chua)${TAIL}`)), ["Lomi vẫn ở đây, khoẻ re nè 😄 Còn bạn hôm nay sao rồi?", "Có Lomi đây nè 🙋 Bạn kể Lomi nghe hôm nay thế nào đi!"], true],
+  ["opener", VR(new RegExp(`^(cho )?(a|anh|chi|c|em|e|minh|tui|toi|t|to)( muon| can)? hoi( (cai nay|cai|chut|xiu|ti|cau nay|mot chut|mot cau|voi|vs|nha|nhe|ne|lomi|duoc khong|dc khong))*$`)), ["Dạ, bạn hỏi đi nè 😄 Lomi nghe đây.", "Hỏi thoải mái luôn nha 😊"], false],
+  ["ack", VN(/^(ok|oke|okie|oki|okay|ok la|okela|ừ|u|uk|ừk|uh|ừh|um|ừm|uhm|ừhm|được|dc|đc|được rồi|ổn|ổn rồi|hay|hay đó|hay quá|hay ghê|good|nice|chuẩn|đúng rồi|vâng|dạ|dạ vâng)( (nha|nhé|nhe|e|em|lomi|nè|à|ạ|a|rồi|luôn|quá|ghê|vậy))*$/), ["Okie 😊", "Dạ 👌", "Hihi okie nè 😄"], true],
+  ["reaction", VN(/^(ủa|ủa vậy|wow|oa|oà|ơi|ôi|ui|oh|ồ|ô|o|hah(?:a)+|hahah(?:a)+|hihi|hehe|k(?:k)+|h(?:m)+|trời|trời ơi|trời đất|hai(?:z)+|thật hả|thật ha|thật luôn|ghê vậy)( (vậy|ta|z|hả|ha|trời|luôn))*$/), ["Sao vậy nè? 😯", "Hihi 😄", "Hửm, có gì hả? 👀"], true],
   // "a kể chuyện này nha", "để c kể cho e nghe" — người dùng xin phép KỂ → mời kể.
-  ["opener", /^(de )?(a|anh|chi|c|em|e|minh|tui|toi|to)( muon)? ke( cho (e|em|lomi|ban))?( nghe)?( (chuyen|cai) nay| mot chuyen| 1 chuyen| chuyen)?( cho (e|em|lomi|ban))?( nghe)?( (nha|nhe|ne|nghe|duoc khong|dc khong))*$/, ["Dạ, bạn kể đi, Lomi nghe nè 😊", "Kể đi bạn, Lomi đang nghe nè 👂"], false],
-  ["yes", /^(co|co chu|co a|u co|co nha|muon|co muon)$/, ["Okie 😄 Bạn nói thêm chút để Lomi làm đúng ý nha?"], false],
-  ["no", /^(khong|ko|k|hong|khum|thoi|khoi|khong can|thoi khoi)( (nha|nhe|a|dau|lomi))*$/, ["Dạ okie, không sao nè 😊 Cần gì cứ nói Lomi nha."], false],
+  ["opener", VN(/^(để )?(a|anh|chị|c|em|e|mình|tui|tôi|tớ)( muốn)? kể( cho (e|em|lomi|bạn))?( nghe)?( (chuyện|cái) này| một chuyện| 1 chuyện| chuyện)?( cho (e|em|lomi|bạn))?( nghe)?( (nha|nhé|nhe|nè|nghe|được không|đc không))*$/), ["Dạ, bạn kể đi, Lomi nghe nè 😊", "Kể đi bạn, Lomi đang nghe nè 👂"], false],
+  ["yes", VN(/^(có|có chứ|có à|có ạ|có a|ừ có|u có|có nha|muốn|có muốn)$/), ["Okie 😄 Bạn nói thêm chút để Lomi làm đúng ý nha?"], false],
+  ["no", VN(/^(không|ko|k|hông|hong|khum|thôi|khỏi|không cần|thôi khỏi)( (nha|nhé|nhe|à|ạ|a|đâu|lomi))*$/), ["Dạ okie, không sao nè 😊 Cần gì cứ nói Lomi nha."], false],
 ];
 const pickS = (a: string[]) => a[Math.floor(Math.random() * a.length)];
 
@@ -410,7 +411,7 @@ export function socialIntent(q: string): { intent: string; text: string; preferC
   for (const [intent, re, texts, preferChit] of SOCIAL) if (re.test(n)) return { intent, text: pickS(texts), preferChit };
   // 11/10: lời GỌI ở đầu không đổi ý một câu MỞ LỜI ("e ơi cho a hỏi", "lomi ơi a hỏi cái này") → bỏ lời gọi ra rồi so khuôn mở lời.
   //        (lời chào kèm buổi — "e ơi chào buổi trưa" — vẫn để lớp khung câu đáp đúng buổi.)
-  const n2 = n.replace(/^(?:e|em|lomi|ban|be) oi\s+(?=\S)/, "");
+  const n2 = n.replace(VN(/^(?:e|em|lomi|bạn|bé) ơi\s+(?=\S)/), "");
   if (n2 !== n) for (const [intent, re, texts, preferChit] of SOCIAL) if (intent === "opener" && re.test(n2)) return { intent, text: pickS(texts), preferChit };
   return null;
 }
@@ -418,23 +419,23 @@ export function socialIntent(q: string): { intent: string; text: string; preferC
  *  không đáp "Chuyện sao vậy, kể Lomi nghe với" như một lời tâm sự. Router chỉ gọi khi KHÔNG lớp chuyên môn nào nhận câu này
  *  ("a hỏi về bệnh gout" đã có lớp sức khoẻ trả lời). */
 export function topicOpener(q: string): string | null {
-  const mt = q.trim().match(/^(?:(?:e|em|lomi|bạn|bé) ơi[\s,]+)?(?:cho\s+)?(?:a|anh|chị|c|em|e|mình|tui|tôi|tớ)(?:\s+(?:muốn|cần))?\s+hỏi(?:\s+(?:chút|xíu|tí|một chút))?\s+(?:về|chuyện)\s+(.{2,40})$/iu);
-  if (!mt || /\b(gi|sao|khong|ko|nao|bao nhieu|may|the nao|chua|ha|nhi)\b/.test(normalizeVi(mt[1]))) return null;
+  const mt = q.trim().match(VR(/^(?:(?:e|em|lomi|bạn|bé) ơi[\s,]+)?(?:cho\s+)?(?:a|anh|chị|c|em|e|mình|tui|tôi|tớ)(?:\s+(?:muốn|cần))?\s+hỏi(?:\s+(?:chút|xíu|tí|một chút))?\s+(?:về|chuyện)\s+(.{2,40})$/iu));
+  if (!mt || VN(/\b(gì|sao|không|ko|nào|bao nhiêu|mấy|thế nào|chưa|hả|ha|nhỉ)\b/).test(normalizeVi(mt[1]))) return null;
   return `Dạ, về ${mt[1].replace(/[.!…\s]+$/u, "")} thì bạn muốn hỏi điều gì nè? Bạn cứ hỏi, Lomi biết tới đâu nói tới đó 😊`;
 }
 
 const PRON = "(?:a|anh|em|mình|tôi|tui|chị|t|tớ|tao|e|c)";
 const NEG = "(?:không phải|ko phải|k phải|hông phải|không|ko|hông|hong|k)(?:\\s+(?:đâu|mà|nha))?[\\s,.!]+";
 // Có chữ phủ định đứng đầu: "không, a hỏi…", "không phải, ý mình là…".
-const CORR_RE = new RegExp(`^${NEG}(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:đang\\s+)?(?:muốn\\s+)?hỏi(?:\\s+là)?|${PRON}\\s+nói\\s+là)[\\s,:]*`, "iu");
+const CORR_RE = VR(new RegExp(`^${NEG}(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:đang\\s+)?(?:muốn\\s+)?hỏi(?:\\s+là)?|${PRON}\\s+nói\\s+là)[\\s,:]*`, "iu"));
 // Không có phủ định thì phải rõ ý sửa: "ý a là…", "a hỏi là…", "a hỏi cái kia".
-const CORR2_RE = new RegExp(`^(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:muốn\\s+)?hỏi\\s+là|${PRON}\\s+hỏi(?=\\s+(?:cái kia|cái khác|chuyện khác)))[\\s,:]*`, "iu");
-const CORR_NEG_RE = /^(?:không phải|ko phải|k phải|hông phải)(?:\s+(?:đâu|vậy|thế|nha|mà))*[\s,.!]+/iu;
-const OTHER_RE = /^(cai kia|cai khac|chuyen khac|cai do|y khac|cai truoc)( (nha|ma|a|do|ne))*$/;
-const FILLER = /^(ua|ok|oke|okie|okay|oki|u|uh|um|uhm|uk|uhm|ui|ha|haha|hahaha|hihi|hehe|kk|kkk|troi|troi oi|troi dat|haiz|haizz|hmm|hm|a|o|oh|wow)$/;
+const CORR2_RE = VR(new RegExp(`^(?:ý\\s+${PRON}\\s+là|${PRON}\\s+(?:muốn\\s+)?hỏi\\s+là|${PRON}\\s+hỏi(?=\\s+(?:cái kia|cái khác|chuyện khác)))[\\s,:]*`, "iu"));
+const CORR_NEG_RE = VR(/^(?:không phải|ko phải|k phải|hông phải)(?:\s+(?:đâu|vậy|thế|nha|mà))*[\s,.!]+/iu);
+const OTHER_RE = VN(/^(cái kia|cái khác|chuyện khác|cái đó|ý khác|cái trước)( (nha|mà|à|a|đó|nè))*$/);
+const FILLER = VN(/^(ủa|ok|oke|okie|okay|oki|ừ|u|uh|ừh|um|ừm|uhm|ừhm|uk|ừk|ui|hả|ha|haha|hahaha|hihi|hehe|kk|kkk|trời|trời ơi|trời đất|haiz|haizz|hmm|hm|à|a|ạ|ồ|ô|o|oh|wow)$/);
 const FOLLOW_TOK = new Set(["vay", "the", "con", "roi", "sao", "y", "la", "cai", "nay", "do", "kia", "tinh", "luon", "ha", "a", "nua", "thi", "gi", "z", "nhi", "ta", "nao", "ne", "sau"]);
 const FOLLOW_HEAD = new Set(["vay", "the", "con", "roi", "y", "cai", "tinh"]);
-const DRINK_ONLY = /^(ca phe|cafe|tra sua|tra|bia|ruou)( (a|ha|ne|khong|hong|ko|k|di|nha))?$/;
+const DRINK_ONLY = VN(/^(cà phê|cafe|trà sữa|trà|bia|rượu)( (à|a|hả|ha|nè|không|hông|hong|ko|k|đi|nha))?$/);
 
 /** Câu có phải follow-up / mơ hồ ngắn ("vậy sao?", "còn cái này?", "tính luôn hả?") không. */
 export function isShortFollowUp(q: string): boolean {
@@ -449,24 +450,24 @@ export function tarotRuleInfo(q: string): UReply | null {
 }
 function tarotInfo(n: string): UReply | null {
   // 11/10: hỏi luật mà không nhắc chữ "tarot" ("bài ngược là sao", "trải celtic là gì", "ẩn chính là gì") vẫn là hỏi về Tarot.
-  const asksWhat = /\b(la gi|la sao|nghia la|nghia gi|y nghia|la the nao|nhu the nao|gom nhung gi|khac gi)\b/.test(n);
-  if (asksWhat && /\b(celtic|chu thap|trai (5|nam|10|muoi|3|ba|1|mot) la|trai bai|kieu trai|cach trai)\b/.test(n))
+  const asksWhat = VN(/\b(là gì|là sao|nghĩa là|nghĩa gì|ý nghĩa|là thế nào|như thế nào|gồm những gì|khác gì)\b/).test(n);
+  if (asksWhat && VN(/\b(celtic|chữ thập|trải (5|năm|10|mười|3|ba|1|một) lá|trải bài|kiểu trải|cách trải)\b/).test(n))
     return {
       intent: "tarot_info",
       text: `Trải bài là cách xếp các lá — mỗi VỊ TRÍ mang một ý riêng 🔮 Lomi có mấy kiểu:\n${TAROT_SPREADS.map((x) => `• **${x.vi.split(" · ")[0]}** — ${x.pos.map((p) => p.vi).join(" · ")}`).join("\n")}\n\nKhi bạn hỏi một câu cụ thể, tên vị trí của trải 3 lá đổi theo câu hỏi (vd Hiện tại · Trở ngại · Kết quả). Muốn thử thì gõ kiểu “trải 5 lá về công việc” nha.`,
       quick: ["Bói một lá cho hôm nay"],
     };
-  if (asksWhat && /\b(an chinh|an phu|major arcana|minor arcana)\b/.test(n))
+  if (asksWhat && VN(/\b(ẩn chính|ẩn phụ|major arcana|minor arcana)\b/).test(n))
     return { intent: "tarot_info", text: "Bộ Tarot có 78 lá 🔮 **22 lá Ẩn Chính** (Chàng Khờ, Tình Nhân, Mặt Trời…) nói về những bài học, bước ngoặt lớn; **56 lá Ẩn Phụ** chia 4 chất — Gậy (hành động), Cốc (cảm xúc), Kiếm (suy nghĩ), Tiền (vật chất) — nói về chuyện thường ngày.", quick: ["Bói một lá cho hôm nay"] };
-  if (!/\b(tarot|la bai|bo bai)\b/.test(n) && !(/\b(bai|la) (nguoc|xuoi)\b/.test(n) && n.split(" ").length <= 7)) return null;
-  if (/\b(nguoc|xuoi|lat nguoc)\b/.test(n))
+  if (!VN(/\b(tarot|lá bài|bộ bài)\b/).test(n) && !(VN(/\b(bài|lá) (ngược|xuôi)\b/).test(n) && n.split(" ").length <= 7)) return null;
+  if (VN(/\b(ngược|xuôi|lật ngược)\b/).test(n))
     return { intent: "tarot_info", text: "Có nè 🔮 Trong Tarot, lá rút ra bị lộn đầu gọi là **lá ngược**. Lomi tính cả lá ngược: mỗi lá có nghĩa xuôi và nghĩa ngược riêng — lá ngược thường là năng lượng bị chặn, chậm lại hoặc cần nhìn lại, chứ không phải lúc nào cũng xấu. Muốn rút thử một lá không?", quick: ["Bói một lá cho hôm nay"] };
-  if (/\b(bao nhieu la|may la|78)\b/.test(n))
+  if (VN(/\b(bao nhiêu lá|mấy lá|78)\b/).test(n))
     return { intent: "tarot_info", text: "Bộ Tarot có **78 lá**: 22 lá Ẩn Chính và 56 lá Ẩn Phụ (4 chất Gậy, Cốc, Kiếm, Tiền) 🔮 Lomi trải 1, 3, 5 hoặc 10 lá tuỳ bạn nha.", quick: ["Bói một lá cho hôm nay"] };
   // Tarot KHÔNG chẩn đoán bệnh, không thay bác sĩ, không đoán chắc tương lai — hỏi thẳng thì nói thẳng.
-  if (/\b(chan doan|chua benh|biet benh|doan benh|thay bac si|thay thuoc|doan truoc|tien tri|biet truoc tuong lai|doan tuong lai|chac chan)\b/.test(n))
+  if (VN(/\b(chẩn đoán|chữa bệnh|biết bệnh|đoán bệnh|thay bác sĩ|thay thuốc|đoán trước|tiên tri|biết trước tương lai|đoán tương lai|chắc chắn)\b/).test(n))
     return { intent: "tarot_info", text: "Không đâu bạn 🙏 Tarot **không chẩn đoán được bệnh, không thay bác sĩ**, và cũng không nói chắc được tương lai. Lá bài chỉ là một cách nhìn lại chuyện của mình để suy ngẫm; chuyện sức khoẻ thì đi khám, chuyện quan trọng thì bạn vẫn là người quyết định nha.", quick: ["Bói một lá cho hôm nay"] };
-  if (/\b(la gi|co that khong|co dung khong|co chinh xac khong|tin duoc khong)\b/.test(n))
+  if (VN(/\b(là gì|có thật không|có đúng không|có chính xác không|tin được không)\b/).test(n))
     return { intent: "tarot_info", text: "Tarot là bộ 78 lá bài dùng để suy ngẫm, nhìn lại chuyện của mình từ góc khác 🔮 Lomi bói cho vui và để bạn có thêm góc nhìn thôi nha — quyết định quan trọng vẫn là ở bạn.", quick: ["Bói một lá cho hôm nay"] };
   return null;
 }
@@ -482,8 +483,8 @@ export const TIP_MENU: UReply = {
   quick: ["Mất ngủ nên làm gì?", "Làm sao bớt căng thẳng?", "Làm sao hút khách cho quán?", "Hôm nay ăn gì?"],
 };
 // 10/10: than phiền CÁCH Lomi trả lời ("sao e cứ vậy hoài", "thấy 1 câu chứ mấy", "trả lời giống nhau hoài") → xin lỗi, hỏi lại.
-const COMPLAIN_RE = / (sao (e|em|lomi|ban|may) (cu |lai |toan |hay )?(vay|the|nhu vay|nhu the|ky vay|ky the) (hoai|mai|vay|the|hoai vay)|(cu|toan|lai) (tra loi|noi|hoi|dap) (giong nhau|giong het|y chang|hoai|mai|lap lai|mot cau)|lap lai hoai|lap di lap lai|lap lai mai|noi hoai (mot|1) cau|tra loi giong nhau|thay (1|mot) cau (chu|thoi)|(e|em|lomi) (do|ngu|kem|lo) (qua|the|vay|ghe)|sao (e|em|lomi) (khong|ko|k|cha|chang) hieu (gi|ji|j)|(e|em|lomi|ban|may) (khong|ko|k|cha|chang) hieu (gi|ji|j)( het| ca| luon| tron)?|(noi|tra loi|hoi|dap) (gi )?(ky|la|lam|ngo|vo duyen) (vay|the|qua|ghe|zay)|hoi di hoi lai) /;
-const WHAT_RE = /^ (la sao|y la sao|y gi|noi gi vay|noi gi the|noi gi ky|tra loi gi vay|gi vay troi|cai gi vay|hai) ?$|^ (la sao|y la sao) .{0,6}?(sao lai|lien quan)| (sao lai lien quan|lien quan gi|co lien quan gi|dau co lien quan|lien quan cho nao|lac de|tra loi lac|hieu sai roi|hieu nham roi|hieu lam roi|dau co hoi|minh dau co hoi|a dau co hoi|e dau co hoi|em dau co hoi) /;
+const COMPLAIN_RE = VN(/ (sao (e|em|lomi|bạn|mày) (cứ |lại |toàn |hay )?(vậy|thế|như vậy|như thế|kỳ vậy|kỳ thế) (hoài|mãi|vậy|thế|hoài vậy)|(cứ|toàn|lại) (trả lời|nói|hỏi|đáp) (giống nhau|giống hệt|y chang|hoài|mãi|lặp lại|một câu)|lặp lại hoài|lặp đi lặp lại|lặp lại mãi|nói hoài (một|1) câu|trả lời giống nhau|thấy (1|một) câu (chữ|thôi)|(e|em|lomi) (dở|đơ|ngu|kém|lỏ) (quá|thế|vậy|ghê)|sao (e|em|lomi) (không|ko|k|chả|chẳng) hiểu (gì|ji|j)|(e|em|lomi|bạn|mày) (không|ko|k|chả|chẳng) hiểu (gì|ji|j)( hết| cả| luôn| trơn)?|(nói|trả lời|hỏi|đáp) (gì )?(kỳ|lạ|lắm|ngộ|vô duyên) (vậy|thế|quá|ghê|zay)|hỏi đi hỏi lại) /);
+const WHAT_RE = VN(/^ (là sao|ý là sao|ý gì|nói gì vậy|nói gì thế|nói gì kỳ|trả lời gì vậy|gì vậy trời|cái gì vậy|hai|hải) ?$|^ (là sao|ý là sao) .{0,6}?(sao lại|liên quan)| (sao lại liên quan|liên quan gì|có liên quan gì|đâu có liên quan|liên quan chỗ nào|lạc đề|trả lời lạc|hiểu sai rồi|hiểu nhầm rồi|hiểu lầm rồi|đâu có hỏi|mình đâu có hỏi|a đâu có hỏi|e đâu có hỏi|em đâu có hỏi) /);
 export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionOnly = false): Gate | null {
   const n = normalizeVi(q);
   const lastAsked = /\?\s*$|\?[^?]{0,12}$/.test(ctx.lastText ?? "");
@@ -498,15 +499,15 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
     return { action: "rewrite", q: rest };
   }
   // "không" / "không phải" đứng một mình, mà Lomi không vừa hỏi gì → bạn đang bác câu trả lời.
-  if (/^(khong|ko|k|hong|khong phai|ko phai|khong dung|sai roi|khong phai vay)( (ma|dau|nha|lomi|a))*$/.test(n) && !lastAsked && !ctx.inFlow && ctx.lastText)
+  if (VN(/^(không|ko|k|hông|hong|không phải|ko phải|không đúng|sai rồi|không phải vậy)( (mà|đâu|nha|lomi|à|a|ạ))*$/).test(n) && !lastAsked && !ctx.inFlow && ctx.lastText)
     return { action: "reply", reply: { intent: "correction", text: "Dạ, chắc Lomi hiểu nhầm rồi 🙏 Bạn muốn hỏi chuyện gì nè? Nói Lomi thêm chút xíu nha." } };
   // 10/10: thắc mắc chính câu Lomi vừa đáp ("là sao? sao lại liên quan e tự hào?", "liên quan gì", "nói gì vậy") → Lomi đáp lạc,
   // nhận lỗi và hỏi lại — trước đây câu này bị đoán sang chủ đề khác (bỏ dấu "liên quan e" = "quán ế" → tư vấn quán vắng khách).
   // 10/10: xin mẹo mà chưa nói chuyện gì ("E biết mẹo gì k?", "có bí kíp gì hay không") — có ngữ cảnh thì lib/lomiConvo đã xử lý trước.
-  if (/^((e|em|lomi|ban|may) )?(co )?(biet|co) (meo|bi kip|tips?)( (gi|nao|hay))*( (khong|ko|k|hong|ne|a|ha|ta|nao))*$/.test(n))
+  if (VN(/^((e|em|lomi|bạn|mày) )?(có )?(biết|có) (mẹo|bí kíp|tip|tips)( (gì|nào|hay))*( (không|ko|k|hông|hong|nè|à|a|hả|ha|ta|nào))*$/).test(n))
     return { action: "reply", reply: TIP_MENU };
   // 10/10: nhờ "tư vấn" mà chưa nói chuyện gì ("Tư vấn chona", "tư vấn cho a đi") → mời chọn mảng, không đoán.
-  if (/^(tu van|tv|tu van gium|tu van giup)( (cho|giup|gium))?( (a|anh|e|em|minh|toi|tui|chi|c|ban))?( (nha|di|voi|xiu|chut|ne|cai|nhe))*$|^tu van chona( (nha|di|voi|xiu|chut|ne))*$/.test(n))
+  if (VN(/^(tư vấn|tv|tư vấn giùm|tư vấn giúp)( (cho|giúp|giùm))?( (a|anh|e|em|mình|tôi|tui|chị|c|bạn))?( (nha|đi|với|xíu|chút|nè|cái|nhé|nhe))*$|^tư vấn chona( (nha|đi|với|xíu|chút|nè))*$/).test(n))
     return { action: "reply", reply: { intent: "consult_menu", text: "Được chứ 😄 Lomi tư vấn được mấy chuyện này nè — bạn muốn nói chuyện nào?\n• 💚 Tâm sự, tình cảm, áp lực\n• 🩺 Sức khoẻ (kiến thức tham khảo, có nguồn)\n• 🏪 Kinh doanh: hút khách, làm ưu đãi\n• 🍜 Ăn gì, đi đâu", quick: ["Tâm sự với Lomi", "🩺 Sức khoẻ", "Tư vấn kinh doanh", "Hôm nay ăn gì?"] } };
   if (ctx.lastText && n.split(" ").length <= 14 && COMPLAIN_RE.test(` ${n} `))
     return { action: "reply", reply: { intent: "correction", text: "Dạ, Lomi xin lỗi nha 🙏 Chắc Lomi trả lời chưa đúng ý bạn. Bạn nói Lomi nghe bạn đang cần gì — một chuyện cụ thể thôi cũng được — Lomi sẽ cố hiểu cho đúng." } };
@@ -533,9 +534,9 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
 
   // 5) Follow-up / mơ hồ ngắn.
   if (isShortFollowUp(q)) {
-    const topic = ctx.topic ?? (/tarot|lá bài|trải bài|🔮/i.test(ctx.lastText ?? "") ? "tarot" : undefined);
+    const topic = ctx.topic ?? (VR(/tarot|lá bài|trải bài|🔮/i).test(ctx.lastText ?? "") ? "tarot" : undefined);
     if (topic === "tarot") {
-      if (/ngược/i.test(ctx.lastText ?? "") && /\b(tinh|tinh luon|co tinh)\b/.test(n))
+      if (VR(/ngược/i).test(ctx.lastText ?? "") && VN(/\b(tính|tính luôn|có tính)\b/).test(n))
         return { action: "reply", reply: { intent: "followup_tarot", text: "Dạ, tính luôn nha 🔮 Lá ngược vẫn được giải nghĩa — chỉ là đọc theo nghĩa ngược (chậm lại, bị chặn, cần nhìn lại) thay vì nghĩa xuôi.", quick: ["Bói một lá cho hôm nay"] } };
       return { action: "reply", reply: { intent: "followup_tarot", text: "Bạn hỏi tiếp về trải bài vừa rồi đúng không? 🔮 Bạn muốn Lomi giải kỹ lá nào, rút thêm lá, hay hỏi bài chuyện khác nè?", quick: ["Bói một lá cho hôm nay"] } };
     }

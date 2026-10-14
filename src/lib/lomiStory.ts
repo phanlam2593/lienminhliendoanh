@@ -25,6 +25,7 @@ import { parseVi, YOU_MARK, type Frame, type SubjectKind } from "@/lib/lomiParse
 import { analyzeBody } from "@/lib/lomiSymptoms";
 import { healthSubjectOf, type HealthCtx } from "@/lib/lomiHealthTopic";
 import type { Addr } from "@/lib/lomiAddress";
+import { VR, VN } from "@/lib/viMatch";
 
 export type StoryKind = "care" | "loss";
 export type Slot = "severity" | "doctor" | "dx" | "meds" | "dur" | "better" | "carer" | "cause" | "feel" | "memory" | "stay" | "far" | "op";
@@ -69,7 +70,7 @@ export type StoryEnv = {
 };
 
 // ── Đọc chữ: có dấu thì so có dấu, gõ không dấu thì so không dấu (tránh "đỡ" / "đó", "khám" / "kham") ─────────────
-const bare = (x: string) => x.normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
+const bare = (x: string) => x.normalize("NFD").replace(VR(/[̀-ͯ]/g), "").replace(VR(/đ/g), "d");
 export type Txt = {
   s: string;
   b: string;
@@ -95,7 +96,7 @@ export function txt(raw: string): Txt {
 }
 /** Mẫu viết CÓ DẤU, tự sinh bản không dấu. (?<!L) / (?!L): ranh giới từ cho chữ có dấu. */
 export function P(src: string, looseSrc?: string) {
-  const wrap = (x: string) => new RegExp(`(?<![\\p{L}\\p{N}])(?:${x})(?![\\p{L}\\p{N}])`, "u");
+  const wrap = (x: string) => VR(new RegExp(`(?<![\\p{L}\\p{N}])(?:${x})(?![\\p{L}\\p{N}])`, "u"));
   const a = wrap(src);
   // looseSrc: bản riêng cho câu gõ KHÔNG DẤU khi chữ bỏ dấu dễ trùng nghĩa khác ("đỡ" → "do", "nhẹ" → "nhe" = nhé, "già" → "gia").
   const b = wrap(looseSrc ?? bare(src));
@@ -163,20 +164,20 @@ const SLOT_KIND: Record<Slot, AnsKind> = { severity: "yn", doctor: "asp", dx: "o
 const OP_DONE = P("mổ xong|phẫu thuật xong|mổ rồi|đã mổ|qua cơn nguy kịch|qua khỏi|tỉnh rồi|tỉnh lại|ra phòng hồi sức");
 const STAY = P("nằm viện|nhập viện|vào viện|vô viện|ở viện|trong viện|đi viện|cấp cứu|phải mổ|mổ|phẫu thuật|hồi sức");
 /** Câu đáp cụt: "rồi" / "chưa" (đã – chưa), "có" / "không". */
-const BARE_DONE = /^(?:(?:da|u|uh|um|vang|ok) )?(?:(?:co )?roi|di roi|kham roi|uong roi|co roi|xong roi|roi a|roi do|co di roi)(?: (?:a|nha|ne|do|ban|lomi|em|e|anh))*$/;
-const BARE_NOTYET = /^(?:(?:da|u|uh|um) )?(?:chua|chua dau|chua co|chua di|chua kip|van chua)(?: (?:a|nha|ne|nua|ban|lomi|em|e))*$/;
-const BARE_YES = /^(?:(?:da|u|uh|um|vang) )?(?:co|co a|co chu|co do|u|uh|um|vang|dung roi|dung vay)(?: (?:a|nha|ne|ban|lomi|em|e))*$/;
-const BARE_NO = /^(?:(?:da|u|uh|um) )?(?:khong|ko|k|hong|khong dau|khong co|khong co dau|cung khong)(?: (?:a|nha|ne|ban|lomi|em|e))*$/;
+const BARE_DONE = VN(/^(?:(?:dạ|ừ|u|uh|ừm|um|vâng|ok) )?(?:(?:có )?rồi|đi rồi|khám rồi|uống rồi|có rồi|xong rồi|rồi ạ|rồi à|rồi a|rồi đó|có đi rồi)(?: (?:ạ|à|a|nha|nè|đó|bạn|lomi|em|e|anh))*$/);
+const BARE_NOTYET = VN(/^(?:(?:dạ|ừ|u|uh|ừm|um) )?(?:chưa|chưa đâu|chưa có|chưa đi|chưa kịp|vẫn chưa)(?: (?:ạ|à|a|nha|nè|nữa|bạn|lomi|em|e))*$/);
+const BARE_YES = VN(/^(?:(?:dạ|ừ|u|uh|ừm|um|vâng) )?(?:có|có ạ|có à|có chứ|có đó|ừ|u|uh|ừm|um|vâng|đúng rồi|đúng vậy)(?: (?:ạ|à|a|nha|nè|bạn|lomi|em|e))*$/);
+const BARE_NO = VN(/^(?:(?:dạ|ừ|u|uh|ừm|um) )?(?:không|ko|k|hông|hong|không đâu|không có|không có đâu|cũng không)(?: (?:ạ|à|a|nha|nè|bạn|lomi|em|e))*$/);
 
-const HOSP_HEAD = /^(nhập viện|nằm viện|vào viện|vô viện|cấp cứu|đi cấp cứu|phải mổ|đi mổ|mổ|phẫu thuật)$/;
-const STAFF = /^(bac si|bs|y ta|dieu duong|duoc si|thu y|benh vien|phong kham)/;
+const HOSP_HEAD = VR(/^(nhập viện|nằm viện|vào viện|vô viện|cấp cứu|đi cấp cứu|phải mổ|đi mổ|mổ|phẫu thuật)$/);
+const STAFF = VN(/^(bác sĩ|bs|y tá|điều dưỡng|dược sĩ|thú y|bệnh viện|phòng khám)/);
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const youOf = (addr?: Addr | null) => (addr === "anh" || addr === "chị" || addr === "em" ? addr : "bạn");
 /** Cách gọi gọn sau lần nhắc đầu: "mẹ anh" → "mẹ" (chỉ với bậc trên — "vợ", "con", "bạn" thì giữ đủ "vợ anh"); thú cưng → "bé". */
-const ELDER = /^(mẹ|má|bố|ba|cha|bà|ông|nội|ngoại|bà nội|bà ngoại|ông nội|ông ngoại|cô|dì|chú|bác|cậu|mợ|thím|dượng)$/;
+const ELDER = VR(/^(mẹ|má|bố|ba|cha|bà|ông|nội|ngoại|bà nội|bà ngoại|ông nội|ông ngoại|cô|dì|chú|bác|cậu|mợ|thím|dượng)$/);
 function shortOf(who: Who): string {
   if (who.kind === "pet") return "bé";
-  const s = who.text.replace(/\s+(?:của\s+)?(?:anh|chị|em|bạn|mình)$/u, "").trim();
+  const s = who.text.replace(VR(/\s+(?:của\s+)?(?:anh|chị|em|bạn|mình)$/u), "").trim();
   return ELDER.test(s) ? s : who.text;
 }
 const slotsAsked = (th: Thread, ...xs: Slot[]): Thread => ({ ...th, asked: xs, done: [...new Set([...th.done, ...xs])] });
@@ -191,14 +192,14 @@ export function subjectFix(raw: string, addr?: Addr | null): { who?: Who } | nul
   if (!m || t.words > 12) return null;
   // Sau "không phải a" còn nói tiếp một việc khác ("không phải a nói vậy") thì không phải sửa chủ thể.
   const tail = (t.loose ? t.b : t.s).slice((m.index ?? 0) + m[0].length).trim();
-  if (tail && !/^(?:mà |ma )?(?:là|la) /.test(`${tail} `)) {
+  if (tail && !VR(/^(?:mà |ma )?(?:là|la) /).test(`${tail} `)) {
     const tf = parseVi(tail, { addr });
     if (!((tf.subject === "third" || tf.subject === "pet") && !tf.pred)) return null;
   }
-  for (const part0 of raw.split(/[,;.!?…\n]+|\s-\s|(?<![\p{L}])(?:mà là|chứ|là)(?![\p{L}])/u)) {
+  for (const part0 of raw.split(VR(/[,;.!?…\n]+|\s-\s|(?<![\p{L}])(?:mà là|chứ|là)(?![\p{L}])/u))) {
     if (!part0.trim() || NOT_ME(txt(part0))) continue;
     // "A đang nói mẹ a, không phải a" / "e hỏi cho ba e" — phần nêu người được nói tới nằm sau "đang nói / hỏi (về, cho)".
-    const part = part0.trim().replace(/^(?:(?:a|anh|c|chị|e|em|mình|tôi|tui|tớ)\s+)?(?:đang\s+)?(?:nói|hỏi|kể|nhắc|noi|hoi|ke|nhac)(?:\s+(?:về|tới|đến|chuyện|cho|ve|toi|den|chuyen))*\s+/iu, "");
+    const part = part0.trim().replace(VR(/^(?:(?:a|anh|c|chị|e|em|mình|tôi|tui|tớ)\s+)?(?:đang\s+)?(?:nói|hỏi|kể|nhắc|noi|hoi|ke|nhac)(?:\s+(?:về|tới|đến|chuyện|cho|ve|toi|den|chuyen))*\s+/iu), "");
     const f = parseVi(part.trim(), { addr });
     if ((f.subject === "third" || f.subject === "pet") && f.subjectText) return { who: { text: f.subjectText.split(YOU_MARK).join(youOf(addr)), kind: f.subject } };
   }
@@ -210,14 +211,14 @@ export function storyOpen(intent: string, who: Who, text: string, illness?: stri
   if (who.kind !== "third" && who.kind !== "pet") return undefined;
   if (intent === "frame:third_ill") {
     // Câu mở đầu đã nêu tên bệnh ("bạn a bị trầm cảm") thì đó là điều đã biết — không hỏi lại "bị gì".
-    const named = illness && !/^(ốm|bệnh|ốm yếu|đau|mệt|sốt|cảm|ho)$/.test(illness) && !HOSP_HEAD.test(illness) ? illness : undefined;
+    const named = illness && !VR(/^(ốm|bệnh|ốm yếu|đau|mệt|sốt|cảm|ho)$/).test(illness) && !HOSP_HEAD.test(illness) ? illness : undefined;
     const th: Thread = { kind: "care", who, facts: named ? { dx: named } : {}, asked: [], done: [] };
     // "ba a nhập viện rồi" → Lomi hỏi luôn "bác sĩ có nói … bị gì không?"; "mẹ a mổ ruột thừa" → hỏi "giờ sao rồi, đỡ hơn chưa?"
-    if (/bị gì không/.test(text)) return slotsAsked({ ...th, facts: { doctor: true, stay: true } }, "dx");
-    if (/đỡ hơn chưa/.test(text)) return slotsAsked({ ...th, facts: { doctor: true, stay: true }, done: ["dx"] }, "better");
-    if (/khám chưa|thú y chưa/.test(text)) return slotsAsked(th, ...(who.kind === "pet" ? (["doctor"] as Slot[]) : (["severity", "doctor"] as Slot[])));
-    if (/bị sao vậy/.test(text)) return slotsAsked(th, "dx"); // "a đang chăm mẹ" → Lomi hỏi "mẹ bị sao vậy?"
-    if (/điều trị sao rồi/.test(text)) return slotsAsked({ ...th, facts: { ...th.facts, doctor: true }, done: ["doctor", "dx"] }, "better"); // bệnh đã có tên
+    if (VR(/bị gì không/).test(text)) return slotsAsked({ ...th, facts: { doctor: true, stay: true } }, "dx");
+    if (VR(/đỡ hơn chưa/).test(text)) return slotsAsked({ ...th, facts: { doctor: true, stay: true }, done: ["dx"] }, "better");
+    if (VR(/khám chưa|thú y chưa/).test(text)) return slotsAsked(th, ...(who.kind === "pet" ? (["doctor"] as Slot[]) : (["severity", "doctor"] as Slot[])));
+    if (VR(/bị sao vậy/).test(text)) return slotsAsked(th, "dx"); // "a đang chăm mẹ" → Lomi hỏi "mẹ bị sao vậy?"
+    if (VR(/điều trị sao rồi/).test(text)) return slotsAsked({ ...th, facts: { ...th.facts, doctor: true }, done: ["doctor", "dx"] }, "better"); // bệnh đã có tên
     return { ...th, facts: { severity: false }, closed: true }; // "bị cảm thôi" — nói là nhẹ, Lomi đã chúc mau khoẻ
   }
   if (intent === "frame:third_loss") return slotsAsked({ kind: "loss", who, facts: {}, asked: [], done: [] }, who.kind === "pet" ? "dur" : "feel");
@@ -233,10 +234,10 @@ export function storyOpenSymptom(who: Who, raw = ""): Thread {
 
 function cleanDx(x: string): string {
   return x
-    .replace(/^(?:là|bị|do|chỉ|chỉ bị|chỉ là|chắc|chắc là|hình như|có lẽ)\s+/gu, "")
-    .replace(/^(?:là|bị|do)\s+/u, "")
-    .replace(/\s+(?:thôi|á|đó|rồi|nha|ạ|nè|mà|à|hà|thôi à|thôi mà)$/gu, "")
-    .replace(/\s+(?:thôi|á|đó|rồi|nha|ạ|nè)$/u, "")
+    .replace(VR(/^(?:là|bị|do|chỉ|chỉ bị|chỉ là|chắc|chắc là|hình như|có lẽ)\s+/gu), "")
+    .replace(VR(/^(?:là|bị|do)\s+/u), "")
+    .replace(VR(/\s+(?:thôi|á|đó|rồi|nha|ạ|nè|mà|à|hà|thôi à|thôi mà)$/gu), "")
+    .replace(VR(/\s+(?:thôi|á|đó|rồi|nha|ạ|nè)$/u), "")
     .trim();
 }
 
@@ -282,9 +283,9 @@ function readCare(t: Txt, f: Frame | null, th: Thread): Got {
   const src = t.loose ? t.b : t.s;
   const rp = REPORT(t);
   // Lời thuật lại chỉ tính là chẩn đoán khi có người nói rõ (bác sĩ, bên viện…), hoặc Lomi vừa hỏi "bị gì", hoặc đã biết là đi khám rồi.
-  const sayer = !!rp && (/(bác sĩ|bac si|bs|họ|ho |người ta|nguoi ta|viện|vien|thú y|thu y|bên đó|ben do)/.test(rp[0]) || th.asked.includes("dx") || th.facts.doctor === true);
+  const sayer = !!rp && (VR(/(bác sĩ|bac si|bs|họ|ho |người ta|nguoi ta|viện|vien|thú y|thu y|bên đó|ben do)/).test(rp[0]) || th.asked.includes("dx") || th.facts.doctor === true);
   const said = rp && sayer ? cleanDx(src.slice((rp.index ?? 0) + rp[0].length).trim()) : "";
-  const mild = / (thôi|thoi|nhẹ|nhe) $/.test(src) || f?.degree === "low";
+  const mild = VR(/ (thôi|thoi|nhẹ|nhe) $/).test(src) || f?.degree === "low";
   const askedDx = th.asked.includes("dx");
   let dx = "";
   if (said) dx = said;
@@ -295,13 +296,13 @@ function readCare(t: Txt, f: Frame | null, th: Thread): Got {
     for (const c of [th.who.text, shortOf(th.who)]) for (const v of [c, bare(c)]) if (body.startsWith(`${v} `)) body = body.slice(v.length + 1);
     dx = cleanDx(body);
   } else if (askedDx && t.words <= 6 && !dm && !mm && !du && !(f && f.toks.length > 0 && f.toks.every((x) => ["TIME", "NUM", "ASPECT", "PART", "FILL", "VOC"].includes(x.r)))) dx = cleanDx(src.trim());
-  else if (mild && f?.pred?.cls === "ill" && t.words <= 6) dx = cleanDx(src.trim().replace(/^(?:\S+ ){0,3}?(?=bị |bi )/u, ""));
+  else if (mild && f?.pred?.cls === "ill" && t.words <= 6) dx = cleanDx(src.trim().replace(VR(/^(?:\S+ ){0,3}?(?=bị |bi )/u), ""));
   // Chỉ nói trống tên một bệnh ("sốt xuất huyết", "tiểu đường") khi chưa biết bị gì → đó là điều người dùng đang cho biết.
   if (!dx && th.facts.dx === undefined && t.words <= 5 && !dm && !mm && !du && !bm && !FEEL(t) && (!f || f.subject === "none" || f.subject === "third") && !(analyzeBody(src)?.sx.length ?? 0) && healthSubjectOf(src.trim(), true)) dx = cleanDx(src.trim());
   // Câu còn mang từ để hỏi ("bị gì vậy e", "có sao không") là người dùng đang HỎI lại, không phải cho biết tên bệnh.
   if (!said && f?.toks.some((x) => x.r === "QWORD" || x.r === "QPART")) dx = "";
   if ((askedDx || rp) && UNKNOWN(t)) g.dx = false;
-  else if (dx && !/^(rồi|roi|vậy|vay|thế|the|gì|gi|sao|đó|do)$/.test(dx)) {
+  else if (dx && !VR(/^(rồi|roi|vậy|vay|thế|the|gì|gi|sao|đó|do)$/).test(dx)) {
     const d = txt(dx);
     if (UNKNOWN(d)) g.dx = false;
     else if (LIGHT(d) && d.words <= 4) {
@@ -344,7 +345,7 @@ export function recap(th: Thread): string {
     if (f.better === true) xs.push("đang đỡ dần");
     if (f.better === false) xs.push("chưa đỡ");
   } else {
-    if (typeof f.dur === "string") xs.push(`ở bên bạn ${f.dur.replace(/\s*(rồi|nay|trời)$/u, "")}`);
+    if (typeof f.dur === "string") xs.push(`ở bên bạn ${f.dur.replace(VR(/\s*(rồi|nay|trời)$/u), "")}`);
   }
   return xs.join(", ");
 }
@@ -448,7 +449,7 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
     const keys = Object.keys(g) as (keyof Got)[];
     // Triệu chứng cụ thể ("sốt cao với ho") mà không phải lời bác sĩ / câu trả lời cho ô vừa hỏi → lớp sức khoẻ phân tích (cho đúng người bệnh).
     //   (nhiệt độ đo được — "39 độ" — cũng vậy: lớp sức khoẻ biết đó là sốt cao hay chưa.)
-    const sym = (analyzeBody(raw)?.sx.length ?? 0) > 0 || /(?<![\p{L}\d])(3[5-9]|4[0-2])([.,]\d)?\s*(độ|do|°)/u.test(raw.normalize("NFC").toLowerCase());
+    const sym = (analyzeBody(raw)?.sx.length ?? 0) > 0 || VR(/(?<![\p{L}\d])(3[5-9]|4[0-2])([.,]\d)?\s*(độ|do|°)/u).test(raw.normalize("NFC").toLowerCase());
     if (sym && g.dx === undefined && g.doctor === undefined && g.meds === undefined && g.better === undefined && !feel) return null;
     if (!keys.length && !feel) {
       // Không có điều gì mới cho mạch: chỉ đáp khi câu là một mẩu kể ngắn về chính người đó, không thuộc lớp nào khác.
@@ -509,7 +510,7 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
     if (g.severity === true && g.doctor !== true && g.stay !== true) acks.push("Nặng vậy hả 🥺 Vậy phải theo sát rồi.");
     else if (g.severity === false && !acks.length) acks.push("Không nặng thì cũng đỡ lo 😊");
     if (g.frail) acks.push(`${g.frail === "young" ? "Còn nhỏ" : pet ? "Bé lớn tuổi" : "Người lớn tuổi"} mà ốm thì mình càng phải để ý kỹ hơn.`);
-    if (typeof g.dur === "string" && !acks.length) acks.push(`${cap(g.dur.replace(/\s*rồi$/u, ""))} rồi hả.`);
+    if (typeof g.dur === "string" && !acks.length) acks.push(`${cap(g.dur.replace(VR(/\s*rồi$/u), ""))} rồi hả.`);
     if (g.far) acks.push(`Ở xa mà nghe ${s} ốm thì sốt ruột lắm 🥺 Bạn gọi hỏi thăm thường xuyên nha — nghe giọng bạn, ${s} cũng yên tâm hơn.`);
     if (g.carer !== undefined) acks.push(g.carer === false ? `Không có ai ở bên thì thương ${s} ghê 🥺 Bạn tranh thủ gọi hỏi thăm, hoặc nhờ người gần đó ghé qua giúp nha.` : g.carer === "self" ? "Bạn tự chăm hả, vất vả ghê 💚 Nhớ giữ sức nha." : `Có người ở bên thì ${s} đỡ tủi, bạn cũng yên tâm hơn 💚`);
     if (typeof g.dur === "string" && th.facts.doctor === false) acks.push(`Vậy nên đưa ${s} đi ${pet ? "thú y" : "khám"} cho chắc nha.`);
@@ -536,7 +537,7 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
           : th.facts.doctor === true && th.facts.meds === false
         ? `Vậy bạn để ý ${s} thêm nha — nghỉ ngơi, uống đủ nước, thấy nặng hơn thì ${pet ? "đưa đi khám lại" : "tái khám"} liền. Mong ${s} mau khoẻ 💚`
         : `Mong ${w} mau khoẻ nha 💚`;
-    const lead = full ? acks.filter((a) => !/yên tâm hơn nhiều|tốt quá/.test(a)) : acks;
+    const lead = full ? acks.filter((a) => !VR(/yên tâm hơn nhiều|tốt quá/).test(a)) : acks;
     // Lời khép lại chỉ nói MỘT lần; sau đó có điều mới thì chỉ ghi nhận.
     const tail = th.closed ? (lead.length ? "" : "Dạ, Lomi nhớ rồi nha 📝") : close;
     return {
@@ -552,7 +553,7 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
   const g: Got = {};
   const du = DUR(t);
   // Khoảng thời gian chỉ là "đã gắn bó bao lâu" khi Lomi vừa hỏi điều đó, hoặc câu nói rõ nuôi / ở với / bên nhau (không phải "khóc cả đêm").
-  if (du && (th0.asked.includes("dur") || !!KEEP(t)) && !/(đêm|tiếng)/.test(du[0])) g.dur = du[0].trim();
+  if (du && (th0.asked.includes("dur") || !!KEEP(t)) && !VR(/(đêm|tiếng)/).test(du[0])) g.dur = du[0].trim();
   if (C_SUDDEN(t)) g.cause = "sudden";
   else if (C_OLD(t) && !g.dur) g.cause = "old";
   else if (C_ILL(t)) g.cause = "ill";
@@ -569,7 +570,7 @@ export function storyTurn(raw: string, f: Frame | null, th0: Thread, env: StoryE
   }
   if (idle > 0 && !keys.length) return null;
   let th: Thread = { ...th0, facts: { ...th0.facts, ...g }, asked: [], idle: 0, felt: (th0.felt ?? 0) + (feel ? 1 : 0) };
-  const dur = typeof th.facts.dur === "string" ? th.facts.dur.replace(/\s*(rồi|nay|trời)$/u, "") : "";
+  const dur = typeof th.facts.dur === "string" ? th.facts.dur.replace(VR(/\s*(rồi|nay|trời)$/u), "") : "";
   if (feel && !keys.length) {
     const n = th0.felt ?? 0;
     if (n === 0)

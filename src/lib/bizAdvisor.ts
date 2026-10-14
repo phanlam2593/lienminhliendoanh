@@ -9,6 +9,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { BIZ, normStrict } from "@/lib/lomiAccent";
 import type { BusinessType } from "@/lib/types";
+import { VR, VN } from "@/lib/viMatch";
 
 export type BizTopic = "offer" | "slow" | "newcust" | "loyal" | "post" | "review" | "price" | "opening" | "holiday";
 export type BizCtx = { type?: BusinessType; noun?: string; topic?: BizTopic; seen?: string[] };
@@ -47,35 +48,35 @@ const TYPE_NOUN: Record<BusinessType, string> = {
 };
 
 const SUBTYPES: { re: RegExp; type: BusinessType; noun: string }[] = [
-  { re: /\b(ca phe|cafe|coffee|cf)\b/, type: "food", noun: "quán cà phê" },
-  { re: /\b(tra sua|tra chanh|milk tea)\b/, type: "food", noun: "quán trà sữa" },
-  { re: /\b(tiem banh|banh ngot|banh mi|bakery)\b/, type: "food", noun: "tiệm bánh" },
-  { re: /\b(lau|nuong|bbq)\b/, type: "food", noun: "quán lẩu nướng" },
-  { re: /\b(quan che|che thai|kem|an vat)\b/, type: "food", noun: "quán ăn vặt" },
-  { re: /\b(bar|pub|quan bia|quan nhau)\b/, type: "food", noun: "quán" },
-  { re: /\b(pho|bun|com|quan an|nha hang|mi quang|hu tieu)\b/, type: "food", noun: "quán ăn" },
-  { re: /\b(spa|massage|goi dau)\b/, type: "service", noun: "spa" },
-  { re: /\b(nail|mong)\b/, type: "service", noun: "tiệm nail" },
-  { re: /\b(toc|salon|barber|cat toc)\b/, type: "service", noun: "tiệm tóc" },
-  { re: /\b(gym|yoga|phong tap)\b/, type: "service", noun: "phòng tập" },
-  { re: /\b(giat ui|giat say|giat)\b/, type: "service", noun: "tiệm giặt" },
-  { re: /\b(sua xe|rua xe)\b/, type: "service", noun: "tiệm xe" },
-  { re: /\b(lop hoc|day hoc|trung tam|gia su)\b/, type: "service", noun: "lớp học" },
-  { re: /\b(homestay)\b/, type: "stay", noun: "homestay" },
-  { re: /\b(khach san|hotel)\b/, type: "stay", noun: "khách sạn" },
-  { re: /\b(villa)\b/, type: "stay", noun: "villa" },
-  { re: /\b(nha nghi)\b/, type: "stay", noun: "nhà nghỉ" },
-  { re: /\b(tour)\b/, type: "travel", noun: "tour" },
-  { re: /\b(thue xe|cho thue xe)\b/, type: "travel", noun: "dịch vụ thuê xe" },
-  { re: /\b(tiktok|youtube|kenh|livestream|kol|koc)\b/, type: "creator", noun: "kênh" },
-  { re: /\b(chup anh|photo|studio)\b/, type: "freelance", noun: "dịch vụ chụp ảnh" },
-  { re: /\b(thiet ke|design)\b/, type: "freelance", noun: "dịch vụ thiết kế" },
-  { re: /\b(nha dat|bat dong san|bds)\b/, type: "broker", noun: "văn phòng nhà đất" },
-  { re: /\b(quan ao|thoi trang|giay dep)\b/, type: "shopping", noun: "shop thời trang" },
-  { re: /\b(my pham|skincare)\b/, type: "shopping", noun: "shop mỹ phẩm" },
-  { re: /\b(tap hoa|tap hoa)\b/, type: "shopping", noun: "tiệm tạp hoá" },
-  { re: /\b(tiem hoa|shop hoa|hoa tuoi)\b/, type: "shopping", noun: "tiệm hoa" },
-  { re: /\b(dac san)\b/, type: "shopping", noun: "shop đặc sản" },
+  { re: VN(/\b(cà phê|cafe|coffee|cf)\b/), type: "food", noun: "quán cà phê" },
+  { re: VN(/\b(trà sữa|trà chanh|milk tea)\b/), type: "food", noun: "quán trà sữa" },
+  { re: VN(/\b(tiệm bánh|bánh ngọt|bánh mì|bakery)\b/), type: "food", noun: "tiệm bánh" },
+  { re: VN(/\b(lẩu|nướng|bbq)\b/), type: "food", noun: "quán lẩu nướng" },
+  { re: VN(/\b(quán chè|chè thái|kem|ăn vặt)\b/), type: "food", noun: "quán ăn vặt" },
+  { re: VN(/\b(bar|pub|quán bia|quán nhậu)\b/), type: "food", noun: "quán" },
+  { re: VN(/\b(phở|bún|cơm|quán ăn|nhà hàng|mì quảng|hủ tiếu)\b/), type: "food", noun: "quán ăn" },
+  { re: VN(/\b(spa|massage|gội đầu)\b/), type: "service", noun: "spa" },
+  { re: VN(/\b(nail|móng)\b/), type: "service", noun: "tiệm nail" },
+  { re: VN(/\b(tóc|salon|barber|cắt tóc)\b/), type: "service", noun: "tiệm tóc" },
+  { re: VN(/\b(gym|yoga|phòng tập)\b/), type: "service", noun: "phòng tập" },
+  { re: VN(/\b(giặt ủi|giặt sấy|giặt)\b/), type: "service", noun: "tiệm giặt" },
+  { re: VN(/\b(sửa xe|rửa xe)\b/), type: "service", noun: "tiệm xe" },
+  { re: VN(/\b(lớp học|dạy học|trung tâm|gia sư)\b/), type: "service", noun: "lớp học" },
+  { re: VR(/\b(homestay)\b/), type: "stay", noun: "homestay" },
+  { re: VN(/\b(khách sạn|hotel)\b/), type: "stay", noun: "khách sạn" },
+  { re: VR(/\b(villa)\b/), type: "stay", noun: "villa" },
+  { re: VN(/\b(nhà nghỉ)\b/), type: "stay", noun: "nhà nghỉ" },
+  { re: VR(/\b(tour)\b/), type: "travel", noun: "tour" },
+  { re: VN(/\b(thuê xe|cho thuê xe)\b/), type: "travel", noun: "dịch vụ thuê xe" },
+  { re: VN(/\b(tiktok|youtube|kênh|livestream|kol|koc)\b/), type: "creator", noun: "kênh" },
+  { re: VN(/\b(chụp ảnh|photo|studio)\b/), type: "freelance", noun: "dịch vụ chụp ảnh" },
+  { re: VN(/\b(thiết kế|design)\b/), type: "freelance", noun: "dịch vụ thiết kế" },
+  { re: VN(/\b(nhà đất|bất động sản|bds)\b/), type: "broker", noun: "văn phòng nhà đất" },
+  { re: VN(/\b(quần áo|thời trang|giày dép)\b/), type: "shopping", noun: "shop thời trang" },
+  { re: VN(/\b(mỹ phẩm|mĩ phẩm|skincare)\b/), type: "shopping", noun: "shop mỹ phẩm" },
+  { re: VN(/\b(tạp hoá|tạp hóa)\b/), type: "shopping", noun: "tiệm tạp hoá" },
+  { re: VN(/\b(tiệm hoa|shop hoa|hoa tươi)\b/), type: "shopping", noun: "tiệm hoa" },
+  { re: VN(/\b(đặc sản)\b/), type: "shopping", noun: "shop đặc sản" },
 ];
 
 export function detectBizKind(text: string): { type?: BusinessType; noun?: string } {
@@ -256,18 +257,18 @@ function upcomingHolidays(now = new Date()): typeof HOLIDAYS {
 
 // ── Nhận diện chủ đề trong câu gõ ──
 const TOPIC_RE: [BizTopic, RegExp][] = [
-  ["post", /\b(viet|caption|bai dang|dang bai|content|noi dung|slogan|quang cao cho)\b/],
-  ["review", /\b(danh gia|review|phan nan|che |bi che|feedback|gop y)\b/],
-  ["slow", /\b(vang|e am|it khach|khong co khach|thap diem|mua thap|khong ai|ban cham|e hang|(buon ban|ban hang|quan|shop|tiem|phong) (bi |hoi |qua |)(e|am|cham|vang))\b/],
-  ["holiday", /\b(dip le|ngay le|le tet|tet|noel|giang sinh|valentine|8 3|20 10|20 11|trung thu|halloween|black friday|mua le)\b/],
-  ["opening", /\b(khai truong|moi mo|sap mo|mo quan|mo tiem|mo shop|mo cua hang|moi khai truong)\b/],
-  ["price", /\b(dinh gia|tang gia|bang gia|dat gia|gia ban|gia ca|combo)\b/],
-  ["loyal", /\b(khach quen|giu khach|giu chan|quay lai|trung thanh|tich diem|cham soc khach)\b/],
-  ["newcust", /\b(khach moi|hut khach|thu hut|quang ba|them khach|tang khach|marketing|tiep thi|nhieu khach|noi tieng|khach biet)\b/],
-  ["offer", /\b(uu dai|khuyen mai|giam gia|voucher|sale|chuong trinh|y tuong)\b/],
+  ["post", VN(/\b(viết|caption|bài đăng|đăng bài|content|nội dung|slogan|quảng cáo cho)\b/)],
+  ["review", VN(/\b(đánh giá|review|phàn nàn|chê |bị chê|feedback|góp ý)\b/)],
+  ["slow", VN(/\b(vắng|ế ẩm|ít khách|không có khách|thấp điểm|mùa thấp|không ai|bán chậm|ế hàng|(buôn bán|bán hàng|quán|shop|tiệm|phòng) (bị |hơi |quá |)(ế|ẩm|chậm|vắng))\b/)],
+  ["holiday", VN(/\b(dịp lễ|ngày lễ|lễ tết|tết|noel|giáng sinh|valentine|8 3|20 10|20 11|trung thu|halloween|black friday|mùa lễ)\b/)],
+  ["opening", VN(/\b(khai trương|mới mở|sắp mở|mở quán|mở tiệm|mở shop|mở cửa hàng|mới khai trương)\b/)],
+  ["price", VN(/\b(định giá|tăng giá|bảng giá|đặt giá|giá bán|giá cả|combo)\b/)],
+  ["loyal", VN(/\b(khách quen|giữ khách|giữ chân|quay lại|trung thành|tích điểm|chăm sóc khách)\b/)],
+  ["newcust", VN(/\b(khách mới|hút khách|thu hút|quảng bá|thêm khách|tăng khách|marketing|tiếp thị|nhiều khách|nổi tiếng|khách biết)\b/)],
+  ["offer", VN(/\b(ưu đãi|khuyến mãi|giảm giá|voucher|sale|chương trình|ý tưởng)\b/)],
 ];
 const BIZ_WORD =
-  /\b(quan|tiem|shop|cua hang|homestay|khach san|spa|kinh doanh|buon ban|ban hang|doanh nghiep|khach hang|tour|dich vu|salon|nha hang|doanh thu|mo quan|chu quan|cua minh)\b/;
+  VN(/\b(quán|tiệm|shop|cửa hàng|homestay|khách sạn|spa|kinh doanh|buôn bán|bán hàng|doanh nghiệp|khách hàng|tour|dịch vụ|salon|nhà hàng|doanh thu|mở quán|chủ quán|của mình)\b/);
 
 export function detectBizTopic(text: string): BizTopic | undefined {
   const n = ` ${normStrict(text, BIZ)} `;
@@ -277,13 +278,13 @@ export function detectBizTopic(text: string): BizTopic | undefined {
 /** Câu gõ tự do (ngoài luồng tư vấn) có phải đang hỏi chuyện kinh doanh không. */
 export function looksLikeBizQuestion(text: string): boolean {
   const n = ` ${normStrict(text, BIZ)} `;
-  if (/\b(nen lam|lam|chay|len|nghi|goi y|tu van) (uu dai|khuyen mai|chuong trinh)\b/.test(n)) return true;
+  if (VN(/\b(nên làm|làm|chạy|lên|nghĩ|gợi ý|tư vấn) (ưu đãi|khuyến mãi|chương trình)\b/).test(n)) return true;
   return !!detectBizTopic(text) && (BIZ_WORD.test(n) || !!detectBizKind(text).type);
 }
 export const isMoreIdeas = (text: string) =>
-  /^(them y|y khac|them|con gi nua|nua|goi y them|them goi y|them nua|con y nao)/.test(normalizeVi(text));
+  VN(/^(thêm ý|ý khác|thêm|còn gì nữa|nữa|gợi ý thêm|thêm gợi ý|thêm nữa|còn ý nào)/).test(normalizeVi(text));
 export const isThanks = (text: string) =>
-  /^(cam on|thanks|thank|tks|ok|oke|okie|okay|hay qua|tuyet|hay do|duoc do|good)\b/.test(normalizeVi(text)) && normalizeVi(text).split(" ").length <= 6;
+  VN(/^(cảm ơn|cám ơn|thanks|thank|tks|ok|oke|okie|okay|hay quá|tuyệt|hay đó|được đó|good)\b/).test(normalizeVi(text)) && normalizeVi(text).split(" ").length <= 6;
 
 export function nounFor(type?: BusinessType, noun?: string) {
   return noun || (type ? TYPE_NOUN[type] : "chỗ kinh doanh");
@@ -340,7 +341,7 @@ export function followUpChips(current: BizTopic): string[] {
   return ["Thêm ý khác", ...base, ...others.map((k) => TOPIC_LABEL[k])].slice(0, 4);
 }
 
-const fill = (s: string, n: string) => s.replace(/\{n\}/g, n);
+const fill = (s: string, n: string) => s.replace(VR(/\{n\}/g), n);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const INTRO: Record<BizTopic, string[]> = {
@@ -416,7 +417,7 @@ function writePosts(type: BusinessType | undefined, n: string): string {
   const body = two
     .map((i, k) =>
       `📝 Mẫu ${k + 1}:\n` +
-      POSTS[i].replace(/\{T\}/g, cap(offer.t)).replace(/\{N\}/g, cap(n)).replace(/\{n\}/g, n),
+      POSTS[i].replace(VR(/\{T\}/g), cap(offer.t)).replace(VR(/\{N\}/g), cap(n)).replace(VR(/\{n\}/g), n),
     )
     .join("\n\n");
   return `${body}\n\n🎯 Ưu đãi Lomi chọn cho mẫu: “${cap(offer.t)}” — ${offer.d} Bạn thay bằng ưu đãi thật của mình nha.\n\n💡 Mẹo: kèm 1–3 ảnh thật, sáng và rõ; ghi rõ thời hạn ưu đãi. Muốn đăng ưu đãi lên app: Hồ sơ → Doanh nghiệp → Ưu đãi (/ho-so?view=business).`;

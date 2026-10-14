@@ -8,7 +8,9 @@
 //   Không chắc → Lomi gợi ý vài câu gần nhất để người dùng chọn (suggestFaqs) thay vì trả lời bừa.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { registerVi, VN } from "@/lib/viMatch";
 import { APP, maskStrict } from "@/lib/lomiAccent";
+import { VR } from "@/lib/viMatch";
 export type FaqCat = "start" | "offers" | "explore" | "biz" | "quet" | "rides" | "chat" | "profile" | "account";
 export type Faq = { id: string; cat: FaqCat; q: { vi: string; en: string }; a: { vi: string; en: string }; kw: string[] };
 
@@ -369,8 +371,10 @@ export const FAQS: Faq[] = [
 ];
 
 // ── Chuẩn hoá chữ (không dấu, chữ thường) ──
+// 14/10: đồng thời ghi lại dạng CÓ DẤU của câu vào sổ của bộ đọc câu (lib/viMatch) — các luật bọc VR(/…/) so chuỗi không dấu
+// này nhưng vẫn phân biệt được "là" / "lá", "đau" / "đầu"… theo đúng chữ người dùng gõ.
 export function normalizeVi(s: string): string {
-  return s
+  const out = s
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -378,55 +382,57 @@ export function normalizeVi(s: string): string {
     .replace(/[^a-z0-9\s]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+  registerVi(s, out);
+  return out;
 }
 
 // Từ đồng nghĩa / viết tắt hay gặp → quy về một cách viết.
 const SYN: [RegExp, string][] = [
-  [/\b(khuyen mai|voucher|deal|coupon|giam gia|offer|sale)\b/g, "uu dai"],
-  [/\b(app nay de lam gi|app de lam gi|app nay dung de lam gi|ung dung nay de lam gi|app nay lam duoc gi|app nay co gi)\b/g, "lien minh lien doanh la gi"],
-  [/\b(ton phi|mat tien|tra phi|co phi|ton tien|tinh phi|thu phi|free khong|mien phi khong)\b/g, "mat phi"],
-  [/\b(mk|pass word|password|pw)\b/g, "mat khau"],
-  [/\b(tk|acc|account)\b/g, "tai khoan"],
-  [/\b(sdt|so dt|dt)\b/g, "so dien thoai"],
-  [/\b(dn)\b/g, "doanh nghiep"],
-  [/\b(dk|dki|dang ki|dangky|dangki)\b/g, "dang ky"],
-  [/\b(matkhau)\b/g, "mat khau"],
-  [/\b(noti|notification|thong bao day)\b/g, "thong bao"],
-  [/\b(ib|inbox|chat rieng)\b/g, "nhan tin"],
-  [/\b(shipper|xe om|grab)\b/g, "tai xe"],
-  [/\b(swipe)\b/g, "quet"],
-  [/\b(ava)\b/g, "anh dai dien"],
-  [/\b(k|ko|khong|hong|hok|hk)\b/g, "khong"],
-  [/\b(dc|duoc|dk duoc)\b/g, "duoc"],
-  [/\b(sao|tai sao|vi sao)\b/g, "sao"],
+  [VN(/\b(khuyến mãi|voucher|deal|coupon|giảm giá|offer|sale)\b/g), "uu dai"],
+  [VN(/\b(app này để làm gì|app để làm gì|app này dùng để làm gì|ứng dụng này để làm gì|app này làm được gì|app này có gì)\b/g), "lien minh lien doanh la gi"],
+  [VN(/\b(tốn phí|mất tiền|trả phí|có phí|tốn tiền|tính phí|thu phí|free không|miễn phí không)\b/g), "mat phi"],
+  [VR(/\b(mk|pass word|password|pw)\b/g), "mat khau"],
+  [VR(/\b(tk|acc|account)\b/g), "tai khoan"],
+  [VN(/\b(sdt|sđt|số dt|số đt|dt|đt)\b/g), "so dien thoai"],
+  [VR(/\b(dn)\b/g), "doanh nghiep"],
+  [VN(/\b(dk|đk|dki|đki|đăng kí|đăng ký|dangky|dangki)\b/g), "dang ky"],
+  [VR(/\b(matkhau)\b/g), "mat khau"],
+  [VN(/\b(noti|notification|thông báo đẩy)\b/g), "thong bao"],
+  [VN(/\b(ib|inbox|chat riêng)\b/g), "nhan tin"],
+  [VN(/\b(shipper|xe ôm|grab)\b/g), "tai xe"],
+  [VR(/\b(swipe)\b/g), "quet"],
+  [VR(/\b(ava)\b/g), "anh dai dien"],
+  [VN(/\b(k|ko|không|hông|hong|hok|hk)\b/g), "khong"],
+  [VN(/\b(dc|đc|được|dk được|đk được)\b/g), "duoc"],
+  [VN(/\b(sao|tại sao|vì sao)\b/g), "sao"],
   // 30/09 r6: cách hỏi đời thường ("1 ngày quẹt đc mấy lần", "admin duyệt lâu k")
-  [/\b(1 ngay|mot ngay|moi hom|1 hom)\b/g, "moi ngay"],
-  [/\b(may lan|bao nhieu lan|may luot|may cai)\b/g, "bao nhieu luot"],
-  [/\b(duyet lau|lau duyet|bao gio duoc duyet|khi nao duoc duyet|duyet bao lau|cho duyet lau)\b/g, "bao lau duoc duyet"],
-  [/\b(ad|quan tri vien|ban quan tri)\b/g, "admin"],
+  [VN(/\b(1 ngày|một ngày|mỗi hôm|1 hôm)\b/g), "moi ngay"],
+  [VN(/\b(mấy lần|bao nhiêu lần|mấy lượt|mấy cái)\b/g), "bao nhieu luot"],
+  [VN(/\b(duyệt lâu|lâu duyệt|bao giờ được duyệt|khi nào được duyệt|duyệt bao lâu|chờ duyệt lâu)\b/g), "bao lau duoc duyet"],
+  [VN(/\b(ad|quản trị viên|ban quản trị)\b/g), "admin"],
   // 01/10 r3 (theo tài liệu Kir): từ tiếng Anh hay chen vào câu Việt — hiểu theo NGHĨA, không bắt gõ tiếng Việt chuẩn.
   // Chỉ quy về một cách viết để so khớp nội bộ; câu hiển thị và câu Lomi đáp không bị "dịch máy móc".
-  [/\b(log in|login|sign in|signin)\b/g, "dang nhap"],
-  [/\b(log out|logout|sign out|signout)\b/g, "dang xuat"],
-  [/\b(sign up|signup)\b/g, "dang ky"],
-  [/\b(profile|profle|trang ca nhan cua minh)\b/g, "ho so"],
-  [/\b(info|infor|information|thong tin chi tiet)\b/g, "thong tin"],
-  [/\b(update|cap nhap|up date)\b/g, "cap nhat"],
-  [/\b(comment|cmt|com men)\b/g, "binh luan"],
-  [/\b(share)\b/g, "chia se"],
-  [/\b(like|liked) (bai|post|anh|status|bai viet)\b/g, "tha tim $2"],
-  [/\b(post|dang post)\b/g, "bai viet"],
-  [/\b(member|thanh vien vip)\b/g, "thanh vien"],
-  [/\b(support|help|helpdesk|cskh)\b/g, "ho tro"],
-  [/\b(review|rv)\b/g, "danh gia"],
-  [/\b(follow|flw|fl)\b/g, "theo doi"],
-  [/\b(unfollow|unfl)\b/g, "bo theo doi"],
-  [/\b(video call|call video|facetime)\b/g, "goi video"],
-  [/\b(call|goi call)\b/g, "goi dien"],
-  [/\b(group|gr|grp)\b/g, "nhom"],
-  [/\b(free)\b/g, "mien phi"],
-  [/\b(code|ma code)\b/g, "ma"],
-  [/\b(user|nguoi xai)\b/g, "nguoi dung"],
+  [VN(/\b(log in|login|sign in|signin)\b/g), "dang nhap"],
+  [VR(/\b(log out|logout|sign out|signout)\b/g), "dang xuat"],
+  [VR(/\b(sign up|signup)\b/g), "dang ky"],
+  [VN(/\b(profile|profle|trang cá nhân của mình)\b/g), "ho so"],
+  [VN(/\b(info|infor|information|thông tin chi tiết)\b/g), "thong tin"],
+  [VN(/\b(update|cập nhập|up date)\b/g), "cap nhat"],
+  [VN(/\b(comment|cmt|com men)\b/g), "binh luan"],
+  [VR(/\b(share)\b/g), "chia se"],
+  [VN(/\b(like|liked) (bài|post|ảnh|status|bài viết)\b/g), "tha tim $2"],
+  [VR(/\b(post|dang post)\b/g), "bai viet"],
+  [VN(/\b(member|thành viên vip)\b/g), "thanh vien"],
+  [VR(/\b(support|help|helpdesk|cskh)\b/g), "ho tro"],
+  [VR(/\b(review|rv)\b/g), "danh gia"],
+  [VR(/\b(follow|flw|fl)\b/g), "theo doi"],
+  [VR(/\b(unfollow|unfl)\b/g), "bo theo doi"],
+  [VR(/\b(video call|call video|facetime)\b/g), "goi video"],
+  [VN(/\b(call|gọi call)\b/g), "goi dien"],
+  [VR(/\b(group|gr|grp)\b/g), "nhom"],
+  [VR(/\b(free)\b/g), "mien phi"],
+  [VN(/\b(code|mã code)\b/g), "ma"],
+  [VN(/\b(user|người xài)\b/g), "nguoi dung"],
 ];
 // Từ đệm, không mang nghĩa khi so khớp.
 const STOP = new Set(
@@ -513,7 +519,7 @@ function scoreAll(text0: string): { f: Faq; score: number; cover: number }[] {
 
 // Câu nhờ VIẾT / SÁNG TẠO → không trả lời bằng FAQ.
 const CREATIVE =
-  /\b(viet (giup|ho|dum|gium|cho minh|bai|caption|mo ta|noi dung|quang cao|content)|soan|sang tac|caption|mo ta giup|y tuong cho|dat ten|slogan|content|bai dang cho|write|draft)\b/;
+  VN(/\b(viết (giúp|hộ|dùm|giùm|cho mình|bài|caption|mô tả|nội dung|quảng cáo|content)|soạn|sáng tác|caption|mô tả giúp|ý tưởng cho|đặt tên|slogan|content|bài đăng cho|write|draft)\b/);
 
 /** Câu trả lời chắc chắn nhất (hoặc null nếu chưa đủ chắc). */
 export function matchFaq(text: string): Faq | null {
@@ -554,7 +560,7 @@ export function answerFromPrev(text: string, prevAnswer: string): string | null 
   const nq = canon(text);
   // Chỉ từ có nghĩa rõ (≥3 chữ cái hoặc là số) — tránh "ho" (họ) trùng "hồ sơ"…
   const qt = tokens(nq).filter((w) => (w.length >= 3 || /\d/.test(w)) && !["khong", "sao", "biet", "roi", "nua", "thi"].includes(w));
-  const qty = /\b(may|bao nhieu|toi da|toi thieu|bao lau)\b/.test(` ${nq} `);
+  const qty = VN(/\b(mấy|bao nhiêu|tối đa|tối thiểu|bao lâu)\b/).test(` ${nq} `);
   if (!qt.length) return null;
   const sents = prevAnswer.split(/(?<=[.!?])\s+|\n+/).map((x) => x.replace(/^[•\d.\s]+/, "").trim()).filter((x) => x.length > 8);
   let best: { s: string; hit: number } | null = null;
@@ -592,7 +598,7 @@ export const faqById = (id: string) => FAQS.find((f) => f.id === id);
 // ── Chuyện phiếm: chào, cảm ơn, tạm biệt, khen… (xoay câu cho đỡ lặp) ──
 const SMALL: { re: RegExp; vi: string[]; en: string[] }[] = [
   {
-    re: /^(xin chao|chao|hello|hi|hey|alo|lomi oi|lomi|good morning|chao buoi sang|chao buoi toi)( (lomi|ban|em|nha|nhe|a|oi|ne))*$/,
+    re: VN(/^(xin chào|chào|hello|hi|hey|alo|alô|lomi ơi|lomi|good morning|chào buổi sáng|chào buổi tối)( (lomi|bạn|em|nha|nhé|nhe|ạ|à|a|ơi|nè))*$/),
     vi: [
       "Chào bạn nha 👋 Lomi giúp gì được cho bạn nè?",
       "Hi bạn! Hôm nay bạn cần Lomi giúp chuyện gì nào? 😊",
@@ -601,22 +607,22 @@ const SMALL: { re: RegExp; vi: string[]; en: string[] }[] = [
     en: ["Hi there 👋 How can Lomi help?", "Hello! What do you need today? 😊"],
   },
   {
-    re: /^(cam on|thanks|thank you|thank|tks|camon|cam on nhieu)\b/,
+    re: VN(/^(cảm ơn|cám ơn|thanks|thank you|thank|tks|camon|cảm ơn nhiều)\b/),
     vi: ["Không có gì nè 😊 Cần gì cứ hỏi Lomi nha!", "Lomi vui vì giúp được bạn 💚", "Hihi, có gì cứ hỏi tiếp nha!"],
     en: ["You're welcome 😊", "Happy to help 💚"],
   },
   {
-    re: /^(tam biet|bye|bai bai|goodbye|see you|hen gap lai)\b/,
+    re: VN(/^(tạm biệt|bye|bai bai|goodbye|see you|hẹn gặp lại)\b/),
     vi: ["Tạm biệt nha 👋 Cần gì cứ gọi Lomi!", "Bye bye, chúc bạn một ngày thật vui 💚"],
     en: ["Bye 👋 Call Lomi anytime!", "See you — have a great day 💚"],
   },
   {
-    re: /\b(de thuong|cute|gioi qua|thong minh|hay qua|yeu lomi|thich lomi|dang yeu)\b/,
+    re: VN(/\b(dễ thương|cute|giỏi quá|thông minh|hay quá|yêu lomi|thích lomi|đáng yêu)\b/),
     vi: ["Hihi, cảm ơn bạn nhiều nha 🥰", "Được khen vậy Lomi ngại quá à 😳💚"],
     en: ["Aww, thank you 🥰"],
   },
   {
-    re: /^(ok|oke|okie|okay|uh|u|um|vang|da|duoc roi|hieu roi)$/,
+    re: VN(/^(ok|oke|okie|okay|uh|u|ừ|um|ừm|vâng|dạ|được rồi|hiểu rồi)$/),
     vi: ["Okie 😊 Cần gì thêm cứ hỏi Lomi nha!", "Dạ, có gì cứ gọi Lomi nha 🌱"],
     en: ["Okay 😊 Ask anytime!"],
   },

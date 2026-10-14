@@ -10,6 +10,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
 import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
+import { VR, VN } from "@/lib/viMatch";
 
 export type HeartReply = { text: string; quick: string[]; theme: string; listen?: boolean; end?: boolean; story?: string };
 
@@ -84,7 +85,7 @@ const THEMES: Theme[] = [
     // Sức khoẻ nam giới — nói tế nhị, đúng y khoa, khuyên gặp bác sĩ; không đi vào chi tiết nhạy cảm.
     id: "menhealth",
     stepFirst: true,
-    re: /\b(xuat tinh som|yeu sinh ly|yeu sinh li|roi loan cuong|kho cuong|khong cuong|liet duong|suy giam ham muon|giam ham muon|khong con ham muon|chuyen phong the|chuyen giuong chieu|sinh ly yeu|ban linh dan ong)\b/,
+    re: VN(/\b(xuất tinh sớm|yếu sinh lý|yếu sinh lí|rối loạn cương|khó cương|không cương|liệt dương|suy giảm ham muốn|giảm ham muốn|không còn ham muốn|chuyện phòng the|chuyện giường chiếu|sinh lý yếu|bản lĩnh đàn ông)\b/),
     define:
       "“YSL” là cách viết tắt của yếu sinh lý — cách gọi chung cho các vấn đề như giảm ham muốn, khó cương, hay xuất tinh sớm. Đây là chuyện sức khoẻ rất phổ biến, không có gì xấu hổ cả.",
     feel: [
@@ -112,7 +113,7 @@ const THEMES: Theme[] = [
   {
     id: "health",
     stepFirst: true,
-    re: /\b(bi benh|mac benh|om qua|dang om|bi om|benh hoai|dau bung|dau dau qua|dau lung|di kham|ket qua kham|nhap vien|nam vien|phau thuat|mo xong|sut can|tang can|beo phi|suc khoe yeu|suc khoe khong tot|lo ve suc khoe|ung thu|benh nan y)\b/,
+    re: VN(/\b(bị bệnh|mắc bệnh|ốm quá|đang ốm|bị ốm|bệnh hoài|đau bụng|đau đầu quá|đau lưng|đi khám|kết quả khám|nhập viện|nằm viện|phẫu thuật|mổ xong|sụt cân|tăng cân|béo phì|sức khỏe yếu|sức khỏe không tốt|lo về sức khỏe|ung thư|bệnh nan y)\b/),
     feel: [
       "Có chuyện sức khoẻ thì lo lắng là đương nhiên.",
       "Sức khoẻ là chuyện đáng để ý. Bạn kể rõ hơn để Lomi gợi ý sát hơn nha.",
@@ -132,13 +133,13 @@ const THEMES: Theme[] = [
     ],
     // 12/10: "a mới đi khám về" — đã đi khám rồi thì hỏi bác sĩ nói sao, không nhắc "nên đi khám sớm" hay hỏi "đã đi khám chưa".
     hint: [
-      [/ (bac si|bs) (noi|bao|keu) (\S+ ){0,3}(khong sao|binh thuong|on|khong co gi|tot|khong van de gi) /, "Bác sĩ nói không sao thì mừng rồi 💚 Nghe vậy bạn thấy nhẹ người hơn chưa?"],
-      [/ (moi (di )?kham|vua (di )?kham|di kham (ve|roi)|kham (xong|ve)|tai kham (ve|roi|xong)) /, "Đi khám về rồi hả. Bác sĩ nói sao bạn — có điều gì làm bạn lo không?"],
+      [VN(/ (bác sĩ|bs) (nói|báo|kêu) (\S+ ){0,3}(không sao|bình thường|ổn|không có gì|tốt|không vấn đề gì) /), "Bác sĩ nói không sao thì mừng rồi 💚 Nghe vậy bạn thấy nhẹ người hơn chưa?"],
+      [VN(/ (mới (đi )?khám|vừa (đi )?khám|đi khám (về|rồi)|khám (xong|về)|tái khám (về|rồi|xong)) /), "Đi khám về rồi hả. Bác sĩ nói sao bạn — có điều gì làm bạn lo không?"],
     ],
   },
   {
     id: "cheat",
-    re: /\b(ngoai tinh|cam sung|bi cam sung|phan boi|lua doi|bi lua|co nguoi khac|co ban gai khac|co ban trai khac|di voi nguoi khac|bat cha|bat gap .* nhan tin|tuesday|nguoi thu ba)\b/,
+    re: VN(/\b(ngoại tình|cắm sừng|bị cắm sừng|phản bội|lừa dối|bị lừa|có người khác|có bạn gái khác|có bạn trai khác|đi với người khác|bắt chả|bắt gặp .* nhắn tin|tuesday|người thứ ba)\b/),
     feel: [
       "Bị người mình tin tưởng lừa dối là một trong những nỗi đau khó chịu nhất.",
       "Ôi… chuyện này chắc làm bạn chết lặng luôn. Cảm giác bị phản bội đau lắm, không phải ai cũng chịu nổi đâu 💔",
@@ -165,7 +166,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "breakup",
-    re: /\b(chia tay|that tinh|bi da|bi bo|bi (chong|vo|nguoi yeu|ban trai|ban gai|bo|crush) (bo|da)|(chong|vo|ban trai|ban gai) bo (di|minh|em|toi|chi|anh|me con|theo)|nguoi yeu bo|nguoi yeu (minh|toi|em|anh|a|e|tui) bo|bo (minh|toi|em|anh|a|e|tui) (roi|di)|bo roi|bo minh|khong con yeu|het yeu|tan vo|ket thuc roi|dut tinh)\b/,
+    re: VN(/\b(chia tay|thất tình|bị đá|bị bỏ|bị (chồng|vợ|người yêu|bạn trai|bạn gái|bồ|crush) (bỏ|đá)|(chồng|vợ|bạn trai|bạn gái) bỏ (đi|mình|em|tôi|chị|anh|mẹ con|theo)|người yêu bỏ|người yêu (mình|tôi|em|anh|a|e|tui) bỏ|bỏ (mình|tôi|em|anh|a|e|tui) (rồi|đi)|bỏ rồi|bỏ mình|không còn yêu|hết yêu|tan vỡ|kết thúc rồi|dứt tình)\b/),
     feel: [
       "Chia tay đau lắm, Lomi hiểu mà 🥺 Như có một phần thói quen hằng ngày tự nhiên biến mất vậy.",
       "Kết thúc một mối quan hệ chưa bao giờ là chuyện nhẹ nhàng.",
@@ -192,8 +193,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "ex",
-    hint: [[/\b(co nen nhan|nen nhan|nhan truoc|co nen goi|lien lac lai khong)\b/, "Nhắn cho người cũ hay không thì tuỳ điều bạn mong sau tin nhắn đó. Nếu chỉ là nhớ quá muốn hỏi thăm, cứ để qua một đêm rồi xem còn muốn nhắn không. Nếu mong quay lại, tự hỏi trước: lý do chia tay ngày đó đã khác chưa? Còn nếu người ấy đã có cuộc sống mới thì giữ khoảng cách thường nhẹ lòng hơn cho cả hai."], [/\b(nhan lai|nhan tin|nhan cho|tra loi|rep|goi lai|lien lac lai)\b/, "Người cũ nhắn lại thì không cần trả lời ngay đâu. Chờ một ngày cho đầu óc tỉnh táo, rồi tự hỏi: mình trả lời vì còn điều muốn nói, hay chỉ vì thói quen và nỗi nhớ? Trả lời hay không đều được — miễn là bạn chọn, chứ không phải bị kéo theo."]],
-    re: /\b(nguoi yeu cu|nguoi cu|ny cu|tinh cu|ban trai cu|ban gai cu|vo cu|chong cu|nho nguoi yeu cu|nho nguoi cu|nho ex|quen nguoi yeu cu|quen nguoi cu|quen ex|quen di nguoi|quen mot nguoi|khong quen duoc|nguoi yeu cu nhan tin|nguoi yeu cu quay lai|quay lai voi nguoi yeu cu|quay lai voi nguoi cu)\b/,
+    hint: [[VN(/\b(có nên nhắn|nên nhắn|nhắn trước|có nên gọi|liên lạc lại không)\b/), "Nhắn cho người cũ hay không thì tuỳ điều bạn mong sau tin nhắn đó. Nếu chỉ là nhớ quá muốn hỏi thăm, cứ để qua một đêm rồi xem còn muốn nhắn không. Nếu mong quay lại, tự hỏi trước: lý do chia tay ngày đó đã khác chưa? Còn nếu người ấy đã có cuộc sống mới thì giữ khoảng cách thường nhẹ lòng hơn cho cả hai."], [VN(/\b(nhắn lại|nhắn tin|nhắn cho|trả lời|rep|gọi lại|liên lạc lại)\b/), "Người cũ nhắn lại thì không cần trả lời ngay đâu. Chờ một ngày cho đầu óc tỉnh táo, rồi tự hỏi: mình trả lời vì còn điều muốn nói, hay chỉ vì thói quen và nỗi nhớ? Trả lời hay không đều được — miễn là bạn chọn, chứ không phải bị kéo theo."]],
+    re: VN(/\b(người yêu cũ|người cũ|ny cũ|tình cũ|bạn trai cũ|bạn gái cũ|vợ cũ|chồng cũ|nhớ người yêu cũ|nhớ người cũ|nhớ ex|quên người yêu cũ|quên người cũ|quên ex|quên đi người|quên một người|không quên được|người yêu cũ nhắn tin|người yêu cũ quay lại|quay lại với người yêu cũ|quay lại với người cũ)\b/),
     feel: [
       "Nhớ người cũ là chuyện bình thường lắm, vì mình đã từng có rất nhiều kỷ niệm với họ 🥺",
       "Có những người đi rồi mà vẫn để lại một khoảng trong lòng — Lomi hiểu cảm giác đó.",
@@ -219,8 +220,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "unrequited",
-    hint: [[/\b(co (nguoi yeu|ny|chong|vo) roi|da co (nguoi yeu|chu))\b/, "Thích một người đã có đôi thì khó xử lắm, Lomi hiểu 🥺 Cảm xúc thì mình không chọn được, nhưng cách mình hành động thì chọn được. Tôn trọng mối quan hệ của họ, giữ khoảng cách vừa đủ và cho lòng mình thời gian — đó là cách vừa thương mình vừa tử tế với người ta."]],
-    re: /\b(don phuong|yeu don phuong|(ban ay|nguoi ay|ho|anh ay|co ay) (da )?co (nguoi yeu|ny|chong|vo) roi|thich nguoi (da )?co (nguoi yeu|chu)|thich don phuong|khong thich lai|khong thich minh|bi tu choi|to tinh that bai|bi tu choi to tinh|chi coi minh la ban|friendzone|ho khong de y)\b/,
+    hint: [[VN(/\b(có (người yêu|ny|chồng|vợ) rồi|đã có (người yêu|chủ))\b/), "Thích một người đã có đôi thì khó xử lắm, Lomi hiểu 🥺 Cảm xúc thì mình không chọn được, nhưng cách mình hành động thì chọn được. Tôn trọng mối quan hệ của họ, giữ khoảng cách vừa đủ và cho lòng mình thời gian — đó là cách vừa thương mình vừa tử tế với người ta."]],
+    re: VN(/\b(đơn phương|yêu đơn phương|(bạn ấy|người ấy|họ|anh ấy|cô ấy) (đã )?có (người yêu|ny|chồng|vợ) rồi|thích người (đã )?có (người yêu|chủ)|thích đơn phương|không thích lại|không thích mình|bị từ chối|tỏ tình thất bại|bị từ chối tỏ tình|chỉ coi mình là bạn|friendzone|họ không để ý)\b/),
     feel: [
       "Thương một người mà họ không đáp lại — cảm giác đó vừa ngọt vừa đắng ghê 🥺",
       "Bị từ chối đau lắm, nhất là khi mình đã lấy hết can đảm. Lomi tự hào vì bạn đã dám thật lòng.",
@@ -246,8 +247,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "crush",
-    hint: [[/\b(co nguoi yeu roi|co ban gai roi|co ban trai roi|co vo roi|co chong roi|co gia dinh roi|co bo roi)\b/, "Người ấy đã có người yêu thì khó cho mình thật 😔 Thích một người không có gì sai, nhưng chen vào giữa hai người thường làm cả ba cùng tổn thương — mà chính mình cũng mệt. Cho mình buồn một thời gian, giữ khoảng cách vừa đủ, rồi để lòng mở ra với người có thể đáp lại trọn vẹn."], [/\b(co nguoi yeu roi|co ban gai roi|co ban trai roi|co vo roi|co chong roi|co gia dinh roi|co bo roi)\b/, "Khi người ấy đã có người yêu, điều mình làm chủ được là khoảng cách của chính mình: bớt nhắn riêng, bớt tìm cớ gặp, và cho mình thời gian để nguôi. Nếu làm chung chỗ thì giữ mọi thứ ở mức đồng nghiệp bình thường. Không còn nuôi hy vọng mỗi ngày thì lòng sẽ dịu dần — buồn một thời gian cũng không sao."], [/\b(bat chuyen|mo loi|lam quen|nen nhan gi|nen noi gi)\b/, "Bắt chuyện dễ nhất là từ thứ hai người đang có chung: lớp học, công việc, một chuyện vừa xảy ra. Hỏi một câu cụ thể, dễ trả lời (“bài hôm nay làm tới đâu rồi?”) thì tự nhiên hơn là “đang làm gì đó?”. Nói vài câu rồi thôi cũng được — gặp thường, mỗi lần một chút là thân dần."], [/\b(dong nghiep|cung cong ty|cung cho lam)\b/, "Thích đồng nghiệp thì hơi “nhạy cảm” một chút ha 😄 Cứ từ từ làm bạn trước, giữ chuyên nghiệp ở chỗ làm; nếu tỏ tình thì chọn lúc riêng tư ngoài giờ, và chuẩn bị tinh thần cư xử tự nhiên dù kết quả thế nào nha."], [/\b(cung lop|ban hoc|cung truong)\b/, "Thích bạn cùng lớp thì có lợi thế là gặp nhau hằng ngày nè 😄 Rủ học nhóm, hỏi bài, đi ăn sau giờ học — gần gũi tự nhiên trước rồi hẵng tính chuyện tỏ tình nha."]],
-    re: /\b(crush|thich mot nguoi|thich 1 nguoi|thich mot ban|thich 1 ban|thich (co|anh|chi|ban|dua|thang|nho|nguoi) (ay|do|kia|nay|dong nghiep|hang xom|cung \S+|hoc chung|lam chung|\S+ cung \S+)|dang thich|tham thuong|cam nang|co nen to tinh|to tinh|lam quen voi|muon lam quen|bat chuyen|nhan tin lam quen|ho co thich minh)\b/,
+    hint: [[VN(/\b(có người yêu rồi|có bạn gái rồi|có bạn trai rồi|có vợ rồi|có chồng rồi|có gia đình rồi|có bồ rồi)\b/), "Người ấy đã có người yêu thì khó cho mình thật 😔 Thích một người không có gì sai, nhưng chen vào giữa hai người thường làm cả ba cùng tổn thương — mà chính mình cũng mệt. Cho mình buồn một thời gian, giữ khoảng cách vừa đủ, rồi để lòng mở ra với người có thể đáp lại trọn vẹn."], [VN(/\b(có người yêu rồi|có bạn gái rồi|có bạn trai rồi|có vợ rồi|có chồng rồi|có gia đình rồi|có bồ rồi)\b/), "Khi người ấy đã có người yêu, điều mình làm chủ được là khoảng cách của chính mình: bớt nhắn riêng, bớt tìm cớ gặp, và cho mình thời gian để nguôi. Nếu làm chung chỗ thì giữ mọi thứ ở mức đồng nghiệp bình thường. Không còn nuôi hy vọng mỗi ngày thì lòng sẽ dịu dần — buồn một thời gian cũng không sao."], [VN(/\b(bắt chuyện|mở lời|làm quen|nên nhắn gì|nên nói gì)\b/), "Bắt chuyện dễ nhất là từ thứ hai người đang có chung: lớp học, công việc, một chuyện vừa xảy ra. Hỏi một câu cụ thể, dễ trả lời (“bài hôm nay làm tới đâu rồi?”) thì tự nhiên hơn là “đang làm gì đó?”. Nói vài câu rồi thôi cũng được — gặp thường, mỗi lần một chút là thân dần."], [VN(/\b(đồng nghiệp|cùng công ty|cùng chỗ làm)\b/), "Thích đồng nghiệp thì hơi “nhạy cảm” một chút ha 😄 Cứ từ từ làm bạn trước, giữ chuyên nghiệp ở chỗ làm; nếu tỏ tình thì chọn lúc riêng tư ngoài giờ, và chuẩn bị tinh thần cư xử tự nhiên dù kết quả thế nào nha."], [VN(/\b(cùng lớp|bạn học|cùng trường)\b/), "Thích bạn cùng lớp thì có lợi thế là gặp nhau hằng ngày nè 😄 Rủ học nhóm, hỏi bài, đi ăn sau giờ học — gần gũi tự nhiên trước rồi hẵng tính chuyện tỏ tình nha."]],
+    re: VN(/\b(crush|thích một người|thích 1 người|thích một bạn|thích 1 bạn|thích (cô|anh|chị|bạn|đứa|thằng|nhỏ|người) (ấy|đó|kia|này|đồng nghiệp|hàng xóm|cùng \S+|học chung|làm chung|\S+ cùng \S+)|đang thích|thầm thương|cảm nắng|có nên tỏ tình|tỏ tình|làm quen với|muốn làm quen|bắt chuyện|nhắn tin làm quen|họ có thích mình)\b/),
     feel: [
       "Ui, đang cảm nắng ai đó hả 😳 Cảm giác tim đập loạn xạ này dễ thương ghê!",
       "Thích một người là cảm giác vừa vui vừa hồi hộp ha 🥰",
@@ -273,7 +274,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "cold",
-    re: /\b(lanh nhat|it nhan tin|khong nhan tin|khong rep|seen khong rep|khong tra loi tin nhan|chua tra loi tin nhan|khong tra loi|khong nhan lai|seen|bi ghost|ghost minh|khong quan tam minh|het quan tam|thay doi roi|khac xua|xa cach|vo tam|bo be|khong con nhu truoc)\b/,
+    re: VN(/\b(lạnh nhạt|ít nhắn tin|không nhắn tin|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
     feel: [
       "Người thương tự dưng lạnh đi, cảm giác hụt hẫng và bất an lắm 🥺",
       "Chờ tin nhắn mà không thấy đâu thì lòng cứ thấp thỏm ha. Lomi hiểu mà.",
@@ -299,8 +300,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "fight",
-    hint: [[/\b(xin loi|lam lanh|het gian|nguoi gian|bot gian|lam hoa)\b/, "Muốn xin lỗi, làm lành là bước khó nhất rồi đó 💚 Một lời xin lỗi dễ được nhận thường có ba ý: nói rõ mình sai ở đâu, không kèm chữ “nhưng…”, và nói mình sẽ làm khác đi thế nào. Ví dụ: “Hôm đó mình nặng lời, mình xin lỗi. Mình không muốn tụi mình giận nhau vì chuyện này.” Chọn lúc cả hai đã nguôi rồi hẵng nói, và nghe người kia nói hết trước khi giải thích."], [/\b(noi sao|noi the nao|nen noi gi|mo loi|het gian|bot gian|lam lanh)\b/, "Mở lời sau khi cãi nhau thì ngắn và thật là đủ, ví dụ: “Mình không muốn giận nhau nữa, tụi mình nói chuyện được không?” Nói cảm giác của mình (“mình buồn vì…”) thay cho lời trách (“lúc nào cũng…”), rồi hỏi lại: “còn điều gì chưa vui thì nói mình nghe.” Người đang giận thường cần thấy mình được nghe trước, rồi mới nghe được lời giải thích."]],
-    re: /\b(cai nhau|gian nhau|chien tranh lanh|bat hoa|xich mich|hieu lam nhau|khong noi chuyen voi nhau|doi chia tay|to tieng)\b/,
+    hint: [[VN(/\b(xin lỗi|làm lành|hết giận|nguôi giận|bớt giận|làm hòa)\b/), "Muốn xin lỗi, làm lành là bước khó nhất rồi đó 💚 Một lời xin lỗi dễ được nhận thường có ba ý: nói rõ mình sai ở đâu, không kèm chữ “nhưng…”, và nói mình sẽ làm khác đi thế nào. Ví dụ: “Hôm đó mình nặng lời, mình xin lỗi. Mình không muốn tụi mình giận nhau vì chuyện này.” Chọn lúc cả hai đã nguôi rồi hẵng nói, và nghe người kia nói hết trước khi giải thích."], [VN(/\b(nói sao|nói thế nào|nên nói gì|mở lời|hết giận|bớt giận|làm lành)\b/), "Mở lời sau khi cãi nhau thì ngắn và thật là đủ, ví dụ: “Mình không muốn giận nhau nữa, tụi mình nói chuyện được không?” Nói cảm giác của mình (“mình buồn vì…”) thay cho lời trách (“lúc nào cũng…”), rồi hỏi lại: “còn điều gì chưa vui thì nói mình nghe.” Người đang giận thường cần thấy mình được nghe trước, rồi mới nghe được lời giải thích."]],
+    re: VN(/\b(cãi nhau|giận nhau|chiến tranh lạnh|bất hòa|xích mích|hiểu lầm nhau|không nói chuyện với nhau|đòi chia tay|to tiếng)\b/),
     feel: [
       "Cãi nhau với người mình thương mệt lòng lắm ha 😔",
       "Lomi hiểu, giận người thân thiết thì vừa bực vừa buồn, chẳng biết phải làm sao.",
@@ -326,8 +327,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "jealous",
-    hint: [[/\b(ban be|ban cua minh|ban than|dong nghiep)\b/, "Ghen cả với bạn bè của bạn thì dễ làm bạn thấy ngột ngạt lắm 😔 Người ấy có thể đang bất an. Thử nói rõ: bạn bè là một phần cuộc sống của bạn và bạn cần được tin tưởng — đồng thời hỏi xem điều gì làm họ lo để cùng tìm cách."]],
-    re: /\b(ghen|ghen tuong|hay ghen|bi ghen|nghi ngo nguoi yeu|(nguoi yeu|ny|ban trai|ban gai|chong|vo|anh ay|co ay) (\S+ ){0,3}kiem soat)\b/, // 10/10: "kiểm soát" một mình không phải ghen ("kiểm soát cơn giận")
+    hint: [[VN(/\b(bạn bè|bạn của mình|bạn thân|đồng nghiệp)\b/), "Ghen cả với bạn bè của bạn thì dễ làm bạn thấy ngột ngạt lắm 😔 Người ấy có thể đang bất an. Thử nói rõ: bạn bè là một phần cuộc sống của bạn và bạn cần được tin tưởng — đồng thời hỏi xem điều gì làm họ lo để cùng tìm cách."]],
+    re: VN(/\b(ghen|ghen tuông|hay ghen|bị ghen|nghi ngờ người yêu|(người yêu|ny|bạn trai|bạn gái|chồng|vợ|anh ấy|cô ấy) (\S+ ){0,3}kiểm soát)\b/), // 10/10: "kiểm soát" một mình không phải ghen ("kiểm soát cơn giận")
     feel: [
       "Ghen là cảm xúc rất người — ai thương thật cũng có lúc ghen hết á 😅",
       "Cảm giác bất an khi thấy người thương thân với ai khác khó chịu lắm, Lomi hiểu.",
@@ -349,7 +350,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "longdist",
-    re: /\b(yeu xa|o xa nhau|xa mat|cach nhau xa|khac thanh pho|khac nuoc)\b/,
+    re: VN(/\b(yêu xa|ở xa nhau|xa mặt|cách nhau xa|khác thành phố|khác nước)\b/),
     feel: ["Yêu xa là thử thách lớn lắm, thương ai mà không được gặp thì nhớ muốn xỉu luôn 🥺", "Lomi hiểu, khoảng cách làm mọi cảm xúc to hơn — nhớ cũng nhiều hơn, lo cũng nhiều hơn."],
     insight: [
       "Yêu xa bền được khi hai người có chung một “điểm đến” — biết khi nào sẽ ở gần nhau.",
@@ -365,8 +366,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "family",
-    hint: [[/\b(so sanh|con nha nguoi ta)\b/, "Bị so sánh với “con nhà người ta” là tủi lắm, Lomi hiểu 🥺 Bố mẹ thường so sánh vì muốn con tốt hơn, nhưng cách đó lại làm con thấy mình không đủ tốt. Thử nói với mẹ lúc cả hai vui vẻ: “Con biết mẹ muốn con giỏi, nhưng bị so sánh làm con buồn và mất động lực lắm.”"]],
-    re: /\b(bo me|ba me|cha me|gia dinh|bo minh|me minh|ba minh|cha minh|anh chi em|bi mang|bi la|bi so sanh voi|ap dat|cai nhau voi (bo|me|ba|cha)|khong hieu minh|vo chong|nha chong|nha vo|me chong|bo chong)\b/,
+    hint: [[VN(/\b(so sánh|con nhà người ta)\b/), "Bị so sánh với “con nhà người ta” là tủi lắm, Lomi hiểu 🥺 Bố mẹ thường so sánh vì muốn con tốt hơn, nhưng cách đó lại làm con thấy mình không đủ tốt. Thử nói với mẹ lúc cả hai vui vẻ: “Con biết mẹ muốn con giỏi, nhưng bị so sánh làm con buồn và mất động lực lắm.”"]],
+    re: VN(/\b(bố mẹ|ba mẹ|cha mẹ|gia đình|bố mình|mẹ mình|ba mình|cha mình|anh chị em|bị mắng|bị la|bị so sánh với|áp đặt|cãi nhau với (bố|mẹ|ba|cha)|không hiểu mình|vợ chồng|nhà chồng|nhà vợ|mẹ chồng|bố chồng)\b/),
     feel: [
       "Chuyện gia đình là chuyện khó nói nhất, vì mình thương mà cũng mệt 😔",
       "Lomi hiểu, bị chính người nhà không hiểu thì tủi thân lắm.",
@@ -392,7 +393,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "friends",
-    re: /\b(ban than|ban be|bi ban|bi co lap|bi noi xau|bi tay chay|bi bo roi|ban phan boi|mat ban|khong co ban|hoi ban|nhom ban|bi loai ra)\b/,
+    re: VN(/\b(bạn thân|bạn bè|bị bạn|bị cô lập|bị nói xấu|bị tẩy chay|bị bỏ rơi|bạn phản bội|mất bạn|không có bạn|hội bạn|nhóm bạn|bị loại ra)\b/),
     feel: [
       "Chuyện bạn bè mà buồn thì nhói lắm, vì đó là những người mình chọn để tin 😔",
       "Bị bạn bè làm tổn thương đau không kém gì chuyện tình cảm đâu, Lomi hiểu mà.",
@@ -414,8 +415,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "boss",
-    hint: [[/\b(nghi viec|bo viec|xin nghi|nghi lam)\b/, "Bị sếp đối xử vậy mà tính nghỉ cũng dễ hiểu lắm. Nhưng đừng quyết lúc đang ức nha — chuẩn bị khoản dự phòng, tìm chỗ mới trước khi nghỉ, và nếu nghỉ thì nghỉ đàng hoàng, giữ quan hệ tốt."]],
-    re: /\b(sep (hay |cu |lai |)(mang|la|chui|chen ep|kho tinh|ghet|soi|bat ne|trach|quat)|bi sep|dong nghiep (noi xau|chen ep|ghet|bat nat|choi xau|tay chay)|bi dong nghiep|moi truong (lam viec )?doc hai|bi bat nat o cong ty|bi mang truoc mat)\b/,
+    hint: [[VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Bị sếp đối xử vậy mà tính nghỉ cũng dễ hiểu lắm. Nhưng đừng quyết lúc đang ức nha — chuẩn bị khoản dự phòng, tìm chỗ mới trước khi nghỉ, và nếu nghỉ thì nghỉ đàng hoàng, giữ quan hệ tốt."]],
+    re: VN(/\b(sếp (hay |cứ |lại |)(mắng|la|chửi|chèn ép|khó tính|ghét|soi|bắt nẹt|trách|quát)|bị sếp|đồng nghiệp (nói xấu|chèn ép|ghét|bắt nạt|chơi xấu|tẩy chay)|bị đồng nghiệp|môi trường (làm việc )?độc hại|bị bắt nạt ở công ty|bị mắng trước mặt)\b/),
     feel: [
       "Bị đối xử như vậy ở chỗ làm chắc ấm ức lắm 😣 Lomi hiểu mà.",
       "Bị mắng hay bị chèn ép trước mặt người khác thì vừa tủi vừa quê, khó chịu thật sự.",
@@ -441,8 +442,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "work",
-    hint: [[/\b(nghi viec|bo viec|xin nghi|nghi lam)\b/, "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [/\b(sep|quan ly)\b/, "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
-    re: /\b(ap luc cong viec|cong viec ap luc|sep|dong nghiep|bi duoi viec|bi sa thai|mat viec|that nghiep|nghi viec|chan viec|chan di lam|ghet cong viec|bi chen ep|bi mang o cong ty|qua tai cong viec|burnout|kiet suc)\b/,
+    hint: [[VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [VN(/\b(sếp|quản lý)\b/), "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
+    re: VN(/\b(áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức)\b/),
     feel: [
       "Áp lực công việc mà kéo dài thì mệt cả thân lẫn tâm luôn 😮‍💨 Bạn vất vả rồi.",
       "Lomi hiểu, đi làm mà không vui thì mỗi sáng thức dậy đều nặng nề.",
@@ -468,7 +469,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "study",
-    re: /\b(thi rot|thi truot|truot mon|rot mon|diem kem|diem thap|hoc hanh|ap luc hoc|ap luc thi|thi cu|on thi|hoc khong vao|luan van|do an|tot nghiep)\b/,
+    re: VN(/\b(thi rớt|thi trượt|trượt môn|rớt môn|điểm kém|điểm thấp|học hành|áp lực học|áp lực thi|thi cử|ôn thi|học không vào|luận văn|đồ án|tốt nghiệp)\b/),
     feel: [
       "Chuyện học hành, thi cử áp lực lắm, Lomi hiểu mà 📚",
       "Điểm số không như mong đợi thì buồn là đương nhiên — nhất là khi bạn đã cố gắng.",
@@ -489,7 +490,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "money",
-    re: /\b(no nan|mac no|vo no|no nhieu|no qua|nhieu no|ganh no|tra no|het tien|thieu tien|ket tien|ap luc tien|lo tien|khong du tien|cang tien|tien bac)\b/,
+    re: VN(/\b(nợ nần|mắc nợ|vỡ nợ|nợ nhiều|nợ quá|nhiều nợ|gánh nợ|trả nợ|hết tiền|thiếu tiền|kẹt tiền|áp lực tiền|lo tiền|không đủ tiền|căng tiền|tiền bạc)\b/),
     feel: ["Áp lực tiền bạc làm người ta mất ngủ thật sự đó 😔 Lomi hiểu.", "Lo chuyện tiền là một trong những nỗi lo nặng nhất, vì nó ảnh hưởng tới mọi thứ khác."],
     insight: [
       "Khi lo tiền, não dễ rơi vào chế độ “sinh tồn”, khó nghĩ xa. Nên bước đầu tiên là nhìn rõ con số, không phải tự trách.",
@@ -508,7 +509,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "grief",
-    re: /\b(mat nguoi than|qua doi|tang le|dam tang|ong mat|ba mat|bo mat|me mat|mat me|mat bo|mat ong|mat ba|mat di mot nguoi|(chong|vo|con|ban than) (minh |toi |em )?(mat|qua doi|mat roi)|thu cung mat|cho mat|meo mat|con cho chet|con meo chet|(ba|bo|me|ma|cha|ong|ba noi|ba ngoai|ong noi|ong ngoai|chong|vo|con|anh trai|chi gai|em trai|em gai|ban than) (em |minh |toi |tui |a |anh |chi |c |e )?(mat roi|qua doi|da mat|vua mat|moi mat|ra di roi|da ra di|vua ra di|moi ra di|vua qua doi|da qua doi))\b/,
+    re: VN(/\b(mất người thân|qua đời|tang lễ|đám tang|ông mất|bà mất|bố mất|mẹ mất|mất mẹ|mất bố|mất ông|mất bà|mất đi một người|(chồng|vợ|con|bạn thân) (mình |tôi |em )?(mất|qua đời|mất rồi)|thú cưng mất|chó mất|mèo mất|con chó chết|con mèo chết|(ba|bố|mẹ|má|cha|ông|bà nội|bà ngoại|ông nội|ông ngoại|chồng|vợ|con|anh trai|chị gái|em trai|em gái|bạn thân) (em |mình |tôi |tui |a |anh |chị |c |e )?(mất rồi|qua đời|đã mất|vừa mất|mới mất|ra đi rồi|đã ra đi|vừa ra đi|mới ra đi|vừa qua đời|đã qua đời))\b/),
     feel: [
       "Lomi rất tiếc về sự mất mát của bạn 🤍 Không lời nào đủ để xoa dịu nỗi đau này.",
       "Mất đi người (hay bé cưng) mình thương là nỗi đau rất lớn. Lomi ở đây với bạn.",
@@ -530,7 +531,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "selfworth",
-    re: /\b(tu ti|that bai|vo dung|ganh nang|khong ai can (minh|toi|tui|em|anh|chi|a|e|c)\b|an bam|kem coi|khong bang ai|so sanh voi|thua kem|ghet ban ?than|chan ban ?than|khong lam duoc gi|khong co gia tri|minh te qua|minh do qua|khong ai thuong|xau xi|beo qua|khong du tot)\b/,
+    re: VN(/\b(tự ti|thất bại|vô dụng|gánh nặng|không ai cần (mình|tôi|tui|em|anh|chị|a|e|c)\b|ăn bám|kém cỏi|không bằng ai|so sánh với|thua kém|ghét bản ?thân|chán bản ?thân|không làm được gì|không có giá trị|mình tệ quá|mình dở quá|không ai thương|xấu xí|béo quá|không đủ tốt)\b/),
     feel: [
       "Nghe bạn nói vậy Lomi thương lắm 🥺 Cảm giác mình không đủ tốt nặng nề thật.",
       "Lomi hiểu, có những ngày mình nhìn đâu cũng thấy mình thua kém người ta.",
@@ -554,7 +555,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "overthink",
-    re: /\b(suy nghi nhieu|nghi nhieu|overthinking|overthink|nghi qua nhieu|khong ngung nghi|nghi linh tinh|dau dau vi nghi|roi qua|roi tri|hoang mang qua|khong biet phai lam sao)\b/,
+    re: VN(/\b(suy nghĩ nhiều|nghĩ nhiều|overthinking|overthink|nghĩ quá nhiều|không ngừng nghĩ|nghĩ linh tinh|đau đầu vì nghĩ|rối quá|rối trí|hoang mang quá|không biết phải làm sao)\b/),
     feel: ["Đầu óc cứ chạy mãi không ngừng mệt lắm ha 😵‍💫 Lomi hiểu mà.", "Suy nghĩ nhiều quá thì cả người cũng rã rời theo, bạn không một mình đâu."],
     insight: [
       "Overthinking là khi não cố “giải” một chuyện chưa xảy ra. Nó tưởng đang bảo vệ mình, nhưng thật ra chỉ làm mình mệt thêm.",
@@ -574,8 +575,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "insomnia",
-    hint: [[/\b(thuoc ngu|thuoc an than)\b/, "Thuốc ngủ thì đừng tự mua uống nha — đó là loại thuốc cần bác sĩ khám rồi mới kê; tự dùng dễ bị lệ thuộc và che mất nguyên nhân thật của chuyện mất ngủ. Mất ngủ kéo dài thì đi khám để tìm nguyên nhân là chắc nhất, Lomi không kê thuốc được."]],
-    re: /\b(mat ngu|khong ngu duoc|kho ngu|thuc trang|ngu khong ngon|tinh giac giua dem|thuc khuya hoai|trang dem|thuoc ngu)\b/,
+    hint: [[VN(/\b(thuốc ngủ|thuốc an thần)\b/), "Thuốc ngủ thì đừng tự mua uống nha — đó là loại thuốc cần bác sĩ khám rồi mới kê; tự dùng dễ bị lệ thuộc và che mất nguyên nhân thật của chuyện mất ngủ. Mất ngủ kéo dài thì đi khám để tìm nguyên nhân là chắc nhất, Lomi không kê thuốc được."]],
+    re: VN(/\b(mất ngủ|không ngủ được|khó ngủ|thức trắng|ngủ không ngon|tỉnh giấc giữa đêm|thức khuya hoài|trắng đêm|thuốc ngủ)\b/),
     feel: ["Mất ngủ mệt lắm luôn, sáng dậy như chưa được sạc pin 😴", "Nằm mãi không ngủ được mà đầu cứ chạy — Lomi hiểu cảm giác đó."],
     insight: [
       "Càng cố ép mình ngủ thì càng tỉnh. Đôi khi chỉ cần nằm thư giãn thôi, giấc ngủ sẽ tự tới.",
@@ -594,7 +595,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "anxiety",
-    re: /\b(lo au|lo lang|bat an|hoang so|so hai|tim dap nhanh|hoi hop|cang thang|stress|ap luc qua|so qua|lo qua)\b/,
+    re: VN(/\b(lo âu|lo lắng|bất an|hoảng sợ|sợ hãi|tim đập nhanh|hồi hộp|căng thẳng|stress|áp lực quá|sợ quá|lo quá)\b/),
     feel: ["Lo âu làm mình như lúc nào cũng căng dây đàn, mệt lắm 😟", "Lomi hiểu, cảm giác bất an cứ lởn vởn khó chịu thật."],
     insight: [
       "Lo âu là cách cơ thể báo động khi thấy nguy hiểm — chỉ là đôi khi chuông báo hơi nhạy quá.",
@@ -608,7 +609,7 @@ const THEMES: Theme[] = [
     // 12/10: lo trước một BUỔI QUAN TRỌNG (phỏng vấn, thi, thuyết trình) mà hỏi cách bớt run → gợi ý cho đúng chuyện đó, không đọc bài lo âu chung.
     adviceHint: [
       [
-        / (phong van|thuyet trinh|mai thi|sap thi|ky thi|buoi thi|len san khau|phat bieu) /,
+        VN(/ (phỏng vấn|thuyết trình|mai thi|sắp thi|kỳ thi|buổi thi|lên sân khấu|phát biểu) /),
         "Hồi hộp trước một buổi quan trọng là chuyện rất bình thường — nó cho thấy bạn coi trọng việc này.\n• Chuẩn bị trước vài ý chính và tập nói thành tiếng một hai lần; có sẵn câu mở đầu là đỡ run nhiều.\n• Ngay trước khi vào: thở chậm vài nhịp, thả lỏng vai, uống một ngụm nước.\n• Tới sớm một chút để quen chỗ, khỏi cuống.\n• Lỡ vấp thì dừng một nhịp rồi nói tiếp — người nghe ít để ý hơn mình tưởng.",
       ],
     ],
@@ -620,7 +621,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "lonely",
-    re: /\b(co don|mot minh|khong ai choi|khong ai hieu|le loi|lonely|khong co ai|khong ai quan tam|khong ai nghe)\b/,
+    re: VN(/\b(cô đơn|một mình|không ai chơi|không ai hiểu|lẻ loi|lonely|không có ai|không ai quan tâm|không ai nghe)\b/),
     feel: ["Cô đơn là cảm giác ai cũng có lúc gặp, nhưng lúc đang ở trong đó thì lạnh lắm 🥺", "Lomi ở đây với bạn nè 🤗 Cảm giác không ai hiểu mình buồn thật."],
     insight: [
       "Cô đơn không phải vì bạn có vấn đề — nhiều khi chỉ là mình chưa gặp đúng người, hoặc đang ở một giai đoạn chuyển đổi.",
@@ -638,7 +639,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "love",
-    re: /\b(chuyen tinh cam|tu van tinh cam|tinh yeu|nguoi yeu|chuyen yeu duong|moi quan he)\b/,
+    re: VN(/\b(chuyện tình cảm|tư vấn tình cảm|tình yêu|người yêu|chuyện yêu đương|mối quan hệ)\b/),
     feel: ["Chuyện tình cảm luôn là chuyện làm lòng mình lên xuống nhiều nhất ha 💕", "Lomi sẵn sàng nghe chuyện tình cảm của bạn nè 🥰"],
     insight: ["Mối quan hệ nào cũng cần hai người cùng vun. Không ai hoàn hảo, quan trọng là cùng muốn hiểu nhau.", "Cảm xúc của bạn trong chuyện này đều đáng được lắng nghe, dù là vui hay buồn."],
     step: ["Kể Lomi nghe từ từ nha, chuyện gì đang làm bạn nghĩ nhiều nhất?"],
@@ -651,7 +652,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "tired",
-    re: /\b(met qua|met moi|met ghe|met lam|hoi met|thay met|met met|duoi suc|kiet suc|qua tai|ban qua|nhieu viec qua|chan nan|nan long|mat dong luc|khong con dong luc)\b/,
+    re: VN(/\b(mệt quá|mệt mỏi|mệt ghê|mệt lắm|hơi mệt|thấy mệt|mệt mệt|đuối sức|kiệt sức|quá tải|bận quá|nhiều việc quá|chán nản|nản lòng|mất động lực|không còn động lực)\b/),
     feel: ["Bạn vất vả rồi 💚 Mệt thì nghỉ một chút, không ai trách đâu.", "Lomi nghe mà thấy thương, chắc dạo này bạn gồng nhiều lắm."],
     insight: [
       "Mệt mỏi là tín hiệu cơ thể và tâm trí đang cần nạp lại, không phải dấu hiệu bạn lười hay yếu.",
@@ -666,7 +667,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "sad",
-    re: /\b(buon(?! ban| cuoi| ngu| non)|buon qua|buon ghe|dang buon|thay buon|buon hiu|chan doi|tui than|muon khoc|dang khoc|khoc qua|tam trang te|tam trang khong tot|down|bi down|nang long|trong rong|that vong|khong vui)\b/,
+    re: VN(/\b(buồn(?! bán| cười| ngủ| nôn)|buồn quá|buồn ghê|đang buồn|thấy buồn|buồn hiu|chán đời|tủi thân|muốn khóc|đang khóc|khóc quá|tâm trạng tệ|tâm trạng không tốt|down|bị down|nặng lòng|trống rỗng|thất vọng|không vui)\b/),
     feel: [
       "Nghe bạn buồn, Lomi thương ghê 🥺",
       "Lomi gửi bạn một cái ôm thật chặt nè 🤗",
@@ -693,7 +694,7 @@ const LOVE_THEMES = new Set(["breakup", "ex", "cheat", "marriage", "fight", "col
 /** Nhắc lại lời người dùng theo ngôi của Lomi ("mình" → "bạn"). */
 function echo(text: string): string {
   const t = text.trim().replace(/[.!?…:()]+$/g, "").replace(/\s+/g, " ");
-  const sw = t.replace(/(^|\s)(mình|mềnh|tui|tôi|tớ|em|anh|a|e)(?=\s|$)/giu, "$1bạn");
+  const sw = t.replace(VR(/(^|\s)(mình|mềnh|tui|tôi|tớ|em|anh|a|e)(?=\s|$)/giu), "$1bạn");
   return sw.charAt(0).toLowerCase() + sw.slice(1);
 }
 export const GENERIC = new Set(["sad", "tired", "love", "overthink", "anxiety", "lonely", "health"]);
@@ -701,31 +702,31 @@ const byId = (id: string) => THEMES.find((t) => t.id === id);
 
 // Câu mở lời "muốn tâm sự" (chưa rõ chuyện gì).
 const START_RE =
-  /\b(tam su|muon tam su|tam su voi|noi chuyen voi minh|nghe minh ke|nghe minh noi|ke lomi nghe|ke cho lomi|an ui minh|an ui toi|an ui em|tu van tinh cam|tu van tam ly|tu van tam li|cho minh loi khuyen|khuyen minh|chia se voi lomi|muon chia se|co ai nghe)\b/;
+  VN(/\b(tâm sự|muốn tâm sự|tâm sự với|nói chuyện với mình|nghe mình kể|nghe mình nói|kể lomi nghe|kể cho lomi|an ủi mình|an ủi tôi|an ủi em|tư vấn tình cảm|tư vấn tâm lý|tư vấn tâm lí|cho mình lời khuyên|khuyên mình|chia sẻ với lomi|muốn chia sẻ|có ai nghe)\b/);
 // Xin lời khuyên trong câu ("làm sao để quên người cũ", "có nên quay lại không").
-const ADVICE_RE = /\b(lam sao|lam the nao|lam gi|nen lam gi|co nen|loi khuyen|khuyen|giup minh|cach nao|phai lam sao|lam cach nao|tu van|goi y|chi minh|noi gi di|y kien|noi sao|noi the nao|nen noi gi|sao cho|xin loi sao|xin loi the nao|lam lanh sao)\b/;
+const ADVICE_RE = VN(/\b(làm sao|làm thế nào|làm gì|nên làm gì|có nên|lời khuyên|khuyên|giúp mình|cách nào|phải làm sao|làm cách nào|tư vấn|gợi ý|chỉ mình|nói gì đi|ý kiến|nói sao|nói thế nào|nên nói gì|sao cho|xin lỗi sao|xin lỗi thế nào|làm lành sao)\b/);
 // "làm gì CŨNG hỏng", "nói sao cũng không nghe" — từ hỏi + "cũng" là "việc gì cũng", không phải câu xin lời khuyên.
-const UNIV_RE = /\b(lam gi|lam sao|noi gi|noi sao|cach nao|the nao) (\S+ )?cung\b/;
+const UNIV_RE = VN(/\b(làm gì|làm sao|nói gì|nói sao|cách nào|thế nào) (\S+ )?cũng\b/);
 const asksAdvice = (n: string) => ADVICE_RE.test(` ${n} `) && !UNIV_RE.test(` ${n} `);
 // 11/10 — người dùng nói rõ CHỈ MUỐN ĐƯỢC NGHE ("a chỉ muốn than thôi, chưa cần lời khuyên") — nhận cả khi chưa vào mạch tâm sự.
-const LISTEN_RE = /\b(chi muon duoc nghe|chi can nghe|dung khuyen|khong can khuyen|nghe thoi|chi muon than|muon than tho|than mot chut|than ti thoi|chua can loi khuyen|khong can loi khuyen|chua can khuyen|khong can tu van|chi can (co )?nguoi nghe|chi muon ke|chi muon noi ra|muon xa stress|trut bau tam su)\b/;
+const LISTEN_RE = VN(/\b(chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự)\b/);
 // 11/10 — tự hỏi mình có MẮC một vấn đề tâm lý không ("không biết có phải a bị trầm cảm không?") — Lomi không chẩn đoán, và cũng không
 // đáp bằng bài "trầm cảm" như thể đã chắc là vậy.
 const DX_WORD: [RegExp, string][] = [
-  [/\b(tram cam)\b/, "trầm cảm"],
-  [/\b(roi loan lo au|lo au)\b/, "rối loạn lo âu"],
-  [/\b(tu ky)\b/, "tự kỷ"],
-  [/\b(tang dong|adhd)\b/, "tăng động giảm chú ý"],
-  [/\b(ocd|am anh cuong che)\b/, "ám ảnh cưỡng chế"],
-  [/\b(luong cuc)\b/, "rối loạn lưỡng cực"],
-  [/\b(roi loan|benh tam ly|van de tam ly|van de ve tam ly|tam than|suy nhuoc than kinh|co van de ve dau oc)\b/, "một vấn đề tâm lý"],
+  [VN(/\b(trầm cảm)\b/), "trầm cảm"],
+  [VN(/\b(rối loạn lo âu|lo âu)\b/), "rối loạn lo âu"],
+  [VN(/\b(tự kỷ|tự kỉ)\b/), "tự kỷ"],
+  [VN(/\b(tăng động|adhd)\b/), "tăng động giảm chú ý"],
+  [VN(/\b(ocd|ám ảnh cưỡng chế)\b/), "ám ảnh cưỡng chế"],
+  [VN(/\b(lưỡng cực)\b/), "rối loạn lưỡng cực"],
+  [VN(/\b(rối loạn|bệnh tâm lý|vấn đề tâm lý|vấn đề về tâm lý|tâm thần|suy nhược thần kinh|có vấn đề về đầu óc)\b/), "một vấn đề tâm lý"],
 ];
 const DX_MARK = "Lomi không chẩn đoán được";
 const DX_SRC = DX_WORD.map(([re]) => re.source.replace(/\\b/g, "")).join("|");
 // Dáng câu TỰ HỎI: "có phải / liệu / không biết có … <tên>", hoặc "(bị / là) <tên> không / hả / nhỉ".
-const DX_ASK_A = new RegExp(`\\b(co phai|phai chang|lieu|khong biet co|co khi nao|hay la|chac la|so la|nghi la)\\b.{0,30}(?:${DX_SRC})\\b`);
+const DX_ASK_A = VR(new RegExp(`\\b(co phai|phai chang|lieu|khong biet co|co khi nao|hay la|chac la|so la|nghi la)\\b.{0,30}(?:${DX_SRC})\\b`));
 //   ("c có bị trầm cảm SAU SINH không" — vài chữ nói rõ thêm sau tên vẫn là câu tự hỏi đó.)
-const DX_ASK_B = new RegExp(`\\b(bi|mac|la|co)\\s+(?:benh\\s+)?(?:${DX_SRC})(?:\\s+\\S+){0,3}?\\s+(?:roi\\s+)?(khong|ko|k|ha|nhi|chua|phai khong|dung khong|chang|u)\\b`);
+const DX_ASK_B = VR(new RegExp(`\\b(bi|mac|la|co)\\s+(?:benh\\s+)?(?:${DX_SRC})(?:\\s+\\S+){0,3}?\\s+(?:roi\\s+)?(khong|ko|k|ha|nhi|chua|phai khong|dung khong|chang|u)\\b`));
 /** Câu tự hỏi mình có mắc một vấn đề tâm lý không (để lớp khác không đáp thay bằng bài phân tích cảm giác). */
 export function selfDxAsk(text: string): boolean {
   return !!selfDx(text, normStrict(text, HEART), {});
@@ -734,7 +735,7 @@ function selfDx(_text: string, n: string, ctx: HeartCtx): string | undefined {
   if (ctx.third) return undefined;
   const m = ` ${n} `;
   const label = DX_WORD.find(([re]) => re.test(m))?.[1];
-  if (!label || /\b(la gi|la sao|nghia la|la nhu the nao|trieu chung|dau hieu|chua duoc|co chua|chua khoi)\b/.test(m)) return undefined;
+  if (!label || VN(/\b(là gì|là sao|nghĩa là|là như thế nào|triệu chứng|dấu hiệu|chữa được|có chữa|chữa khỏi)\b/).test(m)) return undefined;
   return DX_ASK_A.test(m) || DX_ASK_B.test(m) ? label : undefined;
 }
 function selfDxReply(label: string, prev: string | undefined, listen: boolean, ctx: HeartCtx): HeartReply {
@@ -752,9 +753,9 @@ function selfDxReply(label: string, prev: string | undefined, listen: boolean, c
   };
 }
 // Chỉ nói mình đang BÍ, chưa kể chuyện gì ("a không biết phải làm sao") → hỏi chuyện, không đáp bài "suy nghĩ nhiều".
-const HELPLESS_ONLY = /^((a|anh|e|em|c|chi|minh|toi|tui|to) )?((gio|bay gio|that su|thiet|dang) )*(khong|ko|k|chang|cha) biet (phai )?(lam sao|lam gi|lam the nao|tinh sao|sao)( (nua|gio|day|bay gio|het|ca|luon|roi))*( hoang mang)?$/;
+const HELPLESS_ONLY = VN(/^((a|anh|e|em|c|chị|mình|tôi|tui|tớ) )?((giờ|bây giờ|thật sự|thiệt|đang) )*(không|ko|k|chẳng|chả) biết (phải )?(làm sao|làm gì|làm thế nào|tính sao|sao)( (nữa|giờ|đây|bây giờ|hết|cả|luôn|rồi))*( hoang mang)?$/);
 // Mệt tới mức muốn buông hết — chưa phải lời nói muốn tự hại (lib/lomiChat.crisisReply lo), nhưng không đáp như chuyện phiếm.
-const HOPELESS_RE = /\b(buong xuoi|muon buong het|muon bo het|bo cuoc het|khong thiet gi nua|chang thiet gi nua|khong con thiet|khong muon co gang nua|het muon co gang|chiu het noi|khong chiu noi nua|khong gong noi nua|kiet que roi|song cung nhu khong|ton tai cho co)\b/;
+const HOPELESS_RE = VN(/\b(buông xuôi|muốn buông hết|muốn bỏ hết|bỏ cuộc hết|không thiết gì nữa|chẳng thiết gì nữa|không còn thiết|không muốn cố gắng nữa|hết muốn cố gắng|chịu hết nổi|không chịu nổi nữa|không gồng nổi nữa|kiệt quệ rồi|sống cũng như không|tồn tại cho có)\b/);
 const evOfPrev = (prev: string) => prev.startsWith("ev:");
 function hopelessReply(prev: string | undefined, listen: boolean): HeartReply {
   return {
@@ -764,34 +765,34 @@ function hopelessReply(prev: string | undefined, listen: boolean): HeartReply {
     text: "Nghe bạn nói vậy Lomi thương, mà cũng lo nữa 🥺 Gồng lâu quá thì ai cũng tới lúc muốn buông hết.\n\n“Buông xuôi” với bạn là muốn được nghỉ, bỏ bớt gánh nặng một thời gian — hay có lúc bạn nghĩ tới chuyện không muốn sống nữa? Bạn nói thật với Lomi được mà, Lomi không phán xét đâu.",
   };
 }
-const HOW_DUNNO = /\b(khong biet|k biet|hk bit|chang biet|cha biet|khong ro) (\S+ ){0,3}(lam|noi|tinh|xu ly|giai quyet|bat dau|mo loi|tra loi|nhan|doi mat) (sao|gi|the nao|nhu the nao|kieu gi|lam sao)\b|\b(khong biet|k biet|chang biet) (phai )?(sao|lam sao|the nao|lam gi|lam the nao|tinh sao)\b|\b(chiu|bo tay|het cach|biet daux?|sao biet)\b/;
+const HOW_DUNNO = VN(/\b(không biết|k biết|hk bít|chẳng biết|chả biết|không rõ) (\S+ ){0,3}(làm|nói|tính|xử lý|giải quyết|bắt đầu|mở lời|trả lời|nhắn|đối mặt) (sao|gì|thế nào|như thế nào|kiểu gì|làm sao)\b|\b(không biết|k biết|chẳng biết) (phải )?(sao|làm sao|thế nào|làm gì|làm thế nào|tính sao)\b|\b(chịu|bó tay|hết cách|biết đâu|biết đâux|sao biết)\b/);
 // "chẳng muốn nói với ai", "không muốn gặp ai" — đang thu mình lại.
-const WITHDRAW_RE = /\b(khong|ko|chang|cha|chua) (muon|thiet|buon|dam|con muon) (noi|ke|gap|tam su|noi chuyen|tiep xuc|chia se)( \S+){0,2} (voi )?ai\b/;
-const SPAN_RE = /\b(\d+|mot|hai|ba|bon|nam|may|vai|nhieu|ca|nua)\s*(ngay|hom|bua|tuan|thang|nam)\b/;
+const WITHDRAW_RE = VN(/\b(không|ko|chẳng|chả|chưa) (muốn|thiết|buồn|dám|còn muốn) (nói|kể|gặp|tâm sự|nói chuyện|tiếp xúc|chia sẻ)( \S+){0,2} (với )?ai\b/);
+const SPAN_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều|cả|nửa)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
 const UNIT: Record<string, string> = { ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" };
 const NUMW: Record<string, string> = { mot: "một", hai: "hai", ba: "ba", bon: "bốn", nam: "năm", may: "mấy", vai: "vài", nhieu: "nhiều", ca: "cả", nua: "nửa", mo: "mấy" };
 const spanOf = (m: RegExpMatchArray) => `${NUMW[m[1]] ?? m[1]} ${UNIT[m[2]]}`;
 /** Khoảng thời gian đủ dài để nên đi khám (từ hai tuần trở lên). */
-const longSpan = (m: RegExpMatchArray) => m[2] === "thang" || m[2] === "nam" || (m[2] === "tuan" && !/^(1|mot|nua)$/.test(m[1]));
+const longSpan = (m: RegExpMatchArray) => m[2] === "thang" || m[2] === "nam" || (m[2] === "tuan" && !VN(/^(1|một|nửa)$/).test(m[1]));
 
 // Cảm xúc để phản chiếu lại khi người dùng kể tiếp.
 const EMOTIONS: [RegExp, string][] = [
-  [/\b(tui than)\b/, "tủi thân"],
-  [/\b(that vong)\b/, "thất vọng"],
-  [/\b(hoi han|hoi tiec|tiec nuoi)\b/, "tiếc nuối"],
-  [/\b(ton thuong|dau long|dau lam|dau qua)\b/, "tổn thương"],
-  [/\b(bat luc)\b/, "bất lực"],
-  [/\b(trong rong|trong trai)\b/, "trống rỗng"],
-  [/\b(xau ho|nhuc|mat mat)\b/, "xấu hổ"],
-  [/\b(tuc qua|tuc lam|buc qua|buc minh|buc boi|gian qua|gian lam|dang gian|uc che|am uc)\b/, "ấm ức, bực bội"],
-  [/\b(so qua|so lam|dang so|thay so|lo qua|lo lam|lo lang)\b/, "lo lắng"],
-  [/\b(met|duoi)\b/, "mệt mỏi"],
-  [/\b(nho qua|nho lam|nho ho|nho nguoi|nho anh|nho em|dang nho)\b/, "nhớ"],
-  [/\b(co don|mot minh)\b/, "cô đơn"],
-  [/\b(ghen)\b/, "ghen"],
-  [/\b(roi qua|roi tri|hoang mang|khong biet phai)\b/, "rối và hoang mang"],
-  [/\b(ap luc)\b/, "áp lực"],
-  [/\b(buon|khoc)\b/, "buồn"],
+  [VN(/\b(tủi thân)\b/), "tủi thân"],
+  [VN(/\b(thất vọng)\b/), "thất vọng"],
+  [VN(/\b(hối hận|hối tiếc|tiếc nuối)\b/), "tiếc nuối"],
+  [VN(/\b(tổn thương|đau lòng|đau lắm|đau quá)\b/), "tổn thương"],
+  [VN(/\b(bất lực)\b/), "bất lực"],
+  [VN(/\b(trống rỗng|trống trải)\b/), "trống rỗng"],
+  [VN(/\b(xấu hổ|nhục|mất mặt)\b/), "xấu hổ"],
+  [VN(/\b(tức quá|tức lắm|bực quá|bực mình|bực bội|giận quá|giận lắm|đang giận|ức chế|ấm ức)\b/), "ấm ức, bực bội"],
+  [VN(/\b(sợ quá|sợ lắm|đang sợ|thấy sợ|lo quá|lo lắm|lo lắng)\b/), "lo lắng"],
+  [VN(/\b(mệt|đuối)\b/), "mệt mỏi"],
+  [VN(/\b(nhớ quá|nhớ lắm|nhớ họ|nhớ người|nhớ anh|nhớ em|đang nhớ)\b/), "nhớ"],
+  [VN(/\b(cô đơn|một mình)\b/), "cô đơn"],
+  [VN(/\b(ghen)\b/), "ghen"],
+  [VN(/\b(rối quá|rối trí|hoang mang|không biết phải)\b/), "rối và hoang mang"],
+  [VN(/\b(áp lực)\b/), "áp lực"],
+  [VN(/\b(buồn|khóc)\b/), "buồn"],
 ];
 const REFLECT = [
   "Nghe bạn kể, Lomi cảm được là bạn đang thấy {e} lắm…",
@@ -876,7 +877,7 @@ function themeOf(n: string): Theme | undefined {
   const m = ` ${n} `;
   const t = THEMES.find((x) => FIRST.includes(x.id) && x.re.test(m)) ?? THEMES.find((x) => x.re.test(m));
   // "e bị bạn thân phản bội" — bị BẠN BÈ phản bội là chuyện bạn bè, không phải bị người yêu lừa dối.
-  if (t?.id === "cheat" && /\b(ban than|ban be|dua ban|con ban|thang ban|nguoi ban|dong nghiep)\b/.test(m) && !/\b(nguoi yeu|chong|vo|ban trai|ban gai|ny)\b/.test(m)) return THEMES.find((x) => x.id === "friends") ?? t;
+  if (t?.id === "cheat" && VN(/\b(bạn thân|bạn bè|đứa bạn|con bạn|thằng bạn|người bạn|đồng nghiệp)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|bạn trai|bạn gái|ny)\b/).test(m)) return THEMES.find((x) => x.id === "friends") ?? t;
   return t;
 }
 function emotionOf(n: string): string | undefined {
@@ -891,12 +892,12 @@ export function heartOpen(): HeartReply {
 const advGiven = new Map<string, number>(); // số lần đã đưa lời khuyên theo chủ đề (trong phiên)
 // 12/10: câu vừa nghe đã nói rõ điều gì thì không hỏi lại điều đó — "2 năm rồi" → không hỏi "lâu chưa?"; nêu rõ người ("ba mẹ thất
 // vọng về e") → không hỏi "xảy ra với ai trong nhà vậy?".
-const NAMED_WHO = /\b(ba me|bo me|cha me|bo|me|ma|cha|chong|vo|con trai|con gai|ong ba|sep|me chong|me vo|ba chong|bo chong|anh trai|chi gai|em trai|em gai)\b/;
+const NAMED_WHO = VN(/\b(ba mẹ|bố mẹ|cha mẹ|bố|mẹ|má|cha|chồng|vợ|con trai|con gái|ông bà|sếp|mẹ chồng|mẹ vợ|ba chồng|bố chồng|anh trai|chị gái|em trai|em gái)\b/);
 function avoidAskFor(n: string, span: boolean): RegExp | undefined {
   //   ("a mới đi khám về", "bác sĩ nói…" → không hỏi "đã đi khám bác sĩ chưa?")
-  const seenDoctor = /\b(di kham (ve|roi)|kham (roi|xong|ve)|moi (di )?kham|vua (di )?kham|bac si (noi|bao|keu|ke|chan doan)|ket qua kham|tai kham|nhap vien|nam vien|mo xong)\b/.test(` ${n} `);
+  const seenDoctor = VN(/\b(đi khám (về|rồi)|khám (rồi|xong|về)|mới (đi )?khám|vừa (đi )?khám|bác sĩ (nói|báo|kêu|kê|chẩn đoán)|kết quả khám|tái khám|nhập viện|nằm viện|mổ xong)\b/).test(` ${n} `);
   const parts = [span ? "lâu chưa|bao lâu|từ khi nào|lâu rồi|từ lâu chưa" : "", NAMED_WHO.test(` ${n} `) ? "với ai|ai trong nhà|là ai vậy" : "", seenDoctor ? "đi khám bác sĩ chưa|đi khám chưa" : ""].filter(Boolean);
-  return parts.length ? new RegExp(parts.join("|")) : undefined;
+  return parts.length ? VR(new RegExp(parts.join("|"))) : undefined;
 }
 /** Chọn một câu hỏi của chủ đề: bỏ câu hỏi về điều người dùng vừa nói rõ (avoid) và câu đã hỏi trong cuộc trò chuyện này (said). */
 function pickAsk(t: Theme, said: (x: string) => boolean, avoid?: RegExp): string | undefined {
@@ -910,7 +911,7 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp
   const parts: string[] = [];
   // Ý chủ đề có sẵn lời đáp riêng cho đúng điều vừa hỏi / kể — bỏ qua ý đã nói rồi (không đọc lại y nguyên một đoạn).
   const hintOf = () => t.hint?.find(([re, x]) => re.test(` ${n} `) && !said(x))?.[1];
-  const defined = !!t.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `);
+  const defined = !!t.define && VN(/\b(là gì|nghĩa là|là sao|hiểu .* không)\b/).test(` ${n} `);
   if (defined) parts.push(t.define!);
   // Đã khuyên hết ý của chủ đề này rồi mà người dùng hỏi tiếp → đổi sang góc nhìn + bước làm khác, không lặp lời khuyên.
   const given = advGiven.get(t.id) ?? 0;
@@ -1010,7 +1011,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   const cur = byId(prev);
   const chip = CHIP_THEME[text.trim()];
   if (chip) return themeReply(byId(chip)!, n, false);
-  if (text.trim() === BETTER || /\b(on hon roi|do hon roi|nhe long hon|nhe nhom hon|on roi|khong sao roi|cam on lomi|cam on nhieu|cam on nha|cam on)\b/.test(` ${n} `))
+  if (text.trim() === BETTER || VN(/\b(ổn hơn rồi|đỡ hơn rồi|nhẹ lòng hơn|nhẹ nhõm hơn|ổn rồi|không sao rồi|cảm ơn lomi|cảm ơn nhiều|cảm ơn nha|cảm ơn|cám ơn lomi|cám ơn nhiều|cám ơn nha|cám ơn)\b/).test(` ${n} `))
     return {
       text: prev.startsWith("ev:") && eventById(prev.slice(3))?.good
         ? pick("closeG", ["Không có gì nè 🥰 Chúc mừng bạn lần nữa nha, cứ tiếp tục toả sáng! 🎉", "Hihi, Lomi vui lây luôn á 🎊 Có tin vui gì nữa nhớ kể Lomi nghe nha!"])
@@ -1048,9 +1049,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   if (dx) return selfDxReply(dx, prev, listen, ctx);
   //   …và câu trả lời "bao lâu" cho câu hỏi đó: từ hai tuần trở lên thì khuyên đi gặp người có chuyên môn, ngắn hơn thì theo dõi thêm.
   //   (lastText đã đổi xưng hô — "Em không chẩn đoán được…" — nên so phần không có đại từ.)
-  if (lastText.includes("không chẩn đoán được đâu") && /bao lâu rồi\?\s*$/.test(lastText.trim())) {
+  if (lastText.includes("không chẩn đoán được đâu") && VR(/bao lâu rồi\?\s*$/).test(lastText.trim())) {
     const sp = n.match(SPAN_RE);
-    const vagueLong = /\b(lau roi|tu lau|lau lam|keo dai|may thang nay|ca nam|nhieu nam|tu nho|tu hoi)\b/.test(` ${n} `);
+    const vagueLong = VN(/\b(lâu rồi|từ lâu|lâu lắm|kéo dài|mấy tháng nay|cả năm|nhiều năm|từ nhỏ|từ hồi)\b/).test(` ${n} `);
     if ((sp && longSpan(sp)) || vagueLong)
       return {
         text: `${sp ? `${capF(spanOf(sp))} rồi` : "Lâu vậy rồi"} thì đủ để mình nghiêm túc với nó rồi đó. Lomi nghĩ bạn nên đặt một buổi gặp bác sĩ tâm lý hoặc chuyên khoa tâm thần — không phải vì bạn “có vấn đề”, mà để có người có chuyên môn nghe kỹ và nói rõ cho bạn biết. Trong lúc chờ, cố giữ giờ ăn ngủ cho đều và đừng ở một mình quá lâu nha.\n\nBạn có ai tin tưởng để kể chuyện này không?`,
@@ -1058,7 +1059,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
         theme: prev,
         listen,
       };
-    if (sp || /\b(tuan nay|may hom nay|may ngay nay|hom qua|hom nay|moi day|gan day|vai hom|may bua nay)\b/.test(` ${n} `))
+    if (sp || VN(/\b(tuần này|mấy hôm nay|mấy ngày nay|hôm qua|hôm nay|mới đây|gần đây|vài hôm|mấy bữa nay)\b/).test(` ${n} `))
       return {
         text: `Mới ${sp ? spanOf(sp) : "đây thôi"} thì cứ theo dõi thêm, đừng vội gắn cho mình một cái tên bệnh. Nếu qua khoảng hai tuần mà vẫn vậy, hoặc thấy nặng hơn, thì nên đi gặp bác sĩ tâm lý nha.\n\nMấy hôm nay có chuyện gì xảy ra làm bạn thấy vậy không?`,
         quick: [],
@@ -1067,24 +1068,24 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       };
   }
   //   ("ăn kiêng sao e", "bắt đầu thế nào" — câu HỎI kết bằng "sao / thế nào" là hỏi CÁCH làm → cũng là xin gợi ý; "sao ảnh làm vậy" thì không.)
-  const howAtEnd = !!ctx.ask && !ctx.third && /\b(sao|the nao|nhu the nao|kieu gi|cach nao)( (e|em|a|anh|chi|ban|lomi|nhi|ta|day|gio|bay gio|nua|duoc))*$/.test(n) && !/\b(tai sao|vi sao|thi sao|co sao|khong sao|ra sao|sao roi)\b/.test(n) && !/\b(khong|ko|k|chang|cha|hong|hk) (biet|bit|ro|hieu)\b/.test(n);
+  const howAtEnd = !!ctx.ask && !ctx.third && VN(/\b(sao|thế nào|như thế nào|kiểu gì|cách nào)( (e|em|a|anh|chị|bạn|lomi|nhỉ|ta|đây|giờ|bây giờ|nữa|được))*$/).test(n) && !VN(/\b(tại sao|vì sao|thì sao|có sao|không sao|ra sao|sao rồi)\b/).test(n) && !VN(/\b(không|ko|k|chẳng|chả|hông|hong|hk) (biết|bít|rõ|hiểu)\b/).test(n);
   const adviceAsked = text.trim() === HEART_ADVICE || asksAdvice(n) || howAtEnd;
   // Câu mẫu đã nói trong mấy tin gần đây (so cả bản đã đổi xưng hô) — để không đọc lại y nguyên một đoạn.
   const saidR = (x: string) => (ctx.recent ?? []).some((r) => r.includes(x.slice(0, 48)) || (!!ctx.say && r.includes(ctx.say(x).slice(0, 48))));
   // "nhiều lúc c muốn buông xuôi hết" — có thể chỉ là quá mệt, cũng có thể là dấu hiệu nặng hơn → hỏi thẳng một cách nhẹ nhàng.
   if (HOPELESS_RE.test(` ${n} `) && !ctx.third) return hopelessReply(prev, listen);
   // "mà vợ con thì sao", "còn mẹ a thì sao" — một nỗi vướng bận, không phải câu hỏi kiến thức ("chưa bắt chắc ý bạn").
-  const tied = !adviceAsked && n.split(" ").length <= 7 ? text.trim().replace(/[?.!…]+$/u, "").match(/^(?:(?:mà|nhưng|còn|rồi|thế|vậy)\s+)+(.{2,30}?)\s+thì\s+(?:sao|làm sao|tính sao|biết làm sao|thế nào)(?:\s+(?:đây|giờ|nhỉ|ta|e|em))*$/iu) : null;
+  const tied = !adviceAsked && n.split(" ").length <= 7 ? text.trim().replace(/[?.!…]+$/u, "").match(VR(/^(?:(?:mà|nhưng|còn|rồi|thế|vậy)\s+)+(.{2,30}?)\s+thì\s+(?:sao|làm sao|tính sao|biết làm sao|thế nào)(?:\s+(?:đây|giờ|nhỉ|ta|e|em))*$/iu)) : null;
   if (tied && cur && !evOfPrev(prev)) {
-    const x = /(^| )(a|anh|e|em|c|chị|mình|tui|tôi)( |$)/iu.test(tied[1]) ? "chuyện đó" : tied[1].toLowerCase();
+    const x = VR(/(^| )(a|anh|e|em|c|chị|mình|tui|tôi)( |$)/iu).test(tied[1]) ? "chuyện đó" : tied[1].toLowerCase();
     return { text: `Ừ ha, còn ${x} nữa 😔 Vướng chỗ đó nên mới khó quyết. Bạn lo nhất điều gì ${x === "chuyện đó" ? "ở chuyện đó" : `cho ${x}`}?`, quick: [], theme: prev, listen };
   }
   // Lomi vừa hỏi "Bạn có ai tin tưởng để kể chuyện này không?" mà người dùng nói không có ai → không đáp "Ra là vậy".
-  if (/để kể chuyện này không\?\s*$/.test(lastText.trim()) && (NO_RE.test(n) || /\b(khong co ai|chang co ai|cha co ai|khong ai|khong biet ke voi ai)\b/.test(` ${n} `)))
+  if (VR(/để kể chuyện này không\?\s*$/).test(lastText.trim()) && (NO_RE.test(n) || VN(/\b(không có ai|chẳng có ai|chả có ai|không ai|không biết kể với ai)\b/).test(` ${n} `)))
     return { text: "Vậy thì trước mắt bạn cứ kể với Lomi, lúc nào cũng được 💚 Còn khi gặp bác sĩ tâm lý, họ cũng là người để bạn nói hết ra mà không sợ bị phán xét.\n\nNếu có lúc thấy quá sức, đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật) có người sẵn sàng nghe bạn.", quick: [], theme: prev, listen };
   // Lomi vừa hỏi "…hay có lúc bạn nghĩ tới chuyện không muốn sống nữa?" mà người dùng nói KHÔNG, chỉ muốn nghỉ → nhẹ lòng, hỏi tiếp việc cụ thể.
   //   (đáp "có" thì router đã chuyển sang lời hỗ trợ khẩn.)
-  if (/không muốn sống nữa\?/.test(lastText) && (NO_RE.test(n) || /^(khong|ko|k|hong|chua)( |$)|\b(chi muon nghi|nghi thoi|met thoi|khong co dau|khong den muc|chua den muc)\b/.test(n)))
+  if (VR(/không muốn sống nữa\?/).test(lastText) && (NO_RE.test(n) || VN(/^(không|ko|k|hông|hong|chưa)( |$)|\b(chỉ muốn nghỉ|nghỉ thôi|mệt thôi|không có đâu|không đến mức|chưa đến mức)\b/).test(n)))
     return { text: "Vậy thì Lomi đỡ lo rồi 💚 Bạn cần được nghỉ thật sự đó — gồng mãi không ai chịu nổi. Trong tuần này có việc nào bạn bớt được, hoặc nhờ ai đỡ một tay không?", quick: [], theme: prev, listen };
   // "a cũng chẳng muốn nói với ai" — đang thu mình lại: ghi nhận điều đó, không coi là lời bảo dừng và không hỏi dồn.
   if (WITHDRAW_RE.test(` ${n} `) && !adviceAsked && !ctx.third)
@@ -1105,7 +1106,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   if (ctx.person && t && cur && t.id !== cur.id && (LOVEISH.has(t.id) || t.id === "newlove" || t.id === "single") && words <= 8 && !adviceAsked) t = undefined;
   // Đang kể chuyện với NGƯỜI THƯƠNG ("bạn gái a hay ghen" → "a mệt lắm") mà nói thêm một cảm giác chung (mệt, buồn, lo) → vẫn là chuyện đó,
   // không rẽ sang bài "mệt mỏi" rồi quên mất đang nói về ai.
-  if (t && cur && cur.id === "love" && GENERIC.has(t.id) && t.id !== "love" && words <= 6 && !adviceAsked && /(vợ|chồng|bạn gái|bạn trai|người yêu|người ấy|crush|cô ấy|anh ấy|bà xã|ông xã|(?<![\p{L}])ny(?![\p{L}]))/iu.test(story)) t = undefined;
+  if (t && cur && cur.id === "love" && GENERIC.has(t.id) && t.id !== "love" && words <= 6 && !adviceAsked && VR(/(vợ|chồng|bạn gái|bạn trai|người yêu|người ấy|crush|cô ấy|anh ấy|bà xã|ông xã|(?<![\p{L}])ny(?![\p{L}]))/iu).test(story)) t = undefined;
   // Câu kể về một NGƯỜI KHÁC ("con a sắp thi", "mẹ a ở quê") trong lúc đang tâm sự → chữ "thi", "học", "gia đình" không phải chuyện của người dùng.
   if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n)) t = undefined;
   // Chuyện đời thường đang kể (vd mắc mưa) → hiểu câu kể tiếp theo đúng chuyện đó.
@@ -1115,7 +1116,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   //   Đang kể một chuyện CỤ THỂ (bị sếp mắng) mà thêm một mẩu ngắn ("vì đi trễ", "mà e bị kẹt xe") → đó là chi tiết của chuyện đó.
   const detailOfStory = !!cur && !GENERIC.has(cur.id) && !evCur && words <= 8;
   //   Câu nêu LÝ DO cho cảm xúc đang nói ("chắc tại trời mưa", "tại a ngủ ít") cũng là chi tiết của chuyện đó — không rẽ sang "mắc mưa".
-  const reasonLead = !!cur && words <= 8 && /^(chac (la )?(tai|do|vi)|co le (tai|do|vi)|tai vi|boi vi|tai|do|vi) /.test(n);
+  const reasonLead = !!cur && words <= 8 && VN(/^(chắc (là )?(tại|do|vì)|có lẽ (tại|do|vì)|tại vì|bởi vì|tại|do|vì) /).test(n);
   if (evNew && evNew !== evCur && (!t || GENERIC.has(t.id)) && !ctx.third && !detailOfStory && !reasonLead) return eventReply(evNew, n, text);
   if (evCur && (!t || GENERIC.has(t.id))) {
     const f = evCur.follow.find(([re]) => re.test(` ${n} `));
@@ -1144,7 +1145,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
     if (hit) return { text: pick(`ev:${evCur.id}:yn${map!.indexOf(hit)}${YES_RE.test(n) ? "y" : "n"}`, hit[1]), quick: [], theme: prev };
   }
   // Câu hỏi có/không ("…không?", "…chưa?", "…hay…?") khác câu hỏi mở ("vì chuyện gì?").
-  const ynQ = /(không|chưa|hả|nhỉ|đúng không|phải không)\s*\?\s*$|\bhay\b/i.test(lastQ);
+  const ynQ = VR(/(không|chưa|hả|nhỉ|đúng không|phải không)\s*\?\s*$|\bhay\b/i).test(lastQ);
   if (asked && !ynQ && NO_RE.test(n) && !t)
     return {
       text: pick("noOpen", [
@@ -1156,7 +1157,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       listen,
     };
   if (asked && YES_RE.test(n) && !t) {
-    const heavyQ = /(bận lòng|buồn|khó chịu|nặng lòng|lo lắng|mệt|tệ)/.test(lastQ);
+    const heavyQ = VR(/(bận lòng|buồn|khó chịu|nặng lòng|lo lắng|mệt|tệ)/).test(lastQ);
     return {
       text: heavyQ
         ? pick("yesH", [
@@ -1192,13 +1193,13 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // Chủ đề chung chung (buồn, mệt, tình cảm nói chung) không đè lên chuyện cụ thể đang kể (vd chia tay).
   if (t && cur && GENERIC.has(t.id) && !GENERIC.has(cur.id)) t = undefined;
   // Hỏi nghĩa ("YSL là gì?") → giải thích luôn, kể cả khi vẫn đang nói đúng chủ đề đó.
-  if (t?.define && /\b(la gi|nghia la|la sao|hieu .* khong)\b/.test(` ${n} `)) return themeReply(t, n, false);
+  if (t?.define && VN(/\b(là gì|nghĩa là|là sao|hiểu .* không)\b/).test(` ${n} `)) return themeReply(t, n, false);
   // Chủ đề mới (vd đang buồn chung chung → kể ra là cãi nhau với người yêu) → trả lời theo chủ đề mới.
   //   Đang kể dở mà rẽ sang ý mới ("ba mẹ thất vọng về e") → mở bằng chính điều vừa nghe, không đọc lại lời đồng cảm chung của chủ đề mới.
   if (t && t.id !== prev && !(listen && !adviceAsked)) {
     const mw = ctx.mirror?.split(" ").length ?? 0;
     const lead = depth >= 2 && ctx.mirror && mw >= 3 && mw <= 10 && !ctx.ask ? `${ctx.mirror.charAt(0).toUpperCase() + ctx.mirror.slice(1)} hả 😔` : undefined;
-    return themeReply(t, n, adviceAsked, avoidAskFor(n, /\b(\d+|mot|hai|ba|may|vai)\s*(ngay|hom|tuan|thang|nam)\b/.test(n)), saidR, lead);
+    return themeReply(t, n, adviceAsked, avoidAskFor(n, VN(/\b(\d+|một|hai|ba|mấy|vài)\s*(ngày|hôm|tuần|tháng|năm)\b/).test(n)), saidR, lead);
   }
   const th = t ?? cur;
   // Câu kể trúng chi tiết mà chủ đề có sẵn lời đáp riêng (vd crush là đồng nghiệp, tính nghỉ việc) → đáp đúng ý đó.
@@ -1211,14 +1212,14 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   //   (chỉ khi là bí CÁCH LÀM — "không biết nói sao", "chẳng biết tính sao nữa"; còn "e không biết e sai gì" là đang kể nỗi băn khoăn.)
   //   Lomi vừa hỏi "chuyện gì / vì sao…" mà người dùng đáp "không biết (sao) nữa" → là KHÔNG RÕ VÌ SAO mình thấy vậy, không phải bí cách làm
   //   → không dội ba gạch đầu dòng lời khuyên.
-  if (/^(khong|ko|k|chang|cha|hong|hk) (biet|bit|ro|hieu)( (sao|vi sao|tai sao|nua|luon|gi|nx))*$/.test(n) && /\?\s*$/.test(lastText.trim()) && /(chuyện gì|điều gì|vì sao|tại sao|sao vậy)/i.test(lastText.trim().split("\n").pop() ?? ""))
+  if (VN(/^(không|ko|k|chẳng|chả|hông|hong|hk) (biết|bít|rõ|hiểu)( (sao|vì sao|tại sao|nữa|luôn|gì|nx))*$/).test(n) && /\?\s*$/.test(lastText.trim()) && VR(/(chuyện gì|điều gì|vì sao|tại sao|sao vậy)/i).test(lastText.trim().split("\n").pop() ?? ""))
     return { text: "Không rõ vì sao mà vẫn thấy vậy thì cũng không sao đâu — không phải cảm xúc nào cũng có lý do rõ ràng 💚 Bạn không cần tìm ra ngay.\n\nBạn thấy như vậy mới hôm nay, hay mấy hôm rồi?", quick: [], theme: prev, listen };
   if (DUNNO_RE.test(` ${n} `) && HOW_DUNNO.test(` ${n} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true, undefined, saidR);
   // Kể thời gian ("3 năm rồi đó", "2 tuần nay") → đáp theo đúng chuyện đang nói.
-  const dur = n.match(/\b(\d+|mot|hai|ba|bon|nam|may|vai|mo)\s*(ngay|hom|bua|tuan|thang|nam)\b/);
+  const dur = n.match(VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/));
   // Chỉ khi câu NÓI RIÊNG khoảng thời gian đã qua ("3 năm rồi đó", "từ 2 tuần nay"): "làm được 5 năm" là kể việc khác, "còn 2 tuần nữa thi"
   // là chuyện sắp tới — mấy câu đó để phần kể tiếp nhắc lại đúng nội dung.
-  const bareDur = !!dur && !n.replace(dur[0], " ").split(" ").some((w) => w && !/^(roi|do|nay|ne|a|luon|thoi|khoang|gan|hon|ca|tu|toi|den|gio|troi|lan|chac|cung|tam)$/.test(w));
+  const bareDur = !!dur && !n.replace(dur[0], " ").split(" ").some((w) => w && !VN(/^(rồi|đó|này|nay|nè|à|ạ|a|luôn|thôi|khoảng|gần|hơn|cả|từ|tới|đến|giờ|trời|lần|chắc|cũng|tầm)$/).test(w));
   if (dur && bareDur && th && !t) {
     const span = `${dur[1] === "mo" ? "mấy" : dur[1]} ${({ ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" } as Record<string, string>)[dur[2]]}`;
     const love = LOVE_THEMES.has(th.id);
@@ -1248,7 +1249,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       theme: prev,
     };
   // Hỏi một điều Lomi không biết (không khớp chủ đề nào) → nói thật, không đáp đại cho có.
-  if (!t && !NO_RE.test(n) && !YES_RE.test(n) && ((ctx.ask && !emotionOf(n)) || /\?|\b(la gi|nghia la|hieu .* khong|biet .* khong|co biet)\b/.test(`${text} ${n} `)))
+  if (!t && !NO_RE.test(n) && !YES_RE.test(n) && ((ctx.ask && !emotionOf(n)) || VN(/\?|\b(là gì|nghĩa là|hiểu .* không|biết .* không|có biết)\b/).test(`${text} ${n} `)))
     return {
       text: pick("unk", [
         "Ừa, Lomi nghe nè. Bạn nói thêm một chút để Lomi bắt đúng ý nha.",
@@ -1354,12 +1355,12 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
     // Câu hỏi mở đầu của chủ đề ("Có chuyện gì làm bạn buồn vậy?") chỉ hợp lúc mới vào chuyện; sau đó hỏi một ý cụ thể để đi tiếp.
     //   (câu mở đầu đã nói rõ bao lâu — "mất ngủ nhiều tuần rồi" — thì không hỏi lại "lâu chưa?".)
     const knownDur = SPAN_RE.test(normalizeVi(story));
-    const opening = th && depth <= 2 && !GENERIC.has(th.id) ? fresh(`${th.id}:ask`, knownDur ? th.ask.filter((x) => !/lâu chưa|bao lâu|từ khi nào|lâu rồi/.test(x)) : th.ask) : undefined;
-    const upcoming = /(^| )(sắp|sẽ|chuẩn bị|tính|định|sap|se|chuan bi)( |$)/.test(m ?? "");
+    const opening = th && depth <= 2 && !GENERIC.has(th.id) ? fresh(`${th.id}:ask`, knownDur ? th.ask.filter((x) => !VR(/lâu chưa|bao lâu|từ khi nào|lâu rồi/).test(x)) : th.ask) : undefined;
+    const upcoming = VR(/(^| )(sắp|sẽ|chuẩn bị|tính|định|sap|se|chuan bi)( |$)/).test(m ?? "");
     //   (vừa kể người kia phản ứng thế nào — "cô ấy vẫn không nói gì" — thì không hỏi lại "bên kia phản ứng sao".)
-    const toldReact = /(không nói gì|im lặng|không trả lời|không thèm|bảo là|nói là|kêu là|chửi|la |mắng)/.test(m ?? "");
-    const prog = fam ? PROGRESS[fam].filter((x) => !(toldReact && /phản ứng/.test(x))) : undefined;
-    return opening ?? (prog ? fresh(`prog:${fam}`, prog) : undefined) ?? fresh("prog:any", upcoming ? PROGRESS.any.filter((x) => !/sau đó/.test(x)) : PROGRESS.any);
+    const toldReact = VR(/(không nói gì|im lặng|không trả lời|không thèm|bảo là|nói là|kêu là|chửi|la |mắng)/).test(m ?? "");
+    const prog = fam ? PROGRESS[fam].filter((x) => !(toldReact && VR(/phản ứng/).test(x))) : undefined;
+    return opening ?? (prog ? fresh(`prog:${fam}`, prog) : undefined) ?? fresh("prog:any", upcoming ? PROGRESS.any.filter((x) => !VR(/sau đó/).test(x)) : PROGRESS.any);
   };
   // Ý có CHUNG TỪ với điều vừa kể thì dùng ngay (đó là đáp đúng nội dung); còn lại xoay theo lượt và dè dặt với "bài học chung":
   //   lượt 1 hỏi tiếp một ý cụ thể · lượt 2 chỉ ghi nhận (có nói ra cảm xúc thì thêm một góc nhìn) · lượt 3 một bước nhỏ / góc nhìn.
@@ -1379,7 +1380,7 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   if (th?.heavy && e && depth >= 3 && depth % 3 === 0 && !said(PRO)) parts.push(PRO);
   return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
 }
-const CLOSE_RE = /^(khong|ko|hong|khong co|thoi|thoi ke|ke di|ke no|ke|bo di|thoi bo di|thoi bo qua|bo qua di|khong sao|khong co gi|vay thoi|the thoi|vay do|u|uh|um|uhm|ok|oke|okie|da|vang|ua)( (nha|nhe|a|di|em|e|lomi|vay|thoi))*$/;
+const CLOSE_RE = VN(/^(không|ko|hông|hong|không có|thôi|thôi kệ|kệ đi|kệ nó|kệ|bỏ đi|thôi bỏ đi|thôi bỏ qua|bỏ qua đi|không sao|không có gì|vậy thôi|thế thôi|vậy đó|ừ|u|uh|ừh|um|ừm|uhm|ừhm|ok|oke|okie|dạ|vâng|ủa)( (nha|nhé|nhe|à|ạ|a|đi|em|e|lomi|vậy|thôi))*$/);
 const SUPPORT = ["Lomi hiểu.", "Ra là vậy."];
 const STOP = new Set("khong nhung nhieu duoc nguoi minh chuyen muon dang thoi cung nhau biet nghe thay luon chua".split(" "));
 
