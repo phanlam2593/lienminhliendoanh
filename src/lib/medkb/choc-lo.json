@@ -1,0 +1,75 @@
+{
+  "id": "choc-lo",
+  "kind": "infection",
+  "names": [
+    "chốc lở",
+    "bệnh chốc lở",
+    "chốc lở da",
+    "impetigo"
+  ],
+  "about": [
+    {
+      "text": "Chốc lở là bệnh nhiễm trùng da rất dễ lây nhưng thường nhẹ, hay gặp ở trẻ nhỏ; điều trị thì thường khỏi trong vài ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Bắt đầu bằng vết loét đỏ hoặc mụn nước, vỡ nhanh để lại mảng đóng vảy màu vàng nâu như cốm dính trên da; có thể ngứa, đôi khi đau, lan sang chỗ khác. Hay ở mặt (quanh mũi, miệng) và tay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Lây qua tiếp xúc da hoặc chạm đồ dùng nhiễm bệnh như khăn, ga giường; thường nhiễm vào chỗ da đã bị tổn thương (vết cắt, vết gãi, côn trùng cắn, bệnh da sẵn có).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Điều trị thì hết lây sau 48 giờ; không điều trị thì có thể mất 7–21 ngày mới hết lây (khi các mảng đã khô, đóng vảy). Nghỉ học, nghỉ làm tới khi hết lây.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Dược sĩ hoặc bác sĩ sẽ kiểm tra rồi cho kem bôi hoặc kháng sinh (kem hoặc uống); dùng hết đợt điều trị.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Rửa vùng bị bằng xà phòng và lau khô; rửa tay thường xuyên; giặt nóng khăn, ga, gối; không gãi, không chạm vảy (dễ để sẹo); không dùng chung khăn; không nấu ăn cho người khác; tránh tiếp xúc gần trẻ nhỏ, người tiểu đường hay suy giảm miễn dịch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Gặp dược sĩ nếu có triệu chứng (trẻ từ 12 tháng). Đi khám nếu bé dưới 12 tháng, mẹ cho con bú bị ở vùng ngực, người suy giảm miễn dịch, bệnh nặng hơn sau điều trị, hoặc tái lại trong năm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Impetigo",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/impetigo/",
+      "reviewed": "2024-06-06"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

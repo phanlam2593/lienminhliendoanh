@@ -1,0 +1,237 @@
+{
+  "id": "an-uong-khi-cho-con-bu",
+  "kind": "women",
+  "dietOnly": true,
+  "names": [
+    "ăn uống khi cho con bú",
+    "cho con bú",
+    "đang cho con bú",
+    "mẹ cho con bú",
+    "mẹ đang cho con bú",
+    "mẹ sau sinh",
+    "sau sinh",
+    "sau khi sinh",
+    "ở cữ",
+    "nuôi con bằng sữa mẹ",
+    "breastfeeding diet"
+  ],
+  "disambiguation": "Thẻ này chỉ nói về **ăn uống khi cho con bú** (theo NHS). Chuyện sức khoẻ khác sau sinh thì bạn hỏi bác sĩ Sản nha.",
+  "about": [
+    {
+      "text": "NHS: khi cho con bú bạn không cần chế độ ăn đặc biệt — chỉ cần ăn đa dạng, cân bằng, lành mạnh. Một lượng nhỏ những gì mẹ ăn uống có thể đi vào sữa.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [],
+  "course": [],
+  "care": [
+    {
+      "text": "Nếu thấy bé có vẻ nhạy cảm với món mẹ ăn, có thể cần tránh món đó; hãy hỏi bác sĩ hoặc nhân viên y tế theo dõi mẹ và bé.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Dị ứng đạm sữa bò là một trong những dị ứng thức ăn hay gặp nhất ở trẻ, có thể xảy ra cả khi đang bú mẹ: phát ban ngứa, sưng môi / mặt / mắt, đau bụng, nôn, tiêu chảy hoặc táo bón, sổ mũi, chàm — nghi ngờ thì đưa bé đi khám.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Caffeine (trà, cà phê, sô-cô-la, nước tăng lực, một số nước ngọt) có thể làm bé quấy; tốt nhất là bỏ, nếu dùng thì giữ dưới mức NHS khuyến cáo.",
+        "src": [
+          1
+        ]
+      },
+      {
+        "text": "An toàn nhất là không uống rượu bia khi cho con bú; thỉnh thoảng một chút thì khó gây hại, nên cách 2–3 giờ mới cho bú. Không ngủ chung giường hay sofa với bé sau khi uống rượu.",
+        "src": [
+          1
+        ]
+      },
+      {
+        "text": "Cá kiếm, cá cờ, cá mập: tối đa 1 phần mỗi tuần vì nhiều thuỷ ngân; cá béo (cá ngừ tươi, cá hồi, cá thu, cá trích, cá mòi): không quá 2 phần mỗi tuần.",
+        "src": [
+          0,
+          1
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Ít nhất 5 phần rau và trái cây mỗi ngày; tinh bột (cơm, bánh mì, khoai, mì) — chọn loại nguyên cám khi được.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "Đạm từ thịt, gia cầm, cá, trứng, các loại đậu và hạt; nên ăn 2 phần cá mỗi tuần, trong đó 1 phần là cá béo.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "Sữa, phô mai, sữa chua để có canxi — chọn loại ít béo khi được.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "Đậu phộng: trừ khi mẹ bị dị ứng đậu phộng, không có bằng chứng phải kiêng khi cho con bú.",
+        "src": [
+          1
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "cà phê và đồ uống có caffeine",
+        "aliases": [
+          "cà phê",
+          "cafe",
+          "trà",
+          "nước tăng lực",
+          "sô-cô-la",
+          "socola",
+          "cola"
+        ],
+        "verdict": "limit",
+        "note": "NHS: caffeine là chất kích thích có thể làm bé quấy; tốt nhất là bỏ, nếu dùng thì giữ dưới mức khuyến cáo.",
+        "src": [
+          1
+        ]
+      },
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: an toàn nhất là không uống rượu bia khi cho con bú; thỉnh thoảng một chút khó gây hại, nên cách 2–3 giờ mới cho bú.",
+        "src": [
+          1
+        ]
+      },
+      {
+        "name": "cá kiếm, cá mập, cá cờ",
+        "aliases": [
+          "cá kiếm",
+          "cá mập",
+          "cá cờ"
+        ],
+        "verdict": "limit",
+        "note": "NHS: tối đa 1 phần mỗi tuần khi cho con bú vì nhiều thuỷ ngân.",
+        "src": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "cá béo",
+        "aliases": [
+          "cá hồi",
+          "cá thu",
+          "cá trích",
+          "cá mòi",
+          "cá ngừ tươi"
+        ],
+        "verdict": "limit",
+        "note": "NHS: nên có 1 phần cá béo mỗi tuần nhưng không quá 2 phần mỗi tuần khi cho con bú.",
+        "src": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "cá",
+        "aliases": [],
+        "verdict": "good",
+        "note": "NHS: nên ăn 2 phần cá mỗi tuần khi cho con bú, trong đó 1 phần là cá béo.",
+        "src": [
+          0,
+          1
+        ]
+      },
+      {
+        "name": "đậu phộng",
+        "aliases": [
+          "lạc",
+          "bơ đậu phộng"
+        ],
+        "verdict": "ok",
+        "note": "NHS: trừ khi mẹ bị dị ứng đậu phộng, không có bằng chứng phải kiêng khi cho con bú.",
+        "src": [
+          1
+        ]
+      },
+      {
+        "name": "rau và trái cây",
+        "aliases": [
+          "rau",
+          "trái cây",
+          "rau xanh"
+        ],
+        "verdict": "good",
+        "note": "NHS: ít nhất 5 phần rau và trái cây mỗi ngày khi cho con bú.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "sữa và chế phẩm từ sữa",
+        "aliases": [
+          "sữa",
+          "phô mai",
+          "sữa chua"
+        ],
+        "verdict": "good",
+        "note": "NHS: sữa, phô mai, sữa chua cung cấp canxi — chọn loại ít béo khi được.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "trứng",
+        "aliases": [],
+        "verdict": "ok",
+        "note": "NHS: trứng là nguồn đạm nên có khi cho con bú.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nếu nghĩ món mẹ ăn đang ảnh hưởng tới bé qua sữa, hãy hỏi bác sĩ hoặc nhân viên y tế theo dõi mẹ và bé.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "What to eat and drink when breastfeeding",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/best-start-in-life/baby/feeding-your-baby/breastfeeding/healthy-diet-when-breastfeeding/what-to-eat-and-drink-when-breastfeeding/",
+      "reviewed": "2026-02-05"
+    },
+    {
+      "title": "Food and drinks to avoid when breastfeeding",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/best-start-in-life/baby/feeding-your-baby/breastfeeding/healthy-diet-when-breastfeeding/food-and-drinks-to-avoid-when-breastfeeding/",
+      "reviewed": "2026-01-28"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

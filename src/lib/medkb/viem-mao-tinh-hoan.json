@@ -1,0 +1,81 @@
+{
+  "id": "viem-mao-tinh-hoan",
+  "kind": "condition",
+  "names": [
+    "viêm mào tinh hoàn",
+    "viêm mào tinh",
+    "epididymitis"
+  ],
+  "about": [
+    {
+      "text": "Viêm mào tinh hoàn là sưng đau ống cuộn nằm sau mỗi tinh hoàn (nơi chứa và dẫn tinh trùng), thường do nhiễm trùng và điều trị bằng kháng sinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau đột ngột hoặc từ từ ở một hoặc hai tinh hoàn; bìu đau, ấm, sưng; có thể tích dịch quanh tinh hoàn; tuỳ nguyên nhân có thể tiểu khó hoặc tiết dịch trắng, vàng, xanh ở đầu dương vật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do bệnh lây qua đường tình dục như chlamydia, lậu (hay gặp ở nam dưới 35 tuổi); trên 35 tuổi thường do nhiễm trùng tiểu. Ít gặp hơn: quai bị, lao, chấn thương bẹn, một số thuốc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường đỡ sau vài ngày dùng kháng sinh, nhưng khỏi hẳn có thể mất tới 3 tháng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Kháng sinh (tiêm, uống hoặc cả hai) do bác sĩ kê; dùng hết liệu trình. Có thể giảm đau bằng paracetamol hoặc ibuprofen, chườm lạnh bọc khăn vào bẹn, mặc quần lót nâng đỡ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu do lậu hoặc chlamydia: không quan hệ tình dục cho tới khi xong điều trị và thêm 7 ngày; bạn tình gần đây nên đi xét nghiệm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám nếu tinh hoàn có cục u, sưng, đổi hình dạng, một bên to hơn bên kia, hoặc đau âm ỉ không hết.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu đau tinh hoàn hoặc bụng đột ngột, không chịu nổi — có thể là xoắn tinh hoàn, cần mổ càng sớm càng tốt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Epididymitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/epididymitis/",
+      "reviewed": "2024-08-06"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

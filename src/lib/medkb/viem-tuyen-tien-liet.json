@@ -1,0 +1,123 @@
+{
+  "id": "viem-tuyen-tien-liet",
+  "kind": "condition",
+  "names": [
+    "viêm tuyến tiền liệt",
+    "viêm tiền liệt tuyến",
+    "prostatitis"
+  ],
+  "about": [
+    {
+      "text": "Viêm tuyến tiền liệt là tình trạng tuyến tiền liệt (tuyến nhỏ nằm dưới bàng quang ở nam giới) bị viêm; có thể nghiêm trọng và cần khám gấp.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Viêm mạn tính là khi triệu chứng kéo dài từ 3 tháng trở lên.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Châm chích hoặc nóng rát khi tiểu; tiểu khó hoặc phải rặn; đi tiểu nhiều lần hơn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đau ở dương vật, bìu, tinh hoàn hoặc hậu môn; đau khi xuất tinh; sốt cao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do nhiễm trùng, ví dụ nhiễm trùng đường tiểu. Viêm mạn tính thường không rõ nguyên nhân, có thể do nhiễm trùng, viêm hoặc cả hai.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số thấy đỡ trong khoảng 2 tuần sau khi bắt đầu kháng sinh, nhưng khỏi hẳn có thể mất vài tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị thường bằng kháng sinh do bác sĩ kê; uống đủ liệu trình kể cả khi đã thấy đỡ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Uống nhiều nước để không bị mất nước; có thể dùng paracetamol hoặc ibuprofen để giảm đau.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Viêm mạn tính có thể được chuyển bác sĩ tiết niệu: thuốc, liệu pháp nhận thức hành vi (CBT) hoặc tư vấn, vật lý trị liệu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Uống nhiều nước để tránh mất nước.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "nước",
+        "aliases": [
+          "nước lọc",
+          "uống nước"
+        ],
+        "verdict": "good",
+        "note": "NHS: uống nhiều nước để tránh mất nước khi bị viêm tuyến tiền liệt.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu có triệu chứng. Khám gấp nếu không đi tiểu được, hoặc triệu chứng không đỡ / nặng hơn sau 48 giờ dùng kháng sinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu đột nhiên lú lẫn, nói ngọng, da / môi / lưỡi xanh tái hoặc xám, phát ban không mờ khi ấn ly thuỷ tinh, hoặc khó thở nặng — có thể là nhiễm trùng nặng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Prostatitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/prostatitis/",
+      "reviewed": "2024-02-19"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

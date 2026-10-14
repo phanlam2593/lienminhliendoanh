@@ -1,7 +1,7 @@
 {
   "id": "te-bi-tay-chan",
   "kind": "condition",
-  "names": ["bệnh thần kinh ngoại biên", "bệnh lý thần kinh ngoại biên", "tổn thương thần kinh ngoại biên", "tê bì tay chân", "tê bì chân tay", "tê tay chân", "tê chân tay", "bệnh đa dây thần kinh", "peripheral neuropathy"],
+  "names": ["bệnh thần kinh ngoại biên", "bệnh lý thần kinh ngoại biên", "tổn thương thần kinh ngoại biên", "tê bì tay chân", "tê bì chân tay", "tê tay chân", "tê chân tay", "bệnh đa dây thần kinh", "peripheral neuropathy", "tê bì"],
   "disambiguation": "Thẻ này nói về bệnh thần kinh ngoại biên (tổn thương các dây thần kinh ngoài não và tủy sống), có thể gây tê bì tay chân. Tê tay do chèn ép ở cổ tay có thẻ riêng (hội chứng ống cổ tay).",
   "about": [
     {"text": "Bệnh thần kinh ngoại biên là tổn thương các **dây thần kinh ngoại biên** (nằm ngoài não và tủy sống), ví dụ ở bàn tay, bàn chân, cánh tay.", "src": [0, 2]},

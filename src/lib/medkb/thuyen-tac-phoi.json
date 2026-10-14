@@ -1,0 +1,146 @@
+{
+  "id": "thuyen-tac-phoi",
+  "kind": "condition",
+  "names": [
+    "thuyên tắc phổi",
+    "tắc mạch phổi",
+    "nhồi máu phổi",
+    "cục máu đông ở phổi",
+    "pulmonary embolism"
+  ],
+  "about": [
+    {
+      "text": "Thuyên tắc phổi là khi cục máu đông làm tắc mạch máu ở phổi; có thể nguy hiểm tính mạng nếu không điều trị nhanh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đột ngột khó thở, đau ngực tăng khi hít vào, ho ra máu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể kèm đau, đỏ, sưng ở một chân (thường bắp chân) — dấu hiệu cục máu đông ở chân (huyết khối tĩnh mạch sâu).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do một phần cục máu đông ở chân bong ra trôi lên phổi. Huyết khối ở chân đôi khi xảy ra khi đi xe, tàu, máy bay đường dài, nhất là chuyến bay trên 4 giờ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Được phát hiện và điều trị sớm thì thường hồi phục hoàn toàn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Nghi bệnh sẽ được chuyển bệnh viện làm xét nghiệm và điều trị bằng thuốc chống đông (tiêm rồi uống ít nhất vài tháng) — do bác sĩ chỉ định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng khi đi đường dài: mặc đồ rộng, uống nước đều, đứng dậy nghỉ thường xuyên, cử động chân, bàn chân, ngón chân mỗi 30 phút, có thể mang tất chuyến bay; không ngồi lâu bất động, không uống rượu, không uống quá nhiều cà phê, không dùng thuốc ngủ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Khi đi đường dài: không uống rượu, không uống quá nhiều cà phê hay đồ uống chứa caffeine.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Khi đi đường dài: uống nước đều đặn.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: để phòng cục máu đông khi đi đường dài, không uống rượu.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "cà phê và đồ uống chứa caffeine",
+        "aliases": [
+          "cà phê",
+          "cafe",
+          "trà",
+          "nước tăng lực"
+        ],
+        "verdict": "limit",
+        "note": "NHS: khi đi đường dài, không uống quá nhiều cà phê hay đồ uống chứa caffeine.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "nước",
+        "aliases": [
+          "nước lọc",
+          "uống nước"
+        ],
+        "verdict": "good",
+        "note": "NHS: uống nước đều đặn khi đi đường dài để phòng cục máu đông.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Khám gấp nếu đột ngột khó thở hoặc ho ra máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu khó thở nặng, đau ngực hoặc lưng trên, tim đập rất nhanh, hoặc có người bất tỉnh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Pulmonary embolism",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/pulmonary-embolism/",
+      "reviewed": "2023-05-25"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

@@ -1,0 +1,87 @@
+{
+  "id": "viem-cot-song-dinh-khop",
+  "kind": "condition",
+  "names": [
+    "viêm cột sống dính khớp",
+    "viêm dính cột sống",
+    "viêm khớp cột sống",
+    "ankylosing spondylitis"
+  ],
+  "about": [
+    {
+      "text": "Viêm cột sống dính khớp là bệnh lâu dài làm cột sống và một số vùng khác của cơ thể bị viêm; là một dạng viêm khớp cột sống (axial spondyloarthritis).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thường khởi phát ở tuổi thiếu niên và người trẻ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau và cứng lưng; đau, sưng ở chỗ khác do viêm khớp và viêm chỗ gân bám vào xương; rất mệt mỏi.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Triệu chứng thường xuất hiện từ từ trong nhiều tháng hoặc nhiều năm, lúc có lúc không.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Chưa rõ nguyên nhân, được cho là liên quan tới biến thể gen HLA-B27.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Không chữa khỏi và không phục hồi được tổn thương đã có; điều trị giúp giảm triệu chứng và làm chậm bệnh. Với điều trị hiện nay, bệnh thường không làm giảm tuổi thọ đáng kể.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bệnh làm tăng nguy cơ loãng xương, gãy xương cột sống và bệnh tim mạch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị thường phối hợp: tập luyện để giảm đau và cứng, vật lý trị liệu, và thuốc (giảm đau, thuốc sinh học) do bác sĩ chuyên khoa chỉ định; hiếm khi cần phẫu thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám nếu triệu chứng kéo dài; nghi bệnh thì bác sĩ sẽ chuyển chuyên khoa cơ xương khớp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Ankylosing spondylitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/ankylosing-spondylitis/",
+      "reviewed": "2023-01-05"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

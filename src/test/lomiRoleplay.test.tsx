@@ -467,12 +467,12 @@ describe("Chuẩn hoá tư vấn: không hỏi lại điều vừa nghe, không 
   }, T);
   it("mở lời có nêu đề tài ('a hỏi về ibuprofen') → mời hỏi tiếp đúng đề tài; đề tài sức khoẻ chưa có kiến thức thì nói thật", async () => {
     expect((await last(["a hỏi về ibuprofen"])).content).toMatch(/về ibuprofen thì anh muốn hỏi điều gì/);
-    const l = await last(["a hỏi về bệnh Kawasaki"]);
+    const l = await last(["a hỏi về bệnh Marfan"]);
     expect(l.unk).toBeTruthy();
     expect(l.content).not.toMatch(/muốn hỏi điều gì/);
   }, T);
   it("câu hỏi sức khoẻ ngoài kiến thức → 'chưa có kiến thức đã kiểm chứng' (khác 'chưa hiểu câu'), không mời bói", async () => {
-    const m = await last(["bệnh Kawasaki có nguy hiểm không"]);
+    const m = await last(["bệnh Marfan có nguy hiểm không"]);
     expect(m.content).toMatch(/chưa có kiến thức đã kiểm chứng/);
     expect(m.content).not.toMatch(/chưa theo kịp|chưa chắc hiểu|bói|Tarot/i);
     const g = await last(["blah zxcv qwer"]);

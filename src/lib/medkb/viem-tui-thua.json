@@ -1,0 +1,152 @@
+{
+  "id": "viem-tui-thua",
+  "kind": "condition",
+  "names": [
+    "viêm túi thừa",
+    "túi thừa đại tràng",
+    "bệnh túi thừa",
+    "túi thừa",
+    "diverticulitis",
+    "diverticular disease"
+  ],
+  "about": [
+    {
+      "text": "Túi thừa là những túi phình nhỏ ở thành ruột già. Phần lớn người lớn tuổi đều có ít nhiều túi thừa và đa số không có triệu chứng; khi gây triệu chứng gọi là bệnh túi thừa.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Viêm túi thừa là khi ruột bị nhiễm trùng hoặc viêm tại các túi thừa.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau bụng dưới bên trái (số ít bên phải), đau hơn sau ăn và đỡ sau khi đi ngoài hoặc xì hơi; táo bón, tiêu chảy, đầy bụng, có máu trong phân — giống hội chứng ruột kích thích.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Viêm túi thừa: đau bụng dữ dội liên tục, sốt cao, chảy máu hậu môn hoặc đi ngoài ra nhầy.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do các túi phình nhỏ (túi thừa) hình thành ở thành ruột già; túi thừa hay có hơn khi lớn tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Biến chứng hiếm của viêm túi thừa: áp-xe, tắc ruột, rò sang cơ quan khác, thủng ruột gây viêm phúc mạc — có thể cần kháng sinh hoặc phẫu thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bệnh túi thừa: thuốc giảm đau như paracetamol, thuốc nhuận tràng tạo khối cho táo bón hoặc tiêu chảy, thuốc chống co thắt khi đau quặn — do bác sĩ chỉ định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Viêm túi thừa: kháng sinh nếu do nhiễm trùng, kèm thuốc giảm đau như paracetamol.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh thuốc giảm đau nhóm NSAID (như ibuprofen) và opioid (như codeine) vì có thể gây hại dạ dày, táo bón và tăng nguy cơ thủng ruột.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bỏ thuốc lá và giữ cân nặng hợp lý.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Ăn uống cân bằng với ngũ cốc nguyên hạt, trái cây và rau; không cần kiêng món cụ thể nào.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "Nếu đang ăn ít chất xơ thì tăng dần, và uống nhiều nước.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "chất xơ",
+        "aliases": [
+          "thực phẩm giàu chất xơ",
+          "ngũ cốc nguyên hạt",
+          "rau",
+          "trái cây"
+        ],
+        "verdict": "good",
+        "note": "NHS: ăn nhiều ngũ cốc nguyên hạt, trái cây, rau; tăng chất xơ từ từ và uống nhiều nước.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "nước",
+        "aliases": [
+          "nước lọc",
+          "uống nước"
+        ],
+        "verdict": "good",
+        "note": "NHS: uống nhiều nước khi tăng chất xơ.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Khám gấp nếu: phân có máu hoặc nhầy; đau bụng tăng dần hoặc không hết; sốt cao hoặc ớn lạnh; nôn nhiều không giữ được nước; tiêu chảy trên 7 ngày hoặc nôn trên 2 ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu: đau bụng dữ dội kèm nôn, bụng chướng hoặc không đi ngoài, không xì hơi được; chảy máu hậu môn nhiều; lú lẫn, da tái hoặc loang lổ, sốt rất cao hoặc thân nhiệt thấp, thở nhanh hoặc khó thở.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Diverticular disease and diverticulitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/diverticular-disease-and-diverticulitis/",
+      "reviewed": "2023-09-07"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

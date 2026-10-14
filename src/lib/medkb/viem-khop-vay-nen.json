@@ -1,0 +1,111 @@
+{
+  "id": "viem-khop-vay-nen",
+  "kind": "condition",
+  "names": [
+    "viêm khớp vảy nến",
+    "viêm khớp do vảy nến",
+    "psoriatic arthritis"
+  ],
+  "about": [
+    {
+      "text": "Viêm khớp vảy nến là bệnh lâu dài gây đau, sưng và cứng khớp; có thể gặp ở người bị vảy nến, thường xuất hiện khi lớn tuổi hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau, sưng, cứng một hoặc nhiều khớp; ngón tay, ngón chân sưng; móng đổi màu hoặc có vết lõm nhỏ; cảm giác cạn kiệt năng lượng. Thường nặng hơn vào buổi sáng, đỡ khi vận động.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do hệ miễn dịch tấn công mô lành, giống bệnh vảy nến; chưa rõ vì sao chỉ một số người bị vảy nến mắc bệnh này.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thuốc giúp kiểm soát triệu chứng; một số thuốc (DMARD) phải vài tháng mới có tác dụng nên cần dùng đều.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Thuốc là điều trị chính (NSAID, tiêm steroid vào khớp, DMARD, thuốc sinh học) do bác sĩ chỉ định; có thể kèm vật lý trị liệu và hoạt động trị liệu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Vận động nhẹ đều đặn như bơi, đi bộ, yoga; giảm cân nếu thừa cân; không hút thuốc vì làm triệu chứng nặng hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Nếu đang dùng thuốc: giảm rượu bia vì rượu có thể ảnh hưởng tới thuốc; tránh thuốc thảo dược vì có thể tương tác với thuốc đang dùng.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia"
+        ],
+        "verdict": "limit",
+        "note": "NHS: nếu đang dùng thuốc trị viêm khớp vảy nến, nên giảm rượu bia vì rượu có thể ảnh hưởng tới thuốc.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "thuốc thảo dược",
+        "aliases": [
+          "thuốc nam",
+          "thuốc bắc",
+          "thảo dược"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: tránh thuốc thảo dược vì có thể tương tác với thuốc đang dùng.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu đau, cứng, sưng khớp hay tái đi tái lại — kể cả khi không bị vảy nến.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Psoriatic arthritis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/psoriatic-arthritis/",
+      "reviewed": "2023-09-06"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

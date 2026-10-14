@@ -1,0 +1,165 @@
+{
+  "id": "viem-khop",
+  "kind": "condition",
+  "names": [
+    "viêm khớp",
+    "bệnh viêm khớp",
+    "thấp khớp",
+    "bệnh thấp khớp",
+    "bệnh khớp",
+    "bệnh xương khớp",
+    "arthritis"
+  ],
+  "disambiguation": "“Viêm khớp” / “thấp khớp” là cách gọi chung cho nhiều bệnh khớp khác nhau (thoái hoá khớp, gout, viêm khớp dạng thấp…). Mỗi bệnh có cách điều trị và kiêng cữ riêng, nên cần bác sĩ khám để biết đúng loại.",
+  "about": [
+    {
+      "text": "Viêm khớp là tình trạng gây đau, sưng và cứng ở một hoặc nhiều khớp, làm khớp khó cử động.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có nhiều loại: thoái hoá khớp (hay gặp nhất), gout, viêm khớp dạng thấp, viêm cột sống dính khớp, viêm khớp vảy nến, viêm khớp tự phát thiếu niên (trẻ dưới 16 tuổi).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau, sưng và cứng khớp làm khớp khó cử động.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hay gặp ở cổ tay, bàn tay, ngón tay; cổ chân, bàn chân, ngón chân; lưng và cột sống; đầu gối và hông.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Triệu chứng có thể đột ngột nặng lên thành đợt bùng phát, kéo dài vài ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Tuỳ từng loại: thoái hoá khớp thường bắt đầu từ cuối tuổi 40, nguy cơ gout tăng theo tuổi, viêm khớp tự phát thiếu niên gặp ở trẻ dưới 16 tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Viêm khớp không chữa khỏi hẳn, nhưng điều trị giúp kiểm soát triệu chứng; cách điều trị tuỳ loại viêm khớp và mức ảnh hưởng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Đừng tự chẩn đoán — đi khám nếu bạn lo lắng, vì mỗi loại viêm khớp điều trị khác nhau.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Điều trị có thể gồm vật lý trị liệu, hoạt động trị liệu, thuốc giảm đau, giảm sưng viêm hoặc tác động lên hệ miễn dịch, dụng cụ hỗ trợ đi lại, và phẫu thuật khi cách khác không đỡ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Vận động nhẹ nhàng, ít va chạm như bơi, đi bộ, pilates, yoga là tốt nhất.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giữ cân nặng hợp lý vì thừa cân làm khớp chịu thêm sức nặng; không hút thuốc vì làm triệu chứng nặng hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "NHS: tránh uống quá nhiều rượu bia.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "NHS: ăn uống cân bằng, lành mạnh và giữ cân nặng hợp lý.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "text": "NHS (viêm khớp dạng thấp): chưa có bằng chứng mạnh rằng kiêng món cụ thể nào giúp bệnh đỡ hơn; ai thấy tệ hơn sau một món có thể thử tránh món đó vài tuần xem có đỡ không.",
+        "src": [
+          1
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia"
+        ],
+        "verdict": "limit",
+        "note": "NHS khuyên người bị viêm khớp tránh uống quá nhiều rượu bia.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu đau, sưng hoặc cứng khớp không rõ lý do và không hết sau vài ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Cần khám gấp nếu: một khớp đột nhiên đau và sưng dữ dội; đau không đỡ khi dùng thuốc giảm đau như paracetamol; da quanh khớp đỏ hoặc nóng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cần khám gấp nếu đau khớp kèm sốt hoặc ớn lạnh, kèm vấn đề về mắt, hoặc kèm triệu chứng tiết niệu, sinh dục hay phát ban.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Types of arthritis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/arthritis/",
+      "reviewed": "2026-01-19"
+    },
+    {
+      "title": "Rheumatoid arthritis - Treatment",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/rheumatoid-arthritis/treatment/",
+      "reviewed": "2023-03-08"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

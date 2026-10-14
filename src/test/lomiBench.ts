@@ -442,7 +442,7 @@ export const CHAINS: Chain[] = [
   {
     id: "B09", group: "basic", title: "phân biệt 'chưa hiểu câu' với 'chưa có kiến thức'", turns: [
       ["asdf qwer", { says: [/chưa (chắc )?hiểu|nói (rõ|thêm)|ý bạn là/i], avoids: [/chưa được học|chưa có (dữ liệu|kiến thức)/] }],
-      ["bệnh Kawasaki là gì", { says: [/chưa (được học|có dữ liệu|có kiến thức|có thông tin|biết|được tiếp thu)/, /bác sĩ/], avoids: [/chưa (chắc )?hiểu ý|chưa theo kịp|bói|rút bài/] }],
+      ["bệnh Marfan là gì", { says: [/chưa (được học|có dữ liệu|có kiến thức|có thông tin|biết|được tiếp thu)/, /bác sĩ/], avoids: [/chưa (chắc )?hiểu ý|chưa theo kịp|bói|rút bài/] }],
     ],
   },
   {

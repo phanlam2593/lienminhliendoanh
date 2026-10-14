@@ -1,0 +1,146 @@
+{
+  "id": "viem-thanh-quan",
+  "kind": "condition",
+  "names": [
+    "viêm thanh quản",
+    "viêm dây thanh",
+    "khàn tiếng",
+    "mất tiếng",
+    "laryngitis"
+  ],
+  "about": [
+    {
+      "text": "Viêm thanh quản là khi hộp thanh âm (dây thanh) bị kích ứng hoặc sưng; thường tự khỏi trong 1–2 tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Người lớn: giọng khàn, có lúc mất tiếng, ho khan dai dẳng, hay phải hắng giọng, đau họng — thường xuất hiện đột ngột, nặng dần trong 3 ngày đầu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Trẻ em có thể kèm sốt từ 38°C, không muốn ăn uống, hiếm khi khó thở.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hay gặp nhất do virus (cảm lạnh, cúm); cũng có thể do dị ứng (bụi, khói), trào ngược acid dạ dày, ho lâu ngày hoặc hay hắng giọng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường tự khỏi trong 1–2 tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Nói càng ít càng tốt (không nói to, cũng đừng nói thì thầm vì đều làm căng dây thanh); uống nhiều nước; giữ không khí ẩm; súc họng nước muối ấm (không áp dụng cho trẻ).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh hút thuốc, nơi nhiều khói bụi; dược sĩ có thể tư vấn thuốc giảm đau, siro ho, viên ngậm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Tránh uống quá nhiều caffeine hoặc rượu bia vì dễ gây mất nước.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Uống nhiều nước.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia"
+        ],
+        "verdict": "limit",
+        "note": "NHS: khi bị viêm thanh quản, tránh uống quá nhiều rượu bia vì dễ gây mất nước.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "cà phê và đồ uống chứa caffeine",
+        "aliases": [
+          "cà phê",
+          "cafe",
+          "trà"
+        ],
+        "verdict": "limit",
+        "note": "NHS: tránh uống quá nhiều caffeine khi bị viêm thanh quản vì dễ gây mất nước.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "nước",
+        "aliases": [
+          "nước lọc",
+          "uống nước",
+          "nước ấm"
+        ],
+        "verdict": "good",
+        "note": "NHS: uống nhiều nước khi bị viêm thanh quản.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu không đỡ sau 2 tuần hoặc hay bị lại. Gọi tư vấn y tế ngay nếu nuốt rất đau hoặc rất khó.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu bạn hoặc con bị khó thở.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Laryngitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/laryngitis/",
+      "reviewed": "2024-01-17"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

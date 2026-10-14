@@ -1,0 +1,120 @@
+{
+  "id": "sot-phat-ban",
+  "kind": "child",
+  "names": [
+    "sốt phát ban",
+    "bệnh sốt phát ban",
+    "ban đào",
+    "phát ban đỏ ở trẻ",
+    "roseola"
+  ],
+  "about": [
+    {
+      "text": "Sốt phát ban (roseola) là bệnh nhiễm trùng rất hay gặp ở trẻ nhỏ: sốt cao rồi nổi ban; đa số khỏi tại nhà trong vòng một tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ban đầu sốt cao đột ngột, có thể kèm đau họng, sổ mũi, ho, chán ăn, sưng mí mắt và hạch cổ, kéo dài 3–7 ngày rồi mới nổi ban.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ban là các nốt, mảng nhỏ hồng đỏ, bắt đầu ở ngực, bụng, lưng rồi lan lên cổ, tay; thường không ngứa và mờ trong khoảng 2 ngày.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Một số trẻ bị co giật khi sốt cao đột ngột (thường 2–3 phút); đáng sợ nhưng ít khi gây hại lâu dài.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do nhiễm trùng; được cho là dễ lây nhất trong lúc trẻ đang sốt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số trẻ khỏi tại nhà trong vòng một tuần. Hết sốt và khoẻ thì có thể đi nhà trẻ, không cần đợi hết ban.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Cho trẻ nghỉ ngơi, uống nhiều nước; có thể dùng paracetamol hoặc ibuprofen dạng cho trẻ em nếu sốt làm bé khó chịu (xem liều trên chai); không đắp quá nhiều quần áo, chăn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Không cho trẻ dưới 16 tuổi uống aspirin; không dùng chung paracetamol và ibuprofen trừ khi bác sĩ dặn; không dùng ibuprofen cho trẻ bị hen.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Cho trẻ uống nhiều nước khi đang sốt.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "nước",
+        "aliases": [
+          "nước lọc",
+          "sữa",
+          "uống nước"
+        ],
+        "verdict": "good",
+        "note": "NHS: cho trẻ bị sốt phát ban nghỉ ngơi và uống nhiều nước.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Khám gấp nếu trẻ dưới 3 tháng sốt từ 38°C, 3–6 tháng sốt từ 39°C; sốt từ 5 ngày; không chịu uống, bú; sốt không giảm với thuốc hạ sốt; có dấu hiệu mất nước (ít tã ướt, mắt trũng, khóc không có nước mắt); hoặc trẻ không như mọi khi và bạn lo.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu trẻ: da, môi, lưỡi tím tái, xám hoặc loang lổ; ban không mờ khi lăn ly thuỷ tinh lên; khó thở hoặc thở rất nhanh; khóc yếu, the thé lạ; lừ đừ, khó đánh thức; co giật lần đầu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Roseola",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/roseola/",
+      "reviewed": "2026-09-24"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

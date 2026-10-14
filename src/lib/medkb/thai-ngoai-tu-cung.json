@@ -1,0 +1,88 @@
+{
+  "id": "thai-ngoai-tu-cung",
+  "kind": "women",
+  "names": [
+    "thai ngoài tử cung",
+    "mang thai ngoài tử cung",
+    "chửa ngoài tử cung",
+    "ectopic pregnancy"
+  ],
+  "about": [
+    {
+      "text": "Thai ngoài tử cung là khi trứng đã thụ tinh làm tổ bên ngoài tử cung, thường ở vòi trứng. Thai không thể phát triển thành em bé và có thể nguy hiểm cho mẹ nếu tiếp tục, nên thường phải bỏ bằng thuốc hoặc phẫu thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Có thể không có triệu chứng. Nếu có, thường xuất hiện từ tuần 4 tới tuần 12: trễ kinh, đau bụng dưới một bên, ra máu âm đạo hoặc dịch nâu loãng, đau ở đỉnh vai, khó chịu khi đi tiểu hoặc đi ngoài.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nhiều trường hợp không rõ nguyên nhân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn khi: viêm vùng chậu (thường do bệnh lây qua đường tình dục), từng có thai ngoài tử cung, từng mổ vòi trứng, làm thụ tinh nhân tạo hoặc dùng thuốc kích trứng, có thai khi đang đặt vòng, hút thuốc, trên 35 tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số người vẫn có thể có thai lại, kể cả khi đã cắt một vòi trứng; nguy cơ thai ngoài tử cung lần sau cao hơn nhưng vẫn nhỏ. Có thai lại thì báo bác sĩ sớm để được siêu âm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Ba cách xử trí tuỳ triệu chứng và xét nghiệm: theo dõi sát, tiêm thuốc để thai ngưng phát triển, hoặc mổ nội soi lấy khối thai (thường kèm vòi trứng bị ảnh hưởng) — do bác sĩ quyết định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Buồn đau sau mất thai là bình thường và có thể kéo dài vài tháng; tư vấn tâm lý và nhóm hỗ trợ có thể giúp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nghi có thai (kể cả khi que thử chưa lên) mà có các triệu chứng trên thì đi khám ngay để được siêu âm, xét nghiệm máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu ngay nếu đau bụng đột ngột, dữ dội kèm chóng mặt hoặc ngất, buồn nôn, da rất tái — có thể vỡ vòi trứng, cần mổ gấp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ectopic pregnancy",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/ectopic-pregnancy/",
+      "reviewed": "2022-08-23"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

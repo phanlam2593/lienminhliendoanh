@@ -1,0 +1,81 @@
+{
+  "id": "viem-mang-phoi",
+  "kind": "condition",
+  "names": [
+    "viêm màng phổi",
+    "viêm màng phổi cấp",
+    "pleurisy"
+  ],
+  "about": [
+    {
+      "text": "Viêm màng phổi là viêm lớp màng bao quanh phổi, gây đau ngực nhói; thường đỡ sau vài ngày nhưng đôi khi là dấu hiệu bệnh nặng hơn như viêm phổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau ngực nhói khi hít vào, có thể đau hơn khi ho, hắt hơi, cử động, và lan ra vai, lưng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Có thể liên quan tới viêm phổi (thường do vi khuẩn), cục máu đông ở phổi (thuyên tắc phổi), lao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường tự đỡ sau vài ngày; nếu do bệnh nặng như thuyên tắc phổi hay lao thì có thể phải nằm viện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Giảm đau bằng paracetamol hoặc ibuprofen; không hút thuốc, không vape vì làm phổi kích ứng và đau hơn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu do nhiễm khuẩn như viêm phổi, bác sĩ có thể cho kháng sinh — uống đủ liệu trình kể cả khi đã đỡ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nên đi khám sớm nếu nghĩ mình bị viêm màng phổi. Khám gấp nếu: đau ngực lúc có lúc không hoặc chỉ khi thở, ho; đau không đỡ sau vài ngày; vài vệt máu nhỏ trong đờm; hay bị khó thở.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu đau ngực đột ngột kéo dài từ 15 phút hoặc lan ra tay, lưng, cổ, hàm; khó thở; ho ra nhiều máu; ho ra máu kèm khó thở, tim đập rất nhanh, đau ngực — có thể là nhồi máu cơ tim hoặc thuyên tắc phổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Pleurisy",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/pleurisy/",
+      "reviewed": "2026-09-16"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

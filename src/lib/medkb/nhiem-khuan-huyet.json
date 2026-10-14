@@ -1,0 +1,126 @@
+{
+  "id": "nhiem-khuan-huyet",
+  "kind": "infection",
+  "names": [
+    "nhiễm khuẩn huyết",
+    "nhiễm trùng máu",
+    "nhiễm trùng huyết",
+    "sốc nhiễm trùng",
+    "sốc nhiễm khuẩn",
+    "sepsis",
+    "septic shock"
+  ],
+  "about": [
+    {
+      "text": "Nhiễm khuẩn huyết là phản ứng nghiêm trọng của cơ thể với một bệnh nhiễm trùng, có thể nguy hiểm tính mạng; diễn tiến nhanh, thường trong vài giờ, và cần điều trị khẩn ở bệnh viện.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu không điều trị có thể chuyển thành sốc nhiễm khuẩn, có thể gây tử vong.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Người lớn: lú lẫn, nói ngọng hoặc nói không ra ý; run lẩy bẩy không kiểm soát; đau cơ; khó thở; da, môi, lưỡi xanh tái, xám hoặc loang lổ; sốt cao hoặc thân nhiệt thấp; rất ít hoặc không đi tiểu suốt 18 giờ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Trẻ em: thở nhanh hoặc khó thở, co giật, sốt cao hoặc thân nhiệt thấp, da tái xám loang lổ, ban không mờ khi ấn, lừ đừ khó đánh thức, không đi tiểu 12 giờ (trẻ dưới 5 tuổi); trẻ nhỏ có thể bỏ bú hoặc nôn liên tục.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Người bệnh có thể không có đủ mọi dấu hiệu; triệu chứng khó nhận ra hơn ở trẻ nhỏ, người sa sút trí tuệ, người khó giao tiếp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Được cho là hệ miễn dịch phản ứng quá mức với nhiễm trùng và bắt đầu làm hại các cơ quan. Hay gặp nhất do nhiễm khuẩn: viêm phổi, nhiễm trùng tiểu, nhiễm trùng ổ bụng (như viêm ruột thừa), nhiễm trùng da hoặc vết thương.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn ở trẻ dưới 12 tháng, người trên 75 tuổi, phụ nữ mang thai hoặc vừa sinh, sảy thai trong 6 tuần, người suy giảm miễn dịch, người có vết thương, bỏng, đặt ống thông, tiêm chích ma tuý, lạm dụng rượu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Hồi phục có thể mất nhiều tuần tới nhiều tháng; một số người bị hội chứng sau nhiễm khuẩn huyết (mệt, lo âu, giảm trí nhớ…) thường kéo dài 6–18 tháng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị tại bệnh viện: kháng sinh, thở oxy, truyền dịch; một số người cần chăm sóc đặc biệt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khi hồi phục: đừng vội, ngủ đủ, ăn uống cân bằng (chia bữa nhỏ nhiều lần nếu chán ăn), tập luyện từ từ tăng dần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Khi hồi phục: ăn uống cân bằng, chia bữa nhỏ nhiều lần nếu chán ăn.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Từng bị nhiễm khuẩn huyết trong 12 tháng qua mà nay có dấu hiệu nhiễm trùng (sốt cao, ớn lạnh, run) thì gọi ngay đường dây tư vấn y tế / đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu ngay nếu: thở rất nhanh; lú lẫn, nói ngọng; da, môi, lưỡi tái xanh hoặc loang lổ; sốt rất cao hoặc thân nhiệt rất thấp, run lạnh; ban không mờ khi ấn; hoặc bất kỳ triệu chứng nào khiến bạn lo là nhiễm khuẩn huyết.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Trẻ dưới 5 tuổi: thêm thở rít, rút lõm dưới sườn; trẻ dưới 3 tháng sốt từ 38°C, 3–6 tháng sốt từ 39°C; thân nhiệt dưới 36°C; khóc yếu, the thé; lừ đừ, bỏ bú; không đi tiểu 12 giờ — gọi cấp cứu ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Sepsis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/sepsis/",
+      "reviewed": "2026-05-14"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

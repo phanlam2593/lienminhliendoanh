@@ -1,0 +1,113 @@
+{
+  "id": "hoi-nach",
+  "kind": "condition",
+  "names": [
+    "hôi nách",
+    "mùi cơ thể",
+    "hôi cơ thể",
+    "mùi hôi cơ thể",
+    "body odour"
+  ],
+  "about": [
+    {
+      "text": "Mùi cơ thể là vấn đề hay gặp và thường tự xử lý được tại nhà.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Cơ thể, nách, chân có mùi khó chịu; thường đi kèm ra nhiều mồ hôi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Có thể nặng hơn khi tập luyện, trời nóng, thay đổi nội tiết, thừa cân, có bệnh như tiểu đường, bệnh thận, bệnh gan, hoặc dùng một số thuốc; nhiều khi không tìm ra nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường cải thiện khi tự chăm sóc; ca nặng có thuốc và thủ thuật giảm tiết mồ hôi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Rửa nách, bẹn, chân bằng xà phòng ít nhất hai lần mỗi ngày rồi lau khô; dùng chất chống mồ hôi, khử mùi; thay giặt quần áo thường xuyên; mặc vải tự nhiên (cotton, len, lụa), tránh đồ bó và vải nhân tạo.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dược sĩ có thể tư vấn lăn khử mùi mạnh hơn, miếng lót nách, phấn cho chân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Đừng ăn quá nhiều đồ có mùi mạnh hoặc đồ cay, đừng uống quá nhiều rượu bia.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": [
+      {
+        "name": "đồ cay và đồ có mùi mạnh",
+        "aliases": [
+          "đồ cay",
+          "ớt",
+          "đồ ăn cay"
+        ],
+        "verdict": "limit",
+        "note": "NHS: người bị mùi cơ thể đừng ăn quá nhiều đồ có mùi mạnh hoặc đồ cay.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia"
+        ],
+        "verdict": "limit",
+        "note": "NHS: người bị mùi cơ thể đừng uống quá nhiều rượu bia.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu tự chăm sóc không đỡ và mùi ảnh hưởng tới sự tự tin, mùi thay đổi khác thường, hoặc đột nhiên ra mồ hôi nhiều hơn hẳn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Body odour (BO)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/body-odour-bo/",
+      "reviewed": "2025-05-14"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

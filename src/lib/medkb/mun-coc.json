@@ -1,0 +1,95 @@
+{
+  "id": "mun-coc",
+  "kind": "condition",
+  "names": [
+    "mụn cóc",
+    "mụn cơm",
+    "hột cơm",
+    "mụn cóc ở chân",
+    "warts",
+    "verrucas"
+  ],
+  "about": [
+    {
+      "text": "Mụn cóc là những cục nhỏ trên da, sờ chắc và sần, hay mọc ở lòng bàn tay, khớp ngón, đầu gối, ngón tay; mụn cóc ở bàn chân có thể có chấm đen nhỏ dưới lớp da dày.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mụn cóc không nguy hại và thường tự hết, nhưng có thể mất nhiều tháng tới nhiều năm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Cục sần màu da (có thể sẫm hơn trên da nâu, đen); có thể ngứa, đau — mụn cóc ở chân dễ đau hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do virus, lây qua bề mặt nhiễm virus hoặc tiếp xúc da gần; dễ lây hơn khi da ướt hoặc bị tổn thương. Có thể mất nhiều tháng sau khi nhiễm mới mọc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường tự hết sau nhiều tháng hoặc nhiều năm; có thể điều trị nếu thấy phiền, hay tái phát hoặc đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Rửa tay sau khi chạm vào mụn cóc; thay tất mỗi ngày nếu có mụn cóc ở chân; dán băng khi đi bơi; cẩn thận đừng cắt vào khi cạo.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đừng dùng chung khăn, tất, giày; đừng gãi, cạy, cắn móng hay mút ngón tay có mụn cóc; đừng đi chân trần nơi công cộng nếu có mụn cóc ở chân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hiệu thuốc có kem, miếng dán, dạng xịt trị mụn cóc (có thể mất tới 3 tháng, có thể kích ứng, không phải lúc nào cũng hiệu quả) — không dùng trên mặt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể đốt lạnh để mụn cóc rụng sau vài tuần; mụn khó trị hoặc ở mặt có thể được chuyển bác sĩ da liễu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám nếu lo về một cục mọc trên da; mụn cóc hay tái phát, rất to hoặc đau, chảy máu hoặc thay đổi hình dạng; hoặc mọc ở mặt hay bộ phận sinh dục.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Warts and verrucas",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/warts-and-verrucas/",
+      "reviewed": "2023-07-25"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

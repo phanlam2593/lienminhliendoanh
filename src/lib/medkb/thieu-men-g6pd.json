@@ -1,0 +1,158 @@
+{
+  "id": "thieu-men-g6pd",
+  "kind": "condition",
+  "names": [
+    "thiếu men G6PD",
+    "thiếu G6PD",
+    "thiếu enzym G6PD",
+    "bệnh thiếu men G6PD",
+    "G6PD",
+    "bệnh đậu tằm",
+    "favism",
+    "G6PD deficiency"
+  ],
+  "about": [
+    {
+      "text": "Thiếu men G6PD là bệnh di truyền: cơ thể thiếu men G6PD mà hồng cầu cần để hoạt động bình thường, nên khi gặp một số tác nhân thì hồng cầu bị vỡ (tan máu).",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Biến chứng hay gặp nhất là thiếu máu do tan máu — hồng cầu bị phá huỷ nhanh hơn cơ thể kịp tạo mới. Nhiều người bị thiếu men G6PD cả đời không có triệu chứng.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Không có dấu hiệu gì cho tới khi hồng cầu gặp tác nhân gây vỡ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khi có đợt tan máu: nước tiểu sẫm màu, vàng da và vàng mắt, xanh xao, mệt, khó thở, tim đập nhanh; có thể sốt, đau bụng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Thiếu men G6PD là một nguyên nhân quan trọng gây vàng da (từ nhẹ tới nặng) ở trẻ sơ sinh.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do biến thể của gen G6PD, di truyền liên kết nhiễm sắc thể X; bố không truyền bệnh cho con trai. Nam giới hay có triệu chứng hơn, nhưng nữ mang gen cũng có thể có triệu chứng.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Tác nhân gây đợt tan máu: nhiễm trùng; ăn đậu tằm (fava); hít phấn hoa cây đậu tằm; hoá chất như băng phiến; một số thuốc (thuốc sốt rét như quinine, aspirin liều cao, NSAID, quinidine, thuốc sulfa, kháng sinh quinolone, nitrofurantoin).",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Hay gặp ở một số vùng châu Phi, châu Á, Địa Trung Hải và Trung Đông; ước tính khoảng 400 triệu người trên thế giới bị.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn đợt tan máu tự hết, vì cơ thể tiếp tục tạo hồng cầu mới. Hiếm khi một đợt tan máu nặng gây suy thận hoặc tử vong.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị đợt tan máu: chữa nhiễm trùng nếu có, ngưng thuốc đang làm vỡ hồng cầu, truyền máu trong một số trường hợp.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng ngừa quan trọng nhất là tránh tuyệt đối các tác nhân đã biết, và nói chuyện với bác sĩ về mọi thuốc mình dùng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Gia đình có người bị có thể được tư vấn hoặc xét nghiệm di truyền.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Tránh ăn đậu tằm (đậu fava) — một tác nhân gây vỡ hồng cầu ở người thiếu men G6PD.",
+        "src": [
+          0,
+          1
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": [
+      {
+        "name": "đậu tằm",
+        "aliases": [
+          "đậu fava",
+          "fava",
+          "đậu răng ngựa"
+        ],
+        "verdict": "avoid",
+        "note": "Ăn đậu tằm có thể gây đợt vỡ hồng cầu (tan máu) ở người thiếu men G6PD; MedlinePlus khuyên tránh tuyệt đối các tác nhân đã biết.",
+        "src": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Gặp bác sĩ nếu có triệu chứng như nước tiểu sẫm, vàng da, mệt, xanh xao; hoặc đã được chẩn đoán mà triệu chứng không hết sau điều trị.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Luôn báo bác sĩ, dược sĩ rằng mình thiếu men G6PD trước khi dùng thuốc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Glucose-6-phosphate dehydrogenase deficiency (Medical Encyclopedia)",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000528.htm",
+      "reviewed": "2026-01-29"
+    },
+    {
+      "title": "Glucose-6-phosphate dehydrogenase deficiency (MedlinePlus Genetics)",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/genetics/condition/glucose-6-phosphate-dehydrogenase-deficiency",
+      "reviewed": "2023-04-12"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { findMedTopicId as findMedId, foodDisplay, foodReverseAsk, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
+import { findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodReverseAsk, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -167,6 +167,7 @@ type Msg = {
   // Khoá so khớp của câu vừa bí (câu đã chuẩn hoá, cùng dạng với lookupLearned / logUnanswered dùng để tra):
   // nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học "khoá này = câu hỏi kia" (lib/lomiLearn).
   unkKey?: string;
+  foodRev?: string; // 14/10: Lomi vừa trả lời câu hỏi ngược theo món này ("có bệnh gì kiêng ăn cá") — "măng thì sao?" hỏi tiếp món khác
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
   talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
@@ -1253,11 +1254,22 @@ export function AiChat({
         }
         // 14/10 — HỎI NGƯỢC THEO MÓN ("có bệnh gì kiêng ăn cá không", "dưa leo thì bệnh gì không được ăn"): dò mọi thẻ có nguồn
         //   trong kho kiến thức y khoa (lib/lomiMed), gom những bệnh mà nguồn có nêu đúng món đó. Không thẻ nào nêu → nói thật, ghi nhật ký.
-        const rev = foodReverseAsk(q);
+        //   Câu nối ngay sau đó ("măng thì sao?", "còn cua?") hỏi tiếp món khác; nêu tên một bệnh ("gout thì sao?") là hỏi món vừa nói với bệnh đó.
+        const follow = lastA?.foodRev ? foodFollowPhrase(q) : null;
+        const followId = follow ? findMedId(follow) : null;
+        if (follow && followId) {
+          const mt = await loadMedTopic(followId);
+          if (mt) {
+            const mr = renderMed(mt, "food", normalizeVi(lastA!.foodRev!), Date.now(), lastA!.foodRev);
+            topicHit("health");
+            return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: mt.id, aspect: mr.aspect }, foodRev: lastA!.foodRev, ...(mr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
+          }
+        }
+        const rev = foodReverseAsk(q) ?? (follow && !followId ? { phrase: normalizeVi(follow), shown: follow } : null);
         if (rev) {
           const rr = renderFoodAcross(await loadAllMedTopics(), rev.phrase, rev.shown);
           topicHit("health");
-          return localReply(q, { role: "assistant", content: rr.text, local: true, quick: rr.quick, ...(rr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
+          return localReply(q, { role: "assistant", content: rr.text, local: true, quick: rr.quick, foodRev: rev.shown, ...(rr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
         }
         const careOn = th0?.kind === "care" && (th0.idle ?? 0) < 2;
         const careWho = careOn && (th0!.idle ?? 0) === 0 ? th0!.who.text : undefined;
@@ -1709,7 +1721,9 @@ export function AiChat({
           : null;
         // 12/10: câu hỏi SỨC KHOẺ mà Lomi chưa có kiến thức ("bệnh Kawasaki là gì", "có nên mổ không") → nói rõ là CHƯA CÓ KIẾN THỨC đã kiểm
         // chứng (khác với "chưa hiểu câu"), chỉ về bác sĩ; không mời bói cho một câu hỏi y khoa như lời đáp chung của câu "có nên…".
-        const medUnk = !careUnk && (medicalKindOf(q) ?? "unclear") !== "unclear" && (looksLikeQuestion(q) || fr1?.act === "question" || fr1?.act === "request")
+        // 14/10: "<bệnh Lomi chưa có thẻ> kiêng gì" ("thấp khớp cần kiêng gì") cũng là câu hỏi y khoa chưa có kiến thức — không phải chuyện ngoài phạm vi.
+        const dietUnk = VN(/\b(cần |nên |phải |thì )?(kiêng|cữ|kiêng cữ) (gì|những gì|món gì|ăn gì|uống gì|cái gì)\b|\bbị \S+(?: \S+){0,3} (nên|thì nên|phải|cần) ăn gì\b/).test(` ${normalizeVi(q)} `);
+        const medUnk = !careUnk && (dietUnk || (medicalKindOf(q) ?? "unclear") !== "unclear") && (dietUnk || looksLikeQuestion(q) || fr1?.act === "question" || fr1?.act === "request")
           ? "Chuyện này Lomi **chưa có kiến thức đã kiểm chứng** nên không dám trả lời bừa — chuyện sức khoẻ mà nói sai thì nguy hiểm 🙏 Bạn hỏi bác sĩ hoặc dược sĩ là chắc nhất nha.\n\nMuốn Lomi được bổ sung phần này thì bấm 💡 Dạy Lomi ngay dưới câu này để gửi ban quản trị."
           : null;
         // 12/10: phân biệt CHƯA HIỂU CÂU với CHƯA CÓ KIẾN THỨC — câu KỂ / mẩu câu Lomi không đọc được ("ý a là món đó") thì nói là chưa hiểu

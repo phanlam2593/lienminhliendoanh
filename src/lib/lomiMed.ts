@@ -471,6 +471,21 @@ export function foodReverseAsk(text: string): { phrase: string; shown: string } 
   return { phrase: p, shown: foodDisplay(text, p) };
 }
 
+// Câu NỐI sau một lời đáp hỏi ngược: "măng thì sao?", "còn cua?", "vậy trứng thì sao", "gout thì sao" → món / bệnh được hỏi tiếp.
+const REV_FOLLOW = VN(/^(?:còn|vậy|thế|rồi|với|thế còn|vậy còn|còn món|còn với)? ?(.+?)(?: (?:thì sao|thì thế nào|thì như nào|thì sao nhỉ|sao|thì|nữa|thì được không|được không|có sao không|có kiêng không|thì kiêng không|thì có kiêng không))?(?: (?:nhỉ|ạ|à|nha|vậy|ta|z|hả|ha))*$/);
+const FOLLOW_CUE = VN(/^(?:còn|vậy|thế|rồi|với) |(?: thì sao| thì thế nào| thì như nào| thì| nữa| được không| có sao không| kiêng không| sao)(?: (?:nhỉ|ạ|à|nha|vậy|ta|z|hả|ha))*$/);
+/** Câu nối ngắn sau lời đáp hỏi ngược theo món → cụm được hỏi tiếp (như người dùng gõ), hoặc null. */
+export function foodFollowPhrase(text: string): string | null {
+  const n = normalizeVi(text);
+  if (!FOLLOW_CUE.test(n)) return null;
+  const m = n.match(REV_FOLLOW);
+  if (!m) return null;
+  const p = m[1].replace(REV_LEAD, "").trim();
+  const w = p.split(" ").filter(Boolean);
+  if (!w.length || w.length > 4 || VN(/\b(gì|nào|sao|ai|vậy|thế|lomi|em|anh|chị|bạn|mình|tôi|tui)\b/).test(p)) return null;
+  return foodDisplay(text, p);
+}
+
 const pubShort = (p: string) => p.replace(/\s*\(.*\)\s*$/, "");
 type RevHit = { t: MedTopic; f: MedFood; key: string };
 // Chỉ những tiếng chỉ NHÓM món mới được hiểu rộng ra món cụ thể ("cá" → "cá kiếm", "thịt" → "thịt bò"). Tiếng khác thì không:
@@ -526,7 +541,7 @@ export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: stri
     const t = hs[0].t;
     const items = hs.map(({ f, key }) => `${verdictWord[f.verdict]}${normalizeVi(key) === phrase ? "" : ` (${key})`}`).filter((x, i, a) => a.indexOf(x) === i).join("; ");
     const note = hs.map((h) => h.f.note).sort((a, b) => a.length - b.length)[0];
-    return `• **${cap(t.names[0])}**: ${items}. ${note} _(${pubs(hs).join(" · ")})_`;
+    return `• **${cap(t.names[0])}**: ${items}. ${note} (${pubs(hs).join(" · ")})`;
   };
   const bad = byTopic(rest.filter((h) => h.f.verdict === "avoid" || h.f.verdict === "limit")).sort((a, b) => Number(b.some((h) => h.f.verdict === "avoid")) - Number(a.some((h) => h.f.verdict === "avoid")));
   const fine = byTopic(rest.filter((h) => h.f.verdict === "ok" || h.f.verdict === "good" ? !bad.some((g) => g[0].t.id === h.t.id) : false));
@@ -534,7 +549,7 @@ export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: stri
   const quick = [...bad, ...fine].slice(0, 3).map((g) => `${cap(g[0].t.names[0])} ăn ${S} được không?`);
   if (!hits.length)
     return {
-      text: `Lomi đã dò ${withDiet} bệnh có hướng dẫn ăn uống trong kho kiến thức có nguồn, nhưng **chưa nguồn nào nêu riêng bệnh nào phải kiêng ${S}** 🙏\n\nNhư vậy không có nghĩa là ai ăn cũng được — nếu bạn đang có bệnh cần ăn kiêng, hỏi Lomi kiểu “<tên bệnh> ăn ${S} được không” để Lomi xem riêng bệnh đó, hoặc hỏi bác sĩ cho chắc nha.`,
+      text: `Lomi đã dò hướng dẫn ăn uống của ${withDiet} bệnh (trong ${topics.length} chủ đề sức khoẻ có nguồn của Lomi), nhưng **chưa nguồn nào nêu riêng bệnh nào phải kiêng ${S}** 🙏\n\nNhư vậy không có nghĩa là ai ăn cũng được — nếu bạn đang có bệnh cần ăn kiêng, hỏi Lomi kiểu “<tên bệnh> ăn ${S} được không” để Lomi xem riêng bệnh đó, hoặc hỏi bác sĩ cho chắc nha.`,
       quick: [],
       partial: true,
       topics: [],
@@ -542,7 +557,7 @@ export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: stri
   const parts = [`🍽️ **${cap(S)}** — những bệnh mà nguồn y khoa có nhắc tới:`];
   if (!bad.length && !allergy.length) parts.push(`Chưa nguồn nào Lomi đã đối chiếu nêu bệnh nào phải **kiêng** ${S}.`);
   if (bad.length) parts.push(`🚫 Cần tránh / hạn chế:\n${bad.slice(0, 8).map(line).join("\n")}${bad.length > 8 ? `\n• …và ${bad.length - 8} bệnh khác` : ""}`);
-  if (allergy.length) parts.push(`🤧 Người **bị dị ứng** với ${S} thì phải tránh hoàn toàn (kể cả món có thành phần đó) _(${pubs(allergy).join(" · ")})_.`);
+  if (allergy.length) parts.push(`🤧 Người **bị dị ứng** với ${S} thì phải tránh hoàn toàn (kể cả món có thành phần đó) (${pubs(allergy).join(" · ")}).`);
   if (fine.length) parts.push(`✅ Nguồn nói ăn được / nên ăn: ${fine.slice(0, 8).map((g) => `**${cap(g[0].t.names[0])}**${normalizeVi(g[0].key) !== phrase ? ` (${g[0].key})` : ""}`).join(", ")}.`);
   parts.push(`Bệnh không có trong danh sách là vì nguồn Lomi đã đọc không nêu riêng — không có nghĩa là chắc chắn ăn thoải mái. Muốn rõ cho một bệnh, hỏi kiểu “gout ăn ${S} được không” nha.`);
   parts.push(`📚 ${end}`);

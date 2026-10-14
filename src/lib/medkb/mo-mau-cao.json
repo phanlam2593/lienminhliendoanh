@@ -1,7 +1,7 @@
 {
 "id":"mo-mau-cao",
 "kind":"condition",
-"names":["mỡ máu cao","cholesterol cao","rối loạn lipid máu","mỡ trong máu","máu nhiễm mỡ","tăng cholesterol","high cholesterol","hypercholesterolemia","dyslipidemia"],
+"names":["mỡ máu cao","cholesterol cao","rối loạn lipid máu","mỡ trong máu","máu nhiễm mỡ","tăng cholesterol","high cholesterol","hypercholesterolemia","dyslipidemia","mỡ máu"],
 "disambiguation":"Thẻ này nói về cholesterol cao trong máu (thường gọi là mỡ máu cao).",
 "about":[
 {"text":"Cholesterol cao nghĩa là trong máu có quá nhiều cholesterol, một chất béo. Cholesterol tích tụ có thể làm tắc mạch máu.","src":[0]},

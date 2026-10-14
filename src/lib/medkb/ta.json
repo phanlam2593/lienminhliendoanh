@@ -1,0 +1,153 @@
+{
+  "id": "ta",
+  "kind": "infection",
+  "names": [
+    "bệnh tả",
+    "dịch tả",
+    "cholera",
+    "bị tả"
+  ],
+  "about": [
+    {
+      "text": "Tả là bệnh nhiễm trùng gây tiêu chảy nặng; gặp chủ yếu ở những vùng châu Phi, châu Á thiếu nguồn nước sạch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đi ngoài nhiều phân lỏng như nước, buồn nôn hoặc nôn, đau bụng, mất nước.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Lây khi uống nước bẩn, ăn đồ (nhất là hải sản có vỏ) đã ở trong nước bẩn, hoặc ăn đồ do người bị bệnh chế biến.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Điều trị nhằm ngăn mất nước nguy hiểm; người rất mệt có thể cần nhập viện truyền dịch và dùng kháng sinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị chính là uống thật nhiều nước, kể cả dung dịch bù nước (oresol) — gói bột pha với nước để bù muối, đường và khoáng chất mất qua tiêu chảy.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng bệnh: rửa tay bằng xà phòng thường xuyên, nhất là sau khi đi vệ sinh và trước khi chế biến, ăn uống; đánh răng bằng nước đóng chai hoặc nước đun sôi.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có vắc-xin tả dạng uống, nhưng đa số người không cần; thường dành cho người đến vùng có dịch, nơi xa cơ sở y tế, hoặc nhân viên cứu trợ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Ở vùng có tả: chỉ uống nước đóng chai hoặc nước đun sôi, không dùng đá trong đồ uống; tránh hải sản; tránh rau quả sống, kể cả salad, trừ khi tự rửa bằng nước sạch và tự chuẩn bị.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Uống nhiều nước và dung dịch bù nước để tránh mất nước.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "hải sản",
+        "aliases": [
+          "hải sản có vỏ",
+          "tôm",
+          "cua",
+          "sò",
+          "nghêu",
+          "ốc"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: ở vùng có tả, tránh hải sản (nhất là hải sản có vỏ đã ở trong nước bẩn).",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "rau quả sống",
+        "aliases": [
+          "rau sống",
+          "salad",
+          "gỏi"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: ở vùng có tả, tránh rau quả chưa nấu chín, kể cả salad, trừ khi tự rửa bằng nước đóng chai hoặc đun sôi.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "đá lạnh",
+        "aliases": [
+          "nước đá",
+          "đá"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: ở vùng có tả, không dùng đá trong đồ uống.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "dung dịch bù nước",
+        "aliases": [
+          "oresol",
+          "nước bù điện giải"
+        ],
+        "verdict": "good",
+        "note": "NHS: uống nhiều nước kể cả dung dịch bù nước để thay muối, đường, khoáng chất mất đi.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám gấp nếu vừa ở vùng có tả mà bị tiêu chảy như nước nhiều và nôn, hoặc có dấu hiệu mất nước như khát, nước tiểu vàng sẫm, mùi nặng; nhớ báo bác sĩ chuyện đã đi tới vùng có dịch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Cholera",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/cholera",
+      "reviewed": "2024-06-12"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

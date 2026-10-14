@@ -1,0 +1,83 @@
+{
+  "id": "hep-bao-quy-dau",
+  "kind": "condition",
+  "names": [
+    "hẹp bao quy đầu",
+    "dài hẹp bao quy đầu",
+    "nghẹt bao quy đầu",
+    "phimosis",
+    "paraphimosis"
+  ],
+  "about": [
+    {
+      "text": "Hẹp bao quy đầu là khi lớp da bao đầu dương vật khó kéo lên được. Ở bé trai đây là bình thường: phần lớn tới khoảng 5 tuổi mới kéo lên được, có bé tới 10 tuổi hoặc muộn hơn, và thường tự lỏng dần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường vô hại, trừ khi gây sưng đau, đau khi tiểu hoặc tia tiểu yếu, tiểu ra máu, hay nhiễm trùng tiểu, chảy máu, tiết dịch đặc hoặc có mùi dưới bao quy đầu, cương đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Ở trẻ nhỏ là bình thường do bao quy đầu chưa tách; người lớn cũng có thể bị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Ở trẻ thường tự hết khi lớn nên nhiều khi không cần điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Rửa dương vật thường xuyên bằng nước ấm (có thể dùng xà phòng không mùi); người lớn kéo nhẹ bao quy đầu tới mức thoải mái để rửa rồi kéo lại. Không cố kéo bao quy đầu của bé khi còn dính.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nếu gây vấn đề, bác sĩ có thể cho kem steroid làm mềm, kháng sinh khi nhiễm trùng, hoặc phẫu thuật cắt bao quy đầu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám nếu bao quy đầu chật kèm sưng hoặc đau, chảy máu, tiết dịch đặc hoặc có mùi, đau hay khó khi tiểu, cương đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Cấp cứu ngay nếu bao quy đầu bị kẹt ở phía sau, không kéo về được, dương vật sưng to và đau (nghẹt bao quy đầu).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Tight foreskin (phimosis)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/phimosis/",
+      "reviewed": "2026-03-06"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

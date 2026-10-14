@@ -1,0 +1,110 @@
+{
+  "id": "viem-mo-te-bao",
+  "kind": "infection",
+  "names": [
+    "viêm mô tế bào",
+    "viêm mô bào",
+    "cellulitis"
+  ],
+  "about": [
+    {
+      "text": "Viêm mô tế bào là nhiễm khuẩn lớp da sâu; điều trị bằng kháng sinh và có thể nặng nếu không chữa sớm. Không lây từ người sang người.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Da đau, nóng, sưng, thường đỏ (khó thấy hơn trên da sẫm), có thể phồng rộp; có thể mệt như cảm cúm, sưng đau hạch.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hay gặp ở cẳng chân, cũng có thể ở tay, bàn chân, quanh mắt — quanh mắt là rất nghiêm trọng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do vi khuẩn vào qua chỗ da bị rách như vết côn trùng cắn, vết cắt, da khô nứt (có khi rất nhỏ không thấy).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nguy cơ cao hơn khi tuần hoàn kém, ít vận động, suy giảm miễn dịch (hoá trị, tiểu đường), phù bạch huyết, tiêm chích, có vết mổ, hoặc từng bị trước đây.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số khỏi hẳn trong 7–10 ngày; 48 giờ đầu dùng kháng sinh có thể nặng hơn rồi mới đỡ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Thường dùng kháng sinh uống (do bác sĩ kê), uống đủ liệu trình; báo bác sĩ nếu sau 2–3 ngày không đỡ. Ca nặng cần điều trị ở bệnh viện.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giảm đau bằng paracetamol hoặc ibuprofen; kê cao vùng bị trên gối, ghế để bớt sưng; cử động khớp gần đó; uống nhiều nước.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng ngừa: giữ da sạch và đủ ẩm, rửa sạch vết cắt và bôi thuốc sát trùng, mang giày dép, quần áo phù hợp, đeo găng khi làm vườn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Uống nhiều nước khi đang hồi phục.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Da đau, nóng, sưng thì cần khám gấp để dùng kháng sinh sớm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu kèm sốt rất cao hoặc run lạnh, tim đập hoặc thở nhanh, mảng tím trên da, chóng mặt, ngất, lú lẫn, da lạnh ẩm tái, hoặc không phản ứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Cellulitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/cellulitis/",
+      "reviewed": "2024-04-18"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

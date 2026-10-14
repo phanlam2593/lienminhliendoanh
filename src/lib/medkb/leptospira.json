@@ -1,0 +1,109 @@
+{
+  "id": "leptospira",
+  "kind": "infection",
+  "names": [
+    "bệnh leptospira",
+    "leptospira",
+    "xoắn khuẩn vàng da",
+    "bệnh Weil",
+    "leptospirosis"
+  ],
+  "about": [
+    {
+      "text": "Leptospira (bệnh Weil) là bệnh nhiễm trùng lây từ động vật, đất hoặc nước.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Nhiều người không có triệu chứng hoặc chỉ giống cúm nhẹ; một số người bệnh nặng: sốt, đau đầu, đau mình, đau bụng, buồn nôn hoặc nôn, tiêu chảy, đỏ mắt, vàng da.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Lây qua nước tiểu của động vật nhiễm bệnh (hay gặp nhất là chuột, cả bò, heo, chó): đất hoặc nước ngọt (sông, kênh, hồ) bị nhiễm vào miệng, mắt hoặc vết thương; hoặc chạm máu, thịt động vật nhiễm bệnh. Rất hiếm khi lây từ người sang người.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số hồi phục trong vài ngày tới vài tuần; ca nặng cần điều trị ở bệnh viện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bác sĩ thường cho kháng sinh uống; dùng hết liệu trình. Paracetamol hoặc ibuprofen giúp giảm đau, hạ sốt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng bệnh: rửa tay sau khi tiếp xúc động vật; rửa và băng kín vết thương bằng băng không thấm nước; mặc đồ bảo hộ khi làm việc có nguy cơ; tắm ngay sau khi lội nước có thể bị nhiễm; không chạm xác động vật bằng tay trần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Nước sông, kênh, hồ phải đun sôi hoặc xử lý trước khi uống.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": [
+      {
+        "name": "nước sông, hồ chưa đun",
+        "aliases": [
+          "nước sông",
+          "nước hồ",
+          "nước kênh",
+          "nước ao"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: đun sôi hoặc xử lý nước sông, kênh, hồ trước khi uống để phòng leptospira.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu có thể đã tiếp xúc nước tiểu động vật, nước hoặc đất nhiễm bẩn mà bị sốt, ớn lạnh, đau đầu, nôn, tiêu chảy, đau mình, đỏ mắt hoặc chán ăn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Khám gấp nếu vàng da, phát ban, không tiểu được, phù mắt cá, bàn chân hoặc bàn tay, đau ngực hoặc khó thở.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Leptospirosis (Weil's disease)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/leptospirosis/",
+      "reviewed": "2023-06-28"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

@@ -1,0 +1,104 @@
+{
+  "id": "gian-phe-quan",
+  "kind": "condition",
+  "names": [
+    "giãn phế quản",
+    "bệnh giãn phế quản",
+    "bronchiectasis"
+  ],
+  "about": [
+    {
+      "text": "Giãn phế quản là bệnh phổi lâu dài: đường thở bị tổn thương, giãn rộng và tiết nhiều đờm. Thường không chữa khỏi, nhưng điều trị giúp kiểm soát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ho dai dẳng, ho ra nhiều đờm (trong, trắng, vàng hoặc xanh), hay bị nhiễm trùng ngực.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể khò khè, khó thở, tiếng thở bất thường, mệt, ho ra máu, đau ngực.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Viêm làm tổn thương và giãn đường thở khiến đờm ứ lại gây nhiễm trùng; nhiều người không rõ nguyên nhân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể do nhiễm trùng nặng (viêm phổi, lao, sởi, ho gà, COVID-19), bệnh phổi khác (hen, COPD), hít chất độc, bệnh miễn dịch, viêm khớp dạng thấp, bệnh viêm ruột.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Mức ảnh hưởng tuỳ người: nhiều người triệu chứng nhẹ, kiểm soát tốt; một số người khó thở nặng, hiếm khi nguy hiểm tính mạng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Tập kỹ thuật thở để tống đờm (thường mỗi ngày) do chuyên viên vật lý trị liệu hướng dẫn; kháng sinh khi có nhiễm trùng, thuốc hít — do bác sĩ chỉ định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tập thể dục đều; rửa tay thường xuyên, tránh người đang cảm cúm; tiêm cúm hằng năm và các vắc-xin bác sĩ khuyên; không hút thuốc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Ăn uống cân bằng và giữ cân nặng hợp lý giúp đỡ khó thở và giảm nhiễm trùng.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu nghi bị giãn phế quản hoặc ho trên 3 tuần. Khám gấp nếu ho nặng hoặc nặng nhanh, có chút máu trong đờm, khó thở hơn thường lệ, hoặc có dấu hiệu nhiễm trùng ngực (sốt, đau ngực khi thở hoặc ho).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu ho ra nhiều máu (hơn vài vệt nhỏ) hoặc khó thở nặng như thở hổn hển, nghẹn, không nói được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bronchiectasis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/bronchiectasis/",
+      "reviewed": "2025-06-11"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

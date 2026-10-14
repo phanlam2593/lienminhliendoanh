@@ -1,0 +1,122 @@
+{
+  "id": "benh-gan-do-ruou",
+  "kind": "condition",
+  "names": [
+    "bệnh gan do rượu",
+    "viêm gan do rượu",
+    "tổn thương gan do rượu",
+    "gan do rượu",
+    "men gan cao do rượu",
+    "alcohol-related liver disease",
+    "ARLD"
+  ],
+  "about": [
+    {
+      "text": "Bệnh gan do rượu là tổn thương gan do uống quá nhiều rượu trong thời gian dài; được giúp sớm có thể ngăn tổn thương nặng thêm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ba giai đoạn: gan nhiễm mỡ (thường hồi phục nếu bỏ rượu), viêm gan do rượu (một phần có thể hồi phục), xơ gan do rượu (gan bị sẹo nặng, thường không hồi phục).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Giai đoạn sớm thường không có triệu chứng; có thể mệt, chán ăn, sụt cân không chủ ý, buồn nôn hoặc nôn, khó chịu ở bụng trên bên phải.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giai đoạn sau: vàng da, vàng mắt, sốt, bụng to vì tích dịch, phù chân, run tay, nôn ra máu hoặc phân đen dính, lú lẫn, khó tập trung, giảm trí nhớ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do thường xuyên uống quá nhiều rượu. Nguy cơ cao hơn nếu đã có bệnh gan (như viêm gan C), tiểu đường (nhất là type 2), thừa cân béo phì, hoặc gia đình có người bị bệnh do rượu, nghiện rượu. Ở nữ, bệnh xuất hiện nhanh hơn, ở mức uống thấp hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Có thể nguy hiểm tính mạng: suy gan, tích dịch ổ bụng, chảy máu trong, lú lẫn, ung thư gan, tổn thương thận. Bỏ rượu sớm thường giúp gan hồi phục ở giai đoạn đầu; giai đoạn sau khó chữa hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Mục tiêu chính ở mọi giai đoạn là bỏ hẳn rượu; bác sĩ hoặc dịch vụ cai nghiện rượu giúp bạn giảm an toàn bằng trị liệu trò chuyện, thuốc giảm thèm, nhóm hỗ trợ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Người đang uống nhiều thường xuyên mà ngưng đột ngột có thể rất nguy hiểm — hãy nhờ bác sĩ giúp trước khi cai.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Bỏ hẳn rượu bia là mục tiêu chính ở mọi giai đoạn bệnh (cần nhờ bác sĩ nếu đang uống nhiều).",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": [
+      {
+        "name": "rượu bia",
+        "aliases": [
+          "rượu",
+          "bia",
+          "đồ uống có cồn"
+        ],
+        "verdict": "avoid",
+        "note": "NHS: mục tiêu chính ở mọi giai đoạn bệnh gan do rượu là bỏ hẳn rượu; đang uống nhiều thì nhờ bác sĩ giúp vì ngưng đột ngột có thể nguy hiểm.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Đi khám nếu có dấu hiệu bệnh gan hoặc muốn được giúp bỏ rượu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi cấp cứu nếu nôn ra máu, đi ngoài phân đen dính, đau bụng, khó thở, hoặc đột nhiên lú lẫn, chóng mặt, không tỉnh táo được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Alcohol-related liver disease (ARLD)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/alcohol-related-liver-disease-arld/",
+      "reviewed": "2026-07-15"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

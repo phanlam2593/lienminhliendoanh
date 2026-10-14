@@ -1,0 +1,125 @@
+{
+  "id": "ton-thuong-than-cap",
+  "kind": "condition",
+  "names": [
+    "tổn thương thận cấp",
+    "suy thận cấp",
+    "suy thận cấp tính",
+    "acute kidney injury",
+    "AKI"
+  ],
+  "about": [
+    {
+      "text": "Tổn thương thận cấp là khi có điều gì đó đột ngột làm thận ngưng hoạt động bình thường; có thể rất nghiêm trọng ở một số người.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Nhiều người không có triệu chứng, nhất là khi nhẹ. Có thể gặp: tiểu ít hơn hẳn bình thường, rất khát, buồn nôn hoặc nôn, phù bàn chân hoặc cẳng chân, mệt, chóng mặt, lú lẫn hoặc buồn ngủ, khó thở (nhất là khi nằm).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nhiều nguyên nhân: nhiễm trùng hoặc nhiễm khuẩn huyết; mất nước, huyết áp thấp hoặc mất máu; tắc nghẽn hoặc sưng (sỏi thận, viêm tuyến tiền liệt, khối u); bệnh lâu dài ở thận, tim, gan.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dùng lâu một số thuốc (như ức chế men chuyển, NSAID, thuốc lợi tiểu) hoặc thuốc cản quang khi chụp chiếu cũng có thể gây. Hay gặp hơn ở người từ 65 tuổi, người từng bị, người vừa phẫu thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Nhiều người hồi phục hoàn toàn trong vài tuần; ca nặng có thể mất vài tháng và cần xét nghiệm máu, tái khám định kỳ. Một số người bị tổn thương thận vĩnh viễn (bệnh thận mạn).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị tuỳ mức độ và nguyên nhân, có thể phải nằm viện: thuốc, ngưng hoặc đổi thuốc hại thận, truyền dịch, đặt ống thông tiểu, phẫu thuật gỡ tắc nghẽn, chạy thận nhân tạo tạm thời khi nặng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng ngừa ở người nguy cơ cao: uống đủ nước để nước tiểu nhạt màu và đi tiểu đều, nhất là khi trời nóng, nôn hoặc tiêu chảy; hỏi bác sĩ trước khi dùng thuốc hay thực phẩm chức năng mới.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Hỏi bác sĩ trước khi dùng thuốc hoặc thực phẩm chức năng mới.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [
+      {
+        "text": "Uống đủ nước để nước tiểu nhạt màu, nhất là khi trời nóng, nôn hoặc tiêu chảy.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "foods": [
+      {
+        "name": "nước",
+        "aliases": [
+          "nước lọc",
+          "uống nước"
+        ],
+        "verdict": "good",
+        "note": "NHS: người có nguy cơ nên uống đủ nước để nước tiểu nhạt màu và đi tiểu đều, nhất là khi trời nóng, nôn hoặc tiêu chảy.",
+        "src": [
+          0
+        ]
+      },
+      {
+        "name": "thực phẩm chức năng",
+        "aliases": [
+          "thuốc bổ",
+          "viên bổ sung"
+        ],
+        "verdict": "limit",
+        "note": "NHS: hỏi bác sĩ trước khi dùng thực phẩm chức năng mới nếu bạn có nguy cơ tổn thương thận cấp.",
+        "src": [
+          0
+        ]
+      }
+    ]
+  },
+  "doctor": [
+    {
+      "text": "Nếu nghĩ mình có triệu chứng tổn thương thận cấp, cần được khám sớm trong ngày (khám gấp).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Acute kidney injury",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/acute-kidney-injury/",
+      "reviewed": "2026-03-11"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}
