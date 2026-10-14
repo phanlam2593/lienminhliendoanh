@@ -289,6 +289,91 @@
         "src": [
           2
         ]
+      },
+      {
+        "name": "trái cây nhiều kali",
+        "aliases": [
+          "cam",
+          "nước cam",
+          "chuối",
+          "kiwi",
+          "trái cây sấy khô",
+          "nho khô",
+          "mận khô",
+          "dưa lưới",
+          "xuân đào"
+        ],
+        "verdict": "limit",
+        "note": "Khi bác sĩ dặn hạn chế kali: MedlinePlus nêu nên hạn chế hoặc tránh cam, nước cam, chuối, kiwi, nho khô và trái cây sấy, dưa lưới, mận khô, xuân đào.",
+        "src": [
+          4
+        ]
+      },
+      {
+        "name": "rau củ nhiều kali",
+        "aliases": [
+          "khoai tây",
+          "cà chua",
+          "sốt cà chua",
+          "quả bơ",
+          "trái bơ",
+          "măng tây",
+          "bí đỏ",
+          "bí ngô",
+          "rau bina nấu chín",
+          "cải bó xôi nấu chín"
+        ],
+        "verdict": "limit",
+        "note": "Khi bác sĩ dặn hạn chế kali: MedlinePlus nêu nên hạn chế hoặc tránh khoai tây, cà chua và sốt cà chua, quả bơ, măng tây, bí đỏ, rau bina (cải bó xôi) nấu chín.",
+        "src": [
+          4
+        ]
+      },
+      {
+        "name": "trái cây ít kali",
+        "aliases": [
+          "đào",
+          "nho",
+          "lê",
+          "táo",
+          "dâu",
+          "việt quất",
+          "dứa",
+          "thơm",
+          "mận",
+          "quýt",
+          "dưa hấu"
+        ],
+        "verdict": "ok",
+        "note": "Khi cần hạn chế kali, MedlinePlus gợi ý chọn đào, nho, lê, táo, các loại dâu, dứa, mận, quýt, dưa hấu.",
+        "src": [
+          4
+        ]
+      },
+      {
+        "name": "rau củ ít kali",
+        "aliases": [
+          "bông cải xanh",
+          "bắp cải",
+          "cà rốt",
+          "súp lơ",
+          "cần tây",
+          "dưa leo",
+          "dưa chuột",
+          "cà tím",
+          "đậu que",
+          "đậu cô ve",
+          "xà lách",
+          "hành tây",
+          "ớt chuông",
+          "cải xoong",
+          "bí ngòi"
+        ],
+        "verdict": "ok",
+        "note": "Khi cần hạn chế kali, MedlinePlus gợi ý chọn bông cải xanh, bắp cải, cà rốt, súp lơ, cần tây, dưa leo, cà tím, đậu que, xà lách, hành tây, ớt chuông, cải xoong, bí ngòi.",
+        "src": [
+          4
+        ]
       }
     ]
   },
@@ -331,7 +416,13 @@
       "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
       "url": "https://medlineplus.gov/chronickidneydisease.html",
       "reviewed": "2025-09-21"
+    },
+    {
+      "title": "Diet - chronic kidney disease (Medical Encyclopedia)",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/002442.htm",
+      "reviewed": "2025-09-02"
     }
   ],
-  "verifiedAt": "2026-10-09"
+  "verifiedAt": "2026-10-14"
 }

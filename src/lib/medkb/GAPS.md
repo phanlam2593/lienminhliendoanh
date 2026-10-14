@@ -184,3 +184,8 @@ Mỗi mục là điều người dùng có thể hỏi mà các nguồn chính t
 
 ## Câu hỏi CHƯA có thẻ (phát hiện khi chạy thử 10/10)
 - Thoái hoá cột sống thắt lưng (kho mới có cột sống cổ), các câu hỏi thai kỳ ngoài ăn uống (siêu âm, khám thai), axit uric cao không kèm gout.
+
+## Hỏi ngược theo món (14/10)
+- Măng (măng tre, măng tươi): chưa có nguồn trong danh sách tin cậy nêu bệnh nào phải kiêng măng. Bài PMC (nih.gov) về chất tạo xyanua trong măng tươi không đọc được (trang chặn kiểm tra trình duyệt) nên chưa đưa lời khuyên luộc kỹ / bỏ nước vào kho.
+- Dưa leo: chưa nguồn nào nêu bệnh phải kiêng; MedlinePlus chỉ nêu dưa leo là rau ít kali (chọn được khi bệnh thận mạn cần hạn chế kali).
+- Thiếu men G6PD (đậu tằm): chưa có thẻ.

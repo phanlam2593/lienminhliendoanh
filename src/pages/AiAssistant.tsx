@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { findMedTopicId as findMedId, foodDisplay, hasQuestion, isSelfStatement, loadMedTopic, nameAsTyped, parseMedAsk, renderMed } from "@/lib/lomiMed";
+import { findMedTopicId as findMedId, foodDisplay, foodReverseAsk, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1250,6 +1250,14 @@ export function AiChat({
           const hm2 = healthTopicReply(`bị ${hCtx.label}`, undefined, "menu");
           topicHit("health");
           return localReply(q, { role: "assistant", content: `Bạn cũng bị **${hCtx.label}** nữa hả 🩺 Vậy mấy điều về ${hCtx.label} áp dụng cho cả bạn luôn — bạn chọn phần muốn xem bên dưới nha.`, local: true, quick: hm2?.quick, health: hCtx, diet: lastA?.diet });
+        }
+        // 14/10 — HỎI NGƯỢC THEO MÓN ("có bệnh gì kiêng ăn cá không", "dưa leo thì bệnh gì không được ăn"): dò mọi thẻ có nguồn
+        //   trong kho kiến thức y khoa (lib/lomiMed), gom những bệnh mà nguồn có nêu đúng món đó. Không thẻ nào nêu → nói thật, ghi nhật ký.
+        const rev = foodReverseAsk(q);
+        if (rev) {
+          const rr = renderFoodAcross(await loadAllMedTopics(), rev.phrase, rev.shown);
+          topicHit("health");
+          return localReply(q, { role: "assistant", content: rr.text, local: true, quick: rr.quick, ...(rr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
         }
         const careOn = th0?.kind === "care" && (th0.idle ?? 0) < 2;
         const careWho = careOn && (th0!.idle ?? 0) === 0 ? th0!.who.text : undefined;

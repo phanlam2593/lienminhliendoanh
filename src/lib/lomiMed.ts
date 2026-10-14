@@ -448,6 +448,107 @@ export const isSelfStatement = (text: string) => SELF_STATE.test(normalizeVi(tex
 export const hasQuestion = (text: string) => text.includes("?") || QWORD.test(` ${normalizeVi(text)} `);
 
 export type MedState = { id: string; aspect?: string };
+// ── Hỏi NGƯỢC theo món (14/10, theo ý Kir): "có bệnh gì kiêng ăn cá không", "dưa leo thì bệnh gì không được ăn",
+//    "ai không nên ăn măng". Lomi dò MỌI thẻ có hướng dẫn ăn uống, gom những bệnh mà nguồn có nêu đúng món đó
+//    (tránh / hạn chế / ăn được / nên ăn), kèm nguồn. Món mà không thẻ nào nêu → nói thật là nguồn chưa nêu bệnh nào.
+const R_SUBJ = String.raw`(?:có )?(?:những )?(?:người bị bệnh|người bệnh|bị bệnh|bệnh|người|đối tượng|ai)(?: (?:gì|nào))?`;
+const R_VERB = String.raw`(?:(?:thì|phải|cần|nên|bị|hay|là) )*(?:kiêng cữ|kiêng|cữ|cấm|tránh|hạn chế|kỵ|kị|(?:không|ko|k|chẳng|chả) (?:được|đc|dc|nên|ăn được|ăn đc|uống được|hợp))`;
+const R_TAIL = String.raw`(?: (?:không|ko|k|hông|vậy|nhỉ|ạ|à|nhé|nha|thế|hả|ha|ta|đâu|z|nữa|ăn|uống))*$`;
+const REV_A = VN(new RegExp(String.raw`^(?:cho (?:mình|em|tôi|tui|anh|chị) hỏi |hỏi |vậy )?${R_SUBJ} ${R_VERB}(?: (?:ăn|uống|dùng))? (.+?)${R_TAIL}`));
+const REV_B = VN(new RegExp(String.raw`^(?:ăn |uống )?(.+?) (?:thì |có |là |này )*(?:${R_SUBJ} ${R_VERB}(?: (?:ăn|uống|dùng))?|(?:kiêng|kỵ|kị|cữ|hại cho|có hại cho|không tốt cho|không hợp với|không hợp cho) (?:với )?(?:bệnh gì|bệnh nào|ai|người nào|những ai|người bệnh gì|người bị bệnh gì))${R_TAIL}`));
+const REV_LEAD = VN(/^(?:các loại|các món|món|đồ|quả|trái|con|loại) /);
+
+/** Câu hỏi ngược "món X kiêng với bệnh gì" → món được hỏi (phrase = không dấu, shown = như người dùng gõ). */
+export function foodReverseAsk(text: string): { phrase: string; shown: string } | null {
+  const n = normalizeVi(text);
+  const m = n.match(REV_A) ?? n.match(REV_B);
+  if (!m) return null;
+  const p = m[1].replace(REV_LEAD, "").trim();
+  const words = p.split(" ").filter(Boolean);
+  if (!words.length || words.length > 5 || p.length < 2) return null;
+  // "bệnh gout kiêng gì" không phải hỏi ngược — câu nhắc một bệnh có thẻ thì để lớp hỏi theo bệnh trả lời.
+  if (findMedTopicId(text) || VN(/\b(gì|nào|bệnh|ai)\b/).test(p)) return null;
+  return { phrase: p, shown: foodDisplay(text, p) };
+}
+
+const pubShort = (p: string) => p.replace(/\s*\(.*\)\s*$/, "");
+type RevHit = { t: MedTopic; f: MedFood; key: string };
+// Chỉ những tiếng chỉ NHÓM món mới được hiểu rộng ra món cụ thể ("cá" → "cá kiếm", "thịt" → "thịt bò"). Tiếng khác thì không:
+// "măng" không phải "măng tây", "cà" không phải "cà phê", "sữa" không phải "sữa đậu nành".
+const REV_GROUP = new Set(["cá", "thịt", "tôm", "cua", "hải sản", "trứng", "rau", "hạt", "ốc", "sò"]);
+/** Món được hỏi có phải một tiếng chỉ nhóm không — so ĐÚNG DẤU ("cà" không phải "cá"); gõ không dấu thì chỉ nhận khi không lẫn. */
+const isGroup = (shown: string) => {
+  const s = shown.normalize("NFC").toLowerCase().trim();
+  if (REV_GROUP.has(s)) return true;
+  return s === normalizeVi(s) && s !== "ca" && [...REV_GROUP].some((g) => normalizeVi(g) === s);
+};
+/** Tên món trong thẻ khớp với món được hỏi → trả về đúng tên đã khớp (để nói lại), không khớp → null. */
+function revMatch(f: MedFood, phrase: string, shown: string): string | null {
+  const qq = canon(phrase).split(" ");
+  const keys = [f.name, ...f.name.split(/, | và /), ...f.aliases];
+  for (const nm of keys) {
+    const k = canon(normalizeVi(nm)).split(" ").filter(Boolean);
+    if (!k.length) continue;
+    let hit = false;
+    if (k.length === qq.length) hit = k.every((w, i) => w === qq[i]);
+    else if (k.length > qq.length) hit = isGroup(shown) && qq.every((w, i) => w === k[i]); // hỏi "cá" → "cá kiếm"
+    else hit = k.length >= 2 && k.every((w, i) => w === qq[i]); // hỏi "cà chua bi" → "cà chua"
+    if (!hit) continue;
+    // Chữ người dùng đã gõ dấu thì dấu phải đúng: "cá" ≠ "cà", "dưa" ≠ "dừa".
+    const sw = shown.normalize("NFC").toLowerCase().split(/\s+/);
+    const nw = nm.normalize("NFC").toLowerCase().split(/\s+/);
+    if (sw.every((w, i) => i >= nw.length || !isAccented(w) || wordKey(w) === wordKey(nw[i]))) return nm;
+  }
+  return null;
+}
+
+export type FoodAcrossReply = { text: string; quick: string[]; partial: boolean; topics: string[] };
+/** Lời đáp cho câu hỏi ngược: những bệnh mà nguồn có nêu món này. topics = mọi thẻ đã nạp. */
+export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: string, now = Date.now()): FoodAcrossReply {
+  const S = shown.trim();
+  const hits: RevHit[] = [];
+  for (const t of topics)
+    for (const f of t.diet?.foods ?? []) {
+      const key = revMatch(f, phrase, S);
+      if (key) hits.push({ t, f, key });
+    }
+  const withDiet = topics.filter((t) => t.diet && t.diet.foods.length).length;
+  const pubs = (h: RevHit[]) => Array.from(new Set(h.flatMap(({ t, f }) => f.src.map((i) => t.sources[i]).filter(Boolean).map((s) => pubShort(s.publisher)))));
+  const allergy = hits.filter((h) => h.t.id === "di-ung-thuc-pham");
+  const rest = hits.filter((h) => h.t.id !== "di-ung-thuc-pham");
+  const byTopic = (hs: RevHit[]) => {
+    const m = new Map<string, RevHit[]>();
+    for (const h of hs) m.set(h.t.id, [...(m.get(h.t.id) ?? []), h]);
+    return [...m.values()];
+  };
+  const verdictWord: Record<MedFood["verdict"], string> = { avoid: "nên **tránh**", limit: "nên **hạn chế**", ok: "**ăn được**", good: "**nên ăn**" };
+  const line = (hs: RevHit[]) => {
+    const t = hs[0].t;
+    const items = hs.map(({ f, key }) => `${verdictWord[f.verdict]}${normalizeVi(key) === phrase ? "" : ` (${key})`}`).filter((x, i, a) => a.indexOf(x) === i).join("; ");
+    const note = hs.map((h) => h.f.note).sort((a, b) => a.length - b.length)[0];
+    return `• **${cap(t.names[0])}**: ${items}. ${note} _(${pubs(hs).join(" · ")})_`;
+  };
+  const bad = byTopic(rest.filter((h) => h.f.verdict === "avoid" || h.f.verdict === "limit")).sort((a, b) => Number(b.some((h) => h.f.verdict === "avoid")) - Number(a.some((h) => h.f.verdict === "avoid")));
+  const fine = byTopic(rest.filter((h) => h.f.verdict === "ok" || h.f.verdict === "good" ? !bad.some((g) => g[0].t.id === h.t.id) : false));
+  const end = `Đây là kiến thức tham khảo chung từ các nguồn y khoa Lomi đã đối chiếu, không thay lời dặn của bác sĩ / chuyên viên dinh dưỡng đang theo dõi bạn.`;
+  const quick = [...bad, ...fine].slice(0, 3).map((g) => `${cap(g[0].t.names[0])} ăn ${S} được không?`);
+  if (!hits.length)
+    return {
+      text: `Lomi đã dò ${withDiet} bệnh có hướng dẫn ăn uống trong kho kiến thức có nguồn, nhưng **chưa nguồn nào nêu riêng bệnh nào phải kiêng ${S}** 🙏\n\nNhư vậy không có nghĩa là ai ăn cũng được — nếu bạn đang có bệnh cần ăn kiêng, hỏi Lomi kiểu “<tên bệnh> ăn ${S} được không” để Lomi xem riêng bệnh đó, hoặc hỏi bác sĩ cho chắc nha.`,
+      quick: [],
+      partial: true,
+      topics: [],
+    };
+  const parts = [`🍽️ **${cap(S)}** — những bệnh mà nguồn y khoa có nhắc tới:`];
+  if (!bad.length && !allergy.length) parts.push(`Chưa nguồn nào Lomi đã đối chiếu nêu bệnh nào phải **kiêng** ${S}.`);
+  if (bad.length) parts.push(`🚫 Cần tránh / hạn chế:\n${bad.slice(0, 8).map(line).join("\n")}${bad.length > 8 ? `\n• …và ${bad.length - 8} bệnh khác` : ""}`);
+  if (allergy.length) parts.push(`🤧 Người **bị dị ứng** với ${S} thì phải tránh hoàn toàn (kể cả món có thành phần đó) _(${pubs(allergy).join(" · ")})_.`);
+  if (fine.length) parts.push(`✅ Nguồn nói ăn được / nên ăn: ${fine.slice(0, 8).map((g) => `**${cap(g[0].t.names[0])}**${normalizeVi(g[0].key) !== phrase ? ` (${g[0].key})` : ""}`).join(", ")}.`);
+  parts.push(`Bệnh không có trong danh sách là vì nguồn Lomi đã đọc không nêu riêng — không có nghĩa là chắc chắn ăn thoải mái. Muốn rõ cho một bệnh, hỏi kiểu “gout ăn ${S} được không” nha.`);
+  parts.push(`📚 ${end}`);
+  return { text: parts.join("\n\n"), quick, partial: false, topics: [...new Set(hits.map((h) => h.t.id))] };
+}
+
 export type MedAsk = { id: string; aspect: MedAspect | "overview"; food: string | null; focusOnly?: boolean };
 
 /** Câu này có phải câu hỏi kiến thức về một chủ đề trong kho không? prev = chủ đề đang nói ở tin trước (cho câu nối). */
