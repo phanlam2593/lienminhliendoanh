@@ -30,6 +30,8 @@ export type DrugReply = {
   name?: string;
   /** Mã mục thuốc trong lib/lomiDrugData nếu lời đáp dựa trên dữ liệu đã kiểm chứng; không có = Lomi chỉ nói giới hạn của mình. */
   drugId?: string;
+  /** 15/10: câu hỏi dùng thuốc khi MANG THAI / CHO CON BÚ — trả lời trước cả bài giới thiệu thuốc (bài đó không nói chuyện thai kỳ). */
+  preg?: boolean;
 };
 export type DrugCtx = {
   /** Đang ở mạch sức khoẻ (đã kể triệu chứng / đang nói về một bệnh) — câu cụt "liều bao nhiêu" mới được hiểu là hỏi liều thuốc. */
@@ -64,6 +66,14 @@ const ASKS = VN(/\b(không|ko|k|được|sao|gì|nào|thế nào|bao nhiêu|mấ
 const SHOULD = VN(/\b(có nên|nên|có cần|cần|có được|được) (uống|dùng|mua|xài|tiêm|chích|bôi|xịt|nhỏ)\b|\b(uống|dùng|xài|tiêm|chích|bôi)( \S+){1,3} (được không|dc không|đc không|được ko|có sao không|có được không|có nên không|được chưa)\b/);
 const RX_ONLY = VN(/\b(kháng sinh|thuốc ngủ|thuốc an thần|corticoid|thuốc giảm đau mạnh)\b/);
 const ALCOHOL = VN(/\b(rượu|bia|nhậu)\b/);
+// 15/10 (audit): "đang uống thuốc tim có uống panadol được không" — đang dùng một thuốc mà hỏi uống thêm thuốc khác là hỏi DÙNG CHUNG,
+//   dù câu không có chữ "uống chung" (trước đây Lomi đọc bài paracetamol, bỏ qua thuốc tim).
+const ON_DRUG_ASK = VN(/\bđang (uống|dùng|xài) (thuốc|\S+)( \S+){0,6} (có )?(uống|dùng|xài) (thêm )?\S+( \S+){0,4} (được không|được ko|được k|đc không|dc không|có sao không|có được không)\b/);
+const PREG_BF = VN(/\b(cho con bú|mang thai|có bầu|có thai|đang bầu|bà bầu|mẹ bầu|đang mang bầu)\b/);
+const PREG_TEXT =
+  "Đang mang thai hoặc cho con bú thì càng phải hỏi bác sĩ / dược sĩ **trước khi** uống bất kỳ thuốc gì nha — phần lớn thuốc uống khi mang thai đi qua nhau thai tới em bé, và một lượng nhỏ thuốc có thể qua sữa mẹ (theo NHS). Lomi không có dữ liệu để nói thuốc nào an toàn cho giai đoạn này, nên bạn nói rõ hoàn cảnh với người kê / bán thuốc để họ chọn loại phù hợp.";
+// Đồ uống / món hay đứng đầu câu như tên ngoại lai — không phải tên thuốc ("coca uống bao nhiêu").
+const NOT_DRUG_WORD = VN(/^(coca|pepsi|cafe|coffee|sting|redbull|soda|matcha|milo|ovaltine|whisky|vodka|soju|sake|pizza|kombucha|cacao)$/);
 
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
@@ -116,7 +126,10 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   if (NOT_MED.test(n)) return null;
   const words = n.trim().split(" ").length;
   if (words > 22) return null;
-  const med = MED_WORD.test(n);
+  // 15/10: tên thuốc ngoại lai đứng đầu câu hỏi liều ("amoxicillin uống mấy lần 1 ngày") cũng là hỏi thuốc — trước đây câu này rơi sang
+  //   câu hỏi thường gặp về app ("10 lượt quẹt / ngày").
+  const lead = n.trim().split(" ")[0] ?? "";
+  const med = MED_WORD.test(n) || (isForeign(lead) && !NOT_DRUG_WORD.test(lead) && DOSE.test(n));
   const who = ctx.who;
   const forWho = who ? ` cho ${who}` : "";
 
@@ -173,7 +186,16 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       name: known.names[0],
       text: `Với hoàn cảnh bạn vừa kể thì Lomi **không tự kết luận được** là dùng ${known.names[0]} có ổn hay không — nguồn Lomi đối chiếu chỉ nói chung như ở trên, không nói cho từng người.\n\nBạn nói đúng điều này với dược sĩ / bác sĩ (đang dùng ${hit0.with.replace(/ \(.*\)$/, "")} thế nào, thường xuyên cỡ nào) để họ tư vấn cho đúng trường hợp của bạn nha.`,
     };
-  if ((INTERACT.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || VN(/\b(\S+) (uống|dùng) (chung|cùng|kèm) (với )?\S+/).test(n)) && ASKS.test(n)) {
+  // Mang thai / cho con bú + hỏi dùng thuốc → nói điều cần làm trước (hỏi bác sĩ / dược sĩ), không đọc bài chung về thuốc.
+  if (PREG_BF.test(n) && (med || !!known) && ASKS.test(n) && words <= 16)
+    return {
+      kind: "should",
+      med: true,
+      preg: true,
+      ...(known ? { drugId: known.id, name: known.names[0] } : {}),
+      text: known ? `${PREG_TEXT}\n\nVới **${known.names[0]}**, phần dữ liệu Lomi đã kiểm chứng không có hướng dẫn riêng cho lúc mang thai / cho con bú, nên Lomi không nói là dùng được hay không.` : PREG_TEXT,
+    };
+  if ((INTERACT.test(n) || ON_DRUG_ASK.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || VN(/\b(\S+) (uống|dùng) (chung|cùng|kèm) (với )?\S+/).test(n)) && ASKS.test(n)) {
     const hit = hit0;
     if (known && hit)
       return {
@@ -258,7 +280,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
     return {
       kind: "should",
       med: true,
-      text: "Đang mang thai hoặc cho con bú thì càng phải hỏi bác sĩ / dược sĩ **trước khi** uống bất kỳ thuốc gì nha — phần lớn thuốc uống khi mang thai đi qua nhau thai tới em bé, và một lượng nhỏ thuốc có thể qua sữa mẹ (theo NHS). Lomi không có dữ liệu để nói thuốc nào an toàn cho giai đoạn này, nên bạn nói rõ hoàn cảnh với người kê / bán thuốc để họ chọn loại phù hợp.",
+      text: PREG_TEXT,
     };
   // "có nên uống kháng sinh không", "uống thuốc ngủ được không" — Lomi không quyết thay; thuốc kê đơn thì không tự mua uống.
   if (SHOULD.test(n) && (med || RX_ONLY.test(n) || (ctx.inHealth && VN(/\b(uống|dùng|xài|tiêm|chích)\b/).test(n))) && ASKS.test(n) && words <= 14)

@@ -148,8 +148,10 @@ const has = (n: string, re: RegExp) => re.test(` ${n} `);
 
 const RULES: Rule[] = [
   // ⚠️ Khủng hoảng — luôn kiểm tra đầu tiên, không giới hạn độ dài câu.
+  //   15/10 (audit sức khoẻ): "thuốc ngủ uống bao nhiêu thì chết" từng nhận bài "liều phụ thuộc cân nặng" — hỏi liều / cách gây chết,
+  //   định uống thuốc ngủ / thuốc chuột / thuốc trừ sâu cũng là tín hiệu khủng hoảng.
   {
-    re: VN(/\b(muốn chết|tự tử|tự tữ|tự sát|không muốn sống|chán sống|sống làm gì nữa|không còn lý do (để )?sống|kết thúc cuộc đời|tự làm đau|tự hại bản thân|làm hại bản thân|muốn biến mất|chết cho xong|(muốn|định|sẽ|tính|chỉ muốn|đi) treo cổ|treo cổ (tự tử|chết|cho xong|cho rồi)|(muốn|định|sẽ|tính) nhảy (cầu|lầu)|(muốn|định|sẽ|tính) uống thuốc (ngủ|chuột) (cho|để) chết)\b/),
+    re: VN(/\b(muốn chết|tự tử|tự tữ|tự sát|không muốn sống|chán sống|sống làm gì nữa|không còn lý do (để )?sống|kết thúc cuộc đời|tự làm đau|tự hại bản thân|làm hại bản thân|muốn biến mất|chết cho xong|(muốn|định|sẽ|tính|chỉ muốn|đi) treo cổ|treo cổ (tự tử|chết|cho xong|cho rồi)|(muốn|định|sẽ|tính) nhảy (cầu|lầu)|(muốn|định|sẽ|tính) uống thuốc (ngủ|chuột) (cho|để) chết|(muốn|định|sẽ|tính) uống (hết )?(thuốc ngủ|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)|(uống|dùng|nuốt) (bao nhiêu|mấy) (viên |liều |vỉ |lọ |hộp |chai )?(thì|là|để|sẽ|mới) (chết|tử vong|không tỉnh lại)|(uống|dùng|nuốt) (gì|thuốc gì|cái gì) (để|cho|thì|là) (chết|tử vong)|chết (không đau|nhẹ nhàng)|(cách|làm sao) (để )?(tự )?chết)\b/),
     max: 999,
     reply: () => ({
       text:

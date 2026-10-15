@@ -159,7 +159,8 @@ export function earlyIntent(text: string, flow: Flow = {}): Capability | FoodCho
   // Hỏi tìm QUÁN rõ ràng thì nhường (kể cả đang nói chuyện sức khoẻ).
   if (fc.intent === "food_place") return fc;
   // Đang nói chuyện sức khoẻ: "vậy nên ăn gì" là xin lời khuyên sức khoẻ, không phải nhờ chọn món.
-  if (flow.talk === "health") return null;
+  //   15/10 (audit): nhưng "giờ ĐI ăn gì", "đi uống gì" là rủ đi ăn — trước đây sau một mạch sức khoẻ câu này thành "đang hỏi về chuyện nào".
+  if (flow.talk === "health") return VN(/\b(đi ăn|đi uống|ra ngoài ăn|đi nhậu|đi cà phê|đi cf)\b/).test(n) && !VN(/\b(nên|kiêng|được không|bệnh|đau|sốt|ốm)\b/).test(n) ? fc : null;
   // Đang bói / tâm sự / tư vấn kinh doanh: chỉ nhận câu ngắn, hỏi thẳng chuyện ăn uống.
   return n.trim().split(" ").length <= 7 ? fc : null;
 }

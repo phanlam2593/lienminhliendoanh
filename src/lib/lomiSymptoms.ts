@@ -37,11 +37,15 @@ const SYMPTOMS: Sym[] = [
   { id: "chestpain", label: "đau ngực", re: VN(/\b(đau ngực|tức ngực|nặng ngực|đau thắt ngực|đau nhói ngực)\b/), red: "đau hoặc tức ngực" },
   { id: "palp", label: "tim đập nhanh", re: VN(/\b(tim đập nhanh|tim đập mạnh|tim đập loạn|hồi hộp đánh trống ngực|đánh trống ngực)\b/) },
   { id: "breath", label: "khó thở", re: VN(/\b(khó thở|thở dốc|hụt hơi|thở không nổi|nghẹt thở|thở khó khăn)\b/) },
-  { id: "severebreath", label: "khó thở nặng", re: VN(/\b(khó thở (nặng|dữ dội|lắm|quá)|tím tái|môi tím|không thở được)\b/), red: "khó thở nặng, tím môi" },
+  { id: "severebreath", label: "khó thở nặng", re: VN(/\b(khó thở (nặng|dữ dội|lắm|quá)|tím tái|môi tím|không thở được|thở không (được|nổi)|không thở nổi|ngừng thở|tắt thở)\b/), red: "khó thở nặng, tím môi" },
+  // 15/10 (audit sức khoẻ): "bà a lơ mơ gọi không tỉnh", "tự nhiên lú lẫn" từng rơi vào "chưa hiểu ý" — đây là dấu hiệu cấp cứu.
+  //   ("lơ mơ cả ngày" là buồn ngủ, thuộc mục "sleepy" bên dưới.)
+  { id: "unresp", label: "lơ mơ / khó đánh thức / lú lẫn đột ngột", re: VN(/\b(lơ mơ(?! cả ngày)|gọi không (tỉnh|dậy)|lay không (tỉnh|dậy)|đánh thức không (được|dậy)|khó đánh thức|mê man|li bì|lú lẫn đột ngột|tự nhiên lú lẫn|đột nhiên lú lẫn|bỗng nhiên lú lẫn|lẫn lộn đột ngột)\b/), red: "lơ mơ, khó đánh thức hoặc lú lẫn đột ngột" },
   { id: "stroke", label: "yếu / tê nửa người, méo miệng, nói khó", re: VN(/\b(yếu nửa người|liệt nửa người|tê nửa người|méo miệng|méo mặt|nói ngọng|nói khó đột ngột|nói lắp bắp đột ngột)\b/), red: "yếu liệt nửa người, méo miệng, nói khó (dấu hiệu đột quỵ)" },
   { id: "seizure", label: "co giật", re: VN(/\b(co giật|lên cơn giật)\b/), red: "co giật" },
   { id: "swellface", label: "sưng môi / mặt", re: VN(/\b(sưng môi|sưng mặt|phù mặt|sưng mí mắt|sưng họng)\b/) },
-  { id: "bleed", label: "chảy máu bất thường", re: VN(/\b(chảy máu cam|chảy máu chân răng|chấm đỏ trên da|xuất huyết dưới da|bầm tím dễ|chảy máu không cầm)\b/) },
+  { id: "bleed", label: "chảy máu bất thường", re: VN(/\b(chảy máu cam|chảy máu chân răng|chấm đỏ trên da|xuất huyết dưới da|bầm tím dễ)\b/) },
+  { id: "heavybleed", label: "chảy máu nhiều / không cầm được", re: VN(/\b(chảy máu (nhiều|không cầm|không ngừng|không dứt|xối xả|ồ ạt)|máu chảy (nhiều|không ngừng|không cầm|xối xả|ồ ạt)|mất (nhiều|rất nhiều) máu|máu phun)\b/), red: "chảy máu nhiều, không cầm được" },
   // Đầu, mắt, tai, mũi, họng
   { id: "headache", label: "đau đầu", re: VN(/\b(đau đầu|nhức đầu|đau nửa đầu|đau vùng trán|đau vùng đỉnh|đau sau gáy|đau búa bổ)\b/) },
   { id: "suddenhead", label: "đau đầu dữ dội đột ngột", re: VN(/\b(đau đầu (dữ dội|đột ngột|như búa bổ|nhất từ trước tới giờ))\b/), red: "đau đầu dữ dội đột ngột" },
@@ -90,6 +94,8 @@ const SYMPTOMS: Sym[] = [
   // Cơ xương khớp
   { id: "backpain", label: "đau lưng", re: VN(/\b(đau lưng|mỏi lưng|đau thắt lưng|đau cột sống|cứng lưng)\b/) },
   { id: "neckpain", label: "đau cổ vai gáy", re: VN(/\b(đau cổ vai gáy|mỏi cổ vai gáy|đau vai gáy|mỏi vai gáy|cứng cổ|vẹo cổ|đau cổ gáy|trẹo cổ|sái cổ|bị trẹo cổ|bị sái cổ)\b/) },
+  // 15/10: "sốt cao cứng cổ" — cứng cổ đi kèm sốt là dấu hiệu nguy hiểm (xem luật kết hợp trong analyzeBody); một mình thì vẫn tính như đau cổ vai gáy.
+  { id: "stiffneck", label: "cứng cổ", re: VN(/\b(cứng cổ|cổ cứng|không cúi được cổ|không gập được cổ)\b/) },
   { id: "radiate", label: "đau / tê lan xuống tay chân", re: VN(/\b(đau lan xuống chân|tê lan xuống chân|đau lan xuống tay|tê lan xuống tay|đau thần kinh tọa)\b/) },
   { id: "numb", label: "tê bì tay chân", re: VN(/\b(tê tay|tê chân|tê bì|kiến bò|tê đầu ngón)\b/) },
   { id: "jointpain", label: "đau khớp", re: VN(/\b(đau khớp|nhức khớp|đau gối|đau đầu gối|đau cổ tay|đau ngón chân cái|đau khớp ngón)\b/) },
@@ -792,7 +798,15 @@ function tempOf(n: string): number | null {
   if (!m || !VN(/\b(độ|oc|sốt|nhiệt|rưỡi)\b/).test(n)) return null;
   return Number(m[1]) + (m[2] === "ruoi" ? 0.5 : m[3] ? Number(m[3]) / 10 : 0);
 }
-const KID_RE = VN(/\b(con mình|con tôi|con em|con tui|bé nhà|bé mình|bé con|em bé|trẻ nhỏ|cháu mình|bé bi|bé \d+ tuổi|\d+ tháng tuổi)\b/);
+const KID_RE = VN(/\b(con mình|con tôi|con em|con tui|bé nhà|bé mình|bé con|em bé|trẻ nhỏ|cháu mình|bé bi|bé \d+ tuổi|\d+ tháng tuổi|bé \d+ (tháng|tuần)|(con|cháu|trẻ) \d+ (tháng|tuần|tuổi)|sơ sinh)\b/);
+// 15/10: tuổi của bé tính bằng tháng / tuần ("bé 2 tháng", "con 6 tuần", "trẻ sơ sinh") — bé dưới 3 tháng mà sốt thì phải đi khám ngay.
+function infantUnder3m(n: string): boolean {
+  if (VN(/\bsơ sinh\b/).test(` ${n} `)) return true;
+  const m = ` ${n} `.match(VN(/\b(?:bé|con|cháu|trẻ|em bé)\s+(\d+)\s+(tháng|tuần)\b/));
+  if (!m) return false;
+  const k = Number(m[1]);
+  return VN(/^tuần$/).test(m[2]) ? k < 13 : k < 3;
+}
 const SEVERE_RE = VN(/\b(búa bổ|dữ dội|đau lắm|đau quá trời|không chịu nổi|đau muốn xỉu|đau chết đi được)\b/);
 const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SELF_RE = VN(/\b(mình bị|tôi bị|em bị|anh bị|tui bị|đang bị|bị hoài|bị suốt|mình đang|tôi đang|nay bị|này bị|hôm nay bị|từ sáng|từ qua)\b/);
@@ -904,10 +918,6 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
       else if (t >= 37.5) now.push("fever"), notes.push(`🌡️ ${String(t).replace(".", ",")} độ là đang **sốt**.`);
       else notes.push(`🌡️ ${String(t).replace(".", ",")} độ thì chưa tính là sốt đâu, cứ theo dõi thêm nha.`);
     }
-    if (SEVERE_RE.test(` ${n} `)) {
-      detail = true;
-      notes.push("Đau dữ dội như vậy thì đừng chủ quan nha — nếu cơn đau đến **đột ngột**, kèm nôn ói, sốt cao, cứng cổ, yếu tay chân, nói khó hay lơ mơ thì gọi **115** ngay.");
-    }
     const d = n.match(DUR_RE);
     if (d) {
       detail = true;
@@ -917,7 +927,18 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
       notes.push(long ? `Bị ${num} ${unit} rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài.` : `Mới ${num} ${unit} thì cứ theo dõi thêm, nhưng nặng lên là đi khám liền nha.`);
     }
   }
+  // 15/10: "đau bụng dữ dội" ngay câu đầu (chưa ở mạch sức khoẻ) cũng phải được nhắc dấu hiệu cấp cứu — trước đây chỉ nhắc khi đang nói chuyện sức khoẻ.
+  if (SEVERE_RE.test(` ${n} `)) {
+    detail = true;
+    notes.push("Đau dữ dội như vậy thì đừng chủ quan nha — nếu cơn đau đến **đột ngột**, kèm nôn ói, sốt cao, cứng cổ, yếu tay chân, nói khó hay lơ mơ thì gọi **115** ngay.");
+  }
   if (KID_RE.test(` ${n} `)) now.push("kid");
+  // 15/10 (audit): đang mang thai / cho con bú mà kể triệu chứng → nhắc không tự dùng thuốc, hỏi bác sĩ / dược sĩ trước (NHS — xem lomiDrugData pregnancy-meds).
+  const momNote = VN(/\b(mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|đang mang bầu|bầu (\d+|mấy) (tháng|tuần))\b/).test(` ${n} `)
+    ? "🤰 **Đang mang thai:** đừng tự uống thuốc, kể cả thuốc hạ sốt, giảm đau — hỏi bác sĩ / dược sĩ trước (phần lớn thuốc đi qua nhau thai tới em bé, theo NHS). Có triệu chứng thì gọi hỏi nơi đang khám thai sớm; ra máu, đau bụng nhiều, ra nước hay thai máy ít thì đi khám **ngay**."
+    : VN(/\b(cho con bú|đang nuôi con bằng sữa mẹ)\b/).test(` ${n} `)
+      ? "🤱 **Đang cho con bú:** trước khi dùng thuốc gì, nói với dược sĩ / bác sĩ là mình đang cho con bú để họ chọn loại phù hợp (một lượng nhỏ thuốc có thể qua sữa, theo NHS)."
+      : "";
   // "đau đầu dữ dội đột ngột" đã bao gồm "đau đầu"; "sốt cao" bao gồm "sốt".
   if (now.includes("highfever") && !now.includes("fever")) now.push("fever");
   if (now.includes("suddenhead") && !now.includes("headache")) now.push("headache");
@@ -938,12 +959,23 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     .sort((a, b) => b.score - a.score || b.fit - a.fit);
   const kid = all.includes("kid");
   const syms = all.filter((id) => id !== "kid");
-  const reds = syms.map(byIdSym).filter((s) => s.red);
+  const reds: { red?: string }[] = syms.map(byIdSym).filter((s) => s.red);
+  // Luật KẾT HỢP (15/10): từng triệu chứng riêng thì chưa nguy hiểm, đi cùng nhau thì phải đi cấp cứu.
+  if ((all.includes("fever") || all.includes("highfever")) && all.includes("stiffneck")) reds.push({ red: "sốt kèm cứng cổ (cần loại trừ viêm màng não)" });
+  if (all.includes("swellface") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "sưng môi / mặt kèm khó thở (nguy cơ sốc phản vệ)" });
+  if (all.includes("rash") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "nổi mẩn / mề đay kèm khó thở (nguy cơ sốc phản vệ)" });
   const labels = syms.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const ctx = syms.filter((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const out: string[] = [];
   if (reds.length)
     out.push(`⚠️ **${joinVi(reds.map((s) => s.red!))}** là dấu hiệu cần đi cấp cứu. Gọi **115** hoặc tới cơ sở y tế gần nhất ngay nha, đừng chờ.`);
+  // 15/10: bé dưới 3 tháng tuổi mà sốt → đi khám ngay; không đưa danh sách bệnh / lời khuyên của người lớn ("cố đi làm", "tiêm vắc xin cúm").
+  if (kid && (all.includes("fever") || all.includes("highfever")) && infantUnder3m(normalizeVi(text))) {
+    out.push("⚠️ Bé **dưới 3 tháng tuổi** mà sốt (từ 38°C) thì cần đưa bé đi khám **ngay**, đừng tự theo dõi ở nhà. Bé li bì, bỏ bú, co giật, thở nhanh hay tím tái thì gọi **115**.");
+    out.push(KID_NOTE);
+    out.push(NOTE_BODY);
+    return { text: out.join("\n\n"), sx: all };
+  }
   // Kể thêm chi tiết / hỏi "nên làm gì" mà không có triệu chứng mới → đáp gọn, không lặp lại cả bài phân tích.
   const compact = inHealth && prev.length > 0 && !real.some((id) => !prev.includes(id));
   // 04/10: câu hỏi KIẾN THỨC ("đau đầu là do đâu?") ≠ đang bị → không gán triệu chứng cho người hỏi.
@@ -960,6 +992,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     const q1 = fev ? `Sốt khoảng bao nhiêu độ${since ? "" : ", bị bao lâu rồi"}?` : since ? "Mức độ ra sao — nhẹ, vừa hay dữ dội?" : "Bị bao lâu rồi, đau/khó chịu ở mức nào?";
     const q2 = fev ? "Có kèm ho, nôn, đau đầu, hay triệu chứng nào khác không?" : "Có kèm sốt, nôn, hay triệu chứng nào khác không?";
     out.push(`Bạn đang bị **${joinVi(labels)}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• ${q1}\n• ${q2}`);
+    if (momNote) out.push(momNote);
     out.push("Nếu thấy đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay, đừng chờ.");
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };
@@ -976,6 +1009,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   }
   if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
   out.push(...notes);
+  if (momNote) out.push(momNote);
   if (kid && !prev.includes("kid")) out.push(KID_NOTE);
   if (!scored.length) {
     out.push(
@@ -1012,8 +1046,8 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     ),
   ).slice(0, 3);
   if (missing.length && top.length > 1)
-    out.push(`Để Lomi phân biệt rõ hơn: bạn có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không?${DUR_RE.test(` ${n} `) ? "" : " Bị bao lâu rồi?"}`);
-  else out.push(DUR_RE.test(` ${n} `) || prev.length ? "Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha." : "Bạn bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.");
+    out.push(`Để Lomi phân biệt rõ hơn: ${kid ? "bé" : "bạn"} có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không?${DUR_RE.test(` ${n} `) ? "" : " Bị bao lâu rồi?"}`);
+  else out.push(DUR_RE.test(` ${n} `) || prev.length ? "Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha." : `${kid ? "Bé" : "Bạn"} bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.`);
   out.push(NOTE_BODY);
   return { text: out.join("\n\n"), sx: all };
 }

@@ -110,6 +110,7 @@ import {
 import { TarotCards } from "@/components/LomiTarot";
 import { VR, beginViTurn, typedWithAccents, VN } from "@/lib/viMatch";
 import { replyMismatch } from "@/lib/lomiReplyGate";
+import { urgentOf } from "@/lib/lomiUrgent";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn. 30/09: bỏ giới hạn 20 câu/ngày theo ý Kir
@@ -560,7 +561,8 @@ export function AiChat({
     // Đang nói về một người mà Lomi chỉ đáp một câu nghe kể ngắn → vẫn nhớ đang nói về người đó thêm một lượt.
     if (!reply.about && prevA?.about && (prevA.aboutAge ?? 0) < 1 && !newFlow && (reply.talk || (reply.heart && reply.heart === prevA.heart))) reply = { ...reply, about: prevA.about, aboutAge: (prevA.aboutAge ?? 0) + 1 };
     // Chốt cuối: câu đáp có đúng bệnh / thuốc người dùng hỏi không (lib/lomiReplyGate). Lạc → nói thật, mời hỏi lại, ghi nhật ký.
-    const gate = replyMismatch(rawRef.current ?? asked, reply, prevA);
+    // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
+    const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
     if (reply.stuck) {
       recordStuck(
@@ -859,6 +861,26 @@ export function AiChat({
       // Người bị là NGƯỜI KHÁC ("bạn e bị chồng đánh") mà hỏi mình nên làm gì → lời khuyên cho người đứng ngoài, không phải cho nạn nhân.
       const hp = lastA0?.harm ? (helperAdvice(raw, lastA0.harm) ?? boundaryAdvice(raw, lastA0.harm, lastA0.content) ?? fearInHarm(raw, lastA0.harm)) : null;
       if (hp) return localReply(q, { role: "assistant", content: hp, local: true, ...keepHarm, harm: lastA0!.harm });
+    }
+
+    // 15/10 — KHẨN CẤP (lib/lomiUrgent, audit sức khoẻ): câu KỂ một tình huống cấp cứu (uống nhầm chất độc, chảy máu không cầm, đuối nước,
+    //   bỏng, nghi phản vệ, mang thai ra máu, tiền sản giật, hạ đường huyết…) → nói ngay việc phải làm + phần sơ cứu của thẻ có nguồn.
+    //   Chạy TRƯỚC mạch chuyện / khung câu / lưới cuối — các lớp đó từng đáp "Chúc mừng nha!", "Giờ sao rồi?", "chưa hiểu ý".
+    if (!forceAi && !en && !crisisReply(q, lang)) {
+      const ug = urgentOf(raw) ?? (raw !== q ? urgentOf(q) : null);
+      if (ug) {
+        const mt = ug.card ? await loadMedTopic(ug.card) : null;
+        const part = (a: "care" | "emergency") => (mt ? renderMed(mt, a).text : "");
+        const body = !mt ? "" : ug.aspect === "both" ? `${part("care").replace(/\n\n📚[^\n]*$/u, "")}\n\n${part("emergency")}` : part(ug.aspect ?? "care");
+        topicHit("health");
+        return localReply(q, {
+          role: "assistant",
+          content: [ug.head, body, ug.extra].filter(Boolean).join("\n\n"),
+          local: true,
+          health: mt ? { subject: `kb:${mt.id}`, label: mt.names[0] } : {},
+          ...(mt ? { med: { id: mt.id, aspect: ug.aspect === "emergency" ? "emergency" : "care" } } : {}),
+        });
+      }
     }
 
     // 10/10 — MẠCH CHUYỆN CÓ TRẠNG THÁI (lib/lomiStory): Lomi đang theo chuyện một người / con vật ốm hay mới mất → đọc tin này như câu
@@ -1319,7 +1341,8 @@ export function AiChat({
           hsub: lastA?.hsub,
           quick: dg!.kind === "which" && lastA?.sx?.length ? ["Nên làm gì cho đỡ?", "Khi nào cần đi khám?"] : undefined,
         });
-        if (dg?.kind === "interact" || dg?.kind === "pet") {
+        // (15/10: hỏi dùng thuốc khi mang thai / cho con bú cũng trả lời trước bài giới thiệu thuốc — bài đó không nói chuyện thai kỳ.)
+        if (dg?.kind === "interact" || dg?.kind === "pet" || dg?.preg) {
           topicHit("health");
           return localReply(q, drugMsg());
         }

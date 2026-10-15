@@ -59,6 +59,8 @@ export type FrameCtx = {
   hospitalCtx?: boolean;
   /** Triệu chứng trong câu chỉ là loại "nhẹ, nói bâng quơ" (cảm, mệt, ho…) — lớp sức khoẻ không phân tích câu kể kiểu đó. */
   softOnly?: boolean;
+  /** 15/10: câu có triệu chứng KHÁC tên bệnh đã nêu ("ông bị tiểu đường mà chóng mặt vã mồ hôi") → lớp sức khoẻ đọc triệu chứng đó. */
+  sxOther?: boolean;
 };
 export type FrameReply = ChatReply & {
   intent: string;
@@ -276,6 +278,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   const person = f.subject === "third";
   const pet = f.subject === "pet";
   // "vợ a đang bầu", "chị e có thai rồi" — tin vui, không phải chuyện ốm.
+  // 15/10 (audit): mang thai KÈM triệu chứng ("bà bầu bị sốt", "vợ a mang thai bị đau bụng") không phải tin vui để chúc mừng — để lớp sức khoẻ trả lời.
+  if (p.cls === "preg" && person && !f.neg && c.sxOther) return null;
   if (p.cls === "preg" && person && !f.neg) return { intent: "frame:third_preg", talk: true, text: `${subj} ${p.ongoing ? "đang " : ""}${p.head} hả 😄 Chúc mừng nha! Được mấy tháng rồi bạn?` };
   if (p.cls === "death" && (person || pet))
     return { intent: "frame:third_loss", talk: true, keepHeart: true, text: `${subj} ${p.recent ? "mới " : ""}${p.head} hả 🥺 Lomi chia buồn với bạn nha. ${pet ? "Bé ở với bạn lâu chưa?" : "Bạn đang thấy thế nào, kể Lomi nghe với."}` };
@@ -287,11 +291,12 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
     return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `${subj} ${what2} hả 🥺 Thương ghê. ${p.obj ? `Giờ ${lowS} sao rồi bạn, đỡ hơn chưa?` : `Bác sĩ có nói ${lowS} bị gì không?`}` };
   }
   // Bệnh đã có tên, tức là đã được chẩn đoán ("mẹ a bị ung thư", "ba e bị tiểu đường") → hỏi đang điều trị ra sao, không hỏi "đi khám chưa".
+  if ((person || pet) && p.cls === "ill" && DIAGNOSED.test(p.head) && c.sxOther) return null; // bệnh đã có tên + triệu chứng đang xảy ra → lớp sức khoẻ
   if ((person || pet) && p.cls === "ill" && DIAGNOSED.test(p.head)) {
     const lowS = pet ? "bé" : subj.charAt(0).toLowerCase() + subj.slice(1);
     return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `${subj} bị ${p.head} hả 🥺 Thương ghê. Giờ ${lowS} đang điều trị sao rồi bạn?` };
   }
-  if ((person || pet) && p.cls !== "ill" && INJURY.test(`${p.head} ${p.obj}`) && !f.neg)
+  if ((person || pet) && p.cls !== "ill" && INJURY.test(`${p.head} ${p.obj}`) && !f.neg && !c.sxOther)
     return { intent: "frame:third_ill", talk: true, keepHeart: true, text: `${subj} ${echo(f)} hả 🥺 Thương ghê. ${pet ? "Bạn đưa bé đi thú y chưa?" : "Có nặng không bạn, đã đi khám chưa?"}` };
   if (p.cls === "ill") {
     // Có triệu chứng cụ thể thì lớp sức khoẻ trả lời (router đổi chủ ngữ cho đúng); ở đây là "đang ốm", "bị bệnh" chung chung.
@@ -678,6 +683,8 @@ export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | nu
     mode: flow.mode,
     health: speechAct && f.act !== "leave" ? false : healthClaim(q, f, flow),
     symptom: (analyzeBody(q)?.sx.length ?? 0) > 0,
+    // (huyết áp cao / thấp là TÊN BỆNH đã nêu, không phải triệu chứng mới; "kid" chỉ là cờ trẻ em.)
+    sxOther: (analyzeBody(q)?.sx ?? []).some((id) => !["highbp", "lowbp", "kid"].includes(id)) && !onlySoftSymptoms(q),
     medical: MEDICAL.test(f.raw.normalize("NFC").toLowerCase()),
     heart: speechAct ? undefined : relationReply(q) ? "rel" : heartStart(q, false)?.theme,
     // "điện thoại a hết pin", "xe a hư" — chủ ngữ là một đồ vật đã biết thì chữ "pin", "mạng"… không phải chuyện app.
