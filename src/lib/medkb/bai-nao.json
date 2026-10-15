@@ -40,7 +40,7 @@
   "emergency": [],
   "sources": [
     {"title": "Cerebral palsy", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/cerebral-palsy/", "reviewed": "2023-05-31"},
-    {"title": "Cerebral palsy - Symptoms", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/cerebral-palsy/symptoms/"},
+    {"title": "Cerebral palsy - Symptoms", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/cerebral-palsy/symptoms/", "reviewed":"2023-05-31"},
     {"title": "Cerebral Palsy", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/cerebralpalsy.html", "reviewed": "2025-11-23"}
   ],
   "verifiedAt": "2026-10-09"

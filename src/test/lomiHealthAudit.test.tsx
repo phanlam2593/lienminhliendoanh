@@ -78,6 +78,39 @@ describe("thuốc", () => {
   }, T);
 });
 
+describe("chỉ số, té ngã, kiến thức có nguồn (đợt 2)", () => {
+  it("ngưỡng huyết áp / đường huyết theo nguồn, so đúng con số, không chẩn đoán", async () => {
+    const bp = await last(["huyết áp 150/95 có cao không"]);
+    expect(bp.content).toMatch(/140\/90/);
+    expect(bp.content).toMatch(/Một lần đo chưa đủ để kết luận/);
+    expect(bp.content).toMatch(/NHS/);
+    expect((await last(["đường huyết lúc đói 6.2 có sao không"])).content).toMatch(/tiền tiểu đường/);
+    expect((await last(["a1c 6.8% là sao"])).content).toMatch(/A1C \*\*6,8%\*\* ở mức \*\*tiểu đường\*\*/);
+    expect((await last(["đường huyết 3.5"])).content).toMatch(/hạ đường huyết/);
+    expect((await last(["huyết áp bao nhiêu là cao"])).content).toMatch(/135\/85/);
+  }, T);
+  it("người lớn tuổi bị ngã → thẻ té ngã có nguồn; không đứng dậy được → gọi 115", async () => {
+    expect((await last(["mẹ a 80 tuổi bị ngã"])).med?.id).toBe("te-nga");
+    expect((await last(["bà a bị ngã không đứng dậy được"])).content).toMatch(CALL);
+    expect((await last(["ngã ba đường nào đi đà lạt"])).med?.id).not.toBe("te-nga");
+  }, T);
+  it("thuốc: hỏi có cần kháng sinh, thuốc hạ sốt cho trẻ (kể cả không dấu), tên thuốc + uống sao", async () => {
+    expect((await chat(["a bị ho", "có đờm vàng", "có cần kháng sinh không"]))[2].content).toMatch(/kháng sinh.*bác sĩ kê đơn/);
+    for (const t of ["thuốc hạ sốt cho trẻ", "thuoc ha sot cho tre"]) expect((await last([t])).content, t).toMatch(/tính theo tuổi, cân nặng/);
+    expect((await last(["berberin uống sao"])).drug?.kind).toBe("dose");
+  }, T);
+  it("câu hỏi món theo bệnh đi qua thẻ có nguồn thay cho bảng kiêng cũ", async () => {
+    const r = await chat(["mình bị đau dạ dày", "uống cà phê được không"]);
+    expect(r[1].content).toMatch(/📚 Nguồn/);
+    expect((await last(["bị dị ứng ăn tôm được không"])).med?.id).toBe("di-ung-thuc-pham");
+    expect((await last(["mới mổ kiêng gì"])).content).toMatch(/chưa gắn nguồn y khoa cụ thể/);
+  }, T);
+  it("kiến thức phổ thông: có nguồn thì ghi nguồn, chưa có thì nói rõ", async () => {
+    expect((await last(["uống cà phê nhiều có sao không"])).content).toMatch(/400 mg[\s\S]*FDA/);
+    expect((await last(["ngủ bao nhiêu là đủ"])).content).toMatch(/CDC/);
+  }, T);
+});
+
 describe("ngữ cảnh nhiều lượt", () => {
   it("con sốt → 39 độ → cảm ơn → “giờ đi ăn gì” → gợi ý món (không còn kẹt ở mạch sức khoẻ)", async () => {
     const r = await chat(["con a sốt", "39 độ", "cảm ơn e", "giờ đi ăn gì"]);

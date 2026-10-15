@@ -60,10 +60,11 @@ const DOSE = VN(/\b(liều|mấy viên|bao nhiêu viên|uống bao nhiêu|ngày 
 const STOP = VN(/\b(ngưng thuốc|ngưng uống|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
 const SIDE = VN(/\b(tác dụng phụ|phản ứng phụ|có hại gì|hại gan|hại thận|hại dạ dày|có gây nghiện)\b/);
 const WHAT = VN(/\b(là thuốc gì|thuốc gì vậy|là gì|trị gì|chữa gì|trị bệnh gì|chữa bệnh gì|để làm gì|dùng để làm gì|tác dụng gì|công dụng|có tác dụng)\b/);
-const WHICH = VN(/\b(uống thuốc gì|thuốc gì|thuốc nào|mua thuốc gì|dùng thuốc gì|có thuốc nào|uống gì cho (đỡ|hết|khỏi|bớt)|bôi thuốc gì|xịt thuốc gì|nhỏ thuốc gì)\b/);
+// (15/10: "thuốc hạ sốt cho trẻ", "thuốc ho cho bé" — hỏi thuốc nào cho một người, không có chữ "gì".)
+const WHICH = VN(/\b(uống thuốc gì|thuốc gì|thuốc nào|thuốc (hạ sốt|giảm đau|cảm|ho|tiêu chảy|đau bụng|dị ứng|say xe) cho (trẻ|bé|con|em bé|người già|bà bầu)|mua thuốc gì|dùng thuốc gì|có thuốc nào|uống gì cho (đỡ|hết|khỏi|bớt)|bôi thuốc gì|xịt thuốc gì|nhỏ thuốc gì)\b/);
 const ASKS = VN(/\b(không|ko|k|được|sao|gì|nào|thế nào|bao nhiêu|mấy|hả|ha|nhỉ|chưa)\b/);
 // Hỏi CÓ NÊN dùng thuốc không ("có nên uống kháng sinh không", "uống thuốc ngủ được không").
-const SHOULD = VN(/\b(có nên|nên|có cần|cần|có được|được) (uống|dùng|mua|xài|tiêm|chích|bôi|xịt|nhỏ)\b|\b(uống|dùng|xài|tiêm|chích|bôi)( \S+){1,3} (được không|dc không|đc không|được ko|có sao không|có được không|có nên không|được chưa)\b/);
+const SHOULD = VN(/\b(có nên|nên|có cần|cần|có được|được) (uống|dùng|mua|xài|tiêm|chích|bôi|xịt|nhỏ)\b|\b(có nên|nên|có cần|cần|có phải) (kháng sinh|thuốc ngủ|thuốc an thần|corticoid)\b|\b(uống|dùng|xài|tiêm|chích|bôi)( \S+){1,3} (được không|dc không|đc không|được ko|có sao không|có được không|có nên không|được chưa)\b/);
 const RX_ONLY = VN(/\b(kháng sinh|thuốc ngủ|thuốc an thần|corticoid|thuốc giảm đau mạnh)\b/);
 const ALCOHOL = VN(/\b(rượu|bia|nhậu)\b/);
 // 15/10 (audit): "đang uống thuốc tim có uống panadol được không" — đang dùng một thuốc mà hỏi uống thêm thuốc khác là hỏi DÙNG CHUNG,
@@ -129,7 +130,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // 15/10: tên thuốc ngoại lai đứng đầu câu hỏi liều ("amoxicillin uống mấy lần 1 ngày") cũng là hỏi thuốc — trước đây câu này rơi sang
   //   câu hỏi thường gặp về app ("10 lượt quẹt / ngày").
   const lead = n.trim().split(" ")[0] ?? "";
-  const med = MED_WORD.test(n) || (isForeign(lead) && !NOT_DRUG_WORD.test(lead) && DOSE.test(n));
+  const med = MED_WORD.test(n) || (isForeign(lead) && !NOT_DRUG_WORD.test(lead) && (DOSE.test(n) || VN(/\b(uống|dùng|xài) (sao|thế nào|như thế nào|như nào|làm sao)|cách (uống|dùng)\b/).test(n)));
   const who = ctx.who;
   const forWho = who ? ` cho ${who}` : "";
 
@@ -295,7 +296,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
     const about = ctx.label ? `${cap(ctx.label)} thì ` : "";
     return {
       kind: "which",
-      text: `${about}Lomi không kê thuốc được${forWho} — thuốc nào hợp còn tuỳ nguyên nhân, tuổi, bệnh nền và thuốc khác đang dùng.\n• Ra nhà thuốc kể rõ triệu chứng (bị gì, bao lâu, mức độ) để dược sĩ tư vấn; ${who ? `${who} ` : ""}đang có bệnh nền, mang thai hoặc là trẻ nhỏ thì nói luôn.\n• Uống 1–2 ngày không đỡ, hoặc nặng lên, thì đi khám chứ đừng đổi thuốc liên tục.`,
+      text: `${about}Lomi không kê thuốc được${forWho} — thuốc nào hợp còn tuỳ nguyên nhân, tuổi, bệnh nền và thuốc khác đang dùng.\n• Ra nhà thuốc kể rõ triệu chứng (bị gì, bao lâu, mức độ) để dược sĩ tư vấn; ${who ? `${who} ` : ""}đang có bệnh nền, mang thai hoặc là trẻ nhỏ thì nói luôn.\n• Uống 1–2 ngày không đỡ, hoặc nặng lên, thì đi khám chứ đừng đổi thuốc liên tục.${VN(/\b(trẻ|bé|em bé|con nít|trẻ con|con tôi|con mình|con em|con anh|con a|con e)\b/).test(n) ? "\n• Thuốc cho trẻ phải đúng loại dành cho trẻ và tính theo tuổi, cân nặng — không chia thuốc của người lớn cho bé; bé dưới 3 tháng mà sốt thì đi khám ngay." : ""}`,
     };
   }
   return null;

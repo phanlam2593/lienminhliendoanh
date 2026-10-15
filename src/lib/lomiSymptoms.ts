@@ -129,7 +129,7 @@ const SYMPTOMS: Sym[] = [
   { id: "screen", label: "nhìn màn hình nhiều", re: VN(/\b(nhìn màn hình|ngồi máy tính|dùng điện thoại nhiều|ngồi lâu)\b/) },
   { id: "coldweather", label: "khi trời lạnh / bụi", re: VN(/\b(trời lạnh|thời tiết lạnh|gió lạnh|bụi|phấn hoa|lông chó|lông mèo|ẩm mốc)\b/) },
   { id: "alcohol", label: "sau khi uống rượu bia", re: VN(/\b(uống rượu|uống bia|đi nhậu|nhậu xong|say rượu|say xỉn)\b/) },
-  { id: "stress", label: "đang căng thẳng", re: VN(/\b(căng thẳng|stress|áp lực|lo lắng)\b/) },
+  { id: "stress", label: "đang căng thẳng", re: VN(/\b(căng thẳng|stress|áp lực|lo lắng|vì sếp|vì công việc|vì việc học|vì học hành|vì deadline|chạy deadline)\b/) },
 ];
 
 type Cond = {
@@ -772,7 +772,9 @@ const STATES: State[] = [
 ];
 
 // ═══════════════════════ BỘ PHÂN TÍCH ═══════════════════════
-const NOTE_BODY = "(Lomi chỉ gợi ý tham khảo dựa trên triệu chứng bạn kể, không thay được chẩn đoán của bác sĩ nha 🩺)";
+// 15/10 (audit): bảng bệnh / lời khuyên trong file này là kiến thức phổ thông CHƯA gắn nguồn cụ thể — nói rõ trong câu đáp.
+//   Muốn xem phần có nguồn thì hỏi tên bệnh (kho lib/medkb trả lời kèm nguồn).
+const NOTE_BODY = "(Lomi chỉ gợi ý tham khảo dựa trên triệu chứng bạn kể — đây là kiến thức phổ thông, chưa gắn nguồn y khoa cụ thể và không thay được chẩn đoán của bác sĩ nha 🩺 Muốn xem phần có nguồn thì hỏi Lomi tên bệnh, vd “cảm cúm là gì”.)";
 const NOTE_MIND = "(Đây là gợi ý để bạn hiểu mình hơn, không phải chẩn đoán — Lomi luôn ở đây nghe bạn kể 💚)";
 
 function found(list: Sym[], n: string): Sym[] {

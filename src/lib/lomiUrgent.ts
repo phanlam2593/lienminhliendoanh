@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -63,6 +63,9 @@ const PE_RIB = VN(/\b(đau (dưới|vùng) sườn|đau thượng vị|đau trê
 const DIABETES = VN(/\b(tiểu đường|đái tháo đường)\b/);
 const HYPO = VN(/\b(vã mồ hôi|toát mồ hôi|đổ mồ hôi lạnh|run tay|run rẩy|run người|lả đi|mệt lả|đói cồn cào|bủn rủn|lú lẫn|lơ mơ|choáng|xỉu|ngất)\b/);
 
+const FALL = VN(/\b(bị ngã|té ngã|bị té|ngã cầu thang|té cầu thang|ngã xe|té xe|trượt ngã|ngã đập|té đập)\b/);
+const FALL_BAD = VN(/\b(không (đứng|ngồi|tự) dậy được|không dậy được|không đứng lên được|đập đầu|va đầu|đau (hông|lưng|cổ|háng) (dữ dội|nhiều|lắm|quá)|gãy|không cử động được|bất tỉnh|ngất|lơ mơ)\b/);
+const ELDER = VN(/\b(ông|bà|ông bà|ba|bố|mẹ|má|cụ|người già|người cao tuổi|cao tuổi|lớn tuổi|[6-9]\d tuổi|1[01]\d tuổi)\b/);
 const CALL = "gọi **115** ngay";
 
 /** Câu kể một tình huống cần xử trí khẩn → tình huống + thẻ để trả lời; không phải thì null. */
@@ -119,6 +122,12 @@ export function urgentOf(text: string): Urgent | null {
   if (SWELL_AIR.test(n) || (SWELL.test(n) && AIRWAY.test(n)) || (SUDDEN_LIP.test(n) && TRIGGER.test(n)))
     return { id: "anaphylaxis", card: "soc-phan-ve", aspect: "care", head: `🚨 Sưng môi / lưỡi / họng đột ngột, hoặc nổi mẩn kèm khó thở có thể là **sốc phản vệ** — ${CALL}, nói rõ là nghi phản vệ, đừng chờ xem có đỡ không.` };
   if (BURN.test(n)) return { id: "burn", card: "so-cuu-bong", aspect: "care", head: "🔥 Sơ cứu bỏng **ngay bây giờ** theo hướng dẫn dưới đây — và xem phần khi nào phải gọi **115**." };
+  // Té ngã (thẻ te-nga, NHS Falls): gọi cấp cứu khi có thể chấn thương đầu, lưng, cổ, hông hoặc không đứng dậy được.
+  if (FALL.test(n) && FALL_BAD.test(n))
+    return { id: "fall", card: "te-nga", aspect: "care", head: `🚨 Bị ngã mà **có thể chấn thương đầu, lưng, cổ, hông, hoặc không tự đứng dậy được** → ${CALL}. Đừng cố đỡ dậy vội nếu nghi chấn thương cổ, lưng, hông.` };
+  // Người LỚN TUỔI bị ngã (kể cả không thấy đau): NHS khuyên đi khám sau khi ngã để tìm nguyên nhân, phòng ngã lại.
+  if (FALL.test(n) && ELDER.test(n) && !VN(/\b(ngã xe đạp nhẹ|không sao rồi|ổn rồi)\b/).test(n))
+    return { id: "fall", card: "te-nga", aspect: "care", head: "⚠️ Người lớn tuổi bị ngã thì nên được kiểm tra kỹ, kể cả khi trông không sao — NHS khuyên đi khám sau khi bị ngã. Nếu **có thể chấn thương đầu, lưng, cổ, hông, hoặc không tự đứng dậy được** → gọi **115** ngay." };
   if (DIABETES.test(n) && HYPO.test(n))
     return {
       id: "hypo",

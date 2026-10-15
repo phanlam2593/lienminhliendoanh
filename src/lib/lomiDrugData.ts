@@ -26,6 +26,8 @@ export type DrugSource = {
   url: string;
   /** Ngày chính trang nguồn ghi là đã rà soát / cập nhật (YYYY-MM-DD), nếu có. */
   reviewed?: string;
+  /** 15/10: trang KHÔNG ghi ngày rà soát (vd trang tổng của NHS) → ngày trang được cập nhật (YYYY-MM-DD), hiện là "cập nhật …". */
+  updated?: string;
 };
 /** Một ý kiến thức + nguồn của nó (chỉ số trong `sources`). */
 export type DrugFact = { text: string; src: number[] };
@@ -394,7 +396,7 @@ const dmy = (iso: string) => iso.split("-").reverse().join("/");
 export function sourceList(d: DrugEntry): string {
   return [
     `Mấy điều Lomi nói về **${d.names[0]}** lấy từ các trang sau (Lomi đối chiếu ngày ${dmy(d.verifiedAt)}):`,
-    d.sources.map((s) => `• ${s.publisher} — “${s.title}”${s.reviewed ? ` (trang ghi rà soát ${dmy(s.reviewed)})` : ""}\n  ${s.url}`).join("\n"),
+    d.sources.map((s) => `• ${s.publisher} — “${s.title}”${s.reviewed ? ` (trang ghi rà soát ${dmy(s.reviewed)})` : s.updated ? ` (trang cập nhật ${dmy(s.updated)})` : ""}\n  ${s.url}`).join("\n"),
     "Điều gì không có trong các trang đó thì Lomi không nói. Thông tin có thể đã được cập nhật sau ngày Lomi đối chiếu — cần chắc thì hỏi dược sĩ / bác sĩ nha.",
   ].join("\n\n");
 }
@@ -402,12 +404,14 @@ export function sourceList(d: DrugEntry): string {
 /** Dòng nguồn đặt cuối lời đáp: tên cơ quan + ngày nguồn rà soát + ngày Lomi đối chiếu. `now` để test. */
 export function sourceLine(d: Pick<DrugEntry, "sources" | "verifiedAt">, src: number[], now = Date.now()): string {
   const used = Array.from(new Set(src)).sort((a, b) => a - b).map((i) => d.sources[i]);
-  const byPub = new Map<string, string | undefined>();
+  // Mỗi cơ quan một mục, lấy ngày mới nhất; ngày rà soát ghi "rà soát", ngày trang cập nhật (trang không ghi rà soát) ghi "cập nhật".
+  const byPub = new Map<string, { d?: string; kind: "rà soát" | "cập nhật" }>();
   for (const s of used) {
     const prev = byPub.get(s.publisher);
-    byPub.set(s.publisher, prev && s.reviewed && prev > s.reviewed ? prev : (s.reviewed ?? prev));
+    const cur = s.reviewed ? { d: s.reviewed, kind: "rà soát" as const } : s.updated ? { d: s.updated, kind: "cập nhật" as const } : { kind: "rà soát" as const };
+    byPub.set(s.publisher, prev?.d && (!cur.d || prev.d > cur.d) ? prev : cur.d ? cur : (prev ?? cur));
   }
-  const list = [...byPub.entries()].map(([p, r]) => (r ? `${p}, rà soát ${dmy(r)}` : p)).join(" · ");
+  const list = [...byPub.entries()].map(([p, r]) => (r.d ? `${p}, ${r.kind} ${dmy(r.d)}` : p)).join(" · ");
   const stale = (now - Date.parse(d.verifiedAt)) / 86_400_000 > REVIEW_AFTER_DAYS;
   return `📚 Nguồn: ${list}. Lomi đối chiếu ngày ${dmy(d.verifiedAt)}${stale ? " — đã hơn một năm, bạn nên hỏi lại dược sĩ / bác sĩ để có thông tin mới nhất" : ""}. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ / dược sĩ.`;
 }

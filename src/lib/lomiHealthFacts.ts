@@ -11,7 +11,9 @@ import { VR, VN } from "@/lib/viMatch";
 
 // cue = chủ đề chỉ là TÊN đồ uống ("cà phê", "trà sữa") → phải có thêm ý hỏi về sức khoẻ mới trả lời kiến thức,
 // để "cf?", "đi cà phê không", "trà sữa ở đâu ngon" không bị đáp thành bài sức khoẻ (01/10 r3, test thật trên app).
-type Fact = { id: string; re: RegExp; a: string; cue?: boolean };
+// src (15/10, audit sức khoẻ): nguồn đã đối chiếu cho đúng các ý trong câu trả lời; không có = kiến thức phổ thông CHƯA gắn nguồn
+//   (câu đáp ghi rõ điều đó). Các con số (lượng caffeine, giờ ngủ, lượng nước, phút vận động…) chỉ giữ khi khớp nguồn.
+type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string };
 const HEALTH_CUE =
   VN(/\b(có sao|có hại|có tốt|tốt không|hại không|tác hại|lợi ích|ảnh hưởng|sức khoẻ|uống nhiều|nhiều quá|quá nhiều|mỗi ngày|bao nhiêu|mấy ly|mấy cốc|lúc nào|buổi tối|buổi sáng|khi đói|bụng đói|dạ dày|mất ngủ|khó ngủ|tim đập|huyết áp|mang thai|có bầu|cho con bú|trẻ em|béo|mập|tăng cân|giảm cân|đường|nghiện|cai|bỏ được|nóng trong|lợi tiểu|nên uống|có nên uống|uống được không)\b/);
 
@@ -26,7 +28,8 @@ const FACTS: Fact[] = [
     id: "coffee",
     cue: true,
     re: VN(/\b(cà phê|cafe|cf|caffeine|cafein)\b/),
-    a: "☕ **Cà phê:** với người lớn khoẻ mạnh, uống vừa phải (khoảng 1–3 ly nhỏ/ngày) thường không sao, còn giúp tỉnh táo.\n• Uống **nhiều** dễ bị: tim đập nhanh, bồn chồn, mất ngủ, đau/xót dạ dày, đi tiểu nhiều.\n• Nên: uống sau khi ăn, tránh uống sau 2–3 giờ chiều, uống thêm nước lọc.\n• Nên hạn chế nếu: đau dạ dày, trào ngược, mất ngủ, lo âu, tim mạch/huyết áp cao, đang mang thai (hỏi bác sĩ).\n• Để ý lượng đường, sữa đặc trong ly cà phê nữa nha 😄",
+    a: "☕ **Cà phê:** theo FDA (Mỹ), người lớn khoẻ mạnh dùng tới khoảng **400 mg caffeine/ngày** — cỡ 2–3 cốc cà phê lớn (khoảng 350 ml/cốc) — thường không gây tác hại.\n• Dùng **quá nhiều** dễ bị: tim đập nhanh, hồi hộp, tăng huyết áp, mất ngủ, lo âu, bồn chồn, khó chịu dạ dày, buồn nôn, đau đầu.\n• Đang mang thai, định có thai, cho con bú, có bệnh hoặc đang dùng thuốc thì hỏi bác sĩ xem có cần bớt caffeine không.\n• Trẻ em và tuổi teen không nên dùng nước tăng lực.\n• Để ý lượng đường, sữa đặc trong ly cà phê nữa nha 😄",
+    src: "FDA (Hoa Kỳ) — Spilling the Beans: How Much Caffeine is Too Much?, cập nhật 28/08/2024",
   },
   {
     id: "tea",
@@ -44,12 +47,14 @@ const FACTS: Fact[] = [
   {
     id: "water",
     re: VN(/\b(uống bao nhiêu nước|uống nước bao nhiêu|uống đủ nước|uống ít nước|uống nhiều nước|nước lọc|thiếu nước)\b/),
-    a: "💧 **Uống nước:** mỗi người cần khác nhau tuỳ cân nặng, thời tiết, vận động. Cách dễ nhất: uống rải rác cả ngày, **nước tiểu vàng nhạt** là đủ; vàng sẫm là đang thiếu.\n• Uống nhiều hơn khi trời nóng, tập thể dục, sốt, tiêu chảy.\n• Người bệnh thận, tim nên hỏi bác sĩ lượng nước phù hợp.",
+    a: "💧 **Uống nước:** NHS khuyên uống khoảng **6–8 cốc / ly mỗi ngày**, đủ để **nước tiểu có màu vàng nhạt, trong**. Nước lọc, sữa ít béo, đồ uống ít / không đường, cả trà và cà phê đều được tính.\n• Nước ép trái cây, sinh tố cũng tính nhưng có đường tự do — gộp lại chỉ nên khoảng 150 ml/ngày.\n• Người bệnh thận, tim nên hỏi bác sĩ lượng nước phù hợp.",
+    src: "NHS (Anh) — The Eatwell Guide, rà soát 29/11/2022",
   },
   {
     id: "sleep",
     re: VN(/\b(ngủ bao nhiêu|ngủ mấy tiếng|ngủ bao lâu|ngủ đủ|thức khuya có sao|thức khuya|ngủ muộn)\b/),
-    a: "😴 **Giấc ngủ:** người lớn thường cần khoảng **7–9 tiếng** mỗi đêm; tuổi teen cần nhiều hơn.\n• Thức khuya thường xuyên dễ gây mệt, giảm tập trung, tăng cân, da xấu, dễ ốm, tâm trạng thất thường.\n• Mẹo: ngủ – dậy giờ cố định, cất điện thoại trước khi ngủ 30–60 phút, phòng tối và mát, tránh cà phê buổi chiều.",
+    a: "😴 **Giấc ngủ** theo CDC (Mỹ): tuổi teen 13–17 cần **8–10 tiếng**; người lớn 18–60 tuổi **từ 7 tiếng trở lên**; 61–64 tuổi **7–9 tiếng**; từ 65 tuổi **7–8 tiếng** mỗi đêm.\n• Thức khuya thường xuyên dễ làm mệt, kém tập trung, tâm trạng thất thường.\n• Mẹo: ngủ – dậy giờ cố định, cất điện thoại trước khi ngủ, phòng tối và yên tĩnh, tránh cà phê buổi chiều.",
+    src: "CDC (Hoa Kỳ) — About Sleep, rà soát 20/11/2023",
   },
   {
     id: "skin",
@@ -69,7 +74,8 @@ const FACTS: Fact[] = [
   {
     id: "exercise",
     re: VN(/\b(tập thể dục|tập gym|chạy bộ|đi bộ bao lâu|tập bao nhiêu|vận động bao nhiêu|nên tập gì|bắt đầu tập)\b/),
-    a: "🏃 **Vận động:** người lớn nên có khoảng **150 phút/tuần** vận động vừa (đi bộ nhanh, đạp xe, bơi…), chia 30 phút × 5 ngày, thêm 2 buổi tập sức mạnh.\n• Mới bắt đầu: đi bộ 15–20 phút/ngày rồi tăng dần.\n• Khởi động trước, giãn cơ sau; uống đủ nước.\n• Có bệnh tim, huyết áp, xương khớp thì hỏi bác sĩ trước khi tập nặng.",
+    a: "🏃 **Vận động** (NHS, người 19–64 tuổi): ít nhất **150 phút/tuần** vận động vừa (đi bộ nhanh, đạp xe, bơi…) **hoặc 75 phút/tuần** vận động mạnh, cộng thêm bài tập sức mạnh cho các nhóm cơ chính **ít nhất 2 ngày/tuần**.\n• Bớt thời gian ngồi / nằm, chen vào những lúc ngồi lâu vài hoạt động nhẹ.\n• Có bệnh tim, huyết áp, xương khớp thì hỏi bác sĩ trước khi tập nặng.",
+    src: "NHS (Anh) — Physical activity guidelines for adults aged 19 to 64, rà soát 22/05/2024",
   },
   {
     id: "weight",
@@ -84,7 +90,8 @@ const FACTS: Fact[] = [
   {
     id: "alcohol",
     re: VN(/\b(uống rượu bia có sao|uống bia có sao|uống rượu có sao|nhậu nhiều có sao|uống bia hàng ngày|uống bia hằng ngày|giải rượu|giải say)\b/),
-    a: "🍺 **Rượu bia:** càng ít càng tốt — không có mức nào hoàn toàn “an toàn”. Uống nhiều gây hại gan, dạ dày, tim mạch, giấc ngủ và tinh thần.\n• Nếu uống: ăn no trước, uống chậm, xen nước lọc, biết điểm dừng.\n• **Đã uống thì không lái xe.**\n• Chuyện “giải rượu” bằng thuốc hay mẹo dân gian không làm rượu hết nhanh hơn — chỉ có thời gian, nước và nghỉ ngơi.",
+    a: "🍺 **Rượu bia:** WHO khẳng định **không có mức uống rượu bia nào an toàn** cho sức khoẻ — càng ít càng tốt. Uống nhiều gây hại gan, dạ dày, tim mạch, giấc ngủ và tinh thần.\n• Nếu uống: ăn no trước, uống chậm, xen nước lọc, biết điểm dừng.\n• **Đã uống thì không lái xe.**\n• Chuyện “giải rượu” bằng thuốc hay mẹo dân gian không làm rượu hết nhanh hơn — chỉ có thời gian, nước và nghỉ ngơi.",
+    src: "WHO châu Âu — No level of alcohol consumption is safe for our health, 04/01/2023 (ý “không có mức an toàn”; các mẹo còn lại là kiến thức phổ thông)",
   },
   {
     id: "smoke",
@@ -109,7 +116,8 @@ const FACTS: Fact[] = [
   {
     id: "breakfast",
     re: VN(/\b(bỏ ăn sáng|nhịn ăn sáng|không ăn sáng|ăn khuya có sao|ăn đêm có sao)\b/),
-    a: "🍳 **Bữa sáng / ăn khuya:** bỏ bữa sáng thường xuyên dễ đói cồn cào, mệt, kém tập trung, ăn bù quá nhiều bữa sau, không tốt cho dạ dày. Ăn khuya sát giờ ngủ dễ khó ngủ, trào ngược, tăng cân.\n• Bữa sáng đơn giản cũng được: bánh mì trứng, xôi, sữa, trái cây.\n• Bữa tối nên cách giờ ngủ 2–3 tiếng.",
+    a: "🍳 **Bữa sáng / ăn khuya:** bỏ bữa sáng thường xuyên dễ đói cồn cào, mệt, kém tập trung, ăn bù quá nhiều bữa sau. Ăn khuya sát giờ ngủ dễ khó ngủ, ợ nóng, trào ngược.\n• Bữa sáng đơn giản cũng được: bánh mì trứng, xôi, sữa, trái cây.\n• Người hay ợ nóng / trào ngược: NHS khuyên **không ăn trong 3–4 tiếng trước khi ngủ**.",
+    src: "NHS (Anh) — Heartburn and acid reflux, rà soát 20/11/2023 (ý ăn trước khi ngủ; phần còn lại là kiến thức phổ thông)",
   },
   {
     id: "coldwater",
@@ -119,12 +127,14 @@ const FACTS: Fact[] = [
   {
     id: "screen",
     re: VN(/\b(nhìn điện thoại nhiều có sao|xài điện thoại nhiều|ánh sáng xanh|nhìn màn hình nhiều có sao|dùng điện thoại trước khi ngủ)\b/),
-    a: "📱 **Dùng điện thoại/màn hình nhiều:** dễ mỏi mắt, khô mắt, đau cổ vai gáy, khó ngủ (ánh sáng màn hình làm não tỉnh táo).\n• Quy tắc 20-20-20: 20 phút nhìn xa 6 mét trong 20 giây.\n• Cất điện thoại 30–60 phút trước khi ngủ, bật chế độ ánh sáng ấm buổi tối.\n• Giữ màn hình ngang tầm mắt, không cúi đầu lâu.",
+    a: "📱 **Dùng điện thoại/màn hình nhiều:** dễ mỏi mắt, khô mắt (nhìn chăm chú lâu thì ít chớp mắt), đau cổ vai gáy, khó ngủ.\n• Quy tắc 20-20-20 (Viện Hàn lâm Nhãn khoa Mỹ): **cứ 20 phút, nhìn một vật xa ít nhất 20 feet (khoảng 6 mét) trong ít nhất 20 giây**.\n• Màn hình thường đặt cách mặt khoảng 50–65 cm, hơi thấp hơn tầm mắt.\n• Cất điện thoại một lúc trước khi ngủ.",
+    src: "American Academy of Ophthalmology — Eye Strain (aao.org)",
   },
   {
     id: "sitlong",
     re: VN(/\b(ngồi nhiều có sao|ngồi lâu có sao|ngồi văn phòng|dân văn phòng)\b/),
-    a: "🪑 **Ngồi nhiều:** dễ đau lưng, cổ vai gáy, tăng cân, trĩ, táo bón, kém tuần hoàn.\n• Cứ 45–60 phút đứng dậy đi lại, vươn vai vài phút.\n• Ghế có tựa lưng, màn hình ngang tầm mắt, hai chân chạm sàn.\n• Uống đủ nước (vừa tốt, vừa buộc phải đứng dậy đi vệ sinh 😄).",
+    a: "🪑 **Ngồi nhiều:** dễ đau lưng, cổ vai gáy, mỏi người, tăng cân, táo bón.\n• NHS khuyên **bớt thời gian ngồi / nằm**, và chen vào những lúc ngồi lâu bằng vài hoạt động — đứng dậy đi lại, vươn vai.\n• Ghế có tựa lưng, màn hình ngang tầm mắt, hai chân chạm sàn.\n• Uống đủ nước (vừa tốt, vừa buộc phải đứng dậy đi vệ sinh 😄).",
+    src: "NHS (Anh) — Physical activity guidelines for adults aged 19 to 64, rà soát 22/05/2024 (ý bớt ngồi; phần còn lại là kiến thức phổ thông)",
   },
   {
     id: "bp",
@@ -139,5 +149,8 @@ export function healthFact(text: string): string | null {
   const isQ = text.includes("?") || VN(/\b(có sao|có hại|có tốt|ăn gì|uống gì|nên|bao nhiêu|thế nào|làm sao|có nên|được không|không|là đủ|đủ chưa|bao lâu|mấy tiếng|mấy ly|có mập|có béo|tác dụng phụ)\b/).test(n);
   if (!isQ) return null;
   const f = FACTS.find((x) => x.re.test(n) && (!x.cue || HEALTH_CUE.test(n)));
-  return f ? `${f.a}\n\n(Kiến thức tham khảo chung — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺)` : null;
+  if (!f) return null;
+  return f.src
+    ? `${f.a}\n\n📚 Nguồn: ${f.src}. Lomi đối chiếu ngày 15/10/2026. Kiến thức tham khảo chung — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺`
+    : `${f.a}\n\n(Kiến thức phổ thông Lomi tổng hợp, **chưa gắn nguồn y khoa cụ thể** — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺)`;
 }

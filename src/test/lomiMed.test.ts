@@ -55,7 +55,9 @@ describe("kho kiến thức y khoa", () => {
         expect(TRUSTED.some((d) => host === d || host.endsWith(`.${d}`)), `${t.id}: ${host} không thuộc nguồn tin cậy`).toBe(true);
         expect(s.title.length, t.id).toBeGreaterThan(1);
         expect(s.publisher.length, t.id).toBeGreaterThan(1);
-        if (s.reviewed) expect(s.reviewed, t.id).toMatch(/^\d{4}-\d{2}(-\d{2})?$/);
+        // (15/10: trang chỉ ghi năm sửa đổi — "Revised 2025" — thì ghi năm; trang không ghi ngày rà soát thì có ngày cập nhật "updated")
+        if (s.reviewed) expect(s.reviewed, t.id).toMatch(/^\d{4}(-\d{2}(-\d{2})?)?$/);
+        if ((s as { updated?: string }).updated) expect((s as { updated?: string }).updated, t.id).toMatch(/^\d{4}-\d{2}-\d{2}$/);
       }
   });
 

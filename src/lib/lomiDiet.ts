@@ -274,8 +274,7 @@ const DIETS: Diet[] = [
     re: VN(/\b(dị ứng|mề đay|nổi mề đay|nổi mẩn ngứa|mẩn ngứa|nổi mẩn đỏ)\b/),
     avoid: [
       I("món từng làm mình nổi dị ứng", []),
-      I("hải sản (nhất là tôm, cua, ghẹ, sò) khi đang nổi", ["hải sản", "tôm", "cua", "ghẹ", "sò", "ốc", "mực", "nghêu", "hàu"]),
-      I("đồ lên men, để lâu (mắm, cá ngừ để lâu, đồ hộp)", ["mắm", "cá ngừ", "đồ hộp", "dưa muối"]),
+      // 15/10 (audit): bỏ "kiêng hải sản / đồ lên men khi đang nổi" cho MỌI người — chưa có nguồn; chỉ tránh đúng món mình dị ứng.
       ALCOHOL,
     ],
     limit: [I("đậu phộng, trứng, sữa bò (với người vốn dị ứng)", ["đậu phộng", "lạc", "trứng", "sữa", "sữa bò"])],
@@ -320,7 +319,7 @@ const DIETS: Diet[] = [
     id: "wound", name: "có vết thương / mới mổ / mới xăm",
     re: VN(/\b(vết thương|sau mổ|mới mổ|vừa mổ|vết mổ|mới xăm|vừa xăm|bị thương|sau sinh mổ|mới nhổ răng|vết đứt|trầy xước)\b/),
     avoid: [ALCOHOL, I("thuốc lá", ["thuốc lá", "hút thuốc"]), I("đồ sống, đồ để lâu không vệ sinh", ["đồ sống", "gỏi", "tái"])],
-    limit: [I("đồ nếp, đồ quá cay (với một số người làm vết thương ngứa, sưng hơn)", ["nếp", "xôi", "cay", "ớt"])],
+    // 15/10 (audit): bỏ "đồ nếp, đồ cay làm vết thương sưng hơn" — quan niệm dân gian, chưa có nguồn.
     good: [
       I("đạm: thịt nạc, cá, trứng, sữa", ["thịt", "thịt nạc", "cá", "trứng", "sữa", "thịt gà", "gà", "thịt bò", "bò", "hải sản", "tôm"]),
       I("rau xanh, trái cây nhiều vitamin C (cam, ổi, bưởi)", ["rau", "rau xanh", "rau muống", "cam", "ổi", "bưởi", "trái cây"]),
@@ -492,7 +491,18 @@ function findItem(text: string, items: Item[], condPhrase = ""): { item: Item; w
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-const NOTE = "(Kiến thức tham khảo chung — mỗi người mỗi khác, nhất là đang uống thuốc hay có nhiều bệnh cùng lúc, bạn hỏi thêm bác sĩ đang điều trị nha 🩺)";
+const NOTE = "(Kiến thức phổ thông Lomi tổng hợp, **chưa gắn nguồn y khoa cụ thể** — mỗi người mỗi khác, nhất là đang uống thuốc hay có nhiều bệnh cùng lúc, bạn hỏi thêm bác sĩ đang điều trị nha 🩺)";
+
+// 15/10 (audit): bảng kiêng cữ cũ này CHƯA có nguồn. Bệnh nào đã có thẻ CÓ NGUỒN trong kho kiến thức (lib/medkb) thì lời đáp lấy từ thẻ
+//   (AiAssistant đổi sang renderMed); bảng cũ chỉ còn dùng cho phần thẻ chưa có (vd vết thương / mới mổ).
+export const DIET_MEDKB: Record<string, string> = {
+  gout: "gout", htn: "tang-huyet-ap", dm: "tieu-duong", lipid: "mo-mau-cao", stomach: "viem-da-day", kidney: "benh-than-man",
+  liver: "gan-nhiem-mo", heart: "benh-mach-vanh", anemia: "thieu-mau", dengue: "sot-xuat-huyet", cold: "cam-lanh", diarrhea: "tieu-chay",
+  constip: "tao-bon", hemorrhoid: "tri", allergy: "di-ung-thuc-pham", acne: "mun-trung-ca", ibs: "hoi-chung-ruot-kich-thich",
+  pregnant: "an-uong-khi-mang-thai", osteo: "loang-xuong", asthma: "hen-suyen", rhinitis: "viem-mui-di-ung", thyroid: "suy-giap",
+  chickenpox: "thuy-dau", breastfeed: "an-uong-khi-cho-con-bu", lowbp: "huyet-ap-thap", uti: "nhiem-trung-duong-tiet-nieu",
+  insomnia: "mat-ngu", migraine: "migraine",
+};
 
 function fullList(d: Diet): string {
   const line = (xs: Item[]) => xs.filter((x) => x.t).map((x) => `• ${cap(x.t)}`).join("\n");
@@ -505,7 +515,7 @@ function fullList(d: Diet): string {
   return out.join("\n\n");
 }
 
-export type DietResult = { text: string; diet: string };
+export type DietResult = { text: string; diet: string; /** món được hỏi (chữ người dùng gõ), nếu là câu hỏi một món */ food?: string };
 
 /**
  * "bị gout kiêng gì" → danh sách; "gout ăn thịt chó được không" → trả lời đúng món đó.
@@ -537,7 +547,7 @@ export function dietReply(text: string, prevDiet?: string, inDiet = false): Diet
   else head = `✅ **${cap(d.name)} ${verb} ${w} được nha, còn tốt nữa.** (Nhóm ${hit.item.t}${why}.)`;
   const avoidShort = d.avoid.filter((x) => x !== hit.item && x.t).slice(0, 4).map((x) => x.t).join("; ");
   const more = avoidShort ? `\n\nNgoài ra ${d.name} nên hạn chế: ${avoidShort}. Muốn xem đầy đủ thì hỏi "${d.name.split(" (")[0]} kiêng gì" nha.` : "";
-  return { text: `${head}${more}\n\n${NOTE}`, diet: d.id };
+  return { text: `${head}${more}\n\n${NOTE}`, diet: d.id, food: w };
 }
 
 /** Tên gọi của một bệnh trong bảng kiêng cữ (vd "bị gout (gút)", "huyết áp cao") — lib/lomiHealthTopic dùng làm chủ thể sức khoẻ. */

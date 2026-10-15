@@ -29,7 +29,8 @@ for (const id of want) {
     if (!s.url.startsWith("https://")) err(id, `url không https: ${s.url}`);
     if (!TRUSTED.some((d) => host === d || host.endsWith(`.${d}`))) err(id, `tên miền ${host} không thuộc danh sách tin cậy`);
     if (!s.title || !s.publisher) err(id, `nguồn thiếu title/publisher: ${s.url}`);
-    if (s.reviewed && !/^\d{4}-\d{2}(-\d{2})?$/.test(s.reviewed)) err(id, `reviewed sai dạng: ${s.reviewed}`);
+    if (s.reviewed && !/^\d{4}(-\d{2}(-\d{2})?)?$/.test(s.reviewed)) err(id, `reviewed sai dạng: ${s.reviewed}`);
+    if (s.updated && !/^\d{4}-\d{2}-\d{2}$/.test(s.updated)) err(id, `updated sai dạng: ${s.updated}`);
   }
   const n = t.sources?.length ?? 0;
   const chk = (text, src, where) => {

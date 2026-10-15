@@ -54,7 +54,7 @@
   "emergency": [],
   "sources": [
     {"title": "Peripheral neuropathy", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/", "reviewed": "2022-10-10"},
-    {"title": "Peripheral neuropathy - Causes", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/causes/"},
+    {"title": "Peripheral neuropathy - Causes", "publisher": "NHS (Anh)", "url": "https://www.nhs.uk/conditions/peripheral-neuropathy/causes/", "reviewed":"2022-10-10"},
     {"title": "Peripheral Nerve Disorders", "publisher": "MedlinePlus (NIH, Hoa Kỳ)", "url": "https://medlineplus.gov/peripheralnervedisorders.html", "reviewed": "2024-06-27"}
   ],
   "verifiedAt": "2026-10-09"

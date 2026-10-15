@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
+import { findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -52,7 +52,7 @@ import { eventById } from "@/lib/lomiTalk";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
 import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
-import { dietName, dietOf, dietReply } from "@/lib/lomiDiet";
+import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -111,6 +111,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, beginViTurn, typedWithAccents, VN } from "@/lib/viMatch";
 import { replyMismatch } from "@/lib/lomiReplyGate";
 import { urgentOf } from "@/lib/lomiUrgent";
+import { vitalAsk } from "@/lib/lomiVitals";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn. 30/09: bỏ giới hạn 20 câu/ngày theo ý Kir
@@ -1317,6 +1318,13 @@ export function AiChat({
           topicHit("health");
           return localReply(q, { role: "assistant", content: rr.text, local: true, quick: rr.quick, foodRev: rev.shown, ...(rr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
         }
+        // 15/10 — CHỈ SỐ (lib/lomiVitals): "huyết áp bao nhiêu là cao", "đường huyết lúc đói 7 có cao không", "huyết áp 150/95 có sao không"
+        //   → ngưỡng đúng theo nguồn (NHS / NIDDK) + so con số người dùng đưa; trước đây đáp "chưa có kiến thức".
+        const vt = vitalAsk(q);
+        if (vt) {
+          topicHit("health");
+          return localReply(q, { role: "assistant", content: vt.text, local: true, health: hCtx ?? (vt.kind === "bp" ? { label: "huyết áp" } : { label: "đường huyết" }), sx: inTalk ? lastA?.sx : undefined });
+        }
         const careOn = th0?.kind === "care" && (th0.idle ?? 0) < 2;
         const careWho = careOn && (th0!.idle ?? 0) === 0 ? th0!.who.text : undefined;
         const dg = drugAsk(q, {
@@ -1422,6 +1430,22 @@ export function AiChat({
         // (inDiet chỉ khi câu nhắc một bệnh KHÁC bệnh đang nói — "mỡ máu á" — còn nhắc lại đúng bệnh đang nói thì không lặp cả bảng kiêng cữ.)
         const diet = dietReply(dq, lastA?.diet ?? hCtx?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet && dietOf(q) !== lastA.diet);
         if (diet) topicHit("health");
+        // 15/10 (audit): bệnh đã có thẻ CÓ NGUỒN → trả lời từ thẻ (món cụ thể: nguồn có nêu thì nói, không thì nói thẳng là chưa xác minh),
+        //   thay cho bảng kiêng cữ cũ chưa có nguồn. Vẫn giữ khoá bệnh cũ (diet) để các câu nối hiểu đang nói bệnh nào.
+        // (bảng cũ không có món được hỏi — "dị ứng ăn tôm được không" — mà bệnh có thẻ có nguồn → hỏi món đó trên thẻ.)
+        const d0 = !diet ? dietOf(dq) : undefined;
+        const card0 = d0 && DIET_MEDKB[d0] ? await loadMedTopic(DIET_MEDKB[d0]) : null;
+        const fp0 = card0 && hasQuestion(dq) ? foodPhrase(dq, card0) : null;
+        if (card0 && fp0) {
+          const mr = renderMed(card0, "food", fp0, Date.now(), foodDisplay(dq, fp0));
+          topicHit("health");
+          return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: card0.id, aspect: mr.aspect }, health: healthCtxOfDiet(d0!), diet: d0, sx: inTalk ? lastA?.sx : undefined, ...(mr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
+        }
+        const dietCard = diet && DIET_MEDKB[diet.diet] ? await loadMedTopic(DIET_MEDKB[diet.diet]) : null;
+        if (diet && dietCard) {
+          const mr = diet.food ? renderMed(dietCard, "food", normalizeVi(foodSyn(diet.food)), Date.now(), diet.food) : renderMed(dietCard, "diet");
+          return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: dietCard.id, aspect: mr.aspect }, health: healthCtxOfDiet(diet.diet), diet: diet.diet, sx: inTalk ? lastA?.sx : undefined, ...(mr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
+        }
         if (diet) return localReply(q, { role: "assistant", content: diet.text, local: true, health: healthCtxOfDiet(diet.diet), diet: diet.diet, sx: inTalk ? lastA?.sx : undefined });
         //   (đang tâm sự chuyện mất ngủ mà hỏi "có nên uống thuốc ngủ không" thì bài mất ngủ của mạch tâm sự có lời đáp riêng.)
         if (dg && !(dg.kind === "should" && rxHeart)) {
