@@ -267,6 +267,10 @@ export function isMedQuestion(text: string, topicNames: string[] = []): boolean 
   // chỉ nêu tên: "bệnh gout", "tự kỷ ám thị", "gout á"
   const rest = topicNames.reduce((acc2, nm) => acc2.replace(normalizeVi(nm), " "), n).replace(VN(/\b(bệnh|chứng|hội chứng|rối loạn|á|à|a|ạ|hả|ha|nha|nhé|nhe|nè|đó|vậy|thế|là|cái|việc|tình trạng|bị)\b/g), " ").replace(/\s+/g, " ").trim();
   if (topicNames.length && rest === "" && words <= 4) return true;
+  // 15/10: kể kèm thời gian mắc bệnh ("a bị mỡ máu 3 năm rồi", "mẹ bị gout lâu rồi") vẫn là nêu tên bệnh → tóm tắt thẻ có nguồn
+  //   (trước đây rơi về bảng cũ, nói "chưa có thông tin riêng" dù kho có thẻ).
+  const restNoTime = rest.replace(VN(/\b((\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều) (ngày|tuần|tháng|năm)( nay| rồi| trời)?|lâu rồi|lâu năm|từ lâu|mấy năm nay|rồi|nay|cũng|đã|lâu)\b/g), " ").replace(/\s+/g, " ").trim();
+  if (topicNames.length && restNoTime === "" && words <= 9) return true;
   // tên + cụm bổ nghĩa ngắn: "tăng động giảm chú ý ở người lớn", "trầm cảm sau sinh", "gout cho người già"
   if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && VN(/^(?:ở|cho|khi|trên|sau|trước|trong) \S+(?: \S+){0,2}$/).test(rest)) return true;
   // có từ hỏi + tên chủ đề nhưng không rõ khía cạnh ("ADHD người lớn có không", "tay chân miệng ở người lớn có không") → tóm tắt chủ đề.
@@ -307,7 +311,8 @@ function focusTerms(t: MedTopic, text: string): { terms: string[]; shown: string
   const terms: string[] = [];
   const shown: string[] = [];
   for (let i = 0; i + 1 < b.length; i++) {
-    if (cut[i] || cut[i + 1] || FOCUS_STOP.has(b[i]) || FOCUS_STOP.has(b[i + 1])) continue;
+    // (15/10: cặp chữ toàn là số — "9.0" thành "9 0" — không phải một "ý" để dò trong thẻ; trước đây Lomi đáp "Ý “9 0” bạn hỏi…".)
+    if (cut[i] || cut[i + 1] || FOCUS_STOP.has(b[i]) || FOCUS_STOP.has(b[i + 1]) || /^\d+$/.test(b[i]) || /^\d+$/.test(b[i + 1])) continue;
     terms.push(`${b[i]} ${b[i + 1]}`);
     shown.push(`${orig[i]} ${orig[i + 1]}`);
   }

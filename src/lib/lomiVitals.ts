@@ -19,7 +19,68 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
-export type VitalReply = { kind: "bp" | "glucose"; text: string };
+export type VitalReply = { kind: "bp" | "glucose" | "lipid"; text: string };
+
+// 15/10 (ảnh Kir gửi: "Mỡ máu 9.0 là cao k?" → Lomi đáp lạc "Ý “9 0” anh hỏi…"): chỉ số MỠ MÁU.
+//  • NHS — Cholesterol levels, rà soát 13/03/2026 (mức cho người lớn khoẻ mạnh): cholesterol toàn phần < 5 mmol/L · non-HDL < 4 mmol/L ·
+//    HDL > 1,0 mmol/L (nam) / > 1,2 mmol/L (nữ); mức mục tiêu tuỳ tuổi, bệnh, nguy cơ tim mạch — bác sĩ đánh giá cùng các yếu tố khác;
+//    ăn hay chưa ăn trước khi xét nghiệm không ảnh hưởng nhiều tới các chỉ số này.
+//  • MedlinePlus — Triglyceride level, rà soát 14/07/2024: < 150 mg/dL (1,69 mmol/L) bình thường · 150–199 (1,69–2,25) ranh giới cao ·
+//    200–499 (2,26–5,64) cao · ≥ 500 (≥ 5,65) rất cao; không ăn 8–12 tiếng trước xét nghiệm; khoảng bình thường có thể hơi khác giữa các phòng xét nghiệm.
+//  Quy đổi mg/dL → mmol/L: cholesterol chia 38,67; triglycerid chia 88,57 (phép đổi đơn vị).
+const LIPID = VN(/\b(mỡ máu|mỡ trong máu|máu nhiễm mỡ|cholesterol|cholesteron|cholesterol toàn phần|ldl|hdl|non hdl|triglycerid|triglyceride|triglyceride|chất béo trung tính|mỡ trung tính|xét nghiệm mỡ)\b/);
+const TG = VN(/\b(triglycerid|triglyceride|chất béo trung tính|mỡ trung tính|tg)\b/);
+const NONHDL = VN(/\b(non hdl|nonhdl)\b/);
+const HDL = VN(/\bhdl\b/);
+const LDL = VN(/\bldl\b/);
+const TOTAL = VN(/\b(cholesterol|cholesteron|cholesterol toàn phần|toàn phần|tc)\b/);
+const FEMALE = VN(/\b(nữ|chị|em gái|vợ|mẹ|má|bà|cô|phụ nữ|con gái)\b/);
+const SRC_LIPID = "📚 Nguồn: NHS (Anh) — Cholesterol levels, rà soát 13/03/2026 · MedlinePlus (NIH, Hoa Kỳ) — Triglyceride level, rà soát 14/07/2024. Lomi đối chiếu ngày 15/10/2026. Đây là kiến thức tham khảo chung, không thay chẩn đoán của bác sĩ.";
+
+function lipidAsk(raw: string, n: string): VitalReply | null {
+  if (!LIPID.test(n)) return null;
+  const kw = raw.match(/(mỡ máu|mỡ trong máu|máu nhiễm mỡ|cholesterol|cholesteron|non[- ]?hdl|ldl|hdl|triglycerid\w*|chất béo trung tính|mỡ trung tính)/u);
+  const tail = kw ? raw.slice((kw.index ?? 0) + kw[0].length) : raw;
+  const m0 = tail.match(/(\d{1,3}(?:[.,]\d{1,2})?)\s*(mmol|mg)?/u);
+  // "bị mỡ máu 3 năm rồi", "uống thuốc mỡ máu 2 viên" — con số là thời gian / số lượng, không phải chỉ số xét nghiệm.
+  const m = m0 && !/^\s*(năm|tháng|tuần|ngày|tuổi|lần|viên|tiếng|giờ|kg|cân|ký)/u.test(tail.slice((m0.index ?? 0) + m0[0].length)) ? m0 : null;
+  if (!m && !ASK.test(n)) return null;
+  const v = m ? Number(m[1].replace(",", ".")) : NaN;
+  const mg = m?.[2] === "mg" || v >= 30;
+  const out: string[] = [];
+  const table =
+    "📏 Mức tham khảo cho **người lớn khoẻ mạnh**:\n• **Cholesterol toàn phần**: dưới **5 mmol/L** (NHS).\n• **Non-HDL** (cholesterol “xấu”): dưới **4 mmol/L** (NHS).\n• **HDL** (cholesterol “tốt”): trên **1,0 mmol/L** ở nam, trên **1,2 mmol/L** ở nữ (NHS).\n• **Triglycerid** (chất béo trung tính): dưới 1,7 mmol/L (150 mg/dL) là bình thường · 1,7–2,25 ranh giới cao · 2,26–5,64 cao · từ 5,65 mmol/L (500 mg/dL) là **rất cao** (MedlinePlus).";
+  const note =
+    "Đây là mức cho người lớn khoẻ mạnh — mức mục tiêu của mỗi người tuỳ tuổi, bệnh đang có và nguy cơ tim mạch, nên bác sĩ sẽ xem cùng các yếu tố khác (huyết áp, tuổi…). Mỗi phòng xét nghiệm có thể ghi khoảng bình thường hơi khác, cứ đối chiếu với phiếu kết quả của bạn.";
+  if (!isNaN(v) && v > 0) {
+    const tg = TG.test(n);
+    const which = tg ? "tg" : NONHDL.test(n) ? "nonhdl" : HDL.test(n) && !LDL.test(n) ? "hdl" : LDL.test(n) ? "ldl" : TOTAL.test(n) ? "total" : "unknown";
+    const mmolC = mg ? v / 38.67 : v;
+    const mmolT = mg ? v / 88.57 : v;
+    const show = (x: number, conv: number) => (mg ? `**${fmt(v)} mg/dL** (≈ ${fmt(x)} mmol/L)` : `**${fmt(v)} mmol/L** (≈ ${Math.round(v * conv)} mg/dL)`);
+    const tgCls = (x: number) => (x >= 5.65 ? "ở mức **rất cao** (từ 5,65 mmol/L)" : x >= 2.26 ? "ở mức **cao** (2,26–5,64 mmol/L)" : x >= 1.69 ? "ở mức **ranh giới cao** (1,69–2,25 mmol/L)" : "trong mức **bình thường** (dưới 1,69 mmol/L)");
+    const totCls = (x: number) => (x >= 5 ? `**cao hơn** mức khoẻ mạnh của NHS (dưới 5 mmol/L)${x >= 7.5 ? " — cao hơn khá nhiều" : ""}` : "dưới 5 mmol/L — trong mức NHS coi là khoẻ mạnh");
+    if (which === "tg") out.push(`🩺 Triglycerid ${show(mmolT, 88.57)} ${tgCls(mmolT)} theo MedlinePlus.`);
+    else if (which === "total") out.push(`🩺 Cholesterol toàn phần ${show(mmolC, 38.67)} ${totCls(mmolC)}.`);
+    else if (which === "nonhdl") out.push(`🩺 Non-HDL ${show(mmolC, 38.67)} ${mmolC >= 4 ? "**cao hơn** mức khoẻ mạnh của NHS (dưới 4 mmol/L)" : "dưới 4 mmol/L — trong mức NHS coi là khoẻ mạnh"}.`);
+    else if (which === "hdl") {
+      const f = FEMALE.test(n);
+      const cut = f ? 1.2 : 1.0;
+      out.push(`🩺 HDL ${show(mmolC, 38.67)} ${mmolC > cut ? `trên ${fmt(cut)} mmol/L — trong mức NHS coi là khoẻ mạnh${f ? " (với nữ)" : " (với nam; nữ thì cần trên 1,2)"}` : `**thấp hơn** mức khoẻ mạnh của NHS (trên ${fmt(cut)} mmol/L${f ? " với nữ" : " với nam, 1,2 với nữ"})`} — HDL là cholesterol “tốt”, càng thấp càng không có lợi.`);
+    } else if (which === "ldl")
+      out.push(`🩺 Về LDL thì trang NHS Lomi đối chiếu **không ghi một mức chung** — mức LDL cần đạt tuỳ nguy cơ tim mạch của từng người, nên bạn hỏi bác sĩ đọc kết quả giúp nha.`);
+    else
+      out.push(
+        `🩺 “Mỡ máu” trên phiếu xét nghiệm gồm **nhiều chỉ số**, mỗi chỉ số một ngưỡng khác nhau — ${show(mmolC, 38.67)} là chỉ số nào thì mới nói được cao hay không:\n• Nếu là **cholesterol toàn phần**: ${totCls(mmolC)}.\n• Nếu là **triglycerid** (chất béo trung tính): ${tgCls(mmolT)}.\nBạn xem trên phiếu dòng đó ghi là gì (Cholesterol / Triglycerid / HDL / LDL) rồi gõ lại cho Lomi nha.`,
+      );
+    if ((which === "tg" && mmolT >= 5.65) || (which === "total" && mmolC >= 7.5) || (which === "unknown" && mmolC >= 7.5))
+      out.push("Con số này cao rõ, nên đặt lịch gặp bác sĩ **sớm** để được đánh giá và tư vấn cách hạ, đừng tự mua thuốc uống.");
+  }
+  out.push(table);
+  out.push(note);
+  out.push(SRC_LIPID);
+  return { kind: "lipid", text: out.join("\n\n") };
+}
 
 const BP = VN(/\b(huyết áp|tăng áp|tụt áp)\b/);
 const GLU = VN(/\b(đường huyết|đường máu|đường trong máu|chỉ số đường|đo đường|thử đường|glucose|a1c|hba1c)\b/);
@@ -39,6 +100,9 @@ export function vitalAsk(text: string): VitalReply | null {
   const raw = text.normalize("NFC").toLowerCase();
   const n = ` ${normalizeVi(text)} `;
   if (n.trim().split(" ").length > 24) return null;
+  // Mỡ máu xét trước: "mỡ máu cao có sao không" (không có số, không hỏi ngưỡng) thì lipidAsk trả null → để thẻ kiến thức trả lời.
+  const lp = lipidAsk(raw, n);
+  if (lp) return lp;
   const bpNum = raw.match(/(\d{2,3})\s*(?:\/|trên|-)\s*(\d{2,3})/u);
   if (BP.test(n) && (ASK.test(n) || !!bpNum)) {
     const out: string[] = [];

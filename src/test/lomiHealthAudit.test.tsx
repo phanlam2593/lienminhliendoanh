@@ -111,6 +111,29 @@ describe("chỉ số, té ngã, kiến thức có nguồn (đợt 2)", () => {
   }, T);
 });
 
+describe("chỉ số mỡ máu (ảnh Kir gửi 15/10: “Mỡ máu 9.0 là cao k?” → “Ý “9 0” anh hỏi…”)", () => {
+  it("“Mỡ máu 9.0 là cao k?” → nói rõ tuỳ chỉ số nào, cả 2 cách hiểu đều cao, có nguồn; không còn “Ý 9 0”", async () => {
+    for (const t of ["Mỡ máu 9.0 là cao k?", "mo mau 9.0 la cao k"]) {
+      const m = await last([t]);
+      expect(m.content, t).not.toMatch(/Ý “9 0”/);
+      expect(m.content, t).toMatch(/cholesterol toàn phần/i);
+      expect(m.content, t).toMatch(/rất cao/);
+      expect(m.content, t).toMatch(/NHS[\s\S]*MedlinePlus/);
+    }
+  }, T);
+  it("đúng từng chỉ số: cholesterol, triglycerid (cả mg/dL), HDL; LDL thì nói thật không có mức chung", async () => {
+    expect((await last(["cholesterol 6.2 có cao không"])).content).toMatch(/\*\*cao hơn\*\* mức khoẻ mạnh của NHS/);
+    expect((await last(["triglycerid 3.1"])).content).toMatch(/mức \*\*cao\*\*/);
+    expect((await last(["chất béo trung tính 600 mg"])).content).toMatch(/rất cao/);
+    expect((await last(["hdl 0.9 có sao không"])).content).toMatch(/\*\*thấp hơn\*\*/);
+    expect((await last(["ldl 4.5 cao không"])).content).toMatch(/không ghi một mức chung/);
+  }, T);
+  it("không bắt nhầm: hỏi kiêng gì vẫn đi thẻ; kể mắc bệnh mấy năm → tóm tắt thẻ có nguồn", async () => {
+    expect((await last(["mỡ máu cao kiêng gì"])).med?.id).toBe("mo-mau-cao");
+    expect((await last(["a bị mỡ máu 3 năm rồi"])).med?.id).toBe("mo-mau-cao");
+  }, T);
+});
+
 describe("ngữ cảnh nhiều lượt", () => {
   it("con sốt → 39 độ → cảm ơn → “giờ đi ăn gì” → gợi ý món (không còn kẹt ở mạch sức khoẻ)", async () => {
     const r = await chat(["con a sốt", "39 độ", "cảm ơn e", "giờ đi ăn gì"]);
