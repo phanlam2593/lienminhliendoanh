@@ -13,7 +13,7 @@ describe("kho y khoa — câu hỏi thật", () => {
     expect(m.content).not.toMatch(/\*\*(trái cây|các loại đậu)\*\* là món/);
   }, T);
   it("'xử lý' (chữ y) vẫn là hỏi cách xử trí → trả lời từ thẻ có nguồn, không từ bảng cũ", async () => {
-    expect((await last(["hạ đường huyết xử lý sao"])).content).toMatch(/Với \*\*Hạ đường huyết\*\*, theo các nguồn y khoa nên/);
+    expect((await last(["hạ đường huyết xử lý sao"])).content).toMatch(/Với \*\*Hạ đường huyết\*\*, nên/);
     expect((await last(["say rượu nặng thì xử lý sao"])).content).toMatch(/Ngộ độc rượu/);
   }, T);
   it("'sữa chua được không' (không dấu) là hỏi món, không phải 'chữa được không'", async () => {
@@ -72,7 +72,7 @@ describe("kho y khoa + tâm lý — chạy thử 10/10", () => {
     expect((await last(["kiệt sức vì công việc phải làm sao"])).content).toMatch(/Kiệt sức nghề nghiệp/);
   }, T);
   it("hỏi khi nào cần gặp bác sĩ tâm lý → dấu hiệu cần tìm trợ giúp (có nguồn)", async () => {
-    expect((await last(["khi nào cần gặp bác sĩ tâm lý"])).content).toMatch(/MedlinePlus/);
+    expect((await last(["khi nào cần gặp bác sĩ tâm lý"])).src).toMatch(/MedlinePlus/);
     expect((await last(["em có nên đi khám tâm lý không"])).content).toMatch(/dấu hiệu cảnh báo sớm/);
   }, T);
   it("bệnh chưa có thẻ + 'ăn gì' không bị gợi ý quán ăn", async () => {

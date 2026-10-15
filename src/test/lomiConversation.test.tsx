@@ -234,7 +234,7 @@ describe("Sức khoẻ ≠ tâm sự — chuỗi bệnh gout", () => {
     expect(r[1].content).toMatch(/gout/i);
     // 09/10: trả lời từ kho kiến thức có nguồn (lib/lomiMed) — chip theo phần thẻ có.
     expect(r[1].quick?.slice(0, 3)).toEqual(["Gout là gì?", "Gout nên làm gì?", "Gout kiêng gì?"]);
-    expect(r[1].content).toMatch(/📚 Nguồn:/);
+    expect(r[1].src).toMatch(/📚 Nguồn:/); // 15/10: nguồn không còn hiện trong lời đáp — cất ở src, hỏi "nguồn đâu" mới đưa (lib/lomiCite)
     expect(r[2].quick).toEqual(r[1].quick); // "Bệnh gút á" → vẫn bệnh gout, không đọc lại cả bài
     expect(r[2].content).toMatch(/vẫn là \*\*gout\*\*/i);
     expect(r[3].diet).toBe("gout");
@@ -257,7 +257,9 @@ describe("Sức khoẻ ≠ tâm sự — chuỗi bệnh gout", () => {
     expect((await last(["a bị gout"])).content).toMatch(/đang bị \*\*gout\*\*/);
   }, T);
   it("hỏi kiến thức → trả lời kiến thức", async () => {
-    expect((await last(["bệnh gout là gì?"])).content).toMatch(/Gout \(gút\).*viêm khớp.*📚 Nguồn:/s);
+    const gk = await last(["bệnh gout là gì?"]);
+    expect(gk.content).toMatch(/Gout \(gút\).*viêm khớp/s);
+    expect(gk.src).toMatch(/📚 Nguồn:/);
     expect((await last(["cách chữa bệnh gout"])).content).toMatch(/không kê thuốc/);
     expect((await last(["đang bị gout thì uống bia được không?"])).diet).toBe("gout");
     expect((await last(["gout có đáng sợ không"])).heart).toBeUndefined(); // hỏi mức độ nguy hiểm, không phải kể cảm xúc

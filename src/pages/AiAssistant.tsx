@@ -57,7 +57,8 @@ import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
 import { drugAsk } from "@/lib/lomiDrug";
-import { drugById } from "@/lib/lomiDrugData";
+import { drugById, sourceList } from "@/lib/lomiDrugData";
+import { asksSource, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
 import { boundaryAdvice, fearInHarm, harmOf, harmReply, helperAdvice, safetyFollow, type Harm } from "@/lib/lomiSafety";
 import { isUpbeat, senseCanon, senseLast, senseState, talkContinue } from "@/lib/lomiSense";
@@ -170,6 +171,7 @@ type Msg = {
   // nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học "khoá này = câu hỏi kia" (lib/lomiLearn).
   unkKey?: string;
   foodRev?: string; // 14/10: Lomi vừa trả lời câu hỏi ngược theo món này ("có bệnh gì kiêng ăn cá") — "măng thì sao?" hỏi tiếp món khác
+  src?: string; // 15/10: dòng "📚 Nguồn …" của câu đáp (lib/lomiCite) — không hiện, ai hỏi "nguồn đâu?" thì Lomi mới đưa ra
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
   talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
@@ -456,6 +458,12 @@ export function AiChat({
     carryRef.current = null; // mạch chuyện chỉ được giữ qua localReply của đúng lượt đang xử lý
     const sh = shownRef.current;
     if (sh) add = add.map((m) => (m.role === "user" && m.content === sh.from ? { ...m, content: sh.to } : m));
+    // 15/10 (Kir): câu đáp sức khoẻ không đọc tên cơ quan ("NHS: …") và không kèm dòng nguồn — nguồn cất vào src, hỏi mới nói (lib/lomiCite).
+    add = add.map((m) => {
+      if (m.role !== "assistant") return m;
+      const t = tidyCited(m.content);
+      return t.src ? { ...m, content: t.text, src: t.src } : m;
+    });
     // Xưng hô đối xứng (anh/chị/em/bạn) theo cách người dùng tự xưng — lib/lomiAddress.
     if (lang !== "en") {
       const addr = loadMem(user.id).addr;
@@ -862,6 +870,18 @@ export function AiChat({
       // Người bị là NGƯỜI KHÁC ("bạn e bị chồng đánh") mà hỏi mình nên làm gì → lời khuyên cho người đứng ngoài, không phải cho nạn nhân.
       const hp = lastA0?.harm ? (helperAdvice(raw, lastA0.harm) ?? boundaryAdvice(raw, lastA0.harm, lastA0.content) ?? fearInHarm(raw, lastA0.harm)) : null;
       if (hp) return localReply(q, { role: "assistant", content: hp, local: true, ...keepHarm, harm: lastA0!.harm });
+    }
+
+    // 15/10 — HỎI NGUỒN (lib/lomiCite): câu đáp sức khoẻ không còn kèm dòng nguồn — "nguồn đâu?", "lấy ở đâu ra?" thì Lomi mới đưa:
+    //   đáp từ thẻ y khoa → đủ các trang (kèm đường dẫn, ngày rà soát); câu đáp khác có nguồn → đúng dòng nguồn đã cất.
+    //   (đang nói về thuốc thì để lớp thuốc trả lời như cũ — lib/lomiDrug.)
+    if (!forceAi && !en && lastA0 && !lastA0.drug && (lastA0.src || lastA0.med) && asksSource(q)) {
+      const mt0 = lastA0.med ? await loadMedTopic(lastA0.med.id) : null;
+      const subIds = mt0 && (lastA0.med?.aspect === "diet" || lastA0.med?.aspect === "food") ? (UMBRELLA[mt0.id] ?? []) : [];
+      const subs = (await Promise.all(subIds.map((id) => loadMedTopic(id)))).filter((x): x is MedTopic => !!x);
+      const text = mt0 ? [mt0, ...subs].map((t) => sourceList(t)).join("\n\n") : lastA0.src ? sourceSay(lastA0.src) : null;
+      if (text)
+        return localReply(q, { role: "assistant", content: text, local: true, ...keepHealth, ...(lastA0.med ? { med: lastA0.med } : {}), src: lastA0.src });
     }
 
     // 15/10 — KHẨN CẤP (lib/lomiUrgent, audit sức khoẻ): câu KỂ một tình huống cấp cứu (uống nhầm chất độc, chảy máu không cầm, đuối nước,

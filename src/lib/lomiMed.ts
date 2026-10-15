@@ -420,7 +420,7 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       .join("\n");
     const general = [bl(t.diet.avoid), bl(t.diet.ok)].filter(Boolean).join("\n");
     const used = [t.diet.avoid, t.diet.ok, t.diet.foods.map((f) => ({ text: f.name, src: f.src }))];
-    return out([`🍽️ Ăn uống với ${N}, theo các nguồn y khoa:`, general, groups && `Tóm theo món:\n${groups}`, "Hỏi món cụ thể kiểu “ăn … được không” — món nào nguồn có nêu thì Lomi nói, không có thì Lomi nói thẳng là chưa xác minh được.", end(used)].filter(Boolean).join("\n\n"), "diet");
+    return out([`🍽️ Ăn uống với ${N}:`, general, groups && `Tóm theo món:\n${groups}`, end(used)].filter(Boolean).join("\n\n"), "diet");
   }
   if (aspect === "meds") {
     const med = t.care.filter((c) => VR(/thuốc/i).test(c.text));
@@ -439,11 +439,11 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     return sect(`🦠 Về chuyện lây của ${N}:`, fs, "spread", 6, `Các nguồn Lomi đã đối chiếu cho ${N} **không nói về chuyện lây**, nên Lomi chưa xác minh được. Bạn hỏi bác sĩ để chắc nha.`);
   }
   if (aspect === "care") {
-    const r = sect(`🌿 Với ${N}, theo các nguồn y khoa nên:`, t.care, "care");
+    const r = sect(`🌿 Với ${N}, nên:`, t.care, "care");
     // Sơ cứu (thẻ "other": bỏng, chó cắn, đuối nước…): nói luôn khi nào phải đi cấp cứu / đi khám — đừng bắt hỏi thêm một lượt.
     if (!r.partial && t.kind === "other" && (t.emergency.length || t.doctor.length)) {
       const urg = [t.emergency.length ? `🚨 Gọi **115** / đi cấp cứu ngay khi:\n${bl(t.emergency, 4)}` : "", t.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${bl(t.doctor, 3)}` : ""].filter(Boolean).join("\n\n");
-      r.text = [`🌿 Với ${N}, theo các nguồn y khoa nên:`, bl(t.care), urg, end([t.care, t.emergency.slice(0, 4), t.doctor.slice(0, 3)])].join("\n\n");
+      r.text = [`🌿 Với ${N}, nên:`, bl(t.care), urg, end([t.care, t.emergency.slice(0, 4), t.doctor.slice(0, 3)])].join("\n\n");
     }
     // Hỏi cách chữa → luôn nói rõ giới hạn: Lomi không kê thuốc / liều (trừ thẻ thuật ngữ, vd "thiền", "CBT").
     if (!r.partial && t.kind !== "term" && t.kind !== "other") r.text = r.text.replace(/\n\n📚/, "\n\n💊 Lomi không kê thuốc hay nêu liều — dùng thuốc nào là do bác sĩ quyết định sau khi khám.\n\n📚");
@@ -516,7 +516,7 @@ export function renderUmbrella(t: MedTopic, subs: MedTopic[], aspect: "diet" | "
   if (aspect === "diet") {
     out.push(`Với **${N}** thì **không có một danh sách kiêng chung cho mọi người** — “${N}” là cách gọi chung của nhiều bệnh khớp khác nhau, mỗi bệnh chuyện ăn uống một khác.`);
     const gen = note(t, [...(t.diet?.avoid ?? []), ...(t.diet?.ok ?? [])]);
-    if (gen.length) out.push(`Điều các nguồn khuyên chung cho người bị ${N}:\n${bl(gen)}`);
+    if (gen.length) out.push(`Điều nên làm chung cho người bị ${N}:\n${bl(gen)}`);
   } else {
     const f = matchFood(t, food ?? "", shown);
     if (f) {
@@ -549,7 +549,7 @@ export function renderUmbrella(t: MedTopic, subs: MedTopic[], aspect: "diet" | "
     const weights = s.care.filter((c) => VR(/(giảm cân|thừa cân|cân nặng)/iu).test(c.text));
     const weight = weights.find((c) => VR(/thừa cân làm/iu).test(c.text)) ?? weights.find((c) => !VR(/^triệu chứng/iu).test(c.text)) ?? weights[0];
     if (lead) lines.push(`• ${lab(s)}: ${note(s, [lead])[0].text}${s.id === "gout" ? " Đây là hướng dẫn riêng cho gout, không áp nguyên cho mọi loại viêm khớp." : ""}`);
-    else if (weight) lines.push(`• ${lab(s)}: nguồn không nêu món nào phải kiêng. Điều nguồn có nhắc liên quan: “${note(s, [weight])[0].text}”`);
+    else if (weight) lines.push(`• ${lab(s)}: chưa thấy hướng dẫn kiêng món nào riêng. Điều nên lưu ý: “${note(s, [weight])[0].text}”`);
     else lines.push(`• ${lab(s)}: các nguồn Lomi đối chiếu không nêu cách ăn uống riêng.`);
   }
   if (silent.length) lines.push(`• ${silent.map(lab).join(", ")}: nguồn không nêu riêng ${shown ?? food}${silent.some((x) => x.id === "viem-khop-dang-thap") ? " — với viêm khớp dạng thấp, nguồn còn nói chưa có bằng chứng mạnh rằng kiêng một món cụ thể giúp bệnh đỡ hơn" : ""}.`);

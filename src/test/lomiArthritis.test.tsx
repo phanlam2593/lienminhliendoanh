@@ -14,16 +14,18 @@ describe("viêm khớp — câu hỏi ăn uống", () => {
     const first = m.content.split("\n\n")[0];
     expect(first).toMatch(/không có một danh sách kiêng chung/);
     expect(first).toMatch(/cách gọi chung của nhiều bệnh khớp/);
-    expect(m.content).toMatch(/tránh uống quá nhiều rượu bia/); // điều chung NHS
+    expect(m.content).toMatch(/[Tt]ránh uống quá nhiều rượu bia/); // điều chung (NHS)
     expect(m.content).toMatch(/\*\*Viêm khớp dạng thấp\*\*: Chưa có bằng chứng mạnh/); // RA: không kiêng món cụ thể như quy tắc chung
     expect(m.content).toMatch(/\*\*Gout\*\*: Hạn chế thực phẩm giàu purin[\s\S]*hướng dẫn riêng cho gout/);
-    expect(m.content).toMatch(/\*\*Thoái hóa khớp\*\*: nguồn không nêu món nào phải kiêng/);
+    expect(m.content).toMatch(/\*\*Thoái hóa khớp\*\*: chưa thấy hướng dẫn kiêng món nào riêng/);
     expect((m.content.match(/\?/g) ?? []).length).toBe(1); // đúng MỘT câu hỏi làm rõ
     // Không khẳng định phải kiêng món cụ thể cho MỌI loại viêm khớp
     expect(first).not.toMatch(/thịt bò|hải sản|rau muống|sữa/);
-    // Nguồn ghi theo từng thẻ: ngày rà soát của trang nguồn tách khỏi ngày Lomi đối chiếu
-    expect(m.content).toMatch(/📚 Nguồn — Viêm khớp: NHS \(Anh\), rà soát 19\/01\/2026 \(Lomi đối chiếu \d{2}\/\d{2}\/\d{4}\)/);
-    expect(m.content).toMatch(SRC_GOUT);
+    // 15/10 (Kir): lời đáp không đọc tên cơ quan, không kèm dòng nguồn — nguồn cất ở src, theo từng thẻ:
+    // ngày rà soát của trang nguồn tách khỏi ngày Lomi đối chiếu
+    expect(m.content).not.toMatch(/📚|NHS|MedlinePlus|CDC|Mayo|Hỏi món cụ thể/);
+    expect(m.src).toMatch(/📚 Nguồn — Viêm khớp: NHS \(Anh\), rà soát 19\/01\/2026 \(Lomi đối chiếu \d{2}\/\d{2}\/\d{4}\)/);
+    expect(m.src).toMatch(SRC_GOUT);
     // trước đây gắn nhầm khoá kiêng cữ "đau dạ dày"
     expect(m.diet).toBeFalsy();
     expect(m.health?.label ?? "").not.toMatch(/dạ dày/);
@@ -42,7 +44,8 @@ describe("viêm khớp — câu hỏi ăn uống", () => {
     const g = await last(["Bị gout nên kiêng gì?"]);
     expect(g.med).toEqual({ id: "gout", aspect: "diet" });
     expect(g.content).toMatch(/purin/);
-    expect(g.content).toMatch(/\(Mayo Clinic ghi rõ/); // tên riêng giữ chữ hoa
+    expect(g.content).toMatch(/nội tạng \(không nên ăn nội tạng/);
+    expect(g.content).not.toMatch(/📚|NHS|MedlinePlus|CDC|Mayo|NIAMS|NCBI|Hỏi món cụ thể/);
   }, T);
 
   it("5. “Viêm khớp ăn thịt bò được không?” → chung: nguồn không nêu; gout: thịt đỏ nên hạn chế (đúng nguồn); không nói mọi loại phải kiêng", async () => {
@@ -51,7 +54,7 @@ describe("viêm khớp — câu hỏi ăn uống", () => {
     expect(m.content).toMatch(/không nêu riêng thịt bò/);
     expect(m.content).toMatch(/\*\*Gout\*\*: thịt đỏ nên \*\*hạn chế\*\*/);
     expect(m.content).toMatch(/\*\*Thoái hóa khớp\*\*, \*\*Viêm khớp dạng thấp\*\*: nguồn không nêu riêng thịt bò/);
-    expect(m.content).toMatch(SRC_GOUT);
+    expect(m.src).toMatch(SRC_GOUT);
   }, T);
 
   it("6. “Viêm khớp uống sữa được không?” → với gout nêu đúng cả sữa ít béo (nên) và sữa nhiều béo (hạn chế), không quy chung", async () => {
@@ -82,5 +85,16 @@ describe("viêm khớp — câu hỏi ăn uống", () => {
     expect((await last(["viêm khớp là gì"])).med).toEqual({ id: "viem-khop", aspect: "define" });
     expect((await last(["viêm khớp có chữa được không"])).med?.aspect).toBe("course");
     expect((await last(["viêm khớp khi nào cần đi khám"])).med?.aspect).toBe("doctor");
+  }, T);
+
+  it("10. hỏi “nguồn đâu?” sau câu trả lời → mới đưa nguồn: đủ các trang (kèm đường dẫn) của viêm khớp và từng loại", async () => {
+    const r = await chat(["Viêm khớp nên kiêng gì?", "nguồn đâu e"]);
+    expect(r[1].content).toMatch(/\*\*viêm khớp\*\* lấy từ các trang sau/i);
+    expect(r[1].content).toMatch(/https:\/\/www\.nhs\.uk\//);
+    expect(r[1].content).toMatch(/\*\*gout\*\* lấy từ các trang sau/i);
+    expect(r[1].content).toMatch(/rà soát \d{2}\/\d{2}\/\d{4}/);
+    expect(r[1].med?.id).toBe("viem-khop"); // vẫn giữ chủ đề cho câu hỏi tiếp
+    const t = await chat(["Viêm khớp nên kiêng gì?", "nguồn đâu", "còn rượu bia thì sao?"]);
+    expect(t[2].med).toEqual({ id: "viem-khop", aspect: "food" });
   }, T);
 });

@@ -9,14 +9,14 @@ describe("kho kiến thức y khoa qua khung chat", () => {
   it("“ám thị tự kỉ là gì” → giải thích tự ám thị, nói rõ KHÔNG phải chứng tự kỷ, có nguồn", async () => {
     const m = await last(["ám thị tự kỉ là gì"]);
     expect(m.content).toMatch(/KHÔNG phải chứng tự kỷ/);
-    expect(m.content).toMatch(SRC);
+    expect(m.src).toMatch(SRC);
     expect(m.unk).toBeUndefined();
   }, T);
   it("“bệnh gout ăn nhộng đc k” → nói thẳng chưa xác minh được món này, kèm nguyên tắc chung có nguồn; ghi nhật ký bí", async () => {
     const m = await last(["bệnh gout ăn nhộng đc k"]);
     expect(m.content).toMatch(/\*\*nhộng\*\*.*chưa xác minh được/s);
     expect(m.content).toMatch(/purin/);
-    expect(m.content).toMatch(SRC);
+    expect(m.src).toMatch(SRC);
     expect(m.stuck).toBe("kb_partial");
     expect(m.diet).toBe("gout");
   }, T);
@@ -50,12 +50,12 @@ describe("kho kiến thức y khoa qua khung chat", () => {
     expect(a.med).toBeUndefined();
     const b = await last(["trầm cảm là gì"]);
     expect(b.med?.id).toBe("tram-cam");
-    expect(b.content).toMatch(SRC);
+    expect(b.src).toMatch(SRC);
   }, T);
   it("nói mình mắc bệnh thể chất (“a bị gout”) → ghi nhận trước rồi mới đưa kiến thức", async () => {
     const m = await last(["a bị gout"]);
     expect(m.content).toMatch(/đang bị \*\*gout\*\* hả/);
-    expect(m.content).toMatch(SRC);
+    expect(m.src).toMatch(SRC);
   }, T);
   it("“thiếu vitamin D nên ăn gì” là hỏi ăn uống theo tình trạng, không phải gợi ý quán", async () => {
     const m = await last(["thiếu vitamin d nên ăn gì"]);

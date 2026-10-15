@@ -50,6 +50,7 @@ export type Turn = {
   sx?: string[];
   diet?: string;
   med?: { id: string; aspect?: string }; // 09/10: trả lời từ kho kiến thức y khoa có nguồn
+  src?: string; // 15/10: dòng nguồn đã cất (không hiện trong lời đáp)
   stuck?: string; // 09/10: loại "bí" (ghi nhật ký lomi_stuck_log)
   dish?: string;
   dishPick?: boolean;

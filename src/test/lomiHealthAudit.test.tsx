@@ -27,7 +27,7 @@ describe("cấp cứu không bị bỏ sót", () => {
       const m = await last([t]);
       expect(m.content, t).toMatch(re);
       expect(m.content, t).toMatch(/115/);
-      expect(m.content, t).toMatch(/📚 Nguồn/);
+      expect(m.src, t).toMatch(/📚 Nguồn/);
     }
   }, T);
   it("nghi sốc phản vệ → gọi 115, không hỏi “bị bao lâu rồi”", async () => {
@@ -83,7 +83,7 @@ describe("chỉ số, té ngã, kiến thức có nguồn (đợt 2)", () => {
     const bp = await last(["huyết áp 150/95 có cao không"]);
     expect(bp.content).toMatch(/140\/90/);
     expect(bp.content).toMatch(/Một lần đo chưa đủ để kết luận/);
-    expect(bp.content).toMatch(/NHS/);
+    expect(bp.src).toMatch(/NHS/);
     expect((await last(["đường huyết lúc đói 6.2 có sao không"])).content).toMatch(/tiền tiểu đường/);
     expect((await last(["a1c 6.8% là sao"])).content).toMatch(/A1C \*\*6,8%\*\* ở mức \*\*tiểu đường\*\*/);
     expect((await last(["đường huyết 3.5"])).content).toMatch(/hạ đường huyết/);
@@ -101,13 +101,16 @@ describe("chỉ số, té ngã, kiến thức có nguồn (đợt 2)", () => {
   }, T);
   it("câu hỏi món theo bệnh đi qua thẻ có nguồn thay cho bảng kiêng cũ", async () => {
     const r = await chat(["mình bị đau dạ dày", "uống cà phê được không"]);
-    expect(r[1].content).toMatch(/📚 Nguồn/);
+    expect(r[1].src).toMatch(/📚 Nguồn/);
     expect((await last(["bị dị ứng ăn tôm được không"])).med?.id).toBe("di-ung-thuc-pham");
     expect((await last(["mới mổ kiêng gì"])).content).toMatch(/chưa gắn nguồn y khoa cụ thể/);
   }, T);
   it("kiến thức phổ thông: có nguồn thì ghi nguồn, chưa có thì nói rõ", async () => {
-    expect((await last(["uống cà phê nhiều có sao không"])).content).toMatch(/400 mg[\s\S]*FDA/);
-    expect((await last(["ngủ bao nhiêu là đủ"])).content).toMatch(/CDC/);
+    const cf = await last(["uống cà phê nhiều có sao không"]);
+    expect(cf.content).toMatch(/400 mg/);
+    expect(cf.content).not.toMatch(/FDA|\(Mỹ\)/); // tên cơ quan không đọc trong lời đáp
+    expect(cf.src).toMatch(/FDA/);
+    expect((await last(["ngủ bao nhiêu là đủ"])).src).toMatch(/CDC/);
   }, T);
 });
 
@@ -118,11 +121,11 @@ describe("chỉ số mỡ máu (ảnh Kir gửi 15/10: “Mỡ máu 9.0 là cao 
       expect(m.content, t).not.toMatch(/Ý “9 0”/);
       expect(m.content, t).toMatch(/cholesterol toàn phần/i);
       expect(m.content, t).toMatch(/rất cao/);
-      expect(m.content, t).toMatch(/NHS[\s\S]*MedlinePlus/);
+      expect(m.src, t).toMatch(/NHS[\s\S]*MedlinePlus/);
     }
   }, T);
   it("đúng từng chỉ số: cholesterol, triglycerid (cả mg/dL), HDL; LDL thì nói thật không có mức chung", async () => {
-    expect((await last(["cholesterol 6.2 có cao không"])).content).toMatch(/\*\*cao hơn\*\* mức khoẻ mạnh của NHS/);
+    expect((await last(["cholesterol 6.2 có cao không"])).content).toMatch(/\*\*cao hơn\*\* mức khoẻ mạnh \(dưới 5 mmol\/L\)/);
     expect((await last(["triglycerid 3.1"])).content).toMatch(/mức \*\*cao\*\*/);
     expect((await last(["chất béo trung tính 600 mg"])).content).toMatch(/rất cao/);
     expect((await last(["hdl 0.9 có sao không"])).content).toMatch(/\*\*thấp hơn\*\*/);

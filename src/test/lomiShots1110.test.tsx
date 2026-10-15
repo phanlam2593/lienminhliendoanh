@@ -22,7 +22,7 @@ describe("đúng chuỗi trong ảnh: rút bài → tăng huyết áp → aspiri
     expect(r[1].med?.id).toBe("tang-huyet-ap");
     // aspirin: trả lời về aspirin (có nguồn), không đọc lại bài tăng huyết áp
     expect(r[2].content).toMatch(/\*\*Aspirin\*\* là thuốc/);
-    expect(r[2].content).toMatch(/📚 Nguồn: /);
+    expect(r[2].src).toMatch(/📚 Nguồn: /);
     expect(r[2].content).not.toMatch(/Với \*\*Tăng huyết áp\*\*/);
     expect(r[2].drug?.id).toBe("aspirin");
     // "Tăng huyết áp là gì?": kiến thức, không phải lá bài
@@ -66,7 +66,7 @@ describe("hỏi một thuốc dùng để làm gì (không có chữ 'thuốc')"
     expect(r[1].content).toMatch(/\*\*Aspirin\*\* là thuốc/);
     expect(r[2].content).toMatch(/Không cho trẻ từ 15 tuổi trở xuống dùng aspirin/);
     expect(r[3].content).toMatch(/\*\*aspirin\*\* dùng chung với \*\*thuốc hạ huyết áp\*\*/);
-    for (const m of r.slice(1)) expect(m.content).toMatch(/📚 Nguồn: /);
+    for (const m of r.slice(1)) expect(m.src).toMatch(/📚 Nguồn: /);
   }, T);
   it("thuốc chưa có mục → nói thật là chưa có dữ liệu về ĐÚNG thuốc đó, không đọc bài bệnh đang nói", async () => {
     const r = await chat(["tăng huyết áp nên làm gì", "uống amlodipin để làm gì", "nó có tác dụng phụ gì không"]);

@@ -393,7 +393,7 @@ export function findInteraction(d: DrugEntry, text: string): DrugInteraction | n
 
 const dmy = (iso: string) => iso.split("-").reverse().join("/");
 /** Trả lời câu "có nguồn không / lấy ở đâu ra": liệt kê đầy đủ nguồn (kèm đường dẫn) của một mục thuốc. */
-export function sourceList(d: DrugEntry): string {
+export function sourceList(d: Pick<DrugEntry, "names" | "sources" | "verifiedAt">): string {
   return [
     `Mấy điều Lomi nói về **${d.names[0]}** lấy từ các trang sau (Lomi đối chiếu ngày ${dmy(d.verifiedAt)}):`,
     d.sources.map((s) => `• ${s.publisher} — “${s.title}”${s.reviewed ? ` (trang ghi rà soát ${dmy(s.reviewed)})` : s.updated ? ` (trang cập nhật ${dmy(s.updated)})` : ""}\n  ${s.url}`).join("\n"),
