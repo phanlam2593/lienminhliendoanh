@@ -1,0 +1,107 @@
+{
+  "id": "cat-bao-quy-dau",
+  "kind": "other",
+  "names": [
+    "cắt bao quy đầu",
+    "sau cắt bao quy đầu",
+    "mới cắt bao quy đầu",
+    "phẫu thuật cắt bao quy đầu",
+    "cắt da quy đầu",
+    "circumcision"
+  ],
+  "about": [
+    {
+      "text": "Cắt bao quy đầu là phẫu thuật bỏ lớp da bao đầu dương vật; thường làm khi bị nhiễm trùng tái đi tái lại hoặc bao quy đầu chật gây cương đau, tiểu khó, không kéo lên được.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thường mổ trong ngày, mất khoảng 30 phút, dùng chỉ tự tiêu (tiêu sau khoảng 2–6 tuần).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Sau mổ, sưng, bầm và rỉ máu ít trong 1–2 tuần là bình thường; đầu dương vật thường rất nhạy cảm, đỡ dần sau vài tuần; cương có thể căng tức, thường hết sau vài tháng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [],
+  "course": [
+    {
+      "text": "Vết mổ lành trong khoảng 4–6 tuần, có khi lâu hơn. Phần lớn chỉ có biến chứng nhẹ như chảy máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Giảm đau bằng paracetamol hoặc ibuprofen theo tờ hướng dẫn; không cho trẻ dưới 16 tuổi dùng aspirin.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Rửa vùng mổ nhẹ nhàng rồi thấm khô hoặc để khô tự nhiên; mặc quần áo, quần lót rộng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nghỉ làm (hoặc cho trẻ nghỉ học) khoảng một tuần; chỉ lái xe khi đạp phanh gấp được mà không đau.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh bơi, đạp xe, chơi thể thao và mang vác nặng ít nhất 2 tuần.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh quan hệ tình dục và thủ dâm ít nhất 4 tuần, hoặc tới khi vết mổ lành hẳn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám nếu sau 6 tuần chỉ chưa tiêu; vết mổ có mủ, dịch hoặc mùi, bị hở ra; có bầm hoặc chảy máu mới; đầu dương vật trông hẹp lại hoặc tia tiểu yếu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khám gấp nếu chảy máu không cầm, vết mổ đỏ hoặc nóng, sốt hoặc ớn lạnh, tiểu rất khó hoặc tiểu ra máu, đau dương vật nặng hoặc không đỡ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Cấp cứu ngay nếu hoàn toàn không đi tiểu được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Circumcision",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/circumcision-in-men/",
+      "reviewed": "2026-03-11"
+    }
+  ],
+  "verifiedAt": "2026-10-14"
+}

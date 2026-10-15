@@ -41,7 +41,9 @@
 "foods":[
 {"name":"cà phê, trà và cola","aliases":["cà phê","trà","cola","coca","cafe"],"verdict":"limit","note":"NHS khuyên giảm caffeine (trà, cà phê, cola) để tránh táo bón khi bị trĩ.","src":[0]},
 {"name":"rượu bia","aliases":["rượu","bia"],"verdict":"limit","note":"NHS khuyên giảm rượu bia khi bị trĩ.","src":[0]},
-{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS, NIDDK và MedlinePlus khuyên uống đủ nước và chất lỏng khi bị trĩ.","src":[0,1,2]}
+{"name":"nước","aliases":["nước lọc","uống nước"],"verdict":"good","note":"NHS, NIDDK và MedlinePlus khuyên uống đủ nước và chất lỏng khi bị trĩ.","src":[0,1,2]},
+{"name":"thực phẩm giàu chất xơ","aliases":["chất xơ","đồ ăn nhiều chất xơ"],"verdict":"good","note":"NHS, NIDDK và MedlinePlus khuyên ăn nhiều chất xơ để phân mềm, giúp điều trị và phòng trĩ.","src":[0,1,2]},
+{"name":"nước ép trái cây và súp trong","aliases":["nước ép trái cây","nước ép","súp","canh"],"verdict":"good","note":"NIDDK: uống nước và chất lỏng khác như nước ép trái cây, súp trong giúp chất xơ phát huy tác dụng.","src":[1]}
 ]
 },
 "doctor":[

@@ -173,8 +173,12 @@ export function foodPhrase(text: string, topic?: MedTopic | null): string | null
   if (topic) for (const nm of topic.names) n = ` ${n} `.replace(` ${normalizeVi(nm)} `, " ").trim();
   const m = n.match(FOOD_Q) ?? n.match(FOOD_Q2);
   if (!m) return null;
-  const words = m[1].split(" ").filter((w) => w && !FILL.has(w));
-  const p = words.join(" ").trim();
+  // Chỉ bỏ chữ đệm ở HAI ĐẦU — chữ ở giữa là một phần tên món ("nước CÓ ga", "trà CÓ đường").
+  const words = m[1].split(" ").filter(Boolean);
+  while (words.length && FILL.has(words[0])) words.shift();
+  while (words.length && FILL.has(words[words.length - 1])) words.pop();
+  const p0 = words.join(" ").trim();
+  const p = normalizeVi(foodSyn(p0)); // "cf" → "ca phe"
   return p.length >= 2 ? p : null;
 }
 /** Cụm món đúng như người dùng gõ (có dấu) — để nói lại "nhộng" chứ không phải "nhong". */
@@ -183,6 +187,7 @@ export function foodDisplay(text: string, phrase: string): string {
   const b = orig.map((w) => normalizeVi(w));
   const want = phrase.split(" ");
   for (let i = 0; i + want.length <= b.length; i++) if (want.every((w, j) => b[i + j] === w)) return orig.slice(i, i + want.length).join(" ");
+  for (const [, to] of FOOD_SYN) if (normalizeVi(to) === phrase) return to;
   return phrase;
 }
 /** Món trong thẻ khớp với cụm đã hỏi (theo tên hoặc tên gọi khác). */
@@ -198,12 +203,40 @@ export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood 
       if (k.length < 2) continue;
       // Tên món MỘT chữ ("đậu", "cá") chỉ khớp khi người dùng hỏi đúng món đó — "đậu rang", "đậu hũ" chưa chắc thuộc nhóm nguồn nêu.
       const single = !k.includes(" ") && k !== phrase;
-      const hit = single ? false : p.includes(` ${k} `) ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || accentAgrees(acc(nm), sa) : false;
+      // 15/10: món được hỏi nằm TRONG tên món của thẻ ("gà" trong "thịt gà") — chữ nào người dùng gõ dấu thì dấu phải đúng
+      //   ở chính chỗ đó: "gà" không phải "ga" trong "nước ngọt có ga".
+      const hit = single ? false : p.includes(` ${k} `) ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa) : false;
       if (hit) {
         if (!best || k.length > best.len) best = { f, len: k.length };
       }
     }
   return best?.f ?? null;
+}
+
+/** Cụm người dùng gõ (sa) nằm trong tên món (nameAcc): có một chỗ khớp mà mọi chữ người dùng ĐÃ gõ dấu đều đúng dấu. */
+function typedAccentsAt(nameAcc: string, sa: string): boolean {
+  const nw = nameAcc.trim().split(" ");
+  const tw = sa.trim().split(" ");
+  const nb = nw.map((w) => canon(normalizeVi(w)));
+  const tb = tw.map((w) => canon(normalizeVi(w)));
+  for (let i = 0; i + tb.length <= nb.length; i++) {
+    let ok = true;
+    for (let j = 0; j < tb.length && ok; j++) {
+      if (nb[i + j] !== tb[j]) ok = false;
+      else if (isAccented(tw[j]) && wordKey(tw[j]) !== wordKey(nw[i + j])) ok = false;
+    }
+    if (ok) return true;
+  }
+  return false;
+}
+
+// 15/10: cách gọi tắt / tiếng Anh của món hay gặp → tên món trong thẻ ("cf" = cà phê).
+const FOOD_SYN: [RegExp, string][] = [[VR(/^(cf|cafe|caphe|cafè|coffee|coffe|cà fê|ca fe)$/), "cà phê"]];
+/** Đổi cách gọi tắt của món sang tên đầy đủ (giữ nguyên nếu không có). */
+export function foodSyn(shown: string): string {
+  const k = shown.normalize("NFC").toLowerCase().trim();
+  for (const [re, to] of FOOD_SYN) if (re.test(k)) return to;
+  return shown;
 }
 
 export function aspectOf(text: string): MedAspect | null {
@@ -254,7 +287,7 @@ function caution(note: string): string {
   const s = note.split(/(?<=[.;])\s+|;\s*/).find((x) => CAUTION.test(x));
   return s ? ` (${s.replace(/[.;]\s*$/, "").trim().replace(/^./, (c) => c.toLowerCase())})` : "";
 }
-const LAB: Record<string, string> = { avoid: "🚫 Nên tránh", limit: "⚠️ Nên hạn chế", ok: "✅ Được (theo nguồn)", good: "👍 Nên ăn" };
+const LAB: Record<string, string> = { avoid: "🚫 Nên tránh", limit: "⚠️ Nên hạn chế", ok: "✅ Được (theo nguồn)", good: "👍 Nên ăn / uống" };
 
 export type MedReply = { text: string; quick: string[]; aspect: MedAspect | "overview" | "focus"; partial?: boolean; topic: MedTopic };
 
@@ -352,8 +385,22 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     if (!t.diet || !(t.diet.avoid.length || t.diet.ok.length || t.diet.foods.length)) {
       // (bỏ các ý về thuốc: "corticoid uống" không phải chuyện ăn uống)
       const eat = t.care.filter((f) => VR(/(^|[^\p{L}])(ăn|uống|bú|thức ăn|đồ ăn|bù nước|oresol)(?![\p{L}])/iu).test(f.text) && !VR(/thuốc|corticoid|kháng sinh|kháng virus/iu).test(f.text));
-      if (eat.length)
-        return out([`Các nguồn y khoa Lomi đã đối chiếu **không có danh sách kiêng cữ riêng** cho ${N}. Phần chăm sóc có nhắc tới ăn uống thế này:`, bl(eat, 5), "Muốn chắc về món cụ thể, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.", end([eat])].join("\n\n"), "diet", true);
+      // 15/10: hỏi "kiêng gì" mà nguồn không có chuyện ăn uống — vẫn nêu những điều nguồn DẶN TRÁNH (sinh hoạt, vận động, thuốc…),
+      //   vì "kiêng" với người hỏi thường là kiêng cả việc chứ không chỉ món ăn ("mới cắt bao quy đầu kiêng gì").
+      //   (chỉ khi nguồn không nhắc chuyện ăn uống nào — có thì chỉ đưa phần ăn uống như trước.)
+      const dont = eat.length ? [] : t.care.filter((f) => VR(/(^|[^\p{L}])(tránh|không nên|đừng|không được|kiêng|hạn chế|ngưng|nghỉ)(?![\p{L}])/iu).test(f.text));
+      if (eat.length || dont.length)
+        return out(
+          [
+            `Các nguồn y khoa Lomi đã đối chiếu **không có danh sách kiêng cữ riêng** cho ${N}${dont.length ? " (không nêu món ăn nào phải kiêng)" : ""}.`,
+            eat.length ? `Phần chăm sóc có nhắc tới ăn uống thế này:\n${bl(eat, 5)}` : "",
+            dont.length ? `Những điều nguồn dặn **nên tránh / lưu ý**:\n${bl(dont, 5)}` : "",
+            "Muốn chắc về món cụ thể, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.",
+            end([eat, dont]),
+          ].filter(Boolean).join("\n\n"),
+          "diet",
+          true,
+        );
       return out(`Các nguồn y khoa Lomi đã đối chiếu **không nêu cách ăn uống riêng** cho ${N}, nên Lomi không đưa ra danh sách kiêng cữ. Nếu bạn lo về ăn uống, hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.`, "diet", true);
     }
     const groups = (["avoid", "limit", "good", "ok"] as const)
@@ -468,7 +515,22 @@ export function foodReverseAsk(text: string): { phrase: string; shown: string } 
   if (!words.length || words.length > 5 || p.length < 2) return null;
   // "bệnh gout kiêng gì" không phải hỏi ngược — câu nhắc một bệnh có thẻ thì để lớp hỏi theo bệnh trả lời.
   if (findMedTopicId(text) || VN(/\b(gì|nào|bệnh|ai)\b/).test(p)) return null;
-  return { phrase: p, shown: foodDisplay(text, p) };
+  const shown = foodSyn(foodDisplay(text, p));
+  return { phrase: normalizeVi(shown), shown };
+}
+
+// 15/10: vừa trả lời một món của một bệnh mà người dùng nhắc lại / sửa lại món ("gà mà", "ý a là gà", "còn gà?") → cụm món đó.
+const RETRY_TAIL = String.raw`(?: (?:mà|á|à|thôi|nha|nhé|đó|chứ|nè|kìa|ạ|cơ|đâu|được không|được ko|đc không|đc k|đc ko|được k|thì sao|thì|nữa|ấy))`;
+const RETRY_RE = VN(new RegExp(String.raw`^(?:(?:(?:ý|tui|tôi|mình|em|anh|a|e|chị|c) (?:hỏi|nói|là|hỏi là|nói là)|còn|vậy còn|thế còn|còn món) (.+?)${RETRY_TAIL}*|(?:(?:hỏi|nói|là|ăn|uống|vậy|thế) )?(.+?)${RETRY_TAIL}+)$`));
+/** Câu ngắn chỉ nêu lại một món (kèm "mà / á / thì sao…") → món như người dùng gõ, hoặc null. */
+export function foodRetryPhrase(text: string): string | null {
+  const n = normalizeVi(text);
+  const m = n.match(RETRY_RE);
+  if (!m) return null;
+  const p = (m[1] ?? m[2]).replace(REV_LEAD, "").trim();
+  const w = p.split(" ").filter(Boolean);
+  if (!w.length || w.length > 3 || VN(/\b(gì|nào|sao|ai|vậy|thế|lomi|em|anh|chị|bạn|mình|tôi|tui|ok|ừ|vâng|dạ|đúng|rồi|không|ko)\b/).test(p)) return null;
+  return foodSyn(foodDisplay(text, p));
 }
 
 // Câu NỐI sau một lời đáp hỏi ngược: "măng thì sao?", "còn cua?", "vậy trứng thì sao", "gout thì sao" → món / bệnh được hỏi tiếp.
@@ -483,7 +545,7 @@ export function foodFollowPhrase(text: string): string | null {
   const p = m[1].replace(REV_LEAD, "").trim();
   const w = p.split(" ").filter(Boolean);
   if (!w.length || w.length > 4 || VN(/\b(gì|nào|sao|ai|vậy|thế|lomi|em|anh|chị|bạn|mình|tôi|tui)\b/).test(p)) return null;
-  return foodDisplay(text, p);
+  return foodSyn(foodDisplay(text, p));
 }
 
 const pubShort = (p: string) => p.replace(/\s*\(.*\)\s*$/, "");

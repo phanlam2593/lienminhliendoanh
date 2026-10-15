@@ -1092,3 +1092,16 @@ describe("Đáp lại sau câu trả lời y khoa (14/10)", () => {
     expect((await last(["app bị treo hoài"])).content).toMatch(/[Aa]pp/);
   }, T);
 });
+
+describe("Hỏi món theo bệnh (15/10)", () => {
+  it("'sỏi thận ăn gà' → đạm động vật, không phải 'nước có ga'", async () => {
+    const m = await last(["Sỏi thận ăn gà đc k?"]);
+    expect(m.content).toMatch(/đạm động vật/);
+    expect(m.content).not.toMatch(/có ga/);
+  }, T);
+  it("nêu lại món sau câu trả lời ('còn gà?', 'gà mà') → trả lời món đó với đúng bệnh", async () => {
+    expect((await last(["sỏi thận ăn bò đc k", "còn gà?"])).content).toMatch(/Sỏi thận.*đạm động vật/s);
+  }, T);
+  it("'cf' là cà phê", async () => expect((await last(["Bệnh gì cần kiêng cf"])).content).toMatch(/Cà phê/), T);
+  it("'mới cắt bao quy đầu kiêng gì' → những điều nguồn dặn tránh", async () => expect((await last(["Mới cắt bao quy đầu nên kiêng gì?"])).content).toMatch(/quan hệ tình dục/), T);
+});

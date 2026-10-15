@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodReverseAsk, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
+import { findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1318,6 +1318,16 @@ export function AiChat({
         //   Nhường lớp cũ khi: chỉ nêu một TRIỆU CHỨNG ("a bị đau đầu", "đau dạ dày" — để mạch triệu chứng hỏi han / theo dõi),
         //   hỏi khám KHOA NÀO / ở đâu (thẻ không có, bảng cũ có), hay đang theo chuyện người ốm mà thẻ không có phần được hỏi
         //   (mạch chăm người ốm nói "chưa có kiến thức" đúng người, đúng chuyện).
+        // 15/10: vừa trả lời món của một bệnh, người dùng nêu lại món khác / sửa lại ("gà mà") → trả lời món đó với đúng bệnh ấy.
+        if (lastA?.med && (lastA.med.aspect === "food" || lastA.med.aspect === "diet") && !findMedId(q)) {
+          const again = foodRetryPhrase(q);
+          const mt = again ? await loadMedTopic(lastA.med.id) : null;
+          if (again && mt && matchFood(mt, normalizeVi(again), again)) {
+            const mr = renderMed(mt, "food", normalizeVi(again), Date.now(), again);
+            topicHit("health");
+            return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: mt.id, aspect: mr.aspect }, health: hCtx ?? {} });
+          }
+        }
         const mk = parseMedAsk(q, lastA?.med ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
         //   Tự hỏi "có phải a bị trầm cảm không" là câu hỏi CHẨN ĐOÁN về chính mình → mạch tâm sự / sức khoẻ trả lời "Lomi không chẩn đoán".
         const mkSkip =
