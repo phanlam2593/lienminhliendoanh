@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1289,6 +1289,12 @@ export function AiChat({
       if (!en && !gateSkip && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = heartOn || !!hCtx;
         const depth = (lastA?.heartDepth ?? 0) + 1;
+        const umbrellaMed = async (mt: MedTopic, mr: MedReply, food?: string | null, shown?: string): Promise<MedReply> => {
+          const ids = UMBRELLA[mt.id];
+          if (!ids || (mr.aspect !== "diet" && mr.aspect !== "food")) return mr;
+          const subs = (await Promise.all(ids.map((id) => loadMedTopic(id)))).filter((x): x is MedTopic => !!x);
+          return renderUmbrella(mt, subs, mr.aspect, food, shown);
+        };
         const nq = ` ${normalizeVi(q)} `;
         // 11/10 — HỎI VỀ THUỐC (lib/lomiDrug): là thuốc gì · tác dụng phụ · liều · uống thuốc gì · dùng chung · ngưng thuốc · uống nhầm.
         //   Lomi không có dữ liệu riêng cho từng thuốc → nói thật giới hạn theo đúng dáng câu hỏi, không đáp "chưa hiểu ý" / "bấm Dạy Lomi".
@@ -1378,7 +1384,7 @@ export function AiChat({
           const again = foodRetryPhrase(q);
           const mt = again ? await loadMedTopic(lastA.med.id) : null;
           if (again && mt && matchFood(mt, normalizeVi(again), again)) {
-            const mr = renderMed(mt, "food", normalizeVi(again), Date.now(), again);
+            const mr = await umbrellaMed(mt, renderMed(mt, "food", normalizeVi(again), Date.now(), again), normalizeVi(again), again);
             topicHit("health");
             return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: mt.id, aspect: mr.aspect }, health: hCtx ?? {} });
           }
@@ -1389,7 +1395,9 @@ export function AiChat({
           !!mk && (selfDxAsk(q) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length && (isSelfStatement(q) || !hasQuestion(q))) || (mk.aspect === "doctor" && VN(/\b(khám ở đâu|ở đâu khám|khoa nào|khám khoa)\b/).test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
         if (mk?.id && !mkSkip) {
           const mt = await loadMedTopic(mk.id);
-          const mr0 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined) : null;
+          const mr00 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined) : null;
+          // 15/10: thẻ TÊN GỌI CHUNG ("viêm khớp") + hỏi ăn uống / một món → trả lời theo từng loại bệnh (lib/lomiMed.renderUmbrella).
+          const mr0 = mt && mr00 ? await umbrellaMed(mt, mr00, mk.food, mk.food ? foodDisplay(q, mk.food) : undefined) : mr00;
           // Câu nối chung chung theo chủ đề đang nói: chỉ trả lời khi thẻ có đúng ý được hỏi, không thì để các lớp sau xử lý.
           const mr = mk.focusOnly && mr0?.aspect !== "focus" ? null : mr0;
           // Người dùng nói CHÍNH MÌNH đang bị một vấn đề tâm lý ("a bị trầm cảm") → đó là lời tâm sự: để mạch tâm sự lắng nghe trước,

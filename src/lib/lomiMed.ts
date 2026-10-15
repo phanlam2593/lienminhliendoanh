@@ -289,7 +289,9 @@ const title = (t: MedTopic) => `**${cap(t.names[0])}**`;
 const CAUTION = VR(/(không (?:dùng|cho|nên|được)|tránh cho|trẻ (?:dưới|nhỏ|em|sơ sinh)|mang thai|bà bầu|cho con bú|dị ứng)/i);
 function caution(note: string): string {
   const s = note.split(/(?<=[.;])\s+|;\s*/).find((x) => CAUTION.test(x));
-  return s ? ` (${s.replace(/[.;]\s*$/, "").trim().replace(/^./, (c) => c.toLowerCase())})` : "";
+  // (15/10: tên riêng đầu câu — "Mayo Clinic", "NHS" — giữ nguyên chữ hoa; trước đây ra "(mayo Clinic …")
+  const t = s?.replace(/[.;]\s*$/, "").trim();
+  return t ? ` (${/^(Mayo|NHS|CDC|WHO|MedlinePlus|NIAMS|NIDDK|NIH|StatPearls|FDA)\b/.test(t) ? t : t.replace(/^./, (c) => c.toLowerCase())})` : "";
 }
 const LAB: Record<string, string> = { avoid: "🚫 Nên tránh", limit: "⚠️ Nên hạn chế", ok: "✅ Được (theo nguồn)", good: "👍 Nên ăn / uống" };
 
@@ -393,7 +395,8 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       // 15/10: hỏi "kiêng gì" mà nguồn không có chuyện ăn uống — vẫn nêu những điều nguồn DẶN TRÁNH (sinh hoạt, vận động, thuốc…),
       //   vì "kiêng" với người hỏi thường là kiêng cả việc chứ không chỉ món ăn ("mới cắt bao quy đầu kiêng gì").
       //   (chỉ khi nguồn không nhắc chuyện ăn uống nào — có thì chỉ đưa phần ăn uống như trước.)
-      const dont = eat.length ? [] : t.care.filter((f) => VR(/(^|[^\p{L}])(tránh|không nên|đừng|không được|kiêng|hạn chế|ngưng|nghỉ)(?![\p{L}])/iu).test(f.text));
+      // (15/10: kèm các ý về CÂN NẶNG — "giảm cân nếu thừa cân" — vì người hỏi kiêng gì thường cũng đang lo chuyện ăn uống / cân nặng)
+      const dont = eat.length ? [] : t.care.filter((f) => VR(/(^|[^\p{L}])(tránh|không nên|đừng|không được|kiêng|hạn chế|ngưng|nghỉ|giảm cân|thừa cân)(?![\p{L}])/iu).test(f.text));
       if (eat.length || dont.length)
         return out(
           [
@@ -483,6 +486,87 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
 }
 
 /** Tên chủ đề đúng như người dùng gõ (giữ dấu, giữ chữ hoa/thường) — để nói lại "bạn đang bị **gout**". */
+// ── 15/10: THẺ "TÊN GỌI CHUNG" (vd "viêm khớp") — hỏi ăn uống / một món thì trả lời theo từng LOẠI bệnh nằm dưới tên gọi đó ──
+// Lỗi cần sửa (Kir gửi): "Viêm khớp nên kiêng gì?" → đọc nguyên bài ăn uống của thẻ chung, không nói ngay rằng viêm khớp gồm nhiều bệnh,
+// không phân biệt gout (có hướng dẫn riêng) với viêm khớp dạng thấp (nguồn không ủng hộ kiêng món cụ thể). Mọi câu chữ về bệnh vẫn lấy
+// nguyên từ thẻ có nguồn; ở đây chỉ sắp xếp và ghi nguồn theo TỪNG thẻ để truy ngược được từng nhận định.
+export const UMBRELLA: Record<string, string[]> = {
+  "viem-khop": ["thoai-hoa-khop", "viem-khop-dang-thap", "gout"],
+};
+const pubList = (t: MedTopic, src: number[], now: number) => {
+  const line = sourceLine(t, src.length ? src : [0], now);
+  const m = line.match(/^📚 Nguồn: (.*?)\. Lomi đối chiếu ngày ([\d/]+)/u);
+  return m ? `${m[1]} (Lomi đối chiếu ${m[2]})` : line;
+};
+/** Các món trong thẻ có tên chứa đúng cụm được hỏi ("sữa" → "sữa ít béo", "sữa nguyên kem"). */
+function foodsNamed(t: MedTopic, phrase: string): MedFood[] {
+  if (!t.diet || !phrase) return [];
+  const p = ` ${phrase} `;
+  // tên món chứa cụm hỏi ("sữa" ⊂ "sữa ít béo"), hoặc cụm hỏi chứa tên món ("rượu bia" ⊃ "bia", "rượu")
+  return t.diet.foods.filter((f) => [f.name, ...f.aliases].some((nm) => { const k = ` ${normalizeVi(nm)} `; return k.trim().length >= 2 && (k.includes(p) || p.includes(k)); }));
+}
+const SAY: Record<MedFood["verdict"], string> = { avoid: "nên **tránh**", limit: "nên **hạn chế**", ok: "**được**", good: "là món **nên ăn**" };
+/** Ăn uống với một thẻ tên gọi chung: điều chung có nguồn → khác nhau theo từng loại → một câu hỏi làm rõ. */
+export function renderUmbrella(t: MedTopic, subs: MedTopic[], aspect: "diet" | "food", food?: string | null, shown?: string, now = Date.now()): MedReply {
+  const N = t.names[0];
+  const used: [MedTopic, number[]][] = [];
+  const note = (x: MedTopic, fs: DrugFact[]) => (used.push([x, fs.flatMap((f) => f.src)]), fs);
+  const lab = (x: MedTopic) => `**${cap(x.names[0])}**`;
+  const out: string[] = [];
+  if (aspect === "diet") {
+    out.push(`Với **${N}** thì **không có một danh sách kiêng chung cho mọi người** — “${N}” là cách gọi chung của nhiều bệnh khớp khác nhau, mỗi bệnh chuyện ăn uống một khác.`);
+    const gen = note(t, [...(t.diet?.avoid ?? []), ...(t.diet?.ok ?? [])]);
+    if (gen.length) out.push(`Điều các nguồn khuyên chung cho người bị ${N}:\n${bl(gen)}`);
+  } else {
+    const f = matchFood(t, food ?? "", shown);
+    if (f) {
+      note(t, [{ text: f.note, src: f.src }]);
+      out.push(`Với **${N}** nói chung: **${f.name}** ${SAY[f.verdict]}.\n${f.note}`);
+    } else {
+      const gen = note(t, [...(t.diet?.avoid ?? []).slice(0, 1), ...(t.diet?.ok ?? []).slice(0, 1)]);
+      out.push(`Với **${N}** nói chung, các nguồn Lomi đối chiếu **không nêu riêng ${shown ?? food}** — nên Lomi không nói là phải kiêng${gen.length ? `. Điều nguồn khuyên chung:\n${bl(gen)}` : "."}`);
+    }
+  }
+  const lines: string[] = [];
+  const silent: MedTopic[] = []; // hỏi một món mà thẻ của loại đó không nêu → gom lại một dòng
+  for (const s of subs) {
+    if (aspect === "food" && food) {
+      const fs = foodsNamed(s, food);
+      const one = fs.length ? null : matchFood(s, food, shown);
+      const hits = fs.length ? fs : one ? [one] : [];
+      if (hits.length) {
+        note(s, hits.map((h) => ({ text: h.note, src: h.src })));
+        lines.push(`• ${lab(s)}: ${hits.map((h) => `${h.name} ${SAY[h.verdict]} — ${h.note.replace(/\.$/, "")}`).join("; ")}.`);
+        continue;
+      }
+    }
+    if (aspect === "food") {
+      silent.push(s);
+      continue;
+    }
+    // hỏi chung → ý chính về ăn uống của loại bệnh này, đúng như nguồn
+    const lead = s.diet?.avoid[0] ?? s.diet?.ok[0];
+    const weights = s.care.filter((c) => VR(/(giảm cân|thừa cân|cân nặng)/iu).test(c.text));
+    const weight = weights.find((c) => VR(/thừa cân làm/iu).test(c.text)) ?? weights.find((c) => !VR(/^triệu chứng/iu).test(c.text)) ?? weights[0];
+    if (lead) lines.push(`• ${lab(s)}: ${note(s, [lead])[0].text}${s.id === "gout" ? " Đây là hướng dẫn riêng cho gout, không áp nguyên cho mọi loại viêm khớp." : ""}`);
+    else if (weight) lines.push(`• ${lab(s)}: nguồn không nêu món nào phải kiêng. Điều nguồn có nhắc liên quan: “${note(s, [weight])[0].text}”`);
+    else lines.push(`• ${lab(s)}: các nguồn Lomi đối chiếu không nêu cách ăn uống riêng.`);
+  }
+  if (silent.length) lines.push(`• ${silent.map(lab).join(", ")}: nguồn không nêu riêng ${shown ?? food}${silent.some((x) => x.id === "viem-khop-dang-thap") ? " — với viêm khớp dạng thấp, nguồn còn nói chưa có bằng chứng mạnh rằng kiêng một món cụ thể giúp bệnh đỡ hơn" : ""}.`);
+  if (silent.some((x) => x.id === "viem-khop-dang-thap")) {
+    const ra = silent.find((x) => x.id === "viem-khop-dang-thap")!;
+    if (ra.diet?.avoid[0]) note(ra, [ra.diet.avoid[0]]);
+  }
+  if (lines.length) out.push(`${aspect === "diet" ? "Còn tuỳ từng loại" : "Tuỳ loại " + N}:\n${lines.join("\n")}`);
+  out.push(`Bạn (hoặc người nhà) đã được bác sĩ nói là loại ${N} nào chưa? Biết loại thì Lomi nói kỹ phần ăn uống cho đúng loại đó.`);
+  // Nguồn ghi theo TỪNG thẻ (gộp chỉ số nguồn đã dùng) — ngày rà soát là của trang nguồn, ngày "đối chiếu" là ngày Lomi kiểm tra thẻ.
+  const per = new Map<MedTopic, number[]>();
+  for (const [x, src] of used) per.set(x, [...(per.get(x) ?? []), ...src]);
+  out.push(`📚 Nguồn — ${[...per.entries()].map(([x, src]) => `${cap(x.names[0])}: ${pubList(x, src, now)}`).join(" · ")}. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ.`);
+  const quick = subs.map((s) => `${cap(s.names[0])} kiêng gì?`);
+  return { text: out.join("\n\n"), aspect, partial: false, topic: t, quick };
+}
+
 export function nameAsTyped(text: string, id: string): string | null {
   const row = ROWS.find((r) => r.id === id);
   if (!row) return null;

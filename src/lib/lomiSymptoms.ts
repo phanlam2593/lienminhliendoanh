@@ -888,6 +888,9 @@ export function condByName(text: string): { id: string; label: string } | undefi
     for (const part of c.name.split(/[(/–)]/)) {
       const p = part.trim().toLowerCase();
       if (p.length < 3 || VR(/^(cần|hoặc|do|vấn đề)\b/).test(p) || VR(/cần (kiểm tra|loại trừ|khám|được)/).test(p)) continue;
+      // 15/10: mảnh tên chỉ là MỘT chữ chung ("Viêm / đau dạ dày" → "viêm"; "mật" trong "bí mật") không phải tên bệnh —
+      //   trước đây "viêm khớp nên kiêng gì" bị gắn nhầm khoá "đau dạ dày".
+      if (VR(/^(viêm|đau|loét|mật|bệnh|nhiễm)$/u).test(p)) continue;
       if (acc.includes(` ${p} `) || (p.includes(" ") && n.includes(` ${normalizeVi(p)} `))) return { id: c.id, label: p };
     }
   }
