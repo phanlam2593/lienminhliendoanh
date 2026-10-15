@@ -463,8 +463,8 @@ export function tarotMedicalAsk(question: string): boolean {
   return false;
 }
 
-function detectTopic(f: string): TarotTopic {
-  if (VN(/(?<![a-z])(bệnh|hết bệnh|khỏi bệnh|bị ốm|ốm đau|ốm nặng|uống thuốc|thuốc men|toa thuốc|đơn thuốc|thuốc này|sức khỏe|bác sĩ|bệnh viện|khám bệnh|xét nghiệm|phẫu thuật|mổ tim|bị sốt|sốt cao|cảm cúm|bị cảm|đau bụng|đau đầu|đau lưng|nhức đầu|mang thai|có bầu|health|sick|illness|medicine|doctor)(?![a-z])/).test(f))
+function detectTopic(f: string, noHealth = false): TarotTopic {
+  if (!noHealth && VN(/(?<![a-z])(bệnh|hết bệnh|khỏi bệnh|bị ốm|ốm đau|ốm nặng|uống thuốc|thuốc men|toa thuốc|đơn thuốc|thuốc này|sức khỏe|bác sĩ|bệnh viện|khám bệnh|xét nghiệm|phẫu thuật|mổ tim|bị sốt|sốt cao|cảm cúm|bị cảm|đau bụng|đau đầu|đau lưng|nhức đầu|mang thai|có bầu|health|sick|illness|medicine|doctor)(?![a-z])/).test(f))
     return "health";
   if (VN(/(?<![a-z])(tình cảm|tình yêu|người yêu|crush|người ấy|hẹn hò|yêu|ny|vợ|chồng|kết hôn|cưới|chia tay|quay lại|ex|love|dating|boyfriend|girlfriend|marry)(?![a-z])/).test(f))
     return "love";
@@ -556,7 +556,8 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
   // 12/10: bộ bài KHÔNG còn đọc theo chủ đề "sức khoẻ" (lá bài nói về thể trạng, thuốc men, chuyện khỏi bệnh). Câu hỏi y khoa bị chặn
   // ở cửa bói (lib/lomiTarotGate) trước khi tới đây; đây là chốt thứ hai — có lọt tới thì cũng chỉ đọc như một câu hỏi chung.
   // (Mấy câu "Về sức khoẻ…" trong BANK / healthAnswer vì vậy không còn đường nào dẫn tới; giữ lại để kiểu dữ liệu không đổi.)
-  const topic: TarotTopic = t1 === "health" ? "general" : t1;
+  // 15/10: câu có chữ y khoa nhưng KHÔNG hỏi chuyện bệnh ("con có nên học bác sĩ không") → đọc theo chủ đề còn lại (học hành…), không rơi về "chung chung".
+  const topic: TarotTopic = t1 === "health" ? detectTopic(fold(t0 === "health" ? q : (ctxAll ?? q)), true) : t1;
   if (kind === "choice" && options)
     return {
       topic,
@@ -577,7 +578,7 @@ export function drawForQuestion(question: string, context?: string): TarotReadin
     return { topic, spread: sp, cards: drawCards(def.n), at: Date.now(), kind, question: q, context: ctx, intent: it?.id, pos: def.pos };
   }
   if (oneCardAsk(`${ctxAll ?? ""} ${q}`)) return { topic, spread: "one", cards: drawCards(1), at: Date.now(), kind, question: q, context: ctx, intent: it?.id, pos: [P(ONE_POS, "Answer")] };
-  const ipos = it?.pos ? (typeof it.pos === "function" ? it.pos() : it.pos) : undefined;
+  const ipos = it?.pos ? (typeof it.pos === "function" ? it.pos(q) : it.pos) : undefined;
   return {
     topic,
     spread: "sca",
@@ -813,6 +814,7 @@ const HARD_UP = new Set([
   "sự chán nản, dễ bỏ lỡ", "sự tiếc nuối điều đã mất", "quá nhiều lựa chọn, dễ mơ mộng", "sự phân vân giữa hai lựa chọn",
   "một nỗi buồn cần được thừa nhận", "cái giá của tranh cãi", "sự thiếu minh bạch", "cảm giác bị mắc kẹt",
   "nỗi lo âu, nghĩ quá nhiều", "khó khăn tạm thời",
+  "một thay đổi bất ngờ", // 15/10: Tòa Tháp xuôi là lá biến động — không đọc thành "mọi thứ khá thuận"
 ]);
 function hard(d: TarotDraw): boolean {
   const row = kwRow(d);
@@ -917,7 +919,7 @@ const TOPIC_INTRO: Record<TarotTopic, [string[], string[]]> = {
 // ── Bối cảnh cụ thể của câu hỏi (chi tiết hơn chủ đề): tìm việc khác đang đi làm, người cũ khác crush… ──
 type Scene =
   | "jobseek" | "work" | "business" | "newlove" | "ex" | "crush" | "love" | "money" | "travel" | "study" | "health"
-  | "fun" | "future" | "self" | "others" | "general";
+  | "fun" | "future" | "self" | "others" | "general" | "lottery";
 function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   const f = ` ${fold(`${context ?? ""} ${q}`)} `.replace(/[?!.,…"“”]/g, " ");
   const has = (re: RegExp) => re.test(f);
@@ -925,12 +927,14 @@ function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   if (has(VN(/ (thất nghiệp|tìm việc|kiếm việc|xin việc|có việc|mất việc|bị đuổi|nghỉ việc rồi|chưa có việc|phỏng vấn|nộp cv|nộp hồ sơ xin) /))) return "jobseek";
   if (has(VN(/ (tìm được việc|kiếm được việc|có việc làm|bao giờ có việc|khi nào có việc) /))) return "jobseek";
   // Làm ăn / đầu tư / dự án / cửa hàng (hỏi chuyện kinh doanh, khác hỏi chuyện đi làm)
-  if (has(VN(/ (đầu tư|làm ăn|hùn vốn|góp vốn|mở quán|kinh doanh|buôn bán|startup|dự án|cửa hàng|quán của mình|tiệm của mình|shop của mình) /))) return "business";
+  if (has(VN(/ (đầu tư|làm ăn|hùn vốn|góp vốn|mở quán|kinh doanh|buôn bán|startup|dự án|cửa hàng|quán của mình|tiệm của mình|shop của mình|khai trương) /))) return "business";
   if (topic === "work") return "work";
   // Độc thân / vừa thất tình muốn có người mới — khác hẳn hỏi chuyện quay lại với người cũ.
   if (has(VN(/ (người yêu mới|có người yêu|kiếm người yêu|tìm người yêu|độc thân|bị ế|ế quá|vẫn ế|còn ế|gặp đúng người|người mới|chưa có người yêu|gặp được ai) /)) && !has(VN(/ quay lại /)))
     return "newlove";
   if (has(VN(/ (người yêu cũ|người cũ|ny cũ|ex|quay lại|tái hợp|chia tay) /))) return "ex";
+  // 15/10 (Tarot bám câu hỏi): "người ấy CÒN yêu / còn thương…" là chuyện của một mối quan hệ đã có — không đọc kiểu crush ("sợ bị từ chối").
+  if (has(VN(/ (còn yêu|còn thương|hết yêu|hết thương|còn tình cảm) /))) return "love";
   if (has(VN(/ (crush|nhắn tin|tỏ tình|làm quen|bắt chuyện|người ấy|thích (anh|em|bạn|người)|có thích mình) /))) return "crush";
   if (topic === "love") return "love";
   if (topic === "money" || topic === "travel" || topic === "study") return topic;
@@ -944,7 +948,7 @@ function sceneOf(q: string, topic: TarotTopic, context?: string): Scene {
   return "general";
 }
 type Tpl = [string, string]; // [bài thuận, bài thử thách]
-type SceneBank = { noun?: string; state: Tpl; action: Tpl; block: Tpl; result: Tpl; tip: Tpl };
+type SceneBank = { noun?: string; state: Tpl; action: Tpl; block: Tpl; result: Tpl; tip: Tpl; phase?: Tpl };
 // {k} = ý chính của lá (cụm danh từ), {S} = chủ đề người hỏi ("chuyện visa đi Úc").
 const SCENE: Record<Scene, SceneBank> = {
   jobseek: {
@@ -1117,6 +1121,11 @@ const SCENE: Record<Scene, SceneBank> = {
     ],
     block: ["Điều cần để ý là {k} — tận dụng tốt sẽ giúp tiền sinh sôi.", "Thứ có thể cản là {k} — cẩn thận những khoản chi theo cảm xúc."],
     result: ["Kết quả nghiêng về {k} — tài chính có chiều hướng khá lên.", "Kết quả còn vướng {k} — nên giữ một khoản dự phòng cho chắc."],
+    // 15/10: vị trí theo mốc thời gian (đầu / giữa / cuối tháng…) đọc theo dòng tiền, không chỉ "khá thuận" chung chung.
+    phase: [
+      "Về tiền bạc, khoảng này mang năng lượng của {k} — dòng tiền khá thuận, chỉ cần giữ nhịp chi tiêu đều.",
+      "Về tiền bạc, khoảng này có thể vướng {k} — nên chậm các khoản chi lớn và để ý dòng tiền hơn một chút.",
+    ],
     tip: [
       "Trích một phần để tiết kiệm ngay khi nhận tiền, đừng đợi cuối tháng mới để dành.",
       "Tạm hoãn khoản chi lớn, ưu tiên việc thiết yếu và tránh vay mượn thêm lúc này.",
@@ -1189,6 +1198,31 @@ const SCENE: Record<Scene, SceneBank> = {
     result: ["Kết quả nghiêng về {k} — chiều hướng khá tích cực.", "Kết quả còn vướng {k} — có thể cần thêm thời gian hoặc một cách làm khác."],
     tip: ["Cứ tin vào cảm nhận của mình và bước từng bước chắc chắn.", "Chậm lại một nhịp, viết ra điều mình lo nhất rồi xử lý từng phần."],
   },
+  // 15/10: hỏi TRÚNG SỐ / xổ số — kết quả là ngẫu nhiên, nên lá bài chỉ đọc về tâm thế chờ đợi & chuyện tiền mua vé,
+  // không bao giờ đọc thành "sắp có tiền / sẽ trúng", và không lạc sang việc làm hay đầu tư.
+  lottery: {
+    noun: "chuyện mua vé số",
+    state: [
+      "Đặt vào chuyện mua vé số, lá này nói về tâm thế của bạn: {k}. Đó là cách bạn đang chờ kết quả — không phải dấu hiệu con số nào sẽ về.",
+      "Đặt vào chuyện mua vé số, lá này mang sắc thái {k} — ở chuyện chờ kết quả, đó là dấu hiệu dễ kỳ vọng nhiều hoặc sốt ruột mà chưa thấy chuyển biến. Lá bài phản ánh cảm xúc, không báo trước kết quả.",
+    ],
+    action: [
+      "Ở chuyện tiền mua vé, lá này mang biểu tượng {k} — Lomi đọc là tiền đang được dùng có tính toán, giữ đúng mức mình đã định là được; đây không phải dấu hiệu sắp có tiền thưởng.",
+      "Ở chuyện tiền mua vé, lá này nhắc về {k}: dấu hiệu dễ chi quá tay hoặc mua thêm để “gỡ”. Đây là chỗ cần siết lại.",
+    ],
+    block: [
+      "Điều nên giữ là {k} — coi tờ vé như một niềm vui nhỏ: trúng thì mừng, không trúng cũng không ảnh hưởng gì tới sinh hoạt.",
+      "Điều cần giữ là đừng để {k} cuốn mình đi — đặt giới hạn rõ ràng trước khi mua.",
+    ],
+    result: [
+      "Lá ở vị trí này mang sắc thái {k} — tích cực về mặt biểu tượng, nhưng không phải lời hứa trúng thưởng.",
+      "Lá ở vị trí này mang sắc thái {k} — nhắc giữ kỳ vọng vừa phải, chứ không có nghĩa là chắc chắn trượt.",
+    ],
+    tip: [
+      "Đặt sẵn một mức tiền mua vé cố định mỗi tuần — mức mà mất đi cũng không ảnh hưởng ăn ở, sinh hoạt. Không vay mượn để mua vé hay đánh đề, và đừng mua thêm để “gỡ”. Cũng đừng dùng Tarot để chọn số hay đoán kết quả — xổ số là ngẫu nhiên.",
+      "Đặt sẵn một mức tiền mua vé cố định mỗi tuần — mức mà mất đi cũng không ảnh hưởng ăn ở, sinh hoạt. Không vay mượn để mua vé hay đánh đề, và đừng mua thêm để “gỡ”. Cũng đừng dùng Tarot để chọn số hay đoán kết quả — xổ số là ngẫu nhiên.",
+    ],
+  },
 };
 type Group = "state" | "action" | "block" | "result" | "time" | "phase";
 const ROLE_GROUP: Record<Role, Group> = {
@@ -1200,7 +1234,7 @@ const ROLE_GROUP: Record<Role, Group> = {
 };
 // Vị trí theo mốc thời gian (sáng/chiều/tối, đầu/giữa/cuối tháng, từng cặp tháng…)
 const PHASE_TPL: Tpl = [
-  "Khoảng này mang năng lượng của {k} — mọi thứ khá thuận, cứ mạnh dạn.",
+  "Khoảng này mang năng lượng của {k} — đoạn này khá thuận.",
   "Khoảng này có thể vướng {k} — nên chậm lại và cẩn thận hơn một chút.",
 ];
 const TIME_TPL: Tpl = [
@@ -1309,7 +1343,8 @@ const MINOR_DOMAIN: Record<Exclude<TarotSuit, "major">, [string, string, string,
 };
 type Domain = "career" | "love" | "general";
 const DOMAIN_OF: Record<Scene, Domain> = {
-  jobseek: "career", work: "career", money: "career", business: "career", newlove: "love",
+  // 15/10: tiền bạc / làm ăn / xổ số KHÔNG dùng nghĩa "Về công việc…" (nộp hồ sơ, phỏng vấn) — đọc theo mẫu riêng của bối cảnh đó.
+  jobseek: "career", work: "career", money: "general", business: "general", lottery: "general", newlove: "love",
   future: "general", self: "general", others: "general",
   ex: "love", crush: "love", love: "love",
   travel: "general", study: "general", health: "general", fun: "general", general: "general",
@@ -1369,7 +1404,7 @@ const SCENE_ASK: Record<Scene, string> = {
   self: "mình nên đi hướng nào", others: "mối quan hệ này sẽ ra sao", newlove: "có người yêu mới hay không", work: "công việc có thuận lợi không", ex: "người cũ có quay lại không",
   crush: "chuyện với người ấy có thành không", love: "tình cảm có tiến triển không", money: "tiền bạc có khá lên không",
   travel: "mọi chuyện có suôn sẻ không", study: "kết quả có tốt không", health: "có mau khoẻ không", fun: "có nên đi không",
-  general: "chuyện này có thành không",
+  general: "chuyện này có thành không", lottery: "có trúng số không",
 };
 // Gợi ý bói tiếp theo bối cảnh (hiện thành nút bấm; có chữ "Bói" nên bấm là bói luôn).
 const SCENE_NEXT: Record<Scene, string[]> = {
@@ -1389,6 +1424,7 @@ const SCENE_NEXT: Record<Scene, string[]> = {
   health: ["Bói một lá cho hôm nay", "Bói tiếp: tinh thần mình dạo này thế nào"],
   fun: ["Bói một lá cho hôm nay", "Bói tiếp: cuối tuần này có gì vui không"],
   general: ["Bói một lá cho hôm nay", "Bói tiếp: tháng này của mình thế nào"],
+  lottery: ["Bói một lá cho hôm nay", "Bói tiếp: tuần này của mình thế nào"],
 };
 // ─────────────────────────────────────────────────────────────────────────────
 // Ý CÂU HỎI (30/09 r10, theo danh sách câu hay hỏi Kir gửi) — mỗi kiểu câu hỏi có trải bài riêng:
@@ -1401,7 +1437,7 @@ type Intent = {
   kinds?: TarotKind[]; // chỉ áp dụng cho các kiểu này (mặc định: mọi kiểu trừ choice)
   scene?: Scene; // bối cảnh khi câu hỏi chưa rõ bối cảnh
   force?: boolean; // luôn dùng scene này
-  pos?: string[] | (() => string[]);
+  pos?: string[] | ((q: string) => string[]);
   groups?: Group[];
   ask?: string;
   lean?: Lean;
@@ -1420,7 +1456,7 @@ const monthOf = (add: number) => {
 };
 const DIRECTION: Lean = [
   "đang đi theo chiều hướng khá sáng — chỉ cần bạn tiếp tục vun",
-  "đang ở một ngã rẽ — hướng đi phụ thuộc nhiều vào lựa chọn của bạn",
+  "đang ở thế lưng chừng — có cả điểm thuận lẫn điểm cần để ý, chưa nghiêng hẳn về bên nào",
   "đang có khá nhiều thử thách — nên chậm lại và điều chỉnh một chút",
 ];
 const INTENTS: Intent[] = [
@@ -1459,9 +1495,37 @@ const INTENTS: Intent[] = [
     ],
   },
   {
+    // 15/10: "người ấy CÒN yêu / còn thương anh không?" — mối quan hệ đã có, hỏi tình cảm hiện giờ của người kia.
+    // Chốt theo kiểu cảm xúc (còn / chưa rõ / đang nguội), không trả lời kiểu thời điểm ("chưa phải lúc").
+    id: "stilllove",
+    re: VN(/ (còn yêu|còn thương|hết yêu|hết thương|còn tình cảm) /),
+    kinds: ["yesno", "open"],
+    scene: "love",
+    force: true,
+    pos: ["Tình cảm hiện tại của người ấy", "Điều đang chắn giữa hai người", "Chiều hướng tình cảm"],
+    groups: ["state", "block", "result"],
+    ask: "người ấy còn tình cảm không",
+    lean: [
+      "nghiêng về CÒN — tình cảm vẫn hiện diện khá rõ, dù có thể chưa được nói ra",
+      "chưa rõ ràng — tình cảm có đó nhưng đang bị kìm lại hoặc lẫn với những vướng mắc khác",
+      "nghiêng về tình cảm đang nguội hoặc bị chắn — hiện chưa thấy người ấy thể hiện điều bạn mong",
+    ],
+    intro: ["Câu hỏi này chạm vào lòng nhiều lắm… để Lomi lắng nghe xem trái tim người ấy giờ ra sao nha 🌙", "Để Lomi soi xem sợi dây tình cảm giữa hai người còn ấm không nha 💞"],
+    outro: [
+      "Tình cảm thật thì sẽ lộ ra qua hành động — quan sát cách người ấy đối xử với bạn sẽ rõ hơn mọi lá bài 🌙",
+      "Dù bài nói gì, bạn vẫn xứng đáng được thương một cách rõ ràng và trọn vẹn 💚",
+    ],
+    next: ["Bói tiếp: người ấy nghĩ gì về mình", "Bói tiếp: mối quan hệ này có lâu dài không", "Bói tiếp: mình nên làm gì để hai người hiểu nhau hơn"],
+  },
+  {
     id: "feelings",
-    re: VN(/ (có tình cảm|thích mình|yêu mình|có ý với mình|có thương mình|còn yêu mình|còn thương mình|để ý mình|có cảm tình|thương mình không) /),
+    re: VN(/ (có tình cảm|thích mình|yêu mình|có ý với mình|có thương mình|còn yêu mình|còn thương mình|để ý mình|có cảm tình|thương mình không|(có thích|có yêu|có thương|có ý với|có tình cảm với) (anh|em|tôi|tui|tớ)(?! ấy)) /),
     scene: "crush",
+    lean: [
+      "nghiêng về CÓ — người ấy có cảm tình với bạn khá rõ",
+      "chưa rõ ràng — có chút để ý nhưng người ấy còn dè dặt, chưa thể hiện",
+      "nghiêng về CHƯA — hiện chưa thấy tín hiệu tình cảm rõ từ phía người ấy",
+    ],
     pos: ["Cảm xúc của người ấy", "Điều người ấy giữ trong lòng", "Hướng đi của hai người"],
     groups: ["state", "block", "result"],
     ask: "người ấy có tình cảm với mình không",
@@ -1602,8 +1666,22 @@ const INTENTS: Intent[] = [
     next: ["Tư vấn ưu đãi cho chỗ mình", "Bói tiếp: tài chính vài tháng tới thế nào"],
   },
   {
+    // 15/10: hỏi TRÚNG SỐ / xổ số tách khỏi "tiền lớn": kết quả ngẫu nhiên → kết luận thẳng là bài không xác định được,
+    // đọc lá theo tâm thế chờ đợi + chuyện tiền mua vé; lời khuyên đặt giới hạn, không vay để chơi.
+    id: "lottery",
+    re: VN(/ (trúng số|xổ số|vé số|trúng vé|vietlott|đánh đề|lô đề|số đề|độc đắc|jackpot) /),
+    scene: "lottery",
+    force: true,
+    pos: ["Tâm thế chờ đợi", "Chuyện tiền mua vé", "Điều cần giữ"],
+    groups: ["state", "action", "block"],
+    ask: "có trúng số không",
+    intro: ["Lomi trải bài cho câu hỏi này — nói trước: bài sẽ đọc tâm thế và cách bạn chi cho vé số, chứ không đoán được con số nào sẽ về nha 🎟️"],
+    outro: ["Vé số là một niềm vui nhỏ — giữ nó nhỏ thì vui mới trọn 🎟️", "Tiền mua vé nên là tiền “chơi”, không phải tiền ăn, tiền nhà hay tiền đi vay nha 🌿"],
+    next: ["Bói một lá cho hôm nay", "Bói tiếp: tuần này của mình thế nào"],
+  },
+  {
     id: "bigmoney",
-    re: VN(/ (khoản tiền lớn|tiền lớn|trúng số|làm giàu|phát tài|giàu to|hoạnh tài|có tiền lớn) /),
+    re: VN(/ (khoản tiền lớn|tiền lớn|làm giàu|phát tài|giàu to|hoạnh tài|có tiền lớn) /),
     scene: "money",
     force: true,
     pos: ["Vận tiền hiện tại", "Cơ hội sắp đến", "Điều cần giữ"],
@@ -1617,9 +1695,17 @@ const INTENTS: Intent[] = [
     re: VN(/^(?=.* (tài chính|tiền bạc|tiền nong|thu nhập) )(?=.* (tháng tới|vài tháng|sắp tới|năm nay|thời gian tới|3 tháng) )/),
     scene: "money",
     force: true,
-    pos: () => [`Tháng ${monthOf(1)}`, `Tháng ${monthOf(2)}`, `Tháng ${monthOf(3)}`],
+    // 15/10: hỏi "tháng tới" (một tháng) → đọc đầu / giữa / cuối tháng đó; hỏi "vài tháng / 3 tháng / sắp tới" → ba tháng liền.
+    pos: (q) => {
+      const f = ` ${fold(q)} `;
+      if (VN(/ (tháng tới|tháng sau) /).test(f) && !VN(/ (vài tháng|mấy tháng|3 tháng|ba tháng) /).test(f)) {
+        const m = monthOf(1);
+        return [`Đầu tháng ${m}`, `Giữa tháng ${m}`, `Cuối tháng ${m}`];
+      }
+      return [`Tháng ${monthOf(1)}`, `Tháng ${monthOf(2)}`, `Tháng ${monthOf(3)}`];
+    },
     groups: ["phase", "phase", "phase"],
-    ask: "tài chính vài tháng tới thế nào",
+    ask: "tài chính sắp tới thế nào",
     lean: DIRECTION,
     intro: ["Để Lomi mở sổ tài chính của vũ trụ ra xem vài tháng tới của bạn nha 📒", "Lomi lật từng tháng một, xem túi tiền của bạn đi lên hay đi xuống nè 💰"],
     outro: ["Tiền không lớn vì kiếm nhiều, mà lớn vì giữ được — trích để dành ngay khi nhận lương nha 🐷", "Tháng nào bài hơi tối thì tháng đó chi tiêu chậm lại chút là được, đừng lo quá 🌿"],
@@ -1953,7 +2039,7 @@ const ARC_STORY: Record<Arc, string[]> = {
     "Cả trải bài đang nói về một giai đoạn cần gỡ: {k1} → {k2} → {k3}. Không phải dấu xấu đâu — là lời nhắc đi chậm lại và xử lý từng nút một.",
   ],
   open: [
-    "Mạch bài còn để ngỏ: {k1} → {k2} → {k3}. Bài không chốt hộ bạn — hướng đi sẽ rõ theo bước tiếp theo bạn chọn.",
+    "Mạch bài khá cân: {k1} → {k2} → {k3}. Không có lá nào kéo hẳn về phía thuận hay phía vướng — các lá đang bổ sung cho nhau hơn là đối lập.",
   ],
 };
 
@@ -1967,6 +2053,24 @@ function ownYesNoAsk(q: string): string | null {
   if (VR(/(bao giờ|khi nào|lúc nào|mấy|bao nhiêu|ở đâu|là ai|như thế nào|ra sao|thế nào|vì sao|tại sao)/iu).test(s)) return null;
   if (!VR(/(không|chưa|hông)$/iu).test(s)) return null;
   return s.charAt(0).toLowerCase() + s.slice(1);
+}
+
+/** 15/10: mạch chuyện cho câu hỏi xổ số — ghép 3 lá theo vị trí (tâm thế → tiền mua vé → điều cần giữ), không hứa trúng. */
+function lotteryStory(c1: TarotDraw, c2: TarotDraw, c3: TarotDraw): string {
+  const r = (d: TarotDraw) => cardLean(d) < 0;
+  const k = (d: TarotDraw) => kw(d, false);
+  const a = r(c1) ? `tâm thế đang vướng ${k(c1)} (dễ kỳ vọng hoặc sốt ruột chờ kết quả)` : `tâm thế khá nhẹ nhàng với ${k(c1)}`;
+  const b = r(c2) ? `chuyện tiền mua vé có dấu hiệu cần siết lại (${k(c2)})` : `chuyện tiền mua vé đang trong tầm kiểm soát (${k(c2)})`;
+  const c = r(c3) ? `lá cuối nhắc đừng để ${k(c3)} cuốn mình đi` : `lá cuối khuyên giữ ${k(c3)}`;
+  const rel =
+    r(c1) === r(c3)
+      ? r(c1)
+        ? "Lá đầu và lá cuối cùng chỉ về một chỗ: kỳ vọng đang nặng hơn mức nên có."
+        : "Lá đầu và lá cuối cùng một nhịp: bạn đang chơi khá thoải mái — giữ được vậy là ổn."
+      : r(c1)
+        ? "Lá cuối kéo lại cho lá đầu: kỳ vọng hơi cao, nhưng vẫn có cách giữ mọi chuyện vừa phải."
+        : "Lá cuối đối lập với lá đầu: tâm thế thì nhẹ, nhưng cần để ý để niềm vui nhỏ không thành thói quen tốn kém.";
+  return `Ghép ba lá lại trong chuyện mua vé số: ${a}; ${b}; và ${c}. ${rel} Ba lá nói về cách bạn chờ đợi và chi tiêu cho tấm vé — không nói con số nào sẽ về.`;
 }
 
 function readingNarrativeVi(r: TarotReading): string {
@@ -2016,11 +2120,12 @@ function readingNarrativeVi(r: TarotReading): string {
     const c = tarotCard(d.id);
     const meaning = d.rev ? c.rev.vi : c.up.vi;
     const g = groups[i] ?? "state";
-    const tpl = kind === "choice" ? [CHOICE_TPL[0][i % 2], CHOICE_TPL[1][i % 2]] : g === "time" ? TIME_TPL : g === "phase" ? PHASE_TPL : bank[g];
+    const tpl = kind === "choice" ? [CHOICE_TPL[0][i % 2], CHOICE_TPL[1][i % 2]] : g === "time" ? TIME_TPL : g === "phase" ? (bank.phase ?? PHASE_TPL) : bank[g];
     const apply = fillT(tpl[rough(d) ? 1 : 0], kw(d, false), S);
     const lines = [`**🃏 ${i + 1}. ${cardName(d)} — ${posName(i)}**`];
     if (i > 0) lines.push(linkPhrase(r.cards[i - 1], d));
-    lines.push(meaning);
+    // Xổ số: bỏ câu nghĩa chung của lá ("cơ hội tiền bạc… nắm lấy nha!") — dễ đọc thành hứa có tiền; chỉ giữ cách đọc theo vị trí.
+    if (scene !== "lottery") lines.push(meaning);
     const dt = domainText(d, dom);
     if (dt) {
       lines.push(dt);
@@ -2047,10 +2152,17 @@ function readingNarrativeVi(r: TarotReading): string {
   if (r.cards.length >= 3) {
     // Trải 10 lá: kể theo trục chính (Hiện tại → Thử thách → Tương lai gần → Kết quả) cho gọn, dễ theo.
     const keyCards = r.spread === "celtic" ? [0, 1, 5, 9].map((i) => r.cards[i]) : r.cards;
-    const story = vary(`arc-${arc}`, ARC_STORY[arc])
+    const story0 = vary(`arc-${arc}`, ARC_STORY[arc])
       .replace("{k1}", kw(keyCards[0], false))
       .replace("{k2}", kw(keyCards[1], false))
       .replace("{k3}", kw(keyCards[2], false));
+    // 15/10: mạch chuyện neo vào ĐÚNG chuyện người hỏi (không kể một câu chuyện chung chung); xổ số có cách kể riêng.
+    const story =
+      scene === "lottery" && !special
+        ? lotteryStory(keyCards[0], keyCards[1], keyCards[2])
+        : bank.noun && scene !== "general"
+          ? `Đặt vào ${bank.noun}, ${lcFirst(story0)}`
+          : story0;
     out.push(`**🔗 Mạch câu chuyện**\n${story}\n(${keyCards.map((d) => tarotCard(d.id).name.vi).join(" → ")})`);
   }
 
@@ -2063,7 +2175,7 @@ function readingNarrativeVi(r: TarotReading): string {
     arc === "up" || arc === "bright" || (arc === "open" && resLean > 0) ? 0 : (arc === "down" || arc === "heavy") && resLean < 0 ? 2 : 1;
   const should = VN(/(?<![a-z])(nên|should)(?![a-z])/).test(fold(q));
   const overview: string[] = [];
-  if (r.cards.length >= 3) {
+  if (r.cards.length >= 3 && scene !== "lottery") {
     const n = r.cards.length;
     if (arc === "up") overview.push(`Trải bài đi từ ${kw(r.cards[0], false)} tới ${kw(r.cards[n - 1], false)} — thiên về một quá trình phát triển dần hơn là thay đổi đột ngột.`);
     else if (arc === "down") overview.push(`Trải bài mở đầu khá thuận nhưng càng về sau càng cần chú ý, nhất là ${kw(r.cards[n - 1], false)}.`);
@@ -2115,13 +2227,13 @@ function readingNarrativeVi(r: TarotReading): string {
             ? bucket === 0
               ? "nghiêng về NÊN, miễn là bạn giữ chừng mực"
               : bucket === 1
-                ? "còn lưng chừng — tuỳ vào cảm nhận của bạn"
+                ? "còn lưng chừng — có điểm thuận, nhưng cũng có chỗ cần chuẩn bị kỹ thêm trước khi quyết"
                 : "nghiêng về CHƯA NÊN lúc này"
             : bucket === 0
-              ? "nghiêng về CÓ nếu bạn chủ động thêm một chút"
+              ? "nghiêng về CÓ"
               : bucket === 1
-                ? "còn để ngỏ — phụ thuộc nhiều vào bước tiếp theo của bạn"
-                : "nghiêng về chưa phải lúc — nhưng đừng nản nha";
+                ? "chưa nghiêng hẳn về CÓ hay KHÔNG — tín hiệu thuận và điểm vướng đang ngang nhau"
+                : "nghiêng về KHÔNG, ít nhất là ở thời điểm này";
     const tail = kind === "timing" ? "Tarot không thể xác nhận một ngày cụ thể đâu 😄" : "Quyết định cuối cùng vẫn là ở bạn 😄";
     const [c1, c2, c3] = r.cards;
     const answerText =
@@ -2133,8 +2245,15 @@ function readingNarrativeVi(r: TarotReading): string {
             .replace("{go3}", rough(c3) ? `gỡ bỏ ${kw(c3, false)}` : `dựa vào ${kw(c3, false)}`)
             .replace("{res3}", rough(c3) ? `còn vướng ${kw(c3, false)}` : `nghiêng về ${kw(c3, false)}`)
         : null;
-    const leanUse = kind !== "timing" && it?.lean ? it.lean[bucket] : lean;
-    verdictLine = answerText
+    // 15/10: câu hỏi CÓ/KHÔNG ("tháng tới có tìm được việc không?") thì chốt CÓ/KHÔNG — không trả lời bằng câu "chiều hướng" chung của ý thời gian.
+    // Sắc thái biểu tượng cho xổ số: đếm lá thuận / lá vướng (không dựa vào mạch "đi lên" — tránh gọi 3 lá ngược là "tích cực").
+    const nNeg = r.cards.filter((d) => cardLean(d) < 0).length;
+    const nPos = r.cards.filter((d) => cardLean(d) > 0).length;
+    const lotTone = nNeg === 0 && nPos > 0 ? "khá tích cực" : nNeg > nPos ? "nhiều thử thách" : "lẫn lộn";
+    const leanUse = kind !== "timing" && it?.lean && !(it.lean === DIRECTION && ownYesNoAsk(q)) ? it.lean[bucket] : lean;
+    verdictLine = scene === "lottery"
+      ? `${vary("verdict-lot", ["Trả lời thẳng câu “{q}?”:", "Quay lại câu hỏi “{q}?” —"]).replace("{q}", lcFirst(qShow.replace(/[?]+$/, "")))} trải bài KHÔNG thể xác định ${kind === "timing" ? "khi nào bạn trúng số" : "bạn có trúng số hay không"} — kết quả xổ số là ngẫu nhiên, Tarot không dự đoán được con số. Về mặt biểu tượng, các lá lần này mang sắc thái ${lotTone}, nhưng đó là tâm thế của bạn, không phải xác suất trúng thưởng.`
+      : answerText
       ? `${vary("answer", ANSWER_LEAD).replace("{q}", askQ)} ${answerText}`
       : `${vary("verdict", VERDICT).replace("{q}", askQ).replace("{lean}", leanUse)} ${tail}`;
   }
@@ -2142,7 +2261,7 @@ function readingNarrativeVi(r: TarotReading): string {
 
   // 5) ⚠️ Điều cần lưu ý — chỉ nhắc khi thật sự có lá vướng (lá ngược mềm không tính là vướng)
   const weakest = r.cards.map((d, i) => ({ d, i, sc: cardScore(d) })).sort((a, b) => a.sc - b.sc)[0];
-  if (weakest && rough(weakest.d))
+  if (weakest && rough(weakest.d) && scene !== "lottery")
     out.push(
       `**⚠️ Điều cần lưu ý**\n${vary("caution", [
         "Đừng để {k} kéo bạn lại — đây là điểm cần giữ nhất trong trải bài (lá {n} ở vị trí “{p}”).",
@@ -2155,9 +2274,11 @@ function readingNarrativeVi(r: TarotReading): string {
 
   // 6) 💡 Lời khuyên — việc cụ thể theo bối cảnh + lời khuyên của lá cuối + câu chốt
   const lastCard = r.cards[r.cards.length - 1];
-  const adv = ADVICE[tarotCard(lastCard.id).suit][rough(lastCard) ? 1 : 0];
+  // 15/10: lời khuyên theo bộ của lá cuối ("làm theo trái tim", "hành động ngay"…) chỉ dùng cho câu hỏi chung —
+  // câu hỏi có chủ đề rõ (tiền, việc làm, tình cảm, xổ số…) chỉ nhận lời khuyên đúng chủ đề đó.
+  const adv = ["general", "future", "self", "others", "fun"].includes(scene) ? ADVICE[tarotCard(lastCard.id).suit][rough(lastCard) ? 1 : 0] : "";
   const outro = (it ? vary(`outro-${it.id}`, it.outro) : vary(`close-${dom}`, MYSTIC_CLOSE[dom])).trim();
-  out.push(`**💡 Lời khuyên**\n${bank.tip[total >= 1 ? 0 : 1]} ${adv}\n“${outro}”`);
+  out.push(`**💡 Lời khuyên**\n${bank.tip[total >= 1 ? 0 : 1]}${adv ? ` ${adv}` : ""}\n“${outro}”`);
 
   if (r.topic === "health")
     out.push("💚 Lá bài chỉ để mình thêm tinh thần thôi nha — chuyện thuốc men, khỏi hay chưa thì bác sĩ mới là người trả lời chính xác nhất.");
