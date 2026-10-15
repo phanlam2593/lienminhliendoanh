@@ -134,3 +134,16 @@ export async function last(turns: string[]): Promise<Turn> {
   const r = await chat(turns);
   return r[r.length - 1];
 }
+
+/** Dựng khung chat với lịch sử có sẵn (không gõ gì) — để test thao tác trên bong bóng tin nhắn. */
+export function renderChat(pre: Partial<Turn>[]) {
+  cleanup();
+  localStorage.clear();
+  localStorage.setItem(`ai-assistant-history:${UID}`, JSON.stringify(pre));
+  Element.prototype.scrollIntoView = () => {};
+  return render(
+    <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <AiChat />
+    </MemoryRouter>,
+  );
+}

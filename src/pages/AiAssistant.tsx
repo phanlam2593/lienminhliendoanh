@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGoBack } from "@/lib/navigation";
-import { ArrowLeft, CircleHelp, RotateCcw, Send, Smile, Volume2, VolumeX } from "lucide-react";
+import { ArrowLeft, CircleHelp, Copy, RotateCcw, Send, Smile, Volume2, VolumeX } from "lucide-react";
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
@@ -189,6 +189,28 @@ type Msg = {
 };
 type Quota = { member: boolean; limit: number; used: number };
 /** Mạch sức khoẻ đang mở ở tin này. Lịch sử lưu trước 08/10 còn dùng heart "health" làm cờ sức khoẻ → vẫn đọc được. */
+/** Chữ thuần để sao chép: bỏ dấu ** đậm của markdown. */
+const plainText = (x: string) => x.replace(/\*\*(.+?)\*\*/g, "$1").replace(/__(.+?)__/g, "$1").trim();
+/** Chép vào bộ nhớ tạm — trình duyệt cũ / webview không có Clipboard API thì dùng ô chữ ẩn. */
+async function copyText(text: string) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand("copy");
+    } finally {
+      ta.remove();
+    }
+  }
+  toast.success("Đã sao chép");
+}
 const healthOf = (m?: Msg): HealthCtx | undefined => m?.health ?? (m?.heart === "health" && (m.heartDepth === 0 || m.sx?.length || m.hsub || m.diet) ? {} : undefined);
 
 const db = supabase as any;
@@ -366,6 +388,8 @@ export function AiChat({
   const [msgs, setMsgs] = useState<Msg[]>([]);
   // Nút ⁉️ (01/10): tin Lomi đang được báo cáo (vị trí trong msgs).
   const [fbIdx, setFbIdx] = useState<number | null>(null);
+  // 15/10 (theo ý Kir): chạm vào một tin nhắn → hiện nút Sao chép ngay dưới tin đó.
+  const [copyIdx, setCopyIdx] = useState<number | null>(null);
   const [fbReason, setFbReason] = useState<FeedbackReason>("unknown");
   const [fbNote, setFbNote] = useState("");
   const [fbBusy, setFbBusy] = useState(false);
@@ -1941,9 +1965,15 @@ export function AiChat({
                 <img src={stickerUrl(m.sticker)} alt="Sticker" className="w-20 h-auto mb-1 animate-in zoom-in-50 fade-in duration-300" />
               )}
               <div
+                onClick={(e) => {
+                  // bấm vào link / nút bên trong tin (thẻ bài, đường dẫn) thì để chúng xử lý; đang bôi đen chữ thì cũng không bật
+                  if ((e.target as HTMLElement).closest("a,button") || window.getSelection()?.toString()) return;
+                  setCopyIdx((c) => (c === i ? null : i));
+                }}
                 className={cn(
-                  "max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap break-words",
+                  "max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap break-words cursor-pointer",
                   m.role === "user" ? "bg-primary text-primary-foreground rounded-br-md" : "bg-muted rounded-bl-md",
+                  copyIdx === i && "ring-2 ring-primary/40",
                 )}
               >
                 {m.role === "assistant" && m.tarot ? (
@@ -1958,6 +1988,17 @@ export function AiChat({
                   m.content
                 )}
               </div>
+              {copyIdx === i && (
+                <button
+                  onClick={() => {
+                    void copyText(plainText(m.role === "user" ? (m.raw ?? m.content) : m.content));
+                    setCopyIdx(null);
+                  }}
+                  className={cn("mt-1 flex items-center gap-1 rounded-full border bg-card px-3 py-1 text-xs font-semibold text-primary shadow-sm animate-in fade-in zoom-in-95 duration-150", m.role === "user" ? "mr-1" : "ml-1")}
+                >
+                  <Copy className="w-3.5 h-3.5" /> {en ? "Copy" : "Sao chép"}
+                </button>
+              )}
               </>
               )}
               {m.places && <LomiPlaceCards places={m.places} />}
