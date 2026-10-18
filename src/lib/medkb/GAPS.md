@@ -189,3 +189,14 @@ Mỗi mục là điều người dùng có thể hỏi mà các nguồn chính t
 - Măng (măng tre, măng tươi): chưa có nguồn trong danh sách tin cậy nêu bệnh nào phải kiêng măng. Bài PMC (nih.gov) về chất tạo xyanua trong măng tươi không đọc được (trang chặn kiểm tra trình duyệt) nên chưa đưa lời khuyên luộc kỹ / bỏ nước vào kho.
 - Dưa leo: chưa nguồn nào nêu bệnh phải kiêng; MedlinePlus chỉ nêu dưa leo là rau ít kali (chọn được khi bệnh thận mạn cần hạn chế kali).
 - Thiếu men G6PD: đã có thẻ (14/10, theo MedlinePlus) — kiêng đậu tằm.
+
+## tiêu chảy (`tieu-chay`, `tieu-chay-o-tre`) — 18/10
+- Đã bổ sung (có nguồn): ORS là bột pha nước để bù nước và muối (NHS Dehydration, rà soát 01/05/2026); mỗi gói pha với đúng lượng nước đun sôi để nguội / nước đã xử lý ghi trên gói (CDC Yellow Book — Travelers' Diarrhea, 24/03/2026); dấu hiệu mất nước nặng / sốc (NHS Dehydration).
+- Chưa có nguồn đúng đối tượng cho ý "không pha đặc hoặc loãng hơn hướng dẫn": trang WHO "Diarrhoeal disease" không truy cập được lúc đối chiếu; tờ hướng dẫn ORS của Guy's and St Thomas' NHS dành cho người có lỗ dẫn lưu ruột (stoma), không áp dụng cho tiêu chảy thường → không đưa vào thẻ.
+- Chưa có nguồn nói lượng ORS uống mỗi ngày cho người tiêu chảy thường (tài liệu CDC có số liệu nhưng dành cho bệnh Ebola / cứu trợ) → không đưa con số.
+- Nước dừa, nước cháo muối, nước gạo rang: chưa có nguồn trong danh sách tin cậy nêu cho tiêu chảy.
+
+## ho (`ho`) — 18/10
+- Thẻ là trang "Cough" chung (NHS, MedlinePlus) nên thêm trường `display: "Ho"` làm tiêu đề; `names[0]` ("ho kéo dài") giữ nguyên vì là khoá ngữ cảnh.
+- Chưa có nguồn nêu đồ uống cụ thể (nước lạnh, nước đá, trà gừng) khi ho.
+

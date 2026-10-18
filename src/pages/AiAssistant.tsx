@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed, withGroupNote } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1432,9 +1432,10 @@ export function AiChat({
             const ack = mk.aspect === "overview" && typed && isSelfStatement(q) ? `Bạn đang bị **${typed}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n` : "";
             // Nhắc lại đúng chủ đề vừa tóm tắt ("Bệnh gút á") → không đọc lại cả bài, chỉ mời chọn phần muốn xem.
             const again = mr.aspect === "overview" && !ack && lastA?.med?.id === mt.id && lastA.med.aspect === "overview";
-            if (again) mr.text = `Dạ đúng rồi, vẫn là **${mt.names[0]}** nè 🩺 Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇`;
+            if (again) mr.text = `Dạ đúng rồi, vẫn là **${medName(mt)}** nè 🩺 Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇`;
             // 18/10: hỏi cho người mang thai / cho con bú / trẻ nhỏ → chèn lưu ý của đúng nhóm đó (lib/lomiMed.groupNote).
-            else mr.text = withGroupNote(mt, q, mr.text);
+            // 18/10: nhắc dấu hiệu nguy hiểm có trong thẻ (phân có máu, mất nước, khó thở) → ý cần khám / cấp cứu đứng đầu (lib/lomiMed.withRedFlags).
+            else mr.text = withRedFlags(mt, q, withGroupNote(mt, q, mr.text));
             topicHit("health");
             return localReply(q, {
               role: "assistant",

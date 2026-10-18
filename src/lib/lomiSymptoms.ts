@@ -65,6 +65,8 @@ const SYMPTOMS: Sym[] = [
   { id: "sorethroat", label: "đau họng", re: VN(/\b(đau họng(?! lưng| bên| phải| trái| một bên)|rát họng|viêm họng|nuốt đau|đau khi nuốt|ngứa họng|vướng họng)\b/) },
   { id: "hoarse", label: "khàn tiếng", re: VN(/\b(khàn tiếng|mất tiếng|khàn giọng)\b/) },
   { id: "cough", label: "ho", re: VN(/\b((bị|đang|còn|hay|vẫn|lại|thêm|này|mấy nay|mất) ho|(a|anh|e|em|c|chị|mình|tôi|tui|bé) ho(?! (a|anh|e|em|c|chị|mình|tôi|tui|hàng|nội|ngoại|nhà|của|tên|ho|họ)\b)(?= |$)|ho (khan|có đờm|nhiều|hoài|dai|kéo dài|về đêm|liên tục|sặc sụa|không dứt|suốt|quá(?! đáng)|ghê|lắm|mãi|hoài)|ho (cả |hơn |gần |được )?(\d+|một|hai|ba|mấy|vài) (ngày|hôm|đêm|tuần|tháng)|ho từ (hôm|tuần|tháng|tối|sáng|đêm)|ho (thì (nên|uống|kiêng|làm)|nên (uống|làm|ăn|kiêng)|có sao không|có nguy hiểm))\b/) },
+  // 18/10: "Ho kèm khó thở thì sao?" — cụm "ho kèm" phải đứng riêng (có khoảng trắng / đầu câu ở hai đầu) — viết lỏng hơn từng bắt nhầm "hoc ke toan".
+  { id: "cough", label: "ho", re: VN(/(?:^| )ho (?:kèm|kèm theo|có kèm) /) },
   { id: "phlegm", label: "ho có đờm", re: VN(/\b(ho có đờm|khạc đờm|đờm vàng|đờm xanh|nhiều đờm|có đờm)\b/) },
   { id: "wheeze", label: "thở khò khè", re: VN(/\b(khò khè|thở rít|thở khè khè)\b/) },
   { id: "bloodcough", label: "ho ra máu", re: VN(/\b(ho ra máu|khạc ra máu)\b/), red: "ho ra máu" },
@@ -813,7 +815,8 @@ const SEVERE_RE = VN(/\b(búa bổ|dữ dội|đau lắm|đau quá trời|không
 const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SELF_RE = VN(/\b(mình bị|tôi bị|em bị|anh bị|tui bị|đang bị|bị hoài|bị suốt|mình đang|tôi đang|nay bị|này bị|hôm nay bị|từ sáng|từ qua)\b/);
 const KNOW_RE = VN(/\b(là bị gì|là do đâu|do đâu|do đâu mà|nguyên nhân|là bệnh gì|là dấu hiệu|dấu hiệu của|là gì|thường do|vì sao|tại sao|có nguy hiểm không|có phải là|có nghĩa là|là sao|bị là sao|do đâu|từ đâu)\b/);
-const DUR_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
+// 18/10: "ho kéo dài nhiều tuần" — "nhiều" cũng là thời lượng (trước đây Lomi hỏi lại "bị bao lâu rồi").
+const DUR_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ|nhiều)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
 const KID_NOTE =
   "👶 **Với trẻ nhỏ:** đưa bé đi khám ngay nếu bé dưới 3 tháng tuổi mà sốt, hoặc sốt cao khó hạ, li bì, bỏ bú/bỏ ăn, co giật, thở nhanh, phát ban, nôn nhiều. Thuốc hạ sốt cho bé phải tính theo cân nặng — hỏi bác sĩ/dược sĩ, không dùng thuốc của người lớn.";
 
@@ -926,10 +929,18 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     const d = n.match(DUR_RE);
     if (d) {
       detail = true;
-      const long = VN(/tuần|tháng|năm/).test(d[2]) || Number(d[1]) >= 3 || ["ba", "bon", "nam", "may", "vai"].includes(d[1]);
+      const long = VN(/tuần|tháng|năm/).test(d[2]) || Number(d[1]) >= 3 || ["ba", "bon", "nam", "may", "vai", "nhieu"].includes(d[1]);
       const unit = ({ ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" } as Record<string, string>)[d[2]];
-      const num = ({ mot: "1", hai: "2", ba: "3", bon: "4", nam: "5", may: "mấy", vai: "vài", mo: "mấy" } as Record<string, string>)[d[1]] ?? d[1];
+      const num = ({ mot: "1", hai: "2", ba: "3", bon: "4", nam: "5", may: "mấy", vai: "vài", mo: "mấy", nhieu: "nhiều" } as Record<string, string>)[d[1]] ?? d[1];
       notes.push(long ? `Bị ${num} ${unit} rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài.` : `Mới ${num} ${unit} thì cứ theo dõi thêm, nhưng nặng lên là đi khám liền nha.`);
+    }
+  }
+  // 18/10: câu ĐẦU đã nói bị lâu ("ho kéo dài nhiều tuần") → nhắc đi khám luôn (trước chỉ nhắc khi đang kể tiếp).
+  if (!inHealth) {
+    const d0 = n.match(DUR_RE);
+    if (d0 && (VN(/tuần|tháng|năm/).test(d0[2]) || Number(d0[1]) >= 7)) {
+      detail = true;
+      notes.push("Bị lâu như vậy rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài.");
     }
   }
   // 15/10: "đau bụng dữ dội" ngay câu đầu (chưa ở mạch sức khoẻ) cũng phải được nhắc dấu hiệu cấp cứu — trước đây chỉ nhắc khi đang nói chuyện sức khoẻ.
@@ -976,8 +987,10 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   if (all.includes("rash") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "nổi mẩn / mề đay kèm khó thở (nguy cơ sốc phản vệ)" });
   // 18/10: tầng KHÁM GẤP TRONG NGÀY (chưa tới mức gọi 115 theo nguồn, nhưng không được tự chữa ở nhà).
   //   Khớp sưng, nóng, đỏ kèm sốt → NHS "Septic arthritis" (rà soát 03/09/2026): hẹn khám gấp ngay, không chờ.
-  const urgent: string[] = [];
-  if ((all.includes("fever") || all.includes("highfever")) && all.includes("jointswell")) urgent.push("khớp sưng, nóng, đỏ kèm sốt");
+  const urgent: { what: string; why: string }[] = [];
+  if ((all.includes("fever") || all.includes("highfever")) && all.includes("jointswell")) urgent.push({ what: "khớp sưng, nóng, đỏ kèm sốt", why: "có thể là khớp bị nhiễm trùng, cần bác sĩ kiểm tra sớm. Nếu thấy người lả đi, rét run nhiều, thở nhanh hay lơ mơ thì gọi **115** ngay." });
+  //   Ho kèm khó thở → NHS "Cough" (thẻ medkb/ho, rà soát 08/12/2023): cần khám khẩn. Khó thở nặng / tím môi đã là dấu hiệu 115 (severebreath).
+  if (all.includes("cough") && all.includes("breath")) urgent.push({ what: "ho kèm khó thở", why: "đây là dấu hiệu nguồn y khoa xếp vào nhóm cần khám khẩn. Khó thở nặng lên hoặc tím môi thì gọi **115** ngay." });
   const labels = syms.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const ctx = syms.filter((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const out: string[] = [];
@@ -985,7 +998,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     out.push(`⚠️ **${joinVi(reds.map((s) => s.red!))}** là dấu hiệu cần đi cấp cứu. Gọi **115** hoặc tới cơ sở y tế gần nhất ngay nha, đừng chờ.`);
   if (urgent.length && !reds.length)
     out.push(
-      `🚨 **${cap1(joinVi(urgent))}** thì cần **đi khám ngay trong hôm nay**, đừng tự chữa ở nhà hay chờ qua ngày — có thể là khớp bị nhiễm trùng, cần bác sĩ kiểm tra sớm. Nếu thấy người lả đi, rét run nhiều, thở nhanh hay lơ mơ thì gọi **115** ngay.`,
+      urgent.map((u) => `🚨 **${cap1(u.what)}** thì cần **đi khám ngay trong hôm nay**, đừng tự chữa ở nhà hay chờ qua ngày — ${u.why}`).join("\n\n"),
     );
   // 15/10: bé dưới 3 tháng tuổi mà sốt → đi khám ngay; không đưa danh sách bệnh / lời khuyên của người lớn ("cố đi làm", "tiêm vắc xin cúm").
   if (kid && (all.includes("fever") || all.includes("highfever")) && infantUnder3m(normalizeVi(text))) {

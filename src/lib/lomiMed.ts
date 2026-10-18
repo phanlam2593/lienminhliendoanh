@@ -30,6 +30,9 @@ export type MedTopic = {
   dietOnly?: boolean;
   /** id thẻ riêng cho trẻ em của cùng chủ đề (vd sot → sot-o-tre-em): câu nói tới con / bé / trẻ thì dùng thẻ đó. */
   child?: string;
+  /** 18/10: tên HIỂN THỊ khi names[0] không hợp làm tiêu đề (thẻ "ho": names[0] = "ho kéo dài" nhưng nội dung là ho nói chung).
+   *  names[0] vẫn là khoá ngữ cảnh (health.label → findMedTopicId) nên không đổi. */
+  display?: string;
   sources: DrugSource[];
   verifiedAt: string;
 };
@@ -290,7 +293,29 @@ const eatFacts = (t: MedTopic): DrugFact[] =>
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const bl = (fs: DrugFact[], max = 99) => fs.slice(0, max).map((f) => `• ${f.text}`).join("\n");
 const srcs = (...g: DrugFact[][]) => g.flat().flatMap((f) => f.src);
-const title = (t: MedTopic) => `**${cap(t.names[0])}**`;
+/** Tên hiển thị của thẻ (tiêu đề lời đáp). Chip gợi ý / khoá ngữ cảnh vẫn dùng names[0] để còn định tuyến lại được. */
+export const displayName = (t: MedTopic) => t.display ?? t.names[0];
+const title = (t: MedTopic) => `**${cap(displayName(t))}**`;
+// ── 18/10: BÙ NƯỚC (ORS / oresol) — ý có nguồn nằm ở phần chăm sóc của thẻ; hỏi "uống gì" / "oresol thế nào" thì phải đưa ra ──
+const REHYD_FACT = VR(/bù nước|ORS|oresol|dung dịch bù/iu);
+const REHYD_Q = VN(/\b(oresol|orezol|ors|bù nước|gói bù nước|bột bù nước|dung dịch bù nước|điện giải)\b/);
+const rehydFacts = (t: MedTopic) => t.care.filter((f) => REHYD_FACT.test(f.text));
+const dehydWarn = (t: MedTopic) => ({ em: t.emergency.filter((f) => /mất nước|sốc/iu.test(f.text)), doc: t.doctor.filter((f) => /mất nước/iu.test(f.text)) });
+function rehydReply(t: MedTopic, now: number): MedReply | null {
+  const fs = rehydFacts(t);
+  if (!fs.length) return null;
+  const w = dehydWarn(t);
+  const text = [
+    `💧 Bù nước khi bị ${title(t)}:`,
+    bl(fs),
+    w.doc.length ? `🧑‍⚕️ Cần đi khám sớm khi:\n${bl(w.doc, 3)}` : "",
+    w.em.length ? `🚨 Gọi **115** / đi cấp cứu ngay khi:\n${bl(w.em, 2)}` : "",
+    "Bù nước giúp bù lại nước và muối đã mất, không thay được việc đi khám khi có các dấu hiệu trên.",
+    sourceLine(t, srcs(fs, w.doc.slice(0, 3), w.em.slice(0, 2))),
+  ].filter(Boolean).join("\n\n");
+  return { text, aspect: "care", topic: t, quick: chipsOf(t, "care") };
+}
+
 // Lời dặn an toàn nằm trong ghi chú của món (vd mật ong "không dùng cho trẻ dưới 1 tuổi") — tóm theo món vẫn phải giữ lại.
 const CAUTION = VR(/(không (?:dùng|cho|nên|được)|tránh cho|trẻ (?:dưới|nhỏ|em|sơ sinh)|mang thai|bà bầu|cho con bú|dị ứng)/i);
 function caution(note: string): string {
@@ -382,6 +407,10 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   const out = (text: string, a: MedReply["aspect"], partial = false): MedReply => ({ text, aspect: a, partial, topic: t, quick: chipsOf(t, a === "overview" ? undefined : a === "food" ? "diet" : a) });
 
   if (aspect === "food" && food) {
+    if (REHYD_Q.test(` ${food} `)) {
+      const r = rehydReply(t, now);
+      if (r) return r;
+    }
     const f = matchFood(t, food, shown);
     if (f) {
       const say = f.verdict === "avoid" ? "nên **tránh**" : f.verdict === "limit" ? "nên **hạn chế**" : f.verdict === "good" ? "là món **nên ăn**" : "**được**";
@@ -427,7 +456,10 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       .join("\n");
     const general = [bl(t.diet.avoid), bl(t.diet.ok)].filter(Boolean).join("\n");
     const used = [t.diet.avoid, t.diet.ok, t.diet.foods.map((f) => ({ text: f.name, src: f.src }))];
-    return out([`🍽️ Ăn uống với ${N}:`, general, groups && `Tóm theo món:\n${groups}`, end(used)].filter(Boolean).join("\n\n"), "diet");
+    // 18/10: bệnh gây mất nước (tiêu chảy…) — ý bù nước nằm ở phần chăm sóc, trước đây hỏi "uống gì" không thấy nhắc ORS.
+    const rh = rehydFacts(t);
+    const rhText = rh.length ? `💧 Bù nước:\n${bl(rh, 4)}` : "";
+    return out([`🍽️ Ăn uống với ${N}:`, general, rhText, groups && `Tóm theo món:\n${groups}`, end([...used, rh.slice(0, 4)])].filter(Boolean).join("\n\n"), "diet");
   }
   if (aspect === "meds") {
     const med = t.care.filter((c) => VR(/thuốc/i).test(c.text));
@@ -474,6 +506,10 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   }
   // Không rõ khía cạnh nhưng hỏi đúng một ý có trong thẻ → đưa đúng các ý đó.
   if (question) {
+    if (REHYD_Q.test(` ${normalizeVi(question)} `)) {
+      const r = rehydReply(t, now);
+      if (r) return r;
+    }
     const fc = focusFacts(t, question);
     if (fc.facts.length) {
       const what = fc.shown.length ? ` (“${[...new Set(fc.shown)].slice(0, 2).join("”, “")}”)` : "";
@@ -537,6 +573,30 @@ export function withGroupNote(t: MedTopic, text: string, reply: string): string 
   const at = parts.length > 1 && /:\s*$/u.test(parts[0]) ? 2 : 1;
   parts.splice(Math.min(at, parts.length), 0, note);
   return parts.join("\n\n");
+}
+
+// ── 18/10: NGƯỜI DÙNG NHẮC MỘT DẤU HIỆU NGUY HIỂM CÓ TRONG THẺ ("phân có máu", "mất nước", "khó thở") ──
+// Trước đây "Tiêu chảy kèm máu trong phân thì làm gì?" nhận bài chăm sóc tại nhà, còn ý "cần khám" có sẵn trong thẻ bị bỏ qua.
+// Chỉ dùng các ý CÓ NGUỒN trong doctor / emergency của chính thẻ, đặt LÊN ĐẦU lời đáp.
+const RED_CUES: { cue: RegExp; fact: RegExp; label: string }[] = [
+  { cue: VN(/\b(máu trong phân|phân có máu|phân lẫn máu|đi ngoài ra máu|đi cầu ra máu|ỉa ra máu|phân đen|chảy máu hậu môn|có máu)\b/), fact: VR(/đi ngoài ra máu|đi cầu ra máu|máu trong phân|phân có máu|phân đen|máu đỏ|chảy máu ở hậu môn/iu), label: "có máu trong phân" },
+  { cue: VN(/\b(mất nước)\b/), fact: VR(/mất nước|sốc/iu), label: "mất nước" },
+  { cue: VN(/\b(khó thở|thở gấp|thở nhanh|hụt hơi|thở không nổi)\b/), fact: VR(/khó thở|thở nhanh/iu), label: "khó thở" },
+  { cue: VN(/\b(đau ngực|tức ngực)\b/), fact: VR(/đau ngực/iu), label: "đau ngực" },
+];
+export function withRedFlags(t: MedTopic, question: string, reply: string): string {
+  const q = ` ${normalizeVi(question)} `;
+  const hit = RED_CUES.filter((c) => c.cue.test(q));
+  if (!hit.length) return reply;
+  const em = t.emergency.filter((f) => hit.some((c) => c.fact.test(f.text)) && !reply.includes(f.text));
+  const doc = t.doctor.filter((f) => hit.some((c) => c.fact.test(f.text)) && !reply.includes(f.text));
+  if (!em.length && !doc.length) return reply;
+  const head = [
+    `⚠️ **Với dấu hiệu bạn nhắc (${hit.map((c) => c.label).join(", ")}), đừng chỉ tự chăm sóc ở nhà:**`,
+    em.length ? `🚨 Gọi **115** / đi cấp cứu ngay khi:\n${bl(em, 3)}` : "",
+    doc.length ? `🧑‍⚕️ Cần đi khám sớm khi:\n${bl(doc, 3)}` : "",
+  ].filter(Boolean).join("\n");
+  return `${head}\n\n${reply}`;
 }
 
 /** Tên chủ đề đúng như người dùng gõ (giữ dấu, giữ chữ hoa/thường) — để nói lại "bạn đang bị **gout**". */
