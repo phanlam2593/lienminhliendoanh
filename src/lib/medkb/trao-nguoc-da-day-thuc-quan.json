@@ -1,5 +1,5 @@
 {
-"id":"trao-nguoc-da-day-thuc-quan","kind":"condition",
+"id":"trao-nguoc-da-day-thuc-quan","kind":"condition","child":"trao-nguoc-o-tre",
 "names":["trào ngược dạ dày thực quản","trào ngược dạ dày","bệnh trào ngược dạ dày thực quản","trào ngược","GERD","GORD","acid reflux","ợ nóng","ợ chua","heartburn","reflux","bệnh trào ngược"],
 "about":[
 {"text":"Trào ngược dạ dày thực quản (GER) là khi chất trong dạ dày trào ngược lên thực quản. GERD là dạng nặng hơn và kéo dài: trào ngược gây triệu chứng lặp lại hoặc biến chứng theo thời gian.","src":[1]},

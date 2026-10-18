@@ -196,7 +196,11 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       ...(known ? { drugId: known.id, name: known.names[0] } : {}),
       text: known ? `${PREG_TEXT}\n\nVới **${known.names[0]}**, phần dữ liệu Lomi đã kiểm chứng không có hướng dẫn riêng cho lúc mang thai / cho con bú, nên Lomi không nói là dùng được hay không.` : PREG_TEXT,
     };
-  if ((INTERACT.test(n) || ON_DRUG_ASK.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || VN(/\b(\S+) (uống|dùng) (chung|cùng|kèm) (với )?\S+/).test(n)) && ASKS.test(n)) {
+  // 18/10: "Đang uống warfarin uống thêm ibuprofen được không?" — không có chữ "thuốc", không thuốc nào có mục → trước đây rơi sang
+  //   "chưa có kiến thức". Câu đúng mẫu đang-dùng-X-thêm-Y mà có tên NGOẠI LAI (tên hoạt chất) thì vẫn là hỏi dùng chung thuốc;
+  //   "đang uống trà uống thêm cà phê được không" không lọt vì không có chữ ngoại lai.
+  const onDrugForeign = ON_DRUG_ASK.test(n) && n.trim().split(" ").some((w) => isForeign(w) && !NOT_DRUG_WORD.test(w));
+  if ((INTERACT.test(n) || ON_DRUG_ASK.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || onDrugForeign || VN(/\b(\S+) (uống|dùng) (chung|cùng|kèm) (với )?\S+/).test(n)) && ASKS.test(n)) {
     const hit = hit0;
     if (known && hit)
       return {

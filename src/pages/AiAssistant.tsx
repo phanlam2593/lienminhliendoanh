@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed, withGroupNote } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1433,6 +1433,8 @@ export function AiChat({
             // Nhắc lại đúng chủ đề vừa tóm tắt ("Bệnh gút á") → không đọc lại cả bài, chỉ mời chọn phần muốn xem.
             const again = mr.aspect === "overview" && !ack && lastA?.med?.id === mt.id && lastA.med.aspect === "overview";
             if (again) mr.text = `Dạ đúng rồi, vẫn là **${mt.names[0]}** nè 🩺 Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇`;
+            // 18/10: hỏi cho người mang thai / cho con bú / trẻ nhỏ → chèn lưu ý của đúng nhóm đó (lib/lomiMed.groupNote).
+            else mr.text = withGroupNote(mt, q, mr.text);
             topicHit("health");
             return localReply(q, {
               role: "assistant",
@@ -1471,7 +1473,10 @@ export function AiChat({
         }
         const dietCard = diet && DIET_MEDKB[diet.diet] ? await loadMedTopic(DIET_MEDKB[diet.diet]) : null;
         if (diet && dietCard) {
-          const mr = diet.food ? renderMed(dietCard, "food", normalizeVi(foodSyn(diet.food)), Date.now(), diet.food) : renderMed(dietCard, "diet");
+          // 18/10: bảng cũ có thể cắt ngắn tên món ("nước lạnh" → "nước") — món người dùng hỏi đầy đủ hơn thì dùng cụm đầy đủ.
+          const fpFull = diet.food ? foodPhrase(dq, dietCard) : null;
+          const dFood = diet.food && fpFull && fpFull.length > normalizeVi(diet.food).length && ` ${fpFull} `.includes(` ${normalizeVi(diet.food)} `) ? foodDisplay(dq, fpFull) : diet.food;
+          const mr = dFood ? renderMed(dietCard, "food", normalizeVi(foodSyn(dFood)), Date.now(), dFood) : renderMed(dietCard, "diet");
           return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: dietCard.id, aspect: mr.aspect }, health: healthCtxOfDiet(diet.diet), diet: diet.diet, sx: inTalk ? lastA?.sx : undefined, ...(mr.partial ? { stuck: "kb_partial" as StuckKind } : {}) });
         }
         if (diet) return localReply(q, { role: "assistant", content: diet.text, local: true, health: healthCtxOfDiet(diet.diet), diet: diet.diet, sx: inTalk ? lastA?.sx : undefined });

@@ -31,6 +31,9 @@ const RULES: [RegExp, string][] = [
   [new RegExp(`${S}${PUBS} \\((?:về |nói về )?([^()]{2,60})\\):\\s*`, "gu"), "$1\u0001$2: "],
   // "Mayo Clinic, đợi cấp cứu: …"
   [new RegExp(`${S}${PUBS}, (?=[a-zà-ỹđ])`, "gu"), "$1\u0001"],
+  // 18/10: "CDC nêu thêm vẹm, sò điệp…" — bỏ tên cơ quan mà cắt cả động từ thì còn trơ một danh sách ("Vẹm, sò điệp…", 36 thẻ có kiểu
+  //   câu này) → giữ ý "thêm" bằng lời thường: "Ngoài ra còn vẹm, sò điệp…".
+  [new RegExp(`${S}(?:[Tt]heo )?${PUBS}(?: (?:cũng|còn))? nêu thêm(?: rằng)?:?\\s+`, "gu"), "$1\u0001ngoài ra còn "],
   // "NHS: …", "NHS cũng nêu: …", "MedlinePlus nêu thêm: …", "Theo MedlinePlus: …", "Mayo Clinic ghi rõ …"
   [new RegExp(`${S}(?:[Tt]heo )?${PUBS}(?: (?:cũng|còn|thì))?(?: ${CUE})?(?: rằng| là)?\\s*:\\s*`, "gu"), "$1\u0001"],
   [new RegExp(`${S}(?:[Tt]heo )?${PUBS}(?: (?:cũng|còn))? ${CUE}(?: rằng| là)?\\s+`, "gu"), "$1\u0001"],
@@ -42,7 +45,7 @@ const RULES: [RegExp, string][] = [
   [new RegExp(`${S}${PUBS}(?: (?:cũng|còn))? ${ADVISE}(?: rằng)?(?: ${WHO_TO})?\\s+(?=${NEG}${NB})`, "gu"), "$1\u0001$2 "],
   [new RegExp(`${S}${PUBS}(?: (?:cũng|còn))? ${ADVISE}(?: rằng)?(?: ${WHO_TO})?\\s+`, "gu"), "$1\u0001$2 nên "],
   // "NHS xếp cà phê vào …" → "cà phê được xếp vào …"
-  [new RegExp(`${S}${PUBS} xếp (.{2,40}?) vào `, "gu"), "$1\u0001$2 được xếp vào "],
+  [new RegExp(`${S}${PUBS} xếp (.{2,80}?) vào `, "gu"), "$1\u0001$2 được xếp vào "],
   // "NIDDK không nêu …" → "Hướng dẫn y khoa không nêu …"
   [new RegExp(`${S}${PUBS} (không|chưa) `, "gu"), "$1\u0001hướng dẫn y khoa $2 "],
   // giữa câu

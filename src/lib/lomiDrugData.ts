@@ -214,6 +214,73 @@ export const DRUGS: DrugEntry[] = [
       { text: "Nguy cơ hội chứng Reye cao hơn khi trẻ đang nhiễm virus như thuỷ đậu hoặc cúm; với thiếu niên cũng phải hỏi bác sĩ trước.", src: [1] },
     ],
   },
+  {
+    // 18/10/2026 — thêm sau khi Lomi đáp "chưa có kiến thức" cho câu "Đang uống warfarin uống thêm ibuprofen được không?".
+    //   Mọi ý chỉ lấy từ trang NHS dưới (đọc ngày 18/10/2026). Trang KHÔNG nói về paracetamol cùng warfarin (bản ghi đó nằm ở mục paracetamol)
+    //   và KHÔNG có phần riêng cho trẻ em → `children` để trống.
+    id: "warfarin",
+    ingredient: "warfarin",
+    names: ["warfarin", "thuốc chống đông warfarin"],
+    match: VR(/\bwarfarin\b/),
+    group: "thuốc chống đông máu (hay gọi là thuốc làm loãng máu)",
+    sources: [{ title: "Warfarin", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/warfarin/", reviewed: "2026-02-24" }],
+    verifiedAt: "2026-10-18",
+    uses: [{ text: "điều trị và phòng ngừa cục máu đông, ví dụ ở người bị rung nhĩ hoặc sau cơn thiếu máu não thoáng qua — chỉ dùng theo đơn bác sĩ", src: [0] }],
+    sideEffects: {
+      common: [{ text: "Tác dụng phụ chính là **tăng nguy cơ chảy máu**.", src: [0] }],
+      serious: [
+        { text: "Dấu hiệu chảy máu nặng: tiểu ra máu hoặc đi ngoài ra máu / phân đen, bầm tím hay chảy máu cam không rõ lý do, ho hoặc nôn ra máu → **đi khám ngay**.", src: [0] },
+        { text: "Đau đầu dữ dội đột ngột kèm lú lẫn hay yếu người có thể là chảy máu trong não → gọi **115** ngay. Bị va đập vào đầu khi đang dùng warfarin cũng cần đi khám ngay.", src: [0] },
+        { text: "Dị ứng nặng: sưng họng hoặc lưỡi, nổi ban gồ ngứa, khó thở → gọi **115** / đi cấp cứu.", src: [0] },
+      ],
+    },
+    contraindications: [
+      { text: "Có thể không phù hợp nếu: từng dị ứng warfarin; có bệnh gan hoặc thận; tăng huyết áp; mới bị đột quỵ; mới mổ hoặc sắp mổ; đang mang thai hoặc định có thai; có bệnh dễ chảy máu như loét dạ dày.", src: [0] },
+      { text: "Báo bác sĩ **mọi** thuốc, thuốc nam / thảo dược, vitamin và thực phẩm chức năng đang dùng — trước và trong khi dùng warfarin.", src: [0] },
+      { text: "Không tự ngưng warfarin khi chưa hỏi bác sĩ.", src: [0] },
+    ],
+    interactions: [
+      {
+        id: "nsaid",
+        match: VN(/\b(ibuprofen|aspirin|naproxen|diclofenac|nsaid|nsaids|khang viem khong steroid|giam dau khang viem)\b/),
+        with: "ibuprofen, aspirin và các thuốc kháng viêm NSAID khác",
+        note: "Ibuprofen, aspirin và các thuốc kháng viêm NSAID thuộc nhóm **có thể không hợp** khi đang dùng warfarin — đừng tự uống thêm, phải hỏi bác sĩ trước (warfarin vốn đã làm tăng nguy cơ chảy máu).",
+        src: [0],
+      },
+      {
+        id: "other-meds",
+        match: VN(/\b(khang sinh|thuoc chong tram cam|thuoc tim|thuoc da day|thuoc chong nam|statin)\b/),
+        with: "kháng sinh, thuốc chống trầm cảm, thuốc tim mạch, thuốc dạ dày, thuốc chống nấm, statin",
+        note: "Đây là những nhóm thuốc được ghi là **có thể không hợp** với warfarin — hỏi bác sĩ trước khi dùng thêm.",
+        src: [0],
+      },
+      {
+        id: "herbal",
+        match: VN(/\b(st john|cỏ ban|vitamin k|thuốc nam|thuốc bắc|thảo dược|thực phẩm chức năng)\b/),
+        with: "thảo dược, thuốc nam, vitamin K",
+        note: "Không dùng cỏ ban (St John's wort) hay viên bổ sung vitamin K. Thuốc nam, thảo dược, thực phẩm chức năng khác thì phải báo bác sĩ trước khi dùng.",
+        src: [0],
+      },
+      {
+        id: "alcohol",
+        match: VN(/\b(rượu|bia|nhậu|đồ uống có cồn)\b/),
+        with: "rượu bia",
+        note: "Đang dùng warfarin thì **không uống nhiều rượu bia**.",
+        src: [0],
+      },
+      {
+        id: "food",
+        match: VN(/\b(nam việt quất|cranberry|bưởi chùm|grapefruit|rau xanh|bông cải|súp lơ xanh|rau bina|cải bó xôi)\b/),
+        with: "nước ép nam việt quất, nước bưởi chùm, rau xanh nhiều vitamin K",
+        note: "Không uống nước ép nam việt quất (cranberry) hay nước bưởi chùm (grapefruit). Rau lá xanh, bông cải xanh có nhiều vitamin K có thể ảnh hưởng tới thuốc — vẫn ăn được, nhưng hỏi nơi đang theo dõi thuốc cho bạn về cách ăn cho đều.",
+        src: [0],
+      },
+    ],
+    overdose: [
+      { text: "Uống thêm một liều warfarin **có thể nguy hiểm** — lỡ uống nhiều hơn liều được kê thì hỏi ý kiến y tế ngay.", src: [0] },
+    ],
+    children: [],
+  },
 ];
 
 /**
@@ -266,14 +333,14 @@ export const DRUG_CLAIMS: { id: string; claim: string; where: string[]; sources:
   {
     id: "pregnancy-meds",
     claim: "Phần lớn thuốc dùng khi mang thai đi qua nhau thai tới em bé; trước khi dùng bất kỳ thuốc gì phải hỏi dược sĩ / bác sĩ.",
-    where: ["lomiDrug: should (mang thai / cho con bú)"],
+    where: ["lomiDrug: should (mang thai / cho con bú)", "lomiMed: groupNote"],
     sources: [{ title: "Medicines in pregnancy", publisher: "NHS (Anh)", url: "https://www.nhs.uk/pregnancy/keeping-well/medicines/", reviewed: "2022-09-05" }],
     verifiedAt: "2026-10-09",
   },
   {
     id: "breastfeeding-meds",
     claim: "Một lượng nhỏ thuốc người mẹ uống có thể qua sữa sang em bé (nguồn: thường rất thấp, rất ít thuốc không an toàn khi cho con bú) — nói với bác sĩ / dược sĩ là mình đang cho con bú trước khi dùng thuốc.",
-    where: ["lomiDrug: should (mang thai / cho con bú)"],
+    where: ["lomiDrug: should (mang thai / cho con bú)", "lomiMed: groupNote"],
     sources: [{ title: "Breastfeeding and medicines", publisher: "NHS (Anh)", url: "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding-and-lifestyle/medicines/", reviewed: "2026-05-07" }],
     verifiedAt: "2026-10-09",
   },
@@ -431,7 +498,7 @@ export function renderDrug(d: DrugEntry, aspect: DrugAspect, now = Date.now()): 
   if (aspect === "overdose")
     return [`⚠️ Uống quá nhiều ${name} thì **gọi 115 hoặc tới cơ sở y tế gần nhất ngay**, đừng chờ xem có sao không.`, bullets(d.overdose), sourceLine(d, srcOf(d.overdose), now)].join("\n\n");
   if (aspect === "children")
-    return [`👶 Về ${name} cho trẻ em:`, bullets(d.children), "Lomi không đưa con số liều — bạn hỏi dược sĩ / bác sĩ kèm tuổi và cân nặng của bé nha.", sourceLine(d, srcOf(d.children), now)].join("\n\n");
+    return [`👶 Về ${name} cho trẻ em:`, d.children.length ? bullets(d.children) : "Nguồn Lomi đã đối chiếu **không có hướng dẫn riêng cho trẻ em** với thuốc này.", "Lomi không đưa con số liều — bạn hỏi dược sĩ / bác sĩ kèm tuổi và cân nặng của bé nha.", sourceLine(d, srcOf(d.children), now)].join("\n\n");
   if (aspect === "interactions")
     return [
       `💊 Về việc dùng ${name} chung với thuốc khác, Lomi chỉ có dữ liệu đã kiểm chứng cho mấy trường hợp sau:`,

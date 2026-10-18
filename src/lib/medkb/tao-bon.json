@@ -1,5 +1,5 @@
 {
-"id":"tao-bon","kind":"condition",
+"id":"tao-bon","kind":"condition","child":"tao-bon-o-tre",
 "names":["táo bón","constipation","bị táo bón","táo bón mạn tính","táo bón kéo dài"],
 "about":[
 {"text":"Táo bón là khi thói quen đi cầu thay đổi: đi ít lần hơn hoặc khó đi. Thường gặp ở mọi lứa tuổi và thường điều trị được tại nhà.","src":[0]},

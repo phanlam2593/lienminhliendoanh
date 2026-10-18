@@ -155,7 +155,7 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["causes", VN(/\b(nguyên nhân|tại sao|vì sao|do đâu|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
   ["doctor", VN(/\b(đi khám|khám ở đâu|khám khoa nào|khoa nào|cần khám|nên khám|khi nào.*(khám|gặp bác sĩ|đi viện)|gặp bác sĩ|bác sĩ nào|đi viện)\b/)],
   ["course", VN(/\b(có khỏi|khỏi được|khỏi hẳn|chưa khỏi|chữa khỏi|bao lâu khỏi|có lây|lây không|lây qua|có nguy hiểm|có hết|hết không|hết ko|hết được|có sao không|có sao ko|nguy hiểm không|tiến triển|kéo dài bao lâu|kéo dài không|có kéo dài|bị bao lâu|tái phát|biến chứng|có chết|có nặng không|nặng không|có tự khỏi|tự khỏi|khó chữa|có chữa được|chữa được không|vĩnh viễn)\b/)],
-  ["care", VN(/\b(cách chữa|chữa sao|chữa thế nào|chữa như thế nào|chữa bệnh|chữa trị|điều trị|cách trị|làm sao|làm gì|phải làm gì|nên làm gì|chăm sóc|phòng ngừa|phòng tránh|giảm đau|cho đỡ|cải thiện|tự xử lý|tự xử lí|xử lý|xử lí|xử trí|sơ cứu|tập luyện|vận động|sinh hoạt|bôi gì|bôi thuốc|bôi kem|thoa gì)\b/)],
+  ["care", VN(/\b(cách chữa|chữa sao|chữa thế nào|chữa như thế nào|chữa bệnh|chữa trị|điều trị|cách trị|làm sao|làm gì|phải làm gì|nên làm gì|chăm sóc|phòng ngừa|phòng tránh|giảm đau|cho đỡ|cải thiện|tự xử lý|tự xử lí|xử lý|xử lí|xử trí|sơ cứu|tập luyện|vận động|sinh hoạt|bôi gì|bôi thuốc|bôi kem|thoa gì|mẹo|bí quyết|lưu ý|chú ý|để ý gì|cần biết gì|nên biết gì)\b/)],
   ["define", VN(/\b(là gì|là bệnh gì|là sao|nghĩa là gì|có nghĩa|hiểu như thế nào|khái niệm|định nghĩa|có phải là|giải thích|khác gì|khác nhau|phân biệt)\b/)],
 ];
 const CHARS_ACC_CHUA = VR(/(?<![\p{L}])chữa(?![\p{L}])/u);
@@ -203,9 +203,12 @@ export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood 
       if (k.length < 2) continue;
       // Tên món MỘT chữ ("đậu", "cá") chỉ khớp khi người dùng hỏi đúng món đó — "đậu rang", "đậu hũ" chưa chắc thuộc nhóm nguồn nêu.
       const single = !k.includes(" ") && k !== phrase;
+      // 18/10: hỏi một TỪ CHUNG đứng đầu tên món cụ thể hơn ("nước" ↔ "nước chanh mật ong ấm", "cá" ↔ "cá cơm") — nguồn nói về món
+      //   cụ thể đó, không phải về cả nhóm → không khớp ("đang ho uống nước lạnh" từng bị hiểu là hỏi nước chanh mật ong ấm).
+      const head = !phrase.includes(" ") && k.startsWith(`${phrase} `);
       // 15/10: món được hỏi nằm TRONG tên món của thẻ ("gà" trong "thịt gà") — chữ nào người dùng gõ dấu thì dấu phải đúng
       //   ở chính chỗ đó: "gà" không phải "ga" trong "nước ngọt có ga".
-      const hit = single ? false : p.includes(` ${k} `) ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa) : false;
+      const hit = single || head ? false : p.includes(` ${k} `) ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa) : false;
       if (hit) {
         if (!best || k.length > best.len) best = { f, len: k.length };
       }
@@ -281,6 +284,9 @@ export function isMedQuestion(text: string, topicNames: string[] = []): boolean 
 }
 
 // ── Dựng lời đáp (ghép hoàn toàn từ dữ liệu có nguồn) ──
+/** Ý trong phần chăm sóc nói về ăn / uống (bỏ các ý về thuốc: "corticoid uống" không phải chuyện ăn uống). */
+const eatFacts = (t: MedTopic): DrugFact[] =>
+  t.care.filter((f) => VR(/(^|[^\p{L}])(ăn|uống|bú|thức ăn|đồ ăn|bù nước|oresol)(?![\p{L}])/iu).test(f.text) && !VR(/thuốc|corticoid|kháng sinh|kháng virus/iu).test(f.text));
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const bl = (fs: DrugFact[], max = 99) => fs.slice(0, max).map((f) => `• ${f.text}`).join("\n");
 const srcs = (...g: DrugFact[][]) => g.flat().flatMap((f) => f.src);
@@ -383,7 +389,8 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       return out(`${body}\n\n${sourceLine(t, f.src, now)}`, "food");
     }
     // Chưa có nguồn nói về đúng món này → nói thẳng, đưa nguyên tắc chung CÓ nguồn.
-    const gen = t.diet && (t.diet.avoid.length || t.diet.ok.length) ? [t.diet.avoid[0], t.diet.ok[0]].filter(Boolean) as DrugFact[] : [];
+    // 18/10: thẻ không có bảng ăn uống (vd "ho") → nguyên tắc chung lấy từ các ý ăn / uống CÓ NGUỒN trong phần chăm sóc.
+    const gen = t.diet && (t.diet.avoid.length || t.diet.ok.length) ? [t.diet.avoid[0], t.diet.ok[0]].filter(Boolean) as DrugFact[] : eatFacts(t).slice(0, 3);
     const say = `Về **${shown ?? food}** thì Lomi **chưa xác minh được**: các nguồn y khoa Lomi đã đối chiếu cho ${N} không nêu riêng món này, nên Lomi không dám nói được hay không.`;
     const tail = gen.length ? `\n\nNguyên tắc chung theo nguồn:\n${bl(gen)}\n\nMuốn chắc về món này, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi bạn nha.\n\n${end([gen])}` : `\n\nBạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.`;
     return out(say + tail, "food", true);
@@ -391,7 +398,7 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   if (aspect === "diet") {
     if (!t.diet || !(t.diet.avoid.length || t.diet.ok.length || t.diet.foods.length)) {
       // (bỏ các ý về thuốc: "corticoid uống" không phải chuyện ăn uống)
-      const eat = t.care.filter((f) => VR(/(^|[^\p{L}])(ăn|uống|bú|thức ăn|đồ ăn|bù nước|oresol)(?![\p{L}])/iu).test(f.text) && !VR(/thuốc|corticoid|kháng sinh|kháng virus/iu).test(f.text));
+      const eat = eatFacts(t);
       // 15/10: hỏi "kiêng gì" mà nguồn không có chuyện ăn uống — vẫn nêu những điều nguồn DẶN TRÁNH (sinh hoạt, vận động, thuốc…),
       //   vì "kiêng" với người hỏi thường là kiêng cả việc chứ không chỉ món ăn ("mới cắt bao quy đầu kiêng gì").
       //   (chỉ khi nguồn không nhắc chuyện ăn uống nào — có thì chỉ đưa phần ăn uống như trước.)
@@ -483,6 +490,53 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   // overview: tóm tắt ngắn + mời chọn phần muốn xem
   const bits = [t.about[0] && `📖 ${t.about[0].text}`, t.signs.length ? `🩺 Dấu hiệu thường gặp:\n${bl(t.signs, 3)}` : "", t.doctor[0] ? `🧑‍⚕️ ${t.doctor[0].text}` : ""].filter(Boolean);
   return out([`${TERM_HINT(t)}Về ${N}, Lomi có kiến thức đã kiểm chứng như sau:`, ...bits, end([t.about.slice(0, 1), t.signs.slice(0, 3), t.doctor.slice(0, 1)]), "Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇"].join("\n\n"), "overview");
+}
+
+// ── 18/10: LƯU Ý THEO NHÓM CẦN THẬN TRỌNG (mang thai, cho con bú, trẻ nhỏ) ──
+// Lỗi cần sửa: "Bà bầu bị táo bón nên làm gì?" → đọc nguyên bài của người lớn (kể cả gợi ý thuốc nhuận tràng), không nhắc gì tới thai kỳ.
+// Ghép từ (1) đúng những ý CÓ NGUỒN trong thẻ nói về nhóm đó, và (2) lời dặn dùng thuốc đã có nguồn (DRUG_CLAIMS pregnancy-meds /
+// breastfeeding-meds của NHS). Không tự viết lời khuyên mới cho nhóm này.
+const PREG_CUE = VN(/ (mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|mang bầu|thai phụ|bầu (\d+|mấy) (tháng|tuần)) /);
+const BF_CUE = VN(/ (cho con bú|đang cho bú|nuôi con bằng sữa mẹ) /);
+const KID_GROUP = VR(/ (bé|em bé|trẻ|trẻ em|trẻ nhỏ|sơ sinh|cháu|con (tôi|mình|em|tui|anh|chị)|\d+ (tuổi|tháng tuổi)) /u);
+const PREG_FACT = VR(/mang thai|có thai|thai kỳ|bà bầu|sau sinh/iu);
+const BF_FACT = VR(/cho con bú|sữa mẹ/iu);
+const KID_FACT = VR(/(^|[^\p{L}])(trẻ|bé|em bé|sơ sinh)(?![\p{L}])/iu);
+export function groupNote(t: MedTopic, text: string, shownText = ""): string {
+  const a = acc(text);
+  const b = bare(text);
+  const pick = (re: RegExp) => allFacts(t).filter((f) => re.test(f.text) && !shownText.includes(f.text)).slice(0, 3);
+  if (t.id !== "an-uong-khi-mang-thai" && PREG_CUE.test(b)) {
+    const fs = pick(PREG_FACT);
+    return [
+      `🤰 **Đang mang thai thì lưu ý thêm:**`,
+      fs.length ? bl(fs) : "",
+      "• Trước khi dùng **bất kỳ thuốc gì** (kể cả thuốc không kê đơn) phải hỏi bác sĩ / dược sĩ — phần lớn thuốc dùng khi mang thai đi qua nhau thai tới em bé. Tiện nhất là hỏi nơi đang khám thai cho bạn.",
+    ].filter(Boolean).join("\n");
+  }
+  if (BF_CUE.test(b)) {
+    const fs = pick(BF_FACT);
+    return [`🤱 **Đang cho con bú thì lưu ý thêm:**`, fs.length ? bl(fs) : "", "• Trước khi dùng thuốc, nói với bác sĩ / dược sĩ là mình đang cho con bú để họ chọn loại phù hợp — một lượng nhỏ thuốc có thể qua sữa mẹ."].filter(Boolean).join("\n");
+  }
+  if (t.kind !== "child" && !CHILD_OF.has(t.id) && KID_GROUP.test(a)) {
+    const fs = pick(KID_FACT);
+    return [
+      `👶 **Với trẻ nhỏ thì lưu ý thêm:**`,
+      fs.length ? bl(fs) : "",
+      "• Thuốc và liều cho bé phải theo tuổi, cân nặng — hỏi bác sĩ / dược sĩ, không dùng thuốc của người lớn. Bé li bì, bỏ bú / bỏ ăn, co giật, thở nhanh hay nôn nhiều thì đưa đi khám ngay.",
+    ].filter(Boolean).join("\n");
+  }
+  return "";
+}
+/** Chèn lưu ý nhóm ngay sau đoạn đầu của lời đáp (để không bị chìm dưới bài dài). */
+export function withGroupNote(t: MedTopic, text: string, reply: string): string {
+  const note = groupNote(t, text, reply);
+  if (!note) return reply;
+  const parts = reply.split("\n\n");
+  // Đoạn đầu chỉ là tiêu đề ("🌿 Với **Táo bón**, nên:") → chèn sau đoạn kế tiếp, không chen giữa tiêu đề và danh sách của nó.
+  const at = parts.length > 1 && /:\s*$/u.test(parts[0]) ? 2 : 1;
+  parts.splice(Math.min(at, parts.length), 0, note);
+  return parts.join("\n\n");
 }
 
 /** Tên chủ đề đúng như người dùng gõ (giữ dấu, giữ chữ hoa/thường) — để nói lại "bạn đang bị **gout**". */

@@ -23,7 +23,7 @@ type Sym = { id: string; label: string; re: RegExp; red?: string };
 const SYMPTOMS: Sym[] = [
   // Toàn thân
   // 11/10: "con a sốt từ tối qua", "bé sốt cả đêm" — "sốt" đứng sau người bệnh / trước mốc thời gian cũng là sốt ("sốt ruột", "sốt sắng" thì không).
-  { id: "fever", label: "sốt", re: VN(/\b((bị|đang|hơi|phát|còn|vẫn|lại|thêm|có) sốt|sốt (cao|nhẹ|hoài|liền|kéo dài|về đêm|về chiều|miên man|\d+)|nóng sốt|sốt rét|(a|anh|e|em|c|chị|mình|tôi|tui|bé|cháu|mẹ|má|bố|vợ|chồng|nó) sốt(?! ruột| sắng)|sốt (từ|cả|mấy|hơn|gần|suốt|rồi))\b/) },
+  { id: "fever", label: "sốt", re: VN(/\b((bị|đang|hơi|phát|còn|vẫn|lại|thêm|có) sốt|sốt (cao|nhẹ|hoài|liền|kéo dài|về đêm|về chiều|miên man|\d+)|nóng sốt|sốt rét|(a|anh|e|em|c|chị|mình|tôi|tui|bé|cháu|mẹ|má|bố|vợ|chồng|nó) sốt(?! ruột| sắng)|(và|kèm|kèm theo|cùng|với|lẫn|cả|thêm cả) sốt(?! ruột| sắng| dẻo| vang| cà chua| me| bơ| tiêu| chua ngọt| xì dầu)|sốt (từ|cả|mấy|hơn|gần|suốt|rồi))\b/) },
   { id: "highfever", label: "sốt cao", re: VN(/\b(sốt cao|sốt (39|40|41)|sốt trên 39)\b/) },
   { id: "chills", label: "ớn lạnh", re: VN(/\b(ớn lạnh|lạnh run|run mình|gai ốc|rùng mình)\b/) },
   { id: "fatigue", label: "mệt mỏi", re: VN(/\b(mệt mỏi|mệt lử|u oai|uể oải|kiệt sức|đuối sức|không có sức|mất sức|mệt nhiều|hơi mệt|thấy mệt|bị mệt|đang mệt|mệt mệt|mệt cả người|người mệt)\b/) },
@@ -935,7 +935,12 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   // 15/10: "đau bụng dữ dội" ngay câu đầu (chưa ở mạch sức khoẻ) cũng phải được nhắc dấu hiệu cấp cứu — trước đây chỉ nhắc khi đang nói chuyện sức khoẻ.
   if (SEVERE_RE.test(` ${n} `)) {
     detail = true;
-    notes.push("Đau dữ dội như vậy thì đừng chủ quan nha — nếu cơn đau đến **đột ngột**, kèm nôn ói, sốt cao, cứng cổ, yếu tay chân, nói khó hay lơ mơ thì gọi **115** ngay.");
+    // 18/10: dấu hiệu thần kinh (cứng cổ, yếu tay chân, nói khó) chỉ hợp với đau ĐẦU — đau khớp/bụng dữ dội trước đây cũng bị nhắc y như vậy.
+    notes.push(
+      now.includes("headache") || now.includes("suddenhead")
+        ? "Đau dữ dội như vậy thì đừng chủ quan nha — nếu cơn đau đến **đột ngột**, kèm nôn ói, sốt cao, cứng cổ, yếu tay chân, nói khó hay lơ mơ thì gọi **115** ngay."
+        : "Đau dữ dội như vậy thì đừng chủ quan nha — nên đi khám sớm. Nếu kèm khó thở, đau ngực, ngất hay lơ mơ thì gọi **115** ngay.",
+    );
   }
   if (KID_RE.test(` ${n} `)) now.push("kid");
   // 15/10 (audit): đang mang thai / cho con bú mà kể triệu chứng → nhắc không tự dùng thuốc, hỏi bác sĩ / dược sĩ trước (NHS — xem lomiDrugData pregnancy-meds).
@@ -969,11 +974,19 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   if ((all.includes("fever") || all.includes("highfever")) && all.includes("stiffneck")) reds.push({ red: "sốt kèm cứng cổ (cần loại trừ viêm màng não)" });
   if (all.includes("swellface") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "sưng môi / mặt kèm khó thở (nguy cơ sốc phản vệ)" });
   if (all.includes("rash") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "nổi mẩn / mề đay kèm khó thở (nguy cơ sốc phản vệ)" });
+  // 18/10: tầng KHÁM GẤP TRONG NGÀY (chưa tới mức gọi 115 theo nguồn, nhưng không được tự chữa ở nhà).
+  //   Khớp sưng, nóng, đỏ kèm sốt → NHS "Septic arthritis" (rà soát 03/09/2026): hẹn khám gấp ngay, không chờ.
+  const urgent: string[] = [];
+  if ((all.includes("fever") || all.includes("highfever")) && all.includes("jointswell")) urgent.push("khớp sưng, nóng, đỏ kèm sốt");
   const labels = syms.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const ctx = syms.filter((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const out: string[] = [];
   if (reds.length)
     out.push(`⚠️ **${joinVi(reds.map((s) => s.red!))}** là dấu hiệu cần đi cấp cứu. Gọi **115** hoặc tới cơ sở y tế gần nhất ngay nha, đừng chờ.`);
+  if (urgent.length && !reds.length)
+    out.push(
+      `🚨 **${cap1(joinVi(urgent))}** thì cần **đi khám ngay trong hôm nay**, đừng tự chữa ở nhà hay chờ qua ngày — có thể là khớp bị nhiễm trùng, cần bác sĩ kiểm tra sớm. Nếu thấy người lả đi, rét run nhiều, thở nhanh hay lơ mơ thì gọi **115** ngay.`,
+    );
   // 15/10: bé dưới 3 tháng tuổi mà sốt → đi khám ngay; không đưa danh sách bệnh / lời khuyên của người lớn ("cố đi làm", "tiêm vắc xin cúm").
   if (kid && (all.includes("fever") || all.includes("highfever")) && infantUnder3m(normalizeVi(text))) {
     out.push("⚠️ Bé **dưới 3 tháng tuổi** mà sốt (từ 38°C) thì cần đưa bé đi khám **ngay**, đừng tự theo dõi ở nhà. Bé li bì, bỏ bú, co giật, thở nhanh hay tím tái thì gọi **115**.");
@@ -990,7 +1003,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     if (g) return { text: g, sx: [] };
   }
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
-  if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
+  if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !urgent.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
     // 11/10: hỏi đúng điều CÒN THIẾU — đã nói "từ tối qua" thì không hỏi lại "bao lâu rồi"; đang kể sốt thì hỏi mấy độ, không hỏi "có kèm sốt không".
     const since = VN(/\b(từ (tối|sáng|chiều|trưa|đêm|hôm|tuần|tháng)|hôm qua|tối qua|sáng nay|chiều nay|tối nay|đêm qua|mấy hôm nay|mấy ngày nay|cả (ngày|đêm|tuần|tháng)|(\d+|một|hai|ba|mấy|vài) (ngày|hôm|tuần|tháng) nay)\b/).test(` ${n} `);
     const fev = all.includes("fever");
@@ -1038,9 +1051,14 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
       .join("\n")}`,
   );
   const main = top[0].c;
-  out.push(`💡 **Nên làm:**\n${main.do.map((d) => `• ${d}`).join("\n")}`);
-  out.push(`🚫 **Nên kiêng / tránh:**\n${main.avoid.map((d) => `• ${d}`).join("\n")}`);
-  out.push(`🩺 **Đi khám:** ${main.doctor}`);
+  if (urgent.length) {
+    // 18/10: có dấu hiệu khám gấp → mẹo ở nhà chỉ là việc làm TRONG LÚC CHỜ đi khám, không kèm danh sách kiêng cữ lâu dài.
+    out.push(`💡 **Trong lúc chuẩn bị đi khám:**\n${main.do.filter((d) => !/^Đi khám/i.test(d)).map((d) => `• ${d}`).join("\n")}`);
+  } else {
+    out.push(`💡 **Nên làm:**\n${main.do.map((d) => `• ${d}`).join("\n")}`);
+    out.push(`🚫 **Nên kiêng / tránh:**\n${main.avoid.map((d) => `• ${d}`).join("\n")}`);
+    out.push(`🩺 **Đi khám:** ${main.doctor}`);
+  }
   // Gợi ý kể thêm để phân biệt (hỏi triệu chứng đặc trưng còn thiếu của 2 khả năng đầu).
   const missing = Array.from(
     new Set(
