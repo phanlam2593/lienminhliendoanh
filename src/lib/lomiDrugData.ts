@@ -183,7 +183,7 @@ export const DRUGS: DrugEntry[] = [
         note: "NHS xếp các thuốc NSAID khác (như ibuprofen, naproxen) vào nhóm **có thể không hợp** khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước. Riêng người đang uống aspirin đều đặn để phòng nhồi máu cơ tim, đột quỵ: MedlinePlus ghi không tự uống ibuprofen để giảm đau, hạ sốt khi chưa hỏi bác sĩ.",
         src: [0, 1],
       },
-      { id: "anticoagulant", match: VN(/\b(warfarin|rivaroxaban|thuốc chống đông|chống đông máu)\b/), with: "thuốc chống đông (như warfarin, rivaroxaban)", note: "Thuốc chống đông (như warfarin, rivaroxaban) nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — phải báo bác sĩ trước khi dùng.", src: [0] },
+      { id: "anticoagulant", match: VN(/\b(warfarin|rivaroxaban|xarelto|thuốc chống đông|chống đông máu)\b/), with: "thuốc chống đông (như warfarin, rivaroxaban)", note: "Thuốc chống đông (như warfarin, rivaroxaban) nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — phải báo bác sĩ trước khi dùng.", src: [0] },
       { id: "bp", match: VN(/\b(thuốc huyết áp|thuốc hạ huyết áp|thuốc hạ áp|thuốc tăng huyết áp|thuốc cao huyết áp)\b/), with: "thuốc hạ huyết áp", note: "Một số thuốc hạ huyết áp nằm trong nhóm NHS ghi là **có thể không hợp** khi dùng cùng aspirin — đang uống thuốc huyết áp thì báo bác sĩ / dược sĩ trước khi dùng aspirin.", src: [0] },
       { id: "steroid", match: VR(/\b(steroid|steroids|corticoid|corticosteroid)\b/), with: "một số thuốc steroid (corticoid)", note: "Một số thuốc steroid nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
       { id: "antidepressant", match: VN(/\b(thuốc chống trầm cảm|chống trầm cảm|thuốc trầm cảm|antidepressant)\b/), with: "một số thuốc chống trầm cảm", note: "Một số thuốc chống trầm cảm nằm trong nhóm NHS ghi là có thể không hợp khi dùng cùng aspirin — hỏi bác sĩ / dược sĩ trước.", src: [0] },
@@ -288,6 +288,23 @@ export const DRUGS: DrugEntry[] = [
  * Dùng để rà soát: sửa câu chữ ở lib/lomiSymptoms, lib/lomiHeartMore, lib/lomiDrug thì đối chiếu lại với nguồn ở đây.
  */
 export const DRUG_CLAIMS: { id: string; claim: string; where: string[]; sources: DrugSource[]; verifiedAt: string }[] = [
+  {
+    id: "preg-ibuprofen",
+    claim: "Khi mang thai nên tránh ibuprofen, trừ khi bác sĩ hoặc dược sĩ khuyên dùng.",
+    where: ["lomiDrug: PREG_IBU_TEXT", "lomiMed: withGroupNote (dòng gợi ý ibuprofen khi câu nhắc mang thai)"],
+    sources: [{ title: "Ibuprofen for adults", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/ibuprofen-for-adults/", reviewed: "2025-08-27" }],
+    verifiedAt: "2026-10-18",
+  },
+  {
+    id: "anticoag-nsaid",
+    claim: "Thuốc chống đông (như warfarin, rivaroxaban – Xarelto) có thể không hợp với ibuprofen / thuốc giảm đau kháng viêm NSAID; dấu hiệu chảy máu nặng cần đi khám / gọi cấp cứu.",
+    where: ["lomiDrug: ANTICOAG_NSAID_TEXT"],
+    sources: [
+      { title: "Ibuprofen for adults", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/ibuprofen-for-adults/", reviewed: "2025-08-27" },
+      { title: "Rivaroxaban", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/rivaroxaban/", reviewed: "2026-08-05" },
+    ],
+    verifiedAt: "2026-10-18",
+  },
   {
     id: "dengue-nsaid",
     claim: "Bị sốt xuất huyết thì tránh thuốc nhóm NSAID như ibuprofen, aspirin (có thể tăng nguy cơ chảy máu); đau thì có thể dùng paracetamol.",

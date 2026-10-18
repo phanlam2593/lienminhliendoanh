@@ -804,19 +804,60 @@ function tempOf(n: string): number | null {
 }
 const KID_RE = VN(/\b(con mình|con tôi|con em|con tui|bé nhà|bé mình|bé con|em bé|trẻ nhỏ|cháu mình|bé bi|bé \d+ tuổi|\d+ tháng tuổi|bé \d+ (tháng|tuần)|(con|cháu|trẻ) \d+ (tháng|tuần|tuổi)|sơ sinh)\b/);
 // 15/10: tuổi của bé tính bằng tháng / tuần ("bé 2 tháng", "con 6 tuần", "trẻ sơ sinh") — bé dưới 3 tháng mà sốt thì phải đi khám ngay.
+//   18/10 (audit F, P0): "con tôi 2 tháng tuổi", "bé nhà mình 6 tuần tuổi", "bé được 8 tuần" — trước đây chỉ khớp khi số đứng LIỀN sau
+//   "bé/con", nên bé sơ sinh sốt không được nhắc đi khám ngay (NHS "Fever in children": dưới 3 tháng, từ 38°C → cần tư vấn y tế khẩn).
 function infantUnder3m(n: string): boolean {
+  // (review F1: đã đo được nhiệt độ DƯỚI 38°C thì không thuộc mốc "từ 38°C" của NHS — câu cảnh báo cũng ghi rõ mốc đó.)
+  const t0 = tempOf(n);
+  if (t0 !== null && t0 < 38) return false;
   if (VN(/\bsơ sinh\b/).test(` ${n} `)) return true;
-  const m = ` ${n} `.match(VN(/\b(?:bé|con|cháu|trẻ|em bé)\s+(\d+)\s+(tháng|tuần)\b/));
-  if (!m) return false;
-  const k = Number(m[1]);
-  return VN(/^tuần$/).test(m[2]) ? k < 13 : k < 3;
+  const a = ageOf(n);
+  if (!a) return false;
+  return a.unit === "week" ? a.k < 13 : a.k < 3;
 }
+const BELLY = ["bellyache", "epigastric", "rightlow"];
 const SEVERE_RE = VN(/\b(búa bổ|dữ dội|đau lắm|đau quá trời|không chịu nổi|đau muốn xỉu|đau chết đi được)\b/);
 const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SELF_RE = VN(/\b(mình bị|tôi bị|em bị|anh bị|tui bị|đang bị|bị hoài|bị suốt|mình đang|tôi đang|nay bị|này bị|hôm nay bị|từ sáng|từ qua)\b/);
 const KNOW_RE = VN(/\b(là bị gì|là do đâu|do đâu|do đâu mà|nguyên nhân|là bệnh gì|là dấu hiệu|dấu hiệu của|là gì|thường do|vì sao|tại sao|có nguy hiểm không|có phải là|có nghĩa là|là sao|bị là sao|do đâu|từ đâu)\b/);
 // 18/10: "ho kéo dài nhiều tuần" — "nhiều" cũng là thời lượng (trước đây Lomi hỏi lại "bị bao lâu rồi").
 const DUR_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ|nhiều)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
+// 18/10 (audit F): TUỔI của bé ≠ THỜI GIAN bị bệnh. "bé 8 tháng", "con tôi 2 tháng tuổi", "bé nhà mình 6 tuần tuổi", "bé được 8 tuần"
+//   là tuổi; "bé bị sốt 3 ngày rồi" là thời gian. Một cụm số + đơn vị là tuổi khi có chữ "tuổi" đứng sau, hoặc đứng ngay sau
+//   bé / con / cháu / trẻ (chỉ cách nhau bởi chữ chỉ người sở hữu: "nhà mình", "tôi", "được"…).
+const AGE_AFTER = VN(/^\s*tuổi\b/);
+const AGE_LEAD = VN(/(?:^|\s)(?:bé|con|cháu|trẻ|em bé)(?:\s+(?:nhà|tôi|mình|em|tui|anh|chị|của|được|mới|đã|nay))*\s*$/);
+//   (review F1: "bé 2 tháng NAY bị sốt hoài" là bị đã 2 tháng, không phải bé 2 tháng tuổi — "nay / qua / liền / trời" sau cụm là thời gian.)
+const DUR_AFTER = VN(/^\s*(nay|qua|liền|trời|liên tục)\b/);
+function isAgeAt(s: string, idx: number, len: number): boolean {
+  if (DUR_AFTER.test(s.slice(idx + len))) return false;
+  return AGE_AFTER.test(s.slice(idx + len)) || AGE_LEAD.test(s.slice(0, idx));
+}
+/** Cụm thời gian BỊ BỆNH đầu tiên trong câu (bỏ qua cụm là tuổi của bé). */
+function durOf(n: string): RegExpMatchArray | null {
+  const s = ` ${n} `;
+  let off = 0;
+  for (;;) {
+    const m = s.slice(off).match(DUR_RE);
+    if (!m || m.index === undefined) return null;
+    const idx = off + m.index;
+    if (!isAgeAt(s, idx, m[0].length)) return m;
+    off = idx + m[0].length;
+  }
+}
+/** Tuổi của bé tính bằng tháng / tuần, nếu câu có nói. */
+function ageOf(n: string): { k: number; unit: "month" | "week" } | null {
+  const s = ` ${n} `;
+  const re = VN(/\b(\d+)\s*(tháng|tuần)\b/);
+  let off = 0;
+  for (;;) {
+    const m = s.slice(off).match(re);
+    if (!m || m.index === undefined) return null;
+    const idx = off + m.index;
+    if (isAgeAt(s, idx, m[0].length)) return { k: Number(m[1]), unit: VN(/^tuần$/).test(m[2]) ? "week" : "month" };
+    off = idx + m[0].length;
+  }
+}
 const KID_NOTE =
   "👶 **Với trẻ nhỏ:** đưa bé đi khám ngay nếu bé dưới 3 tháng tuổi mà sốt, hoặc sốt cao khó hạ, li bì, bỏ bú/bỏ ăn, co giật, thở nhanh, phát ban, nôn nhiều. Thuốc hạ sốt cho bé phải tính theo cân nặng — hỏi bác sĩ/dược sĩ, không dùng thuốc của người lớn.";
 
@@ -926,7 +967,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
       else if (t >= 37.5) now.push("fever"), notes.push(`🌡️ ${String(t).replace(".", ",")} độ là đang **sốt**.`);
       else notes.push(`🌡️ ${String(t).replace(".", ",")} độ thì chưa tính là sốt đâu, cứ theo dõi thêm nha.`);
     }
-    const d = n.match(DUR_RE);
+    const d = durOf(n);
     if (d) {
       detail = true;
       const long = VN(/tuần|tháng|năm/).test(d[2]) || Number(d[1]) >= 3 || ["ba", "bon", "nam", "may", "vai", "nhieu"].includes(d[1]);
@@ -937,7 +978,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   }
   // 18/10: câu ĐẦU đã nói bị lâu ("ho kéo dài nhiều tuần") → nhắc đi khám luôn (trước chỉ nhắc khi đang kể tiếp).
   if (!inHealth) {
-    const d0 = n.match(DUR_RE);
+    const d0 = durOf(n);
     if (d0 && (VN(/tuần|tháng|năm/).test(d0[2]) || Number(d0[1]) >= 7)) {
       detail = true;
       notes.push("Bị lâu như vậy rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài.");
@@ -947,13 +988,16 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   if (SEVERE_RE.test(` ${n} `)) {
     detail = true;
     // 18/10: dấu hiệu thần kinh (cứng cổ, yếu tay chân, nói khó) chỉ hợp với đau ĐẦU — đau khớp/bụng dữ dội trước đây cũng bị nhắc y như vậy.
+    // 18/10 (audit F, P0): đau BỤNG dữ dội / đột ngột đã là dấu hiệu đi cấp cứu ở luật kết hợp phía dưới — không thêm câu "nên đi khám sớm".
+    if (!now.some((id) => BELLY.includes(id)) || now.includes("periodpain"))
     notes.push(
       now.includes("headache") || now.includes("suddenhead")
         ? "Đau dữ dội như vậy thì đừng chủ quan nha — nếu cơn đau đến **đột ngột**, kèm nôn ói, sốt cao, cứng cổ, yếu tay chân, nói khó hay lơ mơ thì gọi **115** ngay."
         : "Đau dữ dội như vậy thì đừng chủ quan nha — nên đi khám sớm. Nếu kèm khó thở, đau ngực, ngất hay lơ mơ thì gọi **115** ngay.",
     );
   }
-  if (KID_RE.test(` ${n} `)) now.push("kid");
+  // (18/10: "bé được 8 tuần", "bé nhà mình 6 tuần tuổi" — có tuổi của bé thì cũng là đang nói về trẻ nhỏ)
+  if (KID_RE.test(` ${n} `) || ageOf(n)) now.push("kid");
   // 15/10 (audit): đang mang thai / cho con bú mà kể triệu chứng → nhắc không tự dùng thuốc, hỏi bác sĩ / dược sĩ trước (NHS — xem lomiDrugData pregnancy-meds).
   const momNote = VN(/\b(mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|đang mang bầu|bầu (\d+|mấy) (tháng|tuần))\b/).test(` ${n} `)
     ? "🤰 **Đang mang thai:** đừng tự uống thuốc, kể cả thuốc hạ sốt, giảm đau — hỏi bác sĩ / dược sĩ trước (phần lớn thuốc đi qua nhau thai tới em bé, theo NHS). Có triệu chứng thì gọi hỏi nơi đang khám thai sớm; ra máu, đau bụng nhiều, ra nước hay thai máy ít thì đi khám **ngay**."
@@ -984,6 +1028,13 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   // Luật KẾT HỢP (15/10): từng triệu chứng riêng thì chưa nguy hiểm, đi cùng nhau thì phải đi cấp cứu.
   if ((all.includes("fever") || all.includes("highfever")) && all.includes("stiffneck")) reds.push({ red: "sốt kèm cứng cổ (cần loại trừ viêm màng não)" });
   if (all.includes("swellface") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "sưng môi / mặt kèm khó thở (nguy cơ sốc phản vệ)" });
+  // 18/10 (audit F, P0): đau bụng đến ĐỘT NGỘT hoặc DỮ DỘI → NHS "Stomach ache": gọi cấp cứu / tới khoa cấp cứu ngay.
+  //   (Trước đây chỉ có câu "nên đi khám sớm" — hạ mức so với nguồn. "cười đau bụng", "thỉnh thoảng đau bụng nhẹ" không có chữ dữ dội / đột ngột.)
+  //   (review F1: "không còn / hết / chưa … đau bụng dữ dội" là phủ định; "đau bụng kinh dữ dội" thuộc đau bụng kinh — NHS không xếp vào cấp cứu,
+  //    nên đi theo nhánh cũ: nhắc đi khám.)
+  const bellyNeg = VN(/\b(không|ko|chưa|hết|không còn|không bị|đỡ) (còn )?(bị )?(đau bụng )?(dữ dội|đột ngột)\b/).test(` ${n} `);
+  if (now.some((id) => BELLY.includes(id)) && !now.includes("periodpain") && !bellyNeg && (SEVERE_RE.test(` ${n} `) || VN(/\bđột ngột\b/).test(` ${n} `)))
+    reds.push({ red: "đau bụng đến đột ngột hoặc dữ dội" });
   if (all.includes("rash") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "nổi mẩn / mề đay kèm khó thở (nguy cơ sốc phản vệ)" });
   // 18/10: tầng KHÁM GẤP TRONG NGÀY (chưa tới mức gọi 115 theo nguồn, nhưng không được tự chữa ở nhà).
   //   Khớp sưng, nóng, đỏ kèm sốt → NHS "Septic arthritis" (rà soát 03/09/2026): hẹn khám gấp ngay, không chờ.
@@ -1016,7 +1067,7 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     if (g) return { text: g, sx: [] };
   }
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
-  if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !urgent.length && !DUR_RE.test(` ${n} `) && !force && !SEVERE_RE.test(` ${n} `)) {
+  if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !urgent.length && !durOf(n) && !force && !SEVERE_RE.test(` ${n} `)) {
     // 11/10: hỏi đúng điều CÒN THIẾU — đã nói "từ tối qua" thì không hỏi lại "bao lâu rồi"; đang kể sốt thì hỏi mấy độ, không hỏi "có kèm sốt không".
     const since = VN(/\b(từ (tối|sáng|chiều|trưa|đêm|hôm|tuần|tháng)|hôm qua|tối qua|sáng nay|chiều nay|tối nay|đêm qua|mấy hôm nay|mấy ngày nay|cả (ngày|đêm|tuần|tháng)|(\d+|một|hai|ba|mấy|vài) (ngày|hôm|tuần|tháng) nay)\b/).test(` ${n} `);
     const fev = all.includes("fever");
@@ -1043,9 +1094,11 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   if (momNote) out.push(momNote);
   if (kid && !prev.includes("kid")) out.push(KID_NOTE);
   if (!scored.length) {
-    out.push(
-      "Chừng này triệu chứng thì chưa đủ để Lomi đoán sát được 🤔 Bạn kể thêm giúp Lomi nha: bị bao lâu rồi, có sốt không, đau ở đâu, kèm dấu hiệu gì khác?",
-    );
+    // 19/10 (review F1): đã có cảnh báo cấp cứu / khám gấp ở đầu thì không hỏi han thêm — lời hỏi "kể thêm giúp Lomi" làm loãng chỉ dẫn đi cấp cứu.
+    if (!reds.length && !urgent.length)
+      out.push(
+        "Chừng này triệu chứng thì chưa đủ để Lomi đoán sát được 🤔 Bạn kể thêm giúp Lomi nha: bị bao lâu rồi, có sốt không, đau ở đâu, kèm dấu hiệu gì khác?",
+      );
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };
   }
@@ -1082,8 +1135,8 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     ),
   ).slice(0, 3);
   if (missing.length && top.length > 1)
-    out.push(`Để Lomi phân biệt rõ hơn: ${kid ? "bé" : "bạn"} có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không?${DUR_RE.test(` ${n} `) ? "" : " Bị bao lâu rồi?"}`);
-  else out.push(DUR_RE.test(` ${n} `) || prev.length ? "Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha." : `${kid ? "Bé" : "Bạn"} bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.`);
+    out.push(`Để Lomi phân biệt rõ hơn: ${kid ? "bé" : "bạn"} có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không?${durOf(n) ? "" : " Bị bao lâu rồi?"}`);
+  else out.push(durOf(n) || prev.length ? "Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha." : `${kid ? "Bé" : "Bạn"} bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.`);
   out.push(NOTE_BODY);
   return { text: out.join("\n\n"), sx: all };
 }

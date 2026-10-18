@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -67,6 +67,27 @@ const FALL = VN(/\b(bị ngã|té ngã|bị té|ngã cầu thang|té cầu thang
 const FALL_BAD = VN(/\b(không (đứng|ngồi|tự) dậy được|không dậy được|không đứng lên được|đập đầu|va đầu|đau (hông|lưng|cổ|háng) (dữ dội|nhiều|lắm|quá)|gãy|không cử động được|bất tỉnh|ngất|lơ mơ)\b/);
 const ELDER = VN(/\b(ông|bà|ông bà|ba|bố|mẹ|má|cụ|người già|người cao tuổi|cao tuổi|lớn tuổi|[6-9]\d tuổi|1[01]\d tuổi)\b/);
 const CALL = "gọi **115** ngay";
+// 18/10 (audit F, P0): đang sốt xuất huyết mà kể DẤU HIỆU CẢNH BÁO (NHS "Dengue", rà soát 13/08/2026: đau bụng dữ dội, nôn nhiều lần,
+//   thở nhanh, chảy máu chân răng / mũi, rất mệt, bồn chồn, nôn / phân có máu → đi cấp cứu). Trước đây "sốt xuất huyết ngày thứ 4 đau bụng,
+//   chảy máu chân răng" bị chọn nhầm thẻ viêm nướu ("chảy máu chân răng" là một tên của thẻ đó) rồi rơi vào nhánh hỏi thêm.
+//   Chỉ khi câu NÊU RÕ sốt xuất huyết; hỏi kiến thức ("sốt xuất huyết là bệnh gì") đã bị KNOWLEDGE loại từ trước.
+const DENGUE = VN(/\b(sốt xuất huyết|sxh|dengue)\b/);
+// (review F1) "năm ngoái bị sốt xuất huyết, chảy máu cam, giờ khỏi rồi" là chuyện đã qua.
+const DENGUE_PAST = VN(/\b(năm ngoái|năm trước|hồi trước|lúc trước|trước đây|hồi nhỏ|đã khỏi|khỏi rồi|khỏi hẳn|hết bệnh|từng bị)\b/);
+// Có người / thời điểm cụ thể đang bị → nói như tình huống đang xảy ra; không có → câu hỏi chung.
+const DENGUE_NOW = VN(/\b(đang|giờ|bây giờ|hôm nay|tối nay|sáng nay|ngày (thứ )?\d+|tôi|tui|mình|em|anh|chị|con|bé|cháu|vợ|chồng|mẹ|má|ba|bố|ông|bà|nó|hàng xóm|bạn)\b/);
+// Dấu hiệu bị PHỦ ĐỊNH ("không chảy máu chân răng", "không đau bụng") thì không tính.
+function dengueWarnAsserted(n: string): boolean {
+  let off = 0;
+  for (;;) {
+    const m = n.slice(off).match(DENGUE_WARN);
+    if (!m || m.index === undefined) return false;
+    const idx = off + m.index;
+    if (!VN(/\b(không|ko|chưa|hết|không còn|không bị|không có)\s*$/).test(n.slice(0, idx))) return true;
+    off = idx + m[0].length;
+  }
+}
+const DENGUE_WARN = VN(/\b(đau bụng (dữ dội|nhiều|quá|lắm|quặn)|quặn bụng|nôn (nhiều|liên tục|hoài|ra máu)|ói (nhiều|liên tục|ra máu)|chảy máu (chân răng|nướu|lợi|mũi|cam)|máu cam|thở (nhanh|gấp)|li bì|lừ đừ|mệt lả|rất mệt|bồn chồn|vật vã|phân (có máu|đen)|đi (ngoài|cầu) ra máu)\b/);
 
 /** Câu kể một tình huống cần xử trí khẩn → tình huống + thẻ để trả lời; không phải thì null. */
 export function urgentOf(text: string): Urgent | null {
@@ -92,6 +113,18 @@ export function urgentOf(text: string): Urgent | null {
         head: "⚠️ Đang mang thai mà **nhìn mờ / hoa mắt, đau đầu kèm phù mặt – tay – chân, hoặc đau dưới sườn** có thể là dấu hiệu **tiền sản giật** — cần được khám **khẩn**: gọi **115** hoặc tới khoa sản ngay.",
       };
   }
+  if (DENGUE.test(n) && dengueWarnAsserted(n) && !DENGUE_PAST.test(n))
+    return {
+      id: "dengue",
+      card: "sot-xuat-huyet",
+      aspect: "emergency",
+      // (review F1) câu hỏi chung, không nói ai đang bị ("sốt xuất huyết có bị chảy máu chân răng không?") → trả lời như kiến thức: đó là dấu hiệu
+      //   cảnh báo, NẾU đang bị thì đi cấp cứu — không nói như thể người hỏi đang trong tình huống cấp cứu.
+      head: DENGUE_NOW.test(n)
+        ? `⚠️ Đang sốt xuất huyết mà có những dấu hiệu như vậy thì cần **đi cấp cứu ngay** (nhờ người chở hoặc ${CALL}), đừng chờ ở nhà — nguồn y khoa xếp chúng vào dấu hiệu cảnh báo sốt xuất huyết nặng, có thể xuất hiện cả khi đã hạ sốt. Lomi không kết luận được là đã chuyển nặng chỉ qua tin nhắn; bác sĩ cần khám trực tiếp.`
+        : `📌 Theo nguồn y khoa, đó là một trong những **dấu hiệu cảnh báo sốt xuất huyết nặng** (có thể xuất hiện cả khi đã hạ sốt). Nếu ai đang bị sốt xuất huyết mà có dấu hiệu này thì cần **đi cấp cứu ngay** (nhờ người chở hoặc ${CALL}), đừng chờ ở nhà.`,
+      extra: "Trong lúc này đừng tự uống ibuprofen hay aspirin — với sốt xuất huyết, các thuốc giảm đau kháng viêm này có thể gây chảy máu.",
+    };
   if (POISON.test(n)) {
     const selfHarm = !other && SELF_HARM_POISON.test(n);
     return {

@@ -566,6 +566,10 @@ export function groupNote(t: MedTopic, text: string, shownText = ""): string {
 }
 /** Chèn lưu ý nhóm ngay sau đoạn đầu của lời đáp (để không bị chìm dưới bài dài). */
 export function withGroupNote(t: MedTopic, text: string, reply: string): string {
+  // 18/10 (audit F, P1): đang mang thai mà lời đáp có dòng gợi ý ibuprofen (thẻ cúm, đau họng…) → ghi ngay trên dòng đó điều nguồn nói
+  //   riêng cho thai kỳ (NHS "Ibuprofen for adults": tránh khi mang thai, trừ khi bác sĩ / dược sĩ khuyên — xem DRUG_CLAIMS preg-ibuprofen).
+  if (t.id !== "an-uong-khi-mang-thai" && PREG_CUE.test(bare(text)))
+    reply = reply.replace(/^(• [^\n]*ibuprofen[^\n]*)$/gimu, "$1 **Đang mang thai thì tránh ibuprofen**, trừ khi bác sĩ hoặc dược sĩ khuyên dùng.");
   const note = groupNote(t, text, reply);
   if (!note) return reply;
   const parts = reply.split("\n\n");

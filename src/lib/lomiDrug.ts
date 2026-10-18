@@ -49,7 +49,49 @@ export type DrugCtx = {
   /** Thuốc vừa được nhắc ở lượt trước: tên người dùng gõ, và mã mục đã kiểm chứng (nếu có). */
   name?: string;
   drugId?: string;
+  /** 18/10: tin TRƯỚC của người dùng nói đang dùng thuốc chống đông ("đang uống Xarelto") — câu này hỏi dùng thêm NSAID. */
+  anticoag?: boolean;
 };
+
+// ── 18/10 (audit F, P1): THUỐC CHỐNG ĐÔNG + NSAID, và IBUPROFEN KHI MANG THAI ──
+// Chỉ dùng điều hai trang NHS dưới nói thẳng (đọc ngày 18/10/2026); không thêm tên thuốc / nhóm thuốc nào các trang đó không nêu.
+//   • NHS "Ibuprofen for adults" (rà soát 27/08/2025): thuốc chống đông như warfarin có thể không hợp với ibuprofen;
+//     tránh ibuprofen khi mang thai trừ khi bác sĩ / dược sĩ khuyên.
+//   • NHS "Rivaroxaban" (Xarelto, rà soát 05/08/2026): thuốc giảm đau kháng viêm (NSAID) có thể không hợp; dấu hiệu chảy máu nặng.
+const ANTICOAG = VN(/\b(thuốc chống đông|chống đông máu|thuốc làm loãng máu|thuốc loãng máu|rivaroxaban|xarelto)\b/);
+const NSAID_ASK = VN(/\b(ibuprofen|naproxen|diclofenac|nsaid|nsaids|thuốc kháng viêm|kháng viêm không steroid|giảm đau kháng viêm)\b/);
+// (review F1) Phạm vi đúng theo nguồn: NHS Ibuprofen nói "thuốc chống đông" (cả nhóm) + IBUPROFEN; NHS Rivaroxaban nói rivaroxaban + NSAID nói chung.
+//   → nhóm chống đông không rõ tên + NSAID khác (naproxen, diclofenac…) chưa có nguồn trực tiếp → không trả lời bằng câu này.
+const RIVA = VN(/\b(rivaroxaban|xarelto)\b/);
+const anticoagNsaidSourced = (anticoagText: string, nsaidText: string) => RIVA.test(anticoagText) || VN(/\bibuprofen\b/).test(nsaidText);
+const PREG_ONLY = VN(/\b(mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|đang mang bầu)\b/);
+const SRC_IBU = "NHS (Anh) — Ibuprofen for adults, rà soát 27/08/2025";
+const SRC_RIVA = "NHS (Anh) — Rivaroxaban, rà soát 05/08/2026";
+const srcNote = (...s: string[]) => `📚 Nguồn: ${s.join(" · ")}. Lomi đối chiếu ngày 18/10/2026. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ / dược sĩ.`;
+const ANTICOAG_NSAID_TEXT = [
+  "Đang dùng **thuốc chống đông** (như warfarin, rivaroxaban – Xarelto) mà dùng thêm **ibuprofen hay thuốc giảm đau kháng viêm (NSAID)** thì **có thể không hợp** — thuốc chống đông vốn đã làm tăng nguy cơ chảy máu. Đừng tự uống thêm; hỏi bác sĩ đang kê thuốc chống đông hoặc dược sĩ trước.",
+  "Đang dùng thuốc chống đông mà thấy **tiểu ra máu, đi ngoài ra máu / phân đen, nôn hoặc ho ra máu** thì đi khám ngay; **đau đầu dữ dội đột ngột kèm lú lẫn, nói khó, khó cử động tay chân** thì gọi **115** ngay.",
+  srcNote(SRC_IBU, SRC_RIVA),
+].join("\n\n");
+const PREG_IBU_TEXT = [
+  "🤰 Đang mang thai thì **nên tránh ibuprofen**, trừ khi bác sĩ hoặc dược sĩ khuyên dùng cho trường hợp của bạn. Đừng tự uống; hỏi bác sĩ / dược sĩ (tiện nhất là nơi đang khám thai) để được chọn cách hạ sốt, giảm đau phù hợp.",
+  "Lomi không nêu thuốc thay thế hay liều — việc đó cần bác sĩ / dược sĩ quyết định theo tình trạng của bạn và thai kỳ.",
+  srcNote(SRC_IBU),
+].join("\n\n");
+/** Ngữ cảnh thuốc từ ĐÚNG MỘT tin trước của người dùng ("đang uống warfarin" → "uống thêm ibuprofen được không?").
+ *  Chỉ dùng khi câu hiện tại thật sự hỏi dùng chung với thuốc đó — chuyển chủ đề thì không áp vào. */
+export function prevDrugCtx(prevUser: string | undefined, text: string): Pick<DrugCtx, "afterDrug" | "drugId" | "name" | "anticoag"> {
+  if (!prevUser || !VN(/\b(đang|vẫn|hay|thường) (uống|dùng|xài)\b/).test(` ${normalizeVi(prevUser)} `)) return {};
+  const d = findDrug(prevUser);
+  if (d && findInteraction(d, text)) return { afterDrug: true, drugId: d.id, name: d.names[0] };
+  // (review F1) bản ghi cặp nằm ở mục của thuốc được hỏi thêm (paracetamol có dòng warfarin) → đưa tên thuốc đang dùng làm ngữ cảnh.
+  const cur = findDrug(text);
+  if (d && cur && cur.id !== d.id && findInteraction(cur, prevUser)) return { afterDrug: true, name: d.names[0] };
+  const pu = ` ${normalizeVi(prevUser)} `;
+  const tx = ` ${normalizeVi(text)} `;
+  if (!d && ANTICOAG.test(pu) && NSAID_ASK.test(tx) && anticoagNsaidSourced(pu, tx)) return { anticoag: true };
+  return {};
+}
 
 // "thuốc" cũng là thuốc lá / thuốc lào / thuốc nhuộm… — mấy thứ đó không phải thuốc chữa bệnh.
 const NOT_MED = VN(/\b(thuốc lá|thuốc lào|hút thuốc|thuốc nhuộm|thuốc tẩy|thuốc nổ|thuốc súng|thuốc diệt|thuốc trừ sâu|thuốc chuột)\b/);
@@ -187,6 +229,14 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       name: known.names[0],
       text: `Với hoàn cảnh bạn vừa kể thì Lomi **không tự kết luận được** là dùng ${known.names[0]} có ổn hay không — nguồn Lomi đối chiếu chỉ nói chung như ở trên, không nói cho từng người.\n\nBạn nói đúng điều này với dược sĩ / bác sĩ (đang dùng ${hit0.with.replace(/ \(.*\)$/, "")} thế nào, thường xuyên cỡ nào) để họ tư vấn cho đúng trường hợp của bạn nha.`,
     };
+  // 18/10: đang mang thai mà hỏi ibuprofen → điều nguồn nói riêng cho ibuprofen (tránh, trừ khi bác sĩ / dược sĩ khuyên).
+  // (hai nhánh 18/10 nhận cả "có nên dùng thêm ibuprofen?" — "có nên" / dấu hỏi cũng là câu hỏi; ASKS chung giữ nguyên)
+  const asks18 = ASKS.test(n) || /\?/.test(text) || VN(/\b(có nên|nên không)\b/).test(n);
+  if (PREG_ONLY.test(n) && VN(/\bibuprofen\b/).test(n) && asks18 && words <= 22)
+    return { kind: "should", med: true, preg: true, name: "ibuprofen", text: PREG_IBU_TEXT };
+  // 18/10: thuốc chống đông (gọi theo nhóm, hoặc rivaroxaban / Xarelto — chưa có mục riêng) + NSAID. warfarin / aspirin đã có mục riêng ở trên.
+  if (!known && (ANTICOAG.test(n) || ctx.anticoag) && NSAID_ASK.test(n) && (ctx.anticoag || anticoagNsaidSourced(n, n)) && asks18)
+    return { kind: "interact", name: "thuốc chống đông", text: ANTICOAG_NSAID_TEXT };
   // Mang thai / cho con bú + hỏi dùng thuốc → nói điều cần làm trước (hỏi bác sĩ / dược sĩ), không đọc bài chung về thuốc.
   if (PREG_BF.test(n) && (med || !!known) && ASKS.test(n) && words <= 16)
     return {

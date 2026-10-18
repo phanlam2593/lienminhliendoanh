@@ -56,7 +56,7 @@ import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
-import { drugAsk } from "@/lib/lomiDrug";
+import { drugAsk, prevDrugCtx } from "@/lib/lomiDrug";
 import { drugById, sourceList } from "@/lib/lomiDrugData";
 import { asksSource, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
@@ -1353,15 +1353,19 @@ export function AiChat({
         }
         const careOn = th0?.kind === "care" && (th0.idle ?? 0) < 2;
         const careWho = careOn && (th0!.idle ?? 0) === 0 ? th0!.who.text : undefined;
+        // 18/10 (audit F): "đang uống warfarin" → (Lomi đáp chuyện khác) → "uống thêm ibuprofen được không?": lấy thuốc từ ĐÚNG tin trước
+        //   của người dùng, chỉ khi câu này hỏi dùng chung với thuốc đó (lib/lomiDrug.prevDrugCtx).
+        const pdc = lastA?.drug ? {} : prevDrugCtx([...msgs].reverse().find((m) => m.role === "user")?.content, q);
         const dg = drugAsk(q, {
+          ...pdc,
           inHealth: !!hCtx || !!lastA?.sx?.length || careOn || lastA?.heart === "insomnia",
           label: hCtx?.label,
           who: careWho,
           pet: careOn && th0!.who.kind === "pet",
           afterOverdose: lastA?.drug?.kind === "overdose",
-          afterDrug: !!lastA?.drug,
-          name: lastA?.drug?.name,
-          drugId: lastA?.drug?.id,
+          afterDrug: !!lastA?.drug || !!pdc.afterDrug,
+          name: lastA?.drug?.name ?? pdc.name,
+          drugId: lastA?.drug?.id ?? pdc.drugId,
         });
         const drugMsg = (): Msg => ({
           role: "assistant",
