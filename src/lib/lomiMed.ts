@@ -500,6 +500,9 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       aspect,
     );
   }
+  // 19/10 (Kir): hỏi "X là gì / là bệnh gì" về một BỆNH → trả lời đủ phần (như tóm tắt). Thuật ngữ (thiền, CBT…) vẫn chỉ giải thích.
+  //   (giữ nhãn "define": người dùng HỎI "là gì" — nhánh chống lặp "vẫn là X nè" chỉ dành cho câu nhắc lại tên bệnh sau một bài tóm tắt.)
+  if (aspect === "define" && DRUG_KINDS.has(t.kind) && t.about.length) return out(overviewText(t, now), "define");
   if (aspect === "define") {
     const body = t.about.length ? bl(t.about) : "";
     return out([TERM_HINT(t) + (body ? `📖 ${N} là gì:\n${body}` : `📖 ${N}`), end([t.about])].join("\n\n").replace(/^\n+/, ""), "define");
@@ -523,9 +526,56 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       return ov;
     }
   }
-  // overview: tóm tắt ngắn + mời chọn phần muốn xem
-  const bits = [t.about[0] && `📖 ${t.about[0].text}`, t.signs.length ? `🩺 Dấu hiệu thường gặp:\n${bl(t.signs, 3)}` : "", t.doctor[0] ? `🧑‍⚕️ ${t.doctor[0].text}` : ""].filter(Boolean);
-  return out([`${TERM_HINT(t)}Về ${N}, Lomi có kiến thức đã kiểm chứng như sau:`, ...bits, end([t.about.slice(0, 1), t.signs.slice(0, 3), t.doctor.slice(0, 1)]), "Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇"].join("\n\n"), "overview");
+  // overview — 19/10 (Kir): hỏi về một bệnh thì trả lời ĐỦ PHẦN trong một lần: là gì · triệu chứng · kiêng · mẹo chăm sóc · thuốc ·
+  //   khi nào đi khám · khi nào cấp cứu. Mọi ý vẫn lấy nguyên từ thẻ có nguồn (mỗi phần vài ý), phần nào thẻ không có thì bỏ qua;
+  //   riêng phần thuốc chỉ nêu điều nguồn nói, không kê đơn, không nêu liều.
+  return out(overviewText(t, now), "overview");
+}
+
+const MED_FACT = VR(/(^|[^\p{L}])(thuốc(?! lá| lào)|kháng sinh|kháng virus|kháng vi rút|paracetamol|ibuprofen|aspirin|corticoid|corticosteroid|steroid|insulin|vắc xin|vaccine)(?![\p{L}])/iu);
+const AVOID_FACT = VR(/(^|[^\p{L}])(tránh|không nên|đừng|kiêng|hạn chế|bỏ hút|không hút|không uống rượu)(?![\p{L}])/iu);
+const PREVENT_FACT = VR(/phòng (bệnh|ngừa|tránh|lây)|muỗi|vắc xin|vaccine|lây (sang|cho)|cách ly/iu);
+const FOREIGN_LINE = VR(/\b988\b|ở Mỹ|ở Hoa Kỳ|NHS 111|\b999\b/iu);
+const DRUG_KINDS = new Set(["condition", "infection", "cancer", "mental", "women", "child"]);
+function overviewText(t: MedTopic, now: number): string {
+  const N = title(t);
+  const about = t.about.slice(0, 2);
+  const signs = t.signs.slice(0, 4);
+  const careAll = t.care;
+  const meds = careAll.filter((f) => MED_FACT.test(f.text)).slice(0, 3);
+  // Kiêng: phần ăn uống nên tránh của thẻ; thẻ không có phần ăn uống thì lấy các ý "tránh / không nên" trong phần chăm sóc.
+  const dietAvoid = t.diet ? t.diet.avoid.slice(0, 3) : [];
+  const foodsBad = t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").map((f) => f.name) : [];
+  //   (không lấy ý PHÒNG BỆNH cho cộng đồng — "hạn chế nơi muỗi đẻ" không phải điều người bệnh phải kiêng)
+  const careAvoid = dietAvoid.length ? [] : careAll.filter((f) => AVOID_FACT.test(f.text) && !MED_FACT.test(f.text) && !PREVENT_FACT.test(f.text)).slice(0, 3);
+  const avoid = [...dietAvoid, ...careAvoid];
+  const tips = careAll.filter((f) => !MED_FACT.test(f.text) && !careAvoid.includes(f)).slice(0, 4);
+  const doctor = t.doctor.slice(0, 2);
+  // (bỏ ý chỉ dùng được ở nước ngoài — đường dây 988 của Mỹ; ý nghĩ tự tử thì kèm đường dây Ngày Mai như lớp khẩn cấp của app)
+  const emergency = t.emergency.filter((f) => !FOREIGN_LINE.test(f.text)).slice(0, 2);
+  const crisisVN = t.emergency.some((f) => /tự tử|tự sát|tự làm hại/iu.test(f.text));
+  const isDisease = DRUG_KINDS.has(t.kind);
+  const parts = [
+    `${TERM_HINT(t)}Về ${N}, Lomi có kiến thức đã kiểm chứng như sau:`,
+    about.length ? `📖 ${N} là gì:\n${bl(about)}` : "",
+    signs.length ? `🩺 **Triệu chứng thường gặp:**\n${bl(signs)}` : "",
+    avoid.length || foodsBad.length
+      ? `🚫 **${isDisease ? "Kiêng / nên tránh" : "Nên tránh"}:**\n${[bl(avoid), foodsBad.length ? `• Món nên tránh / hạn chế: ${foodsBad.slice(0, 8).join(", ")}.` : ""].filter(Boolean).join("\n")}`
+      : "",
+    tips.length ? `🌿 **Mẹo chăm sóc:**\n${bl(tips)}` : "",
+    meds.length
+      ? `💊 **Về thuốc** (theo nguồn — Lomi không kê đơn, không nêu liều; dùng thuốc nào, bao nhiêu do bác sĩ / dược sĩ quyết định):\n${bl(meds)}`
+      : isDisease
+        ? "💊 **Về thuốc:** nguồn Lomi đã đối chiếu không nêu thuốc cụ thể cho bệnh này — dùng thuốc gì cần bác sĩ khám rồi quyết định."
+        : "",
+    doctor.length ? `🧑‍⚕️ **Khi nào nên đi khám:**\n${bl(doctor)}` : "",
+    emergency.length
+      ? `🚨 **Cần xử trí khẩn khi:**\n${bl(emergency)}\n(Ở Việt Nam gọi **115** hoặc tới cơ sở y tế gần nhất.${crisisVN ? " Đang có ý nghĩ làm hại bản thân thì có thể gọi đường dây Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật)." : ""})`
+      : "",
+    sourceLine(t, srcs(about, signs, avoid, tips, meds, doctor, emergency, t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").slice(0, 8).map((f) => ({ text: f.name, src: f.src })) : []), now),
+    "Muốn xem kỹ phần nào thì chọn bên dưới nha 👇",
+  ];
+  return parts.filter(Boolean).join("\n\n");
 }
 
 // ── 18/10: LƯU Ý THEO NHÓM CẦN THẬN TRỌNG (mang thai, cho con bú, trẻ nhỏ) ──
