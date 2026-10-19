@@ -371,3 +371,50 @@ describe("19/10 (đợt 4) — tách KHUYÊN vs KIÊNG, câu kể thủ thuật,
     expect(m.content).not.toMatch(/những điều cần biết về \*\*tiểu đường/);
   }, T);
 });
+
+describe("20/10 — mẹo dân gian · thuốc nam · thuốc bắc có nguồn (lib/lomiFolk)", () => {
+  it("58. 'lá tía tô có tác dụng gì' → dân gian dùng gì + nghiên cứu nói gì, không nói 'chữa khỏi'", async () => {
+    const m = await last(["lá tía tô có tác dụng gì"]);
+    expect(m.content).toMatch(/Tía tô/);
+    expect(m.content).toMatch(/Dân gian dùng để/);
+    expect(m.content).toMatch(/Nghiên cứu nói gì/);
+    expect(m.content).not.toMatch(/chữa khỏi/);
+  }, T);
+  it("59. 'a cho con ăn cháo cóc' (câu kể) → cảnh báo nguy hiểm: nấu chín không mất độc", async () => {
+    const m = await last(["a cho con ăn cháo cóc"]);
+    expect(m.content).toMatch(/NGUY HIỂM/);
+    expect(m.content).toMatch(/Nấu chín KHÔNG làm mất độc/);
+  }, T);
+  it("60. 'kỷ tử có tác dụng gì' → nói thật chưa có nguồn đáng tin, kèm lời dặn an toàn", async () => {
+    const m = await last(["kỷ tử có tác dụng gì"]);
+    expect(m.content).toMatch(/chưa tìm được nguồn y khoa đáng tin/);
+    expect(m.content).toMatch(/Tự nhiên/);
+  }, T);
+  it("61. 'mẹo dân gian trị ho' → danh sách mẹo cho ho (chanh mật ong…), có mức bằng chứng", async () => {
+    const m = await last(["mẹo dân gian trị ho"]);
+    expect(m.content).toMatch(/Mẹo dân gian cho ho/);
+    expect(m.content).toMatch(/Chanh mật ong/);
+  }, T);
+  it("62. 'bé 6 tháng ăn mật ong được không' → lưu ý trẻ dưới 1 tuổi đứng đầu", async () => {
+    const m = await last(["bé 6 tháng ăn mật ong được không"]);
+    expect(m.content.indexOf("dưới 1 tuổi")).toBeLessThan(m.content.indexOf("Dân gian dùng để"));
+  }, T);
+  it("63. 'bà bầu ăn ngải cứu được không' → KHÔNG dùng khi mang thai (nguồn NCCIH)", async () => {
+    const m = await last(["bà bầu ăn ngải cứu được không"]);
+    expect(m.content).toMatch(/KHÔNG dùng ngải cứu khi đang mang thai/);
+  }, T);
+  it("64. 'hà thủ ô uống được không' → cảnh báo tổn thương gan", async () => {
+    const m = await last(["hà thủ ô uống được không"]);
+    expect(m.content).toMatch(/tổn thương gan/);
+  }, T);
+  it("65. 'đau bụng kinh nên làm gì' → mẹo chăm sóc kèm mẹo dân gian có nguồn (gừng)", async () => {
+    const m = await last(["đau bụng kinh nên làm gì"]);
+    expect(m.content).toMatch(/Mẹo dân gian/);
+    expect(m.content).toMatch(/Gừng/);
+  }, T);
+  it("66. 'gout ăn gừng được không' → vẫn là câu hỏi kiêng cữ của gout, không đổ bài gừng", async () => {
+    const m = await last(["gout ăn gừng được không"]);
+    expect(m.med?.id).toBe("gout");
+    expect(m.content).not.toMatch(/mẹo dân gian & nguồn y khoa/);
+  }, T);
+});

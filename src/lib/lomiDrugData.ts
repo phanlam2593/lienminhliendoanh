@@ -72,6 +72,8 @@ export const TRUSTED = [
   "nhs.uk", "medlineplus.gov", "who.int", "fda.gov", "moh.gov.vn", "dav.gov.vn", "cdc.gov",
   // 09/10: mở rộng cho kho kiến thức y khoa (lib/lomiMedData) — cơ quan y tế quốc gia Hoa Kỳ / Anh, hiệp hội tâm lý, bệnh viện học thuật phi lợi nhuận.
   "nih.gov", "cancer.gov", "samhsa.gov", "nice.org.uk", "apa.org", "mayoclinic.org",
+  // 20/10: cơ quan trực thuộc Bộ Y tế — Viện Kiểm nghiệm ATVSTP Quốc gia, Viện Dinh dưỡng Quốc gia (lib/lomiFolk: cảnh báo ngộ độc cóc).
+  "nifc.gov.vn", "viendinhduong.vn",
 ];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;

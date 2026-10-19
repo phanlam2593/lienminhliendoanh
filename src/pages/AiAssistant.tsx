@@ -53,6 +53,7 @@ import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from 
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
+import { folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -1329,6 +1330,26 @@ export function AiChat({
           return renderUmbrella(mt, subs, mr.aspect, food, shown);
         };
         const nq = ` ${normalizeVi(q)} `;
+        // 20/10 — MẸO DÂN GIAN · THUỐC NAM · THUỐC BẮC (lib/lomiFolk): "lá tía tô có tác dụng gì", "cháo cóc có tốt không",
+        //   "mẹo dân gian trị ho", "hà thủ ô uống được không" → dân gian dùng gì · nghiên cứu nói gì · ai không nên dùng (có nguồn).
+        //   Vị chưa có nguồn đáng tin (kỷ tử, táo tàu…) → nói thật là chưa đối chiếu được. Câu có dấu hiệu cấp cứu thì để mạch triệu chứng.
+        if (!bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) {
+          const fkId = findMedId(q);
+          const fkMt = fkId ? await loadMedTopic(fkId) : null;
+          const fkPrev = lastA?.med?.id ? await loadMedTopic(lastA.med.id) : null;
+          const fk = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
+          if (fk) {
+            topicHit("health");
+            return localReply(q, {
+              role: "assistant",
+              content: fk.text,
+              local: true,
+              health: hCtx ?? {},
+              ...(fk.topic ? { med: { id: fk.topic, aspect: "folk" } } : {}),
+              quick: fk.topic ? ["Nên làm gì cho đỡ?", "Khi nào cần đi khám?"] : undefined,
+            });
+          }
+        }
         // 11/10 — HỎI VỀ THUỐC (lib/lomiDrug): là thuốc gì · tác dụng phụ · liều · uống thuốc gì · dùng chung · ngưng thuốc · uống nhầm.
         //   Lomi không có dữ liệu riêng cho từng thuốc → nói thật giới hạn theo đúng dáng câu hỏi, không đáp "chưa hiểu ý" / "bấm Dạy Lomi".
         //   Câu hỏi DÙNG CHUNG / TƯƠNG TÁC được xét trước cả thuốc Lomi có dữ liệu (paracetamol), vì Lomi không có dữ liệu tương tác nào.
@@ -1474,6 +1495,13 @@ export function AiChat({
             // 18/10: hỏi cho người mang thai / cho con bú / trẻ nhỏ → chèn lưu ý của đúng nhóm đó (lib/lomiMed.groupNote).
             // 18/10: nhắc dấu hiệu nguy hiểm có trong thẻ (phân có máu, mất nước, khó thở) → ý cần khám / cấp cứu đứng đầu (lib/lomiMed.withRedFlags).
             else mr.text = withRedFlags(mt, q, withGroupNote(mt, q, mr.text));
+            // 20/10: hỏi cách chăm sóc → kèm mẹo dân gian đã đối chiếu nguồn cho bệnh đó (lib/lomiFolk), trước dòng nguồn của thẻ.
+            const folkBlk = mr.aspect === "care" ? renderFolkForTopic(mt.id, medName(mt), { compact: true }) : null;
+            if (folkBlk) {
+              const at = mr.text.lastIndexOf("\n\n📚");
+              mr.text = at >= 0 ? `${mr.text.slice(0, at)}\n\n${folkBlk}${mr.text.slice(at)}` : `${mr.text}\n\n${folkBlk}`;
+            }
+            if (!folkBlk && folkFor(mt.id).length && mr.quick && !mr.quick.some((x) => /dân gian/i.test(x))) mr.quick = [...mr.quick.slice(0, 4), `Mẹo dân gian cho ${medName(mt)}?`];
             topicHit("health");
             return localReply(q, {
               role: "assistant",
