@@ -106,7 +106,7 @@ describe("ho — tên hiển thị và cảnh báo", () => {
     expect(m.sx).toEqual(expect.arrayContaining(["cough", "breath"]));
     expect(first(m.content)).toMatch(/\*\*Ho kèm khó thở\*\* thì cần \*\*đi khám ngay trong hôm nay\*\*/);
     expect(first(m.content)).toMatch(/115/);
-    expect(m.content).not.toMatch(/Lomi hỏi thêm 2 điều/);
+    expect(m.content).not.toMatch(/Lomi hỏi thêm (2 điều|chút)/);
   }, T);
 
   it("“họ và tên” / “cho kèm” không bị hiểu thành ho", async () => {

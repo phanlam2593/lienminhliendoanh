@@ -48,7 +48,7 @@ const SYMPTOMS: Sym[] = [
   { id: "heavybleed", label: "chảy máu nhiều / không cầm được", re: VN(/\b(chảy máu (nhiều|không cầm|không ngừng|không dứt|xối xả|ồ ạt)|máu chảy (nhiều|không ngừng|không cầm|xối xả|ồ ạt)|mất (nhiều|rất nhiều) máu|máu phun)\b/), red: "chảy máu nhiều, không cầm được" },
   // Đầu, mắt, tai, mũi, họng
   { id: "headache", label: "đau đầu", re: VN(/\b(đau đầu|nhức đầu|đau nửa đầu|đau vùng trán|đau vùng đỉnh|đau sau gáy|đau búa bổ)\b/) },
-  { id: "suddenhead", label: "đau đầu dữ dội đột ngột", re: VN(/\b(đau đầu (dữ dội|đột ngột|như búa bổ|nhất từ trước tới giờ))\b/), red: "đau đầu dữ dội đột ngột" },
+  { id: "suddenhead", label: "đau đầu dữ dội / đột ngột", re: VN(/\b(đau đầu (dữ dội|đột ngột|như búa bổ|nhất từ trước tới giờ))\b/), red: "đau đầu dữ dội / đột ngột" },
   { id: "eyepain", label: "đau hốc mắt", re: VN(/\b(đau hốc mắt|đau sau mắt|nhức hốc mắt)\b/) },
   { id: "light", label: "sợ ánh sáng / tiếng ồn", re: VN(/\b(sợ ánh sáng|chói mắt|sợ tiếng ồn|khó chịu với ánh sáng)\b/) },
   { id: "redeye", label: "đỏ mắt", re: VN(/\b(đỏ mắt|mắt đỏ|mắt bị đỏ|ghèn mắt|nhiều ghèn)\b/) },
@@ -64,7 +64,7 @@ const SYMPTOMS: Sym[] = [
   { id: "spray", label: "dùng thuốc xịt thông mũi lâu", re: VN(/\b(otilin|otrivin|naphazolin|xylometazolin|thuốc xịt mũi|xịt mũi (hoài|hàng ngày|mỗi ngày|lâu|thường xuyên)|không xịt không thở được)\b/) },
   { id: "sorethroat", label: "đau họng", re: VN(/\b(đau họng(?! lưng| bên| phải| trái| một bên)|rát họng|viêm họng|nuốt đau|đau khi nuốt|ngứa họng|vướng họng)\b/) },
   { id: "hoarse", label: "khàn tiếng", re: VN(/\b(khàn tiếng|mất tiếng|khàn giọng)\b/) },
-  { id: "cough", label: "ho", re: VN(/\b((bị|đang|còn|hay|vẫn|lại|thêm|này|mấy nay|mất) ho|(a|anh|e|em|c|chị|mình|tôi|tui|bé) ho(?! (a|anh|e|em|c|chị|mình|tôi|tui|hàng|nội|ngoại|nhà|của|tên|ho|họ)\b)(?= |$)|ho (khan|có đờm|nhiều|hoài|dai|kéo dài|về đêm|liên tục|sặc sụa|không dứt|suốt|quá(?! đáng)|ghê|lắm|mãi|hoài)|ho (cả |hơn |gần |được )?(\d+|một|hai|ba|mấy|vài) (ngày|hôm|đêm|tuần|tháng)|ho từ (hôm|tuần|tháng|tối|sáng|đêm)|ho (thì (nên|uống|kiêng|làm)|nên (uống|làm|ăn|kiêng)|có sao không|có nguy hiểm))\b/) },
+  { id: "cough", label: "ho", re: VN(/\b((bị|đang|còn|hay|vẫn|lại|thêm|này|mấy nay|mất|chỉ|chỉ còn) ho|(a|anh|e|em|c|chị|mình|tôi|tui|bé) ho(?! (a|anh|e|em|c|chị|mình|tôi|tui|hàng|nội|ngoại|nhà|của|tên|ho|họ)\b)(?= |$)|ho (khan|có đờm|nhiều|hoài|dai|kéo dài|về đêm|liên tục|sặc sụa|không dứt|suốt|quá(?! đáng)|ghê|lắm|mãi|hoài)|ho (cả |hơn |gần |được )?(\d+|một|hai|ba|mấy|vài) (ngày|hôm|đêm|tuần|tháng)|ho từ (hôm|tuần|tháng|tối|sáng|đêm)|ho (thì (nên|uống|kiêng|làm)|nên (uống|làm|ăn|kiêng)|có sao không|có nguy hiểm))\b/) },
   // 18/10: "Ho kèm khó thở thì sao?" — cụm "ho kèm" phải đứng riêng (có khoảng trắng / đầu câu ở hai đầu) — viết lỏng hơn từng bắt nhầm "hoc ke toan".
   { id: "cough", label: "ho", re: VN(/(?:^| )ho (?:kèm|kèm theo|có kèm) /) },
   { id: "phlegm", label: "ho có đờm", re: VN(/\b(ho có đờm|khạc đờm|đờm vàng|đờm xanh|nhiều đờm|có đờm)\b/) },
@@ -782,6 +782,62 @@ const NOTE_MIND = "(Đây là gợi ý để bạn hiểu mình hơn, không ph�
 function found(list: Sym[], n: string): Sym[] {
   return list.filter((s) => s.re.test(` ${n} `));
 }
+// 19/10 (audit sức khoẻ): cụm CỤ THỂ đã bao hàm cụm CHUNG — "đau bụng kinh" là một kiểu đau bụng, không phải "đau bụng" + "đau bụng kinh".
+//   Trước đây Lomi đáp "Bạn đang bị đau bụng và đau bụng kinh". Cụm chung chỉ được tính là triệu chứng RIÊNG khi người dùng
+//   nói nó ở chỗ khác trong câu ("đau bụng và buồn nôn", "đau bụng, rồi đau bụng kinh nữa").
+const IMPLIES: [string, string][] = [
+  ["periodpain", "bellyache"],
+  ["rightlow", "bellyache"],
+  ["highfever", "fever"],
+  ["suddenhead", "headache"],
+  ["severebreath", "breath"],
+  ["bloodcough", "cough"],
+];
+/** Che mọi chỗ khớp của một triệu chứng trong chuỗi (để xét cụm chung có còn đứng riêng ở chỗ khác không). */
+function maskSym(s: string, re: RegExp): string {
+  for (let i = 0; i < 6; i++) {
+    const m = re.exec(s);
+    if (!m || m.index === undefined || !m[0].length) break;
+    s = `${s.slice(0, m.index)} ¦ ${s.slice(m.index + m[0].length)}`;
+  }
+  return s;
+}
+// 19/10: người dùng PHỦ NHẬN / ĐÍNH CHÍNH một triệu chứng ("không phải đau bụng", "không bị sốt", "hết ho rồi") → không giữ triệu chứng đó.
+const NEG_LEAD = VN(/(?:^|\s)(không phải|chứ không phải|ko phải|k phải|hông phải|không bị|ko bị|k bị|chưa bị|không có|ko có|hết bị)\s*(là\s*)?$/);
+// ("hết" đứng một mình KHÔNG phải phủ nhận: "làm sao cho hết nghẹt mũi" là đang bị và muốn hết.)
+/** Triệu chứng chỉ xuất hiện sau lời phủ nhận (mọi chỗ khớp đều bị phủ nhận). */
+function negatedSym(s: string, re: RegExp): boolean {
+  let any = false;
+  for (let i = 0; i < 6; i++) {
+    const m = re.exec(s);
+    if (!m || m.index === undefined || !m[0].length) break;
+    // (cụm khớp có thể bắt đầu bằng chữ đệm "bị" / "có" — "không | bị sốt" — nên xét cả chữ đầu của cụm)
+    const before = s.slice(Math.max(0, m.index - 30), m.index);
+    const w0 = m[0].trim().split(" ")[0];
+    if (!NEG_LEAD.test(before) && !(VN(/^(bị|có)$/).test(w0) && NEG_LEAD.test(`${before} ${w0}`))) return false;
+    any = true;
+    s = `${s.slice(0, m.index)} ¦ ${s.slice(m.index + m[0].length)}`;
+  }
+  return any;
+}
+/** Triệu chứng trong câu, đã bỏ cụm chung bị cụm cụ thể bao hàm và triệu chứng bị phủ nhận. */
+function symptomsIn(n: string): { ids: string[]; implied: Set<string>; negated: Set<string> } {
+  const pad = ` ${n} `;
+  let ids = found(SYMPTOMS, n).map((s) => s.id);
+  ids = Array.from(new Set(ids));
+  const negated = new Set(ids.filter((id) => SYMPTOMS.filter((s) => s.id === id).every((s) => negatedSym(pad, s.re))));
+  ids = ids.filter((id) => !negated.has(id));
+  const implied = new Set<string>();
+  for (const [spec, gen] of IMPLIES) {
+    if (!ids.includes(spec) || !ids.includes(gen)) continue;
+    const masked = SYMPTOMS.filter((s) => s.id === spec).reduce((acc, s) => maskSym(acc, s.re), pad);
+    if (!SYMPTOMS.filter((s) => s.id === gen).some((s) => s.re.test(masked))) implied.add(gen);
+  }
+  // "đau bụng kinh" không phải thêm một cơn đau bụng khác → bỏ hẳn (bảng bệnh đau bụng kinh không chấm điểm "đau bụng").
+  //   Các cặp còn lại vẫn giữ id để chấm điểm như trước, chỉ không nhắc lặp trong lời đáp.
+  if (implied.has("bellyache") && ids.includes("periodpain") && !ids.includes("rightlow")) ids = ids.filter((id) => id !== "bellyache");
+  return { ids, implied, negated };
+}
 const byIdSym = (id: string) => SYMPTOMS.find((s) => s.id === id)!;
 const byIdFeel = (id: string) => FEELS.find((s) => s.id === id)!;
 const joinVi = (a: string[]) => (a.length <= 1 ? a.join("") : `${a.slice(0, -1).join(", ")} và ${a[a.length - 1]}`);
@@ -816,6 +872,8 @@ function infantUnder3m(n: string): boolean {
   return a.unit === "week" ? a.k < 13 : a.k < 3;
 }
 const BELLY = ["bellyache", "epigastric", "rightlow"];
+// 19/10: triệu chứng nhẹ ở mũi — không kèm lời nhắc 115 chung chung, không hỏi "đau ở đâu".
+const MILD = new Set(["stuffy", "runny", "sneeze"]);
 const SEVERE_RE = VN(/\b(búa bổ|dữ dội|đau lắm|đau quá trời|không chịu nổi|đau muốn xỉu|đau chết đi được)\b/);
 const cap1 = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const SELF_RE = VN(/\b(mình bị|tôi bị|em bị|anh bị|tui bị|đang bị|bị hoài|bị suốt|mình đang|tôi đang|nay bị|này bị|hôm nay bị|từ sáng|từ qua)\b/);
@@ -947,7 +1005,22 @@ export function condByName(text: string): { id: string; label: string } | undefi
  */
 export function analyzeBody(text: string, prev: string[] = [], inHealth = false, force = false): BodyResult | null {
   const n = normStrict(text, HEALTH);
-  const now = found(SYMPTOMS, n).map((s) => s.id);
+  const si = symptomsIn(n);
+  const now = si.ids;
+  const indep = [...si.ids]; // triệu chứng người dùng tự nói trong câu này (trước khi suy thêm "sốt cao" ⇒ "sốt"…)
+  // 19/10: đính chính ("không phải đau bụng, chỉ đau bụng kinh", "k, đau bụng kinh thôi") → bỏ triệu chứng bị phủ nhận khỏi các tin trước;
+  //   câu "chỉ X / X thôi" kèm lời phủ nhận thì X thay hẳn danh sách triệu chứng đã kể (không cộng dồn cái người dùng vừa gạt đi).
+  const raw = ` ${text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim()} `;
+  const fix = prev.length > 0 && now.length > 0 && (si.negated.size > 0 || (VR(/ (chỉ|thôi) /u).test(raw) && VR(/^ (không|ko|k|hông|hong|đâu|ý là|à không|nhầm) /u).test(raw)));
+  // (triệu chứng đã kể ở tin trước mà giờ nói "không sốt nữa", "hết ho rồi" → gạt khỏi danh sách đang có)
+  const gone = prev.filter((id) => {
+    const lab = SYMPTOMS.find((x) => x.id === id)?.label;
+    // (vẫn đang kể chính triệu chứng đó — "k, đau bụng kinh thôi" — thì "k" là lời đính chính, không phải "hết bị")
+    if (!lab || lab.includes("/") || now.includes(id)) return false;
+    return VN(new RegExp(`(?:^|\\s)(?:không|ko|k|hết|không còn|ko còn|hết bị|không bị|đã hết|đỡ) (?:bị |còn )?${lab}(?: nữa| rồi)?(?=\\s|$)`)).test(` ${n} `);
+  });
+  if (gone.length) prev = prev.filter((id) => !gone.includes(id));
+  if (si.negated.size || fix) prev = prev.filter((id) => !si.negated.has(id) && (!fix || id === "kid" || now.includes(id)));
   if (!now.length && !inHealth && !prev.length && !force) {
     const nn = ` ${normalizeVi(text)} `;
     if (KNOW_RE.test(nn) && !SELF_RE.test(nn)) {
@@ -1035,6 +1108,17 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   const bellyNeg = VN(/\b(không|ko|chưa|hết|không còn|không bị|đỡ) (còn )?(bị )?(đau bụng )?(dữ dội|đột ngột)\b/).test(` ${n} `);
   if (now.some((id) => BELLY.includes(id)) && !now.includes("periodpain") && !bellyNeg && (SEVERE_RE.test(` ${n} `) || VN(/\bđột ngột\b/).test(` ${n} `)))
     reds.push({ red: "đau bụng đến đột ngột hoặc dữ dội" });
+  // 19/10 (audit sức khoẻ): đau bụng / đau bụng kinh đến ĐỘT NGỘT, DỮ DỘI mà kèm choáng, muốn ngất / ngất → gọi cấp cứu.
+  //   Nguồn: thẻ có nguồn medkb/thai-ngoai-tu-cung (NHS) — "đau bụng đột ngột, dữ dội kèm chóng mặt hoặc ngất … gọi cấp cứu ngay".
+  //   Người hỏi tưởng là đau bụng kinh vẫn phải được nhắc (trước đây chỉ có câu "nên đi khám sớm").
+  if (
+    (now.some((id) => BELLY.includes(id)) || now.includes("periodpain")) &&
+    !bellyNeg &&
+    (SEVERE_RE.test(` ${n} `) || VN(/\bđột ngột\b/).test(` ${n} `)) &&
+    (all.includes("faint") || all.includes("dizzy") || VN(/\b(choáng|muốn ngất|muốn xỉu|sắp ngất|gần ngất|ngất|xỉu|xây xẩm)\b/).test(` ${n} `)) &&
+    !reds.some((r) => /đau bụng/.test(r.red ?? ""))
+  )
+    reds.push({ red: "đau bụng đột ngột, dữ dội kèm choáng / muốn ngất" });
   if (all.includes("rash") && (all.includes("breath") || all.includes("severebreath"))) reds.push({ red: "nổi mẩn / mề đay kèm khó thở (nguy cơ sốc phản vệ)" });
   // 18/10: tầng KHÁM GẤP TRONG NGÀY (chưa tới mức gọi 115 theo nguồn, nhưng không được tự chữa ở nhà).
   //   Khớp sưng, nóng, đỏ kèm sốt → NHS "Septic arthritis" (rà soát 03/09/2026): hẹn khám gấp ngay, không chờ.
@@ -1042,7 +1126,9 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   if ((all.includes("fever") || all.includes("highfever")) && all.includes("jointswell")) urgent.push({ what: "khớp sưng, nóng, đỏ kèm sốt", why: "có thể là khớp bị nhiễm trùng, cần bác sĩ kiểm tra sớm. Nếu thấy người lả đi, rét run nhiều, thở nhanh hay lơ mơ thì gọi **115** ngay." });
   //   Ho kèm khó thở → NHS "Cough" (thẻ medkb/ho, rà soát 08/12/2023): cần khám khẩn. Khó thở nặng / tím môi đã là dấu hiệu 115 (severebreath).
   if (all.includes("cough") && all.includes("breath")) urgent.push({ what: "ho kèm khó thở", why: "đây là dấu hiệu nguồn y khoa xếp vào nhóm cần khám khẩn. Khó thở nặng lên hoặc tím môi thì gọi **115** ngay." });
-  const labels = syms.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
+  // 19/10: không nhắc lặp cụm chung khi đã có cụm cụ thể bao hàm nó ("sốt cao" thay cho "sốt và sốt cao").
+  const shown = syms.filter((id) => !IMPLIES.some(([spec, gen]) => gen === id && syms.includes(spec) && !(indep.includes(id) && !si.implied.has(id))));
+  const labels = shown.filter((id) => !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const ctx = syms.filter((id) => ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"].includes(id)).map((id) => byIdSym(id).label);
   const out: string[] = [];
   if (reds.length)
@@ -1073,9 +1159,14 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     const fev = all.includes("fever");
     const q1 = fev ? `Sốt khoảng bao nhiêu độ${since ? "" : ", bị bao lâu rồi"}?` : since ? "Mức độ ra sao — nhẹ, vừa hay dữ dội?" : "Bị bao lâu rồi, đau/khó chịu ở mức nào?";
     const q2 = fev ? "Có kèm ho, nôn, đau đầu, hay triệu chứng nào khác không?" : "Có kèm sốt, nôn, hay triệu chứng nào khác không?";
-    out.push(`Bạn đang bị **${joinVi(labels)}** hả. Để gợi ý cho sát, Lomi hỏi thêm 2 điều nha:\n• ${q1}\n• ${q2}`);
+    // 19/10: bỏ mẫu "… hả. Lomi hỏi thêm 2 điều nha" (nghe như điền phiếu) — ghi nhận ngắn rồi hỏi đúng điều còn thiếu;
+    //   đã nói "không sốt" thì không hỏi lại có sốt không.
+    const noFever = VN(/\b(không|ko|k|chưa|hết) (bị |có )?sốt\b/).test(` ${n} `);
+    const q2b = fev ? q2 : noFever ? "Có kèm triệu chứng nào khác không (đau họng, ho, đau đầu…)?" : q2;
+    out.push(`Bạn đang bị **${joinVi(labels)}**. Lomi hỏi thêm chút để gợi ý cho sát hơn:\n• ${q1}\n• ${q2b}`);
     if (momNote) out.push(momNote);
-    out.push("Nếu thấy đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay, đừng chờ.");
+    // (nhắc 115 chung chung chỉ hợp với đau / sốt / khó thở — "nghẹt mũi", "sổ mũi" mà cũng dặn "yếu tay chân thì gọi 115" thì lạc đề)
+    if (!all.every((id) => MILD.has(id))) out.push("Nếu thấy đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay, đừng chờ.");
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };
   }
@@ -1089,20 +1180,34 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: [] };
   }
-  if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
-  out.push(...notes);
+  // 19/10: người dùng vừa đính chính → nhận lại ngắn gọn theo đúng điều họ sửa, không tranh luận / không giữ điều đã gạt đi.
+  if (fix || (si.negated.size && prev.length === 0 && labels.length)) out.push(`À, Lomi hiểu rồi — là **${joinVi(labels)}** thôi.`);
+  else if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);
+  // (đã có cảnh báo cấp cứu ở đầu thì bỏ câu "nên đi khám sớm" — hai mức khác nhau làm người đọc lưỡng lự)
+  out.push(...(reds.length ? notes.filter((x) => !x.includes("nên đi khám sớm")) : notes));
   if (momNote) out.push(momNote);
   if (kid && !prev.includes("kid")) out.push(KID_NOTE);
   if (!scored.length) {
     // 19/10 (review F1): đã có cảnh báo cấp cứu / khám gấp ở đầu thì không hỏi han thêm — lời hỏi "kể thêm giúp Lomi" làm loãng chỉ dẫn đi cấp cứu.
-    if (!reds.length && !urgent.length)
-      out.push(
-        "Chừng này triệu chứng thì chưa đủ để Lomi đoán sát được 🤔 Bạn kể thêm giúp Lomi nha: bị bao lâu rồi, có sốt không, đau ở đâu, kèm dấu hiệu gì khác?",
-      );
+    if (!reds.length && !urgent.length) {
+      // 19/10: chỉ hỏi điều người dùng CHƯA nói — "nghẹt mũi 3 ngày rồi" thì không hỏi lại "bị bao lâu rồi", "không sốt" thì không hỏi "có sốt không".
+      const askDur = !durOf(n) && !prev.length;
+      const askFever = !all.includes("fever") && !VN(/\b(không|ko|k|chưa|hết) (bị |có )?sốt\b/).test(` ${n} `);
+      const askWhere = all.every((id) => !MILD.has(id));
+      const asks = [askDur ? "bị bao lâu rồi" : "", askFever ? "có sốt không" : "", askWhere ? "đau / khó chịu ở đâu" : "", "có kèm dấu hiệu gì khác"].filter(Boolean);
+      out.push(`Chừng này triệu chứng thì chưa đủ để Lomi đoán sát được 🤔 Bạn kể thêm giúp Lomi: ${asks.join(", ")}?`);
+    }
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };
   }
   const top = scored.slice(0, scored[0].score >= 6 && (scored[1]?.score ?? 0) < scored[0].score / 2 ? 1 : 3);
+  if (compact && fix) {
+    // 19/10: đính chính lại đúng triệu chứng đã nói → không đọc lại cả bảng mẹo, chỉ nhận lại + khi nào cần đi khám.
+    out.push(`🩺 ${top[0].c.doctor}`);
+    out.push("Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha.");
+    out.push(NOTE_BODY);
+    return { text: out.join("\n\n"), sx: all };
+  }
   if (compact) {
     const m = top[0].c;
     out.push(`Với tình trạng **${m.name.toLowerCase()}** như vậy thì:\n💡 ${m.do.slice(0, 3).join("; ")}.\n🚫 Tránh: ${m.avoid.slice(0, 2).join("; ").toLowerCase()}.\n🩺 ${m.doctor}`);
@@ -1120,6 +1225,15 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   if (urgent.length) {
     // 18/10: có dấu hiệu khám gấp → mẹo ở nhà chỉ là việc làm TRONG LÚC CHỜ đi khám, không kèm danh sách kiêng cữ lâu dài.
     out.push(`💡 **Trong lúc chuẩn bị đi khám:**\n${main.do.filter((d) => !/^Đi khám/i.test(d)).map((d) => `• ${d}`).join("\n")}`);
+  } else if (reds.length) {
+    // 19/10 (audit sức khoẻ): đã báo đi cấp cứu → không kèm mẹo chăm sóc ở nhà (nghỉ ngơi, chườm ấm…) dễ khiến người đọc chần chừ;
+    //   chỉ giữ việc nên làm có nói tới đi khám / cấp cứu và những điều phải TRÁNH trong lúc chờ.
+    const go = main.do.filter((d) => /khám|cấp cứu|115|viện/iu.test(d));
+    //   (kiêng cữ lâu dài kiểu "đồ lạnh, cà phê" và lời khuyên khám thường lệ lúc này là nhiễu — chỉ giữ điều cần tránh khi chờ cấp cứu)
+    const wait = main.avoid.filter((d) => /tự |chờ|chườm|xoa bóp|ở nhà|lái xe|ăn uống gì/iu.test(d));
+    if (go.length) out.push(`💡 **Nên làm:**\n${go.map((d) => `• ${d}`).join("\n")}`);
+    if (wait.length) out.push(`🚫 **Trong lúc chờ, tránh:**\n${wait.map((d) => `• ${d}`).join("\n")}`);
+    if (/cấp cứu|115|ngay/iu.test(main.doctor)) out.push(`🩺 **Đi khám:** ${main.doctor}`);
   } else {
     out.push(`💡 **Nên làm:**\n${main.do.map((d) => `• ${d}`).join("\n")}`);
     out.push(`🚫 **Nên kiêng / tránh:**\n${main.avoid.map((d) => `• ${d}`).join("\n")}`);
@@ -1134,12 +1248,26 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
         .filter((id) => !all.includes(id) && !["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "spray"].includes(id)),
     ),
   ).slice(0, 3);
-  if (missing.length && top.length > 1)
+  // 19/10: đã báo phải đi cấp cứu thì không hỏi han thêm (câu hỏi kéo người đọc ở lại trò chuyện thay vì đi ngay).
+  if (reds.length) {
+    /* không hỏi thêm */
+  } else if (missing.length && top.length > 1)
     out.push(`Để Lomi phân biệt rõ hơn: ${kid ? "bé" : "bạn"} có thấy **${joinVi(missing.map((id) => byIdSym(id).label))}** không?${durOf(n) ? "" : " Bị bao lâu rồi?"}`);
   else out.push(durOf(n) || prev.length ? "Có thêm triệu chứng gì khác thì kể Lomi nghe tiếp nha." : `${kid ? "Bé" : "Bạn"} bị như vậy bao lâu rồi? Kể thêm nếu có triệu chứng khác nha.`);
   out.push(NOTE_BODY);
   return { text: out.join("\n\n"), sx: all };
 }
+
+/**
+ * 19/10: câu có dấu hiệu phải đi CẤP CỨU / KHÁM GẤP theo đúng luật của analyzeBody (triệu chứng đỏ + luật kết hợp)?
+ * Dùng để lớp trả lời mẹo chăm sóc (kho có nguồn) nhường chỗ cho cảnh báo — "nghẹt mũi kèm khó thở nặng thì làm sao" không được đáp bằng mẹo ở nhà.
+ */
+export function bodyAlarm(text: string, prev: string[] = []): boolean {
+  const r = analyzeBody(text, prev, false, true);
+  return !!r && /^(⚠️|🚨)/u.test(r.text);
+}
+/** Tên tiếng Việt của một triệu chứng (để tra thẻ kiến thức theo đúng tên). */
+export const symptomLabel = (id: string): string | undefined => SYMPTOMS.find((s) => s.id === id)?.label;
 
 export type MindResult = { text: string; mood: string[] };
 

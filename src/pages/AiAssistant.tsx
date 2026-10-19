@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -50,7 +50,7 @@ import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById } from "@/lib/lomiTalk";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
-import { THEME_MOOD, analyzeBody, analyzeMind, onlyAnxietyBody, onlySoftSymptoms } from "@/lib/lomiSymptoms";
+import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, onlyAnxietyBody, onlySoftSymptoms, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
@@ -1413,10 +1413,22 @@ export function AiChat({
             return localReply(q, { role: "assistant", content: mr.text, local: true, quick: mr.quick, med: { id: mt.id, aspect: mr.aspect }, health: hCtx ?? {} });
           }
         }
-        const mk = parseMedAsk(q, lastA?.med ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
+        // 19/10 (audit sức khoẻ): câu có dấu hiệu CẤP CỨU / KHÁM GẤP (theo luật của lib/lomiSymptoms) → để mạch triệu chứng đáp cảnh báo trước;
+        //   các lớp mẹo / kiêng cữ / kiến thức chung không được trả lời thay ("nghẹt mũi kèm khó thở nặng thì làm sao" từng nhận bảng ăn uống cảm lạnh).
+        const alarmNow = bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : []);
+        // 19/10 (audit sức khoẻ): lượt trước chỉ kể MỘT triệu chứng ("nghẹt mũi") → câu nối "vậy làm sao?" hỏi về CHÍNH triệu chứng đó
+        //   (thẻ / góc nhìn có nguồn của nó), không phải bệnh mà bảng kiêng cữ cũ gán đại ("nghẹt mũi" → khoá "cảm cúm" → bài Cúm).
+        //   Người dùng tự nhắc tên bệnh ở tin trước thì vẫn theo bệnh đó.
+        const prevUserText = [...msgs].reverse().find((m) => m.role === "user")?.content;
+        const sxPrev = !lastA?.med && lastA?.sx?.length === 1 && !(prevUserText && hCtx?.label && normalizeVi(prevUserText).includes(normalizeVi(hCtx.label))) ? lastA.sx[0] : null;
+        //   (chỉ câu nối hỏi CÁCH CHĂM SÓC / KHI NÀO ĐI KHÁM — hỏi thuốc, hỏi món vẫn để lớp thuốc / kiêng cữ trả lời như trước)
+        const sxPrevId = sxPrev && ["care", "doctor", "emergency"].includes(medAspectOf(q) ?? "") ? (symptomViewId(sxPrev) ?? findMedId(symptomLabel(sxPrev) ?? "")) : null;
+        const mk = parseMedAsk(q, lastA?.med ?? (sxPrevId ? { id: sxPrevId } : undefined) ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
         //   Tự hỏi "có phải a bị trầm cảm không" là câu hỏi CHẨN ĐOÁN về chính mình → mạch tâm sự / sức khoẻ trả lời "Lomi không chẩn đoán".
         const mkSkip =
-          !!mk && (selfDxAsk(q) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length && (isSelfStatement(q) || !hasQuestion(q))) || (mk.aspect === "doctor" && VN(/\b(khám ở đâu|ở đâu khám|khoa nào|khám khoa)\b/).test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
+          !!mk && (selfDxAsk(q) ||
+            // 19/10: câu có dấu hiệu cấp cứu / khám gấp ("nghẹt mũi kèm khó thở nặng thì làm sao") → cảnh báo của mạch triệu chứng đi trước, không đưa mẹo ở nhà.
+            ((mk.aspect === "care" || mk.aspect === "meds" || mk.aspect === "overview" || mk.aspect === "diet" || mk.aspect === "food") && alarmNow) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length && (isSelfStatement(q) || !hasQuestion(q))) || (mk.aspect === "doctor" && VN(/\b(khám ở đâu|ở đâu khám|khoa nào|khám khoa)\b/).test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
         if (mk?.id && !mkSkip) {
           const mt = await loadMedTopic(mk.id);
           const mr00 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined) : null;
@@ -1449,12 +1461,14 @@ export function AiChat({
               med: { id: mt.id, aspect: mr.aspect },
               health: { subject: old?.subject ?? `kb:${mt.id}`, label: old?.label ?? mt.names[0], diet: old?.diet, cond: old?.cond },
               ...((mr.aspect === "diet" || mr.aspect === "food") && old?.diet ? { diet: old.diet } : {}),
-              sx: inTalk ? lastA?.sx : undefined,
+              // 19/10: xin mẹo cho chính triệu chứng mình đang bị ("tư vấn cho a đau bụng kinh") → nhớ triệu chứng đó, để câu đính chính /
+              //   kể thêm ở lượt sau ("k, đau bụng kinh thôi", "đau 2 ngày rồi") được hiểu tiếp, không bị phân tích lại từ đầu.
+              sx: mr.aspect === "care" && analyzeBody(q)?.sx.length ? Array.from(new Set([...(inTalk ? (lastA?.sx ?? []) : []), ...analyzeBody(q)!.sx])) : inTalk ? lastA?.sx : undefined,
               ...(mr.partial ? { stuck: "kb_partial" as StuckKind } : {}),
             });
           }
         }
-        const ha = healthTopicReply(q, hCtx, "aspect");
+        const ha = alarmNow ? null : healthTopicReply(q, hCtx, "aspect");
         if (ha) topicHit("health");
         //      (Câu có kèm triệu chứng — "đau dạ dày nên làm gì" — thì vẫn ghi nhớ triệu chứng đó cho các câu sau.)
         if (ha) return localReply(q, { role: "assistant", content: ha.text, local: true, quick: ha.quick, health: ha.health, sx: Array.from(new Set([...(inTalk ? (lastA?.sx ?? []) : []), ...(analyzeBody(q)?.sx ?? [])])) });
@@ -1463,12 +1477,12 @@ export function AiChat({
         // Đang nói về một bệnh mà hỏi trống "kiêng gì?" / "ăn gì được?" → ghép tên bệnh đang nói vào cho đủ ý.
         const dq = hCtx?.diet && hCtx.label && !dietOf(q) && isDietAsk(q) ? `${hCtx.label} ${q}` : q;
         // (inDiet chỉ khi câu nhắc một bệnh KHÁC bệnh đang nói — "mỡ máu á" — còn nhắc lại đúng bệnh đang nói thì không lặp cả bảng kiêng cữ.)
-        const diet = dietReply(dq, lastA?.diet ?? hCtx?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet && dietOf(q) !== lastA.diet);
+        const diet = alarmNow ? null : dietReply(dq, lastA?.diet ?? hCtx?.diet ?? (prevUser ? dietOf(prevUser) : undefined), !!lastA?.diet && dietOf(q) !== lastA.diet);
         if (diet) topicHit("health");
         // 15/10 (audit): bệnh đã có thẻ CÓ NGUỒN → trả lời từ thẻ (món cụ thể: nguồn có nêu thì nói, không thì nói thẳng là chưa xác minh),
         //   thay cho bảng kiêng cữ cũ chưa có nguồn. Vẫn giữ khoá bệnh cũ (diet) để các câu nối hiểu đang nói bệnh nào.
         // (bảng cũ không có món được hỏi — "dị ứng ăn tôm được không" — mà bệnh có thẻ có nguồn → hỏi món đó trên thẻ.)
-        const d0 = !diet ? dietOf(dq) : undefined;
+        const d0 = !diet && !alarmNow ? dietOf(dq) : undefined;
         const card0 = d0 && DIET_MEDKB[d0] ? await loadMedTopic(DIET_MEDKB[d0]) : null;
         const fp0 = card0 && hasQuestion(dq) ? foodPhrase(dq, card0) : null;
         if (card0 && fp0) {
@@ -1491,7 +1505,7 @@ export function AiChat({
           return localReply(q, drugMsg());
         }
         // 0) Câu hỏi kiến thức sức khoẻ ("uống cà phê nhiều có sao k", "ăn gì để đẹp da") — lib/lomiHealthFacts.
-        const fact = healthFact(q);
+        const fact = alarmNow ? null : healthFact(q);
         if (fact) topicHit("health");
         if (fact) return localReply(q, { role: "assistant", content: fact, local: true, health: hCtx ?? {}, sx: inTalk ? lastA?.sx : undefined });
         // Đang nói chuyện sức khoẻ (không phải đang tâm sự) hoặc đã kể triệu chứng → đọc tin này như chi tiết sức khoẻ.
@@ -1513,7 +1527,11 @@ export function AiChat({
         // 09/10: câu gõ CÓ DẤU mà triệu chứng chỉ khớp nhờ một từ khác nghĩa bị bỏ dấu ("đi đá bóng" → "da bong" = da bong tróc)
         // thì không phải kể triệu chứng (chỉ xét khi chưa ở mạch sức khoẻ; lib/lomiFrame.symptomClash).
         const accentClash = !!fr && !inHealth && !inTalk && symptomClash(q, fr);
-        const body = (mind && softBody) || casualSoft || accentClash ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, inHealth && askAdvice);
+        const body = (mind && softBody) || casualSoft || accentClash ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, (inHealth && askAdvice) || medAspectOf(q) === "care");
+        // 19/10: kể đúng MỘT triệu chứng mà kho có thẻ / góc nhìn có nguồn cho nó → gợi ý sẵn hai câu hỏi hữu ích nhất (mẹo, khi nào đi khám).
+        const sx1 = body && body.sx.filter((id) => id !== "kid").length === 1 && !/^(⚠️|🚨)/u.test(body.text) ? body.sx.find((id) => id !== "kid")! : null;
+        const sx1Label = sx1 ? symptomLabel(sx1) : undefined;
+        const bodyQuick = sx1 && sx1Label && (symptomViewId(sx1) ?? findMedId(sx1Label)) ? [`Mẹo cho đỡ ${sx1Label}`, "Khi nào cần đi khám?"] : undefined;
         if (body) topicHit("health");
         else if (mind) topicHit("mind");
         // Người bệnh là NGƯỜI KHÁC ("con a bị sốt", "mẹ a đau lưng") → không nói "Bạn đang bị…".
@@ -1529,6 +1547,7 @@ export function AiChat({
             role: "assistant",
             content: patient ? body.text.replace(VR(/^Bạn đang bị/u), `${patient} đang bị`).replace(VR(/Lomi ghi nhận bạn đang có/u), `Lomi ghi nhận ${patient.charAt(0).toLowerCase() + patient.slice(1)} đang có`) : carried ? body.text.replace(VR(/^Bạn đang bị/u), `${carried.charAt(0).toUpperCase() + carried.slice(1)} đang bị`).replace(VR(/Lomi ghi nhận bạn đang có/u), `Lomi ghi nhận ${carried} đang có`) : body.text,
             local: true,
+            quick: bodyQuick,
             // Câu kể triệu chứng có nêu tên bệnh ("mẹ a bị cao huyết áp") → nhớ luôn bệnh đó để câu sau "nên kiêng gì?" trả lời được ngay.
             health: hCtx ?? (hsBody ? { subject: hsBody.subject, label: hsBody.label, diet: hsBody.diet, cond: hsBody.cond } : {}),
             sx: body.sx,

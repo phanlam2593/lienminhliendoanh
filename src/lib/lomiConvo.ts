@@ -19,6 +19,7 @@ import { isAskLike, isTalkCont, senseLate, senseState, talkContinue } from "@/li
 import { TIP_MENU, socialIntent } from "@/lib/lomiUnderstand";
 import { detectTarot, readingCardAt, readingRecap, tarotCard, type TarotReading } from "@/lib/tarot";
 import { findMedTopicId } from "@/lib/lomiMed";
+import { symptomLabel } from "@/lib/lomiSymptoms";
 import { VR, VN } from "@/lib/viMatch";
 
 /** Phần của một tin trong lịch sử mà ngữ cảnh cần đọc (khớp các cờ trên Msg của AiAssistant). */
@@ -387,9 +388,15 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
 
   // 3f) Xin mẹo theo chuyện đang nói.
   if (TIP.test(n) && words <= 9 && !detectTarot(q)) {
-    const hl = (last.health as { label?: string } | undefined)?.label;
     const med = (last as { med?: { id: string; aspect?: string } }).med;
-    if (c.topic === "health" && hl) {
+    // 19/10 (audit sức khoẻ): lượt trước chỉ kể MỘT triệu chứng (chưa đáp từ thẻ nào) → mẹo là cho chính triệu chứng đó,
+    //   không phải bệnh mà bảng kiêng cữ cũ gán ("nghẹt mũi" → khoá "cảm cúm" → trước đây viết lại thành "cảm cúm nên làm gì" → bài Cúm).
+    const sx = (last as { sx?: string[] }).sx;
+    const sxL = !med && sx?.length === 1 ? symptomLabel(sx[0]) : undefined;
+    const hl = sxL && findMedTopicId(sxL) ? sxL : (last.health as { label?: string } | undefined)?.label;
+    // Câu xin mẹo TỰ NÊU chủ đề ("mẹo cho đỡ nghẹt mũi") → không phải câu nối: để lớp sức khoẻ đọc đúng chủ đề người dùng gõ.
+    const named = findMedTopicId(q);
+    if (c.topic === "health" && hl && (!named || named === findMedTopicId(hl))) {
       // Vừa đưa cách xử trí rồi mà hỏi "còn mẹo nào khác" → không đọc lại; mời xem phần khác (có nguồn).
       if (med?.aspect === "care" || VN(/\b(còn|khác|nữa)\b/).test(n))
         return { kind: "reply", keep: true, why: "tip:health-more", reply: { text: `Những cách xử trí có nguồn cho **${hl}** Lomi đưa hết ở trên rồi nè — Lomi không tự thêm mẹo ngoài nguồn. Bạn muốn xem thêm phần nào?`, quick: [`${cap(hl)} kiêng gì?`, "Khi nào cần đi khám?", "Nguyên nhân"] } };
