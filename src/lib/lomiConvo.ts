@@ -487,7 +487,7 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   if (REF_THING.test(n)) {
     const hl = (last.health as { label?: string; diet?: string } | undefined)?.label;
     if (c.topic === "health" && hl)
-      return { kind: "reply", keep: true, why: "ref:health-subject", reply: { text: `Bạn đang hỏi tiếp về **${hl}** đúng không? Bạn muốn biết ${hl} là gì, nên xử lý thế nào hay ăn uống cần kiêng gì?`, quick: [`${cap(hl)} là gì?`, `${cap(hl)} nên làm gì?`, `${cap(hl)} kiêng gì?`] } };
+      return { kind: "reply", keep: true, why: "ref:health-subject", reply: { text: `Bạn đang hỏi tiếp về **${hl}** đúng không? Bạn muốn biết ${hl} là gì, nên xử lý thế nào hay ăn uống cần kiêng gì?`, quick: [`${cap(hl)} là gì?`, `${cap(hl)} nên làm gì?`, `${cap(hl)} kiêng gì?`, "Khi nào cần đi khám?"] } };
     if (c.dish && (c.topic === "food" || !c.topic || c.topic === "talk")) {
       const d = c.dish.label.toLowerCase();
       return last.dishPick

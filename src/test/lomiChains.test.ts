@@ -96,11 +96,16 @@ describe("Kiến thức chung vs triệu chứng cá nhân", () => {
       expect(t).not.toMatch(/Bạn đang bị|Lomi ghi nhận bạn/);
     }
   });
-  it("'Mình bị đau đầu' → tình trạng cá nhân: hỏi thêm, chưa chẩn đoán", () => {
+  // 19/10 (Kir đổi quyết định — "không muốn Lomi hỏi lại chung chung"): kể 1 triệu chứng → nêu luôn điều biết được (nguyên nhân thường gặp,
+  //   nên làm / tránh, khi nào đi khám) + tối đa MỘT câu hỏi; vẫn CHƯA chẩn đoán (không nói "hay gặp ở" bệnh nào cho người hỏi).
+  //   Trong khung chat thật, triệu chứng có thẻ có nguồn (đau đầu) còn được thay bằng thẻ đó — xem lomiHealth1910.
+  it("'Mình bị đau đầu' → tình trạng cá nhân: đưa thông tin luôn, chưa chẩn đoán, không phát phiếu hỏi", () => {
     const t = analyzeBody(q("Mình bị đau đầu"), [], false, false)!.text;
     expect(t).toMatch(/Bạn đang bị/);
-    expect(t).toMatch(/hỏi thêm/);
+    expect(t).toMatch(/thường gặp do/);
+    expect(t).not.toMatch(/hỏi thêm|có kèm sốt/);
     expect(t).not.toMatch(/hay gặp ở/);
+    expect((t.match(/\?/g) ?? []).length).toBeLessThanOrEqual(1);
   });
   it("dấu hiệu nguy hiểm → ưu tiên an toàn", () => expect(analyzeBody(q("mình bị đau ngực khó thở"), [], false, false)!.text).toMatch(/115/));
 });

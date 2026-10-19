@@ -130,11 +130,12 @@ describe("19/10 — hỏi CÁCH XỬ LÝ thì đưa mẹo, không biến thành 
 });
 
 describe("19/10 — kể tình trạng: chỉ hỏi điều còn thiếu", () => {
-  it("19. 'Nghẹt mũi 3 ngày rồi' → không hỏi lại 'bị bao lâu rồi' (trước: hỏi lại) + gợi ý sẵn câu xin mẹo", async () => {
+  it("19. 'Nghẹt mũi 3 ngày rồi' → nhận đúng 3 ngày, không hỏi lại 'bao lâu', đưa luôn mẹo có nguồn", async () => {
     const m = await last(["Nghẹt mũi 3 ngày rồi"]);
     expect(m.sx).toEqual(["stuffy"]);
+    expect(m.content).toMatch(/Mới 3 ngày/);
     expect(m.content).not.toMatch(/bao lâu/);
-    expect(m.quick).toContain("Mẹo cho đỡ nghẹt mũi");
+    expect(m.content).toMatch(/nước muối/);
   }, T);
   it("20. 'Tôi chỉ nghẹt mũi, không sốt' → không thêm sốt, không hỏi lại có sốt không, không dặn 115 chung chung", async () => {
     const m = await last(["Tôi chỉ nghẹt mũi, không sốt"]);
@@ -241,5 +242,63 @@ describe("19/10 — nguồn minh bạch / không lấn phạm vi", () => {
   it("38. 'Bị cảm thì kiêng gì' → ăn uống cảm lạnh có nguồn (đã đúng)", async () => {
     const m = await last(["Bị cảm thì kiêng gì"]);
     expect(m.med).toMatchObject({ id: "cam-lanh", aspect: "diet" });
+  }, T);
+});
+
+// 19/10 (đợt 2) — ảnh chụp của Kir: "A bị nghẹt mũi" → Lomi phát phiếu "bao lâu rồi / có kèm sốt, nôn không";
+//   "A bị 15 năm rồi, khó chịu lắm, k kèm sốt nôn" → Lomi ghi "nghẹt mũi và sốt"; "K" → "chắc em hiểu nhầm rồi".
+//   Kir: hỏi nghẹt mũi thì nêu hết mấy thứ về nghẹt mũi, không hỏi chung chung.
+describe("19/10 (đợt 2) — kể 1 triệu chứng → nêu đủ về triệu chứng đó", () => {
+  it("39. 'A bị nghẹt mũi' → đủ phần có nguồn (hay gặp trong bệnh nào, mẹo, thuốc xịt, khi nào khám, khi nào khẩn), không phiếu hỏi", async () => {
+    const m = await last(["A bị nghẹt mũi"]);
+    expect(m.med).toMatchObject({ id: "sx-nghet-mui", aspect: "overview" });
+    expect(m.content).toMatch(/hay gặp trong/);
+    expect(m.content).toMatch(/Cảm lạnh[\s\S]*Viêm xoang[\s\S]*Viêm mũi dị ứng/);
+    expect(m.content).toMatch(/nước muối/);
+    expect(m.content).toMatch(/co mạch chỉ dùng ngắn ngày/);
+    expect(m.content).toMatch(/Khi nào nên đi khám/);
+    expect(m.content).not.toMatch(/có kèm sốt|bao lâu rồi|hỏi thêm/);
+    expect(m.content).not.toMatch(/Về thuốc[^]*Khói thuốc/); // khói thuốc không phải "thuốc"
+    expect(m.src).toMatch(/NHS/);
+  }, T);
+  it("40. … → 'A bị 15 năm rồi, khó chịu lắm, k kèm sốt nôn' → không gắn sốt; nhận 15 năm là kéo dài, cần đi khám (tai mũi họng)", async () => {
+    const r = await chat(["A bị nghẹt mũi", "A bị 15 năm rồi, khó chịu lắm, k kèm sốt nôn"]);
+    expect(r[1].sx).toEqual(["stuffy"]);
+    expect(r[1].content).not.toMatch(/nghẹt mũi và sốt/);
+    expect(r[1].content).toMatch(/15 năm\*\* rồi là tình trạng kéo dài/);
+    expect(r[1].content).toMatch(/tai mũi họng/);
+    expect(r[1].content).toMatch(/Không kèm \*\*sốt\*\*/);
+    expect(r[1].content).not.toMatch(/hay gặp trong/); // không đọc lại cả bài
+  }, T);
+  it("41. … → 'K' → không đáp 'chắc em hiểu nhầm rồi', mời xem tiếp đúng chủ đề", async () => {
+    const r = await chat(["A bị nghẹt mũi", "K"]);
+    expect(r[1].content).not.toMatch(/hiểu nhầm/);
+    expect(r[1].content).toMatch(/nghẹt mũi/);
+    expect(r[1].quick?.length).toBeGreaterThan(0);
+  }, T);
+  it("42. 'Mẹo chữa nghẹt mũi' → 'K' → không đáp 'hiểu nhầm' / xã giao lạc", async () => {
+    const r = await chat(["Mẹo chữa nghẹt mũi", "K"]);
+    expect(r[1].content).not.toMatch(/hiểu nhầm|Okie la/);
+  }, T);
+  it("43. 'Mình bị đau đầu' → thẻ đau đầu có nguồn đủ phần (không còn phiếu hỏi)", async () => {
+    const m = await last(["Mình bị đau đầu"]);
+    expect(m.med).toMatchObject({ id: "dau-dau", aspect: "overview" });
+    expect(m.content).not.toMatch(/có kèm sốt/);
+  }, T);
+  it("44. 'đau bụng' (chưa có thẻ riêng) → nguyên nhân thường gặp + khi nào khám, chỉ hỏi tối đa 1 câu", async () => {
+    const m = await last(["đau bụng"]);
+    expect(m.content).toMatch(/thường gặp do/);
+    expect(m.content).not.toMatch(/có kèm sốt, nôn/);
+    expect((m.content.match(/\?/g) ?? []).length).toBeLessThanOrEqual(1);
+  }, T);
+  it("45. 'bé bị sốt' → vẫn lời đáp riêng cho trẻ (không đưa thẻ sốt người lớn)", async () => {
+    const m = await last(["bé bị sốt"]);
+    expect(m.med?.id).not.toBe("sot");
+    expect(m.content).toMatch(/trẻ nhỏ|bé/);
+  }, T);
+  it("46. 'mình bị đau đầu' → 'uống thuốc gì được?' → phần thuốc (không kê, không liều), không coi 'thuốc gì' là món ăn", async () => {
+    const r = await chat(["mình bị đau đầu", "uống thuốc gì được?"]);
+    expect(r[1].content).toMatch(/không kê thuốc/);
+    expect(r[1].content).not.toMatch(/Về \*\*thuốc\*\* thì Lomi/);
   }, T);
 });

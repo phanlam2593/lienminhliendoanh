@@ -33,6 +33,8 @@ export type MedTopic = {
   /** 18/10: tên HIỂN THỊ khi names[0] không hợp làm tiêu đề (thẻ "ho": names[0] = "ho kéo dài" nhưng nội dung là ho nói chung).
    *  names[0] vẫn là khoá ngữ cảnh (health.label → findMedTopicId) nên không đổi. */
   display?: string;
+  /** 19/10: thẻ ẢO "góc nhìn triệu chứng" ghép từ các thẻ thật (causes = triệu chứng này hay gặp trong bệnh nào). */
+  view?: boolean;
   sources: DrugSource[];
   verifiedAt: string;
 };
@@ -45,7 +47,7 @@ const ROWS = INDEX as IndexRow[];
 // rửa mũi bằng nước muối pha nước đun sôi để nguội…). Trước đây Lomi chỉ hỏi lại "bị bao lâu rồi" chứ không đưa mẹo nào.
 // Góc nhìn = MỘT thẻ ảo ghép từ các ý đã có nguồn của những thẻ đó (lọc theo từ khoá) — không viết kiến thức mới, không chép thẻ.
 // Chỉ dùng cho câu hỏi CÁCH CHĂM SÓC / KHI NÀO ĐI KHÁM / THUỐC; hỏi "là gì", "nguyên nhân"… vẫn để các lớp khác trả lời như cũ.
-type ViewPick = { card: string; care?: RegExp; doctor?: RegExp; emergency?: RegExp };
+type ViewPick = { card: string; signs?: RegExp; care?: RegExp; doctor?: RegExp; emergency?: RegExp };
 type SymptomView = { id: string; names: string[]; display: string; sx: string[]; picks: ViewPick[]; claims?: string[] };
 const SYMPTOM_VIEWS: SymptomView[] = [
   {
@@ -54,9 +56,9 @@ const SYMPTOM_VIEWS: SymptomView[] = [
     display: "nghẹt mũi",
     sx: ["stuffy"],
     picks: [
-      { card: "cam-lanh", care: /nghẹt mũi|xịt mũi|tạo ẩm/iu, doctor: /10 ngày|nặng lên/iu, emergency: /khó thở/iu },
-      { card: "viem-xoang", care: /rửa mũi/iu, doctor: /7 ngày|3 tuần|11 tuổi/iu },
-      { card: "viem-mui-di-ung", care: /rửa mũi/iu },
+      { card: "cam-lanh", signs: /nghẹt/iu, care: /nghẹt mũi|xịt mũi|tạo ẩm/iu, doctor: /10 ngày|nặng lên/iu, emergency: /khó thở/iu },
+      { card: "viem-xoang", signs: /nghẹt/iu, care: /rửa mũi/iu, doctor: /7 ngày|3 tuần|3 tháng|11 tuổi/iu },
+      { card: "viem-mui-di-ung", signs: /nghẹt/iu, care: /rửa mũi/iu, doctor: /nặng lên|không đỡ/iu },
     ],
     // Lời dặn về thuốc xịt thông mũi co mạch đã đối chiếu nguồn (lomiDrugData.DRUG_CLAIMS "decongestant-spray", NHS) — chỉ là lưu ý giới hạn, không khuyên dùng.
     claims: ["decongestant-spray"],
@@ -68,13 +70,15 @@ const LOOKUP_ROWS: IndexRow[] = [...ROWS, ...VIEW_ROWS];
 /** Thẻ (thật hoặc góc nhìn) để hỏi tiếp khi lượt trước chỉ kể MỘT triệu chứng ("nghẹt mũi" → "vậy làm sao?"). */
 export const symptomViewId = (sx: string): string | null => SYMPTOM_VIEWS.find((v) => v.sx.includes(sx))?.id ?? null;
 export const isSymptomView = (id: string) => SYMPTOM_VIEWS.some((v) => v.id === id);
-const VIEW_ASPECTS = new Set<string>(["care", "doctor", "emergency", "meds"]);
+const VIEW_ASPECTS = new Set<string>(["care", "doctor", "emergency", "meds", "overview", "causes"]);
 
 function buildView(v: SymptomView, raw: Record<string, unknown>): MedTopic | null {
   const sources: DrugSource[] = [];
   const care: DrugFact[] = [];
   const doctor: DrugFact[] = [];
   const emergency: DrugFact[] = [];
+  // (triệu chứng này hay gặp trong bệnh nào: ý "triệu chứng" CÓ NGUỒN của từng thẻ có nhắc tới nó, ghi kèm tên bệnh)
+  const seen: DrugFact[] = [];
   let verifiedAt = "9999-12-31";
   for (const p of v.picks) {
     const t = raw[`./medkb/${p.card}.json`] as MedTopic | undefined;
@@ -82,6 +86,8 @@ function buildView(v: SymptomView, raw: Record<string, unknown>): MedTopic | nul
     const off = sources.length;
     sources.push(...t.sources);
     const take = (fs: DrugFact[], re?: RegExp) => (re ? fs.filter((f) => re.test(f.text)).map((f) => ({ text: f.text, src: f.src.map((i) => i + off) })) : []);
+    const sg = take(t.signs, p.signs)[0];
+    if (sg) seen.push({ text: `**${cap(displayName(t))}**: ${sg.text.charAt(0).toLowerCase()}${sg.text.slice(1)}`, src: sg.src });
     care.push(...take(t.care, p.care));
     doctor.push(...take(t.doctor, p.doctor));
     emergency.push(...take(t.emergency, p.emergency));
@@ -96,7 +102,7 @@ function buildView(v: SymptomView, raw: Record<string, unknown>): MedTopic | nul
     if (c.verifiedAt < verifiedAt) verifiedAt = c.verifiedAt;
   }
   if (!care.length) return null;
-  return { id: v.id, kind: "other", names: v.names, display: v.display, about: [], signs: [], causes: [], course: [], care, diet: null, doctor, emergency, sources, verifiedAt };
+  return { id: v.id, kind: "other", names: v.names, display: v.display, about: [], signs: [], causes: seen, course: [], care, diet: null, doctor, emergency, sources, verifiedAt, view: true };
 }
 
 // ── Nạp thẻ theo nhu cầu ── (cả kho là MỘT chunk — lib/lomiMedData — tải ở lần hỏi y khoa đầu tiên)
@@ -609,21 +615,26 @@ function overviewText(t: MedTopic, now: number): string {
   const about = t.about.slice(0, 2);
   const signs = t.signs.slice(0, 4);
   const careAll = t.care;
-  const meds = careAll.filter((f) => MED_FACT.test(f.text)).slice(0, 3);
+  // (19/10: "khói thuốc", "hút thuốc", "thuốc lá" không phải thuốc chữa bệnh)
+  const isMed = (f: DrugFact) => MED_FACT.test(f.text.replace(VR(/(khói|hút|bỏ|cai) thuốc( lá| lào)?/giu), ""));
+  const meds = careAll.filter(isMed).slice(0, 3);
   // Kiêng: phần ăn uống nên tránh của thẻ; thẻ không có phần ăn uống thì lấy các ý "tránh / không nên" trong phần chăm sóc.
   const dietAvoid = t.diet ? t.diet.avoid.slice(0, 3) : [];
   const foodsBad = t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").map((f) => f.name) : [];
   //   (không lấy ý PHÒNG BỆNH cho cộng đồng — "hạn chế nơi muỗi đẻ" không phải điều người bệnh phải kiêng)
-  const careAvoid = dietAvoid.length ? [] : careAll.filter((f) => AVOID_FACT.test(f.text) && !MED_FACT.test(f.text) && !PREVENT_FACT.test(f.text)).slice(0, 3);
+  const careAvoid = dietAvoid.length ? [] : careAll.filter((f) => AVOID_FACT.test(f.text) && !isMed(f) && !PREVENT_FACT.test(f.text)).slice(0, 3);
   const avoid = [...dietAvoid, ...careAvoid];
-  const tips = careAll.filter((f) => !MED_FACT.test(f.text) && !careAvoid.includes(f)).slice(0, 4);
+  const tips = careAll.filter((f) => !isMed(f) && !careAvoid.includes(f)).slice(0, 4);
   const doctor = t.doctor.slice(0, 2);
   // (bỏ ý chỉ dùng được ở nước ngoài — đường dây 988 của Mỹ; ý nghĩ tự tử thì kèm đường dây Ngày Mai như lớp khẩn cấp của app)
   const emergency = t.emergency.filter((f) => !FOREIGN_LINE.test(f.text)).slice(0, 2);
   const crisisVN = t.emergency.some((f) => /tự tử|tự sát|tự làm hại/iu.test(f.text));
   const isDisease = DRUG_KINDS.has(t.kind);
+  // 19/10: góc nhìn triệu chứng (nghẹt mũi) — không có phần "là gì"; nêu triệu chứng này hay gặp trong bệnh nào (mỗi ý có nguồn của thẻ bệnh đó).
+  const seenIn = t.view ? t.causes.slice(0, 4) : [];
   const parts = [
     `${TERM_HINT(t)}Về ${N}, Lomi có kiến thức đã kiểm chứng như sau:`,
+    seenIn.length ? `🔎 **${cap(displayName(t))} hay gặp trong** (chưa đủ để kết luận bạn bị bệnh nào):\n${bl(seenIn)}` : "",
     about.length ? `📖 ${N} là gì:\n${bl(about)}` : "",
     signs.length ? `🩺 **Triệu chứng thường gặp:**\n${bl(signs)}` : "",
     avoid.length || foodsBad.length
@@ -639,7 +650,7 @@ function overviewText(t: MedTopic, now: number): string {
     emergency.length
       ? `🚨 **Cần xử trí khẩn khi:**\n${bl(emergency)}\n(Ở Việt Nam gọi **115** hoặc tới cơ sở y tế gần nhất.${crisisVN ? " Đang có ý nghĩ làm hại bản thân thì có thể gọi đường dây Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật)." : ""})`
       : "",
-    sourceLine(t, srcs(about, signs, avoid, tips, meds, doctor, emergency, t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").slice(0, 8).map((f) => ({ text: f.name, src: f.src })) : []), now),
+    sourceLine(t, srcs(seenIn, about, signs, avoid, tips, meds, doctor, emergency, t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").slice(0, 8).map((f) => ({ text: f.name, src: f.src })) : []), now),
     "Muốn xem kỹ phần nào thì chọn bên dưới nha 👇",
   ];
   return parts.filter(Boolean).join("\n\n");
@@ -981,6 +992,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (isSymptomView(prev.id)) return asp && VIEW_ASPECTS.has(asp) ? { id: prev.id, aspect: asp, food: null } : null;
     const n = normalizeVi(text);
     if (MEAL_SUGGEST.test(` ${n} `) && !VN(/\b(kiêng|nên ăn|tránh)\b/).test(n)) return null;
+    // (19/10: "uống thuốc gì được?" là hỏi THUỐC, không phải hỏi món "thuốc gì")
+    if (asp === "meds") return { id: prev.id, aspect: "meds", food: null };
     const fp = foodPhrase(text, null);
     if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !VN(/\b(kiêng|ăn gì|uống gì|nên ăn|tránh ăn)\b/).test(n)) return { id: prev.id, aspect: "food", food: fp };
     const fm = n.match(VN(/^(?:vậy |thế |còn |nhưng |rồi )*((?:\S+ ){0,2}?\S+?) (?:thì sao|sao|có được không|được không|có sao không|được k|được ko)$/));

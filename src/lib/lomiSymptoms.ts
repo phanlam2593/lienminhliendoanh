@@ -803,7 +803,7 @@ function maskSym(s: string, re: RegExp): string {
   return s;
 }
 // 19/10: người dùng PHỦ NHẬN / ĐÍNH CHÍNH một triệu chứng ("không phải đau bụng", "không bị sốt", "hết ho rồi") → không giữ triệu chứng đó.
-const NEG_LEAD = VN(/(?:^|\s)(không phải|chứ không phải|ko phải|k phải|hông phải|không bị|ko bị|k bị|chưa bị|không có|ko có|hết bị)\s*(là\s*)?$/);
+const NEG_LEAD = VN(/(?:^|\s)(không phải|chứ không phải|ko phải|k phải|hông phải|không bị|ko bị|k bị|chưa bị|không có|ko có|hết bị|không kèm|ko kèm|k kèm|không thấy|ko thấy|k thấy)\s*(là\s*)?$/);
 // ("hết" đứng một mình KHÔNG phải phủ nhận: "làm sao cho hết nghẹt mũi" là đang bị và muốn hết.)
 /** Triệu chứng chỉ xuất hiện sau lời phủ nhận (mọi chỗ khớp đều bị phủ nhận). */
 function negatedSym(s: string, re: RegExp): boolean {
@@ -814,7 +814,8 @@ function negatedSym(s: string, re: RegExp): boolean {
     // (cụm khớp có thể bắt đầu bằng chữ đệm "bị" / "có" — "không | bị sốt" — nên xét cả chữ đầu của cụm)
     const before = s.slice(Math.max(0, m.index - 30), m.index);
     const w0 = m[0].trim().split(" ")[0];
-    if (!NEG_LEAD.test(before) && !(VN(/^(bị|có)$/).test(w0) && NEG_LEAD.test(`${before} ${w0}`))) return false;
+    // ("k kèm sốt nôn" — luật sốt khớp cả cụm "kèm sốt", nên chữ "kèm" cũng xét như chữ đệm)
+    if (!NEG_LEAD.test(before) && !(VN(/^(bị|có|kèm|thấy)$/).test(w0) && NEG_LEAD.test(`${before.trimEnd()} ${w0}`))) return false;
     any = true;
     s = `${s.slice(0, m.index)} ¦ ${s.slice(m.index + m[0].length)}`;
   }
@@ -939,6 +940,12 @@ const COMMON_CAUSES: Record<string, string> = {
   palp: "lo âu, thiếu ngủ, caffeine, sốt, thiếu máu, rối loạn nhịp tim, tuyến giáp",
   breath: "lo âu, nghẹt mũi, hen, nhiễm trùng hô hấp, thiếu máu, bệnh tim phổi",
 };
+/** Nguyên nhân thường gặp của MỘT triệu chứng (bảng COMMON_CAUSES, không có thì tên các tình trạng trong bảng có triệu chứng đó). */
+function causesOf(id: string): string | null {
+  if (!id) return null;
+  // (chỉ bảng nguyên nhân soạn riêng cho từng triệu chứng — không suy từ bảng bệnh, để "chảy máu chân răng" không bị gắn "sốt xuất huyết")
+  return COMMON_CAUSES[id] ?? null;
+}
 export function generalSymptomInfo(text: string): string | null {
   const n = normStrict(text, HEALTH);
   const SKIP = ["sun", "screen", "coldweather", "alcohol", "stress", "afterfood", "skipmeal"];
@@ -1154,19 +1161,24 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
   }
   // 04/10: lần đầu kể đúng 1 triệu chứng, chưa có thời gian/chi tiết, không có dấu hiệu nguy hiểm → hỏi thêm trước, chưa nêu bệnh.
   if (!knowledge && !inHealth && !prev.length && !kid && labels.length <= 2 && !reds.length && !urgent.length && !durOf(n) && !force && !SEVERE_RE.test(` ${n} `)) {
-    // 11/10: hỏi đúng điều CÒN THIẾU — đã nói "từ tối qua" thì không hỏi lại "bao lâu rồi"; đang kể sốt thì hỏi mấy độ, không hỏi "có kèm sốt không".
-    const since = VN(/\b(từ (tối|sáng|chiều|trưa|đêm|hôm|tuần|tháng)|hôm qua|tối qua|sáng nay|chiều nay|tối nay|đêm qua|mấy hôm nay|mấy ngày nay|cả (ngày|đêm|tuần|tháng)|(\d+|một|hai|ba|mấy|vài) (ngày|hôm|tuần|tháng) nay)\b/).test(` ${n} `);
-    const fev = all.includes("fever");
-    const q1 = fev ? `Sốt khoảng bao nhiêu độ${since ? "" : ", bị bao lâu rồi"}?` : since ? "Mức độ ra sao — nhẹ, vừa hay dữ dội?" : "Bị bao lâu rồi, đau/khó chịu ở mức nào?";
-    const q2 = fev ? "Có kèm ho, nôn, đau đầu, hay triệu chứng nào khác không?" : "Có kèm sốt, nôn, hay triệu chứng nào khác không?";
-    // 19/10: bỏ mẫu "… hả. Lomi hỏi thêm 2 điều nha" (nghe như điền phiếu) — ghi nhận ngắn rồi hỏi đúng điều còn thiếu;
-    //   đã nói "không sốt" thì không hỏi lại có sốt không.
-    const noFever = VN(/\b(không|ko|k|chưa|hết) (bị |có )?sốt\b/).test(` ${n} `);
-    const q2b = fev ? q2 : noFever ? "Có kèm triệu chứng nào khác không (đau họng, ho, đau đầu…)?" : q2;
-    out.push(`Bạn đang bị **${joinVi(labels)}**. Lomi hỏi thêm chút để gợi ý cho sát hơn:\n• ${q1}\n• ${q2b}`);
+    // 19/10 (Kir: "người ta hỏi nghẹt mũi thì nêu ra hết mấy thứ về nghẹt mũi, không hỏi chung chung có sốt không"):
+    //   không còn trả lời bằng phiếu hỏi "bao lâu rồi / có kèm sốt, nôn không". Nêu luôn điều biết được về chính triệu chứng đó:
+    //   nguyên nhân thường gặp, điều nên làm / tránh của tình trạng hay gặp nhất (nếu bảng có), khi nào phải đi khám / cấp cứu.
+    //   (Triệu chứng nào có thẻ kiến thức CÓ NGUỒN thì AiAssistant đưa thẻ đó thay cho phần này — xem symptomCard.)
+    //   Chỉ hỏi MỘT câu, và chỉ khi câu trả lời đổi được lời khuyên (thời gian bị — chưa nói thì hỏi).
+    const cause = labels.length === 1 ? causesOf(shown.find((id) => byIdSym(id).label === labels[0]) ?? "") : null;
+    out.push(`${cap1(kid ? "bé" : "bạn")} đang bị **${joinVi(labels)}**.${cause ? ` ${cap1(labels[0])} thường gặp do: ${cause}.` : ""}`);
+    const best = scored[0]?.c;
+    if (best && scored[0].score >= 3) {
+      out.push(`💡 **Có thể làm ngay:**\n${best.do.map((d) => `• ${d}`).join("\n")}`);
+      out.push(`🚫 **Nên tránh:**\n${best.avoid.map((d) => `• ${d}`).join("\n")}`);
+      out.push(`🩺 **Đi khám:** ${best.doctor}`);
+    } else out.push("🩺 Nếu kéo dài, ngày càng nặng hoặc lặp lại nhiều lần thì nên đi khám để tìm đúng nguyên nhân.");
     if (momNote) out.push(momNote);
     // (nhắc 115 chung chung chỉ hợp với đau / sốt / khó thở — "nghẹt mũi", "sổ mũi" mà cũng dặn "yếu tay chân thì gọi 115" thì lạc đề)
-    if (!all.every((id) => MILD.has(id))) out.push("Nếu thấy đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay, đừng chờ.");
+    if (!all.every((id) => MILD.has(id))) out.push("⚠️ Đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay.");
+    const since = VN(/\b(từ (tối|sáng|chiều|trưa|đêm|hôm|tuần|tháng)|hôm qua|tối qua|sáng nay|chiều nay|tối nay|đêm qua|mấy hôm nay|mấy ngày nay|cả (ngày|đêm|tuần|tháng)|(\d+|một|hai|ba|mấy|vài) (ngày|hôm|tuần|tháng) nay)\b/).test(` ${n} `);
+    if (!since) out.push(all.includes("fever") ? "Sốt khoảng bao nhiêu độ, bị mấy ngày rồi? Biết vậy Lomi nói sát hơn được." : "Bị bao lâu rồi? Biết vậy Lomi nói sát hơn được.");
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: all };
   }
@@ -1265,6 +1277,59 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
 export function bodyAlarm(text: string, prev: string[] = []): boolean {
   const r = analyzeBody(text, prev, false, true);
   return !!r && /^(⚠️|🚨)/u.test(r.text);
+}
+/**
+ * 19/10: triệu chứng → thẻ kiến thức CÓ NGUỒN nói về CHÍNH triệu chứng đó (không phải một bệnh đoán từ nó).
+ * Danh sách chọn tay: chỉ thẻ mà nội dung đúng là triệu chứng ấy (vd "đau răng" không trỏ "viêm nướu", "cứng cổ" không trỏ "đau vai gáy").
+ */
+const SX_CARD: Record<string, string> = {
+  stuffy: "sx-nghet-mui",
+  headache: "dau-dau",
+  dizzy: "chong-mat",
+  nausea: "buon-non",
+  diarrhea: "tieu-chay",
+  constip: "tao-bon",
+  periodpain: "dau-bung-kinh",
+  backpain: "dau-lung",
+  sorethroat: "viem-hong",
+  cough: "ho",
+  fever: "sot",
+  insomnia: "mat-ngu",
+  heartburn: "trao-nguoc-da-day-thuc-quan",
+  bloat: "kho-tieu",
+  cramp: "chuot-rut",
+  numb: "te-bi-tay-chan",
+  hairloss: "rung-toc",
+  mouthulcer: "nhiet-mieng",
+};
+export const symptomCard = (id: string): string | undefined => SX_CARD[id];
+/**
+ * 19/10: những điều người dùng vừa KỂ THÊM về triệu chứng đang nói (thời gian, nhiệt độ, mức độ, điều phủ nhận) → câu nhận lại ngắn.
+ * Dùng khi Lomi đã đưa thẻ kiến thức của triệu chứng ở lượt trước — kể thêm thì nhận đúng chi tiết đó, không đọc lại cả bài.
+ */
+export function detailNotes(text: string): string[] {
+  const n = normStrict(text, HEALTH);
+  const out: string[] = [];
+  const t = tempOf(n);
+  if (t !== null) out.push(t >= 39 ? `🌡️ ${String(t).replace(".", ",")} độ là **sốt cao** rồi nha.` : t >= 37.5 ? `🌡️ ${String(t).replace(".", ",")} độ là đang **sốt**.` : `🌡️ ${String(t).replace(".", ",")} độ thì chưa tính là sốt.`);
+  const d = durOf(n);
+  if (d) {
+    const unit = ({ ngay: "ngày", hom: "hôm", bua: "bữa", tuan: "tuần", thang: "tháng", nam: "năm" } as Record<string, string>)[d[2]];
+    const num = ({ mot: "1", hai: "2", ba: "3", bon: "4", nam: "5", may: "mấy", vai: "vài", mo: "mấy", nhieu: "nhiều" } as Record<string, string>)[d[1]] ?? d[1];
+    const long = VN(/tuần|tháng|năm/).test(d[2]) || Number(d[1]) >= 7;
+    out.push(
+      VN(/năm/).test(d[2]) || (VN(/tháng/).test(d[2]) && Number(d[1]) >= 3)
+        ? `Bị **${num} ${unit}** rồi là tình trạng kéo dài — tự chăm sóc ở nhà thường không đủ nữa, nên đi khám (chuyên khoa phù hợp) để tìm đúng nguyên nhân.`
+        : long
+          ? "Bị lâu như vậy rồi thì nên đi khám để tìm đúng nguyên nhân nha, đừng tự chịu hoài."
+          : `Mới ${num} ${unit} thì cứ chăm sóc và theo dõi thêm, nặng lên là đi khám liền nha.`,
+    );
+  }
+  if (SEVERE_RE.test(` ${n} `) || VN(/\b(khó chịu (lắm|quá|nhiều)|mệt lắm|ảnh hưởng (sinh hoạt|giấc ngủ|công việc))\b/).test(` ${n} `))
+    out.push("Khó chịu nhiều tới mức ảnh hưởng sinh hoạt thì càng nên đi khám sớm, đừng cố chịu.");
+  const neg = [...symptomsIn(n).negated].map((id) => byIdSym(id).label);
+  if (neg.length) out.push(`Không kèm **${joinVi(neg)}** — vậy là đỡ lo hơn một chút.`);
+  return out;
 }
 /** Tên tiếng Việt của một triệu chứng (để tra thẻ kiến thức theo đúng tên). */
 export const symptomLabel = (id: string): string | undefined => SYMPTOMS.find((s) => s.id === id)?.label;

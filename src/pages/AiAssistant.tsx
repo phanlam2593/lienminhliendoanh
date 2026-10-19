@@ -50,7 +50,7 @@ import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById } from "@/lib/lomiTalk";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
-import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, onlyAnxietyBody, onlySoftSymptoms, symptomLabel } from "@/lib/lomiSymptoms";
+import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
@@ -782,12 +782,21 @@ export function AiChat({
     const last = msgs[msgs.length - 1];
     const lastA0 = last?.role === "assistant" ? last : undefined;
     // Understanding Gate (01/10) — câu sửa lại ("không, a hỏi…", "ý mình là…") → bỏ ngữ cảnh cũ, hiểu phần sau như câu mới.
-    const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content, inFlow: !!(lastA0?.heart || lastA0?.dishAsk || lastA0?.bizPick || lastA0?.bizTopicPick || lastA0?.issue || lastA0?.tarotAwait) }, true) : null;
+    const corr = !forceAi && !en ? gate(q, { lastText: lastA0?.content, inFlow: !!(lastA0?.heart || lastA0?.dishAsk || lastA0?.bizPick || lastA0?.bizTopicPick || lastA0?.issue || lastA0?.tarotAwait || lastA0?.sx?.length) }, true) : null;
     if (corr?.action === "rewrite") {
       q = corr.q;
       shownRef.current = { from: q, to: typed };
     }
     const lastA = corr?.action === "rewrite" ? undefined : lastA0;
+    // 19/10: vừa đưa kiến thức về một bệnh / triệu chứng mà người dùng chỉ đáp cụt "k", "ok", "ừ" → không đoán là bác câu trả lời,
+    //   không đáp xã giao lạc ("Okie la 👌"): nhận lời rồi mời xem tiếp đúng phần của chủ đề đang nói.
+    if (!forceAi && !en && lastA?.med && VN(/^(k|ko|không|hông|hong|khong|ok|oke|okie|okay|ừ|ừa|uh|uk|dạ|vâng|ờ|ừm|hmm|rồi|ok rồi|k có|ko có|không có)( (nha|nhé|nhe|ạ|à|a|e|em|lomi|đâu|gì))*$/).test(normalizeVi(raw).trim())) {
+      const mt = await loadMedTopic(lastA.med.id);
+      if (mt) {
+        const chips = renderMed(mt, "overview").quick;
+        return localReply(q, { role: "assistant", content: `Dạ 👍 Còn muốn xem kỹ phần nào về **${medName(mt)}** thì chọn bên dưới nha. Có thêm triệu chứng gì khác thì kể Lomi nghe để Lomi nói sát hơn.`, local: true, quick: chips, med: lastA.med, health: lastA.health, sx: lastA.sx });
+      }
+    }
     // 08/10 — hai mạch TÁCH RIÊNG: hCtx = đang nói chuyện sức khoẻ; heartOn = đang tâm sự thật (có cảm xúc).
     // Chỉ heartOn mới được đưa tin kế tiếp vào heartContinue(); mạch sức khoẻ có đường xử lý riêng ở mục f0.
     const hCtx = healthOf(lastA);
@@ -1542,6 +1551,50 @@ export function AiChat({
         // 11/10: đang theo chuyện ốm của một người khác ("con a sốt từ tối qua" → "39 độ") thì câu kể thêm lược chủ ngữ vẫn là về NGƯỜI ĐÓ —
         //   không viết "Lomi ghi nhận bạn đang có: sốt cao" (người sốt là đứa con, không phải người đang gõ).
         const carried = !patient && fr?.subject !== "self" && th0 && th0.kind === "care" && (th0.idle ?? 0) < 2 ? th0.who.text : null;
+        // 19/10 (Kir: "ngta hỏi nghẹt mũi thì nêu ra hết mấy thứ về nghẹt mũi chứ k phải hỏi gì cũng nói chung chung có sốt k"):
+        //   kể MỘT triệu chứng mà kho có thẻ CÓ NGUỒN về chính triệu chứng đó (lib/lomiSymptoms.symptomCard) → đưa luôn thẻ đó đủ phần
+        //   (hay gặp trong bệnh nào / triệu chứng, mẹo chăm sóc, nên tránh, thuốc, khi nào đi khám, khi nào cấp cứu), không phát phiếu hỏi.
+        //   Đã đưa thẻ ở lượt trước mà giờ kể thêm ("bị 15 năm rồi, khó chịu lắm, k kèm sốt") → nhận đúng chi tiết đó + khi nào cần đi khám,
+        //   không đọc lại cả bài. Bé nhỏ / có dấu hiệu cấp cứu thì giữ lời đáp của mạch triệu chứng (có lưu ý riêng cho trẻ, cảnh báo 115).
+        //   (trẻ em: thẻ người lớn không hợp — "bé bị sốt" giữ lời đáp có lưu ý riêng cho trẻ của mạch triệu chứng)
+        const kidTalk = !!body?.sx.includes("kid") || VN(/\b(bé|em bé|con|cháu|trẻ|sơ sinh)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(con người|con gái|con trai lớn)\b/g), " ")) || (whoP ? VN(/\b(bé|con|cháu|trẻ)\b/).test(normalizeVi(whoP.text)) : false);
+        const sxCardId = sx1 && !kidTalk ? symptomCard(sx1) : undefined;
+        const sxCard = sxCardId ? await loadMedTopic(sxCardId) : null;
+        if (body && sx1 && sxCard) {
+          const again = !!lastA?.sx?.includes(sx1) && (lastA.med?.id === sxCard.id || lastA.sx.length === 1);
+          const who = patient ?? (carried ? carried.charAt(0).toUpperCase() + carried.slice(1) : null);
+          const label = symptomLabel(sx1)!;
+          const notes = detailNotes(q);
+          let text: string;
+          let aspect: string;
+          // (vừa đính chính — "k, đau bụng kinh thôi" — thì nhận đúng lời đính chính của mạch triệu chứng)
+          const fixLine = body.text.match(VR(/^À, Lomi hiểu rồi[^\n]*/u))?.[0];
+          if (again) {
+            const doc = renderMed(sxCard, "doctor");
+            text = [[fixLine, ...notes].filter(Boolean).join("\n") || `Dạ, Lomi ghi nhận thêm về **${label}** nha.`, doc.text].join("\n\n");
+            aspect = "doctor";
+          } else {
+            const ov = renderMed(sxCard, "overview");
+            const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 Lomi gửi những điều cần biết về ${label} (đã đối chiếu nguồn y khoa) nha:`;
+            const bodyText = withRedFlags(sxCard, q, withGroupNote(sxCard, q, ov.text.replace(VR(/^Về .*? như sau:\n\n/u), "")));
+            // (thẻ không có phần cấp cứu mà triệu chứng không phải loại nhẹ ở mũi → giữ dòng nhắc 115 như mạch triệu chứng vẫn có)
+            const red115 = !sxCard.emergency.length && !["stuffy", "runny", "sneeze"].includes(sx1) ? "⚠️ Đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay." : "";
+            text = [fixLine ?? head, ...notes, bodyText, red115].filter(Boolean).join("\n\n");
+            aspect = "overview";
+          }
+          topicHit("health");
+          return localReply(q, {
+            role: "assistant",
+            content: text,
+            local: true,
+            quick: renderMed(sxCard, aspect === "doctor" ? "doctor" : "overview").quick,
+            med: { id: sxCard.id, aspect },
+            health: hCtx ?? { subject: `kb:${sxCard.id}`, label },
+            sx: body.sx,
+            mood: inTalk ? lastA?.mood : undefined,
+            ...(whoP ? { about: whoP, ...(th0 ? {} : { thread: storyOpenSymptom(whoP, raw) }) } : {}),
+          });
+        }
         if (body)
           return localReply(q, {
             role: "assistant",
