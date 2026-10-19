@@ -339,3 +339,35 @@ describe("19/10 (đợt 3) — thuốc liên quan + mẹo đầy đủ hơn", ()
     expect(m.content).toMatch(/amlodipine|losartan|ramipril/);
   }, T);
 });
+
+describe("19/10 (đợt 4) — tách KHUYÊN vs KIÊNG, câu kể thủ thuật, thẻ mới", () => {
+  const section = (s: string, head: RegExp) => { const i = s.search(head); if (i < 0) return ""; const r = s.slice(i + 1); const j = r.search(/\n\n\S*\s*\*\*/); return j < 0 ? r : r.slice(0, j); };
+  it("53. 'viêm họng là gì' → mục Kiêng chỉ có điều cần tránh, lời khuyên (súc họng…) nằm ở Mẹo; không 'điều trị tuỳ nguyên nhân'", async () => {
+    const m = await last(["viêm họng là gì"]);
+    const avoid = section(m.content, /🚫/);
+    expect(avoid).toMatch(/[Tt]ránh|[Kk]hông/);
+    expect(avoid).not.toMatch(/[Ss]úc họng|[Uu]ống nhiều nước|[Nn]gậm đá/);
+    expect(m.content).not.toMatch(/tuỳ nguyên nhân\.?\s*$|Cách điều trị tuỳ nguyên nhân/m);
+  }, T);
+  it("54. 'viêm họng nên làm gì' → khuyên trước, rồi mục 'Nên tránh' riêng", async () => {
+    const m = await last(["viêm họng nên làm gì"]);
+    expect(m.content).toMatch(/nên:/);
+    const avoid = section(m.content, /Nên tránh/);
+    if (avoid) expect(avoid).not.toMatch(/[Ss]úc họng|[Uu]ống nhiều nước/);
+  }, T);
+  it("55. 'A mới cắt amidan' → thẻ chăm sóc sau cắt amidan, không hỏi 'Rồi sao nữa'", async () => {
+    const m = await last(["A mới cắt amidan"]);
+    expect(m.med?.id).toBe("sau-cat-amidan");
+    expect(m.content).not.toMatch(/Rồi sao nữa/);
+  }, T);
+  it("56. thẻ mới đi đúng chỗ: sinh mổ, nhổ răng khôn, nấc, đau gối", async () => {
+    for (const [q, id] of [["vợ a vừa sinh mổ", "sau-sinh-mo"], ["a mới nhổ răng khôn", "nho-rang-khon"], ["bị nấc hoài", "nac-cut"], ["đau gối quá", "dau-goi"]] as const) {
+      const m = await last([q]);
+      expect(m.med?.id, q).toBe(id);
+    }
+  }, T * 2);
+  it("57. kể bệnh của người nhà ('mẹ em bị tiểu đường') vẫn là mạch chuyện, không đổ bài kiến thức", async () => {
+    const m = await last(["mẹ em bị tiểu đường"]);
+    expect(m.content).not.toMatch(/những điều cần biết về \*\*tiểu đường/);
+  }, T);
+});

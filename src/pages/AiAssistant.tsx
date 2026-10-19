@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1239,10 +1239,14 @@ export function AiChat({
         const frMode = lastA?.dishPick || lastA?.biz || memLearn?.newSits.length ? "off" : heartOn ? "heart" : hCtx || lastA?.faqId || lastA?.issue || lastA?.dishAsk || lastA?.tarot || lastA?.tarotRef ? "speech" : "full";
         const fx = frameTurn(q, fr, { mode: frMode, inHealth: !!hCtx, hsub: lastA?.hsub, lastText: lastA?.content, addr: loadMem(user.id).addr });
         const hsFx = fx?.intent === "frame:third_ill" ? healthSubjectOf(q, true) : null;
+        // 19/10: "a mới cắt amidan" bị khung câu đáp "Mới cắt amidan hả? Rồi sao nữa…" — câu nêu một tình trạng / thủ thuật có thẻ
+        //   kiến thức (không phải tâm lý) thì để lớp sức khoẻ đưa kiến thức chăm sóc, không biến thành chuyện để kể tiếp.
+        const fxMed = fx && !fx.redirect && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) ? findMedId(q) : null;
+        const fxMedKind = fxMed ? medKindOf(fxMed) : null;
         if (fx?.redirect) {
           q = fx.redirect;
           shownRef.current = { from: q, to: typed };
-        } else if (fx)
+        } else if (fx && !(fxMed && fxMedKind !== "mental" && fxMedKind !== "term"))
           return localReply(q, {
             role: "assistant",
             content: fx.text,
@@ -1454,7 +1458,16 @@ export function AiChat({
             const old = same ? { subject: same.subject, label: same.label, diet: same.diet, cond: same.cond } : (healthSubjectOf(q, true) ?? mt.names.map((n) => healthSubjectOf(n, true)).find(Boolean) ?? null);
             const typed = nameAsTyped(q, mt.id);
             // "a bị gout" — người dùng nói về chính mình: ghi nhận trước, rồi mới đưa kiến thức.
-            const ack = mk.aspect === "overview" && typed && isSelfStatement(q) ? `Bạn đang bị **${typed}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n` : "";
+            // 19/10: câu KỂ (không hỏi) — "a mới cắt amidan", "vợ a vừa sinh mổ", "bị nấc hoài" — nhận lời rồi gửi kiến thức chăm sóc,
+            //   bỏ dòng mở đầu khô "Về X, Lomi có kiến thức…".
+            const told = mk.aspect === "overview" && !hasQuestion(q) && !isSelfStatement(q) && lastA?.med?.id !== mt.id;
+            const ack =
+              mk.aspect === "overview" && typed && isSelfStatement(q)
+                ? `Bạn đang bị **${typed}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n`
+                : told
+                  ? `Lomi gửi những điều cần biết về **${medName(mt)}** (đã đối chiếu nguồn y khoa) để tham khảo nha 🩺\n\n`
+                  : "";
+            if (told) mr.text = mr.text.replace(VR(/(^|\n\n)Về \*\*[^*\n]+\*\*, Lomi có kiến thức đã kiểm chứng như sau:\n\n/u), "$1");
             // Nhắc lại đúng chủ đề vừa tóm tắt ("Bệnh gút á") → không đọc lại cả bài, chỉ mời chọn phần muốn xem.
             const again = mr.aspect === "overview" && !ack && lastA?.med?.id === mt.id && lastA.med.aspect === "overview";
             if (again) mr.text = `Dạ đúng rồi, vẫn là **${medName(mt)}** nè 🩺 Bạn muốn xem kỹ phần nào? Chọn bên dưới nha 👇`;

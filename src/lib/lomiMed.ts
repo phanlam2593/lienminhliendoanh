@@ -126,6 +126,8 @@ export async function loadAllMedTopics(): Promise<MedTopic[]> {
   return out.filter(Boolean) as MedTopic[];
 }
 export const medTopicIds = () => ROWS.map((r) => r.id);
+/** Loại thẻ (condition / mental / other…) theo id, không cần nạp thẻ. */
+export const medKindOf = (id: string): MedTopic["kind"] | null => LOOKUP_ROWS.find((r) => r.id === id)?.kind ?? null;
 
 // ── Nhận ra chủ đề trong câu ──
 // Hai cách viết i/y hay gặp ("tự kỷ"/"tự kỉ", "tâm lý"/"tâm lí") quy về một dạng để khớp tên.
@@ -334,7 +336,7 @@ const QWORD0 = VN(/\b(gì|là gì|thế nào|như nào|ra sao|sao không|đượ
 // "không / chưa" giữa câu là phủ định ("ngủ không được, đầu cứ nghĩ…"); chỉ đứng CUỐI câu mới là từ hỏi ("ăn nhộng đc k").
 const QWORD = { test: (x: string) => QWORD0.test(x) || VN(/(?:^| )(?:không|ko|k|hông|hong|chưa) *$/).test(x) };
 /** Có phải câu HỎI kiến thức (không phải câu kể "a bị gout" hay tâm sự "a hay lo âu")? Có ? / từ hỏi / khía cạnh rõ / chỉ nêu tên chủ đề. */
-export function isMedQuestion(text: string, topicNames: string[] = []): boolean {
+export function isMedQuestion(text: string, topicNames: string[] = [], allowTold: 0 | 1 | 2 = 0): boolean {
   const n = normalizeVi(text);
   const words = n.split(" ").length;
   const asp = aspectOf(text);
@@ -347,8 +349,16 @@ export function isMedQuestion(text: string, topicNames: string[] = []): boolean 
   if (topicNames.length && rest === "" && words <= 4) return true;
   // 15/10: kể kèm thời gian mắc bệnh ("a bị mỡ máu 3 năm rồi", "mẹ bị gout lâu rồi") vẫn là nêu tên bệnh → tóm tắt thẻ có nguồn
   //   (trước đây rơi về bảng cũ, nói "chưa có thông tin riêng" dù kho có thẻ).
-  const restNoTime = rest.replace(VN(/\b((\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều) (ngày|tuần|tháng|năm)( nay| rồi| trời)?|lâu rồi|lâu năm|từ lâu|mấy năm nay|rồi|nay|cũng|đã|lâu)\b/g), " ").replace(/\s+/g, " ").trim();
+  //   19/10: "a mới cắt amidan", "mẹ vừa sinh mổ" — "mới / vừa / xong / hôm qua" là thời điểm, cũng là nêu tên chủ đề.
+  const restNoTime = rest.replace(VN(/\b((\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều) (ngày|tuần|tháng|năm)( nay| rồi| trời)?|lâu rồi|lâu năm|từ lâu|mấy năm nay|rồi|nay|cũng|đã|lâu|mới|vừa|xong|hôm qua|hôm kia|sáng nay|tuần trước)\b/g), " ").replace(/\s+/g, " ").trim();
   if (topicNames.length && restNoTime === "" && words <= 9) return true;
+  // 19/10: kể chuyện mình / người nhà vừa gặp một tình trạng có thẻ ("vợ a vừa sinh mổ", "bị nấc hoài", "con mới nhổ răng") —
+  //   ngoài tên chủ đề chỉ còn người, thời điểm, mức độ → cũng là nêu chủ đề (đưa kiến thức chăm sóc), không phải chuyện để "kể tiếp".
+  //   (allowTold = 2: thủ thuật / sau sinh — kể cả chuyện người nhà; = 1: bệnh thường — chỉ khi không nhắc người nào, vì
+  //    "mẹ em bị tiểu đường" là mở MẠCH CHUYỆN hỏi han người đó, không đổ bài kiến thức.)
+  const restFreq = restNoTime.replace(VN(/\b(hoài|mãi|suốt|liên tục|quá|lắm|nhiều|hay|bị|thấy|đang|vô|xong rồi|xong|mình|tôi|tui|tớ|e|c)\b/g), " ").replace(/\s+/g, " ").trim();
+  const restPeople = restFreq.replace(VN(/\b(vợ|chồng|mẹ|má|ba|bố|con|em|anh|chị|bé|ông|bà|cháu|bạn|nhà|của|nội|ngoại)\b/g), " ").replace(/\s+/g, " ").trim();
+  if (topicNames.length && words <= 9 && ((allowTold >= 1 && restFreq === "") || (allowTold === 2 && restPeople === ""))) return true;
   // tên + cụm bổ nghĩa ngắn: "tăng động giảm chú ý ở người lớn", "trầm cảm sau sinh", "gout cho người già"
   if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && VN(/^(?:ở|cho|khi|trên|sau|trước|trong) \S+(?: \S+){0,2}$/).test(rest)) return true;
   // có từ hỏi + tên chủ đề nhưng không rõ khía cạnh ("ADHD người lớn có không", "tay chân miệng ở người lớn có không") → tóm tắt chủ đề.
@@ -552,10 +562,22 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   }
   if (aspect === "care") {
     const r = sect(`🌿 Với ${N}, nên:`, t.care, "care");
-    // Sơ cứu (thẻ "other": bỏng, chó cắn, đuối nước…): nói luôn khi nào phải đi cấp cứu / đi khám — đừng bắt hỏi thêm một lượt.
-    if (!r.partial && t.kind === "other" && (t.emergency.length || t.doctor.length)) {
-      const urg = [t.emergency.length ? `🚨 Gọi **115** / đi cấp cứu ngay khi:\n${bl(t.emergency, 4)}` : "", t.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${bl(t.doctor, 3)}` : ""].filter(Boolean).join("\n\n");
-      r.text = [`🌿 Với ${N}, nên:`, bl(t.care), urg, end([t.care, t.emergency.slice(0, 4), t.doctor.slice(0, 3)])].join("\n\n");
+    // 19/10: tách nên làm / nên tránh / thuốc (splitCare) thay vì đổ cả phần chăm sóc dưới tiêu đề "nên:".
+    if (!r.partial) {
+      const sc = splitCare(t);
+      const urg =
+        t.kind === "other" && (t.emergency.length || t.doctor.length)
+          ? [t.emergency.length ? `🚨 Gọi **115** / đi cấp cứu ngay khi:\n${bl(t.emergency, 4)}` : "", t.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${bl(t.doctor, 3)}` : ""].filter(Boolean).join("\n\n")
+          : "";
+      const used = [sc.tips, sc.avoid, sc.meds, ...(urg ? [t.emergency.slice(0, 4), t.doctor.slice(0, 3)] : [])];
+      r.text = [
+        `🌿 Với ${N}, nên:`,
+        bl(sc.tips),
+        sc.avoid.length ? `🚫 **Nên tránh:**\n${bl(sc.avoid)}` : "",
+        sc.meds.length && t.kind !== "term" ? `💊 **Về thuốc** (theo nguồn):\n${bl(sc.meds)}` : sc.meds.length ? bl(sc.meds) : "",
+        urg,
+        end(used),
+      ].filter(Boolean).join("\n\n");
     }
     // Hỏi cách chữa → luôn nói rõ giới hạn: Lomi không kê thuốc / liều (trừ thẻ thuật ngữ, vd "thiền", "CBT").
     if (!r.partial && t.kind !== "term" && t.kind !== "other") r.text = r.text.replace(/\n\n📚/, "\n\n💊 Lomi không kê thuốc hay nêu liều — dùng thuốc nào là do bác sĩ quyết định sau khi khám.\n\n📚");
@@ -606,26 +628,84 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
 }
 
 // (19/10: thêm tên nhóm thuốc / hoạt chất hay gặp trong thẻ — để ý "kháng histamin cetirizine…", "loperamide…" vào đúng phần thuốc)
-const MED_FACT = VR(/(^|[^\p{L}])(thuốc(?! lá| lào)|kháng sinh|kháng virus|kháng vi rút|kháng histamin|kháng axit|kháng nấm|alginat|ức chế bơm proton|PPI|nhuận tràng|retinoid|benzoyl peroxide|azelaic|isotretinoin|loperamide|omeprazole|lansoprazole|famotidine|paracetamol|ibuprofen|aspirin|corticoid|corticosteroid|steroid|insulin|vắc xin|vaccine)(?![\p{L}])/iu);
-const AVOID_FACT = VR(/(^|[^\p{L}])(tránh|không nên|đừng|kiêng|hạn chế|bỏ hút|không hút|không uống rượu)(?![\p{L}])/iu);
+const MED_FACT = VR(/(^|[^\p{L}])(thuốc(?! lá| lào)|kháng sinh|kháng virus|kháng vi rút|kháng histamin|kháng axit|kháng nấm|alginat|ức chế bơm proton|PPI|nhuận tràng|retinoid|benzoyl peroxide|azelaic|isotretinoin|loperamide|omeprazole|lansoprazole|famotidine|paracetamol|ibuprofen|aspirin|corticoid|corticosteroid|steroid|insulin|vắc xin|vaccine|allopurinol|colchicine|metformin|statin|levothyroxine|carbimazole|mebendazole|minoxidil|finasteride|sildenafil|tadalafil|dapoxetine|tamsulosin|mesalazine|methotrexate|amlodipine|losartan|ramipril|indapamide|bisphosphonate|hydroxocobalamin|axit folic|kháng nấm|naproxen|codein|codeine)(?![\p{L}])/iu);
 const PREVENT_FACT = VR(/phòng (bệnh|ngừa|tránh|lây)|muỗi|vắc xin|vaccine|lây (sang|cho)|cách ly/iu);
 const FOREIGN_LINE = VR(/\b988\b|ở Mỹ|ở Hoa Kỳ|NHS 111|\b999\b/iu);
 const DRUG_KINDS = new Set(["condition", "infection", "cancer", "mental", "women", "child"]);
+
+// ── 19/10 (Kir: "kiêng / nên tránh kì vậy, cái đó là khuyên chứ") — TÁCH Ý KHUYÊN và Ý KIÊNG ──
+// Trước đây cả câu chăm sóc có chữ "tránh" ở đâu đó ("súc họng nước muối…; uống nhiều nước…; tránh khói thuốc") bị xếp nguyên câu vào
+// mục Kiêng. Giờ tách mỗi ý thành từng vế (theo dấu ";" và hết câu, không tách trong ngoặc): vế BẮT ĐẦU bằng lời dặn tránh
+// ("tránh…", "đừng…", "không nên…", "không ăn / uống / gãi…", "hạn chế…") vào mục Kiêng, còn lại vào mục khuyên. Ý về thuốc giữ nguyên câu
+// (lưu ý thuốc đi cùng thuốc). Mỗi vế giữ nguồn của ý gốc — không viết thêm chữ nào ngoài nguồn.
+const AVOID_LEAD = VR(/^(?:(?:NHS|MedlinePlus|Mayo Clinic|CDC|WHO)\s*(?:khuyên|gợi ý|dặn)?\s*:\s*)?(?:và\s+)?(tránh|đừng|kiêng|cữ|hạn chế|không nên|bớt|ngưng|bỏ (?:hút|thuốc lá|rượu)|không (?:ăn|uống|dùng|hút|cho|để|mặc|ngồi|nằm|gãi|nặn|chà|tự|đi|làm|bơi|đeo|dụi|giũ|chạm|hôn|quan hệ|cạy|chích|nhổ|bôi|xoa|rặn|nhịn|ngoáy|giặt|thụt|xịt|lái|cúi|ngửa|ở|tắm|súc|đắp|cởi|lau|giữ|mang|kê|chườm|nuốt|thức|bỏ bữa))(?![\p{L}])/iu);
+const TIP_PREFIX = VR(/^(?:(?:NHS|MedlinePlus|Mayo Clinic|CDC|WHO)\s*(?:khuyên|gợi ý|dặn)?\s*:\s*|(?:Tự chăm sóc|Nên làm|Nên|Mẹo)\s*:\s*)/iu);
+const FILLER_CLAUSE = VR(/^(?:cách )?điều trị (?:tu[ỳy] |theo )(?:vào )?nguyên nhân\.?$/iu);
+function clausesOf(text: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let cur = "";
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === "(") depth++;
+    if (c === ")") depth = Math.max(0, depth - 1);
+    const next = text.slice(i + 1);
+    if (depth === 0 && (c === ";" || (c === "." && /^\s+\p{Lu}/u.test(next)))) {
+      out.push(cur);
+      cur = "";
+      continue;
+    }
+    cur += c;
+  }
+  out.push(cur);
+  return out.map((x) => x.trim().replace(/[.;,\s]+$/u, "")).filter((x) => x.length > 2);
+}
+const tidy = (x: string) => {
+  const y = x.replace(TIP_PREFIX, "").trim();
+  return `${y.charAt(0).toUpperCase()}${y.slice(1)}.`;
+};
+/** Phần chăm sóc của thẻ, chia thành: ý khuyên nên làm · ý kiêng / nên tránh · ý về thuốc. */
+export function splitCare(t: MedTopic): { tips: DrugFact[]; avoid: DrugFact[]; meds: DrugFact[] } {
+  const tips: DrugFact[] = [];
+  const avoid: DrugFact[] = [];
+  const meds: DrugFact[] = [];
+  const seen = new Set<string>();
+  for (const f of t.care) {
+    if (MED_FACT.test(f.text.replace(VR(/(khói|hút|bỏ|cai) thuốc( lá| lào)?/giu), ""))) {
+      meds.push(f);
+      continue;
+    }
+    const cl = clausesOf(f.text);
+    const tipCl: string[] = [];
+    for (const c of cl) {
+      if (FILLER_CLAUSE.test(c)) continue;
+      const key = normalizeVi(c);
+      if (seen.has(key)) continue;
+      // (ý gần trùng nhau từ hai nguồn — "giảm cân nếu thừa cân nhưng không nhịn ăn cấp tốc" / "…tránh ăn kiêng cấp tốc" — chỉ giữ một)
+      const kt = new Set(key.split(" "));
+      if (kt.size >= 4 && [...seen].some((o) => { const ot = new Set(o.split(" ")); const inter = [...kt].filter((w) => ot.has(w)).length; return inter / (kt.size + ot.size - inter) >= 0.5; })) continue;
+      seen.add(key);
+      // (lời dặn PHÒNG BỆNH cho cộng đồng — "hạn chế nơi muỗi đẻ" — không phải điều người bệnh phải kiêng)
+      if (AVOID_LEAD.test(c) && !PREVENT_FACT.test(c)) avoid.push({ text: tidy(c), src: f.src });
+      else tipCl.push(c.replace(TIP_PREFIX, "").trim());
+    }
+    // (vế sau viết thường chữ đầu khi ghép lại — "…rượu bia; có thể hỏi…", trừ từ viết tắt / tên riêng như "NHS", "H. pylori")
+    if (tipCl.length) tips.push({ text: tidy(tipCl.map((c, i) => (i && !/^\p{Lu}{2}|^\p{Lu}\./u.test(c) ? c.charAt(0).toLowerCase() + c.slice(1) : c)).join("; ")), src: f.src });
+  }
+  return { tips, avoid, meds };
+}
 function overviewText(t: MedTopic, now: number): string {
   const N = title(t);
   const about = t.about.slice(0, 2);
   const signs = t.signs.slice(0, 4);
-  const careAll = t.care;
-  // (19/10: "khói thuốc", "hút thuốc", "thuốc lá" không phải thuốc chữa bệnh)
-  const isMed = (f: DrugFact) => MED_FACT.test(f.text.replace(VR(/(khói|hút|bỏ|cai) thuốc( lá| lào)?/giu), ""));
-  const meds = careAll.filter(isMed).slice(0, 7);
-  // Kiêng: phần ăn uống nên tránh của thẻ; thẻ không có phần ăn uống thì lấy các ý "tránh / không nên" trong phần chăm sóc.
+  // 19/10: tách ý khuyên / ý kiêng / ý thuốc theo từng vế (splitCare) — mục Kiêng chỉ còn đúng các lời dặn tránh.
+  const sc = splitCare(t);
+  const meds = sc.meds.slice(0, 7);
+  // Kiêng: phần ăn uống nên tránh của thẻ + các lời dặn tránh trong phần chăm sóc.
   const dietAvoid = t.diet ? t.diet.avoid.slice(0, 3) : [];
   const foodsBad = t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").map((f) => f.name) : [];
-  //   (không lấy ý PHÒNG BỆNH cho cộng đồng — "hạn chế nơi muỗi đẻ" không phải điều người bệnh phải kiêng)
-  const careAvoid = dietAvoid.length ? [] : careAll.filter((f) => AVOID_FACT.test(f.text) && !isMed(f) && !PREVENT_FACT.test(f.text)).slice(0, 3);
-  const avoid = [...dietAvoid, ...careAvoid];
-  const tips = careAll.filter((f) => !isMed(f) && !careAvoid.includes(f)).slice(0, 7);
+  const avoid = [...dietAvoid, ...sc.avoid].slice(0, 6);
+  const tips = sc.tips.slice(0, 7);
   const doctor = t.doctor.slice(0, 2);
   // (bỏ ý chỉ dùng được ở nước ngoài — đường dây 988 của Mỹ; ý nghĩ tự tử thì kèm đường dây Ngày Mai như lớp khẩn cấp của app)
   const emergency = t.emergency.filter((f) => !FOREIGN_LINE.test(f.text)).slice(0, 2);
@@ -971,7 +1051,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   if (own) {
     const row = LOOKUP_ROWS.find((r) => r.id === own)!;
     const names = row.names;
-    if (!isMedQuestion(text, names)) return null;
+    // (tâm lý — "a hay lo âu quá" — là lời tâm sự, không phải nêu chủ đề kiến thức)
+    if (!isMedQuestion(text, names, row.kind === "mental" || row.kind === "term" ? 0 : row.kind === "other" || row.kind === "women" ? 2 : 1)) return null;
     // Khía cạnh xét trên phần câu NGOÀI tên chủ đề: "rối loạn ăn uống là gì" — chữ "ăn uống" là tên bệnh, không phải hỏi kiêng cữ.
     const rest0 = names.reduce((acc2, nm) => acc2.replace(` ${normalizeVi(nm)} `, " "), ` ${normalizeVi(text)} `);
     const aspR = aspectOf(rest0);
