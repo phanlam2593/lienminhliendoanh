@@ -310,7 +310,8 @@ describe("Sức khoẻ ≠ tâm sự — không riêng gì gout", () => {
       expect(m.unk).toBeUndefined();
     }
     expect(r[1].content).toMatch(/Tiểu đường.*đường \(glucose\) trong máu/s);
-    expect(r[2].content).toMatch(/không kê thuốc/);
+    // (20/10: lời dặn "không kê thuốc / không kê đơn" chỉ nói LẦN ĐẦU trong cuộc trò chuyện — đã có ở bài tóm tắt lượt trước)
+    expect(r.slice(0, 3).map((m) => m.content).join("\n")).toMatch(/không kê (thuốc|đơn)/);
     expect(r[3].content).toMatch(/Nội tiết/);
     expect(r[4].diet).toBe("dm");
     expect(r[5].content).toMatch(/trái cây/);

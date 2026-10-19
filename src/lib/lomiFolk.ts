@@ -14,7 +14,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import { V, VN } from "@/lib/viMatch";
 
-export type FolkVerdict = "help" | "mixed" | "unclear" | "risky" | "danger";
+export type FolkVerdict = "help" | "mixed" | "unclear" | "risky" | "danger" | "myth";
 export type FolkTopic = { id: string; text: string; src: number[]; v?: FolkVerdict };
 export type FolkEntry = {
   id: string;
@@ -23,6 +23,12 @@ export type FolkEntry = {
   /** Tên để nhận ra (viết đúng dấu tiếng Việt). */
   names: string[];
   verdict: FolkVerdict;
+  /** Quan niệm / thói quen dân gian (verdict "myth") — mô tả điều người ta hay làm, không phải ý y khoa nên không cần nguồn. */
+  belief?: string;
+  /** Lời đồn Lomi đã tìm mà KHÔNG thấy nguồn y khoa nào xác nhận (nói thật là chưa thấy, không khẳng định đúng / sai). */
+  unverified?: string[];
+  /** Chỉ nhận khi câu cũng nói tới ngữ cảnh này ("ngửa cổ" chỉ tính khi đang nói chảy máu cam). */
+  ctx?: RegExp;
   folk: DrugFact[];
   science: DrugFact[];
   how?: DrugFact[];
@@ -39,6 +45,7 @@ export const VERDICT: Record<FolkVerdict, { icon: string; text: string }> = {
   unclear: { icon: "❔", text: "Chưa đủ bằng chứng là chữa được bệnh" },
   risky: { icon: "⚠️", text: "Có rủi ro đáng kể — chỉ dùng khi bác sĩ đồng ý" },
   danger: { icon: "⛔", text: "Nguồn y khoa cảnh báo NGUY HIỂM — không nên dùng" },
+  myth: { icon: "🧐", text: "Quan niệm dân gian — nguồn y khoa hướng dẫn khác" },
 };
 
 const VERIFIED = "2026-10-20";
@@ -48,6 +55,21 @@ const NHS_COUGH: DrugSource = { title: "Cough", publisher: "NHS (Anh)", url: "ht
 const NHS_COLD: DrugSource = { title: "Common cold", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/common-cold/", reviewed: "2024-03-22" };
 const NHS_SINUS: DrugSource = { title: "Sinusitis (sinus infection)", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/sinusitis-sinus-infection/", reviewed: "2024-01-31" };
 const NHS_BURN: DrugSource = { title: "Burns and scalds", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/burns-and-scalds/", reviewed: "2026-03-31" };
+const NHS_NOSE: DrugSource = { title: "Nosebleed", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/nosebleed/", reviewed: "2023-12-05" };
+const NHS_SNAKE: DrugSource = { title: "Snake bites", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/snake-bites/", reviewed: "2026-07-17" };
+const NHS_FSEIZ: DrugSource = { title: "Febrile seizures", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/febrile-seizures/", reviewed: "2023-06-21" };
+const NHS_FEVERKID: DrugSource = { title: "Fever in children", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/fever-in-children/", reviewed: "2024-01-03" };
+const NHS_DV: DrugSource = { title: "Diarrhoea and vomiting", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/diarrhoea-and-vomiting/", reviewed: "2023-12-21" };
+const NHS_POX: DrugSource = { title: "Chickenpox", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/chickenpox/", reviewed: "2025-01-31" };
+const NHS_JAUN: DrugSource = { title: "Newborn jaundice", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/jaundice-newborn/", reviewed: "2026-03-24" };
+const NHS_ACNE: DrugSource = { title: "Acne", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/acne/", reviewed: "2026-09-22" };
+const NHS_BITE: DrugSource = { title: "Insect bites and stings", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/insect-bites-and-stings/", reviewed: "2023-06-01" };
+const NHS_CONJ: DrugSource = { title: "Conjunctivitis", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/conjunctivitis/", reviewed: "2024-04-23" };
+const NHS_OA: DrugSource = { title: "Osteoarthritis – Living with", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/osteoarthritis/living-with/", reviewed: "2023-03-20" };
+const NHS_RA: DrugSource = { title: "Rheumatoid arthritis – Living with", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/rheumatoid-arthritis/living-with/", reviewed: "2023-03-08" };
+const NHS_GOUT: DrugSource = { title: "Gout", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/gout/", reviewed: "2023-08-24" };
+const WHO_RABIES: DrugSource = { title: "Rabies – fact sheet (17/09/2026)", publisher: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/rabies" };
+const LIVERTOX_BM: DrugSource = { title: "Bitter Melon — LiverTox (cập nhật 20/03/2023)", publisher: "LiverTox (NIDDK – NIH)", url: "https://www.ncbi.nlm.nih.gov/books/NBK590483/" };
 /** Lời dặn chung khi dùng thảo dược / thực phẩm chức năng. */
 export const WISELY: DrugSource = nccih("using-dietary-supplements-wisely", "Using Dietary Supplements Wisely", "01/2019");
 
@@ -606,20 +628,381 @@ export const FOLK: FolkEntry[] = [
     sources: [NHS_BURN],
     verifiedAt: VERIFIED,
   },
+  // ── 20/10 (đợt 2): thêm vị thuốc / thực phẩm hay dùng ──
+  {
+    id: "kho-qua",
+    name: "Khổ qua (mướp đắng)",
+    names: ["khổ qua", "mướp đắng", "trà khổ qua", "canh khổ qua", "khổ qua rừng", "nước khổ qua", "bitter melon"],
+    verdict: "unclear",
+    folk: [{ text: "Dân gian xem khổ qua là món \"mát\", hay dùng cho táo bón, khó tiêu, bệnh ngoài da; nay được bán như thực phẩm chức năng hạ đường huyết cho tiểu đường type 2.", src: [0] }],
+    science: [
+      { text: "Thử nghiệm ở người tiểu đường: chỉ hạ đường huyết ở mức khiêm tốn, gần như không đổi đường huyết lúc đói và HbA1c; so với metformin thì metformin hạ đường còn khổ qua không.", src: [0] },
+      { text: "Tác dụng kháng virus, chống ung thư được quảng cáo chưa được chứng minh trên người; FDA chưa duyệt khổ qua cho bệnh nào.", src: [0] },
+    ],
+    caution: [
+      { text: "Có thể khó chịu bụng, ợ nóng, tiêu chảy hoặc táo bón, buồn nôn, chóng mặt, đau đầu; hiếm nhưng nặng: hạ đường huyết nặng, hôn mê, co giật.", src: [0] },
+      { text: "Khổ qua có thể gây sảy thai — LiverTox khuyên không dùng (dạng thuốc, chiết xuất) khi mang thai.", src: [0] },
+      { text: "Người tiểu đường đang dùng thuốc hỏi bác sĩ trước khi dùng khổ qua như thuốc, vì khổ qua có thể gây hạ đường huyết.", src: [0] },
+    ],
+    unverified: ["khổ qua (họ bầu bí, mướp) làm nhức xương khớp"],
+    topics: [{ id: "tieu-duong-type-2", text: "chỉ hạ đường huyết nhẹ, kém metformin — không thay được thuốc; bà bầu không dùng", src: [0], v: "unclear" }],
+    sources: [LIVERTOX_BM],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "bach-qua",
+    name: "Bạch quả (ginkgo)",
+    names: ["bạch quả", "ginkgo", "hạt bạch quả", "lá bạch quả", "hoạt huyết dưỡng não"],
+    verdict: "unclear",
+    folk: [{ text: "Đông y dùng bạch quả lâu đời cho ho, tiêu chảy; nay chiết xuất lá được bán cho trí nhớ, \"bổ não\", ù tai, tuần hoàn.", src: [0] }],
+    science: [
+      { text: "Ba nghiên cứu lớn ở người cao tuổi (một nghiên cứu hơn 3.000 người) cho thấy chiết xuất bạch quả KHÔNG làm giảm nguy cơ sa sút trí tuệ.", src: [0] },
+      { text: "Không giúp phòng bệnh tim, hạ huyết áp, chữa ù tai. Người khoẻ dùng có tăng trí nhớ không: chưa chắc.", src: [0] },
+    ],
+    caution: [
+      { text: "Hạt tươi ăn vào có độc; hạt rang, cây thô cũng từng gây tác dụng nặng.", src: [0] },
+      { text: "Có thể tăng nguy cơ chảy máu, nhất là khi dùng chung thuốc chống đông như warfarin. Hay gặp: chóng mặt, rối loạn tiêu hoá, đau đầu.", src: [0] },
+      { text: "Mang thai: có thể không an toàn (sinh non, chảy máu nhiều khi sinh).", src: [0] },
+    ],
+    topics: [
+      { id: "sa-sut-tri-tue", text: "nghiên cứu lớn cho thấy KHÔNG làm giảm nguy cơ sa sút trí tuệ; dễ chảy máu khi dùng chung thuốc chống đông", src: [0], v: "unclear" },
+      { id: "u-tai", text: "nghiên cứu cho thấy bạch quả không giúp ù tai", src: [0], v: "unclear" },
+    ],
+    sources: [nccih("ginkgo", "Ginkgo", "02/2025")],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "bo-cong-anh",
+    name: "Bồ công anh",
+    names: ["bồ công anh", "trà bồ công anh", "dandelion"],
+    verdict: "unclear",
+    folk: [{ text: "Hoa, lá, rễ bồ công anh được dùng trong y học dân gian; nay được quảng bá uống cho khó tiêu, uống hoặc bôi cho đau khớp.", src: [0] }],
+    science: [{ text: "Rất ít nghiên cứu trên người — không có bằng chứng khoa học thuyết phục bồ công anh giúp được bệnh nào.", src: [0] }],
+    caution: [
+      { text: "Lượng như thức ăn có lẽ an toàn; dùng nhiều hơn thì ít được nghiên cứu. Có thể dị ứng (nhất là người bị chàm khi bôi).", src: [0] },
+      { text: "Có thể tương tác với thuốc tiểu đường, thuốc chống đông, thuốc lợi tiểu — hỏi bác sĩ trước.", src: [0] },
+    ],
+    topics: [],
+    sources: [nccih("dandelion", "Dandelion", "11/2024")],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "dau-nanh",
+    name: "Đậu nành / mầm đậu nành",
+    names: ["mầm đậu nành", "tinh chất mầm đậu nành", "isoflavone", "đậu nành", "sữa đậu nành", "đậu hũ"],
+    verdict: "mixed",
+    folk: [{ text: "Đậu nành (đậu hũ, sữa đậu nành) và viên mầm đậu nành / isoflavone được quảng bá cho tiền mãn kinh, mỡ máu, huyết áp, tiểu đường.", src: [0] }],
+    science: [
+      { text: "Bốc hoả tiền mãn kinh: isoflavone hoặc đạm đậu nành có thể giảm số lần và mức độ, nhưng tác dụng nhỏ và không đồng đều.", src: [0] },
+      { text: "Thay đạm khác bằng đạm đậu nành có thể hạ nhẹ cholesterol; isoflavone có lẽ có lợi cho mật độ xương sau mãn kinh.", src: [0] },
+    ],
+    caution: [
+      { text: "Có thể đầy bụng, táo bón, tiêu chảy, buồn nôn; có người dị ứng đậu nành.", src: [0] },
+      { text: "Mang thai: dùng nhiều hơn lượng trong thức ăn có thể không an toàn.", src: [0] },
+      { text: "Đậu hũ, nước tương (nhiều tyramine) dùng chung thuốc chống trầm cảm nhóm MAOI từng gây tăng huyết áp nguy hiểm.", src: [0] },
+    ],
+    topics: [
+      { id: "man-kinh", text: "isoflavone / đạm đậu nành có thể giảm bốc hoả chút ít (tác dụng nhỏ, không đồng đều)", src: [0], v: "mixed" },
+      { id: "mo-mau-cao", text: "thay đạm khác bằng đạm đậu nành có thể hạ nhẹ cholesterol", src: [0], v: "help" },
+    ],
+    sources: [nccih("soy", "Soy", "04/2025")],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "oai-huong",
+    name: "Oải hương (lavender)",
+    names: ["oải hương", "tinh dầu oải hương", "lavender"],
+    verdict: "unclear",
+    folk: [{ text: "Oải hương dùng lâu đời trong xông tinh dầu, tắm, nước hoa; nay được quảng bá uống cho lo âu, căng thẳng, và xông cho dễ ngủ.", src: [0] }],
+    science: [
+      { text: "Lo âu: một chế phẩm dầu oải hương dạng uống có thể giúp, nhưng nghiên cứu nhỏ, ít kiểm chứng độc lập.", src: [0] },
+      { text: "Xông tinh dầu cho giấc ngủ, mất ngủ: chưa rõ có tác dụng.", src: [0] },
+    ],
+    caution: [
+      { text: "Uống có thể gây tiêu chảy, đau đầu, buồn nôn, ợ hơi; xông có thể đau đầu, ho; bôi có thể dị ứng da.", src: [0] },
+      { text: "Có thể tương tác với thuốc an thần (lưu ý trước phẫu thuật). Mang thai, cho con bú: chưa rõ an toàn.", src: [0] },
+    ],
+    topics: [
+      { id: "mat-ngu", text: "xông tinh dầu oải hương chưa rõ có giúp ngủ", src: [0], v: "unclear" },
+      { id: "lo-au", text: "dạng uống có thể giúp lo âu (nghiên cứu nhỏ); có thể tương tác thuốc an thần", src: [0], v: "mixed" },
+    ],
+    sources: [nccih("lavender", "Lavender", "02/2025")],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "nu-lang",
+    name: "Nữ lang (valerian)",
+    names: ["nữ lang", "valerian", "rễ nữ lang"],
+    verdict: "unclear",
+    folk: [{ text: "Rễ nữ lang dùng từ thời Hy Lạp, La Mã cho mất ngủ, đau nửa đầu, mệt mỏi; nay hay có trong viên \"ngủ ngon\" thảo dược.", src: [0] }],
+    science: [{ text: "Mất ngủ: bằng chứng không thống nhất — hướng dẫn của Viện Hàn lâm Y học Giấc ngủ Hoa Kỳ (2017) khuyên KHÔNG dùng cho mất ngủ mạn ở người lớn.", src: [0] }],
+    caution: [
+      { text: "Có thể đau đầu, rối loạn tiêu hoá, đầu óc lờ đờ, bồn chồn, mơ nhiều; dùng lâu rồi ngưng đột ngột có thể bị triệu chứng cai.", src: [0] },
+      { text: "Không dùng chung thuốc an thần, rượu. Hiếm: tổn thương gan (thường khi phối nhiều thảo dược). Mang thai, cho con bú: chưa rõ an toàn.", src: [0] },
+    ],
+    topics: [{ id: "mat-ngu", text: "hướng dẫn chuyên ngành khuyên không dùng cho mất ngủ mạn; không uống chung rượu, thuốc an thần", src: [0], v: "unclear" }],
+    sources: [nccih("valerian", "Valerian", "05/2025")],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "garcinia",
+    name: "Garcinia cambogia (viên giảm cân)",
+    names: ["garcinia", "garcinia cambogia", "hca", "hydroxycitric"],
+    verdict: "risky",
+    folk: [{ text: "Vỏ quả garcinia có HCA, được bán trong nhiều viên \"giảm cân thảo dược\" để giảm thèm ăn.", src: [0] }],
+    science: [{ text: "Chưa rõ có giúp giảm cân không — có nghiên cứu thấy tác dụng khiêm tốn, có nghiên cứu không thấy gì.", src: [0] }],
+    caution: [
+      { text: "Đã có nhiều báo cáo tổn thương gan, có ca nặng — sản phẩm có garcinia (kể cả loại phối nhiều thành phần) có thể không an toàn.", src: [0] },
+      { text: "Có thể đau đầu, buồn nôn, tiêu chảy; tương tác với một số thuốc ảnh hưởng gan, serotonin.", src: [0] },
+    ],
+    topics: [{ id: "beo-phi", text: "viên giảm cân có garcinia: chưa rõ tác dụng, đã có ca tổn thương gan", src: [0], v: "risky" }],
+    sources: [nccih("garcinia-cambogia", "Garcinia Cambogia", "02/2025")],
+    verifiedAt: VERIFIED,
+  },
+  // ── 20/10 (đợt 2): QUAN NIỆM / THÓI QUEN DÂN GIAN khi ốm — nguồn y khoa nói gì ──
+  {
+    id: "kieng-dau-khop",
+    name: "Đau khớp kiêng măng, đồ \"nhức\"",
+    names: ["măng", "đồ nhức", "món nhức", "ăn nhức", "đồ ăn nhức", "thịt vịt", "kiêng nhức", "mướp", "bí", "đồ chua", "khổ qua", "mướp đắng", "bị nhức"],
+    ctx: VN(/\b(khớp|gout|gút|thấp khớp|nhức xương|nhức mỏi|xương khớp|thoái hoá|đau lưng|gai cột sống)\b/),
+    verdict: "myth",
+    belief: "Người đau khớp hay được dặn kiêng măng, khổ qua, mướp, bí, thịt vịt, đồ chua… vì sợ \"nhức\".",
+    folk: [],
+    science: [
+      { text: "NHS không nêu món cụ thể nào phải kiêng với thoái hoá khớp hay viêm khớp dạng thấp — chỉ khuyên ăn uống lành mạnh, vận động, giữ cân nặng (cân dư làm khớp chịu tải nhiều hơn).", src: [0, 1] },
+      { text: "Với gout, NHS khuyên hạn chế rượu bia, có ngày không uống, tránh nhiều đồ ăn / uống ngọt và bữa quá no — không nhắc tới măng.", src: [2] },
+    ],
+    how: [{ text: "Muốn dùng thực phẩm chức năng, thuốc bổ khớp thì hỏi đội ngũ điều trị trước — có thể ảnh hưởng thuốc đang dùng.", src: [0, 1] }],
+    caution: [{ text: "Gout: bác sĩ có thể đưa danh sách món nên ăn / hạn chế riêng cho bạn.", src: [2] }],
+    unverified: ["măng, khổ qua, mướp, bí, thịt vịt, đồ chua làm nặng đau khớp"],
+    topics: [
+      { id: "thoai-hoa-khop", text: "chưa thấy nguồn nói măng, đồ \"nhức\" làm nặng bệnh; NHS chỉ khuyên ăn lành mạnh, giữ cân, vận động", src: [0], v: "myth" },
+      { id: "viem-khop-dang-thap", text: "NHS không nêu món phải kiêng; ăn lành mạnh, vận động, giữ cân", src: [1], v: "myth" },
+    ],
+    sources: [NHS_OA, NHS_RA, NHS_GOUT],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "mau-cam-ngua-co",
+    name: "Chảy máu cam: ngửa cổ ra sau?",
+    names: ["ngửa cổ", "ngửa đầu", "ngửa ra sau", "ngước lên", "nằm ngửa", "nhét giấy", "nhét bông", "ngửa mặt"],
+    ctx: VN(/\b(chảy máu cam|chảy máu mũi|máu cam|máu mũi|cam)\b/),
+    verdict: "myth",
+    belief: "Chảy máu cam thì ngửa cổ ra sau, nằm ngửa hoặc nhét giấy vào mũi.",
+    folk: [],
+    science: [{ text: "NHS hướng dẫn ngồi xuống, NGHIÊNG NGƯỜI VỀ TRƯỚC (đầu cúi về trước), há miệng thở — không phải ngửa cổ.", src: [0] }],
+    how: [
+      { text: "Bóp phần mềm của mũi ngay trên lỗ mũi 10–15 phút, thở bằng miệng; chườm túi đá bọc khăn lên sống mũi có thể giúp (bằng chứng yếu).", src: [0] },
+      { text: "24 giờ sau khi cầm máu: đừng xì / ngoáy mũi, uống đồ nóng, rượu bia, mang vác nặng, và đừng nằm thẳng.", src: [0] },
+    ],
+    caution: [{ text: "Đi cấp cứu nếu chảy quá 10–15 phút, chảy nhiều, nuốt máu tới mức nôn, sau va đập đầu, thấy choáng / chóng mặt hoặc khó thở.", src: [0] }],
+    topics: [{ id: "chay-mau-cam", text: "đừng ngửa cổ — nghiêng người về trước, bóp mũi 10–15 phút", src: [0], v: "myth" }],
+    sources: [NHS_NOSE],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "ran-can-hut-noc",
+    name: "Rắn cắn: hút nọc, garô?",
+    names: ["hút nọc", "nặn nọc", "garô", "ga rô", "buộc chặt", "rạch", "cắt vết", "đắp lá", "đắp thuốc", "chích lể"],
+    ctx: VN(/\b(rắn)\b/),
+    verdict: "myth",
+    belief: "Rắn cắn thì rạch vết cắn, hút / nặn nọc ra, buộc garô thật chặt, đắp lá.",
+    folk: [],
+    science: [{ text: "NHS: KHÔNG hút hay rạch để lấy nọc; KHÔNG buộc chặt quanh chỗ bị cắn; không uống aspirin, ibuprofen (làm chảy máu nặng hơn).", src: [0] }],
+    how: [
+      { text: "Gọi 115 / đến viện ngay (không tự lái xe); giữ phần bị cắn càng yên càng tốt, nằm nghiêng an toàn nếu được; tháo nhẫn, nới quần áo gần vết cắn.", src: [0] },
+      { text: "Nhớ màu, hoa văn con rắn hoặc chụp ảnh từ xa nếu an toàn — đừng lại gần, bắt hay đập rắn.", src: [0] },
+    ],
+    caution: [{ text: "Có thể uống paracetamol nếu đau; tránh aspirin, ibuprofen.", src: [0] }],
+    topics: [{ id: "ran-can", text: "đừng hút nọc, rạch hay buộc garô — giữ yên chỗ bị cắn, đi viện ngay", src: [0], v: "myth" }],
+    sources: [NHS_SNAKE],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "co-giat-nhet-vat",
+    name: "Co giật: nhét đũa vào miệng?",
+    names: ["nhét đũa", "nhét khăn", "nhét muỗng", "nhét thìa", "cạy miệng", "nhét vào miệng", "cắn lưỡi", "giữ chặt", "đè chặt", "bấm nhân trung"],
+    ctx: VN(/\b(co giật|lên cơn giật|giật kinh|kinh phong|động kinh|lên cơn)\b/),
+    verdict: "myth",
+    belief: "Người co giật thì nhét đũa, khăn, muỗng vào miệng cho khỏi cắn lưỡi, đè giữ chặt tay chân, bấm nhân trung.",
+    folk: [],
+    science: [{ text: "NHS (co giật do sốt ở trẻ): KHÔNG nhét bất cứ thứ gì vào miệng; không di chuyển hay giữ chặt; không cởi đồ hay lau nước lạnh để hạ sốt.", src: [0] }],
+    how: [{ text: "Ghi giờ bắt đầu – kết thúc; lấy tay hoặc đồ mềm đỡ đầu; dẹp vật nguy hiểm xung quanh; hết cơn thì đặt nằm nghiêng an toàn, xem miệng họng có vướng gì không.", src: [0] }],
+    caution: [{ text: "Gọi 115 nếu: co giật lần đầu, kéo dài hơn 5 phút, khó thở, giật một bên người, li bì hơn 1 giờ sau cơn, hoặc hơn 1 cơn trong 24 giờ.", src: [0] }],
+    topics: [
+      { id: "sot-co-giat", text: "đừng nhét gì vào miệng, đừng giữ chặt — đỡ đầu, ghi giờ, nằm nghiêng sau cơn", src: [0], v: "myth" },
+      { id: "co-giat", text: "đừng nhét đũa / khăn vào miệng, đừng đè giữ", src: [0], v: "myth" },
+    ],
+    sources: [NHS_FSEIZ],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "sot-u-chan",
+    name: "Trẻ sốt: ủ chăn cho ra mồ hôi?",
+    names: ["trùm chăn", "ủ chăn", "ủ ấm", "đắp chăn", "đắp mền", "trùm mền", "mặc nhiều áo", "mặc nhiều đồ", "cho ra mồ hôi", "lau nước lạnh", "tắm nước lạnh", "chườm đá", "cởi hết đồ", "lau người"],
+    ctx: VN(/\b(sốt|nóng sốt|sốt cao|nóng người|hâm hấp)\b/),
+    verdict: "myth",
+    belief: "Trẻ sốt thì trùm chăn, mặc thật nhiều áo cho \"ra mồ hôi\"; hoặc ngược lại, cởi hết đồ rồi lau nước lạnh.",
+    folk: [],
+    science: [{ text: "NHS: không ủ trẻ bằng quá nhiều quần áo, chăn; cũng không cởi đồ hay lau người (lau mát) để hạ sốt.", src: [0] }],
+    how: [{ text: "Cho trẻ uống nhiều nước; bé bú mẹ thì cứ cho bú.", src: [0] }],
+    caution: [{ text: "Trẻ sốt mà co giật: không nhét gì vào miệng, gọi 115 nếu là lần đầu hoặc kéo dài hơn 5 phút.", src: [1] }],
+    topics: [{ id: "sot-o-tre-em", text: "đừng ủ chăn hay lau nước lạnh — cho uống đủ nước, bú mẹ như thường", src: [0], v: "myth" }],
+    sources: [NHS_FEVERKID, NHS_FSEIZ],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "tieu-chay-nhin-an",
+    name: "Tiêu chảy: nhịn ăn, pha sữa loãng?",
+    names: ["nhịn ăn", "kiêng ăn", "pha loãng", "sữa loãng", "pha sữa loãng", "nước ngọt", "nước có ga", "coca", "nước ép", "nước trái cây", "ngưng bú", "cai sữa", "bỏ bú"],
+    ctx: VN(/\b(tiêu chảy|đi ngoài|tháo dạ|ỉa chảy|đi cầu nhiều|phân lỏng|rối loạn tiêu hoá)\b/),
+    verdict: "myth",
+    belief: "Bị tiêu chảy thì nhịn ăn cho \"ruột nghỉ\", pha sữa loãng cho bé, ngưng bú, uống nước ngọt có ga hay nước trái cây.",
+    folk: [],
+    science: [
+      { text: "NHS: ăn khi thấy ăn được (có thể tránh đồ béo, cay); bé vẫn bú mẹ / bú bình như thường, KHÔNG pha sữa công thức loãng hơn bình thường.", src: [0] },
+      { text: "NHS: không uống nước ép trái cây, nước có ga vì có thể làm tiêu chảy nặng hơn.", src: [0] },
+    ],
+    how: [{ text: "Uống nhiều nước, buồn nôn thì nhấp từng ngụm; dược sĩ có thể khuyên gói bù nước (ORS / oresol).", src: [0] }],
+    caution: [
+      { text: "Không cho trẻ dưới 12 tuổi uống thuốc cầm tiêu chảy; trẻ dưới 16 tuổi không dùng aspirin.", src: [0] },
+      { text: "Trẻ dưới 5 tuổi có dấu hiệu mất nước (ít tã ướt) thì đi khám.", src: [0] },
+    ],
+    topics: [
+      { id: "tieu-chay", text: "đừng nhịn ăn, đừng uống nước có ga / nước ép — ăn khi ăn được, uống đủ nước, ORS", src: [0], v: "myth" },
+      { id: "tieu-chay-o-tre", text: "vẫn cho bú như thường, không pha sữa loãng, không cho thuốc cầm tiêu chảy", src: [0], v: "myth" },
+    ],
+    sources: [NHS_DV],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "thuy-dau-kieng-tam",
+    name: "Thuỷ đậu: kiêng tắm, kiêng gió?",
+    names: ["kiêng tắm", "kiêng gió", "kiêng nước", "không tắm", "tắm được không", "tắm được k", "tắm được ko", "có được tắm", "đóng kín cửa"],
+    ctx: VN(/\b(thuỷ đậu|thủy đậu|trái rạ|phỏng rạ|đậu mùa)\b/),
+    verdict: "myth",
+    belief: "Bị thuỷ đậu (trái rạ) phải kiêng tắm, kiêng gió, kiêng nước, đóng kín cửa.",
+    folk: [],
+    science: [{ text: "NHS: nên tắm nước mát rồi thấm khô (đừng chà xát), mặc đồ rộng rãi.", src: [0] }],
+    how: [{ text: "Cắt móng tay, đeo bao tay khi ngủ cho bé đỡ gãi — gãi dễ để lại sẹo.", src: [0] }],
+    caution: [
+      { text: "Không dùng ibuprofen trừ khi bác sĩ bảo (có thể gây nhiễm trùng da nặng); trẻ dưới 16 tuổi không dùng aspirin.", src: [0] },
+      { text: "Nghỉ học / làm tới khi mụn đóng vảy hết (thường khoảng 5 ngày); tránh lại gần trẻ sơ sinh, bà bầu, người suy giảm miễn dịch.", src: [0] },
+    ],
+    topics: [{ id: "thuy-dau", text: "không cần kiêng tắm — tắm nước mát, thấm khô, mặc đồ rộng; không dùng ibuprofen", src: [0], v: "myth" }],
+    sources: [NHS_POX],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "vang-da-phoi-nang",
+    name: "Bé vàng da: phơi nắng?",
+    names: ["phơi nắng", "tắm nắng", "ra nắng", "cho ra nắng", "đem phơi"],
+    ctx: VN(/\b(vàng da|vàng mắt|da vàng)\b/),
+    verdict: "myth",
+    belief: "Bé sơ sinh vàng da thì đem phơi, tắm nắng cho hết vàng.",
+    folk: [],
+    science: [
+      { text: "Hướng dẫn của NHS không có phơi nắng; ánh sáng chỉ giúp NHÌN màu vàng rõ hơn (trên da sẫm màu thì khó thấy hơn).", src: [0] },
+      { text: "Cho bú đều giúp vàng da mau hết — khoảng 8–12 cữ mỗi ngày, bé ngủ li bì thì đánh thức cho bú.", src: [0] },
+    ],
+    caution: [
+      { text: "Gọi 115 / đi cấp cứu nếu vàng da trong 24 giờ đầu, hoặc bé li bì khó đánh thức, bỏ bú, mềm nhũn / co cứng, sốt từ 38°C hoặc thân nhiệt từ 36°C trở xuống, không có tã ướt, khó thở.", src: [0] },
+      { text: "Khám gấp nếu bé trên 24 giờ tuổi vàng da không đỡ / nặng hơn, nước tiểu vàng sẫm, phân bạc màu.", src: [0] },
+    ],
+    topics: [{ id: "vang-da-so-sinh", text: "nguồn không khuyên phơi nắng — cho bú đều 8–12 cữ/ngày; vàng da trong 24 giờ đầu phải đi cấp cứu", src: [0], v: "myth" }],
+    sources: [NHS_JAUN],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "nan-mun",
+    name: "Nặn mụn, chà mặt thật mạnh?",
+    names: ["nặn mụn", "nặn", "cạy mụn", "lể mụn", "bóp mụn", "chà mạnh", "chà xát", "đồ nóng", "đồ ăn nóng", "nóng trong"],
+    ctx: VN(/\b(mụn|trứng cá)\b/),
+    verdict: "myth",
+    belief: "Mụn thì nặn cho mau khỏi, rửa mặt chà thật mạnh cho sạch; kiêng đồ \"nóng\" (xoài, nhãn, vải…).",
+    folk: [],
+    science: [{ text: "NHS: không nặn hay cạy mụn vì dễ để lại sẹo; không chà mạnh vì làm kích ứng, mụn có thể nặng hơn.", src: [0] }],
+    how: [{ text: "Rửa mặt ngày 2 lần bằng sữa rửa mặt dịu nhẹ; tẩy trang vào cuối ngày.", src: [0] }],
+    caution: [],
+    unverified: ["đồ \"nóng\" như xoài, nhãn, vải làm nổi mụn"],
+    topics: [{ id: "mun-trung-ca", text: "đừng nặn mụn (dễ sẹo), đừng chà mạnh — rửa mặt nhẹ ngày 2 lần", src: [0], v: "myth" }],
+    sources: [NHS_ACNE],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "con-trung-can",
+    name: "Ong đốt, côn trùng cắn: bôi vôi, kem đánh răng?",
+    names: ["bôi vôi", "vôi", "kem đánh răng", "dầu gió", "nước miếng", "nước bọt", "nhíp", "gắp ngòi", "nhổ ngòi", "baking soda", "dầu cù là", "chanh"],
+    ctx: VN(/\b(ong|côn trùng|kiến|muỗi|rết|bọ|sâu róm|nhện)\b.*\b(đốt|cắn|chích)\b|\b(đốt|cắn|chích)\b.*\b(ong|côn trùng|kiến|muỗi|rết|bọ|sâu róm|nhện)\b/),
+    verdict: "myth",
+    belief: "Ong đốt, côn trùng cắn thì bôi vôi, kem đánh răng, dầu gió, nước miếng; lấy nhíp gắp ngòi.",
+    folk: [],
+    science: [{ text: "NHS dặn không dùng mẹo tại nhà (ví dụ baking soda) để chữa vết cắn, đốt; không gắp ngòi bằng nhíp vì có thể bóp thêm nọc vào.", src: [0] }],
+    how: [{ text: "Cạo ngòi theo chiều ngang bằng móng tay / mép thẻ cứng, rửa xà phòng và nước; chườm lạnh (túi đá bọc khăn) ít nhất 20 phút, kê cao chỗ bị đốt; đừng gãi.", src: [0] }],
+    caution: [{ text: "Có thể dùng paracetamol hoặc ibuprofen cho đỡ đau, thuốc kháng histamin uống cho đỡ ngứa — hỏi dược sĩ.", src: [0] }],
+    topics: [{ id: "con-trung-dot", text: "đừng bôi vôi, kem đánh răng hay gắp ngòi bằng nhíp — cạo ngòi, rửa sạch, chườm lạnh", src: [0], v: "myth" }],
+    sources: [NHS_BITE],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "cho-can-thuoc-nam",
+    name: "Chó, mèo cắn: đắp lá, uống thuốc nam?",
+    names: ["đắp lá", "thuốc nam", "thuốc lá cây", "bốc thuốc", "thầy lang", "chữa dại", "theo dõi con chó", "theo dõi chó", "không cần tiêm", "không tiêm"],
+    ctx: VN(/\b(chó|mèo|dơi|khỉ|chuột)\b.*\b(cắn|cào|liếm)\b|\b(cắn|cào)\b.*\b(chó|mèo|dơi|khỉ)\b|\bdại\b/),
+    verdict: "myth",
+    belief: "Chó, mèo cắn thì đắp lá, uống thuốc nam, \"theo dõi con chó\" rồi mới tính chuyện tiêm.",
+    folk: [],
+    science: [{ text: "WHO: bệnh dại một khi đã có triệu chứng thì gần như tử vong 100%.", src: [0] }],
+    how: [{ text: "Rửa vết thương ngay bằng xà phòng và nước ít nhất 15 phút rồi đi khám ngay — tiêm phòng dại sau phơi nhiễm (vắc xin, và huyết thanh khi cần) chặn được virus.", src: [0] }],
+    caution: [],
+    topics: [{ id: "benh-dai", text: "đừng đắp lá / uống thuốc nam thay tiêm — rửa xà phòng 15 phút, đi tiêm phòng dại ngay", src: [0], v: "myth" }],
+    sources: [WHO_RABIES],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "dau-mat-do",
+    name: "Đau mắt đỏ: nhỏ sữa mẹ, nước lá?",
+    names: ["sữa mẹ", "nhỏ sữa", "nước lá", "lá trầu", "nước trà", "xông mắt", "nhỏ chanh", "nước muối tự pha"],
+    ctx: VN(/\b(mắt|đau mắt|mắt đỏ|viêm kết mạc|ghèn|dử mắt)\b/),
+    verdict: "myth",
+    belief: "Đau mắt đỏ thì nhỏ sữa mẹ, nước lá, nước trà, xông mắt.",
+    folk: [],
+    science: [{ text: "Cách tự chăm sóc NHS hướng dẫn chỉ gồm: lau mi bằng bông sạch nhúng nước đun sôi để nguội (mỗi mắt một miếng) và chườm khăn mát vài phút.", src: [0] }],
+    caution: [{ text: "Không dụi mắt, không dùng chung khăn, gối; tạm ngưng kính áp tròng tới khi khỏi.", src: [0] }],
+    unverified: ["nhỏ sữa mẹ, nước lá, nước trà vào mắt giúp mau khỏi"],
+    topics: [{ id: "viem-ket-mac", text: "đừng nhỏ sữa mẹ hay nước lá — lau mi bằng nước sôi để nguội, chườm khăn mát", src: [0], v: "myth" }],
+    sources: [NHS_CONJ],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "cam-vitamin-c",
+    name: "Cảm: uống thật nhiều vitamin C, nước cam?",
+    names: ["vitamin c", "nước cam", "uống cam", "c sủi", "viên sủi c", "uống chanh", "echinacea"],
+    ctx: VN(/\b(cảm|cúm|sổ mũi|nghẹt mũi|ho|đau họng|đề kháng|miễn dịch)\b/),
+    verdict: "myth",
+    belief: "Bị cảm thì uống thật nhiều vitamin C, nước cam, viên sủi C cho mau khỏi.",
+    folk: [],
+    science: [{ text: "NHS: có rất ít bằng chứng vitamin C, echinacea hay tỏi giúp phòng cảm lạnh hoặc mau khỏi.", src: [0] }],
+    how: [{ text: "Nghỉ ngơi, uống đủ nước, ăn uống lành mạnh; súc họng nước muối, chanh mật ong ấm cho dịu họng (không cho bé dưới 1 tuổi ăn mật ong).", src: [0] }],
+    caution: [{ text: "Kháng sinh không chữa cảm lạnh (do virus).", src: [0] }],
+    topics: [{ id: "cam-lanh", text: "rất ít bằng chứng vitamin C giúp phòng hay mau khỏi cảm", src: [0], v: "myth" }],
+    sources: [NHS_COLD],
+    verifiedAt: VERIFIED,
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
 export const UNVERIFIED_HERBS = [
   "kỷ tử", "câu kỷ tử", "kỉ tử", "câu kỉ tử", "táo tàu", "táo tào", "táo đỏ", "đại táo", "đông trùng hạ thảo", "đông trùng", "rau má", "diếp cá", "lá diếp cá", "lá ổi", "búp ổi",
-  "mướp đắng", "khổ qua", "lá lốt", "lá trầu không", "trầu không", "nhân trần", "cà gai leo", "lá vối", "đinh lăng", "ích mẫu", "ngưu tất",
+  "lá lốt", "lá trầu không", "trầu không", "nhân trần", "cà gai leo", "lá vối", "đinh lăng", "ích mẫu", "ngưu tất",
   "đương quy", "thục địa", "xuyên khung", "bạch truật", "hoàng liên", "kim ngân hoa", "la hán quả", "hoa đu đủ đực", "lá đu đủ", "tam thất",
-  "nghệ đen", "ba kích", "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "hoài sơn", "bạch quả", "xạ đen", "lá xạ đen", "an cung ngưu hoàng",
+  "nghệ đen", "ba kích", "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "hoài sơn", "xạ đen", "lá xạ đen", "an cung ngưu hoàng",
   "trinh nữ hoàng cung", "lá sen", "tâm sen", "hạt sen", "râu ngô", "rễ tranh", "mã đề", "lá tre", "nước sâm", "sâm đất", "lá khôi", "chè vằng",
   "lá mơ", "lá mơ lông", "sả", "lá sả", "lá chanh",
 ];
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
-const ASK = VN(/\b(tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|sao vậy)\b/);
+const ASK = VN(/\b(tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
 const BURN = VN(/\b(bỏng|phỏng)\b/);
 const BOI = VN(/\b(bôi|thoa|đắp|xức|trét|chấm)\b/);
 
@@ -639,8 +1022,11 @@ export function findFolk(text: string): FolkEntry | null {
   let best: { f: FolkEntry; len: number } | null = null;
   for (const f of FOLK) {
     if (f.id === "boi-bong" && !(BURN.test(n) && BOI.test(n))) continue;
+    if (f.ctx && !f.ctx.test(n)) continue;
     const m = n.match(RE.get(f.id)!);
-    if (m && (!best || m[0].length > best.len)) best = { f, len: m[0].length };
+    // (mục có ngữ cảnh — "đắp lá" khi rắn cắn / chó cắn — ưu tiên hơn tên vị trần)
+    const len = m ? m[0].length + (f.ctx || f.id === "boi-bong" ? 100 : 0) : 0;
+    if (m && (!best || len > best.len)) best = { f, len };
   }
   return best?.f ?? null;
 }
@@ -672,18 +1058,24 @@ export function renderFolk(f: FolkEntry, topic?: { id: string; name: string } | 
   const pick = (re: RegExp) => [...(f.how ?? []), ...f.caution].filter((x) => re.test(x.text));
   const kid = q && KID.test(nq) ? pick(KID_FACT) : [];
   const preg = q && PREG.test(nq) ? pick(PREG_FACT) : [];
+  const myth = f.verdict === "myth";
   const parts = [
-    `🌿 **${f.name}** — mẹo dân gian & nguồn y khoa nói gì`,
+    myth ? `🧐 **${f.name}** — quan niệm dân gian & nguồn y khoa nói gì` : `🌿 **${f.name}** — mẹo dân gian & nguồn y khoa nói gì`,
     kid.length ? `👶 **Với trẻ nhỏ:**\n${bl(kid)}` : "",
     preg.length ? `🤰 **Với bà bầu / mẹ cho con bú:**\n${bl(preg)}` : "",
-    q && (KID.test(nq) || PREG.test(nq)) && !kid.length && !preg.length ? "👶🤰 Nguồn chưa nêu riêng cho trẻ nhỏ / bà bầu — hỏi bác sĩ / dược sĩ trước khi dùng nha." : "",
+    q && f.verdict !== "myth" && (KID.test(nq) || PREG.test(nq)) && !kid.length && !preg.length ? "👶🤰 Nguồn chưa nêu riêng cho trẻ nhỏ / bà bầu — hỏi bác sĩ / dược sĩ trước khi dùng nha." : "",
     `${v.icon} ${v.text}.`,
     t ? `👉 Với **${topic!.name}**: ${t.text}.` : "",
-    `🏡 **Dân gian dùng để:**\n${bl(f.folk)}`,
-    `🔬 **Nghiên cứu nói gì:**\n${bl(f.science)}`,
-    f.how?.length ? `🥣 **Cách làm theo nguồn:**\n${bl(f.how)}` : "",
-    `⚠️ **${f.verdict === "danger" ? "Cảnh báo / khuyến cáo" : "Lưu ý · ai không nên dùng"}:**\n${bl(f.caution.filter((x) => !kid.includes(x) && !preg.includes(x)).length ? f.caution.filter((x) => !kid.includes(x) && !preg.includes(x)) : f.caution)}`,
-    f.verdict === "danger" ? "" : "💊 Đang dùng thuốc, mang thai, cho con bú, có bệnh gan / thận / tim, hay sắp phẫu thuật thì hỏi bác sĩ / dược sĩ trước khi dùng thảo dược như thuốc nha.",
+    myth && f.belief ? `🏡 **Dân gian hay:** ${f.belief}` : f.folk.length ? `🏡 **Dân gian dùng để:**\n${bl(f.folk)}` : "",
+    `🔬 **${myth ? "Nguồn y khoa nói" : "Nghiên cứu nói gì"}:**\n${bl(f.science)}`,
+    f.how?.length ? `${myth ? "✅ **Nên làm:**" : "🥣 **Cách làm theo nguồn:**"}\n${bl(f.how)}` : "",
+    f.unverified?.length ? `🔎 Lomi chưa tìm thấy nguồn y khoa nào xác nhận chuyện ${f.unverified.join("; ")} — nên Lomi không dám nói là đúng.` : "",
+    (() => {
+      const cs = f.caution.filter((x) => !kid.includes(x) && !preg.includes(x));
+      const list = cs.length ? cs : f.caution;
+      return list.length ? `⚠️ **${f.verdict === "danger" ? "Cảnh báo / khuyến cáo" : myth ? "Lưu ý" : "Lưu ý · ai không nên dùng"}:**\n${bl(list)}` : "";
+    })(),
+    f.verdict === "danger" || myth ? "" : "💊 Đang dùng thuốc, mang thai, cho con bú, có bệnh gan / thận / tim, hay sắp phẫu thuật thì hỏi bác sĩ / dược sĩ trước khi dùng thảo dược như thuốc nha.",
     sourceLine(f, srcOf(f.folk, f.science, f.how ?? [], f.caution, t ? [t] : []), now),
   ];
   return parts.filter(Boolean).join("\n\n");
@@ -704,7 +1096,7 @@ export function renderUnverified(herb: string, topicName?: string | null): strin
   return [
     `🌿 **${cap(herb)}** là vị quen thuộc trong dân gian / Đông y, nhưng Lomi **chưa tìm được nguồn y khoa đáng tin** đánh giá công dụng chữa bệnh và độ an toàn của nó${topicName ? ` với **${topicName}**` : ""} — nên Lomi không dám nói nó chữa được gì.`,
     `⚠️ **Nếu muốn dùng như thuốc, nhớ mấy điều này (theo NCCIH):**\n${bl(WISE_FACTS)}`,
-    `👉 Lomi có đối chiếu nguồn cho: ${FOLK.filter((f) => f.id !== "boi-bong").map((f) => f.name.split(" (")[0].toLowerCase()).slice(0, 14).join(", ")}… — hỏi tên vị (vd “gừng có tác dụng gì”) hoặc “mẹo dân gian trị ho” để xem.`,
+    `👉 Lomi có đối chiếu nguồn cho: ${FOLK.filter((f) => f.id !== "boi-bong" && f.verdict !== "myth").map((f) => f.name.split(" (")[0].toLowerCase()).slice(0, 14).join(", ")}… — hỏi tên vị (vd “gừng có tác dụng gì”) hoặc “mẹo dân gian trị ho” để xem.`,
     wiseLine(),
   ].join("\n\n");
 }
@@ -713,7 +1105,7 @@ export function renderUnverified(herb: string, topicName?: string | null): strin
 export function renderFolkForTopic(topicId: string, topicName: string, opts: { compact?: boolean } = {}): string | null {
   const hits = folkFor(topicId);
   if (!hits.length) return null;
-  const order: FolkVerdict[] = ["help", "mixed", "unclear", "risky", "danger"];
+  const order: FolkVerdict[] = ["myth", "help", "mixed", "unclear", "risky", "danger"];
   hits.sort((a, b) => order.indexOf(a.t.v ?? a.f.verdict) - order.indexOf(b.t.v ?? b.f.verdict));
   const lines = hits.map(({ f, t }) => `• ${VERDICT[t.v ?? f.verdict].icon} **${f.name}** — ${t.text}.`);
   const pubs = Array.from(new Set(hits.flatMap(({ f, t }) => t.src.map((i) => f.sources[i].publisher))));
@@ -722,7 +1114,7 @@ export function renderFolkForTopic(topicId: string, topicName: string, opts: { c
   return [
     `🌱 **Mẹo dân gian cho ${topicName}** — Lomi chỉ nêu những mẹo đã đối chiếu được với nguồn y khoa:`,
     lines.join("\n"),
-    `✅ có bằng chứng (còn hạn chế) · 🔸 giúp vài trường hợp · ❔ chưa đủ bằng chứng · ⚠️ có rủi ro · ⛔ nguy hiểm`,
+    `✅ có bằng chứng (còn hạn chế) · 🔸 giúp vài trường hợp · ❔ chưa đủ bằng chứng · ⚠️ có rủi ro · ⛔ nguy hiểm · 🧐 quan niệm dân gian — nguồn hướng dẫn khác`,
     `👉 Hỏi tên từng vị (vd “${hits[0].f.name.split(" (")[0].toLowerCase()} có tác dụng gì”) để xem kỹ ai không nên dùng. Mẹo dân gian chỉ hỗ trợ, không thay điều trị — nặng lên hay kéo dài thì đi khám nha.`,
     `📚 Nguồn: ${pubs.join(" · ")}. Lomi đối chiếu ngày ${VERIFIED.split("-").reverse().join("/")}. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ / dược sĩ.`,
   ].join("\n\n");
@@ -745,6 +1137,7 @@ export function renderFolkMenu(): string {
     ["🔸 Giúp vài trường hợp", FOLK.filter((f) => f.verdict === "mixed").map((f) => f.name)],
     ["❔ Chưa đủ bằng chứng", FOLK.filter((f) => f.verdict === "unclear").map((f) => f.name)],
     ["⚠️ / ⛔ Cần cảnh giác", FOLK.filter((f) => f.verdict === "risky" || f.verdict === "danger").map((f) => f.name)],
+    ["🧐 Quan niệm dân gian khi ốm", FOLK.filter((f) => f.verdict === "myth").map((f) => f.name)],
   ];
   return [
     `🌿 Lomi có đối chiếu nguồn y khoa (NIH, NHS, Bộ Y tế…) cho các mẹo dân gian / thuốc nam, thuốc bắc này:`,
@@ -765,12 +1158,13 @@ export function folkReply(
   q: string,
   med: { id: string; name: string } | null,
   prevMed: { id: string; name: string } | null,
-): { text: string; folk?: string; topic?: string } | null {
+): { text: string; folk?: string; topic?: string; verdict?: FolkVerdict } | null {
   const words = normalizeVi(q).split(" ").filter(Boolean).length;
   const folkWord = isFolkAsk(q);
   const f = findFolk(q);
   // Cháo cóc / bôi đồ lên vết bỏng: cảnh báo ngay, kể cả câu kể ("a cho con ăn cháo cóc").
-  if (f && (f.id === "thit-coc" || f.id === "boi-bong")) return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id };
+  //   (Quan niệm khi ốm — "chảy máu cam ngửa cổ", "rắn cắn hút nọc" — cũng trả lời ngay: đã khớp đúng ngữ cảnh.)
+  if (f && (f.id === "thit-coc" || f.id === "boi-bong" || f.verdict === "myth")) return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   const asked = asksAbout(q) || words <= 4 || folkWord;
   if (f && asked) {
     // "gout ăn gừng được không" — hỏi một MÓN với bệnh mà vị này không có ý gì cho bệnh đó → để lớp kiêng cữ trả lời.
@@ -778,7 +1172,7 @@ export function folkReply(
     const nq0 = ` ${normalizeVi(q)} `;
     const group = (KID.test(nq0) && [...(f.how ?? []), ...f.caution].some((x) => KID_FACT.test(x.text))) || (PREG.test(nq0) && f.caution.some((x) => PREG_FACT.test(x.text)));
     if (med && !group && !f.topics.some((t) => t.id === med.id) && !folkWord && FOOD_ASK.test(nq0) && !HELP_ASK.test(nq0)) return null;
-    return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id };
+    return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   }
   const uh = findUnverifiedHerb(q);
   if (uh && asked) {

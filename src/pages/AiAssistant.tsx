@@ -39,7 +39,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -53,7 +53,7 @@ import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from 
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
-import { folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
+import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -574,6 +574,12 @@ export function AiChat({
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
+    // 20/10 (Kir): lời dặn chung (không kê đơn, "muốn xem kỹ phần nào…", lưu ý thảo dược…) chỉ nói lần đầu trong cuộc trò chuyện.
+    if (reply.local) {
+      const earlier = msgs.filter((m) => m.role === "assistant").slice(-30).map((m) => m.content);
+      const trimmed = trimRepeatedNotes(reply.content, earlier);
+      if (trimmed !== reply.content) reply = { ...reply, content: trimmed };
+    }
     if (reply.stuck) {
       recordStuck(
         {
@@ -1244,10 +1250,13 @@ export function AiChat({
         //   kiến thức (không phải tâm lý) thì để lớp sức khoẻ đưa kiến thức chăm sóc, không biến thành chuyện để kể tiếp.
         const fxMed = fx && !fx.redirect && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) ? findMedId(q) : null;
         const fxMedKind = fxMed ? medKindOf(fxMed) : null;
+      // 20/10: câu kể một thói quen dân gian sai / nguy hiểm ("con sốt a trùm chăn cho ra mồ hôi", "a cho con ăn cháo cóc") → để lớp mẹo dân gian nói ngay.
+      const fxFolk = fx && !fx.redirect ? findFolk(q) : null;
+      const fxFolkWarn = !!fxFolk && (fxFolk.verdict === "myth" || fxFolk.verdict === "danger");
         if (fx?.redirect) {
           q = fx.redirect;
           shownRef.current = { from: q, to: typed };
-        } else if (fx && !(fxMed && fxMedKind !== "mental" && fxMedKind !== "term"))
+        } else if (fx && !fxFolkWarn && !(fxMed && fxMedKind !== "mental" && fxMedKind !== "term"))
           return localReply(q, {
             role: "assistant",
             content: fx.text,
@@ -1333,11 +1342,14 @@ export function AiChat({
         // 20/10 — MẸO DÂN GIAN · THUỐC NAM · THUỐC BẮC (lib/lomiFolk): "lá tía tô có tác dụng gì", "cháo cóc có tốt không",
         //   "mẹo dân gian trị ho", "hà thủ ô uống được không" → dân gian dùng gì · nghiên cứu nói gì · ai không nên dùng (có nguồn).
         //   Vị chưa có nguồn đáng tin (kỷ tử, táo tàu…) → nói thật là chưa đối chiếu được. Câu có dấu hiệu cấp cứu thì để mạch triệu chứng.
-        if (!bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) {
+        //   (20/10: câu có dấu hiệu cấp cứu vẫn trả lời ở đây nếu hỏi đúng một quan niệm sai / mẹo nguy hiểm — "rắn cắn hút nọc được không",
+        //    "co giật có nên nhét đũa" — vì bài đó đã kèm khi nào gọi 115.)
+        {
           const fkId = findMedId(q);
           const fkMt = fkId ? await loadMedTopic(fkId) : null;
           const fkPrev = lastA?.med?.id ? await loadMedTopic(lastA.med.id) : null;
-          const fk = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
+          const fk0 = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
+          const fk = fk0 && (fk0.verdict === "myth" || fk0.verdict === "danger" || !bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) ? fk0 : null;
           if (fk) {
             topicHit("health");
             return localReply(q, {
@@ -1486,7 +1498,7 @@ export function AiChat({
               mk.aspect === "overview" && typed && isSelfStatement(q)
                 ? `Bạn đang bị **${typed}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n`
                 : told
-                  ? `Lomi gửi những điều cần biết về **${medName(mt)}** (đã đối chiếu nguồn y khoa) để tham khảo nha 🩺\n\n`
+                  ? `Lomi gửi những điều cần biết về **${medName(mt)}** để tham khảo nha 🩺\n\n`
                   : "";
             if (told) mr.text = mr.text.replace(VR(/(^|\n\n)Về \*\*[^*\n]+\*\*, Lomi có kiến thức đã kiểm chứng như sau:\n\n/u), "$1");
             // Nhắc lại đúng chủ đề vừa tóm tắt ("Bệnh gút á") → không đọc lại cả bài, chỉ mời chọn phần muốn xem.
@@ -1619,7 +1631,7 @@ export function AiChat({
             aspect = "doctor";
           } else {
             const ov = renderMed(sxCard, "overview");
-            const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 Lomi gửi những điều cần biết về ${label} (đã đối chiếu nguồn y khoa) nha:`;
+            const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 Lomi gửi những điều cần biết về ${label} nha:`;
             const bodyText = withRedFlags(sxCard, q, withGroupNote(sxCard, q, ov.text.replace(VR(/(^|\n\n)Về \*\*[^*\n]+\*\*, Lomi có kiến thức đã kiểm chứng như sau:\n\n/u), "$1")));
             // (thẻ không có phần cấp cứu mà triệu chứng không phải loại nhẹ ở mũi → giữ dòng nhắc 115 như mạch triệu chứng vẫn có)
             const red115 = !sxCard.emergency.length && !["stuffy", "runny", "sneeze"].includes(sx1 ?? "") ? "⚠️ Đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay." : "";

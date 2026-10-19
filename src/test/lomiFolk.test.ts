@@ -23,12 +23,12 @@ describe("lomiFolk — dữ liệu", () => {
         expect(x.text.length, `${f.id}: ${x.text}`).toBeLessThanOrEqual(220);
       }
       for (const t of f.topics) expect(IDS.has(t.id), `${f.id}: thẻ ${t.id} không có`).toBe(true);
-      expect(f.folk.length && f.science.length && f.caution.length, f.id).toBeTruthy();
+      expect((f.folk.length || f.belief) && f.science.length && (f.caution.length || f.how?.length), f.id).toBeTruthy();
     }
   });
   it("tên không trùng giữa các vị", () => {
     const seen = new Map<string, string>();
-    for (const f of FOLK) for (const n of f.names) {
+    for (const f of FOLK.filter((x) => !x.ctx && x.id !== "boi-bong")) for (const n of f.names) {
       expect(seen.get(n), `${n}: ${f.id} trùng ${seen.get(n)}`).toBeUndefined();
       seen.set(n, f.id);
     }

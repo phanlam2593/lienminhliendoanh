@@ -564,7 +564,9 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     const r = sect(`🌿 Với ${N}, nên:`, t.care, "care");
     // 19/10: tách nên làm / nên tránh / thuốc (splitCare) thay vì đổ cả phần chăm sóc dưới tiêu đề "nên:".
     if (!r.partial) {
-      const sc = splitCare(t);
+      const sc0 = splitCare(t);
+      const seenC: string[][] = [];
+      const sc = { tips: dropDupFacts(sc0.tips, seenC, t.id), avoid: dropDupFacts(sc0.avoid, seenC, t.id), meds: dropDupFacts(sc0.meds, [], t.id) };
       const urg =
         t.kind === "other" && (t.emergency.length || t.doctor.length)
           ? [t.emergency.length ? `🚨 Gọi **115** / đi cấp cứu ngay khi:\n${bl(t.emergency, 4)}` : "", t.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${bl(t.doctor, 3)}` : ""].filter(Boolean).join("\n\n")
@@ -694,18 +696,54 @@ export function splitCare(t: MedTopic): { tips: DrugFact[]; avoid: DrugFact[]; m
   }
   return { tips, avoid, meds };
 }
+// ── 20/10 (Kir: "câu trả lời bị lặp ý"): bỏ ý TRÙNG NGHĨA giữa các nguồn — hai nguồn nói cùng một lời dặn bằng chữ khác nhau
+//   ("Tránh trà, cà phê, rượu… 6 giờ trước khi ngủ" / "Tránh thuốc lá, rượu, trà, cà phê khoảng 6 tiếng trước ngủ").
+//   Một ý bị bỏ khi phần lớn chữ có nghĩa của nó đã nằm trong MỘT ý đã giữ, hoặc trong các ý đã giữ cộng lại.
+const DUP_STOP = new Set("va hoac cac nhung nhu la co the de cua cho voi trong khi nen it nhat khoang neu thi hay rat nhieu mot so vao ra den tu o".split(" "));
+const DUP_SYN: [RegExp, string][] = [[/\btieng\b/g, "gio"], [/\bthuc day\b/g, "day"], [/\b1\b/g, "mot"], [/\bthuoc la\b/g, "hut thuoc"], [/\ban no\b/g, "bua lon"], [/\bbuoi toi\b/g, "toi"], [/\bgio co dinh\b/g, "cung mot gio"], [/\bvan dong\b/g, "tap the duc"]];
+const dupToks = (s: string): string[] => {
+  let n = normalizeVi(s);
+  for (const [re, to] of DUP_SYN) n = n.replace(re, to);
+  return Array.from(new Set(n.split(" ").filter((w) => w && !DUP_STOP.has(w))));
+};
+// (thẻ SƠ CỨU từng bước — mỗi ý là một bước / một nhóm tuổi riêng, chữ giống nhau mà nghĩa khác → không lọc)
+const NO_DEDUPE = new Set(["hoi-sinh-tim-phoi", "hoc-di-vat", "chay-mau", "di-vat-mat", "ngo-doc", "so-cuu-bong", "co-giat", "dien-giat", "duoi-nuoc", "sot-co-giat", "soc-phan-ve", "hoi-sinh-tim-phoi"]);
+/** Giữ thứ tự; bỏ ý trùng nghĩa với ý đã giữ (kể cả ý ở các mục trước — `seen`). `id`: thẻ đang xét (thẻ sơ cứu không lọc). */
+export function dropDupFacts<T extends { text: string }>(facts: T[], seen: string[][] = [], id?: string, maxMiss = 2): T[] {
+  if (id && NO_DEDUPE.has(id)) return facts;
+  const out: T[] = [];
+  for (const f of facts) {
+    const tk = dupToks(f.text);
+    if (tk.length >= 4) {
+      // (mọi chữ có nghĩa đều đã nằm trong MỘT ý đã giữ)
+      const one = seen.some((o) => { const os = new Set(o); return tk.every((w) => os.has(w)); });
+      // (ý dạng TÓM TẮT — liệt kê nhiều thứ cách nhau bằng dấu phẩy / chấm phẩy — mà gần như từng thứ đã được nói ở các ý trước)
+      const all = new Set(seen.flat());
+      const listy = (f.text.match(/[,;]/g) ?? []).length >= 3 && tk.length >= 8;
+      const miss = tk.filter((w) => !all.has(w)).length;
+      if (one || (listy && miss <= maxMiss && miss / tk.length <= (maxMiss > 2 ? 0.3 : 0.2))) continue;
+    }
+    seen.push(tk);
+    out.push(f);
+  }
+  return out;
+}
 function overviewText(t: MedTopic, now: number): string {
   const N = title(t);
   const about = t.about.slice(0, 2);
   const signs = t.signs.slice(0, 4);
   // 19/10: tách ý khuyên / ý kiêng / ý thuốc theo từng vế (splitCare) — mục Kiêng chỉ còn đúng các lời dặn tránh.
   const sc = splitCare(t);
-  const meds = sc.meds.slice(0, 7);
+  const meds = dropDupFacts(sc.meds, [], t.id).slice(0, 7);
   // Kiêng: phần ăn uống nên tránh của thẻ + các lời dặn tránh trong phần chăm sóc.
   const dietAvoid = t.diet ? t.diet.avoid.slice(0, 3) : [];
   const foodsBad = t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").map((f) => f.name) : [];
-  const avoid = [...dietAvoid, ...sc.avoid].slice(0, 6);
-  const tips = sc.tips.slice(0, 7);
+  // (lọc mẹo trước để ý kiêng dạng tóm tắt — "tránh ăn no muộn, xem màn hình, ngủ nướng bù" — đã có trong mẹo thì bỏ)
+  const seenDup: string[][] = [];
+  const tips = dropDupFacts(sc.tips, seenDup, t.id).slice(0, 7);
+  const avoid = dropDupFacts([...dietAvoid, ...sc.avoid], seenDup, t.id).slice(0, 6);
+  // (dòng "Món nên tránh" chỉ giữ khi còn món chưa được nói ở các ý phía trên)
+  const foodsLine = foodsBad.length && dropDupFacts([{ text: foodsBad.slice(0, 8).join(", ") }], seenDup.slice(), t.id, 3).length ? foodsBad : [];
   const doctor = t.doctor.slice(0, 2);
   // (bỏ ý chỉ dùng được ở nước ngoài — đường dây 988 của Mỹ; ý nghĩ tự tử thì kèm đường dây Ngày Mai như lớp khẩn cấp của app)
   const emergency = t.emergency.filter((f) => !FOREIGN_LINE.test(f.text)).slice(0, 2);
@@ -718,12 +756,12 @@ function overviewText(t: MedTopic, now: number): string {
     seenIn.length ? `🔎 **${cap(displayName(t))} hay gặp trong** (chưa đủ để kết luận bạn bị bệnh nào):\n${bl(seenIn)}` : "",
     about.length ? `📖 ${N} là gì:\n${bl(about)}` : "",
     signs.length ? `🩺 **Triệu chứng thường gặp:**\n${bl(signs)}` : "",
-    avoid.length || foodsBad.length
-      ? `🚫 **${isDisease ? "Kiêng / nên tránh" : "Nên tránh"}:**\n${[bl(avoid), foodsBad.length ? `• Món nên tránh / hạn chế: ${foodsBad.slice(0, 8).join(", ")}.` : ""].filter(Boolean).join("\n")}`
+    avoid.length || foodsLine.length
+      ? `🚫 **${isDisease ? "Kiêng / nên tránh" : "Nên tránh"}:**\n${[bl(avoid), foodsLine.length ? `• Món nên tránh / hạn chế: ${foodsLine.slice(0, 8).join(", ")}.` : ""].filter(Boolean).join("\n")}`
       : "",
     tips.length ? `🌿 **Mẹo chăm sóc:**\n${bl(tips)}` : "",
     meds.length
-      ? `💊 **Về thuốc** (theo nguồn — Lomi không kê đơn, không nêu liều; dùng thuốc nào, bao nhiêu do bác sĩ / dược sĩ quyết định):\n${bl(meds)}`
+      ? `💊 **Về thuốc** (theo nguồn):\n${bl(meds)}\n_Lomi không kê đơn, không nêu liều — dùng thuốc nào, bao nhiêu do bác sĩ / dược sĩ quyết định._`
       : isDisease
         ? "💊 **Về thuốc:** nguồn Lomi đã đối chiếu không nêu thuốc cụ thể cho bệnh này — dùng thuốc gì cần bác sĩ khám rồi quyết định."
         : "",
@@ -1089,4 +1127,21 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if ((text.includes("?") || QWORD.test(` ${n} `)) && prev.aspect !== "diet" && prev.aspect !== "food") return { id: prev.id, aspect: "overview", food: null, focusOnly: true };
   }
   return null;
+}
+
+// ── 20/10 (Kir: "bỏ giúp mấy phần lặp đi lặp lại"): lời dặn chung chỉ nói LẦN ĐẦU trong cuộc trò chuyện ──
+//   (không kê đơn / không nêu liều · "muốn xem kỹ phần nào…" · lời dặn chung khi dùng thảo dược · chú thích mức bằng chứng)
+const REPEAT_NOTES: { key: RegExp; drop: RegExp[] }[] = [
+  { key: /không kê (thuốc hay nêu liều|đơn, không nêu liều)/u, // (tin đã lưu đã đổi xưng hô: "Lomi" → "em" — khoá không phụ thuộc chủ ngữ)
+    drop: [/\n\n💊 Lomi không kê thuốc hay nêu liều[^\n]*/gu, /\n_Lomi không kê đơn, không nêu liều[^\n]*_/gu] },
+  { key: /Muốn xem kỹ phần nào thì chọn bên dưới nha/u, drop: [/\n\nMuốn xem kỹ phần nào thì chọn bên dưới nha 👇/gu] },
+  { key: /Đang dùng thuốc, mang thai, cho con bú, có bệnh gan/u, drop: [/\n\n💊 Đang dùng thuốc, mang thai, cho con bú, có bệnh gan[^\n]*/gu] },
+  { key: /✅ có bằng chứng \(còn hạn chế\) · /u, drop: [/\n\n✅ có bằng chứng \(còn hạn chế\) · [^\n]*/gu] },
+  { key: /_Hỏi tên từng vị để xem ai không nên dùng\._/u, drop: [/\n_Hỏi tên từng vị để xem ai không nên dùng\._/gu] },
+];
+/** Bỏ các lời dặn chung đã xuất hiện trong các tin trước của Lomi (`earlier`: nội dung các tin trước, mới nhất cuối). */
+export function trimRepeatedNotes(text: string, earlier: string[]): string {
+  let out = text;
+  for (const n of REPEAT_NOTES) if (earlier.some((e) => n.key.test(e))) for (const d of n.drop) out = out.replace(d, "");
+  return out;
 }

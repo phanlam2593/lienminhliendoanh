@@ -418,3 +418,43 @@ describe("20/10 — mẹo dân gian · thuốc nam · thuốc bắc có nguồn 
     expect(m.content).not.toMatch(/mẹo dân gian & nguồn y khoa/);
   }, T);
 });
+
+describe("20/10 (đợt 2) — bỏ lặp ý / lời dặn lặp lại, quan niệm dân gian khi ốm", () => {
+  it("67. 'mất ngủ là gì' → không lặp lời dặn tránh trà, cà phê… 6 giờ; không lặp mẹo 'chỉ lên giường khi buồn ngủ'", async () => {
+    const m = await last(["mất ngủ là gì"]);
+    expect((m.content.match(/6 (giờ|tiếng)/g) ?? []).length).toBe(1);
+    expect((m.content.match(/Chỉ lên giường khi buồn ngủ/g) ?? []).length).toBe(1);
+  }, T);
+  it("68. lời dặn 'không kê đơn' / 'muốn xem kỹ phần nào' chỉ nói lần đầu trong cuộc trò chuyện", async () => {
+    const ms = await chat(["gout là gì", "mất ngủ là gì"]);
+    const a = ms.filter((x) => x.role === "assistant");
+    expect(a[0].content).toMatch(/không kê đơn, không nêu liều/);
+    expect(a[1].content).not.toMatch(/không kê đơn, không nêu liều/);
+    expect(a[1].content).not.toMatch(/Muốn xem kỹ phần nào/);
+    expect(a[1].content).not.toMatch(/đã đối chiếu nguồn y khoa\)/);
+  }, T);
+  it("69. 'ăn khổ qua bị nhức khớp phải không' → nói thật chưa thấy nguồn xác nhận, kèm điều NHS khuyên", async () => {
+    const m = await last(["ăn khổ qua bị nhức khớp phải không"]);
+    expect(m.content).toMatch(/chưa tìm thấy nguồn y khoa nào xác nhận/);
+  }, T);
+  it("70. 'chảy máu cam có nên ngửa cổ không' → nghiêng người về trước", async () => {
+    const m = await last(["chảy máu cam có nên ngửa cổ không"]);
+    expect(m.content).toMatch(/NGHIÊNG NGƯỜI VỀ TRƯỚC/);
+  }, T);
+  it("71. 'rắn cắn có nên hút nọc không' → KHÔNG hút / rạch / garô", async () => {
+    const m = await last(["rắn cắn có nên hút nọc không"]);
+    expect(m.content).toMatch(/KHÔNG hút hay rạch/);
+  }, T);
+  it("72. 'con sốt a trùm chăn cho ra mồ hôi' (câu kể) → nói ngay là không nên ủ chăn", async () => {
+    const m = await last(["con sốt a trùm chăn cho ra mồ hôi"]);
+    expect(m.content).toMatch(/không ủ trẻ bằng quá nhiều quần áo/i);
+  }, T);
+  it("73. 'bé bị tiêu chảy có nên pha sữa loãng không' → không pha loãng, vẫn cho bú", async () => {
+    const m = await last(["bé bị tiêu chảy có nên pha sữa loãng không"]);
+    expect(m.content).toMatch(/KHÔNG pha sữa công thức loãng/);
+  }, T);
+  it("74. 'khổ qua có tốt không' → nguồn LiverTox: hạ đường nhẹ, bà bầu không dùng", async () => {
+    const m = await last(["khổ qua có tốt không"]);
+    expect(m.content).toMatch(/sảy thai/);
+  }, T);
+});
