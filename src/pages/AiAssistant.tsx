@@ -1558,12 +1558,15 @@ export function AiChat({
         //   không đọc lại cả bài. Bé nhỏ / có dấu hiệu cấp cứu thì giữ lời đáp của mạch triệu chứng (có lưu ý riêng cho trẻ, cảnh báo 115).
         //   (trẻ em: thẻ người lớn không hợp — "bé bị sốt" giữ lời đáp có lưu ý riêng cho trẻ của mạch triệu chứng)
         const kidTalk = !!body?.sx.includes("kid") || VN(/\b(bé|em bé|con|cháu|trẻ|sơ sinh)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(con người|con gái|con trai lớn)\b/g), " ")) || (whoP ? VN(/\b(bé|con|cháu|trẻ)\b/).test(normalizeVi(whoP.text)) : false);
-        const sxCardId = sx1 && !kidTalk ? symptomCard(sx1) : undefined;
+        // 19/10 (đợt 3): người dùng tự nêu TÊN một bệnh có thẻ ("a bị mề đay", "bị mụn rộp ở môi") → đưa đúng thẻ bệnh đó,
+        //   không để bảng triệu chứng cũ đoán sang thứ khác ("nổi mẩn", "nổi mụn"). Có dấu hiệu cấp cứu thì vẫn để cảnh báo đi trước.
+        const namedId = body && body.sx.length && !kidTalk && !/^(⚠️|🚨)/u.test(body.text) ? findMedId(q) : null;
+        const sxCardId = namedId ?? (sx1 && !kidTalk ? symptomCard(sx1) : undefined);
         const sxCard = sxCardId ? await loadMedTopic(sxCardId) : null;
-        if (body && sx1 && sxCard) {
-          const again = !!lastA?.sx?.includes(sx1) && (lastA.med?.id === sxCard.id || lastA.sx.length === 1);
+        if (body && sxCard && (sx1 || namedId)) {
+          const again = lastA?.med?.id === sxCard.id || (!!sx1 && !namedId && !!lastA?.sx?.includes(sx1) && lastA.sx.length === 1);
           const who = patient ?? (carried ? carried.charAt(0).toUpperCase() + carried.slice(1) : null);
-          const label = symptomLabel(sx1)!;
+          const label = namedId ? (nameAsTyped(q, sxCard.id) ?? medName(sxCard)) : symptomLabel(sx1!)!;
           const notes = detailNotes(q);
           let text: string;
           let aspect: string;
@@ -1576,9 +1579,9 @@ export function AiChat({
           } else {
             const ov = renderMed(sxCard, "overview");
             const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 Lomi gửi những điều cần biết về ${label} (đã đối chiếu nguồn y khoa) nha:`;
-            const bodyText = withRedFlags(sxCard, q, withGroupNote(sxCard, q, ov.text.replace(VR(/^Về .*? như sau:\n\n/u), "")));
+            const bodyText = withRedFlags(sxCard, q, withGroupNote(sxCard, q, ov.text.replace(VR(/(^|\n\n)Về \*\*[^*\n]+\*\*, Lomi có kiến thức đã kiểm chứng như sau:\n\n/u), "$1")));
             // (thẻ không có phần cấp cứu mà triệu chứng không phải loại nhẹ ở mũi → giữ dòng nhắc 115 như mạch triệu chứng vẫn có)
-            const red115 = !sxCard.emergency.length && !["stuffy", "runny", "sneeze"].includes(sx1) ? "⚠️ Đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay." : "";
+            const red115 = !sxCard.emergency.length && !["stuffy", "runny", "sneeze"].includes(sx1 ?? "") ? "⚠️ Đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay." : "";
             text = [fixLine ?? head, ...notes, bodyText, red115].filter(Boolean).join("\n\n");
             aspect = "overview";
           }

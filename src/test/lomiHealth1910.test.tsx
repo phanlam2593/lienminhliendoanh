@@ -302,3 +302,40 @@ describe("19/10 (đợt 2) — kể 1 triệu chứng → nêu đủ về triệ
     expect(r[1].content).not.toMatch(/Về \*\*thuốc\*\* thì Lomi/);
   }, T);
 });
+
+// 19/10 (đợt 3) — Kir: "khi ngta hỏi bệnh gì thì có mấy loại thuốc liên quan lun, thêm mẹo này mẹo kia". Kho được bổ sung thuốc + mẹo
+//   từ trang điều trị NHS (mỗi ý kèm nguồn, không liều). Kiểm: lời đáp có tên thuốc cụ thể, và bệnh tự nêu tên đi đúng thẻ.
+describe("19/10 (đợt 3) — thuốc liên quan + mẹo đầy đủ hơn", () => {
+  it("47. 'gout uống thuốc gì' → có tên thuốc cụ thể (allopurinol, colchicine), không nêu liều", async () => {
+    const m = await last(["gout uống thuốc gì"]);
+    expect(m.content).toMatch(/allopurinol/);
+    expect(m.content).toMatch(/colchicine/i);
+    expect(m.content).toMatch(/không kê thuốc hay nêu liều/);
+    expect(m.content).not.toMatch(/\d+\s*(mg|viên)\b/);
+  }, T);
+  it("48. 'trào ngược dạ dày uống thuốc gì' → nêu nhóm thuốc + ví dụ (omeprazole, famotidine)", async () => {
+    const m = await last(["trào ngược dạ dày uống thuốc gì"]);
+    expect(m.content).toMatch(/omeprazole/);
+    expect(m.content).toMatch(/famotidine/);
+  }, T);
+  it("49. 'bị mề đay' → thẻ mề đay có nguồn (không bị bảng triệu chứng đoán thành 'nổi mẩn')", async () => {
+    const m = await last(["bị mề đay"]);
+    expect(m.med?.id).toBe("me-day");
+    expect(m.content).toMatch(/cetirizine|loratadine|kháng histamin/);
+  }, T);
+  it("50. 'bị mụn rộp ở môi' → thẻ mụn rộp môi (không phải herpes sinh dục)", async () => {
+    const m = await last(["bị mụn rộp ở môi"]);
+    expect(m.med?.id).toBe("mun-rop-moi");
+    expect(m.content).toMatch(/kháng virus/);
+  }, T);
+  it("51. 'thuốc trị mụn trứng cá' → nhiều thuốc có tên (benzoyl peroxide, retinoid, isotretinoin…) và cảnh báo mang thai", async () => {
+    const m = await last(["mụn trứng cá dùng thuốc gì"]);
+    expect(m.content).toMatch(/benzoyl peroxide/);
+    expect(m.content).toMatch(/isotretinoin/);
+    expect(m.content).toMatch(/mang thai/);
+  }, T);
+  it("52. 'huyết áp cao uống thuốc gì' → ví dụ thuốc (amlodipine, losartan…) + không tự ngưng", async () => {
+    const m = await last(["huyết áp cao uống thuốc gì"]);
+    expect(m.content).toMatch(/amlodipine|losartan|ramipril/);
+  }, T);
+});

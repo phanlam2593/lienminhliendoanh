@@ -535,8 +535,8 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   }
   if (aspect === "meds") {
     // 19/10: "khói thuốc", "hút thuốc", "thuốc lá" không phải thuốc chữa bệnh — trước đây "Khói thuốc làm triệu chứng nặng hơn" lọt vào phần thuốc.
-    const med = t.care.filter((c) => VR(/thuốc/i).test(c.text.replace(VR(/(khói|hút|bỏ|cai) thuốc( lá| lào)?|thuốc (lá|lào)/giu), "")));
-    return out([`💊 Về thuốc cho ${N}: Lomi **không kê thuốc hay nêu liều** — dùng thuốc nào là do bác sĩ quyết định sau khi khám.`, med.length ? `Theo nguồn:\n${bl(med, 3)}` : "", end([med])].filter(Boolean).join("\n\n"), "meds");
+    const med = t.care.filter((c) => MED_FACT.test(c.text.replace(VR(/(khói|hút|bỏ|cai) thuốc( lá| lào)?/giu), "")));
+    return out([`💊 Về thuốc cho ${N}: Lomi **không kê thuốc hay nêu liều** — dùng thuốc nào là do bác sĩ quyết định sau khi khám.`, med.length ? `Theo nguồn:\n${bl(med, 10)}` : "", end([med])].filter(Boolean).join("\n\n"), "meds");
   }
   const sect = (head: string, fs: DrugFact[], a: MedAspect, cut = 99, none?: string) => {
     if (!fs.length) return out(none ?? `Các nguồn Lomi đã đối chiếu cho ${N} **không nêu phần này**, nên Lomi chưa xác minh được. Bạn hỏi bác sĩ để chắc nha.`, a, true);
@@ -605,7 +605,8 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
   return out(overviewText(t, now), "overview");
 }
 
-const MED_FACT = VR(/(^|[^\p{L}])(thuốc(?! lá| lào)|kháng sinh|kháng virus|kháng vi rút|paracetamol|ibuprofen|aspirin|corticoid|corticosteroid|steroid|insulin|vắc xin|vaccine)(?![\p{L}])/iu);
+// (19/10: thêm tên nhóm thuốc / hoạt chất hay gặp trong thẻ — để ý "kháng histamin cetirizine…", "loperamide…" vào đúng phần thuốc)
+const MED_FACT = VR(/(^|[^\p{L}])(thuốc(?! lá| lào)|kháng sinh|kháng virus|kháng vi rút|kháng histamin|kháng axit|kháng nấm|alginat|ức chế bơm proton|PPI|nhuận tràng|retinoid|benzoyl peroxide|azelaic|isotretinoin|loperamide|omeprazole|lansoprazole|famotidine|paracetamol|ibuprofen|aspirin|corticoid|corticosteroid|steroid|insulin|vắc xin|vaccine)(?![\p{L}])/iu);
 const AVOID_FACT = VR(/(^|[^\p{L}])(tránh|không nên|đừng|kiêng|hạn chế|bỏ hút|không hút|không uống rượu)(?![\p{L}])/iu);
 const PREVENT_FACT = VR(/phòng (bệnh|ngừa|tránh|lây)|muỗi|vắc xin|vaccine|lây (sang|cho)|cách ly/iu);
 const FOREIGN_LINE = VR(/\b988\b|ở Mỹ|ở Hoa Kỳ|NHS 111|\b999\b/iu);
@@ -617,14 +618,14 @@ function overviewText(t: MedTopic, now: number): string {
   const careAll = t.care;
   // (19/10: "khói thuốc", "hút thuốc", "thuốc lá" không phải thuốc chữa bệnh)
   const isMed = (f: DrugFact) => MED_FACT.test(f.text.replace(VR(/(khói|hút|bỏ|cai) thuốc( lá| lào)?/giu), ""));
-  const meds = careAll.filter(isMed).slice(0, 3);
+  const meds = careAll.filter(isMed).slice(0, 7);
   // Kiêng: phần ăn uống nên tránh của thẻ; thẻ không có phần ăn uống thì lấy các ý "tránh / không nên" trong phần chăm sóc.
   const dietAvoid = t.diet ? t.diet.avoid.slice(0, 3) : [];
   const foodsBad = t.diet ? t.diet.foods.filter((f) => f.verdict === "avoid" || f.verdict === "limit").map((f) => f.name) : [];
   //   (không lấy ý PHÒNG BỆNH cho cộng đồng — "hạn chế nơi muỗi đẻ" không phải điều người bệnh phải kiêng)
   const careAvoid = dietAvoid.length ? [] : careAll.filter((f) => AVOID_FACT.test(f.text) && !isMed(f) && !PREVENT_FACT.test(f.text)).slice(0, 3);
   const avoid = [...dietAvoid, ...careAvoid];
-  const tips = careAll.filter((f) => !isMed(f) && !careAvoid.includes(f)).slice(0, 4);
+  const tips = careAll.filter((f) => !isMed(f) && !careAvoid.includes(f)).slice(0, 7);
   const doctor = t.doctor.slice(0, 2);
   // (bỏ ý chỉ dùng được ở nước ngoài — đường dây 988 của Mỹ; ý nghĩ tự tử thì kèm đường dây Ngày Mai như lớp khẩn cấp của app)
   const emergency = t.emergency.filter((f) => !FOREIGN_LINE.test(f.text)).slice(0, 2);
