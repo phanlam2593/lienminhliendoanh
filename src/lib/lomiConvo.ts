@@ -367,14 +367,17 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   // 3e) Thêm giới hạn khoảng cách / "gần thôi" cho lần tìm chỗ vừa rồi.
   const kmM = n.match(KM);
   const lastSearch = (last as { search?: unknown }).search;
-  if ((kmM || VN(/^(gần|gần gần|gần thôi|gần gần thôi|gần nhà thôi|gần nhà|ở gần thôi)( (thôi|nha|nhé|nhe|thì|ạ|à|a|e|em|lomi))*$/).test(n)) && words <= 9 && (last.dish || lastSearch)) {
+  // 20/10: câu tự nêu LOẠI CHỖ / MÓN mới ("Tìm quán cà phê có ưu đãi") là một lần tìm MỚI, không phải thêm điều kiện
+  // cho lần tìm trước — trước đây bị gộp vào lần tìm "đi chơi" (không có loại) nên ra đủ thứ: mỹ phẩm, tư vấn BĐS…
+  const freshKind = !!detectSearch(q)?.kind || !!detectDish(q);
+  if ((kmM || VN(/^(gần|gần gần|gần thôi|gần gần thôi|gần nhà thôi|gần nhà|ở gần thôi)( (thôi|nha|nhé|nhe|thì|ạ|à|a|e|em|lomi))*$/).test(n)) && words <= 9 && (last.dish || lastSearch) && !freshKind) {
     const maxKm = kmM ? Math.max(0.3, Math.min(50, parseFloat(kmM[1].replace(",", ".")))) : undefined;
     if (last.dish && c.dish) return { kind: "refine", why: "place:km", dish: c.dish.id, want: { near: true, maxKm } };
     return { kind: "research", why: "place:km", want: { near: true, maxKm } };
   }
 
   // 3e') "có ưu đãi không?" ngay sau một danh sách chỗ (không theo món) → tìm lại đúng loại chỗ đó, chỉ lấy chỗ đang có ưu đãi.
-  if (lastSearch && !last.dish && words <= 7 && OFFER.test(n) && !VN(/\b(làm sao|cách|thế nào|là gì|nhận|mã pin|dùng sao|đăng)\b/).test(n))
+  if (lastSearch && !last.dish && !freshKind && words <= 7 && OFFER.test(n) && !VN(/\b(làm sao|cách|thế nào|là gì|nhận|mã pin|dùng sao|đăng)\b/).test(n))
     return { kind: "research", why: "place:offer", want: { offer: true } };
 
   // 3g) Hỏi lại chính CHỮ Lomi vừa dùng ("Sao vui á?" sau "Hôm nay có gì vui không nè?") → Lomi giải thích là hỏi thăm thôi.

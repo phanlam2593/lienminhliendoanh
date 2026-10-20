@@ -32,3 +32,17 @@ describe("Lomi gợi ý chỗ đi chơi", () => {
     expect(new Set(ids).size).toBe(3); // 3 lần → 3 chỗ khác nhau
   }, T);
 });
+
+describe("Lomi tìm loại chỗ mới ngay sau một lần gợi ý", () => {
+  it("“Đà lạt đi chơi ở đâu” → chip “Tìm quán cà phê có ưu đãi” → tìm QUÁN CÀ PHÊ, không lấy lại lần tìm trước", async () => {
+    const r = await chat(["Đà lạt a nên đi chơi ở đâu", "Tìm quán cà phê có ưu đãi"], { seed: 1 });
+    const m = r[1];
+    expect(m.content).not.toMatch(/Mấy chỗ/);
+    if (m.search) expect(m.search.kind?.noun).toBe("quán cà phê");
+    else expect(m.dish).toBe("cafe");
+  }, T);
+  it("“có ưu đãi không?” không nêu loại mới → vẫn lọc lại lần tìm trước", async () => {
+    const r = await chat(["tìm quán cà phê", "có ưu đãi không?"], { seed: 1 });
+    expect(r[1].search?.kind?.noun ?? r[1].dish).toBeTruthy();
+  }, T);
+});
