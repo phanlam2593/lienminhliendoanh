@@ -1082,6 +1082,23 @@ export function AiChat({
           const d = detectDish(q);
           if (d) return replyDishShops(q, d.id);
         }
+        // 20/10: vừa bốc 1 chỗ đi chơi / quán → "Đổi chỗ khác", "chỗ khác", "bốc lại" = bốc chỗ KHÁC cùng điều kiện
+        // (cùng khu vực, cùng loại), không lặp các chỗ đã đưa. Trước đây nút "Đổi chỗ khác" không ai bắt → rơi xuống FAQ.
+        if (
+          lastA?.search && lastA.search.mode !== "find" && !lastA.dish && nq0.split(" ").length <= 6 &&
+          (raw.startsWith("🔁") || VN(/\b(đổi chỗ khác|đổi chỗ|chỗ khác|nơi khác|chỗ nào khác|bốc lại|đổi quán|quán khác|gợi ý khác|cái khác)\b/).test(nq0))
+        ) {
+          const intent = lastA.search;
+          const avoid = [...(lastA.avoidIds ?? []), ...(lastA.places ?? []).map((p) => p.id)];
+          setBusy(true);
+          let res;
+          try {
+            res = await runSearch(intent, avoid);
+          } finally {
+            setBusy(false);
+          }
+          return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, avoidIds: avoid, quick: res.quick });
+        }
       }
       // Nút phạm vi ("🩺 Sức khoẻ", "📱 Hỏi về app") → Lomi hỏi tiếp đúng việc.
       // (q khi người dùng gõ "ừ" nhận lời Lomi mời quay lại một chủ đề — lúc đó q đã là chữ trên nút.)

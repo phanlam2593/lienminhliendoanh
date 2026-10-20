@@ -48,7 +48,44 @@ const KINDS: Kind[] = [
   { re: VN(/\b(nhà đất|bất động sản|bds|thuê nhà|mua nhà)\b/), type: "broker", names: [], noun: "văn phòng nhà đất" },
 ];
 
-export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number };
+export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number; /** 20/10: khu vực người dùng nêu ("Đà Lạt nên đi chơi ở đâu") — chỉ lấy chỗ ở đó */ area?: string };
+
+// 20/10: khu vực người dùng nêu tên → lọc đúng khu vực đó (khớp cột businesses.area). Trước đây "Đà Lạt nên đi chơi
+// ở đâu" bị bỏ qua chữ "Đà Lạt" và bốc bừa cả nước → ra một tiệm giặt ủi ở Đà Nẵng cách 459km.
+const AREAS: [string, RegExp][] = [
+  ["Đà Lạt", /\b(da lat|dalat)\b/],
+  ["TP.HCM", /\b(sai gon|saigon|tp ?hcm|hcm|ho chi minh)\b/],
+  ["Hà Nội", /\b(ha noi|hanoi)\b/],
+  ["Đà Nẵng", /\b(da nang|danang)\b/],
+  ["Bảo Lộc", /\bbao loc\b/],
+  ["Biên Hòa", /\bbien hoa\b/],
+  ["Buôn Ma Thuột", /\b(buon ma thuot|buon me thuot|bmt)\b/],
+  ["Cà Mau", /\bca mau\b/],
+  ["Cần Thơ", /\bcan tho\b/],
+  ["Di Linh", /\bdi linh\b/],
+  ["Đơn Dương", /\bdon duong\b/],
+  ["Đức Trọng", /\bduc trong\b/],
+  ["Lạc Dương", /\blac duong\b/],
+  ["Hạ Long", /\bha long\b/],
+  ["Hải Phòng", /\bhai phong\b/],
+  ["Hội An", /\bhoi an\b/],
+  ["Huế", /\b(o|tai|den|ra|ve|vao|tp|thanh pho|di) hue\b/],
+  ["Nha Trang", /\bnha trang\b/],
+  ["Phú Quốc", /\bphu quoc\b/],
+  ["Pleiku", /\bpleiku\b/],
+  ["Quy Nhơn", /\bquy nhon\b/],
+  ["Sa Pa", /\b(sa pa|sapa)\b/],
+  ["Thủ Dầu Một", /\bthu dau mot\b/],
+  ["Vinh", /\b(tp|thanh pho) vinh\b/],
+  ["Vũng Tàu", /\bvung tau\b/],
+];
+export function detectArea(text: string): string | undefined {
+  const n = ` ${normalizeVi(text)} `;
+  return AREAS.find(([, re]) => re.test(n))?.[0];
+}
+const sameArea = (a: string | null | undefined, b: string) => !!a && normalizeVi(a) === normalizeVi(b);
+// "Đi chơi" chỉ lấy chỗ để chơi: tour/thuê xe (travel) + quán (food). Không lấy "service" (giặt ủi, sửa xe, spa…).
+const GO_TYPES: BusinessType[] = ["travel", "food"];
 
 /** 10/10: lọc theo bán kính người dùng nói. Có vị trí thì lọc thật; không có thì nói rõ là chưa lọc được. */
 function byRadius<T extends { distKm?: number }>(cards: T[], pos: unknown, maxKm?: number): { cards: T[]; note: string } {
@@ -73,7 +110,9 @@ export function detectSearch(text: string): SearchIntent | null {
   if (VN(/\b(hôm nay ăn gì|ăn gì bây giờ|ăn gì đây|nên ăn gì|trưa nay ăn gì|tối nay ăn gì|sáng nay ăn gì|ăn gì ta|ăn gì giờ|đổi món|món khác|chọn lại quán|quán khác)\b/).test(n))
     return { mode: "eat", near, offer: true };
   if (VN(/\b(uống gì|đi cafe đâu|cafe ở đâu|cà phê ở đâu|uống ở đâu)\b/).test(n)) return { mode: "drink", near, offer: true, kind: KINDS[0] };
-  if (VN(/\b(đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu)\b/).test(n)) return { mode: "go", near, offer: true };
+  const area = detectArea(text);
+  if (VN(/\b(đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu|có gì chơi|có gì vui|chỗ nào chơi|nơi nào chơi|đi chơi ở|nên đi đâu chơi|tham quan ở đâu|check in ở đâu)\b/).test(n))
+    return { mode: "go", near, offer: true, ...(area ? { area } : {}) };
   if (HOWTO.test(n)) return null;
   const strictKind = KINDS.find((k) => k.re.test(n));
   // "ăn/uống" đứng một mình chỉ là đoán — không đủ để hiểu là muốn tìm quán (vd "bác sĩ nào cũng cho thuốc uống không hết").
@@ -87,7 +126,7 @@ export function detectSearch(text: string): SearchIntent | null {
     (VN(/\bcó\b.*\bkhông\b/).test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
   if (!seek) return null;
   if (!kind && !offer && !place) return null;
-  return { mode: "find", kind, near, offer };
+  return { mode: "find", kind, near, offer, ...(area ? { area } : {}) };
 }
 
 function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
@@ -130,13 +169,17 @@ type Row = {
 };
 const COLS = "id,name,type,area,latest_offer,offer_count,rating,latitude,longitude,cover_url";
 
-async function fetchRows(type: BusinessType | undefined, names: string[], offer: boolean): Promise<Row[]> {
+async function fetchRows(type: BusinessType | BusinessType[] | undefined, names: string[], offer: boolean, area?: string): Promise<Row[]> {
+  const types = type == null ? [] : Array.isArray(type) ? type : [type];
   let q = supabase.from("businesses_explore_view").select(COLS).eq("status", "approved");
-  if (type) q = q.eq("type", type);
+  if (types.length === 1) q = q.eq("type", types[0]);
+  else if (types.length) q = q.in("type", types);
+  if (area) q = q.eq("area", area);
   if (names.length) q = q.or(names.map((k) => `name_unaccent.ilike.%${k.replace(/[,()%]/g, "")}%`).join(","));
   if (offer) q = q.gt("offer_count", 0);
   const { data } = await q.order("rating", { ascending: false, nullsFirst: false }).limit(60);
-  return (data ?? []) as unknown as Row[];
+  // Lọc lại phía máy cho chắc (đúng loại, đúng khu vực) — không bao giờ trả chỗ sai loại / sai khu vực.
+  return ((data ?? []) as unknown as Row[]).filter((r) => (!types.length || types.includes(r.type)) && (!area || sameArea(r.area, area)));
 }
 
 const toCard = (r: Row, pos: { lat: number; lng: number } | null): PlaceCard => ({
@@ -154,40 +197,63 @@ const toCard = (r: Row, pos: { lat: number; lng: number } | null): PlaceCard => 
 export type SearchResult = { text: string; places: PlaceCard[]; quick: string[] };
 const pick = <T,>(a: T[]) => a[Math.floor(Math.random() * a.length)];
 const km = (d?: number) => (d == null ? "" : d < 1 ? ` (cách bạn khoảng ${Math.round(d * 1000 / 50) * 50}m)` : ` (cách bạn khoảng ${d.toFixed(1)}km)`);
+/** Ghi chú vị trí cho 1 chỗ: gần (≤50km) thì nói khoảng cách; xa thì nói chỗ đó ở đâu (không khoe "cách 459km"). */
+const where = (c: PlaceCard, askedArea?: string) =>
+  c.distKm != null && c.distKm <= 50 ? km(c.distKm) : c.area && !(askedArea && sameArea(c.area, askedArea)) ? ` (ở ${c.area})` : "";
 
 export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Promise<SearchResult> {
   const pos = await myPos(it.near);
   // ── Hôm nay ăn gì / uống gì / đi đâu: chọn NGẪU NHIÊN 1 chỗ đang có ưu đãi ──
   if (it.mode !== "find") {
-    const type: BusinessType = it.mode === "go" ? pick(["travel", "food", "service"] as BusinessType[]) : "food";
-    let rows = await fetchRows(type, it.kind?.names ?? [], true);
-    if (!rows.length) rows = await fetchRows(type, [], true);
-    let cards = rows.map((r) => toCard(r, pos)).filter((c) => !avoidIds.includes(c.id));
-    if (pos) {
-      const nearBy = cards.filter((c) => c.distKm != null && c.distKm <= 5);
-      if (nearBy.length) cards = nearBy;
+    const type: BusinessType | BusinessType[] = it.mode === "go" ? GO_TYPES : "food";
+    let rows = await fetchRows(type, it.kind?.names ?? [], true, it.area);
+    if (!rows.length) rows = await fetchRows(type, [], true, it.area);
+    const all = rows.map((r) => toCard(r, pos));
+    // Đổi chỗ mãi hết chỗ mới → bốc lại từ đầu (vẫn tránh đúng chỗ vừa đưa), thay vì báo "không tìm được".
+    let cards = all.filter((c) => !avoidIds.includes(c.id));
+    let again = "";
+    if (!cards.length && all.length > 1) {
+      cards = all.filter((c) => c.id !== avoidIds[avoidIds.length - 1]);
+      again = "\n(Lomi gợi ý hết các chỗ đang có ưu đãi rồi, giờ bốc lại từ đầu nha.)";
+    }
+    // Không nêu khu vực mà có vị trí → chỉ bốc trong các chỗ GẦN anh (≤5km, rồi ≤30km, rồi vài chỗ gần nhất) — không bốc bừa cả nước.
+    if (pos && !it.area) {
+      const withD = cards.filter((c) => c.distKm != null).sort((a, b) => a.distKm! - b.distKm!);
+      const n5 = withD.filter((c) => c.distKm! <= 5);
+      const n30 = withD.filter((c) => c.distKm! <= 30);
+      if (n5.length) cards = n5;
+      else if (n30.length) cards = n30;
+      else if (withD.length) cards = withD.slice(0, 8);
     }
     if (!cards.length)
-      return { text: "Hic, giờ Lomi chưa tìm được chỗ nào đang có ưu đãi phù hợp 🥲 Bạn xem thử ở Khám phá (/kham-pha) nha!", places: [], quick: [] };
+      return {
+        text: it.area
+          ? `Hic, ở ${it.area} Lomi chưa thấy chỗ nào đang có ưu đãi phù hợp 🥲 Bạn xem thử ở Khám phá (/kham-pha) nha!`
+          : "Hic, giờ Lomi chưa tìm được chỗ nào đang có ưu đãi phù hợp 🥲 Bạn xem thử ở Khám phá (/kham-pha) nha!",
+        places: [],
+        quick: [],
+      };
     const c = pick(cards);
     const lead =
       it.mode === "eat"
         ? pick(["Để Lomi chọn giùm cho nè 🎲 Hôm nay thử ghé", "Bốc thăm được rồi! 🍜 Hôm nay mình đi", "Hôm nay đổi gió chút nha, thử"])
         : it.mode === "drink"
           ? pick(["Lomi chọn giùm nè ☕ Ghé", "Uống gì hả? Thử ghé"])
-          : pick(["Đi chơi hả? Lomi gợi ý ghé", "Cuối tuần thử ghé"]);
+          : it.area
+            ? pick([`Đi chơi ${it.area} hả? Lomi gợi ý ghé`, `Ở ${it.area} thì thử ghé`])
+            : pick(["Đi chơi hả? Lomi gợi ý ghé", "Cuối tuần thử ghé"]);
     const offer = c.offer ? ` Đang có ưu đãi: “${c.offer}” 🎁` : "";
     return {
-      text: `${lead} **${c.name}**${km(c.distKm)} nha!${offer}\nKhông ưng thì bấm “${it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác"}” để Lomi bốc lại 😄`,
+      text: `${lead} **${c.name}**${where(c, it.area)} nha!${offer}${again}\nKhông ưng thì bấm “${it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác"}” để Lomi bốc lại 😄`,
       places: [c],
       quick: [it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác", "Tìm quán cà phê có ưu đãi", "Tìm quán ăn gần mình"],
     };
   }
   // ── Tìm theo loại / ưu đãi ──
   const k = it.kind;
-  let rows = await fetchRows(k?.type, k?.names ?? [], it.offer);
+  let rows = await fetchRows(k?.type, k?.names ?? [], it.offer, it.area);
   if (rows.length < 3 && k?.names.length) {
-    const more = await fetchRows(k.type, [], it.offer);
+    const more = await fetchRows(k.type, [], it.offer, it.area);
     rows = rows.concat(more.filter((m) => !rows.some((r) => r.id === m.id)));
   }
   let cards = rows.map((r) => toCard(r, pos));
@@ -198,14 +264,15 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
   const noun = k?.noun ?? "chỗ";
   if (!cards.length)
     return {
-      text: `Lomi chưa thấy ${noun} nào ${it.offer ? "đang có ưu đãi " : ""}trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) với từ khoá khác xem sao nha.`,
+      text: `Lomi chưa thấy ${noun} nào ${it.area ? `ở ${it.area} ` : ""}${it.offer ? "đang có ưu đãi " : ""}trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) với từ khoá khác xem sao nha.`,
       places: [],
       quick: ["Hôm nay ăn gì?", "Tìm quán cà phê có ưu đãi"],
     };
   const how = pos ? "xếp gần bạn nhất trước" : "xếp theo đánh giá cao";
+  const at = it.area ? ` ở ${it.area}` : "";
   const intro = pick([
-    `Lomi tìm được mấy ${noun}${it.offer ? " đang có ưu đãi" : ""} nè (${how}) 👇`,
-    `Có ngay đây! Mấy ${noun}${it.offer ? " đang có ưu đãi" : ""} trong Liên Minh Liên Doanh (${how}):`,
+    `Lomi tìm được mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} nè (${how}) 👇`,
+    `Có ngay đây! Mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} trong Liên Minh Liên Doanh (${how}):`,
   ]);
   const hint = rad.note || (pos ? "" : it.near ? "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)" : "");
   return {
