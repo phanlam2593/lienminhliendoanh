@@ -737,12 +737,14 @@ export function crisisReply(text: string, lang: L): ChatReply | null {
 /** Câu có dáng câu hỏi (để quyết định gợi ý FAQ hay chỉ trò chuyện). */
 export function looksLikeQuestion(text: string): boolean {
   const n = ` ${normalizeVi(text)} `;
-  return text.includes("?") || VN(/\b(là gì|thế nào|ở đâu|bao nhiêu|khi nào|có không|được không|làm sao|như nào|cách nào|sao không|sao lại|tại sao|giúp mình|hướng dẫn|là ai|ai là|bằng mấy|mấy giờ|bao giờ|như thế nào|ra sao|nghĩa là gì)\b/).test(n);
+  return text.includes("?") || VN(/\b(là gì|thế nào|ở đâu|bao nhiêu|khi nào|có không|được không|làm sao|như nào|cách nào|sao không|sao lại|tại sao|giúp mình|hướng dẫn|là ai|ai là|bằng mấy|mấy giờ|bao giờ|như thế nào|ra sao|nghĩa là gì)\b/).test(n) ||
+    // 20/10 (audit): "1 ngày quẹt được mấy lần", "tối đa mấy người" — hỏi SỐ LƯỢNG bằng "mấy" (không tính "mấy ngày nay", "mấy đứa bạn").
+    VN(/\b(được|đc|dc|có|hết|mất|còn|là|tối đa|tối thiểu|tốn|cần) mấy\b|\bmấy (tuổi|lượt)\b/).test(n);
 }
 
 // Từ khoá cho biết câu hỏi đang nói về APP (để gợi ý câu hỏi thường gặp), khác với chuyện đời thường.
 const APPISH =
-  VN(/\b(app|ứng dụng|ưu đãi|mã ưu đãi|nhận mã|pin|tài khoản|mật khẩu|đăng nhập|đăng ký|đăng bài|đăng tin|doanh nghiệp|cửa hàng|thành viên|membership|điểm|quẹt|đưa đón|giao hàng|tin nhắn|cộng đồng|hồ sơ|thông báo|báo cáo|chặn|theo dõi|kết bạn|hướng dẫn|admin|lomi|login|logout|log in|log out|profile|account|acc|password|voucher|offer|member|comment|share|post|follow|link|info|support|update|online|offline|call|review|user|code|ad)\b/);
+  VN(/\b(app|ứng dụng|hết hạn|gia hạn|ưu đãi|mã ưu đãi|nhận mã|pin|tài khoản|mật khẩu|đăng nhập|đăng ký|đăng bài|đăng tin|doanh nghiệp|cửa hàng|thành viên|membership|điểm|quẹt|đưa đón|giao hàng|tin nhắn|cộng đồng|hồ sơ|thông báo|báo cáo|chặn|theo dõi|kết bạn|hướng dẫn|admin|lomi|login|logout|log in|log out|profile|account|acc|password|voucher|offer|member|comment|share|post|follow|link|info|support|update|online|offline|call|review|user|code|ad)\b/);
 export function isAppish(text: string): boolean {
   // 08/10: "chán" bỏ dấu trùng "chặn" (chặn người dùng) — "a đang chán" không phải câu hỏi về app.
   //        11/10: mở rộng cho mọi cách viết có dấu khác nghĩa ("đau chân lắm", "quét nhà") — lib/lomiAccent.

@@ -473,14 +473,16 @@ function near(a: string, b: string): boolean {
 }
 
 // Chỉ mục từ cho từng câu hỏi (tính 1 lần).
-type Indexed = { f: Faq; text: string; toks: Set<string>; kws: string[] };
+type Indexed = { f: Faq; text: string; toks: Set<string>; kws: string[]; qv: string };
 let INDEX: Indexed[] | null = null;
 function index(): Indexed[] {
   if (INDEX) return INDEX;
   INDEX = FAQS.map((f) => {
     const kws = [...new Set(f.kw.map(canon))]; // bỏ trùng sau khi quy đồng nghĩa (vd "thong bao day" → "thong bao")
-    const text = ` ${[canon(f.q.vi), canon(f.q.en), ...kws].join(" | ")} `;
-    return { f, text, toks: new Set(tokens(text.replace(/\|/g, " "))), kws };
+    // (20/10 audit: câu mẫu tiếng Việt cũng đi qua cùng bảng che chữ khác nghĩa như câu người dùng — "tài xế ĐANG tới" hai bên cùng là "dangx")
+    const qv = canon(maskStrict(f.q.vi, APP));
+    const text = ` ${[qv, canon(f.q.en), ...kws].join(" | ")} `;
+    return { f, text, toks: new Set(tokens(text.replace(/\|/g, " "))), kws, qv };
   });
   return INDEX;
 }
@@ -494,14 +496,14 @@ function scoreAll(text0: string): { f: Faq; score: number; cover: number }[] {
   const qt = qt0.length ? qt0 : n.trim().split(" ").filter(Boolean);
   if (!qt.length) return [];
   return index()
-    .map(({ f, text: ft, toks, kws }) => {
+    .map(({ f, text: ft, toks, kws, qv }) => {
       let score = 0;
       // 1) Trùng cụm từ khoá: cụm càng dài càng chắc.
       for (const k of kws) {
         if (k && n.includes(` ${k} `)) score += k.split(" ").length >= 2 ? 3 + k.split(" ").length : qt.length <= 3 ? 3 : 1.5;
       }
       // 2) Trùng nguyên câu hỏi mẫu.
-      if (n.includes(` ${canon(f.q.vi)} `) || n.includes(` ${canon(f.q.en)} `)) score += 12;
+      if (n.includes(` ${qv} `) || n.includes(` ${canon(f.q.en)} `)) score += 12;
       // 3) So từng từ (có chịu gõ sai 1 ký tự) + thưởng cặp từ liền nhau.
       let hit = 0;
       for (const w of qt) {
@@ -517,6 +519,8 @@ function scoreAll(text0: string): { f: Faq; score: number; cover: number }[] {
     .sort((a, b) => b.score - a.score);
 }
 
+const DECIDE = VN(/\b(có nên|nên hay không|có cần phải|có nên hay không)\b/);
+const APP_NOUN = VN(/\b(app|ứng dụng|membership|hội viên|thành viên|ưu đãi|mã ưu đãi|doanh nghiệp|quẹt|tài khoản|mật khẩu|lomi|liên minh|hồ sơ|bài đăng|nhóm chat|thông báo|đưa đón|tài xế|cộng đồng|xác minh|đăng ký|đăng nhập)\b/);
 // Câu nhờ VIẾT / SÁNG TẠO → không trả lời bằng FAQ.
 const CREATIVE =
   VN(/\b(viết (giúp|hộ|dùm|giùm|cho mình|bài|caption|mô tả|nội dung|quảng cáo|content)|soạn|sáng tác|caption|mô tả giúp|ý tưởng cho|đặt tên|slogan|content|bài đăng cho|write|draft)\b/);
@@ -525,6 +529,9 @@ const CREATIVE =
 export function matchFaq(text: string): Faq | null {
   const n = normalizeVi(text);
   if (!n || n.length > 300 || CREATIVE.test(` ${n} `)) return null;
+  // 20/10 (audit): câu hỏi CÓ NÊN làm một việc đời thường ("vậy a có nên nhắn tin trước không") là xin ý kiến, không phải hỏi
+  //   CÁCH dùng app — trước đây khớp từ khoá "nhắn tin" và đáp hướng dẫn mở khung chat. Chỉ nhận khi câu nhắc rõ một thứ của app.
+  if (DECIDE.test(` ${n} `) && !APP_NOUN.test(` ${normalizeVi(maskStrict(text, APP))} `)) return null;
   const [best, second] = scoreAll(text);
   if (!best) return null;
   // Đủ chắc: điểm cao, hoặc phủ phần lớn câu hỏi và bỏ xa câu đứng thứ hai.

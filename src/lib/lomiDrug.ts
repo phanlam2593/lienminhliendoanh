@@ -98,6 +98,31 @@ const NOT_MED = VN(/\b(thuốc lá|thuốc lào|hút thuốc|thuốc nhuộm|thu
 const MED_WORD = VN(/\b(thuốc|kháng sinh|toa|đơn thuốc|viên uống|siro|giảm đau|hạ sốt|thuốc bổ|thuốc nam|thuốc bắc|thuốc tây)\b/);
 const INTERACT = VN(/\b(tương tác|kỵ nhau|kị nhau|kỵ thuốc|kị thuốc|uống chung|dùng chung|uống cùng|dùng cùng|uống kèm|dùng kèm|uống lẫn|kết hợp với|uống với|uống cùng lúc|chung với thuốc|cùng với thuốc)\b/);
 const OVERDOSE = VN(/\b(quá liều|uống nhầm thuốc|uống nhầm|uống lố|lỡ uống|uống quá nhiều thuốc|uống cả vỉ|uống cả hộp|uống cả lọ)\b/);
+// 20/10 (audit P0) — QUÁ LIỀU nhận theo CẤU TRÚC câu, không cần chữ "thuốc" và không cần đang ở mạch sức khoẻ.
+//   Trước đây "a uống quá liều rồi" (không có chữ "thuốc") bị đáp "😋 Ngon không anh?", "a uống hết vỉ thuốc rồi" → "hả 😄 kể nghe với",
+//   "e ơi a nuốt cả lọ thuốc" → "em nghe nè", "a uống nguyên hộp panadol" / "20 viên thuốc ngủ" → chỉ đưa thông tin thuốc, không báo cấp cứu.
+//   Ba dáng câu: (1) cụm tự nó đã là quá liều; (2) động từ đưa vào miệng + "hết / cả / nguyên…" + đơn vị đóng gói thuốc
+//   (vỉ là của thuốc; hộp / lọ / chai… phải đi với chữ thuốc hoặc tên một thuốc); (3) số viên rất nhiều (≥ 10, "cả chục viên").
+const OD_SELF = VN(/\b(quá liều|lố liều|gấp đôi liều|gấp ba liều|uống quá nhiều thuốc|uống thuốc quá nhiều|uống nhầm thuốc|uống thuốc quá liều|tự tử bằng thuốc)\b/);
+const OD_VERB = "(?:uống|nuốt|tọng|ăn|nhai|nốc)";
+const OD_ALL = "(?:hết|cả|nguyên|trọn|sạch|luôn|một|1)(?: (?:cả|một|1|nguyên))?";
+const OD_VI = VN(new RegExp(`\\b${OD_VERB} (?:\\S+ ){0,2}${OD_ALL} (?:\\d+ )?vỉ(?! (?:trứng|sữa|kẹo|bánh|yaourt|sữa chua))\\b`));
+const OD_PACK = VN(new RegExp(`\\b${OD_VERB} (?:\\S+ ){0,2}${OD_ALL} (?:\\d+ )?(?:hộp|lọ|chai|tuýp|bịch|gói|vốc|nắm|đống|vỉ)\\b`));
+const OD_MANY = VN(new RegExp(`\\b${OD_VERB} (?:\\S+ ){0,3}(?:(\\d+)|cả chục|mấy chục|vài chục|chục|cả trăm) viên\\b`));
+const OD_NOT = VN(/\b(không|ko|chưa|chẳng|chả|đâu có|đừng|sợ|lỡ mà|nếu|giả sử) (có |lỡ |bị |định )?(uống|nuốt|ăn|nhai)\b/);
+/** Câu kể / hỏi về việc đã uống QUÁ LIỀU thuốc (dù không nói chữ "thuốc"). */
+export function overdoseSignal(text: string): boolean {
+  const n = ` ${normalizeVi(text)} `;
+  if (NOT_MED.test(n)) return false; // thuốc tẩy / thuốc chuột… là ngộ độc hoá chất — lớp ngộ độc riêng lo
+  if (OD_SELF.test(n)) return true;
+  if (OD_NOT.test(n)) return false;
+  if (OD_VI.test(n)) return true;
+  if (OD_PACK.test(n) && (MED_WORD.test(n) || !!findDrug(text))) return true;
+  const many = n.match(OD_MANY);
+  return !!many && (!many[1] || Number(many[1]) >= 10) && (MED_WORD.test(n) || !!findDrug(text) || VN(/\bviên\b/).test(n));
+}
+const OD_MIND =
+  "\n\nNếu bạn uống vì đang thấy quá sức chịu đựng: sau khi đã an toàn, bạn có thể gọi đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật), hoặc nói với một người bạn tin. Lomi vẫn ở đây nghe bạn.";
 const DOSE = VN(/\b(liều|mấy viên|bao nhiêu viên|uống bao nhiêu|ngày mấy lần|mấy lần một ngày|mấy lần 1 ngày|bao nhiêu mg|bao nhiêu ml|mấy gói|cách nhau mấy tiếng|uống mấy)\b/);
 const STOP = VN(/\b(ngưng thuốc|ngưng uống|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
 const SIDE = VN(/\b(tác dụng phụ|phản ứng phụ|có hại gì|hại gan|hại thận|hại dạ dày|có gây nghiện)\b/);
@@ -195,12 +220,17 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       urgent: true,
       text: "Dạ, Lomi ghi nhận. Lomi không biết đó là thuốc gì nên không nói được chừng đó có sao không — bạn gọi **115** hoặc hỏi ngay bác sĩ / dược sĩ, đọc cho họ tên thuốc, số viên và giờ uống nha. Trong lúc chờ, đừng ở một mình; thấy buồn nôn, lơ mơ, khó thở, đau bụng thì đi cấp cứu liền.",
     };
-  if (OVERDOSE.test(n) && (med || ctx.inHealth))
+  if ((OVERDOSE.test(n) && (med || ctx.inHealth)) || overdoseSignal(text)) {
+    // Thuốc có dữ liệu đã kiểm chứng (paracetamol…) → thêm phần quá liều có nguồn của đúng thuốc đó.
+    const od = findDrug(text) ?? (ctx.drugId ? drugById(ctx.drugId) : null);
+    const known = od && od.overdose.length ? `\n\n${renderDrug(od, "overdose")}` : "\n\nLomi không có dữ liệu để nói loại thuốc đó ở mức nào thì nguy hiểm — nên đi kiểm tra là an toàn nhất.";
     return {
       kind: "overdose",
       urgent: true,
-      text: `⚠️ Uống nhầm thuốc hoặc uống quá liều thì **đừng chờ xem có sao không**: gọi **115** hoặc tới cơ sở y tế gần nhất ngay, kể cả khi lúc này thấy bình thường.\n• Mang theo vỏ hộp / vỉ thuốc, nhớ khoảng bao nhiêu viên và uống lúc mấy giờ.\n• Không tự gây nôn, không tự uống thêm thuốc khác để "giải".\n\nLomi không có dữ liệu để nói loại thuốc đó ở mức nào thì nguy hiểm — nên đi kiểm tra là an toàn nhất.`,
+      ...(od ? { drugId: od.id, name: od.names[0] } : {}),
+      text: `⚠️ Uống nhầm thuốc hoặc uống quá liều thì **đừng chờ xem có sao không**: gọi **115** hoặc tới cơ sở y tế gần nhất ngay, kể cả khi lúc này thấy bình thường.\n• Mang theo vỏ hộp / vỉ thuốc, nhớ khoảng bao nhiêu viên và uống lúc mấy giờ.\n• Không tự gây nôn, không tự uống thêm thuốc khác để "giải".\n• Đừng ở một mình — báo ngay cho người ở gần.${known}${OD_MIND}`,
     };
+  }
 
   // Dùng chung / tương tác. Lomi CHỈ nói về một cặp khi có bản ghi có nguồn cho đúng cặp đó (lib/lomiDrugData); còn lại nói rõ là
   // chưa xác minh được — không suy ra từ tên thuốc hay nhóm thuốc.

@@ -231,6 +231,8 @@ add("STATE", "no", { cls: "need", v: 1 });
 add("STATE", "rảnh rỗi|rảnh", { cls: "free", v: 0 });
 add("STATE", "bận rộn|bận", { cls: "busy", v: 0 });
 add("STATE", "mệt mỏi|lo lắng|căng thẳng|cô đơn|thất vọng|hoang mang|khó chịu|áp lực|buồn|chán|mệt|lo|sợ|giận|bực|tức|stress|tủi|nản|đuối", { cls: "feel", v: -1 });
+// 20/10 (audit): cảm xúc đau mà trước đây là chữ lạ (UNK) → "chuyện đó làm a tổn thương" bị nhắc lại kèm 😄.
+add("STATE", "tổn thương|đau lòng|tủi thân|ấm ức|uất ức|tuyệt vọng|bế tắc|day dứt|hụt hẫng|chạnh lòng", { cls: "feel", v: -1 });
 add("STATE", "hạnh phúc|thoải mái|phấn khích|hào hứng|yên tâm|vui", { cls: "feel", v: 1 });
 add("STATE", "khoẻ|khỏe|ổn|đỡ", { cls: "well", v: 1 });
 add("STATE", "mất ngủ|ốm yếu|ốm|bệnh|đau|sốt|cảm|ho|bỏ ăn|biếng ăn|bỏ bú|tiêu chảy|co giật|khó thở|trầm cảm|tai biến|đột quỵ|ung thư|tiểu đường|cao huyết áp|huyết áp cao|viêm phổi|sốt xuất huyết", { cls: "ill", v: -1 });

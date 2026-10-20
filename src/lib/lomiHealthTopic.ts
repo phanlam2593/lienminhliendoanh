@@ -16,7 +16,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { dietName, dietOf } from "@/lib/lomiDiet";
 import { condByName, condInfo } from "@/lib/lomiSymptoms";
-import { VR, VN } from "@/lib/viMatch";
+import { VR, VN, dropNegated } from "@/lib/viMatch";
 
 /** Trạng thái mạch sức khoẻ lưu trên tin của Lomi. Có cờ này = đang nói chuyện sức khoẻ; subject có thể chưa có. */
 export type HealthCtx = { subject?: string; label?: string; diet?: string; cond?: string };
@@ -60,7 +60,9 @@ export function healthCtxOfDiet(diet: string): HealthCtx {
 }
 
 /** Câu đang nói về bệnh / tình trạng nào. inHealth = đang ở mạch sức khoẻ (cho phép gọi tắt bằng tên cơ quan). */
-export function healthSubjectOf(text: string, inHealth = false): HealthSubject | null {
+export function healthSubjectOf(text0: string, inHealth = false): HealthSubject | null {
+  // 20/10 (audit): bỏ phần người dùng CHỐI ("không bị sốt, chỉ hơi mệt") — trước đây "sốt" bị chốt thành bệnh "cảm cúm".
+  const text = dropNegated(text0);
   const n = ` ${normalizeVi(text)} `;
   let diet = dietOf(text);
   const byName = condByName(text);

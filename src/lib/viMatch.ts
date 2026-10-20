@@ -497,3 +497,16 @@ export function V(re: RegExp): RegExp {
  */
 export const VN = V;
 export const VR = (re: RegExp): RegExp => re;
+
+/**
+ * 20/10 (audit) — BỎ PHẦN BỊ PHỦ ĐỊNH trước khi dò chủ đề: "không bị sốt, chỉ hơi mệt" → "chỉ hơi mệt";
+ * "a đang kể chuyện buồn, không hỏi về sức khỏe" → "a đang kể chuyện buồn". Chỉ cắt sau các cụm CHỐI CHỦ ĐỀ
+ * ("không bị / không có / không phải / không hỏi về…"), tới dấu câu hoặc từ nối ("mà", "chỉ", "nhưng"), tối đa 4 chữ —
+ * "không ngủ được", "không ăn được" vẫn giữ nguyên vì đó là triệu chứng, không phải lời chối.
+ * Dùng chung để các lớp dò chủ đề hiểu phủ định giống bộ đọc triệu chứng (lib/lomiSymptoms).
+ */
+export function dropNegated(text: string): string {
+  const s = text.normalize("NFC");
+  const re = /(^|[\s,.;!?])(?:không|khong|ko|k|hông|hong|chẳng|chả|chưa|chua|đâu có|chứ không|khỏi)\s+(?:có\s+|co\s+)?(?:phải|phai|bị|bi|có|co|mắc|mac|hỏi|hoi|nói|noi|kể|ke|bàn|cần|còn|thấy|thay|kèm|kem|liên quan|lien quan)(?:\s+(?:về|ve|chuyện|chuyen|tới|toi|đến|den|gì|gi))?((?:\s+(?!(?:mà|ma|chỉ|chi|nhưng|nhung|thôi|thoi|mình|minh|là|la)(?:\s|$))[^\s,.;!?]+){1,4})/giu;
+  return s.replace(re, "$1 ").replace(/\s+/g, " ").trim();
+}

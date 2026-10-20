@@ -75,7 +75,7 @@ export type Convo = {
   /** Kiểu câu trả lời Lomi đang chờ cho câu hỏi vừa hỏi. */
   asked?: "yesno" | "choice" | "open";
   /** Chủ đề đã nói TRƯỚC chủ đề hiện tại (để hiểu "cái lúc nãy"). */
-  earlier: { topic: Topic; label: string; resume: string }[];
+  earlier: { topic: Topic; label: string; resume: string; /** tin Lomi cách tin cuối bao nhiêu tin (1 = ngay trước tin cuối) */ back: number }[];
 };
 
 export type Want = { text?: string; offer?: boolean; near?: boolean; /** giới hạn khoảng cách (km) người dùng nói: "5km thôi", "dưới 2 cây số" */ maxKm?: number };
@@ -85,7 +85,7 @@ export type Resolved =
   /** Thêm điều kiện cho lần tìm CHỖ vừa rồi (không theo món): "giới hạn 5km thôi" sau "lựa quán cho a đi". */
   | { kind: "research"; want: Want; why: string }
   /** keep = giữ nguyên cờ ngữ cảnh của tin trước (đang tâm sự, đang nói sức khoẻ, trải bài vừa rút…). */
-  | { kind: "reply"; reply: ChatReply; keep: boolean; talk?: boolean; why: string };
+  | { kind: "reply"; reply: ChatReply; keep: boolean; talk?: boolean; why: string; /** keep: giữ cờ ngữ cảnh của tin Lomi cách đây `back` tin (mặc định tin cuối) */ back?: number };
 
 const dishLabel = (d: Dish) => d.name.split(/[,(]/)[0].trim();
 const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
@@ -152,7 +152,8 @@ export function convoOf(history: ConvoMsg[]): Convo {
   c.foodTalk = (!c.topic || c.topic === "food" || c.topic === "talk") && (!!last.dishAsk || hungry || !!last.quick?.some((x) => VR(/ăn gì|uống gì|quán ăn/i).test(x)));
   if (c.foodTalk && !c.topic) c.topic = "food";
   // Chủ đề đã nói trước đó (khác chủ đề hiện tại), mới nhất trước.
-  for (const m of as.slice(0, -1).reverse()) {
+  const olderA = as.slice(0, -1).reverse();
+  for (const [bi, m] of olderA.entries()) {
     const t = topicOf(m);
     if (!t || t === c.topic || t === "talk" || c.earlier.some((e) => e.topic === t)) continue;
     const md = m.dish ? DISHES.find((x) => x.id === m.dish) : undefined;
@@ -164,7 +165,7 @@ export function convoOf(history: ConvoMsg[]): Convo {
       : t === "food" ? { label: md ? `quán ${dishLabel(md)}` : "chuyện ăn uống", resume: md ? `Tìm quán ${dishLabel(md)}` : "Hôm nay ăn gì? 🎲" }
       : m.faqId && faqById(m.faqId) ? { label: `câu “${faqById(m.faqId)!.q.vi.replace(/\?$/, "")}”`, resume: faqById(m.faqId)!.q.vi }
       : { label: "câu hỏi về app", resume: "Hướng dẫn dùng app" };
-    c.earlier.push({ topic: t, ...e });
+    c.earlier.push({ topic: t, ...e, back: bi + 1 });
     if (c.earlier.length >= 2) break;
   }
   return c;
@@ -175,7 +176,10 @@ const LEAD = "(?:(?:vay|the|roi|con|ua|a|o|ma|y|la) )*";
 const TAIL = "(?: (?:thi sao|sao|the nao|thi the nao|nhu nao|thi lam sao))?(?: (?:a|ha|nhi|ta|vay|ne|do))*";
 const REF_THING = VR(new RegExp(`^${LEAD}(?:cai|chuyen|dieu|viec|mon|cho) (?:do|kia|nay|ay)${TAIL}$`));
 const REF_PERSON = VR(new RegExp(`^${LEAD}(?:nguoi (?:do|ay|kia|ta)|ho|anh ay|co ay|chi ay|ban ay|nguoi yeu|ny|crush)${TAIL}$`));
-const REF_EARLIER = VR(new RegExp(`^${LEAD}(?:(?:cai|chuyen|dieu|viec) )?(?:luc nay|hoi nay|vua roi|vua nay|ban nay|truoc do|luc truoc)(?: (?:do|ay|kia))?${TAIL}$`));
+// 20/10 (audit): "thôi quay lại chuyện lúc nãy", "nói tiếp chuyện hồi nãy đi" — có động từ QUAY LẠI thì người dùng đã chọn rồi.
+const RESUME = "(?:quay lai|quay ve|tro lai|noi tiep|ke tiep|tiep tuc|noi lai|ke lai|nghe tiep)";
+const REF_EARLIER = VR(new RegExp(`^(?:thoi )?${LEAD}(?:${RESUME} (?:voi )?(?:ve )?)?(?:(?:cai|chuyen|dieu|viec) )?(?:luc nay|hoi nay|vua roi|vua nay|ban nay|truoc do|luc truoc|ban dau|luc dau)(?: (?:do|ay|kia))?(?: (?:di|nha|nhe|nhen|thoi))*${TAIL}$`));
+const RESUME_RE = VR(new RegExp(`\\b${RESUME}\\b`));
 // Xác nhận / bác bỏ (rộng hơn isAffirm / isDecline một chút: "đúng rồi", "chuẩn", "không phải").
 const YES = VN(/^(đúng|đúng rồi|đúng vậy|chuẩn|chuẩn rồi|phải|phải rồi|chính xác|ừ đúng|ừ đúng rồi|có chứ)( (ạ|à|a|nha|nhé|nhe|nè|đó|lomi|em|e))*$/);
 const WRONG = VN(/^(không phải|ko phải|k phải|hông phải|hong phải|sai rồi|không đúng|không phải vậy|nhầm rồi|không phải thế)( (đâu|mà|nha|ạ|à|a|lomi|em|e))*$/);
@@ -210,6 +214,19 @@ const TIP = VN(/\b(mẹo|bí kíp|kinh nghiệm gì|còn cách nào|cách nào k
 // 10/10 — KHOẢNG CÁCH cho lần tìm chỗ vừa rồi ("giới hạn 5km thôi", "trong vòng 3km", "dưới 2 cây số").
 const KM = VN(/\b(\d+(?:[.,]\d+)?) ?(?:km|ki lô mét|kí lô mét|kilomet|kilô mét|kilo mét|cây số|cs)\b/);
 
+// 20/10 (audit): hỏi lại ý câu Lomi vừa nói / bác câu đó.
+const EXPLAIN_ME = VN(/^(?:(?:vậy|thế|ủa|ơ|à|nhưng) )*(?:ý (?:e|em|lomi|bạn) là (?:sao|gì)|ý là sao|ý là gì|nghĩa là sao|vậy là sao|là sao|nói rõ hơn|nói rõ lại|giải thích (?:thêm|lại|rõ hơn|cho (?:a|anh|mình|tui) hiểu)|(?:e|em|lomi) nói (?:gì|cái gì) (?:vậy|thế|zậy)|(?:a|anh|mình|tui) (?:chưa |không |ko )hiểu(?: lắm)?|khó hiểu (?:quá|ghê))(?: (?:vậy|thế|à|ạ|a|hả|ha|nhỉ|e|em|lomi|đi|nha|nhé))*$/);
+//   ("sai rồi" trơn sau một lời đoán là Lomi HIỂU NHẦM — mục 4 lo; ở đây phải nói rõ là Lomi NÓI sai: "e nói sai rồi", "trả lời sai".)
+const DISPUTE = VN(/^(?:(?:mà|nhưng|ủa) )?(?:(?:e|em|lomi|bạn) (?:nói|trả lời|đáp|ghi) |(?:e|em|lomi) |nói |trả lời )(?:sai|không đúng|ko đúng|nhầm|bậy|trật)(?: (?:rồi|nha|đó|nhé|á|mà|hết|bét))*(?: (?:e|em|lomi|ơi))*$|\b(?:thông tin|cái|chỗ) (?:này|đó) (?:sai|không đúng)\b/);
+/** Ý chính của một câu trả lời dài: dòng gạch đầu dòng / câu có nội dung đầu tiên (bỏ tiêu đề, emoji, chữ đậm). */
+function gistOf(content: string): string | null {
+  const lines = content.split("\n").map((x) => x.replace(/\*\*/g, "").trim()).filter(Boolean);
+  const pick = lines.find((x) => /^•/.test(x)) ?? lines.find((x) => x.length > 40 && !/:$/.test(x) && !/^📚/u.test(x));
+  if (!pick) return null;
+  const t = pick.replace(/^•\s*/, "").replace(/^\p{Extended_Pictographic}\s*/u, "");
+  const one = t.split(/(?<=[.!?])\s/)[0];
+  return one.length > 220 ? `${one.slice(0, 217).trim()}…` : /[.!?…]$/.test(one) ? one : `${one}.`;
+}
 // Lệnh của mạch chọn món sẵn có ("món khác", "quán khác") — AiAssistant tự xử lý, không coi là điều kiện tìm quán.
 const FLOW_CMD = VN(/\b(món khác|quán khác|đổi món|đổi quán|chỗ khác|đồ uống khác|gợi ý khác|món nào khác)\b/);
 const PLACE_FILL = new Set("on ngon ok oke duoc dep tot re xin hay nhat vay ta nhi ha e em lomi co khong ko thi biet chi gioi thieu goi y a anh cho minh di day gio nay ne nha".split(" "));
@@ -274,6 +291,15 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   // 1) "cái lúc nãy", "chuyện vừa rồi" → chủ đề đã nói TRƯỚC đó.
   if (REF_EARLIER.test(n)) {
     const e = c.earlier[0];
+    //   Nói rõ "quay lại / nói tiếp" → quay lại luôn, mang theo ngữ cảnh của chính chuyện đó (không hỏi lại "muốn nói tiếp hả?").
+    if (e && RESUME_RE.test(n))
+      return {
+        kind: "reply",
+        keep: true,
+        back: e.back,
+        why: "ref:resume",
+        reply: { text: e.topic === "heart" ? `Ừ, mình quay lại **${e.label}** nha 🌿 Bạn kể tiếp đi, Lomi nghe nè.` : `Ừ, quay lại **${e.label}** nha. Bạn muốn hỏi tiếp phần nào?`, quick: e.topic === "heart" ? [] : [e.resume] },
+      };
     if (e) return { kind: "reply", keep: false, why: "ref:earlier", reply: { text: `Lúc nãy mình đang nói về **${e.label}** — bạn muốn nói tiếp chuyện đó hả?`, quick: [e.resume] } };
     if (c.topic && c.topic !== "talk") return { kind: "reply", keep: true, why: "ref:earlier-same", reply: { text: "Ý bạn là chuyện mình vừa nói ở trên hả? Bạn hỏi cụ thể hơn một chút giúp Lomi nha 😊" } };
     return { kind: "reply", keep: true, why: "ref:earlier-none", reply: { text: "Lúc nãy là chuyện nào ta 😅 Bạn nhắc lại giúp Lomi vài chữ thôi cũng được nha." } };
@@ -359,6 +385,28 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
       },
     };
   }
+
+  // 3c') 20/10 (audit) — HỎI LẠI / BÁC câu Lomi VỪA trả lời ("ý e là sao", "e nói sai rồi") → bám đúng câu trả lời đó, giữ mạch đang nói.
+  //   (trước đây: "Cái nào nè? 👀" và mất luôn ngữ cảnh sức khoẻ / bệnh đang nói.) Trải bài Tarot có lời giải riêng ở trên.
+  const substantive = last.content.length >= 120 && !last.tarot && !last.tarotRef;
+  if (substantive && words <= 8 && EXPLAIN_ME.test(n)) {
+    const gist = gistOf(last.content);
+    return {
+      kind: "reply",
+      keep: true,
+      why: "meta:explain",
+      reply: { text: gist ? `Nói gọn lại thì ý Lomi là: ${gist}\n\nBạn thấy chỗ nào khó hiểu, chỉ giúp Lomi để Lomi giải thích kỹ đúng chỗ đó nha.` : "Bạn thấy chỗ nào khó hiểu, chỉ giúp Lomi để Lomi giải thích kỹ đúng chỗ đó nha." },
+    };
+  }
+  if (substantive && words <= 10 && DISPUTE.test(n))
+    return {
+      kind: "reply",
+      keep: true,
+      why: "meta:dispute",
+      reply: {
+        text: `Dạ, bạn thấy chỗ nào chưa đúng ạ? Bạn chỉ giúp Lomi nha, Lomi xem lại liền 🙏${/📚|Nguồn/.test(last.content) || (last as { src?: string }).src ? " Phần Lomi vừa nói là theo nguồn y khoa đã ghi kèm — nếu thông tin bạn biết khác, hỏi thêm bác sĩ / dược sĩ là chắc nhất." : ""}`,
+      },
+    };
 
   // 3d) Lomi vừa hỏi thăm ("…thế nào?", "có gì vui không?") mà đáp "cũng được", "bình thường" → đáp nhẹ, mời kể (không coi là "ừ").
   if (SOSO.test(n) && ((c.asked && VR(/(thế nào|sao rồi|ổn không|có gì vui|ra sao|khoẻ không|khỏe không)/i).test(last.content)) || VR(/^(chào|hello|hi|alo|lomi vẫn ở đây|hihi chào)/i).test(last.content.trim())))

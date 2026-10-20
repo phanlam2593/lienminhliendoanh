@@ -491,7 +491,10 @@ export function gate(q: string, ctx: GateCtx & { inFlow?: boolean }, correctionO
 
   // 1) Sửa lại / bác câu trước.
   const m = q.match(CORR_RE) ?? q.match(CORR2_RE) ?? q.match(CORR_NEG_RE);
-  if (m && m[0].trim() && ctx.lastText) {
+  // 20/10 (audit): "ý e là sao", "ý em là gì" — sau "ý … là" chỉ còn chữ HỎI → đang hỏi lại ý câu Lomi vừa nói, không phải sửa lại câu
+  //   của mình (trước đây bị rút thành "sao" rồi đáp "Cái nào nè?"). lib/lomiConvo trả lời câu này theo đúng câu Lomi vừa nói.
+  const askOnly = !!m && /^ý\s/iu.test(m[0].trim()) && VN(/^(sao|gì|là sao|là gì|như nào|thế nào|sao vậy|gì vậy)( (vậy|thế|ta|hả|ha|à|ạ|a|nhỉ|e|em|lomi))*$/).test(normalizeVi(q.slice(m[0].length)) || "x");
+  if (m && m[0].trim() && ctx.lastText && !askOnly) {
     const rest = q.slice(m[0].length).trim();
     const rn = normalizeVi(rest);
     if (!rn || OTHER_RE.test(rn) || FILLER.test(rn))

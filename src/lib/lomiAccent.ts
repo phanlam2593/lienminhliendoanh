@@ -107,6 +107,8 @@ export const APP: Table = {
   chan: ["chặn"], // chân, chán, chăn, chắn
   quet: ["quẹt"], // quét
   treo: ["treo"], // trẹo (trẹo cổ, trẹo chân) — 10/10
+  // 20/10 (audit): "em có hiểu a đang NÓI gì không" bỏ dấu thành "nội (dung)" → khớp nhầm câu "Báo cáo nội dung".
+  noi: ["nội", "nối"], // nói, nơi, nổi, nồi
   },
 };
 

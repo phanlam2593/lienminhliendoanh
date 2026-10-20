@@ -561,7 +561,10 @@ export function isPersonalTalk(raw: string): boolean {
 }
 
 /** Lưới cuối. Trả null = đây là câu HỎI KIẾN THỨC Lomi chưa có → để Lomi nói "chưa tiếp thu" + nút Dạy Lomi. */
-export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; mirror?: string | null } = {}): SenseReply | null {
+// 20/10 (audit): đã làm / đã thử mà KHÔNG ĐƯỢC ("a làm theo rồi mà không được", "cài lại vẫn chưa được") — câu báo trục trặc, không phải chuyện vui.
+const FAILED = VN(/\b(mà|nhưng|vẫn|cũng|rồi) (vẫn |cũng )?(không|ko|k|chưa|chẳng|chả) (được|đc|dc|ăn thua|xong|chạy|vào|lên|hiện|ra|nhận)\b/);
+const TRIED = VN(/\b(làm theo|làm rồi|thử rồi|thử lại|làm lại|cài lại|bấm rồi|bấm hoài|nhập rồi|đăng nhập lại|tải lại|làm y chang|làm đúng)\b/);
+export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; mirror?: string | null; /** Bộ đọc câu (lib/lomiParse) thấy câu mang nghĩa tiêu cực. */ neg?: boolean } = {}): SenseReply | null {
   const n = normalizeVi(raw);
   if (!n) return null;
   const words = n.split(" ").length;
@@ -595,9 +598,12 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
   // Vẫn phải nhận ra đây là lời kể (có người kể / cảm xúc / mẩu chi tiết ngắn / câu nối "xong…", "rồi…", "mà…");
   // một câu dài nói chuyện khác hẳn ("bitcoin hôm nay lên 100k") thì không giả vờ hiểu.
   if (ctx.talk && isTalkCont(raw)) return talkContinue(raw, ctx.talk, /🥺|😔|😣/u.test(ctx.lastText ?? ""), ctx.lastText ?? "", ctx.mirror ?? null);
+  // Đã làm theo mà vẫn không được, không rõ đang làm việc gì → hỏi đúng chỗ kẹt (không nhắc lại "làm theo hả 😄").
+  if (FAILED.test(` ${n} `) && TRIED.test(` ${n} `) && words <= 12)
+    return { intent: "clarify", text: "Làm rồi mà vẫn chưa được hả 😣 Bạn đang làm việc gì, kẹt ở bước nào hay hiện thông báo gì? Kể Lomi nghe để Lomi chỉ tiếp nha." };
   if (words >= 2 && isPersonalTalk(raw)) {
     const s = low(raw);
-    const sad = VR(/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu).test(raw) || TALK_NEG.test(s);
+    const sad = VR(/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu).test(raw) || TALK_NEG.test(s) || !!ctx.neg || FAILED.test(` ${n} `);
     const act = echoAct(s);
     return {
       intent: "listen",
@@ -622,7 +628,7 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
  * Trả null ⇒ thật sự bí: lúc đó (và chỉ lúc đó) AiAssistant mới logUnanswered + gắn `unk`.
  * hasSuggest = câu nói về app và đã có gợi ý câu hỏi gần đúng → không dùng lưới "lắng nghe / hỏi lại" (đưa gợi ý tốt hơn).
  */
-export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean; talk?: number; mirror?: string | null } = {}): SenseReply | null {
+export function senseLast(raw: string, ctx: { lastText?: string; hasSuggest?: boolean; talk?: number; mirror?: string | null; neg?: boolean } = {}): SenseReply | null {
   // senseState đọc câu NGUYÊN VĂN (giữ :( và chữ kéo dài); senseLate đọc câu đã đổi teen code ("đc k" → "được không").
-  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText, talk: ctx.talk, mirror: ctx.mirror }));
+  return senseState(raw) ?? (ctx.hasSuggest ? null : senseLate(expandTeen(raw), { lastText: ctx.lastText, talk: ctx.talk, mirror: ctx.mirror, neg: ctx.neg }));
 }

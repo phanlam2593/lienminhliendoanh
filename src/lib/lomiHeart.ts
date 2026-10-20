@@ -841,6 +841,17 @@ const REL_INSIGHT = [
   "Bạn đặt cho mình một mốc nha: chờ tới đâu thì cần một câu trả lời rõ ràng.",
 ];
 const REL_ASK = ["Điều bạn ngại nhất nếu chủ động với {p} là gì?", "Nếu {p} trả lời, bạn mong nghe điều gì nhất?"];
+// 20/10 (audit): người kia đã NÓI RÕ cần thời gian / muốn để yên → không khuyên "cứ nhắn một tin hỏi thăm" (trước đây Lomi nói vậy
+//   ngay sau "nhưng cô ấy bảo cần thời gian" — lời khuyên đi ngược điều người kia vừa xin).
+const SPACE_RE = VN(/\b(cần thời gian|cần thêm thời gian|cần không gian|cần khoảng lặng|muốn yên tĩnh|muốn ở một mình|để yên|để (cô ấy|anh ấy|người ta|em|anh) yên|đừng làm phiền|đừng nhắn|đừng liên lạc|đừng gọi|cần suy nghĩ|suy nghĩ thêm|muốn suy nghĩ|tạm dừng|tạm xa|giãn ra|xa nhau một thời gian)\b/);
+const REL_SPACE = [
+  "{P} đã nói cần thời gian thì tôn trọng khoảng lặng đó là điều tốt nhất bạn làm được lúc này — nhắn dồn hay hỏi tới dễ thành áp lực. Nếu muốn, bạn nhắn một lần thôi, ngắn gọn, rằng bạn vẫn ở đây khi {p} sẵn sàng, rồi để {p} chủ động.",
+  "Khoảng lặng {p} xin là để {p} tự sắp xếp lại lòng mình — chưa phải là một câu trả lời cuối cùng. Trong lúc chờ, bạn lo cho mình trước đã: ăn ngủ đủ, làm việc của mình, đừng ngồi canh điện thoại.",
+];
+// Câu sợ một KẾT CỤC ("vậy là hết hy vọng rồi hả", "chắc cô ấy hết thương rồi") — Lomi không đoán được lòng người kia, nên không gật đầu
+//   cũng không hứa hẹn; nói thật điều đó và kéo về phần bạn làm được. Câu LO XA "nếu… thì sao" cũng vậy.
+const DOOM_RE = VN(/\b(hết hy vọng|hết hi vọng|không còn hy vọng|không còn hi vọng|hết cơ hội|không còn cơ hội|hết thật rồi|hết thương|hết yêu|không còn thương|không còn yêu|toang rồi|chắc chia tay|là chia tay rồi|xong thật rồi|mất (cô ấy|anh ấy|người ấy|người ta) rồi)\b/);
+const IF_RE = VN(/^(nếu|lỡ|lỡ như|nhỡ|nhỡ như|ngộ nhỡ|giả sử|nhưng nếu|mà nếu|còn nếu) .+ (thì sao|thì làm sao|thì phải làm sao|thì sao ta|thì sao e|thì sao em|thì làm gì)\b/);
 const LOVEISH = new Set(["love", "cold", "crush", "unrequited", "ex", "situationship", "spark", "longdist"]);
 const OPEN = [
   "Lomi đây, Lomi nghe nè 🌿 Bạn cứ kể từ từ, chuyện gì cũng được — Lomi không phán xét đâu. Đang có chuyện gì làm bạn bận lòng vậy?",
@@ -1248,6 +1259,24 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       quick: chipsFor(th),
       theme: prev,
     };
+  // 20/10 (audit): đang nói chuyện tình cảm — sợ một kết cục / lo xa "nếu… thì sao" → đáp đúng nỗi lo đó (trước đây: "chưa bắt chắc ý bạn").
+  if (th && (LOVE_THEMES.has(th.id) || LOVEISH.has(th.id)) && !t) {
+    const who = ctx.person ?? "người ấy";
+    if (DOOM_RE.test(` ${n} `))
+      return {
+        text: `Chưa ai nói trước được đâu bạn 😔 Lomi không đoán được lòng ${who} — điều ${who} đang nghĩ chỉ ${who} mới nói được, và một giai đoạn khó khăn chưa phải là câu trả lời cuối cùng.\n\nĐiều bạn giữ được lúc này là cách mình đi qua nó: đừng tự kết luận thay ${who}, lo cho bản thân trước, rồi khi hai người nói chuyện được thì hỏi thẳng nhau. Lúc này điều gì làm bạn sợ nhất?`,
+        quick: [],
+        theme: prev,
+        listen,
+      };
+    if (IF_RE.test(n))
+      return {
+        text: `Nghĩ tới cảnh đó thôi đã thấy nhói rồi ha 😔 Nếu chuyện đó xảy ra thật thì buồn là đương nhiên — nhưng nó không nói lên giá trị của bạn, và cảm giác đó rồi sẽ dịu đi.\n\nGiờ mình chưa biết chắc chuyện gì sẽ tới, nên đừng để nỗi sợ về điều chưa xảy ra lấy hết sức của bạn nha. Điều bạn lo nhất trong chuyện đó là gì?`,
+        quick: [],
+        theme: prev,
+        listen,
+      };
+  }
   // Hỏi một điều Lomi không biết (không khớp chủ đề nào) → nói thật, không đáp đại cho có.
   if (!t && !NO_RE.test(n) && !YES_RE.test(n) && ((ctx.ask && !emotionOf(n)) || VN(/\?|\b(là gì|nghĩa là|hiểu .* không|biết .* không|có biết)\b/).test(`${text} ${n} `)))
     return {
@@ -1369,7 +1398,8 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   const k = depth % 3;
   //   Người dùng CHỈ ĐANG KỂ (không nói ra cảm xúc) thì Lomi nghe: nhắc lại, thỉnh thoảng hỏi tiếp một ý — không chen lời khuyên không ai hỏi
   //   (lời khuyên có khi người dùng xin, hoặc khi Lomi tóm lại và mời). Có nói ra cảm xúc thì mới thêm một góc nhìn / bước nhỏ.
-  const extra = relevant ?? (e || p ? (k === 0 && !p ? (step() ?? insight()) : (insight() ?? ask())) : k === 1 || (k === 2 && !reacted) ? ask() : undefined);
+  const space = p && SPACE_RE.test(` ${n} `) ? fresh("rel:space", REL_SPACE.map((x) => x.split("{P}").join(capF(p)).split("{p}").join(p))) : undefined;
+  const extra = space ?? relevant ?? (e || p ? (k === 0 && !p ? (step() ?? insight()) : (insight() ?? ask())) : k === 1 || (k === 2 && !reacted) ? ask() : undefined);
   const added = !!extra;
   if (extra) parts.push(extra);
   // Chỉ nhắc lại trơ trọi thì cụt quá → thêm một lời ngắn cho thấy Lomi vẫn theo kịp (không lặp câu vừa dùng).
