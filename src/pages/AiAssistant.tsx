@@ -48,7 +48,8 @@ import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/l
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
 import { GENERIC, heartContinue, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
-import { eventById } from "@/lib/lomiTalk";
+import { eventById, eventOf } from "@/lib/lomiTalk";
+import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact } from "@/lib/lomiHealthFacts";
@@ -57,6 +58,7 @@ import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
+import { softenTail } from "@/lib/lomiTail";
 import { drugAsk, overdoseMention, prevDrugCtx } from "@/lib/lomiDrug";
 import { drugById, findDrug, sourceList } from "@/lib/lomiDrugData";
 import { asksSource, sourceSay, tidyCited } from "@/lib/lomiCite";
@@ -68,7 +70,7 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, chitChat, crisisMeans, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, chitChat, crisisCheckIn, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -581,6 +583,12 @@ export function AiChat({
       const earlier = msgs.filter((m) => m.role === "assistant").slice(-30).map((m) => m.content);
       const trimmed = trimRepeatedNotes(reply.content, earlier);
       if (trimmed !== reply.content) reply = { ...reply, content: trimmed };
+      // 21/10 (Kir: "nói gì cũng bị hỏi lại 'rồi có sao không'"): đuôi hỏi chung chung → lời đáp đúng sắc thái (lib/lomiTail).
+      //   (câu cảnh báo cấp cứu / khủng hoảng không đụng tới)
+      if (!/^(🚨|⚠️|🔥)/u.test(reply.content) && !/không phải một mình/u.test(reply.content)) {
+        const soft = softenTail(reply.content, prevA?.content ?? "", !prevA?.talk && !prevA?.heart);
+        if (soft !== reply.content) reply = { ...reply, content: soft };
+      }
     }
     if (reply.stuck) {
       recordStuck(
@@ -761,7 +769,7 @@ export function AiChat({
     //   ("e có người yêu chưa" — hỏi chuyện riêng của Lomi — cũng vậy, dù khung không có vị ngữ.)
     //   (21/10: câu HỎI mà chủ ngữ là Lomi — "e là ai", "em tên gì" — cũng là gọi Lomi là em, dù khung câu ngắn nên độ tin thấp;
     //    trước đây lớp đoán "e + động từ" coi người dùng tự xưng em → "Còn em tên gì nè?")
-    const callsLomiEm = (!!fr0 && fr0.act === "question" && fr0.em === "you" && fr0.subject === "you" && !fr0.toks.some((t) => t.r === "SELF" || t.r === "THIRD") && fr0.toks.some((t) => t.r === "QWORD")) || (!!fr0 && asksLomiLove(fr0)) || !!fr0 && fr0.conf >= 0.7 && fr0.em === "you" && !fr0.toks.some((t) => t.r === "SELF") && (fr0.subject === "you" || fr0.act === "greet" || fr0.act === "wish" || fr0.act === "thanks" || fr0.act === "invite");
+    const callsLomiEm = VR(/^\s*ý\s+(e|em)\s+là\b/iu).test(raw) || (!!fr0 && fr0.act === "question" && fr0.em === "you" && fr0.subject === "you" && !fr0.toks.some((t) => t.r === "SELF" || t.r === "THIRD") && fr0.toks.some((t) => t.r === "QWORD")) || (!!fr0 && asksLomiLove(fr0)) || !!fr0 && fr0.conf >= 0.7 && fr0.em === "you" && !fr0.toks.some((t) => t.r === "SELF") && (fr0.subject === "you" || fr0.act === "greet" || fr0.act === "wish" || fr0.act === "thanks" || fr0.act === "invite");
     const selfAC = fr0 && fr0.conf >= 0.75 && fr0.pred && !fr0.multi ? (VN(/^(a|anh)$/).test(fr0.selfWord ?? "") ? "anh" : VR(/^(c|chị)$/).test(fr0.selfWord ?? "") ? "chị" : undefined) : undefined;
     // 12/10 — xưng hô đọc theo CẤU TRÚC cho những câu phép đoán "đại từ + động từ" bỏ sót (benchmark: Lomi vẫn gọi "bạn" dù người dùng
     // đã xưng anh / em):
@@ -787,6 +795,16 @@ export function AiChat({
     const lastMsg0 = msgs[msgs.length - 1];
     const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
+    // 21/10 (đợt 4): NÓI QUÁ ("đói muốn chết", "nóng muốn chết luôn", "chết cười") → hiểu là "rất…" ("đói quá"), không phải khủng hoảng.
+    if (!en) {
+      const hyp = hyperboleOnly(q);
+      if (hyp) q = hyp;
+    }
+    //   ("cười muốn xỉu", "chết cười với thằng bạn" → cười vui lây, không phải "chưa hiểu")
+    if (!en && /^(.{0,30}?)\s*cười quá trời\b(.*)$/u.test(q) && q.split(/\s+/).length <= 9) {
+      const withWho = q.match(VR(/\bvới\s+(.{2,24}?)\s*$/u))?.[1];
+      return localReply(q, { role: "assistant", content: withWho ? `Haha nghe là biết ${withWho} lầy lắm ha 😆 Vui lây luôn á.` : "Haha nghe là thấy vui lây rồi 😆", local: true, talk: 1 });
+    }
     shownRef.current = q !== typed ? { from: q, to: typed } : null;
     setErr(null);
     setInput("");
@@ -1056,6 +1074,10 @@ export function AiChat({
       const cr = crisisReply(q, lang);
       // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
+      // 21/10 (đợt 4): tín hiệu VỪA ("a là gánh nặng của mọi người", "chán muốn chết", "nghĩ hay là thôi") → hỏi thẳng một câu nhẹ nhàng;
+      //   câu đáp "có / nhiều lúc" kế tiếp được ô xác nhận ở đầu send() chuyển sang lời hỗ trợ khủng hoảng.
+      const ck = en ? null : crisisCheckIn(q);
+      if (ck) return localReply(q, { role: "assistant", content: ck.text, local: true, heart: lastA0?.heart ?? "sad", heartDepth: (lastA0?.heartDepth ?? 0) + 1, story: lastA0?.story });
       // 20/10 (audit P0): kể đã uống QUÁ LIỀU / cả vỉ, cả lọ thuốc → báo cấp cứu NGAY, trước mọi lớp xã giao / nhắc lại câu kể
       //   (trước đây "a uống quá liều rồi" → "😋 Ngon không anh?"). Câu nối sau đó ("2 viên", "giờ thấy bình thường") vẫn do lib/lomiDrug lo.
       //   (21/10: câu GIẢ ĐỊNH / lời dặn / hỏi chung — "nếu uống quá liều thì sao?", "đừng uống quá liều" — trả lời cách xử trí an toàn,
@@ -1323,7 +1345,12 @@ export function AiChat({
       // 20/10: câu kể một thói quen dân gian sai / nguy hiểm ("con sốt a trùm chăn cho ra mồ hôi", "a cho con ăn cháo cóc") → để lớp mẹo dân gian nói ngay.
       const fxFolk = fx && !fx.redirect ? findFolk(q) : null;
       const fxFolkWarn = !!fxFolk && (fxFolk.verdict === "myth" || fxFolk.verdict === "danger");
-        if (fx?.redirect) {
+        // 21/10: câu kể nhắc lại chung chung ("Được thưởng hả? Rồi sao nữa…") mà thư viện sự kiện / tâm sự đã có lời đáp riêng
+        //   ("hôm nay a được thưởng" → chúc mừng) → nhường cho thư viện đó (lớp tâm sự ở dưới đáp).
+        const fxYield = !!fx && !fx.redirect && !heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q));
+        if (fxYield) {
+          /* để lớp tâm sự / sự kiện bên dưới trả lời */
+        } else if (fx?.redirect) {
           q = fx.redirect;
           shownRef.current = { from: q, to: typed };
         } else if (fx && !fxFolkWarn && !(fxMed && fxMedKind !== "mental" && fxMedKind !== "term"))
@@ -1649,7 +1676,8 @@ export function AiChat({
         const mind0 = selfDxAsk(q) ? null : analyzeMind(q, moodSeed);
         // Chuyện cụ thể (vd công việc, người yêu) thì để thư viện tâm sự đáp — trừ khi kể từ 3 cảm giác trở lên.
         const psyTalk = heartOn && !inHealth && !!THEME_MOOD[lastA?.heart ?? ""];
-        const mind = mind0 && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
+        // (21/10: người dùng đã nói CHỈ MUỐN ĐƯỢC NGHE → không chen bảng phân tích cảm xúc / gợi ý — để mạch "chỉ nghe" đáp)
+        const mind = mind0 && !lastA?.heartListen && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
         const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
         const askAdvice = VN(/\b(nên làm gì|làm sao|làm gì|phải làm sao|tư vấn|khuyên|nên ăn gì|nên uống gì|có sao không|có nguy hiểm không|cách nào|có cách|cho đỡ|đỡ hơn|hết đau|giảm đau|cần đi viện|cần đi khám|có nên đi khám|đi viện|đi khám|nguy hiểm|có sao)\b/).test(nq);

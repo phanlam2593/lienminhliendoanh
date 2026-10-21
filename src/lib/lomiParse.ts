@@ -232,7 +232,7 @@ add("STATE", "rảnh rỗi|rảnh", { cls: "free", v: 0 });
 add("STATE", "bận rộn|bận", { cls: "busy", v: 0 });
 add("STATE", "mệt mỏi|lo lắng|căng thẳng|cô đơn|thất vọng|hoang mang|khó chịu|áp lực|buồn|chán|mệt|lo|sợ|giận|bực|tức|stress|tủi|nản|đuối", { cls: "feel", v: -1 });
 // 20/10 (audit): cảm xúc đau mà trước đây là chữ lạ (UNK) → "chuyện đó làm a tổn thương" bị nhắc lại kèm 😄.
-add("STATE", "tổn thương|đau lòng|tủi thân|ấm ức|uất ức|tuyệt vọng|bế tắc|day dứt|hụt hẫng|chạnh lòng", { cls: "feel", v: -1 });
+add("STATE", "tổn thương|đau lòng|tủi thân|ấm ức|uất ức|tuyệt vọng|bế tắc|day dứt|hụt hẫng|chạnh lòng|có lỗi|áy náy|hối hận|ân hận|tội lỗi|cắn rứt", { cls: "feel", v: -1 });
 add("STATE", "hạnh phúc|thoải mái|phấn khích|hào hứng|yên tâm|vui", { cls: "feel", v: 1 });
 add("STATE", "khoẻ|khỏe|ổn|đỡ", { cls: "well", v: 1 });
 add("STATE", "mất ngủ|ốm yếu|ốm|bệnh|đau|sốt|cảm|ho|bỏ ăn|biếng ăn|bỏ bú|tiêu chảy|co giật|khó thở|trầm cảm|tai biến|đột quỵ|ung thư|tiểu đường|cao huyết áp|huyết áp cao|viêm phổi|sốt xuất huyết", { cls: "ill", v: -1 });
@@ -393,7 +393,8 @@ function disambiguate(tk: Tok[], loose = false) {
     else if (t.t === "con" && t.r === "CLS" && !(is(next, "NOUN") && next!.cls === "pet") && !is(next, "UNK")) Object.assign(t, { r: "KIN", cls: "person" });
     // "bạn": có người sở hữu phía sau ("bạn a"), hoặc đứng sau động từ / giới từ ("chờ bạn", "với bạn") là người bạn.
     //   ("bị bạn bắt nạt", "bị bạn chơi xấu" — sau "bị" cũng là người bạn.)
-    else if (t.t === "bạn" && t.r === "YOU" && (is(next, "SELF") || (is(next, "EM") && i + 1 < end) || is(prev, "VERB", "MOTION", "PREP", "CLS", "NUM") || prev?.t === "với" || (prev?.t === "bị" && is(next, "VERB", "STATE", "UNK")))) Object.assign(t, { r: "KIN", cls: "person" });
+    //   (21/10: "bạn đó dễ thương lắm" — "bạn" + chữ chỉ định là MỘT NGƯỜI, không phải gọi Lomi.)
+    else if (t.t === "bạn" && t.r === "YOU" && (is(next, "SELF") || is(next, "DEM") || (is(next, "EM") && i + 1 < end) || is(prev, "VERB", "MOTION", "PREP", "CLS", "NUM") || prev?.t === "với" || (prev?.t === "bị" && is(next, "VERB", "STATE", "UNK")))) Object.assign(t, { r: "KIN", cls: "person" });
     // Người nói xưng anh / chị (gọi Lomi là em) thì "bạn" trong câu là người bạn: "đi sinh nhật bạn", "ghé quán bạn chơi".
     else if (t.t === "bạn" && t.r === "YOU" && tk.some((x) => x.r === "SELF" && VR(/^(a|anh|chị|c)$/).test(x.t))) Object.assign(t, { r: "KIN", cls: "person" });
     // "tí / chút / xíu" đầu câu hoặc ngay trước người nói = lát nữa ("tí a quay lại").
@@ -422,7 +423,8 @@ function render(tk: Tok[], emIs: "you" | "self"): string {
     .map((t, i) => {
       if (t.r === "EM") return emIs === "you" ? "Lomi" : YOU_MARK;
       // "bạn" là NGƯỜI BẠN (không phải lời gọi): viết thành "người bạn của …" / "bạn bè" / "cô bạn" để speak() không đổi thành anh / chị.
-      if ((t.r === "KIN" || t.cls === "agent") && t.t === "bạn") return is(tk[i + 1], "SELF", "EM") ? "người bạn của" : "bạn bè";
+      //   (21/10: "bạn đó / bạn ấy" → "người bạn đó", không phải "bạn bè đó")
+      if ((t.r === "KIN" || t.cls === "agent") && t.t === "bạn") return is(tk[i + 1], "SELF", "EM") ? "người bạn của" : is(tk[i + 1], "DEM") ? "người bạn" : "bạn bè";
       if (t.r === "KIN" && t.t === "con bạn") return "cô bạn";
       // Tên riêng: địa danh đã biết viết hoa; từ lạ giữ đúng kiểu người dùng gõ ("Phú Quốc", "con Mực").
       if (t.r === "NOUN" && PROPER.has(t.t)) return t.t.replace(/(^|\s)\p{L}/gu, (x) => x.toUpperCase());

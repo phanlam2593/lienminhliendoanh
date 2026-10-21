@@ -53,7 +53,8 @@ export type Theme = {
   advice: string[]; // khi người dùng xin lời khuyên
   tarot?: string; // câu bói hợp chủ đề (chip "Bói xem …")
   heavy?: boolean; // nhắc gặp chuyên gia nếu kéo dài
-  hint?: [RegExp, string][];
+  /** [mẫu, lời đáp, trọn ý?] — trọn ý = lời đáp đủ rồi, không chêm bước làm / câu hỏi phía sau (21/10). */
+  hint?: [RegExp, string, boolean?][];
   /** Như hint, nhưng CHỈ dùng khi người dùng xin lời khuyên (câu kể thì vẫn hỏi han trước, chưa khuyên vội). */
   adviceHint?: [RegExp, string][]; // câu nói trúng chi tiết người dùng kể (vd nhắc tên thuốc) → dùng thay góc nhìn ngẫu nhiên
   stepFirst?: boolean; // chuyện sức khoẻ → ngay lượt đầu đã chỉ bước nên làm (đi khám…)
@@ -133,6 +134,8 @@ const THEMES: Theme[] = [
     ],
     // 12/10: "a mới đi khám về" — đã đi khám rồi thì hỏi bác sĩ nói sao, không nhắc "nên đi khám sớm" hay hỏi "đã đi khám chưa".
     hint: [
+      // 21/10: đi khám THƯỜNG NGÀY (răng, mắt, định kỳ) — chưa có gì đáng lo, không đưa bài "lo về sức khoẻ".
+      [VN(/\bđi khám (răng|mắt|định kỳ|tổng quát|sức khoẻ định kỳ|sức khỏe định kỳ|thai|lại)\b|\bkhám (răng|mắt|định kỳ|tổng quát)\b/), "Đi khám đều đặn là tốt đó 🌿 Mong là mọi thứ ổn hết nha.", true],
       [VN(/ (bác sĩ|bs) (nói|báo|kêu) (\S+ ){0,3}(không sao|bình thường|ổn|không có gì|tốt|không vấn đề gì) /), "Bác sĩ nói không sao thì mừng rồi 💚 Nghe vậy bạn thấy nhẹ người hơn chưa?"],
       [VN(/ (mới (đi )?khám|vừa (đi )?khám|đi khám (về|rồi)|khám (xong|về)|tái khám (về|rồi|xong)) /), "Đi khám về rồi hả. Bác sĩ nói sao bạn — có điều gì làm bạn lo không?"],
     ],
@@ -303,7 +306,10 @@ const THEMES: Theme[] = [
   },
   {
     id: "fight",
-    hint: [[VN(/\b(xin lỗi|làm lành|hết giận|nguôi giận|bớt giận|làm hòa)\b/), "Muốn xin lỗi, làm lành là bước khó nhất rồi đó 💚 Một lời xin lỗi dễ được nhận thường có ba ý: nói rõ mình sai ở đâu, không kèm chữ “nhưng…”, và nói mình sẽ làm khác đi thế nào. Ví dụ: “Hôm đó mình nặng lời, mình xin lỗi. Mình không muốn tụi mình giận nhau vì chuyện này.” Chọn lúc cả hai đã nguôi rồi hẵng nói, và nghe người kia nói hết trước khi giải thích."], [VN(/\b(nói sao|nói thế nào|nên nói gì|mở lời|hết giận|bớt giận|làm lành)\b/), "Mở lời sau khi cãi nhau thì ngắn và thật là đủ, ví dụ: “Mình không muốn giận nhau nữa, tụi mình nói chuyện được không?” Nói cảm giác của mình (“mình buồn vì…”) thay cho lời trách (“lúc nào cũng…”), rồi hỏi lại: “còn điều gì chưa vui thì nói mình nghe.” Người đang giận thường cần thấy mình được nghe trước, rồi mới nghe được lời giải thích."]],
+    hint: [
+      // 21/10: ĐÃ xin lỗi rồi / người kia VẪN giận — không dạy lại cách xin lỗi (trước đây "a xin lỗi rồi" nhận bài "muốn xin lỗi…").
+      [VN(/\b((đã |cũng )?xin lỗi rồi|xin lỗi (hoài|mấy lần|nhiều lần) rồi|vẫn (chưa hết giận|còn giận|giận)|chưa (chịu )?hết giận|chưa nguôi)\b/), "Đã xin lỗi rồi mà người ấy vẫn chưa nguôi thì sốt ruột thật 😔 Nhiều khi cơn giận cần thêm chút thời gian để hạ xuống — mình cứ giữ thái độ nhẹ nhàng, đừng ép phải hết giận ngay. Một việc nhỏ cho thấy mình để tâm (nấu món người ấy thích, làm giúp một việc) thường nói được nhiều hơn lời xin lỗi lặp lại."],
+      [VN(/\b(xin lỗi|làm lành|hết giận|nguôi giận|bớt giận|làm hòa)\b/), "Muốn xin lỗi, làm lành là bước khó nhất rồi đó 💚 Một lời xin lỗi dễ được nhận thường có ba ý: nói rõ mình sai ở đâu, không kèm chữ “nhưng…”, và nói mình sẽ làm khác đi thế nào. Ví dụ: “Hôm đó mình nặng lời, mình xin lỗi. Mình không muốn tụi mình giận nhau vì chuyện này.” Chọn lúc cả hai đã nguôi rồi hẵng nói, và nghe người kia nói hết trước khi giải thích."], [VN(/\b(nói sao|nói thế nào|nên nói gì|mở lời|hết giận|bớt giận|làm lành)\b/), "Mở lời sau khi cãi nhau thì ngắn và thật là đủ, ví dụ: “Mình không muốn giận nhau nữa, tụi mình nói chuyện được không?” Nói cảm giác của mình (“mình buồn vì…”) thay cho lời trách (“lúc nào cũng…”), rồi hỏi lại: “còn điều gì chưa vui thì nói mình nghe.” Người đang giận thường cần thấy mình được nghe trước, rồi mới nghe được lời giải thích."]],
     re: VN(/\b(cãi nhau|giận nhau|chiến tranh lạnh|bất hòa|xích mích|hiểu lầm nhau|không nói chuyện với nhau|đòi chia tay|to tiếng)\b/),
     feel: [
       "Cãi nhau với người mình thương mệt lòng lắm ha 😔",
@@ -369,8 +375,9 @@ const THEMES: Theme[] = [
   },
   {
     id: "family",
-    hint: [[VN(/\b(so sánh|con nhà người ta)\b/), "Bị so sánh với “con nhà người ta” là tủi lắm, Lomi hiểu 🥺 Bố mẹ thường so sánh vì muốn con tốt hơn, nhưng cách đó lại làm con thấy mình không đủ tốt. Thử nói với mẹ lúc cả hai vui vẻ: “Con biết mẹ muốn con giỏi, nhưng bị so sánh làm con buồn và mất động lực lắm.”"]],
-    re: VN(/\b(bố mẹ|ba mẹ|cha mẹ|gia đình|bố mình|mẹ mình|ba mình|cha mình|anh chị em|bị mắng|bị la|bị so sánh với|áp đặt|cãi nhau với (bố|mẹ|ba|cha)|không hiểu mình|vợ chồng|nhà chồng|nhà vợ|mẹ chồng|bố chồng)\b/),
+    // 21/10: chuyện NUÔI CON ("con a học kém", "a la nó hoài, giờ nó sợ a") — trước đây "con a học kém" bị đáp "chưa hiểu".
+    hint: [[VN(/\bcon (\S+ ){0,2}(học kém|học dở|học yếu|lười học|điểm kém|bị điểm kém|không chịu học|hư|bướng|không nghe lời|cãi lời|mê game|nghiện game|nghiện điện thoại)\b/), "Con học chưa tốt thì bố mẹ nào cũng sốt ruột, Lomi hiểu 😔 Nhiều khi con không lười đâu — có thể con đang hổng kiến thức từ trước, khó tập trung, hoặc đang có chuyện ở lớp mà chưa dám kể. La mắng nhiều dễ làm con sợ và né tránh hơn là cố gắng.\n\nThử ngồi xuống hỏi con xem môn nào khó nhất, khen từng tiến bộ nhỏ, và nói chuyện với cô giáo để biết con hổng ở đâu. Con nhà mình đang học lớp mấy rồi?"], [VN(/\b(la|mắng|đánh|quát) (nó|con|bé) (hoài|nhiều|suốt|hoài à)|(nó|con|bé) sợ (a|anh|e|em|mình|tôi|chị|c)\b|thấy có lỗi với (con|nó|bé)\b/), "Con sợ mình thì người làm cha mẹ nào cũng chạnh lòng 💚 Bạn để ý tới điều đó là đã thương con lắm rồi. Bố mẹ ai cũng có lúc nóng; điều quan trọng là sửa được. Một lời xin lỗi con thật lòng (“bố / mẹ nóng quá, bố / mẹ xin lỗi”) không làm mình mất uy đâu, mà dạy con cách nhận lỗi.\n\nLần tới khi sắp nổi nóng, thử dừng lại vài hơi thở rồi mới nói. Dần dần con sẽ bớt sợ và dám kể chuyện với mình hơn."], [VN(/\b(so sánh|con nhà người ta)\b/), "Bị so sánh với “con nhà người ta” là tủi lắm, Lomi hiểu 🥺 Bố mẹ thường so sánh vì muốn con tốt hơn, nhưng cách đó lại làm con thấy mình không đủ tốt. Thử nói với mẹ lúc cả hai vui vẻ: “Con biết mẹ muốn con giỏi, nhưng bị so sánh làm con buồn và mất động lực lắm.”"]],
+    re: VN(/\b(con (\S+ ){0,2}(học kém|học dở|học yếu|lười học|điểm kém|bị điểm kém|không chịu học|không nghe lời|cãi lời|mê game|nghiện game)|bố mẹ|ba mẹ|cha mẹ|gia đình|bố mình|mẹ mình|ba mình|cha mình|anh chị em|bị mắng|bị la|bị so sánh với|áp đặt|cãi nhau với (bố|mẹ|ba|cha)|không hiểu mình|vợ chồng|nhà chồng|nhà vợ|mẹ chồng|bố chồng)\b/),
     feel: [
       "Chuyện gia đình là chuyện khó nói nhất, vì mình thương mà cũng mệt 😔",
       "Lomi hiểu, bị chính người nhà không hiểu thì tủi thân lắm.",
@@ -951,7 +958,12 @@ function pickAsk(t: Theme, said: (x: string) => boolean, avoid?: RegExp): string
 function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp, said: (x: string) => boolean = () => false, lead?: string): HeartReply {
   const parts: string[] = [];
   // Ý chủ đề có sẵn lời đáp riêng cho đúng điều vừa hỏi / kể — bỏ qua ý đã nói rồi (không đọc lại y nguyên một đoạn).
-  const hintOf = () => t.hint?.find(([re, x]) => re.test(` ${n} `) && !said(x))?.[1];
+  //   (21/10: chỉ xét ý khớp ĐẦU TIÊN — ý cụ thể vừa nói rồi thì không rơi xuống một ý chung hơn: "a xin lỗi rồi" → "mà vẫn chưa
+  //    hết giận" từng nhận lại bài "muốn xin lỗi thì…")
+  const hintOf = () => {
+    const h = t.hint?.find(([re]) => re.test(` ${n} `));
+    return h && !said(h[1]) ? h[1] : undefined;
+  };
   const defined = !!t.define && VN(/\b(là gì|nghĩa là|là sao|hiểu .* không)\b/).test(` ${n} `);
   if (defined) parts.push(t.define!);
   // Đã khuyên hết ý của chủ đề này rồi mà người dùng hỏi tiếp → đổi sang góc nhìn + bước làm khác, không lặp lời khuyên.
@@ -978,7 +990,7 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp
     if (!defined && !hint) parts.push(lead ?? pick(`${t.id}:feel`, t.feel));
     parts.push(hint ?? pick(`${t.id}:ins`, t.insight));
     // Lời đáp riêng đã kết bằng một câu hỏi ("Bác sĩ nói sao bạn?") thì dừng ở đó — không chêm bước làm, không hỏi thêm câu thứ hai.
-    const hintAsks = !!hint && /\?\s*$/.test(hint);
+    const hintAsks = !!hint && (/\?\s*$/.test(hint) || !!t.hint?.find((h) => h[1] === hint)?.[2]);
     if (t.stepFirst && !hintAsks) parts.push(pick(`${t.id}:step`, t.step));
     // Người dùng vừa nói rõ điều đó rồi ("chia tay 2 năm rồi") thì không hỏi lại "chia tay lâu chưa?".
     //   Câu hỏi đã hỏi trong cuộc trò chuyện này cũng không hỏi lại.
@@ -1145,6 +1157,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   if (t && !cur && prev === "open" && depth >= 3 && NOUNISH.has(t.id) && !!ctx.self && words <= 9 && !emotionOf(n) && !adviceAsked) t = undefined;
   // Đang nói về MỘT NGƯỜI cụ thể ("người ấy im lặng") mà kể thêm một chi tiết về hai người ("tụi a mới quen") → vẫn là chuyện đó.
   if (ctx.person && t && cur && t.id !== cur.id && (LOVEISH.has(t.id) || t.id === "newlove" || t.id === "single") && words <= 8 && !adviceAsked) t = undefined;
+  // 21/10: câu khớp một ý RIÊNG của chủ đề đang nói ("mà vẫn chưa hết giận" khi đang kể cãi nhau với vợ) → vẫn là chuyện đó,
+  //   không nhảy sang chủ đề khác chỉ vì có chữ "giận" (trước đây: bài "ngòi nổ ngắn lại, bạn hay nổi nóng khi nào").
+  if (t && cur && t.id !== cur.id && words <= 10 && cur.hint?.some(([re]) => re.test(` ${n} `))) t = undefined;
   // Đang kể chuyện với NGƯỜI THƯƠNG ("bạn gái a hay ghen" → "a mệt lắm") mà nói thêm một cảm giác chung (mệt, buồn, lo) → vẫn là chuyện đó,
   // không rẽ sang bài "mệt mỏi" rồi quên mất đang nói về ai.
   if (t && cur && cur.id === "love" && GENERIC.has(t.id) && t.id !== "love" && words <= 6 && !adviceAsked && VR(/(vợ|chồng|bạn gái|bạn trai|người yêu|người ấy|crush|cô ấy|anh ấy|bà xã|ông xã|(?<![\p{L}])ny(?![\p{L}]))/iu).test(story)) t = undefined;
@@ -1245,7 +1260,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   const th = t ?? cur;
   // Câu kể trúng chi tiết mà chủ đề có sẵn lời đáp riêng (vd crush là đồng nghiệp, tính nghỉ việc) → đáp đúng ý đó.
   //   (đang ở chế độ CHỈ NGHE thì không chen lời khuyên; ý đã nói rồi thì không đọc lại.)
-  const hintHit = listen ? undefined : th?.hint?.find(([re, x]) => re.test(` ${n} `) && !saidR(x));
+  //   (21/10: chỉ ý khớp ĐẦU TIÊN — ý cụ thể vừa nói rồi thì không rơi xuống ý chung hơn)
+  const hintFirst = listen ? undefined : th?.hint?.find(([re]) => re.test(` ${n} `));
+  const hintHit = hintFirst && !saidR(hintFirst[1]) ? hintFirst : undefined;
   if (hintHit && !adviceAsked) return { text: `${hintHit[1]}${/\?\s*$/.test(lastText.trim()) ? "" : `\n\n${pickAsk(th!, saidR) ?? ""}`}`.trim(), quick: [], theme: th!.id, listen };
   //   (lời khuyên xét cả điều vừa kể ở 1–2 lượt trước: "ảnh có người yêu rồi" → "e nên làm sao" phải đáp đúng hoàn cảnh đó.)
   if (adviceAsked && th) return themeReply(th, `${n} ${(ctx.details ?? []).slice(-3).map((d) => normalizeVi(d)).join(" ")}`.trim(), true, undefined, saidR);
@@ -1351,8 +1368,10 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   const m = ctx.mirror?.trim();
   const p = ctx.person && th && LOVEISH.has(th.id) ? ctx.person : undefined;
   const lastAsked = /\?\s*$/.test(lastText.trim());
-  const good = (ctx.val ?? 0) > 0;
-  const bad = (ctx.val ?? 0) < 0;
+  // (21/10: "vẫn chưa hết giận", "chưa đỡ" — điều tốt CHƯA tới là chuyện chưa vui, dù bộ đọc câu thấy chữ "hết giận" là tích cực)
+  const notYet = VN(/\b(chưa|vẫn chưa|còn chưa) (chịu )?(hết|nguôi|bớt|đỡ|khỏi|ổn|tha thứ)\b/).test(` ${n} `);
+  const good = (ctx.val ?? 0) > 0 && !notYet;
+  const bad = (ctx.val ?? 0) < 0 || notYet;
   const parts: string[] = [];
 
   // 3) Tóm lại khi đã kể được vài ý.
@@ -1375,14 +1394,16 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   // 1) Mở đầu: nhắc lại điều vừa nghe / gọi tên cảm xúc.
   if (m) {
     // Mặt buồn chỉ khi điều vừa kể là chuyện không vui; việc bình thường của chính người dùng ("tụi a mới quen", "a xin lỗi rồi") thì không.
-    const mark = good ? " 😊" : ctx.neg && fam === "mishap" ? "" : bad || e || ((fam || th) && !ctx.self && !evCur?.good) ? (fam === "mishap" ? " 😩" : " 😔") : "";
+    //   (21/10: chuyện VUI như mới quen — "tụi a đi cà phê", "nói chuyện hợp lắm" — không gắn mặt buồn.)
+    const posTheme = !!th && POS_THEMES.has(th.id) && !bad && !e;
+    const mark = good || posTheme ? " 😊" : ctx.neg && fam === "mishap" ? "" : bad || e || ((fam || th) && !ctx.self && !evCur?.good) ? (fam === "mishap" ? " 😩" : " 😔") : "";
     const head = `${capF(m)} hả${mark || "."}`;
     // Đã nhắc lại đúng lời người dùng thì không cần gọi tên cảm xúc thêm lần nữa; chỉ thêm một lời đáp đúng tông (không lặp câu đã nói).
     //   (câu có phủ định — "sếp không nói gì" — là chuyện KHÔNG xảy ra, chưa chắc là điều tệ → chỉ nhắc lại.)
     //   Lời đáp đó chỉ dành cho điều xảy đến với người dùng ("làm cả ngày", "vợ a không nói chuyện với a"); còn việc chính họ làm / muốn
     //   ("a xin lỗi rồi", "a muốn nghỉ") thì chỉ nhắc lại, không phán "vậy thì khó chịu thật".
     //   (trong chuyện mâu thuẫn, điều chính người dùng làm — "a quên sinh nhật cô ấy" — không đáp "ai cũng thấy bức bối".)
-    const react = good ? "Nghe vậy cũng nhẹ được một chút ha." : fam && !p && !(ctx.neg && fam === "mishap") && (!ctx.self || (bad && fam !== "conflict")) ? fresh(`react:${fam}`, REACT[fam]) : undefined;
+    const react = posTheme ? fresh("react:pos", ["Nghe dễ thương ghê.", "Thích ghê ha.", "Vậy là có tín hiệu vui rồi đó."]) : good ? "Nghe vậy cũng nhẹ được một chút ha." : fam && !p && !(ctx.neg && fam === "mishap") && (!ctx.self || (bad && fam !== "conflict")) ? fresh(`react:${fam}`, REACT[fam]) : undefined;
     reacted = !!react;
     // Chỉ nhắc lại trơ trọi mà lượt này không nói thêm gì nữa (đang "chỉ nghe") thì thêm một lời ngắn cho thấy Lomi vẫn theo kịp.
     const lone = !react && (listen || good) ? fresh("support", SUPPORT) : undefined;
@@ -1429,7 +1450,11 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   //   Người dùng CHỈ ĐANG KỂ (không nói ra cảm xúc) thì Lomi nghe: nhắc lại, thỉnh thoảng hỏi tiếp một ý — không chen lời khuyên không ai hỏi
   //   (lời khuyên có khi người dùng xin, hoặc khi Lomi tóm lại và mời). Có nói ra cảm xúc thì mới thêm một góc nhìn / bước nhỏ.
   const space = p && SPACE_RE.test(` ${n} `) ? fresh("rel:space", REL_SPACE.map((x) => x.split("{P}").join(capF(p)).split("{p}").join(p))) : undefined;
-  const extra = space ?? relevant ?? (e || p ? (k === 0 && !p ? (step() ?? insight()) : (insight() ?? ask())) : k === 1 || (k === 2 && !reacted) ? ask() : undefined);
+  // (21/10) ý riêng của chủ đề khớp đúng câu vừa kể → dùng luôn (vd đang cãi nhau: "đã xin lỗi rồi mà vẫn chưa hết giận").
+  //   (chỉ ý khớp ĐẦU TIÊN — ý đó vừa nói rồi thì thôi, không rơi xuống một ý khác chung chung hơn)
+  const hintM = th?.hint?.find(([re]) => re.test(` ${n} `));
+  const hintF = hintM && !said(hintM[1]) ? hintM[1] : undefined;
+  const extra = space ?? hintF ?? relevant ?? (e || p ? (k === 0 && !p ? (step() ?? insight()) : (insight() ?? ask())) : k === 1 || (k === 2 && !reacted) ? ask() : undefined);
   const added = !!extra;
   if (extra) parts.push(extra);
   // Chỉ nhắc lại trơ trọi thì cụt quá → thêm một lời ngắn cho thấy Lomi vẫn theo kịp (không lặp câu vừa dùng).
@@ -1442,6 +1467,8 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
 }
 const CLOSE_RE = VN(/^(không|ko|hông|hong|không có|thôi|thôi kệ|kệ đi|kệ nó|kệ|bỏ đi|thôi bỏ đi|thôi bỏ qua|bỏ qua đi|không sao|không có gì|vậy thôi|thế thôi|vậy đó|ừ|u|uh|ừh|um|ừm|uhm|ừhm|ok|oke|okie|dạ|vâng|ủa)( (nha|nhé|nhe|à|ạ|a|đi|em|e|lomi|vậy|thôi))*$/);
 const SUPPORT = ["Lomi hiểu.", "Ra là vậy."];
+// Chủ đề tâm sự mang tin VUI (đang mới quen, có người để ý) — nhắc lại câu kể không gắn mặt buồn, đáp vui lây.
+const POS_THEMES = new Set(["newlove"]);
 const STOP = new Set("khong nhung nhieu duoc nguoi minh chuyen muon dang thoi cung nhau biet nghe thay luon chua".split(" "));
 
 /** Kể tiếp một chuyện đời thường không vui (kẹt xe, mắc mưa…) bằng một mẩu ngắn không khớp bài nào → đáp bám nội dung, đúng tông. */

@@ -66,7 +66,8 @@ const Q_START = VR(/^(ai|gì|nào|đâu|sao|thế nào|bao nhiêu|mấy|tại sa
 // Trừ khi phía trước là phủ định — "a chưa ăn gì", "mình không sao đâu", "không biết làm gì" là câu kể.
 const WH_END = VR(/(?<![\p{L}])(gì|chi|đâu|bao nhiêu|bao lâu|bao giờ|khi nào|mấy|ai|thế nào|ra sao|làm sao|kiểu gì|cái gì|là gì|như nào|sao ta)\s*[!.…]*\s*$/u);
 const NEG_BEFORE = VR(/(?<![\p{L}])(không|ko|hông|hok|khum|chưa|chẳng|chả|đâu có|đừng|k)(?![\p{L}])/u);
-const DIRECTIVE = VR(/^(cho|nói|chỉ|giải thích|cho biết|tìm|tra|dịch|viết|tính|giúp|hãy|làm(?= (giúp|giùm|dùm|hộ|cho|ơn|bài|thơ|văn|toán|phép|sao|thế nào|gì|như|theo|thử|lại|đi|một|cái|câu))|kể|hướng dẫn|tư vấn|gợi ý|đề xuất|xin|mách|bảo|rút|bói|lựa|chọn|cho hỏi|hỏi)\b/u);
+// (21/10: "nói chuyện hợp lắm", "nói chuyện vui ghê" là câu KỂ — chỉ "nói chuyện gì / đi / với em" mới là lời nhờ)
+const DIRECTIVE = VR(/^(cho|nói(?! chuyện(?! (gì|đi|cười|với (em|e|lomi|mình)))\b)|chỉ|giải thích|cho biết|tìm|tra|dịch|viết|tính|giúp|hãy|làm(?= (giúp|giùm|dùm|hộ|cho|ơn|bài|thơ|văn|toán|phép|sao|thế nào|gì|như|theo|thử|lại|đi|một|cái|câu))|kể|hướng dẫn|tư vấn|gợi ý|đề xuất|xin|mách|bảo|rút|bói|lựa|chọn|cho hỏi|hỏi)\b/u);
 export function isAskLike(raw: string): boolean {
   const s = low(raw);
   if (s.includes("?")) return true;
@@ -471,7 +472,7 @@ const REACTION = VN(/^(buồn cười|mắc cười|hài|hài hước|vui|dễ t
 const TALK_POS = W("vui|đã ghê|đã quá|thích|ngon|đẹp|được thưởng|được khen|được nghỉ|được tăng|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
 // Từ hay gặp trong câu KỂ TIẾP ("câu được mấy con cá to") — đủ để biết là đang kể, nhưng chưa đủ để nói đó là chuyện vui.
 const TALK_MORE = W("đã|to|nhiều|được");
-const TALK_NEG = W("cáu gắt|nổi nóng|cáu|quên|không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư|uống thuốc|tiêm|chích thuốc|truyền nước|nhập viện");
+const TALK_NEG = W("cáu gắt|nổi nóng|cáu|quên|không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư|uống thuốc|tiêm|chích thuốc|truyền nước|nhập viện|có lỗi|áy náy|hối hận|ân hận|tội lỗi|cắn rứt");
 const ACT_STOP = new Set("với cùng ở tại rồi nè nha mà thì và hôm lúc xong về cho để nên quá lắm ghê luôn á ạ nhưng mới vừa đang mấy nhiều hoài suốt nữa đó".split(" "));
 /** Việc vừa kể: "hôm qua anh đi câu cá với mấy đứa bạn" → "đi câu cá" (động từ + tối đa 3 từ, dừng ở từ nối). */
 function echoAct(s: string): string {

@@ -728,11 +728,53 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
   return null;
 }
 
+// ── 21/10 (đợt 4, đối chiếu QA): ba mức tín hiệu tự hại ──────────────────────────────────────────────────────────
+// (1) Ý NGHĨ KHÔNG MUỐN SỐNG nói gián tiếp — trước đây lọt: "chỉ muốn ngủ một giấc không bao giờ dậy" (→ mẹo chợp mắt),
+//     "mọi người sẽ tốt hơn nếu không có a" (→ "😄 quý ghê"), "chẳng muốn tiếp tục nữa", "sống vậy chi nữa", "k thiết sống nữa".
+const PASSIVE = VN(/\b((chẳng|không|chả|hông|ko|k) (còn )?(muốn|thiết) (tiếp tục|sống|sống tiếp|tồn tại)( nữa| đâu| rồi| luôn| làm gì)*(?= ?$)|ngủ (một giấc|luôn|mãi)( mà)? (không|chẳng|ko) (bao giờ |cần )?(dậy|tỉnh|thức)(?! (nổi|kịp|được))|ngủ( \S+){0,2} (không|chẳng|ko) bao giờ (dậy|tỉnh|thức)|ngủ (luôn|mãi) không dậy|sống (vậy |thế |như vầy |để |làm )?(chi|gì|làm gì) nữa|(mọi người|gia đình|cả nhà|ai cũng|bố mẹ|ba mẹ|vợ con|người ta) (sẽ )?(tốt|vui|nhẹ nhõm|nhẹ gánh|đỡ khổ|sướng|hạnh phúc) hơn (nếu|khi) (không có|thiếu|vắng|mất) (a|anh|em|e|mình|tôi|tui|t|tao|tớ)|(chẳng|không|chả|ko|k) (còn )?thiết sống|chẳng thiết gì nữa|không còn gì để (sống|mất)|muốn (đi|ngủ) (luôn|mãi) cho xong|chết quách (cho|đi))\b/);
+// (2) Tín hiệu VỪA — hỏi thẳng, nhẹ nhàng (lời hỏi kết bằng "…không muốn sống nữa?" để AiAssistant nhận câu xác nhận kế tiếp).
+const CHECKIN = VN(/\b((là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi)\b/);
+// (3) NÓI QUÁ về trạng thái cơ thể / chuyện thường ("đói muốn chết", "nóng muốn chết luôn", "mệt muốn chết", "chết cười")
+//     — tiếng Việt dùng "muốn chết" như "rất". Trước đây những câu này nhận lời hỗ trợ khủng hoảng kèm đường dây nóng.
+const HYPER_STATE = "đói|no|nóng|lạnh|rét|mệt|buồn ngủ|ngủ|đau|nhức|mỏi|cười|xấu hổ|ngại|quê|mắc cỡ|sợ|run|hồi hộp|thèm|tức|bực|ghen|ngứa|khát|nhớ|thích|vui|sướng|ngon|đẹp|dễ thương|cute|nắng|kẹt xe|ồn|thi|học|làm|bận|ế|chờ|đợi";
+const HYPER = VN(new RegExp(`\\b(${HYPER_STATE})( \\S+){0,2}? muốn chết( luôn| đi được| mất| à| á| quá| nè| ghê| thôi)*\\b|\\bchết (cười|mất|thôi|ngất|đói)\\b|\\bcười (muốn )?(chết|xỉu)\\b`));
+/** Câu chỉ là NÓI QUÁ ("đói muốn chết") — trả câu đã bỏ phần nói quá ("đói quá") để các lớp khác đáp như thường; null nếu không phải. */
+export function hyperboleOnly(text: string): string | null {
+  const n = ` ${normalizeVi(text)} `;
+  if (!HYPER.test(n) || PASSIVE.test(n) || CHECKIN.test(n) || poisonIntent(text)) return null;
+  // Bỏ phần nói quá đi rồi mà vẫn còn tín hiệu khủng hoảng thật ("đói muốn chết, mà a cũng chẳng thiết sống") → không phải nói quá.
+  const rest = text
+    .replace(VR(/(chết\s+cười|cười\s+(muốn\s+)?(chết|xỉu))/giu), " cười quá trời ")
+    .replace(VR(/chết\s+đói/giu), " đói quá ")
+    // "thi xong muốn chết luôn", "làm cả ngày muốn chết" — việc + muốn chết = mệt quá
+    .replace(VR(/((?:^|\s)(?:thi|học|làm|chạy|chờ|đợi|dọn|ôn)(?:\s+\S+){0,2}?)\s+muốn\s+chết(\s+(luôn|đi được|mất|à|á|quá|nè|ghê|thôi))*/giu), "$1 mệt quá ")
+    .replace(VR(/(chết\s+(mất|thôi|ngất)|muốn\s+chết(\s+(luôn|đi được|mất|à|á|quá|nè|ghê|thôi))*)/giu), " quá ")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (RULES[0].re.test(` ${normalizeVi(rest)} `)) return null;
+  return rest;
+}
+const EMO_DEATH = VN(/\b(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi|mệt mỏi|chán đời) (\S+ )?muốn chết\b/);
+const CHECKIN_TEXT =
+  "Nghe bạn nói vậy Lomi thương lắm, mà cũng lo nữa 🥺 Lomi hỏi thẳng một câu nha, vì Lomi quan tâm thật: dạo này bạn có lúc nào nghĩ tới chuyện không muốn sống nữa?";
+/** Tín hiệu vừa → hỏi thẳng một câu nhẹ nhàng. null nếu không phải (hoặc đã là khủng hoảng rõ — crisisReply lo). */
+export function crisisCheckIn(text: string): ChatReply | null {
+  const n = ` ${normalizeVi(text)} `;
+  if (!CHECKIN.test(n) || crisisReply(text, "vi") || hyperboleOnly(text) !== null) return null;
+  return { text: CHECKIN_TEXT };
+}
+
 /** Người dùng nói muốn tự tử / làm hại bản thân — kiểm tra TRƯỚC mọi luồng khác. */
 export function crisisReply(text: string, lang: L): ChatReply | null {
   const n = ` ${normalizeVi(text)} `;
   // 21/10 (đợt 3): ý định tự hại bằng chất độc bất kỳ ("muốn uống thuốc tẩy để chết") — trước đây luật chỉ biết thuốc ngủ / chuột / trừ sâu.
-  if (!RULES[0].re.test(n) && !poisonIntent(text)) return null;
+  // 21/10 (đợt 4): ý nghĩ không muốn sống nói gián tiếp (PASSIVE); câu chỉ NÓI QUÁ ("đói muốn chết") thì không phải khủng hoảng.
+  //   Cảm xúc + "muốn chết" ("chán muốn chết", "buồn muốn chết") mà ngoài cụm đó không còn tín hiệu nào → hỏi han (crisisCheckIn), chưa
+  //   bật lời hỗ trợ khủng hoảng ngay. "a muốn chết" trơn (không kèm trạng thái) vẫn là khủng hoảng.
+  const strong = PASSIVE.test(n) || poisonIntent(text);
+  const stateOnly = hyperboleOnly(text) !== null || (EMO_DEATH.test(n) && !RULES[0].re.test(` ${normalizeVi(text.replace(VR(/muốn\s+chết(\s+(luôn|đi được|mất|à|á|quá|nè|ghê|thôi))*/giu), " quá "))} `));
+  const hit = strong || (RULES[0].re.test(n) && !stateOnly);
+  if (!hit) return null;
   if (lang === "en") return chitChat(text, "en");
   const r = RULES[0].reply();
   // Nhắc tới THUỐC / CHẤT ĐỘC (phương tiện) → thêm bước an toàn: để nó ra xa, nhờ người khác cất giữ.

@@ -290,7 +290,7 @@ export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ TÂM LÝ ═══════════════════════
   {
     id: "depress",
-    re: VN(/\b(trầm cảm|bị trầm cảm|mất hứng thú|làm gì cũng (thấy )?chán|chán hết mọi thứ|chán mọi thứ|cái gì cũng chán|không thấy vui gì|không còn hứng thú|không muốn làm gì|không thiết gì|sống không mục đích|vô nghĩa quá|cuộc sống vô nghĩa|tê liệt cảm xúc|không cảm thấy gì|buồn kéo dài|buồn lâu rồi|không thiết sống)\b/),
+    re: VN(/\b(trống rỗng|thấy trống rỗng|trầm cảm|bị trầm cảm|mất hứng thú|làm gì cũng (thấy )?chán|chán hết mọi thứ|chán mọi thứ|cái gì cũng chán|không thấy vui gì|không còn hứng thú|không muốn làm gì|không thiết gì|sống không mục đích|vô nghĩa quá|cuộc sống vô nghĩa|tê liệt cảm xúc|không cảm thấy gì|buồn kéo dài|buồn lâu rồi|không thiết sống)\b/),
     feel: [
       "Cảm giác trống rỗng, chẳng thiết gì kéo dài như vậy nặng nề thật sự.",
       "Cảm ơn bạn đã nói ra với Lomi. Khi mọi thứ đều mất màu, việc bạn vẫn tìm người để kể đã là một điều rất can đảm.",
@@ -489,7 +489,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "homesick",
-    re: VN(/\b(nhớ nhà|xa nhà|nhớ bố mẹ|nhớ mẹ|nhớ gia đình|du học|sống một mình ở|lên thành phố|mới chuyển đến|mới chuyển nhà|chưa quen nơi mới|lạc lõng ở nơi mới)\b/),
+    re: VN(/\b(nhớ nhà|xa nhà|nhớ bố mẹ|nhớ mẹ|nhớ gia đình|du học|sống một mình ở|lên thành phố (một mình|lạ)|chưa quen nơi mới|lạc lõng ở nơi mới)\b/),
     feel: ["Nhớ nhà là cảm giác chênh vênh ai xa nhà cũng từng trải qua 🥺", "Lomi hiểu, ở nơi mới chưa có ai thân thì những buổi tối thấy trống trải lắm."],
     insight: ["Nhớ nhà cho thấy bạn có một nơi để thương, để quay về — đó là điều may mắn.", "Làm quen với nơi ở mới thường mất vài tháng. Cảm giác lạc lõng sẽ nhạt dần."],
     step: ["Gọi video cho gia đình vào một giờ cố định, có điều để mong chờ mỗi ngày.", "Tạo vài thói quen quen thuộc ở chỗ mới: nấu món ở nhà hay nấu, trang trí góc nhỏ của mình."],
