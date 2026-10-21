@@ -59,7 +59,7 @@ export const FAQS: Faq[] = [
   F("free", "start", "Dùng app có mất phí không?", "Is the app free?",
     "Dùng app là miễn phí nha 💚\n• Tài khoản mới được duyệt có 3 tháng Membership miễn phí\n• Đặt xe: tài xế nhận 100% tiền cước, app không thu phí\n• Tip ủng hộ app hoàn toàn tự nguyện\nGói Membership trả phí (49.000đ/tháng) sẽ mở thanh toán sau, app sẽ báo trước.",
     "The app is free 💚 New approved accounts get 3 months of Membership free; drivers keep 100% of fares; tipping the app is optional. Paid Membership (49,000đ/month) will open later — you'll be notified.",
-    ["mat phi", "tra phi", "mien phi", "co ton tien", "co mat tien", "thu phi", "free"]),
+    ["mat phi", "tra phi", "mien phi", "co ton tien", "co mat tien", "thu phi", "free", "membership gia bao nhieu", "gia membership", "membership bao nhieu tien", "membership bao nhieu", "phi membership"]),
   F("membership", "start", "Membership là gì?", "What is Membership?",
     "Membership mở khoá quyền lợi thành viên:\n• Nhận ưu đãi từ doanh nghiệp\n• Quẹt không giới hạn (tài khoản thường 10 lượt/ngày)\n• Chủ doanh nghiệp đăng được ưu đãi mới\nTài khoản mới được duyệt có sẵn 3 tháng Membership miễn phí. Xem hạn ở Hồ sơ → ⋯ → Hồ sơ cá nhân (/ho-so?view=personal).",
     "Membership unlocks: claiming business offers, unlimited swipes (regular accounts: 10/day), and posting new offers for business owners. Newly approved accounts get 3 months free. Check your expiry in Profile → ⋯ → Personal profile (/ho-so?view=personal).",

@@ -9,7 +9,79 @@
 import type { Theme } from "@/lib/lomiHeart";
 import { VR, VN } from "@/lib/viMatch";
 
+
 export const MORE_THEMES: Theme[] = [
+  // ═══════════════════════ 21/10 (QA V3 tự soạn) ═══════════════════════
+  // Người lớn quen trẻ vị thành niên (em gái 15 tuổi quen người 25 tuổi) — trước đây bài "lo âu" chung.
+  {
+    id: "minorrel",
+    howto: true,
+    re: VN(/\b(em gái|con gái|cháu gái|em trai|con trai|cháu|em|con|bé)( \S+){0,3} (1[0-7]|mười (ba|bốn|lăm|sáu|bảy)) tuổi( \S+){0,6} (quen|yêu|hẹn hò|cặp|qua lại|nói chuyện)( \S+){0,3} (với )?(một )?(người|anh|chú|ông|ông chú|gã|đàn ông|ổng|thằng)( \S+){0,3} (\d{2}|hai mươi|ba mươi|bốn mươi)( \S+)? tuổi\b/),
+    feel: ["Bạn lo là đúng rồi — đây là chuyện cần người lớn trong nhà để tâm."],
+    insight: ["Một người trưởng thành hẹn hò với một bạn dưới 18 tuổi có sự chênh lệch rất lớn về tuổi, kinh nghiệm và quyền lực — dễ dẫn tới thao túng. Ở Việt Nam, mọi quan hệ tình dục với người dưới 16 tuổi đều là tội phạm, kể cả khi bạn nhỏ \"đồng ý\"."],
+    step: ["Nói chuyện với em bằng sự quan tâm, không trách mắng — để em còn muốn kể với gia đình. Nếu nghi em bị dụ dỗ, xâm hại hay đe doạ: gọi tổng đài bảo vệ trẻ em **111** (miễn phí, 24/7) hoặc báo công an **113**."],
+    stepFirst: true,
+    ask: ["Ba mẹ đã biết chuyện này chưa?"],
+    advice: [
+      "Nói chuyện với em nhẹ nhàng, hỏi han chứ không cấm đoán gay gắt hay chê bai em — bị trách dễ làm em giấu và gần người kia hơn.",
+      "Báo cho ba mẹ / người giám hộ của em biết; người lớn trong nhà cần cùng theo dõi.",
+      "Để ý dấu hiệu đáng lo: người kia bảo em giữ bí mật, tặng quà / tiền, tách em khỏi gia đình bạn bè, rủ gặp riêng, xin ảnh nhạy cảm.",
+      "Nếu nghi em bị xâm hại, bị dụ dỗ hay đe doạ: gọi tổng đài bảo vệ trẻ em **111** (miễn phí, 24/7) hoặc báo công an **113**; giữ lại tin nhắn làm bằng chứng.",
+    ],
+  },
+  // Uống rượu mỗi ngày, khó ngưng — trước đây "Nghe là thấy vui rồi 🍻".
+  {
+    id: "alcohol",
+    howto: true,
+    re: VN(/\b((uống|nhậu) (rượu|bia)( \S+){0,4} (mỗi|hằng|hàng|hầu như mỗi) (tối|ngày|đêm)|(khó|không) (ngưng|bỏ|dừng|cai) (được )?(rượu|bia|nhậu)|(rượu|bia|nhậu)( \S+){0,4} (khó|không thể|không) (ngưng|bỏ|dừng|cai)|nghiện rượu|nghiện bia|cai rượu|cai bia)\b|\b(uống rượu|uống bia|nhậu)\b.*\b(khó ngưng|khó bỏ|không bỏ được|không ngưng được)\b/),
+    feel: ["Nhận ra mình khó ngưng uống và muốn thay đổi là bước khó nhất — bạn đã làm được rồi đó 💪"],
+    insight: ["Uống hằng ngày lâu ngày thì cơ thể quen dần, nên ngưng thấy khó là bình thường, không phải do bạn yếu ý chí."],
+    step: ["Ghi lại mỗi ngày uống bao nhiêu, lúc nào, vì sao — để thấy rõ thói quen."],
+    ask: ["Thường bạn uống vào lúc nào, và vì chuyện gì?"],
+    advice: [
+      "Đừng ngưng đột ngột nếu đã uống nhiều mỗi ngày trong thời gian dài — có thể bị run, vã mồ hôi, bồn chồn, nặng thì co giật, lú lẫn. Nên nói với bác sĩ để có kế hoạch giảm an toàn.",
+      "Giảm dần và đặt ngày không uống trong tuần; không để sẵn rượu bia trong nhà.",
+      "Thay thói quen: lúc hay uống thì đi bộ, tắm, gọi cho ai đó, uống trà / nước.",
+      "Nói với người thân để có người đồng hành; bác sĩ (Nội, Tâm thần) có cách hỗ trợ cai rượu hiệu quả.",
+    ],
+  },
+  // Thói quen kiểm tra / rửa lặp lại (Q39) — không chẩn đoán.
+  {
+    id: "ocd",
+    re: VN(/\b(kiểm tra (lại )?(khoá|khóa|bếp|ga|điện|cửa)( \S+){0,3} (nhiều lần|chục lần|mấy lần|hoài|liên tục|cả chục)|rửa tay (hoài|liên tục|chục lần|nhiều lần)|ám ảnh cưỡng chế|ocd|phải làm (đi làm )?lại (nhiều lần|hoài) mới yên tâm)\b/),
+    feel: ["Phải kiểm tra đi kiểm tra lại mới yên tâm thì mệt và mất thời gian lắm, Lomi hiểu."],
+    insight: ["Lomi không chẩn đoán được, nhưng kiểu lặp lại để bớt lo này hay gặp khi đang căng thẳng, lo âu; nếu nó chiếm nhiều thời gian, làm bạn khổ sở hay ảnh hưởng sinh hoạt thì có thể là rối loạn ám ảnh cưỡng chế — một tình trạng điều trị được."],
+    step: ["Thử kiểm tra MỘT lần thật chậm, nói thành tiếng “mình đã khoá cửa rồi”, chụp một tấm ảnh — rồi đi, không quay lại."],
+    ask: ["Mỗi ngày việc kiểm tra này mất của bạn khoảng bao lâu?"],
+    advice: ["Kiểm tra một lần có chủ ý, kèm ghi nhớ (nói thành tiếng, chụp ảnh).", "Nếu chiếm hơn khoảng một giờ mỗi ngày hay làm bạn rất khổ sở, gặp bác sĩ tâm thần / chuyên gia tâm lý — liệu pháp nhận thức hành vi giúp rất nhiều."],
+    heavy: true,
+  },
+  // Cảm giác ai cũng ghét mình (Q40).
+  {
+    id: "disliked",
+    re: VN(/\b((ai|mọi người|cả lớp|cả công ty|cả nhà) (cũng|đều) (ghét|không ưa|khinh|xa lánh) (mình|anh|em|tôi|tui|tớ|a|e))\b/),
+    feel: ["Cảm giác ai cũng ghét mình nặng nề lắm, như đi đâu cũng thấy mình lạc lõng."],
+    insight: ["Khi đang buồn hay mệt, đầu óc dễ đọc mọi phản ứng của người khác thành “họ ghét mình” — có khi đúng với một vài người, nhưng hiếm khi đúng với tất cả."],
+    step: ["Thử viết ra: chuyện gì cụ thể làm bạn nghĩ vậy, và có ai vẫn đối xử tốt với bạn không."],
+    ask: ["Gần đây có chuyện gì làm bạn thấy như vậy không?"],
+    advice: ["Tách điều đã xảy ra với điều mình đoán.", "Giữ liên lạc với một hai người bạn thấy an toàn.", "Cảm giác này kéo dài kèm buồn bã, muốn thu mình thì nên nói chuyện với chuyên gia tâm lý."],
+  },
+  // Bạn mượn tiền không trả (Q27).
+  {
+    id: "debtfriend",
+    howto: true,
+    re: VN(/\b((bạn|bạn thân|người quen|đồng nghiệp|họ hàng)( \S+){0,3} (mượn|vay) (tiền|\d+)( \S+){0,6} (chưa|không|chẳng) (trả|đưa lại)|(mượn|vay) tiền( \S+){0,4} (né|lơ|trốn|không trả|chưa trả))\b/),
+    feel: ["Cho bạn thân mượn tiền rồi bị né thì vừa tiếc tiền vừa buồn vì tình bạn, Lomi hiểu."],
+    insight: ["Nhiều khi người mượn né vì ngại chưa có tiền trả, chứ chưa chắc là cố tình quỵt. Nói rõ ràng, bình tĩnh thường giữ được cả tiền lẫn tình hơn."],
+    step: ["Nhắn một tin rõ ràng, không trách móc, đề nghị một cách trả cụ thể."],
+    ask: ["Số tiền đó có ảnh hưởng nhiều tới chi tiêu của bạn không?"],
+    advice: [
+      "Nhắn rõ mà nhẹ: “Khoản mình cho bạn mượn hồi tháng 4, bạn tính trả sao cho tiện? Chia làm vài lần cũng được.”",
+      "Đề nghị trả góp, đặt mốc cụ thể — dễ được đồng ý hơn đòi một lần.",
+      "Giữ lại tin nhắn, giấy tờ mượn tiền (nếu có).",
+      "Nếu số tiền lớn mà người kia cố tình không trả, có thể nhờ người có uy tín hai bên nói giúp, hoặc hỏi luật sư về thủ tục đòi nợ dân sự.",
+    ],
+  },
   // ═══════════════════════ 21/10 (QA V2) — tình cảm: không đoán ý, thử lòng, mâu thuẫn thực tế, ranh giới ═══════════════════════
   // Q51–Q53: đoán ý người yêu qua một dấu hiệu (đã xem không trả lời, đăng bài buồn, "tùy em") — trước đây FAQ "tin nhắn", "đăng bài".
   {
@@ -904,7 +976,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "addict",
-    re: VN(/\b(nghiện game|nghiện điện thoại|nghiện mạng xã hội|nghiện tiktok|nghiện facebook|lướt điện thoại|nghiện rượu|nghiện bia|nghiện thuốc|nghiện cờ bạc|cờ bạc|cá độ|chơi lô đề|nghiện mua sắm|không bỏ được)\b/),
+    re: VN(/\b(nghiện (chơi )?game|nghiện điện thoại|nghiện mạng xã hội|nghiện tiktok|nghiện facebook|lướt điện thoại|nghiện rượu|nghiện bia|nghiện thuốc|nghiện cờ bạc|cờ bạc|cá độ|chơi lô đề|nghiện mua sắm|không bỏ được)\b/),
     feel: ["Muốn bỏ mà mãi không bỏ được thì bức bối lắm, Lomi hiểu 😔", "Việc bạn nhận ra và muốn thay đổi đã là bước khó nhất rồi đó 💪"],
     insight: [
       "Thói quen khó bỏ vì não đã quen với “phần thưởng” nhanh. Không phải bạn thiếu ý chí.",
@@ -940,7 +1012,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "eating",
-    re: VN(/\b(nhịn ăn để giảm|nhịn đói để giảm|bỏ bữa để giảm cân|ăn xong nôn|móc họng|sợ tăng cân quá|sợ ăn|ăn không kiểm soát|ăn vô độ|ăn quá nhiều rồi hối hận|chán ăn|biếng ăn|ăn uống rối loạn|rối loạn ăn uống|anorexia|bulimia)\b/),
+    re: VN(/\b((tự )?(móc họng|gây nôn|làm cho nôn|cho nôn ra)( \S+){0,4} (sợ (mập|béo|tăng cân)|giảm cân)|nôn ra vì sợ (mập|béo)|ăn xong (là )?(tự )?(móc họng|nôn)|nhịn ăn để giảm|nhịn đói để giảm|bỏ bữa để giảm cân|ăn xong nôn|móc họng|sợ tăng cân quá|sợ ăn|ăn không kiểm soát|ăn vô độ|ăn quá nhiều rồi hối hận|chán ăn|biếng ăn|ăn uống rối loạn|rối loạn ăn uống|anorexia|bulimia)\b/),
     feel: ["Cảm ơn bạn đã tin kể với Lomi 🤍 Chuyện ăn uống gắn với cảm xúc nhiều hơn người ta nghĩ, và bạn không phải một mình.", "Những gì bạn đang trải qua nghe rất mệt mỏi."],
     insight: [
       "Mối quan hệ với đồ ăn thường phản ánh những cảm xúc khó nói — căng thẳng, lo âu, áp lực. Không phải do bạn yếu đuối hay thiếu ý chí.",
@@ -957,7 +1029,8 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "bullied",
-    re: VN(/\b(bị bắt nạt|bắt nạt mình|bị chế giễu|bị cười nhạo|bị trêu chọc|bị trêu|bị chửi trên mạng|bị bóc phốt|bị xúc phạm trên mạng|bị bắt nạt online|bị nhóm bạn tẩy chay|bị cô lập ở lớp|bị đánh ở trường)\b/),
+    hint: [[VN(/\b(con|cháu) (trai |gái )?(\S+ ){0,4}bị (bạn |bạn bè |mấy đứa |tụi |các bạn )?(bắt nạt|trêu|đánh|cô lập|tẩy chay)/), "Nghe con bị bắt nạt ở trường chắc bạn xót lắm 😔 Điều quan trọng nhất là con thấy có người lớn đứng về phía mình.\n\n• Nghe con kể hết, tin con, đừng trách “sao không đánh lại / sao không nói sớm”\n• Ghi lại cụ thể: ngày giờ, ai, chuyện gì, tin nhắn / hình ảnh nếu có\n• Gặp giáo viên chủ nhiệm, chưa ổn thì gặp ban giám hiệu — đề nghị nhà trường có biện pháp cụ thể và báo lại\n• Để ý dấu hiệu con không ổn: sợ đi học, mất ngủ, thu mình, có vết thương; bị đánh, bị doạ nặng thì có thể báo công an; tổng đài bảo vệ trẻ em **111** hỗ trợ miễn phí\n\nCon kể chuyện này với bạn thế nào, đã bị lâu chưa?", true]],
+    re: VN(/\b(bị (bạn |bạn bè |mấy đứa |tụi )?bắt nạt|bị bắt nạt|bắt nạt mình|bị chế giễu|bị cười nhạo|bị trêu chọc|bị trêu|bị chửi trên mạng|bị bóc phốt|bị xúc phạm trên mạng|bị bắt nạt online|bị nhóm bạn tẩy chay|bị cô lập ở lớp|bị đánh ở trường)\b/),
     feel: ["Bị bắt nạt, chế giễu là trải nghiệm rất tổn thương.", "Không ai đáng bị đối xử như vậy. Lỗi không nằm ở bạn đâu."],
     insight: [
       "Người bắt nạt thường muốn thấy mình mạnh hơn bằng cách làm người khác nhỏ đi. Điều đó nói về họ, không phải về bạn.",
@@ -995,7 +1068,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "compare",
-    re: VN(/\b(so sánh với người khác|thua kém (bạn bè|mọi người|người khác|người ta|ai)|(thấy|cảm thấy) (mình |bản thân )?thua kém|ai cũng thành công hơn|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
+    re: VN(/\b((\d{2}|ba mươi|hai mươi lăm|ba lăm|bốn mươi) tuổi( rồi)? mà (vẫn )?(chưa|chẳng|không) (có gì|ra gì|làm được gì|có gì trong tay)|so sánh với người khác|thua kém (bạn bè|mọi người|người khác|người ta|ai)|(thấy|cảm thấy) (mình |bản thân )?thua kém|ai cũng thành công hơn|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
     feel: ["Lướt mạng thấy ai cũng thành công, còn mình thì dậm chân — cảm giác đó khó chịu lắm, Lomi hiểu 😔"],
     insight: [
       "Mạng xã hội là “cuộn phim nổi bật” của người khác, không phải cuộc sống thật của họ.",
@@ -1007,7 +1080,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "lgbt",
-    re: VN(/\b(đồng tính|les|lgbt|song tính|chuyển giới|come out|comeout|công khai xu hướng|xu hướng tính dục|giới tính thật|không được chấp nhận giới tính)\b/),
+    re: VN(/\b((là|mình là|anh là|em là) (đồng tính|song tính)|đồng tính|les|lgbt|song tính|chuyển giới|come out|comeout|công khai xu hướng|xu hướng tính dục|giới tính thật|không được chấp nhận giới tính)\b/),
     feel: ["Cảm ơn bạn đã tin tưởng chia sẻ với Lomi 🌈 Bạn được là chính mình, và bạn xứng đáng được yêu thương như bất kỳ ai.", "Lomi hiểu, sống thật với bản thân mà sợ không được chấp nhận thì áp lực lắm 🤍"],
     insight: [
       "Xu hướng tính dục hay bản dạng giới là một phần tự nhiên của con người, không phải bệnh hay lỗi của ai cả.",

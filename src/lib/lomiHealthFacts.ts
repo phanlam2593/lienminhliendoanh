@@ -144,6 +144,18 @@ const FACTS: Fact[] = [
       "• Uống đủ nước, nghỉ ngơi — cảm lạnh thường tự khỏi sau khoảng 1–2 tuần",
   },
   {
+    // 21/10 (QA V3): "ngủ có 4 tiếng mà vẫn khoẻ, có sao không" — trước đây "chưa được tiếp thu".
+    id: "shortsleep",
+    first: true,
+    re: VN(/\bngủ (có |chỉ |chừng |khoảng )?(\d|bốn|năm|ba|sáu) (tiếng|giờ)( \S+){0,4} (mà|nhưng) (vẫn )?(khoẻ|khỏe|tỉnh|ổn|bình thường)\b/),
+    a:
+      "😴 Người lớn nên ngủ **từ 7 tiếng trở lên** mỗi đêm. Có một số rất ít người ngủ ngắn mà vẫn khoẻ thật, nhưng phần lớn là mình đã **quen với thiếu ngủ** mà không nhận ra — vẫn thấy “ổn” trong khi tập trung, trí nhớ, tâm trạng đã kém đi.\n" +
+      "• Thiếu ngủ kéo dài liên quan tới nguy cơ cao hơn của tiểu đường type 2, bệnh tim, béo phì và trầm cảm\n" +
+      "• Thử vài tuần ngủ đủ 7–8 tiếng xem có thấy khác không (tỉnh táo hơn, ít cáu hơn, ít thèm ngọt hơn)\n" +
+      "• Ban ngày hay buồn ngủ, ngủ gật khi lái xe, hoặc muốn ngủ mà không ngủ được → nên đi khám",
+    src: "CDC (Hoa Kỳ) — About Sleep, rà soát 20/11/2023",
+  },
+  {
     id: "sleep",
     re: VN(/\b(ngủ bao nhiêu|ngủ mấy tiếng|ngủ bao lâu|ngủ đủ|thức khuya có sao|thức khuya|ngủ muộn)\b/),
     a: "😴 **Giấc ngủ** theo CDC (Mỹ): tuổi teen 13–17 cần **8–10 tiếng**; người lớn 18–60 tuổi **từ 7 tiếng trở lên**; 61–64 tuổi **7–9 tiếng**; từ 65 tuổi **7–8 tiếng** mỗi đêm.\n• Thức khuya thường xuyên dễ làm mệt, kém tập trung, tâm trạng thất thường.\n• Mẹo: ngủ – dậy giờ cố định, cất điện thoại trước khi ngủ, phòng tối và yên tĩnh, tránh cà phê buổi chiều.",

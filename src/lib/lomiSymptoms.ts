@@ -79,7 +79,7 @@ const SYMPTOMS: Sym[] = [
   { id: "heartburn", label: "ợ chua / nóng rát ngực", re: VN(/\b(ợ chua|ợ nóng|ợ hơi|trào ngược|nóng rát (ngực|thượng vị|cổ họng)|đắng miệng|chua miệng)\b/) },
   { id: "bloat", label: "đầy bụng, khó tiêu", re: VN(/\b(đầy bụng|chướng bụng|khó tiêu|ăn không tiêu|bụng ành ạch|xì hơi nhiều)\b/) },
   { id: "bellyache", label: "đau bụng", re: VN(/\b(đau bụng|quặn bụng|đau quặn bụng|đau tức bụng)\b/) },
-  { id: "rightlow", label: "đau bụng dưới bên phải", re: VN(/\b(đau bụng dưới bên phải|đau hố chậu phải|đau bụng phải|đau bụng (ở |phía )?bên phải|đau (phía |vùng )?bụng dưới phải|đau bên phải bụng|đau quanh rốn rồi lan xuống bên phải)\b/), red: "đau bụng dưới bên phải tăng dần (cần loại trừ ruột thừa)" },
+  { id: "rightlow", label: "đau bụng dưới bên phải", re: VN(/\b((bên |phía bên )?phải,? (phía |ở )?dưới|dưới,? (bên |phía )?phải|đau bụng dưới bên phải|đau hố chậu phải|đau bụng phải|đau bụng (ở |phía )?bên phải|đau (phía |vùng )?bụng dưới phải|đau bên phải bụng|đau quanh rốn rồi lan xuống bên phải)\b/), red: "đau bụng dưới bên phải tăng dần (cần loại trừ ruột thừa)" },
   { id: "diarrhea", label: "tiêu chảy", re: VN(/\b(tiêu chảy|đi ngoài nhiều|phân lỏng|đi cầu nhiều|đi toilet liên tục|đau bụng đi ngoài)\b/) },
   { id: "constip", label: "táo bón", re: VN(/\b(táo bón|khó đi ngoài|lâu không đi ngoài|phân cứng|đi cầu khó)\b/) },
   { id: "bloodstool", label: "đi ngoài ra máu / phân đen", re: VN(/\b(đi ngoài ra máu|phân có máu|phân đen|đi cầu ra máu)\b/), red: "đi ngoài ra máu hoặc phân đen" },

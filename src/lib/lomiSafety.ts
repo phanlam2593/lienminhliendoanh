@@ -72,6 +72,7 @@ const CONTROL = P(
 const CONTROL2 = P(
   `(?:đọc|xem|coi|lục|soi)(?: lén| trộm) (?:tin nhắn|điện thoại|máy|zalo|facebook)|(?:yêu cầu|bắt|ép|đòi|cấm) ${SELF}(?: \\S+){0,2} (?:cắt liên lạc|cắt đứt|ngừng liên lạc|thôi chơi|nghỉ chơi|không chơi|không gặp|tránh xa)|(?:doạ|dọa) chia tay|(?:đưa|nộp|giao) (?:hết |toàn bộ |cả )?(?:tiền lương|lương|tiền)(?: \\S+){0,3} (?:giữ|quản|cầm)|thật lòng yêu (?:\\S+ ){0,2}(?:thì )?phải`,
 );
+const PERCEIVE = P("nghi|nghi ngờ|thấy|biết|nghe nói|phát hiện|đoán");
 const NEG_IN = VR(/ (chưa|không|ko|chẳng|chả|hông|hổng|chua|khong|chang|đâu có|dau co) /u);
 const HAS_PARTNER = P(PARTNER, PARTNER_B);
 const HAS_KIN = P(KIN, KIN_B);
@@ -105,7 +106,10 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
 
   // Người KỂ là người làm ("a lỡ doạ đánh nó") thì không phải chuyện người kể bị hại → để lớp khác đáp.
   const body = t.loose ? t.b : t.s;
-  const selfActs = f?.subject === "self" && !VR(/ (bị|bi) /).test(body);
+  // ("a NGHI ba mình đánh mẹ", "e thấy chồng chị ấy đánh chị ấy" — người kể chỉ thấy / nghi, không phải người làm.)
+  const pm = PERCEIVE(t);
+  const perceive = !!pm && (pm.index ?? 99) <= 12;
+  const selfActs = f?.subject === "self" && !VR(/ (bị|bi) /).test(body) && !perceive;
   // "ảnh còn doạ đánh e" là bị DOẠ (chưa bị đánh) → xét trước, để lời đáp nói đúng chuyện.
   const th0 = hit(THREAT(t));
   if (th0 && !selfActs && !VR(/(?:^| )(bị|bi) (?:\S+ ){0,2}(?:đánh|danh|tát|tat|đấm|dam)(?: |$)/u).test(body.slice(0, th0.index ?? 0))) return { kind: "threat", victim: "self", actor };

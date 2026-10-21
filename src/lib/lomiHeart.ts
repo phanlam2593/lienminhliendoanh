@@ -458,7 +458,7 @@ const THEMES: Theme[] = [
       // 21/10: MẤT VIỆC / thất nghiệp không phải "kiệt sức" (trước đây "a thất nghiệp 3 tháng rồi" nhận bài burnout).
       [VN(/\b(thất nghiệp|mất việc|bị đuổi việc|bị sa thải|bị cho nghỉ|chưa có việc|chưa xin được việc|tìm việc mãi|không xin được việc)\b/), "Mất việc rồi phải chờ đợi thì vừa lo tiền vừa dễ tự trách, Lomi hiểu 😔 Khoảng trống này không nói lên giá trị của bạn đâu — có những lúc thị trường việc làm chậm lại thôi.\n\nThử chia nhỏ cho đỡ nặng: mỗi ngày làm một việc nhỏ cho chuyện tìm việc (sửa CV, gửi hai ba chỗ, nhắn một người quen trong ngành), còn lại giữ nhịp ăn ngủ và ra ngoài một chút để tinh thần không xuống. Trong app cũng có mục Quẹt → Công việc (/quet) để đăng nhu cầu tìm việc nha.\n\nBạn đang tìm việc trong ngành gì?"],
 [VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [VN(/\b(sếp|quản lý)\b/), "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
-    re: VN(/\b(công việc (\S+ )?(không thuận lợi|không suôn sẻ|trục trặc|gặp khó|khó khăn|bế tắc|không ổn|tệ quá|không như ý|đi xuống|lận đận)|việc làm (không thuận lợi|khó khăn|lận đận)|áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức)\b/),
+    re: VN(/\b((mệt|stress|áp lực|căng thẳng|đuối|kiệt sức) (là )?vì (công việc|việc làm|sếp|chỗ làm)|công việc (\S+ )?(không thuận lợi|không suôn sẻ|trục trặc|gặp khó|khó khăn|bế tắc|không ổn|tệ quá|không như ý|đi xuống|lận đận)|việc làm (không thuận lợi|khó khăn|lận đận)|áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức)\b/),
     feel: [
       "Áp lực công việc mà kéo dài thì mệt cả thân lẫn tâm luôn 😮‍💨 Bạn vất vả rồi.",
       "Lomi hiểu, đi làm mà không vui thì mỗi sáng thức dậy đều nặng nề.",
@@ -932,7 +932,7 @@ function chipsFor(_t: Theme | undefined): string[] {
 }
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
-const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp"];
+const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt"];
 /** 21/10: chủ đề cụ thể được ưu tiên — các lớp chung hơn (khung câu, thẻ bệnh, phân tích cảm xúc) nhường cho chúng. */
 export const PRIORITY_THEMES: readonly string[] = FIRST.filter((x) => x !== "grief" && x !== "suspect");
 function themeOf(n: string): Theme | undefined {
@@ -1049,7 +1049,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   if (!n || appQuestion) return null;
   const chip = CHIP_THEME[text.trim()];
   if (chip) return themeReply(byId(chip)!, n, false);
-  const t = themeOf(n);
+  const t = rawTheme(text) ?? themeOf(n);
   const start = START_RE.test(` ${n} `);
   // Tự hỏi mình có mắc một vấn đề tâm lý không → không chẩn đoán, không đáp như thể đã chắc.
   const dx = selfDx(text, n, {});
@@ -1517,6 +1517,11 @@ export function heartFollow(text: string, prev: string, listen: boolean, depth: 
 }
 
 /** Chủ đề tâm sự khớp với câu (để biết câu này là chuyện cụ thể hay chỉ là cảm xúc chung). */
+// 21/10 (QA V3): từ mượn không dấu ("anh là gay", "mình là les") — so trên câu gốc còn dấu, vì khi bỏ dấu "gay" trùng "gây / gầy".
+const RAW_LGBT = /(^|[\s,.])(là|mình là|anh là|em là|tôi là|tui là|tớ là|bị nói là) (gay|les|lesbian|bisexual|queer)(?![\p{L}])|(^|[\s,.])(lgbt|lgbtq\+?)(?![\p{L}])/iu;
+function rawTheme(text: string): Theme | undefined {
+  return RAW_LGBT.test(text.normalize("NFC")) ? byId("lgbt") : undefined;
+}
 export function heartThemeOf(text: string): string | undefined {
-  return themeOf(normStrict(text, HEART))?.id;
+  return (rawTheme(text) ?? themeOf(normStrict(text, HEART)))?.id;
 }

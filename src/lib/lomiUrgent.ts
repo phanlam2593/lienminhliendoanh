@@ -99,6 +99,8 @@ function dengueWarnAsserted(n: string): boolean {
 }
 const DENGUE_WARN = VN(/\b(đau bụng (dữ dội|nhiều|quá|lắm|quặn)|quặn bụng|nôn (nhiều|liên tục|hoài|ra máu)|ói (nhiều|liên tục|ra máu)|chảy máu (chân răng|nướu|lợi|mũi|cam)|máu cam|thở (nhanh|gấp)|li bì|lừ đừ|mệt lả|rất mệt|bồn chồn|vật vã|phân (có máu|đen)|đi (ngoài|cầu) ra máu)\b/);
 
+const STING = VN(/\b(ong đốt|bị ong|ong vò vẽ|ong bắp cày|côn trùng đốt|kiến ba khoang|bị đốt)\b/);
+const STING_WIDE = VN(/\b(khắp người|toàn thân|cả người|nhiều chỗ|khắp mình|lan rộng)\b/);
 // 21/10 (QA V2): huyết khối, tăng nhãn áp cấp, mất nước, cơn lo kèm tim đập nhanh.
 const CALF = VN(/\b(bắp chân|cẳng chân|bắp chuối|bắp vế|một bên chân|một chân|chân trái|chân phải)\b/);
 const CALF_PAIN = VN(/\b(đau|nhức|căng tức|chuột rút)\b/);
@@ -185,6 +187,14 @@ export function urgentOf(text: string): Urgent | null {
   // Người LỚN TUỔI bị ngã (kể cả không thấy đau): NHS khuyên đi khám sau khi ngã để tìm nguyên nhân, phòng ngã lại.
   if (FALL.test(n) && ELDER.test(n) && !VN(/\b(ngã xe đạp nhẹ|không sao rồi|ổn rồi)\b/).test(n))
     return { id: "fall", card: "te-nga", aspect: "care", head: "⚠️ Người lớn tuổi bị ngã thì nên được kiểm tra kỹ, kể cả khi trông không sao — NHS khuyên đi khám sau khi bị ngã. Nếu **có thể chấn thương đầu, lưng, cổ, hông, hoặc không tự đứng dậy được** → gọi **115** ngay." };
+  // 21/10 (QA V3): bị ong / côn trùng đốt mà nổi mẩn KHẮP người — phản ứng dị ứng toàn thân, cần khám ngay.
+  if (STING.test(n) && STING_WIDE.test(n))
+    return {
+      id: "anaphylaxis",
+      card: "con-trung-dot",
+      aspect: "care",
+      head: `⚠️ Bị đốt mà **nổi mẩn khắp người** là phản ứng dị ứng toàn thân — nên đi khám **ngay**, đừng chờ. Nếu có **khó thở, khò khè, sưng môi / lưỡi / họng, chóng mặt, ngất** → ${CALL} vì có thể là **sốc phản vệ**.`,
+    };
   // 21/10 (QA V2 Q31): đau + sưng MỘT bên bắp chân (nhất là sau bay dài / ngồi lâu) — nghi huyết khối tĩnh mạch sâu.
   if (CALF.test(n) && ((CALF_PAIN.test(n) && CALF_SWELL.test(n)) || ((CALF_PAIN.test(n) || CALF_SWELL.test(n)) && LONG_SIT.test(n))))
     return {

@@ -54,7 +54,7 @@ import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from 
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
 import { honestReply } from "@/lib/lomiHonest";
-import { budgetReply, fixReply, inflationReply, knowledgeReply, simplerReply, whoNeedsCv } from "@/lib/lomiExtras";
+import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
@@ -1341,6 +1341,14 @@ export function AiChat({
       if (!en && !gateSkip) {
         const userHist = msgs.filter((m) => m.role === "user").slice(-8).map((m) => m.content);
         const ex =
+          safetyNowReply(q) ??
+          drinkDriveReply(q) ??
+          weightReply(q, userHist) ??
+          kidFeverFollow(q, userHist) ??
+          allergyAteReply(q, userHist) ??
+          healthFollowReply(q, lastA?.content) ??
+          mathReply(q) ??
+          outOfScopeReply(q) ??
           fixReply(typed) ??
           (bodyAlarm(q, []) ? null : healthFactEarly(q)) ??
           simplerReply(q, lastA?.content) ??
@@ -1373,7 +1381,8 @@ export function AiChat({
       //   → mở đúng chủ đề đó ngay, trước khung câu / bài quan hệ chung / nghe kể (các lớp đó đọc mấy câu này thành chuyện khác).
       if (!en && !gateSkip) {
         const pt = heartThemeOf(q);
-        if (pt && PRIORITY_THEMES.includes(pt) && lastA?.heart !== pt) {
+        // (câu hỏi kiến thức "rối loạn ăn uống là gì" để thẻ y khoa có nguồn trả lời)
+        if (pt && PRIORITY_THEMES.includes(pt) && lastA?.heart !== pt && !VN(/\b(là gì|là bệnh gì|nghĩa là gì|là sao)\b/).test(` ${normalizeVi(q)} `)) {
           const h = heartStart(q, false);
           if (h && h.theme === pt) {
             topicHit("love");
@@ -1481,7 +1490,7 @@ export function AiChat({
       const moneyTalk = lastA?.heart === "saving" && VN(/\b(tiền|chi tiêu|tốn|đắt|rẻ|giá)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(sức khoẻ|sức khỏe|bệnh|hại|tốt không|có sao|mất ngủ|tim)\b/).test(` ${normalizeVi(q)} `);
       // 21/10 (QA V2 Q56/Q64): câu thuộc một chủ đề tâm sự cụ thể ("cần thời gian bình tĩnh", "sợ người yêu nghĩ mình yếu đuối")
       //   không đi vào thẻ bệnh / bảng phân tích cảm xúc chung.
-      const priTheme = PRIORITY_THEMES.includes(heartThemeOf(q) ?? "");
+      const priTheme = PRIORITY_THEMES.includes(heartThemeOf(q) ?? "") && !VN(/\b(là gì|là bệnh gì|nghĩa là gì|là sao)\b/).test(` ${normalizeVi(q)} `);
       if (!en && !gateSkip && !moneyTalk && !priTheme && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = heartOn || !!hCtx;
         const depth = (lastA?.heartDepth ?? 0) + 1;

@@ -419,6 +419,8 @@ const SOCIAL: [string, RegExp, string[], boolean][] = [
   ["chill", VN(/^((anh|em|tui|mình|tôi|a|e|t) )?(muốn |chỉ muốn )?nói chuyện vui( vẻ)?( thôi| chút| xíu| nha| đi)*$/), ["Okie, mình nói chuyện vui vẻ thôi nha 😄 Muốn Lomi đố một câu, hay bạn kể Lomi nghe hôm nay có gì hay?"], false],
   ["userriddle", VN(/\b(giờ |để |tới lượt )?(anh|em|tui|mình|tôi|a|e|t) (kể|đố|hỏi) (em|lomi|e|bạn)( nghe)?( (một|1|lại))? (câu|cái|câu đố)\b/), ["Okie, tới lượt bạn nha 😄 Bạn đố đi, Lomi nghe nè!"], false],
   ["likeexample", VN(/^((anh|em|tui|mình|tôi|a|e|t) )?(thích|muốn) (câu trả lời|trả lời|giải thích) (có|kèm) ví dụ( \S+){0,2}$/), ["Dạ Lomi nhớ rồi — giải thích gì Lomi sẽ kèm ví dụ đời thường cho dễ hình dung nha 👍"], false],
+  // ("ngu" gõ không dấu bị bộ đoán dấu đọc thành "ngủ" — nhận cả hai, câu chỉ có "em ngủ quá vậy" thì gần như luôn là lời chê)
+  ["insult", VN(/^(em|lomi|e|mày|m|bot) (ngu|ngủ|dở|tệ|kém|vô dụng|ngốc|dốt|lú)( (quá|thế|vậy|ghê|vl|thật|vãi|à|z|thiệt))*$/), ["Dạ, chắc Lomi vừa trả lời chưa đúng ý bạn, Lomi xin lỗi nha 🙏 Bạn nói Lomi nghe chỗ nào chưa ổn — Lomi sửa lại liền."], false],
   ["prefshort", VN(/^.{0,30}\b((không|ko|chẳng|hông) thích (câu )?(trả lời|rep|nói|đọc) (dài|dài dòng)|(trả lời|nói|rep) (ngắn|ngắn gọn|gọn) (thôi|thôi nha|nha|nhé|giùm|giúp)|đừng (trả lời|nói|viết) dài( dòng)?)\b.{0,20}$/), ["Dạ Lomi nhớ rồi, từ giờ Lomi trả lời ngắn gọn thôi nha 👍"], false],
   ["yes", VN(/^(có|có chứ|có à|có ạ|có a|ừ có|u có|có nha|muốn|có muốn)$/), ["Okie 😄 Bạn nói thêm chút để Lomi làm đúng ý nha?"], false],
   ["no", VN(/^(không|ko|k|hông|hong|khum|thôi|khỏi|không cần|thôi khỏi)( (nha|nhé|nhe|à|ạ|a|đâu|lomi))*$/), ["Dạ okie, không sao nè 😊 Cần gì cứ nói Lomi nha."], false],
