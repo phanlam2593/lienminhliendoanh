@@ -175,7 +175,7 @@ export const EVENTS: Ev[] = [
     id: "goodnews",
     label: "có tin vui",
     good: true,
-    re: VN(/\b(được tăng lương|tăng lương rồi|lên chức|thăng chức|trúng tuyển|đậu phỏng vấn|đỗ đại học|thi đậu|đậu rồi|tốt nghiệp rồi|có việc rồi|nhận việc rồi|trúng số|được thưởng|được khen|thành công rồi|bán được hàng|chốt đơn|khai trương)\b/),
+    re: VN(/\b(được tăng lương|tăng lương rồi|lên chức|thăng chức|trúng tuyển|đậu phỏng vấn|đỗ đại học|thi đậu|đậu rồi|tốt nghiệp rồi|có việc rồi|nhận việc rồi|trúng số|được thưởng|được khen|thành công rồi|bán được hàng|chốt đơn|(mới|vừa|đã) khai trương|khai trương (rồi|xong|thành công|suôn sẻ))\b/),
     react: ["Wow chúc mừng bạn nha 🎉🥳 Nghe mà Lomi vui lây luôn! Kể Lomi nghe thêm với, bạn đã cố gắng thế nào để có được vậy?", "Tuyệt vời quá 🎊 Bạn xứng đáng lắm đó! Tính ăn mừng sao đây?"],
     follow: [[VN(/\b(ăn mừng|đi ăn|đi chơi|đãi bạn|tự thưởng)\b/), ["Ăn mừng là phải rồi 🥂 Muốn tìm quán ngon có ưu đãi thì hỏi Lomi “quán nào ngon” nha, Lomi tìm giùm!"]]],
     advice: ["Tự thưởng cho mình một chút — bạn xứng đáng mà.", "Ghi lại khoảnh khắc này, lúc nản nhìn lại sẽ có động lực.", "Chia vui với người thân, niềm vui được nhân đôi."],
@@ -188,6 +188,19 @@ export const EVENTS: Ev[] = [
     react: ["Chúc mừng sinh nhật bạn nha 🎂🎉 Tuổi mới thật nhiều sức khoẻ, niềm vui và may mắn! Hôm nay tính đi đâu chơi không?"],
     follow: [[VN(/\b(ở nhà|một mình|không ai nhớ|không ai chúc)\b/), ["Không sao, có Lomi nhớ nè 🥰 Tự thưởng cho mình một món ngon, một ly nước yêu thích nha — sinh nhật là ngày để thương bản thân nhiều hơn."]]],
     advice: ["Tự thưởng một món bạn thích.", "Viết vài điều bạn muốn làm trong tuổi mới.", "Hẹn một người bạn đi ăn cà phê cho vui."],
+  },
+  {
+    // 21/10 (QA Q23): "mai a có cuộc hẹn quan trọng, nhắc a chuẩn bị tinh thần" — trước đây "Vậy hả 😄 Có gì kể tiếp em nghe nha."
+    id: "bigday",
+    label: "sắp có buổi hẹn quan trọng",
+    re: VN(/\b((cuộc|buổi) (hẹn|gặp|họp|gặp mặt|phỏng vấn|thuyết trình|ra mắt|ký hợp đồng) quan trọng|chuẩn bị tinh thần)\b/),
+    react: [
+      "Sắp có hẹn quan trọng hả 💪 Lomi chưa đặt nhắc giờ được, nhưng giúp bạn chuẩn bị tinh thần nè:\n• Tối nay chuẩn bị sẵn đồ mặc, giấy tờ, đường đi\n• Nghĩ trước 2–3 điều chính bạn muốn nói\n• Ngủ sớm, sáng ăn nhẹ, đi sớm 10–15 phút cho khỏi vội\n• Trước lúc vào, hít sâu chậm vài hơi — hồi hộp là vì mình quan tâm, không phải vì mình yếu\n\nChúc bạn thật suôn sẻ nha 🍀",
+    ],
+    follow: [
+      [VN(/\b(lo quá|run|hồi hộp|sợ)\b/), ["Hồi hộp là bình thường lắm 🤗 Thử tập nói trước gương phần mở đầu vài lần, và nhắc mình: chỉ cần làm hết sức, kết quả thế nào cũng không định nghĩa con người của bạn. Lomi tin bạn làm được 🍀"]],
+    ],
+    advice: ["Chuẩn bị đồ, giấy tờ từ tối hôm trước.", "Ngủ đủ quan trọng hơn thức khuya nghĩ thêm.", "Hít thở chậm vài lần trước khi bắt đầu."],
   },
   {
     id: "exam",

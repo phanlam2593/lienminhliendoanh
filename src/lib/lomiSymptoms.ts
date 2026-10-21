@@ -23,7 +23,7 @@ type Sym = { id: string; label: string; re: RegExp; red?: string };
 const SYMPTOMS: Sym[] = [
   // Toàn thân
   // 11/10: "con a sốt từ tối qua", "bé sốt cả đêm" — "sốt" đứng sau người bệnh / trước mốc thời gian cũng là sốt ("sốt ruột", "sốt sắng" thì không).
-  { id: "fever", label: "sốt", re: VN(/\b((bị|đang|hơi|phát|còn|vẫn|lại|thêm|có) sốt|sốt (cao|nhẹ|hoài|liền|kéo dài|về đêm|về chiều|miên man|\d+)|nóng sốt|sốt rét|(a|anh|e|em|c|chị|mình|tôi|tui|bé|cháu|mẹ|má|bố|vợ|chồng|nó) sốt(?! ruột| sắng)|(và|kèm|kèm theo|cùng|với|lẫn|cả|thêm cả) sốt(?! ruột| sắng| dẻo| vang| cà chua| me| bơ| tiêu| chua ngọt| xì dầu)|sốt (từ|cả|mấy|hơn|gần|suốt|rồi))\b/) },
+  { id: "fever", label: "sốt", re: VN(/\b((bị|đang|hơi|phát|còn|vẫn|lại|thêm|có) sốt|(và|kèm|kèm theo) sốt(?! ruột)|sốt (và|kèm|với) (nôn|ói|đau|ho|ớn lạnh|tiêu chảy|mệt|nhức|phát ban|nổi)|sốt (cao|nhẹ|hoài|liền|kéo dài|về đêm|về chiều|miên man|\d+)|nóng sốt|sốt rét|(a|anh|e|em|c|chị|mình|tôi|tui|bé|cháu|mẹ|má|bố|vợ|chồng|nó) sốt(?! ruột| sắng)|(và|kèm|kèm theo|cùng|với|lẫn|cả|thêm cả) sốt(?! ruột| sắng| dẻo| vang| cà chua| me| bơ| tiêu| chua ngọt| xì dầu)|sốt (từ|cả|mấy|hơn|gần|suốt|rồi))\b/) },
   { id: "highfever", label: "sốt cao", re: VN(/\b(sốt cao|sốt (39|40|41)|sốt trên 39)\b/) },
   { id: "chills", label: "ớn lạnh", re: VN(/\b(ớn lạnh|lạnh run|run mình|gai ốc|rùng mình)\b/) },
   { id: "fatigue", label: "mệt mỏi", re: VN(/\b(mệt mỏi|mệt lử|u oai|uể oải|kiệt sức|đuối sức|không có sức|mất sức|mệt nhiều|hơi mệt|thấy mệt|bị mệt|đang mệt|mệt mệt|mệt cả người|người mệt)\b/) },
@@ -73,13 +73,13 @@ const SYMPTOMS: Sym[] = [
   { id: "mouthulcer", label: "loét miệng", re: VN(/\b(loét miệng|nhiệt miệng|lở miệng|nhiệt lưỡi)\b/) },
   { id: "toothache", label: "đau răng / chảy máu chân răng", re: VN(/\b(đau răng|ê buốt răng|sưng lợi|sưng nướu|chảy máu nướu|sâu răng|răng ê)\b/) },
   // Tiêu hoá
-  { id: "nausea", label: "buồn nôn / nôn", re: VN(/\b(buồn nôn|ói mửa|muốn ói|(bị|đang|hay|muốn) nôn|nôn (ra|mửa|nhiều|hoài|liên tục|ói)|ói ra)\b/) },
+  { id: "nausea", label: "buồn nôn / nôn", re: VN(/\b(buồn nôn|ói mửa|muốn ói|(và|kèm|kèm theo) (nôn|ói)|(bị|đang|hay|muốn) nôn|nôn (ra|mửa|nhiều|hoài|liên tục|ói)|ói ra)\b/) },
   { id: "vomitblood", label: "nôn ra máu", re: VN(/\b(nôn ra máu|ói ra máu)\b/), red: "nôn ra máu" },
   { id: "epigastric", label: "đau vùng thượng vị (trên rốn)", re: VN(/\b(đau thượng vị|đau vùng thượng vị|đau trên rốn|đau bao tử|đau dạ dày|cuộn ruột|xót ruột|đau bụng lúc đói|đau bụng khi đói)\b/) },
   { id: "heartburn", label: "ợ chua / nóng rát ngực", re: VN(/\b(ợ chua|ợ nóng|ợ hơi|trào ngược|nóng rát (ngực|thượng vị|cổ họng)|đắng miệng|chua miệng)\b/) },
   { id: "bloat", label: "đầy bụng, khó tiêu", re: VN(/\b(đầy bụng|chướng bụng|khó tiêu|ăn không tiêu|bụng ành ạch|xì hơi nhiều)\b/) },
   { id: "bellyache", label: "đau bụng", re: VN(/\b(đau bụng|quặn bụng|đau quặn bụng|đau tức bụng)\b/) },
-  { id: "rightlow", label: "đau bụng dưới bên phải", re: VN(/\b(đau bụng dưới bên phải|đau hố chậu phải|đau bụng phải|đau quanh rốn rồi lan xuống bên phải)\b/), red: "đau bụng dưới bên phải tăng dần (cần loại trừ ruột thừa)" },
+  { id: "rightlow", label: "đau bụng dưới bên phải", re: VN(/\b(đau bụng dưới bên phải|đau hố chậu phải|đau bụng phải|đau bụng (ở |phía )?bên phải|đau (phía |vùng )?bụng dưới phải|đau bên phải bụng|đau quanh rốn rồi lan xuống bên phải)\b/), red: "đau bụng dưới bên phải tăng dần (cần loại trừ ruột thừa)" },
   { id: "diarrhea", label: "tiêu chảy", re: VN(/\b(tiêu chảy|đi ngoài nhiều|phân lỏng|đi cầu nhiều|đi toilet liên tục|đau bụng đi ngoài)\b/) },
   { id: "constip", label: "táo bón", re: VN(/\b(táo bón|khó đi ngoài|lâu không đi ngoài|phân cứng|đi cầu khó)\b/) },
   { id: "bloodstool", label: "đi ngoài ra máu / phân đen", re: VN(/\b(đi ngoài ra máu|phân có máu|phân đen|đi cầu ra máu)\b/), red: "đi ngoài ra máu hoặc phân đen" },
@@ -1192,6 +1192,9 @@ export function analyzeBody(text: string, prev: string[] = [], inHealth = false,
     out.push(NOTE_BODY);
     return { text: out.join("\n\n"), sx: [] };
   }
+  // 21/10 (QA Q61/Q63): hỏi thẳng "chẩn đoán giúp", "em nghĩ anh bị bệnh gì" → nói rõ không chẩn đoán được qua tin nhắn, rồi mới liệt kê.
+  if (VN(/\b(chẩn đoán|chuẩn đoán|kết luận (giúp|dùm|hộ)|(nghĩ|đoán|xem) (anh|a|em|e|mình|tôi|tui|chị|c) bị (bệnh )?gì|bị bệnh gì)\b/).test(` ${normalizeVi(text)} `))
+    out.push("Lomi **không chẩn đoán chính xác được** qua tin nhắn — chỉ bác sĩ khám trực tiếp (và xét nghiệm nếu cần) mới kết luận được. Dưới đây chỉ để bạn biết mức độ cần đi khám.");
   // 19/10: người dùng vừa đính chính → nhận lại ngắn gọn theo đúng điều họ sửa, không tranh luận / không giữ điều đã gạt đi.
   if (fix || (si.negated.size && prev.length === 0 && labels.length)) out.push(`À, Lomi hiểu rồi — là **${joinVi(labels)}** thôi.`);
   else if (!compact) out.push(`Lomi ghi nhận ${kid ? "bé đang có" : "bạn đang có"}: **${joinVi(labels)}**${ctx.length ? ` (${joinVi(ctx)})` : ""}.`);

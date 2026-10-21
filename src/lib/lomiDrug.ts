@@ -159,7 +159,7 @@ export function overdoseSignal(text: string): boolean {
 const OD_MIND =
   "\n\nNếu bạn uống vì đang thấy quá sức chịu đựng: sau khi đã an toàn, bạn có thể gọi đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật), hoặc nói với một người bạn tin. Lomi vẫn ở đây nghe bạn.";
 const DOSE = VN(/\b(liều|mấy viên|bao nhiêu viên|uống bao nhiêu|ngày mấy lần|mấy lần một ngày|mấy lần 1 ngày|bao nhiêu mg|bao nhiêu ml|mấy gói|cách nhau mấy tiếng|uống mấy)\b/);
-const STOP = VN(/\b(ngưng thuốc|ngưng uống|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
+const STOP = VN(/\b(ngưng thuốc|ngưng uống|ngừng thuốc|ngừng uống|dừng thuốc|dừng uống|thôi uống thuốc|(ngưng|ngừng|dừng|bỏ|thôi|cắt) (uống |dùng )?(thuốc|đơn thuốc) (bác sĩ|bs|bác sỹ) (kê|cho)|không uống thuốc nữa|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
 const SIDE = VN(/\b(tác dụng phụ|phản ứng phụ|có hại gì|hại gan|hại thận|hại dạ dày|có gây nghiện)\b/);
 const WHAT = VN(/\b(là thuốc gì|thuốc gì vậy|là gì|trị gì|chữa gì|trị bệnh gì|chữa bệnh gì|để làm gì|dùng để làm gì|tác dụng gì|công dụng|có tác dụng)\b/);
 // (15/10: "thuốc hạ sốt cho trẻ", "thuốc ho cho bé" — hỏi thuốc nào cho một người, không có chữ "gì".)
@@ -358,6 +358,12 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
     };
   }
 
+  // 21/10 (QA Q64): "muốn ngừng thuốc bác sĩ kê vì thấy đỡ rồi" → đáp đúng ý NGƯNG THUỐC (không kèm chuyện quên liều).
+  if (STOP.test(n) && (med || ctx.inHealth) && !VN(/\b(quên|uống bù|uống thiếu|hết thuốc|gấp đôi)\b/).test(n) && VN(/\b(ngưng|ngừng|dừng|bỏ|nghỉ|thôi|cắt)\b/).test(n))
+    return {
+      kind: "stop",
+      text: `Thuốc bác sĩ kê thì **đừng tự ngưng** khi chưa hỏi lại bác sĩ đã kê, kể cả khi thấy đỡ rồi nha.\n• Thấy đỡ chưa chắc là đã hết bệnh — có loại thuốc phải uống **đủ liệu trình** (vd kháng sinh), có loại ngưng đột ngột thì bệnh dễ quay lại hoặc gây khó chịu (vd thuốc huyết áp, thuốc an thần, corticoid).\n• Lomi không có dữ liệu riêng cho thuốc ${who ? `của ${who}` : "bạn đang dùng"} nên không nói được ngưng lúc nào là an toàn.\n• Cách chắc nhất: gọi hoặc quay lại hỏi bác sĩ đã kê (hoặc dược sĩ), nói rõ là thấy đỡ và muốn ngưng — họ sẽ cho biết nên uống tiếp, giảm dần hay ngưng.`,
+    };
   if (STOP.test(n) && (med || ctx.inHealth))
     return {
       kind: "stop",

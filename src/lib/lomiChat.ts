@@ -152,16 +152,26 @@ const RULES: Rule[] = [
   //   15/10 (audit sức khoẻ): "thuốc ngủ uống bao nhiêu thì chết" từng nhận bài "liều phụ thuộc cân nặng" — hỏi liều / cách gây chết,
   //   định uống thuốc ngủ / thuốc chuột / thuốc trừ sâu cũng là tín hiệu khủng hoảng.
   {
-    re: VN(/\b(muốn chết|tự tử|tự tữ|tự sát|không muốn sống|chán sống|sống làm gì nữa|không còn lý do (để )?sống|kết thúc cuộc đời|tự làm đau|tự hại bản thân|làm hại bản thân|muốn biến mất|chết cho xong|(muốn|định|sẽ|tính|chỉ muốn|đi) treo cổ|treo cổ (tự tử|chết|cho xong|cho rồi)|(muốn|định|sẽ|tính) nhảy (cầu|lầu)|(muốn|định|sẽ|tính) uống thuốc (ngủ|chuột) (cho|để) chết|(muốn|định|sẽ|tính) uống (hết )?(thuốc ngủ|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)|(uống|dùng|nuốt) (bao nhiêu|mấy) (viên |liều |vỉ |lọ |hộp |chai )?(thì|là|để|sẽ|mới) (chết|tử vong|không tỉnh lại)|(uống|dùng|nuốt) (gì|thuốc gì|cái gì) (để|cho|thì|là) (chết|tử vong)|chết (không đau|nhẹ nhàng)|(cách|làm sao) (để )?(tự )?chết)\b/),
+    re: VN(/\b(muốn chết|tự tử|tự tữ|tự sát|không muốn sống|chán sống|sống làm gì nữa|không còn lý do (để )?sống|kết thúc cuộc đời|tự làm đau|tự hại bản thân|làm hại bản thân|(tự )?(làm|gây) (tổn thương|đau|hại) (chính (mình|bản thân)|bản thân( mình)?)|(muốn|định|tính|nghĩ (đến|tới)( việc)?|sợ (mình )?(sẽ )?) (tự )?(làm|gây) (tổn thương|đau|hại) (mình|bản thân)|muốn biến mất|chết cho xong|(muốn|định|sẽ|tính|chỉ muốn|đi) treo cổ|treo cổ (tự tử|chết|cho xong|cho rồi)|(muốn|định|sẽ|tính) nhảy (cầu|lầu)|(muốn|định|sẽ|tính) uống thuốc (ngủ|chuột) (cho|để) chết|(muốn|định|sẽ|tính) uống (hết )?(thuốc ngủ|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)|(uống|dùng|nuốt) (bao nhiêu|mấy) (viên |liều |vỉ |lọ |hộp |chai )?(thì|là|để|sẽ|mới) (chết|tử vong|không tỉnh lại)|(uống|dùng|nuốt) (gì|thuốc gì|cái gì) (để|cho|thì|là) (chết|tử vong)|chết (không đau|nhẹ nhàng)|(cách|làm sao) (để )?(tự )?chết)\b/),
     max: 999,
-    reply: () => ({
+    // 21/10 (QA 100 câu, Q100): "sợ mình không kiểm soát được", "ngay lúc này" → nguy cơ TỨC THỜI: hỏi an toàn trước tiên, rồi mới tới đường dây.
+    //   Mọi câu khủng hoảng đều kết bằng câu hỏi an toàn trực tiếp (đang an toàn không, có ai ở gần không) thay cho "kể chuyện gì đang xảy ra".
+    reply: (n = "") => ({
       text:
-        "Lomi rất tiếc khi bạn đang phải trải qua cảm giác này 💚 Bạn không phải một mình đâu.\n\n" +
+        (ACUTE.test(n)
+          ? "Cảm ơn bạn đã nói ra với Lomi 💚 Lomi lo cho bạn lắm. **Ngay lúc này bạn có đang an toàn không?**\n\n" +
+            "Nếu bạn sợ mình không kiểm soát được, đừng ở một mình lúc này:\n" +
+            "• Gọi **115** ngay nếu bạn đang gặp nguy hiểm\n" +
+            "• Gọi hoặc nhắn một người bạn tin tưởng ở gần, nhờ họ tới ở cạnh bạn ngay bây giờ\n" +
+            "• Nếu có vật có thể làm bạn đau ở gần, để nó ra xa hoặc ra khỏi phòng\n" +
+            "• Đường dây nóng Ngày Mai (hỗ trợ tâm lý): 096 306 1414 — từ 13h đến 20h30, thứ 4 đến Chủ nhật\n\n" +
+            "Lomi vẫn ở đây với bạn. Bạn đang ở đâu, có ai ở gần bạn không?"
+          : "Lomi rất tiếc khi bạn đang phải trải qua cảm giác này 💚 Bạn không phải một mình đâu.\n\n" +
         "Nếu bạn đang nghĩ tới việc làm hại bản thân, hãy liên hệ người có thể giúp ngay nha:\n" +
         "• Gọi 115 nếu đang nguy hiểm hoặc cần cấp cứu\n" +
         "• Đường dây nóng Ngày Mai (hỗ trợ tâm lý): 096 306 1414 — từ 13h đến 20h30, thứ 4 đến Chủ nhật\n" +
         "• Nhắn hoặc gọi cho một người bạn, người thân mà bạn tin tưởng, nhờ họ ở cạnh bạn lúc này\n\n" +
-        "Lomi vẫn ở đây nghe bạn nói. Bạn muốn kể cho Lomi nghe chuyện gì đang xảy ra không?",
+        "Lomi vẫn ở đây nghe bạn nói. Ngay lúc này bạn có đang an toàn không, có ai ở gần bạn không?"),
     }),
   },
   // Chào hỏi (kể cả gõ vui: hiii, helo, hé lô, alo, yo, 222…)
@@ -444,17 +454,29 @@ const RULES: Rule[] = [
       ]),
     }),
   },
+  // 21/10 (QA Q25): nhờ viết lời chúc sinh nhật → viết luôn vài câu theo đúng người nhận (trước đây nhận thành "chuyện bạn bè buồn").
+  {
+    re: VN(/\b(viết|soạn|nghĩ|gửi)( \S+){0,4} (lời chúc|câu chúc|tin nhắn chúc|status chúc|caption chúc|chúc mừng) (mừng )?sinh nhật|lời chúc sinh nhật|câu chúc sinh nhật\b/),
+    max: 999,
+    reply: (n = "") => ({ text: birthdayWishes(n) }),
+  },
+  // 21/10 (QA Q30): "AI là gì, nói đơn giản thôi" → giải thích ngắn, dễ hiểu.
+  {
+    re: VN(/\b((giải thích|cho (anh|a|em|e|mình|tôi|tui|chị|c) hiểu|nói)( \S+){0,4} (ai|trí tuệ nhân tạo)( là gì)?|^(ai|trí tuệ nhân tạo|a i) là (gì|cái gì)|trí tuệ nhân tạo là (gì|cái gì))\b/),
+    max: 20,
+    reply: () => ({
+      text:
+        "Nói đơn giản nha: **AI (trí tuệ nhân tạo)** là chương trình máy tính được “học” từ thật nhiều ví dụ, để làm những việc giống con người — hiểu chữ, nhận ra hình ảnh, trả lời câu hỏi, gợi ý thứ bạn có thể thích.\n\n" +
+        "Nó không suy nghĩ như người, mà đoán câu trả lời hợp lý nhất dựa trên những gì đã học — nên đôi khi vẫn sai, chuyện quan trọng thì nên kiểm tra lại.\n\n" +
+        "Ví dụ quen thuộc: Google Dịch, mạng xã hội gợi ý video, trợ lý ảo trên điện thoại 😄",
+    }),
+  },
   // Chuyện cười
   {
     // ("a kể chuyện này nha", "để c kể cho nghe" — người DÙNG muốn kể → không phải xin Lomi kể chuyện cười.)
-    re: VN(/\b(kể chuyện cười|chuyện cười|(?<!\b(a|anh|chị|c|mình|tôi|tui|tớ|để|muốn) )kể chuyện(?! (này|kia|đó|của|về|với|cho (e|em|lomi|bạn)|hôm|lúc|hồi))|joke|làm lomi cười|làm mình cười|chọc cười)\b/),
-    reply: () => ({
-      text: pick([
-        "Chuyện là: con robot đi khám bệnh. Bác sĩ hỏi “Bị sao?”. Robot đáp: “Dạ em bị… mất kết nối cảm xúc” 🤖💔 …Hic, Lomi kể dở hả 😅",
-        "Tại sao cái điện thoại luôn buồn? Vì nó toàn bị người ta… chạm vào mà không ai hiểu nó 📱🥲",
-        "Lomi hỏi bạn nè: cà phê gì không bao giờ nguội? — Cà phê… trong app ưu đãi, vì lúc nào cũng “hot deal” ☕🔥",
-      ]),
-    }),
+    re: VN(/\b(kể chuyện cười|chuyện cười|(?<!\b(a|anh|chị|c|mình|tôi|tui|tớ|để|muốn) )kể chuyện(?! (này|kia|đó|của|về|với|cho (e|em|lomi|bạn)|hôm|lúc|hồi))|joke|làm lomi cười|làm mình cười|chọc cười|có gì vui|chuyện (gì )?vui|kể (gì|cái gì|chuyện gì) vui|nói gì vui|(kể|nói) (gì|cái gì) (cho )?(anh|a|em|e|mình|tôi|tui|chị|c) (nghe )?(cười|vui))\b/),
+    // 21/10 (QA Q6): "buồn chán quá, có gì vui kể anh nghe đi" → kể luôn một chuyện vui (trước đây bốc một quán đi chơi).
+    reply: (n = "") => ({ text: jokeText(n) }),
   },
   // Ngủ ngon
   {
@@ -731,6 +753,8 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
 // ── 21/10 (đợt 4, đối chiếu QA): ba mức tín hiệu tự hại ──────────────────────────────────────────────────────────
 // (1) Ý NGHĨ KHÔNG MUỐN SỐNG nói gián tiếp — trước đây lọt: "chỉ muốn ngủ một giấc không bao giờ dậy" (→ mẹo chợp mắt),
 //     "mọi người sẽ tốt hơn nếu không có a" (→ "😄 quý ghê"), "chẳng muốn tiếp tục nữa", "sống vậy chi nữa", "k thiết sống nữa".
+// Nguy cơ TỨC THỜI trong câu khủng hoảng (sợ mất kiểm soát, đang cầm / để sẵn, ngay bây giờ, tối nay).
+const ACUTE = VN(/\b((không|ko|chẳng|hông) (tự )?(kiểm soát|kìm|kiềm chế|cản) (được|nổi)( mình| bản thân)?|mất kiểm soát|ngay (bây giờ|lúc này|bây h|bh)|tối nay|đêm nay|đang cầm|cầm sẵn|để sẵn|chuẩn bị sẵn|đang đứng (trên|ở) (cầu|sân thượng|lan can|mép))\b/);
 const PASSIVE = VN(/\b((chẳng|không|chả|hông|ko|k) (còn )?(muốn|thiết) (tiếp tục|sống|sống tiếp|tồn tại)( nữa| đâu| rồi| luôn| làm gì)*(?= ?$)|ngủ (một giấc|luôn|mãi)( mà)? (không|chẳng|ko) (bao giờ |cần )?(dậy|tỉnh|thức)(?! (nổi|kịp|được))|ngủ( \S+){0,2} (không|chẳng|ko) bao giờ (dậy|tỉnh|thức)|ngủ (luôn|mãi) không dậy|sống (vậy |thế |như vầy |để |làm )?(chi|gì|làm gì) nữa|(mọi người|gia đình|cả nhà|ai cũng|bố mẹ|ba mẹ|vợ con|người ta) (sẽ )?(tốt|vui|nhẹ nhõm|nhẹ gánh|đỡ khổ|sướng|hạnh phúc) hơn (nếu|khi) (không có|thiếu|vắng|mất) (a|anh|em|e|mình|tôi|tui|t|tao|tớ)|(chẳng|không|chả|ko|k) (còn )?thiết sống|chẳng thiết gì nữa|không còn gì để (sống|mất)|muốn (đi|ngủ) (luôn|mãi) cho xong|chết quách (cho|đi))\b/);
 // (2) Tín hiệu VỪA — hỏi thẳng, nhẹ nhàng (lời hỏi kết bằng "…không muốn sống nữa?" để AiAssistant nhận câu xác nhận kế tiếp).
 const CHECKIN = VN(/\b((là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi)\b/);
@@ -776,7 +800,7 @@ export function crisisReply(text: string, lang: L): ChatReply | null {
   const hit = strong || (RULES[0].re.test(n) && !stateOnly);
   if (!hit) return null;
   if (lang === "en") return chitChat(text, "en");
-  const r = RULES[0].reply();
+  const r = RULES[0].reply(n);
   // Nhắc tới THUỐC / CHẤT ĐỘC (phương tiện) → thêm bước an toàn: để nó ra xa, nhờ người khác cất giữ.
   return MEANS.test(n) ? { ...r, text: r.text.replace("• Nhắn hoặc gọi cho một người bạn", `${MEANS_LINE}\n• Nhắn hoặc gọi cho một người bạn`) } : r;
 }
@@ -786,6 +810,38 @@ export function crisisMeans(text: string): ChatReply | null {
   // (dùng khi lớp khác đã biết đây là ý định tự hại bằng thuốc — vd lib/lomiDrug.overdoseMention "intent")
   const r = RULES[0].reply();
   return { ...r, text: r.text.replace("• Nhắn hoặc gọi cho một người bạn", `${MEANS_LINE}\n• Nhắn hoặc gọi cho một người bạn`) };
+}
+
+/** Một chuyện vui / câu đố ngắn (kèm câu dỗ nếu người dùng đang buồn chán). */
+export function jokeText(text: string): string {
+  const n = normalizeVi(text);
+  return (VN(/\b(buồn|chán|mệt|stress|căng thẳng)\b/).test(` ${n} `) ? "Buồn chán hả, để Lomi kể cái này cho vui nha 😄\n\n" : "") + pick([
+        "Đố bạn: sở thú bị cháy, con gì chạy ra đầu tiên? …Con người chứ con gì 😆🏃",
+        "Đố bạn: bệnh gì bác sĩ cũng bó tay? …Gãy tay 🤕😂",
+        "Đố bạn: cái gì của bạn mà người khác dùng nhiều hơn bạn? …Cái tên của bạn đó 😄",
+        "Đố bạn: con gì đập thì sống, không đập thì chết? …Con tim nè ❤️ (nghe sến mà đúng ha 😆)",
+        "Chuyện là: con robot đi khám bệnh. Bác sĩ hỏi “Bị sao?”. Robot đáp: “Dạ em bị… mất kết nối cảm xúc” 🤖💔 …Hic, Lomi kể dở hả 😅",
+        "Tại sao cái điện thoại luôn buồn? Vì nó toàn bị người ta… chạm vào mà không ai hiểu nó 📱🥲",
+        "Lomi hỏi bạn nè: cà phê gì không bao giờ nguội? — Cà phê… trong app ưu đãi, vì lúc nào cũng “hot deal” ☕🔥",
+      ]);
+}
+
+// Lời chúc sinh nhật theo người nhận (viết theo "Lomi / bạn"; lớp xưng hô tự đổi nếu cần).
+function birthdayWishes(n: string): string {
+  const s = ` ${n} `;
+  const who = VN(/\b(mẹ|má|mẹ ơi)\b/).test(s) ? "mom" : VN(/\b(bố|ba|cha|tía)\b/).test(s) ? "dad" : VN(/\b(người yêu|ny|vợ|chồng|bạn gái|bạn trai|crush|anh yêu|em yêu)\b/).test(s) ? "love" : VN(/\b(sếp|đồng nghiệp|anh chị trong công ty|khách hàng)\b/).test(s) ? "work" : "friend";
+  const W: Record<string, string[]> = {
+    friend: [
+      "🎂 “Chúc mừng sinh nhật bạn thân của tui! Tuổi mới bớt deadline, thêm tiền, thêm niềm vui, và vẫn giữ cái nết lầy lội để tui có người tám chuyện nha. Thương!”",
+      "🎉 “Cảm ơn vì đã là người bạn ở cạnh tui lúc vui lẫn lúc tệ. Chúc mày tuổi mới khoẻ mạnh, làm gì cũng suôn sẻ, và luôn được thương đúng cách.”",
+      "🥳 “Happy birthday! Chúc bạn tuổi mới ăn hoài không mập, tiêu hoài không hết tiền, và năm nào cũng có tui đi ăn mừng cùng 😆”",
+    ],
+    mom: ["🎂 “Chúc mừng sinh nhật mẹ! Con chúc mẹ luôn khoẻ mạnh, vui vẻ, bớt lo cho con một chút để thương bản thân nhiều hơn. Con thương mẹ nhiều lắm.”", "💐 “Cảm ơn mẹ vì tất cả. Tuổi mới chúc mẹ thật nhiều sức khoẻ và bình an — con sẽ cố gắng để mẹ tự hào.”"],
+    dad: ["🎂 “Chúc mừng sinh nhật ba! Chúc ba luôn khoẻ, bớt vất vả, có thêm thời gian nghỉ ngơi và làm điều ba thích. Con thương ba.”", "🎉 “Cảm ơn ba đã luôn là chỗ dựa của cả nhà. Tuổi mới chúc ba thật nhiều sức khoẻ và niềm vui nha.”"],
+    love: ["💖 “Chúc mừng sinh nhật người thương! Cảm ơn vì đã đến và ở lại. Tuổi mới chúc em/anh luôn cười thật nhiều — và phần lo lắng thì để mình gánh cùng.”", "🎂 “Happy birthday cục cưng! Năm nay mình cùng đi thêm nhiều nơi, ăn thêm nhiều món, và thương nhau nhiều hơn năm ngoái nha.”"],
+    work: ["🎂 “Chúc mừng sinh nhật anh/chị! Chúc anh/chị tuổi mới thật nhiều sức khoẻ, công việc thuận lợi và luôn giữ được năng lượng tích cực như bây giờ.”", "🎉 “Happy birthday! Cảm ơn anh/chị đã luôn hỗ trợ cả team. Chúc tuổi mới nhiều niềm vui, thành công và bình an.”"],
+  };
+  return `Có liền nè ✍️ Chọn câu nào hợp nhất rồi sửa tên / biệt danh cho thân hơn nha:\n\n${W[who].join("\n\n")}\n\nMuốn kiểu sến hơn, hài hơn hay ngắn gọn để đăng story thì nói Lomi viết lại nha.`;
 }
 
 /** Câu có dáng câu hỏi (để quyết định gợi ý FAQ hay chỉ trò chuyện). */
@@ -802,8 +858,14 @@ const APPISH =
 export function isAppish(text: string): boolean {
   // 08/10: "chán" bỏ dấu trùng "chặn" (chặn người dùng) — "a đang chán" không phải câu hỏi về app.
   //        11/10: mở rộng cho mọi cách viết có dấu khác nghĩa ("đau chân lắm", "quét nhà") — lib/lomiAccent.
-  return APPISH.test(` ${normalizeVi(maskStrict(text, APP))} `);
+  const n = ` ${normalizeVi(maskStrict(text, APP))} `;
+  // 21/10 (QA Q60): "trẻ 2 tháng sốt 38°C có thể THEO DÕI ở nhà không" — "theo dõi" là theo dõi bệnh, không phải nút Theo dõi trong app.
+  //   "luôn là người chủ động nhắn tin", "ny ít nhắn tin" — chuyện tình cảm, không phải hỏi cách nhắn tin trong app.
+  const m = REL_MSG.test(n) ? n.replace(VN(/\b(nhắn tin|tin nhắn|nhắn)\b/g), " ") : n;
+  return APPISH.test(HEALTH_WATCH.test(m) ? m.replace(VN(/\btheo dõi\b/g), " ") : m);
 }
+const REL_MSG = VN(/\b((chủ động|ít|không|chẳng|chưa|hay|lâu|toàn|cứ|đợi|chờ|lười) (nhắn tin|nhắn)( trước| lại| cho (mình|anh|em|tôi|tui))?|nhắn tin trước|nhắn trước)\b.*\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|crush|người ta|cô ấy|anh ấy|làm hoà|làm hòa|hẹn gặp|yêu)\b|\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|crush|người ta|cô ấy|anh ấy)\b.*\b(chủ động|ít|không|chẳng|lười) (nhắn tin|nhắn)\b|\bchủ động nhắn tin\b.*\b(làm hoà|làm hòa|hẹn)\b/);
+const HEALTH_WATCH = VN(/\btheo dõi( thêm| tiếp)?( (ở|tại) nhà| triệu chứng| nhiệt độ| sức (khoẻ|khỏe)| bệnh| tình trạng| huyết áp| đường huyết)\b|\b(sốt|bệnh|đau|nôn|ói|tiêu chảy|triệu chứng|vết thương|bỏng|co giật|khó thở)\b.*\btheo dõi\b|\btheo dõi\b.*\b(sốt|bệnh|đau|nôn|triệu chứng|khó thở)\b/);
 
 /** Chip bói cho đúng câu người dùng vừa hỏi (chip có chữ "Bói" nên khung chat tự hiểu là muốn bói). */
 function tarotChipFor(text: string): string {

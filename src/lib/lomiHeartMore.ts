@@ -10,6 +10,175 @@ import type { Theme } from "@/lib/lomiHeart";
 import { VR, VN } from "@/lib/viMatch";
 
 export const MORE_THEMES: Theme[] = [
+  // ═══════════════════════ 21/10 (QA 100 câu) — các chuyện trước đây Lomi đáp lạc chủ đề ═══════════════════════
+  // Cặp đôi / vợ chồng bất đồng chuyện tiền (Q73, Q79) — trước đây nhận thành "áp lực tiền bạc", "bị người nhà không hiểu".
+  {
+    id: "couplemoney",
+    howto: true,
+    re: VN(/\b(vợ chồng|người yêu|ny|bạn trai|bạn gái|hai đứa|hai người|yêu nhau|vợ|chồng)\b.*\b(bất đồng|cãi nhau|cãi|mâu thuẫn|tranh cãi|khác nhau|không hợp|xung đột|giận nhau)( \S+){0,3} (tiền bạc|tiền nong|chuyện tiền|tiền|chi tiêu|tiết kiệm|tiêu xài|xài tiền)\b/),
+    feel: ["Bất đồng chuyện tiền bạc là một trong những điều làm các cặp đôi căng thẳng nhất — vì tiền gắn với cảm giác an toàn và cách mỗi người được nuôi lớn."],
+    insight: ["Thường không phải ai đúng ai sai: một người thấy an toàn khi để dành, người kia thấy sống là phải tận hưởng. Hiểu tiền có ý nghĩa gì với mỗi người quan trọng hơn tranh luận từng khoản chi."],
+    step: ["Chọn lúc cả hai đều bình tĩnh (không phải ngay sau khi vừa cãi), mỗi người nói mình lo điều gì nhất về tiền.", "Thử chia: một quỹ chung (nhà, ăn uống, tiết kiệm chung) và mỗi người một khoản riêng tự quyết, không phải giải trình."],
+    ask: ["Hai bạn hay bất đồng nhất ở khoản nào — chi tiêu hằng ngày, tiết kiệm, hay chuyện giúp đỡ gia đình hai bên?"],
+    advice: [
+      "Không cần ai phải nhường ai hoàn toàn — mục tiêu là một thoả thuận cả hai cùng thấy công bằng: thống nhất mức tiết kiệm chung trước, phần còn lại mỗi người được tự do.",
+      "Khoản lớn (trên một mức hai bạn tự đặt) thì bàn trước khi chi; khoản nhỏ thì tôn trọng quyền tự quyết của nhau.",
+      "Nói bằng câu “mình” thay vì trách: “Mình thấy lo khi tháng này chưa để dành được” thay cho “Bạn tiêu hoang quá”.",
+      "Mỗi tháng ngồi xem lại một lần, ngắn thôi — như một buổi họp gia đình nhẹ nhàng, không phải để bắt lỗi nhau.",
+    ],
+  },
+  // Luôn là người chủ động / yêu nhiều hơn (Q74, Q84) — trước đây Q74 nhận thành câu hỏi "nhắn tin cho ai" của app.
+  {
+    id: "onesided",
+    howto: true,
+    re: VN(/\b((luôn|lúc nào cũng|toàn|chỉ có|cứ) (là )?(mình|anh|a|em|e|tôi|tui) (là )?(người )?(chủ động|nhắn trước|làm hoà|làm hòa|xin lỗi trước|rủ trước|hẹn trước)|(luôn|lúc nào cũng|toàn|cứ|chỉ) (là )?(người )?(chủ động|nhắn trước|làm hoà trước|làm hòa trước|xin lỗi trước|rủ trước|hẹn trước)|(mình|anh|em|tôi|tui) yêu (nhiều )?hơn (đối phương|người ta|cô ấy|anh ấy|ny|người yêu|họ)|yêu nhiều hơn|chỉ (mình|anh|em|tôi) cố gắng|một mình (mình|anh|em|tôi) cố|(người ta|cô ấy|anh ấy|ny|người yêu) (không bao giờ|chẳng bao giờ|chưa bao giờ) chủ động)\b/),
+    feel: ["Lúc nào cũng là người chủ động nhắn, chủ động hẹn, chủ động làm hoà — lâu dần mình sẽ thấy mệt và tủi, như đang giữ mối quan hệ bằng một tay vậy."],
+    insight: ["Một mối quan hệ cân bằng không phải lúc nào cũng 50–50, nhưng nếu lâu dài chỉ một người vun thì người đó sẽ kiệt sức. Cảm giác của bạn là tín hiệu đáng lắng nghe, không phải do bạn đòi hỏi."],
+    step: ["Thử lùi lại vài ngày — không giận dỗi, chỉ là không chủ động trước — để xem người kia có tìm tới bạn không.", "Nói thẳng mà nhẹ, bằng cảm xúc của mình: “Dạo này mình thấy hay là người chủ động trước, mình hơi tủi. Mình cũng muốn được bạn tìm tới.”"],
+    ask: ["Mỗi lần bạn chủ động thì người kia phản ứng thế nào — vui vẻ đón nhận hay hờ hững?"],
+    advice: [
+      "Nói rõ điều bạn cần bằng câu “mình”: “Mình thấy mình hay chủ động trước, mình mong bạn cũng nhắn mình, rủ mình nhiều hơn.”",
+      "Để ý xem sau khi nghe bạn nói, người kia có thay đổi không. Mỗi người thể hiện tình cảm một kiểu, nhưng đã nói rõ mà mọi thứ vẫn vậy thì đó là điều đáng cân nhắc.",
+      "Giữ cuộc sống riêng thật đầy — bạn bè, sở thích, mục tiêu — để giá trị của bạn không phụ thuộc vào việc người kia có nhắn hay không.",
+    ],
+  },
+  // Làm sao biết người ta thật lòng (Q66) — trước đây "chưa được học".
+  {
+    id: "sincere",
+    howto: true,
+    re: VN(/\b((làm sao|làm thế nào|cách nào|sao) (để )?(biết|nhận ra|phân biệt|nhìn ra)( \S+){0,5} (thật lòng|thật sự|có thật|có thực sự) (yêu|thương|thích)|(có )?(thật lòng|thật sự) (yêu|thương|thích) (mình|anh|em|tôi|tui) (không|hay không)|yêu thật lòng hay)\b/),
+    feel: ["Muốn biết người ta có thật lòng không là mong muốn rất bình thường — ai cũng muốn tình cảm mình trao đi được đặt đúng chỗ."],
+    insight: ["Không có một dấu hiệu duy nhất, nhưng tình cảm thật thường lộ ra qua việc làm đều đặn hơn là lời nói ngọt: nhất quán, tôn trọng, và có bạn trong kế hoạch của họ."],
+    step: ["Nhìn vào sự nhất quán: lời nói và việc làm có khớp nhau, và có duy trì theo thời gian không?"],
+    ask: ["Có điều gì làm bạn đang băn khoăn về tình cảm của người ấy không?"],
+    advice: [
+      "Sự nhất quán: lời nói và việc làm có khớp nhau, và giữ được theo thời gian — không chỉ lúc mới quen.",
+      "Cách họ đối xử khi bạn gặp khó khăn hay khi hai người bất đồng: có tôn trọng, lắng nghe, hay coi thường, kiểm soát.",
+      "Họ có giới thiệu bạn với bạn bè, gia đình, nói về tương lai có bạn không.",
+      "Và quan trọng nhất: ở cạnh họ bạn thấy an toàn, được là chính mình — hay thường xuyên lo lắng, hoài nghi.",
+    ],
+  },
+  // Muốn chia tay nhẹ nhàng (Q75) — trước đây nhận thành "ở lại hay rời đi".
+  {
+    id: "endit",
+    howto: true,
+    re: VN(/\b((muốn|định|tính|sắp|phải) chia tay( \S+){0,8} (nói (thế nào|sao|như nào|làm sao|ra sao)|sợ (người ta|đối phương|cô ấy|anh ấy|ny|họ|người kia) (bị )?(tổn thương|buồn|đau|sốc))|(cách|làm sao|làm thế nào) (để )?(nói|đề nghị|mở lời) chia tay|chia tay (sao|thế nào|như nào) cho (nhẹ nhàng|êm|đỡ đau|tử tế))\b/),
+    feel: ["Muốn kết thúc mà vẫn lo cho cảm xúc của người kia — điều đó cho thấy bạn là người tử tế lắm."],
+    insight: ["Không có cách chia tay nào hoàn toàn không đau, nhưng có cách giúp người kia đỡ tổn thương hơn: rõ ràng, tôn trọng và thật lòng."],
+    step: ["Nghĩ trước vài câu mình muốn nói, để lúc gặp không bị cuống mà nói điều làm người kia đau thêm."],
+    ask: ["Bạn đã chắc với quyết định này chưa, hay trong lòng vẫn còn phân vân?"],
+    advice: [
+      "Nói trực tiếp, ở chỗ riêng tư, lúc cả hai không vội — tránh chia tay qua tin nhắn nếu có thể.",
+      "Nói về mình thay vì đổ lỗi: “Mình đã suy nghĩ nhiều, và mình thấy mình không còn muốn tiếp tục nữa.”",
+      "Rõ ràng, đừng hứa “biết đâu sau này” nếu bạn không thật sự nghĩ vậy — mập mờ làm người kia đau lâu hơn.",
+      "Để người kia được nói, được buồn hay giận; không cần tranh luận ai đúng ai sai.",
+      "Sau đó giữ khoảng cách một thời gian, đừng hỏi han thường xuyên, để cả hai có chỗ hồi phục.",
+    ],
+  },
+  // Từ chối khéo (Q27) — trước đây vướng chữ "buồn" nên nhận thành "bạn đang buồn".
+  {
+    id: "decline",
+    howto: true,
+    re: VN(/\b((cách|làm sao|làm thế nào|sao) (để )?từ chối|từ chối (khéo|sao cho|thế nào|như nào|mà không)|(từ chối|khước từ|nói không với)( \S+){0,2} (lời mời|lời rủ|đi chơi|đám cưới|tiệc|nhậu|kèo|lời nhờ|người ta nhờ))\b/),
+    feel: ["Từ chối mà vẫn giữ được lòng người khác là chuyện khó thật, nhất là khi mình quý họ."],
+    insight: ["Từ chối một lời mời không phải là từ chối con người họ. Người ta thường buồn vì cách nói hơn là vì câu “không”."],
+    step: ["Nói sớm, đừng hứa lửng rồi huỷ sát giờ — đó mới là điều làm người ta buồn nhất."],
+    ask: ["Bạn đang muốn từ chối lời mời gì vậy — đi chơi, đám tiệc hay một việc nhờ vả?"],
+    advice: [
+      "Cảm ơn trước: “Cảm ơn bạn đã rủ mình nha!”",
+      "Lý do ngắn và thật, không cần giải thích dài: “Hôm đó mình kẹt việc rồi” hay “Dạo này mình cần nghỉ ngơi chút.”",
+      "Nếu bạn vẫn muốn gặp, đề nghị cách khác: “Lần sau mình đi cà phê nha, mình rủ bạn.”",
+      "Ví dụ trọn câu: “Cảm ơn bạn rủ mình nha! Tối đó mình kẹt rồi, tiếc ghê. Tuần sau mình đi ăn bù nhé?”",
+    ],
+  },
+  // Muốn kiếm thêm thu nhập (Q24) — trước đây "Vậy hả 😄 Có gì kể tiếp em nghe nha."
+  {
+    id: "sideincome",
+    howto: true,
+    re: VN(/\b(kiếm thêm (thu nhập|tiền|chút tiền|việc)|thu nhập thêm|tăng thu nhập|việc làm thêm|làm thêm (gì|việc gì|nghề gì)|nghề tay trái|kiếm tiền thêm)\b/),
+    feel: ["Muốn có thêm thu nhập là chuyện rất nhiều người đang tính — nghĩ tới là đã chủ động rồi đó 💪"],
+    insight: ["Hướng hợp nhất thường bắt đầu từ thứ mình đã có sẵn: kỹ năng, thời gian rảnh và chút vốn."],
+    step: ["Viết ra 3 thứ: mình giỏi gì, mỗi tuần rảnh mấy tiếng, có bao nhiêu vốn có thể thử mà không ảnh hưởng chi tiêu chính."],
+    ask: ["Mỗi tuần bạn rảnh khoảng bao nhiêu giờ, và kỹ năng nào bạn tự tin nhất?"],
+    advice: [
+      "Bắt đầu từ thứ bạn đã có: kỹ năng (dạy kèm, thiết kế, viết, sửa đồ, nấu ăn…), thời gian rảnh và vốn — mỗi thứ dẫn tới một hướng khác nhau.",
+      "Ít vốn: nhận việc tự do theo kỹ năng, dạy kèm, giao hàng hay chạy xe giờ rảnh, bán đồ tự làm.",
+      "Có chút vốn: bán hàng online quy mô nhỏ — nhập ít để thử trước, bán được rồi mới tăng.",
+      "Thử 1–2 tháng, ghi lại thu – chi để biết hướng nào thật sự có lời; đừng vội bỏ việc chính.",
+      "Cẩn thận lời mời “việc nhẹ lương cao”, phải đóng tiền trước hay làm nhiệm vụ online ăn hoa hồng — gần như luôn là lừa đảo.",
+    ],
+  },
+  // Người yêu xin "không gian riêng" (Q83) — trước đây đáp chung chung "chuyện tình cảm lên xuống".
+  {
+    id: "space",
+    howto: true,
+    re: VN(/\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|cô ấy|anh ấy|em ấy|người ấy|crush)\b.*\b(cần|muốn|xin) (có )?(thêm )?(không gian riêng|không gian|khoảng lặng|khoảng trống|thời gian riêng|thời gian một mình|ở một mình)\b/),
+    feel: ["Nghe người thương nói “cần không gian riêng” dễ làm mình chột dạ, sợ đó là dấu hiệu người ta muốn đi — cảm giác đó rất dễ hiểu."],
+    insight: ["Cần không gian riêng **không nhất thiết** là muốn rời xa: nhiều người cần thời gian một mình để nạp lại năng lượng, gỡ áp lực, hoặc sắp xếp lại suy nghĩ. Lomi không đoán được lòng người ấy — điều nói lên nhiều nhất là cách họ cư xử trong và sau khoảng thời gian đó."],
+    step: ["Tôn trọng khoảng lặng đó: đừng nhắn dồn hay ngồi canh điện thoại."],
+    ask: ["Người ấy nói vậy trong hoàn cảnh nào — sau một lần cãi nhau, hay lúc đang nhiều áp lực?"],
+    advice: [
+      "Cần không gian **chưa chắc** là muốn chia tay — nhiều người chỉ cần thời gian một mình để nạp lại năng lượng hay gỡ áp lực.",
+      "Hỏi nhẹ một lần để hiểu: “Bạn cần không gian kiểu nào, khoảng bao lâu, có điều gì đang làm bạn mệt không?” — hỏi để hiểu, không phải tra hỏi.",
+      "Tôn trọng khoảng lặng đó, đừng nhắn dồn; trong lúc chờ thì lo cho mình: bạn bè, việc riêng, sở thích.",
+      "Để ý sau đó: người ấy vẫn quan tâm, quay lại trò chuyện thì thường chỉ là nhu cầu nghỉ; còn ngày càng xa, né nói chuyện thì đó là lúc cần một cuộc nói chuyện thẳng thắn về hai người.",
+    ],
+  },
+  // Muốn giảm chi tiêu (Q38) — trước đây "Vậy hả 😄", câu hỏi tiếp về tiền cà phê thì nhận thành thẻ caffeine.
+  {
+    id: "saving",
+    howto: true,
+    re: VN(/\b(giảm chi tiêu|cắt giảm chi tiêu|bớt chi tiêu|tiết kiệm (tiền|chi tiêu|hơn)|muốn tiết kiệm|chi tiêu (quá tay|hoang|nhiều quá)|tiêu (hoang|quá tay)|để dành (tiền|được tiền)|hết tiền trước cuối tháng)\b/),
+    feel: ["Muốn giảm chi tiêu là bước đầu hay lắm — biết mình cần siết lại đã là một nửa chặng đường rồi 💪"],
+    insight: ["Tiết kiệm bền nhất thường không đến từ nhịn hết mọi thứ, mà từ việc biết tiền đang đi đâu và cắt đúng những khoản nhỏ lặp lại mỗi ngày."],
+    step: ["Ghi lại mọi khoản chi trong 1–2 tuần (kể cả ly nước, gói xôi) — nhìn vào là thấy ngay khoản nào “rò rỉ” nhiều nhất."],
+    ask: ["Bạn thấy khoản nào đang tốn nhiều nhất — ăn uống, mua sắm online, hay đi lại?"],
+    hint: [
+      [VN(/\b(cà phê|cafe|cf|trà sữa|nước uống|đồ uống|ly nước)\b/), "Tiền cà phê mỗi ngày nhìn nhỏ mà cộng lại không nhỏ đâu: khoảng 30–40 nghìn một ly thì mỗi tháng đã gần 1 triệu. Không cần bỏ hẳn cho buồn — thử pha ở nhà vài hôm trong tuần, hoặc giữ một ly mỗi ngày nhưng bỏ ly thứ hai, và săn ưu đãi của quán quen ngay trong app 😉", true],
+    ],
+    advice: [
+      "Ghi chi tiêu 1–2 tuần để biết tiền đi đâu, rồi mới quyết cắt khoản nào.",
+      "Vừa nhận lương là chuyển ngay một phần vào tài khoản tiết kiệm riêng — tiết kiệm trước, tiêu sau.",
+      "Đặt mức trần cho từng nhóm (ăn uống, mua sắm, giải trí) mỗi tuần, hết mức thì dừng.",
+      "Món muốn mua mà không gấp thì chờ 48 giờ — qua cơn thích nhiều khi không cần nữa.",
+      "Cắt khoản nhỏ lặp lại mỗi ngày (đồ uống, phí giao hàng, gói đăng ký ít dùng) thường hiệu quả hơn nhịn một món lớn.",
+    ],
+  },
+  // Học tiếng Anh / ngoại ngữ (Q34) — trước đây nhận thành FAQ "đổi ngôn ngữ app".
+  {
+    id: "learnlang",
+    howto: true,
+    re: VN(/\b((học|luyện|ôn|tự học|bắt đầu học) (lại )?(tiếng anh|tiếng nhật|tiếng hàn|tiếng trung|tiếng pháp|tiếng đức|ngoại ngữ|ielts|toeic|giao tiếp tiếng anh)|(tiếng anh|ngoại ngữ) (mất gốc|kém quá|dở quá))\b/),
+    feel: ["Muốn học ngoại ngữ là quyết định hay lắm đó 💪 Quan trọng nhất không phải học nhiều, mà là học đều."],
+    insight: ["Học ngôn ngữ giống tập thể dục: mỗi ngày một chút đều đặn hiệu quả hơn hẳn học dồn một buổi thật dài rồi bỏ cả tuần."],
+    step: ["Chọn một mục tiêu cụ thể (giao tiếp, thi chứng chỉ, đọc tài liệu công việc) — mục tiêu khác thì cách học khác."],
+    ask: ["Bạn học để giao tiếp, đi làm hay thi chứng chỉ nè?"],
+    hint: [
+      [VN(/\b((\d+|mười lăm|mười|hai mươi|ba mươi) phút|mỗi ngày (bao lâu|mấy tiếng|bao nhiêu)|có đủ không|đủ không)\b/), "15 phút mỗi ngày mà **đều đặn** là khởi đầu tốt đó — đều đặn quan trọng hơn học lâu. Để 15 phút “ra chữ” hơn: 5 phút ôn từ cũ, 5 phút nghe hoặc đọc một đoạn ngắn, 5 phút nói to / tự đặt câu. Khi đã thành thói quen thì tăng dần lên 20–30 phút, nhất là nếu bạn có mục tiêu thi trong vài tháng.", true],
+    ],
+    advice: [
+      "Đặt mục tiêu cụ thể và nhỏ: vd mỗi ngày 10 từ mới, mỗi tuần nghe hết một tập podcast ngắn.",
+      "Học ít mà đều: 15–30 phút mỗi ngày tốt hơn 3 tiếng một buổi rồi nghỉ cả tuần.",
+      "Kết hợp nghe – nói – đọc – viết; nói to thành tiếng dù chỉ một mình.",
+      "Đưa tiếng Anh vào đời sống: đổi ngôn ngữ điện thoại, xem phim có phụ đề tiếng Anh, ghi chú bằng tiếng Anh.",
+    ],
+  },
+  // Muốn thay đổi cuộc sống mà quá nhiều việc (Q95) — trước đây "chưa được học".
+  {
+    id: "overwhelm",
+    howto: true,
+    re: VN(/\b(muốn thay đổi (cuộc sống|bản thân|cuộc đời|cuộc sống của mình)|(quá nhiều|bao nhiêu|cả đống|một đống|ngập) (việc|thứ|chuyện) (phải|cần|muốn) (làm|lo|thay đổi)|ngập việc|quá tải (việc|công việc)?)\b/),
+    feel: ["Muốn thay đổi mà nhìn vào thấy cả núi việc thì dễ bị “đứng hình” lắm — không phải bạn lười, mà là đầu óc đang quá tải."],
+    insight: ["Thay đổi lớn thường bắt đầu từ một thói quen nhỏ làm đều đặn, không phải từ việc sửa mọi thứ cùng lúc."],
+    step: ["Viết hết mọi việc ra giấy cho đầu nhẹ bớt, rồi khoanh đúng MỘT việc để bắt đầu trong tuần này."],
+    ask: ["Trong mớ việc đó, điều bạn muốn thay đổi nhất là gì?"],
+    advice: [
+      "Viết hết mọi việc ra giấy — để trong đầu thì cái gì cũng thấy gấp.",
+      "Chọn đúng MỘT việc quan trọng nhất (hoặc dễ nhất) và làm nó trong tuần này; các việc khác tạm gác lại.",
+      "Chia việc đó nhỏ tới mức làm được trong 10–15 phút mỗi ngày — nhỏ mà đều thắng lớn mà bỏ dở.",
+      "Ưu tiên nền tảng trước: ngủ đủ, ăn uống, vận động nhẹ — có sức thì mới đủ năng lượng đổi những thứ khác.",
+    ],
+  },
   // ═══════════════════════ BỊ NÓI XẤU / HIỂU LẦM (01/10) ═══════════════════════
   {
     id: "gossip",
@@ -290,7 +459,7 @@ export const MORE_THEMES: Theme[] = [
   // ═══════════════════════ TÂM LÝ ═══════════════════════
   {
     id: "depress",
-    re: VN(/\b(trống rỗng|thấy trống rỗng|trầm cảm|bị trầm cảm|mất hứng thú|làm gì cũng (thấy )?chán|chán hết mọi thứ|chán mọi thứ|cái gì cũng chán|không thấy vui gì|không còn hứng thú|không muốn làm gì|không thiết gì|sống không mục đích|vô nghĩa quá|cuộc sống vô nghĩa|tê liệt cảm xúc|không cảm thấy gì|buồn kéo dài|buồn lâu rồi|không thiết sống)\b/),
+    re: VN(/\b(trống rỗng|thấy trống rỗng|trầm cảm|bị trầm cảm|mất hứng thú|(chẳng|không|chả) (có |còn |thấy )?hứng thú (làm |với )?(gì|cái gì|điều gì|chuyện gì)|hết hứng thú|làm gì cũng (thấy )?chán|chán hết mọi thứ|chán mọi thứ|cái gì cũng chán|không thấy vui gì|không còn hứng thú|không muốn làm gì|không thiết gì|sống không mục đích|vô nghĩa quá|cuộc sống vô nghĩa|tê liệt cảm xúc|không cảm thấy gì|buồn kéo dài|buồn lâu rồi|không thiết sống)\b/),
     feel: [
       "Cảm giác trống rỗng, chẳng thiết gì kéo dài như vậy nặng nề thật sự.",
       "Cảm ơn bạn đã nói ra với Lomi. Khi mọi thứ đều mất màu, việc bạn vẫn tìm người để kể đã là một điều rất can đảm.",
@@ -510,7 +679,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "compare",
-    re: VN(/\b(so sánh với người khác|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
+    re: VN(/\b(so sánh với người khác|thua kém (bạn bè|mọi người|người khác|người ta|ai)|(thấy|cảm thấy) (mình |bản thân )?thua kém|ai cũng thành công hơn|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
     feel: ["Lướt mạng thấy ai cũng thành công, còn mình thì dậm chân — cảm giác đó khó chịu lắm, Lomi hiểu 😔"],
     insight: [
       "Mạng xã hội là “cuộn phim nổi bật” của người khác, không phải cuộc sống thật của họ.",

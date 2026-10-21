@@ -52,13 +52,13 @@ import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
-import { healthFact } from "@/lib/lomiHealthFacts";
+import { healthFact, healthFactFirst } from "@/lib/lomiHealthFacts";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
-import { softenTail } from "@/lib/lomiTail";
+import { shorten, softenTail } from "@/lib/lomiTail";
 import { drugAsk, overdoseMention, prevDrugCtx } from "@/lib/lomiDrug";
 import { drugById, findDrug, sourceList } from "@/lib/lomiDrugData";
 import { asksSource, sourceSay, tidyCited } from "@/lib/lomiCite";
@@ -70,12 +70,14 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, chitChat, crisisCheckIn, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, jokeText, chitChat, crisisCheckIn, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
   bizAiPrompt,
   bizAnswer,
+  bizPractical,
+  logoColorText,
   detectBizKind,
   detectBizTopic,
   followUpChips,
@@ -116,6 +118,14 @@ import { VR, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatc
 import { replyMismatch } from "@/lib/lomiReplyGate";
 import { urgentOf } from "@/lib/lomiUrgent";
 import { vitalAsk } from "@/lib/lomiVitals";
+// 21/10: người dùng muốn câu trả lời ngắn (nhớ trên máy này; lỗi bộ nhớ trình duyệt thì coi như chưa đặt).
+const SHORT_KEY = (uid: string) => `lmld:lomi-short:${uid}`;
+function shortPref(uid: string): boolean {
+  try { return localStorage.getItem(SHORT_KEY(uid)) === "1"; } catch { return false; }
+}
+function setShortPref(uid: string, on: boolean) {
+  try { if (on) localStorage.setItem(SHORT_KEY(uid), "1"); else localStorage.removeItem(SHORT_KEY(uid)); } catch { /* bỏ qua */ }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TRỢ LÝ AI (#18) — chỉ thành viên Membership còn hạn. 30/09: bỏ giới hạn 20 câu/ngày theo ý Kir
@@ -589,6 +599,11 @@ export function AiChat({
         const soft = softenTail(reply.content, prevA?.content ?? "", !prevA?.talk && !prevA?.heart);
         if (soft !== reply.content) reply = { ...reply, content: soft };
       }
+      // 21/10 (QA Q35): đã nói không thích câu trả lời dài → rút gọn câu đáp dài (trừ câu có ý an toàn — lib/lomiTail.shorten).
+      if (shortPref(user.id) && !reply.tarot) {
+        const sh = shorten(reply.content);
+        if (sh !== reply.content) reply = { ...reply, content: sh };
+      }
     }
     if (reply.stuck) {
       recordStuck(
@@ -645,7 +660,7 @@ export function AiChat({
     rememberBiz(user.id, ctx);
     return localReply(asked, {
       role: "assistant",
-      content: bizAnswer(ctx, topic, more),
+      content: (!more && bizPractical(asked, ctx)) || bizAnswer(ctx, topic, more),
       local: true,
       biz: { type: ctx.type, noun: ctx.noun, topic },
       quick: followUpChips(topic),
@@ -1239,6 +1254,8 @@ export function AiChat({
           });
         const kind = detectBizKind(q);
         const ctx: BizCtx = { ...b, ...(kind.type ? kind : {}) };
+        // 21/10: "vậy cần chuẩn bị bao nhiêu tiền?", "khai trương ngày nào tốt?" ngay sau khi kể định mở quán.
+        if (bizPractical(q, ctx)) return bizReply(q, ctx, b.topic ?? "opening");
         const more = !topicFromChip(q) && isMoreIdeas(q);
         const tp = topicFromChip(q) ?? (more ? (b.topic ?? "offer") : detectBizTopic(q));
         if (tp) return bizReply(q, ctx, tp, more);
@@ -1325,7 +1342,10 @@ export function AiChat({
         if (g?.action === "reply") return localReply(q, { role: "assistant", content: g.reply.text, local: true, quick: g.reply.quick, ...keepHealth });
         if (g?.action === "skip") gateSkip = g.intent;
         // Giao tiếp cơ bản: ưu tiên câu đáp sẵn của chitChat (nhớ tên, chào theo giờ…), không có thì dùng câu của gate.
+        if (g?.action === "social" && g.reply.intent === "prefshort") setShortPref(user.id, true);
         if (g?.action === "social") {
+          // (21/10: xin kể chuyện vui → kể luôn, không để luật "chán quá" của chitChat bắt trước)
+          if (g.reply.intent === "fun") return localReply(q, { role: "assistant", content: jokeText(q), local: true, ...keepHealth });
           const cc = g.preferChit ? chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name), raw) : null;
           return localReply(q, { role: "assistant", content: cc?.text ?? g.reply.text, local: true, quick: cc?.quick, ...keepHealth });
         }
@@ -1394,7 +1414,7 @@ export function AiChat({
           return localReply(q, { role: "assistant", content: ei.text, local: true, health: hs ? { subject: hs.subject, label: hs.label, diet: hs.diet, cond: hs.cond } : {} });
         }
         if (ei?.intent === "capability") return localReply(q, { role: "assistant", content: ei.text, local: true });
-        if (ei?.intent === "food_place") return replyDishShops(q, ei.dish);
+        if (ei?.intent === "food_place" && !(looksLikeBizQuestion(q) && detectBizTopic(q) === "opening")) return replyDishShops(q, ei.dish);
         if (ei?.intent === "food_choice") return localReply(q, { role: "assistant", content: ei.text!, local: true, quick: ei.quick, dish: ei.dish, dishPick: true });
         // Chưa nhắc món nào ("giờ ăn gì", "a đói mà không biết ăn gì") → gợi ý món, như "Hôm nay ăn gì".
         // 09/10: đang theo chuyện người ốm mà hỏi "nên cho bé ăn gì" / "nên ăn gì" → là hỏi ăn uống cho người bệnh, không phải nhờ gợi ý quán.
@@ -1426,7 +1446,9 @@ export function AiChat({
       // f0) Kể triệu chứng / cảm giác → tra từ điển (lib/lomiSymptoms): triệu chứng A, B, C → bệnh hay gặp,
       //     nên làm / kiêng gì / khám khoa nào; cảm giác G, J, K → trạng thái tâm lý → nên làm gì.
       //     Cộng dồn với những gì đã kể ở tin trước khi đang tâm sự.
-      if (!en && !gateSkip && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+      // 21/10 (QA Q38): đang bàn chuyện tiết kiệm mà hỏi "tiền cà phê mỗi ngày thì sao" → chuyện TIỀN, không phải thẻ caffeine.
+      const moneyTalk = lastA?.heart === "saving" && VN(/\b(tiền|chi tiêu|tốn|đắt|rẻ|giá)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(sức khoẻ|sức khỏe|bệnh|hại|tốt không|có sao|mất ngủ|tim)\b/).test(` ${normalizeVi(q)} `);
+      if (!en && !gateSkip && !moneyTalk && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = heartOn || !!hCtx;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const umbrellaMed = async (mt: MedTopic, mr: MedReply, food?: string | null, shown?: string): Promise<MedReply> => {
@@ -1436,6 +1458,14 @@ export function AiChat({
           return renderUmbrella(mt, subs, mr.aspect, food, shown);
         };
         const nq = ` ${normalizeVi(q)} `;
+        // 21/10 (QA Q44/Q48/Q50): câu hỏi kiến thức rất cụ thể có bài riêng → trả lời đúng câu đó trước thẻ bệnh chung.
+        {
+          const f1 = bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : []) ? null : healthFactFirst(q);
+          if (f1) {
+            topicHit("health");
+            return localReply(q, { role: "assistant", content: f1, local: true, health: hCtx ?? {}, sx: inTalk ? lastA?.sx : undefined });
+          }
+        }
         // 20/10 — MẸO DÂN GIAN · THUỐC NAM · THUỐC BẮC (lib/lomiFolk): "lá tía tô có tác dụng gì", "cháo cóc có tốt không",
         //   "mẹo dân gian trị ho", "hà thủ ô uống được không" → dân gian dùng gì · nghiên cứu nói gì · ai không nên dùng (có nguồn).
         //   Vị chưa có nguồn đáng tin (kỷ tử, táo tàu…) → nói thật là chưa đối chiếu được. Câu có dấu hiệu cấp cứu thì để mạch triệu chứng.
@@ -1857,7 +1887,11 @@ export function AiChat({
     //    doanh (1b), trừ khi FAQ khớp đúng câu hỏi về CÁCH DÙNG app (nhận/đăng ưu đãi, tạo doanh nghiệp…).
     // 0b) Chào hỏi, cảm ơn, tạm biệt… → đáp lại tự nhiên.
     // 0c) Tìm chỗ / ưu đãi THẬT trong app, "hôm nay ăn gì?" (đổi món → bốc chỗ khác, không trùng chỗ cũ).
-    if (!forceAi && !en && !gateSkip) {
+    // 21/10 (QA Q31/Q39): "a đang tính mở quán cà phê", "muốn mở tiệm nail" là chuyện KINH DOANH, không phải đi tìm quán / món;
+    //   "có gì vui kể anh nghe đi" (Q6) là muốn nghe chuyện, không phải tìm chỗ đi chơi.
+    const bizOpening = looksLikeBizQuestion(q) && detectBizTopic(q) === "opening";
+    const tellMe = VN(/\bkể (cho )?(anh|a|em|e|mình|tôi|tui|chị|c|tớ|t) nghe\b/).test(` ${normalizeVi(q)} `);
+    if (!forceAi && !en && !gateSkip && !bizOpening && !tellMe) {
       const it = detectSearch(q);
       // "Hôm nay ăn gì / uống gì" → gợi ý món trước (chọn món rồi mới tìm quán).
       if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q) && !illMeal(q)) return replyDishes(q, it.mode === "drink");
@@ -1951,6 +1985,11 @@ export function AiChat({
     if (!faq && cut && lastA && !en) {
       const back = answerFromPrev(q, lastA.content);
       if (back) return localReply(q, { role: "assistant", content: `Như Lomi vừa nói ở trên nè: ${back}`, local: true, faqId: lastA.faqId, quick: lastA.quick });
+    }
+    // 21/10 (QA Q37): chọn màu logo (kèm màu vừa nói thích ở câu trước).
+    if (!forceAi && !en) {
+      const lc = logoColorText(q, [...msgs].reverse().find((m) => m.role === "user")?.content ?? "");
+      if (lc) return localReply(q, { role: "assistant", content: lc, local: true });
     }
     const bizQ = !forceAi && looksLikeBizQuestion(q);
     // Câu hỏi xin LỜI KHUYÊN kinh doanh (giữ khách, hút khách lúc vắng, giá, khai trương, dịp lễ, bài đăng)

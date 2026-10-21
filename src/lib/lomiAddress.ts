@@ -33,6 +33,7 @@ const THIRD = VR(/(^|\s)(anh|a|chị|c|em|e|ông|bà|cô|chú)\s+(ấy|ta|kia|đ
 const THIRD_NAME = VR(/(^|\s)(anh|a|chị|c|em|e|ông|bà|cô|chú|bác)\s+(\p{Lu}\p{Ll}*)/gu);
 // Người dùng GỌI Lomi: "lomi e đang…", "lomi em ơi", "em ơi", "e ơi cho hỏi" → Lomi là "em".
 const CALL_LOMI_EM = VR(/(^|\s)(lomi\s+(em|e)|(em|e)\s+lomi|(em|e)\s+ơi+)(?=\s|$|[,.!?])/iu);
+const ASK_LOMI_EM = VR(/(^|[,.!?]\s*)(em|e)\s+(có thể|có biết|có hiểu|có nhớ|làm ơn|giúp (anh|a|chị|c|mình|tui|tôi)|cho (anh|a|chị|c) (hỏi|xin|biết))(?=\s|$|[,.!?])/iu);
 // Người dùng gọi Lomi là anh/chị ("anh ơi", "chị ơi", "lomi anh") — Lomi vẫn xưng "Lomi" (giữ persona).
 const CALL_LOMI_AC = VR(/(^|\s)(lomi\s+(anh|a|chị|c)|(anh|a|chị|c)\s+ơi+)(?=\s|$|[,.!?])/iu);
 
@@ -73,10 +74,12 @@ export function detectAddr(raw: string): Addr | null {
   // Bỏ ngôi thứ ba có tên riêng trước khi hạ chữ thường.
   const noNames = nfc.replace(THIRD_NAME, (m0, pre: string, _p: string, name: string) => (name.length > 1 ? pre : m0));
   const t = noNames.toLowerCase();
-  const callsEm = CALL_LOMI_EM.test(t);
+  // 21/10 (QA Q25): "Em có thể giúp anh viết…", "em có biết…" — "em" ở đây là GỌI Lomi để nhờ / hỏi, không phải người dùng tự xưng em.
+  const askLomiEm = ASK_LOMI_EM.test(t);
+  const callsEm = CALL_LOMI_EM.test(t) || askLomiEm;
   const callsAC = CALL_LOMI_AC.test(t);
   // Bỏ phần GỌI Lomi và ngôi thứ ba — phần còn lại mới là chỗ người dùng tự xưng.
-  const cleaned = t.replace(CALL_LOMI_EM, " ").replace(CALL_LOMI_AC, " ").replace(THIRD, " ");
+  const cleaned = t.replace(CALL_LOMI_EM, " ").replace(ASK_LOMI_EM, " ").replace(CALL_LOMI_AC, " ").replace(THIRD, " ");
   let self: Addr | null = null;
   for (const [re, a] of SELF) if (re.test(cleaned)) { self = a; break; }
   if (!self) for (const [re, a] of OBJ) if (re.test(cleaned)) { self = a; break; }

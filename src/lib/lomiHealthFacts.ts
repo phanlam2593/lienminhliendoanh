@@ -13,7 +13,7 @@ import { VR, VN } from "@/lib/viMatch";
 // để "cf?", "đi cà phê không", "trà sữa ở đâu ngon" không bị đáp thành bài sức khoẻ (01/10 r3, test thật trên app).
 // src (15/10, audit sức khoẻ): nguồn đã đối chiếu cho đúng các ý trong câu trả lời; không có = kiến thức phổ thông CHƯA gắn nguồn
 //   (câu đáp ghi rõ điều đó). Các con số (lượng caffeine, giờ ngủ, lượng nước, phút vận động…) chỉ giữ khi khớp nguồn.
-type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string };
+type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string; checked?: string; first?: boolean };
 const HEALTH_CUE =
   VN(/\b(có sao|có hại|có tốt|tốt không|hại không|tác hại|lợi ích|ảnh hưởng|sức khoẻ|uống nhiều|nhiều quá|quá nhiều|mỗi ngày|bao nhiêu|mấy ly|mấy cốc|lúc nào|buổi tối|buổi sáng|khi đói|bụng đói|dạ dày|mất ngủ|khó ngủ|tim đập|huyết áp|mang thai|có bầu|cho con bú|trẻ em|béo|mập|tăng cân|giảm cân|đường|nghiện|cai|bỏ được|nóng trong|lợi tiểu|nên uống|có nên uống|uống được không)\b/);
 
@@ -49,6 +49,50 @@ const FACTS: Fact[] = [
     re: VN(/\b(uống bao nhiêu nước|uống nước bao nhiêu|uống đủ nước|uống ít nước|uống nhiều nước|nước lọc|thiếu nước)\b/),
     a: "💧 **Uống nước:** NHS khuyên uống khoảng **6–8 cốc / ly mỗi ngày**, đủ để **nước tiểu có màu vàng nhạt, trong**. Nước lọc, sữa ít béo, đồ uống ít / không đường, cả trà và cà phê đều được tính.\n• Nước ép trái cây, sinh tố cũng tính nhưng có đường tự do — gộp lại chỉ nên khoảng 150 ml/ngày.\n• Người bệnh thận, tim nên hỏi bác sĩ lượng nước phù hợp.",
     src: "NHS (Anh) — The Eatwell Guide, rà soát 29/11/2022",
+  },
+  {
+    // 21/10 (QA Q44): "ngủ đủ 8 tiếng mà sáng dậy vẫn mệt" — trước đây nhận bài "ngủ bao nhiêu tiếng là đủ" (không trả lời câu hỏi).
+    id: "sleeptired",
+    first: true,
+    re: VN(/\b(ngủ (đủ|nhiều|đủ giấc|đủ \d+ tiếng|\d+ tiếng|8 tiếng|tám tiếng)( \S+){0,5} (mà|nhưng|vẫn|còn) (\S+ )?(mệt|buồn ngủ|uể oải|đuối|không tỉnh|lừ đừ)|dậy (vẫn|còn|mà vẫn) (mệt|uể oải|buồn ngủ|lừ đừ)|lúc nào cũng (mệt|buồn ngủ) dù ngủ đủ)\b/),
+    a:
+      "😴 **Ngủ đủ giờ mà dậy vẫn mệt** — ngủ đủ GIỜ chưa chắc là ngủ đủ SÂU. Hay gặp:\n" +
+      "• Giấc ngủ bị chia cắt: hay thức giấc, giờ ngủ thất thường, xem điện thoại sát giờ ngủ\n" +
+      "• Lối sống: rượu bia, cà phê trong vài giờ trước khi ngủ, ăn uống thiếu chất, ít vận động\n" +
+      "• Căng thẳng, lo âu, trầm cảm cũng làm ngủ không sâu\n" +
+      "• Đôi khi là bệnh: **ngưng thở khi ngủ** (ngáy to, thở hắt / sặc khi ngủ), **thiếu máu do thiếu sắt** (hồi hộp, khó thở, da xanh), tiểu đường, bệnh tuyến giáp\n\n" +
+      "👉 Thử 2 tuần: ngủ – dậy cùng giờ (kể cả cuối tuần), cất điện thoại trước khi ngủ, tránh cà phê / rượu buổi tối.\n" +
+      "🩺 Nên đi khám nếu mệt vài tuần không rõ lý do, mệt ảnh hưởng sinh hoạt, hoặc kèm sụt cân, thay đổi tâm trạng, hay được nói là ngáy to / thở hắt khi ngủ.",
+    src: "NHS 111 Wales — Tiredness and fatigue",
+    checked: "21/10/2026",
+  },
+  {
+    // 21/10 (QA Q50): làm máy tính cả ngày → bảo vệ mắt.
+    id: "screeneyes",
+    first: true,
+    re: VN(/\b(bảo vệ mắt|mỏi mắt|khô mắt|nhức mắt|đau mắt)( \S+){0,6} (máy tính|màn hình|điện thoại|laptop)|(máy tính|màn hình|điện thoại|laptop)( \S+){0,6} (bảo vệ mắt|mỏi mắt|khô mắt|nhức mắt|hại mắt|đau mắt)\b/),
+    a:
+      "👀 **Nhìn màn hình cả ngày** — Hội Nhãn khoa Hoa Kỳ (AAO) khuyên:\n" +
+      "• Quy tắc **20-20-20**: cứ 20 phút, nhìn một vật cách khoảng 6 m (20 feet) trong ít nhất 20 giây\n" +
+      "• Đặt màn hình cách mắt khoảng **một sải tay**, hơi thấp hơn tầm mắt để nhìn hơi xuống\n" +
+      "• Chỉnh độ sáng, độ tương phản vừa mắt; giảm chói (có thể dán màn chống chói), đèn xung quanh dịu bớt\n" +
+      "• Nhìn màn hình làm mình chớp mắt ít đi — mắt khô thì dùng nước mắt nhân tạo\n" +
+      "• Đeo kính lens thì lúc làm máy tính lâu nên đổi sang kính gọng\n\n" +
+      "🩺 Mờ mắt, đau mắt, đỏ mắt kéo dài hay thị lực giảm thì nên đi khám Mắt.",
+    src: "American Academy of Ophthalmology (qua HealthDay, 22/12/2023 — cập nhật 18/01/2024)",
+    checked: "21/10/2026",
+  },
+  {
+    // 21/10 (QA Q48): bị cảm có nên tắm không.
+    id: "coldbath",
+    first: true,
+    re: VN(/\b(cảm|cảm lạnh|cảm cúm|cúm|sốt|sổ mũi|nghẹt mũi)( \S+){0,4} (có nên|được|nên|có được|có sao không khi) (tắm|gội đầu|tắm gội)|(tắm|gội đầu|tắm gội)( \S+){0,3} (khi|lúc) (bị )?(cảm|cảm lạnh|cúm|sốt)\b/),
+    a:
+      "🚿 **Bị cảm vẫn tắm được** — giữ vệ sinh còn giúp dễ chịu hơn. Chỉ cần:\n" +
+      "• Tắm nước **ấm**, nhanh gọn, trong phòng kín gió\n" +
+      "• Lau khô người và tóc ngay, mặc đồ ấm, tránh ra gió lạnh liền sau khi tắm\n" +
+      "• Đang sốt cao, mệt lả hay chóng mặt thì lau người bằng khăn ấm thay vì tắm lâu, và nên có người ở gần\n" +
+      "• Uống đủ nước, nghỉ ngơi — cảm lạnh thường tự khỏi sau khoảng 1–2 tuần",
   },
   {
     id: "sleep",
@@ -144,6 +188,11 @@ const FACTS: Fact[] = [
 ];
 
 /** Câu hỏi kiến thức sức khoẻ ("… có sao không", "ăn gì …", "nên …") → trả lời, không thì null. */
+/** 21/10: câu hỏi trúng một mục "first" (câu hỏi rất cụ thể — bị cảm có nên tắm, ngủ đủ mà vẫn mệt) → trả lời trước cả thẻ bệnh chung. */
+export function healthFactFirst(text: string): string | null {
+  const n = ` ${normStrict(text, HEALTH)} `;
+  return FACTS.some((x) => x.first && x.re.test(n)) ? healthFact(text) : null;
+}
 export function healthFact(text: string): string | null {
   const n = ` ${normStrict(text, HEALTH)} `;
   const isQ = text.includes("?") || VN(/\b(có sao|có hại|có tốt|ăn gì|uống gì|nên|bao nhiêu|thế nào|làm sao|có nên|được không|không|là đủ|đủ chưa|bao lâu|mấy tiếng|mấy ly|có mập|có béo|tác dụng phụ)\b/).test(n);
@@ -151,6 +200,6 @@ export function healthFact(text: string): string | null {
   const f = FACTS.find((x) => x.re.test(n) && (!x.cue || HEALTH_CUE.test(n)));
   if (!f) return null;
   return f.src
-    ? `${f.a}\n\n📚 Nguồn: ${f.src}. Lomi đối chiếu ngày 15/10/2026. Kiến thức tham khảo chung — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺`
+    ? `${f.a}\n\n📚 Nguồn: ${f.src}. Lomi đối chiếu ngày ${f.checked ?? "15/10/2026"}. Kiến thức tham khảo chung — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺`
     : `${f.a}\n\n(Kiến thức phổ thông Lomi tổng hợp, **chưa gắn nguồn y khoa cụ thể** — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺)`;
 }

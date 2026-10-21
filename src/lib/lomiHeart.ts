@@ -59,6 +59,8 @@ export type Theme = {
   adviceHint?: [RegExp, string][]; // câu nói trúng chi tiết người dùng kể (vd nhắc tên thuốc) → dùng thay góc nhìn ngẫu nhiên
   stepFirst?: boolean; // chuyện sức khoẻ → ngay lượt đầu đã chỉ bước nên làm (đi khám…)
   define?: string; // người dùng hỏi "X là gì" → giải thích ngắn trước
+  /** 21/10: lời khuyên là các BƯỚC theo thứ tự (cách chia tay nhẹ nhàng, cách từ chối…) → xin lời khuyên thì đưa đủ, đúng thứ tự, không bốc ngẫu nhiên hai ý. */
+  howto?: boolean;
 };
 
 // Chọn câu không lặp lại gần đây (nhớ trong phiên).
@@ -235,7 +237,7 @@ const THEMES: Theme[] = [
     ],
     insight: [
       "Người ta không thích lại không có nghĩa là bạn không đáng được thương. Chỉ là hai trái tim chưa cùng nhịp thôi.",
-      "Tình cảm không đáp lại thường làm mình tự hỏi “mình có vấn đề gì”. Nhưng hấp dẫn là chuyện rất khó giải thích, nó không phải bảng chấm điểm con người bạn.",
+      "Tình cảm không đáp lại thường làm mình tự hỏi “mình có vấn đề gì”. Nhưng hấp dẫn là chuyện rất khó giải thích, nó không phải bảng chấm điểm con người của bạn.",
       "Dám bày tỏ là một điểm mạnh. Người biết thương thật lòng như bạn rồi sẽ gặp người trân trọng điều đó.",
     ],
     step: [
@@ -274,13 +276,13 @@ const THEMES: Theme[] = [
     advice: [
       "Để ý xem họ có chủ động hỏi han, nhớ những chuyện nhỏ bạn kể, hay tìm cớ nói chuyện không — đó là tín hiệu tốt.",
       "Muốn tỏ tình thì chọn lúc riêng tư, nói ngắn gọn, chân thành, và cho họ thời gian trả lời. Đừng đặt nặng áp lực kiểu “phải trả lời ngay”.",
-      "Dù kết quả thế nào, dám thật lòng là bạn đã thắng chính mình rồi.",
+      "Dù kết quả thế nào, dám thật lòng thì bạn đã thắng chính mình rồi.",
     ],
     tarot: "người ấy có tình cảm với mình không",
   },
   {
     id: "cold",
-    re: VN(/\b(lạnh nhạt|ít nhắn tin|không nhắn tin|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
+    re: VN(/\b(lạnh nhạt|ít nhắn tin|không nhắn tin|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|không (còn )?quan tâm (mình|anh|em|tôi|tui) (như trước|nữa)|(ít|không còn) quan tâm (mình|anh|em) như trước|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
     feel: [
       "Người thương tự dưng lạnh đi, cảm giác hụt hẫng và bất an lắm 🥺",
       "Chờ tin nhắn mà không thấy đâu thì lòng cứ thấp thỏm ha. Lomi hiểu mà.",
@@ -359,7 +361,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "longdist",
-    re: VN(/\b(yêu xa|ở xa nhau|xa mặt|cách nhau xa|khác thành phố|khác nước)\b/),
+    re: VN(/\b(yêu xa|ở xa nhau|sống xa nhau|xa vợ|xa chồng|xa nhau (một thời gian|lâu|mấy tháng|cả năm)|xa mặt|cách nhau xa|khác thành phố|khác nước)\b/),
     feel: ["Yêu xa là thử thách lớn lắm, thương ai mà không được gặp thì nhớ muốn xỉu luôn 🥺", "Lomi hiểu, khoảng cách làm mọi cảm xúc to hơn — nhớ cũng nhiều hơn, lo cũng nhiều hơn."],
     insight: [
       "Yêu xa bền được khi hai người có chung một “điểm đến” — biết khi nào sẽ ở gần nhau.",
@@ -456,7 +458,7 @@ const THEMES: Theme[] = [
       // 21/10: MẤT VIỆC / thất nghiệp không phải "kiệt sức" (trước đây "a thất nghiệp 3 tháng rồi" nhận bài burnout).
       [VN(/\b(thất nghiệp|mất việc|bị đuổi việc|bị sa thải|bị cho nghỉ|chưa có việc|chưa xin được việc|tìm việc mãi|không xin được việc)\b/), "Mất việc rồi phải chờ đợi thì vừa lo tiền vừa dễ tự trách, Lomi hiểu 😔 Khoảng trống này không nói lên giá trị của bạn đâu — có những lúc thị trường việc làm chậm lại thôi.\n\nThử chia nhỏ cho đỡ nặng: mỗi ngày làm một việc nhỏ cho chuyện tìm việc (sửa CV, gửi hai ba chỗ, nhắn một người quen trong ngành), còn lại giữ nhịp ăn ngủ và ra ngoài một chút để tinh thần không xuống. Trong app cũng có mục Quẹt → Công việc (/quet) để đăng nhu cầu tìm việc nha.\n\nBạn đang tìm việc trong ngành gì?"],
 [VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [VN(/\b(sếp|quản lý)\b/), "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
-    re: VN(/\b(áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức)\b/),
+    re: VN(/\b(công việc (\S+ )?(không thuận lợi|không suôn sẻ|trục trặc|gặp khó|khó khăn|bế tắc|không ổn|tệ quá|không như ý|đi xuống|lận đận)|việc làm (không thuận lợi|khó khăn|lận đận)|áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức)\b/),
     feel: [
       "Áp lực công việc mà kéo dài thì mệt cả thân lẫn tâm luôn 😮‍💨 Bạn vất vả rồi.",
       "Lomi hiểu, đi làm mà không vui thì mỗi sáng thức dậy đều nặng nề.",
@@ -464,7 +466,7 @@ const THEMES: Theme[] = [
     ],
     insight: [
       "Kiệt sức (burnout) không phải do bạn yếu, mà do năng lượng bỏ ra lâu ngày nhiều hơn năng lượng được nạp lại.",
-      "Giá trị của bạn lớn hơn chức danh hay một công việc. Một giai đoạn khó không định nghĩa cả con người bạn.",
+      "Giá trị của bạn lớn hơn chức danh hay một công việc. Một giai đoạn khó không định nghĩa cả con người của bạn.",
       "Nhiều người đã phải thay đổi vài lần mới tìm được chỗ hợp mình. Đổi hướng không phải là thất bại.",
     ],
     step: [
@@ -734,6 +736,7 @@ function echo(text: string): string {
   const sw = t.replace(VR(/(^|\s)(mình|mềnh|tui|tôi|tớ|em|anh|a|e)(?=\s|$)/giu), "$1bạn");
   return sw.charAt(0).toLowerCase() + sw.slice(1);
 }
+const CAUSE_RE = VN(/^(vì|tại|do|tại vì|bởi vì|bởi|là do|là vì|chắc do|chắc là do|chủ yếu do|chủ yếu là)\s/);
 export const GENERIC = new Set(["sad", "tired", "love", "overthink", "anxiety", "lonely", "health"]);
 const byId = (id: string) => THEMES.find((t) => t.id === id);
 
@@ -741,12 +744,20 @@ const byId = (id: string) => THEMES.find((t) => t.id === id);
 const START_RE =
   VN(/\b(tâm sự|muốn tâm sự|tâm sự với|nói chuyện với mình|nghe mình kể|nghe mình nói|kể lomi nghe|kể cho lomi|an ủi mình|an ủi tôi|an ủi em|tư vấn tình cảm|tư vấn tâm lý|tư vấn tâm lí|cho mình lời khuyên|khuyên mình|chia sẻ với lomi|muốn chia sẻ|có ai nghe)\b/);
 // Xin lời khuyên trong câu ("làm sao để quên người cũ", "có nên quay lại không").
-const ADVICE_RE = VN(/\b(làm sao|làm thế nào|làm gì|nên làm gì|có nên|lời khuyên|khuyên|giúp mình|cách nào|phải làm sao|làm cách nào|tư vấn|gợi ý|chỉ mình|nói gì đi|ý kiến|nói sao|nói thế nào|nên nói gì|sao cho|xin lỗi sao|xin lỗi thế nào|làm lành sao)\b/);
+const ADVICE_RE = VN(/\b(làm sao|làm thế nào|làm gì|nên làm gì|có nên|lời khuyên|khuyên|giúp mình|cách nào|phải làm sao|làm cách nào|tư vấn|gợi ý|chỉ mình|nói gì đi|ý kiến|nói sao|nói thế nào|nên nói gì|sao cho|xin lỗi sao|xin lỗi thế nào|làm lành sao|bắt đầu từ đâu|nên bắt đầu|giải quyết (thế nào|sao|như nào|ra sao)|xử lý (thế nào|sao|như nào|ra sao)|nhìn nhận (thế nào|sao|như nào)|ai nên nhường)\b/);
 // "làm gì CŨNG hỏng", "nói sao cũng không nghe" — từ hỏi + "cũng" là "việc gì cũng", không phải câu xin lời khuyên.
 const UNIV_RE = VN(/\b(làm gì|làm sao|nói gì|nói sao|cách nào|thế nào) (\S+ )?cũng\b/);
 const asksAdvice = (n: string) => ADVICE_RE.test(` ${n} `) && !UNIV_RE.test(` ${n} `);
 // 11/10 — người dùng nói rõ CHỈ MUỐN ĐƯỢC NGHE ("a chỉ muốn than thôi, chưa cần lời khuyên") — nhận cả khi chưa vào mạch tâm sự.
-const LISTEN_RE = VN(/\b(chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự)\b/);
+const LISTEN_RE = VN(/\b(chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự|(chưa|không|đừng) cần (em |e |lomi |bạn |mày |m )?(phải )?(đưa |cho )?(ra )?(lời )?(khuyên|tư vấn)|(đừng|khỏi|thôi) (đưa |cho )?(ra )?(lời )?khuyên|chỉ (cần |muốn )?(em |lomi |bạn )?(lắng nghe|nghe)( và hỏi| thôi)|chỉ muốn có người (hiểu|nghe)|không muốn nghe (câu |mấy câu |lời )?(“|")?cố lên|đừng (nói|bảo|kêu) (anh |a |em |e |mình |tôi )?cố lên|cứ đưa (ra )?lời khuyên (liên tục|hoài|mãi))\b/);
+// 21/10 (QA Q96/Q97): xin "đừng nói cố lên" / "chỉ lắng nghe và hỏi vài câu" → đáp đúng yêu cầu đó, không chỉ "bạn cứ kể nha".
+const NO_CHEER = VN(/\b(cố lên)\b/);
+const ASK_ME = VN(/\b(hỏi (anh|a|em|e|mình|tôi|tui|chị|c) (vài|mấy|một vài) câu|và hỏi)\b/);
+function listenText(n: string): string | null {
+  if (NO_CHEER.test(` ${n} `)) return "Ừ, Lomi sẽ không nói “cố lên” đâu. Lomi ở đây để hiểu bạn, không phải để giục bạn phải ổn 🫶\n\nLúc này trong lòng bạn đang thấy thế nào — mệt, buồn, trống rỗng, hay là một cảm giác khó gọi tên?";
+  if (ASK_ME.test(` ${n} `)) return "Được, Lomi xin lỗi vì nãy giờ khuyên nhiều quá. Từ giờ Lomi chỉ nghe và hỏi thôi nha 🫶\n\nChuyện làm bạn buồn là chuyện gì vậy — nó mới xảy ra hay đã đeo theo bạn một thời gian rồi?";
+  return null;
+}
 // 11/10 — tự hỏi mình có MẮC một vấn đề tâm lý không ("không biết có phải a bị trầm cảm không?") — Lomi không chẩn đoán, và cũng không
 // đáp bằng bài "trầm cảm" như thể đã chắc là vậy.
 const DX_WORD: [RegExp, string][] = [
@@ -920,7 +931,7 @@ function chipsFor(_t: Theme | undefined): string[] {
 }
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
-const FIRST = ["grief", "suspect"];
+const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space"];
 function themeOf(n: string): Theme | undefined {
   const m = ` ${n} `;
   const t = THEMES.find((x) => FIRST.includes(x.id) && x.re.test(m)) ?? THEMES.find((x) => x.re.test(m));
@@ -973,6 +984,14 @@ function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp
     parts.push(hintOf() ?? pick(`${t.id}:ins`, t.insight));
     parts.push(`Thêm vài bước nhỏ bạn thử nha:\n• ${pick(`${t.id}:step`, t.step)}\n• ${pick(`${t.id}:step`, t.step)}`);
     parts.push(pick(`${t.id}:ask`, t.ask));
+    return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
+  }
+  if (adviceAsked && t.howto && given === 0) {
+    advGiven.set(t.id, t.advice.length);
+    parts.push(hintOf() ?? pick(`${t.id}:feel`, t.feel));
+    parts.push(`Lomi gợi ý vầy nha:\n${t.advice.map((x) => `• ${x}`).join("\n")}`);
+    const q1 = pickAsk(t, said, avoidAsk);
+    if (q1) parts.push(q1);
     return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
   }
   if (adviceAsked) {
@@ -1032,6 +1051,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   if (dx) return { ...selfDxReply(dx, undefined, false, {}), story: storyOf(text) };
   if (HOPELESS_RE.test(` ${n} `)) return { ...hopelessReply(undefined, false), story: storyOf(text) };
   // Nói rõ chỉ muốn được nghe → vào mạch tâm sự ở chế độ CHỈ NGHE (không khuyên) ngay từ câu đầu.
+  if (LISTEN_RE.test(` ${n} `) && listenText(n)) return { text: listenText(n)!, quick: [], theme: t && !GENERIC.has(t.id) ? t.id : "open", listen: true, story: storyOf(text) };
   if (LISTEN_RE.test(` ${n} `))
     return t && !GENERIC.has(t.id)
       ? { text: `${pick(`${t.id}:feel`, t.feel)}\n\nLomi chỉ nghe thôi, không khuyên gì hết 🫶 Bạn cứ kể nha.`, quick: [], theme: t.id, listen: true, story: storyOf(text) }
@@ -1064,6 +1084,10 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   const cur = byId(prev);
   const chip = CHIP_THEME[text.trim()];
   if (chip) return themeReply(byId(chip)!, n, false);
+  // 21/10 (QA Q40): mới mở lời "muốn tâm sự chuyện tình cảm" (chưa kể gì) mà hỏi ngay "có nên tiếp tục không" → hỏi chuyện trước,
+  //   không đưa bài "ở lại hay rời đi" khi còn chưa biết hai người đang gặp chuyện gì.
+  const ea = earlyAsk(n, prev, depth);
+  if (ea) return ea;
   if (text.trim() === BETTER || VN(/\b(ổn hơn rồi|đỡ hơn rồi|nhẹ lòng hơn|nhẹ nhõm hơn|ổn rồi|không sao rồi|cảm ơn lomi|cảm ơn nhiều|cảm ơn nha|cảm ơn|cám ơn lomi|cám ơn nhiều|cám ơn nha|cám ơn)\b/).test(` ${n} `))
     return {
       text: prev.startsWith("ev:") && eventById(prev.slice(3))?.good
@@ -1075,7 +1099,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
     };
   if (text.trim() === LISTEN_ONLY || LISTEN_RE.test(` ${n} `))
     return {
-      text: pick("lonly", [
+      text: listenText(n) ?? pick("lonly", [
         "Okie, Lomi chỉ nghe thôi, không phán xét, không khuyên gì hết 🫶 Bạn cứ kể nha.",
         "Được luôn, Lomi ngồi đây nghe bạn nè 🌿 Muốn nói gì cứ nói.",
       ]),
@@ -1151,7 +1175,8 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // Đang nói một cảm xúc chung (buồn, lo, cô đơn…) mà kể thêm một MỆNH ĐỀ có nhắc "bạn bè / công việc / gia đình" ("bạn bè ai cũng bận",
   // "công việc nhiều quá") → đó là chi tiết của chính nỗi buồn / lo đó, không phải mở chuyện "mâu thuẫn với bạn bè". (Chỉ nói trống tên
   // chủ đề — "chuyện công việc" — thì vẫn chuyển sang chủ đề đó như trước.)
-  if (t && cur && t.id !== cur.id && GENERIC.has(cur.id) && NOUNISH.has(t.id) && !!ctx.mirror && !!ctx.clause && words <= 9 && !emotionOf(n) && !adviceAsked && !DUNNO_RE.test(` ${n} `) && depth >= 2 && prev !== "open") t = undefined;
+  if (t && cur && t.id !== cur.id && GENERIC.has(cur.id) && NOUNISH.has(t.id) && !!ctx.mirror && !!ctx.clause && words <= 9 && !emotionOf(n) && !adviceAsked && !DUNNO_RE.test(` ${n} `) && !CAUSE_RE.test(n) && depth >= 2 && prev !== "open") t = undefined;
+  //   (21/10, QA Q36: câu nêu NGUYÊN NHÂN — "vì công việc không thuận lợi" — là mở đúng chuyện đó: chuyển sang chủ đề công việc.)
   // Vừa mở lời ("a không biết làm sao nữa") rồi kể dần ("công ty sắp phá sản" → "a là trụ cột gia đình"): câu kể về CHÍNH MÌNH có nhắc
   // "gia đình / công việc" là chi tiết của chuyện đang kể, không phải mở chuyện "mâu thuẫn gia đình".
   if (t && !cur && prev === "open" && depth >= 3 && NOUNISH.has(t.id) && !!ctx.self && words <= 9 && !emotionOf(n) && !adviceAsked) t = undefined;
@@ -1472,7 +1497,17 @@ const POS_THEMES = new Set(["newlove"]);
 const STOP = new Set("khong nhung nhieu duoc nguoi minh chuyen muon dang thoi cung nhau biet nghe thay luon chua".split(" "));
 
 /** Kể tiếp một chuyện đời thường không vui (kẹt xe, mắc mưa…) bằng một mẩu ngắn không khớp bài nào → đáp bám nội dung, đúng tông. */
+function earlyAsk(n: string, prev: string, depth: number): HeartReply | null {
+  if (!((prev === "love" || prev === "open") && depth <= 2 && VN(/\b(có nên|nên) (tiếp tục|chia tay|dừng lại|buông|ở lại|quay lại)( hay không| không| nữa không)?\b/).test(` ${n} `))) return null;
+  return {
+    text: "Chuyện này quan trọng nên Lomi không muốn trả lời đại khi chưa hiểu chuyện của bạn 🙏\n\nBạn kể Lomi nghe chút nha: hai người đang gặp chuyện gì, và điều gì làm bạn phân vân muốn dừng lại? Lomi sẽ cùng bạn nhìn rõ hơn — còn quyết định thì vẫn là của bạn.",
+    quick: [],
+    theme: "stayorgo",
+  };
+}
 export function heartFollow(text: string, prev: string, listen: boolean, depth: number, lastText = "", story = "", ctx: HeartCtx = {}): HeartReply {
+  const ea = earlyAsk(normStrict(text, HEART), prev, depth);
+  if (ea) return ea;
   return follow(normStrict(text, HEART), byId(prev), prev, listen, depth, lastText, story, ctx);
 }
 

@@ -527,8 +527,9 @@ describe("Chuẩn hoá tư vấn (tiếp): đúng lớp trả lời cho câu k�
   it("người dùng xin phép KỂ ('a kể chuyện này nha') → mời kể, không kể chuyện cười; 'kể chuyện cười đi' vẫn kể", async () => {
     const m = await last(["a kể chuyện này nha"]);
     expect(m.content).toMatch(/kể đi/i);
-    expect(m.content).not.toMatch(/robot|Tại sao cái điện thoại|cà phê gì/);
-    expect((await last(["kể chuyện cười đi e"])).content).toMatch(/robot|điện thoại|cà phê|😅|🥲|🔥/);
+    // (21/10: thêm các câu đố vui "Đố bạn: …" vào kho chuyện cười — cả hai chiều kiểm tra đều tính luôn kiểu câu đó)
+    expect(m.content).not.toMatch(/robot|Tại sao cái điện thoại|cà phê gì|Đố (bạn|anh|em|chị)/);
+    expect((await last(["kể chuyện cười đi e"])).content).toMatch(/robot|điện thoại|cà phê|Đố (bạn|anh|em|chị)|😅|🥲|🔥/);
   }, T);
   it("'bạn cũ', 'được khen' không bị đọc thành chuyện xui; 'e thất tình' → Lomi gọi đúng là em", async () => {
     const a = await last(["hôm qua a gặp lại bạn cũ"]);

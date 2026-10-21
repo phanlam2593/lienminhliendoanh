@@ -261,7 +261,7 @@ const TOPIC_RE: [BizTopic, RegExp][] = [
   ["review", VN(/\b(đánh giá|review|phàn nàn|chê |bị chê|feedback|góp ý)\b/)],
   ["slow", VN(/\b(vắng|ế ẩm|ít khách|không có khách|thấp điểm|mùa thấp|không ai|bán chậm|ế hàng|(buôn bán|bán hàng|quán|shop|tiệm|phòng) (bị |hơi |quá |)(ế|ẩm|chậm|vắng))\b/)],
   ["holiday", VN(/\b(dịp lễ|ngày lễ|lễ tết|tết|noel|giáng sinh|valentine|8 3|20 10|20 11|trung thu|halloween|black friday|mùa lễ)\b/)],
-  ["opening", VN(/\b(khai trương|mới mở|sắp mở|mở quán|mở tiệm|mở shop|mở cửa hàng|mới khai trương)\b/)],
+  ["opening", VN(/\b(khai trương|mới mở|sắp mở|mở quán|mở tiệm|mở shop|mở cửa hàng|mới khai trương|mở (một |cái |thêm |1 )?(quán|tiệm|shop|cửa hàng|spa|salon|nhà hàng|tiệm nail|quán cà phê|quán cafe))\b/)],
   ["price", VN(/\b(định giá|tăng giá|bảng giá|đặt giá|giá bán|giá cả|combo)\b/)],
   ["loyal", VN(/\b(khách quen|giữ khách|giữ chân|quay lại|trung thành|tích điểm|chăm sóc khách)\b/)],
   ["newcust", VN(/\b(khách mới|hút khách|thu hút|quảng bá|thêm khách|tăng khách|marketing|tiếp thị|nhiều khách|nổi tiếng|khách biết)\b/)],
@@ -476,4 +476,64 @@ export function bizAiPrompt(ctx: BizCtx, topic: BizTopic): string {
 export function topicFromChip(text: string): BizTopic | undefined {
   const t = text.trim();
   return (Object.keys(TOPIC_LABEL) as BizTopic[]).find((k) => TOPIC_LABEL[k] === t);
+}
+
+// ── 21/10 (QA Q31/Q39): câu hỏi THỰC TẾ khi mở chỗ kinh doanh — vốn bao nhiêu, chọn ngày khai trương ──
+// Không đưa con số chung (tuỳ khu vực, diện tích, quy mô — nói đại dễ làm người ta tính sai), chỉ các khoản cần tính + cách tự ước lượng.
+// Ngày tốt xấu theo phong tục thì Lomi không xem — nói thật, gợi ý tiêu chí thực tế.
+const COST_ASK = VN(/\b(bao nhiêu tiền|bao nhiêu vốn|vốn bao nhiêu|cần bao nhiêu|tốn bao nhiêu|mất bao nhiêu|chi phí|cần vốn|nhiêu vốn|bao nhiêu là đủ)\b/);
+const DATE_ASK = VN(/\b(ngày nào|chọn ngày|ngày đẹp|ngày tốt|hôm nào|bữa nào|giờ đẹp|giờ tốt|xem ngày|tháng nào)\b/);
+export function bizPractical(text: string, ctx: BizCtx): string | null {
+  const n = ` ${normStrict(text, BIZ)} `;
+  const noun = nounFor(ctx.type, ctx.noun);
+  const opening = ctx.topic === "opening" || detectBizTopic(text) === "opening";
+  if (COST_ASK.test(n) && (opening || VN(/\b(mở|khởi nghiệp|bắt đầu)\b/).test(n)))
+    return (
+      `Vốn mở ${noun} chênh nhau rất nhiều theo khu vực, diện tích và quy mô, nên Lomi không đưa một con số chung được — nói đại dễ làm bạn tính sai. Bạn ước tính theo các khoản này nha:\n` +
+      "• Mặt bằng: tiền cọc (thường vài tháng) + tiền thuê tháng đầu\n" +
+      "• Sửa chữa, trang trí, bàn ghế, bảng hiệu\n" +
+      "• Máy móc, dụng cụ cần cho nghề\n" +
+      "• Hàng / nguyên liệu nhập ban đầu\n" +
+      "• Giấy phép kinh doanh và các giấy tờ theo ngành (vd an toàn thực phẩm nếu bán đồ ăn uống)\n" +
+      "• Lương nhân viên tháng đầu, chi phí quảng bá khai trương\n" +
+      "• Quỹ dự phòng đủ chi phí vận hành **3–6 tháng** — chỗ mới thường cần thời gian mới có lãi\n\n" +
+      "Mẹo: hỏi 2–3 chủ chỗ cùng loại ở khu bạn định mở để biết giá thuê, giá nhập thực tế, rồi lập bảng dự trù trước khi xuống tiền."
+    );
+  if (DATE_ASK.test(n) && (opening || VN(/\b(khai trương|mở cửa|mở hàng)\b/).test(n)))
+    return (
+      "Chọn ngày khai trương thì Lomi gợi ý theo hướng thực tế nha:\n" +
+      "• Chọn ngày đã chuẩn bị xong hết: giấy tờ, hàng hoá, nhân viên đã chạy thử\n" +
+      "• Cuối tuần (thứ 6 – Chủ nhật) hoặc gần đợt lương thường nhiều người rảnh, dễ ghé hơn\n" +
+      "• Tránh ngày dễ mưa to hoặc trùng dịp mọi người bận việc khác\n" +
+      "• Muốn xem ngày theo phong tục (ngày hoàng đạo, hợp tuổi) thì hỏi người rành hoặc xem lịch vạn niên — phần này Lomi không xem được\n\n" +
+      "Chốt ngày xong thì đăng bài đếm ngược 3–5 ngày trước để khách biết mà ghé nha."
+    );
+  return null;
+}
+
+// ── 21/10 (QA Q37): chọn màu logo — gợi ý theo cảm giác màu thường gợi ra, kèm màu người dùng vừa nói thích (nếu có) ──
+const LOGO_ASK = VN(/\b(logo|nhận diện thương hiệu|màu thương hiệu|màu chủ đạo|bảng hiệu)\b.*\b(màu (gì|nào|sao)|chọn màu|phối màu|màu nào)\b|\b(màu (gì|nào)|chọn màu|phối màu)\b.*\b(logo|thương hiệu|bảng hiệu)\b/);
+const COLOR_NOTE: [RegExp, string][] = [
+  [VN(/\bxanh (dương|biển|navy)\b/), "Xanh dương gợi cảm giác tin cậy, chuyên nghiệp — hợp dịch vụ, công nghệ, tài chính."],
+  [VN(/\bxanh (lá|lục|mint|rêu)\b/), "Xanh lá gợi tự nhiên, tươi mát, sức khoẻ — hợp đồ ăn sạch, spa, cây cảnh."],
+  [VN(/\bxanh\b/), "Bạn thích màu xanh thì cứ lấy xanh làm màu chính nha — xanh dương cho cảm giác tin cậy, chuyên nghiệp; xanh lá cho cảm giác tươi mát, tự nhiên."],
+  [VN(/\b(đỏ|cam)\b/), "Đỏ / cam nổi bật, năng động, gợi cảm giác thèm ăn — hợp quán ăn, đồ uống, cửa hàng bán lẻ."],
+  [VN(/\b(vàng)\b/), "Vàng vui tươi, dễ thấy từ xa — nhưng nên đi kèm một màu đậm để chữ dễ đọc."],
+  [VN(/\b(đen|trắng|xám)\b/), "Đen / trắng / xám cho cảm giác sang, tối giản — hợp thời trang, studio, quán phong cách."],
+  [VN(/\b(hồng|tím)\b/), "Hồng / tím mềm mại, sáng tạo — hợp nail, mỹ phẩm, tiệm bánh, quà tặng."],
+];
+export function logoColorText(text: string, prevUser = ""): string | null {
+  const n = ` ${normStrict(text, BIZ)} `;
+  if (!LOGO_ASK.test(n)) return null;
+  const liked = ` ${normStrict(`${text} ${prevUser}`, BIZ)} `;
+  const note = COLOR_NOTE.find(([re]) => re.test(liked))?.[1];
+  return (
+    "Chọn màu logo thì Lomi gợi ý vầy nha 🎨\n" +
+    (note ? `• ${note}\n` : "") +
+    "• Chọn màu theo **cảm giác muốn khách nhớ tới**: tin cậy (xanh dương), tươi mát (xanh lá), năng động / ngon miệng (đỏ, cam), sang trọng (đen, vàng đồng), dịu dàng (hồng, pastel)\n" +
+    "• Tối đa **2–3 màu**: một màu chính, một màu phụ, một màu nhấn\n" +
+    "• Thử in logo **trắng đen** và thu nhỏ cỡ icon — vẫn rõ là ổn\n" +
+    "• Nhìn qua logo các chỗ cùng ngành quanh bạn để chọn màu khác biệt, dễ nhận ra\n\n" +
+    "Bạn kinh doanh gì để Lomi gợi ý màu sát hơn nè?"
+  );
 }

@@ -19,6 +19,7 @@ const TAILS: RegExp[] = [
   new RegExp(`\\s*Sao rồi nè\\?$`, "u"),
   new RegExp(`\\s*Chuyện sao vậy(?: ${YOU})?,? kể ${ME} nghe với[.!]?$`, "u"),
   new RegExp(`\\s*Có chuyện gì vậy(?: ${YOU})?,? kể ${ME} nghe với[.!]?$`, "u"),
+  new RegExp(`\\s*Sao vậy(?: ${YOU})?,? kể ${ME} nghe với[.!]?$`, "u"),
   new RegExp(`\\s*À à\\.?$`, "u"),
 ];
 const NEG = /(🥺|😔|😣|😩|😢|😭|💔|😞|😥|😟)/u;
@@ -63,4 +64,31 @@ export function softenTail(content: string, prev = "", firstOfStory = false): st
   if (usesEm) soft = soft.replace(/Lomi/g, "em").replace(/^em/, "Em");
   // Câu gốc chỉ là "X hả 😄" + đuôi hỏi → "X hả 😄 Lomi nghe nè." (giữ emoji, thêm lời đáp không hỏi).
   return `${head} ${soft}`;
+}
+
+// ── 21/10 (QA Q35): người dùng nói "không thích câu trả lời dài" → các câu đáp dài sau đó được rút gọn ──
+// Giữ đoạn đầu và tối đa 3 gạch đầu dòng mỗi đoạn, dừng khi đủ ~380 ký tự; kèm một câu mời hỏi kỹ hơn.
+// Câu có cảnh báo cấp cứu / đường dây hỗ trợ / dặn đi khám thì KHÔNG rút gọn (thà dài còn hơn mất ý an toàn).
+const SAFETY = /(115|cấp cứu|Ngày Mai|đi khám ngay|không phải một mình|🚨|⚠️|🔥)/u;
+export function shorten(content: string): string {
+  if (content.length <= 450 || SAFETY.test(content)) return content;
+  const paras = content.split(/\n{2,}/);
+  const out: string[] = [];
+  let len = 0;
+  let cut = false;
+  for (const p of paras) {
+    if (len > 380) { cut = true; break; }
+    const lines = p.split("\n");
+    const bullets = lines.filter((l) => /^\s*(•|-|\d+[.)]|[①-⑨])/u.test(l));
+    let keep = p;
+    if (bullets.length > 3) {
+      let b = 0;
+      keep = lines.filter((l) => !/^\s*(•|-|\d+[.)]|[①-⑨])/u.test(l) || ++b <= 3).join("\n");
+      cut = true;
+    }
+    out.push(keep);
+    len += keep.length;
+  }
+  if (!cut && out.length === paras.length) return content;
+  return `${out.join("\n\n")}\n\n(Muốn Lomi nói kỹ hơn thì cứ bảo nha.)`;
 }

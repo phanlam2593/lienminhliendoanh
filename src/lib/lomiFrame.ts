@@ -331,7 +331,7 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
     //  • việc NGƯỜI KHÁC làm với người đó ("vợ a bị sếp mắng") cũng vậy: đó là chuyện của vợ với sếp, không phải của người nói với vợ.
     if (c.heart && (person || pet ? (f.subjectCls === "partner" || f.subjectCls === "boss") && (c.heart === "rel" || REL_THEMES.has(c.heart)) && p.kind !== "event" && !(adverse && agent) : c.heart.startsWith("ev:"))) return null;
     // Chê một nét của người đó ("lười lắm", "nấu ăn dở lắm") → hỏi chuyện; gặp chuyện không may ("mới chia tay") → hỏi han.
-    if (person && (p.kind === "quality" || !!p.qual || habit)) return { intent: "frame:third_neg", talk: true, text: `${subj} ${habit ? `hay ${p.head}` : what} hả 😅 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+    if (person && (p.kind === "quality" || !!p.qual || habit)) return { intent: "frame:third_neg", talk: true, text: `${subj} ${habit ? `hay ${p.head}` : what} hả ${VN(/\b(tổn thương|làm đau|bỏ rơi|lừa|phản bội|xúc phạm|coi thường|chửi|đánh)\b/).test(` ${what} `) ? "🥺" : "😅"} Chuyện sao vậy bạn, kể Lomi nghe với.` };
     if (person) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 🥺 ${pick(["Nghe mà thương. Giờ sao rồi bạn?", "Chuyện sao vậy bạn, kể Lomi nghe với."])}` };
     if (pet) return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 🥺 Tội bé ghê. Giờ sao rồi bạn?` };
     return { intent: "frame:third_neg", talk: true, text: `${subj} ${what} hả 😣 ${p.kind === "quality" ? "Nghe là thấy bực rồi ha." : "Xui ghê ha."} Giờ bạn tính sao?` };
