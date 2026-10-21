@@ -344,8 +344,14 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
   // 3) Vừa bói xong, hỏi nghĩa xuôi / ngược của CHÍNH các lá vừa rút → giải theo trải bài đó, không rút bài mới.
   if (rd && VR(/\b(nguoc|xuoi)\b/).test(n) && words <= 10 && !detectTarot(q)) {
     const r = rd;
+    // 21/10 (audit P3): hỏi ĐÚNG một chiều ("nếu lá ngược thì sao") → mỗi lá chỉ đọc nghĩa chiều đó (lá đang ra đúng chiều đó thì nói rõ);
+    //   trước đây mỗi lá đọc cả hai chiều, lời đáp dài tới ~1.000 ký tự khi rút trúng lá có lời giải dài.
+    const wantRev = VR(/\bnguoc\b/).test(n) && !VR(/\bxuoi\b/).test(n);
+    const wantUp = VR(/\bxuoi\b/).test(n) && !VR(/\bnguoc\b/).test(n);
     const cards = r.cards.slice(0, 3).map((d) => {
       const k = tarotCard(d.id);
+      if (wantRev) return d.rev ? `• **${k.name.vi}** đang ra ngược sẵn rồi: ${k.rev.vi}` : `• **${k.name.vi}** (đang xuôi) — nếu ra ngược: ${k.rev.vi}`;
+      if (wantUp) return d.rev ? `• **${k.name.vi}** (đang ngược) — nếu ra xuôi: ${k.up.vi}` : `• **${k.name.vi}** đang ra xuôi sẵn rồi: ${k.up.vi}`;
       return d.rev ? `• **${k.name.vi}** đang ra ngược: ${k.rev.vi}\n  Nếu ra xuôi thì nghiêng về: ${k.up.vi}` : `• **${k.name.vi}** đang ra xuôi: ${k.up.vi}\n  Nếu ra ngược thì nghiêng về: ${k.rev.vi}`;
     });
     const head = r.question ? `Vẫn với câu hỏi “${r.question.replace(/[?？\s]+$/u, "")}” nha 🔮` : "Vẫn với lá bài vừa rút nha 🔮";
@@ -522,6 +528,17 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     return null;
   }
 
+  // 4a') 21/10 (audit): vừa trả lời một câu về app mà hỏi "có chắc tính năng đó có thật không" → xác nhận theo đúng câu vừa trả lời.
+  if (c.topic === "app" && last.faqId && words <= 12 && VN(/\b(có chắc|chắc không|chắc chưa|có thật không|thật không|có thật|có đúng không|đúng không vậy)\b/).test(` ${n} `)) {
+    const f = faqById(last.faqId);
+    if (f)
+      return {
+        kind: "reply",
+        keep: true,
+        why: "app:sure",
+        reply: { text: `Dạ có thật nha 😊 Lomi chỉ trả lời theo những tính năng đang có trong Liên Minh Liên Doanh — phần “${f.q.vi.replace(/\?$/, "")}” ở trên là đúng cách app đang chạy. Bạn làm theo mà không thấy nút hay bị báo lỗi thì nói Lomi đang kẹt ở bước nào, Lomi chỉ tiếp nha.`, quick: last.quick },
+      };
+  }
   // 4b) Vừa trả lời một câu về app, giờ hỏi trống "cái đó thì sao?" → không đoán sang câu khác, hỏi đúng ý còn thiếu.
   if (c.topic === "app" && last.faqId && REF_THING.test(n)) {
     const f = faqById(last.faqId);

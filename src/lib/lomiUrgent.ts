@@ -33,9 +33,11 @@ const KNOWLEDGE = VN(/\b(là gì|là sao|bao lâu (thì )?(lành|khỏi|hết)|c
 // Người bị là người khác (con, mẹ, bé…) — để không nói như thể chính người gõ đang có ý làm hại mình.
 const OTHER = VN(/\b(con|bé|em bé|cháu|mẹ|má|ba|bố|cha|ông|bà|vợ|chồng|anh ấy|chị ấy|em ấy|bạn (tôi|tui|mình|em|anh|a|e)|nó|người nhà|đứa nhỏ|thằng nhỏ|con nhỏ)\b/);
 
-const POISON = VN(/\b((uống|nuốt|ăn|hít|lỡ uống|uống nhầm|uống phải|nuốt phải|nuốt nhầm|ăn phải|hít phải)\s+(nhầm\s+|phải\s+)?(thuốc tẩy|nước tẩy|javel|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|thuốc diệt côn trùng|hoá chất|hóa chất|xăng|dầu hoả|dầu hỏa|nước rửa chén|nước lau sàn|axit|acid|thuốc tẩy bồn cầu)|ngộ độc (hoá chất|hóa chất|thuốc trừ sâu|thuốc sâu|khí|khí ga|khói|thuốc diệt cỏ|thuốc chuột))\b/);
+// 21/10 (audit bổ sung): thêm dầu hôi / dầu lửa / nhớt / nước giặt / băng phiến / cồn sát khuẩn / pin cúc áo… — trước đây
+//   "bé nhà a uống dầu hôi" bị đáp "😅 kể em nghe với". (Nuốt pin / nam châm là DỊ VẬT — SWALLOW bên dưới lo, có lời dặn riêng.)
+const POISON = VN(/\b((uống|nuốt|ăn|hít|lỡ uống|uống nhầm|uống phải|nuốt phải|nuốt nhầm|ăn phải|hít phải)\s+(nhầm\s+|phải\s+)?(thuốc tẩy|nước tẩy|javel|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|thuốc diệt côn trùng|hoá chất|hóa chất|xăng|dầu hoả|dầu hỏa|nước rửa chén|nước lau sàn|axit|acid|thuốc tẩy bồn cầu|dầu hôi|dầu lửa|dầu nhớt|nhớt xe|nhớt|nước giặt|viên giặt|nước xả vải|nước lau kính|thuốc tẩy quần áo|băng phiến|long não|thuốc diệt muỗi|thuốc xịt muỗi|nhang muỗi|cồn 70|cồn 90|cồn y tế|cồn sát khuẩn|nước rửa tay khô)|ngộ độc (hoá chất|hóa chất|thuốc trừ sâu|thuốc sâu|khí|khí ga|khói|thuốc diệt cỏ|thuốc chuột))\b/);
 const SELF_HARM_POISON = VN(/\b(thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)\b/);
-const SWALLOW = VN(/\b(nuốt (phải |nhầm |mất )?(đồng xu|xu|pin|pin cúc|pin nút|nam châm|đinh|cây kim|kim|ghim|hạt|hột|đồ chơi|dị vật|cúc áo|nút áo|viên bi|bi|mảnh|miếng nhựa))\b/);
+const SWALLOW = VN(/\b(nuốt (phải |nhầm |mất )?(đồng xu|xu|pin|pin cúc|pin nút|cục pin|viên pin|nam châm|đinh|cây kim|kim|ghim|hạt|hột|đồ chơi|dị vật|cúc áo|nút áo|viên bi|bi|mảnh|miếng nhựa))\b/);
 // (Lời than "nghẹn ngào", "nghẹn lời", và chuyện hay bị nghẹn từ lâu không phải đang hóc.)
 const CHOKE_NOT = VN(/\b(nghẹn ngào|nghẹn lời|hay bị nghẹn|thỉnh thoảng bị nghẹn|hay nghẹn)\b/);
 const CHOKE = VN(/\b(bị hóc|hóc (xương|hạt|hột|dị vật|đồ chơi|kẹo|thạch|thức ăn)|mắc (xương|nghẹn)|bị nghẹn|nghẹn (thức ăn|không thở|thở không))\b/);

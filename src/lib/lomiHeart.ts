@@ -220,7 +220,10 @@ const THEMES: Theme[] = [
   },
   {
     id: "unrequited",
-    hint: [[VN(/\b(có (người yêu|ny|chồng|vợ) rồi|đã có (người yêu|chủ))\b/), "Thích một người đã có đôi thì khó xử lắm, Lomi hiểu 🥺 Cảm xúc thì mình không chọn được, nhưng cách mình hành động thì chọn được. Tôn trọng mối quan hệ của họ, giữ khoảng cách vừa đủ và cho lòng mình thời gian — đó là cách vừa thương mình vừa tử tế với người ta."]],
+    hint: [
+      // 21/10 (audit): câu LO XA ("nếu người ta không thích mình thì sao") — chưa tỏ tình, không khen "dám bày tỏ".
+      [VN(/^ ?(nếu|lỡ|lỡ như|nhỡ|giả sử|nhưng nếu|mà nếu) .*(không thích|không thương|không yêu|từ chối|không đáp lại)/), "Sợ bị từ chối là cảm giác ai thích một người cũng từng có 🥺 Nếu người ta không thích mình thật, mình sẽ buồn một thời gian — nhưng đó là chuyện hợp hay không hợp, không phải bằng chứng là mình không đáng được thương.\n\nTrước khi nghĩ tới chuyện đó, bạn thấy người ta đang đối với bạn thế nào?"],
+[VN(/\b(có (người yêu|ny|chồng|vợ) rồi|đã có (người yêu|chủ))\b/), "Thích một người đã có đôi thì khó xử lắm, Lomi hiểu 🥺 Cảm xúc thì mình không chọn được, nhưng cách mình hành động thì chọn được. Tôn trọng mối quan hệ của họ, giữ khoảng cách vừa đủ và cho lòng mình thời gian — đó là cách vừa thương mình vừa tử tế với người ta."]],
     re: VN(/\b(đơn phương|yêu đơn phương|(bạn ấy|người ấy|họ|anh ấy|cô ấy) (đã )?có (người yêu|ny|chồng|vợ) rồi|thích người (đã )?có (người yêu|chủ)|thích đơn phương|không thích lại|không thích mình|bị từ chối|tỏ tình thất bại|bị từ chối tỏ tình|chỉ coi mình là bạn|friendzone|họ không để ý)\b/),
     feel: [
       "Thương một người mà họ không đáp lại — cảm giác đó vừa ngọt vừa đắng ghê 🥺",
@@ -575,7 +578,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "insomnia",
-    hint: [[VN(/\b(thuốc ngủ|thuốc an thần)\b/), "Thuốc ngủ thì đừng tự mua uống nha — đó là loại thuốc cần bác sĩ khám rồi mới kê; tự dùng dễ bị lệ thuộc và che mất nguyên nhân thật của chuyện mất ngủ. Mất ngủ kéo dài thì đi khám để tìm nguyên nhân là chắc nhất, Lomi không kê thuốc được."]],
+    hint: [[VN(/\b((suy nghĩ|nghĩ|lo) (mãi|hoài|nhiều|lung tung|linh tinh|đủ thứ|miên man)|đầu óc (cứ )?(chạy|quay|nghĩ)|nằm (là )?nghĩ)\b/), "Nằm xuống là đầu óc cứ chạy hoài thì khó ngủ thật 😴 Não đang cố “giải quyết” những chuyện chưa xong trong ngày.\n\nThử thế này nha: trước khi ngủ chừng 30 phút, lấy giấy viết hết mấy điều đang nghĩ ra (kể cả việc ngày mai cần làm) — viết ra rồi thì não dễ buông hơn. Nằm 20 phút mà vẫn tỉnh thì dậy làm việc nhẹ dưới đèn mờ, buồn ngủ rồi mới quay lại giường.\n\nDạo này điều gì cứ lởn vởn trong đầu bạn nhất?"], [VN(/\b(thuốc ngủ|thuốc an thần)\b/), "Thuốc ngủ thì đừng tự mua uống nha — đó là loại thuốc cần bác sĩ khám rồi mới kê; tự dùng dễ bị lệ thuộc và che mất nguyên nhân thật của chuyện mất ngủ. Mất ngủ kéo dài thì đi khám để tìm nguyên nhân là chắc nhất, Lomi không kê thuốc được."]],
     re: VN(/\b(mất ngủ|không ngủ được|khó ngủ|thức trắng|ngủ không ngon|tỉnh giấc giữa đêm|thức khuya hoài|trắng đêm|thuốc ngủ)\b/),
     feel: ["Mất ngủ mệt lắm luôn, sáng dậy như chưa được sạc pin 😴", "Nằm mãi không ngủ được mà đầu cứ chạy — Lomi hiểu cảm giác đó."],
     insight: [
@@ -667,6 +670,9 @@ const THEMES: Theme[] = [
   },
   {
     id: "sad",
+    // 21/10 (audit): "buồn mà không biết vì sao" — đừng hỏi lại "chuyện gì làm bạn buồn" (người dùng vừa nói là không biết).
+    //   (chỉ câu MỞ ĐẦU có chữ "buồn" — câu đáp tiếp "ko biết sao nữa" sau khi Lomi hỏi "chuyện gì" đã có lời đáp riêng ở heartContinue.)
+    hint: [[VN(/\bbuồn\b.*\b(không biết (vì sao|tại sao|sao|lý do)|chẳng biết (vì sao|tại sao|sao)|chả biết (vì sao|sao)|không có lý do|không rõ (vì sao|lý do))\b|\b(tự nhiên (thấy )?buồn|buồn vô cớ)\b/), "Có những nỗi buồn tới mà không có lý do rõ ràng — không sao đâu, không cần tìm ra nguyên nhân ngay mới được buồn 🥺 Nhiều khi là cơ thể đang mệt: thiếu ngủ, ăn uống thất thường, ít ra ngoài, hoặc nhiều chuyện nhỏ dồn lại mà mình chưa kịp để ý. Nếu cảm giác này kéo dài hơn hai tuần, làm bạn mất hứng với mọi thứ thì nên nói chuyện với bác sĩ hoặc chuyên gia tâm lý nha.\n\nMấy hôm nay bạn ngủ nghỉ, ăn uống thế nào?"]],
     re: VN(/\b(buồn(?! bán| cười| ngủ| nôn)|buồn quá|buồn ghê|đang buồn|thấy buồn|buồn hiu|chán đời|tủi thân|muốn khóc|đang khóc|khóc quá|tâm trạng tệ|tâm trạng không tốt|down|bị down|nặng lòng|trống rỗng|thất vọng|không vui)\b/),
     feel: [
       "Nghe bạn buồn, Lomi thương ghê 🥺",

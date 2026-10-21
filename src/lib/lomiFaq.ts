@@ -245,7 +245,7 @@ export const FAQS: Faq[] = [
   F("ridetrack", "rides", "Theo dõi tài xế đang tới ở đâu?", "How do I track my driver?",
     "Khi tài xế nhận chuyến, bản đồ ở Chuyến hiện tại sẽ hiện vị trí tài xế trực tiếp ● và thời gian ước tính. Bạn cũng nhắn tin hoặc gọi tài xế được ngay trong chuyến. Xem lại các chuyến cũ ở Lịch sử chuyến.",
     "Once accepted, the Current trip map shows the driver live ● with an ETA. You can message or call them. Past trips are in Trip history.",
-    ["theo doi tai xe", "tai xe o dau", "vi tri tai xe", "lich su chuyen", "tai xe den chua"]),
+    ["theo doi tai xe", "tai xe o dau", "vi tri tai xe", "lich su chuyen", "tai xe den chua", "tai xe dang toi", "tai xe toi dau", "tai xe toi chua", "tai xe dang o dau", "xe toi dau roi"]),
   F("ridedriver", "rides", "Muốn làm tài xế thì đăng ký sao?", "How do I become a driver?",
     "Vào Đưa đón (/dua-don) → tab Tài xế → gửi hồ sơ: ảnh chân dung (bắt buộc), biển số, hiệu/màu xe, có thể thêm ảnh xe và bằng lái, chọn nhận cả giao hàng nếu muốn. Ban quản trị duyệt xong bạn bật Online để thấy các chuyến gần mình.",
     "Rides (/dua-don) → Driver tab → submit a portrait photo (required), plate, vehicle description, optional vehicle/license photos, and whether you also deliver. After approval, go Online to see nearby trips.",

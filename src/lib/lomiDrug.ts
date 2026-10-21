@@ -19,7 +19,7 @@ import { healthSubjectOf } from "@/lib/lomiHealthTopic";
 import { drugById, findDrug, findDrugs, findInteraction, renderDrug, sourceLine, sourceList } from "@/lib/lomiDrugData";
 import { VR, VN } from "@/lib/viMatch";
 
-export type DrugKind = "interact" | "overdose" | "dose" | "stop" | "side" | "what" | "which" | "should" | "pet" | "source" | "kid";
+export type DrugKind = "interact" | "overdose" | "odinfo" | "dose" | "stop" | "side" | "what" | "which" | "should" | "pet" | "source" | "kid";
 export type DrugReply = {
   kind: DrugKind;
   text: string;
@@ -108,18 +108,53 @@ const OD_VERB = "(?:uống|nuốt|tọng|ăn|nhai|nốc)";
 const OD_ALL = "(?:hết|cả|nguyên|trọn|sạch|luôn|một|1)(?: (?:cả|một|1|nguyên))?";
 const OD_VI = VN(new RegExp(`\\b${OD_VERB} (?:\\S+ ){0,2}${OD_ALL} (?:\\d+ )?vỉ(?! (?:trứng|sữa|kẹo|bánh|yaourt|sữa chua))\\b`));
 const OD_PACK = VN(new RegExp(`\\b${OD_VERB} (?:\\S+ ){0,2}${OD_ALL} (?:\\d+ )?(?:hộp|lọ|chai|tuýp|bịch|gói|vốc|nắm|đống|vỉ)\\b`));
-const OD_MANY = VN(new RegExp(`\\b${OD_VERB} (?:\\S+ ){0,3}(?:(\\d+)|cả chục|mấy chục|vài chục|chục|cả trăm) viên\\b`));
-const OD_NOT = VN(/\b(không|ko|chưa|chẳng|chả|đâu có|đừng|sợ|lỡ mà|nếu|giả sử) (có |lỡ |bị |định )?(uống|nuốt|ăn|nhai)\b/);
-/** Câu kể / hỏi về việc đã uống QUÁ LIỀU thuốc (dù không nói chữ "thuốc"). */
-export function overdoseSignal(text: string): boolean {
+// (21/10 review) chữ sau "viên" cho biết thứ được ăn / uống — "viên kẹo", "bò viên" không phải thuốc.
+const OD_MANY = VN(new RegExp(`\\b(${OD_VERB}) (?:\\S+ ){0,3}?(?:(\\d+)|cả chục|mấy chục|vài chục|chục|cả trăm) viên(?: (\\S+))?`));
+const OD_FOOD = VN(/^(kẹo|bánh|socola|chocolate|sô cô la|kem|thạch|trân châu|xí muội|mứt|đá|bò|cá|tôm|mực|xíu mại|chè|bi|sỏi|nước đá|yến|sữa|singum|kẹo cao su)$/);
+// 21/10 (review commit c14d0f6) — PHÂN LOẠI câu nhắc tới quá liều, thay vì coi mọi câu có chữ "quá liều" là đã uống:
+//   • "event": kể việc ĐÃ / ĐANG xảy ra ("a uống quá liều rồi", "a uống 20 viên thuốc ngủ", "a lỡ uống gấp đôi liều") → báo cấp cứu ngay.
+//   • "hypo": giả định / lời dặn / hỏi kiến thức chung ("nếu uống quá liều thì sao?", "đừng uống quá liều",
+//     "uống quá liều paracetamol có sao không") → trả lời cách xử trí an toàn, KHÔNG khẳng định người dùng đã uống.
+//   • "neg": chối ("a không uống quá liều đâu") → không báo động.
+//   (Trước đây OD_SELF trả true trước khi xét phủ định / giả định, và "a ăn 20 viên kẹo" cũng bị báo cấp cứu.)
+const OD_COND = VN(/\b(nếu|giả sử|giả như|lỡ mà|lỡ như|nhỡ|nhỡ mà|nhỡ như|ngộ nhỡ|phòng khi|đừng|không nên|chớ|tránh|để không|để khỏi|làm sao để không|cẩn thận|coi chừng|kẻo)\b/);
+const OD_NEG = VN(/\b(không|ko|chưa|chẳng|chả|đâu có|hông|hổng) (hề |có |bị |lỡ )?(uống|nuốt|ăn|nhai|dùng|bị)\b|\b(không phải|đâu phải) (là )?(uống|bị) /);
+// Có người làm (a, em, con, bé, mẹ…) đứng trước động từ, hoặc có dấu hiệu việc đã xảy ra → là chuyện thật đang kể.
+const OD_PAST = VN(/\b(rồi|vừa|mới|đã|lúc nãy|hồi nãy|ban nãy|uống xong|nuốt xong|xong rồi|lỡ (uống|nuốt|ăn|dùng)|uống nhầm|nuốt nhầm|uống lộn)\b/);
+const OD_WHO = VN(/\b(a|anh|e|em|mình|tôi|tui|tớ|tao|con|bé|cháu|nó|mẹ|má|ba|bố|cha|ông|bà|vợ|chồng|bạn|đứa|người yêu|ny|chị|cô|chú|dì|cậu)\s+(\S+\s+){0,3}?(uống|nuốt|tọng|ăn|nhai|nốc|bị|dùng)\b/);
+//   • "intent": NÓI Ý ĐỊNH uống quá liều ("a định uống quá liều cho xong", "a tính nuốt cả lọ thuốc") → là dấu hiệu tự hại:
+//     AiAssistant đáp bằng lời hỗ trợ khủng hoảng (đường dây nóng), không nói như thể đã uống.
+const OD_INTENT = VN(/\b(muốn|định|tính|sắp|chuẩn bị|quyết định|thèm) (\S+ ){0,2}?(uống|nuốt|tọng|nốc)\b/);
+export type OdMention = "event" | "hypo" | "neg" | "intent";
+/** Câu có nhắc tới QUÁ LIỀU thuốc không, và là kể việc đã xảy ra, giả định / hỏi chung, hay chối. */
+export function overdoseMention(text: string): OdMention | null {
   const n = ` ${normalizeVi(text)} `;
-  if (NOT_MED.test(n)) return false; // thuốc tẩy / thuốc chuột… là ngộ độc hoá chất — lớp ngộ độc riêng lo
-  if (OD_SELF.test(n)) return true;
-  if (OD_NOT.test(n)) return false;
-  if (OD_VI.test(n)) return true;
-  if (OD_PACK.test(n) && (MED_WORD.test(n) || !!findDrug(text))) return true;
-  const many = n.match(OD_MANY);
-  return !!many && (!many[1] || Number(many[1]) >= 10) && (MED_WORD.test(n) || !!findDrug(text) || VN(/\bviên\b/).test(n));
+  if (NOT_MED.test(n)) return null; // thuốc tẩy / thuốc chuột… là ngộ độc hoá chất — lib/lomiUrgent (POISON) lo, có test riêng
+  const medish = MED_WORD.test(n) || !!findDrug(text);
+  let hit = OD_SELF.test(n) || OD_VI.test(n) || (OD_PACK.test(n) && medish);
+  if (!hit) {
+    const many = n.match(OD_MANY);
+    if (many) {
+      const count = many[2] ? Number(many[2]) : 10;
+      const next = many[3] ?? "";
+      // Phải là THUỐC: có chữ thuốc / tên thuốc, hoặc "uống / nuốt" số viên mà chữ sau "viên" không phải món ăn.
+      //   (không dùng riêng chữ "viên" làm bằng chứng — "ăn 20 viên kẹo" không phải quá liều.)
+      const pill = medish || (VN(/^(uống|nuốt|tọng|nốc)$/).test(many[1]) && !OD_FOOD.test(next));
+      hit = count >= 10 && pill && !OD_FOOD.test(next);
+    }
+  }
+  if (!hit) return null;
+  if (OD_INTENT.test(n) && !OD_PAST.test(n) && !OD_COND.test(n)) return "intent";
+  if (OD_COND.test(n)) return "hypo";
+  // "a sợ uống quá liều" — lo cho chuyện CHƯA xảy ra (khác "a sợ a uống quá liều rồi").
+  if (VN(/\b(sợ|lo|ngại|e là|lo là)\b/).test(n) && !OD_PAST.test(n)) return "hypo";
+  if (OD_NEG.test(n)) return "neg";
+  if (OD_PAST.test(n) || OD_WHO.test(n)) return "event";
+  return "hypo"; // "uống quá liều thì sao", "quá liều paracetamol có sao không" — hỏi chung, không có người / việc đã xảy ra
+}
+/** Người dùng KỂ đã uống quá liều (không phải câu giả định / lời dặn / câu chối). */
+export function overdoseSignal(text: string): boolean {
+  return overdoseMention(text) === "event";
 }
 const OD_MIND =
   "\n\nNếu bạn uống vì đang thấy quá sức chịu đựng: sau khi đã an toàn, bạn có thể gọi đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật), hoặc nói với một người bạn tin. Lomi vẫn ở đây nghe bạn.";
@@ -220,7 +255,18 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       urgent: true,
       text: "Dạ, Lomi ghi nhận. Lomi không biết đó là thuốc gì nên không nói được chừng đó có sao không — bạn gọi **115** hoặc hỏi ngay bác sĩ / dược sĩ, đọc cho họ tên thuốc, số viên và giờ uống nha. Trong lúc chờ, đừng ở một mình; thấy buồn nôn, lơ mơ, khó thở, đau bụng thì đi cấp cứu liền.",
     };
-  if ((OVERDOSE.test(n) && (med || ctx.inHealth)) || overdoseSignal(text)) {
+  const odm = overdoseMention(text);
+  if (odm === "hypo" || (odm !== "event" && odm !== "neg" && OVERDOSE.test(n) && (med || ctx.inHealth) && OD_COND.test(n))) {
+    // Giả định / lời dặn / hỏi chung → cách xử trí an toàn, nói theo dạng "nếu…", không khẳng định người dùng đã uống.
+    const od = findDrug(text) ?? (ctx.drugId ? drugById(ctx.drugId) : null);
+    const known = od && od.overdose.length ? `\n\n${renderDrug(od, "overdose")}` : "";
+    return {
+      kind: "odinfo",
+      ...(od ? { drugId: od.id, name: od.names[0] } : {}),
+      text: `Nếu lỡ uống quá liều hoặc uống nhầm thuốc thì **đừng chờ xem có sao không**: gọi **115** hoặc tới cơ sở y tế gần nhất ngay, kể cả khi lúc đó thấy bình thường — triệu chứng có thể tới muộn.\n• Mang theo vỏ hộp / vỉ thuốc, nhớ khoảng bao nhiêu viên và uống lúc mấy giờ.\n• Không tự gây nôn, không tự uống thêm thuốc khác để "giải".\n• Dùng thuốc theo đúng liều trên hướng dẫn hoặc lời dặn của bác sĩ / dược sĩ; không tự tăng liều khi chưa đỡ.${known}\n\nNếu bạn hỏi vì đang thấy quá sức chịu đựng, cứ nói với Lomi nha — hoặc gọi đường dây Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật).`,
+    };
+  }
+  if (odm === "event" || (odm !== "neg" && OVERDOSE.test(n) && (med || ctx.inHealth))) {
     // Thuốc có dữ liệu đã kiểm chứng (paracetamol…) → thêm phần quá liều có nguồn của đúng thuốc đó.
     const od = findDrug(text) ?? (ctx.drugId ? drugById(ctx.drugId) : null);
     const known = od && od.overdose.length ? `\n\n${renderDrug(od, "overdose")}` : "\n\nLomi không có dữ liệu để nói loại thuốc đó ở mức nào thì nguy hiểm — nên đi kiểm tra là an toàn nhất.";

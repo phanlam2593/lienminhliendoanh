@@ -76,6 +76,8 @@ export type FrameReply = ChatReply & {
   keepHeart?: boolean;
   /** Người dùng vừa nói ra một cảm xúc không vui ("a đang lo") → mở mạch tâm sự với chủ đề này để câu sau được nghe tiếp. */
   openHeart?: string;
+  /** 21/10: người đang được nói tới trong chuyện tình cảm ("cô ấy|silence") — để câu nối sau ("có nên nhắn trước không") bám đúng người. */
+  rel?: string;
 };
 
 const MIN_CONF = 0.75;
@@ -314,6 +316,10 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
     return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : "fight", text: `${subj} hay ${p.head} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   if (p.val < 0 && person && f.subjectCls === "partner" && p.kind === "quality" && TRAIT.test(p.head) && c.heart !== "rel")
     return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : VR(/^(Vợ|Chồng|Bà xã|Ông xã)/).test(subj) ? "marriage" : "love", text: `${subj} ${what} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+  // 21/10 (audit): "cô ấy lạnh nhạt với a dạo này" — một người lạnh nhạt / vô tâm VỚI CHÍNH người kể là chuyện tình cảm (dù chưa nói là
+  //   người yêu) → mở mạch tâm sự "lạnh nhạt" và nhớ người đó, thay vì "Cô ấy lạnh nhạt hả 😅 Chuyện sao vậy".
+  if (p.val < 0 && person && (!c.heart || c.heart === "rel") && VR(/(lạnh nhạt|lạnh lùng|vô tâm|hờ hững|thờ ơ|xa cách|né tránh|hết quan tâm)/).test(p.head) && (f.subjectCls === "partner" || VR(/với ⟦you⟧/).test(p.obj ?? "")))
+    return { intent: "frame:third_neg", openHeart: "cold", rel: `${subj.charAt(0).toLowerCase()}${subj.slice(1)}|silence`, text: `${subj} ${what} hả 😔 Bị người mình để tâm đối xử lạnh nhạt thì chạnh lòng lắm. Dạo này giữa hai người có chuyện gì không bạn?` };
   if (p.val < 0 || adverse) {
     // Chuyện đời sống thư viện tâm sự đã có lời hỏi han riêng (cúp điện, kẹt xe…) hoặc chuyện với sếp / người yêu → để lớp đó đáp.
     //  • chuyện đời sống (cúp điện, kẹt xe…) chỉ áp cho đồ vật / nơi chốn — với người thì mấy bài đó lạc đề ("vợ a nấu ăn dở" ≠ quán dở);

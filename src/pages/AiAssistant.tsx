@@ -57,7 +57,7 @@ import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
-import { drugAsk, overdoseSignal, prevDrugCtx } from "@/lib/lomiDrug";
+import { drugAsk, overdoseMention, prevDrugCtx } from "@/lib/lomiDrug";
 import { drugById, findDrug, sourceList } from "@/lib/lomiDrugData";
 import { asksSource, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
@@ -1056,7 +1056,22 @@ export function AiChat({
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
       // 20/10 (audit P0): kể đã uống QUÁ LIỀU / cả vỉ, cả lọ thuốc → báo cấp cứu NGAY, trước mọi lớp xã giao / nhắc lại câu kể
       //   (trước đây "a uống quá liều rồi" → "😋 Ngon không anh?"). Câu nối sau đó ("2 viên", "giờ thấy bình thường") vẫn do lib/lomiDrug lo.
-      if (!en && overdoseSignal(q)) {
+      //   (21/10: câu GIẢ ĐỊNH / lời dặn / hỏi chung — "nếu uống quá liều thì sao?", "đừng uống quá liều" — trả lời cách xử trí an toàn,
+      //    không khẳng định đã uống; câu chối "a không uống quá liều đâu" thì để các lớp sau đáp như thường.)
+      const odm = en ? null : overdoseMention(q);
+      if (odm === "intent") {
+        const ci = crisisReply("không muốn sống nữa", lang);
+        if (ci) return localReply(q, { role: "assistant", content: ci.text, local: true, heart: "sad", heartDepth: 1 });
+      }
+      if (odm === "hypo") {
+        const odPrevH = lastA0?.drug?.id ?? (lastA0?.hsub ? findDrug(lastA0.hsub)?.id : undefined);
+        const oi = drugAsk(q, { inHealth: true, drugId: odPrevH, afterDrug: !!odPrevH });
+        if (oi?.kind === "odinfo") {
+          topicHit("health");
+          return localReply(q, { role: "assistant", content: oi.text, local: true, drug: { kind: "odinfo", name: oi.name, id: oi.drugId }, health: hCtx ?? {} });
+        }
+      }
+      if (odm === "event") {
         // (đang nói về một thuốc — "paracetamol" — mà hỏi "uống quá liều thì sao" → thêm phần quá liều có nguồn của đúng thuốc đó)
         const odPrev = lastA0?.drug?.id ?? (lastA0?.hsub ? findDrug(lastA0.hsub)?.id : undefined);
         const od = drugAsk(q, { inHealth: true, drugId: odPrev, afterDrug: !!odPrev });
@@ -1296,7 +1311,7 @@ export function AiChat({
             // Tin về một người / con vật đang ốm hay mới mất → mở MẠCH CHUYỆN (lib/lomiStory): câu sau là câu trả lời cho đúng điều Lomi vừa hỏi.
             thread: fx.about ? storyOpen(fx.intent, fx.about, fx.text, fr.toks.find((t) => t.cls === "ill")?.t ?? fr.pred?.head) : undefined,
             // Đang tâm sự mà kể tin buồn về người thân → vẫn ở mạch tâm sự; còn lại: mở / giữ mạch nghe kể, sức khoẻ như thường.
-            ...(heartOn && fx.keepHeart && lastA ? { heart: lastA.heart, heartDepth: (lastA.heartDepth ?? 0) + 1, heartListen: lastA.heartListen, story: lastA.story, rel: lastA.rel, mood: lastA.mood } : fx.openHeart && !heartOn ? { heart: fx.openHeart, heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : fx.talk && !heartOn ? { talk: (convo?.talk ?? 0) + 1 } : {}),
+            ...(heartOn && fx.keepHeart && lastA ? { heart: lastA.heart, heartDepth: (lastA.heartDepth ?? 0) + 1, heartListen: lastA.heartListen, story: lastA.story, rel: lastA.rel, mood: lastA.mood } : fx.openHeart && !heartOn ? { heart: fx.openHeart, heartDepth: 1, story: raw.length <= 90 ? raw : undefined, ...(fx.rel ? { rel: fx.rel } : {}) } : fx.talk && !heartOn ? { talk: (convo?.talk ?? 0) + 1 } : {}),
             // Tin người thân mắc một BỆNH CÓ TÊN ("ba e bị tiểu đường") → nhớ bệnh đó, để câu sau "nên kiêng gì?" trả lời được ngay.
             //   Tin người thân có một TRIỆU CHỨNG ("con a sốt từ tối qua") → nhớ triệu chứng đó, để câu sau "có cần đi viện không?" trả lời được.
             ...(fx.openHealth
@@ -1990,6 +2005,10 @@ export function AiChat({
           local: true,
           health: hCtx ?? {},
         });
+      // 21/10 (audit): câu chỉ trỏ ("vậy cái này nằm ở đâu", "tính năng đó có thật không") mà phía trên CHƯA có gì để chỉ tới →
+      //   hỏi lại là cái nào, không đáp "chưa được học" (không phải Lomi thiếu kiến thức, mà câu thiếu đối tượng).
+      if (!en && !lastA && q.split(/\s+/).length <= 12 && VN(/\b(cái này|cái đó|cái kia|cái ấy|tính năng (này|đó|kia)|nút (này|đó|kia)|chỗ (này|đó)|mục (này|đó)|vụ (này|đó)|cái nút đó)\b/).test(` ${normalizeVi(q)} `))
+        return localReply(q, { role: "assistant", content: "Bạn đang nói tới cái nào nè? 🧭 Nói Lomi tên tính năng hoặc trang bạn đang xem (vd “nhận ưu đãi”, “Quẹt”, “tạo nhóm chat”) là Lomi chỉ liền nha.", local: true });
       // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
       logUnanswered(raw, q);
       if (!sug.length && !en) {
@@ -2068,7 +2087,9 @@ export function AiChat({
     const next = push([{ role: "user", content: q }]);
     setBusy(true);
     const ctx = next
-      .filter((m) => !m.local)
+      // 21/10 (audit P3): gửi CẢ những câu Lomi đã đáp trên máy (trừ dòng thông báo hội viên / hết lượt) — trước đây bỏ hết câu
+      //   đáp trên máy nên nếu bật AI, AI không biết hai bên vừa nói gì. (AI_ENABLED vẫn = false; thay đổi này chưa chạy.)
+      .filter((m) => !m.note && !m.sticker)
       .slice(-12)
       .map(({ role, content, aiContent: ac }) => ({ role, content: ac ?? content }));
     const { data, error } = await supabase.functions.invoke("ai-assistant", { body: { messages: ctx } });
