@@ -98,10 +98,18 @@ const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 
 /** "Lomi" (Lomi tự gọi mình) → "em". */
 function lomiAsEm(text: string): string {
-  return text.replace(VR(/(^|[^\p{L}/“"])Lomi(?![\p{L}])/gu), (_m, pre: string) => {
-    const start = pre === "" || /[.!?\n]\s*$/.test(pre) || pre === "\n";
-    return `${pre}${start ? "Em" : "em"}`;
-  });
+  // 21/10: "Lomi" là TÊN khi tự giới thiệu ("Mình là Lomi nha", "Lomi nè 🤖 Trợ lý nhỏ…") → giữ nguyên, không thành "Mình là em".
+  const KEEP = "\uE001";
+  const kept = text
+    .replace(VR(/((?:^|[^\p{L}])(?:là|tên|tên là|gọi là|gọi em là)\s+)Lomi(?![\p{L}])/gu), `$1${KEEP}`)
+    .replace(VR(/(^|\n)Lomi(?= nè 🤖)/gu), `$1${KEEP}`);
+  return kept
+    .replace(VR(/(^|[^\p{L}/“"])Lomi(?![\p{L}])/gu), (_m, pre: string) => {
+      const start = pre === "" || /[.!?\n]\s*$/.test(pre) || pre === "\n";
+      return `${pre}${start ? "Em" : "em"}`;
+    })
+    .split(KEEP)
+    .join("Lomi");
 }
 
 /** Đổi "bạn" / "Lomi" trong câu Lomi nói cho khớp cách xưng hô của người dùng. */

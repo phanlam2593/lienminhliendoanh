@@ -68,7 +68,7 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, chitChat, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, chitChat, crisisMeans, crisisReply, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -759,7 +759,9 @@ export function AiChat({
     const partnerCtx = msgs.slice(-4).some((m) => VN(/\b(người yêu|ny|bạn trai|chồng|anh ấy|anh ta|crush|ông xã|anh người yêu|ex|người cũ)\b/).test(normalizeVi(m.content))) || (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })();
     const fr0 = en ? null : parseVi(raw, { addr: addr0, partnerCtx });
     //   ("e có người yêu chưa" — hỏi chuyện riêng của Lomi — cũng vậy, dù khung không có vị ngữ.)
-    const callsLomiEm = (!!fr0 && asksLomiLove(fr0)) || !!fr0 && fr0.conf >= 0.7 && fr0.em === "you" && !fr0.toks.some((t) => t.r === "SELF") && (fr0.subject === "you" || fr0.act === "greet" || fr0.act === "wish" || fr0.act === "thanks" || fr0.act === "invite");
+    //   (21/10: câu HỎI mà chủ ngữ là Lomi — "e là ai", "em tên gì" — cũng là gọi Lomi là em, dù khung câu ngắn nên độ tin thấp;
+    //    trước đây lớp đoán "e + động từ" coi người dùng tự xưng em → "Còn em tên gì nè?")
+    const callsLomiEm = (!!fr0 && fr0.act === "question" && fr0.em === "you" && fr0.subject === "you" && !fr0.toks.some((t) => t.r === "SELF" || t.r === "THIRD") && fr0.toks.some((t) => t.r === "QWORD")) || (!!fr0 && asksLomiLove(fr0)) || !!fr0 && fr0.conf >= 0.7 && fr0.em === "you" && !fr0.toks.some((t) => t.r === "SELF") && (fr0.subject === "you" || fr0.act === "greet" || fr0.act === "wish" || fr0.act === "thanks" || fr0.act === "invite");
     const selfAC = fr0 && fr0.conf >= 0.75 && fr0.pred && !fr0.multi ? (VN(/^(a|anh)$/).test(fr0.selfWord ?? "") ? "anh" : VR(/^(c|chị)$/).test(fr0.selfWord ?? "") ? "chị" : undefined) : undefined;
     // 12/10 — xưng hô đọc theo CẤU TRÚC cho những câu phép đoán "đại từ + động từ" bỏ sót (benchmark: Lomi vẫn gọi "bạn" dù người dùng
     // đã xưng anh / em):
@@ -1059,8 +1061,31 @@ export function AiChat({
       //   (21/10: câu GIẢ ĐỊNH / lời dặn / hỏi chung — "nếu uống quá liều thì sao?", "đừng uống quá liều" — trả lời cách xử trí an toàn,
       //    không khẳng định đã uống; câu chối "a không uống quá liều đâu" thì để các lớp sau đáp như thường.)
       const odm = en ? null : overdoseMention(q);
+      // 21/10 (đợt 3): CHỐI đã uống ("a không uống quá liều đâu", "không, a chưa uống gì hết") → đáp bình tĩnh, không đùa, không hỏi dồn.
+      //   Trước đây: "Không uống quá liều hả 😮 Sao vậy anh?"; "không, a chưa uống gì hết" → gợi ý đồ uống; và đang nói về paracetamol thì
+      //   lời chối vẫn rơi xuống lớp báo cấp cứu paracetamol (lib/lomiContext). Lời kể đã uống thật (odm === "event") không đi vào đây.
+      const nqD = ` ${normalizeVi(q)} `;
+      const denyTake = !en && odm !== "event" && (odm === "neg" || VN(/^ (không|ko|k|đâu|chưa|hông|hong)\b.*\b(chưa|không|ko|chẳng) (có |hề )?(uống|nuốt|dùng) (gì|thuốc|viên nào|cái gì)/).test(nqD));
+      const crisisBefore = !!lastA0 && VR(/không phải một mình/).test(lastA0.content);
+      const drugBefore = !!lastA0 && (!!lastA0.drug || !!lastA0.hsub || crisisBefore);
+      //   (mở đầu bằng lời chối mà phía trên chưa nói gì về thuốc → không đoán là đang khát hay đang nói về thuốc, chỉ hỏi nhẹ)
+      if (denyTake && odm !== "neg" && !drugBefore && !lastA0)
+        return localReply(q, { role: "assistant", content: "Dạ, Lomi hiểu rồi. Bạn đang muốn hỏi Lomi chuyện gì nè?", local: true });
+      if (denyTake && (odm === "neg" || drugBefore)) {
+        const justAsk = VN(/\b(chỉ hỏi|hỏi thôi|hỏi chơi|hỏi để biết|hỏi cho biết|tìm hiểu thôi)\b/).test(nqD);
+        const wrongAlarm = lastA0?.drug?.kind === "overdose";
+        const text = crisisBefore
+          ? "Lomi mừng là bạn chưa uống gì 💚 Nếu thuốc hay chất đó đang ở gần, bạn để nó ra xa giúp Lomi, và nhắn một người bạn tin để họ ở cạnh bạn lúc này nha. Lomi vẫn ở đây, bạn muốn kể gì cứ kể."
+          : `${wrongAlarm ? "Dạ, vậy là Lomi hiểu nhầm rồi, xin lỗi bạn nha. " : "Dạ, Lomi hiểu rồi. "}${justAsk ? "Bạn hỏi để biết trước là tốt mà." : "Chưa uống quá liều thì không sao đâu."} Cứ dùng đúng liều ghi trên hộp hoặc theo lời dặn của bác sĩ / dược sĩ nha — có lúc nào lỡ uống quá thì đi cấp cứu ngay, đừng chờ xem có sao không.`;
+        return localReply(q, { role: "assistant", content: text, local: true, ...(crisisBefore ? { heart: lastA0!.heart ?? "sad", heartDepth: (lastA0!.heartDepth ?? 1) + 1 } : { health: hCtx ?? {} }) });
+      }
+      // Vừa nhận lời hỗ trợ khủng hoảng mà nói ĐÃ uống rồi ("a uống rồi", "nuốt hết rồi") → xử trí cấp cứu ngay.
+      if (!en && crisisBefore && VN(/\b(uống rồi|nuốt rồi|đã uống|uống hết rồi|uống mất rồi|nuốt hết rồi|uống luôn rồi|lỡ uống rồi)\b/).test(nqD) && !VN(/\b(chưa|không|ko|chẳng)\b/).test(nqD)) {
+        const odE = drugAsk("a uống quá liều rồi", { inHealth: true });
+        if (odE) return localReply(q, { role: "assistant", content: odE.text, local: true, drug: { kind: "overdose" }, health: hCtx ?? {} });
+      }
       if (odm === "intent") {
-        const ci = crisisReply("không muốn sống nữa", lang);
+        const ci = en ? crisisReply("không muốn sống nữa", lang) : crisisMeans(q);
         if (ci) return localReply(q, { role: "assistant", content: ci.text, local: true, heart: "sad", heartDepth: 1 });
       }
       if (odm === "hypo") {
@@ -2008,7 +2033,14 @@ export function AiChat({
       // 21/10 (audit): câu chỉ trỏ ("vậy cái này nằm ở đâu", "tính năng đó có thật không") mà phía trên CHƯA có gì để chỉ tới →
       //   hỏi lại là cái nào, không đáp "chưa được học" (không phải Lomi thiếu kiến thức, mà câu thiếu đối tượng).
       if (!en && !lastA && q.split(/\s+/).length <= 12 && VN(/\b(cái này|cái đó|cái kia|cái ấy|tính năng (này|đó|kia)|nút (này|đó|kia)|chỗ (này|đó)|mục (này|đó)|vụ (này|đó)|cái nút đó)\b/).test(` ${normalizeVi(q)} `))
-        return localReply(q, { role: "assistant", content: "Bạn đang nói tới cái nào nè? 🧭 Nói Lomi tên tính năng hoặc trang bạn đang xem (vd “nhận ưu đãi”, “Quẹt”, “tạo nhóm chat”) là Lomi chỉ liền nha.", local: true });
+        return localReply(q, {
+          role: "assistant",
+          // ("có nên mua cái này không" — chỉ trỏ một MÓN đồ, không phải một tính năng của app)
+          content: VN(/\b(mua|bán|ăn|uống|chọn|lấy|đổi|xài|dùng thử)\b/).test(` ${normalizeVi(q)} `) && !isAppish(q)
+            ? "Bạn đang nói tới món nào nè? Nói Lomi tên hoặc mô tả một chút, rồi mình cân nhắc cùng nha 🙂"
+            : "Bạn đang nói tới cái nào nè? 🧭 Nói Lomi tên tính năng hoặc trang bạn đang xem (vd “nhận ưu đãi”, “Quẹt”, “tạo nhóm chat”) là Lomi chỉ liền nha.",
+          local: true,
+        });
       // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
       logUnanswered(raw, q);
       if (!sug.length && !en) {

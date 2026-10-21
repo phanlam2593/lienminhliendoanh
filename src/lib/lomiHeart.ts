@@ -445,7 +445,10 @@ const THEMES: Theme[] = [
   },
   {
     id: "work",
-    hint: [[VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [VN(/\b(sếp|quản lý)\b/), "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
+    hint: [
+      // 21/10: MẤT VIỆC / thất nghiệp không phải "kiệt sức" (trước đây "a thất nghiệp 3 tháng rồi" nhận bài burnout).
+      [VN(/\b(thất nghiệp|mất việc|bị đuổi việc|bị sa thải|bị cho nghỉ|chưa có việc|chưa xin được việc|tìm việc mãi|không xin được việc)\b/), "Mất việc rồi phải chờ đợi thì vừa lo tiền vừa dễ tự trách, Lomi hiểu 😔 Khoảng trống này không nói lên giá trị của bạn đâu — có những lúc thị trường việc làm chậm lại thôi.\n\nThử chia nhỏ cho đỡ nặng: mỗi ngày làm một việc nhỏ cho chuyện tìm việc (sửa CV, gửi hai ba chỗ, nhắn một người quen trong ngành), còn lại giữ nhịp ăn ngủ và ra ngoài một chút để tinh thần không xuống. Trong app cũng có mục Quẹt → Công việc (/quet) để đăng nhu cầu tìm việc nha.\n\nBạn đang tìm việc trong ngành gì?"],
+[VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [VN(/\b(sếp|quản lý)\b/), "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
     re: VN(/\b(áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức)\b/),
     feel: [
       "Áp lực công việc mà kéo dài thì mệt cả thân lẫn tâm luôn 😮‍💨 Bạn vất vả rồi.",
@@ -621,6 +624,27 @@ const THEMES: Theme[] = [
       "Giảm cà phê, ngủ đủ, vận động đều — nghe cơ bản nhưng ảnh hưởng tới lo âu nhiều lắm.",
     ],
     heavy: true,
+  },
+  // 21/10: MẤT PHƯƠNG HƯỚNG ("a không biết nên làm gì với cuộc đời mình", "mông lung quá", "tương lai đi về đâu") — trước đây
+  //   không có chủ đề nào nên Lomi chỉ nhắc lại "Làm gì hả 😄 kể nghe với".
+  {
+    id: "lost",
+    re: VN(/\b(không biết (nên )?làm gì (với )?(cuộc đời|cuộc sống|đời mình|tương lai)|mông lung|mất phương hướng|không có phương hướng|không biết mình muốn gì|chẳng biết mình muốn gì|tương lai (đi )?về|tương lai (mù mịt|mờ mịt|bấp bênh)|không biết tương lai|chẳng biết tương lai|bế tắc quá|sống không mục tiêu|không có mục tiêu|sống vô định|chênh vênh)\b/),
+    feel: ["Cảm giác chênh vênh, không biết mình đang đi về đâu — nhiều người từng trải qua lắm, bạn không lạc lõng một mình đâu 🥺", "Mông lung về cuộc đời là cảm giác khó chịu thật, như đứng giữa ngã tư mà không có bảng chỉ đường."],
+    insight: [
+      "Ít ai biết rõ mình muốn gì ngay từ đầu — phần lớn mọi người tìm ra dần qua việc thử, sai rồi chỉnh. Chưa có câu trả lời không có nghĩa là bạn đang thất bại.",
+      "Câu hỏi “làm gì với cả cuộc đời” to quá nên dễ làm mình đứng hình. Đổi thành câu nhỏ hơn — “vài tháng tới mình muốn thử điều gì?” — thường dễ bắt đầu hơn.",
+    ],
+    step: [
+      "Viết ra ba thứ: việc làm bạn quên thời gian, việc người khác hay nhờ bạn giúp, và điều bạn thấy bất công muốn thay đổi. Chỗ ba thứ đó gặp nhau thường là một gợi ý.",
+      "Chọn một việc nhỏ để thử trong 2–4 tuần (một khoá học ngắn, làm thêm cuối tuần, gặp một người trong ngành bạn tò mò) rồi xem mình thấy thế nào.",
+    ],
+    ask: ["Dạo này điều gì làm bạn thấy chênh vênh nhất — công việc, học hành hay chuyện khác?", "Có việc gì gần đây làm bạn thấy hứng thú, dù chỉ một chút không?"],
+    advice: [
+      "Đừng đợi tìm ra “đam mê” rồi mới đi — nhiều khi phải đi một đoạn rồi mới thấy mình hợp với gì.",
+      "Nói chuyện với vài người đi trước ở những hướng bạn tò mò; nghe họ kể một ngày làm việc thật sẽ rõ hơn đọc trên mạng nhiều.",
+      "Giữ nhịp sống cơ bản (ngủ, ăn, vận động) trong lúc tìm hướng — đầu óc mệt thì mọi lựa chọn đều trông mù mờ.",
+    ],
   },
   {
     id: "lonely",

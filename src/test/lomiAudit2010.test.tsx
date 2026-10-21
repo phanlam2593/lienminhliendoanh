@@ -256,3 +256,137 @@ describe("P2/P3 (21/10)", () => {
     expect((await last(["a uống thuốc rồi"])).content).not.toMatch(/😄/);
   }, T);
 });
+
+// 21/10 tối — đợt 3: lời chối tự nhiên, không tự mời bói cho "có nên…", ý định tự hại bằng hoá chất, và vài chỗ trò chuyện còn cứng.
+describe("Đợt 3 — lời chối đã uống: bình tĩnh, không báo động, không gợi ý đồ uống", () => {
+  const NO_JOKE = /😮|😄|😋|😅|Sao vậy anh\?/;
+  it("“a không uống quá liều đâu” → đáp bình tĩnh", async () => {
+    const m = await last(["a không uống quá liều đâu"]);
+    expect(m.content).toMatch(/^Dạ, (Lomi|em) hiểu rồi/);
+    expect(m.content).not.toMatch(NO_JOKE);
+    expect(m.content).not.toMatch(URGENT);
+  }, T);
+  it("“không, a chưa uống gì hết” (không có ngữ cảnh) → không gợi ý đồ uống, hỏi nhẹ", async () => {
+    const m = await last(["không, a chưa uống gì hết"]);
+    expect(m.dishAsk).toBeUndefined();
+    expect(m.content).not.toMatch(/Trà sữa|Khát/);
+    expect(m.content).toMatch(/hiểu rồi/);
+  }, T);
+  it("“a không uống quá liều đâu, a chỉ hỏi thôi” → ghi nhận chỉ hỏi để biết", async () => {
+    const m = await last(["a không uống quá liều đâu, a chỉ hỏi thôi"]);
+    expect(m.content).toMatch(/hỏi để biết trước/);
+    expect(m.content).not.toMatch(URGENT);
+  }, T);
+  it("“a uống quá liều rồi, giờ thấy bình thường” → VẪN báo cấp cứu (độ nhạy không giảm)", async () => {
+    const m = await last(["a uống quá liều rồi, giờ thấy bình thường"]);
+    expect(m.content).toMatch(URGENT);
+    expect(m.drug?.kind).toBe("overdose");
+  }, T);
+  it("đang nói về paracetamol → “a không uống quá liều đâu” không rơi xuống lớp báo cấp cứu paracetamol", async () => {
+    const r = await chat(["a đang uống paracetamol", "a không uống quá liều đâu"], { seed: 7 });
+    expect(r[1].content).not.toMatch(/^⚠️/);
+    expect(r[1].content).not.toMatch(URGENT);
+    expect(r[1].content).toMatch(/hiểu rồi/);
+  }, T);
+  it("vừa hỏi giả định quá liều → “không, a chưa uống gì hết” → yên tâm, không gợi ý đồ uống", async () => {
+    const r = await chat(["nếu uống quá liều thì sao?", "không, a chưa uống gì hết"], { seed: 7 });
+    expect(r[1].content).toMatch(/hiểu rồi/);
+    expect(r[1].content).not.toMatch(/Trà sữa|Khát/);
+  }, T);
+  it("vừa có lời hỗ trợ khủng hoảng → chối đã uống → nhắc để thuốc ra xa, có người ở cạnh; nói ĐÃ uống → cấp cứu ngay", async () => {
+    const a = await chat(["a định nuốt cả lọ thuốc", "không, a chưa uống gì hết"], { seed: 7 });
+    expect(a[1].content).toMatch(/để nó ra xa/);
+    expect(a[1].content).toMatch(/ở cạnh/);
+    const b = await chat(["a định nuốt cả lọ thuốc", "a uống rồi"], { seed: 7 });
+    expect(b[1].content).toMatch(URGENT);
+    expect(b[1].drug?.kind).toBe("overdose");
+  }, T * 2);
+});
+
+describe("Đợt 3 — “có nên…” không tự mời bói Tarot", () => {
+  const NO_TAROT = (m: { content: string; quick?: string[] }) => {
+    expect(m.content).not.toMatch(/bói|rút bài|lá bài|🔮/i);
+    expect((m.quick ?? []).join(" ")).not.toMatch(/Bói/);
+  };
+  it("“a có nên không?” → hỏi lại", async () => {
+    const m = await last(["a có nên không?"]);
+    NO_TAROT(m);
+    expect(m.content).toMatch(/chuyện gì|nói rõ|hiểu ý/); // một câu hỏi lại cho rõ (Lomi có vài cách nói)
+  }, T);
+  it("“có nên nhắn tin trước không” (chưa có ngữ cảnh) → cùng cân nhắc, hỏi hoàn cảnh", async () => {
+    const m = await last(["có nên nhắn tin trước không"]);
+    NO_TAROT(m);
+    expect(m.content).toMatch(/nhắn tin trước/);
+    expect(m.content).toMatch(/hoàn cảnh/);
+  }, T);
+  it("“có nên chia tay không” / “a có nên nghỉ việc không” → tư vấn theo chủ đề", async () => {
+    const a = await last(["có nên chia tay không"]);
+    NO_TAROT(a);
+    expect(a.heart).toBeTruthy();
+    const b = await last(["a có nên nghỉ việc không"]);
+    NO_TAROT(b);
+    expect(b.heart).toBe("work");
+  }, T);
+  it("“có nên mua cái này không” → hỏi món nào (không phải hỏi tên tính năng app)", async () => {
+    const m = await last(["có nên mua cái này không"]);
+    NO_TAROT(m);
+    expect(m.content).toMatch(/món nào/);
+    expect(m.content).not.toMatch(/tính năng/);
+  }, T);
+  it("“hôm nay có nên ăn tôm không?” → vẫn dùng nhánh quyết định món ăn", async () => {
+    const m = await last(["hôm nay có nên ăn tôm không?"]);
+    expect(m.content).toMatch(/\*\*tôm\*\*/);
+  }, T);
+  it("người dùng TỰ xin bói (“bói xem a có nên nghỉ việc không”) → vẫn bói", async () => {
+    const m = await last(["bói xem a có nên nghỉ việc không"]);
+    expect(m.tarot).toBeTruthy();
+  }, T);
+});
+
+describe("Đợt 3 — hoá chất: sự cố đã xảy ra vs ý định tự hại", () => {
+  for (const s of ["bé nhà a uống dầu hôi", "a uống nhầm thuốc tẩy rồi"])
+    it(`sự cố “${s}” → cấp cứu 115`, async () => {
+      const m = await last([s]);
+      expect(m.content).toMatch(/🚨/);
+      expect(m.content).toMatch(URGENT);
+    }, T);
+  it("“a uống quá liều rồi” → cấp cứu 115", async () => {
+    expect((await last(["a uống quá liều rồi"])).content).toMatch(URGENT);
+  }, T);
+  for (const s of ["a định uống thuốc trừ sâu cho xong", "a muốn uống thuốc tẩy để chết", "a định nuốt cả lọ thuốc"])
+    it(`ý định “${s}” → hỗ trợ khủng hoảng + để chất / thuốc ra xa + người tin cậy ở cạnh; không nói như đã uống`, async () => {
+      const m = await last([s]);
+      expect(m.content).toMatch(/không phải một mình/);
+      expect(m.content).toMatch(/để nó ra xa/);
+      expect(m.content).toMatch(/ở cạnh/);
+      expect(m.content).not.toMatch(/🚨 Nuốt|^⚠️ Uống nhầm/);
+    }, T);
+  it("câu hỏi kiến thức “thuốc tẩy có độc không” không bị hiểu là sự cố đang xảy ra", async () => {
+    const m = await last(["thuốc tẩy có độc không"]);
+    expect(m.content).not.toMatch(/🚨|không phải một mình/);
+  }, T);
+});
+
+describe("Đợt 3 — trò chuyện tự nhiên hơn", () => {
+  it("“e là ai” → giới thiệu đúng tên Lomi, không gọi người dùng là “em”", async () => {
+    const m = await last(["e là ai"]);
+    expect(m.content).toMatch(/Lomi/);
+    expect(m.content).not.toMatch(/Còn em tên gì|Em tên gì|Mình là em/);
+  }, T);
+  it("“a thất nghiệp 3 tháng rồi” → nói chuyện mất việc, không phải bài “kiệt sức”", async () => {
+    const m = await last(["a thất nghiệp 3 tháng rồi"]);
+    expect(m.content).toMatch(/[Mm]ất việc/);
+    expect(m.content).not.toMatch(/burnout|Kiệt sức/);
+  }, T);
+  it("“bạn thân a nói xấu a” → mạch bạn bè, không “😅 Chuyện sao vậy”", async () => {
+    const m = await last(["bạn thân a nói xấu a"]);
+    expect(m.heart).toBe("friends");
+    expect(m.content).not.toMatch(/😅/);
+  }, T);
+  for (const s of ["a không biết nên làm gì với cuộc đời mình", "a thấy mình mông lung quá", "a chẳng biết tương lai đi về đâu"])
+    it(`mất phương hướng “${s}” → chủ đề riêng, không “Làm gì hả 😄”`, async () => {
+      const m = await last([s]);
+      expect(m.heart).toBe("lost");
+      expect(m.content).not.toMatch(/😄/);
+    }, T);
+});

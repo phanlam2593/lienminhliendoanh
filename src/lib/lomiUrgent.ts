@@ -35,7 +35,15 @@ const OTHER = VN(/\b(con|bé|em bé|cháu|mẹ|má|ba|bố|cha|ông|bà|vợ|ch�
 
 // 21/10 (audit bổ sung): thêm dầu hôi / dầu lửa / nhớt / nước giặt / băng phiến / cồn sát khuẩn / pin cúc áo… — trước đây
 //   "bé nhà a uống dầu hôi" bị đáp "😅 kể em nghe với". (Nuốt pin / nam châm là DỊ VẬT — SWALLOW bên dưới lo, có lời dặn riêng.)
-const POISON = VN(/\b((uống|nuốt|ăn|hít|lỡ uống|uống nhầm|uống phải|nuốt phải|nuốt nhầm|ăn phải|hít phải)\s+(nhầm\s+|phải\s+)?(thuốc tẩy|nước tẩy|javel|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|thuốc diệt côn trùng|hoá chất|hóa chất|xăng|dầu hoả|dầu hỏa|nước rửa chén|nước lau sàn|axit|acid|thuốc tẩy bồn cầu|dầu hôi|dầu lửa|dầu nhớt|nhớt xe|nhớt|nước giặt|viên giặt|nước xả vải|nước lau kính|thuốc tẩy quần áo|băng phiến|long não|thuốc diệt muỗi|thuốc xịt muỗi|nhang muỗi|cồn 70|cồn 90|cồn y tế|cồn sát khuẩn|nước rửa tay khô)|ngộ độc (hoá chất|hóa chất|thuốc trừ sâu|thuốc sâu|khí|khí ga|khói|thuốc diệt cỏ|thuốc chuột))\b/);
+// 21/10 (đợt 3): danh sách chất độc dùng chung — lib/lomiChat.crisisReply cũng dùng (poisonIntent) để nhận Ý ĐỊNH tự hại bằng hoá chất.
+const POISON_SUBST = "thuốc tẩy|nước tẩy|javel|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|thuốc diệt côn trùng|hoá chất|hóa chất|xăng|dầu hoả|dầu hỏa|nước rửa chén|nước lau sàn|axit|acid|thuốc tẩy bồn cầu|dầu hôi|dầu lửa|dầu nhớt|nhớt xe|nhớt|nước giặt|viên giặt|nước xả vải|nước lau kính|thuốc tẩy quần áo|băng phiến|long não|thuốc diệt muỗi|thuốc xịt muỗi|nhang muỗi|cồn 70|cồn 90|cồn y tế|cồn sát khuẩn|nước rửa tay khô";
+const POISON = VN(new RegExp(`\\b((uống|nuốt|ăn|hít|lỡ uống|uống nhầm|uống phải|nuốt phải|nuốt nhầm|ăn phải|hít phải)\\s+(nhầm\\s+|phải\\s+)?(${POISON_SUBST})|ngộ độc (hoá chất|hóa chất|thuốc trừ sâu|thuốc sâu|khí|khí ga|khói|thuốc diệt cỏ|thuốc chuột))\\b`));
+// Ý ĐỊNH tự hại bằng chất độc / hoá chất CHƯA xảy ra ("a muốn uống thuốc tẩy để chết", "a định uống thuốc trừ sâu cho xong") —
+//   không được đáp như sự cố đã xảy ra; lib/lomiChat.crisisReply đáp lời hỗ trợ khủng hoảng.
+const POISON_INTENT = VN(new RegExp(`\\b(muốn|định|tính|sẽ|sắp|chuẩn bị|chỉ muốn|thèm|quyết định) (\\S+ ){0,2}?(uống|nuốt|ăn|hít|tu|nốc) (hết |cả |nguyên |một |1 )?(chai |lọ |hộp |can |gói |bình |ly )?(${POISON_SUBST})\\b|\\b(uống|nuốt|ăn|hít|tu|nốc) (\\S+ ){0,4}?(để|cho) (chết|xong đời|chết luôn|tự tử|khỏi sống)\\b`));
+export function poisonIntent(text: string): boolean {
+  return POISON_INTENT.test(` ${normalizeVi(text)} `);
+}
 const SELF_HARM_POISON = VN(/\b(thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)\b/);
 const SWALLOW = VN(/\b(nuốt (phải |nhầm |mất )?(đồng xu|xu|pin|pin cúc|pin nút|cục pin|viên pin|nam châm|đinh|cây kim|kim|ghim|hạt|hột|đồ chơi|dị vật|cúc áo|nút áo|viên bi|bi|mảnh|miếng nhựa))\b/);
 // (Lời than "nghẹn ngào", "nghẹn lời", và chuyện hay bị nghẹn từ lâu không phải đang hóc.)

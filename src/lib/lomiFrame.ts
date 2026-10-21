@@ -320,6 +320,9 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   //   người yêu) → mở mạch tâm sự "lạnh nhạt" và nhớ người đó, thay vì "Cô ấy lạnh nhạt hả 😅 Chuyện sao vậy".
   if (p.val < 0 && person && (!c.heart || c.heart === "rel") && VR(/(lạnh nhạt|lạnh lùng|vô tâm|hờ hững|thờ ơ|xa cách|né tránh|hết quan tâm)/).test(p.head) && (f.subjectCls === "partner" || VR(/với ⟦you⟧/).test(p.obj ?? "")))
     return { intent: "frame:third_neg", openHeart: "cold", rel: `${subj.charAt(0).toLowerCase()}${subj.slice(1)}|silence`, text: `${subj} ${what} hả 😔 Bị người mình để tâm đối xử lạnh nhạt thì chạnh lòng lắm. Dạo này giữa hai người có chuyện gì không bạn?` };
+  // 21/10: một người làm điều tệ VỚI CHÍNH người kể ("bạn thân a nói xấu a") mà thư viện tâm sự đã nhận ra chủ đề (bạn bè, sếp…) →
+  //   nhường cho thư viện tâm sự (có lời đáp đúng chuyện), không đáp "😅 Chuyện sao vậy bạn".
+  if (p.val < 0 && person && c.heart && c.heart !== "rel" && !c.heart.startsWith("ev:") && VR(/⟦you⟧/).test(p.obj ?? "") && p.kind !== "event") return null;
   if (p.val < 0 || adverse) {
     // Chuyện đời sống thư viện tâm sự đã có lời hỏi han riêng (cúp điện, kẹt xe…) hoặc chuyện với sếp / người yêu → để lớp đó đáp.
     //  • chuyện đời sống (cúp điện, kẹt xe…) chỉ áp cho đồ vật / nơi chốn — với người thì mấy bài đó lạc đề ("vợ a nấu ăn dở" ≠ quán dở);

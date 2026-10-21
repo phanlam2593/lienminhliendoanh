@@ -12,6 +12,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { APP, maskStrict } from "@/lib/lomiAccent";
 import { emojiOnlyReply, expressive, tone } from "@/lib/lomiUnderstand";
 import { VR, VN } from "@/lib/viMatch";
+import { poisonIntent } from "@/lib/lomiUrgent";
 
 export type ChatReply = { text: string; quick?: string[]; sticker?: string };
 type L = "vi" | "en";
@@ -730,8 +731,19 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
 /** Người dùng nói muốn tự tử / làm hại bản thân — kiểm tra TRƯỚC mọi luồng khác. */
 export function crisisReply(text: string, lang: L): ChatReply | null {
   const n = ` ${normalizeVi(text)} `;
-  if (!RULES[0].re.test(n)) return null;
-  return lang === "en" ? chitChat(text, "en") : RULES[0].reply();
+  // 21/10 (đợt 3): ý định tự hại bằng chất độc bất kỳ ("muốn uống thuốc tẩy để chết") — trước đây luật chỉ biết thuốc ngủ / chuột / trừ sâu.
+  if (!RULES[0].re.test(n) && !poisonIntent(text)) return null;
+  if (lang === "en") return chitChat(text, "en");
+  const r = RULES[0].reply();
+  // Nhắc tới THUỐC / CHẤT ĐỘC (phương tiện) → thêm bước an toàn: để nó ra xa, nhờ người khác cất giữ.
+  return MEANS.test(n) ? { ...r, text: r.text.replace("• Nhắn hoặc gọi cho một người bạn", `${MEANS_LINE}\n• Nhắn hoặc gọi cho một người bạn`) } : r;
+}
+const MEANS = VN(/\b(thuốc|lọ thuốc|vỉ thuốc|thuốc ngủ|quá liều|thuốc tẩy|nước tẩy|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ|hoá chất|hóa chất|xăng|dầu hôi|axit|acid|chất độc)\b/);
+const MEANS_LINE = "• Nếu thuốc hay chất đó đang ở gần, để nó ra xa giúp Lomi — đưa cho người khác cất giữ hoặc ra khỏi phòng";
+export function crisisMeans(text: string): ChatReply | null {
+  // (dùng khi lớp khác đã biết đây là ý định tự hại bằng thuốc — vd lib/lomiDrug.overdoseMention "intent")
+  const r = RULES[0].reply();
+  return { ...r, text: r.text.replace("• Nhắn hoặc gọi cho một người bạn", `${MEANS_LINE}\n• Nhắn hoặc gọi cho một người bạn`) };
 }
 
 /** Câu có dáng câu hỏi (để quyết định gợi ý FAQ hay chỉ trò chuyện). */
@@ -816,19 +828,29 @@ export function foodDecisionReply(text: string): ChatReply | null {
   };
 }
 
+/** Việc người dùng đang cân nhắc trong câu "có nên X không" (chữ như người dùng gõ). null nếu thiếu việc hoặc chỉ là chữ chỉ trỏ ("cái này"). */
+function decideAction(text: string): string | null {
+  const t = text.normalize("NFC").toLowerCase().replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
+  const m = t.match(VR(/(?:có nên|nên)\s+(.+?)\s+(?:không|ko|k|hông|hong|hay không|hay thôi|hay sao)(?:\s+(?:nhỉ|ta|hả|ha|à|ạ|a|nè|e|em|lomi|vậy))*$/u));
+  const act = m?.[1]?.replace(VR(/\s+(?:trước|luôn)?$/u), (x) => x)?.trim();
+  if (!act || act.split(" ").length > 8) return null;
+  if (VR(/(?:^|\s)(?:cái|món|chuyện|việc|vụ)\s+(?:này|đó|kia|ấy)(?:\s|$)|^(?:làm|vậy|thế|vậy không|đi)$/u).test(act)) return null;
+  return act;
+}
+
 export function scopedFallback(text: string, faqQ?: string): ChatReply {
   const n = ` ${normalizeVi(text)} `;
   const fdr = foodDecisionReply(text);
   if (fdr) return fdr;
-  // Câu hỏi quyết định chuyện đời ("hôm nay có nên đi nhậu không") → vẫn mời bói đúng câu đó (trong phạm vi Tarot).
-  if (VN(/\b(có nên|nên .* không|nên .* hay)\b/).test(n) && !isAppish(text))
-    return {
-      text: pick([
-        "Nên hay không thì Lomi không dám quyết thay bạn 😅 Nhưng nếu đang phân vân, Lomi rút bài xem thử cho bạn nha — bấm bên dưới!",
-        "Câu này tuỳ bạn cân nhắc thôi nè 😄 Muốn tham khảo thêm thì để Lomi bói thử đúng câu này nha 🔮",
-      ]),
-      quick: [tarotChipFor(text)],
-    };
+  // 21/10 (đợt 3, theo ý Kir): câu "có nên…" Lomi chưa có bài riêng → KHÔNG tự mời bói nữa (chỉ bói khi người dùng tự xin).
+  //   Có nêu việc cụ thể ("có nên nhắn tin trước không") → cùng cân nhắc, hỏi hoàn cảnh; thiếu việc / chỉ trỏ ("có nên không",
+  //   "có nên mua cái này không") → hỏi lại một câu cho rõ. Câu ăn uống đã có foodDecisionReply ở trên.
+  if (VN(/\b(có nên|nên .* không|nên .* hay)\b/).test(n) && !isAppish(text)) {
+    const act = decideAction(text);
+    return act
+      ? { text: `Chuyện **${act}** thì Lomi không quyết thay bạn được, nhưng mình cân nhắc cùng nha 🙂 Bạn kể Lomi nghe hoàn cảnh một chút: điều gì làm bạn muốn ${act}, và điều gì làm bạn còn ngần ngại?` }
+      : { text: VN(/\b(mua|bán|chọn|lấy|đổi)\b/).test(n) ? "Bạn đang tính chọn món nào nè? Nói Lomi tên hoặc mô tả một chút, rồi mình cân nhắc cùng nha 🙂" : "Bạn đang phân vân chuyện gì nè? Kể Lomi nghe một chút để mình cân nhắc cùng nha 🙂" };
+  }
   // Nhờ làm việc ngoài phạm vi (dịch, viết code, giải toán, tìm tin…) → nói rõ là ngoài phạm vi.
   const outTask = VN(/\b(dịch|viết code|code|lập trình|giải toán|giải bài|làm bài tập|tính giúp|tìm giúp|tra cứu|kết quả bóng đá|xổ số|chứng khoán|giá vàng|tỷ giá|tỉ giá|tin tức)\b/).test(n);
   // Chỉ nói "Về chuyện <câu app vừa hỏi>…" khi câu mới thật sự là câu hỏi nối tiếp — câu cảm thán/phản ứng
