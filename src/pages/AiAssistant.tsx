@@ -47,12 +47,14 @@ import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
-import { GENERIC, heartContinue, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
+import { PRIORITY_THEMES, GENERIC, heartContinue, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
-import { healthFact, healthFactFirst } from "@/lib/lomiHealthFacts";
+import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
+import { honestReply } from "@/lib/lomiHonest";
+import { budgetReply, fixReply, inflationReply, knowledgeReply, simplerReply, whoNeedsCv } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
@@ -70,7 +72,7 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, jokeText, chitChat, crisisCheckIn, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, jokeText, storyNotApp, chitChat, crisisCheckIn, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -1334,6 +1336,23 @@ export function AiChat({
         // không rẽ sang lời khuyên chung chung.
         if (!en && VN(/(?<![a-z])(có nên|nên hay không|liệu có|bao giờ|khi nào)(?![a-z])/).test(normalizeVi(q)) && q.split(/\s+/).length <= 14 && !isAppish(q)) return doTarot(q.replace(VR(/^(vậy|thế|rồi|còn)\s+/iu), ""), q);
       }
+      // 21/10 (QA V2 phần A): câu đời thường cần ngữ cảnh nhiều lượt — nói gọn lại, tính tiền còn lại, lạm phát + ví dụ,
+      //   người có tên trong câu kể, kiến thức nhập môn (tâm lý học, tarot có khoa học không), câu hỏi thực tế khi mở cửa hàng.
+      if (!en && !gateSkip) {
+        const userHist = msgs.filter((m) => m.role === "user").slice(-8).map((m) => m.content);
+        const ex =
+          fixReply(typed) ??
+          (bodyAlarm(q, []) ? null : healthFactEarly(q)) ??
+          simplerReply(q, lastA?.content) ??
+          budgetReply(q, userHist) ??
+          inflationReply(q, lastA?.content) ??
+          whoNeedsCv(q, userHist) ??
+          knowledgeReply(q);
+        if (ex) return localReply(q, { role: "assistant", content: ex, local: true });
+        const bk = detectBizKind(q);
+        const bp = !lastA?.heart ? bizPractical(q, { ...(bk.type ? bk : {}) }) : null;
+        if (bp) return bizReply(q, { ...(bk.type ? bk : {}) }, detectBizTopic(q) ?? "opening");
+      }
       // Understanding Gate (01/10): filler / follow-up / mơ hồ / hỏi luật Tarot — xác định ý trước khi module chuyên biệt bắt câu.
       if (!en) {
         const inFlow = !!(lastA?.heart || hCtx || lastA?.dishAsk || lastA?.dishPick || lastA?.bizPick || lastA?.bizTopicPick || lastA?.issue || lastA?.biz);
@@ -1348,6 +1367,18 @@ export function AiChat({
           if (g.reply.intent === "fun") return localReply(q, { role: "assistant", content: jokeText(q), local: true, ...keepHealth });
           const cc = g.preferChit ? chitChat(q, lang, displayName(loadMem(user.id), profile?.full_name), raw) : null;
           return localReply(q, { role: "assistant", content: cc?.text ?? g.reply.text, local: true, quick: cc?.quick, ...keepHealth });
+        }
+      }
+      // 21/10 (QA V2): câu trúng một chủ đề tâm sự CỤ THỂ (đoán ý người yêu, thử lòng, sợ bị cho là yếu đuối, xin lỗi mà tái phạm…)
+      //   → mở đúng chủ đề đó ngay, trước khung câu / bài quan hệ chung / nghe kể (các lớp đó đọc mấy câu này thành chuyện khác).
+      if (!en && !gateSkip) {
+        const pt = heartThemeOf(q);
+        if (pt && PRIORITY_THEMES.includes(pt) && lastA?.heart !== pt) {
+          const h = heartStart(q, false);
+          if (h && h.theme === pt) {
+            topicHit("love");
+            return localReply(q, heartMsg(h, 1));
+          }
         }
       }
       // e00) KHUNG CÂU (09/10, lib/lomiFrame): đáp theo CẤU TRÚC những câu mà lớp từ khoá đọc sai — lời chào / chúc kèm buổi, dịp bất kỳ,
@@ -1367,7 +1398,7 @@ export function AiChat({
       const fxFolkWarn = !!fxFolk && (fxFolk.verdict === "myth" || fxFolk.verdict === "danger");
         // 21/10: câu kể nhắc lại chung chung ("Được thưởng hả? Rồi sao nữa…") mà thư viện sự kiện / tâm sự đã có lời đáp riêng
         //   ("hôm nay a được thưởng" → chúc mừng) → nhường cho thư viện đó (lớp tâm sự ở dưới đáp).
-        const fxYield = !!fx && !fx.redirect && !heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q));
+        const fxYield = !!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || PRIORITY_THEMES.includes(heartThemeOf(q) ?? ""));
         if (fxYield) {
           /* để lớp tâm sự / sự kiện bên dưới trả lời */
         } else if (fx?.redirect) {
@@ -1448,7 +1479,10 @@ export function AiChat({
       //     Cộng dồn với những gì đã kể ở tin trước khi đang tâm sự.
       // 21/10 (QA Q38): đang bàn chuyện tiết kiệm mà hỏi "tiền cà phê mỗi ngày thì sao" → chuyện TIỀN, không phải thẻ caffeine.
       const moneyTalk = lastA?.heart === "saving" && VN(/\b(tiền|chi tiêu|tốn|đắt|rẻ|giá)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(sức khoẻ|sức khỏe|bệnh|hại|tốt không|có sao|mất ngủ|tim)\b/).test(` ${normalizeVi(q)} `);
-      if (!en && !gateSkip && !moneyTalk && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
+      // 21/10 (QA V2 Q56/Q64): câu thuộc một chủ đề tâm sự cụ thể ("cần thời gian bình tĩnh", "sợ người yêu nghĩ mình yếu đuối")
+      //   không đi vào thẻ bệnh / bảng phân tích cảm xúc chung.
+      const priTheme = PRIORITY_THEMES.includes(heartThemeOf(q) ?? "");
+      if (!en && !gateSkip && !moneyTalk && !priTheme && !(looksLikeQuestion(q) && isAppish(q) && matchFaq(q))) {
         const inTalk = heartOn || !!hCtx;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const umbrellaMed = async (mt: MedTopic, mr: MedReply, food?: string | null, shown?: string): Promise<MedReply> => {
@@ -1458,6 +1492,11 @@ export function AiChat({
           return renderUmbrella(mt, subs, mr.aspect, food, shown);
         };
         const nq = ` ${normalizeVi(q)} `;
+        // 21/10 (QA V2 Q46/Q48/Q49): đòi cam kết 100%, chẩn đoán qua ảnh, nguồn "chữa khỏi hoàn toàn" → nói thật giới hạn.
+        {
+          const hr = honestReply(q);
+          if (hr) return localReply(q, { role: "assistant", content: hr, local: true, health: hCtx ?? {} });
+        }
         // 21/10 (QA Q44/Q48/Q50): câu hỏi kiến thức rất cụ thể có bài riêng → trả lời đúng câu đó trước thẻ bệnh chung.
         {
           const f1 = bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : []) ? null : healthFactFirst(q);
@@ -1980,7 +2019,7 @@ export function AiChat({
     // 11/10: đang kể triệu chứng mà nói thêm một mẩu chi tiết ("nhất là lúc đứng dậy") → không đem đi dò câu hỏi về app
     //        (bỏ dấu thì "đứng dậy", "lúc"… trùng chữ với câu hỏi về mã ưu đãi).
     const healthDetail = !forceAi && !en && !!keepHealth.health && !!lastA?.sx?.length && !looksLikeQuestion(q) && !isAppish(q) && q.split(/\s+/).length <= 8;
-    const faq = forceAi || healthDetail ? null : cut ? (fu ?? matchFaq(q)) : (matchFaq(q) ?? fu);
+    const faq = forceAi || healthDetail || storyNotApp(q) ? null : cut ? (fu ?? matchFaq(q)) : (matchFaq(q) ?? fu);
     // Ý hỏi đã có sẵn trong câu trả lời vừa rồi → chỉ lại đúng câu đó.
     if (!faq && cut && lastA && !en) {
       const back = answerFromPrev(q, lastA.content);

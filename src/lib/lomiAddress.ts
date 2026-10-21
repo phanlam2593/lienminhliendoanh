@@ -33,7 +33,7 @@ const THIRD = VR(/(^|\s)(anh|a|chị|c|em|e|ông|bà|cô|chú)\s+(ấy|ta|kia|đ
 const THIRD_NAME = VR(/(^|\s)(anh|a|chị|c|em|e|ông|bà|cô|chú|bác)\s+(\p{Lu}\p{Ll}*)/gu);
 // Người dùng GỌI Lomi: "lomi e đang…", "lomi em ơi", "em ơi", "e ơi cho hỏi" → Lomi là "em".
 const CALL_LOMI_EM = VR(/(^|\s)(lomi\s+(em|e)|(em|e)\s+lomi|(em|e)\s+ơi+)(?=\s|$|[,.!?])/iu);
-const ASK_LOMI_EM = VR(/(^|[,.!?]\s*)(em|e)\s+(có thể|có biết|có hiểu|có nhớ|làm ơn|giúp (anh|a|chị|c|mình|tui|tôi)|cho (anh|a|chị|c) (hỏi|xin|biết))(?=\s|$|[,.!?])/iu);
+const ASK_LOMI_EM = VR(/(^\s*|[,.!?]\s*)(em|e)\s+(không biết thì|ko biết thì|có thể|có biết|có hiểu|có nhớ|làm ơn|giúp (anh|a|chị|c|mình|tui|tôi)|cho (anh|a|chị|c) (hỏi|xin|biết))(?=\s|$|[,.!?])/iu);
 // Người dùng gọi Lomi là anh/chị ("anh ơi", "chị ơi", "lomi anh") — Lomi vẫn xưng "Lomi" (giữ persona).
 const CALL_LOMI_AC = VR(/(^|\s)(lomi\s+(anh|a|chị|c)|(anh|a|chị|c)\s+ơi+)(?=\s|$|[,.!?])/iu);
 
@@ -108,7 +108,7 @@ function lomiAsEm(text: string): string {
     .replace(VR(/(^|\n)Lomi(?= nè 🤖)/gu), `$1${KEEP}`);
   return kept
     .replace(VR(/(^|[^\p{L}/“"])Lomi(?![\p{L}])/gu), (_m, pre: string) => {
-      const start = pre === "" || /[.!?\n]\s*$/.test(pre) || pre === "\n";
+      const start = pre === "" || /[.!?\n•]\s*$/.test(pre) || pre === "\n";
       return `${pre}${start ? "Em" : "em"}`;
     })
     .split(KEEP)
@@ -144,6 +144,6 @@ function speakPlain(text: string, addr: Addr): string {
   if (addr === "anh" || addr === "chị") out = lomiAsEm(out);
   // Sau khi đổi, đầu câu viết hoa lại (vd "…nha. em hiểu" → "Em hiểu").
   // (09/10: sau emoji cũng là đầu câu — "… ngại quá 😳 em là robot" → "… 😳 Em là robot")
-  out = out.replace(VR(/([.!?]\s+|\p{Extended_Pictographic}\uFE0F?\s+|\n\s*|^)(em|anh|chị)(?=\s)/gu), (_m, p: string, w: string) => `${p}${cap(w)}`);
+  out = out.replace(VR(/([.!?]\s+|•\s+|\p{Extended_Pictographic}\uFE0F?\s+|\n\s*|^)(em|anh|chị)(?=\s)/gu), (_m, p: string, w: string) => `${p}${cap(w)}`);
   return out;
 }

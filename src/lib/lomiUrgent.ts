@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -99,6 +99,20 @@ function dengueWarnAsserted(n: string): boolean {
 }
 const DENGUE_WARN = VN(/\b(đau bụng (dữ dội|nhiều|quá|lắm|quặn)|quặn bụng|nôn (nhiều|liên tục|hoài|ra máu)|ói (nhiều|liên tục|ra máu)|chảy máu (chân răng|nướu|lợi|mũi|cam)|máu cam|thở (nhanh|gấp)|li bì|lừ đừ|mệt lả|rất mệt|bồn chồn|vật vã|phân (có máu|đen)|đi (ngoài|cầu) ra máu)\b/);
 
+// 21/10 (QA V2): huyết khối, tăng nhãn áp cấp, mất nước, cơn lo kèm tim đập nhanh.
+const CALF = VN(/\b(bắp chân|cẳng chân|bắp chuối|bắp vế|một bên chân|một chân|chân trái|chân phải)\b/);
+const CALF_PAIN = VN(/\b(đau|nhức|căng tức|chuột rút)\b/);
+const CALF_SWELL = VN(/\b(sưng|phù|nóng đỏ|đỏ lên|to hơn)\b/);
+const LONG_SIT = VN(/\b(chuyến bay|bay dài|đi máy bay|ngồi lâu|ngồi xe lâu|nằm lâu|sau mổ|sau phẫu thuật|bó bột|ngồi suốt)\b/);
+const EYE_PAIN = VN(/\b(đau mắt|nhức mắt|mắt đau|mắt nhức)( \S+){0,2} (dữ dội|nhiều|quá|đột ngột|kinh khủng|lắm)|(đau|nhức) (dữ dội|đột ngột)( \S+){0,2} (mắt|hốc mắt)\b/);
+const EYE_HALO = VN(/\b(quầng sáng|vòng sáng|quầng (màu|cầu vồng)|thấy quầng)\b/);
+const EYE_RED = VN(/\b(mắt đỏ|đỏ mắt|đỏ cả mắt)\b/);
+const EYE_BLUR = VN(/\b(nhìn mờ|mờ mắt|mắt mờ|nhìn không rõ)\b/);
+const GUT_LOSS = VN(/\b(tiêu chảy|đi ngoài|đi cầu (liên tục|nhiều)|nôn|ói)\b/);
+const DEHY_SIGN = VN(/\b((chóng mặt|choáng|xây xẩm|hoa mắt) (khi |lúc )?(đứng|ngồi) (lên|dậy)|tiểu (rất )?ít|ít tiểu|không đi tiểu|không tiểu|nước tiểu (sẫm|đậm|ít)|mắt trũng|khát (dữ|nhiều|khô cổ)|lả đi|lừ đừ)\b/);
+const PANICISH = VN(/\b(lo lắng|lo âu|hoảng|hoảng loạn|sợ hãi|căng thẳng)\b.*\b(sắp chết|như sắp chết|tưởng (mình )?chết|sợ chết|như muốn chết)\b/);
+const PALP_RUN = VN(/\b(tim đập nhanh|tim đập mạnh|đánh trống ngực|hồi hộp|run)\b/);
+
 /** Câu kể một tình huống cần xử trí khẩn → tình huống + thẻ để trả lời; không phải thì null. */
 export function urgentOf(text: string): Urgent | null {
   const n = ` ${normalizeVi(text)} `;
@@ -171,6 +185,34 @@ export function urgentOf(text: string): Urgent | null {
   // Người LỚN TUỔI bị ngã (kể cả không thấy đau): NHS khuyên đi khám sau khi ngã để tìm nguyên nhân, phòng ngã lại.
   if (FALL.test(n) && ELDER.test(n) && !VN(/\b(ngã xe đạp nhẹ|không sao rồi|ổn rồi)\b/).test(n))
     return { id: "fall", card: "te-nga", aspect: "care", head: "⚠️ Người lớn tuổi bị ngã thì nên được kiểm tra kỹ, kể cả khi trông không sao — NHS khuyên đi khám sau khi bị ngã. Nếu **có thể chấn thương đầu, lưng, cổ, hông, hoặc không tự đứng dậy được** → gọi **115** ngay." };
+  // 21/10 (QA V2 Q31): đau + sưng MỘT bên bắp chân (nhất là sau bay dài / ngồi lâu) — nghi huyết khối tĩnh mạch sâu.
+  if (CALF.test(n) && ((CALF_PAIN.test(n) && CALF_SWELL.test(n)) || ((CALF_PAIN.test(n) || CALF_SWELL.test(n)) && LONG_SIT.test(n))))
+    return {
+      id: "dvt",
+      head: `⚠️ Đau và sưng **một bên bắp chân** (nhất là sau chuyến bay dài, ngồi hay nằm lâu) có thể là dấu hiệu **cục máu đông ở tĩnh mạch sâu (huyết khối)** — cần được bác sĩ khám **khẩn, ngay trong hôm nay**. Đừng xoa bóp, chườm nóng hay cố tập cho chân đó.\n\nNếu kèm **khó thở, đau ngực (nhất là khi hít vào), ho ra máu** → ${CALL} ngay, vì cục máu đông có thể lên phổi.`,
+      extra: "Lomi không chẩn đoán được qua tin nhắn — cần bác sĩ khám (thường kèm siêu âm) mới biết có phải huyết khối hay không.",
+    };
+  // 21/10 (QA V2 Q33): đau mắt dữ dội + đỏ mắt + nhìn mờ / thấy quầng sáng quanh đèn — nghi tăng nhãn áp cấp (glôcôm góc đóng).
+  if (EYE_PAIN.test(n) && (EYE_HALO.test(n) || (EYE_RED.test(n) && EYE_BLUR.test(n))))
+    return {
+      id: "glaucoma",
+      head: `🚨 Đau mắt **dữ dội**, mắt đỏ kèm **nhìn mờ hoặc thấy quầng sáng quanh đèn** (có thể kèm nhức đầu, buồn nôn) có thể là **tăng nhãn áp cấp (glôcôm góc đóng)** — cần đi **cấp cứu mắt ngay** (khoa Mắt / bệnh viện gần nhất), đừng tự nhỏ thuốc rồi chờ: để chậm có thể mất thị lực.`,
+      extra: "Lomi không chẩn đoán được qua tin nhắn — bác sĩ mắt cần đo nhãn áp và khám trực tiếp.",
+    };
+  // 21/10 (QA V2 Q30): tiêu chảy / nôn kèm chóng mặt khi đứng, tiểu rất ít — mất nước đáng kể.
+  if (GUT_LOSS.test(n) && DEHY_SIGN.test(n))
+    return {
+      id: "dehydration",
+      head: `⚠️ Tiêu chảy hay nôn kèm **chóng mặt khi đứng lên, tiểu rất ít** là dấu hiệu **mất nước đáng kể** — nên đi khám **ngay trong hôm nay** để được bù nước đúng cách (có khi phải truyền).\n\nTrong lúc chờ: uống từng ngụm nhỏ, liên tục, dung dịch bù nước (oresol pha **đúng** hướng dẫn trên gói); đứng dậy từ từ, có người ở cạnh.\n\nLơ mơ, ngất, gần như không tiểu cả nửa ngày, đi ngoài ra máu, nôn ra mọi thứ không uống được → ${CALL} hoặc đi cấp cứu ngay.`,
+      extra: "Trẻ nhỏ, người già, người có bệnh nền mất nước nhanh hơn — càng nên khám sớm.",
+    };
+  // 21/10 (QA V2 Q89): lo lắng + tim đập nhanh, run, cảm giác sắp chết — có thể là cơn hoảng loạn, nhưng không loại trừ được bệnh tim qua tin nhắn.
+  if (PANICISH.test(n) && PALP_RUN.test(n))
+    return {
+      id: "panicish",
+      head: `⚠️ Tim đập nhanh, run, cảm giác như sắp chết khi đang lo lắng **có thể** là một cơn hoảng loạn — thường lên đỉnh trong khoảng 10 phút rồi dịu dần. Nhưng Lomi **không phân biệt được** qua tin nhắn: nếu **đây là lần đầu**, hoặc có **đau / tức ngực, khó thở nhiều, ngất, yếu tay chân, méo miệng**, hoặc bạn có bệnh tim → ${CALL} ngay.`,
+      extra: "Nếu từng bị như vậy và bác sĩ đã nói là hoảng loạn: ngồi xuống, thở chậm (hít vào đếm 4, thở ra đếm 6), nhìn và gọi tên 5 thứ quanh mình — cơn sẽ qua. Bị lặp lại nhiều lần thì nên đi khám để được điều trị, đừng chịu một mình nha.",
+    };
   if (DIABETES.test(n) && HYPO.test(n))
     return {
       id: "hypo",

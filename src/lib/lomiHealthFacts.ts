@@ -13,7 +13,7 @@ import { VR, VN } from "@/lib/viMatch";
 // để "cf?", "đi cà phê không", "trà sữa ở đâu ngon" không bị đáp thành bài sức khoẻ (01/10 r3, test thật trên app).
 // src (15/10, audit sức khoẻ): nguồn đã đối chiếu cho đúng các ý trong câu trả lời; không có = kiến thức phổ thông CHƯA gắn nguồn
 //   (câu đáp ghi rõ điều đó). Các con số (lượng caffeine, giờ ngủ, lượng nước, phút vận động…) chỉ giữ khi khớp nguồn.
-type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string; checked?: string; first?: boolean };
+type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string; checked?: string; first?: boolean; early?: boolean };
 const HEALTH_CUE =
   VN(/\b(có sao|có hại|có tốt|tốt không|hại không|tác hại|lợi ích|ảnh hưởng|sức khoẻ|uống nhiều|nhiều quá|quá nhiều|mỗi ngày|bao nhiêu|mấy ly|mấy cốc|lúc nào|buổi tối|buổi sáng|khi đói|bụng đói|dạ dày|mất ngủ|khó ngủ|tim đập|huyết áp|mang thai|có bầu|cho con bú|trẻ em|béo|mập|tăng cân|giảm cân|đường|nghiện|cai|bỏ được|nóng trong|lợi tiểu|nên uống|có nên uống|uống được không)\b/);
 
@@ -81,6 +81,55 @@ const FACTS: Fact[] = [
       "🩺 Mờ mắt, đau mắt, đỏ mắt kéo dài hay thị lực giảm thì nên đi khám Mắt.",
     src: "American Academy of Ophthalmology (qua HealthDay, 22/12/2023 — cập nhật 18/01/2024)",
     checked: "21/10/2026",
+  },
+  {
+    // 21/10 (QA V2 Q17): tim đập nhanh sau khi uống nhiều cà phê — trước đây nhận bài "400 mg caffeine/ngày" chung chung.
+    id: "caffeinepalp",
+    first: true,
+    re: VN(/\b(tim đập nhanh|tim đập mạnh|hồi hộp|đánh trống ngực|run tay|bồn chồn)\b.*\b(cà phê|cafe|cf|caffeine|cafein|nước tăng lực|trà đặc)\b|\b(cà phê|cafe|cf|caffeine|cafein|nước tăng lực|trà đặc)\b.*\b(tim đập nhanh|tim đập mạnh|hồi hộp|đánh trống ngực)\b/),
+    a:
+      "☕ **Tim đập nhanh sau khi uống nhiều cà phê** thường do caffeine, và hay dịu dần trong vài giờ khi caffeine được đào thải.\n" +
+      "• Ngưng uống thêm cà phê, trà, nước tăng lực hôm nay; uống nước lọc, ngồi nghỉ, thở chậm\n" +
+      "• Gọi **115** / đi cấp cứu ngay nếu có: **đau hoặc tức ngực, khó thở, ngất hoặc gần ngất, tim đập rất nhanh hay loạn nhịp kéo dài**, hoặc bạn có bệnh tim\n" +
+      "• Hay bị hồi hộp kể cả khi không uống cà phê → nên đi khám Tim mạch\n\n" +
+      "Bạn đang có thấy tức ngực hay khó thở không?",
+  },
+  {
+    // 21/10 (QA V2 Q86): đau bụng / buồn nôn mỗi lần sắp đi làm vì lo — có thể do lo âu, nhưng không bỏ qua nguyên nhân thể chất.
+    id: "anxietygut",
+    first: true,
+    early: true,
+    re: VN(/\b(đau bụng|buồn nôn|tiêu chảy|đau dạ dày|muốn ói|quặn bụng)\b.*\b(vì lo|lo lắng|căng thẳng|hồi hộp|áp lực)\b|\b(lo lắng|căng thẳng|hồi hộp|áp lực)\b.*\b(đau bụng|buồn nôn|đau dạ dày|muốn ói|quặn bụng)\b/),
+    a:
+      "Đau bụng, buồn nôn mỗi lần sắp đi làm **có thể** do lo âu — ruột và não “nói chuyện” với nhau rất nhiều, căng thẳng làm bụng phản ứng thật chứ không phải tưởng tượng. Nhưng đừng mặc định chỉ là tâm lý nha.\n" +
+      "• Đi khám (Nội tổng quát / Tiêu hoá) nếu: đau cả ngày nghỉ, đau về đêm, sụt cân, nôn ra máu, đi ngoài ra máu hoặc phân đen, sốt — để loại trừ nguyên nhân thể chất\n" +
+      "• Đau dữ dội đột ngột, bụng cứng, nôn liên tục → đi cấp cứu\n\n" +
+      "Nếu chủ yếu xảy ra vào lúc sắp đi làm:\n• Thử để ý điều gì ở chỗ làm làm bạn lo nhất (một người, một việc, áp lực chung)\n• Buổi sáng ăn nhẹ, đủ nước, thở chậm vài phút trước khi đi\n• Kéo dài vài tuần, ảnh hưởng công việc → nói chuyện với bác sĩ hoặc chuyên gia tâm lý\n\n" +
+      "Chuyện ở chỗ làm có điều gì đang làm bạn căng thẳng không?",
+  },
+  {
+    // 21/10 (QA V2 Q94): thiền mà càng ngồi càng lo.
+    id: "meditateanx",
+    first: true,
+    re: VN(/\b(thiền|ngồi thiền|chánh niệm)\b.*\b(càng (thấy )?(lo|bồn chồn|khó chịu|hoảng|bứt rứt)|lại (thấy )?(lo|hoảng|khó chịu))\b/),
+    a:
+      "Không phải bạn làm sai đâu — **không phải ai cũng hợp với kiểu ngồi yên**, nhất là khi đang nhiều lo âu: lúc yên lặng, những suy nghĩ khó chịu dễ trồi lên rõ hơn.\n" +
+      "• Thấy khó chịu nhiều thì cứ dừng lại, không cần ráng\n" +
+      "• Thử kiểu có chuyển động hoặc có điểm tựa bên ngoài: đi bộ chậm chú ý bước chân, yoga nhẹ, thiền có hướng dẫn bằng giọng nói, mở mắt nhìn một vật\n" +
+      "• Bắt đầu thật ngắn (2–3 phút) thay vì ngồi lâu\n" +
+      "• Nếu lo âu nhiều tới mức ảnh hưởng sinh hoạt, hoặc thiền làm bạn hoảng sợ, nói chuyện với chuyên gia tâm lý để có cách phù hợp hơn",
+  },
+  {
+    // 21/10 (QA V2 Q50): "nước chanh thải độc, chữa bệnh gan" — tuyên bố sai trên mạng.
+    id: "detox",
+    first: true,
+    re: VN(/\b(nước chanh|chanh|detox|giải độc|thải độc|thanh lọc)\b.*\b(thải (hết )?độc|giải độc|chữa (bệnh )?gan|mát gan|thanh lọc gan|chữa bệnh)\b/),
+    a:
+      "🍋 **Không đúng đâu** — nước chanh không \"thải hết độc tố\" và không chữa được bệnh gan.\n" +
+      "• Gan và thận vốn là cơ quan tự lọc, đào thải chất cần thải; chưa có bằng chứng nước chanh hay sản phẩm \"detox\" làm việc đó tốt hơn\n" +
+      "• Uống nước chanh pha loãng thì không sao (nhưng dễ xót dạ dày, mòn men răng nếu uống nhiều, đặc)\n" +
+      "• Cẩn thận: tin vào mẹo \"giải độc gan\" mà bỏ khám, hoặc tự uống thuốc nam / thực phẩm chức năng \"mát gan\" không rõ nguồn gốc có khi còn hại gan hơn\n\n" +
+      "🩺 Có **vàng da, vàng mắt, nước tiểu sẫm, đau hạ sườn phải, bụng chướng, ngứa nhiều** → đi khám Tiêu hoá – Gan mật sớm.",
   },
   {
     // 21/10 (QA Q48): bị cảm có nên tắm không.
@@ -188,6 +237,12 @@ const FACTS: Fact[] = [
 ];
 
 /** Câu hỏi kiến thức sức khoẻ ("… có sao không", "ăn gì …", "nên …") → trả lời, không thì null. */
+/** 21/10: mục "early" — câu trộn cảm xúc + triệu chứng ("đau bụng vì lo lắng") mà các lớp thẻ bệnh hay bắt sớm → trả lời trước. */
+export function healthFactEarly(text: string): string | null {
+  const n = ` ${normalizeVi(text)} `;
+  const f = FACTS.find((x) => x.early && x.re.test(n));
+  return f ? renderFact(f) : null;
+}
 /** 21/10: câu hỏi trúng một mục "first" (câu hỏi rất cụ thể — bị cảm có nên tắm, ngủ đủ mà vẫn mệt) → trả lời trước cả thẻ bệnh chung. */
 export function healthFactFirst(text: string): string | null {
   const n = ` ${normStrict(text, HEALTH)} `;
@@ -197,8 +252,15 @@ export function healthFact(text: string): string | null {
   const n = ` ${normStrict(text, HEALTH)} `;
   const isQ = text.includes("?") || VN(/\b(có sao|có hại|có tốt|ăn gì|uống gì|nên|bao nhiêu|thế nào|làm sao|có nên|được không|không|là đủ|đủ chưa|bao lâu|mấy tiếng|mấy ly|có mập|có béo|tác dụng phụ)\b/).test(n);
   if (!isQ) return null;
-  const f = FACTS.find((x) => x.re.test(n) && (!x.cue || HEALTH_CUE.test(n)));
+  // 21/10 (QA V2 Q16): "mở quán cà phê cần bao nhiêu vốn" là chuyện kinh doanh — tên đồ uống không phải câu hỏi sức khoẻ.
+  const biz = VN(/\b(mở quán|mở tiệm|kinh doanh|bao nhiêu vốn|vốn bao nhiêu|cần vốn|bán cà phê|quán cà phê của)\b/).test(n);
+  const ok = (x: Fact) => x.re.test(n) && (!x.cue || (HEALTH_CUE.test(n) && !biz));
+  //   (mục "first" là câu hỏi cụ thể hơn — "tim đập nhanh sau 3 ly cà phê" — được ưu tiên trước mục chung "cà phê")
+  const f = FACTS.find((x) => x.first && ok(x)) ?? FACTS.find(ok);
   if (!f) return null;
+  return renderFact(f);
+}
+function renderFact(f: Fact): string {
   return f.src
     ? `${f.a}\n\n📚 Nguồn: ${f.src}. Lomi đối chiếu ngày ${f.checked ?? "15/10/2026"}. Kiến thức tham khảo chung — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺`
     : `${f.a}\n\n(Kiến thức phổ thông Lomi tổng hợp, **chưa gắn nguồn y khoa cụ thể** — có bệnh nền, đang mang thai hay cho trẻ nhỏ thì hỏi bác sĩ nha 🩺)`;

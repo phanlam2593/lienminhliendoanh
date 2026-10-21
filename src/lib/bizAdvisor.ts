@@ -486,6 +486,24 @@ const DATE_ASK = VN(/\b(ngày nào|chọn ngày|ngày đẹp|ngày tốt|hôm n�
 export function bizPractical(text: string, ctx: BizCtx): string | null {
   const n = ` ${normStrict(text, BIZ)} `;
   const noun = nounFor(ctx.type, ctx.noun);
+  // 21/10 (QA V2 Q11): nhà thuốc là ngành kinh doanh CÓ ĐIỀU KIỆN — nói điều kiện pháp lý trước (không phải tư vấn dùng thuốc).
+  if (VN(/\b(nhà thuốc|tiệm thuốc|quầy thuốc|hiệu thuốc|thuốc tây)\b/).test(n) && VN(/\b(mở|kinh doanh|khai trương|chuẩn bị)\b/).test(n))
+    return (
+      "Mở nhà thuốc là **ngành kinh doanh có điều kiện**, nên phần pháp lý cần lo trước nha:\n" +
+      "• Người phụ trách chuyên môn phải có **chứng chỉ hành nghề dược** đúng loại hình (nhà thuốc hay quầy thuốc có yêu cầu bằng cấp, kinh nghiệm khác nhau)\n" +
+      "• Xin **Giấy chứng nhận đủ điều kiện kinh doanh dược** và đạt chuẩn **GPP** (Thực hành tốt cơ sở bán lẻ thuốc): diện tích, kho, nhiệt độ – độ ẩm, sổ sách / phần mềm quản lý thuốc\n" +
+      "• Đăng ký hộ kinh doanh hoặc doanh nghiệp như các ngành khác\n" +
+      "• Nhập thuốc từ nhà phân phối hợp pháp, có hoá đơn, chứng từ\n\n" +
+      "Quy định cụ thể có thể thay đổi, nên trước khi thuê mặt bằng bạn hỏi **Sở Y tế** nơi định mở (hoặc một dược sĩ đang đứng nhà thuốc) cho chắc. Vốn, mặt bằng, nhân sự thì tính như các cửa hàng khác — muốn Lomi liệt kê các khoản vốn không?"
+    );
+  // 21/10 (QA V2 Q14): nhờ viết câu quảng cáo / slogan → viết luôn vài câu, không đưa mẫu bài đăng ưu đãi chung.
+  if (VN(/\b(câu quảng cáo|slogan|câu khẩu hiệu|tagline|câu giới thiệu|câu chạy quảng cáo)\b/).test(n)) {
+    const nail = VN(/\b(nail|làm móng|tiệm móng)\b/).test(n);
+    const lines = nail
+      ? ["“Đôi tay chỉn chu — tự tin trong từng cái chạm.”", "“Tinh tế từng đường cọ, nhẹ nhàng như chính bạn.”", "“Một bộ móng đẹp, một ngày thật ổn.”", "“Chăm chút từng chi tiết, để bạn chỉ việc toả sáng.”"]
+      : [`“${noun.charAt(0).toUpperCase() + noun.slice(1)} — chăm chút từng chi tiết cho bạn.”`, "“Đơn giản, tử tế, đáng để quay lại.”", "“Chất lượng nói thay lời quảng cáo.”", "“Ghé một lần, nhớ thật lâu.”"];
+    return `Vài câu theo hướng sang mà không sến nè ✍️\n\n${lines.map((x) => `• ${x}`).join("\n")}\n\nMẹo: câu ngắn, ít tính từ hoa mỹ, nói về cảm giác của khách — đọc lên tự nhiên như lời nói thường là ổn. Muốn Lomi viết theo tên tiệm hay phong cách riêng (tối giản, sang trọng, trẻ trung) thì nói thêm nha.`;
+  }
   const opening = ctx.topic === "opening" || detectBizTopic(text) === "opening";
   if (COST_ASK.test(n) && (opening || VN(/\b(mở|khởi nghiệp|bắt đầu)\b/).test(n)))
     return (

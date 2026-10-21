@@ -159,7 +159,11 @@ export function overdoseSignal(text: string): boolean {
 const OD_MIND =
   "\n\nNếu bạn uống vì đang thấy quá sức chịu đựng: sau khi đã an toàn, bạn có thể gọi đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật), hoặc nói với một người bạn tin. Lomi vẫn ở đây nghe bạn.";
 const DOSE = VN(/\b(liều|mấy viên|bao nhiêu viên|uống bao nhiêu|ngày mấy lần|mấy lần một ngày|mấy lần 1 ngày|bao nhiêu mg|bao nhiêu ml|mấy gói|cách nhau mấy tiếng|uống mấy)\b/);
-const STOP = VN(/\b(ngưng thuốc|ngưng uống|ngừng thuốc|ngừng uống|dừng thuốc|dừng uống|thôi uống thuốc|(ngưng|ngừng|dừng|bỏ|thôi|cắt) (uống |dùng )?(thuốc|đơn thuốc) (bác sĩ|bs|bác sỹ) (kê|cho)|không uống thuốc nữa|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
+const SAME_ACTIVE = VN(/\b((hai|2|mấy) (loại |hộp |thứ )?thuốc (\S+ ){0,3}(đều )?(có|chứa) (cùng )?(paracetamol|acetaminophen|panadol)|cùng (hoạt chất|thành phần) paracetamol|đều có paracetamol)\b/);
+const SUPP = VN(/\b(thực phẩm chức năng|tpcn|thảo dược|viên ngủ thảo dược|melatonin|thuốc bổ|vitamin|thực phẩm bổ sung)\b/);
+const ON_RX = VN(/\b(thuốc kê đơn|đang uống thuốc|đang dùng thuốc|thuốc bác sĩ kê|đơn thuốc)\b/);
+const BP_LOW = VN(/\bhuyết áp\b.*\b(thấp|tụt|hạ|xuống)\b/);
+const STOP = VN(/\b(bỏ (liều|thuốc|kháng sinh)( \S+){0,2} còn lại|bỏ (dở|ngang) (thuốc|kháng sinh|liều)|uống dở|bỏ (uống )?kháng sinh|ngưng kháng sinh|ngừng kháng sinh|không uống (hết|tiếp) (thuốc|kháng sinh)|ngưng thuốc|ngưng uống|ngừng thuốc|ngừng uống|dừng thuốc|dừng uống|thôi uống thuốc|(ngưng|ngừng|dừng|bỏ|thôi|cắt) (uống |dùng )?(thuốc|đơn thuốc) (bác sĩ|bs|bác sỹ) (kê|cho)|không uống thuốc nữa|bỏ thuốc|nghỉ thuốc|dừng thuốc lại|dùng thuốc lại|tự ngưng|quên uống|quên liều|quên thuốc|uống bù|uống thiếu|hết thuốc)\b/);
 const SIDE = VN(/\b(tác dụng phụ|phản ứng phụ|có hại gì|hại gan|hại thận|hại dạ dày|có gây nghiện)\b/);
 const WHAT = VN(/\b(là thuốc gì|thuốc gì vậy|là gì|trị gì|chữa gì|trị bệnh gì|chữa bệnh gì|để làm gì|dùng để làm gì|tác dụng gì|công dụng|có tác dụng)\b/);
 // (15/10: "thuốc hạ sốt cho trẻ", "thuốc ho cho bé" — hỏi thuốc nào cho một người, không có chữ "gì".)
@@ -325,6 +329,39 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // 18/10: "Đang uống warfarin uống thêm ibuprofen được không?" — không có chữ "thuốc", không thuốc nào có mục → trước đây rơi sang
   //   "chưa có kiến thức". Câu đúng mẫu đang-dùng-X-thêm-Y mà có tên NGOẠI LAI (tên hoạt chất) thì vẫn là hỏi dùng chung thuốc;
   //   "đang uống trà uống thêm cà phê được không" không lọt vì không có chữ ngoại lai.
+  // 21/10 (QA V2 Q37): hai thuốc khác tên thương mại nhưng CÙNG hoạt chất (paracetamol) → không uống chung: cộng liều, dễ quá liều hại gan.
+  if (SAME_ACTIVE.test(n) && ASKS.test(n))
+    return {
+      kind: "interact",
+      name: "paracetamol",
+      text:
+        "**Không nên uống chung** nha — hai thuốc khác tên thương mại nhưng **cùng hoạt chất paracetamol** thì cơ thể vẫn nhận là một thuốc: uống cả hai là **cộng dồn liều**, dễ vượt quá liều tối đa và gây hại gan, kể cả khi mỗi hộp đều uống \"đúng liều\".\n" +
+        "• Chọn **một** loại thôi, uống theo tờ hướng dẫn; đọc kỹ thành phần các thuốc cảm, thuốc giảm đau khác vì nhiều loại cũng có paracetamol\n" +
+        "• Lỡ uống cả hai rồi, hoặc tổng liều có thể đã quá → gọi **115** / tới cơ sở y tế ngay, kể cả khi đang thấy bình thường (triệu chứng hại gan có thể xuất hiện muộn)\n" +
+        "• Không chắc thuốc nào có paracetamol thì mang cả hai hộp ra hỏi dược sĩ",
+    };
+  // 21/10 (QA V2 Q45): đang dùng thuốc kê đơn + muốn dùng thêm thực phẩm chức năng / thảo dược → không mặc định "tự nhiên là an toàn".
+  if (SUPP.test(n) && (ON_RX.test(n) || med) && !known)
+    return {
+      kind: "interact",
+      text:
+        "Đang uống thuốc kê đơn thì đừng mặc định thực phẩm chức năng là an toàn nha — kể cả loại \"thảo dược, tự nhiên\" cũng có thể **tương tác với thuốc** hoặc **cộng dồn tác dụng gây buồn ngủ**, và thành phần ghi trên hộp không phải lúc nào cũng đầy đủ.\n" +
+        "• Mang (hoặc chụp hình) hộp thực phẩm chức năng **và** đơn thuốc đang dùng ra hỏi dược sĩ, hoặc hỏi bác sĩ đã kê đơn trước khi dùng\n" +
+        "• Chưa hỏi được thì đừng tự dùng thêm\n" +
+        "• Ngủ không ngon kéo dài thì nói với bác sĩ — có khi nguyên nhân nằm ở chính thuốc đang uống hay một bệnh khác\n\n" +
+        "Bạn đang uống thuốc gì, và định dùng sản phẩm nào vậy?",
+    };
+  // 21/10 (QA V2 Q40): đang uống thuốc huyết áp mà đo thấy thấp → không tự bỏ; hỏi chỉ số, triệu chứng; khi nào gọi cấp cứu.
+  if (BP_LOW.test(n) && VN(/\b(thuốc huyết áp|thuốc hạ áp|uống thuốc|dùng thuốc)\b/).test(n))
+    return {
+      kind: "stop",
+      text:
+        "Đừng tự bỏ thuốc huyết áp chỉ vì một lần đo thấp nha — ngưng đột ngột có thể làm huyết áp vọt lên lại.\n" +
+        "• Cho người nhà ngồi nghỉ 5 phút rồi đo lại; ghi lại con số (vd 95/60) và giờ đo\n" +
+        "• Có **chóng mặt nhiều, ngất hoặc gần ngất, lú lẫn, đau ngực, khó thở, da lạnh vã mồ hôi** → gọi **115** ngay\n" +
+        "• Không có triệu chứng mà vẫn thấp hơn hẳn thường ngày → gọi bác sĩ đã kê (hoặc đi khám) **trong hôm nay** để bác sĩ quyết định có chỉnh liều hay không\n\n" +
+        "Đo được bao nhiêu, và người nhà có thấy chóng mặt hay mệt không?",
+    };
   const onDrugForeign = ON_DRUG_ASK.test(n) && n.trim().split(" ").some((w) => isForeign(w) && !NOT_DRUG_WORD.test(w));
   if ((INTERACT.test(n) || ON_DRUG_ASK.test(n) || !!hit0) && (med || !!known || !!ctx.afterDrug || onDrugForeign || VN(/\b(\S+) (uống|dùng) (chung|cùng|kèm) (với )?\S+/).test(n)) && ASKS.test(n)) {
     const hit = hit0;
@@ -359,15 +396,17 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   }
 
   // 21/10 (QA Q64): "muốn ngừng thuốc bác sĩ kê vì thấy đỡ rồi" → đáp đúng ý NGƯNG THUỐC (không kèm chuyện quên liều).
+  const abx = VN(/\bkháng sinh\b/).test(n) ? "\n• Riêng **kháng sinh**: uống đủ số ngày bác sĩ kê dù đã đỡ — bỏ giữa chừng dễ làm bệnh quay lại và vi khuẩn kháng thuốc. Bị tác dụng phụ khó chịu thì gọi bác sĩ / dược sĩ, đừng tự bỏ." : "";
+  const anticoag = ANTICOAG.test(n) || VN(/\b(chống đông|loãng máu)\b/).test(n) ? "\n• Thuốc **chống đông** mà uống gấp đôi hay bỏ liều đều có thể nguy hiểm (chảy máu hoặc cục máu đông) — gọi bác sĩ / dược sĩ **ngay hôm nay** để hỏi cách xử lý đúng cho đúng loại thuốc của bạn." : "";
   if (STOP.test(n) && (med || ctx.inHealth) && !VN(/\b(quên|uống bù|uống thiếu|hết thuốc|gấp đôi)\b/).test(n) && VN(/\b(ngưng|ngừng|dừng|bỏ|nghỉ|thôi|cắt)\b/).test(n))
     return {
       kind: "stop",
-      text: `Thuốc bác sĩ kê thì **đừng tự ngưng** khi chưa hỏi lại bác sĩ đã kê, kể cả khi thấy đỡ rồi nha.\n• Thấy đỡ chưa chắc là đã hết bệnh — có loại thuốc phải uống **đủ liệu trình** (vd kháng sinh), có loại ngưng đột ngột thì bệnh dễ quay lại hoặc gây khó chịu (vd thuốc huyết áp, thuốc an thần, corticoid).\n• Lomi không có dữ liệu riêng cho thuốc ${who ? `của ${who}` : "bạn đang dùng"} nên không nói được ngưng lúc nào là an toàn.\n• Cách chắc nhất: gọi hoặc quay lại hỏi bác sĩ đã kê (hoặc dược sĩ), nói rõ là thấy đỡ và muốn ngưng — họ sẽ cho biết nên uống tiếp, giảm dần hay ngưng.`,
+      text: `Thuốc bác sĩ kê thì **đừng tự ngưng** khi chưa hỏi lại bác sĩ đã kê, kể cả khi thấy đỡ rồi nha.\n• Thấy đỡ chưa chắc là đã hết bệnh — có loại thuốc phải uống **đủ liệu trình** (vd kháng sinh), có loại ngưng đột ngột thì bệnh dễ quay lại hoặc gây khó chịu (vd thuốc huyết áp, thuốc an thần, corticoid).\n• Lomi không có dữ liệu riêng cho thuốc ${who ? `của ${who}` : "bạn đang dùng"} nên không nói được ngưng lúc nào là an toàn.\n• Cách chắc nhất: gọi hoặc quay lại hỏi bác sĩ đã kê (hoặc dược sĩ), nói rõ là thấy đỡ và muốn ngưng — họ sẽ cho biết nên uống tiếp, giảm dần hay ngưng.${abx}${anticoag}`,
     };
   if (STOP.test(n) && (med || ctx.inHealth))
     return {
       kind: "stop",
-      text: `Chuyện ngưng thuốc, quên liều hay uống bù thì tuỳ từng loại thuốc — Lomi không có dữ liệu riêng cho thuốc ${who ? `của ${who}` : "bạn đang dùng"} nên không nói bừa được.\n• Thuốc bác sĩ kê thì đừng tự ngưng giữa chừng; muốn ngưng hay đổi thì hỏi lại bác sĩ đã kê.\n• Lỡ quên một liều: đừng tự uống gấp đôi để bù — xem tờ hướng dẫn hoặc gọi hỏi dược sĩ.`,
+      text: `Chuyện ngưng thuốc, quên liều hay uống bù thì tuỳ từng loại thuốc — Lomi không có dữ liệu riêng cho thuốc ${who ? `của ${who}` : "bạn đang dùng"} nên không nói bừa được.\n• Thuốc bác sĩ kê thì đừng tự ngưng giữa chừng; muốn ngưng hay đổi thì hỏi lại bác sĩ đã kê.\n• Lỡ quên một liều: đừng tự uống gấp đôi để bù — xem tờ hướng dẫn hoặc gọi hỏi dược sĩ.${abx}${anticoag}`,
     };
 
   // Vừa nói về một thuốc mà hỏi "trẻ em uống được không" → thuốc có mục thì đáp theo dữ liệu; không thì nói rõ là chưa có dữ liệu.
@@ -386,7 +425,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   if (DOSE.test(n) && (med || ctx.inHealth) && ASKS.test(n))
     return {
       kind: "dose",
-      text: `Liều thuốc thì Lomi không đưa được${forWho} đâu — liều phụ thuộc **tuổi, cân nặng, bệnh nền và các thuốc khác đang dùng**, nên nói một con số chung là dễ sai.\n• Có đơn bác sĩ: uống đúng theo đơn.\n• Thuốc tự mua: làm theo tờ hướng dẫn trong hộp, hoặc hỏi dược sĩ lúc mua (nói rõ tuổi, cân nặng, đang uống thuốc gì).\n• Không tự tăng liều khi thấy chưa đỡ.`,
+      text: `Liều thuốc thì Lomi không đưa được${forWho} đâu — liều phụ thuộc **tuổi, cân nặng, bệnh nền và các thuốc khác đang dùng**, nên nói một con số chung là dễ sai.\n• Có đơn bác sĩ: uống đúng theo đơn.\n• Thuốc tự mua: làm theo tờ hướng dẫn trong hộp, hoặc hỏi dược sĩ lúc mua (nói rõ tuổi, cân nặng, đang uống thuốc gì).\n• Không tự tăng liều khi thấy chưa đỡ.\n• Đã uống rồi mà vẫn đau: **đừng uống thêm trước khoảng cách giữa hai liều** ghi trên hộp, và không vượt tổng liều trong ngày. Bạn cho Lomi biết tên thuốc, hàm lượng (mấy mg), uống lúc mấy giờ và đã uống mấy lần hôm nay — rồi hỏi dược sĩ là chắc nhất.`,
     };
 
   // Thuốc có trong dữ liệu đã kiểm chứng → trả lời từ dữ liệu, kèm nguồn.

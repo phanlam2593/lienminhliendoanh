@@ -10,7 +10,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
 import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
-import { VR, VN } from "@/lib/viMatch";
+import { dropNegated, VR, VN } from "@/lib/viMatch";
 
 export type HeartReply = { text: string; quick: string[]; theme: string; listen?: boolean; end?: boolean; story?: string };
 
@@ -198,7 +198,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "ex",
-    hint: [[VN(/\b(có nên nhắn|nên nhắn|nhắn trước|có nên gọi|liên lạc lại không)\b/), "Nhắn cho người cũ hay không thì tuỳ điều bạn mong sau tin nhắn đó. Nếu chỉ là nhớ quá muốn hỏi thăm, cứ để qua một đêm rồi xem còn muốn nhắn không. Nếu mong quay lại, tự hỏi trước: lý do chia tay ngày đó đã khác chưa? Còn nếu người ấy đã có cuộc sống mới thì giữ khoảng cách thường nhẹ lòng hơn cho cả hai."], [VN(/\b(nhắn lại|nhắn tin|nhắn cho|trả lời|rep|gọi lại|liên lạc lại)\b/), "Người cũ nhắn lại thì không cần trả lời ngay đâu. Chờ một ngày cho đầu óc tỉnh táo, rồi tự hỏi: mình trả lời vì còn điều muốn nói, hay chỉ vì thói quen và nỗi nhớ? Trả lời hay không đều được — miễn là bạn chọn, chứ không phải bị kéo theo."]],
+    hint: [[VN(/\b(dù|mặc dù|trong khi|nhưng) (đang|vẫn đang) (có|ở trong|yêu|trong)( \S+){0,4} (mối quan hệ|người yêu|người mới|tình yêu)\b/), "Vẫn nhớ người cũ dù đang có một mối quan hệ tốt **không có nghĩa** là bạn không yêu người hiện tại đâu. Ký ức gắn với một quãng đời của mình nên đôi khi tự trồi lên — điều đó rất người.\n\nThử tách ba thứ: **cảm xúc** (nhớ — không chọn được), **hành động** (có liên lạc lại, có so sánh, có giấu người hiện tại không — cái này mình chọn được), và **cam kết** (mình muốn xây dựng với ai). Để ý xem nỗi nhớ đó là nhớ người ấy, hay nhớ con người mình hồi đó.\n\nNỗi nhớ này có làm bạn khó gần người hiện tại không?", true], [VN(/\b(có nên nhắn|nên nhắn|nhắn trước|có nên gọi|liên lạc lại không)\b/), "Nhắn cho người cũ hay không thì tuỳ điều bạn mong sau tin nhắn đó. Nếu chỉ là nhớ quá muốn hỏi thăm, cứ để qua một đêm rồi xem còn muốn nhắn không. Nếu mong quay lại, tự hỏi trước: lý do chia tay ngày đó đã khác chưa? Còn nếu người ấy đã có cuộc sống mới thì giữ khoảng cách thường nhẹ lòng hơn cho cả hai."], [VN(/\b(nhắn lại|nhắn tin|nhắn cho|trả lời|rep|gọi lại|liên lạc lại)\b/), "Người cũ nhắn lại thì không cần trả lời ngay đâu. Chờ một ngày cho đầu óc tỉnh táo, rồi tự hỏi: mình trả lời vì còn điều muốn nói, hay chỉ vì thói quen và nỗi nhớ? Trả lời hay không đều được — miễn là bạn chọn, chứ không phải bị kéo theo."]],
     re: VN(/\b(người yêu cũ|người cũ|ny cũ|tình cũ|bạn trai cũ|bạn gái cũ|vợ cũ|chồng cũ|nhớ người yêu cũ|nhớ người cũ|nhớ ex|quên người yêu cũ|quên người cũ|quên ex|quên đi người|quên một người|không quên được|người yêu cũ nhắn tin|người yêu cũ quay lại|quay lại với người yêu cũ|quay lại với người cũ)\b/),
     feel: [
       "Nhớ người cũ là chuyện bình thường lắm, vì mình đã từng có rất nhiều kỷ niệm với họ 🥺",
@@ -546,6 +546,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "selfworth",
+    hint: [[VN(/\b(làm sai|mắc lỗi|sai|hỏng)( một)? (việc|chuyện|lần|cái)( \S+){0,6} (kết luận|nghĩ|thấy|cho rằng) (mình |bản thân )?(là )?(kẻ |đồ |người )?(thất bại|vô dụng|tệ|kém cỏi)\b/), "Một lỗi nhỏ là **một việc mình làm chưa tốt**, không phải bằng chứng mình là “kẻ thất bại”.\n\nThử tách hai câu ra: “Mình đã làm sai việc X” — đúng, và sửa được; còn “Mình là người thất bại” — là kết luận quá rộng rút ra từ một lần. Nếu bạn thân mắc đúng lỗi này, bạn có gọi họ là kẻ thất bại không?\n\nViết ra ba dòng thôi: lỗi gì, học được gì, lần sau làm khác chỗ nào — vậy là đủ cho chuyện này rồi.", true]],
     re: VN(/\b(tự ti|thất bại|vô dụng|gánh nặng|không ai cần (mình|tôi|tui|em|anh|chị|a|e|c)\b|ăn bám|kém cỏi|không bằng ai|so sánh với|thua kém|ghét bản ?thân|chán bản ?thân|không làm được gì|không có giá trị|mình tệ quá|mình dở quá|không ai thương|xấu xí|béo quá|không đủ tốt)\b/),
     feel: [
       "Nghe bạn nói vậy Lomi thương lắm 🥺 Cảm giác mình không đủ tốt nặng nề thật.",
@@ -591,7 +592,7 @@ const THEMES: Theme[] = [
   {
     id: "insomnia",
     hint: [[VN(/\b((suy nghĩ|nghĩ|lo) (mãi|hoài|nhiều|lung tung|linh tinh|đủ thứ|miên man)|đầu óc (cứ )?(chạy|quay|nghĩ)|nằm (là )?nghĩ)\b/), "Nằm xuống là đầu óc cứ chạy hoài thì khó ngủ thật 😴 Não đang cố “giải quyết” những chuyện chưa xong trong ngày.\n\nThử thế này nha: trước khi ngủ chừng 30 phút, lấy giấy viết hết mấy điều đang nghĩ ra (kể cả việc ngày mai cần làm) — viết ra rồi thì não dễ buông hơn. Nằm 20 phút mà vẫn tỉnh thì dậy làm việc nhẹ dưới đèn mờ, buồn ngủ rồi mới quay lại giường.\n\nDạo này điều gì cứ lởn vởn trong đầu bạn nhất?"], [VN(/\b(thuốc ngủ|thuốc an thần)\b/), "Thuốc ngủ thì đừng tự mua uống nha — đó là loại thuốc cần bác sĩ khám rồi mới kê; tự dùng dễ bị lệ thuộc và che mất nguyên nhân thật của chuyện mất ngủ. Mất ngủ kéo dài thì đi khám để tìm nguyên nhân là chắc nhất, Lomi không kê thuốc được."]],
-    re: VN(/\b(mất ngủ|không ngủ được|khó ngủ|thức trắng|ngủ không ngon|tỉnh giấc giữa đêm|thức khuya hoài|trắng đêm|thuốc ngủ)\b/),
+    re: VN(/\b(nằm (trên giường )?(hàng giờ|mấy tiếng|cả tiếng|mãi|hoài)( \S+){0,6} (nghĩ|suy nghĩ|lo)|nằm (mãi|hoài) (không|chẳng) ngủ|mất ngủ|không ngủ được|khó ngủ|thức trắng|ngủ không ngon|tỉnh giấc giữa đêm|thức khuya hoài|trắng đêm|thuốc ngủ)\b/),
     feel: ["Mất ngủ mệt lắm luôn, sáng dậy như chưa được sạc pin 😴", "Nằm mãi không ngủ được mà đầu cứ chạy — Lomi hiểu cảm giác đó."],
     insight: [
       "Càng cố ép mình ngủ thì càng tỉnh. Đôi khi chỉ cần nằm thư giãn thôi, giấc ngủ sẽ tự tới.",
@@ -931,10 +932,14 @@ function chipsFor(_t: Theme | undefined): string[] {
 }
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
-const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space"];
+const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp"];
+/** 21/10: chủ đề cụ thể được ưu tiên — các lớp chung hơn (khung câu, thẻ bệnh, phân tích cảm xúc) nhường cho chúng. */
+export const PRIORITY_THEMES: readonly string[] = FIRST.filter((x) => x !== "grief" && x !== "suspect");
 function themeOf(n: string): Theme | undefined {
-  const m = ` ${n} `;
-  const t = THEMES.find((x) => FIRST.includes(x.id) && x.re.test(m)) ?? THEMES.find((x) => x.re.test(m));
+  // 21/10 (QA V2 Q18, Q22): phần bị chối ("không phải chia tay", "không phải xem thi cử") không dùng để chọn chủ đề.
+  //   (chủ đề ưu tiên xét trên câu gốc — nhiều chủ đề cần chính chữ phủ định: "mà vẫn không thấy vui", "không dám từ chối".)
+  const m = ` ${dropNegated(n) || n} `;
+  const t = THEMES.find((x) => FIRST.includes(x.id) && x.re.test(` ${n} `)) ?? THEMES.find((x) => x.re.test(m));
   // "e bị bạn thân phản bội" — bị BẠN BÈ phản bội là chuyện bạn bè, không phải bị người yêu lừa dối.
   if (t?.id === "cheat" && VN(/\b(bạn thân|bạn bè|đứa bạn|con bạn|thằng bạn|người bạn|đồng nghiệp)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|bạn trai|bạn gái|ny)\b/).test(m)) return THEMES.find((x) => x.id === "friends") ?? t;
   return t;

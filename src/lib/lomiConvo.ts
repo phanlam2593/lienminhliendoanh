@@ -350,8 +350,8 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     const wantUp = VR(/\bxuoi\b/).test(n) && !VR(/\bnguoc\b/).test(n);
     const cards = r.cards.slice(0, 3).map((d) => {
       const k = tarotCard(d.id);
-      if (wantRev) return d.rev ? `• **${k.name.vi}** đang ra ngược sẵn rồi: ${k.rev.vi}` : `• **${k.name.vi}** (đang xuôi) — nếu ra ngược: ${k.rev.vi}`;
-      if (wantUp) return d.rev ? `• **${k.name.vi}** (đang ngược) — nếu ra xuôi: ${k.up.vi}` : `• **${k.name.vi}** đang ra xuôi sẵn rồi: ${k.up.vi}`;
+      if (wantRev) return d.rev ? `• **${k.name.vi}** đang ra ngược sẵn rồi: ${k.rev.vi}` : `• **${k.name.vi}** đang ra xuôi — nếu ra ngược: ${k.rev.vi}`;
+      if (wantUp) return d.rev ? `• **${k.name.vi}** đang ra ngược — nếu ra xuôi: ${k.up.vi}` : `• **${k.name.vi}** đang ra xuôi sẵn rồi: ${k.up.vi}`;
       return d.rev ? `• **${k.name.vi}** đang ra ngược: ${k.rev.vi}\n  Nếu ra xuôi thì nghiêng về: ${k.up.vi}` : `• **${k.name.vi}** đang ra xuôi: ${k.up.vi}\n  Nếu ra ngược thì nghiêng về: ${k.rev.vi}`;
     });
     const head = r.question ? `Vẫn với câu hỏi “${r.question.replace(/[?？\s]+$/u, "")}” nha 🔮` : "Vẫn với lá bài vừa rút nha 🔮";

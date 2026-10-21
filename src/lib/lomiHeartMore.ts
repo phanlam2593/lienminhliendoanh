@@ -10,12 +10,328 @@ import type { Theme } from "@/lib/lomiHeart";
 import { VR, VN } from "@/lib/viMatch";
 
 export const MORE_THEMES: Theme[] = [
+  // ═══════════════════════ 21/10 (QA V2) — tình cảm: không đoán ý, thử lòng, mâu thuẫn thực tế, ranh giới ═══════════════════════
+  // Q51–Q53: đoán ý người yêu qua một dấu hiệu (đã xem không trả lời, đăng bài buồn, "tùy em") — trước đây FAQ "tin nhắn", "đăng bài".
+  {
+    id: "mindread",
+    re: VN(/\b((xem|seen|đã xem|đọc)( tin nhắn)? (nhưng|mà) (chưa|không|chẳng) (trả lời|rep|nhắn lại)|(chưa|không) (trả lời|rep|nhắn lại)( tin nhắn)? (\d+|mấy|vài|cả|hơn) (tiếng|giờ|ngày)|đăng (bài|status|story|stt) (buồn|bóng gió|ẩn ý|than)|(chắc chắn|có phải|chắc là) (là )?đang (nói|ám chỉ|đá xéo|nhắc) (anh|em|mình|tôi|tui)|(nói|bảo|kêu) (‘|'|"|“)?tùy (em|anh)|tùy em (mỗi|hoài|suốt))\b/),
+    feel: ["Đoán ý người mình thương qua vài dấu hiệu nhỏ là chuyện ai cũng từng làm — và nó làm mình thấp thỏm lắm."],
+    insight: ["Một dấu hiệu đơn lẻ thì chưa đủ để biết người kia nghĩ gì. Đoán rồi tin chắc vào phỏng đoán dễ làm mình buồn thêm hoặc phản ứng sai — cách nhanh nhất để hết đoán là hỏi thẳng, nhẹ nhàng."],
+    step: ["Tách ra: điều mình THẤY (vd đã xem, chưa trả lời) và điều mình ĐOÁN (vd chán mình) — phần đoán thì chưa phải sự thật."],
+    ask: ["Gần đây hai bạn có chuyện gì làm bạn bất an không, hay chỉ mới lần này?"],
+    advice: ["Hỏi thẳng mà nhẹ, nói về cảm giác của mình thay vì buộc tội.", "Nếu chuyện lặp lại nhiều, nói ra một mong muốn cụ thể thay vì để mình đoán mãi."],
+    hint: [
+      [VN(/\b(xem|seen|đọc|trả lời|rep|nhắn lại)\b/), "Chưa trả lời vài tiếng thì **chưa nói lên được** là người ấy chán bạn đâu — có thể đang bận, đang mệt, đang nghĩ cách trả lời, hoặc đọc rồi quên. Một dấu hiệu đơn lẻ thì chưa đủ để kết luận.\n\nNếu chuyện này lặp lại và làm bạn bất an, nói nhẹ nhàng lúc gặp: “Mình hay thấp thỏm khi tin nhắn lâu được trả lời, bạn bận thì nhắn mình một chữ thôi cũng được nha.” Gần đây hai bạn có chuyện gì làm bạn lo không?", true],
+      [VN(/\b(đăng|bài|status|story|stt)\b/), "Bài đăng buồn sau khi cãi nhau thì **có thể** liên quan, cũng **có thể không** — mình chỉ thấy được bài đăng, còn điều cô ấy nghĩ thì chưa biết chắc. Tin chắc vào phỏng đoán dễ làm mình buồn thêm hoặc phản ứng sai.\n\nCách rõ nhất là hỏi thẳng mà nhẹ: “Mình thấy bài bạn đăng, bạn còn buồn chuyện hôm trước không? Mình muốn nói chuyện lại cho đàng hoàng.”", true],
+      [VN(/\btùy (em|anh)\b/), "“Tùy em” có thể là **đồng ý thật**, cũng có thể là **mệt, không muốn cãi tiếp**, hay **đang khó chịu mà không nói ra** — chỉ từ chữ đó thì không biết chắc được, nên đừng tự gán một ý cho người ấy.\n\nThử hỏi lúc cả hai bình tĩnh: “Mỗi lần bạn nói ‘tùy em’, mình không biết là bạn đồng ý hay đang không vui. Lần sau bạn nói thật cảm giác của bạn được không, mình muốn hiểu bạn.”", true],
+    ],
+  },
+  // Q54: người yêu muốn giữ mật khẩu riêng — trước đây FAQ "quên mật khẩu".
+  {
+    id: "privacy",
+    howto: true,
+    re: VN(/\b((giữ|muốn giữ|đặt|có) (mật khẩu|pass|password|mã khoá|mã khóa)( \S+){0,2} riêng|mật khẩu (điện thoại )?riêng|không cho (anh|em|mình|tôi) (biết|xem) (mật khẩu|pass|điện thoại))\b/),
+    feel: ["Thấy người yêu giữ mật khẩu riêng mà mình bất an là chuyện dễ hiểu — nhất là khi mình đang cần cảm giác được tin tưởng."],
+    insight: ["Muốn giữ mật khẩu riêng **không đồng nghĩa** với đang giấu chuyện xấu — nhiều người chỉ cần một khoảng riêng tư, như nhật ký hay tin nhắn với bạn bè, gia đình. Riêng tư khác với lừa dối."],
+    step: ["Nhìn vào cả mối quan hệ: ngoài chuyện mật khẩu, người ấy có minh bạch, nhất quán và tôn trọng bạn không?"],
+    ask: ["Ngoài chuyện mật khẩu, có điều gì khác làm bạn mất niềm tin không?"],
+    advice: [
+      "Riêng tư khác với giấu giếm: nhìn vào cả mối quan hệ — người ấy có minh bạch về những chuyện liên quan tới hai người không.",
+      "Nói về **niềm tin**, đừng đòi mật khẩu: “Mình hơi bất an, không phải muốn kiểm tra bạn, mà muốn hai đứa nói chuyện để mình thấy yên tâm hơn.”",
+      "Hai người có thể thống nhất ranh giới chung: điều gì là riêng của mỗi người, điều gì cần minh bạch với nhau.",
+      "Nếu cảm giác nghi ngờ đến từ một chuyện cụ thể, nói thẳng chuyện đó — đừng lục điện thoại.",
+    ],
+  },
+  // Q55, Q70: thử lòng bằng im lặng / cố làm người yêu ghen — trước đây đọc thành "cô ấy im lặng", "bạn đang ghen".
+  {
+    id: "testlove",
+    howto: true,
+    re: VN(/\b((thử|thử lòng|test)( \S+){0,4} (im lặng|biến mất|không nhắn|lơ)|im lặng (vài|mấy|một) (ngày|hôm|tuần) (xem|để xem|coi)|(khiến|làm|chọc|cố tình làm) (cho )?(người yêu|cô ấy|anh ấy|ny|em ấy|người ta|bạn gái|bạn trai)( \S+){0,2} ghen)\b/),
+    feel: ["Muốn biết người ấy có quan tâm mình không là mong muốn rất thật — ai cũng cần cảm giác được để ý."],
+    insight: ["Nhưng **thử lòng** (im lặng để xem, cố làm người kia ghen) thường phản tác dụng: người kia không biết mình đang bị thử, có thể hiểu là bạn lạnh nhạt hay không nghiêm túc, rồi cả hai cùng đoán ý nhau — và niềm tin mòn đi."],
+    step: ["Nói thẳng điều bạn cần thay vì thử: “Dạo này mình thấy hơi thiếu được quan tâm, mình mong hai đứa dành cho nhau nhiều thời gian hơn.”"],
+    ask: ["Điều gì làm bạn thấy chưa được quan tâm đủ vậy?"],
+    advice: [
+      "Thử lòng thường phản tác dụng: người kia không biết đang bị thử, dễ hiểu sai là bạn lạnh nhạt hay không nghiêm túc.",
+      "Nói thẳng nhu cầu của mình bằng câu “mình”: “Mình thấy hơi thiếu được quan tâm, mình mong bạn nhắn mình nhiều hơn / mình đi chơi riêng nhiều hơn.”",
+      "Đề nghị một việc cụ thể (một buổi hẹn mỗi tuần, gọi điện trước khi ngủ) — dễ làm hơn một lời trách chung chung.",
+      "Nếu nói rõ rồi mà mọi thứ vẫn vậy, đó là thông tin thật để bạn cân nhắc — rõ ràng hơn mọi phép thử.",
+    ],
+  },
+  // Q56: một người muốn giải quyết ngay, người kia cần thời gian bình tĩnh.
+  {
+    id: "pace",
+    howto: true,
+    re: VN(/\b(giải quyết ngay( \S+){0,8} (cần|muốn) (thời gian|bình tĩnh|khoảng lặng)|(cần|muốn) (thời gian|khoảng lặng) (để )?(bình tĩnh|nguôi)( \S+){0,8} giải quyết ngay)\b/),
+    feel: ["Một người muốn nói cho xong, một người cần lùi lại cho nguôi — đây là chuyện rất nhiều cặp đôi gặp, không ai sai cả."],
+    insight: ["Người muốn giải quyết ngay thường sợ bị bỏ lơ; người cần thời gian thường sợ nói lúc nóng sẽ làm tổn thương nhau. Cả hai nhu cầu đều chính đáng."],
+    step: ["Thống nhất trước, lúc đang vui: khi cãi nhau thì tạm dừng bao lâu, và ai là người mở lời lại."],
+    ask: ["Thường thì bạn gái cần khoảng bao lâu để bình tĩnh lại?"],
+    advice: [
+      "Thống nhất một **quãng tạm dừng có hẹn quay lại**: “Mình nghỉ 30 phút / tới tối nay rồi nói tiếp nha” — người cần thời gian được bình tĩnh, người muốn giải quyết biết chắc sẽ được nói.",
+      "Trong lúc tạm dừng, đừng nhắn dồn hay bỏ đi im lặng không báo; mỗi người tự làm dịu mình (đi bộ, uống nước, viết ra điều muốn nói).",
+      "Quay lại đúng hẹn, mỗi người nói về cảm giác và điều mình cần, không lôi thêm chuyện khác.",
+      "Thống nhất cách này từ trước, lúc hai đứa đang vui — đừng đợi tới lúc đang cãi mới bàn.",
+    ],
+  },
+  // Q57: xin lỗi nhiều lần mà vẫn lặp lại lỗi cũ.
+  {
+    id: "repeatsorry",
+    howto: true,
+    re: VN(/\b(xin lỗi (nhiều lần|hoài|mãi|rồi)( \S+){0,4} (vẫn )?(lặp lại|tái phạm|mắc lại)|(lặp lại|tái phạm|mắc lại) (đúng )?(lỗi|chuyện) cũ)\b/),
+    feel: ["Thấy mình xin lỗi rồi mà vẫn lặp lại đúng lỗi cũ thì vừa áy náy vừa bực chính mình, Lomi hiểu."],
+    insight: ["Lời xin lỗi chỉ là bước đầu — với người kia, xin lỗi mà vẫn lặp lại dần mất trọng lượng. Điều thật sự sửa được là **thay đổi hành vi cụ thể**."],
+    step: ["Viết ra: lỗi đó thường xảy ra trong hoàn cảnh nào, điều gì châm ngòi."],
+    ask: ["Lỗi đó thường xảy ra trong hoàn cảnh nào vậy?"],
+    advice: [
+      "Gọi đúng tên lỗi và hoàn cảnh hay xảy ra (vd hay quên hẹn khi bận, hay to tiếng khi mệt).",
+      "Đặt **một việc cụ thể** để chặn nó: báo thức nhắc hẹn, tự hẹn “mệt thì xin nghỉ 15 phút rồi mới nói”…",
+      "Nói với người ấy kế hoạch đó, và mời họ nhắc mình — xin lỗi kèm việc làm thì khác hẳn xin lỗi suông.",
+      "Lỡ tái phạm thì nhận ngay, không bào chữa, và xem kế hoạch hỏng ở đâu để chỉnh.",
+    ],
+  },
+  // Q58: bị nói là không lắng nghe dù mình đã giải thích nhiều.
+  {
+    id: "notlisten",
+    howto: true,
+    re: VN(/\b((nói|bảo|chê|trách) (anh|em|mình|tôi|tui) (không|chẳng) (biết )?lắng nghe|(không|chẳng) chịu lắng nghe)\b/),
+    feel: ["Mình đã cố giải thích mà vẫn bị nói là không lắng nghe thì oan ức thật."],
+    insight: ["Nhưng **giải thích không đồng nghĩa với lắng nghe**: giải thích là mình nói cho người kia hiểu mình; lắng nghe là để người kia thấy mình hiểu họ. Khi đang buồn, người ta thường cần được hiểu trước, rồi mới nghe lý lẽ."],
+    step: ["Lần tới, trước khi giải thích, nhắc lại điều bạn gái đang cảm thấy: “Ý em là em thấy buồn vì…, đúng không?”"],
+    ask: ["Lần gần nhất bạn gái nói vậy là trong chuyện gì?"],
+    advice: [
+      "Trước khi giải thích, nói lại điều người kia đang cảm thấy: “Em thấy bị bỏ rơi khi anh về trễ mà không báo, đúng không?”",
+      "Hỏi thêm một câu thay vì phản bác: “Còn điều gì làm em buồn nữa không?”",
+      "Chỉ giải thích khi người kia thấy đã được hiểu — lúc đó lời giải thích mới vào.",
+      "Hỏi thẳng: “Lúc em buồn, em muốn anh nghe thôi, hay muốn anh cùng tìm cách?”",
+    ],
+  },
+  // Q59, Q65: bất đồng giá trị lớn (sinh con, tôn giáo, lối sống) — trước đây "không hiểu" / bài chia tay.
+  {
+    id: "values",
+    howto: true,
+    re: VN(/\b(khác (biệt )?(tôn giáo|đạo|lối sống|quan điểm sống|giá trị sống)|bất đồng( \S+){0,4} (sinh con|có con|tôn giáo)|(một người|một đứa) muốn (có con|sinh con)|(muốn|không muốn) (có con|sinh con)( \S+){0,6} (không muốn|muốn))\b/),
+    feel: ["Khác biệt lớn như chuyện con cái, tôn giáo hay lối sống làm mình băn khoăn là phải — vì nó chạm tới tương lai của cả hai."],
+    insight: ["Không có đáp án chung là “phải chia tay” hay “cứ yêu là vượt qua”. Điều quyết định là: khác biệt đó có chạm vào **giá trị cốt lõi** — điều mỗi người không thể nhượng bộ — hay chỉ là thói quen có thể dung hoà."],
+    step: ["Mỗi người tự viết ra: điều gì mình **không thể** nhượng bộ, điều gì mình **có thể** linh hoạt."],
+    ask: ["Với bạn, trong chuyện này điều gì là không thể nhượng bộ?"],
+    advice: [
+      "Nói chuyện nghiêm túc, không vội: mỗi người nói vì sao điều đó quan trọng với mình, không phải ai thắng ai.",
+      "Tách điều **không thể nhượng bộ** với điều **có thể thoả thuận** (vd lễ nghi, cách nuôi dạy con, chuyện hai bên gia đình).",
+      "Không ép một người nhượng bộ chỉ để giữ nhau — nhượng bộ ở chuyện cốt lõi thường thành ấm ức về sau.",
+      "Nếu hai người đều muốn đi tiếp mà bế tắc, tư vấn cặp đôi có thể giúp nói chuyện rõ hơn.",
+    ],
+  },
+  // Q61: vợ dành thời gian cho bên ngoại nhiều hơn bên nội.
+  {
+    id: "sidesfam",
+    howto: true,
+    re: VN(/\b(bên ngoại|bên nội|nhà ngoại|nhà nội|nhà vợ|nhà chồng|bên vợ|bên chồng)( \S+){0,6} (hơn|nhiều hơn|ít hơn)\b/),
+    feel: ["Thấy hai bên gia đình được quan tâm không đều thì mình chạnh lòng cũng dễ hiểu."],
+    insight: ["Nhiều khi đó không phải thiên vị, mà do thói quen, khoảng cách nhà, hay bên đó đang cần người hơn. Nói ra điều mình cần thay vì quy kết sẽ dễ được lắng nghe hơn."],
+    step: ["Nghĩ rõ điều bạn thật sự mong: nhiều thời gian hơn cho bên nội, hay cảm giác được vợ coi trọng gia đình mình?"],
+    ask: ["Điều bạn mong nhất là gì — thêm thời gian về bên nội, hay cảm giác được coi trọng?"],
+    advice: [
+      "Tránh câu quy kết như “em lúc nào cũng thiên vị nhà em”.",
+      "Nói về cảm giác và mong muốn: “Anh thấy hơi chạnh lòng vì dạo này mình ít về nhà nội, anh mong mình sắp xếp về thăm ba mẹ anh đều hơn.”",
+      "Hỏi xem có lý do gì không (bên ngoại đang có việc, đường xa…) trước khi kết luận.",
+      "Cùng lên lịch cụ thể cho cả hai bên, để không ai phải đếm.",
+    ],
+  },
+  // Q62: lỡ nặng lời với người yêu trước mặt bạn bè — trước đây bài "bạn bè".
+  {
+    id: "hurtword",
+    howto: true,
+    re: VN(/\b((lỡ )?(nói|quát|chửi|mắng|to tiếng|nặng lời)( \S+){0,6} (trước mặt|trước) (bạn bè|mọi người|người khác|đám đông|bạn)|lỡ (nói|lời) (nặng|quá|khó nghe)|nói (một câu )?(rất )?nặng lời)\b/),
+    feel: ["Biết mình lỡ lời và thấy áy náy cho thấy bạn rất quan tâm người ấy."],
+    insight: ["Nặng lời **trước mặt người khác** thường đau hơn nói riêng, vì người kia thấy mất mặt. Không nên chỉ chờ cho quên đi — nhận trách nhiệm và sửa lại mới làm lành được."],
+    step: ["Tìm lúc riêng tư, xin lỗi cụ thể chứ không chung chung."],
+    ask: ["Từ hôm đó tới giờ người ấy phản ứng thế nào?"],
+    advice: [
+      "Xin lỗi **riêng**, nói đúng điều mình đã làm: “Hôm đó anh nói câu đó trước mặt mọi người là sai, chắc em thấy tổn thương và mất mặt lắm.”",
+      "Không kèm “nhưng…” để bào chữa; để người ấy được nói cảm giác của họ.",
+      "Hỏi người ấy có muốn bạn đính chính hay xin lỗi trước nhóm bạn không — sửa chữa ở nơi đã gây tổn thương.",
+      "Nghĩ xem điều gì làm bạn bùng lên lúc đó, để lần sau tạm dừng trước khi nói.",
+    ],
+  },
+  // Q63: người yêu lôi chuyện cũ ra mỗi lần cãi nhau.
+  {
+    id: "oldstuff",
+    howto: true,
+    re: VN(/\b((lôi|nhắc|đào|khơi) (lại )?(chuyện|lỗi) cũ|chuyện cũ ra (mỗi|hoài|mãi))\b/),
+    feel: ["Cãi chuyện này lại bị lôi thêm chuyện cũ thì mệt lắm, như không bao giờ được khép lại."],
+    insight: ["Chuyện cũ hay bị nhắc lại thường vì nó **chưa được giải quyết xong** trong lòng người kia — họ chưa thấy được hiểu, hay chưa tin là chuyện đó sẽ không lặp lại."],
+    step: ["Chọn lúc cả hai bình tĩnh (không phải lúc đang cãi) để nói riêng về chuyện cũ đó."],
+    ask: ["Chuyện cũ hay bị nhắc là chuyện gì vậy, hai bạn đã nói cho ra lẽ chưa?"],
+    advice: [
+      "Mở riêng một buổi để nói cho xong chuyện cũ: người ấy còn đau ở đâu, cần gì để thấy chuyện đó khép lại.",
+      "Thoả thuận “luật cãi nhau”: mỗi lần chỉ nói một chuyện, chuyện cũ đã giải quyết thì không lôi ra làm vũ khí.",
+      "Khi đang cãi mà chuyện cũ bị nhắc, nói nhẹ: “Chuyện đó quan trọng, mình hẹn nói riêng nha, giờ mình giải quyết chuyện này trước.”",
+      "Nếu vòng lặp cứ diễn ra dù đã cố, tư vấn cặp đôi có thể giúp hai bạn thoát ra.",
+    ],
+  },
+  // Q64, Q80: muốn chia sẻ áp lực nhưng sợ bị cho là yếu đuối / lúc nào cũng phải mạnh mẽ.
+  {
+    id: "showweak",
+    re: VN(/\b((sợ|ngại)( \S+){0,4} (nghĩ|thấy|cho là|chê|coi) ((anh|em|mình|tôi|tui) )?(là )?(yếu đuối|yếu|vô dụng|phiền|đàn ông yếu)|(lúc nào cũng|luôn|phải) (phải )?(làm người |tỏ ra )?mạnh mẽ|không được (than|than thở|khóc|yếu đuối))\b/),
+    feel: ["Gồng mình mạnh mẽ mãi, có chuyện cũng không dám than — nghe thôi đã thấy mệt thay bạn."],
+    insight: ["Chia sẻ áp lực **không phải là yếu đuối** — ai cũng có giới hạn, và mở lòng có chọn lọc với người thân thiết thường làm mối quan hệ gần nhau hơn. Lomi không đoán trước được người ấy sẽ phản ứng thế nào, nhưng bạn có thể bắt đầu nhỏ."],
+    step: ["Bắt đầu nhỏ: kể một chuyện cụ thể và nói rõ điều mình cần — “Anh không cần em giải quyết, chỉ cần em nghe anh nói chút.”"],
+    ask: ["Điều gì làm bạn thấy mình không được phép than thở vậy?"],
+    advice: [
+      "Chọn một người tin được và một lúc thoải mái để nói, không cần kể hết một lần.",
+      "Nói rõ điều mình cần nghe: lắng nghe, góp ý hay chỉ một cái ôm.",
+      "Bạn được quyền có lúc yếu lòng — mạnh mẽ cũng gồm việc biết khi nào cần người khác.",
+    ],
+  },
+  // Q69: muốn xem trộm điện thoại người yêu — không chỉ cách; đưa cách xử lý nghi ngờ an toàn, tôn trọng.
+  {
+    id: "snoop",
+    howto: true,
+    re: VN(/\b((muốn|định|tính|cách|chỉ)( \S+){0,3} (xem|đọc|coi|lục|check|kiểm tra|mở) (trộm|lén) (điện thoại|tin nhắn|zalo|facebook|messenger|máy)|(hack|vào trộm|đăng nhập lén) (tài khoản|facebook|zalo|messenger|điện thoại))\b/),
+    feel: ["Nghi ngờ mà chưa có câu trả lời thì bứt rứt lắm, Lomi hiểu vì sao bạn muốn tìm bằng chứng."],
+    insight: ["Nhưng Lomi **không chỉ cách xem trộm điện thoại hay vào tài khoản của người khác** được — việc đó xâm phạm quyền riêng tư, có thể vi phạm pháp luật, và nếu bị phát hiện thì chính bạn thành người phá vỡ niềm tin trước."],
+    step: ["Viết ra điều cụ thể làm bạn nghi (thay đổi giờ giấc, thái độ…), tách với điều chỉ là cảm giác."],
+    ask: ["Điều gì cụ thể làm bạn nghi ngờ vậy?"],
+    advice: [
+      "Lomi không chỉ cách xem trộm điện thoại / tài khoản người khác — xâm phạm quyền riêng tư và có thể vi phạm pháp luật.",
+      "Ghi lại những điều cụ thể làm bạn nghi, rồi nói chuyện thẳng: “Dạo này mình thấy…, mình bất an, mình muốn nghe bạn nói thật.”",
+      "Quan sát cách người ấy phản ứng: giải thích rõ ràng, hay né tránh, đổ lỗi.",
+      "Nếu niềm tin đã mất tới mức muốn lục điện thoại, đó là lúc cần nói thẳng về mối quan hệ — hoặc nhờ tư vấn cặp đôi.",
+    ],
+  },
+  // Q73: giữ kín khoản tiết kiệm riêng sau kết hôn.
+  {
+    id: "privatemoney",
+    howto: true,
+    re: VN(/\b((giữ kín|giấu|giữ riêng|để riêng)( \S+){0,3} (khoản )?(tiết kiệm|tiền|quỹ)( \S+){0,5} (kết hôn|cưới|lấy vợ|lấy chồng)|quỹ đen|quỹ riêng sau khi cưới)\b/),
+    feel: ["Muốn có một khoản riêng cho mình là mong muốn rất phổ biến, không có gì lạ cả."],
+    insight: ["Không có đúng sai tuyệt đối: có **quỹ riêng** (tiền mình tự quyết) khác với **giấu tiền** (người kia không biết, trong khi hai người đang cùng lo một kế hoạch chung). Điều làm tổn thương thường là chuyện bị giấu, hơn là chuyện có tiền riêng."],
+    step: ["Nghĩ xem vì sao bạn muốn giữ kín: để tự chủ, để phòng thân, hay vì sợ bị kiểm soát?"],
+    ask: ["Bạn muốn giữ khoản đó vì lý do gì nè?"],
+    advice: [
+      "Phân biệt **quỹ riêng có thoả thuận** (hai người biết mỗi người có một khoản tự quyết) với **giấu tiền**.",
+      "Nhiều cặp chia: quỹ chung cho nhà cửa, con cái, tiết kiệm chung + mỗi người một khoản riêng không phải giải trình — đây là cách được nhiều người chọn.",
+      "Nếu hai người đang có nghĩa vụ chung (nợ, mua nhà), giấu một khoản lớn dễ thành mất niềm tin khi bị phát hiện.",
+      "Chuyện tài sản trong hôn nhân còn liên quan tới pháp luật — cần rõ ràng thì nên hỏi luật sư hoặc người có chuyên môn.",
+    ],
+  },
+  // Q75: người dùng phản hồi Lomi cứ khuyên quay lại — nhận lỗi, không mặc định phải hoà giải.
+  {
+    id: "advicewrong",
+    re: VN(/\b(nhưng|mà) (em|lomi|bạn) (cứ|lại|toàn|cứ hay) (bảo|khuyên|nói|kêu)( \S+){0,6} (phải|nên)\b/),
+    feel: ["Lomi xin lỗi nha 🙏 Lomi không nên mặc định là bạn phải quay lại — tình yêu cần cố gắng, nhưng không phải chuyện nào cũng nên cố bằng mọi giá."],
+    insight: ["Chia tay hay quay lại là quyết định của bạn, dựa trên hoàn cảnh thật mà chỉ bạn biết rõ. Lomi ở đây để giúp bạn nhìn rõ, không phải để kéo bạn về một phía."],
+    step: ["Nghĩ xem điều bạn cần nhất lúc này: được nghe, được an ủi, hay cùng xem lại quyết định?"],
+    ask: ["Bạn kể Lomi nghe vì sao hai người chia tay, và bạn đang mong điều gì lúc này nha?"],
+    advice: ["Lomi sẽ nghe hoàn cảnh của bạn trước rồi mới nói, và không mặc định phải hoà giải."],
+  },
+  // ═══════════════════════ 21/10 (QA V2) — tâm lý ═══════════════════════
+  // Q76: không có chuyện gì lớn mà vẫn nặng nề.
+  {
+    id: "heavyheart",
+    re: VN(/\b((không|chẳng|chả) có (chuyện|gì|việc) (gì )?(lớn|to tát|đặc biệt|cả)( \S+){0,4} (nặng nề|buồn|nặng lòng|khó chịu|bức bối|chán)|nặng nề trong lòng|nặng lòng mà không (biết|rõ))\b/),
+    feel: ["Có những lúc lòng nặng trĩu mà không gọi tên được vì sao — cảm giác đó vẫn thật, không cần có chuyện gì lớn mới được buồn đâu."],
+    insight: ["Cảm giác nặng nề có khi đến từ nhiều chuyện nhỏ cộng lại, từ mệt mỏi, thiếu ngủ, hay một giai đoạn chuyển đổi. Không cần tìm ra nguyên nhân ngay mới được nghỉ ngơi."],
+    step: ["Cho mình một chút dịu lại hôm nay: đi bộ ngắn, tắm nước ấm, hay ngồi yên viết vài dòng — không cần phải giải quyết gì."],
+    ask: ["Cảm giác này có từ bao giờ — mới vài hôm, hay đã một thời gian rồi?"],
+    advice: ["Ghi lại mỗi ngày một dòng: hôm nay nặng nề lúc nào, sau chuyện gì — dần dần sẽ thấy quy luật.", "Nếu cảm giác kéo dài trên hai tuần, ảnh hưởng ăn ngủ, công việc, hãy nói chuyện với bác sĩ hoặc chuyên gia tâm lý."],
+    heavy: true,
+  },
+  // Q77: đạt được mục tiêu mà vẫn không vui — trước đây "Nghe bạn vui là Lomi vui lây".
+  {
+    id: "emptywin",
+    re: VN(/\b((đạt|có|làm|thi|xin) (được|đậu|đỗ)( \S+){0,6} (mà|nhưng) (vẫn |lại )?(không|chẳng|chả) (thấy )?(vui|hạnh phúc|hài lòng|sướng|thoả mãn)|thành công rồi mà (vẫn )?(không|chẳng) (vui|thấy gì))\b/),
+    feel: ["Cố gắng mãi mới đạt được, tới nơi rồi lại thấy trống trơn — cảm giác hụt hẫng đó có thật, và nhiều người từng trải qua, không phải bạn vô ơn đâu."],
+    insight: ["Có khi vì mình đã quá mệt trên đường đi, có khi mục tiêu đó không còn là điều mình thật sự cần, hoặc mình quen với cảm giác phải chạy tiếp. Nếu cả những điều trước đây làm bạn vui cũng nhạt đi thì đáng để ý hơn."],
+    step: ["Thử hỏi mình: điều mình mong cảm thấy khi đạt được mục tiêu là gì — an toàn, được công nhận, hay tự do?"],
+    ask: ["Cảm giác không vui này chỉ với mục tiêu đó, hay dạo này nhiều chuyện khác cũng thấy nhạt?"],
+    advice: ["Cho mình nghỉ thật sự sau một chặng dài trước khi đặt mục tiêu mới.", "Nếu mất hứng thú với nhiều thứ kéo dài vài tuần, nói chuyện với chuyên gia tâm lý sẽ giúp bạn hiểu mình hơn."],
+  },
+  // Q79: sợ bị đánh giá, đăng bài rồi xoá — trước đây FAQ "đăng bài".
+  {
+    id: "judged",
+    re: VN(/\b(sợ (người khác|mọi người|người ta|bị) (đánh giá|nghĩ|chê|phán xét|cười)|(xóa|xoá) (đi )?đăng lại|đăng (rồi|xong) lại (xóa|xoá))\b/),
+    feel: ["Đăng gì cũng sợ người ta nghĩ này nghĩ kia rồi xoá đi đăng lại — mệt ghê, Lomi hiểu cảm giác đó."],
+    insight: ["Sợ bị đánh giá là một dạng lo âu xã hội rất phổ biến. Thật ra mọi người thường bận nghĩ về chính họ nhiều hơn ta tưởng — cái “đèn sân khấu” chiếu vào mình mờ hơn mình nghĩ nhiều."],
+    step: ["Thử một bước nhỏ: lần tới đăng một bài đơn giản, đặt hẹn giờ 10 phút không mở lại xem — và để nguyên bài đó."],
+    ask: ["Bạn sợ nhất là người ta sẽ nghĩ gì về mình?"],
+    advice: ["Tập từng bước nhỏ: bài ngắn, ít người xem trước (bạn thân), rồi mới rộng hơn.", "Để ý câu tự phán xét trong đầu và hỏi lại: có bằng chứng thật không?", "Nếu nỗi sợ làm bạn né nhiều việc trong đời sống, chuyên gia tâm lý có thể giúp bạn bằng những bài tập cụ thể."],
+  },
+  // Q81: ghen tị với thành công của bạn thân — trước đây bài "ghen trong tình yêu".
+  {
+    id: "envy",
+    re: VN(/\b(ghen tị|ghen tỵ|đố kỵ|đố kị|ganh tị|ganh tỵ|ganh ghét)\b/),
+    feel: ["Ghen tị với thành công của người thân thiết rồi lại thấy mình xấu tính — cảm giác đó khó chịu lắm, nhưng nó rất người, ai cũng có lúc như vậy."],
+    insight: ["Ghen tị không làm bạn thành người xấu — điều quan trọng là mình làm gì với nó. Thường nó chỉ ra một điều mình đang mong cho chính mình."],
+    step: ["Hỏi mình: trong thành công của bạn ấy, điều gì mình thật sự mong có — công việc, sự công nhận, hay cảm giác đang tiến lên?"],
+    ask: ["Điều gì trong thành công của bạn ấy chạm vào bạn nhất?"],
+    advice: ["Gọi tên điều mình mong, rồi đặt một bước nhỏ cho chính mình hướng tới nó.", "Vẫn có thể chúc mừng bạn ấy thật lòng — hai cảm xúc tồn tại cùng lúc được.", "Bớt so sánh trên mạng xã hội một thời gian nếu nó làm bạn thấy tệ."],
+  },
+  // Q82: không biết mình đang buồn, giận hay thất vọng.
+  {
+    id: "nameit",
+    re: VN(/\b(không (biết|rõ) (mình |anh |em )?(đang )?(buồn|giận|thất vọng|cảm thấy gì|thấy sao)( \S+){0,2} (hay|hoặc|hay là)|lẫn lộn cảm xúc|cảm xúc lẫn lộn|không gọi tên được (cảm xúc|cảm giác))\b/),
+    feel: ["Cảm xúc rối vào nhau, không biết là buồn, giận hay thất vọng — chuyện này hay gặp lắm, nhất là khi nhiều chuyện dồn lại."],
+    insight: ["Gọi được tên cảm xúc giúp nó dịu bớt. Mấy cảm xúc này hay đi cùng nhau: buồn thường đi với mất mát, giận với cảm giác bị đối xử bất công, thất vọng với kỳ vọng không thành."],
+    step: ["Thử trả lời nhanh: chuyện vừa rồi làm bạn thấy mất đi điều gì (buồn), bị đối xử không công bằng ở đâu (giận), hay mình đã mong điều gì mà không được (thất vọng)?"],
+    ask: ["Gần đây có chuyện gì xảy ra làm bạn thấy như vậy không?"],
+    advice: ["Viết ra vài dòng không cần đúng ngữ pháp — cảm xúc thường rõ hơn khi ra giấy.", "Không cần chọn một cảm xúc duy nhất; có thể là cả ba."],
+    stepFirst: true,
+  },
+  // Q83: luôn đồng ý giúp mọi người vì sợ bị ghét.
+  {
+    id: "peoplepleaser",
+    howto: true,
+    re: VN(/\b((cứ |luôn |hay )?(đồng ý|nhận lời|giúp) (mọi người|hết mọi người|ai cũng)( \S+){0,6} (mệt|sợ (họ|người ta|mọi người) ghét|ngại từ chối)|không (dám|biết cách) từ chối|sợ (bị )?(người ta |mọi người |họ )?ghét)\b/),
+    feel: ["Cứ gật đầu giúp mọi người dù mình đã cạn sức — vì sợ bị ghét — lâu dần mệt lắm, Lomi hiểu."],
+    insight: ["Đặt ranh giới không làm bạn thành người xấu. Người quý bạn thật sẽ vẫn quý khi bạn nói “lần này mình không giúp được”."],
+    step: ["Lần tới khi được nhờ, đừng trả lời ngay — nói “để mình xem lịch rồi báo nha” để có thời gian nghĩ."],
+    ask: ["Lần gần nhất bạn muốn từ chối mà không dám là chuyện gì?"],
+    advice: [
+      "Cho mình thời gian: “Để mình xem lại rồi báo bạn nha” thay vì gật ngay.",
+      "Từ chối ngắn, lịch sự, không cần giải thích dài: “Lần này mình không giúp được rồi, mình đang kín việc.”",
+      "Đề nghị phần nhỏ hơn nếu muốn: “Mình không làm cả được, nhưng mình góp ý bản nháp cho bạn nhé.”",
+      "Bắt đầu từ những lời nhờ nhỏ, ít rủi ro để tập — và để ý thấy phần lớn mọi người không ghét mình như mình sợ.",
+    ],
+  },
+  // Q91: không muốn gặp ai mấy tuần nay.
+  {
+    id: "withdraw",
+    heavy: true,
+    re: VN(/\b(không muốn gặp (ai|bất kỳ ai|ai cả|mọi người)|thu mình|tránh mặt (mọi người|tất cả)|không muốn liên lạc với ai|né (hết )?mọi người)\b/),
+    feel: ["Mấy tuần liền không muốn gặp ai, kể cả người từng thân — chắc bạn đang mệt lắm. Lomi không ép bạn phải ra ngoài ngay đâu."],
+    insight: ["Thu mình một thời gian ngắn có thể là cách nghỉ ngơi. Nhưng nếu kéo dài vài tuần, kèm buồn, mất hứng thú, ăn ngủ thay đổi, thì đáng để được quan tâm kỹ hơn."],
+    step: ["Không cần gặp ngay — thử nhắn cho một người bạn tin một câu ngắn: “Dạo này mình hơi mệt, chưa muốn gặp ai, nhưng vẫn nhớ bạn.”"],
+    ask: ["Dạo này việc ăn, ngủ, làm việc của bạn thế nào? Và có lúc nào bạn nghĩ tới chuyện không muốn sống nữa không?"],
+    advice: ["Giữ một sợi dây liên lạc nhỏ với một người tin được.", "Kéo dài trên hai tuần thì nên nói chuyện với bác sĩ hoặc chuyên gia tâm lý."],
+  },
+  // Q92, Q93: muốn tìm chuyên gia tâm lý nhưng ngại bị đánh giá; từng đi tư vấn mà không hợp.
+  {
+    id: "seekhelp",
+    re: VN(/\b((tìm|gặp|đi|đến) (chuyên gia tâm lý|bác sĩ tâm lý|nhà tâm lý|nhà trị liệu|tư vấn tâm lý|bác sĩ tâm thần|chuyên gia)( \S+){0,6} (sợ|ngại)|sợ bị (đánh giá|cho là|nghĩ) (là )?(có vấn đề|bị điên|thần kinh|tâm thần)|(đi tư vấn|đi trị liệu|gặp chuyên gia)( \S+){0,4} (không hợp|chưa hợp)|không hợp (chuyên gia|bác sĩ|người tư vấn|nhà trị liệu))\b/),
+    feel: ["Muốn tìm người giúp mà còn ngại bị đánh giá — Lomi hiểu, và việc bạn nghĩ tới chuyện này đã là một bước can đảm."],
+    insight: ["Gặp chuyên gia tâm lý **không có nghĩa là bạn “có vấn đề”** — giống như đi khám khi đau người thôi. Rất nhiều người tìm tư vấn để hiểu mình hơn, vượt qua một giai đoạn khó, hay học cách ứng phó với căng thẳng."],
+    step: ["Chuẩn bị cho buổi đầu: ghi ra 2–3 điều bạn muốn được giúp, và cứ nói thẳng là mình còn hồi hộp."],
+    ask: ["Điều bạn muốn được giúp nhất khi đi tư vấn là gì?"],
+    advice: [
+      "Buổi đầu thường là để làm quen: bạn kể vì sao tới, chuyên gia hỏi thêm — bạn có quyền chưa kể hết.",
+      "Có thể hỏi trước về cách làm việc, chi phí, bảo mật thông tin.",
+      "Không hợp với một chuyên gia là chuyện bình thường — sự hợp nhau quan trọng lắm. Bạn có thể nói thẳng điều chưa ổn, hoặc tìm người khác phù hợp hơn, không cần bỏ hẳn việc được giúp.",
+    ],
+    hint: [
+      [VN(/\b(không hợp|chưa hợp)\b/), "Không hợp với một chuyên gia là chuyện **bình thường** — mức độ hợp nhau ảnh hưởng nhiều tới hiệu quả tư vấn. Lomi không quyết thay bạn, nhưng có mấy lựa chọn:\n• Nói thẳng với chuyên gia điều chưa ổn (cách nói chuyện, tốc độ, hướng làm việc) — nhiều khi chỉnh lại được\n• Tìm một người khác, có thể khác cách tiếp cận hoặc chuyên về đúng vấn đề của bạn\n• Nhìn lại: điều gì ở lần đó làm bạn thấy không hợp, để lần sau hỏi trước\n\nBỏ một người không hợp **không có nghĩa** là bỏ hẳn việc được giúp. Điều gì ở lần đó làm bạn thấy không ổn nhất?", true],
+    ],
+  },
   // ═══════════════════════ 21/10 (QA 100 câu) — các chuyện trước đây Lomi đáp lạc chủ đề ═══════════════════════
   // Cặp đôi / vợ chồng bất đồng chuyện tiền (Q73, Q79) — trước đây nhận thành "áp lực tiền bạc", "bị người nhà không hiểu".
   {
     id: "couplemoney",
     howto: true,
-    re: VN(/\b(vợ chồng|người yêu|ny|bạn trai|bạn gái|hai đứa|hai người|yêu nhau|vợ|chồng)\b.*\b(bất đồng|cãi nhau|cãi|mâu thuẫn|tranh cãi|khác nhau|không hợp|xung đột|giận nhau)( \S+){0,3} (tiền bạc|tiền nong|chuyện tiền|tiền|chi tiêu|tiết kiệm|tiêu xài|xài tiền)\b/),
+    re: VN(/\b(vợ chồng|người yêu|ny|bạn trai|bạn gái|hai đứa|hai người|yêu nhau|vợ|chồng)\b.*(\b(bất đồng|cãi nhau|cãi|mâu thuẫn|tranh cãi|khác nhau|không hợp|xung đột|giận nhau)( \S+){0,3} (tiền bạc|tiền nong|chuyện tiền|tiền|chi tiêu|tiết kiệm|tiêu xài|xài tiền)\b|\bnợ\b.*\b(ưu tiên|mỗi người muốn|khác nhau|bất đồng)\b)/),
+    hint: [
+      [VN(/\bnợ\b/), "Đang nợ mà mỗi người muốn ưu tiên một khoản khác thì căng thẳng là phải — nhưng đây là bài toán **chung**, không phải chuyện ai thắng ai, và cũng không cần mặc định một người phải nắm hết tiền.\n\nThử cùng ngồi làm vầy:\n• Liệt kê **tất cả** khoản nợ: còn bao nhiêu, lãi suất, hạn trả, phạt nếu trễ\n• Ưu tiên trước khoản **sắp tới hạn / có phạt**, rồi tới khoản **lãi cao nhất** (vd thẻ tín dụng, vay tiêu dùng)\n• Giữ một khoản dự phòng nhỏ cho chi tiêu thiết yếu để không phải vay thêm\n• Thống nhất số tiền trả nợ mỗi tháng, xem lại cùng nhau mỗi tháng\n\nNợ nhiều quá khả năng trả thì nên hỏi ngân hàng về giãn nợ, hoặc người có chuyên môn tài chính. Hai bạn đang bất đồng ở khoản nào vậy?", true],
+    ],
     feel: ["Bất đồng chuyện tiền bạc là một trong những điều làm các cặp đôi căng thẳng nhất — vì tiền gắn với cảm giác an toàn và cách mỗi người được nuôi lớn."],
     insight: ["Thường không phải ai đúng ai sai: một người thấy an toàn khi để dành, người kia thấy sống là phải tận hưởng. Hiểu tiền có ý nghĩa gì với mỗi người quan trọng hơn tranh luận từng khoản chi."],
     step: ["Chọn lúc cả hai đều bình tĩnh (không phải ngay sau khi vừa cãi), mỗi người nói mình lo điều gì nhất về tiền.", "Thử chia: một quỹ chung (nhà, ăn uống, tiết kiệm chung) và mỗi người một khoản riêng tự quyết, không phải giải trình."],
@@ -112,9 +428,9 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "space",
     howto: true,
-    re: VN(/\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|cô ấy|anh ấy|em ấy|người ấy|crush)\b.*\b(cần|muốn|xin) (có )?(thêm )?(không gian riêng|không gian|khoảng lặng|khoảng trống|thời gian riêng|thời gian một mình|ở một mình)\b/),
-    feel: ["Nghe người thương nói “cần không gian riêng” dễ làm mình chột dạ, sợ đó là dấu hiệu người ta muốn đi — cảm giác đó rất dễ hiểu."],
-    insight: ["Cần không gian riêng **không nhất thiết** là muốn rời xa: nhiều người cần thời gian một mình để nạp lại năng lượng, gỡ áp lực, hoặc sắp xếp lại suy nghĩ. Lomi không đoán được lòng người ấy — điều nói lên nhiều nhất là cách họ cư xử trong và sau khoảng thời gian đó."],
+    re: VN(/\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|cô ấy|anh ấy|em ấy|người ấy|crush)\b.*\b(cần|muốn|xin) (có )?(thêm )?(không gian riêng|không gian|khoảng lặng|khoảng trống|thời gian riêng|thời gian một mình|ở một mình|thời gian (để )?suy nghĩ)\b/),
+    feel: ["Nghe người thương nói cần thời gian hay không gian riêng dễ làm mình chột dạ, sợ đó là dấu hiệu người ta muốn đi — cảm giác đó rất dễ hiểu."],
+    insight: ["Cần thời gian, không gian riêng **không nhất thiết** là muốn rời xa: nhiều người cần thời gian một mình để nạp lại năng lượng, gỡ áp lực, hoặc sắp xếp lại suy nghĩ. Lomi không đoán được lòng người ấy — điều nói lên nhiều nhất là cách họ cư xử trong và sau khoảng thời gian đó."],
     step: ["Tôn trọng khoảng lặng đó: đừng nhắn dồn hay ngồi canh điện thoại."],
     ask: ["Người ấy nói vậy trong hoàn cảnh nào — sau một lần cãi nhau, hay lúc đang nhiều áp lực?"],
     advice: [
@@ -167,7 +483,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "overwhelm",
     howto: true,
-    re: VN(/\b(muốn thay đổi (cuộc sống|bản thân|cuộc đời|cuộc sống của mình)|(quá nhiều|bao nhiêu|cả đống|một đống|ngập) (việc|thứ|chuyện) (phải|cần|muốn) (làm|lo|thay đổi)|ngập việc|quá tải (việc|công việc)?)\b/),
+    re: VN(/\b(kế hoạch (quá )?(lớn|to|nhiều)( \S+){0,4} bỏ (giữa chừng|dở)|cứ bỏ (giữa chừng|dở)|cải thiện bản thân( \S+){0,6} bỏ|muốn thay đổi (cuộc sống|bản thân|cuộc đời|cuộc sống của mình)|(quá nhiều|bao nhiêu|cả đống|một đống|ngập) (việc|thứ|chuyện) (phải|cần|muốn) (làm|lo|thay đổi)|ngập việc|quá tải (việc|công việc)?)\b/),
     feel: ["Muốn thay đổi mà nhìn vào thấy cả núi việc thì dễ bị “đứng hình” lắm — không phải bạn lười, mà là đầu óc đang quá tải."],
     insight: ["Thay đổi lớn thường bắt đầu từ một thói quen nhỏ làm đều đặn, không phải từ việc sửa mọi thứ cùng lúc."],
     step: ["Viết hết mọi việc ra giấy cho đầu nhẹ bớt, rồi khoanh đúng MỘT việc để bắt đầu trong tuần này."],
@@ -667,7 +983,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "regret",
-    re: VN(/\b(hối hận|hối tiếc|tiếc nuối|giá như|làm sai rồi|sai lầm lớn|không thể tha thứ cho mình|tự trách|dằn vặt|cảm thấy có lỗi)\b/),
+    re: VN(/\b(nhớ lại( \S+){0,4} (làm sai|lỗi lầm|sai lầm|lỗi)|(lỗi|sai lầm|làm sai)( \S+){0,3} (từ|cách đây) (nhiều|mấy|vài|\d+) năm|hối hận|hối tiếc|tiếc nuối|giá như|làm sai rồi|sai lầm lớn|không thể tha thứ cho mình|tự trách|dằn vặt|cảm thấy có lỗi)\b/),
     feel: ["Hối hận là cảm giác nặng nề lắm, cứ lặp đi lặp lại trong đầu hoài 😔", "Lomi hiểu, tự trách mình là kiểu đau âm ỉ mà khó buông."],
     insight: [
       "Hối hận chứng tỏ bạn có lương tâm và biết điều gì quan trọng với mình.",

@@ -43,8 +43,8 @@ const PARTNER_B = "(?:chong|vo|ban trai|ban gai|nguoi yeu cu|nguoi yeu|ny|anh ay
 const KIN = "(?:ba|bố|cha|mẹ|má|dượng|chú|bác|anh trai|ông|bà|mẹ chồng|ba chồng|bố chồng|mẹ vợ|sếp|thầy|cô giáo)";
 // (gõ không dấu thì "ba", "bo", "ma", "me", "ong"… trùng quá nhiều chữ khác → chỉ nhận những cách gọi không lẫn được)
 const KIN_B = "(?:cha|duong|anh trai|me chong|ba chong|bo chong|me vo|ba toi|ba e|ba em|ba a|bo e|bo em|bo a|me e|me em|me a|sep)";
-const HIT = "(?:đánh đập|bạo hành|bạo lực|đánh|tát|đấm|đạp|bóp cổ|túm tóc|xô ngã|hành hạ|ném đồ vào|cầm dao|đập đầu)";
-const HIT_B = "(?:danh dap|bao hanh|bao luc|danh|tat|dam|dap|bop co|tum toc|xo nga|hanh ha|nem do vao|cam dao|dap dau)";
+const HIT = "(?:đánh đập|bạo hành|bạo lực|xô đẩy|đẩy ngã|xô mạnh|cào cấu|bạt tai|nắm tóc|đánh|tát|đấm|đạp|bóp cổ|túm tóc|xô ngã|hành hạ|ném đồ vào|cầm dao|đập đầu)";
+const HIT_B = "(?:danh dap|bao hanh|bao luc|xo day|day nga|xo manh|cao cau|bat tai|nam toc|danh|tat|dam|dap|bop co|tum toc|xo nga|hanh ha|nem do vao|cam dao|dap dau)";
 // "đánh" + một thứ không phải người ("đánh cầu lông", "đánh răng", "đánh giá"…) không phải đánh người.
 const NOT_HIT = "(?! (?:cầu|bóng|banh|bài|răng|giá|máy|đàn|trống|golf|tennis|game|thức|dấu|vần|rơi|mất|liều|lừa|số|bida|bi-a|cờ|bạc|nhau|son|phấn|móng))";
 const NOT_HIT_B = "(?! (?:cau|bong|banh|bai|rang|gia|may|dan|trong|golf|tennis|game|thuc|dau|van|roi|mat|lieu|lua|so|bida|co|bac|nhau|son|phan|mong))";
@@ -67,6 +67,10 @@ const SCHOOL = P(
 const CONTROL = P(
   `(?:kiểm tra|coi|xem|đọc|lục|soi|check)(?: lén| trộm)? (?:điện thoại|tin nhắn|zalo|facebook|messenger|máy|đt)(?: của)? ${SELF}|(?:không cho|ko cho|k cho|cấm|không muốn cho|chẳng cho) ${SELF}(?: \\S+){0,2} (?:đi|gặp|chơi|làm|học|mặc|nói chuyện|liên lạc|ra ngoài|kết bạn|về)|bắt ${SELF}(?: \\S+){0,2} (?:nghỉ|xoá|xóa|ở nhà|báo cáo|đưa|chặn|block|bỏ)|kiểm soát ${SELF}|${SELF} bị kiểm soát|theo dõi ${SELF}|định vị ${SELF}|giữ (?:hết )?(?:tiền lương|tiền|lương|giấy tờ|điện thoại|thẻ)(?: của)? ${SELF}|đòi (?:mật khẩu|pass)`,
   `(?:kiem tra|coi|xem|doc|luc|soi|check)(?: len| trom)? (?:dien thoai|tin nhan|zalo|facebook|messenger|may|dt)(?: cua)? ${SELF_B}|(?:khong cho|ko cho|k cho|cam|khong muon cho|chang cho) ${SELF_B}(?: \\S+){0,2} (?:di|gap|choi|lam|hoc|mac|noi chuyen|lien lac|ra ngoai|ket ban|ve)|bat ${SELF_B}(?: \\S+){0,2} (?:nghi|xoa|o nha|bao cao|dua|chan|block|bo)|kiem soat ${SELF_B}|${SELF_B} bi kiem soat|theo doi ${SELF_B}|dinh vi ${SELF_B}|giu (?:het )?(?:tien luong|tien|luong|giay to|dien thoai|the)(?: cua)? ${SELF_B}|doi (?:mat khau|pass)`,
+);
+// 21/10 (QA V2 Q66–Q68): đọc trộm tin nhắn, bắt cắt liên lạc bạn bè, doạ chia tay khi mình đi gặp bạn, "thật lòng yêu thì phải đưa hết lương".
+const CONTROL2 = P(
+  `(?:đọc|xem|coi|lục|soi)(?: lén| trộm) (?:tin nhắn|điện thoại|máy|zalo|facebook)|(?:yêu cầu|bắt|ép|đòi|cấm) ${SELF}(?: \\S+){0,2} (?:cắt liên lạc|cắt đứt|ngừng liên lạc|thôi chơi|nghỉ chơi|không chơi|không gặp|tránh xa)|(?:doạ|dọa) chia tay|(?:đưa|nộp|giao) (?:hết |toàn bộ |cả )?(?:tiền lương|lương|tiền)(?: \\S+){0,3} (?:giữ|quản|cầm)|thật lòng yêu (?:\\S+ ){0,2}(?:thì )?phải`,
 );
 const NEG_IN = VR(/ (chưa|không|ko|chẳng|chả|hông|hổng|chua|khong|chang|đâu có|dau co) /u);
 const HAS_PARTNER = P(PARTNER, PARTNER_B);
@@ -124,8 +128,8 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
   const th = hit(THREAT(t));
   if (th && !selfActs) return { kind: "threat", victim: "self", actor };
   // Kiểm soát: chỉ tính khi người làm là người yêu / vợ chồng (cha mẹ cấm con đi chơi là chuyện khác — thư viện tâm sự có bài riêng).
-  const c = hit(CONTROL(t));
-  if (c && partnerish && !(HAS_KIN(t) && !HAS_PARTNER(t) && !ctx.inHarm)) return { kind: "control", victim: "self", actor };
+  const c = hit(CONTROL(t)) ?? hit(CONTROL2(t));
+  if (c && partnerish && !selfActs && !(HAS_KIN(t) && !HAS_PARTNER(t) && !ctx.inHarm)) return { kind: "control", victim: "self", actor };
   return null;
 }
 
@@ -173,7 +177,7 @@ export function harmReply(h: Harm, ctx: SafetyCtx & { mirror?: string | null; sa
       ].join("\n\n"),
     };
   }
-  const what = h.kind === "threat" ? "Bị doạ như vậy" : other ? (whom ? `${cap(whom)} bị đánh` : "Có người thân bị đánh") : "Bị đánh";
+  const what = h.kind === "threat" ? "Bị doạ như vậy" : other ? (whom ? `${cap(whom)} bị đánh` : "Có người thân bị đánh") : "Bị đánh, bị xô đẩy hay bị đối xử bạo lực";
   // Đã đưa số điện thoại ở lượt trước rồi thì không lặp lại cả danh sách.
   if (prev && (prev.kind === "violence" || prev.kind === "threat") && said("1900 969 680"))
     return { harm: { ...h, actor: h.actor ?? prev.actor }, text: `${head}Nghe mà Lomi lo. ${other ? "Người đó" : "Bạn"} không đáng bị đối xử như vậy. Mấy số Lomi gửi ở trên bạn giữ lại nha — thấy không an toàn là gọi liền, đừng chờ.\n\n${other ? "Bạn có ở gần để ở cạnh người đó lúc này không?" : "Có ai ở gần mà bạn tin, có thể qua với bạn hoặc cho bạn ở nhờ không?"}` };

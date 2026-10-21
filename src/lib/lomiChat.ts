@@ -152,7 +152,7 @@ const RULES: Rule[] = [
   //   15/10 (audit sức khoẻ): "thuốc ngủ uống bao nhiêu thì chết" từng nhận bài "liều phụ thuộc cân nặng" — hỏi liều / cách gây chết,
   //   định uống thuốc ngủ / thuốc chuột / thuốc trừ sâu cũng là tín hiệu khủng hoảng.
   {
-    re: VN(/\b(muốn chết|tự tử|tự tữ|tự sát|không muốn sống|chán sống|sống làm gì nữa|không còn lý do (để )?sống|kết thúc cuộc đời|tự làm đau|tự hại bản thân|làm hại bản thân|(tự )?(làm|gây) (tổn thương|đau|hại) (chính (mình|bản thân)|bản thân( mình)?)|(muốn|định|tính|nghĩ (đến|tới)( việc)?|sợ (mình )?(sẽ )?) (tự )?(làm|gây) (tổn thương|đau|hại) (mình|bản thân)|muốn biến mất|chết cho xong|(muốn|định|sẽ|tính|chỉ muốn|đi) treo cổ|treo cổ (tự tử|chết|cho xong|cho rồi)|(muốn|định|sẽ|tính) nhảy (cầu|lầu)|(muốn|định|sẽ|tính) uống thuốc (ngủ|chuột) (cho|để) chết|(muốn|định|sẽ|tính) uống (hết )?(thuốc ngủ|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)|(uống|dùng|nuốt) (bao nhiêu|mấy) (viên |liều |vỉ |lọ |hộp |chai )?(thì|là|để|sẽ|mới) (chết|tử vong|không tỉnh lại)|(uống|dùng|nuốt) (gì|thuốc gì|cái gì) (để|cho|thì|là) (chết|tử vong)|chết (không đau|nhẹ nhàng)|(cách|làm sao) (để )?(tự )?chết)\b/),
+    re: VN(/\b(muốn chết|tự tử|tự tữ|tự sát|không muốn sống|chán sống|sống làm gì nữa|không còn lý do (để )?sống|kết thúc cuộc đời|tự làm đau|tự hại bản thân|làm hại bản thân|(tự )?(làm|gây) (tổn thương|đau|hại) (chính (mình|bản thân)|bản thân( mình)?)|(muốn|định|tính|nghĩ (đến|tới)( việc)?|sợ (mình )?(sẽ )?) (tự )?(làm|gây) (tổn thương|đau|hại) (mình|bản thân)|(cầm|đang cầm|cầm sẵn|có sẵn)( \S+){0,5} (có thể |sẽ |dễ )?(làm|khiến) (mình|anh|em|tôi|tui|bản thân)( bị)? (thương|đau|chảy máu|tổn thương)|muốn biến mất(?! (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)| một thời gian| khỏi)|chết cho xong|(muốn|định|sẽ|tính|chỉ muốn|đi) treo cổ|treo cổ (tự tử|chết|cho xong|cho rồi)|(muốn|định|sẽ|tính) nhảy (cầu|lầu)|(muốn|định|sẽ|tính) uống thuốc (ngủ|chuột) (cho|để) chết|(muốn|định|sẽ|tính) uống (hết )?(thuốc ngủ|thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)|(uống|dùng|nuốt) (bao nhiêu|mấy) (viên |liều |vỉ |lọ |hộp |chai )?(thì|là|để|sẽ|mới) (chết|tử vong|không tỉnh lại)|(uống|dùng|nuốt) (gì|thuốc gì|cái gì) (để|cho|thì|là) (chết|tử vong)|chết (không đau|nhẹ nhàng)|(cách|làm sao) (để )?(tự )?chết)\b/),
     max: 999,
     // 21/10 (QA 100 câu, Q100): "sợ mình không kiểm soát được", "ngay lúc này" → nguy cơ TỨC THỜI: hỏi an toàn trước tiên, rồi mới tới đường dây.
     //   Mọi câu khủng hoảng đều kết bằng câu hỏi an toàn trực tiếp (đang an toàn không, có ai ở gần không) thay cho "kể chuyện gì đang xảy ra".
@@ -161,11 +161,12 @@ const RULES: Rule[] = [
         (ACUTE.test(n)
           ? "Cảm ơn bạn đã nói ra với Lomi 💚 Lomi lo cho bạn lắm. **Ngay lúc này bạn có đang an toàn không?**\n\n" +
             "Nếu bạn sợ mình không kiểm soát được, đừng ở một mình lúc này:\n" +
-            "• Gọi **115** ngay nếu bạn đang gặp nguy hiểm\n" +
+            (VN(/\b(cầm|đang cầm|cầm sẵn|trong tay)\b/).test(` ${n} `) ? "• **Đặt vật đó xuống ngay**, để nó ở phòng khác hoặc đưa cho người khác giữ, rồi bước ra xa nó\n" : "") +
+            "• Gọi **115** ngay nếu bạn đang gặp nguy hiểm hoặc đã bị thương\n" +
             "• Gọi hoặc nhắn một người bạn tin tưởng ở gần, nhờ họ tới ở cạnh bạn ngay bây giờ\n" +
             "• Nếu có vật có thể làm bạn đau ở gần, để nó ra xa hoặc ra khỏi phòng\n" +
             "• Đường dây nóng Ngày Mai (hỗ trợ tâm lý): 096 306 1414 — từ 13h đến 20h30, thứ 4 đến Chủ nhật\n\n" +
-            "Lomi vẫn ở đây với bạn. Bạn đang ở đâu, có ai ở gần bạn không?"
+            "Lomi vẫn ở đây với bạn. Bạn có đang bị thương không? Bạn đang ở đâu, có ai ở gần bạn không?"
           : "Lomi rất tiếc khi bạn đang phải trải qua cảm giác này 💚 Bạn không phải một mình đâu.\n\n" +
         "Nếu bạn đang nghĩ tới việc làm hại bản thân, hãy liên hệ người có thể giúp ngay nha:\n" +
         "• Gọi 115 nếu đang nguy hiểm hoặc cần cấp cứu\n" +
@@ -309,7 +310,7 @@ const RULES: Rule[] = [
   },
   // Thất tình / chia tay (trước "buồn" để trả lời đúng hơn)
   {
-    re: VN(/\b(thất tình|chia tay|bị đá|bị bỏ|người yêu bỏ|ny bỏ|bỏ rồi|không còn yêu|ex)\b/),
+    re: VN(/\b(thất tình|(?<!(không phải|chứ không phải|đâu phải|không phải là|không) )chia tay|bị đá|bị bỏ|người yêu bỏ|ny bỏ|bỏ rồi|không còn yêu|ex)\b/),
     reply: () => ({
       text: pick([
         "Chia tay đau lắm, Lomi hiểu mà 🥺 Cho phép mình buồn một chút cũng không sao đâu. Ăn uống đầy đủ, ngủ đủ giấc, gặp bạn bè nhiều hơn nha — rồi mọi thứ sẽ nhẹ dần.",
@@ -757,7 +758,7 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
 const ACUTE = VN(/\b((không|ko|chẳng|hông) (tự )?(kiểm soát|kìm|kiềm chế|cản) (được|nổi)( mình| bản thân)?|mất kiểm soát|ngay (bây giờ|lúc này|bây h|bh)|tối nay|đêm nay|đang cầm|cầm sẵn|để sẵn|chuẩn bị sẵn|đang đứng (trên|ở) (cầu|sân thượng|lan can|mép))\b/);
 const PASSIVE = VN(/\b((chẳng|không|chả|hông|ko|k) (còn )?(muốn|thiết) (tiếp tục|sống|sống tiếp|tồn tại)( nữa| đâu| rồi| luôn| làm gì)*(?= ?$)|ngủ (một giấc|luôn|mãi)( mà)? (không|chẳng|ko) (bao giờ |cần )?(dậy|tỉnh|thức)(?! (nổi|kịp|được))|ngủ( \S+){0,2} (không|chẳng|ko) bao giờ (dậy|tỉnh|thức)|ngủ (luôn|mãi) không dậy|sống (vậy |thế |như vầy |để |làm )?(chi|gì|làm gì) nữa|(mọi người|gia đình|cả nhà|ai cũng|bố mẹ|ba mẹ|vợ con|người ta) (sẽ )?(tốt|vui|nhẹ nhõm|nhẹ gánh|đỡ khổ|sướng|hạnh phúc) hơn (nếu|khi) (không có|thiếu|vắng|mất) (a|anh|em|e|mình|tôi|tui|t|tao|tớ)|(chẳng|không|chả|ko|k) (còn )?thiết sống|chẳng thiết gì nữa|không còn gì để (sống|mất)|muốn (đi|ngủ) (luôn|mãi) cho xong|chết quách (cho|đi))\b/);
 // (2) Tín hiệu VỪA — hỏi thẳng, nhẹ nhàng (lời hỏi kết bằng "…không muốn sống nữa?" để AiAssistant nhận câu xác nhận kế tiếp).
-const CHECKIN = VN(/\b((là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi)\b/);
+const CHECKIN = VN(/\b((chỉ )?muốn biến mất (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)|muốn biến mất một thời gian|(là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi)\b/);
 // (3) NÓI QUÁ về trạng thái cơ thể / chuyện thường ("đói muốn chết", "nóng muốn chết luôn", "mệt muốn chết", "chết cười")
 //     — tiếng Việt dùng "muốn chết" như "rất". Trước đây những câu này nhận lời hỗ trợ khủng hoảng kèm đường dây nóng.
 const HYPER_STATE = "đói|no|nóng|lạnh|rét|mệt|buồn ngủ|ngủ|đau|nhức|mỏi|cười|xấu hổ|ngại|quê|mắc cỡ|sợ|run|hồi hộp|thèm|tức|bực|ghen|ngứa|khát|nhớ|thích|vui|sướng|ngon|đẹp|dễ thương|cute|nắng|kẹt xe|ồn|thi|học|làm|bận|ế|chờ|đợi";
@@ -785,12 +786,19 @@ const CHECKIN_TEXT =
 export function crisisCheckIn(text: string): ChatReply | null {
   const n = ` ${normalizeVi(text)} `;
   if (!CHECKIN.test(n) || crisisReply(text, "vi") || hyperboleOnly(text) !== null) return null;
+  // 21/10 (QA V2 Q96): "chỉ muốn biến mất vài ngày" — thường là muốn nghỉ, trốn đi một thời gian; không bật lời khủng hoảng, nhưng vẫn hỏi thẳng.
+  if (VN(/\bbiến mất\b/).test(n))
+    return { text: "Mệt tới mức chỉ muốn biến mất vài ngày thì chắc bạn đã cạn sức lắm rồi 🥺 Muốn trốn đi, không phải gặp ai một thời gian là cảm giác rất người.\n\nLomi hỏi thẳng một câu nha, vì Lomi quan tâm: “biến mất” ở đây là muốn được nghỉ ngơi một mình — hay có lúc nào bạn nghĩ tới chuyện không muốn sống nữa?" };
   return { text: CHECKIN_TEXT };
 }
 
 /** Người dùng nói muốn tự tử / làm hại bản thân — kiểm tra TRƯỚC mọi luồng khác. */
 export function crisisReply(text: string, lang: L): ChatReply | null {
   const n = ` ${normalizeVi(text)} `;
+  if (lang !== "en") {
+    const oc = otherCrisis(text);
+    if (oc) return oc;
+  }
   // 21/10 (đợt 3): ý định tự hại bằng chất độc bất kỳ ("muốn uống thuốc tẩy để chết") — trước đây luật chỉ biết thuốc ngủ / chuột / trừ sâu.
   // 21/10 (đợt 4): ý nghĩ không muốn sống nói gián tiếp (PASSIVE); câu chỉ NÓI QUÁ ("đói muốn chết") thì không phải khủng hoảng.
   //   Cảm xúc + "muốn chết" ("chán muốn chết", "buồn muốn chết") mà ngoài cụm đó không còn tín hiệu nào → hỏi han (crisisCheckIn), chưa
@@ -813,9 +821,11 @@ export function crisisMeans(text: string): ChatReply | null {
 }
 
 /** Một chuyện vui / câu đố ngắn (kèm câu dỗ nếu người dùng đang buồn chán). */
+// (xin đúng "câu đố" thì chỉ bốc trong các câu đố)
+const pickRiddle = (riddle: boolean, a: string[]) => pick(riddle ? a.filter((x) => x.startsWith("Đố")) : a);
 export function jokeText(text: string): string {
   const n = normalizeVi(text);
-  return (VN(/\b(buồn|chán|mệt|stress|căng thẳng)\b/).test(` ${n} `) ? "Buồn chán hả, để Lomi kể cái này cho vui nha 😄\n\n" : "") + pick([
+  return (VN(/\b(buồn|chán|mệt|stress|căng thẳng)\b/).test(` ${n} `) ? "Buồn chán hả, để Lomi kể cái này cho vui nha 😄\n\n" : "") + pickRiddle(VN(/\b(câu đố|đố)\b/).test(` ${n} `), [
         "Đố bạn: sở thú bị cháy, con gì chạy ra đầu tiên? …Con người chứ con gì 😆🏃",
         "Đố bạn: bệnh gì bác sĩ cũng bó tay? …Gãy tay 🤕😂",
         "Đố bạn: cái gì của bạn mà người khác dùng nhiều hơn bạn? …Cái tên của bạn đó 😄",
@@ -829,6 +839,12 @@ export function jokeText(text: string): string {
 // Lời chúc sinh nhật theo người nhận (viết theo "Lomi / bạn"; lớp xưng hô tự đổi nếu cần).
 function birthdayWishes(n: string): string {
   const s = ` ${n} `;
+  const sib = s.match(VN(/\b(chị gái|chị hai|chị (\S+ )?(của )?(anh|em|tôi|tui|mình)|anh trai|anh hai|em gái|em trai)\b/));
+  if (sib) {
+    const x = VN(/^(chị|chi)/).test(sib[0]) ? "chị" : VN(/^(anh)/).test(sib[0]) ? "anh" : "em";
+    const self = x === "em" ? "anh / chị" : "em";
+    return `Có liền nè ✍️ Chọn câu nào hợp nhất rồi sửa tên / cách xưng cho đúng nha:\n\n🎂 “Chúc mừng sinh nhật ${x}! Cảm ơn ${x} lúc nào cũng ở bên ${self}, lúc vui lẫn lúc khó. Tuổi mới chúc ${x} thật khoẻ, công việc thuận lợi và luôn được thương thật nhiều.”\n\n🎉 “Happy birthday ${x} yêu! Tuổi mới bớt lo, bớt mệt, thêm thật nhiều niềm vui — ${self} luôn tự hào vì có ${x}.”\n\n🥳 “Sinh nhật vui vẻ nha ${x}! Mong ${x} năm nay làm được hết những điều ${x} mong, còn ${self} thì lúc nào cũng là fan số 1 của ${x} 😆”\n\nMuốn kiểu sến hơn, hài hơn hay ngắn gọn để đăng story thì nói Lomi viết lại nha.`;
+  }
   const who = VN(/\b(mẹ|má|mẹ ơi)\b/).test(s) ? "mom" : VN(/\b(bố|ba|cha|tía)\b/).test(s) ? "dad" : VN(/\b(người yêu|ny|vợ|chồng|bạn gái|bạn trai|crush|anh yêu|em yêu)\b/).test(s) ? "love" : VN(/\b(sếp|đồng nghiệp|anh chị trong công ty|khách hàng)\b/).test(s) ? "work" : "friend";
   const W: Record<string, string[]> = {
     friend: [
@@ -844,6 +860,51 @@ function birthdayWishes(n: string): string {
   return `Có liền nè ✍️ Chọn câu nào hợp nhất rồi sửa tên / biệt danh cho thân hơn nha:\n\n${W[who].join("\n\n")}\n\nMuốn kiểu sến hơn, hài hơn hay ngắn gọn để đăng story thì nói Lomi viết lại nha.`;
 }
 
+// ── 21/10 (QA V2 Q71, Q97, Q99): NGƯỜI KHÁC có dấu hiệu tự hại ──────────────────────────────────────────────────
+// "bạn anh nhắn mọi người sẽ nhẹ nhõm nếu bạn ấy biến mất rồi tắt máy", "nếu một người không còn muốn sống…", "người yêu doạ tự làm
+// hại mình nếu anh chia tay" — trước đây "chưa được học" / bài chia tay. Người hỏi là người ở bên: liên lạc trực tiếp, nhờ người ở gần,
+// 115 khi có nguy cơ tức thời; hỏi thẳng; đường dây nóng. Câu doạ tự hại để giữ người yêu: coi trọng an toàn nhưng không bắt người kể
+// gánh một mình hay phải ở lại.
+const OTHER_WHO = "(bạn (anh|em|tôi|tui|mình|a|e|thân|ấy|của (anh|em|tôi|mình))|bạn thân|đứa bạn|thằng bạn|con bạn|người bạn|người yêu|ny|bạn gái|bạn trai|vợ|chồng|cô ấy|anh ấy|em ấy|chị ấy|con (anh|em|tôi|mình)|em gái|em trai|anh trai|chị gái|đồng nghiệp|một người|có người|ai đó|người đó|người ta)";
+const OTHER_CR = "(muốn chết|tự tử|tự sát|không (còn )?muốn sống|chẳng (còn )?muốn sống|tự làm hại|làm hại bản thân|tự làm đau|tự làm tổn thương|(sẽ|được) nhẹ nhõm (hơn )?nếu|tốt hơn nếu (không có|thiếu)|biến mất|kết thúc cuộc đời|kết liễu)";
+const OTHER_RE = VN(new RegExp(`\\b${OTHER_WHO}(?<mid>(?: \\S+){0,8}?) ${OTHER_CR}\\b`));
+export function otherCrisis(text: string): ChatReply | null {
+  const n = ` ${normalizeVi(text)} `;
+  if (hyperboleOnly(text) !== null) return null;
+  const m = n.match(OTHER_RE);
+  if (!m) return null;
+  // "nó làm anh muốn chết", "người yêu bỏ đi, anh muốn chết" — chuyện của chính người kể (có ngôi người kể chen giữa).
+  //   ("vợ anh", "bạn em" — đại từ sở hữu đứng ngay sau người được nói tới thì vẫn là người kia.)
+  const mid = (m.groups?.mid ?? "").replace(VN(/^ (anh|em|tôi|mình|tui|a|e|tao|tớ)\b/), "");
+  if (VN(/\b(anh|em|tôi|mình|tui|a|e|t|tao|tớ)\b/).test(` ${mid} `)) return null;
+  const partnerThreat = VN(/\b(người yêu|ny|bạn gái|bạn trai|vợ|chồng|cô ấy|anh ấy)\b/).test(n) && VN(/\b(doạ|dọa|hăm|nếu (anh|em|tôi|mình|a|e) (chia tay|bỏ|đi)|nếu chia tay|nếu bị bỏ)\b/).test(n);
+  if (partnerThreat)
+    return {
+      text:
+        "Chuyện này nặng lắm, Lomi hiểu bạn đang bị kẹt giữa lo cho người ấy và quyết định của chính mình 💚\n\n" +
+        "Hai điều cùng đúng:\n• Lời doạ tự làm hại mình **cần được coi là nghiêm túc** — đừng bỏ qua\n• Nhưng bạn **không phải gánh một mình** sự an toàn của người ấy, và cũng không buộc phải ở lại vì bị doạ\n\n" +
+        "Nên làm:\n• Nếu người ấy nói tới cách, thời điểm, hoặc bạn lo họ sắp làm thật: gọi **115**, và báo người nhà / bạn thân của họ tới ở cạnh họ ngay\n" +
+        "• Nói bình tĩnh: “Mình lo cho bạn, nên mình sẽ nhờ người nhà bạn / người có chuyên môn giúp” — thay vì hứa sẽ không chia tay\n" +
+        "• Gợi ý họ gọi đường dây Ngày Mai 096 306 1414 (13h–20h30, thứ 4 đến Chủ nhật) hoặc gặp chuyên gia tâm lý\n" +
+        "• Nếu vẫn quyết định chia tay, chọn lúc có người thân của họ ở gần, và bạn cũng kể cho một người bạn tin — đừng giữ chuyện này một mình\n\n" +
+        "Người ấy đã từng làm hại bản thân, hay đang nói tới cách cụ thể chưa?",
+    };
+  const hypo = VN(/^\s*(nếu|giả sử|lỡ)?\s*(một người|có người|ai đó)\b/).test(n.trim()) || VN(/\b(nếu|giả sử) (một người|có người|ai đó)\b/).test(n);
+  return {
+    text:
+      "Chuyện này cần được coi là nghiêm túc nha 💚 Khi một người nói không muốn sống, hay nói mọi người sẽ nhẹ nhõm nếu họ biến mất, thì **dù họ vẫn đi làm, vẫn cười nói bình thường**, đó vẫn là dấu hiệu đáng lo — nhiều người giấu rất giỏi.\n\n" +
+      "Nếu người đó có thể đang gặp nguy hiểm ngay lúc này:\n• Liên lạc trực tiếp ngay — gọi điện, không chỉ nhắn tin; máy tắt thì gọi lại, nhắn cho người thân của họ\n" +
+      "• Nhờ người ở gần họ (người nhà, bạn cùng phòng, hàng xóm) tới xem họ ngay\n" +
+      "• Không liên lạc được mà lo họ có thể tự làm hại mình, hoặc họ đã nói tới cách, thời điểm — gọi **115** (cần tìm người thì báo **113**)\n\n" +
+      "Khi nói chuyện được với họ:\n• Hỏi thẳng mà nhẹ nhàng: “Bạn có đang nghĩ tới chuyện tự tử không?” — hỏi thẳng không làm họ nảy ý định, mà giúp họ được nói ra\n" +
+      "• Nghe nhiều hơn khuyên, đừng trách hay bảo “nghĩ thoáng lên”\n" +
+      "• Gợi ý họ gọi đường dây Ngày Mai 096 306 1414 (13h–20h30, thứ 4 đến Chủ nhật) hoặc đi gặp bác sĩ / chuyên gia tâm lý — đi cùng họ nếu được\n\n" +
+      (hypo
+        ? "Ngay lúc này có ai đang gặp nguy hiểm không? Nếu người đó là chính bạn, Lomi ở đây nghe bạn nha."
+        : "Bạn cũng đừng gánh một mình nha. Bạn đã liên lạc được với người đó chưa?"),
+  };
+}
+
 /** Câu có dáng câu hỏi (để quyết định gợi ý FAQ hay chỉ trò chuyện). */
 export function looksLikeQuestion(text: string): boolean {
   const n = ` ${normalizeVi(text)} `;
@@ -855,15 +916,26 @@ export function looksLikeQuestion(text: string): boolean {
 // Từ khoá cho biết câu hỏi đang nói về APP (để gợi ý câu hỏi thường gặp), khác với chuyện đời thường.
 const APPISH =
   VN(/\b(app|ứng dụng|hết hạn|gia hạn|ưu đãi|mã ưu đãi|nhận mã|pin|tài khoản|mật khẩu|đăng nhập|đăng ký|đăng bài|đăng tin|doanh nghiệp|cửa hàng|thành viên|membership|điểm|quẹt|đưa đón|giao hàng|tin nhắn|cộng đồng|hồ sơ|thông báo|báo cáo|chặn|theo dõi|kết bạn|hướng dẫn|admin|lomi|login|logout|log in|log out|profile|account|acc|password|voucher|offer|member|comment|share|post|follow|link|info|support|update|online|offline|call|review|user|code|ad)\b/);
+/** 21/10: câu kể chuyện tình cảm / nỗi sợ bị đánh giá / người có tên đang tìm việc — nhắc chữ của app nhưng không phải hỏi app. */
+export function storyNotApp(text: string): boolean {
+  const n = ` ${normalizeVi(text)} `;
+  return REL_CTX.test(n) || JUDGE_CTX.test(n) || NAMED_JOB.test(text.normalize("NFC"));
+}
 export function isAppish(text: string): boolean {
   // 08/10: "chán" bỏ dấu trùng "chặn" (chặn người dùng) — "a đang chán" không phải câu hỏi về app.
   //        11/10: mở rộng cho mọi cách viết có dấu khác nghĩa ("đau chân lắm", "quét nhà") — lib/lomiAccent.
   const n = ` ${normalizeVi(maskStrict(text, APP))} `;
   // 21/10 (QA Q60): "trẻ 2 tháng sốt 38°C có thể THEO DÕI ở nhà không" — "theo dõi" là theo dõi bệnh, không phải nút Theo dõi trong app.
   //   "luôn là người chủ động nhắn tin", "ny ít nhắn tin" — chuyện tình cảm, không phải hỏi cách nhắn tin trong app.
+  // 21/10 (QA V2 Q51/Q52/Q54/Q79): đang kể về người yêu / nỗi sợ bị đánh giá mà nhắc "tin nhắn", "đăng bài", "mật khẩu" — không phải hỏi app.
+  if (REL_CTX.test(n) || JUDGE_CTX.test(n) || NAMED_JOB.test(text.normalize("NFC"))) return false;
   const m = REL_MSG.test(n) ? n.replace(VN(/\b(nhắn tin|tin nhắn|nhắn)\b/g), " ") : n;
   return APPISH.test(HEALTH_WATCH.test(m) ? m.replace(VN(/\btheo dõi\b/g), " ") : m);
 }
+const REL_CTX = VN(/\b(người yêu|ny|bạn trai|bạn gái|vợ|chồng|crush|cô ấy|anh ấy|em ấy)\b.*\b(chán|giận|cãi|buồn|giấu|ghen|nghi|thương|lạnh nhạt|im lặng|chưa trả lời|không trả lời|seen|đã xem|riêng|bóng gió|chia tay|ngoại tình)\b|\b(chán|giận|cãi|giấu|ghen|nghi|chia tay)\b.*\b(người yêu|ny|bạn trai|bạn gái|vợ|chồng|cô ấy|anh ấy)\b/);
+const JUDGE_CTX = VN(/\bsợ (người khác|mọi người|người ta|bị) (đánh giá|nghĩ|chê|phán xét)\b/);
+// "Minh vừa nghỉ việc, Nam đang tìm việc" — người có tên riêng đang tìm việc, không phải hỏi tính năng tìm việc của app.
+const NAMED_JOB = /(^|[\s,.])\p{Lu}\p{Ll}+ (vừa|đang|mới|sắp|đã) (tìm việc|nghỉ việc|xin việc|mất việc|đổi việc)/u;
 const REL_MSG = VN(/\b((chủ động|ít|không|chẳng|chưa|hay|lâu|toàn|cứ|đợi|chờ|lười) (nhắn tin|nhắn)( trước| lại| cho (mình|anh|em|tôi|tui))?|nhắn tin trước|nhắn trước)\b.*\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|crush|người ta|cô ấy|anh ấy|làm hoà|làm hòa|hẹn gặp|yêu)\b|\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|crush|người ta|cô ấy|anh ấy)\b.*\b(chủ động|ít|không|chẳng|lười) (nhắn tin|nhắn)\b|\bchủ động nhắn tin\b.*\b(làm hoà|làm hòa|hẹn)\b/);
 const HEALTH_WATCH = VN(/\btheo dõi( thêm| tiếp)?( (ở|tại) nhà| triệu chứng| nhiệt độ| sức (khoẻ|khỏe)| bệnh| tình trạng| huyết áp| đường huyết)\b|\b(sốt|bệnh|đau|nôn|ói|tiêu chảy|triệu chứng|vết thương|bỏng|co giật|khó thở)\b.*\btheo dõi\b|\btheo dõi\b.*\b(sốt|bệnh|đau|nôn|triệu chứng|khó thở)\b/);
 

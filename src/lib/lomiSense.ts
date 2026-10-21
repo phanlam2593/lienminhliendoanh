@@ -390,6 +390,8 @@ export function senseState(raw: string, only?: string[]): SenseReply | null {
     if (!m) continue;
     // Có người nói rõ ràng thì tin; không có thì chỉ nhận câu ngắn mà trạng thái đứng đầu câu ("đói quá", "mưa quá").
     const idx = m.index ?? 0;
+    // 21/10 (QA V2 Q77): "mà vẫn không thấy vui" — trạng thái bị PHỦ ĐỊNH ngay trước thì không phải đang vui / đang chán.
+    if (VR(/(?<![\p{L}])(không|ko|chẳng|chả|hông|chưa|đâu có)( (thấy|cảm thấy|còn|hề|được))*\s*$/u).test(s.slice(0, idx))) continue;
     // 08/10: câu lược chủ ngữ chỉ nhận khi trạng thái đứng ĐẦU câu (trước nó chỉ có từ đệm / thời gian): "đói quá", "hôm nay mệt ghê".
     // "máy lạnh hư rồi", "điện thoại hết pin" có danh từ khác đứng trước → đang nói về đồ vật, không phải kể về mình.
     const lead = LEAD_ONLY.test(s.slice(0, idx));
