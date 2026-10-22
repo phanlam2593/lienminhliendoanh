@@ -796,7 +796,7 @@ function selfDxReply(label: string, prev: string | undefined, listen: boolean, c
     text: [
       `${DX_MARK} đâu bạn — chỉ qua vài câu kể thì chưa ai kết luận được là ${label} hay không, bác sĩ cũng phải hỏi kỹ hơn nhiều mới nói được.`,
       det.length ? `Nhưng những điều bạn kể — ${det.join(", ")} — là có thật và đáng được quan tâm, dù nó mang tên gì.` : "Nhưng cảm giác bạn đang có là thật và đáng được quan tâm, dù nó mang tên gì.",
-      "Người ta thường nên đi gặp bác sĩ tâm lý hoặc chuyên khoa tâm thần khi những cảm giác này kéo dài từ khoảng hai tuần, gần như ngày nào cũng có, và bắt đầu ảnh hưởng tới ăn ngủ, công việc, sinh hoạt.",
+      "Người ta thường nên đi gặp bác sĩ tâm lý hoặc chuyên khoa tâm thần khi những cảm giác này kéo dài từ khoảng hai tuần, gần như ngày nào cũng có, và bắt đầu ảnh hưởng tới ăn ngủ, công việc, sinh hoạt. (Muốn thì Lomi hỏi bạn 4 câu sàng lọc chuẩn mà nhân viên y tế hay dùng — gõ “sàng lọc” nha; đó vẫn không phải chẩn đoán.)",
       "Bạn thấy như vậy bao lâu rồi?",
     ].join("\n\n"),
   };
@@ -971,7 +971,24 @@ function pickAsk(t: Theme, said: (x: string) => boolean, avoid?: RegExp): string
   return asks.length ? pick(`${t.id}:ask${asks.length !== t.ask.length ? `:${asks.length}` : ""}`, asks) : undefined;
 }
 /** lead = câu mở thay cho lời đồng cảm chung của chủ đề (vd nhắc lại đúng điều vừa nghe khi chuyện rẽ sang một ý mới). */
+// 22/10 (Kir: tư vấn tâm lý sâu hơn): xin lời khuyên ở những chủ đề này → mời làm luôn MỘT bài tập có hướng dẫn từng bước (lib/lomiTherapy).
+//   Chữ trong ngoặc là đúng câu lệnh mở bài tập đó. Mỗi lời mời chỉ nói một lần trong cuộc trò chuyện.
+const TOOL_HINT: [RegExp, string][] = [
+  [/^(anxiety|panic|overwhelm)$/, "🫁 Muốn thử ngay một bài tập thở ngắn có Lomi hướng dẫn từng bước thì gõ “bài tập thở” nha."],
+  [/^(overthink|insomnia)$/, "🧺 Nếu đầu cứ lo hoài, mình làm bài “gỡ nỗi lo” cùng nhau được đó — gõ “gỡ nỗi lo” nha."],
+  [/^(selfworth|compare|disliked|regret|perfect|judged|envy|confidence)$/, "🔎 Muốn thử cùng Lomi soi lại một suy nghĩ khắt khe về bản thân (bài tập chuyên gia tâm lý hay dùng) thì gõ “soi lại suy nghĩ” nha."],
+  [/^(sad|depress|tired|procrast|emptywin|lost|heavyheart)$/, "🌱 Khi chẳng muốn làm gì, bắt đầu từ một việc thật nhỏ hay giúp nhiều — gõ “một việc nhỏ hôm nay” để mình chọn cùng nhau nha."],
+];
+const toolHint = (t: Theme, said: (x: string) => boolean) => {
+  const h = TOOL_HINT.find(([re]) => re.test(t.id))?.[1];
+  return h && !said(h.slice(0, 30)) ? h : undefined;
+};
 function themeReply(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp, said: (x: string) => boolean = () => false, lead?: string): HeartReply {
+  const r = themeReply0(t, n, adviceAsked, avoidAsk, said, lead);
+  const th = adviceAsked ? toolHint(t, said) : undefined;
+  return th ? { ...r, text: `${r.text}\n\n${th}` } : r;
+}
+function themeReply0(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegExp, said: (x: string) => boolean = () => false, lead?: string): HeartReply {
   const parts: string[] = [];
   // Ý chủ đề có sẵn lời đáp riêng cho đúng điều vừa hỏi / kể — bỏ qua ý đã nói rồi (không đọc lại y nguyên một đoạn).
   //   (21/10: chỉ xét ý khớp ĐẦU TIÊN — ý cụ thể vừa nói rồi thì không rơi xuống một ý chung hơn: "a xin lỗi rồi" → "mà vẫn chưa

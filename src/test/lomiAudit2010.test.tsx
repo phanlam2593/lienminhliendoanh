@@ -1266,3 +1266,89 @@ describe("QA V5 — hội thoại dài", () => {
     expect(r[6].content).toMatch(/Dậy cùng một giờ/);
   }, 90000);
 });
+
+// Hỗ trợ tâm lý có cấu trúc (22/10, theo ý Kir) — bài tập nhiều bước qua khung chat thật (lib/lomiTherapy).
+describe("Tâm lý — bài tập có hướng dẫn", () => {
+  it("Lomi không tự xưng bác sĩ tâm lý, nêu được những gì làm được", async () => {
+    const m = await last(["Em có phải bác sĩ tâm lý không?"]);
+    expect(m.content).toMatch(/không phải bác sĩ hay chuyên gia tâm lý/);
+    expect(m.content).toMatch(/Bài tập thở[^]*Soi lại suy nghĩ[^]*Sàng lọc nhanh[^]*Kế hoạch an toàn/);
+    expect(m.content).not.toMatch(/nghe em kể/); // "em" ở đây là gọi Lomi
+  }, T);
+  it("đang hoảng → thở 4–6 → 5-4-3-2-1 → chấm điểm 0–10 → kết", async () => {
+    const r = await chat(["A đang hoảng loạn quá, giúp a bình tĩnh lại", "xong", "cái bàn, cái ly, điện thoại, cửa sổ, cây", "áo, ghế, bàn phím, tóc; tiếng quạt, tiếng xe, tiếng chim", "mùi cà phê, mùi xà phòng; biết ơn vì có người nghe", "3"], { seed: 7 });
+    expect(r[0].content).toMatch(/đếm thầm 1 – 2 – 3 – 4[^]*115/);
+    expect(r[1].content).toMatch(/5 thứ/);
+    expect(r[2].content).toMatch(/4 thứ[^]*3 âm thanh/);
+    expect(r[3].content).toMatch(/2 mùi[^]*1 điều/);
+    expect(r[4].content).toMatch(/0 đến 10/);
+    expect(r[5].content).toMatch(/3\/10/);
+    expect(r[5].therapy).toBeUndefined();
+  }, 90000);
+  it("tự chê 'thấy mình vô dụng' → mời soi lại suy nghĩ → đủ 5 bước CBT → tóm tắt + đổi điểm", async () => {
+    const r = await chat([
+      "Sao a thấy mình vô dụng quá", "Ừ thử xem", "Hôm qua a làm hỏng báo cáo, sếp phải sửa lại", "Xấu hổ, chắc 8 điểm", "Sếp phải sửa lại báo cáo của a",
+      "Tháng trước a làm xong dự án đúng hạn, đồng nghiệp còn cảm ơn a", "A sẽ bảo nó ai cũng có lúc sai, một lần sai không có nghĩa là vô dụng", "Mình làm sai một lần, nhưng mình vẫn làm tốt nhiều việc khác", "4",
+    ], { seed: 7 });
+    expect(r[0].content).toMatch(/“Mình vô dụng quá”[^]*soi lại câu này/);
+    expect(r[1].content).toMatch(/Bước 1/);
+    expect(r[3].content).toMatch(/8\/10[^]*Bước 3/);
+    expect(r[5].content).toMatch(/Bước 4/);
+    expect(r[6].content).toMatch(/Bước 5/);
+    expect(r[8].content).toMatch(/Từ 8 xuống 4\/10[^]*Tóm tắt buổi tập[^]*dán nhãn bản thân/);
+    for (const m of r) expect(m.unk).toBeFalsy();
+  }, 120000);
+  it("được mời soi lại suy nghĩ mà chỉ muốn kể → nghe, không ép", async () => {
+    const r = await chat(["Sao a thấy mình vô dụng quá", "Thôi, a chỉ muốn kể"], { seed: 7 });
+    expect(r[1].therapy).toBeUndefined();
+    expect(r[1].content).not.toMatch(/Bước/);
+  }, 60000);
+  it("sàng lọc PHQ-2 + GAD-2: tính điểm, ≥3 thì khuyên đánh giá kỹ + hỏi thẳng ý nghĩ tự hại; đáp 'có' → lời hỗ trợ khủng hoảng", async () => {
+    const r = await chat(["Cho a làm bài test trầm cảm", "2", "3", "1", "1", "có"], { seed: 7 });
+    expect(r[0].content).toMatch(/không phải chẩn đoán/);
+    expect(r[4].content).toMatch(/PHQ-2\): 5\/6[^]*GAD-2\): 2\/6[^]*không muốn sống nữa\?/);
+    expect(r[5].content).toMatch(/không phải một mình/);
+  }, 90000);
+  it("sàng lọc: đáp bằng chữ ('gần như ngày nào') cũng hiểu; câu trả lời lạc → hỏi lại", async () => {
+    const r = await chat(["Sàng lọc nhanh tâm trạng", "gần như ngày nào", "ăn cơm chưa", "0", "0", "0"], { seed: 7 });
+    expect(r[1].content).toMatch(/Câu 2\/4/);
+    expect(r[2].content).toMatch(/bằng một số/);
+    expect(r[5].content).toMatch(/PHQ-2\): 3\/6/);
+  }, 90000);
+  it("gỡ nỗi lo: phần làm được → một bước cụ thể; phần ngoài tầm tay → giờ lo âu", async () => {
+    const a = await chat(["Gỡ nỗi lo", "A lo không đủ tiền trả nợ tháng sau", "Có phần mình làm được", "Gọi ngân hàng hỏi giãn nợ"], { seed: 7 });
+    expect(a[3].content).toMatch(/Chốt: \*\*Gọi ngân hàng hỏi giãn nợ\*\*/);
+    const b = await chat(["A cứ lo hoài không dừng được", "Lo người nhà bị bệnh", "Nằm ngoài tầm tay"], { seed: 7 });
+    expect(b[2].content).toMatch(/giờ lo âu/);
+  }, 90000);
+  it("chẳng muốn làm gì → mời chọn việc nhỏ → chốt việc + giờ", async () => {
+    const r = await chat(["A chẳng muốn làm gì cả", "Làm sao đây em", "Đi bộ quanh hồ", "5 giờ chiều"], { seed: 7 });
+    expect(r[0].content).toMatch(/một việc thật nhỏ/);
+    expect(r[1].content).toMatch(/kích hoạt hành vi/);
+    expect(r[3].content).toMatch(/Đi bộ quanh hồ[^]*5 giờ chiều/);
+  }, 90000);
+  it("kế hoạch an toàn: 4 bước → tóm tắt kèm 115 và đường dây Ngày Mai", async () => {
+    const r = await chat(["Lập kế hoạch an toàn", "Mất ngủ, không muốn gặp ai", "Tắm nước ấm, nghe nhạc", "Chị gái và bạn thân Nam", "Nhờ người khác cất thuốc"], { seed: 7 });
+    expect(r[4].content).toMatch(/Kế hoạch an toàn[^]*Mất ngủ[^]*Tắm nước ấm[^]*Chị gái[^]*cất thuốc[^]*115[^]*096 306 1414/);
+  }, 90000);
+  it("đang làm bài tập mà nói muốn chết → lời hỗ trợ khủng hoảng đi trước", async () => {
+    const r = await chat(["Hướng dẫn a bài tập thở", "xong", "a muốn chết"], { seed: 7 });
+    expect(r[2].content).toMatch(/không phải một mình/);
+  }, 60000);
+  it("'thôi dừng nha' giữa bài tập → dừng", async () => {
+    const r = await chat(["Hướng dẫn a bài tập thở", "thôi dừng nha"], { seed: 7 });
+    expect(r[1].content).toMatch(/dừng bài tập/);
+    expect(r[1].therapy).toBeUndefined();
+  }, 60000);
+  it("xin lời khuyên khi lo âu → gợi ý bài tập thở", async () => {
+    const r = await chat(["A hay lo âu quá", "Làm sao để bớt lo?"], { seed: 7 });
+    expect(r[1].content).toMatch(/gõ “bài tập thở”/);
+  }, 60000);
+  it("'em ngu quá vậy' vẫn là chê Lomi, không mời bài tập", async () => {
+    expect((await last(["Em ngu quá vậy"])).content).toMatch(/xin lỗi/);
+  }, T);
+  it("[en] panic attack → breathing + grounding", async () => {
+    const m = (await chat(["I'm having a panic attack"], { lang: "en" })).pop()!;
+    expect(m.content).toMatch(/4 counts[^]*5 things you can see/);
+  }, T);
+});

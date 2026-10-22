@@ -35,7 +35,7 @@ const THIRD_NAME = VR(/(^|\s)(anh|a|chị|c|em|e|ông|bà|cô|chú|bác)\s+(\p{L
 const CALL_LOMI_EM = VR(/(^|\s)(lomi\s+(em|e)|(em|e)\s+lomi|(em|e)\s+ơi+)(?=\s|$|[,.!?])/iu);
 // "tâm sự với em", "nói chuyện với em", "em là người hay máy", "em có người yêu chưa" — "em" là Lomi.
 const TALK_LOMI_EM = VR(/(^|\s)((tâm sự|nói chuyện|trò chuyện|chat|kể chuyện|tám) (với|cùng) (em|e)|(em|e) (là người|là máy|là robot|là ai|là gì|là con gì|có người yêu|thông minh|biết hay|ngu|dở))(?=\s|$|[,.!?])/iu);
-const ASK_LOMI_EM = VR(/(^\s*|[,.!?]\s*)(em|e)\s+(không biết thì|ko biết thì|có thể|có biết|có hiểu|có nhớ|làm ơn|giúp (anh|a|chị|c|mình|tui|tôi)|cho (anh|a|chị|c) (hỏi|xin|biết))(?=\s|$|[,.!?])/iu);
+const ASK_LOMI_EM = VR(/(^\s*|[,.!?]\s*)(em|e)\s+(không biết thì|ko biết thì|có thể|có biết|có hiểu|có nhớ|có phải là|có phải|làm ơn|giúp (anh|a|chị|c|mình|tui|tôi)|cho (anh|a|chị|c) (hỏi|xin|biết))(?=\s|$|[,.!?])/iu);
 // Người dùng gọi Lomi là anh/chị ("anh ơi", "chị ơi", "lomi anh") — Lomi vẫn xưng "Lomi" (giữ persona).
 const CALL_LOMI_AC = VR(/(^|\s)(lomi\s+(anh|a|chị|c)|(anh|a|chị|c)\s+ơi+)(?=\s|$|[,.!?])/iu);
 

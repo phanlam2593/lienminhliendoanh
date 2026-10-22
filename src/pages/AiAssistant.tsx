@@ -56,6 +56,7 @@ import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFa
 import { honestReply } from "@/lib/lomiHonest";
 import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
 import { v5Reply } from "@/lib/lomiV5";
+import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTherapy";
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
@@ -208,6 +209,7 @@ type Msg = {
   reported?: boolean; // người dùng đã bấm ⁉️ gửi câu này cho ban quản trị (01/10)
   taught?: boolean; // câu trả lời do admin dạy (lib/lomiLearn → lomi_taught)
   issue?: string; // Lomi vừa hỏi thêm về lỗi app (lib/lomiUnderstand) — tin kế tiếp là chi tiết máy / màn hình
+  therapy?: TherapyState; // 22/10: đang làm dở một bài tập tâm lý (lib/lomiTherapy) — tin kế tiếp là câu trả lời cho bước đó
 };
 type Quota = { member: boolean; limit: number; used: number };
 /** Mạch sức khoẻ đang mở ở tin này. Lịch sử lưu trước 08/10 còn dùng heart "health" làm cờ sức khoẻ → vẫn đọc được. */
@@ -889,6 +891,12 @@ export function AiChat({
       const cr0 = crisisReply("không muốn sống nữa", lang);
       if (cr0) return localReply(q, { role: "assistant", content: cr0.text, local: true, heart: "sad", heartDepth: 1 });
     }
+    // 22/10 — BÀI TẬP TÂM LÝ ĐANG LÀM DỞ (lib/lomiTherapy): tin này là câu trả lời cho bước Lomi vừa hỏi (số 0–10, "xong", một câu kể…)
+    //   → đi bước tiếp, trước mọi lớp đọc câu khác (trước đây "8" hay "xong" sẽ rơi vào lớp khác). Ý định tự hại / cấp cứu vẫn đi trước.
+    if (!forceAi && !en && lastA0?.therapy && !crisisReply(q, lang) && !crisisCheckIn(q) && !urgentOf(raw)) {
+      const tc = therapyContinue(typed, lastA0.therapy);
+      if (tc) return localReply(q, { role: "assistant", content: tc.text, local: true, therapy: tc.state, quick: tc.quick, heart: lastA0.heart ?? "sad", heartDepth: (lastA0.heartDepth ?? 0) + 1, story: lastA0.story });
+    }
     // 11/10: đang nói chuyện không vui của MỘT NGƯỜI KHÁC ("chị ấy mới nghỉ việc" → "chị ấy buồn lắm") mà hỏi mình nên nói gì / an ủi sao
     //        → gợi ý cách ở bên người đó (trước đây: "Ra là vậy 😄").
     //        Hỏi trống "a nên làm gì" cũng vậy — nhưng chỉ khi không phải chuyện ốm đau (mạch sức khoẻ / chăm người ốm có lời khuyên riêng).
@@ -1370,6 +1378,10 @@ export function AiChat({
         const userHist = msgs.filter((m) => m.role === "user").slice(-8).map((m) => m.content);
         // 22/10 (QA V5): tin dài nhiều ý, câu nối trong hội thoại dài — đang tâm sự thì GIỮ mạch tâm sự (câu sau như "có nên níu kéo không"
         //   vẫn hiểu là chuyện đang kể), đang nói chuyện sức khoẻ thì giữ mạch sức khoẻ.
+        // 22/10: hỗ trợ tâm lý có cấu trúc — giới thiệu, bài tập thở, soi lại suy nghĩ (CBT), một việc nhỏ, gỡ nỗi lo, sàng lọc, kế hoạch an toàn.
+        const ts = therapyStart(raw);
+        const TH_HEART: Record<string, string> = { cbt: "selfworth", calm: "anxiety", worry: "overthink", act: "sad", screen: "sad", safety: "sad" };
+        if (ts) return localReply(q, { role: "assistant", content: ts.text, local: true, therapy: ts.state, quick: ts.quick, heart: lastA?.heart && !lastA.heart.startsWith("ev:") ? lastA.heart : (ts.state ? TH_HEART[ts.state.tool] : undefined) ?? "sad", heartDepth: (lastA?.heartDepth ?? 0) + 1, story: lastA?.story });
         const v5 = v5Reply(raw, { last: lastA?.content, lastHeart: lastA?.heart, inHealth: !!hCtx, healthLabel: lastA?.health?.label });
         if (v5) return localReply(q, { role: "assistant", content: v5, local: true, ...(lastA?.heart && !lastA.heart.startsWith("ev:") ? { heart: lastA.heart, heartDepth: (lastA.heartDepth ?? 0) + 1, story: lastA.story } : {}), ...keepHealth });
         const ex =

@@ -84,6 +84,9 @@ export function englishReply(q: string, last?: string): string | null {
     return "Bored, huh 😄 A few ideas: I can pull a tarot card for fun, find you a café or a place to eat in Explore (/kham-pha), or we can just chat — how's your day been?";
   if (has(/\bwhat can you do\b|\bwhat are you\b|\bwho are you\b/, t))
     return "I'm Lomi, the assistant in Liên Minh Liên Doanh 😊 I can help with how to use the app, give everyday health info (I don't diagnose), listen when you want to talk, give small-business tips, and do tarot for fun.";
+  // ── Bài tập thở / kéo về hiện tại (giống lib/lomiTherapy, gói trong một tin) ──
+  if (has(/\b(breathing exercise|help me calm|calm me down|calm down|panic attack|panicking|having a panic)\b/, t))
+    return "Let's do this together, slowly 🫁\n• Sit down, feet on the floor, drop your shoulders\n• Breathe in through your nose for 4 counts… and out slowly through your mouth for 6\n• Repeat 5 times\n\nThen ground yourself: name **5 things you can see**, **4 you can touch**, **3 you can hear**, **2 you can smell**, and **1 thing** that feels okay right now.\n\nIf you have chest pain, severe trouble breathing, or feel faint — or this is the first time — call **115**. How are you feeling now, from 0 to 10?";
   // ── Cảm xúc ──
   if (has(/\b(passed away|died|lost my|funeral|grief|grieving)\b/, t))
     return "I'm so sorry for your loss 💚 Losing someone you love hurts deeply, and there's no right way or timeline to grieve.\n\nWould you like to tell me a bit about them?";

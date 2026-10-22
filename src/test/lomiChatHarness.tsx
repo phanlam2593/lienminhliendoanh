@@ -69,6 +69,7 @@ export type Turn = {
   unk?: string;
   unkKey?: string;
   issue?: string;
+  therapy?: { tool: string; step: number; data: Record<string, string> };
   talk?: number;
   places?: { id: string; name: string }[];
 };
