@@ -428,7 +428,7 @@ const THEMES: Theme[] = [
   {
     id: "boss",
     hint: [[VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Bị sếp đối xử vậy mà tính nghỉ cũng dễ hiểu lắm. Nhưng đừng quyết lúc đang ức nha — chuẩn bị khoản dự phòng, tìm chỗ mới trước khi nghỉ, và nếu nghỉ thì nghỉ đàng hoàng, giữ quan hệ tốt."]],
-    re: VN(/\b(sếp (hay |cứ |lại |)(mắng|la|chửi|chèn ép|khó tính|ghét|soi|bắt nẹt|trách|quát)|bị sếp|đồng nghiệp (nói xấu|chèn ép|ghét|bắt nạt|chơi xấu|tẩy chay)|bị đồng nghiệp|môi trường (làm việc )?độc hại|bị bắt nạt ở công ty|bị mắng trước mặt)\b/),
+    re: VN(/\b(sếp (hay |cứ |lại |vừa |mới |)(mắng|la|chửi|chèn ép|khó tính|ghét|soi|bắt nẹt|trách|quát)|bị sếp|đồng nghiệp (nói xấu|chèn ép|ghét|bắt nạt|chơi xấu|tẩy chay)|bị đồng nghiệp|môi trường (làm việc )?độc hại|bị bắt nạt ở công ty|bị mắng trước mặt)\b/),
     feel: [
       "Bị đối xử như vậy ở chỗ làm chắc ấm ức lắm 😣 Lomi hiểu mà.",
       "Bị mắng hay bị chèn ép trước mặt người khác thì vừa tủi vừa quê, khó chịu thật sự.",
@@ -750,7 +750,7 @@ const ADVICE_RE = VN(/\b(làm sao|làm thế nào|làm gì|nên làm gì|có nê
 const UNIV_RE = VN(/\b(làm gì|làm sao|nói gì|nói sao|cách nào|thế nào) (\S+ )?cũng\b/);
 const asksAdvice = (n: string) => ADVICE_RE.test(` ${n} `) && !UNIV_RE.test(` ${n} `);
 // 11/10 — người dùng nói rõ CHỈ MUỐN ĐƯỢC NGHE ("a chỉ muốn than thôi, chưa cần lời khuyên") — nhận cả khi chưa vào mạch tâm sự.
-const LISTEN_RE = VN(/\b(chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự|(chưa|không|đừng) cần (em |e |lomi |bạn |mày |m )?(phải )?(đưa |cho )?(ra )?(lời )?(khuyên|tư vấn)|(đừng|khỏi|thôi) (đưa |cho )?(ra )?(lời )?khuyên|chỉ (cần |muốn )?(em |lomi |bạn )?(lắng nghe|nghe)( và hỏi| thôi)|chỉ muốn có người (hiểu|nghe)|không muốn nghe (câu |mấy câu |lời )?(“|")?cố lên|đừng (nói|bảo|kêu) (anh |a |em |e |mình |tôi )?cố lên|cứ đưa (ra )?lời khuyên (liên tục|hoài|mãi))\b/);
+const LISTEN_RE = VN(/\b(chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự|(chưa|không|đừng) cần (em |e |lomi |bạn |mày |m )?(phải )?(đưa |cho )?(ra )?(lời )?(khuyên|tư vấn)|(đừng|khỏi|thôi) (đưa |cho )?(ra )?(lời )?khuyên|chỉ (cần |muốn )?(em |lomi |bạn )?(lắng nghe|nghe)( và hỏi| thôi)|chỉ muốn có người (hiểu|nghe)|(cần|muốn có|cần có) (một )?(người|ai đó) (nghe|lắng nghe|để tâm sự|tâm sự|để nói chuyện|nói chuyện cùng)( \S+)?|không muốn nghe (câu |mấy câu |lời )?(“|")?cố lên|đừng (nói|bảo|kêu) (anh |a |em |e |mình |tôi )?cố lên|cứ đưa (ra )?lời khuyên (liên tục|hoài|mãi))\b/);
 // 21/10 (QA Q96/Q97): xin "đừng nói cố lên" / "chỉ lắng nghe và hỏi vài câu" → đáp đúng yêu cầu đó, không chỉ "bạn cứ kể nha".
 const NO_CHEER = VN(/\b(cố lên)\b/);
 const ASK_ME = VN(/\b(hỏi (anh|a|em|e|mình|tôi|tui|chị|c) (vài|mấy|một vài) câu|và hỏi)\b/);

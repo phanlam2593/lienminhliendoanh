@@ -1352,3 +1352,70 @@ describe("Tâm lý — bài tập có hướng dẫn", () => {
     expect(m.content).toMatch(/4 counts[^]*5 things you can see/);
   }, T);
 });
+
+// QA V6 (22/10, tự soạn: viết tắt nặng, gõ sai, giọng miền, emoji, lối vào bài tập tâm lý).
+describe("QA V6 — viết tắt / gõ sai ở câu nguy cấp (P0)", () => {
+  for (const s of ["a mún chít", "anh muống chết", "e oi a mun chit"])
+    it(`“${s}” → lời hỗ trợ khủng hoảng`, async () => {
+      expect((await last([s])).content).toMatch(/không phải một mình/);
+    }, T);
+});
+describe("QA V6 — viết tắt, gõ sai, giọng miền, emoji", () => {
+  const one: [string, (m: Awaited<ReturnType<typeof last>>) => void][] = [
+    ["ko bt lm s nx", (m) => expect(m.content).toMatch(/rối lắm/)],
+    ["a cần ng nghe", (m) => expect(m.content).toMatch(/nghe/)],
+    ["sếp chửi a trc mặt mn", (m) => expect(m.heart).toBe("boss")],
+    ["anh bị đâu đầu quá", (m) => expect(m.health?.label).toBe("đau đầu")],
+    ["em ơi anh buồng quá", (m) => expect(m.heart).toBe("sad")],
+    ["anh mất ngũ mấy đêm rồi", (m) => expect(m.heart).toBe("insomnia")],
+    ["con anh bị sôt cao", (m) => expect(m.content).toMatch(/sốt/)],
+    ["Tui với ổng cãi lộn hoài", (m) => expect(m.heart).toBe("fight")],
+    ["🤒", (m) => expect(m.content).toMatch(/mệt \/ ốm/)],
+    ["😰", (m) => expect(m.content).toMatch(/lo/)],
+  ];
+  for (const [s, check] of one)
+    it(`“${s}”`, async () => {
+      const m = await last([s]);
+      check(m);
+      expect(m.unk).toBeFalsy();
+    }, T);
+  it("“Hỏng biết có nên nghỉ làm hông” → cùng cân nhắc, không hiện nút Dạy Lomi", async () => {
+    const m = await last(["Hỏng biết có nên nghỉ làm hông"]);
+    expect(m.content).toMatch(/nghỉ làm/);
+    expect(m.unk).toBeFalsy();
+  }, T);
+});
+describe("QA V6 — lối vào bài tập tâm lý", () => {
+  it("run hết người vì lo → bài tập thở", async () => {
+    expect((await last(["a đang run hết cả người vì lo, giúp a với"])).therapy?.tool).toBe("calm");
+  }, T);
+  it("có bài tập nào cho đỡ lo → gợi ý 2 bài → 'thở' → bắt đầu bài thở", async () => {
+    const r = await chat(["có bài tập nào cho đỡ lo không e", "thở"], { seed: 7 });
+    expect(r[0].content).toMatch(/Bài tập thở[^]*Gỡ nỗi lo/);
+    expect(r[1].therapy?.tool).toBe("calm");
+  }, 60000);
+  it("muốn kiểm tra xem có bị trầm cảm không → sàng lọc", async () => {
+    expect((await last(["a muốn kiểm tra xem mình có bị trầm cảm không"])).therapy?.tool).toBe("screen");
+  }, T);
+  it("muốn ngủ sâu hơn → mẹo ngủ, không phải 'chợp mắt 15 phút'", async () => {
+    const m = await last(["a muốn ngủ sâu hơn"]);
+    expect(m.content).toMatch(/Dậy cùng một giờ/);
+    expect(m.content).not.toMatch(/chợp mắt/);
+  }, T);
+  it("nằm lì cả ngày → mời chọn một việc nhỏ", async () => {
+    expect((await last(["dạo này a nằm lì cả ngày"])).therapy?.tool).toBe("act");
+  }, T);
+});
+describe("QA V6 — câu khủng hoảng gõ không dấu / viết tắt (quét thêm)", () => {
+  for (const s of ["e oi a muon chet", "a ko mun song nua", "toi khong muon song nua", "lomi oi t muon chet", "t mún die"])
+    it(`“${s}” → lời hỗ trợ khủng hoảng`, async () => {
+      expect((await last([s])).content).toMatch(/không phải một mình/);
+    }, T);
+  for (const s of ["a muon ket thuc tat ca", "chắc a biến mất thì hơn", "a mệt mỏi quá muốn chết luôn"])
+    it(`“${s}” → hỏi thẳng nhẹ nhàng về ý nghĩ không muốn sống`, async () => {
+      expect((await last([s])).content).toMatch(/không muốn sống nữa\?/);
+    }, T);
+  it("“đói muốn chết” vẫn là nói quá", async () => {
+    expect((await last(["đói muốn chết"])).content).not.toMatch(/không phải một mình|không muốn sống nữa\?/);
+  }, T);
+});

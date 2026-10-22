@@ -2234,7 +2234,9 @@ export function AiChat({
           ? "Câu này Lomi chưa hiểu ý lắm 😅 Bạn nói rõ hơn một chút giúp Lomi nha? (Nếu là điều Lomi nên biết mà chưa biết, bạn bấm 💡 Dạy Lomi bên dưới để gửi ban quản trị.)"
           : null;
         const unkText = careUnk ?? medUnk ?? notGot;
-        return localReply(q, { role: "assistant", content: unkText ?? fb.text, local: true, quick: unkText ? undefined : fb.quick, unk: typed, unkKey: q, stuck: (careUnk ? "unknown_care" : medUnk ? "unknown_med" : notGot ? "not_understood" : "fallback") as StuckKind, sticker: unkText ? undefined : fb.sticker, ...keepHealth, ...(askHealth ? { health: {} } : {}) });
+        // 22/10: "có nên nghỉ làm không" → lời cùng cân nhắc (hỏi hoàn cảnh) là câu trả lời thật, không hiện nút 💡 Dạy Lomi như một câu bí.
+        const decided = !unkText && /^Chuyện \*\*/u.test(fb.text);
+        return localReply(q, { role: "assistant", content: unkText ?? fb.text, local: true, quick: unkText ? undefined : fb.quick, unk: decided ? undefined : typed, unkKey: q, stuck: (careUnk ? "unknown_care" : medUnk ? "unknown_med" : notGot ? "not_understood" : "fallback") as StuckKind, sticker: unkText ? undefined : fb.sticker, ...keepHealth, ...(askHealth ? { health: {} } : {}) });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
       const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>

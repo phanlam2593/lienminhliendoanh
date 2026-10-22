@@ -758,15 +758,16 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
 const ACUTE = VN(/\b((không|ko|chẳng|hông) (tự )?(kiểm soát|kìm|kiềm chế|cản) (được|nổi)( mình| bản thân)?|mất kiểm soát|ngay (bây giờ|lúc này|bây h|bh)|tối nay|đêm nay|đang cầm|cầm sẵn|để sẵn|chuẩn bị sẵn|đang đứng (trên|ở) (cầu|sân thượng|lan can|mép))\b/);
 const PASSIVE = VN(/\b((chẳng|không|chả|hông|ko|k) (còn )?(muốn|thiết) (tiếp tục|sống|sống tiếp|tồn tại)( nữa| đâu| rồi| luôn| làm gì)*(?= ?$)|ngủ (một giấc|luôn|mãi)( mà)? (không|chẳng|ko) (bao giờ |cần )?(dậy|tỉnh|thức)(?! (nổi|kịp|được))|ngủ( \S+){0,2} (không|chẳng|ko) bao giờ (dậy|tỉnh|thức)|ngủ (luôn|mãi) không dậy|sống (vậy |thế |như vầy |để |làm )?(chi|gì|làm gì) nữa|sống (như )?(vậy|thế|thế này|như vầy|kiểu này) (để )?(làm gì|làm chi|có ích gì)|(ước gì|giá như|ước) (mình |anh |em |a |e |tôi |tui )?(chưa từng|chưa bao giờ|không|chẳng) (được )?sinh ra|(mọi người|gia đình|cả nhà|ai cũng|bố mẹ|ba mẹ|vợ con|người ta) (sẽ )?(tốt|vui|nhẹ nhõm|nhẹ gánh|đỡ khổ|sướng|hạnh phúc) hơn (nếu|khi) (không có|thiếu|vắng|mất) (a|anh|em|e|mình|tôi|tui|t|tao|tớ)|(chẳng|không|chả|ko|k) (còn )?thiết sống|chẳng thiết gì nữa|không còn gì để (sống|mất)|muốn (đi|ngủ) (luôn|mãi) cho xong|chết quách (cho|đi)|sống (cũng )?(chẳng|chả|không) (để )?(làm gì|làm chi)|sống (cũng )?(chẳng|chả|không) (có )?(ý nghĩa|nghĩa lý) gì)\b/);
 // (2) Tín hiệu VỪA — hỏi thẳng, nhẹ nhàng (lời hỏi kết bằng "…không muốn sống nữa?" để AiAssistant nhận câu xác nhận kế tiếp).
-const CHECKIN = VN(/\b((chỉ )?muốn biến mất (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)|muốn biến mất một thời gian|(là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi|nếu (mình|anh|a|em|e|tôi|tui|t) (biến mất|chết|không còn|đi mất)( đi)?( thì)?( cũng)? (chẳng|không|chả) (có )?ai (để ý|quan tâm|buồn|nhận ra|cần|thấy|tiếc)|(chẳng|không|chả) (có )?ai (để ý|quan tâm|nhận ra|buồn) (nếu|khi) (mình|anh|a|em|e|tôi|tui) (biến mất|chết|không còn))\b/);
+const CHECKIN = VN(/\b((chỉ )?muốn biến mất (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)|muốn biến mất một thời gian|(là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi|mệt mỏi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi|(muốn|định|tính|chỉ muốn) (kết thúc|chấm dứt|buông) (tất cả|mọi thứ|hết mọi thứ|hết tất cả)( luôn| cho xong| đi)?(?! (với|giữa|ở|tại|chỗ))|(biến mất|chết|đi luôn|không còn trên đời|không tồn tại) (đi )?(thì|là|cho) (hơn|tốt hơn|nhẹ nhõm hơn|xong|rồi)|nếu (mình|anh|a|em|e|tôi|tui|t) (biến mất|chết|không còn|đi mất)( đi)?( thì)?( cũng)? (chẳng|không|chả) (có )?ai (để ý|quan tâm|buồn|nhận ra|cần|thấy|tiếc)|(chẳng|không|chả) (có )?ai (để ý|quan tâm|nhận ra|buồn) (nếu|khi) (mình|anh|a|em|e|tôi|tui) (biến mất|chết|không còn))\b/);
 // (3) NÓI QUÁ về trạng thái cơ thể / chuyện thường ("đói muốn chết", "nóng muốn chết luôn", "mệt muốn chết", "chết cười")
 //     — tiếng Việt dùng "muốn chết" như "rất". Trước đây những câu này nhận lời hỗ trợ khủng hoảng kèm đường dây nóng.
-const HYPER_STATE = "đói|no|nóng|lạnh|rét|mệt|buồn ngủ|ngủ|đau|nhức|mỏi|cười|xấu hổ|ngại|quê|mắc cỡ|sợ|run|hồi hộp|thèm|tức|bực|ghen|ngứa|khát|nhớ|thích|vui|sướng|ngon|đẹp|dễ thương|cute|nắng|kẹt xe|ồn|thi|học|làm|bận|ế|chờ|đợi";
+const HYPER_STATE = "đói|no|nóng|lạnh|rét|mệt|buồn ngủ|ngủ|đau|nhức|mỏi|cười|xấu hổ|ngại|quê|mắc cỡ|sợ|run|hồi hộp|thèm|tức|bực|ghen|ngứa|khát|nhớ|thích|vui|sướng|ngon|đẹp|dễ thương|cute|nắng|kẹt xe|ồn|thi|học|làm|bận|chờ|đợi"; // (22/10: bỏ "ế" — gõ không dấu "e ơi a muốn chết" bị đọc thành "ế … muốn chết" = nói quá)
 const HYPER = VN(new RegExp(`\\b(${HYPER_STATE})( \\S+){0,2}? muốn chết( luôn| đi được| mất| à| á| quá| nè| ghê| thôi)*\\b|\\bchết (cười|mất|thôi|ngất|đói)\\b|\\bcười (muốn )?(chết|xỉu)\\b`));
 /** Câu chỉ là NÓI QUÁ ("đói muốn chết") — trả câu đã bỏ phần nói quá ("đói quá") để các lớp khác đáp như thường; null nếu không phải. */
 export function hyperboleOnly(text: string): string | null {
   const n = ` ${normalizeVi(text)} `;
-  if (!HYPER.test(n) || PASSIVE.test(n) || CHECKIN.test(n) || poisonIntent(text)) return null;
+  // (22/10: "mệt mỏi quá muốn chết luôn" — kiệt sức về tinh thần, không chỉ nói quá → để lớp hỏi han nhẹ nhàng)
+  if (!HYPER.test(n) || PASSIVE.test(n) || CHECKIN.test(n) || EMO_DEATH.test(n) || poisonIntent(text)) return null;
   // Bỏ phần nói quá đi rồi mà vẫn còn tín hiệu khủng hoảng thật ("đói muốn chết, mà a cũng chẳng thiết sống") → không phải nói quá.
   const rest = text
     .replace(VR(/(chết\s+cười|cười\s+(muốn\s+)?(chết|xỉu))/giu), " cười quá trời ")
@@ -1122,6 +1123,8 @@ const TEEN: Record<string, string> = {
   // 01/10 (theo tài liệu Kir): thêm cách nói đời thường
   lmj: "làm gì", lmgi: "làm gì", okla: "ok", oki: "ok", okee: "ok", okeee: "ok", ò: "ừ", ừa: "ừ", ùm: "ừ", ừm: "ừ",
   dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo", qtqd: "quá", sk: "sức khỏe",
+  // 22/10 (QA V6)
+  nx: "nữa",
 };
 // ── Chữ kéo dài để biểu cảm (01/10 r2, theo tài liệu Kir): "okkkk", "chánnnn", "khônggg", "đượcccc",
 // "trờiiii", "haizzzz", "hahaahah" → về từ gốc để HIỂU nghĩa; còn độ nhấn thì đọc riêng bằng
@@ -1143,6 +1146,26 @@ export function unstretch(text: string): string {
 
 export function expandTeen(text: string): string {
   let s = unstretch(text.normalize("NFC"));
+  // 22/10 (QA V6): viết tắt / gõ sai ở câu NGUY CẤP ("a mún chít", "anh muống chết") — trước đây lọt lời hỗ trợ khủng hoảng.
+  s = s.replace(VR(/(^|[^\p{L}])(muốn|mún|mốn|muống|mun|mụn) (chít|chịt|chết|chếch|chớt|chêt|die)(?![\p{L}])/giu), "$1muốn chết");
+  s = s.replace(VR(/(^|[^\p{L}])(không|ko|k|chẳng|hông|hong|kh) (mun|mún|mụn|mùn|muốn|muộn) (sống|song|sốn)(?![\p{L}])/giu), "$1không muốn sống");
+  //   (gõ không dấu "muon chit" bị bộ đoán dấu đọc thành "muộn chịt")
+  s = s.replace(VR(/(^|[^\p{L}])muộn (chít|chịt)(?![\p{L}])/giu), "$1muốn chết");
+  // Lỗi gõ hay gặp — chỉ đổi khi ngữ cảnh rõ ("đâu đầu quá", "buồng quá", "mất ngũ", "chia tai", "sôt cao", "hồi họp").
+  s = s.replace(VR(/(^|[^\p{L}])đâu (đầu|bụng|lưng|họng|răng|ngực|bao tử|dạ dày)(?= (quá|lắm|ghê|dữ|nhiều|từ|mấy|cả|hoài|kinh|vl|wa|qá)(?![\p{L}]))/giu), "$1đau $2");
+  s = s.replace(VR(/(^|[^\p{L}])(bị|hay|đang|cũng|nhức) đâu (đầu|bụng|lưng|họng|răng|ngực|bao tử|dạ dày)(?![\p{L}])/giu), "$1$2 đau $3");
+  s = s.replace(VR(/(^|[^\p{L}])buồng (quá|lắm|ghê|thật|thiệt|wa|qá|vl|muốn|chán|thúi)(?![\p{L}])/giu), "$1buồn $2");
+  s = s.replace(VR(/(^|[^\p{L}])mất ngũ(?![\p{L}])/giu), "$1mất ngủ");
+  s = s.replace(/(^|[^\p{L}])chia tai(?![\p{L}])/giu, "$1chia tay"); // (biểu thức thường: chữ gõ sai cụ thể, không phải luật đọc câu)
+  s = s.replace(VR(/(^|[^\p{L}])muống (ăn|uống|ngủ|đi|nói|khóc|nghỉ|bỏ|sống|biến mất)(?![\p{L}])/giu), "$1muốn $2");
+  s = s.replace(VR(/(^|[^\p{L}])(bị|đang|lên cơn|hơi|còn) sôt(?![\p{L}])/giu), "$1$2 sốt").replace(VR(/(^|[^\p{L}])sôt (cao|nhẹ|\d)/giu), "$1sốt $2");
+  s = s.replace(VR(/(^|[^\p{L}])hồi họp(?![\p{L}])/giu), "$1hồi hộp");
+  // Giọng miền: "hỏng biết" (= không biết), "cãi lộn" (= cãi nhau), "mạ tui" (= mẹ tui).
+  s = s.replace(VR(/(^|[^\p{L}])hỏng (biết|muốn|thích|hiểu|chịu|có biết)(?![\p{L}])/giu), "$1không $2");
+  s = s.replace(VR(/(^|[^\p{L}])cãi lộn(?![\p{L}])/giu), "$1cãi nhau");
+  s = s.replace(VR(/(^|[^\p{L}])mạ (tui|tôi|em|anh|mình|a|e|ơi|của)(?![\p{L}])/giu), "$1mẹ $2");
+  // "ko bt lm s nx" → "không biết làm sao nữa"
+  s = s.replace(VR(/(^|[^\p{L}])(lm|làm) s(?![\p{L}])/giu), "$1$2 sao");
   // Cụm cần xét ngữ cảnh — xử lý trước khi đổi từng từ.
   s = s.replace(VR(/(^|[^\p{L}])(hum|hôm|bữa) (nay|ni)(?![\p{L}])/giu), "$1hôm nay");
   s = s.replace(VR(/(^|[^\p{L}])(quên|đổi|lấy lại|nhập|sai|reset|đặt lại) (mk|mật khẩu)(?![\p{L}])/giu), "$1$2 mật khẩu");

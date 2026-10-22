@@ -214,7 +214,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "hurtword",
     howto: true,
-    re: VN(/\b((lỡ )?(nói|quát|chửi|mắng|to tiếng|nặng lời)( \S+){0,6} (trước mặt|trước) (bạn bè|mọi người|người khác|đám đông|bạn)|lỡ (nói|lời) (nặng|quá|khó nghe)|nói (một câu )?(rất )?nặng lời)\b/),
+    re: VN(/\b((?<!(sếp|bị|bị sếp|ổng|bả|ảnh|chị ấy|anh ấy|người ta|họ|nó|thầy|cô|ba|mẹ|bố|chồng|vợ) )(lỡ )?(nói|quát|chửi|mắng|to tiếng|nặng lời)( \S+){0,6} (trước mặt|trước) (bạn bè|mọi người|người khác|đám đông|bạn)|lỡ (nói|lời) (nặng|quá|khó nghe)|nói (một câu )?(rất )?nặng lời)\b/),
     feel: ["Biết mình lỡ lời và thấy áy náy cho thấy bạn rất quan tâm người ấy."],
     insight: ["Nặng lời **trước mặt người khác** thường đau hơn nói riêng, vì người kia thấy mất mặt. Không nên chỉ chờ cho quên đi — nhận trách nhiệm và sửa lại mới làm lành được."],
     step: ["Tìm lúc riêng tư, xin lỗi cụ thể chứ không chung chung."],

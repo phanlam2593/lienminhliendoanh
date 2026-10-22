@@ -55,6 +55,9 @@ export function expressive(raw: string): Expr {
 export function emojiOnlyReply(raw: string): string | null {
   const t = raw.trim();
   if (!t || !/^[\p{Extended_Pictographic}‍️\s]+$/u.test(t)) return null;
+  // 22/10: mặt ốm / mệt / lo — trước đây "🤒" nhận "👍😄".
+  if (/(🤒|🤕|🤧|😷|🤢|🤮|🥵|🥶|😵)/u.test(t)) return pick(["Ơ bạn đang mệt / ốm hả 🥺 Bị sao vậy — sốt, đau đầu hay đau ở đâu? Kể Lomi nghe nha."]);
+  if (/(😰|😨|😟|😧|😣|😖)/u.test(t)) return pick(["Có chuyện gì làm bạn lo vậy nè 😟 Kể Lomi nghe nha."]);
   switch (tone(t)) {
     case "sad":
       return pick(["Ơ sao vậy nè 🥺 Có chuyện gì kể Lomi nghe nha.", "Ôm một cái nè 🤗 Bạn ổn không?"]);

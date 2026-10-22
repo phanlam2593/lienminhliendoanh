@@ -226,19 +226,22 @@ export function therapyContinue(q: string, st: TherapyState): TherapyOut | null 
 
 // ── Bắt đầu ──
 const ASK_PRO = VN(/\b((em|lomi|e|bạn) (có phải|là|có làm được|làm được|có thể làm|có biết) (bác sĩ|chuyên gia|chuyên viên|nhà) (tâm lý|trị liệu)|(muốn|cần|xin) (được )?(tư vấn|trị liệu|hỗ trợ) tâm lý|tư vấn tâm lý (cho|giúp|giùm) (anh|a|em|e|mình|tôi|tui|chị)|(lomi|em|e) (giúp|hỗ trợ) (được )?(gì|những gì) (về|cho) (tâm lý|sức khoẻ tinh thần|sức khỏe tinh thần))\b/);
-const CALM_ASK = VN(/\b(bài tập thở|tập thở|thở sao cho|hướng dẫn thở|giúp (anh|a|em|e|mình|tôi|tui|chị|c) (bình tĩnh|bớt hoảng|thở)( lại)?|đang (hoảng|hoảng loạn|lên cơn hoảng|panic)|lên cơn hoảng|cơn hoảng loạn|hoảng loạn quá|bấn loạn quá|không bình tĩnh (lại )?được|lo quá (không|ko) thở (nổi|được))\b/);
+const CALM_ASK = VN(/^ (bài |cái )?(tập )?thở( (đi|nha|nhé|trước))* $|\b(bài tập thở|tập thở|thở sao cho|hướng dẫn thở|giúp (anh|a|em|e|mình|tôi|tui|chị|c) (bình tĩnh|bớt hoảng|thở)( lại)?|đang (hoảng|hoảng loạn|lên cơn hoảng|panic)|lên cơn hoảng|cơn hoảng loạn|hoảng loạn quá|bấn loạn quá|không bình tĩnh (lại )?được|lo quá (không|ko) thở (nổi|được)|run (hết |cả |lên )*(cả )?người (vì|do) (lo|sợ|hoảng)|tim đập (thình thịch|nhanh) vì (lo|sợ))\b/);
 const CBT_ASK = VN(/\b(soi lại (một |cái )?suy nghĩ|(bớt|giảm|bỏ|thay đổi|gỡ|xử lý) (những |mấy |cái )?suy nghĩ tiêu cực|suy nghĩ tiêu cực (hoài|mãi|quá|nhiều)|hay nghĩ tiêu cực|tập suy nghĩ tích cực|bài tập cbt|liệu pháp nhận thức)\b/);
 const ACT_ASK = VN(/\b(một việc nhỏ hôm nay|chọn (một|1) việc nhỏ|kích hoạt hành vi|giúp (anh|a|em|e|mình|tôi|tui|chị) (có|lấy lại) động lực|làm sao (để )?(có|lấy lại) động lực)\b/);
-const WORRY_ASK = VN(/\b(gỡ (bớt )?nỗi lo|(lo|lo lắng|lo âu) (hoài|mãi|suốt) (không|chẳng|ko) (dừng|ngừng|hết) (được|lại)|không (dừng|ngừng) lo (được)?|cứ lo (lắng )?(hoài|mãi|suốt)|lo đủ thứ (hết|cả)?( (trơn|luôn))?)\b/);
-const SCREEN_ASK = VN(/\b(sàng lọc( nhanh)?( tâm trạng| tâm lý| trầm cảm| lo âu)?|(test|kiểm tra|làm bài test|bài kiểm tra|trắc nghiệm) (tâm lý|trầm cảm|lo âu|tâm trạng|sức khoẻ tinh thần|sức khỏe tinh thần)|phq|gad)\b/);
+const WORRY_ASK = VN(/^ (bài |cái )?gỡ (nỗi )?lo( (đi|nha|nhé|trước))* $|\b(gỡ (bớt )?nỗi lo|(lo|lo lắng|lo âu) (hoài|mãi|suốt) (không|chẳng|ko) (dừng|ngừng|hết) (được|lại)|không (dừng|ngừng) lo (được)?|cứ lo (lắng )?(hoài|mãi|suốt)|lo đủ thứ (hết|cả)?( (trơn|luôn))?)\b/);
+const SCREEN_ASK = VN(/\b(kiểm tra (xem )?((mình|anh|a|em|e|tôi|tui|chị|c) )?(có )?(bị )?(trầm cảm|lo âu|rối loạn lo âu)|sàng lọc( nhanh)?( tâm trạng| tâm lý| trầm cảm| lo âu)?|(test|kiểm tra|làm bài test|bài kiểm tra|trắc nghiệm) (tâm lý|trầm cảm|lo âu|tâm trạng|sức khoẻ tinh thần|sức khỏe tinh thần)|phq|gad)\b/);
 const SAFETY_ASK = VN(/\b(kế hoạch an toàn|lập kế hoạch an toàn|safety plan)\b/);
 // Câu tự chê bản thân rất khắt khe ("mình thật vô dụng", "ai cũng ghét mình") → mời soi lại suy nghĩ đó.
 const SELF_LABEL = VN(/\b(mình|anh|a|em|e|tôi|tui|tớ|tao) (thật|đúng là|quả là|là|thấy mình|cảm thấy mình|thật sự)? ?(một )?((đồ |kẻ |người |đứa |thứ )?(vô dụng|vô tích sự|vô giá trị|kém cỏi|chẳng ra gì|không ra gì|đồ bỏ đi|tệ hại|ngu ngốc)|(đồ|kẻ|người|đứa) (thất bại|ngu|bỏ đi))( quá| thật| lắm| hết sức)?\b|\b(chẳng|không|chả) (bao giờ )?làm (được )?(gì|cái gì|việc gì) (ra hồn|nên hồn|cho đúng|tử tế)\b/);
 const NOT_SELF = VN(/\b(không|chẳng|đâu có|đâu phải|không phải) (là |phải )?(đồ |kẻ |người )?(vô dụng|thất bại|ngu|kém cỏi)\b|\b(nó|họ|ảnh|cổ|anh ấy|cô ấy|sếp|bạn|người ta) (thật |đúng là |là )?(vô dụng|ngu|kém cỏi)\b/);
 
+const ANX_TOOLS = VN(/\b(bài tập|cách|kỹ thuật|mẹo)( \S+){0,2} (cho|để|giúp)( \S+){0,2} (đỡ|bớt|giảm|hết|khỏi) (lo|lo âu|lo lắng|hồi hộp|căng thẳng|stress|hoảng)\b/);
 export function therapyStart(q: string): TherapyOut | null {
   const n = N(q);
   if (ASK_PRO.test(n)) return { text: MENU };
+  if (ANX_TOOLS.test(n))
+    return { text: "Có nè 🌿 Hai bài tập hợp nhất khi đang lo:\n• 🫁 **Bài tập thở** — làm dịu cơ thể ngay, hợp lúc tim đập nhanh, run, bồn chồn (gõ “bài tập thở”)\n• 🧺 **Gỡ nỗi lo** — hợp khi đầu cứ lo hoài một chuyện (gõ “gỡ nỗi lo”)\n\nBạn muốn thử bài nào?" };
   if (SAFETY_ASK.test(n)) return safety(1, q, {});
   if (SCREEN_ASK.test(n)) return screen(0, q, {});
   if (CALM_ASK.test(n) && !VN(/\b(đau ngực|tức ngực|ngất|xỉu|méo miệng|yếu (tay|chân|nửa người))\b/).test(n)) return calm(1, q, {});
