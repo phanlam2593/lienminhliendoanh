@@ -54,6 +54,7 @@ import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from 
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
 import { honestReply } from "@/lib/lomiHonest";
+import { earlyV4, v4Reply } from "@/lib/lomiV4";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
@@ -942,6 +943,12 @@ export function AiChat({
     // 15/10 — KHẨN CẤP (lib/lomiUrgent, audit sức khoẻ): câu KỂ một tình huống cấp cứu (uống nhầm chất độc, chảy máu không cầm, đuối nước,
     //   bỏng, nghi phản vệ, mang thai ra máu, tiền sản giật, hạ đường huyết…) → nói ngay việc phải làm + phần sơ cứu của thẻ có nguồn.
     //   Chạy TRƯỚC mạch chuyện / khung câu / lưới cuối — các lớp đó từng đáp "Chúc mừng nha!", "Giờ sao rồi?", "chưa hiểu ý".
+    // 22/10 (QA V4): đau ngực ĐÃ HẾT (không coi là an toàn, cũng không đáp như đang đau), nhân vật trong truyện uống nhầm hoá chất
+    //   (câu GIẢ ĐỊNH để viết truyện — không đáp như người dùng vừa ngộ độc). Chạy trước bảng cấp cứu theo triệu chứng.
+    if (!forceAi && !en && !crisisReply(q, lang)) {
+      const e4 = earlyV4(q);
+      if (e4) return localReply(q, { role: "assistant", content: e4, local: true });
+    }
     if (!forceAi && !en && !crisisReply(q, lang)) {
       const ug = urgentOf(raw) ?? (raw !== q ? urgentOf(q) : null);
       if (ug) {
@@ -1104,7 +1111,7 @@ export function AiChat({
       //   Trước đây: "Không uống quá liều hả 😮 Sao vậy anh?"; "không, a chưa uống gì hết" → gợi ý đồ uống; và đang nói về paracetamol thì
       //   lời chối vẫn rơi xuống lớp báo cấp cứu paracetamol (lib/lomiContext). Lời kể đã uống thật (odm === "event") không đi vào đây.
       const nqD = ` ${normalizeVi(q)} `;
-      const denyTake = !en && odm !== "event" && (odm === "neg" || VN(/^ (không|ko|k|đâu|chưa|hông|hong)\b.*\b(chưa|không|ko|chẳng) (có |hề )?(uống|nuốt|dùng) (gì|thuốc|viên nào|cái gì)/).test(nqD));
+      const denyTake = !en && odm !== "event" && (odm === "neg" || VN(/^ (không|ko|k|đâu|chưa|hông|hong)\b.*\b(chưa|không|ko|chẳng) (có |hề )?(uống|nuốt|dùng) (gì|thuốc|viên nào|cái gì)/).test(nqD) || VN(/^ (a|anh|em|e|chị|c|mình|tui|tôi|t) (nói|bảo|đã nói|đã bảo) (là )?(không|chưa|chẳng) (có )?(uống|nuốt|dùng) (gì|thuốc|viên nào|cái gì)/).test(nqD));
       const crisisBefore = !!lastA0 && VR(/không phải một mình/).test(lastA0.content);
       const drugBefore = !!lastA0 && (!!lastA0.drug || !!lastA0.hsub || crisisBefore);
       //   (mở đầu bằng lời chối mà phía trên chưa nói gì về thuốc → không đoán là đang khát hay đang nói về thuốc, chỉ hỏi nhẹ)
@@ -1341,6 +1348,7 @@ export function AiChat({
       if (!en && !gateSkip) {
         const userHist = msgs.filter((m) => m.role === "user").slice(-8).map((m) => m.content);
         const ex =
+          v4Reply(q, { last: lastA?.content, hist: msgs.filter((m) => m.role === "user").slice(-24).map((m) => m.content), lastHeart: lastA?.heart, lastHealth: !!hCtx }) ??
           safetyNowReply(q) ??
           drinkDriveReply(q) ??
           weightReply(q, userHist) ??
