@@ -54,7 +54,9 @@ import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from 
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
 import { honestReply } from "@/lib/lomiHonest";
-import { earlyV4, v4Reply } from "@/lib/lomiV4";
+import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
+import { v5Reply } from "@/lib/lomiV5";
+import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
@@ -73,7 +75,7 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, jokeText, storyNotApp, chitChat, crisisCheckIn, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, jokeText, storyNotApp, chitChat, crisisCheckIn, crisisDenial, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -591,6 +593,8 @@ export function AiChat({
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
+    // 22/10: câu gõ tiếng Anh mà không lớp nào hiểu → nói bằng tiếng Anh (không đáp "Câu này Lomi chưa hiểu ý lắm" bằng tiếng Việt).
+    if ((reply.unk || reply.stuck) && looksEnglish(rawRef.current ?? asked)) reply = { ...reply, content: englishFallback(rawRef.current ?? asked) };
     // 20/10 (Kir): lời dặn chung (không kê đơn, "muốn xem kỹ phần nào…", lưu ý thảo dược…) chỉ nói lần đầu trong cuộc trò chuyện.
     if (reply.local) {
       const earlier = msgs.filter((m) => m.role === "assistant").slice(-30).map((m) => m.content);
@@ -759,10 +763,11 @@ export function AiChat({
     // ("con em bi chong mat" → "con em bị chóng mặt", không còn thành "chồng mất"). Bỏ dấu câu đã khôi phục luôn trùng câu gốc nên các
     // lớp so không dấu không đổi gì. Chữ người dùng đã gõ dấu giữ nguyên. Bong bóng vẫn hiện đúng câu người dùng gõ.
     let raw = typed;
-    if (!en && isLooseVi(typed)) {
+    if (!en && isLooseVi(typed) && !looksEnglish(typed)) {
       await loadViModel();
       raw = restoreVi(typed);
     }
+    if (!en) raw = viMixFix(raw); // 22/10: "a bị headache quá" → "a bị đau đầu quá"
     // 14/10 — BỘ ĐỌC CÂU (lib/viMatch): báo cho các luật biết câu của người dùng lượt này (để so đúng chữ có dấu họ gõ).
     //   Câu gõ không dấu thì dạng có dấu chỉ là đoán → lượt đó các luật so như cũ.
     //   Chữ người dùng gõ thiếu dấu trong câu có dấu ("bị dau đầu") được đoán dấu cho bộ đọc; lớp khác vẫn đọc câu như trước.
@@ -813,6 +818,16 @@ export function AiChat({
     const lastMsg0 = msgs[msgs.length - 1];
     const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
+    // 22/10 (QA V5) — TIẾNG ANH (lib/lomiEnglish): app để tiếng Anh, hoặc app tiếng Việt mà người dùng gõ cả câu tiếng Anh.
+    //   Trước đây "I want to kill myself", "my husband hit me", "chest pain…" đều nhận "That's outside what Lomi knows" / "chưa hiểu ý";
+    //   câu tiếng Anh gõ ở app tiếng Việt còn bị đoán dấu thành tiếng Việt ("for me" → "for mẹ"). An toàn trước, rồi tâm sự / sức khoẻ thường gặp.
+    const enText = !en && looksEnglish(typed);
+    if (!forceAi && (en || enText)) {
+      const lastE = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : undefined;
+      const es = englishSafety(typed) ?? englishReply(typed, lastE);
+      if (es) return localReply(typed, { role: "assistant", content: es, local: true });
+      if (enText && /\b(tarot|card|cards|reading|fortune)\b/i.test(typed)) return doTarot("", typed);
+    }
     // 21/10 (đợt 4): NÓI QUÁ ("đói muốn chết", "nóng muốn chết luôn", "chết cười") → hiểu là "rất…" ("đói quá"), không phải khủng hoảng.
     if (!en) {
       const hyp = hyperboleOnly(q);
@@ -1095,6 +1110,9 @@ export function AiChat({
 
     if (!forceAi) {
       // 0) Người dùng nói muốn làm hại bản thân → ưu tiên hỗ trợ trước mọi luồng khác.
+      // 22/10 (QA V5): câu CHỐI có ý định tự hại ("không, a không có ý định làm hại bản thân đâu, chỉ mệt thôi") → không bật lời khủng hoảng.
+      const cd = en ? null : crisisDenial(q);
+      if (cd) return localReply(q, { role: "assistant", content: cd.text, local: true, heart: lastA0?.heart ?? "sad", heartDepth: (lastA0?.heartDepth ?? 0) + 1, story: lastA0?.story });
       const cr = crisisReply(q, lang);
       // Sau đó Lomi ở lại chế độ tâm sự (lắng nghe) để người dùng kể tiếp.
       if (cr) return localReply(q, { role: "assistant", content: cr.text, local: true, ...(en ? {} : { heart: "sad", heartDepth: 1 }) });
@@ -1249,6 +1267,9 @@ export function AiChat({
       // b) Đang trong cuộc tư vấn → hiểu tin này theo ngữ cảnh (chủ đề mới, "thêm ý khác", kể thêm chi tiết…).
       if (lastA?.biz && !lastA.bizPick && !detectTarot(q)) {
         const b = lastA.biz;
+        // 22/10 (QA V5): đang tư vấn mở tiệm mà kể vốn / mặt bằng / cọc / hỏi "còn lại bao nhiêu" → sổ tiền (lib/lomiV4), không lặp lại ý tưởng khai trương.
+        const lg = shopLedgerReply(q, msgs.filter((m) => m.role === "user").slice(-24).map((m) => m.content));
+        if (lg) return localReply(q, { role: "assistant", content: lg, local: true, biz: b });
         if (isThanks(q))
           return localReply(q, {
             role: "assistant",
@@ -1347,6 +1368,10 @@ export function AiChat({
       //   người có tên trong câu kể, kiến thức nhập môn (tâm lý học, tarot có khoa học không), câu hỏi thực tế khi mở cửa hàng.
       if (!en && !gateSkip) {
         const userHist = msgs.filter((m) => m.role === "user").slice(-8).map((m) => m.content);
+        // 22/10 (QA V5): tin dài nhiều ý, câu nối trong hội thoại dài — đang tâm sự thì GIỮ mạch tâm sự (câu sau như "có nên níu kéo không"
+        //   vẫn hiểu là chuyện đang kể), đang nói chuyện sức khoẻ thì giữ mạch sức khoẻ.
+        const v5 = v5Reply(raw, { last: lastA?.content, lastHeart: lastA?.heart, inHealth: !!hCtx, healthLabel: lastA?.health?.label });
+        if (v5) return localReply(q, { role: "assistant", content: v5, local: true, ...(lastA?.heart && !lastA.heart.startsWith("ev:") ? { heart: lastA.heart, heartDepth: (lastA.heartDepth ?? 0) + 1, story: lastA.story } : {}), ...keepHealth });
         const ex =
           v4Reply(q, { last: lastA?.content, hist: msgs.filter((m) => m.role === "user").slice(-24).map((m) => m.content), lastHeart: lastA?.heart, lastHealth: !!hCtx }) ??
           safetyNowReply(q) ??
@@ -2214,7 +2239,7 @@ export function AiChat({
                 "Để chắc ăn, bạn chọn giúp Lomi câu gần đúng nhất nha 😊",
               ])
           : en
-            ? "That's outside what Lomi knows 😅 I'm best at how to use the app, business tips and tarot. Try asking like “how do I claim an offer”, see the Guide (/huong-dan), or reach a human via Profile → ⋯ → Help & Contact."
+            ? englishFallback(typed)
             : "Câu này nằm ngoài những gì Lomi biết rồi 😅 Lomi rành nhất về cách dùng Liên Minh Liên Doanh, tư vấn kinh doanh và bói Tarot. Bạn thử hỏi kiểu “làm sao nhận ưu đãi”, xem Hướng dẫn (/huong-dan), hoặc cần người thật hỗ trợ thì vào Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha.",
         local: true,
         quick: chips,

@@ -81,6 +81,8 @@ export type ChatOpts = {
   history?: Partial<Turn>[];
   /** Cố định phần ngẫu nhiên (Lomi chọn ngẫu nhiên giữa vài câu đáp) — để bộ đo cho cùng kết quả mỗi lần chạy. */
   seed?: number;
+  /** Ngôn ngữ giao diện app (22/10) — "en" để chạy Lomi ở chế độ tiếng Anh như người dùng đã đổi ngôn ngữ trong app. */
+  lang?: "vi" | "en";
 };
 function seeded(seed: number) {
   let a = seed >>> 0;
@@ -105,6 +107,7 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
   await (await import("@/lib/lomiViRestore")).loadViModel(); // từ điển khôi phục dấu (10/10) — app tải sẵn lúc mở trang
   cleanup();
   localStorage.clear();
+  if (opts.lang) localStorage.setItem("lang", opts.lang);
   const pre = opts.history ?? [];
   if (pre.length) localStorage.setItem(`ai-assistant-history:${UID}`, JSON.stringify(pre));
   Element.prototype.scrollIntoView = () => {};

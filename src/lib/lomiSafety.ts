@@ -86,11 +86,22 @@ export type SafetyCtx = {
   addr?: Addr | null;
   /** Đang nói dở chuyện này (lượt trước Lomi đã đáp một câu an toàn) — câu lược chủ ngữ ("không cho e đi chơi với bạn") vẫn là kể tiếp. */
   inHarm?: Harm;
+  /** (22/10) Đang xét từng VẾ của một tin dài mà cả tin có nhắc người yêu / vợ chồng. */
+  partnerHint?: boolean;
 };
 
 /** Câu có kể chuyện bị đánh / bị doạ / bị kiểm soát không. Trả null nếu không (hoặc câu phủ định: "ảnh chưa bao giờ đánh e"). */
 export function harmOf(raw: string, f: Frame | null, ctx: SafetyCtx = {}): Harm | null {
-  const h = harmOf0(raw, f, ctx);
+  let h = harmOf0(raw, f, ctx);
+  // 22/10 (QA V5): tin DÀI kể nhiều chuyện ("người yêu a hay xem điện thoại a, đòi mật khẩu facebook, a đi đâu cũng phải báo…")
+  //   trước đây bị bỏ qua hẳn (quá 28 chữ) → xét từng vế.
+  if (!h && txt(raw).words > 28) {
+    const partnerHint = !!HAS_PARTNER(txt(raw));
+    for (const seg of raw.split(/[,.;!?\n]+|\s+(?:nhưng|mà|rồi|với lại)\s+/u).map((x) => x.trim()).filter((x) => x.split(/\s+/).length >= 3)) {
+      h = harmOf0(seg, null, { ...ctx, partnerHint });
+      if (h) break;
+    }
+  }
   if (h && h.kind !== "control" && (SCHOOL(txt(raw)) || ctx.inHarm?.setting === "school")) h.setting = "school";
   return h;
 }
@@ -101,7 +112,7 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
   // Người gây ra: chủ ngữ của câu (nếu là người khác), không có thì người đang được nhắc từ lượt trước.
   const subj = f && f.subject === "third" && f.subjectText ? f.subjectText.split(YOU_MARK).join(you) : undefined;
   const actor = subj ?? ctx.inHarm?.actor;
-  const partnerish = !!HAS_PARTNER(t) || !!ctx.inHarm;
+  const partnerish = !!HAS_PARTNER(t) || !!ctx.inHarm || !!ctx.partnerHint;
   const hit = (m: RegExpMatchArray | null) => (m && !negated(t, m) ? m : null);
 
   // Người KỂ là người làm ("a lỡ doạ đánh nó") thì không phải chuyện người kể bị hại → để lớp khác đáp.

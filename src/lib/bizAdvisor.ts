@@ -482,7 +482,7 @@ export function topicFromChip(text: string): BizTopic | undefined {
 // Không đưa con số chung (tuỳ khu vực, diện tích, quy mô — nói đại dễ làm người ta tính sai), chỉ các khoản cần tính + cách tự ước lượng.
 // Ngày tốt xấu theo phong tục thì Lomi không xem — nói thật, gợi ý tiêu chí thực tế.
 const COST_ASK = VN(/\b(bao nhiêu tiền|bao nhiêu vốn|vốn bao nhiêu|cần bao nhiêu|tốn bao nhiêu|mất bao nhiêu|chi phí|cần vốn|nhiêu vốn|bao nhiêu là đủ)\b/);
-const DATE_ASK = VN(/\b(ngày nào|chọn ngày|ngày đẹp|ngày tốt|hôm nào|bữa nào|giờ đẹp|giờ tốt|xem ngày|tháng nào)\b/);
+const DATE_ASK = VN(/\b(ngày nào|chọn ngày|ngày đẹp|ngày tốt|hôm nào|bữa nào|giờ đẹp|giờ tốt|xem ngày|tháng nào|cuối tuần|thứ bảy|chủ nhật|ngày thường)\b/);
 export function bizPractical(text: string, ctx: BizCtx): string | null {
   const n = ` ${normStrict(text, BIZ)} `;
   const noun = nounFor(ctx.type, ctx.noun);

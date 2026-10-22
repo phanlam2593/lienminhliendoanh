@@ -756,9 +756,9 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
 //     "mọi người sẽ tốt hơn nếu không có a" (→ "😄 quý ghê"), "chẳng muốn tiếp tục nữa", "sống vậy chi nữa", "k thiết sống nữa".
 // Nguy cơ TỨC THỜI trong câu khủng hoảng (sợ mất kiểm soát, đang cầm / để sẵn, ngay bây giờ, tối nay).
 const ACUTE = VN(/\b((không|ko|chẳng|hông) (tự )?(kiểm soát|kìm|kiềm chế|cản) (được|nổi)( mình| bản thân)?|mất kiểm soát|ngay (bây giờ|lúc này|bây h|bh)|tối nay|đêm nay|đang cầm|cầm sẵn|để sẵn|chuẩn bị sẵn|đang đứng (trên|ở) (cầu|sân thượng|lan can|mép))\b/);
-const PASSIVE = VN(/\b((chẳng|không|chả|hông|ko|k) (còn )?(muốn|thiết) (tiếp tục|sống|sống tiếp|tồn tại)( nữa| đâu| rồi| luôn| làm gì)*(?= ?$)|ngủ (một giấc|luôn|mãi)( mà)? (không|chẳng|ko) (bao giờ |cần )?(dậy|tỉnh|thức)(?! (nổi|kịp|được))|ngủ( \S+){0,2} (không|chẳng|ko) bao giờ (dậy|tỉnh|thức)|ngủ (luôn|mãi) không dậy|sống (vậy |thế |như vầy |để |làm )?(chi|gì|làm gì) nữa|sống (như )?(vậy|thế|thế này|như vầy|kiểu này) (để )?(làm gì|làm chi|có ích gì)|(ước gì|giá như|ước) (mình |anh |em |a |e |tôi |tui )?(chưa từng|chưa bao giờ|không|chẳng) (được )?sinh ra|(mọi người|gia đình|cả nhà|ai cũng|bố mẹ|ba mẹ|vợ con|người ta) (sẽ )?(tốt|vui|nhẹ nhõm|nhẹ gánh|đỡ khổ|sướng|hạnh phúc) hơn (nếu|khi) (không có|thiếu|vắng|mất) (a|anh|em|e|mình|tôi|tui|t|tao|tớ)|(chẳng|không|chả|ko|k) (còn )?thiết sống|chẳng thiết gì nữa|không còn gì để (sống|mất)|muốn (đi|ngủ) (luôn|mãi) cho xong|chết quách (cho|đi))\b/);
+const PASSIVE = VN(/\b((chẳng|không|chả|hông|ko|k) (còn )?(muốn|thiết) (tiếp tục|sống|sống tiếp|tồn tại)( nữa| đâu| rồi| luôn| làm gì)*(?= ?$)|ngủ (một giấc|luôn|mãi)( mà)? (không|chẳng|ko) (bao giờ |cần )?(dậy|tỉnh|thức)(?! (nổi|kịp|được))|ngủ( \S+){0,2} (không|chẳng|ko) bao giờ (dậy|tỉnh|thức)|ngủ (luôn|mãi) không dậy|sống (vậy |thế |như vầy |để |làm )?(chi|gì|làm gì) nữa|sống (như )?(vậy|thế|thế này|như vầy|kiểu này) (để )?(làm gì|làm chi|có ích gì)|(ước gì|giá như|ước) (mình |anh |em |a |e |tôi |tui )?(chưa từng|chưa bao giờ|không|chẳng) (được )?sinh ra|(mọi người|gia đình|cả nhà|ai cũng|bố mẹ|ba mẹ|vợ con|người ta) (sẽ )?(tốt|vui|nhẹ nhõm|nhẹ gánh|đỡ khổ|sướng|hạnh phúc) hơn (nếu|khi) (không có|thiếu|vắng|mất) (a|anh|em|e|mình|tôi|tui|t|tao|tớ)|(chẳng|không|chả|ko|k) (còn )?thiết sống|chẳng thiết gì nữa|không còn gì để (sống|mất)|muốn (đi|ngủ) (luôn|mãi) cho xong|chết quách (cho|đi)|sống (cũng )?(chẳng|chả|không) (để )?(làm gì|làm chi)|sống (cũng )?(chẳng|chả|không) (có )?(ý nghĩa|nghĩa lý) gì)\b/);
 // (2) Tín hiệu VỪA — hỏi thẳng, nhẹ nhàng (lời hỏi kết bằng "…không muốn sống nữa?" để AiAssistant nhận câu xác nhận kế tiếp).
-const CHECKIN = VN(/\b((chỉ )?muốn biến mất (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)|muốn biến mất một thời gian|(là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi)\b/);
+const CHECKIN = VN(/\b((chỉ )?muốn biến mất (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)|muốn biến mất một thời gian|(là|như|thành) (một )?gánh nặng|chỉ làm phiền mọi người|không ai cần (a|anh|em|e|mình|tôi|tui)|(buồn(?! ngủ| cười)|chán|khổ|cô đơn|tuyệt vọng|đau khổ|bế tắc|tủi) (\S+ )?muốn chết|muốn buông xuôi (hết|tất cả)|hay là thôi( cho rồi| đi| vậy)*(?= ?$)|(nghĩ|tính) hay là thôi|nếu (mình|anh|a|em|e|tôi|tui|t) (biến mất|chết|không còn|đi mất)( đi)?( thì)?( cũng)? (chẳng|không|chả) (có )?ai (để ý|quan tâm|buồn|nhận ra|cần|thấy|tiếc)|(chẳng|không|chả) (có )?ai (để ý|quan tâm|nhận ra|buồn) (nếu|khi) (mình|anh|a|em|e|tôi|tui) (biến mất|chết|không còn))\b/);
 // (3) NÓI QUÁ về trạng thái cơ thể / chuyện thường ("đói muốn chết", "nóng muốn chết luôn", "mệt muốn chết", "chết cười")
 //     — tiếng Việt dùng "muốn chết" như "rất". Trước đây những câu này nhận lời hỗ trợ khủng hoảng kèm đường dây nóng.
 const HYPER_STATE = "đói|no|nóng|lạnh|rét|mệt|buồn ngủ|ngủ|đau|nhức|mỏi|cười|xấu hổ|ngại|quê|mắc cỡ|sợ|run|hồi hộp|thèm|tức|bực|ghen|ngứa|khát|nhớ|thích|vui|sướng|ngon|đẹp|dễ thương|cute|nắng|kẹt xe|ồn|thi|học|làm|bận|ế|chờ|đợi";
@@ -787,14 +787,28 @@ export function crisisCheckIn(text: string): ChatReply | null {
   const n = ` ${normalizeVi(text)} `;
   if (!CHECKIN.test(n) || crisisReply(text, "vi") || hyperboleOnly(text) !== null) return null;
   // 21/10 (QA V2 Q96): "chỉ muốn biến mất vài ngày" — thường là muốn nghỉ, trốn đi một thời gian; không bật lời khủng hoảng, nhưng vẫn hỏi thẳng.
-  if (VN(/\bbiến mất\b/).test(n))
+  if (VN(/\bbiến mất (vài|mấy|một|1|ít|dăm) (ngày|hôm|tuần|bữa|tháng|thời gian)\b/).test(n))
     return { text: "Mệt tới mức chỉ muốn biến mất vài ngày thì chắc bạn đã cạn sức lắm rồi 🥺 Muốn trốn đi, không phải gặp ai một thời gian là cảm giác rất người.\n\nLomi hỏi thẳng một câu nha, vì Lomi quan tâm: “biến mất” ở đây là muốn được nghỉ ngơi một mình — hay có lúc nào bạn nghĩ tới chuyện không muốn sống nữa?" };
   return { text: CHECKIN_TEXT };
 }
 
+// 22/10 (QA V5): người dùng nói rõ là KHÔNG có ý định làm hại bản thân ("không, a không có ý định làm hại bản thân đâu, chỉ mệt thôi",
+//   "a chỉ mệt thôi, không làm gì dại đâu") — trước đây chính câu chối này bật lời hỗ trợ khủng hoảng (vì có cụm "làm hại bản thân").
+const DENY = VN(/\b(không|ko|chẳng|chả|đâu có|hông|sẽ không|không hề) (có )?(ý định|định|muốn|tính|nghĩ tới|nghĩ đến|nghĩ) (làm hại|tự hại|tự tử|tự sát|tự làm hại|chết|làm gì dại|làm chuyện dại)( dột)?( bản thân| mình)?( đâu)?|\b(không|ko|chẳng|sẽ không|hông) (làm|nghĩ) (gì|chuyện|điều) (dại|dại dột|ngu ngốc|dại khờ)( đâu)?/);
+const stripDeny = (n: string) => n.replace(new RegExp(DENY.source, DENY.flags.includes("g") ? DENY.flags : `${DENY.flags}g`), " ");
+/** Câu CHỐI có ý định tự hại (không kèm tín hiệu nào khác) → lời đáp nhẹ nhàng, vẫn để ngỏ đường tìm giúp đỡ. */
+export function crisisDenial(text: string): ChatReply | null {
+  const n = ` ${normalizeVi(text)} `;
+  if (!DENY.test(n)) return null;
+  const rest = stripDeny(n);
+  if (PASSIVE.test(rest) || CHECKIN.test(rest) || RULES[0].re.test(rest)) return null;
+  return { text: "Dạ, Lomi hiểu rồi — bạn đang mệt chứ không có ý làm gì dại, cảm ơn bạn đã nói rõ để Lomi yên tâm 💚 Mệt tới mức đó cũng đáng được nghỉ ngơi và chia sẻ. Nếu có lúc nào thấy nặng nề hơn, cứ nói Lomi hoặc một người bạn tin nha.\n\nGiờ điều gì đang làm bạn mệt nhất?" };
+}
+
 /** Người dùng nói muốn tự tử / làm hại bản thân — kiểm tra TRƯỚC mọi luồng khác. */
 export function crisisReply(text: string, lang: L): ChatReply | null {
-  const n = ` ${normalizeVi(text)} `;
+  const n0 = ` ${normalizeVi(text)} `;
+  const n = DENY.test(n0) ? stripDeny(n0) : n0;
   if (lang !== "en") {
     const oc = otherCrisis(text);
     if (oc) return oc;

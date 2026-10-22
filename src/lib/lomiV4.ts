@@ -20,22 +20,28 @@ const DROP = /(bỏ|gác|thôi|dẹp) (chuyện|vụ|cái) (mở )?(quán|tiệm
 const RESUME = /(quay lại|trở lại|tiếp|nói tiếp|bàn tiếp) (chuyện|vụ|cái)? ?(mở )?(quán|tiệm|cửa hàng|shop)/u;
 type Plan = { cap: number; rent?: number; rentAlt?: number; once: { label: string; v: number }[]; askDeposit?: boolean };
 const ONCE: [RegExp, string][] = [
-  [/(sửa sang|sửa chữa|sửa quán|trang trí|decor|thi công)/u, "sửa sang"],
+  [/(sửa sang|sửa chữa|sửa quán|thi công)/u, "sửa sang"],
+  [/(trang trí|decor)/u, "trang trí"],
   [/(đặt cọc|tiền cọc|\bcọc\b)/u, "tiền cọc"],
   [/(máy móc|thiết bị|bàn ghế|dụng cụ)/u, "máy móc, thiết bị"],
   [/(nguyên liệu|hàng nhập|nhập hàng)/u, "nguyên liệu ban đầu"],
   [/(giấy phép|thủ tục)/u, "giấy phép"],
 ];
-function readPlan(msgs: string[]): { plan: Plan | null; active: boolean; dropped: boolean } {
+function readPlan(msgs: string[]): { plan: Plan | null; active: boolean; dropped: boolean; capAt: number } {
   let plan: Plan | null = null;
   let active = false;
   let dropped = false;
-  for (const raw of msgs) {
+  let capAt = -1;
+  let shopCtx = false; // vừa kể định mở quán / tiệm ("a muốn mở tiệm bánh") — câu sau "vốn khoảng 150 triệu" là vốn của quán đó
+  for (const [i, raw] of msgs.entries()) {
     const t = raw.normalize("NFC").toLowerCase();
+    if (SHOP.test(t) && /(mở|kinh doanh|khai trương|làm)/u.test(t)) shopCtx = true;
+    const cap0 = t.match(new RegExp(`^(?:vốn|tiền vốn|vốn liếng)(?:\\s+(?:khoảng|tầm|chừng|có|là|được))?\\s+${TR}`, "u"));
+    if (cap0 && shopCtx && !plan) { plan = { cap: num(cap0[1]), once: [] }; active = true; capAt = i; continue; }
     if (plan && DROP.test(t)) { active = false; dropped = true; continue; }
     if (plan && RESUME.test(t)) { active = true; dropped = false; continue; }
     const cap = t.match(new RegExp(`(?:mở|làm|kinh doanh|vốn|có)[^.?!]{0,40}?(?:với|vốn|có)\\s+${TR}`, "u")) ?? t.match(new RegExp(`vốn\\s+${TR}`, "u"));
-    if (cap && SHOP.test(t)) { plan = { cap: num(cap[1]), once: [] }; active = true; continue; }
+    if (cap && SHOP.test(t)) { plan = { cap: num(cap[1]), once: [] }; active = true; capAt = i; continue; }
     if (!plan || !active) continue;
     const m = t.match(new RegExp(TR, "u"));
     if (/(mặt bằng|tiền thuê|thuê)/u.test(t) && m && /(tháng|tăng lên|giảm xuống|lên \d)/u.test(t)) {
@@ -44,10 +50,19 @@ function readPlan(msgs: string[]): { plan: Plan | null; active: boolean; dropped
       continue;
     }
     const kind = ONCE.find(([re]) => re.test(t));
+    // "cọc 2 tháng tiền nhà" → 2 × tiền thuê đã kể
+    const mon = t.match(/(\d+|một|hai|ba)\s*tháng/u);
+    if (kind && kind[1] === "tiền cọc" && !m && mon && plan.rent) {
+      const k = ({ "một": 1, "hai": 2, "ba": 3 } as Record<string, number>)[mon[1]] ?? Number(mon[1]);
+      plan.once = plan.once.filter((o) => o.label !== "tiền cọc");
+      plan.once.push({ label: "tiền cọc", v: k * plan.rent });
+      plan.askDeposit = false;
+      continue;
+    }
     if (kind && m) { plan.once = plan.once.filter((o) => o.label !== kind[1]); plan.once.push({ label: kind[1], v: num(m[1]) }); plan.askDeposit = false; continue; }
     if (kind && !m && kind[1] === "tiền cọc") plan.askDeposit = true;
   }
-  return { plan, active, dropped };
+  return { plan, active, dropped, capAt };
 }
 const left = (p: Plan) => p.cap - p.once.reduce((a, b) => a + b.v, 0);
 const leftExpr = (p: Plan) => (p.once.length ? `${fmt(p.cap)} − ${p.once.map((o) => `${fmt(o.v)} (${o.label})`).join(" − ")} = **${fmt(left(p))}**` : `**${fmt(p.cap)}**`);
@@ -62,8 +77,8 @@ export function shopLedgerReply(q: string, hist: string[]): string | null {
   const p = now.plan;
   if (!p) return null;
   // vừa kể vốn
-  if (readPlan([q]).plan) {
-    return `Mở quán với vốn **${fmt(p.cap)}** — Lomi ghi lại nha 📝 Bạn kể dần các khoản (mặt bằng, sửa sang, tiền cọc, máy móc, nguyên liệu…) Lomi sẽ cộng trừ giúp. Quán định bán gì vậy?`;
+  if (now.capAt === hist.length) {
+    return `Lomi ghi lại nha 📝 Vốn: **${fmt(p.cap)}**. Bạn kể dần các khoản (mặt bằng, sửa sang, tiền cọc, máy móc, nguyên liệu…) Lomi sẽ cộng trừ giúp. Mặt bằng thuê khoảng bao nhiêu một tháng vậy?`;
   }
   if (before.plan && before.active && !now.active && DROP.test(t)) return "Okie, mình gác chuyện quán lại nha 😊 Bạn muốn hỏi chuyện gì nè?";
   if (!now.active) return null;
