@@ -239,6 +239,8 @@ function teenReply(q: string, c: V8Ctx): V8Reply | null {
   const now = TEEN.test(n) && WITHDRAW.test(n);
   const ctx = now || anyIn(TEEN, c.hist.slice(-4));
   if (!ctx) return null;
+  // (con bị bạn trêu / bắt nạt → mạch "bị bắt nạt" có lời khuyên riêng)
+  if (c.lastHeart === "bullied" || anyIn(VN(/\bbị (bạn |bạn bè |mấy đứa |tụi |các bạn )?(trêu chọc|chọc ghẹo|trêu|cô lập|tẩy chay|bắt nạt)\b/), [...c.hist.slice(-4), q])) return null;
   const H = "parenting";
   if (VN(/\b(nói (chuyện )?(với )?(con|nó) (sao|thế nào|như thế nào)|làm sao (để )?(con|nó) (chịu )?(nói|mở lòng|kể)|nên làm gì|nên làm sao|phải làm sao)\b/).test(n))
     return { heart: H, text: "Vài cách giúp con tuổi này chịu mở lòng hơn nè 💚\n• **Chọn lúc thư thả, đi cạnh nhau** thay vì ngồi đối diện tra hỏi — lúc chở con đi đâu, cùng ăn món con thích, đi bộ\n• Mở đầu bằng **quan tâm, không phải điểm số**: “Dạo này ba thấy con hay mệt, ba lo cho con. Có chuyện gì làm con buồn không?”\n• **Nghe nhiều hơn khuyên**, đừng vội ngắt lời hay sửa ngay; con nói ít cũng cảm ơn con đã kể\n• Tôn trọng chút riêng tư của con, nhưng giữ vài nếp chung (ăn cơm cùng nhau, giờ cất điện thoại)\n• Hỏi khéo thầy cô chủ nhiệm hoặc bạn thân của con xem ở trường có chuyện gì không\n\nNếu con không chịu nói chuyện với ba mẹ, gặp chuyên gia tâm lý học đường hay bác sĩ tâm lý cũng là cách hay — đôi khi con dễ nói với người ngoài hơn." };

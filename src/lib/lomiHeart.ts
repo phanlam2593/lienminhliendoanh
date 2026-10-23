@@ -11,6 +11,7 @@ import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
 import { V7_ADVICE_HINTS, V7_HINTS, V7_THEMES } from "@/lib/lomiHeartV7";
 import { V8_HINTS } from "@/lib/lomiHeartV8";
+import { V9_HINTS } from "@/lib/lomiHeartV9";
 import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
 import { dropNegated, VR, VN } from "@/lib/viMatch";
 
@@ -940,11 +941,17 @@ function chipsFor(_t: Theme | undefined): string[] {
     grief: VN(/\b(ba|bố|cha|mẹ|má|ông|bà|chồng|vợ|con)( \S+){0,2} mất (được |đã |cũng )?(\d+|một|hai|ba|mấy|vài) (ngày|tuần|tháng|năm)\b/),
     lonely: VN(/\b(không|chẳng|chưa|chả) quen (ai|được ai)|không có (bạn|bạn bè) (nào|gì)|ngại (làm quen|kết bạn)|chỉ ở (trong )?phòng|ở (trong )?phòng (một mình|cả ngày|suốt)\b/),
     study: VN(/\b(thi đại học|thi tốt nghiệp|thi vào lớp|sắp thi|học mà không vào|cầm sách là)\b/),
+    marrypressure: VN(/\b(giục|hối|thúc|ép|bắt) (\S+ ){0,2}(lấy chồng|lấy vợ|kết hôn|cưới vợ|cưới chồng|lập gia đình)\b/),
+    bullied: VN(/\bbị (bạn |bạn bè |mấy đứa |tụi |các bạn |bạn cùng lớp )?(trêu chọc|chọc ghẹo|trêu|cô lập|tẩy chay|bắt nạt)\b/),
     addict: VN(/\b(chơi game (tới|đến|tận|tới tận|đến tận) (\d+|khuya|sáng|gần sáng)|thức (khuya|tới sáng|đến sáng) (để )?chơi game|bỏ game|cai game)\b/),
   };
   for (const [id, re] of Object.entries(widen)) {
     const t = THEMES.find((x) => x.id === id);
     if (t) t.re = new RegExp(`${t.re.source}|${re.source}`, t.re.flags);
+  }
+  for (const [id, hs] of Object.entries(V9_HINTS)) {
+    const t = THEMES.find((x) => x.id === id);
+    if (t) t.hint = [...hs, ...(t.hint ?? [])];
   }
   for (const [id, hs] of Object.entries(V8_HINTS)) {
     const t = THEMES.find((x) => x.id === id);
@@ -961,7 +968,7 @@ function chipsFor(_t: Theme | undefined): string[] {
 }
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
-const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt"];
+const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt", "inlaw", "marrypressure"];
 /** 21/10: chủ đề cụ thể được ưu tiên — các lớp chung hơn (khung câu, thẻ bệnh, phân tích cảm xúc) nhường cho chúng. */
 export const PRIORITY_THEMES: readonly string[] = FIRST.filter((x) => x !== "grief" && x !== "suspect");
 function themeOf(n: string): Theme | undefined {

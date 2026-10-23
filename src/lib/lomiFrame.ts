@@ -282,7 +282,11 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   // "vợ a đang bầu", "chị e có thai rồi" — tin vui, không phải chuyện ốm.
   // 15/10 (audit): mang thai KÈM triệu chứng ("bà bầu bị sốt", "vợ a mang thai bị đau bụng") không phải tin vui để chúc mừng — để lớp sức khoẻ trả lời.
   if (p.cls === "preg" && person && !f.neg && c.sxOther) return null;
-  if (p.cls === "preg" && person && !f.neg) return { intent: "frame:third_preg", talk: true, text: `${subj} ${p.ongoing ? "đang " : ""}${p.head} hả 😄 Chúc mừng nha! Được mấy tháng rồi bạn?` };
+  // (23/10 QA V9: đã nói số tháng — "vợ a bầu 7 tháng" — thì không hỏi lại "được mấy tháng rồi")
+  if (p.cls === "preg" && person && !f.neg) {
+    const mo = f.raw.normalize("NFC").match(/(\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín) (tháng|tuần)/iu);
+    return { intent: "frame:third_preg", talk: true, text: mo ? `${subj} ${p.ongoing ? "đang " : ""}${p.head} ${mo[0]} rồi hả 😄 Chúc mừng nha! Giai đoạn này mẹ bầu thấy trong người sao rồi bạn?` : `${subj} ${p.ongoing ? "đang " : ""}${p.head} hả 😄 Chúc mừng nha! Được mấy tháng rồi bạn?` };
+  }
   if (p.cls === "death" && (person || pet))
     // (23/10: mở mạch tâm sự "mất người thân" để những câu kể sau — hối hận, lo cho người còn lại, hỏi cách nguôi ngoai — được đáp đúng chuyện)
     return { intent: "frame:third_loss", talk: true, keepHeart: true, openHeart: "grief", text: `${subj} ${p.recent ? "mới " : ""}${p.head} hả 🥺 Lomi chia buồn với bạn nha. ${pet ? "Bé ở với bạn lâu chưa?" : "Bạn đang thấy thế nào, kể Lomi nghe với."}` };

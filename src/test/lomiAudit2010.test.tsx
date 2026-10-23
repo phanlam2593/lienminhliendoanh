@@ -1719,3 +1719,151 @@ describe("QA V8 — an toàn của người khác & hội thoại nhiều lượ
     expect(r[3].content).not.toMatch(/Anh muốn chuyện này đi theo hướng nào/);
   }, 120000);
 });
+
+describe("QA V9 — tarot hỏi tiếp, trẻ nhỏ / bà bầu / người già, app, chuyện phiếm", () => {
+  it("vừa xem bài mà hỏi 'có quay lại không' / 'có thăng chức không' → vẫn là hỏi bài (không rẽ sang nhớ người cũ / chúc mừng)", async () => {
+    const a = await chat(["Xem tarot giúp a chuyện tình cảm", "A với người yêu cũ có quay lại không"], { seed: 7 });
+    expect(a[1].tarot).toBeTruthy();
+    expect(a[1].heart).toBeUndefined();
+    const b = await chat(["Bói cho a xem công việc tháng này", "Có thăng chức không"], { seed: 7 });
+    expect(b[1].tarot).toBeTruthy();
+    expect(b[1].content).not.toMatch(/Tuyệt vời quá 🎊/);
+  }, 120000);
+  it("bà bầu 7 tháng phù chân + đau đầu nhiều → cấp cứu sản khoa (tiền sản giật); thêm mờ mắt → nhắc đi ngay; không hỏi lại 'được mấy tháng'", async () => {
+    const r = await chat(["Vợ a bầu 7 tháng", "Tự nhiên thấy phù chân, đau đầu nhiều", "Mắt hơi mờ"], { seed: 7 });
+    expect(r[0].content).not.toMatch(/Được mấy tháng rồi/);
+    expect(r[1].content).toMatch(/^🚨/);
+    expect(r[1].content).toMatch(/tiền sản giật/);
+    expect(r[2].content).toMatch(/cấp cứu sản khoa ngay bây giờ/);
+  }, 120000);
+  it("bầu 5 tháng hay chuột rút → thường gặp khi mang thai; 'có sao không' → không ảnh hưởng em bé + khi nào đi khám", async () => {
+    const r = await chat(["Vợ a đang mang bầu 5 tháng", "Dạo này hay bị chuột rút", "Có sao không"], { seed: 7 });
+    expect(r[1].content).toMatch(/rất thường gặp khi mang thai/);
+    expect(r[2].content).toMatch(/không ảnh hưởng tới em bé/);
+  }, 120000);
+  it("bé 8 tháng bị ho: không đọc '8 tháng' thành đã ho 8 tháng; ho về đêm nói về bé; thở nhanh → đi khám hôm nay", async () => {
+    const r = await chat(["Con a 8 tháng bị ho", "Ho nhiều về đêm", "Thở hơi nhanh", "Có sao không em"], { seed: 7 });
+    expect(r[0].content).not.toMatch(/Bị lâu như vậy rồi/);
+    expect(r[0].content).toMatch(/50 lần\/phút/);
+    expect(r[1].content).not.toMatch(/^Bạn đang bị/);
+    expect(r[2].content).toMatch(/^🚨/);
+    expect(r[3].content).toMatch(/đi khám trong hôm nay/);
+  }, 120000);
+  it("bé 3 tuổi sốt → vẫn chơi (dấu hiệu tốt) → uống hạ sốt chưa hạ (không cho thêm liều) → có cần đi viện không", async () => {
+    const r = await chat(["Con a 3 tuổi bị sốt 39 độ", "Bé vẫn chơi", "Uống hạ sốt rồi mà chưa hạ", "Có cần đi viện không"], { seed: 7 });
+    expect(r[1].content).toMatch(/dấu hiệu tốt/);
+    expect(r[2].content).toMatch(/30–60 phút/);
+    expect(r[2].content).toMatch(/Đừng cho uống thêm liều/);
+    expect(r[3].content).toMatch(/quá 2–3 ngày/);
+    for (const m of r.slice(1)) expect(m.content).not.toMatch(/NGƯỜI LỚN|Sốt ở người lớn/);
+  }, 120000);
+  it("bà ngã trong nhà tắm → đau hông không đứng dậy được → nghi gãy cổ xương đùi, gọi 115, đừng đỡ dậy (không ra danh sách sỏi thận)", async () => {
+    const r = await chat(["Bà a bị ngã trong nhà tắm", "Giờ đau hông không đứng dậy được"], { seed: 7 });
+    expect(r[1].content).toMatch(/cổ xương đùi/);
+    expect(r[1].content).toMatch(/115/);
+    expect(r[1].content).not.toMatch(/Sỏi thận/);
+  }, 60000);
+  it("bỏng nước sôi ở tay → phồng rộp (đừng chọc vỡ, nên đi khám) → kem đánh răng: nói thẳng không nên", async () => {
+    const r = await chat(["A bị bỏng nước sôi ở tay", "Phồng rộp", "Có nên bôi kem đánh răng không"], { seed: 7 });
+    expect(r[1].unk).toBeFalsy();
+    expect(r[1].content).toMatch(/Đừng chọc vỡ/);
+    expect(r[1].content).toMatch(/đi khám/);
+    expect(r[2].content).toMatch(/^\*\*Không nên bôi kem đánh răng\*\*/);
+  }, 120000);
+  it("buồn, trống rỗng kéo dài 1 tháng → nên được đánh giá, mời sàng lọc, hỏi thẳng nhẹ nhàng (không hỏi lại 'lâu chưa')", async () => {
+    const r = await chat(["A buồn quá", "Không biết vì sao", "Chỉ thấy trống rỗng", "Kéo dài 1 tháng rồi"], { seed: 7 });
+    expect(r[3].content).toMatch(/trên 2 tuần/);
+    expect(r[3].content).toMatch(/sàng lọc/);
+    expect(r[3].content).toMatch(/không muốn sống nữa\?$/);
+    expect(r[3].content).not.toMatch(/xảy ra lâu chưa/);
+  }, 120000);
+  it("ông 80 tuổi → hỏi tiếp (không 'chưa hiểu'); táo bón nói về ông", async () => {
+    const r = await chat(["Ông a 80 tuổi", "Hay bị táo bón"], { seed: 7 });
+    expect(r[0].unk).toBeFalsy();
+    expect(r[1].content).toMatch(/^Ông đang bị/);
+  }, 60000);
+  it("quên mật khẩu → không nhận được email: app không gửi email, liên hệ admin", async () => {
+    const r = await chat(["A quên mật khẩu app", "Làm sao lấy lại", "A không nhận được email"], { seed: 7 });
+    expect(r[2].content).toMatch(/không gửi email/);
+  }, 60000);
+  it("không thấy thông báo → bật rồi → dùng iPhone: thêm vào Màn hình chính, iOS 16.4", async () => {
+    const r = await chat(["Sao a không thấy thông báo", "A bật rồi mà", "Dùng iphone"], { seed: 7 });
+    expect(r[1].content).toMatch(/Đồng bộ lại/);
+    expect(r[2].content).toMatch(/Màn hình chính/);
+    expect(r[2].content).toMatch(/16\.4/);
+  }, 60000);
+  it("'em có phải người thật không' → trợ lý tự động; 'làm sao biết người thật lòng' không bị bắt nhầm", async () => {
+    expect((await last(["Em có phải người thật không"])).content).toMatch(/trợ lý tự động/);
+    expect((await last(["Làm sao biết một người thật lòng yêu mình?"])).content).not.toMatch(/trợ lý tự động/);
+  }, 60000);
+  it("kể chuyện cười → 'nữa đi' kể câu khác → 'không buồn cười' gỡ lại bằng câu khác", async () => {
+    const r = await chat(["Kể chuyện cười đi", "Nữa đi", "Không buồn cười"], { seed: 7 });
+    expect(r[1].unk).toBeFalsy();
+    expect(r[1].content).not.toBe(r[0].content);
+    expect(r[1].content).not.toMatch(/Ý bạn là sao|Ý anh là sao/);
+    expect(r[2].content).toMatch(/nhạt thật/);
+  }, 60000);
+  it("trời lạnh ăn gì cho ấm → gần chợ (không 'chưa hiểu')", async () => {
+    const r = await chat(["Hôm nay trời Đà Lạt lạnh ghê", "Ăn gì cho ấm", "Gần chợ"], { seed: 7 });
+    expect(r[1].content).toMatch(/Lẩu/);
+    expect(r[2].content).toMatch(/chợ đêm/);
+  }, 60000);
+  it("chỉ nấu canh chua → có công thức", async () => {
+    expect((await last(["Chỉ a nấu canh chua"])).content).toMatch(/Nguyên liệu/);
+  }, T);
+  it("mất ví có căn cước + thẻ ngân hàng → khoá thẻ, báo mất căn cước ở công an phường", async () => {
+    const r = await chat(["A bị mất ví", "Trong đó có căn cước với thẻ ngân hàng", "Giờ a phải làm sao"], { seed: 7 });
+    expect(r[2].content).toMatch(/khoá thẻ/);
+    expect(r[2].content).toMatch(/Báo mất căn cước/);
+  }, 60000);
+  it("hàng xóm mở nhạc to tới 1h sáng → nói rồi không nghe → báo ai (tổ trưởng, công an phường)", async () => {
+    const r = await chat(["Hàng xóm a mở nhạc to đến 1h sáng", "Nói rồi mà không nghe", "A có thể báo ai"], { seed: 7 });
+    for (const m of r) expect(m.unk).toBeFalsy();
+    expect(r[2].content).toMatch(/tổ trưởng tổ dân phố/);
+    expect(r[2].content).toMatch(/công an phường/);
+  }, 120000);
+  it("tiêu hết lương, còn 10 ngày → làm sao: chia tiền theo ngày, tránh vay nóng", async () => {
+    const r = await chat(["Tháng này a tiêu hết lương rồi", "Còn 10 ngày nữa mới có lương", "A phải làm sao"], { seed: 7 });
+    expect(r[1].content).toMatch(/10 ngày/);
+    expect(r[2].content).toMatch(/chia đều theo số ngày/);
+    expect(r[2].content).toMatch(/vay nóng/);
+  }, 60000);
+  it("tiết kiệm mua nhà, lương 15 triệu → để dành bao nhiêu (20% ≈ 3 triệu)", async () => {
+    const r = await chat(["A muốn tiết kiệm mua nhà", "Lương a 15 triệu", "Mỗi tháng nên để dành bao nhiêu"], { seed: 7 });
+    expect(r[2].content).toMatch(/50\/30\/20/);
+    expect(r[2].content).toMatch(/\*\*3 triệu\/tháng\*\*/);
+  }, 60000);
+  it("đặt xe → có giao đồ ăn không (có, chọn Giao đồ ăn) → phí bao nhiêu (giá tham khảo, app không thu phí)", async () => {
+    const r = await chat(["Đặt xe trên app sao em", "Có giao đồ ăn không", "Phí bao nhiêu"], { seed: 7 });
+    expect(r[1].content).toMatch(/^Có nha/);
+    expect(r[2].content).toMatch(/app không thu phí/);
+    expect(r[2].faqId).not.toBe("free");
+  }, 60000);
+  it("quà sinh nhật vợ thích handmade → gợi ý → gợi ý thêm (không lặp, không ra 'xem trang cá nhân')", async () => {
+    const r = await chat(["A muốn tặng quà sinh nhật vợ", "Vợ a thích đồ handmade", "Gợi ý giúp a"], { seed: 7 });
+    expect(r[1].content).toMatch(/handmade/);
+    expect(r[2].content).not.toBe(r[1].content);
+    expect(r[2].faqId).toBeUndefined();
+  }, 60000);
+  it("mua phải xe gian → công an giữ xe: không ra FAQ báo cáo / Quẹt", async () => {
+    const r = await chat(["A mới mua xe máy cũ", "Bị lừa xe gian", "Giờ công an giữ xe"], { seed: 7 });
+    expect(r[1].faqId).toBeUndefined();
+    expect(r[2].faqId).toBeUndefined();
+    expect(r[2].content).toMatch(/biên bản tạm giữ/);
+  }, 60000);
+  it("mẹ chồng chê, chồng không nói gì → mạch nhà chồng; bị giục lấy chồng → mạch áp lực cưới; con bị trêu → mạch bị bắt nạt", async () => {
+    const a = await chat(["Mẹ chồng em hay chê em nấu ăn dở", "Chồng em không nói gì"], { seed: 7 });
+    expect(a[0].heart).toBe("inlaw");
+    expect(a[1].content).toMatch(/đứng về phía em/);
+    const b = await chat(["Em 25 tuổi bị gia đình giục lấy chồng", "Em chưa muốn", "Mẹ em khóc suốt"], { seed: 7 });
+    expect(b[0].heart).toBe("marrypressure");
+    expect(b[2].content).toMatch(/Mẹ khóc/);
+    const c = await chat(["Con gái a 13 tuổi bị bạn bè trêu chọc", "Nó không muốn đi học", "A nên làm gì"], { seed: 7 });
+    expect(c[0].heart).toBe("bullied");
+    expect(c[2].content).toMatch(/giáo viên chủ nhiệm/);
+  }, 120000);
+  it("tính ly hôn, 2 con nhỏ, sợ ảnh hưởng con → lời khuyên về con (xung đột kéo dài, đừng bắt con chọn phe)", async () => {
+    const r = await chat(["A với vợ đang tính ly hôn", "Có 2 con nhỏ", "A sợ ảnh hưởng tới con"], { seed: 7 });
+    expect(r[2].content).toMatch(/xung đột kéo dài/);
+  }, 60000);
+});

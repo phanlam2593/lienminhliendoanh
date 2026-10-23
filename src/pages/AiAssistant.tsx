@@ -57,6 +57,7 @@ import { honestReply } from "@/lib/lomiHonest";
 import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
 import { v5Reply } from "@/lib/lomiV5";
 import { v8Reply } from "@/lib/lomiV8";
+import { v9Reply } from "@/lib/lomiV9";
 import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTherapy";
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
@@ -256,6 +257,7 @@ const FOLLOW_TOPIC_Q: Record<string, string> = {
   study: "Chuyện học hành của mình sắp tới thế nào?",
 };
 // Chủ đề tâm sự thuần tâm lý — kể từ 2 cảm giác thì phân tích tâm lý (lib/lomiSymptoms) sát hơn.
+const TAROT_YESNO = VN(/\b(có|sẽ)( \S+){0,3} (quay lại|quay về|làm lành|thăng chức|lên chức|tăng lương|lên lương|thành công|đậu|đỗ|cưới|lấy nhau|yêu|thích|gặp lại|gặp được|có người yêu|có ny|giàu|khá lên|tốt lên|tốt hơn|thuận lợi|suôn sẻ|hợp nhau|đến với nhau|chia tay|có việc|xin được việc|trúng|được nhận)( \S+){0,3} (không|ko|k|chứ|hông|hem|hả)\s*\??\s*$/);
 const LOVE_KEYS = new Set(["breakup", "ex", "cheat", "unrequited", "crush", "cold", "fight", "jealous", "longdist", "love", "toxic", "marriage", "single", "situationship", "newlove", "stayorgo", "parentsban", "lies", "spark"]);
 const PSY_THEMES = new Set(["insomnia", "overthink", "anxiety", "panic", "sad", "tired", "lonely", "depress", "selfworth", "angerself", "compare"]);
 const DISHES_BY_ID = Object.fromEntries(DISHES.map((d) => [d.id, d]));
@@ -977,7 +979,13 @@ export function AiChat({
       // 23/10 (QA V8): an toàn của NGƯỜI KHÁC + câu kể tiếp cần ngữ cảnh nhiều lượt (bạn nói muốn chết rồi không bắt máy, bị lừa
       //   chuyển khoản, bé tiêu chảy ít đi tiểu, vợ mới sinh hay khóc, dị ứng rồi sưng môi, nợ + lương, mở quán, người già hay quên,
       //   con tuổi teen thu mình, chăm người bệnh kiệt sức, mới chuyển tới, giảm cân, đăng bài bán hàng) — trước mạch nghe kể / kinh doanh.
-      const v8 = v8Reply(raw, { last: lastA0?.content, hist: msgs.filter((m) => m.role === "user").slice(-6).map((m) => m.content), lastHeart: lastA0?.heart });
+      const v8Hist = msgs.filter((m) => m.role === "user").slice(-6).map((m) => m.content);
+      // 23/10 (QA V9): bà bầu có dấu hiệu nguy hiểm, bé nhỏ ho thở nhanh, bé sốt uống thuốc chưa hạ, người già ngã không đứng dậy được,
+      //   bỏng phồng rộp / bôi kem đánh răng, buồn trống rỗng kéo dài; câu hỏi về chính Lomi, câu hỏi tiếp về app, chuyện cười "nữa đi",
+      //   mất ví, hàng xóm ồn, hết tiền trước kỳ lương, để dành bao nhiêu, quà handmade, nấu canh chua, trời lạnh ăn gì.
+      const v9 = v9Reply(raw, { last: lastA0?.content, hist: v8Hist, lastHeart: lastA0?.heart });
+      if (v9) return localReply(q, { role: "assistant", content: v9.text, local: true, ...(v9.keepHealth ? keepHealth : {}), ...(v9.about ? { about: v9.about } : lastA0?.about ? { about: lastA0.about } : {}), ...(v9.heart ? { heart: v9.heart, heartDepth: (lastA0?.heartDepth ?? 0) + 1 } : {}) });
+      const v8 = v8Reply(raw, { last: lastA0?.content, hist: v8Hist, lastHeart: lastA0?.heart });
       if (v8) return localReply(q, { role: "assistant", content: v8.text, local: true, ...(lastA0?.about ? { about: lastA0.about } : {}), ...(v8.biz ? { biz: v8.biz } : {}), ...(v8.heart ? { heart: v8.heart, heartDepth: (lastA0?.heartDepth ?? 0) + 1 } : {}) });
     }
     if (!forceAi && !en && !crisisReply(q, lang)) {
@@ -1378,7 +1386,9 @@ export function AiChat({
         }
         // 10/10: vừa xem bài xong mà hỏi tiếp một câu QUYẾT ĐỊNH ("vậy a có nên nghỉ việc không?") → vẫn là hỏi bài (như bấm nút "Bói tiếp: …"),
         // không rẽ sang lời khuyên chung chung.
-        if (!en && VN(/(?<![a-z])(có nên|nên hay không|liệu có|bao giờ|khi nào)(?![a-z])/).test(normalizeVi(q)) && q.split(/\s+/).length <= 14 && !isAppish(q)) return doTarot(q.replace(VR(/^(vậy|thế|rồi|còn)\s+/iu), ""), q);
+        // 23/10 (QA V9): câu hỏi CÓ / KHÔNG về một chuyện sắp tới ("a với người yêu cũ có quay lại không", "có thăng chức không")
+        //   ngay sau trải bài cũng là hỏi bài — trước đây rẽ sang tâm sự "nhớ người cũ" / chúc mừng "được thăng chức".
+        if (!en && (VN(/(?<![a-z])(có nên|nên hay không|liệu có|bao giờ|khi nào)(?![a-z])/).test(normalizeVi(q)) || TAROT_YESNO.test(` ${normalizeVi(q)} `)) && q.split(/\s+/).length <= 14 && !isAppish(q) && !tarotHealthGate(q)) return doTarot(q.replace(VR(/^(vậy|thế|rồi|còn)\s+/iu), ""), q);
       }
       // 21/10 (QA V2 phần A): câu đời thường cần ngữ cảnh nhiều lượt — nói gọn lại, tính tiền còn lại, lạm phát + ví dụ,
       //   người có tên trong câu kể, kiến thức nhập môn (tâm lý học, tarot có khoa học không), câu hỏi thực tế khi mở cửa hàng.
@@ -1851,7 +1861,9 @@ export function AiChat({
         const sxCard = sxCardId ? await loadMedTopic(sxCardId) : null;
         if (body && sxCard && (sx1 || namedId)) {
           const again = lastA?.med?.id === sxCard.id || (!!sx1 && !namedId && !!lastA?.sx?.includes(sx1) && lastA.sx.length === 1);
-          const who = patient ?? (carried ? carried.charAt(0).toUpperCase() + carried.slice(1) : null);
+          // (23/10 QA V9: lượt trước vừa nói về bé / ông bà — "con a 8 tháng bị ho" → "ho nhiều về đêm" — thì vẫn là người đó, không "Bạn đang bị")
+          const aboutW = !patient && !carried && fr?.subject !== "self" && lastA0?.about?.kind === "third" && /^(bé|con|ông|bà|mẹ|ba|bố|má|cha|ông nội|bà nội|ông ngoại|bà ngoại)$/u.test(lastA0.about.text) ? lastA0.about.text : null;
+          const who = patient ?? (carried ? carried.charAt(0).toUpperCase() + carried.slice(1) : aboutW ? aboutW.charAt(0).toUpperCase() + aboutW.slice(1) : null);
           // (20/10 audit: tên bệnh lấy theo chữ người dùng gõ có thể dính "bị" — "a bị đau đầu" → "Anh đang bị **bị đau đầu**")
           const label = namedId ? ((nameAsTyped(q, sxCard.id) ?? medName(sxCard)).replace(VR(/^(?:đang |cũng |hay )?(?:bị|mắc)\s+/iu), "")) : symptomLabel(sx1!)!;
           const notes = detailNotes(q);
