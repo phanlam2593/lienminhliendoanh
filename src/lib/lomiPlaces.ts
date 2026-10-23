@@ -42,7 +42,7 @@ export const PLACES: Place[] = [
   P("Côn Đảo", /\b(di|o|ra|tai|den|ve|vao|du lich|tour|bien) con dao\b|^ con dao (co|choi|o dau)/, undefined, ["Nhà tù Côn Đảo", "Nghĩa trang Hàng Dương", "Bãi Đầm Trầu", "Lặn ngắm san hô Hòn Bảy Cạnh"]),
   P("Phú Quốc", /\bphu quoc\b/, "Phú Quốc", ["Cáp treo Hòn Thơm", "Bãi Sao", "Chợ đêm Phú Quốc", "Grand World", "Sunset Town (thị trấn Hoàng Hôn)"]),
   // ── Miền Tây ──
-  P("Cần Thơ", /\bcan tho\b(?! (oxy|may|sau|deu|manh))|\b(cai rang|ninh kieu)\b/, "Cần Thơ", ["Chợ nổi Cái Răng (đi sớm khoảng 5–6 giờ sáng)", "Bến Ninh Kiều", "Nhà cổ Bình Thủy"]),
+  P("Cần Thơ", /(\b(o|tai|den|ra|ve|vao|di|tp|thanh pho|khu|gan|xuong|len|du lich|tour|mien tay|cho) )can tho\b|\bcan tho (co gi|choi|an gi|o dau|nen|thi)\b|\b(cai rang|ninh kieu)\b/, "Cần Thơ", ["Chợ nổi Cái Răng (đi sớm khoảng 5–6 giờ sáng)", "Bến Ninh Kiều", "Nhà cổ Bình Thủy"]),
   P("Cà Mau", /\bca mau\b/, "Cà Mau", ["Mũi Cà Mau", "Rừng U Minh Hạ", "Chợ nổi Cà Mau"]),
   P("Châu Đốc", /\b(chau doc|an giang|tra su|nui sam)\b/, undefined, ["Miếu Bà Chúa Xứ núi Sam", "Rừng tràm Trà Sư", "Chợ nổi Long Xuyên"]),
   P("Hà Tiên", /\b(ha tien|rach gia|kien giang|dao nam du)\b/, undefined, ["Quần đảo Nam Du", "Mũi Nai (Hà Tiên)", "Thạch Động"]),

@@ -1867,3 +1867,11 @@ describe("QA V9 — tarot hỏi tiếp, trẻ nhỏ / bà bầu / người già,
     expect(r[2].content).toMatch(/xung đột kéo dài/);
   }, 60000);
 });
+
+describe("23/10 — con của người kể viết tắt 'con a'", () => {
+  it("'Con a 3 tuổi bị sốt 39 độ' → nói về bé (lưu ý trẻ nhỏ), không 'Bạn đang bị sốt cao'", async () => {
+    const m = await last(["Con a 3 tuổi bị sốt 39 độ"]);
+    expect(m.content).toMatch(/bé đang có/);
+    expect(m.content).not.toMatch(/^Bạn đang bị/);
+  }, T);
+});

@@ -21,32 +21,100 @@ export type PlaceCard = {
   cover?: string | null;
 };
 
-type Kind = { re: RegExp; type: BusinessType; names: string[]; noun: string };
-// names = chữ không dấu để tìm trong tên doanh nghiệp (name_unaccent)
+type Kind = { re: RegExp; type: BusinessType | BusinessType[]; names: string[]; noun: string; /** loại chung (vd "quán ăn", "chỗ ở") — ít kết quả thì lấy thêm cả nhóm */ broad?: boolean };
+// names = chữ không dấu để tìm trong tên doanh nghiệp (name_unaccent). Loại CỤ THỂ đứng trước loại chung.
+// 23/10 (Kir: "địa điểm hay dịch vụ này nọ nếu người ta hỏi thì vô Lomi luôn"): phủ đủ các loại dịch vụ đang có trong app —
+//   sửa xe, giặt ủi, thợ điện / nước, taxi, xe ghép, thuê xe, phòng trọ, căn hộ, gia sư, luật sư, chụp ảnh cưới, mặt bằng, tạp hoá…
 const KINDS: Kind[] = [
+  // ── Ăn uống ──
   { re: VN(/\b(cà phê|cafe|coffee|cf)\b/), type: "food", names: ["cafe", "coffee", "ca phe"], noun: "quán cà phê" },
   { re: VN(/\b(trà sữa|trà chanh|milk tea)\b/), type: "food", names: ["tra sua", "tea", "tra"], noun: "quán trà sữa" },
-  { re: VN(/\b(bánh|bakery|tiệm bánh)\b/), type: "food", names: ["banh", "bakery"], noun: "tiệm bánh" },
+  { re: VN(/\b(tiệm bánh|bakery|bánh ngọt|bánh kem)\b/), type: "food", names: ["banh", "bakery"], noun: "tiệm bánh" },
   { re: VN(/\b(lẩu|nướng|bbq)\b/), type: "food", names: ["lau", "nuong", "bbq"], noun: "quán lẩu nướng" },
   { re: VN(/\b(ăn vặt|chè|kem)\b/), type: "food", names: ["an vat", "che", "kem"], noun: "quán ăn vặt" },
   { re: VN(/\b(bar|pub|quán nhậu|bia|nhậu)\b/), type: "food", names: ["bar", "pub", "bia", "nhau"], noun: "quán nhậu" },
-  { re: VN(/\b(phở|bún|cơm|mì quảng|hủ tiếu|quán ăn|nhà hàng|đồ ăn|ăn uống|chỗ ăn)\b/), type: "food", names: [], noun: "quán ăn" },
+  { re: VN(/\b(nhà hàng|restaurant)\b/), type: "food", names: ["nha hang", "restaurant"], noun: "nhà hàng" },
+  { re: VN(/\b(phở|bún|cơm|mì quảng|hủ tiếu|quán ăn|đồ ăn|ăn uống|chỗ ăn)\b/), type: "food", names: [], noun: "quán ăn", broad: true },
+  // ── Dịch vụ ──
+  { re: VN(/\b(giặt ủi|giặt là|giặt sấy|giặt đồ|tiệm giặt)\b/), type: "service", names: ["giat"], noun: "tiệm giặt ủi" },
+  { re: VN(/\b(rửa xe)\b/), type: "service", names: ["rua xe"], noun: "tiệm rửa xe" },
+  { re: VN(/\b(sửa xe|tiệm sửa xe|vá xe|thay nhớt|bảo dưỡng xe|xe bị hư|xe( \S+){0,2} (bị )?(hư|hỏng|chết máy|xẹp lốp|thủng lốp|không nổ máy|không đề được)|thủng lốp)\b/), type: "service", names: ["sua xe"], noun: "tiệm sửa xe" },
+  { re: VN(/\b(sửa điện thoại|thay màn hình|thay pin|điện thoại (bị )?(hư|hỏng|vỡ màn))\b/), type: "service", names: ["sua dien thoai"], noun: "tiệm sửa điện thoại" },
+  { re: VN(/\b(sửa điều hoà|sửa điều hòa|sửa máy lạnh|vệ sinh máy lạnh|điều hoà (bị )?(hư|hỏng)|máy lạnh (bị )?(hư|hỏng))\b/), type: "service", names: ["dieu hoa"], noun: "thợ sửa điều hoà" },
+  { re: VN(/\b(sửa khoá|sửa khóa|thợ khoá|thợ khóa|mở khoá|mở khóa|làm chìa|quên chìa khoá|mất chìa khoá|kẹt khoá)\b/), type: "service", names: ["khoa"], noun: "thợ sửa khoá" },
+  { re: VN(/\b(sửa ống nước|thợ nước|thợ ống nước|ống nước (bị )?(vỡ|bể|rò|hư)|rò nước|nghẹt cống|thông cống|bồn cầu (bị )?(nghẹt|tắc))\b/), type: "service", names: ["ong nuoc"], noun: "thợ sửa ống nước" },
+  { re: VN(/\b(thợ điện|sửa điện|mất điện|chập điện|điện (bị )?(hư|chập)|đi dây điện)\b/), type: "service", names: ["tho dien"], noun: "thợ điện" },
+  { re: VN(/\b(vệ sinh nhà|dọn nhà|dọn dẹp nhà|giúp việc|lau dọn|tổng vệ sinh)\b/), type: "service", names: ["ve sinh"], noun: "dịch vụ vệ sinh nhà" },
+  { re: VN(/\b(photocopy|photo copy|in ấn|in tài liệu|in màu|scan tài liệu)\b/), type: "service", names: ["photocopy"], noun: "tiệm photocopy" },
+  { re: VN(/\b(taxi|gọi xe|đặt xe taxi)\b/), type: "service", names: ["taxi"], noun: "taxi" },
+  { re: VN(/\b(chuyển nhà|vận chuyển|chở hàng|xe tải|chuyển đồ)\b/), type: "service", names: ["van chuyen"], noun: "dịch vụ vận chuyển" },
+  { re: VN(/\b(giao hàng|ship hàng|shipper|gửi hàng)\b/), type: "service", names: ["giao hang"], noun: "dịch vụ giao hàng" },
+  { re: VN(/\b(spa thú cưng|tắm chó|tắm mèo|cắt tỉa lông|chăm sóc thú cưng|gửi chó|gửi mèo)\b/), type: "service", names: ["thu cung"], noun: "chỗ chăm sóc thú cưng" },
+  { re: VN(/\b(nail|móng|làm móng)\b/), type: "service", names: ["nail"], noun: "tiệm nail" },
   { re: VN(/\b(spa|massage|gội đầu)\b/), type: "service", names: ["spa", "massage"], noun: "spa" },
-  { re: VN(/\b(nail|móng)\b/), type: "service", names: ["nail"], noun: "tiệm nail" },
-  { re: VN(/\b(tóc|salon|barber)\b/), type: "service", names: ["toc", "salon", "barber", "hair"], noun: "tiệm tóc" },
-  { re: VN(/\b(gym|yoga|phòng tập)\b/), type: "service", names: ["gym", "yoga", "fitness"], noun: "phòng tập" },
-  { re: VR(/\b(homestay)\b/), type: "stay", names: ["homestay"], noun: "homestay" },
-  { re: VN(/\b(khách sạn|hotel|resort)\b/), type: "stay", names: ["hotel", "khach san", "resort"], noun: "khách sạn" },
-  { re: VR(/\b(villa)\b/), type: "stay", names: ["villa"], noun: "villa" },
-  { re: VN(/\b(chỗ ở|chỗ nghỉ|lưu trú|phòng nghỉ|nhà nghỉ)\b/), type: "stay", names: [], noun: "chỗ ở" },
-  { re: VN(/\b(tour|du lịch)\b/), type: "travel", names: ["tour"], noun: "tour du lịch" },
-  { re: VN(/\b(thuê xe|xe máy)\b/), type: "travel", names: ["xe", "thue"], noun: "chỗ thuê xe" },
-  { re: VN(/\b(chụp ảnh|photo|studio)\b/), type: "freelance", names: ["photo", "studio", "chup"], noun: "dịch vụ chụp ảnh" },
-  { re: VN(/\b(quần áo|thời trang|shop)\b/), type: "shopping", names: ["shop", "fashion"], noun: "shop" },
-  { re: VN(/\b(mỹ phẩm|skincare)\b/), type: "shopping", names: ["cosmetic", "my pham"], noun: "shop mỹ phẩm" },
-  { re: VN(/\b(hoa tươi|tiệm hoa|shop hoa)\b/), type: "shopping", names: ["hoa", "flower"], noun: "tiệm hoa" },
-  { re: VN(/\b(đặc sản)\b/), type: "shopping", names: ["dac san"], noun: "shop đặc sản" },
-  { re: VN(/\b(nhà đất|bất động sản|bds|thuê nhà|mua nhà)\b/), type: "broker", names: [], noun: "văn phòng nhà đất" },
+  { re: VN(/\b(cắt tóc|làm tóc|tiệm tóc|salon|barber|uốn tóc|nhuộm tóc)\b/), type: "service", names: ["toc", "salon", "barber", "hair"], noun: "tiệm tóc" },
+  { re: VN(/\b(gym|yoga|phòng tập|huấn luyện viên|pt cá nhân|personal trainer)\b/), type: ["service", "freelance"], names: ["gym", "yoga", "fitness", "huan luyen"], noun: "phòng tập / huấn luyện viên" },
+  // ── Chỗ ở ──
+  { re: VR(/\b(homestay)\b/i), type: "stay", names: ["homestay"], noun: "homestay" },
+  { re: VN(/\b(resort|khu nghỉ dưỡng|nghỉ dưỡng)\b/), type: "stay", names: ["resort", "nghi duong"], noun: "resort" },
+  { re: VN(/\b(khách sạn|hotel)\b/), type: "stay", names: ["khach san", "hotel"], noun: "khách sạn" },
+  { re: VR(/\b(villa|biệt thự)\b/i), type: "stay", names: ["villa"], noun: "villa" },
+  { re: VR(/\b(bungalow)\b/i), type: "stay", names: ["bungalow"], noun: "bungalow" },
+  { re: VN(/\b(cắm trại|camping|glamping)\b/), type: ["stay", "travel"], names: ["camping", "cam trai"], noun: "chỗ cắm trại" },
+  { re: VN(/\b(nhà nghỉ|motel)\b/), type: "stay", names: ["nha nghi"], noun: "nhà nghỉ" },
+  { re: VN(/\b(phòng trọ|nhà trọ|thuê trọ|ở trọ|kiếm trọ|tìm trọ)\b/), type: "stay", names: ["tro"], noun: "phòng trọ" },
+  { re: VN(/\b(căn hộ cho thuê|thuê căn hộ|thuê chung cư)\b/), type: "stay", names: ["can ho"], noun: "căn hộ cho thuê" },
+  { re: VN(/\b(thuê nhà nguyên căn|nhà nguyên căn|thuê nguyên căn|thuê nhà)\b/), type: "stay", names: ["nguyen can"], noun: "nhà cho thuê nguyên căn" },
+  { re: VN(/\b(nhà sàn)\b/), type: "stay", names: ["nha san"], noun: "nhà sàn" },
+  { re: VN(/\b(chỗ ở|chỗ nghỉ|lưu trú|phòng nghỉ|chỗ ngủ|ngủ ở đâu|nghỉ ở đâu|(nên|sẽ|định|tính) ở (đâu|khu nào|chỗ nào)|ở (đâu|khu nào|chỗ nào) (thì )?(tốt|đẹp|rẻ|ổn|tiện|hợp lý|được)|ở chỗ nào|đặt phòng|thuê phòng|book phòng)\b/), type: "stay", names: [], noun: "chỗ ở", broad: true },
+  // ── Du lịch, đi lại ──
+  { re: VN(/\b(xe ghép|xe khách|xe limousine|limousine|xe đi (đà lạt|sài gòn|nha trang|phan thiết|bảo lộc))\b/), type: "travel", names: ["xe ghep"], noun: "xe ghép / xe khách" },
+  { re: VN(/\b(đưa đón sân bay|ra sân bay|đón sân bay|xe sân bay)\b/), type: "travel", names: ["san bay"], noun: "xe đưa đón sân bay" },
+  { re: VN(/\b(xe đưa đón|thuê xe có tài|thuê tài xế)\b/), type: "travel", names: ["dua don"], noun: "xe đưa đón" },
+  { re: VN(/\b(thuê xe máy|thuê xe tay ga|thuê xe số)\b/), type: "travel", names: ["xe may"], noun: "chỗ thuê xe máy" },
+  { re: VN(/\b(thuê xe|thuê ô tô|thuê xe tự lái|cho thuê xe)\b/), type: "travel", names: ["thue xe"], noun: "chỗ cho thuê xe" },
+  { re: VN(/\b(vé máy bay|đặt vé bay|săn vé)\b/), type: "travel", names: ["ve may bay"], noun: "đại lý vé máy bay" },
+  { re: VN(/\b(du thuyền|đi thuyền|ngủ trên vịnh)\b/), type: "travel", names: ["du thuyen"], noun: "du thuyền" },
+  { re: VN(/\b(lặn biển|lặn ngắm san hô|lặn san hô|snorkeling|diving)\b/), type: "travel", names: ["lan bien"], noun: "tour lặn biển" },
+  { re: VN(/\b(trekking|leo núi|đi bộ đường dài|hiking)\b/), type: "travel", names: ["trekking"], noun: "tour trekking" },
+  { re: VN(/\b(hướng dẫn viên|người dẫn đường|guide)\b/), type: "travel", names: ["huong dan vien"], noun: "hướng dẫn viên" },
+  { re: VN(/\b(làm visa|xin visa|dịch vụ visa|visa)\b/), type: "travel", names: ["visa"], noun: "dịch vụ visa" },
+  { re: VN(/\b(vườn dâu|hái dâu)\b/), type: "travel", names: ["dau"], noun: "vườn dâu" },
+  { re: VN(/\b(tour|du lịch|combo du lịch|lữ hành)\b/), type: "travel", names: ["tour", "du lich", "lu hanh", "combo"], noun: "tour du lịch" },
+  { re: VN(/\b(xe máy)\b/), type: "travel", names: ["xe may"], noun: "chỗ thuê xe máy" },
+  // ── Ảnh, thiết kế, sáng tạo ──
+  { re: VN(/\b(chụp ảnh cưới|ảnh cưới|chụp hình cưới|chụp pre wedding|prewedding)\b/), type: "creator", names: ["anh cuoi"], noun: "studio chụp ảnh cưới" },
+  { re: VN(/\b(quay phim|quay video|quay sự kiện|dựng phim|edit video|biên tập video|làm video)\b/), type: "creator", names: ["phim", "video"], noun: "dịch vụ quay / dựng phim" },
+  { re: VN(/\b(thiết kế logo|làm logo|thiết kế bao bì|thiết kế web|làm web|làm website|thiết kế)\b/), type: ["creator", "freelance"], names: ["thiet ke"], noun: "dịch vụ thiết kế" },
+  { re: VN(/\b(photobooth|livestream|mc|dẫn chương trình)\b/), type: ["creator", "freelance"], names: ["photobooth", "livestream", "mc"], noun: "dịch vụ sự kiện" },
+  { re: VN(/\b(chụp ảnh|chụp hình|photo|studio|thợ ảnh)\b/), type: "creator", names: ["chup", "studio", "photo"], noun: "dịch vụ chụp ảnh" },
+  // ── Chuyên môn, tự do ──
+  { re: VN(/\b(gia sư|dạy kèm|học kèm|dạy thêm|dạy tiếng anh|học tiếng anh kèm)\b/), type: "freelance", names: ["gia su"], noun: "gia sư" },
+  { re: VN(/\b(luật sư|tư vấn pháp lý|tư vấn luật|kiện tụng)\b/), type: ["freelance", "broker"], names: ["luat su", "phap ly"], noun: "luật sư / tư vấn pháp lý" },
+  { re: VN(/\b(kế toán|làm sổ sách|báo cáo thuế|khai thuế)\b/), type: "freelance", names: ["ke toan"], noun: "kế toán" },
+  { re: VN(/\b(dịch thuật|biên dịch|phiên dịch|dịch tài liệu)\b/), type: "freelance", names: ["dich"], noun: "dịch thuật" },
+  { re: VN(/\b(tư vấn tâm lý|chuyên gia tâm lý|nhà tâm lý|trị liệu tâm lý)\b/), type: "freelance", names: ["tam ly"], noun: "chuyên gia tư vấn tâm lý" },
+  { re: VN(/\b(tư vấn tài chính|cố vấn tài chính)\b/), type: "freelance", names: ["tai chinh"], noun: "tư vấn tài chính" },
+  { re: VN(/\b(lập trình viên|thuê lập trình|làm app|viết phần mềm)\b/), type: "freelance", names: ["lap trinh", "web"], noun: "lập trình viên" },
+  { re: VN(/\b(chạy quảng cáo|marketing|viết content|viết bài quảng cáo)\b/), type: "freelance", names: ["marketing", "content", "viet lach"], noun: "freelancer marketing / content" },
+  // ── Nhà đất ──
+  { re: VN(/\b(thuê mặt bằng|mặt bằng cho thuê|sang nhượng|sang quán|sang tiệm)\b/), type: "broker", names: ["mat bang", "sang nhuong"], noun: "mặt bằng / sang nhượng" },
+  { re: VN(/\b(thuê văn phòng|văn phòng cho thuê)\b/), type: "broker", names: ["van phong"], noun: "văn phòng cho thuê" },
+  { re: VN(/\b(mua đất|đất nền|đất nông nghiệp|mua nhà|nhà đất|bất động sản|bđs|bds|môi giới|định giá nhà|kho bãi)\b/), type: "broker", names: [], noun: "môi giới nhà đất", broad: true },
+  // ── Mua sắm ──
+  { re: VN(/\b(tạp hoá|tạp hóa|cửa hàng tiện lợi|tiệm tạp hoá|mua đồ dùng|siêu thị mini)\b/), type: "shopping", names: ["tap hoa", "tien loi", "tong hop"], noun: "tiệm tạp hoá" },
+  { re: VN(/\b(hoa tươi|tiệm hoa|shop hoa|mua hoa|bó hoa|lẵng hoa)\b/), type: "shopping", names: ["hoa tuoi"], noun: "tiệm hoa" },
+  { re: VN(/\b(mỹ phẩm|skincare|son môi|kem dưỡng)\b/), type: "shopping", names: ["my pham"], noun: "shop mỹ phẩm" },
+  { re: VN(/\b(quần áo|thời trang|shop đồ|mua đồ)\b/), type: "shopping", names: ["thoi trang"], noun: "shop thời trang" },
+  { re: VN(/\b(nhà sách|hiệu sách|cửa hàng sách|mua sách)\b/), type: "shopping", names: ["sach"], noun: "nhà sách" },
+  { re: VN(/\b(văn phòng phẩm|đồ dùng học tập)\b/), type: "shopping", names: ["van phong pham"], noun: "cửa hàng văn phòng phẩm" },
+  { re: VN(/\b(đồ chơi)\b/), type: "shopping", names: ["do choi"], noun: "cửa hàng đồ chơi" },
+  { re: VN(/\b(mẹ và bé|đồ em bé|đồ sơ sinh|sữa cho bé|bỉm|tã)\b/), type: "shopping", names: ["me va be"], noun: "cửa hàng mẹ và bé" },
+  { re: VN(/\b(pet shop|đồ thú cưng|thức ăn cho chó|thức ăn cho mèo|cửa hàng thú cưng)\b/), type: "shopping", names: ["thu cung"], noun: "cửa hàng thú cưng" },
+  { re: VN(/\b(điện gia dụng|đồ điện|nồi cơm|quạt điện|đồ gia dụng)\b/), type: "shopping", names: ["gia dung"], noun: "cửa hàng điện gia dụng" },
+  { re: VN(/\b(đặc sản|nông sản|quà mang về|mua trà|trà b'lao|trà bảo lộc|atiso|mứt)\b/), type: "shopping", names: ["nong san", "dac san", "tra b"], noun: "cửa hàng nông sản / đặc sản" },
+  { re: VN(/\b(đồ handmade|handmade|quà lưu niệm|đồ thủ công)\b/), type: "shopping", names: ["handmade"], noun: "cửa hàng handmade" },
+  { re: VN(/\b(shop|cửa hàng)\b/), type: "shopping", names: [], noun: "cửa hàng", broad: true },
 ];
 
 export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number; /** 20/10: khu vực người dùng nêu ("Đà Lạt nên đi chơi ở đâu") — chỉ lấy chỗ ở đó */ area?: string; /** 23/10: tên nơi người dùng nêu (kể cả nơi app chưa có chỗ nào — "Mũi Né") */ place?: string };
@@ -92,7 +160,7 @@ export function detectSearch(text: string): SearchIntent | null {
     (pl && VN(/\b(có gì|chơi gì|đi đâu|tham quan|điểm đến|nên đi|có gì hay|địa điểm|chỗ nào đẹp|chỗ nào đáng|check in|du lịch|đi chơi)\b/).test(n) && !VN(/\b(ăn gì|uống gì|ở đâu ngủ|khách sạn|homestay|chỗ ở)\b/).test(n) && (/\?/.test(text) || VN(/\b(gì|đâu|nào|không|ko|k|hông|sao|nhỉ|ha|hả|giúp|gợi ý|chỉ)\b/).test(n))))
     return { mode: "go", near, offer: true, ...(area ? { area } : {}), ...placeF };
   // Nêu nơi + hỏi ăn gì ("ở Nha Trang ăn gì") → tìm quán ăn ở đúng nơi đó (không gợi món theo giờ ở Đà Lạt).
-  if (pl && VN(/\b(ăn gì|ăn ở đâu|quán ăn|ăn uống|món gì ngon|đặc sản)\b/).test(n))
+  if (pl && VN(/\b(ăn gì|ăn ở đâu|quán ăn|ăn uống|món gì ngon)\b/).test(n))
     return { mode: "find", kind: KINDS.find((k) => k.noun === "quán ăn"), near, offer: false, ...(area ? { area } : {}), ...placeF };
   if (HOWTO.test(n)) return null;
   const strictKind = KINDS.find((k) => k.re.test(n));
@@ -104,10 +172,17 @@ export function detectSearch(text: string): SearchIntent | null {
     SEEK.test(n) ||
     near ||
     (VN(/\b(nào|đâu)\b/).test(n) && (!!strictKind || place)) || // "quán cà phê NÀO đang có ưu đãi"
-    (!!pl && (!!strictKind || place) && VN(/\b(ở|tại|gần|quanh|bên)\b/).test(n)) || // 23/10: "quán cà phê ở Mũi Né"
+    (!!pl && (!!strictKind || place) && VN(/\b(ở|tại|gần|quanh|bên|có)\b/).test(n)) || // 23/10: "quán cà phê ở Mũi Né", "Đà Lạt có chỗ thuê xe máy không"
+    // 23/10: "a cần thợ điện", "muốn thuê mặt bằng", "xe ghép đi Sài Gòn" — nêu một DỊCH VỤ cụ thể kèm nhu cầu (hoặc câu ngắn chỉ có dịch vụ)
+    (!!strictKind && !strictKind.broad && strictKind.type !== "food" && strictKind.noun !== "chuyên gia tư vấn tâm lý" &&
+      (VN(/\b(cần|muốn|thuê|gọi|kêu|đặt|book|kiếm|xin)\b/).test(n) || (/xe ghép|đưa đón|taxi/u.test(strictKind.noun) && n.trim().split(/\s+/).length <= 6)) &&
+      !VN(/\b(mới|vừa|đã|rồi|hôm qua|hôm trước|lúc nãy|hồi nãy|xong|mai|sắp|tuần sau|tháng sau|định|tính)\b/).test(n)) ||
     (VN(/\bcó\b.*\bkhông\b/).test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
   if (!seek) return null;
   if (!kind && !offer && !place) return null;
+  // Xe ghép / xe khách / đưa đón "đi Sài Gòn": nơi nêu là ĐIỂM ĐẾN, không phải nơi tìm xe → không lọc theo nơi đó.
+  if (kind && /xe ghép|đưa đón|taxi|thuê xe|vé máy bay/u.test(kind.noun) && pl && VN(/\b(đi|về|ra|lên|xuống|tới|đến|sang) (\S+ ){0,1}\S+/).test(n) && !VN(/\b(ở|tại)\b/).test(n))
+    return { mode: "find", kind, near, offer };
   return { mode: "find", kind, near, offer, ...(area ? { area } : {}), ...placeF };
 }
 
@@ -252,7 +327,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
   // ── Tìm theo loại / ưu đãi ──
   const k = it.kind;
   let rows = await fetchRows(k?.type, k?.names ?? [], it.offer, it.area);
-  if (rows.length < 3 && k?.names.length) {
+  if (rows.length < 3 && k?.names.length && k.broad) {
     const more = await fetchRows(k.type, [], it.offer, it.area);
     rows = rows.concat(more.filter((m) => !rows.some((r) => r.id === m.id)));
   }
@@ -274,7 +349,15 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
     `Lomi tìm được mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} nè (${how}) 👇`,
     `Có ngay đây! Mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} trong Liên Minh Liên Doanh (${how}):`,
   ]);
-  const hint = rad.note || (pos ? "" : it.near ? "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)" : "");
+  // 23/10: không nêu nơi → nói rõ đang lấy ở đâu (gần bạn / chỗ gần nhất ở xa / cả nước), để không tưởng là chỗ ngay cạnh mình.
+  const areas = [...new Set(cards.map((c) => c.area).filter(Boolean))];
+  const far = !it.area && pos && cards[0]?.distKm != null && cards[0].distKm > 50;
+  const wide = !it.area && !pos && areas.length > 1;
+  const hint =
+    rad.note ||
+    (far ? `\n(Quanh bạn chưa có ${noun} nào trong app — đây là chỗ gần bạn nhất${cards[0].area ? `, ở ${cards[0].area}` : ""}.)` : "") ||
+    (wide ? `\n(Lomi chưa biết bạn ở đâu nên đang lấy ở nhiều nơi: ${areas.slice(0, 4).join(", ")}${areas.length > 4 ? "…" : ""}. Bạn gõ thêm tên nơi — vd “${noun} ở Đà Lạt” — hoặc bật quyền vị trí cho app là Lomi lọc đúng chỗ nha.)` : "") ||
+    (pos ? "" : it.near ? "\n(Bạn bật quyền vị trí cho app thì Lomi xếp theo khoảng cách được nha.)" : "");
   return {
     text: `${intro}${hint}\nBấm vào thẻ để xem chi tiết và nhận ưu đãi nha. Muốn xem nhiều hơn thì vào Khám phá (/kham-pha).`,
     places: cards,

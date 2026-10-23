@@ -73,13 +73,56 @@ describe("Địa danh: chỉ gợi ý đúng nơi người dùng hỏi", () => {
   it("“Đà Lạt có gì chơi” → kể điểm nổi tiếng + chỗ trong app ĐÚNG ở Đà Lạt", async () => {
     const r = await chat(["Đà Lạt có gì chơi"], { seed: 3 });
     expect(r[0].content).toMatch(/Hồ Xuân Hương/);
-    for (const p of r[0].places ?? []) expect(p.area).toBe("Đà Lạt");
+    for (const p of (r[0].places ?? []) as { area?: string }[]) expect(p.area).toBe("Đà Lạt");
   }, T);
   it("tìm quán theo món ở một nơi: chỉ lấy quán ở đó; nơi app chưa có → nói thật", async () => {
     const a = await chat(["quán lẩu ở Đà Lạt", "🔁 Quán khác"], { seed: 3 });
-    for (const m of a) for (const p of m.places ?? []) expect(p.area).toBe("Đà Lạt");
+    for (const m of a) for (const p of (m.places ?? []) as { area?: string }[]) expect(p.area).toBe("Đà Lạt");
     const b = await chat(["quán lẩu ở Mũi Né"], { seed: 3 });
     expect(b[0].places ?? []).toHaveLength(0);
     expect(b[0].content).toMatch(/Mũi Né/);
+  }, T);
+});
+
+// 23/10 — Kir hỏi "Đà lạt nên ở đâu" → Lomi đáp "kiến thức này em chưa được tiếp thu". Kir: "địa điểm hay dịch vụ này nọ
+//   nếu người ta hỏi thì vô Lomi luôn".
+describe("Hỏi chỗ ở / dịch vụ ở một nơi → tìm trong app (không đáp 'chưa biết')", () => {
+  it("nhận đúng loại dịch vụ và nơi", () => {
+    const cases: [string, string, string?][] = [
+      ["Đà lạt nên ở đâu", "chỗ ở", "Đà Lạt"],
+      ["Đi Nha Trang ở đâu thì tốt", "chỗ ở", "Nha Trang"],
+      ["Đà Lạt có homestay nào đẹp không", "homestay", "Đà Lạt"],
+      ["tìm phòng trọ ở Đà Lạt", "phòng trọ", "Đà Lạt"],
+      ["Đà Lạt có chỗ thuê xe máy không", "chỗ thuê xe máy", "Đà Lạt"],
+      ["gần đây có chỗ sửa xe không", "tiệm sửa xe"],
+      ["xe a bị hư, chỗ nào sửa", "tiệm sửa xe"],
+      ["tìm tiệm giặt ủi", "tiệm giặt ủi"],
+      ["a cần thợ điện", "thợ điện"],
+      ["cần dọn nhà", "dịch vụ vệ sinh nhà"],
+      ["tìm gia sư tiếng anh cho con", "gia sư"],
+      ["có luật sư nào tư vấn không", "luật sư / tư vấn pháp lý"],
+      ["chỗ nào chụp ảnh cưới đẹp ở Đà Lạt", "studio chụp ảnh cưới", "Đà Lạt"],
+      ["a muốn thuê mặt bằng", "mặt bằng / sang nhượng"],
+      ["mua hoa tươi ở đâu", "tiệm hoa"],
+      ["ở đâu bán đặc sản Đà Lạt", "cửa hàng nông sản / đặc sản", "Đà Lạt"],
+    ];
+    for (const [s, noun, area] of cases) {
+      const it = detectSearch(s);
+      expect(it?.kind?.noun, s).toBe(noun);
+      expect(it?.area, s).toBe(area);
+    }
+    // xe ghép "đi Sài Gòn": Sài Gòn là điểm đến, không lọc nhà xe ở Sài Gòn
+    expect(detectSearch("xe ghép đi Sài Gòn")).toMatchObject({ mode: "find" });
+    expect(detectSearch("xe ghép đi Sài Gòn")?.area).toBeUndefined();
+    // không bắt nhầm: "cần thợ" không phải Cần Thơ; câu kể dự định / việc đã làm không thành đi tìm
+    expect(detectArea("a cần thợ điện")).toBeUndefined();
+    expect(detectSearch("mai a dọn nhà")).toBeNull();
+    expect(detectSearch("a mới đi sửa xe về")).toBeNull();
+  });
+  it("“Đà lạt nên ở đâu” trong hội thoại → không đáp 'chưa biết', không bấm Dạy Lomi", async () => {
+    const r = await chat(["Đà lạt nên ở đâu"], { seed: 3 });
+    expect(r[0].unk).toBeFalsy();
+    expect(r[0].search).toMatchObject({ mode: "find", area: "Đà Lạt" });
+    expect(r[0].content).not.toMatch(/chưa được tiếp thu|Dạy em|Dạy Lomi/);
   }, T);
 });

@@ -859,7 +859,8 @@ function tempOf(n: string): number | null {
   if (!m || !VN(/\b(độ|oc|sốt|nhiệt|rưỡi)\b/).test(n)) return null;
   return Number(m[1]) + (m[2] === "ruoi" ? 0.5 : m[3] ? Number(m[3]) / 10 : 0);
 }
-const KID_RE = VN(/\b(con mình|con tôi|con em|con tui|bé nhà|bé mình|bé con|em bé|trẻ nhỏ|cháu mình|bé bi|bé \d+ tuổi|\d+ tháng tuổi|bé \d+ (tháng|tuần)|(con|cháu|trẻ) \d+ (tháng|tuần|tuổi)|sơ sinh)\b/);
+// (23/10: "con a 3 tuổi", "con anh", "con chị", "con e" — xưng hô viết tắt cũng là con của người kể)
+const KID_RE = VN(/\b(con mình|con tôi|con em|con tui|con (a|anh|e|chị|c|tớ|t) \d+ (tháng|tuần|tuổi)|con (anh|chị) (bị|đang|sốt|ho)|bé nhà|bé mình|bé con|em bé|trẻ nhỏ|cháu mình|bé bi|bé \d+ tuổi|\d+ tháng tuổi|bé \d+ (tháng|tuần)|(con|cháu|trẻ) \d+ (tháng|tuần|tuổi)|sơ sinh)\b/);
 // 15/10: tuổi của bé tính bằng tháng / tuần ("bé 2 tháng", "con 6 tuần", "trẻ sơ sinh") — bé dưới 3 tháng mà sốt thì phải đi khám ngay.
 //   18/10 (audit F, P0): "con tôi 2 tháng tuổi", "bé nhà mình 6 tuần tuổi", "bé được 8 tuần" — trước đây chỉ khớp khi số đứng LIỀN sau
 //   "bé/con", nên bé sơ sinh sốt không được nhắc đi khám ngay (NHS "Fever in children": dưới 3 tháng, từ 38°C → cần tư vấn y tế khẩn).
