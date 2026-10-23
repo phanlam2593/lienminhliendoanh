@@ -58,6 +58,7 @@ import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
 import { v5Reply } from "@/lib/lomiV5";
 import { v8Reply } from "@/lib/lomiV8";
 import { v9Reply } from "@/lib/lomiV9";
+import { detectPlace } from "@/lib/lomiPlaces";
 import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTherapy";
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
@@ -153,6 +154,8 @@ type Msg = {
   aboutAge?: number;
   /** 10/10: MẠCH CHUYỆN đang theo (lib/lomiStory) — đang nói về ai, đã biết gì, Lomi vừa hỏi gì, còn thiếu gì. */
   thread?: Thread;
+  /** 23/10: nơi người dùng nêu khi tìm quán theo món ("quán lẩu ở Nha Trang") — giữ khi bấm "Quán khác" */
+  dishPlace?: string;
   local?: boolean;
   ask?: string;
   note?: "member" | "limit";
@@ -746,13 +749,16 @@ export function AiChat({
     const shown = shownRef.current;
     setBusy(true);
     let res;
+    // 23/10: nơi người dùng nêu ("quán lẩu ở Nha Trang") — hoặc nơi của lần tìm món trước khi bấm "Quán khác" — chỉ lấy quán ở đó.
+    const lastDish = [...msgs].reverse().find((m) => m.role === "assistant" && m.dish);
+    const place = detectPlace(asked)?.label ?? (avoidIds.length ? lastDish?.dishPlace : undefined);
     try {
-      res = await runDishSearch(d, avoidIds, want);
+      res = await runDishSearch(d, avoidIds, place ? { ...want, place } : want);
     } finally {
       setBusy(false);
     }
     shownRef.current = shown;
-    return localReply(asked, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: d.id, avoidIds });
+    return localReply(asked, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: d.id, avoidIds, ...(place ? { dishPlace: place } : {}) });
   };
 
   const send = async (text: string, forceAi = false) => {
@@ -1231,6 +1237,7 @@ export function AiChat({
         ) {
           const intent = lastA.search;
           const avoid = [...(lastA.avoidIds ?? []), ...(lastA.places ?? []).map((p) => p.id)];
+          if (!avoid.length) avoid.push("-"); // (lần trước không đưa chỗ nào — vd nơi app chưa có — vẫn là "đổi", không lặp lại y câu cũ)
           setBusy(true);
           let res;
           try {
@@ -1527,7 +1534,8 @@ export function AiChat({
         // 09/10: đang theo chuyện người ốm mà hỏi "nên cho bé ăn gì" / "nên ăn gì" → là hỏi ăn uống cho người bệnh, không phải nhờ gợi ý quán.
         const sickMeal = th0?.kind === "care" && (th0.idle ?? 0) < 2 && VN(/\b(nên|cho .{1,15} ăn|kiêng|được ăn)\b/).test(normalizeVi(q));
         // ("thiếu vitamin D nên ăn gì", "gout nên ăn gì" — nêu một bệnh / tình trạng có trong kho kiến thức thì là hỏi ăn uống theo bệnh.)
-        if (ei?.intent === "food_suggest" && !sickMeal && !findMedId(q) && !illMeal(q)) return replyDishes(q, ei.drink);
+        // (23/10: nêu một nơi — "ở Nha Trang ăn gì ngon" — thì tìm quán ở đúng nơi đó, không gợi món theo giờ ở đây)
+        if (ei?.intent === "food_suggest" && !sickMeal && !findMedId(q) && !illMeal(q) && !detectPlace(q)) return replyDishes(q, ei.drink);
         // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
         //     (Câu tự nói rõ một loại chỗ khác — "quán nào gần đây có spa?" — thì không phải trả lời khẩu vị.)
         //     (Nhắc lại chính món đó kèm kiểu — "lẩu thái" khi đang hỏi khẩu vị lẩu — cũng là câu trả lời khẩu vị.)

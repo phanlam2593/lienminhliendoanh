@@ -46,3 +46,40 @@ describe("Lomi tìm loại chỗ mới ngay sau một lần gợi ý", () => {
     expect(r[1].search?.kind?.noun ?? r[1].dish).toBeTruthy();
   }, T);
 });
+
+// 23/10 — Kir hỏi "Mũi né có gì chơi k?" → Lomi bốc "Vé Máy Bay Nắng Vàng (ở Đà Lạt)", bấm "Đổi chỗ khác" → "Tour Vạn Phúc (ở Vũng Tàu)".
+describe("Địa danh: chỉ gợi ý đúng nơi người dùng hỏi", () => {
+  it("nhận tên điểm du lịch / tỉnh / khu trong Đà Lạt, không bắt nhầm chữ thường", async () => {
+    const { detectPlace } = await import("@/lib/lomiPlaces");
+    expect(detectSearch("Mũi né có gì chơi k?")).toMatchObject({ mode: "go", place: "Mũi Né" });
+    expect(detectSearch("Mũi né có gì chơi k?")?.area).toBeUndefined();
+    expect(detectSearch("mui ne co gi choi")).toMatchObject({ mode: "go", place: "Mũi Né" });
+    expect(detectSearch("hồ Tuyền Lâm có gì chơi")).toMatchObject({ mode: "go", area: "Đà Lạt" });
+    expect(detectSearch("quán cà phê ở Mũi Né")).toMatchObject({ mode: "find", place: "Mũi Né" });
+    expect(detectSearch("ở Nha Trang ăn gì ngon")).toMatchObject({ mode: "find", area: "Nha Trang" });
+    expect(detectArea("Langbiang có gì")).toBe("Lạc Dương");
+    for (const s of ["tôi bị lạc đường rồi", "máy đa năng tốt không", "hỏi an toàn không", "con dao này sắc không", "biến hoá khôn lường", "hai phòng ngủ", "mấy lần hả", "ăn thôi", "mang đến cho em", "suy nghĩ kỹ có nên", "cần thở oxy"])
+      expect(detectPlace(s), s).toBeUndefined();
+  });
+  it("“Mũi né có gì chơi k?” → nói thật app chưa có chỗ ở Mũi Né + điểm nổi tiếng; “Đổi chỗ khác” không bốc chỗ tỉnh khác", async () => {
+    const r = await chat(["Mũi né có gì chơi k?", "Đổi chỗ khác"], { seed: 3 });
+    expect(r[0].places ?? []).toHaveLength(0);
+    expect(r[0].content).toMatch(/chưa có chỗ nào ở \*\*Mũi Né\*\*/);
+    expect(r[0].content).toMatch(/Bàu Trắng/);
+    expect(r[1].places ?? []).toHaveLength(0);
+    expect(r[1].content).toMatch(/Mũi Né/);
+    for (const m of r) expect(m.content).not.toMatch(/\(ở (Đà Lạt|Vũng Tàu)\)/);
+  }, T);
+  it("“Đà Lạt có gì chơi” → kể điểm nổi tiếng + chỗ trong app ĐÚNG ở Đà Lạt", async () => {
+    const r = await chat(["Đà Lạt có gì chơi"], { seed: 3 });
+    expect(r[0].content).toMatch(/Hồ Xuân Hương/);
+    for (const p of r[0].places ?? []) expect(p.area).toBe("Đà Lạt");
+  }, T);
+  it("tìm quán theo món ở một nơi: chỉ lấy quán ở đó; nơi app chưa có → nói thật", async () => {
+    const a = await chat(["quán lẩu ở Đà Lạt", "🔁 Quán khác"], { seed: 3 });
+    for (const m of a) for (const p of m.places ?? []) expect(p.area).toBe("Đà Lạt");
+    const b = await chat(["quán lẩu ở Mũi Né"], { seed: 3 });
+    expect(b[0].places ?? []).toHaveLength(0);
+    expect(b[0].content).toMatch(/Mũi Né/);
+  }, T);
+});

@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { normalizeVi } from "@/lib/lomiFaq";
 import type { BusinessType } from "@/lib/types";
 import { VR, VN } from "@/lib/viMatch";
+import { PLACES, detectPlace, noPlaceText } from "@/lib/lomiPlaces";
 
 export type PlaceCard = {
   id: string;
@@ -48,40 +49,14 @@ const KINDS: Kind[] = [
   { re: VN(/\b(nhà đất|bất động sản|bds|thuê nhà|mua nhà)\b/), type: "broker", names: [], noun: "văn phòng nhà đất" },
 ];
 
-export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number; /** 20/10: khu vực người dùng nêu ("Đà Lạt nên đi chơi ở đâu") — chỉ lấy chỗ ở đó */ area?: string };
+export type SearchIntent = { mode: "find" | "eat" | "drink" | "go"; kind?: Kind; near: boolean; offer: boolean; /** 10/10: chỉ lấy chỗ trong bán kính này (km) — "giới hạn 5km thôi" */ maxKm?: number; /** 20/10: khu vực người dùng nêu ("Đà Lạt nên đi chơi ở đâu") — chỉ lấy chỗ ở đó */ area?: string; /** 23/10: tên nơi người dùng nêu (kể cả nơi app chưa có chỗ nào — "Mũi Né") */ place?: string };
 
 // 20/10: khu vực người dùng nêu tên → lọc đúng khu vực đó (khớp cột businesses.area). Trước đây "Đà Lạt nên đi chơi
 // ở đâu" bị bỏ qua chữ "Đà Lạt" và bốc bừa cả nước → ra một tiệm giặt ủi ở Đà Nẵng cách 459km.
-const AREAS: [string, RegExp][] = [
-  ["Đà Lạt", /\b(da lat|dalat)\b/],
-  ["TP.HCM", /\b(sai gon|saigon|tp ?hcm|hcm|ho chi minh)\b/],
-  ["Hà Nội", /\b(ha noi|hanoi)\b/],
-  ["Đà Nẵng", /\b(da nang|danang)\b/],
-  ["Bảo Lộc", /\bbao loc\b/],
-  ["Biên Hòa", /\bbien hoa\b/],
-  ["Buôn Ma Thuột", /\b(buon ma thuot|buon me thuot|bmt)\b/],
-  ["Cà Mau", /\bca mau\b/],
-  ["Cần Thơ", /\bcan tho\b/],
-  ["Di Linh", /\bdi linh\b/],
-  ["Đơn Dương", /\bdon duong\b/],
-  ["Đức Trọng", /\bduc trong\b/],
-  ["Lạc Dương", /\blac duong\b/],
-  ["Hạ Long", /\bha long\b/],
-  ["Hải Phòng", /\bhai phong\b/],
-  ["Hội An", /\bhoi an\b/],
-  ["Huế", /\b(o|tai|den|ra|ve|vao|tp|thanh pho|di) hue\b/],
-  ["Nha Trang", /\bnha trang\b/],
-  ["Phú Quốc", /\bphu quoc\b/],
-  ["Pleiku", /\bpleiku\b/],
-  ["Quy Nhơn", /\bquy nhon\b/],
-  ["Sa Pa", /\b(sa pa|sapa)\b/],
-  ["Thủ Dầu Một", /\bthu dau mot\b/],
-  ["Vinh", /\b(tp|thanh pho) vinh\b/],
-  ["Vũng Tàu", /\bvung tau\b/],
-];
 export function detectArea(text: string): string | undefined {
-  const n = ` ${normalizeVi(text)} `;
-  return AREAS.find(([, re]) => re.test(n))?.[0];
+  // 23/10: dùng bảng địa danh đầy đủ (lib/lomiPlaces) — điểm cụ thể ("Mũi Né", "hồ Tuyền Lâm") ra đúng khu vực của nó;
+  //   nơi app chưa có chỗ nào thì KHÔNG có khu vực (để không bốc chỗ ở tỉnh khác).
+  return detectPlace(text)?.area;
 }
 const sameArea = (a: string | null | undefined, b: string) => !!a && normalizeVi(a) === normalizeVi(b);
 // "Đi chơi" chỉ lấy chỗ để chơi: tour/thuê xe (travel) + quán (food). Không lấy "service" (giặt ủi, sửa xe, spa…).
@@ -110,9 +85,15 @@ export function detectSearch(text: string): SearchIntent | null {
   if (VN(/\b(hôm nay ăn gì|ăn gì bây giờ|ăn gì đây|nên ăn gì|trưa nay ăn gì|tối nay ăn gì|sáng nay ăn gì|ăn gì ta|ăn gì giờ|đổi món|món khác|chọn lại quán|quán khác)\b/).test(n))
     return { mode: "eat", near, offer: true };
   if (VN(/\b(uống gì|đi cafe đâu|cafe ở đâu|cà phê ở đâu|uống ở đâu)\b/).test(n)) return { mode: "drink", near, offer: true, kind: KINDS[0] };
-  const area = detectArea(text);
-  if (VN(/\b(đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu|có gì chơi|có gì vui|chỗ nào chơi|nơi nào chơi|đi chơi ở|nên đi đâu chơi|tham quan ở đâu|check in ở đâu)\b/).test(n))
-    return { mode: "go", near, offer: true, ...(area ? { area } : {}) };
+  const pl = detectPlace(text);
+  const area = pl ? pl.area : detectArea(text);
+  const placeF = pl ? { place: pl.label } : {};
+  if (VN(/\b(đi đâu chơi|chơi ở đâu|đi đâu bây giờ|cuối tuần đi đâu|đi chơi đâu|có gì chơi|có gì vui|chỗ nào chơi|nơi nào chơi|đi chơi ở|nên đi đâu chơi|tham quan ở đâu|check in ở đâu)\b/).test(n) ||
+    (pl && VN(/\b(có gì|chơi gì|đi đâu|tham quan|điểm đến|nên đi|có gì hay|địa điểm|chỗ nào đẹp|chỗ nào đáng|check in|du lịch|đi chơi)\b/).test(n) && !VN(/\b(ăn gì|uống gì|ở đâu ngủ|khách sạn|homestay|chỗ ở)\b/).test(n) && (/\?/.test(text) || VN(/\b(gì|đâu|nào|không|ko|k|hông|sao|nhỉ|ha|hả|giúp|gợi ý|chỉ)\b/).test(n))))
+    return { mode: "go", near, offer: true, ...(area ? { area } : {}), ...placeF };
+  // Nêu nơi + hỏi ăn gì ("ở Nha Trang ăn gì") → tìm quán ăn ở đúng nơi đó (không gợi món theo giờ ở Đà Lạt).
+  if (pl && VN(/\b(ăn gì|ăn ở đâu|quán ăn|ăn uống|món gì ngon|đặc sản)\b/).test(n))
+    return { mode: "find", kind: KINDS.find((k) => k.noun === "quán ăn"), near, offer: false, ...(area ? { area } : {}), ...placeF };
   if (HOWTO.test(n)) return null;
   const strictKind = KINDS.find((k) => k.re.test(n));
   // "ăn/uống" đứng một mình chỉ là đoán — không đủ để hiểu là muốn tìm quán (vd "bác sĩ nào cũng cho thuốc uống không hết").
@@ -123,10 +104,11 @@ export function detectSearch(text: string): SearchIntent | null {
     SEEK.test(n) ||
     near ||
     (VN(/\b(nào|đâu)\b/).test(n) && (!!strictKind || place)) || // "quán cà phê NÀO đang có ưu đãi"
+    (!!pl && (!!strictKind || place) && VN(/\b(ở|tại|gần|quanh|bên)\b/).test(n)) || // 23/10: "quán cà phê ở Mũi Né"
     (VN(/\bcó\b.*\bkhông\b/).test(n) && !!kind && (offer || place)); // "có spa nào giảm giá không"
   if (!seek) return null;
   if (!kind && !offer && !place) return null;
-  return { mode: "find", kind, near, offer, ...(area ? { area } : {}) };
+  return { mode: "find", kind, near, offer, ...(area ? { area } : {}), ...placeF };
 }
 
 function haversineKm(a: { lat: number; lng: number }, b: { lat: number; lng: number }) {
@@ -202,6 +184,13 @@ const where = (c: PlaceCard, askedArea?: string) =>
   c.distKm != null && c.distKm <= 50 ? km(c.distKm) : c.area && !(askedArea && sameArea(c.area, askedArea)) ? ` (ở ${c.area})` : "";
 
 export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Promise<SearchResult> {
+  // 23/10: người dùng nêu một nơi mà app chưa có doanh nghiệp nào ("Mũi Né có gì chơi") → nói thật + điểm nổi tiếng ở đó,
+  //   KHÔNG bốc chỗ gần mình / chỗ ở tỉnh khác (trước đây ra "Vé Máy Bay Nắng Vàng (ở Đà Lạt)", rồi "Tour Vạn Phúc (ở Vũng Tàu)").
+  const plc = it.place ? PLACES.find((p) => p.label === it.place) : undefined;
+  if (plc && !plc.area && avoidIds.length)
+    return { text: `Ở **${plc.label}** trong app chưa có chỗ nào nên Lomi chưa đổi được 😅 Muốn tìm ở khu khác thì bạn gõ tên nơi đó, kiểu “Vũng Tàu có gì chơi” hay “quán cà phê ở Đà Lạt” nha.`, places: [], quick: [] };
+  if (plc && !plc.area)
+    return { text: noPlaceText(plc, it.mode === "find" ? "find" : "go", it.kind?.noun), places: [], quick: plc.sights?.length ? [] : ["Tìm quán cà phê có ưu đãi"] };
   const pos = await myPos(it.near);
   // ── Hôm nay ăn gì / uống gì / đi đâu: chọn NGẪU NHIÊN 1 chỗ đang có ưu đãi ──
   if (it.mode !== "find") {
@@ -217,14 +206,22 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
       again = "\n(Lomi gợi ý hết các chỗ đang có ưu đãi rồi, giờ bốc lại từ đầu nha.)";
     }
     // Không nêu khu vực mà có vị trí → chỉ bốc trong các chỗ GẦN anh (≤5km, rồi ≤30km, rồi vài chỗ gần nhất) — không bốc bừa cả nước.
+    let farNote = "";
     if (pos && !it.area) {
       const withD = cards.filter((c) => c.distKm != null).sort((a, b) => a.distKm! - b.distKm!);
       const n5 = withD.filter((c) => c.distKm! <= 5);
       const n30 = withD.filter((c) => c.distKm! <= 30);
       if (n5.length) cards = n5;
       else if (n30.length) cards = n30;
-      else if (withD.length) cards = withD.slice(0, 8);
+      else if (withD.length) {
+        // 23/10: không có chỗ nào gần → chỉ lấy chỗ GẦN NHẤT (không trộn cả mấy tỉnh), và nói rõ là ở xa.
+        const nearest = withD[0];
+        cards = withD.filter((c) => c.area && nearest.area && sameArea(c.area, nearest.area)).slice(0, 8);
+        if (!cards.length) cards = [nearest];
+        farNote = `\n(Quanh bạn chưa có chỗ nào trong app — đây là khu gần bạn nhất, ${nearest.area ? `ở ${nearest.area}` : `cách khoảng ${Math.round(nearest.distKm!)}km`}.)`;
+      }
     }
+    if (!cards.length && plc && !avoidIds.length) return { text: noPlaceText(plc, "go"), places: [], quick: [] };
     if (!cards.length)
       return {
         text: it.area
@@ -243,8 +240,11 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
             ? pick([`Đi chơi ${it.area} hả? Lomi gợi ý ghé`, `Ở ${it.area} thì thử ghé`])
             : pick(["Đi chơi hả? Lomi gợi ý ghé", "Cuối tuần thử ghé"]);
     const offer = c.offer ? ` Đang có ưu đãi: “${c.offer}” 🎁` : "";
+    // Nêu nơi có điểm nổi tiếng ("Đà Lạt có gì chơi") → kể vài điểm nổi tiếng trước, rồi mới tới chỗ có ưu đãi trong app (lượt đầu).
+    const sightsLead = it.mode === "go" && plc?.sights?.length && !avoidIds.length ? `Đi ${plc.label} thì mấy điểm nổi tiếng nè:\n${plc.sights.map((x) => `• ${x}`).join("\n")}\n\nCòn trong app, ` : "";
+    const lead2 = sightsLead ? "Lomi gợi ý ghé" : lead;
     return {
-      text: `${lead} **${c.name}**${where(c, it.area)} nha!${offer}${again}\nKhông ưng thì bấm “${it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác"}” để Lomi bốc lại 😄`,
+      text: `${sightsLead}${lead2} **${c.name}**${where(c, it.area)} nha!${offer}${again}${farNote}\nKhông ưng thì bấm “${it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác"}” để Lomi bốc lại 😄`,
       places: [c],
       quick: [it.mode === "go" ? "Đổi chỗ khác" : "Đổi món khác", "Tìm quán cà phê có ưu đãi", "Tìm quán ăn gần mình"],
     };
@@ -378,7 +378,7 @@ export function suggestDishes(drink: boolean, avoid: string[] = []): { text: str
 }
 
 /** Điều kiện thêm khi người dùng nói tiếp sau kết quả tìm quán ("gần mình", "có ưu đãi không?", "yên tĩnh") — lib/lomiConvo. */
-export type DishWant = { text?: string; offer?: boolean; near?: boolean; maxKm?: number };
+export type DishWant = { text?: string; offer?: boolean; near?: boolean; maxKm?: number; /** 23/10: nơi người dùng nêu ("quán lẩu ở Nha Trang") */ place?: string };
 
 /**
  * Tìm quán THẬT có món này (tên quán, mô tả hoặc ưu đãi). avoidIds = quán đã gợi ý (bấm "Quán khác").
@@ -386,6 +386,9 @@ export type DishWant = { text?: string; offer?: boolean; near?: boolean; maxKm?:
  * ưu đãi hoặc đánh giá mới nhất của quán. Không có quán nào khớp thì NÓI THẬT rồi vẫn đưa các quán có món đó.
  */
 export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: DishWant): Promise<SearchResult> {
+  const plc = want?.place ? PLACES.find((p) => p.label === want.place) : undefined;
+  const main0 = d.name.split(/[,(]/)[0].trim();
+  if (plc && !plc.area) return { text: noPlaceText(plc, "find", `quán ${main0}`), places: [], quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"] };
   const pos = await myPos(!!want?.near);
   const clean = (x: string) => x.replace(/[,()%]/g, "").trim();
   // Tìm theo tên CÓ DẤU ("Phở" ≠ "Phố" — bỏ dấu thì trùng nhau); chỉ dùng tên không dấu cho từ khoá
@@ -405,7 +408,7 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: Dis
     .order("rating", { ascending: false, nullsFirst: false })
     .limit(40);
   type WRow = Row & { description?: string | null; latest_review_comment?: string | null };
-  let rows = ((data ?? []) as unknown as WRow[]).filter((r) => !avoidIds.includes(r.id));
+  let rows = ((data ?? []) as unknown as WRow[]).filter((r) => !avoidIds.includes(r.id) && (!plc?.area || sameArea(r.area, plc.area)));
   // Điều kiện thêm: lọc được thì ghi rõ đã lọc theo gì (met); không quán nào khớp thì ghi lại (miss) để nói thật.
   const met: string[] = [];
   const miss: string[] = [];
@@ -429,13 +432,16 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: Dis
   const main = d.name.split(/[,(]/)[0].trim();
   const nm = main.charAt(0).toUpperCase() + main.slice(1);
   if (!cards.length) {
-    // Không có quán nào có đúng món → nói thật, gợi ý vài quán ăn/uống khác đang có ưu đãi.
-    const rows = await fetchRows("food", [], true);
+    // Không có quán nào có đúng món → nói thật, gợi ý vài quán ăn/uống khác đang có ưu đãi (cùng khu vực nếu người dùng nêu nơi).
+    const rows = await fetchRows("food", [], true, plc?.area);
+    if (plc?.area && !rows.length) return { text: `Lomi chưa thấy quán **${main0}** nào ở ${plc.area} trong app nè 🥲 Bạn thử tìm ở Khám phá (/kham-pha) nha.`, places: [], quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"] };
     const others = rows.map((r) => toCard(r, pos)).filter((c) => !avoidIds.includes(c.id)).sort(() => Math.random() - 0.5).slice(0, 3);
+    if (!others.length)
+      return { text: `Lomi gợi ý hết các quán có **${main0}**${plc?.area ? ` ở ${plc.area}` : ""} trong app rồi 😅 Bạn xem thêm ở Khám phá (/kham-pha) hoặc chọn món khác nha.`, places: [], quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"] };
     return {
       text: avoidIds.length
         ? `Lomi hết quán có **${nm}** để gợi ý rồi 😅 Thử mấy quán khác đang có ưu đãi nè 👇`
-        : `Hic, trong Liên Minh Liên Doanh chưa có quán nào ghi rõ món **${nm}** 🥲 Lomi gợi ý tạm mấy quán ${d.drink ? "nước" : "ăn"} đang có ưu đãi nha 👇`,
+        : `Hic, trong Liên Minh Liên Doanh chưa có quán nào ${plc?.area ? `ở ${plc.area} ` : ""}ghi rõ món **${nm}** 🥲 Lomi gợi ý tạm mấy quán ${d.drink ? "nước" : "ăn"}${plc?.area ? ` ở ${plc.area}` : ""} đang có ưu đãi nha 👇`,
       places: others,
       quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"],
     };
