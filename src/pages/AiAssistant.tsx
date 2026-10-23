@@ -56,6 +56,7 @@ import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFa
 import { honestReply } from "@/lib/lomiHonest";
 import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
 import { v5Reply } from "@/lib/lomiV5";
+import { v8Reply } from "@/lib/lomiV8";
 import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTherapy";
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
@@ -903,7 +904,9 @@ export function AiChat({
     const nq0 = normalizeVi(q);
     const sayAsk0 = VN(/\b(nên nói gì|nói gì với|nói sao với|an ủi|động viên|làm gì để giúp|giúp (\S+ ){0,2}(sao|thế nào|được gì)|khuyên (\S+ ){0,2}(sao|thế nào|gì))\b/).test(nq0);
     const doAsk0 = !sayAsk0 && !lastA0?.thread && !lastA0?.health && !lastA0?.heart && nq0.split(" ").length <= 7 && VN(/\b(nên làm gì|nên làm sao|phải làm sao|phải làm gì|làm sao (bây giờ|giờ|đây|dậy)|làm gì (bây giờ|giờ|đây|dậy)|biết làm sao)\b/).test(nq0);
-    if (!forceAi && !en && lastA0?.about && lastA0.about.kind === "third" && !lastA0.harm && !crisisReply(q, lang) && (sayAsk0 || doAsk0)) {
+    // (23/10 QA V8: đang tâm sự chuyện mà chính người kia gây ra — "người yêu hay ghen, xem điện thoại a" → "a nên nói sao với cô ấy"
+    //   là hỏi cách nói chuyện về vấn đề của hai người, không phải "an ủi người đang có chuyện": chủ đề đó có lời khuyên riêng thì nhường.)
+    if (!forceAi && !en && lastA0?.about && lastA0.about.kind === "third" && !lastA0.harm && !crisisReply(q, lang) && (sayAsk0 || doAsk0) && !(lastA0.heart && heartAdviceHint(lastA0.heart, raw)) && !v8Reply(raw, { last: lastA0.content, hist: msgs.filter((m) => m.role === "user").slice(-6).map((m) => m.content), lastHeart: lastA0.heart })) {
       const w = lastA0.about.text;
       // 12/10: người đang nhắc tới ĐÃ MẤT ("bạn a mới mất" → "a không biết nói gì với gia đình bạn") → gợi ý cách chia buồn với người ở lại;
       //   tuyệt đối không khuyên "hỏi thăm dạo này sao rồi", "hỏi xem người đó cần giúp gì" như với người đang còn.
@@ -971,6 +974,11 @@ export function AiChat({
     if (!forceAi && !en && !crisisReply(q, lang)) {
       const e4 = earlyV4(q);
       if (e4) return localReply(q, { role: "assistant", content: e4, local: true });
+      // 23/10 (QA V8): an toàn của NGƯỜI KHÁC + câu kể tiếp cần ngữ cảnh nhiều lượt (bạn nói muốn chết rồi không bắt máy, bị lừa
+      //   chuyển khoản, bé tiêu chảy ít đi tiểu, vợ mới sinh hay khóc, dị ứng rồi sưng môi, nợ + lương, mở quán, người già hay quên,
+      //   con tuổi teen thu mình, chăm người bệnh kiệt sức, mới chuyển tới, giảm cân, đăng bài bán hàng) — trước mạch nghe kể / kinh doanh.
+      const v8 = v8Reply(raw, { last: lastA0?.content, hist: msgs.filter((m) => m.role === "user").slice(-6).map((m) => m.content), lastHeart: lastA0?.heart });
+      if (v8) return localReply(q, { role: "assistant", content: v8.text, local: true, ...(lastA0?.about ? { about: lastA0.about } : {}), ...(v8.biz ? { biz: v8.biz } : {}), ...(v8.heart ? { heart: v8.heart, heartDepth: (lastA0?.heartDepth ?? 0) + 1 } : {}) });
     }
     if (!forceAi && !en && !crisisReply(q, lang)) {
       const ug = urgentOf(raw) ?? (raw !== q ? urgentOf(q) : null);
@@ -1988,7 +1996,9 @@ export function AiChat({
     //   "có gì vui kể anh nghe đi" (Q6) là muốn nghe chuyện, không phải tìm chỗ đi chơi.
     const bizOpening = looksLikeBizQuestion(q) && detectBizTopic(q) === "opening";
     const tellMe = VN(/\bkể (cho )?(anh|a|em|e|mình|tôi|tui|chị|c|tớ|t) nghe\b/).test(` ${normalizeVi(q)} `);
-    if (!forceAi && !en && !gateSkip && !bizOpening && !tellMe) {
+    // 23/10 (QA V8): "app có chỗ nào tìm việc làm không" là hỏi TÍNH NĂNG của app (Quẹt → Công việc), không phải đi tìm quán.
+    const appFeat = VN(/\b(app|ứng dụng|trên đây|trong đây)\b/).test(` ${normalizeVi(q)} `) && !!matchFaq(q);
+    if (!forceAi && !en && !gateSkip && !bizOpening && !tellMe && !appFeat) {
       const it = detectSearch(q);
       // "Hôm nay ăn gì / uống gì" → gợi ý món trước (chọn món rồi mới tìm quán).
       if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q) && !illMeal(q)) return replyDishes(q, it.mode === "drink");

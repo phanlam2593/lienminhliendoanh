@@ -314,9 +314,9 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   //   ("người yêu a hay giận", "vợ a hay dỗi" — cảm xúc lặp đi lặp lại của người đó cũng là than về chuyện hai người, không phải tin người đó gặp nạn.)
   const habit = p.cls === "feel" && p.kind === "state" && f.toks.some((t) => t.t === "hay" || t.t === "suốt" || t.t === "toàn");
   if (p.val < 0 && person && f.subjectCls === "partner" && habit && c.heart !== "rel")
-    return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : "fight", text: `${subj} hay ${p.head} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+    return { intent: "frame:third_neg", openHeart: /^(hay |dễ |hơi )?ghen/u.test(p.head) ? "jealous" : c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : "fight", text: `${subj} hay ${p.head} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   if (p.val < 0 && person && f.subjectCls === "partner" && p.kind === "quality" && TRAIT.test(p.head) && c.heart !== "rel")
-    return { intent: "frame:third_neg", openHeart: c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : VR(/^(Vợ|Chồng|Bà xã|Ông xã)/).test(subj) ? "marriage" : "love", text: `${subj} ${what} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
+    return { intent: "frame:third_neg", openHeart: /^(hay |dễ |hơi )?ghen/u.test(p.head) ? "jealous" : c.heart && ["cold", "fight", "marriage"].includes(c.heart) ? c.heart : VR(/^(Vợ|Chồng|Bà xã|Ông xã)/).test(subj) ? "marriage" : "love", text: `${subj} ${what} hả 😔 Chuyện sao vậy bạn, kể Lomi nghe với.` };
   // 21/10 (audit): "cô ấy lạnh nhạt với a dạo này" — một người lạnh nhạt / vô tâm VỚI CHÍNH người kể là chuyện tình cảm (dù chưa nói là
   //   người yêu) → mở mạch tâm sự "lạnh nhạt" và nhớ người đó, thay vì "Cô ấy lạnh nhạt hả 😅 Chuyện sao vậy".
   if (p.val < 0 && person && (!c.heart || c.heart === "rel") && VR(/(lạnh nhạt|lạnh lùng|vô tâm|hờ hững|thờ ơ|xa cách|né tránh|hết quan tâm)/).test(p.head) && (f.subjectCls === "partner" || VR(/với ⟦you⟧/).test(p.obj ?? "")))

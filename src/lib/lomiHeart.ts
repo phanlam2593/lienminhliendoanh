@@ -10,6 +10,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
 import { V7_ADVICE_HINTS, V7_HINTS, V7_THEMES } from "@/lib/lomiHeartV7";
+import { V8_HINTS } from "@/lib/lomiHeartV8";
 import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
 import { dropNegated, VR, VN } from "@/lib/viMatch";
 
@@ -944,6 +945,10 @@ function chipsFor(_t: Theme | undefined): string[] {
   for (const [id, re] of Object.entries(widen)) {
     const t = THEMES.find((x) => x.id === id);
     if (t) t.re = new RegExp(`${t.re.source}|${re.source}`, t.re.flags);
+  }
+  for (const [id, hs] of Object.entries(V8_HINTS)) {
+    const t = THEMES.find((x) => x.id === id);
+    if (t) t.hint = [...hs, ...(t.hint ?? [])];
   }
   for (const [id, hs] of Object.entries(V7_HINTS)) {
     const t = THEMES.find((x) => x.id === id);

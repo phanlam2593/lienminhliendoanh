@@ -1219,7 +1219,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "backpain",
-    re: VN(/\b(đau lưng|mỏi lưng|đau cổ gáy|mỏi cổ gáy|cứng cổ|đau vai gáy|mỏi vai gáy|đau cổ vai gáy|thoát vị|đau khớp|ngồi lâu đau|đau cột sống)\b/),
+    re: VN(/\b(đau lưng|mỏi lưng|đau cổ gáy|mỏi cổ gáy|bị cứng cổ|cứng cổ gáy|cổ bị cứng|đau vai gáy|mỏi vai gáy|đau cổ vai gáy|thoát vị|đau khớp|ngồi lâu đau|đau cột sống)\b/),
     feel: ["Đau lưng mỏi cổ là “bệnh nghề nghiệp” của dân ngồi nhiều đó 😣", "Thương bạn, đau nhức kéo dài làm người uể oải lắm."],
     insight: ["Ngồi sai tư thế, cúi điện thoại nhiều, ít vận động là nguyên nhân thường gặp nhất.", "Đau lan xuống chân, tê bì, yếu tay chân thì cần đi khám sớm."],
     step: ["Cứ 45–60 phút đứng dậy đi lại, vươn vai vài phút.", "Chỉnh màn hình ngang tầm mắt, ghế có tựa lưng, hai chân chạm sàn."],

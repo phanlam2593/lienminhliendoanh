@@ -36,7 +36,7 @@ function readPlan(msgs: string[]): { plan: Plan | null; active: boolean; dropped
   for (const [i, raw] of msgs.entries()) {
     const t = raw.normalize("NFC").toLowerCase();
     if (SHOP.test(t) && /(mở|kinh doanh|khai trương|làm)/u.test(t)) shopCtx = true;
-    const cap0 = t.match(new RegExp(`^(?:vốn|tiền vốn|vốn liếng)(?:\\s+(?:khoảng|tầm|chừng|có|là|được))?\\s+${TR}`, "u"));
+    const cap0 = t.match(new RegExp(`^(?:vốn|tiền vốn|vốn liếng)(?:\\s+(?:a|anh|em|e|mình|tôi|tui|chị|c))?(?:\\s+(?:khoảng|tầm|chừng|có|là|được|hiện|đang))*\\s+${TR}`, "u"));
     if (cap0 && shopCtx && !plan) { plan = { cap: num(cap0[1]), once: [] }; active = true; capAt = i; continue; }
     if (plan && DROP.test(t)) { active = false; dropped = true; continue; }
     if (plan && RESUME.test(t)) { active = true; dropped = false; continue; }
