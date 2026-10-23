@@ -47,7 +47,7 @@ import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
-import { PRIORITY_THEMES, GENERIC, heartContinue, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
+import { PRIORITY_THEMES, GENERIC, heartAdviceHint, heartContinue, heartHintMatches, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
@@ -998,7 +998,7 @@ export function AiChat({
       const addrS = loadMem(user.id).addr;
       if (th0) {
         const claimed = !!(detectTarot(q) || detectSearch(q) || detectDish(q) || looksLikeBizQuestion(q) || capabilityAsk(q) || (isAppish(q) && matchFaq(q)));
-        const st = storyTurn(raw, fr1, th0, { addr: addrS, mirror: mirrorText(fr1, addrS, 8), claimed, inHeart: !!lastA0.heart, inHealth: !!lastA0.health });
+        const st = storyTurn(raw, fr1, th0, { addr: addrS, mirror: mirrorText(fr1, addrS, 8), claimed, inHeart: !!lastA0.heart && !(th0.kind === "loss" && lastA0.heart === "grief" && !heartHintMatches("grief", raw)), inHealth: !!lastA0.health });
         if (st) {
           topicHit(st.health ? "health" : "heart");
           return localReply(q, {
@@ -1380,10 +1380,14 @@ export function AiChat({
         //   vẫn hiểu là chuyện đang kể), đang nói chuyện sức khoẻ thì giữ mạch sức khoẻ.
         // 22/10: hỗ trợ tâm lý có cấu trúc — giới thiệu, bài tập thở, soi lại suy nghĩ (CBT), một việc nhỏ, gỡ nỗi lo, sàng lọc, kế hoạch an toàn.
         const ts = therapyStart(raw);
-        const TH_HEART: Record<string, string> = { cbt: "selfworth", calm: "anxiety", worry: "overthink", act: "sad", screen: "sad", safety: "sad" };
+        const TH_HEART: Record<string, string> = { cbt: "selfworth", calm: "anxiety", worry: "overthink", act: "sad", screen: "sad", safety: "sad", kind: "regret", anger: "angerself" };
         if (ts) return localReply(q, { role: "assistant", content: ts.text, local: true, therapy: ts.state, quick: ts.quick, heart: lastA?.heart && !lastA.heart.startsWith("ev:") ? lastA.heart : (ts.state ? TH_HEART[ts.state.tool] : undefined) ?? "sad", heartDepth: (lastA?.heartDepth ?? 0) + 1, story: lastA?.story });
         const v5 = v5Reply(raw, { last: lastA?.content, lastHeart: lastA?.heart, inHealth: !!hCtx, healthLabel: lastA?.health?.label });
         if (v5) return localReply(q, { role: "assistant", content: v5, local: true, ...(lastA?.heart && !lastA.heart.startsWith("ev:") ? { heart: lastA.heart, heartDepth: (lastA.heartDepth ?? 0) + 1, story: lastA.story } : {}), ...keepHealth });
+        // 23/10 (QA V7): đang tâm sự mà xin CÁCH LÀM → ý riêng của đúng chủ đề đang nói (trước lớp nhắc lại câu / khung câu).
+        const hh = heartOn && lastA?.heart ? heartAdviceHint(lastA.heart, raw) : null;
+        if (hh && !msgs.slice(-6).some((m) => m.role === "assistant" && m.content.includes(hh.slice(0, 40))))
+          return localReply(q, { role: "assistant", content: hh, local: true, heart: lastA!.heart, heartDepth: (lastA!.heartDepth ?? 0) + 1, story: lastA!.story });
         const ex =
           v4Reply(q, { last: lastA?.content, hist: msgs.filter((m) => m.role === "user").slice(-24).map((m) => m.content), lastHeart: lastA?.heart, lastHealth: !!hCtx }) ??
           safetyNowReply(q) ??

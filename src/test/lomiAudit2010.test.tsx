@@ -1419,3 +1419,110 @@ describe("QA V6 — câu khủng hoảng gõ không dấu / viết tắt (quét 
     expect((await last(["đói muốn chết"])).content).not.toMatch(/không phải một mình|không muốn sống nữa\?/);
   }, T);
 });
+
+// QA V7 (23/10, tự soạn: tâm sự nhiều lượt) — chủ đề mới, ý riêng, giữ đúng mạch, giọng đáp.
+describe("QA V7 — tâm sự nhiều lượt", () => {
+  it("mâu thuẫn với ba mẹ: không bị hiểu là cãi nhau với người yêu; 'ba nóng tính' là nói về ba", async () => {
+    const r = await chat(["Dạo này a với ba mẹ hay cãi nhau", "Ba mẹ muốn a về quê làm, còn a muốn ở lại Đà Lạt", "Mỗi lần nói chuyện là to tiếng", "A thấy mình bất hiếu", "A không biết nói sao cho ba mẹ hiểu", "Ba a nóng tính lắm", "Mẹ thì hay khóc"], { seed: 7 });
+    for (const m of r) expect(m.heart).toBe("parentsclash");
+    expect(r[2].content).not.toMatch(/Hai bạn cãi nhau|Cặp đôi/);
+    expect(r[3].content).toMatch(/không phải anh là đứa con tệ/);
+    expect(r[5].content).toMatch(/nóng tính/);
+    expect(r[6].content).toMatch(/mẹ khóc/);
+  }, 120000);
+  it("nuôi con: ăn vạ → điện thoại → quát con → áy náy → vợ chiều con", async () => {
+    const r = await chat(["Con a 5 tuổi hay ăn vạ", "Mỗi lần không cho xem điện thoại là lăn ra khóc", "A hay quát con", "Xong a lại thấy tội lỗi", "Vợ a thì chiều con"], { seed: 7 });
+    for (const m of r) { expect(m.heart).toBe("parenting"); expect(m.unk).toBeFalsy(); }
+    expect(r[1].content).toMatch(/5 phút/);
+    expect(r[3].content).toMatch(/làm lành/);
+    expect(r[4].content).toMatch(/thống nhất/);
+    for (const m of r) expect(m.content).not.toMatch(/😄|Nghe được đó/);
+  }, 120000);
+  it("mất ba: mơ thấy ba → hối hận không về thăm → lo cho mẹ → cách nguôi ngoai", async () => {
+    const r = await chat(["Ba a mất được 2 tháng rồi", "Nhiều đêm a nằm mơ thấy ba", "A hối hận vì không về thăm ba nhiều hơn", "Mẹ a giờ ở một mình", "Có cách nào để nguôi ngoai không em"], { seed: 7 });
+    expect(r[0].content).toMatch(/chia buồn/);
+    expect(r[1].content).toMatch(/Mơ thấy người thân/);
+    expect(r[2].content).toMatch(/giá như/);
+    expect(r[2].content).not.toMatch(/chăm ba hết lòng/);
+    expect(r[3].content).toMatch(/Gọi điện cho mẹ/);
+    expect(r[4].content).toMatch(/không có “hạn chót”/);
+    for (const m of r) expect(m.unk).toBeFalsy();
+  }, 120000);
+  it("mất mẹ: lời khuyên nguôi ngoai / hối hận không nói nhầm sang “ba”; ba ở một mình → gọi cho ba", async () => {
+    const r = await chat(["Mẹ a mất được 3 tháng rồi", "A hối hận vì không về thăm mẹ nhiều hơn", "Ba a giờ ở một mình", "Có cách nào để nguôi ngoai không em"], { seed: 7 });
+    expect(r[1].content).toMatch(/giá như/);
+    expect(r[2].content).toMatch(/Gọi điện cho ba/);
+    expect(r[3].content).toMatch(/không có “hạn chót”/);
+    for (const m of r.slice(1)) expect(m.content).not.toMatch(/viết cho ba|Nói về ba|nói về ba/);
+  }, 120000);
+  it("mất người thân / thú cưng: câu kể ngắn (nhớ, giỗ) vẫn được đáp theo mạch đang kể dù đã mở mạch tâm sự", async () => {
+    const a = await chat(["bố a mất năm ngoái", "a vẫn nhớ"]);
+    expect(a[1].content).toMatch(/Nhớ là phải/);
+    expect(a[0].heart).toBe("grief");
+  }, T);
+  it("'Bố anh mới mất tháng trước, anh vẫn chưa quen được' → chia buồn trước, chưa khuyên", async () => {
+    expect((await last(["Bố anh mới mất tháng trước, anh vẫn chưa quen được"])).content).not.toMatch(/hạn chót/);
+  }, T);
+  it("làm 12 tiếng → không còn thấy vui (không đáp 'Thích vậy trời') → nghỉ việc thì không có tiền", async () => {
+    const r = await chat(["A làm việc 12 tiếng mỗi ngày", "Cuối tuần cũng phải làm", "Không còn thấy vui với cái gì nữa", "Nhưng nghỉ việc thì không có tiền"], { seed: 7 });
+    for (const m of r) expect(m.heart).toBe("overwork");
+    expect(r[2].content).not.toMatch(/Thích vậy trời|Nghe đã ghê|Quá xịn/);
+    expect(r[2].content).toMatch(/hai tuần/);
+    expect(r[3].content).toMatch(/lựa chọn ở giữa/);
+  }, 120000);
+  it("lớp nghe kể: 'không còn thấy vui' không bị đọc là chuyện vui", async () => {
+    const { isUpbeat } = await import("@/lib/lomiSense");
+    expect(isUpbeat("không còn thấy vui với cái gì nữa")).toBe(false);
+  }, T);
+  it("thi cử: học không vào → sợ ba mẹ thất vọng → bài tập thở", async () => {
+    const r = await chat(["Tháng sau a thi đại học", "A học mà không vào", "Sợ thi rớt ba mẹ thất vọng", "Có bài tập thở gì không em"], { seed: 7 });
+    expect(r[1].content).toMatch(/Pomodoro/);
+    expect(r[2].content).toMatch(/không nằm trong một kỳ thi/);
+    expect(r[3].therapy?.tool).toBe("calm");
+  }, 120000);
+  it("cô đơn ở chỗ mới: không quen ai → ngại làm quen → chỗ gặp gỡ người mới (Quẹt, Cộng đồng — không phải danh sách quán)", async () => {
+    const r = await chat(["Không quen ai hết", "A cũng ngại làm quen", "Ở đây có chỗ nào để gặp gỡ người mới không"], { seed: 7 });
+    expect(r[0].heart).toBe("lonely");
+    expect(r[1].content).toMatch(/Ngại làm quen/);
+    expect(r[2].content).toMatch(/Quẹt[^]*Cộng đồng/);
+    expect(r[2].places ?? []).toHaveLength(0);
+  }, 90000);
+  it("'làm sao để bớt so sánh' → lời khuyên bớt so sánh", async () => {
+    expect((await last(["Làm sao để bớt so sánh"])).content).toMatch(/So với chính mình/);
+  }, T);
+  it("nóng giận: đập ly → hối hận (vẫn chủ đề nóng giận) → không muốn vợ con sợ → có bị gì không (không chẩn đoán)", async () => {
+    const r = await chat(["A dễ nổi nóng lắm", "Hôm qua a đập vỡ cái ly vì vợ nói một câu", "Xong a hối hận", "A không muốn làm vợ con sợ", "A có bị gì không em"], { seed: 7 });
+    for (const m of r) expect(m.heart).toBe("angerself");
+    expect(r[3].content).toMatch(/tín hiệu tạm dừng/);
+    expect(r[4].content).toMatch(/không chẩn đoán được/);
+  }, 120000);
+  it("nghiện game: chơi tới 3–4h sáng → quên buồn → vợ giận → bắt đầu từ đâu", async () => {
+    const r = await chat(["A chơi game tới 3-4h sáng", "Chơi game cho quên buồn", "Vợ a giận lắm", "A muốn bỏ mà không biết bắt đầu từ đâu"], { seed: 7 });
+    for (const m of r) expect(m.heart).toBe("addict");
+    expect(r[3].content).toMatch(/Đặt giờ dừng cố định/);
+  }, 120000);
+});
+describe("Tâm lý — bài tập mới (V7)", () => {
+  it("tự trấn an: 3 bước → câu tử tế với chính mình", async () => {
+    const r = await chat(["tự trấn an", "Hôm qua a làm vỡ đồ của khách, a tự nói mình đúng là đồ hậu đậu vô dụng", "A sẽ nói không sao đâu, ai cũng có lúc lỡ tay, lần sau cẩn thận hơn", "Không sao đâu, ai cũng có lúc lỡ tay, lần sau mình cẩn thận hơn"], { seed: 7 });
+    expect(r[0].content).toMatch(/Bước 1/);
+    expect(r[3].content).toMatch(/tự trắc ẩn/);
+    expect(r[3].therapy).toBeUndefined();
+  }, 90000);
+  it("tự mắng mình → mời bài tập → đồng ý → bước 1", async () => {
+    const r = await chat(["Lúc nào làm sai a cũng chửi mình ngu", "ừ thử xem"], { seed: 7 });
+    expect(r[0].therapy?.tool).toBe("kind");
+    expect(r[1].content).toMatch(/Bước 1/);
+  }, 60000);
+  it("kế hoạch cơn giận: ngòi nổ → đèn vàng → câu tạm dừng → thẻ kế hoạch", async () => {
+    const r = await chat(["bài tập cơn giận", "Khi vợ nói nặng lời lúc a đang mệt", "Nóng mặt, nói to dần", "Anh đang nóng, cho anh 15 phút rồi mình nói tiếp nha"], { seed: 7 });
+    expect(r[3].content).toMatch(/Kế hoạch cho cơn giận[^]*Ngòi nổ[^]*Đèn vàng[^]*Câu xin tạm dừng[^]*STOP/);
+  }, 90000);
+  it("xin lời khuyên kiềm chế cơn giận → gợi ý bài tập cơn giận", async () => {
+    const r = await chat(["A dễ nổi nóng lắm", "Có cách nào kiềm chế không"], { seed: 7 });
+    expect(r[1].content).toMatch(/bài tập cơn giận/);
+  }, 60000);
+  it("ngủ đúng giờ → mẹo ngủ", async () => {
+    expect((await last(["Có cách nào để ngủ đúng giờ không"])).content).toMatch(/Dậy cùng một giờ/);
+  }, T);
+});

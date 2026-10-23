@@ -284,7 +284,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   if (p.cls === "preg" && person && !f.neg && c.sxOther) return null;
   if (p.cls === "preg" && person && !f.neg) return { intent: "frame:third_preg", talk: true, text: `${subj} ${p.ongoing ? "đang " : ""}${p.head} hả 😄 Chúc mừng nha! Được mấy tháng rồi bạn?` };
   if (p.cls === "death" && (person || pet))
-    return { intent: "frame:third_loss", talk: true, keepHeart: true, text: `${subj} ${p.recent ? "mới " : ""}${p.head} hả 🥺 Lomi chia buồn với bạn nha. ${pet ? "Bé ở với bạn lâu chưa?" : "Bạn đang thấy thế nào, kể Lomi nghe với."}` };
+    // (23/10: mở mạch tâm sự "mất người thân" để những câu kể sau — hối hận, lo cho người còn lại, hỏi cách nguôi ngoai — được đáp đúng chuyện)
+    return { intent: "frame:third_loss", talk: true, keepHeart: true, openHeart: "grief", text: `${subj} ${p.recent ? "mới " : ""}${p.head} hả 🥺 Lomi chia buồn với bạn nha. ${pet ? "Bé ở với bạn lâu chưa?" : "Bạn đang thấy thế nào, kể Lomi nghe với."}` };
   // "ba a nhập viện rồi", "mẹ a mới mổ" — đã ở trong tay bác sĩ: hỏi bác sĩ nói sao, không hỏi "đi khám chưa".
   //   Đã nói rõ mổ / cấp cứu vì gì ("mẹ a mổ ruột thừa") thì hỏi giờ sao rồi, không hỏi lại "bị gì".
   if ((person || pet) && HOSPITAL.test(p.head)) {

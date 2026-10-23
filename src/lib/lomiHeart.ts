@@ -9,6 +9,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
+import { V7_ADVICE_HINTS, V7_HINTS, V7_THEMES } from "@/lib/lomiHeartV7";
 import { DUNNO_RE, META_RE, NO_RE, YES_RE, activityOf, eventById, eventOf, type Ev } from "@/lib/lomiTalk";
 import { dropNegated, VR, VN } from "@/lib/viMatch";
 
@@ -83,6 +84,7 @@ const PRO =
 
 // Chủ đề mở rộng (lib/lomiHeartMore) đứng trước — từ khoá cụ thể hơn nên được ưu tiên.
 const THEMES: Theme[] = [
+  ...V7_THEMES,
   ...MORE_THEMES,
   {
     // Sức khoẻ nam giới — nói tế nhị, đúng y khoa, khuyên gặp bác sĩ; không đi vào chi tiết nhạy cảm.
@@ -729,6 +731,7 @@ const THEMES: Theme[] = [
 ];
 
 // Chủ đề chỉ là "danh từ" (bạn bè, gia đình, công việc…) — nhắc tới trong lúc kể chuyện khác thì không đổi chủ đề.
+const SELF_THEMES = new Set(["angerself", "regret", "selfworth", "compare", "perfect", "procrast", "confidence"]);
 const NOUNISH = new Set(["friends", "family", "work", "study", "love", "single", "money", "health", "homesick"]);
 const LOVE_THEMES = new Set(["breakup", "ex", "cheat", "marriage", "fight", "cold", "situationship", "spark", "unrequited", "stayorgo", "lies", "toxic", "longdist"]);
 /** Nhắc lại lời người dùng theo ngôi của Lomi ("mình" → "bạn"). */
@@ -930,6 +933,27 @@ const BETTER = "😊 Mình ổn hơn rồi";
 function chipsFor(_t: Theme | undefined): string[] {
   return [];
 }
+// 23/10 (QA V7): ý riêng + cách nói bổ sung cho chủ đề có sẵn (lib/lomiHeartV7).
+{
+  const widen: Record<string, RegExp> = {
+    grief: VN(/\b(ba|bố|cha|mẹ|má|ông|bà|chồng|vợ|con)( \S+){0,2} mất (được |đã |cũng )?(\d+|một|hai|ba|mấy|vài) (ngày|tuần|tháng|năm)\b/),
+    lonely: VN(/\b(không|chẳng|chưa|chả) quen (ai|được ai)|không có (bạn|bạn bè) (nào|gì)|ngại (làm quen|kết bạn)|chỉ ở (trong )?phòng|ở (trong )?phòng (một mình|cả ngày|suốt)\b/),
+    study: VN(/\b(thi đại học|thi tốt nghiệp|thi vào lớp|sắp thi|học mà không vào|cầm sách là)\b/),
+    addict: VN(/\b(chơi game (tới|đến|tận|tới tận|đến tận) (\d+|khuya|sáng|gần sáng)|thức (khuya|tới sáng|đến sáng) (để )?chơi game|bỏ game|cai game)\b/),
+  };
+  for (const [id, re] of Object.entries(widen)) {
+    const t = THEMES.find((x) => x.id === id);
+    if (t) t.re = new RegExp(`${t.re.source}|${re.source}`, t.re.flags);
+  }
+  for (const [id, hs] of Object.entries(V7_HINTS)) {
+    const t = THEMES.find((x) => x.id === id);
+    if (t) t.hint = [...hs, ...(t.hint ?? [])];
+  }
+  for (const [id, hs] of Object.entries(V7_ADVICE_HINTS)) {
+    const t = THEMES.find((x) => x.id === id);
+    if (t) t.adviceHint = [...hs, ...(t.adviceHint ?? [])];
+  }
+}
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
 const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt"];
@@ -977,7 +1001,9 @@ const TOOL_HINT: [RegExp, string][] = [
   [/^(anxiety|panic|overwhelm)$/, "🫁 Muốn thử ngay một bài tập thở ngắn có Lomi hướng dẫn từng bước thì gõ “bài tập thở” nha."],
   [/^(overthink|insomnia)$/, "🧺 Nếu đầu cứ lo hoài, mình làm bài “gỡ nỗi lo” cùng nhau được đó — gõ “gỡ nỗi lo” nha."],
   [/^(selfworth|compare|disliked|regret|perfect|judged|envy|confidence)$/, "🔎 Muốn thử cùng Lomi soi lại một suy nghĩ khắt khe về bản thân (bài tập chuyên gia tâm lý hay dùng) thì gõ “soi lại suy nghĩ” nha."],
-  [/^(sad|depress|tired|procrast|emptywin|lost|heavyheart)$/, "🌱 Khi chẳng muốn làm gì, bắt đầu từ một việc thật nhỏ hay giúp nhiều — gõ “một việc nhỏ hôm nay” để mình chọn cùng nhau nha."],
+  [/^(angerself)$/, "🧯 Muốn cùng Lomi lập một kế hoạch ngắn cho cơn giận (nhận ra “đèn vàng”, câu xin tạm dừng) thì gõ “bài tập cơn giận” nha."],
+  [/^(regret)$/, "💚 Nếu bạn hay tự mắng mình, gõ “tự trấn an” để thử một bài tập 3 bước tập nói với mình như nói với bạn thân nha."],
+  [/^(sad|depress|tired|procrast|emptywin|lost|heavyheart|overwork)$/, "🌱 Khi chẳng muốn làm gì, bắt đầu từ một việc thật nhỏ hay giúp nhiều — gõ “một việc nhỏ hôm nay” để mình chọn cùng nhau nha."],
 ];
 const toolHint = (t: Theme, said: (x: string) => boolean) => {
   const h = TOOL_HINT.find(([re]) => re.test(t.id))?.[1];
@@ -1212,6 +1238,10 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   if (t && cur && cur.id === "love" && GENERIC.has(t.id) && t.id !== "love" && words <= 6 && !adviceAsked && VR(/(vợ|chồng|bạn gái|bạn trai|người yêu|người ấy|crush|cô ấy|anh ấy|bà xã|ông xã|(?<![\p{L}])ny(?![\p{L}]))/iu).test(story)) t = undefined;
   // Câu kể về một NGƯỜI KHÁC ("con a sắp thi", "mẹ a ở quê") trong lúc đang tâm sự → chữ "thi", "học", "gia đình" không phải chuyện của người dùng.
   if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n)) t = undefined;
+  //   (23/10: "Ba a nóng tính lắm" khi đang kể chuyện với ba mẹ là nói về BA, không phải người dùng nóng tính → không sang chủ đề "tự nóng giận";
+  //    đang kể chuyện nóng giận mà nói "xong a hối hận" thì vẫn là chuyện nóng giận đó.)
+  if (t && cur && t.id !== cur.id && ctx.third && SELF_THEMES.has(t.id) && !adviceAsked) t = undefined;
+  if (t && cur && cur.id === "angerself" && t.id === "regret") t = undefined;
   // Chuyện đời thường đang kể (vd mắc mưa) → hiểu câu kể tiếp theo đúng chuyện đó.
   const evCur = prev.startsWith("ev:") ? eventById(prev.slice(3)) : undefined;
   const evNew = eventOf(n);
@@ -1541,4 +1571,21 @@ function rawTheme(text: string): Theme | undefined {
 }
 export function heartThemeOf(text: string): string | undefined {
   return (rawTheme(text) ?? themeOf(normStrict(text, HEART)))?.id;
+}
+
+/** 23/10 (QA V7): đang tâm sự chủ đề `themeId` mà người dùng XIN CÁCH LÀM ("không biết bắt đầu từ đâu", "làm sao bỏ") →
+ *  ý riêng của đúng chủ đề đó (nếu có), để không bị lớp nhắc lại câu bắt mất. null nếu không có ý riêng khớp. */
+/** Câu kể có trúng một ý riêng của chủ đề không (để lớp nghe kể nhường cho lớp tâm sự khi đã có lời đáp đúng chuyện). */
+export function heartHintMatches(themeId: string | undefined, text: string): boolean {
+  const t = themeId ? byId(themeId) : undefined;
+  const n = normalizeVi(text);
+  return !!t?.hint?.some(([re]) => re.test(` ${n} `));
+}
+export function heartAdviceHint(themeId: string | undefined, text: string): string | null {
+  const t = themeId ? byId(themeId) : undefined;
+  if (!t) return null;
+  // (so trên câu đã chuẩn hoá thường: bộ đọc tâm sự bỏ phần bị phủ định — "mà KHÔNG BIẾT bắt đầu từ đâu" — nên mất đúng chỗ đang hỏi)
+  const n = normalizeVi(text);
+  if (!asksAdvice(n)) return null;
+  return t.hint?.find(([re]) => re.test(` ${n} `))?.[1] ?? t.adviceHint?.find(([re]) => re.test(` ${n} `))?.[1] ?? null;
 }

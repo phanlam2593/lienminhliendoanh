@@ -14,7 +14,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
-export type TherapyState = { tool: "calm" | "cbt" | "act" | "worry" | "screen" | "safety"; step: number; data: Record<string, string> };
+export type TherapyState = { tool: "calm" | "cbt" | "act" | "worry" | "screen" | "safety" | "kind" | "anger"; step: number; data: Record<string, string> };
 export type TherapyOut = { text: string; state?: TherapyState; quick?: string[] };
 
 const N = (q: string) => ` ${normalizeVi(q)} `;
@@ -214,7 +214,36 @@ function rate(q: string): number | null {
   return m ? Number(m[1]) : null;
 }
 
-const RUN: Record<TherapyState["tool"], (step: number, q: string, d: Record<string, string>) => TherapyOut> = { calm, cbt, act, worry, screen, safety };
+// ── 23/10: tự trấn an khi tự trách (lòng tự trắc ẩn — self-compassion) ──
+function kind(step: number, q: string, d: Record<string, string>): TherapyOut {
+  const S = (s: number, extra: Record<string, string> = {}) => ({ tool: "kind" as const, step: s, data: { ...d, ...extra } });
+  if (step === 0) {
+    if (YES.test(N(q))) return kind(1, q, d);
+    if (NO.test(N(q))) return { text: "Okie, vậy bạn cứ kể, Lomi nghe nha 🫶" };
+    return { text: "" };
+  }
+  if (step === 1) return { text: "Mình làm 3 bước ngắn nha 💚\n\n**Bước 1:** Lần gần nhất bạn tự mắng mình là vì chuyện gì, và bạn đã nói gì với chính mình? (cứ ghi đúng câu trong đầu, kể cả câu nặng)", state: S(2) };
+  if (step === 2) return { text: "Cảm ơn bạn đã thật lòng 🫶 Nghe câu đó thôi đã thấy nặng rồi.\n\n**Bước 2:** Nếu người bạn thân nhất của bạn làm sai đúng chuyện đó, bạn sẽ nói gì với họ?", state: S(3, { harsh: clip(q, 120) }) };
+  if (step === 3) return { text: "Đó là cách bạn đối xử với người mình thương 💚\n\n**Bước 3:** Giờ đặt một tay lên ngực, hít thở chậm 3 lần, rồi nói câu đó **với chính mình** — đổi “bạn” thành “mình”. Gõ lại câu đó cho Lomi nha.", state: S(4, { friend: clip(q, 120) }) };
+  return {
+    text: `“${clip(q, 140)}” 💚\n\nĐây là câu bạn xứng đáng được nghe — từ chính mình. Tự mắng mình thật nặng không làm mình sửa sai nhanh hơn; nhiều nghiên cứu về **lòng tự trắc ẩn** (self-compassion) cho thấy người tử tế với bản thân khi vấp ngã thường bớt lo âu và có động lực sửa sai tốt hơn.\n\nMẹo nhỏ: lần tới câu cũ${d.harsh ? ` (“${clip(d.harsh, 60)}”)` : ""} hiện lên, dừng lại một nhịp và đổi sang câu mới này. Tập vài lần, nó sẽ đến tự nhiên hơn.`,
+  };
+}
+
+// ── 23/10: kế hoạch cho cơn giận (nhận ra ngòi nổ, dấu hiệu sớm, câu xin tạm dừng, STOP) ──
+function anger(step: number, q: string, d: Record<string, string>): TherapyOut {
+  const S = (s: number, extra: Record<string, string> = {}) => ({ tool: "anger" as const, step: s, data: { ...d, ...extra } });
+  if (step === 1) return { text: "Mình cùng làm một **kế hoạch cho cơn giận** nha 🧯 — kiểu chuyên gia tâm lý hay hướng dẫn, 3 bước ngắn.\n\n**Bước 1:** Thường điều gì làm bạn nổi nóng nhất? (một câu nói, một tình huống, lúc mệt, lúc vội…)", state: S(2) };
+  if (step === 2) return { text: "Ghi nhận 📝\n\n**Bước 2:** Trước khi bùng lên, cơ thể bạn hay báo hiệu gì? (nóng mặt, nắm chặt tay, tim đập nhanh, nói to dần, nghiến răng…)", state: S(3, { trig: clip(q, 90) }) };
+  if (step === 3) return { text: "Đó là “đèn vàng” của bạn 🚦 Thấy nó là còn kịp dừng.\n\n**Bước 3:** Khi đèn vàng bật lên, bạn sẽ nói câu gì để xin tạm dừng? Ví dụ: “Anh đang nóng, cho anh 15 phút rồi mình nói tiếp nha.”", state: S(4, { sign: clip(q, 90) }) };
+  return {
+    text:
+      `🧯 **Kế hoạch cho cơn giận của bạn**\n1. Ngòi nổ hay gặp: ${d.trig ?? "—"}\n2. Đèn vàng của cơ thể: ${d.sign ?? "—"}\n3. Câu xin tạm dừng: “${clip(q, 100)}”\n4. Khi đã tạm dừng — **STOP**: **D**ừng lại · **T**hở chậm (hít 4, thở 6) · **Q**uan sát mình đang thấy gì (tức, tổn thương, mệt?) · rồi mới **C**họn cách nói\n5. Quay lại nói chuyện sau 15–30 phút, nói bằng câu “mình cảm thấy…” thay vì câu trách\n\n` +
+      "Nói trước kế hoạch này với người nhà để họ hiểu khi bạn xin tạm dừng. Nếu cơn giận từng làm ai bị đau, đồ đạc bị đập phá, hay người nhà thấy sợ, nên gặp chuyên gia tâm lý để được hỗ trợ kỹ hơn nha 💚",
+  };
+}
+
+const RUN: Record<TherapyState["tool"], (step: number, q: string, d: Record<string, string>) => TherapyOut> = { calm, cbt, act, worry, screen, safety, kind, anger };
 
 /** Đang làm dở một bài tập → đi bước tiếp. null = người dùng đã chuyển sang chuyện khác (để các lớp khác đáp). */
 export function therapyContinue(q: string, st: TherapyState): TherapyOut | null {
@@ -237,8 +266,18 @@ const SELF_LABEL = VN(/\b(mình|anh|a|em|e|tôi|tui|tớ|tao) (thật|đúng là
 const NOT_SELF = VN(/\b(không|chẳng|đâu có|đâu phải|không phải) (là |phải )?(đồ |kẻ |người )?(vô dụng|thất bại|ngu|kém cỏi)\b|\b(nó|họ|ảnh|cổ|anh ấy|cô ấy|sếp|bạn|người ta) (thật |đúng là |là )?(vô dụng|ngu|kém cỏi)\b/);
 
 const ANX_TOOLS = VN(/\b(bài tập|cách|kỹ thuật|mẹo)( \S+){0,2} (cho|để|giúp)( \S+){0,2} (đỡ|bớt|giảm|hết|khỏi) (lo|lo âu|lo lắng|hồi hộp|căng thẳng|stress|hoảng)\b/);
+const KIND_ASK = VN(/\b(bài tập |cách )?(tự trấn an|tử tế với (bản thân|chính mình)|thương bản thân|bớt tự trách|thôi tự trách|ngừng tự trách|bớt tự chê|lòng tự trắc ẩn)\b/);
+const SELF_CRIT = VN(/\b((chửi|mắng|chê|trách|nói) (mình|bản thân|chính mình) (ngu|dốt|vô dụng|tệ|đồ|là đồ|ngu ngốc)|tự (chửi|mắng|chê|trách|đay nghiến) (mình|bản thân)( \S+){0,3} (hoài|mãi|suốt|lúc nào cũng|nặng)|lúc nào (làm sai|sai)( \S+){0,2} cũng (chửi|mắng|trách|chê) (mình|bản thân))\b/);
+const ANGER_ASK = VN(/\b(bài tập (cho )?cơn giận|kế hoạch (cho |kiềm chế )?cơn giận|bài tập kiềm chế|tập kiềm chế cơn giận)\b/);
 export function therapyStart(q: string): TherapyOut | null {
   const n = N(q);
+  if (KIND_ASK.test(n)) return kind(1, q, {});
+  if (ANGER_ASK.test(n)) return anger(1, q, {});
+  if (SELF_CRIT.test(n) && q.trim().split(/\s+/).length <= 20)
+    return {
+      text: "Lúc làm sai mà còn tự mắng mình nặng như vậy thì mệt gấp đôi 😔 Nhiều người nghĩ phải khắt khe với bản thân mới tiến bộ — nhưng thật ra tự mắng thường chỉ làm mình sợ sai hơn, chứ không giúp sửa sai.\n\nBạn có muốn thử một bài tập ngắn tập **nói với mình như nói với bạn thân** không? Chỉ 3 bước. Hoặc bạn chỉ muốn kể thôi cũng được nha.",
+      state: { tool: "kind", step: 0, data: {} },
+    };
   if (ASK_PRO.test(n)) return { text: MENU };
   if (ANX_TOOLS.test(n))
     return { text: "Có nè 🌿 Hai bài tập hợp nhất khi đang lo:\n• 🫁 **Bài tập thở** — làm dịu cơ thể ngay, hợp lúc tim đập nhanh, run, bồn chồn (gõ “bài tập thở”)\n• 🧺 **Gỡ nỗi lo** — hợp khi đầu cứ lo hoài một chuyện (gõ “gỡ nỗi lo”)\n\nBạn muốn thử bài nào?" };
