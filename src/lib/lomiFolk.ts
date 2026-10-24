@@ -989,6 +989,137 @@ export const FOLK: FolkEntry[] = [
     sources: [NHS_COLD],
     verifiedAt: VERIFIED,
   },
+  // ── 24/10 (theo ý Kir: thêm mẹo về trái cây, lá, rau) — mỗi ý đối chiếu trang nguồn đọc ngày 24/10/2026 ──
+  {
+    id: "buoi-thuoc",
+    name: "Bưởi chùm / bưởi và thuốc uống",
+    names: ["bưởi chùm", "nước bưởi", "nước ép bưởi", "ăn bưởi", "bưởi", "grapefruit", "cam seville", "quýt tangelo"],
+    verdict: "risky",
+    folk: [{ text: "Bưởi, nước ép bưởi hay được xem là trái cây tốt, giải nhiệt, hỗ trợ giảm cân và hạ mỡ máu.", src: [0] }],
+    science: [
+      { text: "FDA: bưởi chùm và nước ép bưởi chùm có thể làm thay đổi lượng thuốc vào máu — với nhiều thuốc là tăng lên (dễ tác dụng phụ), với vài thuốc lại giảm đi (kém hiệu quả).", src: [0] },
+      { text: "Thuốc hay bị ảnh hưởng: vài thuốc mỡ máu nhóm statin, vài thuốc huyết áp, thuốc chống thải ghép, thuốc chống lo âu, thuốc nhịp tim, thuốc dị ứng — không phải mọi thuốc trong các nhóm này.", src: [0] },
+      { text: "Bưởi (pomelo), cam Seville, quýt tangelo có thể gây tác động tương tự bưởi chùm.", src: [0] },
+    ],
+    caution: [
+      { text: "Đang uống thuốc thường xuyên thì hỏi bác sĩ / dược sĩ xem thuốc của mình có kỵ bưởi không, và ăn được bao nhiêu.", src: [0] },
+      { text: "Xem tờ hướng dẫn sử dụng thuốc — thuốc kỵ bưởi thường ghi rõ.", src: [0] },
+    ],
+    topics: [
+      { id: "mo-mau-cao", text: "đang uống thuốc mỡ máu (statin) thì hỏi dược sĩ trước khi ăn bưởi chùm / bưởi — có thể làm tăng tác dụng phụ của thuốc", src: [0], v: "risky" },
+      { id: "tang-huyet-ap", text: "vài thuốc huyết áp kỵ bưởi chùm / bưởi — hỏi dược sĩ trước khi ăn nhiều", src: [0], v: "risky" },
+    ],
+    sources: [{ title: "Grapefruit Juice and Some Drugs Don't Mix (nội dung cập nhật 01/07/2021)", publisher: "FDA (Cục Quản lý Thực phẩm và Dược phẩm Hoa Kỳ)", url: "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "dua-bromelain",
+    name: "Dứa (thơm, khóm) — bromelain",
+    names: ["dứa", "trái dứa", "quả dứa", "nước dứa", "trái thơm", "trái khóm", "bromelain", "lõi dứa"],
+    ctx: VN(/\b(tác dụng|công dụng|tốt|hại|chữa|trị|giúp|tiêu hoá|tiêu hóa|xoang|viêm|sưng|răng khôn|bầu|mang thai|sảy thai|uống|ăn|enzyme|men)\b/),
+    verdict: "mixed",
+    folk: [{ text: "Dứa được truyền nhau là giúp tiêu hoá, giảm sưng viêm; bromelain (men trong thân và quả dứa) được bán làm thực phẩm chức năng.", src: [0] }],
+    science: [
+      { text: "Bromelain uống: vài nghiên cứu cho thấy có thể giảm đau, sưng sau nhổ răng khôn — bằng chứng còn hạn chế.", src: [0] },
+      { text: "Viêm xoang, thoái hoá khớp, đau cơ sau tập: chưa đủ nghiên cứu chất lượng để khuyên dùng.", src: [0] },
+      { text: "Dạng bôi: thuốc chứa bromelain được FDA duyệt năm 2022 để làm sạch mô hoại tử ở bỏng nặng (thuốc kê đơn, dùng ở bệnh viện).", src: [0] },
+    ],
+    caution: [
+      { text: "Bromelain uống thường dung nạp tốt; tác dụng phụ hay gặp là khó chịu bụng, tiêu chảy.", src: [0] },
+      { text: "Mang thai, cho con bú: chưa rõ bromelain dạng thực phẩm chức năng có an toàn không — hỏi bác sĩ trước.", src: [0] },
+      { text: "Đang dùng thuốc thì hỏi bác sĩ trước khi dùng bromelain — một số thảo dược tương tác có hại với thuốc.", src: [0] },
+    ],
+    topics: [
+      { id: "viem-xoang", text: "bromelain chưa đủ bằng chứng giúp viêm xoang", src: [0], v: "unclear" },
+      { id: "thoai-hoa-khop", text: "bromelain cho đau khớp: rất ít nghiên cứu, chưa rõ hiệu quả", src: [0], v: "unclear" },
+    ],
+    sources: [nccih("bromelain", "Bromelain", "11/2024")],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "luu",
+    name: "Lựu (nước ép lựu)",
+    names: ["lựu", "trái lựu", "quả lựu", "nước lựu", "nước ép lựu", "hạt lựu", "vỏ lựu", "pomegranate"],
+    verdict: "mixed",
+    folk: [{ text: "Dân gian dùng lựu cho giun sán, tiêu chảy, đau họng (uống, bôi, súc miệng); nay hay được quảng bá cho huyết áp, tim mạch, tiểu đường.", src: [0] }],
+    science: [
+      { text: "Huyết áp: nước ép / chiết xuất lựu có thể giúp hạ huyết áp, nhưng cần thêm nghiên cứu để khẳng định.", src: [0] },
+      { text: "Đường huyết: giảm nhẹ trong vài nghiên cứu. Mỡ máu: chưa thấy tác dụng rõ.", src: [0] },
+    ],
+    caution: [
+      { text: "Nước ép lựu được xem là an toàn; có người bị khó chịu tiêu hoá, đã có ca dị ứng.", src: [0] },
+      { text: "Rễ, thân, VỎ lựu dùng lượng nhiều có thể không an toàn vì chứa chất có hại.", src: [0] },
+      { text: "Đang dùng thuốc thì hỏi bác sĩ trước khi dùng lựu dạng chiết xuất / thực phẩm chức năng.", src: [0] },
+    ],
+    topics: [
+      { id: "tang-huyet-ap", text: "nước ép lựu có thể giúp hạ huyết áp chút ít, chưa chắc chắn — không thay thuốc", src: [0] },
+      { id: "tieu-duong-type-2", text: "lựu làm giảm đường huyết rất ít trong nghiên cứu, không thay điều trị", src: [0], v: "unclear" },
+    ],
+    sources: [nccih("pomegranate", "Pomegranate", "04/2025")],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "hat-lanh",
+    name: "Hạt lanh, dầu hạt lanh",
+    names: ["hạt lanh", "dầu hạt lanh", "bột hạt lanh", "flaxseed", "hạt lanh nâu", "hạt lanh vàng"],
+    verdict: "mixed",
+    folk: [{ text: "Hạt lanh được quảng bá tốt cho tim, não, miễn dịch (có omega-3 dạng ALA); xưa được dùng như thuốc nhuận tràng.", src: [0] }],
+    science: [
+      { text: "Một thử nghiệm cho thấy chất nhầy hạt lanh pha nước có thể hỗ trợ giảm cân ở người thừa cân; dầu hạt lanh và chiết xuất lignan thì không thấy giúp.", src: [0] },
+      { text: "Tiểu đường type 2: chưa rõ có giúp kiểm soát đường huyết không. Tiểu đường thai kỳ: vài nghiên cứu sơ bộ.", src: [0] },
+    ],
+    caution: [
+      { text: "Không ăn hạt lanh sống hoặc hạt chưa chín — có thể chứa chất độc.", src: [0] },
+      { text: "Dùng nhiều có thể đầy bụng, chướng hơi, tiêu chảy.", src: [0] },
+      { text: "Đang dùng thuốc chống đông / chống kết tập tiểu cầu thì hỏi bác sĩ trước. Mang thai: có nghiên cứu cho là có thể không an toàn.", src: [0] },
+    ],
+    topics: [
+      { id: "beo-phi", text: "chất nhầy hạt lanh có thể hỗ trợ giảm cân chút ít (một thử nghiệm); dầu hạt lanh thì không", src: [0] },
+      { id: "tieu-duong-type-2", text: "hạt lanh: chưa rõ có giúp kiểm soát đường huyết", src: [0], v: "unclear" },
+    ],
+    sources: [nccih("flaxseed-and-flaxseed-oil", "Flaxseed and Flaxseed Oil", "02/2025")],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "ca-rot-mat",
+    name: "Ăn cà rốt cho sáng mắt?",
+    names: ["cà rốt", "ăn cà rốt", "nước ép cà rốt", "beta carotene", "beta-carotene", "vitamin a"],
+    ctx: VN(/\b(mắt|sáng mắt|thị lực|cận|nhìn|quáng gà|da vàng|vàng da|cam|bổ mắt|tốt cho mắt)\b/),
+    verdict: "myth",
+    belief: "Ăn thật nhiều cà rốt (vitamin A) thì mắt sáng hơn, đỡ cận.",
+    folk: [],
+    science: [
+      { text: "Vitamin A cần cho thị lực bình thường; THIẾU vitamin A làm khó nhìn trong tối, lâu ngày có thể mù — hay gặp ở trẻ nhỏ tại nước đang phát triển.", src: [0] },
+      { text: "Rau củ quả màu cam, vàng, xanh đậm (cà rốt, khoai lang, rau bina, bí đỏ, xoài) có beta-carotene — cơ thể đổi thành vitamin A.", src: [0] },
+      { text: "Nguồn này không nói ăn thêm cà rốt làm người đủ chất nhìn rõ hơn; cận thị thì cần đi khám mắt, đeo kính đúng độ.", src: [0] },
+    ],
+    caution: [
+      { text: "Ăn nhiều beta-carotene có thể làm da vàng cam — vô hại, hết khi bớt ăn.", src: [0] },
+      { text: "Người hút thuốc / từng hút thuốc uống viên beta-carotene liều cao có nguy cơ ung thư phổi cao hơn.", src: [0] },
+      { text: "Vitamin A dạng có sẵn (viên uống, gan động vật) dùng quá nhiều gây hại; bà bầu tránh viên vitamin A liều cao vì có thể gây dị tật thai.", src: [0] },
+    ],
+    topics: [],
+    sources: [{ title: "Vitamin A and Carotenoids — Fact Sheet for Consumers (cập nhật 10/03/2025)", publisher: "ODS (Văn phòng Thực phẩm bổ sung – NIH Hoa Kỳ)", url: "https://ods.od.nih.gov/factsheets/VitaminA-Consumer/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "rau-ngot-song",
+    name: "Rau ngót ăn sống / xay ép nước",
+    names: ["rau ngót sống", "nước rau ngót sống", "nước ép rau ngót", "ép rau ngót", "xay rau ngót", "sinh tố rau ngót", "uống nước rau ngót", "rau ngót giảm cân", "ăn sống rau ngót", "katuk"],
+    verdict: "danger",
+    folk: [{ text: "Rau ngót được dùng làm rau ăn và để lợi sữa; có người xay / ép rau ngót sống uống để giảm cân.", src: [0] }],
+    science: [
+      { text: "Ăn quá nhiều lá rau ngót TƯƠI SỐNG có thể gây viêm tiểu phế quản tắc nghẽn — bệnh phổi có thể tử vong; người bị đa số là phụ nữ trẻ và trung niên.", src: [0] },
+      { text: "Rau ngót nấu chín có thể không gây độc như vậy. Tác dụng lợi sữa: các nghiên cứu trên người còn nhiều thiếu sót, chưa chứng minh chắc chắn.", src: [0] },
+    ],
+    caution: [
+      { text: "Không xay / ép rau ngót sống uống, nhất là uống đều để giảm cân — ăn rau ngót nấu chín như món ăn thường ngày.", src: [0] },
+      { text: "Đã từng uống nhiều nước rau ngót sống mà bị khó thở, ho kéo dài, khò khè → đi khám chuyên khoa hô hấp và kể rõ cho bác sĩ.", src: [0] },
+    ],
+    topics: [{ id: "an-uong-khi-cho-con-bu", text: "rau ngót lợi sữa: bằng chứng còn yếu; chỉ ăn nấu chín, không ăn sống / ép nước", src: [0], v: "unclear" }],
+    sources: [{ title: "Sauropus androgynus — Drugs and Lactation Database (LactMed), sửa đổi 15/08/2026", publisher: "NCBI Bookshelf (Thư viện Y khoa Quốc gia Hoa Kỳ – NIH)", url: "https://www.ncbi.nlm.nih.gov/books/NBK603839/" }],
+    verifiedAt: "2026-10-24",
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
@@ -1023,6 +1154,8 @@ export function findFolk(text: string): FolkEntry | null {
   for (const f of FOLK) {
     if (f.id === "boi-bong" && !(BURN.test(n) && BOI.test(n))) continue;
     if (f.ctx && !f.ctx.test(n)) continue;
+    // (bà bầu ĂN dứa là câu hỏi ăn uống khi mang thai — nguồn bromelain chỉ nói về viên bổ sung, không nói về ăn quả → để lớp ăn uống khi mang thai trả lời)
+    if (f.id === "dua-bromelain" && PREG.test(n) && !VN(/\b(bromelain|viên|thực phẩm chức năng|uống men)\b/).test(n)) continue;
     const m = n.match(RE.get(f.id)!);
     // (mục có ngữ cảnh — "đắp lá" khi rắn cắn / chó cắn — ưu tiên hơn tên vị trần)
     const len = m ? m[0].length + (f.ctx || f.id === "boi-bong" ? 100 : 0) : 0;
@@ -1164,7 +1297,7 @@ export function folkReply(
   const f = findFolk(q);
   // Cháo cóc / bôi đồ lên vết bỏng: cảnh báo ngay, kể cả câu kể ("a cho con ăn cháo cóc").
   //   (Quan niệm khi ốm — "chảy máu cam ngửa cổ", "rắn cắn hút nọc" — cũng trả lời ngay: đã khớp đúng ngữ cảnh.)
-  if (f && (f.id === "thit-coc" || f.id === "boi-bong" || f.verdict === "myth")) return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
+  if (f && (f.id === "thit-coc" || f.id === "boi-bong" || f.verdict === "myth" || f.verdict === "danger")) return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   const asked = asksAbout(q) || words <= 4 || folkWord;
   if (f && asked) {
     // "gout ăn gừng được không" — hỏi một MÓN với bệnh mà vị này không có ý gì cho bệnh đó → để lớp kiêng cữ trả lời.

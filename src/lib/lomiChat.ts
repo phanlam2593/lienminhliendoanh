@@ -1125,6 +1125,16 @@ const TEEN: Record<string, string> = {
   dz: "vậy", dzị: "vậy", zạ: "vậy", dalat: "Đà Lạt", tn: "tin nhắn", noti: "thông báo", qtqd: "quá", sk: "sức khỏe",
   // 22/10 (QA V6)
   nx: "nữa",
+  // 24/10 (theo ý Kir: thêm từ lóng, viết tắt, teen code) — chỉ những chữ KHÔNG trùng nghĩa với từ thường
+  khg: "không", kô: "không", khôg: "không", khônk: "không", hôk: "không", khung: "không",
+  đx: "được", dx: "được", đuợc: "được", đượt: "được",
+  nma: "nhưng mà", nhma: "nhưng mà", nhg: "nhưng", nhưg: "nhưng", ntnao: "như thế nào", lsao: "làm sao", lmsao: "làm sao",
+  kbh: "không bao giờ", kcj: "không có gì", kcgi: "không có gì", kq: "kết quả", ktra: "kiểm tra", lq: "liên quan",
+  pk: "phải không", pải: "phải", fải: "phải", fai: "phải", bgio: "bây giờ", bjo: "bây giờ",
+  bv: "bệnh viện", cty: "công ty", ctrinh: "chương trình", đh: "đại học", sv: "sinh viên", gv: "giáo viên",
+  tl: "trả lời", tlời: "trả lời", cmt: "bình luận", chs: "chơi", mứn: "muốn",
+  zời: "trời", trùi: "trời", zì: "gì", zô: "vô", dzô: "vô", zề: "về", zìa: "về", dìa: "về", rứa: "vậy", chừ: "giờ",
+  nhứt: "nhất", hổm: "hôm", bển: "bên đó", trển: "trên đó", sad: "buồn", mlem: "ngon",
 };
 // ── Chữ kéo dài để biểu cảm (01/10 r2, theo tài liệu Kir): "okkkk", "chánnnn", "khônggg", "đượcccc",
 // "trờiiii", "haizzzz", "hahaahah" → về từ gốc để HIỂU nghĩa; còn độ nhấn thì đọc riêng bằng
@@ -1196,6 +1206,31 @@ export function expandTeen(text: string): string {
   s = s.replace(VR(/(^|[^\p{L}])pass (nhầm|lộn|người|thẻ|hết)(?![\p{L}])/giu), "$1bỏ qua $2");
   // 09/10: chữ cái là TÊN LOẠI trong y khoa — "viêm gan b", "vitamin k", "nhóm máu a" — không phải "bạn" / "không": viết hoa để giữ nguyên.
   s = s.replace(VR(/(^|[^\p{L}])(viêm gan|viem gan|vitamin|vitamine|nhóm máu|nhom mau|cúm|cum) ([abcdek])(?![\p{L}\p{N}])/giu), (_m, a: string, b: string, c: string) => `${a}${b} ${c.toUpperCase()}`);
+  // 24/10 (theo ý Kir: từ lóng, viết tắt, teen code, giọng miền) — cụm từ (chữ đứng một mình dễ trùng nghĩa nên chỉ đổi theo cụm)
+  s = s.replace(VR(/(^|[^\p{L}])(gấu|ghệ|bồ) (của )?(a|anh|em|e|mình|tui|tao|t|tớ|chị|c)(?![\p{L}])/giu), "$1người yêu $4");
+  s = s.replace(VR(/(^|[^\p{L}])(a|anh|em|e|mình|tui|tao|t|tớ|chị|c) (có|chưa có|không có|ko có|k có|mới có|vừa có|bị) (gấu|ghệ|bồ)(?![\p{L}])/giu), "$1$2 $3 người yêu");
+  s = s.replace(VR(/(^|[^\p{L}])trầm kẽm(?![\p{L}])/giu), "$1trầm cảm");
+  s = s.replace(VR(/(^|[^\p{L}])toang (rồi|thật|thiệt|luôn|hết|thật rồi)(?![\p{L}])/giu), "$1hỏng hết $2");
+  s = s.replace(VR(/(^|[^\p{L}])gét gô(?![\p{L}])/giu), "$1đi thôi");
+  s = s.replace(VR(/(^|[^\p{L}])ét o ét(?![\p{L}])/giu), "$1cứu với");
+  s = s.replace(VR(/(^|[^\p{L}])xu cà na(?![\p{L}])/giu), "$1xui");
+  s = s.replace(VR(/(^|[^\p{L}])chèn ơi(?![\p{L}])/giu), "$1trời ơi");
+  s = s.replace(VR(/(^|[^\p{L}])(trùi|trời) ui(?![\p{L}])/giu), "$1trời ơi");
+  s = s.replace(VR(/(^|[^\p{L}])hổm (rày|nay|giờ)(?![\p{L}])/giu), "$1mấy hôm nay");
+  // Miền Nam: "mắc ói" = buồn nôn, "mắc tiểu" = buồn tiểu (không phải "đắt")
+  s = s.replace(VR(/(^|[^\p{L}])mắc (ói|mửa)(?![\p{L}])/giu), "$1buồn nôn");
+  s = s.replace(VR(/(^|[^\p{L}])mắc (tiểu|đái|đi tiểu)(?![\p{L}])/giu), "$1buồn tiểu");
+  s = s.replace(VR(/(^|[^\p{L}])mắc (đi cầu|ị|đi ị)(?![\p{L}])/giu), "$1muốn đi vệ sinh");
+  // Miền Trung: "răng rứa" = sao vậy, "làm răng" = làm sao, "đi mô" = đi đâu, "nỏ biết" = không biết
+  s = s.replace(VR(/(^|[^\p{L}])răng (rứa|vậy|z|zậy)(?![\p{L}])/giu), "$1sao vậy");
+  s = s.replace(VR(/(^|[^\p{L}])(làm|vì|tại|bị|ra|thấy) răng( rứa)?(?= *[?!.]*$|(?![\p{L}]) (rứa|hè|hả|ri|nữa|đây|chừ))/giu), "$1$2 sao");
+  s = s.replace(VR(/(^|[^\p{L}])(đi|ở|chỗ|nơi|về|ra|tới|đến) mô(?![\p{L}])/giu), "$1$2 đâu");
+  s = s.replace(VR(/(^|[^\p{L}])nỏ (biết|có|muốn|hiểu|thích|chịu|được|nhớ)(?![\p{L}])/giu), "$1không $2");
+  s = s.replace(VR(/(^|[^\p{L}])(như|cái|bữa|chỗ) ri(?![\p{L}])/giu), "$1$2 này");
+  s = s.replace(VR(/(^|[^\p{L}])(cái|bữa|chỗ|người|đứa) ni(?![\p{L}])/giu), "$1$2 này");
+  // "bs" = bác sĩ khi đi cùng việc khám chữa; "đi bs", "hỏi bs"
+  s = s.replace(VR(/(^|[^\p{L}])(đi|gặp|hỏi|khám|tới|đến|nhờ|gọi|ông|bà|chị|anh|cô|chú|là) bs(?![\p{L}])/giu), "$1$2 bác sĩ");
+  s = s.replace(VR(/(^|[^\p{L}])bs (nói|bảo|kê|khám|dặn|cho|khuyên|chẩn đoán|kết luận)(?![\p{L}])/giu), "$1bác sĩ $2");
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
   return s
     .replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)))

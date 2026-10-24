@@ -62,3 +62,25 @@ describe("lomiFolk — nhận diện", () => {
     expect(folkReply("bài thuốc nam chữa gout", { id: "gout", name: "gout" }, null)!.text).toMatch(/chưa đối chiếu được mẹo dân gian/);
   });
 });
+
+// 24/10 — theo ý Kir: thêm mẹo về trái cây, lá, rau (bưởi + thuốc, dứa, lựu, hạt lanh, cà rốt sáng mắt, rau ngót sống)
+describe("lomiFolk — trái cây, lá, rau (24/10)", () => {
+  it("nhận đúng vị, không bắt nhầm món ăn thường", () => {
+    expect(findFolk("đang uống thuốc mỡ máu ăn bưởi được không")?.id).toBe("buoi-thuoc");
+    expect(findFolk("dứa có tác dụng gì")?.id).toBe("dua-bromelain");
+    expect(findFolk("nước ép lựu có tốt không")?.id).toBe("luu");
+    expect(findFolk("hạt lanh có tác dụng gì")?.id).toBe("hat-lanh");
+    expect(findFolk("ăn cà rốt có sáng mắt không")?.id).toBe("ca-rot-mat");
+    expect(findFolk("uống nước rau ngót sống giảm cân được không")?.id).toBe("rau-ngot-song");
+    expect(findFolk("canh rau ngót")).toBeNull();
+    expect(findFolk("mùi thơm quá")).toBeNull();
+  });
+  it("rau ngót sống: cảnh báo nguy hiểm ngay; bưởi + thuốc mỡ máu: lưu ý tương tác thuốc", () => {
+    const a = folkReply("uống nước rau ngót sống giảm cân được không", null, null);
+    expect(a?.verdict).toBe("danger");
+    expect(a?.text).toMatch(/nấu chín/);
+    const b = folkReply("đang uống thuốc mỡ máu ăn bưởi được không", { id: "mo-mau-cao", name: "Mỡ máu cao" }, null);
+    expect(b?.text).toMatch(/statin/);
+    expect(b?.text).toMatch(/FDA/);
+  });
+});
