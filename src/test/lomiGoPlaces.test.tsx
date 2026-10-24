@@ -126,3 +126,15 @@ describe("Hỏi chỗ ở / dịch vụ ở một nơi → tìm trong app (khôn
     expect(r[0].content).not.toMatch(/chưa được tiếp thu|Dạy em|Dạy Lomi/);
   }, T);
 });
+
+describe("24/10 (kiểm trên bản thật): đang tâm sự / bài tập thở mà hỏi chỗ ở một nơi → tìm chỗ luôn", () => {
+  it("sau bài tập thở → “Mũi né có gì chơi k?” không bị đáp “Ừa, em nghe nè…”", async () => {
+    const r = await chat(["a hồi hộp quá", "bài tập thở", "xong", "thôi dừng nha", "Mũi né có gì chơi k?"], { seed: 3 });
+    expect(r[4].content).toMatch(/Mũi Né/);
+    expect(r[4].content).not.toMatch(/em nghe nè|bắt đúng ý/);
+    const b = await chat(["a buồn quá", "Mũi né có gì chơi k?"], { seed: 3 });
+    expect(b[1].content).toMatch(/Mũi Né/);
+    const c = await chat(["a buồn quá", "quán lẩu ở Mũi Né"], { seed: 3 });
+    expect(c[1].content).toMatch(/Mũi Né/);
+  }, T);
+});

@@ -993,6 +993,21 @@ export function AiChat({
       if (v9) return localReply(q, { role: "assistant", content: v9.text, local: true, ...(v9.keepHealth ? keepHealth : {}), ...(v9.about ? { about: v9.about } : lastA0?.about ? { about: lastA0.about } : {}), ...(v9.heart ? { heart: v9.heart, heartDepth: (lastA0?.heartDepth ?? 0) + 1 } : {}) });
       const v8 = v8Reply(raw, { last: lastA0?.content, hist: v8Hist, lastHeart: lastA0?.heart });
       if (v8) return localReply(q, { role: "assistant", content: v8.text, local: true, ...(lastA0?.about ? { about: lastA0.about } : {}), ...(v8.biz ? { biz: v8.biz } : {}), ...(v8.heart ? { heart: v8.heart, heartDepth: (lastA0?.heartDepth ?? 0) + 1 } : {}) });
+      // 24/10 (kiểm trên bản thật): đang trong mạch tâm sự / bài tập thở mà hỏi "Mũi Né có gì chơi k?" → lớp tâm sự đáp
+      //   "Ừa, em nghe nè…". Câu hỏi đi chơi / tìm chỗ CÓ NÊU NƠI là chuyện mới rõ ràng → tìm chỗ luôn, không để mạch cũ giữ lại.
+      const itP = detectSearch(q);
+      if (itP?.place && (lastA0?.heart || lastA0?.therapy || lastA0?.thread || hCtx0)) {
+        const dP = itP.mode !== "go" ? detectDish(q) : undefined;
+        if (dP) return replyDishShops(q, dP.id);
+        setBusy(true);
+        let res;
+        try {
+          res = await runSearch(itP, []);
+        } finally {
+          setBusy(false);
+        }
+        return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: itP, quick: res.quick });
+      }
     }
     if (!forceAi && !en && !crisisReply(q, lang)) {
       const ug = urgentOf(raw) ?? (raw !== q ? urgentOf(q) : null);

@@ -335,7 +335,14 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
   if (pos) cards.sort((a, b) => (a.distKm ?? 1e9) - (b.distKm ?? 1e9));
   else cards.sort((a, b) => b.rating - a.rating || b.offerCount - a.offerCount);
   const rad = byRadius(cards, pos, it.maxKm);
-  cards = rad.cards.slice(0, 5);
+  cards = rad.cards;
+  // 24/10 (kiểm trên bản thật): "a cần thợ điện" mà quanh mình không có → trước đây ra 5 chỗ ở 3 tỉnh (88km, 205km, 233km).
+  //   Không nêu nơi + chỗ gần nhất đã xa (>50km) → chỉ lấy chỗ ở ĐÚNG khu gần nhất đó.
+  if (!it.area && pos && !it.maxKm && cards[0]?.distKm != null && cards[0].distKm > 50 && cards[0].area) {
+    const a0 = cards[0].area;
+    cards = cards.filter((c) => sameArea(c.area, a0));
+  }
+  cards = cards.slice(0, 5);
   const noun = k?.noun ?? "chỗ";
   if (!cards.length)
     return {
@@ -344,7 +351,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
       quick: ["Hôm nay ăn gì?", "Tìm quán cà phê có ưu đãi"],
     };
   const how = pos ? "xếp gần bạn nhất trước" : "xếp theo đánh giá cao";
-  const at = it.area ? ` ở ${it.area}` : "";
+  const at = it.area ? ` ${/(^| )ở$/u.test(noun) ? "tại" : "ở"} ${it.area}` : ""; // ("chỗ ở tại Đà Lạt", không "chỗ ở ở Đà Lạt")
   const intro = pick([
     `Lomi tìm được mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} nè (${how}) 👇`,
     `Có ngay đây! Mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} trong Liên Minh Liên Doanh (${how}):`,
