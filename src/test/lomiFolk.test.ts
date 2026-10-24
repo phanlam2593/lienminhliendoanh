@@ -84,3 +84,65 @@ describe("lomiFolk — trái cây, lá, rau (24/10)", () => {
     expect(b?.text).toMatch(/FDA/);
   });
 });
+
+// 24/10 (đợt 2) — theo ý Kir: thêm mẹo nhân gian cho bệnh phổ biến; ưu tiên mẹo làm sai gây hại.
+describe("lomiFolk — mẹo nhân gian bệnh phổ biến (24/10)", () => {
+  it("nhận đúng mẹo theo ngữ cảnh bệnh", () => {
+    expect(findFolk("bị bong gân cổ chân xoa rượu được không")?.id).toBe("bong-gan-xoa-ruou");
+    expect(findFolk("trẹo chân chườm nóng được không")?.id).toBe("bong-gan-xoa-ruou");
+    expect(findFolk("con uống nhầm thuốc chuột có nên móc họng cho nôn không")?.id).toBe("ngo-doc-gay-non");
+    expect(findFolk("nuốt phải nước tẩy cho uống sữa được không")?.id).toBe("ngo-doc-gay-non");
+    expect(findFolk("ông bị méo miệng có nên chích máu đầu ngón tay không")?.id).toBe("dot-quy-chich-mau");
+    expect(findFolk("say nắng cạo gió được không")?.id).toBe("say-nang-cao-gio");
+    expect(findFolk("trào ngược kê gối cao có đỡ không")?.id).toBe("trao-nguoc-ke-goi");
+    expect(findFolk("mất ngủ uống rượu cho dễ ngủ được không")?.id).toBe("mat-ngu-uong-ruou");
+    expect(findFolk("đau bụng kinh chườm nóng có đỡ không")?.id).toBe("dau-bung-kinh-chuom-am");
+    expect(findFolk("bị nấc cụt nín thở có hết không")?.id).toBe("nac-cut-meo");
+    expect(findFolk("táo bón ăn gì, ăn nhiều rau được không")?.id).toBe("tao-bon-an-uong");
+  });
+  it("không bắt nhầm khi không đúng ngữ cảnh", () => {
+    expect(findFolk("cuối tuần đi massage thư giãn")).toBeNull();
+    expect(findFolk("tối nay uống bia với bạn")).toBeNull();
+    expect(findFolk("ăn trái cây gì tốt")).toBeNull();
+    expect(findFolk("cạo gió có tác dụng gì")).toBeNull();
+    expect(findFolk("bón phân cho cây đi bộ ra vườn")).toBeNull();
+    // ngộ độc thực phẩm: không áp lời "đừng cho uống gì" của trang ngộ độc chất độc
+    expect(findFolk("ngộ độc thực phẩm cho uống sữa được không")?.id).not.toBe("ngo-doc-gay-non");
+  });
+  it("mẹo sai gây hại: trả lời ngay, nói rõ cách đúng", () => {
+    const a = folkReply("bị bong gân cổ chân xoa rượu được không", null, null)!;
+    expect(a.verdict).toBe("myth");
+    expect(a.text).toMatch(/chườm lạnh/);
+    const b = folkReply("con uống nhầm thuốc chuột có nên móc họng cho nôn không", null, null)!;
+    expect(b.text).toMatch(/KHÔNG tìm cách làm người đó nôn/);
+    expect(b.text).toMatch(/115/);
+    const c = folkReply("ông bị méo miệng có nên chích máu đầu ngón tay không", null, null)!;
+    expect(c.text).toMatch(/FAST/);
+    const d = folkReply("say nắng ủ ấm cho ra mồ hôi được không", null, null)!;
+    expect(d.text).toMatch(/làm MÁT/);
+  });
+  it("thẻ bệnh có thêm mẹo đã đối chiếu", () => {
+    for (const id of ["bong-gan", "ngo-doc", "dot-quy", "say-nang", "trao-nguoc-da-day-thuc-quan", "mat-ngu", "dau-bung-kinh", "nac-cut", "tao-bon"]) expect(folkFor(id).length, id).toBeGreaterThan(0);
+  });
+});
+
+// 24/10 — câu gõ có dấu: tên vị phải khớp đúng dấu ("nghe nói" ≠ nghệ, "tối nay" ≠ tỏi, "sa sút" ≠ sả); "toi bi ho" không dấu = "tôi bị ho".
+describe("lomiFolk — khớp đúng dấu (24/10)", () => {
+  it("không nhận nhầm từ thường thành tên vị", () => {
+    expect(findFolk("nghe nói mai mưa")).toBeNull();
+    expect(findFolk("tôi nghe nhạc")).toBeNull();
+    expect(findFolk("tối nay ăn gì")).toBeNull();
+    expect(findFolk("quê tôi ở Huế")).toBeNull();
+    expect(findFolk("toi bi ho")).toBeNull();
+    expect(findUnverifiedHerb("sa sút tinh thần quá")).toBeNull();
+    expect(findUnverifiedHerb("mã đề thi là gì")).toBeNull();
+  });
+  it("vẫn nhận tên vị gõ đúng dấu hoặc không dấu", () => {
+    expect(findFolk("nghệ có tác dụng gì")?.id).toBe("nghe");
+    expect(findFolk("Tỏi có tốt không")?.id).toBe("toi");
+    expect(findFolk("an toi song co tot khong")?.id).toBe("toi");
+    expect(findFolk("la tia to co tac dung gi")?.id).toBe("tia-to");
+    expect(findUnverifiedHerb("uống nước sả được không")).toBe("sả");
+    expect(findUnverifiedHerb("ky tu co tac dung gi")).toBeTruthy();
+  });
+});

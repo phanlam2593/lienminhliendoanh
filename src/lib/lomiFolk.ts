@@ -29,6 +29,8 @@ export type FolkEntry = {
   unverified?: string[];
   /** Chỉ nhận khi câu cũng nói tới ngữ cảnh này ("ngửa cổ" chỉ tính khi đang nói chảy máu cam). */
   ctx?: RegExp;
+  /** Mẹo sinh hoạt (chườm, ăn uống, tư thế…) chứ không phải vị thuốc → không kèm lời dặn dùng thảo dược. */
+  tip?: true;
   folk: DrugFact[];
   science: DrugFact[];
   how?: DrugFact[];
@@ -1120,6 +1122,180 @@ export const FOLK: FolkEntry[] = [
     sources: [{ title: "Sauropus androgynus — Drugs and Lactation Database (LactMed), sửa đổi 15/08/2026", publisher: "NCBI Bookshelf (Thư viện Y khoa Quốc gia Hoa Kỳ – NIH)", url: "https://www.ncbi.nlm.nih.gov/books/NBK603839/" }],
     verifiedAt: "2026-10-24",
   },
+  // ── 24/10 (đợt 2) — theo ý Kir: "thêm mẹo nhân gian, nhất là mấy bệnh phổ biến". Ưu tiên mẹo hay làm SAI mà gây hại
+  //    (xoa rượu khi bong gân, móc họng khi ngộ độc, chích máu khi đột quỵ, ủ ấm khi say nắng), rồi mẹo đúng có nguồn.
+  {
+    id: "bong-gan-xoa-ruou",
+    name: "Bong gân: xoa rượu, dầu nóng, bóp, chườm nóng?",
+    names: ["xoa rượu", "bóp rượu", "thoa rượu", "rượu thuốc", "rượu gừng", "dầu nóng", "dầu gió", "cao nóng", "chườm nóng", "đắp nóng", "ngâm nước nóng", "xoa bóp", "bóp chân", "massage", "mát xa", "đắp muối", "rang muối"],
+    ctx: VN(/\b(bong gân|trật chân|trẹo chân|lật cổ chân|sái chân|trẹo cổ chân|giãn dây chằng|căng cơ|trật khớp cổ chân|sưng mắt cá)\b/),
+    verdict: "myth",
+    belief: "Bong gân, trẹo chân thì xoa rượu thuốc, dầu nóng, bóp mạnh hoặc chườm nóng cho \"tan máu bầm\".",
+    folk: [],
+    science: [{ text: "NHS: vài ngày đầu tránh nóng (tắm nước nóng, túi chườm nóng), rượu và xoa bóp — vì làm sưng nhiều hơn.", src: [0] }],
+    how: [
+      { text: "Vài ngày đầu: bảo vệ chỗ đau, nghỉ (không dồn sức nặng lên), chườm lạnh bằng túi đá bọc khăn từng đợt ngắn, băng ép vừa phải ban ngày, kê cao chỗ đau.", src: [0] },
+    ],
+    caution: [
+      { text: "Đi cấp cứu nếu lúc bị nghe tiếng \"rắc\", chỗ đau biến dạng / lệch, tê, châm chích, hoặc da tím tái, lạnh.", src: [0] },
+      { text: "Đau dữ dội, sưng to, không đứng / đi được, hoặc tự chữa mà không đỡ → đi khám.", src: [0] },
+    ],
+    topics: [{ id: "bong-gan", text: "đừng xoa rượu, dầu nóng, bóp hay chườm nóng mấy ngày đầu — chườm lạnh, nghỉ, băng ép, kê cao", src: [0], v: "myth" }],
+    sources: [{ title: "Sprains and strains", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/sprains-and-strains/", reviewed: "2024-04-23" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "ngo-doc-gay-non",
+    name: "Nuốt phải chất độc: móc họng cho nôn, uống sữa?",
+    names: ["móc họng", "gây nôn", "cho nôn", "cho ói", "móc cho ói", "bắt nôn", "làm cho nôn", "uống sữa", "cho uống sữa", "uống nước muối", "lòng trắng trứng", "trứng sống", "nước đậu xanh"],
+    ctx: VN(/\b(ngộ độc|nuốt nhầm|uống nhầm|nuốt phải|thuốc chuột|thuốc trừ sâu|thuốc diệt cỏ|thuốc sâu|nước tẩy|nước rửa chén|nước javel|chất tẩy|dầu hoả|xăng|uống quá liều|uống cả vỉ)\b/),
+    verdict: "myth",
+    belief: "Nuốt phải thuốc chuột, thuốc trừ sâu, chất tẩy… thì móc họng cho nôn ra, hoặc cho uống sữa, lòng trắng trứng, nước muối để \"giải độc\".",
+    folk: [],
+    science: [
+      { text: "NHS: KHÔNG tìm cách làm người đó nôn — họ có thể bị sặc, ngưng thở.", src: [0] },
+      { text: "NHS: không cho người đó ăn hay uống gì.", src: [0] },
+    ],
+    how: [
+      { text: "Gọi cấp cứu 115 ngay. Mang theo vỏ chai, bao bì hoặc thứ đã nuốt để bác sĩ biết là chất gì.", src: [0] },
+      { text: "Bất tỉnh mà còn thở → đặt nằm nghiêng an toàn; không thở → làm hồi sức tim phổi (CPR). Ở bên cạnh, theo dõi hơi thở liên tục.", src: [0] },
+    ],
+    caution: [{ text: "Nếu người đó tự nôn, có thể giữ lại một ít chất nôn cho nhân viên y tế xem.", src: [0] }],
+    topics: [{ id: "ngo-doc", text: "đừng móc họng gây nôn, đừng cho ăn uống gì — gọi 115, mang theo bao bì chất đã nuốt", src: [0], v: "myth" }],
+    sources: [{ title: "Poisoning", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/poisoning/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "dot-quy-chich-mau",
+    name: "Đột quỵ: chích máu đầu ngón tay, cạo gió rồi đợi?",
+    names: ["chích máu", "chích đầu ngón tay", "chích ngón tay", "chích 10 đầu ngón tay", "chích mười đầu ngón tay", "nặn máu", "lể máu", "giật tai", "kéo tai", "cạo gió", "đánh gió", "an cung", "an cung ngưu hoàng", "đợi xem", "chờ xem", "chờ cho đỡ", "nằm nghỉ cho đỡ"],
+    ctx: VN(/\b(đột quỵ|tai biến|méo miệng|méo mặt|lệch miệng|liệt nửa người|yếu nửa người|xệ mặt)\b/),
+    verdict: "myth",
+    belief: "Thấy người méo miệng, yếu tay chân thì chích máu mười đầu ngón tay, giật tai, cạo gió, cho uống thuốc rồi chờ xem có đỡ không.",
+    folk: [],
+    science: [
+      { text: "NHS: đột quỵ là cấp cứu. Nhớ FAST — Face (mặt méo), Arms (tay yếu, không giơ lên được), Speech (nói khó, nói ngọng), Time (gọi cấp cứu ngay).", src: [0] },
+      { text: "NHS: dù triệu chứng tự hết vẫn phải đi cấp cứu ngay — đừng chờ xem có trở lại không.", src: [0] },
+    ],
+    how: [{ text: "Gọi 115 ngay khi nghi đột quỵ, nhớ giờ bắt đầu có triệu chứng — đừng mất thời gian làm mẹo trước.", src: [0] }],
+    caution: [],
+    topics: [{ id: "dot-quy", text: "đừng chích máu, cạo gió rồi chờ — nhớ FAST, gọi 115 ngay, kể cả khi triệu chứng tự hết", src: [0], v: "myth" }],
+    sources: [{ title: "Symptoms of a stroke", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/stroke/symptoms/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "say-nang-cao-gio",
+    name: "Say nắng: cạo gió, ủ ấm, xông?",
+    names: ["cạo gió", "đánh gió", "đánh cảm", "giật gió", "ủ ấm", "đắp chăn", "trùm chăn", "xông", "xông hơi", "uống nước gừng", "uống rượu", "mặc thêm áo"],
+    ctx: VN(/\b(say nắng|sốc nhiệt|cảm nắng|trúng nắng|kiệt sức vì nóng|kiệt sức vì nắng)\b/),
+    verdict: "myth",
+    belief: "Say nắng, cảm nắng thì cạo gió, đánh cảm, ủ chăn hay xông cho ra mồ hôi.",
+    folk: [],
+    science: [{ text: "NHS: say nắng / kiệt sức vì nóng cần làm MÁT cơ thể — đưa vào chỗ mát, cởi bớt quần áo, cho uống nhiều nước.", src: [0] }],
+    how: [
+      { text: "Làm mát da bằng nước mát và quạt; đặt túi lạnh bọc khăn ở nách hoặc cổ. Có thể cho uống oresol hoặc nước thể thao pha với nước.", src: [0] },
+    ],
+    caution: [
+      { text: "Gọi 115 nếu sau 30 phút làm mát, nghỉ, uống nước vẫn không đỡ; hoặc sốt rất cao, da nóng mà không ra mồ hôi, thở nhanh, lơ mơ, co giật, ngất.", src: [0] },
+    ],
+    topics: [{ id: "say-nang", text: "đừng ủ ấm, xông hay cạo gió — làm mát: chỗ mát, cởi bớt đồ, nước mát + quạt, uống nước", src: [0], v: "myth" }],
+    sources: [{ title: "Heat exhaustion and heatstroke", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/heat-exhaustion-heatstroke/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "trao-nguoc-ke-goi",
+    name: "Trào ngược: kê thật nhiều gối khi ngủ?",
+    names: ["kê gối", "kê cao gối", "gối cao", "nhiều gối", "chồng gối", "thêm gối", "kê đầu cao", "nằm đầu cao", "kê cao đầu giường", "ăn xong nằm", "ăn no nằm", "nằm sau khi ăn", "ăn khuya"],
+    ctx: VN(/\b(trào ngược|ợ nóng|ợ chua|nóng rát ngực|gerd|trào axit)\b/),
+    verdict: "myth",
+    belief: "Bị trào ngược, ợ nóng thì kê thật nhiều gối cho đầu cao khi ngủ.",
+    folk: [],
+    science: [{ text: "NHS: không chồng thêm gối vì có thể làm nặng hơn — thay vào đó kê cao ĐẦU GIƯỜNG (gạch, sách kê dưới chân giường) để cả nửa người trên dốc lên.", src: [0] }],
+    how: [
+      { text: "Ăn nhiều bữa nhỏ thay vì vài bữa lớn; không ăn trong vòng 3–4 tiếng trước khi ngủ; tránh món làm mình ợ nóng.", src: [0] },
+      { text: "Tránh quần áo bó bụng, bỏ thuốc lá, hạn chế rượu bia; giảm cân nếu thừa cân; dược sĩ có thể tư vấn thuốc kháng acid.", src: [0] },
+    ],
+    caution: [{ text: "Đang dùng thuốc bác sĩ kê thì đừng tự ngưng — hỏi bác sĩ trước.", src: [0] }],
+    topics: [{ id: "trao-nguoc-da-day-thuc-quan", text: "đừng chồng thêm gối — kê cao đầu giường, ăn bữa nhỏ, không ăn 3–4 tiếng trước khi ngủ", src: [0], v: "myth" }],
+    sources: [{ title: "Heartburn and acid reflux", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/heartburn-and-acid-reflux/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "mat-ngu-uong-ruou",
+    name: "Mất ngủ: uống chút rượu, ngủ bù ban ngày?",
+    names: ["uống rượu", "chút rượu", "ít rượu", "rượu cho dễ ngủ", "nhấp rượu", "ly rượu", "chén rượu", "rượu vang", "uống bia", "lon bia", "ngủ bù", "ngủ trưa", "ngủ nướng", "lướt điện thoại", "xem điện thoại", "uống cà phê"],
+    ctx: VN(/\b(mất ngủ|khó ngủ|trằn trọc|không ngủ được|khó vào giấc|thức trắng)\b/),
+    verdict: "myth",
+    belief: "Khó ngủ thì làm ly rượu cho dễ ngủ; đêm ngủ kém thì ban ngày ngủ bù, sáng ngủ nướng.",
+    folk: [],
+    science: [
+      { text: "NHS: không uống rượu, trà, cà phê hay hút thuốc trong vòng 6 tiếng trước khi ngủ.", src: [0] },
+      { text: "NHS: không ngủ ngày, và đừng ngủ nướng sau đêm ngủ kém — giữ giờ ngủ như thường.", src: [0] },
+    ],
+    how: [
+      { text: "Chỉ lên giường khi buồn ngủ, dậy cùng giờ mỗi ngày; thư giãn ít nhất 1 tiếng trước khi ngủ; phòng ngủ tối, yên tĩnh.", src: [0] },
+      { text: "Tập thể dục ban ngày (không tập trong 4 tiếng trước khi ngủ); không ăn bữa lớn khuya; tránh xem điện thoại, TV ngay trước khi ngủ.", src: [0] },
+    ],
+    caution: [{ text: "Buồn ngủ thì đừng lái xe.", src: [0] }],
+    topics: [{ id: "mat-ngu", text: "đừng uống rượu cho dễ ngủ hay ngủ bù ban ngày — giữ giờ dậy cố định, tránh cà phê / rượu trước ngủ", src: [0], v: "myth" }],
+    sources: [{ title: "Insomnia", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/insomnia/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "dau-bung-kinh-chuom-am",
+    name: "Đau bụng kinh: chườm ấm, xoa bụng",
+    names: ["chườm ấm", "chườm nóng", "túi chườm", "chai nước nóng", "túi nước nóng", "miếng dán nóng", "tắm nước ấm", "tắm nước nóng", "xoa bụng", "massage bụng", "xoa lưng", "tập yoga", "yoga", "đi bộ"],
+    ctx: VN(/\b(đau bụng kinh|đau kinh|hành kinh|tới tháng|đến tháng|tới kỳ|đến kỳ|ngày đèn đỏ|bị kinh|có kinh)\b/),
+    tip: true,
+    verdict: "help",
+    folk: [{ text: "Mẹo hay truyền: chườm ấm bụng, xoa bụng, tắm nước ấm cho đỡ đau bụng kinh.", src: [0] }],
+    science: [{ text: "NHS khuyên tự làm được: tắm nước ấm, chườm túi nóng / chai nước nóng bọc khăn lên bụng, xoa bụng và lưng, vận động nhẹ (yoga, bơi, đi bộ, đạp xe).", src: [0] }],
+    how: [{ text: "Có thể dùng thuốc giảm đau không kê đơn theo hướng dẫn trên hộp hoặc hỏi dược sĩ; bớt rượu bia, bỏ thuốc lá cũng có thể giúp.", src: [0] }],
+    caution: [
+      { text: "Bọc khăn khi chườm, đừng áp thẳng chai nước nóng lên da.", src: [0] },
+      { text: "Đi khám nếu đau ngày càng nặng, ra nhiều hơn / không đều, đau đến mức không sinh hoạt được, đau khi quan hệ, ra máu giữa kỳ.", src: [0] },
+    ],
+    topics: [{ id: "dau-bung-kinh", text: "chườm ấm (bọc khăn), xoa bụng, tắm nước ấm, vận động nhẹ — NHS khuyên làm được", src: [0], v: "help" }],
+    sources: [{ title: "Period pain", publisher: "NHS (Anh)", url: "https://www.nhs.uk/symptoms/period-pain/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "nac-cut-meo",
+    name: "Nấc cụt: nín thở, uống nước lạnh, ngậm đường",
+    names: ["nín thở", "uống nước lạnh", "uống nước đá", "ngậm đường", "ăn đường", "nuốt đường", "cắn chanh", "ngậm chanh", "nếm giấm", "thổi túi giấy", "thở vào túi", "co gối", "hù", "làm giật mình"],
+    ctx: VN(/\b(nấc cụt|bị nấc|nấc hoài|nấc mãi|nấc liên tục|nấc quá|đang nấc|cứ nấc|hay nấc|hết nấc|cắt nấc)\b/),
+    tip: true,
+    verdict: "mixed",
+    folk: [{ text: "Mẹo hay truyền: nín thở, uống nước lạnh, ngậm một thìa đường, cắn chanh, thở vào túi giấy.", src: [0] }],
+    science: [{ text: "NHS: nhiều người thấy các mẹo này có ích, nhưng không có bằng chứng là hiệu quả với mọi người.", src: [0] }],
+    how: [{ text: "NHS liệt kê: thở vào túi giấy (không trùm lên đầu), co gối sát ngực rồi cúi người về trước, nhấp nước thật lạnh, nuốt một thìa đường, cắn chanh / nếm giấm, nín thở một lúc.", src: [0] }],
+    caution: [{ text: "Đi khám nếu nấc kéo dài hơn 48 tiếng, hoặc hay bị lại đến mức ảnh hưởng sinh hoạt.", src: [0] }],
+    topics: [{ id: "nac-cut", text: "nín thở, nhấp nước lạnh, ngậm đường — có người thấy đỡ, chưa chắc hiệu quả với mọi người; quá 48 tiếng thì đi khám", src: [0], v: "mixed" }],
+    sources: [{ title: "Hiccups", publisher: "NHS (Anh)", url: "https://www.nhs.uk/symptoms/hiccups/" }],
+    verifiedAt: "2026-10-24",
+  },
+  {
+    id: "tao-bon-an-uong",
+    name: "Táo bón: ăn rau, trái cây, uống nhiều nước",
+    names: ["ăn rau", "ăn nhiều rau", "rau xanh", "ăn trái cây", "trái cây", "hoa quả", "uống nhiều nước", "uống nước nhiều", "yến mạch", "cám lúa mì", "chất xơ", "kê chân", "ghế kê chân", "ngồi xổm", "đi bộ"],
+    ctx: VN(/\b(táo bón|bị bón|khó đi cầu|khó đi ngoài|không đi cầu được|đi cầu khó|phân cứng)\b/),
+    tip: true,
+    verdict: "help",
+    folk: [{ text: "Mẹo hay truyền: táo bón thì ăn nhiều rau, trái cây, uống nhiều nước.", src: [0] }],
+    science: [
+      { text: "NHS: đúng hướng — tăng chất xơ TỪ TỪ (cám lúa mì, yến mạch, hạt lanh), ăn trái cây như táo, mơ, nho, mâm xôi, dâu; uống nhiều nước, tránh rượu.", src: [0] },
+    ],
+    how: [
+      { text: "Đi vệ sinh cùng giờ, cùng chỗ mỗi ngày, đừng nhịn khi buồn đi; kê chân lên ghế thấp cho đầu gối cao hơn hông. Đi bộ hay chạy mỗi ngày cũng giúp.", src: [0] },
+    ],
+    caution: [
+      { text: "Đã đổi ăn uống mà không đỡ → hỏi dược sĩ về thuốc nhuận tràng dùng ngắn ngày.", src: [0] },
+      { text: "Đi khám nếu có máu trong phân, sụt cân không rõ lý do, đau bụng / chướng bụng thường xuyên, thói quen đi cầu đổi đột ngột.", src: [0] },
+    ],
+    topics: [{ id: "tao-bon", text: "tăng chất xơ từ từ, ăn trái cây, uống đủ nước, kê chân khi đi cầu — NHS khuyên", src: [0], v: "help" }],
+    sources: [{ title: "Constipation", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/constipation/" }],
+    verifiedAt: "2026-10-24",
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
@@ -1133,9 +1309,23 @@ export const UNVERIFIED_HERBS = [
 ];
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
-const ASK = VN(/\b(tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
+const ASK = VN(/\b(tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
 const BURN = VN(/\b(bỏng|phỏng)\b/);
 const BOI = VN(/\b(bôi|thoa|đắp|xức|trét|chấm)\b/);
+/** Câu có gõ dấu tiếng Việt. */
+const ACCENTED = /[^ -~\s]/u;
+const toks = (s: string) => s.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
+const baseOf = (w: string) => w.normalize("NFD").replace(/\p{M}/gu, "").replace(/đ/g, "d");
+/** Khoá so dấu không phụ thuộc vị trí dấu ("hoá" = "hóa"). */
+const keyOf = (w: string) => `${baseOf(w)}|${[...w.replace(/đ/g, "d\u0335").normalize("NFD").matchAll(/\p{M}/gu)].map((x) => x[0]).sort().join("")}`;
+/** `name` có xuất hiện trong câu gõ có dấu, đúng từng dấu không (người đã gõ dấu thì "nghe" là nghe, không phải "nghệ"). */
+function typedAs(text: string, name: string): boolean {
+  const R = toks(text).map(keyOf), N = toks(name).map(keyOf);
+  for (let i = 0; i + N.length <= R.length; i++) if (N.every((w, j) => R[i + j] === w)) return true;
+  return false;
+}
+const FOODPOI = VN(/\b(thực phẩm|đồ ăn|thức ăn|ăn phải|ăn trúng|ăn nhầm|ăn đồ|hải sản|ngộ độc rượu|ngộ độc bia|say rượu)\b/);
+const CHEM = VN(/\b(thuốc chuột|thuốc trừ sâu|thuốc diệt cỏ|thuốc sâu|nước tẩy|nước rửa chén|nước javel|chất tẩy|dầu hoả|xăng|uống quá liều|uống cả vỉ|hoá chất)\b/);
 
 const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const nameRe = (names: string[]) => V(new RegExp(`\\b(${[...names].sort((a, b) => b.length - a.length).map(esc).join("|")})\\b`));
@@ -1156,7 +1346,16 @@ export function findFolk(text: string): FolkEntry | null {
     if (f.ctx && !f.ctx.test(n)) continue;
     // (bà bầu ĂN dứa là câu hỏi ăn uống khi mang thai — nguồn bromelain chỉ nói về viên bổ sung, không nói về ăn quả → để lớp ăn uống khi mang thai trả lời)
     if (f.id === "dua-bromelain" && PREG.test(n) && !VN(/\b(bromelain|viên|thực phẩm chức năng|uống men)\b/).test(n)) continue;
-    const m = n.match(RE.get(f.id)!);
+    // (ngộ độc THỰC PHẨM / rượu khác nuốt phải chất độc — nguồn NHS Poisoning nói về chất độc, không áp lời "đừng cho uống gì" cho tiêu chảy, nôn do đồ ăn)
+    if (f.id === "ngo-doc-gay-non" && FOODPOI.test(n) && !CHEM.test(n)) continue;
+    // ("toi bi ho" gõ không dấu là "tôi bị ho"; "tối nay" có dấu khác "tỏi") → chỉ nhận tỏi khi gõ đúng "tỏi", hoặc không dấu mà đi kèm chữ chỉ món tỏi.
+    if (f.id === "toi" && !ACCENTED.test(text) && !/\b(toi song|ngam toi|toi ngam|ruou toi|toi mo coi|toi den|cu toi|tep toi|an toi song)\b/.test(n)) continue;
+    let m: { 0: string } | null = n.match(RE.get(f.id)!);
+    // Câu gõ CÓ DẤU thì tên vị phải khớp cả dấu ("nghe nói" ≠ "nghệ", "quê" ≠ "quế", "tối" ≠ "tỏi"); chữ gõ không dấu vẫn khớp lỏng.
+    if (m && ACCENTED.test(text)) {
+      const hit = f.names.filter((x) => typedAs(text, x)).sort((a, b) => b.length - a.length)[0];
+      m = hit ? [normalizeVi(hit)] : null;
+    }
     // (mục có ngữ cảnh — "đắp lá" khi rắn cắn / chó cắn — ưu tiên hơn tên vị trần)
     const len = m ? m[0].length + (f.ctx || f.id === "boi-bong" ? 100 : 0) : 0;
     if (m && (!best || len > best.len)) best = { f, len };
@@ -1168,7 +1367,17 @@ export function findUnverifiedHerb(text: string): string | null {
   const n = ` ${normalizeVi(text)} `;
   const m = n.match(UNVERIFIED_RE);
   if (!m) return null;
-  return UNVERIFIED_HERBS.find((h) => normalizeVi(h) === m[0].trim()) ?? m[0].trim();
+  const h = UNVERIFIED_HERBS.find((x) => normalizeVi(x) === m[0].trim());
+  const raw = text.normalize("NFC").toLowerCase();
+  const plain = raw.normalize("NFD").replace(/\p{M}/gu, "").replace(/đ/g, "d");
+  // "mã đề thi", "mã đề số 3" là đề kiểm tra, không phải cây mã đề.
+  if (h === "mã đề" && /\bma de (thi|so|\d)/.test(plain)) return null;
+  // Gõ có dấu mà dấu khác tên vị ("sa sút", "sa vào" ≠ "sả") → không phải vị đó.
+  if (ACCENTED.test(text)) {
+    const hit = UNVERIFIED_HERBS.filter((x) => typedAs(text, x)).sort((a, b) => b.length - a.length)[0];
+    return hit ?? null;
+  }
+  return h ?? m[0].trim();
 }
 export const isFolkAsk = (text: string) => FOLK_WORD.test(` ${normalizeVi(text)} `);
 export const asksAbout = (text: string) => ASK.test(` ${normalizeVi(text)} `);
@@ -1206,9 +1415,9 @@ export function renderFolk(f: FolkEntry, topic?: { id: string; name: string } | 
     (() => {
       const cs = f.caution.filter((x) => !kid.includes(x) && !preg.includes(x));
       const list = cs.length ? cs : f.caution;
-      return list.length ? `⚠️ **${f.verdict === "danger" ? "Cảnh báo / khuyến cáo" : myth ? "Lưu ý" : "Lưu ý · ai không nên dùng"}:**\n${bl(list)}` : "";
+      return list.length ? `⚠️ **${f.verdict === "danger" ? "Cảnh báo / khuyến cáo" : myth || f.tip ? "Lưu ý" : "Lưu ý · ai không nên dùng"}:**\n${bl(list)}` : "";
     })(),
-    f.verdict === "danger" || myth ? "" : "💊 Đang dùng thuốc, mang thai, cho con bú, có bệnh gan / thận / tim, hay sắp phẫu thuật thì hỏi bác sĩ / dược sĩ trước khi dùng thảo dược như thuốc nha.",
+    f.verdict === "danger" || myth || f.tip ? "" : "💊 Đang dùng thuốc, mang thai, cho con bú, có bệnh gan / thận / tim, hay sắp phẫu thuật thì hỏi bác sĩ / dược sĩ trước khi dùng thảo dược như thuốc nha.",
     sourceLine(f, srcOf(f.folk, f.science, f.how ?? [], f.caution, t ? [t] : []), now),
   ];
   return parts.filter(Boolean).join("\n\n");
