@@ -843,11 +843,22 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.r1Li4": "Người gửi hàng không gửi hàng cấm, hàng nguy hiểm theo quy định pháp luật và chịu trách nhiệm về hàng hoá mình gửi.",
     "termsPage.r1Li5": "Trong lúc chạy chuyến, vị trí của tài xế được chia sẻ trực tiếp cho khách của chuyến đó và tự xoá khi chuyến kết thúc.",
     "termsPage.r1Li6": "Rủi ro tai nạn, chậm trễ, mất mát hay hư hỏng hàng hoá thuộc trách nhiệm của các bên liên quan theo pháp luật; Ứng dụng không chịu trách nhiệm bồi thường nhưng sẽ hỗ trợ cung cấp thông tin chuyến đi khi có yêu cầu hợp pháp.",
-    "termsPage.c1Title": "9. Tin nhắn, Chat nhóm, Cuộc gọi & Trợ lý AI",
+    "termsPage.c1Title": "9. Tin nhắn, Chat nhóm, Cuộc gọi & Trợ lý Lomi",
     "termsPage.c1Li1": "Chat nhóm tối đa 50 thành viên; quản trị nhóm chịu trách nhiệm quản lý nội dung trong nhóm.",
     "termsPage.c1Li2": "Cuộc gọi thoại/video được kết nối trực tiếp giữa hai thiết bị, Ứng dụng không ghi âm hay ghi hình.",
-    "termsPage.c1Li3": "Trợ lý AI dành cho Thành viên có Gói thành viên còn hiệu lực, tối đa 20 câu/ngày. Câu trả lời do AI tạo ra chỉ để tham khảo, có thể không chính xác và không thay thế tư vấn chuyên môn (pháp lý, y tế, tài chính...). Không nhập thông tin nhạy cảm vào Trợ lý AI.",
-    "termsPage.t1Title": "10. Ủng hộ Ứng dụng (Tip)",
+    "termsPage.c1Li3": "Trợ lý Lomi dành cho Thành viên đã đăng nhập. Quy định riêng về Lomi xem tại mục 10 bên dưới.",
+    "termsPage.l1Title": "10. Trợ lý Lomi — Sức khoẻ, Tâm lý & Tarot",
+    "termsPage.l1Li1": "Lomi là công cụ cung cấp thông tin tham khảo chung. Hiện Lomi trả lời bằng thư viện kiến thức soạn sẵn chạy ngay trên thiết bị của bạn, không dùng AI tạo sinh. Nội dung có thể chưa đầy đủ, chưa cập nhật hoặc có sai sót.",
+    "termsPage.l1Li2": "Thông tin sức khoẻ (bệnh, triệu chứng, thuốc, chỉ số xét nghiệm, mẹo dân gian…) được tổng hợp từ nguồn y khoa công khai và có ghi nguồn (như NHS, MedlinePlus/NIH, CDC, WHO, Bộ Y tế). Đây KHÔNG phải chẩn đoán, kê đơn hay tư vấn y tế cá nhân và không thay thế bác sĩ, dược sĩ. Không tự ý dùng, ngưng hoặc đổi liều thuốc dựa trên câu trả lời của Lomi.",
+    "termsPage.l1Li3": "Khoảng tham chiếu của chỉ số xét nghiệm khác nhau giữa các phòng xét nghiệm; kết quả của bạn cần được bác sĩ đọc cùng triệu chứng, bệnh sử và các xét nghiệm khác.",
+    "termsPage.l1Li4": "Trường hợp khẩn cấp (đau ngực, khó thở, dấu hiệu đột quỵ, ngộ độc, co giật, chảy máu nhiều…), hãy gọi ngay 115 hoặc đến cơ sở y tế gần nhất — không chờ hỏi Lomi.",
+    "termsPage.l1Li5": "Phần trò chuyện, tâm sự chỉ mang tính lắng nghe, động viên, không phải trị liệu hay tư vấn tâm lý chuyên môn. Nếu bạn có ý nghĩ làm hại bản thân hoặc người khác, hãy liên hệ ngay người thân, cơ sở y tế hoặc đường dây hỗ trợ tâm lý.",
+    "termsPage.l1Li6": "Bói Tarot và “Lá bài hôm nay” chỉ nhằm giải trí và gợi ý suy ngẫm, không có cơ sở khoa học và không dùng để quyết định các vấn đề sức khoẻ, pháp lý hay tài chính.",
+    "termsPage.l1Li7": "Gợi ý địa điểm, doanh nghiệp, ưu đãi dựa trên dữ liệu trong Ứng dụng và có thể thay đổi; hãy kiểm tra lại trước khi đi. Vị trí của bạn chỉ được dùng trên thiết bị để sắp xếp nơi gần bạn, và chỉ khi bạn cho phép.",
+    "termsPage.l1Li8": "Lịch sử trò chuyện với Lomi chỉ lưu trên thiết bị của bạn (các tin gần nhất), không lưu lên máy chủ. Câu Lomi chưa trả lời được sẽ được ghi lại không kèm danh tính người hỏi để cải thiện Lomi. Khi bạn bấm gửi góp ý cho một câu trả lời, câu hỏi, câu trả lời và ghi chú của bạn được gửi tới BQT. Không nhập thông tin nhạy cảm (số CCCD, tài khoản ngân hàng, mật khẩu…) vào Lomi.",
+    "termsPage.l1Li9": "Bạn tự chịu trách nhiệm về quyết định của mình khi sử dụng thông tin từ Lomi. Trong phạm vi pháp luật cho phép, Ứng dụng và BQT không chịu trách nhiệm về thiệt hại phát sinh từ việc sử dụng thông tin tham khảo này. BQT có thể áp dụng giới hạn sử dụng hợp lý để chống lạm dụng.",
+    "termsPage.lastUpdated": "Cập nhật lần cuối: 27/10/2026",
+    "termsPage.t1Title": "11. Ủng hộ Ứng dụng (Tip)",
     "termsPage.t1P1": "Việc tip cho Ứng dụng là hoàn toàn tự nguyện và không ảnh hưởng tới quyền lợi của bạn. Hiện Ứng dụng chỉ ghi nhận lời ủng hộ, CHƯA thu tiền. Khi mở thanh toán, điều khoản riêng về phí, thanh toán và hoàn tiền sẽ được công bố và cần sự đồng ý riêng của bạn.",
     "privacyPage.s1Li6": "Ngày sinh — chỉ để xác nhận bạn đủ 18 tuổi, không hiển thị công khai",
     "privacyPage.s1Li7": "Thông tin nhu cầu trên Quẹt (khu vực, giới tính, độ tuổi, mô tả, ảnh...) và lượt thích/bỏ qua/Kết nối",
@@ -910,12 +921,12 @@ const DICT: Record<Lang, Record<string, string>> = {
       'Nếu Doanh nghiệp không thực hiện đúng ưu đãi, Thành viên có thể phản ánh qua chức năng "Báo cáo".',
     "termsPage.s6Li5":
       "BQT có quyền từ chối phê duyệt, tạm ngừng hoặc gỡ bỏ hồ sơ Doanh nghiệp/Ưu đãi vi phạm điều khoản này hoặc quy định pháp luật.",
-    "termsPage.s7Title": "11. Nội dung do người dùng tạo & Quyền sở hữu trí tuệ",
+    "termsPage.s7Title": "12. Nội dung do người dùng tạo & Quyền sở hữu trí tuệ",
     "termsPage.s7P1":
       'Bạn giữ quyền sở hữu trí tuệ với nội dung mình đăng (đánh giá, ảnh, tin nhắn — "Nội dung Người dùng"), nhưng cấp cho Ứng dụng quyền sử dụng, hiển thị nội dung đó trong phạm vi vận hành và quảng bá Ứng dụng.',
     "termsPage.s7P2":
       'Tên gọi "{app}", logo, giao diện, mã nguồn và các yếu tố nhận diện thương hiệu khác thuộc quyền sở hữu của chủ sở hữu Ứng dụng. Nghiêm cấm sao chép, sử dụng trái phép khi chưa có sự đồng ý bằng văn bản.',
-    "termsPage.s8Title": "12. Hành vi bị nghiêm cấm",
+    "termsPage.s8Title": "13. Hành vi bị nghiêm cấm",
     "termsPage.s8Li1": "Tạo tài khoản giả, sử dụng thông tin của người khác không có sự cho phép",
     "termsPage.s8Li2": "Can thiệp trái phép vào hệ thống, khai thác lỗ hổng bảo mật",
     "termsPage.s8Li3": "Sử dụng công cụ tự động (bot, script) truy cập, thu thập dữ liệu trái phép",
@@ -925,38 +936,38 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s8Li6":
       "Mua bán, quảng cáo hàng hoá/dịch vụ bị cấm theo pháp luật Việt Nam (vũ khí, ma tuý, hàng giả, hàng cấm, động vật hoang dã, cờ bạc trái phép...)",
     "termsPage.s8Li7": "Sử dụng Ứng dụng để lừa đảo, chiếm đoạt tài sản hoặc thực hiện hành vi phạm tội khác",
-    "termsPage.s9Title": "13. Xử lý vi phạm & Chấm dứt tài khoản",
+    "termsPage.s9Title": "14. Xử lý vi phạm & Chấm dứt tài khoản",
     "termsPage.s9P1":
       "BQT có quyền cảnh cáo, tạm khoá hoặc chấm dứt tài khoản của Người dùng vi phạm điều khoản này mà không cần báo trước, tuỳ theo mức độ vi phạm.",
     "termsPage.s9P2":
       "Người dùng có quyền yêu cầu chấm dứt tài khoản và xoá dữ liệu cá nhân bất kỳ lúc nào theo quy trình xử lý của BQT.",
     "termsPage.s9P3":
       "BQT có quyền gỡ bỏ ngay lập tức nội dung vi phạm và cung cấp thông tin liên quan cho cơ quan chức năng có thẩm quyền khi có yêu cầu hợp pháp hoặc khi phát hiện hành vi vi phạm pháp luật nghiêm trọng.",
-    "termsPage.s10Title": "14. Gói thành viên (Membership)",
+    "termsPage.s10Title": "15. Gói thành viên (Membership)",
     "termsPage.s10P1":
       "Mọi Thành viên mới được BQT duyệt tài khoản sẽ được cấp Gói thành viên miễn phí trong 03 tháng kể từ ngày kích hoạt, không giới hạn số lượng.",
     "termsPage.s10P2":
       "Khi hết thời hạn ưu đãi, Gói thành viên sẽ TỰ ĐỘNG NGỪNG HIỆU LỰC. Ứng dụng KHÔNG tự động chuyển sang gói trả phí và KHÔNG tự động trừ tiền khi chưa có sự đồng ý riêng của Thành viên.",
     "termsPage.s10P3":
       "Ngoài chương trình ra mắt, khi gói thành viên trả phí chính thức được kích hoạt, điều khoản riêng về phí/thanh toán/hoàn tiền sẽ được công bố và cần sự đồng ý riêng trước khi đăng ký.",
-    "termsPage.s11Title": "15. Miễn trừ bảo đảm & Giới hạn trách nhiệm",
+    "termsPage.s11Title": "16. Miễn trừ bảo đảm & Giới hạn trách nhiệm",
     "termsPage.s11P1":
       'Ứng dụng được cung cấp trên cơ sở "nguyên trạng", không đảm bảo hoạt động không gián đoạn. Ứng dụng đóng vai trò kết nối, không phải bên trực tiếp cung cấp hàng hoá/dịch vụ.',
     "termsPage.s11P2":
       "Ứng dụng không chịu trách nhiệm về chất lượng hàng hoá, dịch vụ do Doanh nghiệp cung cấp, hay thiệt hại phát sinh từ giao dịch giữa Thành viên và Doanh nghiệp.",
-    "termsPage.s12Title": "16. Bồi thường",
+    "termsPage.s12Title": "17. Bồi thường",
     "termsPage.s12P1":
       "Người dùng đồng ý bồi thường và giữ cho Ứng dụng, BQT không bị tổn hại trước mọi khiếu nại, thiệt hại phát sinh từ việc Người dùng vi phạm điều khoản này hoặc pháp luật.",
-    "termsPage.s13Title": "17. Luật áp dụng & Giải quyết tranh chấp",
+    "termsPage.s13Title": "18. Luật áp dụng & Giải quyết tranh chấp",
     "termsPage.s13P1":
       "Điều khoản này được điều chỉnh theo pháp luật Việt Nam. Tranh chấp trước tiên được giải quyết qua thương lượng, hoà giải; nếu không đạt thoả thuận sẽ đưa ra Toà án nhân dân có thẩm quyền tại Việt Nam.",
-    "termsPage.s14Title": "18. Ngôn ngữ áp dụng",
+    "termsPage.s14Title": "19. Ngôn ngữ áp dụng",
     "termsPage.s14P1":
       "Điều khoản này được soạn bằng tiếng Việt và tiếng Anh. Nếu có sự khác biệt giữa hai phiên bản, phiên bản tiếng Việt được ưu tiên áp dụng.",
-    "termsPage.s15Title": "19. Bất khả kháng",
+    "termsPage.s15Title": "20. Bất khả kháng",
     "termsPage.s15P1":
       "Ứng dụng không chịu trách nhiệm về việc chậm trễ do sự kiện bất khả kháng ngoài khả năng kiểm soát hợp lý (thiên tai, dịch bệnh, sự cố hạ tầng bên thứ ba...).",
-    "termsPage.s16Title": "20. Thay đổi điều khoản & Liên hệ",
+    "termsPage.s16Title": "21. Thay đổi điều khoản & Liên hệ",
     "termsPage.s16P1":
       "Điều khoản có thể được cập nhật theo thời gian. Khi có thay đổi quan trọng, chúng tôi sẽ thông báo trong Ứng dụng.",
     "termsPage.s16Pre": "Mọi thắc mắc về điều khoản, vui lòng liên hệ qua Zalo",
@@ -2408,11 +2419,22 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.r1Li4": "Senders must not send prohibited or dangerous goods under the law and are responsible for the goods they send.",
     "termsPage.r1Li5": "During a trip, the driver's location is shared live with that trip's customer and is deleted automatically when the trip ends.",
     "termsPage.r1Li6": "Risks of accidents, delays, loss of or damage to goods rest with the parties involved under the law; the App does not compensate but will help provide trip information upon lawful request.",
-    "termsPage.c1Title": "9. Messages, Group chat, Calls & AI Assistant",
+    "termsPage.c1Title": "9. Messages, Group chat, Calls & Lomi Assistant",
     "termsPage.c1Li1": "Group chats have up to 50 members; group admins are responsible for moderating their groups.",
     "termsPage.c1Li2": "Voice/video calls connect directly between the two devices; the App does not record them.",
-    "termsPage.c1Li3": "The AI Assistant is for Members with an active Membership, up to 20 questions/day. AI answers are for reference only, may be inaccurate and do not replace professional (legal, medical, financial...) advice. Do not enter sensitive information into the AI Assistant.",
-    "termsPage.t1Title": "10. Supporting the App (Tips)",
+    "termsPage.c1Li3": "The Lomi Assistant is available to signed-in Members. Lomi-specific terms are set out in section 10 below.",
+    "termsPage.l1Title": "10. Lomi Assistant — Health, Wellbeing & Tarot",
+    "termsPage.l1Li1": "Lomi provides general reference information. Lomi currently answers from a pre-written knowledge library that runs on your device and does not use generative AI. Content may be incomplete, out of date or contain errors.",
+    "termsPage.l1Li2": "Health information (conditions, symptoms, medicines, lab values, folk remedies…) is compiled from public medical sources and cites them (such as the NHS, MedlinePlus/NIH, CDC, WHO and Vietnam's Ministry of Health). It is NOT a diagnosis, prescription or personal medical advice and does not replace a doctor or pharmacist. Do not start, stop or change any medicine based on Lomi's answers.",
+    "termsPage.l1Li3": "Lab reference ranges differ between laboratories; your results must be interpreted by a doctor together with your symptoms, history and other tests.",
+    "termsPage.l1Li4": "In an emergency (chest pain, difficulty breathing, signs of stroke, poisoning, seizures, heavy bleeding…), call 115 or go to the nearest medical facility immediately — do not wait to ask Lomi.",
+    "termsPage.l1Li5": "Conversations and emotional support are for listening and encouragement only and are not therapy or professional psychological counselling. If you have thoughts of harming yourself or others, contact someone you trust, a medical facility or a mental-health helpline right away.",
+    "termsPage.l1Li6": "Tarot readings and the “Card of the day” are for entertainment and reflection only, have no scientific basis, and must not be used to make health, legal or financial decisions.",
+    "termsPage.l1Li7": "Suggestions of places, businesses and offers are based on data in the App and may change; please check before you go. Your location is only used on your device to sort nearby places, and only with your permission.",
+    "termsPage.l1Li8": "Your chat history with Lomi is stored only on your device (most recent messages) and is not saved on our servers. Questions Lomi cannot answer are recorded without the asker's identity to improve Lomi. When you send feedback on an answer, the question, the answer and your note are sent to the Admin Team. Do not enter sensitive information (ID numbers, bank accounts, passwords…) into Lomi.",
+    "termsPage.l1Li9": "You are responsible for decisions you make using information from Lomi. To the extent permitted by law, the App and the Admin Team are not liable for damages arising from the use of this reference information. The Admin Team may apply reasonable usage limits to prevent abuse.",
+    "termsPage.lastUpdated": "Last updated: 27/10/2026",
+    "termsPage.t1Title": "11. Supporting the App (Tips)",
     "termsPage.t1P1": "Tipping the App is completely voluntary and does not affect your benefits. The App currently only records your pledge and does NOT collect money. When payments open, separate terms on fees, payment and refunds will be published and require your separate consent.",
     "privacyPage.s1Li6": "Date of birth — only to confirm you are 18+, never shown publicly",
     "privacyPage.s1Li7": "Your Quẹt posts (area, gender, age, description, photos...) and likes/passes/Connections",
@@ -2472,12 +2494,12 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s6Li4": 'If a Business does not honor a posted Offer, Members may report it via the "Report" feature.',
     "termsPage.s6Li5":
       "The Admin Team may refuse to approve, suspend, or remove a Business profile/Offer that violates these Terms or applicable law.",
-    "termsPage.s7Title": "11. User-Generated Content & Intellectual Property",
+    "termsPage.s7Title": "12. User-Generated Content & Intellectual Property",
     "termsPage.s7P1":
       'You retain intellectual property ownership of content you post (reviews, photos, messages — "User Content"), but grant the App a license to use and display that content within the scope of operating and promoting the App.',
     "termsPage.s7P2":
       'The name "{app}", logo, interface, source code, and other brand identity elements are owned by the App\'s owner. Unauthorized copying or use without written consent is strictly prohibited.',
-    "termsPage.s8Title": "12. Prohibited Conduct",
+    "termsPage.s8Title": "13. Prohibited Conduct",
     "termsPage.s8Li1": "Creating fake accounts or using someone else's information without permission",
     "termsPage.s8Li2": "Unauthorized interference with the system or exploiting security vulnerabilities",
     "termsPage.s8Li3": "Using automated tools (bots, scripts) for unauthorized access or data collection",
@@ -2487,38 +2509,38 @@ const DICT: Record<Lang, Record<string, string>> = {
     "termsPage.s8Li6":
       "Selling or advertising goods/services banned under Vietnamese law (weapons, drugs, counterfeit or prohibited goods, wildlife, illegal gambling, etc.)",
     "termsPage.s8Li7": "Using the App to commit fraud, misappropriate property, or engage in other criminal activity",
-    "termsPage.s9Title": "13. Enforcement & Account Termination",
+    "termsPage.s9Title": "14. Enforcement & Account Termination",
     "termsPage.s9P1":
       "The Admin Team may warn, suspend, or terminate the account of a User who violates these Terms without prior notice, depending on the severity of the violation.",
     "termsPage.s9P2":
       "Users may request account termination and deletion of personal data at any time, per the Admin Team's process.",
     "termsPage.s9P3":
       "The Admin Team may immediately remove violating content and provide relevant information to competent authorities upon lawful request or upon discovering a serious violation of the law.",
-    "termsPage.s10Title": "14. Membership Plan",
+    "termsPage.s10Title": "15. Membership Plan",
     "termsPage.s10P1":
       "Every new Member approved by the Admin Team is granted a free Membership Plan for 03 (three) months from the date of activation, with no cap on the number of Members.",
     "termsPage.s10P2":
       "When this promotional period ends, the Membership Plan will AUTOMATICALLY STOP. The App will NOT automatically switch you to a paid plan and will NOT automatically charge you without your separate, explicit consent to the payment terms at that time.",
     "termsPage.s10P3":
       "Beyond the launch promotion, when the official paid Membership Plan is activated, separate terms on fees, payment, and refunds will be announced and require your separate consent before subscribing.",
-    "termsPage.s11Title": "15. Disclaimer & Limitation of Liability",
+    "termsPage.s11Title": "16. Disclaimer & Limitation of Liability",
     "termsPage.s11P1":
       'The App is provided "as is," without warranty of uninterrupted operation. The App serves to connect Members and Businesses and is not a direct provider of goods/services.',
     "termsPage.s11P2":
       "The App is not responsible for the quality of goods or services provided by Businesses, or for damages arising from transactions between Members and Businesses.",
-    "termsPage.s12Title": "16. Indemnification",
+    "termsPage.s12Title": "17. Indemnification",
     "termsPage.s12P1":
       "You agree to indemnify and hold the App and the Admin Team harmless from any claims or damages arising from your violation of these Terms or applicable law.",
-    "termsPage.s13Title": "17. Governing Law & Dispute Resolution",
+    "termsPage.s13Title": "18. Governing Law & Dispute Resolution",
     "termsPage.s13P1":
       "These Terms are governed by the laws of Vietnam. Disputes will first be resolved through negotiation and good-faith mediation; if no agreement is reached, disputes will be brought to the competent People's Court in Vietnam.",
-    "termsPage.s14Title": "18. Governing Language",
+    "termsPage.s14Title": "19. Governing Language",
     "termsPage.s14P1":
       "These Terms are drafted in both Vietnamese and English. In case of any discrepancy between the two versions, the Vietnamese version shall prevail.",
-    "termsPage.s15Title": "19. Force Majeure",
+    "termsPage.s15Title": "20. Force Majeure",
     "termsPage.s15P1":
       "The App is not liable for delays caused by force majeure events beyond its reasonable control (natural disasters, epidemics, third-party infrastructure outages...).",
-    "termsPage.s16Title": "20. Changes to These Terms & Contact",
+    "termsPage.s16Title": "21. Changes to These Terms & Contact",
     "termsPage.s16P1":
       "These Terms may be updated over time. We will notify you in the App of any significant changes.",
     "termsPage.s16Pre": "For questions about these terms, please contact us via Zalo",

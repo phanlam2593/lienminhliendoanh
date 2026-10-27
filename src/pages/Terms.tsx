@@ -28,7 +28,7 @@ export default function Terms() {
         </button>
         <h1 className="font-bold text-lg">{t("termsPage.title")}</h1>
       </div>
-      <p className="text-xs text-muted-foreground">{t("legal.lastUpdated")}</p>
+      <p className="text-xs text-muted-foreground">{t("termsPage.lastUpdated")}</p>
 
       <Section title={t("termsPage.s1Title")}>
         <p>{t("termsPage.s1P1", { app: appName })}</p>
@@ -106,6 +106,20 @@ export default function Terms() {
           <li>{t("termsPage.c1Li1")}</li>
           <li>{t("termsPage.c1Li2")}</li>
           <li>{t("termsPage.c1Li3")}</li>
+        </ul>
+      </Section>
+
+      <Section title={t("termsPage.l1Title")}>
+        <ul className="list-disc pl-4 space-y-1">
+          <li>{t("termsPage.l1Li1")}</li>
+          <li>{t("termsPage.l1Li2")}</li>
+          <li>{t("termsPage.l1Li3")}</li>
+          <li>{t("termsPage.l1Li4")}</li>
+          <li>{t("termsPage.l1Li5")}</li>
+          <li>{t("termsPage.l1Li6")}</li>
+          <li>{t("termsPage.l1Li7")}</li>
+          <li>{t("termsPage.l1Li8")}</li>
+          <li>{t("termsPage.l1Li9")}</li>
         </ul>
       </Section>
 
