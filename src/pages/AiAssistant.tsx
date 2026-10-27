@@ -127,6 +127,7 @@ import { VR, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatc
 import { replyMismatch } from "@/lib/lomiReplyGate";
 import { urgentOf } from "@/lib/lomiUrgent";
 import { vitalAsk } from "@/lib/lomiVitals";
+import { labAsk, labTips } from "@/lib/lomiLabs";
 // 21/10: người dùng muốn câu trả lời ngắn (nhớ trên máy này; lỗi bộ nhớ trình duyệt thì coi như chưa đặt).
 const SHORT_KEY = (uid: string) => `lmld:lomi-short:${uid}`;
 function shortPref(uid: string): boolean {
@@ -1657,10 +1658,34 @@ export function AiChat({
         }
         // 15/10 — CHỈ SỐ (lib/lomiVitals): "huyết áp bao nhiêu là cao", "đường huyết lúc đói 7 có cao không", "huyết áp 150/95 có sao không"
         //   → ngưỡng đúng theo nguồn (NHS / NIDDK) + so con số người dùng đưa; trước đây đáp "chưa có kiến thức".
-        const vt = vitalAsk(q);
+        // 27/10 — CHỈ SỐ XÉT NGHIỆM (lib/lomiLabs): kali, natri, clo, canxi, axit uric, creatinin, eGFR, ALT/AST, Hb, bạch cầu, tiểu cầu,
+        //   TSH, vitamin D, BMI — đọc con số theo khoảng tham khảo có nguồn, mức nguy hiểm khi nguồn có ghi; chỉ số lệch thì kèm
+        //   "mẹo & kiêng" lấy từ thẻ kiến thức có nguồn (gout, bệnh thận mạn, thiếu máu, mỡ máu cao, tăng huyết áp…).
+        const vt = vitalAsk(q) ?? labAsk(q);
         if (vt) {
           topicHit("health");
-          return localReply(q, { role: "assistant", content: vt.text, local: true, health: hCtx ?? (vt.kind === "bp" ? { label: "huyết áp" } : { label: "đường huyết" }), sx: inTalk ? lastA?.sx : undefined });
+          const tips: string[] = [];
+          const chips: string[] = [];
+          let tipMed: string | undefined;
+          for (const id of (vt.cards ?? []).slice(0, 2)) {
+            const mt = await loadMedTopic(id);
+            if (!mt) continue;
+            const tp = labTips(mt, medName(mt));
+            if (!tp) continue;
+            tips.push(tp);
+            chips.push(`${medName(mt).charAt(0).toUpperCase()}${medName(mt).slice(1)} kiêng gì?`);
+            tipMed ??= mt.id;
+          }
+          const label = vt.kind === "bp" ? "huyết áp" : vt.kind === "glucose" ? "đường huyết" : vt.kind === "lipid" ? "mỡ máu" : "chỉ số xét nghiệm";
+          return localReply(q, {
+            role: "assistant",
+            content: [vt.text, ...tips].join("\n\n"),
+            local: true,
+            health: hCtx ?? { label },
+            sx: inTalk ? lastA?.sx : undefined,
+            ...(chips.length ? { quick: chips } : {}),
+            ...(tipMed ? { med: { id: tipMed, aspect: "diet" } } : {}),
+          });
         }
         const careOn = th0?.kind === "care" && (th0.idle ?? 0) < 2;
         const careWho = careOn && (th0!.idle ?? 0) === 0 ? th0!.who.text : undefined;

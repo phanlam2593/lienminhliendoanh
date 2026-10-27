@@ -19,7 +19,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
-export type VitalReply = { kind: "bp" | "glucose" | "lipid"; text: string };
+export type VitalReply = { kind: "bp" | "glucose" | "lipid"; text: string; /** 27/10: thẻ kiến thức để đưa mẹo & kiêng khi chỉ số lệch */ cards?: string[] };
 
 // 15/10 (ảnh Kir gửi: "Mỡ máu 9.0 là cao k?" → Lomi đáp lạc "Ý “9 0” anh hỏi…"): chỉ số MỠ MÁU.
 //  • NHS — Cholesterol levels, rà soát 13/03/2026 (mức cho người lớn khoẻ mạnh): cholesterol toàn phần < 5 mmol/L · non-HDL < 4 mmol/L ·
@@ -52,6 +52,7 @@ function lipidAsk(raw: string, n: string): VitalReply | null {
     "📏 Mức tham khảo cho **người lớn khoẻ mạnh**:\n• **Cholesterol toàn phần**: dưới **5 mmol/L** (NHS).\n• **Non-HDL** (cholesterol “xấu”): dưới **4 mmol/L** (NHS).\n• **HDL** (cholesterol “tốt”): trên **1,0 mmol/L** ở nam, trên **1,2 mmol/L** ở nữ (NHS).\n• **Triglycerid** (chất béo trung tính): dưới 1,7 mmol/L (150 mg/dL) là bình thường · 1,7–2,25 ranh giới cao · 2,26–5,64 cao · từ 5,65 mmol/L (500 mg/dL) là **rất cao** (MedlinePlus).";
   const note =
     "Đây là mức cho người lớn khoẻ mạnh — mức mục tiêu của mỗi người tuỳ tuổi, bệnh đang có và nguy cơ tim mạch, nên bác sĩ sẽ xem cùng các yếu tố khác (huyết áp, tuổi…). Mỗi phòng xét nghiệm có thể ghi khoảng bình thường hơi khác, cứ đối chiếu với phiếu kết quả của bạn.";
+  let lipHigh = false;
   if (!isNaN(v) && v > 0) {
     const tg = TG.test(n);
     const which = tg ? "tg" : NONHDL.test(n) ? "nonhdl" : HDL.test(n) && !LDL.test(n) ? "hdl" : LDL.test(n) ? "ldl" : TOTAL.test(n) ? "total" : "unknown";
@@ -60,6 +61,7 @@ function lipidAsk(raw: string, n: string): VitalReply | null {
     const show = (x: number, conv: number) => (mg ? `**${fmt(v)} mg/dL** (≈ ${fmt(x)} mmol/L)` : `**${fmt(v)} mmol/L** (≈ ${Math.round(v * conv)} mg/dL)`);
     const tgCls = (x: number) => (x >= 5.65 ? "ở mức **rất cao** (từ 5,65 mmol/L)" : x >= 2.26 ? "ở mức **cao** (2,26–5,64 mmol/L)" : x >= 1.69 ? "ở mức **ranh giới cao** (1,69–2,25 mmol/L)" : "trong mức **bình thường** (dưới 1,69 mmol/L)");
     const totCls = (x: number) => (x >= 5 ? `**cao hơn** mức khoẻ mạnh của NHS (dưới 5 mmol/L)${x >= 7.5 ? " — cao hơn khá nhiều" : ""}` : "dưới 5 mmol/L — trong mức NHS coi là khoẻ mạnh");
+    lipHigh = which === "tg" ? mmolT >= 1.69 : which === "total" ? mmolC >= 5 : which === "nonhdl" ? mmolC >= 4 : which === "hdl" ? mmolC <= (FEMALE.test(n) ? 1.2 : 1.0) : which === "unknown" ? mmolC >= 5 : false;
     if (which === "tg") out.push(`🩺 Triglycerid ${show(mmolT, 88.57)} ${tgCls(mmolT)} theo MedlinePlus.`);
     else if (which === "total") out.push(`🩺 Cholesterol toàn phần ${show(mmolC, 38.67)} ${totCls(mmolC)}.`);
     else if (which === "nonhdl") out.push(`🩺 Non-HDL ${show(mmolC, 38.67)} ${mmolC >= 4 ? "**cao hơn** mức khoẻ mạnh của NHS (dưới 4 mmol/L)" : "dưới 4 mmol/L — trong mức NHS coi là khoẻ mạnh"}.`);
@@ -79,7 +81,7 @@ function lipidAsk(raw: string, n: string): VitalReply | null {
   out.push(table);
   out.push(note);
   out.push(SRC_LIPID);
-  return { kind: "lipid", text: out.join("\n\n") };
+  return { kind: "lipid", text: out.join("\n\n"), cards: lipHigh ? ["mo-mau-cao"] : undefined };
 }
 
 const BP = VN(/\b(huyết áp|tăng áp|tụt áp)\b/);
@@ -121,10 +123,12 @@ export function vitalAsk(text: string): VitalReply | null {
               ? `**${s}/${d} mmHg** dưới ngưỡng **90/60** — NHS gọi là **huyết áp thấp**. Huyết áp thấp không phải lúc nào cũng gây triệu chứng; nếu hay chóng mặt, choáng hay ngất thì nên đi khám.`
               : `**${s}/${d} mmHg** chưa tới ngưỡng cao (140/90 đo ở cơ sở y tế${home ? ", 135/85 đo ở nhà" : ""}) và cũng không dưới ngưỡng thấp 90/60 của NHS.`;
         out.push(`🩺 ${verdict}`);
+        // 27/10 — mức nguy hiểm (NHS Devon): trên 180/110 có thể là tăng huyết áp nặng → khám sớm; kèm đau đầu, rối loạn thị giác → khám / cấp cứu ngay.
+        if (s > 180 || d > 110) out.push("🚨 Trên **180/110 mmHg** có thể là **tăng huyết áp nặng** — nên được bác sĩ khám **sớm** (trong ngày). Nếu kèm **đau đầu, nhìn mờ / rối loạn thị giác** thì đi khám / cấp cứu **ngay** (NHS).");
         out.push("**Một lần đo chưa đủ để kết luận** — bác sĩ thường cho đo lại (tự đo ở nhà nhiều ngày, tái khám, hoặc đeo máy đo 24 giờ) để xác nhận. Đang điều trị huyết áp thì mức mục tiêu do bác sĩ đặt riêng cho bạn.");
         if (high || low) out.push(RED);
-        out.push(SRC_BP);
-        return { kind: "bp", text: out.join("\n\n") };
+        out.push(s > 180 || d > 110 ? `${SRC_BP} · NHS Devon — Hypertension, cập nhật 22/09/2026 (ngưỡng 180/110).` : SRC_BP);
+        return { kind: "bp", text: out.join("\n\n"), cards: high || (home && homeHigh) ? ["tang-huyet-ap"] : low ? ["huyet-ap-thap"] : undefined };
       }
     }
     out.push(
@@ -144,16 +148,21 @@ export function vitalAsk(text: string): VitalReply | null {
     const num = raw.slice(at).match(/(\d{1,3}(?:[.,]\d)?)\s*(%|mmol|mg)?/u) ?? raw.match(/(\d{1,3}(?:[.,]\d)?)\s*(%|mmol|mg)?/u);
     const v = num ? Number(num[1].replace(",", ".")) : NaN;
     const out: string[] = [];
+    let gCard: string | undefined;
     const table = "📏 Ngưỡng theo NIDDK (cho người **không mang thai**):\n• Đường huyết **lúc đói** (nhịn ăn ít nhất 8 tiếng): ≤ 99 mg/dL (≈ 5,5 mmol/L) là bình thường · 100–125 mg/dL (≈ 5,6–6,9 mmol/L) là **tiền tiểu đường** · từ 126 mg/dL (≈ 7,0 mmol/L) là mức **tiểu đường**.\n• **A1C**: dưới 5,7% bình thường · 5,7–6,4% tiền tiểu đường · từ 6,5% là mức tiểu đường.\n• Đường huyết đo **bất kỳ lúc nào** từ 200 mg/dL (≈ 11,1 mmol/L) **kèm triệu chứng** cũng là mức tiểu đường.\n• Dưới **4 mmol/L** (≈ 72 mg/dL) thường là **hạ đường huyết** (NHS).";
     if (!isNaN(v) && v > 0) {
       if (a1c && v >= 3 && v <= 20) {
         const cls = v >= 6.5 ? "ở mức **tiểu đường** (≥ 6,5%)" : v >= 5.7 ? "ở mức **tiền tiểu đường** (5,7–6,4%)" : "trong mức **bình thường** (< 5,7%)";
         out.push(`🩺 A1C **${fmt(v)}%** ${cls} theo ngưỡng của NIDDK.`);
+        gCard = v >= 6.5 ? "tieu-duong-type-2" : v >= 5.7 ? "tien-tieu-duong" : undefined;
       } else if (!a1c) {
         const mg = num?.[2] === "mg" || v >= 40;
         const mmol = mg ? v / 18 : v;
         const mgv = mg ? v : v * 18;
         const show = mg ? `**${fmt(v)} mg/dL** (≈ ${fmt(mmol)} mmol/L)` : `**${fmt(v)} mmol/L** (≈ ${Math.round(mgv)} mg/dL)`;
+        gCard = mmol < 4 ? "ha-duong-huyet" : FAST.test(n) && mgv >= 126 ? "tieu-duong-type-2" : FAST.test(n) && mgv >= 100 ? "tien-tieu-duong" : mgv >= 200 ? "tieu-duong-type-2" : undefined;
+        // 27/10 — đường huyết rất cao: dấu hiệu phải đi cấp cứu (NHS — High blood sugar, rà soát 17/03/2026)
+        if (mgv >= 200) out.push("🚨 Đường huyết cao như vậy mà kèm **buồn nôn / nôn, đau bụng, thở nhanh, tim đập nhanh, lơ mơ / buồn ngủ li bì, hơi thở có mùi trái cây, lú lẫn** hoặc thử thấy **ceton cao** → gọi **115** / đi cấp cứu ngay, đừng tự lái xe (NHS — High blood sugar, rà soát 17/03/2026).");
         if (mmol < 4) out.push(`⚠️ ${show} là dưới 4 mmol/L — NHS xếp vào mức **hạ đường huyết**. Đang run, vã mồ hôi, lả hay lú lẫn thì xử trí ngay (ăn / uống thứ có đường tác dụng nhanh nếu còn tỉnh và nuốt được); lơ mơ, không tỉnh thì **không cho ăn uống**, gọi **115**.`);
         else if (FAST.test(n)) {
           const cls = mgv >= 126 ? "từ ngưỡng **tiểu đường** (≥ 126 mg/dL ≈ 7,0 mmol/L) trở lên" : mgv >= 100 ? "ở mức **tiền tiểu đường** (100–125 mg/dL ≈ 5,6–6,9 mmol/L)" : "trong mức **bình thường** (≤ 99 mg/dL)";
@@ -173,7 +182,7 @@ export function vitalAsk(text: string): VitalReply | null {
     out.push(table);
     out.push("**Một lần đo chưa đủ để kết luận** — thường bác sĩ sẽ làm xét nghiệm thứ hai để xác nhận; máy đo ở nhà cũng có sai số. Đã được chẩn đoán tiểu đường thì mức mục tiêu do bác sĩ đặt riêng cho bạn.");
     out.push(SRC_GLU);
-    return { kind: "glucose", text: out.join("\n\n") };
+    return { kind: "glucose", text: out.join("\n\n"), cards: gCard ? [gCard] : undefined };
   }
   return null;
 }
