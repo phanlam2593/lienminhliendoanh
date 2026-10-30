@@ -75,6 +75,7 @@ export function setViRestoreOff(x: boolean) {
  * tiếng Việt có thật ("di" trong "di truyền", "la" trong "la mắng", "a" viết tắt "anh") thì giữ nguyên, chỉ đoán dấu cho chữ không
  * dấu mà bản thân nó không phải chữ nào ("dau" → "đau", "nhe" → "nhé").
  */
+const KEEP_BARE = new Set(["cua", "cam", "phan"]);
 export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): string {
   if (!idx || off) return text;
   const { m, forms, total } = idx;
@@ -90,6 +91,8 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
     if (HAS_MARK.test(w)) return [w]; // người dùng gõ dấu → giữ
     const f = forms.get(w);
     if (!f) return [w];
+    // (31/10) câu đã gõ dấu mà viết "cua", "cam", "phan" không dấu là chủ ý (con cua, quả cam, phan tả diệp) — không đoán thành "của", "cám" ("ăn cua xong ăn cam").
+    if (opts.keepBare && KEEP_BARE.has(w)) return [w];
     if (opts.keepBare && m.u[w]) {
       const tot = f.reduce((a, x) => a + (m.u[x] ?? 0), 0) + (f.includes(w) ? 0 : m.u[w]);
       if (m.u[w] / Math.max(1, tot) >= 0.05) return [w];

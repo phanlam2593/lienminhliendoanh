@@ -315,5 +315,20 @@ describe("30/10 — trả lời qua khung chat", () => {
       expect(a, q).not.toMatch(/Liên Minh Liên Doanh/);
     }
   }, T);
+  it("Mẹo dân gian đợt 6 (danh sách ChatGPT lần 2, 31/10)", async () => {
+    const yes = async (q: string, re: RegExp) => expect((await last([q])).content, q).toMatch(re);
+    const no = async (q: string, re: RegExp) => expect((await last([q])).content, q).not.toMatch(re);
+    await yes("Lá lốt rửa vùng kín có hết viêm không?", /thụt rửa/);
+    await yes("uống phan tả diệp giảm cân được không", /nhuận tràng kích thích/);
+    await yes("Sinh mổ có phải nằm im không?", /đi lại càng sớm/);
+    await yes("Ăn cua xong ăn cam có bị ngộ độc không?", /hữu cơ, ít độc/);
+    await yes("Trẻ sốt có phải kiêng thịt không?", /trẻ thấy đói/);
+    await yes("Bồ công anh có giải độc gan không?", /Bồ công anh/);
+    await no("Bồ công anh có giải độc gan không?", /\bem\b/);
+    await yes("tỏi có giải độc gan không", /Tỏi/);
+    await yes("Lá hẹ hấp đường phèn có trị ho không?", /Lá hẹ\*\* là vị quen thuộc/);
+    await no("có ai bán tỏi không", /Tỏi\*\*\s+🔸/);
+    await no("Bà bầu ăn rau ngót có gây sảy thai không?", /Ý “bầu ăn”/);
+  }, T);
 });
 

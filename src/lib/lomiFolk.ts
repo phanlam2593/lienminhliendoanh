@@ -1962,6 +1962,106 @@ export const FOLK: FolkEntry[] = [
     sources: [{ title: "Dengue and severe dengue — fact sheet (21/08/2025)", publisher: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue" }],
     verifiedAt: "2026-10-30",
   },
+  // ── 31/10 (đợt 6 — danh sách ChatGPT lần 2; mỗi ý đối chiếu trang nguồn đọc ngày 31/10/2026) ──
+  {
+    id: "rua-vung-kin-la",
+    name: "Rửa, xông vùng kín bằng nước lá (trầu không, lá lốt, chè xanh)?",
+    names: ["rửa vùng kín", "xông vùng kín", "xông hơi vùng kín", "thụt rửa", "thụt rửa âm đạo", "rửa sâu", "rửa bên trong", "nước lá trầu", "lá trầu không", "lá trầu", "nước lá lốt", "lá lốt", "nước chè xanh", "chè xanh", "trà xanh", "nước muối", "dung dịch vệ sinh", "xà phòng thơm"],
+    ctx: VN(/\b(vùng kín|phụ khoa|âm đạo|cô bé|viêm âm đạo|khí hư|huyết trắng|ngứa vùng kín|viêm phụ khoa|nấm âm đạo|chỗ kín)\b/),
+    verdict: "myth",
+    belief: "Ngứa, viêm vùng kín, ra khí hư thì rửa hoặc xông bằng nước lá trầu không, lá lốt, chè xanh, nước muối; thụt rửa cho \"sạch sâu\".",
+    folk: [],
+    science: [
+      { text: "**Không rửa bên trong âm đạo (thụt rửa).**", src: [0] },
+      { text: "Không dùng sản phẩm vệ sinh có mùi thơm (xà phòng, chất khử mùi) trong hoặc quanh vùng kín.", src: [0] },
+    ],
+    how: [{ text: "Chỉ rửa bên ngoài vùng kín bằng nước sạch rồi lau khô kỹ.", src: [0] }],
+    caution: [],
+    unverified: ["nước lá trầu không, lá lốt, chè xanh chữa ngứa, viêm vùng kín, khí hư"],
+    topics: [],
+    sources: [{ title: "Vaginitis", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/vaginitis/", reviewed: "2023-02-27" }],
+    verifiedAt: "2026-10-31",
+  },
+  {
+    id: "phan-ta-diep",
+    name: "Phan tả diệp (senna) uống trị táo bón, giảm cân?",
+    names: ["phan tả diệp", "lá phan tả", "lá phan tả diệp", "trà phan tả diệp", "senna", "trà senna", "lá senna"],
+    verdict: "risky",
+    belief: "Uống trà phan tả diệp (senna) cho dễ đi cầu, \"xổ\" cho giảm cân.",
+    folk: [{ text: "Phan tả diệp (senna) là thuốc nhuận tràng kiểu kích thích — tác động lên cơ thành ruột để đẩy phân đi.", src: [0] }],
+    science: [
+      { text: "Chỉ nên dùng **thỉnh thoảng, vài ngày một lần**; không dùng quá 1 tuần mà chưa hỏi bác sĩ.", src: [0, 1] },
+      { text: "Dùng lâu có thể gây tiêu chảy, mất cân bằng điện giải (nặng thì co rút cơ, co giật); dùng nhiều tuần, nhiều tháng có thể làm ruột **mất khả năng tự hoạt động**.", src: [0] },
+    ],
+    caution: [
+      { text: "Đang đau bụng, buồn nôn, nôn, hoặc thói quen đi cầu thay đổi đột ngột kéo dài hơn 2 tuần thì hỏi bác sĩ trước.", src: [1] },
+      { text: "Chảy máu hậu môn khi đang dùng → ngưng và báo bác sĩ ngay.", src: [1] },
+    ],
+    topics: [
+      { id: "tao-bon", text: "phan tả diệp (senna) chỉ dùng thỉnh thoảng vài ngày; dùng lâu có thể làm ruột lười, rối loạn điện giải", src: [0, 1], v: "risky" },
+      { id: "beo-phi", text: "phan tả diệp (senna) là thuốc nhuận tràng kích thích — chỉ dùng thỉnh thoảng vài ngày; uống lâu để \"xổ\" có thể gây tiêu chảy, rối loạn điện giải, ruột lười", src: [0, 1], v: "risky" },
+    ],
+    sources: [
+      { title: "Common questions about senna", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/senna/common-questions-about-senna/", reviewed: "2022-02-01" },
+      { title: "Senna — Drug Information (sửa đổi 20/06/2024)", publisher: "MedlinePlus (NIH)", url: "https://medlineplus.gov/druginfo/meds/a601112.html" },
+    ],
+    verifiedAt: "2026-10-31",
+  },
+  {
+    id: "sinh-mo-nam-im",
+    name: "Sinh mổ xong phải nằm im, kiêng đi lại?",
+    names: ["nằm im", "nằm yên", "nằm một chỗ", "kiêng đi lại", "kiêng vận động", "không dám đi", "không được đi lại", "đi lại được không", "đi lại sớm", "ngồi dậy"],
+    ctx: VN(/\b(sinh mổ|mổ đẻ|đẻ mổ|mổ lấy thai|mổ bắt con|sanh mổ)\b/),
+    verdict: "myth",
+    belief: "Sinh mổ xong phải nằm im trên giường nhiều ngày, kiêng đi lại cho \"liền vết mổ\".",
+    folk: [],
+    science: [
+      { text: "Ở bệnh viện, mẹ sinh mổ được **khuyến khích ra khỏi giường và đi lại càng sớm càng tốt**.", src: [0] },
+      { text: "Vận động nhẹ như đi bộ mỗi ngày giúp **giảm nguy cơ cục máu đông** — nhưng đừng gắng sức quá.", src: [0] },
+    ],
+    how: [{ text: "Lau rửa nhẹ vết mổ và giữ khô mỗi ngày; chưa bê vật nặng hơn em bé (có khi tới khoảng 6 tuần), chưa lái xe vài tuần.", src: [0] }],
+    caution: [],
+    topics: [],
+    sources: [{ title: "Caesarean section – Recovery", publisher: "NHS (Anh)", url: "https://www.nhs.uk/tests-and-treatments/caesarean-section/recovery/", reviewed: "2023-01-04" }],
+    verifiedAt: "2026-10-31",
+  },
+  {
+    id: "hai-san-vitamin-c",
+    name: "Ăn tôm, hải sản cùng vitamin C (cam, chanh) sinh thạch tín?",
+    names: ["vitamin c", "uống vitamin c", "viên c", "c sủi", "cam", "nước cam", "chanh", "nước chanh", "trái cây", "thạch tín", "asen", "arsenic", "ngộ độc asen"],
+    ctx: VN(/\b(tôm|cua|ghẹ|hải sản|sò|ốc|mực|hàu|nghêu|tôm hùm)\b/),
+    verdict: "myth",
+    belief: "Ăn tôm, cua, hải sản rồi uống vitamin C hay ăn cam, chanh sẽ \"sinh ra thạch tín\" gây ngộ độc.",
+    folk: [],
+    science: [
+      { text: "Trong hải sản, asen (thạch tín) chủ yếu ở **dạng hữu cơ, ít độc**; asen vô cơ (như trong nước ngầm nhiễm asen) mới rất độc.", src: [0] },
+    ],
+    caution: [{ text: "Nguồn phơi nhiễm asen vô cơ đáng lo nhất là nước ngầm nhiễm asen dùng để uống, nấu ăn.", src: [0] }],
+    unverified: ["ăn hải sản cùng vitamin C, cam, chanh tạo ra thạch tín gây ngộ độc"],
+    topics: [
+      { id: "ngo-doc-thuc-pham", text: "ăn hải sản cùng cam, chanh, vitamin C không có nguồn nào cho thấy sinh thạch tín — asen trong hải sản chủ yếu là dạng hữu cơ ít độc", src: [0], v: "myth" },
+      { id: "ngo-doc", text: "ăn hải sản cùng cam, chanh, vitamin C không có nguồn nào cho thấy sinh thạch tín — asen trong hải sản chủ yếu là dạng hữu cơ ít độc", src: [0], v: "myth" },
+    ],
+    sources: [{ title: "Arsenic — fact sheet (07/12/2022)", publisher: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/arsenic" }],
+    verifiedAt: "2026-10-31",
+  },
+  {
+    id: "tre-sot-kieng-an",
+    name: "Trẻ sốt phải kiêng thịt, trứng, sữa, đồ tanh?",
+    names: ["kiêng thịt", "kiêng trứng", "kiêng sữa", "kiêng tanh", "kiêng đồ tanh", "kiêng thịt gà", "kiêng thịt bò", "kiêng cá", "kiêng ăn", "nhịn ăn", "không cho ăn", "ăn thịt", "ăn trứng", "uống sữa", "bú sữa", "ăn cá"],
+    ctx: VN(/\b(trẻ|bé|con|em bé|cháu|con nít)\b.*\bsốt\b|\bsốt\b.*\b(trẻ|bé|con|em bé|cháu)\b/),
+    verdict: "myth",
+    belief: "Trẻ sốt phải kiêng thịt, trứng, sữa, đồ tanh, ăn cháo trắng cho \"hạ nhiệt\".",
+    folk: [],
+    science: [
+      { text: "Hướng dẫn chăm trẻ sốt của NHS: **cho trẻ ăn nếu trẻ thấy đói** — không nêu món nào phải kiêng.", src: [0] },
+      { text: "Cho trẻ **uống nhiều nước**; bé bú mẹ thì cứ cho bú.", src: [0] },
+    ],
+    caution: [{ text: "Để ý dấu hiệu mất nước: tiểu ít hơn bình thường, khát nhiều, mắt trũng — có thì đưa đi khám.", src: [0] }],
+    topics: [{ id: "sot-o-tre-em", text: "không cần kiêng thịt, trứng, sữa — trẻ đói thì cho ăn, uống nhiều nước, để ý dấu hiệu mất nước", src: [0], v: "myth" }],
+    sources: [{ title: "Fever (high temperature) in children (cập nhật 16/12/2024)", publisher: "Kingston and Richmond NHS Foundation Trust (Anh)", url: "https://www.kingstonandrichmond.nhs.uk/patients-and-families/patient-leaflets/fever-high-temperature-children" }],
+    verifiedAt: "2026-10-31",
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
@@ -1972,10 +2072,17 @@ export const UNVERIFIED_HERBS = [
   "nghệ đen", "ba kích", "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "hoài sơn", "xạ đen", "lá xạ đen", "an cung ngưu hoàng",
   "trinh nữ hoàng cung", "lá sen", "tâm sen", "hạt sen", "râu ngô", "rễ tranh", "mã đề", "lá tre", "nước sâm", "sâm đất", "lá khôi", "chè vằng",
   "lá mơ", "lá mơ lông", "sả", "lá sả", "lá chanh",
+  // 31/10 (danh sách ChatGPT lần 2) — chưa tìm được nguồn đáng tin
+  "húng chanh", "tần dày lá", "lá hẹ", "kinh giới", "lá kinh giới", "húng quế", "lá dứa", "lá xoài", "lá xoài non", "lá sim", "chè dây", "lá mật gấu", "mật gấu",
+  "lược vàng", "lá bàng", "lá bỏng", "sài đất", "lá mướp", "cỏ mần trầu", "cỏ xước", "rau đắng đất", "rau đắng biển", "rau đắng", "rau ngổ", "rau dền gai",
+  "cát cánh", "bách bộ", "thiên môn đông", "mạch môn", "bạch chỉ", "phòng phong", "bạch thược", "mộc hương", "hoàng bá", "hoàng cầm", "bạch linh", "phục linh",
+  "trạch tả", "xa tiền tử", "cúc tần", "đại bi", "cỏ roi ngựa", "rau má biển", "rau dệu", "rau trai", "lá thuốc dòi", "xương sông", "húng lủi", "lá bưởi",
+  "hoàn ngọc", "cây hoàn ngọc", "cây chó đẻ", "chó đẻ răng cưa", "bìm bìm", "muồng trâu", "lá muồng trâu", "hồng hoa", "lá vừng", "lá khế",
 ];
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
-const ASK = VN(/\b(tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
+// (31/10) "bồ công anh có giải độc gan không", "lá hẹ có trị ho không" — câu hỏi "có … không" cũng là hỏi về vị đó.
+const ASK = VN(/\b(có(?! (?:ai|bán|chỗ|quán|nơi|người|shop|cửa hàng|tiệm|ship|giao))(?: \S+){1,5} (?:không|ko|k|hông|hok|ha|hả)|tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
 const BURN = VN(/\b(bỏng|phỏng)\b/);
 const BOI = VN(/\b(bôi|thoa|đắp|xức|trét|chấm)\b/);
 /** Câu có gõ dấu tiếng Việt. */
