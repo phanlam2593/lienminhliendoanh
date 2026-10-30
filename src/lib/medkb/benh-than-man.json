@@ -10,7 +10,12 @@
     "CKD",
     "chronic kidney disease",
     "bệnh thận mãn tính",
-    "suy thận mãn tính"
+    "suy thận mãn tính",
+    "chạy thận",
+    "chạy thận nhân tạo",
+    "lọc máu",
+    "lọc thận",
+    "thẩm phân phúc mạc"
   ],
   "disambiguation": "Thẻ này nói về bệnh thận mạn (diễn tiến lâu dài). Suy thận cấp, xảy ra đột ngột, hiện chưa có thẻ riêng.",
   "about": [
@@ -139,6 +144,12 @@
         "src": [
           2
         ]
+      },
+      {
+        "text": "Tránh ăn khế (kể cả nước ép khế): độc tố trong khế tích tụ và gây hại khi thận yếu.",
+        "src": [
+          5
+        ]
       }
     ],
     "ok": [
@@ -175,6 +186,23 @@
       }
     ],
     "foods": [
+      {
+        "name": "khế",
+        "aliases": [
+          "trái khế",
+          "quả khế",
+          "khế chua",
+          "khế ngọt",
+          "nước khế",
+          "nước ép khế",
+          "star fruit"
+        ],
+        "verdict": "avoid",
+        "note": "Người bệnh thận mạn nên **tránh ăn khế**: khế có độc tố tích tụ trong cơ thể và gây hại khi thận yếu.",
+        "src": [
+          5
+        ]
+      },
       {
         "name": "muối",
         "aliases": [
@@ -422,7 +450,13 @@
       "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
       "url": "https://medlineplus.gov/ency/article/002442.htm",
       "reviewed": "2025-09-02"
+    },
+    {
+      "title": "Dietary advice for people with Chronic Kidney Disease (01/2024)",
+      "publisher": "Royal Devon University Healthcare NHS (Anh)",
+      "url": "https://www.royaldevon.nhs.uk/media/d5mnyqnp/patient-information-leaflet-your-diet-for-chronic-kidney-disease-rde-18-139-003.pdf",
+      "reviewed": "2024-01-01"
     }
   ],
-  "verifiedAt": "2026-10-14"
+  "verifiedAt": "2026-10-30"
 }

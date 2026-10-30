@@ -78,6 +78,7 @@ export const HEART: Table = {
     ["thuốc là", "thuoc lax"],
     ["đau hông", "dau hongx"],
     ["quán đó", "quan dox"],
+    ["cho mắt", "cho matx"], // "tốt cho mắt", "nhỏ thuốc cho mắt" ≠ chó mất (mất thú cưng)
   ],
   bare: ["nha"],
 };

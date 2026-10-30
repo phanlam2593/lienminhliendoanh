@@ -964,6 +964,94 @@ export const FOLK: FolkEntry[] = [
     sources: [{ title: "Measles", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/measles/", reviewed: "2025-07-31" }],
     verifiedAt: VERIFIED,
   },
+  // 30/10 — Kir: "trái cây có tính nóng hay lạnh… dưa hấu ăn vào nóng người, xoài, sầu riêng… tìm hiểu trái cây rau củ quả".
+  {
+    id: "tinh-nong-lanh",
+    name: "Trái cây, rau củ \"tính nóng\" / \"tính mát\"",
+    names: ["dưa hấu", "nước dưa hấu", "xoài", "sầu riêng", "vải", "vải thiều", "nhãn", "mít", "chôm chôm", "măng cụt", "quýt", "chuối", "đu đủ", "dừa", "nước dừa", "thanh long", "lê", "táo", "nho", "dâu", "dâu tây", "ổi", "bơ", "mận", "me", "khế", "sapoche", "hồng xiêm", "mãng cầu", "na", "sơ ri", "rau má", "nước rau má", "bí đao", "bí đỏ", "rau muống", "cà chua", "dưa leo", "dưa chuột", "củ cải", "khoai lang", "khoai mì", "ớt", "trái cây", "hoa quả", "rau củ", "rau củ quả", "rau quả", "đồ nóng", "đồ mát", "đồ lạnh", "say vải", "ăn nhiều vải"],
+    ctx: VN(/\b(tính nóng|tính lạnh|tính mát|tính hàn|tính ấm|tính nhiệt|nóng người|mát người|nóng trong|lạnh bụng|lạnh người|giải nhiệt|thanh nhiệt|mát gan|nóng gan|nhiệt miệng|bị nhiệt|nhiệt|bị nóng|bốc hỏa|bốc hoả|có nóng|có mát|có lạnh|say vải|ăn nhiều|ăn vào nóng|ăn vào mát)\b/),
+    verdict: "myth",
+    belief: "Trái cây \"tính nóng\" (xoài, sầu riêng, vải, nhãn, mít, chôm chôm…) ăn vào nóng người, nổi mụn, nhiệt miệng; đồ \"tính mát / lạnh\" (dưa hấu, dừa, rau má, bí đao…) giải nhiệt, ăn nhiều thì lạnh bụng.",
+    folk: [],
+    science: [
+      { text: "Chia \"nóng / lạnh\" là cách nhìn của Đông y truyền thống. Hướng dẫn dinh dưỡng của NHS không chia như vậy mà khuyên ăn **đa dạng nhiều loại** rau quả, vì mỗi loại cho chất dinh dưỡng khác nhau.", src: [0] },
+      { text: "Rau quả cho vitamin, khoáng chất, chất xơ; ăn đủ giúp giảm nguy cơ bệnh tim, đột quỵ và vài loại ung thư — tươi, đông lạnh, đóng hộp hay sấy khô đều tính.", src: [0] },
+      { text: "Cảm giác \"mát\" của dưa hấu, dừa: đồ ăn cũng cung cấp một phần nước cho cơ thể. Uống đủ nước thì nước tiểu vàng nhạt, trong.", src: [1] },
+      { text: "Nổi mụn: nghiên cứu **chưa thấy món ăn nào gây mụn** — mụn chủ yếu do hormone, tuyến dầu và di truyền.", src: [3] },
+      { text: "Nhiệt miệng (loét miệng) hay do cắn trúng má, bỏng vì đồ nóng, mệt mỏi căng thẳng, thay đổi hormone, thiếu vitamin, hoặc không dung nạp / dị ứng một món ăn.", src: [2] },
+    ],
+    how: [
+      { text: "Ăn đủ và đa dạng rau quả mỗi ngày; nước ép, sinh tố chỉ nên **một ly nhỏ mỗi ngày**, uống trong bữa ăn vì nhiều đường.", src: [0, 1] },
+      { text: "Đang bị loét miệng: tạm tránh đồ quá cay, mặn, chua, đồ cứng giòn, nước ép chua và đồ uống quá nóng; ăn đồ mềm.", src: [2] },
+    ],
+    caution: [
+      { text: "Loét miệng quá 3 tuần, hoặc chảy máu, đau và đỏ hơn → đi khám bác sĩ / nha sĩ.", src: [2] },
+      { text: "Người bệnh thận mạn: **tránh ăn khế** (độc tố tích tụ khi thận yếu); chỉ bớt chuối, bơ khi bác sĩ dặn vì nhiều kali.", src: [4] },
+      { text: "Vải: CDC ghi nhận ở vùng trồng vải (Ấn Độ) nhiều trẻ nhỏ bị bệnh não kèm **hạ đường huyết** đúng mùa vải; trẻ lơ mơ, co giật → đi cấp cứu ngay.", src: [5] },
+    ],
+    unverified: ["dưa hấu, dừa \"tính lạnh\" ăn nhiều gây lạnh bụng, hại dạ dày", "xoài, sầu riêng, vải, nhãn \"tính nóng\" làm nóng người", "ăn sầu riêng cùng rượu bia gây ngộ độc"],
+    topics: [
+      { id: "nhiet-mieng", text: "nhiệt miệng hay do cắn trúng, bỏng đồ nóng, căng thẳng, thiếu vitamin, dị ứng món ăn — loét quá 3 tuần thì đi khám", src: [2], v: "myth" },
+      { id: "mun-trung-ca", text: "nghiên cứu chưa thấy trái cây \"nóng\" hay món nào gây mụn", src: [3], v: "myth" },
+      { id: "benh-than-man", text: "tránh ăn khế; chỉ bớt trái cây nhiều kali khi bác sĩ dặn", src: [4], v: "danger" },
+    ],
+    sources: [
+      { title: "Why 5 A Day?", publisher: "NHS (Anh)", url: "https://www.nhs.uk/live-well/eat-well/5-a-day/why-5-a-day/", reviewed: "2026-09-30" },
+      { title: "Water, drinks and your health", publisher: "NHS (Anh)", url: "https://www.nhs.uk/live-well/eat-well/water-drinks-nutrition/", reviewed: "2023-05-17" },
+      { title: "Mouth ulcers", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/mouth-ulcers/", reviewed: "2024-03-11" },
+      { title: "Acne", publisher: "NHS 111 Wales (Anh)", url: "https://111.wales.nhs.uk/acne/", updated: "2024-11-07" },
+      { title: "Dietary advice for people with Chronic Kidney Disease (01/2024)", publisher: "Royal Devon University Healthcare NHS (Anh)", url: "https://www.royaldevon.nhs.uk/media/d5mnyqnp/patient-information-leaflet-your-diet-for-chronic-kidney-disease-rde-18-139-003.pdf" },
+      { title: "Outbreaks of Unexplained Neurologic Illness — Muzaffarpur, India, 2013–2014 (MMWR 30/01/2015)", publisher: "CDC (Hoa Kỳ)", url: "https://www.cdc.gov/mmwr/preview/mmwrhtml/mm6403a1.htm" },
+    ],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "khe-benh-than",
+    name: "Khế với người bệnh thận",
+    names: ["khế", "trái khế", "quả khế", "khế chua", "khế ngọt", "nước khế", "nước ép khế", "star fruit", "carambola"],
+    ctx: VN(/\b(thận|suy thận|chạy thận|lọc máu|lọc thận|bệnh thận|thận mạn|thận yếu|creatinin)\b/),
+    verdict: "danger",
+    belief: "Khế chua, khế ngọt là trái cây quen thuộc; nhiều người bệnh thận vẫn ăn vì nghĩ trái cây nào cũng lành.",
+    folk: [],
+    science: [
+      { text: "Bệnh viện NHS dặn người bệnh thận mạn **tránh ăn khế**: khế có độc tố tích tụ trong cơ thể và gây hại khi thận yếu.", src: [0] },
+      { text: "Không phải trái cây nào cũng phải kiêng: chỉ giảm kali (chuối, bơ…) khi bác sĩ / chuyên viên dinh dưỡng dặn — tự kiêng thì không có lợi.", src: [0] },
+    ],
+    caution: [
+      { text: "Bị bệnh thận mạn, đang chạy thận → **không ăn khế**, không uống nước ép khế.", src: [0] },
+      { text: "Hỏi bác sĩ / chuyên viên dinh dưỡng trước khi tự kiêng hay ăn thêm nhiều một loại trái cây.", src: [0] },
+    ],
+    topics: [{ id: "benh-than-man", text: "tránh ăn khế — độc tố tích tụ khi thận yếu", src: [0], v: "danger" }],
+    sources: [{ title: "Dietary advice for people with Chronic Kidney Disease (01/2024)", publisher: "Royal Devon University Healthcare NHS (Anh)", url: "https://www.royaldevon.nhs.uk/media/d5mnyqnp/patient-information-leaflet-your-diet-for-chronic-kidney-disease-rde-18-139-003.pdf" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "san-mang-doc",
+    name: "Sắn (khoai mì), măng tươi — \"say sắn\", ngộ độc măng",
+    names: ["sắn", "củ sắn", "khoai mì", "củ mì", "say sắn", "say khoai mì", "măng", "măng tươi", "măng chua", "măng rừng", "măng tre", "nước măng", "luộc măng", "luộc sắn", "ngâm măng", "khoai tây mọc mầm", "khoai tây nảy mầm", "khoai tây mầm", "khoai tây xanh", "khoai tây vỏ xanh"],
+    ctx: VN(/\b(độc|ngộ độc|say|ngâm|luộc|đói|an toàn|nguy hiểm|cyanua|xyanua|xianua|chế biến|sơ chế|bỏ nước|mở vung|ăn nhiều|ăn sống|mọc mầm|nảy mầm|mầm|vỏ xanh)\b/),
+    verdict: "help",
+    tip: true,
+    folk: [{ text: "Dân gian dặn sắn, măng phải ngâm kỹ, luộc bỏ nước, mở vung; ăn nhiều sắn lúc đói dễ bị \"say sắn\".", src: [0] }],
+    science: [
+      { text: "Sắn và măng chứa nhiều cyanogenic glycoside — chất sinh ra độc tố xyanua (cyanua) khi ăn vào.", src: [0, 1] },
+      { text: "Ngộ độc thường xuất hiện sau ăn khoảng 30 phút tới 1–2 giờ: nóng lưỡi, họng, đau đầu, chóng mặt, đau bụng, buồn nôn, thở nhanh; nặng thì lơ mơ, co giật, ngừng thở.", src: [0] },
+      { text: "Mầm khoai tây, phần vỏ xanh hay vỏ có vị đắng — và cả cà chua xanh — có nhiều độc tố solanin.", src: [1] },
+    ],
+    how: [
+      { text: "Sắn: gọt vỏ, cắt bỏ hai đầu, ngâm nước, luộc **mở vung** cho độc bay hơi.", src: [0] },
+      { text: "Măng: ngâm kỹ nhiều nước, luộc nhiều lần, mở vung khi sôi; măng chua đừng ăn / uống nước ngâm quá nhiều.", src: [0] },
+      { text: "Đừng ăn quá nhiều sắn, măng, nhất là lúc đói.", src: [0] },
+      { text: "Khoai tây: cất nơi tối, mát, khô; không ăn phần mọc mầm hay phần xanh.", src: [1] },
+    ],
+    caution: [{ text: "Ăn sắn, măng xong mà lơ mơ, khó thở, co giật, ngất → gọi 115 / đưa đi viện ngay.", src: [0] }],
+    topics: [{ id: "ngo-doc-thuc-pham", text: "sắn, măng phải ngâm kỹ, luộc mở vung, bỏ nước; không ăn nhiều lúc đói", src: [0], v: "help" }],
+    sources: [
+      { title: "Phòng chống ngộ độc cyanogenic glycoside tự nhiên trong thực phẩm (cập nhật 09/10/2023)", publisher: "Viện Kiểm nghiệm ATVSTP Quốc gia – Bộ Y tế", url: "https://nifc.gov.vn/ky-thuat-chuyen-mon/phong-chong-ngo-doc-cyanogenic-glycoside-tu-nhien-trong-thuc-pham-post2027.html" },
+      { title: "Natural toxins in food – fact sheet (10/03/2023)", publisher: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/natural-toxins-in-food" },
+    ],
+    verifiedAt: "2026-10-30",
+  },
   {
     id: "mau-cam-ngua-co",
     name: "Chảy máu cam: ngửa cổ ra sau?",
@@ -1504,6 +1592,7 @@ function typedAs(text: string, name: string): boolean {
   for (let i = 0; i + N.length <= R.length; i++) if (N.every((w, j) => R[i + j] === w)) return true;
   return false;
 }
+const TEMPER = VN(/\b(tính nóng|tính lạnh|tính mát|tính hàn|tính ấm)\b/);
 const FOODPOI = VN(/\b(thực phẩm|đồ ăn|thức ăn|ăn phải|ăn trúng|ăn nhầm|ăn đồ|hải sản|ngộ độc rượu|ngộ độc bia|say rượu)\b/);
 const CHEM = VN(/\b(thuốc chuột|thuốc trừ sâu|thuốc diệt cỏ|thuốc sâu|nước tẩy|nước rửa chén|nước javel|chất tẩy|dầu hoả|xăng|uống quá liều|uống cả vỉ|hoá chất)\b/);
 
@@ -1530,6 +1619,8 @@ export function findFolk(text: string): FolkEntry | null {
     if (f.id === "ngo-doc-gay-non" && FOODPOI.test(n) && !CHEM.test(n)) continue;
     // ("toi bi ho" gõ không dấu là "tôi bị ho"; "tối nay" có dấu khác "tỏi") → chỉ nhận tỏi khi gõ đúng "tỏi", hoặc không dấu mà đi kèm chữ chỉ món tỏi.
     if (f.id === "toi" && !ACCENTED.test(text) && !/\b(toi song|ngam toi|toi ngam|ruou toi|toi mo coi|toi den|cu toi|tep toi|an toi song)\b/.test(n)) continue;
+    // ("mang thai", "san nhà" gõ không dấu ≠ "măng", "sắn") → gõ không dấu thì chỉ nhận tên nhiều chữ.
+    if (f.id === "san-mang-doc" && !ACCENTED.test(text) && !/\b(cu san|say san|khoai mi|cu mi|mang tuoi|mang chua|mang rung|mang tre|nuoc mang|luoc mang|luoc san|ngam mang|khoai tay)\b/.test(n)) continue;
     let m: { 0: string } | null = n.match(RE.get(f.id)!);
     // Câu gõ CÓ DẤU thì tên vị phải khớp cả dấu ("nghe nói" ≠ "nghệ", "quê" ≠ "quế", "tối" ≠ "tỏi"); chữ gõ không dấu vẫn khớp lỏng.
     if (m && ACCENTED.test(text)) {
@@ -1687,7 +1778,8 @@ export function folkReply(
   // Cháo cóc / bôi đồ lên vết bỏng: cảnh báo ngay, kể cả câu kể ("a cho con ăn cháo cóc").
   //   (Quan niệm khi ốm — "chảy máu cam ngửa cổ", "rắn cắn hút nọc" — cũng trả lời ngay: đã khớp đúng ngữ cảnh.)
   if (f && (f.id === "thit-coc" || f.id === "boi-bong" || f.verdict === "myth" || f.verdict === "danger")) return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
-  const asked = asksAbout(q) || words <= 4 || folkWord;
+  // "gừng có tính nóng không" — hỏi tính nóng / mát của một vị là đang hỏi về vị đó; mẹo sinh hoạt đã khớp đúng ngữ cảnh ("say sắn phải làm sao") cũng vậy.
+  const asked = asksAbout(q) || words <= 4 || folkWord || TEMPER.test(` ${normalizeVi(q)} `) || !!(f?.tip && f.ctx);
   if (f && asked) {
     // "gout ăn gừng được không" — hỏi một MÓN với bệnh mà vị này không có ý gì cho bệnh đó → để lớp kiêng cữ trả lời.
     //   (Hỏi cho trẻ nhỏ / bà bầu mà vị này có lưu ý riêng cho nhóm đó — "bà bầu ăn ngải cứu được không" — thì vẫn trả lời ở đây.)

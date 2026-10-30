@@ -151,4 +151,25 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["bé 3 tuổi ho uống mật ong chanh được không"])).content).toMatch(/Chanh mật ong/);
     expect((await last(["kiêng cữ gì khi bị gout"])).med?.id).toBe("gout");
   }, T);
+  // Kir: "trái cây có tính nóng hay lạnh… dưa hấu, xoài, sầu riêng… tìm hiểu trái cây rau củ quả".
+  it("Trái cây, rau củ tính nóng / lạnh; khế với bệnh thận; sắn, măng, khoai tây mọc mầm", async () => {
+    const CASES: [string, RegExp][] = [
+      ["dưa hấu tính nóng hay lạnh", /đa dạng nhiều loại/],
+      ["ăn xoài có nóng người không", /Đông y/],
+      ["ăn vải bị nhiệt miệng phải không", /cắn trúng/],
+      ["người suy thận ăn khế được không", /tránh ăn khế/],
+      ["say sắn phải làm sao", /mở vung/],
+      ["măng tươi luộc thế nào cho hết độc", /luộc nhiều lần/],
+      ["khoai tây mọc mầm ăn được không", /solanin/],
+      ["gừng có tính nóng không", /\*\*Gừng\*\*/],
+    ];
+    for (const [q, re] of CASES) expect((await last([q])).content, q).toMatch(re);
+    expect((await last(["chạy thận có ăn chuối được không"])).med?.id).toBe("benh-than-man");
+    expect((await last(["ăn xoài nổi mụn không"])).content).toMatch(/chưa tìm thấy món ăn nào gây mụn/);
+  }, T);
+  it("Không bắt nhầm: 'tốt cho mắt' không phải mất thú cưng; 'mang thai' không phải măng", async () => {
+    expect((await last(["xoài tốt cho mắt không"])).content).not.toMatch(/mất mát/);
+    expect((await last(["con chó mất rồi"])).content).toMatch(/mất|thương/);
+    expect((await last(["mang thai ăn gì an toàn"])).content).not.toMatch(/xyanua/);
+  }, T);
 });
