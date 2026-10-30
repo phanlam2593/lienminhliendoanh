@@ -526,6 +526,10 @@ const CREATIVE =
   VN(/\b(viết (giúp|hộ|dùm|giùm|cho mình|bài|caption|mô tả|nội dung|quảng cáo|content)|soạn|sáng tác|caption|mô tả giúp|ý tưởng cho|đặt tên|slogan|content|bài đăng cho|write|draft)\b/);
 
 /** Câu trả lời chắc chắn nhất (hoặc null nếu chưa đủ chắc). */
+const FAQ_NEED: Record<string, RegExp> = {
+  ridprice: /\b(xe|cuoc|chuyen|giao|ship|tai xe|km|dua don|dat xe|grab|taxi|cho nguoi|cho hang|van chuyen)\b/,
+  claimexp: /\b(ma|uu dai|voucher|khuyen mai|code|giam gia|da nhan|nhan lai)\b/,
+};
 export function matchFaq(text: string): Faq | null {
   const n = normalizeVi(text);
   if (!n || n.length > 300 || CREATIVE.test(` ${n} `)) return null;
@@ -534,6 +538,10 @@ export function matchFaq(text: string): Faq | null {
   if (DECIDE.test(` ${n} `) && !APP_NOUN.test(` ${normalizeVi(maskStrict(text, APP))} `)) return null;
   const [best, second] = scoreAll(text);
   if (!best) return null;
+  // 30/10 (rà câu hiểu lầm): câu hỏi giá / thời hạn của thứ NGOÀI app ("giá vàng hôm nay bao nhiêu", "cam kết bảo hành bao lâu")
+  //   từng khớp từ khoá "bao nhiêu", "bao lâu" của câu hỏi giá cuốc xe / hạn mã ưu đãi. Mấy câu này phải nhắc đúng thứ của app.
+  const need = FAQ_NEED[best.f.id];
+  if (need && !need.test(` ${n} `)) return null;
   // Đủ chắc: điểm cao, hoặc phủ phần lớn câu hỏi và bỏ xa câu đứng thứ hai.
   const clear = !second || best.score - second.score >= 1.5;
   if (best.score >= 6 || (best.score >= 3.5 && best.cover >= 0.5 && clear)) return best.f;

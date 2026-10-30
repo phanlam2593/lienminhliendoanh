@@ -219,5 +219,28 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["trái cây nào nhiều đường"])).content).toMatch(/Xoài chín: \*\*14,1 g\*\* \(đường 14,8 g\)/);
     expect((await last(["tiểu đường ăn thịt bò được không"])).content).not.toMatch(/Ăn trái cây khi bị tiểu đường/);
   }, T);
+  // Kir: "e rà tiếp mấy cái lỗi hiểu lầm câu đi" — câu thật trong nhật ký bí + câu dễ hiểu lầm.
+  it("Rà câu hiểu lầm (30/10)", async () => {
+    const no = async (q: string, re: RegExp) => expect((await last([q])).content, q).not.toMatch(re);
+    const yes = async (q: string, re: RegExp) => expect((await last([q])).content, q).toMatch(re);
+    await no("giá vàng hôm nay bao nhiêu", /giá mở cửa/);
+    await no("cam kết bảo hành bao lâu", /hiệu lực 2 giờ/);
+    await yes("giá cuốc xe tính sao", /giá mở cửa/);
+    await yes("mã ưu đãi dùng được bao lâu", /hiệu lực 2 giờ/);
+    await no("gà quá đi mất", /Tội bé|chia buồn/);
+    await yes("Haizzz sao e cứ vậy hoài á lomi ơi", /xin lỗi/);
+    await yes("chớ e biết cái gì", /giúp được mấy chuyện/);
+    await yes("đi đường cẩn thận nha", /cảm ơn/);
+    await yes("huyết áp cao thì nên uống aspririn k?", /không kê thuốc/);
+    await yes("Thoái hoá cột sống thì sao?", /thoái hoá cột sống CỔ/);
+    await yes("con em 3 tuổi chưa biết nói", /Chậm nói\*\* là gì/);
+    await yes("bé chậm nói", /Chậm nói\*\* là gì/);
+    await yes("mang thai mấy tuần thì siêu âm được", /tuần \*\*11–14\*\*/);
+    await yes("siêu âm có hại cho thai không", /tác dụng phụ đã biết/);
+    await yes("nhìn điện thoại nhiều bị mỏi mắt", /20-20-20/);
+    await yes("ăn bún bò có mập không", /món nấu sẵn còn nước dùng/);
+    await yes("Ăn măng đc k?", /luộc nhiều lần/);
+    await yes("con 3 tuổi chưa biết nói có sao không", /phần Lomi đã kiểm chứng/);
+  }, T);
 });
 

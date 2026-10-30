@@ -1029,7 +1029,7 @@ export const FOLK: FolkEntry[] = [
     id: "san-mang-doc",
     name: "Sắn (khoai mì), măng tươi — \"say sắn\", ngộ độc măng",
     names: ["sắn", "củ sắn", "khoai mì", "củ mì", "say sắn", "say khoai mì", "măng", "măng tươi", "măng chua", "măng rừng", "măng tre", "nước măng", "luộc măng", "luộc sắn", "ngâm măng", "khoai tây mọc mầm", "khoai tây nảy mầm", "khoai tây mầm", "khoai tây xanh", "khoai tây vỏ xanh"],
-    ctx: VN(/\b(độc|ngộ độc|say|ngâm|luộc|đói|an toàn|nguy hiểm|cyanua|xyanua|xianua|chế biến|sơ chế|bỏ nước|mở vung|ăn nhiều|ăn sống|mọc mầm|nảy mầm|mầm|vỏ xanh)\b/),
+    ctx: VN(/\b(độc|ngộ độc|say|ngâm|luộc|đói|an toàn|nguy hiểm|cyanua|xyanua|xianua|chế biến|sơ chế|bỏ nước|mở vung|ăn nhiều|ăn sống|mọc mầm|nảy mầm|mầm|vỏ xanh|(được|đc|dc) (không|k|ko|hông|hok)|có ăn được|ăn có sao|ăn có hại|có sao không)\b/),
     verdict: "help",
     tip: true,
     folk: [{ text: "Dân gian dặn sắn, măng phải ngâm kỹ, luộc bỏ nước, mở vung; ăn nhiều sắn lúc đói dễ bị \"say sắn\".", src: [0] }],

@@ -455,11 +455,23 @@ const META: [string, RegExp, string[]][] = [
   ],
   [
     "meta_understand",
-    VN(/\b(hiểu (a|anh|chị|c|mình|tôi|tui|không|ko|chưa)( nói)?( gì)?|có hiểu|hiểu gì không|hiểu hông|hiểu hong|biết gì (không|ko)|chưa biết (hả|ha|à|a|sao)|chẳng biết gì|ngu (quá|vậy|thế)|đồ ngốc|ngớ ngẩn|dốt quá|không hiểu gì hết|sao cứ (bắt|hỏi)|bắt (mình|tôi|tui|a|anh) (hỏi|nói|viết) (hoài|mãi|quài|lại)|(hỏi|nói|lặp) (hoài|mãi|quài|đi lặp lại)(?! (mà )?(không|ko|chẳng|chả|chưa) (chịu )?nghe)|lặp lại)\b/),
+    VN(/\b(hiểu (a|anh|chị|c|mình|tôi|tui|không|ko|chưa)( nói)?( gì)?|có hiểu|hiểu gì không|hiểu hông|hiểu hong|biết gì (không|ko)|chưa biết (hả|ha|à|a|sao)|chẳng biết gì|ngu (quá|vậy|thế)|đồ ngốc|ngớ ngẩn|dốt quá|không hiểu gì hết|sao cứ (bắt|hỏi)|bắt (mình|tôi|tui|a|anh) (hỏi|nói|viết) (hoài|mãi|quài|lại)|(hỏi|nói|lặp) (hoài|mãi|quài|đi lặp lại)(?! (mà )?(không|ko|chẳng|chả|chưa) (chịu )?nghe)|lặp lại|(sao )?(e|em|lomi|bạn) cứ (vậy|thế|như vậy|như thế) (hoài|mãi|quài)|cứ (vậy|thế) (hoài|mãi|quài))\b/),
     [
       "Dạ xin lỗi bạn, chắc Lomi hiểu chưa đúng ý 🙏 Lomi còn đang tập hiểu cách mọi người nói chuyện. Bạn thử nói ngắn một ý nha — chuyện sức khoẻ, tâm sự, tình cảm, bói bài hay dùng app — Lomi sẽ cố hết sức!",
       "Hic, Lomi xin lỗi vì chưa theo kịp bạn 🥲 Bạn nói lại bằng vài chữ ngắn gọn giúp Lomi nha. Lomi sẽ học dần để hiểu bạn hơn nha!",
     ],
+  ],
+  [
+    // 30/10 (nhật ký bí: "chớ e biết cái gì") — hỏi Lomi biết làm gì → kể các mảng Lomi giúp được, không báo "chưa tiếp thu".
+    "meta_know",
+    VN(/^(chớ|chứ|vậy|thế|rồi|thế thì|vậy thì)? ?(e|em|lomi|bạn|cưng) (biết|làm được|giúp được|rành) (cái |những |những cái |được )?gì( (hả|ha|vậy|thế|không|ko|nào))?$|^(e|em|lomi) (biết|làm) được (những )?gì\b/),
+    ["Lomi giúp được mấy chuyện này nè 😄\n• 🩺 Sức khoẻ: bệnh, triệu chứng, thuốc, ăn uống theo bệnh, vitamin, calo — có nguồn y khoa\n• 💚 Tâm sự: buồn, áp lực, tình cảm, gia đình\n• 🍜 Ăn gì, đi đâu, tìm quán & ưu đãi trong app\n• 🃏 Bói bài Tarot cho vui\n• 📱 Chỉ cách dùng app\nBạn muốn bắt đầu từ chuyện nào?"],
+  ],
+  [
+    // "đi đường cẩn thận nha" — lời chào / dặn dò, không phải câu hỏi.
+    "meta_care",
+    VN(/^((đi|về|chạy xe|lái xe) )?(đường )?(cẩn thận|cẩn thẩn)( (nha|nhé|nhe|nghen|đó|nhá|á))*$|^đi đường cẩn thận\b/),
+    ["Dạ cảm ơn bạn nha 😊 Bạn cũng vậy, đi đâu nhớ cẩn thận, giữ sức khoẻ nè!"],
   ],
 ];
 const VOCATIVE_ONLY = VR(/^(e|em|lomi|anh|chi|a|c|ban|oi|alo|ê|mn|moi nguoi|ca nha)( (oi|ơi|a|ạ|ne|nè|nhe|nha))*$/);

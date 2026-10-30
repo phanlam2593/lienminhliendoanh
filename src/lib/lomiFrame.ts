@@ -32,6 +32,9 @@ import { understand } from "@/lib/lomiUnderstand";
 import { detectTarot, isTarotAbilityAsk } from "@/lib/tarot";
 import { looksLikeBizQuestion } from "@/lib/bizAdvisor";
 import { VR, VN } from "@/lib/viMatch";
+import { normalizeVi } from "@/lib/lomiFaq";
+import { findMedTopicId } from "@/lib/lomiMed";
+import MED_INDEX from "@/lib/medkb/index.json";
 
 export type FrameCtx = {
   /** full = bối cảnh trung tính; speech = đang ở mạch khác (sức khoẻ, hỏi app) → chỉ nhận lời chào / chúc / cảm ơn / xin phép + hỏi thăm Lomi;
@@ -279,6 +282,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   const what = p.kind === "quality" ? p.head : passive ? `bị${agent} ${echo(f)}` : echo(f);
   const person = f.subject === "third";
   const pet = f.subject === "pet";
+  // 30/10 (rà câu hiểu lầm): "gà quá đi mất", "cute ghê đi mất" — "… quá đi mất" là câu cảm thán (gà = kém, dở), không phải con vật bị mất.
+  if (VN(/\b(quá|lắm|ghê|thiệt|thật) đi mất\b/).test(` ${normalizeVi(f.raw)} `)) return null;
   // "vợ a đang bầu", "chị e có thai rồi" — tin vui, không phải chuyện ốm.
   // 15/10 (audit): mang thai KÈM triệu chứng ("bà bầu bị sốt", "vợ a mang thai bị đau bụng") không phải tin vui để chúc mừng — để lớp sức khoẻ trả lời.
   if (p.cls === "preg" && person && !f.neg && c.sxOther) return null;
@@ -682,6 +687,16 @@ export function healthClaim(q: string, f: Frame, flow: FrameFlow): boolean {
 export function asksLomiLove(f: Frame): boolean {
   return f.toks.length <= 7 && (f.toks[0]?.r === "EM" || f.toks[0]?.r === "YOU") && !f.toks.some((t) => t.r === "SELF") && f.toks.some((t) => t.r === "KIN" && t.cls === "partner") && f.toks.some((t) => t.r === "QPART") && f.toks.every((t) => ["EM", "YOU", "KIN", "QPART", "FILL", "PART", "VOC", "ASPECT"].includes(t.r));
 }
+/** Câu có nêu tên một thẻ kiến thức sức khoẻ (trừ các thẻ "trạng thái" quá chung như mệt, buồn — để mạch tâm sự lo). */
+//   Chỉ khi khung câu CẮT MẤT tên đó ("bé chậm nói" → vị ngữ chỉ còn "chậm") — còn đọc trọn tên ("nó bị bạn bắt nạt") thì vẫn hỏi han như cũ.
+const MED_NAMED = (q: string, f: Frame): boolean => {
+  const id = findMedTopicId(q);
+  if (!id) return false;
+  const n = ` ${normalizeVi(q)} `;
+  const pred = ` ${normalizeVi(f.pred?.head ?? "")} `;
+  const names = ((MED_INDEX as { id: string; names: string[] }[]).find((r) => r.id === id)?.names ?? []).map((x) => normalizeVi(x).replace(/^(bi|mac) /, "")).filter((x) => n.includes(` ${x} `));
+  return names.length > 0 && !names.some((x) => pred.includes(` ${x} `));
+};
 export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | null {
   // "vợ a đang bầu mà bị cảm" — câu hai vế về một NGƯỜI KHÁC, có vế nói người đó ốm → vẫn là tin người thân ốm (không phải người dùng ốm).
   const illTok = f.multi && (f.subject === "third" || f.subject === "pet") && f.subjectText && f.act === "statement" && !f.neg ? f.toks.find((t) => t.cls === "ill") : undefined;
@@ -689,6 +704,9 @@ export function frameTurn(q: string, f: Frame, flow: FrameFlow): FrameReply | nu
   if (flow.mode !== "off" && asksLomiLove(f))
     return { intent: "frame:ask_lomi", text: "Lomi là robot nên chưa có người yêu đâu 😆 Lomi chỉ có mỗi việc ngồi đây trò chuyện với bạn thôi. Còn bạn thì sao?" };
   if (flow.mode === "off" || (f.conf < 0.7 && !illTok)) return null;
+  // 30/10 (rà câu hiểu lầm: "bé chậm nói" → "Bé chậm hả 😅"): câu nêu ĐÚNG TÊN một tình trạng sức khoẻ có thẻ kiến thức (chậm nói,
+  //   mỏi mắt…) mà khung câu không nhận ra là chuyện ốm → để lớp sức khoẻ trả lời, không nhại lại nửa câu.
+  if (!illTok && f.pred?.cls !== "ill" && f.act !== "greet" && f.act !== "thanks" && f.act !== "leave" && MED_NAMED(q, f)) return null;
   // Hỏi Lomi LÀM ĐƯỢC GÌ trong phạm vi của mình ("e tư vấn kinh doanh được không") — lớp hỏi-khả-năng trả lời, không phải chuyện phiếm về Lomi.
   if (f.act === "question" && capabilityAsk(q)) return null;
   const speechAct = f.act === "greet" || f.act === "wish" || f.act === "thanks" || f.act === "leave" || f.act === "hold";

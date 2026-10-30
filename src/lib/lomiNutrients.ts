@@ -11,7 +11,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import { WISELY, findFolk } from "@/lib/lomiFolk";
-import { DAILY_ASK, FACT_ASK, FRUIT_LIST_ASK, factOf, fruitIn, isSugarTopic, renderDaily, renderFact, renderFruitSugar, renderNoFact } from "@/lib/lomiFoodFacts";
+import { DAILY_ASK, FACT_ASK, FRUIT_LIST_ASK, dishNote, factOf, fruitIn, isSugarTopic, renderDaily, renderFact, renderFruitSugar, renderNoFact } from "@/lib/lomiFoodFacts";
 
 const VERIFIED = "2026-10-30";
 const NHS = "NHS (Anh)";
@@ -447,7 +447,10 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
   // (đang có dấu hiệu rối loạn ăn uống → không đưa con số calo; lớp cân nặng lib/lomiExtras trả lời nhẹ nhàng)
   if (FACT_ASK.test(n) && !opts.noNumbers) {
     const ff = factOf(q);
-    if (ff) return renderFact(ff, med, now);
+    if (ff) {
+      const dn = dishNote(q, ff);
+      return `${dn ? `${dn}\n\n` : ""}${renderFact(ff, med, now)}`;
+    }
     // (câu gõ thiếu dấu được đoán dấu sai — "cam bao nhiêu calo" thành "cảm…" — thì đọc lại đúng chữ người dùng gõ; bệnh đoán từ chữ sai bỏ qua)
     const ft = opts.typed && opts.typed !== q ? factOf(opts.typed) : null;
     if (ft) return renderFact(ft, null, now);

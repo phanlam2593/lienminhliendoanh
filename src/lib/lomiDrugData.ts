@@ -153,7 +153,7 @@ export const DRUGS: DrugEntry[] = [
     id: "aspirin",
     ingredient: "aspirin (acid acetylsalicylic)",
     names: ["aspirin", "acid acetylsalicylic"],
-    match: VR(/\b(aspirin|aspirine|acid acetylsalicylic|axit acetylsalicylic|acetylsalicylic)\b/),
+    match: VR(/\b(aspirin|aspirine|aspririn|asprin|asperin|aspilin|acid acetylsalicylic|axit acetylsalicylic|acetylsalicylic)\b/),
     group: "thuốc kháng viêm không steroid (NSAID), thuộc nhóm salicylat",
     sources: [
       // (11/10/2026: các trang cũ "aspirin for pain relief" / "low-dose aspirin" của NHS nay gộp về một trang này.)

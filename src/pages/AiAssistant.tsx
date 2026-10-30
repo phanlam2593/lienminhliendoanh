@@ -799,7 +799,8 @@ export function AiChat({
         if (w.length < 3 || !/^\p{L}+$/u.test(w) || !/[^\x00-\x7F]/.test(w) || isKnownSyllable(w)) continue;
         for (const c of typoCandidates(w)) {
           const cand = [...ws.slice(0, i), ws[i].replace(w, c), ...ws.slice(i + 1)].join("");
-          if (findMedId(cand)) {
+          // (30/10: "mới mổi nên kiêng gì" → "mới mổ…": câu sửa khớp một bài mẹo dân gian có ngữ cảnh cũng tính)
+          if (findMedId(cand) || findFolk(cand)?.ctx) {
             raw = cand;
             typedFix = cand;
             break fix;

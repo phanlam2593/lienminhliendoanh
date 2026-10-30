@@ -214,6 +214,14 @@ export function factLine(f: FoodFact, medId?: string | null, now = Date.now()): 
   ].filter(Boolean).join("\n");
 }
 
+/** "ăn bún bò có mập không" — bảng chỉ có SỢI bún / bánh phở / gạo…, không có cả tô món nấu → nói rõ để khỏi hiểu nhầm số. */
+const DISH = /\b(bun|banh pho|pho|mi|my|mien|com|xoi|banh mi|banh my|chao|hu tieu|banh canh) (bo|ga|cha|thit|rieu|mam|ca|heo|lon|oc|hen|hue|trung|pate|op la|vit|suon|tom|cua|nem|xao|tron|dau|tai|chin|nam)\b/;
+export function dishNote(q: string, f: FoodFact): string {
+  const m = ` ${normalizeVi(q)} `.match(DISH);
+  if (!m || !(f.src === 8 && /^vn-(1\d{3}|2015)$/.test(f.id))) return "";
+  return `⚠️ Đây là số của **${f.name.toLowerCase()}** (nguyên liệu, 100 g) — món nấu sẵn còn nước dùng, thịt, dầu mỡ… nên calo cả tô / dĩa khác nhiều, Lomi chưa có số kiểm chứng cho cả món.`;
+}
+
 /** Lời đáp riêng cho câu hỏi chỉ số ("chuối bao nhiêu calo"). */
 export function renderFact(f: FoodFact, med: { id: string; name: string } | null, now = Date.now()): string {
   const lens = lensOf(med?.id);

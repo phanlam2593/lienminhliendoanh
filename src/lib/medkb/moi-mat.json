@@ -1,0 +1,115 @@
+{
+  "id": "moi-mat",
+  "kind": "condition",
+  "names": [
+    "mỏi mắt",
+    "mắt mỏi",
+    "căng mắt",
+    "nhức mỏi mắt",
+    "mỏi mắt khi dùng máy tính",
+    "mỏi mắt vì điện thoại",
+    "eyestrain",
+    "eye strain",
+    "computer vision syndrome"
+  ],
+  "about": [
+    {
+      "text": "Mỏi mắt là tình trạng hay gặp khi mắt làm việc căng thẳng lâu (nhìn màn hình, đọc, lái xe đường dài…).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mỏi mắt **không gây hậu quả nghiêm trọng hay lâu dài**, nhưng khó chịu và phiền.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Mắt đau, mỏi, nóng rát hoặc ngứa; chảy nước mắt hoặc khô mắt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nhìn mờ hoặc nhìn đôi; cảm giác không mở mắt nổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nhìn màn hình điện thoại, máy tính lâu; đọc liên tục không nghỉ; lái xe đường dài hay việc phải tập trung nhìn lâu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ánh sáng chói; gió khô từ quạt, máy sưởi, máy lạnh thổi vào mắt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có sẵn bệnh mắt như khô mắt, tật khúc xạ chưa được chỉnh kính; căng thẳng, mệt mỏi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Quy tắc **20-20-20**: cứ 20 phút nhìn ra xa khoảng 6 mét (20 feet) ít nhất 20 giây.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Đặt màn hình ngay trước mặt, cách khoảng **một sải tay**; hạn chế thời gian nhìn màn hình, nhắc trẻ nghỉ mắt khi xem lâu.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Xem TV trong phòng có ánh sáng dịu; cải thiện không khí trong phòng (máy tạo ẩm) nếu khô.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Nước mắt nhân tạo không kê đơn giúp phòng và đỡ khô mắt; làm máy tính nhiều có thể cân nhắc kính dành riêng cho việc này.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đã tự chăm sóc như trên mà vẫn mỏi mắt → khám bác sĩ chuyên khoa mắt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Eyestrain – Symptoms and causes",
+      "publisher": "Mayo Clinic (Hoa Kỳ)",
+      "url": "https://www.mayoclinic.org/diseases-conditions/eyestrain/symptoms-causes/syc-20372397",
+      "updated": "2024-07-02"
+    },
+    {
+      "title": "Home remedies: Reducing eye strain and discomfort",
+      "publisher": "Mayo Clinic News Network (Hoa Kỳ)",
+      "url": "https://newsnetwork.mayoclinic.org/discussion/home-remedies-reducing-eye-strain-and-discomfort/",
+      "updated": "2019-02-13"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

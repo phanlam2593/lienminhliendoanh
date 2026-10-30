@@ -9,7 +9,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { diabetesFruitBlock, factLine, factOf, fruitIn, isSugarTopic } from "@/lib/lomiFoodFacts";
 import { normalizeVi } from "@/lib/lomiFaq";
-import { DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
+import { DRUGS, DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import INDEX from "@/lib/medkb/index.json";
 import { VR, VN } from "@/lib/viMatch";
 
@@ -350,7 +350,7 @@ export function isMedQuestion(text: string, topicNames: string[] = [], allowTold
   if (asp && hasQ) return true;
   if (asp && !SELF_STATE.test(n)) return true;
   // chỉ nêu tên: "bệnh gout", "tự kỷ ám thị", "gout á"
-  const rest = topicNames.reduce((acc2, nm) => acc2.replace(normalizeVi(nm), " "), n).replace(VN(/\b(bệnh|chứng|hội chứng|rối loạn|á|à|a|ạ|hả|ha|nha|nhé|nhe|nè|đó|vậy|thế|là|cái|việc|tình trạng|bị)\b/g), " ").replace(/\s+/g, " ").trim();
+  const rest = topicNames.reduce((acc2, nm) => acc2.replace(normalizeVi(nm), " "), n).replace(VN(/\b(bệnh|chứng|hội chứng|rối loạn|á|à|a|ạ|hả|ha|nha|nhé|nhe|nè|đó|vậy|thế|là|cái|việc|tình trạng|bị|bé|trẻ|được|đc)\b/g), " ").replace(/\s+/g, " ").trim();
   if (topicNames.length && rest === "" && words <= 4) return true;
   // 15/10: kể kèm thời gian mắc bệnh ("a bị mỡ máu 3 năm rồi", "mẹ bị gout lâu rồi") vẫn là nêu tên bệnh → tóm tắt thẻ có nguồn
   //   (trước đây rơi về bảng cũ, nói "chưa có thông tin riêng" dù kho có thẻ).
@@ -362,7 +362,7 @@ export function isMedQuestion(text: string, topicNames: string[] = [], allowTold
   //   (allowTold = 2: thủ thuật / sau sinh — kể cả chuyện người nhà; = 1: bệnh thường — chỉ khi không nhắc người nào, vì
   //    "mẹ em bị tiểu đường" là mở MẠCH CHUYỆN hỏi han người đó, không đổ bài kiến thức.)
   const restFreq = restNoTime.replace(VN(/\b(hoài|mãi|suốt|liên tục|quá|lắm|nhiều|hay|bị|thấy|đang|vô|xong rồi|xong|mình|tôi|tui|tớ|e|c)\b/g), " ").replace(/\s+/g, " ").trim();
-  const restPeople = restFreq.replace(VN(/\b(vợ|chồng|mẹ|má|ba|bố|con|em|anh|chị|bé|ông|bà|cháu|bạn|nhà|của|nội|ngoại)\b/g), " ").replace(/\s+/g, " ").trim();
+  const restPeople = restFreq.replace(VN(/\b(\d+ (tuổi|tháng tuổi|tháng)|vợ|chồng|mẹ|má|ba|bố|con|em|anh|chị|bé|ông|bà|cháu|bạn|nhà|của|nội|ngoại)\b/g), " ").replace(/\s+/g, " ").trim();
   if (topicNames.length && words <= 9 && ((allowTold >= 1 && restFreq === "") || (allowTold === 2 && restPeople === ""))) return true;
   // tên + cụm bổ nghĩa ngắn: "tăng động giảm chú ý ở người lớn", "trầm cảm sau sinh", "gout cho người già"
   if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && VN(/^(?:ở|cho|khi|trên|sau|trước|trong) \S+(?: \S+){0,2}$/).test(rest)) return true;
@@ -562,7 +562,13 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     return out([`💊 Về thuốc cho ${N}: Lomi **không kê thuốc hay nêu liều** — dùng thuốc nào là do bác sĩ quyết định sau khi khám.`, med.length ? `Theo nguồn:\n${bl(med, 10)}` : "", end([med])].filter(Boolean).join("\n\n"), "meds");
   }
   const sect = (head: string, fs: DrugFact[], a: MedAspect, cut = 99, none?: string) => {
-    if (!fs.length) return out(none ?? `Các nguồn Lomi đã đối chiếu cho ${N} **không nêu phần này**, nên Lomi chưa xác minh được. Bạn hỏi bác sĩ để chắc nha.`, a, true);
+    if (!fs.length) {
+      if (none) return out(none, a, true);
+      // 30/10 (rà câu hiểu lầm: "con 3 tuổi chưa biết nói có sao không" → chỉ đáp "không nêu phần này"): thẻ không có đúng phần được hỏi
+      //   thì vẫn đưa phần tổng quan đã kiểm chứng (có phần khi nào cần đi khám), thay vì bỏ người hỏi lửng lơ.
+      const ov = renderMed(t, "overview", null, now);
+      return out(`Các nguồn Lomi đã đối chiếu cho ${N} **không nói riêng phần này** — dưới đây là phần Lomi đã kiểm chứng, bạn xem kèm phần khi nào cần đi khám nha:\n\n${ov.text}`, a, true);
+    }
     return out([head, bl(fs, cut), end([fs])].join("\n\n"), a);
   };
   if (aspect === "signs") return sect(`🩺 Dấu hiệu thường gặp của ${N}:`, t.signs, "signs");
@@ -1096,6 +1102,7 @@ export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: stri
 export type MedAsk = { id: string; aspect: MedAspect | "overview"; food: string | null; focusOnly?: boolean };
 
 /** Câu này có phải câu hỏi kiến thức về một chủ đề trong kho không? prev = chủ đề đang nói ở tin trước (cho câu nối). */
+const TELL_OK = new Set(["cham-noi", "moi-mat", "sieu-am-thai"]);
 export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   const own = findMedTopicId(text);
   const words = normalizeVi(text).split(" ").length;
@@ -1103,13 +1110,18 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     const row = LOOKUP_ROWS.find((r) => r.id === own)!;
     const names = row.names;
     // (tâm lý — "a hay lo âu quá" — là lời tâm sự, không phải nêu chủ đề kiến thức)
-    if (!isMedQuestion(text, names, row.kind === "mental" || row.kind === "term" ? 0 : row.kind === "other" || row.kind === "women" ? 2 : 1)) return null;
+    // (30/10: chậm nói, mỏi mắt, siêu âm thai — kể chuyện người nhà gặp tình trạng này cũng là hỏi kiến thức: "con em 3 tuổi chưa biết nói")
+    if (!isMedQuestion(text, names, row.kind === "mental" || row.kind === "term" ? 0 : row.kind === "other" || row.kind === "women" || TELL_OK.has(own) ? 2 : 1)) return null;
     // Khía cạnh xét trên phần câu NGOÀI tên chủ đề: "rối loạn ăn uống là gì" — chữ "ăn uống" là tên bệnh, không phải hỏi kiêng cữ.
     const rest0 = names.reduce((acc2, nm) => acc2.replace(` ${normalizeVi(nm)} `, " "), ` ${normalizeVi(text)} `);
     const aspR = aspectOf(rest0);
     // (tên chủ đề tự chứa khía cạnh — "đi khám tâm lý", "dấu hiệu cần hỗ trợ tâm lý" — thì vẫn lấy khía cạnh trong tên)
     const asp = aspR ?? aspectOf(text);
-    const topicLike = foodPhrase(text, null);
+    const topicLike0 = foodPhrase(text, null);
+    // 30/10: "huyết áp cao uống aspririn được không" — thứ được hỏi là một THUỐC (không phải món ăn) → phần thuốc của bệnh đó
+    //   (Lomi không kê thuốc; dùng thuốc nào do bác sĩ quyết định), không trả lời như hỏi kiêng món "aspririn".
+    if (topicLike0 && DRUGS.some((d) => d.match.test(text))) return { id: own, aspect: "meds", food: null };
+    const topicLike = topicLike0;
     // Khía cạnh xét trên phần câu NGOÀI tên món: "uống sữa chua được không" bỏ dấu dễ thành "chữa được không".
     const aspF = topicLike ? aspectOf(rest0.replace(` ${topicLike} `, " ")) : asp;
     const a: MedAspect | "overview" = topicLike && aspF !== "spread" && (!aspF || aspF === "diet" || aspF === "define") && VN(/\b(ăn|uống|dùng)\b/).test(normalizeVi(text)) && !VN(/\b(kiêng|ăn gì|uống gì|nên ăn|tránh ăn)\b/).test(normalizeVi(text)) ? "food" : (asp ?? "overview");

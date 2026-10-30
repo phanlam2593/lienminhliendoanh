@@ -1,0 +1,77 @@
+{
+  "id": "sieu-am-thai",
+  "kind": "women",
+  "names": [
+    "siêu âm thai",
+    "siêu âm khi mang thai",
+    "mang thai mấy tuần thì siêu âm",
+    "mấy tuần siêu âm được",
+    "khi nào siêu âm thai",
+    "siêu âm 12 tuần",
+    "siêu âm hình thái",
+    "siêu âm 20 tuần",
+    "siêu âm tính tuổi thai",
+    "pregnancy ultrasound",
+    "dating scan",
+    "anomaly scan",
+    "siêu âm có hại",
+    "siêu âm nhiều có hại",
+    "siêu âm có ảnh hưởng",
+    "siêu âm nhiều có sao"
+  ],
+  "about": [
+    {
+      "text": "Ở Anh, bà bầu được làm ít nhất **2 lần siêu âm**: siêu âm tính tuổi thai (khoảng tuần **11–14**) và siêu âm giữa thai kỳ (tuần **18–21**).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Siêu âm **không có tác dụng phụ đã biết** cho mẹ hay bé; nhưng kết quả có thể dẫn tới quyết định làm thêm xét nghiệm (có xét nghiệm có nguy cơ sảy thai).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Siêu âm tuần 11–14: đo em bé để ước tính **ngày dự sinh** (ngày dự sinh có thể được chỉnh theo số đo).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Siêu âm tuần 18–21 (siêu âm hình thái): kiểm tra 11 bệnh lý về hình thể của em bé.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Xem giới tính không nằm trong chương trình tầm soát; tuỳ bệnh viện có thể cho biết ở lần siêu âm tuần 20, và không phải lúc nào cũng chắc chắn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [],
+  "course": [],
+  "care": [
+    {
+      "text": "Lịch siêu âm cụ thể theo nơi bạn khám thai — hỏi bác sĩ / nữ hộ sinh đang theo dõi bạn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Ultrasound scans in pregnancy",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/pregnancy/your-pregnancy-care/ultrasound-scans/",
+      "reviewed": "2023-11-13"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}
