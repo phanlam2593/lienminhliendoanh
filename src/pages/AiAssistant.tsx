@@ -1639,6 +1639,15 @@ export function AiChat({
         const inTalk = heartOn || !!hCtx;
         const depth = (lastA?.heartDepth ?? 0) + 1;
         const umbrellaMed = async (mt: MedTopic, mr: MedReply, food?: string | null, shown?: string): Promise<MedReply> => {
+          // 30/10 (nhật ký bí: "Ung thư cổ tử cung kiêng gì?" → "không nêu cách ăn uống riêng"): ung thư từng loại chưa có nguồn ăn uống riêng
+          //   → nói thật vậy, rồi đưa phần ăn uống CÓ NGUỒN cho người bệnh ung thư nói chung (thẻ ung-thu: Macmillan, Cancer Research UK, NHS).
+          if (mt.kind === "cancer" && mt.id !== "ung-thu" && (mr.aspect === "diet" || mr.aspect === "food") && mr.partial) {
+            const gen = await loadMedTopic("ung-thu");
+            if (gen) {
+              const g = mr.aspect === "food" && food ? renderMed(gen, "food", food, Date.now(), shown) : mr.aspect === "diet" ? renderMed(gen, "diet") : null;
+              if (g && !g.partial) return { ...g, topic: mt, text: `Nguồn y khoa Lomi đối chiếu **chưa nêu cách ăn uống riêng** cho **${medName(mt)}** — dưới đây là điều các nguồn khuyên cho **người bệnh ung thư nói chung**:\n\n${g.text}` };
+            }
+          }
           const ids = UMBRELLA[mt.id];
           if (!ids || (mr.aspect !== "diet" && mr.aspect !== "food")) return mr;
           const subs = (await Promise.all(ids.map((id) => loadMedTopic(id)))).filter((x): x is MedTopic => !!x);
@@ -1820,6 +1829,14 @@ export function AiChat({
             ((mk.aspect === "care" || mk.aspect === "meds" || mk.aspect === "overview" || mk.aspect === "diet" || mk.aspect === "food") && alarmNow) || (mk.aspect === "overview" && !!analyzeBody(q)?.sx?.length && (isSelfStatement(q) || !hasQuestion(q))) || (mk.aspect === "doctor" && VN(/\b(khám ở đâu|ở đâu khám|khoa nào|khám khoa)\b/).test(nq) && !!healthTopicReply(q, hCtx, "aspect")));
         if (mk?.id && !mkSkip) {
           const mt = await loadMedTopic(mk.id);
+          // 30/10: "có nên kiêng đường không" — hỏi "kiêng" kèm tên một món mà thẻ CÓ nhận định riêng → trả lời đúng món đó, không đọc cả danh sách.
+          if (mt?.diet?.foods.length && mk.aspect === "diet" && !mk.food) {
+            // chỉ lấy đúng cụm ngay sau "kiêng / cữ / tránh / bỏ" và chỉ nhận khi cụm đó TRÙNG tên hay tên khác của một món trong thẻ
+            const km = nq.match(VN(/\b(?:kiêng|cữ|tránh|bỏ|cắt) (\S+(?: \S+){0,2}?)(?= (?:không|ko|k|hông|được|đc|nha|nhé|ạ|à|hả)\b|\s*$)/));
+            const ph = km?.[1]?.trim();
+            const fm = ph ? matchFood(mt, ph) : null;
+            if (ph && fm && [fm.name, ...fm.aliases].some((x) => normalizeVi(x) === ph)) Object.assign(mk, { aspect: "food", food: ph });
+          }
           const mr00 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined) : null;
           // 15/10: thẻ TÊN GỌI CHUNG ("viêm khớp") + hỏi ăn uống / một món → trả lời theo từng loại bệnh (lib/lomiMed.renderUmbrella).
           const mr0 = mt && mr00 ? await umbrellaMed(mt, mr00, mk.food, mk.food ? foodDisplay(q, mk.food) : undefined) : mr00;

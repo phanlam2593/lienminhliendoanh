@@ -99,4 +99,19 @@ describe("30/10 — trả lời qua khung chat", () => {
     const b = await last(["bé ho ông ổng tím tái thở không nổi"]);
     expect(b.content).toMatch(/^🚨/);
   }, T);
+  // Nhật ký bí: "Ung thư cổ tử cung kiêng gì?" → "không nêu cách ăn uống riêng".
+  it("Ung thư từng loại chưa có nguồn ăn uống riêng → nói thật, rồi đưa phần ăn uống có nguồn cho người bệnh ung thư nói chung", async () => {
+    const m = await last(["Ung thư cổ tử cung kiêng gì?"]);
+    expect(m.content).toMatch(/chưa nêu cách ăn uống riêng.*ung thư cổ tử cung/s);
+    expect(m.content).toMatch(/không nên tự nhịn ăn/);
+  }, T);
+  it("'kiêng X không' với X là món thẻ có nhận định riêng → trả lời đúng món; 'kiêng gì' vẫn đọc cả danh sách", async () => {
+    const a = await last(["bị ung thư có nên kiêng đường không"]);
+    expect(a.med?.aspect).toBe("food");
+    expect(a.content).toMatch(/Không có bằng chứng/);
+    const b = await last(["gout có nên kiêng bia không"]);
+    expect(b.content).toMatch(/\*\*bia\*\*/);
+    const c = await last(["gout kiêng gì"]);
+    expect(c.med?.aspect).toBe("diet");
+  }, T);
 });
