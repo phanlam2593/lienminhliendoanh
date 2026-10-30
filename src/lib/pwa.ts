@@ -210,6 +210,18 @@ export function isIOSDevice(): boolean {
   return /iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
+/** (31/10) Máy đã cài app iLomi (Chrome Android) — khi đó Chrome KHÔNG cho nút cài nhanh, cần báo người dùng mở app sẵn có. */
+export async function isAppInstalledOnDevice(): Promise<boolean> {
+  try {
+    const nav = navigator as any;
+    if (typeof nav.getInstalledRelatedApps !== "function") return false;
+    const apps = await nav.getInstalledRelatedApps();
+    return Array.isArray(apps) && apps.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 export function canInstallNatively(): boolean {
   return !!deferredInstallPrompt;
 }

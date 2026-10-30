@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { requestPushPermission, canInstallNatively, isIOSDevice, isStandalone, triggerInstall } from "@/lib/pwa";
+import { requestPushPermission, canInstallNatively, isAppInstalledOnDevice, isIOSDevice, isStandalone, triggerInstall } from "@/lib/pwa";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { BellRing } from "lucide-react";
 import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -2351,6 +2351,10 @@ function InstallAppButton() {
   const { t } = useLanguage();
   const [installable, setInstallable] = useState(canInstallNatively());
   const [busy, setBusy] = useState(false);
+  const [onDevice, setOnDevice] = useState(false);
+  useEffect(() => {
+    void isAppInstalledOnDevice().then(setOnDevice);
+  }, []);
 
   useEffect(() => {
     const onChange = () => setInstallable(canInstallNatively());
@@ -2382,6 +2386,10 @@ function InstallAppButton() {
         <Smartphone className="w-4 h-4" /> {busy ? t("settings.installOpening") : t("settings.installApp")}
       </button>
     );
+  }
+
+  if (onDevice) {
+    return <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 text-xs leading-relaxed">{t("settings.installedOther")}</div>;
   }
 
   if (isIOSDevice()) {
