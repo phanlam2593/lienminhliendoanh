@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -101,6 +101,10 @@ const DENGUE_WARN = VN(/\b(đau bụng (dữ dội|nhiều|quá|lắm|quặn)|qu
 
 const MENOPAUSE = VN(/\b(mãn kinh|tắt kinh|hết kinh|dứt kinh)\b/);
 const PMB_BLEED = VN(/\b(ra máu|ra huyết|chảy máu|có kinh lại|thấy kinh lại|ra kinh lại|ra máu lại|rỉ máu|ra dịch lẫn máu)\b/);
+const CROUP = VN(/\b(ho ông ổng|ho ong ổng|ho như chó sủa|ho như hải cẩu|ho sủa|ho tiếng chó sủa|ho khan ông ổng)\b/);
+const CROUP_RASP = VN(/\b(thở rít|thở khò khè rít|rít khi hít vào|thở ra tiếng rít)\b/);
+const KID = VN(/\b(bé|con|cháu|em bé|trẻ|đứa nhỏ|thằng nhỏ|con nhỏ|con gái|con trai|bé nhà)\b/);
+const CROUP_BAD = VN(/\b(khó thở (nhiều|lắm|quá|dữ)|thở rất khó|thở không nổi|không thở được|vật lộn để thở|tím|tái xanh|tái mét|xám|li bì|lừ đừ|khó đánh thức|không tỉnh|mềm oặt|mềm nhũn|chảy dãi|chảy nước dãi|khó nuốt|không nuốt được|rút lõm ngực|lõm ngực)\b/);
 const STING = VN(/\b(ong đốt|bị ong|ong vò vẽ|ong bắp cày|côn trùng đốt|kiến ba khoang|bị đốt)\b/);
 const STING_WIDE = VN(/\b(khắp người|toàn thân|cả người|nhiều chỗ|khắp mình|lan rộng)\b/);
 // 21/10 (QA V2): huyết khối, tăng nhãn áp cấp, mất nước, cơn lo kèm tim đập nhanh.
@@ -150,6 +154,23 @@ export function urgentOf(text: string): Urgent | null {
       aspect: "care",
       head: `⚠️ Đã mãn kinh mà ra máu thì **luôn nên đi khám phụ khoa sớm** — kể cả chỉ ra ít hay chỉ một lần${other ? ", nên đưa người nhà đi khám nha" : ""}. Đa số không nguy hiểm, nhưng cần khám để loại trừ nguyên nhân nặng.`,
     };
+  // 30/10: ho ông ổng (như chó sủa / hải cẩu), hoặc ho kèm thở rít ở trẻ → viêm thanh khí phế quản (croup), thẻ có nguồn NHS 111 Wales.
+  //   Trước đây "bé nhà e ho ông ổng thở rít" chỉ được đọc là "ho và thở khò khè" chung chung. Thở rít khi hít vào là triệu chứng hay gặp
+  //   của croup (không tự nó là cấp cứu); cấp cứu khi bé thở rất khó, tím tái, li bì, mềm oặt, chảy dãi / khó nuốt.
+  if (CROUP.test(n) || (CROUP_RASP.test(n) && VN(/\b(ho)\b/).test(n) && KID.test(n)))
+    return CROUP_BAD.test(n)
+      ? {
+          id: "croup",
+          card: "viem-thanh-khi-phe-quan",
+          aspect: "emergency",
+          head: `🚨 Bé ho ông ổng mà **thở rất khó, tím tái / xám, li bì khó đánh thức, mềm oặt, chảy dãi hay khó nuốt** → ${CALL}; đừng tự chở bé đi.`,
+        }
+      : {
+          id: "croup",
+          card: "viem-thanh-khi-phe-quan",
+          aspect: "both",
+          head: "Ho ông ổng như chó sủa (kèm khàn tiếng, thở rít khi hít vào) ở trẻ hay gặp nhất là **viêm thanh khí phế quản (croup)** — Lomi gửi cách chăm và dấu hiệu phải đi cấp cứu nha 👇",
+        };
   if (DENGUE.test(n) && dengueWarnAsserted(n) && !DENGUE_PAST.test(n))
     return {
       id: "dengue",

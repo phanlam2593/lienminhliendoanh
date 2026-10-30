@@ -79,4 +79,24 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(m.med?.id).toBe("ung-thu-xuong");
     expect(m.content).not.toMatch(/chưa có bài riêng/);
   }, T);
+  // Từ nhật ký bí (lomi_stuck_log) + lỗi còn treo đợt trước.
+  it("Gõ sai một chữ trong tên bệnh vẫn hiểu; chữ không dấu như 'alo' không bị sửa thành 'lao'", async () => {
+    const a = await last(["Mẹo chữa nghẹt mũu"]);
+    expect(a.med?.id).toBe("sx-nghet-mui");
+    const b = await last(["e bị tiểu đườmg kiêng gì"]);
+    expect(b.med?.id).toMatch(/tieu-duong/);
+    const c = await last(["Ủa alo?"]);
+    expect(c.med).toBeUndefined();
+  }, T);
+  it("'Cóc ăn đc k?' → cảnh báo ngộ độc cóc có nguồn Bộ Y tế, không hỏi lại", async () => {
+    const m = await last(["Cóc ăn đc k?"]);
+    expect(m.content).toMatch(/NGUY HIỂM/);
+  }, T);
+  it("Ho ông ổng ở trẻ → viêm thanh khí phế quản; kèm tím tái / thở không nổi → gọi 115", async () => {
+    const a = await last(["bé nhà e ho ông ổng thở rít"]);
+    expect(a.med?.id).toBe("viem-thanh-khi-phe-quan");
+    expect(a.content).toMatch(/115/);
+    const b = await last(["bé ho ông ổng tím tái thở không nổi"]);
+    expect(b.content).toMatch(/^🚨/);
+  }, T);
 });

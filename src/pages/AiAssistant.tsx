@@ -41,7 +41,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
-import { isLooseVi, loadViModel, restoreVi } from "@/lib/lomiViRestore";
+import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, typoCandidates } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
@@ -785,6 +785,26 @@ export function AiChat({
       raw = restoreVi(typed);
     }
     if (!en) raw = viMixFix(raw); // 22/10: "a bị headache quá" → "a bị đau đầu quá"
+    // 30/10 (nhật ký bí: "Mẹo chữa nghẹt mũu" → "Kiến thức này Lomi chưa được tiếp thu"): một chữ gõ sai một ký tự làm hỏng tên bệnh.
+    //   Chỉ sửa khi câu gốc KHÔNG khớp chủ đề sức khoẻ nào, chữ đó không có trong từ điển âm tiết, và câu sau khi sửa một chữ khớp đúng một chủ đề.
+    let typedFix = typed;
+    if (!en && !findMedId(raw)) {
+      await loadViModel();
+      const ws = raw.split(/(\s+)/);
+      fix: for (let i = 0; i < ws.length; i++) {
+        const w = ws[i].replace(/[?!.,…]+$/u, "");
+        // (chỉ chữ gõ CÓ DẤU mà sai — "mũu", "họnh", "đườmg"; chữ không dấu như "alo" có thể là tiếng lóng / tên riêng, sửa thành "lao" là sai)
+        if (w.length < 3 || !/^\p{L}+$/u.test(w) || !/[^\x00-\x7F]/.test(w) || isKnownSyllable(w)) continue;
+        for (const c of typoCandidates(w)) {
+          const cand = [...ws.slice(0, i), ws[i].replace(w, c), ...ws.slice(i + 1)].join("");
+          if (findMedId(cand)) {
+            raw = cand;
+            typedFix = cand;
+            break fix;
+          }
+        }
+      }
+    }
     // 14/10 — BỘ ĐỌC CÂU (lib/viMatch): báo cho các luật biết câu của người dùng lượt này (để so đúng chữ có dấu họ gõ).
     //   Câu gõ không dấu thì dạng có dấu chỉ là đoán → lượt đó các luật so như cũ.
     //   Chữ người dùng gõ thiếu dấu trong câu có dấu ("bị dau đầu") được đoán dấu cho bộ đọc; lớp khác vẫn đọc câu như trước.
@@ -792,10 +812,10 @@ export function AiChat({
     let viStrictTurn = false;
     if (!en) {
       await loadViModel();
-      const rv0 = restoreVi(typed);
-      viStrictTurn = typedWithAccents(typed, rv0);
+      const rv0 = restoreVi(typedFix);
+      viStrictTurn = typedWithAccents(typedFix, rv0);
       // câu gõ dấu: chỉ đoán dấu cho chữ gõ thiếu dấu mà vốn không phải chữ nào ("dau" → "đau"; "di truyền" giữ "di")
-      const rv = viStrictTurn ? restoreVi(typed, { keepBare: true }) : rv0;
+      const rv = viStrictTurn ? restoreVi(typedFix, { keepBare: true }) : rv0;
       viTurn = [rv, expandTeen(rv), senseCanon(expandTeen(rv))];
     }
     beginViTurn(viTurn, viStrictTurn);

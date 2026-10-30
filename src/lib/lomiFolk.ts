@@ -596,7 +596,7 @@ export const FOLK: FolkEntry[] = [
   {
     id: "thit-coc",
     name: "Cháo cóc / thịt cóc",
-    names: ["cháo cóc", "thịt cóc", "ruốc cóc", "chà bông cóc", "trứng cóc", "gan cóc", "bột cóc", "con cóc", "cóc tía", "nấu cóc", "ăn thịt cóc"],
+    names: ["cháo cóc", "thịt cóc", "ruốc cóc", "chà bông cóc", "trứng cóc", "gan cóc", "bột cóc", "con cóc", "cóc tía", "nấu cóc", "ăn thịt cóc", "ăn cóc", "cóc ăn", "cóc nướng", "món cóc", "cóc chiên", "cóc xào"], // 30/10 (nhật ký bí): "Cóc ăn đc k?" trước bị hỏi lại "chuyện gì vậy"
     verdict: "danger",
     folk: [{ text: "Dân gian cho trẻ ăn thịt cóc (cháo cóc, ruốc cóc) để chữa suy dinh dưỡng vì giàu đạm, kẽm — cơ quan Bộ Y tế cảnh báo đây là nguy cơ nghiêm trọng.", src: [0] }],
     science: [

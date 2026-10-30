@@ -158,3 +158,33 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
   });
   return parts.join("");
 }
+
+// ── 30/10: sửa MỘT lỗi gõ trong một chữ (nhật ký bí: "Mẹo chữa nghẹt mũu" → "Ui... Kiến thức này Lomi chưa được tiếp thu") ──
+// Chỉ dùng như phép thử ở nơi gọi (AiAssistant): chữ không có trong từ điển âm tiết của mô hình → thử các chữ cách 1 phép sửa
+// (thay / thêm / bớt / đảo một ký tự) có trong từ điển, xếp theo tần suất. Nơi gọi chỉ nhận khi câu đã sửa mới khớp một chủ đề sức khoẻ.
+const VI_LETTERS = [..."aàáảãạăằắẳẵặâầấẩẫậbcdđeèéẻẽẹêềếểễệghiìíỉĩịklmnoòóỏõọôồốổỗộơờớởỡợpqrstuùúủũụưừứửữựvxyỳýỷỹỵ"];
+/** Chữ có trong từ điển âm tiết không (mô hình chưa nạp → coi như có, để không sửa bừa). */
+export function isKnownSyllable(w: string): boolean {
+  if (!idx) return true;
+  return (idx.m.u[w.normalize("NFC").toLowerCase()] ?? 0) > 0;
+}
+/** Các chữ có trong từ điển cách `w` đúng một phép sửa, tần suất cao trước (tối đa `max`). */
+export function typoCandidates(w: string, max = 6): string[] {
+  if (!idx) return [];
+  const s = [...w.normalize("NFC").toLowerCase()];
+  const out = new Map<string, number>();
+  const add = (c: string[]) => {
+    const k = c.join("");
+    const n = idx!.m.u[k] ?? 0;
+    if (n > 0 && k !== s.join("")) out.set(k, n);
+  };
+  for (let i = 0; i <= s.length; i++) {
+    for (const L of VI_LETTERS) {
+      if (i < s.length) add([...s.slice(0, i), L, ...s.slice(i + 1)]); // thay
+      add([...s.slice(0, i), L, ...s.slice(i)]); // thêm
+    }
+    if (i < s.length) add([...s.slice(0, i), ...s.slice(i + 1)]); // bớt
+    if (i < s.length - 1) add([...s.slice(0, i), s[i + 1], s[i], ...s.slice(i + 2)]); // đảo
+  }
+  return [...out.entries()].sort((a, b) => b[1] - a[1]).slice(0, max).map(([k]) => k);
+}
