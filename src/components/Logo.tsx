@@ -7,12 +7,44 @@ import logo256 from "@/assets/logo-256.png.asset.json";
 import logo512 from "@/assets/logo-512.png.asset.json";
 
 // DO NOT CHANGE: app name is "iLomi" — hiện qua t("app.name") để đổi theo ngôn ngữ
-const BRAND = "#0891b2";
+// (31/10) màu thương hiệu cũ của chữ tên app — chữ giờ dùng Wordmark bên dưới
 
 // Responsive srcset — browser picks the smallest variant that satisfies
 // the rendered CSS size × devicePixelRatio. Keeps mobile crisp without
 // shipping the full 1024px master to every viewport.
 const SRCSET = [`${logo64.url} 64w`, `${logo128.url} 128w`, `${logo256.url} 256w`, `${logo512.url} 512w`].join(", ");
+
+/**
+ * (31/10, Kir chốt) Chữ "iLomi": font Baloo 2 đậm, "Lomi" chuyển màu xanh lá → xanh dương,
+ * dấu chấm chữ i là chiếc lá. Nền sáng dùng dải màu đậm hơn để chữ không bị mờ.
+ */
+export function Wordmark({ name, fontSize, className }: { name: string; fontSize: number; className?: string }) {
+  const lead = name.startsWith("i") ? "ı" : name.charAt(0);
+  const rest = name.slice(1);
+  return (
+    <span
+      className={cn("whitespace-nowrap", className)}
+      style={{ fontFamily: "'Baloo 2', 'Plus Jakarta Sans', sans-serif", fontWeight: 800, fontSize, lineHeight: 1, letterSpacing: "-0.02em" }}
+    >
+      <span className="relative inline-block text-[#059669] dark:text-[#34d399]">
+        {lead}
+        {name.startsWith("i") && (
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="absolute fill-current"
+            style={{ left: "50%", top: "-0.16em", width: "0.4em", height: "0.4em", transform: "translateX(-46%) rotate(-12deg)" }}
+          >
+            <path d="M4 20C4 10 10 4 21 3c0 11-6 17-17 17z" />
+          </svg>
+        )}
+      </span>
+      <span className="bg-clip-text text-transparent bg-[linear-gradient(90deg,#059669_0%,#0891b2_55%,#2563eb_100%)] dark:bg-[linear-gradient(90deg,#34d399_0%,#22d3ee_55%,#3b82f6_100%)]">
+        {rest}
+      </span>
+    </span>
+  );
+}
 
 function pickSrc(size: number) {
   if (size <= 48) return logo64.url;
@@ -40,7 +72,8 @@ export function Logo({
   asLink?: boolean;
 }) {
   const { t } = useLanguage();
-  const showTagline = withText && (withTagline ?? size >= 56);
+  // (31/10) Khẩu hiệu luôn nằm dưới chữ iLomi, kể cả trên thanh đầu trang.
+  const showTagline = withText && (withTagline ?? true);
   const appName = t("app.name");
 
   const content = (
@@ -58,18 +91,15 @@ export function Logo({
         className="object-contain shrink-0"
       />
       {withText && (
-        <div className="leading-tight">
-          <div
-            className="font-extrabold"
-            style={{
-              color: BRAND,
-              letterSpacing: "1.5px",
-              fontSize: size <= 36 ? 12 : size <= 56 ? 14 : 17,
-            }}
-          >
-            {appName}
-          </div>
-          {showTagline && <div className="text-muted-foreground text-[11px] mt-0.5">{t("app.tagline")}</div>}
+        <div className="flex flex-col gap-[3px] leading-tight min-w-0">
+          <span aria-label={appName}>
+            <Wordmark name={appName} fontSize={size <= 36 ? 25 : size <= 56 ? 32 : 40} />
+          </span>
+          {showTagline && (
+            <div className="text-muted-foreground whitespace-nowrap" style={{ fontSize: size <= 36 ? 10 : 12 }}>
+              {t("app.tagline")}
+            </div>
+          )}
         </div>
       )}
     </div>

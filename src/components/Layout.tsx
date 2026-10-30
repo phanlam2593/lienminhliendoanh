@@ -24,7 +24,7 @@ import {
 import { initInstallPrompt, triggerInstall, dismissInstallBanner } from "@/lib/pwa";
 import { Download, X as XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { Logo } from "./Logo";
+import { Logo, Wordmark } from "./Logo";
 import { Avatar } from "./Avatar";
 import { WelcomeOverlay } from "./WelcomeOverlay";
 import { WelcomeOnboarding } from "./WelcomeOnboarding";
@@ -484,7 +484,9 @@ function WelcomeScreen() {
       <Logo size={72} asLink />
       <div className="space-y-1">
         {/* DO NOT CHANGE: app name is "iLomi" — hiện t("app.name") để đổi theo ngôn ngữ */}
-        <h1 className="text-xl font-extrabold text-primary">{t("app.name")}</h1>
+        <h1 className="m-0" aria-label={t("app.name")}>
+          <Wordmark name={t("app.name")} fontSize={40} />
+        </h1>
         <p className="text-xs text-muted-foreground">{t("app.tagline")}</p>
       </div>
       <div className="w-full max-w-sm space-y-2">
