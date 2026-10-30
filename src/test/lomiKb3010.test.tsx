@@ -298,5 +298,15 @@ describe("30/10 — trả lời qua khung chat", () => {
     await yes("nhỏ nước tiểu vào mắt được không", /Đau mắt đỏ/);
     await no("tôm với vitamin C có độc không", /\bem\b/);
   }, T);
+  it("Bớt lặp ý, không nêu nguồn khi chưa hỏi, đáp đúng thứ được hỏi (30/10)", async () => {
+    const a1 = (await last(["Nhỏ nước tiểu vào mắt là sao"])).content;
+    expect(a1.slice(0, 400)).toMatch(/nước tiểu/);
+    expect(a1).not.toMatch(/nguồn y khoa nói gì/);
+    const a2 = (await last(["đau mắt đỏ nên làm gì"])).content;
+    expect(a2).not.toMatch(/đã đối chiếu nguồn|Hỏi tên từng vị|NHS/);
+    expect(a2.match(/Trẻ dưới 2 tuổi cần bác sĩ/gi)?.length ?? 0).toBeLessThanOrEqual(1);
+    const a3 = (await last(["cảm lạnh nên làm gì"])).content;
+    expect(a3.match(/vitamin C/g)?.length ?? 0).toBe(1);
+  }, T);
 });
 

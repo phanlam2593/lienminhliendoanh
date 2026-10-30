@@ -71,7 +71,7 @@ import { contextReply } from "@/lib/lomiContext";
 import { shorten, softenTail } from "@/lib/lomiTail";
 import { drugAsk, overdoseMention, prevDrugCtx } from "@/lib/lomiDrug";
 import { drugById, findDrug, sourceList } from "@/lib/lomiDrugData";
-import { asksSource, sourceSay, tidyCited } from "@/lib/lomiCite";
+import { asksSource, dropRepeats, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
 import { boundaryAdvice, fearInHarm, harmOf, harmReply, helperAdvice, safetyFollow, type Harm } from "@/lib/lomiSafety";
 import { isAskLike, isUpbeat, senseCanon, senseLast, senseState, talkContinue } from "@/lib/lomiSense";
@@ -1892,7 +1892,8 @@ export function AiChat({
             const subCa = mt.id === "ung-thu" ? diseaseOf(raw) : undefined;
             if (subCa && subCa !== "ung thư" && !again) mr.text = `Lomi chưa có bài riêng về **${subCa}**, nên nói phần chung về ung thư nha — chi tiết của loại này thì bác sĩ ung bướu nói sát nhất 🙏\n\n${mr.text}`;
             // 20/10: hỏi cách chăm sóc → kèm mẹo dân gian đã đối chiếu nguồn cho bệnh đó (lib/lomiFolk), trước dòng nguồn của thẻ.
-            const folkBlk = mr.aspect === "care" ? renderFolkForTopic(mt.id, medName(mt), { compact: true }) : null;
+            mr.text = dropRepeats(mr.text);
+            const folkBlk = mr.aspect === "care" ? renderFolkForTopic(mt.id, medName(mt), { compact: true, seen: mr.text }) : null;
             if (folkBlk) {
               const at = mr.text.lastIndexOf("\n\n📚");
               mr.text = at >= 0 ? `${mr.text.slice(0, at)}\n\n${folkBlk}${mr.text.slice(at)}` : `${mr.text}\n\n${folkBlk}`;

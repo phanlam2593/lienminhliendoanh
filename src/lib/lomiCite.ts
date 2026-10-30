@@ -21,6 +21,11 @@ const NB = "(?![\\p{L}])";
 const RULES: [RegExp, string][] = [
   // số khẩn của Anh không dùng được ở Việt Nam: "(NHS 111 ở Anh)", "(ở Anh là gọi đường dây NHS 111)", "(NHS Anh nêu gọi 111)"
   [/\s*\((?:ở Anh là |gọi )?(?:gọi )?(?:đường dây )?NHS(?: Anh)? (?:nêu gọi )?111(?: ở Anh)?\)/gu, ""],
+  // (30/10) các cách ghi số 111 của Anh còn sót — người dùng ở Việt Nam không gọi được
+  [/\s*\((?:NHS )?(?:nêu )?đường dây tư vấn 111 của Anh\)/gu, ""],
+  [/\s*\(ở Anh là 111\)/gu, ""],
+  [/ đường dây y tế 111 \(ở Anh\)/gu, " cơ sở y tế gần nhất"],
+  [/; mới sinh hoặc không gọi được thì gọi 111 \(Anh\)/gu, "; không gọi được thì đến cơ sở y tế gần nhất"],
   // "(NHS)", "(theo CDC)", "(NHS, CDC)" — chú thích nguồn trong ngoặc; "(NHS Anh nêu 11h–15h)" → "(11h–15h)"
   [new RegExp(`\\s*\\((?:theo |nguồn:? )?${PUBS}\\)`, "gu"), ""],
   [new RegExp(`\\((?:theo )?${PUBS} ${CUE} `, "gu"), "("],
@@ -122,4 +127,39 @@ export function asksSource(text: string): boolean {
 export function sourceSay(src: string): string {
   const items = src.split("\n").map((l) => l.replace(/^📚 Nguồn\s*[:—-]\s*/u, "").trim()).filter(Boolean);
   return [`Phần Lomi vừa nói dựa trên:`, items.map((x) => `• ${x}`).join("\n")].join("\n\n");
+}
+
+// 30/10 — Kir: "coi lại hết mấy chỗ lặp lại trong 1 câu" — thẻ gộp nhiều nguồn nên có câu gần như trùng nhau
+// ("Trẻ dưới 2 tuổi cần bác sĩ kê đơn." … "Trẻ dưới 2 tuổi cần bác sĩ kê thuốc."). Bỏ câu sau nếu gần trùng một câu trước đó.
+const SENT_TOKS = (x: string) => new Set(normalizeVi(x.replace(/\*\*|[^\p{L}\p{N}\s]/gu, " ")).split(/\s+/).filter((w) => w.length > 1));
+const jacc = (a: Set<string>, b: Set<string>) => { let i = 0; for (const x of a) if (b.has(x)) i++; return i / (a.size + b.size - i || 1); };
+/** Câu `x` đã được nói (gần như nguyên ý) trong `seen` chưa — `x` gồm phần lớn chữ của một câu trong đó. */
+export function saidBefore(x: string, seen: string): boolean {
+  const t = SENT_TOKS(x);
+  if (t.size < 4) return false;
+  return seen.split(/\n+|(?<=[.;!?])\s+/u).some((s) => { const u = SENT_TOKS(s); let i = 0; for (const w of t) if (u.has(w)) i++; return u.size >= 4 && i / t.size >= 0.75; });
+}
+export function dropRepeats(text: string): string {
+  // Chữ phủ định / con số khác nhau thì KHÔNG coi là trùng ("nên ăn X" ≠ "không nên ăn X", "dưới 2 tuổi" ≠ "dưới 6 tuổi").
+  const NEG = new Set(["khong", "dung", "tranh", "chua", "chang", "cam"]);
+  const sig = (x: string) => `${[...SENT_TOKS(x)].filter((w) => NEG.has(w)).sort().join(",")}|${(x.match(/\d+/g) ?? []).join(",")}`;
+  const seen: { t: Set<string>; g: string }[] = [];
+  const out: string[] = [];
+  for (const line of text.split("\n")) {
+    const m = line.match(/^(\s*(?:• |- |\d+\. )?)(.*)$/u)!;
+    // chỉ bỏ câu trong các ý gạch đầu dòng; dòng tóm tắt ("🚫 Nên tránh: …") là khung trả lời, giữ nguyên
+    const bullet = !!m[1].trim();
+    const parts = m[2].split(/(?<=[.;!?])\s+(?=\p{Lu})/u);
+    const keep = parts.filter((p) => {
+      const t = SENT_TOKS(p);
+      const g = sig(p);
+      const dup = bullet && t.size >= 5 && seen.some((u) => u.g === g && (jacc(u.t, t) >= 0.7 || [...t].filter((w) => u.t.has(w)).length / t.size >= 0.85));
+      if (dup) return false;
+      for (const c of p.split(/[.;—]\s*/u)) if (SENT_TOKS(c).size >= 4) seen.push({ t: SENT_TOKS(c), g: sig(c) });
+      return true;
+    });
+    if (!keep.length && parts.length) continue;
+    out.push(m[1] + keep.join(" "));
+  }
+  return out.join("\n");
 }

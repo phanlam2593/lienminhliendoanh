@@ -360,15 +360,15 @@ export const LABS: LabDef[] = [
       if (ng || nm) {
         const x = ng ? v * 2.5 : v;
         const lv = cls(x);
-        return { level: lv, line: `Vitamin D **${fmt(v, 1)} ${ng ? "ng/mL" : "nmol/L"}**${ng ? ` (≈ ${fmt(x, 0)} nmol/L)` : ""}: ${say(x)} (NIH ODS).`, src: ["vitd"], cards: lv === "low" ? ["thieu-vitamin-d"] : undefined };
+        return { level: lv, line: `Vitamin D **${fmt(v, 1)} ${ng ? "ng/mL" : "nmol/L"}**${ng ? ` (≈ ${fmt(x, 0)} nmol/L)` : ""}: ${say(x)}.`, src: ["vitd"], cards: lv === "low" ? ["thieu-vitamin-d"] : undefined };
       }
       // không ghi đơn vị: ng/mL và nmol/L lệch nhau 2,5 lần → nói cả hai cách đọc
       const a = cls(v * 2.5), b = cls(v);
-      if (a === b) return { level: a, line: `Vitamin D **${fmt(v, 1)}**: dù phiếu ghi ng/mL hay nmol/L thì đều ${say(v * 2.5).split(" — ")[1] ?? say(v)} (NIH ODS).`, src: ["vitd"], cards: a === "low" ? ["thieu-vitamin-d"] : undefined };
-      return { level: a === "ok" || b === "ok" ? "ok" : a, line: `Vitamin D **${fmt(v, 1)}** — phiếu ghi đơn vị nào? Nếu là **ng/mL** (≈ ${fmt(v * 2.5, 0)} nmol/L) thì ${say(v * 2.5)}; nếu là **nmol/L** thì ${say(v)} (NIH ODS).`, src: ["vitd"], cards: a === "low" || b === "low" ? ["thieu-vitamin-d"] : undefined };
+      if (a === b) return { level: a, line: `Vitamin D **${fmt(v, 1)}**: dù phiếu ghi ng/mL hay nmol/L thì đều ${say(v * 2.5).split(" — ")[1] ?? say(v)}.`, src: ["vitd"], cards: a === "low" ? ["thieu-vitamin-d"] : undefined };
+      return { level: a === "ok" || b === "ok" ? "ok" : a, line: `Vitamin D **${fmt(v, 1)}** — phiếu ghi đơn vị nào? Nếu là **ng/mL** (≈ ${fmt(v * 2.5, 0)} nmol/L) thì ${say(v * 2.5)}; nếu là **nmol/L** thì ${say(v)}.`, src: ["vitd"], cards: a === "low" || b === "low" ? ["thieu-vitamin-d"] : undefined };
     },
-    low: { means: "Vitamin D dưới 30 nmol/L (12 ng/mL) là quá thấp, có thể làm xương yếu (NIH ODS). Rất ít thực phẩm tự nhiên có vitamin D: cá béo, dầu gan cá, ít hơn ở gan bò, lòng đỏ trứng, phô mai, nấm phơi nắng; sữa / ngũ cốc có bổ sung. Da tự tạo vitamin D khi phơi nắng (kính cửa sổ chặn tia nắng này).", cards: ["thieu-vitamin-d"], src: ["vitd"] },
-    high: { means: "Vitamin D trên 125 nmol/L (50 ng/mL) là quá cao, trên 375 nmol/L có thể gây hại nghiêm trọng — thường do uống viên bổ sung nhiều; phơi nắng không gây thừa vitamin D (NIH ODS).", src: ["vitd"] },
+    low: { means: "Vitamin D dưới 30 nmol/L (12 ng/mL) là quá thấp, có thể làm xương yếu. Rất ít thực phẩm tự nhiên có vitamin D: cá béo, dầu gan cá, ít hơn ở gan bò, lòng đỏ trứng, phô mai, nấm phơi nắng; sữa / ngũ cốc có bổ sung. Da tự tạo vitamin D khi phơi nắng (kính cửa sổ chặn tia nắng này).", cards: ["thieu-vitamin-d"], src: ["vitd"] },
+    high: { means: "Vitamin D trên 125 nmol/L (50 ng/mL) là quá cao, trên 375 nmol/L có thể gây hại nghiêm trọng — thường do uống viên bổ sung nhiều; phơi nắng không gây thừa vitamin D.", src: ["vitd"] },
   },
 ];
 
