@@ -72,8 +72,8 @@ export function Logo({
   asLink?: boolean;
 }) {
   const { t } = useLanguage();
-  // (31/10) Khẩu hiệu luôn nằm dưới chữ iLomi, kể cả trên thanh đầu trang.
-  const showTagline = withText && (withTagline ?? true);
+  // (31/10, Kir) Thanh đầu trang KHÔNG kèm khẩu hiệu — trang chủ đã có dòng "Một cộng đồng – Nhiều giá trị", để thì bị trùng.
+  const showTagline = withText && (withTagline ?? false);
   const appName = t("app.name");
 
   const content = (
