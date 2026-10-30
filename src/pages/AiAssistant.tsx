@@ -53,6 +53,7 @@ import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
+import { nutrientOf, nutrientReply } from "@/lib/lomiNutrients";
 import { honestReply } from "@/lib/lomiHonest";
 import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
 import { v5Reply } from "@/lib/lomiV5";
@@ -737,6 +738,7 @@ export function AiChat({
   // 10/10: "thoái hóa cột sống ăn gì", "viêm xoang kiêng gì" — câu nêu một bệnh / tình trạng (kể cả bệnh chưa có trong kho) là hỏi
   // ăn uống theo bệnh, không phải nhờ gợi ý quán.
   const illMeal = (x: string) => VN(/\b(bệnh|thoái hoá|viêm|suy|ung thư|hội chứng|rối loạn|đau|mỡ máu|tiểu đường|huyết áp|sau mổ|mang thai|có bầu|bà bầu|kiêng|chữa bệnh|chữa trị)\b/).test(normalizeVi(x));
+  // (30/10: "ăn gì bổ sung sắt", "ăn gì nhiều kẽm" là hỏi vi chất — lib/lomiNutrients — không phải nhờ gợi ý món.)
   // ── Hôm nay ăn gì / uống gì (01/10): gợi ý món → chọn món → tìm quán có món đó ──
   const replyDishes = (asked: string, drink: boolean, avoid: string[] = []) => {
     topicHit(drink ? "drink" : "food");
@@ -1604,7 +1606,7 @@ export function AiChat({
         const sickMeal = th0?.kind === "care" && (th0.idle ?? 0) < 2 && VN(/\b(nên|cho .{1,15} ăn|kiêng|được ăn)\b/).test(normalizeVi(q));
         // ("thiếu vitamin D nên ăn gì", "gout nên ăn gì" — nêu một bệnh / tình trạng có trong kho kiến thức thì là hỏi ăn uống theo bệnh.)
         // (23/10: nêu một nơi — "ở Nha Trang ăn gì ngon" — thì tìm quán ở đúng nơi đó, không gợi món theo giờ ở đây)
-        if (ei?.intent === "food_suggest" && !sickMeal && !findMedId(q) && !illMeal(q) && !detectPlace(q)) return replyDishes(q, ei.drink);
+        if (ei?.intent === "food_suggest" && !sickMeal && !findMedId(q) && !illMeal(q) && !nutrientOf(q) && !detectPlace(q)) return replyDishes(q, ei.drink);
         // Vừa hỏi khẩu vị cho một món → câu trả lời khẩu vị ngắn ("nhiều phô mai") → tìm quán món đó.
         //     (Câu tự nói rõ một loại chỗ khác — "quán nào gần đây có spa?" — thì không phải trả lời khẩu vị.)
         //     (Nhắc lại chính món đó kèm kiểu — "lẩu thái" khi đang hỏi khẩu vị lẩu — cũng là câu trả lời khẩu vị.)
@@ -1665,6 +1667,24 @@ export function AiChat({
           if (f1) {
             topicHit("health");
             return localReply(q, { role: "assistant", content: f1, local: true, health: hCtx ?? {}, sx: inTalk ? lastA?.sx : undefined });
+          }
+        }
+        // 30/10 — VITAMIN · KHOÁNG CHẤT (lib/lomiNutrients): "bị cảm nên uống vitamin gì", "thiếu máu nên bổ sung gì",
+        //   "kẽm có trong món gì", "hải sản có nhiều kẽm không" → chất nào nguồn có nêu cho bệnh đó · ăn từ đâu · lưu ý (có nguồn, không nêu liều).
+        //   Bệnh mà nguồn không nêu chất nào → nói thật. Câu có dấu hiệu cấp cứu thì để mạch triệu chứng.
+        if (!bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) {
+          const nuId = findMedId(q);
+          const nuMt = nuId ? await loadMedTopic(nuId) : null;
+          const nu = nutrientReply(q, nuMt ? { id: nuMt.id, name: medName(nuMt) } : null);
+          if (nu) {
+            topicHit("health");
+            return localReply(q, {
+              role: "assistant",
+              content: nu,
+              local: true,
+              health: hCtx ?? {},
+              ...(nuMt ? { med: { id: nuMt.id, aspect: "diet" } } : {}),
+            });
           }
         }
         // 20/10 — MẸO DÂN GIAN · THUỐC NAM · THUỐC BẮC (lib/lomiFolk): "lá tía tô có tác dụng gì", "cháo cóc có tốt không",
@@ -2134,7 +2154,7 @@ export function AiChat({
     if (!forceAi && !en && !gateSkip && !bizOpening && !tellMe && !appFeat) {
       const it = detectSearch(q);
       // "Hôm nay ăn gì / uống gì" → gợi ý món trước (chọn món rồi mới tìm quán).
-      if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q) && !illMeal(q)) return replyDishes(q, it.mode === "drink");
+      if (it && (it.mode === "eat" || it.mode === "drink") && !detectDish(q) && !illMeal(q) && !nutrientOf(q)) return replyDishes(q, it.mode === "drink");
       // Hỏi thẳng một món ("quán phở nào ngon", "muốn ăn lẩu") → tìm quán có món đó luôn.
       if (it && it.mode !== "go") {
         const d = detectDish(q);

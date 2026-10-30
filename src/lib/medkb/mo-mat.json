@@ -1,0 +1,89 @@
+{
+  "id": "mo-mat",
+  "kind": "condition",
+  "names": [
+    "mờ mắt",
+    "nhìn mờ",
+    "mắt mờ",
+    "mắt nhìn mờ",
+    "nhìn không rõ",
+    "nhìn mờ mờ",
+    "bị mờ mắt",
+    "mắt kém",
+    "giảm thị lực",
+    "blurred vision",
+    "blurry vision",
+    "vision loss"
+  ],
+  "about": [
+    {
+      "text": "Mờ mắt là triệu chứng, không phải một bệnh: có thể chỉ do tật khúc xạ (cận, viễn, loạn, lão thị) hay mỏi mắt, nhưng cũng có thể là dấu hiệu bệnh mắt hoặc bệnh thần kinh cần khám.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Hay gặp: tật khúc xạ, mỏi mắt, tác dụng phụ của thuốc, bụi vào mắt, kính áp tròng lệch; viêm kết mạc, trầy giác mạc.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Bệnh mắt gây mờ dần: **đục thuỷ tinh thể** (mờ, đục như sương), **glôcôm** (tăng nhãn áp), **thoái hoá hoàng điểm** (méo, mờ vùng giữa), **bệnh võng mạc do tiểu đường**.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Đau nửa đầu (migraine) có thể kèm nhìn mờ, sợ ánh sáng, buồn nôn. Hiếm hơn: đột quỵ, đa xơ cứng, xuất huyết não.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Mờ dần, không đau → đi **khám mắt / đo thị lực** sớm; phát hiện và điều trị sớm có thể giúp thị lực không xấu đi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám **trong ngày** nếu: thị lực thay đổi (mờ, nhìn đôi, thấy chớp sáng, đốm đen), có bóng tối di chuyển che tầm nhìn, đau mắt, mắt đỏ đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Gọi **115** / tới cấp cứu ngay nếu: **đột ngột không nhìn thấy** một hoặc hai mắt, đau mắt dữ dội; hoặc mờ mắt kèm **méo miệng, yếu tay chân, nói khó, đau đầu dữ dội** (có thể là đột quỵ). Đừng tự lái xe.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Vision loss",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/vision-loss/",
+      "reviewed": "2025-08-28"
+    },
+    {
+      "title": "What causes blurred vision?",
+      "publisher": "Moorfields Eye Hospital (NHS, Anh)",
+      "url": "https://moorfields.nhs.uk/private/about-moorfields-private/blog-articles/what-causes-blurred-vision"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -172,4 +172,22 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["con chó mất rồi"])).content).toMatch(/mất|thương/);
     expect((await last(["mang thai ăn gì an toàn"])).content).not.toMatch(/xyanua/);
   }, T);
+  // Kir: "từng bệnh e xem nên bổ sung vitamin gì… kẽm, hải sản nhiều kẽm… viêm gan, sốt siêu vi, mờ mắt, huyết áp, đột quỵ, tiền đình".
+  it("Vitamin · khoáng chất theo bệnh và theo chất; bệnh mới", async () => {
+    const CASES: [string, RegExp][] = [
+      ["bị cảm nên uống vitamin gì", /Kẽm/],
+      ["bị thiếu máu nên bổ sung gì", /hấp thu sắt/],
+      ["hải sản có nhiều kẽm không", /Hàu/],
+      ["ăn gì bổ sung sắt", /Thịt đỏ/],
+      ["bà bầu nên uống vitamin gì", /axit folic/],
+      ["viêm gan B nên uống vitamin gì", /chưa nêu vitamin/],
+      ["bị sởi uống vitamin A được không", /không phòng được sởi/],
+    ];
+    for (const [q, re] of CASES) expect((await last([q])).content, q).toMatch(re);
+    expect((await last(["sốt siêu vi"])).med?.id).toBe("sot");
+    expect((await last(["mờ mắt"])).med?.id).toBe("mo-mat");
+    expect((await last(["viêm gan E"])).med?.id).toBe("viem-gan-e");
+    expect((await last(["bị tiền đình"])).med?.id).toBe("roi-loan-tien-dinh");
+    expect((await last(["bà bầu uống axit folic khi nào"])).content).not.toMatch(/ngộ độc|115/);
+  }, T);
 });

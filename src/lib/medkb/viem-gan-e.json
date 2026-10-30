@@ -1,0 +1,100 @@
+{
+  "id": "viem-gan-e",
+  "kind": "infection",
+  "names": [
+    "viêm gan E",
+    "viêm gan siêu vi E",
+    "viêm gan virus E",
+    "viêm gan vi rút E",
+    "HEV",
+    "hepatitis E",
+    "hep E"
+  ],
+  "about": [
+    {
+      "text": "Viêm gan E là nhiễm virus ở gan, lây chủ yếu qua **đồ ăn, nước uống**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Một số chủng lây qua nước, đồ ăn bẩn (hay gặp ở châu Á, châu Phi); chủng khác lây do ăn **thịt heo, sò ốc sống hoặc chưa chín**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Nhiều người không có triệu chứng. Có thể sốt nhẹ, buồn nôn, nôn, đau bụng, **vàng da**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [],
+  "course": [
+    {
+      "text": "Phần lớn **tự khỏi**, không cần điều trị; nặng hoặc kéo dài thì có thuốc kháng virus.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "**Phụ nữ mang thai** và người có bệnh gan mạn có thể bệnh rất nặng, suy gan.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Phòng bệnh: ăn chín uống sôi — nấu **chín kỹ thịt heo, sò ốc**; uống nước sạch; rửa tay sạch sẽ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hiện chưa có vắc xin viêm gan E dùng rộng rãi (ở Anh không có).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Tránh thịt heo, sò ốc sống hoặc chưa chín; tránh nước uống không rõ nguồn.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Vàng da, vàng mắt, nước tiểu sẫm, phân bạc màu → đi khám sớm; **bà bầu** có dấu hiệu này thì đi khám ngay.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Hepatitis E",
+      "publisher": "fitfortravel – NHS Scotland (Anh)",
+      "url": "https://www.fitfortravel.nhs.uk/advice/disease-prevention-advice/hepatitis-e"
+    },
+    {
+      "title": "Hepatitis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/hepatitis/",
+      "reviewed": "2025-12-31"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}
