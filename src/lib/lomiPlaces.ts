@@ -91,7 +91,7 @@ export function detectPlace(text: string): Place | undefined {
 /** Câu trả lời khi app CHƯA có chỗ nào ở nơi người dùng hỏi — nói thật + vài điểm nổi tiếng (nếu có). */
 export function noPlaceText(p: Place, what: "go" | "find", noun = "chỗ"): string {
   const head = what === "go"
-    ? `Trong Liên Minh Liên Doanh hiện chưa có chỗ nào ở **${p.label}** để Lomi gợi ý ưu đãi 🥲`
+    ? `Trong iLomi hiện chưa có chỗ nào ở **${p.label}** để Lomi gợi ý ưu đãi 🥲`
     : `Lomi chưa thấy ${noun} nào ở **${p.label}** trong app nè 🥲`;
   const sights = what === "go" && p.sights?.length ? `\n\nNhưng đi ${p.label} thì mấy điểm nổi tiếng này đáng ghé nè:\n${p.sights.map((s) => `• ${s}`).join("\n")}` : "";
   return `${head}${sights}\n\n${what === "go" && p.sights?.length ? "Giờ mở cửa, giá vé thay đổi theo mùa nên bạn kiểm tra lại trước khi đi nha. " : ""}Khi có doanh nghiệp ở ${p.label} tham gia app, Lomi sẽ gợi ý được chỗ có ưu đãi cho bạn.`;

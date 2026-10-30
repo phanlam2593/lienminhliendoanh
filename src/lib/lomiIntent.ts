@@ -47,7 +47,7 @@ const CAP_TEXT: Record<CapDomain, string> = {
     "Được chứ 😄 Lomi hỗ trợ được các câu hỏi sức khoẻ phổ thông: giải thích triệu chứng, thuốc, xét nghiệm ở mức tham khảo, và giúp nhận biết khi nào nên đi khám hay gọi 115. Lomi không thay bác sĩ, không chẩn đoán và không đưa liều thuốc cho từng người nha. Bạn muốn hỏi chuyện gì về sức khoẻ nè?",
   heart: "Được nè 😊 Lomi nghe bạn tâm sự chuyện tình cảm, gia đình, công việc, và góp vài góc nhìn nếu bạn muốn. Lomi không phải chuyên gia tâm lý, chuyện nặng thì Lomi sẽ gợi ý tìm người hỗ trợ. Bạn muốn kể chuyện gì?",
   biz: "Được chứ 😄 Lomi gợi ý được cách hút khách, giữ khách quen, làm ưu đãi, đặt giá, viết bài đăng cho cửa hàng của bạn. Bạn đang kinh doanh gì nè?",
-  food: "Được nè 😋 Lomi gợi ý món ăn và tìm quán thật trong Liên Minh Liên Doanh cho bạn. Bạn đang thèm món gì, hay để Lomi bốc một món?",
+  food: "Được nè 😋 Lomi gợi ý món ăn và tìm quán thật trong iLomi cho bạn. Bạn đang thèm món gì, hay để Lomi bốc một món?",
 };
 
 /** "Lomi có tư vấn sức khoẻ không?", "có hỏi về thuốc được không?" → khả năng của Lomi. */

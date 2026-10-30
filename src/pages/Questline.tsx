@@ -923,7 +923,7 @@ const QUESTS: Quest[] = [
     category: "Cập nhật phiên 31/07",
     title: "Tên 'Lomi' trên màn hình chính",
     action: "Gỡ và cài lại app vào màn hình chính điện thoại.",
-    expect: "Tên dưới icon là 'Lomi', mở app vào bên trong vẫn thấy 'Liên Minh Liên Doanh' như cũ.",
+    expect: "Tên dưới icon là 'iLomi', mở app vào bên trong cũng thấy 'iLomi'.",
   },
 
   // ===== Rủi ro dự đoán (dựa trên pattern bug đã gặp) =====

@@ -1,7 +1,7 @@
-# Project Rules — Liên Minh Liên Doanh
+# Project Rules — iLomi
 
 ## Bất biến (không bao giờ vi phạm)
-1. Tên app luôn là "Liên Minh Liên Doanh" — không đổi, không viết tắt, không dịch, ở bất kỳ đâu (code, UI, metadata, docs).
+1. Tên app luôn là "iLomi" (đổi từ "Liên Minh Liên Doanh" ngày 30/10/2026 theo yêu cầu của Kir) — không đổi, không viết tắt, không dịch, ở bất kỳ đâu (code, UI, metadata, docs). Khẩu hiệu "Một cộng đồng – Nhiều giá trị" giữ nguyên.
 2. 8 loại hình doanh nghiệp là cố định (food, service, stay, travel, creator, freelance, broker, other) — không thêm, bớt, đổi tên key hay label.
 3. Không bật lại auto-approve cho business hoặc member — admin duyệt tay.
 4. Không đổi cơ chế auth username+password / email giả @lienminh.local.

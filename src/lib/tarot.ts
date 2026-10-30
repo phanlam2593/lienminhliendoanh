@@ -1662,7 +1662,7 @@ const INTENTS: Intent[] = [
     ask: "việc kinh doanh có phát triển không",
     lean: DIRECTION,
     intro: ["Để Lomi xem vận làm ăn của chỗ bạn đang lên hay đang lắng nha 📈", "Lomi xáo bài cầu cho chỗ bạn đông khách nè 🧧"],
-    outro: ["Khách quen là vốn quý nhất — giữ được một khách quen còn hơn kéo mười khách lạ 💚", "Muốn đông khách thì đăng ưu đãi trên Liên Minh Liên Doanh thử xem, Lomi giúp nghĩ ý tưởng cho nè 😉"],
+    outro: ["Khách quen là vốn quý nhất — giữ được một khách quen còn hơn kéo mười khách lạ 💚", "Muốn đông khách thì đăng ưu đãi trên iLomi thử xem, Lomi giúp nghĩ ý tưởng cho nè 😉"],
     next: ["Tư vấn ưu đãi cho chỗ mình", "Bói tiếp: tài chính vài tháng tới thế nào"],
   },
   {

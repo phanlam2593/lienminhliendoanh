@@ -308,5 +308,12 @@ describe("30/10 — trả lời qua khung chat", () => {
     const a3 = (await last(["cảm lạnh nên làm gì"])).content;
     expect(a3.match(/vitamin C/g)?.length ?? 0).toBe(1);
   }, T);
+  it("Đổi tên app thành iLomi (31/10)", async () => {
+    for (const q of ["ilomi là gì", "app này để làm gì", "liên minh liên doanh là gì"]) {
+      const a = (await last([q])).content;
+      expect(a, q).toMatch(/iLomi là cộng đồng/);
+      expect(a, q).not.toMatch(/Liên Minh Liên Doanh/);
+    }
+  }, T);
 });
 

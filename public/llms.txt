@@ -1,8 +1,8 @@
-# Liên Minh Liên Doanh
+# iLomi
 
 > Nền tảng kết nối doanh nghiệp và hội viên: khám phá doanh nghiệp, nhận ưu đãi, đánh giá và gửi đề xuất.
 
-Liên Minh Liên Doanh là cộng đồng kết nối các doanh nghiệp thành viên với hội viên. Người dùng có thể khám phá doanh nghiệp, đọc đánh giá, nhận mã ưu đãi và đề xuất doanh nghiệp mới.
+iLomi là cộng đồng kết nối các doanh nghiệp thành viên với hội viên. Người dùng có thể khám phá doanh nghiệp, đọc đánh giá, nhận mã ưu đãi và đề xuất doanh nghiệp mới.
 
 ## Pages
 

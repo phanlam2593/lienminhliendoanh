@@ -27,7 +27,7 @@ function getLocation(address?: string | null): string | null {
   return parts.length ? parts[parts.length - 1] : null;
 }
 
-// DO NOT CHANGE: app name is "Liên Minh Liên Doanh"
+// DO NOT CHANGE: app name is "iLomi"
 export default function Home() {
   const { user } = useAuth();
   const { t } = useLanguage();

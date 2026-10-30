@@ -5,7 +5,7 @@ import { z } from "zod";
 export default defineTool({
   name: "list_offers",
   title: "Danh sách ưu đãi",
-  description: "Trả về các ưu đãi đang hoạt động trong cộng đồng Liên Minh Liên Doanh.",
+  description: "Trả về các ưu đãi đang hoạt động trong cộng đồng iLomi.",
   inputSchema: {
     business_id: z.string().uuid().optional().describe("Lọc theo ID doanh nghiệp (tùy chọn)"),
     limit: z.number().int().min(1).max(50).default(20),

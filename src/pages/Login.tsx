@@ -55,7 +55,7 @@ export default function Login() {
         <div className="text-center space-y-3 flex flex-col items-center">
           <Logo size={64} asLink />
           <h1 className="text-2xl font-bold">{t("common.login")}</h1>
-          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — t("app.name") tự đổi theo ngôn ngữ */}
+          {/* DO NOT CHANGE: app name is "iLomi" — t("app.name") tự đổi theo ngôn ngữ */}
           <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
             {t("app.name")}
           </Link>

@@ -9,13 +9,13 @@
     "server": {
       "name": "lien-minh-lien-doanh-mcp",
       "version": "0.1.0",
-      "title": "Liên Minh Liên Doanh"
+      "title": "iLomi"
     },
     "tools": [
       {
         "name": "list_businesses",
         "title": "Danh sách doanh nghiệp",
-        "description": "Trả về danh sách doanh nghiệp đã được duyệt trong cộng đồng Liên Minh Liên Doanh. Có thể lọc theo loại hình.",
+        "description": "Trả về danh sách doanh nghiệp đã được duyệt trong cộng đồng iLomi. Có thể lọc theo loại hình.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -83,7 +83,7 @@
       {
         "name": "list_offers",
         "title": "Danh sách ưu đãi",
-        "description": "Trả về các ưu đãi đang hoạt động trong cộng đồng Liên Minh Liên Doanh.",
+        "description": "Trả về các ưu đãi đang hoạt động trong cộng đồng iLomi.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -112,7 +112,7 @@
       {
         "name": "community_stats",
         "title": "Thống kê cộng đồng",
-        "description": "Trả về số lượng thành viên, doanh nghiệp và ưu đãi đang hoạt động của Liên Minh Liên Doanh.",
+        "description": "Trả về số lượng thành viên, doanh nghiệp và ưu đãi đang hoạt động của iLomi.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,

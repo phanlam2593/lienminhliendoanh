@@ -167,7 +167,7 @@ export const EVENTS: Ev[] = [
     advice: [
       "Liên hệ ngân hàng ngay để báo giao dịch lừa đảo.",
       "Chụp lại toàn bộ bằng chứng và trình báo công an nơi gần nhất.",
-      "Nếu người đó dùng Liên Minh Liên Doanh, bấm Báo cáo trên hồ sơ họ để Ban quản trị xử lý.",
+      "Nếu người đó dùng iLomi, bấm Báo cáo trên hồ sơ họ để Ban quản trị xử lý.",
       "Tuyệt đối đừng chuyển thêm tiền dù họ hứa “hoàn tiền” hay “lấy lại giúp”.",
     ],
   },

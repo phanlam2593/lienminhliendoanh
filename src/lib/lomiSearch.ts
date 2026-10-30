@@ -354,7 +354,7 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
   const at = it.area ? ` ${/(^| )ở$/u.test(noun) ? "tại" : "ở"} ${it.area}` : ""; // ("chỗ ở tại Đà Lạt", không "chỗ ở ở Đà Lạt")
   const intro = pick([
     `Lomi tìm được mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} nè (${how}) 👇`,
-    `Có ngay đây! Mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} trong Liên Minh Liên Doanh (${how}):`,
+    `Có ngay đây! Mấy ${noun}${at}${it.offer ? " đang có ưu đãi" : ""} trong iLomi (${how}):`,
   ]);
   // 23/10: không nêu nơi → nói rõ đang lấy ở đâu (gần bạn / chỗ gần nhất ở xa / cả nước), để không tưởng là chỗ ngay cạnh mình.
   const areas = [...new Set(cards.map((c) => c.area).filter(Boolean))];
@@ -531,7 +531,7 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: Dis
     return {
       text: avoidIds.length
         ? `Lomi hết quán có **${nm}** để gợi ý rồi 😅 Thử mấy quán khác đang có ưu đãi nè 👇`
-        : `Hic, trong Liên Minh Liên Doanh chưa có quán nào ${plc?.area ? `ở ${plc.area} ` : ""}ghi rõ món **${nm}** 🥲 Lomi gợi ý tạm mấy quán ${d.drink ? "nước" : "ăn"}${plc?.area ? ` ở ${plc.area}` : ""} đang có ưu đãi nha 👇`,
+        : `Hic, trong iLomi chưa có quán nào ${plc?.area ? `ở ${plc.area} ` : ""}ghi rõ món **${nm}** 🥲 Lomi gợi ý tạm mấy quán ${d.drink ? "nước" : "ăn"}${plc?.area ? ` ở ${plc.area}` : ""} đang có ưu đãi nha 👇`,
       places: others,
       quick: [d.drink ? "🎲 Đồ uống khác" : "🎲 Món khác"],
     };
@@ -555,7 +555,7 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: Dis
   }
   return {
     text: pick([
-      `Thèm **${nm}** hả, có ngay đây 😋 Mấy quán trong Liên Minh Liên Doanh nè 👇`,
+      `Thèm **${nm}** hả, có ngay đây 😋 Mấy quán trong iLomi nè 👇`,
       `Chuẩn bài luôn! Đi ăn **${nm}** thì ghé mấy chỗ này nha 🤤`,
       `Lomi tìm được mấy quán có **${nm}** nè${pos ? " (gần bạn)" : ""} 👇 Bấm vào thẻ để xem chi tiết và nhận ưu đãi nha!`,
     ]),

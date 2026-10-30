@@ -274,7 +274,7 @@ export default function Register() {
         </div>
         <div className="text-center space-y-2 flex flex-col items-center">
           <Logo size={56} asLink />
-          {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — hiện t("app.name") để đổi theo ngôn ngữ */}
+          {/* DO NOT CHANGE: app name is "iLomi" — hiện t("app.name") để đổi theo ngôn ngữ */}
           <Link to="/" className="text-xs font-semibold text-primary">
             {t("app.name")}
           </Link>
@@ -564,7 +564,7 @@ export default function Register() {
             <DialogTitle>{t("terms.title")}</DialogTitle>
           </DialogHeader>
           <div className="text-sm space-y-2 max-h-60 overflow-y-auto">
-            {/* DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — t("app.name") tự đổi theo ngôn ngữ */}
+            {/* DO NOT CHANGE: app name is "iLomi" — t("app.name") tự đổi theo ngôn ngữ */}
             <p>{t("terms.p1", { app: t("app.name") })}</p>
             <p>{t("terms.p2")}</p>
             <p>{t("terms.p3")}</p>

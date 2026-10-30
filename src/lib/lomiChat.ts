@@ -450,8 +450,8 @@ const RULES: Rule[] = [
     re: VN(/\b(bao nhiêu tuổi|mấy tuổi|là người hay máy|là robot|là ai tạo|ai tạo ra|trai hay gái|lomi ở đâu|lomi sống ở đâu|tên thật)\b/),
     reply: () => ({
       text: pick([
-        "Lomi là trợ lý robot nhỏ của Liên Minh Liên Doanh 🤖🌱 Không có tuổi, không phân trai gái, chỉ có một nhiệm vụ: giúp bạn dùng app vui và tiện hơn!",
-        "Lomi “sống” ngay trong app của bạn nè 😄 Lomi là robot, được tạo ra để giúp mọi người trong cộng đồng Liên Minh Liên Doanh.",
+        "Lomi là trợ lý robot nhỏ của iLomi 🤖🌱 Không có tuổi, không phân trai gái, chỉ có một nhiệm vụ: giúp bạn dùng app vui và tiện hơn!",
+        "Lomi “sống” ngay trong app của bạn nè 😄 Lomi là robot, được tạo ra để giúp mọi người trong cộng đồng iLomi.",
       ]),
     }),
   },
@@ -605,7 +605,7 @@ const RULES: Rule[] = [
   // Lomi tên gì / sở thích
   {
     re: VN(/\b(tên gì|tên là gì|tên bạn là gì|bạn là ai|em là ai|e là ai|lomi là ai)\b/),
-    reply: () => ({ text: pick(["Lomi nè 🤖🌱 Trợ lý nhỏ của Liên Minh Liên Doanh. Còn bạn tên gì nè?", "Mình là Lomi nha 😊 Rất vui được làm quen! Bạn tên gì vậy?"]) }),
+    reply: () => ({ text: pick(["Lomi nè 🤖🌱 Trợ lý nhỏ của iLomi. Còn bạn tên gì nè?", "Mình là Lomi nha 😊 Rất vui được làm quen! Bạn tên gì vậy?"]) }),
   },
   {
     re: VN(/\b(lomi thích gì|bạn thích gì|sở thích|lomi thích ăn gì|lomi có thích)\b/),
@@ -963,13 +963,13 @@ function tarotChipFor(text: string): string {
 // Phạm vi của Lomi (30/09 r6, theo ý Kir): chỉ gói gọn mấy việc này — ngoài phạm vi thì nói thật.
 export const SCOPE_CHIPS = ["🔮 Bói Tarot", "💬 Tâm sự", "🩺 Sức khoẻ", "📱 Hỏi về app"];
 const SCOPE_LINE =
-  "Bạn muốn Lomi giúp chuyện gì nè? 😊 Lomi giỏi mấy việc này: 🔮 Bói Tarot · 💬 Tâm sự, tư vấn tình cảm – tâm lý · 🩺 Sức khoẻ thường gặp · 📱 Cách dùng Liên Minh Liên Doanh (kèm gợi ý quán, tư vấn kinh doanh).";
+  "Bạn muốn Lomi giúp chuyện gì nè? 😊 Lomi giỏi mấy việc này: 🔮 Bói Tarot · 💬 Tâm sự, tư vấn tình cảm – tâm lý · 🩺 Sức khoẻ thường gặp · 📱 Cách dùng iLomi (kèm gợi ý quán, tư vấn kinh doanh).";
 /** Nút phạm vi → câu Lomi hỏi tiếp cho đúng việc. */
 export const SCOPE_CHIP_REPLY: Record<string, string> = {
   "🩺 Sức khoẻ":
     "Bạn đang thấy trong người thế nào nè? 🩺 Kể Lomi nghe các triệu chứng (vd “đau đầu, sổ mũi 2 ngày nay”), hoặc hỏi kiểu “uống cà phê nhiều có sao không” cũng được nha.",
   "📱 Hỏi về app":
-    "Bạn cứ hỏi tự nhiên về Liên Minh Liên Doanh nha 📱 Ví dụ: “làm sao nhận ưu đãi”, “quẹt là gì”, “đặt xe thế nào”, “đăng doanh nghiệp ra sao”, “sao không nhận được thông báo”…",
+    "Bạn cứ hỏi tự nhiên về iLomi nha 📱 Ví dụ: “làm sao nhận ưu đãi”, “quẹt là gì”, “đặt xe thế nào”, “đăng doanh nghiệp ra sao”, “sao không nhận được thông báo”…",
 };
 
 /**

@@ -8,9 +8,9 @@ self.addEventListener("push", (event) => {
   try {
     data = event.data ? event.data.json() : {};
   } catch {
-    data = { title: "Liên Minh Liên Doanh", body: event.data ? event.data.text() : "" };
+    data = { title: "iLomi", body: event.data ? event.data.text() : "" };
   }
-  const title = data.title || "Liên Minh Liên Doanh";
+  const title = data.title || "iLomi";
   const options = {
     body: data.body || "",
     icon: APP_ICON,

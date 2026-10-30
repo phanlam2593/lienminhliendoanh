@@ -36,10 +36,10 @@ const F = (id: string, cat: FaqCat, qvi: string, qen: string, avi: string, aen: 
 
 export const FAQS: Faq[] = [
   // ── Bắt đầu ──
-  F("what", "start", "Liên Minh Liên Doanh là gì?", "What is Liên Minh Liên Doanh?",
-    "Liên Minh Liên Doanh là cộng đồng kết nối thành viên và doanh nghiệp địa phương 🌿\n• Khám phá quán, dịch vụ theo khu vực (/kham-pha)\n• Nhận ưu đãi dành riêng cho thành viên (/uu-dai)\n• Quẹt tìm bạn chơi game, làm quen, việc làm, trao đổi, mua bán (/quet)\n• Đặt xe, giao hàng với tài xế trong cộng đồng (/dua-don)\n• Chat theo khu vực và chủ đề ở Cộng đồng (/cong-dong)\n• Nhắn tin, gọi thoại/video, chat nhóm (/tin-nhan)",
-    "Liên Minh Liên Doanh is a community connecting members and local businesses 🌿\n• Explore places by area (/kham-pha)\n• Claim member-only offers (/uu-dai)\n• Swipe for gamers, friends, jobs, trades (/quet)\n• Rides & deliveries with community drivers (/dua-don)\n• Area/topic chat in Community (/cong-dong)\n• Messages, voice/video calls, group chats (/tin-nhan)",
-    ["app nay la gi", "lien minh lien doanh la gi", "app dung de lam gi", "gioi thieu app", "app co gi", "tinh nang app", "what is this app"]),
+  F("what", "start", "iLomi là gì?", "What is iLomi?",
+    "iLomi là cộng đồng kết nối thành viên và doanh nghiệp địa phương 🌿\n• Khám phá quán, dịch vụ theo khu vực (/kham-pha)\n• Nhận ưu đãi dành riêng cho thành viên (/uu-dai)\n• Quẹt tìm bạn chơi game, làm quen, việc làm, trao đổi, mua bán (/quet)\n• Đặt xe, giao hàng với tài xế trong cộng đồng (/dua-don)\n• Chat theo khu vực và chủ đề ở Cộng đồng (/cong-dong)\n• Nhắn tin, gọi thoại/video, chat nhóm (/tin-nhan)",
+    "iLomi is a community connecting members and local businesses 🌿\n• Explore places by area (/kham-pha)\n• Claim member-only offers (/uu-dai)\n• Swipe for gamers, friends, jobs, trades (/quet)\n• Rides & deliveries with community drivers (/dua-don)\n• Area/topic chat in Community (/cong-dong)\n• Messages, voice/video calls, group chats (/tin-nhan)",
+    ["app nay la gi", "ilomi la gi", "i lomi la gi", "lien minh lien doanh la gi", "app dung de lam gi", "gioi thieu app", "app co gi", "tinh nang app", "what is this app"]),
   F("register", "start", "Đăng ký tài khoản thế nào?", "How do I sign up?",
     "Ở màn hình đầu bấm Tham gia ngay / Đăng ký, rồi điền:\n• Tên đăng nhập (3–20 ký tự: chữ thường, số, dấu _)\n• Họ tên, email, số điện thoại\n• Mật khẩu từ 6 ký tự, có cả chữ và số\n• Ngày sinh (cần đủ 18 tuổi)\nCó doanh nghiệp thì điền luôn thông tin doanh nghiệp ở bước sau. Hoặc bấm “Tiếp tục với Google”, rồi bổ sung tên đăng nhập, SĐT và ngày sinh. Đăng ký xong Ban quản trị sẽ duyệt tài khoản nha.",
     "Tap Join now / Sign up and fill in: username (3–20 chars: lowercase, digits, _), full name, email, phone, a password of 6+ characters with letters and numbers, and your birthday (18+). Business owners can add business info in the next step. Or use “Continue with Google” and then add a username, phone and birthday. Admins then review your account.",
@@ -53,8 +53,8 @@ export const FAQS: Faq[] = [
     "Every new account is reviewed by the admins to keep the community safe — usually quick. While waiting you can still use Profile, Messages and Notifications. You'll be notified once approved 🔔",
     ["cho duyet", "chua duoc duyet", "duyet tai khoan", "pending", "bao lau duoc duyet", "chua duyet", "doi duyet"]),
   F("age", "start", "Dưới 18 tuổi có dùng app được không?", "Can I use the app under 18?",
-    "Chưa được bạn ơi. Liên Minh Liên Doanh dành cho người từ đủ 18 tuổi trở lên. Ngày sinh chỉ dùng để kiểm tra tuổi, không hiển thị công khai.",
-    "Sorry, Liên Minh Liên Doanh is for people aged 18 and over. Your birthday is only used to check age and is never shown publicly.",
+    "Chưa được bạn ơi. iLomi dành cho người từ đủ 18 tuổi trở lên. Ngày sinh chỉ dùng để kiểm tra tuổi, không hiển thị công khai.",
+    "Sorry, iLomi is for people aged 18 and over. Your birthday is only used to check age and is never shown publicly.",
     ["18 tuoi", "du tuoi", "bao nhieu tuoi", "tre em", "hoc sinh", "vi thanh nien", "ngay sinh"]),
   F("free", "start", "Dùng app có mất phí không?", "Is the app free?",
     "Dùng app là miễn phí nha 💚\n• Tài khoản mới được duyệt có 3 tháng Membership miễn phí\n• Đặt xe: tài xế nhận 100% tiền cước, app không thu phí\n• Tip ủng hộ app hoàn toàn tự nguyện\nGói Membership trả phí (49.000đ/tháng) sẽ mở thanh toán sau, app sẽ báo trước.",
@@ -365,8 +365,8 @@ export const FAQS: Faq[] = [
     "Data is only used to run the service and never sold. Your birthday isn't public. See the Privacy Policy at the bottom of Home. Lomi never asks for your password or OTP 🔒",
     ["bao mat", "an toan thong tin", "du lieu ca nhan", "privacy", "rieng tu", "chinh sach"]),
   F("lomi", "account", "Lomi là ai, hỏi Lomi được gì?", "Who is Lomi?",
-    "Mình là Lomi — trợ lý của Liên Minh Liên Doanh 🌱 Mình giỏi mấy việc này:\n• 🔮 Bói Tarot: cứ gõ câu hỏi, vd “bói xem khi nào mình có việc mới”\n• 💬 Tâm sự, tư vấn tình cảm – tâm lý: buồn, áp lực, cãi nhau với người yêu… kể mình nghe nha\n• 🩺 Sức khoẻ thường gặp: kể triệu chứng, mình gợi ý nên làm gì, kiêng gì, khám khoa nào\n• 📱 Cách dùng app, gợi ý quán ăn, tư vấn kinh doanh\nTất cả đều miễn phí nha! Kéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng 😄",
-    "I'm Lomi, the Liên Minh Liên Doanh assistant 🌱 Tarot readings, a listening ear (love & wellbeing), common health tips, and help with the app — all free! Drag me anywhere; drop me at the edge to hide 😄",
+    "Mình là Lomi — trợ lý của iLomi 🌱 Mình giỏi mấy việc này:\n• 🔮 Bói Tarot: cứ gõ câu hỏi, vd “bói xem khi nào mình có việc mới”\n• 💬 Tâm sự, tư vấn tình cảm – tâm lý: buồn, áp lực, cãi nhau với người yêu… kể mình nghe nha\n• 🩺 Sức khoẻ thường gặp: kể triệu chứng, mình gợi ý nên làm gì, kiêng gì, khám khoa nào\n• 📱 Cách dùng app, gợi ý quán ăn, tư vấn kinh doanh\nTất cả đều miễn phí nha! Kéo mình đi đâu cũng được, thả sát mép thì mình nấp cho đỡ vướng 😄",
+    "I'm Lomi, the iLomi assistant 🌱 Tarot readings, a listening ear (love & wellbeing), common health tips, and help with the app — all free! Drag me anywhere; drop me at the edge to hide 😄",
     ["lomi la ai", "ban la ai", "tro ly", "hoi duoc gi", "who are you", "lomi lam duoc gi"]),
 ];
 

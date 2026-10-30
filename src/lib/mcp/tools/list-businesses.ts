@@ -8,7 +8,7 @@ export default defineTool({
   name: "list_businesses",
   title: "Danh sách doanh nghiệp",
   description:
-    "Trả về danh sách doanh nghiệp đã được duyệt trong cộng đồng Liên Minh Liên Doanh. Có thể lọc theo loại hình.",
+    "Trả về danh sách doanh nghiệp đã được duyệt trong cộng đồng iLomi. Có thể lọc theo loại hình.",
   inputSchema: {
     type: z.enum(BUSINESS_TYPES).optional().describe("Loại hình doanh nghiệp (tùy chọn)"),
     search: z.string().optional().describe("Từ khóa tìm trong tên doanh nghiệp (tùy chọn)"),

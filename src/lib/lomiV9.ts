@@ -213,7 +213,7 @@ function jokeFollow(q: string, c: V9Ctx): string | null {
 function aboutLomi(q: string): string | null {
   const n = N(q);
   if (VN(/^ (?:(?:em|lomi|bạn|mày|cậu|e)( \S+){0,2} )?(có phải|là) (là )?(người thật|con người|người|robot|máy|bot|chatbot|trí tuệ nhân tạo)( thật)?( không| hả| à| ko| vậy| ha| hông)* $|\b(là người hay (là )?máy|người thật hay (là )?(robot|máy|bot))\b/).test(n))
-    return "Lomi không phải người thật đâu nè 🤖 Lomi là **trợ lý tự động** của Liên Minh Liên Doanh — trả lời theo kiến thức đã được soạn sẵn, chạy ngay trên máy của bạn.\n\nLomi tâm sự, gợi ý về sức khoẻ, tiền bạc, chỉ cách dùng app… được, nhưng chỉ để **tham khảo** — chuyện sức khoẻ, tâm lý nghiêm trọng thì vẫn cần bác sĩ, chuyên gia thật. Nếu muốn gặp người thật trong ban quản trị, bạn liên hệ qua Email / Zalo / Facebook ở mục trợ giúp nha.";
+    return "Lomi không phải người thật đâu nè 🤖 Lomi là **trợ lý tự động** của iLomi — trả lời theo kiến thức đã được soạn sẵn, chạy ngay trên máy của bạn.\n\nLomi tâm sự, gợi ý về sức khoẻ, tiền bạc, chỉ cách dùng app… được, nhưng chỉ để **tham khảo** — chuyện sức khoẻ, tâm lý nghiêm trọng thì vẫn cần bác sĩ, chuyên gia thật. Nếu muốn gặp người thật trong ban quản trị, bạn liên hệ qua Email / Zalo / Facebook ở mục trợ giúp nha.";
   return null;
 }
 

@@ -13,7 +13,7 @@ var BUSINESS_TYPES = ["food", "service", "stay", "travel", "creator", "freelance
 var list_businesses_default = defineTool({
   name: "list_businesses",
   title: "Danh s\xE1ch doanh nghi\u1EC7p",
-  description: "Tr\u1EA3 v\u1EC1 danh s\xE1ch doanh nghi\u1EC7p \u0111\xE3 \u0111\u01B0\u1EE3c duy\u1EC7t trong c\u1ED9ng \u0111\u1ED3ng Li\xEAn Minh Li\xEAn Doanh. C\xF3 th\u1EC3 l\u1ECDc theo lo\u1EA1i h\xECnh.",
+  description: "Tr\u1EA3 v\u1EC1 danh s\xE1ch doanh nghi\u1EC7p \u0111\xE3 \u0111\u01B0\u1EE3c duy\u1EC7t trong c\u1ED9ng \u0111\u1ED3ng iLomi. C\xF3 th\u1EC3 l\u1ECDc theo lo\u1EA1i h\xECnh.",
   inputSchema: {
     type: z.enum(BUSINESS_TYPES).optional().describe("Lo\u1EA1i h\xECnh doanh nghi\u1EC7p (t\xF9y ch\u1ECDn)"),
     search: z.string().optional().describe("T\u1EEB kh\xF3a t\xECm trong t\xEAn doanh nghi\u1EC7p (t\xF9y ch\u1ECDn)"),
@@ -71,7 +71,7 @@ import { z as z3 } from "npm:zod@^4.4.3";
 var list_offers_default = defineTool3({
   name: "list_offers",
   title: "Danh s\xE1ch \u01B0u \u0111\xE3i",
-  description: "Tr\u1EA3 v\u1EC1 c\xE1c \u01B0u \u0111\xE3i \u0111ang ho\u1EA1t \u0111\u1ED9ng trong c\u1ED9ng \u0111\u1ED3ng Li\xEAn Minh Li\xEAn Doanh.",
+  description: "Tr\u1EA3 v\u1EC1 c\xE1c \u01B0u \u0111\xE3i \u0111ang ho\u1EA1t \u0111\u1ED9ng trong c\u1ED9ng \u0111\u1ED3ng iLomi.",
   inputSchema: {
     business_id: z3.string().uuid().optional().describe("L\u1ECDc theo ID doanh nghi\u1EC7p (t\xF9y ch\u1ECDn)"),
     limit: z3.number().int().min(1).max(50).default(20)
@@ -98,7 +98,7 @@ import { createClient as createClient4 } from "npm:@supabase/supabase-js@^2.108.
 var community_stats_default = defineTool4({
   name: "community_stats",
   title: "Th\u1ED1ng k\xEA c\u1ED9ng \u0111\u1ED3ng",
-  description: "Tr\u1EA3 v\u1EC1 s\u1ED1 l\u01B0\u1EE3ng th\xE0nh vi\xEAn, doanh nghi\u1EC7p v\xE0 \u01B0u \u0111\xE3i \u0111ang ho\u1EA1t \u0111\u1ED9ng c\u1EE7a Li\xEAn Minh Li\xEAn Doanh.",
+  description: "Tr\u1EA3 v\u1EC1 s\u1ED1 l\u01B0\u1EE3ng th\xE0nh vi\xEAn, doanh nghi\u1EC7p v\xE0 \u01B0u \u0111\xE3i \u0111ang ho\u1EA1t \u0111\u1ED9ng c\u1EE7a iLomi.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: async () => {
@@ -121,9 +121,9 @@ var community_stats_default = defineTool4({
 // src/lib/mcp/index.ts
 var mcp_default = defineMcp({
   name: "lien-minh-lien-doanh-mcp",
-  title: "Li\xEAn Minh Li\xEAn Doanh",
+  title: "iLomi",
   version: "0.1.0",
-  instructions: "Truy c\u1EADp d\u1EEF li\u1EC7u c\xF4ng khai c\u1EE7a c\u1ED9ng \u0111\u1ED3ng Li\xEAn Minh Li\xEAn Doanh t\u1EA1i \u0110\xE0 L\u1EA1t: danh s\xE1ch doanh nghi\u1EC7p \u0111\xE3 duy\u1EC7t, \u01B0u \u0111\xE3i \u0111ang ho\u1EA1t \u0111\u1ED9ng v\xE0 th\u1ED1ng k\xEA c\u1ED9ng \u0111\u1ED3ng. D\xF9ng list_businesses/get_business \u0111\u1EC3 kh\xE1m ph\xE1 doanh nghi\u1EC7p, list_offers cho \u01B0u \u0111\xE3i, community_stats cho t\u1ED5ng quan.",
+  instructions: "Truy c\u1EADp d\u1EEF li\u1EC7u c\xF4ng khai c\u1EE7a c\u1ED9ng \u0111\u1ED3ng iLomi t\u1EA1i \u0110\xE0 L\u1EA1t: danh s\xE1ch doanh nghi\u1EC7p \u0111\xE3 duy\u1EC7t, \u01B0u \u0111\xE3i \u0111ang ho\u1EA1t \u0111\u1ED9ng v\xE0 th\u1ED1ng k\xEA c\u1ED9ng \u0111\u1ED3ng. D\xF9ng list_businesses/get_business \u0111\u1EC3 kh\xE1m ph\xE1 doanh nghi\u1EC7p, list_offers cho \u01B0u \u0111\xE3i, community_stats cho t\u1ED5ng quan.",
   tools: [list_businesses_default, get_business_default, list_offers_default, community_stats_default]
 });
 

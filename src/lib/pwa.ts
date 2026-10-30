@@ -191,6 +191,16 @@ export function registerPwa() {
 // ===== Install prompt (Add to Home Screen) =====
 const INSTALL_DISMISS_KEY = "lmld:install-dismissed-at";
 let deferredInstallPrompt: any = null;
+// (30/10) Chrome có thể bắn beforeinstallprompt NGAY lúc tải trang — trước khi Layout gắn initInstallPrompt
+// (vd đang ở trang Đăng nhập) → trước đây sự kiện bị lỡ, nút "Cài app" báo "trình duyệt chưa hỗ trợ".
+// Bắt sớm ngay khi module này được nạp (main.tsx import), initInstallPrompt dùng lại.
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e: any) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    window.dispatchEvent(new Event("lmld:install-available"));
+  });
+}
 
 export function isStandalone(): boolean {
   return window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone === true;
@@ -222,12 +232,9 @@ export function initInstallPrompt(onShow: (canPromptNative: boolean) => void) {
 
   // Luôn lắng nghe & lưu deferred prompt — kể cả khi banner tự động đang bị ẩn (do người
   // dùng từng bấm "Để sau") — để nút "Cài app" trong trang Cài đặt vẫn dùng được về sau.
-  window.addEventListener("beforeinstallprompt", (e: any) => {
-    e.preventDefault();
-    deferredInstallPrompt = e;
-    window.dispatchEvent(new Event("lmld:install-available"));
-    void guardedShow(true);
-  });
+  // (sự kiện đã bắt sớm ở trên — đây chỉ hiện banner)
+  if (deferredInstallPrompt) void guardedShow(true);
+  window.addEventListener("beforeinstallprompt", () => void guardedShow(true));
 
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;

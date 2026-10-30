@@ -165,7 +165,7 @@ function canonRequest(q: string, n: string): string | null {
   if (bare(n.match(VR(new RegExp(`^(?:e |em |lomi |oi )*(?:rut|lat|boc|xin|boi|xem) ${FILL} ?${WHO} ?(?:mot |1 |may |vai )?(la bai|la tarot|la|bai|tarot)${POL}`)))))
     return "bói một lá cho hôm nay";
   // Hướng dẫn dùng app
-  if (bare(n.match(VN(/^(?:e |em |lomi |ơi )*(hướng dẫn|chỉ|chỉ cách|dạy|chỉ giúp|hướng dẫn giúp)( \w+){0,2} (xài|dùng|sử dụng|chơi|thao tác) (app|ứng dụng|lomi|liên minh liên doanh)\b/))))
+  if (bare(n.match(VN(/^(?:e |em |lomi |ơi )*(hướng dẫn|chỉ|chỉ cách|dạy|chỉ giúp|hướng dẫn giúp)( \w+){0,2} (xài|dùng|sử dụng|chơi|thao tác) (app|ứng dụng|lomi|ilomi|liên minh liên doanh)\b/))))
     return "hướng dẫn dùng app";
   // Nói chuyện / tâm sự / tư vấn tình cảm
   if (VR(new RegExp(`^(?:e |em |lomi |oi )*(?:noi chuyen|tro chuyen|tam|chat|tam su|ke chuyen|nc) (?:voi|cung) ${WHO}${POL}$`)).test(n))
@@ -503,7 +503,7 @@ const META: [string, RegExp, string[]][] = [
   [
     "dalat_where",
     VN(/\b(đà lạt|dalat)\b.*\b(chơi đâu|đi đâu|ở đâu|ăn gì|ăn đâu|có gì chơi|có gì vui|điểm nào|chỗ nào)\b|\b(chơi đâu|đi đâu|ăn gì)\b.*\b(đà lạt|dalat)\b/),
-    ["Ở Đà Lạt muốn ăn, uống, chơi thì Lomi gợi ý theo các quán trong cộng đồng Liên Minh Liên Doanh nè 🌲 Vào **Khám phá** (/kham-pha) xem theo khu vực, hoặc nói Lomi cụ thể kiểu “tìm quán lẩu”, “cà phê view đẹp”, “homestay” là Lomi tìm liền!"],
+    ["Ở Đà Lạt muốn ăn, uống, chơi thì Lomi gợi ý theo các quán trong cộng đồng iLomi nè 🌲 Vào **Khám phá** (/kham-pha) xem theo khu vực, hoặc nói Lomi cụ thể kiểu “tìm quán lẩu”, “cà phê view đẹp”, “homestay” là Lomi tìm liền!"],
   ],
   [
     // "đi đường cẩn thận nha" — lời chào / dặn dò, không phải câu hỏi.

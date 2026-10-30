@@ -253,7 +253,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
         intent: "ask_link",
         text: "Link app nè: liendoanh.world 🌐 Gửi bạn bè mở bằng trình duyệt trên điện thoại, rồi bấm “Thêm vào màn hình chính” là xài như app luôn. Còn bạn cần link của chỗ nào khác thì nói Lomi nha!",
       };
-    return { intent: "ask_info", text: "Bạn cần thông tin về gì nè? 😊 Một quán / doanh nghiệp, ưu đãi, hay về app Liên Minh Liên Doanh? Nói Lomi nghe là có liền." };
+    return { intent: "ask_info", text: "Bạn cần thông tin về gì nè? 😊 Một quán / doanh nghiệp, ưu đãi, hay về app iLomi? Nói Lomi nghe là có liền." };
   }
   // "để mình check", "mình check thử" — người dùng tự đi kiểm tra; "check giúp mình cái này" — nhờ Lomi xem.
   if (VN(/^(để |cho )?(mình|tôi|tui|em|anh|chị|t|tao|tớ)?( để)? ?(check|kiểm tra|coi|xem) (thử|lại|cái|đã|xíu|chút|tí|ti|sau)( (nha|nhé|nhe|đã|đi|cái|xíu|chút|tí|ti|rồi báo|nghe))*$|^(để |cho )(mình|tôi|tui|em|anh|chị|t|tao|tớ) (check|kiểm tra|coi lại|xem lại)( (nha|nhé|nhe|đã|thử|cái|xíu|chút|tí|ti))*$/).test(n))

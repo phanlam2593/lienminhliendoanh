@@ -536,7 +536,7 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
         kind: "reply",
         keep: true,
         why: "app:sure",
-        reply: { text: `Dạ có thật nha 😊 Lomi chỉ trả lời theo những tính năng đang có trong Liên Minh Liên Doanh — phần “${f.q.vi.replace(/\?$/, "")}” ở trên là đúng cách app đang chạy. Bạn làm theo mà không thấy nút hay bị báo lỗi thì nói Lomi đang kẹt ở bước nào, Lomi chỉ tiếp nha.`, quick: last.quick },
+        reply: { text: `Dạ có thật nha 😊 Lomi chỉ trả lời theo những tính năng đang có trong iLomi — phần “${f.q.vi.replace(/\?$/, "")}” ở trên là đúng cách app đang chạy. Bạn làm theo mà không thấy nút hay bị báo lỗi thì nói Lomi đang kẹt ở bước nào, Lomi chỉ tiếp nha.`, quick: last.quick },
       };
   }
   // 4b) Vừa trả lời một câu về app, giờ hỏi trống "cái đó thì sao?" → không đoán sang câu khác, hỏi đúng ý còn thiếu.

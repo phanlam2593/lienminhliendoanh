@@ -6,7 +6,7 @@ import logo128 from "@/assets/logo-128.png.asset.json";
 import logo256 from "@/assets/logo-256.png.asset.json";
 import logo512 from "@/assets/logo-512.png.asset.json";
 
-// DO NOT CHANGE: app name is "Liên Minh Liên Doanh" — hiện qua t("app.name") để đổi theo ngôn ngữ
+// DO NOT CHANGE: app name is "iLomi" — hiện qua t("app.name") để đổi theo ngôn ngữ
 const BRAND = "#0891b2";
 
 // Responsive srcset — browser picks the smallest variant that satisfies
@@ -67,7 +67,7 @@ export function Logo({
               fontSize: size <= 36 ? 12 : size <= 56 ? 14 : 17,
             }}
           >
-            {appName.toUpperCase()}
+            {appName}
           </div>
           {showTagline && <div className="text-muted-foreground text-[11px] mt-0.5">{t("app.tagline")}</div>}
         </div>

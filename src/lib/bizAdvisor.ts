@@ -176,7 +176,7 @@ const OFFERS: Record<BusinessType, Idea[]> = {
 const TIPS: Record<Exclude<BizTopic, "offer" | "post" | "holiday">, Idea[]> = {
   slow: [
     I("sl1", "Ưu đãi đúng khung vắng", "Chọn đúng khung giờ vắng nhất rồi làm ưu đãi riêng cho khung đó — đừng giảm cả ngày, dễ lỗ."),
-    I("sl2", "Đăng ưu đãi lên app", "Đăng ưu đãi giờ vắng lên Liên Minh Liên Doanh (/uu-dai) để người quanh khu vực thấy ngay."),
+    I("sl2", "Đăng ưu đãi lên app", "Đăng ưu đãi giờ vắng lên iLomi (/uu-dai) để người quanh khu vực thấy ngay."),
     I("sl3", "Lý do để ghé", "Tạo một món/dịch vụ chỉ có trong khung giờ đó — khách sẽ có lý do để đến."),
     I("sl4", "Nhắn khách quen", "Nhắn khách quen kiểu “Sáng nay {n} vắng, ghé mình tặng…”. Khách quen rất dễ quay lại."),
     I("sl5", "Hợp tác với hàng xóm", "Bắt tay với chỗ bên cạnh: khách bên kia mang hoá đơn qua được giảm, và ngược lại."),
@@ -223,7 +223,7 @@ const TIPS: Record<Exclude<BizTopic, "offer" | "post" | "holiday">, Idea[]> = {
   opening: [
     I("op1", "Ưu đãi khai trương có hạn", "Tuần đầu ưu đãi mạnh nhưng chỉ 3–7 ngày để tạo cảm giác “phải đi ngay”."),
     I("op2", "Chạy thử với người quen", "Mời người quen, hàng xóm trải nghiệm trước 1–2 ngày để kịp sửa lỗi."),
-    I("op3", "Đăng ký trên app sớm", "Đăng ký doanh nghiệp trên Liên Minh Liên Doanh sớm để kịp được duyệt trước ngày mở (/ho-so?view=business)."),
+    I("op3", "Đăng ký trên app sớm", "Đăng ký doanh nghiệp trên iLomi sớm để kịp được duyệt trước ngày mở (/ho-so?view=business)."),
     I("op4", "Góc check-in", "Chuẩn bị một góc chụp ảnh đẹp — khách sẽ tự chụp và đăng giúp bạn."),
     I("op5", "Đếm ngược", "Đăng bài đếm ngược 3–5 ngày trước khai trương."),
     I("op6", "Quà cho khách đầu tiên", "Tặng quà nhỏ cho 50 khách đầu tiên."),
@@ -391,7 +391,7 @@ const POSTS: string[] = [
   "Ai đang tìm một {n} dễ thương thì ghé tụi mình nha 🥰\nĐang có ưu đãi “{T}”.\nNhắn tin để giữ chỗ hoặc hỏi thêm nhé!",
   "📣 TIN VUI CHO KHÁCH QUEN\n{N} đang có ưu đãi “{T}”!\nCảm ơn mọi người đã luôn ủng hộ tụi mình 💛",
   "Hôm nay bạn đã tự thưởng cho mình chưa? ✨\n{N} đang có ưu đãi “{T}” — ghé chơi nha!\nHẹn gặp bạn 😊",
-  "🎁 Ưu đãi có hạn: “{T}”\nTheo dõi {n} trên Liên Minh Liên Doanh để không bỏ lỡ ưu đãi tiếp theo nha!",
+  "🎁 Ưu đãi có hạn: “{T}”\nTheo dõi {n} trên iLomi để không bỏ lỡ ưu đãi tiếp theo nha!",
 ];
 const POST_SEEN = "lmld:biz-post-seen";
 
