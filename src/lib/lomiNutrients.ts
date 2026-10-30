@@ -459,6 +459,8 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
     if (!nutrientOf(q) && /\b(bao nhieu calo|bao nhieu kcal|nhieu calo|it calo|bao nhieu duong|nhieu duong khong|co nhieu duong)\b/.test(n) && !med) return renderNoFact("món này");
   }
   const x = nutrientOf(q);
+  // (30/10: "dầu cá có tốt cho mắt không" — bài mẹo dân gian có đúng ngữ cảnh (mắt) nói cụ thể hơn bài chung về chất → để lớp đó trả lời)
+  if (x && findFolk(q)?.ctx) return null;
   // Hỏi MỘT MÓN có chất gì (không nêu tên chất) → bảng món → chất.
   // (câu nêu bệnh mà hỏi "nên uống vitamin gì" → trả lời theo bệnh bên dưới, không theo món)
   if (!x && !(med && SUPP.test(n)) && (FOOD_ASK.test(n) || (!med && FOOD_GOOD.test(n) && !findFolk(q)))) {

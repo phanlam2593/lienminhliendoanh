@@ -284,6 +284,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   const pet = f.subject === "pet";
   // 30/10 (rà câu hiểu lầm): "gà quá đi mất", "cute ghê đi mất" — "… quá đi mất" là câu cảm thán (gà = kém, dở), không phải con vật bị mất.
   if (VN(/\b(quá|lắm|ghê|thiệt|thật) đi mất\b/).test(` ${normalizeVi(f.raw)} `)) return null;
+  // "mắt cá chân bị sưng" — mắt cá là cổ chân, không phải con cá.
+  if (pet && VN(/\bmắt cá\b/).test(` ${normalizeVi(f.raw)} `)) return null;
   // "vợ a đang bầu", "chị e có thai rồi" — tin vui, không phải chuyện ốm.
   // 15/10 (audit): mang thai KÈM triệu chứng ("bà bầu bị sốt", "vợ a mang thai bị đau bụng") không phải tin vui để chúc mừng — để lớp sức khoẻ trả lời.
   if (p.cls === "preg" && person && !f.neg && c.sxOther) return null;

@@ -242,5 +242,22 @@ describe("30/10 — trả lời qua khung chat", () => {
     await yes("Ăn măng đc k?", /luộc nhiều lần/);
     await yes("con 3 tuổi chưa biết nói có sao không", /phần Lomi đã kiểm chứng/);
   }, T);
+  // Kir: "ung thư k nên ăn trứng vịt lộn… cá có omega 3 ăn bổ mắt… bị cảm sốt thì ăn tỏi… mẹo dân gian nhiều lắm".
+  it("Mẹo dân gian đợt 4: kiêng đồ bổ khi ung thư, cá bổ mắt, tỏi trị cảm, tiết canh, ăn cay, bẻ khớp, lò vi sóng", async () => {
+    const CASES: [string, RegExp][] = [
+      ["ung thư có nên ăn trứng vịt lộn không", /bỏ đói/],
+      ["nghe nói ung thư phải nhịn ăn để bỏ đói khối u", /chậm hồi phục/],
+      ["ăn cá có bổ mắt không", /không hơn giả dược/],
+      ["dầu cá có tốt cho mắt không", /AREDS2/],
+      ["bị cảm sốt ăn tỏi có khỏi không", /rất ít bằng chứng/],
+      ["ăn tiết canh có sao không", /liên cầu lợn/],
+      ["ăn cay có bị đau dạ dày không", /H\. pylori/],
+      ["bẻ khớp tay có bị viêm khớp không", /bọt khí/],
+      ["lò vi sóng có gây ung thư không", /nhiễm xạ/],
+      ["mắt cá chân bị sưng", /Phù chân/],
+    ];
+    for (const [q, re] of CASES) expect((await last([q])).content, q).toMatch(re);
+    expect((await last(["mắt cá chân bị sưng"])).content).not.toMatch(/Tội bé|omega/);
+  }, T);
 });
 
