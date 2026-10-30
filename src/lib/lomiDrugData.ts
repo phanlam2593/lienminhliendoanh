@@ -74,6 +74,8 @@ export const TRUSTED = [
   "nih.gov", "cancer.gov", "samhsa.gov", "nice.org.uk", "apa.org", "mayoclinic.org",
   // 20/10: cơ quan trực thuộc Bộ Y tế — Viện Kiểm nghiệm ATVSTP Quốc gia, Viện Dinh dưỡng Quốc gia (lib/lomiFolk: cảnh báo ngộ độc cóc).
   "nifc.gov.vn", "viendinhduong.vn",
+  // 30/10: hai tổ chức ung thư lớn nhất của Anh (thông tin bệnh nhân có ngày rà soát) — thẻ chăm sóc giảm nhẹ (giảm đau, cổ trướng, tắc ruột, ăn uống).
+  "cancerresearchuk.org", "macmillan.org.uk",
 ];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;

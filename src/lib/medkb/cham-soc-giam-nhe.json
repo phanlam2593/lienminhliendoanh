@@ -1,0 +1,195 @@
+{
+  "id": "cham-soc-giam-nhe",
+  "kind": "other",
+  "names": [
+    "chăm sóc giảm nhẹ",
+    "điều trị giảm nhẹ",
+    "chăm sóc cuối đời",
+    "chăm sóc người bệnh giai đoạn cuối",
+    "palliative care",
+    "end of life care",
+    "hospice"
+  ],
+  "display": "chăm sóc giảm nhẹ",
+  "about": [
+    {
+      "text": "Chăm sóc giảm nhẹ giúp người bệnh nặng và cả gia đình sống dễ chịu hơn: giảm đau, giảm các triệu chứng khó chịu, kèm hỗ trợ tinh thần, tâm linh và cả những việc thực tế.",
+      "src": [
+        0,
+        1
+      ]
+    },
+    {
+      "text": "Không chỉ dành cho lúc cuối đời — có thể bắt đầu ngay từ khi chẩn đoán và làm **song song** với điều trị bệnh.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "Có thể chăm ở nhà, ở bệnh viện, phòng khám hoặc cơ sở chăm sóc, tuỳ nhu cầu và mong muốn của người bệnh.",
+      "src": [
+        1,
+        2
+      ]
+    },
+    {
+      "text": "WHO khuyên nghĩ tới chăm sóc giảm nhẹ **sớm** — làm sớm thì hiệu quả hơn và bớt phải nhập viện không cần thiết.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Lo cho những khó chịu hay gặp: đau, mệt, chán ăn, buồn nôn, nôn, khó thở, khó ngủ — và cả lo âu, buồn bã, sợ hãi.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [],
+  "course": [
+    {
+      "text": "Giai đoạn cuối đời có thể kéo dài vài ngày, vài tháng hay hơn một năm — rất khó đoán trước.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Có đau thì dùng thuốc giảm đau theo đơn **ngay**, đừng đợi đau nhiều mới dùng — đau nặng rồi thì khó kiểm soát hơn.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Thuốc giảm đau mạnh như morphin **không** có nghĩa là bệnh nặng thêm; dùng đúng đơn để giảm đau do ung thư thì **hiếm khi gây nghiện**.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Không tự đổi liều; đau chưa đỡ thì báo bác sĩ / điều dưỡng để họ chỉnh thuốc.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Thuốc giảm đau nhóm opioid được WHO xếp là thuốc thiết yếu để giảm đau và giảm khó thở cho người bệnh nặng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Người bệnh và gia đình nên được cùng bàn và quyết định; việc chăm sóc nên theo mong muốn của người bệnh.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Người nhà, người chăm cũng cần được đỡ đần: chăm sóc giảm nhẹ lo cả tinh thần cho gia đình, kể cả sau khi mất người thân.",
+      "src": [
+        0,
+        1
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [],
+    "ok": [
+      {
+        "text": "Ăn bữa nhỏ, món nhiều năng lượng, chia làm nhiều lần; buổi sáng thường ăn ngon miệng hơn.",
+        "src": [
+          6
+        ]
+      },
+      {
+        "text": "Không cần kiêng khem khắt khe — thèm món gì thì ăn món đó.",
+        "src": [
+          6
+        ]
+      },
+      {
+        "text": "Ăn không nổi thì nhấp từng ngụm nhỏ thường xuyên, hoặc dùng sữa / đồ uống bổ sung năng lượng giữa các bữa.",
+        "src": [
+          6
+        ]
+      },
+      {
+        "text": "Ăn cùng gia đình khi được; có thể hỏi chuyên viên dinh dưỡng ở bệnh viện các món dễ tiêu.",
+        "src": [
+          6
+        ]
+      }
+    ],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Đau mà thuốc chưa đỡ — báo bác sĩ / điều dưỡng để chỉnh thuốc.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Ung thư vùng bụng mà bụng căng to dần, tức bụng, nhanh no, khó thở, buồn nôn — có thể là **tích dịch ổ bụng** (cổ trướng); báo bác sĩ, thường rút dịch bằng kim được cho đỡ.",
+      "src": [
+        4
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau quặn bụng, chướng bụng, nôn nhiều (có khi nôn ra thức ăn), không đi tiêu, không xì hơi được — có thể là **tắc ruột**, biến chứng nặng, cần bác sĩ xử trí ngay.",
+      "src": [
+        5
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Palliative care",
+      "publisher": "WHO (Tổ chức Y tế Thế giới)",
+      "url": "https://www.who.int/vietnam/news/fact-sheets/detail/palliative-care",
+      "updated": "2020-08-05"
+    },
+    {
+      "title": "What end of life care involves",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/tests-and-treatments/end-of-life-care/what-it-involves-and-when-it-starts/",
+      "reviewed": "2026-05-06"
+    },
+    {
+      "title": "Palliative Care in Cancer",
+      "publisher": "NCI (cancer.gov, Hoa Kỳ)",
+      "url": "https://www.cancer.gov/about-cancer/advanced-cancer/care-choices/palliative-care-fact-sheet",
+      "reviewed": "2021-11-01"
+    },
+    {
+      "title": "Common questions about painkillers",
+      "publisher": "Macmillan Cancer Support (Anh)",
+      "url": "https://www.macmillan.org.uk/cancer-information-and-support/impacts-of-cancer/pain/painkillers-frequently-asked-questions",
+      "reviewed": "2025-08-01"
+    },
+    {
+      "title": "Ascites (fluid in the abdomen)",
+      "publisher": "Cancer Research UK (Anh)",
+      "url": "https://www.cancerresearchuk.org/about-cancer/coping/physically/fluid-abdomen-ascites",
+      "reviewed": "2024-05-08"
+    },
+    {
+      "title": "A blocked bowel (bowel obstruction)",
+      "publisher": "Cancer Research UK (Anh)",
+      "url": "https://www.cancerresearchuk.org/about-cancer/coping/physically/bowel-problems/types/blocked-bowel-obstruction",
+      "reviewed": "2025-09-24"
+    },
+    {
+      "title": "Diet in advanced cancer",
+      "publisher": "Cancer Research UK (Anh)",
+      "url": "https://www.cancerresearchuk.org/about-cancer/coping/physically/diet-problems/diet-in-advanced-cancer",
+      "reviewed": "2024-03-27"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

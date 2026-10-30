@@ -15,6 +15,8 @@ import { detectTarot } from "@/lib/tarot";
 /** Những gì gate cần biết về một tin của Lomi. */
 export type GateMsg = {
   med?: { id: string };
+  /** 30/10: lời đáp tình huống "bác sĩ trả về" (lib/lomiPalliative) — cố ý đáp bằng thẻ chăm sóc giảm nhẹ dù câu nêu tên bệnh. */
+  pal?: unknown;
   drug?: { id?: string; name?: string };
   tarot?: unknown;
   tarotAwait?: boolean;
@@ -41,7 +43,7 @@ export function replyMismatch(question: string, reply: GateMsg, prev?: GateMsg):
   if (reply.tarot && !prev?.tarotAwait && !prev?.tarotSpread && !detectTarot(question)) return lost();
   // 2) Đáp một BỆNH khác với bệnh / thuốc được hỏi.
   const rTopic = reply.med?.id;
-  if (rTopic && rTopic !== prev?.med?.id && !nameAsTyped(question, rTopic)) {
+  if (rTopic && rTopic !== prev?.med?.id && !nameAsTyped(question, rTopic) && !reply.pal) {
     if (qTopic && qTopic !== rTopic) return lost();
     if (!qTopic && qDrugs.length && !reply.drug) return lost();
   }

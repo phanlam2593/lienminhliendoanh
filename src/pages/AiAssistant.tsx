@@ -126,6 +126,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch } from "@/lib/lomiReplyGate";
 import { urgentOf } from "@/lib/lomiUrgent";
+import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
 // 21/10: người dùng muốn câu trả lời ngắn (nhớ trên máy này; lỗi bộ nhớ trình duyệt thì coi như chưa đặt).
@@ -196,6 +197,7 @@ type Msg = {
   // nếu tin kế tiếp trúng câu hỏi thường gặp thì Lomi tự học "khoá này = câu hỏi kia" (lib/lomiLearn).
   unkKey?: string;
   foodRev?: string; // 14/10: Lomi vừa trả lời câu hỏi ngược theo món này ("có bệnh gì kiêng ăn cá") — "măng thì sao?" hỏi tiếp món khác
+  pal?: { kin?: string; disease?: string; belly?: boolean; self?: boolean; felt?: boolean }; palAge?: number; // 30/10: đang nói chuyện người bệnh được "trả về" (lib/lomiPalliative) — nhớ người + bệnh cho lượt sau
   src?: string; // 15/10: dòng "📚 Nguồn …" của câu đáp (lib/lomiCite) — không hiện, ai hỏi "nguồn đâu?" thì Lomi mới đưa ra
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
@@ -598,6 +600,9 @@ export function AiChat({
     if (tb && !reply.tarot && !reply.tarotRef && !reply.tarotAwait && !newFlow) reply = { ...reply, tarotBack: tb };
     // Đang nói về một người mà Lomi chỉ đáp một câu nghe kể ngắn → vẫn nhớ đang nói về người đó thêm một lượt.
     if (!reply.about && prevA?.about && (prevA.aboutAge ?? 0) < 1 && !newFlow && (reply.talk || (reply.heart && reply.heart === prevA.heart))) reply = { ...reply, about: prevA.about, aboutAge: (prevA.aboutAge ?? 0) + 1 };
+    // 30/10: chuyện người bệnh được "trả về" (lib/lomiPalliative) còn nhớ thêm 3 lượt qua lời đáp của lớp khác (tâm sự…), để hỏi tiếp
+    //   "mẹ còn đau nhiều lắm" vẫn hiểu đúng chuyện, không hỏi lại "có nặng không, đã đi khám chưa".
+    if (!reply.pal && prevA?.pal && (prevA.palAge ?? 0) < 3 && !newFlow && !reply.med) reply = { ...reply, pal: prevA.pal, palAge: (prevA.palAge ?? 0) + 1 };
     // Chốt cuối: câu đáp có đúng bệnh / thuốc người dùng hỏi không (lib/lomiReplyGate). Lạc → nói thật, mời hỏi lại, ghi nhật ký.
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
@@ -1008,6 +1013,34 @@ export function AiChat({
           setBusy(false);
         }
         return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: itP, quick: res.quick });
+      }
+    }
+    // 30/10 (Kir gửi ảnh): "bác sĩ trả về", "không chữa được nữa", "giai đoạn cuối" — trước đây bị đáp bằng thẻ ung thư chung
+    //   (phẫu thuật, hoá trị…) hoặc hỏi lại "đang điều trị sao rồi". Giờ: đúng người, đúng bệnh, hỏi lại bác sĩ + chăm sóc giảm nhẹ có nguồn
+    //   (lib/lomiPalliative + thẻ medkb/cham-soc-giam-nhe). Ý định tự hại vẫn ưu tiên trước (crisisReply).
+    if (!forceAi && !en && !crisisReply(q, lang) && !urgentOf(raw)) {
+      const pw = lastA0?.thread?.who?.text;
+      const dx0 = lastA0?.thread?.facts?.dx;
+      const pal = palliativeOf(raw, { kin: lastA0?.pal?.kin ?? (pw && lastA0?.thread?.who?.kind !== "pet" ? pw.replace(/⟦you⟧/gu, "bạn") : undefined), disease: lastA0?.pal?.disease ?? (typeof dx0 === "string" ? dx0 : undefined) });
+      // Lượt trước đang nói chuyện này → hỏi tiếp ("giờ chăm sao cho đỡ đau", "ăn uống ra sao") được đáp đúng phần, đúng người.
+      const palPrev = !pal && lastA0?.pal && (!lastA0.heart || lastA0.heart === "caregiver") ? { who: lastA0.pal.kin ? ("other" as const) : lastA0.pal.self ? ("self" as const) : ("unknown" as const), kin: lastA0.pal.kin, disease: lastA0.pal.disease, belly: !!lastA0.pal.belly, felt: !!lastA0.pal.felt } : null;
+      const pc = pal || palPrev ? await loadMedTopic(PALLIATIVE_CARD) : null;
+      const r = pc ? (pal ? palliativeReply(pal, pc) : palliativeFollow(raw, palPrev!, pc)) : null;
+      if (r && pc && (pal || palPrev)) {
+        // (câu hỏi tiếp có thể vừa cho biết người bệnh là ai — "mẹ còn đau nhiều lắm" → nhớ "mẹ")
+        const pk = pal ?? { ...palPrev!, ...(!palPrev!.kin && palPrev!.who !== "self" && kinOf(raw) ? { who: "other" as const, kin: kinOf(raw) } : {}) };
+        const ad = loadMem(user.id).addr;
+        topicHit("health");
+        return localReply(q, {
+          role: "assistant",
+          content: ad && ad !== "bạn" ? speak(r.text, ad) : r.text,
+          local: true,
+          quick: r.quick,
+          med: { id: pc.id, aspect: "care" },
+          health: { subject: `kb:${pc.id}`, label: pc.names[0] },
+          pal: { kin: pk.kin, disease: pk.disease, belly: pk.belly, self: pk.who === "self", felt: !!pk.felt || ("felt" in r && !!r.felt) },
+          ...("heart" in r && typeof r.heart === "string" ? { heart: r.heart, heartDepth: 1 } : {}),
+        });
       }
     }
     if (!forceAi && !en && !crisisReply(q, lang)) {
@@ -1797,6 +1830,9 @@ export function AiChat({
             // 18/10: hỏi cho người mang thai / cho con bú / trẻ nhỏ → chèn lưu ý của đúng nhóm đó (lib/lomiMed.groupNote).
             // 18/10: nhắc dấu hiệu nguy hiểm có trong thẻ (phân có máu, mất nước, khó thở) → ý cần khám / cấp cứu đứng đầu (lib/lomiMed.withRedFlags).
             else mr.text = withRedFlags(mt, q, withGroupNote(mt, q, mr.text));
+            // 30/10 (Kir: "ung thư phúc mạc" bị đáp như "Ung thư" chung): hỏi một loại ung thư chưa có thẻ riêng → nói thật là phần chung.
+            const subCa = mt.id === "ung-thu" ? diseaseOf(raw) : undefined;
+            if (subCa && subCa !== "ung thư" && !again) mr.text = `Lomi chưa có bài riêng về **${subCa}**, nên nói phần chung về ung thư nha — chi tiết của loại này thì bác sĩ ung bướu nói sát nhất 🙏\n\n${mr.text}`;
             // 20/10: hỏi cách chăm sóc → kèm mẹo dân gian đã đối chiếu nguồn cho bệnh đó (lib/lomiFolk), trước dòng nguồn của thẻ.
             const folkBlk = mr.aspect === "care" ? renderFolkForTopic(mt.id, medName(mt), { compact: true }) : null;
             if (folkBlk) {
