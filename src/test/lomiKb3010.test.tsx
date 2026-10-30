@@ -134,4 +134,21 @@ describe("30/10 — trả lời qua khung chat", () => {
     const m = await last(["a bị gout ăn bò được không"]);
     expect(m.med?.id).toBe("gout");
   }, T);
+  // Kir: "kiêng xì dầu vì làm đen vết thương… e tìm hiểu tổng quát hơn" — các kiêng cữ dân gian hay gặp, đối chiếu NHS.
+  it("Mẹo dân gian hay gặp → đúng bài, có nguồn", async () => {
+    const CASES: [string, RegExp][] = [
+      ["bị thương ăn xì dầu có bị thâm sẹo không", /che nắng/],
+      ["mới sinh có được tắm gội không", /Ở cữ/],
+      ["ở cữ có nên nằm than không", /khí CO/],
+      ["bé 2 tháng rơ lưỡi mật ong được không", /botulinum/],
+      ["ăn xoài có nổi mụn không", /chưa tìm thấy món ăn nào gây mụn/],
+      ["bị giời leo có nên vẽ mực không", /3 ngày/],
+      ["con bị sởi có được tắm không", /Bị sởi/],
+    ];
+    for (const [q, re] of CASES) expect((await last([q])).content, q).toMatch(re);
+  }, T);
+  it("Không bắt nhầm: mật ong cho bé 3 tuổi vẫn là bài chanh mật ong; 'kiêng cữ gì khi bị gout' vẫn là thẻ gout", async () => {
+    expect((await last(["bé 3 tuổi ho uống mật ong chanh được không"])).content).toMatch(/Chanh mật ong/);
+    expect((await last(["kiêng cữ gì khi bị gout"])).med?.id).toBe("gout");
+  }, T);
 });
