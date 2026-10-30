@@ -1012,7 +1012,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "eating",
-    re: VN(/\b((tự )?(móc họng|gây nôn|làm cho nôn|cho nôn ra)( \S+){0,4} (sợ (mập|béo|tăng cân)|giảm cân)|nôn ra vì sợ (mập|béo)|ăn xong (là )?(tự )?(móc họng|nôn)|nhịn ăn để giảm|nhịn đói để giảm|bỏ bữa để giảm cân|ăn xong nôn|móc họng|sợ tăng cân quá|sợ ăn|ăn không kiểm soát|ăn vô độ|ăn quá nhiều rồi hối hận|chán ăn|biếng ăn|ăn uống rối loạn|rối loạn ăn uống|anorexia|bulimia)\b/),
+    re: VN(/\b((tự )?(móc họng|gây nôn|làm cho nôn|cho nôn ra)( \S+){0,4} (sợ (mập|béo|tăng cân)|giảm cân)|nôn ra vì sợ (mập|béo)|ăn xong (là )?(tự )?(móc họng|nôn)|nhịn ăn để giảm|nhịn đói để giảm|bỏ bữa để giảm cân|ăn xong nôn|móc họng|sợ tăng cân quá|sợ ăn|ăn không kiểm soát|ăn vô độ|ăn quá nhiều rồi hối hận|chán ăn|ăn uống rối loạn|rối loạn ăn uống|anorexia|bulimia)\b/),
     feel: ["Cảm ơn bạn đã tin kể với Lomi 🤍 Chuyện ăn uống gắn với cảm xúc nhiều hơn người ta nghĩ, và bạn không phải một mình.", "Những gì bạn đang trải qua nghe rất mệt mỏi."],
     insight: [
       "Mối quan hệ với đồ ăn thường phản ánh những cảm xúc khó nói — căng thẳng, lo âu, áp lực. Không phải do bạn yếu đuối hay thiếu ý chí.",

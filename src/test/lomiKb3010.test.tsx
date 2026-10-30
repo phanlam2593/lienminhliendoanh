@@ -240,7 +240,7 @@ describe("30/10 — trả lời qua khung chat", () => {
     await yes("nhìn điện thoại nhiều bị mỏi mắt", /20-20-20/);
     await yes("ăn bún bò có mập không", /món nấu sẵn còn nước dùng/);
     await yes("Ăn măng đc k?", /luộc nhiều lần/);
-    await yes("con 3 tuổi chưa biết nói có sao không", /phần Lomi đã kiểm chứng/);
+    await yes("con 3 tuổi chưa biết nói có sao không", /Chậm nói\*\*, Lomi có kiến thức/);
   }, T);
   // Kir: "ung thư k nên ăn trứng vịt lộn… cá có omega 3 ăn bổ mắt… bị cảm sốt thì ăn tỏi… mẹo dân gian nhiều lắm".
   it("Mẹo dân gian đợt 4: kiêng đồ bổ khi ung thư, cá bổ mắt, tỏi trị cảm, tiết canh, ăn cay, bẻ khớp, lò vi sóng", async () => {
@@ -258,6 +258,23 @@ describe("30/10 — trả lời qua khung chat", () => {
     ];
     for (const [q, re] of CASES) expect((await last([q])).content, q).toMatch(re);
     expect((await last(["mắt cá chân bị sưng"])).content).not.toMatch(/Tội bé|omega/);
+  }, T);
+  it("Rà câu hiểu lầm đợt 2 (30/10)", async () => {
+    const no = async (q: string, re: RegExp) => expect((await last([q])).content, q).not.toMatch(re);
+    const yes = async (q: string, re: RegExp) => expect((await last([q])).content, q).toMatch(re);
+    await no("ông nội bị té ngã đập đầu", /bạo lực|bị đánh/i);
+    await yes("ông nội bị té ngã đập đầu", /ngã/);
+    await yes("bé 6 tháng ăn dặm gì", /Ăn dặm/);
+    await yes("sữa mẹ ít quá", /ít sữa/i);
+    await yes("bị hói", /rụng tóc/i);
+    await yes("con bị rôm sảy", /rôm sảy/i);
+    await yes("toang rồi", /Toang hả/);
+    await yes("chill thôi", /Chill chill/);
+    await yes("kèo này thơm", /Kèo thơm/);
+    await yes("Đà Lạt có lạnh không", /áo khoác/);
+    await yes("tháng này em có tiền không", /không ai đoán chắc/);
+    await yes("bị chó cắn có sao không", /Chó cắn\*\*, Lomi có kiến thức/);
+    await yes("bị nóng trong", /tính nóng/);
   }, T);
 });
 

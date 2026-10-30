@@ -1102,7 +1102,7 @@ export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: stri
 export type MedAsk = { id: string; aspect: MedAspect | "overview"; food: string | null; focusOnly?: boolean };
 
 /** Câu này có phải câu hỏi kiến thức về một chủ đề trong kho không? prev = chủ đề đang nói ở tin trước (cho câu nối). */
-const TELL_OK = new Set(["cham-noi", "moi-mat", "sieu-am-thai"]);
+const TELL_OK = new Set(["cham-noi", "moi-mat", "sieu-am-thai", "rom-say", "te-nga", "chan-thuong-dau", "rung-toc", "bieng-an-tre", "an-dam", "it-sua-me"]);
 export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   const own = findMedTopicId(text);
   const words = normalizeVi(text).split(" ").length;
@@ -1128,6 +1128,9 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (row.dietOnly && a !== "food" && a !== "diet") return null;
     // 19/10: góc nhìn triệu chứng chỉ trả lời cách chăm sóc / khi nào khám / thuốc — câu khác để các lớp cũ trả lời như trước.
     if (row.view && !VIEW_ASPECTS.has(a)) return null;
+    // 30/10 (rà câu hiểu lầm: "bị chó cắn có sao không" → mở đầu bằng "gần như 100% tử vong"): hỏi "có sao không / có nguy hiểm không"
+    //   với chủ đề có phần cấp cứu → đưa phần tổng quan (cách xử trí, khi nào đi khám) thay vì chỉ phần diễn tiến.
+    if (a === "course" && VN(/\b(có sao không|có sao ko|có sao k|có nguy hiểm không|nguy hiểm không|có sao hông)\b/).test(normalizeVi(text)) && LOOKUP_ROWS.find((r) => r.id === own)?.kind !== "term") return { id: own, aspect: "overview", food: null };
     return { id: own, aspect: a, food: a === "food" ? topicLike : null };
   }
   // câu nối không nhắc lại tên: "còn nhộng thì sao", "vậy ăn gì được", "triệu chứng?"

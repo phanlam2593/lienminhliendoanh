@@ -1,0 +1,95 @@
+{
+  "id": "bieng-an-tre",
+  "kind": "child",
+  "names": [
+    "biếng ăn",
+    "bé biếng ăn",
+    "trẻ biếng ăn",
+    "con biếng ăn",
+    "bé lười ăn",
+    "trẻ lười ăn",
+    "con lười ăn",
+    "bé kén ăn",
+    "trẻ kén ăn",
+    "con kén ăn",
+    "bé không chịu ăn",
+    "con không chịu ăn",
+    "bé ăn ít",
+    "fussy eating",
+    "picky eater"
+  ],
+  "about": [
+    {
+      "text": "Trẻ nhỏ **không chịu ăn, không chịu nếm món mới là chuyện bình thường**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bé vẫn hiếu động, tăng cân và trông khoẻ thì thường là đang ăn đủ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [],
+  "course": [],
+  "care": [
+    {
+      "text": "Cho bé ngồi ăn cùng cả nhà càng thường càng tốt — trẻ học bằng cách bắt chước người lớn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cho ăn phần nhỏ; khen khi bé ăn, dù chỉ một chút.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bé không ăn thì **dọn đi, không ép, không nói gì**; lần khác cho ăn lại món đó.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mỗi ngày 2 bữa phụ lành mạnh là đủ — ăn vặt nhiều thì tới bữa không đói.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cứ đưa nhiều món khác nhau nhiều lần — có món phải thử nhiều lần bé mới chịu ăn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đừng để tới bữa bé đã quá đói hay quá mệt; kiên nhẫn với bé ăn chậm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Lo bé không đủ ăn — bé ít vận động, không tăng cân hay trông không khoẻ — thì hỏi bác sĩ nhi để kiểm tra.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Fussy eaters",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/baby/weaning-and-feeding/fussy-eaters/",
+      "reviewed": "2023-11-13"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

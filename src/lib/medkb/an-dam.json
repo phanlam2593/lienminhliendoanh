@@ -1,0 +1,96 @@
+{
+  "id": "an-dam",
+  "kind": "child",
+  "names": [
+    "ăn dặm",
+    "cho bé ăn dặm",
+    "bé ăn dặm",
+    "tập ăn dặm",
+    "bắt đầu ăn dặm",
+    "mấy tháng ăn dặm",
+    "ăn dặm gì",
+    "ăn dặm như thế nào",
+    "thức ăn đầu tiên cho bé",
+    "weaning",
+    "starting solids"
+  ],
+  "about": [
+    {
+      "text": "Nên bắt đầu cho bé ăn dặm khi bé **khoảng 6 tháng tuổi**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dấu hiệu bé sẵn sàng (thường cùng lúc, từ khoảng 6 tháng): **ngồi được, giữ đầu vững**; phối hợp mắt, tay, miệng (tự nhìn, cầm, đưa thức ăn vào miệng); **nuốt** được thức ăn thay vì đẩy ra.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Năm đầu, **sữa mẹ hoặc sữa công thức vẫn là thức uống chính**; có thể cho bú mẹ bao lâu tuỳ mẹ và bé.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [],
+  "course": [],
+  "care": [
+    {
+      "text": "Bắt đầu bằng từng loại rau, quả: nghiền hoặc cắt que mềm nấu chín — khoai tây, khoai lang, cà rốt, bông cải xanh, táo, lê…; nên có cả rau không ngọt (bông cải, súp lơ, rau bina).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thức ăn cầm tay: miếng đủ to để bé nắm trong lòng bàn tay, còn chừa một đoạn ló ra.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Món dễ dị ứng (đậu phộng, trứng gà, gluten, cá): cho **từng món một, lượng nhỏ** để kịp nhận ra phản ứng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "**Không thêm đường, muối** (kể cả viên nêm, nước sốt) vào đồ ăn hay nước nấu cho bé.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh đồ cứng như hạt nguyên, cà rốt sống, táo sống (dễ hóc).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tập uống bằng cốc từ khoảng 6 tháng, cho bé nhấp nước khi ăn; sữa bò tươi chưa dùng làm thức uống chính trước 1 tuổi.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đừng lo bé ăn được bao nhiêu — lúc đầu bé chỉ cần một ít trước cữ sữa như thường.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Your baby's first solid foods",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/baby/weaning-and-feeding/babys-first-solid-foods/",
+      "reviewed": "2026-02-19"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

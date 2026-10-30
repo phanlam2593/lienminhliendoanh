@@ -1,0 +1,79 @@
+{
+  "id": "it-sua-me",
+  "kind": "women",
+  "names": [
+    "ít sữa",
+    "sữa mẹ ít",
+    "mất sữa",
+    "không đủ sữa",
+    "ít sữa mẹ",
+    "sữa về ít",
+    "thiếu sữa",
+    "làm sao cho nhiều sữa",
+    "gọi sữa về",
+    "sữa không đủ cho con bú",
+    "low milk supply"
+  ],
+  "about": [
+    {
+      "text": "Dấu hiệu bé bú đủ: từ ngày thứ 5 có **ít nhất 6 tã ướt nặng mỗi 24 giờ**; từ ngày thứ 4 có khoảng 2 lần đi ngoài phân mềm, vàng mỗi ngày trong vài tuần đầu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Sau 3–4 ngày đầu (sụt cân nhẹ là bình thường), bé **tăng cân đều**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [],
+  "course": [],
+  "care": [
+    {
+      "text": "Cho bé bú **thường xuyên, bao lâu tuỳ bé muốn** — bú nhiều thì sữa về nhiều.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Kiểm tra khớp ngậm: bé há miệng rộng, ngậm được nhiều bầu vú; nữ hộ sinh / y tá có thể xem một cữ bú và chỉnh tư thế.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ôm bé sát người, da kề da — vừa giúp gọi sữa vừa dễ nhận ra lúc bé đói.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khi đã quen cho bú, vắt thêm sữa sau cữ bú có thể giúp tăng lượng sữa.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Lo bé bú không đủ (ít tã ướt, bé không tăng cân) → hỏi sớm nữ hộ sinh, y tá hoặc chuyên viên tư vấn nuôi con bằng sữa mẹ; nhiều vấn đề giải quyết được nếu được hỗ trợ đúng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Breastfeeding problems: Not enough breast milk",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/baby/breastfeeding-and-bottle-feeding/breastfeeding-problems/enough-milk/",
+      "reviewed": "2026-04-30"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

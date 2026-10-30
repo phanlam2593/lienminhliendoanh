@@ -468,6 +468,44 @@ const META: [string, RegExp, string[]][] = [
     ["Lomi giúp được mấy chuyện này nè 😄\n• 🩺 Sức khoẻ: bệnh, triệu chứng, thuốc, ăn uống theo bệnh, vitamin, calo — có nguồn y khoa\n• 💚 Tâm sự: buồn, áp lực, tình cảm, gia đình\n• 🍜 Ăn gì, đi đâu, tìm quán & ưu đãi trong app\n• 🃏 Bói bài Tarot cho vui\n• 📱 Chỉ cách dùng app\nBạn muốn bắt đầu từ chuyện nào?"],
   ],
   [
+    // 30/10: "tháng này em có tiền không" — hỏi chuyện tương lai (không có chữ "bói") → nói thật không ai đoán chắc được, mời bói cho vui.
+    "fortune_ask",
+    VN(/\b(tháng này|năm nay|tuần này|sắp tới|năm sau|năm tới|tháng sau|tháng tới|mai mốt|sau này)\b( \S+){0,3} (có tiền|có lộc|giàu|phát tài|trúng số|trúng xổ số|có người yêu|có bồ|có ny|lấy chồng|lấy vợ|thăng chức|đổi đời|may mắn)( \S+)? (không|ko|k|hông|hong|chưa|hả|ha)\b/),
+    ["Chuyện tương lai thì không ai đoán chắc được đâu 😄 Nhưng nếu muốn cho vui, Lomi rút bài Tarot xem thử nha — bạn gõ “bói bài” kèm câu hỏi, ví dụ “bói bài tháng này em có tiền không”."],
+  ],
+  [
+    // 30/10 — tiếng lóng hay gặp (trước đây "chưa hiểu ý")
+    "slang_toang",
+    VN(/^(toang|toang rồi|toang thật|toang thật rồi|toang luôn|hỏng hết rồi|hỏng hết|tiêu rồi|xong đời|xong phim)( (á|à|ạ|nha|luôn|thiệt|thật|mất|rồi))*$/),
+    ["Toang hả 😅 Chuyện gì vậy bạn, kể Lomi nghe thử — biết đâu còn cứu được!"],
+  ],
+  [
+    "slang_chill",
+    VN(/^(chill|chil|chill thôi|chil thôi|chill chill|chil chil|chill đi|chil đi|thư giãn thôi|relax|chill nha|chil nha)( (á|à|nha|nhé|thôi|đi))*$/),
+    ["Chill chill 😎 Thả lỏng chút cho đầu óc nhẹ nhàng nha. Cần Lomi gợi ý quán cà phê view đẹp để chill không?"],
+  ],
+  [
+    "slang_laugh",
+    VN(/^(xỉu|xỉu up xỉu down|xỉu ngang|xỉu dọc|cười xỉu|cười đau bụng|hài xỉu|hết nước chấm|cười ẻ|ối dồi ôi|ôi dồi ôi|trời đất ơi|má ơi|trời ơi đất hỡi)( (luôn|á|à|nha|thiệt|thật|ơi))*$/),
+    ["Haha gì mà dữ vậy 😆 Kể Lomi nghe với, cho Lomi cười ké!"],
+  ],
+  [
+    "slang_deal",
+    VN(/^kèo (này |đó |nay )?(thơm|ngon|thơm phức|thơm quá|ngon ăn|hời)( (quá|ghê|lắm|nha|á))*$/),
+    ["Kèo thơm hả 😆 Kèo gì vậy, kể Lomi nghe chung vui với!"],
+  ],
+  [
+    // 30/10 — Đà Lạt: thời tiết, mặc gì, đi đâu (app của cộng đồng Đà Lạt; trước đây "chưa được học").
+    "dalat_weather",
+    VN(/\b(đà lạt|dalat|đà lạc)\b.*\b(lạnh|nóng|mưa|thời tiết|nhiệt độ|mặc gì|mặc sao|mang gì|đem gì|áo khoác)\b|\b(lạnh|thời tiết|mặc gì|mang gì|đem gì)\b.*\b(đà lạt|dalat)\b/),
+    ["Đà Lạt mát quanh năm, sáng sớm và tối se lạnh, có hôm khá lạnh — nhớ mang **áo khoác**, khăn mỏng; đi xe máy thì thêm găng tay 🧥 Mùa mưa thường khoảng từ tháng 5 tới tháng 10, hay mưa chiều nên mang áo mưa / dù nha.\n\nMuốn tìm quán ăn, cà phê, chỗ chơi thì vào **Khám phá** (/kham-pha) hoặc nói Lomi “tìm quán cà phê view đẹp” nha!"],
+  ],
+  [
+    "dalat_where",
+    VN(/\b(đà lạt|dalat)\b.*\b(chơi đâu|đi đâu|ở đâu|ăn gì|ăn đâu|có gì chơi|có gì vui|điểm nào|chỗ nào)\b|\b(chơi đâu|đi đâu|ăn gì)\b.*\b(đà lạt|dalat)\b/),
+    ["Ở Đà Lạt muốn ăn, uống, chơi thì Lomi gợi ý theo các quán trong cộng đồng Liên Minh Liên Doanh nè 🌲 Vào **Khám phá** (/kham-pha) xem theo khu vực, hoặc nói Lomi cụ thể kiểu “tìm quán lẩu”, “cà phê view đẹp”, “homestay” là Lomi tìm liền!"],
+  ],
+  [
     // "đi đường cẩn thận nha" — lời chào / dặn dò, không phải câu hỏi.
     "meta_care",
     VN(/^((đi|về|chạy xe|lái xe) )?(đường )?(cẩn thận|cẩn thẩn)( (nha|nhé|nhe|nghen|đó|nhá|á))*$|^đi đường cẩn thận\b/),
@@ -636,6 +674,8 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
     };
   }
   // Mẩu câu rất ngắn mà không nhận ra được gì ("quay lại", "tháng này") → hỏi lại một câu, vì chưa đủ ý để mà "bí".
+  // (30/10: tiếng lóng ngắn — "toang rồi", "chill thôi" — có lời đáp riêng, không hỏi lại "ý bạn là sao")
+  for (const [intent, re, texts] of META) if (intent.startsWith("slang_") && re.test(n)) return { intent, text: pick(texts) };
   if (words <= 3) return { intent: "clarify", text: pick(["Lomi chưa chắc hiểu ý bạn 😅 Bạn nói rõ thêm giúp Lomi nha?", "Ý bạn là sao ta 🤔 Bạn nói thêm chút xíu để Lomi hiểu nha."]) };
   return null;
 }
