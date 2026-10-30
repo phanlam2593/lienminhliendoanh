@@ -7,7 +7,7 @@
 //   • Thẻ nạp theo nhu cầu (lazy) — chỉ mục tên (medkb/index.json, nhỏ) nằm sẵn trong gói, thẻ đầy đủ tải khi cần.
 //   • Quy tắc nguồn do test (src/test/lomiMed.test.ts) ép: tên miền tin cậy · mọi `src` hợp lệ · không có liều thuốc · ý ≤ 220 ký tự.
 // ─────────────────────────────────────────────────────────────────────────────
-import { factLine, factOf } from "@/lib/lomiFoodFacts";
+import { diabetesFruitBlock, factLine, factOf, fruitIn, isSugarTopic } from "@/lib/lomiFoodFacts";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import INDEX from "@/lib/medkb/index.json";
@@ -503,7 +503,9 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
       const say = f.verdict === "avoid" ? "nên **tránh**" : f.verdict === "limit" ? "nên **hạn chế**" : f.verdict === "good" ? "là món **nên ăn**" : "**được**";
       const body = `Với ${N}: **${f.name}** ${say}.\n${f.note}${normalizeVi(f.name) !== food ? `\n(Lomi hiểu “${shown ?? food}” thuộc nhóm “${f.name}” theo cách nguồn phân nhóm.)` : ""}`;
       const ff = factOf(question ?? shown ?? food);
-      return out(`${body}\n\n${sourceLine(t, f.src, now)}${ff ? `\n\n${factLine(ff, t.id, now)}` : ""}`, "food");
+      const fruit = isSugarTopic(t.id) ? fruitIn(question ?? shown ?? food) : null;
+      const extra = fruit ? diabetesFruitBlock(fruit, now) : ff ? factLine(ff, t.id, now) : "";
+      return out(`${body}\n\n${sourceLine(t, f.src, now)}${extra ? `\n\n${extra}` : ""}`, "food");
     }
     // Chưa có nguồn nói về đúng món này → nói thẳng, đưa nguyên tắc chung CÓ nguồn.
     // 18/10: thẻ không có bảng ăn uống (vd "ho") → nguyên tắc chung lấy từ các ý ăn / uống CÓ NGUỒN trong phần chăm sóc.
@@ -512,7 +514,10 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     const tail = gen.length ? `\n\nNguyên tắc chung theo nguồn:\n${bl(gen)}\n\nMuốn chắc về món này, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi bạn nha.\n\n${end([gen])}` : `\n\nBạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.`;
     // 30/10: món có trong bảng FDA → kèm số liệu (calo, đường, muối, kali, béo — chỉ số theo bệnh) để người hỏi tự cân nhắc.
     const ff = factOf(question ?? shown ?? food);
-    return out(say + tail + (ff ? `\n\n${factLine(ff, t.id, now)}` : ""), "food", true);
+    // "tiểu đường ăn mít được không" — trái cây: nguồn tiểu đường có hướng dẫn cách ăn trái cây nói chung (NHS, NIDDK).
+    const fruit = isSugarTopic(t.id) ? fruitIn(question ?? shown ?? food) : null;
+    const extra = fruit ? diabetesFruitBlock(fruit, now) : ff ? factLine(ff, t.id, now) : "";
+    return out(say + tail + (extra ? `\n\n${extra}` : ""), "food", true);
   }
   if (aspect === "diet") {
     if (!t.diet || !(t.diet.avoid.length || t.diet.ok.length || t.diet.foods.length)) {

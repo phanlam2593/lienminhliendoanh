@@ -207,5 +207,17 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["phở bao nhiêu calo"])).content).toMatch(/chưa có số liệu/);
     expect((await last(["sợ mập lắm, chuối bao nhiêu calo vậy"])).content).not.toMatch(/110 kcal/);
   }, T);
+  // Kir: "tiểu đường k nên ăn uống mấy món có lượng đường cao như mít, xoài chín…".
+  it("Tiểu đường và trái cây: cách ăn có nguồn, số liệu khi có, nói thật khi chưa có", async () => {
+    const mit = (await last(["tiểu đường ăn mít được không"])).content;
+    expect(mit).toMatch(/vẫn ăn trái cây được/);
+    expect(mit).toMatch(/chưa có số liệu đường đã kiểm chứng\*\* cho \*\*mít/);
+    expect((await last(["tiểu đường type 2 ăn nho được không"])).content).toMatch(/Nho\*\* — khẩu phần 126 g: tinh bột \*\*23 g\*\* · đường \*\*20 g/);
+    const list = (await last(["bị tiểu đường kiêng trái cây gì"])).content;
+    expect(list).toMatch(/tránh nước ép, sinh tố/);
+    expect(list).toMatch(/Nho: khoảng \*\*16 g\*\* đường \/ 100 g/);
+    expect((await last(["trái cây nào nhiều đường"])).content).toMatch(/chưa có số liệu kiểm chứng/);
+    expect((await last(["tiểu đường ăn thịt bò được không"])).content).not.toMatch(/Ăn trái cây khi bị tiểu đường/);
+  }, T);
 });
 

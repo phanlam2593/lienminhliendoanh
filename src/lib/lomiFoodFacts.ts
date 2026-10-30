@@ -20,6 +20,9 @@ export const FACT_SOURCES: DrugSource[] = [
   /* 2 */ { title: "Nutrition Information for Cooked Seafood (nội dung 31/10/2018)", publisher: FDA, url: "https://www.fda.gov/food/labeling-nutrition/cooked-seafood-poster-text-version-accessible-version" },
   /* 3 */ { title: "How much sugar is good for me?", publisher: "NHS (Anh)", url: "https://www.nhs.uk/common-health-questions/food-and-diet/how-much-sugar-is-good-for-me/", reviewed: "2023-05-19" },
   /* 4 */ { title: "What should my daily intake of calories be?", publisher: "NHS (Anh)", url: "https://www.nhs.uk/common-health-questions/food-and-diet/what-should-my-daily-intake-of-calories-be/", reviewed: "2023-04-17" },
+  /* 5 */ { title: "Healthy Eating Guide for Adults with Type 2 Diabetes (34-1188-V2)", publisher: "West Hertfordshire Teaching Hospitals NHS Trust (Anh)", url: "https://westhertshospitals.nhs.uk/patients-and-visitors/patient-information-leaflets/healthy-eating-guide-adults-type-2-diabetes", reviewed: "2022-01-01" },
+  /* 6 */ { title: "Top tips for diet and Type 2 Diabetes (6420-3)", publisher: "West Suffolk NHS Foundation Trust (Anh)", url: "https://www.wsh.nhs.uk/CMS-Documents/Patient-leaflets/DiabetesUnit/6420-3-Top-tips-for-diet-and-Type-2-diabetes.pdf", updated: "2021-03-19" },
+  /* 7 */ { title: "What I need to know about Carbohydrate Counting and Diabetes (12/2013)", publisher: "NIDDK (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://niddk.nih.gov/-/media/Files/Diabetes/WINTKA_CarbCounting_508.pdf" },
 ];
 
 /** Một dòng bảng FDA. g = khẩu phần (gam); các số đúng như bảng (null = bảng không có cột này). */
@@ -222,3 +225,53 @@ export function renderDaily(now = Date.now()): string {
 export function renderNoFact(food: string): string {
   return `📊 Lomi **chưa có số liệu calo, đường đã kiểm chứng** cho **${food}** — bảng chính thức Lomi đang dùng (FDA) mới có 20 loại trái cây, 20 loại rau củ tươi và một số hải sản, nên Lomi không đoán số. Bạn xem nhãn dinh dưỡng trên bao bì (nếu có) hoặc hỏi chuyên viên dinh dưỡng nha.`;
 }
+
+// ── TIỂU ĐƯỜNG & TRÁI CÂY (30/10, Kir: "tiểu đường k nên ăn mấy món có lượng đường cao như mít, xoài chín…") ──
+// Nguồn (NHS, NIDDK) KHÔNG cấm loại trái cây nào: trái cây có tinh bột (đường tự nhiên) → canh khẩu phần, chia nhỏ, ăn nguyên quả,
+//   tránh nước ép / sinh tố. Món có trong bảng FDA thì đưa số liệu; trái cây Việt chưa có số liệu kiểm chứng thì nói thật.
+type Fact = { text: string; src: number[] };
+export const DIABETES_FRUIT: Fact[] = [
+  { text: "Người tiểu đường **vẫn ăn trái cây được** — nguồn không cấm loại nào. Trái cây có tinh bột (đường tự nhiên) nên làm tăng đường huyết → cần **canh khẩu phần**, không phải kiêng hẳn.", src: [5, 7] },
+  { text: "Mỗi lần ăn **một phần** (khoảng một nắm tay / lòng bàn tay), **chia ra nhiều lần** trong ngày thay vì ăn dồn một lúc.", src: [5, 6] },
+  { text: "Chọn trái cây **nguyên quả**; **tránh nước ép, sinh tố** (uống vào nhanh, dễ nhiều đường). Trái cây sấy khô thì phần ăn chỉ bằng **nửa lòng bàn tay**.", src: [5, 6] },
+  { text: "Một quả nhỏ (táo, cam nhỏ) có khoảng **15 g tinh bột** — dùng để ước lượng khi tính khẩu phần tinh bột mỗi bữa.", src: [7] },
+];
+/** Trái cây hay hỏi (cả loại chưa có số liệu FDA) — để nhận ra câu hỏi "tiểu đường ăn X". */
+const FRUITS = ["mít", "mít tố nữ", "xoài", "xoài chín", "xoài xanh", "sầu riêng", "nhãn", "vải", "vải thiều", "chôm chôm", "măng cụt", "thanh long", "ổi", "đu đủ", "na", "mãng cầu", "mãng cầu xiêm", "hồng xiêm", "sapoche", "vú sữa", "chuối", "nho", "dưa hấu", "dứa", "thơm", "khóm", "cam", "quýt", "bưởi", "táo", "lê", "mận", "roi", "khế", "me", "sơ ri", "chanh dây", "lựu", "hồng", "quả hồng", "trái bơ", "dừa", "nước dừa", "dưa lưới", "kiwi", "đào", "dâu tây", "cherry", "anh đào", "trái cây", "hoa quả", "trái cây sấy", "mít sấy", "chuối sấy", "xoài sấy"];
+const FRUIT_RE = new RegExp(`(?<![\\p{L}\\p{N}])(${[...FRUITS].sort((a, b) => b.length - a.length).map(esc).join("|")})(?![\\p{L}\\p{N}])`, "u");
+/** Tên trái cây (có dấu, đúng như gõ) trong câu; null nếu không có. */
+export function fruitIn(text: string): string | null {
+  const m = text.normalize("NFC").toLowerCase().match(FRUIT_RE);
+  return m ? m[1] : null;
+}
+const SUGAR_IDS = new Set(Object.entries(LENS).filter(([, l]) => l === "sugar").map(([id]) => id));
+export const isSugarTopic = (id?: string | null) => !!id && SUGAR_IDS.has(id);
+
+/** Khối gắn dưới lời đáp "tiểu đường ăn X được không" khi X là trái cây: cách ăn + số liệu (nếu có). */
+export function diabetesFruitBlock(fruit: string, now = Date.now()): string {
+  // (tên trái cây lấy đúng như người dùng gõ có dấu — "nho", "cam" là một chữ nên khớp thẳng tên trong bảng, không qua bộ đoán chữ không dấu)
+  const f = FACTS.find((x) => x.names.includes(fruit)) ?? factOf(fruit);
+  const generic = /^(trái cây|hoa quả)$/.test(fruit);
+  return [
+    `🍎 **Ăn trái cây khi bị tiểu đường:**\n${DIABETES_FRUIT.map((x) => `• ${x.text}`).join("\n")}`,
+    f ? `📊 **${f.name}** — khẩu phần ${portion(f)}: tinh bột **${num(f.carb)} g** · đường **${num(f.sugar ?? 0)} g** · chất xơ ${num(f.fiber ?? 0)} g` : generic ? "" : `📊 Lomi **chưa có số liệu đường đã kiểm chứng** cho **${fruit}** (bảng FDA chưa có món này), nên không dám nói nó nhiều hay ít đường hơn loại khác — cứ áp dụng cách ăn ở trên, và theo dõi đường huyết sau khi ăn nếu bác sĩ đã hướng dẫn bạn đo.`,
+    line([5, 6, 7, ...(f ? [f.src] : [])], now),
+  ].filter(Boolean).join("\n\n");
+}
+
+/** "tiểu đường không nên ăn trái cây gì", "trái cây nào nhiều đường" → cách ăn + bảng đường của trái cây có số liệu (xếp nhiều → ít). */
+export const FRUIT_LIST_ASK = /\b(trai cay|hoa qua|qua gi|trai gi|trai nao|qua nao|loai qua|loai trai)\b/;
+export function renderFruitSugar(med: { id: string; name: string } | null, now = Date.now()): string {
+  const fr = FACTS.filter((f) => f.src === 0 && f.sugar !== undefined).sort((a, b) => b.sugar! / b.g - a.sugar! / a.g);
+  // khoảng bao nhiêu gam đường trong 100 g (tính từ số làm tròn của FDA nên chỉ để so sánh), kèm số gốc theo khẩu phần FDA
+  const per100 = (f: FoodFact) => Math.round((f.sugar! / f.g) * 100);
+  const rows = fr.map((f) => `• ${f.name}: khoảng **${per100(f)} g** đường / 100 g (khẩu phần ${f.g} g${f.note ? ` – ${f.note}` : ""}: ${num(f.sugar!)} g)`);
+  return [
+    med && isSugarTopic(med.id) ? `🍎 **${med.name.charAt(0).toUpperCase()}${med.name.slice(1)}: ăn trái cây thế nào?**` : "🍎 **Trái cây nào nhiều đường?**",
+    med && isSugarTopic(med.id) ? DIABETES_FRUIT.map((x) => `• ${x.text}`).join("\n") : "",
+    `📊 **Lượng đường trong trái cây tươi** (bảng FDA, nhiều trước — số “/ 100 g” tính lại từ khẩu phần nên chỉ để so sánh):\n${rows.join("\n")}`,
+    "🔎 Mít, xoài chín, sầu riêng, nhãn, vải, chôm chôm… hay được nói là “nhiều đường”, nhưng Lomi **chưa có số liệu kiểm chứng** cho các loại này nên không xếp hạng được — ăn thì áp dụng đúng cách ăn ở trên.",
+    line([...(med && isSugarTopic(med.id) ? [5, 6, 7] : []), 0], now),
+  ].filter(Boolean).join("\n\n");
+}
+
