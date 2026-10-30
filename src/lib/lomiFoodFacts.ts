@@ -11,6 +11,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugSource } from "@/lib/lomiDrugData";
+import { VN_ROWS } from "@/lib/vnFoodData";
 
 const VERIFIED = "2026-10-30";
 const FDA = "FDA (Cục Quản lý Thực phẩm và Dược phẩm Hoa Kỳ)";
@@ -23,6 +24,7 @@ export const FACT_SOURCES: DrugSource[] = [
   /* 5 */ { title: "Healthy Eating Guide for Adults with Type 2 Diabetes (34-1188-V2)", publisher: "West Hertfordshire Teaching Hospitals NHS Trust (Anh)", url: "https://westhertshospitals.nhs.uk/patients-and-visitors/patient-information-leaflets/healthy-eating-guide-adults-type-2-diabetes", reviewed: "2022-01-01" },
   /* 6 */ { title: "Top tips for diet and Type 2 Diabetes (6420-3)", publisher: "West Suffolk NHS Foundation Trust (Anh)", url: "https://www.wsh.nhs.uk/CMS-Documents/Patient-leaflets/DiabetesUnit/6420-3-Top-tips-for-diet-and-Type-2-diabetes.pdf", updated: "2021-03-19" },
   /* 7 */ { title: "What I need to know about Carbohydrate Counting and Diabetes (12/2013)", publisher: "NIDDK (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://niddk.nih.gov/-/media/Files/Diabetes/WINTKA_CarbCounting_508.pdf" },
+  /* 8 */ { title: "Bảng thành phần thực phẩm Việt Nam (NXB Y học, 2007; bản lưu tại FAO)", publisher: "Viện Dinh dưỡng – Bộ Y tế", url: "https://www.fao.org/fileadmin/templates/food_composition/documents/pdf/VTN_FCT_2007.pdf", updated: "2007-01-01" },
 ];
 
 /** Một dòng bảng FDA. g = khẩu phần (gam); các số đúng như bảng (null = bảng không có cột này). */
@@ -32,11 +34,11 @@ export type FoodFact = {
   names: string[];
   g: number;
   kcal: number;
-  fat: number;
+  fat?: number;
   sat?: number;
   chol?: number;
-  na: number;
-  k: number;
+  na?: number;
+  k?: number;
   carb: number;
   fiber?: number;
   sugar?: number;
@@ -44,13 +46,25 @@ export type FoodFact = {
   src: number;
   /** Ghi chú khẩu phần / cách nấu. */
   note?: string;
+  purin?: number;
+  /** Trái cây / rau củ (để nói chuyện đường tự nhiên). */
+  plant?: boolean;
 };
 const F = (id: string, name: string, names: string[], g: number, kcal: number, fat: number, na: number, k: number, carb: number, fiber: number, sugar: number, protein: number, src: number, note?: string): FoodFact => ({ id, name, names, g, kcal, fat, na, k, carb, fiber, sugar, protein, src, note });
 const S = (id: string, name: string, names: string[], kcal: number, fat: number, sat: number, chol: number, na: number, k: number, carb: number, protein: number): FoodFact => ({ id, name, names, g: 84, kcal, fat, sat, chol, na, k, carb, protein, src: 2, note: "nấu chín, không thêm gia vị, dầu mỡ" });
 
-export const FACTS: FoodFact[] = [
+/** Bảng Việt Nam (Viện Dinh dưỡng) — mỗi dòng tính cho 100 g phần ăn được. Đứng TRƯỚC bảng FDA: cùng tên thì lấy số Việt Nam. */
+const VN_FACTS: FoodFact[] = VN_ROWS.map((r) => {
+  const [kcal, protein, fat, carb, fiber, sugar, na, k, , , chol, sat, purin] = r.v;
+  const grp = Math.floor(r.code / 1000);
+  return {
+    id: `vn-${r.code}`, name: r.table, names: r.names, g: 100, kcal: kcal ?? 0, protein: protein ?? 0, fat, carb: carb ?? 0, fiber, sugar, na, k, chol, sat, purin,
+    src: 8, note: "phần ăn được", plant: grp === 4 || grp === 5,
+  };
+});
+const FDA_FACTS: FoodFact[] = [
   // ── Trái cây tươi (FDA) ──
-  F("tao", "Táo", ["táo", "quả táo", "trái táo", "táo tây", "táo đỏ"], 242, 130, 0, 0, 260, 34, 5, 25, 1, 0, "1 quả to"),
+  F("tao", "Táo", ["quả táo", "trái táo", "táo tây", "táo đỏ"], 242, 130, 0, 0, 260, 34, 5, 25, 1, 0, "1 quả to"),
   F("bo", "Bơ", ["trái bơ", "quả bơ", "avocado"], 30, 50, 4.5, 0, 140, 3, 1, 1, 1, 0, "khoảng 1/5 quả vừa"),
   F("chuoi", "Chuối", ["chuối", "quả chuối", "trái chuối", "chuối tiêu", "chuối già"], 126, 110, 0, 0, 450, 30, 3, 19, 1, 0, "1 quả vừa"),
   F("dua-luoi", "Dưa lưới", ["dưa lưới", "dưa vàng", "cantaloupe"], 134, 50, 0, 20, 240, 12, 1, 11, 1, 0),
@@ -106,7 +120,8 @@ export const FACTS: FoodFact[] = [
   S("ca-kiem", "Cá kiếm", ["cá kiếm", "swordfish"], 120, 6, 1.5, 40, 100, 310, 0, 16),
   S("ca-ro-phi", "Cá rô phi, cá diêu hồng", ["cá rô phi", "cá diêu hồng", "rô phi", "diêu hồng", "tilapia"], 110, 2.5, 1, 75, 30, 360, 0, 22),
   S("ca-ngu", "Cá ngừ", ["cá ngừ", "tuna"], 130, 1.5, 0, 50, 40, 480, 0, 26),
-];
+].map((f) => ({ ...f, plant: f.src !== 2 }));
+export const FACTS: FoodFact[] = [...VN_FACTS, ...FDA_FACTS];
 
 // ── Nhận diện ───────────────────────────────────────────────────────────────
 const ACCENTED = /[^\x00-\x7F]/;
@@ -138,45 +153,49 @@ export function factOf(text: string): FoodFact | null {
 export const FACT_ASK = /\b(calo|calori|calories|kcal|nang luong|bao nhieu duong|nhieu duong|it duong|luong duong|do ngot|ngot khong|chat beo|nhieu beo|it beo|map khong|beo khong|tang can|bao nhieu kali|nhieu kali|it kali|kali|natri|nhieu muoi|it muoi|bao nhieu muoi|tinh bot|carb|carbs|chat xo|chat dam|protein|cholesterol|bao nhieu chat)\b/;
 
 // ── Lăng kính theo bệnh ─────────────────────────────────────────────────────
-type Lens = "sugar" | "kcal" | "salt" | "kidney" | "fat" | "general";
+type Lens = "sugar" | "kcal" | "salt" | "kidney" | "fat" | "gout" | "general";
 const LENS: Record<string, Lens> = {
   "tieu-duong": "sugar", "tieu-duong-type-1": "sugar", "tieu-duong-type-2": "sugar", "tien-tieu-duong": "sugar", "tieu-duong-thai-ky": "sugar",
   "beo-phi": "kcal",
   "tang-huyet-ap": "salt",
+  gout: "gout",
   "benh-than-man": "kidney", "hoi-chung-than-hu": "kidney",
   "mo-mau-cao": "fat", "benh-mach-vanh": "fat", "nhoi-mau-co-tim": "fat", "xo-vua-dong-mach": "fat",
 };
 export const lensOf = (medId?: string | null): Lens => (medId && LENS[medId]) || "general";
 
 const num = (x: number) => String(x).replace(".", ",");
-const portion = (f: FoodFact) => `${f.g} g${f.note ? ` (${f.note})` : ""}`;
+const has = (x?: number): x is number => x !== undefined && x !== null;
+const portion = (f: FoodFact) => `${f.g} g${f.note ? ` ${f.src === 8 ? f.note : `(${f.note})`}` : ""}`;
 /** Các chỉ số theo lăng kính — chỉ số liên quan bệnh đứng đầu, in đậm. */
 function figures(f: FoodFact, lens: Lens): string {
   const all: [Lens[], string][] = [
     [["kcal", "general"], `**${f.kcal} kcal**`],
-    [["sugar"], `tinh bột (carb) **${num(f.carb)} g**`],
-    [["sugar", "general"], f.sugar !== undefined ? `đường **${num(f.sugar)} g**` : ""],
-    [["sugar"], f.fiber !== undefined ? `chất xơ ${num(f.fiber)} g` : ""],
-    [["salt", "kidney"], `natri **${f.na} mg**`],
-    [["kidney"], `kali **${f.k} mg**`],
-    [["fat"], `chất béo **${num(f.fat)} g**${f.sat !== undefined ? ` (bão hoà ${num(f.sat)} g)` : ""}`],
-    [["fat"], f.chol !== undefined ? `cholesterol ${f.chol} mg` : ""],
+    [["general"], f.plant && !has(f.sugar) ? `glucid **${num(f.carb)} g**` : ""],
+    [["sugar"], `tinh bột + đường (glucid) **${num(f.carb)} g**`],
+    [["sugar", "general"], has(f.sugar) ? `đường **${num(f.sugar)} g**` : ""],
+    [["sugar"], has(f.fiber) ? `chất xơ ${num(f.fiber)} g` : ""],
+    [["salt", "kidney"], has(f.na) ? `natri **${f.na} mg**` : "natri: bảng chưa có số"],
+    [["kidney"], has(f.k) ? `kali **${f.k} mg**` : "kali: bảng chưa có số"],
+    [["fat"], has(f.fat) ? `chất béo **${num(f.fat)} g**${has(f.sat) ? ` (no / bão hoà ${num(f.sat)} g)` : ""}` : "chất béo: bảng chưa có số"],
+    [["fat"], has(f.chol) ? `cholesterol ${f.chol} mg` : ""],
+    [["gout"], has(f.purin) ? `purin **${f.purin} mg**` : "purin: bảng chưa có số cho món này"],
   ];
   const main = all.filter(([ls, t]) => t && ls.includes(lens)).map(([, t]) => t);
   const rest = [
     lens !== "kcal" && lens !== "general" ? `${f.kcal} kcal` : "",
-    lens === "general" || lens === "kcal" ? `tinh bột ${num(f.carb)} g` : "",
-    lens === "kcal" && f.sugar !== undefined ? `đường ${num(f.sugar)} g` : "",
-    lens !== "fat" ? `chất béo ${num(f.fat)} g` : "",
+    (lens === "general" && !(f.plant && !has(f.sugar))) || lens === "kcal" || lens === "gout" ? `glucid ${num(f.carb)} g` : "",
+    (lens === "kcal" || lens === "gout") && has(f.sugar) ? `đường ${num(f.sugar)} g` : "",
+    lens !== "fat" && has(f.fat) ? `chất béo ${num(f.fat)} g` : "",
     `đạm ${num(f.protein)} g`,
-    lens !== "kidney" && lens !== "salt" ? `natri ${f.na} mg` : "",
-    lens !== "kidney" ? `kali ${f.k} mg` : "",
+    lens !== "kidney" && lens !== "salt" && has(f.na) ? `natri ${f.na} mg` : "",
+    lens !== "kidney" && has(f.k) ? `kali ${f.k} mg` : "",
   ].filter(Boolean);
   return `${main.join(" · ")}${rest.length ? `\n  (khác: ${rest.join(", ")})` : ""}`;
 }
 /** Một câu nối số liệu với bệnh — chỉ nói điều nguồn có. */
 function lensNote(f: FoodFact, lens: Lens): { text: string; src: number[] } | null {
-  if (lens === "sugar" && f.src !== 2)
+  if (lens === "sugar" && f.plant)
     return { text: "Đường có sẵn trong trái cây, rau **nguyên quả** không tính là “đường tự do”; còn **nước ép, sinh tố** thì có tính — người lớn nên giữ đường tự do dưới 30 g mỗi ngày.", src: [3] };
   if (lens === "kcal") return { text: "Trung bình nam cần khoảng 2.500 kcal, nữ khoảng 2.000 kcal mỗi ngày (tuỳ tuổi, cân nặng, vận động); ăn uống ít calo hơn mức cơ thể dùng thì sẽ giảm cân.", src: [4] };
   return null;
@@ -189,7 +208,7 @@ export function factLine(f: FoodFact, medId?: string | null, now = Date.now()): 
   const lens = lensOf(medId);
   const note = lensNote(f, lens);
   return [
-    `📊 **${f.name}** — khẩu phần ${portion(f)}${f.src === 2 ? "" : ", tươi"}: ${figures(f, lens)}`,
+    `📊 **${f.name}** — ${f.src === 8 ? "trong" : "khẩu phần"} ${portion(f)}${f.src === 0 || f.src === 1 ? ", tươi" : ""}: ${figures(f, lens)}`,
     note ? `💡 ${note.text}` : "",
     line([f.src, ...(note?.src ?? [])], now),
   ].filter(Boolean).join("\n");
@@ -198,10 +217,10 @@ export function factLine(f: FoodFact, medId?: string | null, now = Date.now()): 
 /** Lời đáp riêng cho câu hỏi chỉ số ("chuối bao nhiêu calo"). */
 export function renderFact(f: FoodFact, med: { id: string; name: string } | null, now = Date.now()): string {
   const lens = lensOf(med?.id);
-  const note = lensNote(f, lens) ?? (lens === "general" ? lensNote(f, f.sugar !== undefined && f.sugar >= 10 ? "sugar" : "kcal") : null);
+  const note = lensNote(f, lens) ?? (lens === "general" ? lensNote(f, f.plant && f.carb >= 10 ? "sugar" : "kcal") : null);
   return [
     `📊 **${f.name}** — dinh dưỡng theo bảng số liệu chính thức${med ? `, nhìn theo **${med.name}**` : ""}`,
-    `• Khẩu phần **${portion(f)}**${f.src === 2 ? "" : ", ăn tươi"}`,
+    `• ${f.src === 8 ? "Trong" : "Khẩu phần"} **${portion(f)}**${f.src === 0 || f.src === 1 ? ", ăn tươi" : ""}`,
     `• ${figures(f, lens)}`,
     note ? `💡 ${note.text}` : "",
     "👉 Số liệu là của nguyên liệu (chưa nêm muối, đường, dầu mỡ); món nấu xong sẽ khác. Lomi không tự đặt ngưỡng “được / không được” — hỏi bác sĩ hoặc chuyên viên dinh dưỡng để biết khẩu phần hợp với bạn.",
@@ -223,7 +242,7 @@ export function renderDaily(now = Date.now()): string {
 
 /** Món chưa có trong bảng → nói thật, không đoán số. */
 export function renderNoFact(food: string): string {
-  return `📊 Lomi **chưa có số liệu calo, đường đã kiểm chứng** cho **${food}** — bảng chính thức Lomi đang dùng (FDA) mới có 20 loại trái cây, 20 loại rau củ tươi và một số hải sản, nên Lomi không đoán số. Bạn xem nhãn dinh dưỡng trên bao bì (nếu có) hoặc hỏi chuyên viên dinh dưỡng nha.`;
+  return `📊 Lomi **chưa có số liệu calo, đường đã kiểm chứng** cho **${food}** — bảng Lomi dùng (Bảng thành phần thực phẩm Việt Nam của Viện Dinh dưỡng, bảng FDA) là số của **nguyên liệu**, chưa có món nấu sẵn như phở, cơm tấm, bánh xèo…, nên Lomi không đoán số. Bạn hỏi theo nguyên liệu (vd “bánh phở bao nhiêu calo”, “thịt bò bao nhiêu calo”) hoặc xem nhãn dinh dưỡng trên bao bì nha.`;
 }
 
 // ── TIỂU ĐƯỜNG & TRÁI CÂY (30/10, Kir: "tiểu đường k nên ăn mấy món có lượng đường cao như mít, xoài chín…") ──
@@ -254,7 +273,7 @@ export function diabetesFruitBlock(fruit: string, now = Date.now()): string {
   const generic = /^(trái cây|hoa quả)$/.test(fruit);
   return [
     `🍎 **Ăn trái cây khi bị tiểu đường:**\n${DIABETES_FRUIT.map((x) => `• ${x.text}`).join("\n")}`,
-    f ? `📊 **${f.name}** — khẩu phần ${portion(f)}: tinh bột **${num(f.carb)} g** · đường **${num(f.sugar ?? 0)} g** · chất xơ ${num(f.fiber ?? 0)} g` : generic ? "" : `📊 Lomi **chưa có số liệu đường đã kiểm chứng** cho **${fruit}** (bảng FDA chưa có món này), nên không dám nói nó nhiều hay ít đường hơn loại khác — cứ áp dụng cách ăn ở trên, và theo dõi đường huyết sau khi ăn nếu bác sĩ đã hướng dẫn bạn đo.`,
+    f ? `📊 **${f.name}** — ${f.src === 8 ? "trong" : "khẩu phần"} ${portion(f)}: tinh bột + đường (glucid) **${num(f.carb)} g**${has(f.sugar) ? ` · đường **${num(f.sugar)} g**` : ""}${has(f.fiber) ? ` · chất xơ ${num(f.fiber)} g` : ""}` : generic ? "" : `📊 Lomi **chưa có số liệu đường đã kiểm chứng** cho **${fruit}** (các bảng Lomi dùng chưa có món này), nên không dám nói nó nhiều hay ít đường hơn loại khác — cứ áp dụng cách ăn ở trên, và theo dõi đường huyết sau khi ăn nếu bác sĩ đã hướng dẫn bạn đo.`,
     line([5, 6, 7, ...(f ? [f.src] : [])], now),
   ].filter(Boolean).join("\n\n");
 }
@@ -262,16 +281,16 @@ export function diabetesFruitBlock(fruit: string, now = Date.now()): string {
 /** "tiểu đường không nên ăn trái cây gì", "trái cây nào nhiều đường" → cách ăn + bảng đường của trái cây có số liệu (xếp nhiều → ít). */
 export const FRUIT_LIST_ASK = /\b(trai cay|hoa qua|qua gi|trai gi|trai nao|qua nao|loai qua|loai trai)\b/;
 export function renderFruitSugar(med: { id: string; name: string } | null, now = Date.now()): string {
-  const fr = FACTS.filter((f) => f.src === 0 && f.sugar !== undefined).sort((a, b) => b.sugar! / b.g - a.sugar! / a.g);
-  // khoảng bao nhiêu gam đường trong 100 g (tính từ số làm tròn của FDA nên chỉ để so sánh), kèm số gốc theo khẩu phần FDA
-  const per100 = (f: FoodFact) => Math.round((f.sugar! / f.g) * 100);
-  const rows = fr.map((f) => `• ${f.name}: khoảng **${per100(f)} g** đường / 100 g (khẩu phần ${f.g} g${f.note ? ` – ${f.note}` : ""}: ${num(f.sugar!)} g)`);
+  // Trái cây TƯƠI trong bảng Việt Nam (mã 5xxx, bỏ đồ khô / sấy), xếp theo glucid trong 100 g phần ăn được.
+  const fr = VN_FACTS.filter((f) => /^vn-5\d{3}$/.test(f.id) && !/khô|sấy/.test(f.name) && f.carb > 0).sort((a, b) => b.carb - a.carb);
+  const rows = fr.map((f) => `• ${f.name}: **${num(f.carb)} g**${has(f.sugar) ? ` (đường ${num(f.sugar)} g)` : ""} · ${f.kcal} kcal`);
+  const diab = !!med && isSugarTopic(med.id);
   return [
-    med && isSugarTopic(med.id) ? `🍎 **${med.name.charAt(0).toUpperCase()}${med.name.slice(1)}: ăn trái cây thế nào?**` : "🍎 **Trái cây nào nhiều đường?**",
-    med && isSugarTopic(med.id) ? DIABETES_FRUIT.map((x) => `• ${x.text}`).join("\n") : "",
-    `📊 **Lượng đường trong trái cây tươi** (bảng FDA, nhiều trước — số “/ 100 g” tính lại từ khẩu phần nên chỉ để so sánh):\n${rows.join("\n")}`,
-    "🔎 Mít, xoài chín, sầu riêng, nhãn, vải, chôm chôm… hay được nói là “nhiều đường”, nhưng Lomi **chưa có số liệu kiểm chứng** cho các loại này nên không xếp hạng được — ăn thì áp dụng đúng cách ăn ở trên.",
-    line([...(med && isSugarTopic(med.id) ? [5, 6, 7] : []), 0], now),
+    diab ? `🍎 **${med!.name.charAt(0).toUpperCase()}${med!.name.slice(1)}: ăn trái cây thế nào?**` : "🍎 **Trái cây nào nhiều đường?**",
+    diab ? DIABETES_FRUIT.map((x) => `• ${x.text}`).join("\n") : "",
+    `📊 **Tinh bột + đường (glucid) trong 100 g phần ăn được** — trái cây tươi, nhiều trước:\n${rows.slice(0, 12).join("\n")}\n…\n${rows.slice(-5).join("\n")}`,
+    "💡 Glucid càng cao thì cùng một lượng ăn vào, đường huyết càng dễ lên — nên loại glucid cao ăn **phần nhỏ hơn**, chứ nguồn không cấm hẳn. Hỏi “X bao nhiêu calo / có nhiều đường không” để xem đủ số liệu từng loại.",
+    line([5, ...(diab ? [6, 7] : []), 8], now),
   ].filter(Boolean).join("\n\n");
 }
 

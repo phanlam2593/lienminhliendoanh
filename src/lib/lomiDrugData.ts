@@ -76,6 +76,8 @@ export const TRUSTED = [
   "nifc.gov.vn", "viendinhduong.vn",
   // 30/10: hai tổ chức ung thư lớn nhất của Anh (thông tin bệnh nhân có ngày rà soát) — thẻ chăm sóc giảm nhẹ (giảm đau, cổ trướng, tắc ruột, ăn uống).
   "cancerresearchuk.org", "macmillan.org.uk",
+  // 30/10: FAO (Liên Hợp Quốc) lưu bản PDF Bảng thành phần thực phẩm Việt Nam của Viện Dinh dưỡng – Bộ Y tế (lib/vnFoodData).
+  "fao.org",
 ];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;

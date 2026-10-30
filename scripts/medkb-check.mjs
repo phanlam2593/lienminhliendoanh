@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 const dir = path.resolve("src/lib/medkb");
-const TRUSTED = ["nhs.uk", "medlineplus.gov", "who.int", "fda.gov", "moh.gov.vn", "dav.gov.vn", "cdc.gov", "nih.gov", "cancer.gov", "samhsa.gov", "nice.org.uk", "apa.org", "mayoclinic.org", "nifc.gov.vn", "viendinhduong.vn", "cancerresearchuk.org", "macmillan.org.uk"];
+const TRUSTED = ["nhs.uk", "medlineplus.gov", "who.int", "fda.gov", "moh.gov.vn", "dav.gov.vn", "cdc.gov", "nih.gov", "cancer.gov", "samhsa.gov", "nice.org.uk", "apa.org", "mayoclinic.org", "nifc.gov.vn", "viendinhduong.vn", "cancerresearchuk.org", "macmillan.org.uk", "fao.org"];
 const KINDS = ["condition", "mental", "infection", "child", "women", "cancer", "term", "other"];
 const DOSE = /\b\d+(?:[.,]\d+)?\s*(?:mg|mcg|µg|ug|g\/|ml|iu|đv|viên|gói|giọt|lần\/ngày|lần mỗi ngày)\b/i;
 const nv = (s) => s.toLowerCase().replace(/đ/g, "d").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();

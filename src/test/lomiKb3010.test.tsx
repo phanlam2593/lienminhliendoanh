@@ -199,24 +199,24 @@ describe("30/10 — trả lời qua khung chat", () => {
   }, T);
   // Kir: "calo, lượng đường đồ nữa, a muốn tư vấn mấy bệnh đồ thì mấy thứ dinh dưỡng tư vấn z á".
   it("Calo, đường của món; tư vấn theo bệnh kèm số liệu", async () => {
-    expect((await last(["chuối bao nhiêu calo"])).content).toMatch(/110 kcal/);
-    expect((await last(["cam bao nhiêu calo"])).content).toMatch(/80 kcal/);
-    expect((await last(["tiểu đường ăn chuối được không"])).content).toMatch(/đường \*\*19 g/);
-    expect((await last(["suy thận ăn khoai tây được không"])).content).toMatch(/rau củ nhiều kali[\s\S]*kali \*\*620 mg/);
+    expect((await last(["chuối bao nhiêu calo"])).content).toMatch(/97 kcal/);
+    expect((await last(["cam bao nhiêu calo"])).content).toMatch(/38 kcal/);
+    expect((await last(["tiểu đường ăn chuối được không"])).content).toMatch(/glucid\) \*\*22,2 g/);
+    expect((await last(["suy thận ăn khoai tây được không"])).content).toMatch(/rau củ nhiều kali[\s\S]*kali \*\*396 mg/);
     expect((await last(["mình nên ăn bao nhiêu calo mỗi ngày"])).content).toMatch(/2\.500 kcal/);
     expect((await last(["phở bao nhiêu calo"])).content).toMatch(/chưa có số liệu/);
-    expect((await last(["sợ mập lắm, chuối bao nhiêu calo vậy"])).content).not.toMatch(/110 kcal/);
+    expect((await last(["sợ mập lắm, chuối bao nhiêu calo vậy"])).content).not.toMatch(/97 kcal/);
   }, T);
   // Kir: "tiểu đường k nên ăn uống mấy món có lượng đường cao như mít, xoài chín…".
   it("Tiểu đường và trái cây: cách ăn có nguồn, số liệu khi có, nói thật khi chưa có", async () => {
     const mit = (await last(["tiểu đường ăn mít được không"])).content;
     expect(mit).toMatch(/vẫn ăn trái cây được/);
-    expect(mit).toMatch(/chưa có số liệu đường đã kiểm chứng\*\* cho \*\*mít/);
-    expect((await last(["tiểu đường type 2 ăn nho được không"])).content).toMatch(/Nho\*\* — khẩu phần 126 g: tinh bột \*\*23 g\*\* · đường \*\*20 g/);
+    expect(mit).toMatch(/Mít mật\*\* — trong 100 g phần ăn được: tinh bột \+ đường \(glucid\) \*\*14 g/);
+    expect((await last(["tiểu đường type 2 ăn nho được không"])).content).toMatch(/Nho ngọt\*\* — trong 100 g phần ăn được: tinh bột \+ đường \(glucid\) \*\*16,3 g/);
     const list = (await last(["bị tiểu đường kiêng trái cây gì"])).content;
     expect(list).toMatch(/tránh nước ép, sinh tố/);
-    expect(list).toMatch(/Nho: khoảng \*\*16 g\*\* đường \/ 100 g/);
-    expect((await last(["trái cây nào nhiều đường"])).content).toMatch(/chưa có số liệu kiểm chứng/);
+    expect(list).toMatch(/Sầu riêng: \*\*26,9 g/);
+    expect((await last(["trái cây nào nhiều đường"])).content).toMatch(/Xoài chín: \*\*14,1 g\*\* \(đường 14,8 g\)/);
     expect((await last(["tiểu đường ăn thịt bò được không"])).content).not.toMatch(/Ăn trái cây khi bị tiểu đường/);
   }, T);
 });
