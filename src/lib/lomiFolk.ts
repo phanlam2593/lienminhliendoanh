@@ -784,6 +784,73 @@ export const FOLK: FolkEntry[] = [
     sources: [NHS_OA, NHS_RA, NHS_GOUT],
     verifiedAt: VERIFIED,
   },
+  // 30/10 (Kir: "mới mổ hay có vết thương thì k ăn bò — sẹo lồi, thâm sẹo, hay là rau muống, gà thì ngứa, cua thì lồi sẹo… nghệ thì bôi lên ngừa
+  //   sẹo"; ảnh chụp: "Mới mổ ruột thừa ăn bò đc k?" → "chưa xác minh được"). Đối chiếu: NHS (sẹo lồi), các bệnh viện NHS (ăn uống giúp lành
+  //   vết thương) — nguồn KHÔNG nêu món ăn nào gây sẹo lồi / sẹo thâm, và khuyên NÊN ăn đủ đạm (thịt đỏ, gà, cá, hải sản, trứng…).
+  {
+    id: "kieng-an-vet-thuong",
+    name: "Có vết thương / mới mổ: kiêng bò, rau muống, gà, trứng, hải sản, đồ nếp?",
+    names: ["thịt bò", "bò", "rau muống", "thịt gà", "gà", "trứng", "trứng gà", "lòng trắng trứng", "hải sản", "cua", "tôm", "ghẹ", "ốc", "mực", "cá", "đồ tanh", "đồ nếp", "xôi", "nếp", "gạo nếp", "thịt vịt", "vịt", "đồ biển", "thịt heo", "thịt lợn"],
+    ctx: VN(/\b(vết thương|vết mổ|vết khâu|mới mổ|vừa mổ|sau mổ|sau khi mổ|đi mổ|bị mổ|mổ|phẫu thuật|sinh mổ|đẻ mổ|đứt tay|đứt chân|trầy|xước|khâu|may (vết|mũi)|lên da non|da non|sẹo|sẹo lồi|sẹo thâm|thâm sẹo|lồi sẹo|xăm|bấm khuyên|xỏ khuyên|cắt mí|nâng mũi|hút mỡ|té xe|ngã xe)\b/),
+    verdict: "myth",
+    belief: "Có vết thương hay mới mổ thì kiêng thịt bò (sợ sẹo thâm), rau muống (sợ sẹo lồi), thịt gà (sợ ngứa), trứng (sợ sẹo trắng / lồi), cua, tôm, hải sản (sợ lồi sẹo), đồ nếp (sợ mưng mủ).",
+    folk: [],
+    science: [
+      { text: "NHS: sẹo lồi do cơ thể tạo quá nhiều collagen khi vết thương lành; hay gặp ở người gốc Á, Phi, tuổi 10–30, người từng bị sẹo lồi; hay ở ngực, vai, cằm, cổ, tai — nguồn **không nhắc món ăn nào** gây sẹo lồi.", src: [0] },
+      { text: "Hướng dẫn ăn uống giúp lành vết thương của bệnh viện: **ăn đủ đạm ở mỗi bữa** — thịt (cả thịt đỏ), gà, cá, hải sản, trứng, sữa, đậu… chính là những món hay bị kiêng.", src: [1, 2] },
+      { text: "Vết thương làm cơ thể cần nhiều đạm, vitamin, khoáng hơn; ăn uống đủ chất giúp hệ miễn dịch chống nhiễm trùng và có thể giúp vết thương mau lành.", src: [1] },
+    ],
+    how: [
+      { text: "Ăn đa dạng, có món giàu đạm ở mỗi bữa; ăn rau trái mỗi ngày; uống đủ nước (trừ khi bác sĩ dặn hạn chế).", src: [1] },
+      { text: "Ăn kém thì chia nhiều bữa nhỏ, thêm bữa phụ (sữa chua, trứng, đậu, hạt); đừng ăn kiêng giảm cân khi vết thương chưa lành.", src: [1] },
+      { text: "Chăm sẹo: chỉ xoa bóp với kem dưỡng khi vết thương **đã lành hẳn**; che nắng hoặc bôi kem chống nắng SPF 30+ trên sẹo ít nhất 1 năm; sẹo có thể mất khoảng 2 năm mới mờ.", src: [3, 4] },
+    ],
+    caution: [
+      { text: "Mổ thực quản, dạ dày: ăn từng ít một, nhiều bữa, theo hướng dẫn riêng của đội phẫu thuật / chuyên viên dinh dưỡng.", src: [5] },
+      { text: "Người bệnh thận nên hỏi bác sĩ trước khi tăng đạm; người tiểu đường giữ đường huyết ổn để vết thương mau lành. Dị ứng món nào thì vẫn tránh món đó.", src: [1, 2] },
+      { text: "Ai đã từng bị sẹo lồi thì nên tránh xăm, xỏ khuyên; sẹo lồi gây khó chịu thì đi khám sớm — điều trị sớm có thể giúp sẹo không lớn thêm.", src: [0] },
+    ],
+    unverified: ["thịt bò làm sẹo thâm", "rau muống làm sẹo lồi", "thịt gà làm ngứa, lâu lành", "trứng làm sẹo trắng hay lồi", "cua, tôm, hải sản làm lồi sẹo", "đồ nếp làm vết thương mưng mủ"],
+    topics: [
+      { id: "seo-loi", text: "chưa thấy nguồn nói món ăn nào gây sẹo lồi; nguồn chỉ nêu cơ địa, tuổi, vị trí, và khuyên điều trị sớm", src: [0], v: "myth" },
+      { id: "chay-mau", text: "không cần kiêng bò, gà, trứng, hải sản — nguồn khuyên ăn đủ đạm để vết thương mau lành", src: [1, 2], v: "myth" },
+    ],
+    sources: [
+      { title: "Keloid scars", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/keloid-scars/", reviewed: "2023-02-07" },
+      { title: "Wound Healing – Dietary advice", publisher: "Milton Keynes University Hospital (NHS, Anh)", url: "https://www.mkuh.nhs.uk/patient-information-leaflet/wound-healing-dietary-advice" },
+      { title: "Dietary information to promote wound healing", publisher: "Oxford University Hospitals (NHS, Anh)", url: "https://www.ouh.nhs.uk/media/gnokulyd/106907healing.pdf", reviewed: "2024-12" },
+      { title: "Scars – Treatment", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/scars/treatment/", reviewed: "2023-09-18" },
+      { title: "How do I take care of my scars after surgery?", publisher: "Great Ormond Street Hospital (NHS, Anh)", url: "https://www.gosh.nhs.uk/conditions-and-treatments/procedures-and-treatments/how-do-i-take-care-of-my-scars-after-surgery/", reviewed: "2025-05-01" },
+      { title: "Protein in your diet for upper gastrointestinal (UGI) surgery", publisher: "Guy's and St Thomas' (NHS, Anh)", url: "https://www.guysandstthomas.nhs.uk/health-information/protein-in-your-diet-for-upper-gastrointestinal-UGI-surgery/planning-your-food", reviewed: "2025-07" },
+    ],
+    verifiedAt: VERIFIED,
+  },
+  {
+    id: "boi-nghe-seo",
+    name: "Bôi nghệ ngừa sẹo, mờ thâm?",
+    names: ["nghệ", "bột nghệ", "nghệ tươi", "tinh bột nghệ", "đắp nghệ", "bôi nghệ", "nghệ mật ong", "curcumin"],
+    ctx: VN(/\b(sẹo|lồi sẹo|thâm|vết thương|vết mổ|vết khâu|da non|lên da non|mới mổ|sau mổ|trầy|xước|vết bỏng|vết thâm)\b/),
+    verdict: "myth",
+    belief: "Bôi hoặc đắp nghệ (nghệ tươi, tinh bột nghệ) lên vết thương, vết mổ để ngừa sẹo và mờ thâm.",
+    folk: [],
+    science: [
+      { text: "NCCIH (Viện Y tế Hoa Kỳ): CHƯA đủ bằng chứng nghệ / curcumin có lợi cho bệnh nào; trang không nêu tác dụng ngừa sẹo hay làm lành vết thương. Bôi nghệ có thể nổi mề đay, ngứa.", src: [0] },
+      { text: "Cách chăm sẹo NHS nêu: gel hoặc miếng dán silicone, xoa bóp với kem dưỡng khi đã lành hẳn, che nắng; sẹo lồi nặng có thể tiêm / bôi thuốc, áp lạnh, laser.", src: [1] },
+    ],
+    how: [
+      { text: "Chỉ bắt đầu chăm sẹo (xoa bóp, silicone) khi vết thương **đã lành hẳn, chỉ đã rụng** — không dùng silicone lên vết thương hở.", src: [2] },
+      { text: "Che nắng hoặc bôi kem chống nắng SPF 30+ lên sẹo, nhất là năm đầu — sẹo mới rất dễ cháy nắng, sậm màu.", src: [1, 2] },
+    ],
+    caution: [{ text: "Vết thương đỏ, sưng, nóng, chảy mủ hoặc sốt → đi khám, đừng tự đắp thêm thứ gì.", src: [2] }],
+    unverified: ["bôi nghệ giúp ngừa sẹo, mờ thâm"],
+    topics: [{ id: "seo-loi", text: "chưa có nguồn nói bôi nghệ ngừa sẹo lồi; silicone, che nắng, điều trị sớm mới là cách nguồn nêu", src: [0, 1], v: "myth" }],
+    sources: [
+      nccih("turmeric", "Turmeric", "04/2025"),
+      { title: "Scars – Treatment", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/scars/treatment/", reviewed: "2023-09-18" },
+      { title: "How do I take care of my scars after surgery?", publisher: "Great Ormond Street Hospital (NHS, Anh)", url: "https://www.gosh.nhs.uk/conditions-and-treatments/procedures-and-treatments/how-do-i-take-care-of-my-scars-after-surgery/", reviewed: "2025-05-01" },
+    ],
+    verifiedAt: VERIFIED,
+  },
   {
     id: "mau-cam-ngua-co",
     name: "Chảy máu cam: ngửa cổ ra sau?",

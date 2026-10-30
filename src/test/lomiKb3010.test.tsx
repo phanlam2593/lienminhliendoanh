@@ -114,4 +114,24 @@ describe("30/10 — trả lời qua khung chat", () => {
     const c = await last(["gout kiêng gì"]);
     expect(c.med?.aspect).toBe("diet");
   }, T);
+  // Kir (ảnh chụp): "Mới mổ ruột thừa ăn bò đc k?" → "chưa xác minh được". Mẹo kiêng khi có vết thương / mới mổ, bôi nghệ ngừa sẹo.
+  it("Mới mổ / có vết thương hỏi kiêng bò, rau muống, gà → quan niệm dân gian + nguồn: không món nào gây sẹo lồi, nên ăn đủ đạm", async () => {
+    for (const q of ["Mới mổ ruột thừa ăn bò đc k?", "bị đứt tay ăn rau muống có bị sẹo lồi không", "mới sinh mổ ăn gà được không"]) {
+      const m = await last([q]);
+      expect(m.content, q).toMatch(/không nhắc món ăn nào/);
+      expect(m.content, q).toMatch(/ăn đủ đạm/);
+      expect(m.content, q).not.toMatch(/chưa xác minh được: các nguồn/);
+    }
+  }, T);
+  it("Bôi nghệ lên vết mổ ngừa sẹo → chưa có bằng chứng, chỉ chăm sẹo khi đã lành hẳn; 'nghệ có tác dụng gì' vẫn là bài nghệ chung", async () => {
+    const a = await last(["bôi nghệ lên vết mổ có hết sẹo không"]);
+    expect(a.content).toMatch(/Bôi nghệ ngừa sẹo/);
+    expect(a.content).toMatch(/lành hẳn/);
+    const b = await last(["nghệ có tác dụng gì"]);
+    expect(b.content).toMatch(/\*\*Nghệ\*\*/);
+  }, T);
+  it("Gout hỏi ăn bò vẫn theo thẻ gout (không bị mẹo vết thương bắt nhầm)", async () => {
+    const m = await last(["a bị gout ăn bò được không"]);
+    expect(m.med?.id).toBe("gout");
+  }, T);
 });
