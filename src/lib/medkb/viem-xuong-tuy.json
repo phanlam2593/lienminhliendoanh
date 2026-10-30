@@ -1,0 +1,90 @@
+{
+  "id": "viem-xuong-tuy",
+  "kind": "infection",
+  "names": [
+    "viêm xương tủy",
+    "viêm xương tuỷ",
+    "viêm tủy xương",
+    "nhiễm trùng xương",
+    "cốt tủy viêm",
+    "osteomyelitis",
+    "viem xuong tuy"
+  ],
+  "about": [
+    {
+      "text": "Viêm xương tủy là nhiễm trùng xương gây đau; thường khỏi nếu điều trị kháng sinh sớm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau dữ dội (hay ở chân); sưng, nóng, đỏ vùng xương bị; đi khập khiễng (hay gặp ở trẻ); sốt cao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nhiễm trùng lan tới xương, ví dụ từ vết xước nhỏ ở bàn chân người tiểu đường.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nguy cơ cao: tiểu đường (nhất là có loét chân), gãy xương, vết thương hở, mới mổ hoặc nhiễm trùng, suy giảm miễn dịch, từng bị viêm xương tủy.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Điều trị trong 3–5 ngày đầu thường khỏi hẳn; để muộn có thể tổn thương xương vĩnh viễn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Kháng sinh thường dùng 4–6 tuần (nặng có thể tới 12 tuần) — **uống đủ liệu trình** dù đã thấy đỡ; kèm thuốc giảm đau, có khi nẹp.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có ổ áp xe, chèn ép hoặc tổn thương xương lâu ngày thì có thể phải mổ làm sạch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Trẻ không chịu dùng tay hay chân, quấy khóc → đi khám (trẻ nhỏ có thể không sốt).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đau, sưng, đỏ, nóng trên xương; sốt cao, nóng lạnh run, mệt; hoặc triệu chứng quay lại sau khi từng bị → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Osteomyelitis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/o/article/osteomyelitis?print=1",
+      "updated": "2025-10-15"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

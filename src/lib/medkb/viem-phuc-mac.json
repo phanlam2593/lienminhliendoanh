@@ -1,0 +1,76 @@
+{
+  "id": "viem-phuc-mac",
+  "kind": "infection",
+  "names": [
+    "viêm phúc mạc",
+    "viêm màng bụng",
+    "nhiễm trùng ổ bụng",
+    "peritonitis",
+    "viem phuc mac"
+  ],
+  "about": [
+    {
+      "text": "Viêm phúc mạc là nhiễm trùng lớp màng lót bên trong ổ bụng; không điều trị có thể **đe doạ tính mạng**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau bụng; sốt rất cao hoặc nóng lạnh run; tim đập nhanh; tiểu ít hoặc không tiểu; có thể chán ăn, buồn nôn, nôn, chướng bụng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thủng loét dạ dày, vỡ ruột thừa, bệnh tiêu hoá (Crohn, viêm túi thừa), viêm tuỵ, sau mổ, chấn thương bụng, viêm vùng chậu, xơ gan; hiếm khi do lọc màng bụng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Biến chứng: nhiễm khuẩn huyết khi nhiễm trùng lan rộng, tổn thương các cơ quan trong bụng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị ở bệnh viện, thường truyền kháng sinh; có khi phải nuôi ăn qua ống hoặc đường tĩnh mạch.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể phải mổ để làm sạch, dẫn lưu ổ áp xe hoặc xử lý nguyên nhân (ví dụ cắt ruột thừa vỡ).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [
+    {
+      "text": "Có các triệu chứng trên → **đi khám ngay trong ngày / cấp cứu**, không tự chữa ở nhà.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Peritonitis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/p/article/peritonitis/",
+      "updated": "2026-04-07"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

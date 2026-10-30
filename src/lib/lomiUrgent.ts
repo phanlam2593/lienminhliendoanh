@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -99,6 +99,8 @@ function dengueWarnAsserted(n: string): boolean {
 }
 const DENGUE_WARN = VN(/\b(đau bụng (dữ dội|nhiều|quá|lắm|quặn)|quặn bụng|nôn (nhiều|liên tục|hoài|ra máu)|ói (nhiều|liên tục|ra máu)|chảy máu (chân răng|nướu|lợi|mũi|cam)|máu cam|thở (nhanh|gấp)|li bì|lừ đừ|mệt lả|rất mệt|bồn chồn|vật vã|phân (có máu|đen)|đi (ngoài|cầu) ra máu)\b/);
 
+const MENOPAUSE = VN(/\b(mãn kinh|tắt kinh|hết kinh|dứt kinh)\b/);
+const PMB_BLEED = VN(/\b(ra máu|ra huyết|chảy máu|có kinh lại|thấy kinh lại|ra kinh lại|ra máu lại|rỉ máu|ra dịch lẫn máu)\b/);
 const STING = VN(/\b(ong đốt|bị ong|ong vò vẽ|ong bắp cày|côn trùng đốt|kiến ba khoang|bị đốt)\b/);
 const STING_WIDE = VN(/\b(khắp người|toàn thân|cả người|nhiều chỗ|khắp mình|lan rộng)\b/);
 // 21/10 (QA V2): huyết khối, tăng nhãn áp cấp, mất nước, cơn lo kèm tim đập nhanh.
@@ -139,6 +141,15 @@ export function urgentOf(text: string): Urgent | null {
         head: "⚠️ Đang mang thai mà **nhìn mờ / hoa mắt, đau đầu kèm phù mặt – tay – chân, hoặc đau dưới sườn** có thể là dấu hiệu **tiền sản giật** — cần được khám **khẩn**: gọi **115** hoặc tới khoa sản ngay.",
       };
   }
+  // 30/10: đã mãn kinh mà ra máu lại ("mẹ e mãn kinh 3 năm rồi giờ ra máu lại") — trước đây bị đáp "Vậy hả 😄 Nghe được đó".
+  //   NHS "Postmenopausal bleeding" (rà soát 24/09/2026): luôn đi khám, kể cả ra ít / một lần; thẻ ra-mau-sau-man-kinh có nguồn.
+  if (MENOPAUSE.test(n) && !VN(/\b(tiền mãn kinh|chưa mãn kinh|sắp mãn kinh)\b/).test(n) && PMB_BLEED.test(n) && !NOSE_GUM.test(n))
+    return {
+      id: "pmb",
+      card: "ra-mau-sau-man-kinh",
+      aspect: "care",
+      head: `⚠️ Đã mãn kinh mà ra máu thì **luôn nên đi khám phụ khoa sớm** — kể cả chỉ ra ít hay chỉ một lần${other ? ", nên đưa người nhà đi khám nha" : ""}. Đa số không nguy hiểm, nhưng cần khám để loại trừ nguyên nhân nặng.`,
+    };
   if (DENGUE.test(n) && dengueWarnAsserted(n) && !DENGUE_PAST.test(n))
     return {
       id: "dengue",

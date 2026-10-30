@@ -1,0 +1,83 @@
+{
+  "id": "viem-giac-mac",
+  "kind": "infection",
+  "names": [
+    "viêm giác mạc",
+    "viêm giác mạc do vi khuẩn",
+    "nhiễm trùng giác mạc",
+    "loét giác mạc",
+    "keratitis",
+    "microbial keratitis",
+    "viem giac mac"
+  ],
+  "about": [
+    {
+      "text": "Viêm giác mạc do vi khuẩn là nhiễm trùng giác mạc — lớp trong suốt phía trước mắt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Mắt đỏ, đau; có thể nhìn mờ, cộm như có gì trong mắt; đau tăng dần khi thành vết loét — có thể thấy chấm trắng nhỏ trên lòng đen.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hay gặp nhất do **kính áp tròng**: vệ sinh, bảo quản kém, dùng sai kính dùng một lần, đeo qua đêm. Ít hơn do trầy giác mạc hoặc bệnh mắt sẵn có.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Điều trị bằng thuốc nhỏ mắt kháng sinh, lúc đầu nhỏ rất dày (có khi cả đêm) rồi giảm dần; **phải nhỏ đều**, bỏ dở nhiễm trùng có thể nặng lên nhiều.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Không đeo kính áp tròng khi đang bị và vài tuần sau khi khỏi; sau đó nên kiểm tra lại kính với chuyên viên.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng ngừa: vệ sinh, bảo quản kính đúng cách, dùng kính một lần đúng hướng dẫn, không đeo kính khi ngủ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đeo kính áp tròng mà mắt đỏ, đau → đi khám mắt sớm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đang điều trị mà nhìn mờ hơn, đỏ / đau tăng, hoặc chấm trắng trên giác mạc to ra → đi khám mắt hoặc cấp cứu ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Microbial keratitis",
+      "publisher": "Moorfields Eye Hospital (NHS, Anh)",
+      "url": "https://www.moorfields.nhs.uk/eye-conditions/microbial-keratitis"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

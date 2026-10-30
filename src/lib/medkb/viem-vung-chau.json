@@ -1,0 +1,97 @@
+{
+  "id": "viem-vung-chau",
+  "kind": "women",
+  "names": [
+    "viêm vùng chậu",
+    "bệnh viêm vùng chậu",
+    "viêm phần phụ",
+    "viêm tử cung vòi trứng",
+    "viêm vòi trứng",
+    "viêm vùng chậu cấp",
+    "pelvic inflammatory disease"
+  ],
+  "about": [
+    {
+      "text": "Viêm vùng chậu là nhiễm trùng tử cung, vòi trứng và buồng trứng; hay gặp ở phụ nữ có quan hệ tình dục tuổi 15–24.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường không có hoặc chỉ nhẹ: đau vùng chậu / bụng dưới, đau khi quan hệ hoặc khi tiểu, ra máu giữa kỳ hoặc sau quan hệ, kinh nhiều hay đau, khí hư bất thường.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Dấu hiệu nặng: đau bụng dữ dội, sốt cao, buồn nôn hoặc nôn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Vi khuẩn từ âm đạo / cổ tử cung đi lên, hay gặp nhất là **bệnh lây qua đường tình dục** như chlamydia, lậu; đôi khi do vi khuẩn âm đạo bình thường.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Điều trị muộn tăng nguy cơ: tắc vòi trứng, **thai ngoài tử cung**, vô sinh, áp xe, đau vùng chậu lâu dài. Phần lớn người được điều trị vẫn có thai được.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bác sĩ cho kháng sinh, thường trong 14 ngày, có khi tiêm mũi đầu; uống đủ liệu trình, **không quan hệ** cho tới khi xong điều trị.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bạn tình gần đây cũng phải xét nghiệm và điều trị.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng ngừa: dùng bao cao su với bạn tình mới cho tới khi họ kiểm tra sức khoẻ tình dục.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có triệu chứng thì đi khám sớm (bác sĩ hoặc phòng khám sức khoẻ tình dục) — chậm điều trị dễ để lại biến chứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau bụng dữ dội → đi khám gấp / cấp cứu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Pelvic inflammatory disease",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/p/article/pelvicinflammatorydisease",
+      "updated": "2025-08-01"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

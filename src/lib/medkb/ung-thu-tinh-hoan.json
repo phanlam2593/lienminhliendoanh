@@ -1,0 +1,100 @@
+{
+  "id": "ung-thu-tinh-hoan",
+  "kind": "cancer",
+  "names": [
+    "ung thư tinh hoàn",
+    "ung thư dịch hoàn",
+    "u tinh hoàn",
+    "testicular cancer",
+    "ung thu tinh hoan"
+  ],
+  "about": [
+    {
+      "text": "Ung thư tinh hoàn là ung thư ở tinh hoàn — nơi sản xuất tinh trùng và testosterone. Hay gặp nhất ở nam **15–49 tuổi**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Cục u hoặc sưng ở một bên tinh hoàn; tinh hoàn to ra; bìu nặng, chắc hoặc cứng; đau âm ỉ ở tinh hoàn hoặc bìu.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Có thể kèm đau lưng hoặc bụng dưới, sụt cân, ho, khó thở, khó nuốt, đau hay sưng ngực.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Tinh hoàn ẩn (không xuống bìu), bố hoặc anh em trai từng bị, bản thân từng bị, lỗ tiểu lệch thấp, HIV.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Ung thư tinh hoàn **thường điều trị được**; khi đã lan rộng thì khó hơn, có thể không chữa khỏi.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị chính là mổ cắt bỏ tinh hoàn bị bệnh, có khi chỉ cần vậy; có thể thêm hoá trị hoặc xạ trị.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Cắt một bên tinh hoàn thường **không** ảnh hưởng khả năng có con; hoá trị thì có thể — nên hỏi việc trữ tinh trùng trước điều trị.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Nên tự sờ tinh hoàn định kỳ để biết bình thường của mình ra sao, dễ phát hiện thay đổi sớm.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi có cục u, sưng, tinh hoàn to ra, bìu nặng / cứng, đau, hoặc bất kỳ thay đổi nào khác thường với mình.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "What is testicular cancer?",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/testicular-cancer/what-is-testicular-cancer/",
+      "reviewed": "2024-04-02"
+    },
+    {
+      "title": "Symptoms of testicular cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/testicular-cancer/symptoms/",
+      "reviewed": "2024-04-02"
+    },
+    {
+      "title": "Cancer of the testicle",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/cancerofthetesticle/",
+      "updated": "2024-11-06"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

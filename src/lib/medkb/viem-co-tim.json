@@ -1,0 +1,77 @@
+{
+  "id": "viem-co-tim",
+  "kind": "condition",
+  "names": [
+    "viêm cơ tim",
+    "viêm cơ tim cấp",
+    "viêm cơ tim do virus",
+    "myocarditis",
+    "viem co tim"
+  ],
+  "about": [
+    {
+      "text": "Viêm cơ tim là tình trạng viêm cơ tim (lớp cơ của tim); ở trẻ em gọi là viêm cơ tim trẻ em.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Có người không triệu chứng; có người như cảm cúm, **đau ngực giống nhồi máu cơ tim**, mệt, khó thở, thở nhanh, tim đập nhanh, phù chân, ngất.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do nhiễm trùng lan tới tim, hay gặp nhất là virus (COVID-19, cúm…); ngoài ra do vi khuẩn, một số thuốc, chất độc, tia xạ, bệnh tự miễn. Có khi không tìm ra nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Tuỳ nguyên nhân và sức khoẻ chung: có người hồi phục hoàn toàn, có người bị suy tim lâu dài. Biến chứng có thể gồm bệnh cơ tim, suy tim, rối loạn nhịp, viêm màng ngoài tim.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị theo nguyên nhân; có thể cần thuốc điều trị suy tim, rối loạn nhịp, ăn nhạt và giảm hoạt động theo chỉ dẫn bác sĩ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có các triệu chứng trên — nhất là sau một đợt nhiễm trùng gần đây — thì đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Triệu chứng nặng, hoặc đã được chẩn đoán mà đau ngực, phù, khó thở nặng dần → đi cấp cứu ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Myocarditis",
+      "publisher": "MedlinePlus (NIH, Hoa Kỳ)",
+      "url": "https://medlineplus.gov/ency/article/000149.htm",
+      "reviewed": "2026-01-27"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,76 @@
+{
+  "id": "viem-nieu-dao",
+  "kind": "infection",
+  "names": [
+    "viêm niệu đạo",
+    "viêm niệu đạo không do lậu",
+    "viêm đường niệu đạo",
+    "urethritis",
+    "non-gonococcal urethritis",
+    "viem nieu dao"
+  ],
+  "about": [
+    {
+      "text": "Viêm niệu đạo là viêm ống dẫn nước tiểu ra ngoài; thường do bệnh lây qua đường tình dục — loại không do lậu (như chlamydia) hay gặp hơn loại do lậu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Tiểu đau, buốt; dịch trắng hoặc đục ở dương vật / âm đạo; đầu dương vật kích ứng, đau rát.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Triệu chứng có thể xuất hiện vài ngày đến vài tuần sau quan hệ; có người không triệu chứng nhưng vẫn lây cho người khác.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do bệnh lây qua đường tình dục khi quan hệ không dùng bao cao su; cũng có thể do kích ứng / tổn thương niệu đạo (như đặt ống thông tiểu); có khi không rõ nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Điều trị thường bằng kháng sinh; triệu chứng có thể mất 1–2 tuần mới hết hẳn, có thể được hẹn khám lại.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "**Không quan hệ** (kể cả bằng miệng) cho tới khi bạn và bạn tình điều trị xong, hết triệu chứng; bạn tình gần đây cũng nên xét nghiệm, điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nghĩ mình bị viêm niệu đạo hay bệnh lây qua đường tình dục → đi khám phòng khám sức khoẻ tình dục hoặc bác sĩ để điều trị, tránh lây.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Urethritis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/urethritis/",
+      "reviewed": "2023-05-10"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

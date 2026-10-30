@@ -1,0 +1,77 @@
+{
+  "id": "viem-khop-nhiem-trung",
+  "kind": "infection",
+  "names": [
+    "viêm khớp nhiễm trùng",
+    "viêm khớp nhiễm khuẩn",
+    "viêm khớp do vi khuẩn",
+    "nhiễm trùng khớp",
+    "viêm khớp mủ",
+    "septic arthritis",
+    "viem khop nhiem trung"
+  ],
+  "about": [
+    {
+      "text": "Viêm khớp nhiễm trùng là nhiễm trùng khớp do vi khuẩn — cần điều trị càng sớm càng tốt; phần lớn hồi phục hoàn toàn nếu được điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau **đột ngột, dữ dội**, thường ở một khớp; sưng, đổi màu da quanh khớp; người mệt, sốt hoặc nóng lạnh run; thường xuất hiện trong vài ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Vết thương vào khớp (vết cắn, vết cắt sâu), vi khuẩn từ nơi khác theo máu đến, hoặc biến chứng sau mổ khớp.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Nguy cơ cao: viêm khớp dạng thấp, suy giảm miễn dịch, mới mổ khớp, có khớp nhân tạo, tiêm chích ma tuý, bệnh lậu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Thường nằm viện truyền kháng sinh, có thể hút dịch khớp; về nhà uống tiếp kháng sinh vài tuần — **đủ liệu trình**, dừng sớm dễ tái phát.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Vật lý trị liệu giúp tránh cứng khớp lâu dài; nhiễm trùng khớp nhân tạo có thể phải tháo khớp ra.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [
+    {
+      "text": "Một khớp đau đột ngột dữ dội, sưng, đổi màu da, kèm sốt / nóng lạnh run → đi khám gấp ngay trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Septic arthritis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/s/article/septicarthritis",
+      "updated": "2024-12-18"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

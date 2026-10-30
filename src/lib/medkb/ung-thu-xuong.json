@@ -1,0 +1,103 @@
+{
+  "id": "ung-thu-xuong",
+  "kind": "cancer",
+  "names": [
+    "ung thư xương",
+    "ung thư xương nguyên phát",
+    "sarcoma xương",
+    "sacôm xương",
+    "osteosarcoma",
+    "sarcoma ewing",
+    "bone cancer",
+    "ung thu xuong"
+  ],
+  "about": [
+    {
+      "text": "Ung thư xương **nguyên phát** là ung thư hiếm, bắt đầu ngay tại xương; khác với ung thư từ nơi khác **di căn** đến xương (điều trị khác nhau).",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Sarcoma xương (osteosarcoma) hay gặp ở người dưới 20 tuổi; sarcoma Ewing hay gặp ở tuổi 10–20; sarcoma sụn hay gặp ở người trên 40.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau hoặc nhức xương, lúc có lúc không, thường **nặng hơn về đêm**; cục u hay sưng; khó cử động gần khớp, đi khập khiễng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ít gặp hơn: mệt bất thường, sốt kèm vã mồ hôi, sụt cân; rất hiếm khi gãy xương.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường không rõ nguyên nhân. Nguy cơ tăng khi từng xạ trị, bị bệnh Paget xương, một số bệnh di truyền hiếm.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Tiên lượng tuỳ tuổi, loại, giai đoạn; khoảng 6/10 người sống ít nhất 5 năm sau chẩn đoán. Chưa lan khỏi xương thì dễ chữa hơn.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Phẫu thuật và hoá trị là điều trị chính; một số loại dùng thêm xạ trị hoặc thuốc nhắm trúng đích.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Sau mổ cần vật lý trị liệu để hồi phục; tái khám đều trong và sau điều trị.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi đau xương, nhất là đau về đêm; có cục u, sưng, sụt cân không rõ lý do; đau xương / khớp làm khó đi lại.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Symptoms of bone cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/bone-cancer/symptoms/",
+      "reviewed": "2025-05-20"
+    },
+    {
+      "title": "Treatment for bone cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/bone-cancer/treatment/",
+      "reviewed": "2025-05-20"
+    },
+    {
+      "title": "Cancer of the bone",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/cancerofthebone/",
+      "updated": "2022-11-18"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

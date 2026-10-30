@@ -1,0 +1,94 @@
+{
+  "id": "sarcoma-mo-mem",
+  "kind": "cancer",
+  "names": [
+    "sarcoma mô mềm",
+    "ung thư mô mềm",
+    "sacôm mô mềm",
+    "sarcoma",
+    "soft tissue sarcoma",
+    "ung thu mo mem"
+  ],
+  "about": [
+    {
+      "text": "Sarcoma mô mềm là ung thư hiếm, có thể bắt đầu ở hầu hết mô mềm: cơ, mỡ, mạch máu, dây chằng, gân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hay gặp nhất ở người trên 65 tuổi và người từng xạ trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Cục u thường nằm sâu dưới da, chắc, không đau, khó di chuyển; **cứ lớn dần** và có thể đau khi to ra.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Triệu chứng khác tuỳ vị trí: gần bụng có thể đau bụng, táo bón; gần phổi có thể ho kéo dài.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Tuổi cao và từng xạ trị là các yếu tố nguy cơ được nêu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Phẫu thuật là điều trị chính, nhằm lấy càng nhiều khối u càng tốt; có thể xạ trị; hoá trị không thường dùng nhưng đôi khi được chỉ định.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Thuốc nhắm trúng đích đôi khi giúp làm chậm bệnh; tái khám, chụp chiếu đều trong và sau điều trị.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi có cục u hay chỗ sưng ở bất kỳ đâu trên cơ thể — đa số cục u không phải ung thư nhưng nên được kiểm tra.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "What is soft tissue sarcoma?",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/soft-tissue-sarcoma/what-is-soft-tissue-sarcoma/",
+      "reviewed": "2024-02-20"
+    },
+    {
+      "title": "Symptoms of soft tissue sarcoma",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/soft-tissue-sarcoma/symptoms/",
+      "reviewed": "2024-02-20"
+    },
+    {
+      "title": "Treatment for soft tissue sarcoma",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/soft-tissue-sarcoma/treatment/",
+      "reviewed": "2024-02-20"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

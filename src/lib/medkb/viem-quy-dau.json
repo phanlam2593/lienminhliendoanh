@@ -1,0 +1,75 @@
+{
+  "id": "viem-quy-dau",
+  "kind": "condition",
+  "names": [
+    "viêm quy đầu",
+    "viêm bao quy đầu",
+    "viêm qui đầu",
+    "balanitis",
+    "viem quy dau"
+  ],
+  "about": [
+    {
+      "text": "Viêm quy đầu là tình trạng đầu dương vật sưng, đau; thường không nguy hiểm nhưng nên đi khám để tìm đúng nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đầu dương vật sưng, ngứa, đau rát, đỏ; tiểu đau; dịch đặc dưới bao quy đầu; chảy máu quanh bao quy đầu; mùi hôi; khó tuột bao quy đầu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Vệ sinh chưa kỹ; hẹp bao quy đầu ở bé trai; nấm; bệnh lây qua đường tình dục (lậu, chlamydia); kích ứng do xà phòng, sữa tắm, bao cao su; tiểu đường.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Rửa mỗi ngày bằng nước sạch hoặc chất dưỡng ẩm, lau khô nhẹ; người lớn tuột nhẹ bao quy đầu để rửa; **tránh xà phòng, sữa tắm**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Trẻ em: rửa nhẹ bằng nước ấm, không dùng xà phòng, sữa tắm tạo bọt, khăn ướt; **không cố tuột** bao quy đầu còn dính; thay tã thường xuyên.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ kê thuốc bôi hoặc kháng sinh tuỳ nguyên nhân; hay tái phát mà thuốc không đỡ thì có thể tính đến cắt bao quy đầu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có triệu chứng (ở người lớn hoặc ở con) hoặc điều trị chưa đỡ → đi khám bác sĩ hoặc phòng khám sức khoẻ tình dục.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Balanitis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/b/article/balanitis/",
+      "updated": "2024-12-04"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

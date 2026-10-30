@@ -1,0 +1,71 @@
+{
+  "id": "ra-mau-sau-man-kinh",
+  "kind": "women",
+  "names": [
+    "ra máu sau mãn kinh",
+    "chảy máu sau mãn kinh",
+    "ra huyết sau mãn kinh",
+    "xuất huyết sau mãn kinh",
+    "ra máu âm đạo sau mãn kinh",
+    "post-menopausal bleeding",
+    "postmenopausal bleeding"
+  ],
+  "about": [
+    {
+      "text": "Ra máu sau mãn kinh là ra máu âm đạo khi đã mãn kinh (thường là đã hơn một năm không có kinh).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Hay gặp: niêm mạc âm đạo / tử cung mỏng và viêm do thiếu estrogen; polyp cổ tử cung hoặc tử cung (thường lành tính).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Niêm mạc tử cung dày lên (liên quan liệu pháp hormone, estrogen cao, thừa cân). Ít gặp hơn: ung thư tử cung hoặc buồng trứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường không nguy hiểm, nhưng **có thể là dấu hiệu ung thư** — vì vậy **luôn nên đi khám**; phát hiện sớm thì dễ chữa hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bác sĩ sẽ chuyển khám chuyên khoa phụ khoa — không nên chờ quá 2 tuần; có thể siêu âm đầu dò, khám, soi buồng tử cung và sinh thiết.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "**Luôn đi khám** khi ra máu sau mãn kinh — kể cả chỉ ra ít hoặc chỉ một lần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Postmenopausal bleeding",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/symptoms/post-menopausal-bleeding/",
+      "reviewed": "2026-09-24"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

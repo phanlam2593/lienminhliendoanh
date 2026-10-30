@@ -1,0 +1,103 @@
+{
+  "id": "viem-be-than",
+  "kind": "infection",
+  "names": [
+    "viêm bể thận",
+    "viêm thận bể thận",
+    "nhiễm trùng thận",
+    "viêm đài bể thận",
+    "kidney infection",
+    "pyelonephritis",
+    "viem be than"
+  ],
+  "about": [
+    {
+      "text": "Viêm bể thận (nhiễm trùng thận) là một dạng nhiễm trùng đường tiết niệu gây đau, ở một hoặc cả hai thận; thường do viêm bàng quang gây ra.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Sốt cao hoặc người nóng lạnh run; buồn nôn, nôn, tiêu chảy; **đau lưng dưới hoặc đau bên hông**; đau mỏi cơ như cúm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tiểu buốt, tiểu rát, tiểu gấp, nhiều lần; nước tiểu sẫm hoặc đục. Trẻ nhỏ có thể tè dầm, li bì; dưới 2 tuổi có khi chỉ sốt cao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nguy cơ cao hơn khi có bệnh thận như sỏi thận, một số bệnh khác hoặc suy giảm miễn dịch; nữ hay gặp hơn nhưng ai cũng có thể bị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn đỡ sau khoảng 2 tuần điều trị; người lớn tuổi hoặc có bệnh nền có thể lâu hơn. Không điều trị có thể dẫn tới **nhiễm khuẩn huyết**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Tại nhà: nghỉ ngơi, uống nhiều nước, đi tiểu cho hết.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ cho kháng sinh uống, thường 7–14 ngày; người có bệnh mạn tính hoặc đang mang thai có thể phải nhập viện truyền kháng sinh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể dùng paracetamol hạ sốt, giảm đau; tránh tự dùng ibuprofen khi chưa hỏi bác sĩ — có thể tăng nguy cơ tổn thương thận.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi tiểu buốt, tiểu gấp, nước tiểu sẫm / đục; hoặc vẫn còn triệu chứng sau khi uống hết kháng sinh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khám gấp trong ngày khi sốt rất cao hoặc thân nhiệt dưới 36°C, đau bụng dưới / lưng / dưới sườn, tiểu ra máu, nôn, cả ngày không tiểu, hoặc đang mang thai.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Lú lẫn, lơ mơ, nói khó → gọi **115** ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Kidney infection",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/kidneyinfection/",
+      "updated": "2026-10-13"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,90 @@
+{
+  "id": "ung-thu-duong-mat",
+  "kind": "cancer",
+  "names": [
+    "ung thư đường mật",
+    "ung thư ống mật",
+    "ung thư biểu mô đường mật",
+    "cholangiocarcinoma",
+    "bile duct cancer",
+    "ung thu duong mat"
+  ],
+  "about": [
+    {
+      "text": "Ung thư đường mật có thể xuất hiện ở bất kỳ đâu trên đường mật — một phần của hệ tiêu hoá.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Vàng da / vàng mắt, ngứa da, nước tiểu sẫm, phân bạc màu; chán ăn, sụt cân không rõ lý do.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Mệt mỏi, người khó chịu, sốt và ớn lạnh, buồn nôn, nôn, đau bụng. Có người không có hoặc khó nhận ra triệu chứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Trên 65 tuổi; đường mật bất thường, viêm loét đại tràng, **sán lá gan**, sỏi ống mật, xơ gan.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường điều trị được nhưng có thể khó; phát hiện càng sớm càng dễ chữa.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Phát hiện sớm, chưa lan thì mổ cắt bỏ; mổ cũng giúp giảm triệu chứng khi đường mật bị tắc.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ngoài ra có hoá trị, xạ trị; không chữa khỏi được thì chăm sóc giảm nhẹ để giảm triệu chứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi sụt cân rõ trong 6–12 tháng mà không cố giảm, hoặc triệu chứng nặng hơn / không đỡ sau 2 tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "**Da hoặc tròng trắng mắt vàng**, hay nôn quá 2 ngày → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Bile duct cancer (cholangiocarcinoma)",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/c/article/cancerofthebileduct",
+      "updated": "2024-11-14"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

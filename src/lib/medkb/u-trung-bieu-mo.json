@@ -1,0 +1,84 @@
+{
+  "id": "u-trung-bieu-mo",
+  "kind": "cancer",
+  "names": [
+    "u trung biểu mô",
+    "ung thư trung biểu mô",
+    "u trung biểu mô màng phổi",
+    "u trung biểu mô phúc mạc",
+    "ung thư trung biểu mô phúc mạc",
+    "mesothelioma",
+    "peritoneal mesothelioma"
+  ],
+  "about": [
+    {
+      "text": "U trung biểu mô là ung thư của lớp màng bọc một số cơ quan: hay gặp nhất ở **màng phổi**; cũng có thể ở **phúc mạc** (màng bụng), hiếm hơn ở màng tim, tinh hoàn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Màng phổi: đau ngực, khó thở, rất mệt, sốt, vã mồ hôi đêm, ho kéo dài, chán ăn, sụt cân, đầu ngón tay phình to.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phúc mạc: **đau hoặc chướng bụng**, buồn nôn hoặc nôn, chán ăn, sụt cân, tiêu chảy hoặc táo bón.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Gần như luôn do **tiếp xúc amiăng** (asbestos); thường xuất hiện hơn 20 năm sau khi tiếp xúc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Hiện chưa chữa khỏi được; điều trị nhằm kiểm soát triệu chứng và kéo dài sự sống. Thường phát hiện muộn và tiến triển nhanh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Hoá trị là điều trị chính; xạ trị có thể làm chậm bệnh; miễn dịch có thể kéo dài sự sống; chỉ mổ khi phát hiện rất sớm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Kiểm soát triệu chứng: rút dịch, thuốc giảm đau, thủ thuật ngăn dịch tái tích tụ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi có triệu chứng kéo dài hoặc đáng lo, và nhớ **kể với bác sĩ nếu từng tiếp xúc amiăng** (xây dựng, tấm lợp, công nghiệp…).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Mesothelioma",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/mesothelioma/",
+      "updated": "2024-10-02"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

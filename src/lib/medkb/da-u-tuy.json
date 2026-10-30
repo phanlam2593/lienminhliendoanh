@@ -1,0 +1,110 @@
+{
+  "id": "da-u-tuy",
+  "kind": "cancer",
+  "names": [
+    "đa u tủy",
+    "đa u tuỷ",
+    "đa u tủy xương",
+    "bệnh đa u tủy",
+    "u tủy",
+    "multiple myeloma",
+    "myeloma",
+    "da u tuy"
+  ],
+  "about": [
+    {
+      "text": "Đa u tủy là ung thư của **tủy xương** (mô xốp trong xương tạo ra tế bào máu), thường ảnh hưởng nhiều nơi như cột sống, sọ, xương chậu, xương sườn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hay gặp ở nam, người trên 60 tuổi (đa số khoảng 70 tuổi), người da đen, người có gia đình từng bị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Giai đoạn đầu thường không có triệu chứng, hay được phát hiện qua xét nghiệm máu / nước tiểu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đau xương kéo dài (lưng, sườn, hông); mệt, yếu, khó thở do thiếu máu; hay nhiễm trùng; sụt cân.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Canxi máu cao: khát nhiều, táo bón, lú lẫn. Có thể bầm tím, chảy máu cam / chân răng, xương yếu dễ gãy, bệnh thận.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Không rõ nguyên nhân chính xác; liên quan chặt với MGUS (tình trạng thừa một loại protein miễn dịch trong máu).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Điều trị thường kiểm soát được bệnh trong nhiều năm, nhưng phần lớn trường hợp **không chữa khỏi hẳn**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Chưa có triệu chứng thì có thể chỉ theo dõi. Có triệu chứng thì dùng thuốc điều trị đa u tủy (hoá trị, corticoid và các thuốc chuyên biệt).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Một số người trẻ, khoẻ có thể ghép tế bào gốc. Biến chứng được điều trị riêng: giảm đau, xạ trị, thuốc giữ xương, truyền máu, lọc máu…",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có các triệu chứng trên thì đi khám; bác sĩ thường chuyển chuyên khoa huyết học.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Tê bì, yếu chân, rối loạn tiểu tiện / đại tiện (chèn ép tuỷ sống) → đi cấp cứu ngay.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khát dữ dội, lú lẫn, lơ mơ, đau bụng, tiểu nhiều (canxi máu cao) hoặc dấu hiệu suy thận → đi cấp cứu ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Multiple myeloma",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/m/article/multiplemyeloma",
+      "updated": "2024-10-02"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,94 @@
+{
+  "id": "ung-thu-tui-mat",
+  "kind": "cancer",
+  "names": [
+    "ung thư túi mật",
+    "ung thư túi mật nguyên phát",
+    "gallbladder cancer",
+    "ung thu tui mat"
+  ],
+  "about": [
+    {
+      "text": "Ung thư túi mật là ung thư hiếm của hệ tiêu hoá, có thể bắt đầu ở bất kỳ phần nào của túi mật; hay được phát hiện khi đang điều trị bệnh khác như sỏi mật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Vàng da / vàng mắt, ngứa da, nước tiểu sẫm, phân bạc màu; chán ăn, sụt cân không rõ lý do; sốt, ớn lạnh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cục u ở bụng; buồn nôn, nôn; đau âm ỉ bên phải hoặc đau nhói bụng; sưng bụng không liên quan bữa ăn. Có khi không triệu chứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Trên 75 tuổi, nữ giới; sỏi mật, polyp túi mật, túi mật sứ, đường mật bất thường, viêm túi mật / đường mật lâu ngày, tiểu đường.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Người thân ruột thịt từng bị, gốc châu Á hoặc Mỹ Latinh; thừa cân, uống nhiều rượu, hút thuốc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường điều trị được nhưng có thể khó; mức độ tuỳ vị trí, kích thước, độ lan và sức khoẻ chung.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Phát hiện sớm, chưa lan thì mổ cắt bỏ; không cắt được thì mổ để giảm triệu chứng (thông hay nối tắt đường mật).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ngoài ra có hoá trị, xạ trị, thuốc nhắm trúng đích, miễn dịch; không chữa khỏi được thì chăm sóc giảm nhẹ để giảm triệu chứng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi có cục u ở bụng, sụt cân rõ, đau hoặc sưng bụng nặng dần hoặc không đỡ sau 2 tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "**Vàng da hoặc vàng mắt**, hay nôn quá 2 ngày → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Gallbladder cancer",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/c/article/cancerofthegallbladder",
+      "updated": "2026-06-11"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

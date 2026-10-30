@@ -1,0 +1,120 @@
+{
+  "id": "ung-thu-thanh-quan",
+  "kind": "cancer",
+  "names": [
+    "ung thư thanh quản",
+    "ung thư hộp thanh quản",
+    "ung thư dây thanh",
+    "ung thư họng thanh quản",
+    "laryngeal cancer",
+    "larynx cancer",
+    "ung thu thanh quan"
+  ],
+  "about": [
+    {
+      "text": "Ung thư thanh quản là một loại ung thư vùng họng, ở **hộp thanh quản** (nơi phát ra tiếng nói), nằm ở lối vào khí quản.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hay gặp hơn ở nam giới trên 40 tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Hay gặp nhất: **khàn tiếng hoặc đổi giọng kéo dài không hết**, cục u hay sưng ở cổ, đau hoặc khó nuốt, khó thở.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Ít gặp hơn: đau tai kéo dài, hôi miệng, sụt cân không rõ lý do.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hút thuốc, uống rượu nhiều; trên 40 tuổi; nam giới; có người thân ruột thịt từng bị.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Trào ngược axit (trào ngược dạ dày – thực quản) hoặc từng xạ trị vùng cổ cũng làm tăng nguy cơ.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Phát hiện sớm thì phẫu thuật thường là điều trị chính; ngoài ra có hoá trị, xạ trị, thuốc nhắm trúng đích hoặc miễn dịch.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Mổ có thể cắt một phần hay toàn bộ thanh quản; khi đó có thể phải thở qua lỗ mở ở cổ và được hướng dẫn cách nói, giao tiếp lại.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Giảm nguy cơ: bỏ thuốc lá, hạn chế rượu.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi khàn tiếng / đổi giọng không hết, có cục u ở cổ (kể cả cục đã khám mà to lên), đau hoặc khó nuốt.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Khó thở nặng (thở hổn hển, nghẹn, không nói nổi thành câu) → gọi **115** ngay.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "What is laryngeal cancer?",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/laryngeal-cancer/what-is-laryngeal-cancer/",
+      "reviewed": "2025-09-01"
+    },
+    {
+      "title": "Symptoms of laryngeal cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/laryngeal-cancer/symptoms/",
+      "reviewed": "2025-09-01"
+    },
+    {
+      "title": "Causes of laryngeal cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/laryngeal-cancer/causes/",
+      "reviewed": "2025-09-01"
+    },
+    {
+      "title": "Treatment for laryngeal cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/laryngeal-cancer/treatment/",
+      "reviewed": "2025-09-01"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

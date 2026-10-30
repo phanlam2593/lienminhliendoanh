@@ -1,0 +1,112 @@
+{
+  "id": "u-nao",
+  "kind": "cancer",
+  "names": [
+    "u não",
+    "khối u não",
+    "bướu não",
+    "ung thư não",
+    "u não ác tính",
+    "u não lành tính",
+    "brain tumour",
+    "brain tumor",
+    "brain cancer",
+    "u thần kinh đệm",
+    "glioma"
+  ],
+  "about": [
+    {
+      "text": "U não là khối tế bào não tăng sinh bất thường, không kiểm soát. U được chia độ 1–4 theo tốc độ phát triển và khả năng tái phát.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "U **lành tính** (thường độ 1–2) lớn chậm, ít tái phát. U **ác tính** (thường độ 3–4) có thể bắt đầu ở não hoặc từ nơi khác lan đến, dễ tái phát hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Triệu chứng tuỳ vị trí u: đau đầu, co giật, buồn nôn kéo dài, nôn, buồn ngủ li bì.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Thay đổi tinh thần, hành vi (giảm trí nhớ, đổi tính); yếu hoặc liệt dần một bên người; rối loạn thị lực hoặc nói.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có người lúc đầu không có triệu chứng, hoặc triệu chứng xuất hiện rất chậm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Phần lớn u não **không rõ nguyên nhân**. Nguy cơ tăng theo tuổi, dù vài loại hay gặp ở trẻ em hơn.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Một số ít liên quan tia xạ (từng xạ trị), tiền sử gia đình hoặc bệnh di truyền như u xơ thần kinh, xơ cứng củ, hội chứng Turner.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Tiên lượng tuỳ tuổi, loại u, vị trí, hiệu quả điều trị và sức khoẻ chung — bác sĩ điều trị nói sát nhất cho từng người.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "U lành tính thường điều trị thành công, có thể hồi phục hoàn toàn; vẫn cần tái khám vì có ít khả năng tái phát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị tuỳ loại, vị trí, kích thước u và sức khoẻ người bệnh: phẫu thuật lấy u an toàn nhất có thể, sau đó có thể xạ trị hoặc hoá trị.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể cho thuốc corticoid giảm phù quanh u, thuốc chống động kinh khi co giật và thuốc giảm đau khi đau đầu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám nếu đau đầu **khác hẳn** kiểu đau thường ngày hoặc ngày càng nặng, hay có các triệu chứng trên — chưa chắc là u não nhưng cần được kiểm tra.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Brain tumours",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/brain-tumours/",
+      "reviewed": "2023-06-12"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

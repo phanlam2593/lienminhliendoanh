@@ -1,0 +1,94 @@
+{
+  "id": "viem-mang-ngoai-tim",
+  "kind": "condition",
+  "names": [
+    "viêm màng ngoài tim",
+    "viêm màng tim",
+    "pericarditis",
+    "viem mang ngoai tim"
+  ],
+  "about": [
+    {
+      "text": "Viêm màng ngoài tim là viêm lớp màng bọc quanh tim, gây đau ngực; thường không nguy hiểm nhưng đôi khi gây vấn đề nghiêm trọng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau ngực **nhói, như dao đâm**, có thể lan ra vai, tay, bụng; đau hơn khi hít sâu, nuốt, ho hoặc nằm; **ngồi cúi người ra trước thì đỡ**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể kèm sốt hoặc người nóng lạnh run, ho, đau khớp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường xảy ra sau nhiễm virus như cảm lạnh, cúm; nhiều khi khó xác định nguyên nhân chính xác.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn người bệnh đỡ trong vài tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Ngồi dậy hoặc cúi người ra trước giúp đỡ đau.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Điều trị tuỳ nguyên nhân: thường dùng thuốc giảm đau kháng viêm theo chỉ định bác sĩ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Không đỡ hoặc hay tái phát thì bác sĩ có thể kê thuốc khác; do vi khuẩn thì dùng kháng sinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đau ngực nhói, tăng khi hít sâu, nuốt, ho hoặc nằm → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau ngực đột ngột lan ra tay, lưng, cổ, hàm; ngực thắt / nặng; kèm khó thở, vã mồ hôi, buồn nôn; hoặc kéo dài quá 15 phút → gọi **115** ngay (có thể là nhồi máu cơ tim).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Pericarditis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/Pericarditis/",
+      "updated": "2026-04-02"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,83 @@
+{
+  "id": "viem-bao-hoat-dich",
+  "kind": "condition",
+  "names": [
+    "viêm bao hoạt dịch",
+    "viêm túi thanh dịch",
+    "viêm bao hoạt dịch khớp gối",
+    "viêm bao hoạt dịch khuỷu tay",
+    "viêm bao hoạt dịch vai",
+    "bursitis",
+    "viem bao hoat dich"
+  ],
+  "about": [
+    {
+      "text": "Viêm bao hoạt dịch là viêm các túi chứa dịch đệm cho khớp; hay gặp ở vai, hông, khuỷu tay, đầu gối; thường tự khỏi tại nhà trong vài tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau âm ỉ; đau, nóng, sưng quanh khớp; đau hơn khi cử động hoặc tì đè; có thể đỏ da.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Tì đè lặp lại (như quỳ gối nhiều), thừa cân, va đập vào khớp; đôi khi do nhiễm trùng hoặc gout.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Cho khớp nghỉ, tránh tì đè; chườm túi đá bọc khăn khoảng 10 phút, lặp lại vài giờ một lần; kê thêm gối quanh khớp khi ngủ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể dùng paracetamol hoặc ibuprofen để giảm đau.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể cho kháng sinh nếu do nhiễm trùng, tiêm thuốc giảm sưng, hoặc hút bớt dịch bằng kim.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng ngừa: giữ cân nặng hợp lý, có đệm lót và nghỉ khi phải quỳ, khởi động trước tập, vệ sinh vết thương gần khớp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám khi tự chăm 1–2 tuần không đỡ hoặc nặng hơn, sốt / nóng lạnh run, không cử động được khớp, hoặc đau rất dữ dội.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Bursitis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/bursitis/",
+      "updated": "2025-07-16"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

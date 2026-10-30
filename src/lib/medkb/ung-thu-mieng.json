@@ -1,0 +1,116 @@
+{
+  "id": "ung-thu-mieng",
+  "kind": "cancer",
+  "names": [
+    "ung thư miệng",
+    "ung thư khoang miệng",
+    "ung thư lưỡi",
+    "ung thư nướu",
+    "ung thư lợi",
+    "ung thư môi",
+    "ung thư má",
+    "mouth cancer",
+    "oral cancer",
+    "ung thu mieng"
+  ],
+  "about": [
+    {
+      "text": "Ung thư miệng có thể xuất hiện ở nướu, lưỡi, mặt trong má hoặc môi.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Ai cũng có thể bị, nguy cơ tăng theo tuổi; phần lớn được chẩn đoán quanh 66–70 tuổi.",
+      "src": [
+        3
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Vết loét miệng **quá 3 tuần** không lành; mảng đỏ hoặc trắng trong miệng; cục u trong miệng hoặc trên môi.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đau miệng, khó nuốt, khó nói hoặc khàn tiếng, cục u ở cổ hay họng, sụt cân không rõ lý do.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hút thuốc, hoặc **nhai thuốc lá, nhai trầu, cau**; uống rượu nhiều.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Có mảng trắng trong miệng (bạch sản), nắng gắt lên môi, từng bị ung thư, suy giảm miễn dịch, một số chủng HPV ở miệng.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Điều trị chính: phẫu thuật cắt khối u (có khi cả hạch cổ, một phần lưỡi hoặc hàm, rồi tạo hình lại), xạ trị, hoá trị.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Thuốc nhắm trúng đích và liệu pháp miễn dịch đôi khi được dùng khi ung thư đã lan hoặc tái phát.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Giảm nguy cơ: bỏ thuốc lá, **bỏ nhai trầu cau**, hạn chế rượu, ăn nhiều rau trái, vận động đều.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đi khám bác sĩ hoặc nha sĩ nếu vết loét miệng quá 3 tuần, có cục u, mảng đỏ / trắng, đau miệng không hết, khó nuốt, khó nói, khàn tiếng kéo dài.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Symptoms of mouth cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/mouth-cancer/symptoms/",
+      "reviewed": "2023-06-19"
+    },
+    {
+      "title": "Causes of mouth cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/mouth-cancer/causes/",
+      "reviewed": "2023-06-19"
+    },
+    {
+      "title": "Treatment for mouth cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/mouth-cancer/treatment/",
+      "reviewed": "2023-06-19"
+    },
+    {
+      "title": "What is mouth cancer?",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/mouth-cancer/what-is-mouth-cancer/",
+      "reviewed": "2023-06-19"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,120 @@
+{
+  "id": "ung-thu-noi-mac-tu-cung",
+  "kind": "cancer",
+  "names": [
+    "ung thư nội mạc tử cung",
+    "ung thư tử cung",
+    "ung thư thân tử cung",
+    "ung thư niêm mạc tử cung",
+    "womb cancer",
+    "uterine cancer",
+    "endometrial cancer",
+    "ung thu tu cung"
+  ],
+  "about": [
+    {
+      "text": "Ung thư tử cung thường bắt đầu ở lớp niêm mạc tử cung (nội mạc). Hay gặp nhất ở phụ nữ **đã mãn kinh**. (Ung thư cổ tử cung là bệnh khác.)",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phát hiện sớm thì ung thư tử cung **thường điều trị được**.",
+      "src": [
+        4
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "**Ra máu âm đạo sau mãn kinh**; kinh nhiều bất thường; ra máu giữa kỳ kinh; khí hư thay đổi.",
+      "src": [
+        1
+      ]
+    },
+    {
+      "text": "Có thể kèm khối hay sưng ở bụng / vùng chậu, đau vùng chậu hoặc thắt lưng, đau khi quan hệ.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Sau mãn kinh; estrogen cao (thừa cân, một số loại liệu pháp hormone, chưa sinh con, mãn kinh sau 55 tuổi); tiểu đường.",
+      "src": [
+        2
+      ]
+    },
+    {
+      "text": "Gia đình có người ung thư ruột, buồng trứng, tử cung; hội chứng Lynch; từng dùng tamoxifen; từng xạ trị vùng chậu.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Phẫu thuật (cắt tử cung, cổ tử cung, có thể cả buồng trứng, vòi trứng, hạch) thường là điều trị chính khi phát hiện sớm.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Ngoài ra có xạ trị, hoá trị, liệu pháp hormone, miễn dịch, thuốc nhắm trúng đích; ảnh hưởng tới khả năng sinh con sẽ được bác sĩ bàn trước.",
+      "src": [
+        3
+      ]
+    },
+    {
+      "text": "Giảm nguy cơ: giữ cân nặng hợp lý, vận động đều, ăn cân bằng; hỏi bác sĩ khi định dùng liệu pháp hormone.",
+      "src": [
+        2
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "**Đừng chờ** — đi khám sớm khi có các dấu hiệu trên, nhất là ra máu sau mãn kinh; phát hiện sớm dễ chữa hơn.",
+      "src": [
+        1
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Womb (uterus) cancer",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/womb-cancer/",
+      "reviewed": "2024-10-29"
+    },
+    {
+      "title": "Womb (uterus) cancer - Symptoms",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/womb-cancer/symptoms/",
+      "reviewed": "2024-10-29"
+    },
+    {
+      "title": "Womb (uterus) cancer - Causes",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/womb-cancer/causes/",
+      "reviewed": "2024-10-29"
+    },
+    {
+      "title": "Womb (uterus) cancer - Treatment",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/womb-cancer/treatment/",
+      "reviewed": "2024-10-29"
+    },
+    {
+      "title": "Cancer of the uterus (womb)",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/canceroftheuterus(womb)/",
+      "updated": "2025-09-25"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

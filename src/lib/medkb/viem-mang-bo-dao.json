@@ -1,0 +1,79 @@
+{
+  "id": "viem-mang-bo-dao",
+  "kind": "condition",
+  "names": [
+    "viêm màng bồ đào",
+    "viêm mống mắt",
+    "viêm mống mắt thể mi",
+    "viêm màng bồ đào trước",
+    "uveitis",
+    "iritis",
+    "viem mang bo dao"
+  ],
+  "about": [
+    {
+      "text": "Viêm màng bồ đào (còn gọi viêm mống mắt) là viêm bên trong một phần của mắt; thường một mắt, có thể cả hai; thường đỡ nhanh khi điều trị nhưng có thể tái phát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau mắt (thường nặng hơn khi đọc), mắt đỏ, chảy nước mắt, nhìn mờ hoặc giảm thị lực, sợ ánh sáng, thấy chớp sáng hoặc ruồi bay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường không rõ nguyên nhân; có thể liên quan bệnh tự miễn (như viêm cột sống dính khớp), nhiễm trùng (herpes, zona), chấn thương mắt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Biến chứng nặng nhất là **giảm thị lực, mù loà** — vì vậy cần điều trị sớm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Cần bác sĩ nhãn khoa khám, thường trong 24 giờ; điều trị bằng thuốc giảm viêm, giảm đau, trị nhiễm trùng nếu có; nặng hoặc hay tái phát có thể cần thuốc ức chế miễn dịch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đau mắt, sợ ánh sáng, nhìn mờ / thấy chớp sáng, hoặc mắt đỏ nhiều → đi khám mắt gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Mất thị lực (không nhìn thấy) → đi cấp cứu ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Uveitis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/u/article/uveitis/",
+      "updated": "2026-04-13"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

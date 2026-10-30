@@ -1,0 +1,76 @@
+{
+  "id": "viem-tai-ngoai",
+  "kind": "infection",
+  "names": [
+    "viêm tai ngoài",
+    "viêm ống tai ngoài",
+    "viêm ống tai",
+    "tai bơi lội",
+    "otitis externa",
+    "swimmer's ear",
+    "viem tai ngoai"
+  ],
+  "about": [
+    {
+      "text": "Viêm tai ngoài là viêm lớp da lót ống tai — đoạn từ tai ngoài vào tới màng nhĩ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ngứa, đau hoặc khó chịu trong ống tai; chảy dịch trong; ống tai sưng hẹp; có thể nghe kém; đau khi nhai hoặc nói.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nước, xà phòng, dầu gội vào tai; nước đọng sau khi bơi; **ngoáy tai bằng tăm bông**, gãi; thời tiết nóng ẩm; chàm, vảy nến; ráy tai ứ đọng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Bác sĩ thường kê thuốc nhỏ / xịt tai kháng sinh kèm kháng viêm, dùng đủ liệu trình; có thể dùng thuốc giảm đau thông thường.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giữ tai khô: che tai khi tắm, lau phần tai ngoài bằng khăn giấy khô, để bên trong tự khô; có thể sấy tóc ở mức thấp nhất, để cách xa.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "**Không ngoáy tai** bằng tăm bông hay vật gì; đi bơi thì đội mũ bơi kín hoặc dùng nút tai.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có triệu chứng ở tai thì đi khám, nhất là khi điều trị không đỡ; để lâu nhiễm trùng có thể nặng, rất đau và lan ra ngoài.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Otitis externa",
+      "publisher": "Guy's and St Thomas' (NHS, Anh)",
+      "url": "https://www.guysandstthomas.nhs.uk/health-information/otitis-externa"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}
