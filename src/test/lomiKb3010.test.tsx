@@ -197,5 +197,15 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["dinh dưỡng của chuối"])).content).toMatch(/B1, B6/);
     expect((await last(["bánh căn có chất gì"])).content).not.toMatch(/theo nguồn y khoa\)/);
   }, T);
+  // Kir: "calo, lượng đường đồ nữa, a muốn tư vấn mấy bệnh đồ thì mấy thứ dinh dưỡng tư vấn z á".
+  it("Calo, đường của món; tư vấn theo bệnh kèm số liệu", async () => {
+    expect((await last(["chuối bao nhiêu calo"])).content).toMatch(/110 kcal/);
+    expect((await last(["cam bao nhiêu calo"])).content).toMatch(/80 kcal/);
+    expect((await last(["tiểu đường ăn chuối được không"])).content).toMatch(/đường \*\*19 g/);
+    expect((await last(["suy thận ăn khoai tây được không"])).content).toMatch(/rau củ nhiều kali[\s\S]*kali \*\*620 mg/);
+    expect((await last(["mình nên ăn bao nhiêu calo mỗi ngày"])).content).toMatch(/2\.500 kcal/);
+    expect((await last(["phở bao nhiêu calo"])).content).toMatch(/chưa có số liệu/);
+    expect((await last(["sợ mập lắm, chuối bao nhiêu calo vậy"])).content).not.toMatch(/110 kcal/);
+  }, T);
 });
 

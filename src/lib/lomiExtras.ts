@@ -5,6 +5,7 @@
 //   • lạm phát + "ví dụ đời thường" (Q21), sách nhập môn tâm lý học (Q12), tarot có cơ sở khoa học không (Q13)
 //   • nhớ người có tên trong câu kể ("Minh vừa nghỉ việc, Nam đang tìm việc") → "người nào cần sửa CV trước" (Q23)
 // ─────────────────────────────────────────────────────────────────────────────
+import { factOf } from "@/lib/lomiFoodFacts";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
@@ -137,6 +138,8 @@ export function drinkDriveReply(q: string): string | null {
 
 /** Giảm cân cấp tốc / sụt cân không rõ lý do / hỏi calo. history = các câu người dùng gần đây. */
 const ED_SIGN = VN(/\b(móc họng|tự gây nôn|nôn ra vì sợ|sợ (mập|béo|tăng cân)|nhịn ăn (cả ngày|mấy ngày)|bỏ bữa|ăn xong nôn|ghét cơ thể)\b/);
+/** Lịch sử có dấu hiệu rối loạn ăn uống → không đưa con số calo, cân nặng (lib/lomiFoodFacts cũng dùng). */
+export const edInHistory = (history: string[], q = ""): boolean => [...history, q].some((t) => ED_SIGN.test(` ${normalizeVi(t)} `));
 export function weightReply(q: string, history: string[]): string | null {
   const n = ` ${normalizeVi(q)} `;
   if (VN(/\bsụt( \S+){0,2} (\d+|mấy|vài) ?(kg|ký|cân|kí)\b|\bsụt cân\b/).test(n) && VN(/\b(không|chẳng|chả) (ăn kiêng|giảm cân|cố|tập|làm gì)|không rõ (lý do|nguyên nhân)|tự nhiên\b/).test(n))
@@ -147,6 +150,10 @@ export function weightReply(q: string, history: string[]): string | null {
     return "Giảm 10 kg trong 2 tuần là **không an toàn** đâu, và nhịn ăn để làm vậy dễ gây mệt, chóng mặt, mất cơ, rối loạn tiêu hoá, sỏi mật — xong thường tăng lại nhanh. NHS khuyên giảm khoảng **0,5–1 kg mỗi tuần** là mức an toàn, bền.\n\n• Ăn đủ bữa, nhiều rau, đạm nạc; bớt đồ ngọt, đồ chiên, nước ngọt, rượu bia\n• Vận động đều (đi bộ nhanh, đạp xe…), ngủ đủ\n• Có bệnh nền hay muốn giảm nhiều → gặp bác sĩ dinh dưỡng để có kế hoạch riêng";
   }
   if (VN(/\b(bao nhiêu|mấy) (calo|calories|kcal|ca lo)\b|\bcalo (mỗi|một) ngày\b/).test(n)) {
+    // 30/10: "chuối bao nhiêu calo" — hỏi calo của MỘT MÓN có trong bảng FDA → lớp số liệu món ăn (lib/lomiFoodFacts) trả lời.
+    if (!ed && factOf(q)) return null;
+    // "phở bao nhiêu calo" — hỏi calo của một MÓN (không phải nhu cầu của người) → lớp món ăn nói thật là chưa có số liệu.
+    if (!ed && !VN(/\b(mình|tôi|tui|em|anh|chị|mỗi ngày|một ngày|1 ngày|hằng ngày|ngày|cần|nên ăn|người|nam|nữ|con trai|con gái|giảm cân|tăng cân|giữ cân|duy trì|bmi|kg|ký|cân nặng|cao)\b/).test(n)) return null;
     if (ed) return "Phần số calo thì Lomi xin không đưa con số nha — với hoàn cảnh bạn kể, con số dễ thành áp lực hơn là giúp. Bác sĩ hoặc chuyên gia dinh dưỡng sẽ giúp bạn ăn uống an toàn, và đường dây / chuyên gia tâm lý có thể đồng hành nếu chuyện ăn uống đang làm bạn khổ sở. Bạn có muốn kể Lomi nghe thêm không?";
     const all = [...history, q].map((t) => t.normalize("NFC")).join(" ");
     const h = all.match(/(\d)\s*m\s*(\d{1,2})|(\d{3})\s*cm/iu);

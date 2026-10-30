@@ -7,6 +7,7 @@
 //   • Thẻ nạp theo nhu cầu (lazy) — chỉ mục tên (medkb/index.json, nhỏ) nằm sẵn trong gói, thẻ đầy đủ tải khi cần.
 //   • Quy tắc nguồn do test (src/test/lomiMed.test.ts) ép: tên miền tin cậy · mọi `src` hợp lệ · không có liều thuốc · ý ≤ 220 ký tự.
 // ─────────────────────────────────────────────────────────────────────────────
+import { factLine, factOf } from "@/lib/lomiFoodFacts";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import INDEX from "@/lib/medkb/index.json";
@@ -282,9 +283,13 @@ export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood 
       const head = !phrase.includes(" ") && k.startsWith(`${phrase} `);
       // 15/10: món được hỏi nằm TRONG tên món của thẻ ("gà" trong "thịt gà") — chữ nào người dùng gõ dấu thì dấu phải đúng
       //   ở chính chỗ đó: "gà" không phải "ga" trong "nước ngọt có ga".
-      const hit = single || head ? false : p.includes(` ${k} `) ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa) : false;
+      const whole = !(single || head) && p.includes(` ${k} `);
+      const hit = single || head ? false : whole ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa) : false;
+      // 30/10: tên món của thẻ nằm TRỌN trong câu hỏi ("khoai tây" ↔ nhóm "rau củ nhiều kali") thắng trường hợp câu hỏi chỉ là
+      //   một phần tên món dài hơn ("khoai tây" trong "khoai tây chiên lát" của nhóm đồ chế biến sẵn).
+      const len = k.length + (whole ? 1000 : 0);
       if (hit) {
-        if (!best || k.length > best.len) best = { f, len: k.length };
+        if (!best || len > best.len) best = { f, len };
       }
     }
   return best?.f ?? null;
@@ -497,14 +502,17 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     if (f) {
       const say = f.verdict === "avoid" ? "nên **tránh**" : f.verdict === "limit" ? "nên **hạn chế**" : f.verdict === "good" ? "là món **nên ăn**" : "**được**";
       const body = `Với ${N}: **${f.name}** ${say}.\n${f.note}${normalizeVi(f.name) !== food ? `\n(Lomi hiểu “${shown ?? food}” thuộc nhóm “${f.name}” theo cách nguồn phân nhóm.)` : ""}`;
-      return out(`${body}\n\n${sourceLine(t, f.src, now)}`, "food");
+      const ff = factOf(question ?? shown ?? food);
+      return out(`${body}\n\n${sourceLine(t, f.src, now)}${ff ? `\n\n${factLine(ff, t.id, now)}` : ""}`, "food");
     }
     // Chưa có nguồn nói về đúng món này → nói thẳng, đưa nguyên tắc chung CÓ nguồn.
     // 18/10: thẻ không có bảng ăn uống (vd "ho") → nguyên tắc chung lấy từ các ý ăn / uống CÓ NGUỒN trong phần chăm sóc.
     const gen = t.diet && (t.diet.avoid.length || t.diet.ok.length) ? [t.diet.avoid[0], t.diet.ok[0]].filter(Boolean) as DrugFact[] : eatFacts(t).slice(0, 3);
     const say = `Về **${shown ?? food}** thì Lomi **chưa xác minh được**: các nguồn y khoa Lomi đã đối chiếu cho ${N} không nêu riêng món này, nên Lomi không dám nói được hay không.`;
     const tail = gen.length ? `\n\nNguyên tắc chung theo nguồn:\n${bl(gen)}\n\nMuốn chắc về món này, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi bạn nha.\n\n${end([gen])}` : `\n\nBạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.`;
-    return out(say + tail, "food", true);
+    // 30/10: món có trong bảng FDA → kèm số liệu (calo, đường, muối, kali, béo — chỉ số theo bệnh) để người hỏi tự cân nhắc.
+    const ff = factOf(question ?? shown ?? food);
+    return out(say + tail + (ff ? `\n\n${factLine(ff, t.id, now)}` : ""), "food", true);
   }
   if (aspect === "diet") {
     if (!t.diet || !(t.diet.avoid.length || t.diet.ok.length || t.diet.foods.length)) {

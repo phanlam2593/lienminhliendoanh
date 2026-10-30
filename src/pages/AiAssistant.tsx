@@ -62,7 +62,7 @@ import { v9Reply } from "@/lib/lomiV9";
 import { detectPlace } from "@/lib/lomiPlaces";
 import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTherapy";
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
-import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv } from "@/lib/lomiExtras";
+import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
@@ -1675,7 +1675,7 @@ export function AiChat({
         if (!bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) {
           const nuId = findMedId(q);
           const nuMt = nuId ? await loadMedTopic(nuId) : null;
-          const nu = nutrientReply(q, nuMt ? { id: nuMt.id, name: medName(nuMt) } : null);
+          const nu = nutrientReply(q, nuMt ? { id: nuMt.id, name: medName(nuMt) } : null, Date.now(), { noNumbers: edInHistory(msgs.filter((m) => m.role === "user").map((m) => m.content), q), typed: rawRef.current });
           if (nu) {
             topicHit("health");
             return localReply(q, {

@@ -11,6 +11,7 @@
 import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import { WISELY, findFolk } from "@/lib/lomiFolk";
+import { DAILY_ASK, FACT_ASK, factOf, renderDaily, renderFact, renderNoFact } from "@/lib/lomiFoodFacts";
 
 const VERIFIED = "2026-10-30";
 const NHS = "NHS (Anh)";
@@ -437,8 +438,20 @@ export function renderFood(f: Food, now = Date.now()): string {
 /**
  * Lớp vitamin · khoáng chất. `med` = thẻ bệnh nhận ra trong câu (nếu có). null = không phải câu hỏi này.
  */
-export function nutrientReply(q: string, med: { id: string; name: string } | null, now = Date.now()): string | null {
+export function nutrientReply(q: string, med: { id: string; name: string } | null, now = Date.now(), opts: { noNumbers?: boolean; typed?: string } = {}): string | null {
   const n = ` ${normalizeVi(q)} `;
+  // 30/10 — CALO · ĐƯỜNG · MUỐI · KALI của món (lib/lomiFoodFacts, bảng FDA): "chuối bao nhiêu calo", "tiểu đường ăn chuối có nhiều đường không".
+  // (đang có dấu hiệu rối loạn ăn uống → không đưa con số calo; lớp cân nặng lib/lomiExtras trả lời nhẹ nhàng)
+  if (FACT_ASK.test(n) && !opts.noNumbers) {
+    const ff = factOf(q);
+    if (ff) return renderFact(ff, med, now);
+    // (câu gõ thiếu dấu được đoán dấu sai — "cam bao nhiêu calo" thành "cảm…" — thì đọc lại đúng chữ người dùng gõ; bệnh đoán từ chữ sai bỏ qua)
+    const ft = opts.typed && opts.typed !== q ? factOf(opts.typed) : null;
+    if (ft) return renderFact(ft, null, now);
+    if (DAILY_ASK.test(n)) return renderDaily(now);
+    // "phở bao nhiêu calo" — món chưa có số liệu kiểm chứng → nói thật (chỉ khi câu hỏi rõ là calo / đường của MÓN).
+    if (!nutrientOf(q) && /\b(bao nhieu calo|bao nhieu kcal|nhieu calo|it calo|bao nhieu duong|nhieu duong khong|co nhieu duong)\b/.test(n) && !med) return renderNoFact("món này");
+  }
   const x = nutrientOf(q);
   // Hỏi MỘT MÓN có chất gì (không nêu tên chất) → bảng món → chất.
   // (câu nêu bệnh mà hỏi "nên uống vitamin gì" → trả lời theo bệnh bên dưới, không theo món)
