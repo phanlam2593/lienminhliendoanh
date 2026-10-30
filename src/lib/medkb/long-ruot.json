@@ -1,0 +1,70 @@
+{
+  "id": "long-ruot",
+  "kind": "child",
+  "names": [
+    "lồng ruột",
+    "lồng ruột ở trẻ",
+    "lồng ruột cấp",
+    "ruột lồng",
+    "intussusception"
+  ],
+  "about": [
+    {
+      "text": "Lồng ruột là khi một đoạn ruột trượt lồng vào đoạn kế tiếp; nghiêm trọng nhưng **chữa khỏi được**. Hay gặp ở bé khoảng 3–24 tháng tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "**Đau bụng dữ dội từng cơn**, giữa các cơn bé tạm êm; nôn; bụng trông chướng; có thể đi ngoài ra máu lẫn nhầy như **thạch đỏ** trong tã.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do thành ruột sưng lên sau một đợt nhiễm virus.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường chữa khỏi, đa số bé không bị lại; nếu tái phát thường trong khoảng một ngày sau điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Ở bệnh viện thường bơm hơi qua hậu môn dưới X-quang để đẩy ruột về chỗ cũ; không được hoặc bé quá mệt thì mổ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [
+    {
+      "text": "Bé đau bụng từng cơn dữ dội, nôn, phân lẫn máu → **đưa đi cấp cứu ngay**; triệu chứng quay lại sau điều trị cũng đưa đi viện ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Intussusception in children",
+      "publisher": "Cambridge University Hospitals (NHS, Anh)",
+      "url": "https://www.cuh.nhs.uk/patient-information/intussusception-in-children/",
+      "updated": "2025-07-29"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

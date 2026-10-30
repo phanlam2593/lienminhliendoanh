@@ -1,0 +1,70 @@
+{
+  "id": "benh-whitmore",
+  "kind": "infection",
+  "names": [
+    "bệnh whitmore",
+    "whitmore",
+    "vi khuẩn ăn thịt người",
+    "melioidosis",
+    "nhiễm burkholderia pseudomallei",
+    "burkholderia pseudomallei"
+  ],
+  "about": [
+    {
+      "text": "Bệnh Whitmore (melioidosis) là nhiễm vi khuẩn Burkholderia pseudomallei, hay gặp ở vùng nhiệt đới, nhất là **Đông Nam Á** và bắc Úc.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường xuất hiện 1–3 tuần sau nhiễm (có khi nhiều tháng, nhiều năm sau): sốt, đau đầu, ho, khó thở, đau ngực / bụng, đau cơ, lú lẫn, co giật; hay gây viêm phổi, có thể nhiễm khuẩn huyết.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Tiếp xúc đất, nước nhiễm khuẩn qua vết xước, hít bụi / giọt nước, ăn uống đồ nhiễm khuẩn; hiếm lây từ người sang người. Nguy cơ cao: tiểu đường, nghiện rượu, bệnh gan / thận, thalassemia, ung thư, suy giảm miễn dịch, bệnh phổi mạn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Điều trị bằng kháng sinh truyền vài tuần, rồi kháng sinh uống nhiều tháng — **phải uống đủ liệu trình**.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phòng bệnh: có vết thương hở hoặc bị tiểu đường, bệnh thận thì tránh đất, nước đọng; đi ủng khi làm ruộng, làm vườn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Sốt, ho, khó thở kéo dài — nhất là người tiểu đường, làm nông, từng tiếp xúc bùn đất — thì đi khám sớm và kể rõ việc tiếp xúc đất / nước.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "About Melioidosis",
+      "publisher": "CDC (Hoa Kỳ)",
+      "url": "https://www.cdc.gov/melioidosis/about/index.html",
+      "reviewed": "2025-08-28"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

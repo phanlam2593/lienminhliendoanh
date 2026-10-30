@@ -1,0 +1,74 @@
+{
+  "id": "benh-lyme",
+  "kind": "infection",
+  "names": [
+    "bệnh lyme",
+    "lyme",
+    "lyme disease",
+    "bệnh do ve cắn"
+  ],
+  "about": [
+    {
+      "text": "Bệnh Lyme là nhiễm vi khuẩn lây qua **ve cắn**; điều trị sớm thì dễ hơn, để muộn có thể để lại triệu chứng kéo dài.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Sớm: ban đỏ hình **bia bắn** quanh vết cắn (có thể xuất hiện tới 3 tháng sau; khoảng 1/3 người không có ban); sốt, đau đầu, đau cơ khớp, mệt.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Muộn: sưng khớp, đau / tê thần kinh, vấn đề tim, giảm trí nhớ, khó tập trung.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Chỉ một số con ve mang vi khuẩn; nguy cơ tăng khi ve bám trên da quá 24 giờ. Ve không nhảy, không bay — bám vào khi đi ngang bụi cỏ; vết cắn không đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Gỡ ve bằng nhíp đầu nhọn, kẹp sát da, kéo lên từ từ, không bóp nát; rồi sát khuẩn hoặc rửa xà phòng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đi vùng cỏ rậm thì mặc kín, nhét ống quần vào tất, dùng thuốc chống côn trùng, đi đúng lối mòn; kiểm tra da sau khi về. Nếu bị, kháng sinh thường dùng khoảng 3 tuần — uống đủ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có ban nghi bệnh Lyme hoặc triệu chứng trên sau khi bị ve cắn → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Lyme disease",
+      "publisher": "University Hospitals of Leicester (NHS, Anh)",
+      "url": "https://yourhealth.leicestershospitals.nhs.uk/library/emergency-specialist-medicine/infectious-diseases/947-lyme-disease/file",
+      "reviewed": "2026-09"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

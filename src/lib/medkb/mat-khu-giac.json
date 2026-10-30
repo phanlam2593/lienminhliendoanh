@@ -1,0 +1,72 @@
+{
+  "id": "mat-khu-giac",
+  "kind": "condition",
+  "names": [
+    "mất khứu giác",
+    "giảm khứu giác",
+    "mất mùi",
+    "không ngửi được",
+    "không ngửi thấy mùi",
+    "rối loạn khứu giác",
+    "anosmia",
+    "loss of smell"
+  ],
+  "about": [
+    {
+      "text": "Mất hoặc thay đổi khứu giác thường do bệnh tạm thời và có thể tự hồi phục sau vài tuần đến vài tháng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Cảm lạnh, cúm, COVID-19, viêm xoang, viêm mũi dị ứng, polyp mũi; một số thuốc; hiếm khi do Parkinson hoặc động kinh. Khứu giác cũng giảm dần theo tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường hồi phục trong vài tuần đến vài tháng khi nguyên nhân (như cảm, cúm, COVID-19) qua đi; tập ngửi có thể giúp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Rửa mũi bằng nước muối có thể giúp nếu do nhiễm trùng hoặc dị ứng — pha mới mỗi ngày; tập ngửi mùi (smell training) giúp được một số người.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khi mất mùi, cẩn thận hơn với rò gas, cháy và thức ăn hỏng vì có thể không nhận ra.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Khứu giác không trở lại bình thường sau vài tuần → đi khám; bác sĩ có thể chuyển chuyên khoa nếu chưa rõ nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Lost or changed sense of smell",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/symptoms/lost-or-changed-sense-smell/",
+      "reviewed": "2023-12-01"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,65 @@
+{
+  "id": "tieu-ra-mau",
+  "kind": "condition",
+  "names": [
+    "tiểu ra máu",
+    "đái ra máu",
+    "nước tiểu có máu",
+    "nước tiểu màu đỏ",
+    "nước tiểu hồng",
+    "haematuria",
+    "hematuria",
+    "blood in urine"
+  ],
+  "about": [
+    {
+      "text": "Tiểu ra máu là nước tiểu có màu hồng tươi, đỏ hoặc nâu sẫm. **Luôn cần đi khám**, kể cả chỉ có ít hoặc chưa chắc là máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Nhiễm trùng đường tiết niệu (tiểu buốt, tiểu nhiều, nước tiểu đục / hôi, sốt, đau hông lưng), sỏi thận (đau quặn từng cơn ở hông, lưng, bẹn, buồn nôn), phì đại tuyến tiền liệt ở nam trên 50.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có khi không phải máu: mới ăn củ dền; một số thuốc mới dùng làm nước tiểu đỏ / nâu; máu từ hậu môn, kinh nguyệt hoặc ra máu âm đạo.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Tiểu ra máu có thể là dấu hiệu ung thư — phát hiện sớm thì dễ chữa hơn; đừng tự đoán nguyên nhân qua triệu chứng khác.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có hoặc nghi có máu trong nước tiểu → **đi khám gấp trong ngày**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Blood in urine",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/symptoms/blood-in-urine/",
+      "reviewed": "2026-09-25"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

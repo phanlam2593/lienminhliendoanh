@@ -1,0 +1,70 @@
+{
+  "id": "bong-vong-mac",
+  "kind": "condition",
+  "names": [
+    "bong võng mạc",
+    "tách võng mạc",
+    "rách võng mạc",
+    "detached retina",
+    "retinal detachment"
+  ],
+  "about": [
+    {
+      "text": "Bong võng mạc là khi võng mạc — lớp mỏng ở đáy mắt — bị bong ra; **cần điều trị nhanh** để giữ thị lực.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ruồi bay (chấm, vệt) hoặc chớp sáng trong tầm nhìn; một **bóng đen như tấm màn** che một phần tầm nhìn; nhìn mờ hoặc thị lực thay đổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do dịch kính trong mắt thay đổi theo tuổi; nguy cơ cao hơn khi cận thị, từng mổ mắt (như mổ đục thuỷ tinh thể), chấn thương mắt, gia đình có người bị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phẫu thuật thường giúp thị lực không xấu thêm; hồi phục khoảng 2–6 tuần. Càng điều trị sớm càng giữ được thị lực.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Nếu bong hoặc rách võng mạc thì thường phẫu thuật, giúp thị lực không xấu thêm; thường gây tê tại chỗ, hồi phục khoảng 2–6 tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [
+    {
+      "text": "**Ruồi bay xuất hiện / tăng đột ngột, chớp sáng, bóng đen che mắt, hay đột nhiên nhìn mờ** → đi khám mắt ngay trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Detached retina (retinal detachment)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/detached-retina-retinal-detachment/",
+      "reviewed": "2023-08-04"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

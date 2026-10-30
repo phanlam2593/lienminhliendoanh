@@ -32,7 +32,14 @@
       ]
     }
   ],
-  "course": [],
+  "course": [
+    {
+      "text": "Thường **không nguy hiểm** và đỡ khi điều trị đúng nguyên nhân; hay tái phát mà thuốc không đỡ thì có thể tính đến cắt bao quy đầu.",
+      "src": [
+        0
+      ]
+    }
+  ],
   "care": [
     {
       "text": "Rửa mỗi ngày bằng nước sạch hoặc chất dưỡng ẩm, lau khô nhẹ; người lớn tuột nhẹ bao quy đầu để rửa; **tránh xà phòng, sữa tắm**.",

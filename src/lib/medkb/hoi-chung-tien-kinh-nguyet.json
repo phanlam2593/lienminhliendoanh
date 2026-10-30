@@ -1,0 +1,71 @@
+{
+  "id": "hoi-chung-tien-kinh-nguyet",
+  "kind": "women",
+  "names": [
+    "hội chứng tiền kinh nguyệt",
+    "tiền kinh nguyệt",
+    "pms",
+    "rối loạn tiền kinh nguyệt",
+    "rối loạn khí sắc tiền kinh nguyệt",
+    "pmdd",
+    "premenstrual syndrome"
+  ],
+  "about": [
+    {
+      "text": "Hội chứng tiền kinh nguyệt là nhóm triệu chứng xuất hiện trong những tuần trước kỳ kinh. Rối loạn khí sắc tiền kinh nguyệt (PMDD) là dạng nặng, ảnh hưởng nhiều tới sinh hoạt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Tâm trạng thất thường, buồn chán, dễ cáu, lo âu, dễ xúc động; mệt, khó ngủ, đầy bụng, đau quặn, căng ngực, đau đầu; nổi mụn, tóc nhờn, thèm ăn thay đổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [],
+  "course": [],
+  "care": [
+    {
+      "text": "Tập thể dục đều, ăn cân bằng (có thể chia bữa nhỏ mỗi 2–3 giờ), ngủ đủ, thư giãn như yoga, thiền; tránh hút thuốc, uống rượu nhiều.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Ghi nhật ký triệu chứng ít nhất 2 chu kỳ. Có thể dùng ibuprofen hoặc paracetamol khi đau; hỏi bác sĩ / dược sĩ trước khi dùng thực phẩm bổ sung.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Thay đổi lối sống không đỡ, hoặc triệu chứng ảnh hưởng sinh hoạt → đi khám; bác sĩ có thể dùng thuốc nội tiết, liệu pháp nhận thức hành vi hoặc thuốc khác.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Có ý nghĩ muốn tự tử → gọi **115** hoặc tới cấp cứu ngay; đừng ở một mình.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "PMS (premenstrual syndrome)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/pre-menstrual-syndrome/",
+      "reviewed": "2024-06-18"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

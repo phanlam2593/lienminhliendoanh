@@ -1,0 +1,76 @@
+{
+  "id": "nhuoc-thi",
+  "kind": "child",
+  "names": [
+    "nhược thị",
+    "mắt lười",
+    "mắt nhược thị",
+    "lazy eye",
+    "amblyopia"
+  ],
+  "about": [
+    {
+      "text": "Nhược thị (mắt lười) là khi thị lực của trẻ không phát triển bình thường, thường ở một mắt; khoảng 1/50 trẻ bị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường không có triệu chứng, trẻ nhỏ ít khi nhận ra; trẻ lớn có thể nhìn kém một mắt, khó đọc, viết, vẽ; một mắt trông khác (như lác).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Lác mắt; viễn thị, cận thị, loạn thị làm não \"bỏ qua\" hình của một mắt; ít gặp hơn: đục thuỷ tinh thể bẩm sinh, sẹo giác mạc, sụp mí.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Chữa được, **càng sớm càng hiệu quả**: kém hiệu quả hơn sau 6 tuổi, khó thành công sau 8 tuổi; ngưng điều trị quá sớm có thể mất kết quả.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị: đeo kính đều đặn, **bịt mắt tốt** vài giờ mỗi ngày trong nhiều tháng, hoặc nhỏ thuốc làm mờ mắt tốt theo chỉ định.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "**Điều trị càng sớm càng hiệu quả**: kém hiệu quả sau 6 tuổi, khó thành công sau 8 tuổi; ngưng điều trị quá sớm có thể mất kết quả.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Lo lắng về mắt của con, hoặc gia đình có người bị nhược thị → cho bé khám mắt sớm; trẻ nên được kiểm tra thị lực từ khoảng 3–4 tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Lazy eye",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/lazyeye/",
+      "updated": "2021-12-16"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

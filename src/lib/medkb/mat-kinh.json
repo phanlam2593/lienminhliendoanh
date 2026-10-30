@@ -1,0 +1,62 @@
+{
+  "id": "mat-kinh",
+  "kind": "women",
+  "names": [
+    "mất kinh",
+    "vô kinh",
+    "trễ kinh",
+    "chậm kinh",
+    "không có kinh",
+    "tắc kinh",
+    "bị mất kinh",
+    "missed periods",
+    "stopped periods",
+    "amenorrhoea",
+    "amenorrhea"
+  ],
+  "about": [
+    {
+      "text": "Mất kinh / trễ kinh phần lớn không đáng lo, nhưng vẫn nên khám để chắc chắn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Có thai; căng thẳng; sụt cân nhanh hoặc thừa cân; tập luyện quá sức; biện pháp tránh thai nội tiết; hội chứng buồng trứng đa nang; tiền mãn kinh (thường 45–55 tuổi).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Phần lớn **không có gì đáng lo**, nhưng vẫn nên khám để chắc chắn; bác sĩ có thể hỏi bệnh và xét nghiệm máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Mất kinh 3 kỳ liên tiếp; 15 tuổi chưa có kinh; mất kinh kèm thay đổi cân nặng, mệt, mọc lông mặt, da khô hay nhờn; kinh trở nên không đều → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Stopped or missed periods",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/stopped-or-missed-periods/",
+      "reviewed": "2026-06-12"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

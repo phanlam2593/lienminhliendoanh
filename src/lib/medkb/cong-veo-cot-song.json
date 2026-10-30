@@ -1,0 +1,69 @@
+{
+  "id": "cong-veo-cot-song",
+  "kind": "condition",
+  "names": [
+    "cong vẹo cột sống",
+    "vẹo cột sống",
+    "cột sống cong",
+    "gù vẹo cột sống",
+    "scoliosis"
+  ],
+  "about": [
+    {
+      "text": "Vẹo cột sống là khi cột sống xoắn và cong sang bên. Hay bắt đầu ở tuổi 10–15; thường không nguy hiểm, nhẹ thì thường không cần điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thấy cột sống cong, người nghiêng một bên, vai lệch, một bên vai hoặc hông nhô ra, xương sườn nhô một bên, quần áo mặc không vừa; người lớn có thể đau lưng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Khoảng 8/10 trường hợp không rõ nguyên nhân; **không phải do tư thế ngồi, tập luyện hay ăn uống**, nhưng gen có thể làm tăng nguy cơ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Trẻ lớn có thể đeo áo nẹp lưng tới khoảng 16–17 tuổi; cong nặng dần thì có thể mổ. Người lớn chủ yếu điều trị đau và tập theo hướng dẫn vật lý trị liệu.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Phần lớn sống bình thường, vẫn chơi thể thao; tập luyện có lợi, chỉ tránh khi bác sĩ dặn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nghi bạn hoặc con bị vẹo cột sống, hoặc triệu chứng nặng hơn / thuốc giảm đau thông thường không còn hiệu quả → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Scoliosis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/scoliosis/",
+      "updated": "2025-10-17"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

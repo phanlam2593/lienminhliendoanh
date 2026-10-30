@@ -1,0 +1,71 @@
+{
+  "id": "sa-tang-chau",
+  "kind": "women",
+  "names": [
+    "sa tạng chậu",
+    "sa tử cung",
+    "sa sinh dục",
+    "sa bàng quang",
+    "sa âm đạo",
+    "pelvic organ prolapse",
+    "prolapse"
+  ],
+  "about": [
+    {
+      "text": "Sa tạng chậu là khi tử cung, bàng quang hoặc ruột sa xuống, phồng vào âm đạo.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường không triệu chứng; có thể thấy nặng, khó chịu, tức ở bụng dưới hoặc âm đạo; sờ hoặc thấy khối phồng; đau khi quan hệ; rối loạn tiểu tiện, đại tiện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Do cơ sàn chậu yếu; hay gặp khi lớn tuổi, nhất là sau mãn kinh; sinh con, thừa cân, táo bón lâu ngày / rặn nhiều, ho kéo dài, từng mổ vùng chậu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Giữ cân nặng hợp lý, **tập cơ sàn chậu** đều đặn; ăn đủ chất xơ, uống đủ nước, đi bộ nhẹ để tránh táo bón; tránh mang vác nặng, chạy nhảy mạnh; bỏ thuốc lá để bớt ho.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Điều trị tuỳ mức độ: không triệu chứng có thể không cần; có thể dùng vòng nâng đặt âm đạo, vật lý trị liệu sàn chậu, nội tiết; nặng thì mổ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Thấy có khối trong hoặc quanh âm đạo, hoặc các triệu chứng trên → đi khám phụ khoa.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Pelvic organ prolapse",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/pelvic-organ-prolapse/",
+      "reviewed": "2025-07-03"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

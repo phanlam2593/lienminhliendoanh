@@ -1,0 +1,69 @@
+{
+  "id": "chai-chan",
+  "kind": "condition",
+  "names": [
+    "chai chân",
+    "chai sạn",
+    "vết chai",
+    "corns",
+    "calluses",
+    "corns and calluses"
+  ],
+  "about": [
+    {
+      "text": "Vết chai là vùng da dày, cứng, thường phẳng và rộng. Mắt cá (corn) có nhân ở giữa, tròn hoặc hình nón, có thể đau khi đè lên dây thần kinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Ma sát, đè ép lặp lại, da khô; hay ở chỗ xương nhô như khớp ngón. Mắt cá mềm giữa các ngón do da ẩm mồ hôi, lau không khô.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Không nguy hiểm nếu chăm đúng; chú ý dấu hiệu nhiễm trùng (đỏ, sưng, có mủ, chảy máu dưới da) — nhất là người tiểu đường.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Dùng đá bọt hoặc giũa chân chà nhẹ vùng da dày; thoa kem dưỡng chân mỗi ngày (kem có urê thường hiệu quả).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Chọn giày giảm đè lên chỗ xương nhô, không bóp ngón; **không tự cắt** mắt cá hay dùng thuốc tẩy mắt cá bán sẵn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Kiểm tra vùng chai mỗi ngày; thấy chảy máu dưới da, đỏ, sưng, có mủ → đi khám chuyên viên chăm sóc bàn chân sớm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Corns and calluses",
+      "publisher": "The Dudley Group (NHS, Anh)",
+      "url": "https://www.dgft.nhs.uk/pil/corns-and-calluses/"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

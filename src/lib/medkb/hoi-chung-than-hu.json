@@ -1,0 +1,70 @@
+{
+  "id": "hoi-chung-than-hu",
+  "kind": "child",
+  "names": [
+    "hội chứng thận hư",
+    "thận hư",
+    "thận hư ở trẻ em",
+    "bệnh thận hư",
+    "nephrotic syndrome"
+  ],
+  "about": [
+    {
+      "text": "Hội chứng thận hư là khi thận làm thất thoát nhiều đạm ra nước tiểu, gây phù và dễ nhiễm trùng. Hay được phát hiện ở trẻ 1–6 tuổi, hay gặp hơn ở trẻ gốc châu Á.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Phù — đầu tiên quanh mắt, rồi cẳng chân và người; hay bị nhiễm trùng; nước tiểu nhiều bọt, có khi tiểu ít khi tái phát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Đa số trẻ bị thể \"tổn thương tối thiểu\", không rõ nguyên nhân; ít hơn do bệnh thận khác, nhiễm trùng, lupus, tiểu đường; thể bẩm sinh do gen.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số trẻ đáp ứng tốt với điều trị corticoid, đạm niệu và phù thường hết trong vài tuần; bệnh có thể tái phát. Biến chứng: nhiễm trùng, cục máu đông.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị chính là corticoid theo phác đồ bác sĩ; có thể kèm giảm muối. Ở nhà thử nước tiểu bằng que mỗi sáng, ghi sổ để phát hiện tái phát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Trẻ tiếp xúc người bị thuỷ đậu / sởi mà chưa miễn dịch; trẻ mệt hoặc sốt cao; trẻ vừa tiêu chảy vừa nôn → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Nephrotic syndrome in children",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/nephrotic-syndrome/",
+      "reviewed": "2022-10-05"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

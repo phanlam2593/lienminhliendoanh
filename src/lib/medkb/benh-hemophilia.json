@@ -1,0 +1,78 @@
+{
+  "id": "benh-hemophilia",
+  "kind": "condition",
+  "names": [
+    "bệnh máu khó đông",
+    "máu khó đông",
+    "hemophilia",
+    "haemophilia",
+    "bệnh hemophilia",
+    "bệnh ưa chảy máu",
+    "ưa chảy máu"
+  ],
+  "about": [
+    {
+      "text": "Bệnh máu khó đông (hemophilia) là bệnh hiếm làm máu khó đông, chảy máu lâu hơn bình thường, do thiếu yếu tố đông máu. Chưa chữa khỏi nhưng điều trị giúp sống khá bình thường.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Chảy máu không cầm: chảy máu cam lâu, chảy máu chân răng, vết thương chảy máu lâu, dễ bầm tím; chảy máu trong khớp gây đau, cứng, sưng; chảy máu trong cơ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường di truyền qua nhiễm sắc thể X — chủ yếu gặp ở **nam**; nữ thường chỉ mang gen. Có bé trai bị mà gia đình chưa từng có ai.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Điều trị bằng tiêm bổ sung yếu tố đông máu, đều đặn để phòng chảy máu hoặc khi đang chảy máu, theo phác đồ của trung tâm huyết học.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tránh thể thao va chạm mạnh; **hỏi trước khi dùng aspirin, ibuprofen** (ảnh hưởng đông máu); chăm sóc răng lợi, khám răng định kỳ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Chảy máu không cầm, hoặc khớp đau, sưng, nóng → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Sau chấn thương đầu mà đau đầu dữ dội, cứng cổ, nôn, lú lẫn, nói ngọng, nhìn mờ, mất thăng bằng, méo mặt (nghi chảy máu trong sọ) → gọi **115** ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Haemophilia",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/h/article/haemophilia/",
+      "updated": "2022-10-24"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

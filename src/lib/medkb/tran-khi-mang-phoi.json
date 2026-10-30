@@ -1,0 +1,69 @@
+{
+  "id": "tran-khi-mang-phoi",
+  "kind": "condition",
+  "names": [
+    "tràn khí màng phổi",
+    "xẹp phổi do tràn khí",
+    "tràn khí màng phổi tự phát",
+    "pneumothorax",
+    "collapsed lung"
+  ],
+  "about": [
+    {
+      "text": "Tràn khí màng phổi là khi khí lọt vào khoang giữa phổi và thành ngực; nhỏ thì ít triệu chứng, lớn có thể làm xẹp phổi. Loại có áp lực đè ép phổi và tim — đe doạ tính mạng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "**Đau ngực đột ngột, nhói một bên, đau hơn khi hít vào**; khó thở.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Có thể xảy ra ở người trẻ khoẻ mạnh không rõ lý do (hay ở nam, người cao gầy); hoặc ở người có bệnh phổi (COPD, lao); chấn thương ngực, gãy sườn, một số thủ thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Tuỳ kích thước: nhỏ thường tự lành vài ngày, chụp X-quang kiểm tra lại; lớn thì hút khí bằng kim hoặc đặt ống dẫn lưu ngực ở bệnh viện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Từng bị thì chỉ đi máy bay khi bác sĩ cho phép (thường khoảng 1 tuần sau khi phổi nở lại); **không lặn bình khí** trừ khi đã được mổ phòng tái phát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau ngực đột ngột kèm khó thở → đi cấp cứu / gọi **115** ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Pneumothorax (collapsed lung)",
+      "publisher": "Blackpool Teaching Hospitals (NHS, Anh)",
+      "url": "https://www.blackpoolteachinghospitals.nhs.uk/patients/patient-leaflets/PL1436"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

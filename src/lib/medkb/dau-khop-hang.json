@@ -1,0 +1,87 @@
+{
+  "id": "dau-khop-hang",
+  "kind": "condition",
+  "names": [
+    "đau khớp háng",
+    "đau háng",
+    "đau khớp hông",
+    "hip pain"
+  ],
+  "about": [
+    {
+      "text": "Đau khớp háng ở người lớn có nhiều nguyên nhân, đa số tự chăm tại nhà được; một số trường hợp cần khám gấp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Gãy xương (đau dữ dội, không đi được sau ngã), bong gân / căng cơ / viêm gân, thoái hoá khớp (thường trên 45, đau khi đi, cứng sau khi cử động).",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Viêm khớp dạng thấp (đau cứng tăng sau nghỉ, lúc mới ngủ dậy), viêm khớp nhiễm trùng (háng sưng nóng, sốt), viêm bao hoạt dịch (đau lan xuống đùi, tăng khi nằm nghiêng).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Nhiều trường hợp đỡ sau khoảng 2 tuần tự chăm tại nhà; không đỡ hoặc nặng dần thì cần khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Đừng vận động quá sức nhưng vẫn cử động trong khả năng; chườm túi đá bọc khăn tối đa 20 phút, mỗi 2–3 giờ; đi giày êm, đỡ chân; kéo giãn nhẹ.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Giảm cân nếu thừa cân; tránh mang vác nặng, ngồi ghế thấp. Có thể dùng paracetamol hoặc ibuprofen (dạng gel hay viên) để giảm đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đau ảnh hưởng sinh hoạt, giấc ngủ; nặng dần hay tái lại; tự chăm 2 tuần không đỡ; cứng khớp háng quá 30 phút sau ngủ dậy → đi khám.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Đau dữ dội đột ngột không do ngã; háng sưng nóng; da quanh háng đổi màu; đau kèm sốt, ớn lạnh → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau háng dữ dội sau ngã / chấn thương, **không đi hay không chịu lực được lên chân**, tê bì háng hoặc chân sau chấn thương → đi cấp cứu / gọi **115**, đừng tự lái xe.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Hip pain in adults",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/symptoms/hip-pain/",
+      "reviewed": "2025-11-20"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

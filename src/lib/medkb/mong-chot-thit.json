@@ -1,0 +1,79 @@
+{
+  "id": "mong-chot-thit",
+  "kind": "condition",
+  "names": [
+    "móng chọc thịt",
+    "móng mọc ngược",
+    "móng quặp",
+    "móng đâm vào thịt",
+    "móng chân mọc vào thịt",
+    "ingrown toenail",
+    "móng chân chọc thịt",
+    "móng chân đâm vào thịt"
+  ],
+  "about": [
+    {
+      "text": "Móng chọc thịt là khi mép móng (thường ngón chân cái) cong đâm vào da: ngón đỏ, đau, sưng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ngón chân đỏ, đau, sưng, móng cong ăn vào thịt. Dấu hiệu nhiễm trùng: có mủ, người nóng lạnh run.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Cắt móng quá ngắn, cắt khoé móng; đi giày chật, không vừa chân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường tự chăm tại nhà được (để móng mọc ra); nếu nhiễm trùng có thể cần kháng sinh, móng chọc nặng có thể phải cắt một phần hoặc cả móng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Ngâm chân nước ấm pha muối để da mềm, giảm nguy cơ nhiễm trùng; giữ chân sạch, lau khô kỹ; đi giày rộng thoải mái hoặc dép.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Cắt móng **thẳng ngang**, không cắt khoé; **đừng tự cắt** móng đang chọc thịt ở nhà — để móng mọc ra.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Tự chăm không đỡ; ngón đau sưng chảy mủ; sốt cao hoặc nóng lạnh run; hoặc **đang bị tiểu đường** → đi khám. Bác sĩ có thể cho kháng sinh hoặc chuyển cắt một phần móng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Ingrown toenail",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/ingrown-toenail/",
+      "reviewed": "2025-06-30"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

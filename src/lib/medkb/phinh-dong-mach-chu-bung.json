@@ -1,0 +1,71 @@
+{
+  "id": "phinh-dong-mach-chu-bung",
+  "kind": "condition",
+  "names": [
+    "phình động mạch chủ bụng",
+    "phình động mạch chủ",
+    "phình mạch chủ bụng",
+    "phình động mạch chủ ngực bụng",
+    "abdominal aortic aneurysm",
+    "aortic aneurysm"
+  ],
+  "about": [
+    {
+      "text": "Phình động mạch chủ bụng là chỗ phình ở động mạch chủ — mạch máu lớn đưa máu từ tim xuống bụng. Đa số không gây vấn đề, nhưng có thể **vỡ** — rất nguy hiểm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường không có triệu chứng, hay phát hiện qua tầm soát hoặc khi khám bệnh khác. Khi to dần có thể đau bụng, đau lưng, cảm giác mạch đập trong bụng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Nam từ 65 tuổi; đang hoặc từng hút thuốc; huyết áp cao; mỡ máu cao; người thân từng bị; bệnh động mạch, COPD, hội chứng Marfan.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Phình nhỏ thường theo dõi bằng siêu âm định kỳ và thay đổi lối sống: bỏ thuốc lá, ăn uống lành mạnh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đau bụng hoặc đau lưng không hết, hay tái lại; sờ thấy khối trong bụng → đi khám. Nam 65 tuổi trở lên, nhất là có hút thuốc, nên hỏi bác sĩ về siêu âm tầm soát.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "**Đau bụng hoặc lưng đột ngột, dữ dội**, khó thở, ngất, da tái xám → gọi **115** ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Abdominal aortic aneurysm",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/abdominal-aortic-aneurysm/",
+      "reviewed": "2023-06-14"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

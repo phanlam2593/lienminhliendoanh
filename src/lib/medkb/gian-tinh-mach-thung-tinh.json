@@ -1,0 +1,61 @@
+{
+  "id": "gian-tinh-mach-thung-tinh",
+  "kind": "condition",
+  "names": [
+    "giãn tĩnh mạch thừng tinh",
+    "giãn tĩnh mạch tinh",
+    "dãn tĩnh mạch thừng tinh",
+    "varicocele"
+  ],
+  "about": [
+    {
+      "text": "Giãn tĩnh mạch thừng tinh là một búi tĩnh mạch giãn to cạnh tinh hoàn, hay gặp bên trái hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường không triệu chứng; giãn lớn có thể gây nặng một bên bìu hoặc đau âm ỉ về cuối ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [],
+  "course": [
+    {
+      "text": "Có thể ảnh hưởng máu nuôi tinh hoàn, làm tinh hoàn teo nhỏ và có thể giảm khả năng sinh con; mổ có thể giúp nhưng không chắc chắn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Thường chỉ mổ (mổ mở, nội soi hoặc nút mạch) khi gây khó chịu hoặc ảnh hưởng khả năng sinh con; thường về trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Bìu nặng, đau âm ỉ kéo dài, hoặc vợ chồng chậm có con → đi khám nam khoa. Sau mổ mà sưng đỏ bìu nhiều, đau tăng, sốt cao → khám lại ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Varicocele",
+      "publisher": "Milton Keynes University Hospital (NHS, Anh)",
+      "url": "https://www.mkuh.nhs.uk/patient-information-leaflet/varicocele"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

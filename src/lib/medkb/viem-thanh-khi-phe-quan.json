@@ -1,0 +1,78 @@
+{
+  "id": "viem-thanh-khi-phe-quan",
+  "kind": "child",
+  "names": [
+    "viêm thanh khí phế quản",
+    "viêm thanh khí phế quản cấp",
+    "bệnh croup",
+    "croup",
+    "ho ông ổng",
+    "ho như chó sủa",
+    "ho khan tiếng ông ổng"
+  ],
+  "about": [
+    {
+      "text": "Viêm thanh khí phế quản (croup) là bệnh hay gặp ở đường thở của bé và trẻ nhỏ; thường nhẹ nhưng đôi khi cần điều trị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "**Ho ông ổng như chó sủa / hải cẩu kêu**, khàn tiếng, khó thở, tiếng rít cao khi hít vào; thường có triệu chứng cảm trước, nặng hơn về đêm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [],
+  "course": [
+    {
+      "text": "Thường đỡ trong khoảng 48 giờ; bác sĩ có thể kê thuốc giúp bệnh mau qua.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Cho bé ngồi thẳng, giữ bé bình tĩnh, cho uống nhiều nước, theo dõi bé thường xuyên; **không** cho bé ngồi phòng xông hơi nước.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Có thể cho bé dùng paracetamol hoặc ibuprofen để hạ sốt, giảm đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nghi bé bị croup, hoặc bé nặng hơn / không đỡ sau khi đã khám → đưa bé đi khám. Bé dưới 3 tháng có thể được chuyển viện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Bé **thở rất khó**, môi / da tái xanh, xám; li bì khó đánh thức; mềm oặt; chảy dãi hoặc khó nuốt → gọi **115** ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Croup",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/c/article/croup",
+      "updated": "2026-06-18"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

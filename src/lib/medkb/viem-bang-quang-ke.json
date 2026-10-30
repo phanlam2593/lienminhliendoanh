@@ -1,0 +1,86 @@
+{
+  "id": "viem-bang-quang-ke",
+  "kind": "condition",
+  "names": [
+    "viêm bàng quang kẽ",
+    "hội chứng đau bàng quang",
+    "đau bàng quang mạn tính",
+    "interstitial cystitis",
+    "bladder pain syndrome"
+  ],
+  "about": [
+    {
+      "text": "Viêm bàng quang kẽ (hội chứng đau bàng quang) là bệnh bàng quang lâu dài gây đau bụng dưới hoặc lưng; chưa chữa khỏi nhưng kiểm soát được. Hay gặp ở nữ, từ 40 tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đau bàng quang, bụng dưới, lưng; buồn tiểu liên tục dù bàng quang rỗng; tiểu nhiều lần ít một, thức dậy đi tiểu ban đêm; rỉ tiểu; đau khi quan hệ; lúc nặng lúc nhẹ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Một số đồ ăn uống làm nặng hơn: đồ cay, đồ chua (cam chanh), rượu, cà phê, trà, nước tăng lực.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Ghi nhật ký ăn uống để tìm món làm nặng; vận động nhẹ (đi bộ, bơi, yoga); thư giãn, thiền.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể kết hợp thuốc giảm đau, thuốc khác, vật lý trị liệu sàn chậu, tập lại bàng quang; nặng có thể chuyển chuyên khoa tiết niệu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": {
+    "avoid": [
+      {
+        "text": "Đồ cay, đồ chua như cam chanh, rượu, cà phê, trà, nước tăng lực có thể làm triệu chứng nặng hơn.",
+        "src": [
+          0
+        ]
+      }
+    ],
+    "ok": [],
+    "foods": []
+  },
+  "doctor": [
+    {
+      "text": "Đau bàng quang, bụng dưới hay lưng kéo dài hoặc tái lại, đi tiểu nhiều hơn hẳn → đi khám.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Tiểu ra máu, hoặc đau kèm sốt cao, ớn lạnh (có thể nhiễm trùng) → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Bladder pain syndrome (interstitial cystitis)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/interstitial-cystitis/",
+      "reviewed": "2025-10-17"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

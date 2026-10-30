@@ -1,0 +1,61 @@
+{
+  "id": "tran-dich-mang-phoi",
+  "kind": "condition",
+  "names": [
+    "tràn dịch màng phổi",
+    "nước trong phổi",
+    "dịch màng phổi",
+    "pleural effusion"
+  ],
+  "about": [
+    {
+      "text": "Tràn dịch màng phổi là dịch tích lại giữa phổi và thành ngực (hay gọi \"nước trong phổi\").",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Khó thở tăng dần, thường kèm ho khan và đau ngực bên bị; có thể sụt cân, sốt, ho ra máu tuỳ nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hay gặp nhất do viêm phổi; ngoài ra ung thư vùng ngực, chảy máu do chấn thương ngực, suy tim, suy thận, bệnh gan / tuỵ, bệnh tự miễn như lupus.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Trước hết điều trị nguyên nhân (như kháng sinh cho viêm phổi). Tràn dịch ít, rõ nguyên nhân thường không cần rút dịch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Khó thở nặng dần, ho kéo dài, đau ngực một bên → đi khám; bác sĩ có thể chụp X-quang, siêu âm, chọc hút hoặc dẫn lưu dịch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Pleural effusion",
+      "publisher": "North Tees and Hartlepool (NHS, Anh)",
+      "url": "https://www.nth.nhs.uk/resources/pleural-effusion/"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

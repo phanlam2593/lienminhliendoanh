@@ -34,7 +34,14 @@
       ]
     }
   ],
-  "course": [],
+  "course": [
+    {
+      "text": "Đỡ dần khi nhỏ thuốc đều; bỏ dở hoặc nhỏ không đều thì nhiễm trùng có thể nặng lên nhiều.",
+      "src": [
+        0
+      ]
+    }
+  ],
   "care": [
     {
       "text": "Điều trị bằng thuốc nhỏ mắt kháng sinh, lúc đầu nhỏ rất dày (có khi cả đêm) rồi giảm dần; **phải nhỏ đều**, bỏ dở nhiễm trùng có thể nặng lên nhiều.",

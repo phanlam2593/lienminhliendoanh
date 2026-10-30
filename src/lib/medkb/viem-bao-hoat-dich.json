@@ -34,7 +34,14 @@
       ]
     }
   ],
-  "course": [],
+  "course": [
+    {
+      "text": "Thường tự khỏi tại nhà trong vài tuần.",
+      "src": [
+        0
+      ]
+    }
+  ],
   "care": [
     {
       "text": "Cho khớp nghỉ, tránh tì đè; chườm túi đá bọc khăn khoảng 10 phút, lặp lại vài giờ một lần; kê thêm gối quanh khớp khi ngủ.",

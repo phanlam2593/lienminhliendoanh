@@ -1,0 +1,71 @@
+{
+  "id": "benh-than-kinh-van-dong",
+  "kind": "condition",
+  "names": [
+    "bệnh thần kinh vận động",
+    "bệnh neuron vận động",
+    "xơ cứng teo cơ một bên",
+    "xơ cứng cột bên teo cơ",
+    "als",
+    "motor neurone disease"
+  ],
+  "about": [
+    {
+      "text": "Bệnh thần kinh vận động làm cơ yếu dần qua nhiều tháng, nhiều năm; thường rút ngắn tuổi thọ. Xơ cứng teo cơ một bên (ALS) là loại hay gặp nhất.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Sớm: bàn tay cứng, yếu, khó cầm nắm; chân yếu, hay vấp, khó leo cầu thang, khó nhấc bàn chân; giật cơ, co cứng, chuột rút đau.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Không rõ nguyên nhân; gen kết hợp yếu tố khác. Khoảng 1/10 người bệnh có người thân từng bị. Hay gặp ở người trên 50.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Hiện **chưa chữa khỏi**; tốc độ tiến triển rất khác nhau giữa từng người. Về sau có thể khó thở, khó nuốt, khó nói.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị giúp đỡ triệu chứng và có thể làm chậm bệnh; hỗ trợ gồm vật lý trị liệu, dinh dưỡng, dụng cụ đi lại, ngôn ngữ trị liệu, tư vấn tâm lý.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Khó cầm nắm đồ vật, yếu chân, giật cơ hay chuột rút kéo dài không hết → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Motor neurone disease",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/m/article/motorneuronedisease/",
+      "updated": "2025-10-13"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

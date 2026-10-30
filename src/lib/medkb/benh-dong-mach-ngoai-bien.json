@@ -1,0 +1,78 @@
+{
+  "id": "benh-dong-mach-ngoai-bien",
+  "kind": "condition",
+  "names": [
+    "bệnh động mạch ngoại biên",
+    "bệnh động mạch chi dưới",
+    "tắc động mạch chân",
+    "hẹp động mạch chân",
+    "đau cách hồi",
+    "peripheral arterial disease"
+  ],
+  "about": [
+    {
+      "text": "Bệnh động mạch ngoại biên là khi mỡ đóng trong lòng động mạch làm hẹp mạch, giảm máu nuôi cơ chân; là một dạng bệnh tim mạch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Nhiều người không triệu chứng. Hay gặp: **đau chân khi đi bộ, nghỉ vài phút thì đỡ** (đau cách hồi).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hút thuốc là yếu tố nguy cơ lớn nhất; ngoài ra tiểu đường, huyết áp cao, mỡ máu cao, tuổi cao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Không đe doạ tính mạng ngay, nhưng làm tăng nguy cơ bệnh mạch vành, nhồi máu cơ tim, đột quỵ; nặng có thể hoại tử chân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Quan trọng nhất: **bỏ thuốc lá** và vận động đều đặn; ăn uống lành mạnh, giảm cân nếu thừa, hạn chế rượu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đau chân lặp lại khi vận động → đi khám; đau chân không phải chuyện \"già rồi\" nên bỏ qua.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau rát chân dữ dội cả khi nghỉ, hoặc da chân tái, lạnh, thâm đen → đi khám ngay trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Peripheral arterial disease (PAD)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/peripheral-arterial-disease-pad/",
+      "reviewed": "2026-04-10"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,69 @@
+{
+  "id": "giam-tieu-cau-mien-dich",
+  "kind": "condition",
+  "names": [
+    "giảm tiểu cầu miễn dịch",
+    "xuất huyết giảm tiểu cầu miễn dịch",
+    "itp",
+    "immune thrombocytopenia"
+  ],
+  "about": [
+    {
+      "text": "Giảm tiểu cầu miễn dịch (ITP) là bệnh tự miễn: hệ miễn dịch phá huỷ tiểu cầu làm tiểu cầu thấp, dễ bầm tím, chảy máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Chấm xuất huyết li ti như đầu kim, bầm tím, chảy máu cam, chảy máu chân răng, bóng máu đen trong miệng, mệt, kinh nhiều. Nhiều người không triệu chứng, phát hiện qua xét nghiệm máu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Có thể xảy ra sau nhiễm virus, tiêm chủng hay một số thuốc, nhưng phần lớn không rõ nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Nhiều người chỉ cần theo dõi, không cần điều trị; mệt mỏi thường đỡ khi tiểu cầu cải thiện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Nhiều người không cần điều trị, chỉ theo dõi; điều trị khi chảy máu nặng hoặc trước phẫu thuật. Luôn báo cho nhân viên y tế biết mình bị ITP trước thủ thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [],
+  "emergency": [
+    {
+      "text": "Chảy máu cam quá 30 phút dù đã bóp mũi; chảy máu chân răng kéo dài; tiểu hoặc đi ngoài ra máu; va đập mạnh vào đầu; đau đầu dữ dội kèm mờ mắt, nôn, li bì; bầm tím tăng đột ngột → đi khám ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Immune Thrombocytopenia (ITP)",
+      "publisher": "Hull University Teaching Hospitals (NHS, Anh)",
+      "url": "https://www.hey.nhs.uk/patient-leaflet/immune-thrombocytopenia-itp/",
+      "updated": "2025-07-31"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

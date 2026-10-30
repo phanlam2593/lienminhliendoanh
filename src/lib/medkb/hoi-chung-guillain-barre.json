@@ -1,0 +1,78 @@
+{
+  "id": "hoi-chung-guillain-barre",
+  "kind": "condition",
+  "names": [
+    "hội chứng guillain barre",
+    "hội chứng guillain-barré",
+    "guillain barre",
+    "guillain-barré",
+    "viêm đa rễ thần kinh",
+    "liệt mềm cấp"
+  ],
+  "about": [
+    {
+      "text": "Guillain-Barré là bệnh hiếm, hệ miễn dịch tấn công dây thần kinh; **nghiêm trọng, cần điều trị ở bệnh viện ngay**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Bắt đầu với tê, châm chích ở bàn tay, bàn chân, rồi yếu cơ, nặng dần trong 2–4 tuần; có thể đau thần kinh, khó thở, yếu mặt, khó nuốt, khó nói, nhìn đôi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Không rõ nguyên nhân; thường xuất hiện vài tuần sau một đợt nhiễm trùng như cúm, viêm dạ dày ruột. Hay gặp ở người lớn và nam giới.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đa số đi lại được trong 6 tháng và hồi phục trong 1 năm; một số còn đau thần kinh, mệt, yếu cơ lâu dài. Có thể nguy hiểm tính mạng, nhất là ở người lớn tuổi.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Điều trị ở bệnh viện bằng liệu pháp miễn dịch, kèm hỗ trợ (chống huyết khối, giảm đau, thở máy nếu cần); sau đó vật lý trị liệu.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Nghĩ mình bị Guillain-Barré (tê yếu tay chân tăng dần, nhất là sau một đợt ốm) → đi khám gấp trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Méo một bên mặt, khó nuốt, không nhấc nổi tay, nói ngọng → gọi **115** ngay (có thể là đột quỵ).",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Guillain-Barré syndrome",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/guillain-barre-syndrome/",
+      "reviewed": "2024-08-12"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

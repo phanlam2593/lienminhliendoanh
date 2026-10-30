@@ -39,7 +39,14 @@
       ]
     }
   ],
-  "course": [],
+  "course": [
+    {
+      "text": "Thường khỏi với kháng sinh; triệu chứng có thể mất 1–2 tuần mới hết hẳn.",
+      "src": [
+        0
+      ]
+    }
+  ],
   "care": [
     {
       "text": "Điều trị thường bằng kháng sinh; triệu chứng có thể mất 1–2 tuần mới hết hẳn, có thể được hẹn khám lại.",

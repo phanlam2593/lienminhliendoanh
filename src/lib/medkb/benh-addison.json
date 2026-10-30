@@ -1,0 +1,84 @@
+{
+  "id": "benh-addison",
+  "kind": "condition",
+  "names": [
+    "bệnh addison",
+    "suy tuyến thượng thận",
+    "suy thượng thận",
+    "suy vỏ thượng thận",
+    "addison's disease",
+    "addison",
+    "adrenal insufficiency"
+  ],
+  "about": [
+    {
+      "text": "Bệnh Addison (suy tuyến thượng thận) là khi tuyến thượng thận — nằm trên thận — không tạo đủ hormone cortisol và aldosterone. Hay gặp ở tuổi 30–50, nữ nhiều hơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Sớm: kiệt sức, buồn chán, chán ăn, sụt cân, khát nhiều — dễ nhầm với trầm cảm hay cúm.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Muộn hơn: chóng mặt khi đứng dậy, yếu cơ, chuột rút, da sạm từng mảng, thèm mặn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do hệ miễn dịch tấn công vỏ thượng thận (có thể có tính gia đình); ngoài ra lao, nhiễm trùng, chảy máu tuyến thượng thận, ung thư di căn, sau mổ tuyến thượng thận.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Phải dùng thuốc thay thế hormone **hằng ngày suốt đời** theo đơn; mang thẻ cảnh báo / vòng y tế ghi rõ bệnh.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Khi ốm, chấn thương, mổ hay căng thẳng thường phải tăng thuốc theo \"quy tắc ngày ốm\" bác sĩ nội tiết dặn; luôn có sẵn thuốc dự phòng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Mệt kéo dài, sụt cân không rõ lý do, chóng mặt, buồn chán, da sạm từng mảng → đi khám để tìm nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "**Cơn suy thượng thận cấp**: mất nước nặng, nôn, tiêu chảy, da tái lạnh ẩm, thở nhanh nông, chóng mặt, li bì hoặc bất tỉnh → gọi **115**, báo rõ người bệnh bị Addison.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Addison's disease",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/a/article/addisonsdisease",
+      "updated": "2025-07-02"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,62 @@
+{
+  "id": "dau-day-than-kinh-sinh-ba",
+  "kind": "condition",
+  "names": [
+    "đau dây thần kinh sinh ba",
+    "đau dây thần kinh tam thoa",
+    "đau thần kinh mặt",
+    "trigeminal neuralgia"
+  ],
+  "about": [
+    {
+      "text": "Đau dây thần kinh sinh ba gây những cơn **đau mặt dữ dội, ngắn, như điện giật** ở hàm, răng, lợi; mỗi cơn vài giây tới khoảng 2 phút rồi dừng đột ngột.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Thường một bên mặt, hay ở nửa dưới; cơn có thể lặp lại nhiều ngày, tuần, tháng; có lúc ngưng nhiều tháng, nhiều năm rồi quay lại.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Thường do một mạch máu đè lên dây thần kinh sinh ba trong sọ; đôi khi do tổn thương thần kinh (đa xơ cứng, khối u). Hay gặp ở nữ, tuổi 50–60.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Tránh những gì hay gây cơn: chạm nhẹ vào mặt (rửa mặt, ăn, đánh răng), gió lùa, máy lạnh, cử động mặt.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đau mặt hay tái lại, uống thuốc giảm đau thông thường không đỡ và nha sĩ đã loại trừ bệnh răng → đi khám; bác sĩ thường dùng thuốc chống co giật, không tự ý ngưng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Trigeminal neuralgia",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/trigeminal-neuralgia/",
+      "reviewed": "2023-01-27"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

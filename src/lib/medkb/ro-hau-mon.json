@@ -1,0 +1,71 @@
+{
+  "id": "ro-hau-mon",
+  "kind": "condition",
+  "names": [
+    "rò hậu môn",
+    "dò hậu môn",
+    "rò cạnh hậu môn",
+    "áp xe hậu môn",
+    "áp xe cạnh hậu môn",
+    "anal fistula",
+    "anal abscess"
+  ],
+  "about": [
+    {
+      "text": "Rò hậu môn là một đường hầm nhỏ nối cuối ruột với da gần hậu môn, thường để lại sau một **áp xe hậu môn** (ổ mủ) đã vỡ hoặc được rạch.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Ngứa, kích ứng quanh hậu môn; đau nhức liên tục, tăng khi ngồi, đi lại, đi ngoài, ho; chảy dịch hôi, ra mủ hoặc máu khi đi ngoài.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Áp xe hậu môn: sưng, đỏ, đau quanh hậu môn, có thể sốt cao.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Đa số sau áp xe hậu môn; ít hơn do bệnh Crohn, viêm túi thừa, lao, HIV, biến chứng phẫu thuật hậu môn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Rò hậu môn hiếm khi tự lành — thường cần phẫu thuật; nhiều người mổ xong về trong ngày.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có triệu chứng rò hậu môn kéo dài, hoặc sưng đau, có mủ quanh hậu môn → đi khám để được chuyển bác sĩ hậu môn – trực tràng.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Anal fistula",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/a/article/analfistula",
+      "updated": "2026-02-05"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,71 @@
+{
+  "id": "ban-chan-bet",
+  "kind": "condition",
+  "names": [
+    "bàn chân bẹt",
+    "bàn chân phẳng",
+    "chân bẹt",
+    "bàn chân lòng bằng",
+    "flat feet",
+    "fallen arches"
+  ],
+  "about": [
+    {
+      "text": "Bàn chân bẹt là khi cả lòng bàn chân áp sát mặt đất (không có vòm). Thường gặp và **thường không đáng lo**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Đứng xem phía trong bàn chân có chạm đất không. Thường không triệu chứng; đôi khi đau cổ chân, cẳng chân, nhức phía trong bàn chân, giày mòn nhanh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hầu hết trẻ nhỏ đều bàn chân bẹt — vòm chân thường hình thành khoảng 3–10 tuổi. Người lớn thường do dáng chân, có thể di truyền; hiếm khi do bệnh khác.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường **không đáng lo**; không gây khó chịu thì không cần điều trị, vẫn chơi thể thao bình thường. Lót giày, giày phù hợp giúp đỡ đau nhưng không làm đổi dáng bàn chân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Không gây khó chịu thì không cần làm gì, vẫn chơi thể thao bình thường. Nếu đau: giày rộng, đế thấp, lót giày, bài kéo giãn theo hướng dẫn của chuyên viên.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Bàn chân đau, cứng, yếu hoặc tê; hay bị chấn thương bàn chân / cổ chân; khó đi lại, giữ thăng bằng; mới bị bẹt hoặc chỉ một bên → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Flat feet",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/flat-feet/",
+      "reviewed": "2025-06-24"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

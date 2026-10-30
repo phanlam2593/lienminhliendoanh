@@ -34,7 +34,14 @@
       ]
     }
   ],
-  "course": [],
+  "course": [
+    {
+      "text": "Thường đỡ khi dùng thuốc đủ liệu trình; để lâu không điều trị có thể nặng hơn, rất đau, đau khi cử động hàm và lan ra ngoài tai.",
+      "src": [
+        0
+      ]
+    }
+  ],
   "care": [
     {
       "text": "Bác sĩ thường kê thuốc nhỏ / xịt tai kháng sinh kèm kháng viêm, dùng đủ liệu trình; có thể dùng thuốc giảm đau thông thường.",

@@ -1,0 +1,85 @@
+{
+  "id": "benh-co-tim",
+  "kind": "condition",
+  "names": [
+    "bệnh cơ tim",
+    "bệnh cơ tim giãn",
+    "bệnh cơ tim phì đại",
+    "bệnh cơ tim hạn chế",
+    "hội chứng trái tim tan vỡ",
+    "bệnh cơ tim takotsubo",
+    "cardiomyopathy"
+  ],
+  "about": [
+    {
+      "text": "Bệnh cơ tim là nhóm bệnh của cơ tim làm tim bơm máu kém; thành tim có thể giãn mỏng, dày lên hoặc cứng.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Các loại: giãn, phì đại, hạn chế (hiếm, thường ở trẻ), loạn nhịp do di truyền, và \"hội chứng trái tim tan vỡ\" tạm thời do căng thẳng mạnh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Dấu hiệu suy tim: khó thở, rất mệt, phù mắt cá chân. Loại phì đại có thể gây chóng mặt, đau ngực, ngất thoáng qua.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Phần lớn do di truyền, nhiều người không rõ nguyên nhân; ngoài ra huyết áp cao không kiểm soát, bệnh van tim, nhiễm virus, lupus, mang thai.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Thường không chữa khỏi hẳn nhưng điều trị giúp kiểm soát triệu chứng và ngừa biến chứng. Loại di truyền có thể xét nghiệm gen cho cả người thân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Ăn uống lành mạnh, vận động nhẹ nhàng, bỏ thuốc lá, giảm cân nếu cần, hạn chế rượu, ngủ đủ, giảm căng thẳng, kiểm soát tốt bệnh như tiểu đường.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Đã được chẩn đoán thì tái khám đều theo hẹn; hỏi bác sĩ tim mạch mức vận động phù hợp với mình.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đau ngực hoặc khó thở → gọi **115**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Cardiomyopathy",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/Cardiomyopathy/",
+      "updated": "2024-11-07"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

@@ -1,0 +1,76 @@
+{
+  "id": "nhuoc-co",
+  "kind": "condition",
+  "names": [
+    "nhược cơ",
+    "bệnh nhược cơ",
+    "nhược cơ nặng",
+    "myasthenia gravis"
+  ],
+  "about": [
+    {
+      "text": "Nhược cơ là bệnh lâu dài làm **yếu cơ**, nhất là mắt, mí mắt, mặt, nhai, nuốt, nói — do hệ miễn dịch làm rối tín hiệu giữa thần kinh và cơ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Sụp mí, nhìn đôi, khó biểu cảm mặt, khó nhai, khó nuốt, nói ngọng, giọng khàn hoặc giọng mũi; yếu tay, chân, cổ; khó thở khi nằm hoặc sau gắng sức.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hay gặp ở nữ dưới 40 và nam trên 60; liên quan tuyến ức (thường to), khoảng 1/10 người có u tuyến ức.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Triệu chứng thường nặng hơn khi mệt (hay về chiều tối), đỡ sau nghỉ; bệnh lúc nặng lúc nhẹ, hiếm khi khỏi hẳn, nhưng đa số không ảnh hưởng nhiều tới tuổi thọ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Tránh yếu tố làm nặng: mệt, căng thẳng, nhiễm trùng, một số thuốc; luôn báo bác sĩ mình bị nhược cơ trước khi dùng thuốc mới hay phẫu thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Có triệu chứng kéo dài hoặc đáng lo → đi khám; bác sĩ có thể dùng thuốc, có khi mổ cắt tuyến ức.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đột nhiên **khó thở hoặc khó nuốt nặng** → gọi **115** ngay.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Myasthenia gravis",
+      "publisher": "NHS 111 Wales (Anh)",
+      "url": "https://111.wales.nhs.uk/encyclopaedia/m/article/myastheniagravis",
+      "updated": "2026-02-04"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

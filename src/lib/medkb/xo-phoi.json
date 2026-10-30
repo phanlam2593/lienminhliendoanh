@@ -1,0 +1,78 @@
+{
+  "id": "xo-phoi",
+  "kind": "condition",
+  "names": [
+    "xơ phổi",
+    "xơ phổi vô căn",
+    "bệnh xơ phổi",
+    "phổi bị xơ",
+    "idiopathic pulmonary fibrosis",
+    "pulmonary fibrosis",
+    "ipf"
+  ],
+  "about": [
+    {
+      "text": "Xơ phổi vô căn là bệnh phổi ít gặp, mô sẹo tích dần làm thở khó; hiện **chưa chữa khỏi**.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Khó thở, ho khan dai dẳng, mệt mỏi, móng tay cong khum trên đầu ngón tay phình tròn; thường xuất hiện từ từ và nặng dần.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hay gặp ở người trên 70; không rõ nguyên nhân, có liên quan tiếp xúc lâu dài bụi kim loại, bụi gỗ, amiăng; người thân từng bị.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Tốc độ tiến triển khác nhau; điều trị tốt có thể giữ triệu chứng ổn trong nhiều năm. Biến chứng như nhiễm trùng phổi, suy tim có thể rút ngắn tuổi thọ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bỏ thuốc lá, vận động trong sức mình, ăn uống cân bằng; tiêm phòng cúm, phế cầu, RSV nếu đủ điều kiện; tránh người đang cảm, nhiễm trùng ngực.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Bác sĩ có thể dùng thuốc làm chậm xơ phổi, thở oxy, tập phục hồi chức năng hô hấp.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Khó thở nặng dần khi sinh hoạt hay khi nằm, hoặc **ho từ 3 tuần trở lên** → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Idiopathic pulmonary fibrosis",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/idiopathic-pulmonary-fibrosis/",
+      "reviewed": "2026-08-27"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

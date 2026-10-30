@@ -1,0 +1,69 @@
+{
+  "id": "nhip-nhanh-tren-that",
+  "kind": "condition",
+  "names": [
+    "nhịp nhanh trên thất",
+    "cơn nhịp nhanh kịch phát trên thất",
+    "nhịp tim nhanh kịch phát",
+    "supraventricular tachycardia"
+  ],
+  "about": [
+    {
+      "text": "Nhịp nhanh trên thất gây những cơn **tim đập nhanh đột ngột** hơn hẳn bình thường (trên 100 nhịp/phút lúc nghỉ); thường không nguy hiểm.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "text": "Cơn thường kéo dài vài phút, có khi vài giờ; có thể ngày vài lần hoặc năm một lần; hay bắt đầu ở người trẻ.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "causes": [
+    {
+      "text": "Hệ thống điện điều khiển nhịp tim hoạt động không đúng. Cà phê, rượu, chất kích thích có thể gây cơn, nhưng nhiều khi không rõ lý do.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [],
+  "care": [
+    {
+      "text": "Cơn ngắn, không phiền thì có thể không cần điều trị; bác sĩ có thể chỉ vài cách đơn giản để tự cắt cơn.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Hay bị tim đập nhanh → đi khám, có thể cần đo điện tim để tìm nguyên nhân.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [
+    {
+      "text": "Đã được chẩn đoán mà cơn kéo dài hơn bình thường, hoặc tim đập nhanh kèm khó thở, đau ngực, choáng muốn ngất → gọi **115**; đừng tự lái xe đi viện.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "Supraventricular tachycardia (SVT)",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/supraventricular-tachycardia-svt/",
+      "reviewed": "2024-06-12"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}

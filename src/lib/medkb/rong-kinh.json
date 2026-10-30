@@ -1,0 +1,73 @@
+{
+  "id": "rong-kinh",
+  "kind": "women",
+  "names": [
+    "rong kinh",
+    "cường kinh",
+    "kinh nguyệt ra nhiều",
+    "ra kinh nhiều",
+    "hành kinh nhiều",
+    "kinh ra nhiều",
+    "heavy periods",
+    "menorrhagia",
+    "heavy menstrual bleeding"
+  ],
+  "about": [
+    {
+      "text": "Kinh nhiều (rong kinh / cường kinh) khi: thay băng mỗi 1–2 giờ; phải dùng 2 loại cùng lúc; kinh kéo dài quá 7 ngày; ra cục máu đông to hơn khoảng 2,5 cm; thấm ra quần áo, ga giường.",
+      "src": [
+        0
+      ]
+    },
+    {
+      "text": "Hoặc phải bỏ dở sinh hoạt, nghỉ làm vì kinh; hay mệt, khó thở. Đôi khi kinh nhiều là bình thường: mới có kinh, sau sinh, gần mãn kinh.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "signs": [],
+  "causes": [
+    {
+      "text": "Hội chứng buồng trứng đa nang, u xơ tử cung, lạc nội mạc tử cung, lạc nội mạc trong cơ tử cung, viêm vùng chậu; rối loạn đông máu; một số thuốc (chống đông, hoá trị); hiếm khi ung thư tử cung.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "course": [
+    {
+      "text": "Đôi khi kinh nhiều là bình thường (mới có kinh, sau sinh, gần mãn kinh); còn lại thường điều trị được khi tìm đúng nguyên nhân — hiếm khi là ung thư tử cung.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "care": [
+    {
+      "text": "Bác sĩ có thể xét nghiệm máu (thiếu máu do thiếu sắt), dùng thuốc giảm chảy máu, giảm đau, một số biện pháp tránh thai nội tiết; nặng có thể thủ thuật hay phẫu thuật.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "diet": null,
+  "doctor": [
+    {
+      "text": "Kinh nhiều ảnh hưởng sinh hoạt hoặc kéo dài lâu; đau dữ dội khi hành kinh; ra máu giữa kỳ hay sau quan hệ; kèm đau khi tiểu, đi ngoài, quan hệ → đi khám.",
+      "src": [
+        0
+      ]
+    }
+  ],
+  "emergency": [],
+  "sources": [
+    {
+      "title": "Heavy periods",
+      "publisher": "NHS (Anh)",
+      "url": "https://www.nhs.uk/conditions/heavy-periods/",
+      "reviewed": "2024-09-19"
+    }
+  ],
+  "verifiedAt": "2026-10-30"
+}
