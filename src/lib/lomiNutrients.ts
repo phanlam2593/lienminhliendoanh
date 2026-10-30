@@ -10,7 +10,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
-import { WISELY } from "@/lib/lomiFolk";
+import { WISELY, findFolk } from "@/lib/lomiFolk";
 
 const VERIFIED = "2026-10-30";
 const NHS = "NHS (Anh)";
@@ -36,6 +36,7 @@ export const NUT_SOURCES: DrugSource[] = [
   /* 14 */ WISELY,
   /* 15 */ { title: "Things To Know About Omegas for Heart Disease", publisher: NCCIH, url: "https://www.nccih.nih.gov/health/tips/things-to-know-about-omegas-for-heart-disease" },
   /* 16 */ { title: "Iodine", publisher: NHS, url: "https://www.nhs.uk/conditions/vitamins-and-minerals/iodine/", reviewed: "2020-08-03" },
+  /* 17 */ { title: "Why 5 A Day?", publisher: NHS, url: "https://www.nhs.uk/live-well/eat-well/5-a-day/why-5-a-day/", reviewed: "2026-09-30" },
 ];
 
 export type NutTopic = { id: string; text: string; src: number[] };
@@ -367,12 +368,85 @@ export function renderOverview(now = Date.now()): string {
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
+// ── MÓN ĂN → CHẤT (30/10, Kir: "thêm vô kiểu dinh dưỡng đồ") ─────────────────
+// "trứng có chất gì", "hàu bổ gì", "dinh dưỡng của chuối" → các chất mà NGUỒN của từng chất (ở trên) có kể món này.
+//   Chỉ ghi cặp món – chất có trong nguồn; không ghi hàm lượng.
+type FoodItem = { nut: string; note?: string; src: number[] };
+export type Food = { id: string; name: string; names: string[]; items: FoodItem[]; caution?: DrugFact[] };
+const FRUITVEG: DrugFact = { text: "Rau quả nói chung cho vitamin, khoáng chất và chất xơ; ăn đa dạng nhiều loại vì mỗi loại cho chất khác nhau.", src: [17] };
+const LIVER_WARN: DrugFact = { text: "Gan rất nhiều vitamin A: ăn gan hơn 1 lần mỗi tuần có thể bị thừa; **bà bầu nên tránh gan** và đồ làm từ gan.", src: [7] };
+export const FOODS: Food[] = [
+  { id: "hau", name: "Hàu", names: ["hàu", "con hàu", "hàu sữa", "oyster"], items: [{ nut: "kem", note: "**rất nhiều**", src: [0] }, { nut: "i-ot", note: "hải sản có vỏ", src: [16] }] },
+  { id: "hai-san", name: "Hải sản (cua, tôm, sò, nghêu, ốc)", names: ["hải sản", "đồ biển", "cua", "ghẹ", "tôm", "tôm hùm", "sò", "nghêu", "ngao", "hến", "ốc", "sò điệp"], items: [{ nut: "kem", note: "cua, tôm hùm… là nguồn tốt", src: [0] }, { nut: "i-ot", note: "hải sản có vỏ", src: [16] }, { nut: "sat", note: "một số loại hải sản", src: [9] }] },
+  { id: "thit-bo", name: "Thịt bò (thịt đỏ)", names: ["thịt bò", "bò", "thịt đỏ", "thịt cừu", "thịt dê"], items: [{ nut: "sat", note: "thịt đỏ là nguồn sắt tốt", src: [9] }, { nut: "kem", src: [0] }, { nut: "vitamin-b12", src: [4] }, { nut: "vitamin-d", note: "thịt đỏ", src: [6] }] },
+  { id: "thit-heo", name: "Thịt heo", names: ["thịt heo", "thịt lợn", "heo", "lợn"], items: [{ nut: "kem", src: [0] }, { nut: "vitamin-b12", src: [4] }, { nut: "vitamin-b", note: "B6", src: [4] }] },
+  { id: "thit-ga", name: "Thịt gà, gia cầm", names: ["thịt gà", "gà", "gia cầm", "thịt vịt", "vịt", "gà tây"], items: [{ nut: "kem", src: [0] }, { nut: "vitamin-b", note: "B6", src: [4] }, { nut: "sat", note: "ít hơn thịt đỏ", src: [9] }] },
+  { id: "gan", name: "Gan (gan heo, gan gà, gan bò)", names: ["gan", "gan heo", "gan lợn", "gan gà", "gan bò", "pate gan", "pa tê"], items: [{ nut: "vitamin-a", note: "**rất nhiều**", src: [7] }, { nut: "sat", src: [9] }, { nut: "folate", src: [4] }, { nut: "vitamin-d", src: [6] }, { nut: "vitamin-b", note: "B1", src: [4] }], caution: [LIVER_WARN] },
+  { id: "ca-beo", name: "Cá béo (cá hồi, cá thu, cá mòi, cá trích)", names: ["cá hồi", "cá thu", "cá mòi", "cá trích", "cá béo"], items: [{ nut: "vitamin-d", src: [6] }, { nut: "omega-3", src: [15] }, { nut: "vitamin-a", src: [7] }, { nut: "kem", src: [0] }, { nut: "vitamin-b12", src: [4] }, { nut: "i-ot", note: "cá biển", src: [16] }] },
+  { id: "ca", name: "Cá", names: ["cá", "ăn cá", "cá biển", "cá đồng", "cá lóc", "cá rô", "cá basa", "cá diêu hồng"], items: [{ nut: "kem", src: [0] }, { nut: "vitamin-b12", src: [4] }, { nut: "vitamin-b", note: "B6 (một số loại cá)", src: [4] }, { nut: "i-ot", note: "cá biển", src: [16] }] },
+  { id: "trung", name: "Trứng", names: ["trứng", "trứng gà", "trứng vịt", "trứng cút", "lòng đỏ trứng", "lòng đỏ"], items: [{ nut: "vitamin-d", note: "ở lòng đỏ", src: [6] }, { nut: "vitamin-a", src: [7] }, { nut: "vitamin-b12", src: [4] }, { nut: "i-ot", src: [16] }, { nut: "kem", note: "một ít", src: [0] }] },
+  { id: "sua", name: "Sữa", names: ["sữa", "sữa bò", "sữa tươi", "uống sữa"], items: [{ nut: "canxi", src: [8] }, { nut: "vitamin-b12", src: [4] }, { nut: "vitamin-a", src: [7] }, { nut: "i-ot", src: [16] }, { nut: "vitamin-b", note: "B6", src: [4] }, { nut: "kem", note: "một ít", src: [0] }] },
+  { id: "pho-mai", name: "Phô mai, sữa chua", names: ["phô mai", "phomai", "pho mát", "sữa chua", "yaourt", "da ua"], items: [{ nut: "canxi", src: [8] }, { nut: "vitamin-a", src: [7] }, { nut: "vitamin-b12", note: "phô mai", src: [4] }, { nut: "i-ot", note: "đồ làm từ sữa", src: [16] }] },
+  { id: "dau-phu", name: "Đậu phụ, đậu nành", names: ["đậu phụ", "đậu hũ", "tàu hũ", "đậu nành", "sữa đậu nành"], items: [{ nut: "canxi", src: [8] }, { nut: "vitamin-b", note: "B6 (đậu nành)", src: [4] }] },
+  { id: "cac-loai-dau", name: "Các loại đậu (đậu Hà Lan, đậu gà, đậu đỏ)", names: ["đậu hà lan", "đậu gà", "đậu đỏ", "đậu thận", "các loại đậu"], items: [{ nut: "folate", note: "đậu Hà Lan, đậu gà, đậu đỏ", src: [4] }, { nut: "vitamin-b", note: "B1 (đậu Hà Lan)", src: [4] }, { nut: "kem", note: "một ít", src: [0] }] },
+  { id: "hat", name: "Các loại hạt, đậu phộng", names: ["các loại hạt", "hạt điều", "hạnh nhân", "óc chó", "đậu phộng", "lạc", "hạt dinh dưỡng"], items: [{ nut: "kem", note: "một ít", src: [0] }, { nut: "vitamin-b", note: "B1 (các loại hạt), B6 (đậu phộng)", src: [4] }] },
+  { id: "rau-la-xanh", name: "Rau lá xanh (cải bó xôi, cải xoăn, bắp cải…)", names: ["rau lá xanh", "rau xanh", "cải bó xôi", "rau bina", "rau chân vịt", "cải xoăn", "bắp cải", "rau cải", "rau ngót", "rau dền", "rau muống"], items: [{ nut: "folate", src: [4] }, { nut: "canxi", src: [8] }, { nut: "sat", note: "rau lá xanh đậm", src: [9] }, { nut: "vitamin-a", note: "beta-caroten (rau bina, rau lá xanh)", src: [7] }], caution: [FRUITVEG] },
+  { id: "bong-cai", name: "Bông cải xanh (súp lơ xanh)", names: ["bông cải xanh", "súp lơ xanh", "bông cải", "cải brussels", "broccoli"], items: [{ nut: "vitamin-c", src: [3] }, { nut: "folate", src: [4] }], caution: [FRUITVEG] },
+  { id: "ca-rot", name: "Cà rốt, khoai lang", names: ["cà rốt", "khoai lang", "bí đỏ", "ớt đỏ"], items: [{ nut: "vitamin-a", note: "dạng beta-caroten, cơ thể đổi thành vitamin A", src: [7] }], caution: [FRUITVEG] },
+  { id: "khoai-tay", name: "Khoai tây", names: ["khoai tây"], items: [{ nut: "vitamin-c", src: [3] }], caution: [FRUITVEG] },
+  { id: "cam", name: "Cam, quýt, chanh", names: ["cam", "quả cam", "trái cam", "nước cam", "quýt", "chanh", "bưởi", "trái cây họ cam"], items: [{ nut: "vitamin-c", src: [3] }, { nut: "vitamin-b", note: "B1 (cam)", src: [4] }], caution: [FRUITVEG] },
+  { id: "chuoi", name: "Chuối", names: ["chuối", "trái chuối", "quả chuối"], items: [{ nut: "vitamin-b", note: "B1, B6", src: [4] }], caution: [FRUITVEG] },
+  { id: "dau-tay", name: "Dâu tây, ớt chuông", names: ["dâu tây", "ớt chuông"], items: [{ nut: "vitamin-c", src: [3] }], caution: [FRUITVEG] },
+  { id: "xoai", name: "Xoài, đu đủ, mơ", names: ["xoài", "đu đủ", "mơ", "quả mơ"], items: [{ nut: "vitamin-a", note: "dạng beta-caroten", src: [7] }], caution: [FRUITVEG] },
+  { id: "ngu-coc", name: "Ngũ cốc nguyên hạt, yến mạch, bánh mì nguyên cám", names: ["ngũ cốc", "ngũ cốc nguyên hạt", "yến mạch", "bánh mì nguyên cám", "gạo lứt", "bột yến mạch"], items: [{ nut: "vitamin-b", note: "B1 (bánh mì nguyên cám), B6 (yến mạch)", src: [4] }, { nut: "kem", note: "một ít (ngũ cốc nguyên hạt)", src: [0] }] },
+];
+const FOOD_RAW = new Map(FOODS.map((f) => [f.id, new RegExp(`${LB}(${[...f.names].map((x) => x.toLowerCase().normalize("NFC")).sort((a, b) => b.length - a.length).map(esc).join("|")})${RB}`, "u")]));
+const FOOD_PLAIN = new Map(FOODS.map((f) => [f.id, new RegExp(`\\b(${[...new Set(f.names.map((x) => normalizeVi(x)))].sort((a, b) => b.length - a.length).map(esc).join("|")})\\b`)]));
+/** Món được nhắc trong câu (tên dài nhất thắng: "gan gà" trước "gà", "cá hồi" trước "cá"). */
+export function foodOf(text: string): Food | null {
+  const raw = text.normalize("NFC").toLowerCase();
+  const n = ` ${normalizeVi(text)} `;
+  let best: { f: Food; len: number } | null = null;
+  for (const f of FOODS) {
+    const m = ACCENTED.test(text) ? raw.match(FOOD_RAW.get(f.id)!) : n.match(FOOD_PLAIN.get(f.id)!);
+    if (m && (!best || m[1].length > best.len)) best = { f, len: m[1].length };
+  }
+  return best?.f ?? null;
+}
+/** Hỏi món này có chất gì ("trứng có chất gì", "dinh dưỡng của chuối", "hàu bổ gì"). Không gồm "tác dụng" — lớp mẹo dân gian lo. */
+const FOOD_ASK = /\b(chat gi|nhung chat gi|chat dinh duong|dinh duong|gia tri dinh duong|vitamin gi|nhung vitamin gi|khoang chat gi|vi chat gi|bo gi|bo khong|co bo khong|bo duong|giau chat gi|nhieu chat gi|chua chat gi|co chat gi|co vitamin gi|cung cap gi|cung cap chat gi)\b/;
+/** "ăn trứng có tốt không" — chỉ khi câu không nêu bệnh (có bệnh thì lớp ăn uống theo bệnh trả lời) và không phải vị đã có bài mẹo dân gian. */
+const LIVER_ORGAN = /\b(viem gan|xo gan|suy gan|ung thu gan|men gan|gan nhiem mo|benh gan|dau gan|mat gan|nong gan|gan yeu|bo gan|thai doc gan|chuc nang gan)\b/;
+const FOOD_GOOD = /\b(co tot khong|tot khong|co tot ko|tot ko|co loi gi|loi ich gi|tot cho suc khoe)\b/;
+export function renderFood(f: Food, now = Date.now()): string {
+  const byId = (id: string) => NUTRIENTS.find((x) => x.id === id)!;
+  const short = (id: string) => (id === "vitamin-b" ? "Vitamin nhóm B" : byId(id).name);
+  const cautions = f.caution ?? [];
+  const warn = cautions.filter((c) => c !== FRUITVEG), veg = cautions.filter((c) => c === FRUITVEG);
+  const first = byId(f.items[0].nut).name.split(" (")[0];
+  return [
+    `🥗 **${f.name}** — có những chất gì (theo nguồn y khoa)`,
+    f.items.map((i) => `• **${short(i.nut)}**${i.note ? ` — ${i.note}` : ""}`).join("\n"),
+    veg.length ? `🌿 ${veg[0].text}` : "",
+    warn.length ? `⚠️ ${warn.map((c) => c.text).join("\n⚠️ ")}` : "",
+    `💡 ${GENERAL[0].text} Hỏi tên chất (vd “${first} có tác dụng gì”) để xem chi tiết, ai cần bổ sung.`,
+    line(srcOf(f.items, cautions, GENERAL.slice(0, 1)), now),
+  ].filter(Boolean).join("\n\n");
+}
+
 /**
  * Lớp vitamin · khoáng chất. `med` = thẻ bệnh nhận ra trong câu (nếu có). null = không phải câu hỏi này.
  */
 export function nutrientReply(q: string, med: { id: string; name: string } | null, now = Date.now()): string | null {
   const n = ` ${normalizeVi(q)} `;
   const x = nutrientOf(q);
+  // Hỏi MỘT MÓN có chất gì (không nêu tên chất) → bảng món → chất.
+  // (câu nêu bệnh mà hỏi "nên uống vitamin gì" → trả lời theo bệnh bên dưới, không theo món)
+  if (!x && !(med && SUPP.test(n)) && (FOOD_ASK.test(n) || (!med && FOOD_GOOD.test(n) && !findFolk(q)))) {
+    const f = foodOf(q);
+    // "viêm gan", "men gan", "nóng gan" — chữ "gan" là bộ phận cơ thể, không phải món gan.
+    if (f && !(f.id === "gan" && LIVER_ORGAN.test(n))) return renderFood(f, now);
+  }
   if (x) {
     // "thiếu vitamin D", "thiếu sắt" — kho đã có thẻ bệnh riêng.
     if (med && DEFICIT_CARD[x.id] === med.id && !/\b(co trong|mon gi|thuc pham|an gi|giau|nhieu)\b/.test(n)) return null;

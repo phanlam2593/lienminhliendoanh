@@ -190,4 +190,12 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["bị tiền đình"])).med?.id).toBe("roi-loan-tien-dinh");
     expect((await last(["bà bầu uống axit folic khi nào"])).content).not.toMatch(/ngộ độc|115/);
   }, T);
+  // Kir: "thêm vô kiểu dinh dưỡng đồ" — món ăn có chất gì.
+  it("Món ăn có chất gì", async () => {
+    expect((await last(["trứng có chất gì"])).content).toMatch(/ở lòng đỏ/);
+    expect((await last(["hàu bổ gì"])).content).toMatch(/Kẽm/);
+    expect((await last(["dinh dưỡng của chuối"])).content).toMatch(/B1, B6/);
+    expect((await last(["bánh căn có chất gì"])).content).not.toMatch(/theo nguồn y khoa\)/);
+  }, T);
 });
+
