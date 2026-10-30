@@ -53,3 +53,11 @@ describe("xưng hô nói rõ kiểu tự nhiên", () => {
   ];
   for (const [text, want] of cases) it(text, () => expect(explicitAddr(text)).toBe(want));
 });
+
+describe("vitamin C / nhóm A không phải tự xưng (30/10)", () => {
+  it("chữ cái sau vitamin không đoán xưng hô", () => {
+    expect(detectAddr("tôm với vitamin C có độc không")).toBeNull();
+    expect(detectAddr("uống vitamin e có tốt không")).toBeNull();
+    expect(detectAddr("c có biết không")).toBe("chị");
+  });
+});

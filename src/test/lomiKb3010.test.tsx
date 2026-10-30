@@ -276,5 +276,27 @@ describe("30/10 — trả lời qua khung chat", () => {
     await yes("bị chó cắn có sao không", /Chó cắn\*\*, Lomi có kiến thức/);
     await yes("bị nóng trong", /tính nóng/);
   }, T);
+  it("Mẹo dân gian đợt 5 (danh sách ChatGPT, 30/10)", async () => {
+    const yes = async (q: string, re: RegExp) => expect((await last([q])).content, q).toMatch(re);
+    const no = async (q: string, re: RegExp) => expect((await last([q])).content, q).not.toMatch(re);
+    await yes("uống thuốc nam chữa ung thư được không", /thay thế hoặc trì hoãn điều trị/);
+    await yes("linh chi chữa ung thư không", /Nấm linh chi/);
+    await yes("rượu ấu tàu uống được không", /aconitine/);
+    await yes("lá ngón có độc không", /suy hô hấp/);
+    await yes("trúc đào có độc không", /mọi bộ phận/);
+    await yes("nhỏ chanh vào tai được không", /tăm bông/);
+    await yes("bôi dầu gió cho trẻ sơ sinh được không", /long não/i);
+    await yes("trẻ sơ sinh uống nước lá được không", /không cần uống thêm nước/);
+    await no("trẻ sơ sinh uống nước lá được không", /Nguồn chưa nêu riêng cho trẻ nhỏ/);
+    await yes("uống cà phê giải rượu được không", /chỉ có thời gian/);
+    await yes("thụt tháo có tốt không", /thụt rửa đại tràng/);
+    await yes("bị tiêu chảy kiêng uống nước đúng không", /uống nhiều nước/);
+    await yes("chườm đá trực tiếp lên da được không", /khăn ẩm/);
+    await yes("bôi dầu hỏa trị ghẻ được không", /bỏng và kích ứng/);
+    await yes("uống nước dừa tăng tiểu cầu không", /ibuprofen, aspirin/);
+    await yes("giác hơi có tốt không", /chất lượng thấp/);
+    await yes("nhỏ nước tiểu vào mắt được không", /Đau mắt đỏ/);
+    await no("tôm với vitamin C có độc không", /\bem\b/);
+  }, T);
 });
 

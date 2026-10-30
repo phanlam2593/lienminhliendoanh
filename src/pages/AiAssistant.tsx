@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGoBack } from "@/lib/navigation";
 import { ArrowLeft, CircleHelp, Copy, RotateCcw, Send, Smile, Volume2, VolumeX } from "lucide-react";
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
-import { speak } from "@/lib/lomiAddress";
+import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
@@ -851,7 +851,7 @@ export function AiChat({
       fr0 && !sw0 && addr0 !== "anh" && addr0 !== "chị" && fr0.em === "self" && fr0.act === "statement" && fr0.conf >= 0.75 && (possSelf || (fr0.subject === "self" && (fr0.toks.some((t) => t.r === "KIN" && t.cls === "partner") || (!!fr0.pred && fr0.pred.val < 0 && (fr0.pred.cls === "bad" || fr0.pred.cls === "ill")))))
         ? ("em" as const)
         : undefined;
-    const addrNow = en ? { explicit: undefined } : learnAddr(user.id, raw, { force: callsLomiEm ? "bạn-em" : fr0?.addressee && fr0.em === "you" && selfAC ? selfAC : undefined, fallback: selfAC ?? shortAC ?? selfEm, hold: (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })() });
+    const addrNow = en ? { explicit: undefined } : learnAddr(user.id, raw, { force: callsLomiEm ? "bạn-em" : fr0?.addressee && fr0.em === "you" && selfAC && !hasNameLetter(raw) ? selfAC : undefined, fallback: hasNameLetter(raw) ? undefined : selfAC ?? shortAC ?? selfEm, hold: (() => { const lm = msgs[msgs.length - 1]; return !!(lm?.role === "assistant" && (lm.rel || (lm.heart && LOVE_KEYS.has(lm.heart)))); })() });
     // Câu này vừa cho biết cách xưng hô mới ("a đang…") → đọc lại khung với cách xưng hô đó ("e" trong câu là Lomi).
     const fr1 = fr0 && loadMem(user.id).addr !== addr0 ? parseVi(raw, { addr: loadMem(user.id).addr, partnerCtx }) : fr0;
     // Tin trước đang nói về một người / con vật → câu lược chủ ngữ này vẫn nói về người đó ("mẹ a đang ốm" → "bị cảm thôi").

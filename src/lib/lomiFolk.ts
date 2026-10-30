@@ -1368,7 +1368,7 @@ export const FOLK: FolkEntry[] = [
   {
     id: "dau-mat-do",
     name: "Đau mắt đỏ: nhỏ sữa mẹ, nước lá?",
-    names: ["sữa mẹ", "nhỏ sữa", "nước lá", "lá trầu", "nước trà", "xông mắt", "nhỏ chanh", "nước muối tự pha"],
+    names: ["sữa mẹ", "nhỏ sữa", "nước lá", "lá trầu", "nước trà", "xông mắt", "nhỏ chanh", "nước muối tự pha", "nước tiểu", "nhỏ nước tiểu", "đắp lá lên mắt"],
     ctx: VN(/\b(mắt|đau mắt|mắt đỏ|viêm kết mạc|ghèn|dử mắt)\b/),
     verdict: "myth",
     belief: "Đau mắt đỏ thì nhỏ sữa mẹ, nước lá, nước trà, xông mắt.",
@@ -1700,6 +1700,267 @@ export const FOLK: FolkEntry[] = [
     sources: [{ title: "Constipation", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/constipation/" }],
     verifiedAt: "2026-10-24",
   },
+  // ── 30/10 (đợt 5 — Kir nhờ ChatGPT liệt kê ~1000 mẹo; Lomi gom theo chủ đề, mỗi ý đối chiếu trang nguồn đọc ngày 30/10/2026) ──
+  {
+    id: "thuoc-nam-benh-nang",
+    name: "Bệnh nặng uống thuốc nam / thuốc không rõ thành phần thay điều trị?",
+    names: ["thuốc nam", "thuốc bắc", "thuốc đông y", "thuốc gia truyền", "thầy lang", "lá thuốc", "nước lá", "bài thuốc", "thuốc dân gian", "cây thuốc", "thuốc lá cây", "lá cây rừng", "cây thuốc rừng", "thuốc rừng", "thuốc không rõ nguồn gốc", "thuốc không rõ thành phần", "thuốc trôi nổi", "thuốc không nhãn", "thuốc bổ không rõ", "cao gia truyền"],
+    ctx: VN(/\b(ung thư|u ác|di căn|suy thận|chạy thận|lọc máu|suy gan|xơ gan|viêm gan b|viêm gan c|hiv|tiểu đường|đái tháo đường|suy tim|nhồi máu cơ tim|đột quỵ|tai biến|động kinh|lao phổi|bệnh lao|sốt xuất huyết|sốt rét|viêm ruột thừa|tắc ruột|lupus|trầm cảm|tâm thần|lưỡng cực|parkinson|alzheimer|hen suyễn|viêm phổi|nhiễm trùng máu|viêm màng não|uốn ván|bạch cầu|không rõ nguồn gốc|không rõ thành phần|không nhãn|trôi nổi)\b/),
+    verdict: "danger",
+    belief: "Bệnh nặng (ung thư, suy thận, xơ gan, tiểu đường…) thì uống thuốc nam, thuốc bắc, thuốc gia truyền không rõ thành phần thay cho điều trị ở bệnh viện.",
+    folk: [],
+    science: [
+      { text: "Một số sản phẩm thảo dược Trung Quốc từng bị phát hiện lẫn chất độc, **kim loại nặng (như asen, chì, cadimi)**, thuốc trừ sâu, vi sinh vật — thậm chí lẫn thuốc tây như warfarin, diclofenac.", src: [0] },
+      { text: "Có sản phẩm bị dùng **nhầm vị thuốc**, một số đã gây tổn thương nội tạng.", src: [0] },
+      { text: "Thảo dược, thực phẩm bổ sung có thể tương tác với thuốc đang dùng.", src: [1] },
+    ],
+    how: [{ text: "Muốn dùng thêm thuốc nam khi đang điều trị: mang theo tên / thành phần (hoặc gói thuốc) hỏi bác sĩ điều trị trước, và kể cho bác sĩ mọi thứ mình đang uống.", src: [0, 1] }],
+    caution: [{ text: "**Đừng dùng thuốc đông y để thay thế hoặc trì hoãn điều trị chính thống** — bỏ hoá trị, chạy thận, thuốc tiểu đường… để chuyển qua thuốc nam có thể làm bệnh nặng thêm không quay lại được.", src: [0] }],
+    topics: [
+      { id: "ung-thu", text: "đừng bỏ / hoãn điều trị để uống thuốc nam — thảo dược không rõ thành phần có thể lẫn kim loại nặng, thuốc tây", src: [0], v: "danger" },
+      { id: "benh-than-man", text: "thuốc nam không rõ thành phần có thể lẫn chất độc, nhầm vị gây tổn thương nội tạng — hỏi bác sĩ thận trước khi uống", src: [0], v: "danger" },
+      { id: "viem-gan", text: "đừng tự uống thuốc nam thay điều trị viêm gan — sản phẩm không rõ thành phần có thể gây hại", src: [0], v: "danger" },
+      { id: "tieu-duong-type-2", text: "đừng bỏ thuốc tiểu đường để uống thuốc nam; thảo dược có thể tương tác với thuốc", src: [0, 1], v: "danger" },
+    ],
+    sources: [nccih("traditional-chinese-medicine-what-you-need-to-know", "Traditional Chinese Medicine: What You Need To Know", "04/2019"), WISELY],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "cay-doc",
+    name: "Lá ngón, ấu tàu (ô đầu, phụ tử), trúc đào, cà độc dược, mã tiền",
+    names: ["lá ngón", "cây lá ngón", "đoạn trường thảo", "rượu lá ngón", "trúc đào", "cây trúc đào", "lá trúc đào", "hoa trúc đào", "thông thiên", "cây thông thiên", "cà độc dược", "lá cà độc dược", "hạt cà độc dược", "phụ tử", "phụ tử sống", "ô đầu", "củ ô đầu", "ấu tàu", "củ ấu tàu", "rượu ấu tàu", "rượu ô đầu", "mã tiền", "hạt mã tiền", "mã tiền tử", "rượu mã tiền"],
+    verdict: "danger",
+    belief: "Ngâm rượu, sắc nước ấu tàu (ô đầu, phụ tử), mã tiền để trị đau nhức xương khớp; dùng lá cà độc dược trị hen; cây lá ngón, trúc đào làm thuốc.",
+    folk: [],
+    science: [
+      { text: "**Lá ngón** (Gelsemium elegans): ca ngộ độc nặng tiến triển nhanh tới **suy hô hấp, suy tuần hoàn**, cần hỗ trợ thở gấp; đã có nhiều vụ tử vong.", src: [0, 1] },
+      { text: "**Ấu tàu / ô đầu / phụ tử** (Aconitum): chứa aconitine độc với tim và thần kinh; ngộ độc nặng hay gặp sau uống nước sắc từ củ.", src: [2] },
+      { text: "Đông y chỉ dùng củ **đã bào chế** để giảm độc — chế không đúng hoặc dùng quá nhiều là ngộ độc; loạn nhịp tim do aconitine rất khó cứu.", src: [2] },
+      { text: "**Trúc đào, thông thiên**: chất độc có ở **mọi bộ phận** (hoa, lá, thân, cành) — gây tim đập chậm / không đều, tụt huyết áp, có thể tử vong.", src: [3] },
+      { text: "**Cà độc dược**: độc ở mọi bộ phận, nhất là lá và hạt — gây tim nhanh, loạn nhịp, tăng huyết áp.", src: [4] },
+      { text: "**Mã tiền** (Strychnos nux-vomica) là nguồn tự nhiên chính của **strychnine** — chất cực độc gây co cứng cơ toàn thân dữ dội, có thể tử vong vì không thở được.", src: [5] },
+    ],
+    caution: [
+      { text: "Lỡ ăn / uống phải (kể cả rượu ngâm) → **gọi 115 / đến cấp cứu ngay**, mang theo cây hoặc chai rượu; **đừng tự gây nôn** trừ khi nhân viên y tế bảo.", src: [3, 4, 5] },
+    ],
+    topics: [{ id: "ngo-doc", text: "lá ngón, ấu tàu (ô đầu, phụ tử), trúc đào, cà độc dược, mã tiền rất độc — lỡ dùng thì cấp cứu ngay, đừng tự gây nôn", src: [2, 3, 4, 5], v: "danger" }],
+    sources: [
+      { title: "Caution on the severe damage of Gelsemium elegans poisoning: a case report on family poisoning and systematic review (Frontiers in Public Health, 2025)", publisher: "PubMed (Thư viện Y khoa Quốc gia Hoa Kỳ – NIH)", url: "https://pubmed.ncbi.nlm.nih.gov/40860563/" },
+      { title: "Lethal poisoning with Gelsemium elegans in Guizhou, China (Public Health, 2016)", publisher: "PubMed (Thư viện Y khoa Quốc gia Hoa Kỳ – NIH)", url: "https://pubmed.ncbi.nlm.nih.gov/27026250/" },
+      { title: "Aconite poisoning (Clinical Toxicology, 2009)", publisher: "PubMed (Thư viện Y khoa Quốc gia Hoa Kỳ – NIH)", url: "https://pubmed.ncbi.nlm.nih.gov/19514874/" },
+      { title: "Oleander poisoning", publisher: "MedlinePlus (NIH)", url: "https://medlineplus.gov/ency/article/002884.htm", reviewed: "2025-10-14" },
+      { title: "Jimsonweed poisoning", publisher: "MedlinePlus (NIH)", url: "https://medlineplus.gov/ency/article/002881.htm", reviewed: "2025-10-14" },
+      { title: "Strychnine — Chemical fact sheet (cập nhật 10/06/2026)", publisher: "CDC (Hoa Kỳ)", url: "https://www.cdc.gov/chemical-emergencies/chemical-fact-sheets/strychnine.html" },
+    ],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "nho-tai",
+    name: "Nhỏ chanh, tỏi, rượu vào tai; ngoáy tai bằng tăm bông?",
+    names: ["nhỏ chanh", "nhỏ tỏi", "dầu tỏi", "nhỏ dầu", "nhỏ dầu gió", "nhỏ rượu", "nhỏ nước lá", "nhỏ sữa mẹ", "nhỏ nước tiểu", "nhỏ gì vào tai", "ngoáy tai", "lấy ráy tai", "lấy ráy", "móc ráy", "móc tai", "tăm bông", "bông ngoáy tai", "nến tai", "nến xông tai", "xông tai"],
+    ctx: VN(/\b(tai|lỗ tai|ráy tai|đau tai|viêm tai|ù tai|ngứa tai|nhức tai)\b/),
+    verdict: "risky",
+    tip: true,
+    belief: "Đau tai, ngứa tai thì nhỏ chanh, tỏi, rượu, nước lá vào tai; ngoáy tai bằng tăm bông cho sạch ráy.",
+    folk: [],
+    science: [
+      { text: "**Không dùng ngón tay hay vật gì (như tăm bông)** để lấy ráy tai — chỉ đẩy ráy vào sâu và làm nặng thêm.", src: [0] },
+      { text: "Không có bằng chứng nến xông tai hay máy hút tai lấy được ráy tai.", src: [0] },
+    ],
+    how: [{ text: "Ráy tai bít thì có thể nhỏ vài giọt dầu ô liu hoặc dầu hạnh nhân, nằm nghiêng cho tai đó hướng lên vài phút.", src: [0] }],
+    caution: [
+      { text: "**Không nhỏ gì vào tai nếu có thể bị thủng màng nhĩ.**", src: [0] },
+      { text: "Ráy tai không đỡ sau khoảng 5 ngày, hoặc bít tới mức không nghe được → gặp bác sĩ / điều dưỡng.", src: [0] },
+    ],
+    unverified: ["nhỏ chanh, tỏi, rượu, nước lá vào tai chữa đau tai, viêm tai"],
+    topics: [
+      { id: "ray-tai", text: "đừng ngoáy bằng tăm bông — nhỏ vài giọt dầu ô liu nếu ráy bít (không nhỏ khi thủng màng nhĩ)", src: [0], v: "risky" },
+      { id: "viem-tai-giua", text: "chưa thấy nguồn y khoa nào ủng hộ nhỏ chanh, tỏi, rượu, nước lá vào tai", src: [0], v: "unclear" },
+    ],
+    sources: [{ title: "Earwax build-up", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/earwax-build-up/", reviewed: "2024-01-05" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "dau-gio-tre",
+    name: "Xoa dầu gió, cù là, long não cho trẻ nhỏ?",
+    names: ["dầu gió", "dầu cù là", "cù là", "cao sao vàng", "long não", "dầu long não", "vick", "vicks", "dầu khuynh diệp", "tinh dầu", "dầu nóng", "dầu xoa", "xoa dầu", "bôi dầu"],
+    ctx: VN(/\b(sơ sinh|trẻ sơ sinh|em bé|bé|trẻ|trẻ nhỏ|trẻ em|con nít|thóp|tháng tuổi|bé nhà)\b/),
+    verdict: "risky",
+    tip: true,
+    belief: "Bé cảm, đầy hơi, ho thì xoa dầu gió, cù là, dầu khuynh diệp vào ngực, rốn, thóp, lòng bàn chân.",
+    folk: [],
+    science: [
+      { text: "**Long não (camphor)** có trong nhiều loại dầu / thuốc xoa: thuốc xoa ngực (vd Vicks VapoRub), dầu long não, thuốc xoa giảm đau.", src: [0] },
+      { text: "Bị nhiễm quá mức gây ngộ độc: rát miệng họng, bứt rứt, tim nhanh, run, giật cơ mặt, **co giật**, mê man.", src: [0] },
+    ],
+    how: [{ text: "Trước khi xoa bất cứ loại dầu nào cho bé, xem nhãn có long não (camphor) không và hỏi dược sĩ / bác sĩ có dùng được cho tuổi của bé không.", src: [0] }],
+    caution: [{ text: "Dầu dính da thì rửa bằng xà phòng và nước ấm; bé lỡ nuốt phải, lừ đừ hay co giật → **cấp cứu ngay**, đừng tự gây nôn.", src: [0] }],
+    unverified: ["xoa dầu gió, cù là vào thóp, rốn chữa cảm, đầy hơi cho trẻ sơ sinh"],
+    topics: [],
+    sources: [{ title: "Camphor overdose", publisher: "MedlinePlus (NIH)", url: "https://medlineplus.gov/ency/article/002566.htm", reviewed: "2025-01-08" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "nuoc-la-so-sinh",
+    name: "Cho trẻ sơ sinh uống nước lá, nước lọc?",
+    names: ["nước lá", "nước lá thuốc", "nước thuốc nam", "nước rau má", "nước cam thảo", "nước sắc", "nước lá hẹ", "cho uống nước", "uống nước lọc", "uống nước", "nước đường", "nước trà", "nước thảo mộc", "trà thảo mộc"],
+    ctx: VN(/\b(sơ sinh|trẻ sơ sinh|dưới 6 tháng|1 tháng|2 tháng|3 tháng|4 tháng|5 tháng|mới sinh|đầy tháng)\b/),
+    verdict: "risky",
+    tip: true,
+    belief: "Cho trẻ sơ sinh uống nước lá (lá hẹ, rau má, cam thảo…) để trị đầy hơi, táo bón, vàng da, sốt; hoặc cho uống thêm nước lọc, nước đường.",
+    folk: [],
+    science: [
+      { text: "Bé **bú mẹ hoàn toàn không cần uống thêm nước** cho tới khi bắt đầu ăn dặm; bé bú sữa công thức dưới 6 tháng có thể cần vài ngụm nước đun sôi để nguội khi trời nóng.", src: [0] },
+      { text: "Các loại \"nước cho bé\" và nước thảo mộc thường có đường, **không được khuyên dùng**.", src: [0] },
+    ],
+    how: [{ text: "Bé bú mẹ: cứ cho bú theo nhu cầu — không cần thêm nước lá hay nước lọc trước khi ăn dặm.", src: [0] }],
+    caution: [],
+    unverified: ["nước lá (lá hẹ, rau má, cam thảo…) chữa đầy hơi, táo bón, vàng da, sốt cho trẻ sơ sinh"],
+    topics: [{ id: "vang-da-so-sinh", text: "bé bú mẹ không cần uống thêm nước; nước thảo mộc không được khuyên dùng cho bé", src: [0], v: "risky" }],
+    sources: [{ title: "Drinks and cups for babies and young children", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/baby/weaning-and-feeding/drinks-and-cups-for-babies-and-young-children/", reviewed: "2022-10-05" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "giai-ruou",
+    name: "Giải rượu: cà phê, tắm nước lạnh, uống thêm rượu?",
+    names: ["giải rượu", "tỉnh rượu", "giã rượu", "dã rượu", "giải bia", "cà phê giải rượu", "uống cà phê", "cà phê", "tắm nước lạnh", "tắm", "uống thêm rượu", "uống thêm bia", "gỡ rượu", "nước chanh", "nước tăng lực"],
+    ctx: VN(/\b(say rượu|say bia|xỉn|say xỉn|nhậu|rượu|bia|giải rượu|tỉnh rượu|giã rượu|dã rượu)\b/),
+    verdict: "myth",
+    belief: "Uống cà phê, tắm nước lạnh, uống thêm chút rượu (\"gỡ rượu\") hay nước chanh, nước tăng lực là mau tỉnh rượu, hết mệt sau nhậu.",
+    folk: [],
+    science: [
+      { text: "Uống cà phê, đi tắm hay uống thêm rượu sáng hôm sau đều **không chữa được** cơn mệt sau nhậu; chưa mẹo nào được khoa học chứng minh — **chỉ có thời gian**.", src: [0] },
+      { text: "Uống thêm rượu (\"gỡ\") có thể đỡ tạm nhưng làm cơn mệt kéo dài thêm.", src: [0] },
+      { text: "Lúc còn mệt sau nhậu, khả năng tập trung, ra quyết định, phối hợp cơ vẫn bị giảm — **đừng lái xe**.", src: [0] },
+    ],
+    caution: [{ text: "**Rượu + paracetamol** có thể gây độc cho gan — đừng uống paracetamol để chữa nhức đầu sau nhậu khi chưa hỏi dược sĩ.", src: [0] }],
+    unverified: ["nước chanh, nước tăng lực giúp giải rượu"],
+    topics: [{ id: "ngo-doc-ruou", text: "cà phê, tắm, uống thêm rượu không giải rượu — chỉ có thời gian; rượu + paracetamol hại gan", src: [0], v: "myth" }],
+    sources: [{ title: "Hangovers (cập nhật 12/2025)", publisher: "NIAAA (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/hangovers" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "thut-thao",
+    name: "Detox, thụt tháo, xổ ruột để thải độc?",
+    names: ["thụt tháo", "thụt đại tràng", "thụt cà phê", "súc ruột", "làm sạch ruột", "xổ ruột", "thuốc xổ thải độc", "uống thuốc xổ", "detox", "thải độc", "thanh lọc cơ thể", "nhịn ăn thải độc", "nước ép thải độc", "nước ép cần tây", "uống nước ép cần tây"],
+    verdict: "myth",
+    belief: "Thụt tháo, uống thuốc xổ, nhịn ăn chỉ uống nước ép để \"thải độc\", thanh lọc cơ thể, chữa bệnh.",
+    folk: [],
+    science: [
+      { text: "Rất ít nghiên cứu về các chương trình \"detox\" ở người; một tổng quan năm 2015 **không thấy nghiên cứu thuyết phục** nào cho thấy detox giúp giảm cân hay loại bỏ độc tố.", src: [0] },
+      { text: "Bằng chứng cho **thụt rửa đại tràng** còn hạn chế, chưa đủ cho các công dụng được quảng cáo; có thể gây tác dụng phụ, đôi khi nghiêm trọng.", src: [0] },
+      { text: "Detox hay kèm thuốc xổ → gây tiêu chảy.", src: [0] },
+      { text: "Nước ép chưa tiệt trùng có thể gây bệnh (nặng ở trẻ em, người già, người suy giảm miễn dịch); nước ép rau lá xanh, củ dền nhiều oxalat có thể không tốt cho người dễ bị sỏi thận.", src: [0] },
+    ],
+    caution: [{ text: "Người có bệnh đường tiêu hoá, từng mổ ruột, trĩ nặng, bệnh thận hay bệnh tim **dễ bị hại hơn** khi thụt tháo.", src: [0] }],
+    topics: [{ id: "tao-bon", text: "thụt tháo, xổ ruột \"thải độc\" chưa có bằng chứng và có thể gây hại", src: [0], v: "myth" }],
+    sources: [nccih("detoxes-and-cleanses-what-you-need-to-know", "\"Detoxes\" and \"Cleanses\": What You Need To Know", "03/2025")],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "kieng-uong-nuoc",
+    name: "Sốt, tiêu chảy, nôn, sỏi thận thì kiêng uống nước?",
+    names: ["kiêng uống nước", "kiêng nước", "không cho uống nước", "nhịn uống nước", "nhịn nước", "nhịn khát", "uống ít nước", "hạn chế nước", "hạn chế uống nước", "không uống nước"],
+    ctx: VN(/\b(sốt|tiêu chảy|đi ngoài|nôn|ói|ói mửa|sỏi thận|cảm|cảm lạnh|cúm|sốt xuất huyết)\b/),
+    verdict: "myth",
+    belief: "Bị sốt, tiêu chảy, nôn ói hay sỏi thận thì kiêng uống nước, uống ít cho \"đỡ đi ngoài\", \"đỡ phù\".",
+    folk: [],
+    science: [
+      { text: "Tiêu chảy, nôn: NHS khuyên **uống nhiều nước**; buồn nôn thì nhấp từng ngụm nhỏ.", src: [0] },
+      { text: "Trẻ sốt: NHS khuyên cho uống nhiều nước; bé bú mẹ thì cứ cho bú.", src: [1] },
+      { text: "Sốt xuất huyết: WHO khuyên nghỉ ngơi, **uống nhiều nước**.", src: [2] },
+      { text: "Sỏi thận: NHS khuyên uống nhiều nước mỗi ngày để không bị mất nước, giữ nước tiểu trong.", src: [3] },
+    ],
+    how: [{ text: "Uống từng ngụm, đều trong ngày (trừ khi bác sĩ đang dặn riêng khác); tiêu chảy, nôn nhiều thì hỏi dược sĩ gói bù nước (ORS / oresol).", src: [0] }],
+    caution: [{ text: "Trẻ dưới 5 tuổi có dấu hiệu mất nước (ít tã ướt) thì đi khám.", src: [0] }],
+    topics: [
+      { id: "tieu-chay", text: "đừng kiêng nước — uống nhiều, nhấp từng ngụm nếu buồn nôn; hỏi dược sĩ gói ORS", src: [0], v: "myth" },
+      { id: "sot-xuat-huyet", text: "đừng kiêng nước — WHO khuyên nghỉ ngơi, uống nhiều nước", src: [2], v: "myth" },
+      { id: "soi-than", text: "đừng kiêng nước — uống nhiều nước mỗi ngày để phòng sỏi", src: [3], v: "myth" },
+    ],
+    sources: [NHS_DV, NHS_FEVERKID, { title: "Dengue and severe dengue — fact sheet (21/08/2025)", publisher: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue" }, { title: "Kidney stones – Prevention", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/kidney-stones/prevention/", reviewed: "2022-11-30" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "chuom-da",
+    name: "Chườm đá trực tiếp lên da?",
+    names: ["chườm đá", "chườm lạnh", "túi đá", "đá lạnh", "chườm đá trực tiếp", "áp đá", "chườm nước đá"],
+    ctx: VN(/\b(trực tiếp|lên da|vào da|bọc|khăn|bong gân|trật|sưng|bầm|va đập|chấn thương|bao lâu|mấy phút|đau khớp|đau cổ chân|lật cổ chân)\b/),
+    verdict: "help",
+    tip: true,
+    belief: "Bị sưng, bong gân thì áp thẳng cục đá lên da, chườm càng lâu càng tốt.",
+    folk: [],
+    science: [{ text: "Hướng dẫn chườm đá của NHS dặn **bọc túi đá trong khăn ẩm**, không để đá chạm trực tiếp vào da.", src: [0] }],
+    how: [{ text: "Chườm khoảng 15 phút, mỗi 2–3 giờ, khi chỗ khớp còn sưng, đau.", src: [0] }],
+    caution: [],
+    topics: [{ id: "bong-gan", text: "bọc đá trong khăn ẩm, không áp thẳng lên da; chườm khoảng 15 phút mỗi 2–3 giờ khi còn sưng", src: [0], v: "help" }],
+    sources: [{ title: "Protection, rest and ice regime", publisher: "Mersey Care NHS Foundation Trust (Anh)", url: "https://www.merseycare.nhs.uk/physiotherapy/protection-rest-ice" }],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "hoa-chat-len-da",
+    name: "Bôi dầu hoả, xăng, nhớt, vôi, nước điếu lên da?",
+    names: ["dầu hỏa", "dầu hoả", "dầu hôi", "xăng", "nhớt", "dầu nhớt", "nhớt xe", "nước vôi", "vôi", "nước điếu", "thuốc nhuộm tóc"],
+    ctx: VN(/\b(bôi|thoa|xức|trét|đắp|chấm|ghẻ|nấm|vết thương|lở|ngứa|kiến ba khoang|chàm|hắc lào|lác|chí|chấy)\b/),
+    verdict: "danger",
+    belief: "Bôi dầu hoả, nhớt xe, vôi, nước điếu lên da để trị ghẻ, nấm, chấy, vết kiến ba khoang, vết thương.",
+    folk: [],
+    science: [
+      { text: "Dầu hoả dính da có thể gây **bỏng và kích ứng**.", src: [0] },
+      { text: "**Không bôi thêm gì** — kem hay hoá chất khác — lên vết bỏng.", src: [1] },
+    ],
+    how: [
+      { text: "Lỡ bôi rồi: rửa xối thật nhiều nước sạch, ít nhất 15 phút.", src: [0] },
+      { text: "Đã bỏng rát: đeo găng nếu được, cởi đồ dính hoá chất, phủi hoá chất khô, xối nước mát hoặc âm ấm thật lâu.", src: [1] },
+    ],
+    caution: [{ text: "Hoá chất dính vào **mắt** hoặc bỏng rộng → gọi **115**.", src: [1] }],
+    unverified: ["vôi, nước điếu, nhớt, dầu hoả chữa ghẻ, nấm, chấy, kiến ba khoang"],
+    topics: [{ id: "ghe", text: "đừng bôi dầu hoả, nhớt, vôi — dầu hoả gây bỏng da; ghẻ cần thuốc bác sĩ / dược sĩ hướng dẫn", src: [0, 1], v: "danger" }],
+    sources: [
+      { title: "Kerosene poisoning", publisher: "MedlinePlus (NIH)", url: "https://medlineplus.gov/ency/article/002807.htm", reviewed: "2025-10-14" },
+      { title: "Acid and chemical burns", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/acid-and-chemical-burns/", reviewed: "2024-06-05" },
+    ],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "giac-hoi",
+    name: "Giác hơi (giác lửa) hút độc?",
+    names: ["giác hơi", "giác lửa", "ống giác", "giác chân không", "giác ướt", "giác hơi hút độc", "trích huyết giác hơi"],
+    verdict: "unclear",
+    tip: true,
+    belief: "Giác hơi, giác lửa để \"hút độc\", \"hút gió độc\", chữa đau nhức, cảm lạnh, đau bụng.",
+    folk: [],
+    science: [
+      { text: "Nghiên cứu về giác hơi **phần lớn chất lượng thấp**; có thể giúp giảm đau nhưng bằng chứng chưa mạnh, chưa đủ để kết luận cho các bệnh khác.", src: [0] },
+      { text: "Giác hơi để lại vết tạm thời; có thể gây đổi màu da kéo dài, **sẹo, bỏng, nhiễm trùng**.", src: [0] },
+      { text: "Hiếm gặp nhưng nặng — chảy máu trong sọ sau giác da đầu; thiếu máu do giác ướt (trích máu) nhiều lần.", src: [0] },
+    ],
+    caution: [{ text: "Đang bị chàm (eczema) hay vảy nến thì giác hơi có thể làm nặng thêm.", src: [0] }],
+    unverified: ["giác hơi hút độc tố, hút gió độc ra khỏi người"],
+    topics: [],
+    sources: [nccih("cupping", "Cupping", "11/2018")],
+    verifiedAt: "2026-10-30",
+  },
+  {
+    id: "nuoc-dua-tieu-cau",
+    name: "Sốt xuất huyết: nước dừa, lá đu đủ tăng tiểu cầu?",
+    names: ["nước dừa", "lá đu đủ", "nước lá đu đủ", "nước ép lá đu đủ", "nước cam", "nước rau má", "tăng tiểu cầu", "lá thuốc", "nước lá"],
+    ctx: VN(/\b(sốt xuất huyết|tiểu cầu|dengue|sxh)\b/),
+    verdict: "unclear",
+    tip: true,
+    belief: "Bị sốt xuất huyết thì uống nước dừa, nước lá đu đủ cho tăng tiểu cầu, mau khỏi.",
+    folk: [],
+    science: [
+      { text: "Sốt xuất huyết **không có thuốc điều trị đặc hiệu**; nghỉ ngơi, **uống nhiều nước**, giảm đau hạ sốt bằng paracetamol.", src: [0] },
+      { text: "**tránh thuốc kháng viêm không steroid như ibuprofen, aspirin** vì làm tăng nguy cơ chảy máu.", src: [0] },
+    ],
+    how: [{ text: "Nước dừa cũng là một loại nước uống giúp uống đủ nước như WHO khuyên — nhưng không phải thuốc.", src: [0] }],
+    caution: [{ text: "Dấu hiệu nặng (hay xuất hiện **sau khi hết sốt**): đau bụng dữ dội, nôn liên tục, thở nhanh, chảy máu chân răng / mũi, nôn hoặc đi cầu ra máu, khát nhiều, da lạnh tái, mệt lả, bứt rứt → **đi viện ngay**.", src: [0] }],
+    unverified: ["nước dừa, lá đu đủ, nước cam làm tăng tiểu cầu"],
+    topics: [{ id: "sot-xuat-huyet", text: "chưa thấy nguồn nào cho thấy nước dừa, lá đu đủ tăng tiểu cầu — uống đủ nước, paracetamol, tránh ibuprofen / aspirin, theo dõi dấu hiệu nặng", src: [0], v: "unclear" }],
+    sources: [{ title: "Dengue and severe dengue — fact sheet (21/08/2025)", publisher: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/dengue-and-severe-dengue" }],
+    verifiedAt: "2026-10-30",
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
@@ -1764,7 +2025,8 @@ export function findFolk(text: string): FolkEntry | null {
       m = hit ? [normalizeVi(hit)] : null;
     }
     // (mục có ngữ cảnh — "đắp lá" khi rắn cắn / chó cắn — ưu tiên hơn tên vị trần)
-    const len = m ? m[0].length + (f.ctx || f.id === "boi-bong" ? 100 : 0) : 0;
+    // (mục chung "thuốc nam khi bệnh nặng" không cộng điểm ngữ cảnh — câu nhắc vị cụ thể như "linh chi" thì vị đó trả lời)
+    const len = m ? m[0].length + ((f.ctx || f.id === "boi-bong") && f.id !== "thuoc-nam-benh-nang" ? 100 : 0) : 0;
     if (m && (!best || len > best.len)) best = { f, len };
   }
   return best?.f ?? null;
@@ -1799,6 +2061,8 @@ const PREG = VN(/\b(bầu|mang thai|có thai|cho con bú|đang bú)\b/);
 const KID_FACT = /trẻ|bé/u;
 const PREG_FACT = /mang thai|bà bầu|bầu|cho con bú/u;
 
+/** Mục vốn nói về trẻ nhỏ — không kèm câu "nguồn chưa nêu riêng cho trẻ nhỏ". */
+const KID_ENTRIES = new Set(["dau-gio-tre", "nuoc-la-so-sinh"]);
 export function renderFolk(f: FolkEntry, topic?: { id: string; name: string } | null, now = Date.now(), q = ""): string {
   const v = VERDICT[f.verdict];
   const t = topic ? f.topics.find((x) => x.id === topic.id) : null;
@@ -1812,12 +2076,15 @@ export function renderFolk(f: FolkEntry, topic?: { id: string; name: string } | 
     myth ? `🧐 **${f.name}** — quan niệm dân gian & nguồn y khoa nói gì` : `🌿 **${f.name}** — mẹo dân gian & nguồn y khoa nói gì`,
     kid.length ? `👶 **Với trẻ nhỏ:**\n${bl(kid)}` : "",
     preg.length ? `🤰 **Với bà bầu / mẹ cho con bú:**\n${bl(preg)}` : "",
-    q && f.verdict !== "myth" && (KID.test(nq) || PREG.test(nq)) && !kid.length && !preg.length ? "👶🤰 Nguồn chưa nêu riêng cho trẻ nhỏ / bà bầu — hỏi bác sĩ / dược sĩ trước khi dùng nha." : "",
+    q && f.verdict !== "myth" && !KID_ENTRIES.has(f.id) && (KID.test(nq) || PREG.test(nq)) && !kid.length && !preg.length ? "👶🤰 Nguồn chưa nêu riêng cho trẻ nhỏ / bà bầu — hỏi bác sĩ / dược sĩ trước khi dùng nha." : "",
     `${v.icon} ${v.text}.`,
     t ? `👉 Với **${topic!.name}**: ${t.text}.` : "",
     myth && f.belief ? `🏡 **Dân gian hay:** ${f.belief}` : f.folk.length ? `🏡 **Dân gian dùng để:**\n${bl(f.folk)}` : "",
     `🔬 **${myth ? "Nguồn y khoa nói" : "Nghiên cứu nói gì"}:**\n${bl(f.science)}`,
-    f.how?.length ? `${myth ? "✅ **Nên làm:**" : "🥣 **Cách làm theo nguồn:**"}\n${bl(f.how)}` : "",
+    (() => {
+      const hs = (f.how ?? []).filter((x) => !kid.includes(x) && !preg.includes(x));
+      return hs.length ? `${myth ? "✅ **Nên làm:**" : "🥣 **Cách làm theo nguồn:**"}\n${bl(hs)}` : "";
+    })(),
     f.unverified?.length ? `🔎 Lomi chưa tìm thấy nguồn y khoa nào xác nhận chuyện ${f.unverified.join("; ")} — nên Lomi không dám nói là đúng.` : "",
     (() => {
       const cs = f.caution.filter((x) => !kid.includes(x) && !preg.includes(x));

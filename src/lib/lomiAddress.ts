@@ -39,6 +39,10 @@ const ASK_LOMI_EM = VR(/(^\s*|[,.!?]\s*)(em|e)\s+(không biết thì|ko biết t
 // Người dùng gọi Lomi là anh/chị ("anh ơi", "chị ơi", "lomi anh") — Lomi vẫn xưng "Lomi" (giữ persona).
 const CALL_LOMI_AC = VR(/(^|\s)(lomi\s+(anh|a|chị|c)|(anh|a|chị|c)\s+ơi+)(?=\s|$|[,.!?])/iu);
 
+const VITAMIN_LETTER = VR(/(^|\s)(vitamin|vitamine|vit|nhóm|loại|hạng|lớp|khu|tầng|size|cỡ|điểm|phòng|block|tòa|toà)\s+(a|c|e)(?=\s|$|[,.!?])/giu);
+/** Câu có "vitamin C", "nhóm A"… — chữ a / c / e là tên, không dùng để đoán xưng hô. */
+export const hasNameLetter = (raw: string) => { VITAMIN_LETTER.lastIndex = 0; const r = VITAMIN_LETTER.test(` ${raw.normalize("NFC").toLowerCase()} `); VITAMIN_LETTER.lastIndex = 0; return r; };
+
 /** Người dùng NÓI RÕ muốn xưng hô thế nào — ưu tiên tuyệt đối, khoá lại. */
 export function explicitAddr(raw: string): Addr | null {
   // Gom các cách viết "anh - em", "anh/em", "anh-em", "xưng hô anh em" về một dạng (01/10 lỗi Kir gặp:
@@ -81,7 +85,8 @@ export function detectAddr(raw: string): Addr | null {
   const callsEm = CALL_LOMI_EM.test(t) || askLomiEm;
   const callsAC = CALL_LOMI_AC.test(t);
   // Bỏ phần GỌI Lomi và ngôi thứ ba — phần còn lại mới là chỗ người dùng tự xưng.
-  const cleaned = t.replace(CALL_LOMI_EM, " ").replace(ASK_LOMI_EM, " ").replace(TALK_LOMI_EM, " ").replace(CALL_LOMI_AC, " ").replace(THIRD, " ");
+  // (30/10) "vitamin C có…", "vit A có…", "nhóm B" — chữ cái là tên vitamin / nhóm, không phải "chị / anh / em" tự xưng.
+  const cleaned = t.replace(VITAMIN_LETTER, " ").replace(CALL_LOMI_EM, " ").replace(ASK_LOMI_EM, " ").replace(TALK_LOMI_EM, " ").replace(CALL_LOMI_AC, " ").replace(THIRD, " ");
   let self: Addr | null = null;
   for (const [re, a] of SELF) if (re.test(cleaned)) { self = a; break; }
   if (!self) for (const [re, a] of OBJ) if (re.test(cleaned)) { self = a; break; }
