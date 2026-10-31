@@ -59,10 +59,10 @@ const BURN = VN(/\b((bị|vừa bị|mới bị|lỡ bị) (bỏng|phỏng)(?! (
 // Phản vệ: theo thẻ soc-phan-ve và trang NHS "Insect bites and stings" — môi / miệng / lưỡi / họng sưng đột ngột, họng thít, khó thở.
 //   (Chỉ sưng MẶT sau khi bị đốt thì NHS không xếp vào gọi cấp cứu → để mạch triệu chứng hỏi thêm.)
 const SWELL_AIR = VN(/\b(sưng (lưỡi|họng|cổ họng)|lưỡi sưng|họng (sưng|thít)|thít họng)\b/);
-const SWELL = VN(/\b(sưng (môi|mặt|mí|mí mắt|mắt|miệng)|phù (môi|mặt)|môi sưng|mặt sưng|nổi mề đay|mề đay|nổi mẩn|mẩn đỏ|phát ban|nổi ban|ngứa khắp người)\b/);
+const SWELL = VN(/\b(sưng (môi|mặt|mí|mí mắt|mắt|miệng)|phù (môi|mặt)|môi (hơi |bị |cũng )?sưng|mặt (hơi |bị )?sưng|nổi mề đay|mề đay|nổi mẩn|mẩn đỏ|phát ban|nổi ban|ngứa khắp người)\b/);
 const AIRWAY = VN(/\b(khó thở|thở khò khè|thở rít|tức ngực|khó nuốt|nghẹt thở|thở không (được|nổi)|không thở được|choáng|ngất|lơ mơ|tím tái)\b/);
 const TRIGGER = VN(/\b(ong (đốt|chích)|bị (ong|kiến|côn trùng|bò cạp|rết) (đốt|chích|cắn)|ăn (tôm|cua|hải sản|đậu phộng|lạc|trứng)( \S+){0,3} (xong|vào|rồi)|sau khi (ăn|uống thuốc|tiêm)|uống thuốc (xong|vào))\b/);
-const SUDDEN_LIP = VN(/\b(sưng (môi|miệng)|môi sưng)\b/);
+const SUDDEN_LIP = VN(/\b(sưng (môi|miệng)|môi (hơi |bị |cũng )?sưng)\b/); // (31/10: "giờ môi hơi sưng")
 // Thai kỳ — chỉ những cách nói rõ là đang mang thai ("bầu cử", "bầu trời" không phải).
 const PREG = VN(/\b(mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|đang mang bầu|bầu (\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mấy) (tháng|tuần)|thai (\d+|mấy) (tuần|tháng))\b/);
 const PREG_URGENT = VN(/\b(ra máu|ra huyết|chảy máu|đau bụng (dữ dội|nhiều|quá|lắm|quặn|không chịu nổi)|quặn bụng|ra nước|vỡ ối|rỉ ối|thai (không|ít) (máy|đạp)|không thấy thai (máy|đạp)|thai máy ít|ít đạp|co giật|ngất)\b/);

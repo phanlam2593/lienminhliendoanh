@@ -87,7 +87,7 @@ export function list3Reply(q: string): L3 | null {
       text: "Đừng tự cho bé uống thuốc của người lớn nha, kể cả chia nhỏ liều — thuốc cho trẻ phải theo **tuổi và cân nặng**, và có thuốc ho, cảm của người lớn không dùng cho trẻ nhỏ.\n• Hỏi dược sĩ / bác sĩ, nói rõ tuổi, cân nặng và bé đang bị gì\n• Đưa bé đi khám nếu ho kèm khó thở, thở nhanh, sốt cao, bé li bì hoặc bỏ bú",
     };
   // Kháng sinh: thấy đỡ rồi ngưng được chưa.
-  if (VN(/\bkháng sinh\b/).test(n) && VN(/\b(ngưng|ngừng|dừng|bỏ|thôi|nghỉ) (uống|thuốc|được|luôn|chưa|không|ko)|\b(có )?nên (ngưng|ngừng|dừng|bỏ)\b|\b(đỡ|khỏe|khoẻ|hết)( \S+){0,2} (rồi|hẳn)( \S+){0,4} (ngưng|ngừng|dừng|bỏ|thôi)\b/).test(n))
+  if (VN(/\bkháng sinh\b/).test(n) && VN(/\b(ngưng|ngừng|dừng|bỏ|thôi|nghỉ) (uống|thuốc|được|luôn|chưa|không|ko)|\b(có )?nên (ngưng|ngừng|dừng|bỏ)\b|\b(ngưng|ngừng|dừng|bỏ|thôi) (khi|lúc) (hết sốt|đỡ|khỏe|khoẻ|hết)|\b(thấy )?(khỏe|khoẻ|đỡ) rồi\b|\b(đỡ|khỏe|khoẻ|hết)( \S+){0,2} (rồi|hẳn)( \S+){0,4} (ngưng|ngừng|dừng|bỏ|thôi)\b/).test(n))
     return {
       id: "med_abx_stop",
       health: true,
@@ -108,7 +108,7 @@ export function list3Reply(q: string): L3 | null {
       text: "Thuốc đã ghi là có thể gây chóng mặt hay buồn ngủ thì **đừng lái xe, chạy xe máy** khi chưa biết thuốc ảnh hưởng tới mình ra sao nha — lơ mơ một giây trên đường là nguy hiểm cho cả bạn lẫn người khác.\n• Đọc kỹ tờ hướng dẫn, hỏi dược sĩ thuốc này ảnh hưởng bao lâu sau khi uống\n• Đang thấy chóng mặt, buồn ngủ thì nhờ người chở hoặc đi xe ôm / taxi\n• Đừng uống rượu bia cùng — dễ làm buồn ngủ nặng hơn",
     };
   // Ibuprofen lúc bụng đói (NHS).
-  if (VN(/\b(ibuprofen|ibuprofene)\b/).test(n) && VN(/\b(bụng đói|lúc đói|khi đói|chưa ăn|trước ăn|trước khi ăn|sau ăn|sau khi ăn|với sữa)\b/).test(n))
+  if (VN(/\b(ibuprofen|ibuprofene)\b/).test(n) && VN(/\b(bụng đói|lúc đói|khi đói|chưa ăn|trước ăn|trước khi ăn|sau ăn|sau khi ăn|với sữa|ăn trước|ăn no|ăn sau)\b/).test(n))
     return {
       id: "med_ibu_food",
       health: true,

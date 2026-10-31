@@ -1,4 +1,5 @@
 import { list3Reply } from "@/lib/lomiList3";
+import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugStatement, followAspect, parseDetail } from "@/lib/lomiFollow";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGoBack } from "@/lib/navigation";
@@ -122,6 +123,9 @@ import {
   spreadFromText,
   readingAiPrompt,
   readingText,
+  readingRecap,
+  tarotCard,
+  TAROT_DECK_SIZE,
   type TarotReading,
 } from "@/lib/tarot";
 import { TarotCards } from "@/components/LomiTarot";
@@ -201,6 +205,7 @@ type Msg = {
   foodRev?: string; // 14/10: Lomi vừa trả lời câu hỏi ngược theo món này ("có bệnh gì kiêng ăn cá") — "măng thì sao?" hỏi tiếp món khác
   pal?: { kin?: string; disease?: string; belly?: boolean; self?: boolean; felt?: boolean }; palAge?: number; // 30/10: đang nói chuyện người bệnh được "trả về" (lib/lomiPalliative) — nhớ người + bệnh cho lượt sau
   src?: string; // 15/10: dòng "📚 Nguồn …" của câu đáp (lib/lomiCite) — không hiện, ai hỏi "nguồn đâu?" thì Lomi mới đưa ra
+  medAge?: number; // 31/10: số lượt đã trôi qua kể từ câu đáp có thẻ y khoa thật (med được giữ thêm vài lượt qua câu kể chi tiết)
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
   talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
@@ -591,6 +596,164 @@ export function AiChat({
       { role: "assistant", content: readingText(r, lang), local: true, tarot: r, ask: readingAiPrompt(r, lang) },
     ]);
   };
+  // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt): câu nối ngắn trong mạch sức khoẻ / thuốc (lib/lomiFollow). null = để lớp khác lo.
+  const followUp = async (q: string, raw: string, lastA0: Msg | undefined, hCtx: HealthCtx | undefined): Promise<Msg | null> => {
+    const r = await followUp0(q, raw, lastA0, hCtx);
+    // Đúng câu vừa nói ở lượt trước → không lặp lại nguyên văn (Kir: "bỏ mấy chỗ lặp lại"), chỉ nhắc ý chính.
+    if (r && lastA0 && r.content.slice(0, 60) === lastA0.content.slice(0, 60)) {
+      const first = r.content.split(/(?<=[.!?])\s|\n/u)[0].replace(/^Dạ, Lomi ghi nhận nha 📝 /u, "");
+      return { ...r, content: `Dạ, vẫn như Lomi vừa nói ở trên nha 👆 ${first}\n\nBạn còn muốn hỏi thêm gì không?` };
+    }
+    return r;
+  };
+  const followUp0 = async (q: string, raw: string, lastA0: Msg | undefined, hCtx: HealthCtx | undefined): Promise<Msg | null> => {
+    const nr = ` ${normalizeVi(raw)} `;
+    const w = raw.trim().split(/\s+/).length;
+    const prevA = msgs.filter((m) => m.role === "assistant").slice(-2).reverse();
+    const prevU = msgs.filter((m) => m.role === "user").slice(-3).reverse();
+    // (0) Lượt trước vừa báo cấp cứu (🚨 … 115) mà hỏi tiếp ngắn ("có phải dị ứng nữa không?") → nhắc lại, không đưa bài chăm sóc thường.
+    if (lastA0 && /^🚨/u.test(lastA0.content) && w <= 8 && (raw.includes("?") || VN(/\b(không|ko|hả|ha|phải không|có phải|nguy hiểm|sao)\s*$/).test(nr)) && !VN(/\b(gọi rồi|đã gọi|đang đi|tới viện|đến viện|đỡ rồi|hết rồi|thêm|mờ|đau|sốt|nôn|co giật|chảy máu|tím|ngất|xỉu|thở nhanh|li bì|bỏ bú|tháng|tuổi)\b/).test(nr))
+      return { role: "assistant", content: "🚨 Lomi nhắc lại nha: với những dấu hiệu bạn vừa kể, đừng chờ xem có phải hay không — **gọi 115 ngay** hoặc nhờ người chở tới cấp cứu gần nhất. Trong lúc chờ: ngồi thẳng cho dễ thở, không ăn uống thêm gì, có người ở cạnh.\n\nBạn gọi được chưa?", local: true, health: hCtx ?? {}, med: lastA0.med };
+    // (0b) Vừa gợi ý quán / món mà lọc tiếp ("rẻ hơn đi", "cho 6 người", "có chỗ đậu ô tô") hay đổi món ("à đổi qua bún bò").
+    const searchCtx = prevA.some((m) => (m.places?.length ?? 0) > 0 || !!m.dish || !!m.search);
+    if (searchCtx && w <= 12) {
+      const nd = detectDish(raw);
+      if (nd && nd.id !== lastA0?.dish && VN(/\b(đổi|thôi|không phải|cơ|à|chuyển|qua)\b/).test(nr)) {
+        const dm = await replyDishShopsMsg(raw, nd.id);
+        if (dm) return dm;
+      }
+      const sr = searchRefine(raw);
+      if (sr) return { role: "assistant", content: sr, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish };
+    }
+    // (0c) Tarot hỏi tiếp (danh sách ChatGPT lần 4): "Lá The Fool là gì?", "lá này tốt không", "nếu ngược thì sao", "rút lá vui vui coi".
+    const lowRaw = raw.normalize("NFC").toLowerCase();
+    if (w <= 12) {
+      // tên một lá cụ thể
+      for (let id = 0; id < TAROT_DECK_SIZE; id++) {
+        const c = tarotCard(id);
+        const en1 = c.name.en.toLowerCase();
+        const vi1 = c.name.vi.toLowerCase();
+        if (!prevA.some((m) => m.tarot || m.tarotRef || m.tarotBack) && ((lowRaw.includes(en1) && en1.length >= 7) || (vi1.length >= 6 && lowRaw.includes(vi1) && VN(/\b(lá|bài)\b/).test(nr)))) {
+          if (VN(/\b(là gì|nghĩa là gì|ý nghĩa|có nghĩa|nói gì|tốt không|xấu không|giải thích)\b/).test(nr) || raw.includes("?"))
+            return { role: "assistant", content: `🔮 **${c.name.vi}** (${c.name.en})\n\n• **Xuôi:** ${c.up.vi}\n• **Ngược:** ${c.rev.vi}\n\nTarot là để tham khảo, soi lại lòng mình cho vui thôi nha — không lá nào quyết định tương lai của bạn.`, local: true };
+        }
+      }
+      const prevT = prevA.map((m) => m.tarot ?? m.tarotRef ?? m.tarotBack?.r).find(Boolean) as TarotReading | undefined;
+      // "The Fool có phải ngu ngốc không?"
+      if (VN(/\b(ngu ngốc|ngốc|khờ)\b/).test(nr) && prevA.some((m) => /The Fool|Kẻ Khờ/u.test(m.content)))
+        return { role: "assistant", content: "Không đâu nha 😄 **The Fool (Kẻ Khờ)** trong tarot không có nghĩa là ngu ngốc — lá này nói về **khởi đầu mới**, sự tò mò, dám bước đi dù chưa biết hết đường phía trước. Ngược lại thì nhắc mình đừng quá liều lĩnh, bốc đồng. Mới học tarot mà gặp lá này là hợp ghê luôn đó 🔮", local: true };
+      // (chỉ câu hỏi lá này "tốt / xấu", "đừng hù" — các câu hỏi nghĩa lá, lá ngược, đổi chủ đề đã có lớp tarot riêng lo)
+      if (prevT && VN(/\b(tốt không|tốt hả|xấu hả|xấu không|lá xấu|đừng hù|hù em|hù tui|sợ quá)\b/).test(nr))
+        return { role: "assistant", content: `Trong tarot không có lá **tốt** hay **xấu** tuyệt đối đâu nha 😊 Mỗi lá chỉ gợi một góc nhìn — lá nghe “đáng sợ” thường là lời nhắc để mình chuẩn bị, không phải điềm xấu.\n\n${readingRecap(prevT)}`, local: true, tarotRef: prevT };
+      // "rút lá vui vui coi", "chọn lá bên trái", "em chọn số 3" — xin rút bài
+      if (VN(/\b(rút (một |1 |cho (em|anh|tui|mình) )?(lá|bài)|bốc (một |1 )?(lá|bài)|chọn (lá|số) \S+|lật (một |1 )?lá)\b/).test(nr) && !detectTarot(raw)) {
+        const r = drawForQuestion("hôm nay");
+        return { role: "assistant", content: readingText(r, "vi"), local: true, tarot: r, ask: readingAiPrompt(r, "vi"), quick: tarotFollowUps(r) };
+      }
+    }
+    // (1) Kể đang dùng một thuốc ("mẹ em uống metformin") → nhận đúng tên thuốc; câu sau hỏi tiếp theo thuốc đó.
+    const ds0 = drugStatement(raw);
+    // (thuốc lớp lib/lomiDrug đã biết — Xarelto, warfarin… — thì để lớp đó giữ ngữ cảnh thuốc như cũ)
+    const ds = ds0 && !drugAsk(raw, { inHealth: true }) && !prevDrugCtx(raw, "uống thêm thuốc khác được không")?.drugId ? ds0 : null;
+    if (ds && !findDrug(ds.name) && !VN(/\b(thuốc ngủ|thuốc an thần|thuốc sắt|thuốc dị ứng|thuốc gout|thuốc gút|thuốc bổ|vitamin)\b/).test(` ${normalizeVi(ds.name)} `)) {
+      const whoT = ds.who && !/^(tui|tôi|em|anh|chị|mình|tớ)$/u.test(ds.who) ? `${ds.who} ` : "";
+      return { role: "assistant", content: `Dạ, ${whoT}đang dùng **${ds.name}** 💊 Bạn muốn hỏi gì về thuốc này — cách uống (trước / sau ăn), tác dụng phụ, quên liều, uống chung với thuốc hay đồ uống khác, hay dùng khi mang thai / cho con bú?\n\nLomi không kê thuốc hay nêu liều — liều và đổi thuốc là do bác sĩ / dược sĩ quyết nha.`, local: true, health: hCtx ?? {} }; // (không gắn cờ drug: câu sau đọc tên thuốc từ tin của người dùng — lib/lomiDrug.prevDrugCtx vẫn chạy như cũ)
+    }
+    const prevDrug = prevA.find((m) => m.drug?.name && m.drug.kind !== "overdose")?.drug;
+    const dName = prevDrug?.name ?? prevU.map((m) => drugStatement(m.content)?.name).find(Boolean);
+    // (1a) Đang nói thuốc tránh thai mà kể / hỏi tiếp ngắn ("quên một viên thì sao?", "vỉ 21 viên", "hôm qua quên á").
+    if (dName && VN(/\b(tránh thai|ngừa thai)\b/).test(` ${normalizeVi(dName)} `) && w <= 9) {
+      const pill = list3Reply(`quên thuốc tránh thai ${raw}`);
+      if (pill) return { role: "assistant", content: (VN(/\b(vỉ|viên|hôm qua|hôm kia|sáng nay|tối qua)\b/).test(nr) && !VN(/\?/).test(raw) ? "Dạ, Lomi ghi nhận nha 📝 " : "") + pill.text, local: true, drug: { kind: "what", name: dName }, health: hCtx ?? {} };
+    }
+    if (ds && findDrug(ds.name) && !VN(/\b(quên|ngưng|ngừng|bỏ|uống chung|dùng chung)\b/).test(nr)) {
+      const dk = drugAsk(`${ds.name} là thuốc gì`, {});
+      if (dk) return { role: "assistant", content: dk.text, local: true, drug: { kind: dk.kind, name: dk.name ?? ds.name, id: dk.drugId }, health: hCtx ?? {} };
+    }
+    // (1b) Quên một liều ("em quên một liều thuốc huyết áp").
+    const md = raw.normalize("NFC").toLowerCase().match(/quên\s+(?:uống\s+)?(?:mất\s+)?(?:một|1)?\s*(?:liều|cữ|lần uống|viên)\s*((?:thuốc\s+)?[\p{L}\d-]+(?:\s+[\p{L}\d-]+){0,2})?/u);
+    if (md && w <= 14 && !VN(/\b(tránh thai|ngừa thai)\b/).test(nr) && !drugAsk(raw, { inHealth: true })) {
+      const nm = md[1]?.trim();
+      return { role: "assistant", content: `Quên một liều thì **đừng uống gấp đôi** ở lần sau để bù nha — uống dồn dễ thành quá liều.\n• Cách xử lý (uống bù ngay hay bỏ qua liều đó) **tuỳ từng thuốc** và cách giờ uống kế tiếp bao lâu — xem phần "quên liều" trong tờ hướng dẫn, hoặc gọi hỏi dược sĩ / bác sĩ đã kê\n• Thuốc huyết áp, tim mạch, tiểu đường, chống đông thì hỏi lại sớm trong ngày cho chắc\n• Hay quên thì đặt nhắc giờ trên điện thoại, dùng hộp chia thuốc theo ngày\n\nBạn nhớ ra lúc mấy giờ, còn bao lâu nữa tới giờ uống kế tiếp?`, local: true, drug: { kind: "stop", name: nm || "thuốc" }, health: hCtx ?? {} };
+    }
+    // (2) Đang nói một thuốc mà hỏi / kể tiếp không nhắc tên thuốc.
+    if (dName && w <= 12 && !findDrug(raw) && !VN(/\b(quán|tìm|ở đâu|chỗ nào|đẹp|đi chơi|địa chỉ)\b/).test(nr)) {
+      const drugOut = (text: string, name = dName): Msg => ({ role: "assistant", content: text, local: true, drug: { kind: "what", name, id: prevDrug?.id }, health: hCtx ?? {} });
+      // tên thuốc ("tên là cetirizine", "levothyroxine á", "thuốc amlodipine")
+      const low = raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "");
+      const nm = low.match(/^(?:tên (?:là |thuốc là |thuốc )?|thuốc |là )?([a-z][a-z-]{4,})(?:\s+(?:á|nha|nhé|đó|ạ|nè))?$/u) ?? low.match(/\btên(?: thuốc)?(?: [\p{L}]+){0,2} là ([a-z][a-z-]{4,})\b/u);
+      if (VN(/\b(chưa rõ tên|chưa biết tên|không biết tên|không nhớ tên|tên gì (\S+ )?(chưa rõ|chưa biết|không biết|không nhớ))\b/).test(nr) || VN(/\btên gì\b.*\b(chưa rõ|chưa biết|không biết|không nhớ)\b/).test(nr))
+        return drugOut(`Không sao nha — chưa rõ tên thì cứ chụp hình hộp / vỉ thuốc (hoặc mang theo đơn thuốc) đưa dược sĩ hay bác sĩ xem. Họ sẽ kiểm tra giúp ${dName} uống chung với thuốc đó có được không, uống cách nhau thế nào.\n\nTrong lúc chưa hỏi được, đừng tự uống thêm thuốc mới cùng ${dName} nha.`);
+      const askFor = low.match(/\bhỏi (?:cho|giùm|dùm|giúp|hộ) ([\p{L}]+(?: [\p{L}]+)?)$/u);
+      if (askFor)
+        return drugOut(`Dạ, Lomi hiểu là bạn hỏi giùm ${askFor[1]} nha 📝 ${askFor[1].replace(/^\p{L}/u, (c) => c.toUpperCase())} đang mang thai hay cho con bú, được bao lâu rồi? Dù sao thì trước khi dùng **${dName}**, ${askFor[1]} vẫn nên hỏi bác sĩ đang theo dõi cho chắc.`);
+      if (nm && !findDrug(nm[1]))
+        return drugOut(`Dạ, Lomi ghi nhận tên thuốc là **${nm[1]}** 📝 Lomi chưa có dữ liệu đã kiểm chứng riêng về ${nm[1]}, nên những câu như dùng chung với thuốc / đồ uống khác, giờ uống, quên liều… bạn hỏi dược sĩ cho chắc — mang theo hộp hoặc vỉ thuốc (và các thuốc khác đang dùng) cho họ xem.\n\nTrong lúc chưa hỏi được, đừng tự uống chung hay tự đổi cách uống nha.`, nm[1]);
+      if (VN(/\bkháng sinh\b/).test(` ${normalizeVi(dName)} `) && VN(/\bcòn (\d+|một|hai|ba|bốn|năm|vài|mấy) (ngày|viên|cữ|liều)\b/).test(nr)) {
+        const ab = list3Reply("kháng sinh thấy đỡ rồi ngưng được không");
+        if (ab) return drugOut(`Còn mấy ngày thuốc thì cứ uống cho **hết đợt** như bác sĩ kê nha. ${ab.text}`);
+      }
+      const preg = VN(/\b(bầu|mang thai|có thai|cho con bú|đang bú)\b/).test(nr);
+      const det = parseDetail(raw);
+      if (det && !preg && (det.who?.kind === "elder" || (det.years !== undefined && det.years >= 60)))
+        return drugOut(`Dạ, ${det.who?.text ?? ""}${det.years !== undefined ? ` ${det.years} tuổi` : ""} 📝 Người lớn tuổi thường dùng nhiều thuốc cùng lúc nên dễ bị trùng thuốc hay thuốc tương tác với nhau — trước khi dùng thêm thuốc gì cùng **${dName}**, mang hết các thuốc đang dùng (cả thực phẩm chức năng) cho dược sĩ hoặc bác sĩ xem nha.`.replace("Dạ,  ", "Dạ, "));
+      if (preg || (det && det.who?.kind === "adult" && det.months !== undefined))
+        return drugOut(`Đang mang thai hoặc cho con bú thì phải hỏi bác sĩ (tốt nhất là bác sĩ sản) **trước khi** dùng **${dName}** nha — Lomi không có dữ liệu để nói thuốc này an toàn hay không trong giai đoạn đó.\n• Nếu đang dùng thuốc theo đơn cho bệnh mạn tính mà phát hiện có thai thì **đừng tự ngưng** — báo bác sĩ sớm để họ quyết tiếp tục hay đổi thuốc\n• Khi đi khám, mang theo hộp thuốc và nói rõ thai được mấy tháng / bé bú mấy tháng tuổi`);
+      if ((VN(/\b(chóng mặt|buồn ngủ|lơ mơ|mệt|buồn nôn|nôn|nổi mẩn|ngứa|đau bụng|tiêu chảy)\b/).test(nr) || VN(/\b(có phải (là )?tác dụng phụ|mới uống lần đầu|lần đầu uống|mới bắt đầu uống)\b/).test(nr)) && !VN(/\b(uống chung|dùng chung)\b/).test(nr))
+        return drugOut(`Có thể đó là **tác dụng phụ** của ${dName}, nhất là khi mới bắt đầu uống — nhưng Lomi không chắc được, vì triệu chứng đó cũng có thể do nguyên nhân khác.\n• Báo bác sĩ đã kê hoặc hỏi dược sĩ, nói rõ uống từ hôm nào và bị gì\n• Đang chóng mặt, buồn ngủ thì **đừng lái xe**, đứng dậy từ từ\n• 🚨 Khó thở, sưng môi / mặt / họng, nổi mẩn lan nhanh → gọi **115** ngay`);
+      const other = raw.normalize("NFC").toLowerCase().replace(/[?.!…]+$/u, "").match(/^(?:còn|vậy|thế|với)\s+(.{2,25}?)\s+(?:thì sao|thì sao ta|được không|uống chung được không|có sao không)$/u);
+      if (other || VN(/^ (uống|dùng) chung (được không|đc không|dc không|có sao không|được ko|được k) ?$/).test(nr)) {
+        const dg = drugAsk(`đang uống ${dName} uống chung với ${other ? other[1] : "thuốc khác"} được không`, { inHealth: true, afterDrug: true, name: dName });
+        if (dg) return drugOut(dg.text);
+      }
+      if (VN(/\b(quên|uống bù|uống tiếp|tác dụng phụ|uống chung|dùng chung|trước ăn|sau ăn|ăn trước|ăn sau|cách nhau|ngưng|ngừng|dừng|bỏ thuốc|uống lúc nào|bụng đói|bia|rượu|cà phê|vỉ|viên|uống (buổi )?(sáng|tối|trưa)|tối nay|sáng mai)\b/).test(nr) || (VN(/\bkháng sinh\b/).test(` ${normalizeVi(dName)} `) && VN(/\b(hết sốt|khỏe rồi|khoẻ rồi|đỡ rồi)\b/).test(nr))) {
+        const comb = `${raw.replace(/[?!.]+$/u, "")} ${dName}`;
+        const l3b = list3Reply(comb);
+        if (l3b) return drugOut(l3b.text);
+        const dg2 = drugAsk(comb, { inHealth: true, afterDrug: true, name: dName, drugId: prevDrug?.id });
+        if (dg2) return drugOut(dg2.text);
+      }
+    }
+    // (3) Đang nói một bệnh / triệu chứng.
+    const medNow = lastA0?.med;
+    const hLabel = hCtx?.label ?? lastA0?.sx?.[0];
+    if (!medNow && !hLabel && !lastA0?.health) return null;
+    const mt = medNow ? await loadMedTopic(medNow.id) : null;
+    const tname = mt ? medName(mt) : (hLabel ?? "");
+    const recentU = prevU.map((m) => m.content).join(" ");
+    // (3a0) Đang dị ứng / mề đay / vừa ăn, uống gì mà kể sưng môi, lưỡi, họng hay khó thở → phản vệ, gọi 115.
+    if (VN(/\b((môi|lưỡi|họng|mặt|mí mắt|cổ họng)( \S+){0,2} sưng|sưng (môi|lưỡi|họng|mặt|mí mắt)|khó thở|thở khò khè|nghẹn họng|thở rít)\b/).test(nr) && VN(/\b(dị ứng|mề đay|nổi mẩn|ngứa|phát ban|ong|thuốc|hải sản|tôm|cua|đậu phộng)\b/).test(` ${normalizeVi(`${recentU} ${tname} ${lastA0?.content ?? ""}`)} `))
+      return { role: "assistant", content: "🚨 Đang nổi mề đay / dị ứng mà **sưng môi, lưỡi, mặt, họng hay khó thở** là dấu hiệu có thể **sốc phản vệ** — gọi **115** ngay hoặc nhờ người chở tới cấp cứu gần nhất, đừng chờ xem có tự hết không.\n• Nếu có bút tiêm adrenaline (epinephrine) được kê sẵn thì dùng ngay theo hướng dẫn\n• Ngồi thẳng cho dễ thở (khó thở) hoặc nằm, kê chân cao (choáng, muốn xỉu); có người ở cạnh\n\nBạn gọi được chưa?", local: true, health: hCtx ?? { label: tname }, ...(medNow ? { med: medNow } : {}) };
+    // (3a) Đau bụng chuyển sang bên phải (kèm / không kèm sốt) → đi khám ngay.
+    if (VN(/\b(bên phải|phía phải|hố chậu phải|bụng phải|dưới phải)\b/).test(nr) && VN(/\bđau bụng|đau quanh rốn|quanh rốn\b/).test(` ${normalizeVi(`${recentU} ${tname} ${raw}`)} `))
+      return { role: "assistant", content: "⚠️ Đau bụng bắt đầu quanh rốn rồi **chuyển xuống bên phải** (nhất là phía dưới bên phải), nhất là khi kèm sốt, buồn nôn / nôn, đau tăng khi đi lại hay ho — có thể là **viêm ruột thừa**, cần **đi khám ngay** hôm nay, đừng chờ xem có tự hết không.\n• Đừng tự uống thuốc giảm đau cho đỡ (dễ che triệu chứng), đừng chườm nóng bụng\n• 🚨 Đau dữ dội lan khắp bụng, bụng cứng, sốt cao, lừ đừ → gọi **115** hoặc tới cấp cứu ngay\n\nBạn đi khám được ngay không?", local: true, health: hCtx ?? { label: tname } };
+    // (3b) Kể thêm chi tiết: tuổi, cân nặng, ai là người bệnh.
+    const det = parseDetail(raw);
+    if (det) {
+      const fever = VN(/\bsốt\b/).test(` ${normalizeVi(`${tname} ${recentU}`)} `);
+      return { role: "assistant", content: detailReply(det, tname, fever), local: true, ...(medNow ? { med: medNow } : {}), health: hCtx ?? { label: tname }, sx: lastA0?.sx };
+    }
+    if (!mt || findMedId(raw)) return null;
+    // (3c) Vừa trả lời một MÓN ("Với **Viêm dạ dày**: **đồ uống có caffeine** nên **hạn chế**") mà hỏi "uống mỗi ngày" / "bỏ hẳn không".
+    const fm = prevA.map((m) => m.content.match(/Với \*\*(.+?)\*\*: \*\*(.+?)\*\* (?:là món )?(?:nên )?\*\*(.+?)\*\*/u)).find(Boolean) ?? null;
+    if (fm && w <= 9 && VN(/\b(mỗi ngày|hằng ngày|hàng ngày|ngày nào cũng|bỏ hẳn|kiêng hẳn|ngưng hẳn|cai hẳn|bỏ luôn|uống ít|ăn ít|giảm bớt|bao nhiêu thì được)\b/).test(nr)) {
+      const verdict = normalizeVi(fm[3]);
+      const avoid = /tranh|kieng/.test(verdict);
+      return { role: "assistant", content: avoid ? `Với **${fm[1]}**, nguồn khuyên **tránh** ${fm[2]} — nên bỏ hẳn thì tốt hơn, ít nhất trong lúc đang có triệu chứng. Nếu đang dùng mỗi ngày thì giảm dần cho dễ bỏ, và hỏi bác sĩ khi nào có thể dùng lại.` : `Với **${fm[1]}**, nguồn chỉ nói ${fm[2]} nên **${fm[3]}** — không bắt buộc bỏ hẳn. Đang dùng mỗi ngày thì thử **giảm dần** (ít hơn, không dùng lúc bụng đói, không dùng sát giờ ngủ) rồi xem triệu chứng có đỡ không. Giảm mà vẫn khó chịu, hoặc bác sĩ dặn kiêng hẳn, thì làm theo bác sĩ nha.`, local: true, med: medNow, health: hCtx ?? {} };
+    }
+    // (3d) Hỏi tiếp không nhắc tên bệnh.
+    const fa = followAspect(raw);
+    if (fa === "course" || fa === "school" || (fa === "diet" && !foodPhrase(raw, null))) {
+      const asp = fa === "school" ? "spread" : fa;
+      const mr = renderMed(mt, asp);
+      const school = fa === "school" ? "\n\n🏫 Chuyện nghỉ học / đi học lại: tuỳ bệnh còn lây bao lâu — hỏi bác sĩ khám cho bé hoặc nhà trường / trạm y tế về số ngày cần nghỉ, cho bé đi học lại khi bác sĩ nói đã hết lây." : "";
+      return { role: "assistant", content: mr.text + school, local: true, quick: mr.quick, med: { id: mt.id, aspect: asp }, health: hCtx ?? {} };
+    }
+    // (3e) "làm mỗi ngày được chứ?", "ngày mấy lần?" — nguồn thường không nói tần suất → nói thật.
+    if (w <= 9 && VN(/\b(mỗi ngày|hằng ngày|hàng ngày|ngày mấy lần|mấy lần một ngày|mấy lần 1 ngày|thường xuyên) (được|có sao|có được|không|chứ|hả|ko)|\b(ngày mấy lần|mấy lần một ngày)\b/).test(nr))
+      return { role: "assistant", content: `Các nguồn y khoa Lomi đã đối chiếu cho **${tname}** **chưa nói rõ** làm bao nhiêu lần hay mỗi ngày có được không, nên Lomi không dám nói chắc 🙏 Bạn hỏi bác sĩ hoặc dược sĩ (mang theo sản phẩm đang dùng) để được dặn đúng cho trường hợp của mình nha.`, local: true, med: medNow, health: hCtx ?? {}, stuck: "kb_partial" };
+    return null;
+  };
   const localReply = (asked: string, reply0: Msg) => {
     setErr(null);
     const c = carryRef.current;
@@ -605,6 +768,9 @@ export function AiChat({
     // 30/10: chuyện người bệnh được "trả về" (lib/lomiPalliative) còn nhớ thêm 3 lượt qua lời đáp của lớp khác (tâm sự…), để hỏi tiếp
     //   "mẹ còn đau nhiều lắm" vẫn hiểu đúng chuyện, không hỏi lại "có nặng không, đã đi khám chưa".
     if (!reply.pal && prevA?.pal && (prevA.palAge ?? 0) < 3 && !newFlow && !reply.med) reply = { ...reply, pal: prevA.pal, palAge: (prevA.palAge ?? 0) + 1 };
+    // 31/10 (danh sách ChatGPT lần 4): đang nói một bệnh mà lượt này chỉ là câu kể thêm ("bé 8 tháng", "mấy ngày nay") hay Lomi bí →
+    //   vẫn nhớ đang nói bệnh đó thêm 2 lượt, để câu hỏi nối sau ("bao lâu mới khỏi?", "ăn gì tốt?") hiểu đúng bệnh.
+    if (!reply.med && prevA?.med && (prevA.medAge ?? 0) < 2 && !newFlow && !reply.drug && !!reply.stuck && (!reply.heart || reply.heart === prevA.heart)) reply = { ...reply, med: prevA.med, medAge: (prevA.medAge ?? 0) + 1 };
     // Chốt cuối: câu đáp có đúng bệnh / thuốc người dùng hỏi không (lib/lomiReplyGate). Lạc → nói thật, mời hỏi lại, ghi nhật ký.
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
@@ -751,6 +917,15 @@ export function AiChat({
       quick: s.quick,
       dishAsk: { drink, shown: [...avoid, ...s.dishes.map((d) => d.id)].slice(-12) },
     });
+  };
+  // (31/10) Như replyDishShops nhưng trả về tin để lớp gọi tự đưa qua localReply (lib/lomiFollow: "à đổi qua bún bò").
+  const replyDishShopsMsg = async (asked: string, dishId: string): Promise<Msg | null> => {
+    const d = DISHES_BY_ID[dishId];
+    if (!d) return null;
+    const lastDish = [...msgs].reverse().find((m) => m.role === "assistant" && m.dish);
+    const place = detectPlace(asked)?.label ?? lastDish?.dishPlace;
+    const res = await runDishSearch(d, [], place ? { place } : undefined);
+    return { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: d.id, ...(place ? { dishPlace: place } : {}) };
   };
   const replyDishShops = async (asked: string, dishId: string, avoidIds: string[] = [], want?: DishWant) => {
     const d = DISHES_BY_ID[dishId];
@@ -909,6 +1084,13 @@ export function AiChat({
     const heartOn = !!lastA?.heart && !(hCtx && !lastA?.health);
     // Câu đáp không thuộc lớp sức khoẻ (cảm ơn, xã giao, chưa hiểu…) khi đang ở mạch sức khoẻ thì vẫn giữ mạch + bệnh đang nói.
     const keepHealth: Partial<Msg> = hCtx && !heartOn ? { health: hCtx, sx: lastA?.sx, diet: lastA?.diet, hsub: lastA?.hsub } : {};
+    // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow): câu nối ngắn trong mạch sức khoẻ / thuốc.
+    //   Đặt TRƯỚC các lớp theo chuyện người thân (lib/lomiV9 "Mẹ 62 tuổi rồi hả 😊", lib/lomiStory "Nặng vậy hả 🥺") — đang nói một
+    //   bệnh / thuốc mà kể "mẹ 62 tuổi", "bé 10 tháng", "nặng 9 ký" là chi tiết cho bệnh đó. Câu có tín hiệu khủng hoảng thì để lớp an toàn lo.
+    if (!forceAi && !en && !crisisReply(q, lang) && !crisisCheckIn(q)) {
+      const fu = await followUp(q, raw, lastA0, hCtx);
+      if (fu) return localReply(q, fu);
+    }
     let gateSkip: string | null = null; // Gate bảo "đừng cho module chuyên biệt bắt câu này"
     let memLearn: ReturnType<typeof learnFromText> | null = null;
     // Người dùng nói rõ cách xưng hô ("gọi tui là anh nha", "thôi gọi mình là bạn") → xác nhận ngắn gọn.
@@ -1229,6 +1411,15 @@ export function AiChat({
       //   ngại kể chuyện, "đang cảm một người", "gan lên", Lomi có phải bác sĩ… (lib/lomiList3). Câu lượt sau vẫn theo mạch tâm sự / sức khoẻ.
       const l3 = en ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
       if (l3) return localReply(q, { role: "assistant", content: l3.text, local: true, ...(l3.heart ? { heart: l3.heart, heartDepth: 1 } : {}), ...(l3.health ? { health: hCtx ?? {} } : {}) });
+      // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow):
+      if (!en) {
+        // (a) Vừa nhận lời hỗ trợ khủng hoảng mà kể tiếp "em đang một mình", "không biết có chịu nổi không" → vẫn giữ an toàn là ưu tiên.
+        const recentA = msgs.filter((m) => m.role === "assistant").slice(-2);
+        if (recentA.some((m) => CRISIS_SIG.test(m.content))) {
+          const cf = crisisFollow(raw, lastA0?.content ?? "");
+          if (cf) return localReply(q, { role: "assistant", content: cf, local: true, heart: "sad", heartDepth: (lastA0?.heartDepth ?? 1) + 1 });
+        }
+      }
       // 20/10 (audit P0): kể đã uống QUÁ LIỀU / cả vỉ, cả lọ thuốc → báo cấp cứu NGAY, trước mọi lớp xã giao / nhắc lại câu kể
       //   (trước đây "a uống quá liều rồi" → "😋 Ngon không anh?"). Câu nối sau đó ("2 viên", "giờ thấy bình thường") vẫn do lib/lomiDrug lo.
       //   (21/10: câu GIẢ ĐỊNH / lời dặn / hỏi chung — "nếu uống quá liều thì sao?", "đừng uống quá liều" — trả lời cách xử trí an toàn,
@@ -2244,12 +2435,29 @@ export function AiChat({
     }
     // Câu hỏi nối sau câu trả lời về app ("còn … thì sao", "1 ngày quẹt đc mấy lần") → hiểu theo câu trước.
     // Câu cụt ("hết hạn rồi thì sao", "tối đa mấy người") → ưu tiên hiểu theo câu hỏi vừa rồi.
+    // 31/10 (danh sách ChatGPT lần 4): câu nối trong mạch hỏi về app ("chặn ở đâu?", "đợi 10 phút rồi", "không thấy mail") → đúng câu
+    //   hỏi thường gặp / lời đáp riêng (lib/lomiFollow.appFollow) thay vì dò lại cả bảng.
+    if (!forceAi && !en) {
+      const recentFaq = msgs.filter((m) => m.role === "assistant").slice(-3).map((m) => m.faqId).filter(Boolean) as string[];
+      const af = appFollow(raw, lastA?.faqId, recentFaq);
+      if (af && (af.text || af.faqId)) {
+        const ff = af.faqId ? faqById(af.faqId) : undefined;
+        // vừa nói đúng câu này rồi → không lặp lại nguyên văn; chỉ đường liên hệ Ban quản trị
+        const again = !!lastA && (lastA.content.slice(0, 50) === (af.text ?? ff?.a.vi ?? "").slice(0, 50));
+        if (again) return localReply(q, { role: "assistant", content: "Dạ, vẫn như Lomi vừa chỉ ở trên nha 👆 Nếu làm theo rồi mà vẫn chưa được, bạn nhắn Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ) kèm ảnh chụp màn hình để được hỗ trợ trực tiếp nha.", local: true, faqId: af.faqId });
+        if (!af.text && ff) return answerFaq(ff, q);
+        return localReply(q, { role: "assistant", content: af.text!, local: true, faqId: af.faqId, quick: ff ? relatedFaqs(ff, 2).map((x) => x.q.vi) : undefined });
+      }
+    }
     const cut = !!lastA?.faqId && (q.split(/\s+/).length <= 6 || VN(/\b(thì sao|còn|nữa|vậy)\b/).test(normalizeVi(q)));
     const fu = !forceAi && lastA?.faqId ? matchFaqFollowUp(q, lastA.faqId, lastA.quick) : null;
     // 11/10: đang kể triệu chứng mà nói thêm một mẩu chi tiết ("nhất là lúc đứng dậy") → không đem đi dò câu hỏi về app
     //        (bỏ dấu thì "đứng dậy", "lúc"… trùng chữ với câu hỏi về mã ưu đãi).
     const healthDetail = !forceAi && !en && !!keepHealth.health && !!lastA?.sx?.length && !looksLikeQuestion(q) && !isAppish(q) && q.split(/\s+/).length <= 8;
-    const faq = forceAi || healthDetail || storyNotApp(q) ? null : cut ? (fu ?? matchFaq(q)) : (matchFaq(q) ?? fu);
+    // 31/10 (danh sách ChatGPT lần 4): đang nói sức khoẻ / thuốc mà câu nối không nhắc gì tới app ("tui uống mỗi ngày", "có cần bỏ hẳn không?",
+    //   "làm mỗi ngày được chứ?") → không đem đi dò câu hỏi về app (trước đây ra "10 lượt quẹt/ngày", "iLomi dành cho người từ 18 tuổi").
+    const healthCtxNotApp = !forceAi && !en && (!!lastA?.med || !!lastA?.drug || (!!hCtx && !!lastA?.health)) && !lastA?.faqId && !isAppish(q);
+    const faq = forceAi || healthDetail || healthCtxNotApp || storyNotApp(q) ? null : cut ? (fu ?? matchFaq(q)) : (matchFaq(q) ?? fu);
     // Ý hỏi đã có sẵn trong câu trả lời vừa rồi → chỉ lại đúng câu đó.
     if (!faq && cut && lastA && !en) {
       const back = answerFromPrev(q, lastA.content);

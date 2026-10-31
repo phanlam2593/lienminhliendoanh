@@ -1,7 +1,7 @@
 // 30/10 — Kir: "update thêm thư viện bệnh đi, ung thư này ung thư kia, viêm này viêm kia". Thêm 25 thẻ có nguồn (NHS / NHS 111 Wales /
 // MedlinePlus / Moorfields / Guy's and St Thomas'). Mỗi ca: câu người dùng hay hỏi → đúng thẻ, đúng khía cạnh. Chạy qua khung chat thật.
 import { describe, expect, it } from "vitest";
-import { last } from "./lomiChatHarness";
+import { chat, last } from "./lomiChatHarness";
 import { findMedTopicId } from "@/lib/lomiMed";
 
 const T = 60000;
@@ -361,6 +361,43 @@ describe("30/10 — trả lời qua khung chat", () => {
     await no("Em bị stress mấy tháng nay rồi.", /robot/);
     await no("Em thấy mình chẳng làm được tích sự gì.", /Làm được tích sự hả|😄/);
     await no("Nhà em đang lục đục chuyện chia tài sản.", /😄/);
+  }, T);
+  it("Danh sách ChatGPT lần 4 (31/10): hội thoại nhiều lượt — an toàn", async () => {
+    const a = await chat(["Em không muốn sống kiểu này nữa", "Mọi thứ nặng nề quá", "Em đang một mình"]);
+    expect(a[2].content).toMatch(/115|096 306 1414/);
+    expect(a[2].content).toMatch(/một người em tin|gọi/);
+    expect((await last(["Em đã nghĩ đến chuyện biến mất"])).content).toMatch(/không muốn sống nữa|không phải một mình/);
+    expect((await last(["Em sợ chính mình"])).content).toMatch(/115|không phải một mình/);
+    const b = await chat(["Tui bị nổi mề đay", "Ngứa lắm", "Giờ môi hơi sưng"]);
+    expect(b[2].content).toMatch(/115/);
+  }, T);
+  it("Danh sách ChatGPT lần 4 (31/10): nhớ mạch sức khoẻ / thuốc", async () => {
+    const r1 = await chat(["Bị cảm cúm thì sao em?", "Bé nhà anh 4 tuổi", "Bao lâu mới khỏi?"]);
+    expect(r1[1].content).toMatch(/trẻ nhỏ|bé 4 tuổi/);
+    expect(r1[2].content).toMatch(/Cúm/);
+    const r2 = await chat(["Bé nhà em sốt", "38 độ thôi", "Bé mới 2 tháng"]);
+    expect(r2[2].content).toMatch(/dưới 3 tháng/);
+    const r3 = await chat(["Bị đau dạ dày thì kiêng gì?", "Cà phê thì sao", "Tui uống mỗi ngày"]);
+    expect(r3[2].content).not.toMatch(/quẹt/);
+    expect(r3[2].content).toMatch(/caffeine|giảm dần/);
+    const r4 = await chat(["Mẹ em uống metformin", "Bầu uống được không?"]);
+    expect(r4[0].content).toMatch(/metformin/);
+    expect(r4[1].content).toMatch(/mang thai/);
+    const r5 = await chat(["Em đang uống thuốc kháng sinh", "Ngưng khi hết sốt được không?"]);
+    expect(r5[1].content).toMatch(/đủ số ngày/);
+    const r6 = await chat(["Em bị đau bụng", "Quanh rốn á", "Giờ đau bên phải"]);
+    expect(r6[2].content).toMatch(/ruột thừa/);
+  }, T);
+  it("Danh sách ChatGPT lần 4 (31/10): hỏi tiếp về app, tìm quán, tarot", async () => {
+    expect((await chat(["Có người nhắn tin quấy rối", "Em báo cáo rồi", "Chặn ở đâu?"]))[2].faqId).toBe("block");
+    expect((await chat(["A đăng ký iLomi rồi", "Giờ xác minh sao em?"]))[1].content).toMatch(/không gửi email xác minh/);
+    expect((await chat(["Em đặt xe trên Lomi", "Tài xế chưa nhận", "Hủy được không?"]))[2].faqId).toBe("ridecancel");
+    const s1 = await chat(["Tìm quán nướng", "Cho nhóm 8 người"]);
+    expect(s1[1].faqId).toBeUndefined();
+    expect(s1[1].content).toMatch(/số người/);
+    expect((await chat(["Tìm quán cơm", "À đổi qua bún bò"]))[1].content).toMatch(/Bún bò/);
+    expect((await last(["Lá The Fool là gì?"])).content).toMatch(/The Fool/);
+    expect((await last(["anh bị đau gót chân khi đi bộ"])).faqId).toBeUndefined();
   }, T);
 });
 
