@@ -223,6 +223,8 @@ function askLomi(f: Frame): FrameReply | null {
     if (p.cls === "well") return { intent: "frame:ask_lomi", text: "Lomi khoẻ re nè 💪 Pin đầy, tinh thần phơi phới! Còn bạn hôm nay thế nào?" };
     // "hôm nay e vui không" — hỏi Lomi có vui không thì đừng đáp "không vui… mà vui lắm".
     if (p.cls === "feel" && p.val > 0) return { intent: "frame:ask_lomi", text: `Được nói chuyện với bạn là Lomi ${p.head} rồi nè 😄 Còn bạn hôm nay có ${p.head} không?` };
+    // (31/10: "Em bị stress mấy tháng nay rồi." là người dùng KỂ về mình, không phải hỏi thăm Lomi → không đáp "Lomi là robot")
+    if ((p.cls === "feel" || p.cls === "need" || p.cls === "ill") && ((f.act === "statement" && !f.ask) || f.ask === "howmany")) return null; // ("mấy tháng nay" là mốc thời gian, không phải hỏi)
     if (p.cls === "feel" || p.cls === "need" || p.cls === "ill")
       return { intent: "frame:ask_lomi", text: `Lomi là robot nên không ${p.head} như người đâu 😄 Nhưng được bạn hỏi thăm là Lomi vui lắm! Còn bạn thì sao, có ${p.head} không?` };
     // "e ngủ ngon không" — hỏi thăm, không phải lời chúc ngủ ngon.

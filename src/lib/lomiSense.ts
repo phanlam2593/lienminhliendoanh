@@ -526,12 +526,14 @@ const REACTION = VN(/^(buồn cười|mắc cười|hài|hài hước|vui|dễ t
 const TALK_POS = W("vui|đã ghê|đã quá|thích|ngon|đẹp|được thưởng|được khen|được nghỉ|được tăng|thắng|trúng|xịn|tuyệt|phê|chill|đỉnh|may|ổn|khoẻ|rẻ|hời|lời|đậu|đỗ|khen|thưởng|tăng lương");
 // Từ hay gặp trong câu KỂ TIẾP ("câu được mấy con cá to") — đủ để biết là đang kể, nhưng chưa đủ để nói đó là chuyện vui.
 const TALK_MORE = W("đã|to|nhiều|được");
-const TALK_NEG = W("quát|ăn vạ|tội lỗi|hối hận|áy náy|ngại|không quen|như cái máy|kiệt sức|không vào|một mình|tự trách|cáu gắt|nổi nóng|cáu|quên|không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư|uống thuốc|tiêm|chích thuốc|truyền nước|nhập viện|có lỗi|áy náy|hối hận|ân hận|tội lỗi|cắn rứt");
+const TALK_NEG = W("quát|ăn vạ|tội lỗi|hối hận|áy náy|ngại|không quen|như cái máy|kiệt sức|không vào|một mình|tự trách|cáu gắt|nổi nóng|cáu|quên|không ai|chẳng ai|chả ai|bị quên|bị bỏ|hết tiền|không có tiền|kẹt tiền|bắt nạt|ăn hiếp|mệt|chán|hư|hỏng|mất|trễ|thua|xui|tệ|dở|đau|buồn|bực|ế|kẹt|rớt|trượt|ốm|bệnh|khám|viện|lỗ|cãi|la|mắng|khóc|sợ|lo|giận|dỗi|ghét|lạnh nhạt|chia tay|thức khuya|mất ngủ|áp lực|stress|mổ|phẫu thuật|cấp cứu|tai nạn|chết|đám tang|giỗ|sảy thai|ung thư|uống thuốc|tiêm|chích thuốc|truyền nước|nhập viện|có lỗi|áy náy|hối hận|ân hận|tội lỗi|cắn rứt|lục đục|đứng yên|dậm chân|gánh hết|gánh|không còn thân|xa cách|xa lánh|cô lập|bỏ rơi|lạc lõng|thất vọng|hoang mang|làm phiền|phiền|làm quá|tích sự|vô dụng|vô ích|đuối|gồng|khổ|tức|ấm ức|tủi|bế tắc|tuyệt vọng|toang|không đủ|tự ti|kém cỏi|thất bại|nợ|đổ vỡ|ly hôn|ngoại tình|phản bội|tranh chấp|chia tài sản|xỉu|ngất|chóng mặt|run|hồi hộp|ngộp|lo âu|trầm cảm|cô đơn|sai|mắc lỗi|không ngừng|thất thường|im ru|im lặng|lạnh lùng|nặng nề|ngột ngạt|đè nén|so sánh|chê|bị từ chối|từ chối|nghỉ chơi|không phụ|chẳng phụ|bỏ mặc|thờ ơ|khó chịu|không ổn|sad|lonely|thấp thỏm|bồn chồn|cần thời gian|bơ vơ|chới với|tired|stress|pressure|hopeless|broke up|breakup|ghosted|anxious|depressed|burnout");
 const ACT_STOP = new Set("với cùng ở tại rồi nè nha mà thì và hôm lúc xong về cho để nên quá lắm ghê luôn á ạ nhưng mới vừa đang mấy nhiều hoài suốt nữa đó".split(" "));
 /** Việc vừa kể: "hôm qua anh đi câu cá với mấy đứa bạn" → "đi câu cá" (động từ + tối đa 3 từ, dừng ở từ nối). */
 function echoAct(s: string): string {
   const m = s.match(VR(/(?<![\p{L}])(đi|chơi|xem|coi|ăn|uống|mua|làm|học|gặp|ghé|nấu|tập|chạy|đá|leo|bơi|dọn|sửa|bán|thi|nhận|trồng)\s+([\p{L}\d ]+)/u));
   if (!m) return "";
+  // 31/10: "chẳng làm được tích sự gì" — có phủ định đứng ngay trước động từ thì nhắc lại sẽ thành nghĩa ngược ("Làm được tích sự hả") → không nhắc.
+  if (NEG_TAIL.test(s.slice(0, m.index))) return "";
   const out: string[] = [];
   for (const w of m[2].split(/\s+/)) {
     if (!w || ACT_STOP.has(w) || out.length >= 3) break;

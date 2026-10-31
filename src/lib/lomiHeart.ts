@@ -286,7 +286,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "cold",
-    re: VN(/\b(lạnh nhạt|ít nhắn tin|không nhắn tin|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|không (còn )?quan tâm (mình|anh|em|tôi|tui) (như trước|nữa)|(ít|không còn) quan tâm (mình|anh|em) như trước|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
+    re: VN(/\b((chồng|vợ|ck|vk|người yêu|ny|anh ấy|cô ấy)( \S+){0,2} (cứ )?(im ru|im re|im thin thít|chẳng nói gì|không nói gì)|lạnh nhạt|ít nhắn tin|không nhắn tin|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|không (còn )?quan tâm (mình|anh|em|tôi|tui) (như trước|nữa)|(ít|không còn) quan tâm (mình|anh|em) như trước|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
     feel: [
       "Người thương tự dưng lạnh đi, cảm giác hụt hẫng và bất an lắm 🥺",
       "Chờ tin nhắn mà không thấy đâu thì lòng cứ thấp thỏm ha. Lomi hiểu mà.",
@@ -383,7 +383,7 @@ const THEMES: Theme[] = [
     id: "family",
     // 21/10: chuyện NUÔI CON ("con a học kém", "a la nó hoài, giờ nó sợ a") — trước đây "con a học kém" bị đáp "chưa hiểu".
     hint: [[VN(/\bcon (\S+ ){0,2}(học kém|học dở|học yếu|lười học|điểm kém|bị điểm kém|không chịu học|hư|bướng|không nghe lời|cãi lời|mê game|nghiện game|nghiện điện thoại)\b/), "Con học chưa tốt thì bố mẹ nào cũng sốt ruột, Lomi hiểu 😔 Nhiều khi con không lười đâu — có thể con đang hổng kiến thức từ trước, khó tập trung, hoặc đang có chuyện ở lớp mà chưa dám kể. La mắng nhiều dễ làm con sợ và né tránh hơn là cố gắng.\n\nThử ngồi xuống hỏi con xem môn nào khó nhất, khen từng tiến bộ nhỏ, và nói chuyện với cô giáo để biết con hổng ở đâu. Con nhà mình đang học lớp mấy rồi?"], [VN(/\b(la|mắng|đánh|quát) (nó|con|bé) (hoài|nhiều|suốt|hoài à)|(nó|con|bé) sợ (a|anh|e|em|mình|tôi|chị|c)\b|thấy có lỗi với (con|nó|bé)\b/), "Con sợ mình thì người làm cha mẹ nào cũng chạnh lòng 💚 Bạn để ý tới điều đó là đã thương con lắm rồi. Bố mẹ ai cũng có lúc nóng; điều quan trọng là sửa được. Một lời xin lỗi con thật lòng (“bố / mẹ nóng quá, bố / mẹ xin lỗi”) không làm mình mất uy đâu, mà dạy con cách nhận lỗi.\n\nLần tới khi sắp nổi nóng, thử dừng lại vài hơi thở rồi mới nói. Dần dần con sẽ bớt sợ và dám kể chuyện với mình hơn."], [VN(/\b(so sánh|con nhà người ta)\b/), "Bị so sánh với “con nhà người ta” là tủi lắm, Lomi hiểu 🥺 Bố mẹ thường so sánh vì muốn con tốt hơn, nhưng cách đó lại làm con thấy mình không đủ tốt. Thử nói với mẹ lúc cả hai vui vẻ: “Con biết mẹ muốn con giỏi, nhưng bị so sánh làm con buồn và mất động lực lắm.”"]],
-    re: VN(/\b(con (\S+ ){0,2}(học kém|học dở|học yếu|lười học|điểm kém|bị điểm kém|không chịu học|không nghe lời|cãi lời|mê game|nghiện game)|bố mẹ|ba mẹ|cha mẹ|gia đình|bố mình|mẹ mình|ba mình|cha mình|anh chị em|bị mắng|bị la|bị so sánh với|áp đặt|cãi nhau với (bố|mẹ|ba|cha)|không hiểu mình|vợ chồng|nhà chồng|nhà vợ|mẹ chồng|bố chồng)\b/),
+    re: VN(/\b(con (\S+ ){0,2}(học kém|học dở|học yếu|lười học|điểm kém|bị điểm kém|không chịu học|không nghe lời|cãi lời|mê game|nghiện game)|bố mẹ|ba mẹ|cha mẹ|gia đình|bố mình|mẹ mình|ba mình|cha mình|anh chị em|bị mắng|bị la|bị so sánh với|áp đặt|cãi nhau với (bố|mẹ|ba|cha)|không hiểu mình|vợ chồng|nhà chồng|nhà vợ|mẹ chồng|bố chồng|nhà (em|anh|tui|tôi|mình|chị) (đang |cứ )?(lục đục|bất hoà|bất hòa|cãi nhau)|chia tài sản|tranh tài sản|không muốn về nhà|(ở nhà|về nhà) (toàn|chỉ toàn|suốt ngày) cãi|không còn thân (với )?(ba|bố|mẹ|má|cha)|(gửi|phụ) tiền (về )?(cho )?(nhà|ba mẹ|bố mẹ))\b/),
     feel: [
       "Chuyện gia đình là chuyện khó nói nhất, vì mình thương mà cũng mệt 😔",
       "Lomi hiểu, bị chính người nhà không hiểu thì tủi thân lắm.",
@@ -551,7 +551,7 @@ const THEMES: Theme[] = [
   {
     id: "selfworth",
     hint: [[VN(/\b(làm sai|mắc lỗi|sai|hỏng)( một)? (việc|chuyện|lần|cái)( \S+){0,6} (kết luận|nghĩ|thấy|cho rằng) (mình |bản thân )?(là )?(kẻ |đồ |người )?(thất bại|vô dụng|tệ|kém cỏi)\b/), "Một lỗi nhỏ là **một việc mình làm chưa tốt**, không phải bằng chứng mình là “kẻ thất bại”.\n\nThử tách hai câu ra: “Mình đã làm sai việc X” — đúng, và sửa được; còn “Mình là người thất bại” — là kết luận quá rộng rút ra từ một lần. Nếu bạn thân mắc đúng lỗi này, bạn có gọi họ là kẻ thất bại không?\n\nViết ra ba dòng thôi: lỗi gì, học được gì, lần sau làm khác chỗ nào — vậy là đủ cho chuyện này rồi.", true]],
-    re: VN(/\b(tự ti|thất bại|vô dụng|gánh nặng|không ai cần (mình|tôi|tui|em|anh|chị|a|e|c)\b|ăn bám|kém cỏi|không bằng ai|so sánh với|thua kém|ghét bản ?thân|chán bản ?thân|không làm được gì|không có giá trị|mình tệ quá|mình dở quá|không ai thương|xấu xí|béo quá|không đủ tốt)\b/),
+    re: VN(/\b(tự ti|thất bại|vô dụng|gánh nặng|không ai cần (mình|tôi|tui|em|anh|chị|a|e|c)\b|ăn bám|kém cỏi|không bằng ai|so sánh với|thua kém|ghét bản ?thân|chán bản ?thân|không làm được gì|không có giá trị|mình tệ quá|mình dở quá|không ai thương|xấu xí|béo quá|không đủ tốt|(chẳng|không|chả|ko) làm được (tích sự|trò trống|cái|việc)( gì)?( ra hồn)?|vô tích sự|chắc (mình |em |anh |chị |tui |tôi )?(dở|ngu|kém|tệ) (thật|thiệt|quá|lắm|rồi)|(mình|bản thân)( \S+){0,2} (chẳng|không|chả) (có )?ích (gì|lợi gì)|(thấy|nghĩ) (mình|bản thân) (cứ )?(đang |chỉ )?làm phiền|(vì|tại) (mình|em|tui|tôi) không (đẹp|giỏi|xinh|đủ)|không (đẹp|xinh) (bằng|nên)|bị (nói|gọi|chê) là (ăn bám|vô dụng|vô tích sự))\b/),
     feel: [
       "Nghe bạn nói vậy Lomi thương lắm 🥺 Cảm giác mình không đủ tốt nặng nề thật.",
       "Lomi hiểu, có những ngày mình nhìn đâu cũng thấy mình thua kém người ta.",
@@ -662,7 +662,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "lonely",
-    re: VN(/\b(cô đơn|một mình|không ai chơi|không ai hiểu|lẻ loi|lonely|không có ai|không ai quan tâm|không ai nghe)\b/),
+    re: VN(/\b(cô đơn|một mình|không ai chơi|không ai hiểu|lẻ loi|lonely|không có ai|không ai quan tâm|không ai nghe|(chẳng|chả|hông|ko|k) (có )?ai (để )?(nói chuyện|tâm sự|chia sẻ|nghe|hiểu|chơi)|không ai để (nói chuyện|tâm sự|chia sẻ)|lạc lõng|bị bỏ rơi|bỏ rơi (mình|em|tui|tôi|anh|chị)|(mọi người|ai cũng) (đang )?xa lánh)\b/),
     feel: ["Cô đơn là cảm giác ai cũng có lúc gặp, nhưng lúc đang ở trong đó thì lạnh lắm 🥺", "Lomi ở đây với bạn nè 🤗 Cảm giác không ai hiểu mình buồn thật."],
     insight: [
       "Cô đơn không phải vì bạn có vấn đề — nhiều khi chỉ là mình chưa gặp đúng người, hoặc đang ở một giai đoạn chuyển đổi.",

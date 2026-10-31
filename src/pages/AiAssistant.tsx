@@ -1,3 +1,4 @@
+import { list3Reply } from "@/lib/lomiList3";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGoBack } from "@/lib/navigation";
@@ -781,15 +782,17 @@ export function AiChat({
     // 10/10 — KHÔI PHỤC DẤU (lib/lomiViRestore): câu gõ không dấu / gần như không dấu được đoán lại dấu TRƯỚC khi các lớp đọc câu
     // ("con em bi chong mat" → "con em bị chóng mặt", không còn thành "chồng mất"). Bỏ dấu câu đã khôi phục luôn trùng câu gốc nên các
     // lớp so không dấu không đổi gì. Chữ người dùng đã gõ dấu giữ nguyên. Bong bóng vẫn hiện đúng câu người dùng gõ.
-    let raw = typed;
-    if (!en && isLooseVi(typed) && !looksEnglish(typed)) {
+    // (31/10: đổi chữ tiếng Anh TRƯỚC khi đoán dấu — "I forgot my medicine sáng nay" từng bị đoán dấu thành "mỹ…" rồi mới đổi, nên không còn khớp)
+    let raw = en ? typed : viMixFix(typed);
+    if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
-      raw = restoreVi(typed);
-    }
-    if (!en) raw = viMixFix(raw); // 22/10: "a bị headache quá" → "a bị đau đầu quá"
+      raw = restoreVi(raw);
+    } // 22/10: "a bị headache quá" → "a bị đau đầu quá"
     // 30/10 (nhật ký bí: "Mẹo chữa nghẹt mũu" → "Kiến thức này Lomi chưa được tiếp thu"): một chữ gõ sai một ký tự làm hỏng tên bệnh.
     //   Chỉ sửa khi câu gốc KHÔNG khớp chủ đề sức khoẻ nào, chữ đó không có trong từ điển âm tiết, và câu sau khi sửa một chữ khớp đúng một chủ đề.
-    let typedFix = typed;
+    // (31/10: chữ tiếng Anh đã đổi sang tiếng Việt ở viMixFix cũng phải có trong câu "người dùng gõ" của bộ đọc câu — không thì các luật
+    //   khớp "chia tay", "quên uống thuốc" trên câu đã đổi lại bị bộ đọc chặn vì người dùng không gõ chữ đó)
+    let typedFix = en ? typed : viMixFix(typed);
     if (!en && !findMedId(raw)) {
       await loadViModel();
       const ws = raw.split(/(\s+)/);
@@ -1222,6 +1225,10 @@ export function AiChat({
       //   câu đáp "có / nhiều lúc" kế tiếp được ô xác nhận ở đầu send() chuyển sang lời hỗ trợ khủng hoảng.
       const ck = en ? null : crisisCheckIn(q);
       if (ck) return localReply(q, { role: "assistant", content: ck.text, local: true, heart: lastA0?.heart ?? "sad", heartDepth: (lastA0?.heartDepth ?? 0) + 1, story: lastA0?.story });
+      // 31/10 (danh sách ChatGPT lần 3): các kiểu câu trước đây bị hiểu sai hẳn — thuốc hết hạn / mở nắp lâu, bắt đầu gặp chuyên viên tâm lý,
+      //   ngại kể chuyện, "đang cảm một người", "gan lên", Lomi có phải bác sĩ… (lib/lomiList3). Câu lượt sau vẫn theo mạch tâm sự / sức khoẻ.
+      const l3 = en ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
+      if (l3) return localReply(q, { role: "assistant", content: l3.text, local: true, ...(l3.heart ? { heart: l3.heart, heartDepth: 1 } : {}), ...(l3.health ? { health: hCtx ?? {} } : {}) });
       // 20/10 (audit P0): kể đã uống QUÁ LIỀU / cả vỉ, cả lọ thuốc → báo cấp cứu NGAY, trước mọi lớp xã giao / nhắc lại câu kể
       //   (trước đây "a uống quá liều rồi" → "😋 Ngon không anh?"). Câu nối sau đó ("2 viên", "giờ thấy bình thường") vẫn do lib/lomiDrug lo.
       //   (21/10: câu GIẢ ĐỊNH / lời dặn / hỏi chung — "nếu uống quá liều thì sao?", "đừng uống quá liều" — trả lời cách xử trí an toàn,
