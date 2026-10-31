@@ -1,4 +1,5 @@
 import { list3Reply } from "@/lib/lomiList3";
+import { causeReply } from "@/lib/lomiCause";
 import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugStatement, followAspect, parseDetail } from "@/lib/lomiFollow";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -1747,6 +1748,9 @@ export function AiChat({
       if (ck) return localReply(q, { role: "assistant", content: ck.text, local: true, heart: lastA0?.heart ?? "sad", heartDepth: (lastA0?.heartDepth ?? 0) + 1, story: lastA0?.story });
       // 31/10 (danh sách ChatGPT lần 3): các kiểu câu trước đây bị hiểu sai hẳn — thuốc hết hạn / mở nắp lâu, bắt đầu gặp chuyên viên tâm lý,
       //   ngại kể chuyện, "đang cảm một người", "gan lên", Lomi có phải bác sĩ… (lib/lomiList3). Câu lượt sau vẫn theo mạch tâm sự / sức khoẻ.
+      // 31/10: "vitamin C có làm mất ngủ không", "cà phê có gây mất ngủ", "magie có giúp ngủ ngon không" → trả lời đúng quan hệ X–Y, không đọc cả thẻ bệnh.
+      const cz = en ? null : await causeReply(raw);
+      if (cz) return localReply(q, { role: "assistant", content: cz.text, local: true, health: {}, ...(cz.medId ? { med: { id: cz.medId } } : {}) });
       const l3 = en ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
       if (l3) return localReply(q, { role: "assistant", content: l3.text, local: true, ...(l3.heart ? { heart: l3.heart, heartDepth: 1 } : {}), ...(l3.health ? { health: hCtx ?? {} } : {}) });
       // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow):

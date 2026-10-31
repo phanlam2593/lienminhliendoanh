@@ -449,6 +449,20 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["cô muốn đăng cái ưu đãi quán ăn của cô trên lomi cô có tài khoản doanh nghiệp rồi mà không thấy chỗ đăng bài giảm giá"])).faqId).toBe("bizoffer");
     expect((await chat(["Anh muốn đăng ưu đãi", "Không phải tài khoản cá nhân"]))[1].content).toMatch(/hồ sơ doanh nghiệp/);
   }, T);
+  it("31/10 (ảnh Kir): 'X có gây / giúp Y không' trả lời đúng quan hệ, không đọc cả thẻ bệnh", async () => {
+    const v = await last(["Vitamin C có làm mất ngủ k?"]);
+    expect(v.content).toMatch(/chưa nhắc/);
+    expect(v.content).not.toMatch(/Mất ngủ\*\* là gì/);
+    expect(v.content).toMatch(/Vitamin C/);
+    expect((await last(["cà phê có gây mất ngủ không"])).content).toMatch(/caffeine/);
+    expect((await last(["hút thuốc có gây ung thư phổi không"])).content).toMatch(/Hút thuốc lá/);
+    expect((await last(["canxi có gây sỏi thận không"])).content).toMatch(/canxi/);
+    expect((await last(["magie có giúp ngủ ngon không"])).content).not.toMatch(/^Ngủ ngon nha|^Chúc bạn ngủ/);
+    expect((await last(["thuốc cảm có làm buồn ngủ không"])).content).toMatch(/tuỳ thành phần/);
+    expect((await last(["ăn đường có gây tiểu đường không"])).content).not.toMatch(/Tiểu đường\*\* là gì/);
+    expect((await last(["chúc lomi ngủ ngon"])).content).toMatch(/ngủ/);
+    expect((await last(["muốn kiểm tra xem có bị trầm cảm không"])).content).toMatch(/sàng lọc/);
+  }, T);
   it("Danh sách ChatGPT lần 5 (31/10): người lớn tuổi, tâm sự, tarot, hỗn hợp", async () => {
     expect((await last(["chú đăng ký tài khoản rồi mà nó cứ báo chưa xác minh chú bấm gửi lại mấy lần rồi giờ chú phải làm sao con"])).content).toMatch(/không gửi email xác minh/);
     expect((await last(["ông muốn tìm quán cơm gần chợ đà lạt giá vừa phải có chỗ ngồi thoải mái ông đi với bà nhà ông hai người thôi"])).dish).toBe("com");
