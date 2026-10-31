@@ -463,6 +463,34 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["chúc lomi ngủ ngon"])).content).toMatch(/ngủ/);
     expect((await last(["muốn kiểm tra xem có bị trầm cảm không"])).content).toMatch(/sàng lọc/);
   }, T);
+  it("Danh sách ChatGPT lần 6 (31/10): so sánh, hai ý một câu, phủ định", async () => {
+    expect((await last(["Nên uống trà xanh hay cà phê buổi sáng?"])).content).toMatch(/caffeine/);
+    expect((await last(["Paracetamol hay ibuprofen khác nhau chỗ nào?"])).content).toMatch(/chưa có thẻ đã kiểm chứng đầy đủ/);
+    expect((await last(["vit C hay zinc tot hon khi cam?"])).content).toMatch(/Kẽm/);
+    const two = await last(["Đau đầu uống gì, mà quán phở nào ngon ở Đà Lạt?"]);
+    expect(two.content).toMatch(/Còn ý “Quán phở nào ngon ở Đà Lạt\?”/);
+    expect(two.quick?.[0]).toBe("Quán phở nào ngon ở Đà Lạt?");
+    expect((await last(["Tối qua a uống rượu với bạn khá nhiều, sáng nay dậy buồn nôn, uống gì cho đỡ?"])).content).not.toMatch(/Còn ý/);
+    expect((await last(["ko phai mat ngu, tui hoi app dang nhap sao bi loi?"])).content).toMatch(/tên đăng nhập/);
+    expect((await last(["Không phải đau đầu do thiếu nước mà do thiếu ngủ thì làm gì?"])).med?.id).toBe("dau-dau");
+    expect((await last(["vit C co lam mat ngu k?"])).content).toMatch(/Vitamin C/);
+  }, T);
+  it("Danh sách ChatGPT lần 6 (31/10): từ khoá bẫy, câu hỏi app, số lần", async () => {
+    expect((await last(["Thuốc nào trị lỗi không tải được ảnh?"])).content).toMatch(/app bị trục trặc/);
+    expect((await last(["Bài đăng của tôi bị sốt lượt xem."])).med).toBeUndefined();
+    expect((await last(["Quán có tên 'Mất Ngủ' mở cửa mấy giờ?"])).med).toBeUndefined();
+    expect((await last(["Có bệnh gì khiến app không gửi mã OTP?"])).content).toMatch(/không gửi mã OTP/);
+    expect((await last(["bn tuoi thi dc tao acc iLomi?"])).content).toMatch(/18 tuổi/);
+    expect((await last(["Đăng bài bao lâu thì được duyệt?"])).content).toMatch(/không cần chờ duyệt/);
+    expect((await last(["Mỗi tuần nên ăn cá mấy lần?"])).faqId).toBeUndefined();
+    expect((await last(["Mỗi tuần nên ăn cá mấy lần?"])).content).toMatch(/2 phần cá/);
+    expect((await last(["Mỗi ngày nên ăn rau mấy bữa?"])).content).toMatch(/5 phần/);
+    expect((await last(["Bao nhiêu tuổi thì trẻ có thể ăn mật ong?"])).content).toMatch(/dưới 1 tuổi/);
+    expect((await last(["Bao lâu thì nên đánh giá quán sau khi dùng ưu đãi?"])).dish).toBeUndefined();
+    expect((await last(["Ngoài tarot, Lomi còn giúp tôi tâm sự được không?"])).tarot).toBeFalsy();
+    expect((await last(["toi muon Quet ma ko thay ai, co phai app hong?"])).content).toMatch(/bộ lọc/);
+    expect((await last(["Uống nước dừa có làm tăng đường huyết không?"])).stuck).toBeUndefined();
+  }, T);
   it("Danh sách ChatGPT lần 5 (31/10): người lớn tuổi, tâm sự, tarot, hỗn hợp", async () => {
     expect((await last(["chú đăng ký tài khoản rồi mà nó cứ báo chưa xác minh chú bấm gửi lại mấy lần rồi giờ chú phải làm sao con"])).content).toMatch(/không gửi email xác minh/);
     expect((await last(["ông muốn tìm quán cơm gần chợ đà lạt giá vừa phải có chỗ ngồi thoải mái ông đi với bà nhà ông hai người thôi"])).dish).toBe("com");

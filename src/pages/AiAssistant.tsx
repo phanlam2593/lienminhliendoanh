@@ -1,5 +1,6 @@
 import { list3Reply } from "@/lib/lomiList3";
-import { causeReply } from "@/lib/lomiCause";
+import { causeReply, compareReply, parseCause } from "@/lib/lomiCause";
+import { trapReply } from "@/lib/lomiTrap";
 import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugStatement, followAspect, parseDetail } from "@/lib/lomiFollow";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -445,6 +446,8 @@ export function AiChat({
   // Tin người dùng gõ teen code ("nyc có quay lại khum") → Lomi hiểu bằng bản chữ chuẩn, nhưng khung chat
   // vẫn hiện đúng chữ họ gõ: push() đổi lại nội dung tin của người dùng từ bản chuẩn về bản gốc.
   const shownRef = useRef<{ from: string; to: string } | null>(null);
+  // 31/10: tin hỏi HAI chuyện khác nhau ("đau đầu uống gì, mà quán phở nào ngon") — trả lời ý đầu, ý sau thành nút bấm gửi tiếp.
+  const splitRef = useRef<string | null>(null);
   // Mạch chuyện (lib/lomiStory) của tin trước: câu đáp của lớp khác (kiến thức sức khoẻ, xã giao, chưa hiểu…) vẫn giữ mạch thêm tối đa
   // 2 lượt — trừ khi câu đáp mở hẳn một việc khác (bói bài, tìm quán, tư vấn kinh doanh, hỏi app). Xem localReply().
   const carryRef = useRef<{ thread: Thread; about?: Msg["about"] } | null>(null);
@@ -508,6 +511,12 @@ export function AiChat({
     if (lang !== "en") {
       const addr = loadMem(user.id).addr;
       if (addr && addr !== "bạn") add = add.map((m) => (m.role === "assistant" ? { ...m, content: speak(m.content, addr) } : m));
+    }
+    const sp = splitRef.current;
+    if (sp && add.some((m) => m.role === "assistant")) {
+      splitRef.current = null;
+      const li = add.map((m) => m.role).lastIndexOf("assistant");
+      add = add.map((m, i) => (i === li ? { ...m, content: `${m.content}\n\n💬 Còn ý “${sp}” — bấm nút bên dưới để Lomi trả lời tiếp nha.`, quick: [sp, ...(m.quick ?? []).slice(0, 2)] } : m));
     }
     const next = [...msgs, ...add];
     setMsgs(next);
@@ -606,6 +615,32 @@ export function AiChat({
       return { ...r, content: `Dạ, vẫn như Lomi vừa nói ở trên nha 👆 ${first}\n\nBạn còn muốn hỏi thêm gì không?` };
     }
     return r;
+  };
+  const domainOf = (t: string): string | null => {
+    const n = ` ${normalizeVi(t)} `;
+    if (detectTarot(t)) return "tarot";
+    if (parseCause(t) || compareReply(t) || findMedId(t) || findDrug(t) || VN(/\b(đau|sốt|thuốc|vitamin|bệnh|kiêng|uống gì|ho|trào ngược|tiêu chảy|táo bón|gout|mất ngủ|giấc ngủ|huyết áp|cholesterol|đờm|dạ dày|nổi mụn|buồn nôn|đường huyết)\b/).test(n)) return "health";
+    if (detectDish(t) || detectSearch(t) || VN(/\b(quán|tiệm)( \S+){0,3} (nào|ở đâu|gần)\b/).test(n)) return "place";
+    if (matchFaq(t) || VN(/\b(app|tài khoản|đăng nhập|mật khẩu|quẹt|ưu đãi|tin nhắn|đặt xe|hồ sơ|ảnh đại diện|bài đăng|mã giảm giá|đăng ký|thông báo|chủ quán)\b/).test(n)) return "app";
+    return null;
+  };
+  const splitTwo = (t: string): [string, string] | null => {
+    const s0 = t.trim();
+    if (s0.split(/\s+/).length < 7 || s0.length > 220) return null;
+    // tin nhiều ý có đánh số / "mấy chuyện" đã có lớp riêng; câu kể chuyện ("tối qua…, sáng nay…") không tách
+    if (VN(/\b(thứ nhất|thứ hai|mấy chuyện|vài chuyện|hai chuyện|2 chuyện|nhiều chuyện|tối qua|hôm qua|sáng nay|tuần trước|hồi nãy)\b/).test(` ${normalizeVi(s0)} `)) return null;
+    const askish = (x: string) => /\?/.test(x) || VN(/\b(gì|j|nào|sao|ko|không|k|hông|đâu|ntn|bao nhiêu|bn|mấy|hả|chưa|làm sao|cách|tìm|chỉ|giúp|ở đâu)\b/).test(` ${normalizeVi(x)} `);
+    const re = /\s*(?:,|;)\s*(?:(?:và|với|mà|còn|ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+)?|\s+(?:ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+/giu;
+    for (const m of s0.matchAll(re)) {
+      const a = s0.slice(0, m.index).trim().replace(/[,;]+$/u, "");
+      const b = s0.slice((m.index ?? 0) + m[0].length).trim().replace(/^(?:ngoài ra|tiện hỏi|với|và|mà)\s+/iu, "");
+      if (a.split(/\s+/).length < 3 || b.split(/\s+/).length < 3) continue;
+      const da = domainOf(a);
+      const db = domainOf(b);
+      // (bói về chuyện sức khoẻ — lớp chặn tarot y khoa lo, không tách)
+      if (da && db && da !== db && !(new Set([da, db]).has("tarot") && new Set([da, db]).has("health")) && askish(b)) return [a, b.replace(/^\p{L}/u, (c) => c.toUpperCase())];
+    }
+    return null;
   };
   const followUp0 = async (q: string, raw: string, lastA0: Msg | undefined, hCtx: HealthCtx | undefined): Promise<Msg | null> => {
     const nr = ` ${normalizeVi(raw)} `;
@@ -1297,7 +1332,13 @@ export function AiChat({
     // ("con em bi chong mat" → "con em bị chóng mặt", không còn thành "chồng mất"). Bỏ dấu câu đã khôi phục luôn trùng câu gốc nên các
     // lớp so không dấu không đổi gì. Chữ người dùng đã gõ dấu giữ nguyên. Bong bóng vẫn hiện đúng câu người dùng gõ.
     // (31/10: đổi chữ tiếng Anh TRƯỚC khi đoán dấu — "I forgot my medicine sáng nay" từng bị đoán dấu thành "mỹ…" rồi mới đổi, nên không còn khớp)
-    let raw = en ? typed : viMixFix(typed);
+    // 31/10: "vit C", "vtm D" → "vitamin C" trước khi đoán dấu (từng thành "vịt C" → thịt gà).
+    const typedV = typed
+      .replace(/(^|[^\p{L}])(?:vit|vtm)\.?\s*(c|d|a|e|k|b\d{0,2})(?![\p{L}])/giu, "$1vitamin $2")
+      // "cf" = cà phê; "u cafe / u thuoc" = uống (viết tắt) — để bộ đoán dấu không đoán thành "cf chiếu cố"
+      .replace(/(^|[^\p{L}])cf(?![\p{L}])/giu, "$1cà phê")
+      .replace(/(^|[^\p{L}])u\s+(?=(?:cafe|cà phê|nuoc|nước|thuoc|thuốc|sua|sữa|tra|trà|bia|ruou|rượu|vitamin)(?![\p{L}]))/giu, "$1uống ");
+    let raw = en ? typed : viMixFix(typedV);
     if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
       raw = restoreVi(raw);
@@ -1306,7 +1347,7 @@ export function AiChat({
     //   Chỉ sửa khi câu gốc KHÔNG khớp chủ đề sức khoẻ nào, chữ đó không có trong từ điển âm tiết, và câu sau khi sửa một chữ khớp đúng một chủ đề.
     // (31/10: chữ tiếng Anh đã đổi sang tiếng Việt ở viMixFix cũng phải có trong câu "người dùng gõ" của bộ đọc câu — không thì các luật
     //   khớp "chia tay", "quên uống thuốc" trên câu đã đổi lại bị bộ đọc chặn vì người dùng không gõ chữ đó)
-    let typedFix = en ? typed : viMixFix(typed);
+    let typedFix = en ? typed : viMixFix(typedV);
     if (!en && !findMedId(raw)) {
       await loadViModel();
       const ws = raw.split(/(\s+)/);
@@ -1375,6 +1416,43 @@ export function AiChat({
     const lastMsg0 = msgs[msgs.length - 1];
     const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
+    // 31/10: "ko phải hỏi bệnh, tui hỏi bài đăng bị ẩn sao" / "Tôi cần chữa lỗi đăng nhập, không phải chữa bệnh" → chỉ hiểu phần thật sự hỏi.
+    if (!forceAi && !en) {
+      const nl = q.normalize("NFC").match(/^(?:ko|không|k|hông|chứ không)\s+phải\s+(?:là\s+)?(?:hỏi\s+)?[^,]{2,30},\s*(?:mà\s+)?(?:(?:tui|tôi|mình|em|anh|chị)\s+)?(?:(?:muốn\s+)?hỏi\s+)?(.{4,})$/iu)
+        ?? q.normalize("NFC").match(/^(.{6,}?)[,.]?\s+(?:chứ\s+)?(?:không|ko|k)\s+phải\s+(?:chữa|hỏi|trị)\s+(?:bệnh|người)[.!]?$/iu);
+      const negPart = nl ? q.normalize("NFC").slice(0, Math.max(0, q.normalize("NFC").indexOf(nl[1]))) : "";
+      if (nl && (VN(/\b(hỏi|chẩn đoán|bệnh|chữa bệnh)\b/).test(` ${normalizeVi(negPart || q)} `) || (domainOf(negPart.replace(/^(?:ko|không|k|hông|chứ không)\s+phải\s+/iu, "")) ?? "x") !== (domainOf(nl[1]) ?? "y"))) {
+        q = nl[1].trim();
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+      }
+      // "Không phải đau đầu do thiếu nước mà do thiếu ngủ thì làm gì" → "đau đầu do thiếu ngủ thì làm gì"
+      const nd2 = q.normalize("NFC").match(/^(?:ko|không|k)\s+phải\s+(.{2,25}?)\s+do\s+.{2,25}?\s+mà\s+(?:là\s+)?do\s+(.{2,40})$/iu);
+      if (nd2) {
+        q = `${nd2[1]} do ${nd2[2]}`;
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+      }
+      // Hai chuyện khác hẳn nhau trong một tin → trả lời ý đầu, ý sau thành nút bấm.
+      const sp = splitTwo(q);
+      if (sp) {
+        q = sp[0];
+        raw = sp[0];
+        shownRef.current = { from: q, to: typed };
+        splitRef.current = sp[1];
+      }
+    }
+    if (!forceAi) {
+      // 31/10: chữ sức khoẻ / tarot dùng cho chuyện app ("thuốc nào trị lỗi…", "quán tên 'Mất Ngủ'"), câu hỏi app hay bị hiểu lạc.
+      const tp = en ? null : trapReply(raw);
+      if (tp) {
+        const rf = tp.retry ? matchFaq(tp.retry) : null;
+        if (rf) return localReply(q, { role: "assistant", content: `Lomi hiểu là bạn đang hỏi chuyện app nha 😄\n\n${rf.a.vi}`, local: true, faqId: rf.id });
+        return localReply(q, { role: "assistant", content: tp.text, local: true, ...(tp.faqId ? { faqId: tp.faqId } : {}), ...(tp.heart ? { heart: tp.heart, heartDepth: 1 } : {}) });
+      }
+      const cmp = en ? null : compareReply(raw);
+      if (cmp) return localReply(q, { role: "assistant", content: cmp, local: true, health: {} });
+    }
     // 22/10 (QA V5) — TIẾNG ANH (lib/lomiEnglish): app để tiếng Anh, hoặc app tiếng Việt mà người dùng gõ cả câu tiếng Anh.
     //   Trước đây "I want to kill myself", "my husband hit me", "chest pain…" đều nhận "That's outside what Lomi knows" / "chưa hiểu ý";
     //   câu tiếng Anh gõ ở app tiếng Việt còn bị đoán dấu thành tiếng Việt ("for me" → "for mẹ"). An toàn trước, rồi tâm sự / sức khoẻ thường gặp.

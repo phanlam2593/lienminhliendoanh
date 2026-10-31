@@ -529,6 +529,8 @@ const CREATIVE =
 const FAQ_NEED: Record<string, RegExp> = {
   ridprice: /\b(xe|cuoc|chuyen|giao|ship|tai xe|km|dua don|dat xe|grab|taxi|cho nguoi|cho hang|van chuyen)\b/,
   claimexp: /\b(ma|uu dai|voucher|khuyen mai|code|giam gia|da nhan|nhan lai)\b/,
+  // 31/10 (danh sách ChatGPT lần 6): "mỗi tuần ăn cá mấy lần", "nhập sai mật khẩu mấy lần" từng ra số lượt quẹt
+  quetlimit: /\b(quet|luot|swipe)\b/,
 };
 export function matchFaq(text: string): Faq | null {
   const n = normalizeVi(text);
@@ -541,7 +543,8 @@ export function matchFaq(text: string): Faq | null {
   // 30/10 (rà câu hiểu lầm): câu hỏi giá / thời hạn của thứ NGOÀI app ("giá vàng hôm nay bao nhiêu", "cam kết bảo hành bao lâu")
   //   từng khớp từ khoá "bao nhiêu", "bao lâu" của câu hỏi giá cuốc xe / hạn mã ưu đãi. Mấy câu này phải nhắc đúng thứ của app.
   const need = FAQ_NEED[best.f.id];
-  if (need && !need.test(` ${n} `)) return null;
+  // (chữ nối "mà" bỏ dấu trùng "mã" — "tin nhắn gửi bao lâu mà chưa nhận" không phải hỏi hạn mã ưu đãi)
+  if (need && !need.test(` ${normalizeVi(text.normalize("NFC").replace(/(^|\s)mà(?=\s|$)/giu, " "))} `)) return null;
   // Đủ chắc: điểm cao, hoặc phủ phần lớn câu hỏi và bỏ xa câu đứng thứ hai.
   const clear = !second || best.score - second.score >= 1.5;
   if (best.score >= 6 || (best.score >= 3.5 && best.cover >= 0.5 && clear)) return best.f;

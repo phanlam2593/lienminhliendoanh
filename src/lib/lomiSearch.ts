@@ -399,7 +399,7 @@ export const DISHES: Dish[] = [
   { id: "comtam", label: "🍛 Cơm tấm", name: "cơm tấm", keys: ["com tam"], vi: ["cơm tấm"], re: VN(/\bcơm tấm\b/), when: ["morning", "noon", "evening"] },
   { id: "com", label: "🍚 Cơm", name: "cơm", keys: ["com"], vi: ["cơm"], re: VN(/\b(cơm|cơm trưa|cơm văn phòng)\b/), when: ["noon", "evening"] },
   { id: "chao", label: "🥣 Cháo", name: "cháo", keys: ["chao"], vi: ["cháo"], re: VN(/\bcháo (gà|lòng|vịt|hàu|cá|sườn|bò)\b|\băn cháo\b/), when: ["morning", "night"] },
-  { id: "lau", label: "🍲 Lẩu gà lá é", name: "lẩu (gà lá é, lẩu bò…)", keys: ["lau"], vi: ["lẩu"], re: VR(/\blau\b/), when: ["evening", "night"] },
+  { id: "lau", label: "🍲 Lẩu gà lá é", name: "lẩu (gà lá é, lẩu bò…)", keys: ["lau"], vi: ["lẩu"], re: VN(/\blẩu\b/), when: ["evening", "night"] },
   { id: "nuong", label: "🍢 Đồ nướng / BBQ", name: "đồ nướng", keys: ["nuong", "bbq"], vi: ["nướng", "bbq"], re: VN(/\b(nướng|bbq)\b/), when: ["evening", "night"] },
   { id: "banhtrang", label: "🫓 Bánh tráng nướng", name: "bánh tráng nướng / trộn", keys: ["banh trang"], vi: ["bánh tráng"], re: VN(/\bbánh tráng\b/), when: ["afternoon", "evening", "night"] },
   { id: "oc", label: "🐚 Ốc", name: "ốc", keys: ["oc"], vi: ["ốc"], re: VN(/\b(ăn ốc|quán ốc|ốc)\b/), when: ["evening", "night"] },

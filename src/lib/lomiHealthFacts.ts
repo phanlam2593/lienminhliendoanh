@@ -83,6 +83,19 @@ const FACTS: Fact[] = [
     checked: "21/10/2026",
   },
   {
+    // 31/10 (danh sách ChatGPT lần 6): "một ngày nên nghỉ mắt mấy lần khi dùng máy tính"
+    id: "screenbreak",
+    first: true,
+    re: VN(/\b(nghỉ mắt|cho mắt nghỉ|nghỉ ngơi mắt)\b/),
+    a:
+      "👀 Khi dùng máy tính, Hội Nhãn khoa Hoa Kỳ (AAO) khuyên quy tắc **20-20-20**: **cứ 20 phút** thì nhìn một vật cách khoảng 6 m trong **ít nhất 20 giây** — tức là nghỉ mắt ngắn nhiều lần trong ngày, không phải một hai lần dài.\n" +
+      "• Nhớ chớp mắt; mắt khô thì dùng nước mắt nhân tạo\n" +
+      "• Màn hình cách mắt khoảng một sải tay, hơi thấp hơn tầm mắt",
+    src: "American Academy of Ophthalmology (qua HealthDay, 22/12/2023 — cập nhật 18/01/2024)",
+    checked: "31/10/2026",
+  },
+
+  {
     // 21/10 (QA V2 Q17): tim đập nhanh sau khi uống nhiều cà phê — trước đây nhận bài "400 mg caffeine/ngày" chung chung.
     id: "caffeinepalp",
     first: true,
