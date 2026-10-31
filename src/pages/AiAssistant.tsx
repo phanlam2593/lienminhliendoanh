@@ -614,11 +614,286 @@ export function AiChat({
     // (0) Lượt trước vừa báo cấp cứu (🚨 … 115) mà hỏi tiếp ngắn ("có phải dị ứng nữa không?") → nhắc lại, không đưa bài chăm sóc thường.
     if (lastA0 && /^🚨/u.test(lastA0.content) && w <= 8 && (raw.includes("?") || VN(/\b(không|ko|hả|ha|phải không|có phải|nguy hiểm|sao)\s*$/).test(nr)) && !VN(/\b(gọi rồi|đã gọi|đang đi|tới viện|đến viện|đỡ rồi|hết rồi|thêm|mờ|đau|sốt|nôn|co giật|chảy máu|tím|ngất|xỉu|thở nhanh|li bì|bỏ bú|tháng|tuổi)\b/).test(nr))
       return { role: "assistant", content: "🚨 Lomi nhắc lại nha: với những dấu hiệu bạn vừa kể, đừng chờ xem có phải hay không — **gọi 115 ngay** hoặc nhờ người chở tới cấp cứu gần nhất. Trong lúc chờ: ngồi thẳng cho dễ thở, không ăn uống thêm gì, có người ở cạnh.\n\nBạn gọi được chưa?", local: true, health: hCtx ?? {}, med: lastA0.med };
+    // (0-) Sợ về nhà vì bố mẹ cãi nhau / la hét → hỏi an toàn trước.
+    if (VN(/\b(sợ về nhà|không dám về nhà|không muốn về nhà vì|sợ ở nhà)\b/).test(nr))
+      return { role: "assistant", content: "Nghe em nói sợ về nhà, Lomi lo cho em lắm 🥺 Trước hết Lomi hỏi nha: ở nhà em có **an toàn** không — có ai đánh, đe doạ hay làm em bị thương không?\n• Nếu em đang gặp nguy hiểm → gọi **113** (công an) hoặc **111** (tổng đài bảo vệ trẻ em, nếu em dưới 18 tuổi), hoặc sang nhà người thân / hàng xóm tin cậy\n• Nếu chỉ là ồn ào, cãi vã làm em mệt và sợ — cảm giác đó cũng đáng được lắng nghe\n\nChuyện ở nhà dạo này thế nào, em kể Lomi nghe được không?", local: true, heart: "family", heartDepth: 1 };
+    // (0-) Tìm / đặt xe đi bệnh viện.
+    if (VN(/\b(tìm|đặt|gọi|kêu|book) (xe|taxi|grab|xe ôm)( \S+){0,2} (đi|tới|đến|vô|vào|lên) (bệnh viện|viện|cấp cứu|phòng khám|trạm y tế)\b/).test(nr)) {
+      const infant = prevU.some((m) => VN(/\b(\d|một|hai) tháng\b/).test(` ${normalizeVi(m.content)} `)) && prevU.some((m) => VN(/\bsốt\b/).test(` ${normalizeVi(m.content)} `));
+      return { role: "assistant", content: `${infant ? "⚠️ Bé nhỏ vậy mà sốt thì đi ngay là đúng rồi nha. " : ""}Đặt xe trong app: **Trang chủ → Đưa đón & Giao hàng (/dua-don) → Chở người**, nhập điểm đến là bệnh viện, chọn loại xe rồi đặt.\n\n🚨 Nếu người bệnh **khó thở, lừ đừ, co giật, tím tái, đau dữ dội** hay bạn thấy chờ xe sẽ trễ → gọi **115** để có xe cấp cứu, đừng chờ tài xế.`, local: true, faqId: "ridebook", health: hCtx ?? {} };
+    }
+    // (0-) Bé dưới 3 tháng đang sốt mà hỏi tiếp "bé vẫn sốt", "giờ làm gì" → nhắc lại: đi khám ngay.
+    const prevU8 = msgs.filter((m) => m.role === "user").slice(-8).reverse();
+    if (w <= 8 && VN(/\b(vẫn sốt|còn sốt|giờ làm gì|giờ làm sao|làm sao giờ|sao giờ|phải làm sao|làm gì bây giờ)\b/).test(nr) && prevU8.some((m) => VN(/\b(\d|một|hai) tháng\b/).test(` ${normalizeVi(m.content)} `) && !VN(/\b(\d{2}|[3-9]) tháng\b/).test(` ${normalizeVi(m.content)} `)) && !prevU8.some((m) => VN(/\b(\d+|một|hai|ba) tuổi\b/).test(` ${normalizeVi(m.content)} `)) && [...prevU8.map((m) => m.content), raw].some((x) => VN(/\bsốt\b/).test(` ${normalizeVi(x)} `)))
+      return { role: "assistant", content: "⚠️ Bé **dưới 3 tháng** mà sốt thì việc cần làm ngay là **đưa bé tới bệnh viện / cơ sở y tế gần nhất bây giờ** — đừng tự cho uống thuốc hạ sốt khi chưa có bác sĩ khám, đừng ủ ấm quá.\n• Bé li bì, bỏ bú, co giật, thở nhanh, tím tái → gọi **115** ngay\n• Trên đường đi: cho bé bú nếu bé chịu bú, mặc thoáng\n\nBạn đã có xe đi chưa?", local: true, health: hCtx ?? { label: "sốt" } };
+    // (0a) 31/10 (danh sách ChatGPT lần 5 — hội thoại dài): "quay lại chuyện hồi nãy", "còn vụ ăn uống của mẹ", "quay lại lá lúc nãy"
+    //      → khôi phục đúng mạch cũ (thẻ quán, bệnh, thuốc, trải bài, câu hỏi app, tư vấn kinh doanh, tâm sự) thay vì hiểu là câu mới.
+    // (0-) "Đặt xe xong chưa", "đặt giùm anh" — Lomi không tự đặt xe.
+    if (w <= 8 && VN(/\b(đặt xe (xong|rồi) (chưa|không)|đặt (xe )?(xong|được) chưa|xe (tới|đến) chưa|đặt (giùm|giúp|hộ|dùm)( \S+)? (xe|chuyến))\b/).test(nr))
+      return { role: "assistant", content: "Lomi **không tự đặt xe giùm** được nha 🙏 Bạn đặt trong app: **Trang chủ → Đưa đón & Giao hàng (/dua-don) → Chở người**, nhập điểm đến rồi bấm đặt.\n• Đặt rồi thì xem ở **Đưa đón → Chuyến hiện tại**: có tài xế nhận sẽ hiện tên, biển số và vị trí trên bản đồ\n• Chưa ai nhận lâu quá thì hủy rồi đặt lại, hoặc đổi loại xe", local: true, faqId: "ridetrack" };
+    // (0-) Đang đau mà kể "giờ đau hơn", "nặng hơn rồi" — dù mấy lượt vừa rồi nói chuyện khác.
+    if (w <= 7 && VN(/\b(đau hơn|nặng hơn|tệ hơn|đau nhiều hơn|sốt cao hơn|đau quá trời|đau dữ dội)\b/).test(nr) && !lastA0?.health) {
+      const sxU = prevU8.map((m) => m.content.normalize("NFC").toLowerCase().match(/(đau (?:bụng|đầu|ngực|lưng|khớp|gối|họng|dạ dày|răng)|sốt|tiêu chảy|nôn)/u)?.[1]).find(Boolean);
+      if (sxU)
+        return { role: "assistant", content: `⚠️ ${sxU.replace(/^\p{L}/u, (x) => x.toUpperCase())} mà **nặng hơn** thì nên đi khám **ngay hôm nay**, đừng chờ thêm nha.\n• 🚨 Đau dữ dội, sốt cao, nôn nhiều, bụng cứng, đi ngoài ra máu, khó thở, lừ đừ → gọi **115** hoặc tới cấp cứu\n• Cần xe đi khám thì đặt ở Đưa đón (/dua-don), hoặc nhờ người nhà chở\n\nBạn đi khám được ngay không?`, local: true, health: { label: sxU } };
+    }
+    // (0-) Kể đang nợ nần.
+    if (w <= 7 && VN(/^ (em|anh|chị|tui|tôi|mình|tớ)( đang| bị)? (nợ|mắc nợ|thiếu nợ|nợ nần|ôm nợ)( nhiều| quá| lắm)?( \S+)? $/).test(nr))
+      return { role: "assistant", content: "Nợ nần thì áp lực lắm, nằm ngủ cũng nghĩ 😔 Lomi gợi ý vài bước cho đỡ rối nha:\n• Ghi hết ra: nợ ai, bao nhiêu, lãi bao nhiêu, hạn khi nào\n• Ưu tiên trả khoản **lãi cao** và khoản sắp tới hạn trước\n• Chủ động nói chuyện với người cho vay để xin giãn hạn — im lặng thường làm mọi chuyện tệ hơn\n• Tránh vay chỗ này đắp chỗ kia, nhất là vay nóng / app vay lãi cao\n\nEm muốn kể thêm không, hay muốn Lomi rút một lá bài về chuyện tiền bạc cho vui?", local: true, heart: "money", heartDepth: 1 };
+    // (0-) Lo chuyện cưới, hai bên gia đình không thống nhất.
+    if (w <= 10 && VN(/\b(lo (chuyện |vụ )?(cưới|đám cưới)|chuyện cưới xin|hai bên (gia đình )?(không thống nhất|không đồng ý|bất đồng|không chịu))\b/).test(nr))
+      return { role: "assistant", content: VN(/\bhai bên\b/).test(nr) ? "Hai bên gia đình không thống nhất thì người ở giữa mệt nhất luôn 😔 Mấy điều thường giúp được:\n• Hai bạn thống nhất với nhau trước (ngày, quy mô, ngân sách), rồi mới nói với hai nhà\n• Ai nói chuyện với nhà nấy — tránh để một người phải đứng ra cãi với nhà bên kia\n• Tách chuyện lớn (ngày cưới, tiền) khỏi chuyện nhỏ (màu sắc, thực đơn) — nhường chuyện nhỏ cho êm\n• Nhờ một người lớn được cả hai bên nể làm cầu nối\n\nHai bên đang vướng nhau ở chuyện gì nhất vậy em?" : "Chuyện cưới xin nhiều việc mà còn liên quan hai gia đình, lo là phải rồi 💚 Em đang lo nhất chuyện gì — tiền bạc, ngày giờ, ý hai bên gia đình hay chuyện của hai đứa? Kể Lomi nghe nha.", local: true, heart: "family", heartDepth: 1 };
+    // (0-) Đang kể sợ về nhà mà nói ba mẹ cãi nhau / la hét / vẫn sợ.
+    const famFear = msgs.filter((m) => m.role === "assistant").slice(-6).some((m) => m.content.includes("sợ về nhà"));
+    if (famFear && w <= 8) {
+      if (VN(/\b(ba mẹ|bố mẹ|cha mẹ|ba má|ba|bố|mẹ)( \S+)? (cãi nhau|la hét|chửi nhau|gây nhau|đánh nhau|la)\b/).test(nr) || VN(/\b(chỉ la hét|la hét thôi|không phải đánh nhau|không đánh nhau)\b/).test(nr))
+        return { role: "assistant", content: "Ở trong nhà mà ba mẹ cứ cãi nhau, la hét thì sợ và mệt là phải lắm 🥺 Đó không phải lỗi của em đâu.\n• Lúc ồn ào: vào phòng, đeo tai nghe, hoặc sang nhà người thân / bạn tin cậy một lúc\n• Kể cho một người lớn em tin (ông bà, cô chú, thầy cô) để có người hiểu chuyện ở nhà\n• Nếu có ai đánh, đe doạ em → gọi **111** (tổng đài bảo vệ trẻ em) hoặc **113**\n\nLúc ba mẹ cãi nhau, em thường làm gì cho đỡ sợ?", local: true, heart: "family", heartDepth: 2 };
+      if (VN(/\b(vẫn sợ|sợ lắm|sợ quá|còn sợ)\b/).test(nr))
+        return { role: "assistant", content: "Lomi hiểu, cảm giác sợ không tắt liền được đâu 💚 Lomi hỏi lại cho chắc nha: ngay lúc này em có **an toàn** không? Nếu thấy không an toàn → gọi **111** hoặc **113**, hoặc sang nhà người thân / hàng xóm tin cậy.\n\nNếu em đang an toàn, mình thở chậm cùng Lomi một chút: hít vào 4 nhịp, giữ 4 nhịp, thở ra 6 nhịp — làm 3 lần nha. Có ai ở gần em lúc này không?", local: true, heart: "family", heartDepth: 3 };
+    }
+    // (0-) "Bạn bảo em vô tâm" — "bạn" ở đây là bạn của người dùng, không phải Lomi.
+    const frSaid = raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").match(/^(?:mà\s+)?(?:bạn|bạn em|bạn bè|tụi bạn|mấy đứa bạn)\s+(?:bảo|nói|chê|kêu)\s+(?:em|tui|mình|anh|chị)\s+(.{2,30})$/u);
+    if (frSaid && w <= 8)
+      return { role: "assistant", content: `Bị nói là ${frSaid[1]} hả 😔 Nghe câu đó lúc đang buồn chắc khó chịu lắm. Lời người khác nói là góc nhìn của họ thôi, không phải toàn bộ con người em. Em thấy câu đó đúng phần nào, hay hoàn toàn không đúng?`, local: true, heart: lastA0?.heart ?? "sad", heartDepth: (lastA0?.heartDepth ?? 1) + 1 };
+    // (0-) Câu dài một hơi (người lớn tuổi): nhận ý chính thay vì đoán mò.
+    if (w > 12) {
+      if (VN(/\b(xác minh|xác thực|kích hoạt)\b/).test(nr) && VN(/\b(tài khoản|đăng ký|email|mail)\b/).test(nr)) {
+        const af = appFollow("tài khoản chưa xác minh", undefined);
+        if (af?.text) return { role: "assistant", content: af.text, local: true, faqId: af.faqId };
+      }
+      const dd = detectDish(raw);
+      if (dd && VN(/\b(tìm|kiếm|muốn ăn|chỉ|quán)\b/).test(nr) && !VN(/\b(đau|bệnh|thuốc|kiêng)\b/).test(nr)) {
+        const dm = await replyDishShopsMsg(raw, dd.id);
+        const sr = searchRefine(raw);
+        if (dm) return { ...dm, content: `${dm.content}${sr ? `\n\n${sr}` : ""}` };
+      }
+    }
+    let forceWrite = false;
+    const back = raw.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim().match(/^(?:(?:rồi|thôi|à|ok|okie|vậy|giờ|ờ)\s+)*(?:quay lại|quay về|trở lại|nói tiếp|tiếp tục|còn)\s+(?:(?:vụ|chuyện|cái|về|với|phần)\s+)?(.*?)(?:\s+(?:hồi nãy|lúc nãy|khi nãy|ban nãy|vừa nãy|lúc trước|ban đầu))?(?:\s+(?:đi|nha|nhé|nhe|thì sao|sao rồi|đâu))*(?:\s*,\s*(.+))?$/u);
+    if (back && w <= 16 && (/^(quay|trở|nói tiếp|tiếp tục)/u.test(raw.normalize("NFC").toLowerCase().replace(/^(rồi|thôi|à|ok|okie|vậy|giờ|ờ)\s+/u, "")) || VN(/\b(vụ|chuyện)\b/).test(nr))) {
+      const what = ` ${normalizeVi(back[1] ?? "")} `;
+      const rest = back[2]?.trim() ?? "";
+      const hist = msgs.filter((m) => m.role === "assistant");
+      const ctxOf = (m: Msg) => (m.tarot || m.tarotRef ? "tarot" : m.dish || (m.places?.length ?? 0) > 0 ? "place" : m.biz ? "biz" : m.drug?.name ? "drug" : m.med || (m.health && Object.keys(m.health).length) ? "health" : m.faqId ? "app" : m.heart ? "heart" : null);
+      const want = VN(/\b(đăng ưu đãi|quảng cáo|bài quảng cáo|tuyển|tuyển dụng|kinh doanh|khách|bài đăng)\b/).test(what) ? "biz" : VN(/\b(lá|bài|tarot|bói)\b/).test(what) ? "tarot" : VN(/\b(quán|món|chỗ ăn|quán ăn|nhà hàng|ăn uống ở)\b/).test(what) ? "place" : VN(/\b(thuốc)\b/).test(what) ? "drug" : VN(/\b(chuyến|xe|đặt xe|quẹt|match|mật khẩu|thông báo|app|ưu đãi|đăng ký|đăng bài)\b/).test(what) ? "app" : VN(/\b(ăn uống|đau|bệnh|sốt|ho|mất ngủ|sức khoẻ|sức khỏe|tiểu đường|huyết áp|khớp|bụng|đầu)\b/).test(what) ? (VN(/\bmất ngủ\b/).test(what) ? "heart|health" : "health") : VN(/\b(buồn|tâm sự|chia tay|người yêu|ny)\b/).test(what) ? "heart" : null;
+      const lastCtx = lastA0 ? ctxOf(lastA0) : null;
+      const target = [...hist].reverse().find((m, i) => { const c = ctxOf(m); return !!c && (want ? want.split("|").includes(c) || (want === "biz" && m.faqId?.startsWith("biz")) : i > 0 && c !== lastCtx); });
+      // Lượt trả lời triệu chứng có khi không gắn cờ health/med → tìm lại trong lời người dùng.
+      const wantHealth = !!want?.split("|").includes("health");
+      const tWord = (back[1] ?? "").replace(/\s+(của|cho)\s+.*$/u, "").trim();
+      const healthIdx = hist.indexOf(target as Msg);
+      const userSaid = wantHealth && tWord && msgs.some((m) => m.role === "user" && normalizeVi(m.content).includes(normalizeVi(tWord)));
+      if (wantHealth && !userSaid && !target) {
+        const sxAll = msgs.filter((m) => m.role === "user").slice(-10).reverse().map((m) => m.content.normalize("NFC").toLowerCase().match(/(đau (?:bụng|đầu|ngực|lưng|khớp|gối|họng|dạ dày|răng)|sốt|tiêu chảy|mất ngủ|tiểu đường|huyết áp|gout|gút)/u)?.[1]).find(Boolean);
+        if (sxAll) {
+          const mid = findMedId(sxAll);
+          const mt = mid ? await loadMedTopic(mid) : null;
+          if (mt && VN(/\b(ăn uống|ăn gì|kiêng)\b/).test(what)) {
+            const mr = renderMed(mt, "diet");
+            return { role: "assistant", content: `Dạ, quay lại chuyện ăn uống khi bị **${sxAll}** nha 📝\n\n${mr.text}`, local: true, quick: mr.quick, med: { id: mid!, aspect: "diet" }, health: { label: sxAll } };
+          }
+          return { role: "assistant", content: `Dạ, quay lại chuyện **${sxAll}** nha 📝 ${VN(/\b(ăn uống|ăn gì|kiêng)\b/).test(what) ? `Về ăn uống thì các nguồn Lomi đã đối chiếu **chưa có hướng dẫn riêng** cho ${sxAll}, nên Lomi không dám liệt kê món nên / không nên. Nguyên tắc chung: ăn đa dạng, đủ rau, đủ nước, giữ cân nặng hợp lý; nếu có bệnh nền (tiểu đường, gout, thận…) thì hỏi bác sĩ đang theo dõi.` : "Bạn muốn hỏi tiếp phần nào — ăn uống, chăm sóc, bao lâu thì đỡ hay khi nào cần đi khám?"}`, local: true, health: { label: sxAll }, ...(mid ? { med: { id: mid } } : {}) };
+        }
+      }
+      if (wantHealth && userSaid && (!target || (healthIdx >= 0 && !want!.split("|").includes(ctxOf(target)!)))) {
+        const worse = VN(/\b(đau hơn|nặng hơn|tệ hơn|sốt cao hơn|không đỡ|vẫn chưa đỡ|đau nhiều|đau quá)\b/).test(` ${normalizeVi(rest)} `);
+        const mid = findMedId(tWord);
+        const mt = mid ? await loadMedTopic(mid) : null;
+        const tn = mt ? medName(mt) : tWord;
+        if (worse)
+          return { role: "assistant", content: `⚠️ ${tn.replace(/^\p{L}/u, (x) => x.toUpperCase())} mà **nặng hơn** thì nên đi khám **ngay hôm nay**, đừng chờ thêm nha.\n• 🚨 Đau dữ dội, sốt cao, nôn nhiều, bụng cứng, đi ngoài ra máu, khó thở, lừ đừ → gọi **115** hoặc tới cấp cứu\n• Cần xe đi khám thì đặt ở Đưa đón (/dua-don), hoặc nhờ người nhà chở\n\nBạn đi khám được ngay không?`, local: true, health: { label: tn }, ...(mid && mt ? { med: { id: mid } } : {}) };
+        return { role: "assistant", content: `Dạ, quay lại chuyện **${tn}** nha 📝 Bạn muốn hỏi tiếp phần nào — ăn uống, chăm sóc, bao lâu thì đỡ hay khi nào cần đi khám?`, local: true, health: { label: tn }, quick: mt ? renderMed(mt, "overview").quick : undefined };
+      }
+      if (target) {
+        const c = ctxOf(target)!;
+        const restQ = rest && rest.split(/\s+/).length >= 2 ? rest : "";
+        if (c === "health" || (c === "heart" && VN(/\b(mất ngủ)\b/).test(what))) {
+          const worse = VN(/\b(đau hơn|nặng hơn|tệ hơn|sốt cao hơn|không đỡ|vẫn chưa đỡ|đau nhiều|đau quá)\b/).test(` ${normalizeVi(rest)} `);
+          const mt = target.med ? await loadMedTopic(target.med.id) : null;
+          const tn = mt ? medName(mt) : (target.health?.label ?? (target.heart === "insomnia" ? "mất ngủ" : "sức khoẻ"));
+          if (worse)
+            return { role: "assistant", content: `⚠️ ${tn.replace(/^\p{L}/u, (x) => x.toUpperCase())} mà **nặng hơn** thì nên đi khám **ngay hôm nay**, đừng chờ thêm nha.\n• 🚨 Đau dữ dội, sốt cao, nôn nhiều, bụng cứng, đi ngoài ra máu, khó thở, lừ đừ → gọi **115** hoặc tới cấp cứu\n• Cần xe đi khám thì đặt ở Đưa đón (/dua-don), hoặc nhờ người nhà chở\n\nBạn đi khám được ngay không?`, local: true, health: target.health ?? { label: tn }, ...(target.med ? { med: target.med } : {}) };
+          return { role: "assistant", content: `Dạ, quay lại chuyện **${tn}** nha 📝 Bạn muốn hỏi tiếp phần nào — ăn uống, chăm sóc, bao lâu thì đỡ hay khi nào cần đi khám?`, local: true, health: target.health ?? { label: tn }, ...(target.med ? { med: target.med } : {}), ...(target.heart === "insomnia" ? { heart: "insomnia", heartDepth: 1 } : {}), quick: mt ? renderMed(mt, "overview").quick : undefined };
+        }
+        if (c === "place") {
+          const dn = target.dish ? DISHES_BY_ID[target.dish]?.name : undefined;
+          return { role: "assistant", content: `Dạ, quay lại mấy ${dn ? `quán **${dn}**` : "chỗ"} lúc nãy nha 👇${target.dishPlace ? ` (khu ${target.dishPlace})` : ""} Muốn lọc thêm gì — gần chỗ nào, có ưu đãi không — cứ nói Lomi.`, local: true, places: target.places, dish: target.dish, dishPlace: target.dishPlace, search: target.search, quick: target.quick };
+        }
+        if (c === "tarot") {
+          const tp0 = VN(/\b(tiền|tài chính|nợ)\b/).test(what) ? "money" : VN(/\b(tình|tình yêu|tình cảm|tình duyên|người yêu|ny)\b/).test(what) ? "love" : VN(/\b(công việc|việc làm|sự nghiệp)\b/).test(what) ? "work" : null;
+          const byTopic = tp0 ? [...hist].reverse().map((m) => m.tarot ?? m.tarotRef).find((x) => x?.topic === tp0) : undefined;
+          const r = (byTopic ?? target.tarot ?? target.tarotRef)!;
+          return { role: "assistant", content: `Dạ, quay lại trải bài lúc nãy nha 🔮\n\n${readingRecap(r)}`, local: true, tarotRef: r };
+        }
+        if (c === "drug") return { role: "assistant", content: `Dạ, quay lại chuyện **${target.drug!.name}** nha 💊 Bạn muốn hỏi tiếp gì — cách uống, tác dụng phụ, dùng chung với thứ khác…?`, local: true, drug: target.drug, health: target.health ?? {} };
+        const offerFaq = hist.slice(-8).find((m) => m.faqId === "bizoffer");
+        if (c === "biz" && offerFaq && VN(/\b(đăng ưu đãi|đăng giảm giá|đăng khuyến mãi)\b/).test(what))
+          return { role: "assistant", content: `Dạ, quay lại chuyện đăng ưu đãi nha 👇\n\n${faqById("bizoffer")?.a.vi ?? offerFaq.content}`, local: true, faqId: "bizoffer", biz: target.biz };
+        if (c === "biz" && VN(/\b(tuyển|bài đăng|quảng cáo)\b/).test(what)) forceWrite = true;
+        else if (c === "biz") return { role: "assistant", content: `Dạ, quay lại chuyện kinh doanh của ${nounFor(target.biz!.type, target.biz!.noun)} nha 💼\n\n${bizAnswer(target.biz!, target.biz!.topic ?? "offer", true)}`, local: true, biz: target.biz, quick: followUpChips(target.biz!.topic ?? "offer") };
+        if (c === "app" && target.faqId) {
+          const mf = rest ? matchFaq(`${back[1] ?? ""} ${rest}`.trim()) : null;
+          if (mf && mf.id !== target.faqId && hist.some((m) => m.faqId === mf.id))
+            return { role: "assistant", content: `Dạ, quay lại chuyện “${mf.q.vi.replace(/\?$/, "")}” nha 👇\n\n${mf.a.vi}`, local: true, faqId: mf.id };
+          const ff = faqById(target.faqId);
+          const af = restQ ? appFollow(restQ, target.faqId, [target.faqId]) : null;
+          const ff2 = af?.faqId ? faqById(af.faqId) : null;
+          const text = af?.text ?? ff2?.a.vi ?? ff?.a.vi;
+          if (text) return { role: "assistant", content: `Dạ, quay lại chuyện “${(ff2 ?? ff)!.q.vi.replace(/\?$/, "")}” nha 👇\n\n${text}`, local: true, faqId: af?.faqId ?? target.faqId };
+        }
+        if (c === "heart") return { role: "assistant", content: "Dạ, mình quay lại chuyện lúc nãy nha 💚 Giờ bạn thấy sao rồi, có gì muốn kể thêm không?", local: true, heart: target.heart, heartDepth: (target.heartDepth ?? 1) + 1, story: target.story };
+      }
+    }
+    // (0a2) Chủ quán hỏi chuyện kinh doanh qua nhiều lượt ("quán em bán cà phê", "khách chủ yếu sinh viên", "viết ngắn hơn đi").
+    const OWNER = VN(/\b((quán|tiệm|shop|cửa hàng|sạp|xe) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)|(em|anh|chị|tui|tôi|mình|cô|chú|bác) (có|mở|mới mở|đang mở|mới khai trương|kinh doanh|làm chủ) (một |1 )?(quán|tiệm|shop|cửa hàng|xe)|khai trương quán|khách (đánh giá|chê|phàn nàn|review|than)|cần tuyển (người|nhân viên)|tuyển nhân viên|bài tuyển|chủ quán|đăng (cái |mấy cái |1 |một )?(ưu đãi|khuyến mãi|giảm giá)|đăng bài (giảm giá|ưu đãi|khuyến mãi))\b/);
+    const prevBiz = prevA.find((m) => m.biz)?.biz;
+    // "làm sao đăng ưu đãi?" (hỏi cách dùng app, chưa kể mình có quán) → để FAQ trả lời như cũ
+    const ownerNow = OWNER.test(nr) && !(VN(/\b(làm sao|cách|làm thế nào|thế nào|hướng dẫn)\b/).test(nr) && !VN(/\b(quán|tiệm|shop|cửa hàng) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)\b/).test(nr) && VN(/\bđăng\b/).test(nr));
+    const prevU6 = msgs.filter((m) => m.role === "user").slice(-6).reverse();
+    const bizFaqNear = msgs.filter((m) => m.role === "assistant").slice(-4).some((m) => m.faqId?.startsWith("biz") || !!m.biz);
+    const ownerCtx = ownerNow || !!prevBiz || bizFaqNear || prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `));
+    // Câu dài của người lớn tuổi: "cô muốn đăng cái ưu đãi … mà không thấy chỗ đăng" → hướng dẫn đăng ưu đãi, câu dài mấy cũng vậy.
+    if (ownerNow && w > 18 && VN(/\b(đăng (cái |mấy cái |1 |một )?(ưu đãi|khuyến mãi|giảm giá)|đăng bài (giảm giá|ưu đãi|khuyến mãi))\b/).test(nr)) {
+      const ff = faqById("bizoffer");
+      if (ff) return { role: "assistant", content: `${ff.a.vi}\n\nChưa có hồ sơ doanh nghiệp (hoặc đang chờ duyệt) thì sẽ chưa thấy mục Ưu đãi — tạo ở Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp.`, local: true, faqId: "bizoffer", biz: { type: detectBizKind(raw).type, noun: detectBizKind(raw).noun, topic: "offer" } };
+    }
+    const ownerSkip = VN(/\b(chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr)) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
+    if (ownerCtx && !ownerSkip && w <= 18 && !VN(/\b(đau|bệnh|sốt|thuốc|mất ngủ|buồn|chia tay|bầu|mang thai|có thai|cho con bú|uống được|bác sĩ)\b/).test(nr)) {
+      const allTxt = [...prevU6.map((m) => m.content).reverse(), raw].join(" . ");
+      const sellM = ` ${normalizeVi(allTxt)} `.match(VN(/\bbán (đồ ăn sáng|đồ ăn|ăn sáng|cơm|bún|phở|xôi|bánh mì|hủ tiếu|cháo|bánh)\b/));
+      const kind0 = detectBizKind(raw).type ? detectBizKind(raw) : detectBizKind(allTxt);
+      const kind = kind0.type ? kind0 : sellM ? { type: "food" as const, noun: `quán ${allTxt.normalize("NFC").toLowerCase().match(/bán\s+((?:đồ ăn sáng|đồ ăn|ăn sáng|cơm|bún|phở|xôi|bánh mì|hủ tiếu|cháo|bánh)(?:\s+[\p{L}]+)?)/u)?.[1]?.replace(/^đồ\s+/u, "") ?? "ăn"}` } : kind0;
+      const ctx: BizCtx = { type: kind.type ?? prevBiz?.type, noun: kind.noun ?? prevBiz?.noun };
+      const noun = nounFor(ctx.type, ctx.noun);
+      const tpNow = detectBizTopic(raw);
+      const hire = VN(/\b(tuyển|nhân viên|ca tối|ca sáng|lương)\b/).test(` ${normalizeVi(allTxt)} `);
+      const review = VN(/\b(đánh giá|1 sao|một sao|chê|phàn nàn|review)\b/).test(` ${normalizeVi(allTxt)} `);
+      const write = forceWrite || VN(/\b(viết|soạn|trả lời sao|trả lời thế nào|câu trả lời|ngắn hơn|ngắn thôi|ngắn gọn|bài tuyển|mẫu tuyển|tin tuyển)\b/).test(nr);
+      const short = VN(/\b(ngắn|gọn)\b/).test(nr);
+      const out = (content: string, topic: BizTopic): Msg => ({ role: "assistant", content, local: true, biz: { type: ctx.type, noun: ctx.noun, topic }, quick: followUpChips(topic) });
+      if (hire && !review && VN(/\b(đăng ở đâu|đăng chỗ nào|đăng sao|nút đăng|không thấy (nút|chỗ) đăng)\b/).test(nr))
+        return out("Bài tuyển người đăng ở 2 chỗ nha 👇\n• **Quẹt → Công việc → Tuyển người**: điền vị trí, ca làm, lương rồi đăng — người tìm việc quẹt sẽ thấy\n• Phòng **Việc làm** trong Cộng đồng (/cong-dong): dán bài tuyển vào khung chat của khu vực mình\n\nKhông thấy nút thì vuốt tắt hẳn app rồi mở lại (có thể app chưa cập nhật bản mới) nha.", "post");
+      if (hire && !review && !write && !VN(/\b(đăng ở đâu|nút đăng)\b/).test(nr)) {
+        const at = ` ${normalizeVi(allTxt)} `;
+        const got = [VN(/\bca (tối|sáng|chiều|đêm)\b/).test(at) ? `ca ${allTxt.normalize("NFC").toLowerCase().match(/ca (tối|sáng|chiều|đêm)/u)?.[1]}` : null, VN(/\bsinh viên\b/).test(at) ? "sinh viên làm được" : null, VN(/\blương\b/).test(at) ? "lương thoả thuận" : null, ctx.type ? noun : null].filter(Boolean) as string[];
+        const need = [!ctx.type ? "quán / tiệm gì" : null, !VN(/\bca (tối|sáng|chiều|đêm)\b/).test(at) ? "ca làm" : null, !VN(/\blương\b/).test(at) ? "lương" : null, "công việc chính (pha chế, phục vụ, thu ngân…)"].filter(Boolean) as string[];
+        return out(`${ownerNow ? `Dạ, tuyển nhân viên${ctx.type ? ` cho ${noun}` : ""} nha 📝` : `Dạ, Lomi ghi nhận thêm (${raw.replace(/[.!?]+$/u, "")}) 📝`}${got.length ? ` Đã có: ${got.join(", ")}.` : ""}\n\nĐể bài tuyển rõ ràng, bạn cho Lomi biết thêm: ${need.join(", ")}. Xong cứ nói “viết bài tuyển” là Lomi soạn liền ✍️\n\nMẹo: ghi rõ giờ ca, mức lương (hoặc khoảng lương) và cách liên hệ — người tìm việc hay bỏ qua bài thiếu mấy thông tin này.`, "post");
+      }
+      if (write && hire && !review) {
+        const night = VN(/\bca tối\b/).test(` ${normalizeVi(allTxt)} `) ? "ca tối" : "theo ca";
+        const sv = VN(/\bsinh viên\b/).test(` ${normalizeVi(allTxt)} `);
+        const body = short
+          ? `📢 ${noun.replace(/^\p{L}/u, (x) => x.toUpperCase())} tuyển nhân viên ${night}${sv ? ", sinh viên làm được" : ""}. Lương thoả thuận. Inbox ngay nha!`
+          : `📢 **TUYỂN NHÂN VIÊN ${night.toUpperCase()}**\n${noun.replace(/^\p{L}/u, (x) => x.toUpperCase())} cần tuyển nhân viên ${night}.\n• Công việc: pha chế / phục vụ, dọn dẹp cuối ca\n• ${sv ? "Ưu tiên sinh viên, ca linh hoạt theo lịch học" : "Không cần kinh nghiệm, được hướng dẫn"}\n• Lương: thoả thuận khi phỏng vấn\n• Liên hệ: nhắn tin trực tiếp cho quán`;
+        return out(`${short ? "Bản ngắn nè ✍️" : "Mẫu bài tuyển dụng nè ✍️ (sửa lại công việc, giờ ca và cách liên hệ cho đúng quán bạn nha)"}\n\n${body}\n\nĐăng lên app: **Quẹt → Công việc → Tuyển người**, hoặc phòng **Việc làm** trong Cộng đồng (/cong-dong).`, "post");
+      }
+      if ((write || VN(/\b(trả lời|phản hồi)\b/).test(nr)) && review) {
+        const slow = VN(/\b(chậm|lâu|đông)\b/).test(` ${normalizeVi(allTxt)} `);
+        const sweet = VN(/\b(ngọt|đường)\b/).test(` ${normalizeVi(allTxt)} `);
+        const why = slow ? "để bạn phải chờ lâu hôm đó — quán đông hơn dự kiến và tụi mình xoay chưa kịp" : sweet ? "vì đồ uống chưa vừa khẩu vị — bạn có thể dặn nhân viên giảm đường (ví dụ 30–50%) ở lần sau nha" : "vì trải nghiệm chưa được như mong đợi";
+        const body = short ? `Cảm ơn bạn đã góp ý 🙏 Xin lỗi ${why.split(" — ")[0]}. Quán đã rút kinh nghiệm, mong bạn ghé lại để tụi mình phục vụ tốt hơn!` : `Cảm ơn bạn đã dành thời gian góp ý 🙏 Tụi mình thật sự xin lỗi ${why}. Quán đã ghi nhận và đang điều chỉnh để phục vụ nhanh, chu đáo hơn. Nếu tiện, bạn nhắn quán để tụi mình bù cho lần sau nha. Mong được gặp lại bạn!`;
+        return out(`${short ? "Bản ngắn nè ✍️" : "Mẫu trả lời nè ✍️ — nhận lỗi nhẹ nhàng, không cãi, mời khách quay lại:"}\n\n“${body}”\n\nMẹo: trả lời trong 1–2 ngày, đừng tranh luận đúng sai trước mặt mọi người; chuyện cụ thể thì xin nói riêng qua tin nhắn.`, "review");
+      }
+      // đang hỏi đăng ưu đãi mà kể tiếp loại tài khoản / đã duyệt / không thấy nút
+      if (msgs.filter((m) => m.role === "assistant").slice(-4).some((m) => m.faqId === "bizoffer") && VN(/\b(tài khoản (doanh nghiệp|cá nhân|kinh doanh)|đã duyệt|duyệt rồi|chưa duyệt|đang chờ duyệt|không thấy|nút đăng|ở đâu)\b/).test(nr)) {
+        const approved = VN(/\b(đã duyệt|duyệt rồi)\b/).test(nr) || VN(/\b(đã duyệt|duyệt rồi)\b/).test(` ${normalizeVi(allTxt)} `);
+        const pending = VN(/\b(chưa duyệt|đang chờ duyệt)\b/).test(nr);
+        const personal = VN(/\btài khoản cá nhân\b/).test(nr);
+        return { role: "assistant", content: personal
+          ? "Dạ đúng rồi, ưu đãi **không đăng từ tài khoản cá nhân** được — phải đăng từ **hồ sơ doanh nghiệp** của quán. Chưa có thì tạo ở **Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp**, chờ Ban quản trị duyệt; duyệt xong sẽ có mục **Ưu đãi / Deal** để đăng."
+          : pending
+            ? "Hồ sơ doanh nghiệp **đang chờ duyệt** thì chưa đăng ưu đãi được nha — Ban quản trị duyệt tay nên có thể mất một chút thời gian. Duyệt xong app sẽ báo, lúc đó vào **Hồ sơ → ⋯ → Hồ sơ doanh nghiệp → Ưu đãi / Deal → Thêm ưu đãi mới**."
+            : `${approved ? "Đã duyệt rồi thì " : ""}nút đăng nằm ở đây nè 👇\n1. **Hồ sơ** → bấm **⋯** góc trên → **Hồ sơ doanh nghiệp** (/ho-so?view=business)\n2. Kéo xuống mục **Ưu đãi / Deal** → bấm **Thêm ưu đãi mới**\n3. Điền tên ưu đãi, mô tả, điều kiện, thời gian rồi lưu\n\nVẫn không thấy mục đó thì vuốt tắt hẳn app rồi mở lại; còn không được thì nhắn Ban quản trị (Hồ sơ → ⋯ → Trợ giúp) nha.`, local: true, faqId: "bizoffer", biz: { type: ctx.type, noun: ctx.noun, topic: "offer" } };
+      }
+      if (VN(/\b(đăng ưu đãi|đăng giảm giá|đăng khuyến mãi|đăng (bài )?(lên|trên) (lomi|app|ilomi)|trên lomi được không|lên lomi được không|nút đăng)\b/).test(nr)) {
+        const ff = faqById("bizoffer");
+        if (ff) return { role: "assistant", content: `${ff.a.vi}\n\nChưa có hồ sơ doanh nghiệp (hoặc đang chờ duyệt) thì sẽ chưa thấy mục Ưu đãi — tạo ở Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp.`, local: true, faqId: "bizoffer", biz: { type: ctx.type, noun: ctx.noun, topic: "offer" } };
+      }
+      const offerTxt = ` ${normalizeVi(allTxt)} `;
+      const isOffer = !hire && !review && VN(/\b(ưu đãi|khuyến mãi|giảm giá|giảm \d+)\b/).test(offerTxt);
+      if (isOffer && (write || VN(/\b(điều kiện|ghi gì|ghi những gì|cần ghi)\b/).test(nr))) {
+        const pct = allTxt.match(/giảm\s*\d+\s*(%|k|nghìn|ngàn)?/iu)?.[0] ?? allTxt.match(/\b\d+\s*%/u)?.[0];
+        const when = VN(/\bcuối tuần\b/).test(offerTxt) ? "Thứ 7 & Chủ nhật" : VN(/\b(buổi sáng|sáng)\b/).test(offerTxt) ? "buổi sáng" : VN(/\b(buổi tối|tối)\b/).test(offerTxt) ? "buổi tối" : "";
+        const sv = VN(/\bsinh viên\b/).test(offerTxt);
+        const conds = `• Thời gian áp dụng: ${when || "từ ngày … đến ngày …"}${when ? " (ghi rõ đến ngày nào)" : ""}\n• Áp dụng cho: ${sv ? "khách xuất trình thẻ sinh viên" : "tất cả món / hay chỉ một số món"}\n• Có áp dụng chung với ưu đãi khác không, có giới hạn số lượng không\n• Ăn tại quán hay cả mang đi / giao hàng`;
+        if (!write)
+          return out(`Ưu đãi nên ghi rõ mấy điều kiện này để khách khỏi hiểu nhầm nè 📝\n\n${conds}\n\nMuốn Lomi viết luôn bài đăng thì nói “viết giúp” nha.`, "offer");
+        const title = `${pct ? pct.replace(/^giảm/iu, "GIẢM").toUpperCase() : "ƯU ĐÃI"}${when ? ` ${when.toUpperCase()}` : ""}`;
+        const body = short
+          ? `🎁 ${noun.replace(/^\p{L}/u, (x) => x.toUpperCase())} ${pct ?? "có ưu đãi"}${when ? ` ${when}` : ""}${sv ? " cho sinh viên" : ""}! Ghé liền nha 💚`
+          : `🎁 **${title}**\n${noun.replace(/^\p{L}/u, (x) => x.toUpperCase())} ${pct ? pct.toLowerCase() : "có ưu đãi"} ${sv ? "cho các bạn sinh viên " : ""}${when ? `vào ${when}` : ""} — ghé ăn cùng gia đình, bạn bè nha!\n${conds.replace(/^• (.*?): /gmu, "• $1: ")}`;
+        return out(`${short ? "Bản ngắn nè ✍️" : "Mẫu bài đăng ưu đãi nè ✍️ (điền ngày áp dụng và sửa cho đúng quán nha)"}\n\n${body}\n\nĐăng lên app: Hồ sơ → ⋯ → Hồ sơ doanh nghiệp → Ưu đãi / Deal → Thêm ưu đãi mới.`, "post");
+      }
+      const topic: BizTopic = tpNow ?? (write ? "post" : undefined) ?? prevBiz?.topic ?? detectBizTopic(allTxt) ?? (VN(/\b(khai trương|mới mở)\b/).test(` ${normalizeVi(allTxt)} `) ? "opening" : "newcust");
+      // câu chỉ kể thêm chi tiết ("giá tầm 25k", "khách chủ yếu sinh viên", "bán bún bò", "ngân sách ít") hoặc hỏi tiếp chung chung
+      const detail = VN(/\b(bán|giá|ngân sách|khách (chủ yếu|toàn|là|đa số)|gần (trường|chợ|khu)|cuối tuần|giảm \d+|sinh viên|học sinh|văn phòng|công nhân|dân cư|gia đình)\b/).test(nr);
+      const askMore = VN(/\b(có cách nào|cách nào|sao cho hợp|kiểu gì|làm sao|thế nào|nên làm gì|có nên|được không|hiệu quả|khác không|cách khác)\b/).test(nr);
+      if (ownerNow || detail || askMore || tpNow || write || (!!detectBizKind(raw).type && w <= 4)) {
+        if (topic === "post" && short) {
+          const offer = raw.match(/giảm\s*\d+\s*%/u)?.[0] ?? allTxt.match(/giảm\s*\d+\s*%/u)?.[0];
+          return out(`Bản ngắn nè ✍️\n\n“${noun.replace(/^\p{L}/u, (x) => x.toUpperCase())} ${offer ? `${offer} ` : ""}— ghé là có ưu đãi, ngon mà vừa túi tiền! Hẹn bạn nha 💚”\n\nSửa tên quán, thời gian áp dụng và điều kiện cho đúng trước khi đăng nha.`, "post");
+        }
+        const pre = detail && !tpNow && !ownerNow ? `Dạ, Lomi ghi nhận thêm (${raw.replace(/[.!?]+$/u, "")}) 📝 Vậy mấy ý hợp hơn cho ${noun} nè:\n\n` : "";
+        const prac = bizPractical(raw, { ...ctx, topic });
+        const ans = bizAnswer({ ...ctx, topic }, topic, !!prevBiz && !tpNow);
+        return out(prac ?? `${pre}${pre && ans.includes("①") ? ans.slice(ans.indexOf("①")) : ans}`, topic);
+      }
+    }
     // (0b) Vừa gợi ý quán / món mà lọc tiếp ("rẻ hơn đi", "cho 6 người", "có chỗ đậu ô tô") hay đổi món ("à đổi qua bún bò").
-    const searchCtx = prevA.some((m) => (m.places?.length ?? 0) > 0 || !!m.dish || !!m.search);
+    if (VN(/\b(ưu đãi|khuyến mãi|giảm giá|voucher)\b/).test(nr) && !VN(/\b(nhận|lấy|dùng|sử dụng|cách|làm sao|đăng|tạo|hết hạn|của tôi|của mình|đã lưu|mã)\b/).test(nr) && (raw.includes("?") || VN(/\b(không|ko|hông|nào)\s*$/).test(nr)) && !OWNER.test(nr) && w <= 10 && !lastA0?.dish && msgs.filter((m) => m.role === "assistant").slice(-6).some((m) => (m.places?.length ?? 0) > 0 || !!m.dish || !!m.search)) {
+      const recent = msgs.filter((m) => m.role === "assistant").slice(-6).reverse();
+      const lowQ = raw.normalize("NFC").toLowerCase();
+      const dId = detectDish(raw)?.id ?? DISHES.find((d) => d.vi.some((v) => lowQ.includes(`quán ${v}`)))?.id ?? recent.find((m) => m.dish)?.dish;
+      if (dId) {
+        const d = DISHES_BY_ID[dId];
+        const dp = recent.find((m) => m.dish === dId)?.dishPlace;
+        if (d) {
+          const res = await runDishSearch(d, [], { offer: true, ...(dp ? { place: dp } : {}) });
+          return { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: d.id, ...(dp ? { dishPlace: dp } : {}) };
+        }
+      }
+      const pl = (recent.find((m) => (m.places?.length ?? 0) > 0)?.places ?? []) as PlaceCard[];
+      const withOffer = pl.filter((p) => p.offer || p.offerCount > 0);
+      const content = withOffer.length
+        ? `Trong mấy chỗ lúc nãy, đang có ưu đãi nè 🎁\n${withOffer.slice(0, 4).map((p) => `• **${p.name}**${p.offer ? `: “${p.offer}”` : ""}`).join("\n")}\n\nBấm vào thẻ quán để xem chi tiết và điều kiện ưu đãi nha.`
+        : pl.length
+          ? "Mấy chỗ lúc nãy hiện **chưa đăng ưu đãi** nào trong app 🥲 Muốn tìm chỗ đang có ưu đãi thì nói “tìm quán có ưu đãi”, hoặc xem ở Khám phá (/kham-pha) nha."
+          : "Lomi chưa thấy ưu đãi nào cho chỗ đó trong app 🥲 Bạn xem thử ở Khám phá (/kham-pha), quán nào có ưu đãi sẽ hiện nhãn 🎁 nha.";
+      return { role: "assistant", content, local: true, places: withOffer.length ? withOffer : undefined, search: lastA0?.search, dish: lastA0?.dish };
+    }
+    const searchCtx = msgs.filter((m) => m.role === "assistant").slice(-3).some((m) => (m.places?.length ?? 0) > 0 || !!m.dish || !!m.search);
     if (searchCtx && w <= 12) {
       const nd = detectDish(raw);
-      if (nd && nd.id !== lastA0?.dish && VN(/\b(đổi|thôi|không phải|cơ|à|chuyển|qua)\b/).test(nr)) {
+      const curDish = lastA0?.dish ? DISHES_BY_ID[lastA0.dish] : undefined;
+      // "không phải quán ăn", "không phải Đà Lạt", "à không phải phở" → hỏi lại đúng ý, không lặp lại danh sách cũ
+      const notM = raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").match(/^(?:(?:à|ờ|ủa)\s+)?(?:không|ko|k|hông)\s+phải\s+(.{2,30})$/u);
+      if (notM && w <= 7 && (!nd || nd.id === lastA0?.dish)) {
+        const x = notM[1];
+        const isPlace = !!detectPlace(x);
+        return { role: "assistant", content: isPlace ? `Dạ, không phải ${x} 🙏 Vậy bạn muốn tìm ở **khu nào** nè? Gõ tên thành phố hay khu vực (ví dụ “Nha Trang”, “gần chợ Bến Thành”) là Lomi tìm lại liền.` : `Dạ, không phải ${x} 🙏 Vậy bạn muốn tìm ${curDish ? "món gì" : "loại chỗ nào"} nè — ví dụ ${curDish ? "bún bò, cơm tấm, lẩu…" : "quán cà phê, quán nhậu, tiệm bánh, spa…"}? Gõ là Lomi tìm lại liền.`, local: true, search: lastA0?.search, places: undefined };
+      }
+      // đổi khu vực ("Nha Trang cơ", "ở Vũng Tàu thôi")
+      const np = w <= 6 ? detectPlace(raw) : null;
+      if (np && !nd && (VN(/\b(cơ|thôi|đổi|chuyển|ở|tại|qua|gần)\b/).test(nr) || w <= 3)) {
+        if (curDish) {
+          const res = await runDishSearch(curDish, [], { place: np.label });
+          return { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, dish: curDish.id, dishPlace: np.label };
+        }
+        const it0 = prevA.find((m) => m.search)?.search;
+        if (it0) {
+          const it: SearchIntent = { ...it0, area: np.area, place: np.label };
+          const res = await runSearch(it);
+          return { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, search: it };
+        }
+      }
+      if (VN(/\b(tìm quán (trước|tiếp|lại)|xem quán (lại|tiếp|trước)|quay lại tìm quán)\b/).test(nr)) {
+        const pm = msgs.filter((m) => m.role === "assistant").slice(-6).reverse().find((m) => (m.places?.length ?? 0) > 0);
+        if (pm) return { role: "assistant", content: `Dạ, mình tìm quán tiếp nha 👇 Đây là mấy chỗ ${pm.dish ? `**${DISHES_BY_ID[pm.dish]?.name ?? ""}** ` : ""}lúc nãy${pm.dishPlace ? ` (khu ${pm.dishPlace})` : ""} — muốn đổi khu, đổi món hay chỉ lấy quán có ưu đãi cứ nói Lomi.`, local: true, places: pm.places, dish: pm.dish, dishPlace: pm.dishPlace, search: pm.search, quick: pm.quick };
+      }
+      const swU = !nd ? raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").match(/^(?:(?:à|ờ|thôi)\s+)?(?:đổi|chuyển)\s+(?:qua|sang)\s+(?:món\s+|quán\s+)?(.{2,25})$/u) : null;
+      if (swU && !detectPlace(swU[1]))
+        return { role: "assistant", content: `Dạ, đổi qua **${swU[1]}** nha 🙏 Món này Lomi chưa có trong danh sách tìm theo món, nên chưa lọc quán chính xác được — bạn gõ “${swU[1]}” ở ô tìm kiếm trong Khám phá (/kham-pha) là ra các quán có ghi món đó. Hoặc chọn món gần giống bên dưới để Lomi tìm liền nha.`, local: true, quick: ["Bánh cuốn", "Bún", "Phở"].filter((x) => normalizeVi(x) !== normalizeVi(swU[1])), search: lastA0?.search };
+      if (nd && nd.id !== lastA0?.dish && VN(/\b(đổi|thôi|không phải|cơ|à|chuyển|qua|có món|món)\b/).test(nr)) {
         const dm = await replyDishShopsMsg(raw, nd.id);
         if (dm) return dm;
       }
@@ -638,18 +913,56 @@ export function AiChat({
             return { role: "assistant", content: `🔮 **${c.name.vi}** (${c.name.en})\n\n• **Xuôi:** ${c.up.vi}\n• **Ngược:** ${c.rev.vi}\n\nTarot là để tham khảo, soi lại lòng mình cho vui thôi nha — không lá nào quyết định tương lai của bạn.`, local: true };
         }
       }
-      const prevT = prevA.map((m) => m.tarot ?? m.tarotRef ?? m.tarotBack?.r).find(Boolean) as TarotReading | undefined;
+      const prevT = msgs.filter((m) => m.role === "assistant").slice(-4).reverse().map((m) => m.tarot ?? m.tarotRef ?? m.tarotBack?.r).find(Boolean) as TarotReading | undefined;
+      // "có phải người cũ không" ngay sau trải bài
+      if (prevT && w <= 8 && VN(/\bcó phải (là )?(người cũ|người yêu cũ|ny cũ|ex|người đó|người ấy|anh ấy|cô ấy)\b/).test(nr))
+        return { role: "assistant", content: `Bài tarot không chỉ ra **một người cụ thể** được đâu nha 🔮 Nó chỉ gợi năng lượng, cảm xúc quanh chuyện bạn đang hỏi. Nếu trong lòng bạn đang nghĩ tới người cũ thì thử đọc lại mấy lá theo hướng đó, xem chỗ nào chạm vào bạn:\n\n${readingRecap(prevT)}`, local: true, tarotRef: prevT };
+      // "người ấy nghĩ gì", "có hết nợ năm nay không" — câu hỏi mới cho bài
+      if (prevT && w <= 10 && (VN(/\b(người ấy|anh ấy|cô ấy|họ|crush|ny) nghĩ gì\b/).test(nr) || (VN(/\b(có|sẽ)( \S+){0,5} (không|ko|hông|chứ|hả)\s*$/).test(nr) && VN(/\b(nợ|tiền|giàu|việc|công việc|thăng chức|cưới|yêu|quay lại|thi|đậu)\b/).test(nr)))) {
+        const r = drawForQuestion(raw.replace(/[?]+$/u, ""));
+        return { role: "assistant", content: readingText(r, "vi"), local: true, tarot: r, ask: readingAiPrompt(r, "vi"), quick: tarotFollowUps(r) };
+      }
       // "The Fool có phải ngu ngốc không?"
       if (VN(/\b(ngu ngốc|ngốc|khờ)\b/).test(nr) && prevA.some((m) => /The Fool|Kẻ Khờ/u.test(m.content)))
         return { role: "assistant", content: "Không đâu nha 😄 **The Fool (Kẻ Khờ)** trong tarot không có nghĩa là ngu ngốc — lá này nói về **khởi đầu mới**, sự tò mò, dám bước đi dù chưa biết hết đường phía trước. Ngược lại thì nhắc mình đừng quá liều lĩnh, bốc đồng. Mới học tarot mà gặp lá này là hợp ghê luôn đó 🔮", local: true };
       // (chỉ câu hỏi lá này "tốt / xấu", "đừng hù" — các câu hỏi nghĩa lá, lá ngược, đổi chủ đề đã có lớp tarot riêng lo)
       if (prevT && VN(/\b(tốt không|tốt hả|xấu hả|xấu không|lá xấu|đừng hù|hù em|hù tui|sợ quá)\b/).test(nr))
         return { role: "assistant", content: `Trong tarot không có lá **tốt** hay **xấu** tuyệt đối đâu nha 😊 Mỗi lá chỉ gợi một góc nhìn — lá nghe “đáng sợ” thường là lời nhắc để mình chuẩn bị, không phải điềm xấu.\n\n${readingRecap(prevT)}`, local: true, tarotRef: prevT };
+      // "lá này sao chị", "em chọn bên trái" (vừa rút xong) → nói lại lá vừa rút
+      if (prevT && w <= 7 && (VN(/^ (lá này sao|lá này thì sao|lá đó sao)( (chị|em|anh|bạn|lomi|ta|vậy|nè))? $/).test(nr) || VN(/\bchọn (lá )?(bên )?(trái|phải|giữa)\b/).test(nr)))
+        return { role: "assistant", content: `${VN(/\bchọn\b/).test(nr) ? "Lá bạn chọn đã lật ra rồi nè 🔮 " : ""}${readingRecap(prevT)}`, local: true, tarotRef: prevT };
+      // "nói về tiền", "xem về công việc" ngay sau khi rút → rút cho chủ đề đó
+      const tTopic = prevT && w <= 6 ? nr.match(/^ (?:(?:a|o|thoi) )?(?:(?:em|anh|chi|tui|minh) )?(?:(?:noi|xem|hoi|coi|con|doi qua|doi sang|chuyen qua|chuyen sang) )?(?:ve |chuyen )?(tien|tien bac|tai chinh|cong viec|tinh yeu|tinh cam|tinh duyen|hoc hanh|suc khoe) (?:di |nha |thi sao )?$/u) : null;
+      if (tTopic && !VN(/\bsức khoẻ|sức khỏe\b/).test(nr)) {
+        const r = drawForQuestion(`chuyện ${raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").replace(/^(à|ờ|thôi)\s+/u, "").replace(/^(em|anh|chị|tui|mình)\s+/u, "").replace(/^(nói|xem|hỏi|coi|còn|đổi qua|đổi sang|chuyển qua|chuyển sang)\s+/u, "").replace(/^(về|chuyện)\s+/u, "").replace(/\s+(đi|nha|thì sao)$/u, "")}`);
+        return { role: "assistant", content: readingText(r, "vi"), local: true, tarot: r, ask: readingAiPrompt(r, "vi"), quick: tarotFollowUps(r) };
+      }
       // "rút lá vui vui coi", "chọn lá bên trái", "em chọn số 3" — xin rút bài
       if (VN(/\b(rút (một |1 |cho (em|anh|tui|mình) )?(lá|bài)|bốc (một |1 )?(lá|bài)|chọn (lá|số) \S+|lật (một |1 )?lá)\b/).test(nr) && !detectTarot(raw)) {
         const r = drawForQuestion("hôm nay");
         return { role: "assistant", content: readingText(r, "vi"), local: true, tarot: r, ask: readingAiPrompt(r, "vi"), quick: tarotFollowUps(r) };
       }
+    }
+    // (1--) Sửa ý khi đang nói một thuốc: "nhầm, ba em" (đổi người dùng thuốc), "không phải thuốc đau đầu".
+    {
+      const pd = prevA.find((m) => m.drug?.name && m.drug.kind !== "overdose")?.drug;
+      const pdName = pd?.name ?? prevU.map((m) => drugStatement(m.content)?.name).find(Boolean);
+      if (pdName && w <= 7) {
+        const lowC = raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").trim();
+        const fixWho = lowC.match(/^(?:(?:à|ờ)\s+)?(?:nhầm|lộn|nhầm rồi|xin lỗi)\s*,?\s+(?:là\s+)?((?:vợ|chồng|mẹ|má|ba|bố|cha|con|bé|ông|bà|chị|anh|em|cô|chú|dì|bạn)(?:\s+(?:em|anh|chị|tui|tôi|mình|nội|ngoại))?)$/u);
+        if (fixWho)
+          return { role: "assistant", content: `Dạ, Lomi hiểu rồi — người dùng **${pdName}** là ${fixWho[1]} nha 📝 ${fixWho[1].replace(/^\p{L}/u, (c) => c.toUpperCase())} bao nhiêu tuổi, có bệnh nền khác hay đang uống thêm thuốc nào không? Bạn muốn hỏi gì về thuốc này?`, local: true, drug: { kind: pd?.kind ?? "what", name: pdName, id: pd?.id }, health: hCtx ?? {} };
+        const notD = lowC.match(/^(?:(?:à|ờ)\s+)?(?:không|ko|k)\s+phải\s+(thuốc\s+.+)$/u);
+        if (notD)
+          return { role: "assistant", content: `Dạ, Lomi hiểu — mình đang nói **${pdName}**, không phải ${notD[1]} nha 🙏 Bạn biết tên thuốc không (xem trên hộp / vỉ)? Muốn hỏi gì — cách uống, uống chung với thuốc khác, tác dụng phụ…?`, local: true, drug: { kind: pd?.kind ?? "what", name: pdName, id: pd?.id }, health: hCtx ?? {} };
+      }
+    }
+    // (1-) "Vợ anh hỏi thuốc cảm", "mẹ em muốn hỏi về thuốc ho" (kể, chưa hỏi gì) → hỏi lại cần biết gì, giữ tên thuốc cho câu sau.
+    const askD = raw.normalize("NFC").toLowerCase().replace(/[.!…]+$/u, "").match(/^(?:(?:à|ờ|mà|còn|à mà)\s+)*(?:(vợ|chồng|mẹ|ba|bố|con|bé|chị|anh|em|bà|ông|cô|chú|bạn|tui|tôi|mình|tớ)(?:\s+(?:em|anh|chị|tui|tôi|mình))?\s+)?(?:muốn\s+|cần\s+)?hỏi\s+(?:về\s+|chút\s+về\s+)?(thuốc\s+[\p{L}]+(?:\s+[\p{L}]+)?)$/u);
+    if (askD && !raw.includes("?")) {
+      const nm = askD[2];
+      const who = askD[1] && !/^(tui|tôi|mình|tớ|em|anh|chị)$/u.test(askD[1]) ? `${askD[1]} ${raw.normalize("NFC").toLowerCase().match(new RegExp(`${askD[1]}\\s+(em|anh|chị|tui|tôi|mình)\\b`, "u"))?.[1] ?? ""}`.trim() : "";
+      return { role: "assistant", content: `Dạ, ${who ? `${who} muốn` : "bạn muốn"} hỏi gì về **${nm}** nè 💊 — cách uống, uống chung với thuốc khác, hay đang mang thai / cho con bú, có bệnh nền (huyết áp, tiểu đường…)?\n\n${VN(/\b(cảm|cúm|ho|sổ mũi)\b/).test(` ${normalizeVi(nm)} `) ? "Lưu ý chung: nhiều thuốc cảm, thuốc ho **trùng hoạt chất** (hay gặp nhất là paracetamol), đừng uống 2 loại cùng lúc. " : ""}Lomi không kê thuốc hay nêu liều nha.`, local: true, drug: { kind: "what", name: nm }, health: hCtx ?? {} };
     }
     // (1) Kể đang dùng một thuốc ("mẹ em uống metformin") → nhận đúng tên thuốc; câu sau hỏi tiếp theo thuốc đó.
     const ds0 = drugStatement(raw);
@@ -659,6 +972,9 @@ export function AiChat({
       const whoT = ds.who && !/^(tui|tôi|em|anh|chị|mình|tớ)$/u.test(ds.who) ? `${ds.who} ` : "";
       return { role: "assistant", content: `Dạ, ${whoT}đang dùng **${ds.name}** 💊 Bạn muốn hỏi gì về thuốc này — cách uống (trước / sau ăn), tác dụng phụ, quên liều, uống chung với thuốc hay đồ uống khác, hay dùng khi mang thai / cho con bú?\n\nLomi không kê thuốc hay nêu liều — liều và đổi thuốc là do bác sĩ / dược sĩ quyết nha.`, local: true, health: hCtx ?? {} }; // (không gắn cờ drug: câu sau đọc tên thuốc từ tin của người dùng — lib/lomiDrug.prevDrugCtx vẫn chạy như cũ)
     }
+    // Kể đang dùng thuốc sắt / vitamin (câu kể, chưa hỏi) → ghi nhận, giữ tên cho câu sau.
+    if (ds && !raw.includes("?") && w <= 10 && VN(/\b(thuốc sắt|viên sắt|vitamin|thuốc bổ)\b/).test(` ${normalizeVi(ds.name)} `) && !looksLikeQuestion(raw))
+      return { role: "assistant", content: `Dạ, đang dùng **${ds.name}** 💊 Bạn muốn hỏi gì — uống lúc nào, uống chung với sữa / trà / cà phê được không, hay ăn gì cho hấp thu tốt?\n\nLomi không nêu liều nha — liều và uống bao lâu là theo bác sĩ / tờ hướng dẫn.`, local: true, drug: { kind: "what", name: ds.name }, health: hCtx ?? {} };
     const prevDrug = prevA.find((m) => m.drug?.name && m.drug.kind !== "overdose")?.drug;
     const dName = prevDrug?.name ?? prevU.map((m) => drugStatement(m.content)?.name).find(Boolean);
     // (1a) Đang nói thuốc tránh thai mà kể / hỏi tiếp ngắn ("quên một viên thì sao?", "vỉ 21 viên", "hôm qua quên á").
@@ -672,8 +988,9 @@ export function AiChat({
     }
     // (1b) Quên một liều ("em quên một liều thuốc huyết áp").
     const md = raw.normalize("NFC").toLowerCase().match(/quên\s+(?:uống\s+)?(?:mất\s+)?(?:một|1)?\s*(?:liều|cữ|lần uống|viên)\s*((?:thuốc\s+)?[\p{L}\d-]+(?:\s+[\p{L}\d-]+){0,2})?/u);
-    if (md && w <= 14 && !VN(/\b(tránh thai|ngừa thai)\b/).test(nr) && !drugAsk(raw, { inHealth: true })) {
-      const nm = md[1]?.trim();
+    const md2 = !md && w <= 30 && VN(/\bquên (uống|chưa uống|mất)\b/).test(nr) && VN(/\bthuốc\b/).test(nr) && VN(/\b(uống bù|uống lại|có uống|bù|giờ (có )?uống|uống tiếp)\b/).test(nr) && !VN(/\b(uống (thuốc )?rồi|đã uống|không nhớ|uống chưa|lần nữa|hai lần|2 lần)\b/).test(nr);
+    if ((md && w <= 14 || md2) && !VN(/\b(tránh thai|ngừa thai)\b/).test(nr) && (md2 || !drugAsk(raw, { inHealth: true }))) {
+      const nm = md?.[1]?.trim() ?? raw.normalize("NFC").toLowerCase().match(/thuốc\s+(huyết áp|tiểu đường|tim|mỡ máu|chống đông|tuyến giáp|[a-z]{5,})/u)?.[0];
       return { role: "assistant", content: `Quên một liều thì **đừng uống gấp đôi** ở lần sau để bù nha — uống dồn dễ thành quá liều.\n• Cách xử lý (uống bù ngay hay bỏ qua liều đó) **tuỳ từng thuốc** và cách giờ uống kế tiếp bao lâu — xem phần "quên liều" trong tờ hướng dẫn, hoặc gọi hỏi dược sĩ / bác sĩ đã kê\n• Thuốc huyết áp, tim mạch, tiểu đường, chống đông thì hỏi lại sớm trong ngày cho chắc\n• Hay quên thì đặt nhắc giờ trên điện thoại, dùng hộp chia thuốc theo ngày\n\nBạn nhớ ra lúc mấy giờ, còn bao lâu nữa tới giờ uống kế tiếp?`, local: true, drug: { kind: "stop", name: nm || "thuốc" }, health: hCtx ?? {} };
     }
     // (2) Đang nói một thuốc mà hỏi / kể tiếp không nhắc tên thuốc.
@@ -693,6 +1010,15 @@ export function AiChat({
         const ab = list3Reply("kháng sinh thấy đỡ rồi ngưng được không");
         if (ab) return drugOut(`Còn mấy ngày thuốc thì cứ uống cho **hết đợt** như bác sĩ kê nha. ${ab.text}`);
       }
+      // Thuốc sắt + đồ uống: chỉ nói điều nguồn dinh dưỡng đã kiểm chứng (vitamin C giúp hấp thu; tránh trà, cà phê quanh bữa ăn).
+      if (VN(/\b(sắt)\b/).test(` ${normalizeVi(dName)} `) && VN(/\b(sữa|trà|cà phê|nước cam|cam|chanh|vitamin c|nước ngọt|uống với|uống chung|uống cùng)\b/).test(nr)) {
+        const c = VN(/\b(nước cam|cam|chanh|vitamin c)\b/).test(nr);
+        const tea = VN(/\b(trà|cà phê)\b/).test(nr);
+        const milk = VN(/\bsữa\b/).test(nr);
+        return drugOut(`${c ? "Được nha 🍊 Đồ giàu **vitamin C** (cam, chanh, ớt chuông…) ăn / uống kèm giúp cơ thể **hấp thu sắt tốt hơn**." : tea ? "**Trà và cà phê** làm cơ thể hấp thu sắt kém đi — nên tránh uống trong khoảng **1 giờ trước và sau** khi ăn / uống sắt." : milk ? "Riêng **sữa** thì phần dữ liệu đã kiểm chứng của Lomi chưa nói rõ, nên Lomi không dám nói chắc được hay không — xem tờ hướng dẫn trong hộp thuốc hoặc hỏi dược sĩ nha." : "Phần dữ liệu đã kiểm chứng của Lomi chưa nói riêng về thứ này, nên Lomi không dám nói chắc."}\n• Điều đã kiểm chứng: ăn kèm đồ giàu vitamin C giúp hấp thu sắt; tránh trà, cà phê khoảng 1 giờ trước và sau bữa ăn\n• Uống bao nhiêu, bao lâu thì theo bác sĩ / tờ hướng dẫn — Lomi không nêu liều`);
+      }
+      if (VN(/\b(có cần|cần|nên) (hỏi|gặp|đi) (bác sĩ|dược sĩ)\b/).test(nr))
+        return drugOut(`Có nha 👍 Với **${dName}**, nhất là khi muốn uống chung thuốc / vitamin khác, đang có bệnh nền hay thấy triệu chứng lạ, hỏi **dược sĩ** (ra nhà thuốc, mang theo hộp thuốc) hoặc **bác sĩ đã kê** là chắc nhất. Đừng tự ngưng, tự đổi liều thuốc theo đơn trước khi hỏi họ nha.`);
       const preg = VN(/\b(bầu|mang thai|có thai|cho con bú|đang bú)\b/).test(nr);
       const det = parseDetail(raw);
       if (det && !preg && (det.who?.kind === "elder" || (det.years !== undefined && det.years >= 60)))
@@ -718,9 +1044,13 @@ export function AiChat({
     const medNow = lastA0?.med;
     const hLabel = hCtx?.label ?? lastA0?.sx?.[0];
     if (!medNow && !hLabel && !lastA0?.health) return null;
-    const mt = medNow ? await loadMedTopic(medNow.id) : null;
-    const tname = mt ? medName(mt) : (hLabel ?? "");
     const recentU = prevU.map((m) => m.content).join(" ");
+    const hLabelVi = hLabel ? (symptomLabel(hLabel) ?? hLabel) : undefined;
+    // Chỉ có triệu chứng (chưa có chủ đề kiến thức) → tìm chủ đề theo triệu chứng; trẻ nhỏ sốt → "sốt ở trẻ em".
+    const kidNow = VN(/\b(bé|con em|con anh|con chị|con tui|con mình|cháu|em bé|\d+ tháng)\b/).test(` ${normalizeVi(recentU)} `);
+    const sxMed = !medNow && hLabelVi === "sốt" && !hCtx?.subject?.startsWith("diet") ? (kidNow ? "sot-o-tre-em" : "sot") : null;
+    const mt = medNow ? await loadMedTopic(medNow.id) : sxMed ? await loadMedTopic(sxMed) : null;
+    const tname = mt ? medName(mt) : (hLabelVi ?? "");
     // (3a0) Đang dị ứng / mề đay / vừa ăn, uống gì mà kể sưng môi, lưỡi, họng hay khó thở → phản vệ, gọi 115.
     if (VN(/\b((môi|lưỡi|họng|mặt|mí mắt|cổ họng)( \S+){0,2} sưng|sưng (môi|lưỡi|họng|mặt|mí mắt)|khó thở|thở khò khè|nghẹn họng|thở rít)\b/).test(nr) && VN(/\b(dị ứng|mề đay|nổi mẩn|ngứa|phát ban|ong|thuốc|hải sản|tôm|cua|đậu phộng)\b/).test(` ${normalizeVi(`${recentU} ${tname} ${lastA0?.content ?? ""}`)} `))
       return { role: "assistant", content: "🚨 Đang nổi mề đay / dị ứng mà **sưng môi, lưỡi, mặt, họng hay khó thở** là dấu hiệu có thể **sốc phản vệ** — gọi **115** ngay hoặc nhờ người chở tới cấp cứu gần nhất, đừng chờ xem có tự hết không.\n• Nếu có bút tiêm adrenaline (epinephrine) được kê sẵn thì dùng ngay theo hướng dẫn\n• Ngồi thẳng cho dễ thở (khó thở) hoặc nằm, kê chân cao (choáng, muốn xỉu); có người ở cạnh\n\nBạn gọi được chưa?", local: true, health: hCtx ?? { label: tname }, ...(medNow ? { med: medNow } : {}) };
@@ -731,7 +1061,15 @@ export function AiChat({
     const det = parseDetail(raw);
     if (det) {
       const fever = VN(/\bsốt\b/).test(` ${normalizeVi(`${tname} ${recentU}`)} `);
-      return { role: "assistant", content: detailReply(det, tname, fever), local: true, ...(medNow ? { med: medNow } : {}), health: hCtx ?? { label: tname }, sx: lastA0?.sx };
+      return { role: "assistant", content: detailReply(det, det.who?.kind === "child" || (det.years !== undefined && det.years < 12) || det.months !== undefined ? (hLabelVi ?? tname) : tname, fever), local: true, ...(medNow ? { med: medNow } : mt && sxMed ? { med: { id: sxMed } } : {}), health: hCtx ?? { label: tname }, sx: lastA0?.sx };
+    }
+    // (3b2) Kể thêm một triệu chứng ngắn ("ho nữa", "thêm sổ mũi", "nôn luôn").
+    const addSx = nr.match(/^ (?:(?:bé|con|cháu|em|anh|chị|mẹ|ba)\s+)?(?:(?:bị|có)\s+)?(?:thêm\s+)?(ho|so mui|nghet mui|non|oi|tieu chay|phat ban|noi man|dau hong|dau dau|dau bung|kho tho|met)\s*(?:nua|luon|them|nua roi)?\s*$/u);
+    if (addSx && w <= 5 && (nr.includes(" nua") || nr.includes(" them") || nr.includes(" luon"))) {
+      const lbl = { ho: "ho", "so mui": "sổ mũi", "nghet mui": "nghẹt mũi", non: "nôn", oi: "ói", "tieu chay": "tiêu chảy", "phat ban": "phát ban", "noi man": "nổi mẩn", "dau hong": "đau họng", "dau dau": "đau đầu", "dau bung": "đau bụng", "kho tho": "khó thở", met: "mệt" }[addSx[1]] ?? addSx[1];
+      const kid = kidNow;
+      const flags = kid ? "bé thở nhanh, thở rút lõm ngực, khò khè, môi tím, li bì, bỏ bú / bỏ ăn, sốt cao khó hạ, nôn nhiều" : "khó thở, đau ngực, sốt cao kéo dài, nôn nhiều, lừ đừ";
+      return { role: "assistant", content: `${lbl === "khó thở" ? "🚨 Khó thở thì đừng chờ nha — gọi **115** hoặc đi cấp cứu ngay.\n\n" : ""}Dạ, Lomi ghi nhận ${kid ? "bé" : "bạn"} có thêm **${lbl}**${tname ? ` (cùng với ${hLabelVi ?? tname})` : ""} 📝\n• Đi khám **sớm** nếu: ${flags}\n• Trong lúc theo dõi: cho uống đủ nước, nghỉ ngơi, ghi lại nhiệt độ và triệu chứng theo giờ để kể bác sĩ\n\nBạn muốn hỏi tiếp phần nào — ăn uống, bao lâu thì đỡ hay khi nào cần đi khám?`, local: true, health: { ...(hCtx ?? {}), label: hCtx?.label ?? tname }, ...(medNow ? { med: medNow } : mt && sxMed ? { med: { id: sxMed } } : {}) };
     }
     if (!mt || findMedId(raw)) return null;
     // (3c) Vừa trả lời một MÓN ("Với **Viêm dạ dày**: **đồ uống có caffeine** nên **hạn chế**") mà hỏi "uống mỗi ngày" / "bỏ hẳn không".
@@ -1414,7 +1752,7 @@ export function AiChat({
       // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow):
       if (!en) {
         // (a) Vừa nhận lời hỗ trợ khủng hoảng mà kể tiếp "em đang một mình", "không biết có chịu nổi không" → vẫn giữ an toàn là ưu tiên.
-        const recentA = msgs.filter((m) => m.role === "assistant").slice(-2);
+        const recentA = msgs.filter((m) => m.role === "assistant").slice(-4);
         if (recentA.some((m) => CRISIS_SIG.test(m.content))) {
           const cf = crisisFollow(raw, lastA0?.content ?? "");
           if (cf) return localReply(q, { role: "assistant", content: cf, local: true, heart: "sad", heartDepth: (lastA0?.heartDepth ?? 1) + 1 });
@@ -1566,7 +1904,9 @@ export function AiChat({
         });
       }
       // b) Đang trong cuộc tư vấn → hiểu tin này theo ngữ cảnh (chủ đề mới, "thêm ý khác", kể thêm chi tiết…).
-      if (lastA?.biz && !lastA.bizPick && !detectTarot(q)) {
+      // 31/10 (list 5): đang tư vấn quán mà chuyển sang hỏi thuốc / bệnh / tìm quán → không kéo về ý tưởng kinh doanh.
+      const offBiz = !!(findDrug(q) || drugAsk(q) || findMedId(q) || VN(/\b(thuốc|bầu|mang thai|có thai|đau|sốt|bệnh|bác sĩ|nhức|tiêu chảy|nôn ói)\b/).test(q) || (detectSearch(q) && !/\b(quán|tiệm|shop) (của )?(em|anh|chị|tui|tôi|mình)\b/u.test(q.toLowerCase())));
+      if (lastA?.biz && !lastA.bizPick && !detectTarot(q) && !offBiz) {
         const b = lastA.biz;
         // 22/10 (QA V5): đang tư vấn mở tiệm mà kể vốn / mặt bằng / cọc / hỏi "còn lại bao nhiêu" → sổ tiền (lib/lomiV4), không lặp lại ý tưởng khai trương.
         const lg = shopLedgerReply(q, msgs.filter((m) => m.role === "user").slice(-24).map((m) => m.content));
@@ -1683,12 +2023,13 @@ export function AiChat({
         const hh = heartOn && lastA?.heart ? heartAdviceHint(lastA.heart, raw) : null;
         if (hh && !msgs.slice(-6).some((m) => m.role === "assistant" && m.content.includes(hh.slice(0, 40))))
           return localReply(q, { role: "assistant", content: hh, local: true, heart: lastA!.heart, heartDepth: (lastA!.heartDepth ?? 0) + 1, story: lastA!.story });
+        const kf = kidFeverFollow(q, userHist);
         const ex =
           v4Reply(q, { last: lastA?.content, hist: msgs.filter((m) => m.role === "user").slice(-24).map((m) => m.content), lastHeart: lastA?.heart, lastHealth: !!hCtx }) ??
           safetyNowReply(q) ??
           drinkDriveReply(q) ??
           weightReply(q, userHist) ??
-          kidFeverFollow(q, userHist) ??
+          kf ??
           allergyAteReply(q, userHist) ??
           healthFollowReply(q, lastA?.content) ??
           mathReply(q) ??
@@ -1700,7 +2041,8 @@ export function AiChat({
           inflationReply(q, lastA?.content) ??
           whoNeedsCv(q, userHist) ??
           knowledgeReply(q);
-        if (ex) return localReply(q, { role: "assistant", content: ex, local: true });
+        // 31/10: câu sốt của bé giữ mạch sức khoẻ cho câu sau ("ho nữa", "ăn uống sao", "bao lâu khỏi").
+        if (ex) return localReply(q, { role: "assistant", content: ex, local: true, ...(kf && ex === kf ? { health: { ...(hCtx ?? {}), label: hCtx?.label ?? "sốt" } } : {}) });
         const bk = detectBizKind(q);
         const bp = !lastA?.heart ? bizPractical(q, { ...(bk.type ? bk : {}) }) : null;
         if (bp) return bizReply(q, { ...(bk.type ? bk : {}) }, detectBizTopic(q) ?? "opening");

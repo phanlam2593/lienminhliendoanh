@@ -28,7 +28,11 @@ const SELF = "tui|tôi|em|anh|chị|mình|tớ|tao";
 export function parseDetail(q: string): Detail | null {
   if (words(q) > 9) return null;
   // bỏ từ nối ở đầu ("mà em mới 24 tuổi", "còn bé 4 tuổi") — "mà" bỏ dấu trùng với "má"
-  const low = q.normalize("NFC").toLowerCase().replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim().replace(/^(mà|nhưng|còn|với lại|à|ừ|dạ|ờ)\s+/u, "");
+  const low = q.normalize("NFC").toLowerCase().replace(/[?!.,]/g, " ").replace(/\s+/g, " ").trim().replace(/^(mà|nhưng|còn|với lại|à|ừ|dạ|ờ)\s+/u, "")
+    // 31/10 (list 5 — sửa ý): "Lộn, 3 tuổi chứ không phải 3 tháng", "nhầm, ba em", "không phải 3 tháng mà là 3 tuổi"
+    .replace(/^(?:(?:à|ờ)\s+)?(?:lộn|nhầm|nhầm rồi|xin lỗi|sorry)\s+/u, "")
+    .replace(/\s+(?:chứ|chớ)\s+(?:không|ko|k)\s+phải\b.*$/u, "")
+    .replace(/^(?:không|ko|k)\s+phải\s+.*?\s+mà\s+(?:là\s+)?/u, "");
   const n = ` ${normalizeVi(low)} `;
   const d: Detail = {};
   const age = n.match(VN(/\b(\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)\s*(tháng|tuổi|t)\b(?! (nay|rồi nay))/));
@@ -112,7 +116,7 @@ export function followAspect(q: string): FollowAspect | null {
   if (VN(/\b(nghỉ học|đi học (được|lại|chưa)|đi nhà trẻ|đi mẫu giáo|đi làm (được|lại) (chưa|không|ko|k)|cách ly|ở nhà mấy ngày|nghỉ mấy ngày)\b/).test(n)) return "school";
   if (VN(/\b(ăn chung|uống chung ly|dùng chung|ở chung|ngủ chung|hôn|lây qua|lây cho|có lây)\b/).test(n)) return "spread";
   if (VN(/\b(bao lâu|mấy ngày|mấy tuần|lâu không) (mới |thì |là )?(khỏi|hết|lành|đỡ|bớt)|bao lâu (mới |thì )?khỏi|khi nào (mới |thì )?(khỏi|hết|đỡ)\b/).test(n)) return "course";
-  if (!VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|bây giờ|giờ này|lát nữa|bữa nay|ăn gì ngon|quán)\b/).test(n) && VN(/\b(ăn gì (tốt|được|cho|đây)|ăn gì|ăn uống (sao|thế nào|ra sao|như nào|như thế nào|gì)|nên ăn|kiêng gì|ăn tối lúc nào|ăn (tối|khuya) (lúc|mấy giờ|được không))\b/).test(n)) return "diet";
+  if (!VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|bây giờ|giờ này|lát nữa|bữa nay|ăn gì ngon|quán|đi ăn)\b/).test(n) && VN(/\b(ăn gì (tốt|được|cho|đây)|ăn gì|ăn uống (sao|thế nào|ra sao|như nào|như thế nào|gì)|nên ăn|kiêng gì|ăn tối lúc nào|ăn (tối|khuya) (lúc|mấy giờ|được không))\b/).test(n)) return "diet";
   if (VN(/\b(có cần (đi )?khám|đi khám (không|chưa|được không)|có nguy hiểm|nguy hiểm không|có sao không)\b/).test(n)) return "doctor";
   if (VN(/\b(làm sao|làm gì|giờ sao|sao giờ|phải làm sao|nên làm gì|cho đỡ|xử lý sao|chăm sóc sao)\b/).test(n)) return "care";
   return null;
@@ -143,7 +147,7 @@ export function drugStatement(q: string): { who?: string; name: string } | null 
 // ═══════════════ Sau lời hỗ trợ khủng hoảng ═══════════════
 export const CRISIS_SIG = /không phải một mình|096 306 1414|nghĩ tới chuyện không muốn sống nữa\?/u;
 const ALONE = VN(/\b(một mình|không có ai|chẳng có ai|không ai bên cạnh|ở nhà một mình|đang ở một mình)\b/);
-const HEAVY = VN(/\b(chịu (không )?nổi|không chịu nổi|nặng nề|sợ chính mình|sợ bản thân|sợ mình (sẽ )?làm|không kiểm soát|thường xuyên|lâu rồi|mỗi ngày|ngày nào cũng|không muốn nói|chẳng muốn nói|không ai hiểu|mệt lắm|mệt quá|tuyệt vọng|bế tắc|biến mất|không muốn ai|kết thúc|buông|không còn sức)\b/);
+const HEAVY = VN(/\b(chịu (không )?nổi|không chịu nổi|nặng nề|sợ chính mình|sợ bản thân|sợ mình (sẽ )?làm|không kiểm soát|thường xuyên|lâu rồi|mỗi ngày|ngày nào cũng|không muốn nói|chẳng muốn nói|không ai hiểu|mệt lắm|mệt quá|tuyệt vọng|bế tắc|biến mất|không muốn ai|kết thúc|buông|không còn sức|chẳng ai quan tâm|không ai quan tâm|không ai cần|chẳng ai cần|vô nghĩa|em sợ|sợ lắm|sợ quá|không muốn tiếp tục)\b/);
 /** Câu kể tiếp ngay sau lời hỗ trợ khủng hoảng → vẫn giữ an toàn là ưu tiên. null nếu không phải. */
 export function crisisFollow(q: string, prev = ""): string | null {
   const n = N(q);
@@ -190,6 +194,9 @@ export function appFollow(q: string, prevFaqId: string | undefined, recentFaqIds
   // Cài app ra màn hình chính
   if (inCtx("install", "update", "forgot", "forgotnoemail") && VN(/\b(chrome|android|ba chấm|3 chấm|không thấy (nút|mục|chữ)?( thêm| cài)?|màn hình chính|safari|iphone)\b/).test(n))
     return { faqId: "install", text: "Trên **Chrome Android** bạn thử vầy nha:\n1. Mở ilomi.live bằng Chrome (không mở trong Zalo / Messenger / Facebook)\n2. Bấm **⋮** góc trên bên phải → tìm **“Cài đặt ứng dụng”** hoặc **“Thêm vào màn hình chính”** (tên mục tuỳ phiên bản Chrome)\n3. Không thấy hai mục đó thì có thể **máy đã cài app rồi** — xem trong danh sách ứng dụng; gỡ bản cũ ra rồi vào lại trang để cài bản mới\n4. Vẫn không được thì cập nhật Chrome lên bản mới nhất\n\nTrong app cũng có nút: Hồ sơ → ⋯ → Cài đặt → Cài app ra màn hình chính." };
+  // Đổi mật khẩu: không tìm thấy chỗ đổi ("trong hồ sơ á", "không thấy mục bảo mật", "chỉ em với")
+  if (inCtx("password") && VN(/\b(trong hồ sơ|không thấy (mục|chỗ|nút)|mục bảo mật|bảo mật|chỉ (em|anh|chị|tui|mình) với|chỉ giùm|ở đâu|chỗ nào)\b/).test(n))
+    return { faqId: "password", text: "Từng bước nè 👇\n1. Bấm **Hồ sơ** (biểu tượng người ở thanh dưới)\n2. Bấm nút **⋯** góc trên bên phải → chọn **Cài đặt** (hoặc mở thẳng /ho-so?view=settings)\n3. Trong mục **Cài đặt** có dòng **Đổi mật khẩu** — app không có mục tên “Bảo mật” riêng đâu nha\n4. Nhập mật khẩu hiện tại, mật khẩu mới (từ 6 ký tự) rồi lưu\n\nVẫn không thấy dòng đó thì vuốt tắt hẳn app rồi mở lại (có thể app chưa cập nhật bản mới)." };
   // Đổi mật khẩu (không phải quên)
   if (inCtx("password", "forgot", "forgotnoemail") && VN(/\b(không phải quên|vẫn đăng nhập được|đổi trong hồ sơ|đang đăng nhập|muốn đổi)\b/).test(n)) return { faqId: "password" };
   // Ảnh đại diện vẫn cũ / ảnh bị xoay
@@ -222,10 +229,12 @@ export function searchRefine(q: string): string | null {
   if (words(q) > 12) return null;
   const parts: string[] = [];
   if (VN(/\b(rẻ|bình dân|giá mềm|giá sinh viên|ngân sách|\d+ ?k|\d+ nghìn|\d+ ngàn|không đắt|đỡ đắt)\b/).test(n)) parts.push("giá");
-  if (VN(/\b(mở khuya|khuya|ăn đêm|sau \d+ giờ|mở tới \d+|mở đến \d+|mở buổi tối|mở tối|mở sớm|buổi sáng|mấy giờ đóng|giờ mở cửa|còn mở)\b/).test(n)) parts.push("giờ mở cửa");
+  if (VN(/\b(mở khuya|khuya|ăn đêm|sau \d+ giờ|mở tới \d+|mở đến \d+|mở buổi tối|mở tối|mở sớm|buổi sáng|mấy giờ đóng|giờ mở cửa|còn mở|mở tới mấy giờ|mở đến mấy giờ|đóng cửa mấy giờ|mấy giờ mở|mở cửa mấy giờ)\b/).test(n)) parts.push("giờ mở cửa");
   if (VN(/\b(cho|nhóm|đi) (\d+|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)( người| đứa| bạn)?\b|\b\d+ người\b/).test(n)) parts.push("số người");
   if (VN(/\b(đậu ô tô|đỗ ô tô|đậu xe|đỗ xe|chỗ đậu|bãi xe|giữ xe|đậu oto|đỗ oto)\b/).test(n)) parts.push("chỗ đậu xe");
   if (VN(/\b(phòng riêng|phòng vip)\b/).test(n)) parts.push("không gian");
+  if (VN(/\b(gần biển|view biển|nhìn ra biển|sát biển|ven biển)\b/).test(n)) parts.push("vị trí gần biển");
+  if (VN(/\bgần (bệnh viện|trường|công ty|cơ quan|nhà|viện)\b/).test(n)) parts.push("vị trí gần một chỗ cụ thể");
   if (VN(/\b(wifi|wi-fi|ngồi làm việc|làm việc|ổ cắm|học bài|ngồi lâu)\b/).test(n)) parts.push("chỗ ngồi làm việc / wifi");
   if (VN(/\b(trẻ nhỏ|trẻ em|con nít|có bé|đi với con|cho bé)\b/).test(n)) parts.push("phù hợp trẻ nhỏ");
   if (VN(/\b(giao hàng|ship|giao tận|có giao|giao về)\b/).test(n)) parts.push("giao hàng");
