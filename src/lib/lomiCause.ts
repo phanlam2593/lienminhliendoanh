@@ -9,13 +9,15 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { displayName, findMedTopicId, loadMedTopic, type MedTopic } from "@/lib/lomiMed";
 import { NUTRIENTS, foodOf, nutrientOf, type Nutrient } from "@/lib/lomiNutrients";
 import { findDrug, type DrugFact } from "@/lib/lomiDrugData";
+/** \b của JS không hiểu chữ có dấu ("tài xế" không có ranh giới sau "ế") — đổi \b thành ranh giới theo chữ cái Unicode. */
+const W = (re: RegExp): RegExp => new RegExp(re.source.replace(/\\b/g, "(?:(?<![\\p{L}\\p{N}])(?=[\\p{L}\\p{N}])|(?<=[\\p{L}\\p{N}])(?![\\p{L}\\p{N}]))"), re.flags.includes("u") ? re.flags : re.flags + "u");
 import { findFolk } from "@/lib/lomiFolk";
 
 const N = (s: string) => ` ${normalizeVi(s)} `;
 
 /** Tách câu: X — động từ — Y — đuôi hỏi. */
 const VERB = "(?:có thể |có )?(?:làm cho|làm|gây ra|gây|khiến|dẫn tới|dẫn đến|bị|giúp cho|giúp|tốt cho|hại|ảnh hưởng tới|ảnh hưởng đến|ảnh hưởng)";
-const TAIL = "(?:\\s+(?:hay )?(?:không|ko|k|hông|hem|hok|hả|chứ|ha|ạ|vậy|nha|thật không|đúng không|phải không))+";
+const TAIL = "(?:\\s+(?:hay )?(?:không|ko|k|hông|hem|hok|hả|chứ|ha|ạ|vậy|nha|nhen|nhé|hen|ta|thật không|đúng không|phải không))+";
 const RE = new RegExp(`^(?:cho (?:em|anh|chị|tui|mình|con|cô|chú|bác) hỏi\\s+)?(.{2,40}?)\\s+(${VERB})\\s+(.{2,40}?)${TAIL}\\s*$`, "u");
 
 const X_SYN: [RegExp, string[]][] = [
@@ -40,13 +42,14 @@ const X_SYN: [RegExp, string[]][] = [
   [/\b(magie|magnesium|melatonin|collagen|glucosamine|nhan sam|sam|dong trung ha thao|yen sao|to yen|mat ong|tinh dau|hoa cuc|tra hoa cuc|gung|nghe|curcumin|probiotic|men vi sinh|tao bien|spirulina|vitamin tong hop|thuc pham chuc nang|tpcn)\b/, []],
 ];
 const Y_SYN: [RegExp, string[]][] = [
-  [/\b(mat ngu|kho ngu|thuc khuya|tinh ngu|khong ngu duoc)\b/, ["mất ngủ", "khó ngủ", "thao thức", "tỉnh táo", "giấc ngủ"]],
+  [/\b(mat ngu|kho ngu|thuc khuya|tinh ngu|khong ngu duoc|giac ngu)\b/, ["mất ngủ", "khó ngủ", "thao thức", "tỉnh táo", "giấc ngủ"]],
   [/\b(ngu ngon|de ngu|ngu sau)\b/, ["mất ngủ", "giấc ngủ", "ngủ"]],
   [/\b(buon ngu|lo mo|ngu ga)\b/, ["buồn ngủ", "lơ mơ"]],
   [/\b(tao bon)\b/, ["táo bón"]],
   [/\b(tieu chay|di ngoai)\b/, ["tiêu chảy"]],
   [/\b(mun|trung ca)\b/, ["mụn", "trứng cá"]],
-  [/\b(dau bung|dau da day|dau bao tu)\b/, ["đau bụng", "dạ dày"]],
+  [/\b(dau da day|dau bao tu|da day|bao tu)\b/, ["đau dạ dày", "dạ dày", "bao tử"]],
+  [/\b(dau bung)\b/, ["đau bụng", "dạ dày"]],
   [/\b(dau dau)\b/, ["đau đầu"]],
   [/\b(soi than)\b/, ["sỏi thận", "sỏi"]],
   [/\b(tieu duong|dai thao duong|duong huyet|duong mau)\b/, ["tiểu đường", "đường huyết"]],
@@ -58,7 +61,7 @@ const Y_SYN: [RegExp, string[]][] = [
 ];
 
 const strip = (s: string) =>
-  s.replace(/^(?:(?:à|ờ|mà|vậy|thế|cho hỏi|hỏi chút)\s+)*/u, "")
+  s.replace(/^(?:(?:à|ờ|mà|vậy|thế|còn|vậy còn|cho hỏi|hỏi chút)\s+)*/u, "")
     .replace(/^(?:(?:em|anh|chị|tui|tôi|mình|con|bé|mẹ|ba|người ta)\s+)?(?:(?:hay|thường|mỗi ngày|đang|có)\s+)?/u, "")
     .replace(/^(?:uống|ăn|dùng|xài|bổ sung|hút|thức|nằm)\s+(?!muộn|khuya|đêm)/u, "")
     .replace(/^(?:nhiều|thêm)\s+/u, "")
@@ -86,11 +89,11 @@ export function parseCause(q: string): CauseParse | null {
   const m = low.match(RE);
   if (!m) return null;
   const x = strip(m[1]);
-  const xShow = m[1].replace(/^(?:(?:à|ờ|mà|vậy|thế|cho hỏi|hỏi chút)\s+)*/u, "").replace(/^(?:(?:em|anh|chị|tui|tôi|mình|con|bé|người ta)\s+)?(?:(?:hay|thường|đang|có)\s+)?/u, "").trim();
-  let y = m[3].replace(/\s+(?:hơn|nhiều hơn|quá)$/u, "").trim();
+  const xShow = m[1].replace(/^(?:(?:à|ờ|mà|vậy|thế|còn|cho hỏi|hỏi chút)\s+)*/u, "").replace(/^(?:(?:em|anh|chị|tui|tôi|mình|con|bé|người ta)\s+)?(?:(?:hay|thường|đang|có)\s+)?/u, "").trim();
+  let y = m[3].replace(/\s+(?:hơn|nhiều hơn|quá)$/u, "").replace(/^(?:tui|tôi|mình|em|anh|chị|con|bé|người ta|cho)\s+/u, "").trim();
   if (!x || !y || x.length > 30 || y.length > 30) return null;
   // "ăn gì có giúp…" / "làm sao…" / "cái gì gây…" — câu hỏi mở, để lớp khác
-  if (/\b(gì|nào|sao|ai|đâu)\b/u.test(x)) return null;
+  if (W(/\b(gì|nào|sao|ai|đâu)\b/u).test(x)) return null;
   const verb = /giúp|tốt cho/u.test(m[2]) ? "help" : "cause";
   if (verb === "help") y = y.replace(/^(?:cho\s+)?/u, "");
   // "giúp giảm huyết áp", "giúp hạ đường huyết" → bệnh là huyết áp cao / đường huyết cao
@@ -116,17 +119,29 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   // Quan niệm dân gian đã có bài riêng ("ăn cay gây đau dạ dày", "cua + cam ngộ độc") → để lớp mẹo dân gian trả lời.
   const fk = findFolk(q);
   if (fk && (fk.verdict === "myth" || fk.belief || fk.ctx)) return null;
-  // Thuốc có trong kho thuốc → lớp thuốc (tác dụng phụ có nguồn) trả lời.
-  if (findDrug(p.x)) return null;
+  // Thuốc có trong kho thuốc → xem phần tác dụng phụ có nguồn của thuốc đó
+  const drugE = findDrug(p.x);
   const ySyn = Y_SYN.find(([re]) => re.test(N(p.y)))?.[1];
   const yMed = findMedTopicId(p.y) ?? findMedTopicId(`bị ${p.y}`) ?? (ySyn ? findMedTopicId(ySyn[0]) : null);
   const xMed = findMedTopicId(p.x);
   const food = p.nut ? null : foodOf(p.x);
-  const isDrugish = /^ thuoc\b/.test(xn);
+  const isDrugish = /^ thuoc\b/.test(xn) || !!drugE;
   const eatDrink = /^(?:uống|ăn)\s+\S/u.test(p.xShow) && p.xShow.split(" ").length <= 5;
   const known = !!(p.nut || food || isDrugish || eatDrink || X_SYN.some(([re]) => re.test(xn)));
   // Phải nhận ra ít nhất một vế (Y là bệnh / triệu chứng có trong kho, hoặc X là chất / món đã biết)
   const yKnown = !!yMed || Y_SYN.some(([re]) => re.test(N(p.y)));
+  // X là một BỆNH có thẻ ("thiếu máu có làm chóng mặt không") → xem thẻ bệnh đó có nêu Y là dấu hiệu không
+  if (xMed && yKnown && !p.nut && !food && !isDrugish && !eatDrink && !X_SYN.some(([re]) => re.test(xn)) && p.verb === "cause") {
+    const mx = await loadMedTopic(xMed);
+    if (mx) {
+      const yk = keysOf(p.y, [], Y_SYN);
+      const hit = [...mx.signs, ...mx.about, ...mx.causes].filter((f) => hasKey(f.text, yk)).slice(0, 2);
+      const nm = displayName(mx);
+      if (hit.length)
+        return { text: `Có nha — nguồn về **${nm}** có nhắc tới ${p.yShow ?? p.y}:\n${hit.map((f) => `• ${f.text}`).join("\n")}\n\nNhưng ${p.yShow ?? p.y} cũng có nhiều nguyên nhân khác, nên Lomi không kết luận được là do ${nm.toLowerCase()} — nếu kéo dài hay nặng lên thì đi khám nha.`, medId: xMed };
+      return { text: `Các nguồn Lomi đã đối chiếu cho **${nm}** **chưa nêu** ${p.yShow ?? p.y} là dấu hiệu thường gặp, nên Lomi không dám nói chắc 🙏\nDấu hiệu nguồn có nêu:\n${mx.signs.slice(0, 3).map((f) => `• ${f.text}`).join("\n")}\n\nCó ${p.yShow ?? p.y} kéo dài hay nặng lên thì nên đi khám để tìm đúng nguyên nhân nha.`, medId: xMed };
+    }
+  }
   if (!known || !yKnown || (xMed && !isDrugish && !eatDrink && !p.nut && !food && !X_SYN.some(([re]) => re.test(xn)))) return null;
 
   const mt = yMed ? await loadMedTopic(yMed) : null;
@@ -165,6 +180,7 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
     for (const f of [...p.nut.tooMuch, ...p.nut.what]) if (hasKey(f.text, yKeys)) push(f.text);
   }
   if (food?.caution) for (const f of food.caution) if (hasKey(f.text, yKeys)) push(f.text);
+  if (drugE) for (const f of [...drugE.sideEffects.common, ...drugE.sideEffects.serious]) if (hasKey(f.text, yKeys)) push(f.text);
 
   const yAsk = p.yShow ?? p.y;
   const ask = p.verb === "help" ? `**${xName}** có giúp **${yAsk}** không` : `**${xName}** có ${p.aff ? "ảnh hưởng tới" : "gây"} **${yAsk}** không`;
@@ -251,4 +267,80 @@ export function compareReply(q: string): string | null {
     return `${head}\n${one(a)}\n${one(b)}\n\nĂn đa dạng cả hai là tốt nhất; nếu đang có bệnh (tiểu đường, gout, thận…) thì hỏi Lomi “bị … ăn … được không” để Lomi xem theo bệnh nha.`;
   }
   return null;
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// XIN CHẨN ĐOÁN / XIN LIỀU NÓI VÒNG (31/10, danh sách ChatGPT lần 7): "ho, sổ mũi, hơi sốt vậy là cúm đúng không",
+//   "chắc dị ứng nhẹ thôi phải không", "bé 12kg cho mấy ml", "uống 2 viên luôn được chứ", "uống thuốc của bố được không".
+//   Không chẩn đoán, không nêu liều — nhưng vẫn đưa điều nguồn nói (dấu hiệu, khi nào đi khám / cấp cứu).
+// ────────────────────────────────────────────────────────────────────────
+const DIAG = /(?:vậy |thế |như vậy |vầy )?(?:là bị |là |có phải (?:là |bị )?|phải chăng (?:là )?|chắc (?:là |bị )?|chắc chỉ là |hay là bị |hay là )(?:bệnh |bị )?(.{2,30}?)(?:\s+(?:nhẹ|thôi|rồi|chắc rồi|chứ gì))*(?:\s+(?:đúng không|phải không|không|ko|k|hông|hả|nhỉ|nhể|ha|hen|đúng hông|phải hông|chứ))+\s*$/u;
+export async function diagnoseReply(q: string): Promise<{ text: string; medId: string } | null> {
+  const low = q.normalize("NFC").toLowerCase().replace(/[?!.…]+/gu, " ").replace(/\s+/g, " ").trim();
+  if (low.split(" ").length > 22) return null;
+  // dấu hiệu cấp cứu → để lớp cảnh báo khẩn trả lời trước
+  if (W(/\b(đau ngực|tức ngực|khó thở|ruột thừa|co giật|ngất|tím tái|chảy máu|nôn ra máu|dưới 3 tháng|\d tháng tuổi|sưng môi|sưng lưỡi)\b/u).test(low)) return null;
+  const m = low.match(DIAG);
+  if (!m) return null;
+  const cand = m[1].replace(/^(?:bị|bệnh)\s+/u, "").trim();
+  const organ = W(/\b(dạ dày|bao tử|bụng)\b/u).test(low) ? "dạ dày" : "";
+  const food = W(/\b(sau ăn|sau khi ăn|ăn xong|tôm|cua|hải sản|đậu phộng|sữa)\b/u).test(low) ? "thực phẩm" : "";
+  const id = findMedTopicId(cand) ?? findMedTopicId(`bị ${cand}`) ?? (organ ? findMedTopicId(`${cand} ${organ}`) : null) ?? (food ? findMedTopicId(`${cand} ${food}`) : null);
+  if (!id) return null;
+  // chỉ khi có kể triệu chứng / tình huống trước đó trong câu (không phải "có phải là gout không" hỏi định nghĩa trống)
+  const before = low.slice(0, low.indexOf(m[0])).trim();
+  if (before.split(" ").filter(Boolean).length < 2) return null;
+  const mt = await loadMedTopic(id);
+  if (!mt || mt.kind === "mental") return null; // tâm lý (trầm cảm, lo âu…) có lớp riêng: không chẩn đoán, hỏi đã bao lâu
+  const nm = displayName(mt);
+  const em = mt.emergency.slice(0, 2);
+  const parts = [
+    `Lomi **không chẩn đoán được** là ${nm.toLowerCase()} hay không đâu 🙏 — cùng một kiểu triệu chứng có thể do nhiều bệnh khác nhau, phải người khám trực tiếp mới nói chắc.`,
+    mt.signs.length ? `Dấu hiệu thường gặp của **${nm}** theo nguồn:\n${mt.signs.slice(0, 3).map((f) => `• ${f.text}`).join("\n")}` : "",
+    mt.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${mt.doctor.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : "",
+    em.length ? `🚨 Gọi 115 / đi cấp cứu ngay nếu:\n${em.map((f) => `• ${f.text}`).join("\n")}` : "",
+  ].filter(Boolean);
+  if (W(/\b(nên uống|uống thêm|bổ sung)\s+(?:sắt|vitamin|thuốc)/u).test(low))
+    parts.push("Đừng tự uống thêm thuốc hay viên bổ sung (như viên sắt) khi chưa xét nghiệm / chưa có bác sĩ dặn nha — uống sai chỗ vừa không đúng bệnh, vừa có khi gây hại.");
+  return { text: parts.join("\n\n"), medId: id };
+}
+
+const DOSE = W(/\b(mấy ml|bao nhiêu ml|mấy cc|mấy viên|bao nhiêu viên|nửa viên|1 viên|một viên|2 viên|hai viên|3 viên|ba viên|gấp đôi|liều bao nhiêu|mấy liều|uống bao nhiêu)\b/u);
+const OTHERS = W(/\b(thuốc|viên)( \S+){0,3} (của|nhà) (bố|ba|mẹ|má|bạn|chồng|vợ|anh|chị|em|ông|bà|người khác|hàng xóm)\b/u);
+export function doseReply(q: string): string | null {
+  const low = q.normalize("NFC").toLowerCase();
+  if (low.split(/\s+/).length > 26) return null;
+  const others = OTHERS.test(low);
+  const dose = DOSE.test(low) && W(/\b(uống|cho|dùng|bé|con|thuốc|viên|vitamin)\b/u).test(low);
+  if (!others && !dose) return null;
+  // thuốc có trong kho (paracetamol…) → lớp thuốc có câu riêng; uống nhầm / lỡ uống → lớp quá liều / uống nhầm lo
+  if (findDrug(low) || W(/\b(nhầm|lỡ uống|lỡ cho|uống lộn|quá liều)\b/u).test(low)) return null;
+  if (W(/\b(quên|lỡ)\b/u).test(low) && !others) return null; // quên liều — lớp thuốc có câu riêng
+  const kid = W(/\b(bé|con|cháu|trẻ|em bé|\d+\s*(?:kg|ký|tháng|tuổi))\b/u).test(low);
+  const nut = nutrientOf(low);
+  if (others)
+    return "**Đừng dùng thuốc kê cho người khác** nha 🙏 — kể cả cùng bệnh, liều và loại thuốc bác sĩ chọn theo tuổi, cân nặng, bệnh nền, thuốc đang dùng của từng người; uống nhầm có thể nguy hiểm (nhất là thuốc huyết áp, thuốc ngủ, kháng sinh).\n• Hết thuốc / quên mua: gọi bác sĩ đang theo dõi hoặc ra nhà thuốc hỏi dược sĩ\n• Lỡ uống rồi mà thấy chóng mặt, lơ mơ, khó thở, tim đập bất thường → gọi **115**";
+  const base = kid
+    ? "Lomi **không tính liều** cho bé được nha 🙏 — liều thuốc cho trẻ tính theo **cân nặng và đúng loại / hàm lượng** của từng chai, từng viên; nhầm một chút với bé nhỏ là nguy hiểm.\n• Xem **bảng liều theo cân nặng / tuổi** trên nhãn hoặc tờ hướng dẫn, dùng đúng dụng cụ đong kèm theo (không dùng muỗng ăn)\n• Không chắc thì hỏi **dược sĩ** (đưa họ xem chai thuốc + nói cân nặng của bé) hoặc bác sĩ nhi\n• 🚨 Bé li bì, thở nhanh, co giật, bỏ bú / bỏ ăn, sốt cao khó hạ → đi khám ngay"
+    : `Lomi **không nêu liều** được nha 🙏 — uống mấy viên tuỳ **hàm lượng** từng loại, tuổi, cân nặng, bệnh nền và thuốc khác đang dùng.\n• Làm đúng theo **tờ hướng dẫn / nhãn** hoặc đơn bác sĩ, đừng tự tăng liều hay uống dồn\n• Không chắc thì hỏi **dược sĩ** — đưa họ xem hộp thuốc${nut ? "" : "\n• Uống quá liều, nhất là thuốc giảm đau, có thể hại gan / dạ dày — thấy khó chịu bất thường thì đi khám"}`;
+  return nut && nut.tooMuch.length ? `${base}\n\nĐiều nguồn nói về **${nut.name}** khi dùng nhiều:\n${nut.tooMuch.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : base;
+}
+
+/** "đau đầu có nguy hiểm không", "khóc cả tối mà đau đầu nữa, có nguy hiểm không" → khi nào đi khám / cấp cứu theo thẻ. */
+export async function dangerReply(q: string): Promise<{ text: string; medId: string } | null> {
+  const low = q.normalize("NFC").toLowerCase();
+  if (!W(/\b(có nguy hiểm|nguy hiểm không|nguy hiểm ko)\b/u).test(low) || low.split(/\s+/).length > 22) return null;
+  const id = findMedTopicId(low);
+  if (!id) return null;
+  const mt = await loadMedTopic(id);
+  if (!mt || (!mt.doctor.length && !mt.emergency.length)) return null;
+  const nm = displayName(mt);
+  return {
+    text: [
+      `Thường thì **${nm.toLowerCase()}** hay gặp và nhiều khi tự đỡ, nhưng Lomi không đánh giá được mức độ của bạn qua tin nhắn 🙏 Dựa vào mấy mốc này nha:`,
+      mt.emergency.length ? `🚨 Gọi 115 / đi cấp cứu ngay nếu:\n${mt.emergency.slice(0, 3).map((f) => `• ${f.text}`).join("\n")}` : "",
+      mt.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${mt.doctor.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : "",
+    ].filter(Boolean).join("\n\n"),
+    medId: id,
+  };
 }

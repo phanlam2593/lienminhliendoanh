@@ -1,6 +1,6 @@
 import { list3Reply } from "@/lib/lomiList3";
-import { causeReply, compareReply, parseCause } from "@/lib/lomiCause";
-import { trapReply } from "@/lib/lomiTrap";
+import { causeReply, compareReply, dangerReply, diagnoseReply, doseReply, parseCause } from "@/lib/lomiCause";
+import { actionReply, trapReply } from "@/lib/lomiTrap";
 import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugStatement, followAspect, parseDetail } from "@/lib/lomiFollow";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -448,6 +448,10 @@ export function AiChat({
   const shownRef = useRef<{ from: string; to: string } | null>(null);
   // 31/10: tin hỏi HAI chuyện khác nhau ("đau đầu uống gì, mà quán phở nào ngon") — trả lời ý đầu, ý sau thành nút bấm gửi tiếp.
   const splitRef = useRef<string | null>(null);
+  // 31/10 (list 7): câu thấu cảm cho vế cảm xúc đứng trước một câu hỏi việc ("buồn quá, mà tìm quán…") — gắn đầu câu đáp kế tiếp
+  const emoRef = useRef<string | null>(null);
+  // câu người dùng đã được hiểu lại (thay "nó", lấy ý thứ 2…) → bỏ qua chốt "lạc đề" so trên câu gốc
+  const rewroteRef = useRef(false);
   // Mạch chuyện (lib/lomiStory) của tin trước: câu đáp của lớp khác (kiến thức sức khoẻ, xã giao, chưa hiểu…) vẫn giữ mạch thêm tối đa
   // 2 lượt — trừ khi câu đáp mở hẳn một việc khác (bói bài, tìm quán, tư vấn kinh doanh, hỏi app). Xem localReply().
   const carryRef = useRef<{ thread: Thread; about?: Msg["about"] } | null>(null);
@@ -511,6 +515,12 @@ export function AiChat({
     if (lang !== "en") {
       const addr = loadMem(user.id).addr;
       if (addr && addr !== "bạn") add = add.map((m) => (m.role === "assistant" ? { ...m, content: speak(m.content, addr) } : m));
+    }
+    const em = emoRef.current;
+    if (em && add.some((m) => m.role === "assistant")) {
+      emoRef.current = null;
+      const fi = add.findIndex((m) => m.role === "assistant");
+      add = add.map((m, i) => (i === fi && !/^(🚨|⚠️)/u.test(m.content) ? { ...m, content: `${em}\n\n${m.content}` } : m));
     }
     const sp = splitRef.current;
     if (sp && add.some((m) => m.role === "assistant")) {
@@ -619,18 +629,81 @@ export function AiChat({
   const domainOf = (t: string): string | null => {
     const n = ` ${normalizeVi(t)} `;
     if (detectTarot(t)) return "tarot";
-    if (parseCause(t) || compareReply(t) || findMedId(t) || findDrug(t) || VN(/\b(đau|sốt|thuốc|vitamin|bệnh|kiêng|uống gì|ho|trào ngược|tiêu chảy|táo bón|gout|mất ngủ|giấc ngủ|huyết áp|cholesterol|đờm|dạ dày|nổi mụn|buồn nôn|đường huyết)\b/).test(n)) return "health";
+    if (parseCause(t) || compareReply(t) || findMedId(t) || findDrug(t) || VN(/\b(đau|sốt|thuốc|vitamin|bệnh|kiêng|uống gì|ho|trào ngược|tiêu chảy|táo bón|gout|mất ngủ|giấc ngủ|huyết áp|cholesterol|đờm|dạ dày|nổi mụn|buồn nôn|đường huyết|tim đập|khó thở|chóng mặt|ngất|nổi mẩn|dị ứng|cà phê)\b/).test(n) && !VN(/\b(mệt xỉu|xỉu up|quán cà phê|tìm cà phê)\b/).test(n)) return "health";
     if (detectDish(t) || detectSearch(t) || VN(/\b(quán|tiệm)( \S+){0,3} (nào|ở đâu|gần)\b/).test(n)) return "place";
     if (matchFaq(t) || VN(/\b(app|tài khoản|đăng nhập|mật khẩu|quẹt|ưu đãi|tin nhắn|đặt xe|hồ sơ|ảnh đại diện|bài đăng|mã giảm giá|đăng ký|thông báo|chủ quán)\b/).test(n)) return "app";
     return null;
+  };
+  // 31/10 (list 7): "nó", "cái đó" ở lượt sau → thay bằng đúng thứ vừa nói (thuốc, món / đồ uống, bệnh, lá bài).
+  const SYM_RE = /(buồn ngủ|khó ngủ|mất ngủ|chóng mặt|đau dạ dày|đau bao tử|đau bụng|tiêu chảy|táo bón|nổi mẩn|buồn nôn|đau đầu|mệt|tim đập nhanh|hồi hộp)/u;
+  const resolveRef = async (t: string, prevText: string, lastA1: Msg | undefined): Promise<string | null> => {
+    const low = t.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim();
+    if (low.split(/\s+/).length > 12 || !/(^|\s)(nó|cái đó|cái này|cái kia|vụ đó|thứ đó)(\s|$)/u.test(low)) return null;
+    // "còn cái đó thì sao" trống trơn → lớp hỏi lại 2 hướng lo
+    if (/^(?:(?:vậy|còn|thế|vậy còn)\s+)?(?:nó|cái đó|cái này|cái kia|vụ đó)\s+thì\s+sao(?:\s+(?:ta|nhỉ|ha|vậy))?$/u.test(low)) return null;
+    const pl = prevText.normalize("NFC").toLowerCase();
+    const drug = pl.match(/thuốc\s+(?!này|đó|kia|rồi|xong|mà)[\p{L}]+(?:\s+(?!rồi|xong|mà|dạo|nên|thì|và|với)[\p{L}]+)?/u)?.[0];
+    const DRINK = /(trà xanh|trà sữa|cà phê|cafe|nước tăng lực|rượu|bia|sữa|ăn cay|đồ cay|hải sản|tôm|cua|vitamin [a-z0-9]+)/u;
+    const thing = drug ?? pl.match(DRINK)?.[0];
+    let card: string | undefined;
+    for (let id = 0; id < TAROT_DECK_SIZE && !card; id++) {
+      const c = tarotCard(id);
+      if (pl.includes(c.name.en.toLowerCase()) || (c.name.vi.length >= 6 && pl.includes(c.name.vi.toLowerCase()))) card = `lá ${c.name.en}`;
+    }
+    const sym = pl.match(SYM_RE)?.[0];
+    // "nó" chỉ người (đang tâm sự, "nó không nhắn lại") → không đụng
+    if (VN(/\b(nhắn|yêu|thích|giận|chửi|đánh|bỏ|ghét|nói với|trả lời|seen|rep|đi chơi|hẹn)\b/).test(` ${normalizeVi(low)} `)) return null;
+    if (lastA1?.heart && !lastA1.med && !drug && !card) return null;
+    if (!(lastA1?.med || lastA1?.health || lastA1?.drug || drug || card || (thing && sym) || findMedId(prevText))) return null;
+    // "có phải loét không", "chắc là X hả" → ghép lại câu kể trước để lớp "không chẩn đoán" đọc đủ
+    if (VN(/\b(có phải|chắc là|phải chăng)\b/).test(` ${normalizeVi(low)} `) && !/nguyên nhân/u.test(low)) return `${prevText.replace(/[.!?…]+$/u, "")}, ${low.replace(/(^|\s)(nó|cái đó|cái này|vụ đó)(?=\s|$)/u, " ").replace(/\s+/g, " ").trim()}`;
+    if (thing && sym && /(nguyên nhân|do nó|tại nó|thường gặp|tác dụng phụ|bình thường không)/u.test(low)) return `${thing} có gây ${sym} không`;
+    let subj = card ?? thing;
+    if (!subj) {
+      const mid = lastA1?.med?.id ?? findMedId(prevText);
+      const mt = mid ? await loadMedTopic(mid) : null;
+      if (mt) subj = medName(mt).toLowerCase();
+    }
+    if (!subj) return null;
+    let out = low.replace(/(^|\s)(nó|cái đó|cái này|cái kia|vụ đó|thứ đó)(?=\s|$)/u, `$1${subj}`);
+    // "nên theo dõi sao" khi nói bệnh = theo dõi triệu chứng (không phải nút Theo dõi người khác)
+    out = out.replace(/nên theo dõi (sao|thế nào|ra sao|như nào)/u, "cần làm gì và khi nào nên đi khám").replace(/(có )?nên nghỉ hẳn( không)?/u, "nên vận động thế nào");
+    return out.replace(/^(vậy còn|còn|vậy|thế)\s+/u, "");
+  };
+  const looseSegs = (t: string): string[] =>
+    t.normalize("NFC").replace(/[?!.…]+$/u, "").split(/\s*(?:,|;)\s*(?:và|với|mà|còn|ngoài ra|tiện hỏi|với lại|btw|nhưng)?\s*|\s+(?:ngoài ra|tiện hỏi|với lại|btw)\s+|\s+(?:và|với) (?=(?:muốn|làm sao|cách|đặt|đăng|tìm|tarot|quán|đổi|xoá|xóa|hỏi|chủ quán|uống|ăn|vitamin|trà|thuốc))/iu).map((x) => x.trim()).filter((x) => x.split(/\s+/).length >= 2);
+  const EMO = VN(/\b(buồn( quá| lắm| ghê)?|mệt( quá| lắm| rã rời| xỉu| muốn xỉu)?|áp lực( quá| lắm)?|căng thẳng( quá)?|lo( quá| lắm)?|cô đơn( quá)?|chán( quá)?|tủi thân|kiệt sức|hoảng|sợ( quá)?|khóc|vừa chia tay|mới chia tay|chia tay|chẳng còn ai|không còn ai|vô dụng|hồi hộp|run quá)\b/);
+  const emoLead = (t: string): { rest: string; line: string } | null => {
+    const s0 = t.normalize("NFC").trim();
+    const m = s0.match(/^(.{2,60}?)\s*,\s*(?:mà|nhưng(?: cũng)?|nên|với|còn)?\s*(.{6,})$/u);
+    if (!m) return null;
+    const a = m[1];
+    const b = m[2];
+    if (!EMO.test(` ${normalizeVi(a)} `) || domainOf(a) || !domainOf(b)) return null;
+    // "buồn chán quá, có gì vui kể anh nghe đi" — xin kể chuyện vui, lớp trò chuyện lo
+    if (VN(/\b(kể|chuyện cười|chuyện vui|cho vui|có gì vui|an ủi|tâm sự)\b/).test(` ${normalizeVi(b)} `)) return null;
+    const na = ` ${normalizeVi(a)} `;
+    const line = VN(/\b(chẳng còn ai|không còn ai|vô dụng)\b/).test(na)
+      ? "Nghe bạn nói vậy, Lomi thương và lo cho bạn lắm 💚 Nếu có lúc thấy quá sức, hay nghĩ tới chuyện làm hại bản thân, nói Lomi nghe hoặc gọi người bạn tin tưởng ngay nha."
+      : VN(/\b(chia tay)\b/).test(na)
+        ? "Chia tay xong mà vẫn tự lo cho mình, Lomi thương bạn ghê 💚"
+        : VN(/\b(mệt|kiệt sức)\b/).test(na)
+          ? "Bạn vất vả rồi 💚 Lo xong việc này thì nghỉ ngơi chút nha."
+          : VN(/\b(lo|lo lắng|hoảng|sợ|hồi hộp|run)\b/).test(na) && !VN(/\b(áp lực|căng thẳng)\b/).test(na)
+            ? "Lomi hiểu bạn đang lo lắm 💚 Mình xem từng việc một nha."
+            : VN(/\b(áp lực|căng thẳng)\b/).test(na)
+            ? "Lomi hiểu, đang áp lực thì việc gì cũng nặng thêm 💚 Mình gỡ từng việc một nha."
+            : "Lomi nghe bạn đang buồn 💚 Lo việc này trước, rồi muốn kể chuyện buồn thì Lomi nghe nha.";
+    return { rest: b.replace(/^\p{L}/u, (c) => c.toUpperCase()), line };
   };
   const splitTwo = (t: string): [string, string] | null => {
     const s0 = t.trim();
     if (s0.split(/\s+/).length < 7 || s0.length > 220) return null;
     // tin nhiều ý có đánh số / "mấy chuyện" đã có lớp riêng; câu kể chuyện ("tối qua…, sáng nay…") không tách
     if (VN(/\b(thứ nhất|thứ hai|mấy chuyện|vài chuyện|hai chuyện|2 chuyện|nhiều chuyện|tối qua|hôm qua|sáng nay|tuần trước|hồi nãy)\b/).test(` ${normalizeVi(s0)} `)) return null;
+    if (VN(/\bthuốc\b/).test(` ${normalizeVi(s0)} `) && VN(/\b(lái xe|chạy xe|cầm lái)\b/).test(` ${normalizeVi(s0)} `)) return null;
     const askish = (x: string) => /\?/.test(x) || VN(/\b(gì|j|nào|sao|ko|không|k|hông|đâu|ntn|bao nhiêu|bn|mấy|hả|chưa|làm sao|cách|tìm|chỉ|giúp|ở đâu)\b/).test(` ${normalizeVi(x)} `);
-    const re = /\s*(?:,|;)\s*(?:(?:và|với|mà|còn|ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+)?|\s+(?:ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+/giu;
+    const re = /\s*(?:,|;)\s*(?:(?:và|với|mà|còn|ngoài ra|tiện hỏi|tiện thể|với lại|btw|nhưng(?: cũng)?)\s+)?|\s+(?:ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+/giu;
     for (const m of s0.matchAll(re)) {
       const a = s0.slice(0, m.index).trim().replace(/[,;]+$/u, "");
       const b = s0.slice((m.index ?? 0) + m[0].length).trim().replace(/^(?:ngoài ra|tiện hỏi|với|và|mà)\s+/iu, "");
@@ -647,6 +720,13 @@ export function AiChat({
     const w = raw.trim().split(/\s+/).length;
     const prevA = msgs.filter((m) => m.role === "assistant").slice(-2).reverse();
     const prevU = msgs.filter((m) => m.role === "user").slice(-3).reverse();
+    // 31/10 (list 7): vừa trả lời một câu hỏi app mà hỏi "cái đó nằm chỗ nào", "chỗ đó đặt xe ntn" → nói lại đúng câu đó (hoặc ý nối)
+    if (lastA0?.faqId && w <= 9 && VN(/\b(cái đó|nó|chỗ đó|cái này|vụ đó)\b/).test(nr)) {
+      const af = appFollow(raw, lastA0.faqId, msgs.filter((m) => m.role === "assistant").slice(-4).map((m) => m.faqId).filter(Boolean) as string[]);
+      const ff = af?.faqId ? faqById(af.faqId) : faqById(lastA0.faqId);
+      const text = af?.text ?? (VN(/\b(chỗ nào|ở đâu|nằm|đâu|ntn|như nào|đặt sao|làm sao)\b/).test(nr) ? ff?.a.vi : undefined);
+      if (text) return { role: "assistant", content: af?.text ? text : `Dạ, chỗ đó nè 👇\n\n${text}`, local: true, faqId: af?.faqId ?? lastA0.faqId, quick: lastA0.quick };
+    }
     // (0) Lượt trước vừa báo cấp cứu (🚨 … 115) mà hỏi tiếp ngắn ("có phải dị ứng nữa không?") → nhắc lại, không đưa bài chăm sóc thường.
     if (lastA0 && /^🚨/u.test(lastA0.content) && w <= 8 && (raw.includes("?") || VN(/\b(không|ko|hả|ha|phải không|có phải|nguy hiểm|sao)\s*$/).test(nr)) && !VN(/\b(gọi rồi|đã gọi|đang đi|tới viện|đến viện|đỡ rồi|hết rồi|thêm|mờ|đau|sốt|nôn|co giật|chảy máu|tím|ngất|xỉu|thở nhanh|li bì|bỏ bú|tháng|tuổi)\b/).test(nr))
       return { role: "assistant", content: "🚨 Lomi nhắc lại nha: với những dấu hiệu bạn vừa kể, đừng chờ xem có phải hay không — **gọi 115 ngay** hoặc nhờ người chở tới cấp cứu gần nhất. Trong lúc chờ: ngồi thẳng cho dễ thở, không ăn uống thêm gì, có người ở cạnh.\n\nBạn gọi được chưa?", local: true, health: hCtx ?? {}, med: lastA0.med };
@@ -781,7 +861,7 @@ export function AiChat({
       }
     }
     // (0a2) Chủ quán hỏi chuyện kinh doanh qua nhiều lượt ("quán em bán cà phê", "khách chủ yếu sinh viên", "viết ngắn hơn đi").
-    const OWNER = VN(/\b((quán|tiệm|shop|cửa hàng|sạp|xe) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)|(em|anh|chị|tui|tôi|mình|cô|chú|bác) (có|mở|mới mở|đang mở|mới khai trương|kinh doanh|làm chủ) (một |1 )?(quán|tiệm|shop|cửa hàng|xe)|khai trương quán|khách (đánh giá|chê|phàn nàn|review|than)|cần tuyển (người|nhân viên)|tuyển nhân viên|bài tuyển|chủ quán|đăng (cái |mấy cái |1 |một )?(ưu đãi|khuyến mãi|giảm giá)|đăng bài (giảm giá|ưu đãi|khuyến mãi))\b/);
+    const OWNER = VN(/\b((quán|tiệm|shop|cửa hàng|sạp|xe) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)|(em|anh|chị|tui|tôi|mình|cô|chú|bác) (có|mở|mới mở|đang mở|mới khai trương|kinh doanh|làm chủ) (một |1 )?(quán|tiệm|shop|cửa hàng|xe)|khai trương quán|khách (đánh giá|chê|phàn nàn|review|than)|cần tuyển (người|nhân viên)|tuyển nhân viên|bài tuyển|chủ quán|quán vắng khách|vắng khách quá|làm chủ quán|đăng (cái |mấy cái |1 |một )?(ưu đãi|khuyến mãi|giảm giá)|đăng bài (giảm giá|ưu đãi|khuyến mãi))\b/);
     const prevBiz = prevA.find((m) => m.biz)?.biz;
     // "làm sao đăng ưu đãi?" (hỏi cách dùng app, chưa kể mình có quán) → để FAQ trả lời như cũ
     const ownerNow = OWNER.test(nr) && !(VN(/\b(làm sao|cách|làm thế nào|thế nào|hướng dẫn)\b/).test(nr) && !VN(/\b(quán|tiệm|shop|cửa hàng) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)\b/).test(nr) && VN(/\bđăng\b/).test(nr));
@@ -793,7 +873,7 @@ export function AiChat({
       const ff = faqById("bizoffer");
       if (ff) return { role: "assistant", content: `${ff.a.vi}\n\nChưa có hồ sơ doanh nghiệp (hoặc đang chờ duyệt) thì sẽ chưa thấy mục Ưu đãi — tạo ở Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp.`, local: true, faqId: "bizoffer", biz: { type: detectBizKind(raw).type, noun: detectBizKind(raw).noun, topic: "offer" } };
     }
-    const ownerSkip = VN(/\b(chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr)) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
+    const ownerSkip = VN(/\b(đăng ký( \S+){0,2} (hồ sơ )?chủ quán|tạo hồ sơ (chủ quán|doanh nghiệp)|nhắn (tin )?(cho )?chủ quán|hỏi chủ quán|liên hệ chủ quán|gọi (cho )?chủ quán|chủ quán( \S+){0,2} (nhắn lại|trả lời|rep)|chủ quán có (thể )?tạo|với chủ quán)\b/).test(nr) || VN(/\b(chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr)) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
     if (ownerCtx && !ownerSkip && w <= 18 && !VN(/\b(đau|bệnh|sốt|thuốc|mất ngủ|buồn|chia tay|bầu|mang thai|có thai|cho con bú|uống được|bác sĩ)\b/).test(nr)) {
       const allTxt = [...prevU6.map((m) => m.content).reverse(), raw].join(" . ");
       const sellM = ` ${normalizeVi(allTxt)} `.match(VN(/\bbán (đồ ăn sáng|đồ ăn|ăn sáng|cơm|bún|phở|xôi|bánh mì|hủ tiếu|cháo|bánh)\b/));
@@ -945,8 +1025,8 @@ export function AiChat({
         const en1 = c.name.en.toLowerCase();
         const vi1 = c.name.vi.toLowerCase();
         if (!prevA.some((m) => m.tarot || m.tarotRef || m.tarotBack) && ((lowRaw.includes(en1) && en1.length >= 7) || (vi1.length >= 6 && lowRaw.includes(vi1) && VN(/\b(lá|bài)\b/).test(nr)))) {
-          if (VN(/\b(là gì|nghĩa là gì|ý nghĩa|có nghĩa|nói gì|tốt không|xấu không|giải thích)\b/).test(nr) || raw.includes("?"))
-            return { role: "assistant", content: `🔮 **${c.name.vi}** (${c.name.en})\n\n• **Xuôi:** ${c.up.vi}\n• **Ngược:** ${c.rev.vi}\n\nTarot là để tham khảo, soi lại lòng mình cho vui thôi nha — không lá nào quyết định tương lai của bạn.`, local: true };
+          if (VN(/\b(là gì|nghĩa là gì|ý nghĩa|có nghĩa|nói gì|tốt không|xấu không|giải thích|rút được|bốc được|ra lá|ra được|rút ra)\b/).test(nr) || raw.includes("?"))
+            return { role: "assistant", content: VN(/\b(người kia|người ấy|anh ấy|cô ấy|họ|crush|người đó)\b/).test(nr) ? `🔮 Nếu đặt lá **${c.name.vi}** (${c.name.en}) vào phía người kia, có thể đọc là: “${c.up.vi}”\n\nNhưng tarot **không đọc được suy nghĩ thật** của ai đâu nha — đó chỉ là một góc để bạn ngẫm. Muốn biết người ấy nghĩ gì, cách chắc nhất vẫn là hỏi thẳng, nhẹ nhàng.` : `🔮 **${c.name.vi}** (${c.name.en})\n\n• **Xuôi:** ${c.up.vi}\n• **Ngược:** ${c.rev.vi}\n\nTarot là để tham khảo, soi lại lòng mình cho vui thôi nha — không lá nào quyết định tương lai của bạn.`, local: true };
         }
       }
       const prevT = msgs.filter((m) => m.role === "assistant").slice(-4).reverse().map((m) => m.tarot ?? m.tarotRef ?? m.tarotBack?.r).find(Boolean) as TarotReading | undefined;
@@ -971,6 +1051,12 @@ export function AiChat({
       const tTopic = prevT && w <= 6 ? nr.match(/^ (?:(?:a|o|thoi) )?(?:(?:em|anh|chi|tui|minh) )?(?:(?:noi|xem|hoi|coi|con|doi qua|doi sang|chuyen qua|chuyen sang) )?(?:ve |chuyen )?(tien|tien bac|tai chinh|cong viec|tinh yeu|tinh cam|tinh duyen|hoc hanh|suc khoe) (?:di |nha |thi sao )?$/u) : null;
       if (tTopic && !VN(/\bsức khoẻ|sức khỏe\b/).test(nr)) {
         const r = drawForQuestion(`chuyện ${raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "").replace(/^(à|ờ|thôi)\s+/u, "").replace(/^(em|anh|chị|tui|mình)\s+/u, "").replace(/^(nói|xem|hỏi|coi|còn|đổi qua|đổi sang|chuyển qua|chuyển sang)\s+/u, "").replace(/^(về|chuyện)\s+/u, "").replace(/\s+(đi|nha|thì sao)$/u, "")}`);
+        return { role: "assistant", content: readingText(r, "vi"), local: true, tarot: r, ask: readingAiPrompt(r, "vi"), quick: tarotFollowUps(r) };
+      }
+      // "lá bài (này) nói gì về công việc" mà chưa rút lá nào → rút cho chủ đề đó
+      const askTopic = !prevT ? lowRaw.match(/lá bài(?: này)?\s+(?:nói|bảo|cho biết)\s+(?:gì|chi)\s+về\s+(chuyện\s+)?(công việc|tình cảm|tình yêu|tiền bạc|tiền|học hành|gia đình)/u) : null;
+      if (askTopic) {
+        const r = drawForQuestion(`chuyện ${askTopic[2]}`);
         return { role: "assistant", content: readingText(r, "vi"), local: true, tarot: r, ask: readingAiPrompt(r, "vi"), quick: tarotFollowUps(r) };
       }
       // "rút lá vui vui coi", "chọn lá bên trái", "em chọn số 3" — xin rút bài
@@ -1077,6 +1163,8 @@ export function AiChat({
       }
     }
     // (3) Đang nói một bệnh / triệu chứng.
+    // (câu hỏi rõ là chuyện app — "làm sao đổi ảnh đại diện" — thì không hiểu theo bệnh đang nói)
+    if (VN(/\b(app|tài khoản|đăng nhập|mật khẩu|quẹt|ưu đãi|tin nhắn|đặt xe|ảnh đại diện|bài đăng|đăng bài|mã giảm giá|đăng ký|thông báo|hồ sơ)\b/).test(nr) && !findMedId(raw)) return null;
     const medNow = lastA0?.med;
     const hLabel = hCtx?.label ?? lastA0?.sx?.[0];
     if (!medNow && !hLabel && !lastA0?.health) return null;
@@ -1099,6 +1187,9 @@ export function AiChat({
       const fever = VN(/\bsốt\b/).test(` ${normalizeVi(`${tname} ${recentU}`)} `);
       return { role: "assistant", content: detailReply(det, det.who?.kind === "child" || (det.years !== undefined && det.years < 12) || det.months !== undefined ? (hLabelVi ?? tname) : tname, fever), local: true, ...(medNow ? { med: medNow } : mt && sxMed ? { med: { id: sxMed } } : {}), health: hCtx ?? { label: tname }, sx: lastA0?.sx };
     }
+    // "thật á", "vậy hả", "thiệt hông" sau câu đáp sức khoẻ
+    if (w <= 4 && VN(/^ (thật|thiệt) (á|hả|hông|không|ko|vậy)|^ (vậy|thế) (hả|à|á) |^ thật không /).test(nr) && (medNow || hLabel))
+      return { role: "assistant", content: `Dạ, theo các nguồn y khoa Lomi đã đối chiếu thì là vậy nha 🙂 Nhưng mỗi người mỗi khác${tname ? ` — ${tname.toLowerCase()} của bạn` : ""} có điều gì chưa khớp, hay muốn xem kỹ phần nào (nguyên nhân, chăm sóc, khi nào đi khám) thì nói Lomi nha.`, local: true, health: hCtx ?? {}, ...(medNow ? { med: medNow } : {}) };
     // (3b2) Kể thêm một triệu chứng ngắn ("ho nữa", "thêm sổ mũi", "nôn luôn").
     const addSx = nr.match(/^ (?:(?:bé|con|cháu|em|anh|chị|mẹ|ba)\s+)?(?:(?:bị|có)\s+)?(?:thêm\s+)?(ho|so mui|nghet mui|non|oi|tieu chay|phat ban|noi man|dau hong|dau dau|dau bung|kho tho|met)\s*(?:nua|luon|them|nua roi)?\s*$/u);
     if (addSx && w <= 5 && (nr.includes(" nua") || nr.includes(" them") || nr.includes(" luon"))) {
@@ -1147,7 +1238,7 @@ export function AiChat({
     if (!reply.med && prevA?.med && (prevA.medAge ?? 0) < 2 && !newFlow && !reply.drug && !!reply.stuck && (!reply.heart || reply.heart === prevA.heart)) reply = { ...reply, med: prevA.med, medAge: (prevA.medAge ?? 0) + 1 };
     // Chốt cuối: câu đáp có đúng bệnh / thuốc người dùng hỏi không (lib/lomiReplyGate). Lạc → nói thật, mời hỏi lại, ghi nhật ký.
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
-    const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
+    const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) || rewroteRef.current ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
     // 22/10: câu gõ tiếng Anh mà không lớp nào hiểu → nói bằng tiếng Anh (không đáp "Câu này Lomi chưa hiểu ý lắm" bằng tiếng Việt).
     if ((reply.unk || reply.stuck) && looksEnglish(rawRef.current ?? asked)) reply = { ...reply, content: englishFallback(rawRef.current ?? asked) };
@@ -1323,6 +1414,7 @@ export function AiChat({
     const typed = text.trim(); // câu NGUYÊN VĂN người dùng gõ — hiện trong bong bóng, gửi khi báo cáo / Dạy Lomi
     if (!typed || busy) return;
     rawRef.current = typed;
+    rewroteRef.current = false;
     const stk = parseStickerToken(typed);
     if (stk) {
       setInput("");
@@ -1337,7 +1429,15 @@ export function AiChat({
       .replace(/(^|[^\p{L}])(?:vit|vtm)\.?\s*(c|d|a|e|k|b\d{0,2})(?![\p{L}])/giu, "$1vitamin $2")
       // "cf" = cà phê; "u cafe / u thuoc" = uống (viết tắt) — để bộ đoán dấu không đoán thành "cf chiếu cố"
       .replace(/(^|[^\p{L}])cf(?![\p{L}])/giu, "$1cà phê")
-      .replace(/(^|[^\p{L}])u\s+(?=(?:cafe|cà phê|nuoc|nước|thuoc|thuốc|sua|sữa|tra|trà|bia|ruou|rượu|vitamin)(?![\p{L}]))/giu, "$1uống ");
+      .replace(/(^|[^\p{L}])u\s+(?=(?:cafe|cà phê|nuoc|nước|thuoc|thuốc|sua|sữa|tra|trà|bia|ruou|rượu|vitamin)(?![\p{L}]))/giu, "$1uống ")
+      // 31/10 (list 7): tiếng miền Trung / lóng hay gặp — "làm răng" = làm sao, "quán ni" = quán này, "chi" = gì, "chừ" = giờ, "khum" = không
+      .replace(/(^|[^\p{L}])làm răng(?![\p{L}])/giu, "$1làm sao")
+      .replace(/(^|[^\p{L}])(quán|bữa|lá bài|lá|cái|chủ quán|người|bài|chỗ|thuốc) ni(?![\p{L}])/giu, "$1$2 này")
+      .replace(/(^|[^\p{L}])(nói|làm|có|ăn|uống|hỏi|là) chi(?![\p{L}])/giu, "$1$2 gì")
+      .replace(/(^|[^\p{L}])chừ(?![\p{L}])/giu, "$1giờ")
+      .replace(/(^|[^\p{L}])(quán|chỗ|nơi) mô(?![\p{L}])/giu, "$1$2 nào")
+      .replace(/(^|[^\p{L}])(khum|hổng|hem)(?![\p{L}])/giu, "$1không")
+      .replace(/(^|[^\p{L}])dzậy(?![\p{L}])/giu, "$1vậy");
     let raw = en ? typed : viMixFix(typedV);
     if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
@@ -1417,7 +1517,64 @@ export function AiChat({
     const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
     // 31/10: "ko phải hỏi bệnh, tui hỏi bài đăng bị ẩn sao" / "Tôi cần chữa lỗi đăng nhập, không phải chữa bệnh" → chỉ hiểu phần thật sự hỏi.
-    if (!forceAi && !en) {
+    const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw));
+    if (!forceAi && !en && !danger0) {
+      const pu = [...msgs].reverse().find((m) => m.role === "user");
+      const la = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
+      // "đang uống thuốc dị ứng, dạo này buồn ngủ quá" → hỏi thuốc đó có gây triệu chứng đó không
+      const dsm = q.normalize("NFC").toLowerCase().match(/(?:uống|dùng|xài)\s+(thuốc\s+(?!này|đó|rồi|xong)[\p{L}]+(?:\s+(?!rồi|xong|mà|dạo|nên|thì|và|với)[\p{L}]+)?)(?:\s+(?:rồi|xong))?\s*,?\s*(?:mà\s+|dạo này\s+|giờ\s+|thấy\s+|bị\s+|lại\s+)*(buồn ngủ|chóng mặt|buồn nôn|đau bụng|tiêu chảy|nổi mẩn|mệt|khô miệng|mất ngủ|đau dạ dày)/u);
+      if (dsm && !VN(/\b(lái xe|chạy xe|cầm lái)\b/).test(` ${normalizeVi(q)} `)) {
+        q = `${dsm[1]} có gây ${dsm[2]} không`;
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+      // "bé bị nóng hổi, sốt 38 độ" — "nóng hổi" là sờ thấy nóng, không phải "tính nóng" của thức ăn
+      if (VN(/\bnóng hổi\b/).test(` ${normalizeVi(q)} `) && VN(/\bsốt\b/).test(` ${normalizeVi(q)} `)) {
+        q = q.replace(/(?:bị\s+)?nóng hổi\s*,?\s*/iu, "");
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+      const rr = pu ? await resolveRef(q, pu.raw ?? pu.content, la) : null;
+      if (rr) {
+        q = rr;
+        raw = rr;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+    }
+    // 31/10 (list 7): lượt trước hỏi 2 ý — giờ nói "ý thứ 2", "câu sau", "còn ý kia", hay nhắc lại một chữ của ý kia ("quán bánh căn ấy",
+    //   "cái đặt xe đó") → trả lời đúng ý đó.
+    if (!forceAi && !en && !danger0 && !rewroteRef.current && q.split(/\s+/).length <= 8) {
+      const prevUserMsg = [...msgs].reverse().find((m) => m.role === "user");
+      const prevA1 = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
+      const segs = prevUserMsg ? looseSegs(prevUserMsg.raw ?? prevUserMsg.content) : [];
+      const pend = prevA1?.quick?.[0] && prevA1.content.includes("Còn ý “") ? prevA1.quick[0] : undefined;
+      if (segs.length >= 2 || pend) {
+        const nq = ` ${normalizeVi(q)} `;
+        const meta = /\b(y thu (2|hai)|cau (sau|thu hai|thu 2|hoi sau|con lai)|y sau|y kia|con y|phan sau|phan kia|y con lai|tra loi (not|tiep|cau sau|y sau|phan)|cau kia)\b/.test(nq);
+        const wantEmo = /\b(tinh cam|chuyen buon|cam xuc|tam su|chuyen (cua )?(toi|tui|minh|em))\b/.test(nq) || (meta && !!(prevA1?.search || prevA1?.dish || prevA1?.faqId || prevA1?.biz));
+        const emoSeg = segs.find((x) => EMO.test(` ${normalizeVi(x)} `) || VN(/\b(người yêu|ny|chia tay|người cũ)\b/).test(` ${normalizeVi(x)} `));
+        const STOP = new Set("y cau cai do ay nay kia nha nhe con thi sao tra loi phan cho vay nua toi tui minh cua di a ha truoc sau hoi the".split(" "));
+        const toks = normalizeVi(q).split(/\s+/).filter((t) => t.length >= 2 && !STOP.has(t));
+        const pick = (x: string) => normalizeVi(x).split(/\s+/).filter((t) => toks.includes(t)).length;
+        let target: string | undefined;
+        if (wantEmo && emoSeg && !pend) target = emoSeg;
+        else if (meta) target = pend ?? segs[segs.length - 1];
+        else if (toks.length) {
+          const best = [...segs, ...(pend ? [pend] : [])].map((x) => ({ x, n: pick(x) })).sort((a, b) => b.n - a.n)[0];
+          if (best && best.n >= 1 && (best.n >= 2 || toks.length <= 2)) target = best.x;
+        }
+        if (target && normalizeVi(target) !== normalizeVi(q)) {
+          q = target.trim().replace(/^(?:và|với|mà|ngoài ra|tiện hỏi|còn)\s+/iu, "");
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+        }
+      }
+    }
+    if (!forceAi && !en && !danger0) {
       const nl = q.normalize("NFC").match(/^(?:ko|không|k|hông|chứ không)\s+phải\s+(?:là\s+)?(?:hỏi\s+)?[^,]{2,30},\s*(?:mà\s+)?(?:(?:tui|tôi|mình|em|anh|chị)\s+)?(?:(?:muốn\s+)?hỏi\s+)?(.{4,})$/iu)
         ?? q.normalize("NFC").match(/^(.{6,}?)[,.]?\s+(?:chứ\s+)?(?:không|ko|k)\s+phải\s+(?:chữa|hỏi|trị)\s+(?:bệnh|người)[.!]?$/iu);
       const negPart = nl ? q.normalize("NFC").slice(0, Math.max(0, q.normalize("NFC").indexOf(nl[1]))) : "";
@@ -1425,6 +1582,7 @@ export function AiChat({
         q = nl[1].trim();
         raw = q;
         shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
       }
       // "Không phải đau đầu do thiếu nước mà do thiếu ngủ thì làm gì" → "đau đầu do thiếu ngủ thì làm gì"
       const nd2 = q.normalize("NFC").match(/^(?:ko|không|k)\s+phải\s+(.{2,25}?)\s+do\s+.{2,25}?\s+mà\s+(?:là\s+)?do\s+(.{2,40})$/iu);
@@ -1432,6 +1590,17 @@ export function AiChat({
         q = `${nd2[1]} do ${nd2[2]}`;
         raw = q;
         shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+      // Vế đầu chỉ là cảm xúc ("buồn quá, mà tìm quán nào yên tĩnh…", "áp lực thi cử quá, uống cà phê nhiều có sao không")
+      //   → trả lời vế sau, mở đầu bằng một câu thấu cảm.
+      const emo = emoLead(q);
+      if (emo) {
+        q = emo.rest;
+        raw = emo.rest;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+        emoRef.current = emo.line;
       }
       // Hai chuyện khác hẳn nhau trong một tin → trả lời ý đầu, ý sau thành nút bấm.
       const sp = splitTwo(q);
@@ -1439,10 +1608,30 @@ export function AiChat({
         q = sp[0];
         raw = sp[0];
         shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
         splitRef.current = sp[1];
       }
     }
-    if (!forceAi) {
+    if (!forceAi && !danger0) {
+      // 31/10 (list 7): "Tôi rút được lá The Hermit khi hỏi chuyện tình cảm" — kể lá đã rút (ở đâu đó), không phải xin rút bài mới
+      const lowC = raw.normalize("NFC").toLowerCase();
+      if (!en && VN(/\b(rút được|bốc được|ra lá|ra được|rút ra|rút trúng|bốc trúng|tôi rút|em rút|mình rút|tui rút|anh rút|chị rút)\b/).test(` ${normalizeVi(lowC)} `) && !VN(/\b(rút cho|rút giúp|rút giùm|rút đi|rút thêm|rút lại)\b/).test(` ${normalizeVi(lowC)} `)) {
+        for (let id = 0; id < TAROT_DECK_SIZE; id++) {
+          const c = tarotCard(id);
+          if (lowC.includes(c.name.en.toLowerCase()) || (c.name.vi.length >= 6 && lowC.includes(c.name.vi.toLowerCase()))) {
+            const topicW = VN(/\b(tình cảm|tình yêu|người yêu|crush|ny)\b/).test(` ${normalizeVi(lowC)} `) ? "tình cảm" : VN(/\b(công việc|việc làm|sự nghiệp)\b/).test(` ${normalizeVi(lowC)} `) ? "công việc" : VN(/\b(tiền|tài chính)\b/).test(` ${normalizeVi(lowC)} `) ? "tiền bạc" : "";
+            return localReply(q, { role: "assistant", content: `🔮 **${c.name.vi}** (${c.name.en})${topicW ? ` — với câu hỏi về **${topicW}**` : ""}:\n\n• **Xuôi:** ${c.up.vi}\n• **Ngược:** ${c.rev.vi}\n\nĐọc theo hướng gợi ý để mình ngẫm thôi nha — tarot không quyết định thay bạn. Bạn rút ra xuôi hay ngược?`, local: true });
+          }
+        }
+      }
+      // 31/10 (list 7): nhờ Lomi làm thay (đặt bàn, gọi điện, chuyển tiền, nhắn tin…) → nói thật + chỉ chỗ tự làm
+      const ac = en ? null : actionReply(raw);
+      if (ac) return localReply(q, { role: "assistant", content: ac.text, local: true, ...(ac.faqId ? { faqId: ac.faqId } : {}) });
+      // xin liều / dùng thuốc của người khác; xin chẩn đoán vòng; "có nguy hiểm không"
+      const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);
+      if (ds) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: ds, local: true, health: {} }); }
+      const dg = en ? null : await diagnoseReply(raw);
+      if (dg) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: dg.text, local: true, health: {}, med: { id: dg.medId } }); }
       // 31/10: chữ sức khoẻ / tarot dùng cho chuyện app ("thuốc nào trị lỗi…", "quán tên 'Mất Ngủ'"), câu hỏi app hay bị hiểu lạc.
       const tp = en ? null : trapReply(raw);
       if (tp) {
@@ -1451,7 +1640,11 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: tp.text, local: true, ...(tp.faqId ? { faqId: tp.faqId } : {}), ...(tp.heart ? { heart: tp.heart, heartDepth: 1 } : {}) });
       }
       const cmp = en ? null : compareReply(raw);
-      if (cmp) return localReply(q, { role: "assistant", content: cmp, local: true, health: {} });
+      if (cmp) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: cmp, local: true, health: {} }); }
+      const cz0 = en ? null : await causeReply(raw);
+      if (cz0) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: cz0.text, local: true, health: {}, ...(cz0.medId ? { med: { id: cz0.medId } } : {}) }); }
+      const dn = en ? null : await dangerReply(raw);
+      if (dn) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: dn.text, local: true, health: {}, med: { id: dn.medId } }); }
     }
     // 22/10 (QA V5) — TIẾNG ANH (lib/lomiEnglish): app để tiếng Anh, hoặc app tiếng Việt mà người dùng gõ cả câu tiếng Anh.
     //   Trước đây "I want to kill myself", "my husband hit me", "chest pain…" đều nhận "That's outside what Lomi knows" / "chưa hiểu ý";
@@ -2181,6 +2374,7 @@ export function AiChat({
         } else if (fx?.redirect) {
           q = fx.redirect;
           shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
         } else if (fx && !fxFolkWarn && !(fxMed && fxMedKind !== "mental" && fxMedKind !== "term"))
           return localReply(q, {
             role: "assistant",

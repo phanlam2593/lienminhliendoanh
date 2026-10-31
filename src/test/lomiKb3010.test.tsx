@@ -510,5 +510,22 @@ describe("30/10 — trả lời qua khung chat", () => {
     const m2 = await chat(["Con em sốt", "Bé 2 tháng", "38 độ", "Tìm xe đi bệnh viện", "Có quán cháo gần đó không", "À app báo lỗi", "Bé vẫn sốt"]);
     expect(m2[6].content).toMatch(/dưới 3 tháng/);
   }, T);
+  it("Danh sách ChatGPT lần 7 (31/10): đại từ, câu cụt, ngoài khả năng, liều/chẩn đoán, vùng miền", async () => {
+    expect((await chat(["Tôi đang đọc thẻ về thiếu máu.", "Vậy còn nó có làm chóng mặt không?"]))[1].content).toMatch(/thiếu máu/);
+    expect((await chat(["Tôi uống trà xanh buổi chiều rồi khó ngủ.", "Nó có phải nguyên nhân không?"]))[1].content).toMatch(/trà xanh/);
+    expect((await chat(["Tôi đang bị đau đầu và uống thuốc giảm đau.", "Cái đó có ảnh hưởng dạ dày không?"]))[1].content).toMatch(/thuốc giảm đau/);
+    expect((await chat(["Lomi có thể đặt xe cho tôi không?", "Thôi"]))[1].content).toMatch(/không sao/);
+    expect((await last(["Bạn nhắn cho chủ quán hỏi món còn không, nhẹ nhàng thôi."])).content).toMatch(/không tự nhắn tin thay bạn/);
+    expect((await last(["Tôi uống kháng sinh được 2 ngày, hết sốt rồi thì ngưng được chứ?"])).content).toMatch(/uống đủ số ngày/);
+    expect((await last(["Đường huyết cao vậy là tiểu đường chắc rồi đúng không?"])).content).toMatch(/không chẩn đoán được/);
+    expect((await last(["Tôi bị chóng mặt, chắc thiếu máu nên uống sắt nhỉ?"])).content).toMatch(/không chẩn đoán được/);
+    expect((await last(["Uống 3 viên vitamin C một lúc chắc cũng được mà?"])).content).toMatch(/không nêu liều/);
+    expect((await last(["Tôi uống thuốc ngủ của bạn một viên chắc không sao đâu ha?"])).content).toMatch(/Đừng dùng thuốc kê cho người khác/);
+    expect((await last(["Uống thuốc dị ứng xong buồn ngủ quá trời, chạy xe dc ko?"])).content).toMatch(/đừng lái xe/);
+    expect((await last(["Bé bị nóng hổi, sốt 38 độ thì làm răng?"])).content).toMatch(/sốt/);
+    expect((await last(["Chời ơi, Quẹt của tui hổng thấy ai hết trơn, bị gì dzậy?"])).faqId).toBe("quetwhat");
+    expect((await last(["Tui hk nhận dc OTP, thử mấy lần rồi, ntn giờ?"])).content).toMatch(/không gửi mã OTP/);
+    expect((await last(["Tìm quán cf yên tĩnh để làm việc giúp tui vs."])).dish).toBe("cafe");
+    expect((await last(["Bé 2 tháng sốt 38 độ, có thể đợi mai khám không?"])).content).toMatch(/dưới 3 tháng/);
+  }, T);
 });
-
