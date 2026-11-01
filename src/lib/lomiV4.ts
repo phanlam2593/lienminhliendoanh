@@ -132,7 +132,8 @@ function shortTalk(q: string, c: V4Ctx): string | null {
     if (VN(/\b(cái đó|việc đó|chuyện đó|vậy) có (đáng|đáng không|nên không)\b|\bcó đáng không\b/).test(n)) return "Bạn đang cân nhắc chuyện gì nè? Kể Lomi nghe “cái đó” là gì và bạn phải bỏ ra những gì (tiền, thời gian, công sức…) — mình cùng cân nhắc nha.";
     if (VN(/\b(trường hợp|cái|chuyện|vụ) kia\b/).test(n)) return "Trường hợp kia là trường hợp nào vậy bạn? Lomi chưa thấy mình nói tới trường hợp nào trước đó — bạn nói rõ giúp Lomi nha.";
     if (VN(/\b(cho|lấy|nêu) (anh|a|em|e|mình|tui|tôi)? ?(một |1 |vài )?ví dụ\b/).test(n)) return "Ví dụ cho chuyện gì nè? Bạn nói Lomi đang muốn hiểu chuyện gì để Lomi lấy ví dụ đúng nha.";
-    if (VN(/\btóm (lại|tắt)\b/).test(n)) return "Bạn muốn Lomi tóm lại chuyện gì nè? Gửi Lomi nội dung đó nha.";
+    // (01/11: "tóm tắt giúp tôi bệnh gout" đã nêu rõ cần tóm cái gì → để lớp kiến thức trả lời; chỉ hỏi lại khi không nêu gì)
+    if (VN(/\btóm (lại|tắt)\b/).test(n) && !VN(/\b(bệnh|chứng|về|thẻ|bài)\b/).test(n)) return "Bạn muốn Lomi tóm lại chuyện gì nè? Gửi Lomi nội dung đó nha.";
     if (VN(/\b(nên )?chọn (cái|bên|người|phương án) nào\b/).test(n)) return "Bạn đang phân vân giữa những lựa chọn nào nè? Kể Lomi nghe từng lựa chọn, mình cùng cân nhắc.";
   }
   return null;

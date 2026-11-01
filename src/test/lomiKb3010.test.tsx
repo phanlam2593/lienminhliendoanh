@@ -955,4 +955,15 @@ describe("30/10 — trả lời qua khung chat", () => {
     // đối chứng: xin bói vẫn rút bài
     expect((await last(["bói tình yêu"])).tarot).toBeTruthy();
   }, T);
+  it("01/11 — hiểu câu vòng 21: câu hỏi lồng trong lời mở đầu ('bạn có biết…', 'tôi tự hỏi liệu…', 'kể cho tôi về…', 'tóm tắt giúp tôi bệnh…')", async () => {
+    expect((await last(["bạn có biết gout là gì không"])).content).toMatch(/Gout\*\* là gì/);
+    expect((await last(["tôi tự hỏi liệu cà phê có làm mất ngủ không"])).content).toMatch(/\*\*cà phê\*\* có gây \*\*mất ngủ/);
+    expect((await last(["nói tôi nghe về bệnh thủy đậu"])).content).toMatch(/Thuỷ đậu\*\* là gì/);
+    const dm = await last(["kể cho tôi về tiểu đường đi"]);
+    expect(dm.content).toMatch(/Tiểu đường\*\* là gì/);
+    expect(dm.content).not.toMatch(/Bạn bị \*\*tiểu đường/);
+    expect((await last(["tóm tắt giúp tôi bệnh gout"])).content).toMatch(/Gout/);
+    expect((await last(["tóm tắt giúp tôi"])).content).toMatch(/tóm lại chuyện gì/);
+    expect((await last(["mình đang phân vân không biết có nên đi khám không"])).content).toMatch(/khó chịu ở đâu/);
+  }, T);
 });

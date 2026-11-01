@@ -76,7 +76,8 @@ export function vagueMiss(question: string, reply: GateMsg & { content: string; 
   const who = pm ? `${pm[1].charAt(0).toUpperCase()}${pm[1].slice(1).toLowerCase()} bạn` : "Bạn";
   const preg = /(mang thai|có bầu|đang bầu|bà bầu)/iu.test(q);
   return {
-    text: `${who} bị **${name}** hả 🩺 Bạn muốn biết ${name} là gì, chăm sóc ở nhà thế nào, hay khi nào cần đi khám? Chọn bên dưới hoặc hỏi thẳng nha.${preg ? "\n\n⚠️ Đang mang thai mà **nhìn mờ / hoa mắt, đau đầu kèm phù mặt – tay – chân, hoặc đau dưới sườn** thì cần được khám **khẩn** — gọi **115** hoặc tới khoa sản ngay." : ""}`,
+    // (chỉ nói "X bị … hả" khi người dùng thật sự kể là bị / mắc; "kể cho tôi về tiểu đường" là hỏi kiến thức)
+    text: `${/(?:^|\s)(bị|mắc|đang bị|hay bị)(?:\s|$)/u.test(q.toLowerCase()) ? `${who} bị **${name}** hả 🩺` : `Về **${name}** nha 🩺`} Bạn muốn biết ${name} là gì, chăm sóc ở nhà thế nào, hay khi nào cần đi khám? Chọn bên dưới hoặc hỏi thẳng nha.${preg ? "\n\n⚠️ Đang mang thai mà **nhìn mờ / hoa mắt, đau đầu kèm phù mặt – tay – chân, hoặc đau dưới sườn** thì cần được khám **khẩn** — gọi **115** hoặc tới khoa sản ngay." : ""}`,
     medId: id,
     quick: [`${name} là gì?`, `Chăm sóc ${name} thế nào?`, "Khi nào cần đi khám?"],
   };

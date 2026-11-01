@@ -1643,7 +1643,7 @@ export function AiChat({
       }
       // 01/11 (vòng 11): lời mở đầu "cô muốn hỏi / bà cho hỏi / chú hỏi chút" — người HỎI, không phải người bệnh ("cô muốn hỏi con cô 3 tuổi ho…")
       //   (xưng hô đã học ở trên rồi; bỏ lời mở đầu để các lớp sau đọc đúng chủ ngữ của chuyện được kể)
-      const pre = q.normalize("NFC").match(/^(?:(?:cô|chú|bà|ông|bác|dì|cậu|mợ|tôi|tui|mình|em|anh|chị|con|cháu)\s+)?(?:muốn hỏi|muốn hỏi là|cho hỏi|xin hỏi|hỏi chút|hỏi xíu|hỏi cái|muốn hỏi chút|muốn hỏi xíu)\s*(?:là\s+|con\s+ơi\s+|nha\s+)?(?=\S+\s+\S+\s+\S)/iu);
+      const pre = q.normalize("NFC").match(/^(?:(?:cô|chú|bà|ông|bác|dì|cậu|mợ|tôi|tui|mình|em|anh|chị|con|cháu)\s+)?(?:muốn hỏi|muốn hỏi là|cho hỏi|xin hỏi|hỏi chút|hỏi xíu|hỏi cái|muốn hỏi chút|muốn hỏi xíu|tự hỏi|đang tự hỏi|thắc mắc|đang thắc mắc|thắc mắc là|muốn biết|muốn biết là)\s*(?:là\s+|con\s+ơi\s+|nha\s+|không biết\s+|liệu\s+)?(?:liệu\s+)?(?=\S+\s+\S+\s+\S)/iu);
       if (!rp && pre && pre[0].length < q.length - 6) {
         q = q.normalize("NFC").slice(pre[0].length);
         raw = q;
@@ -1766,6 +1766,10 @@ export function AiChat({
         }
       }
       // 31/10 (list 7): nhờ Lomi làm thay (đặt bàn, gọi điện, chuyển tiền, nhắn tin…) → nói thật + chỉ chỗ tự làm
+      // 01/11 (vòng 21): "phân vân có nên đi khám không" mà chưa nói đang bị gì, và lượt trước KHÔNG đang nói chuyện sức khoẻ → hỏi lại một câu
+      const lastH = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
+      if (!en && !detectTarot(raw) && !lastH?.med && !lastH?.health && !lastH?.sx?.length && !lastH?.thread && raw.split(/\s+/).length <= 14 && VN(/\b(có nên|có cần|nên|cần) (đi )?(khám|bác sĩ|đi viện|gặp bác sĩ)( không| ko| k| hông| chưa)?\b/).test(` ${normalizeVi(raw)} `) && !findMedId(raw) && !VN(/\b(đau|sốt|ho|nôn|ói|tiêu chảy|táo bón|ngứa|sưng|chảy máu|mệt|chóng mặt|khó thở|bị|nổi|mất ngủ|lo âu|buồn|bé|con|mẹ|ba|bố)\b/).test(` ${normalizeVi(raw)} `))
+        return localReply(q, { role: "assistant", content: "Bạn đang thấy **khó chịu ở đâu, bị bao lâu rồi** nè? Kể Lomi nghe một chút để Lomi xem khi nào nên đi khám cho đúng nha 🩺 (Thấy khó thở, đau ngực, lơ mơ hay chảy máu nhiều thì gọi **115** ngay.)", local: true });
       const ac = en ? null : actionReply(raw);
       if (ac) return localReply(q, { role: "assistant", content: ac.text, local: true, ...(ac.faqId ? { faqId: ac.faqId } : {}) });
       // 01/11: NGƯỜI BỆNH là con vật ("con mèo nhà tui bị tiêu chảy") — không đưa nguyên nhân / mẹo / thuốc của người (lib/lomiQShape)

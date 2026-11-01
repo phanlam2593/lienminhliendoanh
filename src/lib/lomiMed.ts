@@ -241,7 +241,8 @@ const CHARS_ACC_CHUA = VR(/(?<![\p{L}])chữa(?![\p{L}])/u);
 // Câu hỏi về MỘT MÓN cụ thể: "ăn X được không", "uống X có sao không", "X có ăn được không", "có nên ăn X".
 const FOOD_Q = VN(/\b(?:ăn|uống|dùng|nấu|nhậu|cho (?:vào|thêm)|bổ sung|dùng kèm|ăn thêm|ăn nhiều|uống nhiều)\s+((?:\S+\s){0,3}?\S+?)\s+(?:có |thì |nữa )?(?:được|dc|đc|có sao|có tốt|có nên|có hại|có ảnh hưởng|có kiêng|ko|không|k|hông|hong|nhé|nhe|nha|chứ)\b/);
 const FOOD_Q2 = VN(/\b((?:\S+\s){0,3}?\S+?)\s+(?:có |thì )?(?:ăn|uống|dùng) (?:được|dc|đc|có sao|có tốt)/);
-const OVERVIEW_ASK = VN(/\b(nói về|tìm hiểu về|hỏi về|giới thiệu|biết gì về|biết về|có biết)\b/);
+// (01/11 vòng 21: "nói tôi nghe về…", "kể cho tôi về…", "tóm tắt giúp tôi bệnh…", "cho tôi biết về…" cũng là xin tổng quan)
+const OVERVIEW_ASK = VN(/\b(nói về|tìm hiểu về|hỏi về|giới thiệu|biết gì về|biết về|có biết|nghe về|kể (cho )?(tôi |tui |mình |em )?(nghe )?về|tóm tắt|tóm lại (về )?bệnh|cho (tôi |tui |mình )?biết về)\b/);
 const FILL = new Set("thi la nao nay do kia nua luon cung hay minh toi tui em anh chi ban co cac nhung mot it nhieu gi sao the cai vu dieu chuyen no".split(" "));
 // "hôm nay ăn gì", "trưa nay ăn gì" là nhờ gợi ý món — không phải hỏi kiêng cữ của bệnh đang nói.
 const MEAL_SUGGEST = VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|bây giờ|giờ này|lát nữa|bữa nay)\b/);
