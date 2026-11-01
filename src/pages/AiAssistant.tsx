@@ -1614,6 +1614,25 @@ export function AiChat({
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
       }
+      // 01/11 (vòng 13): KỂ LẠI LỜI NGƯỜI KHÁC ("bạn tôi nói uống bia nhiều bị gout", "trên mạng nói ăn chuối lúc đói bị đau bụng") —
+      //   người dùng KHÔNG kể mình bị bệnh, mà muốn biết lời đó có đúng không → hỏi thẳng điều được nói ("… có đúng không")
+      const hs = q.normalize("NFC").replace(/[?!.…]+$/u, "").match(/^(?:(?:mà|nhưng|ủa)\s+)?(?:(?:người ta|thiên hạ|mọi người|bạn (?:tôi|tui|mình|em)|(?:mẹ|má|ba|bố|vợ|chồng|bà|ông|chị|anh|em) (?:tôi|tui|mình|em|anh|chị)|trên mạng|trên facebook|trên tiktok|trên youtube|có người)\s+(?:(?:hay|cứ|thường|cũng)\s+)?(?:nói|bảo|đồn|khuyên)|nghe nói|nghe đồn|nghe bảo|nghe người ta (?:nói|bảo))\s+(?:là\s+|rằng\s+)?(.{6,80})$/iu);
+      if (!rp && hs && !qtypeOf(hs[1]) && !VN(/\b(tôi|tui|mình|em)\b/).test(` ${normalizeVi(hs[1])} `.replace(/^ (?:bị|phải) /u, " "))) {
+        q = `${hs[1]} không`;
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
+      }
+      // 01/11 (vòng 13): câu BỊ ĐỘNG "tôi bị cà phê làm cho mất ngủ" → quan hệ "cà phê có làm mất ngủ không"
+      const pv = q.normalize("NFC").replace(/[?!.…]+$/u, "").match(/^(?:(?:tôi|tui|mình|em|anh|chị|con|bé)\s+)?bị\s+(.{2,25}?)\s+làm\s+(?:cho\s+)?(?:(?:tôi|tui|mình|em)\s+)?(?:bị\s+)?(.{2,25})$/iu);
+      if (!rp && pv) {
+        q = `${pv[1]} có làm ${pv[2]} không`;
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
+      }
       // 01/11 (vòng 11): lời mở đầu "cô muốn hỏi / bà cho hỏi / chú hỏi chút" — người HỎI, không phải người bệnh ("cô muốn hỏi con cô 3 tuổi ho…")
       //   (xưng hô đã học ở trên rồi; bỏ lời mở đầu để các lớp sau đọc đúng chủ ngữ của chuyện được kể)
       const pre = q.normalize("NFC").match(/^(?:(?:cô|chú|bà|ông|bác|dì|cậu|mợ|tôi|tui|mình|em|anh|chị|con|cháu)\s+)?(?:muốn hỏi|muốn hỏi là|cho hỏi|xin hỏi|hỏi chút|hỏi xíu|hỏi cái|muốn hỏi chút|muốn hỏi xíu)\s*(?:là\s+|con\s+ơi\s+|nha\s+)?(?=\S+\s+\S+\s+\S)/iu);
@@ -2828,7 +2847,7 @@ export function AiChat({
             const told = mk.aspect === "overview" && !hasQuestion(q) && !isSelfStatement(q) && lastA?.med?.id !== mt.id;
             const ack =
               mk.aspect === "overview" && typed && isSelfStatement(q)
-                ? `Bạn đang bị **${typed}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n`
+                ? `Bạn đang bị **${typed.replace(/^(?:đang\s+)?(?:bị|mắc)\s+/iu, "")}** hả 🩺 Lomi chia sẻ những gì đã kiểm chứng để bạn tham khảo nha.\n\n`
                 : told
                   ? `Lomi gửi những điều cần biết về **${medName(mt)}** để tham khảo nha 🩺\n\n`
                   : "";

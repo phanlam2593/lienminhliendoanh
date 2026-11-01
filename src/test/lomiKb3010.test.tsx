@@ -853,4 +853,24 @@ describe("30/10 — trả lời qua khung chat", () => {
     // "nôn nóng" là sốt ruột, không phải trời nóng
     expect((await last(["tôi nôn nóng quá"])).content).not.toMatch(/Nắng nóng/);
   }, T);
+  it("01/11 — hiểu câu vòng 13: kể lại lời người khác, câu bị động, bị lừa / mất mã, tai nạn kể kèm mô tả", async () => {
+    // "bạn tôi nói X" — hỏi X có đúng không, không phải người dùng bị bệnh
+    expect((await last(["bạn tôi nói uống bia nhiều bị gout"])).content).toMatch(/uống bia nhiều\*\* có gây \*\*gout\*\* không/);
+    expect((await last(["trên mạng nói ăn chuối lúc đói bị đau bụng"])).content).not.toMatch(/Bạn đang bị/);
+    // đối chứng: lời người khác nói VỀ CHÍNH MÌNH vẫn là tâm sự
+    expect((await last(["mẹ tôi nói tôi lười"])).content).not.toMatch(/có đúng không|có gây/);
+    // bị động: "bị X làm cho Y" → X có làm Y không
+    expect((await last(["tôi bị cà phê làm cho mất ngủ"])).content).toMatch(/cà phê\*\* có gây \*\*mất ngủ/);
+    // bị lừa / giả danh → an toàn; mất mã ưu đãi → xem lại ưu đãi đã nhận
+    const scam = await last(["tôi bị lừa mất tiền trên app"]);
+    expect(scam.content).toMatch(/Đừng chuyển tiền/);
+    expect(scam.content).not.toMatch(/miễn phí/);
+    expect((await last(["có người giả làm chủ quán nhắn tin xin tiền"])).content).toMatch(/Đừng chuyển tiền/);
+    expect((await last(["ưu đãi có mất tiền không"])).content).toMatch(/miễn phí/);
+    expect((await last(["tôi làm mất mã ưu đãi"])).content).toMatch(/Ưu đãi đã nhận/);
+    // tai nạn kể kèm mô tả → kiến thức xử trí, không lặp "bị bị"
+    const dog = await last(["tôi bị chó cắn chảy máu"]);
+    expect(dog.med?.id).toBe("cho-can");
+    expect(dog.content).not.toMatch(/bị \*\*bị/);
+  }, T);
 });

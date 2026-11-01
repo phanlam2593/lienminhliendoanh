@@ -375,6 +375,9 @@ export function isMedQuestion(text: string, topicNames: string[] = [], allowTold
   const restFreq = restNoTime.replace(VN(/\b(hoài|mãi|suốt|liên tục|quá|lắm|nhiều|hay|bị|thấy|đang|vô|xong rồi|xong|mình|tôi|tui|tớ|e|c)\b/g), " ").replace(/\s+/g, " ").trim();
   const restPeople = restFreq.replace(VN(/\b(\d+ (tuổi|tháng tuổi|tháng)|vợ|chồng|mẹ|má|ba|bố|con|em|anh|chị|bé|ông|bà|cháu|bạn|nhà|của|nội|ngoại)\b/g), " ").replace(/\s+/g, " ").trim();
   if (topicNames.length && words <= 9 && ((allowTold >= 1 && restFreq === "") || (allowTold === 2 && restPeople === ""))) return true;
+  // 01/11 (vòng 13): tai nạn / sơ cứu ("tôi bị chó cắn chảy máu", "bé bị bỏng nước sôi phồng da") — kể kèm vài chữ mô tả vẫn là cần kiến thức xử trí
+  //   (chỉ khi chính người nói / không nêu ai — "mẹ tôi bị …" là mở mạch hỏi han người đó, để lớp chuyện kể lo)
+  if (allowTold === 2 && topicNames.length && words <= 12 && VN(/^ ?(tôi|tui|mình|em|anh|chị|tớ)? ?(vừa |mới |lỡ )?bị\b/).test(` ${n}`.replace(/^\s+/, " ")) && !VN(/\b(mẹ|má|ba|bố|cha|vợ|chồng|con|bé|ông|bà|cháu|bạn|người yêu|chị gái|em gái|anh trai)\b/).test(` ${n} `)) return true;
   // tên + cụm bổ nghĩa ngắn: "tăng động giảm chú ý ở người lớn", "trầm cảm sau sinh", "gout cho người già"
   if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && VN(/^(?:ở|cho|khi|trên|sau|trước|trong) \S+(?: \S+){0,2}$/).test(rest)) return true;
   // có từ hỏi + tên chủ đề nhưng không rõ khía cạnh ("ADHD người lớn có không", "tay chân miệng ở người lớn có không") → tóm tắt chủ đề.

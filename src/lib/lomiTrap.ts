@@ -34,8 +34,19 @@ export function trapReply(q: string): Trap | null {
   // Mật ong cho trẻ — dưới 1 tuổi không dùng (nguồn: thẻ thuốc / mẹo dân gian đã ghi)
   if (/\bmat ong\b/.test(n) && /\b(tre|be|con|em be|so sinh)\b/.test(n) && /\b(may tuoi|bao nhieu tuoi|may thang|bao nhieu thang|duoc an|an duoc|uong duoc|duoc chua)\b/.test(n))
     return { text: "🍯 **Không cho trẻ dưới 1 tuổi ăn / uống mật ong** nha — kể cả một chút để pha nước hay chấm núm vú. Từ **đủ 1 tuổi** trở lên thì dùng được.\nLý do: mật ong có thể chứa bào tử vi khuẩn gây **ngộ độc botulinum ở trẻ nhỏ**, rất nguy hiểm với bé dưới 1 tuổi." };
+  // 01/11 (vòng 13): BỊ LỪA / có người GIẢ DANH xin tiền — an toàn tài khoản, không phải hỏi phí hay mẹo kinh doanh
+  //   (chỉ chuyện TRONG APP — tin nhắn, chủ quán, tài khoản; chuyển khoản ngân hàng / mua đồ gian bên ngoài đã có lớp riêng)
+  if (VN(/\b(bị lừa|lừa đảo|lừa tiền|giả làm|giả danh|mạo danh|giả mạo|xin tiền|đòi chuyển tiền|bắt chuyển tiền)\b/).test(n) && VN(/\b(app|ứng dụng|ilomi|lomi|tin nhắn|nhắn tin|nhắn|chủ quán|tài khoản|quẹt|trang quán|doanh nghiệp)\b/).test(n) && !VN(/\b(mẹ|ba|bố|bạn (tôi|tui|em|anh|chị)|vợ|chồng|ông|bà|con)\b/).test(n)) {
+    const rp = faqById("report");
+    return { text: `Gặp chuyện này thì bạn làm ngay nha 🛡️\n• **Đừng chuyển tiền** hay gửi mã, mật khẩu cho ai qua tin nhắn — iLomi không bao giờ nhắn đòi tiền hay đòi mật khẩu\n• Chặn người đó: trong khung chat bấm **⋯ → Chặn người dùng**\n• Báo cáo cho Ban quản trị: ${rp ? rp.a.vi : "bấm Báo cáo trên hồ sơ / trang doanh nghiệp"}\n• Nếu đã chuyển tiền: liên hệ ngân hàng ngay để được hỗ trợ, và báo công an nơi gần nhất`, faqId: "report" };
+  }
+  // 01/11: làm mất / quên mã ưu đãi → xem lại ở ưu đãi đã nhận
+  if (VN(/\b(mất|quên|lỡ xoá|lỡ xóa|không thấy|không tìm thấy) (cái )?(mã|mã ưu đãi|ưu đãi|voucher|mã giảm giá)\b/).test(n)) {
+    const ce = faqById("claimexp");
+    if (ce) return { text: `Đừng lo nha 🎁 ${ce.a.vi}`, faqId: "claimexp" };
+  }
   // 01/11: hỏi PHÍ ("nếu đăng ưu đãi thì có mất phí không") — loại câu hỏi là giá / phí, không phải "làm sao đăng"
-  if (VN(/\b(mất phí|tốn phí|tính phí|thu phí|có phí|trả phí|mất tiền|tốn tiền|miễn phí không|free không|có free)\b/).test(n) && APP_OBJ.test(n)) {
+  if (VN(/\b(mất phí|tốn phí|tính phí|thu phí|có phí|trả phí|mất tiền|tốn tiền|miễn phí không|free không|có free)\b/).test(n) && APP_OBJ.test(n) && /(không|ko|k|chưa|hả|bao nhiêu|sao)\s*$|\?/u.test(low + (q.includes("?") ? "?" : ""))) {
     const fr = faqById("free"), mb = faqById("membership");
     if (fr) return { text: `${fr.a.vi}${mb && VN(/\b(ưu đãi|doanh nghiệp|quán)\b/).test(n) ? `\n\nRiêng chuyện ưu đãi: ${mb.a.vi.charAt(0).toLowerCase()}${mb.a.vi.slice(1)}` : ""}`, faqId: "free" };
   }
