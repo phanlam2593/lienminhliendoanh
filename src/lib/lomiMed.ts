@@ -223,7 +223,7 @@ const KID_CUE_B = VN(/ (con|bé|trẻ|em bé|cháu|sơ sinh) /);
 // ── Khía cạnh được hỏi ──
 export type MedAspect = "define" | "signs" | "causes" | "course" | "spread" | "care" | "diet" | "food" | "doctor" | "emergency" | "meds";
 const ASPECTS: [MedAspect, RegExp][] = [
-  ["spread", VN(/\b(lây bao lâu|lây trong bao lâu|lây mấy ngày|còn lây|có lây|lây không|lây qua|lây nhiễm|lây truyền|truyền nhiễm|lây sang|bị lây|lây cho|lây từ|lây khi|lây được|lây thế nào|lây như thế nào|lây ra sao|lây bằng|lây đường)\b/)],
+  ["spread", VN(/\b(hết lây|lây bao lâu|lây trong bao lâu|lây mấy ngày|còn lây|có lây|lây không|lây qua|lây nhiễm|lây truyền|truyền nhiễm|lây sang|bị lây|lây cho|lây từ|lây khi|lây được|lây thế nào|lây như thế nào|lây ra sao|lây bằng|lây đường)\b/)],
   ["emergency", VN(/\b(cấp cứu|gọi 115|nguy hiểm đến tính mạng|dấu hiệu nguy hiểm|báo động)\b/)],
   ["meds", VN(/\b(thuốc gì|thuốc nào|uống thuốc|dùng thuốc|thuốc trị|thuốc chữa|có thuốc|cần thuốc|thuốc đặc trị)\b/)],
   ["diet", VN(/\b(kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],

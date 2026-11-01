@@ -697,4 +697,32 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["gout ăn tôm đặng không"])).content).not.toMatch(/tôm đặng/);
     expect((await last(["tui bị tiêu chảy, mần răng chừ"])).content).toMatch(/Với \*\*Tiêu chảy\*\*, nên/);
   }, T);
+  it("01/11 — hiểu câu vòng 6: câu hỏi app (loại câu hỏi, từ khoá bẫy) và hội thoại nhiều lượt", async () => {
+    // "không nhắn tin được" là lỗi, không phải người yêu lạnh nhạt; đối chứng "người yêu không nhắn tin" vẫn là tâm sự
+    const mt = await last(["sao tôi không nhắn tin được"]);
+    expect(mt.content).toMatch(/Không nhắn \/ gọi được/);
+    expect(mt.heart).toBeUndefined();
+    expect((await last(["người yêu không nhắn tin"])).content).not.toMatch(/Không nhắn \/ gọi được/);
+    // "bị chặn thì sao biết" ≠ "chặn thế nào"
+    expect((await last(["bị người khác chặn thì sao biết"])).content).toMatch(/không gửi thông báo/);
+    expect((await last(["chặn người khác thế nào"])).content).toMatch(/Chặn người dùng/);
+    // quán của mình không hiện → trạng thái duyệt, không phải mẹo quảng cáo
+    expect((await last(["quán tôi bị ẩn là sao"])).content).toMatch(/duyệt tay/);
+    expect((await last(["làm sao để quán tôi hiện trên khám phá"])).content).toMatch(/hiện công khai/);
+    // quyền riêng tư: nói thật là chưa chắc, không đưa nhầm hướng dẫn đổi ảnh như câu trả lời
+    expect((await last(["ai thấy được số điện thoại của tôi"])).content).toMatch(/chưa chắc/);
+    expect((await last(["tôi bị app chặn rồi"])).content).toMatch(/Tài khoản bị khoá/);
+    expect((await last(["lomi có bị bệnh không"])).content).not.toMatch(/chưa có kiến thức/);
+    expect((await last(["ưu đãi này có độc không"])).content).toMatch(/không chứa mã độc/);
+    // hội thoại: "bé bị ho" rồi "có cần đi khám không" → thẻ ho (không phải cúm)
+    expect((await chat(["bé bị ho", "có cần đi khám không"]))[1].med?.id).toBe("ho");
+    expect((await chat(["cúm có lây không", "vậy bao lâu thì hết lây"]))[1].content).toMatch(/chuyện lây của \*\*Cúm/);
+    expect((await chat(["đổi mật khẩu ở đâu", "còn đổi email"]))[1].faqId).toBe("avatar");
+    expect((await chat(["ưu đãi là gì", "nhận nó ở đâu"]))[1].stuck).toBeUndefined();
+    const fw = await chat(["gout kiêng gì", "nhầm, tôi hỏi cho chồng tôi"]);
+    expect(fw[1].content).toMatch(/chồng bạn/);
+    expect(fw[1].content).toMatch(/Gout/);
+    expect((await chat(["tôi bị cảm", "à không phải cảm, cúm"]))[1].content).toMatch(/cúm/i);
+    expect((await chat(["tìm quán phở", "à quên, tôi bị gout, ăn phở được không"]))[1].content).toMatch(/Gout/);
+  }, T);
 });

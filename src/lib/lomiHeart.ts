@@ -978,6 +978,8 @@ function themeOf(n: string): Theme | undefined {
   const m = ` ${dropNegated(n) || n} `;
   const t = THEMES.find((x) => FIRST.includes(x.id) && x.re.test(` ${n} `)) ?? THEMES.find((x) => x.re.test(m));
   // "e bị bạn thân phản bội" — bị BẠN BÈ phản bội là chuyện bạn bè, không phải bị người yêu lừa dối.
+  // 01/11: "sao tôi không nhắn tin được", "tui gửi tin không được" — người nói KHÔNG LÀM ĐƯỢC việc trên app, không phải người yêu lạnh nhạt
+  if (t?.id === "cold" && VN(/\b(không|ko|k|hổng|chẳng) (nhắn tin|nhắn|gửi tin nhắn|gửi tin|rep|trả lời tin nhắn|gọi) (được|đc|dc)\b|\b(nhắn tin|gửi tin|gửi tin nhắn) (không|ko|k|chẳng) (được|đi|lên)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|ny|crush|anh ấy|cô ấy|bạn trai|bạn gái)\b/).test(m)) return undefined;
   if (t?.id === "cheat" && VN(/\b(bạn thân|bạn bè|đứa bạn|con bạn|thằng bạn|người bạn|đồng nghiệp)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|bạn trai|bạn gái|ny)\b/).test(m)) return THEMES.find((x) => x.id === "friends") ?? t;
   return t;
 }

@@ -711,6 +711,8 @@ export function AiChat({
       const a = s0.slice(0, m.index).trim().replace(/[,;]+$/u, "");
       const b = s0.slice((m.index ?? 0) + m[0].length).trim().replace(/^(?:ngoài ra|tiện hỏi|với|và|mà)\s+/iu, "");
       if (a.split(/\s+/).length < 3 || b.split(/\s+/).length < 3) continue;
+      // 01/11: vế đầu là KỂ BỆNH CỦA MÌNH ("à quên, tôi bị gout"), vế sau là câu hỏi món / việc không nêu bệnh → một ý, không tách
+      if (VN(/\b(tôi|tui|mình|em|anh|chị|con|mẹ|ba|bố)( \S+)? (bị|mắc|đang bị)\b/).test(` ${normalizeVi(a)} `) && findMedId(a) && !findMedId(b) && VN(/\b(ăn|uống|dùng)\b/).test(` ${normalizeVi(b)} `)) return null;
       const da = domainOf(a);
       const db = domainOf(b);
       // (bói về chuyện sức khoẻ — lớp chặn tarot y khoa lo, không tách)
@@ -1569,6 +1571,10 @@ export function AiChat({
       //   của câu hỏi trước, giữ loại câu hỏi; "thôi không bói nữa, cho hỏi đau lưng" → hỏi chuyện mới (lib/lomiRepair)
       const rp = repairTurn(q, pu?.raw ?? pu?.content);
       if (rp?.ask) return localReply(q, { role: "assistant", content: rp.ask, local: true });
+      if (rp?.faqId) {
+        const rf = faqById(rp.faqId);
+        if (rf) return localReply(rp.q, { role: "assistant", content: rf.a.vi, local: true, faqId: rf.id });
+      }
       if (rp) {
         q = rp.q;
         raw = rp.q;
@@ -2744,7 +2750,7 @@ export function AiChat({
         const prevUserText = [...msgs].reverse().find((m) => m.role === "user")?.content;
         const sxPrev = !lastA?.med && lastA?.sx?.length === 1 && !(prevUserText && hCtx?.label && normalizeVi(prevUserText).includes(normalizeVi(hCtx.label))) ? lastA.sx[0] : null;
         //   (chỉ câu nối hỏi CÁCH CHĂM SÓC / KHI NÀO ĐI KHÁM — hỏi thuốc, hỏi món vẫn để lớp thuốc / kiêng cữ trả lời như trước)
-        const sxPrevId = sxPrev && ["care", "doctor", "emergency"].includes(medAspectOf(q) ?? "") ? (symptomViewId(sxPrev) ?? findMedId(symptomLabel(sxPrev) ?? "")) : null;
+        const sxPrevId = sxPrev && ["care", "doctor", "emergency"].includes(medAspectOf(q) ?? "") ? (symptomViewId(sxPrev) ?? findMedId(symptomLabel(sxPrev) ?? "") ?? findMedId(`bị ${symptomLabel(sxPrev) ?? ""}`)) : null;
         const mk = parseMedAsk(q, lastA?.med ?? (sxPrevId ? { id: sxPrevId } : undefined) ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
         //   Tự hỏi "có phải a bị trầm cảm không" là câu hỏi CHẨN ĐOÁN về chính mình → mạch tâm sự / sức khoẻ trả lời "Lomi không chẩn đoán".
         const mkSkip =

@@ -117,7 +117,7 @@ export function followAspect(q: string): FollowAspect | null {
   const n = N(q);
   if (words(q) > 10) return null;
   if (VN(/\b(nghỉ học|đi học (được|lại|chưa)|đi nhà trẻ|đi mẫu giáo|đi làm (được|lại) (chưa|không|ko|k)|cách ly|ở nhà mấy ngày|nghỉ mấy ngày)\b/).test(n)) return "school";
-  if (VN(/\b(ăn chung|uống chung ly|dùng chung|ở chung|ngủ chung|hôn|lây qua|lây cho|có lây)\b/).test(n)) return "spread";
+  if (VN(/\b(ăn chung|uống chung ly|dùng chung|ở chung|ngủ chung|hôn|lây qua|lây cho|có lây|hết lây|còn lây|lây bao lâu|lây mấy ngày)\b/).test(n)) return "spread";
   if (VN(/\b(bao lâu|mấy ngày|mấy tuần|lâu không) (mới |thì |là )?(khỏi|hết|lành|đỡ|bớt)|bao lâu (mới |thì )?khỏi|khi nào (mới |thì )?(khỏi|hết|đỡ)\b/).test(n)) return "course";
   if (!VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|bây giờ|giờ này|lát nữa|bữa nay|ăn gì ngon|quán|đi ăn)\b/).test(n) && VN(/\b(ăn gì (tốt|được|cho|đây)|ăn gì|ăn uống (sao|thế nào|ra sao|như nào|như thế nào|gì)|nên ăn|kiêng gì|ăn tối lúc nào|ăn (tối|khuya) (lúc|mấy giờ|được không))\b/).test(n)) return "diet";
   if (VN(/\b(có cần (đi )?khám|đi khám (không|chưa|được không)|có nguy hiểm|nguy hiểm không|có sao không)\b/).test(n)) return "doctor";
@@ -211,7 +211,8 @@ export function appFollow(q: string, prevFaqId: string | undefined, recentFaqIds
   if (inCtx("ridebook", "ridprice") && VN(/\b(đặt xe|đặt sao|đi bằng|đi sao|đi kiểu gì|ntn|thế nào|như nào)\b/).test(n) && !VN(/\b(giá|bao nhiêu|tiền)\b/).test(n))
     return { faqId: "ridebook" };
   // Đổi mật khẩu: không tìm thấy chỗ đổi ("trong hồ sơ á", "không thấy mục bảo mật", "chỉ em với")
-  if (inCtx("password") && VN(/\b(trong hồ sơ|không thấy (mục|chỗ|nút)|mục bảo mật|bảo mật|chỉ (em|anh|chị|tui|mình) với|chỉ giùm|ở đâu|chỗ nào)\b/).test(n))
+  //   (01/11: câu nêu thứ KHÁC mật khẩu — "đổi email ở đâu", "còn đổi ảnh đại diện" — không phải hỏi tiếp chỗ đổi mật khẩu)
+  if (inCtx("password") && !VN(/\b(email|số điện thoại|sđt|ảnh|tên|giới thiệu|thông tin)\b/).test(n) && VN(/\b(trong hồ sơ|không thấy (mục|chỗ|nút)|mục bảo mật|bảo mật|chỉ (em|anh|chị|tui|mình) với|chỉ giùm|ở đâu|chỗ nào)\b/).test(n))
     return { faqId: "password", text: "Từng bước nè 👇\n1. Bấm **Hồ sơ** (biểu tượng người ở thanh dưới)\n2. Bấm nút **⋯** góc trên bên phải → chọn **Cài đặt** (hoặc mở thẳng /ho-so?view=settings)\n3. Trong mục **Cài đặt** có dòng **Đổi mật khẩu** — app không có mục tên “Bảo mật” riêng đâu nha\n4. Nhập mật khẩu hiện tại, mật khẩu mới (từ 6 ký tự) rồi lưu\n\nVẫn không thấy dòng đó thì vuốt tắt hẳn app rồi mở lại (có thể app chưa cập nhật bản mới)." };
   // Đổi mật khẩu (không phải quên)
   if (inCtx("password", "forgot", "forgotnoemail") && VN(/\b(không phải quên|vẫn đăng nhập được|đổi trong hồ sơ|đang đăng nhập|muốn đổi)\b/).test(n)) return { faqId: "password" };

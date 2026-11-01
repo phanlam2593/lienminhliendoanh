@@ -8,6 +8,7 @@ import { findMedTopicId, nameAsTyped } from "@/lib/lomiMed";
 import { nutrientOf, NUTRIENTS } from "@/lib/lomiNutrients";
 import { causeSide, parseCause } from "@/lib/lomiCause";
 import { qtypeOf } from "@/lib/lomiQShape";
+import { matchFaq } from "@/lib/lomiFaq";
 
 /** Dấu hiệu sửa ý ở đầu câu, rồi tới phần mới. */
 const MARK = /^(?:(?:à|ờ|ơ|ủa|à mà|xin lỗi|sorry)\s*,?\s*)?(?:(?:không|ko|k|hông|nhầm|lộn|nhầm rồi|lộn rồi|sửa lại|đính chính|gõ nhầm|gõ lộn|viết nhầm)\s*[,.:!\-–]*\s*)?(?:(?:ý tui là|ý tôi là|ý mình là|ý em là|ý anh là|ý chị là|mình muốn hỏi|tui muốn hỏi|tôi muốn hỏi|em muốn hỏi|ý là|ý tui|ý mình|tui hỏi|tôi hỏi|mình hỏi|em hỏi|ý|là)\s+)?(.{2,80})$/u;
@@ -15,7 +16,7 @@ const HAS_MARK = /^(?:(?:à|ờ|ơ|ủa)\s*,?\s*)?(?:không\s*[,.]|ko\s*[,.]|nh�
 
 const PERSON =/^(?:là\s+)?((?:con|bé|mẹ|má|ba|bố|cha|vợ|chồng|ông|bà|anh|chị|em)(?:\s+(?:tôi|tui|mình|em|anh|chị|nội|ngoại))?|tôi|tui|mình|tớ)(?=\s|$)/u;
 
-export type Repair = { q: string; lead?: string; /** Không đủ ngữ cảnh để hiểu → hỏi lại đúng một câu (không đoán). */ ask?: string };
+export type Repair = { q: string; lead?: string; /** Câu viết lại khớp đúng một câu hỏi app (FAQ) → trả lời luôn câu đó. */ faqId?: string; /** Không đủ ngữ cảnh để hiểu → hỏi lại đúng một câu (không đoán). */ ask?: string };
 /** prevQ = câu hỏi trước của người dùng; q = câu vừa gõ. Không phải câu sửa ý → null. */
 export function repairTurn(q: string, prevQ: string | undefined): Repair | null {
   const low = q.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").replace(/\s+/g, " ").trim();
@@ -36,9 +37,24 @@ export function repairTurn(q: string, prevQ: string | undefined): Repair | null 
   //   ("tôi bị sốt" → "thế còn bé thì sao" = "bé bị sốt"; "ung thư phổi có phải do hút thuốc không" → "vậy còn thuốc lá điện tử")
   const ell = low.match(/^(?:(?:vậy|thế|rồi|à|ủa|nhưng)\s+)?còn\s+(.{2,40}?)(?:\s+(?:thì sao|thì thế nào|thì như nào|thì ra sao|thì sao nhỉ|thì sao ạ|sao|thì|nữa|nhỉ|ạ|ha|hả))*$/u);
   if (ell && !HAS_MARK.test(low)) return swapInto(ell[1].replace(/^(?:cái|con|người|vụ)\s+(?=\S+\s+\S)/u, "").trim(), prevQ, true);
+  // ĐẠI TỪ "nó / cái đó" thay cho chủ đề câu trước ("ưu đãi là gì" → "nhận nó ở đâu" = "nhận ưu đãi ở đâu")
+  if (!HAS_MARK.test(low) && low.split(" ").length <= 8 && /(?:^|\s)(nó|cái đó|cái này|cái ấy)(?=\s|$)/u.test(low)) {
+    const pp = prevQ.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim();
+    const tm = pp.match(/^(.{2,30}?)\s+(?:là gì|là sao|là cái gì|có tác dụng gì|dùng để làm gì|hoạt động sao|là bệnh gì)$/u);
+    if (tm && tm[1].split(" ").length <= 4) {
+      const cand = low.replace(/(^|\s)(nó|cái đó|cái này|cái ấy)(?=\s|$)/u, `$1${tm[1]}`);
+      if (matchFaq(cand) || findMedTopicId(cand)) return { q: cand };
+    }
+  }
   if (!HAS_MARK.test(low)) return null;
   const m = low.match(MARK);
-  const nw = (m?.[1] ?? "").replace(/^(?:là|hỏi)\s+/u, "").trim();
+  let nw = (m?.[1] ?? "").replace(/^(?:là|hỏi)\s+/u, "").trim();
+  // "à không phải cảm, cúm" / "không phải A mà là B" — bỏ phần bị bác, giữ phần sửa lại
+  const np = nw.match(/^phải\s+(?:là\s+)?.{1,25}?\s*(?:,|mà)\s*(?:mà\s+)?(?:là\s+)?(.{2,40})$/u);
+  if (np) nw = np[1].trim();
+  // "nhầm, tôi hỏi cho chồng tôi" — đổi người được hỏi cho, giữ câu hỏi cũ
+  const forWho = nw.match(/^(?:tôi|tui|mình|em)?\s*(?:hỏi\s+)?(?:cho|giùm|giúp|dùm)\s+((?:con|bé|mẹ|má|ba|bố|cha|vợ|chồng|ông|bà|anh|chị|em|bạn)(?:\s+(?:tôi|tui|mình|em|nội|ngoại))?)$/u);
+  if (forWho) return { q: prevQ.normalize("NFC").replace(/[?!.…]+$/u, "").trim(), lead: `Dạ, Lomi hiểu là bạn hỏi cho **${forWho[1].replace(/\s+(tôi|tui|mình)$/u, " bạn")}** nha 📝` };
   return swapInto(nw, prevQ, false);
 }
 
@@ -96,6 +112,15 @@ function swapInto(nw: string, prevQ: string, ellipsis: boolean): Repair | null {
   if (!qtypeOf(nw) && nw.split(" ").length <= 4 && ((!ellipsis && idOld) || idNew || /(?:^|\s)(?:đau|viêm|sốt|ho|ngứa|nổi|nhức|tiêu chảy|táo bón|buồn nôn|chóng mặt|mất ngủ)(?:\s|$)/u.test(nw.toLowerCase()))) {
     const qm = pl.match(/\s(nên ăn gì|ăn gì|uống gì|kiêng gì|nên kiêng gì|là gì|là bệnh gì|có lây không|bao lâu thì (?:khỏi|hết|đỡ)|có nguy hiểm không|có sao không|vì sao|tại sao|làm sao|thì làm sao|thì sao|nên làm gì|thì làm gì|có nên .+|có (?:gây|làm) .+|khi nào .+|ở đâu|chỗ nào|triệu chứng gì|có triệu chứng gì|dấu hiệu gì|nguyên nhân gì|có tác dụng gì|tác dụng gì|có trong .+|chữa sao|chữa thế nào|thế nào|ra sao)$/u);
     if (qm && qm.index !== undefined && qm.index > 0 && pl.slice(0, qm.index).split(" ").length <= 5) return { q: `${nw} ${prev.slice(qm.index + 1)}` };
+  }
+  // Câu hỏi APP: câu cũ = <việc> + <phần hỏi> ("đổi mật khẩu ở đâu") và phần mới là một việc khác ("còn đổi email") → "đổi email ở đâu"
+  if (!qtypeOf(nw) && nw.split(" ").length <= 5 && matchFaq(prev)) {
+    const qa = pl.match(/\s(ở đâu|chỗ nào|thế nào|như thế nào|làm sao|ra sao|được không|mất bao lâu|bao lâu|khi nào)$/u);
+    if (qa && qa.index) {
+      const cand = `${nw} ${prev.slice(qa.index + 1)}`;
+      const f1 = matchFaq(cand);
+      if (f1 && f1.id !== matchFaq(prev)?.id) return { q: cand, faqId: f1.id };
+    }
   }
   // Chỉ có tên bệnh mới, câu cũ không có bệnh → hỏi về bệnh mới (lớp sau hiểu như câu nêu tên bệnh)
   if (idNew && nw.split(" ").length <= 5 && !ellipsis) return { q: nw };

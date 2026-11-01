@@ -305,7 +305,7 @@ export const FAQS: Faq[] = [
   F("avatar", "profile", "Đổi ảnh đại diện, tên, giới thiệu thế nào?", "Change avatar, name or bio?",
     "Vào Hồ sơ (/ho-so): chạm ảnh đại diện (biểu tượng máy ảnh) để đổi ảnh. Bấm ⋯ → Hồ sơ cá nhân để sửa họ tên, email, SĐT và phần giới thiệu (tối đa 300 ký tự) → Lưu thay đổi.",
     "Profile (/ho-so): tap your avatar (camera icon) to change it. ⋯ → Personal profile to edit name, email, phone and bio (max 300 chars) → Save.",
-    ["cap nhat ho so", "chinh sua ho so", "cap nhat thong tin", "sua thong tin ca nhan", "doi thong tin ca nhan", "cap nhat thong tin ca nhan", "doi anh", "anh dai dien", "doi ten", "sua ho so", "gioi thieu ban than", "avatar", "doi so dien thoai", "doi email", "bio"]),
+    ["doi email", "sua email", "doi so dien thoai", "sua so dien thoai", "doi sdt", "sua sdt", "cap nhat ho so", "chinh sua ho so", "cap nhat thong tin", "sua thong tin ca nhan", "doi thong tin ca nhan", "cap nhat thong tin ca nhan", "doi anh", "anh dai dien", "doi ten", "sua ho so", "gioi thieu ban than", "avatar", "doi so dien thoai", "doi email", "bio"]),
   F("username", "profile", "Đổi tên đăng nhập được không?", "Can I change my username?",
     "Tên đăng nhập hiện không tự đổi được. Nếu thật sự cần đổi, bạn liên hệ Ban quản trị ở Hồ sơ → ⋯ → Trợ giúp & Liên hệ nha. Họ tên hiển thị thì tự sửa ở Hồ sơ cá nhân được.",
     "Usernames can't be changed yourself — contact the admins via Profile → ⋯ → Help & Contact. Your display name can be edited in Personal profile.",

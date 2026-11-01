@@ -39,6 +39,28 @@ export function trapReply(q: string): Trap | null {
     const fr = faqById("free"), mb = faqById("membership");
     if (fr) return { text: `${fr.a.vi}${mb && VN(/\b(ưu đãi|doanh nghiệp|quán)\b/).test(n) ? `\n\nRiêng chuyện ưu đãi: ${mb.a.vi.charAt(0).toLowerCase()}${mb.a.vi.slice(1)}` : ""}`, faqId: "free" };
   }
+  // 01/11 (vòng 6): QUÁN CỦA MÌNH không hiện / bị ẩn / muốn hiện trên Khám phá — hỏi TRẠNG THÁI hồ sơ, không phải xin mẹo quảng cáo
+  if (VN(/\b(quán|tiệm|shop|doanh nghiệp|cửa hàng|homestay|spa)( (của )?(tôi|tui|mình|em|anh|chị))?\b/).test(n) && VN(/\b(bị ẩn|không hiện|chưa hiện|không thấy hiện|không xuất hiện|bị khoá|bị khóa|bị từ chối|chưa được duyệt|chưa duyệt|hiện trên khám phá|lên khám phá|hiện lên app|hiện công khai)\b/).test(n)) {
+    const st = faqById("bizstatus");
+    return { text: `Hồ sơ doanh nghiệp chỉ **hiện công khai** (trên Khám phá) sau khi Ban quản trị **duyệt tay** nha 🏪\n• Chưa có hồ sơ: **Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp** (/ho-so?view=business) rồi gửi duyệt\n• Đã gửi mà chưa hiện / bị yêu cầu bổ sung: ${st ? st.a.vi.charAt(0).toLowerCase() + st.a.vi.slice(1) : "xem ghi chú của Ban quản trị trong Hồ sơ doanh nghiệp"}\n\nCòn nếu ý bạn là làm sao để **nhiều khách biết tới** quán hơn thì nói Lomi, Lomi gợi ý cách thu hút khách nha.`, faqId: "bizstatus" };
+  }
+  // 01/11: "bị người khác chặn thì sao biết" — hỏi CÁCH BIẾT, không phải cách chặn (dựa đúng điều app làm khi chặn)
+  if (VN(/\b(bị (ai đó |người khác |người ta |họ |nó )?chặn|bị block)\b/).test(n) && VN(/\b(sao biết|làm sao biết|biết được không|có biết không|thì sao biết|biết không|làm sao để biết)\b/).test(n))
+    return { text: "App **không gửi thông báo** khi ai đó chặn bạn nha 🙂 Khi bị chặn thì bạn sẽ **không nhắn tin, không gọi và không xem được hồ sơ** của người đó nữa — nếu đột nhiên không làm được những việc này với một người thì có thể họ đã chặn.\nNếu thấy bị chặn hay bị làm phiền không đúng, bạn liên hệ Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ).", faqId: "block" };
+  // 01/11: ai thấy số điện thoại / không muốn người khác thấy — Lomi không chắc phạm vi hiển thị → nói thật + chỉ chỗ sửa / xoá
+  if (VN(/\b(số điện thoại|sđt|sdt|email)( của (tôi|tui|mình|em))?\b/).test(n) && VN(/\b(ai thấy|ai xem|người khác thấy|người khác xem|công khai|ẩn|giấu|không muốn (ai|người khác) (thấy|biết|xem))\b/).test(n)) {
+    const ed = faqById("avatar");
+    return { text: `Lomi **chưa chắc** chính xác ai xem được ${VN(/\bemail\b/).test(n) ? "email" : "số điện thoại"} trên hồ sơ của bạn nên không dám nói bừa 🙏\n• Muốn sửa hoặc bỏ bớt thông tin: ${ed ? ed.a.vi : "Hồ sơ → ⋯ → Hồ sơ cá nhân"}\n• Muốn hỏi cho chắc về quyền riêng tư: liên hệ Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ), hoặc xem Chính sách quyền riêng tư trong app.`, faqId: "avatar" };
+  }
+  // 01/11: "tôi bị app chặn", "app khoá tôi rồi" — tài khoản bị khoá, không phải cách chặn người khác
+  if (VN(/\b(bị app (chặn|khoá|khóa|cấm)|app (chặn|khoá|khóa|cấm) (tôi|tui|mình|em)|bị (khoá|khóa|cấm) (app|tài khoản|acc))\b/).test(n))
+    return { text: "Tài khoản bị khoá thì bạn thử vầy nha:\n• Nếu vừa **nhập sai mật khẩu nhiều lần** thì chờ vài phút rồi thử lại, hoặc bấm **Quên mật khẩu** (nhập đúng email + số điện thoại đã đăng ký)\n• Nếu app báo tài khoản bị khoá / tạm ngưng → liên hệ **Ban quản trị** (trang đầu có Email / Hotline / Facebook) để hỏi lý do và cách mở lại", faqId: "forgot" };
+  // 01/11: hỏi thăm Lomi bằng chữ sức khoẻ ("lomi có bị bệnh không", "lomi có mệt không") — chuyện phiếm, không phải câu hỏi y khoa
+  if (VN(/^ ?(lomi|bạn lomi|em lomi)( ơi)?( có| cũng)? (bị bệnh|bị ốm|ốm|bệnh|mệt|đau|sốt|bị cảm|bị cúm)( không| ko| k| hả| chưa| hông)? ?$/).test(n))
+    return { text: "Hihi Lomi là trợ lý chạy trên máy nên không ốm, không mệt đâu 😄 Cảm ơn bạn đã hỏi thăm nha! Còn bạn dạo này khoẻ không?" };
+  // 01/11: "sao tôi không nhắn tin được" — hỏi vì sao KHÔNG LÀM ĐƯỢC (lỗi), không phải hỏi cách nhắn
+  if (VN(/\b(không|ko|k|chẳng|hổng) (nhắn tin|nhắn|gửi tin nhắn|gửi tin|gọi|gọi điện) (được|đc|dc)\b|\b(nhắn tin|gửi tin nhắn|gửi tin) (không|ko|chẳng) (được|đi|lên)\b/).test(n) && !VN(/\b(người yêu|chồng|vợ|ny|crush|anh ấy|cô ấy|bạn trai|bạn gái)\b/).test(n))
+    return { text: "Không nhắn / gọi được thì bạn thử lần lượt nha 📩\n1. Kiểm tra mạng, kéo trang xuống tải lại hoặc tắt hẳn app rồi mở lại\n2. Nếu chỉ không nhắn được với **một người** — có thể người đó đã chặn bạn (khi bị chặn thì không nhắn, gọi hay xem hồ sơ của họ được), hoặc chính bạn đã chặn họ (xem ở Hồ sơ → ⋯ → Cài đặt → Người dùng đã chặn)\n3. Gọi thoại / video thì người kia cần đang online\n4. Vẫn không được thì nhắn Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ), kể rõ lỗi hiện ra sao", faqId: "msgstart" };
   // Mã OTP / SMS xác minh — app không dùng
   if (VN(/\b(otp|mã xác nhận|mã xác thực|mã xác minh|sms xác (minh|nhận))\b/).test(n))
     return {
@@ -129,7 +151,7 @@ export function trapReply(q: string): Trap | null {
   // Lá bài / mã giảm giá "có độc không"
   if (VN(/\b(lá bài|lá tarot|bài tarot|lá này)\b/).test(n) && VN(/\b(độc|ám|xui|có hại|nguy hiểm|tà)\b/).test(n))
     return { text: "Không đâu nha 😄 Lá bài chỉ là hình vẽ trên màn hình thôi, không “độc” hay “ám” gì cả. Còn nếu ý bạn là lá nghe đáng sợ, thì trong tarot **không có lá tốt hay xấu tuyệt đối** — mỗi lá chỉ gợi một góc nhìn để mình ngẫm, xem cho vui và tham khảo thôi." };
-  if (VN(/\b(mã giảm giá|mã ưu đãi|voucher|link)\b/).test(n) && VN(/\b(độc|mã độc|virus|lừa đảo)\b/).test(n))
+  if (VN(/\b(mã giảm giá|mã ưu đãi|ưu đãi|voucher|link)\b/).test(n) && VN(/\b(độc|mã độc|virus|lừa đảo)\b/).test(n))
     return { text: "Mã ưu đãi trong iLomi chỉ là **dãy ký tự để quán xác nhận** bạn đã nhận ưu đãi — không phải file hay đường link, nên không chứa mã độc gì đâu nha 🙂 Cẩn thận với **link lạ** ai đó gửi qua tin nhắn (nhất là đòi đăng nhập, chuyển tiền) — gặp thì đừng bấm, báo cáo người gửi cho Ban quản trị.", faqId: "claim" };
   // Quán có TÊN giống chữ sức khoẻ ("quán tên 'Mất Ngủ'", "quán bún tên Bệnh Viện")
   const named = low.match(/\b(?:quán|tiệm)\s*(?:[\p{L}]+\s+){0,2}(?:có\s+)?(?:tên|tên là|tên gọi)\s*['"“”‘’]?([\p{L}\d ]{2,25}?)['"“”‘’]?(?=\s+(?:ở|mở|có|nằm|đâu|giờ|vậy|v|không|ko)\b|$)/u)
