@@ -287,7 +287,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "cold",
-    re: VN(/\b((chồng|vợ|ck|vk|người yêu|ny|anh ấy|cô ấy)( \S+){0,2} (cứ )?(im ru|im re|im thin thít|chẳng nói gì|không nói gì)|lạnh nhạt|ít nhắn tin|không nhắn tin|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|không (còn )?quan tâm (mình|anh|em|tôi|tui) (như trước|nữa)|(ít|không còn) quan tâm (mình|anh|em) như trước|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
+    re: VN(/\b((chồng|vợ|ck|vk|người yêu|ny|anh ấy|cô ấy)( \S+){0,2} (cứ )?(im ru|im re|im thin thít|chẳng nói gì|không nói gì)|lạnh nhạt|ít nhắn tin|không nhắn tin|không thèm nhắn|chẳng thèm nhắn|không thèm rep|không thèm trả lời|không thèm gọi|chẳng thèm gọi|không rep|seen không rep|không trả lời tin nhắn|chưa trả lời tin nhắn|không trả lời|không nhắn lại|seen|bị ghost|ghost mình|không quan tâm mình|hết quan tâm|không (còn )?quan tâm (mình|anh|em|tôi|tui) (như trước|nữa)|(ít|không còn) quan tâm (mình|anh|em) như trước|thay đổi rồi|khác xưa|xa cách|vô tâm|bỏ bê|không còn như trước)\b/),
     feel: [
       "Người thương tự dưng lạnh đi, cảm giác hụt hẫng và bất an lắm 🥺",
       "Chờ tin nhắn mà không thấy đâu thì lòng cứ thấp thỏm ha. Lomi hiểu mà.",

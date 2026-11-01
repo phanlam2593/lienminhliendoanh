@@ -365,7 +365,8 @@ const RULES: Rule[] = [
   },
   // Bực / giận
   {
-    re: VN(/\b(bực quá|bực mình|tức quá|giận quá|điên quá|cay quá|khó chịu|bị làm phiền|phiền quá)\b/),
+    // (01/11: "dạ dày khó chịu", "trong người khó chịu", "bụng khó chịu" — khó chịu ở CƠ THỂ, không phải bực mình)
+    re: VN(/\b(bực quá|bực mình|tức quá|giận quá|điên quá|cay quá|(?<!(dạ dày|bao tử|bụng|người|trong người|ngực|họng|cổ họng|mắt|da|đầu|lưng|chân|tay|tim|dạ dày tôi|bụng tôi) )khó chịu|bị làm phiền|phiền quá)\b/),
     reply: () => ({
       text: pick([
         "Ai làm bạn bực vậy 😤 Hít sâu ba hơi đã nha. Nếu là chuyện trong app — bị làm phiền, nghi lừa đảo — bạn có thể Chặn hoặc Báo cáo người đó ngay.",

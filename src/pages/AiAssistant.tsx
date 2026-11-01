@@ -1471,7 +1471,13 @@ export function AiChat({
       .replace(/(^|[^\p{L}])mần (răng|chi|gì)(?![\p{L}])/giu, (_m, a, b) => `${a}làm ${b === "răng" ? "sao" : "gì"}`)
       .replace(/(^|[^\p{L}])đặng (không|hông|ko|k|hem|chưa)(?![\p{L}])/giu, "$1được $2")
       // thành ngữ cảm xúc — không phải triệu chứng: "sốt ruột" = lo, "đau lòng" = buồn, "vết thương lòng" = nỗi buồn trong lòng
-      .replace(/(^|[^\p{L}])sốt ruột(?![\p{L}])/giu, "$1lo lắng")
+      .replace(/(^|[^\p{L}])(sốt ruột|nôn nóng|bồn chồn sốt ruột)(?![\p{L}])/giu, "$1lo lắng")
+      // 01/11 (vòng 12): đại từ sở hữu chen giữa BỘ PHẬN CƠ THỂ và triệu chứng ("tim tôi đập nhanh", "dạ dày tôi khó chịu", "mắt tôi bị đỏ")
+      //   → "tôi tim đập nhanh"… để các lớp nhận đúng cụm triệu chứng, vẫn giữ người nói là chủ thể
+.replace(/^(\s*)bụng\s+(tôi|tui|mình|em|anh|chị)\s+(đói|sôi|cồn cào)(?![\p{L}])/iu, "$1$2 $3 bụng")
+      // (gõ không dấu: chỉ cụm chắc nghĩa "tim … dap" — "tim em dap loan nhip" — để không dấu hiểu giống có dấu)
+      .replace(/^(\s*)tim\s+(toi|tui|minh|em|anh|chi)\s+(dap)(?![\p{L}])/iu, "$1$2 tim $3")
+      .replace(/^(\s*)(tim|mắt|bụng|dạ dày|bao tử|đầu|lưng|răng|họng|cổ họng|ngực|chân|tay|da|mặt|vai|gối|đầu gối|khớp|mũi|tai|cổ)\s+(tôi|tui|mình|em|anh|chị|của tôi|của tui|của mình)\s+(?=(?:bị|cứ|hay|đang|lại|thấy|đập|đau|nhức|khó chịu|ngứa|sưng|đỏ|chảy|nóng|lạnh|tê|mỏi|ù|nghẹt|rát|đói|sôi|cồn cào)(?![\p{L}]))/iu, (_m, sp, part, pron) => `${sp}${pron.replace(/^của\s+/u, "")} ${part} `)
       .replace(/(^|[^\p{L}])đau lòng(?![\p{L}])/giu, "$1buồn")
       .replace(/(^|[^\p{L}])vết thương lòng(?![\p{L}])/giu, "$1nỗi buồn trong lòng")
       .replace(/(^|[^\p{L}])rứa(?![\p{L}])/giu, "$1vậy")

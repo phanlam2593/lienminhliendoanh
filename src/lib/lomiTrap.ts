@@ -222,6 +222,8 @@ export function actionReply(q: string): Trap | null {
   const cam = W(/\b(camera|cam an ninh)\b/u).test(low) && W(/\b(mở|xem|coi|check)\b/u).test(low);
   if (!ASK_DO.test(low) && !cam) return null;
   if (W(/\b(cấp cứu|115|113|114)\b/u).test(low)) return null;
+  // 01/11 (vòng 12): "họ không thèm nhắn cho tôi", "anh ấy chẳng gọi cho em" — người KHÁC không làm, người dùng đang than, không phải nhờ Lomi làm
+  if (/^(?:mà\s+)?(?:họ|nó|anh ấy|cô ấy|chị ấy|ảnh|chỉ|người ta|người yêu|ny|bạn trai|bạn gái|chồng|vợ|sếp|bạn tôi|bạn tui)(?:\s+(?:tôi|tui|mình|em))?\s+(?:\S+\s+){0,2}?(?:không|chẳng|chả|hổng|chưa|ko|k)(?:\s+(?:thèm|chịu|hề|bao giờ|có))?\s+(?:nhắn|gọi|gửi|trả lời|rep)/u.test(low)) return null;
   // "làm sao để…", "cách…" là hỏi cách tự làm — lớp hướng dẫn app lo
   if (W(/\b(làm sao|cách nào|cách|như thế nào|ntn|ở đâu|chỗ nào)\b/u).test(low) && !W(/\b(giùm|dùm|hộ|thay)\b/u).test(low)) return null;
   const tired = W(/\b(mệt (muốn xỉu|xỉu|quá|lắm|rã rời)|muốn xỉu|xỉu up|chóng mặt|choáng)\b/u).test(low);

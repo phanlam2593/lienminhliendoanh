@@ -840,4 +840,17 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(biz.places).toBeUndefined();
     expect(biz.content).toMatch(/Tạo hồ sơ doanh nghiệp/);
   }, T);
+  it("01/11 — hiểu câu vòng 12: đại từ sở hữu chen giữa bộ phận cơ thể, người khác không làm ≠ nhờ Lomi làm, thành ngữ", async () => {
+    expect((await last(["tim tôi đập nhanh"])).content).toMatch(/tim đập nhanh/);
+    expect((await last(["mắt tôi bị đỏ"])).content).toMatch(/đỏ mắt/);
+    expect((await last(["bụng tôi đói"])).content).toMatch(/Đói/);
+    expect((await last(["dạ dày tôi khó chịu"])).content).not.toMatch(/Ai làm bạn bực/);
+    expect((await last(["bực mình quá"])).content).toMatch(/bực|Hít sâu|giận/i);
+    // "họ không thèm nhắn cho tôi" là than phiền; "nhắn cho tôi chủ quán…" mới là nhờ làm thay
+    const sad = await last(["họ không thèm nhắn cho tôi"]);
+    expect(sad.content).not.toMatch(/không tự nhắn tin thay bạn|Vậy hả 😄/);
+    expect((await last(["nhắn cho tôi chủ quán là tôi tới trễ nha"])).content).toMatch(/không tự nhắn tin thay bạn/);
+    // "nôn nóng" là sốt ruột, không phải trời nóng
+    expect((await last(["tôi nôn nóng quá"])).content).not.toMatch(/Nắng nóng/);
+  }, T);
 });
