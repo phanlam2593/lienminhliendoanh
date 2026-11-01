@@ -1780,6 +1780,16 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: `Thương bé ${pet} ghê 🥺 Kiến thức sức khoẻ của Lomi là **cho người**, nên Lomi không nói nguyên nhân hay cách chữa cho ${pet} được — con vật bị bệnh khác người, nhiều thuốc người dùng bình thường lại độc với chó mèo.\n• Đừng tự cho bé uống thuốc của người\n• Đưa bé đi **bác sĩ thú y** để được khám\n• Bé lả đi, bỏ ăn uống, khó thở, co giật hay chảy máu → đưa đi thú y **ngay**${VN(/\b(ăn phải|nuốt phải|ăn nhầm|uống nhầm|liếm phải)\b/).test(` ${normalizeVi(raw)} `) ? "\n• Bé **ăn / nuốt phải** thứ lạ thì gọi hoặc đưa đi thú y **ngay**, kể cả khi bé chưa có biểu hiện gì — mang theo bao bì hoặc thứ bé đã ăn" : ""}`, local: true, about: { text: `${pet}`, kind: "pet" } });
       }
       // xin liều / dùng thuốc của người khác; xin chẩn đoán vòng; "có nguy hiểm không"
+      // 01/11 (vòng 23): gõ không dấu "bi gout an toi dc ko" — "toi" là TỎI hay bữa TỐI? Không đoán → hỏi lại, kèm 2 câu bấm sẵn.
+      if (!en && !/[^\x00-\x7F]/.test(typed) && findMedId(raw)) {
+        const nt = ` ${normalizeVi(typed)} `;
+        const mt = nt.match(/ (an) toi (?=(duoc|dc|đc|co|ko|k|khong|hong|tot|nha|nhe)\b)/);
+        if (mt) {
+          const base = typed.replace(/[?!.]+$/, "");
+          const re = new RegExp(`\\b${mt[1]} toi\\b`, "i");
+          return localReply(q, { role: "assistant", content: "Lomi hỏi lại chút nha 🙂 Bạn gõ không dấu nên Lomi chưa chắc: ý bạn là ăn **tỏi** hay ăn **bữa tối**?", local: true, quick: [base.replace(re, "ăn tỏi"), base.replace(re, "ăn tối")] });
+        }
+      }
       const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);
       if (ds) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: ds, local: true, health: {} }); }
       const dg = en ? null : await diagnoseReply(raw);
@@ -2845,7 +2855,7 @@ export function AiChat({
             const fm = ph ? matchFood(mt, ph) : null;
             if (ph && fm && [fm.name, ...fm.aliases].some((x) => normalizeVi(x) === ph)) Object.assign(mk, { aspect: "food", food: ph });
           }
-          const mr00 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined) : null;
+          const mr00 = mt ? renderMed(mt, mk.aspect, mk.food, Date.now(), mk.food ? foodDisplay(q, mk.food) : undefined, mk.aspect === "overview" ? q : undefined, q) : null;
           // 15/10: thẻ TÊN GỌI CHUNG ("viêm khớp") + hỏi ăn uống / một món → trả lời theo từng loại bệnh (lib/lomiMed.renderUmbrella).
           const mr0 = mt && mr00 ? await umbrellaMed(mt, mr00, mk.food, mk.food ? foodDisplay(q, mk.food) : undefined) : mr00;
           // Câu nối chung chung theo chủ đề đang nói: chỉ trả lời khi thẻ có đúng ý được hỏi, không thì để các lớp sau xử lý.

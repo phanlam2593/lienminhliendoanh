@@ -2278,7 +2278,8 @@ export function renderFolkMenu(): string {
   ].join("\n\n");
 }
 
-const FOOD_ASK = VN(/\b(ăn|uống)\b.*\b(được không|được k|được ko|dc k|đc k|có sao|kiêng|có nên|nên không)\b/);
+// (01/11 vòng 23: "bị gout có ăn được tỏi không", "có nên ăn tỏi", "gout ăn tỏi tốt không" cũng là hỏi kiêng cữ món đó với bệnh)
+const FOOD_ASK = VN(/\b(ăn|uống)\b.*\b(được không|được k|được ko|dc k|đc k|dc ko|đc ko|có sao|kiêng|có nên|nên không|tốt không|tốt ko|tốt k|hại không|hại ko)\b|\b(có nên|nên|có được|có thể) (tránh )?(ăn|uống)\b|\bcó (ăn|uống) được\b/);
 const HELP_ASK = VN(/\b(chữa|trị|giúp|đỡ|hết|khỏi|có tác dụng|công dụng|tác dụng)\b/);
 
 /**
@@ -2304,12 +2305,14 @@ export function folkReply(
     //   (Hỏi cho trẻ nhỏ / bà bầu mà vị này có lưu ý riêng cho nhóm đó — "bà bầu ăn ngải cứu được không" — thì vẫn trả lời ở đây.)
     const nq0 = ` ${normalizeVi(q)} `;
     const group = (KID.test(nq0) && [...(f.how ?? []), ...f.caution].some((x) => KID_FACT.test(x.text))) || (PREG.test(nq0) && f.caution.some((x) => PREG_FACT.test(x.text)));
-    if (med && !group && !f.topics.some((t) => t.id === med.id) && !folkWord && FOOD_ASK.test(nq0) && !HELP_ASK.test(nq0)) return null;
+    //   (01/11 vòng 23: câu nối sau thẻ bệnh — "tôi bị gout" rồi "ăn tỏi được không" — bệnh lấy từ câu trước)
+    const dm = med ?? prevMed;
+    if (dm && !group && !f.topics.some((t) => t.id === dm.id) && !folkWord && FOOD_ASK.test(nq0) && !HELP_ASK.test(nq0)) return null;
     return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   }
   const uh = findUnverifiedHerb(q);
   if (uh && asked) {
-    if (med && !folkWord && FOOD_ASK.test(` ${normalizeVi(q)} `) && !HELP_ASK.test(` ${normalizeVi(q)} `)) return null;
+    if ((med ?? prevMed) && !folkWord && FOOD_ASK.test(` ${normalizeVi(q)} `) && !HELP_ASK.test(` ${normalizeVi(q)} `)) return null;
     return { text: renderUnverified(uh, med?.name), topic: med?.id };
   }
   if (!folkWord) return null;

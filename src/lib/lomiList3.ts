@@ -259,7 +259,8 @@ export function list3Reply(q: string): L3 | null {
       text: "Hơi cảm hả, thương ghê 🤒 Nghỉ ngơi nhiều, uống đủ nước ấm, ăn đồ dễ tiêu, giữ ấm cổ — cảm lạnh thông thường hay tự đỡ dần sau khoảng một tuần.\n\nĐi khám nếu sốt cao không hạ, khó thở, đau ngực, lừ đừ, hoặc mấy ngày không đỡ mà nặng thêm.\n\nBạn đang bị gì nhiều nhất — sổ mũi, đau họng, sốt hay nhức người?",
     };
   // Lá gan + rượu bia / ăn uống (không phải "gan" là can đảm).
-  if (VN(/\bgan\b/).test(n) && !GAN_BRAVE.test(n) && VN(/\b(nhậu|rượu|bia|ăn uống thất thường|ăn uống bậy|toang|yếu)\b/).test(n) && !VN(/\b(nóng|sôi|tức|giận)\b/).test(n))
+  // (01/11 vòng 23: "bị gan nhiễm mỡ uống bia được không" — đã nêu đúng tên bệnh gan → để thẻ bệnh trả lời món đó)
+  if (VN(/\bgan\b/).test(n) && !GAN_BRAVE.test(n) && !/\b(gan nhiem mo|viem gan|xo gan|ung thu gan|men gan)\b/.test(normalizeVi(n)) && VN(/\b(nhậu|rượu|bia|ăn uống thất thường|ăn uống bậy|toang|yếu)\b/).test(n) && !VN(/\b(nóng|sôi|tức|giận)\b/).test(n))
     return {
       id: "liver_worry",
       health: true,

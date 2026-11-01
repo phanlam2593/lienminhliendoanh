@@ -239,11 +239,20 @@ const ASPECTS: [MedAspect, RegExp][] = [
 ];
 const CHARS_ACC_CHUA = VR(/(?<![\p{L}])chữa(?![\p{L}])/u);
 // Câu hỏi về MỘT MÓN cụ thể: "ăn X được không", "uống X có sao không", "X có ăn được không", "có nên ăn X".
-const FOOD_Q = VN(/\b(?:ăn|uống|dùng|nấu|nhậu|cho (?:vào|thêm)|bổ sung|dùng kèm|ăn thêm|ăn nhiều|uống nhiều)\s+((?:\S+\s){0,3}?\S+?)\s+(?:có |thì |nữa )?(?:được|dc|đc|có sao|có tốt|có nên|có hại|có ảnh hưởng|có kiêng|ko|không|k|hông|hong|nhé|nhe|nha|chứ)\b/);
+const FOOD_Q = VN(/\b(?:ăn|uống|dùng|nấu|nhậu|cho (?:vào|thêm)|bổ sung|dùng kèm|ăn thêm|ăn nhiều|uống nhiều)\s+((?:\S+\s){0,3}?\S+?)\s+(?:có |thì |nữa )?(?:được|dc|đc|có sao|có tốt|có nên|có hại|có ảnh hưởng|có kiêng|tốt|hại|ko|không|k|hông|hong|nhé|nhe|nha|chứ)\b/);
+// "bị gout thì ăn tỏi có sao không" — "có sao" nói về MÓN vừa nêu, không phải hỏi bệnh có nguy hiểm không.
+const FOOD_SAO = VN(/\b(?:ăn|uống|dùng) (?:\S+ ){1,3}(?:thì |có )?(?:có sao|sao không|có hại)\b/);
+// Hỏi CẢ chế độ ăn ("kiêng gì", "nên ăn những gì") chứ không phải hỏi MỘT món.
+//   (01/11 vòng 23: "bị gout có nên ăn tỏi", "có nên tránh ăn tỏi" là hỏi đúng một món — "nên ăn" chỉ là hỏi chế độ khi theo sau là gì / những / thế nào)
+const NOT_ONE_FOOD = VN(/\b(kiêng gì|kiêng những|kiêng món gì|kiêng ăn gì|kiêng cữ gì|kiêng ăn|kiêng|ăn gì|uống gì|nên ăn (?:gì|những|uống|thế|như|ra sao|sao|món gì|loại gì)|tránh ăn (?:gì|những|món gì)|tránh (?:gì|những gì))\b/);
+// "bị gout có nên ăn tỏi", "gout nên uống bia" — câu hỏi có nên ăn MỘT món, món đứng cuối câu (không có đuôi hỏi).
+const FOOD_Q3 = VN(/\b(?:có nên|nên|có được|được|có thể) (?:tránh )?(?:ăn|uống|dùng)\s+((?:\S+\s){0,2}\S+)\s*$/);
 const FOOD_Q2 = VN(/\b((?:\S+\s){0,3}?\S+?)\s+(?:có |thì )?(?:ăn|uống|dùng) (?:được|dc|đc|có sao|có tốt)/);
 // (01/11 vòng 21: "nói tôi nghe về…", "kể cho tôi về…", "tóm tắt giúp tôi bệnh…", "cho tôi biết về…" cũng là xin tổng quan)
 const OVERVIEW_ASK = VN(/\b(nói về|tìm hiểu về|hỏi về|giới thiệu|biết gì về|biết về|có biết|nghe về|kể (cho )?(tôi |tui |mình |em )?(nghe )?về|tóm tắt|tóm lại (về )?bệnh|cho (tôi |tui |mình )?biết về)\b/);
 const FILL = new Set("thi la nao nay do kia nua luon cung hay minh toi tui em anh chi ban co cac nhung mot it nhieu gi sao the cai vu dieu chuyen no".split(" "));
+// Dạng CÓ DẤU của các chữ đệm trên (để biết "do" trong câu là "đó" hay "đỏ", "toi" là "tôi" hay "tỏi").
+const FILL_ACC = new Set("thì là nào này đó kia nữa luôn cũng hay mình tôi tui em anh chị bạn có các những một ít nhiều gì sao thế cái vụ điều chuyện nó thi la nao nay do kia nua luon cung minh toi chi ban co cac nhung mot nhieu gi the cai vu dieu chuyen no".split(" "));
 // "hôm nay ăn gì", "trưa nay ăn gì" là nhờ gợi ý món — không phải hỏi kiêng cữ của bệnh đang nói.
 const MEAL_SUGGEST = VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|bây giờ|giờ này|lát nữa|bữa nay)\b/);
 
@@ -251,13 +260,24 @@ const MEAL_SUGGEST = VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|b
 export function foodPhrase(text: string, topic?: MedTopic | null): string | null {
   let n = normalizeVi(text);
   if (topic) for (const nm of topic.names) n = ` ${n} `.replace(` ${normalizeVi(nm)} `, " ").trim();
-  const m = n.match(FOOD_Q) ?? n.match(FOOD_Q2);
+  const m = n.match(FOOD_Q) ?? n.match(FOOD_Q2) ?? n.match(FOOD_Q3);
   if (!m) return null;
   // Chỉ bỏ chữ đệm ở HAI ĐẦU — chữ ở giữa là một phần tên món ("nước CÓ ga", "trà CÓ đường").
   const words = m[1].split(" ").filter(Boolean);
+  // ("sỏi thận uống NƯỚC GÌ tốt", "ăn loại cá NÀO" — hỏi chọn món nào, không phải hỏi một món cụ thể)
+  //   (gõ có dấu thì chỉ nhận đúng chữ "gì / nào" — "ăn NÃO heo" là tên món)
+  const wh = /[^\x00-\x7F]/.test(text) ? /(?<![\p{L}])(gì|nào|j)(?![\p{L}])/iu.test(text.normalize("NFC")) : true;
+  if (wh && words.some((w) => w === "gi" || w === "nao" || w === "j")) return null;
+  // (01/11 vòng 23: "bị gout ăn TỎI được không" — bỏ dấu "tỏi" trùng đại từ "tôi" trong bộ chữ đệm; gõ có dấu "tỏi" thì giữ là tên món)
+  const garlic = /(?<![\p{L}])tỏi(?![\p{L}])/iu.test(text.normalize("NFC"));
+  //   Tổng quát: câu gõ có dấu mà KHÔNG có chữ đệm nào (dạng có dấu) bỏ dấu ra chữ này → đây là chữ của tên món ("đồ ĐỎ" ≠ "đó").
+  const accW = /[^\x00-\x7F]/.test(text) ? new Set(text.normalize("NFC").toLowerCase().split(/[^\p{L}]+/u).filter(Boolean)) : null;
+  const fillAcc = (w: string) => !accW || [...accW].some((a) => FILL_ACC.has(a) && normalizeVi(a) === w);
+  const fill = (w: string) => FILL.has(w) && !(garlic && w === "toi") && fillAcc(w);
   // (01/11: "ăn được đậu không" — "được" đứng trước món là trợ từ, không thuộc tên món)
-  while (words.length && (FILL.has(words[0]) || /^(duoc|dc|đc)$/.test(words[0]))) words.shift();
-  while (words.length && FILL.has(words[words.length - 1])) words.pop();
+  // ("gout nên TRÁNH bia không" — "tránh" là động từ, không thuộc tên món)
+  while (words.length && (fill(words[0]) || /^(duoc|dc|đc|tranh)$/.test(words[0]))) words.shift();
+  while (words.length && fill(words[words.length - 1])) words.pop();
   const p0 = words.join(" ").trim();
   const p = normalizeVi(foodSyn(p0)); // "cf" → "ca phe"
   return p.length >= 2 ? p : null;
@@ -267,16 +287,21 @@ export function foodDisplay(text: string, phrase: string): string {
   const orig = text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
   const b = orig.map((w) => normalizeVi(w));
   const want = phrase.split(" ");
-  for (let i = 0; i + want.length <= b.length; i++) if (want.every((w, j) => b[i + j] === w)) return orig.slice(i, i + want.length).join(" ");
+  // (01/11 vòng 23: "mẹ TÔI bị gout ăn TỎI" — bỏ dấu hai chữ trùng nhau; lấy chỗ khớp CUỐI cùng, vì món đứng sau động từ ăn / uống)
+  for (let i = b.length - want.length; i >= 0; i--) if (want.every((w, j) => b[i + j] === w)) return orig.slice(i, i + want.length).join(" ");
   for (const [, to] of FOOD_SYN) if (normalizeVi(to) === phrase) return to;
   return phrase;
 }
+const TASTE = new Set(["chua", "cay", "ngot", "man", "dang", "beo", "chat", "nhat"]);
 /** Món trong thẻ khớp với cụm đã hỏi (theo tên hoặc tên gọi khác). */
-export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood | null {
+export function matchFood(t: MedTopic, phrase: string, shown?: string, question?: string): MedFood | null {
   if (!t.diet || !phrase) return null;
   const p = ` ${phrase} `;
   // Chữ người dùng đã gõ dấu thì dấu phải khớp: "đậu rang" không phải "dâu", "nấm" không phải "nâm".
   const sa = shown ? acc(shown) : null;
+  // 01/11 (vòng 23): câu gõ CÓ DẤU thì chữ không dấu trong món là cố ý không dấu — "ăn CHUA" không phải "chứa" trong
+  //   "đồ uống CHỨA caffeine" (trước đây "trào ngược ăn chua được không" ra phần cà phê).
+  const strict = !!question && /[^\x00-\x7F]/.test(question.replace(new RegExp(shown ?? "\\0", "g"), ""));
   let best: { f: MedFood; len: number } | null = null;
   for (const f of t.diet.foods)
     for (const nm of [f.name, ...f.aliases]) {
@@ -290,7 +315,9 @@ export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood 
       // 15/10: món được hỏi nằm TRONG tên món của thẻ ("gà" trong "thịt gà") — chữ nào người dùng gõ dấu thì dấu phải đúng
       //   ở chính chỗ đó: "gà" không phải "ga" trong "nước ngọt có ga".
       const whole = !(single || head) && p.includes(` ${k} `);
-      const hit = single || head ? false : whole ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa) : false;
+      // 01/11 (vòng 23): hỏi một VỊ ("ăn chua", "ăn ngọt") — chỉ khớp món đúng là vị đó ("đồ cay", "cay"), không khớp chữ nằm trong tên món ("cà CHUA")
+      if (TASTE.has(phrase) && k !== phrase && !new RegExp(`\\b(do|an|do an|thuc an|vi|mon) ${phrase}\\b`).test(k)) continue;
+      const hit = single || head ? false : whole ? !sa || accentAgrees(sa, acc(nm)) : bare(k).includes(p) ? !sa || typedAccentsAt(acc(nm), sa, strict) : false;
       // 30/10: tên món của thẻ nằm TRỌN trong câu hỏi ("khoai tây" ↔ nhóm "rau củ nhiều kali") thắng trường hợp câu hỏi chỉ là
       //   một phần tên món dài hơn ("khoai tây" trong "khoai tây chiên lát" của nhóm đồ chế biến sẵn).
       const len = k.length + (whole ? 1000 : 0);
@@ -302,7 +329,7 @@ export function matchFood(t: MedTopic, phrase: string, shown?: string): MedFood 
 }
 
 /** Cụm người dùng gõ (sa) nằm trong tên món (nameAcc): có một chỗ khớp mà mọi chữ người dùng ĐÃ gõ dấu đều đúng dấu. */
-function typedAccentsAt(nameAcc: string, sa: string): boolean {
+function typedAccentsAt(nameAcc: string, sa: string, strict = false): boolean {
   const nw = nameAcc.trim().split(" ");
   const tw = sa.trim().split(" ");
   const nb = nw.map((w) => canon(normalizeVi(w)));
@@ -311,7 +338,7 @@ function typedAccentsAt(nameAcc: string, sa: string): boolean {
     let ok = true;
     for (let j = 0; j < tb.length && ok; j++) {
       if (nb[i + j] !== tb[j]) ok = false;
-      else if (isAccented(tw[j]) && wordKey(tw[j]) !== wordKey(nw[i + j])) ok = false;
+      else if ((isAccented(tw[j]) || strict) && wordKey(tw[j]) !== wordKey(nw[i + j])) ok = false;
     }
     if (ok) return true;
   }
@@ -508,18 +535,46 @@ function chipsOf(t: MedTopic, skip?: string): string[] {
 
 const TERM_HINT = (t: MedTopic) => (t.disambiguation ? `${t.disambiguation}\n\n` : "");
 
+/** Các món người dùng liệt kê sau "ăn / uống" ("tỏi, gừng", "tôm và cua") — null nếu chỉ một món. */
+function foodList(typed: string): string[] | null {
+  const m = typed.normalize("NFC").toLowerCase().match(/(?<![\p{L}])(?:ăn|uống)\s+(.+?)\s+(?:có |thì )?(?:được|đc|dc|có sao|có tốt|tốt|hại|không|ko|k|hông|nha|nhé)(?![\p{L}])/u);
+  if (!m || !/,|\/|(?<![\p{L}])(và|với|hoặc|hay)(?![\p{L}])/u.test(m[1])) return null;
+  const xs = m[1].split(/\s*(?:,|\/|(?<![\p{L}])(?:và|với|hoặc|hay)(?![\p{L}]))\s*/u).map((x) => x.trim()).filter((x) => x.length >= 2);
+  return xs.length >= 2 ? xs : null;
+}
 /** Lời đáp cho một khía cạnh của một thẻ. food = cụm món được hỏi (đã bỏ dấu) nếu aspect là "food". */
-export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: string | null, now = Date.now(), shown?: string, question?: string): MedReply {
+export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: string | null, now = Date.now(), shown?: string, question?: string, typed?: string): MedReply {
   const N = title(t);
   const end = (used: DrugFact[][]) => `${sourceLine(t, srcs(...used), now)}`;
   const out = (text: string, a: MedReply["aspect"], partial = false): MedReply => ({ text, aspect: a, partial, topic: t, quick: chipsOf(t, a === "overview" ? undefined : a === "food" ? "diet" : a) });
 
   if (aspect === "food" && food) {
+    // 01/11 (vòng 23): "gout ăn tỏi, gừng được không", "ăn tôm và cua được không" — hỏi NHIỀU món một lúc → trả lời từng món
+    //   (trước đây gộp thành một món "tỏi gừng" không có trong nguồn).
+    const many = typed ? foodList(typed) : null;
+    if (many && many.length >= 2 && many.every((x) => food.includes(normalizeVi(x).split(" ")[0]))) {
+      const parts = many.slice(0, 3).map((x) => renderMed(t, "food", normalizeVi(foodSyn(x)), now, x));
+      // mỗi món một đoạn kết luận; phần nguyên tắc chung / nguồn chỉ nói một lần (không lặp câu)
+      const paras = parts.map((r) => r.text.split("\n\n"));
+      const rest = [...new Set(paras.flatMap((x) => x.slice(1)))];
+      const UNV = /^Về \*\*(.+?)\*\* thì Lomi \*\*chưa xác minh được\*\*/;
+      const unv = paras.map((x) => x[0]).filter((h) => UNV.test(h));
+      // hai món cùng một nhóm của nguồn ("chuối", "xoài" → trái cây) → một đoạn, ghi cả hai tên
+      const heads: string[] = [];
+      for (const h of paras.map((x) => x[0]).filter((h) => !UNV.test(h))) {
+        const i = heads.findIndex((x) => x.split("\n")[0] === h.split("\n")[0]);
+        const nm = h.match(/\(Lomi hiểu “(.+?)” thuộc nhóm/)?.[1];
+        if (i < 0) heads.push(h);
+        else if (nm) heads[i] = heads[i].replace(/\(Lomi hiểu (.+?) thuộc nhóm/, (_m, a: string) => `(Lomi hiểu ${a}, “${nm}” thuộc nhóm`);
+      }
+      if (unv.length) heads.push(unv[0].replace(UNV, `Về ${unv.map((h) => `**${h.match(UNV)![1]}**`).join(", ")} thì Lomi **chưa xác minh được**`).replace(/món này/g, unv.length > 1 ? "các món này" : "món này"));
+      return { ...parts[0], text: [...heads, ...rest].join("\n\n") };
+    }
     if (REHYD_Q.test(` ${food} `)) {
       const r = rehydReply(t, now);
       if (r) return r;
     }
-    const f = matchFood(t, food, shown);
+    const f = matchFood(t, food, shown, typed ?? question);
     if (f) {
       const say = f.verdict === "avoid" ? "nên **tránh**" : f.verdict === "limit" ? "nên **hạn chế**" : f.verdict === "good" ? "là món **nên ăn**" : "**được**";
       const body = `Với ${N}: **${f.name}** ${say}.\n${f.note}${normalizeVi(f.name) !== food ? `\n(Lomi hiểu “${shown ?? food}” thuộc nhóm “${f.name}” theo cách nguồn phân nhóm.)` : ""}`;
@@ -1151,9 +1206,15 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     // 01/11 (vòng 11): "mất ngủ uống THUỐC ngủ được không", "có uống thuốc giảm đau được không" — thứ được hỏi là thuốc, không phải món ăn
     if (topicLike0 && /^(thuoc|vien|siro|khang sinh)\b/.test(topicLike0)) return { id: own, aspect: "meds", food: null };
     const topicLike = topicLike0;
+    // 01/11 (vòng 23): "gout nên TRÁNH bia không", "tiểu đường có cần kiêng xoài không" — hỏi có nên tránh MỘT món (không có chữ ăn / uống)
+    if (!topicLike) {
+      const av = rest0.match(/\b(?:co nen|nen|co can|can|co phai|phai) (?:tranh|kieng|bo|cat|han che|cu) ((?:\S+ ){0,2}?\S+) (?:khong|ko|k|hong|khum|ha|a|nhi)\s*$/);
+      const ph = av ? normalizeVi(foodSyn(av[1])) : "";
+      if (ph && !/\b(gi|nhung|an|uong|mon|loai|cai|do an)\b/.test(ph)) return { id: own, aspect: "food", food: ph };
+    }
     // Khía cạnh xét trên phần câu NGOÀI tên món: "uống sữa chua được không" bỏ dấu dễ thành "chữa được không".
     const aspF = topicLike ? aspectOf(rest0.replace(` ${topicLike} `, " ")) : asp;
-    const a: MedAspect | "overview" = topicLike && aspF !== "spread" && (!aspF || aspF === "diet" || aspF === "define") && VN(/\b(ăn|uống|dùng)\b/).test(normalizeVi(text)) && !VN(/\b(kiêng|ăn gì|uống gì|nên ăn|tránh ăn)\b/).test(normalizeVi(text)) ? "food" : (asp ?? "overview");
+    const a: MedAspect | "overview" = topicLike && aspF !== "spread" && (!aspF || aspF === "diet" || aspF === "define" || (aspF === "course" && FOOD_SAO.test(` ${normalizeVi(text)} `))) && VN(/\b(ăn|uống|dùng)\b/).test(normalizeVi(text)) && !NOT_ONE_FOOD.test(normalizeVi(text)) ? "food" : (asp ?? "overview");
     if (row.dietOnly && a !== "food" && a !== "diet") return null;
     // 19/10: góc nhìn triệu chứng chỉ trả lời cách chăm sóc / khi nào khám / thuốc — câu khác để các lớp cũ trả lời như trước.
     if (row.view && !VIEW_ASPECTS.has(a)) return null;
@@ -1176,7 +1237,7 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     // (19/10: "uống thuốc gì được?" là hỏi THUỐC, không phải hỏi món "thuốc gì")
     if (asp === "meds") return { id: prev.id, aspect: "meds", food: null };
     const fp = foodPhrase(text, null);
-    if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !VN(/\b(kiêng|ăn gì|uống gì|nên ăn|tránh ăn)\b/).test(n)) return { id: prev.id, aspect: "food", food: fp };
+    if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !NOT_ONE_FOOD.test(n)) return { id: prev.id, aspect: "food", food: fp };
     const fm = n.match(VN(/^(?:vậy |thế |còn |nhưng |rồi )*((?:\S+ ){0,2}?\S+?) (?:thì sao|sao|có được không|được không|có sao không|được k|được ko)$/));
     // 01/11: "trẻ con bị thì sao", "người già thì sao", "bà bầu thì sao" — hỏi về NGƯỜI BỆNH khác, không phải hỏi một món ăn
     // ("giờ sao", "vậy sao", "rồi sao" — chữ thời gian / chữ đệm, không phải tên món → hỏi phải làm gì / khi nào đi khám)
