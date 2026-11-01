@@ -696,7 +696,8 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "inlaw",
-    re: VN(/\b(mẹ chồng|bố chồng|nhà chồng|mẹ vợ|bố vợ|nhà vợ|nàng dâu|con dâu|con rể|về nhà chồng|sống chung với nhà chồng|ở chung nhà chồng)\b/),
+    // (01/11 vòng 24: bỏ dấu "cơn đau" trùng "con dâu" — "con dau den dot ngot" là kể cơn đau)
+    re: VN(/\b(mẹ chồng|bố chồng|nhà chồng|mẹ vợ|bố vợ|nhà vợ|nàng dâu|con dâu(?! (đến|tới|dữ dội|kéo dài|đột ngột|quặn|nhói|âm ỉ|lan|xuất hiện|tăng|giảm|thắt|bụng|đầu|ngực|lưng|ở))|con rể|về nhà chồng|sống chung với nhà chồng|ở chung nhà chồng)\b/),
     feel: ["Chuyện với nhà chồng / nhà vợ là nỗi niềm của rất nhiều người, Lomi hiểu mà 😔", "Làm dâu, làm rể mà không được thấu hiểu thì mệt mỏi và tủi thân lắm."],
     insight: [
       "Hai gia đình có thói quen, cách nghĩ khác nhau là chuyện tự nhiên. Mâu thuẫn thường đến từ khác biệt, không hẳn vì ai xấu.",

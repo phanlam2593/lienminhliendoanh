@@ -76,6 +76,12 @@ export function setViRestoreOff(x: boolean) {
  * dấu mà bản thân nó không phải chữ nào ("dau" → "đau", "nhe" → "nhé").
  */
 const KEEP_BARE = new Set(["cua", "cam", "phan"]);
+// 01/11 (vòng 24): chữ viết tắt hay gặp — không đoán dấu chúng, nhưng dùng NGHĨA của chúng làm ngữ cảnh cho chữ bên cạnh
+//   ("sao toi k nhan dc thong bao": "k … dc" = "không … được" → "nhận được thông báo", không phải "nhắn"). Chữ in ra vẫn giữ như người dùng gõ.
+const TEEN_CTX: Record<string, string> = {
+  k: "không", ko: "không", kh: "không", hk: "không", khum: "không", dc: "được", đc: "được", j: "gì", v: "vậy", z: "vậy",
+  r: "rồi", ntn: "thế", nhiu: "nhiều", vs: "với", wa: "quá", ck: "chồng", vk: "vợ", ny: "người", mk: "mình", lm: "làm", trc: "trước", hnay: "nay",
+};
 export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): string {
   if (!idx || off) return text;
   const { m, forms, total } = idx;
@@ -88,6 +94,7 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
   const cands: string[][] = wi.map((i) => {
     const w = parts[i].toLowerCase();
     if (/^\d/.test(w)) return ["num"];
+    if (TEEN_CTX[w] && m.u[TEEN_CTX[w]]) return [TEEN_CTX[w]];
     if (HAS_MARK.test(w)) return [w]; // người dùng gõ dấu → giữ
     const f = forms.get(w);
     if (!f) return [w];
@@ -155,7 +162,7 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
   wi.forEach((i, k) => {
     const orig = parts[i];
     const w = out[k];
-    if (w === "num") return;
+    if (w === "num" || TEEN_CTX[orig.toLowerCase()]) return;
     // giữ chữ hoa như người dùng gõ
     parts[i] = orig === orig.toUpperCase() && orig.length > 1 ? w.toUpperCase() : orig[0] === orig[0].toUpperCase() ? w.charAt(0).toUpperCase() + w.slice(1) : w;
   });

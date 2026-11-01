@@ -1028,4 +1028,33 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["bị gout ăn thịt bò được k"])).content).toMatch(/thịt đỏ\*\* nên/);
     expect((await last(["bi gout an thit bo duoc khong"])).content).toMatch(/thịt đỏ\*\* nên/);
   }, T);
+  it("01/11 — hiểu câu vòng 24: gõ không dấu / teen code hiểu như có dấu (bơi ≠ bói, đậu ≠ đâu, nhận ≠ nhắn, cơn đau ≠ con dâu, bộ phận + triệu chứng)", async () => {
+    expect((await last(["bi viem xoang co nen di boi khong"])).tarot).toBeFalsy();
+    expect((await last(["bi gout an dau duoc khong"])).content).toMatch(/các loại đậu/);
+    expect((await last(["an trung nhieu co tot khong"])).content).toMatch(/Trứng/);
+    expect((await last(["bi nac cut khong dut"])).content).toMatch(/nấc cụt/);
+    expect((await last(["bị nấc cụt không dứt"])).content).toMatch(/nấc cụt/);
+    expect((await last(["sao toi k nhan dc thong bao"])).content).not.toMatch(/Không nhắn \/ gọi được/);
+    expect((await last(["sao toi khong nhan duoc thong bao"])).faqId).toBeTruthy();
+    expect((await last(["mat toi bi mo"])).content).toMatch(/mờ mắt/);
+    expect((await last(["tai tôi bị ù"])).content).toMatch(/ù tai/);
+    expect((await last(["rang toi bi e buot"])).content).toMatch(/đau răng/);
+    const hm = await last(["con tôi bị hăm tã"]);
+    expect(hm.content).toMatch(/hăm tã/i);
+    expect(hm.content).not.toMatch(/keep/);
+    expect((await last(["em be bi ham ta"])).content).toMatch(/Hăm tã/);
+    const nm = await last(["bi nam da phai lam sao"]);
+    expect(nm.content).toMatch(/nám da\*\*.*nấm da/);
+    expect(nm.quick).toEqual(["bi nám da phai lam sao", "bi nấm da phai lam sao"]);
+    expect((await last(["con dau den dot ngot"])).content).not.toMatch(/nhà chồng|Làm dâu/);
+    const sl = await last(["ăn cơm xong buồn ngủ"]);
+    expect(sl.content).not.toMatch(/Ngủ ngon nha|nghe ngon ghê|hấp dẫn quá/);
+    expect((await last(["uong nuoc nong co tot k"])).content).not.toMatch(/Cà phê hả/);
+    expect((await chat(["toi dau dau wa", "do dau v"]))[1].content).toMatch(/Nguyên nhân/);
+    expect((await last(["sot xuat huyet khac sot thuong ntn"])).content).not.toMatch(/Ý “khác sốt”/);
+    // đối chứng: nghĩa còn lại vẫn đúng
+    expect((await last(["bói thử chuyện học hành của em"])).tarot).toBeTruthy();
+    expect((await last(["mẹ chồng hay soi mói tôi"])).content).toMatch(/nhà chồng|Làm dâu|mẹ chồng/i);
+    expect((await last(["đi ngủ đây"])).content).toMatch(/ngủ/i);
+  }, T);
 });

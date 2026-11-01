@@ -1487,6 +1487,10 @@ export function AiChat({
       // (gõ không dấu: chỉ cụm chắc nghĩa "tim … dap" — "tim em dap loan nhip" — để không dấu hiểu giống có dấu)
       .replace(/^(\s*)tim\s+(toi|tui|minh|em|anh|chi)\s+(dap)(?![\p{L}])/iu, "$1$2 tim $3")
       .replace(/^(\s*)(tim|mắt|bụng|dạ dày|bao tử|đầu|lưng|răng|họng|cổ họng|ngực|chân|tay|da|mặt|vai|gối|đầu gối|khớp|mũi|tai|cổ)\s+(tôi|tui|mình|em|anh|chị|của tôi|của tui|của mình)\s+(?=(?:bị|cứ|hay|đang|lại|thấy|đập|đau|nhức|khó chịu|ngứa|sưng|đỏ|chảy|nóng|lạnh|tê|mỏi|ù|nghẹt|rát|đói|sôi|cồn cào)(?![\p{L}]))/iu, (_m, sp, part, pron) => `${sp}${pron.replace(/^của\s+/u, "")} ${part} `)
+      // 01/11 (vòng 24): "nhìu / nhiu" = nhiều (teen code) — đổi trước khi đọc câu để "uống nhiu nước đá có sao k" hiểu như câu có dấu
+      .replace(/(^|[^\p{L}])(?:nhìu|nhiu)(?![\p{L}])/giu, "$1nhiều")
+      // 01/11 (vòng 24): "nấc cụt không dứt", "ho không ngừng" — "không" ở đây tả triệu chứng kéo dài, không phải từ hỏi / phủ định
+      .replace(/(^|[^\p{L}])(?:không|khong|ko|k|hông|chẳng|chả|chang|cha)\s+(?:dứt|ngừng|ngớt|dut|ngung)(?=\s*[?!.…]*\s*$|\s+(?:luôn|lun|được|dc|đc|nữa|nua|cả|ca)\b)/giu, "$1liên tục")
       .replace(/(^|[^\p{L}])đau lòng(?![\p{L}])/giu, "$1buồn")
       .replace(/(^|[^\p{L}])vết thương lòng(?![\p{L}])/giu, "$1nỗi buồn trong lòng")
       .replace(/(^|[^\p{L}])rứa(?![\p{L}])/giu, "$1vậy")
@@ -1507,6 +1511,23 @@ export function AiChat({
     // (31/10: chữ tiếng Anh đã đổi sang tiếng Việt ở viMixFix cũng phải có trong câu "người dùng gõ" của bộ đọc câu — không thì các luật
     //   khớp "chia tay", "quên uống thuốc" trên câu đã đổi lại bị bộ đọc chặn vì người dùng không gõ chữ đó)
     let typedFix = en ? typed : viMixFix(typedV);
+    // 01/11 (vòng 24): "mắt bị mờ", "tai tôi bị ù", "răng tôi bị ê buốt", "chân con bị sưng" — tiếng Việt nói được cả hai chiều
+    //   (bộ phận + triệu chứng / triệu chứng + bộ phận); kho đặt tên theo chiều "mờ mắt", "ù tai". Đảo lại, CHỈ nhận khi câu đảo khớp
+    //   đúng một chủ đề mà câu gốc không khớp (gõ không dấu thì câu đã đoán dấu ở trên).
+    if (!en && !findMedId(raw)) {
+      const BODY = "mắt|tai|chân|tay|răng|lợi|nướu|mũi|họng|cổ họng|cổ|lưng|vai|gối|đầu gối|da|môi|lưỡi|bụng|đầu|ngực|khớp|móng|tóc|bàn chân|bàn tay|ngón tay|ngón chân|mặt|bao tử|dạ dày|gót chân|cổ tay|cổ chân|mí mắt";
+      const ADJ = "mờ|ù|sưng|ê buốt|ê|tê|tê bì|ngứa|khô|phù|nhức|mỏi|cứng|đỏ|chảy máu|chảy mủ|nứt nẻ|nổi mẩn|giật|rụng|khó chịu|cồn cào|đau";
+      const re = new RegExp(`(^|[^\\p{L}])(${BODY})(\\s+(?:của\\s+)?(?:tôi|tui|mình|em|anh|chị|bé|con|con tôi|con em|mẹ tôi|bố tôi|ba tôi))?\\s+(?:(?:bị|thấy|hơi|cứ|hay|đang|bỗng|tự nhiên)\\s+)*(${ADJ})(?![\\p{L}])`, "iu");
+      const mm = raw.normalize("NFC").match(re);
+      if (mm) {
+        const who = (mm[3] ?? "").replace(/^\s+(?:của\s+)?/u, "").trim();
+        const cand = raw.normalize("NFC").replace(re, `${mm[1]}${who ? `${who} ` : ""}bị ${mm[4]} ${mm[2]}`);
+        if (findMedId(cand) || ((analyzeBody(cand)?.sx.length ?? 0) > (analyzeBody(raw)?.sx.length ?? 0))) {
+          raw = cand;
+          typedFix = cand;
+        }
+      }
+    }
     if (!en && !findMedId(raw)) {
       await loadViModel();
       const ws = raw.split(/(\s+)/);
@@ -1780,6 +1801,11 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: `Thương bé ${pet} ghê 🥺 Kiến thức sức khoẻ của Lomi là **cho người**, nên Lomi không nói nguyên nhân hay cách chữa cho ${pet} được — con vật bị bệnh khác người, nhiều thuốc người dùng bình thường lại độc với chó mèo.\n• Đừng tự cho bé uống thuốc của người\n• Đưa bé đi **bác sĩ thú y** để được khám\n• Bé lả đi, bỏ ăn uống, khó thở, co giật hay chảy máu → đưa đi thú y **ngay**${VN(/\b(ăn phải|nuốt phải|ăn nhầm|uống nhầm|liếm phải)\b/).test(` ${normalizeVi(raw)} `) ? "\n• Bé **ăn / nuốt phải** thứ lạ thì gọi hoặc đưa đi thú y **ngay**, kể cả khi bé chưa có biểu hiện gì — mang theo bao bì hoặc thứ bé đã ăn" : ""}`, local: true, about: { text: `${pet}`, kind: "pet" } });
       }
       // xin liều / dùng thuốc của người khác; xin chẩn đoán vòng; "có nguy hiểm không"
+      // 01/11 (vòng 24): gõ không dấu "bi nam da" — NÁM da (sạm màu) hay NẤM da (nhiễm nấm)? Hai thẻ khác nhau → hỏi lại.
+      if (!en && !/[^\x00-\x7F]/.test(typed) && /(^|\s)nam da(?=\s|$)/i.test(` ${normalizeVi(typed)} `)) {
+        const base = typed.replace(/[?!.]+$/, "");
+        return localReply(q, { role: "assistant", content: "Lomi hỏi lại chút nha 🙂 Bạn gõ không dấu nên Lomi chưa chắc: ý bạn là **nám da** (mảng da sạm màu) hay **nấm da** (nhiễm nấm, hay ngứa)?", local: true, quick: [base.replace(/nam da/i, "nám da"), base.replace(/nam da/i, "nấm da")] });
+      }
       // 01/11 (vòng 23): gõ không dấu "bi gout an toi dc ko" — "toi" là TỎI hay bữa TỐI? Không đoán → hỏi lại, kèm 2 câu bấm sẵn.
       if (!en && !/[^\x00-\x7F]/.test(typed) && findMedId(raw)) {
         const nt = ` ${normalizeVi(typed)} `;

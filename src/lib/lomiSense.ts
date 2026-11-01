@@ -73,7 +73,8 @@ export function isAskLike(raw: string): boolean {
   if (s.includes("?")) return true;
   const body = s.replace(VR(/^(e|em|lomi|ê|ơi|ạ)\s+(ơi\s+)?/u), "");
   if (Q_START.test(body) || DIRECTIVE.test(body)) return true;
-  if (VR(/(^|\s)có\b.+\b(không|chưa|hông|ko)\b/u).test(s)) return true;
+  // (01/11 vòng 24: "uống nước nóng có tốt k" — đuôi hỏi viết tắt "k / hk / hok / khum" cũng là câu hỏi)
+  if (/(^|\s)(có|co)\s.+\s(không|chưa|hông|ko|k|hk|hok|khum|hem|khong)\s*[?!.…]*\s*$/u.test(s) || VR(/(^|\s)có\b.+\b(không|chưa|hông|ko)\b/u).test(s)) return true;
   let body2 = s;
   for (let i = 0; i < 3; i++) body2 = body2.replace(TRAIL_VOC, "");
   if (Q_END.test(body2)) return true;
@@ -261,7 +262,8 @@ const STATES: StateDef[] = [
     re: W("(đang |vừa |mới )(ăn|nhậu|đi ăn)( xong| rồi)?|ăn xong( rồi)?|(đang |vừa |mới )?ăn (sáng|trưa|tối|vặt|cơm|phở|bún|mì|cháo|lẩu|nướng|bánh mì|bánh|hủ tiếu|cơm tấm|pizza|gà|bò|hải sản|xôi|chè)"),
     reply: (m, s) => {
       const food = tail(s, VR(/ăn xong|ăn (?=\p{L})|nhậu/u)).replace(VR(/^(xong|rồi|sáng|trưa|tối)\s*/u), "");
-      const f = food && !VR(/^(với|cùng|ở|tại|rồi|cái|một)/u).test(food) ? food : "";
+      // (01/11 vòng 24: "ăn cơm xong buồn ngủ / mệt / đau bụng" — phần sau là cảm giác SAU khi ăn, không phải tên món)
+      const f = food && !VR(/^(với|cùng|ở|tại|rồi|cái|một)/u).test(food) && !VR(/(?<![\p{L}])(xong|buồn ngủ|buồn|mệt|đau|khó chịu|đầy bụng|no quá|buồn nôn|ói|nôn|chóng mặt|ngứa)(?![\p{L}])/u).test(food) ? food : "";
       return {
         text: f
           ? pick([`${cap(f)} hả, nghe ngon ghê 😋 Ăn có no không nè?`, `Ui ${f} nghe hấp dẫn quá 🤤 Quán nào vậy bạn, ngon không?`])

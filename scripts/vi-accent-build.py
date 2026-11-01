@@ -12,12 +12,17 @@ def bare(w):
 WORD = re.compile(r"[a-zà-ỹđ]+", re.I)
 ACC = re.compile(r"[^\x00-\x7f]")
 uni, bi, tri = Counter(), Counter(), Counter()
+# 01/11 (vòng 24): chữ chỉ gặp trong src/test (câu thử có chữ GÕ SAI cố ý: "nghẹt mũu") không được thành "chữ có thật" trong từ điển
+#   — nếu không, bộ sửa lỗi gõ (typoCandidates) coi "mũu" là chữ đúng và thôi sửa. Đếm chữ ngoài src/test riêng để lọc.
+uni_main = Counter()
 for dp, dn, fn in os.walk(ROOT):
     if dp.startswith(SKIP): continue
     for f in fn:
         if not f.endswith((".ts", ".tsx", ".json")): continue
         txt = open(os.path.join(dp, f), encoding="utf8").read()
         txt = unicodedata.normalize("NFC", txt).lower()
+        # 01/11 (vòng 24): dòng chú thích kể một lỗi GÕ SAI làm ví dụ ("nghẹt mũu", "đườmg") — không học chữ sai trong đó
+        txt = "\n".join(l for l in txt.split("\n") if not re.search(r"//.*(gõ sai|lỗi gõ|gõ nhầm|gõ sót|gõ thiếu|sai một ký tự|sai dấu)", l))
         if dp.startswith("src/test"):
             for h in HOLD: txt = txt.replace(h, " | ")
         # bỏ biểu thức chính quy (viết không dấu) — chỉ giữ câu chữ thật
@@ -31,6 +36,7 @@ for dp, dn, fn in os.walk(ROOT):
             ws = ["<s>"] + ws + ["</s>"]
             for i, w in enumerate(ws):
                 uni[w] += 1
+                if not dp.startswith("src/test"): uni_main[w] += 1
                 if i: bi[f"{ws[i-1]} {w}"] += 1
                 if i > 1: tri[f"{ws[i-2]} {ws[i-1]} {w}"] += 1
 # Từ điển tiếng Việt @vntk/dictionary (giấy phép MIT): câu ví dụ + định nghĩa + từ nhiều âm tiết (Viet74K). Chỉ lấy THỐNG KÊ cặp chữ,
@@ -58,6 +64,7 @@ if not os.environ.get("NODICT"):
             ws = ["<s>"] + ws + ["</s>"]
             for i, w in enumerate(ws):
                 uni[w] += 1
+                uni_main[w] += 1
                 if i: bi[f"{ws[i-1]} {w}"] += 1
                 if i > 1: tri[f"{ws[i-2]} {ws[i-1]} {w}"] += 1
 # cụm từ chat đời thường (giọng người dùng) — mỗi dòng một câu, tính 3 lần vì văn bản trong app chủ yếu là lời của Lomi
@@ -68,11 +75,12 @@ for line in ([] if os.environ.get("NOSEED") else open("src/lib/viAccent/seed.txt
     for _ in range(3):
         for i, w in enumerate(ws):
             uni[w] += 1
+            uni_main[w] += 1
             if i: bi[f"{ws[i-1]} {w}"] += 1
             if i > 1: tri[f"{ws[i-2]} {ws[i-1]} {w}"] += 1
 # chỉ giữ chữ xuất hiện ≥ 2 lần (bớt chữ gõ lỗi), cặp chữ ≥ 2 lần
 UMIN = int(os.environ.get("UMIN", "3"))
-U = {w: c for w, c in uni.items() if c >= UMIN and len(w) <= 7}
+U = {w: c for w, c in uni.items() if c >= UMIN and len(w) <= 7 and uni_main[w] > 0}
 U["<s>"] = uni["<s>"]
 U["</s>"] = uni["</s>"]
 BMIN = int(os.environ.get("BMIN", "2"))

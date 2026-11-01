@@ -1181,6 +1181,8 @@ export function renderFoodAcross(topics: MedTopic[], phrase: string, shown: stri
 export type MedAsk = { id: string; aspect: MedAspect | "overview"; food: string | null; focusOnly?: boolean };
 
 /** Câu này có phải câu hỏi kiến thức về một chủ đề trong kho không? prev = chủ đề đang nói ở tin trước (cho câu nối). */
+// 01/11 (vòng 24): bệnh của trẻ nhỏ mà bố mẹ KỂ ("em bé bị hăm tã", "con tôi bị hăm tã") — kể là đang hỏi cách chăm, như thẻ dành cho trẻ
+const KID_SAY = /\b(be|em be|con|con toi|con em|con minh|chau|tre|tre nho|tre so sinh)\b/;
 const TELL_OK = new Set(["cham-noi", "moi-mat", "sieu-am-thai", "rom-say", "te-nga", "chan-thuong-dau", "rung-toc", "bieng-an-tre", "an-dam", "it-sua-me"]);
 export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   const own = findMedTopicId(text);
@@ -1190,7 +1192,7 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     const names = row.names;
     // (tâm lý — "a hay lo âu quá" — là lời tâm sự, không phải nêu chủ đề kiến thức)
     // (30/10: chậm nói, mỏi mắt, siêu âm thai — kể chuyện người nhà gặp tình trạng này cũng là hỏi kiến thức: "con em 3 tuổi chưa biết nói")
-    if (!isMedQuestion(text, names, row.kind === "mental" || row.kind === "term" ? 0 : row.kind === "other" || row.kind === "women" || TELL_OK.has(own) ? 2 : 1)) return null;
+    if (!isMedQuestion(text, names, row.kind === "mental" || row.kind === "term" ? 0 : row.kind === "other" || row.kind === "women" || TELL_OK.has(own) || (row.kind === "child" && KID_SAY.test(` ${normalizeVi(text)} `)) ? 2 : 1)) return null;
     // Khía cạnh xét trên phần câu NGOÀI tên chủ đề: "rối loạn ăn uống là gì" — chữ "ăn uống" là tên bệnh, không phải hỏi kiêng cữ.
     const rest0 = names.reduce((acc2, nm) => acc2.replace(` ${normalizeVi(nm)} `, " "), ` ${normalizeVi(text)} `);
     const aspR0 = aspectOf(rest0);

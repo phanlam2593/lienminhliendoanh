@@ -414,7 +414,7 @@ const SYN: [RegExp, string][] = [
   // Chỉ quy về một cách viết để so khớp nội bộ; câu hiển thị và câu Lomi đáp không bị "dịch máy móc".
   [VN(/\b(log in|login|sign in|signin)\b/g), "dang nhap"],
   [VR(/\b(log out|logout|sign out|signout)\b/g), "dang xuat"],
-  [VR(/\b(sign up|signup)\b/g), "dang ky"],
+  [VN(/\b(sign up|signup)\b/g), "dang ky"],
   [VN(/\b(profile|profle|trang cá nhân của mình)\b/g), "ho so"],
   [VN(/\b(info|infor|information|thông tin chi tiết)\b/g), "thong tin"],
   [VN(/\b(update|cập nhập|up date)\b/g), "cap nhat"],

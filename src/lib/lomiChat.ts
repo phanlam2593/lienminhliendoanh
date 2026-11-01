@@ -371,7 +371,7 @@ const RULES: Rule[] = [
   // Bực / giận
   {
     // (01/11: "dạ dày khó chịu", "trong người khó chịu", "bụng khó chịu" — khó chịu ở CƠ THỂ, không phải bực mình)
-    re: VN(/\b(bực quá|bực mình|tức quá|giận quá|điên quá|cay quá|(?<!(dạ dày|bao tử|bụng|người|trong người|ngực|họng|cổ họng|mắt|da|đầu|lưng|chân|tay|tim|dạ dày tôi|bụng tôi) )khó chịu|bị làm phiền|phiền quá)\b/),
+    re: VN(/\b(bực quá|bực mình|tức quá|giận quá|điên quá|cay quá|(?<!(dạ dày|bao tử|bụng|người|trong người|ngực|họng|cổ họng|mắt|da|đầu|lưng|chân|tay|tim)( (tôi|tui|mình|em|anh|chị|con|bé))? )khó chịu|bị làm phiền|phiền quá)\b/),
     reply: () => ({
       text: pick([
         "Ai làm bạn bực vậy 😤 Hít sâu ba hơi đã nha. Nếu là chuyện trong app — bị làm phiền, nghi lừa đảo — bạn có thể Chặn hoặc Báo cáo người đó ngay.",
@@ -490,7 +490,8 @@ const RULES: Rule[] = [
   {
     // (31/10: "magie có giúp ngủ ngon không", "uống gì cho dễ ngủ ngon" là câu hỏi, không phải chúc ngủ ngon)
     // (01/11: "sau khi ăn có nên đi ngủ liền không", "trước khi đi ngủ uống gì" — hỏi về giấc ngủ, không phải chào đi ngủ)
-    re: VN(/\b(?<!(giúp|cho|để|dễ|khó|mới|được|làm|gây|bị|hay|thuốc|nên|khi|trước|sau|lúc) )(ngủ ngon|đi ngủ|chúc ngủ ngon|good night|gn|ngủ thôi|buồn ngủ)(?! (không|ko|hơn|được|hả|chưa|vậy|thì|liền không|liền được|ngay không|ngay được))\b/),
+    // (01/11 vòng 24: "ăn cơm xong buồn ngủ", "uống thuốc vào là buồn ngủ" — kể chuyện buồn ngủ SAU một việc, không phải chào đi ngủ)
+    re: VN(/\b(?<!(giúp|cho|để|dễ|khó|mới|được|làm|gây|bị|hay|thuốc|nên|khi|trước|sau|lúc|xong|vào|là|ăn|uống|cứ|thấy|rất|hơi) )(ngủ ngon|đi ngủ|chúc ngủ ngon|good night|gn|ngủ thôi|buồn ngủ)(?! (không|ko|hơn|được|hả|chưa|vậy|thì|liền không|liền được|ngay không|ngay được))\b/),
     reply: () => ({
       text: pick([
         "Ngủ ngon nha 🌙 Mơ đẹp, mai gặp lại Lomi nè!",
@@ -1126,7 +1127,7 @@ const TEEN: Record<string, string> = {
   ms: "mới", r: "rồi", rùi: "rồi", ùi: "rồi", gòi: "rồi", oy: "rồi", h: "giờ", ns: "nói", nt: "nhắn tin", ib: "nhắn tin",
   nch: "nói chuyện", nc: "nói chuyện", rep: "trả lời", lm: "làm", ik: "đi", trc: "trước", thik: "thích", thix: "thích",
   vs: "với", wa: "quá", wá: "quá", qá: "quá", vl: "quá", vcl: "quá", chx: "chưa", hc: "học", đg: "đang", dg: "đang",
-  mún: "muốn", zui: "vui", bùn: "buồn", thui: "thôi", hoy: "thôi", thoai: "thôi", lun: "luôn", đou: "đâu", nhìu: "nhiều",
+  mún: "muốn", zui: "vui", bùn: "buồn", thui: "thôi", hoy: "thôi", thoai: "thôi", lun: "luôn", đou: "đâu", nhìu: "nhiều", nhiu: "nhiều",
   sr: "xin lỗi", xl: "xin lỗi", tks: "cảm ơn", thx: "cảm ơn", pp: "tạm biệt", sn: "sinh nhật", đt: "điện thoại",
   sđt: "số điện thoại", sdt: "số điện thoại", tk: "tài khoản", ad: "admin", hnay: "hôm nay", hqua: "hôm qua",
   ysl: "yếu sinh lý", xts: "xuất tinh sớm",
@@ -1202,7 +1203,8 @@ export function expandTeen(text: string): string {
   s = s.replace(VR(/(^|[^\p{L}])(đau|mỏi|nhức|bên|vùng|eo|khớp|xương|sườn|ê|tê|sưng|mông|lưng) (hông)(?![\p{L}])/giu), "$1$2 hông_body");
   // "hăm tã", "bé bị hăm", "hăm dọa" là chữ hăm thật (hăm da / đe doạ), không phải "không" (10/10).
   s = s.replace(VR(/(^|[^\p{L}])(hăm)(?= (?:tã|bỉm|đít|da|háng|mông|nách|cổ|kẽ|dọa|doạ)(?![\p{L}]))/giu), "$1hăm_keep");
-  s = s.replace(VR(/(^|[^\p{L}])(bị|nổi|chống|trị|kem) hăm(?![\p{L}])/giu), "$1$2 hăm_keep");
+  //   (01/11 vòng 24: không gắn nhãn lần hai cho chữ đã gắn ở dòng trên — "bé bị hăm tã" từng thành "hăm_keep_keep" rồi lọt "hăm keep" ra lời đáp)
+  s = s.replace(VR(/(^|[^\p{L}])(bị|nổi|chống|trị|kem) hăm(?![\p{L}_])/giu), "$1$2 hăm_keep");
   // Viết tắt NHIỀU NGHĨA (01/10 r3, theo tài liệu Kir) — chỉ đổi khi ngữ cảnh rõ, không đổi bừa:
   //  • "cf": đi kèm uống/đi/quán/ly/đá/sữa/ngon… hoặc đứng một mình hỏi ("cf?") → cà phê; còn lại giữ nguyên.
   s = s.replace(VR(/(^|[^\p{L}])(uống|đi|quán|ly|cốc|tiệm|chỗ|hẹn|rủ|làm|ghé|thèm|mua|order)( (ly|cốc|chút|miếng|tí))? (cf|cafe|caphe|cofe)(?![\p{L}])/giu), "$1$2$3 cà phê");
@@ -1245,8 +1247,9 @@ export function expandTeen(text: string): string {
   // Từ 1 chữ cái chỉ đổi khi viết thường ("b ơi" → "bạn", còn "công việc B" giữ nguyên).
   return s
     .replace(/[\p{L}\p{M}\p{N}_]+/gu, (w) => (w.length === 1 && w !== w.toLowerCase() ? w : (TEEN[w.toLowerCase()] ?? w)))
-    .replace(VR(/hông_body/g), "hông")
-    .replace(VR(/hăm_keep/g), "hăm");
+    // (01/11 vòng 24: nhãn tạm nội bộ — thay thường, không qua bộ đọc câu theo dấu người gõ (từng sót lại "hăm_keep" trong lời đáp))
+    .replace(/hông_body/g, "hông")
+    .replace(/hăm_keep/g, "hăm");
 }
 
 

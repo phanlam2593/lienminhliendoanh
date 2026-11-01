@@ -278,3 +278,59 @@ máy bị treo
 bị treo máy
 app treo hoài
 màn hình bị treo
+# 01/11 (vòng 24): chữ trùng khi bỏ dấu hay gặp trong câu hỏi sức khoẻ / bói — "bơi" ↔ "bói", "đậu" ↔ "đâu", "nấc" ↔ "nắc", "nhận" ↔ "nhắn"
+bói thử cho em
+bói thử chuyện tình cảm
+bói thử chuyện học hành
+bói thử chuyện công việc
+bói xem chuyện học hành của em
+xem bói cho em
+bói giúp em
+bói bài cho anh
+đi bơi
+đi bơi được không
+có nên đi bơi không
+bị viêm xoang có nên đi bơi không
+bị cảm có đi bơi được không
+học bơi
+tập bơi
+hồ bơi
+biết bơi
+bơi lội
+ăn đậu được không
+ăn đậu phụ được không
+ăn đậu nành được không
+bị gout ăn đậu được không
+ăn các loại đậu
+uống sữa đậu nành
+bị nấc cụt
+nấc cụt không dứt
+bị nấc hoài
+sao tôi không nhận được thông báo
+không nhận được thông báo
+không nhận được tin nhắn
+không nhận được mã
+ngủ trưa bao lâu là đủ
+ngủ trưa có tốt không
+sốt thường
+sốt xuất huyết khác sốt thường thế nào
+ăn mặn nhiều có sao không
+ăn mặn có sao không
+uống nhiều nước đá có sao không
+uống nước đá có sao không
+ăn trứng nhiều có tốt không
+uống sữa nóng có đỡ không
+đau đầu do đâu vậy
+bị say xe thì làm sao
+cơn đau đến đột ngột
+cơn đau kéo dài
+cơn đau dữ dội
+đau từng cơn
+ăn cơm xong buồn ngủ
+uống nước nóng có tốt không
+uống nước ấm có tốt không
+răng tôi bị ê buốt
+mắt tôi bị mờ
+tai tôi bị ù
+chân tôi bị sưng
+bao tử tôi khó chịu
