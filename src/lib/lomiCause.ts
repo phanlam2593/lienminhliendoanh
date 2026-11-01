@@ -107,6 +107,14 @@ export function parseCause(q: string): CauseParse | null {
   return { x, xShow: xShow || x, y, yShow, verb, aff: /ảnh hưởng/u.test(m[2]), harm: /hại/u.test(m[2]), nut: nutrientOf(x) };
 }
 
+/** 01/11: một cụm đứng ở vai NGUYÊN NHÂN (chất, món, thói quen, thuốc — "x") hay HẬU QUẢ (bệnh, triệu chứng — "y")? */
+export function causeSide(t: string): "x" | "y" | null {
+  const n = N(t);
+  if (X_SYN.some(([re, ks]) => ks.length && re.test(n)) || nutrientOf(t) || findDrug(t) || /^(?:uống|ăn|hút|dùng|xài|thức)\s/u.test(t.normalize("NFC").toLowerCase())) return "x";
+  if (Y_SYN.some(([re]) => re.test(n)) || findMedTopicId(t)) return "y";
+  return null;
+}
+
 const SECTIONS = (t: MedTopic): DrugFact[] => [
   ...t.causes, ...t.about, ...t.signs, ...t.care,
   ...(t.diet ? [...t.diet.avoid, ...t.diet.ok] : []),

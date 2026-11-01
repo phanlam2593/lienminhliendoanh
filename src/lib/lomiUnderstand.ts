@@ -291,7 +291,9 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
   const PROBLEM_FAQ = new Set(["notifmissing", "update", "logout", "offerlocked", "approve", "forgot", "forgotnoemail", "bizstatus"]);
   // 10/10: "a bị trẹo cổ" bỏ dấu = "bi treo" → tưởng app bị treo. Chữ gõ CÓ DẤU khác nghĩa ("trẹo", "chân"…) bị che trước khi so (lib/lomiAccent APP).
   const kind = detectIssue(` ${normStrict(raw || q, APP)} `);
-  if (kind && !(faqHit && PROBLEM_FAQ.has(faqHit)) && (has(n, APP_REF) || w <= 7)) {
+  // 01/11: câu ngắn kể chuyện CƠ THỂ ("bị gì mà mệt dữ vậy", "sao mà ho hoài") không nhắc app → không phải báo lỗi app
+  const bodyTalk = !has(n, APP_REF) && VN(/\b(mệt|đau|sốt|ho|chóng mặt|buồn nôn|nôn|ói|ngứa|mỏi|nhức|khó thở|mất ngủ|tiêu chảy)\b/).test(` ${n} `) && /[^\x00-\x7F]/.test(raw || q);
+  if (kind && !bodyTalk && !(faqHit && PROBLEM_FAQ.has(faqHit)) && (has(n, APP_REF) || w <= 7)) {
     return {
       intent: "issue",
       issue: kind,

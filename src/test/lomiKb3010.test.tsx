@@ -601,4 +601,32 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(tb[1].content).toMatch(/đau lưng/);
     expect(tb[1].tarot).toBeFalsy();
   }, T);
+  it("01/11 — hiểu câu vòng 3: đại từ / tỉnh lược, người được nói tới, tiếng địa phương", async () => {
+    // Tỉnh lược "vậy còn X": thay X vào đúng chỗ, giữ loại câu hỏi
+    expect((await chat(["cúm là gì", "vậy còn cảm lạnh"]))[1].med?.id).toBe("cam-lanh");
+    expect((await chat(["cà phê có gây mất ngủ không", "còn trà thì sao"]))[1].content).toMatch(/\*\*trà\*\* có gây \*\*mất ngủ/);
+    expect((await chat(["ung thư phổi có phải do hút thuốc không", "vậy còn thuốc lá điện tử"]))[1].content).toMatch(/thuốc lá điện tử\*\* có gây \*\*ung thư phổi/);
+    const kid = await chat(["tôi bị sốt", "thế còn bé thì sao"]);
+    expect(kid[1].content).toMatch(/bé|trẻ/);
+    expect(kid[1].content).not.toMatch(/Về \*\*bé\*\* thì Lomi/);
+    // đối chứng: "còn bia thì sao" sau "gout kiêng gì" vẫn là hỏi món với gout
+    expect((await chat(["gout kiêng gì", "còn bia thì sao"]))[1].content).toMatch(/Gout/);
+    // Người được nói tới: tuổi chen giữa không làm mất người bệnh; người già không nhận lời dặn cho trẻ
+    expect((await last(["mẹ tôi 75 tuổi bị sốt"])).content).toMatch(/^Mẹ bạn/);
+    const old = await last(["ông tôi 80 tuổi bị ho"]);
+    expect(old.content).toMatch(/^Ông bạn/);
+    expect(old.content).not.toMatch(/Với trẻ nhỏ/);
+    expect((await last(["con tôi 2 tuổi bị sốt"])).content).toMatch(/bé|trẻ/);
+    // Loại câu hỏi khi kể triệu chứng: "thì làm gì" → phần chăm sóc, không đọc cả thẻ
+    expect((await last(["ko ngủ dc thì lm j"])).content).toMatch(/Với \*\*Mất ngủ\*\*, nên/);
+    // "quán này có ưu đãi không" (chưa nói quán nào) ≠ phàn nàn quán không giữ ưu đãi
+    const qn = await last(["quán ni có ưu đãi không"]);
+    expect(qn.content).not.toMatch(/Báo cáo/);
+    expect(qn.content).toMatch(/quán nào/);
+    expect((await chat(["tìm quán phở", "chỗ đó có ưu đãi không"]))[1].content).toMatch(/Phở/);
+    // Tiếng địa phương: "bị chi mà mệt dữ rứa" không phải báo lỗi app; "răng mà ho hoài" là hỏi vì sao
+    expect((await last(["bị chi mà mệt dữ rứa"])).content).not.toMatch(/App đang trục trặc/);
+    expect((await last(["răng mà ho hoài rứa"])).content).toMatch(/Nguyên nhân/);
+    expect((await last(["tiểu đường ăn chuối được hông nhen"])).content).toMatch(/Tiểu đường/);
+  }, T);
 });

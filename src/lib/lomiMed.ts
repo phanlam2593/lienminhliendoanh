@@ -228,7 +228,8 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["meds", VN(/\b(thuốc gì|thuốc nào|uống thuốc|dùng thuốc|thuốc trị|thuốc chữa|có thuốc|cần thuốc|thuốc đặc trị)\b/)],
   ["diet", VN(/\b(kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],
   ["signs", VN(/\b(triệu chứng|dấu hiệu|biểu hiện|nhận biết|nhận ra|có những dấu hiệu|có hiện tượng gì|bị sao|bị như thế nào|làm sao biết|sao biết|làm sao để biết|biết mình bị|biết có bị)\b/)],
-  ["causes", VN(/\b(nguyên nhân|tại sao|vì sao|do đâu|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
+  // (01/11: "sao mà ho hoài vậy", "sao lại hay đau đầu" — hỏi vì sao; "làm sao mà…" là hỏi cách nên không tính)
+  ["causes", VN(/\b((?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|do đâu|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
   ["doctor", VN(/\b(đi khám|khám ở đâu|khám khoa nào|khoa nào|cần khám|nên khám|khi nào.*(khám|gặp bác sĩ|đi viện)|gặp bác sĩ|bác sĩ nào|đi viện)\b/)],
   ["course", VN(/\b(có khỏi|khỏi được|khỏi hẳn|chưa khỏi|chữa khỏi|bao lâu khỏi|có lây|lây không|lây qua|có nguy hiểm|có hết|hết không|hết ko|hết được|có sao không|có sao ko|nguy hiểm không|tiến triển|kéo dài bao lâu|kéo dài không|có kéo dài|bị bao lâu|tái phát|biến chứng|có chết|có nặng không|nặng không|có tự khỏi|tự khỏi|khó chữa|có chữa được|chữa được không|vĩnh viễn)\b/)],
   ["care", VN(/\b(cách chữa|chữa sao|chữa thế nào|chữa như thế nào|chữa bệnh|chữa trị|điều trị|cách trị|làm sao|làm gì|phải làm gì|nên làm gì|chăm sóc|phòng ngừa|phòng tránh|giảm đau|cho đỡ|cải thiện|tự xử lý|tự xử lí|xử lý|xử lí|xử trí|sơ cứu|tập luyện|vận động|sinh hoạt|bôi gì|bôi thuốc|bôi kem|thoa gì|mẹo|bí quyết|lưu ý|chú ý|để ý gì|cần biết gì|nên biết gì)\b/)],
@@ -804,7 +805,10 @@ function overviewText(t: MedTopic, now: number): string {
 // breastfeeding-meds của NHS). Không tự viết lời khuyên mới cho nhóm này.
 const PREG_CUE = VN(/ (mang thai|có thai|có bầu|bà bầu|mẹ bầu|đang bầu|mang bầu|thai phụ|bầu (\d+|mấy) (tháng|tuần)) /);
 const BF_CUE = VN(/ (cho con bú|đang cho bú|nuôi con bằng sữa mẹ) /);
-const KID_GROUP = VR(/ (bé|em bé|trẻ|trẻ em|trẻ nhỏ|sơ sinh|cháu|con (tôi|mình|em|tui|anh|chị)|\d+ (tuổi|tháng tuổi)) /u);
+// (01/11: tuổi chỉ tính là TRẺ khi ≤ 12 tuổi hoặc tính bằng tháng — "ông tôi 80 tuổi bị ho" từng nhận lời dặn cho trẻ nhỏ)
+const KID_GROUP0 = VR(/ (bé|em bé|trẻ|trẻ em|trẻ nhỏ|sơ sinh|cháu|con (tôi|mình|em|tui|anh|chị)|\d+ tháng tuổi) /u);
+const ELDER_WHO = VR(/ (ông|bà|cụ|bố|ba|mẹ|má|cha|chồng|vợ|ông nội|bà nội|ông ngoại|bà ngoại) /u);
+const KID_GROUP = { test: (a: string) => (KID_GROUP0.test(a) && !(ELDER_WHO.test(a) && !VR(/ (bé|em bé|trẻ|sơ sinh|con (tôi|mình|em|tui|anh|chị)) /u).test(a))) || [...a.matchAll(/ (\d+) tuổi /gu)].some((m) => Number(m[1]) <= 12) };
 const PREG_FACT = VR(/mang thai|có thai|thai kỳ|bà bầu|sau sinh/iu);
 const BF_FACT = VR(/cho con bú|sữa mẹ/iu);
 const KID_FACT = VR(/(^|[^\p{L}])(trẻ|bé|em bé|sơ sinh)(?![\p{L}])/iu);
@@ -1151,6 +1155,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     const fp = foodPhrase(text, null);
     if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !VN(/\b(kiêng|ăn gì|uống gì|nên ăn|tránh ăn)\b/).test(n)) return { id: prev.id, aspect: "food", food: fp };
     const fm = n.match(VN(/^(?:vậy |thế |còn |nhưng |rồi )*((?:\S+ ){0,2}?\S+?) (?:thì sao|sao|có được không|được không|có sao không|được k|được ko)$/));
+    // 01/11: "trẻ con bị thì sao", "người già thì sao", "bà bầu thì sao" — hỏi về NGƯỜI BỆNH khác, không phải hỏi một món ăn
+    if (fm && !asp && /^(?:tre|tre con|tre em|tre nho|be|em be|con|nguoi gia|nguoi lon|nguoi lon tuoi|ba bau|me bau|nguoi cao tuoi|ong|ba|cu)( bi| mac| ma bi)?$/.test(fm[1])) return { id: prev.id, aspect: "overview", food: null };
     if (fm && !asp) {
       const w = fm[1].split(" ").filter((x) => !FILL.has(x)).join(" ");
       if (w.length >= 2) return { id: prev.id, aspect: "food", food: w };

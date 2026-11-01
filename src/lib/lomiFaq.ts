@@ -532,6 +532,8 @@ const FAQ_NEED: Record<string, RegExp> = {
   claimexp: /\b(ma|uu dai|voucher|khuyen mai|code|giam gia|da nhan|nhan lai)\b/,
   // 31/10 (danh sách ChatGPT lần 6): "mỗi tuần ăn cá mấy lần", "nhập sai mật khẩu mấy lần" từng ra số lượt quẹt
   quetlimit: /\b(quet|luot|swipe)\b/,
+  // 01/11: "quán này có ưu đãi không" là hỏi quán có ưu đãi, không phải phàn nàn quán không giữ đúng ưu đãi
+  offerbad: /\b(khong giu|khong cho|tu choi|khong nhan|khong ap dung|lua|lua dao|sai|khong dung|bao cao|khieu nai|bung|nuot|khong chiu|gian lan|khong chap nhan|bi tu choi)\b/,
 };
 export function matchFaq(text: string): Faq | null {
   const n = normalizeVi(text);
@@ -543,7 +545,10 @@ export function matchFaq(text: string): Faq | null {
   //   ("ngon", "ngủ") từng khớp từ khoá "ngôn ngữ" của câu đổi giao diện. Không phải câu hỏi app → để lớp sức khoẻ trả lời.
   //   (so trên chữ CÓ DẤU — bỏ dấu thì "đâu" trùng "đau", "hồ" trùng "ho"; câu gõ không dấu thì bỏ qua bước này)
   if (/[^\x00-\x7F]/.test(text) && HEALTH_TALK.test(` ${text.normalize("NFC").toLowerCase()} `) && !APP_NOUN.test(` ${normalizeVi(maskStrict(text, APP))} `)) return null;
-  const [best, second] = scoreAll(text);
+  // 01/11: "không / chưa" ĐỨNG CUỐI câu là từ hỏi có / không, không phải phủ định — "quán này có ưu đãi không" từng khớp
+  //   "Quán KHÔNG giữ đúng ưu đãi thì sao" (báo cáo quán). Chỉ bỏ khi câu còn từ khác để chấm điểm.
+  const qTail = text.replace(/\s+(?:không|ko|k|hông|hong|khum|chưa)\s*[?!.…]*\s*$/iu, " ").trim();
+  const [best, second] = scoreAll(qTail.split(/\s+/).length >= 3 ? qTail : text);
   if (!best) return null;
   // 30/10 (rà câu hiểu lầm): câu hỏi giá / thời hạn của thứ NGOÀI app ("giá vàng hôm nay bao nhiêu", "cam kết bảo hành bao lâu")
   //   từng khớp từ khoá "bao nhiêu", "bao lâu" của câu hỏi giá cuốc xe / hạn mã ưu đãi. Mấy câu này phải nhắc đúng thứ của app.

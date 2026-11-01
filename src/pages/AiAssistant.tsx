@@ -1441,7 +1441,14 @@ export function AiChat({
       .replace(/(^|[^\p{L}])chừ(?![\p{L}])/giu, "$1giờ")
       .replace(/(^|[^\p{L}])(quán|chỗ|nơi) mô(?![\p{L}])/giu, "$1$2 nào")
       .replace(/(^|[^\p{L}])(khum|hổng|hem)(?![\p{L}])/giu, "$1không")
-      .replace(/(^|[^\p{L}])dzậy(?![\p{L}])/giu, "$1vậy");
+      .replace(/(^|[^\p{L}])dzậy(?![\p{L}])/giu, "$1vậy")
+      // 01/11 (hiểu câu vòng 3): "rứa" = vậy, "răng mà / răng lại" ở đầu câu = sao mà, "bị chi / thuốc chi" = bị gì,
+      //   "lm j" = làm gì; "hong / hông / hok / hơm" ĐỨNG CUỐI câu là từ hỏi = không (trừ "đau họng", "viêm họng" gõ không dấu)
+      .replace(/(^|[^\p{L}])rứa(?![\p{L}])/giu, "$1vậy")
+      .replace(/^(\s*)răng\s+(mà|lại|không|hông|ri)(?![\p{L}])/iu, "$1sao $2")
+      .replace(/(^|[^\p{L}])(bị|thuốc|món|cái) chi(?![\p{L}])/giu, "$1$2 gì")
+      .replace(/(^|[^\p{L}])lm\s+j(?![\p{L}])/giu, "$1làm gì")
+      .replace(/(?<!(?:đau|viêm|rát|ngứa|khàn|sưng|dau|viem|rat|ngua|khan|sung)\s+)(?<=\s)(hong|hông|hok|hơm)(\s*(?:nhen|nha|ta|vậy)?)\s*([?!.…]*)\s*$/iu, (_m, _w, p2, p3, _o, all: string) => `${/[^\x00-\x7F]/.test(all.replace(/(hông|hơm)\s*\S*\s*[?!.…]*\s*$/iu, "")) ? "không" : "khong"}${p2}${p3}`);
     let raw = en ? typed : viMixFix(typedV);
     if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
@@ -1661,6 +1668,12 @@ export function AiChat({
       const dg = en ? null : await diagnoseReply(raw);
       if (dg) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: dg.text, local: true, health: {}, med: { id: dg.medId } }); }
       // 31/10: chữ sức khoẻ / tarot dùng cho chuyện app ("thuốc nào trị lỗi…", "quán tên 'Mất Ngủ'"), câu hỏi app hay bị hiểu lạc.
+      // 01/11: "quán này / chỗ đó có ưu đãi không" mà chưa có quán nào trong câu chuyện → chỉ chỗ xem ưu đãi của quán (FAQ có sẵn)
+      const lastPl = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
+      if (!en && VN(/\b(quán|tiệm|chỗ) (này|đó|kia|ấy) (có|còn) (ưu đãi|khuyến mãi|giảm giá)\b/).test(` ${normalizeVi(raw)} `) && !(lastPl?.places?.length || lastPl?.search || lastPl?.dish || lastPl?.biz)) {
+        const ol = faqById("offerlist");
+        if (ol) return localReply(q, { role: "assistant", content: `Lomi chưa biết bạn đang nói **quán nào** nè 🙂 ${ol.a.vi}\n\nNói Lomi tên món hoặc loại quán (vd “quán phở có ưu đãi không”) là Lomi tìm giúp liền.`, local: true, faqId: "offerlist" });
+      }
       const tp = en ? null : trapReply(raw);
       if (tp) {
         const rf = tp.retry ? matchFaq(tp.retry) : null;
@@ -2868,13 +2881,16 @@ export function AiChat({
             text = [[fixLine, ...notes].filter(Boolean).join("\n") || `Dạ, Lomi ghi nhận thêm về **${label}** nha.`, doc.text].join("\n\n");
             aspect = "doctor";
           } else {
-            const ov = renderMed(sxCard, "overview");
-            const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 Lomi gửi những điều cần biết về ${label} nha:`;
+            // 01/11: câu có hỏi rõ MỘT phần ("không ngủ được thì làm gì", "bị ho nên ăn gì") → trả đúng phần đó, không đọc cả thẻ
+            const askA = medAspectOf(q);
+            const ask1 = askA && askA !== "define" && askA !== "food" && askA !== "emergency" ? askA : null;
+            const ov = renderMed(sxCard, ask1 ?? "overview");
+            const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 ${ask1 ? "Về điều bạn hỏi nè:" : `Lomi gửi những điều cần biết về ${label} nha:`}`;
             const bodyText = withRedFlags(sxCard, q, withGroupNote(sxCard, q, ov.text.replace(VR(/(^|\n\n)Về \*\*[^*\n]+\*\*, Lomi có kiến thức đã kiểm chứng như sau:\n\n/u), "$1")));
             // (thẻ không có phần cấp cứu mà triệu chứng không phải loại nhẹ ở mũi → giữ dòng nhắc 115 như mạch triệu chứng vẫn có)
             const red115 = !sxCard.emergency.length && !["stuffy", "runny", "sneeze"].includes(sx1 ?? "") ? "⚠️ Đau dữ dội đột ngột, khó thở, đau ngực, lơ mơ hay yếu tay chân thì gọi **115** ngay." : "";
             text = [fixLine ?? head, ...notes, bodyText, red115].filter(Boolean).join("\n\n");
-            aspect = "overview";
+            aspect = ask1 ?? "overview";
           }
           topicHit("health");
           return localReply(q, {

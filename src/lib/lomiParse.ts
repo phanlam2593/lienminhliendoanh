@@ -459,7 +459,9 @@ export type ParseOpts = { /** Cách người dùng đang tự xưng (để biế
 export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
   const nfc = raw.normalize("NFC");
   const base: Frame = { raw, toks: [], act: "fragment", greeted: false, subject: "none", addressee: false, neg: false, polite: false, tags: [], loose: false, multi: false, conf: 0 };
-  const expO = expandTeen(nfc);
+  // 01/11: tuổi chen giữa người và vị ngữ ("mẹ tôi 75 tuổi bị sốt", "ông tôi 80 tuổi bị ho") là phần mô tả của chủ ngữ — bỏ ra khi đọc
+  //   cấu trúc để không mất người bệnh (trước đây thành "Bạn đang bị sốt"). Câu gốc (raw) giữ nguyên, lớp khác vẫn đọc được tuổi.
+  const expO = expandTeen(nfc).replace(/(?<=[\p{L}])\s+\d{1,3}\s*(?:tuổi|tháng tuổi|tháng|t)(?=\s+(?:(?:đang|hay|cứ|mới|vừa|lại)\s+)*(?:bị\s+)?(?:ho|sốt|đau|nôn|ói|tiêu chảy|táo bón|chóng mặt|mệt|ngứa|nổi|sổ mũi|nghẹt mũi|khó thở|mất ngủ|viêm|cảm|cúm|tiểu đường|huyết áp|gout|ung thư)(?![\p{L}]))/gu, "");
   const exp = expO.toLowerCase();
   if (!/\p{L}/u.test(exp)) return base;
   // 11/10: xét theo câu người dùng GÕ, không theo câu đã đổi teen code — "hnay a met wa" gõ không dấu, nhưng sau khi đổi
