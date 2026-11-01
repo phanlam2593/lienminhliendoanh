@@ -62,10 +62,12 @@ export function vagueMiss(question: string, reply: GateMsg & { content: string; 
   if (reply.med || reply.drug || reply.tarot || reply.harm || reply.heart || reply.content.length > 160) return null;
   // (câu gõ không dấu thì tên bệnh chỉ là đoán dấu — "cai nhau" không phải "cai nghiện" — không đổi câu đáp)
   if (!/[^\x00-\x7F]/.test(question)) return null;
-  if (!/(kể (thêm|tiếp)|kể Lomi nghe|Rồi sao nữa|Lomi nghe nè|nghe nè|Có gì kể tiếp)/u.test(reply.content)) return null;
-  const id = findMedTopicId(question);
+  if (!/(kể (thêm|tiếp)|kể Lomi nghe|Rồi sao nữa|Lomi nghe nè|nghe nè|Có gì kể tiếp|chưa chắc hiểu ý|Ý bạn là sao|nói rõ thêm|nói thêm chút xíu)/u.test(reply.content)) return null;
+  // (một chữ triệu chứng trơn — "sốt", "ho" — thì đọc như "bị sốt", "bị ho")
+  const short = question.trim().split(/\s+/).length <= 2;
+  const id = findMedTopicId(question) ?? (short ? findMedTopicId(`bị ${question}`) ?? findMedTopicId(`${question} ở người lớn`) : null);
   if (!id) return null;
-  const name = nameAsTyped(question, id) ?? "";
+  const name = nameAsTyped(question, id) ?? nameAsTyped(`bị ${question}`, id) ?? (short ? question.trim().replace(/[?!.…]+$/u, "") : "");
   if (!name) return null;
   // (câu đáp đã nhắc đúng chuyện đó — "Con anh bị bạn bè bắt nạt hả…" — hoặc đang theo mạch kể về một người → không phải câu chung chung)
   if (reply.about || reply.thread) return null;

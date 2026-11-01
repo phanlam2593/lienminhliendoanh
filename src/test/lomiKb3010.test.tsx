@@ -755,4 +755,22 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(late.places?.length).toBeGreaterThan(0);
     expect(late.content).toMatch(/chưa lọc được theo \*\*giờ mở cửa/);
   }, T);
+  it("01/11 — hiểu câu vòng 8: viết tắt / teen code / gõ sai, câu một chữ, 'bò không' ≠ 'bổ không'", async () => {
+    // "thịt bò không" bỏ dấu trùng "bổ không" — câu có dấu thì hỏi gout + bò; đối chứng "thịt bò có bổ không" vẫn là hỏi chất
+    expect((await last(["gout có ăn đc thịt bò ko"])).content).toMatch(/Với \*\*Gout\*\*/);
+    expect((await last(["gout có ăn được thịt bò không"])).content).toMatch(/Gout/);
+    expect((await last(["thịt bò có bổ không"])).content).toMatch(/có những chất gì/);
+    // viết tắt
+    expect((await last(["tiểu đg ăn xoài đc k"])).content).toMatch(/Tiểu đường/);
+    expect((await last(["acc bị khóa"])).content).toMatch(/Tài khoản bị khoá/);
+    expect((await last(["sao ko nhận đc voucher"])).content).not.toMatch(/Tài khoản bị khoá thì/);
+    // câu hỏi định nghĩa tính năng / một chữ triệu chứng
+    expect((await last(["voucher là gì"])).content).toMatch(/\*\*Ưu đãi\*\* \(voucher\) là/);
+    expect((await last(["ưu đãi?"])).stuck).toBeUndefined();
+    const fv = await last(["sốt"]);
+    expect(fv.content).toMatch(/\*\*sốt\*\*/);
+    expect(fv.quick?.length).toBeGreaterThan(0);
+    // gõ sót dấu đ sau "đau"
+    expect((await last(["đau dầu quá"])).content).toMatch(/đau đầu/i);
+  }, T);
 });

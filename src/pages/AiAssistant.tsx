@@ -1474,6 +1474,9 @@ export function AiChat({
       .replace(/(^|[^\p{L}])đau lòng(?![\p{L}])/giu, "$1buồn")
       .replace(/(^|[^\p{L}])vết thương lòng(?![\p{L}])/giu, "$1nỗi buồn trong lòng")
       .replace(/(^|[^\p{L}])rứa(?![\p{L}])/giu, "$1vậy")
+      // 01/11 (vòng 8): "tiểu đg", "đg huyết" = đường (chỉ trong hai cụm này — "e đg ăn" là "đang")
+      .replace(/(^|[^\p{L}])tiểu đg(?![\p{L}])/giu, "$1tiểu đường")
+      .replace(/(^|[^\p{L}])đg (huyết|máu)(?![\p{L}])/giu, "$1đường $2")
       .replace(/^(\s*)răng\s+(mà|lại|không|hông|ri)(?![\p{L}])/iu, "$1sao $2")
       .replace(/(^|[^\p{L}])(bị|thuốc|món|cái) chi(?![\p{L}])/giu, "$1$2 gì")
       .replace(/(^|[^\p{L}])lm\s+j(?![\p{L}])/giu, "$1làm gì")
@@ -1494,7 +1497,10 @@ export function AiChat({
       fix: for (let i = 0; i < ws.length; i++) {
         const w = ws[i].replace(/[?!.,…]+$/u, "");
         // (chỉ chữ gõ CÓ DẤU mà sai — "mũu", "họnh", "đườmg"; chữ không dấu như "alo" có thể là tiếng lóng / tên riêng, sửa thành "lao" là sai)
-        if (w.length < 3 || !/^\p{L}+$/u.test(w) || !/[^\x00-\x7F]/.test(w) || isKnownSyllable(w)) continue;
+        // (01/11: chữ CÓ NGHĨA nhưng đứng sau "đau / nhức / viêm" mà cả cụm không ra bệnh nào — "đau dầu", "nhức dầu" gõ sót dấu đ —
+        //   vẫn thử sửa một ký tự; chỉ nhận khi câu sửa khớp đúng một chủ đề)
+        const afterPain = i >= 2 && /^(đau|nhức)$/iu.test(ws[i - 2] ?? "") && /^(dầu|dâu|bùng|lừng)$/iu.test(w);
+        if (w.length < 3 || !/^\p{L}+$/u.test(w) || !/[^\x00-\x7F]/.test(w) || (isKnownSyllable(w) && !afterPain)) continue;
         for (const c of typoCandidates(w)) {
           const cand = [...ws.slice(0, i), ws[i].replace(w, c), ...ws.slice(i + 1)].join("");
           // (30/10: "mới mổi nên kiêng gì" → "mới mổ…": câu sửa khớp một bài mẹo dân gian có ngữ cảnh cũng tính)

@@ -463,7 +463,10 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
   if (x && findFolk(q)?.ctx) return null;
   // Hỏi MỘT MÓN có chất gì (không nêu tên chất) → bảng món → chất.
   // (câu nêu bệnh mà hỏi "nên uống vitamin gì" → trả lời theo bệnh bên dưới, không theo món)
-  if (!x && !(med && SUPP.test(n)) && (FOOD_ASK.test(n) || (!med && FOOD_GOOD.test(n) && !findFolk(q)))) {
+  // 01/11: "bò không" bỏ dấu trùng "bổ không" ("gout có ăn được thịt bò không" ≠ hỏi thịt bò bổ không) — câu có dấu thì "bổ" phải gõ đúng dấu
+  const accQ = /[^\x00-\x7F]/.test(q);
+  const foodAsk = FOOD_ASK.test(n) && !(accQ && /\b(bo khong|co bo khong)\b/.test(n) && !/(?:^|[^\p{L}])bổ(?![\p{L}])/u.test(q.normalize("NFC").toLowerCase()) && !/\b(chat gi|dinh duong|vitamin gi|bo gi|bo duong)\b/.test(n));
+  if (!x && !(med && SUPP.test(n)) && (foodAsk || (!med && FOOD_GOOD.test(n) && !findFolk(q)))) {
     const f = foodOf(q);
     // "viêm gan", "men gan", "nóng gan" — chữ "gan" là bộ phận cơ thể, không phải món gan.
     if (f && !(f.id === "gan" && LIVER_ORGAN.test(n))) return renderFood(f, now);

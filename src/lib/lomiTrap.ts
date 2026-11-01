@@ -61,6 +61,11 @@ export function trapReply(q: string): Trap | null {
   // 01/11: "sao tôi không nhắn tin được" — hỏi vì sao KHÔNG LÀM ĐƯỢC (lỗi), không phải hỏi cách nhắn
   if (VN(/\b(không|ko|k|chẳng|hổng) (nhắn tin|nhắn|gửi tin nhắn|gửi tin|gọi|gọi điện) (được|đc|dc)\b|\b(nhắn tin|gửi tin nhắn|gửi tin) (không|ko|chẳng) (được|đi|lên)\b/).test(n) && !VN(/\b(người yêu|chồng|vợ|ny|crush|anh ấy|cô ấy|bạn trai|bạn gái)\b/).test(n))
     return { text: "Không nhắn / gọi được thì bạn thử lần lượt nha 📩\n1. Kiểm tra mạng, kéo trang xuống tải lại hoặc tắt hẳn app rồi mở lại\n2. Nếu chỉ không nhắn được với **một người** — có thể người đó đã chặn bạn (khi bị chặn thì không nhắn, gọi hay xem hồ sơ của họ được), hoặc chính bạn đã chặn họ (xem ở Hồ sơ → ⋯ → Cài đặt → Người dùng đã chặn)\n3. Gọi thoại / video thì người kia cần đang online\n4. Vẫn không được thì nhắn Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ), kể rõ lỗi hiện ra sao", faqId: "msgstart" };
+  // 01/11: "voucher là gì", "ưu đãi?" — hỏi ĐỊNH NGHĨA tính năng ưu đãi → nói ngắn là gì + cách nhận (theo câu hỏi thường gặp có sẵn)
+  if (VN(/^ ?(ưu đãi|voucher|khuyến mãi|mã giảm giá)( (là gì|là sao|là cái gì|nghĩa là gì|à|hả))? ?$/).test(n) || VN(/^ ?(ưu đãi|voucher) $/).test(`${n} `)) {
+    const cl = faqById("claim");
+    return { text: `**Ưu đãi** (voucher) là khuyến mãi các quán, doanh nghiệp trên iLomi đăng cho khách — giảm giá, tặng món… 🎁${cl ? `\n\nCách nhận:\n${cl.a.vi}` : ""}\n\nXem các ưu đãi đang có ở **Ưu đãi (/uu-dai)**.`, faqId: "claim" };
+  }
   // Mã OTP / SMS xác minh — app không dùng
   if (VN(/\b(otp|mã xác nhận|mã xác thực|mã xác minh|sms xác (minh|nhận))\b/).test(n))
     return {
@@ -120,7 +125,7 @@ export function trapReply(q: string): Trap | null {
     return { text: `${VN(/\b(lo quá|lo lắm|sợ quá|hoảng)\b/).test(n) ? "Lomi hiểu bạn đang lo lắm 💚 " : ""}Trong iLomi **chưa có danh sách phòng khám / bệnh viện** đâu 🙏 Bạn mở **bản đồ trên điện thoại** gõ “${kid ? "phòng khám nhi" : "phòng khám"} gần đây” để xem chỗ gần và giờ mở cửa, rồi đặt xe đi ở **Đưa đón (/dua-don)**.${kid && fever ? "\n\n👶 Bé sốt mà **dưới 3 tháng tuổi**, hoặc li bì, bỏ bú / bỏ ăn, thở nhanh, co giật, nổi ban không mất khi ấn → đưa bé đi cấp cứu ngay / gọi **115**, đừng chờ tìm phòng khám." : "\n\n🚨 Khó thở, đau ngực, lơ mơ, chảy máu nhiều → gọi **115** ngay."}` };
   }
   // Tài khoản bị khoá
-  if (VN(/\btài khoản\b/).test(n) && VN(/\b(bị khoá|bị khóa|bị chặn|bị đình chỉ|bị cấm)\b/).test(n))
+  if (VN(/\b(tài khoản|acc|account|nick|tk)\b/).test(n) && VN(/\b(bị khoá|bị khóa|bị chặn|bị đình chỉ|bị cấm|bị block|bị ban)\b/).test(n) && !VN(/\b(ưu đãi|voucher|mã pin|pin)\b/).test(n))
     return { text: "Tài khoản bị khoá thì bạn thử vầy nha:\n• Nếu vừa **nhập sai mật khẩu nhiều lần** thì chờ vài phút rồi thử lại, hoặc bấm **Quên mật khẩu** (nhập đúng email + số điện thoại đã đăng ký)\n• Nếu app báo tài khoản bị khoá / tạm ngưng → liên hệ **Ban quản trị** (trang đầu có Email / Hotline / Facebook) để hỏi lý do và cách mở lại\n\nĐừng lo quá nha — cứ hỏi Ban quản trị là sẽ rõ.", faqId: "forgot" };
   // "đi từ trung tâm tới hồ Tuyền Lâm" → đặt xe
   if (VN(/\b(muốn |cần )?đi từ \S+( \S+){0,4} (tới|đến|qua|lên|xuống|ra) \S+/).test(n) && !VN(/\b(bao xa|mấy km|bao lâu|đường nào)\b/).test(n))
