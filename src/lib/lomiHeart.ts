@@ -980,6 +980,8 @@ function themeOf(n: string): Theme | undefined {
   // "e bị bạn thân phản bội" — bị BẠN BÈ phản bội là chuyện bạn bè, không phải bị người yêu lừa dối.
   // 01/11: "sao tôi không nhắn tin được", "tui gửi tin không được" — người nói KHÔNG LÀM ĐƯỢC việc trên app, không phải người yêu lạnh nhạt
   if (t?.id === "cold" && VN(/\b(không|ko|k|hổng|chẳng) (nhắn tin|nhắn|gửi tin nhắn|gửi tin|rep|trả lời tin nhắn|gọi) (được|đc|dc)\b|\b(nhắn tin|gửi tin|gửi tin nhắn) (không|ko|k|chẳng) (được|đi|lên)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|ny|crush|anh ấy|cô ấy|bạn trai|bạn gái)\b/).test(m)) return undefined;
+  // 01/11 (vòng 25): "tôi cãi nhau với MẸ vì chuyện lấy chồng" — người cãi nhau là người nhà → chuyện gia đình, không phải lời khuyên cặp đôi
+  if (t?.id === "fight" && VN(/\b(với|cùng) (mẹ|má|mạ|bố|ba|cha|bố mẹ|ba mẹ|cha mẹ|ông|bà|anh trai|chị gái|em trai|em gái|anh chị|bố chồng|mẹ chồng|bố vợ|mẹ vợ|con trai|con gái|gia đình|nhà)\b/).test(m)) return THEMES.find((x) => x.id === "family") ?? t;
   if (t?.id === "cheat" && VN(/\b(bạn thân|bạn bè|đứa bạn|con bạn|thằng bạn|người bạn|đồng nghiệp)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|bạn trai|bạn gái|ny)\b/).test(m)) return THEMES.find((x) => x.id === "friends") ?? t;
   return t;
 }

@@ -1057,4 +1057,27 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["mẹ chồng hay soi mói tôi"])).content).toMatch(/nhà chồng|Làm dâu|mẹ chồng/i);
     expect((await last(["đi ngủ đây"])).content).toMatch(/ngủ/i);
   }, T);
+  it("01/11 — hiểu câu vòng 25: không dấu cho câu hỏi app + câu kể nhiều vế (k = không, lợi ≠ lỗi, sắp tới ≠ sạp tôi, cãi với mẹ, gout + uống bia + đau)", async () => {
+    expect((await last(["tai xe k toi thi sao"])).faqId).toBe("ridetrack");
+    const mb = await last(["membership co loi gi"]);
+    expect(mb.content).not.toMatch(/trục trặc/);
+    expect(mb.content).toMatch(/Membership/);
+    for (const q of ["toi bi mat viec, tien nha sap toi han, toi roi qua", "tôi bị mất việc, tiền nhà sắp tới hạn, tôi rối quá"]) {
+      const r = await last([q]);
+      expect(r.biz, q).toBeFalsy();
+    }
+    expect((await last(["quan cua toi chua dc duyet"])).biz).toBeFalsy();
+    const mom = await last(["tôi cãi nhau với mẹ vì chuyện lấy chồng"]);
+    expect(mom.content).not.toMatch(/Cặp đôi|người yêu/);
+    const g = await last(["tôi bị gout, hôm qua lỡ uống bia, giờ đau chân quá"]);
+    expect(g.content).toMatch(/Bạn đang bị \*\*gout\*\* mà giờ đau chân quá/);
+    expect(g.content).not.toMatch(/🍻|Uống bia hả/);
+    expect((await last(["toi bi gout, hom qua lo uong bia, gio dau chan qua"])).content).toMatch(/gout\*\* mà giờ đau chân/);
+    expect((await last(["toi muon bo thuoc la ma kho qua"])).content).not.toMatch(/Khổ qua/);
+    // đối chứng: rủ nhậu vẫn là rủ nhậu; hỏi chế độ ăn vẫn ra danh sách; "50 k" vẫn là tiền; app lỗi vẫn là lỗi
+    expect((await last(["nhậu thôi anh em"])).content).toMatch(/🍻/);
+    expect((await last(["tôi bị gout, nên ăn gì"])).content).toMatch(/Ăn uống với \*\*Gout/);
+    expect((await last(["app bị lỗi gì vậy"])).content).toMatch(/trục trặc|lỗi/);
+    expect((await last(["cãi nhau với người yêu"])).content).not.toMatch(/Chuyện gia đình/);
+  }, T);
 });

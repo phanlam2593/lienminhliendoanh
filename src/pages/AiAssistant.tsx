@@ -881,7 +881,10 @@ export function AiChat({
     const OWNER = VN(/\b((quán|tiệm|shop|cửa hàng|sạp|xe) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)|(em|anh|chị|tui|tôi|mình|cô|chú|bác) (có|mở|mới mở|đang mở|mới khai trương|kinh doanh|làm chủ) (một |1 )?(quán|tiệm|shop|cửa hàng|xe)|khai trương quán|khách (đánh giá|chê|phàn nàn|review|than)|cần tuyển (người|nhân viên)|tuyển nhân viên|bài tuyển|chủ quán|quán vắng khách|vắng khách quá|làm chủ quán|đăng (cái |mấy cái |1 |một )?(ưu đãi|khuyến mãi|giảm giá)|đăng bài (giảm giá|ưu đãi|khuyến mãi))\b/);
     const prevBiz = prevA.find((m) => m.biz)?.biz;
     // "làm sao đăng ưu đãi?" (hỏi cách dùng app, chưa kể mình có quán) → để FAQ trả lời như cũ
-    const ownerNow = OWNER.test(nr) && !(VN(/\b(làm sao|cách|làm thế nào|thế nào|hướng dẫn)\b/).test(nr) && !VN(/\b(quán|tiệm|shop|cửa hàng) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)\b/).test(nr) && VN(/\bđăng\b/).test(nr));
+    // (01/11 vòng 25: bỏ dấu "sắp tới" trùng "sạp tôi" — "tiền nhà sắp tới hạn" không phải đang nói về sạp hàng của mình;
+    //   chữ "sạp" chỉ tính khi câu (đã đoán dấu) viết đúng "sạp")
+    const nrOwn = /(^|[^\p{L}])sạp(?![\p{L}])/iu.test(raw) ? nr : nr.replace(/(^| )sap (?=(cua )?(em|anh|chi|tui|toi|minh|co|chu|bac)( |$))/g, "$1x ");
+    const ownerNow = OWNER.test(nrOwn) && !(VN(/\b(làm sao|cách|làm thế nào|thế nào|hướng dẫn)\b/).test(nr) && !VN(/\b(quán|tiệm|shop|cửa hàng) (của )?(em|anh|chị|tui|tôi|mình|cô|chú|bác)\b/).test(nr) && VN(/\bđăng\b/).test(nr));
     const prevU6 = msgs.filter((m) => m.role === "user").slice(-6).reverse();
     const bizFaqNear = msgs.filter((m) => m.role === "assistant").slice(-4).some((m) => m.faqId?.startsWith("biz") || !!m.biz);
     const ownerCtx = ownerNow || !!prevBiz || bizFaqNear || prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `));
@@ -890,7 +893,7 @@ export function AiChat({
       const ff = faqById("bizoffer");
       if (ff) return { role: "assistant", content: `${ff.a.vi}\n\nChưa có hồ sơ doanh nghiệp (hoặc đang chờ duyệt) thì sẽ chưa thấy mục Ưu đãi — tạo ở Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp.`, local: true, faqId: "bizoffer", biz: { type: detectBizKind(raw).type, noun: detectBizKind(raw).noun, topic: "offer" } };
     }
-    const ownerSkip = VN(/\b(đăng ký( \S+){0,2} (hồ sơ )?chủ quán|tạo hồ sơ (chủ quán|doanh nghiệp)|nhắn (tin )?(cho )?chủ quán|hỏi chủ quán|liên hệ chủ quán|gọi (cho )?chủ quán|chủ quán( \S+){0,2} (nhắn lại|trả lời|rep)|chủ quán có (thể )?tạo|với chủ quán)\b/).test(nr) || VN(/\b(chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr)) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
+    const ownerSkip = VN(/\b(đăng ký( \S+){0,2} (hồ sơ )?chủ quán|tạo hồ sơ (chủ quán|doanh nghiệp)|nhắn (tin )?(cho )?chủ quán|hỏi chủ quán|liên hệ chủ quán|gọi (cho )?chủ quán|chủ quán( \S+){0,2} (nhắn lại|trả lời|rep)|chủ quán có (thể )?tạo|với chủ quán)\b/).test(nr) || VN(/\b(duyệt|chờ duyệt|chưa duyệt|chúc|sinh nhật|thiệp|bỏ chuyện|thôi chuyện|hoà vốn|hòa vốn|vốn|mặt bằng|bao nhiêu ly|lời lỗ|lãi lỗ|ngày nào|ngày đẹp)\b/).test(nr) || (!ownerNow && !!(lastA0?.search || lastA0?.dish || (lastA0?.places?.length ?? 0) > 0)) || (!ownerNow && !!detectSearch(raw) && VN(/\b(tìm|kiếm|gợi ý|chỉ)\b/).test(nr)) || (ownerNow && !prevBiz && !prevU.some((m) => OWNER.test(` ${normalizeVi(m.content)} `)) && VN(/\b(mới khai trương|vừa khai trương|mới mở)\b/).test(nr) && !raw.includes("?") && !VN(/\b(sao|gì|nào|không|giúp|cách)\b/).test(nr));
     if (ownerCtx && !ownerSkip && w <= 18 && !VN(/\b(đau|bệnh|sốt|thuốc|mất ngủ|buồn|chia tay|bầu|mang thai|có thai|cho con bú|uống được|bác sĩ)\b/).test(nr)) {
       const allTxt = [...prevU6.map((m) => m.content).reverse(), raw].join(" . ");
       const sellM = ` ${normalizeVi(allTxt)} `.match(VN(/\bbán (đồ ăn sáng|đồ ăn|ăn sáng|cơm|bún|phở|xôi|bánh mì|hủ tiếu|cháo|bánh)\b/));
@@ -1487,6 +1490,9 @@ export function AiChat({
       // (gõ không dấu: chỉ cụm chắc nghĩa "tim … dap" — "tim em dap loan nhip" — để không dấu hiểu giống có dấu)
       .replace(/^(\s*)tim\s+(toi|tui|minh|em|anh|chi)\s+(dap)(?![\p{L}])/iu, "$1$2 tim $3")
       .replace(/^(\s*)(tim|mắt|bụng|dạ dày|bao tử|đầu|lưng|răng|họng|cổ họng|ngực|chân|tay|da|mặt|vai|gối|đầu gối|khớp|mũi|tai|cổ)\s+(tôi|tui|mình|em|anh|chị|của tôi|của tui|của mình)\s+(?=(?:bị|cứ|hay|đang|lại|thấy|đập|đau|nhức|khó chịu|ngứa|sưng|đỏ|chảy|nóng|lạnh|tê|mỏi|ù|nghẹt|rát|đói|sôi|cồn cào)(?![\p{L}]))/iu, (_m, sp, part, pron) => `${sp}${pron.replace(/^của\s+/u, "")} ${part} `)
+      // 01/11 (vòng 25): "k / ko / kh / hk" ĐỨNG GIỮA câu, ngay trước một chữ = "không" ("tài xế k tới thì sao", "tôi k biết") — đổi trước khi
+      //   đọc câu để các luật viết theo "không" bắt được; "k" sau con số là nghìn ("50 k") nên giữ; "k" cuối câu là từ hỏi, các lớp đã đọc được
+      .replace(/(?<![\p{L}\p{N}])(?<!\d\s?)(?:k|ko|kh|hk|khg|kg|hok)(?=\s+\p{L})/giu, "không")
       // 01/11 (vòng 24): "nhìu / nhiu" = nhiều (teen code) — đổi trước khi đọc câu để "uống nhiu nước đá có sao k" hiểu như câu có dấu
       .replace(/(^|[^\p{L}])(?:nhìu|nhiu)(?![\p{L}])/giu, "$1nhiều")
       // 01/11 (vòng 24): "nấc cụt không dứt", "ho không ngừng" — "không" ở đây tả triệu chứng kéo dài, không phải từ hỏi / phủ định
@@ -1801,6 +1807,22 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: `Thương bé ${pet} ghê 🥺 Kiến thức sức khoẻ của Lomi là **cho người**, nên Lomi không nói nguyên nhân hay cách chữa cho ${pet} được — con vật bị bệnh khác người, nhiều thuốc người dùng bình thường lại độc với chó mèo.\n• Đừng tự cho bé uống thuốc của người\n• Đưa bé đi **bác sĩ thú y** để được khám\n• Bé lả đi, bỏ ăn uống, khó thở, co giật hay chảy máu → đưa đi thú y **ngay**${VN(/\b(ăn phải|nuốt phải|ăn nhầm|uống nhầm|liếm phải)\b/).test(` ${normalizeVi(raw)} `) ? "\n• Bé **ăn / nuốt phải** thứ lạ thì gọi hoặc đưa đi thú y **ngay**, kể cả khi bé chưa có biểu hiện gì — mang theo bao bì hoặc thứ bé đã ăn" : ""}`, local: true, about: { text: `${pet}`, kind: "pet" } });
       }
       // xin liều / dùng thuốc của người khác; xin chẩn đoán vòng; "có nguy hiểm không"
+      // 01/11 (vòng 25): câu KỂ nhiều vế có tên bệnh của chính mình + một vế đang đau / sưng / sốt ("tôi bị gout, hôm qua lỡ uống bia,
+      //   giờ đau chân quá") — câu dài nên các lớp thẻ bệnh bỏ qua, từng bị đáp "Uống bia hả 🥺". Đây là đang lên cơn → phần chăm sóc của bệnh đó.
+      if (!en && !looksLikeQuestion(raw) && /,/.test(raw)) {
+        const idS = findMedId(raw);
+        const nS = ` ${normalizeVi(raw)} `;
+        const parts = raw.split(/\s*,\s*/);
+        const flare = parts.slice(1).find((x) => VN(/\b(đau|sưng|nhức|sốt|ngứa|nổi mẩn|khó thở|tái phát|lên cơn)\b/).test(` ${normalizeVi(x)} `));
+        if (idS && flare && VN(/\b(tôi|tui|mình|em|anh|chị) (bị|đang bị|có)\b/).test(nS) && medKindOf(idS) !== "mental") {
+          const mtS = await loadMedTopic(idS);
+          const mrS = mtS ? renderMed(mtS, "care") : null;
+          if (mtS && mrS?.text) {
+            rewroteRef.current = true;
+            return localReply(q, { role: "assistant", content: `Bạn đang bị **${medName(mtS)}** mà ${((f) => (/^(mấy|dạo|hôm|tối|sáng|chiều|từ|tự nhiên|tuần|gần đây)/iu.test(f) ? f : `giờ ${f}`))(flare.trim().replace(/^(giờ|bây giờ|mà|nhưng|rồi|thì)\s+/iu, "").replace(/[.!…]+$/u, ""))} hả 🩺 Lomi gửi phần chăm sóc${/khám/u.test(mrS.text) ? " và khi nào cần đi khám" : ""} nha:\n\n${mrS.text}`, local: true, health: {}, med: { id: mtS.id, aspect: "care" }, quick: mrS.quick });
+          }
+        }
+      }
       // 01/11 (vòng 24): gõ không dấu "bi nam da" — NÁM da (sạm màu) hay NẤM da (nhiễm nấm)? Hai thẻ khác nhau → hỏi lại.
       if (!en && !/[^\x00-\x7F]/.test(typed) && /(^|\s)nam da(?=\s|$)/i.test(` ${normalizeVi(typed)} `)) {
         const base = typed.replace(/[?!.]+$/, "");

@@ -523,7 +523,8 @@ const RULES: Rule[] = [
   },
   // Nhậu / cà phê / đi chơi — rủ rê cho vui
   {
-    re: VN(/\b(đi nhậu|nhậu thôi|nhậu không|làm vài lon|làm vài chai|làm ly|uống bia|uống rượu|tăng 2|đi bar|đi pub)\b/),
+    // (01/11 vòng 25: "tôi bị gout, hôm qua lỡ uống bia, giờ đau chân quá" — uống bia rồi bị đau / bệnh là chuyện sức khoẻ, không phải rủ đi nhậu)
+    re: VN(/^(?!.*\b(bị|đau|nhức|sốt|bệnh|gout|gút|lỡ|say quá|nôn|ói|mệt|khó chịu|dị ứng|ngứa|thuốc|bác sĩ)\b).*\b(đi nhậu|nhậu thôi|nhậu không|làm vài lon|làm vài chai|làm ly|uống bia|uống rượu|tăng 2|đi bar|đi pub)\b/),
     reply: () => ({
       text: pick([
         "Nghe là thấy vui rồi 🍻 Đi thì nhớ uống vừa phải, đã uống thì đừng lái xe nha! Muốn tìm quán gần đây có ưu đãi thì vào Khám phá (/kham-pha) → Gần đây.",

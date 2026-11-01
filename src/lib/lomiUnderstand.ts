@@ -293,7 +293,9 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
   const kind = detectIssue(` ${normStrict(raw || q, APP)} `);
   // 01/11: câu ngắn kể chuyện CƠ THỂ ("bị gì mà mệt dữ vậy", "sao mà ho hoài") không nhắc app → không phải báo lỗi app
   const bodyTalk = !has(n, APP_REF) && VN(/\b(mệt|đau|sốt|ho|chóng mặt|buồn nôn|nôn|ói|ngứa|mỏi|nhức|khó thở|mất ngủ|tiêu chảy)\b/).test(` ${n} `) && /[^\x00-\x7F]/.test(raw || q);
-  if (kind && !bodyTalk && !(faqHit && PROBLEM_FAQ.has(faqHit)) && (has(n, APP_REF) || w <= 7)) {
+  // 01/11 (vòng 25): "membership có LỢI gì" — bỏ dấu trùng "lỗi gì"; câu (đã đoán dấu) viết "lợi" mà không có "lỗi" thì không phải báo lỗi
+  const benefit = kind === "generic" && /(?<![\p{L}])lợi(?![\p{L}])/iu.test(raw || q) && !/(?<![\p{L}])lỗi(?![\p{L}])/iu.test(raw || q);
+  if (kind && !bodyTalk && !benefit && !(faqHit && PROBLEM_FAQ.has(faqHit)) && (has(n, APP_REF) || w <= 7)) {
     return {
       intent: "issue",
       issue: kind,
