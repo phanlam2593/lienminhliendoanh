@@ -131,9 +131,9 @@ import {
   type TarotReading,
 } from "@/lib/tarot";
 import { TarotCards } from "@/components/LomiTarot";
-import { VR, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
+import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch } from "@/lib/lomiReplyGate";
-import { normNeg, otherComplaint, petPatient } from "@/lib/lomiQShape";
+import { normNeg, otherComplaint, petPatient, qtypeOf } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
@@ -1454,6 +1454,14 @@ export function AiChat({
       .replace(/(^|[^\p{L}])dzậy(?![\p{L}])/giu, "$1vậy")
       // 01/11 (hiểu câu vòng 3): "rứa" = vậy, "răng mà / răng lại" ở đầu câu = sao mà, "bị chi / thuốc chi" = bị gì,
       //   "lm j" = làm gì; "hong / hông / hok / hơm" ĐỨNG CUỐI câu là từ hỏi = không (trừ "đau họng", "viêm họng" gõ không dấu)
+      // 01/11 (vòng 5): "có răng không" = có sao không, "mần răng / mần chi" = làm sao / làm gì, "đặng không" = được không
+      .replace(/(^|[^\p{L}])(có|bị) răng (không|hông|ko|k)(?![\p{L}])/giu, "$1$2 sao $3")
+      .replace(/(^|[^\p{L}])mần (răng|chi|gì)(?![\p{L}])/giu, (_m, a, b) => `${a}làm ${b === "răng" ? "sao" : "gì"}`)
+      .replace(/(^|[^\p{L}])đặng (không|hông|ko|k|hem|chưa)(?![\p{L}])/giu, "$1được $2")
+      // thành ngữ cảm xúc — không phải triệu chứng: "sốt ruột" = lo, "đau lòng" = buồn, "vết thương lòng" = nỗi buồn trong lòng
+      .replace(/(^|[^\p{L}])sốt ruột(?![\p{L}])/giu, "$1lo lắng")
+      .replace(/(^|[^\p{L}])đau lòng(?![\p{L}])/giu, "$1buồn")
+      .replace(/(^|[^\p{L}])vết thương lòng(?![\p{L}])/giu, "$1nỗi buồn trong lòng")
       .replace(/(^|[^\p{L}])rứa(?![\p{L}])/giu, "$1vậy")
       .replace(/^(\s*)răng\s+(mà|lại|không|hông|ri)(?![\p{L}])/iu, "$1sao $2")
       .replace(/(^|[^\p{L}])(bị|thuốc|món|cái) chi(?![\p{L}])/giu, "$1$2 gì")
@@ -1567,12 +1575,32 @@ export function AiChat({
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
         if (rp.lead) emoRef.current = rp.lead;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
       }
       // 01/11: phủ định kép / tu từ ("không phải A mà là B", "chẳng lẽ X không Y", "X đâu có Y đâu") → câu hỏi thẳng (lib/lomiQShape)
       const ng = normNeg(q);
       if (ng && ng !== q) {
         q = ng;
         raw = ng;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+      // 01/11: "sốt (vậy) có sao không", "ho có nguy hiểm không" — câu hỏi về MỘT triệu chứng không có "bị" → đọc như "bị sốt có sao không"
+      const sxq = q.normalize("NFC").match(/^((?:sốt|ho|sổ mũi|nghẹt mũi|tiêu chảy|táo bón|nôn|ói|buồn nôn|chóng mặt|mệt|khó ngủ|mất ngủ|đau (?:đầu|bụng|lưng|họng|răng|ngực|khớp|bụng dưới))(?:\s+(?:cao|nhẹ|nhiều|hoài|mãi|liên tục))?)\s+(?:(?:vậy|thế|như vậy|như thế|vầy)\s+)?(có sao|có nguy hiểm|nguy hiểm)\s+(không|ko|k|hông|hả)\s*[?!.]*$/iu);
+      if (!rp && sxq) {
+        q = `bị ${sxq[1]} ${sxq[2]} ${sxq[3]}`;
+        raw = q;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+      // 01/11: "trước khi đi ngủ nên ăn / uống gì" — hỏi ăn uống cho GIẤC NGỦ (phần ăn uống của thẻ mất ngủ), không phải nhờ gợi ý món
+      if (!rp && VN(/\b(trước khi (đi )?ngủ|trước giờ ngủ|tối trước khi ngủ|sát giờ ngủ)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(ăn gì|uống gì|nên ăn|nên uống|ăn được không|uống được không)\b/).test(` ${normalizeVi(q)} `) && !findMedId(q)) {
+        emoRef.current = "Lomi trả lời theo phần ăn uống cho giấc ngủ (nguồn về mất ngủ) nha 🌙";
+        q = "mất ngủ nên ăn uống gì";
+        raw = q;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
       }
@@ -2849,7 +2877,9 @@ export function AiChat({
         const casualSoft = !inHealth && onlySoftSymptoms(q) && !askAdvice && (analyzeBody(q)?.sx.length ?? 0) > 0;
         // 09/10: câu gõ CÓ DẤU mà triệu chứng chỉ khớp nhờ một từ khác nghĩa bị bỏ dấu ("đi đá bóng" → "da bong" = da bong tróc)
         // thì không phải kể triệu chứng (chỉ xét khi chưa ở mạch sức khoẻ; lib/lomiFrame.symptomClash).
-        const accentClash = !!fr && !inHealth && !inTalk && symptomClash(q, fr);
+        //   (01/11: câu đã được Lomi viết lại — "sốt vậy có sao không" → "bị sốt có sao không" — thì đọc khung của CÂU ĐÃ VIẾT LẠI, không phải câu gốc)
+        const frNow = rewroteRef.current && !en ? parseVi(q, { addr: loadMem(user.id).addr, partnerCtx }) : fr;
+        const accentClash = !!frNow && !inHealth && !inTalk && symptomClash(q, frNow);
         const body = (mind && softBody) || casualSoft || accentClash ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, (inHealth && askAdvice) || medAspectOf(q) === "care");
         // 19/10: kể đúng MỘT triệu chứng mà kho có thẻ / góc nhìn có nguồn cho nó → gợi ý sẵn hai câu hỏi hữu ích nhất (mẹo, khi nào đi khám).
         const sx1 = body && body.sx.filter((id) => id !== "kid").length === 1 && !/^(⚠️|🚨)/u.test(body.text) ? body.sx.find((id) => id !== "kid")! : null;
@@ -2896,7 +2926,9 @@ export function AiChat({
           } else {
             // 01/11: câu có hỏi rõ MỘT phần ("không ngủ được thì làm gì", "bị ho nên ăn gì") → trả đúng phần đó, không đọc cả thẻ
             const askA = medAspectOf(q);
-            const ask1 = askA && askA !== "define" && askA !== "food" && askA !== "emergency" ? askA : null;
+            const ask1a = askA && askA !== "define" && askA !== "food" && askA !== "emergency" ? askA : null;
+            // ("có sao không / có nguy hiểm không" → phần khi nào cần đi khám / cấp cứu, không phải diễn tiến)
+            const ask1 = ask1a === "course" && VN(/\b(có sao|nguy hiểm|có sao hông|có sao ko)\b/).test(` ${normalizeVi(q)} `) ? "doctor" : ask1a;
             const ov = renderMed(sxCard, ask1 ?? "overview");
             const head = `${who ?? "Bạn"} đang bị **${label}** 🩺 ${ask1 ? "Về điều bạn hỏi nè:" : `Lomi gửi những điều cần biết về ${label} nha:`}`;
             const bodyText = withRedFlags(sxCard, q, withGroupNote(sxCard, q, ov.text.replace(VR(/(^|\n\n)Về \*\*[^*\n]+\*\*, Lomi có kiến thức đã kiểm chứng như sau:\n\n/u), "$1")));
@@ -3089,7 +3121,8 @@ export function AiChat({
         });
       // Người dùng vừa kể hoàn cảnh ("mình đang thất nghiệp") → Lomi đáp lại và nhớ.
       const ns = memLearn?.newSits[0];
-      if (ns && !en && q.split(/\s+/).length <= 14 && !matchFaq(q)) {
+      // (01/11: câu HỎI có nhắc hoàn cảnh — "sốt vậy có sao không" — là hỏi kiến thức, không phải kể hoàn cảnh để Lomi ghi nhớ)
+      if (ns && !en && q.split(/\s+/).length <= 14 && !matchFaq(q) && !(ns === "sick" && qtypeOf(q))) {
         const sr = SIT_REPLY[ns];
         return localReply(q, { role: "assistant", content: sr.text, local: true, quick: sr.quick, ...sitHeart });
       }

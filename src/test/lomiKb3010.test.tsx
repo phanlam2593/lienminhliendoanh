@@ -663,4 +663,38 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(e0.content).toMatch(/muốn hỏi chuyện gì về trẻ em/);
     expect(e0.content).not.toMatch(/18 tuổi/);
   }, T);
+  it("01/11 — hiểu câu vòng 5: câu mới trộn các loại (thành ngữ, 'có phải X gây Y', lây bao lâu, không uống thuốc, phương ngữ)", async () => {
+    // "có phải X gây Y" — từ hỏi đứng đầu không thuộc chủ thể; thiếu "có" vẫn là câu hỏi quan hệ
+    const cp = await last(["có phải cà phê gây mất ngủ không"]);
+    expect(cp.content).toMatch(/\*\*cà phê\*\* có gây \*\*mất ngủ/);
+    expect(cp.content).not.toMatch(/phải cà phê/);
+    expect((await last(["mất ngủ làm tăng cân không"])).content).not.toMatch(/từ khi dùng mất ngủ/);
+    expect((await last(["nổi mụn có phải do thức khuya không"])).content).not.toMatch(/dùng thức khuya/);
+    // "lây bao lâu" là hỏi chuyện lây, đối chứng "bao lâu thì khỏi" là diễn tiến
+    expect((await last(["bệnh tay chân miệng lây bao lâu"])).content).toMatch(/chuyện lây của/);
+    expect((await last(["tay chân miệng bao lâu thì khỏi"])).content).toMatch(/Diễn tiến/);
+    // "đau răng nên đi khám ở đâu" = hỏi chỗ (có chữ "đau" vẫn nhận được "ở đâu")
+    expect((await last(["đau răng nên đi khám ở đâu"])).content).toMatch(/chưa có danh sách/);
+    // phủ định: "không uống thuốc" → cách không dùng thuốc; "đâu phải tôi bị sốt, tôi chỉ hơi mệt" → không nói sốt
+    expect((await last(["mất ngủ mà không uống thuốc thì có cách nào"])).content).toMatch(/Với \*\*Mất ngủ\*\*, nên/);
+    expect((await last(["đâu phải tôi bị sốt, tôi chỉ hơi mệt thôi"])).content).not.toMatch(/sốt/);
+    expect((await last(["không phải ho khan mà là ho có đờm thì sao"])).content).not.toMatch(/Cảm lạnh/);
+    // thành ngữ cảm xúc không phải triệu chứng
+    expect((await last(["sốt ruột quá"])).content).not.toMatch(/sốt\*\*|chưa chắc hiểu/);
+    expect((await last(["đau lòng quá"])).med).toBeUndefined();
+    expect((await last(["không ai nói chuyện với tôi cả"])).content).toMatch(/[Cc]ô đơn/);
+    // từ khoá bẫy: tên quán có chữ "Bầu"; app "như bị cảm"
+    expect((await last(["quán Bà Bầu có món gì"])).content).toMatch(/tên quán/);
+    expect((await last(["app bị đơ như bị cảm"])).content).toMatch(/app bị trục trặc/);
+    // "trước khi đi ngủ nên ăn gì" là hỏi ăn uống cho giấc ngủ, không phải gợi ý món
+    expect((await last(["trước khi đi ngủ nên ăn gì"])).dish).toBeUndefined();
+    // hai món cùng bệnh, nói "và X thì sao"; "đậu" không bị đọc thành "dâu"
+    const g = await last(["gout có ăn được đậu không và bia thì sao"]);
+    expect(g.content).toMatch(/đậu/);
+    expect(g.content).toMatch(/bia/);
+    // phương ngữ / câu hỏi triệu chứng không có "bị"
+    expect((await last(["sốt rứa có răng không"])).content).toMatch(/Nên đi khám/);
+    expect((await last(["gout ăn tôm đặng không"])).content).not.toMatch(/tôm đặng/);
+    expect((await last(["tui bị tiêu chảy, mần răng chừ"])).content).toMatch(/Với \*\*Tiêu chảy\*\*, nên/);
+  }, T);
 });

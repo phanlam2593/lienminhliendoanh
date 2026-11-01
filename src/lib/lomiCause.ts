@@ -39,6 +39,8 @@ const X_SYN: [RegExp, string[]][] = [
   [/\b(thieu ngu|ngu it|thuc khuya|mat ngu|ngu khong du)\b/, ["thiếu ngủ", "ngủ ít", "ngủ không đủ", "thiếu ngủ"]],
   [/\b(ngoi lau|it van dong|luoi van dong|ngoi may tinh)\b/, ["ít vận động", "ngồi lâu"]],
   [/\b(nuoc lanh|nuoc da|da lanh)\b/, ["nước lạnh", "đồ lạnh"]],
+  // 01/11: thời tiết làm nguyên nhân ("trời lạnh có làm đau khớp không")
+  [/\b(troi lanh|thoi tiet lanh|gio lanh|troi tro lanh|thoi tiet|troi mua|nong am|troi nong|nang nong)\b/, ["lạnh", "thời tiết", "trời lạnh", "nóng"]],
   // chất bổ sung / thảo dược hay hỏi mà kho chưa có thẻ riêng — vẫn nhận câu để nói thật
   [/\b(magie|magnesium|melatonin|collagen|glucosamine|nhan sam|sam|dong trung ha thao|yen sao|to yen|mat ong|tinh dau|hoa cuc|tra hoa cuc|gung|nghe|curcumin|probiotic|men vi sinh|tao bien|spirulina|vitamin tong hop|thuc pham chuc nang|tpcn)\b/, []],
 ];
@@ -57,6 +59,7 @@ const Y_SYN: [RegExp, string[]][] = [
   [/\b(tang can|map|beo)\b/, ["tăng cân", "béo"]],
   [/\b(huyet ap|cao huyet ap|tang huyet ap)\b/, ["huyết áp"]],
   [/\b(rung toc)\b/, ["rụng tóc"]],
+  [/\b(dau khop|nhuc khop|viem khop|thoai hoa khop)\b/, ["đau khớp", "khớp", "viêm khớp"]],
   [/\b(than|than yeu|benh than|suy than)\b(?! kinh)/, ["thận", "bệnh thận", "suy thận"]],
   [/\b(dom|nhieu dom|co dom)\b/, ["đờm", "đàm", "ho có đờm"]],
   [/\b(nong trong|nhiet mieng|loet mieng)\b/, ["nhiệt miệng", "loét miệng"]],
@@ -84,6 +87,10 @@ export type CauseParse = { x: string; xShow: string; y: string; yShow?: string; 
 export function parseCause(q: string): CauseParse | null {
   // 01/11: câu ĐẢO ("mất ngủ có phải do cà phê không", "bị Y là vì X hả") → dạng xuôi "X có gây Y không" (lib/lomiQShape)
   let low = (flipCause(q) ?? q).normalize("NFC").toLowerCase().replace(/[?!.…,]+/gu, " ").replace(/\s+/g, " ").trim();
+  // 01/11: "có phải cà phê gây mất ngủ không", "liệu ăn cay có làm đau dạ dày không" — từ hỏi đứng đầu không thuộc chủ thể X
+  low = low.replace(/^(?:có phải là|có phải|phải chăng|liệu có phải|liệu|có khi nào)\s+(?=.+\s(?:có\s+)?(?:làm|gây|khiến|giúp|hại|ảnh hưởng|dẫn))/u, "");
+  // "mất ngủ làm tăng cân không" (thiếu "có") — vẫn là câu hỏi quan hệ
+  low = low.replace(/^(.{2,30}?)\s+(làm|gây|khiến)\s+(?!cho\s)(.{2,30}?\s+(?:không|ko|k|hông|hả))$/u, (m0, a, v, b) => (/\scó$/u.test(a) ? m0 : `${a} có ${v} ${b}`));
   // "nếu uống vitamin C buổi tối thì có mất ngủ không" → "uống vitamin C buổi tối có làm mất ngủ không"
   low = low.replace(/^nếu\s+(.+?)\s+thì\s+có\s+(?:bị\s+)?(?!làm|gây|giúp|khiến)/u, "$1 có làm ");
   // "vitamin C có làm mất ngủ nếu uống trước giờ ngủ 2 tiếng không" → bỏ vế "nếu …"
@@ -214,7 +221,7 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   if (p.nut?.tooMuch.length && p.verb === "cause") parts.push(`Điều nguồn có nói về **${p.nut.name}** khi dùng nhiều:\n${p.nut.tooMuch.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`);
   if (mt && p.verb === "cause" && mt.causes.length) parts.push(`Còn ${yName.toLowerCase()} thì nguồn hay nêu những nguyên nhân này:\n${mt.causes.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`);
   if (mt && p.verb === "help" && mt.care.length) parts.push(`Những cách nguồn có nêu cho ${yName.toLowerCase()}:\n${mt.care.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`);
-  if (p.verb === "cause") parts.push(`Nếu bạn thấy ${yAsk} bắt đầu từ khi ${p.nut || food || isDrugish || X_SYN.some(([re, ks]) => ks.length && re.test(xn)) ? `${/^(?:uống|ăn|dùng|hút)\s/u.test(p.xShow) ? "" : "dùng "}${p.xShow === xName ? xName : p.xShow}` : xName}, cứ ghi lại rồi hỏi dược sĩ / bác sĩ cho chắc nha.${isDrugish && /buồn ngủ|lơ mơ|chóng mặt/u.test(yAsk) ? " Đang buồn ngủ, chóng mặt thì đừng lái xe." : ""}`);
+  if (p.verb === "cause") parts.push(`Nếu bạn thấy ${yAsk} bắt đầu từ khi ${/^(?:uống|ăn|dùng|hút|thức|ngủ|tập|ngồi|chơi|lướt|xem|làm|đi)\s/u.test(p.xShow) || !(p.nut || food || isDrugish || X_SYN.some(([re, ks]) => ks.length && re.test(xn))) || /^(?:thức|ngủ|ít|thiếu|mất|trời|thời tiết|tập|ngồi)/u.test(p.xShow) ? p.xShow : `dùng ${xName}`}, cứ ghi lại rồi hỏi dược sĩ / bác sĩ cho chắc nha.${isDrugish && /buồn ngủ|lơ mơ|chóng mặt/u.test(yAsk) ? " Đang buồn ngủ, chóng mặt thì đừng lái xe." : ""}`);
   return { text: parts.join("\n\n"), medId: yMed ?? undefined };
 }
 
@@ -452,7 +459,7 @@ export async function multiAspectReply(q: string): Promise<{ text: string; medId
       }
     }
   }
-  const parts = low.split(/\s*[,;]\s*(?:và|với lại|còn|rồi)?\s*|\s+(?:và|với lại)\s+(?=(?:có|bao|là|nên|ăn|uống|kiêng|khi|vì|tại|làm|cách|lây|triệu|dấu|cần|được)(?![\p{L}]))/u).map((x) => x.trim()).filter((x) => x.split(" ").length >= 2);
+  const parts = low.split(/\s*[,;]\s*(?:và|với lại|còn|rồi)?\s*|\s+(?:và|với lại)\s+(?=(?:có|bao|là|nên|ăn|uống|kiêng|khi|vì|tại|làm|cách|lây|triệu|dấu|cần|được)(?![\p{L}])|(?:còn\s+)?\S+(?:\s+\S+)?\s+(?:thì sao|được không)$)/u).map((x) => x.trim()).filter((x) => x.split(" ").length >= 2);
   if (parts.length < 2 || parts.length > 3) return null;
   // (câu nhắc THUỐC — "uống ibuprofen được không", "có nên uống thêm thuốc giảm đau" — để lớp thuốc trả lời; tên bệnh phải nằm ở vế đầu)
   if (findDrug(low) || W(/\b(thuốc|kháng sinh|viên)\b/u).test(low.toLowerCase()) && !W(/\b(có cần uống kháng sinh|uống kháng sinh không)\b/u).test(low.toLowerCase())) return null;
@@ -460,18 +467,22 @@ export async function multiAspectReply(q: string): Promise<{ text: string; medId
   const t = await loadMedTopic(id);
   if (!t) return null;
   const nm = displayName(t);
-  const asks: { aspect: string; food: string | null }[] = [];
+  const asks: { aspect: string; food: string | null; part: string }[] = [];
   for (const p of parts) {
     const own = findMedTopicId(p) === id;
     const a0 = parseMedAsk(own ? p : `${nm.toLowerCase()} ${p}`);
     // ("có nguy hiểm không / có sao không" → phần khi nào đi khám / cấp cứu)
-    const a = a0 && a0.aspect === "overview" && /(?:nguy hiểm|có sao)/u.test(p) ? { ...a0, aspect: "doctor" as const } : a0;
+    // ("bia thì sao", "còn tôm thì sao" ở vế sau — hỏi một MÓN với cùng bệnh)
+    const fm = !a0 ? p.match(/^(?:còn\s+)?(.{2,20}?)\s+(?:thì sao|thì sao ạ|được không|có được không)$/u) : null;
+    const a1 = fm && !findMedTopicId(fm[1]) ? { id, aspect: "food" as const, food: normalizeVi(fm[1]) } : a0;
+    const a = a1 && a1.aspect === "overview" && /(?:nguy hiểm|có sao)/u.test(p) ? { ...a1, aspect: "doctor" as const } : a1;
     if (!a || a.id !== id || a.aspect === "overview") continue;
-    if (!asks.some((x) => x.aspect === a.aspect && x.food === a.food)) asks.push({ aspect: a.aspect, food: a.food });
+    if (!asks.some((x) => x.aspect === a.aspect && x.food === a.food)) asks.push({ aspect: a.aspect, food: a.food, part: p });
   }
   if (asks.length < 2) return null;
   const texts = asks.slice(0, 2).map((a, i) => {
-    const r = renderMed(t, a.aspect as Parameters<typeof renderMed>[1], a.food);
+    // (truyền chữ người dùng gõ để so món có dấu — "đậu" ≠ "dâu")
+    const r = renderMed(t, a.aspect as Parameters<typeof renderMed>[1], a.food, Date.now(), a.part);
     return i === 0 ? r.text : r.text.replace(/\n*📚[^\n]*$/u, "");
   });
   return { text: `Bạn hỏi hai ý về **${nm}**, Lomi trả lời lần lượt nha 👇\n\n${texts.join("\n\n— — —\n\n")}`, medId: id };

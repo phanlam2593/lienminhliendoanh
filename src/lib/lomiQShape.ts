@@ -48,7 +48,10 @@ export type QType = "where" | "howlong" | "howmany" | "when" | "why" | "how" | "
 export function qtypeOf(q: string): QType | null {
   const n = N(low0(q));
   if (/\b(khac nhau|khac gi|khac cho nao|khac o dau|giong nhau|giong va khac|phan biet)\b/.test(n)) return "compare";
-  if (/\b(o dau|cho nao|noi nao|o cho nao|o mo|dau vay|dau ta|tai dau|o noi nao)\b/.test(n) && !/\b(dau (dau|bung|lung|nguc|hong|rang|bao tu|da day|co|vai|khop|mat|tai|chan|tay|nua dau))\b/.test(n.replace(/\bo dau\b/g, ""))) return "where";
+  // (01/11: câu có dấu thì so đúng chữ "ở đâu / chỗ nào" — "đau răng nên đi khám ở đâu" vẫn là hỏi chỗ; câu không dấu thì "o dau" không
+  //   được là phần đầu của "đau đầu / đau bụng…")
+  const acc = /[^\x00-\x7F]/.test(q);
+  if (acc ? /(?:^|\s)(ở đâu|chỗ nào|nơi nào|ở chỗ nào|ở mô|đâu vậy|đâu ta|tại đâu|ở nơi nào)(?=\s|$)/u.test(low0(q)) : /\b(o dau|cho nao|noi nao|o cho nao|o mo|dau vay|dau ta|tai dau|o noi nao)\b(?! (dau|bung|lung|nguc|hong|rang|bao tu|da day|khop))/.test(n)) return "where";
   if (/\b(bao lau|may ngay|may tuan|may thang|may hom|bao nhieu ngay|bao nhieu lau|keo dai bao lau)\b/.test(n)) return "howlong";
   if (/\b(bao nhieu|may (vien|ly|coc|lit|lan|bua|phan|gam|ml|tieng|gio))\b/.test(n)) return "howmany";
   if (/\b(khi nao|luc nao|bao gio|may gio|gio nao)\b/.test(n)) return "when";
@@ -135,6 +138,9 @@ export function normNeg(q: string): string | null {
   // không phải (là) A, mà (là) B …  (A ngắn; B là phần còn lại)
   const a = L.match(/^(?:ko|không|k|hông|chẳng|chả|đâu)\s+phải\s+(?:là\s+)?(.{2,25}?)\s*,?\s+mà\s+(?:là\s+)?(?!do\s)(.{2,60})$/u);
   if (a && !/^(hỏi|chữa|trị)\b/u.test(a[1])) return low.slice(low.length - a[2].length);
+  // đâu phải / không phải (là) A, (tôi) chỉ B — vế sau sửa lại vế trước ("đâu phải tôi bị sốt, tôi chỉ hơi mệt thôi")
+  const a2 = L.match(/^(?:đâu|không|ko|chẳng|chả)\s+phải\s+(?:là\s+)?(.{2,30}?)\s*,\s*((?:(?:tôi|tui|mình|em|anh|chị|con|bé)\s+)?(?:chỉ|chỉ là|chỉ bị|mà là|là)\s+.{2,50})$/u);
+  if (a2) return low.slice(low.length - a2[2].length).replace(/^((?:tôi|tui|mình|em|anh|chị|con|bé)\s+)?(?:chỉ là|chỉ|mà là|là)\s+/iu, (_m, w) => `${w ?? ""}`);
   // không hẳn (là) A, (chỉ / mà) B
   const b = L.match(/^(?:ko|không|k|chưa)\s+hẳn\s+(?:là\s+)?(.{2,25}?)\s*[,;]\s*(?:mà\s+|chỉ\s+(?:là\s+)?)?(.{2,60})$/u);
   if (b) return low.slice(low.length - b[2].length);

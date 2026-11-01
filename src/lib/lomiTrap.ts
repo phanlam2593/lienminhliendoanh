@@ -16,8 +16,8 @@ import { findMedTopicId } from "@/lib/lomiMed";
 export type Trap = { text: string; faqId?: string; retry?: string; heart?: string };
 
 const APP_OBJ = VN(/\b(lỗi|app|ứng dụng|tài khoản|acc|bài đăng|bài viết|bài quẹt|quẹt|đăng nhập|otp|tin nhắn|ảnh|lượt xem|lượt thích|ưu đãi|mã giảm giá|hồ sơ|thông báo)\b/);
-const MED_WORD = VN(/\b(thuốc|thuốc giải|chữa|trị|bệnh|nhiễm bệnh|virus|vi rút|sốt|đau đầu)\b/);
-const MED_WORD_ANY = VN(/\b(đau|sốt|bệnh|ốm|mất ngủ|cảm|ho|viêm|ung thư|thuốc|nhức|gout|tiểu đường|huyết áp|dạ dày|bác sĩ|bệnh viện)\b/);
+const MED_WORD = VN(/\b(thuốc|thuốc giải|chữa|trị|bệnh|nhiễm bệnh|virus|vi rút|sốt|đau đầu|cảm|cúm|ốm)\b/);
+const MED_WORD_ANY = VN(/\b(đau|sốt|bệnh|ốm|mất ngủ|cảm|ho|viêm|ung thư|thuốc|nhức|gout|tiểu đường|huyết áp|dạ dày|bác sĩ|bệnh viện|bầu|bà bầu|mang thai|cúm|tim|gan|khoẻ|khỏe|béo|mập)\b/);
 const APP_PROBLEM = VN(/\b(lỗi|bị lỗi|không tải|không vào|không gửi|không hiện|bị ẩn|bị mất|mất rồi|virus|nhiễm|đơ|treo|văng)\b/);
 
 export function trapReply(q: string): Trap | null {

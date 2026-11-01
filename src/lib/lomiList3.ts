@@ -252,7 +252,7 @@ export function list3Reply(q: string): L3 | null {
       text: "Bị cảm mà vẫn phải đi làm thì mệt gấp đôi, thương bạn 🤒\n• Nghỉ được một hai hôm là tốt nhất — cơ thể cần nghỉ mới mau khỏi, lại đỡ lây cho đồng nghiệp\n• Phải đi thì uống đủ nước, ăn đồ ấm dễ tiêu, ngủ sớm; ho hắt hơi thì che miệng, rửa tay thường xuyên\n• Đi khám nếu sốt cao không hạ, khó thở, đau ngực, hoặc mấy ngày không đỡ mà nặng thêm\n\nBạn đang bị triệu chứng gì — sổ mũi, đau họng hay sốt?",
     };
   // "hơi cảm", "bị cam quá" (gõ thiếu dấu) — bị cảm.
-  if (w <= 10 && !VN(/\b(vợ|chồng|ck|vk|con|bé|mẹ|má|ba|bố|ông|bà|cháu|người yêu|ny|bạn tui|bạn em|anh ấy|chị ấy|em gái|em trai|anh trai|chị gái)\b/).test(n) && VN(/\b(bị|hơi|đang|thấy|mới bị) (cảm|cam)( lạnh)?( nhẹ| quá| rồi| rùi| nè| á| ghê| hà)*( làm sao đây| sao giờ| phải làm sao| làm sao)?\s*$/).test(strip_cam(n).replace(/[?!.…]+/g, " ").replace(/\s+/g, " ")) && !VN(/\b(ăn|uống|quả|trái|nước) cam\b/).test(n))
+  if (w <= 10 && !VN(/\b(vợ|chồng|ck|vk|con|bé|mẹ|má|ba|bố|ông|bà|cháu|người yêu|ny|bạn tui|bạn em|anh ấy|chị ấy|em gái|em trai|anh trai|chị gái)\b/).test(n) && VN(/\b(bị|hơi|đang|thấy|mới bị) (cảm|cam)( lạnh)?( nhẹ| quá| rồi| rùi| nè| á| ghê| hà)*( làm sao đây| sao giờ| phải làm sao| làm sao)?\s*$/).test(strip_cam(n).replace(/[?!.…]+/g, " ").replace(/\s+/g, " ")) && !VN(/\b(ăn|uống|quả|trái|nước) cam\b/).test(n) && !VN(/\b(app|ứng dụng|điện thoại|máy|như bị|y như)\b/).test(n))
     return {
       id: "mild_cold",
       heart: "flu",

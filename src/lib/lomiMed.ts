@@ -223,7 +223,7 @@ const KID_CUE_B = VN(/ (con|bé|trẻ|em bé|cháu|sơ sinh) /);
 // ── Khía cạnh được hỏi ──
 export type MedAspect = "define" | "signs" | "causes" | "course" | "spread" | "care" | "diet" | "food" | "doctor" | "emergency" | "meds";
 const ASPECTS: [MedAspect, RegExp][] = [
-  ["spread", VN(/\b(có lây|lây không|lây qua|lây nhiễm|lây truyền|truyền nhiễm|lây sang|bị lây|lây cho|lây từ|lây khi|lây được|lây thế nào|lây như thế nào|lây ra sao|lây bằng|lây đường)\b/)],
+  ["spread", VN(/\b(lây bao lâu|lây trong bao lâu|lây mấy ngày|còn lây|có lây|lây không|lây qua|lây nhiễm|lây truyền|truyền nhiễm|lây sang|bị lây|lây cho|lây từ|lây khi|lây được|lây thế nào|lây như thế nào|lây ra sao|lây bằng|lây đường)\b/)],
   ["emergency", VN(/\b(cấp cứu|gọi 115|nguy hiểm đến tính mạng|dấu hiệu nguy hiểm|báo động)\b/)],
   ["meds", VN(/\b(thuốc gì|thuốc nào|uống thuốc|dùng thuốc|thuốc trị|thuốc chữa|có thuốc|cần thuốc|thuốc đặc trị)\b/)],
   ["diet", VN(/\b(kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],
@@ -252,7 +252,8 @@ export function foodPhrase(text: string, topic?: MedTopic | null): string | null
   if (!m) return null;
   // Chỉ bỏ chữ đệm ở HAI ĐẦU — chữ ở giữa là một phần tên món ("nước CÓ ga", "trà CÓ đường").
   const words = m[1].split(" ").filter(Boolean);
-  while (words.length && FILL.has(words[0])) words.shift();
+  // (01/11: "ăn được đậu không" — "được" đứng trước món là trợ từ, không thuộc tên món)
+  while (words.length && (FILL.has(words[0]) || /^(duoc|dc|đc)$/.test(words[0]))) words.shift();
   while (words.length && FILL.has(words[words.length - 1])) words.pop();
   const p0 = words.join(" ").trim();
   const p = normalizeVi(foodSyn(p0)); // "cf" → "ca phe"
@@ -330,7 +331,9 @@ export function aspectOf(text: string): MedAspect | null {
   // "có chữa khỏi không", "bao lâu thì khỏi" là hỏi DIỄN TIẾN (có khỏi không), không phải hỏi cách chữa.
   if (VN(/\b(chữa khỏi|chưa khỏi|khỏi được|khỏi không|khỏi hẳn|có khỏi|bao lâu khỏi|bao lâu thì khỏi|khỏi chưa)\b/).test(n)) return "course";
   // 01/11: "bao lâu thì hết / lành / đỡ", "mấy ngày thì khỏi" cũng là hỏi diễn tiến (lib/lomiQShape) — trước đây rơi vào đọc cả thẻ.
-  if (RECOVERY_Q.test(n)) return "course";
+  if (RECOVERY_Q.test(n) && !/ lay /.test(n)) return "course";
+  // "mất ngủ mà KHÔNG uống thuốc thì có cách nào" — hỏi cách KHÔNG dùng thuốc → phần chăm sóc, không phải phần thuốc
+  if (/ (khong|chang|khoi|ngoai|tranh|it) (uong|dung|xai) thuoc /.test(n)) return "care";
   if (CHARS_ACC_CHUA.test(text.normalize("NFC").toLowerCase())) return "care";
   for (const [a, re] of ASPECTS) if (re.test(n)) return a;
   // 19/10 (audit sức khoẻ): "tư vấn cho a đau bụng kinh", "khuyên mình cách…" là xin LỜI KHUYÊN chăm sóc — trước đây không có khía cạnh nào,

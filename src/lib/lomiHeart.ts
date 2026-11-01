@@ -663,7 +663,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "lonely",
-    re: VN(/\b(cô đơn|một mình|không ai chơi|không ai hiểu|lẻ loi|lonely|không có ai|không ai quan tâm|không ai nghe|(chẳng|chả|hông|ko|k) (có )?ai (để )?(nói chuyện|tâm sự|chia sẻ|nghe|hiểu|chơi)|không ai để (nói chuyện|tâm sự|chia sẻ)|lạc lõng|bị bỏ rơi|bỏ rơi (mình|em|tui|tôi|anh|chị)|(mọi người|ai cũng) (đang )?xa lánh)\b/),
+    re: VN(/\b(cô đơn|một mình|không ai chơi|không ai hiểu|lẻ loi|lonely|không có ai|không ai quan tâm|không ai nghe|(chẳng|chả|hông|ko|k|không) (có )?ai (để )?(nói chuyện|tâm sự|chia sẻ|nghe|hiểu|chơi)|không ai để (nói chuyện|tâm sự|chia sẻ)|lạc lõng|bị bỏ rơi|bỏ rơi (mình|em|tui|tôi|anh|chị)|(mọi người|ai cũng) (đang )?xa lánh)\b/),
     feel: ["Cô đơn là cảm giác ai cũng có lúc gặp, nhưng lúc đang ở trong đó thì lạnh lắm 🥺", "Lomi ở đây với bạn nè 🤗 Cảm giác không ai hiểu mình buồn thật."],
     insight: [
       "Cô đơn không phải vì bạn có vấn đề — nhiều khi chỉ là mình chưa gặp đúng người, hoặc đang ở một giai đoạn chuyển đổi.",

@@ -105,6 +105,17 @@ export function beginViTurn(texts: string[], strict?: boolean): void {
   }
 }
 
+/** 01/11: thêm câu ĐÃ VIẾT LẠI của lượt này (sửa ý, phủ định, "sốt vậy có sao không" → "bị sốt có sao không") vào bộ đọc câu —
+ *  để luật so đúng chữ có dấu nhận cả các chữ do Lomi chuẩn hoá thêm, không chỉ chữ người dùng gõ. Không xoá câu gốc. */
+export function addViTurn(texts: string[]): void {
+  lookCache.clear();
+  for (const t of texts) {
+    const b = stripCanon(canonVi(t) ?? "");
+    put(USER, t, b);
+    put(REG, t, b);
+  }
+}
+
 /** Gộp các dạng có dấu cùng một đoạn: chữ nào các nguồn đặt dấu khác nhau thì về dạng không dấu (= khớp như cũ). */
 const mergeSeg = (a: string[] | null, b: string[]) => (a ? a.map((w, k) => (w === b[k] ? w : stripCanon(w))) : b);
 

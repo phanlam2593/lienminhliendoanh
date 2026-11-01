@@ -534,7 +534,8 @@ export function dietReply(text: string, prevDiet?: string, inDiet = false): Diet
   if (fromPrev && !hit && !VN(/\b(còn gì nữa|ăn gì nữa|kiêng gì nữa|còn nữa|thêm nữa)\b/).test(n)) return null;
   // Hỏi chung chung về bệnh ("bị sỏi thận thì sao?", "mỡ máu á") khi đang nói chuyện ăn uống / kiêng cữ → vẫn trả lời danh sách.
   //   (01/11: "làm sao", "thì làm gì" là hỏi CÁCH CHĂM SÓC — "không ngủ được thì làm gì" không phải hỏi ăn uống — trừ khi đang nói ăn uống)
-  const vague = VN(/\b(thì sao|thế nào|ra sao|sao ạ|sao à|sao ta|sao nhỉ|thì như nào)\b/).test(n) || (inDiet && VN(/\b(làm sao|thì làm gì)\b/).test(n));
+  //   (01/11: "ho có đờm thì sao" khi CHƯA nói chuyện ăn uống là hỏi chung về triệu chứng, không phải hỏi kiêng gì → chỉ tính khi đang nói ăn uống)
+  const vague = inDiet && VN(/\b(thì sao|thế nào|ra sao|sao ạ|sao à|sao ta|sao nhỉ|thì như nào|làm sao|thì làm gì)\b/).test(n);
   if (!fromPrev && !hit && !DIET_ASK.test(n) && !vague && !inDiet) return null;
   if (!fromPrev && hit && !DIET_ASK.test(n) && !CAN_ASK.test(n) && !VN(/\b(thì sao|sao)\b/).test(n)) return null;
   if (!hit) return { text: fullList(d), diet: d.id };
