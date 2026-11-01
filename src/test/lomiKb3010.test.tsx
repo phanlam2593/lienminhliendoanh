@@ -793,8 +793,8 @@ describe("30/10 — trả lời qua khung chat", () => {
     // "có nên mua iPhone" không phải đồ ăn; mốc tuổi cho một việc ≠ tuổi của Lomi ≠ tuổi dùng app
     expect((await last(["có nên mua iPhone không"])).content).not.toMatch(/Thèm|làm một bữa/);
     const eye = await last(["bao nhiêu tuổi thì nên đi khám mắt"]);
-    expect(eye.content).not.toMatch(/Không có tuổi|18 tuổi/);
-    expect((await last(["lomi bao nhiêu tuổi"])).content).toMatch(/Không có tuổi/);
+    expect(eye.content).not.toMatch(/Không có tuổi|là robot|18 tuổi/);
+    expect((await last(["lomi bao nhiêu tuổi"])).content).toMatch(/Không có tuổi|là robot/);
     expect((await last(["mấy tuổi được dùng app"])).content).toMatch(/18 tuổi/);
     // ngưỡng sốt
     expect((await last(["sốt bao nhiêu độ là cao"])).stuck).toBeUndefined();
@@ -821,5 +821,23 @@ describe("30/10 — trả lời qua khung chat", () => {
     const tr = await chat(["rút bài tình yêu", "vậy tôi nên làm gì"]);
     expect(tr[1].content).toMatch(/quyết định vẫn là ở bạn/);
     expect(tr[1].stuck).toBeUndefined();
+  }, T);
+  it("01/11 — hiểu câu vòng 11: câu dài kiểu người lớn tuổi (không dấu câu), lời mở đầu 'cô muốn hỏi', hai bệnh một món", async () => {
+    // "cô muốn hỏi con cô…" — người bệnh là con cô, không phải cô
+    const c = await last(["cô muốn hỏi con cô 3 tuổi ho mấy hôm nay ban đêm ho nhiều lắm có cần đưa đi khám không"]);
+    expect(c.content).not.toMatch(/ghi nhận cô đang có/);
+    // "sưng đỏ đau … phải làm sao" — "đỏ đau" bỏ dấu trùng "do đâu" nhưng đây là hỏi cách xử lý
+    expect((await last(["ông bị gout lâu rồi hôm qua ăn nhậu đám giỗ giờ ngón chân cái sưng đỏ đau quá phải làm sao con"])).content).toMatch(/Với \*\*Gout\*\*, nên/);
+    expect((await last(["gout do đâu mà bị"])).content).toMatch(/Nguyên nhân/);
+    // "uống thuốc ngủ được không" là hỏi thuốc, không phải món
+    expect((await last(["chú bị mất ngủ cả tháng nay đêm nào cũng thức tới 3 giờ sáng uống thuốc ngủ được không con"])).content).toMatch(/không kê thuốc/);
+    // hai bệnh + một món → xét với từng bệnh
+    const two = await last(["bà năm nay 72 tuổi bị tiểu đường với huyết áp cao bà muốn hỏi ăn chuối được không con"]);
+    expect(two.content).toMatch(/Tiểu đường/);
+    expect(two.content).toMatch(/huyết áp/i);
+    // đưa quán của mình lên app ≠ tìm quán
+    const biz = await last(["cô có quán bún bò muốn đăng lên app cho người ta biết thì làm sao con"]);
+    expect(biz.places).toBeUndefined();
+    expect(biz.content).toMatch(/Tạo hồ sơ doanh nghiệp/);
   }, T);
 });

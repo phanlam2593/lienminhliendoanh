@@ -1561,7 +1561,7 @@ export function AiChat({
     const fr1 = fr0 && loadMem(user.id).addr !== addr0 ? parseVi(raw, { addr: loadMem(user.id).addr, partnerCtx }) : fr0;
     // Tin trước đang nói về một người / con vật → câu lược chủ ngữ này vẫn nói về người đó ("mẹ a đang ốm" → "bị cảm thôi").
     const lastMsg0 = msgs[msgs.length - 1];
-    const fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
+    let fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
     // 31/10: "ko phải hỏi bệnh, tui hỏi bài đăng bị ẩn sao" / "Tôi cần chữa lỗi đăng nhập, không phải chữa bệnh" → chỉ hiểu phần thật sự hỏi.
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw));
@@ -1607,6 +1607,16 @@ export function AiChat({
         if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
+      }
+      // 01/11 (vòng 11): lời mở đầu "cô muốn hỏi / bà cho hỏi / chú hỏi chút" — người HỎI, không phải người bệnh ("cô muốn hỏi con cô 3 tuổi ho…")
+      //   (xưng hô đã học ở trên rồi; bỏ lời mở đầu để các lớp sau đọc đúng chủ ngữ của chuyện được kể)
+      const pre = q.normalize("NFC").match(/^(?:(?:cô|chú|bà|ông|bác|dì|cậu|mợ|tôi|tui|mình|em|anh|chị|con|cháu)\s+)?(?:muốn hỏi|muốn hỏi là|cho hỏi|xin hỏi|hỏi chút|hỏi xíu|hỏi cái|muốn hỏi chút|muốn hỏi xíu)\s*(?:là\s+|con\s+ơi\s+|nha\s+)?(?=\S+\s+\S+\s+\S)/iu);
+      if (!rp && pre && pre[0].length < q.length - 6) {
+        q = q.normalize("NFC").slice(pre[0].length);
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+        if (!en) addViTurn([q, expandTeen(q), senseCanon(expandTeen(q))]);
       }
       // 01/11: "sốt (vậy) có sao không", "ho có nguy hiểm không" — câu hỏi về MỘT triệu chứng không có "bị" → đọc như "bị sốt có sao không"
       const sxq = q.normalize("NFC").match(/^((?:sốt|ho|sổ mũi|nghẹt mũi|tiêu chảy|táo bón|nôn|ói|buồn nôn|chóng mặt|mệt|khó ngủ|mất ngủ|đau (?:đầu|bụng|lưng|họng|răng|ngực|khớp|bụng dưới))(?:\s+(?:cao|nhẹ|nhiều|hoài|mãi|liên tục))?)\s+(?:(?:vậy|thế|như vậy|như thế|vầy)\s+)?(có sao|có nguy hiểm|nguy hiểm)\s+(không|ko|k|hông|hả)\s*[?!.]*$/iu);
@@ -1702,6 +1712,12 @@ export function AiChat({
         rewroteRef.current = true;
         splitRef.current = sp[1];
       }
+    }
+    // 01/11 (vòng 11): câu đã được viết lại (bỏ lời mở đầu, sửa ý, chuẩn hoá phủ định…) → đọc lại KHUNG CÂU từ câu đã viết lại,
+    //   để người được nói tới / chủ ngữ là của câu thật sự được hỏi ("cô muốn hỏi con cô 3 tuổi ho" → người bệnh là con cô)
+    if (rewroteRef.current && !en && fr) {
+      const frR = parseVi(raw, { addr: loadMem(user.id).addr, partnerCtx });
+      fr = withAbout(frR, lastMsg0?.role === "assistant" ? lastMsg0.about : null);
     }
     if (!forceAi && !danger0) {
       // 31/10 (list 7): "Tôi rút được lá The Hermit khi hỏi chuyện tình cảm" — kể lá đã rút (ở đâu đó), không phải xin rút bài mới

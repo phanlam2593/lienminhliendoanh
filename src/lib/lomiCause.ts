@@ -454,6 +454,21 @@ export async function multiAspectReply(q: string): Promise<{ text: string; medId
   if (low.split(" ").length > 24) return null;
   const id = findMedTopicId(low);
   if (!id) return null;
+  // 01/11 (vòng 11): HAI BỆNH + hỏi MỘT MÓN ("bị tiểu đường với huyết áp cao ăn chuối được không") → xét món đó với từng bệnh
+  {
+    const segs0 = low.split(/\s*[,;]\s*|\s+(?:và|với|với cả|lẫn|kèm)\s+/u);
+    const ids0 = [...new Set(segs0.map((x) => findMedTopicId(x)).filter((x): x is string => !!x))];
+    if (ids0.length === 2) {
+      const a = parseMedAsk(low);
+      if (a && a.aspect === "food" && a.food) {
+        const ts = (await Promise.all(ids0.map((x) => loadMedTopic(x)))).filter((x): x is MedTopic => !!x);
+        if (ts.length === 2) {
+          const parts2 = ts.map((t) => renderMed(t, "food", a.food, Date.now(), low).text.split("\n").filter((l) => l.trim() && !l.startsWith("📚")).slice(0, 3).join("\n"));
+          return { text: `Bạn có **hai bệnh** nên Lomi xét món này với từng bệnh nha 👇\n\n${parts2.join("\n\n— — —\n\n")}\n\nĐang có cả hai bệnh thì nghe theo lời dặn **chặt hơn**, và hỏi bác sĩ đang theo dõi cho chắc nha.`, medId: ids0[0] };
+        }
+      }
+    }
+  }
   // Hai người / hai bệnh cùng hỏi chuyện ăn ("mẹ bị tiểu đường, bố bị gout, nấu món gì cho cả hai") → đặt cạnh nhau phần ăn uống của từng bệnh
   if (/(?:ăn gì|nấu gì|nấu món gì|món gì|kiêng gì|ăn uống)/u.test(low.toLowerCase())) {
     const segs = low.split(/\s*[,;]\s*|\s+(?:và|còn|với)\s+/u);

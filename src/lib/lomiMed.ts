@@ -231,7 +231,7 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["signs", VN(/\b(triệu chứng|dấu hiệu|biểu hiện|nhận biết|nhận ra|có những dấu hiệu|có hiện tượng gì|bị sao|bị như thế nào|làm sao biết|sao biết|làm sao để biết|biết mình bị|biết có bị)\b/)],
   // (01/11: "sao mà ho hoài vậy", "sao lại hay đau đầu" — hỏi vì sao; "làm sao mà…" là hỏi cách nên không tính;
   //   "ai dễ bị gout", "người nào dễ bị loãng xương" — hỏi ĐỐI TƯỢNG NGUY CƠ → phần nguyên nhân / yếu tố nguy cơ)
-  ["causes", VN(/\b((ai|người nào|những ai|đối tượng nào|ai thì) (dễ|hay|thường|có nguy cơ|dễ bị|hay bị)|(?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|do đâu|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
+  ["causes", VN(/\b((ai|người nào|những ai|đối tượng nào|ai thì) (dễ|hay|thường|có nguy cơ|dễ bị|hay bị)|(?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
   ["doctor", VN(/\b(đi khám|khám ở đâu|khám khoa nào|khoa nào|cần khám|nên khám|khi nào.*(khám|gặp bác sĩ|đi viện)|gặp bác sĩ|bác sĩ nào|đi viện)\b/)],
   ["course", VN(/\b(có khỏi|khỏi được|khỏi hẳn|chưa khỏi|chữa khỏi|bao lâu khỏi|có lây|lây không|lây qua|có nguy hiểm|có hết|hết không|hết ko|hết được|có sao không|có sao ko|nguy hiểm không|tiến triển|kéo dài bao lâu|kéo dài không|có kéo dài|bị bao lâu|tái phát|biến chứng|có chết|có nặng không|nặng không|có tự khỏi|tự khỏi|khó chữa|có chữa được|chữa được không|vĩnh viễn)\b/)],
   ["care", VN(/\b(cách chữa|chữa sao|chữa thế nào|chữa như thế nào|chữa bệnh|chữa trị|điều trị|cách trị|làm sao|làm gì|phải làm gì|nên làm gì|chăm sóc|phòng ngừa|phòng tránh|giảm đau|cho đỡ|cải thiện|tự xử lý|tự xử lí|xử lý|xử lí|xử trí|sơ cứu|tập luyện|vận động|sinh hoạt|bôi gì|bôi thuốc|bôi kem|thoa gì|mẹo|bí quyết|lưu ý|chú ý|để ý gì|cần biết gì|nên biết gì)\b/)],
@@ -337,6 +337,8 @@ export function aspectOf(text: string): MedAspect | null {
   // "mất ngủ mà KHÔNG uống thuốc thì có cách nào" — hỏi cách KHÔNG dùng thuốc → phần chăm sóc, không phải phần thuốc
   if (/ (khong|chang|khoi|ngoai|tranh|it) (uong|dung|xai) thuoc /.test(n)) return "care";
   if (CHARS_ACC_CHUA.test(text.normalize("NFC").toLowerCase())) return "care";
+  // (01/11: "do đâu" bỏ dấu trùng "đỏ đau" — "ngón chân sưng đỏ đau quá phải làm sao" không phải hỏi nguyên nhân → câu có dấu thì so đúng dấu)
+  if (/[^\x00-\x7F]/.test(text) ? /(?:^|\s)do đâu(?=\s|$|[?!.,])/u.test(text.normalize("NFC").toLowerCase()) : / do dau /.test(n)) return "causes";
   for (const [a, re] of ASPECTS) if (re.test(n)) return a;
   // 19/10 (audit sức khoẻ): "tư vấn cho a đau bụng kinh", "khuyên mình cách…" là xin LỜI KHUYÊN chăm sóc — trước đây không có khía cạnh nào,
   //   câu rơi vào mạch hỏi han triệu chứng ("bị bao lâu rồi?") thay vì đưa mẹo. "tư vấn về bệnh gout" (hỏi chung về bệnh) giữ nguyên.
@@ -1132,13 +1134,18 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (!isMedQuestion(text, names, row.kind === "mental" || row.kind === "term" ? 0 : row.kind === "other" || row.kind === "women" || TELL_OK.has(own) ? 2 : 1)) return null;
     // Khía cạnh xét trên phần câu NGOÀI tên chủ đề: "rối loạn ăn uống là gì" — chữ "ăn uống" là tên bệnh, không phải hỏi kiêng cữ.
     const rest0 = names.reduce((acc2, nm) => acc2.replace(` ${normalizeVi(nm)} `, " "), ` ${normalizeVi(text)} `);
-    const aspR = aspectOf(rest0);
+    const aspR0 = aspectOf(rest0);
+    // (01/11: rest0 đã bỏ dấu — chữ trùng khi bỏ dấu ("đỏ đau" ↔ "do đâu") làm sai khía cạnh; câu gõ có dấu thì tin khía cạnh đọc trên câu có dấu)
+    const aspT = /[^\x00-\x7F]/.test(text) ? aspectOf(text) : null;
+    const aspR = aspR0 === "causes" && aspT && aspT !== "causes" ? aspT : aspR0;
     // (tên chủ đề tự chứa khía cạnh — "đi khám tâm lý", "dấu hiệu cần hỗ trợ tâm lý" — thì vẫn lấy khía cạnh trong tên)
     const asp = aspR ?? aspectOf(text);
     const topicLike0 = foodPhrase(text, null);
     // 30/10: "huyết áp cao uống aspririn được không" — thứ được hỏi là một THUỐC (không phải món ăn) → phần thuốc của bệnh đó
     //   (Lomi không kê thuốc; dùng thuốc nào do bác sĩ quyết định), không trả lời như hỏi kiêng món "aspririn".
     if (topicLike0 && DRUGS.some((d) => d.match.test(text))) return { id: own, aspect: "meds", food: null };
+    // 01/11 (vòng 11): "mất ngủ uống THUỐC ngủ được không", "có uống thuốc giảm đau được không" — thứ được hỏi là thuốc, không phải món ăn
+    if (topicLike0 && /^(thuoc|vien|siro|khang sinh)\b/.test(topicLike0)) return { id: own, aspect: "meds", food: null };
     const topicLike = topicLike0;
     // Khía cạnh xét trên phần câu NGOÀI tên món: "uống sữa chua được không" bỏ dấu dễ thành "chữa được không".
     const aspF = topicLike ? aspectOf(rest0.replace(` ${topicLike} `, " ")) : asp;

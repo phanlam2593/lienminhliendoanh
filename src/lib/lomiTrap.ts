@@ -112,6 +112,11 @@ export function trapReply(q: string): Trap | null {
   // Tarot là gì / có ý nghĩa gì (hỏi về tính năng, không xin rút)
   if (VN(/\b(tarot|bói bài)\b/).test(n) && VN(/\b(có ý nghĩa gì|là gì|dùng để làm gì|hoạt động sao|có đúng không|có tin được không|có thật không)\b/).test(n) && !VN(/\b(rút|bốc|xem giúp|bói giúp|bói cho|lá này|lá đó)\b/).test(n))
     return { text: "🔮 **Tarot** là bộ 78 lá bài, mỗi lá mang một hình ảnh và ý nghĩa (xuôi / ngược). Ở iLomi, Lomi rút bài để bạn có **một góc nhìn mà ngẫm lại chuyện của mình** — không phải lời tiên tri, không quyết định thay bạn, và không dùng cho chuyện sức khoẻ, tiền bạc lớn.\n\nMuốn thử thì gõ kiểu “rút bài chuyện công việc” hoặc “bói tình cảm” nha." };
+  // 01/11 (vòng 11): "cô có quán bún bò muốn đăng lên app cho người ta biết" — đưa quán CỦA MÌNH lên app, không phải tìm quán bún bò
+  if (VN(/\b(có|mở|làm chủ|đang bán) (một |cái |1 )?(quán|tiệm|shop|cửa hàng|homestay|spa|nhà hàng)\b/).test(n) && VN(/\b(đăng lên|đưa lên|đăng ký lên|cho lên|lên app|lên ilomi|lên đây|đăng quán|giới thiệu lên)\b/).test(n)) {
+    const bc = faqById("bizcreate");
+    if (bc) return { text: `Đưa quán của mình lên iLomi như vầy nha 🏪\n${bc.a.vi}`, faqId: "bizcreate" };
+  }
   // Đăng ký hồ sơ chủ quán / doanh nghiệp
   if (VN(/\b(đăng ký|tạo|mở|làm|lập)( \S+){0,2} (hồ sơ|tài khoản|trang) (chủ quán|doanh nghiệp|quán|kinh doanh|cửa hàng)\b|\bđưa quán( \S+){0,2} lên app\b/).test(n) && !VN(/\b(ưu đãi)\b/).test(n))
     return { text: "Tạo hồ sơ doanh nghiệp (chủ quán) như vầy nha 👇\n1. **Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp** (/ho-so?view=business)\n2. Điền tên, loại hình, giờ mở / đóng, mô tả, địa chỉ, số điện thoại, **mã PIN 4–8 ký tự** (để khách nhận ưu đãi tại quán); ảnh bìa và link mạng xã hội thì tuỳ chọn\n3. Ghim vị trí quán (hoặc bật “Chỉ bán hàng online”) → **Gửi để duyệt**\n\nBan quản trị duyệt tay xong thì quán mới hiện công khai và đăng ưu đãi được.", faqId: "bizcreate" };
