@@ -113,6 +113,11 @@ export function trapReply(q: string): Trap | null {
   // Chỉ muốn xem quán / ưu đãi, không đăng bài
   if (VN(/\b(chỉ muốn xem|chỉ xem|chỉ cần xem)\b/).test(n) && VN(/\b(quán|ưu đãi|chỗ)\b/).test(n))
     return { text: "Được chứ 😊 Không cần đăng bài gì cả — vào **Khám phá** (/kham-pha) xem quán, **Ưu đãi** (/uu-dai) xem ưu đãi, thích thì bấm Theo dõi quán để có ưu đãi mới là biết liền.", faqId: "offerlist" };
+  // 01/11 (vòng 15): "sao quẹt hoài không ai thích", "không match được ai" — hỏi vì sao chưa ghép đôi (cần HAI BÊN cùng thích)
+  if (VN(/\bquẹt\b/).test(n) && VN(/\b(không ai thích|chưa ai thích|không ai quẹt lại|không match|chưa match|không ghép|chưa ghép|không ai chọn|không ai ưng)\b/).test(n)) {
+    const qw = faqById("quetwhat");
+    return { text: `Quẹt chỉ ghép đôi khi **hai bên cùng thích nhau** nha 💞 nên lúc chưa ghép được không có nghĩa là có gì sai đâu.\n${qw ? qw.a.vi : ""}\n\nMẹo nhỏ: viết phần nhu cầu rõ ràng, có ảnh thật, và thử thêm vài mục khác.`, faqId: "quetwhat" };
+  }
   // Quẹt không thấy ai
   if (VN(/\bquẹt\b/).test(n) && (/\b(khong|ko|k|hong|hem|chang|cha) (thay|hien|co) (ai|ho so nao|nguoi nao)\b/.test(n) || VN(/\b(hết người|không còn ai|trống trơn|không có người|không hiện hồ sơ)\b/).test(n)))
     return { text: "Quẹt chỉ hiện những người **đang có nhu cầu cùng mục** (Game, Làm quen, Trao đổi, Công việc) và hợp **bộ lọc** của bạn — nên lúc ít người thì có thể trống, không phải app hỏng đâu nha 🙂\n• Mở rộng bộ lọc: khu vực, độ tuổi\n• Thử mục khác, hoặc quay lại sau — người mới tạo nhu cầu sẽ hiện thêm\n• Người bạn đã bỏ qua sẽ hiện lại sau 48 giờ\n\nVẫn trống hoàn toàn lâu ngày thì tắt hẳn app rồi mở lại; còn không được thì nhắn Ban quản trị.", faqId: "quetwhat" };
@@ -150,7 +155,7 @@ export function trapReply(q: string): Trap | null {
   if (VN(/\bthuốc\b/).test(n) && VN(/\b(buồn ngủ|lơ mơ|chóng mặt|díp mắt)\b/).test(n) && VN(/\b(lái xe|chạy xe|đi xe|cầm lái|chạy xe máy|lái)\b/).test(n))
     return { text: "Đang buồn ngủ, lơ mơ, chóng mặt sau khi uống thuốc thì **đừng lái xe** hay chạy xe máy nha 🙏 — một giây díp mắt trên đường là nguy hiểm cho bạn và người khác.\n• Nhờ người chở, hoặc đặt xe ở **Đưa đón (/dua-don)**\n• Hỏi dược sĩ xem thuốc bạn đang dùng có loại **ít gây buồn ngủ** hơn không (đưa họ xem hộp thuốc)\n• Buồn ngủ kèm khó thở, sưng môi / mặt, nổi mẩn lan nhanh → gọi **115**" };
   // Tìm phòng khám / bệnh viện / nhà thuốc gần đây
-  if (VN(/\b(tìm|kiếm|chỉ)( giúp| giùm| dùm)?( \S+){0,2} (phòng khám|bệnh viện|nhà thuốc|trạm y tế|bác sĩ)( \S+){0,3} (gần|gần đây|quanh đây|ở đâu)\b|\b(phòng khám|bệnh viện|nhà thuốc)( \S+){0,2} (gần đây|gần nhất|quanh đây) (ở đâu|không|nào)\b/).test(n)) {
+  if (VN(/\b(tìm|kiếm|chỉ)( giúp| giùm| dùm)?( \S+){0,2} (phòng khám|bệnh viện|nhà thuốc|trạm y tế|bác sĩ|nha sĩ|nha khoa|phòng nha)( \S+){0,3} (gần|gần đây|quanh đây|ở đâu)\b|\b(phòng khám|bệnh viện|nhà thuốc|nha khoa|phòng nha)( \S+){0,2} (gần đây|gần nhất|quanh đây) (ở đâu|không|nào)\b/).test(n)) {
     const kid = VN(/\b(bé|con|cháu|trẻ)\b/).test(n);
     const fever = VN(/\bsốt\b/).test(n);
     return { text: `${VN(/\b(lo quá|lo lắm|sợ quá|hoảng)\b/).test(n) ? "Lomi hiểu bạn đang lo lắm 💚 " : ""}Trong iLomi **chưa có danh sách phòng khám / bệnh viện** đâu 🙏 Bạn mở **bản đồ trên điện thoại** gõ “${kid ? "phòng khám nhi" : "phòng khám"} gần đây” để xem chỗ gần và giờ mở cửa, rồi đặt xe đi ở **Đưa đón (/dua-don)**.${kid && fever ? "\n\n👶 Bé sốt mà **dưới 3 tháng tuổi**, hoặc li bì, bỏ bú / bỏ ăn, thở nhanh, co giật, nổi ban không mất khi ấn → đưa bé đi cấp cứu ngay / gọi **115**, đừng chờ tìm phòng khám." : "\n\n🚨 Khó thở, đau ngực, lơ mơ, chảy máu nhiều → gọi **115** ngay."}` };

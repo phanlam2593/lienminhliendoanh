@@ -153,7 +153,8 @@ export const EVENTS: Ev[] = [
   {
     id: "badfood",
     label: "ăn trúng quán dở",
-    re: VN(/\b(ăn dở|đồ ăn dở|dox ăn dở|ăn không ngon|quán dở|quán dox dở|dở tệ|dở ẹc|dở ò|dở không ăn được|bị chặt chém|bị chém giá|bị hốt giá|phục vụ tệ|nhân viên thái độ)\b/),
+    // (01/11: "tôi ăn không ngon" không nhắc quán là CHÁN ĂN, không phải chê quán — "ăn không ngon" chỉ tính khi có chữ quán / món / tiệm)
+    re: VN(/\b(ăn dở|đồ ăn dở|dox ăn dở|(quán|tiệm|món|chỗ|nhà hàng)( \S+){0,3} ăn không ngon|ăn không ngon( \S+){0,2} (quán|tiệm|chỗ)|quán dở|quán dox dở|dở tệ|dở ẹc|dở ò|dở không ăn được|bị chặt chém|bị chém giá|bị hốt giá|phục vụ tệ|nhân viên thái độ)\b/),
     react: ["Ăn trúng quán dở hay bị chặt chém là mất hứng ghê 😒 Quán đó sao vậy bạn?"],
     follow: [[VN(/\b(đắt|mắc|giá|tính tiền|chặt chém)\b/), ["Bị tính giá cao bất thường thì bạn có quyền hỏi lại hoá đơn chi tiết nha. Nếu quán có trong app, bạn có thể để lại đánh giá hoặc gửi Báo cáo cho Ban quản trị."]]],
     advice: ["Xem đánh giá quán trong mục Khám phá (/kham-pha) trước khi ghé.", "Hỏi giá trước với món không ghi giá.", "Đánh giá thật lòng để người khác tham khảo."],

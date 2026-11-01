@@ -767,7 +767,8 @@ export const FOLK: FolkEntry[] = [
     id: "kieng-dau-khop",
     name: "Đau khớp kiêng măng, đồ \"nhức\"",
     names: ["măng", "đồ nhức", "món nhức", "ăn nhức", "đồ ăn nhức", "thịt vịt", "kiêng nhức", "mướp", "bí", "đồ chua", "khổ qua", "mướp đắng", "bị nhức"],
-    ctx: VN(/\b(khớp|gout|gút|thấp khớp|nhức xương|nhức mỏi|xương khớp|thoái hoá|đau lưng|gai cột sống)\b/),
+    // (01/11: chỉ khi câu nói tới ĂN / KIÊNG — "tôi bị nhức mỏi khắp người" là kể triệu chứng, không phải hỏi kiêng "đồ nhức")
+    ctx: VN(/\b(khớp|gout|gút|thấp khớp|nhức xương|nhức mỏi|xương khớp|thoái hoá|đau lưng|gai cột sống)\b(?=.*\b(ăn|kiêng|cữ|món|đồ|măng|vịt|mướp|bí|khổ qua|chua)\b)|\b(ăn|kiêng|cữ|món|đồ|măng|vịt|mướp|bí|khổ qua|chua)\b(?=.*\b(khớp|gout|gút|thấp khớp|nhức xương|nhức mỏi|xương khớp|thoái hoá|đau lưng|gai cột sống)\b)/),
     verdict: "myth",
     belief: "Người đau khớp hay được dặn kiêng măng, khổ qua, mướp, bí, thịt vịt, đồ chua… vì sợ \"nhức\".",
     folk: [],

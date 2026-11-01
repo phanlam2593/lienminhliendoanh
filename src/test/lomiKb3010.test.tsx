@@ -883,4 +883,14 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["mai tôi đi khám răng, có cần chuẩn bị gì không"])).content).not.toMatch(/Đi khám đều đặn là tốt/);
     expect((await last(["cảm lạnh với dị ứng mũi khác gì nhau"])).content).toMatch(/đặt cạnh nhau/);
   }, T);
+  it("01/11 — hiểu câu vòng 15: đính chính trong cùng câu, mẹo dân gian chỉ khi hỏi ăn / kiêng, 'ăn không ngon' ≠ chê quán, quẹt chưa ghép đôi", async () => {
+    expect((await last(["tôi bị táo bón, à không, tiêu chảy"])).content).toMatch(/tiêu chảy/i);
+    expect((await last(["tôi bị táo bón, à không, tiêu chảy"])).content).not.toMatch(/táo bón\*\*/i);
+    expect((await last(["gout kiêng gì, à nhầm, tiểu đường"])).content).toMatch(/Tiểu đường/);
+    expect((await last(["tôi bị nhức mỏi khắp người"])).content).not.toMatch(/kiêng măng/);
+    expect((await last(["đau khớp có kiêng măng không"])).content).toMatch(/kiêng măng/);
+    expect((await last(["tôi ăn không ngon"])).content).not.toMatch(/quán dở|chặt chém/);
+    expect((await last(["sao quẹt hoài không ai thích"])).content).toMatch(/hai bên cùng thích/);
+    expect((await last(["tìm nha sĩ gần đây"])).content).toMatch(/chưa có danh sách phòng khám/);
+  }, T);
 });

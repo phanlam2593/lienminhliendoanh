@@ -23,6 +23,13 @@ export function repairTurn(q: string, prevQ: string | undefined): Repair | null 
   // "thôi không bói nữa, cho hỏi đau lưng" — dừng việc cũ + hỏi chuyện mới trong cùng câu → trả lời chuyện mới
   const stop = low.match(/^(?:thôi|ok|okie|ừ)?\s*,?\s*(?:không|ko|khỏi)\s+(?:bói|rút bài|xem bài|tìm quán|tìm)\s+nữa\s*[,.]?\s*(?:cho\s+(?:tui|tôi|mình|em|anh|chị)\s+)?(?:hỏi|cho hỏi|hỏi về|giờ hỏi)\s+(.{2,60})$/u);
   if (stop) return { q: stop[1], lead: "Okie, mình dừng ở đây nha 😊" };
+  // 01/11 (vòng 15): ĐÍNH CHÍNH TRONG CÙNG CÂU — "tôi bị táo bón, à không, tiêu chảy", "tìm quán phở, lộn, quán bún"
+  //   (phải có dấu hiệu sửa RÕ — "à không", "ờ không", "nhầm", "lộn"; ", không biết vì sao" là câu thường)
+  const inl = low.match(/^(.{4,60}?)\s*[,.;]\s*(?:(?:à|ờ|ơ)\s+(?:không|ko|nhầm|lộn)|nhầm|lộn|nhầm rồi|lộn rồi)\s*(?:phải\s+)?[,.;]?\s*(?:ý là\s+|là\s+|mà là\s+)?(.{2,40})$/u);
+  if (inl && !/(không|ko|chưa)$/u.test(inl[1])) {
+    const r0 = swapInto(inl[2].trim(), inl[1], false);
+    if (r0) return r0;
+  }
   if (!prevQ) {
     // Chưa có câu nào trước đó: "à không, ý là tiểu đường" → hiểu phần sau; "vậy còn trẻ em" → hỏi lại, không đoán
     if (HAS_MARK.test(low)) {
