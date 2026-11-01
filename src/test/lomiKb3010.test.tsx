@@ -917,4 +917,17 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await chat(["chồng tôi bị gout", "anh ấy ăn hải sản được không"]))[1].content).toMatch(/Gout/);
     expect((await chat(["tôi uống thuốc giảm đau", "nó có hại dạ dày không"]))[1].content).toMatch(/thuốc giảm đau/);
   }, T);
+  it("01/11 — hiểu câu vòng 18: câu hỏi THAO TÁC của chủ quán → đúng câu hỏi thường gặp, không phải mẹo quảng cáo", async () => {
+    expect((await last(["quán tôi đổi giờ mở cửa thì sửa ở đâu"])).faqId).toBe("bizedit");
+    expect((await last(["quán tôi chuyển địa chỉ"])).faqId).toBe("bizedit");
+    expect((await last(["ai thấy được ưu đãi của quán tôi"])).content).toMatch(/mọi thành viên/);
+    expect((await last(["mã PIN của quán để làm gì"])).faqId).toBe("pin");
+    expect((await last(["đổi mã PIN ở đâu"])).faqId).toBe("bizpin");
+    expect((await last(["khách nhận ưu đãi thì tôi biết bằng cách nào"])).content).toMatch(/mã PIN/);
+    expect((await last(["có xoá được đánh giá xấu không"])).content).toMatch(/chưa thấy/);
+    expect((await last(["hồ sơ doanh nghiệp duyệt bao lâu"])).content).toMatch(/duyệt tay/);
+    expect((await last(["một tài khoản tạo được mấy quán"])).faqId).toBe("bizmulti");
+    // đối chứng: xin ý tưởng thu hút khách vẫn là tư vấn kinh doanh
+    expect((await last(["quán tôi vắng khách quá, làm sao thu hút khách"])).faqId).toBeUndefined();
+  }, T);
 });

@@ -50,6 +50,37 @@ export function trapReply(q: string): Trap | null {
     const fr = faqById("free"), mb = faqById("membership");
     if (fr) return { text: `${fr.a.vi}${mb && VN(/\b(ưu đãi|doanh nghiệp|quán)\b/).test(n) ? `\n\nRiêng chuyện ưu đãi: ${mb.a.vi.charAt(0).toLowerCase()}${mb.a.vi.slice(1)}` : ""}`, faqId: "free" };
   }
+  // 01/11 (vòng 18): CÂU HỎI THAO TÁC CỦA CHỦ QUÁN — sửa thông tin, ưu đãi hiện ở đâu / ai thấy, PIN để làm gì / đổi ở đâu, khách nhận ưu đãi
+  //   thì biết sao, xem / xoá đánh giá, duyệt bao lâu, mấy quán một tài khoản — đúng câu hỏi thường gặp, không phải mẹo quảng cáo
+  {
+    const owner = VN(/\b((quán|tiệm|shop|doanh nghiệp|cửa hàng|homestay|spa) (của )?(tôi|tui|mình|em|anh|chị)|tôi là chủ quán|mình là chủ quán|chủ quán|chủ doanh nghiệp|hồ sơ doanh nghiệp)\b/).test(n);
+    const f = (id: string, lead = "") => { const x = faqById(id); return x ? { text: `${lead}${x.a.vi}`, faqId: id } : null; };
+    if (VN(/\b(mã pin|pin)\b/).test(n) && VN(/\b(để làm gì|là gì|dùng để|có tác dụng gì|dùng làm gì)\b/).test(n)) { const r = f("pin"); if (r) return r; }
+    if (VN(/\b(mã pin|pin)\b/).test(n) && VN(/\b(đổi|đặt|sửa|thay|ở đâu|chỗ nào)\b/).test(n) && !VN(/\b(sai|nhập)\b/).test(n)) { const r = f("bizpin"); if (r) return r; }
+    if (VN(/\b(đăng|tạo|thêm) (được )?(mấy|bao nhiêu) ưu đãi\b/).test(n)) {
+      const bo = faqById("bizoffer");
+      return { text: `Lomi **chưa chắc** app giới hạn bao nhiêu ưu đãi cùng lúc nên không dám nói con số 🙏 Cách thêm ưu đãi: ${bo ? bo.a.vi : "Hồ sơ doanh nghiệp → Ưu đãi / Deal → Thêm ưu đãi mới"}`, faqId: "bizoffer" };
+    }
+    if (VN(/\b(khách|người ta)( \S+){0,2} nhận ưu đãi\b/).test(n) && VN(/\b(biết|xem|thấy|kiểm tra)\b/).test(n)) { const r = f("regulars", "Khách nhận ưu đãi bằng **mã PIN** quán đưa tại chỗ, nên lúc đưa mã là quán biết ngay nha 🙂 Ngoài ra:\n"); if (r) return r; }
+    if (VN(/\b(xoá|xóa|gỡ|ẩn)( \S+){0,2} (đánh giá|review|bình luận)\b/).test(n)) {
+      const rr = faqById("reviewreply"), rp = faqById("report");
+      return { text: `Lomi **chưa thấy** chỗ để chủ quán tự xoá đánh giá của khách nha 🙏\n• Cách tốt nhất là trả lời nhẹ nhàng: ${rr ? rr.a.vi : "dưới mỗi đánh giá bấm Trả lời"}\n• Đánh giá sai sự thật, xúc phạm thì báo cáo cho Ban quản trị xem xét: ${rp ? rp.a.vi : "bấm Báo cáo trên đánh giá đó"}`, faqId: "reviewreply" };
+    }
+    if (owner && VN(/\b(theo dõi|follow)\b/).test(n) && VN(/\b(khách|người ta|mọi người)\b/).test(n)) { const r = f("follow", "Khách bấm **Theo dõi** trên trang quán của bạn là được nha — vậy nên mời khách bấm theo dõi khi họ ghé (ví dụ dán mã QR / nhắc lúc tính tiền).\n"); if (r) return r; }
+    if (owner || VN(/\b(quán|doanh nghiệp)\b/).test(n)) {
+      if (VN(/\b(giờ mở cửa|giờ đóng cửa|địa chỉ|tên quán|số điện thoại|mô tả|thông tin)\b/).test(n) && VN(/\b(đổi|sửa|thay|cập nhật|chuyển|ở đâu|thế nào|sao)\b/).test(n)) { const r = f("bizedit"); if (r) return r; }
+      if (owner && VN(/\bưu đãi\b/).test(n) && VN(/\b(ai thấy|ai xem|hiện ở đâu|hiện chỗ nào|nằm ở đâu|khách thấy ở đâu|có hiện)\b/).test(n)) {
+        const ol = faqById("offerlist"), bb = faqById("bizbroadcast");
+        return { text: `Ưu đãi quán bạn đăng (đang bật) thì **mọi thành viên** đều thấy được nha 👀\n• Trên **trang quán** của bạn, và trong mục **Ưu đãi** chung: ${ol ? ol.a.vi : "Ưu đãi (/uu-dai)"}\n• Muốn người theo dõi quán biết ngay: ${bb ? bb.a.vi : "bấm Gửi thông báo ở từng ưu đãi"}`, faqId: "offerlist" };
+      }
+      if (owner && VN(/\b(xem|đọc|ai) (\S+ ){0,2}(đánh giá|review)\b/).test(n)) { const r = f("reviewreply", "Đánh giá của khách hiện ngay trên **trang doanh nghiệp** của bạn nha — mở trang quán là thấy hết.\n"); if (r) return r; }
+      if (VN(/\b(duyệt bao lâu|bao lâu (thì |mới |được )?duyệt|duyệt mất bao lâu|bao giờ được duyệt|khi nào được duyệt)\b/).test(n)) {
+        const st = faqById("bizstatus");
+        return { text: `Hồ sơ doanh nghiệp được Ban quản trị **duyệt tay** — Lomi không biết chính xác mất bao lâu 🙏 Duyệt xong quán mới hiện công khai.\n• Bị yêu cầu bổ sung: ${st ? st.a.vi : "xem ghi chú trong Hồ sơ doanh nghiệp"}\n• Chờ lâu thì liên hệ Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ)`, faqId: "bizstatus" };
+      }
+      if (VN(/\b(tạo|mở|đăng|có) (được )?(mấy|bao nhiêu|nhiều) (quán|doanh nghiệp|cửa hàng)\b/).test(n)) { const r = f("bizmulti"); if (r) return r; }
+    }
+  }
   // 01/11 (vòng 6): QUÁN CỦA MÌNH không hiện / bị ẩn / muốn hiện trên Khám phá — hỏi TRẠNG THÁI hồ sơ, không phải xin mẹo quảng cáo
   if (VN(/\b(quán|tiệm|shop|doanh nghiệp|cửa hàng|homestay|spa)( (của )?(tôi|tui|mình|em|anh|chị))?\b/).test(n) && VN(/\b(bị ẩn|không hiện|chưa hiện|không thấy hiện|không xuất hiện|bị khoá|bị khóa|bị từ chối|chưa được duyệt|chưa duyệt|hiện trên khám phá|lên khám phá|hiện lên app|hiện công khai)\b/).test(n)) {
     const st = faqById("bizstatus");
