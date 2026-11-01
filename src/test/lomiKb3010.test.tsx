@@ -873,4 +873,14 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(dog.med?.id).toBe("cho-can");
     expect(dog.content).not.toMatch(/bị \*\*bị/);
   }, T);
+  it("01/11 — hiểu câu vòng 14: 'có nên' là cân nhắc (không mặc định là có, không thêm chi tiết), câu xác nhận đã hiểu, câu hỏi khi kể đi khám", async () => {
+    expect((await last(["có nên nhắn tin cho người yêu cũ không"])).content).toMatch(/quyết định của bạn/);
+    expect((await last(["có nên tỏ tình không"])).content).not.toMatch(/đồng nghiệp/);
+    expect((await last(["có nên tỏ tình với đồng nghiệp không"])).content).toMatch(/đồng nghiệp/);
+    expect((await last(["có nên nâng cấp membership không"])).content).toMatch(/Membership mở khoá/);
+    expect((await last(["app có bị virus không"])).content).not.toMatch(/app bị trục trặc/);
+    expect((await last(["dạ, tôi hiểu rồi"])).content).not.toMatch(/kể tiếp/);
+    expect((await last(["mai tôi đi khám răng, có cần chuẩn bị gì không"])).content).not.toMatch(/Đi khám đều đặn là tốt/);
+    expect((await last(["cảm lạnh với dị ứng mũi khác gì nhau"])).content).toMatch(/đặt cạnh nhau/);
+  }, T);
 });

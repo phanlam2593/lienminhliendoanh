@@ -363,6 +363,11 @@ const RULES: Rule[] = [
       ]),
     }),
   },
+  // 01/11 (vòng 14): "dạ, tôi hiểu rồi", "à em biết rồi" — người dùng xác nhận đã hiểu → đáp nhận, không hỏi "bạn hiểu rồi hả, kể tiếp đi"
+  {
+    re: VN(/^ ?(dạ|vâng|ừ|ờ|à|ok|oke|okie)?,? ?(tôi|tui|mình|em|anh|chị|con|cháu)? ?(hiểu|biết|rõ) rồi( ạ| nha| nhé| nè| nhen| luôn)?( cảm ơn( lomi| nha| nhiều)?)? ?$/),
+    reply: () => ({ text: pick(["Dạ 😊 Có gì cần thêm cứ hỏi Lomi nha!", "Okie nè 👍 Cần gì nữa cứ nói Lomi nha."]) }),
+  },
   // Bực / giận
   {
     // (01/11: "dạ dày khó chịu", "trong người khó chịu", "bụng khó chịu" — khó chịu ở CƠ THỂ, không phải bực mình)

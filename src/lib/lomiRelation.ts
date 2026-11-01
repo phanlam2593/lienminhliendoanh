@@ -171,6 +171,17 @@ function build(r: RelHit, text: string): HeartReply {
       ].join("\n\n"),
     };
   }
+  // 01/11 (hiểu câu vòng 14): "CÓ NÊN nhắn cho người yêu cũ không" — hỏi NÊN HAY KHÔNG, chưa phải hỏi nhắn thế nào → cùng cân nhắc trước
+  if (VN(/\b(có nên|nên hay không|nên không)\b/).test(` ${normStrict(text, HEART)} `))
+    return {
+      theme: "love",
+      quick: [],
+      text: [
+        `Nhắn hay không là quyết định của bạn, Lomi không chọn thay được — nhưng mình cân nhắc cùng nha 💭`,
+        `Thử tự hỏi trước: mình mong điều gì từ tin nhắn đó — nối lại, khép lại cho nhẹ lòng, hay chỉ hỏi thăm? Nếu ${s} không trả lời, hoặc trả lời khác mong đợi, mình có ổn không?`,
+        `Nếu quyết định nhắn thì nên ngắn, tự nhiên, không đòi hỏi phải trả lời ngay. Còn đang buồn hay vừa có chuyện thì để vài hôm cho lòng lắng lại rồi hẵng nhắn cũng được.`,
+      ].join("\n\n"),
+    };
   return {
     theme: "love",
     quick: [],

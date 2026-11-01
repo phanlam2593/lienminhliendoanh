@@ -1110,7 +1110,7 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   const t = rawTheme(text) ?? themeOf(n);
   // 01/11: câu hỏi THÔNG TIN về sức khoẻ ("bao lâu thì nên đi khám răng", "khám mắt ở đâu") không phải lời tâm sự lo lắng —
   //   không đáp bằng câu an ủi / "đi khám đều đặn là tốt đó". (Có chữ cảm xúc — lo, sợ, buồn — thì vẫn là tâm sự.)
-  if (t?.id === "health" && ["howlong", "when", "howmany", "where"].includes(qtypeOf(text) ?? "") && !VN(/\b(lo|sợ|buồn|hoảng|run|bất an|khóc)\b/).test(` ${n} `)) return null;
+  if (t?.id === "health" && !!qtypeOf(text) && !VN(/\b(lo|sợ|buồn|hoảng|run|bất an|khóc)\b/).test(` ${n} `)) return null;
   const start = START_RE.test(` ${n} `);
   // Tự hỏi mình có mắc một vấn đề tâm lý không → không chẩn đoán, không đáp như thể đã chắc.
   const dx = selfDx(text, n, {});
@@ -1127,7 +1127,10 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   if (t) {
     // Câu mở đầu đã nói rõ bao lâu ("mất ngủ nhiều tuần rồi") → không hỏi lại "lâu chưa?"; kéo dài từ hai tuần thì nhắc đi khám.
     const sp = n.match(SPAN_RE);
-    const r = themeReply(t, n, asksAdvice(n), avoidAskFor(n, !!sp));
+    // 01/11 (vòng 14): câu ĐẦU TIÊN "có nên tỏ tình không" chưa nói gì về đồng nghiệp → không dùng ý riêng cho chuyện thích đồng nghiệp
+    //   (câu sau trong cùng mạch đã kể là đồng nghiệp thì vẫn dùng — lớp heartContinue lo)
+    const notWork = (x: string) => x.includes("tỏ tình với đồng nghiệp") && !VN(/\b(đồng nghiệp|công ty|chỗ làm|cùng phòng|sếp)\b/).test(` ${n} `);
+    const r = themeReply(t, n, asksAdvice(n), avoidAskFor(n, !!sp), notWork);
     const note = sp && longSpan(sp) && t.heavy && !r.text.includes(PRO) ? `\n\nKéo dài ${spanOf(sp)} rồi thì bạn nên đi khám để tìm đúng nguyên nhân nha, đừng ráng chịu một mình.` : "";
     // (lời nhắc đi khám đặt TRƯỚC câu hỏi cuối, để tin kết thúc bằng câu hỏi chứ không phải bằng lời dặn.)
     const ps = r.text.split("\n\n");

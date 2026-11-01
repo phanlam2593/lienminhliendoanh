@@ -390,7 +390,9 @@ export async function diffReply(q: string): Promise<{ text: string; medId: strin
     const ws = t.replace(/\s+(?:thông thường|bình thường|thường|nói chung)$/u, "").split(" ");
     for (let k = ws.length; k >= 1; k--) {
       const part = ws.slice(0, k).join(" ");
-      const id = findMedTopicId(part) ?? findMedTopicId(`bị ${part}`);
+      // (thứ tự chữ đảo — "dị ứng mũi" ↔ "viêm mũi dị ứng")
+      const flipW = part.split(" ");
+      const id = findMedTopicId(part) ?? findMedTopicId(`bị ${part}`) ?? (flipW.length === 3 ? findMedTopicId(`viêm ${flipW[2]} ${flipW[0]} ${flipW[1]}`) : null);
       if (id) return id;
     }
     return null;

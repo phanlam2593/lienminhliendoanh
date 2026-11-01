@@ -82,6 +82,16 @@ export function trapReply(q: string): Trap | null {
     const cf = faqById("call");
     return { text: `Được nha 📞 Có hai cách:\n• Gọi **trong app**: ${cf ? cf.a.vi : "trong khung chat 1-1 bấm 📞 / 🎥 (người kia cần đang online)"}\n• Gọi **số điện thoại** của quán: mở trang quán, nếu quán có ghi số thì bấm vào số để gọi luôn`, faqId: "call" };
   }
+  // 01/11 (vòng 14): "app có bị virus không", "app này có mã độc không" — hỏi AN TOÀN của app, không phải báo app đang lỗi
+  if (VN(/\b(app|ứng dụng|ilomi)( này)?( có)? (bị virus|có virus|virus không|mã độc|có độc|chứa virus)\b/).test(n)) {
+    const ins = faqById("install");
+    return { text: `Lomi không kiểm tra được máy của bạn có virus hay không 🙏 — nhưng vài điều chắc chắn về iLomi nè:\n• iLomi ${ins ? "cài từ đúng trang chính thức (xem cách cài bên dưới), không cần tải file cài đặt lạ" : "mở từ đúng trang chính thức, không cần tải file cài đặt lạ"}\n• App không bao giờ nhắn đòi mật khẩu, mã hay chuyển tiền\n• Cẩn thận **link lạ** ai đó gửi qua tin nhắn — gặp thì đừng bấm, báo cáo người gửi\n${ins ? `\nCách cài đúng: ${ins.a.vi}` : ""}`, faqId: "install" };
+  }
+  // 01/11: "có nên nâng cấp / mua membership không" — quyết định mua gói → nói rõ gói gồm gì để người dùng tự cân nhắc
+  if (VN(/\b(có nên|nên) (nâng cấp|mua|đăng ký|lên)( gói)? (membership|hội viên|thành viên)\b/).test(n)) {
+    const mb = faqById("membership");
+    if (mb) return { text: `Có nên hay không là tuỳ bạn có dùng tới mấy quyền lợi này không nha 🙂\n${mb.a.vi}`, faqId: "membership" };
+  }
   // Mã OTP / SMS xác minh — app không dùng
   if (VN(/\b(otp|mã xác nhận|mã xác thực|mã xác minh|sms xác (minh|nhận))\b/).test(n))
     return {
