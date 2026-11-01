@@ -133,6 +133,7 @@ import {
 import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
+import { kinSupportText } from "@/lib/lomiHeart";
 import { normNeg, otherComplaint, petPatient, qtypeOf } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
@@ -1257,6 +1258,12 @@ export function AiChat({
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) || rewroteRef.current ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
+    // 01/11 (vòng 16): thẻ TÂM LÝ (trầm cảm, lo âu…) mà câu kể về NGƯỜI KHÁC ("bạn tôi bị trầm cảm, tôi phải làm sao") → lời đáp cho
+    //   người đang lo cho người đó, không phải lời tự chăm sóc cho chính người dùng
+    if (!en && reply.med?.id && medKindOf(reply.med.id) === "mental") {
+      const ks = kinSupportText(rawRef.current ?? asked);
+      if (ks) reply = { ...reply, content: ks };
+    }
     // 01/11: tìm quán kèm điều kiện Lomi CHƯA lọc được ("quán cà phê mở khuya", "quán lẩu cho nhóm 10 người") → vẫn đưa quán,
     //   nhưng nói rõ điều kiện đó chưa được lọc (không lờ đi như thể các quán này đã đúng ý)
     if (!en && reply.places?.length && !prevA?.places?.length) {

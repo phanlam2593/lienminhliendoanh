@@ -893,4 +893,16 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["sao quẹt hoài không ai thích"])).content).toMatch(/hai bên cùng thích/);
     expect((await last(["tìm nha sĩ gần đây"])).content).toMatch(/chưa có danh sách phòng khám/);
   }, T);
+  it("01/11 — hiểu câu vòng 16: kể chuyện của NGƯỜI KHÁC trong tâm sự → đáp với vai người thân đang lo, không như chính người dùng bị", async () => {
+    const dad = await last(["bố tôi nghiện rượu"]);
+    expect(dad.content).toMatch(/bố bạn/i);
+    expect(dad.content).not.toMatch(/bạn đã làm được rồi đó/);
+    expect((await last(["tôi nghiện rượu"])).content).not.toMatch(/Thấy .* như vậy chắc bạn lo lắm/);
+    expect((await last(["mẹ tôi hay lo lắng"])).content).toMatch(/mẹ bạn/i);
+    expect((await last(["con tôi nghiện điện thoại"])).content).toMatch(/con bạn/i);
+    const fr = await last(["bạn tôi bị trầm cảm, tôi phải làm sao"]);
+    expect(fr.content).toMatch(/bạn của bạn/);
+    expect(fr.content).toMatch(/115/);
+    expect((await last(["tôi bị trầm cảm"])).content).not.toMatch(/Thấy .* như vậy chắc bạn lo lắm/);
+  }, T);
 });
