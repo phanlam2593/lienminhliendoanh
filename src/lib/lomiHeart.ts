@@ -1108,11 +1108,12 @@ function eventReply(ev: Ev, n: string, text: string): HeartReply {
  * ("bạn đã làm được bước khó nhất rồi"), mà đáp với vai người thân đang lo và muốn giúp. Câu tự kể ("tôi nghiện rượu") giữ như cũ.
  */
 const SELF_STATE_THEMES = new Set(["alcohol", "addict", "depress", "anxiety", "insomnia", "tired", "sad", "selfworth", "overthink", "lonely", "lost", "menhealth"]);
+const MOOD_THEMES = new Set(["depress", "sad", "selfworth", "lonely", "lost", "menhealth"]);
 //   ("em / anh / chị / con / ông / bà / bé / cháu" đứng một mình đầu câu thường là người dùng TỰ XƯNG → chỉ tính là người khác khi có "tôi / nhà tôi"
 //    hoặc là "em gái, anh trai…"; vợ, chồng, bố mẹ, người yêu thì luôn là người khác)
 const KIN_LEAD = /^\s*((?:(?:vợ|chồng|bố|ba|cha|mẹ|má|người yêu|bạn trai|bạn gái|ny)(?:\s+(?:tôi|tui|mình|em|anh|chị))?)|(?:(?:con|bé|cháu|ông|bà|anh|chị|em|bạn|bạn thân|em gái|em trai|anh trai|chị gái|con gái|con trai)\s+(?:tôi|tui|mình|nhà tôi|nhà mình|của tôi))|(?:em gái|em trai|anh trai|chị gái|con gái|con trai))\s+(?!ơi\b)/iu;
 /** Lời đáp cho người dùng đang lo cho một NGƯỜI KHÁC (đầu câu là người đó). null nếu câu không mở đầu bằng người khác. */
-export function kinSupportText(text: string): string | null {
+export function kinSupportText(text: string, mood = true): string | null {
   const m = text.normalize("NFC").match(KIN_LEAD);
   if (!m || /^(tôi|tui|mình|tớ)$/iu.test(m[1])) return null;
   // ("bạn tôi" → "bạn của bạn", không thành "bạn bạn")
@@ -1120,14 +1121,14 @@ export function kinSupportText(text: string): string | null {
   return [
     `Thấy ${who} như vậy chắc bạn lo lắm 🥺 Bạn quan tâm tới ${who} vậy là quý lắm rồi.`,
     `Vài điều bạn có thể làm để ở bên ${who}:\n• Chọn lúc bình tĩnh để nói chuyện, nói bằng sự lo lắng ("mình lo cho…") thay vì trách móc\n• Lắng nghe trước, đừng vội khuyên hay so sánh\n• Gợi ý và nếu được thì **đi cùng** ${who} gặp bác sĩ / chuyên gia — chuyện này thường cần người có chuyên môn hỗ trợ\n• Giữ sức cho chính mình nữa, đừng ôm hết một mình`,
-    `Nếu ${who} có lúc nói muốn chết, hay làm hại bản thân → đừng để ${who} ở một mình và gọi **115** hoặc người thân ngay nha.`,
+    mood ? `Nếu ${who} có lúc nói muốn chết, hay làm hại bản thân → đừng để ${who} ở một mình và gọi **115** hoặc người thân ngay nha.` : "",
     `Chuyện này kéo dài bao lâu rồi bạn?`,
-  ].join("\n\n");
+  ].filter(Boolean).join("\n\n");
 }
 export function heartStart(text: string, appQuestion: boolean): HeartReply | null {
   const r = heartStart0(text, appQuestion);
   if (!r || !r.theme || !SELF_STATE_THEMES.has(r.theme)) return r;
-  const k = kinSupportText(text);
+  const k = kinSupportText(text, MOOD_THEMES.has(r.theme));
   return k ? { ...r, text: k } : r;
 }
 function heartStart0(text: string, appQuestion: boolean): HeartReply | null {

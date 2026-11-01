@@ -905,4 +905,16 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(fr.content).toMatch(/115/);
     expect((await last(["tôi bị trầm cảm"])).content).not.toMatch(/Thấy .* như vậy chắc bạn lo lắm/);
   }, T);
+  it("01/11 — hiểu câu vòng 17: từ tự xưng (bà / con / em / anh / chú) ≠ người thân; đại từ 'nó / anh ấy / bả / ổng' giữ đúng người", async () => {
+    expect((await last(["bà bị mất ngủ mấy đêm nay"])).content).not.toMatch(/Thấy bà/);
+    const g = await last(["bà tôi bị mất ngủ mấy đêm nay"]);
+    expect(g.content).toMatch(/bà bạn/);
+    expect(g.content).not.toMatch(/muốn chết/);
+    expect((await last(["con bị đau bụng quá"])).content).not.toMatch(/bé đang có/);
+    expect((await last(["con tôi bị đau bụng quá"])).content).toMatch(/bé/);
+    expect((await last(["em bị sốt"])).content).not.toMatch(/Em bạn/);
+    expect((await last(["em tôi bị sốt"])).content).toMatch(/Em bạn/);
+    expect((await chat(["chồng tôi bị gout", "anh ấy ăn hải sản được không"]))[1].content).toMatch(/Gout/);
+    expect((await chat(["tôi uống thuốc giảm đau", "nó có hại dạ dày không"]))[1].content).toMatch(/thuốc giảm đau/);
+  }, T);
 });
