@@ -13,7 +13,7 @@ import { VR, VN } from "@/lib/viMatch";
 // để "cf?", "đi cà phê không", "trà sữa ở đâu ngon" không bị đáp thành bài sức khoẻ (01/10 r3, test thật trên app).
 // src (15/10, audit sức khoẻ): nguồn đã đối chiếu cho đúng các ý trong câu trả lời; không có = kiến thức phổ thông CHƯA gắn nguồn
 //   (câu đáp ghi rõ điều đó). Các con số (lượng caffeine, giờ ngủ, lượng nước, phút vận động…) chỉ giữ khi khớp nguồn.
-type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string; checked?: string; first?: boolean; early?: boolean };
+type Fact = { id: string; re: RegExp; a: string; cue?: boolean; src?: string; checked?: string; first?: boolean; early?: boolean; minAge?: number; topic?: string };
 const HEALTH_CUE =
   VN(/\b(có sao|có hại|có tốt|tốt không|hại không|tác hại|lợi ích|ảnh hưởng|sức khoẻ|uống nhiều|nhiều quá|quá nhiều|mỗi ngày|bao nhiêu|mấy ly|mấy cốc|lúc nào|buổi tối|buổi sáng|khi đói|bụng đói|dạ dày|mất ngủ|khó ngủ|tim đập|huyết áp|mang thai|có bầu|cho con bú|trẻ em|béo|mập|tăng cân|giảm cân|đường|nghiện|cai|bỏ được|nóng trong|lợi tiểu|nên uống|có nên uống|uống được không)\b/);
 
@@ -46,7 +46,7 @@ const FACTS: Fact[] = [
   },
   {
     id: "water",
-    re: VN(/\b(uống bao nhiêu nước|uống nước bao nhiêu|uống đủ nước|uống ít nước|uống nhiều nước|nước lọc|thiếu nước)\b/),
+    re: VN(/\b(uống bao nhiêu nước|uống nước bao nhiêu|uống mấy (ly|cốc|lít|chai) nước|bao nhiêu (ly|cốc|lít|chai) nước|uống đủ nước|uống ít nước|uống nhiều nước|nước lọc|thiếu nước)\b/),
     a: "💧 **Uống nước:** NHS khuyên uống khoảng **6–8 cốc / ly mỗi ngày**, đủ để **nước tiểu có màu vàng nhạt, trong**. Nước lọc, sữa ít béo, đồ uống ít / không đường, cả trà và cà phê đều được tính.\n• Nước ép trái cây, sinh tố cũng tính nhưng có đường tự do — gộp lại chỉ nên khoảng 150 ml/ngày.\n• Người bệnh thận, tim nên hỏi bác sĩ lượng nước phù hợp.",
     src: "NHS (Anh) — The Eatwell Guide, rà soát 29/11/2022",
   },
@@ -170,6 +170,8 @@ const FACTS: Fact[] = [
   },
   {
     id: "sleep",
+    minAge: 13,
+    topic: "giờ ngủ",
     re: VN(/\b(ngủ bao nhiêu|ngủ mấy tiếng|ngủ bao lâu|ngủ đủ|thức khuya có sao|thức khuya|ngủ muộn)\b/),
     a: "😴 **Giấc ngủ** theo CDC (Mỹ): tuổi teen 13–17 cần **8–10 tiếng**; người lớn 18–60 tuổi **từ 7 tiếng trở lên**; 61–64 tuổi **7–9 tiếng**; từ 65 tuổi **7–8 tiếng** mỗi đêm.\n• Thức khuya thường xuyên dễ làm mệt, kém tập trung, tâm trạng thất thường.\n• Mẹo: ngủ – dậy giờ cố định, cất điện thoại trước khi ngủ, phòng tối và yên tĩnh, tránh cà phê buổi chiều.",
     src: "CDC (Hoa Kỳ) — About Sleep, rà soát 20/11/2023",
@@ -191,7 +193,9 @@ const FACTS: Fact[] = [
   },
   {
     id: "exercise",
-    re: VN(/\b(tập thể dục|tập gym|chạy bộ|đi bộ bao lâu|tập bao nhiêu|vận động bao nhiêu|nên tập gì|bắt đầu tập)\b/),
+    minAge: 19,
+    topic: "mức vận động",
+    re: VN(/\b(tập thể dục|tập gym|chạy bộ|đi bộ bao lâu|đi bộ bao nhiêu|đi bộ mấy|tập bao nhiêu|vận động bao nhiêu|nên tập gì|bắt đầu tập)\b/),
     a: "🏃 **Vận động** (NHS, người 19–64 tuổi): ít nhất **150 phút/tuần** vận động vừa (đi bộ nhanh, đạp xe, bơi…) **hoặc 75 phút/tuần** vận động mạnh, cộng thêm bài tập sức mạnh cho các nhóm cơ chính **ít nhất 2 ngày/tuần**.\n• Bớt thời gian ngồi / nằm, chen vào những lúc ngồi lâu vài hoạt động nhẹ.\n• Có bệnh tim, huyết áp, xương khớp thì hỏi bác sĩ trước khi tập nặng.",
     src: "NHS (Anh) — Physical activity guidelines for adults aged 19 to 64, rà soát 22/05/2024",
   },
@@ -283,7 +287,21 @@ export function healthFact(text: string): string | null {
   //   (mục "first" là câu hỏi cụ thể hơn — "tim đập nhanh sau 3 ly cà phê" — được ưu tiên trước mục chung "cà phê")
   const f = FACTS.find((x) => x.first && ok(x)) ?? FACTS.find(ok);
   if (!f) return null;
+  // 01/11 (vòng 22): số liệu trong mục chỉ áp cho một độ tuổi ("trẻ 5 tuổi ngủ bao nhiêu tiếng" — kho chỉ có từ tuổi teen 13)
+  //   → nói rõ là chưa có số cho tuổi đó, không đưa số của người lớn như thể là câu trả lời.
+  if (f.minAge) {
+    const age = askedAge(n);
+    if (age !== null && age < f.minAge)
+      return `Lomi chỉ có số liệu ${f.topic} cho người **từ ${f.minAge} tuổi trở lên**, chưa có số chắc cho ${age > 0 ? `**${age} tuổi**` : "**trẻ nhỏ**"} nên Lomi không đoán đâu nha 🙏\nVới trẻ nhỏ, bạn hỏi bác sĩ nhi hoặc nhân viên y tế lúc khám định kỳ là chắc nhất 🩺`;
+  }
+  // hỏi SỐ BƯỚC mà mục chỉ có số phút → nói rõ trước, không đánh tráo con số
+  if (f.id === "exercise" && /\bbuoc\b/.test(n)) return `Lomi chưa có con số **bước chân** chuẩn để nói chắc nha, chỉ có khuyến nghị theo **phút** như sau:\n\n${renderFact(f)}`;
   return renderFact(f);
+}
+function askedAge(n: string): number | null {
+  const m = n.match(/\b(\d{1,2}) (tuoi|thang tuoi)\b/);
+  if (m) return m[2] === "tuoi" ? Number(m[1]) : 0;
+  return /\b(tre so sinh|so sinh|em be|tre nho|tre em|be mam non|mau giao|hoc sinh tieu hoc|tre \d)\b/.test(n) ? 0 : null;
 }
 function renderFact(f: Fact): string {
   return f.src

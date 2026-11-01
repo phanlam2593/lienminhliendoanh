@@ -966,4 +966,31 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["tóm tắt giúp tôi"])).content).toMatch(/tóm lại chuyện gì/);
     expect((await last(["mình đang phân vân không biết có nên đi khám không"])).content).toMatch(/khó chịu ở đâu/);
   }, T);
+  it("01/11 — hiểu câu vòng 22: câu hỏi con số (mấy ký tự / mấy lần / tối đa / giá bao nhiêu) trả đúng con số; số liệu theo tuổi không đánh tráo", async () => {
+    expect((await last(["mật khẩu tối thiểu mấy ký tự"])).content).toMatch(/6 ký tự/);
+    expect((await last(["mat khau toi thieu may ky tu"])).content).toMatch(/6 ký tự/);
+    expect((await last(["tên đăng nhập tối đa mấy ký tự"])).content).toMatch(/3–20 ký tự/);
+    expect((await last(["mã PIN mấy số"])).content).toMatch(/4–8 ký tự/);
+    expect((await last(["nhập sai PIN mấy lần thì bị khoá"])).content).toMatch(/sai 5 lần/);
+    expect((await last(["mỗi người đánh giá được mấy lần"])).content).toMatch(/đánh giá 1 lần/);
+    expect((await last(["membership giá bao nhiêu"])).content).toMatch(/^Dạ 🙂 .*49\.000đ\/tháng/);
+    expect((await last(["dòng trạng thái tối đa mấy ký tự"])).content).toMatch(/60 ký tự/);
+    expect((await last(["mã ưu đãi hết hạn sau mấy tiếng"])).content).toMatch(/2 giờ/);
+    expect((await last(["tạo nhóm được bao nhiêu thành viên"])).content).toMatch(/50 người/);
+    // đối chứng: hỏi cách làm vẫn ra hướng dẫn đầy đủ; thứ ngoài app cùng tên không lấy số của app
+    expect((await last(["tạo nhóm chat thế nào"])).content).toMatch(/Vào Tin nhắn/);
+    expect((await last(["nhóm máu O là gì"])).content).not.toMatch(/Tin nhắn/);
+    expect((await last(["mật khẩu wifi quán là bao nhiêu"])).content).not.toMatch(/6 ký tự/);
+    expect((await last(["mỗi tuần ăn cá mấy lần"])).content).toMatch(/cá/);
+    expect((await last(["mỗi ngày uống mấy ly nước"])).content).toMatch(/Uống nước/);
+    // số liệu theo tuổi
+    const k5 = await last(["trẻ 5 tuổi ngủ bao nhiêu tiếng"]);
+    expect(k5.content).toMatch(/từ 13 tuổi trở lên/);
+    expect(k5.content).not.toMatch(/8–10 tiếng/);
+    expect((await last(["bé 8 tháng tuổi ngủ bao lâu"])).content).toMatch(/trẻ nhỏ/);
+    expect((await last(["con tôi 15 tuổi ngủ bao nhiêu là đủ"])).content).toMatch(/8–10 tiếng/);
+    expect((await last(["con 10 tuổi nên tập thể dục bao nhiêu"])).content).toMatch(/từ 19 tuổi trở lên/);
+    expect((await last(["người lớn tập thể dục bao nhiêu là đủ"])).content).toMatch(/150 phút/);
+    expect((await last(["mỗi ngày đi bộ bao nhiêu bước"])).content).toMatch(/bước chân/);
+  }, T);
 });

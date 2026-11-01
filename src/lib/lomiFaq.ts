@@ -532,6 +532,8 @@ const FAQ_NEED: Record<string, RegExp> = {
   claimexp: /\b(ma|uu dai|voucher|khuyen mai|code|giam gia|da nhan|nhan lai)\b/,
   // 31/10 (danh sách ChatGPT lần 6): "mỗi tuần ăn cá mấy lần", "nhập sai mật khẩu mấy lần" từng ra số lượt quẹt
   quetlimit: /\b(quet|luot|swipe)\b/,
+  // 01/11 (vòng 22): "nhóm máu O là gì" không phải hỏi tạo nhóm chat
+  group: /\b(chat|tin nhan|nhan tin|thanh vien|tao nhom|vao nhom|roi nhom|moi nhom|group|truong nhom|them nguoi)\b/,
   // 01/11: "bao nhiêu tuổi thì nên đi khám mắt" là hỏi mốc tuổi cho việc khác, không phải mấy tuổi được dùng app
   age: /\b(app|ung dung|ilomi|lomi|tai khoan|acc|dang ky|dung|xai|choi|tham gia|tao)\b/,
   // 01/11: "quán này có ưu đãi không" là hỏi quán có ưu đãi, không phải phàn nàn quán không giữ đúng ưu đãi
@@ -668,4 +670,54 @@ export function smallTalk(text: string, lang: "vi" | "en"): string | null {
     return lastSmall;
   }
   return null;
+}
+
+/**
+ * 01/11 (vòng 22): câu hỏi CON SỐ về một thứ của app ("mật khẩu tối thiểu mấy ký tự", "mã PIN mấy số", "nhập sai PIN mấy lần thì bị khoá",
+ *   "mỗi người đánh giá được mấy lần", "membership giá bao nhiêu") → trích đúng câu có con số trong kho FAQ, thay vì đáp cả hướng dẫn
+ *   khác ý (đổi tên đăng nhập, cách nhận ưu đãi) hay gợi ý chung chung. Không có câu nào nói con số đó thì trả null (không bịa số).
+ */
+const NUM_SUBJ: [RegExp, RegExp][] = [
+  [/\bmat khau\b|\bpass(word)?\b/, /\bmat khau\b/],
+  [/\bten dang nhap\b|\busername\b/, /\bten dang nhap\b/],
+  [/\b(ma )?pin\b/, /\bpin\b/],
+  [/\bdanh gia\b|\breview\b/, /\bdanh gia\b/],
+  [/\b(goi )?membership\b|\bhoi vien\b/, /\bmembership\b|\bgoi \d/],
+  [/\bnhom (chat|tin nhan)\b|\b(tao|moi|1|mot) nhom\b/, /\bnhom\b/],
+  [/\b(ma uu dai|ma giam gia|voucher|ma khuyen mai)\b/, /\bma (uu dai|co hieu luc)\b|\bvalid\b/],
+  [/\btip\b/, /\btip\b/],
+  [/\bgioi thieu\b|\bbio\b/, /\bgioi thieu\b/],
+  [/\bdong trang thai\b|\bstatus\b/, /\bky tu\b/],
+  [/\bthu vien anh\b|\banh (bia|quan|doanh nghiep)\b/, /\banh\b/],
+];
+const NUM_UNIT: [RegExp, RegExp][] = [
+  [/\b(ky tu|chu|so|chu so)\b/, /\d+\s*(–|-)?\s*\d*\s*ky tu|\d+\+? characters/],
+  [/\blan\b/, /\d+\s*lan\b/],
+  [/\bnguoi\b/, /\d+\s*nguoi\b/],
+  [/\b(gia|tien|phi)\b/, /\d[\d.]*\s*d\b|\d+k\b/],
+  [/\banh\b/, /\d+\s*anh\b/],
+  [/\b(phut|bao lau|tieng|gio|het han|hieu luc)\b/, /\d+\s*(phut|gio|tieng|ngay)\b/],
+];
+export function numFact(text: string): string | null {
+  const n = ` ${normalizeVi(text)} `;
+  if (!/\b(may|bao nhieu|toi da|toi thieu|it nhat|nhieu nhat|gioi han)\b/.test(n)) return null;
+  // nhập sai mấy lần thì bị khoá → đơn vị "lần" gắn với chữ "sai"
+  const subj = NUM_SUBJ.find(([q]) => q.test(n));
+  // (thứ NGOÀI app cùng tên: "mật khẩu wifi", "mã PIN thẻ ngân hàng", "nhóm máu")
+  if (!subj || /\b(suc khoe|benh|kham|thuoc|huyet ap|tim mach|wifi|wi fi|the atm|atm|ngan hang|the tin dung|sim|dien thoai|email|gmail|facebook|zalo|nhom mau)\b/.test(n)) return null;
+  const unit = NUM_UNIT.find(([q]) => q.test(n.replace(/\b(nhieu|bao nhieu)\b/g, " ")));
+  const qt = n.trim().split(" ").filter((w) => w.length >= 3 && !["may", "bao", "nhieu", "toi", "duoc", "khong", "nguoi", "moi", "thi"].includes(w));
+  let best: { s: string; sc: number } | null = null;
+  for (const f of FAQS) {
+    const fq = normalizeVi(f.q.vi);
+    for (const raw of f.a.vi.split(/(?<=[.!?])\s+|\n+/)) {
+      const s = raw.replace(/^[•\d.\s]+(?=\D)/, "").trim();
+      const ns = ` ${normalizeVi(s)} `;
+      if (!/\d/.test(s) || !(subj[1].test(ns) || subj[1].test(` ${fq} `))) continue;
+      if (unit && !unit[1].test(ns)) continue;
+      const sc = (subj[1].test(ns) ? 2 : 0) + qt.filter((w) => ns.includes(` ${w} `)).length;
+      if (!best || sc > best.sc) best = { s, sc };
+    }
+  }
+  return best && best.sc >= 2 ? best.s : null;
 }

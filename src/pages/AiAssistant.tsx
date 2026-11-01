@@ -19,6 +19,7 @@ import {
   matchFaq,
   matchFaqFollowUp,
   answerFromPrev,
+  numFact,
   normalizeVi,
   relatedFaqs,
   suggestFaqs,
@@ -1790,6 +1791,9 @@ export function AiChat({
         const ol = faqById("offerlist");
         if (ol) return localReply(q, { role: "assistant", content: `Lomi chưa biết bạn đang nói **quán nào** nè 🙂 ${ol.a.vi}\n\nNói Lomi tên món hoặc loại quán (vd “quán phở có ưu đãi không”) là Lomi tìm giúp liền.`, local: true, faqId: "offerlist" });
       }
+      // 01/11 (vòng 22): hỏi con số của một thứ trong app ("mật khẩu tối thiểu mấy ký tự", "nhập sai PIN mấy lần") → đúng câu có con số
+      const nf = en ? null : numFact(raw);
+      if (nf) return localReply(q, { role: "assistant", content: `Dạ 🙂 ${nf}`, local: true });
       const tp = en ? null : trapReply(raw);
       if (tp) {
         const rf = tp.retry ? matchFaq(tp.retry) : null;
