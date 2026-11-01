@@ -392,6 +392,18 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
     };
   }
 
+  // 3d) 01/11 (hiểu câu vòng 10): vừa bói xong hỏi "vậy tôi nên làm gì" → nhắc lại kết luận của CHÍNH trải bài đó + nhắc quyết định là ở
+  //     người dùng (không rút bài mới, không đáp "chưa được học").
+  if (rd && words <= 10 && !detectTarot(q) && !findMedTopicId(q) && VN(/\b(nên làm gì|nên làm sao|phải làm sao|phải làm gì|giờ làm sao|làm gì bây giờ|nên thế nào|nên ra sao)\b/).test(n))
+    return {
+      kind: "reply",
+      keep: true,
+      why: "tarot:advice",
+      reply: {
+        text: `${readingRecap(rd, false)}\n\nLá bài chỉ gợi một góc nhìn để mình ngẫm thôi nha — quyết định vẫn là ở bạn 💚 Thử tự hỏi: điều mình thật sự mong là gì, và bước nhỏ nhất làm được trong tuần này là gì?`,
+        quick: ["Rút thêm", "Bói lại"],
+      },
+    };
   // 3c') 20/10 (audit) — HỎI LẠI / BÁC câu Lomi VỪA trả lời ("ý e là sao", "e nói sai rồi") → bám đúng câu trả lời đó, giữ mạch đang nói.
   //   (trước đây: "Cái nào nè? 👀" và mất luôn ngữ cảnh sức khoẻ / bệnh đang nói.) Trải bài Tarot có lời giải riêng ở trên.
   const substantive = last.content.length >= 120 && !last.tarot && !last.tarotRef;

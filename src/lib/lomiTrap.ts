@@ -66,6 +66,11 @@ export function trapReply(q: string): Trap | null {
     const cl = faqById("claim");
     return { text: `**Ưu đãi** (voucher) là khuyến mãi các quán, doanh nghiệp trên iLomi đăng cho khách — giảm giá, tặng món… 🎁${cl ? `\n\nCách nhận:\n${cl.a.vi}` : ""}\n\nXem các ưu đãi đang có ở **Ưu đãi (/uu-dai)**.`, faqId: "claim" };
   }
+  // 01/11 (vòng 10): "vậy gọi điện được không", "gọi cho quán sao" (câu ngắn) — hỏi cách gọi, không phải tư vấn kinh doanh
+  if (w <= 8 && VN(/\b(gọi điện|gọi thoại|gọi video|gọi cho quán|gọi cho chủ quán|gọi quán|gọi được)\b/).test(n) && VN(/\b(được không|được ko|được k|sao|thế nào|ở đâu|bằng gì|có được)\b/).test(n) && !VN(/\b(115|cấp cứu|cứu thương|bác sĩ|bệnh viện)\b/).test(n)) {
+    const cf = faqById("call");
+    return { text: `Được nha 📞 Có hai cách:\n• Gọi **trong app**: ${cf ? cf.a.vi : "trong khung chat 1-1 bấm 📞 / 🎥 (người kia cần đang online)"}\n• Gọi **số điện thoại** của quán: mở trang quán, nếu quán có ghi số thì bấm vào số để gọi luôn`, faqId: "call" };
+  }
   // Mã OTP / SMS xác minh — app không dùng
   if (VN(/\b(otp|mã xác nhận|mã xác thực|mã xác minh|sms xác (minh|nhận))\b/).test(n))
     return {

@@ -1154,6 +1154,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   // câu nối không nhắc lại tên: "còn nhộng thì sao", "vậy ăn gì được", "triệu chứng?"
   const asp = aspectOf(text);
   if (prev?.id && words <= 9) {
+    // 01/11 (vòng 10): "tìm quán cháo", "quán nào bán phở" — lệnh TÌM QUÁN, không phải hỏi món đó ăn được không với bệnh đang nói
+    if (VN(/^ ?(tìm|kiếm|tìm giúp|tìm giùm|tìm dùm|chỉ (mình|tôi|tui|em)? ?(quán|chỗ))\b|\b(quán|tiệm|nhà hàng) (nào|gần|ở đâu)\b|\btìm quán\b/).test(` ${normalizeVi(text)} `)) return null;
     // 01/11: câu nêu một chỗ đau / viêm KHÁC ("đau đầu nên ăn gì" → "đau bụng nên ăn gì") là chuyện mới, không phải câu nối của thẻ cũ
     if (otherComplaint(text, LOOKUP_ROWS.find((r) => r.id === prev.id)?.names ?? [])) return null;
     // (góc nhìn triệu chứng: chỉ câu nối hỏi cách chăm sóc / khi nào khám / thuốc — "vậy làm sao?", "có cần đi khám không")
@@ -1166,6 +1168,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !VN(/\b(kiêng|ăn gì|uống gì|nên ăn|tránh ăn)\b/).test(n)) return { id: prev.id, aspect: "food", food: fp };
     const fm = n.match(VN(/^(?:vậy |thế |còn |nhưng |rồi )*((?:\S+ ){0,2}?\S+?) (?:thì sao|sao|có được không|được không|có sao không|được k|được ko)$/));
     // 01/11: "trẻ con bị thì sao", "người già thì sao", "bà bầu thì sao" — hỏi về NGƯỜI BỆNH khác, không phải hỏi một món ăn
+    // ("giờ sao", "vậy sao", "rồi sao" — chữ thời gian / chữ đệm, không phải tên món → hỏi phải làm gì / khi nào đi khám)
+    if (fm && !asp && /^(gio|bay gio|vay|the|roi|gio thi|luc nay|hien gio)$/.test(fm[1])) return { id: prev.id, aspect: "doctor", food: null };
     if (fm && !asp && /^(?:tre|tre con|tre em|tre nho|be|em be|con|nguoi gia|nguoi lon|nguoi lon tuoi|ba bau|me bau|nguoi cao tuoi|ong|ba|cu)( bi| mac| ma bi)?$/.test(fm[1])) return { id: prev.id, aspect: "overview", food: null };
     if (fm && !asp) {
       const w = fm[1].split(" ").filter((x) => !FILL.has(x)).join(" ");
@@ -1194,4 +1198,9 @@ export function trimRepeatedNotes(text: string, earlier: string[]): string {
   let out = text;
   for (const n of REPEAT_NOTES) if (earlier.some((e) => n.key.test(e))) for (const d of n.drop) out = out.replace(d, "");
   return out;
+}
+
+/** 01/11: thẻ dành cho TRẺ EM của một thẻ người lớn ("sot" → "sot-o-tre-em"), nếu có. */
+export function childCardOf(id: string): string | undefined {
+  return CHILD_OF.get(id);
 }

@@ -43,7 +43,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, typoCandidates } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
@@ -1228,7 +1228,8 @@ export function AiChat({
       const asp = fa === "school" ? "spread" : fa;
       const mr = renderMed(mt, asp);
       const school = fa === "school" ? "\n\n🏫 Chuyện nghỉ học / đi học lại: tuỳ bệnh còn lây bao lâu — hỏi bác sĩ khám cho bé hoặc nhà trường / trạm y tế về số ngày cần nghỉ, cho bé đi học lại khi bác sĩ nói đã hết lây." : "";
-      return { role: "assistant", content: mr.text + school, local: true, quick: mr.quick, med: { id: mt.id, aspect: asp }, health: hCtx ?? {} };
+      // (01/11: hỏi chuyện đi học → câu trả lời về đi học đứng ĐẦU, không bị coi là lặp lại câu "có lây không" vừa nói)
+      return { role: "assistant", content: school ? `${school.trim()}\n\n${mr.text}` : mr.text, local: true, quick: mr.quick, med: { id: mt.id, aspect: asp }, health: hCtx ?? {} };
     }
     // (3e) "làm mỗi ngày được chứ?", "ngày mấy lần?" — nguồn thường không nói tần suất → nói thật.
     if (w <= 9 && VN(/\b(mỗi ngày|hằng ngày|hàng ngày|ngày mấy lần|mấy lần một ngày|mấy lần 1 ngày|thường xuyên) (được|có sao|có được|không|chứ|hả|ko)|\b(ngày mấy lần|mấy lần một ngày)\b/).test(nr))
@@ -2767,7 +2768,10 @@ export function AiChat({
         const sxPrev = !lastA?.med && lastA?.sx?.length === 1 && !(prevUserText && hCtx?.label && normalizeVi(prevUserText).includes(normalizeVi(hCtx.label))) ? lastA.sx[0] : null;
         //   (chỉ câu nối hỏi CÁCH CHĂM SÓC / KHI NÀO ĐI KHÁM — hỏi thuốc, hỏi món vẫn để lớp thuốc / kiêng cữ trả lời như trước)
         const sxPrevId = sxPrev && ["care", "doctor", "emergency"].includes(medAspectOf(q) ?? "") ? (symptomViewId(sxPrev) ?? findMedId(symptomLabel(sxPrev) ?? "") ?? findMedId(`bị ${symptomLabel(sxPrev) ?? ""}`)) : null;
-        const mk = parseMedAsk(q, lastA?.med ?? (sxPrevId ? { id: sxPrevId } : undefined) ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
+        const mk0 = parseMedAsk(q, lastA?.med ?? (sxPrevId ? { id: sxPrevId } : undefined) ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
+        // 01/11 (vòng 10): mấy lượt gần đây đang kể về một ĐỨA TRẺ ("con tôi 5 tuổi", "bé nhà tôi…") → thẻ người lớn có thẻ riêng cho trẻ thì dùng thẻ trẻ
+        const kidRecent = [...msgs.filter((m) => m.role === "user").slice(-4).map((m) => m.raw ?? m.content), q].some((t) => VR(/(^|[^\p{L}])(con (tôi|tui|mình|em|anh|chị)|bé|cháu (tôi|nhà)|em bé|trẻ)(?![\p{L}])/u).test(t.normalize("NFC").toLowerCase()) && ![...t.matchAll(/(\d+)\s*tuổi/gu)].some((m) => Number(m[1]) > 12));
+        const mk = mk0 && kidRecent && childCardOf(mk0.id) ? { ...mk0, id: childCardOf(mk0.id)! } : mk0;
         //   Tự hỏi "có phải a bị trầm cảm không" là câu hỏi CHẨN ĐOÁN về chính mình → mạch tâm sự / sức khoẻ trả lời "Lomi không chẩn đoán".
         const mkSkip =
           !!mk && (selfDxAsk(q) ||

@@ -37,6 +37,19 @@ export function repairTurn(q: string, prevQ: string | undefined): Repair | null 
   //   ("tôi bị sốt" → "thế còn bé thì sao" = "bé bị sốt"; "ung thư phổi có phải do hút thuốc không" → "vậy còn thuốc lá điện tử")
   const ell = low.match(/^(?:(?:vậy|thế|rồi|à|ủa|nhưng)\s+)?còn\s+(.{2,40}?)(?:\s+(?:thì sao|thì thế nào|thì như nào|thì ra sao|thì sao nhỉ|thì sao ạ|sao|thì|nữa|nhỉ|ạ|ha|hả))*$/u);
   if (ell && !HAS_MARK.test(low)) return swapInto(ell[1].replace(/^(?:cái|con|người|vụ)\s+(?=\S+\s+\S)/u, "").trim(), prevQ, true);
+  // 01/11 (vòng 10): HỎI NGUYÊN NHÂN NGẮN sau khi kể bệnh — "tôi bị đau đầu" → "do thiếu ngủ hả" = "đau đầu có phải do thiếu ngủ không"
+  const why = low.match(/^(?:có phải |là |chắc |chắc là |hay là )?(?:do|tại|vì|bởi) (.{2,30}?)(?:\s+(?:hả|không|ko|à|ha|nhỉ|đúng không|phải không|chứ gì))*$/u);
+  if (why && !HAS_MARK.test(low)) {
+    const tid = findMedTopicId(prevQ);
+    const tn = tid ? nameAsTyped(prevQ, tid) : null;
+    if (tn) return { q: `${tn.replace(/^(?:bị|mắc)\s+/u, "")} có phải do ${why[1]} không` };
+  }
+  // CHẤT vừa hỏi ("vitamin C có tác dụng gì") rồi hỏi tiếp không nêu tên ("uống nhiều có sao không", "có trong trái gì") → mang tên chất theo
+  if (!HAS_MARK.test(low) && low.split(" ").length <= 8 && !nutrientOf(low) && !findMedTopicId(low)) {
+    const nOld = nutrientOf(prevQ);
+    if (nOld && /(có sao|có hại|có tốt|có trong|có nhiều|ở đâu|bao nhiêu|lúc nào|khi nào|uống nhiều|thiếu|thừa|tác dụng|để làm gì)/u.test(low))
+      return { q: `${nOld.name.split(" (")[0]} ${low}` };
+  }
   // ĐẠI TỪ "nó / cái đó" thay cho chủ đề câu trước ("ưu đãi là gì" → "nhận nó ở đâu" = "nhận ưu đãi ở đâu")
   if (!HAS_MARK.test(low) && low.split(" ").length <= 8 && /(?:^|\s)(nó|cái đó|cái này|cái ấy)(?=\s|$)/u.test(low)) {
     const pp = prevQ.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim();

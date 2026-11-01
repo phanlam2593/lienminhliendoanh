@@ -799,4 +799,27 @@ describe("30/10 — trả lời qua khung chat", () => {
     // ngưỡng sốt
     expect((await last(["sốt bao nhiêu độ là cao"])).stuck).toBeUndefined();
   }, T);
+  it("01/11 — hiểu câu vòng 10: hội thoại dài đổi chủ đề, câu hỏi tiếp ngắn giữ đúng ngữ cảnh", async () => {
+    // trẻ sốt không hạ → "giờ sao" là hỏi phải làm gì, theo thẻ TRẺ EM (không phải món "giờ", không phải thẻ người lớn)
+    const kid = await chat(["con tôi 5 tuổi", "bị sốt 39 độ", "uống hạ sốt rồi", "vẫn chưa hạ", "giờ sao"]);
+    expect(kid[4].content).toMatch(/Sốt ở trẻ em/);
+    expect(kid[4].content).not.toMatch(/Về \*\*giờ\*\*/);
+    // đang nói đau dạ dày mà "tìm quán cháo" là lệnh tìm quán; hỏi "cháo ăn được không" mới là hỏi món
+    const sto = await chat(["tôi bị đau dạ dày", "tìm quán cháo", "mấy giờ mở cửa"]);
+    expect(sto[1].places?.length).toBeGreaterThan(0);
+    expect(sto[2].content).toMatch(/giờ mở cửa/);
+    expect((await chat(["tôi bị đau dạ dày", "cháo ăn được không"]))[1].places).toBeUndefined();
+    // câu hỏi tiếp ngắn trong mạch app
+    expect((await chat(["ưu đãi là gì", "làm sao nhận", "hết hạn chưa"]))[2].content).toMatch(/2 giờ/);
+    expect((await chat(["đặt xe ở đâu", "giá sao", "trả bằng gì"]))[2].content).toMatch(/tiền mặt/);
+    expect((await chat(["chủ quán không trả lời tin nhắn", "vậy gọi điện được không"]))[1].content).toMatch(/📞/);
+    // câu hỏi tiếp ngắn trong mạch sức khoẻ
+    expect((await chat(["tôi bị đau đầu", "do thiếu ngủ hả"]))[1].content).toMatch(/thiếu ngủ\*\* có gây \*\*đau đầu/);
+    expect((await chat(["thủy đậu có lây không", "con tôi bị thì có được đi học không"]))[1].content).toMatch(/đi học/);
+    expect((await chat(["vitamin C có tác dụng gì", "uống nhiều có sao không"]))[1].content).not.toMatch(/không có dữ liệu riêng về thuốc đó/);
+    // tarot: "vậy tôi nên làm gì" sau trải bài → tóm lại trải bài + quyết định ở người dùng
+    const tr = await chat(["rút bài tình yêu", "vậy tôi nên làm gì"]);
+    expect(tr[1].content).toMatch(/quyết định vẫn là ở bạn/);
+    expect(tr[1].stuck).toBeUndefined();
+  }, T);
 });

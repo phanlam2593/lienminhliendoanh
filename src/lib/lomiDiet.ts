@@ -523,6 +523,9 @@ export type DietResult = { text: string; diet: string; /** món được hỏi (
  */
 export function dietReply(text: string, prevDiet?: string, inDiet = false): DietResult | null {
   const n = ` ${normStrict(text, HEALTH)} `;
+  // 01/11 (hiểu câu vòng 10): "tìm quán cháo" khi đang nói đau dạ dày — lệnh TÌM QUÁN, không phải hỏi cháo ăn được không
+  //   (so trên chữ người dùng gõ — bộ che chữ sức khoẻ có thể đổi "tìm" vì bỏ dấu trùng "tim")
+  if (/(?:^|\s)(tìm (quán|chỗ|tiệm|giúp|giùm|dùm)|kiếm quán|(quán|tiệm) nào)(?=\s|$)/u.test(text.normalize("NFC").toLowerCase())) return null;
   let d = DIETS.find((x) => x.re.test(n));
   const condPhrase = d ? (n.match(d.re)?.[0] ?? "") : "";
   const fromPrev = !d && !!prevDiet;

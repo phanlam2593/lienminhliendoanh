@@ -116,7 +116,7 @@ export type FollowAspect = "course" | "spread" | "diet" | "doctor" | "care" | "s
 export function followAspect(q: string): FollowAspect | null {
   const n = N(q);
   if (words(q) > 10) return null;
-  if (VN(/\b(nghỉ học|đi học (được|lại|chưa)|đi nhà trẻ|đi mẫu giáo|đi làm (được|lại) (chưa|không|ko|k)|cách ly|ở nhà mấy ngày|nghỉ mấy ngày)\b/).test(n)) return "school";
+  if (VN(/\b(nghỉ học|được đi học|cho đi học|đi học được không|đi học có được không|đi học (được|lại|chưa)|đi nhà trẻ|đi mẫu giáo|đi làm (được|lại) (chưa|không|ko|k)|cách ly|ở nhà mấy ngày|nghỉ mấy ngày)\b/).test(n)) return "school";
   if (VN(/\b(ăn chung|uống chung ly|dùng chung|ở chung|ngủ chung|hôn|lây qua|lây cho|có lây|hết lây|còn lây|lây bao lâu|lây mấy ngày)\b/).test(n)) return "spread";
   if (VN(/\b(bao lâu|mấy ngày|mấy tuần|lâu không) (mới |thì |là )?(khỏi|hết|lành|đỡ|bớt)|bao lâu (mới |thì )?khỏi|khi nào (mới |thì )?(khỏi|hết|đỡ)\b/).test(n)) return "course";
   if (!VN(/\b(hôm nay|tối nay|trưa nay|sáng nay|chiều nay|bây giờ|giờ này|lát nữa|bữa nay|ăn gì ngon|quán|đi ăn)\b/).test(n) && VN(/\b(ăn gì (tốt|được|cho|đây)|ăn gì|ăn uống (sao|thế nào|ra sao|như nào|như thế nào|gì)|nên ăn|kiêng gì|ăn tối lúc nào|ăn (tối|khuya) (lúc|mấy giờ|được không))\b/).test(n)) return "diet";
@@ -176,6 +176,10 @@ export function appFollow(q: string, prevFaqId: string | undefined, recentFaqIds
   if (words(q) > 14) return null;
   const ctx = new Set([prevFaqId, ...recentFaqIds].filter(Boolean) as string[]);
   const inCtx = (...ids: string[]) => ids.some((x) => ctx.has(x));
+  // 01/11 (hiểu câu vòng 10): câu hỏi tiếp NGẮN trong mạch một câu hỏi app — "hết hạn chưa", "hết lượt thì sao", "trả bằng gì"
+  if (inCtx("claim", "offerlist", "claimexp", "bizoffer") && VN(/\b(hết hạn|còn hạn|hạn dùng|dùng được bao lâu|bao lâu thì hết|mấy giờ hết)\b/).test(n)) return { faqId: "claimexp" };
+  if (inCtx("quetwhat", "quetlimit", "quetfilter") && VN(/\b(hết lượt|hết quẹt|quẹt thêm|thêm lượt|không quẹt được nữa)\b/).test(n)) return { faqId: "quetlimit" };
+  if (inCtx("ridebook", "ridprice", "ridecancel", "ridetrack", "ridepay") && VN(/\b(trả bằng|thanh toán|trả tiền|chuyển khoản|tiền mặt|quẹt thẻ|momo|ví điện tử)\b/).test(n)) return { faqId: "ridepay" };
   // Xác minh email sau đăng ký — app không gửi mail xác minh; tài khoản chờ Ban quản trị duyệt.
   if (VN(/\b(xác minh|xác thực|kích hoạt|không thấy mail|không thấy email|chưa nhận được mail|chưa nhận được email|email (vẫn )?chưa xác minh|mail xác nhận)\b/).test(n))
     return { faqId: "approve", text: "iLomi **không gửi email xác minh** đâu nha 📭 Đăng ký xong, tài khoản sẽ **chờ Ban quản trị duyệt tay** — trong lúc chờ bạn vẫn xem được Hồ sơ, Tin nhắn và Thông báo; duyệt xong app sẽ báo cho bạn 🔔\n\nChờ lâu mà chưa thấy duyệt thì liên hệ Ban quản trị: Hồ sơ → ⋯ → Trợ giúp & Liên hệ." };
@@ -246,7 +250,7 @@ export function searchRefine(q: string): string | null {
   if (words(q) > 12) return null;
   const parts: string[] = [];
   if (VN(/\b(rẻ|bình dân|giá mềm|giá sinh viên|ngân sách|\d+ ?k|\d+ nghìn|\d+ ngàn|không đắt|đỡ đắt)\b/).test(n)) parts.push("giá");
-  if (VN(/\b(mở khuya|khuya|ăn đêm|sau \d+ giờ|mở tới \d+|mở đến \d+|mở buổi tối|mở tối|mở sớm|buổi sáng|mấy giờ đóng|giờ mở cửa|còn mở|mở tới mấy giờ|mở đến mấy giờ|đóng cửa mấy giờ|mấy giờ mở|mở cửa mấy giờ)\b/).test(n)) parts.push("giờ mở cửa");
+  if (VN(/\b(mở khuya|khuya|ăn đêm|sau \d+ giờ|mở tới \d+|mở đến \d+|mở buổi tối|mở tối|mở sớm|buổi sáng|mấy giờ đóng|giờ mở cửa|mở cửa mấy giờ|mở mấy giờ|đóng cửa mấy giờ|mấy giờ mở|còn mở|mở tới mấy giờ|mở đến mấy giờ|đóng cửa mấy giờ|mấy giờ mở|mở cửa mấy giờ)\b/).test(n)) parts.push("giờ mở cửa");
   if (VN(/\b(cho|nhóm|đi) (\d+|hai|ba|bốn|năm|sáu|bảy|tám|chín|mười)( người| đứa| bạn)?\b|\b\d+ người\b/).test(n)) parts.push("số người");
   if (VN(/\b(đậu ô tô|đỗ ô tô|đậu xe|đỗ xe|chỗ đậu|bãi xe|giữ xe|đậu oto|đỗ oto)\b/).test(n)) parts.push("chỗ đậu xe");
   if (VN(/\b(phòng riêng|phòng vip)\b/).test(n)) parts.push("không gian");
