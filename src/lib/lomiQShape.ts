@@ -104,6 +104,10 @@ export function diffPair(q: string): [string, string] | null {
   const b = low.match(/^(.{2,30}?)\s+khác\s+(?:gì\s+)?(?:với\s+)?(.{2,30}?)(?:\s+(?:thế nào|như thế nào|ra sao|chỗ nào|ở đâu|ở chỗ nào|không|ko|hả|vậy))+$/u)
     ?? low.match(/^(.{2,30}?)\s+khác gì\s+(?:với\s+)?(.{2,30}?)$/u);
   if (b && !/^(?:nhau|gì)$/u.test(b[2])) return [b[1], b[2]];
+  // "cúm có triệu chứng gì khác cảm lạnh", "dấu hiệu sốt xuất huyết khác sốt thường thế nào"
+  const d = low0(q).match(/^(.{2,30}?)\s+(?:có\s+)?(?:triệu chứng|dấu hiệu|biểu hiện)\s+(?:gì\s+)?khác\s+(?:gì\s+)?(?:với\s+|so với\s+)?(.{2,30}?)(?:\s+(?:thế nào|ra sao|không|chỗ nào|ở đâu|vậy))*$/u)
+    ?? low0(q).match(/^(?:triệu chứng|dấu hiệu|biểu hiện)\s+(?:của\s+)?(.{2,30}?)\s+(?:khác|với|và)\s+(?:gì\s+)?(?:với\s+)?(.{2,30}?)(?:\s+(?:khác nhau|thế nào|ra sao|chỗ nào|ở đâu|vậy))*$/u);
+  if (d) return [d[1], d[2]];
   const c = low0(q).match(/^phân biệt(?: giúp| giùm)?\s+(.{2,30}?)\s+(?:với|và)\s+(.{2,30}?)$/u);
   if (c) return [c[1], c[2]];
   return null;

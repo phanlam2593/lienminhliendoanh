@@ -447,7 +447,8 @@ const RULES: Rule[] = [
   },
   // Lomi là ai / bao nhiêu tuổi / người hay máy…
   {
-    re: VN(/\b(bao nhiêu tuổi|mấy tuổi|là người hay máy|là robot|là ai tạo|ai tạo ra|trai hay gái|lomi ở đâu|lomi sống ở đâu|tên thật)\b/),
+    // (01/11: "bao nhiêu tuổi THÌ nên khám mắt", "mấy tuổi được tạo tài khoản" — hỏi mốc tuổi cho một việc, không phải hỏi tuổi Lomi)
+    re: VN(/\b((?<!(?:từ|đến|tới|khi|lúc) )(bao nhiêu tuổi|mấy tuổi)(?! (thì|mới|là|được|nên|có thể|phải|đi|bắt đầu|cho|bị))|là người hay máy|là robot|là ai tạo|ai tạo ra|trai hay gái|lomi ở đâu|lomi sống ở đâu|tên thật)\b/),
     reply: () => ({
       text: pick([
         "Lomi là trợ lý robot nhỏ của iLomi 🤖🌱 Không có tuổi, không phân trai gái, chỉ có một nhiệm vụ: giúp bạn dùng app vui và tiện hơn!",
@@ -1011,6 +1012,8 @@ export function foodDecisionReply(text: string): ChatReply | null {
   const n = ` ${normalizeVi(text)} `;
   const fd = n.match(VN(/\b(?:có nên|nên) (?:mua|ăn|uống|nấu|gọi|đặt|order|làm) ((?:\S+ ){0,3}?\S+?)(?: ăn| uống)? (?:không|ko|k|hông|hong)(?: (?:nhỉ|ta|hả|ha|à|a|nè|ta))*\s*$/));
   if (!fd || isAppish(text)) return null;
+  // (01/11: "có nên MUA iPhone không" — món đồ, không phải đồ ăn: với "mua / đặt / order / gọi" thì phải là thứ ăn uống được)
+  if (VN(/\b(?:có nên|nên) (?:mua|đặt|order|gọi) /).test(n) && !VN(/\b(ăn|uống|đồ ăn|thức ăn|món|cơm|bánh|trái|quả|rau|thịt|cá|tôm|cua|gà|vịt|bò|heo|nước|trà|cà phê|sữa|bia|rượu|phở|bún|lẩu|pizza|gỏi|chè|kem|xôi|cháo|mì|hủ tiếu|bánh mì|trà sữa|đồ uống)\b/).test(n)) return null;
   const w = fd[1].split(" ").filter((x) => !VN(/^(một|ít|chút|xíu|nhiều|cái|món|bữa|đi)$/).test(x));
   const orig = text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter(Boolean);
   const at = orig.findIndex((_, i) => w.length > 0 && w.every((y, j) => normalizeVi(orig[i + j] ?? "") === y));

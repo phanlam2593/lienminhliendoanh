@@ -226,10 +226,12 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["spread", VN(/\b(hết lây|lây bao lâu|lây trong bao lâu|lây mấy ngày|còn lây|có lây|lây không|lây qua|lây nhiễm|lây truyền|truyền nhiễm|lây sang|bị lây|lây cho|lây từ|lây khi|lây được|lây thế nào|lây như thế nào|lây ra sao|lây bằng|lây đường)\b/)],
   ["emergency", VN(/\b(cấp cứu|gọi 115|nguy hiểm đến tính mạng|dấu hiệu nguy hiểm|báo động)\b/)],
   ["meds", VN(/\b(thuốc gì|thuốc nào|uống thuốc|dùng thuốc|thuốc trị|thuốc chữa|có thuốc|cần thuốc|thuốc đặc trị)\b/)],
-  ["diet", VN(/\b(kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],
+  // (01/11: "trái cây nào tốt cho người tiểu đường", "thịt nào tốt cho người gout", "món gì hợp với người đau dạ dày" — hỏi ĂN UỐNG)
+  ["diet", VN(/\b((món|loại|thịt|cá|rau|trái cây|hoa quả|quả|đồ ăn|thức ăn|đồ uống|nước) (nào|gì) (tốt|hợp|nên ăn|nên uống|ăn được)|tốt cho người|hợp với người|kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],
   ["signs", VN(/\b(triệu chứng|dấu hiệu|biểu hiện|nhận biết|nhận ra|có những dấu hiệu|có hiện tượng gì|bị sao|bị như thế nào|làm sao biết|sao biết|làm sao để biết|biết mình bị|biết có bị)\b/)],
-  // (01/11: "sao mà ho hoài vậy", "sao lại hay đau đầu" — hỏi vì sao; "làm sao mà…" là hỏi cách nên không tính)
-  ["causes", VN(/\b((?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|do đâu|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
+  // (01/11: "sao mà ho hoài vậy", "sao lại hay đau đầu" — hỏi vì sao; "làm sao mà…" là hỏi cách nên không tính;
+  //   "ai dễ bị gout", "người nào dễ bị loãng xương" — hỏi ĐỐI TƯỢNG NGUY CƠ → phần nguyên nhân / yếu tố nguy cơ)
+  ["causes", VN(/\b((ai|người nào|những ai|đối tượng nào|ai thì) (dễ|hay|thường|có nguy cơ|dễ bị|hay bị)|(?<!làm )sao mà|(?<!làm )sao lại|sao cứ|nguyên nhân|tại sao|vì sao|do đâu|yếu tố nguy cơ|dẫn đến|gây ra|tại sao bị|vì sao bị|do cái gì|bị do gì|di truyền)\b/)],
   ["doctor", VN(/\b(đi khám|khám ở đâu|khám khoa nào|khoa nào|cần khám|nên khám|khi nào.*(khám|gặp bác sĩ|đi viện)|gặp bác sĩ|bác sĩ nào|đi viện)\b/)],
   ["course", VN(/\b(có khỏi|khỏi được|khỏi hẳn|chưa khỏi|chữa khỏi|bao lâu khỏi|có lây|lây không|lây qua|có nguy hiểm|có hết|hết không|hết ko|hết được|có sao không|có sao ko|nguy hiểm không|tiến triển|kéo dài bao lâu|kéo dài không|có kéo dài|bị bao lâu|tái phát|biến chứng|có chết|có nặng không|nặng không|có tự khỏi|tự khỏi|khó chữa|có chữa được|chữa được không|vĩnh viễn)\b/)],
   ["care", VN(/\b(cách chữa|chữa sao|chữa thế nào|chữa như thế nào|chữa bệnh|chữa trị|điều trị|cách trị|làm sao|làm gì|phải làm gì|nên làm gì|chăm sóc|phòng ngừa|phòng tránh|giảm đau|cho đỡ|cải thiện|tự xử lý|tự xử lí|xử lý|xử lí|xử trí|sơ cứu|tập luyện|vận động|sinh hoạt|bôi gì|bôi thuốc|bôi kem|thoa gì|mẹo|bí quyết|lưu ý|chú ý|để ý gì|cần biết gì|nên biết gì)\b/)],
@@ -344,7 +346,7 @@ export function aspectOf(text: string): MedAspect | null {
 
 // ── Câu hỏi KIẾN THỨC hay đang KỂ chuyện của mình? ──
 const SELF_STATE = VN(/^(?:\s)?(?:a|anh|e|em|c|chị|mình|tôi|tui|tớ)\s+(?:đang |cũng |hay |bị |mới |vừa |lại |vẫn |thường )*(?:bị|mắc|có|hay|thấy|cảm thấy|đang|bị)\b/);
-const QWORD0 = VN(/\b(gì|là gì|thế nào|như nào|ra sao|sao không|được không|có không|có được|nên|nguyên nhân|triệu chứng|dấu hiệu|kiêng|làm sao|bao lâu|có nguy hiểm|có lây|có khỏi|có phải|tại sao|vì sao|khi nào|ở đâu|nghĩa|giải thích|tìm hiểu|hỏi về|nói về)\b/);
+const QWORD0 = VN(/\b(bao nhiêu|mấy độ|là cao|gì|là gì|thế nào|như nào|ra sao|sao không|được không|có không|có được|nên|nguyên nhân|triệu chứng|dấu hiệu|kiêng|làm sao|bao lâu|có nguy hiểm|có lây|có khỏi|có phải|tại sao|vì sao|khi nào|ở đâu|nghĩa|giải thích|tìm hiểu|hỏi về|nói về)\b/);
 // "không / chưa" giữa câu là phủ định ("ngủ không được, đầu cứ nghĩ…"); chỉ đứng CUỐI câu mới là từ hỏi ("ăn nhộng đc k").
 const QWORD = { test: (x: string) => QWORD0.test(x) || VN(/(?:^| )(?:không|ko|k|hông|hong|chưa) *$/).test(x) };
 /** Có phải câu HỎI kiến thức (không phải câu kể "a bị gout" hay tâm sự "a hay lo âu")? Có ? / từ hỏi / khía cạnh rõ / chỉ nêu tên chủ đề. */

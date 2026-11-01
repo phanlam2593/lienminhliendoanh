@@ -773,4 +773,30 @@ describe("30/10 — trả lời qua khung chat", () => {
     // gõ sót dấu đ sau "đau"
     expect((await last(["đau dầu quá"])).content).toMatch(/đau đầu/i);
   }, T);
+  it("01/11 — hiểu câu vòng 9: ai / loại nào / có nên, 'khi bị' là điều kiện, mốc tuổi ≠ tuổi Lomi", async () => {
+    // "ai dễ bị X" → đối tượng nguy cơ (phần nguyên nhân / yếu tố nguy cơ), không phải menu chung
+    expect((await last(["ai dễ bị gout"])).content).toMatch(/yếu tố nguy cơ của \*\*Gout/);
+    // "X nào tốt cho người Y" → ăn uống theo bệnh
+    expect((await last(["thịt nào tốt cho người gout"])).content).toMatch(/Ăn uống với \*\*Gout/);
+    expect((await last(["loại trái cây nào tốt cho người tiểu đường"])).stuck).toBeUndefined();
+    // "uống gì cho dễ ngủ" → ăn uống cho giấc ngủ, không phải gợi ý đồ uống
+    expect((await last(["uống gì cho dễ ngủ"])).content).toMatch(/Mất ngủ/);
+    // "khi bị Y" là điều kiện, không phải "X gây Y"; đối chứng câu nhân quả thật vẫn đọc như cũ
+    expect((await last(["có nên cho bé uống sữa khi bị tiêu chảy không"])).content).not.toMatch(/có gây \*\*tiêu chảy/);
+    expect((await last(["có nên tập thể dục khi bị cảm không"])).content).not.toMatch(/có gây \*\*cảm/);
+    expect((await last(["cà phê có gây mất ngủ không"])).content).toMatch(/có gây \*\*mất ngủ/);
+    // so sánh triệu chứng hai bệnh; hai kiểu vận động
+    const cs = await last(["cúm có triệu chứng gì khác cảm lạnh"]);
+    expect(cs.content).toMatch(/\*\*cúm\*\*:/i);
+    expect(cs.content).toMatch(/\*\*cảm lạnh\*\*:/i);
+    expect((await last(["đi bộ hay chạy bộ tốt hơn"])).content).toMatch(/không dám nói cái nào hơn/);
+    // "có nên mua iPhone" không phải đồ ăn; mốc tuổi cho một việc ≠ tuổi của Lomi ≠ tuổi dùng app
+    expect((await last(["có nên mua iPhone không"])).content).not.toMatch(/Thèm|làm một bữa/);
+    const eye = await last(["bao nhiêu tuổi thì nên đi khám mắt"]);
+    expect(eye.content).not.toMatch(/Không có tuổi|18 tuổi/);
+    expect((await last(["lomi bao nhiêu tuổi"])).content).toMatch(/Không có tuổi/);
+    expect((await last(["mấy tuổi được dùng app"])).content).toMatch(/18 tuổi/);
+    // ngưỡng sốt
+    expect((await last(["sốt bao nhiêu độ là cao"])).stuck).toBeUndefined();
+  }, T);
 });

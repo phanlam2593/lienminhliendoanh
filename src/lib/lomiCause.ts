@@ -102,6 +102,9 @@ export function parseCause(q: string): CauseParse | null {
   const xShow = m[1].replace(/^(?:(?:à|ờ|mà|vậy|thế|còn|cho hỏi|hỏi chút)\s+)*/u, "").replace(/^(?:(?:em|anh|chị|tui|tôi|mình|con|bé|người ta)\s+)?(?:(?:hay|thường|đang|có)\s+)?/u, "").trim();
   let y = m[3].replace(/\s+(?:hơn|nhiều hơn|quá)$/u, "").replace(/^(?:tui|tôi|mình|em|anh|chị|con|bé|người ta|cho)\s+/u, "").trim();
   if (!x || !y || x.length > 30 || y.length > 30) return null;
+  // 01/11: "có nên cho bé uống sữa KHI BỊ tiêu chảy", "có nên tập thể dục khi bị cảm" — "khi bị Y" là ĐIỀU KIỆN, không phải X gây ra Y
+  if (/^bị$/u.test(m[2].trim()) && /(?:^|\s)(khi|lúc|trong khi|đang)$/u.test(m[1].trim())) return null;
+  if (/^(?:có nên|nên|có được|được)\s/u.test(m[1].trim()) && /bị/u.test(m[2])) return null;
   // "ăn gì có giúp…" / "làm sao…" / "cái gì gây…" — câu hỏi mở, để lớp khác
   if (W(/\b(gì|nào|sao|ai|đâu)\b/u).test(x)) return null;
   const verb = /giúp|tốt cho/u.test(m[2]) ? "help" : "cause";
@@ -253,7 +256,7 @@ export function compareReply(q: string): string | null {
   const cmpWord = /(tốt hơn|hợp hơn|phù hợp|tiện hơn|hiệu quả|khác nhau|khác gì|ít .* hơn|hơn|nên chọn|chọn cái nào)/u.test(m[2]);
   const shouldQ = /^(?:em |anh |tui |mình |tôi )?nên\b/u.test(low);
   if (!cmpWord && !shouldQ) return null;
-  const rightHead = m[2].split(/\s+(?=tốt|hợp|phù|tiện|hiệu|khác|ít|nhiều|nên|cho|khi|buổi|vào|lúc|thì|trước|sau)/u)[0];
+  const rightHead = m[2].split(/\s+(?=tốt|hợp|phù|tiện|hiệu|khác|ít|nhiều|nên|cho|khi|buổi|vào|lúc|thì|trước|sau|có)/u)[0];
   const a = sideOf(m[1]);
   const b = sideOf(rightHead);
   if (!a || !b || a.label === b.label) return null;
@@ -268,7 +271,9 @@ export function compareReply(q: string): string | null {
   }
   const healthy = /(khớp|đường huyết|tim|huyết áp|giảm cân|ngủ|người lớn|trẻ|sức khoẻ|sức khỏe|dạ dày|xương|miễn dịch|đề kháng|cảm|đau|mệt|tiêu hoá|tiêu hóa)/u.test(m[2]);
   if (!known(a) && !known(b)) {
-    if (!healthy || !SUPP_RE.test(N(`${m[1]} ${rightHead}`)) && !/^(?:đi bộ|đạp xe|bơi|chạy bộ|tập|yoga|sữa)/u.test(a.label)) return null;
+    // (01/11: "đi bộ hay chạy bộ tốt hơn" — hai kiểu vận động, hỏi cái nào tốt hơn mà không nói tốt cho gì → vẫn trả lời, không xếp hạng)
+    const moves = /^(?:đi bộ|đạp xe|bơi|chạy bộ|tập|yoga|gym)/u;
+    if (!(cmpWord && moves.test(a.label) && moves.test(b.label)) && (!healthy || !SUPP_RE.test(N(`${m[1]} ${rightHead}`)) && !/^(?:đi bộ|đạp xe|bơi|chạy bộ|tập|yoga|sữa)/u.test(a.label))) return null;
     return `Lomi **chưa có nguồn đã kiểm chứng** so sánh trực tiếp **${a.label}** với **${b.label}**, nên không dám nói cái nào hơn 🙏\n• Mỗi người hợp một kiểu — tuỳ tuổi, bệnh nền, thuốc đang dùng và mục tiêu của bạn\n• Chất bổ sung / thảo dược: hỏi dược sĩ hoặc bác sĩ trước khi dùng, nhất là khi đang uống thuốc, mang thai\n• Vận động: chọn kiểu bạn làm đều được và không làm đau thêm; đang đau khớp, tim mạch thì hỏi bác sĩ nên tập mức nào\n\nMuốn Lomi nói riêng về từng cái thì hỏi kiểu “${a.label} có tác dụng gì” nha.`;
   }
   if (!known(a) || !known(b)) {
@@ -405,7 +410,9 @@ export async function diffReply(q: string): Promise<{ text: string; medId: strin
   if (!ia || !ib || ia === ib) return null;
   const [ta, tb] = await Promise.all([loadMedTopic(ia), loadMedTopic(ib)]);
   if (!ta || !tb) return null;
-  const one = (t: MedTopic) => `**${displayName(t)}**:\n${(t.about.length ? t.about : t.signs).slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`;
+  // (hỏi khác nhau về TRIỆU CHỨNG → đặt cạnh nhau phần dấu hiệu; hỏi chung → phần "là gì")
+  const bySigns = /(triệu chứng|dấu hiệu|biểu hiện)/u.test(q.toLowerCase());
+  const one = (t: MedTopic) => `**${displayName(t)}**:\n${(bySigns && t.signs.length ? t.signs : t.about.length ? t.about : t.signs).slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`;
   return {
     text: `Lomi đặt cạnh nhau điều nguồn nói về từng cái nha 👇\n\n${one(ta)}\n\n${one(tb)}\n\nMuốn xem kỹ hơn thì hỏi riêng kiểu “${displayName(tb).toLowerCase()} có triệu chứng gì”. Đang không biết mình bị cái nào thì đi khám để bác sĩ phân biệt nha — Lomi không chẩn đoán được.`,
     medId: ib,

@@ -1617,7 +1617,8 @@ export function AiChat({
         rewroteRef.current = true;
       }
       // 01/11: "trước khi đi ngủ nên ăn / uống gì" — hỏi ăn uống cho GIẤC NGỦ (phần ăn uống của thẻ mất ngủ), không phải nhờ gợi ý món
-      if (!rp && VN(/\b(trước khi (đi )?ngủ|trước giờ ngủ|tối trước khi ngủ|sát giờ ngủ)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(ăn gì|uống gì|nên ăn|nên uống|ăn được không|uống được không)\b/).test(` ${normalizeVi(q)} `) && !findMedId(q)) {
+      //   ("uống gì cho dễ ngủ", "ăn gì để ngủ ngon" — mục đích là giấc ngủ, không phải nhờ gợi ý món / đồ uống)
+      if (!rp && (VN(/\b(trước khi (đi )?ngủ|trước giờ ngủ|tối trước khi ngủ|sát giờ ngủ)\b/).test(` ${normalizeVi(q)} `) || VN(/\b(ăn|uống) gì (cho|để|giúp) (dễ ngủ|ngủ ngon|ngủ sâu|ngủ được|ngon giấc)\b/).test(` ${normalizeVi(q)} `)) && VN(/\b(ăn gì|uống gì|nên ăn|nên uống|ăn được không|uống được không)\b/).test(` ${normalizeVi(q)} `) && !findMedId(q)) {
         emoRef.current = "Lomi trả lời theo phần ăn uống cho giấc ngủ (nguồn về mất ngủ) nha 🌙";
         q = "mất ngủ nên ăn uống gì";
         raw = q;

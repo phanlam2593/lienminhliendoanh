@@ -532,6 +532,8 @@ const FAQ_NEED: Record<string, RegExp> = {
   claimexp: /\b(ma|uu dai|voucher|khuyen mai|code|giam gia|da nhan|nhan lai)\b/,
   // 31/10 (danh sách ChatGPT lần 6): "mỗi tuần ăn cá mấy lần", "nhập sai mật khẩu mấy lần" từng ra số lượt quẹt
   quetlimit: /\b(quet|luot|swipe)\b/,
+  // 01/11: "bao nhiêu tuổi thì nên đi khám mắt" là hỏi mốc tuổi cho việc khác, không phải mấy tuổi được dùng app
+  age: /\b(app|ung dung|ilomi|lomi|tai khoan|acc|dang ky|dung|xai|choi|tham gia|tao)\b/,
   // 01/11: "quán này có ưu đãi không" là hỏi quán có ưu đãi, không phải phàn nàn quán không giữ đúng ưu đãi
   offerbad: /\b(khong giu|khong cho|tu choi|khong nhan|khong ap dung|lua|lua dao|sai|khong dung|bao cao|khieu nai|bung|nuot|khong chiu|gian lan|khong chap nhan|bi tu choi)\b/,
 };
