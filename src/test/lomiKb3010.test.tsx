@@ -569,4 +569,36 @@ describe("30/10 — trả lời qua khung chat", () => {
     // Mốc "tới 3-4h sáng" là giờ kết thúc, không phải "sáng nay"
     expect((await last(["A chơi game tới 3-4h sáng"])).heart).toBe("addict");
   }, T);
+  it("01/11 — hiểu câu vòng 2: phủ định, mệnh đề điều kiện, đính chính / đổi ý", async () => {
+    // Phủ định: "không phải A mà là B" → theo B; đối chứng "A mà không phải B" → theo A
+    expect((await last(["không phải đau đầu mà là đau bụng thì làm sao"])).content).toMatch(/đau bụng/);
+    expect((await last(["đau đầu mà không phải đau bụng thì làm sao"])).content).toMatch(/Đau đầu/);
+    const self = await last(["không phải con tôi mà là tôi bị sốt"]);
+    expect(self.content).not.toMatch(/bé|trẻ nhỏ/i);
+    expect((await last(["không phải tôi mà là con tôi bị sốt"])).content).toMatch(/bé|trẻ/i);
+    // Phủ định tu từ / giả định → câu hỏi thẳng
+    expect((await last(["chẳng lẽ uống cà phê không gây mất ngủ"])).content).toMatch(/cà phê\*\* có gây \*\*mất ngủ/);
+    expect((await last(["cà phê đâu có gây mất ngủ đâu đúng không"])).content).toMatch(/cà phê\*\* có gây \*\*mất ngủ/);
+    expect((await last(["cúm không lây đúng không"])).content).toMatch(/chuyện lây của \*\*Cúm/);
+    // "làm gì" là hỏi cách chăm sóc, không phải hỏi ăn uống; "ngủ không ngon giấc" không phải câu đổi giao diện
+    expect((await last(["không ngủ được thì làm gì"])).content).not.toMatch(/Ăn uống với|nên ăn uống thế nào/);
+    expect((await last(["ngủ được nhưng không ngon giấc"])).faqId).toBeUndefined();
+    // Mệnh đề phụ: "sau khi ăn có nên đi ngủ liền không" là câu hỏi, không phải chào đi ngủ; "nếu bé…" không thành chủ ngữ
+    expect((await last(["sau khi ăn có nên đi ngủ liền không"])).content).not.toMatch(/Ngủ ngon nha|Chúc bạn ngủ/);
+    expect((await last(["nếu bé sốt 39 độ thì có cần đi viện không"])).content).not.toMatch(/^Nếu bé/);
+    expect((await last(["tuần trước con tôi bị cúm, giờ vẫn còn ho, có sao không"])).content).not.toMatch(/“tuần trước”/);
+    expect((await last(["nếu đăng ưu đãi thì có mất phí không"])).content).toMatch(/miễn phí/);
+    // Đính chính: bỏ ý cũ, ghép ý mới vào đúng chỗ, giữ loại câu hỏi
+    expect((await chat(["gout kiêng gì", "không, ý mình là tiểu đường"]))[1].content).toMatch(/Ăn uống với \*\*Tiểu đường|Tiểu đường nên ăn uống/);
+    expect((await chat(["cúm là gì", "à không, ý là cảm lạnh"]))[1].med?.id).toBe("cam-lanh");
+    expect((await chat(["cà phê có gây mất ngủ không", "ý là trà xanh"]))[1].content).toMatch(/trà xanh\*\* có gây \*\*mất ngủ/);
+    expect((await chat(["vitamin C có tác dụng gì", "à mình hỏi vitamin D"]))[1].content).not.toMatch(/Vitamin C/);
+    const who = await chat(["con tôi bị sốt", "à nhầm, là tôi bị sốt"]);
+    expect(who[1].content).not.toMatch(/Tôi bao nhiêu tuổi|là tôi nha/);
+    const dd = await chat(["đau đầu nên ăn gì", "nhầm, ý tui là đau bụng"]);
+    expect(dd[1].content).not.toMatch(/Đau đầu/);
+    const tb = await chat(["rút bài tarot tình yêu", "thôi không bói nữa, cho hỏi đau lưng"]);
+    expect(tb[1].content).toMatch(/đau lưng/);
+    expect(tb[1].tarot).toBeFalsy();
+  }, T);
 });

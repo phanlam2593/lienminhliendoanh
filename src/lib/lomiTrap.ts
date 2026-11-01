@@ -34,6 +34,11 @@ export function trapReply(q: string): Trap | null {
   // Mật ong cho trẻ — dưới 1 tuổi không dùng (nguồn: thẻ thuốc / mẹo dân gian đã ghi)
   if (/\bmat ong\b/.test(n) && /\b(tre|be|con|em be|so sinh)\b/.test(n) && /\b(may tuoi|bao nhieu tuoi|may thang|bao nhieu thang|duoc an|an duoc|uong duoc|duoc chua)\b/.test(n))
     return { text: "🍯 **Không cho trẻ dưới 1 tuổi ăn / uống mật ong** nha — kể cả một chút để pha nước hay chấm núm vú. Từ **đủ 1 tuổi** trở lên thì dùng được.\nLý do: mật ong có thể chứa bào tử vi khuẩn gây **ngộ độc botulinum ở trẻ nhỏ**, rất nguy hiểm với bé dưới 1 tuổi." };
+  // 01/11: hỏi PHÍ ("nếu đăng ưu đãi thì có mất phí không") — loại câu hỏi là giá / phí, không phải "làm sao đăng"
+  if (VN(/\b(mất phí|tốn phí|tính phí|thu phí|có phí|trả phí|mất tiền|tốn tiền|miễn phí không|free không|có free)\b/).test(n) && APP_OBJ.test(n)) {
+    const fr = faqById("free"), mb = faqById("membership");
+    if (fr) return { text: `${fr.a.vi}${mb && VN(/\b(ưu đãi|doanh nghiệp|quán)\b/).test(n) ? `\n\nRiêng chuyện ưu đãi: ${mb.a.vi.charAt(0).toLowerCase()}${mb.a.vi.slice(1)}` : ""}`, faqId: "free" };
+  }
   // Mã OTP / SMS xác minh — app không dùng
   if (VN(/\b(otp|mã xác nhận|mã xác thực|mã xác minh|sms xác (minh|nhận))\b/).test(n))
     return {

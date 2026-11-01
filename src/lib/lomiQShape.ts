@@ -118,3 +118,46 @@ export function petPatient(q: string): string | null {
   return m ? m[1] : null;
 }
 
+
+/**
+ * CHUẨN HOÁ PHỦ ĐỊNH (01/11): đưa các kiểu phủ định / phủ định kép / phủ định tu từ về câu hỏi thẳng, để lớp sau đọc đúng ý chính.
+ *   "không phải đau đầu mà là đau bụng thì làm sao" → "đau bụng thì làm sao"     (bỏ vế bị bác, giữ vế được nhận)
+ *   "không phải con tôi mà là tôi bị sốt"          → "tôi bị sốt"
+ *   "ko hẳn là đau đầu, chỉ hơi nặng đầu thôi"     → "hơi nặng đầu thôi"
+ *   "chẳng lẽ uống cà phê không gây mất ngủ"       → "uống cà phê có gây mất ngủ không"
+ *   "cà phê đâu có gây mất ngủ đâu đúng không"     → "cà phê có gây mất ngủ không"
+ *   "cúm không lây đúng không"                      → "cúm có lây không"   (phủ định đặt giả định rồi hỏi lại)
+ * Không đổi được → null.
+ */
+export function normNeg(q: string): string | null {
+  const low = q.normalize("NFC").replace(/[?!.…]+$/u, "").replace(/\s+/g, " ").trim();
+  const L = low.toLowerCase();
+  // không phải (là) A, mà (là) B …  (A ngắn; B là phần còn lại)
+  const a = L.match(/^(?:ko|không|k|hông|chẳng|chả|đâu)\s+phải\s+(?:là\s+)?(.{2,25}?)\s*,?\s+mà\s+(?:là\s+)?(?!do\s)(.{2,60})$/u);
+  if (a && !/^(hỏi|chữa|trị)\b/u.test(a[1])) return low.slice(low.length - a[2].length);
+  // không hẳn (là) A, (chỉ / mà) B
+  const b = L.match(/^(?:ko|không|k|chưa)\s+hẳn\s+(?:là\s+)?(.{2,25}?)\s*[,;]\s*(?:mà\s+|chỉ\s+(?:là\s+)?)?(.{2,60})$/u);
+  if (b) return low.slice(low.length - b[2].length);
+  // chẳng lẽ / lẽ nào / bộ X không Y (sao / hả)
+  const c = L.match(/^(?:chẳng lẽ|lẽ nào|chả lẽ|bộ|không lẽ)\s+(.{2,30}?)\s+(?:lại\s+)?(?:không|ko|chẳng|chả)\s+(.{2,30}?)(?:\s+(?:sao|hả|à|ư|thật|thiệt|à|ha|vậy|thật sao))*$/u);
+  if (c) return `${c[1]} có ${c[2]} không`;
+  // X đâu có Y đâu (đúng không / phải không / nhỉ)
+  const d = L.match(/^(.{2,30}?)\s+(?:đâu có|có đâu|đâu)\s+(.{2,30}?)\s+đâu(?:\s+(?:đúng không|phải không|nhỉ|ha|hả|chứ|ta))*$/u);
+  if (d) return `${d[1]} có ${d[2]} không`;
+  // X không Y đúng không / phải không  (Y là vị ngữ có thể hỏi có / không)
+  const e = L.match(/^(.{2,30}?)\s+(?:không|ko|chẳng|chả)\s+((?:có\s+)?(?:lây|nguy hiểm|gây|hại|ảnh hưởng|sao|cần|nặng|đau|tái phát|di truyền|chữa được|khỏi|độc)(?:\s+.{0,25})?)\s+(?:đúng không|phải không|đúng hông|phải hông|đúng ko|phải ko|nhỉ|chứ gì)$/u);
+  if (e && !/^(?:tôi|tui|mình|em|anh|chị|con|bé)\b/u.test(e[1])) return `${e[1]} có ${e[2].replace(/^có\s+/u, "")} không`;
+  return null;
+}
+
+/**
+ * Câu nêu một CHỖ ĐAU / VIÊM ("đau bụng", "viêm họng", "nhức răng") không thuộc tên của chủ đề đang nói → là chuyện mới,
+ * không phải câu hỏi nối của thẻ cũ ("đau đầu nên ăn gì" → "đau bụng nên ăn gì"). names = các tên của thẻ đang nói.
+ */
+export function otherComplaint(text: string, names: string[]): string | null {
+  const m = ` ${normalizeVi(text)} `.match(/ (dau|viem|nhuc|sung) (bung duoi|lung duoi|bao tu|da day|bung|dau|lung|hong|rang|nguc|khop|mat|tai|co|vai|chan|tay|gan|than|phoi|xoang|goi) /);
+  if (!m) return null;
+  const k = `${m[1]} ${m[2]}`;
+  const nn = names.map((x) => normalizeVi(x));
+  return nn.some((x) => x.includes(k) || k.includes(x)) ? null : k;
+}

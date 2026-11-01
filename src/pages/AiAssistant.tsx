@@ -133,7 +133,8 @@ import {
 import { TarotCards } from "@/components/LomiTarot";
 import { VR, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch } from "@/lib/lomiReplyGate";
-import { petPatient } from "@/lib/lomiQShape";
+import { normNeg, otherComplaint, petPatient } from "@/lib/lomiQShape";
+import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
@@ -1200,6 +1201,8 @@ export function AiChat({
       return { role: "assistant", content: `${lbl === "khó thở" ? "🚨 Khó thở thì đừng chờ nha — gọi **115** hoặc đi cấp cứu ngay.\n\n" : ""}Dạ, Lomi ghi nhận ${kid ? "bé" : "bạn"} có thêm **${lbl}**${tname ? ` (cùng với ${hLabelVi ?? tname})` : ""} 📝\n• Đi khám **sớm** nếu: ${flags}\n• Trong lúc theo dõi: cho uống đủ nước, nghỉ ngơi, ghi lại nhiệt độ và triệu chứng theo giờ để kể bác sĩ\n\nBạn muốn hỏi tiếp phần nào — ăn uống, bao lâu thì đỡ hay khi nào cần đi khám?`, local: true, health: { ...(hCtx ?? {}), label: hCtx?.label ?? tname }, ...(medNow ? { med: medNow } : mt && sxMed ? { med: { id: sxMed } } : {}) };
     }
     if (!mt || findMedId(raw)) return null;
+    // 01/11: câu nêu một chỗ đau / viêm KHÁC thẻ đang nói ("đau bụng nên ăn gì" sau "đau đầu nên ăn gì") là chuyện mới (lib/lomiQShape)
+    if (otherComplaint(raw, mt.names)) return null;
     // (3c) Vừa trả lời một MÓN ("Với **Viêm dạ dày**: **đồ uống có caffeine** nên **hạn chế**") mà hỏi "uống mỗi ngày" / "bỏ hẳn không".
     const fm = prevA.map((m) => m.content.match(/Với \*\*(.+?)\*\*: \*\*(.+?)\*\* (?:là món )?(?:nên )?\*\*(.+?)\*\*/u)).find(Boolean) ?? null;
     if (fm && w <= 9 && VN(/\b(mỗi ngày|hằng ngày|hàng ngày|ngày nào cũng|bỏ hẳn|kiêng hẳn|ngưng hẳn|cai hẳn|bỏ luôn|uống ít|ăn ít|giảm bớt|bao nhiêu thì được)\b/).test(nr)) {
@@ -1537,7 +1540,25 @@ export function AiChat({
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
       }
-      const rr = pu ? await resolveRef(q, pu.raw ?? pu.content, la) : null;
+      // 01/11: ĐÍNH CHÍNH / ĐỔI Ý ("à không, ý là cảm lạnh", "nhầm, là tôi bị sốt", "ý là trà xanh") → ghép phần mới vào đúng chỗ
+      //   của câu hỏi trước, giữ loại câu hỏi; "thôi không bói nữa, cho hỏi đau lưng" → hỏi chuyện mới (lib/lomiRepair)
+      const rp = repairTurn(q, pu?.raw ?? pu?.content);
+      if (rp) {
+        q = rp.q;
+        raw = rp.q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+        if (rp.lead) emoRef.current = rp.lead;
+      }
+      // 01/11: phủ định kép / tu từ ("không phải A mà là B", "chẳng lẽ X không Y", "X đâu có Y đâu") → câu hỏi thẳng (lib/lomiQShape)
+      const ng = normNeg(q);
+      if (ng && ng !== q) {
+        q = ng;
+        raw = ng;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
+      const rr = pu && !rp ? await resolveRef(q, pu.raw ?? pu.content, la) : null;
       if (rr) {
         q = rr;
         raw = rr;

@@ -643,7 +643,10 @@ export function patientOf(f: Frame, addr?: Addr | null): string | null {
   if (!((f.subject === "third" || f.subject === "pet") && f.subjectText && f.conf >= 0.4)) return null;
   // "bác sĩ nói viêm họng", "bác sĩ bảo bị viêm xoang" — bác sĩ là người NÓI, không phải người bệnh.
   if (VR(/^(bác sĩ|bs|y tá|điều dưỡng|dược sĩ)( |$)/).test(f.subjectText)) return null;
-  return cap(f.subjectText.split(YOU_MARK).join(youOf(addr)));
+  // (01/11: "nếu bé sốt 39 độ thì…", "lỡ con…" — từ nối điều kiện đứng đầu không thuộc chủ ngữ)
+  const st = f.subjectText.replace(VR(/^(nếu|lỡ|nhỡ|giả sử|hễ|khi|lúc|trường hợp)\s+/), "");
+  if (!st) return null;
+  return cap(st.split(YOU_MARK).join(youOf(addr)));
 }
 
 // ── Nối vào router ───────────────────────────────────────────────────────────

@@ -103,6 +103,9 @@ export function detailReply(d: Detail, topic: string, fever: boolean): string {
   const ageBit = a ? ` ${a}` : "";
   if (elder)
     return `Dạ, ${whoLow || "người bệnh"}${ageBit} 📝 Người lớn tuổi bị ${T} nên được đi khám **sớm hơn** người trẻ, nhất là khi đang có bệnh nền (tim mạch, huyết áp, tiểu đường…) hoặc đang uống nhiều thuốc — vì dễ nặng hơn và thuốc dễ tương tác với nhau.\n\nHiện ${whoLow || "người bệnh"} đang có triệu chứng gì, và bạn muốn biết phần nào — chăm sóc, ăn uống hay khi nào cần đi khám?`;
+  // (01/11: "à nhầm, là tôi bị sốt" — người bệnh là CHÍNH người đang nói → gọi là "bạn", không lặp "tôi" như tên người khác)
+  if (d.who && d.sick && !a && d.who.kind === "self")
+    return `Dạ, vậy người bị ${T} là **bạn** nha 📝 Bạn bao nhiêu tuổi, đang có triệu chứng gì? Kể thêm để Lomi nói sát hơn nha.`;
   if (d.who && d.sick && !a)
     return `À, người bị ${T} là ${whoLow} nha 📝 ${whoLow.replace(/^\p{L}/u, (c) => c.toUpperCase())} bao nhiêu tuổi, đang có triệu chứng gì? Bạn kể thêm để Lomi nói sát hơn nha.`;
   return `Dạ, Lomi ghi nhận${whoLow && d.who?.kind !== "self" ? ` ${whoLow}` : ""}${ageBit} 📝 Bạn muốn biết thêm phần nào về ${T} — cách chăm sóc, ăn uống, bao lâu thì đỡ hay khi nào cần đi khám?`;

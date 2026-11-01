@@ -7,7 +7,7 @@
 //   • Thẻ nạp theo nhu cầu (lazy) — chỉ mục tên (medkb/index.json, nhỏ) nằm sẵn trong gói, thẻ đầy đủ tải khi cần.
 //   • Quy tắc nguồn do test (src/test/lomiMed.test.ts) ép: tên miền tin cậy · mọi `src` hợp lệ · không có liều thuốc · ý ≤ 220 ký tự.
 // ─────────────────────────────────────────────────────────────────────────────
-import { RECOVERY_Q } from "@/lib/lomiQShape";
+import { RECOVERY_Q, otherComplaint } from "@/lib/lomiQShape";
 import { diabetesFruitBlock, factLine, factOf, fruitIn, isSugarTopic } from "@/lib/lomiFoodFacts";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUGS, DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
@@ -421,7 +421,7 @@ export type MedReply = { text: string; quick: string[]; aspect: MedAspect | "ove
 // ── Hỏi đúng MỘT Ý trong thẻ ("thuốc lá điện tử có giúp bỏ không", "polyp có thành ung thư không") ──
 // Không rõ khía cạnh → tìm trong thẻ các ý chứa đúng cụm từ người dùng hỏi (cặp chữ liền nhau, bỏ tên chủ đề và chữ đệm).
 const FOCUS_STOP = new Set(
-  "a ah ai anh ba bao be bi biet bo ca cac cai can cho chi chu co con cua cung da dang de den di do duoc dc em gi giup gio ha hay hoi hon hong k khi khong kia ko la lai lam luc ma minh moi mot nay nao ne neu nen nha nhe nhi nhieu nhu nhung no nua o oi phai qua ra rang rat roi sao se sau tai the thi tho thuong toi tren tu tui va van vay ve voi vo xem ban benh chung loai nguoi an uong xong kieng bau nghe noi cu muon book you help ton khoang ghi gay".split(" "), // (31/10: "Ý “nghe nói” / “cứ lạnh” / “tốn khoảng” / “ghi gây” bạn hỏi…")
+  "a ah ai anh ba bao be bi biet bo ca cac cai can cho chi chu co con cua cung da dang de den di do duoc dc em gi giup gio ha hay hoi hon hong k khi khong kia ko la lai lam luc ma minh moi mot nay nao ne neu nen nha nhe nhi nhieu nhu nhung no nua o oi phai qua ra rang rat roi sao se sau tai the thi tho thuong toi tren tu tui va van vay ve voi vo xem ban benh chung loai nguoi an uong xong kieng bau nghe noi cu muon book you help ton khoang ghi gay tuan truoc hom ngay dem chieu".split(" "), // (31/10: "Ý “nghe nói” / “cứ lạnh” / “tốn khoảng” / “ghi gây” bạn hỏi…")
   // (31/10) "ăn", "uống", "xong", "kiêng", "bầu" chỉ là động từ / người — trước đây ra "Ý “xong ăn” bạn hỏi…", "Ý “bầu ăn”…"
 );
 function focusTerms(t: MedTopic, text: string): { terms: string[]; shown: string[] } {
@@ -1140,6 +1140,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
   // câu nối không nhắc lại tên: "còn nhộng thì sao", "vậy ăn gì được", "triệu chứng?"
   const asp = aspectOf(text);
   if (prev?.id && words <= 9) {
+    // 01/11: câu nêu một chỗ đau / viêm KHÁC ("đau đầu nên ăn gì" → "đau bụng nên ăn gì") là chuyện mới, không phải câu nối của thẻ cũ
+    if (otherComplaint(text, LOOKUP_ROWS.find((r) => r.id === prev.id)?.names ?? [])) return null;
     // (góc nhìn triệu chứng: chỉ câu nối hỏi cách chăm sóc / khi nào khám / thuốc — "vậy làm sao?", "có cần đi khám không")
     if (isSymptomView(prev.id)) return asp && VIEW_ASPECTS.has(asp) ? { id: prev.id, aspect: asp, food: null } : null;
     const n = normalizeVi(text);

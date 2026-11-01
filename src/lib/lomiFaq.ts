@@ -520,6 +520,7 @@ function scoreAll(text0: string): { f: Faq; score: number; cover: number }[] {
 }
 
 const DECIDE = VN(/\b(có nên|nên hay không|có cần phải|có nên hay không)\b/);
+const HEALTH_TALK = /(?<![\p{L}])(ngủ|giấc|đau|sốt|ho|bệnh|thuốc|chóng mặt|buồn nôn|tiêu chảy|táo bón|khó thở)(?![\p{L}])/u;
 const APP_NOUN = VN(/\b(app|ứng dụng|membership|hội viên|thành viên|ưu đãi|mã ưu đãi|doanh nghiệp|quẹt|tài khoản|mật khẩu|lomi|liên minh|hồ sơ|bài đăng|nhóm chat|thông báo|đưa đón|tài xế|cộng đồng|xác minh|đăng ký|đăng nhập)\b/);
 // Câu nhờ VIẾT / SÁNG TẠO → không trả lời bằng FAQ.
 const CREATIVE =
@@ -538,6 +539,10 @@ export function matchFaq(text: string): Faq | null {
   // 20/10 (audit): câu hỏi CÓ NÊN làm một việc đời thường ("vậy a có nên nhắn tin trước không") là xin ý kiến, không phải hỏi
   //   CÁCH dùng app — trước đây khớp từ khoá "nhắn tin" và đáp hướng dẫn mở khung chat. Chỉ nhận khi câu nhắc rõ một thứ của app.
   if (DECIDE.test(` ${n} `) && !APP_NOUN.test(` ${normalizeVi(maskStrict(text, APP))} `)) return null;
+  // 01/11: câu nói về GIẤC NGỦ / triệu chứng mà không nhắc thứ gì của app ("ngủ được nhưng không ngon giấc") — chữ rời rạc
+  //   ("ngon", "ngủ") từng khớp từ khoá "ngôn ngữ" của câu đổi giao diện. Không phải câu hỏi app → để lớp sức khoẻ trả lời.
+  //   (so trên chữ CÓ DẤU — bỏ dấu thì "đâu" trùng "đau", "hồ" trùng "ho"; câu gõ không dấu thì bỏ qua bước này)
+  if (/[^\x00-\x7F]/.test(text) && HEALTH_TALK.test(` ${text.normalize("NFC").toLowerCase()} `) && !APP_NOUN.test(` ${normalizeVi(maskStrict(text, APP))} `)) return null;
   const [best, second] = scoreAll(text);
   if (!best) return null;
   // 30/10 (rà câu hiểu lầm): câu hỏi giá / thời hạn của thứ NGOÀI app ("giá vàng hôm nay bao nhiêu", "cam kết bảo hành bao lâu")

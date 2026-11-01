@@ -482,7 +482,8 @@ const RULES: Rule[] = [
   // Ngủ ngon
   {
     // (31/10: "magie có giúp ngủ ngon không", "uống gì cho dễ ngủ ngon" là câu hỏi, không phải chúc ngủ ngon)
-    re: VN(/\b(?<!(giúp|cho|để|dễ|khó|mới|được|làm|gây|bị|hay|thuốc) )(ngủ ngon|đi ngủ|chúc ngủ ngon|good night|gn|ngủ thôi|buồn ngủ)(?! (không|ko|hơn|được|hả|chưa|vậy|thì))\b/),
+    // (01/11: "sau khi ăn có nên đi ngủ liền không", "trước khi đi ngủ uống gì" — hỏi về giấc ngủ, không phải chào đi ngủ)
+    re: VN(/\b(?<!(giúp|cho|để|dễ|khó|mới|được|làm|gây|bị|hay|thuốc|nên|khi|trước|sau|lúc) )(ngủ ngon|đi ngủ|chúc ngủ ngon|good night|gn|ngủ thôi|buồn ngủ)(?! (không|ko|hơn|được|hả|chưa|vậy|thì|liền không|liền được|ngay không|ngay được))\b/),
     reply: () => ({
       text: pick([
         "Ngủ ngon nha 🌙 Mơ đẹp, mai gặp lại Lomi nè!",
