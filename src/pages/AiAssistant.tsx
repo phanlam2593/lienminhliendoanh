@@ -1,5 +1,5 @@
 import { list3Reply } from "@/lib/lomiList3";
-import { causeReply, compareReply, dangerReply, diagnoseReply, doseReply, parseCause } from "@/lib/lomiCause";
+import { causeReply, compareReply, dangerReply, diagnoseReply, diffReply, doseReply, medPlaceReply, parseCause } from "@/lib/lomiCause";
 import { actionReply, trapReply } from "@/lib/lomiTrap";
 import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugStatement, followAspect, parseDetail } from "@/lib/lomiFollow";
 import { useEffect, useRef, useState } from "react";
@@ -133,6 +133,7 @@ import {
 import { TarotCards } from "@/components/LomiTarot";
 import { VR, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch } from "@/lib/lomiReplyGate";
+import { petPatient } from "@/lib/lomiQShape";
 import { urgentOf } from "@/lib/lomiUrgent";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
@@ -1627,6 +1628,12 @@ export function AiChat({
       // 31/10 (list 7): nhờ Lomi làm thay (đặt bàn, gọi điện, chuyển tiền, nhắn tin…) → nói thật + chỉ chỗ tự làm
       const ac = en ? null : actionReply(raw);
       if (ac) return localReply(q, { role: "assistant", content: ac.text, local: true, ...(ac.faqId ? { faqId: ac.faqId } : {}) });
+      // 01/11: NGƯỜI BỆNH là con vật ("con mèo nhà tui bị tiêu chảy") — không đưa nguyên nhân / mẹo / thuốc của người (lib/lomiQShape)
+      const pet = en ? null : petPatient(raw);
+      if (pet && !VN(/\b(thuốc của người|thuốc người|uống thuốc|cho uống)\b/).test(` ${normalizeVi(raw)} `)) {
+        rewroteRef.current = true;
+        return localReply(q, { role: "assistant", content: `Thương bé ${pet} ghê 🥺 Kiến thức sức khoẻ của Lomi là **cho người**, nên Lomi không nói nguyên nhân hay cách chữa cho ${pet} được — con vật bị bệnh khác người, nhiều thuốc người dùng bình thường lại độc với chó mèo.\n• Đừng tự cho bé uống thuốc của người\n• Đưa bé đi **bác sĩ thú y** để được khám\n• Bé lả đi, bỏ ăn uống, khó thở, co giật hay chảy máu → đưa đi thú y **ngay**`, local: true, about: { text: `${pet}`, kind: "pet" } });
+      }
       // xin liều / dùng thuốc của người khác; xin chẩn đoán vòng; "có nguy hiểm không"
       const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);
       if (ds) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: ds, local: true, health: {} }); }
@@ -1639,6 +1646,11 @@ export function AiChat({
         if (rf) return localReply(q, { role: "assistant", content: `Lomi hiểu là bạn đang hỏi chuyện app nha 😄\n\n${rf.a.vi}`, local: true, faqId: rf.id });
         return localReply(q, { role: "assistant", content: tp.text, local: true, ...(tp.faqId ? { faqId: tp.faqId } : {}), ...(tp.heart ? { heart: tp.heart, heartDepth: 1 } : {}) });
       }
+      // 01/11: hỏi "ở đâu" cho việc y tế → trả lời nơi chốn; "A với B khác nhau thế nào" giữa hai bệnh → đặt cạnh nhau
+      const mp = en ? null : medPlaceReply(raw);
+      if (mp) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: mp.text, local: true, health: {}, ...(mp.medId ? { med: { id: mp.medId } } : {}) }); }
+      const df = en ? null : await diffReply(raw);
+      if (df) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: df.text, local: true, health: {}, med: { id: df.medId } }); }
       const cmp = en ? null : compareReply(raw);
       if (cmp) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: cmp, local: true, health: {} }); }
       const cz0 = en ? null : await causeReply(raw);

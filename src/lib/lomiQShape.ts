@@ -1,0 +1,120 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// HÌNH DẠNG CÂU HỎI (01/11, Kir: "không bao giờ hỏi A trả lời B") — chạy trên máy, không gọi AI, không thêm kiến thức.
+//
+// Mấy lớp trả lời (lib/lomiCause, lib/lomiMed, lib/lomiTrap) khớp theo TỪ KHOÁ; file này chỉ đọc CẤU TRÚC câu để các lớp đó
+// biết: ai/cái gì là nguyên nhân (kể cả khi câu đảo "Y có phải do X không"), người dùng hỏi LOẠI gì (ở đâu / bao lâu / bao nhiêu /
+// khác nhau thế nào…), và chủ ngữ có phải là một đồ vật / tên quán chứ không phải người bệnh.
+// Mọi hàm ở đây là hàm thuần (chuỗi vào → kết quả), không đọc kho kiến thức.
+// ─────────────────────────────────────────────────────────────────────────────
+import { normalizeVi } from "@/lib/lomiFaq";
+
+/** \b của JS không hiểu chữ có dấu → ranh giới theo chữ cái Unicode. */
+const W = (re: RegExp): RegExp => new RegExp(re.source.replace(/\\b/g, "(?:(?<![\\p{L}\\p{N}])(?=[\\p{L}\\p{N}])|(?<=[\\p{L}\\p{N}])(?![\\p{L}\\p{N}]))"), re.flags.includes("u") ? re.flags : re.flags + "u");
+const N = (s: string) => ` ${normalizeVi(s)} `;
+const low0 = (s: string) => s.normalize("NFC").toLowerCase().replace(/[?!.…,]+/gu, " ").replace(/\s+/g, " ").trim();
+
+/** Đuôi câu hỏi có / không (gồm tiếng địa phương, viết tắt). */
+const QEND = "(?:\\s+(?:hay\\s+)?(?:không|ko|k|hông|hong|hem|hok|khum|hả|ha|à|chứ|ạ|vậy|nhỉ|nhể|ta|đúng không|phải không|đúng hông|phải hông|thật không|luôn))+";
+
+/**
+ * Câu nhân quả ĐẢO VỊ TRÍ → dạng xuôi "X có gây Y không" (X = nguyên nhân, Y = hậu quả).
+ *   "mất ngủ có phải do cà phê không"      → "cà phê có gây mất ngủ không"
+ *   "bị mất ngủ là vì uống cà phê hả"       → "uống cà phê có gây mất ngủ không"
+ *   "khó ngủ có phải tại trà xanh không"    → "trà xanh có gây khó ngủ không"
+ *   "cà phê có phải nguyên nhân gây mất ngủ không" → "cà phê có gây mất ngủ không"
+ * Không phải dạng đó → null.
+ */
+export function flipCause(q: string): string | null {
+  const low = low0(q);
+  if (low.split(" ").length > 16) return null;
+  // Y (có) phải (là) do / tại / vì / bởi X không
+  const a = low.match(new RegExp(`^(?:(?:cho (?:em|anh|chị|tui|mình) hỏi|vậy|thế|còn)\\s+)?(?:bị\\s+)?(.{2,30}?)\\s+(?:có phải|có phải là|phải|phải chăng|liệu có phải|có khi nào|có khi|chắc|là|có thể là|có thể)\\s+(?:là\\s+)?(?:do|tại|vì|bởi|bởi vì|tại vì|nguyên nhân từ)\\s+(.{2,30}?)(?:\\s+(?:mà ra|gây ra|nên))?${QEND}$`, "u"));
+  const y = (t: string) => t.replace(/^(?:(?:tôi|tui|mình|em|anh|chị|con|bé)\s+)?(?:(?:hay|thường|đang|cứ)\s+)?(?:bị|thấy)\s+/u, "");
+  if (a) return `${a[2]} có gây ${y(a[1])} không`;
+  // X có phải (là) nguyên nhân (gây / của / làm) Y không
+  const b = low.match(new RegExp(`^(.{2,30}?)\\s+(?:có phải|có phải là|là)\\s+(?:là\\s+)?nguyên nhân\\s+(?:gây(?: ra)?|của|làm|khiến)\\s+(.{2,30}?)${QEND}$`, "u"));
+  if (b) return `${b[1]} có gây ${y(b[2])} không`;
+  // vì sao / tại sao X lại / thì / hay Y ("vì sao uống cà phê lại mất ngủ") — hỏi cơ chế của một quan hệ nhân quả
+  const c = low.match(/^(?:vì sao|tại sao|sao|do đâu mà)\s+(.{2,30}?)\s+(?:lại|thì|hay|cứ|lại hay|lại bị|thì bị|hay bị)\s+(?:bị\s+)?(.{2,30}?)(?:\s+(?:vậy|thế|ta|nhỉ|ạ|à|hả))*$/u);
+  if (c) return `${c[1]} có gây ${y(c[2])} không`;
+  return null;
+}
+
+export type QType = "where" | "howlong" | "howmany" | "when" | "why" | "how" | "should" | "compare" | "what" | "yesno";
+/**
+ * Loại câu hỏi theo TỪ HỎI và vị trí của nó. Thứ tự ưu tiên: so sánh trước (vì "khác nhau ở đâu" không phải hỏi chỗ),
+ * rồi các từ hỏi có nội dung (ở đâu, bao lâu…), cuối cùng mới là có / không.
+ */
+export function qtypeOf(q: string): QType | null {
+  const n = N(low0(q));
+  if (/\b(khac nhau|khac gi|khac cho nao|khac o dau|giong nhau|giong va khac|phan biet)\b/.test(n)) return "compare";
+  if (/\b(o dau|cho nao|noi nao|o cho nao|o mo|dau vay|dau ta|tai dau|o noi nao)\b/.test(n) && !/\b(dau (dau|bung|lung|nguc|hong|rang|bao tu|da day|co|vai|khop|mat|tai|chan|tay|nua dau))\b/.test(n.replace(/\bo dau\b/g, ""))) return "where";
+  if (/\b(bao lau|may ngay|may tuan|may thang|may hom|bao nhieu ngay|bao nhieu lau|keo dai bao lau)\b/.test(n)) return "howlong";
+  if (/\b(bao nhieu|may (vien|ly|coc|lit|lan|bua|phan|gam|ml|tieng|gio))\b/.test(n)) return "howmany";
+  if (/\b(khi nao|luc nao|bao gio|may gio|gio nao)\b/.test(n)) return "when";
+  if (/\b(vi sao|tai sao|sao lai|do dau|nguyen nhan)\b/.test(n)) return "why";
+  if (/\b(lam sao|the nao|nhu the nao|nhu nao|ra sao|cach nao|bang cach nao|lam gi)\b/.test(n)) return "how";
+  if (/\b(co nen|nen hay khong|nen khong|co can)\b/.test(n)) return "should";
+  if (/\b(la gi|la benh gi|nghia la gi)\b/.test(n)) return "what";
+  if (/(?:^| )(?:khong|ko|k|hong|hem|khum|chua|ha|a|chu) *$/.test(n)) return "yesno";
+  return null;
+}
+
+/** Hỏi THỜI GIAN HỒI PHỤC ("bao lâu thì hết / lành / đỡ", "mấy ngày thì khỏi", "kéo dài bao lâu") — khác "bao lâu thì phải đi khám". */
+export const RECOVERY_Q = /\b(bao lau|may ngay|may tuan|may thang|may hom|bao nhieu ngay)( thi| moi| se| la)? (khoi|het|lanh|do|bot|giam|xep|khoi han|het han|lanh han|on)\b|\bkeo dai bao lau\b|\b(bi|benh)( \S+){0,3} bao lau\s*$/;
+
+/** Đồ vật / máy móc làm chủ ngữ ("điện thoại bị sốt pin", "máy nóng quá", "app bị bệnh gì") — không phải người bệnh. */
+const DEVICE = /^(?:(?:cai|con|chiec)\s+)?(dien thoai|dt|dthoai|may|may tinh|laptop|pin|sac|cuc sac|app|ung dung|wifi|mang|tivi|ti vi|tu lanh|may lanh|dieu hoa|xe|xe may|o to|loa|tai nghe|dong ho|ipad|iphone|android)\b/;
+export function deviceSubject(q: string): string | null {
+  const n = normalizeVi(low0(q).replace(/^(?:(?:tôi|tui|mình|em|anh|chị|con|bé)\s+)?(?:(?:thấy|bị|hỏi)\s+)?/u, "").replace(/^(?:cái|con|chiếc)\s+/u, ""));
+  const m = n.match(DEVICE);
+  if (!m) return null;
+  // "máy đo huyết áp", "máy xông" là dụng cụ y tế — câu hỏi vẫn là sức khoẻ
+  if (/^may (do|xong|thay|tro thinh|tao oxy|hut)\b/.test(n)) return null;
+  return m[1];
+}
+
+/**
+ * Tên quán viết HOA ngay sau "quán / tiệm" ("quán Đau Đầu ở đâu", "tiệm Mất Ngủ mở cửa không") — tên riêng, không phải bệnh.
+ * Chỉ nhận khi các chữ của tên đều viết hoa chữ cái đầu (trong câu gốc người dùng gõ).
+ */
+export function namedShop(raw: string): string | null {
+  const m = raw.normalize("NFC").match(/(?:^|[^\p{L}])(?:quán|tiệm|cửa hàng|nhà hàng)\s+((?:\p{Lu}[\p{Ll}\p{M}]*)(?:\s+\p{Lu}[\p{Ll}\p{M}]*){0,3})(?=$|[^\p{L}])/u);
+  return m ? m[1] : null;
+}
+
+/** Dịch vụ y tế hỏi "ở đâu" ("tiêm phòng cúm ở đâu", "khám thuỷ đậu chỗ nào", "xét nghiệm tiểu đường ở đâu"). */
+export function medPlaceAsk(q: string): string | null {
+  const low = low0(q);
+  if (qtypeOf(low) !== "where") return null;
+  const m = low.match(W(/\b(tiêm phòng|tiêm ngừa|chích ngừa|tiêm vắc ?xin|tiêm|chích|khám|xét nghiệm|tầm soát|chụp|siêu âm|nội soi|điều trị|chữa|mua thuốc|lấy thuốc|hỗ trợ|tư vấn|cai)\b/u));
+  return m ? m[1] : null;
+}
+
+/**
+ * "A với / và B khác nhau thế nào", "A khác B chỗ nào", "phân biệt A và B" → [A, B].
+ */
+export function diffPair(q: string): [string, string] | null {
+  const low = low0(q).replace(/^(?:cho (?:em|anh|chị|tui|mình) hỏi|phân biệt( giúp| giùm)?)\s+/u, "");
+  const a = low.match(/^(.{2,30}?)\s+(?:với|và|vs|so với)\s+(.{2,30}?)\s+(?:khác nhau|khác gì nhau|khác gì|khác)(?:\s+(?:thế nào|như thế nào|ra sao|chỗ nào|ở đâu|ở chỗ nào|gì|không|ko|hả|vậy|nhau))*$/u);
+  if (a) return [a[1], a[2]];
+  const b = low.match(/^(.{2,30}?)\s+khác\s+(?:gì\s+)?(?:với\s+)?(.{2,30}?)(?:\s+(?:thế nào|như thế nào|ra sao|chỗ nào|ở đâu|ở chỗ nào|không|ko|hả|vậy))+$/u)
+    ?? low.match(/^(.{2,30}?)\s+khác gì\s+(?:với\s+)?(.{2,30}?)$/u);
+  if (b && !/^(?:nhau|gì)$/u.test(b[2])) return [b[1], b[2]];
+  const c = low0(q).match(/^phân biệt(?: giúp| giùm)?\s+(.{2,30}?)\s+(?:với|và)\s+(.{2,30}?)$/u);
+  if (c) return [c[1], c[2]];
+  return null;
+}
+
+/**
+ * Con vật là NGƯỜI BỆNH ("con mèo nhà tui bị tiêu chảy", "chó bị sốt", "bé cún nôn hoài") — kiến thức sức khoẻ của Lomi là cho NGƯỜI,
+ * không được đưa nguyên nhân / mẹo / thuốc của người. Trả về tên con vật như người dùng gõ, hoặc null.
+ */
+const PET = "(?:con |bé |em |chú |cô )?(mèo|chó|cún|mèo con|chó con|cún con|thú cưng|vẹt|chim|thỏ|hamster|chuột hamster|rùa|cá cảnh)";
+const PET_SX = "(sốt|tiêu chảy|đi ngoài|nôn|ói|ho|hắt hơi|sổ mũi|chảy nước mũi|ngứa|rụng lông|nổi mẩn|ghẻ|táo bón|chảy máu|đau bụng|khó thở|thở gấp|co giật|run|sưng|viêm|nhiễm trùng|bị thương|đi tiểu ra máu|tiểu ra máu)";
+export function petPatient(q: string): string | null {
+  const low = low0(q);
+  const m = low.match(new RegExp(`^(?:(?:nhà|của)\\s+(?:tôi|tui|mình|em|anh|chị|con)\\s+(?:có\\s+)?)?${PET}(?:\\s+(?:nhà|của)\\s+(?:tôi|tui|mình|em|anh|chị|bạn|con|tớ|a|e|c))?\\s+(?:\\S+\\s+){0,3}?(?:đang\\s+|hay\\s+|cứ\\s+|bị\\s+|lại\\s+)*${PET_SX}(?![\\p{L}])`, "u"));
+  return m ? m[1] : null;
+}
+

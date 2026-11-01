@@ -7,6 +7,7 @@
 //   • Thẻ nạp theo nhu cầu (lazy) — chỉ mục tên (medkb/index.json, nhỏ) nằm sẵn trong gói, thẻ đầy đủ tải khi cần.
 //   • Quy tắc nguồn do test (src/test/lomiMed.test.ts) ép: tên miền tin cậy · mọi `src` hợp lệ · không có liều thuốc · ý ≤ 220 ký tự.
 // ─────────────────────────────────────────────────────────────────────────────
+import { RECOVERY_Q } from "@/lib/lomiQShape";
 import { diabetesFruitBlock, factLine, factOf, fruitIn, isSugarTopic } from "@/lib/lomiFoodFacts";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUGS, DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
@@ -327,6 +328,8 @@ export function aspectOf(text: string): MedAspect | null {
   const n = ` ${normalizeVi(text)} `.replace(VN(/ để làm (gì|chi) /g), " ");
   // "có chữa khỏi không", "bao lâu thì khỏi" là hỏi DIỄN TIẾN (có khỏi không), không phải hỏi cách chữa.
   if (VN(/\b(chữa khỏi|chưa khỏi|khỏi được|khỏi không|khỏi hẳn|có khỏi|bao lâu khỏi|bao lâu thì khỏi|khỏi chưa)\b/).test(n)) return "course";
+  // 01/11: "bao lâu thì hết / lành / đỡ", "mấy ngày thì khỏi" cũng là hỏi diễn tiến (lib/lomiQShape) — trước đây rơi vào đọc cả thẻ.
+  if (RECOVERY_Q.test(n)) return "course";
   if (CHARS_ACC_CHUA.test(text.normalize("NFC").toLowerCase())) return "care";
   for (const [a, re] of ASPECTS) if (re.test(n)) return a;
   // 19/10 (audit sức khoẻ): "tư vấn cho a đau bụng kinh", "khuyên mình cách…" là xin LỜI KHUYÊN chăm sóc — trước đây không có khía cạnh nào,

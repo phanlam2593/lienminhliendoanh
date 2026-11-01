@@ -528,4 +528,45 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["Tìm quán cf yên tĩnh để làm việc giúp tui vs."])).dish).toBe("cafe");
     expect((await last(["Bé 2 tháng sốt 38 độ, có thể đợi mai khám không?"])).content).toMatch(/dưới 3 tháng/);
   }, T);
+  it("01/11 — hiểu câu vòng 1: chủ thể / đối tượng (câu đảo), loại câu hỏi, từ khoá bẫy", async () => {
+    // Câu nhân quả đảo vị trí ("Y có phải do X không") → trả lời đúng quan hệ X → Y như câu xuôi, không đọc cả thẻ Y
+    const rev = await last(["mất ngủ có phải do cà phê không"]);
+    expect(rev.content).toMatch(/\*\*cà phê\*\* có gây \*\*mất ngủ\*\*/);
+    expect(rev.content).not.toMatch(/Mất ngủ\*\* là gì/);
+    expect((await last(["bị mất ngủ là vì uống cà phê hả"])).content).toMatch(/cà phê\*\* có gây \*\*mất ngủ/);
+    expect((await last(["gan nhiễm mỡ là do rượu hả"])).content).toMatch(/\*\*rượu\*\* có gây \*\*gan nhiễm mỡ/);
+    expect((await last(["bị tiểu đường có phải do ăn nhiều đường không"])).content).not.toMatch(/không đường\*\* là món/);
+    expect((await last(["vì sao uống cà phê lại mất ngủ"])).content).toMatch(/cà phê\*\* có gây \*\*mất ngủ/);
+    // "trà sữa" là trà (chữ chính đứng trước), không phải sữa
+    expect((await last(["trà sữa có gây mập không"])).content).not.toMatch(/Sữa gây/);
+    // Loại câu hỏi: "bao lâu thì hết / lành" = diễn tiến; "là gì" = định nghĩa; "ở đâu" = nơi chốn
+    expect((await last(["thủy đậu bao lâu thì lành"])).content).toMatch(/Diễn tiến/);
+    expect((await last(["thủy đậu là gì"])).content).not.toMatch(/Diễn tiến/);
+    expect((await last(["sốt xuất huyết bao lâu thì hết"])).content).toMatch(/Diễn tiến/);
+    expect((await last(["tiêm phòng cúm ở đâu"])).content).toMatch(/chưa có danh sách điểm tiêm/);
+    expect((await last(["khám thủy đậu ở đâu"])).content).toMatch(/trạm y tế/);
+    expect((await last(["khi nào thủy đậu cần đi khám"])).content).not.toMatch(/trạm y tế/);
+    expect((await last(["viêm họng ở đâu"])).content).toMatch(/khám viêm họng ở đâu/);
+    // "khác nhau ở đâu" là so sánh, không phải hỏi chỗ
+    const df = await last(["viêm dạ dày với trào ngược khác nhau ở đâu"]);
+    expect(df.content).toMatch(/đặt cạnh nhau/);
+    expect(df.content).not.toMatch(/trạm y tế/);
+    expect((await last(["đau đầu với đau nửa đầu khác nhau thế nào"])).content).toMatch(/\*\*đau đầu\*\*:[\s\S]*\*\*Đau nửa đầu|\*\*đau đầu\*\*:[\s\S]*\*\*đau nửa đầu/i);
+    // "bao nhiêu nước" là lượng đồ uống; "bao nhiêu ml hạ sốt" mới là xin liều
+    expect((await last(["mỗi ngày nên uống bao nhiêu nước"])).content).not.toMatch(/không nêu liều/);
+    expect((await last(["bé uống bao nhiêu ml hạ sốt"])).content).toMatch(/không tính liều/);
+    // Bệnh + món → theo bệnh; không bệnh → thông tin chung
+    expect((await last(["đau dạ dày có nên uống cà phê không"])).content).toMatch(/Viêm dạ dày/);
+    // Từ khoá bẫy: tên quán viết hoa, máy móc "bị sốt", chữa cháy, con vật
+    const shop = await last(["quán Đau Đầu ở đâu"]);
+    expect(shop.med).toBeUndefined();
+    expect(shop.content).toMatch(/tên quán/);
+    expect((await last(["điện thoại bị sốt pin"])).med).toBeUndefined();
+    expect((await last(["chữa cháy thế nào khi bếp bén lửa"])).content).toMatch(/114/);
+    const cat = await last(["con mèo nhà tui bị tiêu chảy"]);
+    expect(cat.content).toMatch(/thú y/);
+    expect(cat.content).not.toMatch(/thường gặp do/);
+    // Mốc "tới 3-4h sáng" là giờ kết thúc, không phải "sáng nay"
+    expect((await last(["A chơi game tới 3-4h sáng"])).heart).toBe("addict");
+  }, T);
 });

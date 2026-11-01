@@ -10,11 +10,14 @@ import { VN } from "@/lib/viMatch";
 /** \b của JS không hiểu chữ có dấu ("tài xế" không có ranh giới sau "ế") — đổi \b thành ranh giới theo chữ cái Unicode. */
 const W = (re: RegExp): RegExp => new RegExp(re.source.replace(/\\b/g, "(?:(?<![\\p{L}\\p{N}])(?=[\\p{L}\\p{N}])|(?<=[\\p{L}\\p{N}])(?![\\p{L}\\p{N}]))"), re.flags.includes("u") ? re.flags : re.flags + "u");
 import { healthFact } from "@/lib/lomiHealthFacts";
+import { deviceSubject, namedShop } from "@/lib/lomiQShape";
+import { findMedTopicId } from "@/lib/lomiMed";
 
 export type Trap = { text: string; faqId?: string; retry?: string; heart?: string };
 
 const APP_OBJ = VN(/\b(lỗi|app|ứng dụng|tài khoản|acc|bài đăng|bài viết|bài quẹt|quẹt|đăng nhập|otp|tin nhắn|ảnh|lượt xem|lượt thích|ưu đãi|mã giảm giá|hồ sơ|thông báo)\b/);
 const MED_WORD = VN(/\b(thuốc|thuốc giải|chữa|trị|bệnh|nhiễm bệnh|virus|vi rút|sốt|đau đầu)\b/);
+const MED_WORD_ANY = VN(/\b(đau|sốt|bệnh|ốm|mất ngủ|cảm|ho|viêm|ung thư|thuốc|nhức|gout|tiểu đường|huyết áp|dạ dày|bác sĩ|bệnh viện)\b/);
 const APP_PROBLEM = VN(/\b(lỗi|bị lỗi|không tải|không vào|không gửi|không hiện|bị ẩn|bị mất|mất rồi|virus|nhiễm|đơ|treo|văng)\b/);
 
 export function trapReply(q: string): Trap | null {
@@ -56,7 +59,8 @@ export function trapReply(q: string): Trap | null {
   if (VN(/\bquẹt\b/).test(n) && (/\b(khong|ko|k|hong|hem|chang|cha) (thay|hien|co) (ai|ho so nao|nguoi nao)\b/.test(n) || VN(/\b(hết người|không còn ai|trống trơn|không có người|không hiện hồ sơ)\b/).test(n)))
     return { text: "Quẹt chỉ hiện những người **đang có nhu cầu cùng mục** (Game, Làm quen, Trao đổi, Công việc) và hợp **bộ lọc** của bạn — nên lúc ít người thì có thể trống, không phải app hỏng đâu nha 🙂\n• Mở rộng bộ lọc: khu vực, độ tuổi\n• Thử mục khác, hoặc quay lại sau — người mới tạo nhu cầu sẽ hiện thêm\n• Người bạn đã bỏ qua sẽ hiện lại sau 48 giờ\n\nVẫn trống hoàn toàn lâu ngày thì tắt hẳn app rồi mở lại; còn không được thì nhắn Ban quản trị.", faqId: "quetwhat" };
   // "có nên uống thêm cà phê không" (đang hồi hộp / áp lực) → điều nguồn nói về caffeine, không tìm quán cà phê
-  if ((VN(/\b(có nên|nên) uống (thêm |nhiều )?(cà phê|cafe|cf)\b|\buống (thêm |nhiều) (cà phê|cafe|cf)( \S+){0,2} (có sao|được không)\b|\buống (cà phê|cafe|cf) nhiều( \S+){0,2} (có sao|được không)\b/).test(n)) && !VN(/\b(giải rượu|say|giải say|tỉnh rượu)\b/).test(n)) {
+  //   (01/11: câu nêu một BỆNH — "đau dạ dày có nên uống cà phê không" — thì lớp ăn uống theo bệnh trả lời, không đọc thông tin caffeine chung)
+  if (!(findMedTopicId(q) && !VN(/\b(hồi hộp|lo|căng thẳng|áp lực|run|stress)\b/).test(n)) && (VN(/\b(có nên|nên) uống (thêm |nhiều )?(cà phê|cafe|cf)\b|\buống (thêm |nhiều) (cà phê|cafe|cf)( \S+){0,2} (có sao|được không)\b|\buống (cà phê|cafe|cf) nhiều( \S+){0,2} (có sao|được không)\b/).test(n)) && !VN(/\b(giải rượu|say|giải say|tỉnh rượu)\b/).test(n)) {
     const hf = healthFact("uống cà phê nhiều có sao không?");
     if (hf) return { text: `${VN(/\b(hồi hộp|lo|căng thẳng|áp lực|run)\b/).test(n) ? "Đang hồi hộp, căng thẳng thì nên **hạn chế** thêm cà phê nha — caffeine có thể làm tim đập nhanh, bồn chồn hơn. Thử nước lọc, trà thảo mộc không caffeine, hít thở chậm vài phút 💚\n\n" : ""}${hf}` };
   }
@@ -131,6 +135,19 @@ export function trapReply(q: string): Trap | null {
     const offer = VN(/\b(ưu đãi|giảm giá|khuyến mãi)\b/).test(n);
     return { text: `Lomi chưa tìm quán **theo tên** được 🙏 Bạn gõ “${nm}” vào ô tìm kiếm ở **Khám phá** (/kham-pha) là ra nếu quán có trong iLomi${hours ? " — trên thẻ quán có nhãn **Đang mở / Đã đóng**, bấm vào để xem giờ mở cửa" : ""}${offer ? " — quán đang có ưu đãi sẽ hiện ngay trên trang quán" : ""}. Nếu không thấy thì có thể quán chưa tham gia app.` };
   }
+  // 01/11: tên quán viết HOA ngay sau "quán / tiệm" ("quán Đau Đầu ở đâu") — tên riêng, không phải bệnh
+  const shop = namedShop(q);
+  if (shop && MED_WORD_ANY.test(` ${normalizeVi(shop)} `) && !VN(/\b(bị|đang|uống|chữa|trị|thuốc)\b/).test(` ${normalizeVi(low.replace(shop.toLowerCase(), " "))} `)) {
+    const hours = VN(/\b(mấy giờ|giờ mở|mở cửa|đóng cửa)\b/).test(n);
+    return { text: `“${shop}” nghe như **tên quán** nha 😄 Lomi chưa tìm quán **theo tên** được 🙏 Bạn gõ “${shop}” vào ô tìm kiếm ở **Khám phá** (/kham-pha) là ra nếu quán có trong iLomi${hours ? " — trên thẻ quán có nhãn **Đang mở / Đã đóng**" : ""}. Không thấy thì có thể quán chưa tham gia app.` };
+  }
+  // 01/11: chủ ngữ là MÁY / điện thoại / pin mà dùng chữ sức khoẻ ("điện thoại bị sốt pin", "máy nóng quá") — không phải người bệnh
+  const dev = deviceSubject(low);
+  if (dev && (!/^(app|ung dung)$/.test(dev) || VN(/\b(nóng máy|hao pin|tốn pin|nóng quá)\b/).test(n)) && VN(/\b(sốt|nóng|bệnh|virus|nhiễm|đau|chữa|trị|thuốc|yếu|mệt|chết|hỏng|nóng máy|nóng ran)\b/).test(n) && !VN(/\b(đau (đầu|mắt|cổ|vai|lưng|tay)|mỏi mắt|bức xạ|sóng điện thoại|mất ngủ|cận thị)\b/).test(n))
+    return { text: `Lomi hiểu là bạn đang nói về **${low.match(/^(?:(?:tôi|tui|mình|em|anh|chị)\s+)?(?:(?:cái|con|chiếc)\s+)?(\S+(?:\s+(?:thoại|tính|lạnh|máy|sạc))?)/u)?.[1] ?? "máy"}** chứ không phải chuyện sức khoẻ nha 😄 Lomi chưa rành sửa máy, nhưng thử mấy bước an toàn này:\n• Nếu đang mở iLomi thì vuốt tắt hẳn app rồi mở lại, tắt bớt app chạy nền\n• Máy nóng ran, pin phồng hay có mùi khét → **ngưng sạc**, để máy nguội và mang ra tiệm / hãng kiểm tra\n\nCòn nếu ý bạn là **người** đang bị sốt, mệt thì kể Lomi nghe nha.` };
+  // 01/11: "chữa cháy", "bếp bén lửa", "cháy nhà" — chuyện cháy nổ, không phải chữa bệnh (quán "chữa cháy" ưu đãi đã xử lý ở trên)
+  if (VN(/\b(chữa cháy|bình chữa cháy|cháy nhà|cháy bếp|bén lửa|bắt lửa|cháy nổ|đám cháy)\b/).test(n) && !VN(/\b(bỏng|phỏng|ngạt khói|hít khói)\b/).test(n))
+    return { text: `Đây là chuyện **cháy nổ** chứ không phải chữa bệnh nha 🧯 Lomi chưa có hướng dẫn chữa cháy đã kiểm chứng để chỉ chi tiết.\n• **Đang cháy thật** → gọi **114** (cứu hoả) ngay, đưa mọi người ra chỗ an toàn trước, đừng quay vào lấy đồ\n• Có người bị bỏng hay ngạt khói → gọi **115**\n${VN(/\b(mua|ở đâu|chỗ nào)\b/).test(n) ? "• Mua bình chữa cháy thì hỏi cửa hàng thiết bị phòng cháy, hoặc cơ quan PCCC địa phương để được chỉ loại phù hợp" : "• Muốn học cách dùng bình chữa cháy, thoát hiểm thì hỏi cơ quan PCCC địa phương — họ hay có buổi hướng dẫn"}` };
   // Lượt xem "bị sốt"
   if (VN(/\bsốt\b/).test(n) && VN(/\b(lượt xem|lượt thích|bài đăng|view|like)\b/).test(n))
     return { text: "Bài “sốt” lượt xem là tin vui nha 🔥😄 Bài đang được nhiều người xem — tranh thủ trả lời bình luận, ghim thông tin quan trọng (giờ mở cửa, ưu đãi) cho người mới ghé. Nếu ý bạn là lượt xem **tăng / giảm bất thường** mà nghi lỗi, thì kéo trang xuống tải lại; vẫn lạ thì nhắn Ban quản trị (Hồ sơ → ⋯ → Trợ giúp)." };

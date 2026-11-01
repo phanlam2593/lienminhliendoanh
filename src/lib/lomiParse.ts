@@ -573,6 +573,14 @@ export function parseVi(raw: string, opts: ParseOpts = {}): Frame {
     const v = core.findIndex((t) => is(t, "VERB", "MOTION", "DESIRE"));
     if (v >= 0 && !core.some((t) => is(t, "GREET", "WISH", "THANK", "GOOD")))
       for (const t of core.slice(v + 1)) if (t.r === "TIME" && !t.rel && !t.today && (t.cls === "occasion" || t.part)) Object.assign(t, { r: "NOUN", cls: "occasion", part: undefined });
+    // 01/11: "chơi game tới 3-4h sáng", "thức đến 2 giờ đêm" — buổi đứng sau "tới / đến + giờ" là MỐC KẾT THÚC của việc, không phải "sáng nay"
+    for (let i = 0; i < core.length; i++) {
+      const t = core[i];
+      if (t.r !== "TIME" || t.rel || !t.part) continue;
+      const back = core.slice(Math.max(0, i - 4), i);
+      const til = back.findIndex((x) => VR(/^(tới|đến|tận|tới tận|đến tận|từ)$/).test(x.t));
+      if (til >= 0 && back.slice(til + 1).some((x) => /\d/.test(x.t))) Object.assign(t, { r: "NOUN", cls: "occasion", part: undefined, today: undefined });
+    }
   }
   const times = core.filter((t) => t.r === "TIME");
   const aspects = core.filter((t) => t.r === "ASPECT");

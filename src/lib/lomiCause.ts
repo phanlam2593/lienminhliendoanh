@@ -12,6 +12,7 @@ import { findDrug, type DrugFact } from "@/lib/lomiDrugData";
 /** \b của JS không hiểu chữ có dấu ("tài xế" không có ranh giới sau "ế") — đổi \b thành ranh giới theo chữ cái Unicode. */
 const W = (re: RegExp): RegExp => new RegExp(re.source.replace(/\\b/g, "(?:(?<![\\p{L}\\p{N}])(?=[\\p{L}\\p{N}])|(?<=[\\p{L}\\p{N}])(?![\\p{L}\\p{N}]))"), re.flags.includes("u") ? re.flags : re.flags + "u");
 import { findFolk } from "@/lib/lomiFolk";
+import { diffPair, flipCause, medPlaceAsk } from "@/lib/lomiQShape";
 
 const N = (s: string) => ` ${normalizeVi(s)} `;
 
@@ -78,9 +79,10 @@ const hasKey = (text: string, keys: string[]) => {
   return keys.some((k) => t.includes(N(k)));
 };
 
-export type CauseParse = { x: string; xShow: string; y: string; yShow?: string; aff?: boolean; verb: "cause" | "help"; nut: Nutrient | null };
+export type CauseParse = { x: string; xShow: string; y: string; yShow?: string; aff?: boolean; harm?: boolean; verb: "cause" | "help"; nut: Nutrient | null };
 export function parseCause(q: string): CauseParse | null {
-  let low = q.normalize("NFC").toLowerCase().replace(/[?!.…,]+/gu, " ").replace(/\s+/g, " ").trim();
+  // 01/11: câu ĐẢO ("mất ngủ có phải do cà phê không", "bị Y là vì X hả") → dạng xuôi "X có gây Y không" (lib/lomiQShape)
+  let low = (flipCause(q) ?? q).normalize("NFC").toLowerCase().replace(/[?!.…,]+/gu, " ").replace(/\s+/g, " ").trim();
   // "nếu uống vitamin C buổi tối thì có mất ngủ không" → "uống vitamin C buổi tối có làm mất ngủ không"
   low = low.replace(/^nếu\s+(.+?)\s+thì\s+có\s+(?:bị\s+)?(?!làm|gây|giúp|khiến)/u, "$1 có làm ");
   // "vitamin C có làm mất ngủ nếu uống trước giờ ngủ 2 tiếng không" → bỏ vế "nếu …"
@@ -102,7 +104,7 @@ export function parseCause(q: string): CauseParse | null {
     const y2 = y.replace(/^(?:giảm|hạ|bớt|trị|chữa|ngừa|phòng|đỡ)\s+/u, "");
     if (y2 !== y) y = /^huyết áp$/u.test(y2) ? "tăng huyết áp" : /^(?:đường huyết|đường máu)$/u.test(y2) ? "tiểu đường" : /^(?:mỡ máu|cholesterol)$/u.test(y2) ? "mỡ máu cao" : y2;
   }
-  return { x, xShow: xShow || x, y, yShow, verb, aff: /ảnh hưởng/u.test(m[2]), nut: nutrientOf(x) };
+  return { x, xShow: xShow || x, y, yShow, verb, aff: /ảnh hưởng/u.test(m[2]), harm: /hại/u.test(m[2]), nut: nutrientOf(x) };
 }
 
 const SECTIONS = (t: MedTopic): DrugFact[] => [
@@ -117,14 +119,17 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   if (!p) return null;
   const xn = `${N(p.x)}${N(p.xShow)}`;
   // Quan niệm dân gian đã có bài riêng ("ăn cay gây đau dạ dày", "cua + cam ngộ độc") → để lớp mẹo dân gian trả lời.
+  //   (01/11: chỉ khi bài đó nói về chính X — "mất ngủ có phải do cà phê không" không phải bài "uống rượu cho dễ ngủ")
   const fk = findFolk(q);
-  if (fk && (fk.verdict === "myth" || fk.belief || fk.ctx)) return null;
+  if (fk && (fk.verdict === "myth" || fk.belief || fk.ctx) && hasKey(`${fk.name} ${fk.belief ?? ""}`, [...keysOf(p.x, [], X_SYN), ...p.x.split(" ").filter((w) => w.length >= 2 && !/^(?:ăn|uống|dùng|xong|với|và|có|nhiều|ít|thêm|rồi|lại|cái|món|đồ)$/u.test(w))])) return null;
   // Thuốc có trong kho thuốc → xem phần tác dụng phụ có nguồn của thuốc đó
   const drugE = findDrug(p.x);
   const ySyn = Y_SYN.find(([re]) => re.test(N(p.y)))?.[1];
   const yMed = findMedTopicId(p.y) ?? findMedTopicId(`bị ${p.y}`) ?? (ySyn ? findMedTopicId(ySyn[0]) : null);
   const xMed = findMedTopicId(p.x);
-  const food = p.nut ? null : foodOf(p.x);
+  // (01/11: món phải là CHỮ ĐẦU của X — "trà sữa" là trà, không phải sữa; tiếng Việt chữ chính đứng trước)
+  const food0 = p.nut ? null : foodOf(p.x);
+  const food = food0 && food0.names.some((nm) => N(p.x).startsWith(N(nm))) ? food0 : null;
   const isDrugish = /^ thuoc\b/.test(xn) || !!drugE;
   const eatDrink = /^(?:uống|ăn)\s+\S/u.test(p.xShow) && p.xShow.split(" ").length <= 5;
   const known = !!(p.nut || food || isDrugish || eatDrink || X_SYN.some(([re]) => re.test(xn)));
@@ -183,7 +188,9 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   if (drugE) for (const f of [...drugE.sideEffects.common, ...drugE.sideEffects.serious]) if (hasKey(f.text, yKeys)) push(f.text);
 
   const yAsk = p.yShow ?? p.y;
-  const ask = p.verb === "help" ? `**${xName}** có giúp **${yAsk}** không` : `**${xName}** có ${p.aff ? "ảnh hưởng tới" : "gây"} **${yAsk}** không`;
+  // (01/11: "X có hại Y không" → "có hại cho Y" — Y là bộ phận / bệnh bị hại, không phải thứ được "gây" ra)
+  const vw = p.aff ? "ảnh hưởng tới" : p.harm ? "hại cho" : "gây";
+  const ask = p.verb === "help" ? `**${xName}** có giúp **${yAsk}** không` : `**${xName}** có ${vw} **${yAsk}** không`;
   if (ev.length) {
     return {
       text: `Về chuyện ${ask}, các nguồn Lomi đã đối chiếu nói thế này nè:\n${ev.map((e) => `• ${e}`).join("\n")}${p.verb === "cause" ? `\n\nNếu ${yName.toLowerCase()} kéo dài hoặc làm bạn khó chịu nhiều thì nên hỏi bác sĩ để tìm đúng nguyên nhân nha.` : ""}`,
@@ -192,12 +199,12 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   }
   // Không có dòng nào nhắc cả hai → nói thật, kèm điều nguồn CÓ nói (ngắn gọn), không đọc cả thẻ.
   const parts: string[] = [];
-  parts.push(`Các nguồn y khoa Lomi đã đối chiếu **chưa nhắc** ${p.verb === "help" ? `${xName} giúp ${yAsk}` : `${xName} ${p.aff ? "ảnh hưởng tới" : "gây"} ${yAsk}`}, nên Lomi không dám nói có hay không 🙏`);
+  parts.push(`Các nguồn y khoa Lomi đã đối chiếu **chưa nhắc** ${p.verb === "help" ? `${xName} giúp ${yAsk}` : `${xName} ${p.aff ? "ảnh hưởng tới" : p.harm ? "hại cho" : "gây"} ${yAsk}`}, nên Lomi không dám nói có hay không 🙏`);
   if (isDrugish) parts.push(`Có gây ${yAsk} hay không còn **tuỳ thành phần** của từng loại thuốc — xem mục tác dụng phụ / lưu ý trên tờ hướng dẫn trong hộp, hoặc đưa hộp thuốc cho dược sĩ xem.`);
   if (p.nut?.tooMuch.length && p.verb === "cause") parts.push(`Điều nguồn có nói về **${p.nut.name}** khi dùng nhiều:\n${p.nut.tooMuch.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`);
   if (mt && p.verb === "cause" && mt.causes.length) parts.push(`Còn ${yName.toLowerCase()} thì nguồn hay nêu những nguyên nhân này:\n${mt.causes.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`);
   if (mt && p.verb === "help" && mt.care.length) parts.push(`Những cách nguồn có nêu cho ${yName.toLowerCase()}:\n${mt.care.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`);
-  if (p.verb === "cause") parts.push(`Nếu bạn thấy ${yAsk} bắt đầu từ khi ${p.nut || food || isDrugish ? `dùng ${xName}` : xName}, cứ ghi lại rồi hỏi dược sĩ / bác sĩ cho chắc nha.${isDrugish && /buồn ngủ|lơ mơ|chóng mặt/u.test(yAsk) ? " Đang buồn ngủ, chóng mặt thì đừng lái xe." : ""}`);
+  if (p.verb === "cause") parts.push(`Nếu bạn thấy ${yAsk} bắt đầu từ khi ${p.nut || food || isDrugish || X_SYN.some(([re, ks]) => ks.length && re.test(xn)) ? `${/^(?:uống|ăn|dùng|hút)\s/u.test(p.xShow) ? "" : "dùng "}${p.xShow === xName ? xName : p.xShow}` : xName}, cứ ghi lại rồi hỏi dược sĩ / bác sĩ cho chắc nha.${isDrugish && /buồn ngủ|lơ mơ|chóng mặt/u.test(yAsk) ? " Đang buồn ngủ, chóng mặt thì đừng lái xe." : ""}`);
   return { text: parts.join("\n\n"), medId: yMed ?? undefined };
 }
 
@@ -283,6 +290,8 @@ export async function diagnoseReply(q: string): Promise<{ text: string; medId: s
   const m = low.match(DIAG);
   if (!m) return null;
   const cand = m[1].replace(/^(?:bị|bệnh)\s+/u, "").trim();
+  // 01/11: "Y có phải DO X không" hỏi NGUYÊN NHÂN (lớp causeReply đọc dạng đảo), trừ khi người dùng đang kể chính mình bị gì
+  if (/^(?:do|tại|vì|bởi)\s/u.test(cand) && !W(/\b(tôi|tui|mình|em|anh|chị|con|bé|mẹ|ba|bố)\b/u).test(low.slice(0, low.indexOf(m[0])))) return null;
   const organ = W(/\b(dạ dày|bao tử|bụng)\b/u).test(low) ? "dạ dày" : "";
   const food = W(/\b(sau ăn|sau khi ăn|ăn xong|tôm|cua|hải sản|đậu phộng|sữa)\b/u).test(low) ? "thực phẩm" : "";
   const id = findMedTopicId(cand) ?? findMedTopicId(`bị ${cand}`) ?? (organ ? findMedTopicId(`${cand} ${organ}`) : null) ?? (food ? findMedTopicId(`${cand} ${food}`) : null);
@@ -311,7 +320,9 @@ export function doseReply(q: string): string | null {
   const low = q.normalize("NFC").toLowerCase();
   if (low.split(/\s+/).length > 26) return null;
   const others = OTHERS.test(low);
-  const dose = DOSE.test(low) && W(/\b(uống|cho|dùng|bé|con|thuốc|viên|vitamin)\b/u).test(low);
+  // (01/11: "uống bao nhiêu NƯỚC / sữa / cà phê" là hỏi lượng đồ uống, không phải xin liều thuốc)
+  const drink = W(/\b(?:uống|cho uống|bú)\s+(?:bao nhiêu|mấy)\s+(?:ly|cốc|lít|chai|ml|cc\s+)?(?:nước|sữa|cà phê|trà|bia|rượu|nước lọc|nước ép|sinh tố)\b|\b(?:nước|sữa|cà phê|trà|bia|rượu)\s+(?:\S+\s+){0,2}(?:bao nhiêu|mấy)\s+(?:ly|cốc|lít|ml)\b/u).test(low) && !W(/\b(thuốc|viên|siro|liều|kháng sinh)\b/u).test(low);
+  const dose = !drink && DOSE.test(low) && W(/\b(uống|cho|dùng|bé|con|thuốc|viên|vitamin)\b/u).test(low);
   if (!others && !dose) return null;
   // thuốc có trong kho (paracetamol…) → lớp thuốc có câu riêng; uống nhầm / lỡ uống → lớp quá liều / uống nhầm lo
   if (findDrug(low) || W(/\b(nhầm|lỡ uống|lỡ cho|uống lộn|quá liều)\b/u).test(low)) return null;
@@ -342,5 +353,69 @@ export async function dangerReply(q: string): Promise<{ text: string; medId: str
       mt.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${mt.doctor.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : "",
     ].filter(Boolean).join("\n\n"),
     medId: id,
+  };
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 01/11 — "A VỚI B KHÁC NHAU THẾ NÀO" giữa hai BỆNH có thẻ: đặt cạnh nhau phần "là gì" của từng thẻ (không tự kết luận),
+//   thay vì đọc một thẻ ("đau đầu với đau nửa đầu khác nhau thế nào" từng chỉ ra thẻ đau nửa đầu).
+// ────────────────────────────────────────────────────────────────────────
+export async function diffReply(q: string): Promise<{ text: string; medId: string } | null> {
+  const pr = diffPair(q);
+  if (!pr) return null;
+  // (tên có thêm chữ mô tả — "sốt thường", "đau đầu thông thường" — thì bớt dần chữ cuối cho tới khi ra một thẻ)
+  const topicOf = (t: string): string | null => {
+    const ws = t.replace(/\s+(?:thông thường|bình thường|thường|nói chung)$/u, "").split(" ");
+    for (let k = ws.length; k >= 1; k--) {
+      const part = ws.slice(0, k).join(" ");
+      const id = findMedTopicId(part) ?? findMedTopicId(`bị ${part}`);
+      if (id) return id;
+    }
+    return null;
+  };
+  const ia = topicOf(pr[0]);
+  const ib = topicOf(pr[1]);
+  // chỉ một bên có thẻ ("sốt xuất huyết và sốt thường") → nói thật bên kia chưa có thẻ riêng, đưa phần đã kiểm chứng của bên có thẻ
+  if ((ia && !ib) || (!ia && ib)) {
+    const t1 = await loadMedTopic((ia ?? ib)!);
+    const other = ia ? pr[1] : pr[0];
+    if (!t1 || other.split(" ").length > 4) return null;
+    return {
+      text: `Lomi **chưa có thẻ riêng** về “${other}” nên không so trực tiếp được 🙏 Đây là điều nguồn nói về **${displayName(t1)}**:\n${(t1.about.length ? t1.about : t1.signs).slice(0, 2).map((f) => `• ${f.text}`).join("\n")}${t1.signs.length ? `\n\nDấu hiệu thường gặp:\n${t1.signs.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : ""}\n\nKhông chắc mình bị cái nào thì đi khám để bác sĩ phân biệt nha — Lomi không chẩn đoán được.`,
+      medId: t1.id,
+    };
+  }
+  if (!ia || !ib || ia === ib) return null;
+  const [ta, tb] = await Promise.all([loadMedTopic(ia), loadMedTopic(ib)]);
+  if (!ta || !tb) return null;
+  const one = (t: MedTopic) => `**${displayName(t)}**:\n${(t.about.length ? t.about : t.signs).slice(0, 2).map((f) => `• ${f.text}`).join("\n")}`;
+  return {
+    text: `Lomi đặt cạnh nhau điều nguồn nói về từng cái nha 👇\n\n${one(ta)}\n\n${one(tb)}\n\nMuốn xem kỹ hơn thì hỏi riêng kiểu “${displayName(tb).toLowerCase()} có triệu chứng gì”. Đang không biết mình bị cái nào thì đi khám để bác sĩ phân biệt nha — Lomi không chẩn đoán được.`,
+    medId: ib,
+  };
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 01/11 — hỏi "Ở ĐÂU" cho một việc y tế ("tiêm phòng cúm ở đâu", "khám thuỷ đậu chỗ nào"): trả lời đúng loại câu hỏi (nơi chốn),
+//   nói thật là Lomi không có danh sách cơ sở y tế — không đọc thẻ bệnh ("là gì") hay "khi nào đi khám".
+// ────────────────────────────────────────────────────────────────────────
+export function medPlaceReply(q: string): { text: string; medId?: string } | null {
+  const act = medPlaceAsk(q);
+  if (!act) {
+    // "viêm họng ở đâu" — chỉ có tên bệnh + "ở đâu": không rõ hỏi chỗ khám hay bệnh nằm ở đâu → hỏi lại MỘT câu, không đoán
+    const low = q.normalize("NFC").toLowerCase().replace(/[?!.…]+/gu, " ").trim();
+    const mm = low.match(/^(.{2,30}?)\s+(?:ở đâu|chỗ nào|ở chỗ nào)(?:\s+(?:vậy|ạ|ta|nhỉ|hả))*$/u);
+    const id0 = mm ? findMedTopicId(mm[1]) : null;
+    if (mm && id0 && findMedTopicId(mm[1]) === id0 && mm[1].split(" ").length <= 4)
+      return { text: `Bạn hỏi **${mm[1]}** “ở đâu” là muốn biết **khám ${mm[1]} ở đâu**, hay **${mm[1]} là gì / bị ở chỗ nào trên cơ thể** vậy? Nói Lomi biết để Lomi trả lời đúng ý nha 😊`, medId: id0 };
+    return null;
+  }
+  const id = findMedTopicId(q);
+  const tiem = /tiêm|chích/u.test(act);
+  if (!id && !tiem && !W(/\b(bác sĩ|bệnh|phòng khám|bệnh viện)\b/u).test(q.toLowerCase())) return null;
+  const kid = W(/\b(bé|con|cháu|trẻ)\b/u).test(q.toLowerCase());
+  return {
+    text: `Trong iLomi **chưa có danh sách ${tiem ? "điểm tiêm" : "phòng khám / bệnh viện"}** nên Lomi không chỉ được chỗ cụ thể 🙏\n• Hỏi **trạm y tế phường / xã** nơi bạn ở, hoặc gọi trước cho bệnh viện / phòng khám gần nhà${tiem ? " để hỏi còn vắc xin và giờ tiêm" : ""}\n• Mở bản đồ trên điện thoại gõ “${tiem ? "điểm tiêm chủng" : kid ? "phòng khám nhi" : "phòng khám"} gần đây” để xem chỗ gần và giờ mở cửa\n• Cần xe đi thì đặt ở **Đưa đón (/dua-don)**\n\n🚨 Khó thở, đau ngực, lơ mơ, co giật → gọi **115** ngay, đừng chờ tìm chỗ.`,
+    medId: id ?? undefined,
   };
 }
