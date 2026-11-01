@@ -180,6 +180,11 @@ export function trapReply(q: string): Trap | null {
     const f = faqById("quetwhat");
     if (f) return { text: f.a.vi, faqId: "quetwhat" };
   }
+  // 01/11 (vòng 20): "tôi không tin tarot" — tôn trọng, không rút bài; "tarot với bói bài tây khác gì", "xem tử vi được không" — Lomi chỉ có tarot
+  if (VN(/\b(không tin|chẳng tin|chả tin|ko tin|hổng tin)( \S+){0,2} (tarot|bói|bói bài|bài)\b/).test(n) && !VN(/\b(rút|bốc|xem giúp|bói giúp|bói cho)\b/).test(n))
+    return { text: "Không tin cũng không sao đâu nha 😊 Tarot ở iLomi chỉ là một cách để mình **ngẫm lại chuyện của mình** cho vui — không phải lời tiên tri, cũng không quyết định thay ai cả. Lomi còn tâm sự, tìm quán, hỏi đáp sức khoẻ, hướng dẫn dùng app nữa — bạn cần gì cứ nói nha!" };
+  if (VN(/\b(tử vi|xem tướng|thần số học|cung hoàng đạo|bói bài tây|xem chỉ tay|phong thuỷ|phong thủy)\b/).test(n) && !VN(/\b(rút|bốc)\b/).test(n))
+    return { text: `Lomi chỉ có **bói bài Tarot** thôi nha 🔮 — chưa xem được ${VN(/\btử vi\b/).test(n) ? "tử vi" : VN(/\bthần số học\b/).test(n) ? "thần số học" : VN(/\bcung hoàng đạo\b/).test(n) ? "cung hoàng đạo" : VN(/\bbói bài tây\b/).test(n) ? "bài tây" : "kiểu này"}. Muốn thử tarot thì gõ kiểu “rút bài chuyện công việc” hoặc “bói tình cảm” nha (xem để tham khảo, không phải lời tiên tri).` };
   // Tarot là gì / có ý nghĩa gì (hỏi về tính năng, không xin rút)
   if (VN(/\b(tarot|bói bài)\b/).test(n) && VN(/\b(có ý nghĩa gì|là gì|dùng để làm gì|hoạt động sao|có đúng không|có tin được không|có thật không)\b/).test(n) && !VN(/\b(rút|bốc|xem giúp|bói giúp|bói cho|lá này|lá đó)\b/).test(n))
     return { text: "🔮 **Tarot** là bộ 78 lá bài, mỗi lá mang một hình ảnh và ý nghĩa (xuôi / ngược). Ở iLomi, Lomi rút bài để bạn có **một góc nhìn mà ngẫm lại chuyện của mình** — không phải lời tiên tri, không quyết định thay bạn, và không dùng cho chuyện sức khoẻ, tiền bạc lớn.\n\nMuốn thử thì gõ kiểu “rút bài chuyện công việc” hoặc “bói tình cảm” nha." };

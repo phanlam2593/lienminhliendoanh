@@ -417,6 +417,8 @@ export function detectTarot(text: string): { question: string; daily: boolean } 
   // Phần còn lại chỉ là chữ hỏi / phủ định ("không", "hk", "được không", "chưa") → chưa có câu hỏi thật
   // (01/10 r2: "lomi biết bói toán hk" từng bị rút 3 lá với câu hỏi "không").
   if (VR(/^(toan|khong|ko|k|hk|hong|hok|hem|khum|chua|duoc khong|dc khong|duoc ko|duoc|ha|hả|chu|nhi|a|vay|khong vay|khong ta|khong ha|nua|nua khong|di|nha|nhe|giup|cho|minh|toi|tui|em|anh|chi|ban|lomi|biet|co biet|co|gioi|hay|the nao|ra sao|sao|[\s?!.,…])*$/).test(fold(q).trim())) q = "";
+  // 01/11 (hiểu câu vòng 20): "rút một lá thôi" — "thôi / đi / nha / luôn" chỉ là chữ đệm, không phải câu hỏi
+  if (/^(thoi|thoi nha|di|nha|nhe|luon|nao|coi|xem|thu|thu xem|cai|1 la|mot la|mot la thoi|1 la thoi)$/.test(fold(q).trim())) q = "";
   const fq = fold(q).trim();
   const dailyOnly = !fq || VN(/^(cho )?(hôm nay|thông điệp( hôm nay)?|ngày hôm nay|today)\s*\??$/).test(fq);
   if (dailyOnly) q = "";

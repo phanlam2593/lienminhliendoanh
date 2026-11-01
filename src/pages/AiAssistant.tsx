@@ -623,7 +623,8 @@ export function AiChat({
   const followUp = async (q: string, raw: string, lastA0: Msg | undefined, hCtx: HealthCtx | undefined): Promise<Msg | null> => {
     const r = await followUp0(q, raw, lastA0, hCtx);
     // Đúng câu vừa nói ở lượt trước → không lặp lại nguyên văn (Kir: "bỏ mấy chỗ lặp lại"), chỉ nhắc ý chính.
-    if (r && lastA0 && r.content.slice(0, 60) === lastA0.content.slice(0, 60)) {
+    //   (01/11: trải bài MỚI — "còn công việc thì sao" — có câu mở đầu ngẫu nhiên trùng câu trước, không phải lặp lại)
+    if (r && lastA0 && !r.tarot && r.content.slice(0, 60) === lastA0.content.slice(0, 60)) {
       const first = r.content.split(/(?<=[.!?])\s|\n/u)[0].replace(/^Dạ, Lomi ghi nhận nha 📝 /u, "");
       return { ...r, content: `Dạ, vẫn như Lomi vừa nói ở trên nha 👆 ${first}\n\nBạn còn muốn hỏi thêm gì không?` };
     }
@@ -1754,7 +1755,8 @@ export function AiChat({
     if (!forceAi && !danger0) {
       // 31/10 (list 7): "Tôi rút được lá The Hermit khi hỏi chuyện tình cảm" — kể lá đã rút (ở đâu đó), không phải xin rút bài mới
       const lowC = raw.normalize("NFC").toLowerCase();
-      if (!en && VN(/\b(rút được|bốc được|ra lá|ra được|rút ra|rút trúng|bốc trúng|tôi rút|em rút|mình rút|tui rút|anh rút|chị rút)\b/).test(` ${normalizeVi(lowC)} `) && !VN(/\b(rút cho|rút giúp|rút giùm|rút đi|rút thêm|rút lại)\b/).test(` ${normalizeVi(lowC)} `)) {
+      //   (01/11: "lá Death có phải là chết không", "lá The Tower có xấu không" — hỏi NGHĨA một lá cụ thể, kể cả không có chữ "rút được")
+      if (!en && (VN(/\b(rút được|bốc được|ra lá|ra được|rút ra|rút trúng|bốc trúng|tôi rút|em rút|mình rút|tui rút|anh rút|chị rút)\b/).test(` ${normalizeVi(lowC)} `) || (VR(/(?:^|\s)lá(?=\s)/u).test(lowC) && VN(/\b(nghĩa|có phải|là gì|tốt không|xấu không|có sao|đáng sợ|có xấu|có tốt)\b/).test(` ${normalizeVi(lowC)} `))) && !VN(/\b(rút cho|rút giúp|rút giùm|rút đi|rút thêm|rút lại)\b/).test(` ${normalizeVi(lowC)} `)) {
         for (let id = 0; id < TAROT_DECK_SIZE; id++) {
           const c = tarotCard(id);
           if (lowC.includes(c.name.en.toLowerCase()) || (c.name.vi.length >= 6 && lowC.includes(c.name.vi.toLowerCase()))) {

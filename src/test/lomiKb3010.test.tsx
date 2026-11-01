@@ -942,4 +942,17 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["nhắn cho chủ quán giúp tôi được không"])).content).toMatch(/không tự nhắn tin thay bạn/);
     expect((await last(["thu hồi tin nhắn được không"])).stuck).toBeUndefined();
   }, T);
+  it("01/11 — hiểu câu vòng 20: tarot — 'không tin' không rút bài, hỏi nghĩa một lá, chữ đệm không thành câu hỏi, không có tử vi", async () => {
+    const nb = await last(["tôi không tin tarot"]);
+    expect(nb.tarot).toBeFalsy();
+    expect(nb.content).toMatch(/Không tin cũng không sao/);
+    const dt = await last(["lá Death có phải là chết không"]);
+    expect(dt.content).toMatch(/Cái Chết/);
+    expect(dt.content).not.toMatch(/chưa có kiến thức/);
+    expect((await last(["rút một lá thôi"])).content).not.toMatch(/câu hỏi “thôi”/);
+    expect((await last(["xem bói tử vi được không"])).tarot).toBeFalsy();
+    expect((await chat(["bói tình yêu", "còn công việc thì sao"]))[1].content).not.toMatch(/vẫn như Lomi vừa nói/);
+    // đối chứng: xin bói vẫn rút bài
+    expect((await last(["bói tình yêu"])).tarot).toBeTruthy();
+  }, T);
 });
