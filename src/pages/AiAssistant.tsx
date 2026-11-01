@@ -1,5 +1,5 @@
 import { list3Reply } from "@/lib/lomiList3";
-import { causeReply, compareReply, dangerReply, diagnoseReply, diffReply, doseReply, medPlaceReply, parseCause } from "@/lib/lomiCause";
+import { causeReply, compareReply, dangerReply, diagnoseReply, diffReply, doseReply, medPlaceReply, multiAspectReply, parseCause } from "@/lib/lomiCause";
 import { actionReply, trapReply } from "@/lib/lomiTrap";
 import { CRISIS_SIG, appFollow, searchRefine, crisisFollow, detailReply, drugStatement, followAspect, parseDetail } from "@/lib/lomiFollow";
 import { useEffect, useRef, useState } from "react";
@@ -705,7 +705,8 @@ export function AiChat({
     if (VN(/\b(thứ nhất|thứ hai|mấy chuyện|vài chuyện|hai chuyện|2 chuyện|nhiều chuyện|tối qua|hôm qua|sáng nay|tuần trước|hồi nãy)\b/).test(` ${normalizeVi(s0)} `)) return null;
     if (VN(/\bthuốc\b/).test(` ${normalizeVi(s0)} `) && VN(/\b(lái xe|chạy xe|cầm lái)\b/).test(` ${normalizeVi(s0)} `)) return null;
     const askish = (x: string) => /\?/.test(x) || VN(/\b(gì|j|nào|sao|ko|không|k|hông|đâu|ntn|bao nhiêu|bn|mấy|hả|chưa|làm sao|cách|tìm|chỉ|giúp|ở đâu)\b/).test(` ${normalizeVi(x)} `);
-    const re = /\s*(?:,|;)\s*(?:(?:và|với|mà|còn|ngoài ra|tiện hỏi|tiện thể|với lại|btw|nhưng(?: cũng)?)\s+)?|\s+(?:ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+/giu;
+    // (01/11: "với lại" phải đứng trước "với" — không thì vế sau thành "lại quán phở…"; thêm "rồi + lời nhờ" — "tìm quán phở rồi chỉ tôi cách nhận ưu đãi")
+    const re = /\s*(?:,|;)\s*(?:(?:với lại|tiện hỏi|tiện thể|ngoài ra|nhưng(?: cũng)?|và|với|mà|còn|btw)\s+)?|\s+(?:ngoài ra|tiện hỏi|tiện thể|với lại|btw)\s+|\s+(?:rồi|xong rồi|sau đó)\s+(?=(?:chỉ|cho|giúp|hướng dẫn|tìm|rút|đặt|bói|xem)(?![\p{L}]))/giu;
     for (const m of s0.matchAll(re)) {
       const a = s0.slice(0, m.index).trim().replace(/[,;]+$/u, "");
       const b = s0.slice((m.index ?? 0) + m[0].length).trim().replace(/^(?:ngoài ra|tiện hỏi|với|và|mà)\s+/iu, "");
@@ -714,8 +715,17 @@ export function AiChat({
       const db = domainOf(b);
       // (bói về chuyện sức khoẻ — lớp chặn tarot y khoa lo, không tách)
       if (da && db && da !== db && !(new Set([da, db]).has("tarot") && new Set([da, db]).has("health")) && askish(b)) return [a, b.replace(/^\p{L}/u, (c) => c.toUpperCase())];
+      // "rồi + lời nhờ" ở vế sau là việc thứ hai, kể cả khi cùng loại
+      if (/^(?:rồi|xong rồi|sau đó)\s/u.test(m[0].trim() + " ") && da && db) return [a, b.replace(/^\p{L}/u, (c) => c.toUpperCase())];
     }
     return null;
+  };
+  // 01/11: HAI NGƯỜI, HAI CHUYỆN trong một câu ("con tôi bị sốt còn tôi bị ho") — không gộp thành một người bị cả hai
+  const splitWho = (t: string): [string, string] | null => {
+    const m = t.normalize("NFC").replace(/[?!.…]+$/u, "").match(/^((?:con|bé|mẹ|má|ba|bố|cha|vợ|chồng|ông|bà|anh|chị|em|bạn|tôi|tui|mình)(?:\s+(?:tôi|tui|mình|em|nhà tôi|nội|ngoại))?\s+(?:\S+\s+){0,3}?bị\s+.{2,30}?)\s*,?\s+(?:còn|và|với|mà)\s+((?:con|bé|mẹ|má|ba|bố|cha|vợ|chồng|ông|bà|anh|chị|em|bạn|tôi|tui|mình)(?:\s+(?:tôi|tui|mình|em|nhà tôi|nội|ngoại))?\s+(?:\S+\s+){0,3}?bị\s+.{2,30})$/iu);
+    if (!m) return null;
+    const who = (x: string) => x.toLowerCase().split(/\s+/).slice(0, 2).join(" ");
+    return who(m[1]) !== who(m[2]) ? [m[1], m[2].replace(/^\p{L}/u, (c) => c.toUpperCase())] : null;
   };
   const followUp0 = async (q: string, raw: string, lastA0: Msg | undefined, hCtx: HealthCtx | undefined): Promise<Msg | null> => {
     const nr = ` ${normalizeVi(raw)} `;
@@ -1550,6 +1560,7 @@ export function AiChat({
       // 01/11: ĐÍNH CHÍNH / ĐỔI Ý ("à không, ý là cảm lạnh", "nhầm, là tôi bị sốt", "ý là trà xanh") → ghép phần mới vào đúng chỗ
       //   của câu hỏi trước, giữ loại câu hỏi; "thôi không bói nữa, cho hỏi đau lưng" → hỏi chuyện mới (lib/lomiRepair)
       const rp = repairTurn(q, pu?.raw ?? pu?.content);
+      if (rp?.ask) return localReply(q, { role: "assistant", content: rp.ask, local: true });
       if (rp) {
         q = rp.q;
         raw = rp.q;
@@ -1632,7 +1643,7 @@ export function AiChat({
         emoRef.current = emo.line;
       }
       // Hai chuyện khác hẳn nhau trong một tin → trả lời ý đầu, ý sau thành nút bấm.
-      const sp = splitTwo(q);
+      const sp = splitTwo(q) ?? splitWho(q);
       if (sp) {
         q = sp[0];
         raw = sp[0];
@@ -1683,6 +1694,8 @@ export function AiChat({
       // 01/11: hỏi "ở đâu" cho việc y tế → trả lời nơi chốn; "A với B khác nhau thế nào" giữa hai bệnh → đặt cạnh nhau
       const mp = en ? null : medPlaceReply(raw);
       if (mp) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: mp.text, local: true, health: {}, ...(mp.medId ? { med: { id: mp.medId } } : {}) }); }
+      const ma = en || splitRef.current ? null : await multiAspectReply(raw);
+      if (ma) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: ma.text, local: true, health: {}, med: { id: ma.medId } }); }
       const df = en ? null : await diffReply(raw);
       if (df) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: df.text, local: true, health: {}, med: { id: df.medId } }); }
       const cmp = en ? null : compareReply(raw);

@@ -6,6 +6,7 @@
 // ⚠️ Ý định tự hại luôn được lomiChat.crisisReply xử lý TRƯỚC khi tới đây.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { qtypeOf } from "@/lib/lomiQShape";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { MORE_THEMES } from "@/lib/lomiHeartMore";
@@ -1105,6 +1106,9 @@ export function heartStart(text: string, appQuestion: boolean): HeartReply | nul
   const chip = CHIP_THEME[text.trim()];
   if (chip) return themeReply(byId(chip)!, n, false);
   const t = rawTheme(text) ?? themeOf(n);
+  // 01/11: câu hỏi THÔNG TIN về sức khoẻ ("bao lâu thì nên đi khám răng", "khám mắt ở đâu") không phải lời tâm sự lo lắng —
+  //   không đáp bằng câu an ủi / "đi khám đều đặn là tốt đó". (Có chữ cảm xúc — lo, sợ, buồn — thì vẫn là tâm sự.)
+  if (t?.id === "health" && ["howlong", "when", "howmany", "where"].includes(qtypeOf(text) ?? "") && !VN(/\b(lo|sợ|buồn|hoảng|run|bất an|khóc)\b/).test(` ${n} `)) return null;
   const start = START_RE.test(` ${n} `);
   // Tự hỏi mình có mắc một vấn đề tâm lý không → không chẩn đoán, không đáp như thể đã chắc.
   const dx = selfDx(text, n, {});

@@ -6,7 +6,7 @@
 //   Không nêu liều, không chẩn đoán. Chạy trên máy.
 // ────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
-import { displayName, findMedTopicId, loadMedTopic, type MedTopic } from "@/lib/lomiMed";
+import { displayName, findMedTopicId, loadMedTopic, parseMedAsk, renderMed, type MedTopic } from "@/lib/lomiMed";
 import { NUTRIENTS, foodOf, nutrientOf, type Nutrient } from "@/lib/lomiNutrients";
 import { findDrug, type DrugFact } from "@/lib/lomiDrugData";
 /** \b của JS không hiểu chữ có dấu ("tài xế" không có ranh giới sau "ế") — đổi \b thành ranh giới theo chữ cái Unicode. */
@@ -57,6 +57,7 @@ const Y_SYN: [RegExp, string[]][] = [
   [/\b(tang can|map|beo)\b/, ["tăng cân", "béo"]],
   [/\b(huyet ap|cao huyet ap|tang huyet ap)\b/, ["huyết áp"]],
   [/\b(rung toc)\b/, ["rụng tóc"]],
+  [/\b(than|than yeu|benh than|suy than)\b(?! kinh)/, ["thận", "bệnh thận", "suy thận"]],
   [/\b(dom|nhieu dom|co dom)\b/, ["đờm", "đàm", "ho có đờm"]],
   [/\b(nong trong|nhiet mieng|loet mieng)\b/, ["nhiệt miệng", "loét miệng"]],
 ];
@@ -133,7 +134,8 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   // Thuốc có trong kho thuốc → xem phần tác dụng phụ có nguồn của thuốc đó
   const drugE = findDrug(p.x);
   const ySyn = Y_SYN.find(([re]) => re.test(N(p.y)))?.[1];
-  const yMed = findMedTopicId(p.y) ?? findMedTopicId(`bị ${p.y}`) ?? (ySyn ? findMedTopicId(ySyn[0]) : null);
+  // (01/11: Y là một CƠ QUAN — "ăn mặn có hại thận không" — thì xét bệnh của cơ quan đó: "bệnh thận")
+  const yMed = findMedTopicId(p.y) ?? findMedTopicId(`bị ${p.y}`) ?? (ySyn ? findMedTopicId(ySyn[0]) : null) ?? (/^(?:thận|gan|tim|phổi|dạ dày|xương|khớp|mắt|da|răng)$/u.test(p.y) ? findMedTopicId(`bệnh ${p.y}`) ?? findMedTopicId(`${p.y} yếu`) ?? findMedTopicId(`suy ${p.y}`) : null);
   const xMed = findMedTopicId(p.x);
   // (01/11: món phải là CHỮ ĐẦU của X — "trà sữa" là trà, không phải sữa; tiếng Việt chữ chính đứng trước)
   const food0 = p.nut ? null : foodOf(p.x);
@@ -426,4 +428,51 @@ export function medPlaceReply(q: string): { text: string; medId?: string } | nul
     text: `Trong iLomi **chưa có danh sách ${tiem ? "điểm tiêm" : "phòng khám / bệnh viện"}** nên Lomi không chỉ được chỗ cụ thể 🙏\n• Hỏi **trạm y tế phường / xã** nơi bạn ở, hoặc gọi trước cho bệnh viện / phòng khám gần nhà${tiem ? " để hỏi còn vắc xin và giờ tiêm" : ""}\n• Mở bản đồ trên điện thoại gõ “${tiem ? "điểm tiêm chủng" : kid ? "phòng khám nhi" : "phòng khám"} gần đây” để xem chỗ gần và giờ mở cửa\n• Cần xe đi thì đặt ở **Đưa đón (/dua-don)**\n\n🚨 Khó thở, đau ngực, lơ mơ, co giật → gọi **115** ngay, đừng chờ tìm chỗ.`,
     medId: id ?? undefined,
   };
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// 01/11 — HAI Ý VỀ CÙNG MỘT BỆNH trong một câu ("cúm có lây không và bao lâu thì khỏi", "viêm họng có lây không, có cần uống kháng sinh
+//   không", "đau dạ dày uống cà phê được không, ăn cay được không") → trả lời CẢ HAI phần, mỗi phần đúng khía cạnh được hỏi,
+//   thay vì chỉ đáp phần khớp trước và bỏ mất phần kia.
+// ────────────────────────────────────────────────────────────────────────
+export async function multiAspectReply(q: string): Promise<{ text: string; medId: string } | null> {
+  const low = q.normalize("NFC").replace(/[?!.…]+$/u, "").replace(/\s+/g, " ").trim();
+  if (low.split(" ").length > 24) return null;
+  const id = findMedTopicId(low);
+  if (!id) return null;
+  // Hai người / hai bệnh cùng hỏi chuyện ăn ("mẹ bị tiểu đường, bố bị gout, nấu món gì cho cả hai") → đặt cạnh nhau phần ăn uống của từng bệnh
+  if (/(?:ăn gì|nấu gì|nấu món gì|món gì|kiêng gì|ăn uống)/u.test(low.toLowerCase())) {
+    const segs = low.split(/\s*[,;]\s*|\s+(?:và|còn|với)\s+/u);
+    const ids = [...new Set(segs.map((x) => findMedTopicId(x)).filter((x): x is string => !!x))];
+    if (ids.length === 2) {
+      const ts = (await Promise.all(ids.map((x) => loadMedTopic(x)))).filter((x): x is MedTopic => !!x);
+      if (ts.length === 2 && ts.every((t) => t.diet)) {
+        const one = (t: MedTopic) => `**${displayName(t)}**:\n${renderMed(t, "diet").text.split("\n").filter((l) => l.startsWith("•")).slice(0, 4).join("\n")}`;
+        return { text: `Hai bệnh nên Lomi đặt cạnh nhau phần ăn uống theo nguồn của từng bệnh nha 👇\n\n${ts.map(one).join("\n\n")}\n\nNấu chung thì chọn món **hợp với cả hai** — món nào một bên phải tránh thì tách riêng phần đó. Mỗi người có bệnh nền / thuốc riêng, nên hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi để chắc nha.`, medId: ids[0] };
+      }
+    }
+  }
+  const parts = low.split(/\s*[,;]\s*(?:và|với lại|còn|rồi)?\s*|\s+(?:và|với lại)\s+(?=(?:có|bao|là|nên|ăn|uống|kiêng|khi|vì|tại|làm|cách|lây|triệu|dấu|cần|được)(?![\p{L}]))/u).map((x) => x.trim()).filter((x) => x.split(" ").length >= 2);
+  if (parts.length < 2 || parts.length > 3) return null;
+  // (câu nhắc THUỐC — "uống ibuprofen được không", "có nên uống thêm thuốc giảm đau" — để lớp thuốc trả lời; tên bệnh phải nằm ở vế đầu)
+  if (findDrug(low) || W(/\b(thuốc|kháng sinh|viên)\b/u).test(low.toLowerCase()) && !W(/\b(có cần uống kháng sinh|uống kháng sinh không)\b/u).test(low.toLowerCase())) return null;
+  if (findMedTopicId(parts[0]) !== id) return null;
+  const t = await loadMedTopic(id);
+  if (!t) return null;
+  const nm = displayName(t);
+  const asks: { aspect: string; food: string | null }[] = [];
+  for (const p of parts) {
+    const own = findMedTopicId(p) === id;
+    const a0 = parseMedAsk(own ? p : `${nm.toLowerCase()} ${p}`);
+    // ("có nguy hiểm không / có sao không" → phần khi nào đi khám / cấp cứu)
+    const a = a0 && a0.aspect === "overview" && /(?:nguy hiểm|có sao)/u.test(p) ? { ...a0, aspect: "doctor" as const } : a0;
+    if (!a || a.id !== id || a.aspect === "overview") continue;
+    if (!asks.some((x) => x.aspect === a.aspect && x.food === a.food)) asks.push({ aspect: a.aspect, food: a.food });
+  }
+  if (asks.length < 2) return null;
+  const texts = asks.slice(0, 2).map((a, i) => {
+    const r = renderMed(t, a.aspect as Parameters<typeof renderMed>[1], a.food);
+    return i === 0 ? r.text : r.text.replace(/\n*📚[^\n]*$/u, "");
+  });
+  return { text: `Bạn hỏi hai ý về **${nm}**, Lomi trả lời lần lượt nha 👇\n\n${texts.join("\n\n— — —\n\n")}`, medId: id };
 }

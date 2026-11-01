@@ -15,14 +15,23 @@ const HAS_MARK = /^(?:(?:à|ờ|ơ|ủa)\s*,?\s*)?(?:không\s*[,.]|ko\s*[,.]|nh�
 
 const PERSON =/^(?:là\s+)?((?:con|bé|mẹ|má|ba|bố|cha|vợ|chồng|ông|bà|anh|chị|em)(?:\s+(?:tôi|tui|mình|em|anh|chị|nội|ngoại))?|tôi|tui|mình|tớ)(?=\s|$)/u;
 
-export type Repair = { q: string; lead?: string };
+export type Repair = { q: string; lead?: string; /** Không đủ ngữ cảnh để hiểu → hỏi lại đúng một câu (không đoán). */ ask?: string };
 /** prevQ = câu hỏi trước của người dùng; q = câu vừa gõ. Không phải câu sửa ý → null. */
 export function repairTurn(q: string, prevQ: string | undefined): Repair | null {
   const low = q.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").replace(/\s+/g, " ").trim();
   // "thôi không bói nữa, cho hỏi đau lưng" — dừng việc cũ + hỏi chuyện mới trong cùng câu → trả lời chuyện mới
   const stop = low.match(/^(?:thôi|ok|okie|ừ)?\s*,?\s*(?:không|ko|khỏi)\s+(?:bói|rút bài|xem bài|tìm quán|tìm)\s+nữa\s*[,.]?\s*(?:cho\s+(?:tui|tôi|mình|em|anh|chị)\s+)?(?:hỏi|cho hỏi|hỏi về|giờ hỏi)\s+(.{2,60})$/u);
   if (stop) return { q: stop[1], lead: "Okie, mình dừng ở đây nha 😊" };
-  if (!prevQ) return null;
+  if (!prevQ) {
+    // Chưa có câu nào trước đó: "à không, ý là tiểu đường" → hiểu phần sau; "vậy còn trẻ em" → hỏi lại, không đoán
+    if (HAS_MARK.test(low)) {
+      const nw0 = (low.match(MARK)?.[1] ?? "").replace(/^(?:là|hỏi)\s+/u, "").trim();
+      return nw0 && nw0 !== low && nw0.split(" ").length <= 5 && findMedTopicId(nw0) ? { q: nw0 } : null;
+    }
+    const e0 = low.match(/^(?:(?:vậy|thế|rồi)\s+)?còn\s+(.{2,30}?)(?:\s+(?:thì sao|thì thế nào|sao|thì|nữa|nhỉ|ạ|ha|hả))*$/u);
+    if (e0 && e0[1].split(" ").length <= 3 && !/(?:^|\s)(?:bao|mấy|gì|nào|không|ko|hạn|hàng|chỗ|món|ưu đãi|mở|được|đâu|ai|ko|k|kia|đó|này|ấy|trên|dưới|lại)(?:\s|$)/u.test(e0[1])) return { q: low, ask: `“Còn ${e0[1]}” là bạn muốn hỏi chuyện gì về ${e0[1]} nè? Nói Lomi thêm một chút để Lomi trả lời đúng ý nha 😊` };
+    return null;
+  }
   // TỈNH LƯỢC "vậy còn X (thì sao)" — X cùng loại với một phần của câu trước → thay đúng phần đó, giữ loại câu hỏi
   //   ("tôi bị sốt" → "thế còn bé thì sao" = "bé bị sốt"; "ung thư phổi có phải do hút thuốc không" → "vậy còn thuốc lá điện tử")
   const ell = low.match(/^(?:(?:vậy|thế|rồi|à|ủa|nhưng)\s+)?còn\s+(.{2,40}?)(?:\s+(?:thì sao|thì thế nào|thì như nào|thì ra sao|thì sao nhỉ|thì sao ạ|sao|thì|nữa|nhỉ|ạ|ha|hả))*$/u);

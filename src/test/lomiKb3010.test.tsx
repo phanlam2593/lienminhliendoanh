@@ -629,4 +629,38 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["răng mà ho hoài rứa"])).content).toMatch(/Nguyên nhân/);
     expect((await last(["tiểu đường ăn chuối được hông nhen"])).content).toMatch(/Tiểu đường/);
   }, T);
+  it("01/11 — hiểu câu vòng 4: hai ý trong một câu, câu ghép, sửa ý / tỉnh lược khi chưa có câu trước", async () => {
+    // Hai ý cùng một bệnh → trả lời cả hai phần (đối chứng: một ý thì một phần)
+    const two = await last(["cúm có lây không và bao lâu thì khỏi"]);
+    expect(two.content).toMatch(/chuyện lây của \*\*Cúm/);
+    expect(two.content).toMatch(/Diễn tiến của \*\*Cúm/);
+    const one = await last(["cúm có lây không"]);
+    expect(one.content).not.toMatch(/Diễn tiến/);
+    const sxh = await last(["sốt xuất huyết là gì và có nguy hiểm không"]);
+    expect(sxh.content).toMatch(/Sốt xuất huyết\*\* là gì/);
+    expect(sxh.content).toMatch(/khám|115/);
+    const dd = await last(["tôi bị đau dạ dày, uống cà phê được không, ăn cay được không"]);
+    expect(dd.content).toMatch(/caffeine/);
+    expect(dd.content).toMatch(/cay/);
+    // Hai người, hai chuyện → không gộp thành một người bị cả hai
+    const p2 = await last(["con tôi bị sốt còn tôi bị ho"]);
+    expect(p2.content).not.toMatch(/bé đang có: \*\*sốt và ho/);
+    expect(p2.content).toMatch(/Còn ý/);
+    // Hai bệnh hỏi ăn chung → đặt cạnh nhau phần ăn uống của từng bệnh
+    const dz = await last(["mẹ tôi bị tiểu đường, bố tôi bị gout, nấu món gì cho cả hai"]);
+    expect(dz.content).toMatch(/tiểu đường/i);
+    expect(dz.content).toMatch(/gout/i);
+    // "với lại" / "rồi + lời nhờ" tách hai việc, ý sau thành nút bấm
+    expect((await last(["đau đầu uống gì, với lại quán phở nào ngon"])).content).toMatch(/Còn ý “Quán phở nào ngon”/);
+    expect((await last(["tìm quán phở rồi chỉ tôi cách nhận ưu đãi"])).content).toMatch(/Còn ý “Chỉ tôi cách nhận ưu đãi”/);
+    // Cơ quan làm hậu quả: "ăn mặn có hại thận không" → bệnh thận, có trích dòng nguồn
+    expect((await last(["ăn mặn có hại thận không"])).content).toMatch(/có hại cho \*\*thận/);
+    // Câu hỏi thông tin không bị đáp bằng lời an ủi
+    expect((await last(["bao lâu thì nên đi khám răng"])).content).not.toMatch(/Đi khám đều đặn là tốt/);
+    // Sửa ý / tỉnh lược ở câu đầu tiên: hiểu phần sau, hoặc hỏi lại đúng một câu
+    expect((await last(["à không, ý là tiểu đường"])).content).toMatch(/Tiểu đường/);
+    const e0 = await last(["vậy còn trẻ em"]);
+    expect(e0.content).toMatch(/muốn hỏi chuyện gì về trẻ em/);
+    expect(e0.content).not.toMatch(/18 tuổi/);
+  }, T);
 });
