@@ -147,7 +147,10 @@ export function weightReply(q: string, history: string[]): string | null {
   const ed = [...history, q].some((t) => ED_SIGN.test(` ${normalizeVi(t)} `));
   if (VN(/\b(giảm|xuống) (\d+|mười|chục) ?(kg|ký|kí|cân)( \S+){0,3} (trong|chỉ trong) (\d+|một|hai|ba|vài) (ngày|tuần)\b/).test(n) || VN(/\bnhịn ăn( \S+){0,3} (giảm cân|cho nhanh|được không)\b/).test(n)) {
     if (ed) return null;
-    return "Giảm 10 kg trong 2 tuần là **không an toàn** đâu, và nhịn ăn để làm vậy dễ gây mệt, chóng mặt, mất cơ, rối loạn tiêu hoá, sỏi mật — xong thường tăng lại nhanh. NHS khuyên giảm khoảng **0,5–1 kg mỗi tuần** là mức an toàn, bền.\n\n• Ăn đủ bữa, nhiều rau, đạm nạc; bớt đồ ngọt, đồ chiên, nước ngọt, rượu bia\n• Vận động đều (đi bộ nhanh, đạp xe…), ngủ đủ\n• Có bệnh nền hay muốn giảm nhiều → gặp bác sĩ dinh dưỡng để có kế hoạch riêng";
+    // (01/11: chỉ nhắc con số người dùng THẬT SỰ nêu — "nhịn ăn giảm cân được không" từng nhận "Giảm 10 kg trong 2 tuần…")
+    const kgT = n.match(/ (\d+|muoi|chuc) ?(kg|ky|ki|can)( \S+){0,3} (?:trong|chi trong) (\d+|mot|hai|ba|vai) (ngay|tuan) /);
+    const lead = kgT ? `Giảm ${/^\d+$/.test(kgT[1]) ? kgT[1] : "10"} kg trong ${/^\d+$/.test(kgT[4]) ? kgT[4] : kgT[4] === "mot" ? "1" : kgT[4] === "hai" ? "2" : kgT[4] === "ba" ? "3" : "vài"} ${kgT[5] === "tuan" ? "tuần" : "ngày"} là **không an toàn** đâu, và nhịn ăn để làm vậy` : "Nhịn ăn để giảm cân là **không an toàn** đâu — nhịn ăn";
+    return lead + " dễ gây mệt, chóng mặt, mất cơ, rối loạn tiêu hoá, sỏi mật — xong thường tăng lại nhanh. NHS khuyên giảm khoảng **0,5–1 kg mỗi tuần** là mức an toàn, bền.\n\n• Ăn đủ bữa, nhiều rau, đạm nạc; bớt đồ ngọt, đồ chiên, nước ngọt, rượu bia\n• Vận động đều (đi bộ nhanh, đạp xe…), ngủ đủ\n• Có bệnh nền hay muốn giảm nhiều → gặp bác sĩ dinh dưỡng để có kế hoạch riêng";
   }
   if (VN(/\b(bao nhiêu|mấy) (calo|calories|kcal|ca lo)\b|\bcalo (mỗi|một) ngày\b/).test(n)) {
     // 30/10: "chuối bao nhiêu calo" — hỏi calo của MỘT MÓN có trong bảng FDA → lớp số liệu món ăn (lib/lomiFoodFacts) trả lời.

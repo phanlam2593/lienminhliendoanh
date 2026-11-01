@@ -310,7 +310,7 @@ export async function diagnoseReply(q: string): Promise<{ text: string; medId: s
   // 01/11: "Y có phải DO X không" hỏi NGUYÊN NHÂN (lớp causeReply đọc dạng đảo), trừ khi người dùng đang kể chính mình bị gì
   if (/^(?:do|tại|vì|bởi)\s/u.test(cand) && !W(/\b(tôi|tui|mình|em|anh|chị|con|bé|mẹ|ba|bố)\b/u).test(low.slice(0, low.indexOf(m[0])))) return null;
   const organ = W(/\b(dạ dày|bao tử|bụng)\b/u).test(low) ? "dạ dày" : "";
-  const food = W(/\b(sau ăn|sau khi ăn|ăn xong|tôm|cua|hải sản|đậu phộng|sữa)\b/u).test(low) ? "thực phẩm" : "";
+  const food = W(/\b(sau ăn|sau khi ăn|ăn xong|tôm|cua|hải sản|đồ biển|ốc|nghêu|sò|đậu phộng|sữa)\b/u).test(low) ? "thực phẩm" : "";
   const id = findMedTopicId(cand) ?? findMedTopicId(`bị ${cand}`) ?? (organ ? findMedTopicId(`${cand} ${organ}`) : null) ?? (food ? findMedTopicId(`${cand} ${food}`) : null);
   if (!id) return null;
   // chỉ khi có kể triệu chứng / tình huống trước đó trong câu (không phải "có phải là gout không" hỏi định nghĩa trống)

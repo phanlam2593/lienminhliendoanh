@@ -725,4 +725,34 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await chat(["tôi bị cảm", "à không phải cảm, cúm"]))[1].content).toMatch(/cúm/i);
     expect((await chat(["tìm quán phở", "à quên, tôi bị gout, ăn phở được không"]))[1].content).toMatch(/Gout/);
   }, T);
+  it("01/11 — hiểu câu vòng 7: thông tin nền đầu câu, an toàn (say không biết gì), người thân kể bệnh, điều kiện tìm quán", async () => {
+    // Câu dài: chữ ở phần kể nền không được coi là điều được hỏi
+    expect((await last(["hôm qua đi đám cưới về ăn nhiều đồ biển, sáng nay bị nổi mẩn ngứa khắp người, có phải dị ứng không"])).content).not.toMatch(/“đám cưới”/);
+    expect((await last(["mẹ tôi năm nay 65 tuổi, bị tiểu đường mười năm, gần đây hay tê chân, có sao không"])).content).not.toMatch(/“mười năm”/);
+    expect((await last(["bé nhà tôi 8 tháng, mấy hôm nay biếng ăn, có sao không"])).content).not.toMatch(/“tháng mấy”/);
+    // An toàn: say tới mức không biết gì → khẩn; đối chứng: rủ đi nhậu vẫn là chuyện vui
+    const drunk = await last(["thằng bạn tôi uống rượu say không biết gì"]);
+    expect(drunk.content).toMatch(/115/);
+    expect(drunk.content).not.toMatch(/vui rồi/);
+    // con vật ăn phải thứ lạ → thú y ngay; người ăn phải bị dị ứng → sức khoẻ người
+    const cat = await last(["mèo nhà tôi ăn phải chocolate"]);
+    expect(cat.content).toMatch(/thú y \*\*ngay\*\*/);
+    expect((await last(["tôi ăn phải chocolate bị dị ứng"])).content).not.toMatch(/thú y/);
+    // Không chèn con số người dùng không nói
+    const fast = await last(["giảm cân bằng cách nhịn ăn được không"]);
+    expect(fast.content).not.toMatch(/10 kg/);
+    expect(fast.content).toMatch(/không an toàn/);
+    expect((await last(["giảm 5kg trong 1 tuần được không"])).content).not.toMatch(/10 kg/);
+    // Người thân kể bệnh có thẻ → hỏi lại đúng người + đúng bệnh, không "kể thêm đi" chung chung
+    const mom = await last(["mẹ tôi bị phù chân"]);
+    expect(mom.content).toMatch(/Mẹ bạn bị \*\*phù chân\*\*/);
+    expect(mom.med?.id).toBe("phu-chan");
+    const preg = await last(["chị tôi mang thai bị phù chân"]);
+    expect(preg.content).toMatch(/Chị bạn/);
+    expect(preg.content).toMatch(/115/);
+    // Tìm quán kèm điều kiện chưa lọc được → vẫn đưa quán nhưng nói rõ
+    const late = await last(["tìm quán cà phê mở khuya"]);
+    expect(late.places?.length).toBeGreaterThan(0);
+    expect(late.content).toMatch(/chưa lọc được theo \*\*giờ mở cửa/);
+  }, T);
 });

@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -129,6 +129,15 @@ export function urgentOf(text: string): Urgent | null {
   if (KNOWLEDGE.test(n) || HEARSAY.test(n)) return null;
   const other = OTHER.test(n);
 
+  // 01/11 (hiểu câu vòng 7): "thằng bạn uống rượu say không biết gì" từng được đáp như chuyện vui ("Nghe là thấy vui rồi 🍻").
+  //   Say tới mức không biết gì / gọi không tỉnh / thở chậm → dấu hiệu ngộ độc rượu (thẻ ngo-doc-ruou có nguồn) → khẩn.
+  if (VN(/\b(say|xỉn|say xỉn|nhậu|uống rượu|uống bia|uống nhiều rượu)\b/).test(n) && VN(/\b(không biết gì|bất tỉnh|li bì|gọi không (dậy|tỉnh)|lay không (dậy|tỉnh)|không tỉnh|mê man|không dậy nổi|thở chậm|thở yếu|co giật|tím tái)\b/).test(n))
+    return {
+      id: "alcohol",
+      card: "ngo-doc-ruou",
+      aspect: "emergency",
+      head: "🚨 Say tới mức **không biết gì, gọi không tỉnh, thở chậm / yếu hoặc co giật** có thể là **ngộ độc rượu** — gọi **115** ngay, đừng để người đó nằm một mình.",
+    };
   // Thai kỳ đứng trước "chảy máu" chung: đang mang thai mà ra máu là chuyện của thai kỳ.
   if (PREG.test(n)) {
     if (PREG_URGENT.test(n))

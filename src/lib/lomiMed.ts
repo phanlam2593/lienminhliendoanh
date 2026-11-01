@@ -450,7 +450,12 @@ function allFacts(t: MedTopic): DrugFact[] {
   return [...t.about, ...t.signs, ...t.causes, ...t.course, ...t.care, ...(t.diet ? [...t.diet.avoid, ...t.diet.ok] : []), ...t.doctor, ...t.emergency];
 }
 /** Các ý trong thẻ nói đúng điều được hỏi (rỗng nếu không có ý nào). */
-export function focusFacts(t: MedTopic, text: string): { facts: DrugFact[]; shown: string[]; asked?: string[] } {
+export function focusFacts(t: MedTopic, text0: string): { facts: DrugFact[]; shown: string[]; asked?: string[] } {
+  // 01/11: câu dài "thông tin nền, …, câu hỏi" ("hôm qua đi đám cưới về ăn đồ biển, sáng nay nổi mẩn, có phải dị ứng không") —
+  //   điều được hỏi nằm ở VẾ CÓ CÂU HỎI (thường là vế cuối); chữ ở phần kể nền ("đám cưới", "mười năm") không phải trọng tâm.
+  const cls = text0.split(/\s*[,;]\s*/u).filter((x) => x.trim());
+  const qi = cls.length > 1 ? [...cls.keys()].reverse().find((i) => QWORD.test(` ${normalizeVi(cls[i])} `)) : undefined;
+  const text = qi !== undefined ? cls.slice(qi).join(", ") : text0;
   const { terms, shown } = focusTerms(t, text);
   // Tên cụ thể hơn chứa một tên chung của cùng thẻ ("thuốc lá điện tử" ⊃ "thuốc lá") → phần thêm ("điện tử", ≥ 2 chữ) là trọng tâm.
   const nq = ` ${normalizeVi(text)} `;

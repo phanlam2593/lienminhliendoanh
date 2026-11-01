@@ -114,7 +114,7 @@ export function diffPair(q: string): [string, string] | null {
  * không được đưa nguyên nhân / mẹo / thuốc của người. Trả về tên con vật như người dùng gõ, hoặc null.
  */
 const PET = "(?:con |bé |em |chú |cô )?(mèo|chó|cún|mèo con|chó con|cún con|thú cưng|vẹt|chim|thỏ|hamster|chuột hamster|rùa|cá cảnh)";
-const PET_SX = "(sốt|tiêu chảy|đi ngoài|nôn|ói|ho|hắt hơi|sổ mũi|chảy nước mũi|ngứa|rụng lông|nổi mẩn|ghẻ|táo bón|chảy máu|đau bụng|khó thở|thở gấp|co giật|run|sưng|viêm|nhiễm trùng|bị thương|đi tiểu ra máu|tiểu ra máu)";
+const PET_SX = "(sốt|tiêu chảy|đi ngoài|nôn|ói|ho|hắt hơi|sổ mũi|chảy nước mũi|ngứa|rụng lông|nổi mẩn|ghẻ|táo bón|chảy máu|đau bụng|khó thở|thở gấp|co giật|run|sưng|viêm|nhiễm trùng|bị thương|đi tiểu ra máu|tiểu ra máu|ăn phải|nuốt phải|ăn nhầm|uống nhầm|liếm phải)";
 export function petPatient(q: string): string | null {
   const low = low0(q);
   const m = low.match(new RegExp(`^(?:(?:nhà|của)\\s+(?:tôi|tui|mình|em|anh|chị|con)\\s+(?:có\\s+)?)?${PET}(?:\\s+(?:nhà|của)\\s+(?:tôi|tui|mình|em|anh|chị|bạn|con|tớ|a|e|c))?\\s+(?:\\S+\\s+){0,3}?(?:đang\\s+|hay\\s+|cứ\\s+|bị\\s+|lại\\s+)*${PET_SX}(?![\\p{L}])`, "u"));

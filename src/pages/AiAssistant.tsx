@@ -132,7 +132,7 @@ import {
 } from "@/lib/tarot";
 import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
-import { replyMismatch } from "@/lib/lomiReplyGate";
+import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { normNeg, otherComplaint, petPatient, qtypeOf } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
@@ -1256,6 +1256,15 @@ export function AiChat({
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) || rewroteRef.current ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
+    // 01/11: tìm quán kèm điều kiện Lomi CHƯA lọc được ("quán cà phê mở khuya", "quán lẩu cho nhóm 10 người") → vẫn đưa quán,
+    //   nhưng nói rõ điều kiện đó chưa được lọc (không lờ đi như thể các quán này đã đúng ý)
+    if (!en && reply.places?.length && !prevA?.places?.length) {
+      const rf0 = searchRefine(rawRef.current ?? asked);
+      if (rf0 && !reply.content.includes("chưa lọc được")) reply = { ...reply, content: `${reply.content}\n\n${rf0.replace(/^Lomi chưa lọc được theo/u, "Lưu ý: Lomi chưa lọc được theo")}` };
+    }
+    // 01/11: câu nêu một bệnh có thẻ mà câu đáp chỉ là "nghe nè, kể thêm đi" → hỏi lại đúng người + đúng bệnh (lib/lomiReplyGate.vagueMiss)
+    const vm = gate || en ? null : vagueMiss(rawRef.current ?? asked, reply);
+    if (vm) reply = { ...reply, content: vm.text, med: { id: vm.medId }, quick: vm.quick, talk: undefined };
     // 22/10: câu gõ tiếng Anh mà không lớp nào hiểu → nói bằng tiếng Anh (không đáp "Câu này Lomi chưa hiểu ý lắm" bằng tiếng Việt).
     if ((reply.unk || reply.stuck) && looksEnglish(rawRef.current ?? asked)) reply = { ...reply, content: englishFallback(rawRef.current ?? asked) };
     // 20/10 (Kir): lời dặn chung (không kê đơn, "muốn xem kỹ phần nào…", lưu ý thảo dược…) chỉ nói lần đầu trong cuộc trò chuyện.
@@ -1705,7 +1714,7 @@ export function AiChat({
       const pet = en ? null : petPatient(raw);
       if (pet && !VN(/\b(thuốc của người|thuốc người|uống thuốc|cho uống)\b/).test(` ${normalizeVi(raw)} `)) {
         rewroteRef.current = true;
-        return localReply(q, { role: "assistant", content: `Thương bé ${pet} ghê 🥺 Kiến thức sức khoẻ của Lomi là **cho người**, nên Lomi không nói nguyên nhân hay cách chữa cho ${pet} được — con vật bị bệnh khác người, nhiều thuốc người dùng bình thường lại độc với chó mèo.\n• Đừng tự cho bé uống thuốc của người\n• Đưa bé đi **bác sĩ thú y** để được khám\n• Bé lả đi, bỏ ăn uống, khó thở, co giật hay chảy máu → đưa đi thú y **ngay**`, local: true, about: { text: `${pet}`, kind: "pet" } });
+        return localReply(q, { role: "assistant", content: `Thương bé ${pet} ghê 🥺 Kiến thức sức khoẻ của Lomi là **cho người**, nên Lomi không nói nguyên nhân hay cách chữa cho ${pet} được — con vật bị bệnh khác người, nhiều thuốc người dùng bình thường lại độc với chó mèo.\n• Đừng tự cho bé uống thuốc của người\n• Đưa bé đi **bác sĩ thú y** để được khám\n• Bé lả đi, bỏ ăn uống, khó thở, co giật hay chảy máu → đưa đi thú y **ngay**${VN(/\b(ăn phải|nuốt phải|ăn nhầm|uống nhầm|liếm phải)\b/).test(` ${normalizeVi(raw)} `) ? "\n• Bé **ăn / nuốt phải** thứ lạ thì gọi hoặc đưa đi thú y **ngay**, kể cả khi bé chưa có biểu hiện gì — mang theo bao bì hoặc thứ bé đã ăn" : ""}`, local: true, about: { text: `${pet}`, kind: "pet" } });
       }
       // xin liều / dùng thuốc của người khác; xin chẩn đoán vòng; "có nguy hiểm không"
       const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);
