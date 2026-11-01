@@ -50,6 +50,20 @@ export function trapReply(q: string): Trap | null {
     const fr = faqById("free"), mb = faqById("membership");
     if (fr) return { text: `${fr.a.vi}${mb && VN(/\b(ưu đãi|doanh nghiệp|quán)\b/).test(n) ? `\n\nRiêng chuyện ưu đãi: ${mb.a.vi.charAt(0).toLowerCase()}${mb.a.vi.slice(1)}` : ""}`, faqId: "free" };
   }
+  // 01/11 (vòng 19): câu hỏi thao tác ở các mảng khác của app — đúng loại câu hỏi (bao lâu / ai / được không)
+  {
+    const f = (id: string, lead = "") => { const x = faqById(id); return x ? { text: `${lead}${x.a.vi}`, faqId: id } : null; };
+    if (VN(/\b(bao lâu|khi nào|chừng nào|mấy phút) (thì )?(tài xế|xe|shipper) (tới|đến|đón)|\bai (chở|giao|đón)( tôi| tui| mình)?\b|\btài xế là ai\b/).test(n)) { const r = f("ridetrack"); if (r) return r; }
+    if (VN(/\b(cồng kềnh|hàng nặng|đồ to|bốc dỡ|bốc vác)\b/).test(n) && VN(/\b(gửi|giao|chở|ship)\b/).test(n)) { const r = f("ridprice", "Được nha, chỉ là có thể tính thêm phụ phí 📦 "); if (r) return r; }
+    if (VN(/\bquẹt\b/).test(n) && VN(/\b(quẹt trái|bỏ qua|vuốt trái)\b/).test(n) && VN(/\b(thấy lại|hiện lại|gặp lại|quay lại)\b/).test(n))
+      return { text: "Có nha 🙂 Người bạn đã **bỏ qua** (quẹt trái) sẽ **hiện lại sau 48 giờ**, nên chưa phải mất luôn đâu.", faqId: "quetwhat" };
+    if (VN(/\bquẹt\b/).test(n) && VN(/\b(ai thấy|ai xem|ai đọc|người khác thấy)\b/).test(n))
+      return { text: "Nhu cầu Quẹt của bạn hiện cho những người **đang dùng Quẹt cùng mục** (Game, Làm quen, Trao đổi, Công việc) và **hợp bộ lọc** khu vực, độ tuổi của họ nha 🙂 Muốn tạm không hiện thì vào Quẹt → thẻ mục đó → **Tạm dừng**.", faqId: "quetwhat" };
+    if (VN(/\b(gửi ảnh|gửi hình|gửi gif|gửi sticker|ghi âm|tin nhắn thoại|sửa tin nhắn|xoá tin nhắn|xóa tin nhắn|thu hồi tin nhắn|thu hồi)\b/).test(n) && VN(/\b(được không|được ko|có được|thế nào|sao|ở đâu|cách)\b/).test(n)) {
+      const r = f("msgfeatures", VN(/\bthu hồi\b/).test(n) ? "App có **xoá tin nhắn** (Lomi chưa chắc người kia đã xem trước đó hay chưa) — đây là những gì làm được trong khung chat nè:\n" : "");
+      if (r) return r;
+    }
+  }
   // 01/11 (vòng 18): CÂU HỎI THAO TÁC CỦA CHỦ QUÁN — sửa thông tin, ưu đãi hiện ở đâu / ai thấy, PIN để làm gì / đổi ở đâu, khách nhận ưu đãi
   //   thì biết sao, xem / xoá đánh giá, duyệt bao lâu, mấy quán một tài khoản — đúng câu hỏi thường gặp, không phải mẹo quảng cáo
   {
@@ -279,6 +293,8 @@ export function actionReply(q: string): Trap | null {
   const cam = W(/\b(camera|cam an ninh)\b/u).test(low) && W(/\b(mở|xem|coi|check)\b/u).test(low);
   if (!ASK_DO.test(low) && !cam) return null;
   if (W(/\b(cấp cứu|115|113|114)\b/u).test(low)) return null;
+  // 01/11 (vòng 19): "gửi ảnh trong tin nhắn được không" — hỏi app CÓ CHO LÀM không, không phải nhờ Lomi làm thay
+  if (/^(?:có\s+)?(?:gửi|nhắn|gọi|đặt|đăng|chia sẻ|xoá|xóa)\s+.{1,40}?\s+(?:được không|được ko|được k|có được không|đc không|đc ko)$/u.test(low) && !W(/\b(giúp|giùm|dùm|hộ|thay|cho (?:tôi|tui|mình|em|anh|chị)|bạn|lomi)\b/u).test(low)) return null;
   // 01/11 (vòng 12): "họ không thèm nhắn cho tôi", "anh ấy chẳng gọi cho em" — người KHÁC không làm, người dùng đang than, không phải nhờ Lomi làm
   if (/^(?:mà\s+)?(?:họ|nó|anh ấy|cô ấy|chị ấy|ảnh|chỉ|người ta|người yêu|ny|bạn trai|bạn gái|chồng|vợ|sếp|bạn tôi|bạn tui)(?:\s+(?:tôi|tui|mình|em))?\s+(?:\S+\s+){0,2}?(?:không|chẳng|chả|hổng|chưa|ko|k)(?:\s+(?:thèm|chịu|hề|bao giờ|có))?\s+(?:nhắn|gọi|gửi|trả lời|rep)/u.test(low)) return null;
   // "làm sao để…", "cách…" là hỏi cách tự làm — lớp hướng dẫn app lo

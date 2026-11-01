@@ -930,4 +930,16 @@ describe("30/10 — trả lời qua khung chat", () => {
     // đối chứng: xin ý tưởng thu hút khách vẫn là tư vấn kinh doanh
     expect((await last(["quán tôi vắng khách quá, làm sao thu hút khách"])).faqId).toBeUndefined();
   }, T);
+  it("01/11 — hiểu câu vòng 19: câu hỏi thao tác ở Đưa đón / Quẹt / Tin nhắn đúng loại câu hỏi; 'X được không' là hỏi app cho làm không", async () => {
+    expect((await last(["đặt xe rồi bao lâu tài xế tới"])).faqId).toBe("ridetrack");
+    expect((await last(["gửi đồ cồng kềnh được không"])).content).toMatch(/phụ phí/);
+    expect((await last(["người tôi quẹt trái có thấy lại không"])).content).toMatch(/48 giờ/);
+    expect((await last(["ai thấy được nhu cầu quẹt của tôi"])).content).toMatch(/cùng mục/);
+    const img = await last(["gửi ảnh trong tin nhắn được không"]);
+    expect(img.content).toMatch(/Gửi ảnh/);
+    expect(img.content).not.toMatch(/không tự nhắn tin thay bạn/);
+    // đối chứng: nhờ Lomi làm thay vẫn nói thật là không làm thay
+    expect((await last(["nhắn cho chủ quán giúp tôi được không"])).content).toMatch(/không tự nhắn tin thay bạn/);
+    expect((await last(["thu hồi tin nhắn được không"])).stuck).toBeUndefined();
+  }, T);
 });
