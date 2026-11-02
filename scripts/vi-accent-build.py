@@ -78,6 +78,33 @@ for line in ([] if os.environ.get("NOSEED") else open("src/lib/viAccent/seed.txt
             uni_main[w] += 1
             if i: bi[f"{ws[i-1]} {w}"] += 1
             if i > 1: tri[f"{ws[i-2]} {ws[i-1]} {w}"] += 1
+# 01/11 (hướng 1 — sửa gốc phần dấu): thêm thống kê cặp chữ từ kho Wikipedia tiếng Việt (undertheseanlp/corpus.viwiki, CC BY-SA 4.0 —
+#   chỉ lấy SỐ ĐẾM cặp / bộ ba chữ, không đưa văn bản vào app). Chạy: WIKI_DIR=/đường/dẫn/corpus.viwiki/viwiki python3 scripts/vi-accent-build.py
+#   Trọng số thấp (WIKI_W) để giọng chat của app vẫn quyết định; chữ chỉ có ở Wikipedia thì không thêm vào từ điển (giữ mô hình gọn).
+WIKI_DIR = os.environ.get("WIKI_DIR")
+WIKI_W = float(os.environ.get("WIKI_W", "0.25"))
+if WIKI_DIR and os.path.isdir(WIKI_DIR):
+    wu, wb, wt = Counter(), Counter(), Counter()
+    for fn in sorted(os.listdir(WIKI_DIR)):
+        txt = unicodedata.normalize("NFC", open(os.path.join(WIKI_DIR, fn), encoding="utf8", errors="ignore").read()).lower()
+        txt = re.sub(r"\d+(?:[.,]\d+)?", " num ", txt)
+        for seg in re.split(r"[^a-zà-ỹđ ]+", txt):
+            ws = WORD.findall(seg)
+            if len(ws) < 2: continue
+            ws = ["<s>"] + ws + ["</s>"]
+            for i, w in enumerate(ws):
+                wu[w] += 1
+                if i: wb[f"{ws[i-1]} {w}"] += 1
+                if i > 1: wt[f"{ws[i-2]} {ws[i-1]} {w}"] += 1
+    known = {w for w in uni if uni_main[w] > 0}
+    for w, c in wu.items():
+        if w in known: uni[w] += max(1, round(c * WIKI_W)) if c * WIKI_W >= 0.5 else 0
+    for k, c in wb.items():
+        v = round(c * WIKI_W)
+        if v and all(x in known or x in ("<s>", "</s>") for x in k.split(" ")): bi[k] += v
+    for k, c in wt.items():
+        v = round(c * WIKI_W)
+        if v >= 1 and all(x in known or x in ("<s>", "</s>") for x in k.split(" ")): tri[k] += v
 # chỉ giữ chữ xuất hiện ≥ 2 lần (bớt chữ gõ lỗi), cặp chữ ≥ 2 lần
 UMIN = int(os.environ.get("UMIN", "3"))
 U = {w: c for w, c in uni.items() if c >= UMIN and len(w) <= 7 and uni_main[w] > 0}

@@ -46,7 +46,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
-import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, typoCandidates } from "@/lib/lomiViRestore";
+import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, restoreViAlts, typoCandidates } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
@@ -456,6 +456,8 @@ export function AiChat({
   const emoRef = useRef<string | null>(null);
   // câu người dùng đã được hiểu lại (thay "nó", lấy ý thứ 2…) → bỏ qua chốt "lạc đề" so trên câu gốc
   const rewroteRef = useRef(false);
+  // 01/11 (hướng 1): câu gõ không dấu mà hai cách đọc sát điểm dẫn tới HAI nội dung khác nhau → kèm dòng "Lomi hiểu là…" + nút cách đọc kia
+  const viEchoRef = useRef<{ chosen: string; alt: string } | null>(null);
   // Mạch chuyện (lib/lomiStory) của tin trước: câu đáp của lớp khác (kiến thức sức khoẻ, xã giao, chưa hiểu…) vẫn giữ mạch thêm tối đa
   // 2 lượt — trừ khi câu đáp mở hẳn một việc khác (bói bài, tìm quán, tư vấn kinh doanh, hỏi app). Xem localReply().
   const carryRef = useRef<{ thread: Thread; about?: Msg["about"] } | null>(null);
@@ -1246,6 +1248,10 @@ export function AiChat({
     setErr(null);
     const c = carryRef.current;
     const newFlow = !!(reply0.tarot || reply0.tarotAwait || reply0.biz || reply0.bizPick || reply0.dish || reply0.dishAsk || reply0.dishPick || reply0.search || reply0.faqId || reply0.issue);
+    const ve = viEchoRef.current;
+    viEchoRef.current = null;
+    // (không chen vào lời Lomi đang HỎI LẠI chính chỗ phân vân đó — "nám da hay nấm da?")
+    if (ve && !reply0.harm && !reply0.stuck && !/^Lomi hỏi lại/u.test(reply0.content)) reply0 = { ...reply0, content: `_Lomi hiểu là: “${ve.chosen}”_\n\n${reply0.content}`, quick: [ve.alt, ...(reply0.quick ?? [])].slice(0, 5) };
     let reply: Msg = c && !reply0.thread && !newFlow ? { ...reply0, thread: { ...c.thread, asked: [], idle: (c.thread.idle ?? 0) + 1 }, about: reply0.about ?? c.about } : reply0;
     // Trải bài vừa rút được nhớ thêm 3 lượt qua các câu đáp của lớp khác (tâm sự, hỏi han…), trừ khi lượt này mở một mạch mới.
     const prevA = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
@@ -1453,6 +1459,7 @@ export function AiChat({
     if (!typed || busy) return;
     rawRef.current = typed;
     rewroteRef.current = false;
+    viEchoRef.current = null;
     const stk = parseStickerToken(typed);
     if (stk) {
       setInput("");
@@ -1508,9 +1515,21 @@ export function AiChat({
       .replace(/(^|[^\p{L}])lm\s+j(?![\p{L}])/giu, "$1làm gì")
       .replace(/(?<!(?:đau|viêm|rát|ngứa|khàn|sưng|dau|viem|rat|ngua|khan|sung)\s+)(?<=\s)(hong|hông|hok|hơm)(\s*(?:nhen|nha|ta|vậy)?)\s*([?!.…]*)\s*$/iu, (_m, _w, p2, p3, _o, all: string) => `${/[^\x00-\x7F]/.test(all.replace(/(hông|hơm)\s*\S*\s*[?!.…]*\s*$/iu, "")) ? "không" : "khong"}${p2}${p3}`);
     let raw = en ? typed : viMixFix(typedV);
+    let pickedRestore: { from: string; to: string } | null = null;
     if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
-      raw = restoreVi(raw);
+      // 01/11 (hướng 1 — sửa gốc phần dấu): không tin tuyệt đối MỘT cách đoán dấu. Cách đọc tốt nhất không khớp điều gì Lomi biết mà một
+      //   cách đọc sát điểm (đổi một chữ: "bơi/bói", "đậu/đâu", "chị/chỉ") khớp tên bệnh / triệu chứng / câu hỏi về app → lấy cách đọc đó.
+      const ra = restoreViAlts(raw, { maxDelta: 3 });
+      const knows = (t: string) => !!findMedId(t) || !!matchFaq(t) || (analyzeBody(t)?.sx.length ?? 0) > 0;
+      const pick = knows(ra.best) ? null : ra.alts.find((a) => knows(a.text));
+      pickedRestore = { from: raw, to: pick ? pick.text : ra.best };
+      // còn phân vân: một cách đọc khác sát điểm dẫn tới chủ đề / câu hỏi app KHÁC → nói rõ Lomi hiểu thế nào, cho bấm cách đọc kia
+      const hitOf = (t: string) => findMedId(t) ?? matchFaq(t)?.id ?? null;
+      const hChosen = hitOf(pickedRestore.to);
+      const other = hChosen ? ra.alts.find((a) => a.text !== pickedRestore!.to && a.delta < 2 && hitOf(a.text) && hitOf(a.text) !== hChosen) : undefined;
+      viEchoRef.current = other ? { chosen: pickedRestore.to, alt: other.text } : null;
+      raw = pickedRestore.to;
     } // 22/10: "a bị headache quá" → "a bị đau đầu quá"
     // 30/10 (nhật ký bí: "Mẹo chữa nghẹt mũu" → "Kiến thức này Lomi chưa được tiếp thu"): một chữ gõ sai một ký tự làm hỏng tên bệnh.
     //   Chỉ sửa khi câu gốc KHÔNG khớp chủ đề sức khoẻ nào, chữ đó không có trong từ điển âm tiết, và câu sau khi sửa một chữ khớp đúng một chủ đề.
@@ -1562,7 +1581,7 @@ export function AiChat({
     let viStrictTurn = false;
     if (!en) {
       await loadViModel();
-      const rv0 = restoreVi(typedFix);
+      const rv0 = pickedRestore && pickedRestore.from === typedFix ? pickedRestore.to : restoreVi(typedFix);
       viStrictTurn = typedWithAccents(typedFix, rv0);
       // câu gõ dấu: chỉ đoán dấu cho chữ gõ thiếu dấu mà vốn không phải chữ nào ("dau" → "đau"; "di truyền" giữ "di")
       const rv = viStrictTurn ? restoreVi(typedFix, { keepBare: true }) : rv0;

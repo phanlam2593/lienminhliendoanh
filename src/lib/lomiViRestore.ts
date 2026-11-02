@@ -82,14 +82,15 @@ const TEEN_CTX: Record<string, string> = {
   k: "không", ko: "không", kh: "không", hk: "không", khum: "không", dc: "được", đc: "được", j: "gì", v: "vậy", z: "vậy",
   r: "rồi", ntn: "thế", nhiu: "nhiều", vs: "với", wa: "quá", ck: "chồng", vk: "vợ", ny: "người", mk: "mình", lm: "làm", trc: "trước", hnay: "nay",
 };
-export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): string {
-  if (!idx || off) return text;
-  const { m, forms, total } = idx;
+type Prepared = { parts: string[]; wi: number[]; cands: string[][]; typedAt: string[]; linked: boolean[] };
+function prepare(text: string, opts: { keepBare?: boolean }): Prepared | null {
+  if (!idx || off) return null;
+  const { m, forms } = idx;
   // lẻ: chữ hoặc SỐ (số tính như một chữ "num" để "sốt 38 độ" vẫn nối được ngữ cảnh), chẵn: phần giữa (khoảng trắng, dấu câu…)
   const parts = text.normalize("NFC").split(/([\p{L}]+|\d+(?:[.,]\d+)?)/u);
   const wi: number[] = [];
   for (let i = 1; i < parts.length; i += 2) wi.push(i);
-  if (!wi.length) return text;
+  if (!wi.length) return null;
   // Ứng viên cho từng chữ
   const cands: string[][] = wi.map((i) => {
     const w = parts[i].toLowerCase();
@@ -106,6 +107,14 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
     }
     return m.u[w] && !f.includes(w) ? [w, ...f] : f;
   });
+  // Câu đứt đoạn bởi dấu câu ("ok. em buon") thì chữ sau dấu câu tính như đầu câu.
+  const linked = wi.map((i, k) => k > 0 && /^\s+$/.test(parts[i - 1]));
+  const typedAt = wi.map((i) => parts[i].toLowerCase());
+  return { parts, wi, cands, typedAt, linked };
+}
+/** Viterbi bậc 2 trên các ứng viên → cách đọc tốt nhất và tổng điểm (log). */
+function decode(cands: string[][], typedAt: string[], linked: boolean[]): { out: string[]; score: number } {
+  const { m, total } = idx!;
   // Điểm: log P(c | a b) — có bộ ba thì theo bộ ba, không thì cặp chữ, không nữa thì tần suất chữ (stupid backoff 0.4).
   const uni = (w: string) => (m.u[w] ? Math.log(m.u[w] / total) : LOG_FLOOR);
   // Cách đọc VỐN KHÔNG DẤU ("anh", "con", "tui", "nay") được ưu tiên nhẹ: người gõ không dấu dùng các chữ này rất nhiều, còn văn bản
@@ -122,11 +131,8 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
     if (t && ab) return Math.log(t / ab);
     return Math.log(0.4) + two(b, c);
   };
-  // Câu đứt đoạn bởi dấu câu ("ok. em buon") thì chữ sau dấu câu tính như đầu câu.
-  const linked = wi.map((i, k) => k > 0 && /^\s+$/.test(parts[i - 1]));
   // Viterbi bậc 2: trạng thái = (chữ trước, chữ này). "<s>" = đầu câu.
   type St = { p: string; w: string; s: number; back: number };
-  const typedAt = wi.map((i) => parts[i].toLowerCase());
   let prev: St[] = cands[0].map((w) => ({ p: "<s>", w, s: two("<s>", w) + pref(w, typedAt[0]), back: -1 }));
   const trail: St[][] = [prev];
   for (let k = 1; k < cands.length; k++) {
@@ -154,12 +160,17 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
   // Lần ngược — cộng điểm "đứng cuối câu" ("đau bụng quá" chứ không phải "qua"; "mấy ngày nay" chứ không phải "này")
   const fin = prev.map((x) => x.s + three(x.p, x.w, "</s>"));
   let j = fin.reduce((bi, x, i) => (x > fin[bi] ? i : bi), 0);
+  const score = fin[j];
   const out: string[] = new Array(cands.length);
   for (let k = cands.length - 1; k >= 0; k--) {
     out[k] = trail[k][j].w;
     j = trail[k][j].back;
   }
-  wi.forEach((i, k) => {
+  return { out, score };
+}
+function render(pr: Prepared, out: string[]): string {
+  const parts = [...pr.parts];
+  pr.wi.forEach((i, k) => {
     const orig = parts[i];
     const w = out[k];
     if (w === "num" || TEEN_CTX[orig.toLowerCase()]) return;
@@ -167,6 +178,38 @@ export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): stri
     parts[i] = orig === orig.toUpperCase() && orig.length > 1 ? w.toUpperCase() : orig[0] === orig[0].toUpperCase() ? w.charAt(0).toUpperCase() + w.slice(1) : w;
   });
   return parts.join("");
+}
+export function restoreVi(text: string, opts: { keepBare?: boolean } = {}): string {
+  const pr = prepare(text, opts);
+  if (!pr) return text;
+  return render(pr, decode(pr.cands, pr.typedAt, pr.linked).out);
+}
+
+/** Một cách đọc khác của câu: đổi đúng MỘT chữ so với cách đọc tốt nhất, kèm độ chênh điểm (log, càng nhỏ càng sát). */
+export type ViAlt = { text: string; delta: number; at: number; word: string; alt: string };
+/**
+ * 01/11 (hướng 1 — sửa gốc phần dấu): đoán dấu xong KHÔNG tin tuyệt đối một cách đọc. Trả về cách đọc tốt nhất và các cách đọc
+ *   khác sát điểm (mỗi cách đổi một chữ có nhiều cách đọc: "chị/chỉ", "ho/họ", "bơi/bói"…). Nơi gọi chọn cách đọc nào khớp với điều
+ *   Lomi thật sự biết (tên bệnh, câu hỏi về app), hoặc thấy còn phân vân thì nói "Lomi hiểu là…".
+ */
+export function restoreViAlts(text: string, opts: { keepBare?: boolean; maxDelta?: number; max?: number } = {}): { best: string; alts: ViAlt[] } {
+  const pr = prepare(text, opts);
+  if (!pr) return { best: text, alts: [] };
+  const top = decode(pr.cands, pr.typedAt, pr.linked);
+  const alts: ViAlt[] = [];
+  const maxDelta = opts.maxDelta ?? 4;
+  pr.cands.forEach((cs, k) => {
+    if (cs.length < 2) return;
+    for (const c of cs) {
+      if (c === top.out[k]) continue;
+      const forced = pr.cands.map((x, i) => (i === k ? [c] : x));
+      const r = decode(forced, pr.typedAt, pr.linked);
+      const delta = top.score - r.score;
+      if (delta <= maxDelta) alts.push({ text: render(pr, r.out), delta, at: k, word: top.out[k], alt: c });
+    }
+  });
+  alts.sort((a, b) => a.delta - b.delta);
+  return { best: render(pr, top.out), alts: alts.slice(0, opts.max ?? 8) };
 }
 
 // ── 30/10: sửa MỘT lỗi gõ trong một chữ (nhật ký bí: "Mẹo chữa nghẹt mũu" → "Ui... Kiến thức này Lomi chưa được tiếp thu") ──

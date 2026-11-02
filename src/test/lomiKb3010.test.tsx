@@ -1080,4 +1080,23 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["app bị lỗi gì vậy"])).content).toMatch(/trục trặc|lỗi/);
     expect((await last(["cãi nhau với người yêu"])).content).not.toMatch(/Chuyện gia đình/);
   }, T);
+  it("02/11 — hướng 1 (sửa gốc phần dấu): đoán dấu trả về cả các cách đọc sát điểm; chọn cách đọc khớp điều Lomi biết", async () => {
+    const { restoreViAlts, restoreVi, loadViModel } = await import("@/lib/lomiViRestore");
+    await loadViModel();
+    // cách đọc tốt nhất của restoreViAlts trùng restoreVi (không đổi hành vi cũ)
+    for (const q of ["bi gout an dau duoc khong", "chi bi dau bung", "quen mat khau", "toi muon bo thuoc la ma kho qua", "an toi muon"]) expect(restoreViAlts(q).best).toBe(restoreVi(q));
+    // chữ còn phân vân có cách đọc thay thế kèm độ chênh điểm
+    const nm = restoreViAlts("bi nam da", { maxDelta: 3 });
+    expect([nm.best, ...nm.alts.map((a) => a.text)]).toEqual(expect.arrayContaining(["bị nám da", "bị nấm da"]));
+    expect(nm.alts.every((a) => a.delta >= 0 && a.delta <= 3)).toBe(true);
+    const ch = restoreViAlts("chi bi dau bung", { maxDelta: 3 });
+    expect([ch.best, ...ch.alts.map((a) => a.text)]).toEqual(expect.arrayContaining(["chị bị đau bụng", "chỉ bị đau bụng"]));
+    // không có chữ nào phân vân → không có cách đọc thay thế
+    expect(restoreViAlts("quen mat khau", { maxDelta: 3 }).alts).toEqual([]);
+    // qua khung chat: câu không dấu vẫn ra đúng nội dung
+    expect((await last(["bi gout an dau duoc khong"])).content).toMatch(/các loại đậu/);
+    expect((await last(["bi tri kieng gi"])).content).toMatch(/Trĩ/i);
+    expect((await last(["bi soi than"])).content).toMatch(/sỏi thận/i);
+    expect((await last(["quen mat khau"])).faqId).toBe("forgot");
+  }, T);
 });
