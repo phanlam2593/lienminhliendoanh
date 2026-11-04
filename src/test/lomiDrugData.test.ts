@@ -99,7 +99,7 @@ describe("phân biệt NHẬN RA câu hỏi thuốc với CÓ kiến thức về
     expect(known.drugId).toBe("paracetamol");
     expect(known.text).toMatch(/📚 Nguồn: /);
     // 04/11: amoxicillin, omeprazol đã vào danh mục thuốc (lib/lomiDrugIndex) → kiểm bằng thuốc chưa có trong danh mục
-    for (const q of ["sevelamer có tác dụng phụ gì", "thuốc levothyroxin trị gì", "Cinacalcet là thuốc gì?"]) {
+    for (const q of ["sevelamer có tác dụng phụ gì", "thuốc lanthanum trị gì", "Cinacalcet là thuốc gì?"]) {
       const r = drugAsk(q)!;
       expect(r.drugId, q).toBeUndefined();
       expect(r.text, q).toMatch(/chưa có dữ liệu đã kiểm chứng/);

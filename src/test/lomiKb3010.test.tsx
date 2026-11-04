@@ -1304,6 +1304,14 @@ describe("30/10 — trả lời qua khung chat", () => {
       ["tobrex nhỏ mấy lần", /4–8 giờ/], ["dalacin c uống sao", /ly nước đầy/], ["zaditor nhỏ sao", /8–12 giờ/], ["nebilet uống sao", /ngày 1 lần/],
     ];
     for (const [q, re] of D) expect((await last([q])).content, q).toMatch(re);
+    const E: [string, RegExp][] = [
+      ["berlthyrox uống lúc nào", /30–60 phút trước bữa sáng/], ["xanax uống sao", /lệ thuộc/], ["combantrin uống sao", /2 tuần/], ["seretide xịt sao", /Không dùng để cắt cơn/],
+      ["methotrexate uống mấy lần", /MỖI TUẦN 1 LẦN/], ["differin bôi sao", /8–12 tuần/], ["betaloc zok uống sao", /nuốt nguyên/], ["utrogestan uống lúc nào", /đi ngủ/],
+      ["rivotril uống rượu được không", /hôn mê/], ["doxycyclin uống sao", /ly nước đầy/], ["symbicort xịt sao", /súc miệng/], ["xatral uống lúc nào", /sau cùng một bữa ăn/],
+      ["thyrozol uống sao", /Đau họng, sốt/], ["pradaxa uống sao", /không mở/], ["brilinta uống sao", /chảy máu/], ["glucobay uống sao", /miếng ăn đầu tiên/],
+      ["selsun gội sao", /10 phút/], ["minoxidil bôi bao lâu", /4 tháng/], ["distocide uống sao", /3 liều/], ["famotidin uống mấy viên", /2 viên/],
+    ];
+    for (const [q, re] of E) expect((await last([q])).content, q).toMatch(re);
   }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
