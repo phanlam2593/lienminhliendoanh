@@ -511,5 +511,7 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
   if (/\b(uong chung|dung chung|uong cung|chung voi|cung voi|tuong tac)\b/.test(n)) return null;
   // ("vitamin" trong tên thẻ bệnh — "thiếu vitamin D" — đã bắt ở trên; ở đây là hỏi chung theo bệnh.)
   if (med) return renderForDisease(med, now);
+  // 04/11: "vitamin e uống có tác dụng gì" — chất chưa có trong bảng dinh dưỡng nhưng có trong danh mục thuốc → để lớp thuốc trả lời
+  if (findIndexedDrug(q)) return null;
   return renderOverview(now);
 }

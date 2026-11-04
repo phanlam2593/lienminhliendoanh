@@ -1491,3 +1491,19 @@ describe("04/11 vòng 17 — dược chất đợt 1 + thuốc cho trẻ", () =>
     expect((await last(["panadol cho bé 2 tuổi được không"])).content).toMatch(/Paracetamol\*\* cho trẻ em/);
   });
 });
+
+// ── 04/11 vòng 18: dược chất đợt 2 (tra cứu dược chất Long Châu) ──
+describe("04/11 vòng 18 — dược chất đợt 2", () => {
+  const H8: [string, RegExp][] = [
+    ["gasmotin là thuốc gì", /mosaprid/],
+    ["salonpas dán sao", /methyl salicylat[\s\S]*dưới 2 tuổi/],
+    ["dermovate bôi mặt được không", /clobetasol[\s\S]*trứng cá/],
+    ["daktarin cho bé 4 tháng được không", /dưới 6 tháng/],
+    ["bactrim bà bầu uống được không", /co-trimoxazol[\s\S]*có thai không nên dùng/],
+    ["dramamine uống lúc nào", /dimenhydrinat[\s\S]*30 phút trước/],
+    ["bisolvon uống mấy viên", /bromhexin[\s\S]*8–16 mg/],
+    ["vitamin e uống có tác dụng gì", /Vitamin E[\s\S]*rối loạn chảy máu/],
+    ["flagentyl uống sao", /secnidazol[\s\S]*mang thai/],
+  ];
+  for (const [q, re] of H8) it(q, async () => expect((await last([q])).content).toMatch(re));
+});
