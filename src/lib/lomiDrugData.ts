@@ -89,7 +89,7 @@ export const DRUGS: DrugEntry[] = [
     id: "paracetamol",
     ingredient: "paracetamol (acetaminophen)",
     names: ["paracetamol", "acetaminophen", "Panadol", "Efferalgan", "Hapacol"],
-    match: VR(/\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b/),
+    match: VR(/\b(paracetamol|panadol|efferalgan|hapacol|acetaminophen)\b(?! codein)/),
     group: "thuốc giảm đau, hạ sốt",
     sources: [
       // (09/10/2026: bốn trang con cũ của NHS — About / Side effects / Taking with other medicines / Common questions — nay gộp về một trang này.)

@@ -7,7 +7,7 @@
 // ────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { displayName, findMedTopicId, loadMedTopic, parseMedAsk, renderMed, type MedTopic } from "@/lib/lomiMed";
-import { NUTRIENTS, foodOf, nutrientOf, type Nutrient } from "@/lib/lomiNutrients";
+import { NUTRIENTS, foodOf, nutrientOf, renderNutrient, type Nutrient } from "@/lib/lomiNutrients";
 import { findDrug, type DrugFact } from "@/lib/lomiDrugData";
 import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 /** \b của JS không hiểu chữ có dấu ("tài xế" không có ranh giới sau "ế") — đổi \b thành ranh giới theo chữ cái Unicode. */
@@ -354,6 +354,8 @@ export function doseReply(q: string): string | null {
   if (W(/\b(quên|lỡ)\b/u).test(low) && !others) return null; // quên liều — lớp thuốc có câu riêng
   const kid = W(/\b(bé|con|cháu|trẻ|em bé|\d+\s*(?:kg|ký|tháng|tuổi))\b/u).test(low);
   const nut = nutrientOf(low);
+  // 04/11: vitamin / khoáng chất có số liệu nhu cầu mỗi ngày (NHS) → đưa số liệu đó thay vì từ chối
+  if (nut?.need?.length && !others) return renderNutrient(nut, null, true);
   if (others)
     return "**Đừng dùng thuốc kê cho người khác** nha 🙏 — kể cả cùng bệnh, liều và loại thuốc bác sĩ chọn theo tuổi, cân nặng, bệnh nền, thuốc đang dùng của từng người; uống nhầm có thể nguy hiểm (nhất là thuốc huyết áp, thuốc ngủ, kháng sinh).\n• Hết thuốc / quên mua: gọi bác sĩ đang theo dõi hoặc ra nhà thuốc hỏi dược sĩ\n• Lỡ uống rồi mà thấy chóng mặt, lơ mơ, khó thở, tim đập bất thường → gọi **115**";
   const base = kid

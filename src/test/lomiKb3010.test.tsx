@@ -519,7 +519,8 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["Tôi uống kháng sinh được 2 ngày, hết sốt rồi thì ngưng được chứ?"])).content).toMatch(/uống đủ số ngày/);
     expect((await last(["Đường huyết cao vậy là tiểu đường chắc rồi đúng không?"])).content).toMatch(/không chẩn đoán được/);
     expect((await last(["Tôi bị chóng mặt, chắc thiếu máu nên uống sắt nhỉ?"])).content).toMatch(/không chẩn đoán được/);
-    expect((await last(["Uống 3 viên vitamin C một lúc chắc cũng được mà?"])).content).toMatch(/không nêu liều/);
+    // 04/11: chính sách mới — vitamin / khoáng chất có số liệu NHS thì nêu nhu cầu mỗi ngày + ngưỡng không nên vượt
+    expect((await last(["Uống 3 viên vitamin C một lúc chắc cũng được mà?"])).content).toMatch(/trên 1\.000 mg\/ngày/);
     expect((await last(["Tôi uống thuốc ngủ của bạn một viên chắc không sao đâu ha?"])).content).toMatch(/Đừng dùng thuốc kê cho người khác/);
     expect((await last(["Uống thuốc dị ứng xong buồn ngủ quá trời, chạy xe dc ko?"])).content).toMatch(/đừng lái xe/);
     expect((await last(["Bé bị nóng hổi, sốt 38 độ thì làm răng?"])).content).toMatch(/sốt/);
@@ -1258,6 +1259,27 @@ describe("30/10 — trả lời qua khung chat", () => {
       ["pantoloc uống trước hay sau ăn", /1 giờ trước bữa ăn/], ["pariet uống lúc nào", /sau bữa sáng/], ["medrol uống sao", /thức ăn hoặc sữa/],
       ["dexamethasone uống lúc nào", /bữa sáng/], ["coversyl uống sao", /trước bữa sáng/], ["diamicron uống sao", /hạ đường huyết/],
       ["crestor uống lúc nào", /cùng giờ/], ["air x uống sao", /nhai kỹ/], ["bé 3 tuổi uống rhinathiol mấy ml", /2–4 tuổi/],
+    ];
+    for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+  }, 120000);
+  it("04/11 (vòng 9) — viên sủi kẽm / vitamin C / canxi / D3: nhu cầu mỗi ngày theo NHS; thêm 23 thuốc", async () => {
+    const C: [string, RegExp][] = [
+      ["viên sủi vitamin c uống sao", /40 mg vitamin C mỗi ngày/], ["viên sủi kẽm uống mấy viên 1 ngày", /Không uống quá 25 mg/], ["canxi uống bao nhiêu 1 ngày", /700 mg/],
+      ["vitamin d3 uống bao nhiêu", /400 IU/], ["redoxon uống sao", /1\.000 mg/], ["magne b6 uống bao nhiêu", /400 mg\/ngày trở xuống/],
+      ["efferalgan codein uống mấy viên", /không quá 8 viên/], ["forlax uống sao", /2 tuần/], ["fosamax uống sao", /30 phút/], ["betnovate bôi mặt được không", /hỏi bác sĩ/],
+      ["eliquis quên uống thì sao", /ngày 2 lần/], ["jardiance uống sao", /12 giờ/], ["circadin uống lúc nào", /1–2 giờ trước khi ngủ/], ["xalatan nhỏ sao", /buổi tối/],
+      ["trimethoprim uống mấy ngày", /3 ngày/], ["beconase xịt sao", /8 nhát/], ["cipralex uống sao", /Đừng tự ngưng/], ["ospen uống trước hay sau ăn", /30 phút trước bữa ăn/],
+    ];
+    for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+    expect((await last(["kẽm có trong món gì"])).content).not.toMatch(/25 mg/);
+    expect((await last(["efferalgan codein uống chung panadol được không"])).content).toMatch(/có paracetamol/);
+    expect((await last(["efferalgan uống mấy viên"])).content).toMatch(/Paracetamol/);
+  }, 120000);
+  it("04/11 (vòng 10) — thêm thuốc thần kinh, tim mạch, da, tiêu hoá theo NHS", async () => {
+    const C: [string, RegExp][] = [
+      ["remeron uống lúc nào", /trước khi ngủ/], ["lyrica uống sao", /Đừng ngưng đột ngột/], ["betaserc uống sao", /sau bữa ăn/], ["flucloxacillin uống sao", /1 giờ trước ăn/],
+      ["propecia uống sao", /1 mg\/ngày/], ["xarelto uống sao", /cùng bữa ăn/], ["tenormin uống mấy viên", /25–50 mg/], ["imdur uống sao", /nuốt nguyên/],
+      ["eumovate bôi mấy ngày", /7 ngày/], ["colpermin uống sao", /30–60 phút trước bữa ăn/], ["amitriptyline uống sao", /25 mg × 2 lần/], ["citalopram uống lúc nào", /ngày 1 lần/],
     ];
     for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
   }, 120000);

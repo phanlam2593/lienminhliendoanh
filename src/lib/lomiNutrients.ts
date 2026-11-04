@@ -4,11 +4,13 @@
 //
 // Nguyên tắc (giống lib/lomiFolk, lib/lomiDrugData):
 //   1. Mọi ý có nguồn chính thống (NHS, NIH – ODS / NCCIH, WHO, CDC). Không nguồn → không viết.
-//   2. KHÔNG nêu liều (mg, viên, giọt…). Liều theo nhãn / dược sĩ / bác sĩ.
+//   2. KHÔNG nêu liều (mg, viên, giọt…) trong các ý chung. 04/11 (Kir: "viên sủi kẽm hay vitamin C… cứ thêm vô"): riêng trường `need`
+//      ghi NHU CẦU MỖI NGÀY + NGƯỠNG KHÔNG NÊN VƯỢT đúng như trang NHS — chỉ hiện khi người dùng hỏi liều / bao nhiêu.
 //   3. Bệnh mà nguồn không nêu vitamin nào giúp → nói thật là chưa thấy, kèm nhóm người thường cần bổ sung.
 //   Thêm chất mới = thêm một mục vào NUTRIENTS (test src/test/lomiNutrients.test.ts ép tên miền nguồn, chỉ số src, không liều).
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
+import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import { WISELY, findFolk } from "@/lib/lomiFolk";
 import { DAILY_ASK, FACT_ASK, FRUIT_LIST_ASK, dishNote, factOf, fruitIn, isSugarTopic, renderDaily, renderFact, renderFruitSugar, renderNoFact } from "@/lib/lomiFoodFacts";
@@ -38,6 +40,9 @@ export const NUT_SOURCES: DrugSource[] = [
   /* 15 */ { title: "Things To Know About Omegas for Heart Disease", publisher: NCCIH, url: "https://www.nccih.nih.gov/health/tips/things-to-know-about-omegas-for-heart-disease" },
   /* 16 */ { title: "Iodine", publisher: NHS, url: "https://www.nhs.uk/conditions/vitamins-and-minerals/iodine/", reviewed: "2020-08-03" },
   /* 17 */ { title: "Why 5 A Day?", publisher: NHS, url: "https://www.nhs.uk/live-well/eat-well/5-a-day/why-5-a-day/", reviewed: "2026-09-30" },
+  /* 18 */ { title: "Vitamins and minerals – Others (zinc, magnesium…)", publisher: NHS, url: "https://www.nhs.uk/conditions/vitamins-and-minerals/others/", reviewed: "2020-08-03" },
+  /* 19 */ { title: "Vitamins and minerals – Calcium", publisher: NHS, url: "https://www.nhs.uk/conditions/vitamins-and-minerals/calcium/", reviewed: "2020-08-03" },
+  /* 20 */ { title: "How and when to take colecalciferol", publisher: NHS, url: "https://www.nhs.uk/medicines/colecalciferol/how-and-when-to-take-colecalciferol/", reviewed: "2023-01-10" },
 ];
 
 export type NutTopic = { id: string; text: string; src: number[] };
@@ -55,6 +60,8 @@ export type Nutrient = {
   short: DrugFact;
   who: DrugFact[];
   tooMuch: DrugFact[];
+  /** 04/11: nhu cầu mỗi ngày + ngưỡng không nên vượt (có số) — chỉ hiện khi hỏi liều. */
+  need?: DrugFact[];
   /** Bệnh trong kho lib/medkb mà nguồn có nêu chất này. */
   topics: NutTopic[];
 };
@@ -63,8 +70,8 @@ export const NUTRIENTS: Nutrient[] = [
   {
     id: "kem",
     name: "Kẽm",
-    names: ["kẽm", "chất kẽm", "viên kẽm", "siro kẽm", "viên ngậm kẽm", "zinc"],
-    plainCue: /\b(zinc|chat kem|vien kem|siro kem|thieu kem|bo sung kem|uong kem|nhieu kem|giau kem|kem co trong|kem co tac dung|kem la gi|ngam kem)\b/,
+    names: ["kẽm", "chất kẽm", "viên kẽm", "siro kẽm", "viên ngậm kẽm", "zinc", "viên sủi kẽm", "kẽm sủi", "kẽm gluconat", "zinc gluconate"],
+    plainCue: /\b(zinc|chat kem|vien kem|vien sui kem|kem sui|kem gluconat|siro kem|thieu kem|bo sung kem|uong kem|nhieu kem|giau kem|kem co trong|kem co tac dung|kem la gi|ngam kem)\b/,
     what: [{ text: "Kẽm giúp hệ miễn dịch chống vi khuẩn, virus; cần cho tạo đạm, ADN, cho trẻ lớn lên, giúp lành vết thương và cảm nhận vị.", src: [0] }],
     foods: [
       { text: "**Hàu** có rất nhiều kẽm; thịt, cá, gia cầm, **cua, tôm hùm** cũng nhiều.", src: [0] },
@@ -77,6 +84,10 @@ export const NUTRIENTS: Nutrient[] = [
       { text: "Kẽm tương tác với vài thuốc (kháng sinh nhóm quinolon, tetracyclin; thuốc lợi tiểu thiazid) — hỏi dược sĩ nên uống cách nhau bao lâu.", src: [0] },
       { text: "**Không dùng kẽm xịt / nhỏ mũi** — có thể làm mất khứu giác nặng, vĩnh viễn.", src: [1] },
     ],
+    need: [
+      { text: "Người lớn (19–64 tuổi) cần khoảng **9,5 mg/ngày (nam)** và **7 mg/ngày (nữ)** — đa số ăn uống đủ chất là đủ.", src: [18] },
+      { text: "**Không uống quá 25 mg kẽm bổ sung mỗi ngày** nếu bác sĩ không dặn.", src: [18] },
+    ],
     topics: [
       { id: "cam-lanh", text: "viên ngậm kẽm bắt đầu trong 24 giờ đầu có thể giúp cảm lạnh mau khỏi hơn (có thể gây buồn nôn); **không** dùng kẽm xịt mũi.", src: [1] },
       { id: "tieu-chay-o-tre", text: "trẻ tiêu chảy cấp nên được dùng **kẽm kèm oresol**, thường trong 10–14 ngày — liều theo tuổi, hỏi bác sĩ / dược sĩ.", src: [2] },
@@ -88,12 +99,16 @@ export const NUTRIENTS: Nutrient[] = [
   {
     id: "vitamin-c",
     name: "Vitamin C",
-    names: ["vitamin c", "vitamin C", "vit c", "vtm c", "axit ascorbic", "acid ascorbic"],
+    names: ["vitamin c", "vitamin C", "vit c", "vtm c", "axit ascorbic", "acid ascorbic", "viên sủi vitamin c", "vitamin c sủi", "c sủi", "redoxon"],
     what: [{ text: "Vitamin C giúp bảo vệ, giữ tế bào khoẻ; giữ da, mạch máu, xương, sụn khoẻ; giúp vết thương lành.", src: [3] }],
     foods: [{ text: "Có trong rất nhiều rau quả: cam, quýt, chanh, ớt chuông, dâu tây, bông cải xanh, cải Brussels, khoai tây…", src: [3] }],
     short: { text: "cam, quýt, chanh, ớt chuông, dâu tây, bông cải xanh, khoai tây", src: [3] },
     who: [{ text: "Ăn uống đủ rau quả thì có đủ vitamin C từ bữa ăn; uống thêm thì đừng uống quá nhiều.", src: [3] }],
     tooMuch: [{ text: "Uống liều cao có thể đau bụng, tiêu chảy, đầy hơi — thường hết khi ngưng uống.", src: [3] }],
+    need: [
+      { text: "Người lớn (19–64 tuổi) cần **40 mg vitamin C mỗi ngày**.", src: [3] },
+      { text: "Uống **trên 1.000 mg/ngày** có thể đau bụng, tiêu chảy, đầy hơi; dưới 1.000 mg/ngày thì khó gây hại.", src: [3] },
+    ],
     topics: [
       { id: "cam-lanh", text: "với đa số người, vitamin C **không ngừa được cảm lạnh**, chỉ giúp bệnh ngắn hơn, nhẹ hơn chút ít; có thể có ích với người tập luyện thể lực rất nặng.", src: [1] },
       { id: "thieu-mau", text: "ăn kèm đồ giàu vitamin C (cam, ớt chuông…) giúp cơ thể **hấp thu sắt** tốt hơn.", src: [9] },
@@ -111,6 +126,10 @@ export const NUTRIENTS: Nutrient[] = [
     short: { text: "nắng trực tiếp; cá béo, lòng đỏ trứng, thịt đỏ, đồ ăn bổ sung vitamin D", src: [6] },
     who: [{ text: "Nhóm nên uống bổ sung: trẻ bú mẹ dưới 1 tuổi, trẻ 1–4 tuổi; người ít ra nắng, ở trong nhà nhiều, mặc kín da khi ra ngoài, người da sẫm màu; ai cũng nên cân nhắc vào những tháng ít nắng.", src: [6] }],
     tooMuch: [{ text: "Uống quá nhiều vitamin D lâu ngày làm canxi tích tụ, có thể hại xương, thận, tim. Ra nắng thì không bị thừa vitamin D.", src: [6] }],
+    need: [
+      { text: "Người lớn duy trì: **400 IU (10 microgam) mỗi ngày**; viên nang / viên nén nuốt nguyên, uống cùng bữa ăn chính.", src: [20] },
+      { text: "Em bé dưới 1 tuổi: **340–400 IU/ngày**; trẻ 1–4 tuổi: **400 IU/ngày**. Bị thiếu vitamin D thì bác sĩ cho liều cao theo đợt.", src: [20] },
+    ],
     topics: [
       { id: "loang-xuong", text: "canxi và vitamin D giúp xương chắc; đã bị loãng xương thì bác sĩ có thể kê **canxi + vitamin D** nếu lo bạn ăn thiếu canxi.", src: [8] },
       { id: "coi-xuong", text: "vitamin D cần cho xương; trẻ bú mẹ dưới 1 tuổi và trẻ 1–4 tuổi thuộc nhóm nên được bổ sung vitamin D.", src: [6] },
@@ -173,6 +192,10 @@ export const NUTRIENTS: Nutrient[] = [
     short: { text: "sữa, phô mai, rau lá xanh, đậu nành, đậu phụ", src: [8] },
     who: [{ text: "Đã bị loãng xương thì bác sĩ có thể kê canxi + vitamin D nếu lo bạn ăn thiếu canxi.", src: [8] }],
     tooMuch: [],
+    need: [
+      { text: "Người lớn cần **700 mg canxi mỗi ngày**.", src: [19] },
+      { text: "Uống **trên 1.500 mg/ngày** có thể đau bụng, tiêu chảy; từ 1.500 mg/ngày trở xuống thì khó gây hại.", src: [19] },
+    ],
     topics: [{ id: "loang-xuong", text: "ăn đủ canxi (sữa, phô mai, rau lá xanh, đậu phụ); bác sĩ có thể kê canxi + vitamin D nếu bạn ăn thiếu.", src: [8] }],
   },
   {
@@ -283,7 +306,7 @@ export function nutrientOf(text: string): Nutrient | null {
 const SUPP = /\b(vitamin|vitamine|vi ta min|khoang chat|vi chat|thuoc bo|thuc pham chuc nang|tpcn|bo sung (gi|chat gi|them gi|cai gi|nhung gi|nhung chat gi)|uong (them )?(chat )?gi (cho|de) (khoe|nhanh khoi|mau khoi|bo)|thieu chat gi|thieu vitamin gi)\b/;
 /** Hỏi về một chất ("kẽm có trong món gì", "vitamin C có tác dụng gì", "hải sản có nhiều kẽm không"). */
 const NUT_ASK = /\b(co trong|co nhieu|nhieu nhat|giau|chua nhieu|o dau|tac dung|cong dung|de lam gi|la gi|mon gi|thuc pham|do an|an gi|uong|bo sung|thieu|khi nao|luc nao|co tot|co can|nen|co nen|co sao|co hai|qua nhieu|thua|lieu|bao nhieu|nguon|hai san|thit|rau|trai cay)\b/;
-const DOSE = /\b(lieu|bao nhieu (mg|vien|ml|giot|ui|lan)|mot ngay (uong )?bao nhieu|uong bao nhieu|bao nhieu mot ngay|may vien)\b/;
+const DOSE = /\b(lieu|bao nhieu (mg|vien|ml|giot|ui|lan)|mot ngay (uong )?bao nhieu|uong bao nhieu|bao nhieu mot ngay|may vien|uong sao|uong the nao|uong nhu the nao|dung sao|cach uong|1 ngay may|mot ngay may|ngay uong may)\b/;
 /** Câu là chuyện THIẾU chất mà kho kiến thức đã có thẻ riêng → để thẻ đó trả lời. */
 const DEFICIT_CARD: Record<string, string> = { "vitamin-d": "thieu-vitamin-d", "vitamin-b12": "thieu-vitamin-b12", sat: "thieu-mau" };
 
@@ -297,13 +320,15 @@ export function renderNutrient(x: Nutrient, med: { id: string; name: string } | 
   const parts = [
     `💊 **${x.name}** — có trong món gì, ai cần bổ sung`,
     med ? (t ? `👉 Với **${med.name}**: ${t.text}` : `👉 Các nguồn Lomi đối chiếu **chưa nêu ${x.name.split(" (")[0].toLowerCase()} giúp chữa ${med.name}**.`) : "",
-    dose ? "🔢 Lomi **không nêu liều** — liều tuỳ tuổi, bệnh, loại sản phẩm; làm theo nhãn hoặc hỏi dược sĩ / bác sĩ nha." : "",
+    dose && x.need?.length
+      ? `📏 **Lượng cần mỗi ngày theo nguồn:**\n${bl(x.need)}\nℹ️ Để **đọc tham khảo** — mỗi loại viên (viên sủi, viên nhai, siro…) hàm lượng khác nhau: xem **nhãn**, và hỏi dược sĩ / bác sĩ nếu đang mang thai, có bệnh, đang dùng thuốc khác hoặc cho trẻ dùng.`
+      : dose ? "🔢 Lomi **chưa có số liệu liều** có nguồn cho chất này — liều tuỳ tuổi, bệnh, loại sản phẩm; làm theo nhãn hoặc hỏi dược sĩ / bác sĩ nha." : "",
     `📖 **Tác dụng:**\n${bl(x.what)}`,
     `🥗 **Có nhiều trong:**\n${bl(x.foods)}`,
     `🙋 **Ai cần chú ý:**\n${bl(x.who)}`,
     x.tooMuch.length ? `⚠️ **Lưu ý:**\n${bl([...x.tooMuch, ...WISE])}` : `⚠️ **Lưu ý:**\n${bl(WISE)}`,
     !med && x.topics.length ? `🩺 **Hay được nhắc với:**\n${x.topics.map((y) => `• ${TOPIC_NAMES[y.id] ?? y.id}: ${y.text}`).join("\n")}` : "",
-    line(srcOf(x.what, x.foods, x.who, x.tooMuch, WISE, t ? [t] : !med ? x.topics : []), now),
+    line(srcOf(x.what, x.foods, x.who, x.tooMuch, WISE, t ? [t] : !med ? x.topics : [], dose ? x.need ?? [] : []), now),
   ];
   return parts.filter(Boolean).join("\n\n");
 }
@@ -458,7 +483,10 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
     // "phở bao nhiêu calo" — món chưa có số liệu kiểm chứng → nói thật (chỉ khi câu hỏi rõ là calo / đường của MÓN).
     if (!nutrientOf(q) && /\b(bao nhieu calo|bao nhieu kcal|nhieu calo|it calo|bao nhieu duong|nhieu duong khong|co nhieu duong)\b/.test(n) && !med) return renderNoFact("món này");
   }
-  const x = nutrientOf(q);
+  const x0 = nutrientOf(q);
+  // 04/11: "magne b6" chứa chữ "b6" nhưng là thuốc trong danh mục (có số liệu magnesi của NHS) → để lớp thuốc trả lời
+  const ixd = x0 ? findIndexedDrug(q) : null;
+  const x = x0 && ixd?.drug.id !== "magne-b6" ? x0 : null;
   // (30/10: "dầu cá có tốt cho mắt không" — bài mẹo dân gian có đúng ngữ cảnh (mắt) nói cụ thể hơn bài chung về chất → để lớp đó trả lời)
   if (x && findFolk(q)?.ctx) return null;
   // Hỏi MỘT MÓN có chất gì (không nêu tên chất) → bảng món → chất.

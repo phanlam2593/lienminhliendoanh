@@ -22,6 +22,8 @@ describe("lomiNutrients — dữ liệu", () => {
         expect(f.text.length, `${x.id}: ${f.text}`).toBeLessThanOrEqual(260);
       }
       for (const t of x.topics) expect(IDS.has(t.id), `${x.id}: thẻ ${t.id} không có`).toBe(true);
+      // 04/11: `need` (nhu cầu mỗi ngày, có số) — vẫn phải có nguồn hợp lệ
+      for (const f of x.need ?? []) for (const i of f.src) expect(NUT_SOURCES[i], `${x.id}: need src ${i}`).toBeTruthy();
     }
   });
 });
@@ -41,7 +43,8 @@ describe("lomiNutrients — nhận diện", () => {
     expect(nutrientReply("bị cảm nên uống vitamin gì", { id: "cam-lanh", name: "cảm lạnh" })).toMatch(/không ngừa được cảm lạnh/);
     expect(nutrientReply("bị cảm nên uống vitamin gì", { id: "cam-lanh", name: "cảm lạnh" })).toMatch(/xịt mũi/);
     expect(nutrientReply("huyết áp cao nên bổ sung gì", { id: "tang-huyet-ap", name: "tăng huyết áp" })).toMatch(/chưa nêu vitamin hay khoáng chất nào/);
-    expect(nutrientReply("uống kẽm bao nhiêu mg", null)).toMatch(/không nêu liều/);
+    expect(nutrientReply("uống kẽm bao nhiêu mg", null)).toMatch(/Không uống quá 25 mg/); // 04/11: nhu cầu mỗi ngày theo NHS
+    expect(nutrientReply("uống omega 3 bao nhiêu mg", null)).toMatch(/chưa có số liệu liều/);
     expect(nutrientReply("nhồi máu cơ tim có nên uống dầu cá", { id: "nhoi-mau-co-tim", name: "nhồi máu cơ tim" })).toMatch(/chưa được chứng minh bảo vệ tim/);
   });
 });

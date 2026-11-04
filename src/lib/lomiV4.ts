@@ -6,6 +6,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
+import { nutrientOf } from "@/lib/lomiNutrients";
 
 export type V4Ctx = { last?: string; hist: string[]; lastHeart?: string; lastHealth?: boolean };
 const N = (q: string) => ` ${normalizeVi(q)} `;
@@ -218,7 +219,8 @@ export function healthV4(q: string, c: V4Ctx): string | null {
     return "Ù tai **tự nhiên ở một bên** thì nên để ý thính lực nha 👂\n\n⚠️ Nếu **nghe kém đi đột ngột** (dù chỉ một bên), nên đi khám Tai Mũi Họng **càng sớm càng tốt, trong vòng 1–2 ngày** — điếc đột ngột điều trị sớm mới có hiệu quả, đừng chờ xem có tự hết không. **Đi cấp cứu ngay** nếu kèm méo miệng, yếu tay chân, nói khó, chóng mặt dữ dội hoặc đau đầu dữ dội.\n\nNếu chỉ ù nhẹ mà nghe vẫn bình thường (sau đi máy bay, cảm cúm, nghẹt mũi, ráy tai) thì thường tự đỡ — đừng tự ngoáy tai sâu; quá 1–2 tuần không đỡ thì đi khám.\n\nTai đó có nghe kém hơn bên kia không?";
   if (VN(/\b(hai|2|nhiều|mấy) (loại )?thuốc cảm\b|\bthuốc cảm\b.*\b(cùng lúc|chung với|uống chung|kết hợp)\b/).test(n))
     return "Cẩn thận chỗ này nha: nhiều thuốc cảm **trùng hoạt chất** — hay gặp nhất là **paracetamol**, ngoài ra còn thuốc chống nghẹt mũi và thuốc chống dị ứng (gây buồn ngủ). Uống hai loại cùng lúc dễ thành **quá liều mà không biết**, nhất là paracetamol (có thể hại gan).\n\n• Đọc phần **thành phần** trên hai hộp: nếu cùng có một hoạt chất thì đừng uống chung\n• Đưa cả hai hộp cho dược sĩ xem là chắc nhất\n• Có bệnh gan, huyết áp, tim, đang mang thai hay đang uống thuốc khác thì càng nên hỏi trước\n\nHai thuốc bạn định uống tên gì, hoặc thành phần ghi gì?";
-  if (VN(/\b(vitamin|thực phẩm chức năng|tpcn|viên uống|canxi|sắt|kẽm|omega)\b/).test(n) && VN(/\b(không biết|chưa biết|bao nhiêu|mấy viên|liều)\b/).test(n) && VN(/\b(liều|bao nhiêu|mấy viên|uống sao)\b/).test(n))
+  // (04/11: chất có số liệu nhu cầu mỗi ngày của NHS — kẽm, vitamin C, D, canxi — để lớp vitamin trả lời bằng số liệu đó)
+  if (VN(/\b(vitamin|thực phẩm chức năng|tpcn|viên uống|canxi|sắt|kẽm|omega)\b/).test(n) && VN(/\b(không biết|chưa biết|bao nhiêu|mấy viên|liều)\b/).test(n) && VN(/\b(liều|bao nhiêu|mấy viên|uống sao)\b/).test(n) && !nutrientOf(n)?.need?.length)
     return "Liều vitamin **tuỳ sản phẩm và hàm lượng** mỗi viên, nên Lomi không đoán một con số chung được 🙏\n• Xem phần **“Liều dùng” / “Cách dùng”** trên nhãn hoặc tờ hướng dẫn, và đừng uống quá mức ghi trên đó\n• Đang uống nhiều sản phẩm cùng lúc thì cộng lại xem có trùng không (vd vitamin tổng hợp + viên vitamin D riêng)\n• Uống quá liều một số loại (A, D, sắt…) có thể gây hại\n• Đang mang thai, có bệnh nền hay uống thuốc khác thì hỏi dược sĩ / bác sĩ\n\nBạn đang uống sản phẩm nào, mỗi viên ghi hàm lượng bao nhiêu?";
   if (VN(/\bthuốc\b/).test(n) && VN(/\b(người nhà|nhà (anh|em|mình|tôi|a|e)|mẹ|ba|bố|vợ|chồng|bạn|hàng xóm|người khác)( \S+){0,3} (uống|dùng|xài)( \S+){0,3} (hiệu quả|đỡ|khỏi|tốt|hết)\b/).test(n) && VN(/\b(uống theo|dùng theo|xài theo|uống thử|xin|uống luôn)\b/).test(n))
     return "Đừng uống theo thuốc của người khác nha, kể cả khi người nhà thấy hiệu quả 🙏 Thuốc bác sĩ kê cho ai là theo bệnh, cân nặng, tuổi, bệnh nền và các thuốc khác của người đó — triệu chứng giống nhau chưa chắc là cùng bệnh, và cùng thuốc có thể hợp với người này mà hại người kia (dị ứng, tương tác thuốc, sai liều).\n\nBạn đang bị triệu chứng gì? Lomi chỉ những điều nên biết và lúc nào cần đi khám; còn thuốc thì để bác sĩ hoặc dược sĩ chọn cho đúng bạn.";
