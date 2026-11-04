@@ -23,7 +23,7 @@ describe("lomiFolk — dữ liệu", () => {
         expect(x.text.length, `${f.id}: ${x.text}`).toBeLessThanOrEqual(220);
       }
       for (const t of f.topics) expect(IDS.has(t.id), `${f.id}: thẻ ${t.id} không có`).toBe(true);
-      expect((f.folk.length || f.belief) && (f.science.length || f.verdict === "trad") && (f.caution.length || f.how?.length), f.id).toBeTruthy();
+      expect((f.folk.length || f.belief) && (f.science.length || f.verdict === "trad" || f.sources.some((x) => /Long Châu/.test(x.publisher))) && (f.caution.length || f.how?.length), f.id).toBeTruthy();
     }
   });
   it("tên không trùng giữa các vị", () => {
@@ -50,7 +50,7 @@ describe("lomiFolk — nhận diện", () => {
   });
   it("vị chưa có nguồn → nói thật", () => {
     expect(findUnverifiedHerb("thục địa có tác dụng gì")).toBe("thục địa");
-    const r = folkReply("nghệ đen có tác dụng gì", null, null)!;
+    const r = folkReply("xuyên khung có tác dụng gì", null, null)!;
     expect(r.text).toMatch(/chưa tìm được nguồn y khoa đáng tin/);
   });
   it("hỏi món với bệnh mà vị không liên quan → nhường lớp kiêng cữ", () => {

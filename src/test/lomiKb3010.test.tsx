@@ -1420,7 +1420,7 @@ describe("04/11 vòng 14 — đinh lăng, ba kích, lá vối; bệnh kèm dư�
   ];
   for (const [q, re] of H4) it(q, async () => expect((await last([q])).content).toMatch(re));
   it("'nghệ đen' không bị trả lời bằng bài về nghệ", async () => {
-    expect((await last(["nghệ đen có tác dụng gì"])).content).toMatch(/Nghệ đen[\s\S]*chưa tìm được nguồn/);
+    expect((await last(["nghệ đen có tác dụng gì"])).content).toMatch(/Nga truật[\s\S]*mang thai/);
   });
   it("hỏi bệnh → kèm dược liệu hay dùng", async () => {
     expect((await last(["sỏi thận là gì"])).content).toMatch(/Dược liệu \/ mẹo dân gian hay dùng cho sỏi thận[\s\S]*Kim tiền thảo/);
@@ -1428,5 +1428,25 @@ describe("04/11 vòng 14 — đinh lăng, ba kích, lá vối; bệnh kèm dư�
   });
   it("hỏi kiêng gì → kèm thảo dược cần tránh", async () => {
     expect((await last(["tăng huyết áp kiêng gì"])).content).toMatch(/cần tránh hoặc thận trọng với tăng huyết áp[\s\S]*Cam thảo[\s\S]*Ba kích/);
+  });
+});
+
+// ── 04/11 vòng 15: dược liệu đợt 4 (Long Châu) ──
+describe("04/11 vòng 15 — dược liệu đợt 4", () => {
+  const H5: [string, RegExp][] = [
+    ["nghe den co tac dung gi", /Nga truật[\s\S]*mang thai/],
+    ["nhục đậu khấu có tác dụng gì", /Nhục đậu khấu[\s\S]*rất nguy hiểm/],
+    ["chùm ngây có tác dụng gì", /Chùm ngây[\s\S]*phụ nữ có thai/],
+    ["cây cứt lợn chữa viêm xoang được không", /cứt lợn[\s\S]*cỏ lào/i],
+    ["bà bầu uống trà hoa hòe được không", /hòe[\s\S]*sảy thai/i],
+    ["tầm gửi có tác dụng gì", /Tầm gửi[\s\S]*cây độc/],
+    ["đại hoàng trị táo bón được không", /Đại hoàng[\s\S]*có thai/],
+    ["củ gấu có tác dụng gì", /Hương phụ/],
+  ];
+  for (const [q, re] of H5) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("tên vị trùng chữ thường khi gõ không dấu không bị nhận nhầm", async () => {
+    const { findFolk } = await import("@/lib/lomiFolk");
+    for (const q of ["rieng toi bi dau dau uong gi", "chi tu bi dau bung", "benh tam that"]) expect(findFolk(q), q).toBeNull();
+    expect(findFolk("cu rieng chua dau bung")?.id).toBe("rieng");
   });
 });
