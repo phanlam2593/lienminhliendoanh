@@ -1528,3 +1528,9 @@ describe("04/11 vòng 19 — dược liệu còn lại (tự động)", () => {
     expect(c.split("\n").filter((l) => l.startsWith("• ")).length).toBeLessThan(25);
   });
 });
+
+// ── 05/11: "lá vối để làm j" (Kir chụp màn hình) — hỏi "để làm gì / làm j / dùng làm gì" về một vị ──
+describe("05/11 — hỏi 'để làm gì / làm j' về vị thuốc", () => {
+  for (const q of ["Lá vối để làm j", "lá vối để làm gì", "la voi de lam j", "đinh lăng để làm gì", "a giao dùng để làm gì", "mè đen để làm j"])
+    it(q, async () => expect((await last([q])).content).toMatch(/^🌿 \*\*/));
+});

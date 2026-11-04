@@ -4323,7 +4323,7 @@ export const UNVERIFIED_HERBS = [
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
 // (31/10) "bồ công anh có giải độc gan không", "lá hẹ có trị ho không" — câu hỏi "có … không" cũng là hỏi về vị đó.
-const ASK = VN(/\b(có(?! (?:ai|bán|chỗ|quán|nơi|người|shop|cửa hàng|tiệm|ship|giao))(?: \S+){1,5} (?:không|ko|k|hông|hok|ha|hả)|tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
+const ASK = VN(/\b(để làm gì|để làm j|dùng làm gì|dùng làm j|dùng để làm gì|dùng để làm j|làm gì|làm j|để làm chi|dùng vô việc gì|là j|trị j|chữa j|tác dụng j|công dụng j|có(?! (?:ai|bán|chỗ|quán|nơi|người|shop|cửa hàng|tiệm|ship|giao))(?: \S+){1,5} (?:không|ko|k|hông|hok|ha|hả)|tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
 const BURN = VN(/\b(bỏng|phỏng)\b/);
 const BOI = VN(/\b(bôi|thoa|đắp|xức|trét|chấm)\b/);
 /** Câu có gõ dấu tiếng Việt. */
@@ -4353,7 +4353,7 @@ export const folkFor = (topicId: string): { f: FolkEntry; t: FolkTopic }[] =>
   FOLK.flatMap((f) => f.topics.filter((t) => t.id === topicId).map((t) => ({ f, t })));
 
 /** Vị / mẹo dân gian nhắc trong câu (tên dài khớp trước). "Bôi … lên vết bỏng" chỉ nhận khi câu nói tới bỏng. */
-const GEN_CTX = /\b(tac dung|cong dung|chua|tri|bai thuoc|vi thuoc|dong y|y hoc co truyen|thuoc nam|thuoc bac|duoc lieu|uong|sac|ngam|ham|boi|dap|xong|doc|bau|mang thai|co thai|cho con bu|tinh nong|tinh mat|tinh han|la cay gi|la gi|la con gi|co tot|tot khong|kieng|ai khong nen|dung duoc|dung the nao|dung sao)\b/;
+const GEN_CTX = /\b(de lam|lam gi|lam j|lam chi|la j|tac dung|cong dung|chua|tri|bai thuoc|vi thuoc|dong y|y hoc co truyen|thuoc nam|thuoc bac|duoc lieu|uong|sac|ngam|ham|boi|dap|xong|doc|bau|mang thai|co thai|cho con bu|tinh nong|tinh mat|tinh han|la cay gi|la gi|la con gi|co tot|tot khong|kieng|ai khong nen|dung duoc|dung the nao|dung sao)\b/;
 const AMBIG_BARE = new Set(["rieng", "chi tu", "do trong", "o mai", "hoe", "sa nhan", "sai ho", "tam that", "huong phu", "phong phong"]);
 export function findFolk(text: string): FolkEntry | null {
   const n = ` ${normalizeVi(text)} `;
