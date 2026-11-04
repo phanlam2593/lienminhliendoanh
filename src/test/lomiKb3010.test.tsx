@@ -1237,6 +1237,20 @@ describe("30/10 — trả lời qua khung chat", () => {
     // "là thuốc gì" của thuốc bôi → gợi ý hỏi "bôi sao", không nêu liều
     expect((await last(["salbutamol là thuốc gì"])).content).toMatch(/xịt sao/);
   }, 120000);
+  it("04/11 (vòng 7) — thuốc mạn tính / thần kinh / tiết niệu / say xe theo trang thuốc NHS", async () => {
+    const C: [string, RegExp][] = [
+      ["duspatalin uống sao", /20 phút trước bữa ăn/], ["transamin uống mấy viên", /4 ngày/], ["diflucan uống sao", /150 mg một liều duy nhất/],
+      ["nasonex xịt sao", /14 ngày/], ["stilnox uống lúc nào", /ngay trước khi lên giường/], ["harnal uống lúc nào", /sau bữa sáng/],
+      ["seduxen uống được bao lâu", /tối đa khoảng 4 tuần/], ["zoloft uống sao", /Đừng tự ngưng đột ngột/], ["viagra uống trước bao lâu", /1 giờ trước khi quan hệ/],
+      ["stugeron uống trước khi đi bao lâu", /2 giờ trước khi đi/], ["adalat uống sao", /ít nhất 12 giờ/], ["imigran uống sao", /tối đa 300 mg/],
+      ["pulmicort xịt sao", /dự phòng/], ["macrobid uống sao", /uống hết đợt/i], ["propranolol uống mấy viên", /80 mg × 2 lần/],
+      ["tritace uống sao", /trước khi ngủ/], ["lasix uống lúc nào", /buổi sáng/], ["zocor uống lúc nào", /buổi tối/], ["kwells uống sao", /20–30 phút/],
+    ];
+    for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+    expect((await last(["uống seduxen với rượu được không"])).content).toMatch(/Không uống rượu bia/);
+    expect((await last(["bà bầu uống renitec được không"])).content).toMatch(/không dùng khi mang thai/);
+    expect((await last(["thiếu vitamin d nên ăn gì"])).content).not.toMatch(/colecalciferol/);
+  }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
 import { MEDS } from "@/lib/lomiDrugIndex";
