@@ -1099,4 +1099,16 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["bi soi than"])).content).toMatch(/sỏi thận/i);
     expect((await last(["quen mat khau"])).faqId).toBe("forgot");
   }, T);
+  it("Rà lại 04/11 sau các vòng cloud: nuốt pin, người khác nhắn, tài xế bao lâu, đặt xe tới chỗ, đính chính tên đăng nhập", async () => {
+    expect((await last(["Bé nhà tôi ăn phải viên pin"])).content).toMatch(/115/);
+    expect((await last(["con tui lỡ ngậm nuốt cục pin"])).content).toMatch(/115/);
+    expect((await last(["Ăn hạt điều có béo không"])).content).not.toMatch(/115/);
+    expect((await last(["Người lạ nhắn tin cho tôi, chặn sao?"])).faqId).toBe("block");
+    expect((await last(["Có người cứ nhắn làm phiền tôi"])).faqId).toBe("block");
+    expect((await last(["Bạn nhắn cho chủ quán giùm tôi"])).faqId).toBe("msgstart");
+    expect((await last(["Tài xế bao lâu mới tới?"])).faqId).toBe("ridetrack");
+    expect((await last(["Tôi muốn đặt xe ra sân bay Liên Khương"])).faqId).toBe("ridebook");
+    expect((await last(["giá đặt xe ra sân bay bao nhiêu"])).faqId).toBe("ridprice");
+    expect((await last(["Không phải tôi hỏi mật khẩu, tôi hỏi tên đăng nhập quên thì sao"])).faqId).toBe("forgot");
+  }, T);
 });

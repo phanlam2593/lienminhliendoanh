@@ -46,7 +46,9 @@ export function poisonIntent(text: string): boolean {
   return POISON_INTENT.test(` ${normalizeVi(text)} `);
 }
 const SELF_HARM_POISON = VN(/\b(thuốc chuột|bả chuột|thuốc trừ sâu|thuốc sâu|thuốc diệt cỏ)\b/);
-const SWALLOW = VN(/\b(nuốt (phải |nhầm |mất )?(đồng xu|xu|pin|pin cúc|pin nút|cục pin|viên pin|nam châm|đinh|cây kim|kim|ghim|hạt|hột|đồ chơi|dị vật|cúc áo|nút áo|viên bi|bi|mảnh|miếng nhựa))\b/);
+// 04/11: "bé ăn phải viên pin", "lỡ ngậm nuốt cục pin" — ăn / ngậm phải (có "phải / nhầm") vật không ăn được cũng là nuốt dị vật
+//   (trước đây "Bé nhà tôi ăn phải viên pin" bị đáp "Nghe được đó 😄"). "ăn hạt" thường (hạt điều…) không tính — chỉ khi có "phải / nhầm".
+const SWALLOW = VN(/\b((lỡ )?nuốt (phải |nhầm |mất )?(đồng xu|xu|pin|pin cúc|pin nút|cục pin|viên pin|nam châm|đinh|cây kim|kim|ghim|hạt|hột|đồ chơi|dị vật|cúc áo|nút áo|viên bi|bi|mảnh|miếng nhựa)|(lỡ )?(ăn|ngậm|nhai) (phải|nhầm) (đồng xu|xu|pin|pin cúc|pin nút|cục pin|viên pin|nam châm|đinh|cây kim|kim|ghim|đồ chơi|dị vật|cúc áo|nút áo|viên bi|bi|mảnh thuỷ tinh|mảnh thủy tinh|miếng nhựa))\b/);
 // (Lời than "nghẹn ngào", "nghẹn lời", và chuyện hay bị nghẹn từ lâu không phải đang hóc.)
 const CHOKE_NOT = VN(/\b(nghẹn ngào|nghẹn lời|hay bị nghẹn|thỉnh thoảng bị nghẹn|hay nghẹn)\b/);
 const CHOKE = VN(/\b(bị hóc|hóc (xương|hạt|hột|dị vật|đồ chơi|kẹo|thạch|thức ăn)|mắc (xương|nghẹn)|bị nghẹn|nghẹn (thức ăn|không thở|thở không))\b/);

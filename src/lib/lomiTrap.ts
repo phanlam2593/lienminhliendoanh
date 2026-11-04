@@ -53,7 +53,7 @@ export function trapReply(q: string): Trap | null {
   // 01/11 (vòng 19): câu hỏi thao tác ở các mảng khác của app — đúng loại câu hỏi (bao lâu / ai / được không)
   {
     const f = (id: string, lead = "") => { const x = faqById(id); return x ? { text: `${lead}${x.a.vi}`, faqId: id } : null; };
-    if (VN(/\b(bao lâu|khi nào|chừng nào|mấy phút) (thì )?(tài xế|xe|shipper) (tới|đến|đón)|\bai (chở|giao|đón)( tôi| tui| mình)?\b|\btài xế là ai\b/).test(n)) { const r = f("ridetrack"); if (r) return r; }
+    if (VN(/\b(tài xế|xe|shipper) (\S+ ){0,2}?(bao lâu|mấy phút|khi nào|chừng nào|bao giờ) (mới |thì |sẽ )?(tới|đến|đón|giao)\b/).test(n) || VN(/\b(bao lâu|khi nào|chừng nào|mấy phút) (thì )?(tài xế|xe|shipper) (tới|đến|đón)|\bai (chở|giao|đón)( tôi| tui| mình)?\b|\btài xế là ai\b/).test(n)) { const r = f("ridetrack"); if (r) return r; }
     if (VN(/\b(cồng kềnh|hàng nặng|đồ to|bốc dỡ|bốc vác)\b/).test(n) && VN(/\b(gửi|giao|chở|ship)\b/).test(n)) { const r = f("ridprice", "Được nha, chỉ là có thể tính thêm phụ phí 📦 "); if (r) return r; }
     if (VN(/\bquẹt\b/).test(n) && VN(/\b(quẹt trái|bỏ qua|vuốt trái)\b/).test(n) && VN(/\b(thấy lại|hiện lại|gặp lại|quay lại)\b/).test(n))
       return { text: "Có nha 🙂 Người bạn đã **bỏ qua** (quẹt trái) sẽ **hiện lại sau 48 giờ**, nên chưa phải mất luôn đâu.", faqId: "quetwhat" };
@@ -215,7 +215,17 @@ export function trapReply(q: string): Trap | null {
   if (VN(/\b(tài khoản|acc|account|nick|tk)\b/).test(n) && VN(/\b(bị khoá|bị khóa|bị chặn|bị đình chỉ|bị cấm|bị block|bị ban)\b/).test(n) && !VN(/\b(ưu đãi|voucher|mã pin|pin)\b/).test(n))
     return { text: "Tài khoản bị khoá thì bạn thử vầy nha:\n• Nếu vừa **nhập sai mật khẩu nhiều lần** thì chờ vài phút rồi thử lại, hoặc bấm **Quên mật khẩu** (nhập đúng email + số điện thoại đã đăng ký)\n• Nếu app báo tài khoản bị khoá / tạm ngưng → liên hệ **Ban quản trị** (trang đầu có Email / Hotline / Facebook) để hỏi lý do và cách mở lại\n\nĐừng lo quá nha — cứ hỏi Ban quản trị là sẽ rõ.", faqId: "forgot" };
   // "đi từ trung tâm tới hồ Tuyền Lâm" → đặt xe
-  if (VN(/\b(muốn |cần )?đi từ \S+( \S+){0,4} (tới|đến|qua|lên|xuống|ra) \S+/).test(n) && !VN(/\b(bao xa|mấy km|bao lâu|đường nào)\b/).test(n))
+  // 04/11: ý ở vế sau khi đính chính / kể: người khác nhắn làm phiền → chặn; hỏi giá chuyến xe → giá tham khảo; QUÊN tên đăng nhập → lấy lại.
+  {
+    const fq = (id: string) => { const x = faqById(id); return x ? { text: x.a.vi, faqId: id } : null; };
+    if (VN(/\b(làm phiền|quấy rối|quấy rầy|spam)\b/).test(n) && VN(/\b(nhắn|gọi|inbox|tin nhắn)\b/).test(n)) { const r = fq("block"); if (r) return r; }
+    if (VN(/\b(giá|bao nhiêu tiền|mấy tiền|hết bao nhiêu|tốn bao nhiêu|cước)\b/).test(n) && VN(/\b(đặt xe|đi xe|gọi xe|chuyến xe|xe ôm|chở)\b/).test(n)) { const r = fq("ridprice"); if (r) return r; }
+    const tail = n.replace(/^.*\b(mà là|tôi hỏi|tui hỏi|ý là|ý tôi là)\b/, "");
+    if (VN(/\b(quên|mất|không nhớ|hổng nhớ)\b/).test(tail) && VN(/\b(tên đăng nhập|username|tên tài khoản)\b/).test(tail)) { const r = fq("forgot"); if (r) return r; }
+  }
+  // 04/11: "tôi muốn đặt xe ra sân bay Liên Khương" — lời kể muốn đặt xe tới một chỗ (không phải hỏi giá / bao lâu) → chỉ cách đặt trong app,
+  //   không đi tìm "quán" xe đưa đón sân bay.
+  if ((VN(/\b(muốn |cần )?đi từ \S+( \S+){0,4} (tới|đến|qua|lên|xuống|ra) \S+/).test(n) || VN(/\b(muốn|cần|định|tính|phải) (đặt|gọi|book|kêu|bắt) (xe|grab|taxi)( \S+)? (ra|tới|đến|lên|về|đi|qua|xuống) \S+/).test(n)) && !VN(/\b(bao xa|mấy km|bao lâu|đường nào|giá|bao nhiêu tiền|mấy tiền)\b/).test(n))
     return { text: "Muốn đi thì đặt xe trong app nha 🛵 **Trang chủ → Đưa đón & Giao hàng (/dua-don) → Chở người** → chọn điểm đón và điểm đến (kéo ghim trên bản đồ hoặc gõ tên chỗ) → chọn loại xe → đặt.\nApp hiện giá tham khảo theo quãng đường; trả tiền mặt trực tiếp cho tài xế.", faqId: "ridebook" };
   // Không thấy nút ưu đãi
   if (/\b(khong|ko|k|khum|hong|hem) thay (nut|cho|muc)( \S+){0,2} uu dai\b/.test(n))
@@ -327,7 +337,8 @@ export function actionReply(q: string): Trap | null {
     return say("đặt món hay trả tiền", "• Gọi / nhắn tin cho quán (trên trang quán) để đặt món\n• Cần người chở đồ ăn về: **Đưa đón (/dua-don) → Giao đồ ăn**, nhập điểm lấy và điểm giao\n• Trả tiền trực tiếp cho quán / tài xế — app không thu tiền", "ridebook");
   if (W(/\bđặt xe|book xe|gọi xe|kêu xe\b/u).test(low))
     return say("đặt xe", "• **Trang chủ → Đưa đón & Giao hàng (/dua-don) → Chở người**, nhập điểm đến rồi bấm đặt\n• Đặt rồi xem ở **Chuyến hiện tại**: có tài xế nhận sẽ hiện tên, biển số", "ridebook");
-  if (W(/\b(nhắn|gửi tin|inbox|nói với|bảo)\b/u).test(low) && !W(/\b(lời mời|báo cáo)\b/u).test(low)) {
+  // 04/11: "người lạ nhắn tin cho tôi, chặn sao?" — người KHÁC nhắn / muốn chặn, không phải nhờ Lomi nhắn thay → để FAQ chặn trả lời.
+  if (W(/\b(nhắn|gửi tin|inbox|nói với|bảo)\b/u).test(low) && !W(/\b(lời mời|báo cáo|chặn|block|làm phiền|quấy rối|spam)\b/u).test(low) && !W(/\b(người lạ|ai đó|có người|người ta|họ|nó|ổng|bả) (\S+ )?(nhắn|gửi tin|inbox)\b/u).test(low)) {
     const draft = quoted ? `\n\nGợi ý tin để bạn gửi: “${quoted.replace(/\b(tôi|tui)\b/gu, "mình").replace(/^\p{L}/u, (c) => c.toUpperCase())}${/[.!?]$/.test(quoted) ? "" : " nha"} 💚”` : "";
     return { ...say("nhắn tin thay bạn", "• Mở **Tin nhắn (/tin-nhan)** → chọn người (hoặc gõ tên / @username để tìm) → gửi\n• Nhắn quán: mở trang quán → bấm **Nhắn tin**\n• Muốn Lomi soạn giúp câu cho khéo thì nói nội dung, Lomi viết cho bạn chép", "msgstart"), text: say("nhắn tin thay bạn", "• Mở **Tin nhắn (/tin-nhan)** → chọn người (hoặc gõ tên / @username để tìm) → gửi\n• Nhắn quán: mở trang quán → bấm **Nhắn tin**\n• Muốn Lomi soạn giúp câu cho khéo thì nói nội dung, Lomi viết cho bạn chép").text + draft };
   }
