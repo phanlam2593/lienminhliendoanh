@@ -130,6 +130,8 @@ export async function loadAllMedTopics(): Promise<MedTopic[]> {
 export const medTopicIds = () => ROWS.map((r) => r.id);
 /** Loại thẻ (condition / mental / other…) theo id, không cần nạp thẻ. */
 export const medKindOf = (id: string): MedTopic["kind"] | null => LOOKUP_ROWS.find((r) => r.id === id)?.kind ?? null;
+/** Tên gọi đầu tiên của một chủ đề trong kho (chưa nạp thẻ) — để làm câu gợi ý "<tên> là gì?". */
+export const medNameOfId = (id: string): string | null => LOOKUP_ROWS.find((r) => r.id === id)?.names[0] ?? null;
 
 // ── Nhận ra chủ đề trong câu ──
 // Hai cách viết i/y hay gặp ("tự kỷ"/"tự kỉ", "tâm lý"/"tâm lí") quy về một dạng để khớp tên.

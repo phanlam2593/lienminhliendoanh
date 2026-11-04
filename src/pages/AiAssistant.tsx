@@ -46,6 +46,7 @@ import {
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
+import { meaningChips } from "@/lib/lomiMeaning";
 import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, restoreViAlts, typoCandidates } from "@/lib/lomiViRestore";
 import { learnAnswer, learnKey, loadTaught, logUnanswered, lookupLearned, matchTaught, sendFeedback, taughtHit, type FeedbackReason } from "@/lib/lomiLearn";
 import { toast } from "sonner";
@@ -3461,6 +3462,12 @@ export function AiChat({
         });
       // Tới đây là Lomi thật sự bí: ghi câu NGUYÊN VĂN (raw) cho admin xem, khoá gộp theo câu đã chuẩn hoá (q).
       logUnanswered(raw, q);
+      // 02/11 (hướng 2): câu HỎI / lời nhờ Lomi chưa hiểu → hỏi máy chủ (lib/lomiMeaning) câu gần NGHĨA nhất, trộn với gợi ý theo từ khoá,
+      //   rồi hỏi lại "Có phải bạn muốn hỏi…" (không tự trả lời). Đang theo chuyện người ốm / mạch sức khoẻ thì giữ lời đáp theo mạch.
+      const askLike = looksLikeQuestion(q) || fr1?.act === "question" || fr1?.act === "request" || isAppish(q);
+      const mChips = !en && askLike && !keepHealth.health && th0?.kind !== "care" ? await meaningChips(q) : null;
+      if (mChips && !sug.length)
+        return localReply(q, { role: "assistant", content: "Hmm, câu này Lomi chưa chắc hiểu đúng ý bạn 😅 Có phải bạn muốn hỏi một trong mấy câu này không?", local: true, quick: mChips, unk: typed, unkKey: q, stuck: "suggest" });
       if (!sug.length && !en) {
         // 10/10: phân vân chuyện ăn uống ("nên mua tôm ăn không nhỉ") là câu Lomi trả lời được — không tính là bí.
         const fdr = foodDecisionReply(q);
@@ -3497,7 +3504,7 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: unkText ?? fb.text, local: true, quick: unkText ? undefined : fb.quick, unk: decided ? undefined : typed, unkKey: q, stuck: (careUnk ? "unknown_care" : medUnk ? "unknown_med" : notGot ? "not_understood" : "fallback") as StuckKind, sticker: unkText ? undefined : fb.sticker, ...keepHealth, ...(askHealth ? { health: {} } : {}) });
       }
       const pick = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-      const chips = (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
+      const chips = mChips ?? (sug.length ? sug : POPULAR_FAQ_IDS.slice(0, 4).map((id) => faqById(id)!)).map((f) =>
         lang === "en" ? f.q.en : f.q.vi,
       );
       return localReply(q, {
