@@ -1450,3 +1450,20 @@ describe("04/11 vòng 15 — dược liệu đợt 4", () => {
     expect(findFolk("cu rieng chua dau bung")?.id).toBe("rieng");
   });
 });
+
+// ── 04/11 vòng 16: vị độc (cảnh báo) + dược liệu đợt 5 ──
+describe("04/11 vòng 16 — vị độc + dược liệu đợt 5", () => {
+  const H6: [string, RegExp][] = [
+    ["chu sa có tác dụng gì", /Chu sa[\s\S]*thuỷ ngân[\s\S]*115/],
+    ["tỏi độc trị gout được không", /Tỏi độc[\s\S]*Vị thuốc ĐỘC[\s\S]*colchicine/],
+    ["thương lục có tác dụng gì", /Thương lục[\s\S]*nhầm với sâm/],
+    ["dừa cạn chữa huyết áp được không", /Dừa cạn[\s\S]*có thai/],
+    ["hoa đu đủ đực trị ho cho bé được không", /Hoa đu đủ đực[\s\S]*dưới 3 tuổi/],
+    ["re co tranh co tac dung gi", /cỏ tranh/i],
+    ["uống bột sắn dây có tốt không", /Sắn dây[\s\S]*nấu chín/],
+  ];
+  for (const [q, re] of H6) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("'xấu hổ' (cảm xúc) không thành cây xấu hổ", async () => {
+    expect((await last(["tôi thấy xấu hổ quá"])).content).not.toMatch(/cây xấu hổ/i);
+  });
+});
