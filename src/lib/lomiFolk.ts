@@ -2766,21 +2766,216 @@ export const FOLK: FolkEntry[] = [
     sources: [{ title: "Đảng sâm", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/dang-sam-re" }],
     verifiedAt: "2026-11-04",
   },
+  // ── 04/11 đợt 3 (Kir: đinh lăng, ba kích, lá vối + vị tiếp theo; Long Châu — theo y học cổ truyền, tham khảo) ──
+  {
+    id: "dinh-lang",
+    name: "Đinh lăng",
+    names: ["đinh lăng", "lá đinh lăng", "củ đinh lăng", "rễ đinh lăng", "cây đinh lăng", "cao đinh lăng", "nước lá đinh lăng"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền dùng đinh lăng làm thuốc bổ (được ví như \"nhân sâm của người nghèo\"); lá tính mát, vị hơi đắng, dùng cho tiêu hoá kém, đầy hơi, mất ngủ, đau đầu, rối loạn kinh nguyệt, đau lưng, dị ứng da.", src: [0] }],
+    science: [{ text: "Lá đinh lăng chứa saponin, vitamin nhóm B (nhất là B1), alcaloid, flavonoid.", src: [0] }],
+    how: [{ text: "Đau lưng: dân gian giã lá đinh lăng tươi xoa bóp chỗ đau.", src: [0] }, { text: "Nước lá đinh lăng nên uống trong ngày khi còn ấm — không uống nước đã để qua đêm.", src: [0] }],
+    caution: [{ text: "**Không lạm dụng / uống thường xuyên**: nhiều saponin có thể gây hoa mắt, chóng mặt, buồn nôn, mệt mỏi.", src: [0] }, { text: "**Trẻ em chỉ dùng ngoài da, không uống**. **Bà bầu 3 tháng đầu không uống** nước lá đinh lăng. Bị dị ứng với đinh lăng thì không đắp lên da.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "mat-ngu", text: "y học cổ truyền dùng an thần, giúp ngủ — mất ngủ kéo dài nên đi khám", src: [0], v: "trad" }, { id: "kho-tieu", text: "y học cổ truyền dùng cho đầy hơi, khó tiêu", src: [0], v: "trad" }, { id: "kinh-nguyet-khong-deu", text: "y học cổ truyền dùng điều kinh", src: [0], v: "trad" }, { id: "dau-lung", text: "dân gian giã lá xoa bóp chỗ đau", src: [0], v: "trad" }, { id: "me-day", text: "dân gian dùng cho dị ứng, mề đay — sưng môi, khó thở thì gọi 115", src: [0], v: "trad" }],
+    sources: [{ title: "Cây đinh lăng: công dụng, bài thuốc và lưu ý khi dùng", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/bai-viet/cay-dinh-lang-cong-dung-bai-thuoc-va-luu-y-khi-dung.html" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "ba-kich",
+    name: "Ba kích",
+    names: ["ba kích", "ba kích tím", "ba kích trắng", "rượu ba kích", "ba kích thiên", "morinda"],
+    verdict: "trad",
+    folk: [{ text: "Đông y xem ba kích vị cay ngọt, tính ấm, vào kinh thận; dùng bổ thận, tráng dương, tăng sinh lý nam, mạnh gân cốt, giảm đau nhức xương khớp. Ba kích tím được dùng nhiều nhất.", src: [0] }],
+    science: [{ text: "Nghiên cứu bước đầu về tác dụng lên nội tiết sinh dục nam, chống viêm, giảm mệt mỏi.", src: [0] }],
+    caution: [{ text: "**Không dùng cho**: người tăng huyết áp, người bệnh gan, người \"nóng trong\", phụ nữ mang thai / cho con bú, trẻ em.", src: [0] }, { text: "Có thể gây nóng trong, nổi mụn, táo bón, tăng huyết áp. **Phải bỏ lõi** (dùng nguyên lõi dễ ngộ độc). Lạm dụng rượu ba kích hại gan.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "roi-loan-cuong-duong", text: "y học cổ truyền dùng bổ thận, tráng dương — rối loạn cương kéo dài nên khám nam khoa", src: [0], v: "trad" }, { id: "thoai-hoa-khop", text: "y học cổ truyền dùng mạnh gân cốt", src: [0], v: "trad" }, { id: "tang-huyet-ap", text: "người tăng huyết áp không nên dùng ba kích — có thể làm tăng huyết áp", src: [0], v: "risky" }, { id: "gan-nhiem-mo", text: "người bệnh gan không nên dùng ba kích, nhất là rượu ba kích", src: [0], v: "risky" }, { id: "viem-gan", text: "người bệnh gan không nên dùng ba kích, nhất là rượu ba kích", src: [0], v: "risky" }],
+    sources: [{ title: "Ba kích là gì? Những công dụng của ba kích", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/bai-viet/ba-kich-la-gi-nhung-cong-dung-cua-ba-kich-doi-voi-suc-khoe.html" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "la-voi",
+    name: "Lá vối / nụ vối",
+    names: ["lá vối", "nụ vối", "nước vối", "nước lá vối", "chè vối", "trà vối", "trà nụ vối", "cây vối"],
+    verdict: "trad",
+    folk: [{ text: "Dân gian dùng nước lá vối, nụ vối để thanh nhiệt, giải khát, giúp tiêu hoá, đỡ đầy bụng, khó tiêu, lợi tiểu; còn dùng hỗ trợ gout, mỡ máu, đường huyết.", src: [0] }],
+    science: [{ text: "Nụ vối có flavonoid, lá có tinh dầu, tanin được nghiên cứu về ổn định đường huyết, mỡ máu và kháng khuẩn.", src: [0] }],
+    how: [{ text: "Hãm lá vối khô như pha trà, chắt bỏ nước đầu; uống trong ngày, không để nước vối qua đêm (dễ thiu, đau bụng).", src: [0] }],
+    caution: [{ text: "**Không uống khi đói** (dễ mệt, chóng mặt, xây xẩm); không lạm dụng, uống quá nhiều sau ăn.", src: [0] }, { text: "Không nên dùng: người quá gầy yếu, trẻ dưới 12 tuổi; bà bầu, mẹ cho con bú nên hạn chế; đang dùng thuốc điều trị bệnh thì hỏi bác sĩ.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "kho-tieu", text: "dân gian dùng giúp tiêu hoá, đỡ đầy bụng", src: [0], v: "trad" }, { id: "gout", text: "dân gian dùng lợi tiểu, hỗ trợ đào thải acid uric — vẫn theo thuốc bác sĩ kê", src: [0], v: "trad" }, { id: "tieu-duong", text: "dân gian dùng hỗ trợ đường huyết — đang dùng thuốc thì hỏi bác sĩ", src: [0], v: "trad" }, { id: "mo-mau-cao", text: "dân gian dùng hỗ trợ giảm mỡ máu", src: [0], v: "trad" }],
+    sources: [{ title: "Những tác hại của lá vối mà bạn nên chú ý khi dùng", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/bai-viet/nhung-tac-hai-cua-la-voi-ma-ban-nen-chu-y-khi-dung.html" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "la-oi",
+    name: "Lá ổi / búp ổi",
+    names: ["lá ổi", "búp ổi", "lá ổi non", "nước lá ổi"],
+    verdict: "trad",
+    folk: [{ text: "Đông y dùng lá non, búp ổi chữa tiêu chảy, đau bụng đi ngoài; lá tươi dùng khi bầm dập, vết loét.", src: [0] }],
+    science: [{ text: "Lá ổi có tác dụng làm săn, gây táo bón — vì vậy dùng cho tiêu chảy.", src: [0] }],
+    caution: [{ text: "Đang táo bón không nên dùng. Tiêu chảy kèm sốt cao, phân có máu, mất nước (khát, ít tiểu) thì đi khám.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "tieu-chay", text: "dân gian dùng búp ổi — trẻ nhỏ, mất nước, phân có máu thì đi khám; bù nước bằng oresol vẫn là chính", src: [0], v: "trad" }],
+    sources: [{ title: "Lá ổi / búp ổi", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/oi-la" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "cat-canh",
+    name: "Cát cánh",
+    names: ["cát cánh", "rễ cát cánh"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền xem cát cánh vị đắng cay; trừ đờm, lợi họng; dùng cho ho nhiều đờm, đau họng, khàn tiếng.", src: [0] }],
+    science: [{ text: "Hoạt chất platycodin (saponin) được nghiên cứu nhiều về tác dụng long đờm, miễn dịch.", src: [0] }],
+    caution: [{ text: "Ho lâu ngày kiểu âm hư hoặc **ho ra máu không nên dùng**; dùng lượng lớn có thể gây nôn.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "ho", text: "y học cổ truyền dùng long đờm — ho trên 3 tuần, ho ra máu thì đi khám", src: [0], v: "trad" }, { id: "viem-hong", text: "y học cổ truyền dùng lợi họng", src: [0], v: "trad" }],
+    sources: [{ title: "Cát cánh", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/cat-canh-re" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "bach-bo",
+    name: "Bách bộ",
+    names: ["bách bộ", "rễ bách bộ", "củ bách bộ"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền xem bách bộ vị ngọt đắng, mát phổi; dân gian dùng chữa ho lâu ngày, trị giun.", src: [0] }],
+    science: [{ text: "Hoạt chất stemonin ức chế trung tâm hô hấp, làm giảm phản xạ ho.", src: [0] }],
+    caution: [{ text: "Người tỳ vị hư yếu không dùng. Ho kéo dài nhiều tuần cần đi khám tìm nguyên nhân (lao, hen…).", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "ho", text: "y học cổ truyền dùng cho ho lâu ngày — ho trên 3 tuần thì đi khám", src: [0], v: "trad" }],
+    sources: [{ title: "Bách bộ", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/bach-bo" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "bach-chi",
+    name: "Bạch chỉ",
+    names: ["bạch chỉ", "rễ bạch chỉ"],
+    verdict: "trad",
+    folk: [{ text: "Đông y xem bạch chỉ vị cay, tính ôn; giảm đau, thông mũi; dùng cho nhức đầu, đau răng, nghẹt mũi, viêm xoang.", src: [0] }],
+    science: [{ text: "Thí nghiệm cho thấy bạch chỉ ức chế một số vi khuẩn như E. coli, trực khuẩn lỵ.", src: [0] }],
+    caution: [{ text: "Không dùng cho người âm hư hoả vượng, nhiệt thịnh. Dễ nhầm với \"nam bạch chỉ\" (cây mát rừng) — là cây khác.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "dau-dau", text: "y học cổ truyền dùng giảm đau đầu — đau đầu dữ dội đột ngột thì gọi 115", src: [0], v: "trad" }, { id: "viem-xoang", text: "y học cổ truyền dùng thông mũi", src: [0], v: "trad" }],
+    sources: [{ title: "Bạch chỉ", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/bach-chi" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "hoang-ba",
+    name: "Hoàng bá",
+    names: ["hoàng bá", "vỏ hoàng bá"],
+    verdict: "trad",
+    folk: [{ text: "Đông y xem hoàng bá vị đắng, tính lạnh; thanh thấp nhiệt; dùng cho tiêu hoá kém, vàng da, trĩ, bệnh ngoài da.", src: [0] }],
+    science: [{ text: "Thí nghiệm cho thấy dịch chiết hoàng bá ức chế tụ cầu, vi khuẩn lỵ, Salmonella.", src: [0] }],
+    caution: [{ text: "Dùng quá mức có thể gây **vàng da ở trẻ sơ sinh** — bà bầu, mẹ cho con bú không tự dùng. Người tỳ hư, tiêu chảy không nên dùng.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [],
+    sources: [{ title: "Hoàng bá", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/hoang-ba-vo-than" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "phuc-linh",
+    name: "Phục linh (bạch linh)",
+    names: ["phục linh", "bạch linh", "nấm phục linh", "phục thần"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền dùng phục linh lợi tiểu, chữa phù, an thần; hay có trong các bài thuốc bổ.", src: [0] }],
+    science: [{ text: "Nghiên cứu dược lý về bảo vệ gan, hạ đường huyết; polysaccharid tăng miễn dịch.", src: [0] }],
+    caution: [{ text: "Đang dùng thuốc lợi tiểu, thuốc tiểu đường thì hỏi bác sĩ trước.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "mat-ngu", text: "y học cổ truyền dùng an thần", src: [0], v: "trad" }],
+    sources: [{ title: "Phục linh", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/phuc-linh" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "kinh-gioi",
+    name: "Kinh giới",
+    names: ["kinh giới", "lá kinh giới", "rau kinh giới"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền xem kinh giới vị cay, tính ôn; dùng giải cảm, đau đầu, lợi họng; vừa là rau ăn vừa là thuốc.", src: [0] }],
+    science: [{ text: "Nghiên cứu ghi nhận kinh giới có tính kháng khuẩn, kháng virus, chống viêm.", src: [0] }],
+    caution: [{ text: "Ăn như rau thì an toàn; dùng lượng lớn làm thuốc có thể gây tác dụng phụ — hỏi thầy thuốc.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "cam-lanh", text: "dân gian dùng giải cảm", src: [0], v: "trad" }, { id: "kho-tieu", text: "dân gian dùng chữa khó tiêu", src: [0], v: "trad" }],
+    sources: [{ title: "Kinh giới", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/kinh-gioi" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "hung-que",
+    name: "Húng quế",
+    names: ["húng quế", "rau quế", "lá húng quế", "hạt é", "hạt húng quế"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền xem húng quế vị cay, tính nóng; giải cảm, giảm đầy bụng khó tiêu, thông đường thở; hạt é nhuận tràng.", src: [0] }],
+    science: [{ text: "Tinh dầu húng quế ức chế một số vi khuẩn trong thí nghiệm.", src: [0] }],
+    caution: [{ text: "Ăn quá nhiều lá húng quế có thể ngộ độc eugenol (thở gấp, ho…). Ăn như rau gia vị thì bình thường.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "kho-tieu", text: "dân gian dùng đỡ đầy bụng", src: [0], v: "trad" }, { id: "tao-bon", text: "dân gian dùng hạt é nhuận tràng", src: [0], v: "trad" }],
+    sources: [{ title: "Húng quế", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/hung-que" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "co-man-trau",
+    name: "Cỏ mần trầu",
+    names: ["cỏ mần trầu", "mần trầu"],
+    verdict: "trad",
+    folk: [{ text: "Dân gian dùng cỏ mần trầu cho huyết áp cao, và gội đầu để giảm rụng tóc.", src: [0] }],
+    science: [],
+    caution: [{ text: "Theo y học cổ truyền: người không có thực nhiệt không dùng. Đang dùng thuốc huyết áp thì đừng tự bỏ thuốc.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "tang-huyet-ap", text: "dân gian dùng hỗ trợ — vẫn uống thuốc huyết áp bác sĩ kê", src: [0], v: "trad" }, { id: "rung-toc", text: "dân gian dùng gội đầu", src: [0], v: "trad" }],
+    sources: [{ title: "Cỏ mần trầu", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/co-man-trau" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "trach-ta",
+    name: "Trạch tả",
+    names: ["trạch tả", "củ trạch tả"],
+    verdict: "trad",
+    folk: [{ text: "Đông y xem trạch tả vị ngọt, tính lạnh; lợi tiểu, trừ thấp nhiệt; dùng cho bí tiểu, phù, tiêu chảy.", src: [0] }],
+    science: [{ text: "Có nghiên cứu về trạch tả với gan nhiễm mỡ không do rượu.", src: [0] }],
+    caution: [{ text: "Người gan thận hư, tiểu nhiều mà không có thấp nhiệt không được dùng.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "gan-nhiem-mo", text: "có nghiên cứu tham khảo — gan nhiễm mỡ chủ yếu cần giảm cân, ăn uống, vận động", src: [0], v: "trad" }],
+    sources: [{ title: "Trạch tả", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/trach-ta" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "la-khoi",
+    name: "Lá khôi",
+    names: ["lá khôi", "khôi tía", "cây khôi"],
+    verdict: "trad",
+    folk: [{ text: "Người dân vùng Thanh Hoá dùng lá khôi sắc uống chữa đau bụng, đau dạ dày.", src: [0] }],
+    science: [],
+    caution: [{ text: "Đau dạ dày kéo dài, nôn ra máu, đi ngoài phân đen thì đi khám ngay.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "viem-da-day", text: "dân gian dùng — vẫn theo thuốc bác sĩ kê", src: [0], v: "trad" }, { id: "loet-da-day", text: "dân gian dùng — phân đen, nôn ra máu thì đi khám ngay", src: [0], v: "trad" }],
+    sources: [{ title: "Lá khôi", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/khoi-la" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "hy-thiem",
+    name: "Hy thiêm",
+    names: ["hy thiêm", "cỏ đĩ", "cây hy thiêm"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền xem hy thiêm vị đắng, tính hàn; dùng cho phong thấp, đau lưng mỏi gối, tê bại.", src: [0] }],
+    science: [{ text: "Thí nghiệm trên chuột cho thấy tác dụng chống viêm.", src: [0] }],
+    caution: [{ text: "Trẻ em, phụ nữ mang thai, cho con bú hỏi bác sĩ trước khi dùng.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "thoai-hoa-khop", text: "y học cổ truyền dùng cho đau nhức xương khớp", src: [0], v: "trad" }, { id: "dau-lung", text: "y học cổ truyền dùng cho đau lưng mỏi gối", src: [0], v: "trad" }],
+    sources: [{ title: "Hy thiêm", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/hy-thiem" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "che-day",
+    name: "Chè dây",
+    names: ["chè dây", "trà chè dây", "lá chè dây"],
+    verdict: "trad",
+    folk: [{ text: "Y học cổ truyền xem chè dây vị ngọt, tính mát; dân gian dùng cho đau dạ dày, ợ hơi, ợ chua, viêm loét dạ dày.", src: [0] }],
+    science: [{ text: "Thí nghiệm trên chuột với flavonoid chè dây cho thấy giảm chỉ số loét dạ dày.", src: [0] }],
+    caution: [{ text: "Đau dạ dày kéo dài, phân đen, nôn ra máu thì đi khám — đừng chỉ uống chè dây.", src: [0] }, { text: "Dược liệu tự nhiên vẫn có chỉ định, chống chỉ định, tác dụng phụ và **dễ nhầm với cây khác** — đừng tự ý dùng thay thuốc bác sĩ kê; hỏi bác sĩ / thầy thuốc y học cổ truyền trước, nhất là khi đang dùng thuốc khác.", src: [0] }],
+    topics: [{ id: "viem-da-day", text: "dân gian dùng — vẫn theo thuốc bác sĩ kê", src: [0], v: "trad" }, { id: "loet-da-day", text: "dân gian dùng — phân đen, nôn ra máu thì đi khám ngay", src: [0], v: "trad" }],
+    sources: [{ title: "Chè dây", publisher: "Nhà thuốc FPT Long Châu – tra cứu dược liệu (tham khảo, đọc ngày 04/11/2026)", url: "https://nhathuoclongchau.com.vn/thanh-phan/che-day" }],
+    verifiedAt: "2026-11-04",
+  },
 ];
 
 /** Vị thuốc nam / bắc phổ biến mà Lomi CHƯA tìm được nguồn đáng tin đánh giá → nói thật, kèm lời dặn chung. */
 export const UNVERIFIED_HERBS = [
-  "lá ổi", "búp ổi",
-  "lá vối", "đinh lăng", 
+  
+  
   "thục địa", "xuyên khung", "hoa đu đủ đực", "lá đu đủ", 
-  "nghệ đen", "ba kích", "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "an cung ngưu hoàng",
-  "rễ tranh", "nước sâm", "sâm đất", "lá khôi", 
+  "nghệ đen", "nhung hươu", "rượu rắn", "cao hổ cốt", "cao xương", "an cung ngưu hoàng",
+  "rễ tranh", "nước sâm", "sâm đất", 
   "lá mơ", "lá mơ lông", "lá chanh",
   // 31/10 (danh sách ChatGPT lần 2) — chưa tìm được nguồn đáng tin
-  "húng chanh", "tần dày lá", "lá hẹ", "kinh giới", "lá kinh giới", "húng quế", "lá dứa", "lá xoài", "lá xoài non", "lá sim", "chè dây", "lá mật gấu", "mật gấu",
-  "lược vàng", "lá bàng", "lá bỏng", "sài đất", "lá mướp", "cỏ mần trầu", "rau đắng đất", "rau đắng biển", "rau đắng", "rau ngổ", "rau dền gai",
-  "cát cánh", "bách bộ", "thiên môn đông", "mạch môn", "bạch chỉ", "phòng phong", "bạch thược", "mộc hương", "hoàng bá", "hoàng cầm", "bạch linh", "phục linh",
-  "trạch tả", "cúc tần", "đại bi", "cỏ roi ngựa", "rau má biển", "rau dệu", "rau trai", "lá thuốc dòi", "xương sông", "húng lủi", "lá bưởi",
+  "húng chanh", "tần dày lá", "lá hẹ", "lá dứa", "lá xoài", "lá xoài non", "lá sim", "lá mật gấu", "mật gấu",
+  "lược vàng", "lá bàng", "lá bỏng", "sài đất", "lá mướp", "rau đắng đất", "rau đắng biển", "rau đắng", "rau ngổ", "rau dền gai",
+  "thiên môn đông", "mạch môn", "phòng phong", "bạch thược", "mộc hương", "hoàng cầm", 
+  "cúc tần", "đại bi", "cỏ roi ngựa", "rau má biển", "rau dệu", "rau trai", "lá thuốc dòi", "xương sông", "húng lủi", "lá bưởi",
   "hoàn ngọc", "cây hoàn ngọc", "bìm bìm", "muồng trâu", "lá muồng trâu", "hồng hoa", "lá vừng", "lá khế",
   // 04/11 (Kir: mẹo dân gian trị ho) — chưa tìm được nguồn y khoa đáng tin đánh giá
   "quất chưng đường phèn", "tắc chưng đường phèn", "quất chưng", "tắc chưng", "quất hấp", "tắc hấp", "chanh đào", "chanh đào ngâm mật ong",
@@ -2838,6 +3033,9 @@ export function findFolk(text: string): FolkEntry | null {
     if (f.id === "toi" && !ACCENTED.test(text) && !/\b(toi song|ngam toi|toi ngam|ruou toi|toi mo coi|toi den|cu toi|tep toi|an toi song)\b/.test(n)) continue;
     // ("mang thai", "san nhà" gõ không dấu ≠ "măng", "sắn") → gõ không dấu thì chỉ nhận tên nhiều chữ.
     if (f.id === "san-mang-doc" && !ACCENTED.test(text) && !/\b(cu san|say san|khoai mi|cu mi|mang tuoi|mang chua|mang rung|mang tre|nuoc mang|luoc mang|luoc san|ngam mang|khoai tay)\b/.test(n)) continue;
+    // (04/11) "mã đề thi", "mã đề số 3" là đề kiểm tra; "sa" không dấu một mình ("bi sa sut", "sa vao") không phải cây sả.
+    if (f.id === "ma-de" && /\bma de (thi|so|\d)/.test(n)) continue;
+    if (f.id === "sa" && !ACCENTED.test(text) && !/\b(la sa|cu sa|cay sa|nuoc sa|tinh dau sa|tra sa|xong sa)\b/.test(n)) continue;
     let m: { 0: string } | null = n.match(RE.get(f.id)!);
     // Câu gõ CÓ DẤU thì tên vị phải khớp cả dấu ("nghe nói" ≠ "nghệ", "quê" ≠ "quế", "tối" ≠ "tỏi"); chữ gõ không dấu vẫn khớp lỏng.
     if (m && ACCENTED.test(text)) {
@@ -2848,6 +3046,11 @@ export function findFolk(text: string): FolkEntry | null {
     // (mục chung "thuốc nam khi bệnh nặng" không cộng điểm ngữ cảnh — câu nhắc vị cụ thể như "linh chi" thì vị đó trả lời)
     const len = m ? m[0].length + ((f.ctx || f.id === "boi-bong") && f.id !== "thuoc-nam-benh-nang" ? 100 : 0) : 0;
     if (m && (!best || len > best.len)) best = { f, len };
+  }
+  // (04/11) "nghệ đen" (nga truật) là vị khác "nghệ" — vị chưa có nguồn mà tên dài hơn tên vừa khớp thì không trả lời bằng vị ngắn.
+  if (best && best.len < 100) {
+    const u = findUnverifiedHerb(text);
+    if (u && normalizeVi(u).length > best.len && normalizeVi(u).includes(normalizeVi(best.f.names.find((x) => n.includes(` ${normalizeVi(x)} `)) ?? "\u0000"))) return null;
   }
   return best?.f ?? null;
 }
@@ -2969,6 +3172,22 @@ export function renderFolkForTopic(topicId: string, topicName: string, opts: { c
 const HERB_EFFECT = VN(/\b(hạ|tăng|giảm) (đường huyết|đường máu|đường|huyết áp|áp|mỡ máu|cholesterol)\b/);
 const SICK_EFFECT = VN(/\b(bị|đang|hay|thường|dễ) (hạ|tăng|giảm) (đường|huyết áp|áp)\b/);
 export const herbEffectAsk = (q: string) => HERB_EFFECT.test(` ${normalizeVi(q)} `) && !SICK_EFFECT.test(` ${normalizeVi(q)} `) && !!findFolk(q);
+
+/** 04/11 (Kir: "bệnh gì có liên quan thì thêm mấy dược liệu đó vào khi người ta hỏi đến") — dòng gợi ý ngắn kèm thẻ bệnh:
+ *  • phần tổng quan: các vị / mẹo dân gian hay dùng cho bệnh này (tham khảo), mời hỏi riêng từng vị;
+ *  • phần kiêng: vị nên TRÁNH / thận trọng với bệnh này (ý nguồn ghi rủi ro) + vị hay dùng. */
+export function herbHintFor(topicId: string, topicName: string, aspect: "overview" | "diet", seen = ""): string | null {
+  const hits = folkFor(topicId).filter(({ f }) => f.verdict !== "myth" && !f.name.endsWith("?"));
+  const bad = hits.filter(({ f, t }) => ["risky", "danger"].includes(t.v ?? f.verdict));
+  const goodE = hits.filter((h) => !bad.includes(h)).map(({ f }) => f).filter((f) => !seen.includes(`**${f.name.replace(/\s*\(.*\)$/, "")}**`));
+  const good = goodE.map((f) => f.name.replace(/\s*\(.*\)$/, ""));
+  const parts: string[] = [];
+  if (aspect === "diet" && bad.length)
+    parts.push(`⚠️ **Thảo dược / mẹo dân gian cần tránh hoặc thận trọng với ${topicName}:**\n${bad.slice(0, 5).map(({ f, t }) => `• **${f.name.replace(/\s*\(.*\)$/, "")}** — ${t.text}.`).join("\n")}`);
+  if (good.length)
+    parts.push(`🌿 **Dược liệu / mẹo dân gian hay dùng cho ${topicName}** (tham khảo): ${good.slice(0, 6).join(", ")}${good.length > 6 ? "…" : ""} — hỏi “${goodE[0].names[0]} có tác dụng gì” để xem cách dùng và ai không nên dùng.`);
+  return parts.length ? parts.join("\n\n") : null;
+}
 
 /** Hỏi mẹo dân gian cho một bệnh mà Lomi chưa có mẹo nào đối chiếu được nguồn. */
 export function renderNoFolk(topicName: string): string {

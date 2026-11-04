@@ -49,8 +49,8 @@ describe("lomiFolk — nhận diện", () => {
     expect(findFolk("kem đánh răng nào tốt")).toBeNull();
   });
   it("vị chưa có nguồn → nói thật", () => {
-    expect(findUnverifiedHerb("đinh lăng có tác dụng gì")).toBe("đinh lăng");
-    const r = folkReply("ba kích có tác dụng gì", null, null)!;
+    expect(findUnverifiedHerb("thục địa có tác dụng gì")).toBe("thục địa");
+    const r = folkReply("nghệ đen có tác dụng gì", null, null)!;
     expect(r.text).toMatch(/chưa tìm được nguồn y khoa đáng tin/);
   });
   it("hỏi món với bệnh mà vị không liên quan → nhường lớp kiêng cữ", () => {
@@ -59,7 +59,7 @@ describe("lomiFolk — nhận diện", () => {
   it("bệnh có mẹo dân gian → danh sách; bệnh chưa có → nói thật", () => {
     expect(folkFor("ho").length).toBeGreaterThan(1);
     expect(folkReply("mẹo dân gian trị ho", { id: "ho", name: "ho" }, null)!.text).toMatch(/Chanh mật ong/);
-    expect(folkReply("bài thuốc nam chữa gout", { id: "gout", name: "gout" }, null)!.text).toMatch(/chưa đối chiếu được mẹo dân gian/);
+    expect(folkReply("bài thuốc nam chữa bạch biến", { id: "bach-bien", name: "bạch biến" }, null)!.text).toMatch(/chưa đối chiếu được mẹo dân gian/);
   });
 });
 
@@ -142,9 +142,10 @@ describe("lomiFolk — khớp đúng dấu (24/10)", () => {
     expect(findFolk("Tỏi có tốt không")?.id).toBe("toi");
     expect(findFolk("an toi song co tot khong")?.id).toBe("toi");
     expect(findFolk("la tia to co tac dung gi")?.id).toBe("tia-to");
-    expect(findUnverifiedHerb("uống nước lá ổi được không")).toBe("lá ổi");
+    expect(findUnverifiedHerb("uống nước lá đu đủ được không")).toBe("lá đu đủ");
     expect(findFolk("uống nước sả được không")?.id).toBe("sa");
-    expect(findUnverifiedHerb("dinh lang co tac dung gi")).toBeTruthy();
+    expect(findUnverifiedHerb("thuc dia co tac dung gi")).toBeTruthy();
+    expect(findFolk("dinh lang co tac dung gi")?.id).toBe("dinh-lang");
     expect(findFolk("ky tu co tac dung gi")?.id).toBe("ky-tu");
   });
 });

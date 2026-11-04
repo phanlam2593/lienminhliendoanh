@@ -1403,3 +1403,30 @@ describe("04/11 vòng 13 — dược liệu theo y học cổ truyền (Long Ch�
     expect((await last(["tôi bị huyết áp thấp"])).content).toMatch(/Huyết áp thấp/);
   });
 });
+
+// ── 04/11 vòng 14: đinh lăng, ba kích, lá vối + 13 vị (Long Châu) · thẻ bệnh kèm dược liệu liên quan ──
+describe("04/11 vòng 14 — đinh lăng, ba kích, lá vối; bệnh kèm dược liệu", () => {
+  const H4: [string, RegExp][] = [
+    ["đinh lăng có tác dụng gì", /Đinh lăng[\s\S]*Trẻ em chỉ dùng ngoài da/],
+    ["dinh lang co tac dung gi", /Đinh lăng/],
+    ["ba kích có tác dụng gì", /Ba kích[\s\S]*bỏ lõi/],
+    ["tăng huyết áp uống ba kích được không", /Ba kích[\s\S]*tăng huyết áp/],
+    ["uống nước lá vối có tốt không", /vối[\s\S]*Không uống khi đói/],
+    ["la voi co tac dung gi", /vối/],
+    ["búp ổi trị tiêu chảy được không", /ổi[\s\S]*tiêu chảy/i],
+    ["cát cánh có tác dụng gì", /Cát cánh[\s\S]*ho ra máu không nên dùng/],
+    ["chè dây có tác dụng gì", /Chè dây[\s\S]*dạ dày/],
+    ["húng quế có tác dụng gì", /Húng quế[\s\S]*eugenol/],
+  ];
+  for (const [q, re] of H4) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("'nghệ đen' không bị trả lời bằng bài về nghệ", async () => {
+    expect((await last(["nghệ đen có tác dụng gì"])).content).toMatch(/Nghệ đen[\s\S]*chưa tìm được nguồn/);
+  });
+  it("hỏi bệnh → kèm dược liệu hay dùng", async () => {
+    expect((await last(["sỏi thận là gì"])).content).toMatch(/Dược liệu \/ mẹo dân gian hay dùng cho sỏi thận[\s\S]*Kim tiền thảo/);
+    expect((await last(["gout là gì"])).content).toMatch(/hay dùng cho gout[\s\S]*vối/);
+  });
+  it("hỏi kiêng gì → kèm thảo dược cần tránh", async () => {
+    expect((await last(["tăng huyết áp kiêng gì"])).content).toMatch(/cần tránh hoặc thận trọng với tăng huyết áp[\s\S]*Cam thảo[\s\S]*Ba kích/);
+  });
+});

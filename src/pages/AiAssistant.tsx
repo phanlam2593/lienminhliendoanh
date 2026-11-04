@@ -71,7 +71,7 @@ import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTher
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
-import { findFolk, folkFor, folkReply, herbEffectAsk, renderFolkForTopic } from "@/lib/lomiFolk";
+import { findFolk, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -2989,6 +2989,12 @@ export function AiChat({
             if (folkBlk) {
               const at = mr.text.lastIndexOf("\n\n📚");
               mr.text = at >= 0 ? `${mr.text.slice(0, at)}\n\n${folkBlk}${mr.text.slice(at)}` : `${mr.text}\n\n${folkBlk}`;
+            }
+            // 04/11 (Kir): hỏi tổng quan / kiêng gì của một bệnh → kèm dòng ngắn các dược liệu hay dùng (và vị cần tránh) cho bệnh đó.
+            const herbBlk = !folkBlk && !again && (mr.aspect === "overview" || mr.aspect === "define" || mr.aspect === "diet") ? herbHintFor(mt.id, medName(mt), mr.aspect === "diet" ? "diet" : "overview", mr.text) : null;
+            if (herbBlk) {
+              const at = mr.text.lastIndexOf("\n\n📚");
+              mr.text = at >= 0 ? `${mr.text.slice(0, at)}\n\n${herbBlk}${mr.text.slice(at)}` : `${mr.text}\n\n${herbBlk}`;
             }
             if (!folkBlk && folkFor(mt.id).length && mr.quick && !mr.quick.some((x) => /dân gian/i.test(x))) mr.quick = [...mr.quick.slice(0, 4), `Mẹo dân gian cho ${medName(mt)}?`];
             topicHit("health");
