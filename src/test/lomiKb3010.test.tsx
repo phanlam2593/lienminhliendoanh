@@ -1507,3 +1507,24 @@ describe("04/11 vòng 18 — dược chất đợt 2", () => {
   ];
   for (const [q, re] of H8) it(q, async () => expect((await last([q])).content).toMatch(re));
 });
+
+// ── 04/11 vòng 19: các vị còn lại của tra cứu dược liệu Long Châu (tóm tắt tự động, chỉ nhận khi có ngữ cảnh vị thuốc) ──
+describe("04/11 vòng 19 — dược liệu còn lại (tự động)", () => {
+  const H9: [string, RegExp][] = [
+    ["a giao có tác dụng gì", /A giao[\s\S]*Theo y học cổ truyền/],
+    ["anh túc xác có tác dụng gì", /Anh túc xác[\s\S]*Vị thuốc ĐỘC[\s\S]*thuốc phiện/],
+    ["hạnh nhân đắng ăn được không", /Hạnh nhân đắng[\s\S]*cyanid/],
+    ["thầu dầu có tác dụng gì", /Thầu dầu[\s\S]*Hạt thầu dầu rất độc/],
+    ["bà bầu uống huyền sâm được không", /Huyền sâm[\s\S]*bà bầu/],
+    ["mè đen có tác dụng gì", /Mè đen[\s\S]*Theo y học cổ truyền/],
+  ];
+  for (const [q, re] of H9) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("tên rau / vật thường ngày không bị hiểu là hỏi vị thuốc khi không có ngữ cảnh", async () => {
+    const { findFolk } = await import("@/lib/lomiFolk");
+    for (const q of ["tôi thích ăn sim", "sua chua duoc khong", "chỉ muốn than thôi"]) expect(findFolk(q)?.gen, q).toBeFalsy();
+  });
+  it("mẹo dân gian theo bệnh: vị tự động gom thành một dòng", async () => {
+    const c = (await last(["mẹo dân gian trị ho"])).content;
+    expect(c.split("\n").filter((l) => l.startsWith("• ")).length).toBeLessThan(25);
+  });
+});
