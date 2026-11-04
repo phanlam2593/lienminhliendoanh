@@ -71,7 +71,7 @@ import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTher
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
-import { findFolk, folkFor, folkReply, renderFolkForTopic } from "@/lib/lomiFolk";
+import { findFolk, folkFor, folkReply, herbEffectAsk, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -2784,7 +2784,7 @@ export function AiChat({
           const fkPrev = lastA?.med?.id ? await loadMedTopic(lastA.med.id) : null;
           const fk0 = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
           // 04/11: "giảo cổ lam có hạ đường huyết không" — hỏi TÁC DỤNG của một vị (hạ đường / hạ áp / hạ mỡ máu) không phải đang bị hạ đường huyết.
-          const fkEffect = !!fk0?.folk && VN(/\b(có|giúp|làm) (hạ|tăng|giảm) (đường huyết|đường máu|đường|huyết áp|áp|mỡ máu|cholesterol)\b/).test(q);
+          const fkEffect = !!fk0?.folk && herbEffectAsk(q);
           const fk = fk0 && (fk0.verdict === "myth" || fk0.verdict === "danger" || fkEffect || !bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) ? fk0 : null;
           if (fk) {
             topicHit("health");

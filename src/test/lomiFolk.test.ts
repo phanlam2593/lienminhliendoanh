@@ -23,7 +23,7 @@ describe("lomiFolk — dữ liệu", () => {
         expect(x.text.length, `${f.id}: ${x.text}`).toBeLessThanOrEqual(220);
       }
       for (const t of f.topics) expect(IDS.has(t.id), `${f.id}: thẻ ${t.id} không có`).toBe(true);
-      expect((f.folk.length || f.belief) && f.science.length && (f.caution.length || f.how?.length), f.id).toBeTruthy();
+      expect((f.folk.length || f.belief) && (f.science.length || f.verdict === "trad") && (f.caution.length || f.how?.length), f.id).toBeTruthy();
     }
   });
   it("tên không trùng giữa các vị", () => {
@@ -142,7 +142,8 @@ describe("lomiFolk — khớp đúng dấu (24/10)", () => {
     expect(findFolk("Tỏi có tốt không")?.id).toBe("toi");
     expect(findFolk("an toi song co tot khong")?.id).toBe("toi");
     expect(findFolk("la tia to co tac dung gi")?.id).toBe("tia-to");
-    expect(findUnverifiedHerb("uống nước sả được không")).toBe("sả");
+    expect(findUnverifiedHerb("uống nước lá ổi được không")).toBe("lá ổi");
+    expect(findFolk("uống nước sả được không")?.id).toBe("sa");
     expect(findUnverifiedHerb("dinh lang co tac dung gi")).toBeTruthy();
     expect(findFolk("ky tu co tac dung gi")?.id).toBe("ky-tu");
   });

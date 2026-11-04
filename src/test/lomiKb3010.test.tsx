@@ -1354,13 +1354,13 @@ describe("04/11 vòng 12 — dược liệu (Long Châu)", () => {
     ["bầu uống ích mẫu được không", /Ích mẫu[\s\S]*Không dùng khi mang thai/],
     ["giảo cổ lam có hạ đường huyết không", /Giảo cổ lam[\s\S]*hạ đường huyết quá mức/],
     ["dây thìa canh chữa tiểu đường được không", /Dây thìa canh[\s\S]*không thay thuốc/],
-    ["xạ đen chữa ung thư được không", /Xạ đen[\s\S]*chưa có bằng chứng chữa được ung thư/],
+    ["xạ đen chữa ung thư được không", /Xạ đen[\s\S]*không bỏ điều trị ung thư[\s\S]*Theo y học cổ truyền/],
     ["kim tien thao tri soi than duoc khong", /Kim tiền thảo[\s\S]*đi khám/],
     ["nhân trần uống được không", /Nhân trần[\s\S]*3 cây khác nhau/],
     ["kỷ tử có tác dụng gì", /kỷ tử[\s\S]*sáng mắt/i],
     ["táo tàu có tác dụng gì", /Đại táo/],
     ["diếp cá chữa trĩ được không", /Diếp cá[\s\S]*trĩ/],
-    ["trinh nữ hoàng cung chữa u xơ tử cung được không", /Trinh nữ hoàng cung[\s\S]*chưa đủ bằng chứng/],
+    ["trinh nữ hoàng cung chữa u xơ tử cung được không", /Trinh nữ hoàng cung[\s\S]*bác sĩ phụ khoa theo dõi/],
   ];
   for (const [q, re] of H2) it(q, async () => expect((await last([q])).content).toMatch(re));
   it("vẫn là thẻ bệnh khi người dùng BỊ hạ đường huyết", async () => {
@@ -1368,5 +1368,38 @@ describe("04/11 vòng 12 — dược liệu (Long Châu)", () => {
   });
   it("nguồn tham khảo Long Châu nằm trong danh sách tin cậy", () => {
     expect(TRUSTED).toContain("nhathuoclongchau.com.vn");
+  });
+});
+
+// ── 04/11 vòng 13 (Kir: "nói theo y học cổ truyền, để tham khảo", bỏ câu "chưa đủ bằng chứng trên người") + 20 vị đợt 2 ──
+describe("04/11 vòng 13 — dược liệu theo y học cổ truyền (Long Châu đợt 2)", () => {
+  const H3: [string, RegExp][] = [
+    ["lá lốt có tác dụng gì", /Lá lốt[\s\S]*đau dạ dày, táo bón không nên dùng/],
+    ["bà bầu uống ngưu tất được không", /Ngưu tất[\s\S]*có thai không được dùng/],
+    ["hoai son co tac dung gi", /Hoài sơn[\s\S]*bổ tỳ/],
+    ["kim ngan hoa co tac dung gi", /Kim ngân hoa[\s\S]*thanh nhiệt/],
+    ["la han qua co tac dung gi", /La hán quả[\s\S]*Trẻ dưới 6 tuổi/],
+    ["bà bầu uống trà tâm sen được không", /Tâm sen[\s\S]*phụ nữ mang thai/],
+    ["uống nước râu ngô hạ huyết áp được không", /Râu ngô[\s\S]*thuốc chống đông/],
+    ["mã đề trị ho được không", /Mã đề[\s\S]*đái dầm/],
+    ["lá tre có tác dụng gì", /Lá tre[\s\S]*cảm sốt/],
+    ["che vang co tac dung gi", /Chè vằng[\s\S]*lá ngón/],
+    ["rau sam có tác dụng gì", /Rau sam[\s\S]*lỵ/],
+    ["bình vôi chữa mất ngủ được không", /Bình vôi[\s\S]*có độc/],
+    ["uống nước sả có tốt không", /Sả[\s\S]*tinh dầu sả lượng lớn/],
+    ["lá trầu không có tác dụng gì", /trầu không[\s\S]*cạn sữa/],
+  ];
+  for (const [q, re] of H3) it(q, async () => {
+    const c = (await last([q])).content;
+    expect(c).toMatch(re);
+    expect(c).toMatch(/Theo y học cổ truyền/);
+  });
+  it("vị lấy từ Long Châu không còn câu 'chưa đủ bằng chứng trên người'", async () => {
+    const { FOLK } = await import("@/lib/lomiFolk");
+    for (const f of FOLK.filter((x) => x.sources.some((s) => /Long Châu/.test(s.publisher))))
+      for (const x of [...f.folk, ...f.science, ...(f.how ?? []), ...f.caution, ...f.topics]) expect(x.text, f.id).not.toMatch(/bằng chứng/);
+  });
+  it("người BỊ huyết áp thấp vẫn ra thẻ bệnh", async () => {
+    expect((await last(["tôi bị huyết áp thấp"])).content).toMatch(/Huyết áp thấp/);
   });
 });
