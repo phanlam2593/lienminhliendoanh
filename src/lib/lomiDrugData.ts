@@ -78,6 +78,8 @@ export const TRUSTED = [
   "cancerresearchuk.org", "macmillan.org.uk",
   // 30/10: FAO (Liên Hợp Quốc) lưu bản PDF Bảng thành phần thực phẩm Việt Nam của Viện Dinh dưỡng – Bộ Y tế (lib/vnFoodData).
   "fao.org",
+  // 04/11: MHRA (cơ quan quản lý thuốc Anh, trên gov.uk) — giới hạn 5 ngày xịt thông mũi; PCDS (Hội Da liễu chăm sóc ban đầu Anh) — hướng dẫn bôi thuốc trị ghẻ (lib/lomiDrugIndex).
+  "gov.uk", "pcds.org.uk",
 ];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;

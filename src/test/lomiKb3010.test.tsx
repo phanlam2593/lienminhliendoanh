@@ -1215,4 +1215,48 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect(kid.content).not.toMatch(/\d+\s*(mg|viên)\b/);
     expect((await last(["amoxicillin là thuốc gì"])).content).not.toMatch(/\d+\s*mg/);
   }, T);
+  it("04/11 (vòng 6) — thuốc bôi / xịt / nhỏ / hít / tẩy giun / nhuận tràng… theo trang thuốc NHS, WHO, MedlinePlus", async () => {
+    const C: [string, RegExp][] = [
+      ["canesten bôi sao", /2–3 lần\/ngày/], ["otrivin xịt mấy ngày", /không dùng quá 5 ngày/], ["ventolin xịt mấy nhát", /không quá 4 lần trong 24 giờ/],
+      ["fugacar uống sao", /một liều duy nhất/], ["cloraxin nhỏ mắt mấy lần", /đủ \*\*5 ngày/], ["fucidin bôi mấy lần", /3–4 lần\/ngày/],
+      ["kem acyclovir bôi thế nào", /5 lần\/ngày/], ["voltaren gel bôi sao", /không quá 4 lần trong 24 giờ/], ["lamisil bôi bao lâu", /1–2 tuần/],
+      ["flixonase xịt sao", /vài tuần/], ["nizoral gội sao", /3–5 phút/], ["dulcolax uống lúc nào", /trước khi đi ngủ/], ["zentel uống sao", /400 mg/],
+      ["oresol pha sao", /đúng lượng nước sạch/], ["postinor uống khi nào", /72 giờ/], ["sudafed uống mấy viên", /cách nhau ít nhất 4 giờ/],
+      ["gaviscon uống sao", /sau bữa ăn và trước khi ngủ/], ["buscopan uống mấy viên", /tối đa 8 viên/], ["duphalac uống sao", /15 ml/],
+      ["permethrin bôi sao", /12 giờ/], ["nystatin rơ miệng sao", /30 giây/], ["telfast uống sao", /không uống với nước cam/],
+      ["hydrocortisone bôi mặt được không", /không bôi lên vết thương hở, mặt/], ["chlorhexidine súc sao", /10 ml/], ["beclometasone xịt sao", /kể cả khi không có triệu chứng/],
+      ["aspirin uống sao", /15 tuổi trở xuống/], ["bactroban là thuốc gì", /kháng sinh bôi da/], ["nexium uống sao", /nuốt nguyên viên/],
+    ];
+    for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+    // thuốc + mang thai → không còn rơi vào bảng MÓN ĂN khi mang thai
+    const pz = await last(["bà bầu uống zentel được không"]);
+    expect(pz.content).not.toMatch(/món cần tránh/);
+    expect(pz.content).toMatch(/hại thai nhi/);
+    expect((await last(["đang cho con bú dùng canesten được không"])).content).toMatch(/đừng tự dùng/);
+    expect((await last(["uống senokot với rượu được không"])).content).toMatch(/chưa có nguồn đã kiểm chứng/);
+    // "là thuốc gì" của thuốc bôi → gợi ý hỏi "bôi sao", không nêu liều
+    expect((await last(["salbutamol là thuốc gì"])).content).toMatch(/xịt sao/);
+  }, 120000);
+});
+// 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
+import { MEDS } from "@/lib/lomiDrugIndex";
+import { TRUSTED } from "@/lib/lomiDrugData";
+describe("04/11 — danh mục thuốc: nguồn hợp lệ", () => {
+  it("nguồn chính thống, src hợp lệ, tên không trùng", () => {
+    const seen = new Map<string, string>();
+    for (const m of MEDS) {
+      for (const s of m.sources ?? []) {
+        const host = new URL(s.url).hostname;
+        expect(s.url.startsWith("https://"), m.id).toBe(true);
+        expect(TRUSTED.some((d) => host === d || host.endsWith(`.${d}`)), `${m.id}: ${host}`).toBe(true);
+      }
+      const facts = [...(m.how ?? []), ...(m.side ?? []), ...(m.care ?? []), ...(m.dose?.adult ?? []), ...(m.dose?.kid ?? [])];
+      for (const f of facts) for (const i of f.src) expect(m.sources?.[i], `${m.id}: ${f.text.slice(0, 40)}`).toBeTruthy();
+      for (const n of m.names) {
+        expect(seen.get(n) ?? m.id, `tên "${n}" trùng`).toBe(m.id);
+        seen.set(n, m.id);
+      }
+    }
+    expect(MEDS.length).toBeGreaterThanOrEqual(85);
+  });
 });
