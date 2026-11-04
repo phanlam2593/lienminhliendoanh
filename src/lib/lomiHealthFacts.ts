@@ -199,6 +199,42 @@ const FACTS: Fact[] = [
     a: "🏃 **Vận động** (NHS, người 19–64 tuổi): ít nhất **150 phút/tuần** vận động vừa (đi bộ nhanh, đạp xe, bơi…) **hoặc 75 phút/tuần** vận động mạnh, cộng thêm bài tập sức mạnh cho các nhóm cơ chính **ít nhất 2 ngày/tuần**.\n• Bớt thời gian ngồi / nằm, chen vào những lúc ngồi lâu vài hoạt động nhẹ.\n• Có bệnh tim, huyết áp, xương khớp thì hỏi bác sĩ trước khi tập nặng.",
     src: "NHS (Anh) — Physical activity guidelines for adults aged 19 to 64, rà soát 22/05/2024",
   },
+  // 04/11 (Kir: hoàn thiện dinh dưỡng) — mỗi mục đối chiếu trang NHS đọc ngày 04/11/2026.
+  {
+    id: "gainweight",
+    early: true,
+    re: VN(/\b(ăn gì (để |cho |mà )?(tăng cân|lên cân|mập lên|béo lên)|muốn (tăng cân|lên cân|mập lên)|làm sao (để )?(tăng cân|lên cân|mập lên)|(tăng cân|lên cân) (lành mạnh|thế nào|bằng cách nào|ăn gì|nhanh)|gầy quá|người gầy (nên )?ăn gì|thiếu cân)\b/),
+    a: "🍚 **Tăng cân lành mạnh** — tăng **từ từ** bằng calo lành mạnh:\n• Chia nhiều bữa nhỏ, thêm bữa phụ lành mạnh giữa các bữa (sữa chua, chè / pudding gạo…)\n• Thêm đạm vào bữa: đậu, cá, trứng, thịt nạc; thêm phô mai, các loại hạt cho nhiều năng lượng hơn\n• Uống sữa, sinh tố giữa các bữa — nhưng đừng uống no nước ngay trước bữa ăn\n• Ăn đa dạng các nhóm thực phẩm; tập sức mạnh hoặc yoga để lên cơ và ăn ngon miệng hơn\n🚫 Đừng dựa vào sô-cô-la, bánh ngọt, nước ngọt để tăng cân.\n🧑‍⚕️ Nên đi khám nếu **sụt cân đột ngột** hoặc sụt cân mà không đổi cách ăn / vận động.",
+    src: "NHS (Anh) — Healthy ways to gain weight, rà soát 28/03/2023",
+  },
+  {
+    id: "salt",
+    early: true,
+    re: VN(/\b(bao nhiêu muối|bao nhiêu gam muối|muối bao nhiêu|mấy gam muối)\b|\b(ăn (nhiều )?muối|ăn mặn|nhiều muối|bớt muối|giảm muối)\b(?=.*\b(hại|có sao|tác hại|bao nhiêu|tốt không|ảnh hưởng|nên|mỗi ngày|làm sao|cách)\b)/),
+    a: "🧂 **Muối:** người lớn nên ăn **không quá 6 g muối mỗi ngày** (khoảng 1 thìa cà phê gạt) — tính cả muối có sẵn trong đồ ăn, nước mắm, nước tương, đồ chế biến.\n• Ăn nhiều muối có thể gây **tăng huyết áp**, làm tăng nguy cơ **đau tim, đột quỵ**.\n• Trẻ em cần ít hơn nữa; em bé dưới 1 tuổi gần như không nên ăn muối vì thận chưa phát triển đủ.\n• Mẹo bớt muối: nêm bằng rau thơm, gia vị, tiêu, tỏi, ớt, nước cốt chanh; đừng để sẵn lọ muối trên bàn; chọn đồ hộp ngâm nước thay vì ngâm muối.",
+    src: "NHS (Anh) — Salt: the facts, rà soát 17/04/2023",
+  },
+  {
+    id: "vegan",
+    early: true,
+    re: VN(/\b(ăn chay|ăn thuần chay|thuần chay|ăn chay trường|người ăn chay)\b(?=.*\b(thiếu chất|đủ chất|thiếu gì|có tốt|tốt không|có sao|bổ sung|có đủ|thiếu máu|cần gì|nên ăn gì|ăn gì)\b)/),
+    a: "🥗 **Ăn chay vẫn đủ chất được** nếu ăn **đa dạng, cân bằng**, có thêm thực phẩm bổ sung vi chất khi cần. Mấy chất cần để ý:\n• **Vitamin B12** — thực vật gần như không có, thường cần thực phẩm bổ sung B12 (ngũ cốc, sữa đậu nành có bổ sung) hoặc viên bổ sung\n• **Sắt** — từ các loại đậu, bánh mì nguyên cám, rau lá xanh đậm, các loại hạt, trái cây sấy; ăn kèm món giàu vitamin C và tránh uống trà / cà phê ngay trong hay sau bữa chính\n• **Canxi** — bông cải xanh, bắp cải, đậu bắp, đậu phụ làm bằng canxi, mè, sữa đậu nành có bổ sung canxi\n• **Vitamin D** — nắng, thực phẩm có bổ sung; **omega-3** — hạt lanh, hạt chia, óc chó, dầu cải\n🧑‍⚕️ Bà bầu, trẻ nhỏ, người có bệnh nền ăn chay thì hỏi bác sĩ / chuyên viên dinh dưỡng để không thiếu chất.",
+    src: "NHS (Anh) — The vegan diet, rà soát 05/06/2026",
+  },
+  {
+    id: "cowmilk",
+    early: true,
+    re: VN(/\b(sữa tươi|sữa bò|sữa con bò)\b(?=.*\b(bé|trẻ|con|em bé|cháu|tháng|tuổi)\b)|\b(bé|trẻ|con|em bé|cháu)\b(?=.*\b(uống sữa tươi|uống sữa bò)\b)/),
+    a: "🥛 **Sữa bò (sữa tươi) cho bé:**\n• Từ **khoảng 6 tháng**: dùng sữa bò để **nấu hoặc trộn vào món ăn dặm** được\n• **Chưa cho uống làm thức uống chính trước 12 tháng tuổi**; từ **12 tháng** mới cho uống sữa bò làm thức uống chính\n• Dưới 12 tháng: bé không cần nước ép hay sinh tố; bú mẹ hoàn toàn thì chưa cần uống nước cho tới khi ăn dặm (khoảng 6 tháng), sau đó cho bé nhấp nước bằng cốc trong bữa ăn\n🧑‍⚕️ Bé dị ứng sữa, sinh non hay chậm tăng cân thì hỏi bác sĩ nhi trước.",
+    src: "NHS (Anh) — Drinks and cups for babies and young children, rà soát 05/10/2022",
+  },
+  {
+    id: "olderfood",
+    early: true,
+    re: VN(/\b(người già|người lớn tuổi|người cao tuổi|ông bà|bố mẹ già|ba mẹ già|cụ già)\b(?=.*\b(nên ăn gì|ăn gì|ăn uống|nên uống gì|ăn thế nào|bồi bổ)\b)/),
+    a: "👵 **Ăn uống cho người lớn tuổi** — nguyên tắc chung theo nguồn:\n• Ăn **đa dạng, cân bằng** các nhóm thực phẩm; đủ đạm từ đậu, cá, trứng, thịt nạc\n• Uống đủ nước — khoảng **6–8 ly mỗi ngày** (nước lọc, sữa ít béo, trà, cà phê đều tính)\n• **Ít muối** — không quá 6 g mỗi ngày, vì muối làm tăng huyết áp\n• Ăn kém, sụt cân thì chia nhiều bữa nhỏ, thêm bữa phụ; **sụt cân đột ngột không rõ lý do thì đi khám**\n🧑‍⚕️ Người có bệnh nền (tiểu đường, huyết áp, thận, gout…) thì hỏi Lomi theo đúng bệnh hoặc hỏi bác sĩ để biết món nào cần hạn chế.",
+    src: "NHS (Anh) — The Eatwell Guide, rà soát 29/11/2022 · Salt: the facts, rà soát 17/04/2023 · Healthy ways to gain weight, rà soát 28/03/2023",
+  },
   {
     id: "weight",
     re: VN(/\b(giảm cân lành mạnh|giảm cân thế nào|làm sao giảm cân|muốn giảm cân|tăng cân thế nào|làm sao tăng cân|muốn tăng cân)\b/),

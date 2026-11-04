@@ -25,11 +25,17 @@ export function trapReply(q: string): Trap | null {
   const n = ` ${normalizeVi(low)} `;
   const w = low.split(/\s+/).length;
   if (w > 22) return null;
+  // 04/11 (Kir: hoàn thiện kiêng cữ) — kiêng khi ĐẾN THÁNG: nguồn kinh nguyệt / đau bụng kinh Lomi có không bảo kiêng gội đầu, tắm, đồ chua, đồ lạnh
+  if (VN(/\b(đến tháng|tới tháng|hành kinh|đang có kinh|kinh nguyệt|ngày đèn đỏ|đang hành kinh)\b/).test(n) && VN(/\b(gội|gội đầu|tắm|ăn chua|đồ chua|nước đá|đồ lạnh|uống lạnh|ăn kem|kiêng|ăn cay|đồ cay|tập thể dục|chạy bộ|đi bơi|bơi)\b/).test(n) && !VN(/\b(đau dữ dội|ra máu nhiều|chảy máu nhiều|ngất|xỉu)\b/).test(n))
+    return { text: "🩸 Lomi **chưa thấy nguồn y khoa nào** bảo đến tháng phải kiêng gội đầu, tắm, ăn chua, đồ lạnh hay vận động — đây là những lời dặn dân gian, nên Lomi không dám nói là đúng.\nNếu làm gì mà thấy đau bụng hay khó chịu hơn thì cứ bớt lại theo cảm nhận của mình nha.\n\nĐau bụng kinh thì hỏi Lomi “đau bụng kinh nên làm gì” — Lomi có cách giảm đau theo nguồn. Đau dữ dội, ra máu rất nhiều hay choáng ngất thì đi khám sớm." };
+  // "nóng trong người / nóng gan uống gì" — cách gọi dân gian, không phải tên bệnh → hỏi lại đúng triệu chứng, không đi gợi ý quán nước
+  if (VN(/\b(nóng trong|nóng trong người|nóng gan|bị nóng|người nóng|nhiệt trong người|nóng ruột gan)\b/).test(n) && VN(/\b(uống gì|ăn gì|làm sao|nên|bị gì|là sao|là gì|giải nhiệt|mát gan)\b/).test(n) && !VN(/\b(sốt|nhiệt độ|độ c|bỏng|phỏng)\b/).test(n))
+    return { text: "🌡️ “Nóng trong người”, “nóng gan” là **cách gọi dân gian**, không phải tên một bệnh trong y khoa — nên Lomi không có món “giải nhiệt / mát gan” nào có nguồn để chỉ bạn 🙏\nNgười ta hay nói vậy khi bị **nhiệt miệng, nổi mụn, táo bón, khô họng, tiểu vàng** hay **mệt mỏi, khó ngủ**. Bạn đang bị cụ thể chuyện nào? Nói Lomi nghe để Lomi chỉ đúng cách chăm theo nguồn y khoa nha.\n💧 Trong lúc đó, uống đủ nước (đủ để nước tiểu vàng nhạt, trong) luôn là việc nên làm." };
 
   // Câu hỏi "bao nhiêu lần" về ăn uống có nguồn NHS (31/10, danh sách ChatGPT lần 6)
   if (/\b(an ca|ca)( \S+){0,3} (may lan|bao nhieu lan|may bua|bao nhieu bua)\b|\b(may lan|bao nhieu lan|may bua)( \S+){0,3} (an )?ca\b/.test(n) && !/\b(ca phe|ca nhan|ca lam|ca toi|ca sang)\b/.test(n))
     return { text: "🐟 NHS khuyên mỗi tuần ăn **ít nhất 2 phần cá**, trong đó **1 phần là cá béo** (cá hồi, cá thu, cá mòi, cá trích…).\n• Bà bầu, người đang cho con bú và trẻ em: cá béo **tối đa 2 phần/tuần**, tránh cá kiếm, cá mập, cá cờ (nhiều thuỷ ngân)\n• Ưu tiên hấp, nướng, luộc hơn chiên" };
-  if (/\b(rau|rau qua|trai cay|hoa qua)( \S+){0,3} (may bua|may lan|bao nhieu|may phan|bao nhieu phan)\b|\b(may bua|may phan|bao nhieu phan)( \S+){0,3} (rau|trai cay)\b/.test(n))
+  if (/\b(rau|rau qua|trai cay|hoa qua)( \S+){0,3} (may bua|may lan|bao nhieu|may phan|bao nhieu phan)\b|\b(may bua|may phan|bao nhieu phan|bao nhieu)( \S+){0,2} (rau|trai cay)\b/.test(n) && !/\b(tien|gia|dong|k|nghin|ngan)\b/.test(n))
     return { text: "🥦 NHS khuyên mỗi ngày ăn **ít nhất 5 phần rau và trái cây** (đủ loại; tươi, đông lạnh hay nấu đều tính) — rải ra các bữa là dễ đủ nhất, ví dụ bữa nào cũng có một đĩa rau, thêm trái cây giữa buổi.\n• Một phần người lớn khoảng **80 g** (cỡ một trái chuối, một trái táo, 3 muỗng canh rau nấu)\n• Nước ép trái cây chỉ tính tối đa 1 phần/ngày" };
   // Mật ong cho trẻ — dưới 1 tuổi không dùng (nguồn: thẻ thuốc / mẹo dân gian đã ghi)
   if (/\bmat ong\b/.test(n) && /\b(tre|be|con|em be|so sinh)\b/.test(n) && /\b(may tuoi|bao nhieu tuoi|may thang|bao nhieu thang|duoc an|an duoc|uong duoc|duoc chua)\b/.test(n))
@@ -219,7 +225,7 @@ export function trapReply(q: string): Trap | null {
   {
     const fq = (id: string) => { const x = faqById(id); return x ? { text: x.a.vi, faqId: id } : null; };
     if (VN(/\b(làm phiền|quấy rối|quấy rầy|spam)\b/).test(n) && VN(/\b(nhắn|gọi|inbox|tin nhắn)\b/).test(n)) { const r = fq("block"); if (r) return r; }
-    if (VN(/\b(giá|bao nhiêu tiền|mấy tiền|hết bao nhiêu|tốn bao nhiêu|cước)\b/).test(n) && VN(/\b(đặt xe|đi xe|gọi xe|chuyến xe|xe ôm|chở)\b/).test(n)) { const r = fq("ridprice"); if (r) return r; }
+    if (VN(/\b(giá|bao nhiêu tiền|mấy tiền|hết bao nhiêu|tốn bao nhiêu|cước)\b/).test(n) && VN(/\b(đặt xe|đi xe|gọi xe|chuyến xe|xe ôm|cuốc xe)\b/).test(n)) { const r = fq("ridprice"); if (r) return r; }
     const tail = n.replace(/^.*\b(mà là|tôi hỏi|tui hỏi|ý là|ý tôi là)\b/, "");
     if (VN(/\b(quên|mất|không nhớ|hổng nhớ)\b/).test(tail) && VN(/\b(tên đăng nhập|username|tên tài khoản)\b/).test(tail)) { const r = fq("forgot"); if (r) return r; }
   }

@@ -30,7 +30,9 @@ export type Mismatch = { asked: string; text: string };
  * question = câu người dùng gõ; reply = câu Lomi định đáp; prev = tin Lomi ngay trước (ngữ cảnh).
  * Trả về null nếu câu đáp đúng chủ đề (hoặc câu hỏi không nhắc bệnh / thuốc nào Lomi biết).
  */
-export function replyMismatch(question: string, reply: GateMsg, prev?: GateMsg): Mismatch | null {
+export function replyMismatch(question0: string, reply: GateMsg, prev?: GateMsg): Mismatch | null {
+  // 04/11: "tỏi có hạ huyết áp không" = làm giảm huyết áp CAO (không phải hỏi bệnh huyết áp thấp) — cùng cách đọc với lúc hỏi
+  const question = question0.replace(/(^|[^\p{L}])(có|giúp|làm|để|sẽ)\s+hạ\s+huyết áp(?!\s*(?:cao|thấp))/giu, "$1$2 hạ huyết áp cao");
   const qTopic = findMedTopicId(question);
   const qDrugs = findDrugs(question);
   if (!qTopic && !qDrugs.length) return null;

@@ -588,7 +588,13 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     // Chưa có nguồn nói về đúng món này → nói thẳng, đưa nguyên tắc chung CÓ nguồn.
     // 18/10: thẻ không có bảng ăn uống (vd "ho") → nguyên tắc chung lấy từ các ý ăn / uống CÓ NGUỒN trong phần chăm sóc.
     const gen = t.diet && (t.diet.avoid.length || t.diet.ok.length) ? [t.diet.avoid[0], t.diet.ok[0]].filter(Boolean) as DrugFact[] : eatFacts(t).slice(0, 3);
-    const say = `Về **${shown ?? food}** thì Lomi **chưa xác minh được**: các nguồn y khoa Lomi đã đối chiếu cho ${N} không nêu riêng món này, nên Lomi không dám nói được hay không.`;
+    // 04/11: kèm luôn danh sách món nguồn DẶN TRÁNH / HẠN CHẾ của bệnh này để người hỏi tự đối chiếu (không tự suy là "ăn được").
+    //   Riêng ăn uống khi mang thai: thẻ lấy từ danh sách "Foods to avoid in pregnancy" của NHS — món không có trong danh sách đó thì nói rõ.
+    const lim = (t.diet?.foods ?? []).filter((x) => x.verdict === "avoid" || x.verdict === "limit").map((x) => x.name.toLowerCase());
+    const preg = t.id === "an-uong-khi-mang-thai";
+    const say = preg
+      ? `**${(shown ?? food).charAt(0).toUpperCase()}${(shown ?? food).slice(1)}** **không có trong danh sách món cần tránh khi mang thai** của nguồn y khoa Lomi đối chiếu (danh sách đó gồm: ${lim.slice(0, 8).join(", ")}). Nguồn cũng không nói riêng về món này, nên Lomi chưa nói chắc được là tốt hay xấu — ăn vừa phải, rửa sạch, nấu chín là an toàn nhất.`
+      : `Về **${shown ?? food}** thì Lomi **chưa xác minh được**: các nguồn y khoa Lomi đã đối chiếu cho ${N} không nêu riêng món này, nên Lomi chưa nói chắc được là tốt hay xấu.${lim.length ? `\n\nNhững món nguồn dặn **tránh / hạn chế** với ${N}: ${lim.slice(0, 8).join(", ")}.` : ""}`;
     const tail = gen.length ? `\n\nNguyên tắc chung theo nguồn:\n${bl(gen)}\n\nMuốn chắc về món này, bạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi bạn nha.\n\n${end([gen])}` : `\n\nBạn hỏi bác sĩ hoặc chuyên viên dinh dưỡng nha.`;
     // 30/10: món có trong bảng FDA → kèm số liệu (calo, đường, muối, kali, béo — chỉ số theo bệnh) để người hỏi tự cân nhắc.
     const ff = factOf(question ?? shown ?? food);

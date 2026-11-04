@@ -1487,6 +1487,11 @@ export function AiChat({
       .replace(/(^|[^\p{L}])dzậy(?![\p{L}])/giu, "$1vậy")
       // 04/11 (câu thật của người dùng): "mới mổi" gõ sót = mới mổ; "có … j?" cuối câu = có … không ("có bệnh gì cần kiêng rượu bia j?")
       .replace(/(^|[^\p{L}])(mới|vừa|sau khi|sau) mổi(?![\p{L}])/giu, "$1$2 mổ")
+      // 04/11: "ăn gì bổ máu" = thiếu máu nên ăn gì; "dạ dày / bao tử có nên ăn X" (không nói bị gì) = đau dạ dày
+      .replace(/^(\s*)(?:ăn gì (?:để |cho )?bổ máu|bổ máu (?:nên )?ăn gì|món (?:gì|nào) bổ máu|thực phẩm (?:gì|nào) bổ máu)\s*([?.!]*)\s*$/iu, "$1thiếu máu nên ăn gì$2")
+      .replace(/^(\s*)(dạ dày|bao tử)\s+(có nên |nên |có được |được |)(ăn|uống)\s/iu, "$1đau $2 $3$4 ")
+      // "tỏi có hạ huyết áp không" = làm GIẢM huyết áp cao (không phải bệnh huyết áp thấp — "bị hạ huyết áp")
+      .replace(/(^|[^\p{L}])(có|giúp|làm|để|sẽ)\s+hạ\s+huyết áp(?!\s*thấp)/giu, "$1$2 hạ huyết áp cao")
       .replace(/^(\s*có\s.+?)\s+(j|z)\s*([?.!]*)\s*$/iu, "$1 không$3")
       // 04/11 (Kir: "Ho có ăn tôm đc k?" bị đáp chưa có kiến thức): "ho" (không dấu, khác "họ") ĐẦU CÂU / đầu vế đứng trước
       //   từ hỏi chuyện ăn uống, kiêng cữ, lây… là đang bị ho → "bị ho …" để thẻ Ho và mẹo dân gian về ho nhận ra.

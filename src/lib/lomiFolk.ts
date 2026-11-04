@@ -187,7 +187,7 @@ export const FOLK: FolkEntry[] = [
   {
     id: "nghe",
     name: "Nghệ",
-    names: ["nghệ", "tinh bột nghệ", "nghệ mật ong", "curcumin", "nghệ tươi", "bột nghệ"],
+    names: ["nghệ", "tinh bột nghệ", "nghệ mật ong", "mật ong nghệ", "mật ong với nghệ", "nghệ với mật ong", "nghệ trộn mật ong", "curcumin", "nghệ tươi", "bột nghệ"],
     verdict: "unclear",
     folk: [{ text: "Đông y, Ấn Độ, Thái dùng nghệ cho khó tiêu, đau bụng, cảm, nhiễm trùng da, đau khớp, bệnh gan.", src: [0] }],
     science: [
@@ -1590,8 +1590,8 @@ export const FOLK: FolkEntry[] = [
   {
     id: "bong-gan-xoa-ruou",
     name: "Bong gân: xoa rượu, dầu nóng, bóp, chườm nóng?",
-    names: ["xoa rượu", "bóp rượu", "thoa rượu", "rượu thuốc", "rượu gừng", "dầu nóng", "dầu gió", "cao nóng", "chườm nóng", "đắp nóng", "ngâm nước nóng", "xoa bóp", "bóp chân", "massage", "mát xa", "đắp muối", "rang muối"],
-    ctx: VN(/\b(bong gân|trật chân|trẹo chân|lật cổ chân|sái chân|trẹo cổ chân|giãn dây chằng|căng cơ|trật khớp cổ chân|sưng mắt cá)\b/),
+    names: ["xoa rượu", "bóp rượu", "thoa rượu", "rượu thuốc", "rượu gừng", "dầu nóng", "dầu gió", "cao nóng", "chườm nóng", "đắp nóng", "ngâm nước nóng", "xoa bóp", "bóp chân", "massage", "mát xa", "đắp muối", "rang muối", "xoa dầu", "thoa dầu", "bôi dầu"],
+    ctx: VN(/\b(bong gân|trật chân|trặc chân|trặc tay|trật tay|trẹo chân|lật cổ chân|sái chân|trẹo cổ chân|giãn dây chằng|căng cơ|trật khớp cổ chân|sưng mắt cá)\b/),
     verdict: "myth",
     belief: "Bong gân, trẹo chân thì xoa rượu thuốc, dầu nóng, bóp mạnh hoặc chườm nóng cho \"tan máu bầm\".",
     folk: [],
@@ -2139,6 +2139,7 @@ export const UNVERIFIED_HERBS = [
   // 04/11 (Kir: mẹo dân gian trị ho) — chưa tìm được nguồn y khoa đáng tin đánh giá
   "quất chưng đường phèn", "tắc chưng đường phèn", "quất chưng", "tắc chưng", "quất hấp", "tắc hấp", "chanh đào", "chanh đào ngâm mật ong",
   "lê chưng đường phèn", "lê chưng", "lê hấp",
+  "yến sào", "tổ yến", "nước yến", "yến chưng",
 ];
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
@@ -2180,6 +2181,8 @@ export function findFolk(text: string): FolkEntry | null {
     if (f.id === "boi-bong" && !(BURN.test(n) && BOI.test(n))) continue;
     if (f.ctx && !f.ctx.test(n)) continue;
     // (bà bầu ĂN dứa là câu hỏi ăn uống khi mang thai — nguồn bromelain chỉ nói về viên bổ sung, không nói về ăn quả → để lớp ăn uống khi mang thai trả lời)
+    // (04/11: mục "người lớn bị sốt" không áp cho trẻ — trẻ sốt có mục riêng)
+    if (f.id === "sot-kieng" && KID.test(n)) continue;
     if (f.id === "dua-bromelain" && PREG.test(n) && !VN(/\b(bromelain|viên|thực phẩm chức năng|uống men)\b/).test(n)) continue;
     // (ngộ độc THỰC PHẨM / rượu khác nuốt phải chất độc — nguồn NHS Poisoning nói về chất độc, không áp lời "đừng cho uống gì" cho tiêu chảy, nôn do đồ ăn)
     if (f.id === "ngo-doc-gay-non" && FOODPOI.test(n) && !CHEM.test(n)) continue;

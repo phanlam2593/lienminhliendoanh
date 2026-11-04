@@ -219,7 +219,8 @@ export function mathReply(q: string): string | null {
 /** Những việc ngoài khả năng / ngoài dữ liệu — nói thật, chỉ chỗ làm được. */
 export function outOfScopeReply(q: string): string | null {
   const n = ` ${normalizeVi(q)} `;
-  if (VN(/\b(thời tiết|trời mưa không|có mưa không|nhiệt độ ngoài trời|dự báo thời tiết)\b/).test(n))
+  // (04/11: "dị ứng thời tiết", "đổi thời tiết bị đau khớp" là chuyện sức khoẻ, không phải hỏi dự báo)
+  if (VN(/\b(thời tiết|trời mưa không|có mưa không|nhiệt độ ngoài trời|dự báo thời tiết)\b/).test(n) && !VN(/\b(dị ứng|nổi mẩn|mề đay|ngứa|đau khớp|nhức|viêm mũi|hắt hơi|sổ mũi|cảm|ho|bệnh|kiêng)\b/).test(n))
     return "Lomi chưa xem được dự báo thời tiết trực tiếp nên không dám nói bừa ☁️ Bạn xem app thời tiết trên điện thoại hoặc trang của Trung tâm Dự báo KTTV nha.\n\nĐà Lạt nói chung mát quanh năm, sáng tối se lạnh; mùa mưa thường khoảng tháng 5 tới tháng 11, hay mưa chiều — đi chơi nhớ mang áo khoác và áo mưa.";
   if (VN(/\b(dịch|translate)( \S+){0,4} (sang|qua|ra) (tiếng )?(anh|english|nhật|hàn|trung)\b/).test(n)) {
     if (VN(/\b(tôi|anh|em|mình) yêu (em|anh|bạn)\b/).test(n)) return "“Tôi yêu em” trong tiếng Anh là **“I love you”** 💕";

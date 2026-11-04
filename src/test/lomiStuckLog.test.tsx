@@ -16,7 +16,7 @@ describe("nhật ký Lomi bí", () => {
     expect(e.reply.length).toBeGreaterThan(10);
     expect(e.context.some((c) => c.r === "u" && /xin chào/i.test(c.t))).toBe(true);
     expect(["not_understood", "fallback", "suggest", "unknown_med"]).toContain(e.kind);
-  });
+  }, 30000); // (04/11: lần chat đầu tiên của file phải nạp bộ đoán dấu + kho FAQ — máy chậm có lúc quá 5 giây mặc định; không đổi điều kiện kiểm)
   it("câu Lomi trả lời được thì KHÔNG ghi", async () => {
     const got: StuckEntry[] = [];
     setStuckSink((e) => got.push(e));

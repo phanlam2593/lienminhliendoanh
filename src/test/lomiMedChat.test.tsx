@@ -54,8 +54,9 @@ describe("kho y khoa + tâm lý — chạy thử 10/10", () => {
   it("ăn uống khi mang thai trả lời theo NHS; món nguồn không nêu (rau ngót, dứa) thì nói thẳng chưa xác minh", async () => {
     expect((await last(["bà bầu ăn sushi được không"])).content).toMatch(/cá và hải sản sống\*\* nên \*\*tránh\*\*/);
     expect((await last(["mang thai ăn pate được không"])).content).toMatch(/gan và sản phẩm từ gan/);
-    expect((await last(["bà bầu ăn rau ngót được không"])).content).toMatch(/\*\*rau ngót\*\* thì Lomi \*\*chưa xác minh được\*\*/);
-    expect((await last(["bầu ăn dứa được không"])).content).toMatch(/\*\*dứa\*\* thì Lomi \*\*chưa xác minh được\*\*/);
+    // 04/11: món không có trong danh sách "Foods to avoid in pregnancy" (NHS) → nói rõ là không có trong danh sách, vẫn không khẳng định tốt / xấu
+    expect((await last(["bà bầu ăn rau ngót được không"])).content).toMatch(/\*\*Rau ngót\*\* \*\*không có trong danh sách món cần tránh khi mang thai\*\*.*chưa nói chắc được/s);
+    expect((await last(["bầu ăn dứa được không"])).content).toMatch(/\*\*Dứa\*\* \*\*không có trong danh sách món cần tránh khi mang thai\*\*/);
   }, T);
   it("'bầu cử', 'mang thai mấy tuần thì siêu âm' không bị coi là hỏi ăn uống / lo trễ kinh", async () => {
     expect((await last(["bầu cử là gì"])).content).not.toMatch(/kiến thức đã kiểm chứng|chuyện sức khoẻ mà nói sai|mang thai/);
