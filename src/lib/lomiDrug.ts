@@ -14,7 +14,7 @@
 // không đoán tương tác; chỉ đường tới dược sĩ / bác sĩ và nêu dấu hiệu cần đi cấp cứu. Thuốc Lomi CÓ dữ liệu (lib/lomiContext)
 // vẫn do lớp đó trả lời trước — trừ câu hỏi tương tác, vì Lomi không có dữ liệu tương tác cho thuốc nào cả.
 // ─────────────────────────────────────────────────────────────────────────────
-import { findIndexedDrug, hasSideFacts, paraDupReply, renderIndexed } from "@/lib/lomiDrugIndex";
+import { findIndexedDrug, hasAlcoholFact, hasSideFacts, paraDupReply, renderIndexed } from "@/lib/lomiDrugIndex";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { healthSubjectOf } from "@/lib/lomiHealthTopic";
 import { drugById, findDrug, findDrugs, findInteraction, renderDrug, sourceLine, sourceList } from "@/lib/lomiDrugData";
@@ -236,6 +236,18 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // 04/11: hai thuốc trong câu cùng có paracetamol ("decolgen uống chung panadol") → cảnh báo uống trùng hoạt chất
   const dup = paraDupReply(text);
   if (dup) return { kind: "interact", text: dup };
+  // 04/11: thuốc có trong danh mục tên thuốc (lib/lomiDrugIndex — biệt dược, gõ sai: "paradol", "amoxicilin", "beplex") →
+  //   nói rõ là thuốc gì, nhóm nào, kèm cách dùng / tác dụng phụ CÓ NGUỒN của nhóm; vẫn không nêu liều.
+  const ix0 = findIndexedDrug(text);
+  // (quá liều / uống nhầm, hỏi uống CHUNG hai thuốc, trẻ dưới 12 tuổi với paracetamol → để các lớp riêng lo)
+  const ix = ix0 && !overdoseMention(text) && !VN(/\b(uống chung|dùng chung|cùng lúc|kết hợp|chung với|với thuốc)\b/).test(n) ? ix0 : null;
+  const howAsk = VN(/\b(cách nhau (bao lâu|mấy giờ|mấy tiếng)|trước hay sau (khi )?ăn|uống (trước|sau) (khi )?ăn|uống lúc nào|uống khi nào|uống buổi nào|uống sáng hay tối|(uống|dùng|xài|sử dụng) (sao|thế nào|như thế nào|như nào|làm sao|ra sao)|cách (uống|dùng|xài|sử dụng)|hướng dẫn (uống|dùng|sử dụng)|quên (uống|liều)|uống bao lâu)\b/).test(n);
+  if (ix && !findDrug(text) && ALCOHOL.test(n) && ASKS.test(n) && hasAlcoholFact(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
+  if (ix && (howAsk || (DOSE.test(n) && ASKS.test(n)) || VN(/\b(bao nhiêu|mấy viên|mấy ml)\b/).test(n))) return { kind: "dose", name: ix.brand, text: renderIndexed(ix, "how") };
+  // (tác dụng phụ: chỉ khi nhóm / thuốc có ý có nguồn — không thì để lời "chưa có dữ liệu đã kiểm chứng về X" như cũ)
+  if (ix && !findDrug(text) && (SIDE.test(n) || VN(/\b(buồn ngủ|gây ngủ|làm buồn ngủ|lái xe được không)\b/).test(n)) && hasSideFacts(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
+  // ("thuốc beplex", "beplex?" — chỉ tên thuốc; câu kể "mẹ em uống metformin", "a hỏi về ibuprofen" để lớp khác nhận ngữ cảnh)
+  if (ix && !findDrug(text) && !SIDE.test(n) && (WHAT.test(n) || (words <= 3 && !VN(/\b(uống|dùng|đang|xài|hỏi)\b/).test(n)))) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
   if (words > 22) return null;
   // 15/10: tên thuốc ngoại lai đứng đầu câu hỏi liều ("amoxicillin uống mấy lần 1 ngày") cũng là hỏi thuốc — trước đây câu này rơi sang
   //   câu hỏi thường gặp về app ("10 lượt quẹt / ngày").
@@ -420,15 +432,6 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
       ? { kind: "kid", drugId: d.id, name: d.names[0], text: renderDrug(d, "children") }
       : { kind: "kid", name: ctx.name, text: `Lomi chưa có dữ liệu đã kiểm chứng để nói ${ctx.name ? `**${ctx.name}**` : "thuốc đó"} trẻ em dùng được hay không. Thuốc cho trẻ phải theo tuổi và cân nặng — bạn hỏi dược sĩ / bác sĩ kèm tuổi, cân nặng của bé, và đừng tự chia thuốc của người lớn cho bé nha.` };
   }
-  // 04/11: thuốc có trong danh mục tên thuốc (lib/lomiDrugIndex — biệt dược, gõ sai: "paradol", "amoxicilin", "beplex") →
-  //   nói rõ là thuốc gì, nhóm nào, kèm cách dùng / tác dụng phụ CÓ NGUỒN của nhóm; vẫn không nêu liều.
-  const ix = findIndexedDrug(text);
-  const howAsk = VN(/\b(cách nhau (bao lâu|mấy giờ|mấy tiếng)|trước hay sau (khi )?ăn|uống (trước|sau) (khi )?ăn|uống lúc nào|uống khi nào|uống buổi nào|uống sáng hay tối|(uống|dùng|xài|sử dụng) (sao|thế nào|như thế nào|như nào|làm sao|ra sao)|cách (uống|dùng|xài|sử dụng)|hướng dẫn (uống|dùng|sử dụng)|quên (uống|liều)|uống bao lâu)\b/).test(n);
-  if (ix && (howAsk || (DOSE.test(n) && ASKS.test(n)))) return { kind: "dose", name: ix.brand, text: renderIndexed(ix, "how") };
-  // (tác dụng phụ: chỉ khi nhóm / thuốc có ý có nguồn — không thì để lời "chưa có dữ liệu đã kiểm chứng về X" như cũ)
-  if (ix && !findDrug(text) && (SIDE.test(n) || VN(/\b(buồn ngủ|gây ngủ|làm buồn ngủ|lái xe được không)\b/).test(n)) && hasSideFacts(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
-  // ("thuốc beplex", "beplex?" — chỉ tên thuốc; câu kể "mẹ em uống metformin", "a hỏi về ibuprofen" để lớp khác nhận ngữ cảnh)
-  if (ix && !findDrug(text) && !SIDE.test(n) && (WHAT.test(n) || (words <= 3 && !VN(/\b(uống|dùng|đang|xài|hỏi)\b/).test(n)))) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
   // "uống trước hay sau ăn", "uống mấy ngày" — cách dùng cũng tuỳ từng thuốc.
   if (VN(/\b(cách nhau (bao lâu|mấy giờ|mấy tiếng)|cách (mấy|bao nhiêu) (giờ|tiếng)|bao lâu uống (một|1) lần|mấy tiếng uống (một|1) lần|trước hay sau (khi )?ăn|uống (trước|sau) (khi )?ăn|uống lúc nào|uống khi nào|uống buổi nào|uống sáng hay tối|uống (trong )?(bao lâu|mấy ngày|mấy tuần)|(uống|dùng|xài) (sao|thế nào|như thế nào|như nào|làm sao)|cách (uống|dùng|xài))\b/).test(n) && (med || ctx.inHealth || ctx.afterDrug))
     return {

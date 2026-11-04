@@ -440,7 +440,8 @@ describe("Thuốc có nguồn: chỉ nói điều đã đối chiếu, còn lạ
     expect(r[0].content).toMatch(/cũng chứa paracetamol/);
     expect(r[1].faqId).toBeFalsy(); // trước đây: đáp bằng câu hỏi app "mã ưu đãi có hiệu lực 2 giờ"
     expect(r[1].content).toMatch(/dược sĩ/);
-    expect(r[1].content).not.toMatch(DOSE_NUM);
+    // 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — người lớn: liều tham khảo đúng như trang NHS, kèm lời đối chiếu tờ hướng dẫn / dược sĩ
+    expect(r[1].content).toMatch(/ít nhất 4 giờ/);
     expect(r[2].faqId).toBeFalsy();
     expect(r[2].content).toMatch(/cho trẻ em/);
     const a = await chat(["efferalgan với rượu có sao không", "a uống 3 lon bia mỗi ngày"]);
@@ -451,7 +452,8 @@ describe("Thuốc có nguồn: chỉ nói điều đã đối chiếu, còn lạ
     const i = await chat(["ibuprofen có tác dụng phụ gì", "uống với paracetamol được không"]);
     expect(i[0].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*ibuprofen\*\*/);
     expect(i[1].content).toMatch(/dùng chung với \*\*ibuprofen\*\*/); // thuốc vừa nhắc ở lượt trước là thứ dùng chung
-    for (const m of [...r, ...a, ...i]) expect(m.content).not.toMatch(DOSE_NUM);
+    // (r[1] hỏi "cách nhau bao lâu" → liều tham khảo người lớn theo NHS, 04/11; các lượt khác vẫn không có con số liều)
+    for (const m of [r[0], r[2], ...a, ...i]) expect(m.content).not.toMatch(DOSE_NUM);
   }, 60000);
 });
 

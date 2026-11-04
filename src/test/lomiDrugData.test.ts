@@ -172,7 +172,8 @@ describe("lớp trả lời theo chủ thể (lomiContext) dùng đúng dữ li�
     }
     const dose = contextReply(q("paracetamol uống bao nhiêu viên?"))!;
     expect(dose.anchor.aspect).toBe("dose");
-    expect(dose.text).not.toMatch(DOSE_NUM);
+    // 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — người lớn: liều tham khảo đúng như trang NHS, kèm lời đối chiếu tờ hướng dẫn / dược sĩ
+    expect(dose.text).toMatch(/Liều tham khảo/);
     expect(dose.text).toMatch(/dược sĩ/);
   });
   it("rượu bia: nói đúng theo nguồn (không cấm tuyệt đối khi uống bình thường, nhưng uống nhiều thì tránh)", () => {

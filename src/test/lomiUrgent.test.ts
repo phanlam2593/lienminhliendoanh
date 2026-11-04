@@ -62,7 +62,9 @@ describe("thuốc", () => {
   it("tên thuốc ngoại lai + hỏi liều → không đưa liều (trước đây trả lời FAQ lượt quẹt)", () => {
     const r = drugAsk("amoxicillin uống mấy lần 1 ngày");
     expect(r?.kind).toBe("dose");
-    expect(r?.text).not.toMatch(/\d+ ?(mg|viên|lần)/);
+    // 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — người lớn: liều tham khảo đúng như trang NHS, kèm lời đối chiếu tờ hướng dẫn / dược sĩ — thuốc kê đơn ghi rõ liều do bác sĩ quyết định
+    expect(r?.text).toMatch(/Liều tham khảo/);
+    expect(r?.text).toMatch(/bác sĩ quyết định/);
   });
   it("đồ uống đứng đầu câu không bị coi là thuốc", () => expect(drugAsk("coca uống bao nhiêu thì béo")?.kind).not.toBe("dose"));
   it("đang uống thuốc X mà hỏi uống thêm Y → hỏi dùng chung", () => expect(drugAsk("đang uống thuốc tim có uống panadol được không")?.kind).toBe("interact"));

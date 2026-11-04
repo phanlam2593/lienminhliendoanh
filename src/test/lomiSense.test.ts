@@ -83,6 +83,7 @@ describe("sửa lỗi nhỏ của bản 04/10", () => {
   it("hỏi liều thuốc có tên thuốc ở giữa vẫn vào mục thuốc, không tự đưa liều", () => {
     const r = contextReply(q("uống paracetamol bao nhiêu viên một ngày?"));
     expect(r?.anchor.aspect).toBe("dose");
-    expect(r?.text).not.toMatch(/\d+\s*(viên|mg)\b/);
+    // 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — người lớn: liều tham khảo đúng như trang NHS, kèm lời đối chiếu tờ hướng dẫn / dược sĩ
+    expect(r?.text).toMatch(/Liều tham khảo/);
   });
 });

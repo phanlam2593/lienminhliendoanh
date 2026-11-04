@@ -1186,7 +1186,7 @@ describe("30/10 — trả lời qua khung chat", () => {
     const p = await last(["Thuốc paradol uống làm sao?"]);
     expect(p.content).toMatch(/Lomi hiểu là \*\*Panadol\*\*/);
     expect(p.content).toMatch(/lúc no hay lúc đói đều được/);
-    expect(p.content).toMatch(/không nêu liều/);
+    expect(p.content).toMatch(/đọc tham khảo/);
     expect((await last(["Thuốc ambroxol uống sao"])).content).toMatch(/long đờm/);
     expect((await last(["Thuốc amoxicilin uống làm sao"])).content).toMatch(/Uống hết đợt/);
     expect((await last(["Thuốc beplex"])).content).toMatch(/vitamin nhóm B/);
@@ -1199,5 +1199,20 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["decolgen uống chung panadol được không"])).content).toMatch(/đều \*\*có paracetamol/);
     expect((await last(["panadol là thuốc gì"])).content).toMatch(/giảm đau, hạ sốt/);
     expect((await last(["parasite là gì"])).content).not.toMatch(/💊/);
+  }, T);
+  it("04/11 (vòng 5) — liều tham khảo + hướng dẫn dùng theo trang thuốc NHS", async () => {
+    const p = await last(["panadol uống mấy viên"]);
+    expect(p.content).toMatch(/không quá 8 viên trong 24 giờ/);
+    expect(p.content).toMatch(/tờ hướng dẫn/);
+    expect((await last(["ibuprofen uống làm sao"])).content).toMatch(/không quá 6 viên trong 24 giờ/);
+    expect((await last(["bé 4 tuổi uống cetirizin bao nhiêu"])).content).toMatch(/2–5 tuổi.*2,5 mg/s);
+    expect((await last(["motilium uống trước hay sau ăn"])).content).toMatch(/15–30 phút trước bữa ăn/);
+    expect((await last(["flagyl uống rượu được không"])).content).toMatch(/Không uống rượu bia/);
+    expect((await last(["amlodipin quên uống thì sao"])).content).toMatch(/bưởi chùm/);
+    expect((await last(["metformin uống lúc nào"])).content).toMatch(/cùng bữa ăn/);
+    expect((await last(["amoxicilin uống mấy viên"])).content).toMatch(/bác sĩ quyết định/);
+    const kid = await last(["bé 5 tuổi uống paracetamol mấy viên"]);
+    expect(kid.content).not.toMatch(/\d+\s*(mg|viên)\b/);
+    expect((await last(["amoxicillin là thuốc gì"])).content).not.toMatch(/\d+\s*mg/);
   }, T);
 });

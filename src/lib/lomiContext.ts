@@ -103,8 +103,8 @@ const SUBJECTS: Subject[] = [
       info: () => renderDrug(PARA, "info"),
       how: () => { const ix = findIndexedDrug("paracetamol"); return ix ? renderIndexed(ix, "how") : renderDrug(PARA, "info"); },
       // Liều: không có con số nào ở đây — chỉ nói liều phụ thuộc vào đâu và hỏi ai.
-      dose: (a) =>
-        `Lomi không đưa liều cụ thể${a.personal ? " cho từng người" : ""} được, vì liều paracetamol phụ thuộc **tuổi, cân nặng** (nhất là với trẻ em), bệnh gan và các thuốc khác đang dùng.\n• Làm theo tờ hướng dẫn trên hộp thuốc hoặc hỏi dược sĩ/bác sĩ.\n• Không tự tăng liều, không uống thêm thuốc cảm/thuốc ho có chứa paracetamol cùng lúc.\n\nBạn hỏi cho người lớn hay trẻ em (bao nhiêu tuổi, khoảng bao nhiêu ký)? Có thông tin đó thì dược sĩ tư vấn được ngay.`,
+      // 04/11 (Kir: thêm liều tham khảo để người dùng đọc) — liều người lớn đúng như trang NHS "Paracetamol for adults" (lib/lomiDrugIndex)
+      dose: () => { const ix = findIndexedDrug("paracetamol"); return ix ? renderIndexed(ix, "how") : renderDrug(PARA, "info"); },
       kid: () => `${renderDrug(PARA, "children")}\n\nBé dưới 3 tháng mà sốt từ 38°C thì cần được nhân viên y tế xem sớm; bé li bì, co giật, khó thở → đưa đi cấp cứu ngay.`,
       overdose: () =>
         `${renderDrug(PARA, "overdose")}\n\nKhông tự gây nôn nha. Nếu bạn uống nhiều vì đang thấy quá sức chịu đựng: sau khi đã an toàn, bạn có thể gọi đường dây nóng Ngày Mai **096 306 1414** (13h–20h30, thứ 4 đến Chủ nhật), hoặc nói với một người bạn tin.`,

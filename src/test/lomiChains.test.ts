@@ -124,7 +124,9 @@ describe("Thuốc — kiến thức chung vs liều / quá liều / trẻ em", (
     const r = A("Paracetamol uống bao nhiêu viên?");
     expect(r.anchor.aspect).toBe("dose");
     expect(r.text).toMatch(/tuổi|cân nặng/);
-    expect(r.text).not.toMatch(/\d+\s*(viên|mg)\b/);
+    // 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — người lớn: liều tham khảo đúng như trang NHS, kèm lời đối chiếu tờ hướng dẫn / dược sĩ
+    expect(r.text).toMatch(/Liều tham khảo/);
+    expect(r.text).toMatch(/tờ hướng dẫn/);
   });
   it("vừa uống quá nhiều → cấp cứu / 115", () => {
     const r = A("Mình vừa uống quá nhiều paracetamol");

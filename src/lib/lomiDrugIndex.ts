@@ -34,6 +34,9 @@ export type IndexedDrug = {
   sources?: DrugSource[];
   /** Thuốc gây buồn ngủ hay không (chỉ ghi khi nguồn nói rõ). */
   drowsy?: boolean;
+  /** 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — liều THAM KHẢO đúng như trang NHS ghi
+   *  (src trỏ vào `sources` của thuốc). kid: chỉ khi nguồn ghi rõ theo tuổi; không có thì nhắc xem nhãn / hỏi dược sĩ. */
+  dose?: { adult: DrugFact[]; kid?: DrugFact[]; rx?: boolean };
 };
 
 const NHS = "NHS (Anh)";
@@ -47,6 +50,15 @@ const S = {
   vitb: { title: "Vitamins and minerals – B vitamins and folic acid", publisher: NHS, url: "https://www.nhs.uk/conditions/vitamins-and-minerals/vitamin-b/", reviewed: "2020-08-03" },
   cough: { title: "Cough", publisher: NHS, url: "https://www.nhs.uk/conditions/cough/", reviewed: "2023-12-08" },
   coughMp: { title: "Cough", publisher: "MedlinePlus (NIH, Hoa Kỳ)", url: "https://medlineplus.gov/cough.html", reviewed: "2025-03-18" },
+  paraMain: { title: "Paracetamol for adults", publisher: NHS, url: "https://www.nhs.uk/medicines/paracetamol-for-adults/", reviewed: "2026-03-24" },
+  cet: { title: "How and when to take cetirizine", publisher: NHS, url: "https://www.nhs.uk/medicines/cetirizine/how-and-when-to-take-cetirizine/", reviewed: "2025-02-18" },
+  lor: { title: "How and when to take loratadine", publisher: NHS, url: "https://www.nhs.uk/medicines/loratadine/how-and-when-to-take-loratadine/", reviewed: "2025-04-22" },
+  chlor: { title: "How and when to take chlorphenamine", publisher: NHS, url: "https://www.nhs.uk/medicines/chlorphenamine-including-piriton/how-and-when-to-take-chlorphenamine/", reviewed: "2025-05-14" },
+  dom: { title: "How and when to take domperidone", publisher: NHS, url: "https://www.nhs.uk/medicines/domperidone/how-and-when-to-take-domperidone/", reviewed: "2023-04-06" },
+  met: { title: "How and when to take metformin", publisher: NHS, url: "https://www.nhs.uk/medicines/metformin/how-and-when-to-take-metformin/", reviewed: "2026-08-05" },
+  aml: { title: "How and when to take amlodipine", publisher: NHS, url: "https://www.nhs.uk/medicines/amlodipine/how-and-when-to-take-amlodipine/", reviewed: "2026-06-09" },
+  ator: { title: "How and when to take atorvastatin", publisher: NHS, url: "https://www.nhs.uk/medicines/atorvastatin/how-and-when-to-take-atorvastatin/", reviewed: "2026-06-23" },
+  metro: { title: "About metronidazole", publisher: NHS, url: "https://www.nhs.uk/medicines/metronidazole/about-metronidazole/", reviewed: "2025-12-31" },
 } satisfies Record<string, DrugSource>;
 const VERIFIED = "2026-11-04";
 
@@ -142,14 +154,44 @@ const AMOX: DrugFact[] = [
 // id · hoạt chất · nhóm · tên (không dấu) — tên biệt dược hay gặp ở Việt Nam
 const row = (id: string, ingredient: string, group: GroupId, names: string[], extra: Partial<IndexedDrug> = {}): IndexedDrug => ({ id, ingredient, group, names, ...extra });
 export const MEDS: IndexedDrug[] = [
-  row("paracetamol", "paracetamol (acetaminophen)", "pain", ["panadol", "efferalgan", "hapacol", "tylenol", "partamol", "paracetamol", "acetaminophen", "para"]),
-  row("ibuprofen", "ibuprofen", "nsaid", ["advil", "nurofen", "gofen", "ibuprofen", "ibuprophen"]),
+  row("paracetamol", "paracetamol (acetaminophen)", "pain", ["panadol", "efferalgan", "hapacol", "tylenol", "partamol", "paracetamol", "acetaminophen", "para"], {
+    sources: [S.paraMain],
+    dose: {
+      adult: [
+        { text: "Viên / nang **500 mg** (loại hay gặp): mỗi lần **1–2 viên**, các lần cách nhau **ít nhất 4 giờ**, **không quá 8 viên trong 24 giờ**.", src: [0] },
+        { text: "Viên **1 g** (nếu có): mỗi lần **1 viên**, **không quá 4 viên trong 24 giờ**.", src: [0] },
+        { text: "Người **nặng dưới 50 kg** có thể cần liều thấp hơn; có **bệnh gan, thận** thì hỏi dược sĩ / bác sĩ trước khi dùng.", src: [0] },
+      ],
+      kid: [{ text: "Liều trên chỉ cho người **từ 18 tuổi**; trẻ em dùng loại paracetamol dành cho trẻ, liều theo tuổi / cân nặng ghi trên nhãn — hỏi dược sĩ nếu chưa chắc.", src: [0] }],
+    },
+  }),
+  row("ibuprofen", "ibuprofen", "nsaid", ["advil", "nurofen", "gofen", "ibuprofen", "ibuprophen"], {
+    sources: [S.ibu],
+    dose: {
+      adult: [
+        { text: "Viên **200 mg**: mỗi lần **1–2 viên**, **tối đa 3 lần/ngày**, cách nhau **ít nhất 4 giờ**, **không quá 6 viên trong 24 giờ**.", src: [0] },
+        { text: "Viên **400 mg**: mỗi lần **1 viên**, **tối đa 3 lần/ngày**, cách nhau **ít nhất 4 giờ**, **không quá 3 viên trong 24 giờ**.", src: [0] },
+        { text: "Không tự uống quá **10 ngày** nếu bác sĩ không dặn; bác sĩ kê liều cao hơn thì làm theo bác sĩ.", src: [0] },
+      ],
+    },
+  }),
   row("ibu-para", "ibuprofen + paracetamol", "nsaid", ["alaxan"]),
   row("diclofenac", "diclofenac", "nsaid", ["voltaren", "diclofenac", "diclofenak"]),
   row("meloxicam", "meloxicam", "nsaid", ["mobic", "meloxicam"]),
   row("celecoxib", "celecoxib", "nsaid", ["celebrex", "celecoxib"]),
   row("naproxen", "naproxen", "nsaid", ["naproxen"]),
-  row("amoxicillin", "amoxicillin", "abx", ["amoxicillin", "amoxicilin", "amoxil", "clamoxyl", "amoxycillin"], { how: AMOX, sources: [S.amox] }),
+  row("amoxicillin", "amoxicillin", "abx", ["amoxicillin", "amoxicilin", "amoxil", "clamoxyl", "amoxycillin"], {
+    how: AMOX,
+    sources: [S.amox],
+    dose: {
+      rx: true,
+      adult: [
+        { text: "Liều **hay được kê** cho người lớn: **250–500 mg mỗi lần, ngày 3 lần** — liều và số ngày của bạn là do **bác sĩ kê**.", src: [0] },
+        { text: "Uống **3–5 ngày** mà không thấy đỡ thì báo bác sĩ.", src: [0] },
+      ],
+      kid: [{ text: "Trẻ em thường dùng liều thấp hơn (có dạng siro) — theo đơn bác sĩ.", src: [0] }],
+    },
+  }),
   row("amox-clav", "amoxicillin + acid clavulanic", "abx", ["augmentin", "klamentin", "curam", "amoxiclav"]),
   row("cefuroxime", "cefuroxime", "abx", ["zinnat", "cefuroxime", "cefuroxim"]),
   row("cefixime", "cefixime", "abx", ["cefixime", "cefixim"]),
@@ -159,17 +201,57 @@ export const MEDS: IndexedDrug[] = [
   row("clarithromycin", "clarithromycin", "abx", ["klacid", "clarithromycin"]),
   row("ciprofloxacin", "ciprofloxacin", "abx", ["ciprofloxacin", "ciprobay"]),
   row("levofloxacin", "levofloxacin", "abx", ["levofloxacin", "tavanic"]),
-  row("metronidazole", "metronidazole", "abx", ["flagyl", "metronidazole", "metronidazol"]),
+  row("metronidazole", "metronidazole", "abx", ["flagyl", "metronidazole", "metronidazol"], {
+    sources: [S.metro],
+    care: [{ text: "**Không uống rượu bia** trong thời gian dùng metronidazole (viên, siro hay viên đặt).", src: [0] }],
+    side: [{ text: "Hay gặp: buồn nôn, nôn, tiêu chảy, **vị kim loại** trong miệng.", src: [0] }],
+  }),
   row("doxycycline", "doxycycline", "abx", ["doxycycline", "doxycyclin"]),
-  row("cetirizine", "cetirizine", "antihis", ["zyrtec", "cetirizine", "cetirizin"], { drowsy: false }),
-  row("loratadine", "loratadine", "antihis", ["clarityne", "loratadine", "loratadin"], { drowsy: false }),
+  row("cetirizine", "cetirizine", "antihis", ["zyrtec", "cetirizine", "cetirizin"], {
+    drowsy: false,
+    sources: [S.cet],
+    how: [
+      { text: "Uống **lúc no hay đói đều được**, uống với nước / sữa.", src: [0] },
+      { text: "Quên liều: uống ngay khi nhớ, trừ khi gần tới liều sau; **không uống 2 liều** để bù.", src: [0] },
+    ],
+    dose: {
+      adult: [{ text: "Người lớn và trẻ **từ 12 tuổi**: **10 mg, ngày 1 lần**.", src: [0] }],
+      kid: [
+        { text: "Trẻ **6–11 tuổi**: thường **5 mg, ngày 2 lần** (cách nhau 10–12 giờ). Trẻ **2–5 tuổi**: **2,5 mg, ngày 2 lần**.", src: [0] },
+        { text: "Trẻ **1 tuổi**: bác sĩ tính liều theo cân nặng / tuổi. Trẻ nhỏ dùng dạng siro dễ uống hơn.", src: [0] },
+      ],
+    },
+  }),
+  row("loratadine", "loratadine", "antihis", ["clarityne", "loratadine", "loratadin"], {
+    drowsy: false,
+    sources: [S.lor],
+    how: [
+      { text: "Uống **lúc no hay đói đều được**.", src: [0] },
+      { text: "Quên liều: uống ngay khi nhớ, trừ khi gần tới liều sau; **không uống 2 liều** để bù.", src: [0] },
+    ],
+    dose: {
+      adult: [{ text: "Người lớn: thường **10 mg, ngày 1 lần**.", src: [0] }],
+      kid: [{ text: "Trẻ em: bác sĩ tính liều theo cân nặng / tuổi; trẻ **6–12 tuổi chỉ uống dạng viên khi nặng trên 30 kg**, trẻ **dưới 6 tuổi hoặc ≤ 30 kg** dùng dạng siro.", src: [0] }],
+    },
+  }),
   row("fexofenadine", "fexofenadine", "antihis", ["telfast", "fexofenadine", "fexofenadin"], { drowsy: false }),
   row("desloratadine", "desloratadine", "antihis", ["aerius", "desloratadine", "desloratadin"]),
-  row("chlorphenamine", "chlorphenamine (clorpheniramin)", "antihis", ["chlorphenamine", "chlorpheniramine", "clorpheniramin", "clorpheniramine", "chlorpheniramin", "piriton"], { drowsy: true }),
+  row("chlorphenamine", "chlorphenamine (clorpheniramin)", "antihis", ["chlorphenamine", "chlorpheniramine", "clorpheniramin", "clorpheniramine", "chlorpheniramin", "piriton"], {
+    drowsy: true,
+    sources: [S.chlor],
+    how: [{ text: "Uống **lúc no hay đói đều được**; quên liều thì uống ngay khi nhớ, trừ khi gần tới liều sau — **không uống bù gấp đôi**.", src: [0] }],
+    dose: {
+      adult: [{ text: "Người lớn và trẻ **từ 12 tuổi**: **1 viên mỗi 4–6 giờ**, **không quá 6 viên trong 24 giờ**.", src: [0] }],
+      kid: [{ text: "Trẻ **dưới 12 tuổi** dùng liều thấp hơn; **không cho trẻ dưới 6 tuổi** thuốc ho / cảm có chlorphenamine; bé **dưới 1 tuổi** chỉ dùng khi bác sĩ kê.", src: [0] }],
+    },
+  }),
   row("promethazine", "promethazine", "antihis", ["phenergan", "promethazine", "promethazin"], { drowsy: true }),
   row("diphenhydramine", "diphenhydramine", "antihis", ["diphenhydramine", "diphenhydramin"], { drowsy: true }),
   row("cinnarizine", "cinnarizine", "antihis", ["stugeron", "cinnarizine", "cinnarizin"], { drowsy: true }),
-  row("omeprazole", "omeprazole", "ppi", ["losec", "omeprazole", "omeprazol"]),
+  row("omeprazole", "omeprazole", "ppi", ["losec", "omeprazole", "omeprazol"], {
+    sources: [S.ome],
+    dose: { adult: [{ text: "Liều tuỳ bệnh — thường **ngày 1 hoặc 2 lần** theo bác sĩ dặn. **Tự mua không có đơn thì không dùng quá 2 tuần**.", src: [0] }] },
+  }),
   row("esomeprazole", "esomeprazole", "ppi", ["nexium", "esomeprazole", "esomeprazol"]),
   row("pantoprazole", "pantoprazole", "ppi", ["pantoloc", "pantoprazole", "pantoprazol"]),
   row("lansoprazole", "lansoprazole", "ppi", ["lansoprazole", "lansoprazol"]),
@@ -185,16 +267,45 @@ export const MEDS: IndexedDrug[] = [
   row("prednisolone", "prednisolone", "steroid", ["prednisolone", "prednisolon"]),
   row("methylprednisolone", "methylprednisolone", "steroid", ["medrol", "methylprednisolone", "methylprednisolon", "menison"]),
   row("dexamethasone", "dexamethasone", "steroid", ["dexamethasone", "dexamethason"]),
-  row("amlodipine", "amlodipine (thuốc huyết áp)", "rx", ["amlor", "amlodipine", "amlodipin"]),
+  row("amlodipine", "amlodipine (thuốc huyết áp)", "rx", ["amlor", "amlodipine", "amlodipin"], {
+    sources: [S.aml],
+    how: [
+      { text: "Thường uống **ngày 1 lần, cùng giờ mỗi ngày**; trước hay sau ăn đều được. Liều do bác sĩ quyết định.", src: [0] },
+      { text: "**Tránh bưởi chùm và nước ép bưởi chùm** (dễ tăng tác dụng phụ).", src: [0] },
+      { text: "Quên liều: bỏ liều đó, uống liều sau như thường; **không uống 2 liều** để bù. **Đừng tự ngưng** — ngưng đột ngột có thể nguy hiểm.", src: [0] },
+    ],
+  }),
   row("losartan", "losartan (thuốc huyết áp)", "rx", ["cozaar", "losartan"]),
   row("perindopril", "perindopril (thuốc huyết áp)", "rx", ["coversyl", "perindopril"]),
   row("bisoprolol", "bisoprolol (thuốc tim mạch, huyết áp)", "rx", ["concor", "bisoprolol"]),
-  row("metformin", "metformin (thuốc tiểu đường)", "rx", ["glucophage", "metformin"]),
+  row("metformin", "metformin (thuốc tiểu đường)", "rx", ["glucophage", "metformin"], {
+    sources: [S.met],
+    how: [
+      { text: "Uống **cùng bữa ăn**; nuốt nguyên viên với nước, **không nghiền, không nhai**. Ăn uống bình thường được.", src: [0] },
+      { text: "Phần lớn người uống **1–3 lần/ngày**, liều tuỳ bệnh và tuổi — bác sĩ có thể cho liều thấp lúc đầu.", src: [0] },
+      { text: "Quên liều: ngày 1 lần thì uống ngay khi nhớ; ngày nhiều lần mà gần tới liều sau thì bỏ liều quên; **không uống 2 liều** để bù.", src: [0] },
+    ],
+  }),
   row("gliclazide", "gliclazide (thuốc tiểu đường)", "rx", ["diamicron", "gliclazide", "gliclazid"]),
-  row("atorvastatin", "atorvastatin (thuốc mỡ máu)", "rx", ["lipitor", "atorvastatin"]),
+  row("atorvastatin", "atorvastatin (thuốc mỡ máu)", "rx", ["lipitor", "atorvastatin"], {
+    sources: [S.ator],
+    how: [
+      { text: "Uống **ngày 1 lần, cùng giờ mỗi ngày**; lúc no hay đói đều được. Bác sĩ có thể cho liều thấp rồi tăng dần.", src: [0] },
+      { text: "**Đừng uống nhiều nước ép bưởi chùm** (dễ tăng tác dụng phụ).", src: [0] },
+      { text: "Quên liều: bỏ liều đó, uống liều sau như thường; **không uống 2 liều** để bù.", src: [0] },
+    ],
+  }),
   row("rosuvastatin", "rosuvastatin (thuốc mỡ máu)", "rx", ["crestor", "rosuvastatin"]),
   row("clopidogrel", "clopidogrel (thuốc chống kết tập tiểu cầu)", "rx", ["plavix", "clopidogrel"]),
-  row("domperidone", "domperidone (thuốc chống nôn)", "gi", ["motilium", "domperidone", "domperidon"]),
+  row("domperidone", "domperidone (thuốc chống nôn)", "gi", ["motilium", "domperidone", "domperidon"], {
+    sources: [S.dom],
+    how: [
+      { text: "Uống **15–30 phút trước bữa ăn** (hoặc bữa phụ).", src: [0] },
+      { text: "Thường chỉ dùng **tối đa khoảng 1 tuần** — dùng lâu hoặc liều cao có thể gây **loạn nhịp tim**.", src: [0] },
+      { text: "Quên liều: uống ngay nếu còn cách liều sau ít nhất 2 giờ; không thì bỏ qua — **không uống 2 liều cùng lúc**.", src: [0] },
+    ],
+    dose: { adult: [{ text: "Người lớn và trẻ **từ 12 tuổi**: thường **10 mg mỗi lần, tối đa 3 lần/ngày**, các lần cách nhau **ít nhất 8 giờ**.", src: [0] }] },
+  }),
   row("loperamide", "loperamide (thuốc cầm tiêu chảy)", "gi", ["imodium", "loperamide", "loperamid"]),
   row("diosmectite", "diosmectite", "gi", ["smecta", "diosmectite", "diosmectit"]),
   row("drotaverine", "drotaverine (thuốc chống co thắt)", "gi", ["no spa", "nospa", "drotaverine", "drotaverin"]),
@@ -258,37 +369,50 @@ export function renderIndexed(hit: { drug: IndexedDrug; typed: string; fuzzy: bo
   const ing0 = normalizeVi(d.ingredient).split(/[\s(+]/)[0];
   const isIngredient = normalizeVi(d.ingredient).startsWith(hit.brand) || edit(hit.brand, ing0, 2) <= 2;
   const head = `💊 ${hit.fuzzy ? `Lomi hiểu là **${shownBrand}** nha (bạn gõ “${hit.typed}”). ` : ""}**${isIngredient ? cap(d.ingredient) : shownBrand}**${isIngredient ? "" : ` — hoạt chất **${d.ingredient}**`}, thuộc nhóm **${g.label}**.`;
-  // ý riêng của hoạt chất ưu tiên hơn ý chung của nhóm
-  const own = d.how && d.sources ? { how: d.how, srcs: d.sources } : null;
   const parts: string[] = [head];
-  let src: { sources: DrugSource[]; verifiedAt: string } | null = null;
-  let used: number[] = [];
+  // nguồn đã dùng: gom theo đối tượng nguồn (ý của thuốc trỏ vào d.sources, ý của nhóm trỏ vào g.sources)
+  const usedSrc = new Set<DrugSource>();
+  const use = (xs: DrugFact[], from: DrugSource[]) => xs.forEach((x) => x.src.forEach((i) => from[i] && usedSrc.add(from[i])));
+  const own = d.sources ?? [];
   if (aspect === "side") {
-    const s = [...(d.side ?? []), ...(g.side ?? [])];
     const dz = d.drowsy === true ? "Đây là loại **gây buồn ngủ**." : d.drowsy === false ? "Đây thuộc loại **ít gây buồn ngủ** (non-drowsy) theo nguồn — vẫn có người bị, uống lần đầu nên để ý." : "";
-    if (s.length || dz) {
-      parts.push(`⚠️ **Tác dụng phụ / lưu ý theo nguồn:**\n${dz ? `• ${dz}\n` : ""}${bl(s)}${g.care?.length ? `\n${bl(g.care)}` : ""}`.replace(/\n$/, ""));
-      src = { sources: g.sources, verifiedAt: VERIFIED };
-      used = [...s, ...(g.care ?? [])].flatMap((x) => x.src);
-      if (dz && !used.length) used = [0];
+    const lines = [...(d.side ?? []), ...(g.side ?? []), ...(d.care ?? []), ...(g.care ?? [])];
+    if (lines.length || dz) {
+      parts.push(`⚠️ **Tác dụng phụ / lưu ý theo nguồn:**\n${dz ? `• ${dz}${lines.length ? "\n" : ""}` : ""}${bl(lines)}`);
+      use([...(d.side ?? []), ...(d.care ?? [])], own);
+      use([...(g.side ?? []), ...(g.care ?? [])], g.sources);
+      if (dz) g.sources[0] && usedSrc.add(g.sources[0]);
     } else parts.push("Lomi **chưa có dữ liệu tác dụng phụ** có nguồn cho riêng thuốc này — tờ hướng dẫn trong hộp có mục tác dụng phụ; thấy bất thường thì ngưng và hỏi dược sĩ / bác sĩ.");
   } else {
-    const how = own?.how ?? g.how ?? [];
+    const how = d.how?.length ? d.how : g.how ?? [];
     if (how.length) {
-      parts.push(`📋 **Cách dùng chung theo nguồn:**\n${bl(how)}`);
-      src = { sources: own?.srcs ?? g.sources, verifiedAt: VERIFIED };
-      used = how.flatMap((x) => x.src);
-      if (own && g.how?.length && d.group === "abx") parts.push(`💡 **Với mọi kháng sinh:**\n${bl(g.how.slice(0, 2))}`);
+      parts.push(`📋 **Cách dùng theo nguồn:**\n${bl(how)}`);
+      use(how, d.how?.length ? own : g.sources);
+      if (d.how?.length && g.how?.length && d.group === "abx") {
+        parts.push(`💡 **Với mọi kháng sinh:**\n${bl(g.how.slice(0, 2))}`);
+        use(g.how.slice(0, 2), g.sources);
+      }
     } else if (d.group === "rx" || d.group === "steroid")
       parts.push("Đây là **thuốc kê đơn** — uống đúng giờ, đúng liều như đơn bác sĩ ghi; muốn ngưng, đổi liều hay quên liều thì hỏi lại bác sĩ / dược sĩ đã kê, **đừng tự ngưng**.");
     else parts.push("Lomi **chưa có hướng dẫn cách dùng** có nguồn cho riêng thuốc này — cách uống (trước / sau ăn, mấy lần) xem **tờ hướng dẫn trong hộp** hoặc hỏi **dược sĩ** lúc mua.");
-    if (g.care?.length && aspect === "how") parts.push(`⚠️ **Lưu ý:**\n${bl(g.care)}`);
+    const care = [...(d.care ?? []), ...(g.care ?? [])];
+    if (care.length) {
+      parts.push(`⚠️ **Lưu ý:**\n${bl(care)}`);
+      use(d.care ?? [], own);
+      use(g.care ?? [], g.sources);
+    }
   }
-  parts.push("🚫 Lomi **không nêu liều** (số viên, mg, mấy lần) — liều tuỳ tuổi, cân nặng, bệnh nền: làm theo đơn bác sĩ / tờ hướng dẫn, hoặc hỏi dược sĩ. Đang mang thai, cho con bú, cho trẻ nhỏ dùng thì hỏi trước nha.");
-  if (src && used.length) {
-    // nguồn: ý chung của nhóm (kháng sinh) trỏ vào nguồn của nhóm — gộp cả hai danh sách nguồn khi có ý riêng
-    const all = own && d.group === "abx" ? { sources: [...own.srcs, ...g.sources], verifiedAt: VERIFIED } : src;
-    parts.push(sourceLine(all, all.sources.map((_, i) => i), now));
+  if (aspect === "what" && d.dose)
+    parts.push(`📏 Muốn xem **liều tham khảo** theo nguồn thì hỏi Lomi “${isIngredient ? d.id : hit.brand} uống liều bao nhiêu” nha.`);
+  else if (aspect !== "side" && d.dose) {
+    parts.push(`📏 **Liều tham khảo theo nguồn${d.dose.rx ? " (thuốc kê đơn — liều của bạn do bác sĩ quyết định)" : " cho người lớn"}:**\n${bl(d.dose.adult)}${d.dose.kid?.length ? `\n👶 ${d.dose.kid.map((x) => x.text).join(" ")}` : "\n👶 Trẻ em: liều theo tuổi / cân nặng — xem nhãn thuốc dành cho trẻ hoặc hỏi dược sĩ."}`);
+    use([...d.dose.adult, ...(d.dose.kid ?? [])], own);
+    parts.push("ℹ️ Liều trên để **đọc tham khảo** — liều thực tế còn tuỳ **hàm lượng viên** bạn có, tuổi, cân nặng, bệnh gan / thận, đang mang thai hay cho con bú và thuốc khác đang dùng: luôn đối chiếu **tờ hướng dẫn trong hộp** hoặc hỏi **dược sĩ / bác sĩ**.");
+  } else if (aspect !== "side")
+    parts.push("📏 Lomi **chưa có liều tham khảo** có nguồn cho thuốc này — liều tuỳ hàm lượng viên, tuổi, cân nặng, bệnh nền: xem **tờ hướng dẫn trong hộp** / đơn bác sĩ, hoặc hỏi dược sĩ. Mang thai, cho con bú, cho trẻ nhỏ dùng thì hỏi trước nha.");
+  if (usedSrc.size) {
+    const list = [...usedSrc];
+    parts.push(sourceLine({ sources: list, verifiedAt: VERIFIED }, list.map((_, i) => i), now));
   }
   return parts.join("\n\n");
 }
@@ -311,4 +435,6 @@ export function paraDupReply(text: string, now = Date.now()): string | null {
 }
 
 /** Thuốc / nhóm có ý tác dụng phụ có nguồn để trả lời không. */
-export const hasSideFacts = (d: IndexedDrug): boolean => !!(d.side?.length || GROUPS[d.group].side?.length || d.drowsy !== undefined);
+export const hasSideFacts = (d: IndexedDrug): boolean => !!(d.side?.length || d.care?.length || GROUPS[d.group].side?.length || d.drowsy !== undefined);
+/** Thuốc / nhóm có ý về rượu bia có nguồn. */
+export const hasAlcoholFact = (d: IndexedDrug): boolean => [...(d.care ?? []), ...(GROUPS[d.group].care ?? [])].some((x) => /rượu/u.test(x.text));
