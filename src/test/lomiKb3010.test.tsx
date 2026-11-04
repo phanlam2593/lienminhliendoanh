@@ -1251,6 +1251,16 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["bà bầu uống renitec được không"])).content).toMatch(/không dùng khi mang thai/);
     expect((await last(["thiếu vitamin d nên ăn gì"])).content).not.toMatch(/colecalciferol/);
   }, 120000);
+  it("04/11 (vòng 8) — thuốc trước đây chỉ biết tên nay có cách dùng theo NHS / MedlinePlus", async () => {
+    const C: [string, RegExp][] = [
+      ["augmentin uống sao", /cùng bữa ăn/], ["zinnat uống mấy lần", /mỗi 12 giờ/], ["mobic uống sao", /ngày 1 lần/], ["celebrex uống lúc nào", /trên 200 mg/],
+      ["klacid uống mấy viên", /250–500 mg, ngày 2 lần/], ["levofloxacin uống sao", /đứt gân/], ["aerius uống sao", /ngày 1 lần/], ["phenergan uống sao", /tối hôm trước/],
+      ["pantoloc uống trước hay sau ăn", /1 giờ trước bữa ăn/], ["pariet uống lúc nào", /sau bữa sáng/], ["medrol uống sao", /thức ăn hoặc sữa/],
+      ["dexamethasone uống lúc nào", /bữa sáng/], ["coversyl uống sao", /trước bữa sáng/], ["diamicron uống sao", /hạ đường huyết/],
+      ["crestor uống lúc nào", /cùng giờ/], ["air x uống sao", /nhai kỹ/], ["bé 3 tuổi uống rhinathiol mấy ml", /2–4 tuổi/],
+    ];
+    for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+  }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
 import { MEDS } from "@/lib/lomiDrugIndex";
