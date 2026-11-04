@@ -1111,4 +1111,28 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["giá đặt xe ra sân bay bao nhiêu"])).faqId).toBe("ridprice");
     expect((await last(["Không phải tôi hỏi mật khẩu, tôi hỏi tên đăng nhập quên thì sao"])).faqId).toBe("forgot");
   }, T);
+  it("04/11 — ho / sốt hỏi món, kiêng cữ, mẹo dân gian; câu thật của người dùng", async () => {
+    expect((await last(["Ho có ăn tôm đc k?"])).content).toMatch(/Ăn \*\*tôm\*\* khi ho.*không bảo phải kiêng/s);
+    expect((await last(["ho kiêng gì"])).content).toMatch(/kiêng/);
+    expect((await last(["Ho nên ăn gì"])).content).toMatch(/không có món nào bắt buộc phải kiêng/);
+    expect((await last(["ho có uống nước đá được không"])).content).toMatch(/không bảo phải kiêng đồ lạnh/);
+    expect((await last(["bị ho có nên hút thuốc k"])).content).toMatch(/đừng hút thuốc/);
+    expect((await last(["ho uống chanh mật ong được không"])).content).toMatch(/Chanh mật ong ấm.*dưới 1 tuổi/s);
+    expect((await last(["ho uống sữa được không"])).content).toMatch(/không làm cơ thể tiết thêm đờm/);
+    expect((await last(["ho uống gừng có đỡ không"])).content).toMatch(/Gừng/);
+    expect((await last(["ho uống cam thảo được không"])).content).toMatch(/Cam thảo/);
+    expect((await last(["ho có tiêu chảy không"])).content).not.toMatch(/Ăn \*\*/);
+    expect((await last(["bé 6 tháng bị ho uống mật ong được k"])).content).toMatch(/Bé 6 tháng/);
+    expect((await chat(["Tôi bị ho", "Có ăn tôm được không?"]))[1].content).toMatch(/khi ho/);
+    expect((await last(["đau họng uống nước đá được ko"])).content).toMatch(/đau họng/);
+    expect((await last(["sốt có ăn tôm được không"])).content).toMatch(/khi sốt/);
+    expect((await last(["sốt kiêng gì"])).content).toMatch(/không có món nào bắt buộc phải kiêng/);
+    expect((await last(["sốt cao 40 độ, cứng cổ, ăn gì"])).content).toMatch(/115/);
+    expect((await last(["bé 2 tuổi sốt có ăn trứng được không"])).content).toMatch(/Trẻ sốt/);
+    expect((await last(["Họ có ăn tôm được không"])).content).not.toMatch(/khi ho/);
+    expect((await last(["Nổi tràm thì nên làm gì?"])).content).toMatch(/Rôm sảy/);
+    expect((await last(["Nghiện thủ dâm nên làm gì?"])).content).toMatch(/nghiện tình dục/);
+    expect((await last(["Mới mổi nên kiêng gì?"])).content).toMatch(/mới mổ/);
+    expect((await last(["Có bệnh gì cần kiêng rượu bia j?"])).content).toMatch(/Rượu bia/);
+  }, T);
 });

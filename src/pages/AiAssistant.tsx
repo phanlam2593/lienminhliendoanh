@@ -45,6 +45,7 @@ import {
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
+import { coughFocusReply, feverFocusReply } from "@/lib/lomiFolk";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { meaningChips } from "@/lib/lomiMeaning";
 import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, restoreViAlts, typoCandidates } from "@/lib/lomiViRestore";
@@ -1484,6 +1485,12 @@ export function AiChat({
       .replace(/(^|[^\p{L}])(quán|chỗ|nơi) mô(?![\p{L}])/giu, "$1$2 nào")
       .replace(/(^|[^\p{L}])(khum|hổng|hem)(?![\p{L}])/giu, "$1không")
       .replace(/(^|[^\p{L}])dzậy(?![\p{L}])/giu, "$1vậy")
+      // 04/11 (câu thật của người dùng): "mới mổi" gõ sót = mới mổ; "có … j?" cuối câu = có … không ("có bệnh gì cần kiêng rượu bia j?")
+      .replace(/(^|[^\p{L}])(mới|vừa|sau khi|sau) mổi(?![\p{L}])/giu, "$1$2 mổ")
+      .replace(/^(\s*có\s.+?)\s+(j|z)\s*([?.!]*)\s*$/iu, "$1 không$3")
+      // 04/11 (Kir: "Ho có ăn tôm đc k?" bị đáp chưa có kiến thức): "ho" (không dấu, khác "họ") ĐẦU CÂU / đầu vế đứng trước
+      //   từ hỏi chuyện ăn uống, kiêng cữ, lây… là đang bị ho → "bị ho …" để thẻ Ho và mẹo dân gian về ho nhận ra.
+      .replace(/(^|[.,!?;]\s*)ho\s+(?=(?:có|nên|kiêng|cữ|uống|ăn|thì|phải|được|đc|lây|bao lâu|mấy|ngậm|hút|tắm|khan|đờm|đàm|kéo dài|nhiều|hoài|quá|mãi|suốt|dai dẳng|lâu|về đêm|ban đêm|khi nào)(?![\p{L}]))/giu, "$1bị ho ")
       // 01/11 (hiểu câu vòng 3): "rứa" = vậy, "răng mà / răng lại" ở đầu câu = sao mà, "bị chi / thuốc chi" = bị gì,
       //   "lm j" = làm gì; "hong / hông / hok / hơm" ĐỨNG CUỐI câu là từ hỏi = không (trừ "đau họng", "viêm họng" gõ không dấu)
       // 01/11 (vòng 5): "có răng không" = có sao không, "mần răng / mần chi" = làm sao / làm gì, "đặng không" = được không
@@ -1858,6 +1865,12 @@ export function AiChat({
           return localReply(q, { role: "assistant", content: "Lomi hỏi lại chút nha 🙂 Bạn gõ không dấu nên Lomi chưa chắc: ý bạn là ăn **tỏi** hay ăn **bữa tối**?", local: true, quick: [base.replace(re, "ăn tỏi"), base.replace(re, "ăn tối")] });
         }
       }
+      // 04/11: bị ho + hỏi một món / thói quen cụ thể ("ho có ăn tôm đc k", "ho uống sữa được không") → trả lời thẳng món đó (lib/lomiFolk)
+      // (câu hỏi tiếp ngắn ngay sau lời đáp về ho / sốt — "Có ăn tôm được không?" — mang theo chuyện ho / sốt đang nói)
+      const lastMedId = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].med?.id : undefined;
+      const carry = !en && (lastMedId === "ho" || lastMedId === "sot") && q.split(/\s+/).length <= 9 && VN(/\b(ăn|uống|kiêng|tắm|gội|gió|lây|hút thuốc|ngậm|súc)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(quán|tìm|ở đâu|gần đây|bé|con|trẻ|cháu)\b/).test(` ${normalizeVi(q)} `);
+      const cf = en ? null : coughFocusReply(q) ?? feverFocusReply(q) ?? (carry ? (lastMedId === "ho" ? coughFocusReply(`bị ho ${q}`) : feverFocusReply(`bị sốt ${q}`)) : null);
+      if (cf) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: cf, local: true, health: {}, med: { id: /sốt/u.test(cf) && !/khi ho/u.test(cf) ? "sot" : "ho" } }); }
       const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);
       if (ds) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: ds, local: true, health: {} }); }
       const dg = en ? null : await diagnoseReply(raw);

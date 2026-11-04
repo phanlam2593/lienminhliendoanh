@@ -55,6 +55,11 @@ const VERIFIED = "2026-10-20";
 const NCCIH = "NCCIH (Viện Y tế Quốc gia Hoa Kỳ – NIH)";
 const nccih = (slug: string, title: string, upd: string): DrugSource => ({ title: `${title} (trang ghi cập nhật ${upd})`, publisher: NCCIH, url: `https://www.nccih.nih.gov/health/${slug}` });
 const NHS_COUGH: DrugSource = { title: "Cough", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/cough/", reviewed: "2023-12-08" };
+const NHS_SORE: DrugSource = { title: "Sore throat", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/sore-throat/", reviewed: "2024-04-08" };
+const MEDLINE_COUGH: DrugSource = { title: "Cough", publisher: "MedlinePlus (NIH, Hoa Kỳ)", url: "https://medlineplus.gov/cough.html", reviewed: "2025-03-18" };
+const NHS_FEVER_AD: DrugSource = { title: "High temperature (fever) in adults", publisher: "NHS (Anh)", url: "https://www.nhs.uk/symptoms/fever-in-adults/", reviewed: "2026-10-19" };
+const MEDLINE_FEVER: DrugSource = { title: "Fever (Medical Encyclopedia)", publisher: "MedlinePlus (NIH, Hoa Kỳ)", url: "https://medlineplus.gov/ency/article/003090.htm" };
+const MAYO_MILK: DrugSource = { title: "Cold symptoms: Does drinking milk increase phlegm? (13/06/2023)", publisher: "Mayo Clinic", url: "https://www.mayoclinic.org/symptoms/phlegm/expert-answers/faq-20058015" };
 const NHS_COLD: DrugSource = { title: "Common cold", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/common-cold/", reviewed: "2024-03-22" };
 const NHS_SINUS: DrugSource = { title: "Sinusitis (sinus infection)", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/sinusitis-sinus-infection/", reviewed: "2024-01-31" };
 const NHS_BURN: DrugSource = { title: "Burns and scalds", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/burns-and-scalds/", reviewed: "2026-03-31" };
@@ -153,6 +158,7 @@ export const FOLK: FolkEntry[] = [
       { id: "dau-bung-kinh", text: "gừng dạng bổ sung có thể giảm đau bụng kinh", src: [0], v: "help" },
       { id: "say-tau-xe", text: "phần lớn nghiên cứu cho thấy gừng KHÔNG giúp say tàu xe", src: [0], v: "unclear" },
       { id: "thoai-hoa-khop", text: "có thể đỡ chút ít đau khớp gối, nhưng nghiên cứu chất lượng thấp; bôi gừng thì không thấy giúp", src: [0] },
+      { id: "ho", text: "dân gian hay dùng khi cảm cúm, ho; nguồn chưa nêu nghiên cứu nào cho thấy gừng làm hết ho", src: [0], v: "unclear" },
     ],
     sources: [nccih("ginger", "Ginger", "02/2025")],
     verifiedAt: VERIFIED,
@@ -1385,7 +1391,7 @@ export const FOLK: FolkEntry[] = [
   {
     id: "cam-vitamin-c",
     name: "Cảm: uống thật nhiều vitamin C, nước cam?",
-    names: ["vitamin c", "nước cam", "uống cam", "c sủi", "viên sủi c", "uống chanh", "echinacea"],
+    names: ["vitamin c", "nước cam", "uống nước cam", "c sủi", "viên sủi c", "uống nước chanh", "echinacea"],
     ctx: VN(/\b(cảm|cúm|sổ mũi|nghẹt mũi|ho|đau họng|đề kháng|miễn dịch)\b/),
     verdict: "myth",
     belief: "Bị cảm thì uống thật nhiều vitamin C, nước cam, viên sủi C cho mau khỏi.",
@@ -1396,6 +1402,57 @@ export const FOLK: FolkEntry[] = [
     topics: [{ id: "cam-lanh", text: "rất ít bằng chứng vitamin C giúp phòng hay mau khỏi cảm", src: [0], v: "myth" }],
     sources: [NHS_COLD],
     verifiedAt: VERIFIED,
+  },
+  // 04/11 (Kir: "ho khá phổ biến… ho kiêng đồ lạnh, tôm, hút thuốc… nên uống chanh mật ong, gừng") — đối chiếu NHS Cough
+  //   (rà 08/12/2023), NHS Sore throat (rà 08/04/2024), Mayo Clinic (sữa & đờm, 13/06/2023), đọc lại ngày 04/11/2026.
+  {
+    id: "ho-kieng",
+    name: "Bị ho: kiêng đồ lạnh, tôm cua, hải sản, trứng, sữa, kiêng gió?",
+    names: ["tôm", "cua", "tôm cua", "hải sản", "đồ biển", "đồ tanh", "tanh", "trứng", "sữa", "uống sữa", "đồ lạnh", "nước lạnh", "nước đá", "đá lạnh", "kem", "ăn kem", "đồ uống lạnh", "nước ngọt lạnh", "kiêng gió", "ra gió", "kiêng gì", "kiêng ăn", "nên ăn gì", "ăn gì", "uống gì", "hút thuốc", "thuốc lá", "khói thuốc", "ngậm muối", "nước muối", "súc miệng", "súc họng", "nước ấm", "đồ ấm", "cay", "đồ cay"],
+    ctx: VN(/\b(bị ho|đang ho|còn ho|hay ho|ho khan|ho có đờm|ho có đàm|ho đờm|ho kéo dài|ho dai dẳng|ho lâu|cơn ho|ho nhiều|ho quá|ho hoài|ho suốt)\b/),
+    verdict: "myth",
+    tip: true,
+    belief: "Bị ho thì kiêng đồ lạnh, nước đá, kem; kiêng tôm, cua, hải sản, đồ tanh, trứng, sữa (sợ thêm đờm); kiêng gió.",
+    unverified: ["ho phải kiêng tôm, cua, hải sản, đồ tanh hay trứng", "ho phải kiêng gió"],
+    folk: [],
+    science: [
+      { text: "Hướng dẫn tự chăm khi ho **không nêu món ăn nào phải kiêng** — chỉ khuyên nghỉ ngơi, uống nhiều nước.", src: [0] },
+      { text: "**Đồ lạnh:** khi đau họng, hướng dẫn y khoa còn gợi ý ăn đồ mát hoặc mềm, ngậm đá viên, kem que cho dịu họng (đừng cho trẻ nhỏ ngậm vật nhỏ, cứng vì dễ hóc).", src: [1] },
+      { text: "**Sữa:** uống sữa không làm cơ thể tiết thêm đờm — sữa trộn với nước bọt chỉ tạo cảm giác hơi đặc ở họng trong chốc lát.", src: [2] },
+      { text: "**Hút thuốc** là một nguyên nhân gây ho; khi đau họng cũng nên tránh hút thuốc và chỗ có khói thuốc.", src: [0, 1] },
+    ],
+    how: [
+      { text: "Nghỉ ngơi, uống nhiều nước; chanh mật ong ấm có thể dịu ho gần giống siro ho (bằng chứng còn hạn chế).", src: [0] },
+      { text: "Đau họng kèm theo: súc họng bằng nước muối ấm rồi nhổ ra (trẻ em không nên làm), ăn đồ mát hoặc mềm, uống nhiều nước.", src: [1] },
+    ],
+    caution: [
+      { text: "Không cho bé dưới 1 tuổi ăn mật ong; không cho trẻ nhỏ uống đồ nóng.", src: [0] },
+      { text: "Đi khám nếu ho quá 3 tuần, ho ra máu, khó thở, đau ngực, hoặc ho nặng lên nhanh.", src: [0] },
+    ],
+    topics: [{ id: "ho", text: "nguồn không nêu món phải kiêng khi ho — nghỉ ngơi, uống nhiều nước, tránh khói thuốc", src: [0, 1], v: "myth" }],
+    sources: [NHS_COUGH, NHS_SORE, MAYO_MILK, MEDLINE_COUGH],
+    verifiedAt: "2026-11-04",
+  },
+  // 04/11: người lớn bị sốt hỏi kiêng gì (trẻ sốt có mục riêng "tre-sot-kieng") — NHS High temperature in adults (rà 19/10/2026), đọc 04/11/2026.
+  {
+    id: "sot-kieng",
+    name: "Người lớn bị sốt: kiêng tôm, trứng, đồ tanh, kiêng tắm, kiêng gió?",
+    names: ["tôm", "cua", "hải sản", "đồ tanh", "trứng", "sữa", "thịt", "kiêng gì", "kiêng ăn", "nên ăn gì", "ăn gì", "uống gì", "tắm", "gội đầu", "kiêng gió", "ra gió", "đồ lạnh", "nước đá"],
+    ctx: VN(/\b(bị sốt|đang sốt|sốt cao|sốt nhẹ|còn sốt|lên cơn sốt|sốt)\b(?! (xuất huyết|rét|phát ban|co giật|siêu vi))/),
+    verdict: "myth",
+    tip: true,
+    belief: "Bị sốt thì kiêng tôm, cua, trứng, đồ tanh, kiêng tắm, kiêng gió, ủ thật kín cho ra mồ hôi.",
+    unverified: ["sốt phải kiêng tôm, cua, trứng hay đồ tanh", "sốt phải kiêng tắm, kiêng gió"],
+    folk: [],
+    science: [{ text: "Hướng dẫn tự chăm khi sốt ở người lớn **không nêu món ăn nào phải kiêng** — chỉ khuyên nghỉ ngơi nhiều, uống nhiều nước (nước lọc là tốt nhất).", src: [0] }],
+    how: [
+      { text: "Uống đủ nước để không mất nước — đủ để nước tiểu vàng nhạt, trong.", src: [0] },
+      { text: "Cố ở nhà, hạn chế tiếp xúc người khác cho tới khi hết sốt.", src: [0] },
+    ],
+    caution: [{ text: "Gọi cấp cứu nếu người sốt lú lẫn, khó đánh thức, co giật, khó thở, môi / móng tím tái, đau đầu dữ dội hoặc cứng cổ.", src: [1] }],
+    topics: [{ id: "sot", text: "nguồn không nêu món phải kiêng khi sốt — nghỉ ngơi, uống nhiều nước", src: [0], v: "myth" }],
+    sources: [NHS_FEVER_AD, MEDLINE_FEVER],
+    verifiedAt: "2026-11-04",
   },
   // ── 24/10 (theo ý Kir: thêm mẹo về trái cây, lá, rau) — mỗi ý đối chiếu trang nguồn đọc ngày 24/10/2026 ──
   {
@@ -2079,6 +2136,9 @@ export const UNVERIFIED_HERBS = [
   "cát cánh", "bách bộ", "thiên môn đông", "mạch môn", "bạch chỉ", "phòng phong", "bạch thược", "mộc hương", "hoàng bá", "hoàng cầm", "bạch linh", "phục linh",
   "trạch tả", "xa tiền tử", "cúc tần", "đại bi", "cỏ roi ngựa", "rau má biển", "rau dệu", "rau trai", "lá thuốc dòi", "xương sông", "húng lủi", "lá bưởi",
   "hoàn ngọc", "cây hoàn ngọc", "cây chó đẻ", "chó đẻ răng cưa", "bìm bìm", "muồng trâu", "lá muồng trâu", "hồng hoa", "lá vừng", "lá khế",
+  // 04/11 (Kir: mẹo dân gian trị ho) — chưa tìm được nguồn y khoa đáng tin đánh giá
+  "quất chưng đường phèn", "tắc chưng đường phèn", "quất chưng", "tắc chưng", "quất hấp", "tắc hấp", "chanh đào", "chanh đào ngâm mật ong",
+  "lê chưng đường phèn", "lê chưng", "lê hấp",
 ];
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
@@ -2322,4 +2382,100 @@ export function folkReply(
   const tp = med ?? sx ?? prevMed;
   if (tp) return { text: renderFolkForTopic(tp.id, tp.name) ?? renderNoFolk(tp.name), topic: tp.id };
   return { text: renderFolkMenu() };
+}
+
+// 04/11 (Kir: "Ho có ăn tôm đc k?" — câu hỏi một món cụ thể khi ho phải được trả lời THẲNG món đó, không đưa nguyên thẻ chung).
+//   Dùng đúng các ý có nguồn của mục "ho-kieng" (và thẻ Ho cho chuyện tắm); câu hỏi chung "ho kiêng gì / nên ăn gì" để folkReply đưa đủ thẻ.
+const COUGH = VN(/\b(bị ho|đang ho|còn ho|hay ho|ho khan|ho có đờm|ho có đàm|ho đờm|ho kéo dài|ho dai dẳng|ho lâu|cơn ho|ho nhiều|ho quá|ho hoài|ho suốt)\b/);
+const ASKY = VN(/\b(gì|lây|được không|được ko|được k|đc không|đc ko|đc k|được hông|có sao không|có sao ko|có nên|nên không|nên ko|có tốt không|tốt không|có đỡ|đỡ không|đỡ ko|có kiêng|kiêng không|kiêng ko|phải kiêng|có hại|hại không|có giúp|giúp không|không|ko|k|hông|hem)\b/);
+export function coughFocusReply(text: string): string | null {
+  const nq = ` ${normalizeVi(text)} `;
+  const throat = !COUGH.test(nq) && VN(/\b(đau họng|rát họng|viêm họng|ngứa họng)\b/).test(nq);
+  if ((!COUGH.test(nq) && !throat) || !ASKY.test(nq)) return null;
+  // chỉ đau họng (không ho): chỉ trả lời các ý nguồn đau họng nói rõ — đồ lạnh, nước muối, hút thuốc
+  if (throat && !VN(/\b(đồ lạnh|nước lạnh|nước đá|đá lạnh|đá|kem|đồ uống lạnh|lạnh|ngậm muối|nước muối|súc miệng|súc họng|hút thuốc|thuốc lá|khói thuốc)\b/).test(nq)) return null;
+  const f = FOLK.find((x) => x.id === "ho-kieng");
+  if (!f) return null;
+  // hỏi thuốc (kháng sinh, siro, thuốc ho…) → để phần thuốc trả lời (Lomi không quyết dùng thuốc thay bác sĩ)
+  if (VN(/\b(thuốc|kháng sinh|siro|si rô|paracetamol|ibuprofen|aspirin|viên|toa|đơn thuốc)\b/).test(nq) && !VN(/\b(thuốc lá|hút thuốc|khói thuốc)\b/).test(nq)) return null;
+
+  // vị thuốc / mẹo có mục riêng (tía tô, cam thảo, gừng, lá hẹ, quất chưng…) → để lời đáp của vị đó trả lời
+  const own = findFolk(text);
+  if ((own && !["ho-kieng", "mat-ong-chanh", "cam-vitamin-c"].includes(own.id)) || findUnverifiedHerb(text)) return null;
+  const kid = VN(/\b(bé|con|trẻ|cháu|em bé|con nít|tháng tuổi)\b/).test(nq);
+  const close = throat ? "Chung khi đau họng: uống nhiều nước, ăn đồ mát hoặc mềm, nghỉ ngơi." : "Chung khi ho: nghỉ ngơi, uống nhiều nước. Đi khám nếu ho quá 3 tuần, ho ra máu, khó thở, đau ngực hoặc ho nặng lên nhanh.";
+  const say = (head: string, src: number[]) => [head, close, sourceLine(f, [...src, 0])].join("\n\n");
+  if (VN(/\b(mật ong|chanh mật ong|chanh nóng|chanh ấm|nước chanh|chanh muối)\b/).test(nq)) {
+    if (kid) return null; // bé + mật ong: lời đáp riêng cho trẻ (dưới 1 tuổi không được ăn mật ong) đã có sẵn
+    return say("🍋 **Chanh mật ong ấm** uống được nha — có thể dịu ho gần giống siro ho, dù bằng chứng còn hạn chế. Cách làm: vắt nửa quả chanh vào cốc nước sôi, thêm chút mật ong, uống khi còn ấm.\n⚠️ Không cho bé **dưới 1 tuổi** ăn mật ong; không cho trẻ nhỏ uống đồ nóng.", [0]);
+  }
+  if (VN(/\b(hút thuốc|thuốc lá|khói thuốc|vape|thuốc lá điện tử)\b/).test(nq))
+    return say(throat ? "🚭 **Đang đau họng thì nên tránh hút thuốc** và chỗ có khói thuốc nha." : "🚭 **Đang ho thì đừng hút thuốc** nha — hút thuốc chính là một nguyên nhân gây ho, và khi đau họng cũng nên tránh cả chỗ có khói thuốc.", [0, 1]);
+  if (VN(/\b(sữa|uống sữa)\b/).test(nq))
+    return say("🥛 **Uống sữa được** nha — sữa không làm cơ thể tiết thêm đờm. Cảm giác họng hơi đặc sau khi uống chỉ là do sữa trộn với nước bọt, hết sau chốc lát.", [2]);
+  if (VN(/\b(đồ lạnh|nước lạnh|nước đá|đá lạnh|đá|kem|đồ uống lạnh|nước ngọt lạnh|lạnh)\b/).test(nq))
+    return say(`🧊 Nguồn y khoa **không bảo phải kiêng đồ lạnh** khi ${throat ? "đau họng" : "ho"}. ${throat ? "Hướng dẫn chăm đau họng còn gợi ý" : "Nếu đau họng kèm theo, hướng dẫn còn gợi ý"} ăn đồ mát hoặc mềm, ngậm đá viên, kem que cho dịu họng.${kid ? "\n⚠️ Đừng cho trẻ nhỏ ngậm vật nhỏ, cứng (đá viên, kẹo cứng) vì dễ hóc." : " (Đừng cho trẻ nhỏ ngậm vật nhỏ, cứng vì dễ hóc.)"} Thấy uống lạnh khó chịu hơn thì cứ chọn nước ấm.`, [1]);
+  if (VN(/\b(ngậm muối|nước muối|súc miệng|súc họng)\b/).test(nq))
+    return say(`🧂 Súc họng bằng **nước muối ấm** rồi nhổ ra có thể giúp dịu khi đau họng kèm theo${kid ? " — nhưng **trẻ em không nên** súc họng kiểu này" : " (trẻ em không nên làm)"}.`, [1]);
+  if (VN(/\b(nước ấm|đồ ấm|uống ấm|nước nóng|nước gừng)\b/).test(nq) && !VN(/\bgừng\b/).test(nq))
+    return say("☕ **Uống nước ấm tốt** nha — uống nhiều nước giúp dịu ho; chanh mật ong ấm cũng là lựa chọn quen thuộc (không cho bé dưới 1 tuổi ăn mật ong).", [0, 3]);
+  if (VN(/\b(tắm|gội đầu|gội)\b/).test(nq))
+    return say("🚿 Nguồn y khoa **không bảo kiêng tắm** khi ho — hơi nước ấm (như tắm nước ấm) còn có thể giúp dịu ho. Tắm nhanh, lau khô, giữ ấm sau khi tắm.", [3]);
+  if (VN(/\b(gió|ra gió|kiêng gió|quạt|máy lạnh)\b/).test(nq))
+    return say("🌬️ Lomi **chưa thấy nguồn y khoa nào** nói ho phải kiêng gió — hướng dẫn tự chăm chỉ khuyên nghỉ ngơi, uống nhiều nước, ở nhà nếu đang sốt.", [0]);
+  if (VN(/\b(lây|lây không|lây ko|lây sang|lây cho)\b/).test(nq))
+    return say("🦠 Ho là **triệu chứng**, nên có lây hay không là tuỳ **nguyên nhân** gây ho. Phần lớn cơn ho do **cảm lạnh hoặc cúm**. Đang sốt hay thấy mệt, không sinh hoạt bình thường được thì nên ở nhà, hạn chế tiếp xúc người khác.", [0]);
+  // món cụ thể — tên hiển thị lấy theo bảng (câu đã bỏ dấu khi so)
+  const FOODS: [RegExp, string, boolean][] = [
+    [VN(/\btôm cua\b/), "tôm, cua", true], [VN(/\btôm\b/), "tôm", true], [VN(/\bcua\b/), "cua", true], [VN(/\b(hải sản|đồ biển)\b/), "hải sản", true],
+    [VN(/\b(đồ tanh|tanh)\b/), "đồ tanh", true], [VN(/\btrứng\b/), "trứng", true], [VN(/\bcá\b/), "cá", true],
+    [VN(/\b(thịt gà|gà)\b/), "thịt gà", true], [VN(/\b(thịt bò|bò)\b/), "thịt bò", false], [VN(/\b(đồ cay|ăn cay|cay)\b/), "đồ cay", false],
+    [VN(/\b(đồ chiên|chiên|rán)\b/), "đồ chiên", false], [VN(/\b(đồ ngọt|kẹo|bánh ngọt)\b/), "đồ ngọt", false],
+    [VN(/\b(trái cây|hoa quả)\b/), "trái cây", false], [VN(/\b(cam(?! thảo)|quýt)\b/), "cam, quýt", false], [VN(/\bchuối\b/), "chuối", false],
+  ];
+  const hit = FOODS.find(([re]) => re.test(nq));
+  if (hit) {
+    const [, item, tanh] = hit;
+    return say(`🍤 Ăn **${item}** khi ho thì nguồn y khoa **không bảo phải kiêng** — hướng dẫn tự chăm khi ho không nêu món ăn nào cần tránh. Lomi cũng chưa thấy nguồn nào xác nhận chuyện ho phải kiêng ${tanh ? "tôm, cua, hải sản, đồ tanh hay trứng" : "món này"}.${item === "đồ cay" ? " Nếu ăn cay làm họng rát, ho nhiều hơn thì cứ bớt lại theo cảm nhận của mình." : ""}`, [0]);
+  }
+  if (VN(/\b(uống gì|nên uống|uống cái gì|uống nước gì)\b/).test(nq))
+    return say("🥤 Với **Ho**, **uống nhiều nước** là chính — nước ấm, nước lọc đều được. **Chanh mật ong ấm** có thể dịu ho gần giống siro ho (bằng chứng còn hạn chế; không cho bé dưới 1 tuổi ăn mật ong, không cho trẻ nhỏ uống đồ nóng). Thuốc ho, siro ho thì hỏi dược sĩ để chọn đúng loại.", [0, 3]);
+  if (VN(/\b(nên ăn gì|ăn gì|ăn cái gì|ăn uống sao|ăn uống thế nào)\b/).test(nq) && !VN(/\bkiêng\b/).test(nq))
+    return say("🍲 Khi ho **không có món nào bắt buộc phải kiêng** theo hướng dẫn y khoa — cứ ăn uống bình thường, đủ bữa, **uống nhiều nước**. Đau họng kèm theo thì chọn đồ mềm hoặc mát cho dễ nuốt.", [0, 1]);
+  return null;
+}
+
+// 04/11: người lớn bị sốt hỏi một món / thói quen cụ thể → trả lời thẳng (trẻ em: để lời đáp riêng cho trẻ sốt).
+export function feverFocusReply(text: string): string | null {
+  const nq = ` ${normalizeVi(text)} `;
+  if (!VN(/\b(bị sốt|đang sốt|sốt cao|sốt nhẹ|còn sốt|sốt)\b/).test(nq)) return null;
+  const red = VN(/\b(lú lẫn|lơ mơ|khó đánh thức|không tỉnh|co giật|khó thở|tím tái|môi tím|đau đầu dữ dội|cứng cổ|không đi được)\b/).test(nq);
+  if (!red && !ASKY.test(nq)) return null;
+  if (VN(/\b(bé|con|trẻ|cháu|em bé|con nít|tháng tuổi|sốt xuất huyết|sốt rét|sốt phát ban|co giật)\b/).test(nq)) return null;
+  if (VN(/\b(bị ho|ho|đau họng)\b/).test(nq)) return null; // ho kèm sốt: lời đáp về ho lo
+  const f = FOLK.find((x) => x.id === "sot-kieng");
+  if (!f) return null;
+  // hỏi thuốc (kháng sinh, siro, thuốc ho…) → để phần thuốc trả lời (Lomi không quyết dùng thuốc thay bác sĩ)
+  if (VN(/\b(thuốc|kháng sinh|siro|si rô|paracetamol|ibuprofen|aspirin|viên|toa|đơn thuốc)\b/).test(nq) && !VN(/\b(thuốc lá|hút thuốc|khói thuốc)\b/).test(nq)) return null;
+
+  // dấu hiệu phải gọi cấp cứu đi kèm sốt → nói chuyện cấp cứu trước, không bàn chuyện ăn uống
+  if (red && !VN(/\b(ăn|uống|kiêng|tắm|gội|gió)\b/).test(nq)) return null; // kể dấu hiệu nặng (không hỏi ăn uống) → luồng cấp cứu sẵn có
+  if (red)
+    return [`⚠️ Sốt mà kèm **lú lẫn, khó đánh thức, co giật, khó thở, môi / móng tím tái, đau đầu dữ dội hoặc cứng cổ** là dấu hiệu cần **gọi cấp cứu (115)** hoặc tới cơ sở y tế gần nhất **ngay** nha, đừng chờ ở nhà.`, sourceLine(f, [1])].join("\n\n");
+  const own = findFolk(text);
+  if ((own && !["sot-kieng", "kieng-nuoc"].includes(own.id)) || findUnverifiedHerb(text)) return null;
+  const close = "Chung khi sốt: nghỉ ngơi nhiều, uống nhiều nước, ở nhà tới khi hết sốt. Sốt kèm lú lẫn, co giật, khó thở, đau đầu dữ dội hay cứng cổ thì gọi cấp cứu ngay.";
+  const say = (head: string) => [head, close, sourceLine(f, [0, 1])].join("\n\n");
+  if (VN(/\b(tắm|gội|gội đầu)\b/).test(nq))
+    return say("🚿 Lomi **chưa thấy nguồn y khoa nào** bảo người lớn bị sốt phải kiêng tắm — hướng dẫn tự chăm chỉ nói nghỉ ngơi, uống nhiều nước. Thấy mệt thì tắm nhanh bằng nước ấm, lau khô, đừng để bị lạnh run.");
+  if (VN(/\b(gió|ra gió|kiêng gió|quạt|máy lạnh|ủ kín|trùm chăn)\b/).test(nq))
+    return say("🌬️ Lomi **chưa thấy nguồn y khoa nào** nói sốt phải kiêng gió hay ủ thật kín — hướng dẫn tự chăm chỉ khuyên nghỉ ngơi, uống nhiều nước.");
+  if (VN(/\b(uống gì|nên uống|uống nước gì)\b/).test(nq))
+    return say("💧 Khi sốt thì **uống nhiều nước** là chính — nước lọc là tốt nhất, uống đủ để nước tiểu vàng nhạt, trong.");
+  const FOODS: [RegExp, string][] = [[VN(/\btôm\b/), "tôm"], [VN(/\bcua\b/), "cua"], [VN(/\b(hải sản|đồ biển)\b/), "hải sản"], [VN(/\b(đồ tanh|tanh)\b/), "đồ tanh"], [VN(/\btrứng\b/), "trứng"], [VN(/\bsữa\b/), "sữa"], [VN(/\b(thịt gà|gà)\b/), "thịt gà"], [VN(/\b(thịt bò|bò)\b/), "thịt bò"], [VN(/\bcá\b/), "cá"], [VN(/\bthịt\b/), "thịt"], [VN(/\b(đồ lạnh|nước đá|kem)\b/), "đồ lạnh"]];
+  const hit = FOODS.find(([re]) => re.test(nq));
+  if (hit) return say(`🍤 Ăn **${hit[1]}** khi sốt thì nguồn y khoa **không bảo phải kiêng** — hướng dẫn tự chăm khi sốt ở người lớn không nêu món ăn nào cần tránh. Lomi cũng chưa thấy nguồn nào xác nhận chuyện sốt phải kiêng món này. Ăn được gì thì ăn, nhớ uống đủ nước.`);
+  if (VN(/\b(kiêng gì|kiêng cái gì|kiêng món gì|nên ăn gì|ăn gì|ăn uống sao)\b/).test(nq))
+    return say("🍲 Khi sốt **không có món nào bắt buộc phải kiêng** theo hướng dẫn y khoa — ăn được gì thì ăn, quan trọng nhất là **nghỉ ngơi** và **uống nhiều nước** (nước lọc là tốt nhất).");
+  return null;
 }

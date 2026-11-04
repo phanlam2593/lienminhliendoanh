@@ -1,0 +1,109 @@
+{
+ "id": "hanh-vi-tinh-duc-cuong-buc",
+ "kind": "mental",
+ "display": "Hành vi tình dục cưỡng bức (nghiện tình dục)",
+ "names": [
+  "nghiện thủ dâm",
+  "thủ dâm quá nhiều",
+  "thủ dâm nhiều quá",
+  "không bỏ được thủ dâm",
+  "nghiện tình dục",
+  "nghiện sex",
+  "cuồng dâm",
+  "hành vi tình dục cưỡng bức",
+  "rối loạn hành vi tình dục cưỡng bức",
+  "hypersexuality",
+  "sex addiction",
+  "sexual addiction",
+  "compulsive sexual behavior"
+ ],
+ "about": [
+  {
+   "text": "Hành vi tình dục cưỡng bức (còn gọi là nghiện tình dục) là khi ý nghĩ, ham muốn hay hành vi tình dục trở nên dồn dập và không kiểm soát được.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Hành vi có thể là thủ dâm, xem nội dung tình dục trên mạng, quan hệ với nhiều người… — vấn đề là khi nó không kiểm soát được và gây hại cho cuộc sống.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Ý nghĩ, ham muốn và hành vi tình dục lặp lại, dữ dội, chiếm nhiều thời gian và cảm thấy mất kiểm soát.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Thấy bị thôi thúc phải làm, rồi sau đó lại thấy có lỗi hoặc hối hận.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Đã thử bớt hoặc kiểm soát nhưng không được.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Dùng nó để trốn tránh chuyện khác như cô đơn, buồn, lo âu, căng thẳng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Vẫn tiếp tục dù đã gây ra hậu quả nghiêm trọng; khó giữ các mối quan hệ lành mạnh, ổn định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [],
+ "course": [
+  {
+   "text": "Nếu không được hỗ trợ, tình trạng này thường nặng dần theo thời gian.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "care": [
+  {
+   "text": "Có thể học cách kiểm soát được nhờ điều trị kết hợp tự giúp mình — bước đầu là nói chuyện với bác sĩ hoặc chuyên viên tâm lý.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên tìm giúp đỡ khi thấy mất kiểm soát hành vi tình dục, nhất là khi nó gây rắc rối cho bạn hoặc người khác.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Ngại nói ra là bình thường, nhưng tìm giúp đỡ sớm thì dễ kiểm soát hơn — nhân viên y tế sẽ giữ kín chuyện của bạn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "disambiguation": "Thẻ nói về khi hành vi tình dục (kể cả thủ dâm) KHÔNG kiểm soát được và gây hại cho cuộc sống.",
+ "sources": [
+  {
+   "title": "Compulsive sexual behavior",
+   "publisher": "Mayo Clinic",
+   "url": "https://www.mayoclinic.org/diseases-conditions/compulsive-sexual-behavior/symptoms-causes/syc-20360434",
+   "updated": "2023-04-19"
+  }
+ ],
+ "verifiedAt": "2026-11-04"
+}

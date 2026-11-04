@@ -76,10 +76,11 @@ describe("18/10 — hiểu đúng ý", () => {
     expect(m.content).toMatch(/giảm muối/);
   }, T);
 
-  it("đang ho + nước lạnh → thẻ ho, không hiểu thành 'nước chanh mật ong ấm', nói rõ nguồn không nêu riêng", async () => {
+  // 04/11: đã có nguồn cho đồ lạnh khi ho / đau họng (lib/lomiFolk "ho-kieng": NHS Sore throat) → trả lời thẳng thay vì "chưa xác minh"
+  it("đang ho + nước lạnh → thẻ ho, không hiểu thành 'nước chanh mật ong ấm', trả lời đúng chuyện đồ lạnh theo nguồn", async () => {
     const m = await last(["Đang ho có nên uống nước lạnh không?"]);
     expect(m.med?.id).toBe("ho");
-    expect(m.content).toMatch(/\*\*nước lạnh\*\* thì Lomi \*\*chưa xác minh được\*\*/);
+    expect(m.content).toMatch(/không bảo phải kiêng đồ lạnh/);
     expect(m.content).toMatch(/uống nhiều nước/);
     expect(m.content).not.toMatch(/thuộc nhóm “nước chanh mật ong ấm”/);
   }, T);
