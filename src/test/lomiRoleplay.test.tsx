@@ -431,8 +431,8 @@ describe("Thuốc có nguồn: chỉ nói điều đã đối chiếu, còn lạ
     expect(u.content).toMatch(/chưa xác minh được/);
     expect(u.content).toMatch(/không có nghĩa là dùng chung an toàn/);
     expect(u.src ?? "").not.toMatch(/📚 Nguồn/);
-    const none = await chat(["thuốc berberin trị gì", "uống chung với men vi sinh được không"]);
-    expect(none[0].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*berberin\*\*/);
+    const none = await chat(["thuốc sevelamer trị gì", "uống chung với men vi sinh được không"]);
+    expect(none[0].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*sevelamer\*\*/);
     expect(none[1].content).toMatch(/không có dữ liệu tương tác thuốc/);
   }, T);
   it("câu nối trong chuyện thuốc không rơi ra lớp khác: cách nhau bao lâu, trẻ em uống được không, kể thêm hoàn cảnh", async () => {

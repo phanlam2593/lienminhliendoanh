@@ -1467,3 +1467,27 @@ describe("04/11 vòng 16 — vị độc + dược liệu đợt 5", () => {
     expect((await last(["tôi thấy xấu hổ quá"])).content).not.toMatch(/cây xấu hổ/i);
   });
 });
+
+// ── 04/11 vòng 17: dược chất đợt 1 (tra cứu dược chất Long Châu) + hỏi thuốc cho trẻ em ──
+describe("04/11 vòng 17 — dược chất đợt 1 + thuốc cho trẻ", () => {
+  const H7: [string, RegExp][] = [
+    ["alpha choay uống sao", /alpha chymotrypsin[\s\S]*không nhai/],
+    ["debridat có tác dụng gì", /trimebutine[\s\S]*đầy hơi/],
+    ["myonal uống mấy viên", /eperisone[\s\S]*Liều tham khảo[\s\S]*50 mg/],
+    ["decontractyl có gây buồn ngủ không", /mephenesin[\s\S]*gây buồn ngủ/],
+    ["bà bầu uống berberin được không", /Berberin[\s\S]*có thai không dùng/],
+    ["daflon uống sao", /diosmin[\s\S]*trĩ/],
+    ["arcoxia có tác dụng phụ gì", /etoricoxib[\s\S]*tăng huyết áp/],
+    ["no spa uống mấy viên", /drotaverin[\s\S]*120–240 mg/],
+    ["smecta uống sao", /diosmectite[\s\S]*cách các thuốc khác khoảng 2 giờ/],
+    ["toplexil có gây buồn ngủ không", /oxomemazin[\s\S]*gây buồn ngủ/],
+    ["betadine dùng sao", /povidon iod/],
+  ];
+  for (const [q, re] of H7) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("thuốc trong danh mục + cho bé → ý về trẻ em, không 'chưa biết'", async () => {
+    expect((await last(["smecta cho bé 1 tuổi được không"])).content).toMatch(/Nguồn nói về trẻ em[\s\S]*dưới 2 tuổi chỉ dùng khi bác sĩ cho/);
+    expect((await last(["zyrtec cho bé uống được không"])).content).toMatch(/cetirizine[\s\S]*trẻ em/i);
+    expect((await last(["terpin codein trẻ em uống được không"])).content).toMatch(/Không dùng cho trẻ dưới 12 tuổi/);
+    expect((await last(["panadol cho bé 2 tuổi được không"])).content).toMatch(/Paracetamol\*\* cho trẻ em/);
+  });
+});
