@@ -2882,6 +2882,8 @@ export function AiChat({
           diet: lastA?.diet,
           hsub: lastA?.hsub,
           quick: dg!.kind === "which" && lastA?.sx?.length ? ["Nên làm gì cho đỡ?", "Khi nào cần đi khám?"] : undefined,
+          // 04/11: thuốc Lomi chưa có trong danh mục → ghi nhật ký "bí" để biết người dùng hay hỏi thuốc nào mà thêm vào
+          ...(/Lomi chưa có dữ liệu đã kiểm chứng về/u.test(dg!.text) ? { stuck: "unknown_med" as StuckKind } : {}),
         });
         // (15/10: hỏi dùng thuốc khi mang thai / cho con bú cũng trả lời trước bài giới thiệu thuốc — bài đó không nói chuyện thai kỳ.)
         if (dg?.kind === "interact" || dg?.kind === "pet" || dg?.preg) {

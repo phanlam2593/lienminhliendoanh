@@ -42,8 +42,8 @@ describe("drugAsk — nhận đúng loại câu hỏi", () => {
 
 describe("drugAsk — nội dung lời đáp", () => {
   it("thuốc chưa có dữ liệu: nói rõ là chưa có dữ liệu + nhắc lại đúng tên người dùng hỏi", () => {
-    const r = drugAsk("Colchicine là thuốc gì?")!;
-    expect(r.text).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*Colchicine\*\*/);
+    const r = drugAsk("Cinacalcet là thuốc gì?")!;
+    expect(r.text).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*Cinacalcet\*\*/);
     expect(r.text).toMatch(/dược sĩ/);
   });
   it("tên BỆNH sau chữ 'thuốc' không bị coi là tên thuốc", () => {

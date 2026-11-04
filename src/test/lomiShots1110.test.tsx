@@ -71,10 +71,10 @@ describe("hỏi một thuốc dùng để làm gì (không có chữ 'thuốc')"
   }, T);
   it("thuốc chưa có mục → nói thật là chưa có dữ liệu về ĐÚNG thuốc đó, không đọc bài bệnh đang nói", async () => {
     // 04/11: amlodipin đã vào danh mục thuốc (lib/lomiDrugIndex) → kiểm bằng thuốc chưa có trong danh mục
-    const r = await chat(["tăng huyết áp nên làm gì", "uống allopurinol để làm gì", "nó có tác dụng phụ gì không"]);
-    expect(r[1].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*allopurinol\*\*/);
+    const r = await chat(["tăng huyết áp nên làm gì", "uống sevelamer để làm gì", "nó có tác dụng phụ gì không"]);
+    expect(r[1].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*sevelamer\*\*/);
     expect(r[1].content).not.toMatch(/Tăng huyết áp/);
-    expect(r[2].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*allopurinol\*\*/);
+    expect(r[2].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*sevelamer\*\*/);
   }, T);
   it("nhận theo DÁNG câu: tên ngoại lai sau động từ dùng thuốc; thức uống thường ngày / đồ không phải thuốc thì không", () => {
     for (const [q, name] of [["uống omeprazol để làm gì", "omeprazol"], ["tiêm insulin để làm gì", "insulin"], ["a uống amlodipin để làm gì vậy e", "amlodipin"], ["berberin uống để làm gì", "berberin"], ["omeprazol trị gì", "omeprazol"], ["uống collagen có tác dụng gì", "collagen"]] as const) {

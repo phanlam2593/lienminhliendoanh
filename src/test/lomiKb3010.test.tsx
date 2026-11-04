@@ -1296,6 +1296,14 @@ describe("30/10 — trả lời qua khung chat", () => {
     ];
     for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
     expect((await last(["miếng dán nicotine dán sao"])).content).toMatch(/\*\*Nicotine thay thế/);
+    const D: [string, RegExp][] = [
+      ["milurit uống sao", /sau bữa ăn/], ["colchicin uống mấy viên", /tối đa 12 viên/], ["tamiflu uống mấy ngày", /5 ngày/], ["atarax uống sao", /buồn ngủ/i],
+      ["ponstan uống sao", /mỗi 6 giờ/], ["sirdalud uống sao", /tối đa 3 lần/], ["lipanthyl uống lúc nào", /cùng bữa ăn/], ["visine nhỏ sao", /3–4 lần/],
+      ["maalox uống sao", /nhai kỹ/], ["sporal uống sao", /bữa ăn no/], ["valtrex uống sao", /12 giờ/], ["xyzal uống lúc nào", /buổi tối/],
+      ["pepto bismol uống sao", /48 giờ/], ["amaryl uống lúc nào", /bữa sáng/], ["micardis uống sao", /mang thai/], ["fasigyn uống rượu được không", /3 ngày/],
+      ["tobrex nhỏ mấy lần", /4–8 giờ/], ["dalacin c uống sao", /ly nước đầy/], ["zaditor nhỏ sao", /8–12 giờ/], ["nebilet uống sao", /ngày 1 lần/],
+    ];
+    for (const [q, re] of D) expect((await last([q])).content, q).toMatch(re);
   }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
