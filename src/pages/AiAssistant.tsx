@@ -45,7 +45,7 @@ import {
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
 import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
-import { coughFocusReply, feverFocusReply } from "@/lib/lomiFolk";
+import { coughFocusReply, feverFocusReply, sleepTeaReply } from "@/lib/lomiFolk";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { meaningChips } from "@/lib/lomiMeaning";
 import { isKnownSyllable, isLooseVi, loadViModel, restoreVi, restoreViAlts, typoCandidates } from "@/lib/lomiViRestore";
@@ -1490,6 +1490,8 @@ export function AiChat({
       // 04/11: "ăn gì bổ máu" = thiếu máu nên ăn gì; "dạ dày / bao tử có nên ăn X" (không nói bị gì) = đau dạ dày
       .replace(/^(\s*)(?:ăn gì (?:để |cho )?bổ máu|bổ máu (?:nên )?ăn gì|món (?:gì|nào) bổ máu|thực phẩm (?:gì|nào) bổ máu)\s*([?.!]*)\s*$/iu, "$1thiếu máu nên ăn gì$2")
       .replace(/^(\s*)(dạ dày|bao tử)\s+(có nên |nên |có được |được |)(ăn|uống)\s/iu, "$1đau $2 $3$4 ")
+      // 04/11: "mẹ tôi hay nóng giận / nóng tính" = hay nổi giận (không phải "nóng" thân nhiệt hay "nóng trong")
+      .replace(/(^|[^\p{L}])(hay|dễ|rất|bị|cứ|lại|thường)\s+(nóng giận|nóng tính|nóng nảy)(?![\p{L}])/giu, "$1$2 nổi giận")
       // "tỏi có hạ huyết áp không" = làm GIẢM huyết áp cao (không phải bệnh huyết áp thấp — "bị hạ huyết áp")
       .replace(/(^|[^\p{L}])(có|giúp|làm|để|sẽ)\s+hạ\s+huyết áp(?!\s*thấp)/giu, "$1$2 hạ huyết áp cao")
       .replace(/^(\s*có\s.+?)\s+(j|z)\s*([?.!]*)\s*$/iu, "$1 không$3")
@@ -1874,6 +1876,9 @@ export function AiChat({
       // (câu hỏi tiếp ngắn ngay sau lời đáp về ho / sốt — "Có ăn tôm được không?" — mang theo chuyện ho / sốt đang nói)
       const lastMedId = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].med?.id : undefined;
       const carry = !en && (lastMedId === "ho" || lastMedId === "sot") && q.split(/\s+/).length <= 9 && VN(/\b(ăn|uống|kiêng|tắm|gội|gió|lây|hút thuốc|ngậm|súc)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(quán|tìm|ở đâu|gần đây|bé|con|trẻ|cháu)\b/).test(` ${normalizeVi(q)} `);
+      // 04/11: "mất ngủ uống trà gì / trà nào giúp ngủ ngon" → tóm các loại trà, thảo dược hay dùng kèm bằng chứng (lib/lomiFolk)
+      const st = en ? null : sleepTeaReply(q);
+      if (st) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: st, local: true, health: {}, med: { id: "mat-ngu" } }); }
       const cf = en ? null : coughFocusReply(q) ?? feverFocusReply(q) ?? (carry ? (lastMedId === "ho" ? coughFocusReply(`bị ho ${q}`) : feverFocusReply(`bị sốt ${q}`)) : null);
       if (cf) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: cf, local: true, health: {}, med: { id: /sốt/u.test(cf) && !/khi ho/u.test(cf) ? "sot" : "ho" } }); }
       const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);

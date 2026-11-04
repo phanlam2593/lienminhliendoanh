@@ -140,6 +140,8 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   // Quan niệm dân gian đã có bài riêng ("ăn cay gây đau dạ dày", "cua + cam ngộ độc") → để lớp mẹo dân gian trả lời.
   //   (01/11: chỉ khi bài đó nói về chính X — "mất ngủ có phải do cà phê không" không phải bài "uống rượu cho dễ ngủ")
   const fk = findFolk(q);
+  // 04/11: "trà hoa cúc / lạc tiên có GIÚP ngủ ngon không" — X là một vị có mục riêng và Y là bệnh vị đó có dòng nguồn → mục vị đó trả lời (đúng ý hơn)
+  if (fk && p.verb === "help" && fk.topics.length && !(fk.verdict === "myth") && hasKey(fk.names.join(" "), [N(p.x)])) return null;
   if (fk && (fk.verdict === "myth" || fk.belief || fk.ctx) && hasKey(`${fk.name} ${fk.belief ?? ""}`, [...keysOf(p.x, [], X_SYN), ...p.x.split(" ").filter((w) => w.length >= 2 && !/^(?:ăn|uống|dùng|xong|với|và|có|nhiều|ít|thêm|rồi|lại|cái|món|đồ)$/u.test(w))])) return null;
   // Thuốc có trong kho thuốc → xem phần tác dụng phụ có nguồn của thuốc đó
   const drugE = findDrug(p.x);

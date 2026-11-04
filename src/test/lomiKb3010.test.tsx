@@ -1165,4 +1165,21 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["trật chân xoa dầu được không"])).content).toMatch(/Bong gân/);
     expect((await last(["bé bị sốt có tắm được không"])).content).not.toMatch(/Người lớn bị sốt/);
   }, T);
+  it("04/11 (vòng 3) — trà / thảo dược cho giấc ngủ, chu kỳ kinh, nóng giận", async () => {
+    const t = await last(["mất ngủ uống trà gì"]);
+    expect(t.content).toMatch(/Cúc La Mã/);
+    expect(t.content).toMatch(/passionflower/);
+    expect(t.content).toMatch(/6 giờ trước khi ngủ/);
+    expect((await last(["trà nào giúp ngủ ngon"])).content).toMatch(/Trà \/ thảo dược hay được dùng cho dễ ngủ/);
+    expect((await last(["bà bầu mất ngủ uống trà gì"])).content).toMatch(/không dùng lạc tiên tây/);
+    expect((await last(["trà hoa cúc có giúp ngủ ngon không"])).content).toMatch(/Cúc La Mã/);
+    expect((await last(["lạc tiên có giúp ngủ không"])).content).toMatch(/passionflower.*Bà bầu không dùng/s);
+    expect((await last(["melatonin có giúp ngủ không"])).content).toMatch(/5 giờ/);
+    expect((await last(["trà lá vông có ngủ ngon không"])).content).toMatch(/chưa tìm được nguồn/);
+    expect((await last(["tía tô đất có giúp ngủ không"])).content).not.toMatch(/\*\*Tía tô\*\* ❔/);
+    expect((await last(["uống trà xanh buổi tối có mất ngủ không"])).content).toMatch(/caffeine/);
+    expect((await last(["đến tháng mấy ngày là bình thường"])).content).toMatch(/28 ngày/);
+    expect((await last(["chu kỳ kinh 40 ngày có sao không"])).content).toMatch(/ngoài\*\* mốc 21–35/);
+    expect((await last(["mẹ tôi hay nóng giận"])).content).not.toMatch(/nóng hả/);
+  }, T);
 });

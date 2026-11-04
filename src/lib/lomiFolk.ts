@@ -59,6 +59,7 @@ const NHS_SORE: DrugSource = { title: "Sore throat", publisher: "NHS (Anh)", url
 const MEDLINE_COUGH: DrugSource = { title: "Cough", publisher: "MedlinePlus (NIH, Hoa Kỳ)", url: "https://medlineplus.gov/cough.html", reviewed: "2025-03-18" };
 const NHS_FEVER_AD: DrugSource = { title: "High temperature (fever) in adults", publisher: "NHS (Anh)", url: "https://www.nhs.uk/symptoms/fever-in-adults/", reviewed: "2026-10-19" };
 const MEDLINE_FEVER: DrugSource = { title: "Fever (Medical Encyclopedia)", publisher: "MedlinePlus (NIH, Hoa Kỳ)", url: "https://medlineplus.gov/ency/article/003090.htm" };
+const MAYO_MELA: DrugSource = { title: "Melatonin side effects: What are the risks? (16/12/2025)", publisher: "Mayo Clinic", url: "https://www.mayoclinic.org/healthy-lifestyle/adult-health/expert-answers/melatonin-side-effects/faq-20057874" };
 const MAYO_MILK: DrugSource = { title: "Cold symptoms: Does drinking milk increase phlegm? (13/06/2023)", publisher: "Mayo Clinic", url: "https://www.mayoclinic.org/symptoms/phlegm/expert-answers/faq-20058015" };
 const NHS_COLD: DrugSource = { title: "Common cold", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/common-cold/", reviewed: "2024-03-22" };
 const NHS_SINUS: DrugSource = { title: "Sinusitis (sinus infection)", publisher: "NHS (Anh)", url: "https://www.nhs.uk/conditions/sinusitis-sinus-infection/", reviewed: "2024-01-31" };
@@ -322,8 +323,10 @@ export const FOLK: FolkEntry[] = [
   {
     id: "cuc-la-ma",
     name: "Cúc La Mã (chamomile)",
-    names: ["cúc la mã", "trà cúc la mã", "chamomile", "hoa cúc la mã"],
+    names: ["cúc la mã", "trà cúc la mã", "chamomile", "hoa cúc la mã", "trà hoa cúc", "trà cúc"],
     verdict: "unclear",
+    // 04/11: "trà hoa cúc" ở Việt Nam nhiều khi là cúc vàng / cúc chi (loài khác) — nguồn chỉ nói về cúc La Mã
+    unverified: ["trà hoa cúc vàng / cúc chi (loại cúc Việt Nam hay dùng, khác cúc La Mã) giúp ngủ ngon, \"mát gan\""],
     folk: [{ text: "Được dùng từ thời Trung Hoa, Ai Cập, Hy Lạp, La Mã cổ; nay được quảng bá cho cảm, khó tiêu, lo âu, mất ngủ, bé khóc dạ đề, ho.", src: [0] }],
     science: [
       { text: "Chưa đủ bằng chứng cho bệnh nào. Sơ bộ: có thể giúp lo âu lan toả.", src: [0] },
@@ -752,6 +755,50 @@ export const FOLK: FolkEntry[] = [
     topics: [{ id: "mat-ngu", text: "hướng dẫn chuyên ngành khuyên không dùng cho mất ngủ mạn; không uống chung rượu, thuốc an thần", src: [0], v: "unclear" }],
     sources: [nccih("valerian", "Valerian", "05/2025")],
     verifiedAt: VERIFIED,
+  },
+  // 04/11 (Kir: "có mấy loại trà trị mất ngủ… e thêm vào") — NCCIH Passionflower (cập nhật 04/2025), Mayo Clinic Melatonin (16/12/2025), đọc 04/11/2026.
+  {
+    id: "lac-tien",
+    name: "Lạc tiên tây (passionflower)",
+    names: ["passionflower", "passion flower", "lạc tiên tây", "hoa lạc tiên", "lạc tiên", "trà lạc tiên", "dây lạc tiên", "chùm bao"],
+    verdict: "mixed",
+    unverified: ["lạc tiên mọc dại ở Việt Nam (chùm bao) có tác dụng giống loài passionflower được nghiên cứu"],
+    folk: [{ text: "Từ xưa passionflower được dùng như thuốc an thần; nay được bán làm thực phẩm bổ sung cho lo âu, khó ngủ.", src: [0] }],
+    science: [
+      { text: "Một ít nghiên cứu cho thấy uống passionflower **có thể tăng tổng thời gian ngủ** ở người lớn mất ngủ; còn chuyện dễ vào giấc, ngủ không thức giấc thì kết quả chưa thống nhất.", src: [0] },
+      { text: "Lo âu: có thể giảm triệu chứng, nhưng bằng chứng còn ít, chưa kết luận được.", src: [0] },
+    ],
+    caution: [
+      { text: "Có thể gây buồn ngủ, chóng mặt, lú lẫn — đừng lái xe ngay sau khi uống.", src: [0] },
+      { text: "**Bà bầu không dùng** — có thể gây co bóp tử cung. Cho con bú: chưa rõ an toàn.", src: [0] },
+      { text: "Dùng dạng trà ngắn ngày (khoảng một tuần) có thể an toàn; dùng lâu chưa rõ.", src: [0] },
+    ],
+    topics: [
+      { id: "mat-ngu", text: "có thể tăng tổng thời gian ngủ (nghiên cứu ít); bà bầu không dùng", src: [0], v: "mixed" },
+      { id: "lo-au", text: "có thể giảm lo âu nhưng bằng chứng còn ít", src: [0], v: "unclear" },
+    ],
+    sources: [{ title: "Passionflower (cập nhật 04/2025)", publisher: NCCIH, url: "https://www.nccih.nih.gov/health/passionflower" }],
+    verifiedAt: "2026-11-04",
+  },
+  {
+    id: "melatonin",
+    name: "Melatonin (viên ngủ)",
+    names: ["melatonin", "viên melatonin", "kẹo ngủ melatonin"],
+    verdict: "mixed",
+    folk: [{ text: "Melatonin là viên bổ sung hay được mua để dễ ngủ, đỡ lệch múi giờ khi đi xa.", src: [0] }],
+    science: [
+      { text: "Có thể đỡ phần nào **mất ngủ và lệch múi giờ**; dùng ngắn ngày nhìn chung an toàn, dùng lâu dài cần thêm nghiên cứu.", src: [0] },
+      { text: "Ít khi bị lệ thuộc hay giảm tác dụng theo thời gian.", src: [0] },
+    ],
+    how: [{ text: "Không nên xem melatonin là cách đầu tiên hay duy nhất cho mất ngủ — kết hợp ăn uống lành mạnh, vận động, thói quen ngủ tốt.", src: [0] }],
+    caution: [
+      { text: "Hay gặp: đau đầu, chóng mặt, buồn nôn, buồn ngủ ban ngày — **đừng lái xe, vận hành máy trong 5 giờ** sau khi uống.", src: [0] },
+      { text: "Có thể tương tác thuốc chống đông, thuốc chống động kinh, thuốc tránh thai, thuốc huyết áp, thuốc tiểu đường, thuốc ức chế miễn dịch — hỏi bác sĩ / dược sĩ trước.", src: [0] },
+      { text: "Mỗi sản phẩm chứa lượng melatonin khác nhau nhiều; có bệnh nền hay đang dùng thuốc thì hỏi bác sĩ trước khi uống.", src: [0] },
+    ],
+    topics: [{ id: "mat-ngu", text: "có thể đỡ phần nào mất ngủ; không thay được thói quen ngủ tốt; đừng lái xe trong 5 giờ sau khi uống", src: [0], v: "mixed" }],
+    sources: [MAYO_MELA],
+    verifiedAt: "2026-11-04",
   },
   {
     id: "garcinia",
@@ -2140,6 +2187,7 @@ export const UNVERIFIED_HERBS = [
   "quất chưng đường phèn", "tắc chưng đường phèn", "quất chưng", "tắc chưng", "quất hấp", "tắc hấp", "chanh đào", "chanh đào ngâm mật ong",
   "lê chưng đường phèn", "lê chưng", "lê hấp",
   "yến sào", "tổ yến", "nước yến", "yến chưng",
+  "lá vông", "trà lá vông", "lá vông nem", "trà sen", "trà tâm sen", "trà ướp sen", "lá tía tô đất", "tía tô đất", "trà dưỡng tâm an thần",
 ];
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
@@ -2183,6 +2231,7 @@ export function findFolk(text: string): FolkEntry | null {
     // (bà bầu ĂN dứa là câu hỏi ăn uống khi mang thai — nguồn bromelain chỉ nói về viên bổ sung, không nói về ăn quả → để lớp ăn uống khi mang thai trả lời)
     // (04/11: mục "người lớn bị sốt" không áp cho trẻ — trẻ sốt có mục riêng)
     if (f.id === "sot-kieng" && KID.test(n)) continue;
+    if (f.id === "tia-to" && /\btia to dat\b/.test(n)) continue; // tía tô đất (lemon balm) là cây khác tía tô
     if (f.id === "dua-bromelain" && PREG.test(n) && !VN(/\b(bromelain|viên|thực phẩm chức năng|uống men)\b/).test(n)) continue;
     // (ngộ độc THỰC PHẨM / rượu khác nuốt phải chất độc — nguồn NHS Poisoning nói về chất độc, không áp lời "đừng cho uống gì" cho tiêu chảy, nôn do đồ ăn)
     if (f.id === "ngo-doc-gay-non" && FOODPOI.test(n) && !CHEM.test(n)) continue;
@@ -2481,4 +2530,30 @@ export function feverFocusReply(text: string): string | null {
   if (VN(/\b(kiêng gì|kiêng cái gì|kiêng món gì|nên ăn gì|ăn gì|ăn uống sao)\b/).test(nq))
     return say("🍲 Khi sốt **không có món nào bắt buộc phải kiêng** theo hướng dẫn y khoa — ăn được gì thì ăn, quan trọng nhất là **nghỉ ngơi** và **uống nhiều nước** (nước lọc là tốt nhất).");
   return null;
+}
+
+// 04/11 (Kir: "có mấy loại trà trị mất ngủ") — "mất ngủ uống trà gì / trà nào giúp ngủ ngon": tóm các loại hay được hỏi, mỗi loại đúng
+//   một dòng lấy từ mục có nguồn của nó (thẻ "mat-ngu" của từng vị), cộng lời dặn tránh trà có caffeine trước giờ ngủ (thẻ mất ngủ).
+export function sleepTeaReply(text: string): string | null {
+  const nq = ` ${normalizeVi(text)} `;
+  if (!VN(/\b(ngủ|mất ngủ|khó ngủ|ngủ ngon|dễ ngủ|ngủ không được|trằn trọc|an thần)\b/).test(nq)) return null;
+  // "uống trà xanh / trà đen / trà sữa buổi tối có mất ngủ không" → chuyện caffeine (thẻ mất ngủ: tránh trà, cà phê ≥ 6 giờ trước khi ngủ)
+  if ((VN(/\b(trà xanh|trà đen|trà sữa|trà đặc|trà ô long|trà lài|trà nhài|hồng trà|matcha|trà đá)\b/).test(nq) || VN(/\buống trà\b(?=.*\b(buổi tối|ban đêm|tối|đêm|trước khi ngủ|chiều)\b)/).test(nq)) && VN(/\b(mất ngủ|khó ngủ|ngủ không được|thức trắng)\b/).test(nq) && !VN(/\b(trà (gì|nào|loại nào)|gây|làm cho|khiến)\b/).test(nq) && !VN(/\b(trà (thảo mộc|hoa cúc|cúc|gừng|sen|tâm sen|lạc tiên|oải hương|bạc hà|atiso|lá vông))\b/).test(nq))
+    return "☕ **Có thể đấy** — trà xanh, trà đen, trà sữa có **caffeine**, mà nguồn y khoa về mất ngủ khuyên **tránh trà, cà phê ít nhất 6 giờ trước khi đi ngủ** (cùng với rượu và thuốc lá).\n• Muốn uống gì ấm buổi tối thì chọn đồ không có caffeine; tránh uống quá nhiều nước sát giờ ngủ cho đỡ phải dậy đi tiểu\n• Người nhạy với caffeine có khi uống buổi chiều cũng khó ngủ — thử dời ly trà sang buổi sáng xem sao\n\nMuốn biết loại trà nào hay được dùng cho dễ ngủ thì hỏi Lomi “mất ngủ uống trà gì” nha.";
+  if (!VN(/\b(trà (gì|nào|loại nào|cho dễ ngủ|giúp ngủ|ngủ ngon|an thần)|loại trà|các loại trà|mấy loại trà|uống gì (cho |để |thì )?(dễ ngủ|ngủ ngon|ngủ được)|uống gì cho ngủ|thảo dược (gì|nào)|lá gì|mẹo (gì|nào) (cho |để )?(dễ ngủ|ngủ ngon)|mẹo dân gian (trị |chữa )?mất ngủ|trị mất ngủ bằng (gì|cách nào))\b/).test(nq)) return null;
+  if (VN(/\b(bé|con|trẻ|cháu|em bé|tháng tuổi)\b/).test(nq)) return null;
+  const line = (id: string, label: string) => {
+    const f = FOLK.find((x) => x.id === id);
+    const t = f?.topics.find((x) => x.id === "mat-ngu");
+    return f && t ? `• ${VERDICT[t.v ?? f.verdict].icon} **${label}** — ${t.text}` : "";
+  };
+  const preg = VN(/\b(bầu|mang thai|có thai|cho con bú)\b/).test(nq);
+  return [
+    "🍵 **Trà / thảo dược hay được dùng cho dễ ngủ** — bằng chứng của từng loại theo nguồn y khoa:",
+    [line("cuc-la-ma", "Cúc La Mã (chamomile)"), line("lac-tien", "Lạc tiên tây (passionflower)"), line("nu-lang", "Nữ lang (valerian)"), line("oai-huong", "Oải hương (lavender)"), line("melatonin", "Melatonin (viên, không phải trà)")].filter(Boolean).join("\n"),
+    "🔎 **Chưa có nguồn đáng tin đánh giá:** tâm sen / trà sen, lá vông, lạc tiên dại Việt Nam, tía tô đất, trà hoa cúc vàng — Lomi không dám nói chúng giúp ngủ hay không.",
+    "☕ **Nên tránh trước giờ ngủ:** trà xanh, trà đen, trà sữa, cà phê (có caffeine) — tránh ít nhất 6 giờ trước khi ngủ; tránh cả rượu và thuốc lá.",
+    preg ? "🤰 **Đang mang thai:** trà thảo mộc (như bạc hà, hoa cúc) không quá 4 cốc mỗi ngày; **không dùng lạc tiên tây**; hỏi bác sĩ trước khi dùng nữ lang, oải hương." : "🤰 Bà bầu: không dùng lạc tiên tây; trà thảo mộc thì hỏi bác sĩ trước.",
+    "💡 Thảo dược chỉ là phụ — cái giúp ngủ chắc nhất vẫn là **giờ ngủ, giờ dậy cố định**, thư giãn một giờ trước khi ngủ, tránh màn hình sát giờ ngủ. Mất ngủ kéo dài nhiều tuần thì nên đi khám. Hỏi tên từng loại (vd “lạc tiên có giúp ngủ không”) để xem chi tiết và ai không nên dùng.",
+  ].join("\n\n");
 }
