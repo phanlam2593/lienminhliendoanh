@@ -1182,4 +1182,22 @@ describe("30/10 — trả lời qua khung chat", () => {
     expect((await last(["chu kỳ kinh 40 ngày có sao không"])).content).toMatch(/ngoài\*\* mốc 21–35/);
     expect((await last(["mẹ tôi hay nóng giận"])).content).not.toMatch(/nóng hả/);
   }, T);
+  it("04/11 (vòng 4) — danh mục thuốc: biệt dược, gõ sai, cách dùng có nguồn, không liều", async () => {
+    const p = await last(["Thuốc paradol uống làm sao?"]);
+    expect(p.content).toMatch(/Lomi hiểu là \*\*Panadol\*\*/);
+    expect(p.content).toMatch(/lúc no hay lúc đói đều được/);
+    expect(p.content).toMatch(/không nêu liều/);
+    expect((await last(["Thuốc ambroxol uống sao"])).content).toMatch(/long đờm/);
+    expect((await last(["Thuốc amoxicilin uống làm sao"])).content).toMatch(/Uống hết đợt/);
+    expect((await last(["Thuốc beplex"])).content).toMatch(/vitamin nhóm B/);
+    expect((await last(["ibuprofen uống làm sao"])).content).toMatch(/trong hoặc sau bữa ăn/);
+    expect((await last(["paracetamol uống trước hay sau ăn"])).content).toMatch(/lúc no hay lúc đói đều được/);
+    expect((await last(["omeprazol uống lúc nào"])).content).toMatch(/cùng giờ mỗi ngày/);
+    expect((await last(["cetirizin có buồn ngủ không"])).content).toMatch(/ít gây buồn ngủ/);
+    expect((await last(["augmentin uống mấy viên"])).content).toMatch(/amoxicillin \+ acid clavulanic/);
+    expect((await last(["medrol uống sao"])).content).toMatch(/thuốc kê đơn/);
+    expect((await last(["decolgen uống chung panadol được không"])).content).toMatch(/đều \*\*có paracetamol/);
+    expect((await last(["panadol là thuốc gì"])).content).toMatch(/giảm đau, hạ sốt/);
+    expect((await last(["parasite là gì"])).content).not.toMatch(/💊/);
+  }, T);
 });

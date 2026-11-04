@@ -9,6 +9,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { displayName, findMedTopicId, loadMedTopic, parseMedAsk, renderMed, type MedTopic } from "@/lib/lomiMed";
 import { NUTRIENTS, foodOf, nutrientOf, type Nutrient } from "@/lib/lomiNutrients";
 import { findDrug, type DrugFact } from "@/lib/lomiDrugData";
+import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 /** \b của JS không hiểu chữ có dấu ("tài xế" không có ranh giới sau "ế") — đổi \b thành ranh giới theo chữ cái Unicode. */
 const W = (re: RegExp): RegExp => new RegExp(re.source.replace(/\\b/g, "(?:(?<![\\p{L}\\p{N}])(?=[\\p{L}\\p{N}])|(?<=[\\p{L}\\p{N}])(?![\\p{L}\\p{N}]))"), re.flags.includes("u") ? re.flags : re.flags + "u");
 import { findFolk } from "@/lib/lomiFolk";
@@ -349,7 +350,7 @@ export function doseReply(q: string): string | null {
   const dose = !drink && DOSE.test(low) && W(/\b(uống|cho|dùng|bé|con|thuốc|viên|vitamin)\b/u).test(low);
   if (!others && !dose) return null;
   // thuốc có trong kho (paracetamol…) → lớp thuốc có câu riêng; uống nhầm / lỡ uống → lớp quá liều / uống nhầm lo
-  if (findDrug(low) || W(/\b(nhầm|lỡ uống|lỡ cho|uống lộn|quá liều)\b/u).test(low)) return null;
+  if (findDrug(low) || findIndexedDrug(low) || W(/\b(nhầm|lỡ uống|lỡ cho|uống lộn|quá liều)\b/u).test(low)) return null;
   if (W(/\b(quên|lỡ)\b/u).test(low) && !others) return null; // quên liều — lớp thuốc có câu riêng
   const kid = W(/\b(bé|con|cháu|trẻ|em bé|\d+\s*(?:kg|ký|tháng|tuổi))\b/u).test(low);
   const nut = nutrientOf(low);

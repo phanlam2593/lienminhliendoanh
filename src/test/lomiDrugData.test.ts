@@ -98,7 +98,8 @@ describe("phân biệt NHẬN RA câu hỏi thuốc với CÓ kiến thức về
     const known = drugAsk("paracetamol có tác dụng phụ gì")!;
     expect(known.drugId).toBe("paracetamol");
     expect(known.text).toMatch(/📚 Nguồn: /);
-    for (const q of ["amoxicillin có tác dụng phụ gì", "thuốc omeprazol trị gì", "Colchicine là thuốc gì?"]) {
+    // 04/11: amoxicillin, omeprazol đã vào danh mục thuốc (lib/lomiDrugIndex) → kiểm bằng thuốc chưa có trong danh mục
+    for (const q of ["allopurinol có tác dụng phụ gì", "thuốc levothyroxin trị gì", "Colchicine là thuốc gì?"]) {
       const r = drugAsk(q)!;
       expect(r.drugId, q).toBeUndefined();
       expect(r.text, q).toMatch(/chưa có dữ liệu đã kiểm chứng/);

@@ -7,6 +7,7 @@
 // món định uống — không suy ra bệnh, liều hay loại xét nghiệm khi họ chưa nói.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { findIndexedDrug, renderIndexed } from "@/lib/lomiDrugIndex";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { drugById, renderDrug, sourceLine } from "@/lib/lomiDrugData";
 import { VR, VN } from "@/lib/viMatch";
@@ -100,6 +101,7 @@ const SUBJECTS: Subject[] = [
     main: "info",
     aspects: {
       info: () => renderDrug(PARA, "info"),
+      how: () => { const ix = findIndexedDrug("paracetamol"); return ix ? renderIndexed(ix, "how") : renderDrug(PARA, "info"); },
       // Liều: không có con số nào ở đây — chỉ nói liều phụ thuộc vào đâu và hỏi ai.
       dose: (a) =>
         `Lomi không đưa liều cụ thể${a.personal ? " cho từng người" : ""} được, vì liều paracetamol phụ thuộc **tuổi, cân nặng** (nhất là với trẻ em), bệnh gan và các thuốc khác đang dùng.\n• Làm theo tờ hướng dẫn trên hộp thuốc hoặc hỏi dược sĩ/bác sĩ.\n• Không tự tăng liều, không uống thêm thuốc cảm/thuốc ho có chứa paracetamol cùng lúc.\n\nBạn hỏi cho người lớn hay trẻ em (bao nhiêu tuổi, khoảng bao nhiêu ký)? Có thông tin đó thì dược sĩ tư vấn được ngay.`,
@@ -118,7 +120,9 @@ const SUBJECTS: Subject[] = [
 const ASPECTS: [string, RegExp][] = [
   ["overdose", VN(/\b(quá liều|uống quá nhiều|uống nhầm|uống nhiều quá|uống nhiều|lỡ uống|uống cả vỉ|uống cả hộp|hại gan|tổn thương gan|suy gan)\b/)],
   ["kid", VN(/\b(trẻ|bé|em bé|con mình|trẻ em|\d+ tuổi)\b/)],
-  ["dose", VN(/\b(bao nhiêu viên|mấy viên|liều|bao nhiêu mg|uống bao nhiêu|cách uống|uống mấy lần|mấy tiếng uống)\b/)],
+  // 04/11: cách uống (trước / sau ăn, lúc nào) — chỉ thẻ có khía cạnh "how" mới dùng (paracetamol: trang NHS "How and when to take")
+  ["how", VN(/\b(trước hay sau (khi )?ăn|uống (trước|sau) (khi )?ăn|uống lúc nào|lúc đói|bụng đói|lúc no|(uống|dùng) (sao|thế nào|như thế nào|làm sao|ra sao)|cách uống|cách dùng)\b/)],
+  ["dose", VN(/\b(bao nhiêu viên|mấy viên|liều|bao nhiêu mg|uống bao nhiêu|uống mấy lần|mấy tiếng uống)\b/)],
   ["alcohol", VN(/\b(rượu|bia)\b/)],
   ["why", VN(/\b(để làm gì|tại sao|vì sao|nhằm mục đích)\b/)],
   ["time", VN(/\b(bao lâu|mấy tiếng|khi nào có|bao giờ có|mất bao lâu)\b/)],

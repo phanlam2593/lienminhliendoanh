@@ -5,6 +5,7 @@
 //   • tên thuốc đứng sau "uống" mà câu không có chữ "thuốc" thì lớp hỏi-thuốc không nhận ra.
 // Sửa kèm (cùng gốc "một tiếng bỏ dấu / một tiếng trong từ ghép"): "tình cảm là gì", "cảm xúc là gì" từng bị đáp bằng bài Cảm lạnh;
 // "sếp em là nữ" từng bị hiểu là bị sếp la mắng.
+import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { describe, expect, it } from "vitest";
 import { chat, last } from "./lomiChatHarness";
 import { drugAsk } from "@/lib/lomiDrug";
@@ -69,17 +70,19 @@ describe("hỏi một thuốc dùng để làm gì (không có chữ 'thuốc')"
     for (const m of r.slice(1)) expect(m.src).toMatch(/📚 Nguồn: /);
   }, T);
   it("thuốc chưa có mục → nói thật là chưa có dữ liệu về ĐÚNG thuốc đó, không đọc bài bệnh đang nói", async () => {
-    const r = await chat(["tăng huyết áp nên làm gì", "uống amlodipin để làm gì", "nó có tác dụng phụ gì không"]);
-    expect(r[1].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*amlodipin\*\*/);
+    // 04/11: amlodipin đã vào danh mục thuốc (lib/lomiDrugIndex) → kiểm bằng thuốc chưa có trong danh mục
+    const r = await chat(["tăng huyết áp nên làm gì", "uống allopurinol để làm gì", "nó có tác dụng phụ gì không"]);
+    expect(r[1].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*allopurinol\*\*/);
     expect(r[1].content).not.toMatch(/Tăng huyết áp/);
-    expect(r[2].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*amlodipin\*\*/);
+    expect(r[2].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*allopurinol\*\*/);
   }, T);
   it("nhận theo DÁNG câu: tên ngoại lai sau động từ dùng thuốc; thức uống thường ngày / đồ không phải thuốc thì không", () => {
     for (const [q, name] of [["uống omeprazol để làm gì", "omeprazol"], ["tiêm insulin để làm gì", "insulin"], ["a uống amlodipin để làm gì vậy e", "amlodipin"], ["berberin uống để làm gì", "berberin"], ["omeprazol trị gì", "omeprazol"], ["uống collagen có tác dụng gì", "collagen"]] as const) {
       const d = drugAsk(q)!;
       expect(d?.kind, q).toBe("what");
       expect(d.name, q).toBe(name);
-      expect(d.text, q).toMatch(/chưa có dữ liệu đã kiểm chứng/);
+      // (04/11: thuốc đã có trong danh mục tên thuốc thì nói rõ thuốc gì, nhóm nào; chưa có thì vẫn nói thật là chưa có dữ liệu)
+      expect(d.text, q).toMatch(findIndexedDrug(q) ? /thuộc nhóm/ : /chưa có dữ liệu đã kiểm chứng/);
     }
     for (const q of ["uống nước để làm gì", "uống bia để làm gì", "uống trà gừng để làm gì", "ăn cơm để làm gì", "wifi dùng để làm gì", "zalo để làm gì"]) expect(drugAsk(q), q).toBeNull();
   });
