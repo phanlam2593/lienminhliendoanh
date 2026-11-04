@@ -80,6 +80,9 @@ export const TRUSTED = [
   "fao.org",
   // 04/11: MHRA (cơ quan quản lý thuốc Anh, trên gov.uk) — giới hạn 5 ngày xịt thông mũi; PCDS (Hội Da liễu chăm sóc ban đầu Anh) — hướng dẫn bôi thuốc trị ghẻ (lib/lomiDrugIndex).
   "gov.uk", "pcds.org.uk",
+  // 04/11: Kir duyệt dùng tra cứu dược liệu / dược chất của Nhà thuốc FPT Long Châu làm nguồn THAM KHẢO cho phần y học cổ truyền
+  //   (lib/lomiFolk) — chỉ diễn đạt lại có chọn lọc, luôn ghi rõ là theo y học cổ truyền / nghiên cứu chưa đủ bằng chứng trên người.
+  "nhathuoclongchau.com.vn",
 ];
 /** Sau chừng này ngày kể từ `verifiedAt`, lời đáp kèm ghi chú nên kiểm tra lại. */
 export const REVIEW_AFTER_DAYS = 365;

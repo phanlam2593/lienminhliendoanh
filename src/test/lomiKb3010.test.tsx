@@ -1343,3 +1343,30 @@ describe("04/11 — danh mục thuốc: nguồn hợp lệ", () => {
     expect(MEDS.length).toBeGreaterThanOrEqual(85);
   });
 });
+
+// ── 04/11 vòng 12: dược liệu tham khảo tra cứu Long Châu (y học cổ truyền + nghiên cứu, viết lại có chọn lọc) ──
+describe("04/11 vòng 12 — dược liệu (Long Châu)", () => {
+  const H2: [string, RegExp][] = [
+    ["cà gai leo có tác dụng gì", /Cà gai leo[\s\S]*giải rượu/],
+    ["ca gai leo co tac dung gi", /Cà gai leo/],
+    ["bà bầu uống diệp hạ châu được không", /Diệp hạ châu[\s\S]*bà bầu[\s\S]*có thai không dùng/],
+    ["mang thai uống tam thất được không", /Tam thất[\s\S]*có thai không dùng/],
+    ["bầu uống ích mẫu được không", /Ích mẫu[\s\S]*Không dùng khi mang thai/],
+    ["giảo cổ lam có hạ đường huyết không", /Giảo cổ lam[\s\S]*hạ đường huyết quá mức/],
+    ["dây thìa canh chữa tiểu đường được không", /Dây thìa canh[\s\S]*không thay thuốc/],
+    ["xạ đen chữa ung thư được không", /Xạ đen[\s\S]*chưa có bằng chứng chữa được ung thư/],
+    ["kim tien thao tri soi than duoc khong", /Kim tiền thảo[\s\S]*đi khám/],
+    ["nhân trần uống được không", /Nhân trần[\s\S]*3 cây khác nhau/],
+    ["kỷ tử có tác dụng gì", /kỷ tử[\s\S]*sáng mắt/i],
+    ["táo tàu có tác dụng gì", /Đại táo/],
+    ["diếp cá chữa trĩ được không", /Diếp cá[\s\S]*trĩ/],
+    ["trinh nữ hoàng cung chữa u xơ tử cung được không", /Trinh nữ hoàng cung[\s\S]*chưa đủ bằng chứng/],
+  ];
+  for (const [q, re] of H2) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("vẫn là thẻ bệnh khi người dùng BỊ hạ đường huyết", async () => {
+    expect((await last(["tôi bị hạ đường huyết"])).content).toMatch(/Hạ đường huyết/);
+  });
+  it("nguồn tham khảo Long Châu nằm trong danh sách tin cậy", () => {
+    expect(TRUSTED).toContain("nhathuoclongchau.com.vn");
+  });
+});

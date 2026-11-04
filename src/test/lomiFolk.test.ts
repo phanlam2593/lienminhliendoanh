@@ -49,8 +49,8 @@ describe("lomiFolk — nhận diện", () => {
     expect(findFolk("kem đánh răng nào tốt")).toBeNull();
   });
   it("vị chưa có nguồn → nói thật", () => {
-    expect(findUnverifiedHerb("kỷ tử có tác dụng gì")).toBe("kỷ tử");
-    const r = folkReply("táo tàu có tác dụng gì", null, null)!;
+    expect(findUnverifiedHerb("đinh lăng có tác dụng gì")).toBe("đinh lăng");
+    const r = folkReply("ba kích có tác dụng gì", null, null)!;
     expect(r.text).toMatch(/chưa tìm được nguồn y khoa đáng tin/);
   });
   it("hỏi món với bệnh mà vị không liên quan → nhường lớp kiêng cữ", () => {
@@ -143,6 +143,7 @@ describe("lomiFolk — khớp đúng dấu (24/10)", () => {
     expect(findFolk("an toi song co tot khong")?.id).toBe("toi");
     expect(findFolk("la tia to co tac dung gi")?.id).toBe("tia-to");
     expect(findUnverifiedHerb("uống nước sả được không")).toBe("sả");
-    expect(findUnverifiedHerb("ky tu co tac dung gi")).toBeTruthy();
+    expect(findUnverifiedHerb("dinh lang co tac dung gi")).toBeTruthy();
+    expect(findFolk("ky tu co tac dung gi")?.id).toBe("ky-tu");
   });
 });

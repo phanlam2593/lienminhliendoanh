@@ -2783,7 +2783,9 @@ export function AiChat({
           const fkMt = fkId ? await loadMedTopic(fkId) : null;
           const fkPrev = lastA?.med?.id ? await loadMedTopic(lastA.med.id) : null;
           const fk0 = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
-          const fk = fk0 && (fk0.verdict === "myth" || fk0.verdict === "danger" || !bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) ? fk0 : null;
+          // 04/11: "giảo cổ lam có hạ đường huyết không" — hỏi TÁC DỤNG của một vị (hạ đường / hạ áp / hạ mỡ máu) không phải đang bị hạ đường huyết.
+          const fkEffect = !!fk0?.folk && VN(/\b(có|giúp|làm) (hạ|tăng|giảm) (đường huyết|đường máu|đường|huyết áp|áp|mỡ máu|cholesterol)\b/).test(q);
+          const fk = fk0 && (fk0.verdict === "myth" || fk0.verdict === "danger" || fkEffect || !bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) ? fk0 : null;
           if (fk) {
             topicHit("health");
             return localReply(q, {

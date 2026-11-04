@@ -386,8 +386,8 @@ describe("20/10 — mẹo dân gian · thuốc nam · thuốc bắc có nguồn 
     expect(m.content).toMatch(/NGUY HIỂM/);
     expect(m.content).toMatch(/Nấu chín KHÔNG làm mất độc/);
   }, T);
-  it("60. 'kỷ tử có tác dụng gì' → nói thật chưa có nguồn đáng tin, kèm lời dặn an toàn", async () => {
-    const m = await last(["kỷ tử có tác dụng gì"]);
+  it("60. 'đinh lăng có tác dụng gì' → nói thật chưa có nguồn đáng tin, kèm lời dặn an toàn", async () => {
+    const m = await last(["đinh lăng có tác dụng gì"]);
     expect(m.content).toMatch(/chưa tìm được nguồn y khoa đáng tin/);
     expect(m.content).toMatch(/Tự nhiên/);
   }, T);
