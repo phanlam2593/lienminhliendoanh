@@ -1283,6 +1283,17 @@ describe("30/10 — trả lời qua khung chat", () => {
     ];
     for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
   }, 120000);
+  it("04/11 (vòng 11) — thêm thuốc thần kinh, động kinh, tim, tiết niệu, da theo NHS", async () => {
+    const C: [string, RegExp][] = [
+      ["neurontin uống sao", /900–3\.600 mg/], ["fybogel uống sao", /150 ml/], ["nitroglycerin xịt sao", /gọi 115/], ["tetralysal uống bao lâu", /8 tuần/],
+      ["roaccutane uống sao", /ngừa thai/], ["carbimazole uống mấy viên", /20–60 mg/], ["isoptin uống sao", /bưởi chùm/], ["dilatrend uống sao", /suy tim/],
+      ["lanoxin uống lúc nào", /sau bữa sáng/], ["aprovel uống sao", /ngày 1 lần/], ["efexor uống sao", /cùng bữa ăn/], ["seroquel uống sao", /tăng dần/],
+      ["ativan uống được bao lâu", /4 tuần/], ["imovane uống lúc nào", /lúc đi ngủ/], ["aricept uống lúc nào", /trước khi ngủ/], ["lamictal uống sao", /ban đỏ/],
+      ["topamax uống sao", /ngừa thai/], ["depakine uống sao", /nuốt nguyên/], ["vesicare uống sao", /5 mg ngày 1 lần/], ["ditropan uống mấy viên", /5 mg × 2–3 lần/],
+      ["zyprexa uống sao", /5–20 mg/], ["keppra uống sao", /ngày 1–2 lần/], ["tegretol uống sao", /bưởi chùm/], ["abilify uống sao", /10–15 mg/], ["seroxat uống lúc nào", /buổi sáng/], ["tantum verde xịt mấy nhát", /4–8 nhát/], ["risperdal uống sao", /4–6 mg/],
+    ];
+    for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+  }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
 import { MEDS } from "@/lib/lomiDrugIndex";
