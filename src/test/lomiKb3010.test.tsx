@@ -1291,8 +1291,11 @@ describe("30/10 — trả lời qua khung chat", () => {
       ["ativan uống được bao lâu", /4 tuần/], ["imovane uống lúc nào", /lúc đi ngủ/], ["aricept uống lúc nào", /trước khi ngủ/], ["lamictal uống sao", /ban đỏ/],
       ["topamax uống sao", /ngừa thai/], ["depakine uống sao", /nuốt nguyên/], ["vesicare uống sao", /5 mg ngày 1 lần/], ["ditropan uống mấy viên", /5 mg × 2–3 lần/],
       ["zyprexa uống sao", /5–20 mg/], ["keppra uống sao", /ngày 1–2 lần/], ["tegretol uống sao", /bưởi chùm/], ["abilify uống sao", /10–15 mg/], ["seroxat uống lúc nào", /buổi sáng/], ["tantum verde xịt mấy nhát", /4–8 nhát/], ["risperdal uống sao", /4–6 mg/],
+      ["xenical uống sao", /cùng bữa ăn chính/], ["champix uống sao", /ngày bỏ thuốc/], ["cialis uống trước bao lâu", /30 phút/], ["aldactone uống lúc nào", /kali/],
+      ["ritalin uống sao", /nuốt nguyên/i], ["valoid uống trước khi đi bao lâu", /1–2 giờ/], ["co dydramol uống mấy viên", /không quá 8 viên/], ["pentasa uống sao", /nuốt nguyên/],
     ];
     for (const [q, re] of C) expect((await last([q])).content, q).toMatch(re);
+    expect((await last(["miếng dán nicotine dán sao"])).content).toMatch(/\*\*Nicotine thay thế/);
   }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
