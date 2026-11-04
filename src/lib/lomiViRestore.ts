@@ -75,7 +75,7 @@ export function setViRestoreOff(x: boolean) {
  * tiếng Việt có thật ("di" trong "di truyền", "la" trong "la mắng", "a" viết tắt "anh") thì giữ nguyên, chỉ đoán dấu cho chữ không
  * dấu mà bản thân nó không phải chữ nào ("dau" → "đau", "nhe" → "nhé").
  */
-const KEEP_BARE = new Set(["cua", "cam", "phan"]);
+const KEEP_BARE = new Set(["cua", "cam", "phan", "nho"]); // 04/11: "hạt nho", "nho khô" — câu đã gõ dấu thì "nho" là quả nho, không đoán thành "nhỏ"
 // 01/11 (vòng 24): chữ viết tắt hay gặp — không đoán dấu chúng, nhưng dùng NGHĨA của chúng làm ngữ cảnh cho chữ bên cạnh
 //   ("sao toi k nhan dc thong bao": "k … dc" = "không … được" → "nhận được thông báo", không phải "nhắn"). Chữ in ra vẫn giữ như người dùng gõ.
 const TEEN_CTX: Record<string, string> = {

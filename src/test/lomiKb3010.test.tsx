@@ -1312,6 +1312,13 @@ describe("30/10 — trả lời qua khung chat", () => {
       ["selsun gội sao", /10 phút/], ["minoxidil bôi bao lâu", /4 tháng/], ["distocide uống sao", /3 liều/], ["famotidin uống mấy viên", /2 viên/],
     ];
     for (const [q, re] of E) expect((await last([q])).content, q).toMatch(re);
+    // 04/11 (Kir gửi danh sách dược liệu Long Châu) — thảo dược theo NCCIH
+    const H: [string, RegExp][] = [
+      ["sâm ấn độ có tác dụng gì", /Ayurveda/], ["tinh dầu hoa anh thảo có tốt không", /không giúp được chàm/], ["uống cúc tím có hết cảm không", /giảm nhẹ khả năng bị cảm/],
+      ["kava có hại không", /tổn thương gan/], ["yohimbe có tốt cho đàn ông không", /NGUY HIỂM/], ["việt quất đen có sáng mắt không", /nhìn đêm không thấy lợi ích/],
+      ["hạt nho có tốt không", /Chiết xuất hạt nho/], ["cỏ ban âu có tác dụng gì", /Tương tác nguy hiểm/], ["quả cơm cháy có độc không", /cyanide/], ["saw palmetto có tốt cho tuyến tiền liệt không", /gần như không giúp/],
+    ];
+    for (const [q, re] of H) expect((await last([q])).content, q).toMatch(re);
   }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
