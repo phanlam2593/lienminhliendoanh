@@ -1,0 +1,67 @@
+{
+ "id": "lc-benh-vong-mac-tieu-duong",
+ "kind": "condition",
+ "display": "Bệnh võng mạc tiểu đường",
+ "names": [
+  "Bệnh võng mạc tiểu đường",
+  "võng mạc tiểu đường"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh võng mạc tiểu đường** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt, nội tiết - chuyển hóa, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, nhìn mờ, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): có lượng đường trong máu cao liên tục, tăng huyết áp, có cholesterol cao, đang mang thai, đái tháo đường típ 1, đái tháo đường thai kỳ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tập thể dục, khám mắt, tái khám đúng hẹn, xét nghiệm, ngưng hút thuốc lá, trái cây và rau.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh võng mạc tiểu đường – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-vong-mac-tieu-duong.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

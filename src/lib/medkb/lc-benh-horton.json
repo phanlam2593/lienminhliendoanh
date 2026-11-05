@@ -1,0 +1,73 @@
+{
+ "id": "lc-benh-horton",
+ "kind": "condition",
+ "display": "Bệnh Horton",
+ "names": [
+  "Bệnh Horton",
+  "Horton"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh Horton** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: thiếu máu, cứng khớp, đau họng, nhìn đôi, ho khan, đau đầu, yếu cơ, ngứa, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thủy đậu, vi khuẩn Chlamydia pneumoniae, virus varicella-zoster, virus herpes simplex, virus Epstein–Barr, vi khuẩn Mycoplasma pneumoniae.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tuổi cao, giới, chủng tộc, hút thuốc lá.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngưng hút thuốc lá, kiểm tra mật độ xương định kỳ, bổ sung vitamin D và canxi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh Horton – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-horton.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

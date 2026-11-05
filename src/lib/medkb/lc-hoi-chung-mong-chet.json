@@ -1,0 +1,59 @@
+{
+ "id": "lc-hoi-chung-mong-chet",
+ "kind": "condition",
+ "display": "Hội chứng mông chết",
+ "names": [
+  "Hội chứng mông chết"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng mông chết** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, xem theo bộ phận cơ thể.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: yếu cơ, đau cổ, sưng, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tư thế chuẩn bị, thực hiện, chú ý.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng mông chết – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-mong-chet.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

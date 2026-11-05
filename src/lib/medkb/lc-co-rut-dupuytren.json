@@ -1,0 +1,66 @@
+{
+ "id": "lc-co-rut-dupuytren",
+ "kind": "condition",
+ "display": "Co rút Dupuytren",
+ "names": [
+  "Co rút Dupuytren"
+ ],
+ "about": [
+  {
+   "text": "**Co rút Dupuytren** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: co rút, ngón tay.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người có tiền căn động kinh, người bệnh đái tháo đường, người nhiễm HIV, chủng tộc, tuổi tác, giới tính.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không hút thuốc lá.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Co rút Dupuytren – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/co-rut-dupuytren.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

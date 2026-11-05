@@ -1,0 +1,66 @@
+{
+ "id": "lc-u-bi-buong-trung",
+ "kind": "women",
+ "display": "U bì buồng trứng",
+ "names": [
+  "U bì buồng trứng"
+ ],
+ "about": [
+  {
+   "text": "**U bì buồng trứng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, bệnh nữ giới.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau khi quan hệ, chảy máu âm đạo, đau bụng dưới, chướng bụng, xuất huyết, đau ngực, đau bụng, buồn nôn, tăng cân, khối u.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tinh trùng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): u tế bào mầm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "U bì buồng trứng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/u-bi-buong-trung.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

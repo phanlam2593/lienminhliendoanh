@@ -1,0 +1,66 @@
+{
+ "id": "lc-sup-mi",
+ "kind": "condition",
+ "display": "Sụp mi",
+ "names": [
+  "Sụp mi"
+ ],
+ "about": [
+  {
+   "text": "**Sụp mi** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: nhìn đôi, mệt mỏi, uể oải, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhược cơ, sụp mí bẩm sinh, bị yếu cơ nâng mi, quá trình lão hóa của mắt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): dây thần kinh liệt cơ bị tổn thương, bị nhược cơ, quá trình lão hóa tự nhiên, bị đột quỵ, có khối u ở não, đau mắt hột.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Sụp mi – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/sup-mi-403.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,60 @@
+{
+ "id": "lc-chung-tao-dom-do-virus",
+ "kind": "condition",
+ "display": "Chứng tạo đờm do virus",
+ "names": [
+  "Chứng tạo đờm do virus"
+ ],
+ "about": [
+  {
+   "text": "**Chứng tạo đờm do virus** — Nhà thuốc Long Châu xếp vào nhóm bệnh: hô hấp, tai - mũi - họng, ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mũi, thở khò khè, thở nhanh, sốt nhẹ, ho khan, sốt cao, hắt hơi, mệt mỏi, khó thở, chán ăn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người cao tuổi, hen suyễn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Chứng tạo đờm do virus – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/chung-tao-dom-do-virus-110.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

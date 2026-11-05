@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-giac-mac-do-acanthamoeba",
+ "kind": "infection",
+ "display": "Viêm giác mạc do Acanthamoeba",
+ "names": [
+  "Viêm giác mạc do Acanthamoeba"
+ ],
+ "about": [
+  {
+   "text": "**Viêm giác mạc do Acanthamoeba** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt, truyền nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mắt, nhìn mờ, mờ mắt, đỏ mắt, sưng, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: kính áp tròng, nguồn nước ô nhiễm, tổn thương mắt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người sử dụng kính áp tròng, vận động viên bơi lội, tiền căn tổn thương mắt, cơ địa suy giảm miễn dịch, đeo kính áp tròng lâu, mắt tiếp xúc với nước bị ô nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tránh tiếp xúc trực tiếp mắt với nguồn nước, ngừng sử dụng kính áp tròng, che chắn cho mắt khi ra khỏi nhà, tránh để nước tiếp xúc trực tiếp vào mắt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm giác mạc do Acanthamoeba – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-giac-mac-do-acanthamoeba.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

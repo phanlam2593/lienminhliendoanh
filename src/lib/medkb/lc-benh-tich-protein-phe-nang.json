@@ -1,0 +1,67 @@
+{
+ "id": "lc-benh-tich-protein-phe-nang",
+ "kind": "condition",
+ "display": "Bệnh tích protein phế nang",
+ "names": [
+  "Bệnh tích protein phế nang",
+  "tích protein phế nang"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh tích protein phế nang** — Nhà thuốc Long Châu xếp vào nhóm bệnh: hô hấp, ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau ngực, mệt mỏi, khó thở, nám, sốt, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: miễn dịch, hóa chất, di truyền, bệnh truyền nhiễm, rối loạn chức năng di truyền.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): hút thuốc.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh tích protein phế nang – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-tich-protein-phe-nang.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

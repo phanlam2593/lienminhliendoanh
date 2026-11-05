@@ -1,0 +1,72 @@
+{
+ "id": "lc-liet-day-than-kinh-hong-khoeo-ngoai",
+ "kind": "condition",
+ "display": "Liệt dây thần kinh hông khoeo ngoài",
+ "names": [
+  "Liệt dây thần kinh hông khoeo ngoài"
+ ],
+ "about": [
+  {
+   "text": "**Liệt dây thần kinh hông khoeo ngoài** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: châm chích, tê bì, bàn chân rủ, tê bì, không duỗi được ngón chân, teo cơ chân, rủ bàn chân.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: trật khớp, bệnh thần kinh đái tháo đường, chèn ép dây thần kinh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): vận động viên thể thao như bóng đá, thể trạng gầy, đái tháo đường, nghiện rượu, tiền sử bệnh di truyền như Charcot-Marie-Tooth.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: sử dụng nẹp cổ bàn chân, không bắt chéo chân, tránh gập gối quá lâu khi ngồi hoặc nằm.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Liệt dây thần kinh hông khoeo ngoài – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/liet-day-than-kinh-hong-khoeo-ngoai.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

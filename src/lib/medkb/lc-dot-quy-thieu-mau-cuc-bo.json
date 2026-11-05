@@ -1,0 +1,66 @@
+{
+ "id": "lc-dot-quy-thieu-mau-cuc-bo",
+ "kind": "condition",
+ "display": "Đột quỵ thiếu máu cục bộ",
+ "names": [
+  "Đột quỵ thiếu máu cục bộ"
+ ],
+ "about": [
+  {
+   "text": "**Đột quỵ thiếu máu cục bộ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tim mạch, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, méo miệng, thiếu máu, buồn nôn, hoa mắt, đau đầu, ù tai, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: xơ vữa động mạch, rung nhĩ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): bệnh tăng huyết áp, bệnh đái tháo đường, bệnh rối loạn lipid máu, bệnh rung nhĩ, bệnh thiếu máu hồng cầu hình liềm, bệnh rối loạn đông máu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Đột quỵ thiếu máu cục bộ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/dot-quy-thieu-mau-cuc-bo.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

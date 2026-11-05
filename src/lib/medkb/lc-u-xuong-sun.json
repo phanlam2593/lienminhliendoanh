@@ -1,0 +1,66 @@
+{
+ "id": "lc-u-xuong-sun",
+ "kind": "condition",
+ "display": "U xương sụn",
+ "names": [
+  "U xương sụn"
+ ],
+ "about": [
+  {
+   "text": "**U xương sụn** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: ngứa ran, khối u, sưng, nám, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): trẻ em và thanh thiếu niên, tiền sử chấn thương, yếu tố môi trường, tiền sử gia đình, chấn thương.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: theo dõi y tế, vận động và tập thể dục, quản lý cơn đau, hỗ trợ tâm lý và xã hội, tăng cường lượng protein ăn vào, cung cấp canxi và vitamin D.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "U xương sụn – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/u-xuong-sun.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

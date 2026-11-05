@@ -1,0 +1,72 @@
+{
+ "id": "lc-u-mang-nao",
+ "kind": "cancer",
+ "display": "U màng não",
+ "names": [
+  "U màng não"
+ ],
+ "about": [
+  {
+   "text": "**U màng não** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, thần kinh - tinh thần, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, chóng mặt, nhìn đôi, buồn nôn, co giật, đau tai, đau đầu, yếu cơ, khối u, mờ mắt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: đột biến gen, U xơ thần kinh, phơi nhiễm bức xạ, U xơ thần kinh loại 2.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người trưởng thành, giới tính, chủng tộc, phơi nhiễm bức xạ, nội tiết tố nữ, U xơ thần kinh loại 2.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: nghỉ ngơi đầy đủ, quản lý căng thẳng, duy trì cuộc sống lành mạnh, tái khám đúng hẹn, chất béo lành mạnh, protein chất lượng cao.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "U màng não – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/u-mang-nao.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

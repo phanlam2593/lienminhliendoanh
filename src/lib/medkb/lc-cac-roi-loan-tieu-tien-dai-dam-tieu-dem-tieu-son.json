@@ -1,0 +1,67 @@
+{
+ "id": "lc-cac-roi-loan-tieu-tien-dai-dam-tieu-dem-tieu-son",
+ "kind": "condition",
+ "display": "Các rối loạn tiểu tiện (đái dầm, tiểu đêm, tiểu són)",
+ "names": [
+  "Các rối loạn tiểu tiện (đái dầm, tiểu đêm, tiểu són)",
+  "cac roi loan tieu tien dai dam tieu dem tieu son"
+ ],
+ "about": [
+  {
+   "text": "**Các rối loạn tiểu tiện (đái dầm, tiểu đêm, tiểu són)** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu nhiều, tiểu rắt, hắt hơi, khối u, sưng, ngất.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: do bệnh lý, do chức năng, tiểu khó, sỏi tiết niệu, suy tim.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ đang mang thai.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Các rối loạn tiểu tiện (đái dầm, tiểu đêm, tiểu són) – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/cac-roi-loan-tieu-tien-dai-dam-tieu-dem-tieu-son-350.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

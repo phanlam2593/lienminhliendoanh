@@ -1,0 +1,66 @@
+{
+ "id": "lc-hoi-chung-rung-giat-co-lanh-tinh",
+ "kind": "condition",
+ "display": "Hội chứng rung giật cơ lành tính",
+ "names": [
+  "Hội chứng rung giật cơ lành tính"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng rung giật cơ lành tính** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chuột rút, co giật, yếu cơ, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: dị ứng, nortriptyline, trầm cảm, thuốc chẹn beta, clorpheniramin, dimenhydrinate, diphenhydramine, methylphenidate.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): căng thẳng , lo lắng, mệt mỏi, thiếu ngủ, trầm cảm, sử dụng caffeine, rượu, hút thuốc lá, trẻ em.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng rung giật cơ lành tính – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-rung-giat-co-lanh-tinh.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

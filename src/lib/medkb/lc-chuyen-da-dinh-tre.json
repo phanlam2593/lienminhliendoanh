@@ -1,0 +1,72 @@
+{
+ "id": "lc-chuyen-da-dinh-tre",
+ "kind": "women",
+ "display": "Chuyển dạ đình trệ",
+ "names": [
+  "Chuyển dạ đình trệ"
+ ],
+ "about": [
+  {
+   "text": "**Chuyển dạ đình trệ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, thiếu máu, chảy máu, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: do mẹ, do thai nhi, em bé nặng cân, khung chậu hẹp, u xơ cổ tử cung, u nang buồng trứng, khung chậu hẹp , biến dạng, hẹp cổ tử cung.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): mẹ suy dinh dưỡng, đa thai, di truyền, mẹ mang thai lần đầu, mẹ hút thuốc lá, mẹ lớn tuổi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bỏ rượu bia, thuốc lá, quản lý cân nặng, bổ sung đầy đủ chất dinh dưỡng cần thiết, nghỉ ngơi, thư giãn, hạn chế cà phê và rượu, bỏ hút thuốc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Chuyển dạ đình trệ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/chuyen-da-dinh-tre.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

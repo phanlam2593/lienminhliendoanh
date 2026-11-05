@@ -1,0 +1,66 @@
+{
+ "id": "lc-man-kinh-nu",
+ "kind": "women",
+ "display": "Mãn kinh nữ",
+ "names": [
+  "Mãn kinh nữ"
+ ],
+ "about": [
+  {
+   "text": "**Mãn kinh nữ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, bệnh nữ giới.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, tiểu nhiều, đổ mồ hôi, chóng mặt, tăng cân, trầm cảm, đau rát, mất ngủ, mệt mỏi, cáu gắt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: phẫu thuật cắt bỏ tử cung, hoá trị và xạ trị, suy buồng trứng sớm, chấn thương vùng chậu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ đến độ tuổi mãn kinh, người phẫu thuật cắt bỏ tử cung, hóa trị , xạ trị do ung thư, suy buồng trứng sớm, do yếu tố di truyền, người hút thuốc lá.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Mãn kinh nữ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/man-kinh-nu-485.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

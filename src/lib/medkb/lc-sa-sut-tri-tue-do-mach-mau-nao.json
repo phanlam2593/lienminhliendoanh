@@ -1,0 +1,66 @@
+{
+ "id": "lc-sa-sut-tri-tue-do-mach-mau-nao",
+ "kind": "condition",
+ "display": "Sa sút trí tuệ do mạch máu não",
+ "names": [
+  "Sa sút trí tuệ do mạch máu não"
+ ],
+ "about": [
+  {
+   "text": "**Sa sút trí tuệ do mạch máu não** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: suy giảm trí nhớ, loạn thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhồi máu não, đái tháo đường, bệnh động mạch lớn, xơ vữa mạch máu, bệnh động mạch nhỏ, yếu tố nguy cơ, hội chứng amyloid não.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): huyết áp cao, cholesterol cao, tiểu đường, béo phì, hút thuốc, bệnh tim.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Sa sút trí tuệ do mạch máu não – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/sa-sut-tri-tue-do-mach-mau-nao-33.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,72 @@
+{
+ "id": "lc-xo-gan-do-ruou",
+ "kind": "condition",
+ "display": "Xơ gan do rượu",
+ "names": [
+  "Xơ gan do rượu"
+ ],
+ "about": [
+  {
+   "text": "**Xơ gan do rượu** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tiêu hóa, nội tiết - chuyển hóa, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chướng bụng, xuất huyết, nôn ra máu, tiêu chảy, phân đen, vàng mắt, đau bụng, buồn nôn, tăng cân, chán ăn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: lạm dụng rượu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): thiếu enzyme phân hủy rượu, viêm gan siêu vi C.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ tinh thần lạc quan, yêu đời, bổ sung protein ngăn ngừa bệnh não gan.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Xơ gan do rượu – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/xo-gan-do-ruou.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-ung-thu-am-ho",
+ "kind": "cancer",
+ "display": "Ung thư âm hộ",
+ "names": [
+  "Ung thư âm hộ"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư âm hộ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, bệnh nữ giới, sinh dục.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, ngứa, loét, mụn, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): nhiễm Human papillomavirus, nghiện thuốc lá nặng, lichen xơ hoá.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bệnh nhân cần lạc quan, quan hệ tình dục an toàn, tiêm vắc xin ngừa HPV, gardasil 9, gardasil.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư âm hộ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-am-ho-377.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

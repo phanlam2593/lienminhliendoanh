@@ -1,0 +1,66 @@
+{
+ "id": "lc-hoi-chung-than-hu-bam-sinh",
+ "kind": "condition",
+ "display": "Hội chứng thận hư bẩm sinh",
+ "names": [
+  "Hội chứng thận hư bẩm sinh"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng thận hư bẩm sinh** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đỏ mắt, phù, nhiễm trùng, cân nặng thấp lúc sinh, phù, chậm phát triển, nhiễm trùng cơ hội, huyết khối tắc mạch, nồng độ Thyroxin.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: lupus ban đỏ hệ thống, HIV, di truyền, không di truyền, truyền nhiễm.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): quan hệ cận huyết.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng thận hư bẩm sinh – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-than-hu-bam-sinh.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

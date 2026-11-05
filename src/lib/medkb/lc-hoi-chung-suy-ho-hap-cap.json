@@ -1,0 +1,60 @@
+{
+ "id": "lc-hoi-chung-suy-ho-hap-cap",
+ "kind": "condition",
+ "display": "Hội chứng suy hô hấp cấp",
+ "names": [
+  "Hội chứng suy hô hấp cấp"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng suy hô hấp cấp** — Nhà thuốc Long Châu xếp vào nhóm bệnh: hô hấp, ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chóng mặt, thở nhanh, đau ngực, trầm cảm, khó thở, lú lẫn, yếu cơ, lo âu, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm trùng huyết, viêm phổi hít, truyền máu, viêm tụy, tổn thương do hít phải, quá liều thuốc, đuối nước hoặc gần chết đuối.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng suy hô hấp cấp – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-suy-ho-hap-cap.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

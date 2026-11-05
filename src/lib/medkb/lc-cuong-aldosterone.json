@@ -1,0 +1,66 @@
+{
+ "id": "lc-cuong-aldosterone",
+ "kind": "condition",
+ "display": "Cường Aldosterone",
+ "names": [
+  "Cường Aldosterone"
+ ],
+ "about": [
+  {
+   "text": "**Cường Aldosterone** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đánh trống ngực, tiểu nhiều, chuột rút, chóng mặt, khát nước, đau ngực, cứng gáy, mệt mỏi, đau đầu, yếu cơ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: cường aldosteron nguyên phát, cường aldosteron thứ phát, hội chứng Conn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tăng huyết áp và nồng độ kali thấp, có một khối u trên tuyến thượng thận, tăng huyết áp khi còn trẻ, huyết áp cao.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Cường Aldosterone – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/cuong-aldosterone-291.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

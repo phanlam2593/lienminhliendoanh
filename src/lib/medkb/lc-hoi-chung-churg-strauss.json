@@ -1,0 +1,60 @@
+{
+ "id": "lc-hoi-chung-churg-strauss",
+ "kind": "condition",
+ "display": "Hội chứng Churg-Strauss",
+ "names": [
+  "Hội chứng Churg-Strauss"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng Churg-Strauss** — Nhà thuốc Long Châu xếp vào nhóm bệnh: dị ứng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, đau bụng, nóng rát, phát ban, ngứa ran, đau khớp, sụt cân, đau mắt, mệt mỏi, khó thở.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): viêm mũi dị ứng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng Churg-Strauss – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-churg-strauss.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

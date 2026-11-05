@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-tuyen-tien-liet-cap-tinh",
+ "kind": "women",
+ "display": "Viêm tuyến tiền liệt cấp tính",
+ "names": [
+  "Viêm tuyến tiền liệt cấp tính"
+ ],
+ "about": [
+  {
+   "text": "**Viêm tuyến tiền liệt cấp tính** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: có mùi hôi, ớn lạnh, bí tiểu, sưng, nám, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: vi khuẩn, nhiễm khuẩn chlamydia.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): uống không đủ nước, đặt ống thông tiểu, bị nhiễm trùng tiểu, có tiền sử viêm tuyến tiền liệt, bị viêm tinh hoàn, nhiễm HIV/AIDS.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tắm nước ấm hoặc tắm, ngồi trên đệm, tránh căng thẳng, châm cứu, thảo dược rửa, chườm,…, tránh uống rượu, caffeine,….",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm tuyến tiền liệt cấp tính – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-tuyen-tien-liet-cap-tinh.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

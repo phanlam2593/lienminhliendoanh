@@ -1,0 +1,66 @@
+{
+ "id": "lc-hoi-chung-bartter",
+ "kind": "condition",
+ "display": "Hội chứng Bartter",
+ "names": [
+  "Hội chứng Bartter"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng Bartter** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa, thận - tiết niệu, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu nhiều, chuột rút, tiêu chảy, mất nước, tiểu rắt, khó tiêu, đau lưng, buồn nôn, sốt cao, mệt mỏi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): thai nhi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giảm stress và tăng cường sức khỏe tâm lý, bổ sung muối, bổ sung kali, bổ sung magie, giới hạn tiêu thụ nước, chia nhỏ khẩu phần ăn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng Bartter – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-bartter.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-dai-trang-thieu-mau-cuc-bo",
+ "kind": "condition",
+ "display": "Viêm đại tràng thiếu máu cục bộ",
+ "names": [
+  "Viêm đại tràng thiếu máu cục bộ"
+ ],
+ "about": [
+  {
+   "text": "**Viêm đại tràng thiếu máu cục bộ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tiêu hóa, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: thiếu máu, tiêu chảy, đau bụng, buồn nôn, sốt nhẹ, loét, nôn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: xơ vữa động mạch, táo bón mạn tính, suy tim, tắc ruột, nội độc tố, viêm mạch, phẫu thuật phình động mạch chủ, chấn thương bụng kín.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tuổi, rối loạn đông máu, nhồi máu cơ tim, chạy thận nhân tạo, tiền sử phẫu thuật động mạch chủ, suy tim.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngưng hút thuốc lá, không hút thuốc lá.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm đại tràng thiếu máu cục bộ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-dai-trang-thieu-mau-cuc-bo.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

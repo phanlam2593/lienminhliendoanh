@@ -1,0 +1,72 @@
+{
+ "id": "lc-chan-thuong-thanh-quan",
+ "kind": "condition",
+ "display": "Chấn thương thanh quản",
+ "names": [
+  "Chấn thương thanh quản"
+ ],
+ "about": [
+  {
+   "text": "**Chấn thương thanh quản** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tai - mũi - họng, cổ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: khàn tiếng, ho ra máu, chảy máu, đau họng, ho khan, khó thở, sưng, ngất, vảy, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: chấn thương thanh quản, chấn thương thanh quản ngoài, chấn thương thanh quản trong, đặt nội khí quản.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): uống ít nước, hút thuốc lá.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: uống đủ nước, bỏ thuốc lá hoặc tránh hít phải khói thuốc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Chấn thương thanh quản – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/chan-thuong-thanh-quan-456.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

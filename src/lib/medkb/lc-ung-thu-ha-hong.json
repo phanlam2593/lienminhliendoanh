@@ -1,0 +1,60 @@
+{
+ "id": "lc-ung-thu-ha-hong",
+ "kind": "cancer",
+ "display": "Ung thư hạ họng",
+ "names": [
+  "Ung thư hạ họng"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư hạ họng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: khàn tiếng, nổi hạch, sụt cân, khó thở, ngất.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): bệnh chủ yếu gặp ở nam giới, người nghiện thuốc lá mạn tính, người nghiện rượu mạn tính, vệ sinh răng miệng kém, nghiện thuốc lá, nghiện rượu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư hạ họng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-ha-hong-383.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,60 @@
+{
+ "id": "lc-da-u-mo-thua-duong-mat",
+ "kind": "cancer",
+ "display": "Đa u mô thừa đường mật",
+ "names": [
+  "Đa u mô thừa đường mật"
+ ],
+ "about": [
+  {
+   "text": "**Đa u mô thừa đường mật** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau hạ sườn phải, đau thượng vị, chướng bụng, đau bụng, vàng da, đau cổ, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): bệnh gan do rượu, xơ gan bẩm sinh, gan đa nang, thận đa nang, xơ gan.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Đa u mô thừa đường mật – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/da-u-mo-thua-duong-mat.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

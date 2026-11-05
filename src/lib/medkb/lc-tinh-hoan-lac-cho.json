@@ -1,0 +1,66 @@
+{
+ "id": "lc-tinh-hoan-lac-cho",
+ "kind": "women",
+ "display": "Tinh hoàn lạc chỗ",
+ "names": [
+  "Tinh hoàn lạc chỗ"
+ ],
+ "about": [
+  {
+   "text": "**Tinh hoàn lạc chỗ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, sinh dục.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: khối u, sưng, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tinh hoàn đi xuống bìu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): ibuprofen, mẹ hút thuốc lá, mẹ mắc béo phì, trọng lượng nhỏ hơn so với tuổi thai, trọng lượng nhau thai nhỏ hơn, hóa chất gây rối loạn nội tiết.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Tinh hoàn lạc chỗ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/tinh-hoan-lac-cho.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,72 @@
+{
+ "id": "lc-chung-so-khoang-rong",
+ "kind": "mental",
+ "display": "Chứng sợ khoảng rộng",
+ "names": [
+  "Chứng sợ khoảng rộng"
+ ],
+ "about": [
+  {
+   "text": "**Chứng sợ khoảng rộng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tâm thần, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tim đập nhanh, đổ mồ hôi, chóng mặt, đau ngực, hoa mắt, khó thở, ớn lạnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: di truyền.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): rối loạn hoảng sợ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tập thư giãn, giải quyết căng thẳng, ngủ đủ 8 tiếng/ngày, uống đủ 2 lít nước mỗi ngày.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Chứng sợ khoảng rộng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/chung-so-khoang-rong.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

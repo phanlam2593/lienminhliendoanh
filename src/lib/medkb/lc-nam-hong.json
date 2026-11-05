@@ -1,0 +1,72 @@
+{
+ "id": "lc-nam-hong",
+ "kind": "condition",
+ "display": "Nấm họng",
+ "names": [
+  "Nấm họng"
+ ],
+ "about": [
+  {
+   "text": "**Nấm họng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tiêu hóa, tai - mũi - họng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, đau rát, cáu gắt, sưng, loét, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nấm Candida, C, HIV/AIDS, lạm dụng kháng sinh, ăn thực phẩm nhiễm nấm, người suy giảm hệ miễn dịch.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người có sức đề kháng yếu, người bị HIV/AIDS, sống trong môi trường bị ô nhiễm, thiếu máu mạn tính.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: sử dụng nước muối sinh lý để súc miệng, không hút thuốc lá, uống rượu, khi trời lạnh cần phải giữ ấm cơ thể, tránh tiếp xúc gần với những người bị bệnh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Nấm họng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nam-hong-460.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

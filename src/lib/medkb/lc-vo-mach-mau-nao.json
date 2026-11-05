@@ -1,0 +1,72 @@
+{
+ "id": "lc-vo-mach-mau-nao",
+ "kind": "condition",
+ "display": "Vỡ mạch máu não",
+ "names": [
+  "Vỡ mạch máu não"
+ ],
+ "about": [
+  {
+   "text": "**Vỡ mạch máu não** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: méo miệng, nhìn đôi, buồn nôn, co giật, đau đầu, lú lẫn, hôn mê, nôn, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: cao huyết áp.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): xơ vữa động mạch, lạm dụng rượu, U não, hút thuốc lá, sử dụng ma túy, chấn thương đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bỏ thuốc lá, rượu bia, duy trì cân nặng khỏe mạnh, hạn chế căng thẳng tinh thần, tập thể dục mỗi ngày, làm việc, nghỉ ngơi hợp lý, tránh đồ ăn và đồ uống có đường.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Vỡ mạch máu não – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/vo-mach-mau-nao.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

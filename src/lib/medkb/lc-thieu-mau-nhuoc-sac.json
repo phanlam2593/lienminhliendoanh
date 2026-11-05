@@ -1,0 +1,66 @@
+{
+ "id": "lc-thieu-mau-nhuoc-sac",
+ "kind": "condition",
+ "display": "Thiếu máu nhược sắc",
+ "names": [
+  "Thiếu máu nhược sắc"
+ ],
+ "about": [
+  {
+   "text": "**Thiếu máu nhược sắc** — Nhà thuốc Long Châu xếp vào nhóm bệnh: máu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tim đập nhanh, da xanh xao, chóng mặt, thiếu máu, khó tiêu, xanh xao, hoa mắt, mệt mỏi, khó thở, chán ăn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: HIV/AIDS, viêm loét dạ dày, hội chứng Thalassemia.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): yếu tố di truyền từ gia đình, mắc bệnh lý tiêu chảy mãn tính, tiêu chảy mãn tính.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Thiếu máu nhược sắc – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/thieu-mau-nhuoc-sac.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-xep-dot-song",
+ "kind": "condition",
+ "display": "Xẹp đốt sống",
+ "names": [
+  "Xẹp đốt sống"
+ ],
+ "about": [
+  {
+   "text": "**Xẹp đốt sống** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau lưng, mất ngủ, đau tai, hắt hơi, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: loãng xương, thoái hóa, chấn thương, U, thiếu canxi, thoái hóa khớp.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ mãn kinh, người có lối sống tĩnh tại, thoái hóa cột sống, viêm khớp dạng thấp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Xẹp đốt sống – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/xep-dot-song.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

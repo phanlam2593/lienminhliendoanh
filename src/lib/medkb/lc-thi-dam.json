@@ -1,0 +1,66 @@
+{
+ "id": "lc-thi-dam",
+ "kind": "mental",
+ "display": "Thị dâm",
+ "names": [
+  "Thị dâm"
+ ],
+ "about": [
+  {
+   "text": "**Thị dâm** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tâm thần, sức khỏe giới tính.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: ho, rối loạn thần kinh, rối loạn tâm thần, không thể kiểm soát được, gây tổn thương bản thân.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): lạm dụng tình dục, cuồng dâm, sang chấn tình dục thời thơ ấu, lạm dụng chất gây nghiện, ấu dâm, rượu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tìm sự hỗ trợ chuyên môn, quản lý thời gian và cân bằng cuộc sống, hạn chế tiếp xúc với tình huống kích thích, giáo dục và nhận thức, tìm kiếm sự hỗ trợ tâm lý, quản lý căng thẳng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Thị dâm – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/thi-dam.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

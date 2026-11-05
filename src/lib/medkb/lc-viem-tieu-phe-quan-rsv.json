@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-tieu-phe-quan-rsv",
+ "kind": "condition",
+ "display": "Viêm tiểu phế quản RSV",
+ "names": [
+  "Viêm tiểu phế quản RSV"
+ ],
+ "about": [
+  {
+   "text": "**Viêm tiểu phế quản RSV** — Nhà thuốc Long Châu xếp vào nhóm bệnh: hô hấp, bệnh trẻ em.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: thở khò khè, thở nhanh, mất nước, sốt nhẹ, ho khan, sốt cao, thở rít, mệt mỏi, khó thở, chán ăn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người có hệ miễn dịch suy yếu, tiếp xúc với khói thuốc lá, không được tiêm phòng đầy đủ, sinh non.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: cung cấp thực phẩm giàu vitamin C, vắc xin RSV, kháng thể đơn dòng Palivizumab.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm tiểu phế quản RSV – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-tieu-phe-quan-rsv.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-ung-thu-tuyen-thuong-than",
+ "kind": "cancer",
+ "display": "Ung thư tuyến thượng thận",
+ "names": [
+  "Ung thư tuyến thượng thận"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư tuyến thượng thận** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chướng bụng, đau lưng, rụng tóc, buồn nôn, tăng cân, yếu cơ, nôn, nám, sốt, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: DNA.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): hội chứng Beckwith-Wiedemann, khu phức hợp Carney, hội chứng Li-Fraumeni, hội chứng Lynch, đa sản nội tiết, loại 1.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư tuyến thượng thận – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-tuyen-thuong-than-323.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

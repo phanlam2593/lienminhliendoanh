@@ -1,0 +1,66 @@
+{
+ "id": "lc-hoai-tu-vo-than",
+ "kind": "condition",
+ "display": "Hoại tử vỏ thận",
+ "names": [
+  "Hoại tử vỏ thận"
+ ],
+ "about": [
+  {
+   "text": "**Hoại tử vỏ thận** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu, xem theo bộ phận cơ thể, nhóm bệnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau bụng dưới, tiêu chảy, chảy máu, đau họng, nôn, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: liên quan đến mang thai, nhiễm trùng, thuốc và độc chất, vô căn, nhau bong non, viêm phúc mạc, xuất huyết tiêu hóa.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): hoại tử vỏ thận.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hoại tử vỏ thận – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoai-tu-vo-than.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

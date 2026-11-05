@@ -1,0 +1,72 @@
+{
+ "id": "lc-ung-thu-da-giai-doan-muon",
+ "kind": "cancer",
+ "display": "Ung thư da giai đoạn muộn",
+ "names": [
+  "Ung thư da giai đoạn muộn"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư da giai đoạn muộn** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, da.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng hạch, vàng mắt, co giật, sụt cân, đau tai, mệt mỏi, khó thở, vàng da, sưng, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tế bào hắc tố, đột biến DNA, tế bào vảy, tế bào đáy.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người có tiền sử ung thư da, người có hệ miễn dịch suy yếu, người lớn tuổi, người có làn da sáng màu, người tiếp xúc với hóa chất độc hại, tiếp xúc với tia cực tím.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bảo vệ da khỏi ánh nắng mặt trời, tập thể dục nhẹ nhàng, giữ tinh thần lạc quan, thực phẩm giàu chất chống oxy hóa, protein lành mạnh, thực phẩm giàu axit béo omega-3.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư da giai đoạn muộn – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-da-giai-doan-muon.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

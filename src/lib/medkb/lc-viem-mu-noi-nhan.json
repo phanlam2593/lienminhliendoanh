@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-mu-noi-nhan",
+ "kind": "condition",
+ "display": "Viêm mủ nội nhãn",
+ "names": [
+  "Viêm mủ nội nhãn"
+ ],
+ "about": [
+  {
+   "text": "**Viêm mủ nội nhãn** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng, nám, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: staphylococcus epidermidis, S, candida albicans, aspergillus, B, streptococcus, fusarium, bacillus cereus.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người sau phẫu thuật mắt, người bị chấn thương ở mắt, chấn thương mắt, phẫu thuật mắt, tiêm nội nhãn, nhiễm trùng huyết.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm mủ nội nhãn – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-mu-noi-nhan-557.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

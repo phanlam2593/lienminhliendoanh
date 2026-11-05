@@ -1,0 +1,66 @@
+{
+ "id": "lc-nhiem-trung-duong-tiet-nieu-o-nu",
+ "kind": "condition",
+ "display": "nhiễm trùng đường tiết niệu ở nữ",
+ "names": [
+  "nhiễm trùng đường tiết niệu ở nữ"
+ ],
+ "about": [
+  {
+   "text": "**nhiễm trùng đường tiết niệu ở nữ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu, bệnh nữ giới.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu nhiều, có mùi hôi, tiểu buốt, tiểu rắt, nóng rát, đau lưng, buồn nôn, tiểu đục, sốt nhẹ, mệt mỏi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: vi khuẩn Escherichia coli, tiểu đường.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): mãn kinh, màng ngăn âm đạo, sỏi thận.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "nhiễm trùng đường tiết niệu ở nữ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nhiem-trung-duong-tiet-nieu-o-nu.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,53 @@
+{
+ "id": "lc-trung-gio",
+ "kind": "condition",
+ "display": "Trúng gió",
+ "names": [
+  "Trúng gió"
+ ],
+ "about": [
+  {
+   "text": "**Trúng gió** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mắt, chảy nước mũi, thở khò khè, sưng hạch, nghẹt mũi, sốt nhẹ, đau tai, hắt hơi, mệt mỏi, đau đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Trúng gió – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/trung-gio-1375.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

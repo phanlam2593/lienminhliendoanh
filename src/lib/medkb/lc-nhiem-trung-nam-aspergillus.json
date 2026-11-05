@@ -1,0 +1,66 @@
+{
+ "id": "lc-nhiem-trung-nam-aspergillus",
+ "kind": "infection",
+ "display": "Nhiễm trùng nấm Aspergillus",
+ "names": [
+  "Nhiễm trùng nấm Aspergillus"
+ ],
+ "about": [
+  {
+   "text": "**Nhiễm trùng nấm Aspergillus** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, ho ra máu, nghẹt mũi, đau ngực, nhức đầu, đau khớp, đau mắt, mệt mỏi, khó thở, ớn lạnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): hen suyễn hoặc xơ nang, ung thư máu, hóa trị.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ tinh thần thư giãn, tâm lý thoải mái, bổ sung đầy đủ dinh dưỡng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Nhiễm trùng nấm Aspergillus – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nhiem-trung-nam-aspergillus.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

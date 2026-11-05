@@ -1,0 +1,66 @@
+{
+ "id": "lc-cung-da-khop-bam-sinh",
+ "kind": "condition",
+ "display": "Cứng đa khớp bẩm sinh",
+ "names": [
+  "Cứng đa khớp bẩm sinh"
+ ],
+ "about": [
+  {
+   "text": "**Cứng đa khớp bẩm sinh** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, bệnh trẻ em.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tinh hoàn ẩn, trật khớp, cơ bắp kém phát triển, tay chân mềm yếu, khớp vai, đầu gối, khuỷu tay, mắt cá chân.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: loạn dưỡng cơ, tật nứt đốt sống, xơ cứng bì.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): di truyền, người châu Á, châu Phi hoặc châu Âu, nhược cơ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Cứng đa khớp bẩm sinh – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/cung-da-khop-bam-sinh.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

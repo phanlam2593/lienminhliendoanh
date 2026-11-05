@@ -1,0 +1,73 @@
+{
+ "id": "lc-viem-dau-rang",
+ "kind": "condition",
+ "display": "Viêm, đau răng",
+ "names": [
+  "Viêm, đau răng",
+  "viem dau rang"
+ ],
+ "about": [
+  {
+   "text": "**Viêm, đau răng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: răng - hàm - mặt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: có mùi hôi, đau răng, nhức đầu, đau mắt, đau đầu, sưng, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm nha chu, viêm xoang, áp-xe quanh cuống răng, sâu răng, gãy thân răng, mọc răng, gãy chân răng theo chiều dọc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): vệ sinh răng miệng kém, khô miệng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: đi khám nha khoa định kỳ 6 tháng/lần.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm, đau răng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-dau-rang-992.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

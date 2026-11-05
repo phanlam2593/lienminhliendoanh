@@ -1,0 +1,60 @@
+{
+ "id": "lc-tieu-chay-do-khang-sinh",
+ "kind": "infection",
+ "display": "Tiêu chảy do kháng sinh",
+ "names": [
+  "Tiêu chảy do kháng sinh"
+ ],
+ "about": [
+  {
+   "text": "**Tiêu chảy do kháng sinh** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, tiêu hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau bụng dưới, chuột rút, chóng mặt, khô miệng, khát nước, tiêu chảy, mất nước, buồn nôn, sốt nhẹ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm C, C, hệ tiêu hóa, macrolide, như clarithromycin, cephalosporin, như cefdinir và cefpodoxime, fluoroquinolon, ciprofloxacin và levofloxacin, penicillin, như amoxicillin và ampicillin.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Tiêu chảy do kháng sinh – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/tieu-chay-do-khang-sinh-134.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

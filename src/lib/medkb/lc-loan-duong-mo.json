@@ -1,0 +1,72 @@
+{
+ "id": "lc-loan-duong-mo",
+ "kind": "condition",
+ "display": "Loạn dưỡng mỡ",
+ "names": [
+  "Loạn dưỡng mỡ"
+ ],
+ "about": [
+  {
+   "text": "**Loạn dưỡng mỡ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa, xem theo bộ phận cơ thể.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: gan nhiễm mỡ, viêm tụy, đái tháo đường, tăng triglyceride, hội chứng chuyển hóa, bệnh mạch vành.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: lupus ban đỏ, hạ đường huyết.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): thủy đậu, sởi, bệnh bạch cầu đơn nhân nhiễm trùng, bệnh bạch hầu, viêm tủy xương, viêm phổi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không hút thuốc lá, không uống rượu bia, ngủ đủ giấc, không thức khuya, giảm tiêu thụ chất béo động vật.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Loạn dưỡng mỡ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/loan-duong-mo.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

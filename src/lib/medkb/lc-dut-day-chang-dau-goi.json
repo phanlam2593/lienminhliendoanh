@@ -1,0 +1,72 @@
+{
+ "id": "lc-dut-day-chang-dau-goi",
+ "kind": "condition",
+ "display": "đứt dây chằng đầu gối",
+ "names": [
+  "đứt dây chằng đầu gối"
+ ],
+ "about": [
+  {
+   "text": "**đứt dây chằng đầu gối** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, sưng khớp, chảy máu, sưng đau, bầm tím, đau đầu, yếu cơ, đau cổ, sưng, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thay đổi hướng đột ngột, tiếp đất không đúng tư thế, chấn thương khi chơi thể thao.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): vận động viên, người từng bị chấn thương đầu gối, khởi động chưa đầy đủ, kỹ thuật vận động chưa phù hợp, tăng cường độ vận động không phù hợp, bề mặt tập luyện không phù hợp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tập phục hồi chức năng đúng hướng dẫn, tránh vận động quá sức, tăng mức độ vận động từ từ, hạn chế nguy cơ té ngã, duy trì cân nặng phù hợp, ăn uống cân đối.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "đứt dây chằng đầu gối – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/dut-day-chang-dau-goi.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

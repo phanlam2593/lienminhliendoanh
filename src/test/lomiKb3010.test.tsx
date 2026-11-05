@@ -1614,3 +1614,26 @@ describe("05/11 — danh mục thuốc Long Châu", () => {
     expect(Object.values(PROD_ALIAS).flat().length).toBeGreaterThan(1500);
   });
 });
+
+// ── 05/11: thẻ bệnh ngắn từ mục "Tìm hiểu về bệnh" của Long Châu (lib/medkb/lc-*.json — sinh tự động) ──
+describe("05/11 — thẻ bệnh ngắn (Long Châu)", () => {
+  it("bệnh trước đây chưa có thẻ → thẻ ngắn có nguồn, nhắc đọc bài đầy đủ, không kê thuốc", async () => {
+    const c = (await last(["thủng màng nhĩ là gì"])).content;
+    expect(c).toMatch(/Thủng màng nhĩ[\s\S]*tai - mũi - họng/);
+    expect(c).toMatch(/tóm tắt ngắn/);
+    expect(c).not.toMatch(/\d+\s?mg/);
+  });
+  it("hỏi triệu chứng của bệnh mới", async () => {
+    expect((await last(["giả gút có triệu chứng gì"])).content).toMatch(/Giả gút[\s\S]*đau khớp/i);
+  });
+  it("triệu chứng chung vẫn đi lớp triệu chứng cũ (không bị thẻ ngắn cướp)", async () => {
+    const { findMedTopicId } = await import("@/lib/lomiMed");
+    expect(findMedTopicId("mẹo chữa nghẹt mũi")).toBe("sx-nghet-mui");
+    expect(findMedTopicId("sốt xuất huyết giảm tiểu cầu")).toBe("sot-xuat-huyet");
+  });
+  it("đủ số lượng thẻ", async () => {
+    const idx = (await import("@/lib/medkb/index.json")).default as { id: string }[];
+    expect(idx.length).toBeGreaterThan(1400);
+    expect(idx.filter((r) => r.id.startsWith("lc-")).length).toBeGreaterThan(1000);
+  });
+});

@@ -1,0 +1,66 @@
+{
+ "id": "lc-man-duc-nam",
+ "kind": "women",
+ "display": "Mãn dục nam",
+ "names": [
+  "Mãn dục nam"
+ ],
+ "about": [
+  {
+   "text": "**Mãn dục nam** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa, sức khỏe sinh sản, bệnh nam giới.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: rối loạn cương, da nhăn nheo, thiếu máu, buồn ngủ, mất ngủ, mệt mỏi, đỏ mắt, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tuổi tác, di truyền, tinh hoàn, giảm cân bằng tiết tố, lạm dụng thuốc, phì đại tiền liệt tuyến.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): rối loạn chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Mãn dục nam – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/man-duc-nam-484.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

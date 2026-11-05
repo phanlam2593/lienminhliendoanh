@@ -1,0 +1,66 @@
+{
+ "id": "lc-ung-thu-buong-trung-giai-doan",
+ "kind": "cancer",
+ "display": "Ung thư buồng trứng giai đoạn IV",
+ "names": [
+  "Ung thư buồng trứng giai đoạn IV"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư buồng trứng giai đoạn IV** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, sức khỏe sinh sản.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chướng bụng, tiểu nhiều, loét miệng, thiếu máu, tiêu chảy, đau bụng, đau lưng, phát ban, rụng tóc, buồn nôn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): sự gia tăng của tuổi tác, sử dụng liệu pháp hormone thay thế, thừa cân hoặc béo phì, tiếp xúc amiăng, hút thuốc lá, hội chứng Lynch.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngưng hút thuốc lá.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư buồng trứng giai đoạn IV – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-buong-trung-giai-doan-4.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,72 @@
+{
+ "id": "lc-nhiem-trung-duong-ruot",
+ "kind": "infection",
+ "display": "Nhiễm trùng đường ruột",
+ "names": [
+  "Nhiễm trùng đường ruột"
+ ],
+ "about": [
+  {
+   "text": "**Nhiễm trùng đường ruột** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, tiêu hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, tiêu chảy, mất nước, nhức đầu, buồn nôn, trầm cảm, sụt cân, sốt nhẹ, sốt cao, mệt mỏi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: vi khuẩn, virus, ký sinh trùng, giardia, cryptosporidium, vi sinh vật, salmonella, virus Noro.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): hệ miễn dịch suy yếu, ăn uống không đảm bảo vệ sinh, sống trong môi trường không sạch sẽ, tiếp xúc với nguồn nước bị ô nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: đảm bảo vệ sinh an toàn thực phẩm, ăn chín uống sôi, không nên ăn gỏi cá, rau sống, tiết canh, môi trường sống cần được vệ sinh sạch sẽ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Nhiễm trùng đường ruột – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nhiem-trung-duong-ruot-1326.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

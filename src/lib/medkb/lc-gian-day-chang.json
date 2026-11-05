@@ -1,0 +1,72 @@
+{
+ "id": "lc-gian-day-chang",
+ "kind": "condition",
+ "display": "Giãn dây chằng",
+ "names": [
+  "Giãn dây chằng"
+ ],
+ "about": [
+  {
+   "text": "**Giãn dây chằng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, bệnh người già.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: bầm tím, sưng, chấn thương, viêm, gãy xương, đau vị trí tổn thương, bầm tím.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: mắt cá chân, đầu gối, cổ tay, ngón tay cái.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): có tiền sử giãn dây chằng, tình trạng thể chất kém hoặc thừa cân, đang mệt mỏi, tuổi cao.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: hạn chế hoạt động và trọng lượng, bắt đầu với bài tập và vận động nhẹ, tiêu thụ đủ protein, cung cấp đủ vitamin và khoáng chất, tăng cường tiêu thụ chất chống viêm, uống đủ nước.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Giãn dây chằng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/gian-day-chang-1304.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

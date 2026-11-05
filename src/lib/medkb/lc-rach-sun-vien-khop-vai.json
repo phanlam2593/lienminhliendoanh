@@ -1,0 +1,72 @@
+{
+ "id": "lc-rach-sun-vien-khop-vai",
+ "kind": "condition",
+ "display": "Rách sụn viền khớp vai",
+ "names": [
+  "Rách sụn viền khớp vai"
+ ],
+ "about": [
+  {
+   "text": "**Rách sụn viền khớp vai** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau cổ, ho, đau mãn tính, viêm khớp vai, đau trong khớp vai, hạn chế chuyển động, cảm giác khớp bị kẹt, giảm chất lượng cuộc sống, tác động tâm lý.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tổn thương SLAP, tổn thương Bankart, tổn thương Bankart ngược.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): vận động viên và người chơi thể thao, người cao tuổi, người có bệnh lý khớp vai, tuổi tác, yếu tố di truyền, chấn thương.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: đảm bảo về tư thế và cử động đúng, tránh chấn thương và vận động quá mức, duy trì trọng lượng cơ thể lành mạnh, hạn chế thời gian ngồi lâu, tiêu thụ đủ chất chống oxy hóa, cung cấp đủ canxi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Rách sụn viền khớp vai – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/rach-sun-vien-khop-vai.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

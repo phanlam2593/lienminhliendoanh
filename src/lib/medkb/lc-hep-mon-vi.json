@@ -1,0 +1,66 @@
+{
+ "id": "lc-hep-mon-vi",
+ "kind": "condition",
+ "display": "Hẹp môn vị",
+ "names": [
+  "Hẹp môn vị"
+ ],
+ "about": [
+  {
+   "text": "**Hẹp môn vị** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tiêu hóa, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chướng bụng, mất nước, khó tiêu, chảy máu, đau bụng, buồn nôn, đầy bụng, co giật, sụt cân, táo bón.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: phẫu thuật cắt túi mật, loét dạ dày - tá tràng, di truyền.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): chứng phì đại môn vị ở người lớn, bệnh lao, u đầu tụy.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hẹp môn vị – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hep-mon-vi-116.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

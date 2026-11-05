@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-dau-xuong-got",
+ "kind": "condition",
+ "display": "Viêm đầu xương gót",
+ "names": [
+  "Viêm đầu xương gót"
+ ],
+ "about": [
+  {
+   "text": "**Viêm đầu xương gót** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, xem theo bộ phận cơ thể, nhóm bệnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau gót chân, sưng, đau chân, đau bàn chân, gãy xương, sưng nhẹ ở gót chân, đi khập khiễng, đi bằng ngón chân.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): có tình trạng thừa cân/ béo phì, béo phì.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: nghỉ ngơi, sử dụng đệm đế giày, tập cơ và giãn cơ, sử dụng giày phù hợp, bổ sung canxi, vitamin D.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm đầu xương gót – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-dau-xuong-got.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

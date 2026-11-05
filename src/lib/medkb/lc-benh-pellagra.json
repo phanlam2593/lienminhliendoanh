@@ -1,0 +1,67 @@
+{
+ "id": "lc-benh-pellagra",
+ "kind": "condition",
+ "display": "Bệnh Pellagra",
+ "names": [
+  "Bệnh Pellagra",
+  "Pellagra"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh Pellagra** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, hoang tưởng, châm chích, tiêu chảy, mất nước, khó tiêu, đau bụng, mụn nước, phát ban, buồn nôn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: HIV, chán ăn, bệnh đường tiêu hóa, rối loạn sử dụng rượu, phẫu thuật cắt dạ dày, thiếu máu thiếu sắt, bệnh Hartnup, khối u carcinoid.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người nghiện rượu, rối loạn ăn uống, chạy thận nhân tạo, nghiện rượu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh Pellagra – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-pellagra.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-xuong-so",
+ "kind": "condition",
+ "display": "Viêm xương sọ",
+ "names": [
+  "Viêm xương sọ"
+ ],
+ "about": [
+  {
+   "text": "**Viêm xương sọ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mũi, chảy mủ tai, nghẹt mũi, thiếu máu, nhức đầu, buồn nôn, đau mắt, đau tai, đau đầu, chán ăn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm tai ngoài, viêm xoang, salmonella.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người mắc bệnh đái tháo đường, người lớn tuổi, bệnh mạch máu nhỏ, phơi nhiễm phóng xạ, bệnh lý ung thư, loãng xương.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: uống đủ 2 lít nước/ngày, uống đủ lượng nước trong ngày.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm xương sọ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-xuong-so.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

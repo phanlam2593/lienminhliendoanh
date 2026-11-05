@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-tuy-cat-ngang",
+ "kind": "condition",
+ "display": "Viêm tủy cắt ngang",
+ "names": [
+  "Viêm tủy cắt ngang"
+ ],
+ "about": [
+  {
+   "text": "**Viêm tủy cắt ngang** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu không tự chủ, khó tiêu, nóng rát, ngứa ran, táo bón, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: virus herpes, vi rút zika, bệnh Lyme, bệnh bạch hầu, bệnh đa xơ cứng, sarcoidosis, epstein-Barr, HIV.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tập thư giãn, giải quyết căng thẳng, ngủ đủ 8 tiếng/ngày.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm tủy cắt ngang – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-tuy-cat-ngang.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

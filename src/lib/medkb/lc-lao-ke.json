@@ -1,0 +1,72 @@
+{
+ "id": "lc-lao-ke",
+ "kind": "infection",
+ "display": "Lao kê",
+ "names": [
+  "Lao kê"
+ ],
+ "about": [
+  {
+   "text": "**Lao kê** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, hô hấp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: ho ra máu, đổ mồ hôi, tiêu chảy, đau bụng, buồn nôn, sụt cân, ho khan, sốt cao, mệt mỏi, đau đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: lao kê, vi khuẩn lao Mycobacterium tuberculosis hominis.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): nghiện thuốc lá, sử dụng ma túy, trẻ nhỏ chưa được tiêm phòng vaccine BCG, người bị thiếu cân, suy dinh dưỡng, môi trường sống bị ô nhiễm, suy dinh dưỡng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bỏ thuốc lá hoặc tránh khói thuốc lá, giữ vệ sinh cá nhân.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Lao kê – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/lao-ke-444.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

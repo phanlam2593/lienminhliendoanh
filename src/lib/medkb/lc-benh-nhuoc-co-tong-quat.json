@@ -1,0 +1,73 @@
+{
+ "id": "lc-benh-nhuoc-co-tong-quat",
+ "kind": "condition",
+ "display": "Bệnh nhược cơ tổng quát",
+ "names": [
+  "Bệnh nhược cơ tổng quát",
+  "nhược cơ tổng quát"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh nhược cơ tổng quát** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: nhìn đôi, trầm cảm, sụt cân, mất ngủ, mệt mỏi, khó thở, nói khó, yếu cơ, mờ mắt, lo âu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: hệ thần kinh trung ương, thần kinh ngoại biên, suy giáp, tổn thương thần kinh ngoại biên, bệnh cơ nguyên phát, bệnh nội tiết, bệnh lý toàn thân.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): nhiễm trùng hoặc căng thẳng kéo dài, thay đổi nội tiết, tuyến ức, bệnh tự miễn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngủ đủ giấc, tránh thức khuya, giữ tinh thần ổn định, hạn chế căng thẳng, chủ động phòng tránh nhiễm trùng, không tự ý dùng thuốc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh nhược cơ tổng quát – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-nhuoc-co-tong-quat.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-ket-mac-mat-o-tre-em",
+ "kind": "condition",
+ "display": "Viêm kết mạc mắt ở trẻ em",
+ "names": [
+  "Viêm kết mạc mắt ở trẻ em"
+ ],
+ "about": [
+  {
+   "text": "**Viêm kết mạc mắt ở trẻ em** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mắt, sợ ánh sáng, chảy dịch, nóng rát, nhìn mờ, đau mắt, đỏ mắt, ngứa, sưng, loét.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: vi rút, vi khuẩn, dị ứng, tiếp xúc với hóa chất, vật lạ trong mắt, tắc nghẽn ống dẫn nước mắt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: đắp gạc lên mắt, thử dùng thuốc nhỏ mắt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm kết mạc mắt ở trẻ em – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-ket-mac-mat-o-tre-em.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

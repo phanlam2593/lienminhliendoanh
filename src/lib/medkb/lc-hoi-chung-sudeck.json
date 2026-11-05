@@ -1,0 +1,66 @@
+{
+ "id": "lc-hoi-chung-sudeck",
+ "kind": "condition",
+ "display": "Hội chứng Sudeck",
+ "names": [
+  "Hội chứng Sudeck"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng Sudeck** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu không tự chủ, tiểu nhiều, tiêu chảy, đau bụng, buồn nôn, trầm cảm, táo bón, khó thở, lo âu, sưng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: chấn thương, viêm quanh khớp vai, phẫu thuật, nằm bất động lâu, sử dụng thuốc, nội soi khớp.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tuổi, giới, đột quỵ não, đái tháo đường.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng Sudeck – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-sudeck.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

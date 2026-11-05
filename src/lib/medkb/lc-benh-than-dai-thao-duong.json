@@ -1,0 +1,67 @@
+{
+ "id": "lc-benh-than-dai-thao-duong",
+ "kind": "condition",
+ "display": "Bệnh thận đái tháo đường",
+ "names": [
+  "Bệnh thận đái tháo đường",
+  "thận đái tháo đường"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh thận đái tháo đường** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu, nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: phù chân, buồn nôn, mệt mỏi, đau đầu, khô da, ngứa, vảy, nôn, nám, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): yếu tố di truyền, thời gian và mức độ tăng đường huyết, rối loạn lipid máu, hút thuốc lá, thừa cân hoặc béo phì.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giảm cân nếu bạn thừa cân hoặc béo phì, hạn chế ăn đạm.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh thận đái tháo đường – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-than-dai-thao-duong.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

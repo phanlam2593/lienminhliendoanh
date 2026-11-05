@@ -1,0 +1,72 @@
+{
+ "id": "lc-a-sung",
+ "kind": "condition",
+ "display": "Á sừng",
+ "names": [
+  "Á sừng"
+ ],
+ "about": [
+  {
+   "text": "**Á sừng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: da - tóc - móng, da.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, mụn nước, đau rát, ngứa, sưng, nám, mụn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: di truyền, thiếu hụt chất dinh dưỡng, rối loạn nội tiết tố, khí hậu, hóa chất độc hại, hệ miễn dịch suy yếu, hệ miễn dịch bị suy giảm.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): yếu tố di truyền, mất cân bằng dinh dưỡng, thời tiết lạnh, hanh khô.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: hạn chế sử dụng xà phòng và hóa chất.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Á sừng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/a-sung-512.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

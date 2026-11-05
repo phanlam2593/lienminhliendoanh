@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-khop-thai-duong-ham",
+ "kind": "condition",
+ "display": "Viêm khớp thái dương hàm",
+ "names": [
+  "Viêm khớp thái dương hàm"
+ ],
+ "about": [
+  {
+   "text": "**Viêm khớp thái dương hàm** — Nhà thuốc Long Châu xếp vào nhóm bệnh: răng - hàm - mặt, cơ - xương - khớp, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, chảy máu, nổi hạch, hoa mắt, đau đầu, đau cổ, ù tai, sưng, vảy, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thoái hóa khớp, viêm khớp dạng thấp, hay nhiễm khuẩn khớp, chấn thương, răng mọc lệch, chen chúc, nhổ răng hàm, nhổ răng khôn, nhai một bên, tật nghiến răng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người cao tuổi, tuổi tác, giới tính, di truyền, căng thẳng, stress kéo dài, tiền mãn kinh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm khớp thái dương hàm – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-khop-thai-duong-ham.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

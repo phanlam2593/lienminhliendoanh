@@ -1,0 +1,66 @@
+{
+ "id": "lc-tang-bach-cau-don-nhan",
+ "kind": "infection",
+ "display": "Tăng bạch cầu đơn nhân",
+ "names": [
+  "Tăng bạch cầu đơn nhân"
+ ],
+ "about": [
+  {
+   "text": "**Tăng bạch cầu đơn nhân** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: mệt mỏi, sưng, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: stress.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): viêm nội tâm mạc, bệnh lao, bệnh mạch máu collagen, bệnh sarcoidosis, nhiễm trùng đơn bào hoặc ký sinh trùng, phục hồi tủy xương.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Tăng bạch cầu đơn nhân – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/tang-bach-cau-don-nhan-266.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

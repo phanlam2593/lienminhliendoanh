@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-quanh-rang",
+ "kind": "condition",
+ "display": "Viêm quanh răng",
+ "names": [
+  "Viêm quanh răng"
+ ],
+ "about": [
+  {
+   "text": "**Viêm quanh răng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: răng - hàm - mặt, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu chân răng, đau răng, nổi hạch, đau rát, sốt cao, mệt mỏi, đau đầu, đau cổ, sưng, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: răng bị nhiễm khuẩn, sang chấn răng, sang chấn răng cấp tính, sang chấn răng mãn tính, viêm tủy răng, hoại tử tủy răng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): răng chen chúc, mắc bệnh ung thư máu hoặc HIV, béo phì, bệnh tiểu đường, tăng huyết áp, thay đổi nội tiết tố.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm quanh răng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-quanh-rang.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

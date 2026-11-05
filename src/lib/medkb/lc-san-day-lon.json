@@ -1,0 +1,66 @@
+{
+ "id": "lc-san-day-lon",
+ "kind": "infection",
+ "display": "Sán dây lợn",
+ "names": [
+  "Sán dây lợn"
+ ],
+ "about": [
+  {
+   "text": "**Sán dây lợn** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau bụng, co giật, sụt cân, chán ăn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): ăn thịt sống hoặc nấu chưa chín kỹ, vệ sinh kém, thiếu vệ sinh và nước thải, thiếu nước sạch.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: vệ sinh cá nhân, kiểm soát chất thải, cung cấp đủ lượng calo, cung cấp đủ protein, tăng cường tiêu thụ chất xơ, hạn chế đường và thực phẩm chế biến sẵn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Sán dây lợn – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/san-day-lon.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

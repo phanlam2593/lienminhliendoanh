@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-khop-tay",
+ "kind": "condition",
+ "display": "Viêm khớp tay",
+ "names": [
+  "Viêm khớp tay"
+ ],
+ "about": [
+  {
+   "text": "**Viêm khớp tay** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, sưng khớp, nóng rát, đau khớp, mất ngủ, đau cổ, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm khớp dạng thấp, viêm khớp vảy nến, viêm khớp, vảy nến.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): nữ giới, người da trắng, thừa cân, béo phì, đã từng bị thương ở tay trước đó, di truyền, ví dụ bệnh tự miễn, béo phì.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bổ sung đầy đủ dinh dưỡng, cai thuốc lá.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm khớp tay – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-khop-tay.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-liet-day-hoi-quy",
+ "kind": "condition",
+ "display": "Liệt dây hồi quy",
+ "names": [
+  "Liệt dây hồi quy"
+ ],
+ "about": [
+  {
+   "text": "**Liệt dây hồi quy** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, cổ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: khàn tiếng, nuốt khó, sụt cân, thở rít, khó thở, vảy, nám, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: phẫu thuật cắt bỏ tuyến giáp, bệnh thần kinh đái tháo đường, khối u, đặt nội khí quản, tổn thương mạch máu, vô căn.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): mắc đái tháo đường, nam giới, đái tháo đường.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Liệt dây hồi quy – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/liet-day-hoi-quy.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

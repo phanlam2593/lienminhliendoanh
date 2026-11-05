@@ -1,0 +1,72 @@
+{
+ "id": "lc-chikungunya",
+ "kind": "infection",
+ "display": "Chikungunya",
+ "names": [
+  "Chikungunya"
+ ],
+ "about": [
+  {
+   "text": "**Chikungunya** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng khớp, phát ban, buồn nôn, đau khớp, sốt cao, mệt mỏi, đau đầu, đau cổ, sưng, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: aedes, muỗi Aedes, đau cơ xương khớp kéo dài, cứng khớp buổi sáng, đau thần kinh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người lớn tuổi, hệ miễn dịch yếu, trẻ em và phụ nữ mang thai, sống ở vùng đông dân cư.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tránh muỗi đốt, tạo môi trường sống sạch sẽ, nghỉ ngơi hợp lý, uống đủ nước, ăn thực phẩm giàu dinh dưỡng, loại bỏ nơi sinh sản muỗi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Chikungunya – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/chikungunya.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

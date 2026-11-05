@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-mach-bach-huyet",
+ "kind": "condition",
+ "display": "viêm mạch bạch huyết",
+ "names": [
+  "viêm mạch bạch huyết"
+ ],
+ "about": [
+  {
+   "text": "**viêm mạch bạch huyết** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tim đập nhanh, sưng hạch, chóng mặt, sưng đau, sốt cao, mệt mỏi, đau đầu, khó thở, ớn lạnh, rét run.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm liên cầu khuẩn, nhiễm tụ cầu khuẩn, nhiễm nấm, nhiễm Mycobacterium.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người bị suy giảm miễn dịch, người mắc bệnh đái tháo đường, người có tình trạng phù bạch huyết, da bị trầy xước hoặc có vết thương, bị côn trùng hoặc động vật cắn, cào, tiếp xúc với đất và thực vật.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: chăm sóc vùng tổn thương, nâng cao vùng bị ảnh hưởng, nghỉ ngơi hợp lý, theo dõi diễn tiến, ăn uống đầy đủ, bổ sung đủ protein.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "viêm mạch bạch huyết – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-mach-bach-huyet.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

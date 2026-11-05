@@ -1,0 +1,72 @@
+{
+ "id": "lc-mo-vu-day-dac",
+ "kind": "women",
+ "display": "Mô vú dày đặc",
+ "names": [
+  "Mô vú dày đặc"
+ ],
+ "about": [
+  {
+   "text": "**Mô vú dày đặc** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: khối u, ung thư vú, ung thư, vô sinh, tuổi tác, sử dụng rượu bia, sinh con, không có con, chỉ số BMI cao.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: di truyền, nội tiết tố.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tuổi trẻ, chỉ số khối cơ thể, đang mang thai hoặc cho con bú, thuốc, tình trạng mãn kinh, tiền sử gia đình.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tầm soát ung thư vú định kỳ, khám sức khỏe định kỳ 6 tháng/lần, ngưng hút thuốc lá, hạn chế rượu bia, ăn đầy đủ chất dinh dưỡng, không hút thuốc lá.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Mô vú dày đặc – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/mo-vu-day-dac.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

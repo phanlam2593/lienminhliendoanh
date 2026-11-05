@@ -1,0 +1,60 @@
+{
+ "id": "lc-nhiem-herpes-zoster",
+ "kind": "infection",
+ "display": "Nhiễm Herpes zoster",
+ "names": [
+  "Nhiễm Herpes zoster"
+ ],
+ "about": [
+  {
+   "text": "**Nhiễm Herpes zoster** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sợ ánh sáng, nổi hạch, mụn nước, đau đầu, co rút, đau cổ, ngứa, vảy, nám, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): ức chế miễn dịch, liệu pháp ức chế miễn dịch, hội chứng viêm phục hồi miễn dịch, hệ miễn dịch suy yếu, bệnh bạch cầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Nhiễm Herpes zoster – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nhiem-herpes-zoster-58.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

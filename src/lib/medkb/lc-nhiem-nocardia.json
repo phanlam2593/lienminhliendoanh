@@ -1,0 +1,66 @@
+{
+ "id": "lc-nhiem-nocardia",
+ "kind": "infection",
+ "display": "Nhiễm Nocardia",
+ "names": [
+  "Nhiễm Nocardia"
+ ],
+ "about": [
+  {
+   "text": "**Nhiễm Nocardia** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tim đập nhanh, sợ ánh sáng, thở nhanh, đau ngực, nhức đầu, mụn nước, buồn nôn, co giật, sụt cân, táo bón.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nocardia, actinomycetaceae, hiếu khí, nhiễm HIV/AIDS.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): cơ thể suy giảm miễn dịch, sử dụng thuốc corticoid dài ngày, xơ gan.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Nhiễm Nocardia – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nhiem-nocardia-74.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

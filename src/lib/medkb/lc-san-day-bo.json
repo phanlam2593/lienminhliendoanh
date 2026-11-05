@@ -1,0 +1,66 @@
+{
+ "id": "lc-san-day-bo",
+ "kind": "infection",
+ "display": "Sán dây bò",
+ "names": [
+  "Sán dây bò"
+ ],
+ "about": [
+  {
+   "text": "**Sán dây bò** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, thiếu máu, tiêu chảy, xanh xao, đau bụng, sụt cân, táo bón, đau cổ, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bệnh sán dây bò.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: uống thuốc xổ giun định kỳ, rửa tay sạch sẽ, tránh đưa tay lên miệng, ăn chín uống sôi, kiểm tra thịt kỹ trước khi sử dụng, không đại tiện bừa bãi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Sán dây bò – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/san-day-bo.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,72 @@
+{
+ "id": "lc-nao-ung-thuy",
+ "kind": "condition",
+ "display": "Não úng thủy",
+ "names": [
+  "Não úng thủy"
+ ],
+ "about": [
+  {
+   "text": "**Não úng thủy** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: buồn ngủ, nhìn đôi, buồn nôn, co giật, nhìn mờ, sốt cao, cáu gắt, đau đầu, chán ăn, hôn mê.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bẩm sinh, trẻ em/thanh thiếu niên, người lớn tuổi, viêm màng não, rubella, xuất huyết não, chấn thương vùng đầu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): nhiễm trùng thần kinh trung ương, chấn thương đầu, xuất huyết mạch máu não, phẫu thuật não, khối u não hoặc tủy sống.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: vận động thể lực vừa phải, bảo vệ đầu cho trẻ và cho bạn, thái độ sống tích cực, chăm sóc trước sinh, tiêm ngừa vắc xin.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Não úng thủy – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nao-ung-thuy.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

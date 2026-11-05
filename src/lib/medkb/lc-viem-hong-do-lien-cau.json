@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-hong-do-lien-cau",
+ "kind": "condition",
+ "display": "Viêm họng do liên cầu",
+ "names": [
+  "Viêm họng do liên cầu"
+ ],
+ "about": [
+  {
+   "text": "**Viêm họng do liên cầu** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tai - mũi - họng, cổ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng hạch, đốm trắng, ho có đờm, đau họng, đau bụng, phát ban, buồn nôn, mảng đỏ, ho khan, sốt cao.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người bị suy giảm hệ miễn dịch, người sống trong môi trường bị ô nhiễm, người có cơ địa dễ bị dị ứng, hệ miễn dịch suy giảm, suy giảm hệ miễn dịch, viêm nhiễm đường hô hấp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không hút thuốc lá , uống rượu, khi trời lạnh cần phải giữ ấm cơ thể, tránh tiếp xúc gần với những người bị bệnh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm họng do liên cầu – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-hong-do-lien-cau-470.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

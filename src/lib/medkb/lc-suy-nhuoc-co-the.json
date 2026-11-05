@@ -1,0 +1,66 @@
+{
+ "id": "lc-suy-nhuoc-co-the",
+ "kind": "condition",
+ "display": "Suy nhược cơ thể",
+ "names": [
+  "Suy nhược cơ thể"
+ ],
+ "about": [
+  {
+   "text": "**Suy nhược cơ thể** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chuột rút, chóng mặt, đau ngực, co giật, mệt mỏi, khó thở, nói khó, uể oải, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thiếu máu, bệnh tim, bệnh cúm, bệnh tuyến giáp, trầm cảm hoặc lo lắng, thiếu ngủ, bệnh tiểu đường, suy tim sung huyết.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): thiếu dinh dưỡng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Suy nhược cơ thể – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/suy-nhuoc-co-the-701.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

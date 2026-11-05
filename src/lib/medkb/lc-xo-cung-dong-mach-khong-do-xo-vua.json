@@ -1,0 +1,66 @@
+{
+ "id": "lc-xo-cung-dong-mach-khong-do-xo-vua",
+ "kind": "condition",
+ "display": "Xơ cứng động mạch không do xơ vữa",
+ "names": [
+  "Xơ cứng động mạch không do xơ vữa"
+ ],
+ "about": [
+  {
+   "text": "**Xơ cứng động mạch không do xơ vữa** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tim mạch, xem theo bộ phận cơ thể, nhóm bệnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: liệt nửa người, thiếu máu, đau ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tăng phosphat máu, bệnh đái tháo đường.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tăng huyết áp, bệnh lupus ban đỏ hệ thống.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Xơ cứng động mạch không do xơ vữa – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/xo-cung-dong-mach-khong-do-xo-vua.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

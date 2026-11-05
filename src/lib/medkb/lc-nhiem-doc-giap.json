@@ -1,0 +1,66 @@
+{
+ "id": "lc-nhiem-doc-giap",
+ "kind": "condition",
+ "display": "Nhiễm độc giáp",
+ "names": [
+  "Nhiễm độc giáp"
+ ],
+ "about": [
+  {
+   "text": "**Nhiễm độc giáp** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mắt, tiêu chảy, buồn nôn, sụt cân, sốt cao, đỏ mắt, sưng, nôn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: basedow, suy giáp, bệnh Graves, U tuyến giáp, U quái đơn bì, viêm tuyến giáp.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người mắc bệnh tự miễn, người bị viêm tuyến giáp, phụ nữ vừa sinh con, giới tính, vừa mới sinh con, bệnh tự miễn.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Nhiễm độc giáp – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/nhiem-doc-giap-1133.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

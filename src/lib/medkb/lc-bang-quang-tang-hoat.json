@@ -1,0 +1,72 @@
+{
+ "id": "lc-bang-quang-tang-hoat",
+ "kind": "condition",
+ "display": "Bàng quang tăng hoạt",
+ "names": [
+  "Bàng quang tăng hoạt"
+ ],
+ "about": [
+  {
+   "text": "**Bàng quang tăng hoạt** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu không tự chủ, tiểu nhiều, tiểu ít.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: chấn thương bụng, tổn thương thần kinh, thuốc lá, rượu và cà phê, nhiễm trùng, tăng cân, thiếu hụt estrogen sau mãn kinh, nhiễm trùng đường tiết niệu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ, người cao tuổi, phụ nữ sau mãn kinh, người bị suy giảm nhận thức, nhiễm trùng tiết niệu, bệnh đa xơ cứng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bỏ rượu bia, thuốc lá, tập Kegel để tăng cường sức cơ sàn chậu, cà phê, trà, rượu bia, thực phẩm làm từ cà chua.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bàng quang tăng hoạt – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/bang-quang-tang-hoat.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

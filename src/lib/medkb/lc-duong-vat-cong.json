@@ -1,0 +1,72 @@
+{
+ "id": "lc-duong-vat-cong",
+ "kind": "condition",
+ "display": "Dương vật cong",
+ "names": [
+  "Dương vật cong"
+ ],
+ "about": [
+  {
+   "text": "**Dương vật cong** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe giới tính, sinh dục.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất tinh sớm, trầm cảm, khối u, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bệnh peyronie, bẩm sinh, gãy dương vật, rối loạn mô liên kết, quan hệ tình dục quá mức, rối loạn cương dương.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): di truyền, chấn thương dương vật, chấn thương vùng kín, quan hệ tình dục mạnh bạo, lớn tuổi, lạm dụng rượu, thuốc lá.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: quan hệ tình dục an toàn, sử dụng gel bôi trơn, tránh quan hệ tình dục quá mạnh bạo.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Dương vật cong – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/duong-vat-cong.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

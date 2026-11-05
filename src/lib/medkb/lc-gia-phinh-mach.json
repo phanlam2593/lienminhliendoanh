@@ -1,0 +1,72 @@
+{
+ "id": "lc-gia-phinh-mach",
+ "kind": "condition",
+ "display": "Giả phình mạch",
+ "names": [
+  "Giả phình mạch"
+ ],
+ "about": [
+  {
+   "text": "**Giả phình mạch** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tim mạch, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau ngực, chảy máu, ngứa ran, bầm tím, lú lẫn, khối u, lơ mơ, nám.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: giả phình động mạch đùi, giả phình động mạch nội tạng, giả phình động mạch chủ, viêm tụy, nhiễm trùng, hội chứng Marfan, chấn thương, sự nhiễm trùng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): giới tính nữ, người béo phì, đặt ống thông tim hoặc đau tim, một chấn thương làm tổn thương động mạch, xơ vữa động mạch, béo phì.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không hút thuốc lá, sử dụng rượu bia, ăn chậm, nhai kỹ, ăn đúng bữa, sử dụng thực phẩm chứa chất béo tốt như, tránh ăn mặn hay ăn ngọt, ngủ đủ giấc, kiểm soát căng thẳng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Giả phình mạch – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/gia-phinh-mach.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-viem-phoi-rsv",
+ "kind": "infection",
+ "display": "Viêm phổi RSV",
+ "names": [
+  "Viêm phổi RSV"
+ ],
+ "about": [
+  {
+   "text": "**Viêm phổi RSV** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: da xanh xao, thở khò khè, thở nhanh, sốt nhẹ, ho khan, sốt cao, hắt hơi, khó thở, tím tái, sổ mũi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người có hệ miễn dịch suy yếu, môi trường sống đông đúc, thiếu thông thoáng, không tiêm phòng đầy đủ, sinh non, bệnh phổi tắc nghẽn mãn tính, nhiễm trùng hô hấp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: vệ sinh môi trường sống sạch sẽ, thông thoáng, tránh hút thuốc lá và khói thuốc trong nhà.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm phổi RSV – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-phoi-rsv.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,53 @@
+{
+ "id": "lc-hoi-chung-bung-qua-man",
+ "kind": "women",
+ "display": "Hội chứng bụng quả mận",
+ "names": [
+  "Hội chứng bụng quả mận"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng bụng quả mận** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: bí tiểu, nhiễm trùng đường tiết niệu, tim bẩm sinh, dị tật tim bẩm sinh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng bụng quả mận – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-bung-qua-man.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

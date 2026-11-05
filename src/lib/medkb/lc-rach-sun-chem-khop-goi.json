@@ -1,0 +1,72 @@
+{
+ "id": "lc-rach-sun-chem-khop-goi",
+ "kind": "condition",
+ "display": "Rách sụn chêm khớp gối",
+ "names": [
+  "Rách sụn chêm khớp gối"
+ ],
+ "about": [
+  {
+   "text": "**Rách sụn chêm khớp gối** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng đau, đau khớp, trầm cảm, đau cổ, sưng, vảy, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: đối với người trẻ, đối với người lớn tuổi, chấn thương, viêm khớp gối, chấn thương mạnh, thoái hóa tự nhiên, hành động đứng lên/ngồi xuống.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người cao tuổi, người có tiền sử chấn thương khớp gối, vận động viên hoặc người chơi thể thao, người có cân nặng quá lớn, người có bệnh khớp, tuổi tác.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giảm trọng lượng cơ thể, bảo vệ khớp, tập thể dục không tác động lên khớp gối, tăng cường cơ bắp xung quanh khớp gối, nghỉ ngơi và tái tạo, nguồn omega-3.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Rách sụn chêm khớp gối – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/rach-sun-chem-khop-goi.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

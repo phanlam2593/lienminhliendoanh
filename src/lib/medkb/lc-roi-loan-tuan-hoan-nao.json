@@ -1,0 +1,66 @@
+{
+ "id": "lc-roi-loan-tuan-hoan-nao",
+ "kind": "condition",
+ "display": "Rối loạn tuần hoàn não",
+ "names": [
+  "Rối loạn tuần hoàn não"
+ ],
+ "about": [
+  {
+   "text": "**Rối loạn tuần hoàn não** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tim mạch, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: liệt nửa người, chóng mặt, buồn nôn, hoa mắt, mất ngủ, đau đầu, nói khó, hôn mê, tê bì, ù tai.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: xơ vữa động mạch, cục máu đông.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): béo phì, rối loạn lipid máu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Rối loạn tuần hoàn não – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/roi-loan-tuan-hoan-nao-602.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

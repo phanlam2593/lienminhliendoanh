@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-da-mun-mu-truyen-nhiem",
+ "kind": "condition",
+ "display": "Viêm da mụn mủ truyền nhiễm",
+ "names": [
+  "Viêm da mụn mủ truyền nhiễm"
+ ],
+ "about": [
+  {
+   "text": "**Viêm da mụn mủ truyền nhiễm** — Nhà thuốc Long Châu xếp vào nhóm bệnh: da - tóc - móng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng hạch, bọng nước, mụn nước, mệt mỏi, mụn mủ, ngứa, loét, vảy, sốt, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: staphylococcus aureus, treptococcus pyogenes, S, vi khuẩn tụ cầu vàng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tuổi tác, tiếp xúc gần, thời tiết ấm áp, ẩm ướt, da nứt nẻ, viêm da dị ứng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tăng lượng acid béo omega-3.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm da mụn mủ truyền nhiễm – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-da-mun-mu-truyen-nhiem-166.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

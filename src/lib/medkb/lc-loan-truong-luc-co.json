@@ -1,0 +1,66 @@
+{
+ "id": "lc-loan-truong-luc-co",
+ "kind": "condition",
+ "display": "Loạn trương lực cơ",
+ "names": [
+  "Loạn trương lực cơ"
+ ],
+ "about": [
+  {
+   "text": "**Loạn trương lực cơ** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chuột rút, trầm cảm, mệt mỏi, lo âu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: loạn trương lực cơ nguyên phát, loạn trương lực cơ thứ phát, đột biến nhiễm sắc thể, xuất huyết não, ung thư phổi, do di truyền, bị đột biến nhiễm sắc thể, do thoái hóa thần kinh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): bị tổn thương não hay dây thần kinh, nhiễm virus, nhiễm khuẩn và nấm, sử dụng thuốc an thần, bị đột quỵ, bị ngộ độc chì, đột quỵ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Loạn trương lực cơ – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/loan-truong-luc-co-20.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

@@ -1,0 +1,66 @@
+{
+ "id": "lc-u-te-bao-hac-to",
+ "kind": "cancer",
+ "display": "U tế bào hắc tố",
+ "names": [
+  "U tế bào hắc tố"
+ ],
+ "about": [
+  {
+   "text": "**U tế bào hắc tố** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, ngứa, ngứa, phát triển kích thước, chảy máu hoặc chai sạn, ngứa hoặc đau.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: UVB.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): ung thư da không tế bào hắc tố, da sáng màu và có tàn nhang, mắc ung thư hắc tố lentigo, hội chứng nốt ruồi không điển hình, kem chống nắng, UVA.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "U tế bào hắc tố – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/u-te-bao-hac-to-287.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

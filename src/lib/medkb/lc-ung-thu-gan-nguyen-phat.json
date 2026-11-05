@@ -1,0 +1,66 @@
+{
+ "id": "lc-ung-thu-gan-nguyen-phat",
+ "kind": "cancer",
+ "display": "Ung thư gan nguyên phát",
+ "names": [
+  "Ung thư gan nguyên phát"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư gan nguyên phát** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, xem theo bộ phận cơ thể, bụng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, vàng mắt, buồn nôn, sụt cân, bầm tím, mệt mỏi, chán ăn, vàng da, nôn, sốt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): viêm gan siêu vi, xơ gan, đái tháo đường tuýp 2, béo phì, di truyền, tuổi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: hạn chế rượu bia, tiêm ngừa viêm gan siêu vi B, phòng ngừa viêm gan siêu vi C, quan hệ tình dục an toàn, tránh sử dụng ma túy, hạn chế rượu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư gan nguyên phát – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-gan-nguyen-phat.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

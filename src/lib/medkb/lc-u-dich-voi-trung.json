@@ -1,0 +1,72 @@
+{
+ "id": "lc-u-dich-voi-trung",
+ "kind": "women",
+ "display": "Ứ dịch vòi trứng",
+ "names": [
+  "Ứ dịch vòi trứng"
+ ],
+ "about": [
+  {
+   "text": "**Ứ dịch vòi trứng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: sức khỏe sinh sản, bệnh nữ giới.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau bụng dưới, ngứa, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm trùng, viêm, chlamydia, viêm vùng chậu, bệnh viêm vùng chậu.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): đã từng phẫu thuật bụng và/hoặc vùng chậu, quan hệ tình dục không an toàn, lạc nội mạc tử cung, STD.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không thụt rửa âm đạo, tránh căng thẳng, nghỉ ngơi hợp lý, uống đủ 2 lít nước/ngày, uống đủ lượng nước trong ngày, khám phụ khoa định kỳ 6 tháng 1 lần.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ứ dịch vòi trứng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/u-dich-voi-trung.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

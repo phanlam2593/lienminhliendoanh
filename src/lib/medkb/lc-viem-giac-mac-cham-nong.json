@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-giac-mac-cham-nong",
+ "kind": "condition",
+ "display": "Viêm giác mạc chấm nông",
+ "names": [
+  "Viêm giác mạc chấm nông"
+ ],
+ "about": [
+  {
+   "text": "**Viêm giác mạc chấm nông** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mắt, sợ ánh sáng, đau mắt, mệt mỏi, mờ mắt, đỏ mắt, sưng, loét, nám, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: khô mắt, viêm bờ mi, viêm khô kết giác mạc, bỏng hóa chất, thuốc nhỏ mắt, tia sáng, lạm dụng kính áp tròng, liệt mặt ngoại biên, thiếu dinh dưỡng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): bệnh lý ở mắt trước đó, hay chạm tay lên mắt, lông quặm, liệt dây thần kinh VII ngoại biên.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bổ sung vitamin A chống khô mắt, đeo kính mát khi đi ngoài trời, dùng gạc che mắt nếu có tật hở mi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm giác mạc chấm nông – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-giac-mac-cham-nong.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

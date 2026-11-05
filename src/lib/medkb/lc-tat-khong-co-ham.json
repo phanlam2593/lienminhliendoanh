@@ -1,0 +1,66 @@
+{
+ "id": "lc-tat-khong-co-ham",
+ "kind": "condition",
+ "display": "Tật không có hàm",
+ "names": [
+  "Tật không có hàm"
+ ],
+ "about": [
+  {
+   "text": "**Tật không có hàm** — Nhà thuốc Long Châu xếp vào nhóm bệnh: răng - hàm - mặt, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: nôn, sốt, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tiếp xúc phóng xạ trong thai kỳ, nhiễm trùng trong thai kỳ, uống rượu trong thai kỳ, yếu tố di truyền, phóng xạ, nhiễm trùng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: thực phẩm chứa acid folic, thực phẩm chứa protein, thực phẩm chứa sắt, không thực hiện hôn nhân cận huyết.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Tật không có hàm – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/tat-khong-co-ham.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

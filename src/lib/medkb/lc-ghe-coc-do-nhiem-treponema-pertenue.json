@@ -1,0 +1,67 @@
+{
+ "id": "lc-ghe-coc-do-nhiem-treponema-pertenue",
+ "kind": "infection",
+ "display": "Ghẻ cóc (do nhiễm Treponema pertenue)",
+ "names": [
+  "Ghẻ cóc (do nhiễm Treponema pertenue)",
+  "ghe coc do nhiem treponema pertenue"
+ ],
+ "about": [
+  {
+   "text": "**Ghẻ cóc (do nhiễm Treponema pertenue)** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, da.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: sưng hạch, phát ban, ngứa, sưng, loét, vảy.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: treponema pertenue, T, xoắn khuẩn, viêm loét da.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: luôn giữ vệ sinh thân thể sạch sẽ, nên giặt quần áo với nước nóng hoặc luộc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ghẻ cóc (do nhiễm Treponema pertenue) – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ghe-coc-do-nhiem-treponema-pertenue-584.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

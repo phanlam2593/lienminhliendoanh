@@ -1,0 +1,66 @@
+{
+ "id": "lc-hoi-chung-cotard",
+ "kind": "mental",
+ "display": "Hội chứng Cotard",
+ "names": [
+  "Hội chứng Cotard"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng Cotard** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tâm thần, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: hoang tưởng, ảo giác, vảy, nám, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): động kinh, bệnh thần kinh, lạm dụng chất gây nghiện, tình trạng tâm thần, nhiễm trùng, tiền sử chấn thương sọ não, đột quỵ.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không hút thuốc lá, không uống rượu bia, giữ tinh thần vui vẻ, hạnh phúc, tập thể dục giúp tâm trạng bạn tốt hơn, uống đủ nước, chia đều trong ngày, bổ sung đầy đủ dinh dưỡng.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng Cotard – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-cotard.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

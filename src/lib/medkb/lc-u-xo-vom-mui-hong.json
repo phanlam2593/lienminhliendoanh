@@ -1,0 +1,60 @@
+{
+ "id": "lc-u-xo-vom-mui-hong",
+ "kind": "condition",
+ "display": "U xơ vòm mũi họng",
+ "names": [
+  "U xơ vòm mũi họng"
+ ],
+ "about": [
+  {
+   "text": "**U xơ vòm mũi họng** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tai - mũi - họng, đầu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mắt, mất khứu giác, chảy máu mũi, nghẹt mũi, chảy máu, nhức đầu, nhìn đôi, đau mắt, khó thở, sổ mũi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): tuổi dậy thì, nam giới, bệnh đa polyp tuyến gia đình.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "U xơ vòm mũi họng – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/u-xo-vom-mui-hong.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

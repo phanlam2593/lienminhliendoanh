@@ -1,0 +1,72 @@
+{
+ "id": "lc-van-duc-dich-kinh",
+ "kind": "condition",
+ "display": "Vẩn đục dịch kính",
+ "names": [
+  "Vẩn đục dịch kính"
+ ],
+ "about": [
+  {
+   "text": "**Vẩn đục dịch kính** — Nhà thuốc Long Châu xếp vào nhóm bệnh: mắt.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đau mắt, nám, đau mắt, mất thị lực tạm thời.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: dịch kính lỏng, hiện tượng lấp lánh, viêm màng bồ đào, bệnh lý nhiễm tinh bột, cận thị, bong võng mạc, viêm mống mắt, xuất huyết võng mạc.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): đục thủy tinh thể, viêm màng bồ đào.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: luôn luôn cho mắt có thời gian nghỉ ngơi, cân nhắc bổ sung axit hyaluronic, bài tập di chuyển mắt.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Vẩn đục dịch kính – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/van-duc-dich-kinh-553.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

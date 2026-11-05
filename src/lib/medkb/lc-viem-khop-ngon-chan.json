@@ -1,0 +1,72 @@
+{
+ "id": "lc-viem-khop-ngon-chan",
+ "kind": "condition",
+ "display": "Viêm khớp ngón chân",
+ "names": [
+  "Viêm khớp ngón chân"
+ ],
+ "about": [
+  {
+   "text": "**Viêm khớp ngón chân** — Nhà thuốc Long Châu xếp vào nhóm bệnh: cơ - xương - khớp, tứ chi.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, đau rát, sốt nhẹ, mệt mỏi, đau cổ, sưng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thoái hóa khớp, viêm khớp dạng thấp, bệnh gout, viêm khớp vảy nến, viêm khớp nhiễm trùng, chấn thương, bệnh vảy nến, mệt mỏi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người lớn tuổi, thừa cân, tiền sử gia đình bị viêm khớp, diễn viên múa ba lê, nhiễm trùng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: duy trì trọng lượng cơ thể khỏe mạnh, duy trì thăm khám sức khỏe định kỳ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Viêm khớp ngón chân – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/viem-khop-ngon-chan.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

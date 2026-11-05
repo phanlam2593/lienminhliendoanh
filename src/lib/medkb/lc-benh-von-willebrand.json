@@ -1,0 +1,67 @@
+{
+ "id": "lc-benh-von-willebrand",
+ "kind": "condition",
+ "display": "Bệnh Von Willebrand",
+ "names": [
+  "Bệnh Von Willebrand",
+  "Von Willebrand"
+ ],
+ "about": [
+  {
+   "text": "**Bệnh Von Willebrand** — Nhà thuốc Long Châu xếp vào nhóm bệnh: máu, nhóm bệnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy máu chân răng, chảy máu mũi, phân có máu, xuất huyết, thiếu máu, chảy máu, bầm tím, ngứa, nám, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: loại 1, loại 2, loại 3, đột biến gen, lupus ban đỏ, suy giáp, rối loạn tăng sinh bạch huyết, khối u tăng sinh tủy.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): bệnh tim mạch, di truyền.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bệnh Von Willebrand – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/benh-von-willebrand.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

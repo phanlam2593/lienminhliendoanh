@@ -1,0 +1,73 @@
+{
+ "id": "lc-kho-tho-hut-hoi",
+ "kind": "condition",
+ "display": "Khó thở, hụt hơi",
+ "names": [
+  "Khó thở, hụt hơi",
+  "kho tho hut hoi"
+ ],
+ "about": [
+  {
+   "text": "**Khó thở, hụt hơi** — Nhà thuốc Long Châu xếp vào nhóm bệnh: hô hấp, ngực.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đánh trống ngực, tim đập nhanh, thở khò khè, nặng ngực, thở nhanh, đau ngực, tức ngực, xanh xao, buồn nôn, ho khan.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thiếu máu do thiếu sắt, cơn hen phế quản cấp tính, dị vật đường thở, chấn thương ngực, tiếp xúc với carbon monoxide, tăng áp động mạch phổi, hạ huyết áp, thuyên tắc phổi.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): béo phì.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tránh hút thuốc lá, tránh ô nhiễm không khí, duy trì cân nặng hợp lý, tránh gắng sức quá mức.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Khó thở, hụt hơi – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/kho-tho-hut-hoi.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

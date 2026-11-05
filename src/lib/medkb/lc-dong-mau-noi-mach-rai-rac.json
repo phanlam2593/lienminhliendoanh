@@ -1,0 +1,66 @@
+{
+ "id": "lc-dong-mau-noi-mach-rai-rac",
+ "kind": "condition",
+ "display": "Đông máu nội mạch rải rác",
+ "names": [
+  "Đông máu nội mạch rải rác"
+ ],
+ "about": [
+  {
+   "text": "**Đông máu nội mạch rải rác** — Nhà thuốc Long Châu xếp vào nhóm bệnh: máu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, ho ra máu, thở nhanh, đau ngực, nhức đầu, sốt nhẹ, mệt mỏi, khó thở, sưng, ngất.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm trùng huyết, biến chứng sản khoa, bệnh lý ác tính.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): phản ứng truyền máu, viêm tụy, bệnh gan, phẫu thuật hoặc gây mê gần đây, U máu, viêm tụy cấp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Đông máu nội mạch rải rác – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/dong-mau-noi-mach-rai-rac-264.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

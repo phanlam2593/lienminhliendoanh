@@ -1,0 +1,60 @@
+{
+ "id": "lc-roi-loan-dang-co-the",
+ "kind": "mental",
+ "display": "Rối loạn dạng cơ thể",
+ "names": [
+  "Rối loạn dạng cơ thể"
+ ],
+ "about": [
+  {
+   "text": "**Rối loạn dạng cơ thể** — Nhà thuốc Long Châu xếp vào nhóm bệnh: tâm thần, thần kinh - tinh thần.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: trầm cảm, mệt mỏi, khó thở, lo âu, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): rối loạn sử dụng chất gây nghiện, lạm dụng rượu, bị lạm dụng thể chất và tình dục, bị bỏ bê trong thời thơ ấu, lối sống hỗn loạn, sang chấn tâm lý, bệnh mạn tính trong thời thơ ấu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Rối loạn dạng cơ thể – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/roi-loan-dang-co-the.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

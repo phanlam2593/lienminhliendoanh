@@ -1,0 +1,67 @@
+{
+ "id": "lc-cum-a-h3-n2",
+ "kind": "infection",
+ "display": "Cúm A H3N2",
+ "names": [
+  "Cúm A H3N2",
+  "cum a h3 n2"
+ ],
+ "about": [
+  {
+   "text": "**Cúm A H3N2** — Nhà thuốc Long Châu xếp vào nhóm bệnh: truyền nhiễm, bệnh theo mùa, bệnh thường gặp.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chảy nước mũi, nghẹt mũi, tiêu chảy, thở nhanh, đau họng, đau bụng, co giật, mệt mỏi, đau đầu, ớn lạnh.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): trẻ em dưới 5 tuổi, người bị suy giảm miễn dịch, phụ nữ mang thai, HIV.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: không khạc nhổ bừa bãi, hạn chế tiếp xúc với người bệnh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Cúm A H3N2 – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/cum-a-h3-n2.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

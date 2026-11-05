@@ -1,0 +1,72 @@
+{
+ "id": "lc-ha-canxi-mau",
+ "kind": "condition",
+ "display": "Hạ canxi máu",
+ "names": [
+  "Hạ canxi máu"
+ ],
+ "about": [
+  {
+   "text": "**Hạ canxi máu** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: chóng mặt, trầm cảm, co giật, nhìn mờ, đau mắt, mệt mỏi, cáu gắt, lo âu, sưng, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: suy tuyến cận giáp, giả suy tuyến cận giáp, bệnh thận, viêm tụy cấp, đái tháo đường thai kỳ.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người thiếu hụt vitamin D hoặc magie, tuổi tác, thiếu hụt vitamin D.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bệnh nhân thiếu canxi máu nên ăn gì?, hạ canxi nên uống gì?, làm gì để phòng tránh chứng tụt canxi?.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hạ canxi máu – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ha-canxi-mau-1207.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

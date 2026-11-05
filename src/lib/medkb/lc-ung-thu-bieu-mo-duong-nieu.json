@@ -1,0 +1,66 @@
+{
+ "id": "lc-ung-thu-bieu-mo-duong-nieu",
+ "kind": "cancer",
+ "display": "Ung thư biểu mô đường niệu",
+ "names": [
+  "Ung thư biểu mô đường niệu"
+ ],
+ "about": [
+  {
+   "text": "**Ung thư biểu mô đường niệu** — Nhà thuốc Long Châu xếp vào nhóm bệnh: ung thư, thận - tiết niệu.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: tiểu nhiều, nóng rát, sụt cân, sốt nhẹ, mệt mỏi, khối u, phù.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): người tiếp xúc với nguồn nước chứa arsenic, tiếp xúc với hóa chất trong công việc, viêm mạn tính đường tiết niệu, hóa trị và xạ trị trước đây, tiếp xúc với arsenic trong nước uống, di truyền và đột biến gen.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ vệ sinh cá nhân và đường tiết niệu, kiểm soát căng thẳng, thực phẩm giàu protein, rau xanh và trái cây, ngũ cốc nguyên hạt, chất béo lành mạnh.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Ung thư biểu mô đường niệu – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/ung-thu-bieu-mo-duong-nieu.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

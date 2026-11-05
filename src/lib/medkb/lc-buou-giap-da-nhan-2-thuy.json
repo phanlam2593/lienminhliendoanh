@@ -1,0 +1,72 @@
+{
+ "id": "lc-buou-giap-da-nhan-2-thuy",
+ "kind": "condition",
+ "display": "Bướu giáp đa nhân 2 thùy",
+ "names": [
+  "Bướu giáp đa nhân 2 thùy"
+ ],
+ "about": [
+  {
+   "text": "**Bướu giáp đa nhân 2 thùy** — Nhà thuốc Long Châu xếp vào nhóm bệnh: nội tiết - chuyển hóa.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: đổ mồ hôi, tiêu chảy, táo bón, mệt mỏi, khó thở, yếu cơ, khối u, sưng, phù, ho.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bệnh lý tự miễn, U tuyến yên, thiếu iốt, mắc bệnh lý tự miễn, U tuyến yên tăng tiết TSH, di truyền trong gia đình.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Người dễ mắc hơn (theo nguồn): phụ nữ, khu vực thiếu iốt, suy dinh dưỡng, mang thai và mãn kinh, tuổi, tiền sử gia đình.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: bỏ rượu bia, thuốc lá, quản lý căng thẳng, rong biển, cá tuyết, sữa chua nguyên chất, ít béo, sữa giảm béo.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Bướu giáp đa nhân 2 thùy – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/buou-giap-da-nhan-2-thuy.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}

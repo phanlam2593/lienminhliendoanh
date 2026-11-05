@@ -1,0 +1,67 @@
+{
+ "id": "lc-hoi-chung-lennox-gastaut",
+ "kind": "condition",
+ "display": "Hội chứng Lennox - Gastaut",
+ "names": [
+  "Hội chứng Lennox - Gastaut",
+  "hoi chung lennox gastaut"
+ ],
+ "about": [
+  {
+   "text": "**Hội chứng Lennox - Gastaut** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thần kinh - tinh thần, bệnh trẻ em.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "signs": [
+  {
+   "text": "Triệu chứng nguồn có nhắc tới: co giật, ho, co giật, cơn động kinh co cứng.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "causes": [
+  {
+   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thiếu oxy não, viêm não, rubella, hội chứng West, tổn thương não do thiếu oxy, nhiễm trùng não, loạn sản vỏ não, di truyền.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "course": [],
+ "care": [
+  {
+   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: quản lý thuốc, môi trường an toàn, hỗ trợ giám sát, chăm sóc sức khỏe tổng quát, hỗ trợ giáo dục, hỗ trợ tâm lý và xã hội.",
+   "src": [
+    0
+   ]
+  },
+  {
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "diet": null,
+ "doctor": [
+  {
+   "text": "Nên **đi khám** khi có các triệu chứng trên, triệu chứng kéo dài, nặng dần hoặc tái đi tái lại; **đi cấp cứu ngay** nếu khó thở, đau ngực, lơ mơ, co giật, chảy máu nhiều.",
+   "src": [
+    0
+   ]
+  }
+ ],
+ "emergency": [],
+ "sources": [
+  {
+   "title": "Hội chứng Lennox - Gastaut – Tìm hiểu về bệnh",
+   "publisher": "Nhà thuốc FPT Long Châu (bài được bác sĩ / dược sĩ duyệt)",
+   "url": "https://nhathuoclongchau.com.vn/benh/hoi-chung-lennox-gastaut.html",
+   "reviewed": "2026-11-05"
+  }
+ ],
+ "verifiedAt": "2026-11-05"
+}
