@@ -318,6 +318,8 @@ export function actionReply(q: string): Trap | null {
   const cam = W(/\b(camera|cam an ninh)\b/u).test(low) && W(/\b(mở|xem|coi|check)\b/u).test(low);
   if (!ASK_DO.test(low) && !cam) return null;
   if (W(/\b(cấp cứu|115|113|114)\b/u).test(low)) return null;
+  // 05/11: "em mua gói Oresol mà chưa biết pha sao" — người dùng KỂ đã mua, đang hỏi cách dùng, không nhờ Lomi mua
+  if (W(/\b(chưa|không|ko|hông) (biết|rõ) (cách )?(pha|dùng|uống|xài|bôi|sử dụng)\b/u).test(low)) return null;
   // 01/11 (vòng 19): "gửi ảnh trong tin nhắn được không" — hỏi app CÓ CHO LÀM không, không phải nhờ Lomi làm thay
   if (/^(?:có\s+)?(?:gửi|nhắn|gọi|đặt|đăng|chia sẻ|xoá|xóa)\s+.{1,40}?\s+(?:được không|được ko|được k|có được không|đc không|đc ko)$/u.test(low) && !W(/\b(giúp|giùm|dùm|hộ|thay|cho (?:tôi|tui|mình|em|anh|chị)|bạn|lomi)\b/u).test(low)) return null;
   // 01/11 (vòng 12): "họ không thèm nhắn cho tôi", "anh ấy chẳng gọi cho em" — người KHÁC không làm, người dùng đang than, không phải nhờ Lomi làm

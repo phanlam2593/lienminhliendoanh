@@ -91,6 +91,12 @@ const SYN: [RegExp, string][] = [
   [VN(/\b(ngủ (không|ko|k|hông|hong) (được|dc|đc|nổi|ngon|say)|không ngủ (nổi|nghê)|trằn trọc|thức trắng|thuc tam|ngủ chập chờn|hay tỉnh giấc)\b/), "mất ngủ"],
   [VN(/\b(nhức đầu|choáng váng|đau nửa đầu|đau đầu)\b/), "đau đầu"],
   [VN(/\b(buồn nôn|muốn nôn|nôn mửa|nóng ruột)\b/), "buồn nôn"],
+  // 05/11 (bộ đề "nói kiểu khác" do ChatGPT soạn): tên gọi dân gian / cách tả của bệnh thường gặp → tên chuẩn
+  [VN(/\b(tào tháo đuổi|ỉa chảy|ỉa lỏng|tiêu lỏng|đi phân lỏng|phân lỏng|đi ngoài (nhiều lần|liên tục|hoài|lỏng|toàn nước)|đi cầu (lỏng|nhiều lần|liên tục|toàn nước))\b/), "tiêu chảy"],
+  [VN(/\b(bị bón|bón bụng|bon bung|khó đi (cầu|vệ sinh|ngoài|đại tiện|nặng)|(chưa|không|ko|hông) đi (ngoài|cầu|vệ sinh|nặng) (được|đc|dc|nổi)|(mấy|nhiều|vài) (ngày|hôm|bữa)( \S+){0,2} (chưa|không|ko) đi (ngoài|cầu|vệ sinh|nặng))\b/), "táo bón"],
+  [VN(/\b(đau bụng (khi |lúc |mỗi lần |mỗi khi |những )?(ngày )?(tới|đến|có|hành) (tháng|kỳ|kinh)|(tới|đến|có) (tháng|kỳ|kinh)( \S+){0,4} đau bụng|đau bụng (ngày|mùa|kỳ) (đèn đỏ|kinh|dâu|đèn)|(ngày|kỳ) đèn đỏ( \S+){0,4} đau bụng|đau bụng ngày kinh)\b/), "đau bụng kinh"],
+  [VN(/\b(căng như dây đàn|đầu óc căng thẳng|căng não)\b/), "căng thẳng"],
+  [VN(/\b(tâm trạng (xuống|đi xuống|chùng xuống|tụt)|(chẳng|không|hông|ko) (thấy )?vui (chút )?(nào|gì cả|gì hết|nổi))\b/), "tâm trạng tệ"],
   [VN(/\b(đầy hơi|chướng bụng|ăn không tiêu|đầy bụng)\b/), "khó tiêu"],
   // tâm lý
   [VN(/\b(áp lực|nặng nề|ngộp thở|ngợp thở|kiệt quệ|không chịu nổi nữa|chịu hông nổi|chịu hong nổi|sap dat|quá sức)\b/), "áp lực quá"],
@@ -115,7 +121,28 @@ const SYN: [RegExp, string][] = [
 ];
 
 /** Nối thêm từ khoá chuẩn vào câu (nếu cách nói là biến thể). Câu không dính biến thể nào thì trả nguyên. */
-export function senseCanon(q: string): string {
+// 05/11 (bộ đề "nói kiểu khác"): tên gọi khác của bệnh / triệu chứng → ĐỔI THẲNG trong câu (không nối thêm ở cuối, để câu
+//   "cao đường ăn chuối hok" vẫn đọc được là hỏi món với bệnh). Có cả dạng có dấu lẫn không dấu.
+const RENAME: [RegExp, string][] = [
+  [VR(/(?<![\p{L}])(tào tháo đuổi|tao thao duoi|ỉa chảy|ia chay|ỉa lỏng|tiêu lỏng)(?![\p{L}])/giu), "tiêu chảy"],
+  [VR(/(?<![\p{L}])(bón bụng|bon bung)(?![\p{L}])/giu), "táo bón"],
+  [VR(/(?<![\p{L}])(bị bón|bi bon)(?![\p{L}])/giu), "bị táo bón"],
+  [VR(/(?<![\p{L}])(rát cổ họng|rát cổ|rat co|cổ họng (bị )?rát|co hong (bi )?rat|rát họng|rat hong)(?![\p{L}])/giu), "đau họng"],
+  [VR(/(?<![\p{L}])(mũi (bị )?(tịt|tắc)|mui (bi )?(tit|tac)|tịt mũi|tắc mũi)(?![\p{L}])/giu), "nghẹt mũi"],
+  [VR(/(?<![\p{L}])(cao máu|cao mau)(?![\p{L}])/giu), "tăng huyết áp"],
+  [VR(/(?<![\p{L}])(bệnh đường|benh duong|cao đường|cao duong|đường huyết cao|duong huyet cao)(?![\p{L}])/giu), "tiểu đường"],
+  [VR(/(?<![\p{L}])(muỗi (chích|cắn)|muoi (chich|can))(?![\p{L}])/giu), "muỗi đốt"],
+  [VR(/(?<![\p{L}])(nóng sốt|sốt nóng)(?![\p{L}])/giu), "sốt"],
+  [VR(/(?<![\p{L}])dạ dàu(?![\p{L}])/giu), "dạ dày"],
+  [VR(/(?<![\p{L}])(bị cho thôi việc|cho thôi việc|bị thôi việc|bị cho nghỉ việc|mất công việc)(?![\p{L}])/giu), "bị mất việc"],
+  [VR(/(?<![\p{L}])đau cái (đầu|bụng|lưng|răng|họng|bụng)(?![\p{L}])/giu), "đau $1"],
+  [VR(/(?<![\p{L}])bị hô(?= (phải|thì|hoài|quá|lâu|mấy|nhiều|làm|lm|có)(?![\p{L}]))/giu), "bị ho"],
+];
+export function senseCanon(q0: string): string {
+  let q = q0;
+  // (câu gõ không dấu → tên chuẩn cũng không dấu, để cả câu vẫn là "không dấu" cho bộ đoán dấu / các lớp đọc lỏng)
+  const plain = !/[\u0080-\uFFFF]/.test(q0);
+  for (const [re, to] of RENAME) q = q.replace(re, plain && !to.includes("$") ? normalizeVi(to) : to);
   const n = normalizeVi(q);
   const add: string[] = [];
   for (const [re, canon] of SYN) if (re.test(n) && !n.includes(normalizeVi(canon))) add.push(canon);

@@ -66,7 +66,7 @@ const KINDS: Kind[] = [
   { re: VN(/\b(căn hộ cho thuê|thuê căn hộ|thuê chung cư)\b/), type: "stay", names: ["can ho"], noun: "căn hộ cho thuê" },
   { re: VN(/\b(thuê nhà nguyên căn|nhà nguyên căn|thuê nguyên căn|thuê nhà)\b/), type: "stay", names: ["nguyen can"], noun: "nhà cho thuê nguyên căn" },
   { re: VN(/\b(nhà sàn)\b/), type: "stay", names: ["nha san"], noun: "nhà sàn" },
-  { re: VN(/\b(chỗ ở|chỗ nghỉ|lưu trú|phòng nghỉ|chỗ ngủ|ngủ ở đâu|nghỉ ở đâu|(nên|sẽ|định|tính) ở (đâu|khu nào|chỗ nào)|ở (đâu|khu nào|chỗ nào) (thì )?(tốt|đẹp|rẻ|ổn|tiện|hợp lý|được)|ở chỗ nào|đặt phòng|thuê phòng|book phòng)\b/), type: "stay", names: [], noun: "chỗ ở", broad: true },
+  { re: VN(/\b(chỗ ở|chỗ nghỉ|lưu trú|phòng nghỉ|chỗ ngủ|ngủ ở đâu|nghỉ ở đâu|(nên|sẽ|định|tính) ở (đâu|khu nào|chỗ nào)|ở (đâu|khu nào|chỗ nào) (thì )?(tốt|đẹp|rẻ|ổn|tiện|hợp lý|được)|ở chỗ nào|đặt phòng|thuê phòng|book phòng|ngủ (đâu|chỗ nào)|(chỗ|địa điểm|nơi) (ở lại|nghỉ lại|ngủ lại)|^ở đâu (đà lạt|ở đà lạt))\b/), type: "stay", names: [], noun: "chỗ ở", broad: true },
   // ── Du lịch, đi lại ──
   { re: VN(/\b(xe ghép|xe khách|xe limousine|limousine|xe đi (đà lạt|sài gòn|nha trang|phan thiết|bảo lộc))\b/), type: "travel", names: ["xe ghep"], noun: "xe ghép / xe khách" },
   { re: VN(/\b(đưa đón sân bay|ra sân bay|đón sân bay|xe sân bay)\b/), type: "travel", names: ["san bay"], noun: "xe đưa đón sân bay" },

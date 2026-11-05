@@ -529,7 +529,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "grief",
-    re: VN(/\b(mất người thân|qua đời|tang lễ|đám tang|ông mất|bà mất|bố mất|mẹ mất|mất mẹ|mất bố|mất ông|mất bà|mất đi một người|(chồng|vợ|con|bạn thân) (mình |tôi |em )?(mất|qua đời|mất rồi)|thú cưng mất|(con|bé|em) (chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết)|(chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết) rồi|con chó chết|con mèo chết|(ba|bố|mẹ|má|cha|ông|bà nội|bà ngoại|ông nội|ông ngoại|chồng|vợ|con|anh trai|chị gái|em trai|em gái|bạn thân) (em |mình |tôi |tui |a |anh |chị |c |e )?(mất rồi|qua đời|đã mất|vừa mất|mới mất|ra đi rồi|đã ra đi|vừa ra đi|mới ra đi|vừa qua đời|đã qua đời))\b/),
+    re: VN(/\b(mất người thân|qua đời|tang lễ|đám tang|ông mất|bà mất|bố mất|mẹ mất|mất mẹ|mất bố|mất ông|mất bà|mất đi một người|(chồng|vợ|con|bạn thân) (mình |tôi |em )?(mất|qua đời|mất rồi)|thú cưng mất|(con|bé|em) (chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết)|(chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết) rồi|con chó chết|con mèo chết|(ba|bố|mẹ|má|cha|ông|bà nội|bà ngoại|ông nội|ông ngoại|chồng|vợ|con|anh trai|chị gái|em trai|em gái|bạn thân) (em |mình |tôi |tui |a |anh |chị |c |e )?(mất rồi|qua đời|đã mất|vừa mất|mới mất|ra đi rồi|đã ra đi|vừa ra đi|mới ra đi|vừa qua đời|đã qua đời))\b(?! (việc|công việc|việc làm|cv|job|tiền|điện|nước|ngủ|ví|điện thoại|đt|xe|đồ|hết|trắng|lòng tin|kiểm soát|bình tĩnh|cảm giác|sức|ngon|giọng|liên lạc|kết nối|mạng|wifi|sóng|tài khoản|nick|mật khẩu|dữ liệu|kinh|hứng|tập trung|thời gian|cơ hội|khách|vốn))/),
     feel: [
       "Lomi rất tiếc về sự mất mát của bạn 🤍 Không lời nào đủ để xoa dịu nỗi đau này.",
       "Mất đi người (hay bé cưng) mình thương là nỗi đau rất lớn. Lomi ở đây với bạn.",

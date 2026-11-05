@@ -230,7 +230,7 @@ const ASPECTS: [MedAspect, RegExp][] = [
   ["emergency", VN(/\b(cấp cứu|gọi 115|nguy hiểm đến tính mạng|dấu hiệu nguy hiểm|báo động)\b/)],
   ["meds", VN(/\b(thuốc gì|thuốc nào|uống thuốc|dùng thuốc|thuốc trị|thuốc chữa|có thuốc|cần thuốc|thuốc đặc trị)\b/)],
   // (01/11: "trái cây nào tốt cho người tiểu đường", "thịt nào tốt cho người gout", "món gì hợp với người đau dạ dày" — hỏi ĂN UỐNG)
-  ["diet", VN(/\b((món|loại|thịt|cá|rau|trái cây|hoa quả|quả|đồ ăn|thức ăn|đồ uống|nước) (nào|gì) (tốt|hợp|nên ăn|nên uống|ăn được)|tốt cho người|hợp với người|kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],
+  ["diet", VN(/\b((món|loại|thịt|cá|rau|trái cây|hoa quả|quả|đồ ăn|thức ăn|đồ uống|nước) (nào|gì) (tốt|hợp|nên ăn|nên uống|ăn được)|(những )?(món|đồ ăn|thức ăn|thực phẩm|đồ) (nào|gì) (cần|phải|nên) (tránh|kiêng|hạn chế)|tốt cho người|hợp với người|kiêng|ăn gì|uống gì|uống nước gì|ăn uống gì|gì tốt|chế độ ăn|thực đơn|nên ăn|nên uống|tránh ăn|ăn uống|được ăn gì|dinh dưỡng|bổ sung gì)\b/)],
   ["signs", VN(/\b(triệu chứng|dấu hiệu|biểu hiện|nhận biết|nhận ra|có những dấu hiệu|có hiện tượng gì|bị sao|bị như thế nào|làm sao biết|sao biết|làm sao để biết|biết mình bị|biết có bị)\b/)],
   // (01/11: "sao mà ho hoài vậy", "sao lại hay đau đầu" — hỏi vì sao; "làm sao mà…" là hỏi cách nên không tính;
   //   "ai dễ bị gout", "người nào dễ bị loãng xương" — hỏi ĐỐI TƯỢNG NGUY CƠ → phần nguyên nhân / yếu tố nguy cơ)

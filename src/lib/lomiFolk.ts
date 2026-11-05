@@ -4326,7 +4326,7 @@ export const UNVERIFIED_HERBS = [
 
 const FOLK_WORD = VN(/\b(dân gian|mẹo dân gian|thuốc nam|thuốc bắc|bài thuốc|đông y|thảo dược|cây thuốc|lá thuốc|thuốc lá cây|mẹo xưa|mẹo ông bà|cách dân gian|thuốc dân gian|y học cổ truyền)\b/);
 // (31/10) "bồ công anh có giải độc gan không", "lá hẹ có trị ho không" — câu hỏi "có … không" cũng là hỏi về vị đó.
-const ASK = VN(/\b(để làm gì|để làm j|dùng làm gì|dùng làm j|dùng để làm gì|dùng để làm j|làm gì|làm j|để làm chi|dùng vô việc gì|là j|trị j|chữa j|tác dụng j|công dụng j|có(?! (?:ai|bán|chỗ|quán|nơi|người|shop|cửa hàng|tiệm|ship|giao))(?: \S+){1,5} (?:không|ko|k|hông|hok|ha|hả)|tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
+const ASK = VN(/\b(có lợi gì|lợi gì|để làm gì|để làm j|dùng làm gì|dùng làm j|dùng để làm gì|dùng để làm j|làm gì|làm j|để làm chi|dùng vô việc gì|là j|trị j|chữa j|tác dụng j|công dụng j|có(?! (?:ai|bán|chỗ|quán|nơi|người|shop|cửa hàng|tiệm|ship|giao))(?: \S+){1,5} (?:không|ko|k|hông|hok|ha|hả)|tác dụng|công dụng|có tốt|tốt không|tốt k|tốt ko|có hại|hại không|có độc|độc không|có sao|sao không|uống|dùng|xài|là gì|là cây gì|chữa|trị|giúp|đỡ|bổ|ai không nên|kiêng|được không|được k|được ko|dc k|đc k|ra sao|thế nào|như nào|có nên|nên không|nên k|ăn được|cho bé|cho con|cho trẻ|bà bầu|mang thai|có thật|thật không|hiệu quả|có ích|lợi ích|thì sao|thế sao|hết không|có hết|có khỏi|sao vậy|phải không|phải k|đúng không|đúng k|có đúng)\b/);
 const BURN = VN(/\b(bỏng|phỏng)\b/);
 const BOI = VN(/\b(bôi|thoa|đắp|xức|trét|chấm)\b/);
 /** Câu có gõ dấu tiếng Việt. */
@@ -4358,8 +4358,11 @@ export const folkFor = (topicId: string): { f: FolkEntry; t: FolkTopic }[] =>
 /** Vị / mẹo dân gian nhắc trong câu (tên dài khớp trước). "Bôi … lên vết bỏng" chỉ nhận khi câu nói tới bỏng. */
 const GEN_CTX = /\b(de lam|lam gi|lam j|lam chi|la j|tac dung|cong dung|chua|tri|bai thuoc|vi thuoc|dong y|y hoc co truyen|thuoc nam|thuoc bac|duoc lieu|uong|sac|ngam|ham|boi|dap|xong|doc|bau|mang thai|co thai|cho con bu|tinh nong|tinh mat|tinh han|la cay gi|la gi|la con gi|co tot|tot khong|kieng|ai khong nen|dung duoc|dung the nao|dung sao)\b/;
 const AMBIG_BARE = new Set(["rieng", "chi tu", "do trong", "o mai", "hoe", "sa nhan", "sai ho", "tam that", "huong phu", "phong phong"]);
+const TEEN_ADDED = /(?<![\p{L}])(gì|vậy|được|không|làm|sao|nữa|biết|bạn|giờ|vô|về|trời|hôm nay|bao nhiêu|người yêu|mật khẩu)(?![\p{L}])/gu;
 export function findFolk(text: string): FolkEntry | null {
   const n = ` ${normalizeVi(text)} `;
+  // 05/11: câu gõ không dấu mà lớp viết tắt chèn thêm chữ có dấu ("la voi dung lm j" → "… làm gì") vẫn tính là gõ KHÔNG dấu
+  const acc0 = ACCENTED.test(text.replace(TEEN_ADDED, " "));
   let best: { f: FolkEntry; len: number } | null = null;
   for (const f of FOLK) {
     if (f.id === "boi-bong" && !(BURN.test(n) && BOI.test(n))) continue;
@@ -4372,21 +4375,21 @@ export function findFolk(text: string): FolkEntry | null {
     // (ngộ độc THỰC PHẨM / rượu khác nuốt phải chất độc — nguồn NHS Poisoning nói về chất độc, không áp lời "đừng cho uống gì" cho tiêu chảy, nôn do đồ ăn)
     if (f.id === "ngo-doc-gay-non" && FOODPOI.test(n) && !CHEM.test(n)) continue;
     // ("toi bi ho" gõ không dấu là "tôi bị ho"; "tối nay" có dấu khác "tỏi") → chỉ nhận tỏi khi gõ đúng "tỏi", hoặc không dấu mà đi kèm chữ chỉ món tỏi.
-    if (f.id === "toi" && !ACCENTED.test(text) && !/\b(toi song|ngam toi|toi ngam|ruou toi|toi mo coi|toi den|cu toi|tep toi|an toi song)\b/.test(n)) continue;
+    if (f.id === "toi" && !acc0 && !/\b(toi song|ngam toi|toi ngam|ruou toi|toi mo coi|toi den|cu toi|tep toi|an toi song)\b/.test(n)) continue;
     // ("mang thai", "san nhà" gõ không dấu ≠ "măng", "sắn") → gõ không dấu thì chỉ nhận tên nhiều chữ.
-    if (f.id === "san-mang-doc" && !ACCENTED.test(text) && !/\b(cu san|say san|khoai mi|cu mi|mang tuoi|mang chua|mang rung|mang tre|nuoc mang|luoc mang|luoc san|ngam mang|khoai tay)\b/.test(n)) continue;
+    if (f.id === "san-mang-doc" && !acc0 && !/\b(cu san|say san|khoai mi|cu mi|mang tuoi|mang chua|mang rung|mang tre|nuoc mang|luoc mang|luoc san|ngam mang|khoai tay)\b/.test(n)) continue;
     // (04/11) "mã đề thi", "mã đề số 3" là đề kiểm tra; "sa" không dấu một mình ("bi sa sut", "sa vao") không phải cây sả.
     if (f.id === "ma-de" && /\bma de (thi|so|\d)/.test(n)) continue;
-    if (f.id === "sa" && !ACCENTED.test(text) && !/\b(la sa|cu sa|cay sa|nuoc sa|tinh dau sa|tra sa|xong sa)\b/.test(n)) continue;
+    if (f.id === "sa" && !acc0 && !/\b(la sa|cu sa|cay sa|nuoc sa|tinh dau sa|tra sa|xong sa)\b/.test(n)) continue;
     if (f.gen && f.verdict === "trad" && !GEN_CTX.test(n)) continue;
     let m: { 0: string } | null = n.match(RE.get(f.id)!);
     // (04/11) mục tự động có tên một chữ ("sim", "duối", "ngò") gõ không dấu thì không nhận — dễ trùng chữ thường.
-    if (m && f.gen && !ACCENTED.test(text) && !m[0].trim().includes(" ")) continue;
+    if (m && f.gen && !acc0 && !m[0].trim().includes(" ")) continue;
     // (04/11) tên vị trùng chữ thường khi gõ không dấu ("rieng toi" = riêng tôi, "chi tu" = chị tư, "do trong" = đồ trong, "tam that" = tâm thất)
     //   → chỉ nhận khi câu có chữ chỉ vị thuốc.
-    if (m && !ACCENTED.test(text) && AMBIG_BARE.has(m[0].trim()) && !/\b(tac dung|cong dung|vi thuoc|thuoc nam|thuoc bac|duoc lieu|cu|la|tra|nuoc|bot|qua|hat|vo|re)\b/.test(n)) continue;
+    if (m && !acc0 && AMBIG_BARE.has(m[0].trim()) && !/\b(tac dung|cong dung|vi thuoc|thuoc nam|thuoc bac|duoc lieu|cu|la|tra|nuoc|bot|qua|hat|vo|re)\b/.test(n)) continue;
     // Câu gõ CÓ DẤU thì tên vị phải khớp cả dấu ("nghe nói" ≠ "nghệ", "quê" ≠ "quế", "tối" ≠ "tỏi"); chữ gõ không dấu vẫn khớp lỏng.
-    if (m && ACCENTED.test(text)) {
+    if (m && acc0) {
       const hit = f.names.filter((x) => typedAs(text, x)).sort((a, b) => b.length - a.length)[0];
       m = hit ? [normalizeVi(hit)] : null;
     }

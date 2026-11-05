@@ -1674,6 +1674,19 @@ export function AiChat({
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
       }
+      // 05/11 (bộ đề "nói kiểu khác"): câu cụt "<bệnh> sao" / "sốt làm gì" / "mụn sao" (≤ 4 chữ, tên bệnh có thẻ) → hỏi cách chăm sóc
+      {
+        const cw = q.trim().replace(/[?!.…]+$/u, "").split(/\s+/);
+        const tail = VN(/^(sao|làm sao|lm sao|làm gì|sao đây|sao giờ|sao ta|thì sao)$/);
+        const k = cw.length >= 2 && cw.length <= 4 ? [2, 1].find((t) => cw.length > t && tail.test(normalizeVi(cw.slice(-t).join(" ")))) : undefined;
+        const cond = k ? cw.slice(0, -k).join(" ").replace(/^(bị|bi)\s+/iu, "") : "";
+        if (cond && !la?.med && !la?.drug && findMedId(`bị ${cond} nên làm gì`) && !findIndexedDrug(cond) && !findDrug(cond)) {
+          q = `bị ${cond} nên làm gì`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+      }
       // 05/11: Lomi vừa hỏi "Bạn muốn biết X là gì, nên xử lý thế nào hay ăn uống cần kiêng gì?" mà đáp "tất cả / cả 3 / hết"
       //   → đưa nguyên thẻ kiến thức của X (câu "X là gì" ra thẻ đủ phần), thay vì "chưa được tiếp thu".
       if (la?.health?.label && /muốn biết .+\?$/u.test(la.content) && VN(/^(tất cả|tất|hết|hết luôn|cả (2|3|hai|ba)|cả (2|3|hai|ba) (luôn|phần|cái)|toàn bộ|tất tần tật|đủ hết|full|all|muốn biết hết|biết hết)( luôn| nha| nhé| nhe| đi| ạ| á| nè| lun)*$/).test(normalizeVi(q))) {

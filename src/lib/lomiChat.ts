@@ -1199,7 +1199,10 @@ export function expandTeen(text: string): string {
   s = s.replace(VR(/(^|[^\p{L}])(ng|người) (iu|yêu)(?![\p{L}])/giu), "$1người yêu");
   s = s.replace(VR(/(^|[^\p{L}])bn(?![\p{L}])/giu), "$1bạn");
   // "lm j", "làm j" → làm gì; "m/t + động từ" là mày/tao (khác "5 m" = mét); "nv quán" = nhân viên.
-  s = s.replace(VR(/(^|[^\p{L}])(lm|làm) (j|gi)(?![\p{L}])/giu), "$1làm gì");
+  // (05/11: câu gõ KHÔNG DẤU — "la voi dung lm j" — giữ không dấu "lam gi" để bộ đoán dấu vẫn đọc cả câu; chèn "làm gì" có dấu
+  //   làm câu thành nửa có dấu, bộ đoán dấu bỏ qua → "la voi" không ra "lá vối")
+  const plain0 = !/[\u0080-\uFFFF]/.test(s);
+  s = s.replace(VR(/(^|[^\p{L}])(lm|làm) (j|gi)(?![\p{L}])/giu), plain0 ? "$1lam gi" : "$1làm gì");
   s = s.replace(VR(/(^|[^\p{L}\p{N}])m (đi|làm|ăn|ngủ|ở|có|biết|nói|bị|khùng|điên|ơi|rảnh|thích|nghĩ|hiểu|đang)(?![\p{L}])/giu), "$1mày $2");
   s = s.replace(VR(/(^|[^\p{L}\p{N}])t (đi|làm|ăn|ngủ|ở|có|biết|nói|bị|muốn|thích|nghĩ|hiểu|đang|hỏi|thấy|không|ko|k)(?![\p{L}])/giu), "$1tao $2");
   s = s.replace(VR(/(^|[^\p{L}])nv (quán|cửa hàng|bán hàng|phục vụ|shop|ở|tiệm|công ty|chỗ)(?![\p{L}])/giu), "$1nhân viên $2");

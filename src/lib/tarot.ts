@@ -358,7 +358,7 @@ function fold(s: string): string {
 }
 
 const TRIG =
-  VN(/(?<![a-z])(bói\s+tarot|xem\s+tarot|tarot|bói\s+bài|rút\s+bài|trải\s+bài|xem\s+bài\s+(?:(?:1|một|3|ba|5|năm|10|mười)\s+lá|tarot)|xem\s+bài(?=\s+(?:giúp|giùm|dùm|cho)\s)|xem\s+bói|bói\s+toán|rút\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|trải\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|bói\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|bói)(?![a-z])/g);
+  VN(/(?<![a-z])(bói\s+tarot|xem\s+tarot|tarot|bói\s+bài|rút\s+bài|trải\s+bài|xem\s+bài\s+(?:(?:1|một|3|ba|5|năm|10|mười)\s+lá|tarot)|xem\s+bài(?=\s+(?:giúp|giùm|dùm|cho)\s)|xem\s+bói|bói\s+toán|rút\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|rút\s+(?:cho|giúp|giùm|dùm|hộ)(?:\s+(?:mình|em|tôi|tui|anh|chị|tớ|con|bạn|t|e|a))?\s+(?:1|một|3|ba|5|năm)\s+lá|trải\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|bói\s+(?:1|một|3|ba|5|năm|10|mười)\s+lá|bói)(?![a-z])/g);
 
 function findTrigger(orig: string, f: string): { start: number; end: number } | null {
   TRIG.lastIndex = 0;
@@ -410,6 +410,8 @@ export function detectTarot(text: string): { question: string; daily: boolean } 
   const m = findTrigger(text, f);
   // 05/11: "lá bài hôm nay của tôi", "quẻ hôm nay của mình" — không có chữ bói / rút nhưng rõ là xin lá bài trong ngày
   if (!m && VN(/^(lá bài|quẻ|quẻ bói) (hôm nay|của tôi|của tui|của mình|cho tôi|cho mình|ngày hôm nay)( của (tôi|tui|mình|em|anh))?\s*\??$/).test(f.trim())) return { question: "", daily: true };
+  // 05/11: "hôm nay bài gì", "hôm nay quẻ gì" (bộ đề "nói kiểu khác")
+  if (!m && VN(/^(hôm nay|nay) (bài|lá bài|lá|quẻ) (gì|nào|sao)( (vậy|ta|đây|nè|nhỉ))?\s*\??$/).test(f.trim())) return { question: "", daily: true };
   if (!m) return null;
   let after = clean(text.slice(m.end));
   const before = clean(text.slice(0, m.start));
