@@ -78,6 +78,7 @@ import { contextReply } from "@/lib/lomiContext";
 import { shorten, softenTail } from "@/lib/lomiTail";
 import { drugAsk, overdoseMention, prevDrugCtx } from "@/lib/lomiDrug";
 import { drugById, findDrug, sourceList } from "@/lib/lomiDrugData";
+import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { asksSource, dropRepeats, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
 import { boundaryAdvice, fearInHarm, harmOf, harmReply, helperAdvice, safetyFollow, type Harm } from "@/lib/lomiSafety";
@@ -1123,6 +1124,18 @@ export function AiChat({
       return { role: "assistant", content: `Dạ, đang dùng **${ds.name}** 💊 Bạn muốn hỏi gì — uống lúc nào, uống chung với sữa / trà / cà phê được không, hay ăn gì cho hấp thu tốt?\n\nLomi không nêu liều nha — liều và uống bao lâu là theo bác sĩ / tờ hướng dẫn.`, local: true, drug: { kind: "what", name: ds.name }, health: hCtx ?? {} };
     const prevDrug = prevA.find((m) => m.drug?.name && m.drug.kind !== "overdose")?.drug;
     const dName = prevDrug?.name ?? prevU.map((m) => drugStatement(m.content)?.name).find(Boolean);
+    // 05/11 (Kir chụp màn hình: hỏi amoxicillin rồi gõ "Ambroxol" → "chưa có dữ liệu về ambroxol"): đang nói thuốc A mà gõ / hỏi ngắn
+    //   sang một thuốc B KHÁC có trong danh mục ("Ambroxol", "còn bisolvon", "thế còn smecta") → trả lời về thuốc B, không bám thuốc A.
+    if (dName && w <= 6) {
+      const ixB = findIndexedDrug(raw);
+      const dN = ` ${normalizeVi(dName)} `;
+      // (chỉ khi câu CHỈ là tên thuốc B + chữ đệm — "uống thêm ibuprofen được không" là hỏi dùng chung với A, để lớp tương tác lo)
+      const restB = ` ${normalizeVi(raw).replace(/[-–?!.,…]/g, " ")} `.replace(` ${ixB?.brand ?? "\u0000"} `, " ").replace(/\b(con|the con|vay con|the|vay|thi sao|thi the nao|la gi|la thuoc gi|la thuoc chi|thuoc|vien|siro|nua|nha|a|ha|nhi|di|e|em|oi|lomi|sao)\b/g, " ").trim();
+      if (ixB && !restB && !ixB.drug.names.some((x) => dN.includes(` ${x} `)) && !dN.includes(` ${ixB.brand} `)) {
+        const dk = drugAsk(`${ixB.brand} là thuốc gì`, {});
+        if (dk) return { role: "assistant", content: dk.text, local: true, drug: { kind: dk.kind, name: dk.name ?? ixB.brand, id: dk.drugId }, health: hCtx ?? {} };
+      }
+    }
     // (1a) Đang nói thuốc tránh thai mà kể / hỏi tiếp ngắn ("quên một viên thì sao?", "vỉ 21 viên", "hôm qua quên á").
     if (dName && VN(/\b(tránh thai|ngừa thai)\b/).test(` ${normalizeVi(dName)} `) && w <= 9) {
       const pill = list3Reply(`quên thuốc tránh thai ${raw}`);

@@ -1637,3 +1637,27 @@ describe("05/11 — thẻ bệnh ngắn (Long Châu)", () => {
     expect(idx.filter((r) => r.id.startsWith("lc-")).length).toBeGreaterThan(1000);
   });
 });
+
+// ── 05/11 (Kir chụp màn hình): cùng một hội thoại, đang nói thuốc A mà gõ sang thuốc B → trả lời về B ──
+describe("05/11 — đổi sang thuốc khác trong cùng hội thoại", () => {
+  const S: [string[], RegExp][] = [
+    [["amoxicillin là thuốc gì", "Ambroxol"], /\*\*Ambroxol\*\*/],
+    [["panadol là thuốc gì", "còn bisolvon"], /Bisolvon[\s\S]*bromhexin/],
+    [["panadol uống mấy viên", "Enterogermina"], /Enterogermina[\s\S]*Bacillus clausii/],
+    [["thủng màng nhĩ là gì", "ambroxol"], /\*\*Ambroxol\*\*/],
+  ];
+  for (const [seq, re] of S) it(seq.join(" → "), async () => {
+    const r = await chat(seq);
+    expect(r[r.length - 1].content).toMatch(re);
+    expect(r[r.length - 1].content).not.toMatch(/ghi nhận tên thuốc/);
+  });
+  it("vẫn giữ ngữ cảnh khi hỏi uống chung", async () => {
+    const r = await chat(["panadol là thuốc gì", "uống chung với decolgen được không"]);
+    expect(r[r.length - 1].content).toMatch(/đều \*\*có paracetamol\*\*/);
+  });
+  it("hỏi giờ uống mà nguồn không ghi → nói rõ, không lặp 'vẫn như vừa nói'", async () => {
+    const r = await chat(["Ambroxol", "uống lúc nào"]);
+    expect(r[r.length - 1].content).toMatch(/không ghi riêng/);
+    expect(r[r.length - 1].content).not.toMatch(/vẫn như Lomi vừa nói/);
+  });
+});

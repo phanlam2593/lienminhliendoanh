@@ -229,6 +229,7 @@ function bareNameOf(raw: string, loose: boolean): string | undefined {
 const ASK_PHARM = "Cách chắc nhất: hỏi **dược sĩ** ở nhà thuốc hoặc bác sĩ, và đọc tờ hướng dẫn trong hộp thuốc.";
 
 /** Câu có phải đang hỏi về thuốc theo một trong các dáng ở trên không; có thì trả lời trong giới hạn của Lomi. */
+const cap0 = (x: string) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : x);
 export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   const n = ` ${normalizeVi(text)} `;
   if (NOT_MED.test(n)) return null;
@@ -252,7 +253,15 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // (rượu bia mà nguồn không có ý riêng → nói thẳng chưa có dữ liệu, không im lặng rơi sang "chưa hiểu")
   if (ix && !findDrug(text) && ALCOHOL.test(n) && ASKS.test(n) && !hasAlcoholFact(ix.drug)) return { kind: "side", name: ix.brand, text: `${renderIndexed(ix, "what").split("\n")[0]}\n\nLomi **chưa có nguồn đã kiểm chứng** nói riêng về uống rượu bia khi dùng thuốc này, nên Lomi không nói được là được hay không — bạn hỏi **dược sĩ / bác sĩ** hoặc xem mục rượu bia trong **tờ hướng dẫn trong hộp** trước khi uống nha.` };
   if (ix && !findDrug(text) && ALCOHOL.test(n) && ASKS.test(n) && hasAlcoholFact(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
-  if (ix && (howAsk || (DOSE.test(n) && ASKS.test(n)) || VN(/\b(bao nhiêu|mấy viên|mấy ml|mấy nhát|mấy giọt|mấy lần)\b/).test(n))) return { kind: "dose", name: ix.brand, text: renderIndexed(ix, "how") };
+  if (ix && (howAsk || (DOSE.test(n) && ASKS.test(n)) || VN(/\b(bao nhiêu|mấy viên|mấy ml|mấy nhát|mấy giọt|mấy lần)\b/).test(n))) {
+    // 05/11: hỏi GIỜ uống ("uống lúc nào", "trước hay sau ăn") mà nguồn của thuốc không nói gì về giờ / bữa ăn → nói thẳng điều đó
+    //   (trước đây lặp lại y nguyên thẻ thuốc, rồi bị lớp chống lặp đáp "vẫn như Lomi vừa nói").
+    const when = VN(/\b(lúc nào|khi nào|buổi nào|trước hay sau|trước (khi )?ăn|sau (khi )?ăn|lúc đói|lúc no|sáng hay tối|giờ nào)\b/).test(n);
+    const facts = [...(ix.drug.how ?? []), ...(ix.drug.dose?.adult ?? []), ...(ix.drug.care ?? [])].map((x) => normalizeVi(x.text)).join(" ");
+    const noWhen = when && !/\b(an|bua|doi|no|sang|toi|ngu|truoc|sau)\b/.test(facts);
+    const body = renderIndexed(ix, "how");
+    return { kind: "dose", name: ix.brand, text: noWhen ? `⏰ Nguồn Lomi có cho **${cap0(ix.brand)}** **không ghi riêng** nên uống lúc nào (trước hay sau ăn, sáng hay tối) — làm theo **tờ hướng dẫn trong hộp** hoặc lời dặn của dược sĩ / bác sĩ nha.\n\n${body}` : body };
+  }
   // (tác dụng phụ: chỉ khi nhóm / thuốc có ý có nguồn — không thì để lời "chưa có dữ liệu đã kiểm chứng về X" như cũ)
   if (ix && !findDrug(text) && (SIDE.test(n) || VN(/\b(buồn ngủ|gây ngủ|làm buồn ngủ|lái xe được không)\b/).test(n)) && hasSideFacts(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
   // ("thuốc beplex", "beplex?" — chỉ tên thuốc; câu kể "mẹ em uống metformin", "a hỏi về ibuprofen" để lớp khác nhận ngữ cảnh)
