@@ -393,7 +393,7 @@ describe("20/10 — mẹo dân gian · thuốc nam · thuốc bắc có nguồn 
   }, T);
   it("61. 'mẹo dân gian trị ho' → danh sách mẹo cho ho (chanh mật ong…), có mức bằng chứng", async () => {
     const m = await last(["mẹo dân gian trị ho"]);
-    expect(m.content).toMatch(/Mẹo dân gian cho ho/);
+    expect(m.content).toMatch(/Mẹo dân gian cho ho/i);
     expect(m.content).toMatch(/Chanh mật ong/);
   }, T);
   it("62. 'bé 6 tháng ăn mật ong được không' → lưu ý trẻ dưới 1 tuổi đứng đầu", async () => {

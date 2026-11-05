@@ -1534,3 +1534,13 @@ describe("05/11 — hỏi 'để làm gì / làm j' về vị thuốc", () => {
   for (const q of ["Lá vối để làm j", "lá vối để làm gì", "la voi de lam j", "đinh lăng để làm gì", "a giao dùng để làm gì", "mè đen để làm j"])
     it(q, async () => expect((await last([q])).content).toMatch(/^🌿 \*\*/));
 });
+
+// ── 05/11: "Ho phải làm sao?", "Có mẹo nào trị ho k?" (Kir chụp màn hình) → thẻ Ho, không "chưa có kiến thức" ──
+describe("05/11 — hỏi cách chữa ho / sốt", () => {
+  for (const q of ["Ho phải làm sao?", "Có mẹo nào trị ho k?", "bị ho nên làm gì", "ho nên làm gì", "bị ho phải làm sao", "mẹo trị ho"])
+    it(q, async () => expect((await last([q])).content).toMatch(/Với \*\*Ho\*\*/));
+  it("sốt phải làm sao", async () => expect((await last(["sốt phải làm sao"])).content).toMatch(/Với \*\*Sốt/));
+  it("câu bị động thật vẫn đổi như cũ", async () => {
+    expect((await last(["tôi bị cà phê làm cho mất ngủ"])).content).not.toMatch(/chưa có kiến thức/);
+  });
+});

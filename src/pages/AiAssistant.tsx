@@ -1696,7 +1696,10 @@ export function AiChat({
       }
       // 01/11 (vòng 13): câu BỊ ĐỘNG "tôi bị cà phê làm cho mất ngủ" → quan hệ "cà phê có làm mất ngủ không"
       const pv = q.normalize("NFC").replace(/[?!.…]+$/u, "").match(/^(?:(?:tôi|tui|mình|em|anh|chị|con|bé)\s+)?bị\s+(.{2,25}?)\s+làm\s+(?:cho\s+)?(?:(?:tôi|tui|mình|em)\s+)?(?:bị\s+)?(.{2,25})$/iu);
-      if (!rp && pv) {
+      // (05/11 — Kir: "bị ho nên làm gì" bị đổi thành "ho nên có làm gì không" → "chưa có kiến thức"): "làm gì / làm sao" là HỎI CÁCH,
+      //   không phải câu bị động — vế sau là từ hỏi, hoặc vế trước kết thúc bằng "nên / phải / thì / cần" thì không đổi.
+      const pvAsk = !!pv && (/^(gì|j|sao|chi|thế nào|như nào|như thế nào|gì đây|gì bây giờ|gì giờ|gì cho|gì để)\b/u.test(pv[2].toLowerCase()) || /\s(nên|phải|thì|cần|có thể)$/u.test(pv[1].toLowerCase()));
+      if (!rp && pv && !pvAsk) {
         q = `${pv[1]} có làm ${pv[2]} không`;
         raw = q;
         shownRef.current = { from: q, to: typed };
@@ -2931,7 +2934,10 @@ export function AiChat({
         const sxPrev = !lastA?.med && lastA?.sx?.length === 1 && !(prevUserText && hCtx?.label && normalizeVi(prevUserText).includes(normalizeVi(hCtx.label))) ? lastA.sx[0] : null;
         //   (chỉ câu nối hỏi CÁCH CHĂM SÓC / KHI NÀO ĐI KHÁM — hỏi thuốc, hỏi món vẫn để lớp thuốc / kiêng cữ trả lời như trước)
         const sxPrevId = sxPrev && ["care", "doctor", "emergency"].includes(medAspectOf(q) ?? "") ? (symptomViewId(sxPrev) ?? findMedId(symptomLabel(sxPrev) ?? "") ?? findMedId(`bị ${symptomLabel(sxPrev) ?? ""}`)) : null;
-        const mk0 = parseMedAsk(q, lastA?.med ?? (sxPrevId ? { id: sxPrevId } : undefined) ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined));
+        const mkCtx = lastA?.med ?? (sxPrevId ? { id: sxPrevId } : undefined) ?? (hCtx?.label ? { id: findMedId(hCtx.label) ?? "", aspect: hCtx.diet ? "diet" : undefined } : undefined);
+        // 05/11 (Kir: "Ho phải làm sao?", "bị ho nên làm gì" → "chưa có kiến thức"): lớp hiểu câu có khi viết lại câu ("bị ho nên làm gì" → "ho nên có làm gì không")
+        //   làm mất tên bệnh → thử thêm đúng câu người dùng gõ.
+        const mk0 = parseMedAsk(q, mkCtx) ?? (raw !== q ? parseMedAsk(raw, mkCtx) : null);
         // 01/11 (vòng 10): mấy lượt gần đây đang kể về một ĐỨA TRẺ ("con tôi 5 tuổi", "bé nhà tôi…") → thẻ người lớn có thẻ riêng cho trẻ thì dùng thẻ trẻ
         const kidRecent = [...msgs.filter((m) => m.role === "user").slice(-4).map((m) => m.raw ?? m.content), q].some((t) => VR(/(^|[^\p{L}])(con (tôi|tui|mình|em|anh|chị)|bé|cháu (tôi|nhà)|em bé|trẻ)(?![\p{L}])/u).test(t.normalize("NFC").toLowerCase()) && ![...t.matchAll(/(\d+)\s*tuổi/gu)].some((m) => Number(m[1]) > 12));
         const mk = mk0 && kidRecent && childCardOf(mk0.id) ? { ...mk0, id: childCardOf(mk0.id)! } : mk0;
