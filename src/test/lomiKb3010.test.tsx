@@ -1544,3 +1544,24 @@ describe("05/11 — hỏi cách chữa ho / sốt", () => {
     expect((await last(["tôi bị cà phê làm cho mất ngủ"])).content).not.toMatch(/chưa có kiến thức/);
   });
 });
+
+// ── 05/11 vòng 20: dược chất còn lại của tra cứu Long Châu (tóm tắt tự động: chỉ định có nhắc tới / tác dụng phụ / lưu ý — không nêu liều) ──
+describe("05/11 vòng 20 — dược chất còn lại (tự động)", () => {
+  const H10: [string, RegExp][] = [
+    ["tanganil là thuốc gì", /Acetylleucine[\s\S]*Tanganil/],
+    ["stresam có gây buồn ngủ không", /Etifoxine[\s\S]*buồn ngủ/],
+    ["bà bầu uống duphaston được không", /Dydrogesterone[\s\S]*bác sĩ/],
+    ["primolut là thuốc gì", /Norethisterone/],
+    ["fastum gel có tác dụng gì", /Ketoprofen[\s\S]*chưa có tóm tắt công dụng đã kiểm chứng/],
+    ["procoralan là thuốc gì", /Ivabradine/],
+    ["loxfen có tác dụng phụ gì", /Loxoprofen[\s\S]*buồn nôn/],
+  ];
+  for (const [q, re] of H10) it(q, async () => expect((await last([q])).content).toMatch(re));
+  it("không thêm trùng thuốc đã có (aspirin vẫn là mục cũ)", async () => {
+    const { findIndexedDrug } = await import("@/lib/lomiDrugIndex");
+    expect(findIndexedDrug("aspirin uống sao")?.drug.id.startsWith("lcx-")).toBeFalsy();
+  });
+  it("tóm tắt tự động không bịa liều", async () => {
+    expect((await last(["lornoxicam uống mấy viên"])).content).not.toMatch(/\d+\s?mg/);
+  });
+});
