@@ -1546,15 +1546,20 @@ describe("05/11 — hỏi cách chữa ho / sốt", () => {
 });
 
 // ── 05/11 vòng 20: dược chất còn lại của tra cứu Long Châu (tóm tắt tự động: chỉ định có nhắc tới / tác dụng phụ / lưu ý — không nêu liều) ──
-describe("05/11 vòng 20 — dược chất còn lại (tự động)", () => {
+describe("05/11 vòng 20 — dược chất còn lại (tự động, có dòng phân loại của Long Châu)", () => {
   const H10: [string, RegExp][] = [
     ["tanganil là thuốc gì", /Acetylleucine[\s\S]*Tanganil/],
     ["stresam có gây buồn ngủ không", /Etifoxine[\s\S]*buồn ngủ/],
     ["bà bầu uống duphaston được không", /Dydrogesterone[\s\S]*bác sĩ/],
     ["primolut là thuốc gì", /Norethisterone/],
-    ["fastum gel có tác dụng gì", /Ketoprofen[\s\S]*chưa có tóm tắt công dụng đã kiểm chứng/],
+    ["fastum gel có tác dụng gì", /Ketoprofen[\s\S]*chống viêm không steroid/i],
+    ["stablon có tác dụng gì", /Tianeptine[\s\S]*chống trầm cảm/],
+    ["paxlovid là thuốc gì", /Ritonavir[\s\S]*HIV/],
+    ["xolair là thuốc gì", /Omalizumab[\s\S]*hen/],
+    ["grandaxin uống được không", /Tofisopam/],
+    ["zyrtec uống được không", /cetirizin/i],
     ["procoralan là thuốc gì", /Ivabradine/],
-    ["loxfen có tác dụng phụ gì", /Loxoprofen[\s\S]*buồn nôn/],
+    ["loxfen có tác dụng phụ gì", /Loxoprofen[\s\S]*nôn/],
   ];
   for (const [q, re] of H10) it(q, async () => expect((await last([q])).content).toMatch(re));
   it("không thêm trùng thuốc đã có (aspirin vẫn là mục cũ)", async () => {

@@ -254,6 +254,9 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   if (ix && !findDrug(text) && (SIDE.test(n) || VN(/\b(buồn ngủ|gây ngủ|làm buồn ngủ|lái xe được không)\b/).test(n)) && hasSideFacts(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
   // ("thuốc beplex", "beplex?" — chỉ tên thuốc; câu kể "mẹ em uống metformin", "a hỏi về ibuprofen" để lớp khác nhận ngữ cảnh)
   if (ix && !findDrug(text) && !SIDE.test(n) && (WHAT.test(n) || (words <= 3 && !VN(/\b(uống|dùng|đang|xài|hỏi)\b/).test(n)))) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
+  // 05/11: "zyrtec uống được không", "stresam uống được không" (chỉ tên thuốc + "uống được không") — trước đây rơi vào "Lomi chưa hiểu".
+  //   Trả lời thẻ thuốc (thuốc gì, lưu ý có nguồn) — không tự nói là "uống được".
+  if (ix && !findDrug(text) && words <= 6 && VN(/\b(uống|dùng|xài|sử dụng) (được|đc|dc) (không|ko|k|hông|hok|hem)\b/).test(n)) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
   if (words > 22) return null;
   // 15/10: tên thuốc ngoại lai đứng đầu câu hỏi liều ("amoxicillin uống mấy lần 1 ngày") cũng là hỏi thuốc — trước đây câu này rơi sang
   //   câu hỏi thường gặp về app ("10 lượt quẹt / ngày").
