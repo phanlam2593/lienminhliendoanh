@@ -11,6 +11,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
+import { PRODUCTS, PROD_ALIAS, WEAK_NAMES, type ProdTuple } from "@/lib/lomiDrugProducts";
 
 type GroupId = "pain" | "nsaid" | "abx" | "antihis" | "ppi" | "vitb" | "mucus" | "cold" | "rx" | "steroid" | "gi" | "skin" | "eye" | "nose" | "inhaler" | "worm" | "supp" | "coughrx" | "other";
 type Group = {
@@ -37,6 +38,8 @@ export type IndexedDrug = {
   /** 04/11 (Kir: "liều dùng hay hướng dẫn sử dụng gì cũng thêm vào để ngta đọc tham khảo") — liều THAM KHẢO đúng như trang NHS ghi
    *  (src trỏ vào `sources` của thuốc). kid: chỉ khi nguồn ghi rõ theo tuổi; không có thì nhắc xem nhãn / hỏi dược sĩ. */
   dose?: { adult: DrugFact[]; kid?: DrugFact[]; rx?: boolean };
+  /** 05/11: sản phẩm có paracetamol (danh mục thuốc Long Châu) — dùng cho cảnh báo uống trùng paracetamol. */
+  para?: boolean;
 };
 
 const NHS = "NHS (Anh)";
@@ -1532,10 +1535,32 @@ export const MEDS: IndexedDrug[] = [
   row("lcx-norfloxacin", "Norfloxacin", "other", ["norfloxacin"], { sources: [S.lcx_norfloxacin], how: [{ text: "Theo tra cứu dược chất Long Châu, Norfloxacin là: **kháng sinh nhóm quinolon**.", src: [0] }, { text: "Dùng theo **đơn / chỉ định của bác sĩ** hoặc hướng dẫn của dược sĩ; liều tuỳ bệnh, tuổi, cân nặng — đọc kỹ tờ hướng dẫn.", src: [0] }], side: [{ text: "Tác dụng phụ thường gặp theo nguồn (chưa đầy đủ): buồn nôn, tiêu chảy, đau đầu, chóng mặt, tăng men gan.", src: [0] }], care: [{ text: "Phụ nữ có thai: chỉ dùng khi bác sĩ cân nhắc lợi ích – nguy cơ.", src: [0] }, { text: "Mẹ đang cho con bú: nguồn khuyên không dùng hoặc phải hỏi bác sĩ trước.", src: [0] }, { text: "Trẻ dưới 18 tuổi: nguồn ghi không dùng hoặc chưa xác định an toàn — không tự cho trẻ dùng.", src: [0] }] }),
 ];
 
+// ── 05/11: danh mục thuốc của Nhà thuốc Long Châu (lib/lomiDrugProducts — sinh tự động từ trang sản phẩm) ──
+//   • thuốc MỘT hoạt chất đã có mục → chỉ thêm tên biệt dược vào mục đó (giữ nguyên thông tin có nguồn của mục);
+//   • thuốc phối hợp / hoạt chất chưa có mục → một mục riêng: công dụng theo tên sản phẩm, thành phần, kê đơn hay không,
+//     độ tuổi, chống chỉ định / thận trọng ngắn của trang. KHÔNG có liều.
+const capV = (x: string) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : x);
+function prodRow(p: ProdTuple): IndexedDrug {
+  const [name, names, form, use, ing, rx, age, ci, warn, ind, slug, para, id] = p;
+  const src: DrugSource = { title: `${name} – trang thuốc`, publisher: "Nhà thuốc FPT Long Châu", url: `https://nhathuoclongchau.com.vn/${slug}`, reviewed: "2026-11-05" };
+  const F = (text: string): DrugFact => ({ text, src: [0] });
+  const how = [F(`Theo Nhà thuốc Long Châu, **${name}**${form ? ` (${form.toLowerCase()})` : ""}${use ? ` dùng để **${use}**` : ""}.`), F(`Thành phần: ${ing}.`)];
+  if (ind.length) how.push(F(`Bệnh / triệu chứng liên quan theo nguồn: ${ind.join(", ")}.`));
+  how.push(F(rx ? "**Thuốc kê đơn** — chỉ dùng khi bác sĩ kê, đúng liều bác sĩ dặn." : "Dùng theo tờ hướng dẫn trong hộp hoặc lời dặn của dược sĩ; không tự dùng kéo dài, không tự tăng liều."));
+  const care: DrugFact[] = [];
+  if (age) care.push(F(`Độ tuổi dùng theo nguồn: ${age}.`));
+  if (ci) care.push(F(`Chống chỉ định theo nguồn: ${ci}.`));
+  if (warn.length) care.push(F(`Nguồn lưu ý thận trọng với: ${warn.map((x) => x.toLowerCase()).join(", ")}.`));
+  if (para) care.push(F("Có **paracetamol** — **không uống chung** với thuốc khác cũng có paracetamol (Panadol, Efferalgan, Hapacol, nhiều thuốc cảm…) để tránh quá liều."));
+  return { id, ingredient: capV(ing), group: "other", names, how, care, sources: [src], ...(para ? { para: true } : {}) };
+}
+for (const [id, xs] of Object.entries(PROD_ALIAS)) MEDS.find((m) => m.id === id)?.names.push(...xs);
+MEDS.push(...PRODUCTS.map(prodRow));
+
 // Tên → mục (đã bỏ dấu); tên nhiều chữ khớp trước tên ngắn.
 const BY_NAME = MEDS.flatMap((m) => m.names.map((n) => ({ n, m }))).sort((a, b) => b.n.length - a.n.length);
 // Tên ngắn dễ trùng chữ thường ("para", "3b") chỉ nhận khi câu có chữ "thuốc" / "viên" / "uống".
-const SHORT = new Set(["para", "3b"]);
+const SHORT = new Set(["para", "3b", ...WEAK_NAMES]);
 
 function edit(a: string, b: string, max: number): number {
   if (Math.abs(a.length - b.length) > max) return max + 1;
@@ -1673,7 +1698,7 @@ export function renderIndexed(hit: { drug: IndexedDrug; typed: string; fuzzy: bo
 export function paraDupReply(text: string, now = Date.now()): string | null {
   const n = ` ${normalizeVi(text).replace(/[-–]/g, " ")} `;
   const hits = new Map<string, string>();
-  for (const { n: name, m } of BY_NAME) if (["paracetamol", "ibu-para", "decolgen", "co-codamol", "co-dydramol"].includes(m.id) && !SHORT.has(name) && n.includes(` ${name} `) && ![...hits.keys()].some((k) => k.includes(name))) hits.set(name, m.id);
+  for (const { n: name, m } of BY_NAME) if ((["paracetamol", "ibu-para", "decolgen", "co-codamol", "co-dydramol"].includes(m.id) || m.para) && !SHORT.has(name) && n.includes(` ${name} `) && ![...hits.keys()].some((k) => k.includes(name))) hits.set(name, m.id);
   if (hits.size < 2 || !/\b(chung|cung luc|cung voi|voi|them|ket hop)\b/.test(n)) return null;
   const names = [...hits.keys()].map(cap);
   const g = GROUPS.pain;
