@@ -11,7 +11,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { normalizeVi } from "@/lib/lomiFaq";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
-import { PRODUCTS, PROD_ALIAS, WEAK_NAMES, type ProdTuple } from "@/lib/lomiDrugProducts";
+import type { ProdTuple } from "@/lib/lomiDrugProducts";
 
 type GroupId = "pain" | "nsaid" | "abx" | "antihis" | "ppi" | "vitb" | "mucus" | "cold" | "rx" | "steroid" | "gi" | "skin" | "eye" | "nose" | "inhaler" | "worm" | "supp" | "coughrx" | "other";
 type Group = {
@@ -1554,13 +1554,22 @@ function prodRow(p: ProdTuple): IndexedDrug {
   if (para) care.push(F("Có **paracetamol** — **không uống chung** với thuốc khác cũng có paracetamol (Panadol, Efferalgan, Hapacol, nhiều thuốc cảm…) để tránh quá liều."));
   return { id, ingredient: capV(ing), group: "other", names, how, care, sources: [src], ...(para ? { para: true } : {}) };
 }
-for (const [id, xs] of Object.entries(PROD_ALIAS)) MEDS.find((m) => m.id === id)?.names.push(...xs);
-MEDS.push(...PRODUCTS.map(prodRow));
+// (≈1 MB dữ liệu → tách thành chunk riêng, nạp ngay sau khi mở trợ lý; trong lúc chưa nạp xong Lomi vẫn trả lời bằng danh mục soạn tay)
+function applyProducts(mod: typeof import("@/lib/lomiDrugProducts")) {
+  if (MEDS.some((m) => m.id.startsWith("lcp-"))) return;
+  for (const [id, xs] of Object.entries(mod.PROD_ALIAS)) MEDS.find((m) => m.id === id)?.names.push(...xs);
+  MEDS.push(...mod.PRODUCTS.map(prodRow));
+  for (const w of mod.WEAK_NAMES) SHORT.add(w);
+  BY_NAME = buildByName();
+}
+/** Promise xong khi danh mục thuốc Long Châu đã nạp (test chờ cái này). */
+export const productsReady: Promise<void> = import("@/lib/lomiDrugProducts").then(applyProducts).catch(() => undefined);
 
 // Tên → mục (đã bỏ dấu); tên nhiều chữ khớp trước tên ngắn.
-const BY_NAME = MEDS.flatMap((m) => m.names.map((n) => ({ n, m }))).sort((a, b) => b.n.length - a.n.length);
+const buildByName = () => MEDS.flatMap((m) => m.names.map((n) => ({ n, m }))).sort((a, b) => b.n.length - a.n.length);
+let BY_NAME = buildByName();
 // Tên ngắn dễ trùng chữ thường ("para", "3b") chỉ nhận khi câu có chữ "thuốc" / "viên" / "uống".
-const SHORT = new Set(["para", "3b", ...WEAK_NAMES]);
+const SHORT = new Set(["para", "3b"]);
 
 function edit(a: string, b: string, max: number): number {
   if (Math.abs(a.length - b.length) > max) return max + 1;

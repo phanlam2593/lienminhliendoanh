@@ -1322,10 +1322,12 @@ describe("30/10 — trả lời qua khung chat", () => {
   }, 120000);
 });
 // 04/11 — mọi thuốc trong danh mục: nguồn https thuộc TRUSTED, src trỏ đúng chỉ mục, tên không trùng giữa hai thuốc.
-import { MEDS } from "@/lib/lomiDrugIndex";
+import { MEDS, productsReady } from "@/lib/lomiDrugIndex";
 import { TRUSTED } from "@/lib/lomiDrugData";
 describe("04/11 — danh mục thuốc: nguồn hợp lệ", () => {
-  it("nguồn chính thống, src hợp lệ, tên không trùng", () => {
+  it("nguồn chính thống, src hợp lệ, tên không trùng", async () => {
+    await productsReady;
+    expect(MEDS.some((m) => m.id.startsWith("lcp-"))).toBe(true);
     const seen = new Map<string, string>();
     for (const m of MEDS) {
       for (const s of m.sources ?? []) {
@@ -1602,7 +1604,8 @@ describe("05/11 — danh mục thuốc Long Châu", () => {
     expect((await last(["alaxan fr uống chung panadol được không"])).content).toMatch(/đều \*\*có paracetamol\*\*/);
   });
   it("tên chung chung không bị hiểu là tên thuốc", async () => {
-    const { findIndexedDrug } = await import("@/lib/lomiDrugIndex");
+    const { findIndexedDrug, productsReady } = await import("@/lib/lomiDrugIndex");
+    await productsReady;
     for (const q of ["bổ gan có tốt không", "dầu gió có tác dụng gì", "thuốc dạ dày", "đau dạ dày uống thuốc gì", "bình an", "an khang"]) expect(findIndexedDrug(q), q).toBeNull();
   });
   it("đủ số lượng", async () => {

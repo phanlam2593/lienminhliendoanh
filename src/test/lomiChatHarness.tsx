@@ -35,6 +35,7 @@ vi.mock("@/components/LomiDailyCard", () => ({ LomiDailyCard: () => null, should
 vi.mock("@/components/LomiTarot", () => ({ TarotCards: () => null })); // hình lá bài không phải thứ cần test ở đây
 
 import { AiChat } from "@/pages/AiAssistant";
+import { productsReady } from "@/lib/lomiDrugIndex";
 
 export type Turn = {
   role: "user" | "assistant";
@@ -96,6 +97,7 @@ function seeded(seed: number) {
   };
 }
 export async function chat(turns: string[], opts: ChatOpts = {}): Promise<Turn[]> {
+  await productsReady; // 05/11: danh mục thuốc Long Châu nạp riêng (chunk lazy)
   const rnd = opts.seed !== undefined ? vi.spyOn(Math, "random").mockImplementation(seeded(opts.seed)) : null;
   try {
     return await chat0(turns, opts);
