@@ -1586,3 +1586,28 @@ describe("05/11 đợt 3 — thuốc OTC hay hỏi", () => {
   ];
   for (const [q, re] of H11) it(q, async () => expect((await last([q])).content).toMatch(re));
 });
+
+// ── 05/11: danh mục thuốc Long Châu (lib/lomiDrugProducts — sinh tự động) ──
+describe("05/11 — danh mục thuốc Long Châu", () => {
+  it("thuốc phối hợp: thành phần + lưu ý, không có liều", async () => {
+    const c = (await last(["acetab extra là thuốc gì"])).content;
+    expect(c).toMatch(/Paracetamol[\s\S]*Cafein/i);
+    expect(c).toMatch(/không uống chung/);
+    expect(c).toMatch(/chưa có liều tham khảo/);
+  });
+  it("biệt dược một hoạt chất → mục hoạt chất có sẵn", async () => {
+    expect((await last(["actadol uống mấy viên"])).content).toMatch(/paracetamol[\s\S]*500 mg/i);
+  });
+  it("hai thuốc cùng có paracetamol → cảnh báo uống trùng", async () => {
+    expect((await last(["alaxan fr uống chung panadol được không"])).content).toMatch(/đều \*\*có paracetamol\*\*/);
+  });
+  it("tên chung chung không bị hiểu là tên thuốc", async () => {
+    const { findIndexedDrug } = await import("@/lib/lomiDrugIndex");
+    for (const q of ["bổ gan có tốt không", "dầu gió có tác dụng gì", "thuốc dạ dày", "đau dạ dày uống thuốc gì", "bình an", "an khang"]) expect(findIndexedDrug(q), q).toBeNull();
+  });
+  it("đủ số lượng", async () => {
+    const { PRODUCTS, PROD_ALIAS } = await import("@/lib/lomiDrugProducts");
+    expect(PRODUCTS.length).toBeGreaterThan(2000);
+    expect(Object.values(PROD_ALIAS).flat().length).toBeGreaterThan(1500);
+  });
+});
