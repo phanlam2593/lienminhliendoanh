@@ -1661,3 +1661,21 @@ describe("05/11 — đổi sang thuốc khác trong cùng hội thoại", () => 
     expect(r[r.length - 1].content).not.toMatch(/vẫn như Lomi vừa nói/);
   });
 });
+
+// ── 05/11: 3 chuyện trong cùng hội thoại — khác nhau thì đổi đúng chủ đề, nối nhau thì giữ đúng chủ đề ──
+describe("05/11 — 3 chuyện trong một hội thoại", () => {
+  const S: [string[], RegExp[]][] = [
+    [["amoxicillin là thuốc gì", "đinh lăng có tác dụng gì", "giả gút là gì"], [/Amoxicillin/, /Đinh lăng/, /Giả gút/]],
+    [["bị ho phải làm sao", "Enterogermina uống lúc nào", "lá vối để làm gì"], [/Ho/, /Enterogermina/, /Lá vối/]],
+    [["thủng màng nhĩ là gì", "smecta cho bé 2 tuổi được không", "gout kiêng gì"], [/Thủng màng nhĩ/, /Smecta[\s\S]*trẻ/, /Gout/]],
+    [["đinh lăng có tác dụng gì", "bà bầu dùng được không"], [/Đinh lăng/, /Đinh lăng[\s\S]*Bà bầu 3 tháng đầu không uống/]],
+    [["bị ho phải làm sao", "uống prospan được không", "cho bé 3 tuổi uống mấy ml"], [/Ho/, /Prospan[\s\S]*viêm đường hô hấp/, /2,5 ml\/lần/]],
+    [["tôi bị tiêu chảy", "uống smecta được không"], [/tiêu chảy/i, /Smecta[\s\S]*diosmectite/]],
+    [["amoxicillin là thuốc gì", "uống chung panadol được không"], [/Amoxicillin/, /\*\*amoxicillin\*\*/]],
+    [["gout là gì", "kiêng gì", "uống bia được không"], [/Gout/, /Gout/, /bia[\s\S]*hạn chế/]],
+  ];
+  for (const [seq, res] of S) it(seq.join(" → "), async () => {
+    const r = (await chat(seq)).filter((t) => t.role === "assistant");
+    res.forEach((re, i) => expect(r[i].content, seq[i]).toMatch(re));
+  });
+});

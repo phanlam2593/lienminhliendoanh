@@ -71,7 +71,7 @@ import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTher
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
-import { findFolk, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolkForTopic } from "@/lib/lomiFolk";
+import { FOLK, findFolk, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -227,6 +227,8 @@ type Msg = {
   // 12/10: Lomi vừa trả lời một câu hỏi về THUỐC — loại câu hỏi, tên thuốc người dùng nêu, và mã mục đã kiểm chứng (lib/lomiDrugData) nếu có.
   // Câu nối ("nó có tác dụng phụ gì không", "2 viên", "giờ thấy bình thường") đọc theo cờ này, không dò lại câu chữ của lời đáp trước.
   drug?: { kind: string; name?: string; id?: string };
+  /** 05/11: vị thuốc / mẹo dân gian vừa trả lời (id trong lib/lomiFolk) — cho câu hỏi nối "bà bầu dùng được không", "uống thế nào". */
+  herb?: string;
   // 12/10: Lomi vừa từ chối bói một câu hỏi y khoa (lib/tarot.tarotHealthGate).
   tarotGate?: "medical" | "unclear";
   diet?: string; // bệnh vừa hỏi kiêng ăn uống (lib/lomiDiet) — cho câu nối tiếp "còn bia thì sao"
@@ -1897,6 +1899,13 @@ export function AiChat({
       if (st) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: st, local: true, health: {}, med: { id: "mat-ngu" } }); }
       const cf = en ? null : coughFocusReply(q) ?? feverFocusReply(q) ?? (carry ? (lastMedId === "ho" ? coughFocusReply(`bị ho ${q}`) : feverFocusReply(`bị sốt ${q}`)) : null);
       if (cf) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: cf, local: true, health: {}, med: { id: /sốt/u.test(cf) && !/khi ho/u.test(cf) ? "sot" : "ho" } }); }
+      // 05/11: vừa nói một thuốc trong danh mục (vd Prospan) mà hỏi liều nối "cho bé 3 tuổi uống mấy ml" → liều / ý CÓ NGUỒN của chính thuốc đó
+      //   (trước đây lời chung "Lomi không tính liều cho bé" dù nguồn của thuốc có ghi liều theo tuổi).
+      const lastDrugNm = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].drug?.name : undefined;
+      if (!en && lastDrugNm && findIndexedDrug(lastDrugNm) && !findIndexedDrug(raw) && !findDrug(raw) && !overdoseMention(raw) && normalizeVi(raw).split(" ").length <= 12 && VN(/\b(mấy|bao nhiêu|liều|ml|viên|gói|ống|giọt|lần)\b/).test(` ${normalizeVi(raw)} `)) {
+        const dk = drugAsk(`${lastDrugNm} ${raw}`, {});
+        if (dk) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: dk.text, local: true, drug: { kind: dk.kind, name: dk.name ?? lastDrugNm, id: dk.drugId }, health: {} }); }
+      }
       const ds = en || /115|uống nhầm|quá liều|nuốt nhầm/u.test(msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].content : "") ? null : doseReply(raw);
       if (ds) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: ds, local: true, health: {} }); }
       const dg = en ? null : await diagnoseReply(raw);
@@ -2798,7 +2807,12 @@ export function AiChat({
           const fkId = findMedId(q);
           const fkMt = fkId ? await loadMedTopic(fkId) : null;
           const fkPrev = lastA?.med?.id ? await loadMedTopic(lastA.med.id) : null;
-          const fk0 = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
+          let fk0 = folkReply(q, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
+          // 05/11: câu hỏi nối về vị vừa nói ("đinh lăng có tác dụng gì" → "bà bầu dùng được không" / "uống thế nào" / "có tác dụng phụ không")
+          //   — câu không nêu tên vị, bệnh hay thuốc nào khác → hỏi lại kèm tên vị (trước đây: "chưa có kiến thức" / lời chung về thuốc).
+          const herbPrev = lastA?.herb ? FOLK.find((x) => x.id === lastA.herb) : undefined;
+          if (!fk0 && herbPrev && !fkId && !findFolk(q) && !findIndexedDrug(q) && normalizeVi(q).split(" ").length <= 10 && VN(/\b(bà bầu|mang thai|có thai|cho con bú|trẻ|bé|em bé|uống|dùng|sắc|pha|nấu|ngâm|liều|bao nhiêu|mấy|tác dụng phụ|có hại|có độc|kiêng|ai không nên|người nào|lâu dài|hằng ngày|mỗi ngày|được không|thế nào|ra sao|làm sao)\b/).test(` ${normalizeVi(q)} `))
+            fk0 = folkReply(`${herbPrev.name} ${q}`, fkMt ? { id: fkMt.id, name: medName(fkMt) } : null, fkPrev ? { id: fkPrev.id, name: medName(fkPrev) } : null);
           // 04/11: "giảo cổ lam có hạ đường huyết không" — hỏi TÁC DỤNG của một vị (hạ đường / hạ áp / hạ mỡ máu) không phải đang bị hạ đường huyết.
           const fkEffect = !!fk0?.folk && herbEffectAsk(q);
           const fk = fk0 && (fk0.verdict === "myth" || fk0.verdict === "danger" || fkEffect || !bodyAlarm(q, inTalk ? (lastA?.sx ?? []) : [])) ? fk0 : null;
@@ -2810,6 +2824,7 @@ export function AiChat({
               local: true,
               health: hCtx ?? {},
               ...(fk.topic ? { med: { id: fk.topic, aspect: "folk" } } : {}),
+              ...(fk.folk ? { herb: fk.folk } : {}),
               quick: fk.topic ? ["Nên làm gì cho đỡ?", "Khi nào cần đi khám?"] : undefined,
             });
           }

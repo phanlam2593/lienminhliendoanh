@@ -106,10 +106,14 @@ describe("phân biệt NHẬN RA câu hỏi thuốc với CÓ kiến thức về
       expect(r.text, q).not.toMatch(/Nguồn:/);
     }
   });
-  it("câu hỏi nối không nhắc lại tên vẫn biết đang nói thuốc nào (và vẫn nói thật là chưa có dữ liệu)", () => {
+  it("câu hỏi nối không nhắc lại tên vẫn biết đang nói thuốc nào", () => {
+    // 05/11: amoxicillin đã có trong danh mục tên thuốc (có ý tác dụng phụ có nguồn) → câu nối trả lời đúng ý đó
     const r = drugAsk("nó có tác dụng phụ gì không", { afterDrug: true, name: "amoxicillin" })!;
     expect(r.kind).toBe("side");
-    expect(r.text).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*amoxicillin\*\*/);
+    expect(r.text).toMatch(/Amoxicillin/);
+    // thuốc KHÔNG có trong dữ liệu nào → vẫn nói thật là chưa có dữ liệu
+    const u = drugAsk("nó có tác dụng phụ gì không", { afterDrug: true, name: "zzqthuoc" })!;
+    expect(u.text).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*zzqthuoc\*\*/);
   });
 });
 

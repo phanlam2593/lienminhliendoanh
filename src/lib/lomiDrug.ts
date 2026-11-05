@@ -19,6 +19,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { healthSubjectOf } from "@/lib/lomiHealthTopic";
 import { drugById, findDrug, findDrugs, findInteraction, renderDrug, sourceLine, sourceList } from "@/lib/lomiDrugData";
 import { VR, VN } from "@/lib/viMatch";
+import { findMedTopicId } from "@/lib/lomiMed";
 
 export type DrugKind = "interact" | "overdose" | "odinfo" | "dose" | "stop" | "side" | "what" | "which" | "should" | "pet" | "source" | "kid";
 export type DrugReply = {
@@ -234,6 +235,12 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   const n = ` ${normalizeVi(text)} `;
   if (NOT_MED.test(n)) return null;
   const words = n.trim().split(" ").length;
+  // 05/11: câu hỏi nối ("có tác dụng phụ gì", "bà bầu dùng được không") về thuốc vừa nói mà thuốc đó nằm trong danh mục tên thuốc
+  //   (lib/lomiDrugIndex) → hỏi lại kèm tên thuốc để lớp danh mục trả lời ý có nguồn, thay vì "chưa có dữ liệu".
+  if (ctx.afterDrug && ctx.name && words <= 10 && !findIndexedDrug(text) && !findDrug(text) && !findMedTopicId(text) && findIndexedDrug(ctx.name)) {
+    const again = drugAsk(`${ctx.name} ${text}`, { ...ctx, afterDrug: false });
+    if (again) return again;
+  }
   // 04/11: hai thuốc trong câu cùng có paracetamol ("decolgen uống chung panadol") → cảnh báo uống trùng hoạt chất
   const dup = paraDupReply(text);
   if (dup) return { kind: "interact", text: dup };
@@ -275,7 +282,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   }
   // 05/11: "zyrtec uống được không", "stresam uống được không" (chỉ tên thuốc + "uống được không") — trước đây rơi vào "Lomi chưa hiểu".
   //   Trả lời thẻ thuốc (thuốc gì, lưu ý có nguồn) — không tự nói là "uống được".
-  if (ix && !findDrug(text) && words <= 6 && VN(/\b(uống|dùng|xài|sử dụng) (được|đc|dc) (không|ko|k|hông|hok|hem)\b/).test(n)) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
+  if (ix && !findDrug(text) && words <= 7 && VN(/\b(uống|dùng|xài|sử dụng)\b.*\b(được|đc|dc) (không|ko|k|hông|hok|hem)\b/).test(n) && !VN(/\b(chung|cùng|với|kết hợp|thêm|đang|bầu|mang thai|cho con bú|bé|trẻ|rượu|bia)\b/).test(n)) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
   if (words > 22) return null;
   // 15/10: tên thuốc ngoại lai đứng đầu câu hỏi liều ("amoxicillin uống mấy lần 1 ngày") cũng là hỏi thuốc — trước đây câu này rơi sang
   //   câu hỏi thường gặp về app ("10 lượt quẹt / ngày").
@@ -422,7 +429,7 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
         drugId: known.id,
         name: known.names[0],
         text: [
-          `Về **${known.names[0]}** thì Lomi có dữ liệu, nhưng với thứ bạn định dùng chung thì Lomi **chưa xác minh được** — trong nguồn Lomi đã đối chiếu không có thông tin cho cặp này, nên Lomi không đoán (không có thông tin không có nghĩa là dùng chung an toàn).`,
+          `Về **${known.names[0]}** thì Lomi có dữ liệu, nhưng với ${ctx.afterDrug && ctx.name && !known.names.some((x) => normalizeVi(x) === normalizeVi(ctx.name!)) ? `**${ctx.name}**` : "thứ bạn định dùng chung"} thì Lomi **chưa xác minh được** — trong nguồn Lomi đã đối chiếu không có thông tin cho cặp này, nên Lomi không đoán (không có thông tin không có nghĩa là dùng chung an toàn).`,
           `Cách chắc nhất${forWho}: mang (hoặc chụp hình) **tất cả** thuốc đang uống ra nhà thuốc hỏi dược sĩ, hoặc hỏi bác sĩ đã kê đơn.`,
           `Những trường hợp Lomi có nguồn: ${known.interactions.map((x) => x.with.replace(/ \(.*\)$/, "")).join("; ")}.`,
         ].join("\n\n"),

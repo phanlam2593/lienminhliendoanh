@@ -1250,6 +1250,9 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (MEAL_SUGGEST.test(` ${n} `) && !VN(/\b(kiêng|nên ăn|tránh)\b/).test(n)) return null;
     // (19/10: "uống thuốc gì được?" là hỏi THUỐC, không phải hỏi món "thuốc gì")
     if (asp === "meds") return { id: prev.id, aspect: "meds", food: null };
+    // 05/11: đang nói một bệnh mà hỏi "uống prospan / smecta được không" — thứ được hỏi là THUỐC trong danh mục → để lớp thuốc trả lời
+    //   (trước đây hiểu thành hỏi kiêng MÓN "prospan" của thẻ Ho).
+    if (findIndexedDrug(text)) return null;
     const fp = foodPhrase(text, null);
     if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !NOT_ONE_FOOD.test(n)) return { id: prev.id, aspect: "food", food: fp };
     const fm = n.match(VN(/^(?:vậy |thế |còn |nhưng |rồi )*((?:\S+ ){0,2}?\S+?) (?:thì sao|sao|có được không|được không|có sao không|được k|được ko)$/));
