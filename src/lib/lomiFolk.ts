@@ -32,6 +32,8 @@ export type FolkEntry = {
   ctx?: RegExp;
   /** Mẹo sinh hoạt (chườm, ăn uống, tư thế…) chứ không phải vị thuốc → không kèm lời dặn dùng thảo dược. */
   tip?: true;
+  /** 05/11: câu nhận định riêng thay cho câu chung của verdict (vd mẹo an toàn thực phẩm không phải "mẹo hỗ trợ điều trị"). */
+  vlabel?: string;
   /** 04/11: mục tóm tắt tự động từ tra cứu dược liệu (Long Châu) — chỉ nhận khi câu hỏi có ngữ cảnh vị thuốc
    *  ("có tác dụng gì", "uống / sắc / ngâm", "bà bầu dùng được không"…), để tên rau / quả / vật thường ngày không bị hiểu nhầm là hỏi vị thuốc. */
   gen?: true;
@@ -1092,6 +1094,7 @@ export const FOLK: FolkEntry[] = [
     ctx: VN(/\b(độc|ngộ độc|say|ngâm|luộc|đói|an toàn|nguy hiểm|cyanua|xyanua|xianua|chế biến|sơ chế|bỏ nước|mở vung|ăn nhiều|ăn sống|mọc mầm|nảy mầm|mầm|vỏ xanh|(được|đc|dc) (không|k|ko|hông|hok)|có ăn được|ăn có sao|ăn có hại|có sao không)\b/),
     verdict: "help",
     tip: true,
+    vlabel: "Ăn được nếu sơ chế đúng — sắn, măng sống có chất sinh độc, cách dân gian dặn (ngâm kỹ, luộc bỏ nước, mở vung) là đúng theo nguồn",
     folk: [{ text: "Dân gian dặn sắn, măng phải ngâm kỹ, luộc bỏ nước, mở vung; ăn nhiều sắn lúc đói dễ bị \"say sắn\".", src: [0] }],
     science: [
       { text: "Sắn và măng chứa nhiều cyanogenic glycoside — chất sinh ra độc tố xyanua (cyanua) khi ăn vào.", src: [0, 1] },
@@ -4433,7 +4436,7 @@ const PREG_FACT = /mang thai|có thai|bà bầu|bầu|cho con bú/u;
 const KID_ENTRIES = new Set(["dau-gio-tre", "nuoc-la-so-sinh"]);
 export function renderFolk(f: FolkEntry, topic?: { id: string; name: string } | null, now = Date.now(), q = ""): string {
   // (04/11) vị độc lấy từ tài liệu y học cổ truyền (Long Châu) — không gọi là "nguồn y khoa".
-  const v = f.verdict === "danger" && f.sources.every((x) => /Long Châu/.test(x.publisher)) ? { icon: "⛔", text: "Vị thuốc ĐỘC — cảnh báo nguy hiểm, không tự ý dùng" } : VERDICT[f.verdict];
+  const v = f.verdict === "danger" && f.sources.every((x) => /Long Châu/.test(x.publisher)) ? { icon: "⛔", text: "Vị thuốc ĐỘC — cảnh báo nguy hiểm, không tự ý dùng" } : f.vlabel ? { icon: VERDICT[f.verdict].icon, text: f.vlabel } : VERDICT[f.verdict];
   const t = topic ? f.topics.find((x) => x.id === topic.id) : null;
   const nq = ` ${normalizeVi(q)} `;
   // Hỏi cho trẻ nhỏ / bà bầu → lưu ý của đúng nhóm đó lên đầu ("bé 6 tháng ăn mật ong được không").

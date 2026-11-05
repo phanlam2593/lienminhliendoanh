@@ -2,7 +2,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { readFileSync } from "fs";
 import { last } from "./lomiChatHarness";
-import { meaningChips, setMeaningProvider } from "@/lib/lomiMeaning";
+import { localProvider, meaningChips, setMeaningProvider } from "@/lib/lomiMeaning";
+import { fuzzyTop } from "@/lib/lomiFuzzy";
 import { FAQS } from "@/lib/lomiFaq";
 
 const T = 60000;
@@ -26,13 +27,13 @@ describe("hiểu nghĩa khi Lomi bí (lomi-understand)", () => {
   });
   it("qua khung chat: câu hỏi Lomi bí → hỏi lại kèm gợi ý theo nghĩa, không tự trả lời", async () => {
     setMeaningProvider(async () => [{ id: "faq:theme", score: 0.861 }, { id: "faq:password", score: 0.846 }]);
-    const m = await last(["chuyển sang chế độ nền đen được không"]);
+    const m = await last(["muốn xài app trên máy tính đc k"]);
     expect(m.content).toMatch(/Có phải bạn muốn hỏi/);
     expect(m.quick).toContain("Đổi giao diện tối hoặc ngôn ngữ?");
     expect(m.faqId).toBeUndefined();
     // không có nguồn → như cũ (không có gợi ý theo nghĩa)
     setMeaningProvider(null);
-    expect((await last(["chuyển sang chế độ nền đen được không"])).quick ?? []).not.toContain("Đổi giao diện tối hoặc ngôn ngữ?");
+    expect((await last(["muốn xài app trên máy tính đc k"])).quick ?? []).not.toContain("Đổi giao diện tối hoặc ngôn ngữ?");
   }, T);
   it("câu Lomi đã hiểu thì không hỏi máy chủ", async () => {
     let called = 0;
@@ -46,5 +47,26 @@ describe("hiểu nghĩa khi Lomi bí (lomi-understand)", () => {
     const med = (JSON.parse(readFileSync("src/lib/medkb/index.json", "utf8")) as { id: string }[]).map((r) => `med:${r.id}`);
     expect(a.items).toEqual([...FAQS.map((f) => `faq:${f.id}`), ...med]);
     expect(Buffer.from(a.q, "base64").length).toBe(a.owner.length * a.dim);
+  });
+});
+
+// 05/11: máy chủ lỗi (thư viện mô hình nạp từ CDN) → nguồn mặc định là bộ so khớp gần đúng trên máy (lib/lomiFuzzy).
+describe("so khớp gần đúng trên máy (lomiFuzzy)", () => {
+  const top = (t: string) => fuzzyTop(t, 1)[0];
+  it("chịu được gõ sai, thiếu dấu, teencode", () => {
+    expect(top("dau dau ko het")?.id).toBe("med:dau-dau");
+    expect(top("quen mat khau dang nhap")?.id).toBe("faq:forgot");
+    expect(top("xoá tai khoan ntn")?.id).toBe("faq:deleteacc");
+    expect(top("bé bị sôt cao")?.id).toMatch(/^med:sot/);
+    expect(top("nổi mề đai")?.id).toBe("med:me-day");
+    expect(top("bi gut an j")?.id).toBe("med:gout");
+  });
+  it("câu lạc đề không vượt ngưỡng gợi ý", async () => {
+    for (const t of ["asdf qwer", "hôm nay trời đẹp ghê", "cách kiếm tiền nhanh", "bitcoin hôm nay lên chưa"]) expect(await localProvider(t)).toEqual([]);
+  });
+  it("qua meaningChips: nguồn trên máy cho câu gợi ý đúng", async () => {
+    setMeaningProvider(localProvider);
+    expect(await meaningChips("quen mat khau dang nhap")).toContain("Quên mật khẩu thì làm sao?");
+    expect(await meaningChips("asdf qwer zxcv")).toBeNull();
   });
 });

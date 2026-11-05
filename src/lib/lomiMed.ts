@@ -1088,7 +1088,8 @@ const RETRY_RE = VN(new RegExp(String.raw`^(?:(?:(?:ý|tui|tôi|mình|em|anh|a|e
 /** Câu ngắn chỉ nêu lại một món (kèm "mà / á / thì sao…") → món như người dùng gõ, hoặc null. */
 export function foodRetryPhrase(text: string): string | null {
   const n = normalizeVi(text);
-  const m = n.match(RETRY_RE);
+  // 05/11: gõ trơn lại đúng tên món ("Gà" sau "sỏi thận ăn gà đc k?") cũng là nêu lại món — chỉ 1–2 chữ; nơi gọi còn kiểm món có trong thẻ.
+  const m = n.match(RETRY_RE) ?? (n && n.split(" ").length <= 2 ? [n, n] : null);
   if (!m) return null;
   const p = (m[1] ?? m[2]).replace(REV_LEAD, "").trim();
   const w = p.split(" ").filter(Boolean);

@@ -143,7 +143,7 @@ const Q_BLOCK = "Chặn hoặc bỏ chặn ai đó?";
 const Q_REPORT = "Báo cáo nội dung hoặc người dùng thế nào?";
 const Q_CLAIM = "Làm sao để nhận ưu đãi?";
 
-type Rule = { re: RegExp; reply: (n?: string) => ChatReply; max?: number };
+type Rule = { re: RegExp; reply: (n?: string) => ChatReply; max?: number; not?: RegExp };
 
 const has = (n: string, re: RegExp) => re.test(` ${n} `);
 
@@ -384,6 +384,8 @@ const RULES: Rule[] = [
   {
     // Không bắt "chan" đơn lẻ — trùng "chặn" (chặn người dùng).
     re: VN(/\b(chán quá|chán ghê|chán thật|ran quá|rảnh quá|ran rồi|rảnh rồi|không có gì làm|boring|tẻ nhạt|làm gì bây giờ|buồn chán)\b/),
+    // 05/11: "mất việc, chán quá" là chán vì CHUYỆN BUỒN, không phải vì rảnh — nhường cho lớp tâm sự / sự kiện đời sống phía sau.
+    not: VN(/\b(mất việc|thất nghiệp|bị đuổi|đuổi việc|nghỉ việc|sa thải|cho nghỉ|thi (rớt|trượt|hỏng)|rớt|trượt|bị (la|mắng|chửi)|cãi nhau|ly hôn|ly dị|phá sản|lỗ vốn|thua lỗ|mắc nợ|nợ nần|bị lừa|bị ốm|bị bệnh|mất (bà|ông|ba|bố|mẹ|má|anh|chị|em|con|chồng|vợ|người thân))\b/),
     reply: () => ({
       text: pick([
         "Rảnh thì tám với Lomi nè 😆 Hôm nay bạn đã làm gì rồi?",
@@ -757,6 +759,7 @@ function chitChatRules(n: string): { rep: ChatReply; rule: number } | null {
   for (let i = 0; i < RULES.length; i++) {
     const r = RULES[i];
     if (words > (r.max ?? 12)) continue;
+    if (r.not && (has(n, r.not) || r.not.test(n))) continue;
     if (has(n, r.re) || r.re.test(n)) return { rep: r.reply(n), rule: i };
   }
   return null;

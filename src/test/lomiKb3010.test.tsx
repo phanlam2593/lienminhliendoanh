@@ -1707,3 +1707,32 @@ describe("05/11 — rà lỗi tổng", () => {
     expect(c).not.toMatch(/chưa có kiến thức|chưa hiểu|chưa được học/);
   });
 });
+
+// 05/11 — rà nhật ký bí + câu gốc của bộ đề "nói kiểu khác".
+describe("05/11 — đọc hiểu: câu nối và chuyện buồn", () => {
+  it("'mất việc, chán quá' là chuyện buồn, không phải chán vì rảnh", async () => {
+    const c = (await last(["Tôi vừa bị mất việc, chán quá"])).content;
+    expect(c).not.toMatch(/Rảnh thì tám|bày trò|Tarot/);
+    expect(c).toMatch(/tìm việc|khúc quanh|🫂/);
+    expect((await last(["chán quá"])).content).toMatch(/Chán hả|Rảnh thì|Quẹt/);
+  }, T);
+  it("Lomi hỏi muốn biết phần nào → 'tất cả' / 'cả 3 luôn' ra nguyên thẻ", async () => {
+    const r = await chat(["Tư vấn cho a về bệnh gout", "Tất cả"]);
+    expect(r.at(-1)!.content).toMatch(/Gout[\s\S]*là gì[\s\S]*Triệu chứng/);
+    expect(r.at(-1)!.content).not.toMatch(/chưa được tiếp thu/);
+  }, T);
+  it("gõ trơn lại tên món ('Gà' sau 'sỏi thận ăn gà đc k?') → trả lời lại món đó với đúng bệnh", async () => {
+    const r = await chat(["Sỏi thận ăn gà đc k?", "Gà"]);
+    expect(r.at(-1)!.content).toMatch(/Sỏi thận.*đạm động vật/s);
+    expect((await chat(["Sỏi thận ăn gà đc k?", "ừ"])).at(-1)!.content).not.toMatch(/đạm động vật/);
+  }, T);
+  it("'ăn măng đc k' — nhận định đúng chuyện sơ chế, không gọi là 'mẹo hỗ trợ điều trị'", async () => {
+    const c = (await last(["Ăn măng đc k?"])).content;
+    expect(c).toMatch(/sơ chế đúng/);
+    expect(c).not.toMatch(/không thay điều trị/);
+  }, T);
+  it("FAQ hiểu 'nền đen', 'nick'", async () => {
+    expect((await last(["chuyển sang chế độ nền đen được không"])).faqId).toBe("theme");
+    expect((await last(["xoá vĩnh viễn nick sao z"])).faqId).toBe("deleteacc");
+  }, T);
+});

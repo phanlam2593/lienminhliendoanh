@@ -1674,6 +1674,14 @@ export function AiChat({
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
       }
+      // 05/11: Lomi vừa hỏi "Bạn muốn biết X là gì, nên xử lý thế nào hay ăn uống cần kiêng gì?" mà đáp "tất cả / cả 3 / hết"
+      //   → đưa nguyên thẻ kiến thức của X (câu "X là gì" ra thẻ đủ phần), thay vì "chưa được tiếp thu".
+      if (la?.health?.label && /muốn biết .+\?$/u.test(la.content) && VN(/^(tất cả|tất|hết|hết luôn|cả (2|3|hai|ba)|cả (2|3|hai|ba) (luôn|phần|cái)|toàn bộ|tất tần tật|đủ hết|full|all|muốn biết hết|biết hết)( luôn| nha| nhé| nhe| đi| ạ| á| nè| lun)*$/).test(normalizeVi(q))) {
+        q = `${la.health.label} là gì`;
+        raw = q;
+        shownRef.current = { from: q, to: typed };
+        rewroteRef.current = true;
+      }
       // 01/11: ĐÍNH CHÍNH / ĐỔI Ý ("à không, ý là cảm lạnh", "nhầm, là tôi bị sốt", "ý là trà xanh") → ghép phần mới vào đúng chỗ
       //   của câu hỏi trước, giữ loại câu hỏi; "thôi không bói nữa, cho hỏi đau lưng" → hỏi chuyện mới (lib/lomiRepair)
       const rp = repairTurn(q, pu?.raw ?? pu?.content);
