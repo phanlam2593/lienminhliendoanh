@@ -1570,3 +1570,19 @@ describe("05/11 vòng 20 — dược chất còn lại (tự động, có dòng 
     expect((await last(["lornoxicam uống mấy viên"])).content).not.toMatch(/\d+\s?mg/);
   });
 });
+
+// ── 05/11 đợt 3: thuốc không kê đơn hay hỏi (trang sản phẩm Long Châu) ──
+describe("05/11 đợt 3 — thuốc OTC hay hỏi", () => {
+  const H11: [string, RegExp][] = [
+    ["phosphalugel uống mấy gói", /1–2 gói\/lần × 2–3 lần\/ngày/],
+    ["enterogermina uống chung kháng sinh được không", /xen kẽ giữa các liều kháng sinh/],
+    ["bioflora là thuốc gì", /tiêu chảy cấp[\s\S]*oresol/],
+    ["prospan cho bé 3 tuổi uống mấy ml", /2,5 ml\/lần × 3 lần\/ngày/],
+    ["yumangel uống trước hay sau ăn", /sau ăn 30 phút/],
+    ["V.Rohto có dùng được khi bị tăng nhãn áp không", /tăng nhãn áp/],
+    ["natri clorid 0.9 nhỏ mũi cho trẻ sơ sinh được không", /trẻ sơ sinh/],
+    ["dolfenal là thuốc gì", /mefenamic/i],
+    ["vrohto nhỏ mấy giọt", /2–3 giọt\/lần/],
+  ];
+  for (const [q, re] of H11) it(q, async () => expect((await last([q])).content).toMatch(re));
+});

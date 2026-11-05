@@ -239,6 +239,9 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // 04/11: thuốc có trong danh mục tên thuốc (lib/lomiDrugIndex — biệt dược, gõ sai: "paradol", "amoxicilin", "beplex") →
   //   nói rõ là thuốc gì, nhóm nào, kèm cách dùng / tác dụng phụ CÓ NGUỒN của nhóm; vẫn không nêu liều.
   const ix0 = findIndexedDrug(text);
+  // 05/11: men vi sinh ("enterogermina uống chung kháng sinh được không") — nguồn của chính thuốc có ý về dùng cùng kháng sinh
+  //   → trả lời ý đó (cách dùng), thay vì "chưa xác minh được cặp thuốc".
+  if (ix0 && ix0.drug.group !== "abx" && !overdoseMention(text) && VN(/\b(uống chung|dùng chung|cùng lúc|kết hợp|chung với|với|cùng|đang uống|đang dùng) ([a-z]+ ){0,2}kháng sinh\b/).test(n) && (ix0.drug.how ?? []).some((x) => /kháng sinh/.test(x.text))) return { kind: "dose", name: ix0.brand, text: renderIndexed(ix0, "how") };
   // (quá liều / uống nhầm, hỏi uống CHUNG hai thuốc, trẻ dưới 12 tuổi với paracetamol → để các lớp riêng lo)
   const ix = ix0 && !overdoseMention(text) && !VN(/\b(uống chung|dùng chung|cùng lúc|kết hợp|chung với|với thuốc)\b/).test(n) ? ix0 : null;
   const howAsk = VN(/\b(cách nhau (bao lâu|mấy giờ|mấy tiếng)|trước hay sau (khi )?ăn|uống (trước|sau) (khi )?ăn|uống lúc nào|uống khi nào|uống buổi nào|uống sáng hay tối|(uống|dùng|xài|sử dụng) (sao|thế nào|như thế nào|như nào|làm sao|ra sao)|cách (uống|dùng|xài|sử dụng)|hướng dẫn (uống|dùng|sử dụng)|quên (uống|liều)|uống bao lâu|(uống|dùng|xài) (được )?(bao lâu|mấy ngày|mấy tuần|mấy tháng)|trước khi (đi|ngủ|quan hệ|lên xe|đi xe|ăn) (bao lâu|mấy tiếng|mấy giờ|mấy phút)|uống trước [a-z ]{0,20}(bao lâu|mấy tiếng|mấy giờ)|(bôi|thoa|xịt|nhỏ|hít|dán|đặt|súc|gội|ngậm|rơ) ([a-z]+ ){0,2}(sao|thế nào|như thế nào|như nào|làm sao|ra sao|mấy lần|bao lâu|mấy ngày|mấy nhát|mấy giọt|mấy phút|lúc nào|khi nào|bao nhiêu)|cách (bôi|thoa|xịt|nhỏ|hít|dán|đặt|súc|gội|pha)|pha (sao|thế nào|như thế nào|như nào|ra sao)|(dùng|xài|uống|bôi|xịt) (mấy|bao nhiêu) (ngày|lần|tuần|nhát|giọt)|(bôi|thoa|xịt|nhỏ|dán|gội) [a-z ]{0,25}(được không|được ko|được hông|được k|có được không))\b/).test(n);
@@ -254,6 +257,13 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   if (ix && !findDrug(text) && (SIDE.test(n) || VN(/\b(buồn ngủ|gây ngủ|làm buồn ngủ|lái xe được không)\b/).test(n)) && hasSideFacts(ix.drug)) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
   // ("thuốc beplex", "beplex?" — chỉ tên thuốc; câu kể "mẹ em uống metformin", "a hỏi về ibuprofen" để lớp khác nhận ngữ cảnh)
   if (ix && !findDrug(text) && !SIDE.test(n) && (WHAT.test(n) || (words <= 3 && !VN(/\b(uống|dùng|đang|xài|hỏi)\b/).test(n)))) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
+  // 05/11: "V.Rohto có dùng được khi bị tăng nhãn áp không" — bệnh người hỏi nêu có đúng trong lưu ý CÓ NGUỒN của thuốc → đưa phần lưu ý
+  //   (trước đây ra "chưa xác minh được" dù nguồn ghi rõ chống chỉ định).
+  if (ix && !findDrug(text)) {
+    const cm = n.match(/\b(?:bi|benh|mac|nguoi bi|dang bi) ((?:[a-z]+ ){0,3}[a-z]+?)(?= (?:khong|ko|k|duoc|dc|thi|co|nhe|nha|a|vay)\b| *$)/);
+    const cond = cm?.[1]?.trim().replace(/( (khong|ko|k|hong|hok|a|nhi|vay|ha))+$/, "");
+    if (cond && cond.split(" ").length >= 2 && [...(ix.drug.care ?? []), ...(ix.drug.side ?? [])].some((x) => normalizeVi(x.text).includes(cond))) return { kind: "side", name: ix.brand, text: renderIndexed(ix, "side") };
+  }
   // 05/11: "zyrtec uống được không", "stresam uống được không" (chỉ tên thuốc + "uống được không") — trước đây rơi vào "Lomi chưa hiểu".
   //   Trả lời thẻ thuốc (thuốc gì, lưu ý có nguồn) — không tự nói là "uống được".
   if (ix && !findDrug(text) && words <= 6 && VN(/\b(uống|dùng|xài|sử dụng) (được|đc|dc) (không|ko|k|hông|hok|hem)\b/).test(n)) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };

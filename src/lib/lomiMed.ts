@@ -12,6 +12,7 @@ import { diabetesFruitBlock, factLine, factOf, fruitIn, isSugarTopic } from "@/l
 import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUGS, DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import INDEX from "@/lib/medkb/index.json";
+import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { VR, VN } from "@/lib/viMatch";
 
 export type MedFood = { name: string; aliases: string[]; verdict: "avoid" | "limit" | "ok" | "good"; note: string; src: number[] };
@@ -1215,6 +1216,9 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (topicLike0 && DRUGS.some((d) => d.match.test(text))) return { id: own, aspect: "meds", food: null };
     // 01/11 (vòng 11): "mất ngủ uống THUỐC ngủ được không", "có uống thuốc giảm đau được không" — thứ được hỏi là thuốc, không phải món ăn
     if (topicLike0 && /^(thuoc|vien|siro|khang sinh)\b/.test(topicLike0)) return { id: own, aspect: "meds", food: null };
+    // 05/11: "V.Rohto có dùng được khi bị tăng nhãn áp không" — thứ được hỏi là THUỐC trong danh mục tên thuốc (không phải món ăn)
+    //   → để lớp thuốc trả lời (lưu ý / chống chỉ định có nguồn của chính thuốc đó), không trả lời như hỏi kiêng món "v rohto".
+    if (topicLike0 && findIndexedDrug(topicLike0)?.fuzzy === false) return null;
     const topicLike = topicLike0;
     // 01/11 (vòng 23): "gout nên TRÁNH bia không", "tiểu đường có cần kiêng xoài không" — hỏi có nên tránh MỘT món (không có chữ ăn / uống)
     if (!topicLike) {
