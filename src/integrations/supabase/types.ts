@@ -937,6 +937,42 @@ export type Database = {
         }
         Relationships: []
       }
+      lomi_stuck_log: {
+        Row: {
+          context: Json
+          created_at: string
+          id: string
+          kind: string
+          note: string | null
+          question: string
+          reply: string
+          source: string
+          status: string
+        }
+        Insert: {
+          context?: Json
+          created_at?: string
+          id?: string
+          kind: string
+          note?: string | null
+          question: string
+          reply?: string
+          source?: string
+          status?: string
+        }
+        Update: {
+          context?: Json
+          created_at?: string
+          id?: string
+          kind?: string
+          note?: string | null
+          question?: string
+          reply?: string
+          source?: string
+          status?: string
+        }
+        Relationships: []
+      }
       lomi_taught: {
         Row: {
           active: boolean
@@ -2762,6 +2798,15 @@ export type Database = {
       }
       lomi_learn: {
         Args: { _faq_id: string; _key: string }
+        Returns: undefined
+      }
+      lomi_log_stuck: {
+        Args: {
+          _context: Json
+          _kind: string
+          _question: string
+          _reply: string
+        }
         Returns: undefined
       }
       lomi_log_unanswered: {
