@@ -450,7 +450,8 @@ describe("Thuốc có nguồn: chỉ nói điều đã đối chiếu, còn lạ
     expect(a[1].content).not.toMatch(/an toàn cho anh|anh uống được|không sao đâu/);
     noUnknown(a[1]);
     const i = await chat(["ibuprofen có tác dụng phụ gì", "uống với paracetamol được không"]);
-    expect(i[0].content).toMatch(/chưa có dữ liệu đã kiểm chứng về \*\*ibuprofen\*\*/);
+    // (05/11: ibuprofen đã có trong danh mục tên thuốc — trả lời phần tác dụng phụ / lưu ý có nguồn của danh mục)
+    expect(i[0].content).toMatch(/Ibuprofen/);
     expect(i[1].content).toMatch(/dùng chung với \*\*ibuprofen\*\*/); // thuốc vừa nhắc ở lượt trước là thứ dùng chung
     // (r[1] hỏi "cách nhau bao lâu" → liều tham khảo người lớn theo NHS, 04/11; các lượt khác vẫn không có con số liều)
     for (const m of [r[0], r[2], ...a, ...i]) expect(m.content).not.toMatch(DOSE_NUM);

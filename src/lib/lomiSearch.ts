@@ -556,7 +556,7 @@ export async function runDishSearch(d: Dish, avoidIds: string[] = [], want?: Dis
   return {
     text: pick([
       `Thèm **${nm}** hả, có ngay đây 😋 Mấy quán trong iLomi nè 👇`,
-      `Chuẩn bài luôn! Đi ăn **${nm}** thì ghé mấy chỗ này nha 🤤`,
+      `Chuẩn bài luôn! Đi ${/(cà phê|cafe|coffee|trà|sinh tố|nước|bia|rượu|sữa|cacao|matcha)/i.test(nm) ? "uống" : "ăn"} **${nm}** thì ghé mấy chỗ này nha 🤤`,
       `Lomi tìm được mấy quán có **${nm}** nè${pos ? " (gần bạn)" : ""} 👇 Bấm vào thẻ để xem chi tiết và nhận ưu đãi nha!`,
     ]),
     places: cards,

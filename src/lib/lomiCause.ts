@@ -143,6 +143,8 @@ export async function causeReply(q: string): Promise<{ text: string; medId?: str
   // 05/11: X chỉ là "uống nhiều / dùng lâu" (không nói uống gì) — thứ được hỏi nằm ở câu trước (vd vừa hỏi panadol) → để lớp thuốc /
   //   ngữ cảnh trả lời; không đáp chung chung theo thẻ bệnh (trước đây "suy gan" chưa có thẻ nên không lộ lỗi này).
   if (/^(?:uống|dùng|ăn|xài)\s+(?:nhiều|quá nhiều|lâu|lâu dài|thường xuyên|liên tục|hoài|mãi)$/u.test(p.xShow.trim())) return null;
+  // 05/11: X là THUỐC trong danh mục tên thuốc ("metformin có hại thận không") → lớp thuốc trả lời (tác dụng phụ / lưu ý có nguồn)
+  if (findIndexedDrug(p.x)) return null;
   const fk = findFolk(q);
   // 04/11: "trà hoa cúc / lạc tiên có GIÚP ngủ ngon không" — X là một vị có mục riêng và Y là bệnh vị đó có dòng nguồn → mục vị đó trả lời (đúng ý hơn)
   if (fk && p.verb === "help" && fk.topics.length && !(fk.verdict === "myth") && hasKey(fk.names.join(" "), [N(p.x)])) return null;

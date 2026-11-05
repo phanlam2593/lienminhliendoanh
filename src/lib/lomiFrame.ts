@@ -34,6 +34,8 @@ import { looksLikeBizQuestion } from "@/lib/bizAdvisor";
 import { VR, VN } from "@/lib/viMatch";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { findMedTopicId } from "@/lib/lomiMed";
+import { findFolk } from "@/lib/lomiFolk";
+import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import MED_INDEX from "@/lib/medkb/index.json";
 
 export type FrameCtx = {
@@ -291,6 +293,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   // "vợ a đang bầu", "chị e có thai rồi" — tin vui, không phải chuyện ốm.
   // 15/10 (audit): mang thai KÈM triệu chứng ("bà bầu bị sốt", "vợ a mang thai bị đau bụng") không phải tin vui để chúc mừng — để lớp sức khoẻ trả lời.
   if (p.cls === "preg" && person && !f.neg && c.sxOther) return null;
+  // 05/11: "ngải cứu bà bầu", "smecta bà bầu" — hỏi một vị thuốc / thuốc cho bà bầu, không phải báo tin có thai
+  if (p.cls === "preg" && (findFolk(f.raw) || findIndexedDrug(f.raw))) return null;
   // (23/10 QA V9: đã nói số tháng — "vợ a bầu 7 tháng" — thì không hỏi lại "được mấy tháng rồi")
   if (p.cls === "preg" && person && !f.neg) {
     const mo = f.raw.normalize("NFC").match(/(\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín) (tháng|tuần)/iu);
@@ -353,6 +357,8 @@ function third(f: Frame, c: FrameCtx): FrameReply | null {
   if (p.val > 0) {
     if (pet) return { intent: "frame:third_pos", talk: true, text: `${subj} ${what} vậy luôn hả 😍 Nghe là muốn cưng liền! Bé tên gì vậy bạn?` };
     if (person) return { intent: "frame:third_pos", talk: true, text: `${subj} ${what} vậy hả 😄 ${pick(["Nghe mà thấy quý ghê. Kể Lomi nghe thêm đi!", "Thích ghê á. Bạn chắc tự hào lắm ha?"])}` };
+    // (05/11: "quán cà phê đẹp ở đà lạt" là đang TÌM quán, không phải khoe)
+    if (f.subject === "place" && detectSearch(f.raw)?.mode === "find") return null;
     if (f.subject === "place") return { intent: "frame:third_pos", talk: true, text: `${subj} ${what} vậy hả 😄 Chỗ nào vậy bạn, kể Lomi nghe với!` };
     return { intent: "frame:third_pos", talk: true, text: `${subj} ${what} thiệt hả 😄 ${pick(["Bạn mới sắm hả?", "Nghe thích ghê!"])}` };
   }

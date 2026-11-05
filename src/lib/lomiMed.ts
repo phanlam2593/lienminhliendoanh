@@ -411,6 +411,8 @@ export function isMedQuestion(text: string, topicNames: string[] = [], allowTold
   if (allowTold === 2 && topicNames.length && words <= 12 && VN(/^ ?(tôi|tui|mình|em|anh|chị|tớ)? ?(vừa |mới |lỡ )?bị\b/).test(` ${n}`.replace(/^\s+/, " ")) && !VN(/\b(mẹ|má|ba|bố|cha|vợ|chồng|con|bé|ông|bà|cháu|bạn|người yêu|chị gái|em gái|anh trai)\b/).test(` ${n} `)) return true;
   // tên + cụm bổ nghĩa ngắn: "tăng động giảm chú ý ở người lớn", "trầm cảm sau sinh", "gout cho người già"
   if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && VN(/^(?:ở|cho|khi|trên|sau|trước|trong) \S+(?: \S+){0,2}$/).test(rest)) return true;
+  // (05/11: "tay chân miệng ở trẻ", "viêm phổi ở bé" — chữ trẻ / bé đã bị bỏ ở trên nên chỉ còn "ở")
+  if (topicNames.length && words <= 9 && !SELF_STATE.test(n) && /^(o|cho|khi|tren|o nguoi)$/.test(rest)) return true;
   // có từ hỏi + tên chủ đề nhưng không rõ khía cạnh ("ADHD người lớn có không", "tay chân miệng ở người lớn có không") → tóm tắt chủ đề.
   if (hasQ && topicNames.length && !SELF_STATE.test(n) && !foodPhrase(text)) return true;
   // câu kể có hỏi kèm ("a bị gout ăn nhộng được không") — phần hỏi là món
@@ -1211,6 +1213,10 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     // (tên chủ đề tự chứa khía cạnh — "đi khám tâm lý", "dấu hiệu cần hỗ trợ tâm lý" — thì vẫn lấy khía cạnh trong tên)
     const asp = aspR ?? aspectOf(text);
     const topicLike0 = foodPhrase(text, null);
+    // 05/11: câu nêu bệnh KÈM một thuốc trong danh mục ("berberin trị tiêu chảy được không", "ibuprofen đau dạ dày không") → thứ được
+    //   hỏi là thuốc đó → để lớp thuốc trả lời (trước: lời chung theo thẻ bệnh "nguồn chưa nói rõ ý berberin trị").
+    const ixd = findIndexedDrug(text);
+    if (ixd && !ixd.fuzzy && !["oresol", "ors", "hydrite", "orezol"].includes(ixd.brand) && ixd.drug.id !== "ors" && !names.some((nm) => normalizeVi(nm).includes(ixd.brand))) return null;
     // 30/10: "huyết áp cao uống aspririn được không" — thứ được hỏi là một THUỐC (không phải món ăn) → phần thuốc của bệnh đó
     //   (Lomi không kê thuốc; dùng thuốc nào do bác sĩ quyết định), không trả lời như hỏi kiêng món "aspririn".
     if (topicLike0 && DRUGS.some((d) => d.match.test(text))) return { id: own, aspect: "meds", food: null };
@@ -1219,7 +1225,8 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     // 05/11: "V.Rohto có dùng được khi bị tăng nhãn áp không" — thứ được hỏi là THUỐC trong danh mục tên thuốc (không phải món ăn)
     //   → để lớp thuốc trả lời (lưu ý / chống chỉ định có nguồn của chính thuốc đó), không trả lời như hỏi kiêng món "v rohto".
     if (topicLike0 && findIndexedDrug(topicLike0)?.fuzzy === false) return null;
-    const topicLike = topicLike0;
+    // (05/11: "nhịn ăn gián đoạn có tốt không" — cụm sau "ăn" là một phần TÊN chủ đề, không phải món được hỏi)
+    const topicLike = topicLike0 && names.some((nm) => ` ${normalizeVi(nm)} `.includes(` ${topicLike0} `)) ? null : topicLike0;
     // 01/11 (vòng 23): "gout nên TRÁNH bia không", "tiểu đường có cần kiêng xoài không" — hỏi có nên tránh MỘT món (không có chữ ăn / uống)
     if (!topicLike) {
       const av = rest0.match(/\b(?:co nen|nen|co can|can|co phai|phai) (?:tranh|kieng|bo|cat|han che|cu) ((?:\S+ ){0,2}?\S+) (?:khong|ko|k|hong|khum|ha|a|nhi)\s*$/);

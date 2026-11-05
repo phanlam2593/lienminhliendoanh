@@ -1679,3 +1679,31 @@ describe("05/11 — 3 chuyện trong một hội thoại", () => {
     res.forEach((re, i) => expect(r[i].content, seq[i]).toMatch(re));
   });
 });
+
+// ── 05/11: rà lỗi tổng (câu hỏi thường gặp trước đây rơi vào "chưa hiểu / chưa có kiến thức") ──
+describe("05/11 — rà lỗi tổng", () => {
+  const H: [string, RegExp][] = [
+    ["betadine súc miệng được không", /Betadine/],
+    ["metformin có hại thận không", /Metformin/],
+    ["amlodipin bị phù chân", /Amlodipine/],
+    ["postinor uống sau bao lâu", /Postinor[\s\S]*levonorgestrel/],
+    ["tay chân miệng ở trẻ", /Tay chân miệng/],
+    ["viêm phổi ở trẻ", /Viêm phổi/],
+    ["berberin trị tiêu chảy được không", /Berberin/],
+    ["ibuprofen đau dạ dày không", /Ibuprofen/],
+    ["ngải cứu bà bầu", /Ngải cứu[\s\S]*mang thai/],
+    ["bị muỗi đốt sưng", /côn trùng đốt/i],
+    ["thuốc nhỏ mắt v rohto dùng sao", /tetrahydrozolin/],
+    ["thuốc dạ dày chữ p", /Aluminium phosphate[\s\S]*ợ nóng/],
+    ["men vi sinh uống lúc nào", /Men vi sinh[\s\S]*kháng sinh/],
+    ["nhịn ăn gián đoạn có tốt không", /Nhịn ăn gián đoạn/],
+    ["kem trị mụn", /mụn/i],
+    ["lá bài hôm nay của tôi", /lá bài dẫn đường|🔮/],
+    ["quán cà phê đẹp ở đà lạt", /Cà phê|cà phê/],
+  ];
+  for (const [q, re] of H) it(q, async () => {
+    const c = (await last([q])).content;
+    expect(c).toMatch(re);
+    expect(c).not.toMatch(/chưa có kiến thức|chưa hiểu|chưa được học/);
+  });
+});

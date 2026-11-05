@@ -408,6 +408,8 @@ const DAILY_RE = VN(/(?<![a-z])(hôm nay|thông điệp|1 lá|một lá|today)(?
 export function detectTarot(text: string): { question: string; daily: boolean } | null {
   const f = fold(text);
   const m = findTrigger(text, f);
+  // 05/11: "lá bài hôm nay của tôi", "quẻ hôm nay của mình" — không có chữ bói / rút nhưng rõ là xin lá bài trong ngày
+  if (!m && VN(/^(lá bài|quẻ|quẻ bói) (hôm nay|của tôi|của tui|của mình|cho tôi|cho mình|ngày hôm nay)( của (tôi|tui|mình|em|anh))?\s*\??$/).test(f.trim())) return { question: "", daily: true };
   if (!m) return null;
   let after = clean(text.slice(m.end));
   const before = clean(text.slice(0, m.start));
