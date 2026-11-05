@@ -1736,3 +1736,36 @@ describe("05/11 — đọc hiểu: câu nối và chuyện buồn", () => {
     expect((await last(["xoá vĩnh viễn nick sao z"])).faqId).toBe("deleteacc");
   }, T);
 });
+
+// 05/11 — rà câu HIỂU SAI (ví von, nhiều nghĩa, chữ đời thường)
+describe("05/11 — rà câu hiểu sai", () => {
+  const C: [string, RegExp, RegExp?][] = [
+    ["nóng ruột chờ người yêu nhắn tin", /lo|bất an|thấp thỏm/i, /buồn nôn/],
+    ["bị say nắng rồi chóng mặt quá", /Say nắng/],
+    ["chán sống ở thành phố quá", /./, /không phải một mình|làm hại/],
+    ["chán sống quá", /không phải một mình|làm hại/],
+    ["đau đầu vì sếp", /sếp/, /đau đầu\*\* 🩺/],
+    ["điên đầu với đống deadline", /công việc|áp lực|burnout|Kiệt sức|đi làm/i],
+    ["tim đập nhanh khi gặp crush", /Thích|hồi hộp|rộn ràng|cảm nắng/i, /Tim đập nhanh thường gặp/],
+    ["mất sóng điện thoại", /mất mạng|Cúp điện/, /mật khẩu/],
+    ["giết thời gian bằng gì bây giờ", /Rảnh|vui|chán/i],
+    ["ăn đòn vì về trễ", /bạo lực|không phải lỗi/],
+    ["muốn chết vì thèm phở", /phở/i, /không phải một mình/],
+    ["mình có bị điên không", /không chẩn đoán/],
+    ["đau như bị dao cắt ở bụng", /115|cấp cứu/],
+    ["lên cơn hen suyễn", /cấp cứu|115/],
+    ["nhà thuốc nào mở cửa khuya", /Google Maps|nhà thuốc gần đây/, /kinh doanh có điều kiện/],
+    ["bệnh viện nào gần nhất", /Google Maps|115/],
+    ["muốn tìm bạn chơi game", /Quẹt/],
+    ["hôm nay em đi khám về bác sĩ bảo bị viêm dạ dày", /Viêm dạ dày\*\*, nên/],
+    ["bác sĩ kê amoxicillin cho con", /Amoxicillin/],
+    ["mẹ em mới mất", /chia buồn/],
+  ];
+  for (const [q, ok, bad] of C)
+    it(q, async () => {
+      const c = (await last([q])).content;
+      expect(c).toMatch(ok);
+      if (bad) expect(c).not.toMatch(bad);
+      expect(c).not.toMatch(/chưa được tiếp thu|chưa biết cái này|chưa được học/);
+    }, T);
+});

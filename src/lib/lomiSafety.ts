@@ -51,7 +51,7 @@ const NOT_HIT_B = "(?! (?:cau|bong|banh|bai|rang|gia|may|dan|trong|golf|tennis|g
 
 // Bị đánh: "X đánh e", "e bị (chồng) đánh", "chồng e hay đánh đập", "bị bạo hành".
 const V_OBJ = P(`${HIT}${NOT_HIT} ${SELF}`, `${HIT_B}${NOT_HIT_B} ${SELF_B}`);
-const V_PASSIVE = P(`bị (?:\\S+ ){0,3}?${HIT}${NOT_HIT}|bị bạo hành|bị bạo lực|bạo lực gia đình|bạo hành gia đình`, `bi (?:\\S+ ){0,3}?${HIT_B}${NOT_HIT_B}|bi bao hanh|bi bao luc|bao luc gia dinh|bao hanh gia dinh`);
+const V_PASSIVE = P(`bị (?:\\S+ ){0,3}?${HIT}${NOT_HIT}|bị bạo hành|bị bạo lực|bạo lực gia đình|bạo hành gia đình|ăn đòn|bị ăn đòn|ăn roi`, `bi (?:\\S+ ){0,3}?${HIT_B}${NOT_HIT_B}|bi bao hanh|bi bao luc|bao luc gia dinh|bao hanh gia dinh|an don|bi an don|an roi`);
 const V_ACTOR = P(`(?:${PARTNER}|${KIN})(?: ${SELF})?(?: \\S+){0,3} ${HIT}${NOT_HIT}`, `(?:${PARTNER_B}|${KIN_B})(?: ${SELF_B})?(?: \\S+){0,3} ${HIT_B}${NOT_HIT_B}`);
 // Bị doạ: "doạ đánh e", "hăm giết", "đe doạ tung ảnh".
 const THREAT = P(

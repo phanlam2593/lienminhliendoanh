@@ -90,7 +90,11 @@ const SYN: [RegExp, string][] = [
   // sức khoẻ / giấc ngủ
   [VN(/\b(ngủ (không|ko|k|hông|hong) (được|dc|đc|nổi|ngon|say)|không ngủ (nổi|nghê)|trằn trọc|thức trắng|thuc tam|ngủ chập chờn|hay tỉnh giấc)\b/), "mất ngủ"],
   [VN(/\b(nhức đầu|choáng váng|đau nửa đầu|đau đầu)\b/), "đau đầu"],
-  [VN(/\b(buồn nôn|muốn nôn|nôn mửa|nóng ruột)\b/), "buồn nôn"],
+  [VN(/\b(buồn nôn|muốn nôn|nôn mửa)\b/), "buồn nôn"],
+  // 05/11 (rà hiểu sai): "nóng ruột chờ người yêu nhắn" là SỐT RUỘT (lo, mong) — chỉ là buồn nôn khi không kèm chuyện chờ đợi / lo
+  [VN(/\bnóng ruột\b(?!.*\b(chờ|đợi|mong|lo|tin nhắn|nhắn|kết quả|không biết|quá trời|ghê))/), "buồn nôn"],
+  [VN(/\bnóng ruột\b(?=.*\b(chờ|đợi|mong|lo|tin nhắn|nhắn|kết quả|không biết|quá trời|ghê))/), "sốt ruột lo lắng"],
+  [VN(/\b(muốn trốn|chỉ muốn trốn)( \S+){0,4} (cho yên|yên tĩnh|một mình|khỏi mọi người|khỏi tất cả)\b/), "áp lực quá"],
   // 05/11 (bộ đề "nói kiểu khác" do ChatGPT soạn): tên gọi dân gian / cách tả của bệnh thường gặp → tên chuẩn
   [VN(/\b(tào tháo đuổi|ỉa chảy|ỉa lỏng|tiêu lỏng|đi phân lỏng|phân lỏng|đi ngoài (nhiều lần|liên tục|hoài|lỏng|toàn nước)|đi cầu (lỏng|nhiều lần|liên tục|toàn nước))\b/), "tiêu chảy"],
   [VN(/\b(bị bón|bón bụng|bon bung|khó đi (cầu|vệ sinh|ngoài|đại tiện|nặng)|(chưa|không|ko|hông) đi (ngoài|cầu|vệ sinh|nặng) (được|đc|dc|nổi)|(mấy|nhiều|vài) (ngày|hôm|bữa)( \S+){0,2} (chưa|không|ko) đi (ngoài|cầu|vệ sinh|nặng))\b/), "táo bón"],
@@ -134,6 +138,15 @@ const RENAME: [RegExp, string][] = [
   [VR(/(?<![\p{L}])(muỗi (chích|cắn)|muoi (chich|can))(?![\p{L}])/giu), "muỗi đốt"],
   [VR(/(?<![\p{L}])(nóng sốt|sốt nóng)(?![\p{L}])/giu), "sốt"],
   [VR(/(?<![\p{L}])dạ dàu(?![\p{L}])/giu), "dạ dày"],
+  // 05/11 (rà hiểu sai): nói ví von, không phải bệnh
+  [VR(/(?<![\p{L}])(đau đầu|nhức đầu|điên đầu|nhức nhối|đau não) (vì|với|do|tại|chuyện) (?=(sếp|deadline|công việc|việc|con|chồng|vợ|tiền|nợ|chuyện|người yêu|ny|bài tập|thi cử|kỳ thi|đống|mấy đứa|khách|nhà chồng|nhà vợ)(?![\p{L}]))/giu), "áp lực vì "],
+  [VR(/(?<![\p{L}])điên đầu(?![\p{L}])/giu), "áp lực quá"],
+  [VR(/(?<![\p{L}])tim (đập nhanh|đập thình thịch|loạn nhịp|rung rinh)( \S+){0,2} (khi|lúc|mỗi khi|mỗi lần) (gặp|thấy|nhìn|nói chuyện với|nhắn tin với|đứng gần) (crush|người ấy|anh ấy|cô ấy|người yêu|ny|bạn ấy|ảnh|ổng|chị ấy)(?![\p{L}])/giu), "mình thích $5"],
+  [VR(/(?<![\p{L}])(mất sóng|yếu sóng|không có sóng|rớt sóng)( điện thoại)?(?![\p{L}])/giu), "mất mạng"],
+  [VR(/(?<![\p{L}])giết thời gian(?![\p{L}])/giu), "không có gì làm"],
+  [VR(/(?<![\p{L}])ăn đòn(?![\p{L}])/giu), "bị đánh"],
+  [VR(/(?<![\p{L}])đau như (bị )?(dao|kim|lửa) (cắt|đâm|xé|cứa|đốt)( ở| vùng)? (bụng|ngực|đầu|lưng|dạ dày)(?![\p{L}])/giu), "đau $5 dữ dội"],
+  [VR(/(?<![\p{L}])(bị |đang )?lên cơn (hen suyễn|hen|suyễn)(?![\p{L}])/giu), "bị cơn hen suyễn"],
   [VR(/(?<![\p{L}])(bị cho thôi việc|cho thôi việc|bị thôi việc|bị cho nghỉ việc|mất công việc)(?![\p{L}])/giu), "bị mất việc"],
   [VR(/(?<![\p{L}])đau cái (đầu|bụng|lưng|răng|họng|bụng)(?![\p{L}])/giu), "đau $1"],
   [VR(/(?<![\p{L}])bị hô(?= (phải|thì|hoài|quá|lâu|mấy|nhiều|làm|lm|có)(?![\p{L}]))/giu), "bị ho"],
@@ -366,7 +379,7 @@ const STATES: StateDef[] = [
   },
   {
     id: "weather",
-    re: W("trời (đẹp|xanh|trong|quang)|(trời )?(mưa|nắng|gió|lạnh|nóng|oi|mát|rét|sương mù|nồm)( to| lớn| nhỏ| dữ| quá| ghê| lắm| nè| rồi| rả rích| phùn| cả ngày| hoài)*"),
+    re: W("trời (đẹp|xanh|trong|quang)|(trời )?(mưa|nắng|gió|lạnh|nóng|oi|mát|rét|sương mù|nồm)(?! (lùng|nhạt|lẽo|tanh|ruột|lòng|tính|nảy|giận|mặt))( to| lớn| nhỏ| dữ| quá| ghê| lắm| nè| rồi| rả rích| phùn| cả ngày| hoài)*"),
     reply: (m) => {
       const k = (m[0].match(VR(/đẹp|xanh|trong|quang|mưa|nắng|gió|lạnh|nóng|oi|mát|rét|sương mù|nồm/u)) ?? [""])[0];
       const t: Record<string, string[]> = {

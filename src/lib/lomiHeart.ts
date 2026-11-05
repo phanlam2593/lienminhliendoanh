@@ -775,6 +775,8 @@ const DX_WORD: [RegExp, string][] = [
   [VN(/\b(ocd|ám ảnh cưỡng chế)\b/), "ám ảnh cưỡng chế"],
   [VN(/\b(lưỡng cực)\b/), "rối loạn lưỡng cực"],
   [VN(/\b(rối loạn|bệnh tâm lý|vấn đề tâm lý|vấn đề về tâm lý|tâm thần|suy nhược thần kinh|có vấn đề về đầu óc)\b/), "một vấn đề tâm lý"],
+  // 05/11 (rà hiểu sai): "mình có bị điên không", "liệu tui có khùng không" — tự hỏi về sức khoẻ tinh thần bằng chữ đời thường
+  [VN(/\b(điên|khùng|điên khùng|bị điên|bị khùng)\b/), "một vấn đề tâm lý"],
 ];
 const DX_MARK = "Lomi không chẩn đoán được";
 const DX_SRC = DX_WORD.map(([re]) => re.source.replace(/\\b/g, "")).join("|");

@@ -1713,6 +1713,48 @@ export function AiChat({
           shownRef.current = { from: q, to: typed };
           rewroteRef.current = true;
         }
+        //   (f) 05/11 (rà hiểu sai): KỂ bác sĩ đã khám ("đi khám về bác sĩ bảo bị viêm dạ dày") → cách chăm sóc bệnh đó, không phải "khi nào nên đi khám";
+        //       "bác sĩ kê amoxicillin cho con" → thẻ thuốc đó
+        const dx = lowQ.match(/(?:bác sĩ|bs|bác sỹ)\s+(?:bảo|nói|chẩn đoán|kết luận|nói là|bảo là)\s+(?:là\s+)?(?:(?:em|anh|chị|con|tui|tôi|mình|bé|mẹ|ba|bố)\s+)?(?:bị\s+)?(.{2,40}?)(?:\s+(?:rồi|á|ạ|nè|nha|đó))*$/u);
+        const dxOther = !!la?.thread || !!la?.about || VN(/\b(mẹ|má|ba|bố|cha|ông|bà|con|bé|chồng|vợ|anh trai|chị gái|em gái|em trai|bạn|cháu|người nhà)\b/).test(` ${normalizeVi(lowQ.split(/bác sĩ|bs|bác sỹ/u)[0])} `);
+        if (!bk && !nm && dx && !dxOther && !findIndexedDrug(dx[1]) && findMedId(`bị ${dx[1]} nên làm gì`)) {
+          q = `bị ${dx[1]} nên làm gì`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        const rx0 = lowQ.match(/(?:bác sĩ|bs|bác sỹ|dược sĩ)\s+(?:kê|cho|kê cho|cho uống|kê đơn)\s+(?:(?:em|anh|chị|con|tui|tôi|mình|bé)\s+)?(?:thuốc\s+)?(.+?)(?:\s+(?:cho\s+\S+|rồi|á|ạ|nè|nha))*$/u);
+        const rxIx = rx0 && !q.includes("?") ? findIndexedDrug(rx0[1]) : null;
+        if (rxIx && !rxIx.fuzzy && lowQ.split(/\s+/).length <= 12 && !VN(/\b(được không|có sao|có hại|bao nhiêu|mấy|lúc nào|uống sao|tác dụng phụ|chung)\b/).test(` ${normalizeVi(q)} `)) {
+          q = `${rxIx.brand} là thuốc gì`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (g) "bị say nắng rồi chóng mặt quá" → bài say nắng (kèm dấu hiệu cấp cứu), không chỉ bài chóng mặt
+        if (VN(/\b(say nắng|sốc nhiệt|say nóng)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(cảm nắng|crush|thích|yêu)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 12 && !/nên làm gì$/u.test(q)) {
+          q = "bị say nắng nên làm gì";
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (g2) "lên cơn hen suyễn" (đang lên cơn) → cách xử trí cơn hen ngay, không phải bảng chọn "muốn biết phần nào"
+        if (VN(/\b(cơn hen|lên cơn hen|lên cơn suyễn)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 10 && !/cấp cứu/u.test(q)) {
+          q = "hen suyễn khi nào cần đi cấp cứu";
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (h) 05/11 (rà hiểu sai): tìm NHÀ THUỐC / BỆNH VIỆN gần đây ("nhà thuốc nào mở cửa khuya" từng ra bài mở nhà thuốc để kinh doanh)
+        if (VN(/\b(nhà thuốc|tiệm thuốc|hiệu thuốc|quầy thuốc|bệnh viện|phòng khám|trạm y tế|chỗ khám|mua thuốc)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(gần|gần đây|gần nhất|ở đâu|chỗ nào|nào|mở cửa|còn mở|trực|24h|24 giờ|khuya|ban đêm)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(mở (một |cái )?(nhà thuốc|tiệm thuốc|quầy thuốc|phòng khám)|kinh doanh|giấy phép|vốn|thủ tục)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 14) {
+          const hosp = VN(/\b(bệnh viện|phòng khám|trạm y tế|chỗ khám)\b/).test(` ${normalizeVi(q)} `);
+          return localReply(q, { role: "assistant", content: `Lomi chưa có danh sách ${hosp ? "bệnh viện / phòng khám" : "nhà thuốc"} trong app nên không chỉ chỗ cụ thể được 🙏\n• Mở **Google Maps** (hoặc bản đồ trên điện thoại) gõ “${hosp ? "bệnh viện gần đây" : "nhà thuốc gần đây"}” — xem giờ mở cửa và gọi trước cho chắc\n• ${hosp ? "Cần cấp cứu (khó thở, đau ngực, ngất, chảy máu nhiều…) → gọi **115** ngay, đừng tự đi tìm" : "Đêm khuya cần thuốc gấp thì các bệnh viện thường có nhà thuốc trực; dấu hiệu nặng (khó thở, đau ngực, sốt cao li bì…) → gọi **115**"}`, local: true, health: {} });
+        }
+        //   (i) "muốn tìm bạn chơi game / đi cà phê" → mục Quẹt
+        if (VN(/\b(tìm|kiếm|muốn có|cần)( \S+){0,1} (bạn|người|đồng đội|team)( \S+){0,1} (chơi game|chơi|đi chơi|đi cà phê|đi ăn|đánh game|leo rank|đi phượt|tập gym)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 12) {
+          const qf = faqById("quetwhat");
+          if (qf) return localReply(q, { role: "assistant", content: `Tìm bạn thì vào **Quẹt** nha 🎮☕\n\n${qf.a.vi}`, local: true, faqId: "quetwhat" });
+        }
         //   (e) lời đáp trước có nhắc gói bù nước (ORS / Oresol) mà hỏi "gói đó pha ntn" → hỏi cách pha Oresol
         if (la && /Oresol|ORS|bù nước/u.test(la.content) && VN(/\bpha\b/).test(` ${normalizeVi(q)} `) && VN(/\b(gói|nó|đó|này|cái đó|thuốc đó)\b/).test(` ${normalizeVi(q)} `) && !findIndexedDrug(q) && !findDrug(q)) {
           q = `oresol ${q}`;
