@@ -44,7 +44,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes, medNameOfId } from "@/lib/lomiMed";
 import { coughFocusReply, feverFocusReply, sleepTeaReply } from "@/lib/lomiFolk";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { meaningChips } from "@/lib/lomiMeaning";
@@ -71,7 +71,7 @@ import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTher
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
-import { FOLK, findFolk, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolkForTopic } from "@/lib/lomiFolk";
+import { FOLK, asksAbout, findFolk, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
@@ -1074,6 +1074,9 @@ export function AiChat({
       // "lá này sao chị", "em chọn bên trái" (vừa rút xong) → nói lại lá vừa rút
       if (prevT && w <= 7 && (VN(/^ (lá này sao|lá này thì sao|lá đó sao)( (chị|em|anh|bạn|lomi|ta|vậy|nè))? $/).test(nr) || VN(/\bchọn (lá )?(bên )?(trái|phải|giữa)\b/).test(nr)))
         return { role: "assistant", content: `${VN(/\bchọn\b/).test(nr) ? "Lá bạn chọn đã lật ra rồi nè 🔮 " : ""}${readingRecap(prevT)}`, local: true, tarotRef: prevT };
+      // 05/11 (bộ hội thoại nhiều lượt): "lá bài này nói gì về hôm nay", "lá này có lời khuyên gì cho công việc ko" → đọc lại lá vừa rút
+      if (prevT && w <= 14 && VN(/\b(lá (bài )?(này|đó|vừa rồi|vừa rút|hôm nay)|bài này|quẻ này)\b/).test(nr) && VN(/\b(nói gì về|lời khuyên|khuyên gì|có ý gì|muốn nói|báo gì|nhắn gì)\b/).test(nr) && !VN(/\b(nghĩa là gì|nghĩa gì|ý nghĩa)\b/).test(nr))
+        return { role: "assistant", content: readingRecap(prevT), local: true, tarotRef: prevT };
       // "nói về tiền", "xem về công việc" ngay sau khi rút → rút cho chủ đề đó
       const tTopic = prevT && w <= 6 ? nr.match(/^ (?:(?:a|o|thoi) )?(?:(?:em|anh|chi|tui|minh) )?(?:(?:noi|xem|hoi|coi|con|doi qua|doi sang|chuyen qua|chuyen sang) )?(?:ve |chuyen )?(tien|tien bac|tai chinh|cong viec|tinh yeu|tinh cam|tinh duyen|hoc hanh|suc khoe) (?:di |nha |thi sao )?$/u) : null;
       if (tTopic && !VN(/\bsức khoẻ|sức khỏe\b/).test(nr)) {
@@ -1155,7 +1158,10 @@ export function AiChat({
       return { role: "assistant", content: `Quên một liều thì **đừng uống gấp đôi** ở lần sau để bù nha — uống dồn dễ thành quá liều.\n• Cách xử lý (uống bù ngay hay bỏ qua liều đó) **tuỳ từng thuốc** và cách giờ uống kế tiếp bao lâu — xem phần "quên liều" trong tờ hướng dẫn, hoặc gọi hỏi dược sĩ / bác sĩ đã kê\n• Thuốc huyết áp, tim mạch, tiểu đường, chống đông thì hỏi lại sớm trong ngày cho chắc\n• Hay quên thì đặt nhắc giờ trên điện thoại, dùng hộp chia thuốc theo ngày\n\nBạn nhớ ra lúc mấy giờ, còn bao lâu nữa tới giờ uống kế tiếp?`, local: true, drug: { kind: "stop", name: nm || "thuốc" }, health: hCtx ?? {} };
     }
     // (2) Đang nói một thuốc mà hỏi / kể tiếp không nhắc tên thuốc.
-    if (dName && w <= 12 && !findDrug(raw) && !VN(/\b(quán|tìm|ở đâu|chỗ nào|đẹp|đi chơi|địa chỉ)\b/).test(nr)) {
+    // (05/11: câu nêu tên một thuốc KHÁC trong danh mục — "quay lại smecta, uống lúc nào" sau berberin — không phải hỏi nối thuốc cũ)
+    const ixOther = findIndexedDrug(raw);
+    const otherDrug = !!ixOther && !ixOther.fuzzy && !VN(/\b(chung|cùng|với|kết hợp|thêm|trùng)\b/).test(nr) && !!dName && normalizeVi(ixOther.brand) !== normalizeVi(dName) && !normalizeVi(dName).includes(normalizeVi(ixOther.brand));
+    if (dName && w <= 12 && !findDrug(raw) && !otherDrug && !VN(/\b(quán|tìm|ở đâu|chỗ nào|đẹp|đi chơi|địa chỉ)\b/).test(nr)) {
       const drugOut = (text: string, name = dName): Msg => ({ role: "assistant", content: text, local: true, drug: { kind: "what", name, id: prevDrug?.id }, health: hCtx ?? {} });
       // tên thuốc ("tên là cetirizine", "levothyroxine á", "thuốc amlodipine")
       const low = raw.normalize("NFC").toLowerCase().replace(/[.!?…]+$/u, "");
@@ -1674,6 +1680,55 @@ export function AiChat({
         shownRef.current = { from: q, to: typed };
         rewroteRef.current = true;
       }
+      // 05/11 (bộ hội thoại nhiều lượt do ChatGPT soạn):
+      {
+        const lowQ = q.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim();
+        const known = (x: string) => !!(findIndexedDrug(x) || findDrug(x) || findMedId(x) || findMedId(`bị ${x} nên làm gì`) || findFolk(x));
+        //   (a) "quay lại vụ tiểu đường hồi nãy, ăn chuối đc ko", "quay lại thuốc smecta, uống lúc nào vậy" → hỏi thẳng câu đó với ĐÚNG thứ được nêu
+        //       (trước đây lớp "quay lại" chỉ tìm mạch sức khoẻ / thuốc gần nhất → ra nhầm bệnh / thuốc vừa nói).
+        const bk = lowQ.match(/^(?:(?:rồi|thôi|à|ok|okie|vậy|giờ|ờ)\s+)*(?:quay lại|quay về|trở lại|nói tiếp|còn)\s+(?:(?:vụ|chuyện|cái|về|phần|thuốc|bệnh|vị)\s+)*(.+?)(?:\s+(?:hồi nãy|lúc nãy|khi nãy|ban nãy|vừa nãy|lúc trước))?\s*,\s*(.+)$/u);
+
+        if (bk && known(bk[1]) && bk[2].split(/\s+/).length >= 2) {
+          q = `${bk[1]} ${bk[2]}`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (b) "nhầm, mình muốn hỏi amoxicillin", "à không, ý là lá vối" → hỏi về thứ mới nêu
+        const nm = !bk ? lowQ.match(/^(?:à\s+|ờ\s+)?(?:nhầm|nhầm rồi|lộn|lộn rồi|à không|không phải|ko phải|hông phải)(?:\s+(?:cái đó|thuốc đó|cái kia|rồi))?[,\s]+(?:(?:ý|ý là)\s+)?(?:(?:mình|em|tôi|tui|anh|chị|con)\s+)?(?:(?:muốn|định|đang)\s+)?(?:hỏi|nói|là|ý là)\s+(?:về\s+|cái\s+)?(?:thuốc\s+)?(.+?)(?:\s+(?:cơ|mà|á|ạ|nha|nhé|chứ|thôi))*$/u) : null;
+        if (nm && nm[1].split(/\s+/).length <= 4 && known(nm[1])) {
+          q = findIndexedDrug(nm[1]) || findDrug(nm[1]) ? `${nm[1]} là thuốc gì` : `${nm[1]} là gì`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (c) vừa nói về một vị (ngải cứu, lá vối…) mà hỏi nối "mới có bầu mấy tháng thôi", "có cần kiêng hẳn món này ko", "lỡ ăn rồi có sao ko"
+        //       — câu không nêu thứ gì khác → hỏi lại kèm tên vị (trước đây các lớp mang thai / "chưa có kiến thức" đáp lạc vị).
+        const hb = la?.herb ? FOLK.find((x) => x.id === la.herb) : undefined;
+        if (hb && !bk && !nm && lowQ.split(/\s+/).length <= 12 && !findFolk(q) && !findIndexedDrug(q) && !findDrug(q) && (VN(/\b(món này|cái này|vị này|thứ này|nó|lỡ ăn|lỡ uống|đã ăn|ăn rồi|uống rồi|có bầu|bầu|mang thai|có thai|cho con bú)\b/).test(` ${normalizeVi(q)} `) || (!findMedId(q) && VN(/\b(kiêng|có sao|có hại|tác dụng phụ|mỗi ngày|hằng ngày|thường xuyên|lâu dài)\b/).test(` ${normalizeVi(q)} `)))) {
+          //   (câu KỂ mang thai / cho con bú không có chữ hỏi — "mới có bầu mấy tháng thôi" → hỏi thẳng vị đó dùng khi mang thai được không)
+          const pregTell = VN(/\b(bầu|mang thai|có thai|cho con bú)\b/).test(` ${normalizeVi(q)} `) && !asksAbout(q) && !q.includes("?");
+          q = pregTell ? `${hb.names[0]} ${VN(/\bcho con bú\b/).test(` ${normalizeVi(q)} `) ? "mẹ cho con bú" : "bà bầu"} dùng được không` : `${hb.names[0]} ${msgs.filter((m) => m.role === "user").slice(-3).some((m) => VN(/\b(bầu|mang thai|có thai)\b/).test(` ${normalizeVi(m.content)} `)) && !VN(/\b(bầu|mang thai|có thai)\b/).test(` ${normalizeVi(q)} `) ? "bà bầu " : ""}${q}`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (e) lời đáp trước có nhắc gói bù nước (ORS / Oresol) mà hỏi "gói đó pha ntn" → hỏi cách pha Oresol
+        if (la && /Oresol|ORS|bù nước/u.test(la.content) && VN(/\bpha\b/).test(` ${normalizeVi(q)} `) && VN(/\b(gói|nó|đó|này|cái đó|thuốc đó)\b/).test(` ${normalizeVi(q)} `) && !findIndexedDrug(q) && !findDrug(q)) {
+          q = `oresol ${q}`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (d) đang nói một bệnh mà hỏi "ở nhà cần theo dõi những gì" — theo dõi dấu hiệu bệnh, không phải nút Theo dõi trong app
+        const hl = la?.health?.label ?? (la?.med?.id ? medNameOfId(la.med.id) ?? undefined : undefined);
+        if (hl && VN(/\b(theo dõi|để ý|canh chừng)( \S+){0,2} (gì|những gì|những dấu hiệu gì|dấu hiệu gì|thế nào|ra sao|cái gì)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(người|bạn bè|tài khoản|trang|quán|app)\b/).test(` ${normalizeVi(q)} `)) {
+          q = `${hl} cần theo dõi dấu hiệu gì, khi nào cần đi khám`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+      }
       // 05/11 (bộ đề "nói kiểu khác"): câu cụt "<bệnh> sao" / "sốt làm gì" / "mụn sao" (≤ 4 chữ, tên bệnh có thẻ) → hỏi cách chăm sóc
       {
         const cw = q.trim().replace(/[?!.…]+$/u, "").split(/\s+/);
@@ -1923,7 +1978,8 @@ export function AiChat({
       // 05/11: vừa nói một thuốc trong danh mục (vd Prospan) mà hỏi liều nối "cho bé 3 tuổi uống mấy ml" → liều / ý CÓ NGUỒN của chính thuốc đó
       //   (trước đây lời chung "Lomi không tính liều cho bé" dù nguồn của thuốc có ghi liều theo tuổi).
       const lastDrugNm = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1].drug?.name : undefined;
-      if (!en && lastDrugNm && findIndexedDrug(lastDrugNm) && !findIndexedDrug(raw) && !findDrug(raw) && !overdoseMention(raw) && normalizeVi(raw).split(" ").length <= 12 && VN(/\b(mấy|bao nhiêu|liều|ml|viên|gói|ống|giọt|lần)\b/).test(` ${normalizeVi(raw)} `)) {
+      if (!en && lastDrugNm && findIndexedDrug(lastDrugNm) && !findIndexedDrug(raw) && !findDrug(raw) && !overdoseMention(raw) && normalizeVi(raw).split(" ").length <= 12 && VN(/\b(mấy|bao nhiêu|liều|ml|viên|gói|ống|giọt|lần|ăn no|lúc no|lúc đói|bụng đói|trước ăn|sau ăn|trước khi ăn|sau khi ăn|trước hay sau|uống lúc nào|lúc nào|khi nào|pha)\b/).test(` ${normalizeVi(raw)} `)) {
+
         const dk = drugAsk(`${lastDrugNm} ${raw}`, {});
         if (dk) { rewroteRef.current = true; return localReply(q, { role: "assistant", content: dk.text, local: true, drug: { kind: dk.kind, name: dk.name ?? lastDrugNm, id: dk.drugId }, health: {} }); }
       }
@@ -2914,6 +2970,7 @@ export function AiChat({
         // 18/10 (audit F): "đang uống warfarin" → (Lomi đáp chuyện khác) → "uống thêm ibuprofen được không?": lấy thuốc từ ĐÚNG tin trước
         //   của người dùng, chỉ khi câu này hỏi dùng chung với thuốc đó (lib/lomiDrug.prevDrugCtx).
         const pdc = lastA?.drug ? {} : prevDrugCtx([...msgs].reverse().find((m) => m.role === "user")?.content, q);
+
         const dg = drugAsk(q, {
           ...pdc,
           inHealth: !!hCtx || !!lastA?.sx?.length || careOn || lastA?.heart === "insomnia",

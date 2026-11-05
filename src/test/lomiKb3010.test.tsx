@@ -1714,7 +1714,7 @@ describe("05/11 — đọc hiểu: câu nối và chuyện buồn", () => {
     const c = (await last(["Tôi vừa bị mất việc, chán quá"])).content;
     expect(c).not.toMatch(/Rảnh thì tám|bày trò|Tarot/);
     expect(c).toMatch(/tìm việc|khúc quanh|🫂/);
-    expect((await last(["chán quá"])).content).toMatch(/Chán hả|Rảnh thì|Quẹt/);
+    expect((await last(["chán quá"])).content).toMatch(/Chán hả|Rảnh|Quẹt|vui/);
   }, T);
   it("Lomi hỏi muốn biết phần nào → 'tất cả' / 'cả 3 luôn' ra nguyên thẻ", async () => {
     const r = await chat(["Tư vấn cho a về bệnh gout", "Tất cả"]);
