@@ -474,9 +474,9 @@ function selfPast(f: Frame): FrameReply {
     return { intent: "frame:done", talk: true, text: `${e} hả 😄 ${p.cls === "duty" ? "Vất vả rồi nè, nghỉ ngơi chút đi nha!" : "Vậy là xong một việc rồi ha!"}` };
   }
   const T = timed ? timeCap(f) : "Mới";
-  if (!p.known) return neutral(T, f);
-  // Kể chuyện bị đối xử tệ ("bị sếp chửi oan") → nhường lớp tâm sự; kiểm tra TRƯỚC nhánh p.val < 0 chung.
+  // Kể chuyện bị đối xử tệ ("bị sếp chửi oan") → nhường lớp tâm sự; kiểm tra TRƯỚC nhánh động từ lạ và p.val < 0 chung.
   if (mistreated(f, echo(f))) return null;
+  if (!p.known) return neutral(T, f);
   if (p.val < 0) return { intent: "frame:past", talk: true, text: `${T} ${echo(f)} hả 😅 ${pick(["Rồi có sao không bạn?", "Giờ ổn hơn chưa bạn?"])}` };
   // Khen ở cuối câu ("…vui lắm", "…hay lắm") thì không cần nhắc lại; nhận xét trung tính ("ngủ sớm") thì giữ.
   const e = echo(f, p.val === 0);
@@ -493,10 +493,10 @@ function selfPlan(f: Frame): FrameReply {
   const p = f.pred!;
   const T = f.time?.explicit ? timeCap(f) : p.planned ? "Sắp" : "";
   const e = echo(f);
-  if (!p.known) return neutral(T, f);
   // 06/11: "hôm nay đi làm bị sếp chửi oan" là KỂ chuyện bị đối xử tệ, không phải kế hoạch đi làm → nhường lớp tâm sự (trước đây đáp "Cố lên nha 💪").
-  // Kiểm tra TRƯỚC nhánh p.val < 0 chung để câu "sợ bị mắng" không bị đáp "Giữ sức nha" thay vì được lắng nghe.
+  // Kiểm tra TRƯỚC nhánh động từ lạ và p.val < 0 chung để câu "sợ bị mắng" không bị đáp "Giữ sức nha" thay vì được lắng nghe.
   if (mistreated(f, e)) return null;
+  if (!p.known) return neutral(T, f);
   if (p.val < 0) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🥺 Bạn giữ sức nha, có gì cứ nói với Lomi.` };
   const d = detectDish(f.raw);
   if (d && VR(/(^| )(ăn|uống|nhậu|cà phê)( |$)/).test(e)) {
