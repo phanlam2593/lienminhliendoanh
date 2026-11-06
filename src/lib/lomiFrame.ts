@@ -459,6 +459,9 @@ const neutral = (lead: string, f: Frame): FrameReply => ({ intent: "frame:echo",
 
 /** Cụm "bị đối xử tệ / oan ức" — đó là chuyện cần được NGHE (lớp tâm sự), không phải chuyện để đáp câu chung kiểu "Giữ sức nha". */
 const MISTREAT = VR(/(^| )(bị (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)|oan|ấm ức|tủi thân|uất ức)( |$)/);
+/** Dạng có NGƯỜI GÂY RA đứng giữa ("bị đồng nghiệp mắng") — echo() bỏ mất "bị …" nên phải soi trên câu gốc. */
+const MISTREAT_RAW = VR(/bị( \S+){0,3} (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)/);
+const mistreated = (f: Frame, e: string) => MISTREAT.test(e) || MISTREAT_RAW.test(f.raw);
 
 function selfPast(f: Frame): FrameReply {
   const p = f.pred!;
@@ -473,7 +476,7 @@ function selfPast(f: Frame): FrameReply {
   const T = timed ? timeCap(f) : "Mới";
   if (!p.known) return neutral(T, f);
   // Kể chuyện bị đối xử tệ ("bị sếp chửi oan") → nhường lớp tâm sự; kiểm tra TRƯỚC nhánh p.val < 0 chung.
-  if (MISTREAT.test(echo(f))) return null;
+  if (mistreated(f, echo(f))) return null;
   if (p.val < 0) return { intent: "frame:past", talk: true, text: `${T} ${echo(f)} hả 😅 ${pick(["Rồi có sao không bạn?", "Giờ ổn hơn chưa bạn?"])}` };
   // Khen ở cuối câu ("…vui lắm", "…hay lắm") thì không cần nhắc lại; nhận xét trung tính ("ngủ sớm") thì giữ.
   const e = echo(f, p.val === 0);
@@ -493,7 +496,7 @@ function selfPlan(f: Frame): FrameReply {
   if (!p.known) return neutral(T, f);
   // 06/11: "hôm nay đi làm bị sếp chửi oan" là KỂ chuyện bị đối xử tệ, không phải kế hoạch đi làm → nhường lớp tâm sự (trước đây đáp "Cố lên nha 💪").
   // Kiểm tra TRƯỚC nhánh p.val < 0 chung để câu "sợ bị mắng" không bị đáp "Giữ sức nha" thay vì được lắng nghe.
-  if (MISTREAT.test(e)) return null;
+  if (mistreated(f, e)) return null;
   if (p.val < 0) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🥺 Bạn giữ sức nha, có gì cứ nói với Lomi.` };
   const d = detectDish(f.raw);
   if (d && VR(/(^| )(ăn|uống|nhậu|cà phê)( |$)/).test(e)) {

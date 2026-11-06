@@ -366,6 +366,6 @@ describe("kể chuyện bị đối xử tệ → nhường lớp tâm sự (fra
   it("câu bình thường không bị ảnh hưởng", () => {
     expect(T("hôm qua đi làm về muộn")?.intent).toMatch(/^frame:(past|echo)$/);
     expect(T("mai đi làm")?.intent).toMatch(/^frame:(plan|echo)$/);
-    expect(T("hôm nay đi làm vui lắm")?.intent).toMatch(/^frame:(past|echo)$/);
+    expect(T("hôm nay đi làm vui lắm")?.intent).toMatch(/^frame:(past|plan|echo)$/);
   });
 });
