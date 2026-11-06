@@ -353,3 +353,19 @@ describe("câu bị động: việc xảy đến với ai thì hỏi han đúng 
     expect(T("ba a bị ngã")?.intent).toBe("frame:third_ill");
   });
 });
+
+// 06/11 — KỂ CHUYỆN BỊ ĐỐI XỬ TỆ: nhánh p.val < 0 chung từng return trước khi kiểm tra cụm "bị chửi / bị mắng / oan…",
+// nên Lomi đáp câu chung ("Giữ sức nha", "Giờ ổn hơn chưa?") thay vì nhường cho lớp tâm sự lắng nghe đúng hoàn cảnh.
+describe("kể chuyện bị đối xử tệ → nhường lớp tâm sự (frameTurn trả null)", () => {
+  it("chuyện đã xảy ra", () => {
+    for (const s of ["hôm nay đi làm bị sếp chửi oan", "hôm qua bị đồng nghiệp mắng", "sáng nay bị khách đổ lỗi", "đi làm bị bắt nạt"]) expect(T(s), s).toBeNull();
+  });
+  it("chuyện dự định / lo sợ sắp tới", () => {
+    for (const s of ["mai đi làm mà sợ bị sếp mắng", "sắp phải gặp người đồng nghiệp hay bắt nạt mình"]) expect(T(s), s).toBeNull();
+  });
+  it("câu bình thường không bị ảnh hưởng", () => {
+    expect(T("hôm qua đi làm về muộn")?.intent).toMatch(/^frame:(past|echo)$/);
+    expect(T("mai đi làm")?.intent).toMatch(/^frame:(plan|echo)$/);
+    expect(T("hôm nay đi làm vui lắm")?.intent).toMatch(/^frame:(past|echo)$/);
+  });
+});
