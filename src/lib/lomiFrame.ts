@@ -466,6 +466,8 @@ const mistreated = (f: Frame, e: string) => MISTREAT.test(e) || MISTREAT_RAW.tes
 function selfPast(f: Frame): FrameReply {
   const p = f.pred!;
   const timed = !!f.time?.explicit && f.time.rel === "past";
+  // Kể chuyện bị đối xử tệ ("bị sếp chửi oan", "bị chê rồi") → nhường lớp tâm sự; kiểm tra TRƯỚC mọi nhánh trả lời.
+  if (mistreated(f, echo(f))) return null;
   // "a ăn rồi", "a thi xong rồi" — việc đã xong, không có "mới / vừa": nhắc lại kèm "rồi".
   if (!timed && !p.recent && p.done) {
     const e = `${cap(echo(f))}${VN(/xong$/).test(echo(f)) ? "" : " rồi"}`;
@@ -474,8 +476,6 @@ function selfPast(f: Frame): FrameReply {
     return { intent: "frame:done", talk: true, text: `${e} hả 😄 ${p.cls === "duty" ? "Vất vả rồi nè, nghỉ ngơi chút đi nha!" : "Vậy là xong một việc rồi ha!"}` };
   }
   const T = timed ? timeCap(f) : "Mới";
-  // Kể chuyện bị đối xử tệ ("bị sếp chửi oan") → nhường lớp tâm sự; kiểm tra TRƯỚC nhánh động từ lạ và p.val < 0 chung.
-  if (mistreated(f, echo(f))) return null;
   if (!p.known) return neutral(T, f);
   if (p.val < 0) return { intent: "frame:past", talk: true, text: `${T} ${echo(f)} hả 😅 ${pick(["Rồi có sao không bạn?", "Giờ ổn hơn chưa bạn?"])}` };
   // Khen ở cuối câu ("…vui lắm", "…hay lắm") thì không cần nhắc lại; nhận xét trung tính ("ngủ sớm") thì giữ.
