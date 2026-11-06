@@ -258,7 +258,7 @@ const km = (d?: number) => (d == null ? "" : d < 1 ? ` (cách bạn khoảng ${M
 const where = (c: PlaceCard, askedArea?: string) =>
   c.distKm != null && c.distKm <= 50 ? km(c.distKm) : c.area && !(askedArea && sameArea(c.area, askedArea)) ? ` (ở ${c.area})` : "";
 
-export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Promise<SearchResult> {
+export async function runSearch(it: SearchIntent, avoidIds: string[] = [], noDefault = false): Promise<SearchResult> {
   // 23/10: người dùng nêu một nơi mà app chưa có doanh nghiệp nào ("Mũi Né có gì chơi") → nói thật + điểm nổi tiếng ở đó,
   //   KHÔNG bốc chỗ gần mình / chỗ ở tỉnh khác (trước đây ra "Vé Máy Bay Nắng Vàng (ở Đà Lạt)", rồi "Tour Vạn Phúc (ở Vũng Tàu)").
   const plc = it.place ? PLACES.find((p) => p.label === it.place) : undefined;
@@ -267,6 +267,12 @@ export async function runSearch(it: SearchIntent, avoidIds: string[] = []): Prom
   if (plc && !plc.area)
     return { text: noPlaceText(plc, it.mode === "find" ? "find" : "go", it.kind?.noun), places: [], quick: plc.sights?.length ? [] : ["Tìm quán cà phê có ưu đãi"] };
   const pos = await myPos(it.near);
+  // 06/11 (Kir thử thật): không nêu nơi, không có vị trí → ưu tiên ĐÀ LẠT trước (iLomi là cộng đồng Đà Lạt) thay vì bốc nhiều tỉnh;
+  //   ở Đà Lạt chưa có chỗ phù hợp thì mới lấy như cũ (nhiều nơi, có ghi rõ).
+  if (!noDefault && !it.area && !pos && !plc && !it.maxKm) {
+    const dl = await runSearch({ ...it, area: "Đà Lạt" }, avoidIds, true);
+    if (dl.places?.length) return { ...dl, text: dl.text.replace(/\nBấm vào thẻ/u, "\n(Lomi lấy ở **Đà Lạt** trước nha — muốn nơi khác thì gõ thêm tên nơi, vd “quán cà phê ở Nha Trang”.)\nBấm vào thẻ") };
+  }
   // ── Hôm nay ăn gì / uống gì / đi đâu: chọn NGẪU NHIÊN 1 chỗ đang có ưu đãi ──
   if (it.mode !== "find") {
     const type: BusinessType | BusinessType[] = it.mode === "go" ? GO_TYPES : "food";

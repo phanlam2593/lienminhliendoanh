@@ -71,13 +71,13 @@ import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTher
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
 import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
-import { FOLK, asksAbout, findFolk, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolkForTopic } from "@/lib/lomiFolk";
+import { FOLK, asksAbout, findFolk, folkById, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolk, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
 import { capabilityAsk, earlyIntent } from "@/lib/lomiIntent";
 import { contextReply } from "@/lib/lomiContext";
 import { shorten, softenTail } from "@/lib/lomiTail";
 import { drugAsk, overdoseMention, prevDrugCtx } from "@/lib/lomiDrug";
-import { drugById, findDrug, sourceList } from "@/lib/lomiDrugData";
+import { drugById, findDrug, renderDrug, sourceList } from "@/lib/lomiDrugData";
 import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { asksSource, dropRepeats, sourceSay, tidyCited } from "@/lib/lomiCite";
 import { MEDICAL_CHIPS, REFLECT_INTRO, REFLECT_Q, gateWhy, medicalFollowAsk, medicalKindOf, medicalRefusal, tarotHealthGate } from "@/lib/lomiTarotGate";
@@ -1192,6 +1192,24 @@ export function AiChat({
         return drugOut(`Dạ, ${det.who?.text ?? ""}${det.years !== undefined ? ` ${det.years} tuổi` : ""} 📝 Người lớn tuổi thường dùng nhiều thuốc cùng lúc nên dễ bị trùng thuốc hay thuốc tương tác với nhau — trước khi dùng thêm thuốc gì cùng **${dName}**, mang hết các thuốc đang dùng (cả thực phẩm chức năng) cho dược sĩ hoặc bác sĩ xem nha.`.replace("Dạ,  ", "Dạ, "));
       if (preg || (det && det.who?.kind === "adult" && det.months !== undefined))
         return drugOut(`Đang mang thai hoặc cho con bú thì phải hỏi bác sĩ (tốt nhất là bác sĩ sản) **trước khi** dùng **${dName}** nha — Lomi không có dữ liệu để nói thuốc này an toàn hay không trong giai đoạn đó.\n• Nếu đang dùng thuốc theo đơn cho bệnh mạn tính mà phát hiện có thai thì **đừng tự ngưng** — báo bác sĩ sớm để họ quyết tiếp tục hay đổi thuốc\n• Khi đi khám, mang theo hộp thuốc và nói rõ thai được mấy tháng / bé bú mấy tháng tuổi`);
+      // 06/11 (Kir thử 50 câu liền mạch): "uống có buồn ngủ không" là HỎI thuốc có gây buồn ngủ không — trả lời theo phần tác dụng phụ
+      //   có nguồn của đúng thuốc đó; trước đây bị hiểu là KỂ đang bị buồn ngủ → "Có thể đó là tác dụng phụ… Lomi không chắc".
+      const seW = ["chóng mặt", "buồn ngủ", "ngủ gà", "lơ mơ", "buồn nôn", "nổi mẩn", "đau bụng", "tiêu chảy", "táo bón", "khô miệng", "mệt", "nôn", "ngứa"];
+      const seM = seW.find((w) => VN(new RegExp(`\\b${w}\\b`)).test(nr));
+      const seAsk = !!seM && !VN(/\b(bị|đang|thấy|mới|hôm qua|từ hôm|quá|ghê|rồi)\b/).test(nr) && (VN(/\b(không|ko|k|hông|hok|chứ|ha|hả|nhỉ)\s*$/).test(nr.trimEnd()) || raw.includes("?"));
+      if (seAsk && !VN(/\b(uống chung|dùng chung)\b/).test(nr)) {
+        const de = findDrug(dName);
+        const sideTxt = de ? renderDrug(de, "side") : drugAsk(`${dName} có tác dụng phụ gì`, {})?.text;
+        if (sideTxt) {
+          const sym = seM!;
+          const has = new RegExp(normalizeVi(sym)).test(normalizeVi(sideTxt));
+          const noData = /chưa có dữ liệu tác dụng phụ/u.test(sideTxt) || !/tác dụng phụ/iu.test(sideTxt);
+          //   (thuốc phối hợp có thành phần chống dị ứng — Decolgen… — mà chưa có dữ liệu riêng: nhắc lưu ý chung có nguồn của nhóm kháng histamin)
+          const ahNote = noData && /chống dị ứng|kháng histamin/u.test(sideTxt) && /buồn ngủ|ngủ gà|lơ mơ/u.test(sym) ? drugAsk("thuoc chong di ung co tac dung phu gi", {})?.text.split("\n").find((l) => /gây buồn ngủ/u.test(l)) : undefined;
+          if (noData) return drugOut(`Lomi **chưa có dữ liệu tác dụng phụ có nguồn riêng** cho **${dName}**, nên không dám nói chắc có gây ${sym} hay không 🙏${ahNote ? `\n\n**${dName}** có thành phần **chống dị ứng** — lưu ý chung của nhóm thuốc này theo nguồn:\n${ahNote}` : ""}\n\nXem mục tác dụng phụ trong **tờ hướng dẫn trong hộp**, hoặc hỏi dược sĩ cho chắc nha.`);
+          return drugOut(noData ? sideTxt : `${has ? `Có — nguồn có ghi **${sym}** trong tác dụng phụ / lưu ý của **${dName}** 👇` : `Trong phần tác dụng phụ nguồn ghi cho **${dName}**, Lomi **không thấy nhắc ${sym}** 👇 (mỗi người mỗi khác — uống vào thấy lạ thì hỏi dược sĩ nha)`}\n\n${sideTxt}`);
+        }
+      }
       if ((VN(/\b(chóng mặt|buồn ngủ|lơ mơ|mệt|buồn nôn|nôn|nổi mẩn|ngứa|đau bụng|tiêu chảy)\b/).test(nr) || VN(/\b(có phải (là )?tác dụng phụ|mới uống lần đầu|lần đầu uống|mới bắt đầu uống)\b/).test(nr)) && !VN(/\b(uống chung|dùng chung)\b/).test(nr))
         return drugOut(`Có thể đó là **tác dụng phụ** của ${dName}, nhất là khi mới bắt đầu uống — nhưng Lomi không chắc được, vì triệu chứng đó cũng có thể do nguyên nhân khác.\n• Báo bác sĩ đã kê hoặc hỏi dược sĩ, nói rõ uống từ hôm nào và bị gì\n• Đang chóng mặt, buồn ngủ thì **đừng lái xe**, đứng dậy từ từ\n• 🚨 Khó thở, sưng môi / mặt / họng, nổi mẩn lan nhanh → gọi **115** ngay`);
       const other = raw.normalize("NFC").toLowerCase().replace(/[?.!…]+$/u, "").match(/^(?:còn|vậy|thế|với)\s+(.{2,25}?)\s+(?:thì sao|thì sao ta|được không|uống chung được không|có sao không)$/u);
@@ -1755,6 +1773,20 @@ export function AiChat({
           const qf = faqById("quetwhat");
           if (qf) return localReply(q, { role: "assistant", content: `Tìm bạn thì vào **Quẹt** nha 🎮☕\n\n${qf.a.vi}`, local: true, faqId: "quetwhat" });
         }
+        //   (j) 06/11: "làm vậy có ổn không ta?" ngay sau khi KỂ dự định ("mình định uống trà gừng trước khi ngủ") → hỏi chính dự định đó
+        //       (trước đây bị hiểu là hỏi thăm Lomi: "Lomi khoẻ re nè 💪")
+        const pu0 = [...msgs].reverse().find((m) => m.role === "user")?.content;
+        if (pu0 && VN(/^(làm|như|thế|vậy|làm thế|làm vậy|như vậy|như thế|làm như vậy|làm như thế|cách đó|vậy thì)( vậy| thế)? (có )?(ổn|được|đc|ok|oke|tốt|sao|hợp lý|nên|an toàn)( không| ko| k| hông| hok| chưa)?( ta| nhỉ| ha| á| vậy| hả| bạn| lomi)*$/).test(normalizeVi(lowQ)) && pu0.split(/\s+/).length <= 20 && !pu0.includes("?")) {
+          q = `${pu0.replace(/[.!…]+$/u, "")} có ổn không`;
+          raw = q;
+          shownRef.current = { from: q, to: typed };
+          rewroteRef.current = true;
+        }
+        //   (k) 06/11: "thuốc bắc / thuốc nam có tốt không" (nói chung, không nêu vị, không nêu bệnh) → không kéo theo vị / bệnh vừa nói
+        const tnb = folkById("thuoc-nam-benh-nang");
+        if (tnb && VN(/\b(thuốc nam|thuốc bắc|thuốc đông y|đông y|thuốc dân gian|thảo dược)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(có tốt không|tốt không|có nên (uống|dùng)|có an toàn không|an toàn không|có hại không|có hiệu quả không|có tác dụng không|tin được không|có tốt bằng|hay thuốc tây|tốt hơn)\b/).test(` ${normalizeVi(q)} `) && !findFolk(q.replace(/thuốc (nam|bắc|đông y|dân gian)|đông y|thảo dược/giu, " "))?.id && lowQ.split(/\s+/).length <= 14) {
+          return localReply(q, { role: "assistant", content: `Thuốc nam / thuốc bắc thì **tuỳ từng vị**, nên Lomi không nói chung “tốt” hay “không tốt” được 🙏 Bạn cho Lomi tên vị (vd gừng, lá vối, nghệ…) để Lomi xem đúng vị đó nha.\n\nCòn đây là những điều nguồn y khoa lưu ý **chung** khi dùng thuốc nam / thuốc bắc 👇\n\n${renderFolk(tnb)}`, local: true, herb: tnb.id });
+        }
         //   (e) lời đáp trước có nhắc gói bù nước (ORS / Oresol) mà hỏi "gói đó pha ntn" → hỏi cách pha Oresol
         if (la && /Oresol|ORS|bù nước/u.test(la.content) && VN(/\bpha\b/).test(` ${normalizeVi(q)} `) && VN(/\b(gói|nó|đó|này|cái đó|thuốc đó)\b/).test(` ${normalizeVi(q)} `) && !findIndexedDrug(q) && !findDrug(q)) {
           q = `oresol ${q}`;
@@ -2243,7 +2275,8 @@ export function AiChat({
         } finally {
           setBusy(false);
         }
-        return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: itP, quick: res.quick });
+        const sadP = VN(/\b(buồn|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `);
+        return localReply(q, { role: "assistant", content: sadP && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: itP, quick: sadP ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
       }
     }
     // 30/10 (Kir gửi ảnh): "bác sĩ trả về", "không chữa được nữa", "giai đoạn cuối" — trước đây bị đáp bằng thẻ ung thư chung
@@ -2541,7 +2574,9 @@ export function AiChat({
           } finally {
             setBusy(false);
           }
-          return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, avoidIds: avoid, quick: res.quick });
+          // 06/11: "nay muốn kiếm gì đó ăn cho đỡ buồn" — vừa tìm quán vừa có chuyện buồn → hỏi han một câu trước, kèm nút tâm sự
+          const sad = VN(/\b(buồn|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `);
+          return localReply(q, { role: "assistant", content: sad && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: intent, avoidIds: avoid, quick: sad ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
         }
       }
       // Nút phạm vi ("🩺 Sức khoẻ", "📱 Hỏi về app") → Lomi hỏi tiếp đúng việc.
@@ -3433,7 +3468,8 @@ export function AiChat({
           setBusy(false);
         }
         shownRef.current = shown;
-        return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, search: intent, quick: res.quick });
+        const sadS = VN(/\b(buồn|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `);
+        return localReply(q, { role: "assistant", content: sadS && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: intent, quick: sadS ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
       }
     }
     if (!forceAi) {

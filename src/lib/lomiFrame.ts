@@ -473,6 +473,7 @@ function selfPast(f: Frame): FrameReply {
   // Khen ở cuối câu ("…vui lắm", "…hay lắm") thì không cần nhắc lại; nhận xét trung tính ("ngủ sớm") thì giữ.
   const e = echo(f, p.val === 0);
   const going = p.kind === "motion" || VR(/^đi( |$)/).test(p.head);
+  if (VR(/(^| )(bị (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)|oan|ấm ức|tủi thân|uất ức)( |$)/).test(echo(f))) return null;
   if (VN(/^mua( |$)/).test(p.head)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 Xịn ghê! Dùng thấy sao bạn?` };
   if (p.cls === "duty") return { intent: "frame:past", talk: true, text: `${T} ${e} hả 🤗 Vất vả rồi nè. ${pick(["Mọi việc ổn không bạn?", "Giờ nghỉ ngơi chút đi nha!"])}` };
   if (VR(/(^| )(ăn|uống|nhậu)( |$)/).test(p.head) && detectDish(f.raw)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😋 Ngon không bạn?` };
@@ -487,6 +488,8 @@ function selfPlan(f: Frame): FrameReply {
   const e = echo(f);
   if (!p.known) return neutral(T, f);
   if (p.val < 0) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🥺 Bạn giữ sức nha, có gì cứ nói với Lomi.` };
+  // 06/11: "hôm nay đi làm bị sếp chửi oan" là KỂ chuyện bị đối xử tệ, không phải kế hoạch đi làm → nhường lớp tâm sự (trước đây đáp "Cố lên nha 💪")
+  if (VR(/(^| )(bị (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)|oan|ấm ức|tủi thân|uất ức)( |$)/).test(e)) return null;
   const d = detectDish(f.raw);
   if (d && VR(/(^| )(ăn|uống|nhậu|cà phê)( |$)/).test(e)) {
     const label = dishWord(f, d.name);

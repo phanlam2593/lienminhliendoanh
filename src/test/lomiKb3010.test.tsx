@@ -1769,3 +1769,40 @@ describe("05/11 — rà câu hiểu sai", () => {
       expect(c).not.toMatch(/chưa được tiếp thu|chưa biết cái này|chưa được học/);
     }, T);
 });
+
+// 06/11 — Kir thử 50 câu liền một mạch
+describe("06/11 — hội thoại liền mạch: hỏi tác dụng phụ, thuốc nam chung, dự định, tâm sự", () => {
+  it("'uống có buồn ngủ không' sau khi hỏi thuốc = HỎI, trả theo phần tác dụng phụ có nguồn (không phải 'có thể là tác dụng phụ… không chắc')", async () => {
+    const r = await chat(["thuốc panadol có tác dụng gì", "uống có buồn ngủ không"]);
+    expect(r.at(-1)!.content).toMatch(/không thấy nhắc buồn ngủ|nguồn có ghi/);
+    expect(r.at(-1)!.content).not.toMatch(/Có thể đó là \*\*tác dụng phụ\*\*/);
+    const d = await chat(["decolgen là thuốc gì", "nó có gây buồn ngủ không"]);
+    expect(d.at(-1)!.content).toMatch(/chưa có dữ liệu tác dụng phụ có nguồn riêng[\s\S]*chống dị ứng/);
+  }, T);
+  it("'thuốc dị ứng có gây buồn ngủ không' (không nêu tên) → lưu ý chung của nhóm, không 'chưa nhắc'", async () => {
+    const c = (await last(["uống thuốc dị ứng buồn ngủ quá"])).content;
+    expect(c).toMatch(/gây buồn ngủ/);
+    expect(c).not.toMatch(/chưa nhắc/);
+  }, T);
+  it("'thuốc bắc có tốt không' sau khi nói ho → lời chung về thuốc nam/bắc, không kéo về ho", async () => {
+    const r = await chat(["thuốc nam nào trị ho", "thuốc bắc có tốt không"]);
+    expect(r.at(-1)!.content).toMatch(/tuỳ từng vị/);
+    expect(r.at(-1)!.content).not.toMatch(/Mẹo dân gian cho Ho/);
+  }, T);
+  it("'làm vậy có ổn không ta?' sau khi kể dự định → hỏi dự định đó, không phải hỏi thăm Lomi", async () => {
+    const r = await chat(["dạo này mình hay mất ngủ", "mình định uống trà gừng trước khi ngủ", "làm vậy có ổn không ta?"]);
+    expect(r.at(-1)!.content).not.toMatch(/Lomi khoẻ re|Pin đầy/);
+    expect(r.at(-1)!.content).toMatch(/Gừng/);
+  }, T);
+  it("'hôm nay đi làm bị sếp chửi oan' → tâm sự, không phải 'Cố lên nha 💪'", async () => {
+    const c = (await last(["hôm nay đi làm bị sếp chửi oan"])).content;
+    expect(c).not.toMatch(/Cố lên nha|suôn sẻ/);
+  }, T);
+  it("'nay muốn kiếm gì đó ăn cho đỡ buồn' → hỏi han một câu + tìm quán + nút tâm sự", async () => {
+    const m = await last(["nay muốn kiếm gì đó ăn cho đỡ buồn"]);
+    if (m.places?.length) {
+      expect(m.content).toMatch(/tự thương mình/);
+      expect(m.quick).toContain("Tâm sự với Lomi");
+    }
+  }, T);
+});
