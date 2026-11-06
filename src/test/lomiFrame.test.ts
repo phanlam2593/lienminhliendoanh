@@ -368,4 +368,22 @@ describe("kể chuyện bị đối xử tệ → nhường lớp tâm sự (fra
     expect(T("mai đi làm")?.intent).toMatch(/^frame:(plan|echo)$/);
     expect(T("hôm nay đi làm vui lắm")?.intent).toMatch(/^frame:(past|plan|echo)$/);
   });
+  it("câu 'đã xong' (p.done) bị đối xử tệ không lọt qua nhánh frame:done", () => {
+    // Frame thật: done=true, recent=false, time.explicit=false → trước đây vào nhánh p.done và đáp "Vậy là xong một việc rồi ha!".
+    for (const s of ["A bị đuổi rồi.", "A bị chê rồi."]) {
+      const f = P(s);
+      expect(f.pred?.done && !f.pred?.recent && !f.time?.explicit, s).toBe(true);
+      expect(T(s), s).toBeNull();
+    }
+    for (const s of ["A bị sếp mắng rồi.", "A bị đồng nghiệp đổ lỗi rồi.", "Hôm qua bị sếp mắng rồi."]) expect(T(s), s).toBeNull();
+    // Có người gây ra → lớp hỏi han bị động, không bao giờ là frame:done.
+    const r = T("A bị khách chửi xong.");
+    expect(r?.intent ?? null, "A bị khách chửi xong.").not.toBe("frame:done");
+    expect(r?.text ?? "").not.toMatch(/xong một việc|😄/);
+  });
+  it("đối chứng: việc xong bình thường giữ nguyên", () => {
+    expect(T("A ăn cơm rồi.")?.intent).toBe("frame:done");
+    expect(T("A thi xong rồi.")?.intent).toBe("frame:done");
+    expect(T("Hôm qua A đi làm về muộn.")?.intent).toBe("frame:past");
+  });
 });
