@@ -457,6 +457,9 @@ function selfLocation(f: Frame): FrameReply {
 /** Động từ lạ (chỉ đoán theo vị trí): nhắc lại + hỏi nối, không khen không chia buồn — vì chưa biết đó là chuyện vui hay buồn. */
 const neutral = (lead: string, f: Frame): FrameReply => ({ intent: "frame:echo", talk: true, text: `${cap(join(lead, echo(f)))} hả? Rồi sao nữa bạn, kể Lomi nghe với.` });
 
+/** Cụm "bị đối xử tệ / oan ức" — đó là chuyện cần được NGHE (lớp tâm sự), không phải chuyện để đáp câu chung kiểu "Giữ sức nha". */
+const MISTREAT = VR(/(^| )(bị (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)|oan|ấm ức|tủi thân|uất ức)( |$)/);
+
 function selfPast(f: Frame): FrameReply {
   const p = f.pred!;
   const timed = !!f.time?.explicit && f.time.rel === "past";
@@ -469,11 +472,12 @@ function selfPast(f: Frame): FrameReply {
   }
   const T = timed ? timeCap(f) : "Mới";
   if (!p.known) return neutral(T, f);
+  // Kể chuyện bị đối xử tệ ("bị sếp chửi oan") → nhường lớp tâm sự; kiểm tra TRƯỚC nhánh p.val < 0 chung.
+  if (MISTREAT.test(echo(f))) return null;
   if (p.val < 0) return { intent: "frame:past", talk: true, text: `${T} ${echo(f)} hả 😅 ${pick(["Rồi có sao không bạn?", "Giờ ổn hơn chưa bạn?"])}` };
   // Khen ở cuối câu ("…vui lắm", "…hay lắm") thì không cần nhắc lại; nhận xét trung tính ("ngủ sớm") thì giữ.
   const e = echo(f, p.val === 0);
   const going = p.kind === "motion" || VR(/^đi( |$)/).test(p.head);
-  if (VR(/(^| )(bị (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)|oan|ấm ức|tủi thân|uất ức)( |$)/).test(echo(f))) return null;
   if (VN(/^mua( |$)/).test(p.head)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😄 Xịn ghê! Dùng thấy sao bạn?` };
   if (p.cls === "duty") return { intent: "frame:past", talk: true, text: `${T} ${e} hả 🤗 Vất vả rồi nè. ${pick(["Mọi việc ổn không bạn?", "Giờ nghỉ ngơi chút đi nha!"])}` };
   if (VR(/(^| )(ăn|uống|nhậu)( |$)/).test(p.head) && detectDish(f.raw)) return { intent: "frame:past", talk: true, text: `${T} ${e} hả 😋 Ngon không bạn?` };
@@ -487,9 +491,10 @@ function selfPlan(f: Frame): FrameReply {
   const T = f.time?.explicit ? timeCap(f) : p.planned ? "Sắp" : "";
   const e = echo(f);
   if (!p.known) return neutral(T, f);
+  // 06/11: "hôm nay đi làm bị sếp chửi oan" là KỂ chuyện bị đối xử tệ, không phải kế hoạch đi làm → nhường lớp tâm sự (trước đây đáp "Cố lên nha 💪").
+  // Kiểm tra TRƯỚC nhánh p.val < 0 chung để câu "sợ bị mắng" không bị đáp "Giữ sức nha" thay vì được lắng nghe.
+  if (MISTREAT.test(e)) return null;
   if (p.val < 0) return { intent: "frame:plan", talk: true, text: `${cap(join(T, e))} hả 🥺 Bạn giữ sức nha, có gì cứ nói với Lomi.` };
-  // 06/11: "hôm nay đi làm bị sếp chửi oan" là KỂ chuyện bị đối xử tệ, không phải kế hoạch đi làm → nhường lớp tâm sự (trước đây đáp "Cố lên nha 💪")
-  if (VR(/(^| )(bị (chửi|la|mắng|quát|trách|phạt|đuổi|trừ lương|bắt nạt|ăn hiếp|chê|đánh|đổ lỗi|nói xấu|cô lập|bơ|hắt hủi)|oan|ấm ức|tủi thân|uất ức)( |$)/).test(e)) return null;
   const d = detectDish(f.raw);
   if (d && VR(/(^| )(ăn|uống|nhậu|cà phê)( |$)/).test(e)) {
     const label = dishWord(f, d.name);
