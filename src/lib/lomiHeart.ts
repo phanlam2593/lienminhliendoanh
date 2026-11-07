@@ -810,7 +810,7 @@ function selfDxReply(label: string, prev: string | undefined, listen: boolean, c
   };
 }
 // Chỉ nói mình đang BÍ, chưa kể chuyện gì ("a không biết phải làm sao") → hỏi chuyện, không đáp bài "suy nghĩ nhiều".
-const HELPLESS_ONLY = VN(/^((a|anh|e|em|c|chị|mình|tôi|tui|tớ) )?((giờ|bây giờ|thật sự|thiệt|đang) )*(không|ko|k|chẳng|chả) biết (phải )?(làm sao|làm gì|làm thế nào|tính sao|sao)( (nữa|giờ|đây|bây giờ|hết|cả|luôn|rồi))*( hoang mang)?$/);
+const HELPLESS_ONLY = VN(/^((giờ|bây giờ|thật sự|thiệt) )*((a|anh|e|em|c|chị|mình|tôi|tui|tớ) )?((giờ|bây giờ|thật sự|thiệt|đang) )*(không|ko|k|chẳng|chả) biết (phải )?(làm sao|làm gì|làm thế nào|tính sao|sao)( (nữa|giờ|đây|bây giờ|hết|cả|luôn|rồi))*( hoang mang)?$/);
 // Mệt tới mức muốn buông hết — chưa phải lời nói muốn tự hại (lib/lomiChat.crisisReply lo), nhưng không đáp như chuyện phiếm.
 const HOPELESS_RE = VN(/\b(buông xuôi|muốn buông hết|muốn bỏ hết|bỏ cuộc hết|không thiết gì nữa|chẳng thiết gì nữa|không còn thiết|không muốn cố gắng nữa|hết muốn cố gắng|chịu hết nổi|không chịu nổi nữa|không gồng nổi nữa|kiệt quệ rồi|sống cũng như không|tồn tại cho có)\b/);
 const evOfPrev = (prev: string) => prev.startsWith("ev:");
@@ -1557,7 +1557,9 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   const lastAsked = /\?\s*$/.test(lastText.trim());
   // (21/10: "vẫn chưa hết giận", "chưa đỡ" — điều tốt CHƯA tới là chuyện chưa vui, dù bộ đọc câu thấy chữ "hết giận" là tích cực)
   const notYet = VN(/\b(chưa|vẫn chưa|còn chưa) (chịu )?(hết|nguôi|bớt|đỡ|khỏi|ổn|tha thứ)\b/).test(` ${n} `);
-  const good = (ctx.val ?? 0) > 0 && !notYet;
+  // (07/11: "may mà gia đình vẫn ủng hộ a", "cũng may là còn việc" — điều may giữa chuyện đang lo là tin nhẹ lòng, không đáp "hèn gì bạn lo")
+  const relief = VN(/^(may mà|may là|may sao|cũng may|còn may|may quá|được cái)( |$)/).test(n);
+  const good = ((ctx.val ?? 0) > 0 || relief) && !notYet;
   const bad = (ctx.val ?? 0) < 0 || notYet;
   const parts: string[] = [];
 
@@ -1591,7 +1593,17 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
     //   ("a xin lỗi rồi", "a muốn nghỉ") thì chỉ nhắc lại, không phán "vậy thì khó chịu thật".
     //   (trong chuyện mâu thuẫn, điều chính người dùng làm — "a quên sinh nhật cô ấy" — không đáp "ai cũng thấy bức bối".)
     const react = posTheme ? fresh("react:pos", ["Nghe dễ thương ghê.", "Thích ghê ha.", "Vậy là có tín hiệu vui rồi đó."]) : good ? "Nghe vậy cũng nhẹ được một chút ha." : fam && !p && !(ctx.neg && fam === "mishap") && (!ctx.self || (bad && fam !== "conflict")) ? fresh(`react:${fam}`, REACT[fam]) : undefined;
+    // 07/11: chi tiết kể thêm chưa có lời đáp đúng tông ("a là trụ cột gia đình" sau "công ty a sắp phá sản") → nối với điều vừa kể
+    //   ở lượt trước, để thấy Lomi hiểu hai chuyện chồng lên nhau ("Thêm chuyện công ty bạn sắp phá sản nữa thì bảo sao bạn lo.").
+    const before = det.length >= 2 && det[det.length - 1] === m ? det[det.length - 2] : undefined;
+    const tie = !react && !listen && !good && !posTheme && !e && !p && fam && fam !== "mishap" && before && before !== m && !said(before)
+      ? `Thêm chuyện ${before} nữa thì ${fam === "worry" ? "bảo sao bạn lo" : fam === "tired" ? "bảo sao bạn đuối" : fam === "conflict" ? "càng khó chịu hơn" : "nghe càng nặng lòng"}.`
+      : undefined;
     reacted = !!react;
+    if (tie) {
+      parts.push(`${head} ${tie}`);
+      return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+    }
     // Chỉ nhắc lại trơ trọi mà lượt này không nói thêm gì nữa (đang "chỉ nghe") thì thêm một lời ngắn cho thấy Lomi vẫn theo kịp.
     const lone = !react && (listen || good) ? fresh("support", SUPPORT) : undefined;
     parts.push([head, react, lone].filter(Boolean).join(" "));
