@@ -3403,7 +3403,9 @@ export function AiChat({
           const m = msgs[i];
           if (m.role !== "user") continue;
           // Chỉ tính các mẩu KỂ THÊM cho đúng chuyện đang nói: tin Lomi trước và sau nó cùng một chủ đề (câu mở đầu / câu đổi chuyện thì không).
-          if (msgs[i - 1]?.role !== "assistant" || !msgs[i - 1].heart || msgs[i - 1].heart !== msgs[i + 1]?.heart) break;
+          //   (07/11: mở bằng một cảm xúc chung — "a đang lo quá", "dạo này a buồn" — rồi kể ra chuyện cụ thể vẫn là CÙNG một câu chuyện.)
+          const hPrev = msgs[i - 1]?.heart;
+          if (msgs[i - 1]?.role !== "assistant" || !hPrev || (hPrev !== msgs[i + 1]?.heart && !(GENERIC.has(hPrev) || hPrev === "open"))) break;
           const mm = mirrorText(parseVi(m.raw ?? m.content, { addr: addrH }), addrH, 7);
           if (mm) told.unshift(mm);
         }
