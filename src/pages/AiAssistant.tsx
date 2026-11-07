@@ -3649,7 +3649,10 @@ export function AiChat({
         //   (nỗi lo / nỗi sợ thì không hỏi "rồi có sao không" — đó là điều đang nghĩ, chưa phải chuyện đã xảy ra.)
         const feelSl = fr1?.pred?.cls === "feel";
         const slText = sl && mSl ? `${mSl.charAt(0).toUpperCase() + mSl.slice(1)} hả${feelSl && vSl < 0 ? (fr1?.pred?.obj ? " 🥺 Nghĩ vậy cũng dễ hiểu mà. Bạn kể thêm cho Lomi nghe với." : " 🥺 Có chuyện gì vậy bạn, kể Lomi nghe với.") : vSl < 0 || /🥺/.test(sl.text) ? " 🥺 Rồi có sao không bạn?" : vSl > 0 ? " 😄 Nghe thích ghê!" : "? Rồi sao nữa bạn, kể Lomi nghe với."}` : sl?.text;
-        if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, quick: sl.quick, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
+        // 07/11: nhắc lại một nỗi lo / nỗi buồn của CHÍNH người dùng ("a đang lo chuyện công việc" → "…kể thêm cho Lomi nghe với") là đã mời
+        //   tâm sự → mở mạch tâm sự, để câu kể tiếp ("công ty có thể cắt giảm nhân sự") được nghe như phần tiếp của chuyện đó.
+        const slHeart = !!mSl && feelSl && vSl < 0 && !heartOn && fr1?.subject === "self" ? { heart: VR(/^(lo|sợ|hồi hộp|căng thẳng|bất an|rối|hoang mang|sốt ruột)/).test(fr1.pred?.head ?? "") ? "anxiety" : "sad", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {};
+        if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, quick: sl.quick, ...slHeart, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
       }
       // 12/10: đang ở mạch sức khoẻ mà người dùng nói ra một nỗi lo / cảm xúc của CHÍNH MÌNH ("mà a cũng hay lo", "lo chuyện tiền") → đó là
       // lời tâm sự, không phải "kiến thức Lomi chưa có": mở mạch tâm sự (vẫn nhớ bệnh đang nói), không đáp "chưa được học, bấm Dạy Lomi".
