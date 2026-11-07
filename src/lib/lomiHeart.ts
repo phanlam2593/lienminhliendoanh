@@ -1271,6 +1271,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
     return { text: `${ctx.mirror ? `${capF(ctx.mirror)} hả 😔 ` : ""}Giữ hết trong lòng một mình thì nặng lắm. Bạn chịu nói ra với Lomi chừng này là quý rồi — cứ từ từ, không cần gồng.`, quick: [], theme: prev, listen };
   let t = themeOf(n);
   const words = n.split(" ").length;
+  if ((globalThis as any).__DBG) console.log("HC", JSON.stringify({text, prev, depth, t: t?.id, words, emo: emotionOf(n), adviceAsked, ctx: {...ctx, recent: undefined, say: undefined}}));
   // Chi tiết ngắn kể thêm cho chuyện đang nói ("bạn ấy là đồng nghiệp", "cả với bạn bè của mình") → KHÔNG đổi chủ đề.
   const detailOnly = !!(t && cur && t.id !== cur.id && !GENERIC.has(cur.id) && NOUNISH.has(t.id) && words <= 9 && !emotionOf(n) && !adviceAsked);
   if (detailOnly) t = undefined;
