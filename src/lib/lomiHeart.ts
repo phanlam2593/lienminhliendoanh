@@ -1317,8 +1317,10 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // 07/11: đã kể được chuyện ("công ty a sắp phá sản", "a là trụ cột gia đình") rồi mới nói "giờ a không biết phải làm sao" → đó là BÍ trong
   //   chính chuyện vừa kể: đáp bám các điều đó và hỏi một ý cụ thể để gỡ — không đọc chữ "hoang mang" thành chủ đề mới, chưa đưa danh sách khuyên.
   //   (hỏi thẳng "a nên làm sao?" thì vẫn là xin lời khuyên như cũ.)
-  const told = (ctx.details ?? []).filter(Boolean);
-  if (HELPLESS_ONLY.test(n) && told.length && !listen && !ctx.third && prev !== "open" && !evOfPrev(prev)) return stuckWithStory(told, cur, prev, listen);
+  //   (chỉ tính điều đã kể ở các lượt TRƯỚC — không phải chính câu này; "không biết sao nữa" sau câu Lomi hỏi "chuyện gì?" là không rõ VÌ SAO,
+  //    không phải bí cách làm → để nhánh "không phải cảm xúc nào cũng có lý do" phía dưới đáp.)
+  const told = (ctx.details ?? []).filter((d) => d && d !== ctx.mirror && !DUNNO_RE.test(` ${normalizeVi(d)} `));
+  if (HELPLESS_ONLY.test(n) && VN(/\b(làm sao|làm gì|làm thế nào|tính sao)\b/).test(` ${n} `) && told.length && !listen && !ctx.third && prev !== "open" && !evOfPrev(prev)) return stuckWithStory(told, cur, prev, listen);
   let t = themeOf(n);
   const words = n.split(" ").length;
   // 07/11: câu chỉ NHẮC TỚI danh từ một đề tài trong lúc đang kể chuyện khác ("a là trụ cột gia đình" khi đang lo công ty phá sản,
