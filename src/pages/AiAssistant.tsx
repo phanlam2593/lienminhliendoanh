@@ -3252,7 +3252,11 @@ export function AiChat({
         // Chuyện cụ thể (vd công việc, người yêu) thì để thư viện tâm sự đáp — trừ khi kể từ 3 cảm giác trở lên.
         const psyTalk = heartOn && !inHealth && !!THEME_MOOD[lastA?.heart ?? ""];
         // (21/10: người dùng đã nói CHỈ MUỐN ĐƯỢC NGHE → không chen bảng phân tích cảm xúc / gợi ý — để mạch "chỉ nghe" đáp)
-        const mind = mind0 && !lastA?.heartListen && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
+        // 07/11: đã kể chuyện được vài lượt ("công ty có thể cắt giảm nhân sự" → "nhưng a vẫn thấy áp lực") mà câu này chỉ nói thêm MỘT cảm giác
+        //   → đó là một phần của câu chuyện đang kể: để mạch tâm sự đáp bám chuyện đó, không cộng dồn cảm giác cũ thành bảng "thường gặp khi… / nên tránh…".
+        //   (tự câu này nêu từ hai cảm giác trở lên thì vẫn phân tích như cũ.)
+        const midStory = heartOn && !inHealth && (lastA?.heartDepth ?? 0) >= 2 && !lastA?.mood?.length;
+        const mind = mind0 && !lastA?.heartListen && (!midStory || !!analyzeMind(q, [])) && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
         const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
         const askAdvice = VN(/\b(nên làm gì|làm sao|làm gì|phải làm sao|tư vấn|khuyên|nên ăn gì|nên uống gì|có sao không|có nguy hiểm không|cách nào|có cách|cho đỡ|đỡ hơn|hết đau|giảm đau|cần đi viện|cần đi khám|có nên đi khám|đi viện|đi khám|nguy hiểm|có sao)\b/).test(nq);
