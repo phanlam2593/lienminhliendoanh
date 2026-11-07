@@ -823,6 +823,52 @@ function hopelessReply(prev: string | undefined, listen: boolean): HeartReply {
   };
 }
 const HOW_DUNNO = VN(/\b(không biết|k biết|hk bít|chẳng biết|chả biết|không rõ) (\S+ ){0,3}(làm|nói|tính|xử lý|giải quyết|bắt đầu|mở lời|trả lời|nhắn|đối mặt) (sao|gì|thế nào|như thế nào|kiểu gì|làm sao)\b|\b(không biết|k biết|chẳng biết) (phải )?(sao|làm sao|thế nào|làm gì|làm thế nào|tính sao)\b|\b(chịu|bó tay|hết cách|biết đâu|biết đâux|sao biết)\b/);
+// 07/11: "không ai CHỊU nghe", "nó không chịu học" — "chịu" + động từ là SẴN LÒNG làm gì, không phải "chịu (thua)/bó tay".
+//   Chỉ dùng để hỏi HOW_DUNNO / DUNNO_RE trong mạch tâm sự (mẫu chung ở lomiTalk giữ nguyên).
+const WILLING_RE = VN(/\bchịu (?!(thôi|luôn|rồi|nổi|thua|chết|thật|thiệt|hết|á|đó|nha|ạ|à|ha|nhé)\b)\S+/g);
+const stuckOf = (n: string) => n.replace(WILLING_RE, " ");
+// 07/11 — TỪ KHOÁ ≠ Ý NGHĨA. Chủ đề "gia đình / công việc / bạn bè…" có khi chỉ khớp vì câu NHẮC TỚI danh từ đó
+//   ("a là trụ cột gia đình", "may mà gia đình vẫn ủng hộ a"): đó là hoàn cảnh của chuyện đang kể, không phải mở chuyện mâu thuẫn mới.
+//   Phần khớp chủ đề chỉ toàn là danh từ gọi tên đề tài → "chỉ nhắc tên"; còn khớp cả điều xảy ra ("bị mắng", "áp đặt", "mất việc") → chuyện thật.
+const TOPIC_NOUN = VN(/^(gia đình|bố mẹ|ba mẹ|cha mẹ|bố mình|mẹ mình|ba mình|cha mình|anh chị em|vợ chồng|vợ con|nhà chồng|nhà vợ|mẹ chồng|bố chồng|công việc|việc làm|chỗ làm|công ty|sếp|đồng nghiệp|bạn bè|bạn thân|hội bạn|nhóm bạn|học hành|thi cử|tiền bạc|tình yêu|người yêu|mối quan hệ|chuyện tình cảm|sức khỏe|sức khoẻ)$/);
+// Câu chỉ GỌI TÊN đề tài ("chuyện gia đình", "vì công việc") — vẫn là mở đúng chuyện đó như trước.
+const TOPIC_FILL = VN(/^(chuyện|về|vì|tại|do|là|của|cái|mấy|nhà|với|thì|mà|còn|cũng|nữa|đó|á|à|ạ|nha|thôi|ấy|nói chung|a|anh|e|em|c|chị|mình|tôi|tui|tớ)$/);
+function nounOnly(t: Theme, n: string): boolean {
+  const g = VN(new RegExp((t.re as RegExp & { vsrc?: string }).vsrc ?? t.re.source, "g"));
+  const s = ` ${n} `;
+  let any = false;
+  for (let m = g.exec(s), k = 0; m && k < 12; m = g.exec(s), k++) {
+    if (!m[0]) g.lastIndex++;
+    else if (!TOPIC_NOUN.test(m[0].trim())) return false;
+    else any = true;
+  }
+  return any;
+}
+function bareTopic(n: string): boolean {
+  let s = ` ${n} `;
+  for (const m of n.split(" ")) void m;
+  // bỏ danh từ đề tài (hai, ba chữ) trước, rồi xem phần còn lại có toàn chữ đệm không
+  s = s.replace(VN(/\b(gia đình|bố mẹ|ba mẹ|cha mẹ|anh chị em|vợ chồng|vợ con|nhà chồng|nhà vợ|mẹ chồng|bố chồng|công việc|việc làm|chỗ làm|công ty|sếp|đồng nghiệp|bạn bè|bạn thân|hội bạn|nhóm bạn|học hành|thi cử|tiền bạc|tình yêu|người yêu|mối quan hệ|tình cảm|sức khỏe|sức khoẻ)\b/g), " ");
+  return s.split(/\s+/).filter(Boolean).every((w) => TOPIC_FILL.test(w));
+}
+// "Không biết phải làm sao" khi đã kể được vài điều → câu đáp bám đúng các điều đó + hỏi một ý cụ thể để gỡ, chưa vội khuyên.
+const UNSURE_RE = VN(/\b(sắp|có thể|có khi|chắc|sẽ|nguy cơ|chuẩn bị|nghe nói|nghe đồn)\b/);
+function stuckWithStory(details: string[], cur: Theme | undefined, prev: string, listen: boolean): HeartReply {
+  const ds = details.filter((d, i) => details.indexOf(d) === i).slice(-2);
+  const lead = pick("stuckS:lead", [
+    "Nghe bạn kể từ nãy tới giờ thì rối là phải.",
+    "Kể tới đây thì Lomi thấy rõ vì sao bạn bế tắc rồi.",
+    "Chừng đó chuyện dồn lại một lúc, chưa biết bắt đầu từ đâu cũng dễ hiểu.",
+  ]);
+  const sum = ds.length >= 2 ? `${capF(ds[0])}, mà ${ds[1]} — áp lực đâu chỉ nằm ở một chỗ.` : `${capF(ds[0])} — chuyện đó đè nặng thật.`;
+  const unsure = ds.find((d) => UNSURE_RE.test(` ${normalizeVi(d)} `));
+  const ask = unsure
+    ? `Mình gỡ từng phần một nha. Chuyện ${unsure} đã chắc chắn chưa, hay mới là những dấu hiệu bạn đang thấy?`
+    : ds.length >= 2
+      ? "Mình gỡ từng phần một nha. Trong mấy chuyện đó, chuyện nào đang gấp nhất với bạn lúc này?"
+      : "Mình gỡ từng phần một nha. Phần nào trong chuyện đó làm bạn lo nhất lúc này?";
+  return { text: `${lead} ${sum}\n\n${ask}`, quick: chipsFor(cur), theme: prev, listen };
+}
 // "chẳng muốn nói với ai", "không muốn gặp ai" — đang thu mình lại.
 const WITHDRAW_RE = VN(/\b(không|ko|chẳng|chả|chưa) (muốn|thiết|buồn|dám|còn muốn) (nói|kể|gặp|tâm sự|nói chuyện|tiếp xúc|chia sẻ)( \S+){0,2} (với )?ai\b/);
 const SPAN_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều|cả|nửa)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
