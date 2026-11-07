@@ -810,7 +810,7 @@ function selfDxReply(label: string, prev: string | undefined, listen: boolean, c
   };
 }
 // Chỉ nói mình đang BÍ, chưa kể chuyện gì ("a không biết phải làm sao") → hỏi chuyện, không đáp bài "suy nghĩ nhiều".
-const HELPLESS_ONLY = VN(/^((a|anh|e|em|c|chị|mình|tôi|tui|tớ) )?((giờ|bây giờ|thật sự|thiệt|đang) )*(không|ko|k|chẳng|chả) biết (phải )?(làm sao|làm gì|làm thế nào|tính sao|sao)( (nữa|giờ|đây|bây giờ|hết|cả|luôn|rồi))*( hoang mang)?$/);
+const HELPLESS_ONLY = VN(/^((giờ|bây giờ|thật sự|thiệt) )*((a|anh|e|em|c|chị|mình|tôi|tui|tớ) )?((giờ|bây giờ|thật sự|thiệt|đang) )*(không|ko|k|chẳng|chả) biết (phải )?(làm sao|làm gì|làm thế nào|tính sao|sao)( (nữa|giờ|đây|bây giờ|hết|cả|luôn|rồi))*( hoang mang)?$/);
 // Mệt tới mức muốn buông hết — chưa phải lời nói muốn tự hại (lib/lomiChat.crisisReply lo), nhưng không đáp như chuyện phiếm.
 const HOPELESS_RE = VN(/\b(buông xuôi|muốn buông hết|muốn bỏ hết|bỏ cuộc hết|không thiết gì nữa|chẳng thiết gì nữa|không còn thiết|không muốn cố gắng nữa|hết muốn cố gắng|chịu hết nổi|không chịu nổi nữa|không gồng nổi nữa|kiệt quệ rồi|sống cũng như không|tồn tại cho có)\b/);
 const evOfPrev = (prev: string) => prev.startsWith("ev:");
@@ -823,6 +823,51 @@ function hopelessReply(prev: string | undefined, listen: boolean): HeartReply {
   };
 }
 const HOW_DUNNO = VN(/\b(không biết|k biết|hk bít|chẳng biết|chả biết|không rõ) (\S+ ){0,3}(làm|nói|tính|xử lý|giải quyết|bắt đầu|mở lời|trả lời|nhắn|đối mặt) (sao|gì|thế nào|như thế nào|kiểu gì|làm sao)\b|\b(không biết|k biết|chẳng biết) (phải )?(sao|làm sao|thế nào|làm gì|làm thế nào|tính sao)\b|\b(chịu|bó tay|hết cách|biết đâu|biết đâux|sao biết)\b/);
+// 07/11: "không ai CHỊU nghe", "nó không chịu học" — "chịu" + động từ là SẴN LÒNG làm gì, không phải "chịu (thua)/bó tay".
+//   Chỉ dùng để hỏi HOW_DUNNO / DUNNO_RE trong mạch tâm sự (mẫu chung ở lomiTalk giữ nguyên).
+const WILLING_RE = VN(/\bchịu (?!(thôi|luôn|rồi|nổi|thua|chết|thật|thiệt|hết|á|đó|nha|ạ|à|ha|nhé)\b)\S+/g);
+const stuckOf = (n: string) => n.replace(WILLING_RE, " ");
+// 07/11 — TỪ KHOÁ ≠ Ý NGHĨA. Chủ đề "gia đình / công việc / bạn bè…" có khi chỉ khớp vì câu NHẮC TỚI danh từ đó
+//   ("a là trụ cột gia đình", "may mà gia đình vẫn ủng hộ a"): đó là hoàn cảnh của chuyện đang kể, không phải mở chuyện mâu thuẫn mới.
+//   Phần khớp chủ đề chỉ toàn là danh từ gọi tên đề tài → "chỉ nhắc tên"; còn khớp cả điều xảy ra ("bị mắng", "áp đặt", "mất việc") → chuyện thật.
+const TOPIC_NOUN = VN(/^(gia đình|bố mẹ|ba mẹ|cha mẹ|bố mình|mẹ mình|ba mình|cha mình|anh chị em|vợ chồng|vợ con|nhà chồng|nhà vợ|mẹ chồng|bố chồng|công việc|việc làm|chỗ làm|công ty|sếp|đồng nghiệp|bạn bè|bạn thân|hội bạn|nhóm bạn|học hành|thi cử|tiền bạc|tình yêu|người yêu|mối quan hệ|chuyện tình cảm|sức khỏe|sức khoẻ)$/);
+// Câu chỉ GỌI TÊN đề tài ("chuyện gia đình", "vì công việc") — vẫn là mở đúng chuyện đó như trước.
+const TOPIC_FILL = VN(/^(chuyện|về|vì|tại|do|là|của|cái|mấy|nhà|với|thì|mà|còn|cũng|nữa|đó|á|à|ạ|nha|thôi|ấy|nói chung|a|anh|e|em|c|chị|mình|tôi|tui|tớ)$/);
+function nounOnly(t: Theme, n: string): boolean {
+  const g = VN(new RegExp((t.re as RegExp & { vsrc?: string }).vsrc ?? t.re.source, "g"));
+  const s = ` ${n} `;
+  let any = false;
+  for (let m = g.exec(s), k = 0; m && k < 12; m = g.exec(s), k++) {
+    if (!m[0]) g.lastIndex++;
+    else if (!TOPIC_NOUN.test(m[0].trim())) return false;
+    else any = true;
+  }
+  return any;
+}
+function bareTopic(n: string): boolean {
+  let s = ` ${n} `;
+  // bỏ danh từ đề tài (hai, ba chữ) trước, rồi xem phần còn lại có toàn chữ đệm không
+  s = s.replace(VN(/\b(gia đình|bố mẹ|ba mẹ|cha mẹ|anh chị em|vợ chồng|vợ con|nhà chồng|nhà vợ|mẹ chồng|bố chồng|công việc|việc làm|chỗ làm|công ty|sếp|đồng nghiệp|bạn bè|bạn thân|hội bạn|nhóm bạn|học hành|thi cử|tiền bạc|tình yêu|người yêu|mối quan hệ|tình cảm|sức khỏe|sức khoẻ)\b/g), " ");
+  return s.split(/\s+/).filter(Boolean).every((w) => TOPIC_FILL.test(w));
+}
+// "Không biết phải làm sao" khi đã kể được vài điều → câu đáp bám đúng các điều đó + hỏi một ý cụ thể để gỡ, chưa vội khuyên.
+const UNSURE_RE = VN(/\b(sắp|có thể|có khi|chắc|sẽ|nguy cơ|chuẩn bị|nghe nói|nghe đồn)\b/);
+function stuckWithStory(details: string[], cur: Theme | undefined, prev: string, listen: boolean): HeartReply {
+  const ds = details.filter((d, i) => details.indexOf(d) === i).slice(-2);
+  const lead = pick("stuckS:lead", [
+    "Nghe bạn kể từ nãy tới giờ thì rối là phải.",
+    "Kể tới đây thì Lomi thấy rõ vì sao bạn bế tắc rồi.",
+    "Chừng đó chuyện dồn lại một lúc, chưa biết bắt đầu từ đâu cũng dễ hiểu.",
+  ]);
+  const sum = ds.length >= 2 ? `${capF(ds[0])}, mà ${ds[1]} — áp lực đâu chỉ nằm ở một chỗ.` : `${capF(ds[0])} — chuyện đó đè nặng thật.`;
+  const unsure = ds.find((d) => UNSURE_RE.test(` ${normalizeVi(d)} `));
+  const ask = unsure
+    ? `Mình gỡ từng phần một nha. Chuyện ${unsure} đã chắc chắn chưa, hay mới là những dấu hiệu bạn đang thấy?`
+    : ds.length >= 2
+      ? "Mình gỡ từng phần một nha. Trong mấy chuyện đó, chuyện nào đang gấp nhất với bạn lúc này?"
+      : "Mình gỡ từng phần một nha. Phần nào trong chuyện đó làm bạn lo nhất lúc này?";
+  return { text: `${lead} ${sum}\n\n${ask}`, quick: chipsFor(cur), theme: prev, listen };
+}
 // "chẳng muốn nói với ai", "không muốn gặp ai" — đang thu mình lại.
 const WITHDRAW_RE = VN(/\b(không|ko|chẳng|chả|chưa) (muốn|thiết|buồn|dám|còn muốn) (nói|kể|gặp|tâm sự|nói chuyện|tiếp xúc|chia sẻ)( \S+){0,2} (với )?ai\b/);
 const SPAN_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều|cả|nửa)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
@@ -1269,8 +1314,19 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // "a cũng chẳng muốn nói với ai" — đang thu mình lại: ghi nhận điều đó, không coi là lời bảo dừng và không hỏi dồn.
   if (WITHDRAW_RE.test(` ${n} `) && !adviceAsked && !ctx.third)
     return { text: `${ctx.mirror ? `${capF(ctx.mirror)} hả 😔 ` : ""}Giữ hết trong lòng một mình thì nặng lắm. Bạn chịu nói ra với Lomi chừng này là quý rồi — cứ từ từ, không cần gồng.`, quick: [], theme: prev, listen };
+  // 07/11: đã kể được chuyện ("công ty a sắp phá sản", "a là trụ cột gia đình") rồi mới nói "giờ a không biết phải làm sao" → đó là BÍ trong
+  //   chính chuyện vừa kể: đáp bám các điều đó và hỏi một ý cụ thể để gỡ — không đọc chữ "hoang mang" thành chủ đề mới, chưa đưa danh sách khuyên.
+  //   (hỏi thẳng "a nên làm sao?" thì vẫn là xin lời khuyên như cũ.)
+  //   (chỉ tính điều đã kể ở các lượt TRƯỚC — không phải chính câu này; "không biết sao nữa" sau câu Lomi hỏi "chuyện gì?" là không rõ VÌ SAO,
+  //    không phải bí cách làm → để nhánh "không phải cảm xúc nào cũng có lý do" phía dưới đáp.)
+  const told = (ctx.details ?? []).filter((d) => d && d !== ctx.mirror && !DUNNO_RE.test(` ${normalizeVi(d)} `));
+  if (HELPLESS_ONLY.test(n) && VN(/\b(làm sao|làm gì|làm thế nào|tính sao)\b/).test(` ${n} `) && told.length && !listen && !ctx.third && prev !== "open" && !evOfPrev(prev)) return stuckWithStory(told, cur, prev, listen);
   let t = themeOf(n);
   const words = n.split(" ").length;
+  // 07/11: câu chỉ NHẮC TỚI danh từ một đề tài trong lúc đang kể chuyện khác ("a là trụ cột gia đình" khi đang lo công ty phá sản,
+  //   "may mà gia đình vẫn ủng hộ a" khi đang lo chuyện công việc) → hoàn cảnh của chuyện đang kể, không đổi chủ đề.
+  //   (điều nghe được là chuyện không vui — "sếp mắng a" — hoặc chỉ gọi tên đề tài — "chuyện gia đình" — thì vẫn đổi như trước.)
+  if (t && cur && t.id !== cur.id && NOUNISH.has(t.id) && !adviceAsked && (ctx.val ?? 0) >= 0 && nounOnly(t, n) && !bareTopic(n)) t = undefined;
   // Chi tiết ngắn kể thêm cho chuyện đang nói ("bạn ấy là đồng nghiệp", "cả với bạn bè của mình") → KHÔNG đổi chủ đề.
   const detailOnly = !!(t && cur && t.id !== cur.id && !GENERIC.has(cur.id) && NOUNISH.has(t.id) && words <= 9 && !emotionOf(n) && !adviceAsked);
   if (detailOnly) t = undefined;
@@ -1291,7 +1347,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // không rẽ sang bài "mệt mỏi" rồi quên mất đang nói về ai.
   if (t && cur && cur.id === "love" && GENERIC.has(t.id) && t.id !== "love" && words <= 6 && !adviceAsked && VR(/(vợ|chồng|bạn gái|bạn trai|người yêu|người ấy|crush|cô ấy|anh ấy|bà xã|ông xã|(?<![\p{L}])ny(?![\p{L}]))/iu).test(story)) t = undefined;
   // Câu kể về một NGƯỜI KHÁC ("con a sắp thi", "mẹ a ở quê") trong lúc đang tâm sự → chữ "thi", "học", "gia đình" không phải chuyện của người dùng.
-  if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n)) t = undefined;
+  //   (07/11: trừ khi đó đúng là chuyện TRONG NHÀ — "ba mẹ cứ la mắng a": người nhà làm gì đó với chính người dùng là chuyện gia đình thật,
+  //    khớp cả điều xảy ra chứ không chỉ nhắc tên "ba mẹ".)
+  if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n) && !(t.id === "family" && !nounOnly(t, n))) t = undefined;
   //   (23/10: "Ba a nóng tính lắm" khi đang kể chuyện với ba mẹ là nói về BA, không phải người dùng nóng tính → không sang chủ đề "tự nóng giận";
   //    đang kể chuyện nóng giận mà nói "xong a hối hận" thì vẫn là chuyện nóng giận đó.)
   if (t && cur && t.id !== cur.id && ctx.third && SELF_THEMES.has(t.id) && !adviceAsked) t = undefined;
@@ -1403,7 +1461,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   //   → không dội ba gạch đầu dòng lời khuyên.
   if (VN(/^(không|ko|k|chẳng|chả|hông|hong|hk) (biết|bít|rõ|hiểu)( (sao|vì sao|tại sao|nữa|luôn|gì|nx))*$/).test(n) && /\?\s*$/.test(lastText.trim()) && VR(/(chuyện gì|điều gì|vì sao|tại sao|sao vậy)/i).test(lastText.trim().split("\n").pop() ?? ""))
     return { text: "Không rõ vì sao mà vẫn thấy vậy thì cũng không sao đâu — không phải cảm xúc nào cũng có lý do rõ ràng 💚 Bạn không cần tìm ra ngay.\n\nBạn thấy như vậy mới hôm nay, hay mấy hôm rồi?", quick: [], theme: prev, listen };
-  if (DUNNO_RE.test(` ${n} `) && HOW_DUNNO.test(` ${n} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true, undefined, saidR);
+  if (DUNNO_RE.test(` ${stuckOf(n)} `) && HOW_DUNNO.test(` ${stuckOf(n)} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true, undefined, saidR);
   // Kể thời gian ("3 năm rồi đó", "2 tuần nay") → đáp theo đúng chuyện đang nói.
   const dur = n.match(VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/));
   // Chỉ khi câu NÓI RIÊNG khoảng thời gian đã qua ("3 năm rồi đó", "từ 2 tuần nay"): "làm được 5 năm" là kể việc khác, "còn 2 tuần nữa thi"
@@ -1501,7 +1559,9 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
   const lastAsked = /\?\s*$/.test(lastText.trim());
   // (21/10: "vẫn chưa hết giận", "chưa đỡ" — điều tốt CHƯA tới là chuyện chưa vui, dù bộ đọc câu thấy chữ "hết giận" là tích cực)
   const notYet = VN(/\b(chưa|vẫn chưa|còn chưa) (chịu )?(hết|nguôi|bớt|đỡ|khỏi|ổn|tha thứ)\b/).test(` ${n} `);
-  const good = (ctx.val ?? 0) > 0 && !notYet;
+  // (07/11: "may mà gia đình vẫn ủng hộ a", "cũng may là còn việc" — điều may giữa chuyện đang lo là tin nhẹ lòng, không đáp "hèn gì bạn lo")
+  const relief = VN(/^(may mà|may là|may sao|cũng may|còn may|may quá|được cái)( |$)/).test(n);
+  const good = ((ctx.val ?? 0) > 0 || relief) && !notYet;
   const bad = (ctx.val ?? 0) < 0 || notYet;
   const parts: string[] = [];
 
@@ -1535,7 +1595,17 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
     //   ("a xin lỗi rồi", "a muốn nghỉ") thì chỉ nhắc lại, không phán "vậy thì khó chịu thật".
     //   (trong chuyện mâu thuẫn, điều chính người dùng làm — "a quên sinh nhật cô ấy" — không đáp "ai cũng thấy bức bối".)
     const react = posTheme ? fresh("react:pos", ["Nghe dễ thương ghê.", "Thích ghê ha.", "Vậy là có tín hiệu vui rồi đó."]) : good ? "Nghe vậy cũng nhẹ được một chút ha." : fam && !p && !(ctx.neg && fam === "mishap") && (!ctx.self || (bad && fam !== "conflict")) ? fresh(`react:${fam}`, REACT[fam]) : undefined;
+    // 07/11: chi tiết kể thêm chưa có lời đáp đúng tông ("a là trụ cột gia đình" sau "công ty a sắp phá sản") → nối với điều vừa kể
+    //   ở lượt trước, để thấy Lomi hiểu hai chuyện chồng lên nhau ("Thêm chuyện công ty bạn sắp phá sản nữa thì bảo sao bạn lo.").
+    const before = det[det.length - 1] === m ? det[det.length - 2] : det[det.length - 1];
+    const tie = !react && !listen && !good && !posTheme && !e && !p && fam && fam !== "mishap" && before && before !== m && !(lowR[0] ?? "").includes("thêm chuyện")
+      ? `Thêm chuyện ${before} nữa thì ${fam === "worry" ? "bảo sao bạn lo" : fam === "tired" ? "bảo sao bạn đuối" : fam === "conflict" ? "càng khó chịu hơn" : "nghe càng nặng lòng"}.`
+      : undefined;
     reacted = !!react;
+    if (tie) {
+      parts.push(`${head} ${tie}`);
+      return { text: parts.join("\n\n"), quick: chipsFor(th), theme: prev, listen };
+    }
     // Chỉ nhắc lại trơ trọi mà lượt này không nói thêm gì nữa (đang "chỉ nghe") thì thêm một lời ngắn cho thấy Lomi vẫn theo kịp.
     const lone = !react && (listen || good) ? fresh("support", SUPPORT) : undefined;
     parts.push([head, react, lone].filter(Boolean).join(" "));

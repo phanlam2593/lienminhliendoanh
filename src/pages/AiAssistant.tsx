@@ -3252,7 +3252,11 @@ export function AiChat({
         // Chuyện cụ thể (vd công việc, người yêu) thì để thư viện tâm sự đáp — trừ khi kể từ 3 cảm giác trở lên.
         const psyTalk = heartOn && !inHealth && !!THEME_MOOD[lastA?.heart ?? ""];
         // (21/10: người dùng đã nói CHỈ MUỐN ĐƯỢC NGHE → không chen bảng phân tích cảm xúc / gợi ý — để mạch "chỉ nghe" đáp)
-        const mind = mind0 && !lastA?.heartListen && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
+        // 07/11: đã kể chuyện được vài lượt ("công ty có thể cắt giảm nhân sự" → "nhưng a vẫn thấy áp lực") mà câu này chỉ nói thêm MỘT cảm giác
+        //   → đó là một phần của câu chuyện đang kể: để mạch tâm sự đáp bám chuyện đó, không cộng dồn cảm giác cũ thành bảng "thường gặp khi… / nên tránh…".
+        //   (tự câu này nêu từ hai cảm giác trở lên thì vẫn phân tích như cũ.)
+        const midStory = heartOn && !inHealth && (lastA?.heartDepth ?? 0) >= 2 && !lastA?.mood?.length;
+        const mind = mind0 && !lastA?.heartListen && (!midStory || !!analyzeMind(q, [])) && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
         const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
         const askAdvice = VN(/\b(nên làm gì|làm sao|làm gì|phải làm sao|tư vấn|khuyên|nên ăn gì|nên uống gì|có sao không|có nguy hiểm không|cách nào|có cách|cho đỡ|đỡ hơn|hết đau|giảm đau|cần đi viện|cần đi khám|có nên đi khám|đi viện|đi khám|nguy hiểm|có sao)\b/).test(nq);
@@ -3403,7 +3407,9 @@ export function AiChat({
           const m = msgs[i];
           if (m.role !== "user") continue;
           // Chỉ tính các mẩu KỂ THÊM cho đúng chuyện đang nói: tin Lomi trước và sau nó cùng một chủ đề (câu mở đầu / câu đổi chuyện thì không).
-          if (msgs[i - 1]?.role !== "assistant" || !msgs[i - 1].heart || msgs[i - 1].heart !== msgs[i + 1]?.heart) break;
+          //   (07/11: mở bằng một cảm xúc chung — "a đang lo quá", "dạo này a buồn" — rồi kể ra chuyện cụ thể vẫn là CÙNG một câu chuyện.)
+          const hPrev = msgs[i - 1]?.heart;
+          if (msgs[i - 1]?.role !== "assistant" || !hPrev || (hPrev !== msgs[i + 1]?.heart && !(GENERIC.has(hPrev) || hPrev === "open"))) break;
           const mm = mirrorText(parseVi(m.raw ?? m.content, { addr: addrH }), addrH, 7);
           if (mm) told.unshift(mm);
         }
@@ -3647,7 +3653,10 @@ export function AiChat({
         //   (nỗi lo / nỗi sợ thì không hỏi "rồi có sao không" — đó là điều đang nghĩ, chưa phải chuyện đã xảy ra.)
         const feelSl = fr1?.pred?.cls === "feel";
         const slText = sl && mSl ? `${mSl.charAt(0).toUpperCase() + mSl.slice(1)} hả${feelSl && vSl < 0 ? (fr1?.pred?.obj ? " 🥺 Nghĩ vậy cũng dễ hiểu mà. Bạn kể thêm cho Lomi nghe với." : " 🥺 Có chuyện gì vậy bạn, kể Lomi nghe với.") : vSl < 0 || /🥺/.test(sl.text) ? " 🥺 Rồi có sao không bạn?" : vSl > 0 ? " 😄 Nghe thích ghê!" : "? Rồi sao nữa bạn, kể Lomi nghe với."}` : sl?.text;
-        if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, quick: sl.quick, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
+        // 07/11: nhắc lại một nỗi lo / nỗi buồn của CHÍNH người dùng ("a đang lo chuyện công việc" → "…kể thêm cho Lomi nghe với") là đã mời
+        //   tâm sự → mở mạch tâm sự, để câu kể tiếp ("công ty có thể cắt giảm nhân sự") được nghe như phần tiếp của chuyện đó.
+        const slHeart = !!mSl && feelSl && vSl < 0 && !heartOn && fr1?.subject === "self" ? { heart: VR(/^(lo|sợ|hồi hộp|căng thẳng|bất an|rối|hoang mang|sốt ruột)/).test(fr1.pred?.head ?? "") ? "anxiety" : "sad", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {};
+        if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, quick: sl.quick, ...slHeart, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
       }
       // 12/10: đang ở mạch sức khoẻ mà người dùng nói ra một nỗi lo / cảm xúc của CHÍNH MÌNH ("mà a cũng hay lo", "lo chuyện tiền") → đó là
       // lời tâm sự, không phải "kiến thức Lomi chưa có": mở mạch tâm sự (vẫn nhớ bệnh đang nói), không đáp "chưa được học, bấm Dạy Lomi".
