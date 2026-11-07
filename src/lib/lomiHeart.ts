@@ -1596,7 +1596,7 @@ function follow(n: string, th: Theme | undefined, prev: string, listen: boolean,
     // 07/11: chi tiết kể thêm chưa có lời đáp đúng tông ("a là trụ cột gia đình" sau "công ty a sắp phá sản") → nối với điều vừa kể
     //   ở lượt trước, để thấy Lomi hiểu hai chuyện chồng lên nhau ("Thêm chuyện công ty bạn sắp phá sản nữa thì bảo sao bạn lo.").
     const before = det.length >= 2 && det[det.length - 1] === m ? det[det.length - 2] : undefined;
-    const tie = !react && !listen && !good && !posTheme && !e && !p && fam && fam !== "mishap" && before && before !== m && !said(before)
+    const tie = !react && !listen && !good && !posTheme && !e && !p && fam && fam !== "mishap" && before && before !== m && !(lowR[0] ?? "").includes("thêm chuyện")
       ? `Thêm chuyện ${before} nữa thì ${fam === "worry" ? "bảo sao bạn lo" : fam === "tired" ? "bảo sao bạn đuối" : fam === "conflict" ? "càng khó chịu hơn" : "nghe càng nặng lòng"}.`
       : undefined;
     reacted = !!react;
