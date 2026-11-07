@@ -1314,8 +1314,17 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // "a cũng chẳng muốn nói với ai" — đang thu mình lại: ghi nhận điều đó, không coi là lời bảo dừng và không hỏi dồn.
   if (WITHDRAW_RE.test(` ${n} `) && !adviceAsked && !ctx.third)
     return { text: `${ctx.mirror ? `${capF(ctx.mirror)} hả 😔 ` : ""}Giữ hết trong lòng một mình thì nặng lắm. Bạn chịu nói ra với Lomi chừng này là quý rồi — cứ từ từ, không cần gồng.`, quick: [], theme: prev, listen };
+  // 07/11: đã kể được chuyện ("công ty a sắp phá sản", "a là trụ cột gia đình") rồi mới nói "giờ a không biết phải làm sao" → đó là BÍ trong
+  //   chính chuyện vừa kể: đáp bám các điều đó và hỏi một ý cụ thể để gỡ — không đọc chữ "hoang mang" thành chủ đề mới, chưa đưa danh sách khuyên.
+  //   (hỏi thẳng "a nên làm sao?" thì vẫn là xin lời khuyên như cũ.)
+  const told = (ctx.details ?? []).filter(Boolean);
+  if (HELPLESS_ONLY.test(n) && told.length && !listen && !ctx.third && prev !== "open" && !evOfPrev(prev)) return stuckWithStory(told, cur, prev, listen);
   let t = themeOf(n);
   const words = n.split(" ").length;
+  // 07/11: câu chỉ NHẮC TỚI danh từ một đề tài trong lúc đang kể chuyện khác ("a là trụ cột gia đình" khi đang lo công ty phá sản,
+  //   "may mà gia đình vẫn ủng hộ a" khi đang lo chuyện công việc) → hoàn cảnh của chuyện đang kể, không đổi chủ đề.
+  //   (điều nghe được là chuyện không vui — "sếp mắng a" — hoặc chỉ gọi tên đề tài — "chuyện gia đình" — thì vẫn đổi như trước.)
+  if (t && cur && t.id !== cur.id && NOUNISH.has(t.id) && !adviceAskedEarly(text, n) && (ctx.val ?? 0) >= 0 && nounOnly(t, n) && !bareTopic(n)) t = undefined;
   // Chi tiết ngắn kể thêm cho chuyện đang nói ("bạn ấy là đồng nghiệp", "cả với bạn bè của mình") → KHÔNG đổi chủ đề.
   const detailOnly = !!(t && cur && t.id !== cur.id && !GENERIC.has(cur.id) && NOUNISH.has(t.id) && words <= 9 && !emotionOf(n) && !adviceAsked);
   if (detailOnly) t = undefined;
