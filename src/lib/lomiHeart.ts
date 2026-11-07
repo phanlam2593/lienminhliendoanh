@@ -846,7 +846,6 @@ function nounOnly(t: Theme, n: string): boolean {
 }
 function bareTopic(n: string): boolean {
   let s = ` ${n} `;
-  for (const m of n.split(" ")) void m;
   // bỏ danh từ đề tài (hai, ba chữ) trước, rồi xem phần còn lại có toàn chữ đệm không
   s = s.replace(VN(/\b(gia đình|bố mẹ|ba mẹ|cha mẹ|anh chị em|vợ chồng|vợ con|nhà chồng|nhà vợ|mẹ chồng|bố chồng|công việc|việc làm|chỗ làm|công ty|sếp|đồng nghiệp|bạn bè|bạn thân|hội bạn|nhóm bạn|học hành|thi cử|tiền bạc|tình yêu|người yêu|mối quan hệ|tình cảm|sức khỏe|sức khoẻ)\b/g), " ");
   return s.split(/\s+/).filter(Boolean).every((w) => TOPIC_FILL.test(w));
