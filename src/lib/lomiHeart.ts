@@ -1324,7 +1324,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // 07/11: câu chỉ NHẮC TỚI danh từ một đề tài trong lúc đang kể chuyện khác ("a là trụ cột gia đình" khi đang lo công ty phá sản,
   //   "may mà gia đình vẫn ủng hộ a" khi đang lo chuyện công việc) → hoàn cảnh của chuyện đang kể, không đổi chủ đề.
   //   (điều nghe được là chuyện không vui — "sếp mắng a" — hoặc chỉ gọi tên đề tài — "chuyện gia đình" — thì vẫn đổi như trước.)
-  if (t && cur && t.id !== cur.id && NOUNISH.has(t.id) && !adviceAskedEarly(text, n) && (ctx.val ?? 0) >= 0 && nounOnly(t, n) && !bareTopic(n)) t = undefined;
+  if (t && cur && t.id !== cur.id && NOUNISH.has(t.id) && !adviceAsked && (ctx.val ?? 0) >= 0 && nounOnly(t, n) && !bareTopic(n)) t = undefined;
   // Chi tiết ngắn kể thêm cho chuyện đang nói ("bạn ấy là đồng nghiệp", "cả với bạn bè của mình") → KHÔNG đổi chủ đề.
   const detailOnly = !!(t && cur && t.id !== cur.id && !GENERIC.has(cur.id) && NOUNISH.has(t.id) && words <= 9 && !emotionOf(n) && !adviceAsked);
   if (detailOnly) t = undefined;
@@ -1345,7 +1345,9 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // không rẽ sang bài "mệt mỏi" rồi quên mất đang nói về ai.
   if (t && cur && cur.id === "love" && GENERIC.has(t.id) && t.id !== "love" && words <= 6 && !adviceAsked && VR(/(vợ|chồng|bạn gái|bạn trai|người yêu|người ấy|crush|cô ấy|anh ấy|bà xã|ông xã|(?<![\p{L}])ny(?![\p{L}]))/iu).test(story)) t = undefined;
   // Câu kể về một NGƯỜI KHÁC ("con a sắp thi", "mẹ a ở quê") trong lúc đang tâm sự → chữ "thi", "học", "gia đình" không phải chuyện của người dùng.
-  if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n)) t = undefined;
+  //   (07/11: trừ khi đó đúng là chuyện TRONG NHÀ — "ba mẹ cứ la mắng a": người nhà làm gì đó với chính người dùng là chuyện gia đình thật,
+  //    khớp cả điều xảy ra chứ không chỉ nhắc tên "ba mẹ".)
+  if (ctx.third && t && cur && (NOUNISH.has(t.id) || GENERIC.has(t.id)) && !adviceAsked && !emotionOf(n) && !(t.id === "family" && !nounOnly(t, n))) t = undefined;
   //   (23/10: "Ba a nóng tính lắm" khi đang kể chuyện với ba mẹ là nói về BA, không phải người dùng nóng tính → không sang chủ đề "tự nóng giận";
   //    đang kể chuyện nóng giận mà nói "xong a hối hận" thì vẫn là chuyện nóng giận đó.)
   if (t && cur && t.id !== cur.id && ctx.third && SELF_THEMES.has(t.id) && !adviceAsked) t = undefined;
@@ -1457,7 +1459,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   //   → không dội ba gạch đầu dòng lời khuyên.
   if (VN(/^(không|ko|k|chẳng|chả|hông|hong|hk) (biết|bít|rõ|hiểu)( (sao|vì sao|tại sao|nữa|luôn|gì|nx))*$/).test(n) && /\?\s*$/.test(lastText.trim()) && VR(/(chuyện gì|điều gì|vì sao|tại sao|sao vậy)/i).test(lastText.trim().split("\n").pop() ?? ""))
     return { text: "Không rõ vì sao mà vẫn thấy vậy thì cũng không sao đâu — không phải cảm xúc nào cũng có lý do rõ ràng 💚 Bạn không cần tìm ra ngay.\n\nBạn thấy như vậy mới hôm nay, hay mấy hôm rồi?", quick: [], theme: prev, listen };
-  if (DUNNO_RE.test(` ${n} `) && HOW_DUNNO.test(` ${n} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true, undefined, saidR);
+  if (DUNNO_RE.test(` ${stuckOf(n)} `) && HOW_DUNNO.test(` ${stuckOf(n)} `) && th && !listen && !emotionOf(n)) return themeReply(th, n, true, undefined, saidR);
   // Kể thời gian ("3 năm rồi đó", "2 tuần nay") → đáp theo đúng chuyện đang nói.
   const dur = n.match(VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|mớ)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/));
   // Chỉ khi câu NÓI RIÊNG khoảng thời gian đã qua ("3 năm rồi đó", "từ 2 tuần nay"): "làm được 5 năm" là kể việc khác, "còn 2 tuần nữa thi"
