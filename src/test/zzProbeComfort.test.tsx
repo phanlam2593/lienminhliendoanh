@@ -23,6 +23,8 @@ const chains: string[][] = [
   ["Bạn a đang buồn vì bị bồ đá."], ["Làm sao để an ủi bạn gái đang buồn?"],
   ["A đang buồn", "A không muốn tâm sự nữa."], ["A đang buồn", "Uống vitamin C mỗi ngày có tốt không?"],
   ["A đang thất nghiệp.", "Nó làm a mất ngủ luôn."],
+  ["Cho anh chút động lực đi"], ["Anh buồn quá, dỗ anh đi"], ["Động viên mình một chút được không?"], ["Anh đang cần được an ủi."], ["Do anh đi trễ nên bị sếp mắng"],
+  ["A đang thất nghiệp.", "Tìm việc mãi không được.", "Em an ủi anh đi chứ."], ["A đang buồn", "Giúp anh tính tiền lương."],
 ];
 it("probe", async () => {
   writeFileSync(OUT, "");
