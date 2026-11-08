@@ -620,7 +620,8 @@ const THEMES: Theme[] = [
   },
   {
     id: "anxiety",
-    re: VN(/\b(lo âu|lo lắng|bất an|hoảng sợ|sợ hãi|tim đập nhanh|hồi hộp|căng thẳng|stress|áp lực quá|sợ quá|lo quá)\b/),
+    // (08/11: lo cho những ngày tới — "a lo không biết thời gian tới sống sao" — cũng là lo âu, trước đây Lomi đáp "chưa hiểu ý")
+    re: VN(/\b(lo âu|lo lắng|bất an|hoảng sợ|sợ hãi|tim đập nhanh|hồi hộp|căng thẳng|stress|áp lực quá|sợ quá|lo quá|lo (không biết )?(thời gian tới|sắp tới|sau này|tương lai|mai mốt|tháng tới|năm tới)( \S+){0,2} (sống|sẽ|ra sao|thế nào|làm sao|tính sao))\b/),
     feel: ["Lo âu làm mình như lúc nào cũng căng dây đàn, mệt lắm 😟", "Lomi hiểu, cảm giác bất an cứ lởn vởn khó chịu thật."],
     insight: [
       "Lo âu là cách cơ thể báo động khi thấy nguy hiểm — chỉ là đôi khi chuông báo hơi nhạy quá.",
