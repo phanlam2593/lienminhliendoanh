@@ -1282,6 +1282,8 @@ function heartStart0(text: string, appQuestion: boolean): HeartReply | null {
   const dx = selfDx(text, n, {});
   if (dx) return { ...selfDxReply(dx, undefined, false, {}), story: storyOf(text) };
   if (HOPELESS_RE.test(` ${n} `)) return { ...hopelessReply(undefined, false), story: storyOf(text) };
+  // 08/11: mở lời bằng xin được an ủi ("a mệt mỏi quá, an ủi a đi") → an ủi trước, chưa khuyên.
+  if (comfortAsk(text)) return { ...comfortReply(text, t && !GENERIC.has(t.id) ? t.id : undefined, false), story: storyOf(text) };
   // Nói rõ chỉ muốn được nghe → vào mạch tâm sự ở chế độ CHỈ NGHE (không khuyên) ngay từ câu đầu.
   if (LISTEN_RE.test(` ${n} `) && listenText(n)) return { text: listenText(n)!, quick: [], theme: t && !GENERIC.has(t.id) ? t.id : "open", listen: true, story: storyOf(text) };
   if (LISTEN_RE.test(` ${n} `))
@@ -1332,6 +1334,11 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
       theme: prev,
       end: true,
     };
+  // 08/11: xin được AN ỦI (kể cả "không cần lời khuyên, chỉ muốn được an ủi") → an ủi bám đúng chuyện đã kể, không khuyên, không mời tính năng.
+  if (comfortAsk(text) && !ctx.third) {
+    const saidC = (x: string) => (ctx.recent ?? []).some((r) => r.includes(x.slice(0, 40)) || (!!ctx.say && r.includes(ctx.say(x).slice(0, 40))));
+    return comfortReply(text, prev, listen, ctx.details ?? [], saidC);
+  }
   if (text.trim() === LISTEN_ONLY || LISTEN_RE.test(` ${n} `))
     return {
       text: listenText(n) ?? pick("lonly", [
