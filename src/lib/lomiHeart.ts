@@ -1280,14 +1280,14 @@ const OTHER_WHO = VN(/\b(bạn gái|bạn trai|người yêu|ny|vợ|chồng|b�
 const OTHER_LEAD = /^\s*(bạn thân|bạn|đứa bạn|em gái|em trai|anh trai|chị gái|con gái|con trai)(\s+(a|anh|e|em|c|chị|tôi|tui|mình|tớ))?\s+(đang |bị |vừa |mới |cứ )*(buồn|thất tình|chia tay|bị (bồ|người yêu|ny|bạn trai|bạn gái) (đá|bỏ|chia tay))/iu;
 const WHO_TEXT: Record<string, string> = { "ban gai": "bạn gái", "ban trai": "bạn trai", "nguoi yeu": "người yêu", ny: "người yêu", vo: "vợ", chong: "chồng", "ban than": "bạn thân", "dua ban": "bạn", ban: "bạn", me: "mẹ", ma: "mẹ", ba: "ba", bo: "bố", con: "con", "em gai": "em gái", "em trai": "em trai", "anh trai": "anh trai", "chi gai": "chị gái", "dong nghiep": "đồng nghiệp", crush: "crush" };
 function otherComfort(text: string, n: string): HeartReply | null {
-  const s = \` \${n} \`;
+  const s = ` ${n} `;
   if (HOW_COMFORT.test(s)) {
     const after = s.slice(s.search(VN(/\b(an ủi|động viên|dỗ|vỗ về)\b/)));
     const wm = after.match(OTHER_WHO);
     const who0 = wm ? (WHO_TEXT[wm[1]] ?? wm[1]) : "người ấy";
     const who = who0 === "bạn" ? "bạn của bạn" : who0;
     return {
-      text: \`Muốn an ủi \${who} lúc đang buồn thì nhiều khi ở bên còn quan trọng hơn nói hay nè 💚\n• Hỏi nhẹ trước: “Muốn mình chỉ nghe thôi, hay muốn mình góp ý?” — rồi làm đúng điều \${who} cần\n• Nghe trọn câu chuyện, đừng vội sửa hay phân tích đúng sai\n• Gọi tên cảm xúc (“chuyện đó buồn thật ha”) thay vì “có gì đâu mà buồn”\n• Một hành động nhỏ: ly nước ấm, món \${who} thích, ngồi cạnh một lúc\n\n\${capF(who)} đang buồn vì chuyện gì vậy? Biết chuyện thì Lomi gợi ý câu nói sát hơn.\`,
+      text: `Muốn an ủi ${who} lúc đang buồn thì nhiều khi ở bên còn quan trọng hơn nói hay nè 💚\n• Hỏi nhẹ trước: “Muốn mình chỉ nghe thôi, hay muốn mình góp ý?” — rồi làm đúng điều ${who} cần\n• Nghe trọn câu chuyện, đừng vội sửa hay phân tích đúng sai\n• Gọi tên cảm xúc (“chuyện đó buồn thật ha”) thay vì “có gì đâu mà buồn”\n• Một hành động nhỏ: ly nước ấm, món ${who} thích, ngồi cạnh một lúc\n\n${capF(who)} đang buồn vì chuyện gì vậy? Biết chuyện thì Lomi gợi ý câu nói sát hơn.`,
       quick: [],
       theme: "open",
     };
@@ -1299,8 +1299,8 @@ function otherComfort(text: string, n: string): HeartReply | null {
     const love = /thất tình|chia tay|đá|bỏ/iu.test(om[0]) || VN(/\b(thất tình|chia tay|bồ|người yêu|ny)\b/).test(s);
     return {
       text: love
-        ? \`\${capF(who)} đang buồn vì chuyện tình cảm hả 🥺 Bạn để ý tới \${who} như vậy là quý lắm rồi.\n\nLúc mới chia tay, điều giúp nhiều nhất thường là có người ở bên nghe kể — chưa cần khuyên, cũng đừng vội nói xấu người kia. Rủ đi ăn, đi dạo một chút cũng đỡ hơn ngồi một mình.\n\nChuyện xảy ra lâu chưa, và bạn muốn giúp \${who} theo cách nào?\`
-        : \`Thấy \${who} buồn chắc bạn cũng lo 🥺 Có bạn quan tâm như vậy là quý lắm rồi.\n\nNhiều khi chỉ cần ngồi nghe \${who} kể, chưa cần khuyên gì, là đã đỡ nhiều. \${capF(who)} đang buồn vì chuyện gì vậy?\`,
+        ? `${capF(who)} đang buồn vì chuyện tình cảm hả 🥺 Bạn để ý tới ${who} như vậy là quý lắm rồi.\n\nLúc mới chia tay, điều giúp nhiều nhất thường là có người ở bên nghe kể — chưa cần khuyên, cũng đừng vội nói xấu người kia. Rủ đi ăn, đi dạo một chút cũng đỡ hơn ngồi một mình.\n\nChuyện xảy ra lâu chưa, và bạn muốn giúp ${who} theo cách nào?`
+        : `Thấy ${who} buồn chắc bạn cũng lo 🥺 Có bạn quan tâm như vậy là quý lắm rồi.\n\nNhiều khi chỉ cần ngồi nghe ${who} kể, chưa cần khuyên gì, là đã đỡ nhiều. ${capF(who)} đang buồn vì chuyện gì vậy?`,
       quick: [],
       theme: "open",
     };
