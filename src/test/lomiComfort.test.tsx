@@ -18,7 +18,7 @@ describe("A — tâm sự và đồng cảm", () => {
       expect(r.content).not.toMatch(PROMO);
       expect(r.content).toMatch(/\?/);
     }
-  });
+  }, 90000); // (lượt đầu của file nạp kho dữ liệu — chạy chung cả bộ test thì chậm)
   it("2. 'A buồn quá' → mạch buồn, không giới thiệu tính năng", async () => {
     const [r] = await run(["A buồn quá."]);
     expect(r.heart).toBe("sad");

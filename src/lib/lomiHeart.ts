@@ -1232,7 +1232,7 @@ const capF = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
 const IDLE_RE = VN(/\b(rảnh|ran|không có gì làm|ko có gì làm|chẳng có gì làm|chả có gì làm|không biết làm gì|boring|ở nhà hoài|nằm nhà)\b/);
 const BORED_FEEL = [
   "Chán hả bạn 🥺 Hôm nay có chuyện gì làm bạn thấy vậy không, hay tự nhiên thấy mọi thứ nhạt nhẽo? Kể Lomi nghe nha.",
-  "Ừm, chán thật ha 😶 Chán kiểu rảnh quá không biết làm gì, hay chán vì trong lòng đang có chuyện? Bạn kể Lomi nghe thử.",
+  "Chán hả 😶 Chán kiểu rảnh quá không biết làm gì, hay chán vì trong lòng đang có chuyện? Bạn kể Lomi nghe thử.",
 ];
 function eventReply(ev: Ev, n: string, text: string): HeartReply {
   const act = activityOf(n);
