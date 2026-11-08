@@ -922,7 +922,7 @@ export function comfortReply(text: string, prev: string | undefined, listen: boo
   const line = pick(`comfort:${key}`, pool.length ? pool : COMFORT_BY[key]);
   const anchor = ds.length
     ? `${capF(ds.join(", rồi "))} — ${pick("comfort:w", ["chừng đó dồn lên một người thì mệt và tủi thân lắm.", "nghe thôi Lomi đã thấy nặng lòng thay bạn rồi.", "ai ở vị trí đó cũng sẽ thấy chông chênh thôi."])}`
-    : th && !GENERIC.has(th.id)
+    : th
       ? pick(`${th.id}:feel`, th.feel)
       : pick("comfort:a0", ["Lại đây Lomi ngồi cạnh bạn nè 💚", "Ừ, để Lomi ở đây với bạn một chút nha 💚"]);
   const close = ds.length || (th && !GENERIC.has(th.id))
@@ -1226,9 +1226,16 @@ const storyOf = (text: string): string | undefined => {
   return t.length > 90 ? t.slice(0, 88).trim() + "…" : t;
 };
 const capF = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+// 08/11: "a chán quá" trần (không nói là rảnh / không có gì làm) có thể là chán vì đang có chuyện — hỏi thăm trước,
+//   không bày trò Tarot / Quẹt / tìm quán. Rảnh thật ("rảnh quá", "không có gì làm") thì vẫn gợi ý hoạt động như cũ.
+const IDLE_RE = VN(/\b(rảnh|ran|không có gì làm|ko có gì làm|chẳng có gì làm|chả có gì làm|không biết làm gì|boring|ở nhà hoài|nằm nhà)\b/);
+const BORED_FEEL = [
+  "Chán hả bạn 🥺 Hôm nay có chuyện gì làm bạn thấy vậy không, hay tự nhiên thấy mọi thứ nhạt nhẽo? Kể Lomi nghe nha.",
+  "Ừm, chán thật ha 😶 Chán kiểu rảnh quá không biết làm gì, hay chán vì trong lòng đang có chuyện? Bạn kể Lomi nghe thử.",
+];
 function eventReply(ev: Ev, n: string, text: string): HeartReply {
   const act = activityOf(n);
-  const line = pick(`ev:${ev.id}:r`, ev.react)
+  const line = (ev.id === "bored" && !IDLE_RE.test(` ${n} `) ? pick("ev:bored:feel", BORED_FEEL) : pick(`ev:${ev.id}:r`, ev.react))
     .replace("{act}", act ? `đang ${act} ` : "")
     .replace("{Act}", act ? capF(`đang ${act} `) : "Ra ngoài ");
   // Tóm tắt chuyện bằng lời của Lomi ("đi ăn mà bị mắc mưa") thay vì trích nguyên câu người dùng gõ.
