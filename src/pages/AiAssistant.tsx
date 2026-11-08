@@ -2818,7 +2818,8 @@ export function AiChat({
       const fxFolkWarn = !!fxFolk && (fxFolk.verdict === "myth" || fxFolk.verdict === "danger");
         // 21/10: câu kể nhắc lại chung chung ("Được thưởng hả? Rồi sao nữa…") mà thư viện sự kiện / tâm sự đã có lời đáp riêng
         //   ("hôm nay a được thưởng" → chúc mừng) → nhường cho thư viện đó (lớp tâm sự ở dưới đáp).
-        const fxYield = !!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || PRIORITY_THEMES.includes(heartThemeOf(q) ?? ""));
+        //   (08/11: "công ty sắp phá sản rồi" — chuyện xấu của CHỖ LÀM là chuyện công việc của chính người kể → để thư viện tâm sự đáp, không "Xui ghê ha")
+        const fxYield = !!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || (!heartOn && fx.intent === "frame:third_neg" && heartThemeOf(q) === "work") || PRIORITY_THEMES.includes(heartThemeOf(q) ?? ""));
         if (fxYield) {
           /* để lớp tâm sự / sự kiện bên dưới trả lời */
         } else if (fx?.redirect) {

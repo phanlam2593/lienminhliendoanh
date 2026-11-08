@@ -464,7 +464,7 @@ const THEMES: Theme[] = [
       //   (08/11: lúc người dùng mới KỂ thì đồng cảm trước — các bước tìm việc + mục Quẹt → Công việc chỉ đưa khi họ xin lời khuyên, xem adviceHint)
       [VN(/\b(thất nghiệp|mất việc|bị đuổi việc|bị sa thải|bị cho nghỉ|chưa có việc|chưa xin được việc|tìm việc mãi|tìm việc hoài|kiếm việc mãi|kiếm việc hoài|không xin được việc|(không|chưa|chẳng|chả) (kiếm|tìm|xin) (được )?(việc|việc làm|công việc)|gửi (cv|hồ sơ)( \S+){0,5} (không|chẳng|chưa) (ai|nơi nào|chỗ nào) (gọi|liên hệ|trả lời|hồi âm))\b/), "Mất việc rồi phải chờ đợi thì vừa lo tiền vừa dễ tự trách, Lomi hiểu 😔 Khoảng trống này không nói lên giá trị của bạn đâu — có những lúc thị trường việc làm chậm lại thôi.\n\nBạn đang tìm việc trong ngành gì?"],
 [VN(/\b(nghỉ việc|bỏ việc|xin nghỉ|nghỉ làm)\b/), "Nếu đang tính nghỉ việc thì đừng quyết lúc đang nóng giận nha. Thử viết ra: điều gì không chịu nổi, điều gì còn giữ bạn lại; chuẩn bị khoản dự phòng vài tháng và tìm chỗ mới trước khi nghỉ thì an toàn hơn nhiều."], [VN(/\b(sếp|quản lý)\b/), "Chuyện với sếp là áp lực lớn nhất ở chỗ làm luôn 😣 Nếu bị la nhiều, thử tách riêng: phần nào là góp ý đúng để sửa, phần nào chỉ là cảm xúc của họ. Bị xúc phạm lặp lại thì bạn có quyền nói rõ hoặc báo lên cấp cao hơn."]],
-    re: VN(/\b((mệt|stress|áp lực|căng thẳng|đuối|kiệt sức) (là )?vì (công việc|việc làm|sếp|chỗ làm)|công việc (\S+ )?(không thuận lợi|không suôn sẻ|trục trặc|gặp khó|khó khăn|bế tắc|không ổn|tệ quá|không như ý|đi xuống|lận đận)|việc làm (không thuận lợi|khó khăn|lận đận)|áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức|tìm việc mãi|tìm việc hoài|kiếm việc mãi|kiếm việc hoài|(không|chưa|chẳng|chả) (kiếm|tìm|xin) (được )?(việc|việc làm|công việc))\b/),
+    re: VN(/\b((mệt|stress|áp lực|căng thẳng|đuối|kiệt sức) (là )?vì (công việc|việc làm|sếp|chỗ làm)|công việc (\S+ )?(không thuận lợi|không suôn sẻ|trục trặc|gặp khó|khó khăn|bế tắc|không ổn|tệ quá|không như ý|đi xuống|lận đận)|việc làm (không thuận lợi|khó khăn|lận đận)|áp lực công việc|công việc áp lực|sếp|đồng nghiệp|bị đuổi việc|bị sa thải|mất việc|thất nghiệp|nghỉ việc|chán việc|chán đi làm|ghét công việc|bị chèn ép|bị mắng ở công ty|quá tải công việc|burnout|kiệt sức|tìm việc mãi|tìm việc hoài|kiếm việc mãi|kiếm việc hoài|(không|chưa|chẳng|chả) (kiếm|tìm|xin) (được )?(việc|việc làm|công việc)|(công ty|chỗ làm|cơ quan|xưởng)( \S+){0,2} (sắp |có thể |có khi |chuẩn bị |đang |bị )?(phá sản|đóng cửa|giải thể|cắt giảm|nợ lương|chậm lương))\b/),
     adviceHint: [
       [VN(/\b(thất nghiệp|mất việc|bị đuổi việc|bị sa thải|bị cho nghỉ|chưa có việc|tìm việc|kiếm việc|xin việc|xin được việc)\b/), "Thử chia nhỏ cho đỡ nặng: mỗi ngày làm một việc nhỏ cho chuyện tìm việc (sửa CV, gửi hai ba chỗ, nhắn một người quen trong ngành), còn lại giữ nhịp ăn ngủ và ra ngoài một chút để tinh thần không xuống. Trong app cũng có mục Quẹt → Công việc (/quet) để đăng nhu cầu tìm việc nha."],
     ],
@@ -1285,7 +1285,7 @@ function otherComfort(text: string, n: string): HeartReply | null {
     const after = s.slice(s.search(VN(/\b(an ủi|động viên|dỗ|vỗ về)\b/)));
     const wm = after.match(OTHER_WHO);
     const who0 = wm ? (WHO_TEXT[wm[1]] ?? wm[1]) : "người ấy";
-    const who = who0 === "bạn" ? "bạn của bạn" : who0;
+    const who = who0 === "bạn" ? "người bạn đó" : who0;
     return {
       text: `Muốn an ủi ${who} lúc đang buồn thì nhiều khi ở bên còn quan trọng hơn nói hay nè 💚\n• Hỏi nhẹ trước: “Muốn mình chỉ nghe thôi, hay muốn mình góp ý?” — rồi làm đúng điều ${who} cần\n• Nghe trọn câu chuyện, đừng vội sửa hay phân tích đúng sai\n• Gọi tên cảm xúc (“chuyện đó buồn thật ha”) thay vì “có gì đâu mà buồn”\n• Một hành động nhỏ: ly nước ấm, món ${who} thích, ngồi cạnh một lúc\n\n${capF(who)} đang buồn vì chuyện gì vậy? Biết chuyện thì Lomi gợi ý câu nói sát hơn.`,
       quick: [],
@@ -1295,7 +1295,7 @@ function otherComfort(text: string, n: string): HeartReply | null {
   const om = text.normalize("NFC").match(OTHER_LEAD);
   if (om) {
     const w = om[1].toLowerCase();
-    const who = w === "bạn" || w === "đứa bạn" ? "bạn của bạn" : w === "bạn thân" ? "bạn thân của bạn" : w;
+    const who = w === "bạn" || w === "đứa bạn" ? "người bạn đó" : w === "bạn thân" ? "người bạn thân đó" : w;
     const love = /thất tình|chia tay|đá|bỏ/iu.test(om[0]) || VN(/\b(thất tình|chia tay|bồ|người yêu|ny)\b/).test(s);
     return {
       text: love
@@ -1600,7 +1600,8 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   //   (21/10: chỉ ý khớp ĐẦU TIÊN — ý cụ thể vừa nói rồi thì không rơi xuống ý chung hơn)
   const hintFirst = listen ? undefined : th?.hint?.find(([re]) => re.test(` ${n} `));
   const hintHit = hintFirst && !saidR(hintFirst[1]) ? hintFirst : undefined;
-  if (hintHit && !adviceAsked) return { text: `${hintHit[1]}${/\?\s*$/.test(lastText.trim()) ? "" : `\n\n${pickAsk(th!, saidR) ?? ""}`}`.trim(), quick: [], theme: th!.id, listen };
+  //   (08/11: ý riêng đã kết bằng câu hỏi thì không hỏi thêm câu thứ hai)
+  if (hintHit && !adviceAsked) return { text: `${hintHit[1]}${/\?\s*$/.test(lastText.trim()) || /\?\s*$/.test(hintHit[1]) ? "" : `\n\n${pickAsk(th!, saidR) ?? ""}`}`.trim(), quick: [], theme: th!.id, listen };
   //   (lời khuyên xét cả điều vừa kể ở 1–2 lượt trước: "ảnh có người yêu rồi" → "e nên làm sao" phải đáp đúng hoàn cảnh đó.)
   if (adviceAsked && th) return themeReply(th, `${n} ${(ctx.details ?? []).slice(-3).map((d) => normalizeVi(d)).join(" ")}`.trim(), true, undefined, saidR);
   // "a không biết nói sao", "chẳng biết phải làm thế nào" — bí, đang cần gợi ý (không phải câu hỏi kiến thức) → đưa lời khuyên của đúng chuyện đang nói.
