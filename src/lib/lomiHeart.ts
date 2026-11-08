@@ -891,9 +891,9 @@ const JOBLESS_RE = VN(/\b(thất nghiệp|mất việc|đuổi việc|sa thải|
 const COMFORT_BY: Record<string, string[]> = {
   jobless: [
     "Nhưng đừng vì giai đoạn này mà nghĩ mình kém cỏi nha. Chưa tìm được công việc phù hợp không có nghĩa là bạn không có giá trị.",
-    "Chuyện việc làm chưa tới không nói lên con người bạn đâu. Nhiều người giỏi cũng từng phải chờ như vậy, chỉ là ít ai kể ra thôi.",
+    "Chuyện việc làm chưa tới không nói lên giá trị của bạn đâu. Nhiều người giỏi cũng từng phải chờ như vậy, chỉ là ít ai kể ra thôi.",
   ],
-  work: ["Công việc chỉ là một phần của bạn thôi, không phải thước đo cả con người bạn.", "Bạn đã gồng với chuyện công việc lâu rồi đó — mệt là đương nhiên, không phải vì bạn yếu."],
+  work: ["Công việc chỉ là một phần cuộc sống của bạn thôi, không phải thước đo giá trị của bạn.", "Bạn đã gồng với chuyện công việc lâu rồi đó — mệt là đương nhiên, không phải vì bạn yếu."],
   selfworth: ["Những câu khắt khe mình tự nói lúc mệt thường không công bằng với mình chút nào. Bạn đáng được đối xử dịu dàng hơn — kể cả bởi chính bạn."],
   tired: ["Mệt tới vậy là vì bạn đã cố lâu rồi đó. Nghỉ một chút không phải là bỏ cuộc."],
   lonely: ["Thấy một mình không có nghĩa là bạn không đáng được quan tâm. Lúc này ít nhất có Lomi ngồi đây nghe bạn nè."],
@@ -910,19 +910,22 @@ const COMFORT_BY: Record<string, string[]> = {
  * Lời AN ỦI: công nhận cảm xúc + nhắc lại đúng hoàn cảnh đã kể + một câu giữ giá trị bản thân + "không cần gồng, Lomi ở đây".
  * Không danh sách giải pháp, không mời tính năng app. details = các điều người dùng đã kể trong mạch này (đã nhắc lại theo xưng hô).
  */
-export function comfortReply(text: string, prev: string | undefined, listen: boolean, details: string[] = [], said: (x: string) => boolean = () => false): HeartReply {
+export function comfortReply(text: string, prev: string | undefined, listen: boolean, details: string[] = [], said: (x: string) => boolean = () => false, context = ""): HeartReply {
   const ds = details.filter((d, i) => d && details.indexOf(d) === i && !comfortAsk(d) && !LISTEN_RE.test(` ${normalizeVi(d)} `) && !DUNNO_RE.test(` ${normalizeVi(d)} `)).slice(-2);
   const n = normStrict(text, HEART);
   const known = prev && prev !== "open" && !prev.startsWith("ev:") ? byId(prev) : undefined;
   const fromStory = ds.length ? themeOf(normStrict(ds.join(" "), HEART)) : undefined;
   const th = known ?? fromStory ?? themeOf(n);
-  const all = ` ${normalizeVi([...ds, text].join(" "))} `;
+  //   (context = câu chuyện đã lưu + lời Lomi vừa đáp — "a thất nghiệp rồi" quá ngắn để lưu làm chi tiết, nhưng lời đáp trước đã nói về tìm việc)
+  const all = ` ${normalizeVi([...ds, text, context].join(" "))} `;
   const key = th?.id === "work" && JOBLESS_RE.test(all) ? "jobless" : th && COMFORT_BY[th.id] ? th.id : "any";
   const pool = COMFORT_BY[key].filter((x) => !said(x));
   const line = pick(`comfort:${key}`, pool.length ? pool : COMFORT_BY[key]);
   const anchor = ds.length
     ? `${capF(ds.join(", rồi "))} — ${pick("comfort:w", ["chừng đó dồn lên một người thì mệt và tủi thân lắm.", "nghe thôi Lomi đã thấy nặng lòng thay bạn rồi.", "ai ở vị trí đó cũng sẽ thấy chông chênh thôi."])}`
-    : th
+    : key === "jobless"
+      ? "Thất nghiệp mà cứ phải chờ đợi thì vừa lo vừa tủi, Lomi hiểu mà 🫂"
+      : th
       ? pick(`${th.id}:feel`, th.feel)
       : pick("comfort:a0", ["Lại đây Lomi ngồi cạnh bạn nè 💚", "Ừ, để Lomi ở đây với bạn một chút nha 💚"]);
   const close = ds.length || (th && !GENERIC.has(th.id))
@@ -948,13 +951,6 @@ export function leaveHeart(text: string): "explicit" | "learn" | "app" | "calc" 
   if (SWITCH_CALC.test(n)) return "calc";
   if (SWITCH_HEALTH.test(n)) return "health";
   return null;
-}
-/** "Thôi quay lại chuyện tìm việc lúc nãy đi" — người dùng chủ động quay về mạch tâm sự cũ. */
-export const RESUME_RE = VN(/\b((quay lại|quay về|nói tiếp|kể tiếp|tiếp tục)( \S+){0,1} (chuyện|vụ|cái|việc)( \S+){0,4} (lúc nãy|hồi nãy|ban nãy|khi nãy|vừa nãy|lúc trước|hồi trước)|(quay lại|quay về) (chuyện|vụ) (cũ|đó|kia|lúc nãy|hồi nãy))\b/);
-export function heartResume(theme: string, details: string[]): HeartReply {
-  const ds = details.filter((d, i) => d && details.indexOf(d) === i).slice(-2);
-  const lead = ds.length ? `Ừ, mình quay lại chuyện đó nha 💚 Lúc nãy bạn kể ${ds.join(", rồi ")}.` : "Ừ, mình quay lại chuyện lúc nãy nha 💚";
-  return { text: `${lead} Giờ bạn đang thấy sao rồi — muốn kể tiếp, hay muốn Lomi cùng nghĩ cách gỡ?`, quick: [], theme };
 }
 // "chẳng muốn nói với ai", "không muốn gặp ai" — đang thu mình lại.
 const WITHDRAW_RE = VN(/\b(không|ko|chẳng|chả|chưa) (muốn|thiết|buồn|dám|còn muốn) (nói|kể|gặp|tâm sự|nói chuyện|tiếp xúc|chia sẻ)( \S+){0,2} (với )?ai\b/);
@@ -1006,6 +1002,8 @@ const FAM: Record<string, Fam> = {
   fight: "conflict", boss: "conflict", toxic: "conflict", gossip: "conflict", bullied: "conflict", inlaw: "conflict", parentsban: "conflict", lies: "conflict",
   anxiety: "worry", caregiver: "worry", panic: "worry", suspect: "worry",
   marriage: "conflict", jealous: "conflict",
+  // (08/11: chuyện công việc / thất nghiệp kể thêm chi tiết — "gửi CV mà không ai gọi" — đáp đúng tông thay vì "…hả. Lomi hiểu.")
+  work: "sad",
   sad: "sad", lonely: "sad", grief: "sad", breakup: "sad", ex: "sad", unrequited: "sad", homesick: "sad", cheat: "sad", friends: "sad", family: "sad", selfworth: "sad", depress: "sad",
 };
 const REACT: Record<Fam, string[]> = {
@@ -1344,7 +1342,7 @@ export function heartContinue(text: string, prev: string, listen: boolean, depth
   // 08/11: xin được AN ỦI (kể cả "không cần lời khuyên, chỉ muốn được an ủi") → an ủi bám đúng chuyện đã kể, không khuyên, không mời tính năng.
   if (comfortAsk(text) && !ctx.third) {
     const saidC = (x: string) => (ctx.recent ?? []).some((r) => r.includes(x.slice(0, 40)) || (!!ctx.say && r.includes(ctx.say(x).slice(0, 40))));
-    return comfortReply(text, prev, listen, ctx.details ?? [], saidC);
+    return comfortReply(text, prev, listen, ctx.details ?? [], saidC, `${story} ${lastText}`);
   }
   if (text.trim() === LISTEN_ONLY || LISTEN_RE.test(` ${n} `))
     return {
