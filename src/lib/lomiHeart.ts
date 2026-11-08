@@ -872,6 +872,90 @@ function stuckWithStory(details: string[], cur: Theme | undefined, prev: string,
       : "Mình gỡ từng phần một nha. Phần nào trong chuyện đó làm bạn lo nhất lúc này?";
   return { text: `${lead} ${sum}\n\n${ask}`, quick: chipsFor(cur), theme: prev, listen };
 }
+// 08/11 — XIN ĐƯỢC AN ỦI ("an ủi anh đi chứ", "dỗ anh chút", "nói gì cho anh đỡ buồn", "cần chút động viên"). Đây là một ý riêng:
+//   khác CHỈ MUỐN ĐƯỢC NGHE (LISTEN_RE), khác XIN LỜI KHUYÊN (asksAdvice) và khác CÙNG GỠ CÁCH LÀM (stuckWithStory) — trước đây
+//   câu này bị đáp "chưa bắt chắc ý", "…hả. Em hiểu" hoặc "không rành lắm, gợi ý vài điều nha".
+const COMFORT_RE = VN(/\b((an ủi|vỗ về|động viên)( (anh|a|em|e|mình|tui|tôi|tớ|chị|c|t|tao))?( (đi|với|chút|một chút|1 chút|xíu|một xíu|tí|một tí|nha|nhé|chứ|được không|coi|cái|giùm|dùm|nào))+|(cần|muốn) (được )?((một |1 )?(chút|xíu|tí) )?(được )?(an ủi|động viên|vỗ về|dỗ dành)|nói (gì|cái gì|câu gì|vài câu|mấy câu|gì đó)( \S+){0,3} (đỡ buồn|bớt buồn|vui lên|vui hơn|nhẹ lòng|dễ nghe|dễ chịu|ấm lòng)|cho (anh |a |em |e |mình |tui |tôi |chị |c )?((một |1 )?(chút|xíu|tí) )?động lực)\b/);
+//   "dỗ" bỏ dấu trùng "do" ("do anh đi trễ") → chỉ nhận khi câu gõ có dấu.
+const COAX_RE = /(^|[^\p{L}])dỗ( dành)?( (anh|em|mình|tui|tôi|tớ|chị))?( (đi|với|chút|một chút|xíu|tí|nha|nhé|chứ|coi|nào))+($|[^\p{L}])/u;
+//   (an ủi NGƯỜI KHÁC — "cách an ủi bạn gái đang buồn" — là hỏi cách làm; "không cần an ủi, cần lời khuyên" là xin khuyên)
+const COMFORT_NOT = VN(/\b((không|chẳng|chả|đừng|khỏi) (cần |muốn )?(được )?(an ủi|động viên|dỗ dành|vỗ về)|(cách|làm sao|làm thế nào|nên|sao để|thế nào để|phải|biết) (để )?(an ủi|động viên|dỗ|vỗ về)|(an ủi|động viên|dỗ|dỗ dành|vỗ về) (bạn gái|bạn trai|người yêu|ny|vợ|chồng|con|mẹ|má|ba|bố|cha|bạn|bạn thân|người ta|ảnh|chỉ|ổng|bả|nó|cô ấy|anh ấy|em ấy|chị ấy|họ|crush))\b/);
+/** Người dùng đang xin được an ủi / động viên CHO CHÍNH MÌNH. */
+export function comfortAsk(text: string): boolean {
+  const n = ` ${normStrict(text, HEART)} `;
+  if (COMFORT_NOT.test(n)) return false;
+  return COMFORT_RE.test(n) || COAX_RE.test(text.normalize("NFC").toLowerCase());
+}
+const JOBLESS_RE = VN(/\b(thất nghiệp|mất việc|đuổi việc|sa thải|tìm việc|kiếm việc|xin việc|việc làm|gửi cv|phỏng vấn)\b/);
+// Lời an ủi theo chuyện đang kể — không hứa "rồi sẽ ổn", không kèm lời khuyên.
+const COMFORT_BY: Record<string, string[]> = {
+  jobless: [
+    "Nhưng đừng vì giai đoạn này mà nghĩ mình kém cỏi nha. Chưa tìm được công việc phù hợp không có nghĩa là bạn không có giá trị.",
+    "Chuyện việc làm chưa tới không nói lên con người bạn đâu. Nhiều người giỏi cũng từng phải chờ như vậy, chỉ là ít ai kể ra thôi.",
+  ],
+  work: ["Công việc chỉ là một phần của bạn thôi, không phải thước đo cả con người bạn.", "Bạn đã gồng với chuyện công việc lâu rồi đó — mệt là đương nhiên, không phải vì bạn yếu."],
+  selfworth: ["Những câu khắt khe mình tự nói lúc mệt thường không công bằng với mình chút nào. Bạn đáng được đối xử dịu dàng hơn — kể cả bởi chính bạn."],
+  tired: ["Mệt tới vậy là vì bạn đã cố lâu rồi đó. Nghỉ một chút không phải là bỏ cuộc."],
+  lonely: ["Thấy một mình không có nghĩa là bạn không đáng được quan tâm. Lúc này ít nhất có Lomi ngồi đây nghe bạn nè."],
+  breakup: ["Đau như vậy là vì bạn đã thương thật lòng. Nó không nói lên là bạn không đủ tốt."],
+  family: ["Bị chính người nhà làm buồn thì đau gấp đôi, vì đó là những người mình mong được hiểu nhất."],
+  anxiety: ["Lo nhiều như vậy là vì chuyện đó quan trọng với bạn. Mình chưa cần giải quyết hết ngay hôm nay đâu."],
+  study: ["Một kỳ thi hay một con số không đo được hết bạn đâu."],
+  any: [
+    "Cảm giác của bạn là thật và đáng được lắng nghe — bạn không làm quá đâu.",
+    "Buồn như vậy không có nghĩa là bạn yếu đuối, chỉ là lòng bạn đang mệt và cần được nghỉ một chút.",
+  ],
+};
+/**
+ * Lời AN ỦI: công nhận cảm xúc + nhắc lại đúng hoàn cảnh đã kể + một câu giữ giá trị bản thân + "không cần gồng, Lomi ở đây".
+ * Không danh sách giải pháp, không mời tính năng app. details = các điều người dùng đã kể trong mạch này (đã nhắc lại theo xưng hô).
+ */
+export function comfortReply(text: string, prev: string | undefined, listen: boolean, details: string[] = [], said: (x: string) => boolean = () => false): HeartReply {
+  const ds = details.filter((d, i) => d && details.indexOf(d) === i && !comfortAsk(d) && !LISTEN_RE.test(` ${normalizeVi(d)} `) && !DUNNO_RE.test(` ${normalizeVi(d)} `)).slice(-2);
+  const n = normStrict(text, HEART);
+  const known = prev && prev !== "open" && !prev.startsWith("ev:") ? byId(prev) : undefined;
+  const fromStory = ds.length ? themeOf(normStrict(ds.join(" "), HEART)) : undefined;
+  const th = known ?? fromStory ?? themeOf(n);
+  const all = ` ${normalizeVi([...ds, text].join(" "))} `;
+  const key = th?.id === "work" && JOBLESS_RE.test(all) ? "jobless" : th && COMFORT_BY[th.id] ? th.id : "any";
+  const pool = COMFORT_BY[key].filter((x) => !said(x));
+  const line = pick(`comfort:${key}`, pool.length ? pool : COMFORT_BY[key]);
+  const anchor = ds.length
+    ? `${capF(ds.join(", rồi "))} — ${pick("comfort:w", ["chừng đó dồn lên một người thì mệt và tủi thân lắm.", "nghe thôi Lomi đã thấy nặng lòng thay bạn rồi.", "ai ở vị trí đó cũng sẽ thấy chông chênh thôi."])}`
+    : th && !GENERIC.has(th.id)
+      ? pick(`${th.id}:feel`, th.feel)
+      : pick("comfort:a0", ["Lại đây Lomi ngồi cạnh bạn nè 💚", "Ừ, để Lomi ở đây với bạn một chút nha 💚"]);
+  const close = ds.length || (th && !GENERIC.has(th.id))
+    ? pick("comfort:c", ["Hôm nay bạn chưa cần phải tỏ ra mạnh mẽ đâu. Lomi ở đây nghe bạn kể mà 💚", "Bạn không cần gồng với Lomi đâu — muốn kể tiếp hay chỉ muốn ngồi yên một chút cũng được 💚"])
+    : "Nếu muốn, bạn kể Lomi nghe chuyện gì đang làm bạn nặng lòng nha — Lomi nghe, không phán xét đâu.";
+  const theme = known ? prev! : fromStory && !GENERIC.has(fromStory.id) ? fromStory.id : th?.id ?? (prev && prev !== "open" ? prev : "sad");
+  return { text: `${anchor}\n\n${line} ${close}`, quick: [], theme, listen: listen || LISTEN_RE.test(` ${n} `) };
+}
+/** Nhận diện ý rõ ràng là CHỦ ĐỀ MỚI khi đang tâm sự (để mạch tâm sự không giữ chặt mọi tin nhắn kế tiếp). */
+const SWITCH_EXPLICIT = VN(/\b(đổi chủ đề|đổi đề tài|đổi chuyện|nói chuyện khác|hỏi chuyện khác|nói cái khác|hỏi cái khác|chuyện khác đi|không nói chuyện này nữa|thôi không nói chuyện này)\b/);
+const SWITCH_LEARN = VN(/\b(học|dạy|chỉ|tập|luyện)( \S+){0,4} (tiếng anh|tiếng nhật|tiếng hàn|tiếng trung|tiếng pháp|tiếng đức|ngoại ngữ|english)\b/);
+const SWITCH_APP = VN(/\b(cách (dùng|sử dụng|xài)|hướng dẫn( (dùng|sử dụng|xài))?)( \S+){0,2} (app|ứng dụng|quẹt|cộng đồng|ưu đãi|tin nhắn|đưa đón|hồ sơ)\b/);
+const SWITCH_CALC = VN(/\b(giúp|giùm|dùm|hộ|thử|coi)( \S+){0,2} tính( \S+){0,3} (tiền lương|lương|tiền|lãi|phần trăm|khoản)|tính (giúp|giùm|dùm|hộ|thử|coi)( \S+){0,3} (tiền lương|lương|tiền|lãi|phần trăm|khoản)\b/);
+const SWITCH_HEALTH = VN(/\b(hỏi|tư vấn)( \S+){0,2} (chuyện |về |vấn đề )?(sức khỏe|sức khoẻ|bệnh|thuốc|vitamin)\b/);
+//   (câu có cảm xúc — "a buồn vì học tiếng anh mãi không giỏi" — vẫn là kể chuyện, không phải đổi chủ đề)
+const SWITCH_FEEL = VN(/\b(buồn|chán|nản|áp lực|stress|lo|sợ|tủi|mệt|rớt|trượt|không giỏi|dốt|kém|tự ti|xấu hổ)\b/);
+export function leaveHeart(text: string): "explicit" | "learn" | "app" | "calc" | "health" | null {
+  const n = ` ${normStrict(text, HEART)} `;
+  if (SWITCH_EXPLICIT.test(n)) return "explicit";
+  if (SWITCH_FEEL.test(n)) return null;
+  if (SWITCH_LEARN.test(n)) return "learn";
+  if (SWITCH_APP.test(n)) return "app";
+  if (SWITCH_CALC.test(n)) return "calc";
+  if (SWITCH_HEALTH.test(n)) return "health";
+  return null;
+}
+/** "Thôi quay lại chuyện tìm việc lúc nãy đi" — người dùng chủ động quay về mạch tâm sự cũ. */
+export const RESUME_RE = VN(/\b((quay lại|quay về|nói tiếp|kể tiếp|tiếp tục)( \S+){0,1} (chuyện|vụ|cái|việc)( \S+){0,4} (lúc nãy|hồi nãy|ban nãy|khi nãy|vừa nãy|lúc trước|hồi trước)|(quay lại|quay về) (chuyện|vụ) (cũ|đó|kia|lúc nãy|hồi nãy))\b/);
+export function heartResume(theme: string, details: string[]): HeartReply {
+  const ds = details.filter((d, i) => d && details.indexOf(d) === i).slice(-2);
+  const lead = ds.length ? `Ừ, mình quay lại chuyện đó nha 💚 Lúc nãy bạn kể ${ds.join(", rồi ")}.` : "Ừ, mình quay lại chuyện lúc nãy nha 💚";
+  return { text: `${lead} Giờ bạn đang thấy sao rồi — muốn kể tiếp, hay muốn Lomi cùng nghĩ cách gỡ?`, quick: [], theme };
+}
 // "chẳng muốn nói với ai", "không muốn gặp ai" — đang thu mình lại.
 const WITHDRAW_RE = VN(/\b(không|ko|chẳng|chả|chưa) (muốn|thiết|buồn|dám|còn muốn) (nói|kể|gặp|tâm sự|nói chuyện|tiếp xúc|chia sẻ)( \S+){0,2} (với )?ai\b/);
 const SPAN_RE = VN(/\b(\d+|một|hai|ba|bốn|năm|mấy|vài|nhiều|cả|nửa)\s*(ngày|hôm|bữa|tuần|tháng|năm)\b/);
