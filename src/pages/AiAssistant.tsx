@@ -54,7 +54,7 @@ import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
-import { PRIORITY_THEMES, GENERIC, RESUME_RE, comfortAsk, heartAdviceHint, heartContinue, heartResume, leaveHeart, heartHintMatches, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
+import { PRIORITY_THEMES, GENERIC, comfortAsk, heartAdviceHint, heartContinue, leaveHeart, heartHintMatches, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
@@ -3390,26 +3390,13 @@ export function AiChat({
       //    20/10 (audit): câu HỎI về app rõ ràng ("thôi, 1 ngày quẹt được mấy lần") là đổi chủ đề — thoát mạch tâm sự (trước đây chỉ nhận
       //    câu có "?" / "bao nhiêu"…, nên Lomi đáp "chưa bắt chắc ý anh").
       //    08/11: ý rõ ràng là CHỦ ĐỀ MỚI (đổi chủ đề, học tiếng Anh, cách dùng app, nhờ tính tiền, hỏi sức khoẻ) → thoát mạch tâm sự,
-      //    để lớp đúng chủ đề đáp; lịch sử + trạng thái tâm sự của các tin cũ vẫn còn, "quay lại chuyện lúc nãy" là nối lại được.
-      const leave = heartOn && !en ? leaveHeart(q) : null;
+      //    để lớp đúng chủ đề đáp; lịch sử + trạng thái tâm sự của các tin cũ vẫn còn, "quay lại chuyện lúc nãy" (lớp quay lại chủ đề cũ) vẫn nối lại được.
+      const leaveK = en ? null : leaveHeart(q);
+      const leave = heartOn ? leaveK : null;
       if (!en && !gateSkip) {
-        const addrR = loadMem(user.id).addr;
-        // Quay lại mạch tâm sự cũ: tìm tin Lomi gần nhất còn mang chủ đề tâm sự (khác chủ đề vừa rời đi, nếu đang ở một mạch khác).
-        if (RESUME_RE.test(` ${normalizeVi(q)} `)) {
-          const named = heartThemeOf(q);
-          const cands = msgs.slice(-24).filter((m) => m.role === "assistant" && m.heart && m.heart !== "open" && !m.heart.startsWith("ev:"));
-          const back = (named && [...cands].reverse().find((m) => m.heart === named)) || [...cands].reverse().find((m) => !lastA?.heart || m.heart !== lastA.heart) || cands[cands.length - 1];
-          if (back?.heart) {
-            const det: string[] = [];
-            msgs.forEach((m, i) => {
-              if (m.role === "assistant" && m.heart === back.heart && msgs[i - 1]?.role === "user") {
-                const mm = mirrorText(parseVi(msgs[i - 1].raw ?? msgs[i - 1].content, { addr: addrR }), addrR, 9);
-                if (mm) det.push(mm);
-              }
-            });
-            return localReply(q, heartMsg(heartResume(back.heart, det), (back.heartDepth ?? 1) + 1, back));
-          }
-        }
+        // Nhờ tính lương / tiền mà chưa đưa con số → nói thật Lomi chỉ tính được phép tính đơn giản (lib/lomiExtras.mathReply), chỉ cách gõ.
+        if (leaveK === "calc" && !/\d/.test(q))
+          return localReply(q, { role: "assistant", content: "Lomi tính được phép tính đơn giản thôi nha 🧮 Bạn gõ thẳng từng phép, ví dụ “26 x 350000” (số ngày công × lương một ngày) hay “8500000 - 500000” (trừ một khoản), Lomi ra kết quả liền.\n\nCòn lương thực nhận sau thuế, bảo hiểm thì bạn xem bảng lương hoặc hỏi phòng nhân sự cho chính xác nha.", local: true });
         if (leave === "explicit")
           return localReply(q, { role: "assistant", content: "Okie, mình đổi chuyện nha 😊 Bạn muốn nói về gì nè? Lúc nào muốn quay lại chuyện lúc nãy thì cứ nói Lomi.", local: true });
         const enMini = englishMiniReply(q);
