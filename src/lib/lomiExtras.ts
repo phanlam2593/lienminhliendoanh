@@ -252,3 +252,18 @@ export function healthFollowReply(q: string, last?: string): string | null {
     return "Lomi **không gợi ý tên thuốc ngủ** được đâu — thuốc ngủ cần bác sĩ khám rồi mới kê, vì nhiều loại dễ gây lệ thuộc, buồn ngủ ngày hôm sau, té ngã (nhất là người lớn tuổi) và tương tác với thuốc khác.\n• Mất ngủ kéo dài vài tuần → đi khám (Nội thần kinh / Tâm thần / phòng khám giấc ngủ); bác sĩ thường thử chỉnh thói quen ngủ và liệu pháp nhận thức hành vi cho mất ngủ trước, thuốc chỉ dùng ngắn hạn khi cần\n• Đừng tự mua thuốc ngủ hay dùng thuốc của người khác\n\nBạn mất ngủ kiểu khó vào giấc, hay hay tỉnh giữa đêm?";
   return null;
 }
+
+// ── 08/11: "học vài câu tiếng Anh", "học tiếng Anh với anh một chút" ──
+//   Lomi KHÔNG có chương trình dạy tiếng Anh — nói thật điều đó, rồi đưa một bài rất ngắn soạn sẵn (3 câu giao tiếp) để học ngay.
+const EN_MINI = VN(/\b((học|dạy|chỉ|tập)( \S+){0,3} (vài|mấy|một số|một vài|ít) (câu|từ)( \S+){0,2} tiếng anh|(học|tập|luyện|nói) tiếng anh (với|cùng) (anh|a|em|e|mình|tui|tôi|chị|c|tớ)|dạy (anh|a|em|e|mình|tui|tôi|chị|c|tớ)( \S+){0,2} tiếng anh)\b/);
+const EN_SETS = [
+  ["**How's your day going?** — Hôm nay của bạn thế nào?", "**I'm feeling a bit tired today.** — Hôm nay mình hơi mệt.", "**Thanks for listening.** — Cảm ơn vì đã lắng nghe."],
+  ["**Could you say that again, please?** — Bạn nói lại giúp mình được không?", "**What do you mean?** — Ý bạn là sao?", "**Let me think for a second.** — Để mình nghĩ một chút."],
+  ["**Nice to meet you.** — Rất vui được gặp bạn.", "**What do you do?** — Bạn làm nghề gì?", "**I'm looking for a job.** — Mình đang tìm việc."],
+];
+let enSet = 0;
+export function englishMiniReply(q: string): string | null {
+  if (!EN_MINI.test(` ${normalizeVi(q)} `)) return null;
+  const set = EN_SETS[enSet++ % EN_SETS.length];
+  return `Lomi chưa có chương trình dạy tiếng Anh bài bản đâu, nhưng mình học nhanh vài câu giao tiếp nha 😊\n\n${set.map((x) => `• ${x}`).join("\n")}\n\nBạn thử gõ lại một câu bằng tiếng Anh xem — sai cũng không sao. Muốn học đều đặn thì nên dùng thêm một ứng dụng học tiếng Anh hoặc một lớp có giáo viên nha.`;
+}
