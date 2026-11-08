@@ -2468,7 +2468,9 @@ export function AiChat({
       // 31/10: "vitamin C có làm mất ngủ không", "cà phê có gây mất ngủ", "magie có giúp ngủ ngon không" → trả lời đúng quan hệ X–Y, không đọc cả thẻ bệnh.
       const cz = en ? null : await causeReply(raw);
       if (cz) return localReply(q, { role: "assistant", content: cz.text, local: true, health: {}, ...(cz.medId ? { med: { id: cz.medId } } : {}) });
-      const l3 = en ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
+      //   (08/11: xin được AN ỦI / động viên cho chính mình — "cần chút động viên", "an ủi anh đi" — để lớp tâm sự đáp bám chuyện đã kể,
+      //    không đưa câu trích dẫn động lực chung)
+      const l3 = en || comfortAsk(raw) ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
       if (l3) return localReply(q, { role: "assistant", content: l3.text, local: true, ...(l3.heart ? { heart: l3.heart, heartDepth: 1 } : {}), ...(l3.health ? { health: hCtx ?? {} } : {}) });
       // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow):
       if (!en) {
@@ -3387,7 +3389,33 @@ export function AiChat({
       //    trả lời sức khoẻ bị đáp "Chuyện này làm anh bận lòng nhiều không?".
       //    20/10 (audit): câu HỎI về app rõ ràng ("thôi, 1 ngày quẹt được mấy lần") là đổi chủ đề — thoát mạch tâm sự (trước đây chỉ nhận
       //    câu có "?" / "bao nhiêu"…, nên Lomi đáp "chưa bắt chắc ý anh").
-      if (heartOn && lastA?.heart && !en && !gateSkip && !wantSearch && !((looksLikeQuestion(q) || isAskLike(q)) && isAppish(q) && matchFaq(q))) {
+      //    08/11: ý rõ ràng là CHỦ ĐỀ MỚI (đổi chủ đề, học tiếng Anh, cách dùng app, nhờ tính tiền, hỏi sức khoẻ) → thoát mạch tâm sự,
+      //    để lớp đúng chủ đề đáp; lịch sử + trạng thái tâm sự của các tin cũ vẫn còn, "quay lại chuyện lúc nãy" là nối lại được.
+      const leave = heartOn && !en ? leaveHeart(q) : null;
+      if (!en && !gateSkip) {
+        const addrR = loadMem(user.id).addr;
+        // Quay lại mạch tâm sự cũ: tìm tin Lomi gần nhất còn mang chủ đề tâm sự (khác chủ đề vừa rời đi, nếu đang ở một mạch khác).
+        if (RESUME_RE.test(` ${normalizeVi(q)} `)) {
+          const named = heartThemeOf(q);
+          const cands = msgs.slice(-24).filter((m) => m.role === "assistant" && m.heart && m.heart !== "open" && !m.heart.startsWith("ev:"));
+          const back = (named && [...cands].reverse().find((m) => m.heart === named)) || [...cands].reverse().find((m) => !lastA?.heart || m.heart !== lastA.heart) || cands[cands.length - 1];
+          if (back?.heart) {
+            const det: string[] = [];
+            msgs.forEach((m, i) => {
+              if (m.role === "assistant" && m.heart === back.heart && msgs[i - 1]?.role === "user") {
+                const mm = mirrorText(parseVi(msgs[i - 1].raw ?? msgs[i - 1].content, { addr: addrR }), addrR, 9);
+                if (mm) det.push(mm);
+              }
+            });
+            return localReply(q, heartMsg(heartResume(back.heart, det), (back.heartDepth ?? 1) + 1, back));
+          }
+        }
+        if (leave === "explicit")
+          return localReply(q, { role: "assistant", content: "Okie, mình đổi chuyện nha 😊 Bạn muốn nói về gì nè? Lúc nào muốn quay lại chuyện lúc nãy thì cứ nói Lomi.", local: true });
+        const enMini = englishMiniReply(q);
+        if (enMini) return localReply(q, { role: "assistant", content: enMini, local: true });
+      }
+      if (heartOn && lastA?.heart && !en && !gateSkip && !wantSearch && !leave && !((looksLikeQuestion(q) || isAskLike(q)) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
         //   (đang kể chuyện cãi nhau mà hỏi "nhắn gì cho vợ giờ" → đã biết hoàn cảnh là vừa cãi nhau: soạn câu nhắn hợp cảnh đó.)
         const relSeed = !lastA.rel && lastA.heart === "fight" && VN(/\b(nhắn|gọi điện|mở lời|liên lạc|viết)\b/).test(normalizeVi(raw)) && relationSubject(q) ? `${relationSubject(q)}|after_fight|fight` : undefined;
