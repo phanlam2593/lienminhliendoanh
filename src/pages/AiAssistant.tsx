@@ -3257,7 +3257,9 @@ export function AiChat({
         // 07/11: đã kể chuyện được vài lượt ("công ty có thể cắt giảm nhân sự" → "nhưng a vẫn thấy áp lực") mà câu này chỉ nói thêm MỘT cảm giác
         //   → đó là một phần của câu chuyện đang kể: để mạch tâm sự đáp bám chuyện đó, không cộng dồn cảm giác cũ thành bảng "thường gặp khi… / nên tránh…".
         //   (tự câu này nêu từ hai cảm giác trở lên thì vẫn phân tích như cũ.)
-        const midStory = heartOn && !inHealth && (lastA?.heartDepth ?? 0) >= 2 && !lastA?.mood?.length;
+        //   (08/11: chuyện CỤ THỂ đang kể — thất nghiệp — mà câu ngắn trỏ lại nó: "nó làm a mất ngủ luôn" → cũng là kể tiếp, ngay từ lượt sau câu mở đầu.)
+        const pointsBack = heartOn && !!lastA?.heart && !GENERIC.has(lastA.heart) && lastA.heart !== "open" && !lastA.heart.startsWith("ev:") && q.split(/\s+/).length <= 10 && VN(/^(nó|chuyện đó|vụ đó|chuyện này|vụ này|cái đó|cái này)\b/).test(normalizeVi(q).trim());
+        const midStory = heartOn && !inHealth && ((lastA?.heartDepth ?? 0) >= 2 || pointsBack) && !lastA?.mood?.length;
         const mind = mind0 && !lastA?.heartListen && (!midStory || !!analyzeMind(q, [])) && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
         const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
@@ -3639,7 +3641,7 @@ export function AiChat({
           ...keepHealth,
         });
       // "vậy a kể triệu chứng nha", "a hỏi chuyện sức khoẻ nha" — mở lời về sức khoẻ: mời kể, mở mạch sức khoẻ.
-      if (!en && !heartOn && q.split(/\s+/).length <= 9 && VN(/\b(kể|nói|hỏi|tư vấn) (\S+ ){0,3}(triệu chứng|sức khoẻ|bệnh tình)\b/).test(normalizeVi(q)))
+      if (!en && (!heartOn || leaveHeart(q) === "health") && q.split(/\s+/).length <= 9 && VN(/\b(kể|nói|hỏi|tư vấn) (\S+ ){0,3}(triệu chứng|sức khoẻ|bệnh tình)\b/).test(normalizeVi(q)))
         return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY["🩺 Sức khoẻ"], local: true, health: hCtx ?? {} });
       // Mẩu chi tiết cho triệu chứng đang kể mà Lomi chưa có dữ liệu riêng → ghi nhận, giữ mạch sức khoẻ (không đáp "chưa được học").
       if (healthDetail && fr1?.act !== "question" && fr1?.act !== "greet" && fr1?.act !== "thanks")
