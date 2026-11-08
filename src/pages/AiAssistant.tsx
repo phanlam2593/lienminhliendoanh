@@ -54,7 +54,7 @@ import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
-import { PRIORITY_THEMES, GENERIC, heartAdviceHint, heartContinue, heartHintMatches, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
+import { PRIORITY_THEMES, GENERIC, comfortAsk, heartAdviceHint, heartContinue, leaveHeart, heartHintMatches, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
@@ -69,7 +69,7 @@ import { v9Reply } from "@/lib/lomiV9";
 import { detectPlace } from "@/lib/lomiPlaces";
 import { therapyContinue, therapyStart, type TherapyState } from "@/lib/lomiTherapy";
 import { englishFallback, englishReply, englishSafety, looksEnglish, viMixFix } from "@/lib/lomiEnglish";
-import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
+import { allergyAteReply, budgetReply, healthFollowReply, drinkDriveReply, fixReply, inflationReply, englishMiniReply, kidFeverFollow, knowledgeReply, mathReply, outOfScopeReply, safetyNowReply, simplerReply, weightReply, whoNeedsCv, edInHistory } from "@/lib/lomiExtras";
 import { DIET_MEDKB, dietName, dietOf, dietReply } from "@/lib/lomiDiet";
 import { FOLK, asksAbout, findFolk, folkById, folkFor, folkReply, herbEffectAsk, herbHintFor, renderFolk, renderFolkForTopic } from "@/lib/lomiFolk";
 import { relationReply, relationSubject } from "@/lib/lomiRelation";
@@ -2468,7 +2468,9 @@ export function AiChat({
       // 31/10: "vitamin C có làm mất ngủ không", "cà phê có gây mất ngủ", "magie có giúp ngủ ngon không" → trả lời đúng quan hệ X–Y, không đọc cả thẻ bệnh.
       const cz = en ? null : await causeReply(raw);
       if (cz) return localReply(q, { role: "assistant", content: cz.text, local: true, health: {}, ...(cz.medId ? { med: { id: cz.medId } } : {}) });
-      const l3 = en ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
+      //   (08/11: xin được AN ỦI / động viên cho chính mình — "cần chút động viên", "an ủi anh đi" — để lớp tâm sự đáp bám chuyện đã kể,
+      //    không đưa câu trích dẫn động lực chung)
+      const l3 = en || comfortAsk(raw) ? null : (list3Reply(raw) ?? list3Reply(q)); // (câu gốc trước — lớp đổi tiếng lóng có thể đã đổi "chill", "toang")
       if (l3) return localReply(q, { role: "assistant", content: l3.text, local: true, ...(l3.heart ? { heart: l3.heart, heartDepth: 1 } : {}), ...(l3.health ? { health: hCtx ?? {} } : {}) });
       // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow):
       if (!en) {
@@ -2816,7 +2818,8 @@ export function AiChat({
       const fxFolkWarn = !!fxFolk && (fxFolk.verdict === "myth" || fxFolk.verdict === "danger");
         // 21/10: câu kể nhắc lại chung chung ("Được thưởng hả? Rồi sao nữa…") mà thư viện sự kiện / tâm sự đã có lời đáp riêng
         //   ("hôm nay a được thưởng" → chúc mừng) → nhường cho thư viện đó (lớp tâm sự ở dưới đáp).
-        const fxYield = !!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || PRIORITY_THEMES.includes(heartThemeOf(q) ?? ""));
+        //   (08/11: "công ty sắp phá sản rồi" — chuyện xấu của CHỖ LÀM là chuyện công việc của chính người kể → để thư viện tâm sự đáp, không "Xui ghê ha")
+        const fxYield = !!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || (!heartOn && fx.intent === "frame:third_neg" && heartThemeOf(q) === "work") || PRIORITY_THEMES.includes(heartThemeOf(q) ?? ""));
         if (fxYield) {
           /* để lớp tâm sự / sự kiện bên dưới trả lời */
         } else if (fx?.redirect) {
@@ -3255,7 +3258,9 @@ export function AiChat({
         // 07/11: đã kể chuyện được vài lượt ("công ty có thể cắt giảm nhân sự" → "nhưng a vẫn thấy áp lực") mà câu này chỉ nói thêm MỘT cảm giác
         //   → đó là một phần của câu chuyện đang kể: để mạch tâm sự đáp bám chuyện đó, không cộng dồn cảm giác cũ thành bảng "thường gặp khi… / nên tránh…".
         //   (tự câu này nêu từ hai cảm giác trở lên thì vẫn phân tích như cũ.)
-        const midStory = heartOn && !inHealth && (lastA?.heartDepth ?? 0) >= 2 && !lastA?.mood?.length;
+        //   (08/11: chuyện CỤ THỂ đang kể — thất nghiệp — mà câu ngắn trỏ lại nó: "nó làm a mất ngủ luôn" → cũng là kể tiếp, ngay từ lượt sau câu mở đầu.)
+        const pointsBack = heartOn && !!lastA?.heart && !GENERIC.has(lastA.heart) && lastA.heart !== "open" && !lastA.heart.startsWith("ev:") && q.split(/\s+/).length <= 10 && VN(/^(nó|chuyện đó|vụ đó|chuyện này|vụ này|cái đó|cái này)\b/).test(normalizeVi(q).trim());
+        const midStory = heartOn && !inHealth && ((lastA?.heartDepth ?? 0) >= 2 || pointsBack) && !lastA?.mood?.length;
         const mind = mind0 && !lastA?.heartListen && (!midStory || !!analyzeMind(q, [])) && (!th || GENERIC.has(th) || PSY_THEMES.has(th) || mind0.mood.length >= 3 || psyTalk) ? mind0 : null;
         // "mệt mỏi, mất ngủ, áp lực quá" / "tim đập nhanh" khi đang kể chuyện lo âu là chuyện tâm lý, không phải bệnh cơ thể.
         const softBody = onlySoftSymptoms(q) || (psyTalk && onlyAnxietyBody(q));
@@ -3387,7 +3392,20 @@ export function AiChat({
       //    trả lời sức khoẻ bị đáp "Chuyện này làm anh bận lòng nhiều không?".
       //    20/10 (audit): câu HỎI về app rõ ràng ("thôi, 1 ngày quẹt được mấy lần") là đổi chủ đề — thoát mạch tâm sự (trước đây chỉ nhận
       //    câu có "?" / "bao nhiêu"…, nên Lomi đáp "chưa bắt chắc ý anh").
-      if (heartOn && lastA?.heart && !en && !gateSkip && !wantSearch && !((looksLikeQuestion(q) || isAskLike(q)) && isAppish(q) && matchFaq(q))) {
+      //    08/11: ý rõ ràng là CHỦ ĐỀ MỚI (đổi chủ đề, học tiếng Anh, cách dùng app, nhờ tính tiền, hỏi sức khoẻ) → thoát mạch tâm sự,
+      //    để lớp đúng chủ đề đáp; lịch sử + trạng thái tâm sự của các tin cũ vẫn còn, "quay lại chuyện lúc nãy" (lớp quay lại chủ đề cũ) vẫn nối lại được.
+      const leaveK = en ? null : leaveHeart(q);
+      const leave = heartOn ? leaveK : null;
+      if (!en && !gateSkip) {
+        // Nhờ tính lương / tiền mà chưa đưa con số → nói thật Lomi chỉ tính được phép tính đơn giản (lib/lomiExtras.mathReply), chỉ cách gõ.
+        if (leaveK === "calc" && !/\d/.test(q))
+          return localReply(q, { role: "assistant", content: "Lomi tính được phép tính đơn giản thôi nha 🧮 Bạn gõ thẳng từng phép, ví dụ “26 x 350000” (số ngày công × lương một ngày) hay “8500000 - 500000” (trừ một khoản), Lomi ra kết quả liền.\n\nCòn lương thực nhận sau thuế, bảo hiểm thì bạn xem bảng lương hoặc hỏi phòng nhân sự cho chính xác nha.", local: true });
+        if (leave === "explicit")
+          return localReply(q, { role: "assistant", content: "Okie, mình đổi chuyện nha 😊 Bạn muốn nói về gì nè? Lúc nào muốn quay lại chuyện lúc nãy thì cứ nói Lomi.", local: true });
+        const enMini = englishMiniReply(q);
+        if (enMini) return localReply(q, { role: "assistant", content: enMini, local: true });
+      }
+      if (heartOn && lastA?.heart && !en && !gateSkip && !wantSearch && !leave && !((looksLikeQuestion(q) || isAskLike(q)) && isAppish(q) && matchFaq(q))) {
         const depth = (lastA.heartDepth ?? 0) + 1;
         //   (đang kể chuyện cãi nhau mà hỏi "nhắn gì cho vợ giờ" → đã biết hoàn cảnh là vừa cãi nhau: soạn câu nhắn hợp cảnh đó.)
         const relSeed = !lastA.rel && lastA.heart === "fight" && VN(/\b(nhắn|gọi điện|mở lời|liên lạc|viết)\b/).test(normalizeVi(raw)) && relationSubject(q) ? `${relationSubject(q)}|after_fight|fight` : undefined;
@@ -3624,7 +3642,7 @@ export function AiChat({
           ...keepHealth,
         });
       // "vậy a kể triệu chứng nha", "a hỏi chuyện sức khoẻ nha" — mở lời về sức khoẻ: mời kể, mở mạch sức khoẻ.
-      if (!en && !heartOn && q.split(/\s+/).length <= 9 && VN(/\b(kể|nói|hỏi|tư vấn) (\S+ ){0,3}(triệu chứng|sức khoẻ|bệnh tình)\b/).test(normalizeVi(q)))
+      if (!en && (!heartOn || leaveHeart(q) === "health") && q.split(/\s+/).length <= 9 && VN(/\b(kể|nói|hỏi|tư vấn) (\S+ ){0,3}(triệu chứng|sức khoẻ|bệnh tình)\b/).test(normalizeVi(q)))
         return localReply(q, { role: "assistant", content: SCOPE_CHIP_REPLY["🩺 Sức khoẻ"], local: true, health: hCtx ?? {} });
       // Mẩu chi tiết cho triệu chứng đang kể mà Lomi chưa có dữ liệu riêng → ghi nhận, giữ mạch sức khoẻ (không đáp "chưa được học").
       if (healthDetail && fr1?.act !== "question" && fr1?.act !== "greet" && fr1?.act !== "thanks")
