@@ -70,7 +70,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "debtfriend",
     howto: true,
-    re: VN(/\b((bạn|bạn thân|người quen|đồng nghiệp|họ hàng)( \S+){0,3} (mượn|vay) (tiền|\d+)( \S+){0,6} (chưa|không|chẳng) (trả|đưa lại)|(mượn|vay) tiền( \S+){0,4} (né|lơ|trốn|không trả|chưa trả))\b/),
+    re: VN(/\b((bạn|bạn thân|người quen|đồng nghiệp|họ hàng)( \S+){0,3} (mượn|vay) (tiền|\d+)( \S+){0,6} (chưa|không|chẳng) (trả|đưa lại)|(mượn|vay) tiền( \S+){0,4} (né|lơ|trốn|không trả|chưa trả|lảng|lảng tránh|im luôn)|(nói sao|làm sao|cách nào)( \S+){0,2} đòi (tiền|nợ|lại)|đòi (tiền|nợ)( \S+){0,4} (bạn|mà đỡ|cho khéo|sao cho|đỡ căng))\b/),
     feel: ["Cho bạn thân mượn tiền rồi bị né thì vừa tiếc tiền vừa buồn vì tình bạn, Lomi hiểu."],
     insight: ["Nhiều khi người mượn né vì ngại chưa có tiền trả, chứ chưa chắc là cố tình quỵt. Nói rõ ràng, bình tĩnh thường giữ được cả tiền lẫn tình hơn."],
     step: ["Nhắn một tin rõ ràng, không trách móc, đề nghị một cách trả cụ thể."],
@@ -355,7 +355,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "peoplepleaser",
     howto: true,
-    re: VN(/\b(làm hài lòng (người khác|mọi người|tất cả|hết mọi người|ai cũng)|chiều lòng (mọi người|người khác)|sống vì người khác|sợ làm mất lòng|(cứ |luôn |hay )?(đồng ý|nhận lời|giúp) (mọi người|hết mọi người|ai cũng)( \S+){0,6} (mệt|sợ (họ|người ta|mọi người) ghét|ngại từ chối)|không (dám|biết cách) từ chối|sợ (bị )?(người ta |mọi người |họ )?ghét)\b/),
+    re: VN(/\b(làm hài lòng (người khác|mọi người|tất cả|hết mọi người|ai cũng)|chiều lòng (mọi người|người khác)|sống vì người khác|sợ làm mất lòng|(cứ |luôn |hay )?(đồng ý|nhận lời|giúp) (mọi người|hết mọi người|ai cũng)( \S+){0,6} (mệt|sợ (họ|người ta|mọi người) ghét|ngại từ chối)|không (dám|biết cách) từ chối|sợ (bị )?(người ta |mọi người |họ )?ghét|(làm )?vừa lòng (cả nhà|mọi người|người khác|ai cũng|hết thảy)( \S+){0,8} (chẳng còn|không còn|hết) (thời gian|sức|chỗ)( \S+){0,2} (cho )?(mình|bản thân))\b/),
     feel: ["Cứ gật đầu giúp mọi người dù mình đã cạn sức — vì sợ bị ghét — lâu dần mệt lắm, Lomi hiểu."],
     insight: ["Đặt ranh giới không làm bạn thành người xấu. Người quý bạn thật sẽ vẫn quý khi bạn nói “lần này mình không giúp được”."],
     step: ["Lần tới khi được nhờ, đừng trả lời ngay — nói “để mình xem lịch rồi báo nha” để có thời gian nghĩ."],
@@ -500,7 +500,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "space",
     howto: true,
-    re: VN(/\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|cô ấy|anh ấy|em ấy|người ấy|crush)\b.*\b(cần|muốn|xin) (có )?(thêm )?(không gian riêng|không gian|khoảng lặng|khoảng trống|thời gian riêng|thời gian một mình|ở một mình|thời gian (để )?suy nghĩ)\b/),
+    re: VN(/\b(người yêu|ny|vợ|chồng|bạn trai|bạn gái|cô ấy|anh ấy|em ấy|người ấy|crush)\b.*\b(cần|muốn|xin) (có )?(thêm )?(không gian riêng|không gian|khoảng riêng|khoảng không riêng|khoảng lặng|khoảng trống|thời gian riêng|thời gian một mình|ở một mình|thời gian (để )?suy nghĩ)\b/),
     feel: ["Nghe người thương nói cần thời gian hay không gian riêng dễ làm mình chột dạ, sợ đó là dấu hiệu người ta muốn đi — cảm giác đó rất dễ hiểu."],
     insight: ["Cần thời gian, không gian riêng **không nhất thiết** là muốn rời xa: nhiều người cần thời gian một mình để nạp lại năng lượng, gỡ áp lực, hoặc sắp xếp lại suy nghĩ. Lomi không đoán được lòng người ấy — điều nói lên nhiều nhất là cách họ cư xử trong và sau khoảng thời gian đó."],
     step: ["Tôn trọng khoảng lặng đó: đừng nhắn dồn hay ngồi canh điện thoại."],
@@ -926,6 +926,52 @@ export const MORE_THEMES: Theme[] = [
       "Làm theo nhịp 25 phút tập trung – 5 phút nghỉ, xong 4 lượt thì nghỉ dài.",
       "Làm việc khó nhất vào lúc bạn tỉnh táo nhất trong ngày.",
       "Tự thưởng nhỏ khi xong mỗi phần — não thích phần thưởng lắm.",
+    ],
+  },
+  {
+    // 11/11 (bộ 1.000 câu, G02-040): vừa TỪ CHỐI cho mượn tiền / nhờ vả rồi thấy có lỗi — trước đây chỉ "Ừ, Lomi nghe nè 🥺 Chuyện sao vậy bạn?".
+    id: "guiltno",
+    re: VN(/\b((từ chối|không cho|chẳng cho|ko cho)( \S+){0,4} (mượn|vay|nhờ|giúp)( \S+){0,8} (có lỗi|áy náy|day dứt|tội lỗi|ngại|khó xử)|(có lỗi|áy náy|day dứt)( \S+){0,6} (vì |do )?(đã )?(từ chối|không cho|không giúp))\b/),
+    feel: [
+      "Từ chối xong mà thấy áy náy — điều đó cho thấy bạn quý người ta, chứ không phải bạn làm sai đâu 🫂",
+      "Nói “không” với người mình quý bao giờ cũng để lại chút cấn trong lòng. Bạn thấy vậy là bình thường thôi.",
+    ],
+    insight: [
+      "Giúp người khác chỉ thật sự là giúp khi mình không phải tự làm khó mình. Bạn không dư mà vẫn cho mượn thì người gánh lo sau đó lại chính là bạn.",
+      "Từ chối một việc không có nghĩa là từ chối cả con người đó. Tình bạn tốt chịu được một lời “lần này mình không giúp được”.",
+    ],
+    step: [
+      "Nếu còn cấn, nhắn người ấy một câu ngắn: “Lần này mình không xoay được thật, chứ không phải mình không muốn giúp.”",
+      "Nghĩ xem có cách giúp nào khác vừa sức mình không — hỏi thăm, giới thiệu chỗ khác, hay giúp một việc không dính tới tiền.",
+    ],
+    ask: ["Người ấy phản ứng thế nào khi bạn từ chối?", "Điều làm bạn áy náy nhất là gì — sợ họ giận, hay sợ họ đang kẹt thật?"],
+    advice: [
+      "Đặt cho mình một nguyên tắc rõ: chỉ cho mượn số tiền mà nếu mất cũng không ảnh hưởng tới mình — nguyên tắc có sẵn thì lần sau từ chối đỡ day dứt.",
+      "Đừng giải thích dài hay xin lỗi nhiều lần; một lời từ chối rõ ràng, tử tế là đủ.",
+    ],
+  },
+  {
+    // 11/11 (bộ 1.000 câu, G04-087, G01-087): bị người nhà chỉ trích / hỏi mãi một chuyện, muốn ĐẶT RANH GIỚI mà vẫn giữ hoà khí.
+    id: "boundary",
+    howto: true,
+    re: VN(/\b((đặt|giữ|vạch|có) (ra )?ranh giới|(chỉ trích|chê bai|soi mói|xen vào|can thiệp vào|bắt bẻ)( \S+){0,4} (cách (mình|em|tôi|tui|anh|chị) sống|chuyện (riêng )?của (mình|em|tôi|tui)|cuộc sống của (mình|em|tôi))|bị hỏi( \S+){0,2} (chuyện )?(lương|cưới|lấy chồng|lấy vợ|con cái|bao giờ)( \S+){0,3} (mãi|hoài|suốt|liên tục))\b/),
+    feel: [
+      "Bị người nhà soi vào cách mình sống hoài thì mệt lắm — vừa thương họ, vừa thấy ngộp.",
+      "Muốn giữ hoà khí mà vẫn được là mình — nghe là biết bạn đã nhịn khá lâu rồi 🫂",
+    ],
+    insight: [
+      "Đặt ranh giới không phải là cãi lại hay xa cách; đó là nói rõ điều mình chấp nhận được, để hai bên còn ở gần nhau lâu dài.",
+      "Người nhà thường hỏi hay góp ý vì quan tâm theo cách của họ. Mình không cần đổi họ — chỉ cần nói rõ mình muốn được đối xử thế nào.",
+    ],
+    step: [
+      "Chọn MỘT chuyện cụ thể để nói trước, lúc cả hai đang bình tĩnh: “Em biết chị lo cho em, nhưng chuyện này em muốn tự quyết.”",
+      "Chuẩn bị sẵn một câu ngắn để lặp lại khi bị hỏi tiếp, nói nhẹ mà không giải thích thêm: “Chuyện đó em chưa muốn bàn, mình nói chuyện khác nha.”",
+    ],
+    ask: ["Chuyện nào bị nói tới nhiều nhất làm bạn khó chịu nhất?", "Bạn đã thử nói thẳng với người ấy lần nào chưa, họ phản ứng sao?"],
+    advice: [
+      "Nói bằng “em thấy / em cần” thay vì “chị lúc nào cũng…” — người nghe đỡ thấy bị trách nên dễ nghe hơn.",
+      "Ranh giới cần lặp lại vài lần mới thành nếp; lần đầu họ chưa quen là bình thường, cứ nhắc lại cùng một câu, cùng một giọng.",
+      "Ghi nhận phần thiện ý trước (“em biết chị thương em”) rồi mới nói điều mình cần — giữ được hoà khí mà vẫn rõ ràng.",
     ],
   },
   {

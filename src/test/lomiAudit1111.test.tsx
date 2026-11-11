@@ -151,3 +151,42 @@ describe("kiểm toán Lovable 11/11 — câu đầu không có nội dung → h
     expect(r.at(-1)!.content).not.toMatch(/chưa rõ bạn đang nói tới chuyện gì/);
   }, T);
 });
+
+// Đợt 3 (11/11): những câu có ý rõ ràng mà từng rơi xuống "Vậy hả 😄 Có gì kể tiếp" hoặc "Dạy Lomi" (lib/lomiRescue + chủ đề tâm sự).
+describe("kiểm toán Lovable 11/11 — câu có ý rõ mà từng bị 'nghe nè' / 'Dạy Lomi'", () => {
+  it("phép tính đơn giản", async () => {
+    expect(await said(["Tính giúp 125 nghìn chia đều cho 5 người."])).toMatch(/25\.000 đồng\*\* mỗi người/);
+    expect(await said(["12 nhân 8 ra 96 đúng hem, e tính tiền hộ ae"])).toMatch(/= \*\*96\*\*.*đúng/);
+    expect(await said(["Giỏi ghê ha, mình cộng 7 với 8 ra 14, bạn tính lại giúp cái."])).toMatch(/= \*\*15\*\* — không phải 14/);
+    expect(await said(["17 cộg 28 bằng bao nhiu nhỉ"])).toMatch(/= \*\*45\*\*/);
+    expect(await said(["ông hỏi chút, hai mươi cộng mười lăm bằng bao nhiêu"])).toMatch(/= \*\*35\*\*/);
+    expect(await said(["đổi 2 giờ rưỡi ra phút giúp tui"])).toMatch(/150 phút/);
+    expect(await said(["uống 2 viên x 3 lần mỗi ngày có sao không"])).not.toMatch(/🧮/); // liều thuốc không phải phép tính
+  }, T);
+  it("ghé chào, tạm biệt, cảm ơn, hỏi về chính Lomi, việc ngoài phạm vi", async () => {
+    expect(await said(["k cần giúp j đâu, mk ghé chào xíu thui"])).toMatch(/Chào bạn nha 👋/);
+    expect(await said(["chào nha, mới vô đây lần đầu"])).toMatch(/Lần đầu vào/);
+    expect(await said(["Thôi khỏi, để lúc khác nói tiếp nha, giờ mình đi làm."])).toMatch(/Okie nha 👋/);
+    expect(await said(["bạn là rô bốt hay người thật vậy"])).toMatch(/trợ lý ảo/);
+    expect(await said(["Lomi có ngủ buổi tối giống tui ko"])).toMatch(/không cần ngủ/);
+    expect(await said(["Lomi có nói tiếng Việt được không?"])).toMatch(/tiếng Việt là chính/);
+    expect(await said(["dịch giùm mk cả tập tài liệu tiếng Đức chuyên ngành đc hem"])).toMatch(/nằm ngoài những gì Lomi làm được/);
+    expect(await said(["Mình ngồi làm thiết kế cả ngày, tối còn chơi game nên cổ tay hay tê"])).not.toMatch(/nằm ngoài những gì Lomi/);
+  }, T);
+  it("lỗi gõ ở chữ sức khoẻ vẫn ra bài sức khoẻ", async () => {
+    expect((await last(["khoong biết sao tôi cứ chóng mặc khi đứng dậy"])).content).toMatch(/chóng mặt/i);
+    expect((await last(["con em 3 tuổi bị sỗ mủi, chăm ở nhà sao cho đúng"])).content).not.toMatch(/Có gì kể tiếp Lomi nghe nha/);
+    expect((await last(["Tai bên trái của tôi cứ ù sau chuyến bay."])).content).toMatch(/ù tai/i);
+  }, T);
+  it("chuyện tâm sự bị trượt: áy náy vì từ chối cho mượn tiền, đòi nợ bạn, đặt ranh giới, người yêu cần khoảng riêng", async () => {
+    expect((await last(["t vừa từ chối cho bạn mượn tiền, thấy có lỗi wá dù t cx k dư"])).heart).toBe("guiltno");
+    expect((await last(["thằng bạn tao cứ vay tiền rồi lảng tránh, nói sao để đòi mà đỡ căng"])).heart).toBe("debtfriend");
+    expect((await last(["Chị mình lúc nào cũng chỉ trích cách mình sống, mình muốn đặt ranh giới mà vẫn giữ hòa khí."])).heart).toBe("boundary");
+    expect((await last(["bạn gái bảo cần khoảng riêng, mình có nên dừng nhắn tin vài ngày"])).heart).toBe("space");
+  }, T);
+  it("hỏi cách đọc bài Tarot → trả lời kiến thức; 'bốc giúp ba lá' → rút bài", async () => {
+    expect(await said(["bài ngược có phải lúc nào cũng xấu ko Lomi"])).toMatch(/Lá ngược không phải lúc nào cũng xấu/);
+    const m = await last(["bốc giúp ba lá coi đường tình duyên nha"]);
+    expect(!!(m.tarot || m.tarotAwait || m.tarotRef)).toBe(true);
+  }, T);
+});

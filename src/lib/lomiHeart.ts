@@ -410,7 +410,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "friends",
-    re: VN(/\b(bạn thân|bạn bè|bị bạn|bị cô lập|bị nói xấu|bị tẩy chay|bị bỏ rơi|bạn phản bội|mất bạn|không có bạn|hội bạn|nhóm bạn|bị loại ra)\b/),
+    re: VN(/\b(bạn thân|bạn bè|bị bạn|bị cô lập|bị nói xấu|bị tẩy chay|bị bỏ rơi|bạn phản bội|mất bạn|không có bạn|hội bạn|nhóm bạn|bị loại ra|bạn (tôi|mình|em|tui|tớ) (bỏ đi|nghỉ chơi|hết chơi|không chơi với|xa lánh)( \S+){0,6} (hụt hẫng|buồn|trống|nhớ))\b/),
     feel: [
       "Chuyện bạn bè mà buồn thì nhói lắm, vì đó là những người mình chọn để tin 😔",
       "Bị bạn bè làm tổn thương đau không kém gì chuyện tình cảm đâu, Lomi hiểu mà.",
@@ -1105,7 +1105,7 @@ function chipsFor(_t: Theme | undefined): string[] {
 }
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
-const FIRST = ["grief", "suspect", "homeland", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt", "inlaw", "marrypressure"];
+const FIRST = ["grief", "suspect", "homeland", "guiltno", "boundary", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt", "inlaw", "marrypressure"];
 /** 21/10: chủ đề cụ thể được ưu tiên — các lớp chung hơn (khung câu, thẻ bệnh, phân tích cảm xúc) nhường cho chúng. */
 export const PRIORITY_THEMES: readonly string[] = FIRST.filter((x) => x !== "grief" && x !== "suspect");
 function themeOf(n: string): Theme | undefined {

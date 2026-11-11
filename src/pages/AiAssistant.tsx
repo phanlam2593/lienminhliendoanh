@@ -139,6 +139,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { kinSupportText } from "@/lib/lomiHeart";
+import { byeHello, calcReply, fixTypos, metaReply, tarotHowto } from "@/lib/lomiRescue";
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
@@ -1569,7 +1570,7 @@ export function AiChat({
       .replace(/(^|[^\p{L}])(bị|thuốc|món|cái) chi(?![\p{L}])/giu, "$1$2 gì")
       .replace(/(^|[^\p{L}])lm\s+j(?![\p{L}])/giu, "$1làm gì")
       .replace(/(?<!(?:đau|viêm|rát|ngứa|khàn|sưng|dau|viem|rat|ngua|khan|sung)\s+)(?<=\s)(hong|hông|hok|hơm)(\s*(?:nhen|nha|ta|vậy)?)\s*([?!.…]*)\s*$/iu, (_m, _w, p2, p3, _o, all: string) => `${/[^\x00-\x7F]/.test(all.replace(/(hông|hơm)\s*\S*\s*[?!.…]*\s*$/iu, "")) ? "không" : "khong"}${p2}${p3}`);
-    let raw = en ? typed : viMixFix(typedV);
+    let raw = en ? typed : viMixFix(fixTypos(typedV)); // 11/11: sửa lỗi gõ hay gặp ở chữ sức khoẻ / kinh doanh trước khi đọc câu (lib/lomiRescue)
     let pickedRestore: { from: string; to: string } | null = null;
     if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
@@ -3771,6 +3772,17 @@ export function AiChat({
         //    câu hỏi cụ thể sau đó do lớp thuốc trả lời trong giới hạn dữ liệu đã kiểm chứng.)
         const tOpen = heartOn || gateWhy(q).some((w) => !w.startsWith("meds")) ? null : topicOpener(raw);
         if (tOpen) return localReply(q, { role: "assistant", content: tOpen, local: true, ...keepHealth });
+        // 11/11 (bộ 1.000 câu): trước khi đáp "nghe nè, kể tiếp" — phép tính đơn giản, lời tạm biệt / ghé chào là những câu có ý rõ ràng.
+        if (!en) {
+          const calc = calcReply(raw);
+          if (calc) return localReply(q, { role: "assistant", content: calc, local: true });
+          const bh = !heartOn ? byeHello(raw) : null;
+          if (bh) return localReply(q, { role: "assistant", content: bh, local: true });
+          const meta = metaReply(raw, msgs.length);
+          if (meta) return localReply(q, { role: "assistant", content: meta, local: true });
+          const th = tarotHowto(raw);
+          if (th) return localReply(q, { role: "assistant", content: th, local: true });
+        }
         // 20/10 (audit): sắc thái câu lấy từ bộ đọc câu (lib/lomiParse) — vị ngữ âm, hoặc có chữ cảm xúc âm mà câu không phủ định nó.
         const negTone = !!fr1 && ((fr1.pred ? fr1.pred.val < 0 : false) || (!fr1.neg && fr1.toks.some((t) => (t.v ?? 0) < 0)));
         const slAny = senseLast(raw, { lastText: lastA?.content, hasSuggest: sug.length > 0, talk: convo?.talk, mirror: fr ? mirrorText(fr, loadMem(user.id).addr, 9) : null, neg: negTone });
