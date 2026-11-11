@@ -116,6 +116,36 @@ const SUBJECTS: Subject[] = [
   },
 ];
 
+// 11/11 — Người kể đã uống MỘT ÍT viên paracetamol (1–4 viên, một lần): đối chiếu với liều thường thay vì báo động quá liều.
+//   Nguồn: NHS "Paracetamol for adults" (1–2 viên 500 mg / lần, cách ≥ 4 giờ, ≤ 8 viên / 24 giờ) và NHS 111 Wales, mục "If you take too much"
+//   ("Taking 1 or 2 extra tablets is unlikely to harm you. Do not take more than 8 tablets in 24 hours.").
+//   Chỉ áp dụng khi câu KHÔNG có dấu hiệu nào khác của quá liều: trẻ em, nhiều lần, cả vỉ / hộp, viên hàm lượng khác, rượu bia, ý tự hại → giữ lời báo động cũ.
+const FEW_NUM: Record<string, number> = { mot: 1, hai: 2, ba: 3, bon: 4 };
+const FEW_RE = /\b(\d+|mot|hai|ba|bon) vien\b/g;
+const FEW_BLOCK = VN(/\b(quá liều|lố liều|gấp đôi|gấp ba|cả vỉ|hết vỉ|nguyên vỉ|cả hộp|hết hộp|nguyên hộp|cả lọ|hết lọ|nhiều|liên tiếp|liên tục|\d+ lần|mấy lần|hai lần|ba lần|mỗi lần|mỗi ngày|ngày nào|trẻ|bé|con|cháu|em bé|tuổi|kg|ký|650|1000|1 ?g|extra|codein|rượu|bia|nhậu|chết|tự tử|tự hại|không muốn sống|cho xong)\b/);
+export function paraFewTablets(n: string): string | null {
+  if (FEW_BLOCK.test(n)) return null;
+  const all = [...n.matchAll(FEW_RE)];
+  if (all.length !== 1) return null; // không nêu số viên, hoặc nêu nhiều con số ("2 viên rồi thêm 2 viên") → không đoán
+  const count = FEW_NUM[all[0][1]] ?? Number(all[0][1]);
+  if (!(count >= 1 && count <= 4)) return null;
+  const extra = VN(/\b(thêm|nữa|tiếp)\b/).test(n);
+  const head =
+    count <= 2 && !extra
+      ? `💊 **${count} viên Paracetamol 500 mg là một liều thông thường của người lớn**, chưa phải quá liều đâu — bạn đừng lo quá nha.`
+      : count <= 2
+        ? `💊 Theo nguồn, người lớn **lỡ uống thêm 1–2 viên** Paracetamol 500 mg thì **thường không gây hại**, miễn là tổng cộng **không quá 8 viên trong 24 giờ**.`
+        : `💊 Người lớn mỗi lần chỉ nên uống **1–2 viên** Paracetamol 500 mg, nên ${count} viên một lúc là nhiều hơn liều thường. Theo nguồn, **lỡ thêm 1–2 viên thì thường không gây hại**, miễn là tổng cộng **không quá 8 viên trong 24 giờ**.`;
+  const lines = [
+    "• Liều thường của người lớn: mỗi lần **1–2 viên 500 mg**, các lần cách nhau **ít nhất 4 giờ**, **không quá 8 viên trong 24 giờ**.",
+    ...(count <= 2 && !extra ? [`• Nếu ${count} viên này là uống **thêm** ngoài liều vừa uống trước đó: theo nguồn, lỡ thêm 1–2 viên thường không gây hại, miễn tổng cộng không quá 8 viên trong 24 giờ.`] : []),
+    ...(count > 2 || extra ? ["• Từ giờ **tạm ngưng paracetamol**; muốn uống liều kế thì hỏi dược sĩ trước, và nhớ tính cả số viên đã uống vào mức 8 viên / 24 giờ."] : []),
+    "• Đừng uống kèm thuốc khác **cũng có paracetamol** (nhiều thuốc cảm, thuốc cúm) — cộng lại dễ thành quá nhiều.",
+    "• **Hỏi ngay bác sĩ / dược sĩ, kể cả khi thấy bình thường**, nếu: người uống là **trẻ em**, **nặng dưới 50 kg**, có **bệnh gan / thận**, viên **không phải loại 500 mg** (650 mg, 1 g…), hoặc tổng đã **quá 8 viên trong 24 giờ** — uống quá nhiều paracetamol có thể hại gan dù chưa có triệu chứng.",
+  ];
+  return [head, lines.join("\n"), sourceLine(PARA, [0, 2])].join("\n\n");
+}
+
 // Khía cạnh — thứ tự = độ ưu tiên.
 const ASPECTS: [string, RegExp][] = [
   ["overdose", VN(/\b(quá liều|uống quá nhiều|uống nhầm|uống nhiều quá|uống nhiều|lỡ uống|uống cả vỉ|uống cả hộp|hại gan|tổn thương gan|suy gan)\b/)],
@@ -178,6 +208,11 @@ export function contextReply(text: string, ctxSubject?: string): ContextReply | 
     }
   }
   anchor.aspect = asp ?? s.main;
+  // 11/11: "lỡ uống 2 viên panadol" — 1–2 viên 500 mg là MỘT LIỀU thường của người lớn, không phải quá liều → không báo cấp cứu.
+  if (s.id === PARA.id && anchor.aspect === "overdose") {
+    const few = paraFewTablets(n);
+    if (few) return { text: few, anchor: { ...anchor, aspect: "dose" } };
+  }
   return { text: s.aspects[anchor.aspect](anchor), anchor, urgent: anchor.aspect === "overdose" };
 }
 

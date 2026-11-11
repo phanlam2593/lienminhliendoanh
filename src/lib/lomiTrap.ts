@@ -31,9 +31,28 @@ export function trapReply(q: string): Trap | null {
   // 04/11: "đến tháng mấy ngày là bình thường", "chu kỳ bao nhiêu ngày" → số liệu của thẻ kinh nguyệt không đều (NHS, Mayo Clinic)
   if (VN(/\b(đến tháng|tới tháng|hành kinh|có kinh|kinh nguyệt|chu kỳ kinh|chu kì kinh|vòng kinh|ra kinh)\b/).test(n) && VN(/\b(mấy ngày|bao nhiêu ngày|bao lâu|kéo dài|bình thường|chu kỳ|chu kì|cách nhau)\b/).test(n) && !VN(/\b(trễ|chậm|mất kinh|rong kinh|ra nhiều|đau dữ dội|có thai|mang thai|que thử)\b/).test(n))
     return { text: `${(() => { const m = n.match(/\b(\d{1,2}) ngay\b/); const d = m ? Number(m[1]) : 0; return d >= 10 && /\b(chu ky|chu ki|vong kinh|cach nhau)\b/.test(n) ? (d < 21 || d > 35 ? `👉 Chu kỳ **${d} ngày** nằm **ngoài** mốc 21–35 ngày nên được xem là **kinh không đều** — nếu cứ vậy nhiều tháng thì nên đi khám.\n\n` : `👉 Chu kỳ **${d} ngày** nằm **trong** khoảng thường gặp nha.\n\n`) : ""; })()}📅 **Chu kỳ kinh nguyệt** — mốc tham khảo theo nguồn y khoa:\n• Chu kỳ (từ ngày đầu kỳ này tới ngày đầu kỳ sau) trung bình **khoảng 28 ngày**, thường gặp trong khoảng **24–38 ngày**\n• Số ngày hành kinh: thường **không quá khoảng 8 ngày**\n• Được xem là **không đều** khi hai kỳ cách nhau **dưới 21 ngày hoặc trên 35 ngày**, hoặc khác hẳn nhịp quen thuộc của bạn\n• Tuổi dậy thì và lúc gần mãn kinh hay không đều hơn\n\nKinh ra quá nhiều, kéo dài, đau dữ dội hay thất thường nhiều tháng thì nên đi khám nha.` };
-  // "nóng trong người / nóng gan uống gì" — cách gọi dân gian, không phải tên bệnh → hỏi lại đúng triệu chứng, không đi gợi ý quán nước
-  if (VN(/\b(nóng trong|nóng trong người|nóng gan|bị nóng|người nóng|nhiệt trong người|nóng ruột gan)\b/).test(n) && VN(/\b(uống gì|ăn gì|làm sao|nên|bị gì|là sao|là gì|giải nhiệt|mát gan)\b/).test(n) && !VN(/\b(sốt|nhiệt độ|độ c|bỏng|phỏng)\b/).test(n))
-    return { text: "🌡️ “Nóng trong người”, “nóng gan” là **cách gọi dân gian**, không phải tên một bệnh trong y khoa — nên Lomi không có món “giải nhiệt / mát gan” nào có nguồn để chỉ bạn 🙏\nNgười ta hay nói vậy khi bị **nhiệt miệng, nổi mụn, táo bón, khô họng, tiểu vàng** hay **mệt mỏi, khó ngủ**. Bạn đang bị cụ thể chuyện nào? Nói Lomi nghe để Lomi chỉ đúng cách chăm theo nguồn y khoa nha.\n💧 Trong lúc đó, uống đủ nước (đủ để nước tiểu vàng nhạt, trong) luôn là việc nên làm." };
+  // "nóng trong người / nóng gan uống gì" — cách gọi dân gian, không phải tên bệnh.
+  // 11/11 (việc còn mở): trước đây chỉ hỏi lại "bạn bị cụ thể chuyện nào" → nay nói luôn biểu hiện, nguyên nhân hay gặp, nên làm gì và mấy thức uống
+  //   y học cổ truyền hay dùng, để tham khảo (Kir 04/11: Long Châu là nguồn THAM KHẢO cho phần y học cổ truyền; 19/10: nói hết, đừng hỏi lại chung chung).
+  //   Mỗi ý lấy từ trang "Nóng trong người" và các bài cùng chuyên đề của Nhà thuốc FPT Long Châu (đọc ngày 11/11/2026).
+  //   Câu chỉ kể "mình bị nóng trong người" (không hỏi gì) cũng vào đây thay vì ra thẻ trái cây "tính nóng / tính mát".
+  if (
+    VN(/\b(nóng trong|nóng trong người|nóng gan|bị nóng|người nóng|nhiệt trong người|nóng ruột gan)\b/).test(n) &&
+    (VN(/\b(uống gì|ăn gì|làm sao|nên|bị gì|là sao|là gì|giải nhiệt|mát gan|biểu hiện|dấu hiệu|triệu chứng|nguyên nhân|tại sao|vì sao|do đâu|kiêng)\b/).test(n) ||
+      /^\s*((minh|em|e|anh|a|toi|tui|t|chi|c|con|be|dao nay|hay|dang|bi|thay|nguoi|cu) )*(nong trong( nguoi)?|nong gan)( (qua|ghe|lam|hoai|suot|roi|a|nha|ne|ha|luon|troi|oi))*\s*$/.test(n)) &&
+    !VN(/\b(sốt|nhiệt độ|độ c|bỏng|phỏng)\b/).test(n)
+  )
+    return {
+      text: [
+        "🌡️ **“Nóng trong người”**, “nóng gan” là **cách gọi dân gian** / của y học cổ truyền, không phải tên một bệnh trong y khoa hiện đại. Lomi kể những gì hay được nói tới để bạn tham khảo nha:",
+        "🔎 **Biểu hiện hay được mô tả:** nổi mụn nhọt, môi khô nứt nẻ, hơi thở có mùi, táo bón, ợ chua, chán ăn, khó ngủ, quầng thâm mắt.",
+        "🧩 **Nguyên nhân hay gặp:**\n• Ăn nhiều đồ cay nóng, dầu mỡ, đồ ngọt mà ít rau xanh, trái cây, chất xơ\n• Uống không đủ nước; uống nhiều rượu bia, cà phê\n• Đôi khi do bệnh ở đường tiêu hoá hoặc cường giáp",
+        "✅ **Nên làm:**\n• Uống đủ nước mỗi ngày (đủ để nước tiểu vàng nhạt, trong)\n• Ăn thêm rau xanh và trái cây — cam, chanh, bưởi, dưa hấu, cà chua\n• Bớt đồ cay, đồ chiên rán nhiều dầu mỡ, đồ ngọt; hạn chế rượu bia",
+        "🌿 **Theo y học cổ truyền, để tham khảo:** rau má, bột sắn dây, bí đao, atiso, hoa cúc, mía lau hay được nấu nước uống để “thanh nhiệt”.",
+        "⚠️ Nóng trong người thường **không nguy hiểm**. Nhưng nếu **kéo dài**, hay kèm **đi cầu ra máu**, thì nên đi khám để tìm đúng nguyên nhân.",
+        "📚 Nguồn: Nhà thuốc FPT Long Châu – trang bệnh “Nóng trong người” và các bài cùng chuyên đề (tham khảo). Lomi đối chiếu ngày 11/11/2026. Đây là kiến thức tham khảo chung, không thay lời dặn của bác sĩ / dược sĩ.",
+      ].join("\n\n"),
+    };
 
   // Câu hỏi "bao nhiêu lần" về ăn uống có nguồn NHS (31/10, danh sách ChatGPT lần 6)
   if (/\b(an ca|ca)( \S+){0,3} (may lan|bao nhieu lan|may bua|bao nhieu bua)\b|\b(may lan|bao nhieu lan|may bua)( \S+){0,3} (an )?ca\b/.test(n) && !/\b(ca phe|ca nhan|ca lam|ca toi|ca sang)\b/.test(n))

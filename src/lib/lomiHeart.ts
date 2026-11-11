@@ -1105,7 +1105,7 @@ function chipsFor(_t: Theme | undefined): string[] {
 }
 // Mất người thân luôn ưu tiên trước (vd "chồng mình mất rồi" không phải chuyện vợ chồng lục đục).
 // (nghi ngờ bị phản bội cũng xét trước: "a nghi vợ a ngoại tình" là NGHI, chưa phải đã bị phản bội.)
-const FIRST = ["grief", "suspect", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt", "inlaw", "marrypressure"];
+const FIRST = ["grief", "suspect", "homeland", "compare", "couplemoney", "onesided", "endit", "space", "mindread", "privacy", "testlove", "pace", "repeatsorry", "notlisten", "values", "sidesfam", "hurtword", "oldstuff", "showweak", "snoop", "privatemoney", "advicewrong", "emptywin", "envy", "peoplepleaser", "seekhelp", "minorrel", "alcohol", "eating", "ocd", "disliked", "debtfriend", "lgbt", "inlaw", "marrypressure"];
 /** 21/10: chủ đề cụ thể được ưu tiên — các lớp chung hơn (khung câu, thẻ bệnh, phân tích cảm xúc) nhường cho chúng. */
 export const PRIORITY_THEMES: readonly string[] = FIRST.filter((x) => x !== "grief" && x !== "suspect");
 function themeOf(n: string): Theme | undefined {

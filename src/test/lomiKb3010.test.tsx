@@ -274,7 +274,7 @@ describe("30/10 — trả lời qua khung chat", () => {
     await yes("Đà Lạt có lạnh không", /áo khoác/);
     await yes("tháng này em có tiền không", /không ai đoán chắc/);
     await yes("bị chó cắn có sao không", /Chó cắn\*\*, Lomi có kiến thức/);
-    await yes("bị nóng trong", /tính nóng/);
+    await yes("bị nóng trong", /cách gọi dân gian/); // 11/11: kể "bị nóng trong" → bài nóng trong người (trước là thẻ trái cây "tính nóng")
   }, T);
   it("Mẹo dân gian đợt 5 (danh sách ChatGPT, 30/10)", async () => {
     const yes = async (q: string, re: RegExp) => expect((await last([q])).content, q).toMatch(re);
@@ -1804,5 +1804,54 @@ describe("06/11 — hội thoại liền mạch: hỏi tác dụng phụ, thuố
       expect(m.content).toMatch(/tự thương mình/);
       expect(m.quick).toContain("Tâm sự với Lomi");
     }
+  }, T);
+});
+
+// 11/11 — ba việc còn mở: "lỡ uống 2 viên panadol" báo động quá tay, "nóng trong người" chưa có nội dung, "bỏ phố về quê" bị xếp vào chủ đề lạc hướng chung.
+describe("11/11 — panadol vài viên, nóng trong người, bỏ phố về quê", () => {
+  const ALARM = /gọi 115 hoặc tới cơ sở y tế gần nhất ngay/;
+  it("'lỡ uống 2 viên panadol' → là một liều thường, không báo cấp cứu", async () => {
+    for (const q of ["lỡ uống 2 viên panadol", "lo uong 2 vien panadol co sao ko"]) {
+      const m = await last([q]);
+      const c = m.content;
+      expect(c, q).toMatch(/một liều thông thường của người lớn/);
+      expect(c, q).toMatch(/không quá 8 viên trong 24 giờ/);
+      expect(m.src, q).toMatch(/NHS 111 Wales/); // dòng nguồn được cất — hỏi "nguồn đâu?" mới đưa ra
+      expect(c, q).not.toMatch(ALARM);
+    }
+  }, T);
+  it("3–4 viên một lúc / uống thêm 2 viên → nói theo nguồn, dặn tạm ngưng, không báo cấp cứu", async () => {
+    const four = (await last(["em lỡ uống 4 viên panadol 1 lúc"])).content;
+    expect(four).toMatch(/nhiều hơn liều thường/);
+    expect(four).toMatch(/tạm ngưng paracetamol/);
+    expect(four).not.toMatch(ALARM);
+    expect((await last(["a lỡ uống thêm 2 viên panadol nữa"])).content).toMatch(/lỡ uống thêm 1–2 viên/);
+  }, T);
+  it("nhiều viên, trẻ em, cả hộp, 'quá liều' → vẫn báo cấp cứu như cũ", async () => {
+    for (const q of ["lỡ uống 6 viên panadol", "lỡ uống 10 viên panadol", "bé nhà e lỡ uống 2 viên panadol", "a uống nguyên hộp panadol", "a lỡ uống quá liều panadol rồi", "lỡ uống 2 viên panadol 650", "lỡ uống 2 viên panadol 3 lần liên tiếp"])
+      expect((await last([q])).content, q).toMatch(/115/);
+  }, T);
+  it("'nóng trong người' → biểu hiện, nguyên nhân, nên làm gì, y học cổ truyền để tham khảo — không hỏi lại chung chung", async () => {
+    for (const q of ["nóng trong người", "mình bị nóng trong người phải làm sao", "nong trong nguoi nen uong gi", "nóng trong người là gì"]) {
+      const m = await last([q]);
+      const c = m.content;
+      expect(c, q).toMatch(/cách gọi dân gian/);
+      expect(c, q).toMatch(/Nguyên nhân hay gặp/);
+      expect(c, q).toMatch(/Theo y học cổ truyền, để tham khảo/);
+      expect(m.src, q).toMatch(/Long Châu/);
+      expect(c, q).not.toMatch(/Bạn đang bị cụ thể chuyện nào/);
+    }
+    expect((await last(["ăn xoài có nóng không"])).content).toMatch(/tính nóng/); // hỏi về MÓN ĂN thì vẫn là thẻ trái cây
+  }, T);
+  it("'bỏ phố về quê' → lời riêng cho chuyện rời phố, không hỏi 'đang học hay đi làm'", async () => {
+    for (const q of ["mình muốn bỏ phố về quê", "có nên bỏ phố về quê không", "chán thành phố quá muốn về quê sống"]) {
+      const c = (await last([q])).content;
+      expect(c, q).toMatch(/về quê/);
+      expect(c, q).not.toMatch(/đang học hay đi làm|chọn ngành|ngành bạn quan tâm|Tarot/);
+    }
+    const r = await chat(["mình muốn bỏ phố về quê", "ở đây áp lực công việc quá", "nhưng về quê sợ không có việc"]);
+    expect(r.at(-1)!.content).toMatch(/Thu nhập khoảng bao nhiêu/);
+    expect(r.at(-1)!.content).not.toMatch(/Chia việc thành 3 nhóm/);
+    expect((await last(["không biết mình đang cố gắng vì điều gì nữa"])).content).not.toMatch(/về quê/); // chủ đề lạc hướng giữ nguyên
   }, T);
 });

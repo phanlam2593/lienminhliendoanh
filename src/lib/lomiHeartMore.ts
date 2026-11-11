@@ -929,8 +929,39 @@ export const MORE_THEMES: Theme[] = [
     ],
   },
   {
+    // 11/11 (việc còn mở): "bỏ phố về quê" trước đây rơi vào chủ đề "lost" (hỏi "đang học hay đi làm?", khuyên chọn ngành) — nay có lời riêng:
+    //   giúp cân nhắc rời-vì-gì / về-vì-gì, tính chuyện kiếm sống, thử trước khi quyết. Đứng TRƯỚC "lost" để được chọn trước.
+    id: "homeland",
+    re: VN(/\b(bỏ phố|về quê sống|về quê (luôn|hẳn|lập nghiệp|làm ăn|khởi nghiệp|sinh sống)|về quê ở (luôn|hẳn)|(rời|bỏ) (thành phố|phố|sài gòn|hà nội|sg|hn) (để )?về quê|về quê (cho|để) (yên|bình yên|nhẹ đầu|đỡ áp lực)|về quê (thì |lại |mà |rồi )?(sợ|lo|ngại) (\S+ ){0,2}(không có việc|không có gì làm|thất nghiệp|không có thu nhập|không kiếm được tiền|không biết làm gì|buồn|chán)|về quê (thì |rồi )?(biết )?làm gì (để )?(sống|ăn|kiếm sống|kiếm tiền))\b/),
+    hint: [
+      [
+        VN(/\bvề quê (\S+ ){0,4}(không có việc|không có gì làm|thất nghiệp|không có thu nhập|không kiếm được tiền|không biết làm gì|làm gì (để )?(sống|ăn|kiếm sống|kiếm tiền))\b/),
+        "Sợ về quê không có việc là nỗi lo rất thật — và thường chính nó quyết định về rồi có ở lại được không, nên bạn nghĩ tới trước là đúng 🌾\nThử trả lời ba câu này trước khi quyết: về đó mình **làm gì** (việc ở quê, việc làm từ xa, hay buôn bán nhỏ)? **Thu nhập khoảng bao nhiêu** so với mức mình cần để sống? Và mình có sẵn **một khoản đủ sống vài tháng đầu** chưa?\nNếu chưa rõ, bạn có thể giữ công việc hiện tại và về thử 2–4 tuần, hoặc tìm việc ở quê trước rồi mới rời phố.",
+        true,
+      ],
+    ],
+    feel: [
+      "Muốn rời phố về quê — nghe là biết bạn đang mệt với nhịp sống ở đây, và đang nhớ một chỗ dễ thở hơn 🌾",
+      "Ý định bỏ phố về quê thường không tự nhiên mà tới — hay là lúc mình thấy phố lấy của mình nhiều hơn cho lại.",
+    ],
+    insight: [
+      "Câu hỏi thật thường không phải “phố hay quê”, mà là “mình muốn rời khỏi điều gì, và muốn tới gần điều gì”. Rời vì kiệt sức thì về quê cũng dễ mang theo cái mệt; về vì có điều mình muốn sống cùng thì khác hẳn.",
+      "Về quê không phải thất bại, ở lại phố cũng không phải cố chấp — đây là chọn nhịp sống hợp với mình ở giai đoạn này, và sau này vẫn đổi lại được.",
+    ],
+    step: [
+      "Viết ra hai cột: ở phố mình đang chịu gì / được gì; về quê mình sẽ được gì / mất gì — nhất là ba chuyện: thu nhập, người thân, và việc mình làm mỗi ngày.",
+      "Thử trước khi quyết: về quê ở 2–4 tuần như đang sống thật (làm việc, chi tiêu như thật), không phải như đi nghỉ.",
+    ],
+    ask: ["Điều gì ở phố làm bạn muốn rời đi nhất?", "Về quê rồi, bạn hình dung một ngày của mình sẽ ra sao?"],
+    advice: [
+      "Tính trước chuyện kiếm sống: về quê làm gì, thu nhập khoảng bao nhiêu, và để sẵn một khoản đủ sống vài tháng đầu.",
+      "Nói chuyện với một người đã bỏ phố về quê vài năm — hỏi họ điều gì khó hơn họ tưởng.",
+      "Giữ một đường lui: đừng cắt hết công việc, mối quan hệ ở phố ngay; cho mình một mốc (ví dụ 6 tháng) để nhìn lại rồi quyết tiếp.",
+    ],
+  },
+  {
     id: "lost",
-    re: VN(/\b(cố gắng vì (điều gì|cái gì|ai|chuyện gì|gì)|đường khác cho (cuộc đời|cuộc sống|đời)|sống vì điều gì|bỏ phố về quê|về quê sống|thay đổi cuộc đời|mất phương hướng|không biết mình muốn gì|không biết làm gì với cuộc đời|khủng hoảng tuổi|định hướng|chọn ngành|chọn nghề|không biết theo nghề gì|không biết học gì|bất định|bị lạc lối|không có mục tiêu)\b/),
+    re: VN(/\b(cố gắng vì (điều gì|cái gì|ai|chuyện gì|gì)|đường khác cho (cuộc đời|cuộc sống|đời)|sống vì điều gì|thay đổi cuộc đời|mất phương hướng|không biết mình muốn gì|không biết làm gì với cuộc đời|khủng hoảng tuổi|định hướng|chọn ngành|chọn nghề|không biết theo nghề gì|không biết học gì|bất định|bị lạc lối|không có mục tiêu)\b/),
     feel: ["Cảm giác lạc lối, không biết mình muốn gì — rất nhiều người trẻ đang trải qua giống bạn đó 🌱", "Lomi hiểu, đứng giữa nhiều ngã rẽ mà không biết chọn đường nào thì hoang mang lắm."],
     insight: [
       "Ít ai biết rõ mình muốn gì ngay từ đầu. Đam mê thường được tìm thấy qua việc thử, chứ không phải ngồi nghĩ ra.",

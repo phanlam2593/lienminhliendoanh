@@ -98,6 +98,8 @@ export const DRUGS: DrugEntry[] = [
       // (09/10/2026: bốn trang con cũ của NHS — About / Side effects / Taking with other medicines / Common questions — nay gộp về một trang này.)
       { title: "Paracetamol for adults", publisher: "NHS (Anh)", url: "https://www.nhs.uk/medicines/paracetamol-for-adults/", reviewed: "2026-03-24" },
       { title: "Acetaminophen", publisher: "MedlinePlus (Thư viện Y khoa Quốc gia Hoa Kỳ)", url: "https://medlineplus.gov/druginfo/meds/a681004.html", reviewed: "2025-10-15" },
+      // 11/11/2026: mục "If you take too much" — lỡ thêm 1–2 viên thường không gây hại, không quá 8 viên / 24 giờ (dùng cho lomiContext: paraFewTablets).
+      { title: "Paracetamol for adults", publisher: "NHS 111 Wales (Anh)", url: "https://111.wales.nhs.uk/encyclopaedia/p/article/paracetamolforadults", updated: "2024-12-19" },
     ],
     verifiedAt: "2026-10-09",
     uses: [{ text: "giảm đau mức nhẹ đến vừa và hạ sốt — ví dụ đau đầu, đau răng, đau họng, sưng cứng khớp, triệu chứng cảm cúm", src: [0, 1] }],
