@@ -168,7 +168,7 @@ describe("kiểm toán Lovable 11/11 — câu có ý rõ mà từng bị 'nghe n
     expect(await said(["chào nha, mới vô đây lần đầu"])).toMatch(/Lần đầu vào/);
     expect(await said(["Thôi khỏi, để lúc khác nói tiếp nha, giờ mình đi làm."])).toMatch(/Okie nha 👋/);
     expect(await said(["bạn là rô bốt hay người thật vậy"])).toMatch(/trợ lý ảo/);
-    expect(await said(["Lomi có ngủ buổi tối giống tui ko"])).toMatch(/không cần ngủ/);
+    expect(await said(["Lomi có ngủ buổi tối giống tui ko"])).toMatch(/không cần ngủ|thức 24\/7/); // (Lomi có sẵn vài câu đáp cho ý này)
     expect(await said(["Lomi có nói tiếng Việt được không?"])).toMatch(/tiếng Việt là chính/);
     expect(await said(["dịch giùm mk cả tập tài liệu tiếng Đức chuyên ngành đc hem"])).toMatch(/nằm ngoài những gì Lomi làm được/);
     expect(await said(["Mình ngồi làm thiết kế cả ngày, tối còn chơi game nên cổ tay hay tê"])).not.toMatch(/nằm ngoài những gì Lomi/);

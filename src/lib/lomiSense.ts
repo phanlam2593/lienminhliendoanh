@@ -706,7 +706,10 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
   if (words >= 2 && isPersonalTalk(raw)) {
     const s = low(raw);
     const sad = VR(/(😭|🥲|😢|😞|:\(+|huhu|hic)/iu).test(raw) || TALK_NEG.test(s) || !!ctx.neg || FAILED.test(` ${n} `);
-    const act = echoAct(s);
+    // 11/11 (bộ 1.000 câu — "Ghé chào bạn một hả 😄", "Chạy bộ hả 😄", "Ăn vô là cồn hả 🥺"): nhại một MẨU của câu dài nghe rất lạc,
+    //   và 😄 đặt sau chuyện không vui thì vô duyên. Chỉ nhại khi câu ngắn (≤ 8 chữ); chỉ 😄 khi câu có ý vui.
+    const act = words <= 8 ? echoAct(s) : null;
+    const glad = VN(/\b(vui|thích|mừng|tuyệt|sướng|ngon|đẹp|được khen|tự hào|hạnh phúc|may quá|đã quá|xịn|phê)\b/).test(` ${n} `);
     return {
       intent: "listen",
       talk: true,
@@ -715,8 +718,12 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
           ? `${cap(act)} hả 🥺 Rồi có sao không bạn?`
           : pick(["Ừ, Lomi nghe nè 🥺 Chuyện sao vậy bạn?", "Lomi ở đây với bạn nè 💚 Chuyện này làm bạn thấy sao?"])
         : act
-          ? pick([`${cap(act)} hả 😄 Rồi sao, kể Lomi nghe với!`, `Ồ, ${act} luôn hả 😄 Sao rồi nè?`])
-          : pick(["Ừa, Lomi nghe nè 😊 Rồi sao nữa?", "Vậy hả 😄 Chuyện sao vậy bạn, kể Lomi nghe với.", "Lomi nghe nè 🌿 Bạn kể thêm chút được không?"]),
+          ? glad
+            ? pick([`${cap(act)} hả 😄 Rồi sao, kể Lomi nghe với!`, `Ồ, ${act} luôn hả 😄 Sao rồi nè?`])
+            : `${cap(act)} hả? Rồi sao nữa, kể Lomi nghe với.`
+          : glad
+            ? pick(["Ừa, Lomi nghe nè 😊 Rồi sao nữa?", "Vậy hả 😄 Chuyện sao vậy bạn, kể Lomi nghe với."])
+            : pick(["Ừa, Lomi nghe nè. Rồi sao nữa bạn?", "Lomi nghe nè 🌿 Bạn kể thêm chút được không?"]),
     };
   }
   // Mẩu câu rất ngắn mà không nhận ra được gì ("quay lại", "tháng này") → hỏi lại một câu, vì chưa đủ ý để mà "bí".
