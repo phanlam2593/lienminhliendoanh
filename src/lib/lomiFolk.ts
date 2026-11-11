@@ -4603,7 +4603,9 @@ export function folkReply(
     const dm = med ?? prevMed;
     // (04/11) bà bầu hỏi một vị thuốc lấy từ tra cứu dược liệu (không phải món ăn) → trả lời ở đây (kèm "nguồn chưa nêu riêng cho bà bầu"), không rơi vào bảng món ăn khi mang thai.
     const herbPreg = PREG.test(nq0) && f.sources.some((x) => /Long Châu/.test(x.publisher));
-    if (dm && !group && !herbPreg && !herbEffectAsk(q) && !f.topics.some((t) => t.id === dm.id) && !folkWord && FOOD_ASK.test(nq0) && !HELP_ASK.test(nq0)) return null;
+    //   (06/11: hỏi về chính vị đó — "uống nước lá tía tô MỖI NGÀY được không" — thì vẫn trả lời vị đó)
+    const selfAsk = VN(/\b(mỗi ngày|hằng ngày|hàng ngày|thường xuyên|lâu dài|có phải|là vị|giống nhau|khác nhau)\b/).test(nq0);
+    if (dm && !group && !herbPreg && !selfAsk && !herbEffectAsk(q) && !f.topics.some((t) => t.id === dm.id) && !folkWord && FOOD_ASK.test(nq0) && !HELP_ASK.test(nq0)) return null;
     return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   }
   const uh = findUnverifiedHerb(q);

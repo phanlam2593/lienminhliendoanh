@@ -1768,6 +1768,11 @@ export function AiChat({
           const hosp = VN(/\b(bệnh viện|phòng khám|trạm y tế|chỗ khám)\b/).test(` ${normalizeVi(q)} `);
           return localReply(q, { role: "assistant", content: `Lomi chưa có danh sách ${hosp ? "bệnh viện / phòng khám" : "nhà thuốc"} trong app nên không chỉ chỗ cụ thể được 🙏\n• Mở **Google Maps** (hoặc bản đồ trên điện thoại) gõ “${hosp ? "bệnh viện gần đây" : "nhà thuốc gần đây"}” — xem giờ mở cửa và gọi trước cho chắc\n• ${hosp ? "Cần cấp cứu (khó thở, đau ngực, ngất, chảy máu nhiều…) → gọi **115** ngay, đừng tự đi tìm" : "Đêm khuya cần thuốc gấp thì các bệnh viện thường có nhà thuốc trực; dấu hiệu nặng (khó thở, đau ngực, sốt cao li bì…) → gọi **115**"}`, local: true, health: {} });
         }
+        //   (i2) 06/11: "tôi muốn tìm một người hợp với mình", "tìm người đi cùng" → mục Quẹt (Làm quen) thay vì chỉ nhắc lại câu
+        if (VN(/\b(tìm|kiếm)( được)?( một| 1)? (người|ai đó|ai|bạn|nửa kia)( \S+){0,2} (hợp với mình|hợp với tôi|hợp với tui|hợp với em|hợp nhau|đi cùng|đi chung|đồng hành|làm quen|để yêu|nói chuyện cùng|tâm sự cùng)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 14 && !VN(/\b(chơi game|cà phê|đi ăn)\b/).test(` ${normalizeVi(q)} `)) {
+          const qf2 = faqById("quetwhat");
+          if (qf2) return localReply(q, { role: "assistant", content: `Muốn gặp người hợp với mình thì thử mục **Quẹt → Làm quen** nha 💚 Mình tạo nhu cầu (vd tìm bạn đi cà phê, đi phượt, hay tìm hiểu nghiêm túc), ai hợp thì kết nối nói chuyện.\n\n${qf2.a.vi}\n\nNhớ gặp lần đầu ở chỗ đông người, báo cho người thân biết nha.`, local: true, faqId: "quetwhat" });
+        }
         //   (i) "muốn tìm bạn chơi game / đi cà phê" → mục Quẹt
         if (VN(/\b(tìm|kiếm|muốn có|cần)( \S+){0,1} (bạn|người|đồng đội|team)( \S+){0,1} (chơi game|chơi|đi chơi|đi cà phê|đi ăn|đánh game|leo rank|đi phượt|tập gym)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 12) {
           const qf = faqById("quetwhat");
@@ -1784,9 +1789,43 @@ export function AiChat({
         }
         //   (k) 06/11: "thuốc bắc / thuốc nam có tốt không" (nói chung, không nêu vị, không nêu bệnh) → không kéo theo vị / bệnh vừa nói
         const tnb = folkById("thuoc-nam-benh-nang");
-        if (tnb && VN(/\b(thuốc nam|thuốc bắc|thuốc đông y|đông y|thuốc dân gian|thảo dược)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(có tốt không|tốt không|có nên (uống|dùng)|có an toàn không|an toàn không|có hại không|có hiệu quả không|có tác dụng không|tin được không|có tốt bằng|hay thuốc tây|tốt hơn)\b/).test(` ${normalizeVi(q)} `) && !findFolk(q.replace(/thuốc (nam|bắc|đông y|dân gian)|đông y|thảo dược/giu, " "))?.id && lowQ.split(/\s+/).length <= 14) {
-          return localReply(q, { role: "assistant", content: `Thuốc nam / thuốc bắc thì **tuỳ từng vị**, nên Lomi không nói chung “tốt” hay “không tốt” được 🙏 Bạn cho Lomi tên vị (vd gừng, lá vối, nghệ…) để Lomi xem đúng vị đó nha.\n\nCòn đây là những điều nguồn y khoa lưu ý **chung** khi dùng thuốc nam / thuốc bắc 👇\n\n${renderFolk(tnb)}`, local: true, herb: tnb.id });
+        if (tnb && VN(/\b(thuốc nam|thuốc bắc|thuốc đông y|đông y|thuốc dân gian|thảo dược)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(có tốt không|tốt không|có nên (uống|dùng)|có an toàn không|an toàn không|có hại không|có hiệu quả không|có tác dụng không|tin được không|có tốt bằng|hay thuốc tây|tốt hơn|khác nhau|khác gì|giống nhau|phân biệt)\b/).test(` ${normalizeVi(q)} `) && !findFolk(q.replace(/thuốc (nam|bắc|đông y|dân gian)|đông y|thảo dược/giu, " "))?.id && lowQ.split(/\s+/).length <= 14) {
+          return localReply(q, { role: "assistant", content: `${VN(/\b(khác nhau|khác gì|giống nhau|phân biệt)\b/).test(` ${normalizeVi(q)} `) ? "Lomi **chưa có nguồn đã kiểm chứng** để phân biệt thuốc nam với thuốc bắc nên không dám giải thích bừa 🙏 Mỗi vị một khác — bạn cho Lomi tên vị" : "Thuốc nam / thuốc bắc thì **tuỳ từng vị**, nên Lomi không nói chung “tốt” hay “không tốt” được 🙏 Bạn cho Lomi tên vị"} (vd gừng, lá vối, nghệ…) để Lomi xem đúng vị đó nha.\n\nCòn đây là những điều nguồn y khoa lưu ý **chung** khi dùng thuốc nam / thuốc bắc 👇\n\n${renderFolk(tnb)}`, local: true, herb: tnb.id });
         }
+        //   (j2) 06/11: "làm vậy có ổn không ta?" mà trước đó chưa kể dự định nào → hỏi bạn đang tính làm gì (không đáp "Lomi vẫn ổn")
+        if (!rewroteRef.current && VN(/^(làm|như|thế|vậy|làm thế|làm vậy|như vậy|như thế|làm như vậy|làm như thế|cách đó|vậy thì)( vậy| thế)? (có )?(ổn|được|đc|ok|oke|tốt|sao|hợp lý|nên|an toàn)( không| ko| k| hông| hok| chưa)?( ta| nhỉ| ha| á| vậy| hả| bạn| lomi)*$/).test(normalizeVi(lowQ)))
+          return localReply(q, { role: "assistant", content: "Bạn đang tính làm gì nè? Kể Lomi nghe cụ thể một chút (định làm gì, cho chuyện gì), rồi mình cùng xem có ổn không nha 🙂", local: true });
+        //   (j3) "có cách nào nhẹ nhàng hơn không?" — hỏi cách khác cho chuyện vừa nói, nhưng chưa rõ chuyện nào → hỏi lại một câu
+        if (VN(/^(có )?(cách|cách nào|cách gì|kiểu nào)( \S+)? (nhẹ nhàng|dễ|đơn giản|bớt cực|đỡ mệt|khác|ít tốn|nhẹ) ?(hơn)?( không| ko| k| hông| hok)?( ta| nhỉ| ha| á| vậy| hả)*$/).test(normalizeVi(lowQ)) && !la?.med && !la?.drug && !la?.herb)
+          return localReply(q, { role: "assistant", content: "Có chứ, mình tìm cách nhẹ nhàng hơn nha 🙂 Bạn muốn nhẹ nhàng hơn trong chuyện nào nè — công việc, nghỉ ngơi, hay chuyện đang làm bạn mệt? Kể Lomi nghe thêm một chút nha.", local: true });
+        //   (l) "thuốc này / thuốc đó dùng để làm gì" mà mấy lượt gần đây chưa nói tới thuốc nào → hỏi tên thuốc (trước đây nối nhầm vào bài đau khớp)
+        const recentDrug = msgs.slice(-6).some((m) => m.role === "assistant" && (m.drug || m.herb));
+        //   (chỉ câu hỏi trơn "thuốc này dùng để làm gì / trị gì / là thuốc gì" — câu có thêm nội dung như "ghi gây chóng mặt", "nguồn nghiên cứu" để lớp khác lo)
+        if (VN(/^(cái |loại )?(thuốc|viên|viên thuốc) (này|đó|kia|ấy|nãy)( (dùng|uống|xài))?( (để|vào))? (làm gì|trị gì|chữa gì|trị bệnh gì|chữa bệnh gì|là thuốc gì|thuốc gì|có tác dụng gì|tác dụng gì|công dụng gì|có công dụng gì|dùng làm gì)( (vậy|vay|ạ|á|nhỉ|ta|nè|z|v))*$/).test(normalizeVi(lowQ)) && !recentDrug && !findIndexedDrug(q) && !findDrug(q) && !findFolk(q))
+          return localReply(q, { role: "assistant", content: "Thuốc nào nè bạn? Bạn gõ **tên thuốc** ghi trên vỉ / hộp (vd Panadol, Decolgen, Smecta…) để Lomi tra đúng thuốc đó nha 💊", local: true, health: {} });
+        //   (m) "uống thuốc xong thấy buồn ngủ thì sao" — không nêu tên thuốc → nói thật là có thể do thuốc, hỏi tên thuốc (trước đây đáp "Lomi ôm bạn")
+        const seGen = ["buồn ngủ", "chóng mặt", "buồn nôn", "nổi mẩn", "ngứa", "mệt", "đau bụng", "khô miệng"].find((w) => VN(new RegExp(`\\b${w}\\b`)).test(` ${normalizeVi(q)} `));
+        if (seGen && VN(/\b(uống|dùng|xài) (thuốc|viên thuốc)( \S+){0,2} (xong|rồi|vào|thì)\b/).test(` ${normalizeVi(q)} `) && !findIndexedDrug(q) && !findDrug(q) && !la?.drug) {
+          const ahl = seGen === "buồn ngủ" ? drugAsk("thuoc chong di ung co tac dung phu gi", {})?.text.split("\n").find((l) => /gây buồn ngủ/u.test(l)) : undefined;
+          return localReply(q, { role: "assistant", content: `**${seGen.charAt(0).toUpperCase() + seGen.slice(1)}** sau khi uống thuốc có thể là tác dụng phụ của chính thuốc đó — mỗi thuốc mỗi khác nên Lomi cần biết **tên thuốc** (ghi trên vỉ / hộp) để tra đúng nha 💊${ahl ? `\n\nVí dụ nhóm **thuốc chống dị ứng** theo nguồn:\n${ahl}` : ""}\n\n• Trong lúc chờ: đừng lái xe hay làm việc cần tỉnh táo nếu đang ${seGen}\n• Thấy nặng hơn hoặc lạ (khó thở, sưng môi mặt, nổi mẩn khắp người) → đi khám ngay / gọi **115**\n• Thuốc bác sĩ kê thì hỏi lại bác sĩ / dược sĩ, đừng tự ngưng`, local: true, health: {} });
+        }
+        //   (n) "nghệ vàng và tinh bột nghệ có giống nhau không" — so hai thứ của một vị → thẻ vị đó (không ra bảng dinh dưỡng)
+        const hcmp = findFolk(q);
+        if (hcmp && hcmp.id !== "thuoc-nam-benh-nang" && VN(/\b(giống nhau|khác nhau|khác gì|có giống|phân biệt)\b/).test(` ${normalizeVi(q)} `))
+          return localReply(q, { role: "assistant", content: `Lomi **chưa có nguồn so sánh riêng** cho câu này nên không dám nói giống hay khác 🙏 Đây là những gì nguồn nói về **${hcmp.names[0]}** nha 👇\n\n${renderFolk(hcmp, null, Date.now(), q)}`, local: true, herb: hcmp.id });
+        //   (o) 11/11: "Quán này có ổn không?" sau khi Lomi gợi ý quán → chỉ cách xem đánh giá (trước đây "Lomi khoẻ re 💪")
+        if (VN(/\b(quán|chỗ|tiệm|nơi|khách sạn|homestay) (này|đó|kia|vừa rồi|đầu tiên|thứ \S+)\b/).test(` ${normalizeVi(q)} `) && VN(/\b(ổn|ngon|được|tốt|đáng|uy tín|sạch|đẹp|rẻ|mắc|đắt)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 12) {
+          const hadPlaces = msgs.slice(-12).some((m) => m.role === "assistant" && m.places?.length);
+          return localReply(q, { role: "assistant", content: hadPlaces ? "Lomi chưa tự đi thử nên không dám chấm điểm thay bạn 🙏 Bạn bấm vào thẻ quán để xem **sao và nhận xét của người dùng iLomi**, ưu đãi đang có, giờ mở cửa nha — đọc thêm nhận xét trên Google Maps nữa cho chắc." : "Quán nào nè bạn? Gõ **tên quán** (hoặc hỏi Lomi tìm quán trước) để Lomi mở thẻ có đánh giá của người dùng iLomi cho bạn xem nha 🙂", local: true });
+        }
+        //   (p) 11/11: "Gừng có phải là vị thuốc nam không?" → thẻ vị đó (trước đây ra cả danh sách thuốc nam)
+        const isHerb = lowQ.match(/^(.+?)\s+(?:có\s+)?phải\s+(?:là\s+)?(?:một\s+)?(?:vị\s+|loại\s+|cây\s+)?(?:thuốc nam|thuốc bắc|dược liệu|vị thuốc|thảo dược|cây thuốc|thuốc đông y)/u);
+        const ih = isHerb ? findFolk(isHerb[1]) : null;
+        if (ih && ih.id !== "thuoc-nam-benh-nang")
+          return localReply(q, { role: "assistant", content: `**${ih.names[0].charAt(0).toUpperCase() + ih.names[0].slice(1)}** có trong kho dược liệu / mẹo dân gian Lomi đã đối chiếu nguồn nè 🌿 Lomi chưa có nguồn xếp loại “thuốc nam hay thuốc bắc” riêng, nên đây là những gì nguồn nói về vị này 👇\n\n${renderFolk(ih, null, Date.now(), q)}`, local: true, herb: ih.id });
+        //   (q) 11/11: "có nên đánh liều một lần không" → giúp cân nhắc, không quyết thay (trước đây lặp lại lời khuyên mở tiệm của lượt trước)
+        if (VN(/\b(đánh liều|liều một lần|liều 1 lần|liều thử|mạo hiểm (một|1) lần|liều ăn nhiều|chơi lớn|all in)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 14)
+          return localReply(q, { role: "assistant", content: "Chuyện **đánh liều** thì Lomi không quyết thay bạn được, nhưng mình cân nhắc cùng nha 🙂\n• **Tệ nhất** có thể xảy ra là gì — mất bao nhiêu tiền, thời gian, và mình có chịu được không?\n• Có cách **thử nhỏ trước** không (làm thử vài tuần, bỏ vốn ít) thay vì dồn hết một lần?\n• Nếu không làm, một năm nữa mình có tiếc không?\n• Đừng đánh liều bằng tiền vay hay tiền cần cho chi tiêu thiết yếu.\n\nBạn đang tính liều chuyện gì nè? Kể Lomi nghe để mình xem kỹ hơn.", local: true });
         //   (e) lời đáp trước có nhắc gói bù nước (ORS / Oresol) mà hỏi "gói đó pha ntn" → hỏi cách pha Oresol
         if (la && /Oresol|ORS|bù nước/u.test(la.content) && VN(/\bpha\b/).test(` ${normalizeVi(q)} `) && VN(/\b(gói|nó|đó|này|cái đó|thuốc đó)\b/).test(` ${normalizeVi(q)} `) && !findIndexedDrug(q) && !findDrug(q)) {
           q = `oresol ${q}`;
@@ -3503,7 +3542,8 @@ export function AiChat({
         const sl0 = senseState(raw, ["sleepy"]);
         if (sl0) return localReply(q, { role: "assistant", content: sl0.text, local: true, quick: sl0.quick, talk: (convo?.talk ?? 0) + 1 });
         // Đang nói chuyện sức khoẻ mà câu không có tín hiệu cảm xúc → không mở mạch tâm sự (để phần "chưa biết" bên dưới nói thật).
-        const calmHealth = !!hCtx && !heartOn && !healthFeeling(raw);
+        //   (11/11: câu khớp hẳn một chủ đề tâm sự — "không biết mình đang cố gắng vì điều gì nữa" — vẫn mở tâm sự dù lượt trước nói chuyện thuốc)
+        const calmHealth = !!hCtx && !heartOn && !healthFeeling(raw) && !(heartThemeOf(q) && !findMedId(q) && !findIndexedDrug(q) && !findDrug(q));
         const rel = calmHealth ? null : relationReply(q);
         if (rel) topicHit("love");
         if (rel) return localReply(q, { ...heartMsg(rel, 1), rel: rel.rel });

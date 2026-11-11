@@ -206,6 +206,8 @@ const RULES: Rule[] = [
   // Hỏi thăm Lomi
   {
     re: VN(/\b(khỏe không|khỏe ko|có khỏe|thế nào rồi|ổn không|đang làm gì|làm gì đó|làm gì thế|hôm nay thế nào|how are you)\b/),
+    // 11/11: "Quán này có ổn không?", "làm vậy có ổn không" hỏi về MỘT THỨ, không phải hỏi thăm Lomi
+    not: VN(/\b(quán|chỗ|tiệm|món|cái|việc|cách|kế hoạch|ý tưởng|thuốc|đồ|phòng|khu|nơi|người|dịch vụ|sản phẩm|này|đó|kia|vậy|thế)\b( \S+){0,2} (có )?ổn không\b/),
     // 09/10: "đang làm gì" là hỏi Lomi đang LÀM gì — không đáp "Lomi khoẻ re".
     reply: (n = "") => ({
       text: VN(/\blàm gì\b/).test(n)
@@ -1039,7 +1041,8 @@ export function foodDecisionReply(text: string): ChatReply | null {
 function decideAction(text: string): string | null {
   const t = text.normalize("NFC").toLowerCase().replace(/[?!.…]+/g, " ").replace(/\s+/g, " ").trim();
   const m = t.match(VR(/(?:có nên|nên)\s+(.+?)\s+(?:không|ko|k|hông|hong|hay không|hay thôi|hay sao)(?:\s+(?:nhỉ|ta|hả|ha|à|ạ|a|nè|e|em|lomi|vậy))*$/u));
-  const act = m?.[1]?.replace(VR(/\s+(?:trước|luôn)?$/u), (x) => x)?.trim();
+  // (06/11: "có nên nghỉ nữa không" → việc là "nghỉ", bỏ chữ đệm cuối "nữa / luôn / thử / đại")
+  const act = m?.[1]?.replace(VR(/\s+(?:trước|luôn)?$/u), (x) => x)?.replace(VR(/\s+(?:nữa|luôn|thử|đại|liền|ngay)$/u), "")?.trim();
   if (!act || act.split(" ").length > 8) return null;
   if (VR(/(?:^|\s)(?:cái|món|chuyện|việc|vụ)\s+(?:này|đó|kia|ấy)(?:\s|$)|^(?:làm|vậy|thế|vậy không|đi)$/u).test(act)) return null;
   return act;

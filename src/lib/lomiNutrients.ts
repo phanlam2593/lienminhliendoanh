@@ -315,11 +315,11 @@ const srcOf = (...gs: { src: number[] }[][]) => gs.flat().flatMap((x) => x.src);
 const line = (src: number[], now: number) => sourceLine({ sources: NUT_SOURCES, verifiedAt: VERIFIED }, src, now);
 
 /** Bài về MỘT chất. `med` (nếu có) → dòng riêng cho bệnh đó đứng đầu. */
-export function renderNutrient(x: Nutrient, med: { id: string; name: string } | null, dose: boolean, now = Date.now()): string {
+export function renderNutrient(x: Nutrient, med: { id: string; name: string } | null, dose: boolean, now = Date.now(), cause = false): string {
   const t = med ? x.topics.find((y) => y.id === med.id) : undefined;
   const parts = [
     `💊 **${x.name}** — có trong món gì, ai cần bổ sung`,
-    med ? (t ? `👉 Với **${med.name}**: ${t.text}` : `👉 Các nguồn Lomi đối chiếu **chưa nêu ${x.name.split(" (")[0].toLowerCase()} giúp chữa ${med.name}**.`) : "",
+    med ? (t ? `👉 Với **${med.name}**: ${t.text}` : `👉 Các nguồn Lomi đối chiếu **chưa nêu ${x.name.split(" (")[0].toLowerCase()} ${cause ? "gây" : "giúp chữa"} ${cause ? med.name.toLowerCase() : med.name}**.`) : "",
     dose && x.need?.length
       ? `📏 **Lượng cần mỗi ngày theo nguồn:**\n${bl(x.need)}\nℹ️ Để **đọc tham khảo** — mỗi loại viên (viên sủi, viên nhai, siro…) hàm lượng khác nhau: xem **nhãn**, và hỏi dược sĩ / bác sĩ nếu đang mang thai, có bệnh, đang dùng thuốc khác hoặc cho trẻ dùng.`
       : dose ? "🔢 Lomi **chưa có số liệu liều** có nguồn cho chất này — liều tuỳ tuổi, bệnh, loại sản phẩm; làm theo nhãn hoặc hỏi dược sĩ / bác sĩ nha." : "",
@@ -504,7 +504,8 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
     if (med && DEFICIT_CARD[x.id] === med.id && !/\b(co trong|mon gi|thuc pham|an gi|giau|nhieu)\b/.test(n)) return null;
     const words = n.trim().split(" ").length;
     if (!NUT_ASK.test(n) && words > 4) return null;
-    return renderNutrient(x, med && med.id !== DEFICIT_CARD[x.id] ? med : null, DOSE.test(n), now);
+    // (06/11: "uống vitamin C buổi tối có KHÓ NGỦ không" là hỏi chất đó có GÂY bệnh/triệu chứng không, không phải có chữa được không)
+    return renderNutrient(x, med && med.id !== DEFICIT_CARD[x.id] ? med : null, DOSE.test(n), now, /\b(co kho|co bi|co gay|co lam|gay|lam .* (kho|mat|bi)|kho ngu|mat ngu khong)\b/.test(n));
   }
   if (!SUPP.test(n)) return null;
   // "thuốc bổ gan uống chung với paracetamol được không" — hỏi tương tác thuốc → để lớp thuốc trả lời.

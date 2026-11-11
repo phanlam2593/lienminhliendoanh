@@ -119,6 +119,7 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
       <AiChat />
     </MemoryRouter>,
   );
+  const collected: Turn[] = [];
   for (let i = 0; i < turns.length; i++) {
     const box = [...container.querySelectorAll("textarea")].pop()!;
     await act(async () => {
@@ -128,10 +129,15 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
       fireEvent.keyDown(box, { key: "Enter", code: "Enter" });
     });
     await waitFor(() => {
-      if (history().length < pre.length + (i + 1) * 2) throw new Error(`Lomi chưa đáp tin thứ ${i + 1}: "${turns[i]}"`);
+      // (11/11: lịch sử lưu tối đa 30 tin — hội thoại dài hơn 15 lượt thì dò theo tin người dùng cuối cùng thay vì đếm độ dài)
+      const h = history();
+      const long = pre.length + (i + 1) * 2 > 30;
+      if (!long ? h.length < pre.length + (i + 1) * 2 : !(h.at(-1)?.role === "assistant" && h.at(-2)?.role === "user" && h.at(-2)?.content === turns[i]))
+        throw new Error(`Lomi chưa đáp tin thứ ${i + 1}: "${turns[i]}"`);
     });
+    if (pre.length + turns.length * 2 > 30) collected.push(history().at(-1)!);
   }
-  const out = history().slice(pre.length).filter((m) => m.role === "assistant");
+  const out = pre.length + turns.length * 2 > 30 ? collected : history().slice(pre.length).filter((m) => m.role === "assistant");
   cleanup();
   return out;
 }

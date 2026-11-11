@@ -558,7 +558,7 @@ const THEMES: Theme[] = [
   {
     id: "selfworth",
     hint: [[VN(/\b(làm sai|mắc lỗi|sai|hỏng)( một)? (việc|chuyện|lần|cái)( \S+){0,6} (kết luận|nghĩ|thấy|cho rằng) (mình |bản thân )?(là )?(kẻ |đồ |người )?(thất bại|vô dụng|tệ|kém cỏi)\b/), "Một lỗi nhỏ là **một việc mình làm chưa tốt**, không phải bằng chứng mình là “kẻ thất bại”.\n\nThử tách hai câu ra: “Mình đã làm sai việc X” — đúng, và sửa được; còn “Mình là người thất bại” — là kết luận quá rộng rút ra từ một lần. Nếu bạn thân mắc đúng lỗi này, bạn có gọi họ là kẻ thất bại không?\n\nViết ra ba dòng thôi: lỗi gì, học được gì, lần sau làm khác chỗ nào — vậy là đủ cho chuyện này rồi.", true]],
-    re: VN(/\b(tự ti|thất bại|vô dụng|gánh nặng|không ai cần (mình|tôi|tui|em|anh|chị|a|e|c)\b|ăn bám|kém cỏi|không bằng ai|so sánh với|thua kém|ghét bản ?thân|chán bản ?thân|không làm được gì|không có giá trị|mình tệ quá|mình dở quá|không ai thương|xấu xí|béo quá|không đủ tốt|(chẳng|không|chả|ko) làm được (tích sự|trò trống|cái|việc)( gì)?( ra hồn)?|vô tích sự|chắc (mình |em |anh |chị |tui |tôi )?(dở|ngu|kém|tệ) (thật|thiệt|quá|lắm|rồi)|(mình|bản thân)( \S+){0,2} (chẳng|không|chả) (có )?ích (gì|lợi gì)|(thấy|nghĩ) (mình|bản thân) (cứ )?(đang |chỉ )?làm phiền|(vì|tại) (mình|em|tui|tôi) không (đẹp|giỏi|xinh|đủ)|không (đẹp|xinh) (bằng|nên)|bị (nói|gọi|chê) là (ăn bám|vô dụng|vô tích sự))\b/),
+    re: VN(/\b(tự ti|thất bại|vô dụng|gánh nặng|không ai cần (mình|tôi|tui|em|anh|chị|a|e|c)\b|ăn bám|kém cỏi|không bằng ai|chẳng bằng ai|thua kém mọi người|không bằng người ta|chẳng bằng người ta|so sánh với|thua kém|ghét bản ?thân|chán bản ?thân|không làm được gì|không có giá trị|mình tệ quá|mình dở quá|không ai thương|xấu xí|béo quá|không đủ tốt|(chẳng|không|chả|ko) làm được (tích sự|trò trống|cái|việc)( gì)?( ra hồn)?|vô tích sự|chắc (mình |em |anh |chị |tui |tôi )?(dở|ngu|kém|tệ) (thật|thiệt|quá|lắm|rồi)|(mình|bản thân)( \S+){0,2} (chẳng|không|chả) (có )?ích (gì|lợi gì)|(thấy|nghĩ) (mình|bản thân) (cứ )?(đang |chỉ )?làm phiền|(vì|tại) (mình|em|tui|tôi) không (đẹp|giỏi|xinh|đủ)|không (đẹp|xinh) (bằng|nên)|bị (nói|gọi|chê) là (ăn bám|vô dụng|vô tích sự))\b/),
     feel: [
       "Nghe bạn nói vậy Lomi thương lắm 🥺 Cảm giác mình không đủ tốt nặng nề thật.",
       "Lomi hiểu, có những ngày mình nhìn đâu cũng thấy mình thua kém người ta.",
@@ -763,7 +763,7 @@ const ADVICE_RE = VN(/\b(làm sao|làm thế nào|làm gì|nên làm gì|có nê
 const UNIV_RE = VN(/\b(làm gì|làm sao|nói gì|nói sao|cách nào|thế nào) (\S+ )?cũng\b/);
 const asksAdvice = (n: string) => ADVICE_RE.test(` ${n} `) && !UNIV_RE.test(` ${n} `);
 // 11/10 — người dùng nói rõ CHỈ MUỐN ĐƯỢC NGHE ("a chỉ muốn than thôi, chưa cần lời khuyên") — nhận cả khi chưa vào mạch tâm sự.
-const LISTEN_RE = VN(/\b(chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự|(chưa|không|đừng) cần (em |e |lomi |bạn |mày |m )?(phải )?(đưa |cho )?(ra )?(lời )?(khuyên|tư vấn)|(đừng|khỏi|thôi) (đưa |cho )?(ra )?(lời )?khuyên|chỉ (cần |muốn )?(em |lomi |bạn )?(lắng nghe|nghe)( và hỏi| thôi)|chỉ muốn có người (hiểu|nghe)|(cần|muốn có|cần có) (một )?(người|ai đó) (nghe|lắng nghe|để tâm sự|tâm sự|để nói chuyện|nói chuyện cùng)( \S+)?|không muốn nghe (câu |mấy câu |lời )?(“|")?cố lên|đừng (nói|bảo|kêu) (anh |a |em |e |mình |tôi )?cố lên|cứ đưa (ra )?lời khuyên (liên tục|hoài|mãi)|(không|chưa|chẳng|chả) (muốn|cần|thích) (nhận |nghe )?(lời )?(khuyên|góp ý))\b/);
+const LISTEN_RE = VN(/\b((muốn|cần|ước)( được)? (có )?(người|ai)( \S+){0,2} (nghe|lắng nghe) (mình|tui|tôi|em|con|tớ) (nói|kể|tâm sự|than)|chỉ muốn được nghe|chỉ cần nghe|đừng khuyên|không cần khuyên|nghe thôi|chỉ muốn than|muốn than thở|than một chút|than tí thôi|than ti thôi|chưa cần lời khuyên|không cần lời khuyên|chưa cần khuyên|không cần tư vấn|chỉ cần (có )?người nghe|chỉ muốn kể|chỉ muốn nói ra|muốn xả stress|trút bầu tâm sự|(chưa|không|đừng) cần (em |e |lomi |bạn |mày |m )?(phải )?(đưa |cho )?(ra )?(lời )?(khuyên|tư vấn)|(đừng|khỏi|thôi) (đưa |cho )?(ra )?(lời )?khuyên|chỉ (cần |muốn )?(em |lomi |bạn )?(lắng nghe|nghe)( và hỏi| thôi)|chỉ muốn có người (hiểu|nghe)|(cần|muốn có|cần có) (một )?(người|ai đó) (nghe|lắng nghe|để tâm sự|tâm sự|để nói chuyện|nói chuyện cùng)( \S+)?|không muốn nghe (câu |mấy câu |lời )?(“|")?cố lên|đừng (nói|bảo|kêu) (anh |a |em |e |mình |tôi )?cố lên|cứ đưa (ra )?lời khuyên (liên tục|hoài|mãi)|(không|chưa|chẳng|chả) (muốn|cần|thích) (nhận |nghe )?(lời )?(khuyên|góp ý))\b/);
 // 21/10 (QA Q96/Q97): xin "đừng nói cố lên" / "chỉ lắng nghe và hỏi vài câu" → đáp đúng yêu cầu đó, không chỉ "bạn cứ kể nha".
 const NO_CHEER = VN(/\b(cố lên)\b/);
 const ASK_ME = VN(/\b(hỏi (anh|a|em|e|mình|tôi|tui|chị|c) (vài|mấy|một vài) câu|và hỏi)\b/);
@@ -1183,7 +1183,10 @@ function themeReply0(t: Theme, n: string, adviceAsked: boolean, avoidAsk?: RegEx
   if (adviceAsked && given * 2 >= t.advice.length) {
     advGiven.set(t.id, 0);
     parts.push(hintOf() ?? pick(`${t.id}:ins`, t.insight));
-    parts.push(`Thêm vài bước nhỏ bạn thử nha:\n• ${pick(`${t.id}:step`, t.step)}\n• ${pick(`${t.id}:step`, t.step)}`);
+    // (06/11: chủ đề chỉ có 1 bước thì đừng in 2 lần cùng một dòng)
+    const st1 = pick(`${t.id}:step`, t.step);
+    const st2 = t.step.length > 1 ? pick(`${t.id}:step`, t.step.filter((x) => x !== st1)) : "";
+    parts.push(st2 ? `Thêm vài bước nhỏ bạn thử nha:\n• ${st1}\n• ${st2}` : `Thêm một bước nhỏ bạn thử nha:\n• ${st1}`);
     parts.push(pick(`${t.id}:ask`, t.ask));
     return { text: parts.join("\n\n"), quick: chipsFor(t), theme: t.id };
   }

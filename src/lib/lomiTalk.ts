@@ -260,4 +260,4 @@ export const NO_RE = VN(/^(không|ko|k|kh|hông|hong|hem|khum|chưa|chưa có|kh
 export const DUNNO_RE = VN(/\b(không biết|hk bit|k biết|chịu|không rõ|biết đâu(?:x)?|sao biết)\b/);
 // Người dùng than Lomi máy móc / không hiểu
 export const META_RE =
-  VN(/\b(sao cứ nói vậy|cứ nói vậy hoài|nói hoài(?! (mà )?(không|ko|chẳng|chả|chưa) (chịu )?nghe)|nói vậy hoài|lặp lại|lặp đi lặp lại|máy móc|như robot|như cái máy|không hiểu gì|không hiểu mình|nói gì vậy|là sao|ý là sao|ý gì|hiểu không vậy|trả lời gì kỳ|trả lời kỳ vậy|lạc đề|không liên quan)\b|\blà sa(?:o)+\b|^(sa(?:o)+|hể|he|hả|ha|hm(?:m)+)$/);
+  VN(/\b(sao cứ nói vậy|cứ nói vậy hoài|nói hoài(?! (mà )?(không|ko|chẳng|chả|chưa) (chịu )?nghe)|nói vậy hoài|lặp lại|lặp đi lặp lại|máy móc|như robot|như cái máy|không hiểu gì|(?<!(người thân|ba mẹ|bố mẹ|gia đình|mọi người|ai|người yêu|vợ|chồng|bạn bè|họ|sếp|đồng nghiệp|con|anh ấy|cô ấy|ảnh|ổng|bả) (cũng |còn |vẫn )?)không hiểu mình|nói gì vậy|là sao|ý là sao|ý gì|hiểu không vậy|trả lời gì kỳ|trả lời kỳ vậy|lạc đề|không liên quan)\b|\blà sa(?:o)+\b|^(sa(?:o)+|hể|he|hả|ha|hm(?:m)+)$/);

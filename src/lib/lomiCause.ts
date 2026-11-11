@@ -96,6 +96,8 @@ export function parseCause(q: string): CauseParse | null {
   low = low.replace(/^nếu\s+(.+?)\s+thì\s+có\s+(?:bị\s+)?(?!làm|gây|giúp|khiến)/u, "$1 có làm ");
   // "vitamin C có làm mất ngủ nếu uống trước giờ ngủ 2 tiếng không" → bỏ vế "nếu …"
   low = low.replace(/\s+nếu\s+.+?(\s+(?:không|ko|k|hông))$/u, "$1");
+  // 06/11: "ăn đồ lạnh có dễ bị đau bụng không" → bỏ "dễ / hay" trước "bị / gây" (trước đây nhắc lại thành "ăn đồ lạnh có dễ gây đau bụng")
+  low = low.replace(/\s+có\s+(?:dễ|hay|dễ bị|hay bị)\s+(?=bị\s|gây\s|làm\s|khiến\s)/u, " có ").replace(/\s+có\s+(?:dễ|hay)\s+bị\s+/u, " có bị ");
   if (low.split(" ").length > 16) return null;
   const m = low.match(RE);
   if (!m) return null;

@@ -13,6 +13,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUGS, DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import INDEX from "@/lib/medkb/index.json";
 import { findIndexedDrug } from "@/lib/lomiDrugIndex";
+import { findFolk } from "@/lib/lomiFolk";
 import { VR, VN } from "@/lib/viMatch";
 
 export type MedFood = { name: string; aliases: string[]; verdict: "avoid" | "limit" | "ok" | "good"; note: string; src: number[] };
@@ -1252,6 +1253,9 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     if (VN(/^ ?(tìm|kiếm|tìm giúp|tìm giùm|tìm dùm|chỉ (mình|tôi|tui|em)? ?(quán|chỗ))\b|\b(quán|tiệm|nhà hàng) (nào|gần|ở đâu)\b|\btìm quán\b/).test(` ${normalizeVi(text)} `)) return null;
     // 01/11: câu nêu một chỗ đau / viêm KHÁC ("đau đầu nên ăn gì" → "đau bụng nên ăn gì") là chuyện mới, không phải câu nối của thẻ cũ
     if (otherComplaint(text, LOOKUP_ROWS.find((r) => r.id === prev.id)?.names ?? [])) return null;
+    // 06/11 (Kir hỏi 50 câu liền): câu nói về NGƯỜI / cảm xúc ("người thân không hiểu mình thì phải làm sao") là chuyện tâm sự mới,
+    //   không phải "phải làm sao" của bệnh vừa nói (trước đây ra thẻ Cảm lạnh / Cúm)
+    if (VN(/\b(người thân|gia đình|bố mẹ|ba mẹ|cha mẹ|người yêu|bạn bè|vợ chồng|đồng nghiệp|sếp|không hiểu mình|không ai hiểu|cô đơn|tủi thân|thất bại|tự ti|hài lòng người khác|lời người khác|nhạy cảm|cố gắng vì|cuộc đời|cuộc sống)\b/).test(` ${normalizeVi(text)} `)) return null;
     // (góc nhìn triệu chứng: chỉ câu nối hỏi cách chăm sóc / khi nào khám / thuốc — "vậy làm sao?", "có cần đi khám không")
     if (isSymptomView(prev.id)) return asp && VIEW_ASPECTS.has(asp) ? { id: prev.id, aspect: asp, food: null } : null;
     const n = normalizeVi(text);
@@ -1261,6 +1265,10 @@ export function parseMedAsk(text: string, prev?: MedState): MedAsk | null {
     // 05/11: đang nói một bệnh mà hỏi "uống prospan / smecta được không" — thứ được hỏi là THUỐC trong danh mục → để lớp thuốc trả lời
     //   (trước đây hiểu thành hỏi kiêng MÓN "prospan" của thẻ Ho).
     if (findIndexedDrug(text)) return null;
+    // 06/11: hỏi về CHÍNH một vị thuốc nam ("uống nước lá tía tô mỗi ngày được không", "gừng có phải vị thuốc nam không") → để lớp
+    //   dược liệu trả lời vị đó, không nối vào thẻ bệnh vừa nói (trước đây ra "nguồn cho viêm dạ dày chưa nói rõ mỗi ngày…")
+    const hf = findFolk(text);
+    if (hf && hf.id !== "thuoc-nam-benh-nang" && VN(/\b(mỗi ngày|hằng ngày|hàng ngày|thường xuyên|lâu dài|có phải|là vị|vị thuốc|thuốc nam|thuốc bắc|giống nhau|khác nhau|công dụng|tác dụng|là gì|có tốt không|có lợi)\b/).test(` ${normalizeVi(text)} `)) return null;
     const fp = foodPhrase(text, null);
     if (fp && asp !== "spread" && VN(/\b(ăn|uống|dùng)\b/).test(n) && !NOT_ONE_FOOD.test(n)) return { id: prev.id, aspect: "food", food: fp };
     const fm = n.match(VN(/^(?:vậy |thế |còn |nhưng |rồi )*((?:\S+ ){0,2}?\S+?) (?:thì sao|sao|có được không|được không|có sao không|được k|được ko)$/));

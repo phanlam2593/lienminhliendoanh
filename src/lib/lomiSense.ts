@@ -141,6 +141,8 @@ const RENAME: [RegExp, string][] = [
   // 05/11 (rà hiểu sai): nói ví von, không phải bệnh
   [VR(/(?<![\p{L}])(đau đầu|nhức đầu|điên đầu|nhức nhối|đau não) (vì|với|do|tại|chuyện) (?=(sếp|deadline|công việc|việc|con|chồng|vợ|tiền|nợ|chuyện|người yêu|ny|bài tập|thi cử|kỳ thi|đống|mấy đứa|khách|nhà chồng|nhà vợ)(?![\p{L}]))/giu), "áp lực vì "],
   [VR(/(?<![\p{L}])điên đầu(?![\p{L}])/giu), "áp lực quá"],
+  [VR(/(?<![\p{L}])(đầu óc |đầu )?(cứ )?quay cuồng (vì|với|do|tại|chuyện)(?![\p{L}])/giu), "áp lực vì"],
+  [VR(/(?<![\p{L}])(đau bụng|đầy bụng|đi ngoài|tiêu chảy|sôi bụng)( \S+){0,1} (mỗi khi|mỗi lần|khi|sau khi|lúc) (uống|ăn) (sữa|đồ sữa|phô mai|kem)(?![\p{L}])/giu), "không dung nạp lactose"],
   [VR(/(?<![\p{L}])tim (đập nhanh|đập thình thịch|loạn nhịp|rung rinh)( \S+){0,2} (khi|lúc|mỗi khi|mỗi lần) (gặp|thấy|nhìn|nói chuyện với|nhắn tin với|đứng gần) (crush|người ấy|anh ấy|cô ấy|người yêu|ny|bạn ấy|ảnh|ổng|chị ấy)(?![\p{L}])/giu), "mình thích $5"],
   [VR(/(?<![\p{L}])(mất sóng|yếu sóng|không có sóng|rớt sóng)( điện thoại)?(?![\p{L}])/giu), "mất mạng"],
   [VR(/(?<![\p{L}])giết thời gian(?![\p{L}])/giu), "không có gì làm"],

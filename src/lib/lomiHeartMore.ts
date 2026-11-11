@@ -323,7 +323,7 @@ export const MORE_THEMES: Theme[] = [
   // Q79: sợ bị đánh giá, đăng bài rồi xoá — trước đây FAQ "đăng bài".
   {
     id: "judged",
-    re: VN(/\b(sợ (người khác|mọi người|người ta|bị) (đánh giá|nghĩ|chê|phán xét|cười)|(xóa|xoá) (đi )?đăng lại|đăng (rồi|xong) lại (xóa|xoá))\b/),
+    re: VN(/\b((suy nghĩ|bận tâm|để ý|để tâm|nghĩ nhiều) (về |tới |đến )?(lời|lời nói|lời ra tiếng vào|chuyện) (của )?(người khác|người ta|thiên hạ|mọi người)|lời người khác|người ta nói ra nói vào|sợ (người khác|mọi người|người ta|bị) (đánh giá|nghĩ|chê|phán xét|cười)|(xóa|xoá) (đi )?đăng lại|đăng (rồi|xong) lại (xóa|xoá))\b/),
     feel: ["Đăng gì cũng sợ người ta nghĩ này nghĩ kia rồi xoá đi đăng lại — mệt ghê, Lomi hiểu cảm giác đó."],
     insight: ["Sợ bị đánh giá là một dạng lo âu xã hội rất phổ biến. Thật ra mọi người thường bận nghĩ về chính họ nhiều hơn ta tưởng — cái “đèn sân khấu” chiếu vào mình mờ hơn mình nghĩ nhiều."],
     step: ["Thử một bước nhỏ: lần tới đăng một bài đơn giản, đặt hẹn giờ 10 phút không mở lại xem — và để nguyên bài đó."],
@@ -355,7 +355,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "peoplepleaser",
     howto: true,
-    re: VN(/\b((cứ |luôn |hay )?(đồng ý|nhận lời|giúp) (mọi người|hết mọi người|ai cũng)( \S+){0,6} (mệt|sợ (họ|người ta|mọi người) ghét|ngại từ chối)|không (dám|biết cách) từ chối|sợ (bị )?(người ta |mọi người |họ )?ghét)\b/),
+    re: VN(/\b(làm hài lòng (người khác|mọi người|tất cả|hết mọi người|ai cũng)|chiều lòng (mọi người|người khác)|sống vì người khác|sợ làm mất lòng|(cứ |luôn |hay )?(đồng ý|nhận lời|giúp) (mọi người|hết mọi người|ai cũng)( \S+){0,6} (mệt|sợ (họ|người ta|mọi người) ghét|ngại từ chối)|không (dám|biết cách) từ chối|sợ (bị )?(người ta |mọi người |họ )?ghét)\b/),
     feel: ["Cứ gật đầu giúp mọi người dù mình đã cạn sức — vì sợ bị ghét — lâu dần mệt lắm, Lomi hiểu."],
     insight: ["Đặt ranh giới không làm bạn thành người xấu. Người quý bạn thật sẽ vẫn quý khi bạn nói “lần này mình không giúp được”."],
     step: ["Lần tới khi được nhờ, đừng trả lời ngay — nói “để mình xem lịch rồi báo nha” để có thời gian nghĩ."],
@@ -930,7 +930,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "lost",
-    re: VN(/\b(mất phương hướng|không biết mình muốn gì|không biết làm gì với cuộc đời|khủng hoảng tuổi|định hướng|chọn ngành|chọn nghề|không biết theo nghề gì|không biết học gì|bất định|bị lạc lối|không có mục tiêu)\b/),
+    re: VN(/\b(cố gắng vì (điều gì|cái gì|ai|chuyện gì|gì)|đường khác cho (cuộc đời|cuộc sống|đời)|sống vì điều gì|bỏ phố về quê|về quê sống|thay đổi cuộc đời|mất phương hướng|không biết mình muốn gì|không biết làm gì với cuộc đời|khủng hoảng tuổi|định hướng|chọn ngành|chọn nghề|không biết theo nghề gì|không biết học gì|bất định|bị lạc lối|không có mục tiêu)\b/),
     feel: ["Cảm giác lạc lối, không biết mình muốn gì — rất nhiều người trẻ đang trải qua giống bạn đó 🌱", "Lomi hiểu, đứng giữa nhiều ngã rẽ mà không biết chọn đường nào thì hoang mang lắm."],
     insight: [
       "Ít ai biết rõ mình muốn gì ngay từ đầu. Đam mê thường được tìm thấy qua việc thử, chứ không phải ngồi nghĩ ra.",
@@ -961,6 +961,36 @@ export const MORE_THEMES: Theme[] = [
       "Tập nói trước gương hoặc ghi âm lại khi cần thuyết trình — quen dần là bớt run.",
       "Tập trung vào người đối diện (hỏi han, lắng nghe) thay vì lo mình trông thế nào — áp lực sẽ giảm rất nhiều.",
       "Nếu nỗi sợ làm bạn né tránh hầu hết các hoạt động, chuyên gia tâm lý có thể giúp bạn tập dần.",
+    ],
+  },
+  // 06/11 (Kir hỏi 50 câu liền): "có phải mình quá nhạy cảm không" — trước đây chỉ "Ừa, Lomi nghe nè"
+  {
+    id: "sensitive",
+    re: VN(/\b(quá nhạy cảm|nhạy cảm quá|dễ tổn thương|dễ bị tổn thương|dễ tủi thân|hay để bụng|dễ khóc|mau nước mắt)\b/),
+    feel: ["Hay để ý, dễ chạnh lòng hơn người khác rồi tự hỏi “mình có quá nhạy cảm không” — Lomi hiểu, cảm giác đó mệt lắm."],
+    insight: ["Nhạy cảm không phải là lỗi — nó đi kèm khả năng thấu hiểu, để ý cảm xúc người khác. Chỉ là mình cần học cách giữ cho mình khỏi bị cuốn theo mọi thứ."],
+    step: ["Lần tới thấy chạnh lòng, thử dừng lại hỏi: chuyện này mình biết chắc, hay mình đang đoán ý người ta?"],
+    ask: ["Gần đây có chuyện gì làm bạn thấy mình nhạy cảm quá không?"],
+    advice: [
+      "Cho mình thời gian trước khi phản ứng — cảm xúc lúc đầu thường mạnh hơn sự việc thật.",
+      "Nói nhẹ nhàng cho người thân biết điều gì làm bạn tổn thương, thay vì giữ trong lòng.",
+      "Dành thời gian nghỉ, ở một mình một chút khi thấy quá tải.",
+    ],
+  },
+  // "muốn mở một cái tiệm nhưng chưa biết bán gì" — trước đây chỉ nhắc lại câu
+  {
+    id: "shopidea",
+    howto: true,
+    re: VN(/\b((muốn|định|tính) (mở|làm|bắt đầu)( một| 1)? (cái |cửa )?(tiệm|quán|shop|cửa hàng|hàng|kinh doanh|buôn bán)( \S+){0,4} (chưa biết|không biết) (bán|làm|kinh doanh) (gì|cái gì|món gì)|không biết (nên )?(bán|kinh doanh|mở) (gì|cái gì|tiệm gì|quán gì))\b/),
+    feel: ["Muốn mở tiệm mà chưa biết bán gì là bước đầu của rất nhiều người kinh doanh nhỏ đó 💪"],
+    insight: ["Ý tưởng hợp nhất thường nằm giữa 3 thứ: mình rành / thích gì, khách quanh mình đang thiếu gì, và vốn mình có thể thử mà không ảnh hưởng chi tiêu chính."],
+    step: ["Đi một vòng khu bạn định mở, ghi lại: tiệm nào đông, tiệm nào vắng, người ta hay phải đi xa để mua gì."],
+    ask: ["Bạn định mở ở khu nào, và vốn ban đầu khoảng bao nhiêu?"],
+    advice: [
+      "Bắt đầu nhỏ để thử: bán online, bán sáng / tối, hoặc ké mặt bằng trước khi thuê riêng.",
+      "Tính trước chi phí cố định mỗi tháng (mặt bằng, điện nước, công) — biết bán bao nhiêu mới hoà vốn.",
+      "Chọn thứ mình rành: rành món thì bán đồ ăn, rành đồ thì bán đồ — rành mới giữ được khách.",
+      "Có rồi thì đăng doanh nghiệp lên iLomi để người quanh khu biết tới nha.",
     ],
   },
   {

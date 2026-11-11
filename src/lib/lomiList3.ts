@@ -232,7 +232,8 @@ export function list3Reply(q: string): L3 | null {
       text: "Rối như canh hẹ thì mình gỡ từng sợi một nha 🧶\n• Viết hết mọi chuyện đang làm bạn rối ra giấy, mỗi chuyện một dòng\n• Đánh dấu chuyện nào **gấp**, chuyện nào **để sau được**\n• Chỉ chọn **một** việc nhỏ làm trước — xong một việc là đầu nhẹ hơn liền\n\nChuyện nào đang làm bạn rối nhất?",
     };
   // "đầu óc cứ quay quay" — chóng mặt thật hay rối trí?
-  if (VN(/\b(đầu óc|đầu|cái đầu)( \S+){0,2} (quay quay|quay cuồng|xoay xoay|lâng lâng)\b/).test(n))
+  //   (11/11: "đầu óc quay cuồng VÌ công việc" là bận rộn / áp lực, không hỏi chóng mặt)
+  if (VN(/\b(đầu óc|đầu|cái đầu)( \S+){0,2} (quay quay|quay cuồng|xoay xoay|lâng lâng)\b/).test(n) && !VN(/\b(quay cuồng|quay quay) (vì|với|do|tại|theo|chuyện)\b/).test(n))
     return {
       id: "dizzy_or_mind",
       text: "“Quay quay” của bạn là kiểu nào nè?\n• Chóng mặt thật: nhìn mọi thứ như xoay, lảo đảo, muốn té → ngồi / nằm xuống ngay, uống chút nước; nếu kèm méo miệng, yếu tay chân, nói khó, đau đầu dữ dội → gọi **115**\n• Hay đầu óc rối, nghĩ nhiều quá, không tập trung được?\n\nBạn nói thêm để Lomi giúp đúng chỗ nha.",
