@@ -535,7 +535,7 @@ const THEMES: Theme[] = [
   },
   {
     id: "grief",
-    re: VN(/\b(mất người thân|qua đời|tang lễ|đám tang|ông mất|bà mất|bố mất|mẹ mất|mất mẹ|mất bố|mất ông|mất bà|mất đi một người|(chồng|vợ|con|bạn thân) (mình |tôi |em )?(mất|qua đời|mất rồi)|thú cưng mất|(con|bé|em) (chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết)|(chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết) rồi|con chó chết|con mèo chết|(ba|bố|mẹ|má|cha|ông|bà nội|bà ngoại|ông nội|ông ngoại|chồng|vợ|con|anh trai|chị gái|em trai|em gái|bạn thân) (em |mình |tôi |tui |a |anh |chị |c |e )?(mất rồi|qua đời|đã mất|vừa mất|mới mất|ra đi rồi|đã ra đi|vừa ra đi|mới ra đi|vừa qua đời|đã qua đời))\b(?! (việc|công việc|việc làm|cv|job|tiền|điện|nước|ngủ|ví|điện thoại|đt|xe|đồ|hết|trắng|lòng tin|kiểm soát|bình tĩnh|cảm giác|sức|ngon|giọng|liên lạc|kết nối|mạng|wifi|sóng|tài khoản|nick|mật khẩu|dữ liệu|kinh|hứng|tập trung|thời gian|cơ hội|khách|vốn))/),
+    re: VN(/\b(mất người thân|qua đời|tang lễ|đám tang|ông mất|bà mất|bố mất|mẹ mất|mất mẹ|mất bố|mất ông|mất bà|mất đi một người|(chồng|vợ|con|bạn thân) (mình |tôi |em )?(mất|qua đời|mất rồi)|thú cưng mất|(con|bé|em) (chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết)|(chó|mèo) (nhà )?(mình |tôi |em |tui )?(mất|chết) rồi|con chó chết|con mèo chết|(ba|bố|mẹ|má|cha|ông|bà nội|bà ngoại|ông nội|ông ngoại|ngoại|nội|dì|cậu|chú|bác|thầy|dượng|mợ|thím|chồng|vợ|con|anh trai|chị gái|em trai|em gái|bạn thân) (em |mình |tôi |tui |a |anh |chị |c |e )?(mất rồi|qua đời|đã mất|vừa mất|mới mất|ra đi rồi|đã ra đi|vừa ra đi|mới ra đi|vừa qua đời|đã qua đời))\b(?! (việc|công việc|việc làm|cv|job|tiền|điện|nước|ngủ|ví|điện thoại|đt|xe|đồ|hết|trắng|lòng tin|kiểm soát|bình tĩnh|cảm giác|sức|ngon|giọng|liên lạc|kết nối|mạng|wifi|sóng|tài khoản|nick|mật khẩu|dữ liệu|kinh|hứng|tập trung|thời gian|cơ hội|khách|vốn))/),
     feel: [
       "Lomi rất tiếc về sự mất mát của bạn 🤍 Không lời nào đủ để xoa dịu nỗi đau này.",
       "Mất đi người (hay bé cưng) mình thương là nỗi đau rất lớn. Lomi ở đây với bạn.",
@@ -1273,7 +1273,22 @@ export function kinSupportText(text: string, mood = true): string | null {
     `Chuyện này kéo dài bao lâu rồi bạn?`,
   ].filter(Boolean).join("\n\n");
 }
+// 11/11 (kiểm toán Lovable 09–11/11, P0-6): "Tự nhiên tôi chóng mặt mỗi lần đứng dậy." từng được đáp "Lomi rất tiếc về sự mất mát của bạn"
+//   — luật mất người thân "(chồng|vợ|con) (tôi )?(mất)" so trên chữ bỏ dấu nên "chóng mặt" = "chồng mất". Gốc: chữ CHÓNG MẶT (gõ đủ dấu,
+//   hoặc gõ không dấu mà hai chữ đứng liền nhau và không kèm dấu hiệu của chuyện mất người thân) được che đi trước khi chọn chủ đề tâm sự.
+const DIZZY_ACC = /ch[oó]ng\s+m[ặa]t/giu;
+const DIZZY_BARE_GRIEF = /\bchong mat (som|dot ngot|lau roi|duoc|da (lau|\d)|\d+ (nam|thang|tuan|ngay)|vi (benh|ung thu|tai nan|covid)|do (benh|ung thu|tai nan)|nam ngoai|hoi|khi)\b/;
+function maskDizzy(text: string): string {
+  const t = text.normalize("NFC");
+  if (!DIZZY_ACC.test(t)) return text;
+  DIZZY_ACC.lastIndex = 0;
+  // gõ đủ dấu "chóng mặt" → chắc chắn là chóng mặt; gõ không dấu "chong mat" → chóng mặt, trừ khi theo sau là dấu hiệu mất người thân.
+  const bareOnly = !/ch[ó]ng\s+mặt/iu.test(t);
+  if (bareOnly && DIZZY_BARE_GRIEF.test(t.toLowerCase())) return text;
+  return t.replace(DIZZY_ACC, "chongmat"); // (một chữ trung tính — không chủ đề tâm sự nào bắt, lớp sức khoẻ đọc câu gốc)
+}
 export function heartStart(text: string, appQuestion: boolean): HeartReply | null {
+  text = maskDizzy(text);
   const r = heartStart0(text, appQuestion);
   if (!r || !r.theme || !SELF_STATE_THEMES.has(r.theme)) return r;
   const k = kinSupportText(text, MOOD_THEMES.has(r.theme));
@@ -1849,6 +1864,7 @@ function rawTheme(text: string): Theme | undefined {
   return RAW_LGBT.test(text.normalize("NFC")) ? byId("lgbt") : undefined;
 }
 export function heartThemeOf(text: string): string | undefined {
+  text = maskDizzy(text);
   return (rawTheme(text) ?? themeOf(normStrict(text, HEART)))?.id;
 }
 

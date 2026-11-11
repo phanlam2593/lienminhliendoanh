@@ -32,7 +32,7 @@ const SYMPTOMS: Sym[] = [
   { id: "weightloss", label: "sụt cân", re: VN(/\b(sụt cân|gầy sút|giảm cân không rõ lý do|tự nhiên gầy)\b/) },
   { id: "thirst", label: "khát nước nhiều", re: VN(/\b(khát nước nhiều|hay khát|khát liên tục|lúc nào cũng khát)\b/) },
   { id: "pale", label: "da xanh xao", re: VN(/\b(xanh xao|da xanh|nhợt nhạt|mặt xanh)\b/) },
-  { id: "dizzy", label: "chóng mặt", re: VN(/\b((bị|hay|dễ|hơi) chóng mặt|chóng mặt (quá|hoa mắt|buồn nôn|khi đứng|khi quay|khi đổi tư thế)|hoa mắt|choáng váng|xây xẩm|quay cuồng)\b/) },
+  { id: "dizzy", label: "chóng mặt", re: VN(/\b((bị|hay|dễ|hơi) chóng mặt|chóng mặt (quá|hoa mắt|buồn nôn|khi đứng|khi quay|khi đổi tư thế)|hoa mắt|choáng váng|xây xẩm|quay cuồng|(tôi|mình|tui|tớ|tao|thấy|cứ|đang|tự nhiên|tự dưng|bỗng dưng|bỗng nhiên|đột nhiên) (\S+ )?chóng mặt|chóng mặt (mỗi (lần|khi|sáng|tối)|khi|lúc|sau khi|suốt|hoài|cả ngày|từ (sáng|hôm|tối)|mấy (ngày|hôm)))\b/) }, // 11/11: "tôi chóng mặt mỗi lần đứng dậy" (không có chữ "bị") trước đây không được nhận là triệu chứng
   { id: "faint", label: "ngất xỉu", re: VN(/\b(ngất xỉu|bị ngất|xỉu đi|ngất đi|bất tỉnh|lịm đi)\b/), red: "ngất, bất tỉnh" },
   { id: "chestpain", label: "đau ngực", re: VN(/\b(đau ngực|tức ngực|nặng ngực|đau thắt ngực|đau nhói ngực)\b/), red: "đau hoặc tức ngực" },
   { id: "palp", label: "tim đập nhanh", re: VN(/\b(tim đập nhanh|tim đập mạnh|tim đập loạn|hồi hộp đánh trống ngực|đánh trống ngực)\b/) },
@@ -53,7 +53,7 @@ const SYMPTOMS: Sym[] = [
   { id: "light", label: "sợ ánh sáng / tiếng ồn", re: VN(/\b(sợ ánh sáng|chói mắt|sợ tiếng ồn|khó chịu với ánh sáng)\b/) },
   { id: "redeye", label: "đỏ mắt", re: VN(/\b(đỏ mắt|mắt đỏ|mắt bị đỏ|ghèn mắt|nhiều ghèn)\b/) },
   { id: "itcheye", label: "ngứa / chảy nước mắt", re: VN(/\b(ngứa mắt|chảy nước mắt|cay mắt|xót mắt)\b/) },
-  { id: "dryeye", label: "khô mỏi mắt", re: VN(/\b(khô mắt|(bị|hay|dễ) mỏi mắt|mỏi mắt (quá|khi|lắm|hoài)|mắt mỏi|mờ mắt khi nhìn lâu|nhức mắt)\b/) },
+  { id: "dryeye", label: "khô mỏi mắt", re: VN(/\b(khô mắt|(bị|hay|dễ) mỏi mắt|mỏi mắt (quá|khi|lắm|hoài)|(?<!chóng )mắt mỏi|mờ mắt khi nhìn lâu|nhức mắt)\b/) }, // (11/11: "chóng mặt mỗi lần…" bỏ dấu thành "mat moi" — không phải mắt mỏi)
   { id: "earpain", label: "đau tai / ù tai", re: VN(/\b(đau tai|ù tai|chảy mủ tai|chảy nước tai|nghe kém|nghe không rõ)\b/) },
   { id: "stuffy", label: "nghẹt mũi", re: VN(/\b(nghẹt mũi|ngạt mũi|tắc mũi|khó thở bằng mũi)\b/) },
   { id: "runny", label: "chảy nước mũi", re: VN(/\b(chảy mũi|sổ mũi|chảy nước mũi|nước mũi trong)\b/) },
@@ -1011,6 +1011,11 @@ export function condByName(text: string): { id: string; label: string } | undefi
  * Phân tích triệu chứng cơ thể. prev = triệu chứng đã kể ở các tin trước (cộng dồn).
  * Trả null nếu tin này không có triệu chứng nào (để các luồng khác xử lý).
  */
+/** 11/11 (kiểm toán Lovable, P0-5): các DẤU HIỆU ĐỎ (cần cấp cứu) có trong câu — để các lớp chuyện phiếm / khung câu / bói bài nhường đường. */
+export function redFlagsIn(text: string): string[] {
+  const si = symptomsIn(normStrict(text, HEALTH));
+  return SYMPTOMS.filter((x) => x.red && si.ids.includes(x.id)).map((x) => x.red!);
+}
 export function analyzeBody(text: string, prev: string[] = [], inHealth = false, force = false): BodyResult | null {
   const n = normStrict(text, HEALTH);
   const si = symptomsIn(n);

@@ -31,6 +31,8 @@ export type Harm = {
   whom?: string;
   /** Người gây ra, nếu câu có nêu ("bạn trai bạn", "chồng bạn") — để lượt sau nói tiếp vẫn biết đang nói về ai. */
   actor?: string;
+  /** 11/11: bị NHỐT / giam / khoá trái cửa — lời đáp nói thẳng việc gọi 113 và báo người thân chỗ mình đang ở. */
+  confined?: boolean;
   /** Chuyện xảy ra giữa bạn bè / ở trường ("con e bị bạn đánh ở trường") — lời khuyên khác hẳn bạo lực trong nhà: báo thầy cô, nhà trường, 111. */
   setting?: "school";
 };
@@ -57,6 +59,19 @@ const V_ACTOR = P(`(?:${PARTNER}|${KIN})(?: ${SELF})?(?: \\S+){0,3} ${HIT}${NOT_
 const THREAT = P(
   `(?:doạ|dọa|hăm doạ|hăm dọa|hăm|đe doạ|đe dọa|đòi)(?: \\S+){0,2} (?:đánh|giết|chém|đâm|tạt axit|tung ảnh|tung clip|tung hình|đuổi ra khỏi nhà|từ mặt|bắt con)|(?:doạ|dọa|hăm doạ|hăm dọa|đe doạ|đe dọa) ${SELF}|bị (?:đe doạ|đe dọa|hăm doạ|hăm dọa|doạ|dọa)`,
   `(?:doa|ham doa|ham|de doa|doi)(?: \\S+){0,2} (?:danh|giet|chem|dam|tat axit|tung anh|tung clip|tung hinh|duoi ra khoi nha|tu mat|bat con)|(?:doa|ham doa|de doa) ${SELF_B}|bi (?:de doa|ham doa|doa)`,
+);
+// 11/11 (kiểm toán Lovable 09–11/11, P0-3 / P0-4):
+//   • bị NHỐT: "đang bị chồng khoá cửa nhốt trong phòng, cứu với" từng được đáp "Ừa, Lomi nghe nè 😊".
+//     (gõ không dấu chỉ nhận "nhot", "khoa trai" — "giam" trùng "giảm". Kẹt thang máy / nhốt thú cưng không phải chuyện này.)
+//   • bị doạ ở thể ĐIỀU KIỆN: "bạn trai bảo sẽ đánh nếu mình chia tay" — không có chữ "doạ" nên trước đây không được nhận.
+const CONFINE = P(
+  `bị (?:\\S+ ){0,4}?(?:nhốt|giam|khoá trái|khóa trái)(?! (?:chó|mèo|gà|vịt|chim|thú))|(?:nhốt|giam) ${SELF}(?: |$)|(?:khoá|khóa) cửa nhốt|nhốt (?:\\S+ ){0,2}trong (?:phòng|nhà|kho|toilet|nhà vệ sinh)|bị (?:${PARTNER}|${KIN}) nhọt (?:\\S+ ){0,2}trong (?:phòng|nhà)`, // ("nhọt": bản khôi phục dấu của "nhot" gõ không dấu)
+  `bi (?:\\S+ ){0,4}?(?:nhot|khoa trai)(?! (?:cho|meo|ga|vit|chim|thu))|nhot ${SELF_B}(?: |$)|khoa cua nhot`,
+);
+const CONFINE_NOT = P("thang máy|nhốt (?:chó|mèo|gà|vịt|chim|thú|con (?:chó|mèo))|tự nhốt|nhốt mình|kẹt cửa|kẹt trong", "thang may|tu nhot|nhot minh");
+const THREAT_IF = P(
+  `(?:bảo|nói|nhắn|tuyên bố|hứa)(?: là| rằng)?(?: \\S+){0,2} (?:sẽ )?(?:đánh|giết|chém|đâm|tạt axit|xử|cho biết tay)(?: \\S+){0,3} nếu|sẽ (?:đánh|giết|chém|đâm|tạt axit)(?: \\S+){0,3} nếu|nếu (?:\\S+ ){1,5}(?:thì |là )?(?:sẽ )?(?:đánh|giết|chém|đâm|tạt axit) ${SELF}`,
+  `(?:bao|noi|nhan)(?: la| rang)?(?: \\S+){0,2} se (?:danh|giet|chem|dam|tat axit)(?: \\S+){0,3} neu|se (?:danh|giet|chem|dam|tat axit)(?: \\S+){0,3} neu`,
 );
 // Chuyện ở trường / giữa bạn bè: "ở trường", "trong lớp", "bạn học", "bị (mấy) bạn đánh" (không phải "bị bạn trai đánh").
 const SCHOOL = P(
@@ -106,6 +121,9 @@ export function harmOf(raw: string, f: Frame | null, ctx: SafetyCtx = {}): Harm 
   return h;
 }
 function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
+  // 11/11 (kiểm toán Lovable, P0-3): câu gõ KHÔNG DẤU "bi chong khoa cua nhot trong phong" được bộ đoán dấu trả về "nhọt" (mụn nhọt)
+  //   → lớp an toàn không còn thấy chữ "nhốt". "nhọt … trong phòng / nhà / kho" hay "khoá cửa nhọt" thì chỉ có thể là NHỐT.
+  if (/nhọt (?:\S+ ){0,2}trong (?:phòng|nhà|kho|buồng|toilet|nhà vệ sinh)|(?:khoá|khóa) (?:trái )?cửa nhọt/iu.test(raw.normalize("NFC"))) raw = raw.normalize("NFC").replace(/nhọt/giu, "nhốt");
   const t: Txt = txt(raw);
   if (!t.words || t.words > 28 || NOT_REAL(t)) return null;
   // 30/10 (rà câu hiểu lầm: "ông nội bị té ngã đập đầu" → đáp như bị bạo hành): TÉ / NGÃ / TRƯỢT mà đập đầu là tai nạn, không phải bị đánh
@@ -125,7 +143,10 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
   const perceive = !!pm && (pm.index ?? 99) <= 12;
   const selfActs = f?.subject === "self" && !VR(/ (bị|bi) /).test(body) && !perceive;
   // "ảnh còn doạ đánh e" là bị DOẠ (chưa bị đánh) → xét trước, để lời đáp nói đúng chuyện.
-  const th0 = hit(THREAT(t));
+  // 11/11: bị nhốt / giam — xét trước mọi thứ khác (đang không tự rời đi được).
+  const cf = CONFINE_NOT(t) ? null : hit(CONFINE(t));
+  if (cf && !selfActs) return { kind: "violence", victim: f?.subject === "third" && f.subjectCls !== "partner" && !VR(/(?:^| )(bị|bi) /u).test(body.slice(0, (cf.index ?? 0) + 3)) ? "other" : "self", actor, confined: true };
+  const th0 = hit(THREAT(t)) ?? hit(THREAT_IF(t));
   if (th0 && !selfActs && !VR(/(?:^| )(bị|bi) (?:\S+ ){0,2}(?:đánh|danh|tát|tat|đấm|dam)(?: |$)/u).test(body.slice(0, th0.index ?? 0))) return { kind: "threat", victim: "self", actor };
   const vObj = hit(V_OBJ(t));
   const vPas = hit(V_PASSIVE(t));
@@ -143,7 +164,7 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
     const other = VR(/^(mẹ|má|ba|bố|con|chị|bà|vợ|em|me|ma|bo|chi|vo|cháu|chau)$/u).test(after);
     return { kind: "violence", victim: other ? "other" : "self", actor };
   }
-  const th = hit(THREAT(t));
+  const th = hit(THREAT(t)) ?? hit(THREAT_IF(t));
   if (th && !selfActs) return { kind: "threat", victim: "self", actor };
   // Kiểm soát: chỉ tính khi người làm là người yêu / vợ chồng (cha mẹ cấm con đi chơi là chuyện khác — thư viện tâm sự có bài riêng).
   const c = hit(CONTROL(t)) ?? hit(CONTROL2(t));
@@ -178,6 +199,18 @@ export function harmReply(h: Harm, ctx: SafetyCtx & { mirror?: string | null; sa
   }
   const other = h.victim === "other";
   const whom = h.whom ?? prev?.whom;
+  // 11/11: bị nhốt / giam — việc đầu tiên là gọi được người tới, không phải "rời khỏi chỗ đó".
+  if (h.confined && !(prev?.confined && said("báo rõ địa chỉ")))
+    return {
+      harm: { ...h, actor: h.actor ?? prev?.actor, whom },
+      text: [
+        `${other ? `Lomi lo cho ${whom ?? "người đó"} lắm.` : "Lomi ở đây với bạn, và Lomi lo cho bạn lắm."} Bị nhốt, không cho ra ngoài là chuyện nghiêm trọng, và **không phải lỗi của ${other ? "người bị nhốt" : "bạn"}**.`,
+        other
+          ? "Việc nên làm ngay:\n• Gọi **113**, báo rõ địa chỉ nơi người đó đang bị giữ.\n• Báo người thân / hàng xóm ở gần tới xem — đừng tự mình xông vào nếu người kia đang nóng giận.\n• Có người bị thương thì gọi **115**; trẻ em thì gọi thêm **111**."
+          : "Việc nên làm ngay, nếu bạn còn cầm được điện thoại:\n• Gọi **113** và báo rõ địa chỉ, phòng bạn đang ở. Không tiện nói thì nhắn tin cho một người thân hoặc người quen tin cậy: địa chỉ + “đang bị nhốt, gọi 113 giúp”.\n• Ở gần cửa sổ hoặc chỗ có người nghe thấy; gọi to nhờ hàng xóm nếu được.\n• Đừng cố đôi co với người đang nóng giận. Bị thương thì gọi **115**.\n• Khi đã ra được: **Ngôi nhà Bình yên 1900 969 680** hỗ trợ chỗ tạm lánh; dưới 18 tuổi gọi **111**.",
+        other ? "Bạn có biết chính xác người đó đang ở đâu không?" : "Bạn có bị thương không, và giờ có gọi điện ra ngoài được không?",
+      ].join("\n\n"),
+    };
   // Bị bạn bè đánh / doạ ở trường: việc cần làm là xem vết thương, nghe kể, ghi lại và báo nhà trường — không phải "chỗ tạm lánh".
   if (h.setting === "school") {
     const keep: Harm = { ...h, actor: h.actor ?? prev?.actor, whom };

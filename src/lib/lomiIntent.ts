@@ -103,6 +103,8 @@ const STYLES: Record<string, string> = {
   lau: "lẩu Thái chua cay, lẩu gà lá é, lẩu bò, hay lẩu nấm thanh nhẹ",
 };
 
+const PREG_Q = VN(/\b(đang bầu|có bầu|mang bầu|bà bầu|mẹ bầu|bầu (\d+|một|hai|ba|bốn|năm|sáu|bảy|tám|chín) (tháng|tuần)|mang thai|có thai|đang thai|thai kỳ|thai nhi|em bé trong bụng|cho con bú|đang cho bú|sau sinh|ở cữ)\b/);
+const HARM_Q = VN(/\b(có (ảnh hưởng|hại|sao|tốt|độc|nguy hiểm) (gì )?(\S+ ){0,3}(không|ko|k|hông|hem)|ảnh hưởng (tới|đến|gì) (thai|em bé|con|sức khoẻ|sức khỏe|dạ dày|gan|thận|tim)|(ăn|uống) (\S+ ){0,3}(được không|có được không|đc ko|được ko) (\S+ ){0,2}(bầu|thai|bệnh|ốm|sốt|đau))\b/);
 /**
  * Thèm / chọn một món cụ thể (food_choice); hỏi chỗ ăn món đó (food_place); chưa nhắc món nào mà hỏi ăn/uống gì (food_suggest).
  * null nếu không phải chuyện chọn món hay đang hỏi chuyện sức khoẻ.
@@ -110,6 +112,9 @@ const STYLES: Record<string, string> = {
 export function foodChoice(text: string): FoodChoice | null {
   const n = ` ${normalizeVi(text)} `;
   if (HEALTHY.test(n) || ILL.test(n) || ILL_ACC.test(text.normalize("NFC").toLowerCase())) return null;
+  // 11/11 (kiểm toán Lovable, P0-8): "Em đang bầu ba tháng mà thèm trà sữa, uống có ảnh hưởng thai không ạ?" từng được đáp như chọn vị trà sữa.
+  //   Đang mang thai / cho con bú, hoặc câu HỎI món đó có hại / có ảnh hưởng gì không → là câu hỏi sức khoẻ, không phải nhờ chọn món.
+  if (PREG_Q.test(n) || HARM_Q.test(n)) return null;
   const d = detectDish(text);
   if (!d) {
     if (EAT_NOT.test(n) || n.trim().split(" ").length > 12) return null;

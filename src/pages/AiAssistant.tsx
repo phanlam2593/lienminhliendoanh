@@ -58,7 +58,7 @@ import { PRIORITY_THEMES, GENERIC, comfortAsk, heartAdviceHint, heartContinue, l
 import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
-import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
+import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, redFlagsIn, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
 import { nutrientOf, nutrientReply } from "@/lib/lomiNutrients";
 import { honestReply } from "@/lib/lomiHonest";
@@ -88,7 +88,7 @@ import { YOU_MARK, parseVi } from "@/lib/lomiParse";
 import { asksLomiLove, durationOf, frameTurn, isClause, mirrorText, patientOf, symptomClash, withAbout } from "@/lib/lomiFrame";
 import type { SubjectKind } from "@/lib/lomiParse";
 import { healthCtxOfDiet, healthFeeling, healthSubjectOf, healthTopicReply, isDietAsk, looksLikeHealthTopic, type HealthCtx } from "@/lib/lomiHealthTopic";
-import { SCOPE_CHIP_REPLY, jokeText, storyNotApp, chitChat, crisisCheckIn, crisisDenial, crisisMeans, crisisReply, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
+import { SCOPE_CHIP_REPLY, jokeText, storyNotApp, chitChat, crisisCheckIn, crisisDenial, crisisMeans, crisisReply, otherCrisisFollow, hyperboleOnly, expressiveReply, expandTeen, isAppish, looksLikeQuestion, foodDecisionReply, scopedFallback } from "@/lib/lomiChat";
 import { BUSINESS_TYPES } from "@/lib/types";
 import {
   TOPIC_CHIPS,
@@ -1632,16 +1632,31 @@ export function AiChat({
     //   Câu gõ không dấu thì dạng có dấu chỉ là đoán → lượt đó các luật so như cũ.
     //   Chữ người dùng gõ thiếu dấu trong câu có dấu ("bị dau đầu") được đoán dấu cho bộ đọc; lớp khác vẫn đọc câu như trước.
     let viTurn: string[] = [];
+    let rvBare = ""; // 11/11: bản đoán dấu của câu gõ KHÔNG DẤU (câu gõ đủ dấu thì để trống)
     let viStrictTurn = false;
     if (!en) {
       await loadViModel();
       const rv0 = pickedRestore && pickedRestore.from === typedFix ? pickedRestore.to : restoreVi(typedFix);
       viStrictTurn = typedWithAccents(typedFix, rv0);
+      if (!viStrictTurn) rvBare = rv0;
       // câu gõ dấu: chỉ đoán dấu cho chữ gõ thiếu dấu mà vốn không phải chữ nào ("dau" → "đau"; "di truyền" giữ "di")
       const rv = viStrictTurn ? restoreVi(typedFix, { keepBare: true }) : rv0;
       viTurn = [rv, expandTeen(rv), senseCanon(expandTeen(rv))];
     }
     beginViTurn(viTurn, viStrictTurn);
+    // 11/11 (kiểm toán Lovable): "ba ngoai minh moi mat" (gõ KHÔNG DẤU) từng ra bài MỎI MẮT, "ong noi e vua mat" ra "Ông nội em mới mắt hả?".
+    //   Bộ đoán dấu không phân biệt được mới mất / mỏi mắt / vừa mắt sau một NGƯỜI THÂN, nên đọc theo cấu trúc:
+    //   • "<người thân> … vừa mat", hoặc "… moi mat" kèm mốc thời gian (rồi, hôm qua, tuần trước, năm ngoái…) → mất người thân;
+    //   • "<người thân> … moi mat" trơn (hết câu) → mơ hồ thật → hỏi lại MỘT câu; "… moi mat quá / lắm / hoài" → mỏi mắt như cũ.
+    if (rvBare) {
+      const kinLoss = raw.normalize("NFC").match(/^(.*?(?:^|\s)(?:bà|ba|ông|bố|mẹ|má|cha|chồng|vợ|cô|chú|bác|dì|cậu|mợ|thím|dượng|nội|ngoại|anh trai|chị gái|em trai|em gái|bạn thân)(?:\s(?!bị|đang|hay|thấy|kêu|than)\S+){0,3}?)\s(mỏi|mới|vừa mới|vừa)\s(?:mắt|mất|mặt)((?:\s(?:rồi|hôm qua|hôm kia|hôm nay|sáng nay|tối qua|đêm qua|tuần trước|tuần rồi|tháng trước|tháng rồi|năm ngoái|năm rồi|được \S+ (?:ngày|tuần|tháng|năm)))*)\s*[.!…]*$/iu);
+      if (kinLoss) {
+        const sure = /^vừa/iu.test(kinLoss[2]) || !!kinLoss[3].trim();
+        if (!sure && !forceAi)
+          return localReply(raw, { role: "assistant", content: `Lomi hỏi lại cho chắc để khỏi hiểu nhầm nha: ý bạn là **${kinLoss[1].trim().toLowerCase()} mới mất** (qua đời), hay là đang bị **mỏi mắt**?`, local: true, quick: [`${kinLoss[1].trim()} mới qua đời`, `${kinLoss[1].trim()} bị mỏi mắt`] });
+        raw = `${kinLoss[1]} ${/^vừa/iu.test(kinLoss[2]) ? "vừa" : "mới"} qua đời${kinLoss[3]}`;
+      }
+    }
     // Người dùng tự xưng anh/chị/em/mình → Lomi xưng hô đối xứng từ câu này trở đi.
     // 09/10 — KHUNG CÂU (lib/lomiParse): đọc câu GỐC một lần thành chủ ngữ / phủ định / thời gian / loại câu / vị ngữ.
     // Câu hỏi mở đầu bằng "e / em" mà chủ ngữ là Lomi ("e ăn tối chưa") → người dùng đang GỌI Lomi là em, không phải tự xưng em.
@@ -1678,8 +1693,18 @@ export function AiChat({
     const lastMsg0 = msgs[msgs.length - 1];
     let fr = fr1 ? withAbout(fr1, lastMsg0?.role === "assistant" ? lastMsg0.about : null) : null;
     let q = en ? expandTeen(raw) : senseCanon(expandTeen(raw)); // 06/10: cách nói khác → từ khoá chuẩn (lib/lomiSense); bong bóng vẫn hiện nguyên văn
+    // 11/11 (kiểm toán Lovable, P0-8): "Em đang bầu ba tháng mà thèm trà sữa, uống có ảnh hưởng thai không ạ?" — hai vế là MỘT câu hỏi
+    //   ăn uống khi mang thai; ghép lại để không bị tách thành "về đang bầu…" + "còn ý uống có ảnh hưởng…".
+    if (!en) {
+      const pq = q.match(/^(.*?(?:bầu|bau|mang thai|co thai|có thai)[^,;.]*?)\s+(?:mà\s+|nhưng\s+|lại\s+|ma\s+|nhung\s+)?(?:thèm|them|muốn ăn|muốn uống|muon an|muon uong|lỡ ăn|lỡ uống|lo an|lo uong|hay ăn|hay uống|thích ăn|thích uống)\s+([^,;.?]{2,25}?)\s*[,;]?\s+(ăn|uống|an|uong)\s+((?:vào\s+|nhiều\s+|vao\s+|nhieu\s+)?(?:có|co|được|duoc|đc)\s.{2,45})$/iu);
+      if (pq) q = `${pq[1]} ${pq[3]} ${pq[2]} ${pq[4]}`;
+    }
     // 31/10: "ko phải hỏi bệnh, tui hỏi bài đăng bị ẩn sao" / "Tôi cần chữa lỗi đăng nhập, không phải chữa bệnh" → chỉ hiểu phần thật sự hỏi.
-    const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw));
+    // 11/11 (kiểm toán Lovable 09–11/11, P0-5): câu có DẤU HIỆU ĐỎ ("ba em đi ngoài ra máu tươi sáng nay") từng bị khung câu đáp
+    //   "… hả 😄 Nghe vui đó!" — có dấu hiệu đỏ thì các lớp chuyện phiếm nhường cho lớp sức khoẻ.
+    const redNow = !forceAi && !en && redFlagsIn(q).length > 0;
+    //   (P0-4: câu kể bị đánh / bị doạ / bị nhốt cũng là câu NGUY HIỂM — không tách vế, không viết lại câu thành "tìm quán cà phê".)
+    const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
     if (!forceAi && !en && !danger0) {
       const pu = [...msgs].reverse().find((m) => m.role === "user");
       const la = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
@@ -2181,7 +2206,14 @@ export function AiChat({
     // 31/10 (danh sách ChatGPT lần 4 — hội thoại nhiều lượt, lib/lomiFollow): câu nối ngắn trong mạch sức khoẻ / thuốc.
     //   Đặt TRƯỚC các lớp theo chuyện người thân (lib/lomiV9 "Mẹ 62 tuổi rồi hả 😊", lib/lomiStory "Nặng vậy hả 🥺") — đang nói một
     //   bệnh / thuốc mà kể "mẹ 62 tuổi", "bé 10 tháng", "nặng 9 ký" là chi tiết cho bệnh đó. Câu có tín hiệu khủng hoảng thì để lớp an toàn lo.
-    if (!forceAi && !en && !crisisReply(q, lang) && !crisisCheckIn(q)) {
+    //   11/11 (kiểm toán Lovable, P0-2): vừa kể một người khác nói không muốn sống → câu kế ("bạn ấy bảo mình đi về, có nên đi không") vẫn là chuyện đó.
+    if (!forceAi && !en && lastA0 && !crisisReply(q, lang)) {
+      const ocf = otherCrisisFollow(q, lastA0.content);
+      if (ocf) return localReply(q, { role: "assistant", content: ocf.text, local: true, heart: lastA0.heart ?? "sad", heartDepth: (lastA0.heartDepth ?? 1) + 1 });
+    }
+    //   11/11 (kiểm toán Lovable, P0-4): câu kể bị đánh / bị doạ / bị nhốt ("bạn trai bảo sẽ đánh nếu mình chia tay, mình đang ở quán cà phê…")
+    //   từng bị lớp này gợi ý quán cà phê — có tín hiệu bị hại thì để lớp an toàn (bên dưới) lo.
+    if (!forceAi && !en && !crisisReply(q, lang) && !crisisCheckIn(q) && !harmOf(raw, fr1, { inHarm: lastA0?.harm })) {
       const fu = await followUp(q, raw, lastA0, hCtx);
       if (fu) return localReply(q, fu);
     }
@@ -2280,6 +2312,17 @@ export function AiChat({
       const text = mt0 ? [mt0, ...subs].map((t) => sourceList(t)).join("\n\n") : lastA0.src ? sourceSay(lastA0.src) : null;
       if (text)
         return localReply(q, { role: "assistant", content: text, local: true, ...keepHealth, ...(lastA0.med ? { med: lastA0.med } : {}), src: lastA0.src });
+    }
+
+    // 11/11 (kiểm toán Lovable — phủ định bị bỏ sót 42%): câu CHỐI trơn "Nào có mất ngủ đâu", "mình không bị mất ngủ", "em đâu có trầm cảm"
+    //   từng được đáp như thể người dùng ĐANG bị ("Bạn bị mất ngủ hả 🩺", "Mất ngủ mệt lắm luôn"). Câu chỉ gồm lời chối + một bệnh / một nỗi niềm
+    //   Lomi biết → ghi nhận là KHÔNG có, không mở thẻ bệnh hay mạch tâm sự. (Đang trả lời câu Lomi vừa hỏi thì để các lớp hỏi-đáp cũ lo.)
+    if (!forceAi && !en && !danger0 && !/[?？]\s*$/u.test((lastA0?.content ?? "").trim())) {
+      const dn = raw.normalize("NFC").trim().match(/^(?:(?:mình|em|e|anh|a|tôi|tui|tớ|chị|c|con|minh|toi|to|chi)\s+)?(?:nào có|nao co|làm gì có|lam gi co|đâu có|dau co|không có|khong co|ko có|ko co|k có|k co|không bị|khong bi|ko bị|ko bi|k bị|k bi|chưa bị|chua bi|chẳng bị|chang bi|không hề|khong he|chẳng hề|chang he)\s+(?:bị\s+|bi\s+|có\s+|co\s+)?(.{3,28}?)(?:\s+(?:đâu|dau|nha|mà|ma|á|nè|ne|hết|het|gì hết|gi het|gì cả|gi ca|cả|ca|nhé|nhe|ạ))*\s*[.!…]*$/iu);
+      const dx = dn?.[1]?.trim();
+      if (dx && !/(?<![\p{L}])(không|khong|ko|sao|gì|gi|chưa|chua|hả|ha|à|nhưng|nhung|mà|ma|và|va|với|voi|thì|thi|nên|nen|vì|vi|chỉ|chi|còn|con|hay|hoặc|hoac)(?![\p{L}])|[,;:]/iu.test(dx) && (findMedId(dx) || heartThemeOf(dx))) {
+        return localReply(q, { role: "assistant", content: `À, vậy là không phải chuyện **${dx.toLowerCase()}** ha 👍 Lomi hiểu rồi. Còn điều gì khác thì bạn cứ hỏi Lomi nha.`, local: true });
+      }
     }
 
     // 15/10 — KHẨN CẤP (lib/lomiUrgent, audit sức khoẻ): câu KỂ một tình huống cấp cứu (uống nhầm chất độc, chảy máu không cầm, đuối nước,
@@ -2844,7 +2887,7 @@ export function AiChat({
       //      hỏi thăm Lomi, chuyện của người / con vật / đồ vật khác, câu có phủ định, chuyện đã qua, dự định, đang ở đâu / làm gì.
       //      Câu thuộc về lớp chuyên môn (sức khoẻ, tâm sự, tìm quán, hỏi app, bói bài, kinh doanh) thì frameTurn trả null.
       //      Đang ở một mạch khác thì chỉ nhận lời chào / chúc / cảm ơn + hỏi thăm Lomi; đang tâm sự, chọn khẩu vị, tư vấn kinh doanh thì không dùng.
-      if (fr && !gateSkip) {
+      if (fr && !gateSkip && !redNow) {
         const frMode = lastA?.dishPick || lastA?.biz || memLearn?.newSits.length ? "off" : heartOn ? "heart" : hCtx || lastA?.faqId || lastA?.issue || lastA?.dishAsk || lastA?.tarot || lastA?.tarotRef ? "speech" : "full";
         const fx = frameTurn(q, fr, { mode: frMode, inHealth: !!hCtx, hsub: lastA?.hsub, lastText: lastA?.content, addr: loadMem(user.id).addr });
         const hsFx = fx?.intent === "frame:third_ill" ? healthSubjectOf(q, true) : null;
@@ -2921,7 +2964,11 @@ export function AiChat({
       }
       // e) Câu có ý muốn bói → bói luôn nếu đã có câu hỏi, chưa có thì Lomi hỏi lại.
       //    Kiểm tra TRƯỚC FAQ/AI để câu kiểu "bói tarot tư vấn giúp mình" không bị chuyển sang AI.
-      if (!gateSkip) {
+      //    11/11 (kiểm toán Lovable): câu có DẤU HIỆU ĐỎ ("mẹ xem bói bảo năm nay xấu, mà mẹ đang ho ra máu") → lớp sức khoẻ đáp, không phải lời
+      //    từ chối bói bệnh; và câu chỉ NHẮC chuyện người khác rủ / bảo đi xem thầy bói rồi nói điều mình thật sự muốn
+      //    ("bạn rủ đi xem thầy bói nhưng mình chỉ muốn tìm cách thôi kiểm tra tin nhắn người yêu cũ") không phải là nhờ Lomi bói.
+      const tarotAside = !en && VN(/\b(rủ|bảo|kêu|khuyên|xúi|dẫn|đòi)( \S+){0,3} (đi )?(xem|coi|gặp) (thầy |bà |ông )?(bói|thầy bói|thầy)( \S+){0,6} (nhưng|mà|chứ|còn) (mình|em|e|tôi|tui|anh|a|chị|tớ) (chỉ|lại|thì|không|chẳng|ko|đâu)\b/).test(` ${normalizeVi(q)} `);
+      if (!gateSkip && !redNow && !tarotAside) {
         // Hỏi Lomi có biết bói không → trả lời "có" + mời hỏi, KHÔNG rút bài ngay (01/10 r2).
         if (!en && isTarotAbilityAsk(q))
           return askTarot(
@@ -3306,13 +3353,16 @@ export function AiChat({
         const askAdvice = VN(/\b(nên làm gì|làm sao|làm gì|phải làm sao|tư vấn|khuyên|nên ăn gì|nên uống gì|có sao không|có nguy hiểm không|cách nào|có cách|cho đỡ|đỡ hơn|hết đau|giảm đau|cần đi viện|cần đi khám|có nên đi khám|đi viện|đi khám|nguy hiểm|có sao)\b/).test(nq);
         // "hôm nay hơi mệt", "mất ngủ" nói bâng quơ (chưa nói chuyện sức khoẻ) → để phần tâm sự đáp ân cần hơn.
         //   (chỉ khi câu CÓ triệu chứng "mềm" — câu hỏi kiến thức không nêu triệu chứng nào như "Ho là do đâu?" thì vẫn để lớp sức khoẻ trả lời.)
-        const casualSoft = !inHealth && onlySoftSymptoms(q) && !askAdvice && (analyzeBody(q)?.sx.length ?? 0) > 0;
+        //   11/11 (kiểm toán Lovable, P0-6): "Tự nhiên tôi chóng mặt mỗi lần đứng dậy" KHÔNG phải nói bâng quơ — câu tả rõ lúc nào / kiểu gì bị
+        //   (mỗi lần…, khi đứng dậy, tự nhiên, cứ… hoài) là đang kể triệu chứng → đưa kiến thức ngay (Kir 19/10), không "Lomi nghe nè".
+        const sxDetail = !mind && !heartThemeOf(q) && VN(/\b(mỗi lần|mỗi khi|mỗi sáng|mỗi tối|tự nhiên|tự dưng|bỗng dưng|bỗng nhiên|đột nhiên|khi (đứng|ngồi|nằm|cúi|ăn|ngủ|đi|leo|thức|vừa)|lúc (đứng|ngồi|nằm|cúi|ăn|ngủ|đi|leo|thức)|sau khi|đứng dậy|ngồi dậy|\d+ (ngày|hôm|tuần|tháng) (nay|rồi)|mấy (ngày|hôm|tuần) (nay|rồi))\b/).test(nq);
+        const casualSoft = !inHealth && onlySoftSymptoms(q) && !askAdvice && !sxDetail && (analyzeBody(q)?.sx.length ?? 0) > 0;
         // 09/10: câu gõ CÓ DẤU mà triệu chứng chỉ khớp nhờ một từ khác nghĩa bị bỏ dấu ("đi đá bóng" → "da bong" = da bong tróc)
         // thì không phải kể triệu chứng (chỉ xét khi chưa ở mạch sức khoẻ; lib/lomiFrame.symptomClash).
         //   (01/11: câu đã được Lomi viết lại — "sốt vậy có sao không" → "bị sốt có sao không" — thì đọc khung của CÂU ĐÃ VIẾT LẠI, không phải câu gốc)
         const frNow = rewroteRef.current && !en ? parseVi(q, { addr: loadMem(user.id).addr, partnerCtx }) : fr;
         const accentClash = !!frNow && !inHealth && !inTalk && symptomClash(q, frNow);
-        const body = (mind && softBody) || casualSoft || accentClash ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, (inHealth && askAdvice) || medAspectOf(q) === "care");
+        const body = (mind && softBody) || casualSoft || accentClash ? null : analyzeBody(q, inTalk ? (lastA?.sx ?? []) : [], inHealth, (inHealth && askAdvice) || medAspectOf(q) === "care" || sxDetail);
         // 19/10: kể đúng MỘT triệu chứng mà kho có thẻ / góc nhìn có nguồn cho nó → gợi ý sẵn hai câu hỏi hữu ích nhất (mẹo, khi nào đi khám).
         const sx1 = body && body.sx.filter((id) => id !== "kid").length === 1 && !/^(⚠️|🚨)/u.test(body.text) ? body.sx.find((id) => id !== "kid")! : null;
         const sx1Label = sx1 ? symptomLabel(sx1) : undefined;
@@ -3785,6 +3835,11 @@ export function AiChat({
           const tc = talkContinue(raw, convo.talk, /🥺|😔|😣/u.test(lastA?.content ?? ""), lastA?.content ?? "");
           return localReply(q, { role: "assistant", content: tc.text, local: true, talk: convo.talk + 1, about: lastA?.about });
         }
+        // 11/11 (kiểm toán Lovable, P1): "chuyện đó có nghiêm trọng không" khi CHƯA nói chuyện gì → câu mơ hồ thật, hỏi lại một câu ngắn
+        //   (trước đây đáp "Lomi chưa biết cái này" kèm nút 💡 Dạy Lomi — như thể đó là kiến thức còn thiếu).
+        const ctxA = lastA && (lastA.med || lastA.heart || lastA.health || lastA.tarot || lastA.tarotRef || lastA.search || lastA.dish || lastA.harm || lastA.faqId);
+        const anaphQ = !careUnk && !medUnk && !ctxA && isAsk && q.trim().split(/\s+/).length <= 10 && VN(/\b(chuyện|cái|việc|vụ|điều|bệnh|thuốc|món) (đó|này|ấy|kia|đấy)\b/).test(` ${normalizeVi(q)} `);
+        if (anaphQ) return localReply(q, { role: "assistant", content: "Bạn đang nói tới chuyện nào ha 🤔 Bạn kể cụ thể hơn một chút (đang bị gì, hay chuyện gì đã xảy ra) để Lomi trả lời đúng ý nha.", local: true, stuck: "not_understood" as StuckKind });
         const notGot = !careUnk && !medUnk && !isAsk && !keepHealth.health && !askHealth
           ? "Câu này Lomi chưa hiểu ý lắm 😅 Bạn nói rõ hơn một chút giúp Lomi nha? (Nếu là điều Lomi nên biết mà chưa biết, bạn bấm 💡 Dạy Lomi bên dưới để gửi ban quản trị.)"
           : null;

@@ -148,6 +148,9 @@ const HOWTO = VN(/\b(làm sao|cách|thế nào|như thế nào|hướng dẫn|l�
 
 /** Nhận ý "tìm chỗ/ưu đãi thật" hoặc "hôm nay ăn gì". Câu hỏi cách dùng app thì trả null để FAQ lo. */
 export function detectSearch(text: string): SearchIntent | null {
+  // 11/11 (kiểm toán Lovable, P1 — phủ định): "Nào có mất ngủ đâu", "em đâu có khó ngủ đâu" — chữ "ngủ đâu" ở đây là lời CHỐI
+  //   (mất ngủ / khó ngủ … đâu), không phải hỏi chỗ ngủ → không tìm chỗ ở.
+  if (/(?:^|\s)(?:mất|mat|khó|kho|không|khong|ko|k|chưa|chua|chẳng|chang|buồn|buon|thiếu|thieu|thèm|them|ít|it)\s+ngủ\s+(?:đâu|dau)(?:\s|[?!.]|$)|(?:^|\s)(?:nào|nao|làm gì|lam gi|đâu|dau)\s+có\s.{1,40}\s(?:đâu|dau)\s*[?!.]*$/iu.test(text.normalize("NFC").replace(/ngu(?=\s+dau)/giu, "ngủ").replace(/\bco\b/giu, "có"))) return null;
   const n = ` ${normalizeVi(text)} `;
   const near = VN(/\b(gần|quanh|lân cận|nearby)\b/).test(n);
   if (VN(/\b(hôm nay ăn gì|ăn gì bây giờ|ăn gì đây|nên ăn gì|trưa nay ăn gì|tối nay ăn gì|sáng nay ăn gì|ăn gì ta|ăn gì giờ|đổi món|món khác|chọn lại quán|quán khác)\b/).test(n))
