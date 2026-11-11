@@ -104,3 +104,50 @@ describe("kiểm toán Lovable 11/11 — P1 sửa gọn", () => {
     expect(r.at(-1)!.content).not.toMatch(/Bạn đang nói tới chuyện nào/); // đã có chuyện đang nói thì không hỏi lại
   }, T);
 });
+
+// Đợt 2 (11/11, sau khi có file kết quả từng câu của bộ 1.000 câu): chạy lại đúng 985 câu → 65,4% lên 71,9%.
+describe("kiểm toán Lovable 11/11 — chuyện làm ăn của chính người kể (P1-1)", () => {
+  it("quán / shop / homestay CỦA MÌNH + hỏi cách làm → tư vấn kinh doanh, không tìm quán theo tên món", async () => {
+    for (const q of [
+      "Stress vì quán cơm ế khách quá, làm sao kéo dân văn phòng tới ăn trưa?",
+      "quan bun cua toi bi khach che phuc vu cham, nen sua sao",
+      "quán cf nhà mk vắng khách hnay quá, chạy km kiểu j kéo khách lại",
+      "Tôi đang chạy quán bún nhỏ, nên làm chương trình gì để khách quay lại?",
+      "Homestay nhà tôi nhiều lượt xem mà ít người đặt phòng, sửa chỗ nào?",
+      "quán cơm chị bán qua app giao đồ ăn, tính giá ntn để còn lời",
+    ]) {
+      const m = await last([q]);
+      expect(m.biz, q).toBeTruthy();
+      expect(m.places?.length ?? 0, q).toBe(0);
+      expect(m.content, q).not.toMatch(/ghé mấy chỗ này|Lomi chưa thấy homestay/);
+    }
+  }, T);
+  it("đối chứng: tìm quán thật, hỏi cách dùng app thì không thành tư vấn kinh doanh", async () => {
+    expect((await last(["quán phở nào ngon em ơi"])).biz).toBeUndefined();
+    expect((await last(["tìm quán cà phê vắng khách để ngồi làm việc"])).biz).toBeUndefined();
+    expect((await last(["làm sao đăng ký doanh nghiệp của mình trên iLomi"])).faqId).toBeTruthy();
+    // (CHƯA sửa được: "Từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn, cần đi khám ngay không?" vẫn ra gợi ý khai trương — G10-094.)
+    const r = await chat(["Mình muốn tăng doanh thu quán nước.", "Chưa đăng ký thành viên iLomi thì mỗi ngày được quẹt bao nhiêu lần?"]);
+    expect(r.at(-1)!.content).not.toMatch(/Cơ sở kinh doanh hả/);
+  }, T);
+});
+
+describe("kiểm toán Lovable 11/11 — câu đầu không có nội dung → hỏi lại một câu (P1-8, G06, G08)", () => {
+  it("chỉ gồm chữ thay thế + hư từ → hỏi lại, không 'Dạy Lomi', không 'Vậy hả 😄', không FAQ / hỏi thăm Lomi", async () => {
+    for (const q of ["bả bị sao vậy", "ổng nói vậy là ý gì", "nó có ổn không", "họ cần gì ở mình"]) {
+      const c = (await last([q])).content;
+      expect(c, q).toMatch(/Bạn đang nói về \*\*ai\*\*/);
+    }
+    for (const q of ["bao nhiêu?", "bh làm ntn đây hix", "lại nữa rồi", "để vậy qua đêm ổn ko"]) {
+      const c = (await last([q])).content;
+      expect(c, q).toMatch(/chưa rõ bạn đang nói tới chuyện gì/);
+      expect(c, q).not.toMatch(/Dạy Lomi|😄/u);
+    }
+  }, T);
+  it("đối chứng: câu có nội dung, lời đáp gọn, hỏi Lomi là ai, và câu nối trong cuộc trò chuyện thì không bị hỏi lại", async () => {
+    for (const q of ["bị chó cắn có sao không", "tui đau cái đầu quá, làm sao cho đỡ?", "e là ai", "cho hỏi", "vậy hả", "ừ", "bi cho can co sao khong"])
+      expect((await last([q])).content, q).not.toMatch(/chưa rõ bạn đang nói tới chuyện gì|Bạn đang nói về \*\*ai\*\*/);
+    const r = await chat(["mình bị sốt xuất huyết", "có sao không"]);
+    expect(r.at(-1)!.content).not.toMatch(/chưa rõ bạn đang nói tới chuyện gì/);
+  }, T);
+});

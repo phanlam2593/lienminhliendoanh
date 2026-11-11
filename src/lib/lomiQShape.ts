@@ -171,3 +171,32 @@ export function otherComplaint(text: string, names: string[]): string | null {
   const nn = names.map((x) => normalizeVi(x));
   return nn.some((x) => x.includes(k) || k.includes(x)) ? null : k;
 }
+
+// 11/11 (kiểm toán Lovable, P1-8 / G06 / G08 — "cần hỏi lại" chỉ đúng 58/112): câu KHÔNG có ngữ cảnh mà chỉ gồm chữ thay thế + hư từ
+//   ("bả bị sao vậy", "nó có ổn không", "bao nhiêu?", "ổng nói vậy là ý gì", "lại nữa rồi") thì không có gì để trả lời —
+//   trước đây ra "Dạy Lomi", "Vậy hả 😄 kể tiếp", hay bị FAQ / lời hỏi thăm Lomi bắt nhầm. Giờ hỏi lại MỘT câu.
+//   Chỉ dùng khi lượt trước KHÔNG có mạch nào đang mở (bệnh, tâm sự, quán, bài…) — có mạch thì các lớp hỏi nối lo.
+// Hư từ / chữ thay thế — viết ĐỦ DẤU. Chữ gõ có dấu phải khớp đúng dấu ("chó", "cắn", "đau", "đầu" KHÔNG nằm trong danh sách);
+//   chữ gõ không dấu chỉ được tính khi dạng bỏ dấu của nó không trùng một chữ có nghĩa hay gặp (VG_AMBIG).
+const VG_WORDS =
+  "bh giờ bây làm ntn thế nào đây hix huhu cho tui tôi mình em anh chị e a c mk xin đó với vs liệu có dc đc được không ko k nhỉ bả bị sao vậy z ổng nói là ý gì j nó ổn họ cần ở người hả nên đi chỉ tính ấy còn như trước chứ lại nữa rồi r đang bao nhiêu thì bên hơn hết lâu mới xong để qua đêm ngày mấy lần cái hợp đọc giùm giúp thêm chút nha của mẹ á chưa mà vừa thấy cũng hỏi kia này ta nhé nè ad ơi ừ hay cứ vẫn sẽ đã từng thật sự về chuyện việc vụ điều khác nếu vì tại ai kiểu ảnh cổ";
+const VG_STOP = new Set(VG_WORDS.split(" "));
+const VG_BARE = new Set(VG_WORDS.split(" ").map((w) => normalizeVi(w)));
+const VG_AMBIG = new Set("can dau cho me ba la lam o a de hop doc ve vu tai anh co ong tinh ben chi no ho hoi".split(" ")); // cắn/cân, đau/đầu, chó, mè, ba/bà, lá, lạm, ổ…
+const VG_ACK = /^(?:cho (?:minh |em |toi |tui |anh |chi )?hoi(?: chut| ti| xiu| cai nay)?|hoi (?:chut|ti|xiu|cai nay)(?: nha| nhe)?|(?:\S+ )?la ai(?: vay| the| nhi)?)$|^(?:(?:vay|the|u|uh|um|o|a|ra|ok|oke|okie|duoc|roi|ha|nha|thoi|khong sao|ko sao|da|vang|uk|uhm|hay|that|a ha) ?)+$/;
+const VG_WHO = /(?:^| )(ổng|bả|nó|họ|ảnh|cổ|người đó|người ấy|người ta|người kia|anh ấy|cô ấy|chị ấy|ông ấy|bà ấy|thằng đó|con đó|nguoi do|nguoi ay|nguoi ta|nguoi kia|anh ay|co ay|chi ay)(?: |$)/u;
+/** Câu trơn không có nội dung để trả lời (khi chưa có ngữ cảnh)? "who" = có nhắc một NGƯỜI chưa rõ là ai; "what" = chưa rõ chuyện gì. */
+export function vagueAsk(text: string): "who" | "what" | null {
+  const t = text.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").replace(/(\p{L})\1{2,}/gu, "$1").replace(/\s+/g, " ").trim();
+  const n = normalizeVi(t);
+  const toks = t.split(" ").filter(Boolean);
+  if (!toks.length || toks.length > 9 || VG_ACK.test(n)) return null;
+  const accented = /[^\x00-\x7F]/.test(t);
+  const ok = (w: string) => (/[^\x00-\x7F]/.test(w) ? VG_STOP.has(w) : VG_STOP.has(w) || (VG_BARE.has(w) && (accented ? false : !VG_AMBIG.has(w))));
+  if (!toks.every(ok)) return null;
+  return VG_WHO.test(t) ? "who" : "what";
+}
+export const VAGUE_TEXT = {
+  who: "Bạn đang nói về **ai**, và chuyện gì đã xảy ra vậy nè 🤔 Lomi chưa có ngữ cảnh — bạn kể thêm một chút để Lomi hiểu đúng nha.",
+  what: "Lomi chưa rõ bạn đang nói tới chuyện gì 🤔 Bạn nói cụ thể hơn một chút nha — ví dụ chuyện sức khoẻ, tình cảm, công việc, hay cách dùng app?",
+};

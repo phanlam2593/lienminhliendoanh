@@ -102,6 +102,7 @@ import {
   isMoreIdeas,
   isThanks,
   looksLikeBizQuestion,
+  ownerBizAsk,
   nounFor,
   topicFromChip,
   type BizCtx,
@@ -138,7 +139,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { kinSupportText } from "@/lib/lomiHeart";
-import { normNeg, otherComplaint, petPatient, qtypeOf } from "@/lib/lomiQShape";
+import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
@@ -1705,6 +1706,16 @@ export function AiChat({
     const redNow = !forceAi && !en && redFlagsIn(q).length > 0;
     //   (P0-4: câu kể bị đánh / bị doạ / bị nhốt cũng là câu NGUY HIỂM — không tách vế, không viết lại câu thành "tìm quán cà phê".)
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
+    // 11/11 (kiểm toán Lovable, P1-1): chuyện làm ăn CỦA CHÍNH người kể ("quán cơm của mình ế khách, làm sao kéo dân văn phòng?") →
+    //   tư vấn kinh doanh ngay tại đây, TRƯỚC các lớp nối mạch / chọn món / tìm quán / FAQ (trước đây tên món trong câu thắng).
+    //   Không đọc ra chủ đề nào Lomi có bài (đặt cọc, chốt đơn…) → hỏi lại loại hình / chủ đề thay vì đưa bài lạc đề.
+    if (!forceAi && !en && !danger0) {
+      const ob = ownerBizAsk(q);
+      if (ob) {
+        const tpO = ob.topic ?? detectBizTopic(q);
+        return tpO ? bizReply(q, detectBizKind(q), tpO) : askBiz(q);
+      }
+    }
     if (!forceAi && !en && !danger0) {
       const pu = [...msgs].reverse().find((m) => m.role === "user");
       const la = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
@@ -2187,6 +2198,13 @@ export function AiChat({
       shownRef.current = { from: q, to: typed };
     }
     const lastA = corr?.action === "rewrite" ? undefined : lastA0;
+    // 11/11 (kiểm toán Lovable — "cần hỏi lại"): chưa có mạch nào đang mở mà câu chỉ gồm chữ thay thế + hư từ → hỏi lại một câu.
+    //   Câu HỎI / câu nhắc một người chưa rõ thì hỏi lại ngay ở đây (trước FAQ, lời hỏi thăm Lomi…); câu kể trơn thì để tới lớp "nghe nè".
+    //   "Chưa có mạch" = đây là câu ĐẦU của cuộc trò chuyện (chưa có lượt người dùng nào trước đó) — cuộc trò chuyện đã có vài lượt thì
+    //   "có sao không", "còn bao nhiêu" gần như luôn nối một chuyện đang nói, để các lớp hỏi nối lo.
+    const noCtx0 = !msgs.some((m) => m.role === "user");
+    const vague0 = !forceAi && !en && !danger0 && noCtx0 ? vagueAsk(raw) : null;
+    if (vague0 && (vague0 === "who" || looksLikeQuestion(q))) return localReply(q, { role: "assistant", content: VAGUE_TEXT[vague0], local: true, stuck: "not_understood" as StuckKind });
     // 19/10: vừa đưa kiến thức về một bệnh / triệu chứng mà người dùng chỉ đáp cụt "k", "ok", "ừ" → không đoán là bác câu trả lời,
     //   không đáp xã giao lạc ("Okie la 👌"): nhận lời rồi mời xem tiếp đúng phần của chủ đề đang nói.
     if (!forceAi && !en && lastA?.med && VN(/^(k|ko|không|hông|hong|khong|ok|oke|okie|okay|ừ|ừa|uh|uk|dạ|vâng|ờ|ừm|hmm|rồi|ok rồi|k có|ko có|không có)( (nha|nhé|nhe|ạ|à|a|e|em|lomi|đâu|gì))*$/).test(normalizeVi(raw).trim())) {
@@ -2693,7 +2711,9 @@ export function AiChat({
       }
       // a) Lomi vừa hỏi loại hình → nhận loại hình (chip hoặc gõ tự do), rồi hỏi chủ đề
       //    (hoặc trả lời luôn nếu đã có chủ đề đang chờ / trong câu có sẵn chủ đề).
-      if (lastA?.bizPick && !detectTarot(q)) {
+      // (11/11: Lomi vừa hỏi loại hình mà người dùng hỏi sang CÁCH DÙNG APP — "chưa đăng ký thành viên thì mỗi ngày quẹt được mấy lần?" —
+      //   thì đó không phải câu trả lời loại hình)
+      if (lastA?.bizPick && !detectTarot(q) && !(isAppish(q) && looksLikeQuestion(q) && matchFaq(q))) {
         const nq = normalizeVi(q);
         const key = BUSINESS_TYPES.find((k) => normalizeVi(bizLabel(k)) === nq);
         const kind = detectBizKind(q);
@@ -2851,7 +2871,9 @@ export function AiChat({
         // 31/10: câu sốt của bé giữ mạch sức khoẻ cho câu sau ("ho nữa", "ăn uống sao", "bao lâu khỏi").
         if (ex) return localReply(q, { role: "assistant", content: ex, local: true, ...(kf && ex === kf ? { health: { ...(hCtx ?? {}), label: hCtx?.label ?? "sốt" } } : {}) });
         const bk = detectBizKind(q);
-        const bp = !lastA?.heart ? bizPractical(q, { ...(bk.type ? bk : {}) }) : null;
+        // (11/11: câu có triệu chứng cơ thể — "từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn, cần đi khám ngay không?" —
+        //   là chuyện sức khoẻ, không phải hỏi ngày khai trương)
+        const bp = !lastA?.heart && !(analyzeBody(q)?.sx.length) ? bizPractical(q, { ...(bk.type ? bk : {}) }) : null;
         if (bp) return bizReply(q, { ...(bk.type ? bk : {}) }, detectBizTopic(q) ?? "opening");
       }
       // Understanding Gate (01/10): filler / follow-up / mơ hồ / hỏi luật Tarot — xác định ý trước khi module chuyên biệt bắt câu.
@@ -3680,7 +3702,7 @@ export function AiChat({
       const lc = logoColorText(q, [...msgs].reverse().find((m) => m.role === "user")?.content ?? "");
       if (lc) return localReply(q, { role: "assistant", content: lc, local: true });
     }
-    const bizQ = !forceAi && looksLikeBizQuestion(q);
+    const bizQ = !forceAi && looksLikeBizQuestion(q) && !(analyzeBody(q)?.sx.length);
     // Câu hỏi xin LỜI KHUYÊN kinh doanh (giữ khách, hút khách lúc vắng, giá, khai trương, dịp lễ, bài đăng)
     // thì để tư vấn kinh doanh trả lời — trừ FAQ về cách dùng app rõ ràng (APP_HOWTO_FAQ).
     const advisory = bizQ && ["loyal", "slow", "newcust", "price", "opening", "holiday", "post", "offer"].includes(detectBizTopic(q) ?? "");
@@ -3764,6 +3786,7 @@ export function AiChat({
         // 07/11: nhắc lại một nỗi lo / nỗi buồn của CHÍNH người dùng ("a đang lo chuyện công việc" → "…kể thêm cho Lomi nghe với") là đã mời
         //   tâm sự → mở mạch tâm sự, để câu kể tiếp ("công ty có thể cắt giảm nhân sự") được nghe như phần tiếp của chuyện đó.
         const slHeart = !!mSl && feelSl && vSl < 0 && !heartOn && fr1?.subject === "self" ? { heart: VR(/^(lo|sợ|hồi hộp|căng thẳng|bất an|rối|hoang mang|sốt ruột)/).test(fr1.pred?.head ?? "") ? "anxiety" : "sad", heartDepth: 1, story: raw.length <= 90 ? raw : undefined } : {};
+        if (sl && vague0) return localReply(q, { role: "assistant", content: VAGUE_TEXT[vague0], local: true, stuck: "not_understood" as StuckKind });
         if (sl) return localReply(q, { role: "assistant", content: slText ?? sl.text, local: true, quick: sl.quick, ...slHeart, ...(sl.intent === "listen" && !mSl && VR(/^(Ừa?, Lomi nghe nè|Vậy hả 😄 Chuyện sao|Lomi nghe nè 🌿|Lomi ở đây với bạn nè)/).test(sl.text) ? { stuck: "generic_listen" as StuckKind } : {}), ...(sl.talk ? { talk: (convo?.talk ?? 0) + 1 } : {}) });
       }
       // 12/10: đang ở mạch sức khoẻ mà người dùng nói ra một nỗi lo / cảm xúc của CHÍNH MÌNH ("mà a cũng hay lo", "lo chuyện tiền") → đó là
@@ -3839,6 +3862,7 @@ export function AiChat({
         //   (trước đây đáp "Lomi chưa biết cái này" kèm nút 💡 Dạy Lomi — như thể đó là kiến thức còn thiếu).
         const ctxA = lastA && (lastA.med || lastA.heart || lastA.health || lastA.tarot || lastA.tarotRef || lastA.search || lastA.dish || lastA.harm || lastA.faqId);
         const anaphQ = !careUnk && !medUnk && !ctxA && isAsk && q.trim().split(/\s+/).length <= 10 && VN(/\b(chuyện|cái|việc|vụ|điều|bệnh|thuốc|món) (đó|này|ấy|kia|đấy)\b/).test(` ${normalizeVi(q)} `);
+        if (vague0) return localReply(q, { role: "assistant", content: VAGUE_TEXT[vague0], local: true, stuck: "not_understood" as StuckKind });
         if (anaphQ) return localReply(q, { role: "assistant", content: "Bạn đang nói tới chuyện nào ha 🤔 Bạn kể cụ thể hơn một chút (đang bị gì, hay chuyện gì đã xảy ra) để Lomi trả lời đúng ý nha.", local: true, stuck: "not_understood" as StuckKind });
         const notGot = !careUnk && !medUnk && !isAsk && !keepHealth.health && !askHealth
           ? "Câu này Lomi chưa hiểu ý lắm 😅 Bạn nói rõ hơn một chút giúp Lomi nha? (Nếu là điều Lomi nên biết mà chưa biết, bạn bấm 💡 Dạy Lomi bên dưới để gửi ban quản trị.)"

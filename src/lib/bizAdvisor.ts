@@ -281,6 +281,40 @@ export function looksLikeBizQuestion(text: string): boolean {
   if (VN(/\b(nên làm|làm|chạy|lên|nghĩ|gợi ý|tư vấn) (ưu đãi|khuyến mãi|chương trình)\b/).test(n)) return true;
   return !!detectBizTopic(text) && (BIZ_WORD.test(n) || !!detectBizKind(text).type);
 }
+// 11/11 (kiểm toán Lovable, P1-1 — kinh doanh chỉ đúng 28/66, 15 câu thành "Đi ăn **Cơm** thì ghé mấy chỗ này"):
+//   người kể đang nói về chỗ làm ăn CỦA CHÍNH MÌNH ("quán cơm của mình", "homestay nhà tôi", "tiệm nail em", "chị bán bánh online")
+//   và hỏi cách làm / kể chuyện khách, giá, đơn, lời lỗ → đây là câu xin tư vấn kinh doanh, không phải tìm quán, không phải chọn món.
+//   Luật so trên chữ BỎ DẤU (các cụm dưới đây không trùng nghĩa khác), nên gõ có dấu hay không dấu đều như nhau.
+const OB_PLACE = "(?:quan|tiem|shop|cua hang|homestay|khach san|nha nghi|villa|spa|salon|nha hang|xe|sap|gian hang|cua tiem)";
+const OB_ME = "(?:minh|toi|tui|em|anh|chi|a|e|c|mk|tao|to|tớ)";
+const OB_OWNER = new RegExp(
+  `\\b${OB_PLACE}(?: (?!nao\\b|nay\\b|do\\b|kia\\b|gan\\b|o\\b)\\S+){0,3} (?:cua|nha) (?:${OB_ME}|me ${OB_ME}|ba ${OB_ME}|vo chong ${OB_ME}|gia dinh ${OB_ME})\\b` +
+    `|\\b${OB_PLACE}(?: (?!nao\\b|nay\\b|do\\b|kia\\b|gan\\b|o\\b)\\S+){0,2} ${OB_ME}\\b` +
+    `|\\b(?:${OB_ME}|me ${OB_ME}|me) (?:dang |moi |dinh |tinh |co |vua )?(?:mo|chay|ban|kinh doanh|buon ban|lam chu) ` +
+    `|(?:^| )ban (?:banh|com|rau|hang|tra sua|quan ao|do an|my pham|ca phe|tra|hoa|trai cay)\\b|\\bban (?:\\S+ ){0,2}online\\b|\\b(?:shop|quan|tiem|homestay) (?:minh|toi|tui|em) ` +
+    `|\\b(?:quan|shop|tiem|homestay|cua hang) (?:dang |hay |moi |van |cu )?(?:bi|lo)\\b|\\b(?:doanh thu|bien loi nhuan|chot don)\\b`,
+);
+const OB_TERM = /\b(khach|gia ban|dinh gia|tinh gia|bao gia|chinh gia|tang gia|tinh phi|phi giao|con loi|loi it|loi nhuan|khong lo|so lo|bi lo|doanh thu|khuyen mai|chot don|don hang|it don|let det|dat phong|dat ban|dat coc|phuc vu|chi phi|quang cao|ton hang|review|danh gia|nhan xet|tich diem|uu dai|marketing|thanh toan|ngan sach|san pham|dang anh|khai truong|trong phong|ban cham|e am|keo nguoi|keo khach|keo dan|hut khach|co loi|bi lo|\blo\b|khach nho)\b/;
+const OB_ASK = /\b(lam sao|lam the nao|nen|tinh sao|sua|kieu gi|kieu nao|cach nao|the nao|ntn|sao de|sao cho|tu van|giup|co nen|y tuong|ke hoach|tu dau|chinh sao|xu ly|vang khach|e khach|it khach|trong phong|sao|muon tang|muon giam|can)\b/;
+const OB_APP = /\b(ilomi|app(?! giao)|ung dung(?! giao)|trang doanh nghiep|ho so doanh nghiep|dang ky doanh nghiep|tai khoan|duyet|membership)\b/;
+const OB_TOPIC: [BizTopic, RegExp][] = [
+  ["review", /\b(che|review xau|phan hoi khach|danh gia|nhan xet|phuc vu cham|phan nan)\b/],
+  ["price", /\b(dinh gia|tinh gia|bao gia|chinh gia|tang gia|gia ban|gia suat|tinh phi|phi giao|con loi|khong lo|so lo|loi it|bien loi nhuan|loi nhuan)\b/],
+  ["loyal", /\b(quay lai|giu khach|giu chan|tich diem|khach quen|khach nho)\b/],
+  ["slow", /\b(vang|e khach|e am|trong phong|it nguoi dat|it khach|let det|ton hang|ban cham|ngay thuong trong)\b/],
+  ["newcust", /\b(keo khach|keo nguoi|keo dan|hut khach|khach moi|quang cao|marketing|dang anh|them khach)\b/],
+  ["offer", /\b(khuyen mai|chuong trinh|uu dai|giam gia|voucher)\b/],
+];
+/** Người kể đang hỏi / kể chuyện làm ăn của CHÍNH mình? Trả về chủ đề tư vấn nếu đọc ra (không đọc ra thì topic để trống). */
+export function ownerBizAsk(text: string): { topic?: BizTopic } | null {
+  // (vế bị gạt đi — "đừng chỉ cách đăng ký doanh nghiệp iLomi nữa, mình cần…" — không tính)
+  const n = ` ${normalizeVi(text.replace(/(^|[\s,;.])(đừng|khỏi|không cần|bỏ vụ|thôi khỏi|dung|khoi|khong can|bo vu)\s[^,;.]*?[,;.]/giu, "$1 "))} `;
+  // (câu có chuyện SỨC KHOẺ — "từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn" — thì sức khoẻ trước, không phải tư vấn bán hàng)
+  if (/\b(dau|sot|non|oi|kham|benh|thuoc|chong mat|kho tho|di ngoai|tieu chay|ngat|co giat)\b/.test(n)) return null;
+  if (!OB_OWNER.test(n) || !OB_TERM.test(n) || !OB_ASK.test(n) || OB_APP.test(n)) return null;
+  for (const [tp, re] of OB_TOPIC) if (re.test(n)) return { topic: tp };
+  return {};
+}
 export const isMoreIdeas = (text: string) =>
   VN(/^(thêm ý|ý khác|thêm|còn gì nữa|nữa|gợi ý thêm|thêm gợi ý|thêm nữa|còn ý nào)/).test(normalizeVi(text));
 export const isThanks = (text: string) =>
