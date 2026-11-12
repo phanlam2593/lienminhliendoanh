@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, sưng khớp, sưng đau, mệt mỏi, khó thở, rét run, đau cổ, sưng, sốt.",
+   "text": "Triệu chứng hay gặp: cứng khớp, sưng khớp, sưng đau, mệt mỏi, khó thở, rét run, đau cổ, sưng, sốt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thoái hóa khớp, chấn thương, viêm khớp dạng thấp, nhiễm trùng khớp, tinh thể lắng đọng trong khớp.",
+   "text": "Nguyên nhân / yếu tố liên quan: thoái hóa khớp, chấn thương, viêm khớp dạng thấp, nhiễm trùng khớp, tinh thể lắng đọng trong khớp.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: hạn chế hoạt động gây đau, duy trì vận động phù hợp, nghỉ ngơi hợp lý, chườm lạnh hoặc chườm ấm phù hợp, kiểm soát cân nặng hợp lý, phòng tránh chấn thương.",
+   "text": "Sinh hoạt / phòng ngừa: hạn chế hoạt động gây đau, duy trì vận động phù hợp, nghỉ ngơi hợp lý, chườm lạnh hoặc chườm ấm phù hợp, kiểm soát cân nặng hợp lý, phòng tránh chấn thương.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

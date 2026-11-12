@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: tiểu ra máu, tiểu nhiều, tiểu buốt, tiểu rắt, nóng rát, sốt cao, khó thở, ớn lạnh, bí tiểu, rét run.",
+   "text": "Triệu chứng hay gặp: tiểu ra máu, tiểu nhiều, tiểu buốt, tiểu rắt, nóng rát, sốt cao, khó thở, ớn lạnh, bí tiểu, rét run.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm trùng lan theo đường máu, vi khuẩn Gram âm, escherichia coli.",
+   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng lan theo đường máu, vi khuẩn Gram âm, escherichia coli.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: nghỉ ngơi hợp lý, không tự xử trí tại nhà, kiểm soát tốt bệnh lý nền, uống nước phù hợp, không tự ý sử dụng kháng sinh, chăm sóc đúng khi phải đặt ống thông tiểu.",
+   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi hợp lý, không tự xử trí tại nhà, kiểm soát tốt bệnh lý nền, uống nước phù hợp, không tự ý sử dụng kháng sinh, chăm sóc đúng khi phải đặt ống thông tiểu.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

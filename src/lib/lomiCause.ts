@@ -337,7 +337,7 @@ export async function diagnoseReply(q: string): Promise<{ text: string; medId: s
   const em = mt.emergency.slice(0, 2);
   const parts = [
     `Lomi **không chẩn đoán được** là ${nm.toLowerCase()} hay không đâu 🙏 — cùng một kiểu triệu chứng có thể do nhiều bệnh khác nhau, phải người khám trực tiếp mới nói chắc.`,
-    mt.signs.length ? `Dấu hiệu thường gặp của **${nm}** theo nguồn:\n${mt.signs.slice(0, 3).map((f) => `• ${f.text}`).join("\n")}` : "",
+    mt.signs.length ? `Dấu hiệu thường gặp của **${nm}**:\n${mt.signs.slice(0, 3).map((f) => `• ${f.text}`).join("\n")}` : "",
     mt.doctor.length ? `🧑‍⚕️ Nên đi khám khi:\n${mt.doctor.slice(0, 2).map((f) => `• ${f.text}`).join("\n")}` : "",
     em.length ? `🚨 Gọi 115 / đi cấp cứu ngay nếu:\n${em.map((f) => `• ${f.text}`).join("\n")}` : "",
   ].filter(Boolean);
@@ -491,7 +491,7 @@ export async function multiAspectReply(q: string): Promise<{ text: string; medId
       const ts = (await Promise.all(ids.map((x) => loadMedTopic(x)))).filter((x): x is MedTopic => !!x);
       if (ts.length === 2 && ts.every((t) => t.diet)) {
         const one = (t: MedTopic) => `**${displayName(t)}**:\n${renderMed(t, "diet").text.split("\n").filter((l) => l.startsWith("•")).slice(0, 4).join("\n")}`;
-        return { text: `Hai bệnh nên Lomi đặt cạnh nhau phần ăn uống theo nguồn của từng bệnh nha 👇\n\n${ts.map(one).join("\n\n")}\n\nNấu chung thì chọn món **hợp với cả hai** — món nào một bên phải tránh thì tách riêng phần đó. Mỗi người có bệnh nền / thuốc riêng, nên hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi để chắc nha.`, medId: ids[0] };
+        return { text: `Hai bệnh nên Lomi đặt cạnh nhau phần ăn uống của từng bệnh nha 👇\n\n${ts.map(one).join("\n\n")}\n\nNấu chung thì chọn món **hợp với cả hai** — món nào một bên phải tránh thì tách riêng phần đó. Mỗi người có bệnh nền / thuốc riêng, nên hỏi bác sĩ hoặc chuyên viên dinh dưỡng đang theo dõi để chắc nha.`, medId: ids[0] };
       }
     }
   }

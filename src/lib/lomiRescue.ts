@@ -24,9 +24,18 @@ const TYPOS: [RegExp, string][] = [
   [/(?<![\p{L}])uư đãi(?![\p{L}])/giu, "ưu đãi"],
   [/(?<![\p{L}])định já(?![\p{L}])/giu, "định giá"],
   [/(?<![\p{L}])cộg(?![\p{L}])/giu, "cộng"],
+  [/(?<![\p{L}])cải nhau(?![\p{L}])/giu, "cãi nhau"],
+  [/(?<![\p{L}])chồg(?![\p{L}])/giu, "chồng"],
+  [/(?<![\p{L}])chẳg(?![\p{L}])/giu, "chẳng"],
+  [/(?<![\p{L}])xin lổi(?![\p{L}])/giu, "xin lỗi"],
+  [/(?<![\p{L}])nhìu(?![\p{L}])/giu, "nhiều"],
+  // "toi cam nang co ban cung lop" — bộ đoán dấu đọc "cảm nặng"; "cảm nắng" + một người là thích thầm
+  [/(?<![\p{L}])cam nang (co |mot |1 )?(ban|nguoi|anh|chi|em|co|cau|thang|con|crush|ai)(?![\p{L}])/giu, "cảm nắng $1$2"],
   [/(?<![\p{L}])bao nhiu(?![\p{L}])/giu, "bao nhiêu"],
   // "bốc giúp ba lá coi đường tình duyên" = rút ba lá
   [/(?<![\p{L}])bốc( giúp| cho| giùm| dùm| hộ)?( \S+)?( ba| 3| một| 1| mấy| vài) lá(?![\p{L}])/giu, "rút$1$2$3 lá"],
+  // gõ không dấu "te ban tay luc ngu day" — bộ đoán dấu đọc "té" (ngã); tê + bộ phận + lúc / khi … thì là TÊ
+  [/(?<![\p{L}])te (ban |hai |2 )?(tay|chan)( (luc|khi|moi|ban|vao|sau) )/giu, "tê $1$2$3"],
   // đảo trật tự: "tai bên trái của tôi cứ ù" → "bị ù tai"
   [/(?<![\p{L}])tai( bên)?( trái| phải)?( của)?( tôi| mình| em| tui| anh| chị)?( cứ| hay| bị| đang)? ù(?![\p{L}])/giu, "bị ù tai$2"],
 ];

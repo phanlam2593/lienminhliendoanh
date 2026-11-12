@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, sưng khớp, khó tiêu, chảy máu, đau họng, đau bụng, phát ban, buồn nôn, đau khớp, táo bón.",
+   "text": "Triệu chứng hay gặp: cứng khớp, sưng khớp, khó tiêu, chảy máu, đau họng, đau bụng, phát ban, buồn nôn, đau khớp, táo bón.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: neisseria gonorrhoeae.",
+   "text": "Nguyên nhân / yếu tố liên quan: neisseria gonorrhoeae.",
    "src": [
     0
    ]
@@ -32,13 +32,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: hạn chế số lượng bạn tình.",
+   "text": "Sinh hoạt / phòng ngừa: hạn chế số lượng bạn tình.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

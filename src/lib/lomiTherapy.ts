@@ -295,7 +295,7 @@ export function therapyStart(q: string): TherapyOut | null {
     };
   // ("em ngu quá", "lomi vô dụng" là chê Lomi — lớp xã giao đáp xin lỗi)
   // (người dùng đang KỂ về cái thói tự chê — "làm sai việc nhỏ rồi tự kết luận mình là kẻ thất bại" — chủ đề tâm sự có lời đáp riêng)
-  if (SELF_LABEL.test(n) && !NOT_SELF.test(n) && !VN(/\btự (kết luận|cho (là|rằng)|nghĩ (là|rằng)|gán|dán nhãn)\b/).test(n) && !VN(/^ (em|e|lomi|mày|m|bot|bạn) (ngu|ngủ|dở|tệ|kém|vô dụng|ngốc|dốt|chán)\b/).test(n) && q.trim().split(/\s+/).length <= 20) {
+  if (SELF_LABEL.test(n) && !NOT_SELF.test(n) && !VN(/\b(ba|bố|mẹ|má|ông|bà|bạn (ấy|thân|mình|tôi|em)|nó|anh ấy|chị ấy|cô ấy|chồng|vợ|con (tôi|mình|em)|em gái|em trai|anh trai|chị gái|ổng|bả)( \S+){0,4} (bảo|nói|than|kêu|cứ bảo|cứ nói|hay nói|tự nhận|cứ nghĩ|thấy)\b/).test(n) && !VN(/\btự (kết luận|cho (là|rằng)|nghĩ (là|rằng)|gán|dán nhãn)\b/).test(n) && !VN(/^ (em|e|lomi|mày|m|bot|bạn) (ngu|ngủ|dở|tệ|kém|vô dụng|ngốc|dốt|chán)\b/).test(n) && q.trim().split(/\s+/).length <= 20) {
     // trích đúng câu tự chê, đổi về ngôi "mình": "Sao a thấy mình vô dụng quá" → “Mình vô dụng quá”
     const q1 = q.replace(/^(?:em ơi|lomi ơi|e ơi)[,\s]*/iu, "");
     const at = q1.search(/(?:^|\s)(?:anh|a|em|e|tôi|tui|tớ|tao|mình)\s+(?:(?:cảm\s+)?thấy\s+)?(?:mình\s+)?(?:thật\s+|đúng là\s+|là\s+)?(?:một\s+)?(?:đồ\s+|kẻ\s+|người\s+|đứa\s+)?(?:vô dụng|vô tích sự|vô giá trị|kém cỏi|chẳng ra gì|không ra gì|tệ hại|ngu ngốc|thất bại|bỏ đi)/iu);

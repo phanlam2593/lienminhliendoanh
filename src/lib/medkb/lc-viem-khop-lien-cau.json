@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: có mùi hôi, nổi hạch, cứng gáy, sốt cao, ớn lạnh, rét run, uể oải, sưng.",
+   "text": "Triệu chứng hay gặp: có mùi hôi, nổi hạch, cứng gáy, sốt cao, ớn lạnh, rét run, uể oải, sưng.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: chấn thương, tiêm khớp.",
+   "text": "Nguyên nhân / yếu tố liên quan: chấn thương, tiêm khớp.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ tinh thần thoải mái, tránh stress.",
+   "text": "Sinh hoạt / phòng ngừa: giữ tinh thần thoải mái, tránh stress.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

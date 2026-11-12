@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chướng bụng, thở khò khè, nghẹt mũi, thiếu máu, tăng cân, táo bón, tím tái, tiểu ít, vàng da, sưng.",
+   "text": "Triệu chứng hay gặp: chướng bụng, thở khò khè, nghẹt mũi, thiếu máu, tăng cân, táo bón, tím tái, tiểu ít, vàng da, sưng.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: rối loạn phát triển tuyến giáp, thiếu hoặc thừa iốt, thiếu iốt.",
+   "text": "Nguyên nhân / yếu tố liên quan: rối loạn phát triển tuyến giáp, thiếu hoặc thừa iốt, thiếu iốt.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: dùng thuốc đều đặn, tái khám đúng lịch, theo dõi sự phát triển của trẻ, chú ý thời điểm dùng sắt và canxi, lưu ý với thực phẩm từ đậu nành, không tự ý bổ sung iốt.",
+   "text": "Sinh hoạt / phòng ngừa: dùng thuốc đều đặn, tái khám đúng lịch, theo dõi sự phát triển của trẻ, chú ý thời điểm dùng sắt và canxi, lưu ý với thực phẩm từ đậu nành, không tự ý bổ sung iốt.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

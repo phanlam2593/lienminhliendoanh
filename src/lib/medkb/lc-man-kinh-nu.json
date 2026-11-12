@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, tiểu nhiều, đổ mồ hôi, chóng mặt, tăng cân, trầm cảm, đau rát, mất ngủ, mệt mỏi, cáu gắt.",
+   "text": "Triệu chứng hay gặp: mất trí nhớ, tiểu nhiều, đổ mồ hôi, chóng mặt, tăng cân, trầm cảm, đau rát, mất ngủ, mệt mỏi, cáu gắt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: phẫu thuật cắt bỏ tử cung, hoá trị và xạ trị, suy buồng trứng sớm, chấn thương vùng chậu.",
+   "text": "Nguyên nhân / yếu tố liên quan: phẫu thuật cắt bỏ tử cung, hoá trị và xạ trị, suy buồng trứng sớm, chấn thương vùng chậu.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đau lưng, buồn nôn, đau rát, đau cổ, loét, nôn, nám, sốt, phù.",
+   "text": "Triệu chứng hay gặp: đau lưng, buồn nôn, đau rát, đau cổ, loét, nôn, nám, sốt, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm đường niệu đạo do lậu, viêm đường niệu đạo mãn tính.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm đường niệu đạo do lậu, viêm đường niệu đạo mãn tính.",
    "src": [
     0
    ]
@@ -32,13 +32,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: rửa vùng sinh dục hàng ngày bằng nước sạch.",
+   "text": "Sinh hoạt / phòng ngừa: rửa vùng sinh dục hàng ngày bằng nước sạch.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

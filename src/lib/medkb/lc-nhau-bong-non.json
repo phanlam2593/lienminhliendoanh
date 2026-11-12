@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chảy máu âm đạo, chảy máu, đau bụng, đau lưng, đỏ mắt, ngất, nôn.",
+   "text": "Triệu chứng hay gặp: chảy máu âm đạo, chảy máu, đau bụng, đau lưng, đỏ mắt, ngất, nôn.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: hút thuốc, huyết áp cao, vỡ ối, mang thai muộn, chấn thương bụng, sảy thai.",
+   "text": "Nguyên nhân / yếu tố liên quan: hút thuốc, huyết áp cao, vỡ ối, mang thai muộn, chấn thương bụng, sảy thai.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: thắt dây an toàn.",
+   "text": "Sinh hoạt / phòng ngừa: thắt dây an toàn.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -76,6 +76,8 @@ const PE_RIB = VN(/\b(đau (dưới|vùng) sườn|đau thượng vị|đau trê
 const DIABETES = VN(/\b(tiểu đường|đái tháo đường)\b/);
 const HYPO = VN(/\b(vã mồ hôi|toát mồ hôi|đổ mồ hôi lạnh|run tay|run rẩy|run người|lả đi|mệt lả|đói cồn cào|bủn rủn|lú lẫn|lơ mơ|choáng|xỉu|ngất)\b/);
 
+const HEAD_HIT = VN(/\b(va đập đầu|va đầu|đập đầu|cụng đầu|đụng đầu|chấn thương đầu|chấn thương ở đầu|té đập đầu|ngã đập đầu|bóng đập (vào )?đầu|đập (vào )?(đầu|trán))\b/);
+const HEAD_BAD = VN(/\b(nôn|ói|buồn nôn nhiều|buồn ngủ|ngủ li bì|lừ đừ|lơ mơ|li bì|lú lẫn|nói lẫn|co giật|ngất|bất tỉnh|không tỉnh|khó tỉnh|mất trí nhớ|không nhớ|đau đầu (dữ dội|tăng|ngày càng)|chảy máu tai|chảy dịch (tai|mũi)|nhìn mờ|yếu (tay|chân)|nói ngọng|đồng tử)\b/);
 const FALL = VN(/\b(bị ngã|té ngã|bị té|ngã cầu thang|té cầu thang|ngã xe|té xe|trượt ngã|ngã đập|té đập)\b/);
 const FALL_BAD = VN(/\b(không (đứng|ngồi|tự) dậy được|không dậy được|không đứng lên được|đập đầu|va đầu|đau (hông|lưng|cổ|háng) (dữ dội|nhiều|lắm|quá)|gãy|không cử động được|bất tỉnh|ngất|lơ mơ)\b/);
 const ELDER = VN(/\b(ông|bà|ông bà|ba|bố|mẹ|má|cụ|người già|người cao tuổi|cao tuổi|lớn tuổi|[6-9]\d tuổi|1[01]\d tuổi)\b/);
@@ -127,6 +129,12 @@ const PALP_RUN = VN(/\b(tim đập nhanh|tim đập mạnh|đánh trống ngực
 /** Câu kể một tình huống cần xử trí khẩn → tình huống + thẻ để trả lời; không phải thì null. */
 export function urgentOf(text: string): Urgent | null {
   const n = ` ${normalizeVi(text)} `;
+  // 12/11 (bộ 1.000 câu, G05-023 — "cháu va đầu vào cột rồi nôn hai lần và buồn ngủ nhiều" từng chỉ được "Lomi ở đây với bạn nè 💚"):
+  //   bị đập / va đầu KÈM dấu hiệu nặng mà thẻ chan-thuong-dau ghi (nôn, buồn ngủ / khó giữ tỉnh, lơ mơ, lú lẫn, co giật, ngất,
+  //   đau đầu tăng dần, chảy máu / dịch ở tai mũi) → cảnh báo cấp cứu + phần "khi nào cấp cứu" của thẻ.
+  //   Chạy TRƯỚC giới hạn 30 chữ và lọc "nghe kể" — câu kể dài của phụ huynh ("cháu bảo va đầu…") vẫn phải được cảnh báo.
+  if (HEAD_HIT.test(n) && HEAD_BAD.test(n) && !KNOWLEDGE.test(n))
+    return { id: "fall", card: "chan-thuong-dau", aspect: "emergency", head: `🚨 Bị va đập đầu mà **nôn, buồn ngủ / khó giữ tỉnh, lơ mơ, lú lẫn, co giật hoặc ngất** là dấu hiệu cần xử trí khẩn → ${CALL}, hoặc đưa đến **cấp cứu** ngay. Trong lúc chờ, đừng để người đó ngủ một mình và theo dõi sát.` };
   if (n.trim().split(" ").length > 30) return null;
   if (KNOWLEDGE.test(n) || HEARSAY.test(n)) return null;
   const other = OTHER.test(n);

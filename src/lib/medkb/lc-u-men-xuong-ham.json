@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, đau răng, sốt cao, khó thở, đau cổ, khối u, đỏ da, sưng, loét, nám.",
+   "text": "Triệu chứng hay gặp: chảy máu, đau răng, sốt cao, khó thở, đau cổ, khối u, đỏ da, sưng, loét, nám.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm nướu, di truyền, nhiễm virus, chấn thương hàm.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm nướu, di truyền, nhiễm virus, chấn thương hàm.",
    "src": [
     0
    ]
@@ -32,13 +32,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngủ đủ giấc, tránh thức khuya, giữ một tinh thần thoải mái, tránh lo lắng, bổ sung đầy đủ dinh dưỡng, uống ít nhất 2 lít nước.",
+   "text": "Sinh hoạt / phòng ngừa: ngủ đủ giấc, tránh thức khuya, giữ một tinh thần thoải mái, tránh lo lắng, bổ sung đầy đủ dinh dưỡng, uống ít nhất 2 lít nước.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

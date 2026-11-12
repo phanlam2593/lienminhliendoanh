@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sưng hạch, đốm trắng, đau họng, đau bụng, sốt cao, ngứa, sưng, nôn, sốt.",
+   "text": "Triệu chứng hay gặp: sưng hạch, đốm trắng, đau họng, đau bụng, sốt cao, ngứa, sưng, nôn, sốt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm amidan do virus, viêm amidan do vi khuẩn, viêm họng liên cầu khuẩn.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm amidan do virus, viêm amidan do vi khuẩn, viêm họng liên cầu khuẩn.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tránh khói thuốc lá, rượu bia, chất kích thích, tiêm chủng vắc xin đầy đủ, giữ con bạn ở nhà khi bé bị ốm, ho hoặc hắt hơi vào khăn giấy, rửa tay sau khi hắt hơi hoặc ho.",
+   "text": "Sinh hoạt / phòng ngừa: tránh khói thuốc lá, rượu bia, chất kích thích, tiêm chủng vắc xin đầy đủ, giữ con bạn ở nhà khi bé bị ốm, ho hoặc hắt hơi vào khăn giấy, rửa tay sau khi hắt hơi hoặc ho.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chướng bụng, tiểu nhiều, xuất huyết, tiêu chảy, chảy máu, phù chân, đau bụng, co giật, khó thở, tím tái.",
+   "text": "Triệu chứng hay gặp: chướng bụng, tiểu nhiều, xuất huyết, tiêu chảy, chảy máu, phù chân, đau bụng, co giật, khó thở, tím tái.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thuốc, nhiễm trùng, bệnh tự miễn, HIV, viêm thận lupus.",
+   "text": "Nguyên nhân / yếu tố liên quan: thuốc, nhiễm trùng, bệnh tự miễn, HIV, viêm thận lupus.",
    "src": [
     0
    ]
@@ -32,7 +32,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

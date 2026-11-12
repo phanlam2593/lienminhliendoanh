@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: nhìn mờ, đau mắt, nhạy cảm với ánh sáng, đốm đen, nhìn mờ, đau mắt, mắt có ruồi bay, mất thị lực đột ngột, bị đau mắt, xuất hiện đốm sáng.",
+   "text": "Triệu chứng hay gặp: nhìn mờ, đau mắt, nhạy cảm với ánh sáng, đốm đen, nhìn mờ, đau mắt, mắt có ruồi bay, mất thị lực đột ngột, bị đau mắt, xuất hiện đốm sáng.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: chấn thương, nhiễm trùng, bệnh không nhiễm trùng, chấn thương mắt, cytomegalovirus, rubella, bệnh giang mai, viêm võng mạc sắc tố.",
+   "text": "Nguyên nhân / yếu tố liên quan: chấn thương, nhiễm trùng, bệnh không nhiễm trùng, chấn thương mắt, cytomegalovirus, rubella, bệnh giang mai, viêm võng mạc sắc tố.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: sắp xếp không gian sống, sử dụng công nghệ hỗ trợ, hỗ trợ trong giao tiếp, hỗ trợ vận động, hỗ trợ tâm lý, hỗ trợ về y tế.",
+   "text": "Sinh hoạt / phòng ngừa: sắp xếp không gian sống, sử dụng công nghệ hỗ trợ, hỗ trợ trong giao tiếp, hỗ trợ vận động, hỗ trợ tâm lý, hỗ trợ về y tế.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

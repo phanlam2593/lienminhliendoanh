@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sần sùi, nổi mẩn, ngứa, sưng, loét, nám, sốt, phù.",
+   "text": "Triệu chứng hay gặp: sần sùi, nổi mẩn, ngứa, sưng, loét, nám, sốt, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: dậy thì, u xơ tử cung, di truyền, dư thừa estrogen, sử dụng thuốc, bệnh lý, sự thay đổi hormone.",
+   "text": "Nguyên nhân / yếu tố liên quan: dậy thì, u xơ tử cung, di truyền, dư thừa estrogen, sử dụng thuốc, bệnh lý, sự thay đổi hormone.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: duy trì cân nặng hợp lý, thăm khám và kiểm tra sức khỏe định kỳ, tránh và hạn chế sử dụng rượu bia.",
+   "text": "Sinh hoạt / phòng ngừa: duy trì cân nặng hợp lý, thăm khám và kiểm tra sức khỏe định kỳ, tránh và hạn chế sử dụng rượu bia.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

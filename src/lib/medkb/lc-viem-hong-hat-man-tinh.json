@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: nổi hạch, sốt cao, đau đầu, ù tai, ngứa, sốt, ho.",
+   "text": "Triệu chứng hay gặp: nổi hạch, sốt cao, đau đầu, ù tai, ngứa, sốt, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm trùng, viêm xoang mãn tính, viêm amidan mãn tính, trào ngược dạ dày thực quản, viêm họng cấp, polyp mũi.",
+   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng, viêm xoang mãn tính, viêm amidan mãn tính, trào ngược dạ dày thực quản, viêm họng cấp, polyp mũi.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: nghỉ ngơi và bổ sung dinh dưỡng, súc miệng bằng nước muối ấm, sử dụng máy tạo độ ẩm.",
+   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi và bổ sung dinh dưỡng, súc miệng bằng nước muối ấm, sử dụng máy tạo độ ẩm.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

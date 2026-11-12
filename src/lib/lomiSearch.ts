@@ -148,6 +148,8 @@ const HOWTO = VN(/\b(làm sao|cách|thế nào|như thế nào|hướng dẫn|l�
 
 /** Nhận ý "tìm chỗ/ưu đãi thật" hoặc "hôm nay ăn gì". Câu hỏi cách dùng app thì trả null để FAQ lo. */
 export function detectSearch(text: string): SearchIntent | null {
+  // 12/11 (bộ 1.000 câu G09-027): "thôi không cần tìm quán nữa, chỉ muốn tâm sự" — gạt việc tìm quán đi thì không tìm
+  if (/(?:^|\s)(?:không cần|khong can|ko cần|k cần|khỏi|khoi|thôi|thoi|đừng|dung|không|khong) (?:tìm|tim|kiếm|kiem)(?: \S+){0,2} (?:nữa|nua)\b|(?:^|\s)(?:không cần|khong can|khỏi|khoi|đừng) (?:tìm|tim)(?: quán| chỗ)?\b/iu.test(text.normalize("NFC"))) return null;
   // 11/11 (kiểm toán Lovable, P1 — phủ định): "Nào có mất ngủ đâu", "em đâu có khó ngủ đâu" — chữ "ngủ đâu" ở đây là lời CHỐI
   //   (mất ngủ / khó ngủ … đâu), không phải hỏi chỗ ngủ → không tìm chỗ ở.
   if (/(?:^|\s)(?:mất|mat|khó|kho|không|khong|ko|k|chưa|chua|chẳng|chang|buồn|buon|thiếu|thieu|thèm|them|ít|it)\s+ngủ\s+(?:đâu|dau)(?:\s|[?!.]|$)|(?:^|\s)(?:nào|nao|làm gì|lam gi|đâu|dau)\s+có\s.{1,40}\s(?:đâu|dau)\s*[?!.]*$/iu.test(text.normalize("NFC").replace(/ngu(?=\s+dau)/giu, "ngủ").replace(/\bco\b/giu, "có"))) return null;
@@ -448,6 +450,10 @@ export function detectDish(text: string): Dish | undefined {
   const byLabel = DISHES.find((d) => d.label === t);
   if (byLabel) return byLabel;
   const n = ` ${normalizeVi(t)} `;
+  // 12/11 (bộ 1.000 câu G10-010): "hôm nay tự nấu được bữa cơm đầu tiên, vui ghê" — kể chuyện TỰ NẤU, không phải muốn đi ăn món đó;
+  //   "người yêu chỉ thả tim cho người khác" — "thả tim" không phải món.
+  if (/\b(tu nau|nau duoc|moi nau|vua nau|nau xong|tap nau|hoc nau|nau cho (ca nha|me|ba|bo|chong|vo|con|nguoi yeu|ny|ban))\b/.test(n)) return undefined;
+  if (/\btha tim\b/.test(n)) return undefined;
   // 08/10: "phô mai", "phố đi bộ" bỏ dấu cũng ra "pho" — gõ CÓ DẤU mà không phải "phở" thì không tính là món phở
   // (gõ không dấu "pho" vẫn hiểu là phở như trước).
   const notPho = VR(/(?<![\p{L}])ph[ôốồổỗộóòỏõọ](?![\p{L}])/u).test(t.normalize("NFC").toLowerCase()) && !VR(/phở/iu).test(t.normalize("NFC"));

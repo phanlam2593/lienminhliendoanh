@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chảy máu chân răng, chảy máu mũi, phân có máu, xuất huyết, thiếu máu, chảy máu, bầm tím, ngứa, nám, phù.",
+   "text": "Triệu chứng hay gặp: chảy máu chân răng, chảy máu mũi, phân có máu, xuất huyết, thiếu máu, chảy máu, bầm tím, ngứa, nám, phù.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: loại 1, loại 2, loại 3, đột biến gen, lupus ban đỏ, suy giáp, rối loạn tăng sinh bạch huyết, khối u tăng sinh tủy.",
+   "text": "Nguyên nhân / yếu tố liên quan: loại 1, loại 2, loại 3, đột biến gen, lupus ban đỏ, suy giáp, rối loạn tăng sinh bạch huyết, khối u tăng sinh tủy.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

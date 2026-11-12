@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, chóng mặt, buồn nôn, đau đầu, nám, sốt, ho.",
+   "text": "Triệu chứng hay gặp: mất trí nhớ, chóng mặt, buồn nôn, đau đầu, nám, sốt, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: hoạt động thể chất mạnh, quan hệ tình dục, chấn thương đầu nhẹ.",
+   "text": "Nguyên nhân / yếu tố liên quan: hoạt động thể chất mạnh, quan hệ tình dục, chấn thương đầu nhẹ.",
    "src": [
     0
    ]
@@ -32,7 +32,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

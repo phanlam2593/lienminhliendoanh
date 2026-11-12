@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: nóng rát, buồn nôn, ợ hơi, sưng, loét, nôn.",
+   "text": "Triệu chứng hay gặp: nóng rát, buồn nôn, ợ hơi, sưng, loét, nôn.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: H, vi khuẩn H.",
+   "text": "Nguyên nhân / yếu tố liên quan: H, vi khuẩn H.",
    "src": [
     0
    ]
@@ -33,7 +33,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

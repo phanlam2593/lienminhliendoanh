@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đánh trống ngực, chóng mặt, thiếu máu, đau ngực, mệt mỏi, khó thở, lú lẫn, sưng, ngất.",
+   "text": "Triệu chứng hay gặp: đánh trống ngực, chóng mặt, thiếu máu, đau ngực, mệt mỏi, khó thở, lú lẫn, sưng, ngất.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bệnh tim thiếu máu cục bộ, bệnh van tim, tim bẩm sinh, thuốc, tăng trương lực phế vị.",
+   "text": "Nguyên nhân / yếu tố liên quan: bệnh tim thiếu máu cục bộ, bệnh van tim, tim bẩm sinh, thuốc, tăng trương lực phế vị.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

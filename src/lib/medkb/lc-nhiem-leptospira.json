@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, tiêu chảy, vàng mắt, nhức đầu, sốt cao, ớn lạnh, tiểu ít, vàng da, đau cổ, nôn.",
+   "text": "Triệu chứng hay gặp: xuất huyết, tiêu chảy, vàng mắt, nhức đầu, sốt cao, ớn lạnh, tiểu ít, vàng da, đau cổ, nôn.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: vi khuẩn, da bị tổn thương, gia súc, lợn, ngựa, chó, loài gặm nhấm, động vật hoang dã.",
+   "text": "Nguyên nhân / yếu tố liên quan: vi khuẩn, da bị tổn thương, gia súc, lợn, ngựa, chó, loài gặm nhấm, động vật hoang dã.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: sữa chua, bánh mì, bánh quy, củ cà rốt, bí ngô, cá, thịt bò, tiêm chủng cho đối tượng có nguy cơ cao.",
+   "text": "Sinh hoạt / phòng ngừa: sữa chua, bánh mì, bánh quy, củ cà rốt, bí ngô, cá, thịt bò, tiêm chủng cho đối tượng có nguy cơ cao.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

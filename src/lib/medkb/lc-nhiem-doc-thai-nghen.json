@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: xanh xao, đau bụng, buồn nôn, mệt mỏi, đau đầu, khó thở, hôn mê, mờ mắt, ngứa, nôn.",
+   "text": "Triệu chứng hay gặp: xanh xao, đau bụng, buồn nôn, mệt mỏi, đau đầu, khó thở, hôn mê, mờ mắt, ngứa, nôn.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm thận mãn tính, thời tiết, tuổi tác.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm thận mãn tính, thời tiết, tuổi tác.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

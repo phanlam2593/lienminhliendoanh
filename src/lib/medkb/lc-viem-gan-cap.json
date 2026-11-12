@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đau bụng, buồn nôn, đau khớp, chán ăn, vàng da, mề đay, ngứa, nôn, sốt, phù.",
+   "text": "Triệu chứng hay gặp: đau bụng, buồn nôn, đau khớp, chán ăn, vàng da, mề đay, ngứa, nôn, sốt, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: virus hướng gan, virus không hướng gan, liên quan đến rượu, thuốc và chất độc, trao đổi chất hoặc di truyền, liên quan đến mang thai, virus viêm gan A, virus Herpes simplex.",
+   "text": "Nguyên nhân / yếu tố liên quan: virus hướng gan, virus không hướng gan, liên quan đến rượu, thuốc và chất độc, trao đổi chất hoặc di truyền, liên quan đến mang thai, virus viêm gan A, virus Herpes simplex.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

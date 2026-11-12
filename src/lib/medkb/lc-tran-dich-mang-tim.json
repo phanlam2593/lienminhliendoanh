@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: khàn tiếng, chóng mặt, nặng ngực, thở nhanh, đau ngực, mệt mỏi, khó thở, tím tái, lo âu, ngất.",
+   "text": "Triệu chứng hay gặp: khàn tiếng, chóng mặt, nặng ngực, thở nhanh, đau ngực, mệt mỏi, khó thở, tím tái, lo âu, ngất.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm trùng, ung thư, viêm/thấp khớp, chấn thương, vấn đề về tim, mạch máu, vô căn, ung thư phổi.",
+   "text": "Nguyên nhân / yếu tố liên quan: nhiễm trùng, ung thư, viêm/thấp khớp, chấn thương, vấn đề về tim, mạch máu, vô căn, ung thư phổi.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: hạn chế rượu, duy trì cân nặng khỏe mạnh.",
+   "text": "Sinh hoạt / phòng ngừa: hạn chế rượu, duy trì cân nặng khỏe mạnh.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: xuất huyết, nôn ra máu, khó tiêu, phân đen, đau bụng, nóng rát, buồn nôn, đầy bụng, sụt cân, chán ăn.",
+   "text": "Triệu chứng hay gặp: xuất huyết, nôn ra máu, khó tiêu, phân đen, đau bụng, nóng rát, buồn nôn, đầy bụng, sụt cân, chán ăn.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm vi khuẩn Helicobacter pylori, viêm dạ dày mạn tính, viêm dạ dày tự miễn, tổn thương niêm mạc kéo dài.",
+   "text": "Nguyên nhân / yếu tố liên quan: nhiễm vi khuẩn Helicobacter pylori, viêm dạ dày mạn tính, viêm dạ dày tự miễn, tổn thương niêm mạc kéo dài.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tái khám theo lịch hẹn, ngừng hút thuốc, hạn chế rượu bia, sử dụng thuốc thận trọng, ăn uống điều độ, tăng rau củ và trái cây.",
+   "text": "Sinh hoạt / phòng ngừa: tái khám theo lịch hẹn, ngừng hút thuốc, hạn chế rượu bia, sử dụng thuốc thận trọng, ăn uống điều độ, tăng rau củ và trái cây.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

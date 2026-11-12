@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: tiểu nhiều, đau lưng, nám, sốt, phù.",
+   "text": "Triệu chứng hay gặp: tiểu nhiều, đau lưng, nám, sốt, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: ung thư tuyến tiền liệt, viêm tuyến tiền liệt, tiểu không tự chủ, nhiễm trùng tiết niệu, thoát vị bàng quang, thuốc và chất kích thích, mang thai, viêm bàng quang sau xạ trị.",
+   "text": "Nguyên nhân / yếu tố liên quan: ung thư tuyến tiền liệt, viêm tuyến tiền liệt, tiểu không tự chủ, nhiễm trùng tiết niệu, thoát vị bàng quang, thuốc và chất kích thích, mang thai, viêm bàng quang sau xạ trị.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

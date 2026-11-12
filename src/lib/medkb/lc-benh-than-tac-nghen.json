@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đau bụng dưới, tiểu nhiều, khó tiêu, đau họng, buồn nôn, ớn lạnh, khối u, nôn, sốt, ho.",
+   "text": "Triệu chứng hay gặp: đau bụng dưới, tiểu nhiều, khó tiêu, đau họng, buồn nôn, ớn lạnh, khối u, nôn, sốt, ho.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: trẻ em, thanh niên, người lớn tuổi, ung thư bàng quang, ung thư tuyến tiền liệt, sỏi bàng quang, sỏi thận, ung thư ruột kết.",
+   "text": "Nguyên nhân / yếu tố liên quan: trẻ em, thanh niên, người lớn tuổi, ung thư bàng quang, ung thư tuyến tiền liệt, sỏi bàng quang, sỏi thận, ung thư ruột kết.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

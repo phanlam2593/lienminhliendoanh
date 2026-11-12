@@ -8,6 +8,7 @@
 //     để admin / Claude xem đúng câu đó mà sửa.
 // Chủ đề / thuốc lấy từ lượt trước (câu hỏi nối "vậy uống được không") thì không tính là lạc.
 // ─────────────────────────────────────────────────────────────────────────────
+import { heartThemeOf } from "@/lib/lomiHeart";
 import { findMedTopicId, nameAsTyped } from "@/lib/lomiMed";
 import { drugById, findDrugs } from "@/lib/lomiDrugData";
 import { detectTarot } from "@/lib/tarot";
@@ -62,6 +63,10 @@ export function replyMismatch(question0: string, reply: GateMsg, prev?: GateMsg)
  */
 export function vagueMiss(question: string, reply: GateMsg & { content: string; heart?: string; harm?: unknown; about?: unknown; thread?: unknown }): { text: string; medId: string; quick: string[] } | null {
   if (reply.med || reply.drug || reply.tarot || reply.harm || reply.heart || reply.content.length > 160) return null;
+  // (12/11: "bị đá khỏi nhóm bạn, giờ thấy cô độc quá", "mình thích yên tĩnh mà bị chê khó gần" — chuyện cảm xúc có chủ đề tâm sự,
+  //   không đổi thành "Bạn bị cô độc hả 🩺 muốn biết cô độc là gì")
+  const thQ = heartThemeOf(question);
+  if (thQ && !["insomnia", "headache", "stomach", "nasal", "flu", "backpain", "eyes", "weight", "skin", "hangover", "smoking", "period", "pregnant", "health", "tired", "menhealth"].includes(thQ)) return null;
   // (câu gõ không dấu thì tên bệnh chỉ là đoán dấu — "cai nhau" không phải "cai nghiện" — không đổi câu đáp)
   if (!/[^\x00-\x7F]/.test(question)) return null;
   if (!/(kể (thêm|tiếp)|kể Lomi nghe|Rồi sao nữa|Lomi nghe nè|nghe nè|Có gì kể tiếp|chưa chắc hiểu ý|Ý bạn là sao|nói rõ thêm|nói thêm chút xíu)/u.test(reply.content)) return null;

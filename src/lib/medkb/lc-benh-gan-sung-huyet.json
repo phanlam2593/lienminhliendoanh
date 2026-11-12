@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, vàng mắt, buồn nôn, sụt cân, bầm tím, mệt mỏi, chán ăn, vàng da, sưng, vảy.",
+   "text": "Triệu chứng hay gặp: chảy máu, vàng mắt, buồn nôn, sụt cân, bầm tím, mệt mỏi, chán ăn, vàng da, sưng, vảy.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: suy tim mạn, suy giảm chức năng gan, hội chứng Budd-Chiari.",
+   "text": "Nguyên nhân / yếu tố liên quan: suy tim mạn, suy giảm chức năng gan, hội chứng Budd-Chiari.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

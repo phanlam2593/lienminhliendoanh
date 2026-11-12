@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: khàn tiếng, thở nhanh, đau họng, ho khan, mệt mỏi, khó thở, chán ăn, ớn lạnh, sưng, sốt.",
+   "text": "Triệu chứng hay gặp: khàn tiếng, thở nhanh, đau họng, ho khan, mệt mỏi, khó thở, chán ăn, ớn lạnh, sưng, sốt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm virus, nhiễm vi khuẩn.",
+   "text": "Nguyên nhân / yếu tố liên quan: nhiễm virus, nhiễm vi khuẩn.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ ấm cho trẻ em vào mùa lạnh, bổ sung chất dinh dưỡng, vitamin.",
+   "text": "Sinh hoạt / phòng ngừa: giữ ấm cho trẻ em vào mùa lạnh, bổ sung chất dinh dưỡng, vitamin.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

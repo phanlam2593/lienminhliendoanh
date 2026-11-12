@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: tiêu chảy, chảy máu, đau bụng, sụt cân, ho khan, mệt mỏi, chán ăn, ợ nóng.",
+   "text": "Triệu chứng hay gặp: tiêu chảy, chảy máu, đau bụng, sụt cân, ho khan, mệt mỏi, chán ăn, ợ nóng.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm đại tràng, viêm dạ dày.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm đại tràng, viêm dạ dày.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

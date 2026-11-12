@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chóng mặt, đau ngực, buồn ngủ, nhức đầu, buồn nôn, co giật, mệt mỏi, đau đầu, khó thở, lú lẫn.",
+   "text": "Triệu chứng hay gặp: chóng mặt, đau ngực, buồn ngủ, nhức đầu, buồn nôn, co giật, mệt mỏi, đau đầu, khó thở, lú lẫn.",
    "src": [
     0
    ]
@@ -32,13 +32,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: gọi cấp cứu và cứu hộ ngay lập tức, dọn dẹp, kiểm tra lò sưởi nhà bạn.",
+   "text": "Sinh hoạt / phòng ngừa: gọi cấp cứu và cứu hộ ngay lập tức, dọn dẹp, kiểm tra lò sưởi nhà bạn.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

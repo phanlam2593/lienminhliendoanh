@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: tiêu chảy, chảy máu, sốt cao, sưng, loét.",
+   "text": "Triệu chứng hay gặp: tiêu chảy, chảy máu, sốt cao, sưng, loét.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: căng thẳng, thiếu hụt vitamin và khoáng chất, thiếu ngủ, nhiễm virus, vi khuẩn hoặc nấm.",
+   "text": "Nguyên nhân / yếu tố liên quan: căng thẳng, thiếu hụt vitamin và khoáng chất, thiếu ngủ, nhiễm virus, vi khuẩn hoặc nấm.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

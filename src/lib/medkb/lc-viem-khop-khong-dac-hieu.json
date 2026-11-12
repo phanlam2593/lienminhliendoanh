@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, sưng khớp, đau khớp, đau tai, mệt mỏi, yếu cơ, đau cổ, đỏ da, sưng, sốt.",
+   "text": "Triệu chứng hay gặp: cứng khớp, sưng khớp, đau khớp, đau tai, mệt mỏi, yếu cơ, đau cổ, đỏ da, sưng, sốt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bệnh, viêm khớp tự miễn, nhiễm trùng, lắng đọng tinh thể trong khớp, phản ứng sau nhiễm trùng, bệnh lý viêm hệ thống, bệnh viêm khớp tự miễn.",
+   "text": "Nguyên nhân / yếu tố liên quan: bệnh, viêm khớp tự miễn, nhiễm trùng, lắng đọng tinh thể trong khớp, phản ứng sau nhiễm trùng, bệnh lý viêm hệ thống, bệnh viêm khớp tự miễn.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: duy trì vận động phù hợp, tránh gây quá tải cho khớp, nghỉ ngơi hợp lý, duy trì cân nặng phù hợp, bảo vệ khớp trong sinh hoạt, kiểm soát khẩu phần ăn.",
+   "text": "Sinh hoạt / phòng ngừa: duy trì vận động phù hợp, tránh gây quá tải cho khớp, nghỉ ngơi hợp lý, duy trì cân nặng phù hợp, bảo vệ khớp trong sinh hoạt, kiểm soát khẩu phần ăn.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

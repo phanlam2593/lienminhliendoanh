@@ -330,7 +330,7 @@ export function trapReply(q: string): Trap | null {
 //   Lomi chỉ trả lời trong khung chat — không thao tác thay. Nói thật + chỉ đúng chỗ trong app để người dùng tự làm.
 //   (Gọi cấp cứu đã có lớp riêng, chạy trước.)
 // ────────────────────────────────────────────────────────────────────────
-const ASK_DO = W(/(?:\b(giúp|giùm|dùm|hộ|thay|cho (?:tôi|tui|mình|em|anh|chị))\b|^(?:bạn|lomi|em|cậu)\s+(?:\S+\s+){0,2}(?:đặt|gọi|nhắn|gửi|chuyển|mua|hẹn|mở|xem|đăng|báo cáo|thanh toán|trả tiền|book)\b|^(?:đặt|gọi|nhắn|gửi|chuyển|mua|hẹn|mở|xem giúp|đăng|báo cáo|thanh toán|book)\b.*\b(nha|nhé|đi|luôn|với|được không|dc ko|đc không)\s*$)/u);
+const ASK_DO = W(/(?:\b(giúp|giùm|dùm|hộ|thay(?! (?:đổi|thế|vì|lòng|áo|đồ|mới|ra|da|tã))|cho (?:tôi|tui|mình|em|anh|chị)(?! ấy| ta| kia| đó| người| nào))\b|^(?:bạn|lomi|em|cậu)\s+(?:(?!(?:không|ko|k|muốn|định|đã|vừa|mới|sẽ|hay|cứ|chưa|đang|chẳng|chả)\s)\S+\s+){0,2}(?:đặt|gọi|nhắn|gửi|chuyển|mua|hẹn|mở|xem|đăng|báo cáo|thanh toán|trả tiền|book)\b|^(?:đặt|gọi|nhắn|gửi|chuyển|mua|hẹn|mở|xem giúp|đăng|báo cáo|thanh toán|book)\b.*\b(nha|nhé|đi|luôn|với|được không|dc ko|đc không)\s*$)/u);
 export function actionReply(q: string): Trap | null {
   const low = q.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim();
   if (low.split(/\s+/).length > 24) return null;

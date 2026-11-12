@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: thở khò khè, tức ngực, khó thở, ho.",
+   "text": "Triệu chứng hay gặp: thở khò khè, tức ngực, khó thở, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: trào ngược dạ dày thực quản, cảm lạnh, dị nguyên trong nhà, nhiễm trùng đường hô hấp trên, khói thuốc lá, hít không khí lạnh, khô.",
+   "text": "Nguyên nhân / yếu tố liên quan: trào ngược dạ dày thực quản, cảm lạnh, dị nguyên trong nhà, nhiễm trùng đường hô hấp trên, khói thuốc lá, hít không khí lạnh, khô.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

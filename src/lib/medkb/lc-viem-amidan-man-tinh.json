@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đốm trắng, mất nước, đau họng, sưng đau, đau bụng, đau khớp, sốt cao, đau tai, đau đầu, ớn lạnh.",
+   "text": "Triệu chứng hay gặp: đốm trắng, mất nước, đau họng, sưng đau, đau bụng, đau khớp, sốt cao, đau tai, đau đầu, ớn lạnh.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm amidan do virus, viêm amidan do vi khuẩn, staphylococcus aureus, viêm họng do liên cầu, viêm amidan, adenovirus, virus cúm, epstein Barr Virus.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm amidan do virus, viêm amidan do vi khuẩn, staphylococcus aureus, viêm họng do liên cầu, viêm amidan, adenovirus, virus cúm, epstein Barr Virus.",
    "src": [
     0
    ]
@@ -39,13 +39,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: uống đủ nước giúp làm dịu cổ họng, súc miệng bằng nước muối ấm, ăn những thực phẩm mềm, tránh xa người bị đau họng hoặc viêm amidan.",
+   "text": "Sinh hoạt / phòng ngừa: uống đủ nước giúp làm dịu cổ họng, súc miệng bằng nước muối ấm, ăn những thực phẩm mềm, tránh xa người bị đau họng hoặc viêm amidan.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

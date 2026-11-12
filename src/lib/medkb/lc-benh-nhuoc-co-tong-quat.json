@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: nhìn đôi, trầm cảm, sụt cân, mất ngủ, mệt mỏi, khó thở, nói khó, yếu cơ, mờ mắt, lo âu.",
+   "text": "Triệu chứng hay gặp: nhìn đôi, trầm cảm, sụt cân, mất ngủ, mệt mỏi, khó thở, nói khó, yếu cơ, mờ mắt, lo âu.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: hệ thần kinh trung ương, thần kinh ngoại biên, suy giáp, tổn thương thần kinh ngoại biên, bệnh cơ nguyên phát, bệnh nội tiết, bệnh lý toàn thân.",
+   "text": "Nguyên nhân / yếu tố liên quan: hệ thần kinh trung ương, thần kinh ngoại biên, suy giáp, tổn thương thần kinh ngoại biên, bệnh cơ nguyên phát, bệnh nội tiết, bệnh lý toàn thân.",
    "src": [
     0
    ]
@@ -39,13 +39,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngủ đủ giấc, tránh thức khuya, giữ tinh thần ổn định, hạn chế căng thẳng, chủ động phòng tránh nhiễm trùng, không tự ý dùng thuốc.",
+   "text": "Sinh hoạt / phòng ngừa: ngủ đủ giấc, tránh thức khuya, giữ tinh thần ổn định, hạn chế căng thẳng, chủ động phòng tránh nhiễm trùng, không tự ý dùng thuốc.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

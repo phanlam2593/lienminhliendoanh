@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: nám, khoái cảm, vô sinh nam, tinh trùng.",
+   "text": "Triệu chứng hay gặp: nám, khoái cảm, vô sinh nam, tinh trùng.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bàng quang, đái tháo đường, parkinson, bệnh Parkinson, chấn thương tủy sống, tai biến mạch máu não, xạ trị vùng chậu, phẫu thuật tuyến tiền liệt.",
+   "text": "Nguyên nhân / yếu tố liên quan: bàng quang, đái tháo đường, parkinson, bệnh Parkinson, chấn thương tủy sống, tai biến mạch máu não, xạ trị vùng chậu, phẫu thuật tuyến tiền liệt.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tập tư thế Kegel, giữ tinh thần thư giãn.",
+   "text": "Sinh hoạt / phòng ngừa: tập tư thế Kegel, giữ tinh thần thư giãn.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

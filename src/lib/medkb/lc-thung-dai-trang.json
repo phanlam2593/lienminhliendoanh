@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chảy máu, đau bụng, buồn nôn, mệt mỏi, ớn lạnh, nôn, sốt.",
+   "text": "Triệu chứng hay gặp: chảy máu, đau bụng, buồn nôn, mệt mỏi, ớn lạnh, nôn, sốt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thụt tháo, chuẩn bị ruột cho nội soi, nội soi đại tràng sigma, nội soi đại tràng, nội soi, bệnh Crohn, ung thư đại tràng, chấn thương hoặc tổn thương ruột.",
+   "text": "Nguyên nhân / yếu tố liên quan: thụt tháo, chuẩn bị ruột cho nội soi, nội soi đại tràng sigma, nội soi đại tràng, nội soi, bệnh Crohn, ung thư đại tràng, chấn thương hoặc tổn thương ruột.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: nghỉ ngơi và hạn chế hoạt động, cung cấp đủ dinh dưỡng, thực phẩm giàu chất xơ, thức ăn dễ tiêu hoá, giảm tiêu thụ chất kích thích đại tràng, uống đủ nước.",
+   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi và hạn chế hoạt động, cung cấp đủ dinh dưỡng, thực phẩm giàu chất xơ, thức ăn dễ tiêu hoá, giảm tiêu thụ chất kích thích đại tràng, uống đủ nước.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

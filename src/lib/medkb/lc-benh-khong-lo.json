@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: rối loạn kinh nguyệt, đau khớp, trầm cảm, đau đầu, yếu cơ, đau cổ, khối u, ho.",
+   "text": "Triệu chứng hay gặp: rối loạn kinh nguyệt, đau khớp, trầm cảm, đau đầu, yếu cơ, đau cổ, khối u, ho.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: phức hợp Carney, hội chứng McCune-Albright, đa u tuyến nội tiết, bệnh u xơ thần kinh, U tuyến yên.",
+   "text": "Nguyên nhân / yếu tố liên quan: phức hợp Carney, hội chứng McCune-Albright, đa u tuyến nội tiết, bệnh u xơ thần kinh, U tuyến yên.",
    "src": [
     0
    ]
@@ -33,7 +33,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

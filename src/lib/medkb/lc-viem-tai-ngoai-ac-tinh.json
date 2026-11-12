@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: nghe kém, sốt cao, đau tai, yếu cơ, đỏ da, ù tai, ngứa, sưng.",
+   "text": "Triệu chứng hay gặp: nghe kém, sốt cao, đau tai, yếu cơ, đỏ da, ù tai, ngứa, sưng.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm tai ngoài ác tính, nhiễm HIV/AIDS, pseudomonas aeruginosa, staphylococcus aureus, aspergillus, proteus mirabilis, klebsiella oxytoca, burkholderia cepacia.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm tai ngoài ác tính, nhiễm HIV/AIDS, pseudomonas aeruginosa, staphylococcus aureus, aspergillus, proteus mirabilis, klebsiella oxytoca, burkholderia cepacia.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, hoang tưởng, châm chích, tiêu chảy, mất nước, khó tiêu, đau bụng, mụn nước, phát ban, buồn nôn.",
+   "text": "Triệu chứng hay gặp: mất trí nhớ, hoang tưởng, châm chích, tiêu chảy, mất nước, khó tiêu, đau bụng, mụn nước, phát ban, buồn nôn.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: HIV, chán ăn, bệnh đường tiêu hóa, rối loạn sử dụng rượu, phẫu thuật cắt dạ dày, thiếu máu thiếu sắt, bệnh Hartnup, khối u carcinoid.",
+   "text": "Nguyên nhân / yếu tố liên quan: HIV, chán ăn, bệnh đường tiêu hóa, rối loạn sử dụng rượu, phẫu thuật cắt dạ dày, thiếu máu thiếu sắt, bệnh Hartnup, khối u carcinoid.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -130,7 +130,7 @@ export const DRUGS: DrugEntry[] = [
         id: "ibuprofen",
         match: VR(/\bibuprofen\b/),
         with: "ibuprofen",
-        note: "Theo nguồn, **người lớn** có thể dùng paracetamol cùng ibuprofen nếu cần; nên thử từng thuốc riêng trước, và dùng mức thấp nhất còn hiệu quả, ngưng khi hết đau. Lưu ý: ibuprofen có những chống chỉ định riêng mà Lomi **chưa có dữ liệu đã kiểm chứng** — phần đó phải hỏi dược sĩ / bác sĩ.",
+        note: "**Người lớn** có thể dùng paracetamol cùng ibuprofen nếu cần; nên thử từng thuốc riêng trước, và dùng mức thấp nhất còn hiệu quả, ngưng khi hết đau. Lưu ý: ibuprofen có những chống chỉ định riêng mà Lomi **chưa có dữ liệu đã kiểm chứng** — phần đó phải hỏi dược sĩ / bác sĩ.",
         src: [0],
       },
       { id: "warfarin", match: VR(/\bwarfarin\b/), with: "warfarin (thuốc chống đông)", note: "Đang dùng warfarin thì phải hỏi bác sĩ / dược sĩ trước khi dùng paracetamol.", src: [0] },

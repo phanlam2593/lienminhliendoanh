@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: trầm cảm, mệt mỏi, đỏ mắt, lo âu, sưng, nám, phù.",
+   "text": "Triệu chứng hay gặp: trầm cảm, mệt mỏi, đỏ mắt, lo âu, sưng, nám, phù.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: viêm tuyến tiền liệt, âm suy hỏa vượng, thận hư, thấp nhiệt hạ chú.",
+   "text": "Nguyên nhân / yếu tố liên quan: viêm tuyến tiền liệt, âm suy hỏa vượng, thận hư, thấp nhiệt hạ chú.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

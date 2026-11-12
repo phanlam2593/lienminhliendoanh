@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: rối loạn cương, xuất huyết, chảy máu, đau bụng, nhìn đôi, buồn nôn, táo bón, bầm tím, mệt mỏi, đau đầu.",
+   "text": "Triệu chứng hay gặp: rối loạn cương, xuất huyết, chảy máu, đau bụng, nhìn đôi, buồn nôn, táo bón, bầm tím, mệt mỏi, đau đầu.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: U sợi thần kinh, phức hợp Carney, hội chứng X-LAG, U sợi thần kinh type 1, hội chứng Von Hippel–Lindau.",
+   "text": "Nguyên nhân / yếu tố liên quan: U sợi thần kinh, phức hợp Carney, hội chứng X-LAG, U sợi thần kinh type 1, hội chứng Von Hippel–Lindau.",
    "src": [
     0
    ]
@@ -32,7 +32,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

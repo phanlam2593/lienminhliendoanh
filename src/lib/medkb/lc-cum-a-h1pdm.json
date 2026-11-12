@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chóng mặt, tiêu chảy, đau ngực, đau họng, buồn nôn, mệt mỏi, khó thở, lú lẫn, sốt, phù.",
+   "text": "Triệu chứng hay gặp: chóng mặt, tiêu chảy, đau ngực, đau họng, buồn nôn, mệt mỏi, khó thở, lú lẫn, sốt, phù.",
    "src": [
     0
    ]
@@ -33,13 +33,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: che miệng và mũi khi ho hoặc hắt hơi, tránh chạm tay vào mắt, mũi và miệng, tránh tiếp xúc gần với người bệnh.",
+   "text": "Sinh hoạt / phòng ngừa: che miệng và mũi khi ho hoặc hắt hơi, tránh chạm tay vào mắt, mũi và miệng, tránh tiếp xúc gần với người bệnh.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

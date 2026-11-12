@@ -472,6 +472,10 @@ export function resolveTurn(q: string, raw: string, c: Convo, opts: { correcting
       return { kind: "rewrite", why: "tip:health", q: `${hl} nên làm gì` };
     }
     if (c.topic === "biz") return { kind: "rewrite", why: "tip:biz", q: "có mẹo gì không" };
+    // 12/11 (bộ 1.000 câu G09-037): đang tâm sự mà hỏi "còn cách nào nữa, câu đó hơi cứng" → xin THÊM lời khuyên cho đúng chuyện đó
+    //   (lớp tâm sự đưa ý chưa nói), không mở menu mẹo chung.
+    const lh = (last as { heart?: string }).heart;
+    if (lh && !lh.startsWith("ev:")) return { kind: "rewrite", why: "tip:heart", q: "💬 Cho mình lời khuyên" };
     if (!c.topic || c.topic === "talk" || c.topic === "app")
       return {
         kind: "reply",

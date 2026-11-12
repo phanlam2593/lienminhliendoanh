@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đau thắt lưng, cứng khớp, đau cổ, tê bì, ngứa, nám, ho.",
+   "text": "Triệu chứng hay gặp: đau thắt lưng, cứng khớp, đau cổ, tê bì, ngứa, nám, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bước 1, bước 2, bước 3, thoát vị đĩa đệm.",
+   "text": "Nguyên nhân / yếu tố liên quan: bước 1, bước 2, bước 3, thoát vị đĩa đệm.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: thực phẩm giàu calci, thực giảm giàu omega 3, glucosamin, vitamin D, duy trì cân nặng hợp lý.",
+   "text": "Sinh hoạt / phòng ngừa: thực phẩm giàu calci, thực giảm giàu omega 3, glucosamin, vitamin D, duy trì cân nặng hợp lý.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

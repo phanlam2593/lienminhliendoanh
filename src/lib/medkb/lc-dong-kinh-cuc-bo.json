@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: giảm thính lực, chóng mặt, tiêu chảy, đau bụng, buồn nôn, ngứa ran, trầm cảm, co giật, ảo giác, nôn.",
+   "text": "Triệu chứng hay gặp: giảm thính lực, chóng mặt, tiêu chảy, đau bụng, buồn nôn, ngứa ran, trầm cảm, co giật, ảo giác, nôn.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: di truyền, cấu trúc, truyền nhiễm, trao đổi chất, rối loạn tự miễn dịch, đột biến gen, đột quỵ, viêm màng não.",
+   "text": "Nguyên nhân / yếu tố liên quan: di truyền, cấu trúc, truyền nhiễm, trao đổi chất, rối loạn tự miễn dịch, đột biến gen, đột quỵ, viêm màng não.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngủ đủ giấc, giảm thiểu căng thẳng, uống thuốc đúng liều và đều đặn, cung cấp đủ chất dinh dưỡng, hạn chế chất kích thích, theo dõi phản ứng của cơ thể.",
+   "text": "Sinh hoạt / phòng ngừa: ngủ đủ giấc, giảm thiểu căng thẳng, uống thuốc đúng liều và đều đặn, cung cấp đủ chất dinh dưỡng, hạn chế chất kích thích, theo dõi phản ứng của cơ thể.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

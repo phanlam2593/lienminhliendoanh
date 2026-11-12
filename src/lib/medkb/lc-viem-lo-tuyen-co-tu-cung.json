@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chảy máu âm đạo, đau vùng chậu, chuột rút, chảy máu, đau lưng, phù.",
+   "text": "Triệu chứng hay gặp: chảy máu âm đạo, đau vùng chậu, chuột rút, chảy máu, đau lưng, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: estrogen, mãn kinh, thanh thiếu niên, thai kỳ.",
+   "text": "Nguyên nhân / yếu tố liên quan: estrogen, mãn kinh, thanh thiếu niên, thai kỳ.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ vệ sinh cá nhân, tránh quan hệ tình dục, tránh căng thẳng, điều chỉnh hoạt động thể lực, thực phẩm giàu chất chống viêm, rau xanh và quả tươi.",
+   "text": "Sinh hoạt / phòng ngừa: giữ vệ sinh cá nhân, tránh quan hệ tình dục, tránh căng thẳng, điều chỉnh hoạt động thể lực, thực phẩm giàu chất chống viêm, rau xanh và quả tươi.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

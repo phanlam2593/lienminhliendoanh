@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sưng khớp, phát ban, buồn nôn, đau khớp, sốt cao, mệt mỏi, đau đầu, đau cổ, sưng, nám.",
+   "text": "Triệu chứng hay gặp: sưng khớp, phát ban, buồn nôn, đau khớp, sốt cao, mệt mỏi, đau đầu, đau cổ, sưng, nám.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: aedes, muỗi Aedes, đau cơ xương khớp kéo dài, cứng khớp buổi sáng, đau thần kinh.",
+   "text": "Nguyên nhân / yếu tố liên quan: aedes, muỗi Aedes, đau cơ xương khớp kéo dài, cứng khớp buổi sáng, đau thần kinh.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tránh muỗi đốt, tạo môi trường sống sạch sẽ, nghỉ ngơi hợp lý, uống đủ nước, ăn thực phẩm giàu dinh dưỡng, loại bỏ nơi sinh sản muỗi.",
+   "text": "Sinh hoạt / phòng ngừa: tránh muỗi đốt, tạo môi trường sống sạch sẽ, nghỉ ngơi hợp lý, uống đủ nước, ăn thực phẩm giàu dinh dưỡng, loại bỏ nơi sinh sản muỗi.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

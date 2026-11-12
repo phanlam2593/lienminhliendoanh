@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chuột rút, táo bón, mệt mỏi, yếu cơ, đau cổ, ho.",
+   "text": "Triệu chứng hay gặp: chuột rút, táo bón, mệt mỏi, yếu cơ, đau cổ, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tổn thương thận, ảnh hưởng của thuốc, hẹp động mạch thận, kháng sinh thuộc nhóm Aminoglycosides, thuốc chống nấm amphotericin B, sử dụng insulin, nhiễm kiềm máu, biếng ăn.",
+   "text": "Nguyên nhân / yếu tố liên quan: tổn thương thận, ảnh hưởng của thuốc, hẹp động mạch thận, kháng sinh thuộc nhóm Aminoglycosides, thuốc chống nấm amphotericin B, sử dụng insulin, nhiễm kiềm máu, biếng ăn.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

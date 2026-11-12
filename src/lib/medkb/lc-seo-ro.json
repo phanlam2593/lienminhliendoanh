@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: trầm cảm, mụn, collagen, rối loạn giấc ngủ, trầm cảm, sẹo rỗ đá nhọn, sẹo rỗ hình lượn sóng, sẹo rỗ chân vuông.",
+   "text": "Triệu chứng hay gặp: trầm cảm, mụn, collagen, rối loạn giấc ngủ, trầm cảm, sẹo rỗ đá nhọn, sẹo rỗ hình lượn sóng, sẹo rỗ chân vuông.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: mụn trứng cá sâu, nặn mụn, di truyền, mụn viêm.",
+   "text": "Nguyên nhân / yếu tố liên quan: mụn trứng cá sâu, nặn mụn, di truyền, mụn viêm.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tuyệt đối không cào gãi, nặn mụn, không hút thuốc.",
+   "text": "Sinh hoạt / phòng ngừa: tuyệt đối không cào gãi, nặn mụn, không hút thuốc.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

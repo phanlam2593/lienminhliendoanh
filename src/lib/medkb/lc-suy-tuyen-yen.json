@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: rối loạn cương, tiểu nhiều, đau bụng, buồn nôn, tăng cân, táo bón, mệt mỏi, lú lẫn, yếu cơ, ngất.",
+   "text": "Triệu chứng hay gặp: rối loạn cương, tiểu nhiều, đau bụng, buồn nôn, tăng cân, táo bón, mệt mỏi, lú lẫn, yếu cơ, ngất.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: u tuyến yên, viêm màng não, huyết sắc tố, chấn thương đầu, phẫu thuật não, xạ trị vùng đầu hoặc cổ.",
+   "text": "Nguyên nhân / yếu tố liên quan: u tuyến yên, viêm màng não, huyết sắc tố, chấn thương đầu, phẫu thuật não, xạ trị vùng đầu hoặc cổ.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

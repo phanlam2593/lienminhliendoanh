@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: tim đập nhanh, đổ mồ hôi, nhức đầu, trầm cảm, khó thở, lo âu, phù, ho.",
+   "text": "Triệu chứng hay gặp: tim đập nhanh, đổ mồ hôi, nhức đầu, trầm cảm, khó thở, lo âu, phù, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: yếu tố di truyền, yếu tố môi trường.",
+   "text": "Nguyên nhân / yếu tố liên quan: yếu tố di truyền, yếu tố môi trường.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngủ đủ giấc, ăn uống lành mạnh, giữ lối sống lành mạnh.",
+   "text": "Sinh hoạt / phòng ngừa: ngủ đủ giấc, ăn uống lành mạnh, giữ lối sống lành mạnh.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: tiểu buốt, nóng rát, bí tiểu, rét run, ngất, sốt, ho.",
+   "text": "Triệu chứng hay gặp: tiểu buốt, nóng rát, bí tiểu, rét run, ngất, sốt, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: nhiễm khuẩn đường tiết niệu, nhiễm khuẩn ở thận, sỏi niệu, bệnh thận, ung thư, rối loạn di truyền, chấn thương thận, thuốc.",
+   "text": "Nguyên nhân / yếu tố liên quan: nhiễm khuẩn đường tiết niệu, nhiễm khuẩn ở thận, sỏi niệu, bệnh thận, ung thư, rối loạn di truyền, chấn thương thận, thuốc.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

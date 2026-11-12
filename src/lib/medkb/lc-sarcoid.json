@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đánh trống ngực, đổ mồ hôi đêm, thở khò khè, sưng hạch, tức ngực, đau khớp, nhìn mờ, đau mắt, ho khan, mệt mỏi.",
+   "text": "Triệu chứng hay gặp: đánh trống ngực, đổ mồ hôi đêm, thở khò khè, sưng hạch, tức ngực, đau khớp, nhìn mờ, đau mắt, ho khan, mệt mỏi.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: propionibacterium acnes, mycobacteria, mycobacterium tuberculosis, viêm, vi khuẩn Propionibacterium acnes và Mycobacteria.",
+   "text": "Nguyên nhân / yếu tố liên quan: propionibacterium acnes, mycobacteria, mycobacterium tuberculosis, viêm, vi khuẩn Propionibacterium acnes và Mycobacteria.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

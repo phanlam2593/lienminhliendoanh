@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, sưng khớp, sưng đau, sốt cao, mệt mỏi, vảy.",
+   "text": "Triệu chứng hay gặp: cứng khớp, sưng khớp, sưng đau, sốt cao, mệt mỏi, vảy.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: sưng khớp, quá trình lão hóa.",
+   "text": "Nguyên nhân / yếu tố liên quan: sưng khớp, quá trình lão hóa.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: có lối sống tích cực, lạc quan.",
+   "text": "Sinh hoạt / phòng ngừa: có lối sống tích cực, lạc quan.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

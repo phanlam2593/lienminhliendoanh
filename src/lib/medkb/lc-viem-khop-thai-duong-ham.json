@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: cứng khớp, chảy máu, nổi hạch, hoa mắt, đau đầu, đau cổ, ù tai, sưng, vảy, nám.",
+   "text": "Triệu chứng hay gặp: cứng khớp, chảy máu, nổi hạch, hoa mắt, đau đầu, đau cổ, ù tai, sưng, vảy, nám.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: thoái hóa khớp, viêm khớp dạng thấp, hay nhiễm khuẩn khớp, chấn thương, răng mọc lệch, chen chúc, nhổ răng hàm, nhổ răng khôn, nhai một bên, tật nghiến răng.",
+   "text": "Nguyên nhân / yếu tố liên quan: thoái hóa khớp, viêm khớp dạng thấp, hay nhiễm khuẩn khớp, chấn thương, răng mọc lệch, chen chúc, nhổ răng hàm, nhổ răng khôn, nhai một bên, tật nghiến răng.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

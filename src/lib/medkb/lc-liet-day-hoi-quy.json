@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: khàn tiếng, nuốt khó, sụt cân, thở rít, khó thở, vảy, nám, ho.",
+   "text": "Triệu chứng hay gặp: khàn tiếng, nuốt khó, sụt cân, thở rít, khó thở, vảy, nám, ho.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: phẫu thuật cắt bỏ tuyến giáp, bệnh thần kinh đái tháo đường, khối u, đặt nội khí quản, tổn thương mạch máu, vô căn.",
+   "text": "Nguyên nhân / yếu tố liên quan: phẫu thuật cắt bỏ tuyến giáp, bệnh thần kinh đái tháo đường, khối u, đặt nội khí quản, tổn thương mạch máu, vô căn.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

@@ -134,11 +134,11 @@ export function paraFewTablets(n: string): string | null {
     count <= 2 && !extra
       ? `💊 **${count} viên Paracetamol 500 mg là một liều thông thường của người lớn**, chưa phải quá liều đâu — bạn đừng lo quá nha.`
       : count <= 2
-        ? `💊 Theo nguồn, người lớn **lỡ uống thêm 1–2 viên** Paracetamol 500 mg thì **thường không gây hại**, miễn là tổng cộng **không quá 8 viên trong 24 giờ**.`
-        : `💊 Người lớn mỗi lần chỉ nên uống **1–2 viên** Paracetamol 500 mg, nên ${count} viên một lúc là nhiều hơn liều thường. Theo nguồn, **lỡ thêm 1–2 viên thì thường không gây hại**, miễn là tổng cộng **không quá 8 viên trong 24 giờ**.`;
+        ? `💊 Người lớn **lỡ uống thêm 1–2 viên** Paracetamol 500 mg thì **thường không gây hại**, miễn là tổng cộng **không quá 8 viên trong 24 giờ**.`
+        : `💊 Người lớn mỗi lần chỉ nên uống **1–2 viên** Paracetamol 500 mg, nên ${count} viên một lúc là nhiều hơn liều thường. **Lỡ thêm 1–2 viên thì thường không gây hại**, miễn là tổng cộng **không quá 8 viên trong 24 giờ**.`;
   const lines = [
     "• Liều thường của người lớn: mỗi lần **1–2 viên 500 mg**, các lần cách nhau **ít nhất 4 giờ**, **không quá 8 viên trong 24 giờ**.",
-    ...(count <= 2 && !extra ? [`• Nếu ${count} viên này là uống **thêm** ngoài liều vừa uống trước đó: theo nguồn, lỡ thêm 1–2 viên thường không gây hại, miễn tổng cộng không quá 8 viên trong 24 giờ.`] : []),
+    ...(count <= 2 && !extra ? [`• Nếu ${count} viên này là uống **thêm** ngoài liều vừa uống trước đó: lỡ thêm 1–2 viên thường không gây hại, miễn tổng cộng không quá 8 viên trong 24 giờ.`] : []),
     ...(count > 2 || extra ? ["• Từ giờ **tạm ngưng paracetamol**; muốn uống liều kế thì hỏi dược sĩ trước, và nhớ tính cả số viên đã uống vào mức 8 viên / 24 giờ."] : []),
     "• Đừng uống kèm thuốc khác **cũng có paracetamol** (nhiều thuốc cảm, thuốc cúm) — cộng lại dễ thành quá nhiều.",
     "• **Hỏi ngay bác sĩ / dược sĩ, kể cả khi thấy bình thường**, nếu: người uống là **trẻ em**, **nặng dưới 50 kg**, có **bệnh gan / thận**, viên **không phải loại 500 mg** (650 mg, 1 g…), hoặc tổng đã **quá 8 viên trong 24 giờ** — uống quá nhiều paracetamol có thể hại gan dù chưa có triệu chứng.",

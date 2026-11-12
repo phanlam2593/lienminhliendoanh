@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sợ ánh sáng, xuất huyết, phát ban, buồn nôn, co giật, đau đầu, đau cổ, ngứa, nôn, nám.",
+   "text": "Triệu chứng hay gặp: sợ ánh sáng, xuất huyết, phát ban, buồn nôn, co giật, đau đầu, đau cổ, ngứa, nôn, nám.",
    "src": [
     0
    ]
@@ -32,13 +32,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: vắc xin Menactra, vắc xin MenQuadfi.",
+   "text": "Sinh hoạt / phòng ngừa: vắc xin Menactra, vắc xin MenQuadfi.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

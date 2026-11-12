@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: giảm thính lực, đổ mồ hôi đêm, chảy nước mũi, xuất huyết, ho ra máu, thiếu máu, chảy máu, đau bụng, buồn nôn, đau khớp.",
+   "text": "Triệu chứng hay gặp: giảm thính lực, đổ mồ hôi đêm, chảy nước mũi, xuất huyết, ho ra máu, thiếu máu, chảy máu, đau bụng, buồn nôn, đau khớp.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: hội chứng Goodpasture, viêm cầu thận sau nhiễm trùng, viêm đa động mạch vi thể, viêm cầu thận lupus, bệnh thận IgA, ban xuất huyết Henoch-Schonlein, viêm nội tâm mạc, hydralazine.",
+   "text": "Nguyên nhân / yếu tố liên quan: hội chứng Goodpasture, viêm cầu thận sau nhiễm trùng, viêm đa động mạch vi thể, viêm cầu thận lupus, bệnh thận IgA, ban xuất huyết Henoch-Schonlein, viêm nội tâm mạc, hydralazine.",
    "src": [
     0
    ]
@@ -33,7 +33,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

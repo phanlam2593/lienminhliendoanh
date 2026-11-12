@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sưng, nám, phù.",
+   "text": "Triệu chứng hay gặp: sưng, nám, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: tinh hoàn bị xệ, vô sinh.",
+   "text": "Nguyên nhân / yếu tố liên quan: tinh hoàn bị xệ, vô sinh.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: tránh tiếp xúc với ánh nắng mặt trời, bỏ thuốc lá, hạn chế rượu bia, bài tập Kegel, tập giữ tinh hoàn.",
+   "text": "Sinh hoạt / phòng ngừa: tránh tiếp xúc với ánh nắng mặt trời, bỏ thuốc lá, hạn chế rượu bia, bài tập Kegel, tập giữ tinh hoàn.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

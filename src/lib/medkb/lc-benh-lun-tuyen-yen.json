@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: trầm cảm, nám, ho.",
+   "text": "Triệu chứng hay gặp: trầm cảm, nám, ho.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bẩm sinh, mắc phải, vô căn, bệnh lùn tuyến yên loại IA, bệnh lùn tuyến yên loại IB, bệnh lùn tuyến yên loại II, bệnh lùn tuyến yên loại III, bệnh lùn tuyến yên loại IV.",
+   "text": "Nguyên nhân / yếu tố liên quan: bẩm sinh, mắc phải, vô căn, bệnh lùn tuyến yên loại IA, bệnh lùn tuyến yên loại IB, bệnh lùn tuyến yên loại II, bệnh lùn tuyến yên loại III, bệnh lùn tuyến yên loại IV.",
    "src": [
     0
    ]
@@ -39,13 +39,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngủ đủ giấc và sâu giấc, không thức khuya, uống đủ 2 lít nước/ngày, kiểm soát căng thẳng, giữ tinh thần thoải mái, uống đủ lượng nước trong ngày.",
+   "text": "Sinh hoạt / phòng ngừa: ngủ đủ giấc và sâu giấc, không thức khuya, uống đủ 2 lít nước/ngày, kiểm soát căng thẳng, giữ tinh thần thoải mái, uống đủ lượng nước trong ngày.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

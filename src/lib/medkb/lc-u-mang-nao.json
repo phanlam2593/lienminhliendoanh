@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: mất trí nhớ, chóng mặt, nhìn đôi, buồn nôn, co giật, đau tai, đau đầu, yếu cơ, khối u, mờ mắt.",
+   "text": "Triệu chứng hay gặp: mất trí nhớ, chóng mặt, nhìn đôi, buồn nôn, co giật, đau tai, đau đầu, yếu cơ, khối u, mờ mắt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: đột biến gen, U xơ thần kinh, phơi nhiễm bức xạ, U xơ thần kinh loại 2.",
+   "text": "Nguyên nhân / yếu tố liên quan: đột biến gen, U xơ thần kinh, phơi nhiễm bức xạ, U xơ thần kinh loại 2.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: nghỉ ngơi đầy đủ, quản lý căng thẳng, duy trì cuộc sống lành mạnh, tái khám đúng hẹn, chất béo lành mạnh, protein chất lượng cao.",
+   "text": "Sinh hoạt / phòng ngừa: nghỉ ngơi đầy đủ, quản lý căng thẳng, duy trì cuộc sống lành mạnh, tái khám đúng hẹn, chất béo lành mạnh, protein chất lượng cao.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

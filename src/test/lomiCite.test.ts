@@ -15,9 +15,10 @@ describe("lomiCite — câu chữ tự nhiên, nguồn cất riêng", () => {
     expect(plainPub("Hãy xin tư vấn y tế (NHS 111 ở Anh).")).toBe("Hãy xin tư vấn y tế.");
     expect(plainPub("🩺 150/95 cao hơn ngưỡng **140/90** của NHS — tức là cao.")).toBe("🩺 150/95 cao hơn ngưỡng **140/90** — tức là cao.");
   });
-  it("hai nguồn nói KHÁC nhau → giữ tên (bỏ đi thì thành hai câu mâu thuẫn)", () => {
+  // 12/11 (Kir: "nếu ai hỏi nguồn thì mới nói nguồn"): kể cả khi hai nguồn nói khác nhau cũng không đọc tên — "có nguồn… nguồn khác…"
+  it("hai nguồn nói KHÁC nhau → không nêu tên, vẫn giữ rõ đó là hai ý của hai nguồn", () => {
     const t = "Sảy thai là mất thai sớm. NHS tính là trước 24 tuần; MedlinePlus tính là trước tuần thứ 20.";
-    expect(plainPub(t)).toBe(t);
+    expect(plainPub(t)).toBe("Sảy thai là mất thai sớm. Có nguồn tính là trước 24 tuần; nguồn khác tính là trước tuần thứ 20.");
   });
   it("không đụng chữ thường trùng tên ('who'), không đụng câu không có tên cơ quan", () => {
     expect(plainPub("guess who is back")).toBe("guess who is back");

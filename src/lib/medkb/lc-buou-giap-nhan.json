@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đánh trống ngực, xuất huyết, khàn tiếng, tiêu chảy, ngứa ran, tăng cân, trầm cảm, sụt cân, hồi hộp, táo bón.",
+   "text": "Triệu chứng hay gặp: đánh trống ngực, xuất huyết, khàn tiếng, tiêu chảy, ngứa ran, tăng cân, trầm cảm, sụt cân, hồi hộp, táo bón.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bướu giáp keo, U nang tuyến giáp, viêm tuyến giáp, bướu giáp đa nhân, ung thư tuyến giáp, cường giáp.",
+   "text": "Nguyên nhân / yếu tố liên quan: bướu giáp keo, U nang tuyến giáp, viêm tuyến giáp, bướu giáp đa nhân, ung thư tuyến giáp, cường giáp.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

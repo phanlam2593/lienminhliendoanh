@@ -16,7 +16,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: đau khi quan hệ, rối loạn cương, trầm cảm, nám, ho.",
+   "text": "Triệu chứng hay gặp: đau khi quan hệ, rối loạn cương, trầm cảm, nám, ho.",
    "src": [
     0
    ]
@@ -24,7 +24,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: chấn thương dương vật, bệnh tự miễn, chứng co cứng Dupuytren, chấn thương.",
+   "text": "Nguyên nhân / yếu tố liên quan: chấn thương dương vật, bệnh tự miễn, chứng co cứng Dupuytren, chấn thương.",
    "src": [
     0
    ]
@@ -39,7 +39,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

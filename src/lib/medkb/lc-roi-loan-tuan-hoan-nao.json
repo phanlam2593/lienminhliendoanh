@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: liệt nửa người, chóng mặt, buồn nôn, hoa mắt, mất ngủ, đau đầu, nói khó, hôn mê, tê bì, ù tai.",
+   "text": "Triệu chứng hay gặp: liệt nửa người, chóng mặt, buồn nôn, hoa mắt, mất ngủ, đau đầu, nói khó, hôn mê, tê bì, ù tai.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: xơ vữa động mạch, cục máu đông.",
+   "text": "Nguyên nhân / yếu tố liên quan: xơ vữa động mạch, cục máu đông.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

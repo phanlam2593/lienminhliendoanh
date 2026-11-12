@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chuột rút, buồn nôn, trầm cảm, co giật, mệt mỏi, chán ăn, sưng, nôn, nám.",
+   "text": "Triệu chứng hay gặp: chuột rút, buồn nôn, trầm cảm, co giật, mệt mỏi, chán ăn, sưng, nôn, nám.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: mất qua đường niệu, mất qua dạ dày ruột, cung cấp không đủ, thuốc, bệnh di truyền, hội chứng Gitelman, hạ magie máu tăng canxi niệu, hội chứng EAST.",
+   "text": "Nguyên nhân / yếu tố liên quan: mất qua đường niệu, mất qua dạ dày ruột, cung cấp không đủ, thuốc, bệnh di truyền, hội chứng Gitelman, hạ magie máu tăng canxi niệu, hội chứng EAST.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

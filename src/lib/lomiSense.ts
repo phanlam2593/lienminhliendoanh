@@ -128,6 +128,20 @@ const SYN: [RegExp, string][] = [
 // 05/11 (bộ đề "nói kiểu khác"): tên gọi khác của bệnh / triệu chứng → ĐỔI THẲNG trong câu (không nối thêm ở cuối, để câu
 //   "cao đường ăn chuối hok" vẫn đọc được là hỏi món với bệnh). Có cả dạng có dấu lẫn không dấu.
 const RENAME: [RegExp, string][] = [
+  // 12/11 (bộ 1.000 câu — câu sức khoẻ nói theo kiểu đời thường mà kho có bài): đổi về tên bài
+  [VR(/(?<![\p{L}])(lá gan|gan)( của)?( \S+)?( (bị|đã|cũng|hơi))? nhiễm mỡ(?![\p{L}])/giu), "gan nhiễm mỡ"],
+  [VR(/(?<![\p{L}])(lãng tai|lang tai|nặng tai|nang tai|tai (nghe )?kém|nghe (không|ko|chẳng) rõ|nghe nhỏ|nghe ngày càng kém)(?![\p{L}])/giu), "nghe kém"],
+  [VR(/(?<![\p{L}])(nóng rát|rát|nóng|bỏng rát) (sau|ở|vùng|giữa|trong) (xương ức|ngực|thượng vị|lồng ngực)(?![\p{L}])/giu), "ợ nóng"],
+  [VR(/(?<![\p{L}])(cổ tay (\S+ )?(hay|bị|cứ|thường|hơi)? ?tê|tê (ở |hai |2 )?cổ tay|tê (bàn |các )?(ngón )?tay (khi|lúc|mỗi|ban|về) (\S+ ){0,2}(ngủ|đêm|sáng|dậy|gõ|làm))(?![\p{L}])/giu), "tê tay chân"],
+  [VR(/(?<![\p{L}])(té|tê) (bàn )?(tay|chân) (lúc|khi|mỗi) (ngủ|sáng|đêm)(?![\p{L}])/giu), "tê tay chân $4 $5"],
+  [VR(/(?<![\p{L}])(va|đập|cụng|đụng) (đầu|trán) (vào|vô|xuống)(?![\p{L}])/giu), "va đập đầu vào"],
+  [VR(/(?<![\p{L}])lưng( \S+)? (nhức|đau|mỏi)( âm ỉ| nhiều| quá| ê ẩm)?(?![\p{L}])/giu), "đau lưng"],
+  [VR(/(?<![\p{L}])(nhức|đau) (âm ỉ )?(ở )?(vùng )?(thắt )?lưng(?![\p{L}])/giu), "đau lưng"],
+  [VR(/(?<![\p{L}])(đầu gối|gối)( \S+)? (sưng|sưng đau|bị sưng)(?![\p{L}])/giu), "đau đầu gối, sưng"],
+  [VR(/(?<![\p{L}])sưng (đầu )?gối(?![\p{L}])/giu), "đau đầu gối, sưng"],
+  [VR(/(?<![\p{L}])(bị )?(ói|ọe|oẹ|mửa|nôn)( \d+| hai| ba| mấy)? (lần|bận|cữ)(?![\p{L}])/giu), "bị nôn$3 $4"],
+  [VR(/(?<![\p{L}])(trầy da|trầy xước|bị trầy|xước da|trầy chân|trầy tay|trầy đầu gối)(?![\p{L}])/giu), "vết trầy xước"],
+  [VR(/(?<![\p{L}])nhịp tim (nhanh|cao|hơi nhanh)(?![\p{L}])/giu), "đánh trống ngực"],
   [VR(/(?<![\p{L}])(tào tháo đuổi|tao thao duoi|ỉa chảy|ia chay|ỉa lỏng|tiêu lỏng)(?![\p{L}])/giu), "tiêu chảy"],
   [VR(/(?<![\p{L}])(bón bụng|bon bung)(?![\p{L}])/giu), "táo bón"],
   [VR(/(?<![\p{L}])(bị bón|bi bon)(?![\p{L}])/giu), "bị táo bón"],
@@ -143,7 +157,7 @@ const RENAME: [RegExp, string][] = [
   [VR(/(?<![\p{L}])điên đầu(?![\p{L}])/giu), "áp lực quá"],
   [VR(/(?<![\p{L}])(đầu óc |đầu )?(cứ )?quay cuồng (vì|với|do|tại|chuyện)(?![\p{L}])/giu), "áp lực vì"],
   [VR(/(?<![\p{L}])(đau bụng|đầy bụng|đi ngoài|tiêu chảy|sôi bụng)( \S+){0,1} (mỗi khi|mỗi lần|khi|sau khi|lúc) (uống|ăn) (sữa|đồ sữa|phô mai|kem)(?![\p{L}])/giu), "không dung nạp lactose"],
-  [VR(/(?<![\p{L}])tim (đập nhanh|đập thình thịch|loạn nhịp|rung rinh)( \S+){0,2} (khi|lúc|mỗi khi|mỗi lần) (gặp|thấy|nhìn|nói chuyện với|nhắn tin với|đứng gần) (crush|người ấy|anh ấy|cô ấy|người yêu|ny|bạn ấy|ảnh|ổng|chị ấy)(?![\p{L}])/giu), "mình thích $5"],
+  [VR(/(?<![\p{L}])tim (đập nhanh|đập thình thịch|loạn nhịp|rung rinh)( \S+){0,2} (khi|lúc|mỗi khi|mỗi lần) (gặp|thấy|nhìn|nói chuyện với|nhắn tin với|đứng gần) (crush|người ấy|anh ấy|cô ấy|người yêu|ny|bạn ấy|ảnh|ổng|chị ấy|người (mình |tôi |em )?thích)(?![\p{L}])/giu), "mình thích $5"],
   [VR(/(?<![\p{L}])(mất sóng|yếu sóng|không có sóng|rớt sóng)( điện thoại)?(?![\p{L}])/giu), "mất mạng"],
   [VR(/(?<![\p{L}])giết thời gian(?![\p{L}])/giu), "không có gì làm"],
   [VR(/(?<![\p{L}])ăn đòn(?![\p{L}])/giu), "bị đánh"],
@@ -491,6 +505,7 @@ export function senseGreeting(raw: string): SenseReply | null {
 }
 
 // ── 3) LATE: lưới cuối trước khi nói "chưa tiếp thu" ──────────────────────────
+const THIRD_SAY = VN(/\b(mẹ|má|ba|bố|cha|họ hàng|họ|người ta|mọi người|anh ấy|chị ấy|cô ấy|ông ấy|bà ấy|vợ|chồng|ck|vk|người yêu|ny|bạn (tôi|mình|em)|sếp|thầy|cô giáo|đồng nghiệp|bà con|cả nhà)( \S+){0,4} (hiểu|hỏi|nói|lặp)\b/);
 const META: [string, RegExp, string[]][] = [
   [
     "meta_addr",
@@ -672,7 +687,12 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
   const words = n.split(" ").length;
   const g = senseGreeting(raw) ?? senseAboutLomi(raw);
   if (g) return g;
-  for (const [intent, re, texts] of META) if (re.test(n)) return { intent, text: pick(texts) };
+  for (const [intent, re, texts] of META) {
+    // 12/11 (bộ 1.000 câu G02-044, G04-091): "họ hàng hỏi hoài chuyện ck con", "làm sao nói để mẹ hiểu mình" là chuyện với NGƯỜI KHÁC,
+    //   không phải chê Lomi; và câu đầu cuộc trò chuyện thì chưa có gì để Lomi "hiểu sai".
+    if (intent === "meta_understand" && THIRD_SAY.test(` ${n} `)) continue;
+    if (re.test(n)) return { intent, text: pick(texts) };
+  }
   // Chỉ gọi trống ("anh", "em ơi", "lomi") — đáp "dạ", mời nói tiếp.
   if (VOCATIVE_ONLY.test(n))
     return { intent: "vocative", text: pick(["Dạ, Lomi nghe nè 🙋 Bạn cần gì nè?", "Dạ? Có Lomi đây 😊 Bạn nói đi nha!", "Dạ bạn nói đi, Lomi nghe nè 👂"]) };
@@ -722,7 +742,7 @@ export function senseLate(raw: string, ctx: { lastText?: string; talk?: number; 
             ? pick([`${cap(act)} hả 😄 Rồi sao, kể Lomi nghe với!`, `Ồ, ${act} luôn hả 😄 Sao rồi nè?`])
             : `${cap(act)} hả? Rồi sao nữa, kể Lomi nghe với.`
           : glad
-            ? pick(["Ừa, Lomi nghe nè 😊 Rồi sao nữa?", "Vậy hả 😄 Chuyện sao vậy bạn, kể Lomi nghe với."])
+            ? pick(["Ui, nghe mà Lomi vui lây luôn á 🥳 Bạn làm được vậy là đáng tự hào lắm đó! Lúc đó bạn thấy sao?", "Tuyệt quá 🥰 Lomi mừng cho bạn ghê! Kể Lomi nghe thêm chút đi — chuyện vui thì nói bao nhiêu cũng được."])
             : pick(["Ừa, Lomi nghe nè. Rồi sao nữa bạn?", "Lomi nghe nè 🌿 Bạn kể thêm chút được không?"]),
     };
   }

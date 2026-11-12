@@ -8,7 +8,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 
 // Tên cơ quan / trang nguồn hay gặp trong các ý của thẻ (phân biệt hoa thường — "WHO" không phải "who").
 const PUB =
-  "(?:(?:Guy's and St Thomas' NHS|NHS Healthier Together(?: \\(Wessex\\))?|NHS Every Mind Matters|NHS inform|NHS(?: \\(Anh\\)| Anh)?|NIDDK|NIAMS|NIMH|NINDS|NHLBI|NIAID|NICHD|NCCIH|NIDCD|NIDCR|NIDA|NIAAA|NEI|NIA|NCI|NIH|CDC|WHO|FDA|AAO|AAP|AAD|AAFP|ACOG|AHA|ADA|ACS|SAMHSA|USPSTF|Mayo Clinic|Mayo|MedlinePlus Magazine|MedlinePlus|StatPearls|NCBI Bookshelf|NCBI|Cleveland Clinic|Johns Hopkins|NICE|UNICEF|Bộ Y tế)(?: \\((?:Mỹ|Hoa Kỳ|Anh|NIH, Hoa Kỳ)\\))?)";
+  "(?:(?:Guy's and St Thomas' NHS|NHS Healthier Together(?: \\(Wessex\\))?|NHS Every Mind Matters|NHS inform|NHS(?: \\(Anh\\)| Anh)?|NIDDK|NIAMS|NIMH|NINDS|NHLBI|NIAID|NICHD|NCCIH|NIDCD|NIDCR|NIDA|NIAAA|NEI|NIA|NCI|NIH|CDC|WHO|FDA|AAO|AAP|AAD|AAFP|ACOG|AHA|ADA|ACS|SAMHSA|USPSTF|Mayo Clinic|Mayo|MedlinePlus Magazine|MedlinePlus|StatPearls|NCBI Bookshelf|NCBI|Cleveland Clinic|Johns Hopkins|NICE|UNICEF|Bộ Y tế|(?:[Tt]ra cứu dược chất |[Tt]ra cứu dược liệu |[Tt]rang bệnh )?(?:[Nn]hà thuốc )?(?:FPT )?Long Châu|Vinmec|Tâm Anh|Hello Bacsi|Healthline|Dược thư(?: Quốc gia)?(?: Việt Nam)?)(?: \\((?:Mỹ|Hoa Kỳ|Anh|NIH, Hoa Kỳ)\\))?)";
 const PUBS = `${PUB}(?:(?:, | và | lẫn | cùng |\\/)${PUB})*`;
 const S = "(^|[.;:!?]\\s+|\\(|\\n(?:• )?|• )"; // đầu một ý
 const CUE = "(?:nêu thêm|nêu rõ|nêu|cho biết|mô tả|ghi rõ|ghi nhận|ghi|lưu ý|nhấn mạnh|liệt kê|nói rõ|nói|định nghĩa|giải thích|thêm)";
@@ -18,7 +18,24 @@ const NEG = "(?:không|đừng|tránh|hạn chế|nên|chỉ|hãy|theo)";
 const IMPER = "(?:nên|không|đừng|tránh|hạn chế|hãy|cần|chỉ|giữ|bỏ|ngưng|ngừng|uống|ăn|tập|đi|gọi|dùng|cho|chọn|giảm|tăng|thay|kiểm tra|theo dõi|nghỉ|ngủ|rửa|che|đeo|tiêm|bôi|chườm)";
 const NB = "(?![\\p{L}])";
 
-const RULES: [RegExp, string][] = [
+const RULES: [RegExp, string | ((...a: string[]) => string)][] = [
+  // 12/11 (Kir): "nếu ai hỏi nguồn thì mới nói nguồn" — bỏ luôn các cụm "theo nguồn" (không tên) trong câu chữ.
+  [/\s*\((?:theo|lấy theo) nguồn\)/gu, ""],
+  [/(^|[.;:!?]\s+|\n(?:• )?|• |\*\*\s*)[Tt]heo nguồn(?: tham khảo)?,\s*([a-zà-ỹđ])/gu, (_m: string, a: string, c: string) => `${a}${/^$|[.!?]\s+$|• $|\n$/u.test(a) ? c.toUpperCase() : c}`],
+  [/(^|[.;!?]\s+|\n(?:• )?|• )[Tt]heo nguồn(?: tham khảo)?:\s*/gu, "$1"],
+  [/ theo nguồn(?: tham khảo)?(?: của (?:từng|mỗi) (?:bệnh|thuốc|thẻ))?(?=[\s.,:;)!]|$)/gu, ""],
+  [/,? theo nguồn(?: tham khảo)?,/gu, ","],
+  [/\s*\(theo nguồn khác\)/gu, ""],
+  // câu nêu cơ quan như CHỦ NGỮ của một sự kiện — đổi thành lời chung
+  [new RegExp(`[Tt]hẻ này dựa trên ${PUBS}`, "gu"), "Thông tin này dựa trên nguồn nước ngoài"],
+  [new RegExp(`nay ${PUBS} gọi là`, "gu"), "nay còn được gọi là"],
+  [new RegExp(`(^|[.;:!?]\\s+|\\n(?:• )?|• )(?:Cả )?${PUBS} (?:đều )?(?:nói|nêu|cho biết)(?: rằng)? (?=chưa biết)`, "gu"), "$1Hiện "],
+  [new RegExp(`Bệnh viện ${PUBS} dặn`, "gu"), "Bác sĩ dặn"],
+  [new RegExp(`(được |đã )?${PUBS} xếp là`, "gu"), "được xếp là"],
+  // "**Sỏi niệu quản** — Nhà thuốc Long Châu xếp vào nhóm bệnh: thận - tiết niệu." → "… — thuộc nhóm bệnh: thận - tiết niệu."
+  [new RegExp(`${PUBS} xếp (?:bệnh này )?vào nhóm`, "gu"), "thuộc nhóm"],
+  // "Theo tra cứu dược chất Long Châu, Nepafenac là: …" → "Nepafenac là: …"
+  [new RegExp(`(^|[.;:!?]\\s+|\\n(?:• )?|• )[Tt]heo ${PUBS},\\s*`, "gu"), "$1\u0001"],
   // số khẩn của Anh không dùng được ở Việt Nam: "(NHS 111 ở Anh)", "(ở Anh là gọi đường dây NHS 111)", "(NHS Anh nêu gọi 111)"
   [/\s*\((?:ở Anh là |gọi )?(?:gọi )?(?:đường dây )?NHS(?: Anh)? (?:nêu gọi )?111(?: ở Anh)?\)/gu, ""],
   // (30/10) các cách ghi số 111 của Anh còn sót — người dùng ở Việt Nam không gọi được
@@ -81,10 +98,18 @@ const PUB_RE = new RegExp(PUB, "gu");
 // bỏ tên đi thì thành hai câu mâu thuẫn không rõ của ai.
 const CONTRAST = /(khác nhau|chưa thống nhất|(^|\s)lại\s|trong khi|cho rằng|tính là|nhưng)/u;
 function plainLine(line: string): string {
+  // (12/11: khi ghép các ý, chữ đầu ý sau dấu ";" bị viết thường — "medlinePlus nói…", "mayo Clinic…" — đưa về đúng tên để các luật dưới nhận ra)
+  line = line.replace(/(?<![\p{L}])medlinePlus/gu, "MedlinePlus").replace(/(?<![\p{L}])mayo(?= Clinic|[\s,.;:)])/gu, "Mayo").replace(/(?<![\p{L}])nHS(?![\p{L}])/gu, "NHS");
   const pubs = new Set((line.match(PUB_RE) ?? []).map((x) => x.replace(/ (Clinic|\(Anh\)|Anh)$/u, "")));
-  if (pubs.size >= 2 && CONTRAST.test(line)) return line;
   let s = line;
-  for (const [re, to] of RULES) s = s.replace(re, to);
+  // 12/11 (Kir): kể cả khi hai nguồn nói khác nhau cũng không nêu tên — "Mayo Clinic nói khoảng 10 phút…, MedlinePlus nói ít nhất 5 đến 30 phút"
+  //   → "có nguồn nói khoảng 10 phút…, nguồn khác nói ít nhất 5 đến 30 phút". Tên vẫn có khi người dùng hỏi nguồn.
+  if (pubs.size >= 2 && CONTRAST.test(line)) {
+    let k = 0;
+    s = s.replace(new RegExp(`(?:[Cc]ả )?${PUBS}(?: (?:cũng|còn|thì|đều))?`, "gu"), () => (k++ === 0 ? "có nguồn" : "nguồn khác"));
+    s = s.replace(/(^|[.!?]\s+|• )có nguồn/gu, "$1Có nguồn");
+  }
+  for (const [re, to] of RULES) s = s.replace(re, to as string);
   s = s.replace(/\u0001\s+/gu, "\u0001");
   // viết hoa lại chữ đầu ý chỗ vừa bỏ tên ("NHS: tránh …" → "Tránh …"); trong ngoặc / sau dấu ":" thì giữ chữ thường
   s = s.replace(/\u0001([a-zà-ỹđ])?/gu, (_m, c: string | undefined, off: number, all: string) => {
@@ -113,9 +138,14 @@ export function splitSource(content: string): { text: string; src?: string } {
 
 /** Lời đáp sức khoẻ có nguồn → câu chữ tự nhiên + nguồn cất riêng. Lời đáp không có dòng nguồn thì giữ nguyên. */
 export function tidyCited(content: string): { text: string; src?: string } {
+  // (câu trả lời KHI ĐƯỢC HỎI NGUỒN thì giữ nguyên tên trang)
+  if (isSourceAnswer(content)) return { text: content };
   const r = splitSource(content);
-  return r.src ? { text: plainPub(r.text), src: r.src } : r;
+  // 12/11 (Kir): lời đáp nào cũng không đọc tên nguồn, kể cả lời không kèm dòng "📚 Nguồn"
+  return r.src ? { text: plainPub(r.text), src: r.src } : { text: plainPub(r.text) };
 }
+/** Lời đáp cho câu "nguồn đâu?" (lib/lomiDrugData.sourceList, sourceSay) — phải giữ tên trang. */
+export const isSourceAnswer = (content: string) => /^(Phần Lomi vừa nói dựa trên|Mấy điều Lomi nói về \*\*[^*]+\*\* lấy từ các trang sau)/u.test(content.trim());
 
 /** Hỏi nguồn ngắn gọn: "nguồn đâu", "lấy ở đâu ra", "dựa vào đâu", "có nguồn không" (không phải "nguồn gốc", "nguồn canxi"…). */
 export function asksSource(text: string): boolean {

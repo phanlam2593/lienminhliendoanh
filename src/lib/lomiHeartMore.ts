@@ -467,7 +467,7 @@ export const MORE_THEMES: Theme[] = [
   {
     id: "decline",
     howto: true,
-    re: VN(/\b((cách|làm sao|làm thế nào|sao) (để )?từ chối|từ chối (khéo|sao cho|thế nào|như nào|mà không)|(từ chối|khước từ|nói không với)( \S+){0,2} (lời mời|lời rủ|đi chơi|đám cưới|tiệc|nhậu|kèo|lời nhờ|người ta nhờ))\b/),
+    re: VN(/\b((ngại|khó|không dám|sợ|ngần ngại) từ chối( \S+){0,4} (vay|mượn|nhờ|rủ|mời|xin)|(cách|làm sao|làm thế nào|sao) (để )?từ chối|từ chối (khéo|sao cho|thế nào|như nào|mà không)|(từ chối|khước từ|nói không với)( \S+){0,2} (lời mời|lời rủ|đi chơi|đám cưới|tiệc|nhậu|kèo|lời nhờ|người ta nhờ))\b/),
     feel: ["Từ chối mà vẫn giữ được lòng người khác là chuyện khó thật, nhất là khi mình quý họ."],
     insight: ["Từ chối một lời mời không phải là từ chối con người họ. Người ta thường buồn vì cách nói hơn là vì câu “không”."],
     step: ["Nói sớm, đừng hứa lửng rồi huỷ sát giờ — đó mới là điều làm người ta buồn nhất."],
@@ -716,7 +716,7 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "marrypressure",
-    re: VN(/\b(hỏi cưới|giục cưới|thúc cưới|ép cưới|bị ép cưới|bao giờ cưới|khi nào cưới|chưa lấy chồng|chưa lấy vợ|lớn tuổi chưa|áp lực lấy chồng|áp lực lấy vợ|áp lực kết hôn|bị hỏi chuyện chồng|bị hỏi chuyện vợ|ế chồng|ế vợ)\b/),
+    re: VN(/\b(hỏi cưới|giục cưới|thúc cưới|ép cưới|bị ép cưới|bao giờ cưới|khi nào cưới|chưa lấy chồng|chưa lấy vợ|lớn tuổi chưa|áp lực lấy chồng|áp lực lấy vợ|áp lực kết hôn|bị hỏi chuyện chồng|bị hỏi chuyện vợ|ế chồng|ế vợ|(họ hàng|bà con|người thân|cả nhà|mọi người)( \S+){0,3} (hỏi|giục|nhắc|hối)( \S+){0,3} (chuyện |về )?(chồng con|vợ con|ck con|vk con|cưới xin|lấy chồng|lấy vợ|người yêu|ny|có bồ))\b/),
     feel: ["Bị hỏi “bao giờ cưới” hoài mệt ghê ha 😮‍💨 Lomi hiểu mà.", "Áp lực chuyện cưới xin từ gia đình, họ hàng làm nhiều người thấy ngột ngạt lắm."],
     insight: [
       "Mỗi người có một thời điểm riêng. Cưới vì áp lực thường khó hạnh phúc hơn là chờ đúng người, đúng lúc.",
@@ -926,6 +926,101 @@ export const MORE_THEMES: Theme[] = [
       "Làm theo nhịp 25 phút tập trung – 5 phút nghỉ, xong 4 lượt thì nghỉ dài.",
       "Làm việc khó nhất vào lúc bạn tỉnh táo nhất trong ngày.",
       "Tự thưởng nhỏ khi xong mỗi phần — não thích phần thưởng lắm.",
+    ],
+  },
+  {
+    // 12/11 (bộ 1.000 câu G04-091, G07-031): muốn ba mẹ / người nhà HIỂU, LẮNG NGHE, TÔN TRỌNG mình mà vẫn biết họ thương mình.
+    id: "beheard",
+    howto: true,
+    re: VN(/\b((mẹ|má|ba|bố|cha|chồng|vợ|người yêu|ny|họ|cả nhà|người nhà|ông bà)( \S+){0,3} (chẳng|không|ko|chả|ít khi) (chịu )?(nghe|hiểu|lắng nghe) (mình|em|tôi|tui|con)( nói)?|(để|cho|làm sao để|sao cho) (mẹ|má|ba|bố|cha|chồng|vợ|người yêu|họ|cả nhà|người nhà) (hiểu|tôn trọng|lắng nghe|chịu nghe) (mình|em|tôi|tui|con))\b/),
+    feel: [
+      "Thương ba mẹ mà nói gì cũng không được nghe trọn — cảm giác đó vừa tủi vừa bất lực, Lomi hiểu 🤍",
+      "Biết người nhà lo cho mình, nhưng mình cũng cần được tôn trọng như một người lớn — mong vậy là chính đáng mà.",
+    ],
+    insight: [
+      "Ba mẹ thường nghe được con hơn khi họ thấy **nỗi lo của họ đã được hiểu** trước. Khi họ còn lo, lời giải thích của con dễ bị nghe thành cãi lại.",
+      "Được tôn trọng thường đến từ việc mình nói rõ, bình tĩnh và giữ lời — hơn là thắng trong một lần tranh luận.",
+    ],
+    step: [
+      "Mở đầu bằng nỗi lo của họ: “Con biết mẹ la vì sợ con khổ” — rồi mới nói điều mình cần: “nhưng con muốn được tự quyết chuyện này, và con sẽ chịu trách nhiệm.”",
+      "Chọn lúc cả nhà vui vẻ, nói một chuyện thôi, ngắn gọn; nếu đang to tiếng thì xin hoãn: “Mình nói lại tối nay nha mẹ.”",
+    ],
+    ask: ["Chuyện gì hay làm hai bên căng nhất vậy bạn?", "Lúc mẹ la, bạn thường phản ứng thế nào?"],
+    advice: [
+      "Dùng “con thấy / con cần” thay vì “mẹ lúc nào cũng…” — người nghe đỡ thấy bị trách nên dễ nghe hơn.",
+      "Cho ba mẹ thấy bằng việc làm: giữ đúng một cam kết nhỏ đã hứa sẽ thuyết phục hơn nhiều lần giải thích.",
+      "Nếu nói trực tiếp khó, viết một lá thư / tin nhắn dài kể điều mình nghĩ — nhiều ba mẹ đọc chậm rãi thì hiểu con hơn.",
+    ],
+  },
+  {
+    // 12/11 (bộ 1.000 câu G07-045): thích yên tĩnh, ở một mình mà bị người nhà / bạn bè chê "khó gần", "lầm lì".
+    id: "introvert",
+    re: VN(/\b(bị (người nhà|mọi người|cả nhà|ba mẹ|bố mẹ|họ hàng|bạn bè|đồng nghiệp)( \S+){0,2} chê (là )?(khó gần|lầm lì|ít nói|khép kín|kì|kỳ|lập dị|không hoà đồng|không hòa đồng)|(thích|quen) (yên tĩnh|ở một mình|ở 1 mình)( \S+){0,6} (bị|nhưng|mà) (chê|nói|bảo)|người hướng nội|tính hướng nội|hướng nội (quá|nên))\b/),
+    feel: [
+      "Thích yên tĩnh mà bị bảo là khó gần — nghe vậy hoài cũng thấy mình bị hiểu sai, Lomi hiểu 🤍",
+      "Bạn chỉ là người cần không gian riêng để nạp lại năng lượng thôi, đâu phải có vấn đề gì.",
+    ],
+    insight: [
+      "Ở một mình không giống với cô đơn: nhiều người hướng nội thấy thoải mái, đủ đầy khi có thời gian yên tĩnh — đó là một nét tính cách, không phải khuyết điểm.",
+      "Người nhà hay lo khi thấy mình ít nói, vì họ đọc sự im lặng là buồn hay giận. Nói cho họ biết mình đang ổn thường giúp họ bớt chê.",
+    ],
+    step: [
+      "Nói ngắn với người nhà: “Con thích yên tĩnh để nghỉ ngơi thôi, con không buồn hay giận ai đâu.”",
+      "Chọn vài lúc cố định để ở cùng mọi người (bữa tối, cuối tuần) — họ thấy mình vẫn gắn bó, mình vẫn giữ được thời gian riêng.",
+    ],
+    ask: ["Ai hay nói bạn khó gần nhất vậy?", "Lúc ở một mình bạn hay làm gì cho vui?"],
+    advice: [
+      "Bạn không cần đổi mình cho giống người khác — chỉ cần cho người thân thấy mình vẫn quan tâm theo cách của mình (hỏi han, phụ một việc nhỏ).",
+      "Nếu ở một mình bắt đầu thành buồn bã, mất hứng mọi thứ, ngủ hay ăn thất thường kéo dài thì đó là lúc nên tâm sự với ai đó hoặc gặp chuyên gia.",
+    ],
+  },
+  {
+    // 12/11 (Kir: tối ưu phần tâm sự; bộ 1.000 câu G03-036, G03-045): muốn LÀM LÀNH với người thân / bạn sau khi giận nhau.
+    id: "makeup",
+    howto: true,
+    re: VN(/\b((?<!(mới|vừa|đã|vừa mới) )(làm lành|làm hoà|làm hòa|hàn gắn|giảng hoà|giảng hòa)(?! (rồi|xong))|xin lỗi (rồi|mấy lần)( \S+){0,4} (vẫn|còn) (giận|dỗi|không (thèm )?nói chuyện|lơ|im)|(vẫn|còn) giận (mình|em|tôi|tui|tớ)( \S+){0,6} (làm sao|sao giờ|có nên|nên làm gì))\b/),
+    feel: [
+      "Muốn làm lành là đã đi được nửa đường rồi đó — nghĩa là bạn còn quý mối quan hệ này lắm 🤍",
+      "Giận nhau mà chưa hoà được thì cứ lấn cấn trong lòng hoài, Lomi hiểu mà.",
+    ],
+    insight: [
+      "Người đang giận thường cần **được hiểu** trước, rồi mới nghe được lời xin lỗi. Một lời nhận đúng điều mình làm họ buồn có sức nặng hơn nhiều câu “xin lỗi” chung chung.",
+      "Đã xin lỗi rồi mà người kia còn giận thì không có nghĩa là lời xin lỗi vô ích — nhiều người cần thêm thời gian để nguôi, nhất là khi họ bị tổn thương thật.",
+    ],
+    step: [
+      "Nói cụ thể điều mình đã làm và vì sao nó làm người ấy buồn — “Hôm đó mình nói nặng lời trước mặt mọi người, chắc bạn thấy bị xem thường” — thay vì chỉ “cho mình xin lỗi”.",
+      "Cho người ấy biết mình sẵn sàng khi họ sẵn sàng: “Khi nào bạn muốn nói chuyện thì mình ở đây” — rồi cho họ vài ngày, đừng nhắn dồn.",
+    ],
+    ask: ["Chuyện giận nhau bắt đầu từ đâu vậy bạn?", "Bạn đã nói gì khi xin lỗi, người ấy phản ứng sao?"],
+    advice: [
+      "Chọn lúc cả hai bình tĩnh, gặp trực tiếp hoặc gọi điện thì tốt hơn nhắn tin — giọng nói giúp người kia nghe được sự chân thành.",
+      "Với ba mẹ, đôi khi một việc nhỏ (pha ly trà, phụ một việc nhà, rủ ăn cơm) mở lời dễ hơn một cuộc nói chuyện nghiêm túc.",
+      "Nếu đã chân thành mà họ vẫn cần thời gian thì tôn trọng điều đó — giữ liên lạc nhẹ nhàng, không trách “mình xin lỗi rồi mà”.",
+    ],
+  },
+  {
+    // 12/11 (bộ 1.000 câu G02-030, G02-035, G09-029): hỏi cách AN ỦI / ĐỘNG VIÊN một người khác (bạn đang cô đơn, ba nghỉ hưu thấy mình vô dụng,
+    //   bạn bị người yêu bỏ) — trước đây ra thẻ bệnh "Cô đơn", lời hỏi thăm khủng hoảng của chính người kể, hay "Dạy Lomi".
+    id: "comfortother",
+    howto: true,
+    re: VN(/\b((an ủi|động viên|vỗ về|nói gì với|nói sao với|nói thế nào với|nói (gì|sao|thế nào|như thế nào|kiểu gì) (với|cho)) (\S+ ){0,2}(bạn ấy|bạn mình|bạn thân|nó|cậu ấy|cô ấy|anh ấy|chị ấy|em ấy|ba|bố|mẹ|má|ông|bà|chồng|vợ|con|em gái|em trai|anh trai|chị gái|đứa bạn|người đó|người ấy|ổng|bả)|(bạn ấy|nó|ba|bố|mẹ|má|ông|bà)( \S+){0,8} (an ủi|động viên)( \S+){0,2} (sao|thế nào|ntn|như thế nào|kiểu gì|làm sao)|(an ủi|động viên) (\S+ ){0,3}(sao|thế nào|ntn|như thế nào|kiểu gì|ra sao)|(nói|nhắn|khuyên) (gì )?(với|cho) (bạn ấy|nó|cậu ấy|cô ấy|anh ấy|chị ấy|em ấy|người ấy|đứa bạn|bạn mình)( \S+){0,2} (thế nào|sao|ntn|như thế nào|kiểu gì|gì bây giờ|sao cho))\b/),
+    feel: [
+      "Bạn đang lo cho người ấy — chỉ riêng việc bạn để tâm hỏi cách giúp đã là một điều tử tế rồi 🤍",
+      "Muốn ở bên một người đang buồn mà không biết nói gì cho đúng — ai cũng từng lúng túng như vậy.",
+    ],
+    insight: [
+      "Người đang buồn thường không cần lời khuyên ngay, mà cần cảm giác **có người hiểu mình**. Lắng nghe trọn vẹn nhiều khi giúp hơn mọi câu “đừng buồn nữa”.",
+      "Những câu như “có gì đâu mà buồn”, “người ta còn khổ hơn” dễ làm người nghe thấy mình bị gạt đi — dù người nói có ý tốt.",
+    ],
+    step: [
+      "Mở lời bằng điều mình thấy, không phán xét: “Dạo này thấy bạn trầm hơn, có chuyện gì muốn kể không?” — rồi để họ nói, mình nghe là chính.",
+      "Nhắc lại điều họ vừa kể để họ biết mình hiểu (“nghe như bạn thấy hụt hẫng lắm”), và hỏi: “Bạn cần mình nghe thôi, hay muốn cùng nghĩ cách?”",
+    ],
+    ask: ["Người ấy đang gặp chuyện gì vậy bạn?", "Bạn với người ấy thân tới mức nào — thường hay tâm sự với nhau không?"],
+    advice: [
+      "Với người lớn tuổi mới nghỉ hưu hay thấy mình “vô dụng”: rủ làm cùng một việc có ích (chăm cây, đi chợ, chỉ con cháu một việc ông bà giỏi) giúp họ thấy mình vẫn được cần.",
+      "Hẹn một việc nhỏ cụ thể (đi ăn, đi dạo, gọi điện tối mai) thay vì “cần gì cứ nói nha” — người buồn thường ngại tự mở lời.",
+      "Nếu người ấy nói muốn chết, muốn biến mất hay buông xuôi: đừng để họ một mình, hỏi thẳng nhẹ nhàng, và liên hệ **115** hoặc người thân của họ khi thấy nguy hiểm.",
     ],
   },
   {
@@ -1178,7 +1273,7 @@ export const MORE_THEMES: Theme[] = [
     id: "compare",
     // 31/10: bố mẹ đem so với "con nhà người ta" — chuyện gia đình, không phải lướt mạng xã hội.
     hint: [[VN(/\b(con nhà người ta|(ba mẹ|bố mẹ|ba má|mẹ|ba|bố|cả nhà|gia đình) (\S+ ){0,3}so sánh)\b/), "Bị chính ba mẹ đem so với “con nhà người ta” thì tủi lắm, Lomi hiểu 😔 Nhiều khi ba mẹ so sánh vì lo và muốn mình hơn, nhưng cách nói đó lại làm mình thấy không bao giờ đủ tốt trong mắt người thân nhất.\n\nMỗi người có nhịp riêng — người kia giỏi ở chỗ này, mình mạnh ở chỗ khác. Nếu nói chuyện được, thử chọn lúc cả nhà vui vẻ và nói thật nhẹ: “Con biết ba mẹ muốn tốt cho con, nhưng mỗi lần bị so sánh con thấy buồn và mất động lực lắm.”\n\nBa mẹ hay so sánh em về chuyện gì nhất — học hành, công việc hay chuyện khác?", true]],
-    re: VN(/\b((\d{2}|ba mươi|hai mươi lăm|ba lăm|bốn mươi) tuổi( rồi)? mà (vẫn )?(chưa|chẳng|không) (có gì|ra gì|làm được gì|có gì trong tay)|so sánh với người khác|thua kém (bạn bè|mọi người|người khác|người ta|ai)|(thấy|cảm thấy) (mình |bản thân )?thua kém|ai cũng thành công hơn|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|con nhà người ta|ai cũng (có )?(cuộc sống|cuộc đời) (\S+ )?(tốt|sướng|ổn|đẹp) hơn|đời (mình|tui|em|tôi|anh|chị) (cứ )?(đứng yên|dậm chân)|dậm chân tại chỗ|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
+    re: VN(/\b((thấy )?(mình|em|tôi|tui) (chậm|thua|kém|tụt|đi sau) (hơn |so với )?(mọi người|bạn bè|người ta|người khác|bạn bè đồng trang lứa|ai cũng)|(\d{2}|ba mươi|hai mươi lăm|ba lăm|bốn mươi) tuổi( rồi)? mà (vẫn )?(chưa|chẳng|không) (có gì|ra gì|làm được gì|có gì trong tay)|so sánh với người khác|thua kém (bạn bè|mọi người|người khác|người ta|ai)|(thấy|cảm thấy) (mình |bản thân )?thua kém|ai cũng thành công hơn|(hay |cứ |luôn )?so sánh (mình|bản thân|em|tôi|tui|anh|chị) với|ai cũng hơn mình|ai cũng giỏi hơn|con nhà người ta|ai cũng (có )?(cuộc sống|cuộc đời) (\S+ )?(tốt|sướng|ổn|đẹp) hơn|đời (mình|tui|em|tôi|anh|chị) (cứ )?(đứng yên|dậm chân)|dậm chân tại chỗ|giỏi hơn mình|bạn bè thành công|bạn bè đều có|thua bạn bằng|fomo|lướt mạng thấy buồn|nhìn người ta thấy tủi|thấy mình chậm chân|bằng tuổi người ta)\b/),
     feel: ["Lướt mạng thấy ai cũng thành công, còn mình thì dậm chân — cảm giác đó khó chịu lắm, Lomi hiểu 😔"],
     insight: [
       "Mạng xã hội là “cuộn phim nổi bật” của người khác, không phải cuộc sống thật của họ.",

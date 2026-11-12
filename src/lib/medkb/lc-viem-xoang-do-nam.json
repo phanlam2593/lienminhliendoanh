@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chóng mặt, nhức đầu, đau mắt, mất ngủ, mệt mỏi, đau đầu, sưng, vảy, nám, sốt.",
+   "text": "Triệu chứng hay gặp: chóng mặt, nhức đầu, đau mắt, mất ngủ, mệt mỏi, đau đầu, sưng, vảy, nám, sốt.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: aspergillus, HIV/AIDS.",
+   "text": "Nguyên nhân / yếu tố liên quan: aspergillus, HIV/AIDS.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ môi trường sống sạch sẽ khô thoáng, đeo khẩu trang khi ra đường.",
+   "text": "Sinh hoạt / phòng ngừa: giữ môi trường sống sạch sẽ khô thoáng, đeo khẩu trang khi ra đường.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

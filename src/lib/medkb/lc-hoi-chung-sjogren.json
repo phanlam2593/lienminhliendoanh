@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sưng hạch, khô miệng, cứng khớp, nóng rát, phát ban, ngứa ran, ho khan, mệt mỏi, đau đầu, khó thở.",
+   "text": "Triệu chứng hay gặp: sưng hạch, khô miệng, cứng khớp, nóng rát, phát ban, ngứa ran, ho khan, mệt mỏi, đau đầu, khó thở.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: gen trong di truyền, vi khuẩn.",
+   "text": "Nguyên nhân / yếu tố liên quan: gen trong di truyền, vi khuẩn.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

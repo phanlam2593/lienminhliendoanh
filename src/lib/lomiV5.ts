@@ -26,15 +26,25 @@ const LABEL: [RegExp, string][] = [
 ];
 const labelOf = (th: string) => LABEL.find(([re]) => re.test(th))?.[1];
 const BOSS = VN(/\b(sếp|công ty|chỗ làm|đồng nghiệp|đi làm)\b/);
+const SORE = VN(/\b(buồn|mệt|áp lực|căng|chán|tệ|khó chịu|cãi|giận|lo|sợ|stress|ức|bực|ghét|la|mắng|chửi|đuổi|nghỉ việc|mất việc|trễ lương|nợ|quá tải|không chịu|lạnh nhạt|chia tay|ngoại tình|bỏ)\b/);
 const LOVE = VN(/\b(người yêu|ny|bạn gái|bạn trai|vợ|chồng|crush)\b/);
 export function multiIssueReply(q: string): string | null {
   if (words(q) < 25) return null;
+  // (12/11: "đám cưới bạn thân… buồn vì thấy mình chậm hơn mọi người" là MỘT chuyện so sánh; "phân vân giữa ở gần gia đình và sống xa" là MỘT lựa chọn)
+  const whole = heartThemeOf(q);
+  if (whole && !labelOf(whole)) return null;
+  if (VN(/\b(phân vân giữa|lưỡng lự giữa|chọn giữa|không biết nên chọn)\b/).test(N(q))) return null;
   const segs = q.split(/[,.;!?\n]+|\s+(?:còn|về nhà thì|rồi|mà|nhưng)\s+/u).map((x) => x.trim()).filter((x) => x.split(/\s+/).length >= 3);
   const labels: string[] = [];
+  // (12/11, G05-045: "đám cưới bạn thân… về nhà lại buồn vì thấy mình chậm hơn mọi người" — mẩu sau có chủ đề cụ thể "so sánh",
+  //   mẩu trước chỉ là bối cảnh → một chuyện)
+  if (segs.some((sg) => { const t = heartThemeOf(sg); return !!t && !labelOf(t) && !["sad", "tired", "lonely", "anxiety", "overthink", "health"].includes(t); })) return null;
   for (const sg of segs) {
     const n = N(sg);
     const th = heartThemeOf(sg);
-    const lb = (th && labelOf(th)) ?? (BOSS.test(n) ? "chuyện ở chỗ làm" : LOVE.test(n) ? "chuyện với người yêu" : undefined);
+    // (12/11: "sáng vẫn đi làm bình thường", "mình cũng thật lòng chúc mừng" — nhắc chỗ làm / người yêu mà KHÔNG có ý buồn, áp lực thì chỉ là
+    //   bối cảnh của chuyện chính, không phải một chuyện nữa cần gỡ)
+    const lb = (th && labelOf(th)) ?? (!SORE.test(n) ? undefined : BOSS.test(n) ? "chuyện ở chỗ làm" : LOVE.test(n) ? "chuyện với người yêu" : undefined);
     if (lb && !labels.includes(lb)) labels.push(lb);
   }
   if (labels.length < 2) return null;

@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: chuột rút, trầm cảm, mệt mỏi, lo âu.",
+   "text": "Triệu chứng hay gặp: chuột rút, trầm cảm, mệt mỏi, lo âu.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: loạn trương lực cơ nguyên phát, loạn trương lực cơ thứ phát, đột biến nhiễm sắc thể, xuất huyết não, ung thư phổi, do di truyền, bị đột biến nhiễm sắc thể, do thoái hóa thần kinh.",
+   "text": "Nguyên nhân / yếu tố liên quan: loạn trương lực cơ nguyên phát, loạn trương lực cơ thứ phát, đột biến nhiễm sắc thể, xuất huyết não, ung thư phổi, do di truyền, bị đột biến nhiễm sắc thể, do thoái hóa thần kinh.",
    "src": [
     0
    ]
@@ -38,7 +38,7 @@
  "course": [],
  "care": [
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

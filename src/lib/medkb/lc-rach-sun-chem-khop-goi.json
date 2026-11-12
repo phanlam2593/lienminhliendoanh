@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: sưng đau, đau khớp, trầm cảm, đau cổ, sưng, vảy, phù.",
+   "text": "Triệu chứng hay gặp: sưng đau, đau khớp, trầm cảm, đau cổ, sưng, vảy, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: đối với người trẻ, đối với người lớn tuổi, chấn thương, viêm khớp gối, chấn thương mạnh, thoái hóa tự nhiên, hành động đứng lên/ngồi xuống.",
+   "text": "Nguyên nhân / yếu tố liên quan: đối với người trẻ, đối với người lớn tuổi, chấn thương, viêm khớp gối, chấn thương mạnh, thoái hóa tự nhiên, hành động đứng lên/ngồi xuống.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giảm trọng lượng cơ thể, bảo vệ khớp, tập thể dục không tác động lên khớp gối, tăng cường cơ bắp xung quanh khớp gối, nghỉ ngơi và tái tạo, nguồn omega-3.",
+   "text": "Sinh hoạt / phòng ngừa: giảm trọng lượng cơ thể, bảo vệ khớp, tập thể dục không tác động lên khớp gối, tăng cường cơ bắp xung quanh khớp gối, nghỉ ngơi và tái tạo, nguồn omega-3.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

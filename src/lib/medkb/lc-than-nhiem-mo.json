@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: phù chân, sụt cân, mệt mỏi, chán ăn, tiểu ít, nám, phù.",
+   "text": "Triệu chứng hay gặp: phù chân, sụt cân, mệt mỏi, chán ăn, tiểu ít, nám, phù.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: hội chứng thận hư, nguyên phát, hội chứng thận hư thứ phát, xuất hiện protein trong nước tiểu, lối sống kém khoa học, tăng mỡ máu, giảm Albumin máu.",
+   "text": "Nguyên nhân / yếu tố liên quan: hội chứng thận hư, nguyên phát, hội chứng thận hư thứ phát, xuất hiện protein trong nước tiểu, lối sống kém khoa học, tăng mỡ máu, giảm Albumin máu.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: giữ cân nặng ở mức phù hợp, không hút thuốc lá, không uống rượu bia.",
+   "text": "Sinh hoạt / phòng ngừa: giữ cân nặng ở mức phù hợp, không hút thuốc lá, không uống rượu bia.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]

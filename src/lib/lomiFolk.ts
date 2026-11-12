@@ -363,7 +363,7 @@ export const FOLK: FolkEntry[] = [
     ],
     caution: [
       { text: "Bôi: thỉnh thoảng gây rát, ngứa, phát ban.", src: [0] },
-      { text: "Nhựa vàng (latex) uống để nhuận tràng gây đau quặn, tiêu chảy — FDA đã yêu cầu bỏ khỏi thuốc nhuận tràng không kê đơn. Chiết xuất lá uống có liên quan viêm gan cấp.", src: [0] },
+      { text: "Nhựa vàng (latex) uống để nhuận tràng gây đau quặn, tiêu chảy — cơ quan quản lý dược Mỹ đã yêu cầu bỏ khỏi thuốc nhuận tràng không kê đơn. Chiết xuất lá uống có liên quan viêm gan cấp.", src: [0] },
       { text: "Mang thai, cho con bú: uống nha đam ở mọi dạng có thể không an toàn.", src: [0] },
     ],
     topics: [
@@ -615,7 +615,7 @@ export const FOLK: FolkEntry[] = [
     name: "Cháo cóc / thịt cóc",
     names: ["cháo cóc", "thịt cóc", "ruốc cóc", "chà bông cóc", "trứng cóc", "gan cóc", "bột cóc", "con cóc", "cóc tía", "nấu cóc", "ăn thịt cóc", "ăn cóc", "cóc ăn", "cóc nướng", "món cóc", "cóc chiên", "cóc xào"], // 30/10 (nhật ký bí): "Cóc ăn đc k?" trước bị hỏi lại "chuyện gì vậy"
     verdict: "danger",
-    folk: [{ text: "Dân gian cho trẻ ăn thịt cóc (cháo cóc, ruốc cóc) để chữa suy dinh dưỡng vì giàu đạm, kẽm — cơ quan Bộ Y tế cảnh báo đây là nguy cơ nghiêm trọng.", src: [0] }],
+    folk: [{ text: "Dân gian cho trẻ ăn thịt cóc (cháo cóc, ruốc cóc) để chữa suy dinh dưỡng vì giàu đạm, kẽm — ngành y tế cảnh báo đây là nguy cơ nghiêm trọng.", src: [0] }],
     science: [
       { text: "Độc tố cóc (bufotoxin) có ở da, tuyến sau tai, gan, trứng — ở mọi giai đoạn từ trứng, nòng nọc đến cóc trưởng thành; thịt dễ nhiễm khi nhựa, gan, mật dập vào.", src: [0, 1] },
       { text: "Nấu chín KHÔNG làm mất độc — độc tố cóc không bị phân huỷ ở nhiệt độ sôi.", src: [0, 1] },
@@ -1155,7 +1155,7 @@ export const FOLK: FolkEntry[] = [
     tip: true,
     folk: [{ text: "Dân gian và quảng cáo hay nói ăn cá, uống dầu cá (omega-3) giúp sáng mắt, chữa khô mắt, ngừa thoái hoá điểm vàng.", src: [0, 1] }],
     science: [
-      { text: "Nghiên cứu lớn (DREAM, NIH): **viên** omega-3 từ dầu cá **không hơn giả dược** trong việc giảm triệu chứng hay dấu hiệu khô mắt.", src: [0] },
+      { text: "Nghiên cứu lớn (DREAM): **viên** omega-3 từ dầu cá **không hơn giả dược** trong việc giảm triệu chứng hay dấu hiệu khô mắt.", src: [0] },
       { text: "Nghiên cứu AREDS2 (NIH): thêm omega-3 vào công thức vitamin cho mắt **không làm giảm thêm** nguy cơ thoái hoá điểm vàng nặng; viên omega-3 không có tác dụng với đục thuỷ tinh thể.", src: [1] },
       { text: "Cá giàu omega-3 vẫn nên có trong bữa ăn vì tốt cho tim mạch.", src: [2] },
     ],
@@ -1542,7 +1542,7 @@ export const FOLK: FolkEntry[] = [
     science: [
       { text: "Bromelain uống: vài nghiên cứu cho thấy có thể giảm đau, sưng sau nhổ răng khôn — bằng chứng còn hạn chế.", src: [0] },
       { text: "Viêm xoang, thoái hoá khớp, đau cơ sau tập: chưa đủ nghiên cứu chất lượng để khuyên dùng.", src: [0] },
-      { text: "Dạng bôi: thuốc chứa bromelain được FDA duyệt năm 2022 để làm sạch mô hoại tử ở bỏng nặng (thuốc kê đơn, dùng ở bệnh viện).", src: [0] },
+      { text: "Dạng bôi: thuốc chứa bromelain được duyệt ở Mỹ năm 2022 để làm sạch mô hoại tử ở bỏng nặng (thuốc kê đơn, dùng ở bệnh viện).", src: [0] },
     ],
     caution: [
       { text: "Bromelain uống thường dung nạp tốt; tác dụng phụ hay gặp là khó chịu bụng, tiêu chảy.", src: [0] },

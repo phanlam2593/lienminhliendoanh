@@ -15,7 +15,7 @@
  ],
  "signs": [
   {
-   "text": "Triệu chứng nguồn có nhắc tới: thở khò khè, ho có đờm, đau ngực, buồn nôn, tăng cân, mệt mỏi, khó thở, chán ăn, ngất, vảy.",
+   "text": "Triệu chứng hay gặp: thở khò khè, ho có đờm, đau ngực, buồn nôn, tăng cân, mệt mỏi, khó thở, chán ăn, ngất, vảy.",
    "src": [
     0
    ]
@@ -23,7 +23,7 @@
  ],
  "causes": [
   {
-   "text": "Nguyên nhân / yếu tố liên quan nguồn có nhắc tới: bệnh tim bẩm sinh, viêm cơ tim, bệnh cơ tim, rối loạn nhịp tim, uống rượu quá mức, thiếu máu, bệnh tuyến giáp.",
+   "text": "Nguyên nhân / yếu tố liên quan: bệnh tim bẩm sinh, viêm cơ tim, bệnh cơ tim, rối loạn nhịp tim, uống rượu quá mức, thiếu máu, bệnh tuyến giáp.",
    "src": [
     0
    ]
@@ -38,13 +38,13 @@
  "course": [],
  "care": [
   {
-   "text": "Sinh hoạt / phòng ngừa nguồn có nhắc tới: ngừng hút thuốc lá, hạn chế uống rượu, giảm cân, cân bản thân hàng ngày, hạn chế ăn muối, không hút thuốc lá.",
+   "text": "Sinh hoạt / phòng ngừa: ngừng hút thuốc lá, hạn chế uống rượu, giảm cân, cân bản thân hàng ngày, hạn chế ăn muối, không hút thuốc lá.",
    "src": [
     0
    ]
   },
   {
-   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này — đọc bài đầy đủ ở nguồn bên dưới, và việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
+   "text": "Lomi chỉ có **tóm tắt ngắn** cho bệnh này (muốn đọc bài đầy đủ thì hỏi Lomi “nguồn đâu” để lấy đường dẫn); việc chẩn đoán, điều trị cần **bác sĩ** quyết định.",
    "src": [
     0
    ]
