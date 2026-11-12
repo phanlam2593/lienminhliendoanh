@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="vi">
+<html lang="vi" style="background:#04adad">
   <head>
     <script>
       (function() {
@@ -9,7 +9,7 @@
         } catch(e) {}
         try {
           var standalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-          if (!standalone) document.documentElement.setAttribute('data-hide-splash', '1');
+          if (!standalone) { document.documentElement.setAttribute('data-hide-splash', '1'); document.documentElement.style.background = ''; }
         } catch(e) {}
       })();
     </script>
@@ -24,7 +24,7 @@
         justify-content: center;
         /* Bắt đầu bằng ĐÚNG màu phẳng của splash hệ điều hành (background_color trong
            manifest) — để lúc chuyển giao không bị giật màu. Gradient sẽ "nở" ra sau. */
-        background: #0891b2;
+        background: #04adad;
         transition: opacity 0.4s ease;
         overflow: hidden;
       }
@@ -55,12 +55,25 @@
       #app-splash .app-splash-name {
         position: relative;
         z-index: 1;
-        margin-top: 20px;
+        margin-top: 22px;
         color: #fff;
+        /* (12/11, Kir) cùng kiểu chữ "iLomi" ở trang chủ (components/Logo Wordmark): Baloo 2 đậm 800, chấm chữ i là chiếc lá */
         font-family: 'Baloo 2', 'Plus Jakarta Sans', -apple-system, sans-serif;
-        font-size: 28px;
-        font-weight: 600;
-        letter-spacing: 0.2px;
+        font-size: 52px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.18);
+      }
+      #app-splash .app-splash-name .app-splash-i { position: relative; }
+      #app-splash .app-splash-name .app-splash-i svg {
+        position: absolute;
+        left: 50%;
+        top: -0.16em;
+        width: 0.4em;
+        height: 0.4em;
+        fill: #b9f6ca;
+        transform: translateX(-46%) rotate(-12deg);
       }
       #app-splash .app-splash-name span {
         display: inline-block;
@@ -74,12 +87,14 @@
       #app-splash .app-splash-tag {
         position: relative;
         z-index: 1;
-        margin-top: 6px;
-        color: rgba(255,255,255,0.8);
+        margin-top: 10px;
+        color: rgba(255,255,255,0.92);
         font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-        font-size: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
         opacity: 0;
-        animation: app-splash-fade 0.6s ease-out 1.15s forwards;
+        animation: app-splash-fade 0.5s ease-out 0.8s forwards;
       }
       @keyframes app-splash-fade {
         from { opacity: 0; transform: translateY(8px); }
@@ -159,9 +174,9 @@
     <div id="app-splash">
       <img src="/__l5e/assets-v1/24cf1f1b-163f-4107-8c1f-5aed79ea28fc/logo-256.png" alt="iLomi" />
       <div class="app-splash-name">
-        <span style="animation-delay:0.50s">i</span><span style="animation-delay:0.55s">L</span><span style="animation-delay:0.60s">o</span><span style="animation-delay:0.65s">m</span><span style="animation-delay:0.70s">i</span>
+        <span class="app-splash-i" style="animation-delay:0.50s">ı<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20C4 10 10 4 21 3c0 11-6 17-17 17z"/></svg></span><span style="animation-delay:0.55s">L</span><span style="animation-delay:0.60s">o</span><span style="animation-delay:0.65s">m</span><span style="animation-delay:0.70s">i</span>
       </div>
-      <div class="app-splash-tag">Một cộng đồng · Nhiều giá trị</div>
+      <div class="app-splash-tag">Một cộng đồng – Nhiều giá trị</div>
       <div class="app-splash-dots"><span></span><span></span><span></span></div>
     </div>
     <div id="root"></div>

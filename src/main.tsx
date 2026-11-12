@@ -30,7 +30,11 @@ const hideSplash = () => {
   const wait = Math.max(0, SPLASH_MIN_MS - elapsed);
   setTimeout(() => {
     splash.style.opacity = "0";
-    setTimeout(() => splash.remove(), SPLASH_FADE_MS);
+    setTimeout(() => {
+      splash.remove();
+      // (12/11) nền xanh đặt sẵn trên <html> (index.html) chỉ để lúc mở app không loé trắng — splash tắt thì trả về như cũ
+      document.documentElement.style.background = "";
+    }, SPLASH_FADE_MS);
   }, wait);
 };
 (window as any).__lomiHideSplash = hideSplash;
