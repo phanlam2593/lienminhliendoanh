@@ -93,7 +93,7 @@ Deno.serve(async (req) => {
         redirect: "follow",
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (compatible; LomiLinkPreview/1.0; +https://liendoanh.world) facebookexternalhit/1.1",
+            "Mozilla/5.0 (compatible; LomiLinkPreview/1.0; +https://ilomi.live) facebookexternalhit/1.1",
           Accept: "text/html,application/xhtml+xml",
         },
       });

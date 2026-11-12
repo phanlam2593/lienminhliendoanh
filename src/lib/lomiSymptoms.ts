@@ -54,6 +54,8 @@ const SYMPTOMS: Sym[] = [
   { id: "redeye", label: "đỏ mắt", re: VN(/\b(đỏ mắt|mắt đỏ|mắt bị đỏ|ghèn mắt|nhiều ghèn)\b/) },
   { id: "itcheye", label: "ngứa / chảy nước mắt", re: VN(/\b(ngứa mắt|chảy nước mắt|cay mắt|xót mắt)\b/) },
   { id: "dryeye", label: "khô mỏi mắt", re: VN(/\b(khô mắt|(bị|hay|dễ) mỏi mắt|mỏi mắt (quá|khi|lắm|hoài)|(?<!chóng )mắt mỏi|mờ mắt khi nhìn lâu|nhức mắt)\b/) }, // (11/11: "chóng mặt mỗi lần…" bỏ dấu thành "mat moi" — không phải mắt mỏi)
+  // 12/11 (Kir: "A bị giật mắt phải" → tưởng app giật lag): giật mí / máy mắt là chuyện cơ thể, có thẻ riêng (medkb/giat-mi-mat)
+  { id: "eyetwitch", label: "giật mí mắt", re: VN(/\b(giật (mí mắt|mí|mắt)|máy mắt|(mí mắt|mí|mắt)( phải| trái| trên| dưới)?( bị| cứ| hay| tự)? giật)\b/) },
   { id: "earpain", label: "đau tai / ù tai", re: VN(/\b(đau tai|ù tai|chảy mủ tai|chảy nước tai|nghe kém|nghe không rõ)\b/) },
   { id: "stuffy", label: "nghẹt mũi", re: VN(/\b(nghẹt mũi|ngạt mũi|tắc mũi|khó thở bằng mũi)\b/) },
   { id: "runny", label: "chảy nước mũi", re: VN(/\b(chảy mũi|sổ mũi|chảy nước mũi|nước mũi trong)\b/) },
@@ -927,6 +929,7 @@ const KID_NOTE =
 // câu hỏi chưa đủ để xác định nguyên nhân, và KHÔNG chọn một nguyên nhân làm của người hỏi.
 // Bảng nhỏ theo triệu chứng; triệu chứng chưa có trong bảng thì lấy tên các nhóm nguyên nhân từ CONDS.
 const COMMON_CAUSES: Record<string, string> = {
+  eyetwitch: "mệt mỏi, căng thẳng, uống nhiều cà phê / trà / nước tăng lực, rượu bia, đôi khi do thuốc đang dùng — nhiều lúc không tìm ra lý do; đa số tự hết sau vài ngày đến vài tuần",
   headache: "thiếu ngủ, mất nước, căng thẳng, mỏi mắt do nhìn màn hình, đau nửa đầu (migraine), nghẹt mũi/viêm xoang, cảm cúm hoặc nhiễm trùng, tư thế cổ vai gáy xấu, dùng thuốc giảm đau quá thường xuyên",
   dizzy: "thiếu ngủ, mất nước, hạ đường huyết khi nhịn đói, huyết áp thấp, đứng dậy quá nhanh, thiếu máu, rối loạn tiền đình, lo âu",
   fatigue: "thiếu ngủ, căng thẳng kéo dài, ăn uống thiếu chất, thiếu máu, cảm cúm hoặc nhiễm trùng, rối loạn giấc ngủ, vấn đề tuyến giáp, trầm buồn",
@@ -1310,6 +1313,7 @@ const SX_CARD: Record<string, string> = {
   numb: "te-bi-tay-chan",
   hairloss: "rung-toc",
   mouthulcer: "nhiet-mieng",
+  eyetwitch: "giat-mi-mat",
 };
 export const symptomCard = (id: string): string | undefined => SX_CARD[id];
 /**

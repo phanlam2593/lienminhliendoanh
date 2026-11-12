@@ -107,7 +107,7 @@ function issueSteps(kind: string): string {
     "2. Kiểm tra mạng — đổi qua lại wifi ↔ 4G thử",
     kind === "login"
       ? "3. Chắc chắn gõ đúng tên đăng nhập; quên mật khẩu thì bấm “Quên mật khẩu” ở màn đăng nhập"
-      : "3. Vẫn bị thì xoá app ngoài màn hình chính rồi cài lại từ liendoanh.world (dữ liệu không mất đâu)",
+      : "3. Vẫn bị thì xoá app ngoài màn hình chính rồi cài lại từ ilomi.live (dữ liệu không mất đâu)",
   ];
   return base.join("\n");
 }
@@ -119,8 +119,13 @@ function issueHead(q: string, kind: string): string {
   return ISSUE_TIP[kind];
 }
 
-function detectIssue(n: string): string | null {
-  for (const [k, re] of ISSUE) if (has(n, re)) return k;
+// "giật mắt", "mí mắt giật", "bắp chân bị giật"… là chuyện cơ thể, không phải app lag.
+const BODY_TWITCH = VN(/\b(giật (mắt|mí|môi|cơ|tay|chân|bắp|má|mặt|ngón|người|mình|đùi|vai|cổ|bụng)|(mắt|mí|mí mắt|môi|cơ|bắp|bắp tay|bắp chân|tay|chân|má|mặt|ngón tay|ngón chân|đùi|vai|cổ|bụng|người) (phải |trái |trên |dưới )?(bị |cứ |hay |tự |liên tục |)giật)\b/);
+function detectIssue(n: string, plain = n): string | null {
+  for (const [k, re] of ISSUE) if (has(n, re)) {
+    if (k === "lag" && has(plain, BODY_TWITCH) && !has(plain, VN(/\b(app|ứng dụng|web|màn hình|lomi|video|load)\b/))) continue;
+    return k;
+  }
   return null;
 }
 
@@ -251,7 +256,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
     if (VN(/\b(link|liên kết)\b/).test(n))
       return {
         intent: "ask_link",
-        text: "Link app nè: liendoanh.world 🌐 Gửi bạn bè mở bằng trình duyệt trên điện thoại, rồi bấm “Thêm vào màn hình chính” là xài như app luôn. Còn bạn cần link của chỗ nào khác thì nói Lomi nha!",
+        text: "Link app nè: ilomi.live 🌐 Gửi bạn bè mở bằng trình duyệt trên điện thoại, rồi bấm “Thêm vào màn hình chính” là xài như app luôn. Còn bạn cần link của chỗ nào khác thì nói Lomi nha!",
       };
     return { intent: "ask_info", text: "Bạn cần thông tin về gì nè? 😊 Một quán / doanh nghiệp, ưu đãi, hay về app iLomi? Nói Lomi nghe là có liền." };
   }
@@ -269,7 +274,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
     if (VN(/^(app|ứng dụng)( (à|a|hả|ha|nè|sao|này))?$/).test(n))
       return { intent: "short_app", text: "Bạn muốn hỏi gì về app nè? 📱 Cứ nói tự nhiên kiểu “nhận ưu đãi sao”, “đặt xe ở đâu” là Lomi chỉ liền." };
     if (VN(/^(link|liên kết)( (à|a|hả|ha|nè|đâu|app))?$/).test(n))
-      return { intent: "ask_link", text: "Link app nè: liendoanh.world 🌐 Còn bạn cần link chỗ khác thì nói Lomi nha!" };
+      return { intent: "ask_link", text: "Link app nè: ilomi.live 🌐 Còn bạn cần link chỗ khác thì nói Lomi nha!" };
     if (VN(/^(info|infor|thông tin)( (à|a|hả|ha|nè|gì))?$/).test(n))
       return { intent: "ask_info", text: "Thông tin về gì nè bạn? Quán nào, ưu đãi, hay về app? 😊" };
     if (VN(/^(cà phê|cafe)( (à|a|hả|ha|nè|không|hông|hong|ko|k|đi|nha))?$/).test(n))
@@ -290,7 +295,7 @@ export function understand(q: string, raw: string, ctx: UCtx, faqHit?: string): 
   // 2) Báo lỗi app — ý định trước, tone sau (":))" vẫn có thể là lỗi thật).
   const PROBLEM_FAQ = new Set(["notifmissing", "update", "logout", "offerlocked", "approve", "forgot", "forgotnoemail", "bizstatus"]);
   // 10/10: "a bị trẹo cổ" bỏ dấu = "bi treo" → tưởng app bị treo. Chữ gõ CÓ DẤU khác nghĩa ("trẹo", "chân"…) bị che trước khi so (lib/lomiAccent APP).
-  const kind = detectIssue(` ${normStrict(raw || q, APP)} `);
+  const kind = detectIssue(` ${normStrict(raw || q, APP)} `, n);
   // 01/11: câu ngắn kể chuyện CƠ THỂ ("bị gì mà mệt dữ vậy", "sao mà ho hoài") không nhắc app → không phải báo lỗi app
   const bodyTalk = !has(n, APP_REF) && VN(/\b(mệt|đau|sốt|ho|chóng mặt|buồn nôn|nôn|ói|ngứa|mỏi|nhức|khó thở|mất ngủ|tiêu chảy)\b/).test(` ${n} `) && /[^\x00-\x7F]/.test(raw || q);
   // 01/11 (vòng 25): "membership có LỢI gì" — bỏ dấu trùng "lỗi gì"; câu (đã đoán dấu) viết "lợi" mà không có "lỗi" thì không phải báo lỗi

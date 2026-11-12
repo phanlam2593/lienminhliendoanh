@@ -136,3 +136,20 @@ describe("12/11 — tâm sự", () => {
     expect(k.content).not.toMatch(/Đi ăn \*\*Cơm\*\*/);
   }, T);
 });
+
+describe("12/11 (đợt 2) — giật mắt là chuyện sức khoẻ, link app là ilomi.live", () => {
+  it("'A bị giật mắt phải' đưa thẻ giật mí mắt, không phải mẹo app đơ; 'app bị giật' vẫn là lỗi app", async () => {
+    for (const q of ["A bị giật mắt phải", "mí mắt giật liên tục mấy ngày nay", "mắt giật cả tuần rồi", "giật mí mắt có sao không"]) {
+      const a = (await last([q])).content;
+      expect(a, q).toMatch(/Giật mí mắt/);
+      expect(a, q).not.toMatch(/App đang chậm|cài lại/);
+      expect(a, q).not.toMatch(NAMES);
+    }
+    expect((await last(["mắt trái cứ giật hoài là bị gì"])).content).toMatch(/căng thẳng/);
+    expect((await last(["bắp chân bị giật"])).content).not.toMatch(/App đang chậm/);
+    const app = (await last(["app bị giật quá"])).content;
+    expect(app).toMatch(/App đang chậm/);
+    expect(app).toMatch(/ilomi\.live/);
+    expect(app).not.toMatch(/liendoanh\.world/);
+  }, T);
+});
