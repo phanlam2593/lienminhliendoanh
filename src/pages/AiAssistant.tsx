@@ -139,7 +139,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { kinSupportText } from "@/lib/lomiHeart";
-import { byeHello, calcReply, fixTypos, metaReply, tarotHowto } from "@/lib/lomiRescue";
+import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaReply, outOfScope, tarotHowto, thanksGreet } from "@/lib/lomiRescue";
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
@@ -512,6 +512,7 @@ export function AiChat({
   // 20/10 (audit): hook phải gọi TRƯỚC lần return sớm — trước đây useRef nằm sau dòng này, đăng nhập / đăng xuất khi khung chat đang mở
   //   làm React báo "rendered more hooks than during the previous render" và khung chat sập.
   const rawRef = useRef<string | null>(null); // câu người dùng gõ nguyên văn của lượt đang xử lý
+  const coreRef = useRef<string | null>(null); // (12/11) phần ý chính khi câu có lời mở đầu xã giao ("cho mình hỏi về sốt" → "sốt")
   if (!user) return <div className="p-8 text-center text-sm text-muted-foreground">{t("community.needLogin")}</div>;
 
   const left = quota ? Math.max(0, quota.limit - quota.used) : null;
@@ -1333,7 +1334,7 @@ export function AiChat({
       if (rf0 && !reply.content.includes("chưa lọc được")) reply = { ...reply, content: `${reply.content}\n\n${rf0.replace(/^Lomi chưa lọc được theo/u, "Lưu ý: Lomi chưa lọc được theo")}` };
     }
     // 01/11: câu nêu một bệnh có thẻ mà câu đáp chỉ là "nghe nè, kể thêm đi" → hỏi lại đúng người + đúng bệnh (lib/lomiReplyGate.vagueMiss)
-    const vm = gate || en ? null : vagueMiss(rawRef.current ?? asked, reply);
+    const vm = gate || en ? null : vagueMiss(coreRef.current ?? rawRef.current ?? asked, reply);
     if (vm) reply = { ...reply, content: vm.text, med: { id: vm.medId }, quick: vm.quick, talk: undefined };
     // 22/10: câu gõ tiếng Anh mà không lớp nào hiểu → nói bằng tiếng Anh (không đáp "Câu này Lomi chưa hiểu ý lắm" bằng tiếng Việt).
     if ((reply.unk || reply.stuck) && looksEnglish(rawRef.current ?? asked)) reply = { ...reply, content: englishFallback(rawRef.current ?? asked) };
@@ -1509,6 +1510,7 @@ export function AiChat({
     const typed = text.trim(); // câu NGUYÊN VĂN người dùng gõ — hiện trong bong bóng, gửi khi báo cáo / Dạy Lomi
     if (!typed || busy) return;
     rawRef.current = typed;
+    coreRef.current = null;
     rewroteRef.current = false;
     viEchoRef.current = null;
     const stk = parseStickerToken(typed);
@@ -1600,6 +1602,23 @@ export function AiChat({
     // (31/10: chữ tiếng Anh đã đổi sang tiếng Việt ở viMixFix cũng phải có trong câu "người dùng gõ" của bộ đọc câu — không thì các luật
     //   khớp "chia tay", "quên uống thuốc" trên câu đã đổi lại bị bộ đọc chặn vì người dùng không gõ chữ đó)
     let typedFix = en ? typed : viMixFix(fixTypos(typedV)); // (12/11: cùng bản đã sửa lỗi gõ — "sổ dấu" đọc câu này, không thì luật bỏ qua chữ đã sửa)
+    // 12/11: lời mở đầu chỉ là xã giao — "cảm ơn bạn nhưng cho mình hỏi thêm về sốt", "cho mình hỏi về sốt", "mình muốn hỏi về sốt" →
+    //   đọc phần đứng sau ("sốt") như một câu hỏi bình thường (trước đây: "Không có gì nè", "chưa có kiến thức", "Từ từ thôi nha, Lomi vẫn nghe").
+    if (!en && !forceAi) {
+      const pre = raw.normalize("NFC").match(/^\s*(?:(?:thôi\s+)?(?:cảm ơn|cám ơn|thanks|thank you)[^,.!?]{0,25}?[,.!]?\s*(?:nhưng mà|nhưng|mà)\s+)?(?:(?:lomi|bạn)\s*(?:ơi)?\s*,?\s*)?(?:cho\s+(?:mình|em|tôi|tui|anh|chị|cháu|con)\s+hỏi|(?:mình|em|tôi|tui|anh|chị|cháu|con)\s+(?:muốn|cần)\s+hỏi)(?:\s+(?:thêm|chút|xíu|tí))?\s+về\s+(.{2,})$/iu);
+      // ("Thôi bỏ qua, tối nay quanh Hồ Tây có quán bún nào ngon?", "Giờ bỏ bài đi, gợi ý món tối…", "Chuyện khác hoàn toàn nha: …" — đổi chủ đề)
+      const sw = raw.normalize("NFC").match(/^\s*(?:thôi|giờ|ok|okie)?\s*(?:bỏ qua|bỏ đi|bỏ bài đi|bỏ vụ app(?: đi)?(?: nha| nhé)?|thôi bỏ đi|chuyển đề tài(?: nha| nhé)?|nói chuyện khác(?: đi)?|chuyện khác(?: hoàn toàn)?(?: nha| nhé)?|đổi chủ đề(?: nha| nhé)?)\s*[,.:!]\s*(\S+(?:\s+\S+){2,})$/iu);
+      if (sw) {
+        raw = sw[1].trim();
+        typedFix = raw;
+        coreRef.current = raw;
+      }
+      if (pre && !/(chuyện|việc) (của )?(mình|em|tôi|tui)/iu.test(pre[1]) && !/^(thuốc|cách|vụ|chuyện|cái)\s/iu.test(pre[1].trim())) {
+        raw = pre[1].trim();
+        typedFix = raw;
+        coreRef.current = raw;
+      }
+    }
     // 01/11 (vòng 24): "mắt bị mờ", "tai tôi bị ù", "răng tôi bị ê buốt", "chân con bị sưng" — tiếng Việt nói được cả hai chiều
     //   (bộ phận + triệu chứng / triệu chứng + bộ phận); kho đặt tên theo chiều "mờ mắt", "ù tai". Đảo lại, CHỈ nhận khi câu đảo khớp
     //   đúng một chủ đề mà câu gốc không khớp (gõ không dấu thì câu đã đoán dấu ở trên).
@@ -1724,6 +1743,16 @@ export function AiChat({
         const tpO = ob.topic ?? detectBizTopic(q);
         return tpO ? bizReply(q, detectBizKind(q), tpO) : askBiz(q);
       }
+      // 12/11 (bộ 1.000 câu, nhóm trò chuyện): câu có ý rất rõ — phép tính / bài toán đố (kể cả nối phép tính ngay trước),
+      //   hỏi Lomi là người hay máy, cảm ơn / chào, câu hẳn ra ngoài phạm vi — đáp ngay, không để các lớp đoán chủ đề hiểu lệch
+      //   ("cà phê" → tìm quán, "mệt" → tâm sự, "đậu xe" → bệnh).
+      const lastAs = [...msgs].reverse().find((m) => m.role === "assistant");
+      const early = calcReply(raw, lastAs?.content) ?? chatAboutLomi(raw) ?? thanksGreet(raw) ?? outOfScope(raw) ?? (lastAs?.drug || lastAs?.med || lastAs?.health ? null : foodChat(raw, msgs.length));
+      if (early) return localReply(q, { role: "assistant", content: early, local: true });
+      //   câu hỏi cách dùng app nhắc rõ iLomi / một mục trong app → câu hỏi thường gặp tương ứng (lib/lomiRescue.appAskId)
+      const aid = appAskId(raw, matchFaq);
+      const aff = aid ? faqById(aid) : undefined;
+      if (aff) return answerFaq(aff, q);
     }
     if (!forceAi && !en && !danger0) {
       const pu = [...msgs].reverse().find((m) => m.role === "user");

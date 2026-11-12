@@ -129,6 +129,8 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
   // 30/10 (rà câu hiểu lầm: "ông nội bị té ngã đập đầu" → đáp như bị bạo hành): TÉ / NGÃ / TRƯỢT mà đập đầu là tai nạn, không phải bị đánh
   //   (trừ khi câu có chữ đánh, tát, đấm, xô, đẩy… — "bị chồng xô ngã đập đầu" vẫn là bạo lực).
   if (/(?:^| )(?:té|ngã|trượt|vấp|té xe|ngã xe|rơi|lật xe|tai nạn|te|nga|truot|vap|roi)(?: |$)/u.test(` ${raw.normalize("NFC").toLowerCase()} `) && !/(đánh|tát|đấm|đạp|xô|đẩy|bóp cổ|bạo|hành hạ|danh|tat|xo|day)/u.test(raw.normalize("NFC").toLowerCase())) return null;
+  // 12/11: "mẹ cầm dao chặt gà ngoài sân" — dao để làm bếp (chặt / thái / gọt / băm đồ ăn), không phải hung khí, nếu câu không có chữ doạ / đánh người
+  if (/(?:^| )(?:chặt|thái|gọt|băm|lọc|mổ|làm|cắt) (?:\S+ )?(?:gà|vịt|thịt|cá|rau|củ|xương|dưa|trái cây|hoa quả|hành|tỏi|sườn|heo|bò)(?: |$)/u.test(` ${raw.normalize("NFC").toLowerCase()} `) && !/(đánh|doạ|dọa|đe|chém (người|em|mẹ|con|tôi|tui|mình)|đâm|đuổi|rượt)/u.test(raw.normalize("NFC").toLowerCase())) return null;
   const you = youOf(ctx.addr);
   // Người gây ra: chủ ngữ của câu (nếu là người khác), không có thì người đang được nhắc từ lượt trước.
   const subj = f && f.subject === "third" && f.subjectText ? f.subjectText.split(YOU_MARK).join(you) : undefined;

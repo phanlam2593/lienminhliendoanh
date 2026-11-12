@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol" | "weapon";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -56,6 +56,8 @@ const DROWN = VN(/\b(đuối nước|chết đuối|ngạt nước|chìm nước
 const BLEED = VN(/\b(chảy máu (nhiều|không cầm|không ngừng|không dứt|xối xả|ồ ạt|quá trời|dữ lắm|đầm đìa)|máu chảy (nhiều|không ngừng|không cầm|xối xả|ồ ạt|quá trời)|mất (nhiều|rất nhiều) máu|máu phun|chảy máu (ở )?đầu|vỡ đầu|toác đầu)\b/);
 const NOSE_GUM = VN(/\b(chảy máu cam|máu cam|chân răng|nướu|lợi|kinh nguyệt|đến tháng|hành kinh|rong kinh|cường kinh|hiến máu)\b/);
 // Chuyện đọc / xem ở đâu đó (tin tức, phim, truyện) — không phải đang xảy ra với người dùng.
+const WEAPON = VN(/\b(cầm|cầm theo|mang theo|vác|rút|lăm lăm|có) (con )?(dao|súng|mã tấu|kiếm|dao găm|dao phay|búa|rựa|gậy sắt|tuýp sắt|axit|a xít)\b/);
+const WEAPON_ACT = VN(/\b(đe doạ|đe dọa|dọa|doạ|hăm|đòi (giết|chém|đâm|xử)|xông (vào|tới)|đứng (trước|ngoài) (cửa|nhà|cổng)|trước cửa|ngoài cửa|trước cổng|rượt|đuổi (đánh|chém)|chém|đâm|tấn công|phá cửa)\b/);
 const HEARSAY = VN(/\b(tin tức|đọc báo|trên báo|xem tin|bản tin|đọc tin|trên mạng|trên tivi|trong phim|xem phim|đọc truyện|trong truyện|trong game)\b/);
 const BURN = VN(/\b((bị|vừa bị|mới bị|lỡ bị) (bỏng|phỏng)(?! (nắng|lưỡi))|(bỏng|phỏng) (nước sôi|nước nóng|lửa|dầu|dầu nóng|điện|hoá chất|hóa chất|axit|nặng|nồi|bô|ô bô|pô|cháy|canh nóng|cháo nóng))\b/);
 // Phản vệ: theo thẻ soc-phan-ve và trang NHS "Insect bites and stings" — môi / miệng / lưỡi / họng sưng đột ngột, họng thít, khó thở.
@@ -135,6 +137,14 @@ export function urgentOf(text: string): Urgent | null {
   //   Chạy TRƯỚC giới hạn 30 chữ và lọc "nghe kể" — câu kể dài của phụ huynh ("cháu bảo va đầu…") vẫn phải được cảnh báo.
   if (HEAD_HIT.test(n) && HEAD_BAD.test(n) && !KNOWLEDGE.test(n))
     return { id: "fall", card: "chan-thuong-dau", aspect: "emergency", head: `🚨 Bị va đập đầu mà **nôn, buồn ngủ / khó giữ tỉnh, lơ mơ, lú lẫn, co giật hoặc ngất** là dấu hiệu cần xử trí khẩn → ${CALL}, hoặc đưa đến **cấp cứu** ngay. Trong lúc chờ, đừng để người đó ngủ một mình và theo dõi sát.` };
+  // 12/11 (bộ 1.000 câu, G02-095 — "bạn e ib bảo có ng cầm dao đe dọa ngay trc cửa, bh giúp nó sao" từng được đáp cách nhắn tin trong app):
+  //   có người CẦM HUNG KHÍ đe doạ / xông tới → gọi 113 ngay. Người kể nghe lại từ bạn ("bạn em nhắn bảo…") vẫn là chuyện thật đang xảy ra.
+  if (WEAPON.test(n) && WEAPON_ACT.test(n) && !HEARSAY.test(n) && !/\b(mo thay|nam mo|phim|truyen|game)\b/.test(n) && !VN(/\b(gà|thịt|cá|rau|củ|chặt|gọt|thái|nấu|bếp|dưa|trái cây|hoa quả)\b/).test(n))
+    return {
+      id: "weapon",
+      head: "🚨 Có người **cầm hung khí đe doạ** là nguy hiểm ngay lúc này — gọi **113** (công an) ngay, đừng chờ.",
+      extra: "• Ở yên trong nhà, **khoá cửa**, tránh xa cửa ra vào và cửa sổ; đừng ra nói chuyện hay giằng co với người đó.\n• Nếu người gặp chuyện là **bạn / người thân** của bạn: nhắn họ gọi 113 ngay và làm như trên — hoặc **bạn gọi 113 giúp**, nói rõ địa chỉ của họ.\n• Có ai bị thương thì gọi **115**.\n• Nhờ hàng xóm, bảo vệ khu nhà hỗ trợ nếu gần đó có người. An toàn của mình là trên hết, đừng tự xử lý.",
+    };
   if (n.trim().split(" ").length > 30) return null;
   if (KNOWLEDGE.test(n) || HEARSAY.test(n)) return null;
   const other = OTHER.test(n);

@@ -184,7 +184,7 @@ describe("D — chuyển chủ đề khi đang tâm sự", () => {
     const r = await run(["A đang buồn", "Giúp anh tính tiền lương.", "26 x 350000"]);
     expect(r[1].heart).toBeUndefined();
     expect(r[1].content).toMatch(/phép tính/);
-    expect(r[2].content).toMatch(/9100000/);
+    expect(r[2].content).toMatch(/9\.?100\.?000/); // (12/11: số có dấu chấm ngăn hàng nghìn)
   });
   it("35. thất nghiệp → học tiếng Anh → 'quay lại chuyện tìm việc lúc nãy' → về lại mạch công việc", async () => {
     const r = await run(["A đang thất nghiệp.", "Tìm việc mãi không được.", "Học tiếng Anh với anh một chút được không?", "Thôi quay lại chuyện tìm việc lúc nãy đi."]);
