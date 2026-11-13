@@ -102,3 +102,19 @@ describe("thực phẩm, rau, trái cây — tác dụng", () => {
     expect((await last(["tinh bột nghệ có tác dụng gì"])).content).toMatch(/\*\*Nghệ\*\*/);
   }, T);
 });
+
+describe("thực phẩm chức năng / thực phẩm hay hỏi — giấm táo, hạt chia, whey, collagen", () => {
+  it("trả lời có liều tham khảo, lưu ý thuốc / bệnh thận, chỉ một dòng 'tham khảo', không nêu tên nguồn", async () => {
+    const a = (await last(["uống giấm táo có giảm cân không"])).content;
+    expect(a).toMatch(/Giấm táo[\s\S]*chưa chứng minh[\s\S]*2 thìa canh[\s\S]*insulin/);
+    expect((await last(["hạt chia có tác dụng gì"])).content).toMatch(/Hạt chia[\s\S]*táo bón[\s\S]*2 thìa canh/);
+    const w = (await last(["uống whey có tốt không"])).content;
+    expect(w).toMatch(/15–30 g đạm[\s\S]*Bệnh thận/);
+    const c = (await last(["collagen có tác dụng gì"])).content;
+    expect(c).toMatch(/chưa có bằng chứng mạnh[\s\S]*kem chống nắng/);
+    for (const x of [a, w, c]) {
+      expect(x.match(/tham khảo/g)?.length).toBe(1);
+      expect(x).not.toMatch(/Mayo|MedlinePlus|NCCIH/);
+    }
+  }, T);
+});
