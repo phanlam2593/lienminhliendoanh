@@ -15,11 +15,13 @@ describe("lomiFolk — dữ liệu", () => {
         const host = new URL(s.url).hostname.replace(/^www\./, "");
         expect(TRUSTED.some((d) => host === d || host.endsWith(`.${d}`)), `${f.id}: ${host}`).toBe(true);
       }
-      const facts = [...f.folk, ...f.science, ...(f.how ?? []), ...f.caution, ...f.topics];
+      const facts = [...f.folk, ...f.science, ...(f.how ?? []), ...(f.dose ?? []), ...f.caution, ...f.topics];
+      // 13/11 (Kir cho ghi liều tham khảo): con số liều chỉ được nằm ở mục liều (dose) và bài thuốc (how).
+      const doseOk = new Set([...(f.how ?? []), ...(f.dose ?? [])]);
       for (const x of facts) {
         expect(x.src.length, `${f.id}: ${x.text}`).toBeGreaterThan(0);
         for (const i of x.src) expect(f.sources[i], `${f.id}: src ${i}`).toBeTruthy();
-        expect(DOSE.test(x.text), `${f.id} có liều: ${x.text}`).toBe(false);
+        if (!doseOk.has(x)) expect(DOSE.test(x.text), `${f.id} có liều: ${x.text}`).toBe(false);
         expect(x.text.length, `${f.id}: ${x.text}`).toBeLessThanOrEqual(220);
       }
       for (const t of f.topics) expect(IDS.has(t.id), `${f.id}: thẻ ${t.id} không có`).toBe(true);

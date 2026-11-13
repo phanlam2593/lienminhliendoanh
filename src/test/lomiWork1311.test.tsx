@@ -65,12 +65,14 @@ describe("va chạm bỏ dấu & sức khoẻ", () => {
 describe("tư vấn dược liệu — bồ kết", () => {
   it("quả bồ kết: tên khác, dùng ngoài / uống, cảnh báo độc, bà bầu; không còn 2 dòng Kir bỏ", async () => {
     const a = (await last(["trái bồ kết có tác dụng gì"])).content;
-    expect(a).toMatch(/Bồ kết \(quả\)/);
+    expect(a).toMatch(/\*\*Bồ kết\*\*/);
     expect(a).toMatch(/tạo giác/);
     expect(a).toMatch(/Dùng ngoài/);
-    expect(a).toMatch(/HƠI CÓ ĐỘC/);
+    expect(a).toMatch(/hơi có độc/);
     expect(a).toMatch(/Phụ nữ có thai không được dùng/);
-    expect(a).not.toMatch(/Thông tin tham khảo theo y học cổ truyền|chủ yếu trên động vật/);
+    expect(a).not.toMatch(/Thông tin tham khảo theo y học cổ truyền|chủ yếu trên động vật|Long Châu|Tài liệu ghi/);
+    expect(a).toMatch(/Liều thường dùng[\s\S]*0,5–1 g/);
+    expect(a.match(/tham khảo/g)?.length, "chỉ nói 'tham khảo' một lần").toBe(1);
     expect((await last(["gai bồ kết chữa bệnh gì"])).content).toMatch(/Gai bồ kết[\s\S]*tạo giác thích/);
     const b = (await last(["bạch sâm có tác dụng gì"])).content;
     expect(b).toMatch(/Y học hiện đại có nghiên cứu liên quan tới/);
