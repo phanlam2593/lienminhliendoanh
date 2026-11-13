@@ -34,7 +34,7 @@ Nguyên tắc chọn là **"nhánh nào khớp trước thì thắng"**. Gần n
 - chủ quán đau bụng nôn ói → mẹo mở quán
 - đang trải bài mà nói "rút toàn lá căng thẳng" → thẻ bệnh "Căng thẳng"
 
-Mỗi lần sửa phải thêm một luật hẹp chặn trước. Cách này đã đưa điểm từ 65% lên 86,7%, nhưng càng thêm càng dễ va nhau.
+Mỗi lần sửa phải thêm một luật hẹp chặn trước. Cách này đã đưa điểm từ 65% lên 88,8%, nhưng càng thêm càng dễ va nhau.
 
 Đề xuất kiến trúc của đợt kiểm toán (đọc nguyên văn trong `scripts/lomi-audit/BAO_CAO_KIEM_TOAN_LOVABLE.md`, mục F):
 1. **Lớp an toàn chạy TRƯỚC mọi lớp, ở một chỗ duy nhất.** Có tín hiệu rủi ro thì cấm nhánh nhắc lại câu và biểu tượng vui; cờ rủi ro mang qua các lượt sau.
@@ -60,9 +60,9 @@ Mỗi lần sửa phải thêm một luật hẹp chặn trước. Cách này đ
 ## 5. Thước đo (bắt buộc, chạy sau mỗi nhóm)
 Tất cả chạy từ gốc repo:
 1. `npx tsc --noEmit -p tsconfig.app.json`: không lỗi.
-2. `npx vitest run --exclude "src/test/tmp/**"`: **2.460 test phải qua hết** (mất ~11 phút; chạy nền rồi chờ). Test cũ chỉ được sửa nếu nó kiểm hình thức (vd chuỗi số "9100000" thành "9.100.000"), không được sửa để che lỗi hành vi. Sửa test nào thì ghi rõ trong báo cáo.
-3. `LOMI_PARA=1 LOMI_CONVO=1 npx vitest run src/test/lomiConvoBank.test.tsx src/test/lomiParaphrase.test.tsx`: hai bộ đề ChatGPT. Hiện qua hết; tỉ lệ in ra phải ≥ ~97%.
-4. `bash scripts/lomi-audit/rerun.sh`: bộ 1.000 câu kiểm toán (985 câu chấm được, ~10 phút). Chuẩn hiện tại **854/985 = 86,7%**. Theo từng lớp:
+2. `npx vitest run --exclude "src/test/tmp/**"`: **2.468 test phải qua hết** (mất ~11 phút; chạy nền rồi chờ). Test cũ chỉ được sửa nếu nó kiểm hình thức (vd chuỗi số "9100000" thành "9.100.000"), không được sửa để che lỗi hành vi. Sửa test nào thì ghi rõ trong báo cáo.
+3. `LOMI_PARA=1 LOMI_CONVO=1 npx vitest run src/test/lomiConvoBank.test.tsx src/test/lomiParaphrase.test.tsx`: hai bộ đề ChatGPT. Hiện qua hết; tỉ lệ in ra quanh 96,5–97% (dao động vài câu giữa các lần chạy vì Lomi chọn ngẫu nhiên vài câu đáp; so từng câu với bản chính nếu nghi).
+4. `bash scripts/lomi-audit/rerun.sh`: bộ 1.000 câu kiểm toán (985 câu chấm được, ~10 phút). Chuẩn hiện tại **875/985 = 88,8%** (13/11). Theo từng lớp:
 
    | Lớp | Đúng |
    |---|---|
@@ -70,11 +70,11 @@ Tất cả chạy từ gốc repo:
    | biz | 53/66 |
    | chat | 92/95 |
    | faq | 102/109 |
-   | food | 67/91 |
-   | health | 198/230 |
+   | food | 71/91 |
+   | health | 203/230 |
    | heart | 169/176 |
-   | safety | 25/29 |
-   | tarot | 59/77 |
+   | safety | 26/29 |
+   | tarot | 70/77 |
 
    Sau đó chạy `python3 -I scripts/lomi-audit/diff_baseline.py` để in từng câu bị **hỏng** so với chuẩn. **Không được hỏng câu nào ở lớp `safety`.** Tổng điểm không được giảm. `fails.py <lớp>` liệt kê câu sai theo lớp.
 
@@ -88,7 +88,7 @@ Bộ chạy thử hội thoại: `src/test/lomiChatHarness` (`chat(turns, {seed}
 - Ghi tiến độ liên tục vào `scripts/lomi-audit/HANDOFF_KIEN_TRUC.md`: nhóm nào đã chuyển, số đo sau mỗi bước, quyết định thiết kế, việc còn dở. Một phiên khác (mô hình nhẹ hơn) sẽ đọc file này để làm tiếp, nên viết sao cho đọc là hiểu.
 - **Khi nào được merge vào `main` và deploy:** chỉ khi đủ cả 4 điều sau:
   - tất cả thước đo ở mục 5 đều đạt
-  - bộ 1.000 câu ≥ 86,7% và 0 câu safety bị hỏng
+  - bộ 1.000 câu ≥ 88,8% và 0 câu safety bị hỏng
   - bộ giữ riêng không giảm
   - build sạch
 

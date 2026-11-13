@@ -33,7 +33,7 @@ export function classify(m: Turn): string {
   const c = m.content;
   if (/đáp lạc|hiểu nhầm|hiểu chưa đúng/.test(c)) return "fix";
   if (m.harm || /Ngày Mai|096 306 1414|1900 969 680|\b113\b/.test(c)) return "safety";
-  if (m.tarot || m.tarotAwait || m.tarotRef || m.tarotBack || m.tarotGate) return "tarot";
+  if (m.tarot || m.tarotAwait || m.tarotRef || m.tarotBack || m.tarotGate || m.tarotCard) return "tarot";
   if (m.med || m.drug || m.diet || m.health || m.sx?.length || m.hsub) return "health";
   if (m.dishAsk || m.dish || m.dishPick || m.places?.length || m.search) return "food";
   if (m.biz) return "biz";

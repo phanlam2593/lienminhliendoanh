@@ -139,7 +139,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { kinSupportText } from "@/lib/lomiHeart";
-import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaReply, outOfScope, tarotHowto, thanksGreet } from "@/lib/lomiRescue";
+import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaReply, outOfScope, tarotCardAsk, tarotHowto, thanksGreet } from "@/lib/lomiRescue";
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
@@ -220,6 +220,7 @@ type Msg = {
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
   talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
+  tarotCard?: boolean; // (13/11) Lomi vừa giải nghĩa một lá có nêu tên (lib/lomiRescue.tarotCardAsk)
   tarotRef?: TarotReading; // trải bài đang được nói tới (không vẽ lại lá) — để hỏi nối sau một câu giải thích vẫn đúng trải đó
   // 11/10: trải bài rút cách đây 1–3 lượt, giữa chừng đã nói sang chuyện khác ("nhưng người ấy không nhắn 2 tuần rồi") — câu sau nhắc rõ
   // "lá / bài / rút thêm" thì vẫn là hỏi về đúng trải bài đó (n = số lượt đã trôi qua).
@@ -590,7 +591,7 @@ export function AiChat({
     // Câu gõ đầy đủ (kể cả phần kể chuyện trước chữ "bói") giúp Lomi hiểu tâm trạng người hỏi.
     // 08/10: chỉ coi là "có chuyện kể kèm" khi ngoài câu hỏi và mấy chữ nhờ bói ra còn ít nhất vài từ — nếu không,
     // "bói tarot xem người ấy còn tình cảm không" (câu đầu tiên) bị mở đầu bằng "Nối tiếp chuyện mình đang nói lúc nãy".
-    const extra = normalizeVi(asked).replace(normalizeVi(question), " ").replace(VN(/\b(bói|tarot|xem|rút|bài|lá|trải|giúp|giùm|dùm|cho|mình|em|e|a|anh|chị|lomi|đi|nha|nhé|nhe|thử|coi|về|chuyện|một|ba|năm|mười|1|3|5|10|ơi|với)\b/g), " ").trim();
+    const extra = normalizeVi(asked).replace(normalizeVi(question), " ").replace(VN(/\b(bói|bóc|bốc|ơi|đc|được|không|khôg|ko|tarot|xem|rút|bài|lá|trải|giúp|giùm|dùm|cho|mình|em|e|a|anh|chị|lomi|đi|nha|nhé|nhe|thử|coi|về|chuyện|một|ba|năm|mười|1|3|5|10|ơi|với)\b/g), " ").trim();
     let ctx = context ?? (question && extra.split(/\s+/).filter(Boolean).length >= 3 ? asked : undefined);
     // "trải 5 lá về tiền bạc": số lá nằm ngoài phần câu hỏi → vẫn phải rút đúng 5 lá.
     if (!ctx && question && ((spreadFromText(asked) && !spreadFromText(question)) || (oneCardAsk(asked) && !oneCardAsk(question)))) ctx = asked;
@@ -1607,7 +1608,7 @@ export function AiChat({
     if (!en && !forceAi) {
       const pre = raw.normalize("NFC").match(/^\s*(?:(?:thôi\s+)?(?:cảm ơn|cám ơn|thanks|thank you)[^,.!?]{0,25}?[,.!]?\s*(?:nhưng mà|nhưng|mà)\s+)?(?:(?:lomi|bạn)\s*(?:ơi)?\s*,?\s*)?(?:cho\s+(?:mình|em|tôi|tui|anh|chị|cháu|con)\s+hỏi|(?:mình|em|tôi|tui|anh|chị|cháu|con)\s+(?:muốn|cần)\s+hỏi)(?:\s+(?:thêm|chút|xíu|tí))?\s+về\s+(.{2,})$/iu);
       // ("Thôi bỏ qua, tối nay quanh Hồ Tây có quán bún nào ngon?", "Giờ bỏ bài đi, gợi ý món tối…", "Chuyện khác hoàn toàn nha: …" — đổi chủ đề)
-      const sw = raw.normalize("NFC").match(/^\s*(?:thôi|giờ|ok|okie)?\s*(?:bỏ qua|bỏ đi|bỏ bài đi|bỏ vụ app(?: đi)?(?: nha| nhé)?|thôi bỏ đi|chuyển đề tài(?: nha| nhé)?|nói chuyện khác(?: đi)?|chuyện khác(?: hoàn toàn)?(?: nha| nhé)?|đổi chủ đề(?: nha| nhé)?)\s*[,.:!]\s*(\S+(?:\s+\S+){2,})$/iu);
+      const sw = raw.normalize("NFC").match(/^\s*(?:thôi|giờ|ok|okie)?\s*(?:bỏ qua(?: chuyện (?:nhà|đó|này|kia|đó đi|cũ))?|bỏ chủ đề (?:đó|này|kia)(?: đi)?(?: nha| nhé)?|bỏ đi|bỏ bài đi|bỏ vụ app(?: đi)?(?: nha| nhé)?|thôi bỏ đi|chuyển đề tài(?: nha| nhé)?|nói chuyện khác(?: đi)?|chuyện khác(?: hoàn toàn)?(?: nha| nhé)?|đổi chủ đề(?: nha| nhé)?)\s*[,.:!]\s*(\S+(?:\s+\S+){2,})$/iu);
       if (sw) {
         raw = sw[1].trim();
         typedFix = raw;
@@ -1734,6 +1735,20 @@ export function AiChat({
     const redNow = !forceAi && !en && redFlagsIn(q).length > 0;
     //   (P0-4: câu kể bị đánh / bị doạ / bị nhốt cũng là câu NGUY HIỂM — không tách vế, không viết lại câu thành "tìm quán cà phê".)
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
+    // 13/11 (bộ 1.000 câu, G10-067 — "chồng giữ hết tiền, NHỐT tôi trong nhà và DOẠ ĐÁNH nếu tôi ra ngoài, cứu tôi với" từng được đáp
+    //   "Áp lực tiền bạc làm người ta mất ngủ"): CHÍNH người kể đang bị nhốt / bị đánh lần đầu kể ra → lời đáp an toàn (113, không phải lỗi
+    //   của bạn) NGAY, trước mọi lớp tâm sự / chủ đề. Ý định tự hại vẫn đi trước (crisisReply). Đang trong mạch an toàn thì để khối 11/10 lo.
+    if (!forceAi && !en && !crisisReply(q, lang) && !crisisCheckIn(q)) {
+      const la1 = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
+      const hm1 = la1?.harm ? null : harmOf(raw, fr1);
+      if (hm1 && hm1.victim === "self" && (hm1.confined || (hm1.kind === "violence" && VN(/\b(cứu (tôi|em|mình|tui|với)|cứu)\b/).test(` ${normalizeVi(raw)} `)))) {
+        const addrS = loadMem(user.id).addr;
+        const hmA = harmOf(raw, fr1, { addr: addrS }) ?? hm1;
+        topicHit("heart");
+        const sr = harmReply(hmA, { addr: addrS, mirror: mirrorText(fr1, addrS, 10), said: msgs.filter((m) => m.role === "assistant").slice(-6).map((m) => m.content) });
+        return localReply(q, { role: "assistant", content: sr.text, local: true, heart: "toxic", heartDepth: 1, story: raw.length <= 90 ? raw : undefined, harm: sr.harm });
+      }
+    }
     // 11/11 (kiểm toán Lovable, P1-1): chuyện làm ăn CỦA CHÍNH người kể ("quán cơm của mình ế khách, làm sao kéo dân văn phòng?") →
     //   tư vấn kinh doanh ngay tại đây, TRƯỚC các lớp nối mạch / chọn món / tìm quán / FAQ (trước đây tên món trong câu thắng).
     //   Không đọc ra chủ đề nào Lomi có bài (đặt cọc, chốt đơn…) → hỏi lại loại hình / chủ đề thay vì đưa bài lạc đề.
@@ -1753,6 +1768,44 @@ export function AiChat({
       const aid = appAskId(raw, matchFaq);
       const aff = aid ? faqById(aid) : undefined;
       if (aff) return answerFaq(aff, q);
+      //   13/11 (bộ 1.000 câu, nhóm Tarot): XIN BÓI RÕ RÀNG ("bói bài xem mình có nên mở quán cà phê năm nay không", "rút giúp em một trải nhé",
+      //   "bóc bài cho tuần này đc khôg") → trải bài ngay, trước các lớp tìm quán / tâm sự đọc nhầm chữ "cà phê", "người ấy".
+      //   Chối bói ("không cần bói đâu"), hỏi Lomi có biết bói không, kể người khác rủ đi xem bói → để lớp bói phía sau xét như cũ.
+      //   hỏi nghĩa một lá có nêu tên (hoặc "nó / lá đó" chỉ lá ở câu trước) → đọc lá đó
+      //   (đang có trải bài vừa rút thì "lá đó / nó" là lá trong trải — để lớp hỏi nối trải bài phía sau lo, ở đây chỉ nhận lá có nêu tên)
+      const readingNear = msgs.slice(-3).some((m) => !!m.tarot || !!m.tarotRef || !!m.tarotBack);
+      const prevTxt = readingNear ? undefined : msgs.slice(-3).map((m) => m.content).join(" . ");
+      const tCtx = readingNear || msgs.slice(-3).some((m) => !!m.tarotCard || VN(/\b(tarot|lá bài|trải bài|rút bài)\b/).test(` ${normalizeVi(m.content)} `));
+      const tca = tarotCardAsk(raw, tCtx, prevTxt);
+      if (tca) {
+        const rd = [...msgs].reverse().find((m) => m.tarot || m.tarotRef);
+        return localReply(q, { role: "assistant", content: tca, local: true, tarotCard: true, ...(rd ? { tarotRef: rd.tarot ?? rd.tarotRef } : {}) });
+      }
+      const nT = ` ${normalizeVi(q)} `;
+      const tarotAsk = VN(/\b(bói bài|xem bài|coi bài|bốc bài|bóc bài|trải bài|bói tarot|xem tarot|coi tarot|(xem|coi) (một |1 |ba |3 )?lá (bài|tarot)|(bốc|lật) (một |1 |ba |3 )?lá (bài|tarot|cho|về|xem)|rút (giúp |cho |giùm |dùm )?(em |mình |tui |tôi |anh |chị |e |mk )?(một |1 |ba |3 |mấy |vài )?(lá|bài|trải)( tarot)?)\b/).test(nT);
+      //   ("Đi xem tarot XONG đói bụng, gần Nhà thờ Đức Bà có món gì ăn nhẹ", "định bói tình duyên Ở QUÁN cà phê, chỉ quán nào ít ồn" → hỏi quán)
+      const tarotBy = !!detectSearch(q) && VN(/\b((xem|bói|coi|rút) (bài |tarot |bói )?(xong|rồi)|(định|tính|sẽ) (đi )?(bói|xem tarot|xem bói|coi bói)( \S+){0,6} (ở|tại) (quán|chỗ))\b/).test(nT);
+      const tarotNo = tarotBy || VN(/\b(không|k|ko|chẳng|chả|khỏi|đừng|thôi) (cần |muốn |phải )?(bói|xem bài|coi bài|rút bài|trải bài|tarot)\b/).test(nT) || VN(/\b(rủ|bảo|kêu|khuyên|xúi|dẫn)( \S+){0,3} (đi )?(xem|coi) (bói|bài)\b/).test(nT);
+      //   (cửa hiểu ý "gate" vẫn có quyền chặn như ở lớp bói phía sau: hỏi luật Tarot, quyết định tài chính lớn, xem lại cho tới khi ra bài đẹp…;
+      //   kể chuyện đã rút bài — "rút bài vì đang lo, càng xem càng lo" — hay hỏi về Tarot — "xem tarot có thay được tư vấn tâm lý không" — không phải xin rút)
+      const tarotTell = VN(/\b((rút|xem|bói) (bài|tarot|lá)( \S+){0,2} (vì|xong|rồi|mà)|càng xem càng|(tarot|xem bài|bói bài) (có|thì) (thay|đúng|thật|chính xác|tin|nên tin|khác)|tài chính lớn|quyết định lớn|quyết định tài chính|khoản tiền lớn|mua nhà|mua đất)\b/).test(nT);
+      const gT = tarotAsk && !tarotTell ? gate(q, { lastText: lastAs?.content, faqId: lastAs?.faqId, topic: lastAs?.tarot || lastAs?.tarotRef ? "tarot" : undefined, inFlow: false }) : null;
+      if (tarotAsk && !tarotNo && !tarotTell && !gT && !isTarotAbilityAsk(q) && !earlyV4(q)) {
+        const dT = detectTarot(q);
+        if (dT) return dT.question || dT.daily ? doTarot(dT.question, q) : askTarot(q);
+        // (bộ nhận câu bói chưa bắt được kiểu "rút giúp em một trải nhé", "bóc bài cho tuần này" → câu hỏi là phần còn lại của câu)
+        const qT = q
+          .normalize("NFC")
+          .replace(/^\s*(lomi|bạn|em|chị|anh)\s*(ơi)?\s*,?\s*/iu, "")
+          .replace(/^\s*(tui|tôi|mình|em|anh|chị)\s+(muốn|định|cần)\s+/iu, "")
+          .replace(/(bói bài|xem bài|coi bài|bốc bài|bóc bài|trải bài|bói tarot|xem tarot|coi tarot|rút|xem|bốc|lật|coi)(\s+(giúp|cho|giùm|dùm))?(\s+(em|mình|tui|tôi|anh|chị|e|mk))?(\s+(một|1|ba|3|mấy|vài))?(\s+(lá|bài|trải))?(\s+(bài|tarot))?/iu, " ")
+          .replace(/(\s+(đc|được)\s+(không|khôg|ko|k|hông|hk))?(\s+(nhé|nha|nhá|với|vs|đi|giúp|giùm|dùm|ạ|nghen))*\s*[.!?]*\s*$/iu, "")
+          .replace(/^[\s,.:;]+|[\s,.:;]+$/g, "")
+          .replace(/^(cho|về|xem)\s+/iu, "")
+          .replace(/\s+/g, " ");
+        if (VN(/^(cho )?(ngày )?(hôm nay|bữa nay|nay)( của (tôi|tui|mình|em))?$/).test(normalizeVi(qT).trim())) return doTarot("", q);
+        return qT.split(" ").length >= 2 ? doTarot(qT, q) : askTarot(q);
+      }
     }
     if (!forceAi && !en && !danger0) {
       const pu = [...msgs].reverse().find((m) => m.role === "user");
@@ -2080,7 +2133,13 @@ export function AiChat({
         emoRef.current = emo.line;
       }
       // Hai chuyện khác hẳn nhau trong một tin → trả lời ý đầu, ý sau thành nút bấm.
-      const sp = splitTwo(q) ?? splitWho(q);
+      //   (13/11: "Đi xem tarot XONG đói bụng, gần Nhà thờ Đức Bà có món gì ăn nhẹ" — vế bói chỉ là kể; ý chính là tìm quán → không tách)
+      const tarotByQ = !!detectSearch(q) && VN(/\b((xem|bói|coi|rút) (bài |tarot |bói )?(xong|rồi)|(định|tính|sẽ) (đi )?(bói|xem tarot|xem bói|coi bói)( \S+){0,6} (ở|tại) (quán|chỗ))\b/).test(` ${normalizeVi(q)} `);
+      let sp = tarotByQ ? null : (splitTwo(q) ?? splitWho(q));
+      //   (13/11, G10-094: "Từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn, cần đi khám ngay không" — vế sau là chuyện sức khoẻ
+      //   đang cấp → trả lời vế đó trước, vế làm ăn thành nút)
+      const SICK = VN(/\b(đau|sốt|nôn|ói|khó thở|chóng mặt|chảy máu|ngất|co giật|tiêu chảy|đi khám|cấp cứu)\b/);
+      if (sp && SICK.test(` ${normalizeVi(sp[1])} `) && !SICK.test(` ${normalizeVi(sp[0])} `)) sp = [sp[1], sp[0]];
       if (sp) {
         q = sp[0];
         raw = sp[0];
@@ -2968,7 +3027,10 @@ export function AiChat({
         // 21/10: câu kể nhắc lại chung chung ("Được thưởng hả? Rồi sao nữa…") mà thư viện sự kiện / tâm sự đã có lời đáp riêng
         //   ("hôm nay a được thưởng" → chúc mừng) → nhường cho thư viện đó (lớp tâm sự ở dưới đáp).
         //   (08/11: "công ty sắp phá sản rồi" — chuyện xấu của CHỖ LÀM là chuyện công việc của chính người kể → để thư viện tâm sự đáp, không "Xui ghê ha")
-        const fxYield = !!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || (!heartOn && fx.intent === "frame:third_neg" && heartThemeOf(q) === "work") || PRIORITY_THEMES.includes(heartThemeOf(q) ?? ""));
+        // 13/11 (G01-028): "Bé nhà chị bị TÁO BÓN ba ngày rồi", "con tôi bị táo bón" — người thân gặp chuyện mà chuyện đó là một BỆNH có thẻ
+        //   → lớp sức khoẻ đưa thông tin ngay (Kir 19/10), không chỉ "…hả 🥺 Giờ sao rồi chị?"
+        const fxMed3 = !!fx && fx.intent === "frame:third_neg" && VN(/\b(bị|mắc|có triệu chứng)\b/).test(` ${normalizeVi(q)} `) && !!findMedId(q) && medKindOf(findMedId(q)!) !== "other";
+        const fxYield = fxMed3 || (!!fx && !fx.redirect && ((!heartOn && ["frame:echo", "frame:past", "frame:doing"].includes(fx.intent) && (!!eventOf(normStrict(q, HEART)) || !!heartThemeOf(q))) || (!heartOn && fx.intent === "frame:third_neg" && heartThemeOf(q) === "work") || PRIORITY_THEMES.includes(heartThemeOf(q) ?? "")));
         if (fxYield) {
           /* để lớp tâm sự / sự kiện bên dưới trả lời */
         } else if (fx?.redirect) {
@@ -3034,7 +3096,8 @@ export function AiChat({
       //    11/11 (kiểm toán Lovable): câu có DẤU HIỆU ĐỎ ("mẹ xem bói bảo năm nay xấu, mà mẹ đang ho ra máu") → lớp sức khoẻ đáp, không phải lời
       //    từ chối bói bệnh; và câu chỉ NHẮC chuyện người khác rủ / bảo đi xem thầy bói rồi nói điều mình thật sự muốn
       //    ("bạn rủ đi xem thầy bói nhưng mình chỉ muốn tìm cách thôi kiểm tra tin nhắn người yêu cũ") không phải là nhờ Lomi bói.
-      const tarotAside = !en && (VN(/\b(rủ|bảo|kêu|khuyên|xúi|dẫn|đòi)( \S+){0,3} (đi )?((xem|coi|gặp) )?(thầy |bà |ông )?(bói|thầy bói|thầy|tarot)( \S+){0,8} (nhưng|mà|chứ|còn) (mình|em|e|tôi|tui|anh|a|chị|c|tớ) (chỉ|lại|thì|không|chẳng|ko|đâu|muốn|cần)\b/).test(` ${normalizeVi(q)} `) ||
+      //   (câu dài bị tách ý thì q chỉ còn vế đầu "Đi xem tarot xong đói bụng" — xét cả câu gốc)
+      const tarotAside = !en && ((!!detectSearch(raw) && VN(/\b((xem|bói|coi|rút) (bài |tarot |bói )?(xong|rồi)|(định|tính|sẽ) (đi )?(bói|xem tarot|xem bói|coi bói)( \S+){0,6} (ở|tại) (quán|chỗ))\b/).test(` ${normalizeVi(raw)} `)) || VN(/\b(rủ|bảo|kêu|khuyên|xúi|dẫn|đòi)( \S+){0,3} (đi )?((xem|coi|gặp) )?(thầy |bà |ông )?(bói|thầy bói|thầy|tarot)( \S+){0,8} (nhưng|mà|chứ|còn) (mình|em|e|tôi|tui|anh|a|chị|c|tớ) (chỉ|lại|thì|không|chẳng|ko|đâu|muốn|cần)\b/).test(` ${normalizeVi(q)} `) ||
         // 12/11 (G02-037): "chị k cần bói đâu, chỉ muốn kể chuyện vk ck đang lạnh nhạt thôi" — CHỐI bói thì không trải bài
         (VN(/\b(không|k|ko|chẳng|chả|khỏi|đừng|thôi) (cần |muốn |phải )?(bói|xem bói|coi bói|tarot|rút bài|trải bài)\b/).test(` ${normalizeVi(q)} `) &&
           // ("đừng bói sức khoẻ, rút bài giúp mình xem công việc" — chối một chủ đề nhưng vẫn xin rút bài)

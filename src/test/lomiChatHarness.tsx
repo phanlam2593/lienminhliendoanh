@@ -65,6 +65,7 @@ export type Turn = {
   heartListen?: boolean;
   drug?: { kind: string; name?: string; id?: string };
   tarotGate?: "medical";
+  tarotCard?: boolean;
   biz?: unknown;
   faqId?: string;
   unk?: string;

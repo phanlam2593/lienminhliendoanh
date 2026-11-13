@@ -110,7 +110,9 @@ export function harmOf(raw: string, f: Frame | null, ctx: SafetyCtx = {}): Harm 
   let h = harmOf0(raw, f, ctx);
   // 22/10 (QA V5): tin DÀI kể nhiều chuyện ("người yêu a hay xem điện thoại a, đòi mật khẩu facebook, a đi đâu cũng phải báo…")
   //   trước đây bị bỏ qua hẳn (quá 28 chữ) → xét từng vế.
-  if (!h && txt(raw).words > 28) {
+  // 13/11 (G10-067): câu kể làm ăn trước rồi mới tới "chồng … nhốt tôi trong nhà và doạ đánh …, cứu tôi với" — khung câu lấy vế đầu
+  //   ("tôi mở tiệm") làm chính nên bỏ sót; có chữ nhốt / doạ đánh / kêu cứu thì cũng xét từng vế như tin dài.
+  if (!h && (txt(raw).words > 28 || /(nhốt|nhot|cứu (tôi|em|mình|tui|với)|cuu (toi|em|minh|tui|voi))/iu.test(raw.normalize("NFC")))) {
     const partnerHint = !!HAS_PARTNER(txt(raw));
     for (const seg of raw.split(/[,.;!?\n]+|\s+(?:nhưng|mà|rồi|với lại)\s+/u).map((x) => x.trim()).filter((x) => x.split(/\s+/).length >= 3)) {
       h = harmOf0(seg, null, { ...ctx, partnerHint });
@@ -129,6 +131,8 @@ function harmOf0(raw: string, f: Frame | null, ctx: SafetyCtx): Harm | null {
   // 30/10 (rà câu hiểu lầm: "ông nội bị té ngã đập đầu" → đáp như bị bạo hành): TÉ / NGÃ / TRƯỢT mà đập đầu là tai nạn, không phải bị đánh
   //   (trừ khi câu có chữ đánh, tát, đấm, xô, đẩy… — "bị chồng xô ngã đập đầu" vẫn là bạo lực).
   if (/(?:^| )(?:té|ngã|trượt|vấp|té xe|ngã xe|rơi|lật xe|tai nạn|te|nga|truot|vap|roi)(?: |$)/u.test(` ${raw.normalize("NFC").toLowerCase()} `) && !/(đánh|tát|đấm|đạp|xô|đẩy|bóp cổ|bạo|hành hạ|danh|tat|xo|day)/u.test(raw.normalize("NFC").toLowerCase())) return null;
+  // 13/11 (G04-018): "bà định ĐÁNH CẢM bằng đồng xu cho tôi đang sốt" — đánh cảm / đánh gió / cạo gió là mẹo dân gian, không phải đánh người
+  if (/(đánh|danh|cạo|cao) (cảm|cam|gió|gio)(?![\p{L}])/iu.test(raw.normalize("NFC")) && !/(đấm|tát|đạp|bạo hành|hành hạ|doạ|dọa|chửi)/iu.test(raw.normalize("NFC"))) return null;
   // 12/11: "mẹ cầm dao chặt gà ngoài sân" — dao để làm bếp (chặt / thái / gọt / băm đồ ăn), không phải hung khí, nếu câu không có chữ doạ / đánh người
   if (/(?:^| )(?:chặt|thái|gọt|băm|lọc|mổ|làm|cắt) (?:\S+ )?(?:gà|vịt|thịt|cá|rau|củ|xương|dưa|trái cây|hoa quả|hành|tỏi|sườn|heo|bò)(?: |$)/u.test(` ${raw.normalize("NFC").toLowerCase()} `) && !/(đánh|doạ|dọa|đe|chém (người|em|mẹ|con|tôi|tui|mình)|đâm|đuổi|rượt)/u.test(raw.normalize("NFC").toLowerCase())) return null;
   const you = youOf(ctx.addr);

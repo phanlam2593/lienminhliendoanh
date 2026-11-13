@@ -1,11 +1,11 @@
-# So từng câu với lần chạy chuẩn (baseline/run_c6ed288.json, 86,7%): in câu ĐÚNG→SAI (hỏng) và SAI→ĐÚNG (sửa được) theo cách chấm của score.py.
+# So từng câu với lần chạy chuẩn (baseline/run_1311.json, 88,8%): in câu ĐÚNG→SAI (hỏng) và SAI→ĐÚNG (sửa được) theo cách chấm của score.py.
 # Dùng: python3 -I scripts/lomi-audit/diff_baseline.py   (sau khi rerun.sh)
 import json,os,subprocess,sys
 D=os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,D)
 import score
 now,_,_=score.main()
-base_run={x['id']:x for x in json.load(open(f'{D}/baseline/run_c6ed288.json'))}
+base_run={x['id']:x for x in json.load(open(f'{D}/baseline/run_1311.json'))}
 score.run.clear(); score.run.update(base_run)
 base,_,_=score.main()
 cur={}

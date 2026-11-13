@@ -154,6 +154,11 @@ export function detectSearch(text: string): SearchIntent | null {
   //   (mất ngủ / khó ngủ … đâu), không phải hỏi chỗ ngủ → không tìm chỗ ở.
   if (/(?:^|\s)(?:mất|mat|khó|kho|không|khong|ko|k|chưa|chua|chẳng|chang|buồn|buon|thiếu|thieu|thèm|them|ít|it)\s+ngủ\s+(?:đâu|dau)(?:\s|[?!.]|$)|(?:^|\s)(?:nào|nao|làm gì|lam gi|đâu|dau)\s+có\s.{1,40}\s(?:đâu|dau)\s*[?!.]*$/iu.test(text.normalize("NFC").replace(/ngu(?=\s+dau)/giu, "ngủ").replace(/\bco\b/giu, "có"))) return null;
   const n = ` ${normalizeVi(text)} `;
+  // 13/11 (G10-099): "bà đang dùng THUỐC chống đông, ăn rau xanh có cần hỏi BÁC SĨ về chế độ ăn không" — hỏi thuốc / ăn uống theo bệnh,
+  //   không phải tìm quán (trừ khi tìm chính nhà thuốc / phòng khám)
+  if (/\bkem\b/.test(n) && /\b(boi|thoa|dung kem|kem duong|kem tri|chong nang|da hoi kho|da kho|noi man|rat|di ung|ngua)\b/.test(n) && !/\b(an kem|quan kem|tiem kem|ly kem)\b/.test(n)) return null;
+  if (VN(/\b(tăng cân|giảm cân|ăn kiêng|ăn sao (để|cho)|ăn thế nào (để|cho)|ăn như thế nào)\b/).test(n) && !VN(/\b(quán|tiệm|chỗ|ở đâu)\b/).test(n)) return null;
+  if (VN(/\b(đang (dùng|uống) thuốc|thuốc (chống đông|huyết áp|tiểu đường|tim)|hỏi bác sĩ|bác sĩ (dặn|kê|bảo))\b/).test(n) && !VN(/\b(nhà thuốc|tiệm thuốc|hiệu thuốc|quầy thuốc|phòng khám|bệnh viện|phòng mạch)\b/).test(n)) return null;
   const near = VN(/\b(gần|quanh|lân cận|nearby)\b/).test(n);
   if (VN(/\b(hôm nay ăn gì|ăn gì bây giờ|ăn gì đây|nên ăn gì|trưa nay ăn gì|tối nay ăn gì|sáng nay ăn gì|ăn gì ta|ăn gì giờ|đổi món|món khác|chọn lại quán|quán khác)\b/).test(n))
     return { mode: "eat", near, offer: true };
@@ -165,7 +170,8 @@ export function detectSearch(text: string): SearchIntent | null {
     (pl && VN(/\b(có gì|chơi gì|đi đâu|tham quan|điểm đến|nên đi|có gì hay|địa điểm|chỗ nào đẹp|chỗ nào đáng|check in|du lịch|đi chơi)\b/).test(n) && !VN(/\b(ăn gì|uống gì|ở đâu ngủ|khách sạn|homestay|chỗ ở)\b/).test(n) && (/\?/.test(text) || VN(/\b(gì|đâu|nào|không|ko|k|hông|sao|nhỉ|ha|hả|giúp|gợi ý|chỉ)\b/).test(n))))
     return { mode: "go", near, offer: true, ...(area ? { area } : {}), ...placeF };
   // Nêu nơi + hỏi ăn gì ("ở Nha Trang ăn gì") → tìm quán ăn ở đúng nơi đó (không gợi món theo giờ ở Đà Lạt).
-  if (pl && VN(/\b(ăn gì|ăn ở đâu|quán ăn|ăn uống|món gì ngon)\b/).test(n))
+  //   (13/11, bộ 1.000 câu: "cuối tuần muốn dẫn cả nhà ăn chay ở Đà Nẵng", "trưa ở Đà Nẵng có món j dễ ăn", "gần Nhà thờ Đức Bà có món gì ăn nhẹ")
+  if (pl && VN(/\b(ăn gì|ăn ở đâu|quán ăn|ăn uống|món gì ngon|ăn chay|ăn tối|ăn trưa|ăn sáng|ăn khuya|ăn nhẹ|chỗ ăn|có món (gì|nào)|món (gì|nào) (dễ ăn|ngon|ăn nhẹ)|dễ ăn)\b/).test(n) && !VN(/\b(bị|bệnh|đau|kiêng|nấu|làm món)\b/).test(n))
     return { mode: "find", kind: KINDS.find((k) => k.noun === "quán ăn"), near, offer: false, ...(area ? { area } : {}), ...placeF };
   if (HOWTO.test(n)) return null;
   const strictKind = KINDS.find((k) => k.re.test(n));
@@ -454,6 +460,8 @@ export function detectDish(text: string): Dish | undefined {
   //   "người yêu chỉ thả tim cho người khác" — "thả tim" không phải món.
   if (/\b(tu nau|nau duoc|moi nau|vua nau|nau xong|tap nau|hoc nau|nau cho (ca nha|me|ba|bo|chong|vo|con|nguoi yeu|ny|ban))\b/.test(n)) return undefined;
   if (/\btha tim\b/.test(n)) return undefined;
+  // 13/11 (G05-022): "dùng KEM mới… bôi xong thấy rát và nổi mẩn" — kem bôi da / kem dưỡng, không phải kem ăn (món chè – kem)
+  if (/\bkem\b/.test(n) && /\b(boi|thoa|duong|chong nang|tri mun|da mat|len da|kem tri|kem duong|my pham|noi man|di ung|rat da|ngua|dung kem|da hoi kho|da kho|kho da|kem moi)\b/.test(n) && !/\b(an kem|quan kem|tiem kem|ly kem|cay kem|kem (que|ly|tuoi|bo|dua|tra xanh|socola|chocolate|vani))\b/.test(n)) return undefined;
   // 08/10: "phô mai", "phố đi bộ" bỏ dấu cũng ra "pho" — gõ CÓ DẤU mà không phải "phở" thì không tính là món phở
   // (gõ không dấu "pho" vẫn hiểu là phở như trước).
   const notPho = VR(/(?<![\p{L}])ph[ôốồổỗộóòỏõọ](?![\p{L}])/u).test(t.normalize("NFC").toLowerCase()) && !VR(/phở/iu).test(t.normalize("NFC"));

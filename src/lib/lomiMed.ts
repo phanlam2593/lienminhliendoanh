@@ -157,17 +157,24 @@ function wordKey(w: string): string {
 }
 const isAccented = (w: string) => normalizeVi(w) !== w;
 /** Tên dài khớp khi bỏ dấu; nhưng chữ nào người dùng ĐÃ gõ dấu thì dấu phải đúng ("đậu rang" ≠ "đau răng", "viêm gan" ≠ "viêm gân"). */
+// chữ không dấu hay gặp trong câu có dấu — là chính nó, không phải chữ có dấu bị gõ thiếu
+const PLAIN_WORDS = new Set(["ngay", "nay", "tay", "may", "hay", "sao", "nao", "an", "ban", "con", "cho", "toi", "di", "la", "ma", "ca", "co", "nam", "ba", "mai", "hai", "lai", "bao", "tai", "vai", "nhau", "sau"]);
 function accentAgrees(textAcc: string, nameAcc: string): boolean {
   const tw = textAcc.trim().split(" ");
   const nw = nameAcc.trim().split(" ");
   const tb = tw.map((w) => canon(normalizeVi(w)));
   const nb = nw.map((w) => canon(normalizeVi(w)));
   if (tb.some((w) => w.includes(" "))) return true; // không căn được từng chữ → giữ cách khớp cũ
+  // 13/11: "đau bụng dữ dội kèm nôn, cần đi khám NGAY không" ra thẻ "Ngưng thở khi ngủ" (tên gọi khác "ngáy") — câu GÕ CÓ DẤU gần hết
+  //   thì một chữ không dấu THÔNG DỤNG (ngay, nay, tay…) là không dấu thật, so luôn cả dấu. Chỉ áp cho mấy chữ đó: câu gõ không dấu được
+  //   bộ đoán dấu khôi phục dở ("bị nac cụt không dứt") vẫn khớp như cũ.
+  const accRatio = tw.filter((w) => isAccented(w)).length / Math.max(1, tw.length);
+  const strictW = (w: string) => accRatio >= 0.4 && PLAIN_WORDS.has(w);
   for (let i = 0; i + nb.length <= tb.length; i++) {
     let hit = true;
     for (let j = 0; j < nb.length && hit; j++) {
       if (tb[i + j] !== nb[j]) hit = false;
-      else if (isAccented(tw[i + j]) && wordKey(tw[i + j]) !== wordKey(nw[j])) hit = false;
+      else if ((isAccented(tw[i + j]) || (strictW(tw[i + j]) && isAccented(nw[j]))) && wordKey(tw[i + j]) !== wordKey(nw[j])) hit = false;
     }
     if (hit) return true;
   }

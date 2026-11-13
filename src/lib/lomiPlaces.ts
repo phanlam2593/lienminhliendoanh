@@ -85,7 +85,13 @@ export const PLACES: Place[] = [
 /** Nơi người dùng nêu tên trong câu (điểm cụ thể nhất). */
 export function detectPlace(text: string): Place | undefined {
   const n = ` ${normalizeVi(text)} `;
-  return PLACES.find((p) => p.re.test(n));
+  const p = PLACES.find((x) => x.re.test(n));
+  // (13/11, G07-021: "tôi đang HỎI ĂN sao để tăng cân" — bỏ dấu "hỏi ăn" = "Hội An": câu có dấu mà không có chữ "Hội An" thật thì không phải nơi đó)
+  if (p && p.label === "Hội An" && /[^\x00-\x7F]/.test(text) && !/hội an|cù lao chàm/iu.test(text.normalize("NFC")) && !/\bcu lao cham\b/.test(n)) {
+    const rest = PLACES.filter((x) => x !== p).find((x) => x.re.test(n));
+    return rest;
+  }
+  return p;
 }
 
 /** Câu trả lời khi app CHƯA có chỗ nào ở nơi người dùng hỏi — nói thật + vài điểm nổi tiếng (nếu có). */

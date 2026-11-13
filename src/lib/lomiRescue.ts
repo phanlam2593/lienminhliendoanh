@@ -1,6 +1,7 @@
 // 11/11 — "Cứu" những câu có nội dung thật nhưng từng rơi xuống lớp nghe chung chung ("Vậy hả 😄 Có gì kể tiếp Lomi nghe nha")
 //   hoặc "Dạy Lomi" trong bộ 1.000 câu kiểm toán của Lovable: lỗi gõ ở chữ sức khoẻ / kinh doanh, phép tính đơn giản,
 //   lời chào ghé qua và lời tạm biệt. Tất cả chạy trên máy, không gọi AI.
+import { TAROT_DECK_SIZE, tarotCard } from "@/lib/tarot";
 import { normalizeVi } from "@/lib/lomiFaq";
 
 // ── 1) Lỗi gõ hay gặp (sai dấu hỏi / ngã, thiếu chữ, gõ lặp) ở những chữ mà viết sai thì KHÔNG thành chữ có nghĩa khác ──
@@ -260,7 +261,8 @@ export function chatAboutLomi(text: string): string | null {
   if (toLomi && /\b(khong|ko|k|hong|dau|ha|chu|nhi)\b/.test(n)) {
     if (/\b(ngu|an|met|doi|nghi ngoi)\b(?: \S+){0,3} (nhu nguoi|ca ngay|bao gio|khi noi chuyen|vi noi chuyen)\b|\b(co|biet) (met|ngu)\b(?: \S+){0,4} (noi chuyen|ca ngay|nhu nguoi)\b|\b(dau|khong) co (ngu|an|met)\b/.test(n))
       return "Lomi là trợ lý ảo nên không cần ngủ, cũng không biết mệt đâu 😄 Nói chuyện cả ngày vẫn vui. Còn bạn thì nhớ nghỉ ngơi nha!";
-    if (/\b(biet|co the) (boi|bay|nau an|hat|nhay|lai xe|choi game)\b/.test(n))
+    // ("bạn có thể BÓI bài xem…" — bỏ dấu "bói" và "bơi" trùng nhau: có chữ bài / tarot / xem thì là xin bói, không phải hỏi biết bơi)
+    if (/\b(biet|co the) (boi|bay|nau an|hat|nhay|lai xe|choi game)\b/.test(n) && !/\b(bai|tarot|xem|la bai|rut)\b/.test(n) && !/bói/iu.test(text))
       return "Lomi không có thân thể nên không bơi, không nấu ăn được đâu 😄 Lomi chỉ trò chuyện thôi — nhưng giỏi mấy việc này: thông tin sức khoẻ thường gặp, nghe tâm sự, tìm quán, cách dùng app và bói Tarot cho vui.";
     if (/\b(ten khac|biet danh|ten gi khac|con ten)\b/.test(n))
       return "Lomi chỉ có một tên là **Lomi** thôi nè 😊 Bạn muốn gọi thân hơn kiểu gì cũng được, Lomi nghe hết.";
@@ -376,4 +378,60 @@ export function appAskId(text: string, faqMatch: (t: string) => { id: string } |
   if (/\b(xoa)\b/.test(n) && /\b(cuoc tro chuyen|tin nhan|doan chat)\b/.test(n)) return "msgmanage";
   // (chỉ nói "trên app" mà không rõ thứ gì — "đăng bài bán hàng trên app" — để các lớp hỏi app phía sau lo, chúng hiểu sâu hơn)
   return /\bilomi\b/.test(n) ? faqMatch(text)?.id ?? null : null;
+}
+
+// ── 9) 13/11 — hỏi NGHĨA MỘT LÁ TAROT có nêu tên ("tôi vừa rút lá Lovers ngược cho tình yêu, giải thích ý nghĩa được không",
+//   "giải thích lại lá Tower trong trải tình cảm này", đang học The Hermit mà hỏi "nó ngược thì giải thế nào") → đọc lá đó, xuôi / ngược.
+//   Trước đây: tâm sự tình cảm, thẻ bệnh "Căng thẳng", "Dạy Lomi". Tên Việt dễ trùng chữ thường ("mặt trời", "ngôi sao", "công lý")
+//   nên chỉ nhận khi có chữ lá / bài / tarot / ngược / xuôi đi kèm.
+type CardKey = { id: number; keys: string[] };
+let CARD_KEYS: CardKey[] | null = null;
+function cardKeys(): CardKey[] {
+  if (CARD_KEYS) return CARD_KEYS;
+  CARD_KEYS = Array.from({ length: TAROT_DECK_SIZE }, (_, id) => {
+    const c = tarotCard(id);
+    const en = normalizeVi(c.name.en);
+    const vi = normalizeVi(c.name.vi);
+    const keys = [en, en.replace(/^the /, ""), vi].filter((k) => k.length >= 3);
+    return { id, keys: [...new Set(keys)] };
+  });
+  return CARD_KEYS;
+}
+// ("nghĩa LÀ sao" bỏ dấu cũng là "la" — so chữ có dấu khi câu có dấu; câu không dấu thì cần "la bai", "rut la", "tarot"…)
+function tarotCue(text: string): boolean {
+  const t = ` ${text.normalize("NFC").toLowerCase()} `;
+  if (/[^\x00-\x7F]/.test(text)) return /(?<![\p{L}])(lá|bài|tarot|ngược|xuôi|trải|rút)(?![\p{L}])/u.test(t);
+  return /\b(la bai|rut la|tarot|nguoc|xuoi|trai bai)\b/.test(normalizeVi(text));
+}
+export function cardNamed(text: string): { id: number; rev: boolean } | null {
+  const n = ` ${normalizeVi(text)} `;
+  let best: { id: number; key: string } | null = null;
+  for (const c of cardKeys())
+    for (const k of c.keys)
+      if ((!best || k.length > best.key.length) && new RegExp(`(?<![a-z])${k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![a-z])`).test(n)) best = { id: c.id, key: k };
+  if (!best) return null;
+  // tên Việt (Mặt Trời, Ngôi Sao, Công Lý…) phải có chữ lá / bài / tarot đứng kèm
+  const viKey = best.key === normalizeVi(tarotCard(best.id).name.vi);
+  if (viKey && !tarotCue(text)) return null;
+  return { id: best.id, rev: /\b(nguoc|reversed|lat nguoc)\b/.test(n) };
+}
+export function tarotCardAsk(text: string, tarotCtx: boolean, prev?: string): string | null {
+  const n = ` ${normalizeVi(text)} `;
+  const asks = /\b(nghia|y nghia|giai thich|giai (the nao|sao|ra sao)|doc (nguoc|xuoi)|la gi|noi gi|bao (hieu|gi)|co dang so|dang so|tot hay xau|xau khong|tot khong|doc (the nao|sao)|hieu (the nao|sao))\b/.test(n);
+  if (!asks) return null;
+  // ("Tui đang học lá The Hermit." → "Nó ngược thì giải thế nào?", "quay lại lá lúc nãy, nó có đáng sợ vậy không") — lá ở câu trước
+  const ref = /\b(no|la do|la nay|la luc nay|la vua roi|la kia|cai la do)\b/.test(n);
+  const cp = !cardNamed(text) && ref && prev ? cardNamed(prev) : null;
+  const c0 = cardNamed(text) ?? (cp ? { id: cp.id, rev: /\b(nguoc|lat nguoc)\b/.test(n) } : null);
+  if (!c0) return null;
+  const c = c0;
+  if (!tarotCtx && !tarotCue(text)) return null;
+  const k = tarotCard(c.id);
+  const scary = /\b(dang so|co dang so|xau khong|tot hay xau)\b/.test(n);
+  const head = `🔮 **${k.name.vi} (${k.name.en})**${c.rev ? " — **ngược**" : ""}`;
+  const body = c.rev
+    ? `${k.rev.vi}\n\n(Khi xuôi, lá này nói: ${k.up.vi.charAt(0).toLowerCase()}${k.up.vi.slice(1)})`
+    : `**Xuôi:** ${k.up.vi}\n**Ngược:** ${k.rev.vi}`;
+  const calm = scary ? "\n\nKhông có lá nào là \"xấu\" hẳn đâu nha — lá bài chỉ gợi một góc nhìn để mình chuẩn bị, chứ không quyết định chuyện gì sẽ xảy ra." : "";
+  return `${head}\n\n${body}${calm}\n\nĐọc trong trải bài thì nhớ ghép với câu hỏi và vị trí của lá nha. Bạn muốn Lomi rút thêm một lá làm rõ không?`;
 }

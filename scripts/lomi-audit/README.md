@@ -3,7 +3,7 @@
 - `cases.json` — 985 ca chấm được (id, turns = lịch sử + câu hỏi) lấy từ đợt kiểm toán read-only của Lovable 09–11/11/2026.
 - `ket_qua_lovable.csv` — kết quả gốc của Lovable: `lop_mong_doi` (lớp đúng: health/heart/faq/food/tarot/biz/safety/chat/askback, có thể `a/b`), `lop_thuc_te`, `loi_dap_lomi`…
 - `BAO_CAO_KIEM_TOAN_LOVABLE.md` — báo cáo gốc (P0–P3 + 6 đề xuất kiến trúc).
-- `baseline/run_c6ed288.json` — câu trả lời của Lomi ở commit c6ed288 (86,7%).
+- `baseline/run_1311.json` — câu trả lời của Lomi ngày 13/11/2026 (88,8%).
 
 Chạy: `bash scripts/lomi-audit/rerun.sh` (từ gốc repo) → in % đúng theo từng lớp. Lỗi theo lớp: `python3 -I scripts/lomi-audit/fails.py <lớp_mong_đợi> [lớp_thực_tế] [độ_dài]`. So với baseline từng câu: `python3 -I scripts/lomi-audit/diff_baseline.py`.
 
