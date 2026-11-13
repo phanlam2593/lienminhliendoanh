@@ -59,3 +59,21 @@ describe("va chạm bỏ dấu & sức khoẻ", () => {
     for (const q of ["Cuối tuần muốn dẫn cả nhà ăn chay ở Đà Nẵng.", "mk k ăn cay, trưa ở Đà Nẵng có món j dễ ăn"]) expect((await last([q])).content, q).toMatch(/Đà Nẵng/);
   }, T);
 });
+
+// 13/11 (Kir so với ChatGPT): bỏ dòng "📜 Thông tin tham khảo theo y học cổ truyền…" và "(chủ yếu trên động vật / phòng thí nghiệm)";
+//   "bồ kết" là QUẢ bồ kết (tạo giác, hơi có độc) — gai bồ kết là vị riêng.
+describe("tư vấn dược liệu — bồ kết", () => {
+  it("quả bồ kết: tên khác, dùng ngoài / uống, cảnh báo độc, bà bầu; không còn 2 dòng Kir bỏ", async () => {
+    const a = (await last(["trái bồ kết có tác dụng gì"])).content;
+    expect(a).toMatch(/Bồ kết \(quả\)/);
+    expect(a).toMatch(/tạo giác/);
+    expect(a).toMatch(/Dùng ngoài/);
+    expect(a).toMatch(/HƠI CÓ ĐỘC/);
+    expect(a).toMatch(/Phụ nữ có thai không được dùng/);
+    expect(a).not.toMatch(/Thông tin tham khảo theo y học cổ truyền|chủ yếu trên động vật/);
+    expect((await last(["gai bồ kết chữa bệnh gì"])).content).toMatch(/Gai bồ kết[\s\S]*tạo giác thích/);
+    const b = (await last(["bạch sâm có tác dụng gì"])).content;
+    expect(b).toMatch(/Y học hiện đại có nghiên cứu liên quan tới/);
+    expect(b).not.toMatch(/📜|chủ yếu trên động vật/);
+  }, T);
+});
