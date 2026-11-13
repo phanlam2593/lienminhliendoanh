@@ -79,3 +79,26 @@ describe("tư vấn dược liệu — bồ kết", () => {
     expect(b).not.toMatch(/📜|chủ yếu trên động vật/);
   }, T);
 });
+
+// 13/11 (Kir: "thêm thực phẩm chức năng, món ăn dinh dưỡng, rau, lá, trái cây") — "X có tác dụng gì" cho món chưa có bài mẹo dân gian
+//   ghép từ bảng chất (NHS) + bảng thành phần thực phẩm Việt Nam; CoQ10 (NCCIH); "đu đủ có tác dụng gì" không còn ra câu "dưới 18 tuổi".
+describe("thực phẩm, rau, trái cây — tác dụng", () => {
+  it("rau, trái cây ra bài lợi ích có số liệu; tên ghép không bị hiểu sai", async () => {
+    const a = (await last(["đu đủ có tác dụng gì"])).content;
+    expect(a).not.toMatch(/18 tuổi/);
+    expect(a).toMatch(/Đu đủ[\s\S]*Vitamin A/);
+    const b = (await last(["rau ngót có tác dụng gì"])).content;
+    expect(b).toMatch(/Rau ngót[\s\S]*canxi/);
+    expect(b.match(/tham khảo/g)?.length).toBe(1);
+    expect((await last(["cam có tác dụng gì"])).content).toMatch(/Vitamin C/);
+    expect((await last(["ăn rau muống có tốt không"])).content).toMatch(/Rau muống/);
+    for (const q of ["việt quất có tác dụng gì", "đậu bắp có tác dụng gì"]) expect((await last([q])).content, q).not.toMatch(/Quất chín|Ngô bắp/);
+    expect((await last(["dưa hấu bao nhiêu calo"])).content).toMatch(/📊 \*\*Dưa hấu/);
+  }, T);
+  it("thực phẩm chức năng: CoQ10, tinh bột nghệ", async () => {
+    const a = (await last(["coenzyme q10 có tác dụng gì"])).content;
+    expect(a).toMatch(/CoQ10[\s\S]*warfarin/);
+    expect(a).not.toMatch(/B-coenzyme/);
+    expect((await last(["tinh bột nghệ có tác dụng gì"])).content).toMatch(/\*\*Nghệ\*\*/);
+  }, T);
+});

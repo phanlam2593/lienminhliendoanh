@@ -13,7 +13,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { findIndexedDrug } from "@/lib/lomiDrugIndex";
 import { sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import { WISELY, findFolk } from "@/lib/lomiFolk";
-import { DAILY_ASK, FACT_ASK, FRUIT_LIST_ASK, dishNote, factOf, fruitIn, isSugarTopic, renderDaily, renderFact, renderFruitSugar, renderNoFact } from "@/lib/lomiFoodFacts";
+import { DAILY_ASK, FACT_ASK, FRUIT_LIST_ASK, dishNote, factLine, factOf, fruitIn, isSugarTopic, renderDaily, renderFact, renderFruitSugar, renderNoFact } from "@/lib/lomiFoodFacts";
 
 const VERIFIED = "2026-10-30";
 const NHS = "NHS (Anh)";
@@ -460,6 +460,64 @@ export function renderFood(f: Food, now = Date.now()): string {
   ].filter(Boolean).join("\n\n");
 }
 
+/** 13/11 (Kir: "thêm thực phẩm, món ăn dinh dưỡng, rau, lá, trái cây…") — "chuối có tác dụng gì", "ăn rau ngót có lợi gì":
+ *  món chưa có bài mẹo dân gian → ghép từ dữ liệu SẴN CÓ, không tự thêm công dụng chữa bệnh:
+ *   • chất có nhiều trong món (bảng FOODS, NHS) + vai trò của chất đó (mục `what` của chất);
+ *   • điểm nổi bật theo bảng số liệu (Viện Dinh dưỡng, 100 g): ngưỡng ghi nhãn "nguồn …" thường dùng (chất xơ ≥ 3 g; kali ≥ 300 mg,
+ *     canxi ≥ 120 mg, sắt ≥ 2,1 mg — 15% nhu cầu tham chiếu; ít năng lượng ≤ 40 kcal; đạm ≥ 12% năng lượng và ≥ 5 g);
+ *   • dòng số liệu như câu hỏi calo (factLine, có lăng kính bệnh nếu câu nêu bệnh). */
+export const BENEFIT_ASK = /\b(tac dung gi|co tac dung|tac dung cua|cong dung|loi ich|co loi gi|tot cho gi|tot gi|giup gi|an .{1,20} co tot)\b/;
+// Chữ đứng sát tên món mà vẫn là cùng món ("ăn chuối", "quả cam chín", "rau ngót luộc") — chữ khác thì là món khác
+//   ("đậu BẮP" không phải bắp ngô, "việt QUẤT" không phải quả quất, "CHANH dây" không phải chanh).
+const FOOD_BEFORE = new Set(["an", "uong", "qua", "trai", "rau", "la", "cu", "hat", "cay", "nuoc", "to", "ep", "bot", "mon", "canh", "chao", "cua", "ve", "cho", "hoi", "voi", "thi", "va", "la", "minh", "toi", "em", "anh", "chi", "nhieu", "it", "hay", "thuong", "deu"]);
+const FOOD_AFTER = new Set(["co", "thi", "moi", "hang", "hap", "luoc", "nuong", "song", "kho", "chin", "xanh", "tuoi", "vao", "buoi", "nhieu", "it", "deu", "thuong", "lam", "giup", "tot", "bo", "duoc", "khong", "a", "nhi", "vay", "the", "nay", "do", "la"]);
+function foodSpanOk(q: string, names: string[]): boolean {
+  const w = normalizeVi(q).split(" ").filter(Boolean);
+  for (const nm of [...names].map((x) => normalizeVi(x).split(" ")).sort((a, b) => b.length - a.length))
+    for (let i = 0; i + nm.length <= w.length; i++)
+      if (nm.every((x, j) => w[i + j] === x)) {
+        const b = w[i - 1], a = w[i + nm.length];
+        if ((b === undefined || FOOD_BEFORE.has(b)) && (a === undefined || FOOD_AFTER.has(a))) return true;
+      }
+  return false;
+}
+export function renderFoodBenefit(q: string, med: { id: string; name: string } | null, now = Date.now()): string | null {
+  // "táo có tác dụng gì", "bơ có tác dụng gì" — tên một chữ không nằm trong bảng (vì "táo" bón, "bơ" sữa) → đọc là quả
+  const bare = normalizeVi(q).match(/^(?:an |uong )?(tao|bo|dua|cam|le|man|dao|quyt|nho|na|oi) (?:co tac dung|tac dung|co loi|loi ich|tot cho|cong dung)/);
+  const q2 = bare && /[^\x00-\x7F]/.test(q) ? q.replace(/^(\s*(?:ăn |uống )?)/iu, "$1quả ") : q;
+  const f0 = foodOf(q2), ff0 = factOf(q2);
+  const f = f0 && foodSpanOk(q2, f0.names) ? f0 : null;
+  const ff = ff0 && foodSpanOk(q2, ff0.names) ? ff0 : null;
+  if (!f && !ff) return null;
+  const byId = (id: string) => NUTRIENTS.find((x) => x.id === id)!;
+  const short = (id: string) => (id === "vitamin-b" ? "Vitamin nhóm B" : byId(id).name);
+  const title = ff && (!f || ff.names.some((x) => f.names.includes(x)) || ff.src === 8) ? ff.name : f!.name;
+  const hi: string[] = [];
+  if (ff && ff.g === 100) {
+    if ((ff.fiber ?? 0) >= 3) hi.push(`nhiều **chất xơ** (${String(ff.fiber).replace(".", ",")} g) — tốt cho tiêu hoá, đỡ táo bón`);
+    if ((ff.k ?? 0) >= 300) hi.push(`nhiều **kali** (${ff.k} mg)`);
+    if ((ff.ca ?? 0) >= 120) hi.push(`nhiều **canxi** (${ff.ca} mg)`);
+    if ((ff.fe ?? 0) >= 2.1) hi.push(`nhiều **sắt** (${String(ff.fe).replace(".", ",")} mg)`);
+    if (ff.protein >= 5 && ff.kcal > 0 && (ff.protein * 4) / ff.kcal >= 0.12) hi.push(`nhiều **đạm** (${String(ff.protein).replace(".", ",")} g)`);
+    if (ff.kcal > 0 && ff.kcal <= 40) hi.push(`**Ít calo** (${ff.kcal} kcal) — ăn no mà không nhiều năng lượng`);
+  }
+  const items = f?.items ?? [];
+  const warn = (f?.caution ?? []).filter((c) => c !== FRUITVEG);
+  const plant = (ff?.plant ?? false) || (f?.caution ?? []).includes(FRUITVEG);
+  return [
+    `🥗 **${cap1(title)}** — ăn vào có lợi gì`,
+    items.length ? `💪 **Chất có nhiều trong món này và vai trò:**\n${items.map((i) => `• **${short(i.nut)}**${i.note ? ` (${i.note})` : ""} — ${byId(i.nut).what[0].text}`).join("\n")}` : "",
+    hi.length ? `⭐ **Điểm nổi bật (trong 100 g):**\n${hi.map((x) => `• ${cap1(x)}`).join("\n")}` : "",
+    ff ? factLine(ff, med?.id, now) : "",
+    warn.length ? `⚠️ ${warn.map((c) => c.text).join("\n⚠️ ")}` : "",
+    (ff?.k ?? 0) >= 300 ? "⚠️ Người bệnh thận đang được dặn hạn chế kali thì hỏi bác sĩ nên ăn bao nhiêu nha." : "",
+    plant ? `🌿 ${FRUITVEG.text}` : "",
+    "📌 Thông tin dinh dưỡng để tham khảo — món ăn hỗ trợ sức khoẻ, không thay thuốc; đang có bệnh thì hỏi bác sĩ / chuyên viên dinh dưỡng lượng ăn phù hợp nha.",
+    items.length ? line(srcOf(items, plant ? [FRUITVEG] : [], warn, items.map((i) => byId(i.nut).what[0])), now) : "",
+  ].filter(Boolean).join("\n\n");
+}
+const cap1 = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 /**
  * Lớp vitamin · khoáng chất. `med` = thẻ bệnh nhận ra trong câu (nếu có). null = không phải câu hỏi này.
  */
@@ -470,7 +528,8 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
   if (!opts.noNumbers && FRUIT_LIST_ASK.test(n) && (!fruitIn(q) || /^(trái cây|hoa quả)$/.test(fruitIn(q)!)) && ((med && isSugarTopic(med.id) && /\b(kieng|khong nen|nen an|an gi|an duoc|loai nao|qua nao|trai nao|gi)\b/.test(n)) || /\b(nhieu duong|it duong|ngot nhat|duong cao|duong thap)\b/.test(n)))
     return renderFruitSugar(med, now);
   // (đang có dấu hiệu rối loạn ăn uống → không đưa con số calo; lớp cân nặng lib/lomiExtras trả lời nhẹ nhàng)
-  if (FACT_ASK.test(n) && !opts.noNumbers) {
+  // (13/11: "TINH BỘT nghệ có tác dụng gì" là tên sản phẩm, không phải hỏi lượng tinh bột)
+  if (FACT_ASK.test(n) && !opts.noNumbers && !/\btinh bot (nghe|san day|khoai|ngo|sen)\b.*\b(tac dung|cong dung|tot|loi ich)\b/.test(n)) {
     const ff = factOf(q);
     if (ff) {
       const dn = dishNote(q, ff);
@@ -497,7 +556,14 @@ export function nutrientReply(q: string, med: { id: string; name: string } | nul
   if (!x && !(med && SUPP.test(n)) && (foodAsk || (!med && FOOD_GOOD.test(n) && !findFolk(q)))) {
     const f = foodOf(q);
     // "viêm gan", "men gan", "nóng gan" — chữ "gan" là bộ phận cơ thể, không phải món gan.
-    if (f && !(f.id === "gan" && LIVER_ORGAN.test(n))) return renderFood(f, now);
+    // 13/11: "ăn rau muống có tốt không" → bài lợi ích đầy đủ (chất + vai trò + số liệu); hỏi "bổ gì / chất gì" vẫn là danh sách chất
+    if (f && !(f.id === "gan" && LIVER_ORGAN.test(n))) return (!foodAsk ? renderFoodBenefit(q, med, now) : null) ?? renderFood(f, now);
+  }
+  // 13/11: "chuối có tác dụng gì" — món chưa có bài mẹo dân gian (bài đó cụ thể hơn thì để lớp đó trả lời)
+  // (câu có nêu bệnh — "tiểu đường ăn trứng có tốt không" — để lớp ăn uống theo bệnh trả lời)
+  if (!x && !med && BENEFIT_ASK.test(n) && !findFolk(q)) {
+    const r = renderFoodBenefit(q, med, now);
+    if (r) return r;
   }
   if (x) {
     // "thiếu vitamin D", "thiếu sắt" — kho đã có thẻ bệnh riêng.

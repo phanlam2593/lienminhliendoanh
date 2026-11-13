@@ -36,6 +36,8 @@ export type FolkEntry = {
   vlabel?: string;
   /** 13/11: tên khác · bộ phận dùng (vd quả bồ kết = tạo giác) — in ngay dưới tên. */
   aka?: string;
+  /** 13/11: nhãn mục "Dân gian dùng để" cho thực phẩm chức năng (vd "Người ta hay dùng để"). */
+  folkLabel?: string;
   /** 13/11 (Kir cho ghi liều tham khảo): liều thường dùng theo nguồn — chỉ ở đây và trong bài thuốc (how). */
   dose?: DrugFact[];
   /** 04/11: mục tóm tắt tự động từ tra cứu dược liệu (Long Châu) — chỉ nhận khi câu hỏi có ngữ cảnh vị thuốc
@@ -810,6 +812,33 @@ export const FOLK: FolkEntry[] = [
     topics: [{ id: "mat-ngu", text: "có thể đỡ phần nào mất ngủ; không thay được thói quen ngủ tốt; đừng lái xe trong 5 giờ sau khi uống", src: [0], v: "mixed" }],
     sources: [MAYO_MELA],
     verifiedAt: "2026-11-04",
+  },
+  // 13/11 (Kir: "thêm mấy loại thực phẩm chức năng") — trước đây "coenzyme q10" bị hiểu là thuốc B-coenzyme.
+  {
+    id: "coq10",
+    name: "Coenzyme Q10 (CoQ10)",
+    names: ["coenzyme q10", "coq10", "co q10", "coenzym q10", "ubiquinone", "viên q10"],
+    verdict: "unclear",
+    folkLabel: "Là gì · hay được quảng cáo cho",
+    folk: [{ text: "CoQ10 là chất có sẵn trong cơ thể (nhiều nhất ở tim, gan, thận, tuỵ), được bán dưới dạng thực phẩm chức năng — hay quảng cáo cho tim mạch, đau cơ khi uống thuốc mỡ máu, đau nửa đầu.", src: [0] }],
+    science: [
+      { text: "Phòng bệnh tim, suy tim: nghiên cứu còn ít và **chưa rõ kết quả**; có bằng chứng giúp giảm vài biến chứng sau mổ tim.", src: [0] },
+      { text: "**Không** giúp giảm đau cơ do thuốc mỡ máu (statin); gần như không làm hạ huyết áp; không hạ mỡ máu; không giúp bệnh Parkinson.", src: [0, 3] },
+      { text: "Đau nửa đầu: bằng chứng ít, có thể giảm **số lần và thời gian** cơn đau (không giảm mức độ đau).", src: [1] },
+    ],
+    caution: [
+      { text: "Chưa thấy tác dụng phụ nghiêm trọng; có thể mất ngủ, khó tiêu, buồn nôn, ợ nóng, đau đầu, chóng mặt.", src: [0, 1] },
+      { text: "**Có thể tương tác với thuốc chống đông warfarin và insulin** — đang dùng thì hỏi bác sĩ trước.", src: [0] },
+      { text: "Đang hoá trị ung thư thì hỏi bác sĩ trước — thuốc bổ chống oxy hoá (kể cả CoQ10) có thể làm giảm hiệu quả điều trị.", src: [0, 2] },
+    ],
+    topics: [{ id: "migraine", text: "bằng chứng ít — có thể giảm số lần, thời gian cơn đau; không thay thuốc bác sĩ kê", src: [1], v: "unclear" }],
+    sources: [
+      { title: "Coenzyme Q10", publisher: "NCCIH (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://www.nccih.nih.gov/health/coenzyme-q10" },
+      { title: "Headaches: What You Need To Know", publisher: "NCCIH (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://www.nccih.nih.gov/health/headaches-what-you-need-to-know" },
+      { title: "Antioxidant Supplements: What You Need To Know", publisher: "NCCIH (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://www.nccih.nih.gov/health/antioxidant-supplements-what-you-need-to-know" },
+      { title: "Cholesterol Management at a Glance", publisher: "NCCIH (Viện Y tế Quốc gia Hoa Kỳ – NIH)", url: "https://www.nccih.nih.gov/health/cholesterol-management-at-a-glance" },
+    ],
+    verifiedAt: "2026-11-13",
   },
   {
     id: "garcinia",
@@ -4469,7 +4498,7 @@ export function renderFolk(f: FolkEntry, topic?: { id: string; name: string } | 
     v === VERDICT.trad ? "" : `${v.icon} ${v.text}.`,
     unvFirst ? unvLine : "",
     t ? `👉 Với **${topic!.name}**: ${t.text}.` : "",
-    myth && f.belief ? `🏡 **Dân gian hay:** ${f.belief}` : f.folk.length ? `🏡 **${trad ? "Theo y học cổ truyền" : "Dân gian dùng để"}:**\n${bl(f.folk)}` : "",
+    myth && f.belief ? `🏡 **Dân gian hay:** ${f.belief}` : f.folk.length ? `🏡 **${trad ? "Theo y học cổ truyền" : f.folkLabel ?? "Dân gian dùng để"}:**\n${bl(f.folk)}` : "",
     f.science.length ? `🔬 **${myth ? "Nguồn y khoa nói" : trad ? "Theo y học hiện đại" : "Nghiên cứu nói gì"}:**\n${bl(f.science)}` : "",
     f.dose?.length ? `📏 **Liều thường dùng:**\n${bl(f.dose)}` : "",
     (() => {

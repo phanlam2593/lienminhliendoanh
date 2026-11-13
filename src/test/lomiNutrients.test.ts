@@ -64,7 +64,7 @@ describe("lomiNutrients — món ăn → chất", () => {
     expect(foodOf("tôm có chất gì")?.id).toBe("hai-san");
     expect(nutrientReply("hàu bổ gì", null)).toMatch(/Kẽm\*\* — \*\*rất nhiều/);
     expect(nutrientReply("gan heo có chất dinh dưỡng gì", null)).toMatch(/bà bầu nên tránh gan/);
-    expect(nutrientReply("ăn trứng có tốt không", null)).toMatch(/Vitamin D\*\* — ở lòng đỏ/);
+    expect(nutrientReply("ăn trứng có tốt không", null)).toMatch(/Vitamin D\*\* \(ở lòng đỏ\)/);
     // có bệnh → để lớp ăn uống theo bệnh trả lời
     expect(nutrientReply("tiểu đường ăn trứng có tốt không", { id: "tieu-duong", name: "tiểu đường" })).toBeNull();
     // món đã có bài mẹo dân gian → để lớp đó trả lời

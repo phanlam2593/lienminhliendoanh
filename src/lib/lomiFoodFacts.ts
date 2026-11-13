@@ -47,6 +47,9 @@ export type FoodFact = {
   /** Ghi chú khẩu phần / cách nấu. */
   note?: string;
   purin?: number;
+  /** 13/11: canxi, sắt (mg) — chỉ bảng Việt Nam có. */
+  ca?: number;
+  fe?: number;
   /** Trái cây / rau củ (để nói chuyện đường tự nhiên). */
   plant?: boolean;
 };
@@ -55,10 +58,10 @@ const S = (id: string, name: string, names: string[], kcal: number, fat: number,
 
 /** Bảng Việt Nam (Viện Dinh dưỡng) — mỗi dòng tính cho 100 g phần ăn được. Đứng TRƯỚC bảng FDA: cùng tên thì lấy số Việt Nam. */
 const VN_FACTS: FoodFact[] = VN_ROWS.map((r) => {
-  const [kcal, protein, fat, carb, fiber, sugar, na, k, , , chol, sat, purin] = r.v;
+  const [kcal, protein, fat, carb, fiber, sugar, na, k, ca, fe, chol, sat, purin] = r.v;
   const grp = Math.floor(r.code / 1000);
   return {
-    id: `vn-${r.code}`, name: r.table, names: r.names, g: 100, kcal: kcal ?? 0, protein: protein ?? 0, fat, carb: carb ?? 0, fiber, sugar, na, k, chol, sat, purin,
+    id: `vn-${r.code}`, name: r.table, names: r.names, g: 100, kcal: kcal ?? 0, protein: protein ?? 0, fat, carb: carb ?? 0, fiber, sugar, na, k, ca, fe, chol, sat, purin,
     src: 8, note: "phần ăn được", plant: grp === 4 || grp === 5,
   };
 });

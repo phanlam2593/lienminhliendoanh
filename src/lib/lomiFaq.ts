@@ -535,7 +535,8 @@ const FAQ_NEED: Record<string, RegExp> = {
   // 01/11 (vòng 22): "nhóm máu O là gì" không phải hỏi tạo nhóm chat
   group: /\b(chat|tin nhan|nhan tin|thanh vien|tao nhom|vao nhom|roi nhom|moi nhom|group|truong nhom|them nguoi)\b/,
   // 01/11: "bao nhiêu tuổi thì nên đi khám mắt" là hỏi mốc tuổi cho việc khác, không phải mấy tuổi được dùng app
-  age: /\b(app|ung dung|ilomi|lomi|tai khoan|acc|dang ky|dung|xai|choi|tham gia|tao)\b/,
+  // 13/11: "đu đủ có TÁC DỤNG gì" (bỏ dấu "du du … tac dung") từng ra câu "dưới 18 tuổi" — "dụng" trong "tác dụng / công dụng" không phải "dùng app"
+  age: /\b(app|ung dung|ilomi|lomi|tai khoan|acc|dang ky|(?<!(?:tac|cong|su) )dung|xai|choi|tham gia|tao)\b/,
   // 01/11: "quán này có ưu đãi không" là hỏi quán có ưu đãi, không phải phàn nàn quán không giữ đúng ưu đãi
   // 12/11 (bộ 1.000 câu): "mình cần THEO DÕI những dấu hiệu gì", "mẫu CHÍNH SÁCH đặt cọc cho quán", "chạy quảng cáo TỐN TIỀN",
   //   "thẻ TÍCH ĐIỂM hay ưu đãi lần sau" — chữ trùng câu hỏi app nhưng không nói về app
