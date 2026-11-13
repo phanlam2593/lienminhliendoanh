@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# kết quả chạy bộ kiểm toán Lomi
+scripts/lomi-audit/out/
