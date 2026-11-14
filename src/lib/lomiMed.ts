@@ -13,7 +13,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { DRUGS, DRUG_CLAIMS, sourceLine, type DrugFact, type DrugSource } from "@/lib/lomiDrugData";
 import INDEX from "@/lib/medkb/index.json";
 import { findIndexedDrug } from "@/lib/lomiDrugIndex";
-import { findFolk } from "@/lib/lomiFolk";
+import { findFolk, knNote } from "@/lib/lomiFolk";
 import { VR, VN } from "@/lib/viMatch";
 
 export type MedFood = { name: string; aliases: string[]; verdict: "avoid" | "limit" | "ok" | "good"; note: string; src: number[] };
@@ -612,7 +612,9 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     // "tiểu đường ăn mít được không" — trái cây: nguồn tiểu đường có hướng dẫn cách ăn trái cây nói chung (NHS, NIDDK).
     const fruit = isSugarTopic(t.id) ? fruitIn(question ?? shown ?? food) : null;
     const extra = fruit ? diabetesFruitBlock(fruit, now) : ff ? factLine(ff, t.id, now) : "";
-    return out(say + tail + (extra ? `\n\n${extra}` : ""), "food", true);
+    // 14/11: món có mục kiến thức phổ thông nhắc đúng bệnh này → kèm vào (ghi rõ là kiến thức phổ thông)
+    const kn = knNote(question || typed || shown || food, t.id);
+    return out(say + (kn ? `\n\n${kn}` : "") + tail + (extra ? `\n\n${extra}` : ""), "food", true);
   }
   if (aspect === "diet") {
     if (!t.diet || !(t.diet.avoid.length || t.diet.ok.length || t.diet.foods.length)) {
@@ -733,6 +735,9 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     if (fc.asked?.length && hasQuestion(question)) {
       const ov = renderMed(t, "overview", null, now);
       ov.text = `Ý “${fc.asked[0]}” bạn hỏi thì các nguồn Lomi đã đối chiếu cho ${N} **chưa nói rõ**, nên Lomi chưa xác minh được — bạn hỏi bác sĩ để chắc nha.\n\nDưới đây là phần Lomi đã kiểm chứng:\n\n${ov.text.replace(VR(/^Về .*? như sau:\n\n/), "")}`;
+      // 14/11: "mì tôm có gây ung thư không" — món có mục kiến thức phổ thông nói về chuyện này thì trả lời bằng mục đó
+      const kn = knNote(question || typed || fc.asked.join(" "), t.id);
+      if (kn) return out(`${kn}\n\nCác nguồn y khoa Lomi đã đối chiếu cho ${N} chưa nêu riêng món này — muốn chắc thì hỏi bác sĩ nha.`, "focus", true);
       ov.partial = true;
       return ov;
     }

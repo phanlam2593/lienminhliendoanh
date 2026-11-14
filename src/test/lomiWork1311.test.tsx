@@ -155,3 +155,17 @@ describe("thực phẩm — kiến thức phổ thông đợt 2", () => {
     expect((await last(["da hồng hào ăn gì"])).content).not.toMatch(/Quả hồng/);
   }, T);
 });
+
+// 14/11 đợt 3 — kèm kiến thức phổ thông khi nguồn của bệnh không nêu món; lời đồn món kỵ nhau; ăn khuya, bữa sáng, mắt, chiều cao; calo bia có cồn
+describe("thực phẩm — đợt 3", () => {
+  it("bệnh + món, lời đồn, câu 'ăn gì tốt cho…', calo bia", async () => {
+    expect((await last(["tiểu đường ăn chè được không"])).content).toMatch(/kiến thức dinh dưỡng phổ thông[\s\S]*chè ít đường/);
+    expect((await last(["mì tôm có gây ung thư không"])).content).toMatch(/Không có bằng chứng ăn mì tôm gây ung thư/);
+    expect((await last(["sữa với chuối kỵ nhau không"])).content).toMatch(/không có cơ sở khoa học/);
+    expect((await last(["ăn gì tốt cho mắt"])).content).toMatch(/lutein/);
+    expect((await last(["ăn gì để tăng chiều cao"])).content).toMatch(/di truyền/);
+    expect((await last(["ăn khuya có hại không"])).content).toMatch(/Ăn khuya/);
+    expect((await last(["bia có bao nhiêu calo"])).content).toMatch(/chưa tính phần cồn[\s\S]*43 kcal/);
+    expect((await last(["ăn đu đủ lúc đói có sao không"])).content).toMatch(/Đu đủ/);
+  }, T);
+});

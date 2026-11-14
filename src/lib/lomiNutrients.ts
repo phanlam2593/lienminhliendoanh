@@ -466,11 +466,11 @@ export function renderFood(f: Food, now = Date.now()): string {
  *   • điểm nổi bật theo bảng số liệu (Viện Dinh dưỡng, 100 g): ngưỡng ghi nhãn "nguồn …" thường dùng (chất xơ ≥ 3 g; kali ≥ 300 mg,
  *     canxi ≥ 120 mg, sắt ≥ 2,1 mg — 15% nhu cầu tham chiếu; ít năng lượng ≤ 40 kcal; đạm ≥ 12% năng lượng và ≥ 5 g);
  *   • dòng số liệu như câu hỏi calo (factLine, có lăng kính bệnh nếu câu nêu bệnh). */
-export const BENEFIT_ASK = /\b(tac dung gi|co tac dung|tac dung cua|cong dung|loi ich|co loi gi|tot cho gi|tot gi|giup gi|(?:an|uong) .{1,20} co tot|^\S+(?: \S+){0,2} co tot (?:khong|ko|k)$)\b/;
+export const BENEFIT_ASK = /\b(tac dung gi|co tac dung|tac dung cua|cong dung|loi ich|co loi gi|tot cho gi|tot gi|giup gi|co sao (?:khong|ko|k)|co hai (?:khong|ko|gi)|(?:an|uong) .{1,20} co tot|^\S+(?: \S+){0,2} co tot (?:khong|ko|k)$)\b/;
 // Chữ đứng sát tên món mà vẫn là cùng món ("ăn chuối", "quả cam chín", "rau ngót luộc") — chữ khác thì là món khác
 //   ("đậu BẮP" không phải bắp ngô, "việt QUẤT" không phải quả quất, "CHANH dây" không phải chanh).
 const FOOD_BEFORE = new Set(["an", "uong", "qua", "trai", "rau", "la", "cu", "hat", "cay", "nuoc", "to", "ep", "bot", "mon", "canh", "chao", "cua", "ve", "cho", "hoi", "voi", "thi", "va", "la", "minh", "toi", "em", "anh", "chi", "nhieu", "it", "hay", "thuong", "deu"]);
-const FOOD_AFTER = new Set(["rang", "muoi", "say", "chien", "xao", "nuoc", "co", "thi", "moi", "hang", "hap", "luoc", "nuong", "song", "kho", "chin", "xanh", "tuoi", "vao", "buoi", "nhieu", "it", "deu", "thuong", "lam", "giup", "tot", "bo", "duoc", "khong", "a", "nhi", "vay", "the", "nay", "do", "la"]);
+const FOOD_AFTER = new Set(["luc", "buoi", "vao", "truoc", "sau", "voi", "cung", "rang", "muoi", "say", "chien", "xao", "nuoc", "co", "thi", "moi", "hang", "hap", "luoc", "nuong", "song", "kho", "chin", "xanh", "tuoi", "vao", "buoi", "nhieu", "it", "deu", "thuong", "lam", "giup", "tot", "bo", "duoc", "khong", "a", "nhi", "vay", "the", "nay", "do", "la"]);
 function foodSpanOk(q: string, names: string[]): boolean {
   const w = normalizeVi(q).split(" ").filter(Boolean);
   for (const nm of [...names].map((x) => normalizeVi(x).split(" ")).sort((a, b) => b.length - a.length))

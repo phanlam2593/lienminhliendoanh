@@ -207,12 +207,20 @@ function lensNote(f: FoodFact, lens: Lens): { text: string; src: number[] } | nu
 const line = (src: number[], now: number) => sourceLine({ sources: FACT_SOURCES, verifiedAt: VERIFIED }, [...new Set(src)], now);
 
 /** Dòng ngắn gắn dưới lời đáp ăn uống theo bệnh ("tiểu đường ăn chuối được không"). */
+// 14/11: bảng Việt Nam ghi năng lượng rượu bia CHƯA tính phần cồn (bia ghi 11 kcal / 100 g) — mỗi gam cồn cho khoảng 7 kcal.
+function alcoNote(f: FoodFact): string {
+  const m = f.name.match(/cồn:?\s*([\d,.]+)\s*g/u);
+  if (!m) return "";
+  const g = parseFloat(m[1].replace(",", "."));
+  return `🍺 Số calo trong bảng **chưa tính phần cồn** — mỗi gam cồn cho khoảng 7 kcal, nên thực tế khoảng **${Math.round(f.kcal + g * 7)} kcal** mỗi ${portion(f)}.`;
+}
 export function factLine(f: FoodFact, medId?: string | null, now = Date.now()): string {
   const lens = lensOf(medId);
   const note = lensNote(f, lens);
   return [
     `📊 **${f.name}** — ${f.src === 8 ? "trong" : "khẩu phần"} ${portion(f)}${f.src === 0 || f.src === 1 ? ", tươi" : ""}: ${figures(f, lens)}`,
     note ? `💡 ${note.text}` : "",
+    alcoNote(f),
     line([f.src, ...(note?.src ?? [])], now),
   ].filter(Boolean).join("\n");
 }
@@ -234,6 +242,7 @@ export function renderFact(f: FoodFact, med: { id: string; name: string } | null
     `• ${f.src === 8 ? "Trong" : "Khẩu phần"} **${portion(f)}**${f.src === 0 || f.src === 1 ? ", ăn tươi" : ""}`,
     `• ${figures(f, lens)}`,
     note ? `💡 ${note.text}` : "",
+    alcoNote(f),
     "👉 Số liệu là của nguyên liệu (chưa nêm muối, đường, dầu mỡ); món nấu xong sẽ khác. Lomi không tự đặt ngưỡng “được / không được” — hỏi bác sĩ hoặc chuyên viên dinh dưỡng để biết khẩu phần hợp với bạn.",
     line([f.src, ...(note?.src ?? [])], now),
   ].filter(Boolean).join("\n\n");

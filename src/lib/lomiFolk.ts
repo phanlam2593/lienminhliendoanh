@@ -1388,7 +1388,7 @@ export const FOLK: FolkEntry[] = [
     vlabel: "Tiện, no nhanh — nhưng **nhiều muối, chất béo, ít chất**; đừng ăn thay bữa thường xuyên",
     folkLabel: "Là gì · ăn thế nào",
     folk: [{ text: "Vắt mì chiên sẵn + gói gia vị.", src: [0] }],
-    science: [{ text: "Chủ yếu **tinh bột và chất béo** (vắt mì đã chiên), **rất nhiều muối** trong gói gia vị; ít đạm, ít rau, ít vitamin.", src: [0] }, { text: "Không có \"chất độc\" đặc biệt như lời đồn, nhưng ăn thay bữa thường xuyên dễ **thiếu chất, tăng huyết áp**.", src: [0] }],
+    science: [{ text: "Chủ yếu **tinh bột và chất béo** (vắt mì đã chiên), **rất nhiều muối** trong gói gia vị; ít đạm, ít rau, ít vitamin.", src: [0] }, { text: "**Không có bằng chứng ăn mì tôm gây ung thư** hay có \"chất độc\" đặc biệt như lời đồn; điều đáng lo là ăn thay bữa thường xuyên dễ **thiếu chất, tăng huyết áp**.", src: [0] }],
     dose: [{ text: "Nếu ăn: **bớt nửa gói gia vị**, thêm trứng, thịt, rau; không ăn quá vài lần mỗi tuần.", src: [0] }],
     caution: [{ text: "Người **huyết áp cao, bệnh thận, suy tim** hạn chế (nhiều muối).", src: [0] }, { text: "Trẻ em, bà bầu ăn mì thay bữa dễ thiếu chất.", src: [0] }],
     topics: [{ id: "tang-huyet-ap", text: "nhiều muối — nên hạn chế", src: [0], v: "risky" }],
@@ -1886,6 +1886,84 @@ export const FOLK: FolkEntry[] = [
     verifiedAt: "2026-11-14",
   },
 
+  // 14/11 đợt 3 — lời đồn món kỵ nhau, ăn khuya, bữa sáng, ăn cho mắt, tăng chiều cao (kn).
+  {
+    id: "kn-ky-nhau",
+    kn: true,
+    name: "Món ăn \"kỵ nhau\" (tương khắc)",
+    names: ["kỵ nhau", "kị nhau", "kỵ với", "kị với", "tương khắc", "khắc nhau", "ăn chung được không", "ăn cùng được không"],
+    verdict: "myth",
+    vlabel: "Phần lớn các cặp \"kỵ nhau\" truyền miệng **không có cơ sở khoa học** — chỉ vài trường hợp thật sự cần lưu ý",
+    folkLabel: "Lời đồn",
+    folk: [{ text: "Trên mạng hay truyền danh sách món \"kỵ nhau\": cua với hồng, sữa với chuối, tôm với vitamin C, đậu phụ với rau bina, trứng với sữa đậu nành…", src: [0] }],
+    science: [{ text: "Hầu hết các cặp này **chưa có bằng chứng gây ngộ độc** — ăn cùng bữa với lượng bình thường là an toàn với người khoẻ.", src: [0] }, { text: "Khó chịu sau khi ăn thường do **ăn quá nhiều, đồ ăn không tươi, dị ứng** (hải sản, sữa…) chứ không phải do \"kỵ\".", src: [0] }],
+    caution: [{ text: "Cặp **thật sự cần tránh**: **rượu bia với thuốc** (an thần, kháng sinh metronidazol, paracetamol liều cao…); **bưởi, nước bưởi với một số thuốc** (mỡ máu, huyết áp) — hỏi dược sĩ.", src: [0] }, { text: "**Hồng chát, hồng khô ăn nhiều lúc đói** (nhất là kèm cua, đồ khó tiêu) có thể tạo **khối bã trong dạ dày** — ăn hồng chín, ăn no rồi mới ăn.", src: [0] }, { text: "Đang uống thuốc chống đông warfarin thì giữ lượng rau lá xanh đều đặn.", src: [0] }],
+    topics: [],
+    sources: [KN_SOURCE],
+    verifiedAt: "2026-11-14",
+  },
+  {
+    id: "kn-an-khuya",
+    kn: true,
+    name: "Ăn khuya",
+    names: ["ăn khuya", "ăn đêm", "ăn tối muộn", "ăn trước khi ngủ", "ăn sát giờ ngủ"],
+    verdict: "mixed",
+    vlabel: "Ăn khuya **không tự gây hại** — vấn đề là **ăn gì, ăn bao nhiêu** và sát giờ ngủ",
+    folkLabel: "Là gì · ăn thế nào",
+    folk: [{ text: "Ăn sau bữa tối, gần giờ đi ngủ.", src: [0] }],
+    science: [{ text: "Tăng cân là do **tổng lượng ăn cả ngày**, nhưng ăn khuya thường là mì gói, đồ chiên, trà sữa — **dư calo** dễ tăng cân.", src: [0] }, { text: "Ăn no sát giờ ngủ dễ **trào ngược, ợ nóng, khó ngủ**.", src: [0] }],
+    dose: [{ text: "Đói thật thì ăn nhẹ (sữa chua, trái cây, một lát bánh mì, ly sữa ấm); ăn xong cách giờ ngủ **2–3 tiếng** nếu được.", src: [0] }],
+    caution: [{ text: "Người **trào ngược dạ dày**: ăn bữa cuối trước khi ngủ ít nhất 3 tiếng.", src: [0] }, { text: "**Tiểu đường** dùng insulin, thuốc hạ đường huyết: bữa phụ buổi tối theo hướng dẫn của bác sĩ.", src: [0] }],
+    topics: [],
+    sources: [KN_SOURCE],
+    verifiedAt: "2026-11-14",
+  },
+  {
+    id: "kn-bua-sang",
+    kn: true,
+    name: "Bữa sáng",
+    names: ["bữa sáng", "ăn sáng", "ăn sáng gì", "bỏ bữa sáng", "nhịn ăn sáng", "không ăn sáng"],
+    verdict: "help",
+    vlabel: "Bữa sáng tốt là bữa **đủ tinh bột tốt + đạm + rau / trái cây**",
+    folkLabel: "Là gì · ăn thế nào",
+    folk: [{ text: "Bữa đầu ngày sau một đêm nhịn đói.", src: [0] }],
+    science: [{ text: "Bữa sáng cân bằng giúp **no lâu, tập trung**, đỡ ăn vặt; trẻ em, học sinh nên ăn sáng đầy đủ.", src: [0] }, { text: "Gợi ý: bánh mì nguyên cám + trứng; cháo yến mạch + sữa + trái cây; phở / bún bớt nước dùng + nhiều rau; xôi ít, kèm đậu, trứng.", src: [0] }],
+    caution: [{ text: "Hạn chế sáng nào cũng mì gói, xôi mỡ, bánh ngọt, trà sữa — nhiều đường, muối, chất béo.", src: [0] }, { text: "**Tiểu đường**: không bỏ bữa sáng nếu đang dùng thuốc hạ đường huyết; bữa sáng ít tinh bột trắng, nhiều đạm, rau.", src: [0] }],
+    topics: [],
+    sources: [KN_SOURCE],
+    verifiedAt: "2026-11-14",
+  },
+  {
+    id: "kn-an-cho-mat",
+    kn: true,
+    name: "Ăn uống cho mắt khoẻ",
+    names: ["ăn gì tốt cho mắt", "ăn gì bổ mắt", "bổ mắt", "ăn gì sáng mắt", "thực phẩm tốt cho mắt", "ăn gì cho mắt"],
+    verdict: "help",
+    vlabel: "Ăn đủ **rau lá xanh, rau củ màu cam, cá** — kèm khám mắt định kỳ",
+    folkLabel: "Là gì · ăn thế nào",
+    folk: [{ text: "Ăn uống hỗ trợ mắt khoẻ lâu dài.", src: [0] }],
+    science: [{ text: "**Rau lá xanh đậm** (cải bó xôi, cải xanh, rau ngót…) có **lutein, zeaxanthin** — người ăn nhiều ít bị thoái hoá điểm vàng hơn.", src: [0] }, { text: "**Vitamin A** (cà rốt, bí đỏ, khoai lang, gan, trứng) cần cho nhìn trong tối; **cá béo** (cá hồi, cá thu) có omega-3.", src: [0] }, { text: "Ăn uống **không chữa được cận thị, loạn thị**; viên bổ mắt chỉ có ích cho nhóm thoái hoá điểm vàng giai đoạn giữa / muộn.", src: [0] }],
+    caution: [{ text: "Nhìn mờ, đau mắt, chớp sáng, ruồi bay nhiều đột ngột thì **đi khám mắt**, đừng chỉ ăn uống.", src: [0] }, { text: "Ngoài 40 tuổi nên khám mắt định kỳ; dùng điện thoại nghỉ mắt 20 giây mỗi 20 phút.", src: [0] }],
+    topics: [],
+    sources: [KN_SOURCE],
+    verifiedAt: "2026-11-14",
+  },
+  {
+    id: "kn-tang-chieu-cao",
+    kn: true,
+    name: "Ăn uống để tăng chiều cao",
+    names: ["tăng chiều cao", "cao lên", "ăn gì để cao", "ăn gì cho cao", "ăn gì để tăng chiều cao", "thuốc tăng chiều cao", "uống gì để cao"],
+    verdict: "mixed",
+    vlabel: "Chiều cao chủ yếu do **di truyền** — dinh dưỡng, ngủ, vận động giúp **đạt tối đa tiềm năng khi còn đang lớn**",
+    folkLabel: "Là gì · ăn thế nào",
+    folk: [{ text: "Câu hỏi hay gặp của trẻ đang lớn và phụ huynh.", src: [0] }],
+    science: [{ text: "Trẻ đang lớn cần đủ **đạm** (thịt, cá, trứng, sữa, đậu), **canxi** (sữa, đậu phụ, cá nhỏ, rau xanh), **vitamin D** (nắng sáng, cá, trứng), kẽm.", src: [0] }, { text: "**Ngủ đủ, sớm** và **vận động** (bơi, bóng rổ, nhảy dây, đạp xe…) cũng quan trọng; sau tuổi dậy thì khi sụn tăng trưởng đã đóng thì **gần như không cao thêm**.", src: [0] }],
+    dose: [{ text: "Gợi ý cho trẻ: khoảng 2–3 ly sữa hoặc chế phẩm sữa mỗi ngày (tuỳ tuổi), cộng các nguồn canxi khác.", src: [0] }],
+    caution: [{ text: "**Thuốc, viên \"tăng chiều cao\" quảng cáo** không đáng tin; thuốc có hormone tăng trưởng chỉ bác sĩ nội tiết chỉ định.", src: [0] }, { text: "Trẻ **thấp hơn hẳn bạn cùng tuổi** hoặc gần như không cao thêm trong 1 năm → đưa đi khám nhi / nội tiết.", src: [0] }],
+    topics: [],
+    sources: [KN_SOURCE],
+    verifiedAt: "2026-11-14",
+  },
   {
     id: "garcinia",
     name: "Garcinia cambogia (viên giảm cân)",
@@ -5437,10 +5515,33 @@ export const folkFor = (topicId: string): { f: FolkEntry; t: FolkTopic }[] =>
   FOLK.flatMap((f) => f.topics.filter((t) => t.id === topicId).map((t) => ({ f, t })));
 
 /** Vị / mẹo dân gian nhắc trong câu (tên dài khớp trước). "Bôi … lên vết bỏng" chỉ nhận khi câu nói tới bỏng. */
-const KN_CTX = /\b(an|nen|bo|bo gi|bo khong|loi ich|co loi|co hai|hai gi|giup gi|tot gi|tot cho|bao nhieu|moi ngay|duoc khong|calo|dinh duong)\b/;
+// (tìm quán / chỗ đi / so món để chọn — "Đà Lạt có cà phê nào view đẹp", "cao lầu vs mì Quảng nên thử món nào" — không phải hỏi sức khoẻ)
+const KN_PLACE = /\b(o dau|cho nao|quan nao|tiem|quan ngon|nao ngon|nao dep|nao re|view|ngam|di an|thu mon|mon nao|nen thu|vs|da lat|ha noi|sai gon|hoi an|mua o|ban o|gia bao nhieu|quanh|gan day|gan nha|ngoi|chill|lam viec|doc sach|co (?:\S+ ){1,3}nao)\b/;
+const KN_CTX = /\b(an|uong|co sao|tang|gay|ky|ki|khac|bo|bo gi|bo khong|loi ich|co loi|co hai|hai gi|giup gi|tot gi|tot cho|bao nhieu|moi ngay|duoc khong|calo|dinh duong)\b/;
 const GEN_CTX = /\b(de lam|lam gi|lam j|lam chi|la j|tac dung|cong dung|chua|tri|bai thuoc|vi thuoc|dong y|y hoc co truyen|thuoc nam|thuoc bac|duoc lieu|uong|sac|ngam|ham|boi|dap|xong|doc|bau|mang thai|co thai|cho con bu|tinh nong|tinh mat|tinh han|la cay gi|la gi|la con gi|co tot|tot khong|kieng|ai khong nen|dung duoc|dung the nao|dung sao)\b/;
 const AMBIG_BARE = new Set(["rieng", "chi tu", "do trong", "o mai", "hoe", "sa nhan", "sai ho", "tam that", "huong phu", "phong phong"]);
 const TEEN_ADDED = /(?<![\p{L}])(gì|vậy|được|không|làm|sao|nữa|biết|bạn|giờ|vô|về|trời|hôm nay|bao nhiêu|người yêu|mật khẩu)(?![\p{L}])/gu;
+/** 14/11: "tiểu đường ăn chè được không", "mì tôm có gây ung thư không" — nguồn y khoa của bệnh không nêu món đó; nếu món có mục kiến thức
+ *  phổ thông (kn) nhắc đúng bệnh này thì kèm các ý đó (ghi rõ là kiến thức phổ thông). Không có thì null. */
+const KN_DIS: [RegExp, RegExp][] = [
+  [/tieu-duong|dai-thao-duong/, /tiểu đường|đường huyết/iu],
+  [/cao-huyet-ap|tang-huyet-ap/, /huyết áp/iu],
+  [/gout/, /gút/iu],
+  [/mo-mau|cholesterol/, /mỡ máu|cholesterol/iu],
+  [/benh-than|suy-than/, /thận/iu],
+  [/beo-phi/, /béo phì|giảm cân|tăng cân|calo/iu],
+  [/da-day|trao-nguoc|loet/, /dạ dày|trào ngược/iu],
+  [/ung-thu/, /ung thư/iu],
+  [/gan-nhiem-mo/, /gan nhiễm mỡ/iu],
+];
+export function knNote(text: string, topicId: string): string | null {
+  const f = findFolk(text);
+  const k = KN_DIS.find(([id]) => id.test(topicId))?.[1];
+  if (!f?.kn || !k) return null;
+  const hits = [...f.science, ...(f.dose ?? []), ...f.caution].filter((x) => k.test(x.text));
+  return hits.length ? `💡 **${f.name}** — kiến thức dinh dưỡng phổ thông (Lomi tổng hợp):\n${hits.map((x) => `• ${x.text}`).join("\n")}` : null;
+}
+
 export function findFolk(text: string): FolkEntry | null {
   const n = ` ${normalizeVi(text)} `;
   // 05/11: câu gõ không dấu mà lớp viết tắt chèn thêm chữ có dấu ("la voi dung lm j" → "… làm gì") vẫn tính là gõ KHÔNG dấu
@@ -5465,13 +5566,13 @@ export function findFolk(text: string): FolkEntry | null {
     if (f.id === "sa" && !acc0 && !/\b(la sa|cu sa|cay sa|nuoc sa|tinh dau sa|tra sa|xong sa)\b/.test(n)) continue;
     if (f.gen && f.verdict === "trad" && !GEN_CTX.test(n)) continue;
     // 14/11: món ăn thường ngày (kn) chỉ khi đang HỎI về nó — "bữa cơm", "đi ăn phở" kể chuyện thì không phải
-    if (f.kn && !(GEN_CTX.test(n) || KN_CTX.test(n))) continue;
+    if (f.kn && (!(GEN_CTX.test(n) || KN_CTX.test(n)) || (KN_PLACE.test(n) && !/\b(bo nao|tot cho nao|hai nao|thong minh)\b/.test(n)))) continue;
     let m: { 0: string } | null = n.match(RE.get(f.id)!);
     // (04/11) mục tự động có tên một chữ ("sim", "duối", "ngò") gõ không dấu thì không nhận — dễ trùng chữ thường.
     if (m && f.gen && !acc0 && !m[0].trim().includes(" ")) continue;
     // (14/11) món thường ngày tên một chữ ("me", "hồng", "sung", "chè", "kem") — chỉ khi gõ có dấu và tên món đứng đầu câu hỏi
     //   ("hồng có tác dụng gì", "ăn chè có béo không"); "da hồng hào", "mẹ" gõ không dấu thì không phải.
-    if (m && f.kn && !m[0].trim().includes(" ") && !(acc0 && new RegExp(`^ (?:(?:an|uong|cho|be|con) )?(?:(?:qua|trai|mon|ly|coc|chen|to) )?${m[0].trim()} (?:co|la|thi|tot|bo|giup|an|uong|nhieu|moi|hang|khong|ko|chua|hai|$)`).test(n))) continue;
+    if (m && f.kn && !m[0].trim().includes(" ") && !(acc0 && new RegExp(`^ (?:(?:an|uong|cho|be|con) )?(?:(?:qua|trai|mon|ly|coc|chen|to) )?${m[0].trim()} (?:co|la|thi|tot|bo|giup|an|uong|nhieu|moi|hang|khong|ko|chua|hai|luc|buoi|vao|truoc|sau|voi|cung|$)`).test(n))) continue;
     // (04/11) tên vị trùng chữ thường khi gõ không dấu ("rieng toi" = riêng tôi, "chi tu" = chị tư, "do trong" = đồ trong, "tam that" = tâm thất)
     //   → chỉ nhận khi câu có chữ chỉ vị thuốc.
     if (m && !acc0 && AMBIG_BARE.has(m[0].trim()) && !/\b(tac dung|cong dung|vi thuoc|thuoc nam|thuoc bac|duoc lieu|cu|la|tra|nuoc|bot|qua|hat|vo|re)\b/.test(n)) continue;
@@ -5685,7 +5786,7 @@ export function folkReply(
   //   (Quan niệm khi ốm — "chảy máu cam ngửa cổ", "rắn cắn hút nọc" — cũng trả lời ngay: đã khớp đúng ngữ cảnh.)
   if (f && (f.id === "thit-coc" || f.id === "boi-bong" || f.verdict === "myth" || f.verdict === "danger")) return { text: renderFolk(f, med, Date.now(), q), folk: f.id, topic: med?.id, verdict: f.verdict };
   // "gừng có tính nóng không" — hỏi tính nóng / mát của một vị là đang hỏi về vị đó; mẹo sinh hoạt đã khớp đúng ngữ cảnh ("say sắn phải làm sao") cũng vậy.
-  const asked = asksAbout(q) || words <= 4 || folkWord || TEMPER.test(` ${normalizeVi(q)} `) || !!(f?.tip && f.ctx);
+  const asked = asksAbout(q) || words <= 4 || folkWord || TEMPER.test(` ${normalizeVi(q)} `) || !!(f?.tip && f.ctx) || !!f?.kn; // (14/11: mục kn đã lọc "đang hỏi về món" trong findFolk)
   if (f && asked) {
     // "gout ăn gừng được không" — hỏi một MÓN với bệnh mà vị này không có ý gì cho bệnh đó → để lớp kiêng cữ trả lời.
     //   (Hỏi cho trẻ nhỏ / bà bầu mà vị này có lưu ý riêng cho nhóm đó — "bà bầu ăn ngải cứu được không" — thì vẫn trả lời ở đây.)
