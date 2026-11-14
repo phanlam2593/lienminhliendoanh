@@ -470,7 +470,7 @@ export const BENEFIT_ASK = /\b(tac dung gi|co tac dung|tac dung cua|cong dung|lo
 // Chữ đứng sát tên món mà vẫn là cùng món ("ăn chuối", "quả cam chín", "rau ngót luộc") — chữ khác thì là món khác
 //   ("đậu BẮP" không phải bắp ngô, "việt QUẤT" không phải quả quất, "CHANH dây" không phải chanh).
 const FOOD_BEFORE = new Set(["an", "uong", "qua", "trai", "rau", "la", "cu", "hat", "cay", "nuoc", "to", "ep", "bot", "mon", "canh", "chao", "cua", "ve", "cho", "hoi", "voi", "thi", "va", "la", "minh", "toi", "em", "anh", "chi", "nhieu", "it", "hay", "thuong", "deu"]);
-const FOOD_AFTER = new Set(["co", "thi", "moi", "hang", "hap", "luoc", "nuong", "song", "kho", "chin", "xanh", "tuoi", "vao", "buoi", "nhieu", "it", "deu", "thuong", "lam", "giup", "tot", "bo", "duoc", "khong", "a", "nhi", "vay", "the", "nay", "do", "la"]);
+const FOOD_AFTER = new Set(["rang", "muoi", "say", "chien", "xao", "nuoc", "co", "thi", "moi", "hang", "hap", "luoc", "nuong", "song", "kho", "chin", "xanh", "tuoi", "vao", "buoi", "nhieu", "it", "deu", "thuong", "lam", "giup", "tot", "bo", "duoc", "khong", "a", "nhi", "vay", "the", "nay", "do", "la"]);
 function foodSpanOk(q: string, names: string[]): boolean {
   const w = normalizeVi(q).split(" ").filter(Boolean);
   for (const nm of [...names].map((x) => normalizeVi(x).split(" ")).sort((a, b) => b.length - a.length))
@@ -502,20 +502,25 @@ export function renderFoodBenefit(q: string, med: { id: string; name: string } |
     if (ff.kcal > 0 && ff.kcal <= 40) hi.push(`**Ít calo** (${ff.kcal} kcal) — ăn no mà không nhiều năng lượng`);
   }
   const items = f?.items ?? [];
+  // (14/11) rượu bia: không liệt kê "điểm nổi bật" như đồ ăn bổ
+  if (ALCO.test(normalizeVi(title))) hi.length = 0;
   const warn = (f?.caution ?? []).filter((c) => c !== FRUITVEG);
   const plant = (ff?.plant ?? false) || (f?.caution ?? []).includes(FRUITVEG);
   return [
-    `🥗 **${cap1(title)}** — ăn vào có lợi gì`,
+    // (14/11) món không có chất nổi bật (bia, nước ngọt, xúc xích…) thì không gọi là "có lợi"
+    `🥗 **${cap1(title)}** — ${items.length || hi.length ? "ăn vào có lợi gì" : "dinh dưỡng · cần lưu ý"}`,
     items.length ? `💪 **Chất có nhiều trong món này và vai trò:**\n${items.map((i) => `• **${short(i.nut)}**${i.note ? ` (${i.note})` : ""} — ${byId(i.nut).what[0].text}`).join("\n")}` : "",
     hi.length ? `⭐ **Điểm nổi bật (trong 100 g):**\n${hi.map((x) => `• ${cap1(x)}`).join("\n")}` : "",
     ff ? factLine(ff, med?.id, now) : "",
     warn.length ? `⚠️ ${warn.map((c) => c.text).join("\n⚠️ ")}` : "",
+    ALCO.test(normalizeVi(title)) ? "⚠️ Rượu bia **không có mức uống nào được xem là tốt cho sức khoẻ** — uống càng ít càng tốt; không uống khi lái xe, mang thai, đang dùng thuốc." : "",
     (ff?.k ?? 0) >= 300 ? "⚠️ Người bệnh thận đang được dặn hạn chế kali thì hỏi bác sĩ nên ăn bao nhiêu nha." : "",
     plant ? `🌿 ${FRUITVEG.text}` : "",
     "📌 Thông tin dinh dưỡng để tham khảo — món ăn hỗ trợ sức khoẻ, không thay thuốc; đang có bệnh thì hỏi bác sĩ / chuyên viên dinh dưỡng lượng ăn phù hợp nha.",
     items.length ? line(srcOf(items, plant ? [FRUITVEG] : [], warn, items.map((i) => byId(i.nut).what[0])), now) : "",
   ].filter(Boolean).join("\n\n");
 }
+const ALCO = /\b(bia|ruou|con \d)/;
 const cap1 = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /**

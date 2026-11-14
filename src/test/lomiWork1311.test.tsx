@@ -142,3 +142,16 @@ describe("thực phẩm — kiến thức phổ thông (kn)", () => {
     expect(src).toMatch(/Lomi tổng hợp — chưa đối chiếu/);
   }, T);
 });
+
+// 14/11 đợt 2 (Kir: "làm típ cho hoàn thiện") — đồ uống, ăn vặt, đồ chế biến sẵn, món Tết; tên một chữ có dấu đứng đầu câu
+describe("thực phẩm — kiến thức phổ thông đợt 2", () => {
+  it("trà sữa, mì tôm, muối, bột ngọt, nước tăng lực, bánh chưng, hồng / sung gọi trống; bia không gọi là 'có lợi'", async () => {
+    for (const [q, re] of [["trà sữa có tác dụng gì", /nhiều đường/], ["ăn mì tôm có tốt không", /bớt nửa gói gia vị/], ["muối có tác dụng gì", /dưới 5 g muối/],
+      ["bột ngọt có hại không", /an toàn/], ["nước tăng lực có tác dụng gì", /caffeine/], ["bánh chưng có tác dụng gì", /tinh bột/],
+      ["hồng có tác dụng gì", /Quả hồng/], ["sung có tác dụng gì", /Quả sung/], ["hạt điều rang muối có tác dụng gì", /Hạt điều/]] as const)
+      expect((await last([q])).content, q).toMatch(re);
+    const b = (await last(["bia có tác dụng gì"])).content;
+    expect(b).toMatch(/dinh dưỡng · cần lưu ý[\s\S]*không có mức uống nào/);
+    expect((await last(["da hồng hào ăn gì"])).content).not.toMatch(/Quả hồng/);
+  }, T);
+});
