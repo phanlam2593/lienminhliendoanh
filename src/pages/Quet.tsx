@@ -629,6 +629,12 @@ export default function Quet() {
   const myId = user?.id;
 
   const needByType = (type: NeedType) => myNeeds.find((n) => n.need_type === type);
+  // Ưu tiên nhu cầu ĐANG BẬT (1 mục có thể có nhiều nhu cầu, cái đầu danh sách có thể đang tạm dừng).
+  const myNeedsRef = useRef<SwipeNeed[]>([]);
+  const activeNeedByType = (type: NeedType) => {
+    const list = myNeedsRef.current.length ? myNeedsRef.current : myNeeds;
+    return list.find((n) => n.need_type === type && n.is_active) ?? list.find((n) => n.need_type === type);
+  };
   const needsOfType = (type: NeedType) => myNeeds.filter((n) => n.need_type === type);
 
   useEffect(() => {
@@ -664,30 +670,31 @@ export default function Quet() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isApproved]);
 
-  const loadCandidates = async () => {
-    if (!myId || !activeCategory) return;
-    setLoading(true);
-    const { data: swiped } = await db.from("swipe_actions").select("need_id, action, created_at").eq("actor_id", myId);
-    // "Thích" thì ẩn vĩnh viễn; "Bỏ qua" thì nhớ thời điểm bỏ qua để tính hạn hồi phục bên dưới.
-    const likedIds = new Set<string>();
-    const passedAt = new Map<string, string>();
-    (swiped ?? []).forEach((s: any) => {
-      if (s.action === "like") likedIds.add(s.need_id);
-      else if (s.action === "pass") passedAt.set(s.need_id, s.created_at);
-    });
-    const cooldownCutoff = Date.now() - PASS_COOLDOWN_HOURS * 60 * 60 * 1000;
+  // Nạp ứng viên theo TRANG (sửa 14/11): trước đây chỉ lấy 50 bài mới nhất rồi mới lọc bài đã
+  // quẹt → mục có >50 bài thì quẹt hết 50 bài đầu là báo "hết" dù còn bài cũ hơn. Giờ đi tiếp
+  // từng trang tới khi đủ thẻ hoặc hết thật; lượt đã quẹt tra theo đúng các bài của trang đó
+  // (không còn dính trần 1.000 dòng khi người dùng đã quẹt rất nhiều).
+  const candPageRef = useRef(0);
+  const candMoreRef = useRef(false);
+  const candLoadingRef = useRef(false);
+  const candKeyRef = useRef("");
+  const CAND_PAGE = 50;
+  const CAND_MIN = 12;
+  const CAND_MAX_PAGES = 8;
 
+  const fetchCandidatePage = async (cat: NeedType, page: number): Promise<{ rows: SwipeNeed[]; raw: number } | null> => {
+    if (!myId) return null;
     let q = db
       .from("swipe_needs")
       .select("*")
       .eq("is_active", true)
-      .eq("need_type", activeCategory)
+      .eq("need_type", cat)
       .neq("user_id", myId);
 
     // Làm quen: lọc 2 chiều kiểu Tinder — chỉ hiện người có giới tính khớp với "muốn tìm"
     // của mình, VÀ "muốn tìm" của họ khớp với giới tính của mình (hoặc để "Không yêu cầu").
-    if (activeCategory === "lam_quen") {
-      const myNeed = needByType("lam_quen");
+    if (cat === "lam_quen") {
+      const myNeed = activeNeedByType("lam_quen");
       const myDetails = (myNeed?.details as Record<string, string>) ?? {};
       if (myDetails.target && myDetails.target !== "any") {
         q = q.eq("details->>gender", myDetails.target);
@@ -697,13 +704,30 @@ export default function Quet() {
       }
     }
 
-    const { data, error } = await q.order("created_at", { ascending: false }).limit(50);
-    if (error) {
-      toast.error(t("common.error"));
-      setLoading(false);
-      return;
-    }
-    const filtered: SwipeNeed[] = (data ?? []).filter((n: SwipeNeed) => {
+    const { data, error } = await q
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(page * CAND_PAGE, page * CAND_PAGE + CAND_PAGE - 1);
+    if (error) return null;
+    const rows = (data ?? []) as SwipeNeed[];
+    if (rows.length === 0) return { rows: [], raw: 0 };
+    const { data: swiped } = await db
+      .from("swipe_actions")
+      .select("need_id, action, created_at")
+      .eq("actor_id", myId)
+      .in(
+        "need_id",
+        rows.map((n) => n.id),
+      );
+    // "Thích" thì ẩn vĩnh viễn; "Bỏ qua" thì nhớ thời điểm bỏ qua để tính hạn hồi phục bên dưới.
+    const likedIds = new Set<string>();
+    const passedAt = new Map<string, string>();
+    (swiped ?? []).forEach((s: any) => {
+      if (s.action === "like") likedIds.add(s.need_id);
+      else if (s.action === "pass") passedAt.set(s.need_id, s.created_at);
+    });
+    const cooldownCutoff = Date.now() - PASS_COOLDOWN_HOURS * 60 * 60 * 1000;
+    const filtered = rows.filter((n) => {
       if (likedIds.has(n.id)) return false;
       const passedTime = passedAt.get(n.id);
       if (!passedTime) return true;
@@ -711,19 +735,63 @@ export default function Quet() {
       const cooldownExpired = new Date(passedTime).getTime() < cooldownCutoff;
       return editedSincePass || cooldownExpired;
     });
-    setCandidates(filtered);
+    return { rows: filtered, raw: rows.length };
+  };
 
-    const ownerIds = Array.from(new Set(filtered.map((n) => n.user_id)));
-    if (ownerIds.length > 0) {
-      const { data: profs } = await supabase
-        .from("profiles_public")
-        .select("id, username, full_name, avatar_url")
-        .in("id", ownerIds);
-      const map: Record<string, OwnerInfo> = {};
-      (profs ?? []).forEach((p: any) => (map[p.id] = p));
-      setOwners(map);
+  const loadOwnersFor = async (list: SwipeNeed[], reset: boolean) => {
+    const ownerIds = Array.from(new Set(list.map((n) => n.user_id)));
+    if (ownerIds.length === 0) {
+      if (reset) setOwners({});
+      return;
     }
-    setLoading(false);
+    const { data: profs } = await supabase
+      .from("profiles_public")
+      .select("id, username, full_name, avatar_url")
+      .in("id", ownerIds);
+    const map: Record<string, OwnerInfo> = {};
+    (profs ?? []).forEach((p: any) => (map[p.id] = p));
+    setOwners((prev) => (reset ? map : { ...prev, ...map }));
+  };
+
+  // reset=true: nạp lại từ đầu (đổi mục / vào màn quẹt). reset=false: nạp thêm trang kế khi sắp hết thẻ.
+  const loadCandidates = async (reset = true) => {
+    if (!myId || !activeCategory) return;
+    if (!reset && (candLoadingRef.current || !candMoreRef.current)) return;
+    const cat = activeCategory;
+    const key = `${myId}:${cat}:${Date.now()}`;
+    if (reset) {
+      candKeyRef.current = key;
+      candPageRef.current = 0;
+      setLoading(true);
+    }
+    const runKey = candKeyRef.current;
+    candLoadingRef.current = true;
+    const got: SwipeNeed[] = [];
+    let more = true;
+    let pages = 0;
+    let failed = false;
+    while (more && got.length < CAND_MIN && pages < CAND_MAX_PAGES) {
+      const res = await fetchCandidatePage(cat, candPageRef.current);
+      if (candKeyRef.current !== runKey) return; // đã đổi mục giữa chừng → bỏ kết quả cũ
+      if (!res) {
+        failed = true;
+        break;
+      }
+      got.push(...res.rows);
+      more = res.raw === CAND_PAGE;
+      candPageRef.current += 1;
+      pages += 1;
+    }
+    candMoreRef.current = more && !failed;
+    candLoadingRef.current = false;
+    if (failed && reset) toast.error(t("common.error"));
+    setCandidates((prev) => {
+      if (reset) return got;
+      const seen = new Set(prev.map((n) => n.id));
+      return [...prev, ...got.filter((n) => !seen.has(n.id))];
+    });
+    await loadOwnersFor(got, reset);
+    if (reset) setLoading(false);
   };
 
   const loadMyNeeds = async () => {
@@ -733,6 +801,7 @@ export default function Quet() {
       .select("*")
       .eq("user_id", myId)
       .order("created_at", { ascending: false });
+    myNeedsRef.current = (data ?? []) as SwipeNeed[];
     setMyNeeds(data ?? []);
     setMyNeedsLoading(false);
   };
@@ -794,7 +863,12 @@ export default function Quet() {
 
   useEffect(() => {
     if (!myId || tab !== "swipe" || !activeCategory) return;
-    void loadCandidates();
+    void (async () => {
+      // Vào thẳng màn quẹt (mở lại trang / bấm thông báo) thì chưa có danh sách nhu cầu của mình
+      // → nạp trước, để bộ lọc 2 chiều của mục Làm quen dùng đúng nhu cầu của mình.
+      if (myNeedsRef.current.length === 0) await loadMyNeeds();
+      await loadCandidates(true);
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myId, tab, activeCategory]);
 
@@ -928,30 +1002,26 @@ export default function Quet() {
     setSwipeQuota((q) => (q && !q.unlimited ? { ...q, used: q.used + 1 } : q));
     let matchId: string | null = null;
     if (action === "like") {
-      // QUAN TRỌNG (sửa lỗi round 35): trước đây tìm "match GẦN NHẤT có liên quan tới need
-      // này" — nếu need này đã từng match với người KHÁC trước đó (vd dữ liệu test), sẽ vô
-      // tình lấy nhầm match CŨ đó, và nếu sau đó bấm "hoàn tác" sẽ XOÁ NHẦM match không liên
-      // quan. Giờ chỉ tìm match đúng giữa NHU CẦU CỦA MÌNH và nhu cầu vừa thích.
-      const myNeedId = activeCategory ? needByType(activeCategory)?.id : null;
-      if (myNeedId) {
-        const { data: newMatch } = await db
-          .from("swipe_matches")
-          .select("id")
-          .or(
-            `and(need_id_a.eq.${need.id},need_id_b.eq.${myNeedId}),and(need_id_a.eq.${myNeedId},need_id_b.eq.${need.id})`,
-          )
-          .order("created_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
-        if (newMatch) {
-          matchId = newMatch.id;
-          setMatchInfo({ owner: likedOwner, needTitle: need.title });
-          // Rung nhẹ khi có Kết nối (máy hỗ trợ) — cảm giác "It's a match" quen thuộc.
-          try {
-            navigator.vibrate?.([60, 40, 120]);
-          } catch {
-            /* bỏ qua */
-          }
+      // Tìm Kết nối giữa CHÍNH MÌNH và nhu cầu vừa thích (round 35: không lấy nhầm match cũ của
+      // need này với người KHÁC). Sửa 14/11: không còn đoán "nhu cầu của mình" bằng cái đầu tiên
+      // trong mục — trigger có thể ghép với nhu cầu khác cùng mục của mình, khi đó trước đây
+      // có Kết nối mà không hiện màn chúc mừng.
+      const { data: newMatch } = await db
+        .from("swipe_matches")
+        .select("id")
+        .or(`need_id_a.eq.${need.id},need_id_b.eq.${need.id}`)
+        .or(`user_a.eq.${myId},user_b.eq.${myId}`)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (newMatch) {
+        matchId = newMatch.id;
+        setMatchInfo({ owner: likedOwner, needTitle: need.title });
+        // Rung nhẹ khi có Kết nối (máy hỗ trợ) — cảm giác "It's a match" quen thuộc.
+        try {
+          navigator.vibrate?.([60, 40, 120]);
+        } catch {
+          /* bỏ qua */
         }
       }
     }
@@ -976,14 +1046,20 @@ export default function Quet() {
   const undoLastAction = async () => {
     if (!lastAction || busy) return;
     setBusy(true);
-    const { need, actionId, matchId } = lastAction;
+    const { need, matchId } = lastAction;
     setLastAction(null);
-    if (matchId) {
-      await db.from("swipe_matches").delete().eq("id", matchId);
-      setMatches((prev) => prev.filter((m) => m.id !== matchId));
+    // Hoàn tác ở server (RPC undo_swipe_action): xoá lượt quẹt của mình; nếu lượt thích đó vừa
+    // tạo Kết nối thì gỡ Kết nối và GIỮ NGUYÊN lượt thích của người kia (trước đây xoá match
+    // từ client làm lượt thích của họ bị đổi thành "bỏ qua" 48 giờ).
+    const { data, error } = await db.rpc("undo_swipe_action", { _need_id: need.id });
+    if (error || !data?.ok) {
+      setBusy(false);
+      toast.error(t("common.error"));
+      return;
     }
-    if (actionId) {
-      await db.from("swipe_actions").delete().eq("id", actionId);
+    if (matchId) {
+      setMatches((prev) => prev.filter((m) => m.id !== matchId));
+      setMatchInfo(null);
     }
     setCandidates((prev) => (prev.some((n) => n.id === need.id) ? prev : [need, ...prev]));
     setBusy(false);
@@ -1294,7 +1370,11 @@ export default function Quet() {
   const togglePauseEditing = async () => {
     if (!editingNeed) return;
     const next = !editingNeed.is_active;
-    await db.from("swipe_needs").update({ is_active: next }).eq("id", editingNeed.id);
+    const { error } = await db.from("swipe_needs").update({ is_active: next }).eq("id", editingNeed.id);
+    if (error) {
+      toast.error(t("common.error"));
+      return;
+    }
     setEditingNeed({ ...editingNeed, is_active: next });
     void loadMyNeeds();
   };
@@ -1302,7 +1382,11 @@ export default function Quet() {
   const deleteEditing = async () => {
     if (!editingNeed) return;
     const type = editingNeed.need_type;
-    await db.from("swipe_needs").delete().eq("id", editingNeed.id);
+    const { error } = await db.from("swipe_needs").delete().eq("id", editingNeed.id);
+    if (error) {
+      toast.error(t("common.error"));
+      return;
+    }
     setEditingNeed(null);
     goScreen({ tab: "category", step: "manage", cat: type }, true);
     void loadMyNeeds();
@@ -1310,7 +1394,8 @@ export default function Quet() {
 
   const deleteFromManageList = async (id: string) => {
     setDeleteTargetId(null);
-    await db.from("swipe_needs").delete().eq("id", id);
+    const { error } = await db.from("swipe_needs").delete().eq("id", id);
+    if (error) toast.error(t("common.error"));
     void loadMyNeeds();
   };
 
@@ -1367,6 +1452,12 @@ export default function Quet() {
     filterTradeType !== "all" ||
     filterMode !== "all" ||
     radiusKm != null;
+
+  // Sắp hết thẻ mà server còn bài → nạp thêm trang kế.
+  useEffect(() => {
+    if (tab === "swipe" && !loading && visibleCandidates.length <= 3) void loadCandidates(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleCandidates.length, tab, loading]);
 
   const topCard = visibleCandidates[0];
   const nextCard = visibleCandidates[1];

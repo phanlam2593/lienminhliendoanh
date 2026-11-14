@@ -46,6 +46,7 @@ import { AiAssistantRow } from "./AiAssistant";
 import { useOnlineUsers } from "@/lib/onlineUsers";
 import { linkifyContent, ChatLinkPreview } from "@/lib/linkPreview";
 import { useCall } from "@/lib/call";
+import { displayCallStatus } from "@/lib/callLogic";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
 import { Avatar } from "@/components/Avatar";
@@ -93,6 +94,13 @@ function messagePreview(m: Pick<Message, "type" | "content">, tr: (k: string) =>
   if (m.type === "voice") return `🎤 ${tr("chat.voiceMessage")}`;
   if (m.type === "broadcast") return m.content.replace(/^📢\s*/, "📢 ");
   return m.content;
+}
+
+// Lỗi gửi tin: RLS từ chối (mã 42501) = hai người đang chặn nhau → nói dễ hiểu thay vì hiện
+// nguyên văn "new row violates row-level security policy…".
+function sendFailText(error: { code?: string; message?: string }, tr: (k: string) => string): string {
+  if (error?.code === "42501") return tr("chat.cannotSendTo");
+  return tr("chat.sendFail") + ": " + (error?.message ?? "");
 }
 
 function callPreviewText(
@@ -157,7 +165,7 @@ export function MessagesInbox() {
       .insert({ sender_id: user.id, receiver_id: target.partnerId, content, type: "text" });
     setStatusSending(false);
     if (error) {
-      toast.error(t("chat.sendFail") + ": " + error.message);
+      toast.error(sendFailText(error, t));
       return;
     }
     setStatusReply("");
@@ -322,10 +330,17 @@ export function MessagesInbox() {
     // danh sách hội thoại luôn cập nhật kịp thời.
     const onCallLogged = () => load();
     window.addEventListener("call:logged", onCallLogged);
+    // Quay lại app sau khi để nền: kết nối realtime đã ngắt trong lúc đó và KHÔNG phát lại tin
+    // đã lỡ → tự nạp lại danh sách, nếu không hộp thư đứng im tới khi thoát ra vào lại.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void load();
+    };
+    document.addEventListener("visibilitychange", onVisible);
 
     return () => {
       supabase.removeChannel(ch);
       window.removeEventListener("call:logged", onCallLogged);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, [user?.id]);
 
@@ -899,7 +914,7 @@ export function MessagesThread() {
   const partnerOnline = onlineUsers.has(id);
 
   const handleCall = () => {
-    if (!partner) return;
+    if (!partner || partner.id === user?.id) return;
     if (!partnerOnline) {
       toast(t("call.offline"));
       return;
@@ -907,7 +922,7 @@ export function MessagesThread() {
     startCall({ id: partner.id, full_name: partner.full_name, avatar_url: partner.avatar_url });
   };
   const handleVideoCall = () => {
-    if (!partner) return;
+    if (!partner || partner.id === user?.id) return;
     if (!partnerOnline) {
       toast(t("call.offline"));
       return;
@@ -919,6 +934,10 @@ export function MessagesThread() {
   const [msgsLoading, setMsgsLoading] = useState(true);
   const [calls, setCalls] = useState<CallRow[]>([]);
   const [msgLimit, setMsgLimit] = useState(MSG_PAGE_SIZE);
+  // Bản mới nhất của msgLimit / danh sách id tin cho các hàm nghe sự kiện (đăng ký 1 lần).
+  const msgLimitRef = useRef(MSG_PAGE_SIZE);
+  msgLimitRef.current = msgLimit;
+  const msgIdsRef = useRef<string[]>([]);
   const [msgHasMore, setMsgHasMore] = useState(true);
   const [loadingOlder, setLoadingOlder] = useState(false);
   const [text, setText] = useState("");
@@ -927,6 +946,7 @@ export function MessagesThread() {
   const voice = useVoiceRecorder(() => toast.error(t("chat.micDenied")));
   const [pendingImage, setPendingImage] = useState<{ file: File; previewUrl: string } | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  msgIdsRef.current = msgs.map((m) => m.id);
   const [partnerIsAdmin, setPartnerIsAdmin] = useState(false);
   const [quickViewOpen, setQuickViewOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -1154,10 +1174,21 @@ export function MessagesThread() {
       .then(({ data }) => setIMutedThem(!!data));
     void loadMsgs(MSG_PAGE_SIZE, true);
     void loadCalls();
-    void markThreadRead();
-    // Thử lại khi người dùng quay lại tab/app (lần đầu có thể lỗi mạng hoặc token vừa hết hạn)
+    if (document.visibilityState === "visible") void markThreadRead();
+    // Quay lại tab/app: realtime đã ngắt lúc app nằm nền và KHÔNG phát lại tin đã lỡ → nạp lại
+    // đoạn chat TRƯỚC rồi mới đánh dấu đã đọc. Trước đây chỉ đánh dấu đã đọc: tin đến lúc để nền
+    // bị tính "đã xem" (mất chấm đỏ) trong khi màn hình chưa hề hiện tin đó.
+    let lastRefresh = 0;
     const onFocus = () => {
-      if (document.visibilityState === "visible") void markThreadRead();
+      if (document.visibilityState !== "visible") return;
+      const now = Date.now();
+      if (now - lastRefresh < 1500) return; // focus + visibilitychange thường bắn liền nhau
+      lastRefresh = now;
+      void (async () => {
+        await loadMsgs(msgLimitRef.current, pinnedToBottomRef.current);
+        void loadCalls();
+        void markThreadRead();
+      })();
     };
     window.addEventListener("focus", onFocus);
     document.addEventListener("visibilitychange", onFocus);
@@ -1175,7 +1206,8 @@ export function MessagesThread() {
           const row = payload.new as Message;
           if (row.receiver_id !== user.id) return;
           setMsgs((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
-          void markThreadRead();
+          // Chỉ tính "đã xem" khi màn hình đang thật sự hiện (app để nền thì chưa xem).
+          if (document.visibilityState === "visible") void markThreadRead();
           setTimeout(() => scrollToBottom(true), 50);
         },
       )
@@ -1205,22 +1237,14 @@ export function MessagesThread() {
           setMsgs((prev) => prev.map((m) => (m.id === row.id ? row : m)));
         },
       )
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "messages", filter: `sender_id=eq.${id}` },
-        (payload) => {
-          const oldRow = payload.old as { id: string };
-          setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
-        },
-      )
-      .on(
-        "postgres_changes",
-        { event: "DELETE", schema: "public", table: "messages", filter: `sender_id=eq.${user.id}` },
-        (payload) => {
-          const oldRow = payload.old as { id: string };
-          setMsgs((prev) => prev.filter((m) => m.id !== oldRow.id));
-        },
-      )
+      // Sự kiện DELETE không lọc được theo cột (bảng messages chỉ gửi kèm khoá chính của dòng bị
+      // xoá) — 2 bộ lọc sender_id trước đây không bao giờ khớp nên đối phương xoá tin mà bên
+      // này vẫn thấy tới khi vào lại. Nghe DELETE không lọc, đối chiếu theo id tin đang hiển thị.
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "messages" }, (payload) => {
+        const oldRow = payload.old as { id?: string };
+        if (!oldRow?.id) return;
+        setMsgs((prev) => (prev.some((m) => m.id === oldRow.id) ? prev.filter((m) => m.id !== oldRow.id) : prev));
+      })
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "message_reactions" }, (payload) => {
         const r = payload.new as { message_id: string; user_id: string; emoji: string };
         setReactions((prev) => {
@@ -1232,12 +1256,17 @@ export function MessagesThread() {
         });
       })
       .on("postgres_changes", { event: "DELETE", schema: "public", table: "message_reactions" }, (payload) => {
-        const r = payload.old as { message_id: string; user_id: string; emoji: string };
+        const r = payload.old as { message_id?: string; user_id: string; emoji: string };
+        if (!r.message_id) {
+          // Dòng bị xoá chỉ kèm khoá chính (không có message_id) → nạp lại cảm xúc của đoạn chat.
+          void loadReactions(msgIdsRef.current);
+          return;
+        }
         setReactions((prev) => {
-          if (!prev[r.message_id]?.[r.emoji]) return prev;
+          if (!prev[r.message_id!]?.[r.emoji]) return prev;
           const next = { ...prev };
-          next[r.message_id] = { ...next[r.message_id] };
-          next[r.message_id][r.emoji] = next[r.message_id][r.emoji].filter((id) => id !== r.user_id);
+          next[r.message_id!] = { ...next[r.message_id!] };
+          next[r.message_id!][r.emoji] = next[r.message_id!][r.emoji].filter((id) => id !== r.user_id);
           return next;
         });
       })
@@ -1309,7 +1338,7 @@ export function MessagesThread() {
       .select()
       .single();
     if (error) {
-      toast.error(t("chat.sendGifFail") + ": " + error.message);
+      toast.error(sendFailText(error, t));
       return;
     }
     if (data) setMsgs((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data as Message]));
@@ -1345,7 +1374,7 @@ export function MessagesThread() {
       setReplyingTo(null);
       setTimeout(() => scrollToBottom(true), 50);
     } catch (e: any) {
-      toast.error(e.message || t("chat.sendVoiceFail"));
+      toast.error(e?.code === "42501" ? t("chat.cannotSendTo") : e.message || t("chat.sendVoiceFail"));
     } finally {
       setUploading(false);
     }
@@ -1375,7 +1404,7 @@ export function MessagesThread() {
         URL.revokeObjectURL(pendingImage.previewUrl);
         setPendingImage(null);
       } catch (e: any) {
-        toast.error(e.message || t("chat.sendImageFail"));
+        toast.error(e?.code === "42501" ? t("chat.cannotSendTo") : e.message || t("chat.sendImageFail"));
       } finally {
         setUploading(false);
       }
@@ -1396,7 +1425,7 @@ export function MessagesThread() {
       .select()
       .single();
     if (error) {
-      toast.error(t("chat.sendFail") + ": " + error.message);
+      toast.error(sendFailText(error, t));
       setText(trimmed);
       return;
     }
@@ -1518,7 +1547,8 @@ export function MessagesThread() {
       return;
     }
     toast.success(t("messages.convoDeleted"));
-    nav("/tin-nhan");
+    // replace: nút Back không quay lại đoạn chat vừa xoá (#56).
+    nav("/tin-nhan", { replace: true });
   };
 
   const loadAllMedia = async () => {
@@ -1553,7 +1583,7 @@ export function MessagesThread() {
           <div className="font-semibold text-sm truncate hover:text-primary">{partner?.full_name || "…"}</div>
           {partner && <MemberLevelBadge points={(partner as any).points ?? 0} isAdmin={partnerIsAdmin} />}
         </button>
-        {partner && (
+        {partner && partner.id !== user.id && (
           <>
             <button
               onClick={handleCall}
@@ -1771,7 +1801,8 @@ export function MessagesThread() {
                 if (entry.kind === "call") {
                   const c = entry.item;
                   const outgoing = c.caller_id === user.id;
-                  const missedByMe = !outgoing && (c.status === "missed" || c.status === "busy");
+                  const cStatus = displayCallStatus(c.status, c.created_at, Date.now());
+                  const missedByMe = !outgoing && (cStatus === "missed" || cStatus === "busy");
                   const durMin = Math.floor((c.duration_seconds ?? 0) / 60);
                   const durSec = (c.duration_seconds ?? 0) % 60;
                   const isVideo = (c as any).call_type === "video";
@@ -1786,7 +1817,7 @@ export function MessagesThread() {
                   const sub =
                     c.status === "answered"
                       ? t("call.inline.durationLong", { m: durMin, s: durSec })
-                      : c.status === "missed"
+                      : cStatus === "missed" || cStatus === "ringing"
                         ? outgoing
                           ? t("call.inline.noAnswer")
                           : isVideo

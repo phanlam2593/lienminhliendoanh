@@ -563,7 +563,18 @@ export default function Community() {
         },
       )
       .subscribe();
+    // Quay lại app sau khi để nền: realtime đã ngắt và không phát lại tin đã lỡ → nạp lại kênh.
+    let lastRefresh = 0;
+    const onVisible = () => {
+      if (document.visibilityState !== "visible") return;
+      const now = Date.now();
+      if (now - lastRefresh < 1500) return;
+      lastRefresh = now;
+      void loadMsgs(msgLimitRef.current, false, channelRef.current.location, channelTopic);
+    };
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
+      document.removeEventListener("visibilitychange", onVisible);
       supabase.removeChannel(ch);
     };
   }, [user?.id, channelTopic]);

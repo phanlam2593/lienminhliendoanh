@@ -414,17 +414,47 @@ export default function GroupChat() {
         const extra = row.type === "system" && row.content.includes(":") ? [row.content.split(":")[1]] : [];
         void ensurePeople([row.sender_id ?? "", ...extra]);
         if (row.type === "system") void loadMembers();
-        void markRead();
+        // Chỉ tính "đã đọc" khi màn hình đang hiện (app để nền thì chưa đọc).
+        if (document.visibilityState === "visible") void markRead();
       })
-      .on("postgres_changes", { event: "DELETE", schema: "public", table: "group_messages", filter: `group_id=eq.${gid}` }, (p: any) =>
-        setMsgs((prev) => prev.filter((x) => x.id !== p.old.id)),
+      // DELETE không lọc được theo group_id (dòng bị xoá chỉ kèm khoá chính) → nghe không lọc,
+      // đối chiếu theo id tin đang hiển thị.
+      .on("postgres_changes", { event: "DELETE", schema: "public", table: "group_messages" }, (p: any) =>
+        setMsgs((prev) => (p.old?.id && prev.some((x) => x.id === p.old.id) ? prev.filter((x) => x.id !== p.old.id) : prev)),
       )
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "group_chats", filter: `id=eq.${gid}` }, (p: any) =>
         setGroup((prev) => (prev ? { ...prev, name: p.new.name } : prev)),
       )
       .subscribe();
+
+    // Quay lại app sau khi để nền: realtime đã ngắt và không phát lại tin đã lỡ → nạp lại.
+    let lastRefresh = 0;
+    const onVisible = () => {
+      if (document.visibilityState !== "visible" || cancelled) return;
+      const now = Date.now();
+      if (now - lastRefresh < 1500) return;
+      lastRefresh = now;
+      void (async () => {
+        const { data: m } = await db
+          .from("group_messages")
+          .select("*")
+          .eq("group_id", gid)
+          .order("created_at", { ascending: false })
+          .limit(100);
+        if (cancelled || !m) return;
+        const list = (m as GroupMessage[]).reverse();
+        setMsgs(list);
+        void ensurePeople(list.map((x) => x.sender_id ?? ""));
+        void loadMembers();
+        void markRead();
+      })();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", onVisible);
     return () => {
       cancelled = true;
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", onVisible);
       supabase.removeChannel(ch);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -460,7 +490,8 @@ export default function GroupChat() {
       .select()
       .single();
     if (error) {
-      toast.error(t("chat.sendFail") + ": " + error.message);
+      // RLS từ chối (42501) = mình không còn trong nhóm (vừa bị xoá khỏi nhóm lúc đang mở).
+      toast.error(error.code === "42501" ? t("common.contentGone") : t("chat.sendFail") + ": " + error.message);
       return false;
     }
     if (data) setMsgs((prev) => (prev.some((x) => x.id === data.id) ? prev : [...prev, data as GroupMessage]));
@@ -536,7 +567,7 @@ export default function GroupChat() {
     if (error) return toast.error(error.message);
     if (uid === user?.id) {
       toast.success(t("group.leftToast"));
-      nav("/tin-nhan");
+      nav("/tin-nhan", { replace: true });
       return;
     }
     void loadMembers();

@@ -6,6 +6,7 @@ import { useLanguage } from "@/lib/i18n";
 import { Avatar } from "@/components/Avatar";
 import { Phone, PhoneOff, Mic, MicOff, Video, VideoOff, RotateCw, Volume2, Volume1 } from "lucide-react";
 import { toast } from "sonner";
+import { callEndStatus, decideOnOffer, stillSameCall } from "@/lib/callLogic";
 
 const STUN_ONLY: RTCIceServer[] = [{ urls: ["stun:stun.l.google.com:19302", "stun:stun1.l.google.com:19302"] }];
 
@@ -164,8 +165,20 @@ export function CallProvider({ children }: { children: ReactNode }) {
   const durationTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [, forceTick] = useState(0);
   const ringtone = useRingtone();
+  // Chốt chống bấm 2 lần (Gọi / Nghe) trong lúc còn đang xin mic, lấy TURN.
+  const startingRef = useRef(false);
+  const acceptingRef = useRef(false);
+  // callId mà mình đang TRẢ LỜI (đã vào connectAsCallee) — nhận ra offer gửi lặp.
+  const calleeOfCallIdRef = useRef<string | null>(null);
+  // Những người MÌNH đã chặn — cuộc gọi của họ bị bỏ qua im lặng (tín hiệu gọi đi qua kênh
+  // broadcast nên RLS của bảng calls không tự chặn được chuông).
+  const blockedIdsRef = useRef<Set<string>>(new Set());
+  // Cuộc gọi đang chờ kiểm lại "còn chặn không" — ICE candidate tới trong lúc chờ được giữ lại.
+  const verifyingCallIdRef = useRef<string | null>(null);
 
   stateRef.current = state;
+  const profileRef = useRef(profile);
+  profileRef.current = profile;
 
   const canReceiveCalls = !!user && (isApproved || isAdmin);
 
@@ -204,7 +217,12 @@ export function CallProvider({ children }: { children: ReactNode }) {
     setSpeakerOn(false);
     setMainView("remote");
     facingModeRef.current = "user";
+    acceptingRef.current = false;
+    calleeOfCallIdRef.current = null;
     closeOutboundChannel();
+    // Đặt "rảnh" NGAY (không chờ React vẽ lại) để các bước async đang chạy dở (xin mic, lấy
+    // TURN…) kiểm lại là thấy cuộc gọi đã kết thúc. Chỗ nào cần trạng thái khác sẽ tự đặt lại sau.
+    stateRef.current = { status: "idle" };
   };
 
   const outboundRef = useRef<{
@@ -300,15 +318,7 @@ export function CallProvider({ children }: { children: ReactNode }) {
       sendSignal(s.peer.id, "end", { callId: s.callId, reason: reason ?? "hangup" });
     }
     if (s.status !== "idle") {
-      const status =
-        s.status === "connected"
-          ? "answered"
-          : reason === "declined"
-            ? "declined"
-            : reason === "busy"
-              ? "busy"
-              : "missed";
-      void logCall(status);
+      void logCall(callEndStatus(s.status, reason));
       // Kết thúc cuộc gọi (dù bằng cách nào) thì đưa thẳng vào khung chat với người đó
       // luôn — dù trước đó đang ở trang bất kỳ (VD Trang chủ) khi bắt/kết thúc cuộc gọi.
       nav(`/tin-nhan/${s.peer.id}`);
@@ -367,62 +377,95 @@ export function CallProvider({ children }: { children: ReactNode }) {
 
   const startCall = async (peer: CallPeerInfo, opts?: { asAnswerToCallId?: string; video?: boolean }) => {
     if (!user || !profile) return;
-    if (stateRef.current.status !== "idle") {
-      toast.error(t("call.alreadyInCall"));
+    if (peer.id === user.id) return; // không tự gọi cho chính mình
+    if (stateRef.current.status !== "idle" || startingRef.current) {
+      if (stateRef.current.status !== "idle") toast.error(t("call.alreadyInCall"));
       return;
     }
-    // "Trả lời" qua đường trễ (opts.asAnswerToCallId): dùng LẠI đúng callId gốc thay vì
-    // tạo cuộc gọi mới — giữ đúng chiều "ai gọi ai" trong DB (không bị đảo ngược), và
-    // tránh tạo ra 1 dòng "ringing" mồ côi không bao giờ được cập nhật.
-    const isAnswering = !!opts?.asAnswerToCallId;
-    const isVideo = !!opts?.video;
-    const callId = opts?.asAnswerToCallId ?? crypto.randomUUID();
-    const stream = await getMedia(isVideo);
-    if (!stream) return;
+    startingRef.current = true;
+    try {
+      // "Trả lời" qua đường trễ (opts.asAnswerToCallId): dùng LẠI đúng callId gốc thay vì
+      // tạo cuộc gọi mới — giữ đúng chiều "ai gọi ai" trong DB (không bị đảo ngược), và
+      // tránh tạo ra 1 dòng "ringing" mồ côi không bao giờ được cập nhật.
+      const isAnswering = !!opts?.asAnswerToCallId;
+      const isVideo = !!opts?.video;
+      const callId = opts?.asAnswerToCallId ?? crypto.randomUUID();
+      const stream = await getMedia(isVideo);
+      if (!stream) return;
+      if (stateRef.current.status !== "idle") {
+        // Trong lúc hộp thoại xin quyền mic còn mở thì đã có cuộc gọi khác tới → nhường cuộc đó.
+        stream.getTracks().forEach((tr) => tr.stop());
+        if (localStreamRef.current === stream) localStreamRef.current = null;
+        return;
+      }
 
-    amICallerRef.current = !isAnswering;
-    setState({ status: "calling", callId, peer, video: isVideo });
-    ringtone.start("ringback");
+      amICallerRef.current = !isAnswering;
+      stateRef.current = { status: "calling", callId, peer, video: isVideo };
+      setState({ status: "calling", callId, peer, video: isVideo });
+      ringtone.start("ringback");
+      // Mỗi bước chờ bên dưới xong đều kiểm lại: người dùng đã bấm Kết thúc (hoặc cuộc gọi đã
+      // đổi sang callId khác do "đụng độ") thì DỪNG — trước đây vẫn chạy tiếp, gửi offer + ghi
+      // "đang đổ chuông" cho 1 cuộc đã huỷ → máy bên kia reo "ma".
+      const mine = () => stillSameCall(stateRef.current, callId, ["calling"]);
 
-    const iceServers = await getIceServers();
-    const pc = setupPeerConnection(peer.id, callId, iceServers, isVideo);
-    stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
-
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-
-    sendSignal(peer.id, "offer", {
-      callId,
-      sdp: offer,
-      video: isVideo,
-      from: { id: user.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
-    });
-
-    if (!isAnswering) {
-      // Ghi lại "đang đổ chuông" vào DB (không chỉ tín hiệu tức thời qua broadcast) — để
-      // nếu người nhận đang tắt app, họ vẫn biết qua push + tự phát hiện lại khi mở app
-      // lên. Chỉ ghi khi đây thực sự là cuộc gọi MỚI — nếu là trả lời qua đường trễ thì
-      // dòng "ringing" đã được ghi từ lúc người gọi bắt đầu rồi, không ghi lại nữa.
-      void supabase
-        .from("calls")
-        .insert({
+      if (!isAnswering) {
+        // Ghi "đang đổ chuông" vào DB TRƯỚC khi phát tín hiệu: RLS của bảng calls từ chối khi 2
+        // người đã chặn nhau → dừng ngay, không đổ chuông máy người đã chặn mình. Dòng này cũng
+        // là thứ kích hoạt push + "phát hiện qua đường trễ" khi người nhận đang tắt app.
+        const { error } = await supabase.from("calls").insert({
           id: callId,
           caller_id: user.id,
           callee_id: peer.id,
           status: "ringing",
           call_type: isVideo ? "video" : "voice",
-        } as any)
-        .then(({ error }) => {
-          if (error) console.error("[call] LỖI insert ringing:", error.message, error);
-        });
-    }
-
-    ringTimeoutRef.current = setTimeout(() => {
-      if (stateRef.current.status === "calling") {
-        toast(t("call.noAnswer"));
-        endCall(true, "timeout");
+        } as any);
+        if (!mine()) return;
+        if (error) {
+          console.error("[call] LỖI insert ringing:", error.message, error);
+          toast.error(t("call.cannotCall"));
+          cleanupCall();
+          stateRef.current = { status: "idle" };
+          setState({ status: "idle" });
+          return;
+        }
       }
-    }, RING_TIMEOUT_MS);
+
+      const iceServers = await getIceServers();
+      if (!mine()) return;
+      const pc = setupPeerConnection(peer.id, callId, iceServers, isVideo);
+      stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
+
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+      if (!mine()) {
+        pc.close();
+        if (pcRef.current === pc) pcRef.current = null;
+        return;
+      }
+
+      sendSignal(peer.id, "offer", {
+        callId,
+        sdp: offer,
+        video: isVideo,
+        from: { id: user.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
+      });
+
+      clearRingTimeout();
+      ringTimeoutRef.current = setTimeout(() => {
+        if (stillSameCall(stateRef.current, callId, ["calling"])) {
+          toast(t("call.noAnswer"));
+          endCall(true, "timeout");
+        }
+      }, RING_TIMEOUT_MS);
+    } catch (err) {
+      console.error("[call] Lỗi khi bắt đầu cuộc gọi:", err);
+      if (stateRef.current.status === "calling") {
+        toast.error(t("call.connectionFailed"));
+        endCall(true, "failed");
+      }
+    } finally {
+      startingRef.current = false;
+    }
   };
 
   const connectAsCallee = async (
@@ -433,39 +476,70 @@ export function CallProvider({ children }: { children: ReactNode }) {
   ) => {
     clearRingTimeout();
     ringtone.stop();
+    calleeOfCallIdRef.current = callId;
+    // Người gọi có thể đã cúp máy trong lúc mình còn đang xin mic / lấy TURN → mỗi bước chờ
+    // xong phải kiểm lại, nếu không sẽ kẹt ở màn "đã kết nối 00:00" với 1 cuộc đã kết thúc.
+    const alive = () => stillSameCall(stateRef.current, callId) && calleeOfCallIdRef.current === callId;
 
     const stream = await getMedia(video);
     if (!stream) {
-      endCall(true, video ? "no-camera" : "no-mic");
+      if (alive()) endCall(true, video ? "no-camera" : "no-mic");
+      return;
+    }
+    if (!alive()) {
+      stream.getTracks().forEach((tr) => tr.stop());
+      if (localStreamRef.current === stream) localStreamRef.current = null;
       return;
     }
 
     const iceServers = await getIceServers();
+    if (!alive()) {
+      stream.getTracks().forEach((tr) => tr.stop());
+      if (localStreamRef.current === stream) localStreamRef.current = null;
+      return;
+    }
     const pc = setupPeerConnection(peer.id, callId, iceServers, video);
     stream.getTracks().forEach((tr) => pc.addTrack(tr, stream));
 
-    await pc.setRemoteDescription(offerSdp);
-    for (const c of pendingIceRef.current) {
-      try {
-        await pc.addIceCandidate(c);
-      } catch {
-        /* ignore stale candidate */
+    try {
+      await pc.setRemoteDescription(offerSdp);
+      for (const c of pendingIceRef.current) {
+        try {
+          await pc.addIceCandidate(c);
+        } catch {
+          /* ignore stale candidate */
+        }
       }
-    }
-    pendingIceRef.current = [];
+      pendingIceRef.current = [];
 
-    const answer = await pc.createAnswer();
-    await pc.setLocalDescription(answer);
-    sendSignal(peer.id, "answer", { callId, sdp: answer });
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+      if (!alive()) {
+        pc.close();
+        if (pcRef.current === pc) pcRef.current = null;
+        return;
+      }
+      sendSignal(peer.id, "answer", { callId, sdp: answer });
+    } catch (err) {
+      console.error("[call] Lỗi khi trả lời cuộc gọi:", err);
+      if (alive()) {
+        toast.error(t("call.connectionFailed"));
+        endCall(true, "failed");
+      }
+      return;
+    }
 
     const startedAt = Date.now();
+    stateRef.current = { status: "connected", callId, peer, startedAt, video };
     setState({ status: "connected", callId, peer, startedAt, video });
+    if (durationTimerRef.current) clearInterval(durationTimerRef.current);
     durationTimerRef.current = setInterval(() => forceTick((n) => n + 1), 1000);
   };
 
   const acceptCall = async () => {
     const s = stateRef.current;
-    if (s.status !== "incoming") return;
+    if (s.status !== "incoming" || acceptingRef.current) return;
+    acceptingRef.current = true;
     nav(`/tin-nhan/${s.peer.id}`);
 
     if (s.viaLateDetection) {
@@ -577,6 +651,40 @@ export function CallProvider({ children }: { children: ReactNode }) {
     if (!canReceiveCalls || !user) return;
     const ch = supabase.channel(`call:${user.id}`);
 
+    // Đổ chuông cho 1 cuộc gọi đến (dùng chung cho đường thường và đường "vừa bỏ chặn").
+    const ring = (callId: string, from: CallPeerInfo, sdp: RTCSessionDescriptionInit, isVideo: boolean) => {
+      amICallerRef.current = false;
+      stateRef.current = { status: "incoming", callId, peer: from, offerSdp: sdp, video: isVideo };
+      setState({ status: "incoming", callId, peer: from, offerSdp: sdp, video: isVideo });
+      ringtone.start("ring");
+      // Kiểm lại danh sách chặn ngay sau khi đổ chuông (phòng khi mình vừa chặn họ ở màn khác,
+      // danh sách trong bộ nhớ chưa kịp cập nhật) — đúng là đã chặn thì tắt chuông im lặng.
+      void supabase
+        .from("blocks")
+        .select("id")
+        .eq("blocker_id", user.id)
+        .eq("blocked_id", from.id)
+        .maybeSingle()
+        .then(({ data }) => {
+          if (!data) return;
+          blockedIdsRef.current.add(from.id);
+          if (stillSameCall(stateRef.current, callId, ["incoming"])) {
+            cleanupCall();
+            stateRef.current = { status: "idle" };
+            setState({ status: "idle" });
+          }
+        });
+      clearRingTimeout();
+      ringTimeoutRef.current = setTimeout(() => {
+        if (stillSameCall(stateRef.current, callId, ["incoming"])) {
+          sendSignal(from.id, "reject", { callId, reason: "timeout" });
+          void logCall("missed");
+          cleanupCall();
+          setState({ status: "idle" });
+        }
+      }, RING_TIMEOUT_MS);
+    };
+
     ch.on("broadcast", { event: "offer" }, ({ payload }) => {
       const { callId, sdp, from, video } = payload as {
         callId: string;
@@ -586,17 +694,77 @@ export function CallProvider({ children }: { children: ReactNode }) {
       };
       const isVideo = !!video;
       const cur = stateRef.current;
+      const decision = decideOnOffer({
+        myId: user.id,
+        fromId: from.id,
+        incomingCallId: callId,
+        phase: cur.status,
+        curCallId: cur.status === "idle" ? null : cur.callId,
+        curPeerId: cur.status === "idle" ? null : cur.peer.id,
+        calleeOfCallId: calleeOfCallIdRef.current,
+        blocked: blockedIdsRef.current.has(from.id),
+      });
+      if (decision === "duplicate") return;
+      if (decision === "blocked") {
+        // Danh sách chặn trong bộ nhớ có thể đã cũ (mình vừa BỎ chặn ở màn khác) → hỏi lại DB.
+        // Còn chặn thì im lặng bỏ qua; hết chặn thì đổ chuông như thường.
+        verifyingCallIdRef.current = callId;
+        pendingIceRef.current = [];
+        void supabase
+          .from("blocks")
+          .select("id")
+          .eq("blocker_id", user.id)
+          .eq("blocked_id", from.id)
+          .maybeSingle()
+          .then(({ data, error }) => {
+            if (verifyingCallIdRef.current !== callId) return;
+            verifyingCallIdRef.current = null;
+            if (data || error) {
+              pendingIceRef.current = [];
+              return;
+            }
+            blockedIdsRef.current.delete(from.id);
+            if (stateRef.current.status === "idle") ring(callId, from, sdp, isVideo);
+          });
+        return;
+      }
 
       // "Đụng độ": mình đang gọi ĐÚNG người này, mà họ cũng đang gọi lại mình cùng lúc
       // (thường do họ không thấy chuông đổ nên tự bấm gọi lại, hoặc đang "Nghe" 1 cuộc
-      // gọi phát hiện qua đường trễ). Thay vì báo "bận" vô lý, coi như họ vừa bắt máy:
-      // huỷ lượt gọi đi của mình và kết nối thẳng bằng offer mới của họ.
-      if (cur.status === "calling" && cur.peer.id === from.id) {
+      // gọi phát hiện qua đường trễ). Thay vì báo "bận" vô lý, coi như họ vừa bắt máy.
+      // Sửa 14/11: trước đây CẢ HAI cùng nhường → không ai giữ offer → kết nối thất bại. Giờ
+      // phân vai cố định (xem decideOnOffer): 1 bên giữ vai người gọi và gửi lại offer.
+      if (decision === "hold") {
+        const local = pcRef.current?.localDescription;
+        const profile = profileRef.current;
+        if (cur.status === "calling" && local && profile) {
+          // localDescription lúc này đã kèm các ICE candidate gom được → bên kia không bị thiếu.
+          sendSignal(from.id, "offer", {
+            callId: cur.callId,
+            sdp: { type: local.type, sdp: local.sdp },
+            video: cur.video,
+            from: { id: user.id, full_name: profile.full_name, avatar_url: profile.avatar_url },
+          });
+        }
+        return;
+      }
+      if (decision === "yield" && cur.status === "calling") {
+        const abandonedCallId = cur.callId;
         cleanupCall();
-        // KHÔNG đổi amICallerRef ở đây nữa — nếu callId khớp với cuộc gọi mình đang chủ
-        // động gọi đi (tức đối phương đang "trả lời" qua đường trễ bằng đúng callId gốc),
-        // mình vẫn đúng là người gọi ban đầu, giữ nguyên vai trò để chiều "ai gọi ai"
-        // trong DB/nhật ký cuộc gọi không bị đảo ngược.
+        // callId khớp cuộc mình đang gọi đi (đối phương "Nghe" qua đường trễ bằng đúng callId
+        // gốc) → mình vẫn là người gọi ban đầu, GIỮ amICallerRef để chiều "ai gọi ai" trong
+        // nhật ký không bị đảo. callId KHÁC (hai người cùng bấm gọi) → mình thành người nghe
+        // của cuộc gọi của họ; dòng "ringing" của lượt gọi mình vừa bỏ được khép lại.
+        if (abandonedCallId !== callId) {
+          amICallerRef.current = false;
+          void supabase
+            .from("calls")
+            .update({ status: "answered", ended_at: new Date().toISOString(), duration_seconds: 0 } as any)
+            .eq("id", abandonedCallId)
+            .eq("caller_id", user.id)
+            .eq("status", "ringing")
+            .then(() => {});
+        }
         // Cập nhật callId NGAY (không đợi connectAsCallee xử lý xong) — nếu không, các
         // ICE candidate của đối phương đến trong lúc đang thương lượng (xin quyền mic,
         // lấy TURN...) sẽ bị handler "ice" âm thầm bỏ qua vì so sánh với callId CŨ, gây
@@ -607,22 +775,12 @@ export function CallProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      if (cur.status !== "idle") {
+      if (decision !== "ring") {
         sendSignal(from.id, "busy", { callId });
         return;
       }
       pendingIceRef.current = [];
-      amICallerRef.current = false;
-      setState({ status: "incoming", callId, peer: from, offerSdp: sdp, video: isVideo });
-      ringtone.start("ring");
-      ringTimeoutRef.current = setTimeout(() => {
-        if (stateRef.current.status === "incoming") {
-          sendSignal(from.id, "reject", { callId, reason: "timeout" });
-          void logCall("missed");
-          cleanupCall();
-          setState({ status: "idle" });
-        }
-      }, RING_TIMEOUT_MS);
+      ring(callId, from, sdp, isVideo);
     });
     ch.on("broadcast", { event: "answer" }, async ({ payload }) => {
       const { callId, sdp } = payload as { callId: string; sdp: RTCSessionDescriptionInit };
@@ -641,12 +799,17 @@ export function CallProvider({ children }: { children: ReactNode }) {
       pendingIceRef.current = [];
       const startedAt = Date.now();
       setState({ status: "connected", callId, peer: s.peer, startedAt, video: s.video });
+      if (durationTimerRef.current) clearInterval(durationTimerRef.current);
       durationTimerRef.current = setInterval(() => forceTick((n) => n + 1), 1000);
     });
 
     ch.on("broadcast", { event: "ice" }, async ({ payload }) => {
       const { callId, candidate } = payload as { callId: string; candidate: RTCIceCandidateInit };
       const s = stateRef.current;
+      if (s.status === "idle" && verifyingCallIdRef.current === callId) {
+        pendingIceRef.current.push(candidate);
+        return;
+      }
       if (s.status === "idle" || s.callId !== callId) return;
       if (pcRef.current?.remoteDescription) {
         try {
@@ -660,9 +823,15 @@ export function CallProvider({ children }: { children: ReactNode }) {
     });
 
     ch.on("broadcast", { event: "reject" }, ({ payload }) => {
-      const { callId } = payload as { callId: string };
+      const { callId, reason } = payload as { callId: string; reason?: string };
       const s = stateRef.current;
       if (s.status === "calling" && s.callId === callId) {
+        // Máy bên kia reo hết giờ mà không ai bấm → là "không bắt máy", không phải "từ chối".
+        if (reason === "timeout") {
+          toast(t("call.noAnswer"));
+          endCall(false, "timeout");
+          return;
+        }
         toast(t("call.declined"));
         endCall(false, "declined");
       }
@@ -689,7 +858,24 @@ export function CallProvider({ children }: { children: ReactNode }) {
     });
 
     ch.subscribe();
+
+    void supabase
+      .from("blocks")
+      .select("blocked_id")
+      .eq("blocker_id", user.id)
+      .then(({ data }) => {
+        blockedIdsRef.current = new Set(((data ?? []) as { blocked_id: string }[]).map((r) => r.blocked_id));
+      });
+
+    // Đóng tab / thoát hẳn app giữa cuộc gọi → báo bên kia kết thúc ngay (trước đây họ phải chờ
+    // ~30 giây tới khi kết nối tự rớt) và ghi nhật ký.
+    const onPageHide = () => {
+      if (stateRef.current.status !== "idle") endCall(true, "hangup");
+    };
+    window.addEventListener("pagehide", onPageHide);
+
     return () => {
+      window.removeEventListener("pagehide", onPageHide);
       supabase.removeChannel(ch);
     };
   }, [canReceiveCalls, user?.id]);
