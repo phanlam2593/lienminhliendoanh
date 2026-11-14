@@ -378,6 +378,23 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // 18/10: thuốc chống đông (gọi theo nhóm, hoặc rivaroxaban / Xarelto — chưa có mục riêng) + NSAID. warfarin / aspirin đã có mục riêng ở trên.
   if (!known && (ANTICOAG.test(n) || ctx.anticoag) && NSAID_ASK.test(n) && (ctx.anticoag || anticoagNsaidSourced(n, n)) && asks18)
     return { kind: "interact", name: "thuốc chống đông", text: ANTICOAG_NSAID_TEXT };
+  // 14/11 (Fable 2): "đang uống thuốc chống đông thì ăn rau xanh được không" — gọi theo NHÓM, không nêu tên thuốc → trước đây rơi
+  //   sang câu chung "Lomi chưa có thông tin riêng về thuốc này". Nguồn (NHS Warfarin, mục ăn uống của warfarin) chỉ nói riêng cho
+  //   WARFARIN; thuốc chống đông khác chưa có nguồn về ăn uống → nói đúng phạm vi đó, không suy rộng.
+  const warf0 = !known && (ANTICOAG.test(n) || ctx.anticoag) && asks18 ? drugById("warfarin") : null;
+  const warfFood = warf0 ? findInteraction(warf0, text) : null;
+  if (warf0 && warfFood?.id === "food")
+    return {
+      kind: "interact",
+      name: "thuốc chống đông",
+      text: [
+        "Cái này **tuỳ loại thuốc chống đông** bạn đang uống nha 💊",
+        `• Nếu là **warfarin**: ${warfFood.note}`,
+        "• Nếu là thuốc chống đông **khác** (vd rivaroxaban – Xarelto): Lomi **chưa có nguồn** nói riêng về chuyện ăn uống với thuốc đó, nên chưa nói chắc được.",
+        "Bạn xem tên thuốc ghi trên vỉ / hộp, rồi hỏi bác sĩ hoặc dược sĩ đang theo dõi thuốc cho bạn để biết ăn thế nào cho đúng nha.",
+        sourceLine(warf0, warfFood.src),
+      ].join("\n"),
+    };
   // Mang thai / cho con bú + hỏi dùng thuốc → nói điều cần làm trước (hỏi bác sĩ / dược sĩ), không đọc bài chung về thuốc.
   if (PREG_BF.test(n) && (med || !!known) && ASKS.test(n) && words <= 16)
     return {

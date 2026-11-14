@@ -1081,7 +1081,9 @@ export function AiChat({
       if (VN(/\b(ngu ngốc|ngốc|khờ)\b/).test(nr) && prevA.some((m) => /The Fool|Kẻ Khờ/u.test(m.content)))
         return { role: "assistant", content: "Không đâu nha 😄 **The Fool (Kẻ Khờ)** trong tarot không có nghĩa là ngu ngốc — lá này nói về **khởi đầu mới**, sự tò mò, dám bước đi dù chưa biết hết đường phía trước. Ngược lại thì nhắc mình đừng quá liều lĩnh, bốc đồng. Mới học tarot mà gặp lá này là hợp ghê luôn đó 🔮", local: true };
       // (chỉ câu hỏi lá này "tốt / xấu", "đừng hù" — các câu hỏi nghĩa lá, lá ngược, đổi chủ đề đã có lớp tarot riêng lo)
-      if (prevT && VN(/\b(tốt không|tốt hả|xấu hả|xấu không|lá xấu|đừng hù|hù em|hù tui|sợ quá)\b/).test(nr))
+      //   14/11 (Fable 2): chê trải bài vừa rút "toàn lá căng thẳng / nặng nề / u ám" cũng là nói về LÁ BÀI — trước đây chữ
+      //   "căng thẳng" bị lớp sức khoẻ lấy làm tên bệnh (đọc thẻ "Căng thẳng" cho một câu đang nói chuyện bài).
+      if (prevT && (VN(/\b(tốt không|tốt hả|xấu hả|xấu không|lá xấu|đừng hù|hù em|hù tui|sợ quá)\b/).test(nr) || VN(/\b(toàn (là )?(mấy )?lá|(mấy|những|các|ba|3|năm|5) lá (này|đó|kia|vừa rồi|vừa rút)) (\S+ ){0,2}(căng thẳng|nặng nề|nặng|u ám|đáng sợ|tiêu cực|xui|đen|dữ|ghê|khó|buồn)\b/).test(nr)))
         return { role: "assistant", content: `Trong tarot không có lá **tốt** hay **xấu** tuyệt đối đâu nha 😊 Mỗi lá chỉ gợi một góc nhìn — lá nghe “đáng sợ” thường là lời nhắc để mình chuẩn bị, không phải điềm xấu.\n\n${readingRecap(prevT)}`, local: true, tarotRef: prevT };
       // "lá này sao chị", "em chọn bên trái" (vừa rút xong) → nói lại lá vừa rút
       if (prevT && w <= 7 && (VN(/^ (lá này sao|lá này thì sao|lá đó sao)( (chị|em|anh|bạn|lomi|ta|vậy|nè))? $/).test(nr) || VN(/\bchọn (lá )?(bên )?(trái|phải|giữa)\b/).test(nr)))

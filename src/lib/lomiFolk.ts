@@ -5537,6 +5537,15 @@ const KN_DIS: [RegExp, RegExp][] = [
 export function knNote(text: string, topicId: string): string | null {
   const f = findFolk(text);
   const k = KN_DIS.find(([id]) => id.test(topicId))?.[1];
+  // 14/11 (Fable 2): đang mang thai hỏi một món nguồn thai kỳ không nhắc ("bà bầu ăn trứng muối được không") → kèm các ý kiến thức
+  //   phổ thông của món nhắc tới bầu / thai; món không có ý riêng cho bầu thì kèm phần LƯU Ý chung của món (mặn, nhiều đường…) —
+  //   vẫn ghi rõ là kiến thức phổ thông, không trộn vào phần nguồn y khoa.
+  if (f?.kn && /mang-thai/.test(topicId)) {
+    const all = [...f.science, ...(f.dose ?? []), ...f.caution];
+    const preg = all.filter((x) => /bầu|mang thai|thai kỳ|thai phụ/iu.test(x.text));
+    const use = preg.length ? preg : f.caution.slice(0, 3);
+    return use.length ? `💡 **${f.name}** — kiến thức dinh dưỡng phổ thông (Lomi tổng hợp):\n${use.map((x) => `• ${x.text}`).join("\n")}` : null;
+  }
   if (!f?.kn || !k) return null;
   const hits = [...f.science, ...(f.dose ?? []), ...f.caution].filter((x) => k.test(x.text));
   return hits.length ? `💡 **${f.name}** — kiến thức dinh dưỡng phổ thông (Lomi tổng hợp):\n${hits.map((x) => `• ${x.text}`).join("\n")}` : null;
