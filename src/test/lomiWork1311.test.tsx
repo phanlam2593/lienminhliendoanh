@@ -131,3 +131,14 @@ describe("thực phẩm chức năng đợt 2 + dừa", () => {
     expect(l).not.toMatch(/NEI|NIH|Mayo/);
   }, T);
 });
+
+// 14/11 (Kir: "mấy cái e k kím đc nguồn thì lấy trong kho kiến thức của e") — mục kn: kiến thức phổ thông, khi hỏi nguồn thì nói thật
+describe("thực phẩm — kiến thức phổ thông (kn)", () => {
+  it("củ dền, đậu bắp, cà phê, óc heo, phở…; hỏi nguồn thì nói là Lomi tổng hợp", async () => {
+    for (const [q, re] of [["củ dền có tác dụng gì", /Củ dền[\s\S]*nitrat/], ["đậu bắp có tác dụng gì", /Đậu bắp[\s\S]*warfarin/], ["uống cà phê có tốt không", /400 mg caffeine/],
+      ["ăn óc heo có bổ não không", /cholesterol/], ["nước hầm xương có bổ không", /không phải nguồn canxi/], ["quả hồng có tác dụng gì", /lúc bụng đói/], ["phở có tác dụng gì", /nước dùng/]] as const)
+      expect((await last([q])).content, q).toMatch(re);
+    const src = (await last(["củ dền có tác dụng gì", "nguồn đâu"])).content;
+    expect(src).toMatch(/Lomi tổng hợp — chưa đối chiếu/);
+  }, T);
+});

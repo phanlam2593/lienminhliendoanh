@@ -1,7 +1,7 @@
 // 20/10 — mẹo dân gian / thuốc nam có nguồn (lib/lomiFolk): ép quy tắc nguồn giống kho kiến thức y khoa.
 import { describe, expect, it } from "vitest";
 import { TRUSTED } from "@/lib/lomiDrugData";
-import { FOLK, findFolk, findUnverifiedHerb, folkFor, folkReply } from "@/lib/lomiFolk";
+import { KN_SOURCE, FOLK, findFolk, findUnverifiedHerb, folkFor, folkReply } from "@/lib/lomiFolk";
 import INDEX from "@/lib/medkb/index.json";
 
 const DOSE = /\b\d+(?:[.,]\d+)?\s*(?:mg|mcg|µg|ug|g\/|ml|iu|đv|viên|gói|giọt|lần\/ngày|lần mỗi ngày)\b/i;
@@ -12,6 +12,8 @@ describe("lomiFolk — dữ liệu", () => {
     for (const f of FOLK) {
       expect(f.sources.length, f.id).toBeGreaterThan(0);
       for (const s of f.sources) {
+        // 14/11: mục kiến thức phổ thông (kn) chỉ được có đúng nguồn KN_SOURCE
+        if (f.kn) { expect(s, f.id).toBe(KN_SOURCE); continue; }
         const host = new URL(s.url).hostname.replace(/^www\./, "");
         expect(TRUSTED.some((d) => host === d || host.endsWith(`.${d}`)), `${f.id}: ${host}`).toBe(true);
       }
