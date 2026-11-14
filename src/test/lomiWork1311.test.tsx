@@ -118,3 +118,16 @@ describe("thực phẩm chức năng / thực phẩm hay hỏi — giấm táo, 
     }
   }, T);
 });
+
+// 14/11: lutein (NEI), tảo xoắn (NCCIH, Mayo, FDA), sữa ong chúa (chỉ có nguồn về dị ứng); "dừa / nước dừa có tốt không"
+describe("thực phẩm chức năng đợt 2 + dừa", () => {
+  it("lutein, tảo xoắn, sữa ong chúa, dừa", async () => {
+    const l = (await last(["uống lutein có tốt cho mắt không"])).content;
+    expect(l).toMatch(/AREDS2[\s\S]*Không phòng được[\s\S]*10 mg[\s\S]*beta-carotene/);
+    expect((await last(["tảo xoắn có tác dụng gì"])).content).toMatch(/microcystin/);
+    expect((await last(["sữa ong chúa có tác dụng gì"])).content).toMatch(/dị ứng phấn hoa/);
+    expect((await last(["dừa có tác dụng gì"])).content).toMatch(/Cùi dừa/);
+    expect((await last(["uống nước dừa có tốt không"])).content).toMatch(/Nước dừa/);
+    expect(l).not.toMatch(/NEI|NIH|Mayo/);
+  }, T);
+});

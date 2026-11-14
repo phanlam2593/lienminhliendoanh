@@ -466,7 +466,7 @@ export function renderFood(f: Food, now = Date.now()): string {
  *   • điểm nổi bật theo bảng số liệu (Viện Dinh dưỡng, 100 g): ngưỡng ghi nhãn "nguồn …" thường dùng (chất xơ ≥ 3 g; kali ≥ 300 mg,
  *     canxi ≥ 120 mg, sắt ≥ 2,1 mg — 15% nhu cầu tham chiếu; ít năng lượng ≤ 40 kcal; đạm ≥ 12% năng lượng và ≥ 5 g);
  *   • dòng số liệu như câu hỏi calo (factLine, có lăng kính bệnh nếu câu nêu bệnh). */
-export const BENEFIT_ASK = /\b(tac dung gi|co tac dung|tac dung cua|cong dung|loi ich|co loi gi|tot cho gi|tot gi|giup gi|an .{1,20} co tot)\b/;
+export const BENEFIT_ASK = /\b(tac dung gi|co tac dung|tac dung cua|cong dung|loi ich|co loi gi|tot cho gi|tot gi|giup gi|(?:an|uong) .{1,20} co tot|^\S+(?: \S+){0,2} co tot (?:khong|ko|k)$)\b/;
 // Chữ đứng sát tên món mà vẫn là cùng món ("ăn chuối", "quả cam chín", "rau ngót luộc") — chữ khác thì là món khác
 //   ("đậu BẮP" không phải bắp ngô, "việt QUẤT" không phải quả quất, "CHANH dây" không phải chanh).
 const FOOD_BEFORE = new Set(["an", "uong", "qua", "trai", "rau", "la", "cu", "hat", "cay", "nuoc", "to", "ep", "bot", "mon", "canh", "chao", "cua", "ve", "cho", "hoi", "voi", "thi", "va", "la", "minh", "toi", "em", "anh", "chi", "nhieu", "it", "hay", "thuong", "deu"]);
@@ -484,7 +484,7 @@ function foodSpanOk(q: string, names: string[]): boolean {
 export function renderFoodBenefit(q: string, med: { id: string; name: string } | null, now = Date.now()): string | null {
   // "táo có tác dụng gì", "bơ có tác dụng gì" — tên một chữ không nằm trong bảng (vì "táo" bón, "bơ" sữa) → đọc là quả
   const bare = normalizeVi(q).match(/^(?:an |uong )?(tao|bo|dua|cam|le|man|dao|quyt|nho|na|oi) (?:co tac dung|tac dung|co loi|loi ich|tot cho|cong dung)/);
-  const q2 = bare && /[^\x00-\x7F]/.test(q) ? q.replace(/^(\s*(?:ăn |uống )?)/iu, "$1quả ") : q;
+  const q2 = bare && /[^\x00-\x7F]/.test(q) && !factOf(q) && !foodOf(q) ? q.replace(/^(\s*(?:ăn |uống )?)/iu, /^\s*(?:ăn |uống )?dừa/iu.test(q) ? "$1cùi " : "$1quả ") : q;
   const f0 = foodOf(q2), ff0 = factOf(q2);
   const f = f0 && foodSpanOk(q2, f0.names) ? f0 : null;
   const ff = ff0 && foodSpanOk(q2, ff0.names) ? ff0 : null;
