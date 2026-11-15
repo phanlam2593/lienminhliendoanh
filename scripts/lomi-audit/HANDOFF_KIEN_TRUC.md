@@ -91,3 +91,27 @@ Vì `riskMiss` chỉ 1/43 nên bước "bật chặn cho cấp cứu / bạo l�
 
 Đủ điều kiện gộp (mọi thước đo ≥ gốc, 0 ca an toàn hỏng, bộ giữ riêng không giảm) → **đã gộp vào `main`** ngày 15/11.
 Nhánh `kien-truc-lomi` giữ lại để làm tiếp các bước sau; trước khi làm tiếp nhớ `git merge main` vào nhánh.
+
+## 5. Phiên Fable 3 (15/11/2026) — bước 2: nhóm THUỐC
+
+- `lomiRouter.drugCandidates(raw)`: `drugAsk(raw)` trả loại "interact" (không kèm ngữ cảnh lượt trước) → ứng viên
+  `{layer: health, intent: drug, 0.9, evidence: tên thuốc/nhóm, clause}`.
+- `lomiRouter.layerOf(reply)`: lớp của câu đáp legacy (chép `vibench.classify`).
+- `arbitrate` nhận thêm `legacy.intent`: ứng viên **cùng lớp** vẫn được xét nếu khác ý định (thẻ dinh dưỡng ≠ thuốc).
+- Nối trong `localReply` ngay sau khối an toàn: chỉ thay khi câu đáp legacy không phải lời an toàn, chưa có cờ `drug`, câu không bị
+  viết lại (`rewroteRef`), không phải tiếng Anh. Câu đáp thay vào mang `drug: {kind: "interact"}` + `routed: "drug-interact"`.
+- Ca kiểm đạt: "bố em uống thuốc loãng máu, ăn cải bó xôi có sao không" → cảnh báo vitamin K (trước: thẻ dinh dưỡng rau xanh).
+- Còn hở: "đang uống warfarin, ăn rau cải xoăn…" — mẫu khớp món của mục `food` trong `lomiDrugData` (warfarin) chưa có "cải xoăn / cải ngọt".
+  Mở rộng mẫu đó theo đúng danh sách rau nguồn NHS ghi, đừng thêm theo cảm tính.
+
+| Thước đo | Gốc | Sau bước 2 |
+|---|---|---|
+| vitest | 2.526 | **2.532 qua**, 0 trượt |
+| paraphrase / convo | 386/400 · 155/160 | **387/400** · 155/160 |
+| Bộ 1.000 câu | 876/985 | 876/985 — sửa 1, hỏng 0; safety 26/29 |
+| Bộ giữ riêng | 61/65 | 61/65 |
+
+Trên bộ 1.000 câu trọng tài vẫn chưa phải thay câu đáp lần nào (`routed` = 0), `riskMiss` = 1 → **bộ 1.000 không có ca nào thuộc 2 nhóm đã
+chuyển**. Điểm chỉ lên khi làm bước 3 (câu ghép) và 4 (hỏi lại) — hai lớp đang mất nhiều nhất là food 71/91 và askback 89/112.
+**Bước 1 phần cấp cứu / bạo lực chưa bật chặn** (vẫn chỉ đo): `riskMiss` 1/43 nên lợi ít; làm khi tách xong `urgentReplyOf` / `harmReplyOf`.
+Thứ tự tiếp theo không đổi: 1 (nốt) → 3 → 4 → 5 → 6. Đã gộp vào `main` 15/11.
