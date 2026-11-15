@@ -143,7 +143,7 @@ import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaR
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
-import { arbitrate, isSafetyReply, nextRisk, riskKind, riskScan, safetyCandidates, type RiskFlag, type RiskScan } from "@/lib/lomiRouter";
+import { arbitrate, drugCandidates, isSafetyReply, layerOf, nextRisk, riskKind, riskScan, safetyCandidates, type RiskFlag, type RiskScan } from "@/lib/lomiRouter";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
@@ -1344,6 +1344,16 @@ export function AiChat({
       } else if ((rk.urgent || rk.harm || rk.red) && !isSafetyReply(reply)) {
         // Cấp cứu / bạo lực / dấu hiệu đỏ: nhóm này CHƯA chuyển sang trọng tài (lời đáp còn nằm trong các khối legacy) → chỉ ĐO.
         reply = { ...reply, riskMiss: riskKind(rk) ?? "risk" };
+      }
+    }
+    // 15/11 — bước 2: nhóm THUỐC. Câu nói đang dùng thuốc + hỏi kèm thứ có tương tác (nguồn có ghi) mà lớp legacy lại đáp chuyện
+    //   khác (thẻ dinh dưỡng của món, tìm quán…) → lời về tương tác thuốc thay vào. Không đụng câu đáp an toàn, câu đáp đã về thuốc,
+    //   câu Lomi đang hỏi lại / đang trong trải bài; chỉ xét câu người dùng TỰ GÕ ở lượt này (không phải câu đã được viết lại).
+    if (rk && !en && !reply.routed && !reply.drug && !isSafetyReply(reply) && !rewroteRef.current && rawRef.current) {
+      const dv = arbitrate({ layer: layerOf(reply as unknown as Record<string, unknown> & { content: string }), intent: reply.med ? "med" : "other", clause: "main", safety: false }, drugCandidates(rawRef.current));
+      if (dv.winner && dv.reason === "main-clause") {
+        const p = dv.winner.payload as { text: string; name?: string };
+        reply = { role: "assistant", content: p.text, local: true, drug: { kind: "interact", name: p.name }, routed: "drug-interact" };
       }
     }
     // Cờ rủi ro mang qua lượt: lượt đang có rủi ro, hoặc 2 lượt ngay sau đó → câu đáp không kèm sticker.

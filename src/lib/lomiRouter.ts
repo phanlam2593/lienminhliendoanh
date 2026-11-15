@@ -16,6 +16,7 @@
 import { crisisCheckIn, crisisDenial, crisisReply } from "@/lib/lomiChat";
 import { normalizeVi } from "@/lib/lomiFaq";
 import { urgentOf } from "@/lib/lomiUrgent";
+import { drugAsk } from "@/lib/lomiDrug";
 
 export type Layer = "safety" | "health" | "heart" | "faq" | "food" | "tarot" | "biz" | "chat" | "askback" | "unknown";
 export type Clause = "main" | "sub";
@@ -108,6 +109,35 @@ export function safetyCandidates(risk: RiskScan, raw: string): Candidate<{ text:
   return out;
 }
 
+// ── 2b) Nhóm THUỐC (bước 2, 15/11) ──────────────────────────────────────────
+// Người dùng nói đang dùng một thuốc / nhóm thuốc và hỏi kèm món ăn, thuốc khác… mà nguồn có ghi TƯƠNG TÁC → đó là ý chính của
+// câu, dù lớp khác (món ăn có lợi gì, tìm quán…) khớp trước. Chỉ đề cử khi drugAsk() trả về đúng loại "interact" cho CẢ CÂU, không
+// kèm ngữ cảnh lượt trước (để không đoán theo mạch cũ).
+export function drugCandidates(raw: string): Candidate<{ text: string; name?: string }>[] {
+  let r: ReturnType<typeof drugAsk> = null;
+  try {
+    r = drugAsk(raw);
+  } catch {
+    r = null;
+  }
+  if (!r || r.kind !== "interact" || !r.name) return [];
+  return [{ layer: "health", intent: "drug", confidence: 0.9, evidence: r.name, clause: clauseOf(raw, r.name), payload: { text: r.text, name: r.name } }];
+}
+
+/** Lớp của một câu đáp legacy — cùng cách xếp với bộ chấm (src/test/vibench/vibench.ts → classify). */
+export function layerOf(m: Record<string, unknown> & { content: string }): Layer {
+  const c = m.content;
+  if (m.harm || /Ngày Mai|096 306 1414|1900 969 680|\b113\b/.test(c)) return "safety";
+  if (m.tarot || m.tarotAwait || m.tarotRef || m.tarotBack || m.tarotGate || m.tarotCard) return "tarot";
+  if (m.med || m.drug || m.diet || m.health || (Array.isArray(m.sx) && m.sx.length) || m.hsub) return "health";
+  if (m.dishAsk || m.dish || m.dishPick || (Array.isArray(m.places) && m.places.length) || m.search) return "food";
+  if (m.biz) return "biz";
+  if (m.faqId) return "faq";
+  if (m.stuck && ["fallback", "not_understood", "unknown_med", "suggest", "generic_listen"].includes(String(m.stuck))) return "unknown";
+  if (m.heart || m.heartListen || m.thread || m.rel || m.talk) return "heart";
+  return "chat";
+}
+
 // ── 3) Trọng tài ────────────────────────────────────────────────────────────
 /** Câu đáp đã là lời an toàn chưa (đường dây nóng, 113 / 115 / 111, cảnh báo cấp cứu, mạch bạo lực). */
 export function isSafetyReply(r: { content: string; harm?: unknown }): boolean {
@@ -121,14 +151,15 @@ export interface Verdict<T = unknown> {
   askBack?: boolean;
 }
 
-export function arbitrate<T>(legacy: { layer: Layer; clause: Clause; confidence?: number; safety: boolean }, noms: Candidate<T>[]): Verdict<T> {
+export function arbitrate<T>(legacy: { layer: Layer; intent?: string; clause: Clause; confidence?: number; safety: boolean }, noms: Candidate<T>[]): Verdict<T> {
   const lc = legacy.confidence ?? 0.6;
   // (1) An toàn trước: ứng viên an toàn đủ chắc mà câu đáp legacy chưa phải lời an toàn → an toàn thắng.
   const safe = noms.filter((c) => c.layer === "safety" && c.confidence >= 0.9).sort((a, b) => b.confidence - a.confidence)[0];
   if (safe && !legacy.safety) return { winner: safe, reason: "safety-first" };
   if (legacy.safety) return { winner: null, reason: "legacy" };
   // (2) Vế chính thắng vế phụ; cùng vế thì phải hơn hẳn 0,25 mới thay câu đáp legacy.
-  const rest = noms.filter((c) => c.layer !== "safety" && c.layer !== legacy.layer).sort((a, b) => b.confidence - a.confidence);
+  //     Ứng viên cùng lớp với legacy chỉ được xét khi legacy khai ý định và ý định KHÁC (vd legacy = thẻ dinh dưỡng, ứng viên = thuốc).
+  const rest = noms.filter((c) => c.layer !== "safety" && (c.layer !== legacy.layer || (!!legacy.intent && legacy.intent !== c.intent))).sort((a, b) => b.confidence - a.confidence);
   const top = rest[0];
   if (top && top.clause === "main" && (legacy.clause === "sub" || top.confidence - lc >= 0.25)) return { winner: top, reason: "main-clause" };
   // (3) Sát điểm, khác lớp, cùng ở vế chính → đáng hỏi lại.

@@ -1,7 +1,7 @@
 // 14/11 — kiến trúc chọn lớp mới (lib/lomiRouter): quét rủi ro một chỗ, đề cử + trọng tài ở cửa ra, cờ rủi ro mang qua lượt.
 import { describe, expect, it } from "vitest";
 import { chat, last } from "./lomiChatHarness";
-import { arbitrate, clauseOf, isSafetyReply, nextRisk, riskScan, safetyCandidates, splitClauses, type Candidate } from "@/lib/lomiRouter";
+import { arbitrate, clauseOf, drugCandidates, isSafetyReply, layerOf, nextRisk, riskScan, safetyCandidates, splitClauses, type Candidate } from "@/lib/lomiRouter";
 
 const T = 120000;
 const scan = (t: string, extra: { harm?: boolean; red?: boolean } = {}) => riskScan({ q: t, raw: t, lang: "vi", ...extra });
@@ -133,5 +133,43 @@ describe("trong khung chat thật", () => {
     const a = (await last(["tìm quán cà phê yên tĩnh"])) as { risk?: unknown; routed?: string };
     expect(a.risk).toBeUndefined();
     expect(a.routed).toBeUndefined();
+  }, T);
+});
+
+// 15/11 — bước 2: nhóm thuốc.
+describe("nhóm thuốc — ứng viên tương tác", () => {
+  it("đang dùng thuốc chống đông + hỏi rau xanh → có ứng viên drug ở vế chính", () => {
+    const c = drugCandidates("bố em uống thuốc loãng máu, ăn cải bó xôi có sao không");
+    expect(c).toHaveLength(1);
+    expect(c[0].intent).toBe("drug");
+    expect(c[0].payload?.text).toMatch(/vitamin K/);
+  });
+  it("câu không nhắc thuốc → không đề cử", () => {
+    expect(drugCandidates("rau cải bó xôi có tác dụng gì")).toHaveLength(0);
+    expect(drugCandidates("tìm quán cà phê yên tĩnh")).toHaveLength(0);
+  });
+  it("trọng tài: ứng viên thuốc thắng thẻ dinh dưỡng (cùng lớp sức khoẻ nhưng khác ý định)", () => {
+    const c = drugCandidates("bố em uống thuốc loãng máu, ăn cải bó xôi có sao không");
+    expect(arbitrate({ layer: "health", intent: "other", clause: "main", safety: false }, c).reason).toBe("main-clause");
+    expect(arbitrate({ layer: "health", intent: "drug", clause: "main", safety: false }, c).winner).toBeNull();
+    expect(arbitrate({ layer: "safety", clause: "main", safety: true }, c).winner).toBeNull();
+  });
+  it("layerOf xếp lớp câu đáp như bộ chấm", () => {
+    expect(layerOf({ content: "x", drug: { kind: "interact" } })).toBe("health");
+    expect(layerOf({ content: "x", places: [1] })).toBe("food");
+    expect(layerOf({ content: "Gọi 113 ngay" })).toBe("safety");
+    expect(layerOf({ content: "x", faqId: "a" })).toBe("faq");
+    expect(layerOf({ content: "chào bạn" })).toBe("chat");
+  });
+  it("trong khung chat: 'uống thuốc loãng máu, ăn cải bó xôi có sao không' → cảnh báo vitamin K, không phải thẻ dinh dưỡng", async () => {
+    const a = (await last(["bố em uống thuốc loãng máu, ăn cải bó xôi có sao không"])) as { content: string; routed?: string };
+    expect(a.content).toMatch(/vitamin K/);
+    expect(a.content).toMatch(/tuỳ loại thuốc chống đông/);
+    expect(a.routed).toBe("drug-interact");
+  }, T);
+  it("hỏi món đó mà không nhắc thuốc → vẫn là thẻ dinh dưỡng như cũ", async () => {
+    const a = (await last(["rau cải bó xôi có tác dụng gì"])) as { content: string; routed?: string };
+    expect(a.routed).toBeUndefined();
+    expect(a.content).not.toMatch(/tuỳ loại thuốc chống đông/);
   }, T);
 });
