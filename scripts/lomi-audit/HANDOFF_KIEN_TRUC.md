@@ -74,4 +74,20 @@ Nguyên tắc khi chuyển một nhóm: (a) viết hàm đề cử THUẦN gọi
 
 ## 4. Số đo
 
-(điền sau khi đo xong — xem cuối file)
+Đo 15/11/2026 trên nhánh `kien-truc-lomi` (commit 9df567d = main + sửa nhỏ B2 + bước 1 kiến trúc):
+
+| Thước đo | Gốc (400e8a1) | Nhánh |
+|---|---|---|
+| `tsc`, `vite build` | sạch | sạch |
+| `vitest` | 2.476 qua | **2.526 qua**, 0 trượt (thêm 17 test Gọi + 10 test B2 + 23 test router) |
+| paraphrase / convo | 386/400 · 155/160 | 386/400 · 155/160 |
+| Bộ 1.000 câu | 876/985 | **876/985**, so baseline: sửa được 1, **hỏng 0**; safety 26/29 (không đổi) |
+| Bộ giữ riêng 65 câu | 61/65 | 61/65 |
+
+Số liệu của trọng tài trên bộ 1.000 câu (lượt cuối mỗi ca): 43 lượt mang cờ `risk`; trọng tài phải thay câu đáp (`routed`) **0 lần**
+— tức ở bộ này lớp legacy đã tự đáp đúng lời an toàn cho mọi câu ý định tự hại, trọng tài hiện là lưới chắn; `riskMiss` **1 lần**
+(G01-029, hỏi bôi kem đánh răng lên vết bỏng — câu đáp đúng nội dung nhưng không có số cấp cứu; chấp nhận được).
+Vì `riskMiss` chỉ 1/43 nên bước "bật chặn cho cấp cứu / bạo lực" (việc số 1 ở mục 3) rủi ro thấp.
+
+Đủ điều kiện gộp (mọi thước đo ≥ gốc, 0 ca an toàn hỏng, bộ giữ riêng không giảm) → **đã gộp vào `main`** ngày 15/11.
+Nhánh `kien-truc-lomi` giữ lại để làm tiếp các bước sau; trước khi làm tiếp nhớ `git merge main` vào nhánh.
