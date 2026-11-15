@@ -143,6 +143,7 @@ import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaR
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
+import { arbitrate, isSafetyReply, nextRisk, riskKind, riskScan, safetyCandidates, type RiskFlag, type RiskScan } from "@/lib/lomiRouter";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
@@ -227,6 +228,12 @@ type Msg = {
   tarotBack?: { r: TarotReading; n: number };
   // 11/10: người dùng đang kể chuyện bị đánh / bị doạ / bị kiểm soát (lib/lomiSafety) — câu sau lược chủ ngữ vẫn là kể tiếp chuyện đó.
   harm?: Harm;
+  // 14/11 (kiến trúc mới, lib/lomiRouter): cờ rủi ro của lượt này, mang qua 2 lượt sau (trong lúc đó không kèm sticker / biểu tượng vui).
+  risk?: RiskFlag;
+  // Trọng tài đã thay câu đáp của lớp legacy bằng ứng viên nào ("safety-first"…) — để đo và để test.
+  routed?: string;
+  // (đo, chưa chặn) lượt có tín hiệu cấp cứu / bạo lực / dấu hiệu đỏ mà câu đáp legacy chưa phải lời an toàn.
+  riskMiss?: string;
   // 12/10: Lomi vừa trả lời một câu hỏi về THUỐC — loại câu hỏi, tên thuốc người dùng nêu, và mã mục đã kiểm chứng (lib/lomiDrugData) nếu có.
   // Câu nối ("nó có tác dụng phụ gì không", "2 viên", "giờ thấy bình thường") đọc theo cờ này, không dò lại câu chữ của lời đáp trước.
   drug?: { kind: string; name?: string; id?: string };
@@ -1299,6 +1306,9 @@ export function AiChat({
       return { role: "assistant", content: `Các nguồn y khoa Lomi đã đối chiếu cho **${tname}** **chưa nói rõ** làm bao nhiêu lần hay mỗi ngày có được không, nên Lomi không dám nói chắc 🙏 Bạn hỏi bác sĩ hoặc dược sĩ (mang theo sản phẩm đang dùng) để được dặn đúng cho trường hợp của mình nha.`, local: true, med: medNow, health: hCtx ?? {}, stuck: "kb_partial" };
     return null;
   };
+  // 14/11 (kiến trúc mới): kết quả quét rủi ro của LƯỢT ĐANG XỬ LÝ (lib/lomiRouter.riskScan) — send() ghi ở một chỗ duy nhất,
+  //   cửa ra localReply đọc để trọng tài quyết định. null = lượt này chưa quét (vd bấm chip, gửi sticker).
+  const riskRef = useRef<RiskScan | null>(null);
   const localReply = (asked: string, reply0: Msg) => {
     setErr(null);
     const c = carryRef.current;
@@ -1322,6 +1332,26 @@ export function AiChat({
     if (!reply.med && prevA?.med && (prevA.medAge ?? 0) < 2 && !newFlow && !reply.drug && !!reply.stuck && (!reply.heart || reply.heart === prevA.heart)) reply = { ...reply, med: prevA.med, medAge: (prevA.medAge ?? 0) + 1 };
     // Chốt cuối: câu đáp có đúng bệnh / thuốc người dùng hỏi không (lib/lomiReplyGate). Lạc → nói thật, mời hỏi lại, ghi nhật ký.
     // (15/10: câu đáp mở đầu bằng cảnh báo cấp cứu — "🚨 … gọi 115" — không bao giờ bị thay bằng "chưa chắc hiểu đúng": thà nói thừa còn hơn giấu.)
+    // ── 14/11 — TRỌNG TÀI Ở CỬA RA (lib/lomiRouter) ──
+    //   Mọi nhánh trong send() đều đi qua đây. Lớp AN TOÀN đề cử ứng viên từ kết quả quét rủi ro; nếu lớp legacy (nhánh nào đó khớp
+    //   trước) đưa ra câu đáp KHÔNG phải lời an toàn cho một câu nói thẳng ý định tự hại → lời hỗ trợ khủng hoảng thay vào.
+    //   Nhờ vậy không nhánh nào — dù đứng trước lớp an toàn trong send() và quên kiểm — còn "giành" được câu đó.
+    const rk = riskRef.current;
+    if (rk) {
+      const verdict = arbitrate({ layer: "unknown", clause: "main", safety: isSafetyReply(reply) }, safetyCandidates(rk, rawRef.current ?? asked));
+      if (verdict.winner && verdict.reason === "safety-first") {
+        reply = { role: "assistant", content: (verdict.winner.payload as { text: string }).text, local: true, ...(en ? {} : { heart: "sad" as const, heartDepth: 1 }), routed: "safety-first" };
+      } else if ((rk.urgent || rk.harm || rk.red) && !isSafetyReply(reply)) {
+        // Cấp cứu / bạo lực / dấu hiệu đỏ: nhóm này CHƯA chuyển sang trọng tài (lời đáp còn nằm trong các khối legacy) → chỉ ĐO.
+        reply = { ...reply, riskMiss: riskKind(rk) ?? "risk" };
+      }
+    }
+    // Cờ rủi ro mang qua lượt: lượt đang có rủi ro, hoặc 2 lượt ngay sau đó → câu đáp không kèm sticker.
+    const riskFlag = nextRisk(rk ?? { crisis: null, denial: false, checkIn: false, urgent: false, harm: false, red: false, any: false }, prevA?.risk);
+    if (riskFlag) {
+      reply = { ...reply, risk: riskFlag };
+      if (reply.sticker) reply = { ...reply, sticker: undefined };
+    }
     const gate = /^(🚨|⚠️|🔥)/u.test(reply.content) || rewroteRef.current ? null : replyMismatch(rawRef.current ?? asked, reply, prevA);
     if (gate) reply = { role: "assistant", content: gate.text, local: true, stuck: "mismatch", ...(reply.health ? { health: reply.health } : {}) };
     // 01/11 (vòng 16): thẻ TÂM LÝ (trầm cảm, lo âu…) mà câu kể về NGƯỜI KHÁC ("bạn tôi bị trầm cảm, tôi phải làm sao") → lời đáp cho
@@ -1515,6 +1545,7 @@ export function AiChat({
     rawRef.current = typed;
     coreRef.current = null;
     rewroteRef.current = false;
+    riskRef.current = null;
     viEchoRef.current = null;
     const stk = parseStickerToken(typed);
     if (stk) {
@@ -1584,6 +1615,9 @@ export function AiChat({
       .replace(/(^|[^\p{L}])lm\s+j(?![\p{L}])/giu, "$1làm gì")
       .replace(/(?<!(?:đau|viêm|rát|ngứa|khàn|sưng|dau|viem|rat|ngua|khan|sung)\s+)(?<=\s)(hong|hông|hok|hơm)(\s*(?:nhen|nha|ta|vậy)?)\s*([?!.…]*)\s*$/iu, (_m, _w, p2, p3, _o, all: string) => `${/[^\x00-\x7F]/.test(all.replace(/(hông|hơm)\s*\S*\s*[?!.…]*\s*$/iu, "")) ? "không" : "khong"}${p2}${p3}`);
     let raw = en ? typed : viMixFix(fixTypos(typedV)); // 11/11: sửa lỗi gõ hay gặp ở chữ sức khoẻ / kinh doanh trước khi đọc câu (lib/lomiRescue)
+    // 14/11 (kiến trúc mới) — LỚP AN TOÀN CHẠY TRƯỚC: quét rủi ro ngay khi vừa có câu đã sửa lỗi gõ, TRƯỚC mọi nhánh trả lời
+    //   (kể cả các nhánh hỏi lại / viết lại câu ở ngay dưới). Tới chỗ tính danger0 sẽ quét lại lần nữa trên câu đã chuẩn hoá đầy đủ.
+    riskRef.current = riskScan({ q: en ? expandTeen(raw) : senseCanon(expandTeen(raw)), raw, lang, en, forceAi });
     let pickedRestore: { from: string; to: string } | null = null;
     if (!en && isLooseVi(raw) && !looksEnglish(typed)) {
       await loadViModel();
@@ -1737,6 +1771,8 @@ export function AiChat({
     const redNow = !forceAi && !en && redFlagsIn(q).length > 0;
     //   (P0-4: câu kể bị đánh / bị doạ / bị nhốt cũng là câu NGUY HIỂM — không tách vế, không viết lại câu thành "tìm quán cà phê".)
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
+    // 14/11 (kiến trúc mới) — QUÉT RỦI RO Ở MỘT CHỖ: kết quả để ở riskRef cho trọng tài tại cửa ra (localReply) dùng.
+    riskRef.current = riskScan({ q, raw, lang, en, forceAi, harm: !forceAi && !en && !!harmOf(raw, fr1), red: redNow });
     // 13/11 (bộ 1.000 câu, G10-067 — "chồng giữ hết tiền, NHỐT tôi trong nhà và DOẠ ĐÁNH nếu tôi ra ngoài, cứu tôi với" từng được đáp
     //   "Áp lực tiền bạc làm người ta mất ngủ"): CHÍNH người kể đang bị nhốt / bị đánh lần đầu kể ra → lời đáp an toàn (113, không phải lỗi
     //   của bạn) NGAY, trước mọi lớp tâm sự / chủ đề. Ý định tự hại vẫn đi trước (crisisReply). Đang trong mạch an toàn thì để khối 11/10 lo.
