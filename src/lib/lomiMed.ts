@@ -209,7 +209,9 @@ function standsAlone(a: string, name: string): boolean {
 }
 
 /** Chủ đề được nhắc trong câu (tên dài nhất thắng). Tên ngắn / dễ lẫn (< 4 chữ cái) chỉ nhận khi GÕ ĐÚNG DẤU. */
-export function findMedTopicId(text: string): string | null {
+export function findMedTopicId(text0: string): string | null {
+  // 18/11: "bé NHÀ EM không chịu ăn", "con CỦA TÔI chán ăn" — bỏ phần chỉ người sở hữu để khớp tên thẻ ("bé không chịu ăn")
+  const text = text0.replace(/(^|[\s,.])(bé|con|cháu|trẻ)(?: (?:nhà|của) (?:em|tôi|mình|tui|tớ|chị|anh|mk|t)| (?:tôi|mình|tui|tớ|mk))(?=[\s,.]|$)/giu, "$1$2");
   const b = bare(text);
   const a = acc(text);
   for (const k of NAME_KEYS) {
@@ -219,11 +221,15 @@ export function findMedTopicId(text: string): string | null {
     if (DIET_ONLY.has(k.id) && !DIET_CUE.test(b)) continue;
     // 18/11 — "cảm nắng / say nắng một người" là thích thầm, không phải bệnh do nóng.
     if (k.id === "say-nang" && CRUSH_CUE.test(b)) continue;
+    // 18/11 (G07-021): "tôi đâu muốn giảm cân, tôi hỏi ăn sao để TĂNG cân" — không phải thẻ béo phì
+    if (k.id === "beo-phi" && /\btang can\b/.test(b) && !/\b(beo phi|thua can|map qua)\b/.test(b)) continue;
     // Thẻ người lớn có thẻ riêng cho trẻ ("con bị sốt bao nhiêu độ" → sốt ở trẻ em).
     const kid = CHILD_OF.get(k.id);
     if (kid && (a === b ? KID_CUE_B.test(b) : KID_CUE.test(a))) return kid;
     return k.id;
   }
+  // 18/11 (G04-078): "đi bơi xong thấy tai bị đau và ù" (cả khi gõ không dấu "di boi") → viêm tai ngoài (tai người bơi lội)
+  if (/\b(boi|boi loi) (xong|ve)\b.*\btai\b.*\b(dau|u|ngua|nhuc|chay nuoc|nghe kem)\b|\bsau khi (di )?boi\b.*\btai\b/.test(b) && a === b || /\b(bơi|bơi lội) (xong|về)\b.*\btai\b|\bsau khi (đi )?bơi\b.*\btai\b/u.test(a)) return "viem-tai-ngoai";
   return null;
 }
 const CRUSH_CUE = /(?<!\bbi )\b(cam|say) nang (co |mot |1 |voi |ve )?(ban|nguoi|anh|chi|em|co|cau|thang|con nho|nho|dua|crush|ai|ong|ba xa|gai|trai)\b|\b(cam|say) nang\b.*\b(to tinh|mo loi|lam quen|bat chuyen|crush|thich tham|nguoi yeu|hoi hop|nhan tin|rung dong)\b|\b(to tinh|mo loi|lam quen|crush|thich tham|nguoi yeu|rung dong)\b.*\b(cam|say) nang\b/;

@@ -293,7 +293,8 @@ export function drugAsk(text: string, ctx: DrugCtx = {}): DrugReply | null {
   // 05/11: "zyrtec uống được không", "stresam uống được không" (chỉ tên thuốc + "uống được không") — trước đây rơi vào "Lomi chưa hiểu".
   //   Trả lời thẻ thuốc (thuốc gì, lưu ý có nguồn) — không tự nói là "uống được".
   if (ix && !ix.fuzzy && !findDrug(text) && words <= 7 && VN(/\b(uống|dùng|xài|sử dụng|súc|súc miệng|bôi|thoa|xịt|nhỏ|dán)\b.*\b(được|đc|dc) (không|ko|k|hông|hok|hem)\b/).test(n) && !VN(/\b(chung|cùng|với|kết hợp|thêm|đang|bầu|mang thai|cho con bú|bé|trẻ|rượu|bia)\b/).test(n)) return { kind: "what", name: ix.brand, text: renderIndexed(ix, "what") };
-  if (words > 22) return null;
+  // (18/11, G10-099: câu kể dài có nhắc thuốc chống đông — "Bà ngoại muốn đi ăn cùng nhà mà đang dùng thuốc chống đông, ăn rau xanh có cần…" — vẫn xét tới 32 chữ)
+  if (words > (ANTICOAG.test(n) ? 32 : 22)) return null;
   // 15/10: tên thuốc ngoại lai đứng đầu câu hỏi liều ("amoxicillin uống mấy lần 1 ngày") cũng là hỏi thuốc — trước đây câu này rơi sang
   //   câu hỏi thường gặp về app ("10 lượt quẹt / ngày").
   const lead = n.trim().split(" ")[0] ?? "";

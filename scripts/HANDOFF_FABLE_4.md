@@ -114,3 +114,16 @@ Test chặn tái phát: `src/test/lomiFix1118.test.tsx`.
 
 Lưu ý an toàn: nhánh `faq-ctx` (hiểu câu cụt theo câu kể trước) chỉ chạy khi câu trước nhắc rõ một phần của app, không có tín hiệu khủng hoảng / cấp cứu, và Lomi vừa đáp không phải lời an toàn / tâm sự / sức khoẻ — test QA V8 "bạn nói muốn chết → không biết làm sao" từng bắt lỗi này, nay đã qua.
 Không thêm câu hỏi đáp mới vào FAQS (thêm sẽ phải dựng lại anchors.json của edge function lomi-understand → phải deploy, tốn credit).
+
+## 10. Sức khoẻ: đúng bài thay vì tâm sự / tarot (18/11 tối)
+
+Đo: bộ 1.000 câu **891/985** (sức khoẻ 204 → 210), so mốc gốc sửa 16 / hỏng 0 · test 2.566 qua · giữ riêng 61/65 · paraphrase 388/400 · hội thoại 155/160.
+
+- **Dấu hiệu rối loạn ăn uống đi trước mọi lớp** (AiAssistant, sau quét an toàn): "ăn xong mình hay móc họng vì sợ béo" trước bị bộ chọn món đọc thành "A hay B" → "chọn xong mình nha 😋"; "chán ăn, ăn vô là muốn nôn vì sợ mập" ra thẻ Buồn nôn. Nay → mạch tâm sự "eating" (khuyên gặp bác sĩ / chuyên gia, không số liệu).
+- "đi bơi xong đau tai" (cả "di boi" không dấu, trước bị hiểu là đi bói) → Viêm tai ngoài (lomiMed).
+- "bé NHÀ EM / con CỦA TÔI …" — bỏ phần sở hữu khi dò tên thẻ; thêm tên gọi cho Biếng ăn ở trẻ, Đau gối, Không dung nạp lactose, Viêm tai ngoài (thêm ở CUỐI danh sách tên → câu mẫu máy chủ không đổi). "Bé chán ăn" không còn vào tâm sự rối loạn ăn uống (chủ đề đó dành cho người lớn tự kể).
+- lomiHealthFacts thêm 3 mục có nguồn NHS: **tăng cân lành mạnh** (Healthy ways to gain weight, 28/03/2023), **sụt cân dù không cố giảm → nên đi khám**, **lá cây / thuốc nam khi đang uống thuốc bác sĩ** (Herbal medicines, 01/05/2026). Mục "weight" cũ không còn bắt câu tăng cân.
+- Câu kể dài về thuốc chống đông + rau xanh (>22 chữ) nay vẫn được lớp thuốc xét (tới 32 chữ).
+- lomiReplyGate: khi chữ gõ không trùng tên thẻ ("bé nhà em không chịu ăn") dùng tên chính của thẻ.
+
+Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker trả index.html cũ → luôn kiểm bằng cách điều hướng hẳn tới trang rồi đọc document.scripts.

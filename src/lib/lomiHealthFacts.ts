@@ -236,8 +236,31 @@ const FACTS: Fact[] = [
     src: "NHS (Anh) — The Eatwell Guide, rà soát 29/11/2022 · Salt: the facts, rà soát 17/04/2023 · Healthy ways to gain weight, rà soát 28/03/2023",
   },
   {
+    // 18/11 (G05-014): lá cây / thuốc nam / thảo dược thay hoặc uống chung với thuốc bác sĩ kê
+    id: "herbal",
+    early: true,
+    re: VN(/\b(lá cây|thuốc nam|thuốc bắc|thảo dược|cây thuốc|thuốc lá cây|lá thuốc|đông y)\b(?=.*\b(thuốc (bác sĩ|bs|tây|đang uống|đang dùng)|bác sĩ kê|đơn thuốc|thay thuốc|bỏ thuốc|uống chung|uống cùng|chữa (hết|khỏi) (bệnh|mọi bệnh)|chữa bách bệnh)\b)|\b(thay|bỏ) thuốc (bác sĩ|tây)( \S+){0,3} (bằng|uống) (lá|thuốc nam|thảo dược)\b/),
+    a: "🌿 **Lá cây, thuốc nam, thảo dược khi đang uống thuốc bác sĩ kê:**\n• **Đừng tự ngưng thuốc bác sĩ kê** — muốn đổi gì cũng hỏi bác sĩ trước.\n• Thảo dược **có thể gây hại hoặc làm thuốc đang uống mất tác dụng** (ví dụ thuốc chống đông warfarin, thuốc mỡ máu, thuốc tiểu đường metformin, thuốc huyết áp, thuốc chống trầm cảm, thuốc tránh thai).\n• Muốn thử thì **hỏi dược sĩ / bác sĩ trước**, mang theo tên lá hoặc sản phẩm. Người mang thai, cho con bú, bệnh gan / thận và **trẻ em** càng không nên tự dùng.\n• Không có loại lá nào “chữa hết bệnh” — tránh hàng trôi nổi mua trên mạng.",
+    src: "NHS (Anh) — Herbal medicines, rà soát 01/05/2026",
+  },
+  {
+    // 18/11 (G07-021, G05-025): tăng cân / sụt cân không rõ lý do — tách khỏi "weight" (đang trộn lời khuyên giảm cân)
+    id: "gain",
+    early: true,
+    re: VN(/\b(tăng cân thế nào|làm sao (để )?tăng cân|muốn tăng cân|ăn (sao|gì|thế nào|như nào) (để|cho) (tăng|lên) cân|tăng cân (cho|lành mạnh|an toàn)|khó (tăng|lên) cân|ăn mãi không (mập|béo|lên cân)|ăn hoài không (mập|béo|lên cân)|người (gầy|ốm) quá|bị gầy|nhẹ cân|thiếu cân)\b/),
+    a: "🍚 **Tăng cân lành mạnh** — lên **từ từ**, bằng bữa ăn đủ chất chứ không phải đồ ngọt:\n• Chia **nhiều bữa nhỏ** trong ngày, xen bữa phụ (sữa chua, sữa, chuối, các loại hạt, bánh mì trứng)\n• Mỗi bữa đủ nhóm: tinh bột, rau trái, sữa; thêm **đạm** (đậu, cá, trứng, thịt nạc); rắc thêm phô mai, hạt để bữa ăn nhiều năng lượng hơn\n• **Đừng uống no nước trước bữa ăn**; uống sữa, sinh tố giữa các bữa\n• **Đừng dựa vào** bánh ngọt, sô-cô-la, nước ngọt để lên cân\n• Tập **sức mạnh** (hoặc yoga) để lên cơ — vận động cũng giúp ăn ngon miệng hơn\n🩺 Nên đi khám nếu bị **sụt cân đột ngột**, hoặc **sụt cân dù không đổi cách ăn / vận động** — có thể có bệnh cần tìm ra.",
+    src: "NHS (Anh) — Healthy ways to gain weight, rà soát 28/03/2023",
+  },
+  {
+    id: "lossunexplained",
+    early: true,
+    re: VN(/\b(tự nhiên sụt cân|sụt cân (không rõ|mà không|dù|liên tục|hoài)|giảm cân (không rõ lý do|mà không ăn kiêng|dù không)|cân nặng (vẫn |cứ |lại )?(giảm|sụt) (liên tục|dần|hoài|mãi|đều))\b/),
+    a: "⚖️ **Sụt cân dù không cố giảm** (ăn uống, vận động vẫn như cũ) là điều **nên đi khám**, không nên chờ — bác sĩ sẽ hỏi bạn sụt bao nhiêu, trong bao lâu và có kèm gì khác (mệt, khát nước nhiều, tiêu chảy, ho, sốt về chiều, hồi hộp, run tay…) để tìm nguyên nhân.\n• Trước khi đi: ghi lại **cân nặng mấy tuần gần đây**, ăn uống mỗi ngày ra sao, và các triệu chứng đi kèm.\n🩺 Đi khám **sớm hơn** nếu sụt cân nhanh, hoặc kèm sốt, đau, nôn, đi ngoài ra máu, khó nuốt.",
+    src: "NHS (Anh) — Healthy ways to gain weight, rà soát 28/03/2023",
+  },
+  {
     id: "weight",
-    re: VN(/\b(giảm cân lành mạnh|giảm cân thế nào|làm sao giảm cân|muốn giảm cân|tăng cân thế nào|làm sao tăng cân|muốn tăng cân)\b/),
+    re: VN(/\b(giảm cân lành mạnh|giảm cân thế nào|làm sao giảm cân|muốn giảm cân)\b/),
     a: "⚖️ **Thay đổi cân nặng lành mạnh:** đi từ từ, bền vững quan trọng hơn nhanh.\n• Ăn đủ bữa, nhiều rau, đủ đạm (thịt, cá, trứng, đậu), bớt đồ ngọt, nước ngọt, đồ chiên.\n• Vận động đều, ngủ đủ, bớt căng thẳng.\n• Tránh nhịn ăn, thuốc giảm cân trôi nổi — dễ hại sức khoẻ và tăng lại.\nMuốn có kế hoạch riêng cho mình thì gặp bác sĩ Dinh dưỡng nha. Nếu việc lo về cân nặng làm bạn căng thẳng hay sợ ăn, hãy nói chuyện với chuyên gia nhé.",
   },
   {

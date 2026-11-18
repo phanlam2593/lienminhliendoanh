@@ -155,11 +155,15 @@ import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/li
 //   • Tâm sự & tâm lý: câu có chủ đề cảm xúc mà không hỏi kiến thức bệnh ("là gì", "triệu chứng", "thuốc"…) → lớp sức khoẻ nhường.
 //   Lớp an toàn không đi qua các hàm này → không bị ảnh hưởng.
 const TAB_MED_ASK = /\b(la gi|benh gi|la sao|nguyen nhan|trieu chung|dau hieu|chua|thuoc|dieu tri|kham|xet nghiem|uong gi|an gi|kieng)\b/;
+// 18/11 (G04-083): "Bé nhà tôi chán ăn sau đợt ốm" — chủ đề tâm sự "ăn uống rối loạn" là cho người lớn tự kể; trẻ nhỏ chán ăn là thẻ biếng ăn ở trẻ.
+const kidEat = (text: string) => (findMedId(text) === "bieng-an-tre" && heartThemeOf0(text) === "eating")
+  // (G10-099: "bà đang dùng thuốc chống đông, ăn rau xanh có cần hỏi bác sĩ về chế độ ăn" — chuyện thuốc + ăn uống, không phải tâm sự cân nặng)
+  || (heartThemeOf0(text) === "weight" && /\bthuoc\b/.test(normalizeVi(text)) && !/\b(thuoc giam can|thuoc tang can)\b/.test(normalizeVi(text)));
 function heartThemeOf(text: string): string | undefined {
-  return lomiTab.cur === "health" && findMedId(text) ? undefined : heartThemeOf0(text);
+  return (lomiTab.cur === "health" && findMedId(text)) || kidEat(text) ? undefined : heartThemeOf0(text);
 }
 function heartStart(text: string, appQuestion: boolean): HeartReply | null {
-  return lomiTab.cur === "health" && findMedId(text) ? null : heartStart0(text, appQuestion);
+  return (lomiTab.cur === "health" && findMedId(text)) || kidEat(text) ? null : heartStart0(text, appQuestion);
 }
 function parseMedAsk(text: string, prev?: Parameters<typeof parseMedAsk0>[1]): ReturnType<typeof parseMedAsk0> {
   const r = parseMedAsk0(text, prev);
@@ -1851,6 +1855,16 @@ export function AiChat({
           return localReply(q, { role: "assistant", content: tmr.text, local: true, quick: tmr.quick, med: { id: tmt.id, aspect: "overview" }, health: {}, routed: "tab-health" });
         }
       }
+    }
+    // 18/11: dấu hiệu rối loạn ăn uống (gây nôn / nhịn ăn VÌ SỢ BÉO) → mạch tâm sự "eating" (khuyên tìm chuyên gia) đi TRƯỚC mọi lớp khác.
+    //   Trước: "ăn xong mình hay móc họng vì sợ béo" bị bộ chọn món đọc thành "A hay B" ("chọn xong mình nha 😋"),
+    //   "chán ăn, ăn vô là muốn nôn vì sợ mập" ra thẻ Buồn nôn.
+    if (!forceAi && !en && !danger0) {
+      const nE = ` ${normalizeVi(q)} `;
+      const edCue = VN(/\b(sợ (mập|béo|tăng cân|lên cân)|vì (mập|béo)|cho (đỡ|bớt) (mập|béo))\b/).test(nE) && VN(/\b(nôn|ói|móc họng|gây nôn|nhịn ăn|nhịn đói|bỏ bữa|không dám ăn|ăn rất ít|chán ăn)\b/).test(nE)
+        || VN(/\b(móc họng|gây nôn|tự làm nôn)\b/).test(nE) && VN(/\b(ăn xong|sau khi ăn|sau bữa|ăn vô|ăn vào|mập|béo|cân)\b/).test(nE);
+      const hE = edCue ? heartStart0(q, false) : null;
+      if (hE?.theme === "eating") { topicHit("mind"); return localReply(q, heartMsg(hE, 1)); }
     }
     // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
     //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.

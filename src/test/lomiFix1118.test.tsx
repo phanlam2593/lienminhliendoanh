@@ -94,3 +94,44 @@ describe("hỏi kiến thức Tarot không bị rút bài luôn", () => {
     expect(a.tarot).toBeTruthy();
   }, T);
 });
+
+describe("sức khoẻ: đúng bài thay vì tâm sự / tarot (đợt 2, 18/11)", () => {
+  const med = async (q: string) => ((await last([q])) as M).med?.id;
+  it("đi bơi xong đau tai (có / không dấu) → viêm tai ngoài, không phải bói", async () => {
+    expect(await med("toi di boi xong thay tai bi dau va u, co can kham tai mui hong khong?")).toBe("viem-tai-ngoai");
+    expect(await med("đi bơi xong tai bị đau với ù")).toBe("viem-tai-ngoai");
+  }, T);
+  it("bé nhà em / bé nhà tôi chán ăn → biếng ăn ở trẻ, không phải tâm sự rối loạn ăn uống", async () => {
+    expect(await med("Bé nhà tôi chán ăn sau đợt ốm và sụt cân, tôi nên ghi lại gì trước khi đưa bé khám?")).toBe("bieng-an-tre");
+    const a = (await last(["bé nhà em không chịu ăn, cứ ngậm cơm"])) as M;
+    expect(a.content).toMatch(/biếng ăn/i);
+    expect(a.content).not.toMatch(/ngậm cơm là gì/);
+  }, T);
+  it("đầu gối lại đau khi chạy → thẻ đau gối", async () => {
+    expect(await med("Tuy tập chạy khiến mình thấy tinh thần tốt hơn nhưng mỗi lần tăng quãng đường thì đầu gối lại đau, mình nên nghỉ tập và đi khám không?")).toBe("dau-goi");
+  }, T);
+  it("tăng cân / sụt cân không rõ lý do → mục có nguồn, không phải lời khuyên giảm cân", async () => {
+    const a = (await last(["Tôi đâu có muốn giảm cân, tôi đang hỏi ăn sao để tăng cân cho khỏe."])) as M;
+    expect(a.content).toMatch(/Tăng cân lành mạnh/);
+    expect(a.content).not.toMatch(/dễ tăng lại/);
+    const b = (await last(["Nếu mình ăn đủ bữa, ngủ tương đối đều mà cân nặng vẫn giảm liên tục trong hai tháng thì có nên đi khám không?"])) as M;
+    expect(b.content).toMatch(/nên đi khám/);
+  }, T);
+  it("dấu hiệu rối loạn ăn uống → tâm sự + khuyên tìm chuyên gia, không phải chọn món / thẻ buồn nôn", async () => {
+    for (const q of ["ăn xong mình hay móc họng vì sợ béo", "dạo này mình chán ăn, ăn vô là muốn nôn vì sợ mập", "toi hay moc hong sau khi an vi so beo"]) {
+      const a = (await last([q])) as M;
+      expect(a.heart, q).toBe("eating");
+      expect(a.med, q).toBeUndefined();
+      expect(a.content, q).not.toMatch(/Nếu là Lomi thì chọn/);
+    }
+    expect(await med("ăn xong buồn nôn là bị gì")).toBeTruthy();
+  }, T);
+  it("lá cây / thuốc nam khi đang uống thuốc bác sĩ → không tự ngưng thuốc, hỏi dược sĩ", async () => {
+    const a = (await last(["Mình nghe đồng nghiệp bảo lá cây có thể chữa hết bệnh nên cũng tò mò, nhưng đang uống thuốc bác sĩ kê và chưa dám thử, mình nên làm sao?"])) as M;
+    expect(a.content).toMatch(/Đừng tự ngưng thuốc bác sĩ kê/);
+  }, T);
+  it("câu kể dài: bà dùng thuốc chống đông hỏi ăn rau xanh → lời về warfarin + rau xanh", async () => {
+    const a = (await last(["Bà ngoại muốn đi ăn cùng nhà mà đang dùng thuốc chống đông, ăn rau xanh có cần hỏi bác sĩ về chế độ ăn không?"])) as M;
+    expect(a.content).toMatch(/tuỳ loại thuốc chống đông/);
+  }, T);
+});

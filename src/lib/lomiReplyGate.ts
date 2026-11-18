@@ -9,7 +9,7 @@
 // Chủ đề / thuốc lấy từ lượt trước (câu hỏi nối "vậy uống được không") thì không tính là lạc.
 // ─────────────────────────────────────────────────────────────────────────────
 import { heartThemeOf } from "@/lib/lomiHeart";
-import { findMedTopicId, nameAsTyped } from "@/lib/lomiMed";
+import { findMedTopicId, medNameOfId, nameAsTyped } from "@/lib/lomiMed";
 import { drugById, findDrugs } from "@/lib/lomiDrugData";
 import { detectTarot } from "@/lib/tarot";
 
@@ -74,7 +74,9 @@ export function vagueMiss(question: string, reply: GateMsg & { content: string; 
   const short = question.trim().split(/\s+/).length <= 2;
   const id = findMedTopicId(question) ?? (short ? findMedTopicId(`bị ${question}`) ?? findMedTopicId(`${question} ở người lớn`) : null);
   if (!id) return null;
-  const name = nameAsTyped(question, id) ?? nameAsTyped(`bị ${question}`, id) ?? (short ? question.trim().replace(/[?!.…]+$/u, "") : "");
+  // (18/11: "bé NHÀ EM không chịu ăn" — chữ gõ không trùng nguyên tên thẻ → dùng tên chính của thẻ)
+  const name0 = nameAsTyped(question, id) ?? nameAsTyped(`bị ${question}`, id) ?? (short ? question.trim().replace(/[?!.…]+$/u, "") : "");
+  const name = name0 || (/(?:^|\s)(bé|con|cháu|trẻ)\s+(nhà|của)\s/iu.test(question) ? medNameOfId(id) ?? "" : "");
   if (!name) return null;
   // (câu đáp đã nhắc đúng chuyện đó — "Con anh bị bạn bè bắt nạt hả…" — hoặc đang theo mạch kể về một người → không phải câu chung chung)
   if (reply.about || reply.thread) return null;
