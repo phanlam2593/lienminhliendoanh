@@ -47,6 +47,9 @@ export async function uploadImage(
   folder = "general",
   ownerId?: string,
   maxSize = MAX_SIZE,
+  // Bucket đích. Mặc định "uploads". Bucket khác (vd "driver-docs" — giấy tờ tài xế, riêng tư) thì đường dẫn trả về
+  // có tiền tố "<bucket>/" để getSignedUrl biết ký từ bucket nào.
+  bucket = "uploads",
 ): Promise<string> {
   const err = validateImage(file, maxSize);
   if (err) throw new Error(err);
@@ -59,12 +62,12 @@ export async function uploadImage(
   if (!uid) throw new Error(tStatic("upload.errAuth"));
   const ext = compressed.name.split(".").pop() || "jpg";
   const path = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("uploads").upload(path, compressed, {
+  const { error } = await supabase.storage.from(bucket).upload(path, compressed, {
     contentType: compressed.type,
     upsert: false,
   });
   if (error) throw error;
-  return path;
+  return bucket === "uploads" ? path : `${bucket}/${path}`;
 }
 
 // ── Tin nhắn thoại (voice message). Không nén như ảnh: file opus/mp4 đã nhỏ sẵn
@@ -100,7 +103,7 @@ const cache = new Map<string, string>();
 // Ảnh mặc định nằm trong bucket "uploads". Nếu path có tiền tố "<bucket>/" của một bucket
 // khác đã được khai báo ở đây (vd "avatars/..." dùng cho avatar tài khoản test) thì ký URL
 // từ bucket đó. Không đổi hành vi cũ với mọi path hiện có.
-const EXTRA_BUCKETS = ["avatars", "voice"];
+const EXTRA_BUCKETS = ["avatars", "voice", "driver-docs"];
 
 export async function getSignedUrl(path: string): Promise<string> {
   if (!path) return "";

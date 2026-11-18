@@ -146,6 +146,16 @@ export function registerPwa() {
     return;
   }
 
+  // 15/11 — báo "Có bản mới": trang này đã có service worker điều khiển từ trước (KHÔNG phải lần cài đầu) mà bộ điều
+  // khiển đổi sang bản mới (skipWaiting + clientsClaim) → bản mới đã sẵn, mời tải lại (components/UpdatePrompt).
+  // Không tự tải lại (người dùng có thể đang gõ dở / đang gọi). Không đổi cách cache.
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController) return;
+    updateReady = true;
+    window.dispatchEvent(new Event("pwa:update-ready"));
+  });
+
   window.addEventListener("load", async () => {
     try {
       const registration = await navigator.serviceWorker.register(SW_URL, { updateViaCache: "none" });
@@ -188,6 +198,10 @@ export function registerPwa() {
     } catch {}
   });
 }
+// Đã có bản mới sẵn sàng (xem controllerchange ở trên) — cho UpdatePrompt gắn sau vẫn biết.
+let updateReady = false;
+export const isUpdateReady = () => updateReady;
+
 // ===== Install prompt (Add to Home Screen) =====
 const INSTALL_DISMISS_KEY = "lmld:install-dismissed-at";
 let deferredInstallPrompt: any = null;
@@ -325,11 +339,10 @@ function _setUpdateStatus(s: UpdateStatus) {
     // KHÔNG tự động reload nữa — ép reload đúng lúc mạng chập chờn từng gây ra bug
     // "báo mất mạng dù có mạng". Chỉ báo cho biết, để người dùng tự bấm cập nhật khi
     // họ đang rảnh tay, qua nút UpdateIndicator đã có sẵn.
-    toast(tStatic("pwa.updateTitle"), {
-      description: tStatic("pwa.updateDesc"),
-      duration: 8000,
-      action: { label: tStatic("pwa.updateAction"), onClick: () => void applyUpdate() },
-    });
+    // 15/11: thay toast 8 giây (dễ lỡ, chen cả vào lúc đang gọi) bằng thanh báo giữ nguyên tới khi chạm
+    // (components/UpdatePrompt — tự hoãn khi đang có cuộc gọi).
+    updateReady = true;
+    window.dispatchEvent(new Event("pwa:update-ready"));
   }
 }
 

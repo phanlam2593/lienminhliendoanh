@@ -11,6 +11,7 @@ import { AuthProvider } from "@/lib/auth";
 import { LanguageProvider } from "@/lib/i18n";
 import { OnlineUsersProvider } from "@/lib/onlineUsers";
 import { CallProvider } from "@/lib/call";
+import UpdatePrompt from "@/components/UpdatePrompt";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import { useLanguage } from "@/lib/i18n";
@@ -120,6 +121,7 @@ const App = () => (
                     </Route>
                     <Route path="*" element={<NotFound />} />
                   </Routes>
+                  <UpdatePrompt />
                 </CallProvider>
               </BrowserRouter>
             </OnlineUsersProvider>

@@ -1067,9 +1067,11 @@ function DriverTab() {
     if (!driverPhoto && !driver?.driver_photo_url) return toast.error(t("ride.errDriverPhoto"));
     setSaving(true);
     try {
-      const dp = driverPhoto ? await uploadImage(driverPhoto, "drivers", user.id) : null;
-      const vp = vehiclePhoto ? await uploadImage(vehiclePhoto, "drivers", user.id) : null;
-      const lp = licensePhoto ? await uploadImage(licensePhoto, "drivers", user.id) : null;
+      // Giấy tờ tài xế vào bucket riêng tư "driver-docs" (15/11): bằng lái + ảnh xe chỉ chủ hồ sơ và admin xem được;
+      // ảnh chân dung thêm khách của chuyến mình nhận. Trước đây nằm chung kho "uploads" ai đăng nhập cũng đọc được.
+      const dp = driverPhoto ? await uploadImage(driverPhoto, "portrait", user.id, undefined, "driver-docs") : null;
+      const vp = vehiclePhoto ? await uploadImage(vehiclePhoto, "vehicle", user.id, undefined, "driver-docs") : null;
+      const lp = licensePhoto ? await uploadImage(licensePhoto, "license", user.id, undefined, "driver-docs") : null;
       const { error } = await db.rpc("apply_driver", {
         _vehicle: form.vehicle,
         _plate: form.plate,
