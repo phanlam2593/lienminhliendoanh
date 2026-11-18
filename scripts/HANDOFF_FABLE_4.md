@@ -79,3 +79,16 @@ Chi tiết: `scripts/lomi-audit/HANDOFF_KIEN_TRUC.md` mục 6.
 
 ## Credit đã tiêu
 1 lần `send_message` (Lovable báo 0,6 credit; con số này thường báo thấp hơn thực tế — anh xem số dư trong Lovable).
+
+## 8. Lomi — 4 nút chủ đề (18/11 chiều, anh Kir giao "em quyết rồi làm luôn")
+Quyết định: **gợi ý mềm**, không khoá cứng; gộp "tâm lý" + "tâm sự" (trong Lomi là cùng một lớp); thêm "Khác" cho tarot / tìm quán / kinh doanh.
+- `src/lib/lomiTab.ts` (danh sách nút, nhớ lựa chọn trên máy) + hàng nút trên ô nhập ở `AiAssistant.tsx` (chạm lại = bỏ chọn = tự do).
+- **Sức khoẻ:** (1) `heartThemeOf` / `heartStart` nhường khi câu nhắc bệnh có trong kho; (2) câu KỂ có nhắc bệnh (không phải câu hỏi, không có rủi ro,
+  không đang nói tiếp bệnh đó) → thẻ kiến thức ngay sau lớp an toàn (`routed: "tab-health"`).
+- **Tâm sự & tâm lý:** `parseMedAsk` nhường khi câu có chủ đề cảm xúc mà không hỏi kiến thức (là gì / triệu chứng / thuốc / khám…).
+- **Hỏi về app:** Lomi bí → gợi ý câu hướng dẫn app gần nhất (`routed: "tab-app"`).
+- An toàn không đi qua các hàm này → luôn chạy trước. Test: `src/test/lomiTab.test.tsx`; khung giả lập nhận `{ tab }`.
+- Đo: **không chọn tab 877/985 (y như trước, hỏng 0)**; **chọn đúng tab 882/985** (sức khoẻ 204→209) — `bash scripts/lomi-audit/rerun_tab.sh`.
+  Tab không giúp được lớp food/askback (đó là chuyện nấu ăn #71 và câu mơ hồ).
+- Ghi chú đo: bộ paraphrase không cố định ngẫu nhiên — 2 câu "stress" chấm theo chữ trong câu đáp ngẫu nhiên nên 387 ↔ 389 dao động, không phải lỗi.
+- Gợi ý phiên sau: xem số người bấm từng nút (chưa ghi lại — có thể ghi vào `lomi_topic_stats`) trước khi đầu tư thêm cho tab.
