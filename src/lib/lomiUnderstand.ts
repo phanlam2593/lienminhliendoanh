@@ -92,7 +92,7 @@ const ISSUE: [string, RegExp][] = [
   ["blank", VN(/\b(trắng trơn|màn hình trắng|trắng xoá|trắng bạch|đen thui|màn hình đen|không hiện gì|không hiển thị gì|trống trơn|không có gì hết|không thấy gì hết)\b/)],
   ["lag", VN(/\b(lag|giật lag|bị giật|giật quá|bị đơ|(?<!thái )đơ quá|(?<!thái )đơ luôn|đơ màn hình|đứng hình|treo(?! cổ\b)|bị treo(?! cổ\b)|chậm quá|chậm rì|chậm thế|chậm vậy|load lâu|load mãi|load hoài|xoay hoài|xoay mãi|quay hoài|quay mãi|loading mãi|không load|không lên|mãi không lên|load không lên)\b/)],
   ["login", VN(/\b(không vào được|vào không được|không đăng nhập được|đăng nhập không được|không login được|bị đá ra|bị out|bị đăng xuất)\b/)],
-  ["generic", VN(/\b(bị gì|bị sao|bị lỗi|lỗi rồi|lỗi gì|báo lỗi|hiện lỗi|bug|hư rồi|hư hả|không chạy|không hoạt động|không dùng được|xài không được|dùng không được|không bấm được|bấm không được|bấm không ăn|không gửi được|gửi không được|không tải được|không mở được|mở không được|không lưu được|lưu không được|bị offline|hiện offline|báo offline|mất mạng|mất kết nối|không có mạng)\b|\bkhông (gửi|tải|mở|lưu|bấm|load|xem|nghe|gọi|đăng|up|đổi|chọn|tìm|thay đổi|cập nhật|cài)\b.{0,30}\bđược\b/)],
+  ["generic", VN(/\b((?<!chuẩn |sửa soạn )bị gì|(?<!chuẩn )bị sao|bị lỗi|lỗi rồi|lỗi gì|báo lỗi|hiện lỗi|bug|hư rồi|hư hả|không chạy|không hoạt động|không dùng được|xài không được|dùng không được|không bấm được|bấm không được|bấm không ăn|không gửi được|gửi không được|không tải được|không mở được|mở không được|không lưu được|lưu không được|bị offline|hiện offline|báo offline|mất mạng|mất kết nối|không có mạng)\b|\bkhông (gửi|tải|mở|lưu|bấm|load|xem|nghe|gọi|đăng|up|đổi|chọn|tìm|thay đổi|cập nhật|cài)\b.{0,30}\bđược\b/)],
 ];
 const ISSUE_TIP: Record<string, string> = {
   crash: "App tự văng ra hả 😥",

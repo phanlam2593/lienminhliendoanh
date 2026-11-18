@@ -143,7 +143,7 @@ function byRadius<T extends { distKm?: number }>(cards: T[], pos: unknown, maxKm
 // Động từ "tìm" rõ ràng. (Chữ "ưu đãi", "rẻ", "ngon" chỉ là điều kiện lọc, không tự kích hoạt tìm —
 // tránh "ưu đãi hết hạn gia hạn được không?" bị hiểu thành đi tìm quán.)
 const SEEK =
-  VN(/\b(tìm|kiếm|ở đâu|đâu có|gần đây|gần mình|gần nhất|quanh đây|quanh mình|gợi ý|giới thiệu|recommend|muốn đi|muốn ăn|muốn uống|cần tìm|có ai bán|có ai làm)\b/);
+  VN(/\b(tìm(?! hiểu)|kiếm(?! tiền| sống| việc)|ở đâu|đâu có|gần đây|gần mình|gần nhất|quanh đây|quanh mình|gợi ý|giới thiệu|recommend|muốn đi|muốn ăn|muốn uống|cần tìm|có ai bán|có ai làm)\b/);
 const HOWTO = VN(/\b(làm sao|cách|thế nào|như thế nào|hướng dẫn|là gì|tại sao|bao nhiêu điểm|tạo ưu đãi|của tôi|của mình|đã nhận|đã lưu|mã ưu đãi)\b/);
 
 /** Nhận ý "tìm chỗ/ưu đãi thật" hoặc "hôm nay ăn gì". Câu hỏi cách dùng app thì trả null để FAQ lo. */
@@ -153,7 +153,11 @@ export function detectSearch(text: string): SearchIntent | null {
   // 11/11 (kiểm toán Lovable, P1 — phủ định): "Nào có mất ngủ đâu", "em đâu có khó ngủ đâu" — chữ "ngủ đâu" ở đây là lời CHỐI
   //   (mất ngủ / khó ngủ … đâu), không phải hỏi chỗ ngủ → không tìm chỗ ở.
   if (/(?:^|\s)(?:mất|mat|khó|kho|không|khong|ko|k|chưa|chua|chẳng|chang|buồn|buon|thiếu|thieu|thèm|them|ít|it)\s+ngủ\s+(?:đâu|dau)(?:\s|[?!.]|$)|(?:^|\s)(?:nào|nao|làm gì|lam gi|đâu|dau)\s+có\s.{1,40}\s(?:đâu|dau)\s*[?!.]*$/iu.test(text.normalize("NFC").replace(/ngu(?=\s+dau)/giu, "ngủ").replace(/\bco\b/giu, "có"))) return null;
-  const n = ` ${normalizeVi(text)} `;
+  // 18/11 (G04-090): gõ không dấu "tha tim … it quan tam" — "tim" bị đọc thành "tìm", "quan" thành "quán" → bỏ các từ ghép này trước khi xét
+  const n = ` ${normalizeVi(text)} `.replace(/ (tha tim|quan tam|quan trong|quan he|quan diem|quan sat)(?= )/g, " ");
+  // 18/11 (G05-057): muốn LÀM tài xế / shipper trên app ("đăng ký làm tài xế thì cần gì") — hỏi cách dùng app, không phải tìm dịch vụ xe
+  //   ("mình đang CHẠY giao hàng tự do…" — người kể tự làm nghề đó, không phải đang tìm dịch vụ)
+  if (VN(/\b((đăng ký|đăng kí|muốn|làm sao|cách) (làm |thành |trở thành )?(tài xế|shipper|người giao hàng)|đang (chạy|làm) (giao hàng|ship|shipper|xe ôm|grab|tài xế|xe công nghệ))\b/).test(n) && !VN(/\b(tìm|kiếm|gọi|đặt|cần) (một |1 )?(tài xế|shipper|xe)\b/).test(n)) return null;
   // 13/11 (G10-099): "bà đang dùng THUỐC chống đông, ăn rau xanh có cần hỏi BÁC SĨ về chế độ ăn không" — hỏi thuốc / ăn uống theo bệnh,
   //   không phải tìm quán (trừ khi tìm chính nhà thuốc / phòng khám)
   if (/\bkem\b/.test(n) && /\b(boi|thoa|dung kem|kem duong|kem tri|chong nang|da hoi kho|da kho|noi man|rat|di ung|ngua)\b/.test(n) && !/\b(an kem|quan kem|tiem kem|ly kem)\b/.test(n)) return null;

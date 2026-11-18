@@ -137,7 +137,7 @@ export const FAQS: Faq[] = [
   F("bizcreate", "biz", "Đăng doanh nghiệp lên app thế nào?", "How do I list my business?",
     "Vào Hồ sơ → ⋯ → Tạo hồ sơ doanh nghiệp (/ho-so?view=business) rồi điền:\n• Tên, loại hình (9 loại), giờ mở/đóng, mô tả, địa chỉ, SĐT\n• Mã PIN 4–8 ký tự (bắt buộc — để khách nhận ưu đãi tại quán)\n• Ảnh bìa, link Facebook/TikTok/Instagram/YouTube/Website (tuỳ chọn)\n• Ghim vị trí hiện tại để hiện ở mục Gần đây; chỉ bán online thì bật “Chỉ bán hàng online”\nBấm Gửi để duyệt, Ban quản trị duyệt xong doanh nghiệp mới hiện công khai.",
     "Profile → ⋯ → Create business profile (/ho-so?view=business): name, type (9 types), hours, description, address, phone, a 4–8 character PIN (required, for in-store claims), optional cover and social links, pin your location for Nearby or toggle Online-only. Submit — it goes public after admin approval.",
-    ["dang doanh nghiep", "tao doanh nghiep", "them doanh nghiep", "dang ky doanh nghiep", "mo shop", "dang quan", "tao hoso doanh nghiep", "dua quan len app", "dang ky kinh doanh", "dua cua hang len app", "dua cua hang len", "dang ky cua hang", "dang ky quan", "dang cua hang", "dang ky shop", "dang ky ban hang"]),
+    ["dang doanh nghiep", "tao doanh nghiep", "them doanh nghiep", "ai duyet doanh nghiep", "ai duyet ho so doanh nghiep", "gui ho so doanh nghiep", "doanh nghiep bao lau duoc duyet", "dang ky doanh nghiep", "mo shop", "dang quan", "tao hoso doanh nghiep", "dua quan len app", "dang ky kinh doanh", "dua cua hang len app", "dua cua hang len", "dang ky cua hang", "dang ky quan", "dang cua hang", "dang ky shop", "dang ky ban hang"]),
   F("bizoffer", "biz", "Doanh nghiệp đăng ưu đãi ở đâu?", "Where do I post an offer?",
     "Hồ sơ → ⋯ → Hồ sơ doanh nghiệp (/ho-so?view=business) → mục Ưu đãi / Deal → Thêm ưu đãi mới. Mỗi ưu đãi có thể Tạm ẩn, Hiện lại, Xoá hoặc Gửi thông báo cho người theo dõi. Đăng ưu đãi mới cần Membership còn hạn. Cần ý tưởng thì gõ “tư vấn ưu đãi” để Lomi gợi ý nha 💡",
     "Profile → ⋯ → Business profile (/ho-so?view=business) → Offers / Deals → add a new offer. Each offer can be hidden, shown, deleted or broadcast to followers. Posting new offers needs active Membership. Need ideas? Type “offer ideas” 💡",
@@ -249,7 +249,7 @@ export const FAQS: Faq[] = [
   F("ridedriver", "rides", "Muốn làm tài xế thì đăng ký sao?", "How do I become a driver?",
     "Vào Đưa đón (/dua-don) → tab Tài xế → gửi hồ sơ: ảnh chân dung (bắt buộc), biển số, hiệu/màu xe, có thể thêm ảnh xe và bằng lái, chọn nhận cả giao hàng nếu muốn. Ban quản trị duyệt xong bạn bật Online để thấy các chuyến gần mình.",
     "Rides (/dua-don) → Driver tab → submit a portrait photo (required), plate, vehicle description, optional vehicle/license photos, and whether you also deliver. After approval, go Online to see nearby trips.",
-    ["lam tai xe", "dang ky tai xe", "chay xe", "nhan cuoc", "tai xe", "lam shipper", "chay grab"]),
+    ["lam tai xe", "dang ky tai xe", "dang ky lam tai xe", "muon lam tai xe", "lam tai xe tren", "chay xe", "nhan cuoc", "tai xe", "lam shipper", "chay grab"]),
   F("driveronline", "rides", "Tài xế nhận chuyến thế nào?", "How do drivers take trips?",
     "Ở tab Tài xế bật Online để thấy các chuyến đang chờ gần bạn → Nhận chuyến → Đã đón khách / Đã lấy hàng → Hoàn thành chuyến. Trong lúc chạy nhớ giữ app mở để khách thấy bạn trên bản đồ nha.",
     "In the Driver tab go Online to see nearby trips → Accept → Picked up → Complete. Keep the app open while driving so the customer sees you on the map.",
@@ -607,6 +607,17 @@ export function answerFromPrev(text: string, prevAnswer: string): string | null 
     const st = new Set(tokens(canon(x)));
     const hit = qt.filter((w) => st.has(w)).length;
     if (hit && (!best || hit > best.hit)) best = { s: x, hit };
+  }
+  // 18/11 (G09-052): hỏi kèm một CON SỐ ("thêm 60 người có được ko") mà câu trước có "tối đa 50 người" → so luôn, trả lời được / không.
+  const askN = nq.match(/(?:^| )(\d{1,5})(?: |$)/);
+  if (askN) {
+    for (const x of sents) {
+      const m = canon(x).match(/\b(?:toi da|nhieu nhat|khong qua)( \S+){0,3}? (\d{1,5}) (\S+)/);
+      if (m && ` ${nq} `.includes(` ${m[3]} `)) {
+        const ok = Number(askN[1]) <= Number(m[2]);
+        return `${ok ? "Được nha" : "Chưa được đâu"} — ${x.replace(/[.!]$/, "")}.`;
+      }
+    }
   }
   // Hỏi số lượng ("tối đa mấy người") → câu có con số và trùng ít nhất 1 từ là đủ.
   if (qty) {

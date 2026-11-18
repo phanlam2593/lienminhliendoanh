@@ -309,7 +309,7 @@ export function trapReply(q: string): Trap | null {
   if (VN(/\bsốt\b/).test(n) && VN(/\b(lượt xem|lượt thích|bài đăng|view|like)\b/).test(n))
     return { text: "Bài “sốt” lượt xem là tin vui nha 🔥😄 Bài đang được nhiều người xem — tranh thủ trả lời bình luận, ghim thông tin quan trọng (giờ mở cửa, ưu đãi) cho người mới ghé. Nếu ý bạn là lượt xem **tăng / giảm bất thường** mà nghi lỗi, thì kéo trang xuống tải lại; vẫn lạ thì nhắn Ban quản trị (Hồ sơ → ⋯ → Trợ giúp)." };
   // Chữ thuốc / chữa / bệnh dùng cho lỗi app → bỏ chữ ẩn dụ, hỏi lại phần app
-  if (MED_WORD.test(n) && APP_OBJ.test(n) && APP_PROBLEM.test(n) && !VN(/\b(đau (bụng|ngực|lưng|răng|họng)|uống thuốc|bị sốt|đang sốt|bác sĩ|bệnh viện|phòng khám|đặt thuốc|giao thuốc|mua thuốc)\b/).test(n)) {
+  if (MED_WORD.test(n) && APP_OBJ.test(n) && APP_PROBLEM.test(n) && !VN(/\b(đau (bụng|ngực|lưng|răng|họng)|uống thuốc|bị sốt|đang sốt|bác sĩ|bệnh viện|phòng khám|đặt thuốc|giao thuốc|mua thuốc|mở lời|cảm nắng|tỏ tình|hồi hộp|crush|người yêu|cùng lớp)\b/).test(n)) {
     const rest = low
       .replace(/^(?:tôi|tui|mình|em|anh|chị)\s+/u, "")
       .replace(/\b(?:đau đầu với (?:cái )?app(?: này)?(?: quá)?|lomi có thuốc giải cho|có thuốc giải cho|thuốc (?:nào|gì) (?:trị|chữa)|có bệnh gì khiến|muốn tìm thuốc cho|cần chữa|muốn chữa|hỏi bệnh của|bị nhiễm bệnh|nhiễm bệnh|bị virus|như virus)\b[,:]?\s*/gu, " ")

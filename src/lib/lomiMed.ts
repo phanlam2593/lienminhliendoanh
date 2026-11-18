@@ -188,7 +188,7 @@ const set = (x: string) => new Set(x.split(" ").filter(Boolean));
 const COMPOUND: Record<string, { before: Set<string>; after: Set<string> }> = {
   cảm: {
     before: set("tình thông đồng linh thiện ác mặc nhạy đa tự giao xúc thương dũng quả mẫn truyền gợi khoái hảo phản biểu vô tri trực dự mỹ mĩ rung thiện tâm thấu thụ hàm ngoại nội bi thẩm"),
-    after: set("ơn xúc giác thấy nhận động tình thông hứng kích phục mến thương tưởng quan tính ứng biến nghĩ tạ hóa hoá thụ tác thán khái tử hoài phiền thấu ứng"),
+    after: set("nắng ơn xúc giác thấy nhận động tình thông hứng kích phục mến thương tưởng quan tính ứng biến nghĩ tạ hóa hoá thụ tác thán khái tử hoài phiền thấu ứng"),
   },
   lao: { before: set("cần gian công nhọc"), after: set("động công lực đao tù vào tới xuống ra lên xao đầu tâm khổ") },
   lậu: { before: set("hàng buôn trốn nhập rượu xăng thuốc đồ phim nhạc sách"), after: set("thuế vé") },
@@ -217,6 +217,8 @@ export function findMedTopicId(text: string): string | null {
     if (!standsAlone(a, k.acc.trim())) continue;
     // Thẻ chỉ nói ăn uống ("bầu", "mang thai") chỉ nhận khi câu nói tới ăn uống — "bầu cử là gì" không phải.
     if (DIET_ONLY.has(k.id) && !DIET_CUE.test(b)) continue;
+    // 18/11 — "cảm nắng / say nắng một người" là thích thầm, không phải bệnh do nóng.
+    if (k.id === "say-nang" && CRUSH_CUE.test(b)) continue;
     // Thẻ người lớn có thẻ riêng cho trẻ ("con bị sốt bao nhiêu độ" → sốt ở trẻ em).
     const kid = CHILD_OF.get(k.id);
     if (kid && (a === b ? KID_CUE_B.test(b) : KID_CUE.test(a))) return kid;
@@ -224,6 +226,7 @@ export function findMedTopicId(text: string): string | null {
   }
   return null;
 }
+const CRUSH_CUE = /(?<!\bbi )\b(cam|say) nang (co |mot |1 |voi |ve )?(ban|nguoi|anh|chi|em|co|cau|thang|con nho|nho|dua|crush|ai|ong|ba xa|gai|trai)\b|\b(cam|say) nang\b.*\b(to tinh|mo loi|lam quen|bat chuyen|crush|thich tham|nguoi yeu|hoi hop|nhan tin|rung dong)\b|\b(to tinh|mo loi|lam quen|crush|thich tham|nguoi yeu|rung dong)\b.*\b(cam|say) nang\b/;
 const DIET_ONLY = new Set(ROWS.filter((r) => r.dietOnly).map((r) => r.id));
 const DIET_CUE = VN(/ (ăn|uống|kiêng|thực phẩm|món|đồ ăn|thức ăn|nhậu|bia|rượu|cà phê) /);
 const CHILD_OF = new Map(ROWS.filter((r) => r.child).map((r) => [r.id, r.child!]));

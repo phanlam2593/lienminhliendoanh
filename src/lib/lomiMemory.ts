@@ -45,7 +45,7 @@ const SIT_RE: [Sit, RegExp][] = [
   ["heartbroken", VN(/\b(thất tình|vừa chia tay|bị đá|bị bỏ rồi|chia tay rồi|bị người yêu bỏ|mới chia tay)\b/)],
   ["single", VN(/\b(độc thân|đang ế|fa|chưa có người yêu|không có người yêu)\b/)],
   ["inlove", VN(/\b(có người yêu rồi|đang yêu|mới có người yêu|đang hẹn hò)\b/)],
-  ["sick", VN(/\b(đang ốm|bị ốm|bị bệnh|đang bệnh|bị sốt|bị cảm|đang điều trị)\b/)],
+  ["sick", VN(/\b(đang ốm|bị ốm|bị bệnh|đang bệnh|bị sốt|bị cảm(?! nắng (một |1 )?(anh|chị|em|cô|cậu|bạn|người|ai|nhỏ|đứa|thằng|crush|ông|gái|trai))|đang điều trị)\b/)],
   ["student", VN(/\b(sinh viên|học sinh|đang ôn thi|sắp thi|đang đi học|mùa thi)\b/)],
 ];
 const CONFLICT: Partial<Record<Sit, Sit[]>> = {

@@ -92,3 +92,25 @@ Quyết định: **gợi ý mềm**, không khoá cứng; gộp "tâm lý" + "t�
   Tab không giúp được lớp food/askback (đó là chuyện nấu ăn #71 và câu mơ hồ).
 - Ghi chú đo: bộ paraphrase không cố định ngẫu nhiên — 2 câu "stress" chấm theo chữ trong câu đáp ngẫu nhiên nên 387 ↔ 389 dao động, không phải lỗi.
 - Gợi ý phiên sau: xem số người bấm từng nút (chưa ghi lại — có thể ghi vào `lomi_topic_stats`) trước khi đầu tư thêm cho tab.
+
+## 9. Sửa hiểu lầm từ bộ 1.000 câu (18/11, sau 4 nút chủ đề)
+
+Đo: bộ 1.000 câu **886/985** (trước 877), so mốc gốc: sửa được 11, hỏng 0 · test tự động 2.560 qua · giữ riêng 61/65 · paraphrase 386/400 (dao động ngẫu nhiên) · hội thoại 155/160.
+Test chặn tái phát: `src/test/lomiFix1118.test.tsx`.
+
+| Câu | Trước | Sau | Sửa ở |
+|---|---|---|---|
+| "tôi **cảm nắng** bạn cùng lớp, làm sao mở lời" | thẻ sơ cứu Say nắng / Cảm lạnh; không dấu → "app trục trặc" | lời khuyên bắt chuyện | lomiMed (CRUSH_CUE, "nắng" sau "cảm"), lomiTrap, lomiMemory ("bị cảm nắng cô bạn" ≠ ốm), lomiHeart ("say nắng anh ấy" = crush), AiAssistant (viết lại câu say nắng) |
+| "đi ngoài trời bị cảm nắng chóng mặt" | an ủi chung chung | thẻ Say nắng | AiAssistant |
+| "người yêu thả tim cho người khác mà ít quan tâm" (không dấu) | tìm quán | tâm sự | lomiSearch (bỏ "tha tim", "quan tam"… trước khi xét) |
+| "chị cần **chuẩn bị gì**" | "app bị gì" → trục trặc | bài đăng ký tài xế | lomiUnderstand |
+| "đang chạy giao hàng… muốn đăng ký làm tài xế" | tìm dịch vụ giao hàng | bài tài xế | lomiSearch ("tìm hiểu" ≠ tìm), lomiFaq từ khoá |
+| "Nó chứa tối đa bao nhiêu người?" sau bài nhóm chat | "chưa có hướng dẫn" | "Mỗi nhóm tối đa 50 người" | AiAssistant (câu hỏi số lượng ≤12 chữ cũng soi câu trả lời trước) |
+| "[đang tạo nhóm chat] thêm 60 người có được ko" | "chưa được học" | "Chưa được đâu — tối đa 50 người" | lomiFaq.answerFromPrev (so con số), AiAssistant `faq-ctx` |
+| "[Ba mình muốn gọi ô tô bằng mục Đưa đón] trả tiền mặt được chứ" | tâm sự gia đình | trả tiền mặt cho tài xế | AiAssistant (câu nói Ý ĐỊNH dùng app = hỏi app; `faq-ctx`) |
+| "cần bằng lái không" sau bài tài xế | nhảy sang Đăng ký tài khoản | câu "có thể thêm… bằng lái" | AiAssistant |
+| "gửi hồ sơ doanh nghiệp rồi ai duyệt" | gợi ý lạc đề | bài Đăng doanh nghiệp (Ban quản trị duyệt) | lomiFaq từ khoá |
+| "trải ba lá đọc theo thứ tự nào", "dùng ba lá được chứ", "[vừa rút trải bài] Cái đó…" | rút bài luôn / "chưa rõ bạn nói gì" | giải thích | lomiRescue.tarotHowto (thêm ý số lá), AiAssistant `tarot-howto` |
+
+Lưu ý an toàn: nhánh `faq-ctx` (hiểu câu cụt theo câu kể trước) chỉ chạy khi câu trước nhắc rõ một phần của app, không có tín hiệu khủng hoảng / cấp cứu, và Lomi vừa đáp không phải lời an toàn / tâm sự / sức khoẻ — test QA V8 "bạn nói muốn chết → không biết làm sao" từng bắt lỗi này, nay đã qua.
+Không thêm câu hỏi đáp mới vào FAQS (thêm sẽ phải dựng lại anchors.json của edge function lomi-understand → phải deploy, tốn credit).

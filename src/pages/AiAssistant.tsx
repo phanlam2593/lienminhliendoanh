@@ -1852,6 +1852,35 @@ export function AiChat({
         }
       }
     }
+    // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
+    //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && q.split(/\s+/).length <= 12 && !tarotHowto(raw)) {
+      const prevT = [...msgs].reverse().find((m) => m.role === "user")?.content ?? "";
+      const lastT = msgs[msgs.length - 1];
+      if ((/\b(tarot|trai bai|rut bai|la bai|xem bai|boi bai)\b/.test(` ${normalizeVi(prevT)} `) || !!(lastT?.role === "assistant" && (lastT.tarot || lastT.tarotRef))) && VN(/\b(cái|vụ|kiểu|cách) (đó|này|đấy|ấy|kia)\b/).test(` ${normalizeVi(q)} `)) {
+        const thC = tarotHowto(`trải bài ${raw}`);
+        if (thC) return localReply(q, { role: "assistant", content: thC, local: true, routed: "tarot-howto" });
+      }
+    }
+    // 18/11 (G09-052, G09-050): câu trước người dùng KỂ đang dùng một phần của app ("Tôi đang tạo nhóm chat", "Ba mình muốn gọi ô tô
+    //   bằng mục Đưa đón") rồi hỏi cụt ("thêm 60 người có được ko", "trả tiền mặt được chứ") → lấy câu hỏi đáp của phần đó để trả lời.
+    const lastAc = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1] : undefined;
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && !lastAc?.faqId && !lastAc?.med && !lastAc?.drug && q.split(/\s+/).length <= 12 && !isAppish(q) && (looksLikeQuestion(q) || VN(/\b(được (chứ|không|ko|k|hông|hok)|được ko|đc (không|ko|k)|cần (chuẩn bị )?gì|làm sao|thế nào|ra sao)\b/).test(` ${normalizeVi(q)} `))) {
+      const prevU = [...msgs].reverse().find((m) => m.role === "user")?.content ?? "";
+      // (chỉ khi câu trước NHẮC RÕ một phần của app, và không phải mạch an toàn / tâm sự — "Bạn thân nhắn tin bảo muốn chết" → "A không biết
+      //   làm sao" là chuyện cứu người, không phải câu hỏi đáp về tin nhắn)
+      const appCtx = !!prevU && VN(/\b(ilomi|app|ứng dụng|nhóm chat|chat nhóm|đưa đón|quẹt|ưu đãi|doanh nghiệp|tài xế|tin nhắn|hồ sơ|membership|thành viên)\b/).test(` ${normalizeVi(prevU)} `);
+      const calm = !!prevU && !crisisReply(prevU, lang) && !crisisCheckIn(prevU) && !urgentOf(prevU) && !(lastAc && (isSafetyReply(lastAc) || lastAc.heart || lastAc.health || lastAc.sx?.length));
+      const pf = appCtx && calm ? matchFaq(prevU) : null;
+      if (pf) {
+        const back = answerFromPrev(q, pf.a.vi);
+        if (back) return localReply(q, { role: "assistant", content: back, local: true, faqId: pf.id, routed: "faq-ctx" });
+        const fu = matchFaqFollowUp(q, pf.id);
+        if (fu) return localReply(q, { role: "assistant", content: fu.a.vi, local: true, faqId: fu.id, routed: "faq-ctx" });
+        if (VN(/\b(cần (chuẩn bị )?gì|chuẩn bị gì|làm sao|làm thế nào|thế nào|như nào|ra sao|bắt đầu từ đâu)\b/).test(` ${normalizeVi(q)} `))
+          return localReply(q, { role: "assistant", content: pf.a.vi, local: true, faqId: pf.id, routed: "faq-ctx" });
+      }
+    }
     // 13/11 (bộ 1.000 câu, G10-067 — "chồng giữ hết tiền, NHỐT tôi trong nhà và DOẠ ĐÁNH nếu tôi ra ngoài, cứu tôi với" từng được đáp
     //   "Áp lực tiền bạc làm người ta mất ngủ"): CHÍNH người kể đang bị nhốt / bị đánh lần đầu kể ra → lời đáp an toàn (113, không phải lỗi
     //   của bạn) NGAY, trước mọi lớp tâm sự / chủ đề. Ý định tự hại vẫn đi trước (crisisReply). Đang trong mạch an toàn thì để khối 11/10 lo.
@@ -1907,6 +1936,9 @@ export function AiChat({
       //   kể chuyện đã rút bài — "rút bài vì đang lo, càng xem càng lo" — hay hỏi về Tarot — "xem tarot có thay được tư vấn tâm lý không" — không phải xin rút)
       const tarotTell = VN(/\b((rút|xem|bói) (bài|tarot|lá)( \S+){0,2} (vì|xong|rồi|mà)|càng xem càng|(tarot|xem bài|bói bài) (có|thì) (thay|đúng|thật|chính xác|tin|nên tin|khác)|tài chính lớn|quyết định lớn|quyết định tài chính|khoản tiền lớn|mua nhà|mua đất)\b/).test(nT);
       const gT = tarotAsk && !tarotTell ? gate(q, { lastText: lastAs?.content, faqId: lastAs?.faqId, topic: lastAs?.tarot || lastAs?.tarotRef ? "tarot" : undefined, inFlow: false }) : null;
+      // 18/11 (G06-020): hỏi KIẾN THỨC đọc bài ("trải ba lá đọc theo thứ tự nào", "dùng ba lá được chứ") → trả lời, không rút bài luôn
+      const thE = !en && tarotAsk && !tarotNo ? tarotHowto(raw) : null;
+      if (thE) return localReply(q, { role: "assistant", content: thE, local: true, routed: "tarot-howto" });
       if (tarotAsk && !tarotNo && !tarotTell && !gT && !isTarotAbilityAsk(q) && !earlyV4(q)) {
         const dT = detectTarot(q);
         if (dT) return dT.question || dT.daily ? doTarot(dT.question, q) : askTarot(q);
@@ -1993,8 +2025,8 @@ export function AiChat({
           shownRef.current = { from: q, to: typed };
           rewroteRef.current = true;
         }
-        //   (g) "bị say nắng rồi chóng mặt quá" → bài say nắng (kèm dấu hiệu cấp cứu), không chỉ bài chóng mặt
-        if (VN(/\b(say nắng|sốc nhiệt|say nóng)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(cảm nắng|crush|thích|yêu)\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 12 && !/nên làm gì$/u.test(q)) {
+        //   (g) "bị say nắng rồi chóng mặt quá" / "bị cảm nắng chóng mặt" → bài say nắng (kèm dấu hiệu cấp cứu), không chỉ bài chóng mặt
+        if (VN(/\b(say nắng|sốc nhiệt|say nóng|trúng nắng|(bị|trúng) cảm nắng)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(crush|thích|yêu|là gì|nghĩa là|(say|cảm) nắng (một |1 )?(anh|chị|em|cô|cậu|bạn|người|ai|nhỏ|đứa|thằng|ông|gái|trai))\b/).test(` ${normalizeVi(q)} `) && lowQ.split(/\s+/).length <= 12 && !/nên làm gì$/u.test(q)) {
           q = "bị say nắng nên làm gì";
           raw = q;
           shownRef.current = { from: q, to: typed };
@@ -3851,7 +3883,10 @@ export function AiChat({
         // 08/10: Lomi đang nghe kể chuyện vui ("a đang tính đi Nha Trang" → "đi với gia đình") thì một chữ "gia đình", "sếp"
         // không biến câu kể thành tâm sự chuyện buồn — chỉ mở mạch tâm sự khi câu có dấu hiệu buồn / mệt / hỏi xin lời khuyên.
         const casual = (!!convo?.talk && isUpbeat(raw)) || calmHealth;
-        const h = casual ? null : heartStart(q, looksLikeQuestion(q) && isAppish(q) && !!matchFaq(q));
+        // 18/11 (G09-050): câu nói Ý ĐỊNH dùng một phần của app ("Ba mình muốn gọi ô tô bằng mục Đưa đón iLomi", "Mẹ mình muốn nhận ưu đãi trên
+        //   iLomi") cũng là hỏi app như câu hỏi — trừ khi có chữ cảm xúc (khi đó là tâm sự có nhắc tới app).
+        const appWant = isAppish(q) && VN(/\b(muốn|định|tính|cần|đang tìm cách|chỉ cách|hướng dẫn) (\S+ ){0,2}(gọi|đặt|nhận|đăng ký|đăng|tạo|dùng|xài|mở|cài|làm|thêm|đổi)\b/).test(` ${normalizeVi(q)} `) && !VN(/\b(buồn|lo|mệt|giận|khóc|tủi|cãi|chán|sợ|stress|áp lực|thất vọng|bực)\b/).test(` ${normalizeVi(q)} `);
+        const h = casual ? null : heartStart(q, (looksLikeQuestion(q) || appWant) && isAppish(q) && !!matchFaq(q));
         if (h) topicHit(LOVE_KEYS.has(h.theme) ? "love" : PSY_THEMES.has(h.theme) ? "mind" : "heart");
         if (h) return localReply(q, heartMsg(h, 1));
       }
@@ -3920,10 +3955,26 @@ export function AiChat({
     // 31/10 (danh sách ChatGPT lần 4): đang nói sức khoẻ / thuốc mà câu nối không nhắc gì tới app ("tui uống mỗi ngày", "có cần bỏ hẳn không?",
     //   "làm mỗi ngày được chứ?") → không đem đi dò câu hỏi về app (trước đây ra "10 lượt quẹt/ngày", "iLomi dành cho người từ 18 tuổi").
     const healthCtxNotApp = !forceAi && !en && (!!lastA?.med || !!lastA?.drug || (!!hCtx && !!lastA?.health)) && !lastA?.faqId && !isAppish(q);
+    // 18/11 (G09-056): "chị cần chuẩn bị gì" ngay sau câu trả lời "Muốn làm tài xế thì đăng ký sao?" — câu hỏi CHUNG (không nêu thứ gì mới)
+    //   là hỏi tiếp đúng việc vừa nói, không đem đi dò câu khác (trước nhảy sang "Đăng ký tài khoản").
+    const prepAsk = !forceAi && !en && !!lastA?.faqId && q.split(/\s+/).length <= 7 && VN(/^(\S+ )?(thì |vậy |rồi )?(cần|phải|nên)( chuẩn bị| có| làm| mang)? (gì|những gì|các gì|giấy tờ gì)( (vậy|ạ|nhỉ|nha|không|ko|đây|ta|hả|nữa|thêm))*$/).test(normalizeVi(q).trim());
+    if (prepAsk) {
+      const pa = faqById(lastA!.faqId!);
+      if (pa) return localReply(q, { role: "assistant", content: `Như Lomi vừa nói ở trên nè: ${pa.a.vi}`, local: true, faqId: pa.id, quick: lastA!.quick });
+    }
+    // 18/11: câu nối cụt mà câu trả lời vừa rồi ĐÃ nói đúng ý đó ("cần bằng lái không" sau bài đăng ký tài xế: "…có thể thêm ảnh xe và
+    //   bằng lái") → chỉ lại câu đó, trước khi đoán sang một câu hỏi đáp khác chỉ khớp lỏng (trước nhảy sang "Đăng ký tài khoản").
+    if (!forceAi && !en && cut && lastA?.faqId && !healthDetail && !healthCtxNotApp && !matchFaq(q)) {
+      const back0 = answerFromPrev(q, lastA.content);
+      if (back0) return localReply(q, { role: "assistant", content: `Như Lomi vừa nói ở trên nè: ${back0}`, local: true, faqId: lastA.faqId, quick: lastA.quick });
+    }
     const faq = forceAi || healthDetail || healthCtxNotApp || storyNotApp(q) ? null : cut ? (fu ?? matchFaq(q)) : (matchFaq(q) ?? fu);
     // Ý hỏi đã có sẵn trong câu trả lời vừa rồi → chỉ lại đúng câu đó.
-    if (!faq && cut && lastA && !en) {
-      const back = answerFromPrev(q, lastA.content);
+    // 18/11 (G06-015): "Nó chứa tối đa bao nhiêu người?" (7 chữ) — câu hỏi SỐ LƯỢNG / kèm con số nối ngay sau một câu trả lời về app
+    //   cũng được soi lại câu trả lời đó (trước chỉ soi khi câu nối ≤ 6 chữ). Soi cả bản đầy đủ của câu hỏi đáp.
+    const qtyFollow = !!lastA?.faqId && q.split(/\s+/).length <= 12 && (VN(/\b(mấy|bao nhiêu|tối đa|tối thiểu|bao lâu)\b/).test(` ${normalizeVi(q)} `) || /(?:^|\s)\d{1,5}(?:\s|$)/.test(q));
+    if (!faq && (cut || qtyFollow) && lastA && !en) {
+      const back = answerFromPrev(q, lastA.content) ?? (lastA.faqId ? answerFromPrev(q, faqById(lastA.faqId)?.a.vi ?? "") : null);
       if (back) return localReply(q, { role: "assistant", content: `Như Lomi vừa nói ở trên nè: ${back}`, local: true, faqId: lastA.faqId, quick: lastA.quick });
     }
     // 21/10 (QA Q37): chọn màu logo (kèm màu vừa nói thích ở câu trước).
