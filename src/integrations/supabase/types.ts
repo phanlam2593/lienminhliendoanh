@@ -1178,6 +1178,7 @@ export type Database = {
           is_read: boolean
           read_at: string | null
           receiver_id: string
+          ref_post_id: string | null
           reply_to_id: string | null
           sender_id: string
           type: string
@@ -1191,6 +1192,7 @@ export type Database = {
           is_read?: boolean
           read_at?: string | null
           receiver_id: string
+          ref_post_id?: string | null
           reply_to_id?: string | null
           sender_id: string
           type?: string
@@ -1204,11 +1206,19 @@ export type Database = {
           is_read?: boolean
           read_at?: string | null
           receiver_id?: string
+          ref_post_id?: string | null
           reply_to_id?: string | null
           sender_id?: string
           type?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "messages_ref_post_id_fkey"
+            columns: ["ref_post_id"]
+            isOneToOne: false
+            referencedRelation: "wall_posts"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "messages_reply_to_id_fkey"
             columns: ["reply_to_id"]
@@ -2378,7 +2388,6 @@ export type Database = {
       businesses_explore_view: {
         Row: {
           address: string | null
-          admin_note: string | null
           area: string | null
           cover_url: string | null
           created_at: string | null
@@ -2878,8 +2887,11 @@ export type Database = {
       }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
+      storage_is_listing: { Args: never; Returns: boolean }
+      swipe_count_self: { Args: never; Returns: undefined }
       unaccent: { Args: { "": string }; Returns: string }
       unaccent_safe: { Args: { _t: string }; Returns: string }
+      undo_swipe_action: { Args: { _need_id: string }; Returns: Json }
       update_ride_location: {
         Args: { _heading?: number; _lat: number; _lng: number; _rid: string }
         Returns: Json
