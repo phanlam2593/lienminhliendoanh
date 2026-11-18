@@ -58,4 +58,24 @@ Migration `20261118123000_fable4_claim_lock_explore_view.sql` (đã chạy).
 - Deploy `admin-action` + `admin-cleanup-orphans` (lần đầu). Kiểm thật: cả hai trả 401 "thiếu đăng nhập" (không phải 404) → đã chạy.
 - Commit của agent (`76862b3`) chỉ sinh lại `src/integrations/supabase/types.ts` cho khớp DB (cột `ref_post_id`, bỏ `admin_note` ở view,
   3 hàm mới) — đúng, giữ lại. Không sửa file nào khác.
-## 7. Lomi bước 3–4 — (ghi khi làm)
+## 7. Lomi bước 3–4 — bước 4 XONG, bước 3 chưa làm (có lý do)
+Chi tiết: `scripts/lomi-audit/HANDOFF_KIEN_TRUC.md` mục 6.
+- Đo trước khi làm: câu ghép "nhưng / mà" gần như không có trong danh sách trượt → bước 3 không kéo điểm, để sau.
+- Lớp food: ~12/20 câu trượt là **hỏi nấu ăn ở nhà** — Lomi đáp đúng luật #71 (không nấu ăn) nhưng bộ chấm đòi "food". **Cần anh quyết.**
+- Bước 4: Lomi bí mà câu có cụm chỉ trỏ tới thứ chưa nói ("cho tui xin chổ đó với", "em bị vậyy từ hôm qua") → hỏi lại thay vì "chưa biết".
+
+| Thước đo | Gốc | Cuối phiên |
+|---|---|---|
+| vitest | 2.532 | 2.539 qua, 0 trượt |
+| paraphrase / convo | 387 · 155 | 389/400 · 155/160 |
+| Bộ 1.000 câu | 876/985 | 877/985 — sửa 2, hỏng 0; safety 26/29 |
+| Bộ giữ riêng | 61/65 | 61/65 |
+
+## Deploy
+- App: các lần deploy ~12:00 (việc 1–3, 6) **đã lên thật** (kiểm bundle `index-26bqHXwY.js`: có thanh báo bản mới, tin thả tim, driver-docs).
+  Lần deploy sau khi chuyển Admin (việc 4) **chưa lên sau ~1 giờ** — giống 15/11 (bản Lomi bước 2 khi đó cũng lên trễ, giờ đã có).
+  Không gây hỏng: bản cũ vẫn ghi thẳng bảng như trước. Đã gọi deploy lại khi gộp bước 4.
+- Edge function: `admin-action`, `admin-cleanup-orphans` đã chạy (401 khi thiếu đăng nhập).
+
+## Credit đã tiêu
+1 lần `send_message` (Lovable báo 0,6 credit; con số này thường báo thấp hơn thực tế — anh xem số dư trong Lovable).
