@@ -267,12 +267,14 @@ export interface Message {
   sender_id: string;
   receiver_id: string;
   content: string;
-  type: "text" | "image" | "sticker" | "broadcast" | "gif" | "voice";
+  type: "text" | "image" | "sticker" | "broadcast" | "gif" | "voice" | "post_reaction";
   image_url: string | null;
   is_read: boolean;
   created_at: string;
   edited_at: string | null;
   reply_to_id: string | null;
+  // 18/11 (#13): tin "đã thích bài viết của bạn" do server tạo (type "post_reaction") — trỏ tới bài tường.
+  ref_post_id?: string | null;
   read_at: string | null;
 }
 

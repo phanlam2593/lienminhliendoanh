@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Heart, MessageCircle, Send, Pencil, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
@@ -44,6 +45,21 @@ export function WallPostCard({ post, onDeleted }: { post: WallPostCardPost; onDe
   const [editPostBusy, setEditPostBusy] = useState(false);
   const [deletingPost, setDeletingPost] = useState(false);
   const isMinePost = !!user && user.id === post.user_id;
+
+  // 18/11 (#13): mở từ tin "đã thích bài viết của bạn" (đường dẫn có ?post=<id>) → cuộn tới đúng bài + sáng viền vài giây.
+  const [searchParams] = useSearchParams();
+  const focused = searchParams.get("post") === post.id;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [glow, setGlow] = useState(false);
+  useEffect(() => {
+    if (!focused) return;
+    const tm = setTimeout(() => {
+      cardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      setGlow(true);
+      setTimeout(() => setGlow(false), 2500);
+    }, 300);
+    return () => clearTimeout(tm);
+  }, [focused]);
 
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
   const [editCommentText, setEditCommentText] = useState("");
@@ -191,7 +207,10 @@ export function WallPostCard({ post, onDeleted }: { post: WallPostCardPost; onDe
   };
 
   return (
-    <div className="bg-card rounded-2xl p-3 shadow-sm space-y-1.5">
+    <div
+      ref={cardRef}
+      className={`bg-card rounded-2xl p-3 shadow-sm space-y-1.5 transition-shadow duration-500 ${glow ? "ring-2 ring-primary" : ""}`}
+    >
       <div className="flex items-center justify-between gap-2">
         <div className="text-[11px] text-muted-foreground">{timeAgo(post.created_at, lang)}</div>
         {(isMinePost || isAdmin) && (

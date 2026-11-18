@@ -1950,6 +1950,37 @@ export function MessagesThread() {
                             <X className="w-3.5 h-3.5" />
                           </button>
                         </div>
+                      ) : m.type === "post_reaction" ? (
+                        // #13: ai đó thả tim bài tường → tin hệ thống, chạm "Xem bài viết" mở đúng bài
+                        // (bài nằm trên tường của người NHẬN tin = chủ bài).
+                        <div className={`flex flex-col gap-1 max-w-[80%] ${mine ? "items-end" : "items-start"}`}>
+                          <div className="px-3 py-2 rounded-2xl text-sm bg-card border">
+                            <div className="text-muted-foreground">
+                              <span className="font-medium text-foreground">
+                                {mine ? t("community.you") : partner?.full_name || ""}
+                              </span>{" "}
+                              {m.content.replace(/^❤️\s*/, "❤️ ")}
+                            </div>
+                            {m.ref_post_id ? (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  nav(
+                                    m.receiver_id === user.id
+                                      ? `/ho-so?post=${m.ref_post_id}`
+                                      : `/ho-so/${m.receiver_id}?post=${m.ref_post_id}`,
+                                  )
+                                }
+                                className="mt-1.5 text-xs font-medium text-primary hover:underline"
+                              >
+                                {t("chat.viewPost")} →
+                              </button>
+                            ) : (
+                              <div className="mt-1 text-xs italic text-muted-foreground">{t("chat.postGone")}</div>
+                            )}
+                            <div className="text-[11px] mt-0.5 text-muted-foreground">{timeAgo(m.created_at, lang)}</div>
+                          </div>
+                        </div>
                       ) : m.type === "gif" ? (
                         <div className="flex flex-col items-center">
                           <img src={m.content} alt="GIF" className={gifImgClass(m.content)} loading="lazy" />
