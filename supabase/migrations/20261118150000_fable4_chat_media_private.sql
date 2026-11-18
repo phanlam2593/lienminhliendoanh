@@ -54,3 +54,17 @@ WITH CHECK (bucket_id = 'chat' AND public.chat_media_writable(name));
 DROP POLICY IF EXISTS "chat media delete own" ON storage.objects;
 CREATE POLICY "chat media delete own" ON storage.objects FOR DELETE TO authenticated
 USING (bucket_id = 'chat' AND (storage.foldername(name))[1] = (auth.uid())::text);
+
+-- Thống kê dung lượng trang Admin (get_usage_stats) trước chỉ đếm uploads / voice → đếm thêm ảnh / tin thoại trong "chat"
+-- (vá tại chỗ, giữ nguyên phần còn lại của hàm). Đã chạy 18/11.
+DO $do$
+DECLARE d text;
+BEGIN
+  d := pg_get_functiondef('public.get_usage_stats()'::regprocedure);
+  IF position('''chat''' in d) = 0 THEN
+    d := replace(d, $$o.bucket_id = 'uploads'$$, $$(o.bucket_id = 'uploads' OR (o.bucket_id = 'chat' AND coalesce(o.metadata->>'mimetype','') LIKE 'image/%'))$$);
+    d := replace(d, $$o.bucket_id = 'voice'$$, $$(o.bucket_id = 'voice' OR (o.bucket_id = 'chat' AND coalesce(o.metadata->>'mimetype','') LIKE 'audio/%'))$$);
+    IF position('''chat''' in d) = 0 THEN RAISE EXCEPTION 'patch point not found'; END IF;
+    EXECUTE d;
+  END IF;
+END $do$;

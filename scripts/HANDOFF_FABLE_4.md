@@ -13,12 +13,12 @@ Migration `20261115170000_fable4_storage_privacy.sql` (đã chạy trên DB th�
   tài xế đó đã nhận (`accepted/picked_up/completed`). Đăng ký tài xế (`Rides.tsx`) tải lên đường dẫn `driver-docs/<uid>/{portrait|vehicle|license}/…`;
   `getSignedUrl` ký theo tiền tố bucket. **Ảnh cũ:** không có tài xế nào từng gửi bằng lái / ảnh xe; ảnh chân dung duy nhất (`lamphan`)
   chính là ảnh đại diện hồ sơ (công khai sẵn) → không có gì phải chuyển, không xoá gì.
-- **(c) Tin nhắn riêng / tin thoại chỉ 2 người đọc — CHƯA làm.** Kế hoạch:
-  1. Bucket mới `dm` (riêng tư). Đường dẫn `dm/<uid gửi>/<uid nhận>/<uuid>.<ext>` → policy SELECT: `auth.uid()` là phần 1 hoặc 2 của đường dẫn, hoặc admin.
-  2. `uploadImage` / `uploadAudio` nhận thêm `bucket` + thư mục `<partnerId>`; Messages.tsx (ảnh, tin thoại) truyền vào. Chat nhóm: `gm/<groupId>/…`
-     + policy qua `is_group_member((storage.foldername(name))[1]::uuid, auth.uid())`.
-  3. Ảnh/tin thoại cũ: để nguyên trong `uploads` / `voice` (đã chặn liệt kê) — hoặc chép sang rồi cập nhật `messages.image_url` theo từng dòng.
-  4. Nhớ: thông báo đẩy / bản xem trước link không dùng đường dẫn này.
+- **(c) Tin nhắn riêng / chat nhóm — XONG (18/11 chiều, Kir bảo làm tiếp).** Migration `20261118150000_fable4_chat_media_private.sql`.
+  Bucket riêng tư `chat`: `<người gửi>/dm/<người nhận>/…`, `<người gửi>/g/<groupId>/…`. Đọc: người gửi, người nhận, thành viên nhóm, admin
+  (`chat_media_readable`); ghi: chỉ thư mục của mình, nhóm phải là thành viên (`chat_media_writable`). Messages.tsx (ảnh + tin thoại),
+  GroupChat.tsx (ảnh) tải lên đây. Ảnh / tin thoại CŨ để nguyên ở `uploads` / `voice` (đã chặn liệt kê). Kênh Cộng đồng giữ `uploads` (công khai
+  trong app). `get_usage_stats` đếm thêm kho `chat`. Thử loadtest_: người ngoài đọc 0 file; không ghi vào thư mục người khác / nhóm ngoài.
+  Chưa làm: chép ảnh cũ sang kho mới (không cần gấp — không ai liệt kê được, phải biết đúng đường dẫn ngẫu nhiên).
 
 ## 2. Thanh báo "Có bản mới — chạm để tải lại" — XONG
 `src/components/UpdatePrompt.tsx` + `lib/pwa.ts`. Khi service worker mới nắm quyền (`controllerchange`, **không** tính lần cài đầu) hoặc khi
