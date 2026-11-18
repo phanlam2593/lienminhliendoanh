@@ -1356,7 +1356,8 @@ export function MessagesThread() {
     setUploading(true);
     try {
       const file = new File([rec.blob], "voice", { type: rec.blob.type });
-      const path = await uploadAudio(file, "messages-voice", user.id);
+      // 18/11: tin thoại tin nhắn riêng → kho riêng tư "chat" (chỉ 2 người trong cuộc + admin đọc được).
+      const path = await uploadAudio(file, `dm/${id}`, user.id, "chat");
       const { data, error } = await supabase
         .from("messages")
         .insert({
@@ -1384,7 +1385,8 @@ export function MessagesThread() {
     if (pendingImage) {
       setUploading(true);
       try {
-        const path = await uploadImage(pendingImage.file, "messages", user.id);
+        // 18/11: ảnh tin nhắn riêng → kho riêng tư "chat" (chỉ 2 người trong cuộc + admin đọc được).
+        const path = await uploadImage(pendingImage.file, `dm/${id}`, user.id, undefined, "chat");
         const { data, error } = await supabase
           .from("messages")
           .insert({

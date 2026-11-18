@@ -518,7 +518,8 @@ export default function GroupChat() {
     if (err) return toast.error(err);
     setSending(true);
     try {
-      const path = await uploadImage(f, "group-chat", user?.id);
+      // 18/11: ảnh chat nhóm → kho riêng tư "chat" (chỉ thành viên nhóm + admin đọc được).
+      const path = await uploadImage(f, `g/${gid}`, user?.id, undefined, "chat");
       await insertMessage({ content: "", type: "image", image_url: path });
     } catch (e: any) {
       toast.error(e?.message ?? t("common.error"));

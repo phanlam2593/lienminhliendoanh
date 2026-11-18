@@ -75,7 +75,8 @@ export async function uploadImage(
 export const MAX_SIZE_AUDIO = 10 * 1024 * 1024;
 const AUDIO_MIMES = ["audio/webm", "audio/mp4", "audio/ogg", "audio/mpeg"];
 
-export async function uploadAudio(file: File | Blob, folder = "voice", ownerId?: string): Promise<string> {
+// bucket: "voice" (mặc định) hoặc "chat" (tin nhắn riêng / chat nhóm — chỉ người trong cuộc đọc được, 18/11).
+export async function uploadAudio(file: File | Blob, folder = "voice", ownerId?: string, bucket = "voice"): Promise<string> {
   const baseType = (file.type || "").split(";")[0];
   if (!AUDIO_MIMES.includes(baseType)) throw new Error(tStatic("upload.errType"));
   if (file.size > MAX_SIZE_AUDIO)
@@ -90,12 +91,12 @@ export async function uploadAudio(file: File | Blob, folder = "voice", ownerId?:
   // Bucket "uploads" chỉ cho phép image/* nên tệp âm thanh đi vào bucket riêng "voice".
   // Đường dẫn trả về có tiền tố "voice/" để getSignedUrl() ký URL từ đúng bucket.
   const key = `${uid}/${folder}/${crypto.randomUUID()}.${ext}`;
-  const { error } = await supabase.storage.from("voice").upload(key, file, {
+  const { error } = await supabase.storage.from(bucket).upload(key, file, {
     contentType: baseType,
     upsert: false,
   });
   if (error) throw error;
-  return `voice/${key}`;
+  return `${bucket}/${key}`;
 }
 
 const cache = new Map<string, string>();
@@ -103,7 +104,7 @@ const cache = new Map<string, string>();
 // Ảnh mặc định nằm trong bucket "uploads". Nếu path có tiền tố "<bucket>/" của một bucket
 // khác đã được khai báo ở đây (vd "avatars/..." dùng cho avatar tài khoản test) thì ký URL
 // từ bucket đó. Không đổi hành vi cũ với mọi path hiện có.
-const EXTRA_BUCKETS = ["avatars", "voice", "driver-docs"];
+const EXTRA_BUCKETS = ["avatars", "voice", "driver-docs", "chat"];
 
 export async function getSignedUrl(path: string): Promise<string> {
   if (!path) return "";
