@@ -72,9 +72,9 @@ Chi tiết: `scripts/lomi-audit/HANDOFF_KIEN_TRUC.md` mục 6.
 | Bộ giữ riêng | 61/65 | 61/65 |
 
 ## Deploy
-- App: các lần deploy ~12:00 (việc 1–3, 6) **đã lên thật** (kiểm bundle `index-26bqHXwY.js`: có thanh báo bản mới, tin thả tim, driver-docs).
-  Lần deploy sau khi chuyển Admin (việc 4) **chưa lên sau ~1 giờ** — giống 15/11 (bản Lomi bước 2 khi đó cũng lên trễ, giờ đã có).
-  Không gây hỏng: bản cũ vẫn ghi thẳng bảng như trước. Đã gọi deploy lại khi gộp bước 4.
+- 18/11 ~14:30: **tất cả đã lên thật** — bundle `index-DewZ_M1n.js` trên ilomi.live có admin-action, kho chat riêng tư, Lomi bước 4.
+- Lưu ý: Lovable publish **trễ** (lần này ~2 giờ, 15/11 cũng vậy). deploy_project trả "pending" không có nghĩa đã lên — kiểm bundle thật
+  (quy tắc #17); chưa thấy thì chờ, đừng tưởng hỏng.
 - Edge function: `admin-action`, `admin-cleanup-orphans` đã chạy (401 khi thiếu đăng nhập).
 
 ## Credit đã tiêu
