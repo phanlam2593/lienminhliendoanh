@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Navigate, Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { adminBroadcast, adminDelete, adminInsertOffer, adminUpdate } from "@/lib/adminAction";
 import { invalidateBusinesses, invalidateReviews } from "@/lib/queryClient";
 import { useAuth } from "@/lib/auth";
 import type { Profile, Business, Offer, Review, Report, ReportStatus } from "@/lib/types";
@@ -274,10 +275,7 @@ export default function Admin() {
 
   const setStatus = async (id: string, status: "approved" | "rejected", note?: string) => {
     const patch = typeof note === "string" ? { status, admin_note: note.trim() || null } : { status };
-    const { error } = await supabase
-      .from("profiles")
-      .update(patch as any)
-      .eq("id", id);
+    const { error } = await adminUpdate("profiles", id, patch);
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
@@ -771,7 +769,7 @@ function PendingTab({
   }, [refreshKey]);
 
   const approveMember = async (id: string) => {
-    const { error } = await supabase.from("profiles").update({ status: "approved" }).eq("id", id);
+    const { error } = await adminUpdate("profiles", id, { status: "approved" });
     if (error) {
       toast.error(error.message);
       return;
@@ -781,7 +779,7 @@ function PendingTab({
     onChanged();
   };
   const rejectMember = async (id: string) => {
-    const { error } = await supabase.from("profiles").update({ status: "rejected" }).eq("id", id);
+    const { error } = await adminUpdate("profiles", id, { status: "rejected" });
     if (error) {
       toast.error(error.message);
       return;
@@ -791,7 +789,7 @@ function PendingTab({
     onChanged();
   };
   const approveBiz = async (id: string) => {
-    const { error } = await supabase.from("businesses").update({ status: "approved" }).eq("id", id);
+    const { error } = await adminUpdate("businesses", id, { status: "approved" });
     if (error) {
       toast.error(error.message);
       return;
@@ -803,10 +801,7 @@ function PendingTab({
   };
   const submitRevision = async (note: string) => {
     if (!revisionTarget) return;
-    const { error } = await supabase
-      .from("businesses")
-      .update({ status: "needs_revision", admin_note: note })
-      .eq("id", revisionTarget.id);
+    const { error } = await adminUpdate("businesses", revisionTarget.id, { status: "needs_revision", admin_note: note });
     if (error) {
       toast.error(error.message);
       return;
@@ -971,9 +966,7 @@ function BusinessDetailDialog({
   const saveBiz = async () => {
     if (!biz) return;
     setSaving(true);
-    const { error } = await supabase
-      .from("businesses")
-      .update({
+    const { error } = await adminUpdate("businesses", biz.id, {
         name: bName,
         type: bType,
         description: bDesc,
@@ -984,8 +977,7 @@ function BusinessDetailDialog({
         facebook_url: bFb || null,
         website_url: bWeb || null,
         is_featured: bFeatured,
-      })
-      .eq("id", biz.id);
+      });
     setSaving(false);
     if (error) {
       toast.error(error.message);
@@ -997,10 +989,7 @@ function BusinessDetailDialog({
 
   const approveBiz = async () => {
     if (!biz) return;
-    const { error } = await supabase
-      .from("businesses")
-      .update({ status: "approved", admin_note: null })
-      .eq("id", biz.id);
+    const { error } = await adminUpdate("businesses", biz.id, { status: "approved", admin_note: null });
     if (error) {
       toast.error(error.message);
       return;
@@ -1017,10 +1006,7 @@ function BusinessDetailDialog({
       toast.error("Vui lòng nhập nội dung cần bổ sung");
       return;
     }
-    const { error } = await supabase
-      .from("businesses")
-      .update({ status: "needs_revision", admin_note: bizRejectNote.trim() })
-      .eq("id", biz.id);
+    const { error } = await adminUpdate("businesses", biz.id, { status: "needs_revision", admin_note: bizRejectNote.trim() });
     if (error) {
       toast.error(error.message);
       return;
@@ -1035,8 +1021,7 @@ function BusinessDetailDialog({
 
   const delBiz = async () => {
     if (!biz || !confirm("Xóa doanh nghiệp này và toàn bộ ưu đãi?")) return;
-    await supabase.from("offers").delete().eq("business_id", biz.id);
-    const { error } = await supabase.from("businesses").delete().eq("id", biz.id);
+    const { error } = await adminDelete("businesses", biz.id);
     if (error) {
       toast.error(error.message);
       return;
@@ -1058,9 +1043,7 @@ function BusinessDetailDialog({
   };
   const addOffer = async () => {
     if (!biz || !newOfferTitle.trim()) return;
-    const { error } = await supabase
-      .from("offers")
-      .insert({ business_id: biz.id, title: newOfferTitle.trim(), status: "active" });
+    const { error } = await adminInsertOffer(biz.id, newOfferTitle.trim());
     if (error) {
       toast.error(error.message);
       return;
@@ -1069,15 +1052,12 @@ function BusinessDetailDialog({
     reloadOffers();
   };
   const toggleOffer = async (o: Offer) => {
-    await supabase
-      .from("offers")
-      .update({ status: o.status === "active" ? "inactive" : "active" })
-      .eq("id", o.id);
+    await adminUpdate("offers", o.id, { status: o.status === "active" ? "inactive" : "active" });
     reloadOffers();
   };
   const delOffer = async (id: string) => {
     if (!confirm("Xóa ưu đãi?")) return;
-    await supabase.from("offers").delete().eq("id", id);
+    await adminDelete("offers", id);
     reloadOffers();
   };
 
@@ -1400,16 +1380,13 @@ function MembershipAdminSection({
   const setMembership = async (patch: { is_member: boolean; membership_expires_at: string | null }) => {
     setBusy(true);
     const nowIso = new Date().toISOString();
-    const { error } = await supabase
-      .from("profiles")
-      .update({
+    const { error } = await adminUpdate("profiles", row.id, {
         is_member: patch.is_member,
         membership_expires_at: patch.membership_expires_at,
         membership_started_at: patch.is_member
           ? (row as any).membership_started_at || nowIso
           : (row as any).membership_started_at,
-      } as any)
-      .eq("id", row.id);
+      });
     setBusy(false);
     if (error) {
       toast.error(error.message);
@@ -1572,7 +1549,7 @@ function MemberDetail({
   const saveProfile = async () => {
     if (!row) return;
     setSaving(true);
-    const { error } = await supabase.from("profiles").update({ full_name: fullName, email, phone }).eq("id", row.id);
+    const { error } = await adminUpdate("profiles", row.id, { full_name: fullName, email, phone });
     setSaving(false);
     if (error) {
       toast.error(error.message);
@@ -1585,9 +1562,7 @@ function MemberDetail({
   const saveBiz = async () => {
     if (!biz) return;
     setSaving(true);
-    const { error } = await supabase
-      .from("businesses")
-      .update({
+    const { error } = await adminUpdate("businesses", biz.id, {
         name: bName,
         type: bType,
         description: bDesc,
@@ -1598,8 +1573,7 @@ function MemberDetail({
         facebook_url: bFb || null,
         website_url: bWeb || null,
         is_featured: bFeatured,
-      })
-      .eq("id", biz.id);
+      });
     setSaving(false);
     if (error) {
       toast.error(error.message);
@@ -1611,10 +1585,7 @@ function MemberDetail({
 
   const approveBizProfile = async () => {
     if (!biz) return;
-    const { error } = await supabase
-      .from("businesses")
-      .update({ status: "approved", admin_note: null })
-      .eq("id", biz.id);
+    const { error } = await adminUpdate("businesses", biz.id, { status: "approved", admin_note: null });
     if (error) {
       toast.error(error.message);
       return;
@@ -1631,10 +1602,7 @@ function MemberDetail({
       toast.error("Vui lòng nhập nội dung cần bổ sung");
       return;
     }
-    const { error } = await supabase
-      .from("businesses")
-      .update({ status: "needs_revision", admin_note: bizRejectNote.trim() })
-      .eq("id", biz.id);
+    const { error } = await adminUpdate("businesses", biz.id, { status: "needs_revision", admin_note: bizRejectNote.trim() });
     if (error) {
       toast.error(error.message);
       return;
@@ -1649,8 +1617,7 @@ function MemberDetail({
 
   const delBiz = async () => {
     if (!biz || !confirm("Xóa doanh nghiệp này và toàn bộ ưu đãi?")) return;
-    await supabase.from("offers").delete().eq("business_id", biz.id);
-    const { error } = await supabase.from("businesses").delete().eq("id", biz.id);
+    const { error } = await adminDelete("businesses", biz.id);
     if (error) {
       toast.error(error.message);
       return;
@@ -1690,9 +1657,7 @@ function MemberDetail({
 
   const addOffer = async () => {
     if (!biz || !newOfferTitle.trim()) return;
-    const { error } = await supabase
-      .from("offers")
-      .insert({ business_id: biz.id, title: newOfferTitle.trim(), status: "active" });
+    const { error } = await adminInsertOffer(biz.id, newOfferTitle.trim());
     if (error) {
       toast.error(error.message);
       return;
@@ -1701,21 +1666,18 @@ function MemberDetail({
     load(row!.id, biz.id);
   };
   const toggleOffer = async (o: Offer) => {
-    await supabase
-      .from("offers")
-      .update({ status: o.status === "active" ? "inactive" : "active" })
-      .eq("id", o.id);
+    await adminUpdate("offers", o.id, { status: o.status === "active" ? "inactive" : "active" });
     load(row!.id, biz!.id);
   };
   const delOffer = async (id: string) => {
     if (!confirm("Xóa ưu đãi?")) return;
-    await supabase.from("offers").delete().eq("id", id);
+    await adminDelete("offers", id);
     load(row!.id, biz!.id);
   };
 
   const delReview = async (id: string) => {
     if (!confirm("Xóa đánh giá?")) return;
-    await supabase.from("reviews").delete().eq("id", id);
+    await adminDelete("reviews", id);
     invalidateReviews(biz?.id);
     load(row!.id, biz?.id);
   };
@@ -2159,7 +2121,7 @@ function ReportRow({
   const del = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!confirm("Xóa báo cáo?")) return;
-    await supabase.from("reports").delete().eq("id", r.id);
+    await adminDelete("reports", r.id);
     onDeleted();
   };
 
@@ -2414,7 +2376,14 @@ function Broadcast() {
           // Người nhận vẫn thấy bình thường vì filter chỉ áp dụng phía người gửi.
           type: "broadcast" as const,
         }));
-      if (rows.length) await supabase.from("messages").insert(rows);
+      if (rows.length) {
+        const { error: bErr } = await adminBroadcast(
+          user.id,
+          rows.map((r) => r.receiver_id),
+          content,
+        );
+        if (bErr) toast.error(bErr.message);
+      }
     }
     setL(false);
     setT("");
@@ -2773,7 +2742,7 @@ function BusinessesSection({
       if (target) setRevisionTarget(target);
       return;
     }
-    const { error } = await supabase.from("businesses").update({ status }).eq("id", id);
+    const { error } = await adminUpdate("businesses", id, { status });
     if (error) toast.error(error.message);
     else {
       toast.success("Đã cập nhật");
@@ -2784,10 +2753,7 @@ function BusinessesSection({
   };
   const submitRevision = async (note: string) => {
     if (!revisionTarget) return;
-    const { error } = await supabase
-      .from("businesses")
-      .update({ status: "needs_revision", admin_note: note })
-      .eq("id", revisionTarget.id);
+    const { error } = await adminUpdate("businesses", revisionTarget.id, { status: "needs_revision", admin_note: note });
     if (error) {
       toast.error(error.message);
       return;
@@ -2799,7 +2765,7 @@ function BusinessesSection({
     onChanged();
   };
   const togglePin = async (b: Business) => {
-    const { error } = await supabase.from("businesses").update({ is_featured: !b.is_featured }).eq("id", b.id);
+    const { error } = await adminUpdate("businesses", b.id, { is_featured: !b.is_featured });
     if (error) toast.error(error.message);
     else {
       toast.success(b.is_featured ? "Đã bỏ ghim" : "Đã ghim");
@@ -2808,8 +2774,7 @@ function BusinessesSection({
   };
   const del = async (id: string) => {
     if (!confirm("Xóa doanh nghiệp và toàn bộ ưu đãi?")) return;
-    await supabase.from("offers").delete().eq("business_id", id);
-    const { error } = await supabase.from("businesses").delete().eq("id", id);
+    const { error } = await adminDelete("businesses", id);
     if (error) toast.error(error.message);
     else {
       toast.success("Đã xóa");
