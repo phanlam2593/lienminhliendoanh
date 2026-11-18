@@ -1358,7 +1358,9 @@ export function AiChat({
     }
     // 18/11 — bước 4: Lomi bí mà câu chỉ trỏ tới thứ chưa nói / quá ngắn → hỏi lại (lomiRouter.vagueAskBack). Dùng đúng câu hỏi lại
     //   có sẵn (VAGUE_TEXT) và giữ stuck "not_understood" như nhánh hỏi lại cũ (vẫn ghi lại câu Lomi bí).
-    if (!en && !reply.routed && !rk?.any && rawRef.current && !rewroteRef.current) {
+    // Câu đáp legacy ĐÃ là câu hỏi lại ("Bạn đang nói tới chuyện nào", "chưa hiểu ý"…) thì giữ nguyên.
+    const alreadyAsks = /\?\s*\S{0,3}\s*$|chưa hiểu ý|nói rõ|cụ thể hơn|đang nói tới/u.test(reply.content);
+    if (!en && !reply.routed && !rk?.any && rawRef.current && !rewroteRef.current && !alreadyAsks) {
       const listening = !!(prevA?.heart || prevA?.heartListen || prevA?.thread || prevA?.talk);
       const isQ = /\?\s*$/.test(rawRef.current) || looksLikeQuestion(rawRef.current);
       if (vagueAskBack(rawRef.current, reply.stuck as string | undefined, { listening, isQuestion: isQ })) {

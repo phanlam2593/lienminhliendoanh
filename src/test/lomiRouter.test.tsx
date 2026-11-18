@@ -179,7 +179,8 @@ describe("hỏi lại khi Lomi bí", () => {
   const free = { listening: false, isQuestion: false };
   it("câu chỉ trỏ tới thứ chưa nói + Lomi bí → hỏi lại", () => {
     expect(vagueAskBack("cho tui xin chổ đó với", "fallback", free)).toBe(true);
-    expect(vagueAskBack("đăng ở đâu", "fallback", free)).toBe(true);
+    expect(vagueAskBack("thủ đô nước Pháp là j vậy", "fallback", free)).toBe(false); // "vậy" cuối câu = tiếng đệm
+    expect(vagueAskBack("Marfan á", "fallback", free)).toBe(false); // câu ngắn cụ thể → giữ "chưa biết" + 💡
     expect(vagueAskBack("em bị vậyy từ hôm qua", "generic_listen", free)).toBe(true);
     expect(vagueAskBack("cho toi xin cho do voi", "fallback", free)).toBe(true);
   });

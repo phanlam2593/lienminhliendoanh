@@ -143,8 +143,11 @@ export function layerOf(m: Record<string, unknown> & { content: string }): Layer
 // "cái này") hoặc quá ngắn để có chủ đề → hỏi lại cho rõ thay vì nói "chưa biết". Bộ bắt câu mơ hồ có sẵn (lomiQShape.vagueAsk)
 // chỉ bắt câu mà MỌI chữ là hư từ, ở câu ĐẦU cuộc trò chuyện; lưới này chỉ chạy SAU khi mọi lớp đã bí nên không cướp câu nào
 // Lomi đáp được. Không chạy khi Lomi đang nghe người dùng tâm sự ("nghe nè" là đúng chỗ đó) hay khi câu có rủi ro.
-const DEIX_ACC = /(?:^| )(đó|đấy|đây|vậy|vầy|zậy|z|thế|này|kia|ấy|nớ|đâu)(?: |$)/u;
-const DEIX_BARE = /(?:^| )(?:(?:cho|cai|vu|nguoi|chuyen|viec|ben|thang|con|bi|lam|o) (?:do|day|nay|kia|ay|vay)|vay|z|dau)(?: |$)/;
+// Chỉ tính CỤM chỉ trỏ (danh/động từ + đó/này/kia/ấy/vậy, "ở đó"). "vậy", "thế", "z" đứng cuối câu chỉ là tiếng đệm
+// ("thủ đô nước Pháp là j vậy") nên KHÔNG tính.
+const DEIX_HEAD = "chỗ|chổ|cái|vụ|người|chuyện|việc|bên|thằng|con|bị|làm|kiểu|như|ở|món|thuốc|bệnh|quán|chỗ";
+const DEIX_ACC = new RegExp(`(?:^| )(?:${DEIX_HEAD}) (?:đó|đấy|đây|này|kia|ấy|vậy|vầy|thế)(?: |$)`, "u");
+const DEIX_BARE = /(?:^| )(?:cho|cai|vu|nguoi|chuyen|viec|ben|thang|con|bi|lam|kieu|o|mon|thuoc|benh|quan) (?:do|day|kia|ay|vay)(?: |$)/;
 export function vagueAskBack(raw: string, legacyStuck: string | undefined, ctx: { listening: boolean; isQuestion: boolean }): boolean {
   if (!legacyStuck) return false;
   const t = raw.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").replace(/(\p{L})\1{2,}/gu, "$1").replace(/(\p{L})\1+(?= |$)/gu, "$1").replace(/\s+/g, " ").trim(); // "vậyy", "đóoo"
@@ -158,7 +161,7 @@ export function vagueAskBack(raw: string, legacyStuck: string | undefined, ctx: 
   } else if (legacyStuck !== "fallback" && legacyStuck !== "not_understood") {
     return false;
   }
-  return deixis || words.length <= 4;
+  return deixis;
 }
 
 // ── 3) Trọng tài ────────────────────────────────────────────────────────────
