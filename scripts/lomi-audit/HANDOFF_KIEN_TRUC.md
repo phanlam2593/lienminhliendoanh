@@ -115,3 +115,26 @@ Trên bộ 1.000 câu trọng tài vẫn chưa phải thay câu đáp lần nào
 chuyển**. Điểm chỉ lên khi làm bước 3 (câu ghép) và 4 (hỏi lại) — hai lớp đang mất nhiều nhất là food 71/91 và askback 89/112.
 **Bước 1 phần cấp cứu / bạo lực chưa bật chặn** (vẫn chỉ đo): `riskMiss` 1/43 nên lợi ít; làm khi tách xong `urgentReplyOf` / `harmReplyOf`.
 Thứ tự tiếp theo không đổi: 1 (nốt) → 3 → 4 → 5 → 6. Đã gộp vào `main` 15/11.
+
+## 6. Phiên Fable 4 (18/11/2026) — bước 4: hỏi lại khi Lomi bí
+
+**Phát hiện trước khi làm (đo, không đoán):** câu ghép "nhưng / mà" gần như KHÔNG có trong danh sách trượt của bộ 1.000 câu → bước 3 sẽ không kéo
+điểm, nên chưa làm. Lớp food trượt 20 câu, ~12 câu là hỏi **nấu ăn ở nhà** — Lomi đang đáp đúng luật #71 (không làm nấu ăn, mời tìm quán)
+mà bộ chấm lại kỳ vọng "food". Đây là **bộ chấm lệch luật**, cần anh Kir quyết: sửa nhãn bộ chấm, hay đổi luật #71.
+
+- `lomiRouter.vagueAskBack(raw, legacyStuck, {listening, isQuestion})`: Lomi **đã bí** (stuck fallback / not_understood, hoặc "nghe nè"
+  khi không đang nghe tâm sự) mà câu có **cụm chỉ trỏ** tới thứ chưa nói ("chỗ đó", "cái này", "bị vậy", "ở đó"…) → hỏi lại bằng `VAGUE_TEXT`.
+  Không đụng: câu đáp đã là hỏi lại, câu có rủi ro, câu được viết lại, tiếng Anh. "vậy/thế/z" cuối câu = tiếng đệm, không tính.
+- Lần thử đầu rộng hơn (thêm "câu ≤ 4 chữ") → 881/985 nhưng **làm trượt 5 test cũ** (mất "chưa biết + 💡" của câu ngắn cụ thể như
+  "Marfan á", đè câu hỏi lại sẵn có) → đã siết lại. Đừng nới lại luật ≤ 4 chữ.
+
+| Thước đo | Trước | Sau bước 4 |
+|---|---|---|
+| vitest | 2.532 | **2.539 qua**, 0 trượt |
+| paraphrase / convo | 387 · 155 | **389**/400 · 155/160 |
+| Bộ 1.000 câu | 876/985 (askback 89) | **877**/985 (askback 90) — sửa 2, hỏng 0; safety 26/29 |
+| Bộ giữ riêng | 61/65 | 61/65 |
+
+Đã gộp `main` 18/11. Việc tiếp theo: (1) anh quyết chuyện bộ chấm nấu ăn; (2) bước 1 nốt (cấp cứu / bạo lực bật chặn);
+(3) askback còn 22 câu trượt — đa số là câu hỏi về app thiếu chủ ngữ ("đăng ở đâu", "mỗi ngày mấy lần") mà FAQ đáp đại → nên để FAQ
+hỏi lại khi câu không nêu tính năng nào; (4) bước 3 câu ghép khi có ca thật.
