@@ -143,7 +143,7 @@ import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaR
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
-import { arbitrate, drugCandidates, isSafetyReply, layerOf, nextRisk, riskKind, riskScan, safetyCandidates, type RiskFlag, type RiskScan } from "@/lib/lomiRouter";
+import { arbitrate, drugCandidates, isSafetyReply, layerOf, nextRisk, riskKind, riskScan, safetyCandidates, vagueAskBack, type RiskFlag, type RiskScan } from "@/lib/lomiRouter";
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
@@ -1354,6 +1354,16 @@ export function AiChat({
       if (dv.winner && dv.reason === "main-clause") {
         const p = dv.winner.payload as { text: string; name?: string };
         reply = { role: "assistant", content: p.text, local: true, drug: { kind: "interact", name: p.name }, routed: "drug-interact" };
+      }
+    }
+    // 18/11 — bước 4: Lomi bí mà câu chỉ trỏ tới thứ chưa nói / quá ngắn → hỏi lại (lomiRouter.vagueAskBack). Dùng đúng câu hỏi lại
+    //   có sẵn (VAGUE_TEXT) và giữ stuck "not_understood" như nhánh hỏi lại cũ (vẫn ghi lại câu Lomi bí).
+    if (!en && !reply.routed && !rk?.any && rawRef.current && !rewroteRef.current) {
+      const listening = !!(prevA?.heart || prevA?.heartListen || prevA?.thread || prevA?.talk);
+      const isQ = /\?\s*$/.test(rawRef.current) || looksLikeQuestion(rawRef.current);
+      if (vagueAskBack(rawRef.current, reply.stuck as string | undefined, { listening, isQuestion: isQ })) {
+        const who = vagueAsk(rawRef.current) === "who";
+        reply = { role: "assistant", content: VAGUE_TEXT[who ? "who" : "what"], local: true, stuck: "not_understood" as StuckKind, routed: "askback" };
       }
     }
     // Cờ rủi ro mang qua lượt: lượt đang có rủi ro, hoặc 2 lượt ngay sau đó → câu đáp không kèm sticker.

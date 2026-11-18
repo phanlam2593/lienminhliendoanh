@@ -1,7 +1,7 @@
 // 14/11 — kiến trúc chọn lớp mới (lib/lomiRouter): quét rủi ro một chỗ, đề cử + trọng tài ở cửa ra, cờ rủi ro mang qua lượt.
 import { describe, expect, it } from "vitest";
 import { chat, last } from "./lomiChatHarness";
-import { arbitrate, clauseOf, drugCandidates, isSafetyReply, layerOf, nextRisk, riskScan, safetyCandidates, splitClauses, type Candidate } from "@/lib/lomiRouter";
+import { arbitrate, clauseOf, drugCandidates, isSafetyReply, layerOf, nextRisk, riskScan, safetyCandidates, splitClauses, vagueAskBack, type Candidate } from "@/lib/lomiRouter";
 
 const T = 120000;
 const scan = (t: string, extra: { harm?: boolean; red?: boolean } = {}) => riskScan({ q: t, raw: t, lang: "vi", ...extra });
@@ -171,5 +171,36 @@ describe("nhóm thuốc — ứng viên tương tác", () => {
     const a = (await last(["rau cải bó xôi có tác dụng gì"])) as { content: string; routed?: string };
     expect(a.routed).toBeUndefined();
     expect(a.content).not.toMatch(/tuỳ loại thuốc chống đông/);
+  }, T);
+});
+
+// 18/11 — bước 4: Lomi bí mà câu chỉ trỏ / quá ngắn → hỏi lại.
+describe("hỏi lại khi Lomi bí", () => {
+  const free = { listening: false, isQuestion: false };
+  it("câu chỉ trỏ tới thứ chưa nói + Lomi bí → hỏi lại", () => {
+    expect(vagueAskBack("cho tui xin chổ đó với", "fallback", free)).toBe(true);
+    expect(vagueAskBack("đăng ở đâu", "fallback", free)).toBe(true);
+    expect(vagueAskBack("em bị vậyy từ hôm qua", "generic_listen", free)).toBe(true);
+    expect(vagueAskBack("cho toi xin cho do voi", "fallback", free)).toBe(true);
+  });
+  it("Lomi đáp được (không bí) → không đụng", () => {
+    expect(vagueAskBack("cho tui xin chỗ đó với", undefined, free)).toBe(false);
+  });
+  it("câu cụ thể dài mà Lomi không biết → giữ 'chưa biết' (còn nút Dạy Lomi)", () => {
+    expect(vagueAskBack("cách trồng cây ngải cứu trong chậu ở ban công cho tốt", "fallback", free)).toBe(false);
+  });
+  it("đang nghe tâm sự → giữ 'Lomi nghe nè'", () => {
+    expect(vagueAskBack("em bị vậy từ hôm qua", "generic_listen", { listening: true, isQuestion: false })).toBe(false);
+  });
+  it("câu kể trơn không chỉ trỏ → giữ 'nghe nè'", () => {
+    expect(vagueAskBack("hôm nay đi làm về muộn", "generic_listen", free)).toBe(false);
+  });
+  it("không dấu: 'hôm nay', 'có thể' không bị coi là chữ chỉ trỏ", () => {
+    expect(vagueAskBack("hom nay troi dep qua di dao cong vien thoi nha", "fallback", free)).toBe(false);
+  });
+  it("trong khung chat: 'cho tui xin chổ đó với' → hỏi lại", async () => {
+    const a = (await last(["cho tui xin chổ đó với"])) as { content: string; routed?: string };
+    expect(a.routed).toBe("askback");
+    expect(a.content).toMatch(/cụ thể hơn/);
   }, T);
 });

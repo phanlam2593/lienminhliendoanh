@@ -138,6 +138,29 @@ export function layerOf(m: Record<string, unknown> & { content: string }): Layer
   return "chat";
 }
 
+// ── 2c) HỎI LẠI khi Lomi bí mà câu chỉ trỏ / quá ngắn (bước 4, 18/11) ─────────────────────────────────────────────
+// Lomi không tìm được gì để đáp (legacy = "chưa biết" / "nghe nè"), mà câu lại TRỎ tới một thứ chưa nói ("chỗ đó", "bị vậy",
+// "cái này") hoặc quá ngắn để có chủ đề → hỏi lại cho rõ thay vì nói "chưa biết". Bộ bắt câu mơ hồ có sẵn (lomiQShape.vagueAsk)
+// chỉ bắt câu mà MỌI chữ là hư từ, ở câu ĐẦU cuộc trò chuyện; lưới này chỉ chạy SAU khi mọi lớp đã bí nên không cướp câu nào
+// Lomi đáp được. Không chạy khi Lomi đang nghe người dùng tâm sự ("nghe nè" là đúng chỗ đó) hay khi câu có rủi ro.
+const DEIX_ACC = /(?:^| )(đó|đấy|đây|vậy|vầy|zậy|z|thế|này|kia|ấy|nớ|đâu)(?: |$)/u;
+const DEIX_BARE = /(?:^| )(?:(?:cho|cai|vu|nguoi|chuyen|viec|ben|thang|con|bi|lam|o) (?:do|day|nay|kia|ay|vay)|vay|z|dau)(?: |$)/;
+export function vagueAskBack(raw: string, legacyStuck: string | undefined, ctx: { listening: boolean; isQuestion: boolean }): boolean {
+  if (!legacyStuck) return false;
+  const t = raw.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").replace(/(\p{L})\1{2,}/gu, "$1").replace(/(\p{L})\1+(?= |$)/gu, "$1").replace(/\s+/g, " ").trim(); // "vậyy", "đóoo"
+  const words = t.split(" ").filter(Boolean);
+  if (!words.length || words.length > 10) return false;
+  const accented = /[^\x00-\x7F]/.test(t);
+  const deixis = accented ? DEIX_ACC.test(t) : DEIX_BARE.test(normalizeVi(t));
+  if (legacyStuck === "generic_listen") {
+    // "Ừa, Lomi nghe nè" chỉ thay khi KHÔNG đang nghe tâm sự, và câu là câu hỏi / có chữ chỉ trỏ.
+    if (ctx.listening || !(deixis || ctx.isQuestion)) return false;
+  } else if (legacyStuck !== "fallback" && legacyStuck !== "not_understood") {
+    return false;
+  }
+  return deixis || words.length <= 4;
+}
+
 // ── 3) Trọng tài ────────────────────────────────────────────────────────────
 /** Câu đáp đã là lời an toàn chưa (đường dây nóng, 113 / 115 / 111, cảnh báo cấp cứu, mạch bạo lực). */
 export function isSafetyReply(r: { content: string; harm?: unknown }): boolean {
