@@ -44,7 +44,7 @@ import {
   situationContext,
 } from "@/lib/lomiMemory";
 import { DISHES, detectDish, detectSearch, runDishSearch, runSearch, suggestDishes, type DishWant, type PlaceCard, type SearchIntent } from "@/lib/lomiSearch";
-import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes, medNameOfId } from "@/lib/lomiMed";
+import { UMBRELLA, renderUmbrella, type MedReply, type MedTopic, findMedTopicId as findMedId, foodDisplay, foodFollowPhrase, foodPhrase, foodSyn, foodRetryPhrase, foodReverseAsk, matchFood, hasQuestion, isSelfStatement, loadAllMedTopics, loadMedTopic, nameAsTyped, parseMedAsk as parseMedAsk0, aspectOf as medAspectOf, childCardOf, symptomViewId, renderFoodAcross, renderMed, withGroupNote, withRedFlags, displayName as medName, medKindOf, trimRepeatedNotes, medNameOfId } from "@/lib/lomiMed";
 import { coughFocusReply, feverFocusReply, sleepTeaReply } from "@/lib/lomiFolk";
 import { recordStuck, type StuckKind } from "@/lib/lomiStuckLog";
 import { meaningChips } from "@/lib/lomiMeaning";
@@ -54,7 +54,7 @@ import { toast } from "sonner";
 import { GATE_ASK_BACK, gate, tarotRuleInfo, topicOpener, understand } from "@/lib/lomiUnderstand";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { isAffirm, isDecline } from "@/lib/lomiChat";
-import { PRIORITY_THEMES, GENERIC, comfortAsk, heartAdviceHint, heartContinue, leaveHeart, heartHintMatches, heartFollow, heartOpen, heartStart, heartThemeOf, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
+import { PRIORITY_THEMES, GENERIC, comfortAsk, heartAdviceHint, heartContinue, leaveHeart, heartHintMatches, heartFollow, heartOpen, heartStart as heartStart0, heartThemeOf as heartThemeOf0, selfDxAsk, type HeartCtx, type HeartReply } from "@/lib/lomiHeart";
 import { eventById, eventOf } from "@/lib/lomiTalk";
 import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
@@ -147,6 +147,29 @@ import { arbitrate, drugCandidates, isSafetyReply, layerOf, nextRisk, riskKind, 
 import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, palliativeReply } from "@/lib/lomiPalliative";
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
+import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/lib/lomiTab";
+
+// 18/11 — CHỦ ĐỀ LOMI (lib/lomiTab): nghiêng nhận diện theo nút người dùng đang chọn, chỉ ở chỗ NƯỚC ĐÔI giữa sức khoẻ và tâm sự.
+//   • Sức khoẻ: câu nhắc một bệnh / triệu chứng có trong kho ("mất ngủ", "chán ăn") → lớp tâm sự nhường, lớp sức khoẻ trả lời
+//     (kể cả khi người dùng KỂ chứ không hỏi).
+//   • Tâm sự & tâm lý: câu có chủ đề cảm xúc mà không hỏi kiến thức bệnh ("là gì", "triệu chứng", "thuốc"…) → lớp sức khoẻ nhường.
+//   Lớp an toàn không đi qua các hàm này → không bị ảnh hưởng.
+const TAB_MED_ASK = /\b(la gi|benh gi|la sao|nguyen nhan|trieu chung|dau hieu|chua|thuoc|dieu tri|kham|xet nghiem|uong gi|an gi|kieng)\b/;
+function heartThemeOf(text: string): string | undefined {
+  return lomiTab.cur === "health" && findMedId(text) ? undefined : heartThemeOf0(text);
+}
+function heartStart(text: string, appQuestion: boolean): HeartReply | null {
+  return lomiTab.cur === "health" && findMedId(text) ? null : heartStart0(text, appQuestion);
+}
+function parseMedAsk(text: string, prev?: Parameters<typeof parseMedAsk0>[1]): ReturnType<typeof parseMedAsk0> {
+  const r = parseMedAsk0(text, prev);
+  if (lomiTab.cur === "heart" && r && heartThemeOf0(text) && !TAB_MED_ASK.test(normalizeVi(text))) return null;
+  if (lomiTab.cur === "health" && !r) {
+    const id = findMedId(text);
+    if (id) return { id, aspect: "overview", food: null };
+  }
+  return r;
+}
 // 21/10: người dùng muốn câu trả lời ngắn (nhớ trên máy này; lỗi bộ nhớ trình duyệt thì coi như chưa đặt).
 const SHORT_KEY = (uid: string) => `lmld:lomi-short:${uid}`;
 function shortPref(uid: string): boolean {
@@ -457,6 +480,14 @@ export function AiChat({
   const [fbNote, setFbNote] = useState("");
   const [fbBusy, setFbBusy] = useState(false);
   const [input, setInput] = useState("");
+  // 18/11 — chủ đề đang chọn (lib/lomiTab). Gắn vào biến dùng chung để luồng xử lý tin đọc được; nhớ lựa chọn trên máy.
+  const [tab, setTabState] = useState<LomiTab | null>(() => loadLomiTab());
+  lomiTab.cur = tab;
+  const setTab = (v: LomiTab | null) => {
+    lomiTab.cur = v;
+    saveLomiTab(v);
+    setTabState(v);
+  };
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [soundOn, setSoundOn] = useState(lomiSoundOn);
@@ -1356,6 +1387,18 @@ export function AiChat({
         reply = { role: "assistant", content: p.text, local: true, drug: { kind: "interact", name: p.name }, routed: "drug-interact" };
       }
     }
+    // 18/11 — tab "Hỏi về app": Lomi bí → đưa vài câu hướng dẫn app gần nhất để chạm chọn (thay cho "chưa biết").
+    if (lomiTab.cur === "app" && !en && !reply.routed && !rk?.any && rawRef.current && reply.stuck) {
+      const sugA = suggestFaqs(rawRef.current, 3);
+      if (sugA.length)
+        reply = {
+          role: "assistant",
+          content: "Bạn đang hỏi phần nào của app nè? Chạm câu gần đúng nhất nha 👇",
+          local: true,
+          quick: sugA.map((f) => f.q.vi),
+          routed: "tab-app",
+        };
+    }
     // 18/11 — bước 4: Lomi bí mà câu chỉ trỏ tới thứ chưa nói / quá ngắn → hỏi lại (lomiRouter.vagueAskBack). Dùng đúng câu hỏi lại
     //   có sẵn (VAGUE_TEXT) và giữ stuck "not_understood" như nhánh hỏi lại cũ (vẫn ghi lại câu Lomi bí).
     // Câu đáp legacy ĐÃ là câu hỏi lại ("Bạn đang nói tới chuyện nào", "chưa hiểu ý"…) thì giữ nguyên.
@@ -1795,6 +1838,20 @@ export function AiChat({
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
     // 14/11 (kiến trúc mới) — QUÉT RỦI RO Ở MỘT CHỖ: kết quả để ở riskRef cho trọng tài tại cửa ra (localReply) dùng.
     riskRef.current = riskScan({ q, raw, lang, en, forceAi, harm: !forceAi && !en && !!harmOf(raw, fr1), red: redNow });
+    // 18/11 — tab "Sức khoẻ": câu KỂ có nhắc một bệnh / triệu chứng trong kho ("Nào có mất ngủ, tôi ngủ đủ mà sáng vẫn mệt rũ") mà
+    //   lớp sức khoẻ thường bỏ qua vì không phải câu hỏi (rồi lớp tâm sự nhận) → trả thẻ kiến thức của bệnh đó luôn. Chỉ khi: không có rủi ro
+    //   (an toàn đi trước), câu KHÔNG phải câu hỏi kiến thức (câu hỏi để lớp sức khoẻ đầy đủ lo), và không đang nói tiếp đúng bệnh đó.
+    if (lomiTab.cur === "health" && !forceAi && !en && !danger0 && !parseMedAsk0(q)) {
+      const tabMid = findMedId(raw) ?? findMedId(q);
+      const lastMed = msgs[msgs.length - 1]?.role === "assistant" ? msgs[msgs.length - 1]?.med?.id : undefined;
+      if (tabMid && tabMid !== lastMed) {
+        const tmt = await loadMedTopic(tabMid);
+        if (tmt) {
+          const tmr = renderMed(tmt, "overview");
+          return localReply(q, { role: "assistant", content: tmr.text, local: true, quick: tmr.quick, med: { id: tmt.id, aspect: "overview" }, health: {}, routed: "tab-health" });
+        }
+      }
+    }
     // 13/11 (bộ 1.000 câu, G10-067 — "chồng giữ hết tiền, NHỐT tôi trong nhà và DOẠ ĐÁNH nếu tôi ra ngoài, cứu tôi với" từng được đáp
     //   "Áp lực tiền bạc làm người ta mất ngủ"): CHÍNH người kể đang bị nhốt / bị đánh lần đầu kể ra → lời đáp an toàn (113, không phải lỗi
     //   của bạn) NGAY, trước mọi lớp tâm sự / chủ đề. Ý định tự hại vẫn đi trước (crisisReply). Đang trong mạch an toàn thì để khối 11/10 lo.
@@ -3907,7 +3964,8 @@ export function AiChat({
       // Chỉ tới đây khi MỌI luồng (xã giao, sức khoẻ, Tarot, ngữ cảnh, món ăn, FAQ, câu đã dạy/đã học) đều không đáp được.
       // Chỉ gợi ý câu hỏi về app khi câu thật sự nói về app; còn lại nói thật là chưa hiểu / ngoài phạm vi.
       //   (Đang nghe kể mà người dùng kể thêm một mẩu ngắn — "trầy chân thôi" — thì không đem đi dò câu hỏi về app: bỏ dấu "chân" trùng "chặn".)
-      const sug = isAppish(q) && !(convo?.talk && !looksLikeQuestion(q) && q.split(/\s+/).length <= 6) ? suggestFaqs(q, 3) : [];
+      // 18/11: đang chọn "Hỏi về app" thì câu nào Lomi bí cũng gợi ý câu hướng dẫn app gần nhất.
+      const sug = (lomiTab.cur === "app" || isAppish(q)) && !(convo?.talk && !looksLikeQuestion(q) && q.split(/\s+/).length <= 6) ? suggestFaqs(q, 3) : [];
       // 08/10 — thứ tự đúng: senseState → senseLate → CHỈ KHI thật sự bí mới logUnanswered + gắn unk (nút 💡 Dạy Lomi).
       // senseLast (lib/lomiSense) gộp hai bước đầu: câu KỂ về mình ("a đói bụng"), chào kèm lời chúc, hỏi về chính Lomi,
       // gọi trống, câu cụt, lời kể nhận ra được → Lomi đáp tự nhiên và KHÔNG ghi vào "Lomi bí".
@@ -4454,12 +4512,33 @@ export function AiChat({
             <LomiStickerGrid onPick={sendSticker} className="grid grid-cols-5 gap-1 p-2 max-h-56 overflow-y-auto" />
           </div>
         )}
+        {/* 18/11 — chọn chủ đề (gợi ý mềm, chạm lại để bỏ chọn). */}
+        <div className="flex gap-1.5 overflow-x-auto px-3 pt-2 pb-0.5 border-t [scrollbar-width:none]" role="tablist" aria-label="Chủ đề">
+          {LOMI_TABS.map((tb) => {
+            const on = tab === tb.id;
+            return (
+              <button
+                key={tb.id}
+                type="button"
+                role="tab"
+                aria-selected={on}
+                onClick={() => setTab(on ? null : tb.id)}
+                className={cn(
+                  "shrink-0 rounded-full px-3 py-1 text-xs font-medium border transition whitespace-nowrap",
+                  on ? "gradient-brand text-white border-transparent shadow-sm" : "bg-background text-muted-foreground hover:bg-accent",
+                )}
+              >
+                {tb.emoji} {tb.label}
+              </button>
+            );
+          })}
+        </div>
         <form
           onSubmit={(e) => {
             e.preventDefault();
             void send(input);
           }}
-          className="p-3 flex items-end gap-2 border-t"
+          className="p-3 pt-2 flex items-end gap-2"
         >
           <button
             type="button"
@@ -4487,7 +4566,7 @@ export function AiChat({
               }
             }}
             rows={1}
-            placeholder={t("ai.placeholder")}
+            placeholder={(lang === "vi" && LOMI_TABS.find((x) => x.id === tab)?.placeholder) || t("ai.placeholder")}
             className="flex-1 resize-none rounded-2xl border bg-background px-3 py-2 text-base max-h-32 focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-50"
           />
           <button

@@ -80,6 +80,8 @@ const history = (): Turn[] => JSON.parse(localStorage.getItem(`ai-assistant-hist
 
 /** Gõ lần lượt các tin vào khung chat thật; trả về các tin LOMI đáp (theo thứ tự), kèm cờ ngữ cảnh. */
 export type ChatOpts = {
+  /** 18/11: chủ đề Lomi đang chọn (lib/lomiTab) — "heart" | "health" | "app" | "other". */
+  tab?: string;
   /** Lịch sử dựng sẵn (vd đúng câu Lomi đã nói trong một hội thoại thật) — để tái hiện chính xác ngữ cảnh. */
   history?: Partial<Turn>[];
   /** Cố định phần ngẫu nhiên (Lomi chọn ngẫu nhiên giữa vài câu đáp) — để bộ đo cho cùng kết quả mỗi lần chạy. */
@@ -112,6 +114,7 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
   cleanup();
   localStorage.clear();
   if (opts.lang) localStorage.setItem("lang", opts.lang);
+  if (opts.tab) localStorage.setItem("lomi:tab", opts.tab);
   const pre = opts.history ?? [];
   if (pre.length) localStorage.setItem(`ai-assistant-history:${UID}`, JSON.stringify(pre));
   Element.prototype.scrollIntoView = () => {};
@@ -144,8 +147,8 @@ async function chat0(turns: string[], opts: ChatOpts): Promise<Turn[]> {
 }
 
 /** Tin Lomi đáp cho lượt cuối của chuỗi. */
-export async function last(turns: string[]): Promise<Turn> {
-  const r = await chat(turns);
+export async function last(turns: string[], opts: ChatOpts = {}): Promise<Turn> {
+  const r = await chat(turns, opts);
   return r[r.length - 1];
 }
 
