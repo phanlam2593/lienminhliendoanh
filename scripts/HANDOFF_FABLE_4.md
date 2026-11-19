@@ -136,3 +136,12 @@ Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker tr�
 - ownerBizAsk: luật "có chữ sức khoẻ thì nhường" trước đọc "từ ĐÂU", "ĐÂU có bán online" thành "đau" → nay bỏ chữ "đâu" có dấu trước khi soi ("dau" không dấu vẫn coi là có thể "đau"). Lưu ý: VN(...) chạy riêng (không qua normalizeVi trong luồng chat) không phân biệt dấu — đừng dựa vào nó trong hàm thư viện.
 - Câu hỏi nối cụt sau câu KỂ chuyện quán của mình (ownerBizStory, 1–2 lượt trước) được đọc chung với câu kể — trừ khi Lomi vừa đáp an toàn / sức khoẻ / tarot / đang trong mạch tư vấn kinh doanh (mạch đó tự giữ loại hình).
 - "Khách của homestay mình đi theo gia đình" không còn thành tâm sự chuyện gia đình.
+
+## 12. Nấu ăn ở nhà (19/11 — Kir duyệt bỏ "không nấu ăn" của luật #71)
+
+Đo: bộ 1.000 câu **915/985** (đồ ăn 71 → 82), so mốc gốc sửa 40 / hỏng 0 · test 2.582 qua · giữ riêng 61/65 · paraphrase 388/400 · hội thoại 155/160.
+
+- **lib/lomiCook.ts** (mới): 28 món nhà làm phổ biến (nguyên liệu chính, cách nấu xào/hấp/chiên/canh/kho/trộn, chay được không, phút, mang đi được không, 3 bước). `isCookAsk` (luật HẸP: chữ nấu nướng + chữ hỏi món; "làm gì" một mình KHÔNG tính — bản đầu bắt nhầm "lá vối để làm gì", "ho nên làm gì", "không biết làm gì", 48 test trượt), `cookReply(text, ctx)` chọn 2 món theo nguyên liệu + điều kiện (chay, không chiên, món hấp, chán món nước, nhanh, mang đi, đãi khách); món thiếu nguyên liệu chính xếp sau; hỏi cách nấu món CÓ trong thư viện → cách làm; món NGOÀI thư viện ("bún bò Huế nấu sao") → null → câu nói thật + mời kể nguyên liệu / tìm quán.
+- Nhận nguyên liệu cẩn thận: "bánh mì" ≠ "mì", "chuẩn bị đồ ăn" ≠ "bí đỏ", "bất ngờ" ≠ "bắp", "cá" chỉ khi rõ (cá lóc, kho cá…) vì "ca" bỏ dấu còn là "cả", "cà"; "đừng cho thịt" không tính thịt là nguyên liệu.
+- AiAssistant: bước nấu ăn chạy sớm (sau quét an toàn), ghép nguyên liệu / ý nấu của lượt trước ("[Tủ lạnh còn đậu hũ và nấm] Nấu cái đó kiểu gì"); câu có bệnh / thai / kiêng / dị ứng / giảm cân → lớp sức khoẻ; câu hỏi nấu không bị tách đôi. lomiRescue.foodChat dùng cookReply thay câu từ chối.
+- Test: src/test/lomiCook.test.tsx; lomiWork1211b cập nhật theo luật mới; vibench.classify xếp `routed: "cook"` vào lớp food.

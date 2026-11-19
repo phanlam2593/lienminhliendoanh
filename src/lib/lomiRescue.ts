@@ -3,6 +3,7 @@
 //   lời chào ghé qua và lời tạm biệt. Tất cả chạy trên máy, không gọi AI.
 import { TAROT_DECK_SIZE, tarotCard } from "@/lib/tarot";
 import { normalizeVi } from "@/lib/lomiFaq";
+import { cookReply, isCookAsk } from "@/lib/lomiCook";
 
 // ── 1) Lỗi gõ hay gặp (sai dấu hỏi / ngã, thiếu chữ, gõ lặp) ở những chữ mà viết sai thì KHÔNG thành chữ có nghĩa khác ──
 const TYPOS: [RegExp, string][] = [
@@ -331,8 +332,9 @@ export function foodChat(text: string, seed = 0): string | null {
     /\b(nau|lam|che bien|xao|hap|chien|kho)\b(?: (cai do|mon|nhanh|gi do))?(?: \S+){0,2} (mon gi|gi|kieu gi|the nao|sao cho|ra sao)\b/.test(n) && /\b(nau|che bien|lam mon|mon)\b/.test(n)
     || /\bmon (gi|nao|chay|hap|xao)\b(?: \S+){0,3} (de lam|nhanh gon|lam nhanh|nau nhanh|don gian)\b/.test(n)
     || /\b(tu|nha|tu lanh) (con|co)\b(?: \S+){1,8} (nau|lam) (mon|gi|cai)\b/.test(n);
-  if (cook)
-    return "Lomi chưa có công thức nấu ăn nên không dám chỉ bừa đâu 🙏 Nấu ở nhà thì bạn tra công thức trên mạng cho chắc nha.\n\nCòn nếu ngại nấu, muốn ăn ngoài cho nhanh thì bạn nói món hoặc khu vực, Lomi tìm quán ở Đà Lạt có ưu đãi cho bạn liền 🍜";
+  // 19/11: Kir duyệt — Lomi gợi ý món nấu ở nhà từ thư viện trên máy (lib/lomiCook); món ngoài thư viện thì nói thật + mời tìm quán.
+  if (cook || isCookAsk(text))
+    return cookReply(text) ?? "Món này Lomi chưa có cách làm chắc chắn nên không dám chỉ bừa 🙏 Bạn kể Lomi nghe đang có nguyên liệu gì (vd “trứng, cà chua, rau cải”), Lomi gợi ý món nhà làm nhanh gọn nha.\n\nCòn ngại nấu thì nói món hoặc khu vực, Lomi tìm quán có ưu đãi cho bạn liền 🍜";
   const ch = n.match(/\b(an|uong|nau|di an)\s+(.{2,22}?)\s+hay\s+(?:la\s+)?(.{2,22}?)(?=\s+(?:thi|nhi|ta|day|di|ha|hon|ne|a)\b|\s*$)/);
   // ("uống sau ăn hay trước ăn" là hỏi cách dùng thuốc; "uống buổi sáng hay buổi tối" là hỏi giờ — không phải chọn món)
   const TIMEY = /^(sau|truoc|luc|khi|buoi|ban|moi|1|mot|2|hai|3|ba|bao)\b|\b(an|doi|no|sang|trua|chieu|toi|dem|ngay|tuan|lan|vien|lieu|thuoc)$/;

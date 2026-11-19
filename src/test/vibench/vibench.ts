@@ -35,7 +35,7 @@ export function classify(m: Turn): string {
   if (m.harm || /Ngày Mai|096 306 1414|1900 969 680|\b113\b/.test(c)) return "safety";
   if (m.tarot || m.tarotAwait || m.tarotRef || m.tarotBack || m.tarotGate || m.tarotCard) return "tarot";
   if (m.med || m.drug || m.diet || m.health || m.sx?.length || m.hsub) return "health";
-  if (m.dishAsk || m.dish || m.dishPick || m.places?.length || m.search) return "food";
+  if (m.dishAsk || m.dish || m.dishPick || m.places?.length || m.search || m.routed === "cook") return "food"; // (19/11: gợi ý nấu ở nhà — lib/lomiCook)
   if (m.biz) return "biz";
   if (m.faqId) return "faq";
   if (m.stuck && ["fallback", "not_understood", "unknown_med", "suggest", "generic_listen"].includes(m.stuck)) return "unknown";

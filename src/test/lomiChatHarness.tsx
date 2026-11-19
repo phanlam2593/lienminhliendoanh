@@ -55,6 +55,7 @@ export type Turn = {
   stuck?: string; // 09/10: loại "bí" (ghi nhật ký lomi_stuck_log)
   dish?: string;
   dishPick?: boolean;
+  routed?: string;
   dishAsk?: { drink: boolean; shown: string[] };
   search?: { mode: string; kind?: { noun?: string } };
   tarot?: { question?: string; cards: unknown[]; spread?: string; kind?: string };

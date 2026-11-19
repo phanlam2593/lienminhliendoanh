@@ -149,6 +149,10 @@ import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, pall
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
 import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/lib/lomiTab";
+import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk } from "@/lib/lomiCook";
+// (câu có bệnh / thai / kiêng / trẻ nhỏ → để lớp sức khoẻ lo, không gợi ý món)
+const NOT_FOOD_TALK_VI = /(?<![\p{L}])(bệnh|đau|sốt|tiểu đường|huyết áp|bầu|mang thai|kiêng|dị ứng|giảm cân|ăn kiêng)(?![\p{L}])/u;
+const NOT_COOK_CTX = /\b(benh|bi (dau|sot|tieu chay|di ung)|sot|tieu duong|huyet ap|bau|mang thai|kieng|di ung|an kieng|giam can)\b/;
 
 // 18/11 — CHỦ ĐỀ LOMI (lib/lomiTab): nghiêng nhận diện theo nút người dùng đang chọn, chỉ ở chỗ NƯỚC ĐÔI giữa sức khoẻ và tâm sự.
 //   • Sức khoẻ: câu nhắc một bệnh / triệu chứng có trong kho ("mất ngủ", "chán ăn") → lớp tâm sự nhường, lớp sức khoẻ trả lời
@@ -1870,6 +1874,22 @@ export function AiChat({
       const hE = edCue ? heartStart0(q, false) : null;
       if (hE?.theme === "eating") { topicHit("mind"); return localReply(q, heartMsg(hE, 1)); }
     }
+    // 19/11 (Kir duyệt bỏ "không nấu ăn"): hỏi NẤU GÌ / cách nấu ở nhà (lib/lomiCook) → gợi ý món, trước lớp chọn món / tìm quán / tâm sự
+    //   (trước: "trời mưa ngại ra ngoài, nhà có mì, nấm… chỉ giúp món khô" → tâm sự chuyện mắc mưa; "chuẩn bị đồ ăn mang đi công viên" → chọn bánh mì).
+    //   Nối hai lượt: "[Tủ lạnh còn đậu hũ và nấm.] Nấu cái đó kiểu gì…", "[Nay mình muốn nấu bữa tối…] trong tủ chỉ còn trứng với cà chua"
+    //   → ghép nguyên liệu / ý nấu của lượt trước. Câu có bệnh / thai / kiêng / dị ứng → để lớp sức khoẻ lo.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && !NOT_COOK_CTX.test(` ${normalizeVi(raw)} `) && !NOT_FOOD_TALK_VI.test(raw.normalize("NFC").toLowerCase())) {
+      const lastAs = [...msgs].reverse().find((m) => m.role === "assistant");
+      const prevUk = [...msgs].reverse().find((m) => m.role === "user");
+      const prevUkT = prevUk ? (prevUk.raw ?? prevUk.content) : "";
+      if (!(lastAs?.drug || lastAs?.med || lastAs?.health)) {
+        const cookCtx = !!prevUkT && !lastAs?.heart && !NOT_COOK_CTX.test(` ${normalizeVi(prevUkT)} `) && (
+          (cookIngredientsOnly(raw) && (isCookAsk(prevUkT) || /\b(nau|bua toi|bua trua|bua com|lam mon|do an)\b/.test(` ${normalizeVi(prevUkT)} `)))
+          || (isCookAsk(raw) && !hasCookIngredients(raw) && hasCookIngredients(prevUkT)));
+        const ck = cookCtx ? cookReply(raw, prevUkT) : isCookAsk(raw) ? cookReply(raw) : null;
+        if (ck) return localReply(q, { role: "assistant", content: ck, local: true, routed: "cook" });
+      }
+    }
     // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
     //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.
     if (!forceAi && !en && !danger0 && !riskRef.current?.any && q.split(/\s+/).length <= 12 && !tarotHowto(raw)) {
@@ -2315,7 +2335,8 @@ export function AiChat({
       // Hai chuyện khác hẳn nhau trong một tin → trả lời ý đầu, ý sau thành nút bấm.
       //   (13/11: "Đi xem tarot XONG đói bụng, gần Nhà thờ Đức Bà có món gì ăn nhẹ" — vế bói chỉ là kể; ý chính là tìm quán → không tách)
       const tarotByQ = !!detectSearch(q) && VN(/\b((xem|bói|coi|rút) (bài |tarot |bói )?(xong|rồi)|(định|tính|sẽ) (đi )?(bói|xem tarot|xem bói|coi bói)( \S+){0,6} (ở|tại) (quán|chỗ))\b/).test(` ${normalizeVi(q)} `);
-      let sp = tarotByQ ? null : (splitTwo(q) ?? splitWho(q));
+      //   (19/11: hỏi nấu / chuẩn bị đồ ăn cả câu — "đưa hai cháu đi công viên, muốn chuẩn bị đồ ăn mang theo…, gợi ý thêm món dễ chia phần" — không tách)
+      let sp = tarotByQ || (isCookAsk(q) && !NOT_COOK_CTX.test(` ${normalizeVi(q)} `)) ? null : (splitTwo(q) ?? splitWho(q));
       //   (13/11, G10-094: "Từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn, cần đi khám ngay không" — vế sau là chuyện sức khoẻ
       //   đang cấp → trả lời vế đó trước, vế làm ăn thành nút)
       const SICK = VN(/\b(đau|sốt|nôn|ói|khó thở|chóng mặt|chảy máu|ngất|co giật|tiêu chảy|đi khám|cấp cứu)\b/);
