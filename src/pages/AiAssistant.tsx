@@ -1399,7 +1399,11 @@ export function AiChat({
       }
     }
     // 18/11 — tab "Hỏi về app": Lomi bí → đưa vài câu hướng dẫn app gần nhất để chạm chọn (thay cho "chưa biết").
-    if (lomiTab.cur === "app" && !en && !reply.routed && !rk?.any && rawRef.current && reply.stuck) {
+    // 19/11: không chọn tab mà câu NGẮN có động từ của app ("đăng ở đâu", "mỗi ngày mấy lần") và Lomi bí → cũng đưa câu hướng dẫn app để chọn.
+    const appShort = !!rawRef.current && rawRef.current.trim().split(/\s+/).length <= 5 && !(prevA?.heart || prevA?.heartListen || prevA?.thread || prevA?.talk)
+      && VN(/\b(đăng|quẹt|nhận|đổi|tạo|xoá|xóa|mở|tắt|bật|gửi|nạp|lượt|mấy lần|ở đâu|nút)\b/).test(` ${normalizeVi(rawRef.current)} `)
+      && ["fallback", "not_understood", "generic_listen"].includes(String(reply.stuck));
+    if ((lomiTab.cur === "app" || appShort) && !en && !reply.routed && !rk?.any && rawRef.current && reply.stuck && suggestFaqs(rawRef.current, 3).length >= (appShort && lomiTab.cur !== "app" ? 2 : 1)) {
       const sugA = suggestFaqs(rawRef.current, 3);
       if (sugA.length)
         reply = {
@@ -1407,9 +1411,13 @@ export function AiChat({
           content: "Bạn đang hỏi phần nào của app nè? Chạm câu gần đúng nhất nha 👇",
           local: true,
           quick: sugA.map((f) => f.q.vi),
-          routed: "tab-app",
+          routed: lomiTab.cur === "app" ? "tab-app" : "app-pick",
         };
     }
+    // 19/11: người dùng bảo Lomi hiểu chưa đúng ("Chưa phải vậy đâu", "không phải ý đó") mà Lomi bí → hỏi lại chỗ sai
+    if (!en && !reply.routed && !rk?.any && rawRef.current && reply.stuck
+      && VN(/^(chưa|không|ko|hông) phải (vậy|thế|ý đó|cái đó|chuyện đó|như vậy)( đâu| nha| mà)?$|^(sai|nhầm) rồi( mà| nha)?$|^ý (mình|tôi|tui|em|anh|chị) không phải (vậy|thế)$/).test(normalizeVi(rawRef.current).trim()))
+      reply = { role: "assistant", content: "Ồ, Lomi chưa nắm đúng ý bạn rồi 🙏 Bạn nói lại giúp Lomi chỗ nào chưa đúng, hoặc bạn đang muốn hỏi điều gì nha?", local: true, stuck: "not_understood" as StuckKind, routed: "askback" };
     // 18/11 — bước 4: Lomi bí mà câu chỉ trỏ tới thứ chưa nói / quá ngắn → hỏi lại (lomiRouter.vagueAskBack). Dùng đúng câu hỏi lại
     //   có sẵn (VAGUE_TEXT) và giữ stuck "not_understood" như nhánh hỏi lại cũ (vẫn ghi lại câu Lomi bí).
     // Câu đáp legacy ĐÃ là câu hỏi lại ("Bạn đang nói tới chuyện nào", "chưa hiểu ý"…) thì giữ nguyên.
@@ -1873,6 +1881,33 @@ export function AiChat({
         || VN(/\b(móc họng|gây nôn|tự làm nôn)\b/).test(nE) && VN(/\b(ăn xong|sau khi ăn|sau bữa|ăn vô|ăn vào|mập|béo|cân)\b/).test(nE);
       const hE = edCue ? heartStart0(q, false) : null;
       if (hE?.theme === "eating") { topicHit("mind"); return localReply(q, heartMsg(hE, 1)); }
+    }
+    // 19/11 (G09-099, G09-096): câu nối trỏ "người đó" / "cái đó" mà câu trước có HAI người / HAI bệnh ("Anh trai và em gái mình đều
+    //   thất nghiệp" → "người đó nên làm gì trước"; "Mẹ đau bụng còn mình mất ngủ" → "cái đó có nguy hiểm không") → hỏi lại là ai / cái nào,
+    //   nút chạm điền sẵn câu hỏi cho từng người / từng bệnh (trước: Lomi đoán bừa một bên).
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
+      const prevU2 = [...msgs].reverse().find((m) => m.role === "user");
+      const pT = prevU2 ? (prevU2.raw ?? prevU2.content) : "";
+      const qn = raw.normalize("NFC").toLowerCase();
+      if (pT && raw.trim().split(/\s+/).length <= 12) {
+        const whoD = /(^|[^\p{L}])người (đó|ấy|kia)([^\p{L}]|$)/u.exec(qn);
+        if (whoD) {
+          const REL = /(^|[^\p{L}])(anh trai|em gái|em trai|chị gái|mẹ|ba|bố|vợ|chồng|con trai|con gái|bạn thân|sếp|đồng nghiệp|người yêu|ông nội|ông ngoại|bà nội|bà ngoại)(?=[^\p{L}]|$)/gu;
+          const ppl = [...new Set([...pT.normalize("NFC").toLowerCase().matchAll(REL)].map((m) => m[2]))];
+          if (ppl.length === 2)
+            return localReply(q, { role: "assistant", content: `Bạn đang hỏi cho **${ppl[0]}** hay **${ppl[1]}** nè? Chạm chọn để Lomi trả lời đúng người nha 👇`, local: true, routed: "askback-who", quick: ppl.map((p) => raw.replace(/người (đó|ấy|kia)/iu, p)) });
+        }
+        if (/(^|[^\p{L}])(cái|bệnh|chuyện|vụ) (đó|này|ấy)([^\p{L}]|$)/u.test(qn)) {
+          const SYM = /(đau (bụng|đầu|lưng|ngực|họng|răng|bao tử|dạ dày|khớp)|sốt|ho|chóng mặt|tiêu chảy|buồn nôn|nôn|mất ngủ|khó thở|ngứa|phát ban)(?=[^\p{L}]|$)/u;
+          const names = [...new Set(pT.normalize("NFC").toLowerCase().split(/[,.;]| còn | và | với | mà /u).map((seg) => {
+            const id = findMedId(seg);
+            return id ? (medNameOfId(id) ?? id) : SYM.exec(seg)?.[1] ?? null;
+          }).filter(Boolean) as string[])];
+          if (names.length === 2) {
+            return localReply(q, { role: "assistant", content: `Bạn đang hỏi về **${names[0]}** hay **${names[1]}** nè? Chạm chọn để Lomi trả lời đúng nha 👇`, local: true, routed: "askback-what", quick: names.map((nm) => raw.replace(/(cái|bệnh|chuyện|vụ) (đó|này|ấy)/iu, nm)) });
+          }
+        }
+      }
     }
     // 19/11 (Kir duyệt bỏ "không nấu ăn"): hỏi NẤU GÌ / cách nấu ở nhà (lib/lomiCook) → gợi ý món, trước lớp chọn món / tìm quán / tâm sự
     //   (trước: "trời mưa ngại ra ngoài, nhà có mì, nấm… chỉ giúp món khô" → tâm sự chuyện mắc mưa; "chuẩn bị đồ ăn mang đi công viên" → chọn bánh mì).

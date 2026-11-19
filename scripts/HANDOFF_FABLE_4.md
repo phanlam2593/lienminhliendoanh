@@ -145,3 +145,12 @@ Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker tr�
 - Nhận nguyên liệu cẩn thận: "bánh mì" ≠ "mì", "chuẩn bị đồ ăn" ≠ "bí đỏ", "bất ngờ" ≠ "bắp", "cá" chỉ khi rõ (cá lóc, kho cá…) vì "ca" bỏ dấu còn là "cả", "cà"; "đừng cho thịt" không tính thịt là nguyên liệu.
 - AiAssistant: bước nấu ăn chạy sớm (sau quét an toàn), ghép nguyên liệu / ý nấu của lượt trước ("[Tủ lạnh còn đậu hũ và nấm] Nấu cái đó kiểu gì"); câu có bệnh / thai / kiêng / dị ứng / giảm cân → lớp sức khoẻ; câu hỏi nấu không bị tách đôi. lomiRescue.foodChat dùng cookReply thay câu từ chối.
 - Test: src/test/lomiCook.test.tsx; lomiWork1211b cập nhật theo luật mới; vibench.classify xếp `routed: "cook"` vào lớp food.
+
+## 13. Hỏi lại khi câu mơ hồ (19/11 tối)
+
+Đo: bộ 1.000 câu **922/985** (hỏi lại 90 → 97), so mốc gốc sửa 47 / hỏng 0 · test 2.586 qua · giữ riêng 61/65 · paraphrase 387/400 · hội thoại 155/160.
+
+- lomiRouter.vagueAskBack: câu DÀI (11–50 chữ) mà Lomi bí hẳn (fallback / not_understood) và có ≥ 2 chữ chỉ trỏ tới thứ chưa kể ("cái ấy", "bên kia", "tình hình này", "như lần trước", "lời họ"…) → hỏi lại, thay cho "Lomi chưa biết, bấm Dạy Lomi".
+- AiAssistant (localReply): câu ≤ 5 chữ có động từ của app ("đăng ở đâu", "mỗi ngày mấy lần") mà Lomi bí, không đang nghe tâm sự → đưa ≥ 2 câu hướng dẫn app để chạm (routed "app-pick"), giống tab "Hỏi về app".
+- "Chưa phải vậy đâu" / "sai rồi" / "không phải ý đó" mà Lomi bí → hỏi lại chỗ chưa đúng.
+- Câu nối "người đó" / "cái đó" mà câu trước có ĐÚNG 2 người (anh trai và em gái…) hoặc 2 bệnh / triệu chứng (mẹ đau bụng còn mình mất ngủ) → hỏi lại, nút điền sẵn câu hỏi cho từng bên (routed "askback-who" / "askback-what"). Chỉ một bên thì trả lời thẳng như cũ.

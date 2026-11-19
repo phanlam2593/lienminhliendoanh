@@ -168,3 +168,28 @@ describe("kinh doanh: chủ quán hỏi việc cụ thể (19/11)", () => {
     expect(b.content).not.toMatch(/Chuyện gia đình là chuyện khó nói/);
   }, T);
 });
+
+describe("hỏi lại khi câu mơ hồ (19/11 tối)", () => {
+  type A = M & { quick?: string[]; stuck?: string };
+  it("câu dài toàn chữ chỉ trỏ → hỏi lại, không bảo 'Dạy Lomi'", async () => {
+    const a = (await last(["Vì tuần này nhiều thứ dồn cùng lúc nên mình chưa kể đầu đuôi cho bạn, nhưng cái ấy lại xuất hiện như lần trước, nếu muốn xử lý cho xong thì giờ mình phải làm thế nào?"])) as A;
+    expect(a.content).toMatch(/Lomi chưa rõ bạn đang nói tới chuyện gì/);
+    expect(a.content).not.toMatch(/Dạy Lomi/);
+  }, T);
+  it("câu app ngắn → đưa câu hướng dẫn để chọn", async () => {
+    const a = (await last(["mỗi ngày mấy lần"])) as A;
+    expect(a.quick?.join("|")).toMatch(/quẹt/);
+  }, T);
+  it("'Chưa phải vậy đâu' → hỏi lại chỗ sai", async () => {
+    const a = (await last(["Chưa phải vậy đâu."])) as A;
+    expect(a.content).toMatch(/chưa nắm đúng ý/);
+  }, T);
+  it("'người đó' / 'cái đó' trỏ được 2 bên → hỏi lại, nút điền sẵn từng bên", async () => {
+    const a = (await last(["Anh trai và em gái mình đều đang thất nghiệp.", "người đó nên làm gì trước"])) as A;
+    expect(a.quick).toEqual(["anh trai nên làm gì trước", "em gái nên làm gì trước"]);
+    const b = (await last(["Mẹ mình đau bụng còn mình thì mất ngủ.", "vậy cái đó có nguy hiểm không"])) as A;
+    expect(b.content).toMatch(/đau bụng\*\* hay \*\*mất ngủ/);
+    const c = (await last(["Mẹ mình bị mất ngủ.", "vậy cái đó có nguy hiểm không"])) as A;
+    expect(c.med).toBeTruthy();
+  }, T);
+});

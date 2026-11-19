@@ -152,7 +152,15 @@ export function vagueAskBack(raw: string, legacyStuck: string | undefined, ctx: 
   if (!legacyStuck) return false;
   const t = raw.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N} ]+/gu, " ").replace(/(\p{L})\1{2,}/gu, "$1").replace(/(\p{L})\1+(?= |$)/gu, "$1").replace(/\s+/g, " ").trim(); // "vậyy", "đóoo"
   const words = t.split(" ").filter(Boolean);
-  if (!words.length || words.length > 10) return false;
+  // 19/11: câu DÀI mà Lomi bí hẳn, toàn chữ chỉ trỏ tới thứ chưa kể ("cái ấy lại xuất hiện như lần trước", "bên kia cứ giục",
+  //   "nhìn cái vừa nhận được", "với tình hình này") → hỏi lại, thay vì "Lomi chưa biết, bấm Dạy Lomi".
+  if (words.length > 10) {
+    if (words.length > 50 || (legacyStuck !== "fallback" && legacyStuck !== "not_understood")) return false;
+    const n = ` ${normalizeVi(t)} `;
+    const vague = n.match(/\b(cai (ay|do|nay|kia|vua \S+)|ben kia|cho quen|tinh hinh (nay|do|vay)|chuyen (do|nay|ay)|viec (do|nay|ay)|nguoi quen|loi ho|ho noi|nhu vay|nhu the|nhu lan truoc|y nhu cu|de nhu vay)\b/g);
+    return !!vague && vague.length >= 2;
+  }
+  if (!words.length) return false;
   const accented = /[^\x00-\x7F]/.test(t);
   const deixis = accented ? DEIX_ACC.test(t) : DEIX_BARE.test(normalizeVi(t));
   if (legacyStuck === "generic_listen") {
