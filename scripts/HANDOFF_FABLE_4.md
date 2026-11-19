@@ -154,3 +154,14 @@ Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker tr�
 - AiAssistant (localReply): câu ≤ 5 chữ có động từ của app ("đăng ở đâu", "mỗi ngày mấy lần") mà Lomi bí, không đang nghe tâm sự → đưa ≥ 2 câu hướng dẫn app để chạm (routed "app-pick"), giống tab "Hỏi về app".
 - "Chưa phải vậy đâu" / "sai rồi" / "không phải ý đó" mà Lomi bí → hỏi lại chỗ chưa đúng.
 - Câu nối "người đó" / "cái đó" mà câu trước có ĐÚNG 2 người (anh trai và em gái…) hoặc 2 bệnh / triệu chứng (mẹ đau bụng còn mình mất ngủ) → hỏi lại, nút điền sẵn câu hỏi cho từng bên (routed "askback-who" / "askback-what"). Chỉ một bên thì trả lời thẳng như cũ.
+
+## 14. "Dùng X nhiều có sao", "X có tác dụng phụ gì" — mọi loại X (20/11, Kir yêu cầu)
+
+Đo: test 2.588 qua · bộ 1.000 câu 922/985 (không đổi, hỏng 0) · giữ riêng 61/65 · paraphrase 388/400 · hội thoại 155/160. Test: `src/test/lomiExcess.test.tsx`.
+
+- **lib/lomiExcess.ts** (mới): `excessAsk` nhận "ăn / uống / dùng / sử dụng / xài / hút / bôi… (X) nhiều / nhìu / quá liều / lâu dài / hằng ngày … có sao (k/ko/s) / có hại / thì sao…" → "excess"; "tác dụng phụ / tdp / tác hại / có hại gì" → "side". Không bắt câu chối ("không uống quá liều đâu") và "… có TỐT không".
+  `focusExcess` lọc THẺ CHUẨN (mở đầu biểu tượng 🥗💊🌿☕🍺🍵 + tên in đậm) → tiêu đề "🔎 **X** — dùng nhiều có sao không / tác dụng phụ · cần lưu ý", giữ khối ⚠️ / 📏 Liều / Lưu ý / Tác dụng phụ và các dòng nói DÙNG nhiều / quá liều / dị ứng…, giữ dòng giới thiệu thẻ thuốc và khối 📚 nguồn / 📌; thẻ dinh dưỡng → rút ý từ chính số liệu (kcal ≥150, đường bột ≥15 g, béo ≥10 g, natri ≥400 mg, kali ≥400 mg); thẻ món ăn không có số liệu → nói thật "chưa có số liệu riêng" + lời khuyên chung. Thẻ thuốc + "dùng nhiều" → thêm dòng "lỡ uống quá nhiều thì gọi 115". Câu đáp viết riêng (quá liều paracetamol, "2 viên là liều thường", lời chối) KHÔNG bị lọc.
+  `sleepPillExcess`: thuốc ngủ / an thần dùng nhiều → quá liều nguy hiểm + 115 + đường dây Ngày Mai.
+- AiAssistant: (g) viết lại câu nối "ăn nhiều có sao k", "có tác dụng phụ gì không" sau khi vừa nói về X (dược liệu / thuốc / bệnh / tên in đậm đầu thẻ) → câu đầy đủ với X; bước chống lặp ("vẫn như Lomi vừa nói") bỏ qua câu hỏi này; lọc thẻ ở localReply (không lọc thẻ bệnh).
+- lomiHealthFacts "alcohol": early + nhận "uống rượu nhiều có sao ko", "nhậu nhìu có s k" (trước bị lớp rủ đi nhậu đáp "Nghe là thấy vui rồi 🍻").
+- Chưa có: kem chống nắng; "ăn nhiều rau có tốt không", "ăn nhiều mà vẫn đói" (lỗi có từ trước).

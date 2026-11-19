@@ -60,7 +60,7 @@ import { HEART, normStrict } from "@/lib/lomiAccent";
 import { storyOpen, storyOpenSymptom, storyTurn, subjectFix, type Thread } from "@/lib/lomiStory";
 import { THEME_MOOD, analyzeBody, analyzeMind, bodyAlarm, detailNotes, onlyAnxietyBody, onlySoftSymptoms, redFlagsIn, symptomCard, symptomLabel } from "@/lib/lomiSymptoms";
 import { healthFact, healthFactEarly, healthFactFirst } from "@/lib/lomiHealthFacts";
-import { nutrientOf, nutrientReply } from "@/lib/lomiNutrients";
+import { foodOf, nutrientOf, nutrientReply } from "@/lib/lomiNutrients";
 import { honestReply } from "@/lib/lomiHonest";
 import { earlyV4, shopLedgerReply, v4Reply } from "@/lib/lomiV4";
 import { v5Reply } from "@/lib/lomiV5";
@@ -149,6 +149,7 @@ import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, pall
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
 import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/lib/lomiTab";
+import { excessAsk, excessVerb, focusExcess, sleepPillExcess } from "@/lib/lomiExcess";
 import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk } from "@/lib/lomiCook";
 // (câu có bệnh / thai / kiêng / trẻ nhỏ → để lớp sức khoẻ lo, không gợi ý món)
 const NOT_FOOD_TALK_VI = /(?<![\p{L}])(bệnh|đau|sốt|tiểu đường|huyết áp|bầu|mang thai|kiêng|dị ứng|giảm cân|ăn kiêng)(?![\p{L}])/u;
@@ -691,7 +692,8 @@ export function AiChat({
     const r = await followUp0(q, raw, lastA0, hCtx);
     // Đúng câu vừa nói ở lượt trước → không lặp lại nguyên văn (Kir: "bỏ mấy chỗ lặp lại"), chỉ nhắc ý chính.
     //   (01/11: trải bài MỚI — "còn công việc thì sao" — có câu mở đầu ngẫu nhiên trùng câu trước, không phải lặp lại)
-    if (r && lastA0 && !r.tarot && r.content.slice(0, 60) === lastA0.content.slice(0, 60)) {
+    //   (20/11: hỏi dùng nhiều / tác dụng phụ của đúng thứ vừa nói → không rút gọn, để lớp lọc thẻ đưa đúng phần đó)
+    if (r && lastA0 && !r.tarot && !excessAsk(raw) && r.content.slice(0, 60) === lastA0.content.slice(0, 60)) {
       const first = r.content.split(/(?<=[.!?])\s|\n/u)[0].replace(/^Dạ, Lomi ghi nhận nha 📝 /u, "");
       return { ...r, content: `Dạ, vẫn như Lomi vừa nói ở trên nha 👆 ${first}\n\nBạn còn muốn hỏi thêm gì không?` };
     }
@@ -1418,6 +1420,16 @@ export function AiChat({
     if (!en && !reply.routed && !rk?.any && rawRef.current && reply.stuck
       && VN(/^(chưa|không|ko|hông) phải (vậy|thế|ý đó|cái đó|chuyện đó|như vậy)( đâu| nha| mà)?$|^(sai|nhầm) rồi( mà| nha)?$|^ý (mình|tôi|tui|em|anh|chị) không phải (vậy|thế)$/).test(normalizeVi(rawRef.current).trim()))
       reply = { role: "assistant", content: "Ồ, Lomi chưa nắm đúng ý bạn rồi 🙏 Bạn nói lại giúp Lomi chỗ nào chưa đúng, hoặc bạn đang muốn hỏi điều gì nha?", local: true, stuck: "not_understood" as StuckKind, routed: "askback" };
+    // 20/11 (Kir): "ăn / uống / dùng X nhiều có sao", "X có tác dụng phụ gì" → lọc thẻ, đưa phần dùng nhiều / quá liều / tác dụng phụ /
+    //   lưu ý lên (lib/lomiExcess) thay vì cả thẻ. Câu đáp an toàn (bắt đầu 🚨 / ⚠️) giữ nguyên.
+    const exK2 = !en && rawRef.current ? excessAsk(rawRef.current) : null;
+    const slp = exK2 && !rk?.any ? sleepPillExcess(rawRef.current ?? "") : null;
+    if (slp) reply = { role: "assistant", content: slp, local: true, health: reply.health ?? {}, routed: "sleep-pill-excess" };
+    //   (chỉ thẻ về MỘT THỨ để ăn / uống / dùng — thuốc, vitamin, món ăn, dược liệu; thẻ bệnh thì giữ nguyên)
+    if (exK2 && !slp && !rk?.any && !reply.tarot && (reply.herb || reply.drug || /^(🥗|💊|🌿|☕|🍺|🍵)/u.test(reply.content)) && !/^(🚨|⚠️|🔥)/u.test(reply.content)) {
+      const fx = focusExcess(reply.content, exK2, { drug: !!reply.drug });
+      if (fx) reply = { ...reply, content: fx };
+    }
     // 18/11 — bước 4: Lomi bí mà câu chỉ trỏ tới thứ chưa nói / quá ngắn → hỏi lại (lomiRouter.vagueAskBack). Dùng đúng câu hỏi lại
     //   có sẵn (VAGUE_TEXT) và giữ stuck "not_understood" như nhánh hỏi lại cũ (vẫn ghi lại câu Lomi bí).
     // Câu đáp legacy ĐÃ là câu hỏi lại ("Bạn đang nói tới chuyện nào", "chưa hiểu ý"…) thì giữ nguyên.
@@ -2092,6 +2104,22 @@ export function AiChat({
           raw = q;
           shownRef.current = { from: q, to: typed };
           rewroteRef.current = true;
+        }
+        //   (g) 20/11 (Kir): hỏi nối "ăn nhiều có sao k", "uống nhìu có s k", "có tác dụng phụ gì không" ngay sau khi vừa nói về X
+        //       (thuốc, vitamin, món ăn, đồ uống, dược liệu) — câu không nêu thứ gì khác → điền X vào (trước: "Lomi chưa biết", hoặc
+        //       "vẫn như Lomi vừa nói" rồi lặp phần giới thiệu).
+        const exK = excessAsk(q);
+        if (exK && !bk && !nm && la && lowQ.split(/\s+/).length <= 12 && !known(lowQ) && !foodOf(lowQ) && !nutrientOf(lowQ)) {
+          const hbX = la.herb ? FOLK.find((x) => x.id === la.herb) : undefined;
+          const subj = hbX?.names[0] ?? (la.drug as { name?: string } | undefined)?.name ?? (la.med?.id ? medNameOfId(la.med.id) : null)
+            ?? (/^\S{1,3}\s*\*\*([^*]{2,40})\*\*/u.exec(la.content)?.[1] ?? null);
+          if (subj && (la.health || la.herb || la.drug || la.med || la.src)) {
+            const v = excessVerb(q) ?? (la.drug ? "uống" : "dùng");
+            q = exK === "side" ? `${subj} có tác dụng phụ gì` : `${v} ${subj} nhiều có sao không`;
+            raw = q;
+            shownRef.current = { from: q, to: typed };
+            rewroteRef.current = true;
+          }
         }
         //   (f) 05/11 (rà hiểu sai): KỂ bác sĩ đã khám ("đi khám về bác sĩ bảo bị viêm dạ dày") → cách chăm sóc bệnh đó, không phải "khi nào nên đi khám";
         //       "bác sĩ kê amoxicillin cho con" → thẻ thuốc đó

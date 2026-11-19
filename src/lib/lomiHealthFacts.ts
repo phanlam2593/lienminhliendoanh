@@ -270,7 +270,9 @@ const FACTS: Fact[] = [
   },
   {
     id: "alcohol",
-    re: VN(/\b(uống rượu bia có sao|uống bia có sao|uống rượu có sao|nhậu nhiều có sao|uống bia hàng ngày|uống bia hằng ngày|giải rượu|giải say)\b/),
+    early: true,
+    // (20/11: "uống rượu nhiều có sao ko", "nhậu nhìu có hại gì" — trước bị lớp rủ đi nhậu đáp "Nghe là thấy vui rồi 🍻")
+    re: VN(/\b(uống rượu bia có sao|uống bia có sao|uống rượu có sao|nhậu nhiều có sao|uống bia hàng ngày|uống bia hằng ngày|giải rượu|giải say|(uống|nhậu) (rượu|bia|rượu bia)( \S+){0,4} (có sao|có hại|hại gì|sao không|sao ko|sao k|có s|tác hại|tác dụng phụ)|(rượu|bia|rượu bia|nhậu) (\S+ ){0,3}(nhiều|nhìu|thường xuyên|hằng ngày|hàng ngày|mỗi ngày)( \S+){0,3} (có sao|có hại|hại gì|sao không|sao ko|sao k|có s))\b/),
     a: "🍺 **Rượu bia:** WHO khẳng định **không có mức uống rượu bia nào an toàn** cho sức khoẻ — càng ít càng tốt. Uống nhiều gây hại gan, dạ dày, tim mạch, giấc ngủ và tinh thần.\n• Nếu uống: ăn no trước, uống chậm, xen nước lọc, biết điểm dừng.\n• **Đã uống thì không lái xe.**\n• Chuyện “giải rượu” bằng thuốc hay mẹo dân gian không làm rượu hết nhanh hơn — chỉ có thời gian, nước và nghỉ ngơi.",
     src: "WHO châu Âu — No level of alcohol consumption is safe for our health, 04/01/2023 (ý “không có mức an toàn”; các mẹo còn lại là kiến thức phổ thông)",
   },
