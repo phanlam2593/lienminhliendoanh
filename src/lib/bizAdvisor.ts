@@ -292,7 +292,7 @@ const OB_OWNER = new RegExp(
     `|\\b${OB_PLACE}(?: (?!nao\\b|nay\\b|do\\b|kia\\b|gan\\b|o\\b)\\S+){0,2} ${OB_ME}\\b` +
     `|\\b(?:${OB_ME}|me ${OB_ME}|me) (?:dang |moi |dinh |tinh |co |vua )?(?:mo|chay|ban|kinh doanh|buon ban|lam chu) ` +
     `|(?:^| )ban (?:banh|com|rau|hang|tra sua|quan ao|do an|my pham|ca phe|tra|hoa|trai cay)\\b|\\bban (?:\\S+ ){0,2}online\\b|\\b(?:shop|quan|tiem|homestay) (?:minh|toi|tui|em) ` +
-    `|\\b(?:quan|shop|tiem|homestay|cua hang) (?:dang |hay |moi |van |cu )?(?:bi|lo)\\b|\\b(?:doanh thu|bien loi nhuan|chot don)\\b`,
+    `|\\b(?:quan|shop|tiem|homestay|cua hang) (?:dang |hay |moi |van |cu )?(?:bi|lo)\\b|\\b(?:doanh thu|bien loi nhuan|chot don)\\b|\\b(?:chia|tinh|lap|len|phan bo) ngan sach\\b`,
 );
 const OB_TERM = /\b(khach|gia ban|dinh gia|tinh gia|bao gia|chinh gia|tang gia|tinh phi|phi giao|con loi|loi it|loi nhuan|khong lo|so lo|bi lo|doanh thu|khuyen mai|chot don|don hang|it don|let det|dat phong|dat ban|dat coc|phuc vu|chi phi|quang cao|ton hang|review|danh gia|nhan xet|tich diem|uu dai|marketing|thanh toan|ngan sach|san pham|dang anh|khai truong|trong phong|ban cham|e am|keo nguoi|keo khach|keo dan|hut khach|co loi|bi lo|\blo\b|khach nho)\b/;
 const OB_ASK = /\b(lam sao|lam the nao|nen|tinh sao|sua|kieu gi|kieu nao|cach nao|the nao|ntn|sao de|sao cho|tu van|giup|co nen|y tuong|ke hoach|tu dau|chinh sao|xu ly|vang khach|e khach|it khach|trong phong|sao|muon tang|muon giam|can)\b/;
@@ -310,10 +310,17 @@ export function ownerBizAsk(text: string): { topic?: BizTopic } | null {
   // (vế bị gạt đi — "đừng chỉ cách đăng ký doanh nghiệp iLomi nữa, mình cần…" — không tính)
   const n = ` ${normalizeVi(text.replace(/(^|[\s,;.])(đừng|khỏi|không cần|bỏ vụ|thôi khỏi|dung|khoi|khong can|bo vu)\s[^,;.]*?[,;.]/giu, "$1 "))} `;
   // (câu có chuyện SỨC KHOẺ — "từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn" — thì sức khoẻ trước, không phải tư vấn bán hàng)
-  if (/\b(dau|sot|non|oi|kham|benh|thuoc|chong mat|kho tho|di ngoai|tieu chay|ngat|co giat)\b/.test(n)) return null;
+  //   (19/11: so CÓ DẤU khi người dùng gõ có dấu — "từ ĐÂU", "ĐÂU có bán online" không phải "đau")
+  if (/\b(dau|sot|non|oi|kham|benh|thuoc|chong mat|kho tho|di ngoai|tieu chay|ngat|co giat)\b/.test(` ${normalizeVi(text.replace(/(^|[^\p{L}])đâu(?=[^\p{L}]|$)/giu, "$1 "))} `)) return null;
   if (!OB_OWNER.test(n) || !OB_TERM.test(n) || !OB_ASK.test(n) || OB_APP.test(n)) return null;
   for (const [tp, re] of OB_TOPIC) if (re.test(n)) return { topic: tp };
   return {};
+}
+/** 19/11: câu trước KỂ chuyện chỗ làm ăn của mình ("Quán phở của mình mới khai trương", "Mẹ mình bán bánh tại nhà…") — để hiểu câu
+ *  hỏi nối cụt ở lượt sau ("Chuyện đó nên tích điểm hay ưu đãi lần sau?", "Họ hay hỏi gói ở dài ngày, nên báo giá sao?"). */
+export function ownerBizStory(text: string): boolean {
+  const n = ` ${normalizeVi(text)} `;
+  return OB_OWNER.test(n) && !OB_APP.test(n);
 }
 export const isMoreIdeas = (text: string) =>
   VN(/^(thêm ý|ý khác|thêm|còn gì nữa|nữa|gợi ý thêm|thêm gợi ý|thêm nữa|còn ý nào)/).test(normalizeVi(text));
@@ -550,6 +557,96 @@ export function bizPractical(text: string, ctx: BizCtx): string | null {
       "• Lương nhân viên tháng đầu, chi phí quảng bá khai trương\n" +
       "• Quỹ dự phòng đủ chi phí vận hành **3–6 tháng** — chỗ mới thường cần thời gian mới có lãi\n\n" +
       "Mẹo: hỏi 2–3 chủ chỗ cùng loại ở khu bạn định mở để biết giá thuê, giá nhập thực tế, rồi lập bảng dự trù trước khi xuống tiền."
+    );
+  // 19/11 (bộ 1.000 câu, nhóm kinh doanh): các việc CỤ THỂ chủ quán hay hỏi mà 9 chủ đề chung không trúng — trước đây Lomi hỏi lại
+  //   "Chỗ của bạn kinh doanh gì nè?" dù người kể đã nói rõ ("chị bán bánh online mà khách hỏi rồi im luôn").
+  const bn = ` ${normalizeVi(text)} `;
+  if (/\b(chot don|chot sale)\b|\bkhach (cu |hay )?(hoi|ib|inbox|nhan tin)( \S+){0,6} (roi )?(im|mat hut|lan|bien mat|khong tra loi|seen|khong mua)\b|\bhoi (gia|sdt|dia chi)( \S+){0,4} (roi )?(im|mat hut|lan)\b/.test(bn))
+    return (
+      "Khách hỏi rồi im là chuyện rất thường gặp khi bán online, sửa được từ cách trả lời nha 💬\n" +
+      "• **Trả lời nhanh, đủ trong một tin**: giá, size / vị, phí giao, thời gian nhận — khách khỏi phải hỏi thêm từng câu\n" +
+      "• **Kết bằng một câu hỏi dễ trả lời** để khách quyết: “Bạn lấy hộp 6 hay hộp 12 ạ?”, “Mình giao chiều nay hay sáng mai?”\n" +
+      "• Gửi **ảnh thật + vài nhận xét của khách cũ** để khách yên tâm\n" +
+      "• Có lý do chốt sớm nhưng thật: mẻ bánh hôm nay còn ít, đặt trước 5h chiều giao trong ngày\n" +
+      "• Khách im thì **nhắn lại đúng 1 lần** sau vài tiếng, nhẹ nhàng (“Mình giữ phần cho bạn tới tối nay nha”), không dồn ép\n" +
+      "• Đặt sẵn tin nhắn mẫu cho các câu hay hỏi để trả lời nhanh mà không sót ý"
+    );
+  if (/\b(ma qr|qr code|quet ma|chuyen khoan|thanh toan (qr|online|khong tien mat)|may quet the|may pos|pos)\b/.test(bn) && /\b(nen|co nen|them|lam sao|loi|tien hon|tien loi)\b/.test(bn))
+    return (
+      "Thêm mã QR chuyển khoản thì nên làm nha, vừa rẻ vừa tiện cho khách 📲\n" +
+      "• Dùng **QR tĩnh của tài khoản ngân hàng / ví** của quán, in to, dán ở quầy và trên bàn\n" +
+      "• Nên dùng loại **có thông báo tiền về** (loa báo hoặc app ngân hàng) để nhân viên khỏi phải hỏi “chuyển chưa”\n" +
+      "• Ghi rõ **tên chủ tài khoản** cạnh mã để khách yên tâm; kiểm tra mã định kỳ, đề phòng bị dán đè mã giả\n" +
+      "• Vẫn giữ tiền mặt (và máy quẹt thẻ nếu khách du lịch hay dùng) — QR là thêm lựa chọn, không thay hết\n" +
+      "Máy quẹt thẻ hay lỗi thì báo bên cung cấp máy kiểm tra đường truyền / đổi máy, trong lúc đó QR là phương án dự phòng tốt."
+    );
+  if (/\b(dat coc|coc truoc|tien coc|chinh sach coc|huy (dat ban|ban|phong|lich|don)|huy sat gio|bom (hang|don|ban|lich)|khach (bung|huy|khong den))\b/.test(bn))
+    return (
+      "Chính sách đặt cọc gọn mà khách vẫn thấy dễ chịu, bạn tham khảo khung này nha 📝\n" +
+      "• **Chỉ cọc khi đáng**: nhóm đông, giờ cao điểm, ngày lễ, đặt món / phòng riêng — bàn lẻ ngày thường thì khỏi cọc để khách không ngại\n" +
+      "• **Mức cọc vừa phải** (một phần nhỏ của hoá đơn dự kiến), trừ thẳng vào hoá đơn khi khách tới\n" +
+      "• **Mốc huỷ rõ ràng**: huỷ trước mốc (vd trước 1 ngày) hoàn cọc hoặc dời lịch; huỷ sát giờ / không tới thì giữ cọc\n" +
+      "• Ghi chính sách **ngắn gọn ngay lúc nhận đặt** và nhắn xác nhận lại (giờ, số người, tiền cọc, mốc huỷ)\n" +
+      "• **Nhắn nhắc** vài tiếng trước giờ hẹn — cách này giảm huỷ sát giờ rất nhiều mà không mất lòng khách\n" +
+      "Mẫu câu: “Bàn từ 8 người quán xin cọc trước, trừ vào hoá đơn. Báo huỷ trước 1 ngày quán hoàn cọc đầy đủ ạ.”"
+    );
+  if (/\b(giam chi phi|cat giam chi phi|tiet kiem chi phi|cat chi phi|bot chi phi|chi phi (cao|tang|nang))\b/.test(bn))
+    return (
+      `Giảm chi phí mà vẫn giữ chất lượng cho ${noun} thì làm theo thứ tự này nha 📉\n` +
+      "• **Ghi lại hết các khoản chi 1 tháng** (nguyên liệu / hàng, mặt bằng, điện nước, nhân sự, hao hụt, quảng cáo) — thấy khoản nào lớn nhất thì xử lý nó trước\n" +
+      "• **Hao hụt**: nhập vừa đủ theo ngày bán chạy / bán chậm, món ế lâu thì bỏ bớt khỏi menu\n" +
+      "• **Nhà cung cấp**: hỏi giá 2–3 nơi, gom đơn nhập để được giá tốt hơn\n" +
+      "• **Ca làm** theo giờ đông / vắng thực tế thay vì cố định cả ngày\n" +
+      "• **Điện nước**: tắt thiết bị giờ vắng, bảo trì máy để đỡ hao\n" +
+      "• **Đừng cắt** đúng thứ khách cảm nhận rõ nhất (chất lượng món, sạch sẽ, thái độ phục vụ) — cắt chỗ đó là mất khách\n" +
+      "Lo lỗ đến mất ngủ thì nhớ nghỉ ngơi nữa nha, đầu óc tỉnh mới tính toán sáng suốt được 🤍"
+    );
+  if (/\b(ngai|so|mac co|khong thich|khong dam) (quay|len hinh|lo mat|xuat hien|quay mat|livestream|len video|chup)\b|\b(khong (muon|dam) )?lo mat\b.*\b(video|clip|tiktok|livestream)\b/.test(bn))
+    return (
+      "Ngại lộ mặt thì vẫn làm video bán hàng tốt được nha 🎬\n" +
+      "• **Quay tay và sản phẩm**: nhào bột, rót kem, cắt bánh, đóng hộp — kiểu video này người xem rất thích\n" +
+      "• **Lồng tiếng hoặc chỉ để chữ + nhạc**, không cần nói trước máy\n" +
+      "• Quay **trước – sau**: nguyên liệu → thành phẩm, hộp bánh mở ra\n" +
+      "• Đăng **ảnh thật và lời khen của khách** (xin phép trước) — đáng tin không kém video có mặt người\n" +
+      "• Quen dần rồi thì có thể thử lộ một chút (giọng nói, góc nghiêng) nếu thấy thoải mái, không cần ép mình"
+    );
+  if (/\b(phuc vu cham|ra mon cham|len mon cham|cho lau|doi lau|khach phai cho)\b/.test(bn))
+    return (
+      "Khách chê phục vụ chậm thì sửa quy trình theo thứ tự này nha ⏱️\n" +
+      "• **Đo thật**: ghi vài ngày xem chậm ở khâu nào — nhận order, pha chế / nấu, hay mang ra / tính tiền\n" +
+      "• **Giờ cao điểm**: chuẩn bị sẵn nguyên liệu, ly, topping trước giờ đông; thêm người đúng khung giờ đó\n" +
+      "• **Menu gọn**: món làm lâu mà ít người gọi thì bớt hoặc làm sẵn một phần\n" +
+      "• **Phân việc rõ**: ai nhận order, ai pha, ai mang ra — tránh một người ôm hết\n" +
+      "• Đông quá thì **báo trước thời gian chờ** và mời ly nước lọc — khách dễ thông cảm hơn nhiều\n" +
+      "• Trả lời lời chê một cách lịch sự, nói rõ quán đã sửa gì — khách cũ hay quay lại kiểm tra"
+    );
+  if (/\b(quang cao|chay ads|chay quang cao|ads)\b.*\b(ton tien|het tien|khong ra don|it don|let det|khong hieu qua|khong co don)\b|\b(ton tien|het tien)\b.*\b(quang cao|ads)\b/.test(bn))
+    return (
+      "Chạy quảng cáo tốn tiền mà ít đơn thì đừng đổ thêm tiền vội — sửa từ gốc trước nha 🔧\n" +
+      "• **Trang bán hàng trước**: ảnh thật, giá rõ, cách đặt dễ, có nhận xét của khách — quảng cáo hay mà trang sơ sài thì khách vào rồi bỏ đi\n" +
+      "• **Trả lời tin nhắn nhanh và chốt gọn** — nhiều đơn rơi ở khâu này chứ không phải do quảng cáo\n" +
+      "• **Thu hẹp đối tượng**: đúng khu vực giao được, đúng nhóm người hay mua\n" +
+      "• **Thử nhỏ**: chạy 2–3 mẫu quảng cáo với ngân sách thấp vài ngày, giữ mẫu ra tin nhắn / đơn nhiều nhất, tắt mẫu kém\n" +
+      "• Xem lại **giá và ưu đãi** so với chỗ khác — nhiều khi khách quan tâm nhưng chưa thấy lý do mua ngay\n" +
+      "Bạn cũng có thể đăng ưu đãi trên iLomi để khách quanh Đà Lạt thấy, không tốn tiền quảng cáo."
+    );
+  if (/\b(hop tac|lien ket|bat tay|ket hop)\b.*\b(homestay|khach san|quan|tiem|cua hang|shop|tour|spa)\b/.test(bn) && /\b(lam sao|the nao|nen|cach|co loi|hai ben|ca hai)\b/.test(bn))
+    return (
+      "Hợp tác hai bên cùng có lợi thì làm đơn giản thế này nha 🤝\n" +
+      "• **Giới thiệu chéo**: homestay đặt vài sản phẩm / tờ giới thiệu của bạn ở sảnh, bạn giới thiệu homestay cho khách hỏi chỗ ở\n" +
+      "• **Mã ưu đãi riêng**: khách của homestay được giảm khi mua ở chỗ bạn — nhờ mã riêng mà đếm được bao nhiêu khách từ bên kia sang\n" +
+      "• **Quà chào mừng**: homestay tặng khách món nhỏ của bạn (bạn bán giá sỉ), vừa quảng bá vừa có doanh thu\n" +
+      "• **Thoả thuận rõ** từ đầu: ai lo gì, hoa hồng / chiết khấu bao nhiêu, thử 1–2 tháng rồi cùng xem số liệu\n" +
+      "Bạn tìm homestay quanh khu ở mục Khám phá của iLomi rồi nhắn tin làm quen được nha."
+    );
+  if (/\b(chia|tinh|lap|len|phan bo) ngan sach\b/.test(bn) && /\b(quang cao|khai truong|su kien|marketing|quang ba)\b/.test(bn))
+    return (
+      "Chia ngân sách quảng bá cho dịp khai trương, bạn chia theo 3 chặng này cho dễ kiểm soát nha 💰\n" +
+      "• **Trước khai trương (khoảng 1–2 tuần)** — phần lớn ngân sách: đăng bài đếm ngược, quảng cáo nhắm đúng khu quanh quán, tờ rơi / băng rôn gần quán\n" +
+      "• **Ngày khai trương**: quà / ưu đãi cho khách đầu tiên, trang trí, một hoạt động vui để khách chụp ảnh đăng lên (tiết mục như xem bói vui thì tính vào khoản này)\n" +
+      "• **Sau khai trương (2–4 tuần)**: giữ một phần để nhắc lại, chăm khách vừa tới — ưu đãi lần sau, xin đánh giá\n" +
+      "• Luôn để **một khoản dự phòng nhỏ** cho việc phát sinh\n" +
+      "Tỉ lệ cụ thể tuỳ quy mô quán, nên ghi lại kênh nào mang khách tới nhiều nhất để lần sau dồn tiền vào kênh đó. Đăng ưu đãi khai trương lên iLomi cũng giúp khách quanh khu thấy mà không tốn phí."
     );
   if (DATE_ASK.test(n) && (opening || VN(/\b(khai trương|mở cửa|mở hàng)\b/).test(n)))
     return (

@@ -135,3 +135,36 @@ describe("sức khoẻ: đúng bài thay vì tâm sự / tarot (đợt 2, 18/11)
     expect(a.content).toMatch(/tuỳ loại thuốc chống đông/);
   }, T);
 });
+
+describe("kinh doanh: chủ quán hỏi việc cụ thể (19/11)", () => {
+  type B = M & { biz?: { topic?: string }; bizPick?: boolean };
+  const cases: [string[], RegExp][] = [
+    [["chị bán bánh online mà khách hỏi rồi im luôn, tư vấn chị với"], /Khách hỏi rồi im/],
+    [["Máy quẹt thẻ ở quán tôi hay lỗi, có nên thêm mã QR để khách thanh toán tiện hơn?"], /mã QR/],
+    [["Khách hủy đặt bàn làm mình hụt hẫng, nhưng điều mình cần là mẫu chính sách đặt cọc cho quán để giảm hủy sát giờ."], /đặt cọc/],
+    [["Mình ngủ kém vì lo quán lỗ, nhưng giờ chỉ cần bạn giúp lập kế hoạch giảm chi phí mà vẫn giữ chất lượng."], /Giảm chi phí/],
+    [["Marketing đỉnh ghê, chạy quảng cáo tốn tiền mà đơn vẫn lẹt đẹt; shop mình nên sửa từ đâu?"], /quảng cáo tốn tiền/],
+    [["Cách nhận ưu đãi trên app là sao?", "À quán cà phê mình bị khách chê phục vụ chậm, nên sửa quy trình từ đâu?"], /phục vụ chậm/],
+    [["Mẹ mình bán bánh tại nhà, muốn có thêm khách trên mạng.", "mẹ ngại quay mặt lên video"], /Ngại lộ mặt/],
+    [["Tui tính thuê thầy bói tới quán dịp khai trương, nhưng cần bạn tính cách chia ngân sách quảng cáo cho sự kiện này."], /ngân sách/],
+  ];
+  it("trả lời đúng việc, không hỏi lại loại hình", async () => {
+    for (const [turns, re] of cases) {
+      const a = (await last(turns)) as B;
+      expect(a.bizPick, turns.join(" | ")).toBeFalsy();
+      expect(a.content, turns.join(" | ")).toMatch(re);
+    }
+  }, T * 3);
+  it("\"từ đâu\" / \"Đâu có\" không bị coi là chữ \"đau\"; đau bụng thật vẫn là sức khoẻ", async () => {
+    const a = (await last(["Đâu có bán online, tiệm bánh tôi chỉ bán tại chỗ, làm sao kéo người quanh khu tới?"])) as B;
+    expect(a.biz).toBeTruthy();
+    const b = (await last(["từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn"])) as B;
+    expect(b.biz).toBeFalsy();
+  }, T);
+  it("câu nối sau câu kể về khách của homestay → tư vấn báo giá; câu kể không thành tâm sự gia đình", async () => {
+    const a = (await last(["Khách của homestay mình chủ yếu đi theo gia đình.", "Họ hay hỏi gói ở dài ngày, nên báo giá sao?"])) as B;
+    expect(a.biz?.topic).toBe("price");
+    const b = (await last(["Khách của homestay mình chủ yếu đi theo gia đình."])) as B;
+    expect(b.content).not.toMatch(/Chuyện gia đình là chuyện khó nói/);
+  }, T);
+});

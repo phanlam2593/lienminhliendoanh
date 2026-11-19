@@ -103,6 +103,7 @@ import {
   isThanks,
   looksLikeBizQuestion,
   ownerBizAsk,
+  ownerBizStory,
   nounFor,
   topicFromChip,
   type BizCtx,
@@ -158,7 +159,9 @@ const TAB_MED_ASK = /\b(la gi|benh gi|la sao|nguyen nhan|trieu chung|dau hieu|ch
 // 18/11 (G04-083): "Bé nhà tôi chán ăn sau đợt ốm" — chủ đề tâm sự "ăn uống rối loạn" là cho người lớn tự kể; trẻ nhỏ chán ăn là thẻ biếng ăn ở trẻ.
 const kidEat = (text: string) => (findMedId(text) === "bieng-an-tre" && heartThemeOf0(text) === "eating")
   // (G10-099: "bà đang dùng thuốc chống đông, ăn rau xanh có cần hỏi bác sĩ về chế độ ăn" — chuyện thuốc + ăn uống, không phải tâm sự cân nặng)
-  || (heartThemeOf0(text) === "weight" && /\bthuoc\b/.test(normalizeVi(text)) && !/\b(thuoc giam can|thuoc tang can)\b/.test(normalizeVi(text)));
+  || (heartThemeOf0(text) === "weight" && /\bthuoc\b/.test(normalizeVi(text)) && !/\b(thuoc giam can|thuoc tang can)\b/.test(normalizeVi(text)))
+  // (19/11, G06-017: "KHÁCH của homestay mình chủ yếu đi theo gia đình" — kể về khách của chỗ làm ăn, không phải tâm sự gia đình mình)
+  || (heartThemeOf0(text) === "family" && ownerBizStory(text) && /\bkhach\b/.test(normalizeVi(text)));
 function heartThemeOf(text: string): string | undefined {
   return (lomiTab.cur === "health" && findMedId(text)) || kidEat(text) ? undefined : heartThemeOf0(text);
 }
@@ -1507,12 +1510,13 @@ export function AiChat({
       },
     ]);
   };
-  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic, more = false) => {
+  const bizReply = (asked: string, ctx: BizCtx, topic: BizTopic, more = false, read?: string) => {
     topicHit("biz");
     rememberBiz(user.id, ctx);
     return localReply(asked, {
       role: "assistant",
-      content: (!more && bizPractical(asked, ctx)) || bizAnswer(ctx, topic, more),
+      // (read: câu ghép với câu kể trước — 19/11, hỏi nối cụt về quán của mình)
+      content: (!more && bizPractical(read ?? asked, ctx)) || bizAnswer(ctx, topic, more),
       local: true,
       biz: { type: ctx.type, noun: ctx.noun, topic },
       quick: followUpChips(topic),
@@ -1913,10 +1917,23 @@ export function AiChat({
     //   tư vấn kinh doanh ngay tại đây, TRƯỚC các lớp nối mạch / chọn món / tìm quán / FAQ (trước đây tên món trong câu thắng).
     //   Không đọc ra chủ đề nào Lomi có bài (đặt cọc, chốt đơn…) → hỏi lại loại hình / chủ đề thay vì đưa bài lạc đề.
     if (!forceAi && !en && !danger0) {
-      const ob = ownerBizAsk(q);
+      // 19/11: câu hỏi nối cụt sau câu KỂ chuyện quán của mình (1–2 lượt trước) → đọc chung với câu kể đó
+      const prevUs = msgs.filter((m) => m.role === "user").slice(-2).map((m) => m.raw ?? m.content);
+      const lastAb = msgs[msgs.length - 1];
+      const bizCtxQ = !ownerBizAsk(q) && prevUs.some(ownerBizStory) && !(lastAb && (isSafetyReply(lastAb) || lastAb.med || lastAb.drug || lastAb.tarot || lastAb.biz || lastAb.bizPick)) && !riskRef.current?.any
+        ? `${prevUs.filter(ownerBizStory).slice(-1)[0]}. ${q}` : null;
+      const ob = ownerBizAsk(q) ?? (bizCtxQ ? ownerBizAsk(bizCtxQ) ?? (bizPractical(bizCtxQ, detectBizKind(bizCtxQ)) ? {} : null) : null);
+      if (ob && bizCtxQ && !ownerBizAsk(q)) {
+        const kC = detectBizKind(bizCtxQ);
+        const tpC = ownerBizAsk(`quán mình ${q}`)?.topic ?? detectBizTopic(q) ?? ob.topic ?? detectBizTopic(bizCtxQ);
+        if (tpC || bizPractical(bizCtxQ, kC)) return bizReply(q, kC, tpC ?? "newcust", false, bizCtxQ);
+      }
       if (ob) {
         const tpO = ob.topic ?? detectBizTopic(q);
-        return tpO ? bizReply(q, detectBizKind(q), tpO) : askBiz(q);
+        // 19/11: việc cụ thể có bài riêng (chốt đơn, QR, đặt cọc, cắt chi phí…) → trả lời luôn, kể cả khi không đọc ra chủ đề chung
+        const kO = detectBizKind(q);
+        if (!tpO && bizPractical(q, kO)) return bizReply(q, kO, "newcust");
+        return tpO ? bizReply(q, kO, tpO) : askBiz(q);
       }
       // 12/11 (bộ 1.000 câu, nhóm trò chuyện): câu có ý rất rõ — phép tính / bài toán đố (kể cả nối phép tính ngay trước),
       //   hỏi Lomi là người hay máy, cảm ơn / chào, câu hẳn ra ngoài phạm vi — đáp ngay, không để các lớp đoán chủ đề hiểu lệch

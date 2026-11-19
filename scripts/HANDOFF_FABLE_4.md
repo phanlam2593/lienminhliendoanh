@@ -127,3 +127,12 @@ Không thêm câu hỏi đáp mới vào FAQS (thêm sẽ phải dựng lại an
 - lomiReplyGate: khi chữ gõ không trùng tên thẻ ("bé nhà em không chịu ăn") dùng tên chính của thẻ.
 
 Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker trả index.html cũ → luôn kiểm bằng cách điều hướng hẳn tới trang rồi đọc document.scripts.
+
+## 11. Kinh doanh: trả lời việc cụ thể thay vì hỏi lại loại hình (19/11)
+
+Đo: bộ 1.000 câu **904/985** (kinh doanh 53 → **66/66**), so mốc gốc sửa 29 / hỏng 0 · test 2.570 qua · giữ riêng 61/65 · paraphrase 387/400 · hội thoại 155/160.
+
+- bizAdvisor.bizPractical thêm 9 bài việc cụ thể: chốt đơn khi khách hỏi rồi im · thêm QR / máy quẹt thẻ lỗi · chính sách đặt cọc giảm huỷ · giảm chi phí giữ chất lượng · ngại lộ mặt khi quay video · phục vụ chậm · quảng cáo tốn tiền ít đơn · hợp tác chéo (homestay + cửa hàng) · chia ngân sách quảng bá khai trương. Nhánh "chủ quán hỏi mà không đọc ra chủ đề" (AiAssistant, ownerBizAsk) giờ dùng các bài này trước khi hỏi lại "Chỗ của bạn kinh doanh gì?".
+- ownerBizAsk: luật "có chữ sức khoẻ thì nhường" trước đọc "từ ĐÂU", "ĐÂU có bán online" thành "đau" → nay bỏ chữ "đâu" có dấu trước khi soi ("dau" không dấu vẫn coi là có thể "đau"). Lưu ý: VN(...) chạy riêng (không qua normalizeVi trong luồng chat) không phân biệt dấu — đừng dựa vào nó trong hàm thư viện.
+- Câu hỏi nối cụt sau câu KỂ chuyện quán của mình (ownerBizStory, 1–2 lượt trước) được đọc chung với câu kể — trừ khi Lomi vừa đáp an toàn / sức khoẻ / tarot / đang trong mạch tư vấn kinh doanh (mạch đó tự giữ loại hình).
+- "Khách của homestay mình đi theo gia đình" không còn thành tâm sự chuyện gia đình.
