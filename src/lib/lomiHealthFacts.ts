@@ -265,7 +265,8 @@ const FACTS: Fact[] = [
   },
   {
     id: "sugar",
-    re: VN(/\b(ăn ngọt|ăn nhiều đường|nước ngọt|đồ ngọt có sao|ăn kẹo)\b/),
+    // 21/11 (bộ 60 đoạn, #44): "đường ăn có ảnh hưởng gì đến sức khỏe" — đường ăn (đường trắng, đường kính), không phải đường huyết
+    re: VN(/\b(ăn ngọt|ăn nhiều đường|nước ngọt|đồ ngọt có sao|ăn kẹo|đường ăn (có|ảnh hưởng|tác hại|hại|có hại)|đường (trắng|kính|cát) (có|ảnh hưởng|hại))\b/),
     a: "🍬 **Đồ ngọt:** thỉnh thoảng thì không sao, nhưng ăn/uống ngọt nhiều thường xuyên dễ gây tăng cân, sâu răng, mụn, tăng nguy cơ tiểu đường, gan nhiễm mỡ.\n• Thay nước ngọt bằng nước lọc, trà không đường.\n• Chọn trái cây thay bánh kẹo khi thèm ngọt.",
   },
   {

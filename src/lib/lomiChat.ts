@@ -207,7 +207,8 @@ const RULES: Rule[] = [
   {
     re: VN(/\b(khỏe không|khỏe ko|có khỏe|thế nào rồi|ổn không|đang làm gì|làm gì đó|làm gì thế|hôm nay thế nào|how are you)\b/),
     // 11/11: "Quán này có ổn không?", "làm vậy có ổn không" hỏi về MỘT THỨ, không phải hỏi thăm Lomi
-    not: VN(/\b(quán|chỗ|tiệm|món|cái|việc|cách|kế hoạch|ý tưởng|thuốc|đồ|phòng|khu|nơi|người|dịch vụ|sản phẩm|này|đó|kia|vậy|thế)\b( \S+){0,2} (có )?ổn không\b/),
+    //   21/11 (bộ 60 đoạn, #44 — "đường ăn có ảnh hưởng gì đến sức khỏe không?" từng được đáp "Lomi khoẻ re"): hỏi về SỨC KHOẺ của mình / món ăn.
+    not: VN(/\b(quán|chỗ|tiệm|món|cái|việc|cách|kế hoạch|ý tưởng|thuốc|đồ|phòng|khu|nơi|người|dịch vụ|sản phẩm|này|đó|kia|vậy|thế)\b( \S+){0,2} (có )?ổn không\b|\b(sức khỏe|sức khoẻ|ảnh hưởng|có hại|có tốt|tác hại)\b/),
     // 09/10: "đang làm gì" là hỏi Lomi đang LÀM gì — không đáp "Lomi khoẻ re".
     reply: (n = "") => ({
       text: VN(/\blàm gì\b/).test(n)

@@ -105,7 +105,8 @@ export const EVENTS: Ev[] = [
   {
     id: "lost",
     label: "bị mất đồ",
-    re: VN(/\b(mất ví|mất bóp|mất điện thoại|rơi mất|đánh rơi|làm mất|bị móc túi|mất tiền|mất giấy tờ|mất chìa khoá|bị trộm|bị cướp|mất xe)\b/),
+    // 21/11 (bộ 60 đoạn, #59 — "mình thì lo mất tiền" là LO bị lỗ khi góp vốn, không phải vừa bị mất tiền)
+    re: VN(/\b(mất ví|mất bóp|mất điện thoại|rơi mất|đánh rơi|làm mất|bị móc túi|(?<!lo |sợ |ngại |e |sợ bị |lo bị )mất tiền(?! oan| vốn)|mất giấy tờ|mất chìa khoá|bị trộm|bị cướp|mất xe)\b/),
     react: ["Trời ơi, mất đồ là hoảng lắm 😰 Bạn mất lúc nào, ở đâu vậy?", "Xui quá 😣 Mất những gì vậy bạn, có giấy tờ hay thẻ ngân hàng không?"],
     follow: [
       [VN(/\b(thẻ|ngân hàng|atm|thẻ tín dụng|ví điện tử)\b/), ["Vậy gọi tổng đài ngân hàng khoá thẻ NGAY nha, trước khi làm gì khác. Ví điện tử thì đổi mật khẩu, khoá tài khoản luôn."]],

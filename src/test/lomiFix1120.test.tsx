@@ -170,3 +170,51 @@ describe("bộ 60 đoạn hội thoại — app / nấu ăn", () => {
     expect(a.content).not.toMatch(/có tác dụng gì” để xem/);
   }, T);
 });
+
+describe("21/11 — vòng sửa tiếp bộ 60 đoạn", () => {
+  it("mẹo dân gian: vị nào cũng kèm 'Cách dùng' (có nguồn, hoặc nói thật là nguồn chưa ghi)", async () => {
+    const a = (await last(["tiểu đường kiêng gì"])) as M;
+    const herbs = a.content.split("Dược liệu / mẹo dân gian hay dùng")[1] ?? "";
+    expect(herbs).toMatch(/Cách dùng/);
+    expect(a.content).not.toMatch(/có tác dụng gì” để xem/);
+  }, T);
+  it("#40 đang kể cảm nắng một bạn rồi đùa 'say nắng thật ko :))' → chuyện tình cảm, không thẻ bệnh", async () => {
+    const a = (await last(["Mình đang cảm nắng một bạn làm chung.", "Mỗi lần gặp bạn ấy là mặt mình nóng ran.", "Ko biết có phải mình bị say nắng thật ko nữa :))"])) as M;
+    expect(a.med).toBeUndefined();
+    expect(a.content).toMatch(/tim đập/);
+  }, T);
+  it("#52 nói rõ là đùa sau lời khủng hoảng → nhẹ nhõm, không lặp lời khủng hoảng", async () => {
+    const a = (await last(["Mình muốn tự sát cái món mì cay này ghê.", "Ý là ăn cay cấp độ 7 cho đã chứ ko phải tự làm đau mình nha =)))"])) as M;
+    expect(a.content).toMatch(/lo hơi quá/);
+  }, T);
+  it("#59 góp vốn: hỏi cách kiểm tra rủi ro thực tế → lời khuyên thực tế, không rút bài", async () => {
+    const a = (await last(["Mình muốn xem tarot về việc có nên góp vốn mở tiệm nail với bạn ko, vốn khoảng 80tr.", "Nhưng bạn mình chưa có kinh nghiệm, còn mình thì lo mất tiền.", "Vậy nên rút bài xem tương lai hay có cách nào kiểm tra rủi ro thực tế hơn?"])) as M;
+    expect(a.tarot).toBeFalsy();
+    expect(a.content).toMatch(/hoà vốn/);
+  }, T);
+  it("'lo mất tiền' không phải vừa bị mất đồ", async () => {
+    expect(((await last(["Mình muốn xem tarot về việc có nên góp vốn mở tiệm nail với bạn ko, vốn khoảng 80tr.", "Nhưng bạn mình chưa có kinh nghiệm, còn mình thì lo mất tiền."])) as M).content).not.toMatch(/mất đồ là hoảng/);
+  }, T);
+  it("#15 đăng ảnh lên Cộng đồng ở đâu → hướng dẫn Cộng đồng, không phải tường Hồ sơ", async () => {
+    expect(((await last(["Mình bị dị ứng sau khi ăn tôm, da nổi mẩn nhẹ.", "À iLomi có cho đăng ảnh món ăn lên cộng đồng ko?", "Đăng bài ở đâu vậy e?"])) as M).content).toMatch(/Cộng đồng \(\/cong-dong\)\*\* → chọn/);
+  }, T);
+  it("#16 khách ở gần có tìm thấy tiệm mình không → Khám phá + ghim vị trí", async () => {
+    expect(((await last(["Khách ở gần đó có tìm thấy tiệm mình ko?"])) as M).content).toMatch(/Ghim vị trí/);
+  }, T);
+  it("#54 app có ship không → chưa có đặt đơn, có Giao hàng ở Đưa đón", async () => {
+    expect(((await last(["Khách đặt xong mk tự giao hay app có ship?"])) as M).content).toMatch(/chưa có giỏ hàng/);
+  }, T);
+  it("#14 tìm bạn đi trekking → Quẹt Làm quen + Cộng đồng", async () => {
+    expect(((await last(["Nhân tiện, app có mục nào tìm bạn đi trekking ko?"])) as M).content).toMatch(/Làm quen/);
+  }, T);
+  it("#30 cần homestay cho nhóm → tìm chỗ ở, không hỏi 'chỗ của bạn kinh doanh gì'", async () => {
+    expect(((await last(["Ko phải khách sạn, mình cần homestay cho nhóm 10 người."])) as M).content).not.toMatch(/kinh doanh gì/);
+  }, T);
+  it("#44 đường ăn ảnh hưởng sức khoẻ → thẻ đồ ngọt, không 'Lomi khoẻ re'", async () => {
+    expect(((await last(["Mình muốn hỏi đường ăn có ảnh hưởng gì đến sức khỏe không?"])) as M).content).toMatch(/Đồ ngọt/);
+  }, T);
+  it("#42 'ví dụ mình muốn bán đồ cũ' → Quẹt Trao đổi; hỏi ghi giá → có ô Giá", async () => {
+    expect(((await last(["Ví dụ mình muốn bán đồ cũ trên iLomi thì đăng ở đâu?"])) as M).content).toMatch(/Trao đổi/);
+    expect(((await last(["Ví dụ mình muốn bán đồ cũ trên iLomi thì đăng ở đâu?", "Có cần ghi giá ngay trong bài ko?"])) as M).content).toMatch(/ô \*\*Giá\*\*/);
+  }, T);
+});

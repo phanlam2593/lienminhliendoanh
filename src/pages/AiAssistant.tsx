@@ -460,6 +460,11 @@ export function AiAssistantRow() {
 
 // 12/11: chủ đề tâm sự mà lớp khung câu hay đáp lạc → để lớp tâm sự đáp (PRIORITY_THEMES = các chủ đề cụ thể ưu tiên, trừ mất người thân)
 const FRAME_YIELD = new Set<string>([...PRIORITY_THEMES, "ex", "decline", "crush"]);
+// 21/11 (bộ 60 đoạn, #14): tìm bạn / nhóm đi chơi — Quẹt → Làm quen và Cộng đồng.
+const FIND_BUDDY = "Có 2 chỗ hợp nè 👇\n• **Quẹt → Làm quen (/quet)**: ghi nhu cầu kiểu “tìm bạn đi trekking cuối tuần”, chọn sở thích; ai hợp ý quẹt phải là hai bên **kết nối** và nhắn tin được\n• **Cộng đồng (/cong-dong)**: chọn khu vực của bạn → chủ đề *Chat chung* hoặc *Linh tinh* rồi rủ cả nhóm, nhiều người thấy cùng lúc\n\nĐi trekking với người mới quen thì hẹn chỗ đông người trước, báo người nhà lịch trình nha 🥾";
+// 21/11 (bộ 60 đoạn, #59): góp vốn làm ăn chung — kiểm tra rủi ro thực tế (lời khuyên kinh doanh chung, không phải tư vấn tài chính cá nhân).
+const GOP_VON = "Rút bài thì chỉ để tham khảo cho vui thôi nha 🔮 — chuyện bỏ 80 triệu thì nên kiểm tra rủi ro **bằng giấy bút** trước:\n• **Tính thử**: tiền mặt bằng, máy móc, nguyên liệu, lương; mỗi tháng cần bao nhiêu khách để hoà vốn; nếu 6 tháng đầu vắng thì còn trụ được không\n• **Thử nhỏ trước**: làm tại nhà / nhận khách quen vài tuần, xem có khách thật không rồi mới thuê mặt bằng\n• **Ghi rõ bằng giấy**: mỗi người góp bao nhiêu, chia lời – lỗ thế nào, ai làm việc gì, muốn rút ra thì sao — ký hai bên\n• **Bù kinh nghiệm**: bạn chưa có kinh nghiệm thì cho bạn đi học nghề / làm thử ở tiệm khác trước\n• Chỉ góp số tiền mà **mất hết cũng không ảnh hưởng cuộc sống**\n\nLomi không phải chuyên gia tài chính, nên số tiền lớn thì hỏi thêm người có kinh nghiệm mở tiệm thật nha.";
+
 export default function AiAssistant() {
   const goBack = useGoBack();
   // 01/10 (theo ý Kir): khung chat Lomi nằm GIỮA thanh trên của app (logo, tin nhắn, thông báo) và thanh điều hướng
@@ -1918,6 +1923,19 @@ export function AiChat({
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
     // 14/11 (kiến trúc mới) — QUÉT RỦI RO Ở MỘT CHỖ: kết quả để ở riskRef cho trọng tài tại cửa ra (localReply) dùng.
     riskRef.current = riskScan({ q, raw, lang, en, forceAi, harm: !forceAi && !en && !!harmOf(raw, fr1), red: redNow });
+    // 21/11 (bộ 60 đoạn, #52 — "Ý là ăn cay cấp độ 7 cho đã chứ ko phải tự làm đau mình nha =)))"): lượt trước Lomi vừa đưa lời hỗ trợ
+    //   khủng hoảng, giờ người dùng nói rõ là đùa / nói quá → nhẹ nhõm, vẫn để ngỏ (trước: lặp lại lời khủng hoảng, lượt sau vẫn giọng buồn).
+    {
+      const la = [...msgs].reverse().find((m) => m.role === "assistant" && !m.note && !m.sticker);
+      const nX = ` ${normalizeVi(raw)} `;
+      const joke = VN(/\b((chứ |mà )?(không|ko|k|hông|chẳng) phải (là )?(tự (làm đau|tử|sát|hại|tổn thương)( mình| bản thân)?|muốn chết|thật)|(nói|giỡn|đùa) (vui|chơi|thôi|á|mà|nha)|nói quá|chỉ đùa|đùa thôi|giỡn thôi)\b/);
+      const restJ = nX.replace(VN(/\b(chứ |mà )?(không|ko|k|hông|chẳng) phải (là )?(tự (làm đau|tử|sát|hại|tổn thương)( mình| bản thân)?|muốn chết)\b/g), " ");
+      if (!en && la?.role === "assistant" && /không phải một mình/u.test(la.content) && joke.test(nX) && !crisisReply(restJ, lang) && (/:\)|=\)|haha|hihi|kk|nha|á/u.test(raw) || VN(/\b(đùa|giỡn|nói quá|nói vui)\b/).test(nX)))
+      {
+        riskRef.current = null; // đã nói rõ là đùa — trọng tài an toàn trong localReply không thay lại lời khủng hoảng
+        return localReply(q, { role: "assistant", content: "Ui, vậy là Lomi lo hơi quá rồi 😅 May quá! Lomi hỏi kỹ vì những chữ đó Lomi luôn để ý thật lòng.\n\nCòn nếu lúc nào đó thấy nặng nề thật, cứ nói với Lomi hoặc người bạn tin cậy nha 💚 Giờ mình nói tiếp chuyện của bạn nè!", local: true });
+      }
+    }
     // 20/11 (bộ 60 đoạn, #50/#55): lượt trước Lomi vừa báo CẤP CỨU (🚨 … 115) mà giờ người dùng hỏi có nên chờ / theo dõi / nằm nghỉ,
     //   hay kể thêm triệu chứng nặng ("mồ hôi lạnh ra nhiều, tay chân bủn rủn") → nhắc lại: đừng chờ, gọi 115 ngay (trước: "Lomi chưa biết cái này").
     {
@@ -2009,18 +2027,38 @@ export function AiChat({
           return localReply(q, { role: "assistant", content: "Món này Lomi chưa có công thức nên chưa dám chỉ bừa 🥲 Bạn kể Lomi nghe trong tủ đang có gì, Lomi gợi ý vài món làm được liền nha!", local: true, routed: "cook", stuck: "fallback" });
       }
     }
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
+      // 21/11: câu nối trong mạch app có lời đáp riêng (lib/lomiFollow.appFollow) → trả lời trước mọi lớp khác (#15, #16, #44).
+      const recentFa = msgs.filter((m) => m.role === "assistant").slice(-3).map((m) => m.faqId).filter(Boolean) as string[];
+      if (raw.split(/\s+/).length <= 16) {
+        const afE = appFollow(raw, msgs[msgs.length - 1]?.faqId, recentFa);
+        if (afE?.text) return localReply(q, { role: "assistant", content: afE.text, local: true, faqId: afE.faqId });
+      }
+    }
     // 20/11 (bộ 100 câu, #44/#54): câu hỏi rõ là về CHỖ NÀO TRONG APP ("tìm việc làm thêm thì dùng mục nào", "xem lượt theo dõi cửa hàng
     //   ở đâu") mà khớp một câu hướng dẫn app → trả lời câu đó trước lớp tâm sự / tư vấn kinh doanh (trước: "muốn có thêm thu nhập…").
-    if (!forceAi && !en && !danger0 && !riskRef.current?.any && VN(/\b(dùng mục nào|vào mục nào|mục nào|vào đâu|xem ở đâu|xem chỗ nào)\b/).test(` ${normalizeVi(raw)} `)) {
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && VN(/\b(dùng mục nào|vào mục nào|mục nào|vào đâu|xem ở đâu|xem chỗ nào|đăng ở đâu|đăng chỗ nào|đăng bài ở đâu)\b/).test(` ${normalizeVi(raw)} `)) {
       // (#54) chủ DN xem số người theo dõi — Hồ sơ doanh nghiệp hiện ⭐ đánh giá · 👥 người theo dõi · khách quen (pages/Profile)
       if (VN(/\b((lượt|người|ai|bao nhiêu)( \S+){0,3} theo dõi|khách quen)\b/).test(` ${normalizeVi(raw)} `) && VN(/\b(cửa hàng|quán|tiệm|doanh nghiệp|shop|của mình|của tôi|của em)\b/).test(` ${normalizeVi(raw)} `))
         return localReply(q, { role: "assistant", content: "Vào **Hồ sơ → ⋯ → Hồ sơ doanh nghiệp** (/ho-so?view=business). Ngay dưới tên doanh nghiệp có số ⭐ đánh giá, 👥 **người theo dõi** và số **khách quen** — bấm vào “khách quen” để xem danh sách nha.", local: true, faqId: "bizoffer" });
-      const fApp = matchFaq(q) ?? matchFaq(raw);
+      const rawVD = raw.replace(/^\s*(ví dụ|vd|giả sử|giả dụ)( như| là)?[,:]?\s+/iu, "");
+      const fApp = matchFaq(q) ?? matchFaq(rawVD);
       if (fApp) return answerFaq(fApp, q);
+      // 21/11 (bộ 60 đoạn, #14): "app có mục nào tìm bạn đi trekking ko" — chưa khớp câu hướng dẫn nào (trước: tìm "tour trekking" trong danh bạ quán)
+      if (VN(/\b(tìm|kiếm|có) (\S+ )?(bạn|nhóm|người|hội|team)( \S+){0,2} (đi|cùng|chơi|để)\b/).test(` ${normalizeVi(raw)} `))
+        return localReply(q, { role: "assistant", content: FIND_BUDDY, local: true, faqId: "quetwhat" });
     }
     // 20/11 (bộ 60 đoạn): ba câu hỏi về app trước đây bị trả lời sai FAQ.
     if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
       const nA = ` ${normalizeVi(raw)} `;
+      // 21/11 (#14): vừa gợi ý chỗ tìm bạn / nhóm đi chơi mà nói "chỉ muốn tìm nhóm đi cuối tuần thôi" → chỉ rõ cách đăng.
+      if ((msgs.filter((m) => m.role === "assistant").slice(-3).map((m) => m.faqId) as (string | undefined)[]).includes("quetwhat") && VN(/\b(tìm|kiếm) (\S+ )?(nhóm|bạn|hội|người|team)\b/).test(nA))
+        return localReply(q, { role: "assistant", content: "Tìm **nhóm đi cuối tuần** thì vầy cho nhanh nè 👇\n• **Cộng đồng (/cong-dong)** → chọn khu vực của bạn → phòng *Chat chung*: rủ kiểu “cuối tuần này ai đi trekking / cắm trại không, tầm 4–6 người, đi xe máy” — ghi rõ ngày, chỗ, mức độ khó\n• **Quẹt → Làm quen**: ghi nhu cầu “tìm hội đi chơi cuối tuần” để người hợp ý quẹt kết nối\n\nLần đầu đi với nhóm mới thì hẹn gặp ở chỗ đông người và báo người nhà lịch trình nha 🥾", local: true, faqId: "quetwhat" });
+      // 21/11 (#44): "Mình có cái ví da còn mới, muốn bán lại" → đăng bán đồ cũ ở Quẹt → Trao đổi.
+      if (VN(/\b(muốn|định|cần|tính) (bán|thanh lý|pass|nhượng)( lại)?\b/).test(nA) && VN(/\b(cái|chiếc|đồ|món|ví|điện thoại|xe|quần áo|giày|túi|laptop|máy|tủ|bàn|ghế|đồ cũ)\b/).test(nA) && !VN(/\b(mở|kinh doanh|quán|tiệm|shop|online|buôn)\b/).test(nA)) {
+        const fT = faqById("quettrade");
+        if (fT) return answerFaq(fT, q);
+      }
       //   #21 đăng nhập 2 máy / đổi máy (trước: cách lấy lại mật khẩu). Lịch sử chat với Lomi lưu trên máy (saveHistory → localStorage).
       if (VN(/\b((đăng nhập|dùng|xài|vào) (\S+ ){0,3}(trên|ở|bằng) (hai|2|nhiều|mấy) (điện thoại|máy|thiết bị)|đổi (máy|điện thoại)|máy mới|điện thoại mới)\b/).test(nA) && VN(/\b(tài khoản|đăng nhập|dữ liệu|app|ilomi|được không|còn không|mất không|có mất)\b/).test(nA))
         return localReply(q, { role: "assistant", content: "Được nha 👍 Một tài khoản iLomi đăng nhập được trên nhiều điện thoại — chỉ cần đúng tên đăng nhập + mật khẩu.\n• Đổi máy thì **hồ sơ, bài đăng, tin nhắn, doanh nghiệp, ưu đãi đã nhận** vẫn còn, vì lưu trên máy chủ\n• Riêng **lịch sử trò chuyện với Lomi** lưu trên từng máy, nên máy mới sẽ bắt đầu cuộc trò chuyện mới\n• Dùng xong trên máy lạ thì nhớ **Đăng xuất** (Hồ sơ → ⋯ → Đăng xuất) cho an toàn", local: true, faqId: "logout" });
@@ -2043,6 +2081,35 @@ export function AiChat({
     if (!forceAi && !en && !danger0) {
       const tm = tarotMeta(raw);
       if (tm) return localReply(q, { role: "assistant", content: tm, local: true, routed: "tarot-howto" });
+    }
+    // 21/11 (bộ 60 đoạn) — các câu nối trước đây bị hiểu lệch:
+    if (!forceAi && !en && !danger0) {
+      const nX = ` ${normalizeVi(raw)} `;
+      const prevU = msgs.filter((m) => m.role === "user").slice(-3).map((m) => ` ${normalizeVi(m.raw ?? m.content)} `).join(" ");
+      const la = msgs[msgs.length - 1];
+      //   #40 "Ko biết có phải mình bị say nắng thật ko nữa :))" — đang kể chuyện CẢM NẮNG một bạn (trước: thẻ bệnh say nắng).
+      if (VN(/\b(say nắng|cảm nắng)\b/).test(nX) && VN(/\b(cảm nắng|crush|thích (một |1 )?(bạn|người|anh|chị|em))\b/).test(prevU) && (/:\)|=\)|haha|hihi|kk/.test(raw) || VN(/\b(thật (không|ko|k)|hay là|chắc là)\b/).test(nX)) && !VN(/\b(đi nắng|ngoài nắng|nắng gắt|chóng mặt|buồn nôn|sốt|nhức đầu|ngất)\b/).test(nX))
+        return localReply(q, { role: "assistant", content: "Haha, mặt nóng ran mỗi lần gặp bạn ấy thì Lomi đoán là **“say nắng” kiểu tim đập thình thịch** rồi, không phải say nắng ngoài trời đâu 😆💓\n\nCảm giác này dễ thương mà, cứ tận hưởng nha. Bạn ấy có biết bạn để ý không, hay bạn đang tính bật mí dần dần?", local: true, heart: "crush" });
+      //   #59 góp vốn mở tiệm: "nên rút bài xem tương lai hay có cách nào kiểm tra rủi ro thực tế hơn?" (trước: rút bài luôn)
+      if (VN(/\b(góp vốn|hùn vốn|chung vốn|làm chung|hợp tác (làm ăn|kinh doanh)|mở chung)\b/).test(nX + prevU) && VN(/\b((kiểm tra|đánh giá|tính|lường|giảm) (\S+ )?rủi ro|thực tế hơn|cách nào (an toàn|chắc|thực tế)|làm sao (cho )?(an toàn|chắc ăn|đỡ rủi ro))\b/).test(nX))
+        return localReply(q, { role: "assistant", content: GOP_VON, local: true, routed: "biz" });
+      //   #30 "Ko phải khách sạn, mình cần homestay cho nhóm 10 người" (trước: hỏi "chỗ của bạn kinh doanh gì")
+      if (VN(/\b(mình|tôi|em|tụi mình|nhóm mình|tui|t) (cần|tìm|muốn (tìm|thuê|ở)|kiếm) (\S+ )?(homestay|khách sạn|nhà nghỉ|chỗ ở|chỗ lưu trú|villa|resort|phòng)\b/).test(nX) && !VN(/\b(mở|kinh doanh|của mình|cho thuê)\b/).test(nX)) {
+        const itH = detectSearch(raw.replace(/^.*?(?=(homestay|khách sạn|nhà nghỉ|chỗ ở|villa|resort|phòng))/iu, "tìm "));
+        if (itH) {
+          const res = await runSearch(itH, []);
+          return localReply(q, { role: "assistant", content: res.text, local: true, places: res.places, quick: res.quick, search: itH });
+        }
+      }
+      //   #30 "Có chỗ nào cho mang theo chó nhỏ ko?" — Lomi không biết chỗ nào nhận thú cưng.
+      if (VN(/\b(cho (mang|dắt|đem|mang theo|dẫn) (theo )?(chó|mèo|thú cưng|pet|cún|bé cún|boss)|nhận (thú cưng|pet|chó|mèo)|pet friendly)\b/).test(nX))
+        return localReply(q, { role: "assistant", content: "Lomi chưa lọc được chỗ nào **nhận thú cưng** đâu 🐶 — danh bạ trong app chưa ghi mục này. Bạn mở trang chỗ ở / quán trên **Khám phá (/kham-pha)** rồi bấm **Nhắn tin** hỏi chủ trước nha (nhớ nói rõ chó nhỏ, mấy bé, có ở trong phòng không). Hỏi trước cho chắc, tới nơi bị từ chối thì mệt lắm.", local: true, stuck: "suggest" });
+      //   #44 "Còn đường ăn kiêng có an toàn tuyệt đối ko?" (trước: lời khen "muốn chăm sóc cơ thể")
+      if (VN(/\b((?<!tiểu )đường ăn kiêng|chất tạo ngọt|(?<!tiểu )đường không calo|(?<!tiểu )đường 0 calo|đường cỏ ngọt|stevia|aspartame|sucralose)\b/).test(nX))
+        return localReply(q, { role: "assistant", content: "Về **đường ăn kiêng / chất tạo ngọt** (stevia, aspartame, sucralose…) thì Lomi chưa có nguồn y khoa đã kiểm chứng đủ chi tiết, nên chưa dám nói an toàn hay không 🙏 Chắc chắn là **không có gì “an toàn tuyệt đối”** khi dùng nhiều — người bị tiểu đường, bệnh thận hay đang mang thai thì hỏi bác sĩ / dược sĩ trước khi dùng thường xuyên nha.", local: true, health: {}, stuck: "unknown_care" });
+      //   #36 "Bạn ấy còn tập gym muốn tăng cơ nữa" (đang nói dị ứng sữa) — hỏi ăn uống, không phải tìm phòng gym
+      if (VN(/\b(tập gym|tập tạ|tập thể hình)\b/).test(nX) && VN(/\b(tăng cơ|lên cơ|giữ cơ|ăn gì|bổ sung|đạm|protein)\b/).test(nX) && !VN(/\b(tìm|ở đâu|phòng gym|chỗ tập|gần đây|giá)\b/).test(nX))
+        return localReply(q, { role: "assistant", content: "Muốn tăng cơ thì quan trọng nhất là **tập đều + ăn đủ đạm** chia ra các bữa trong ngày 💪 Chuyện chọn nguồn đạm hợp với người bị dị ứng thì Lomi chưa có kiến thức đã kiểm chứng đủ chi tiết, nên chưa dám chỉ món cụ thể — nếu bạn ấy dị ứng thức ăn thì hỏi bác sĩ hoặc chuyên gia dinh dưỡng để chọn nguồn đạm an toàn nha.", local: true, health: {}, stuck: "unknown_care" });
     }
     // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
     //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.
