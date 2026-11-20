@@ -1118,6 +1118,13 @@ function themeOf(n: string): Theme | undefined {
   if (t?.id === "cold" && VN(/\b(không|ko|k|hổng|chẳng) (nhắn tin|nhắn|gửi tin nhắn|gửi tin|rep|trả lời tin nhắn|gọi) (được|đc|dc)\b|\b(nhắn tin|gửi tin|gửi tin nhắn) (không|ko|k|chẳng) (được|đi|lên)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|ny|crush|anh ấy|cô ấy|bạn trai|bạn gái)\b/).test(m)) return undefined;
   // 01/11 (vòng 25): "tôi cãi nhau với MẸ vì chuyện lấy chồng" — người cãi nhau là người nhà → chuyện gia đình, không phải lời khuyên cặp đôi
   if (t?.id === "fight" && VN(/\b(với|cùng) (mẹ|má|mạ|bố|ba|cha|bố mẹ|ba mẹ|cha mẹ|ông|bà|anh trai|chị gái|em trai|em gái|anh chị|bố chồng|mẹ chồng|bố vợ|mẹ vợ|con trai|con gái|gia đình|nhà)\b/).test(m)) return THEMES.find((x) => x.id === "family") ?? t;
+  // 20/11 (bộ 100 câu ChatGPT): ba câu bị nhận lệch chủ đề.
+  //   #10 "Tớ vừa mất việc, tiền nhà tháng sau chưa biết lấy đâu trả… chẳng biết bắt đầu lại từ đâu" → chuyện MẤT VIỆC (trước: "tự tin / muốn thay đổi").
+  if (t && t.id !== "work" && VN(/\b(thất nghiệp|mất việc|bị đuổi việc|bị sa thải|bị cho nghỉ việc|bị cho thôi việc)\b/).test(m)) return THEMES.find((x) => x.id === "work") ?? t;
+  //   #19 "làm ăn mãi ko khá, nhìn bạn bè ai cũng thành công mà nản" → so sánh mình với người khác (trước: chuyện tình bạn).
+  if (t?.id === "friends" && VN(/\b(bạn bè|người ta|mọi người|bạn cùng lứa)( \S+){0,2} (ai cũng |đều |cũng )?(thành công|giàu|khá giả|ổn định|có nhà|có xe|hơn mình|hơn em|hơn tôi)\b/).test(m)) return THEMES.find((x) => x.id === "compare") ?? t;
+  //   #18 "phải gánh hết mọi thứ trong nhà, chẳng ai hiểu cho em" → chuyện gia đình (trước: cô đơn chung chung).
+  if (t?.id === "lonely" && VN(/\b(gánh|lo|làm|chịu)( \S+){0,2} (hết|tất cả|mọi thứ|mọi việc)( \S+){0,3} (trong nhà|gia đình|cho nhà|cả nhà|việc nhà)\b/).test(m)) return THEMES.find((x) => x.id === "family") ?? t;
   if (t?.id === "cheat" && VN(/\b(bạn thân|bạn bè|đứa bạn|con bạn|thằng bạn|người bạn|đồng nghiệp)\b/).test(m) && !VN(/\b(người yêu|chồng|vợ|bạn trai|bạn gái|ny)\b/).test(m)) return THEMES.find((x) => x.id === "friends") ?? t;
   return t;
 }

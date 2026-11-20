@@ -85,3 +85,22 @@ describe("app / Tarot / kinh doanh", () => {
     expect(((await last(["Cuối tuần ở Đà Lạt đi đâu chơi cho đỡ chán?"])) as M).content).not.toMatch(/tự thương mình/);
   }, T);
 });
+
+describe("tâm sự đúng chủ đề (vòng 2)", () => {
+  it("#10 mất việc + lo tiền nhà → chuyện mất việc, không bịa 'người nhà chưa biết'", async () => {
+    const a = (await last(["Tớ vừa mất việc, tiền nhà tháng sau chưa biết lấy đâu trả. Tớ thấy mình thất bại quá, chẳng biết bắt đầu lại từ đâu."])) as M;
+    expect(a.content).toMatch(/[Mm]ất việc/);
+    expect(a.content).not.toMatch(/người nhà chưa biết|muốn thay đổi/);
+  }, T);
+  it("#18 gánh hết mọi thứ trong nhà → chuyện gia đình", async () => {
+    expect(((await last(["Em cảm thấy mình phải gánh hết mọi thứ trong nhà, chẳng ai hiểu cho em cả."])) as M).content).toMatch(/gia đình|người nhà|trong nhà/);
+  }, T);
+  it("#19 làm ăn không khá, bạn bè ai cũng thành công → so sánh bản thân, không phải chuyện tình bạn", async () => {
+    expect(((await last(["T làm ăn mãi ko khá, nhìn bạn bè ai cũng thành công mà nản ghê."])) as M).content).not.toMatch(/tình bạn này|người mình chọn để tin/);
+  }, T);
+  it("#38 thuốc có gây A hoặc B không → tác dụng phụ của thuốc, không 'bạn đang bị'", async () => {
+    const a = (await last(["Thuốc colchicine có gây tiêu chảy hoặc ảnh hưởng đến cơ không?"])) as M;
+    expect(a.content).toMatch(/Colchicine/);
+    expect(a.content).not.toMatch(/đang bị \*\*tiêu chảy/);
+  }, T);
+});
