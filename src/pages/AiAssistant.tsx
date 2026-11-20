@@ -9,6 +9,7 @@ import { ArrowLeft, CircleHelp, Copy, RotateCcw, Send, Smile, Volume2, VolumeX }
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
+import { claudeEligible, claudeNote, isHardOff, markClaudeOff } from "@/lib/lomiClaude";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -254,6 +255,7 @@ type Msg = {
   src?: string; // 15/10: dòng "📚 Nguồn …" của câu đáp (lib/lomiCite) — không hiện, ai hỏi "nguồn đâu?" thì Lomi mới đưa ra
   medAge?: number; // 31/10: số lượt đã trôi qua kể từ câu đáp có thẻ y khoa thật (med được giữ thêm vài lượt qua câu kể chi tiết)
   med?: { id: string; aspect?: string }; // 09/10: Lomi vừa trả lời từ kho kiến thức y khoa có nguồn (lib/lomiMed) — câu nối hiểu theo chủ đề này
+  claude?: boolean; // 20/11: câu này do Claude trả lời (lib/lomiClaude) — Lomi bí trên máy
   stuck?: StuckKind; // 09/10: loại "bí" của lượt này — tự ghi vào nhật ký lomi_stuck_log (lib/lomiStuckLog)
   talk?: number; // Lomi đang "nghe kể" (số lượt liên tục) — tin kế tiếp là kể tiếp, không phải câu độc lập (lib/lomiConvo)
   tarotCard?: boolean; // (13/11) Lomi vừa giải nghĩa một lá có nêu tên (lib/lomiRescue.tarotCardAsk)
@@ -1500,7 +1502,34 @@ export function AiChat({
         isAdmin,
       );
     }
-    push([{ role: "user", content: asked, local: true, raw: rawRef.current ?? asked }, reply]);
+    const userMsg: Msg = { role: "user", content: asked, local: true, raw: rawRef.current ?? asked };
+    // 20/11 (Kir duyệt — "hướng lai"): Lomi bí thật sự + câu không có dấu hiệu nguy hiểm + là thành viên → nhờ Claude (lib/lomiClaude).
+    //   Claude lỗi / chưa cài key / hết lượt → vẫn gửi câu đáp trên máy như cũ. Câu "bí" vẫn được ghi vào nhật ký ở trên cho admin xem.
+    const qClaude = rawRef.current ?? asked;
+    if (claudeEligible({ stuck: reply.stuck, question: qClaude, reply: reply.content, risk: riskRef.current, member: !!quota?.member && left !== 0, tarot: !!reply.tarot })) {
+      void askClaude(userMsg, reply, qClaude);
+      return;
+    }
+    push([userMsg, reply]);
+    lomiSound("msg");
+  };
+  const askClaude = async (userMsg: Msg, local: Msg, q: string) => {
+    setBusy(true);
+    let text: string | null = null;
+    try {
+      const ctx = msgs
+        .filter((m) => !m.note && !m.sticker)
+        .slice(-6)
+        .map((m) => ({ role: m.role, content: m.role === "user" ? (m.raw ?? m.content) : (m.aiContent ?? m.content) }));
+      const { data, error } = await supabase.functions.invoke("lomi-claude", { body: { messages: [...ctx, { role: "user", content: q }] } });
+      if (!error && typeof data?.reply === "string" && data.reply.trim()) text = data.reply.trim();
+      if (quota && typeof data?.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
+      else if (isHardOff(data?.error)) markClaudeOff();
+    } catch {
+      text = null;
+    }
+    setBusy(false);
+    push([userMsg, text ? { role: "assistant", content: text + claudeNote(local.stuck, lang === "en"), local: true, claude: true } : local]);
     lomiSound("msg");
   };
 

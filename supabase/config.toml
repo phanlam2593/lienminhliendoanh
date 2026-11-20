@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.admin-action]
 verify_jwt = true
+
+[functions.lomi-claude]
+verify_jwt = true
