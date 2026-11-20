@@ -90,6 +90,7 @@ export function cacheKey(q: string): string {
   k = k.replace(/( (ạ|á|à|nhé|nhe|nha|nhá|vậy|z|thế|hả|ha|hen|nè))+$/u, "");
   return k.trim();
 }
+const MED_KINDS = new Set(["unknown_med", "unknown_care", "kb_partial", "health_detail"]);
 const cacheable = (k: string) => k.split(" ").length >= 4 && k.length <= 300;
 
 function nowLine(): string {
@@ -128,6 +129,7 @@ Deno.serve(async (req) => {
 
   let messages: Msg[] = [];
   let card = "";
+  let kind = "";
   try {
     const body = await req.json();
     messages = (Array.isArray(body?.messages) ? body.messages : [])
@@ -135,6 +137,7 @@ Deno.serve(async (req) => {
       .slice(-8)
       .map((m: any) => ({ role: m.role, content: String(m.content).slice(0, 1500) }));
     if (typeof body?.card === "string") card = body.card.slice(0, 3000);
+    if (typeof body?.kind === "string") kind = body.kind.slice(0, 40);
   } catch {
     return json({ fallback: true, error: "BAD_REQUEST" }, 400);
   }
@@ -203,7 +206,8 @@ Deno.serve(async (req) => {
       if (canCache) await admin.from("lomi_claude_answers").upsert({ key: qKey, question: messages[messages.length - 1].content.slice(0, 500), scope: "out", answer: null });
       return json({ fallback: true, error: "OUT_OF_SCOPE", remaining });
     }
-    if (reply && label === "CHUNG" && canCache) {
+    // Câu sức khoẻ KHÔNG lưu vào thư viện (quy tắc #62: kiến thức sức khoẻ của Lomi phải có nguồn kiểm chứng) — vẫn trả lời lượt này.
+    if (reply && label === "CHUNG" && canCache && !MED_KINDS.has(kind)) {
       await admin.from("lomi_claude_answers").upsert({ key: qKey, question: messages[messages.length - 1].content.slice(0, 500), scope: "ok", answer: reply });
     }
     if (!reply) {

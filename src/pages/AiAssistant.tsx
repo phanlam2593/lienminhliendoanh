@@ -1522,7 +1522,7 @@ export function AiChat({
         .filter((m) => !m.note && !m.sticker)
         .slice(-6)
         .map((m) => ({ role: m.role, content: m.role === "user" ? (m.raw ?? m.content) : (m.aiContent ?? m.content) }));
-      const { data, error } = await supabase.functions.invoke("lomi-claude", { body: { messages: [...ctx, { role: "user", content: q }] } });
+      const { data, error } = await supabase.functions.invoke("lomi-claude", { body: { messages: [...ctx, { role: "user", content: q }], kind: local.stuck } });
       if (!error && typeof data?.reply === "string" && data.reply.trim()) text = data.reply.trim();
       if (quota && typeof data?.remaining === "number") setQuota({ ...quota, used: quota.limit - data.remaining });
       else if (isHardOff(data?.error)) markClaudeOff();

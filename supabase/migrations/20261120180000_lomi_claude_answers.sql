@@ -15,3 +15,7 @@ ALTER TABLE public.lomi_claude_answers ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "lomi_claude_answers admin read" ON public.lomi_claude_answers;
 CREATE POLICY "lomi_claude_answers admin read" ON public.lomi_claude_answers FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'::app_role));
 REVOKE ALL ON public.lomi_claude_answers FROM anon;
+-- Admin xoá được câu đã lưu (trang Quản trị → Lomi học hỏi → ✨ Claude đã trả lời), như các bảng Lomi học hỏi khác.
+DROP POLICY IF EXISTS "lomi_claude_answers admin delete" ON public.lomi_claude_answers;
+CREATE POLICY "lomi_claude_answers admin delete" ON public.lomi_claude_answers FOR DELETE TO authenticated USING (public.has_role(auth.uid(), 'admin'::app_role));
+GRANT SELECT, DELETE ON public.lomi_claude_answers TO authenticated;

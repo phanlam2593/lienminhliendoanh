@@ -6,6 +6,8 @@
 //    (bảng lomi_stuck_log, lib/lomiStuckLog) để xem vấn đề nằm ở đâu rồi sửa đúng chỗ.
 //  • Đã dạy: các câu trả lời admin đã dạy — bật/tắt, sửa, xoá. Lomi dùng ngay cho mọi người
 //    (máy người dùng tải lại danh sách mỗi 5 phút / mỗi lần mở trang Lomi).
+//  • ✨ Claude đã trả lời (20/11): câu Lomi bí đã nhờ Claude và được lưu lại (bảng lomi_claude_answers) — xem, xoá câu chưa hay,
+//    hoặc "Đưa vào Đã dạy" để Lomi trả lời ngay trên máy (không cần mạng tới máy chủ).
 // ─────────────────────────────────────────────────────────────────────────────
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -20,8 +22,9 @@ type Feedback = { id: string; question: string; answer: string; reason: string; 
 type Unanswered = { key: string; sample: string; ask_count: number; last_at: string };
 type Taught = { id: string; key: string; question: string; answer: string; active: boolean; hits: number; updated_at: string };
 type Stuck = { id: string; created_at: string; source: string; kind: string; question: string; reply: string; context: { r: "u" | "a"; t: string }[]; status: string; note?: string | null };
-type View = "feedback" | "unanswered" | "stuck" | "taught";
-type TeachSrc = { feedbackId?: string; unansweredKey?: string; taughtId?: string };
+type ClaudeAns = { key: string; question: string; answer: string | null; scope: "ok" | "out"; hits: number; created_at: string; last_hit_at: string | null };
+type View = "feedback" | "unanswered" | "stuck" | "taught" | "claude";
+type TeachSrc = { feedbackId?: string; unansweredKey?: string; taughtId?: string; claudeKey?: string };
 
 const REASON: Record<string, string> = {
   unknown: "🤔 Lomi chưa biết",
@@ -56,6 +59,16 @@ export function LomiLearnPanel() {
   const [stDone, setStDone] = useState(false);
   const [teach, setTeach] = useState<{ q: string; a: string; src: TeachSrc } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [ca, setCa] = useState<ClaudeAns[] | null>(null);
+  const loadCa = async () => {
+    const { data } = await db.from("lomi_claude_answers").select("*").order("created_at", { ascending: false }).limit(300);
+    setCa(data ?? []);
+  };
+  const delCa = async (key: string) => {
+    const { error } = await db.from("lomi_claude_answers").delete().eq("key", key);
+    if (error) return void toast.error(error.message);
+    setCa((p) => p?.filter((x) => x.key !== key) ?? p);
+  };
 
   const loadFb = async () => {
     let q = db.from("lomi_feedback").select("*").order("created_at", { ascending: false }).limit(200);
@@ -86,6 +99,7 @@ export function LomiLearnPanel() {
   useEffect(() => {
     void loadUn();
     void loadTg();
+    void loadCa();
   }, []);
   const markSt = async (id: string, status: "fixed" | "ignored") => {
     const { error } = await db.from("lomi_stuck_log").update({ status }).eq("id", id);
@@ -135,6 +149,8 @@ export function LomiLearnPanel() {
     }
     if (teach.src.feedbackId) await db.from("lomi_feedback").update({ status: "taught" }).eq("id", teach.src.feedbackId);
     if (teach.src.unansweredKey) await db.from("lomi_unanswered").delete().eq("key", teach.src.unansweredKey);
+    // Câu đã đưa vào "Đã dạy" thì Lomi trả lời trên máy — bỏ bản lưu của Claude cho gọn.
+    if (teach.src.claudeKey) await db.from("lomi_claude_answers").delete().eq("key", teach.src.claudeKey);
     // Các câu "bí" trùng với cách hỏi vừa dạy cũng xoá luôn.
     const keys = lines.map(learnKey).filter((k) => k.length >= 2);
     if (keys.length) await db.from("lomi_unanswered").delete().in("key", keys);
@@ -144,6 +160,7 @@ export function LomiLearnPanel() {
     void loadFb();
     void loadUn();
     void loadTg();
+    if (teach.src.claudeKey) void loadCa();
   };
 
   const tabs: [View, string, number | undefined][] = [
@@ -151,6 +168,7 @@ export function LomiLearnPanel() {
     ["unanswered", "🤔 Lomi bí", un?.length],
     ["stuck", "🧪 Hội thoại bí", stDone ? undefined : st?.length],
     ["taught", "🎓 Đã dạy", tg?.length],
+    ["claude", "✨ Claude đã trả lời", ca?.length],
   ];
 
   return (
@@ -342,6 +360,42 @@ export function LomiLearnPanel() {
                     Sửa
                   </button>
                   <button onClick={() => void delTg(t)} className="font-semibold text-destructive">
+                    Xoá
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
+
+      {view === "claude" && (
+        <div className="space-y-2">
+          <p className="text-[11px] text-muted-foreground">
+            Câu Lomi bí đã nhờ Claude trả lời và được lưu lại — lần sau ai hỏi đúng câu đó, Lomi dùng lại câu này (không gọi Claude). Câu chưa hay thì
+            bấm Xoá; muốn sửa lời thì bấm Đưa vào Đã dạy. "Ngoài phạm vi" = câu không thuộc 4 mục của Lomi, xoá đi thì lần sau sẽ hỏi lại Claude.
+          </p>
+          {!ca ? (
+            <Skel />
+          ) : !ca.length ? (
+            <Empty text="Chưa có câu nào" />
+          ) : (
+            ca.map((c) => (
+              <div key={c.key} className={cn("bg-card border rounded-xl p-3 space-y-1.5", c.scope === "out" && "opacity-70")}>
+                <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                  <span className="px-2 py-0.5 rounded-full bg-muted font-semibold">{c.scope === "out" ? "🚫 Ngoài phạm vi" : "✨ Đã trả lời"}</span>
+                  <span className="ml-auto">{fmt(c.created_at)}</span>
+                </div>
+                <div className="text-sm font-semibold break-words">{c.question}</div>
+                {c.answer && <div className="text-xs text-muted-foreground whitespace-pre-wrap line-clamp-6">{c.answer}</div>}
+                <div className="flex items-center gap-3 text-[11px] text-muted-foreground pt-1">
+                  <span>Dùng lại {c.hits} lần</span>
+                  {c.answer && (
+                    <button onClick={() => setTeach({ q: c.question, a: c.answer ?? "", src: { claudeKey: c.key } })} className="ml-auto font-semibold text-primary">
+                      🎓 Đưa vào Đã dạy
+                    </button>
+                  )}
+                  <button onClick={() => void delCa(c.key)} className={cn("font-semibold text-destructive", !c.answer && "ml-auto")}>
                     Xoá
                   </button>
                 </div>
