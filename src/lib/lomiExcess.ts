@@ -106,3 +106,33 @@ export function sleepPillExcess(text: string): string | null {
     "• Dùng đúng liều bác sĩ kê, không tự tăng liều khi khó ngủ; dùng lâu dễ **lệ thuộc**, ngưng đột ngột cũng có thể khó chịu — muốn giảm thì hỏi bác sĩ.\n\n" +
     "Nếu bạn hỏi vì đang thấy quá mệt mỏi, muốn buông xuôi, thì nói với Lomi hoặc một người bạn tin ngay nha — bạn không phải một mình. Đường dây hỗ trợ tâm lý **Ngày Mai: 096 306 1414**.";
 }
+
+// ── 20/11: "ăn X lúc nào tốt nhất" — chưa có "giờ vàng" được chứng minh → nói thật + các lưu ý giờ giấc có sẵn trong thẻ ──
+export function timingAsk(text: string): boolean {
+  const n = ` ${normalizeVi(text)} `;
+  return /\b(luc nao|khi nao|gio nao|buoi nao|thoi diem nao) (thi )?(la )?(tot|tot nhat|hop|hop nhat|nen|de|hieu qua)\b|\b(nen )?(an|uong|dung) (\S+ ){1,4}(vao )?(luc nao|khi nao|buoi nao|gio nao)\b|\b(an|uong) (\S+ ){1,4}(buoi sang|buoi toi|ban dem|luc doi|khi doi|truoc khi ngu) (hay|hoac) /.test(n);
+}
+const TIME_LINE = /(buổi sáng|sáng sớm|buổi tối|ban đêm|giờ ngủ|đi ngủ|khi đói|lúc đói|bụng đói|sau ăn|trước ăn|sau bữa|trước bữa|trong bữa|giờ trước|tiếng trước)/iu;
+export function focusTiming(content: string): string | null {
+  if (!/^(🥗|💊|🌿|☕|🍺|🍵)\s*\*\*[^*]+\*\*/u.test(content)) return null;
+  const title = content.match(/\*\*([^*]{2,60})\*\*/u)?.[1]?.trim();
+  if (!title) return null;
+  const blocks = content.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
+  const lines = blocks.slice(1).filter((b) => !/^(📌|📚)/u.test(b)).flatMap((b) => b.split("\n")).filter((l) => /^\s*[•\-–]/u.test(l) && TIME_LINE.test(l));
+  const foot = blocks.filter((b) => /^(📌|📚)/u.test(b));
+  return `⏰ **${title}** — dùng lúc nào tốt?\n\n• Chưa có bằng chứng về một “giờ tốt nhất” để dùng **${title}** — lúc nào hợp bữa ăn, hợp sinh hoạt của bạn cũng được; quan trọng là **lượng vừa phải** và bữa ăn cân đối.${lines.length ? `\n\nLưu ý về giờ giấc:\n${[...new Set(lines)].slice(0, 5).join("\n")}` : ""}${foot.length ? `\n\n${foot.join("\n\n")}` : ""}`;
+}
+
+// ── 20/11: "ăn A với B được không", "uống sữa với cam có sao không" → thẻ món kỵ nhau; một bên là thuốc → nói thật chưa có dữ liệu ──
+export function pairAsk(text: string): { a: string; b: string } | null {
+  const t = text.normalize("NFC").toLowerCase().replace(/[?!.…]+$/u, "").trim();
+  const m = t.match(/^(?:(?:ăn|uống|dùng|xài)\s+)?(.{2,30}?)\s+(?:với|cùng|chung với|kèm|và)\s+(.{2,30}?)\s+(?:có sao|có s|có kỵ|kỵ không|kỵ ko|kị không|có hại|có độc|được không|được ko|đc không|đc ko|đc k|chung được không|cùng lúc được không|một lúc được không|có được không|được hông|sao không|sao ko)(?:\s.*)?$/u);
+  if (!m) return null;
+  const clean = (x: string) => x.replace(/^(ăn|uống|dùng|xài)\s+/u, "").trim();
+  return { a: clean(m[1]), b: clean(m[2]) };
+}
+export function drugPairReply(drugName: string, other: string, drugCard: string): string {
+  const key = other.toLowerCase();
+  const said = drugCard.split("\n").filter((l) => /^\s*[•\-–]/u.test(l) && l.toLowerCase().includes(key));
+  return `💊 Uống **${drugName}** cùng **${other}**: Lomi **chưa có dữ liệu đã kiểm chứng** về việc dùng chung hai thứ này nên không dám nói chắc 🙏\n• Xem mục **tương tác thuốc / thức ăn, đồ uống** trong tờ hướng dẫn của thuốc.\n• Hỏi **dược sĩ chỗ mua thuốc** — hỏi nhanh mà chắc nhất.${said.length ? `\n\n📌 Thẻ thuốc của Lomi có ghi:\n${said.slice(0, 3).join("\n")}` : ""}`;
+}

@@ -272,7 +272,7 @@ const FACTS: Fact[] = [
     id: "alcohol",
     early: true,
     // (20/11: "uống rượu nhiều có sao ko", "nhậu nhìu có hại gì" — trước bị lớp rủ đi nhậu đáp "Nghe là thấy vui rồi 🍻")
-    re: VN(/\b(uống rượu bia có sao|uống bia có sao|uống rượu có sao|nhậu nhiều có sao|uống bia hàng ngày|uống bia hằng ngày|giải rượu|giải say|(uống|nhậu) (rượu|bia|rượu bia)( \S+){0,4} (có sao|có hại|hại gì|sao không|sao ko|sao k|có s|tác hại|tác dụng phụ)|(rượu|bia|rượu bia|nhậu) (\S+ ){0,3}(nhiều|nhìu|thường xuyên|hằng ngày|hàng ngày|mỗi ngày)( \S+){0,3} (có sao|có hại|hại gì|sao không|sao ko|sao k|có s))\b/),
+    re: VN(/\b(uống rượu bia có sao|uống bia có sao|uống rượu có sao|nhậu nhiều có sao|uống bia hàng ngày|uống bia hằng ngày|giải rượu|giải say|(bia|rượu|rượu bia)( \S+){0,2} (với|cùng|chung với|và) (bia|rượu|nước ngọt|nước tăng lực|cà phê|soda)( \S+){0,3} (được không|được ko|đc ko|có sao|chung được|uống chung)|(uống|nhậu) (rượu|bia|rượu bia)( \S+){0,4} (có sao|có hại|hại gì|sao không|sao ko|sao k|có s|tác hại|tác dụng phụ)|(rượu|bia|rượu bia|nhậu) (\S+ ){0,3}(nhiều|nhìu|thường xuyên|hằng ngày|hàng ngày|mỗi ngày)( \S+){0,3} (có sao|có hại|hại gì|sao không|sao ko|sao k|có s))\b/),
     a: "🍺 **Rượu bia:** WHO khẳng định **không có mức uống rượu bia nào an toàn** cho sức khoẻ — càng ít càng tốt. Uống nhiều gây hại gan, dạ dày, tim mạch, giấc ngủ và tinh thần.\n• Nếu uống: ăn no trước, uống chậm, xen nước lọc, biết điểm dừng.\n• **Đã uống thì không lái xe.**\n• Chuyện “giải rượu” bằng thuốc hay mẹo dân gian không làm rượu hết nhanh hơn — chỉ có thời gian, nước và nghỉ ngơi.",
     src: "WHO châu Âu — No level of alcohol consumption is safe for our health, 04/01/2023 (ý “không có mức an toàn”; các mẹo còn lại là kiến thức phổ thông)",
   },
@@ -309,9 +309,42 @@ const FACTS: Fact[] = [
   },
   {
     id: "screen",
-    re: VN(/\b(nhìn điện thoại nhiều có sao|xài điện thoại nhiều|ánh sáng xanh|nhìn màn hình nhiều có sao|dùng điện thoại trước khi ngủ)\b/),
+    // (20/11: + "ngồi máy tính nhiều có sao k", "chơi game cả ngày có hại không")
+    re: VN(/\b(nhìn điện thoại nhiều có sao|xài điện thoại nhiều|ánh sáng xanh|nhìn màn hình nhiều có sao|dùng điện thoại trước khi ngủ|(ngồi|dùng|xài|nhìn|chơi) (máy tính|laptop|máy vi tính|màn hình|điện thoại|game|điện tử)( \S+){0,3} (nhiều|lâu|cả ngày|suốt ngày)( \S+){0,3} (có sao|có hại|sao không|sao ko|sao k|có s|hại gì|ảnh hưởng))\b/),
     a: "📱 **Dùng điện thoại/màn hình nhiều:** dễ mỏi mắt, khô mắt (nhìn chăm chú lâu thì ít chớp mắt), đau cổ vai gáy, khó ngủ.\n• Quy tắc 20-20-20 (Viện Hàn lâm Nhãn khoa Mỹ): **cứ 20 phút, nhìn một vật xa ít nhất 20 feet (khoảng 6 mét) trong ít nhất 20 giây**.\n• Màn hình thường đặt cách mặt khoảng 50–65 cm, hơi thấp hơn tầm mắt.\n• Cất điện thoại một lúc trước khi ngủ.",
     src: "American Academy of Ophthalmology — Eye Strain (aao.org)",
+  },
+  {
+    // 20/11: "ăn nhiều rau có tốt không", "ăn trái cây nhiều có sao" — NHS 5 A Day
+    id: "veg",
+    re: VN(/\b(ăn (nhiều )?(rau|rau xanh|rau củ|trái cây|hoa quả|rau quả)( \S+){0,3} (có tốt|tốt không|tốt ko|tốt k|có sao|có hại|sao không|có s)|(rau|trái cây|hoa quả|rau quả) (có )?tốt (gì|không|ko|k)|mỗi ngày (nên )?ăn bao nhiêu (rau|trái cây|hoa quả))\b/),
+    a: "🥦 **Rau và trái cây:** ăn nhiều là **tốt** — nên ăn ít nhất **5 phần mỗi ngày** (một phần khoảng **80 g**), tính chung cả rau lẫn trái cây, càng nhiều loại càng tốt.\n• Có nhiều vitamin, khoáng chất (folate, vitamin C, kali) và **chất xơ** — tốt cho tiêu hoá, đỡ táo bón.\n• Giúp giảm nguy cơ bệnh tim, đột quỵ, một số loại ung thư; thường ít béo, ít năng lượng nên dễ giữ cân (miễn đừng chiên, xào quá nhiều dầu).\n• Khoai tây, khoai mì (sắn) không tính vào 5 phần vì chủ yếu là tinh bột.\n⚠️ Người bệnh thận được dặn hạn chế kali, hay đang uống thuốc chống đông thì hỏi bác sĩ lượng rau quả phù hợp.",
+    src: "NHS (Anh) — Why 5 A Day?, rà soát 30/09/2026",
+    checked: "20/11/2026",
+  },
+  {
+    // 20/11: "cơm để qua đêm ăn được không", "thịt để tủ lạnh được bao lâu", "đồ ăn thừa hâm lại mấy lần" — FSA
+    id: "leftover",
+    early: true,
+    re: VN(/\b((cơm|đồ ăn|thức ăn|món|canh|thịt|cá|đồ) (\S+ ){0,2}(để|cất) (qua đêm|tủ lạnh|tủ mát|ngoài|lâu|mấy ngày|qua ngày)|(cơm|đồ ăn|thức ăn) (thừa|nguội|qua đêm)( \S+){0,3} (ăn được|có sao|được không|được ko|đc ko|đc k|để được|bao lâu|hâm)|(để|cất) (trong )?tủ lạnh (được )?bao lâu|hâm (lại|nóng)( \S+){0,3} (mấy lần|nhiều lần|được không)|đồ ăn thừa)\b/),
+    a: "🍱 **Đồ ăn thừa, cơm để qua đêm:**\n• Nấu xong chưa ăn thì để **nguội rồi cho vào tủ lạnh trong vòng 1–2 giờ** — chia hộp nhỏ, đậy kín cho nhanh nguội; đừng để ngoài cả đêm.\n• Trong tủ lạnh (0–5°C) nên **ăn hết trong 2 ngày** — riêng **món cơm chỉ 1 ngày**; không kịp thì cấp đông.\n• **Chỉ hâm lại một lần**, hâm cho **nóng sôi đều** rồi mới ăn.\n• Đồ rã đông thì ăn trong 24 giờ, không cấp đông lại.\n• **Thịt, cá sống**: bọc kín, để **ngăn dưới cùng** tủ lạnh cho khỏi nhỏ nước sang đồ khác, dùng trước **hạn dùng** ghi trên bao bì.\n⚠️ Thấy mùi lạ, chua, nhớt thì bỏ, đừng tiếc — người già, bà bầu, trẻ nhỏ càng nên cẩn thận.",
+    src: "FSA — Cơ quan Tiêu chuẩn Thực phẩm Anh (food.gov.uk), hướng dẫn bảo quản đồ ăn thừa",
+    checked: "20/11/2026",
+  },
+  {
+    // 20/11: "bôi kem chống nắng mỗi ngày có sao k", "kem chống nắng SPF bao nhiêu" — NHS
+    id: "sunscreen",
+    early: true,
+    re: VN(/\b(kem chống nắng|chống nắng|spf)\b(?=.*\b(có sao|có hại|sao không|sao ko|sao k|có s|được không|được ko|đc ko|bao nhiêu|loại nào|thế nào|như nào|mỗi ngày|bôi lại|có cần|nên|có tốt|hại gì)\b)/),
+    a: "🧴 **Kem chống nắng:**\n• Chọn loại **SPF từ 30 trở lên** (chống tia UVB) và có **chống UVA** (trên bao bì ghi UVA / PA / phổ rộng).\n• Bôi **đủ dày** — đa số người bôi quá mỏng nên che chắn kém; ra nắng lâu thì bôi **30 phút trước khi ra ngoài** và bôi lại ngay trước lúc đi.\n• **Bôi lại khoảng mỗi 2 giờ**, và sau khi bơi, lau khăn, ra nhiều mồ hôi.\n• Đừng chỉ dựa vào kem: thêm **áo dài tay, mũ rộng vành, kính râm, tìm bóng râm** lúc nắng gắt; trời âm u vẫn có thể cháy nắng.\n• Dùng hằng ngày được; nổi mẩn, ngứa, rát sau khi bôi thì đổi loại khác (da nhạy cảm chọn loại dịu nhẹ) hoặc hỏi bác sĩ da liễu.",
+    src: "NHS (Anh) — Sunscreen and sun safety, rà soát 24/03/2026",
+    checked: "20/11/2026",
+  },
+  {
+    // 20/11: "uống thuốc xong bao lâu thì được ăn", "thuốc uống trước hay sau ăn" — không có nguồn riêng cho từng thuốc → chỉ đọc nhãn / hỏi dược sĩ
+    id: "pilltiming",
+    re: VN(/\b(uống thuốc (xong|rồi)( \S+){0,3} (bao lâu|mấy tiếng|mấy phút)( \S+){0,3} (ăn|được ăn)|thuốc (uống|này uống) (trước|sau) (ăn|bữa ăn) (hay|hoặc) (trước|sau)|(uống thuốc|thuốc) (trước|sau) (khi )?ăn (bao lâu|mấy tiếng|mấy phút)|uống thuốc lúc (đói|no)( \S+){0,2} (được không|được ko|có sao))\b/),
+    a: "💊 **Uống thuốc trước hay sau ăn, cách bữa bao lâu** thì **mỗi thuốc mỗi khác** — Lomi không đoán chung được:\n• Xem **tờ hướng dẫn / nhãn**: có ghi “uống lúc đói”, “trước bữa ăn”, “sau bữa ăn” hay “trong bữa ăn” — làm đúng như vậy.\n• Thuốc bác sĩ kê thì xem dặn dò trên **đơn thuốc**.\n• Không thấy ghi, hay không chắc thì **hỏi dược sĩ chỗ mua** — hỏi nhanh mà chắc nhất.\n• Một số thuốc dễ gây khó chịu dạ dày nên thường được dặn uống sau ăn; ngược lại có thuốc phải uống lúc đói mới hấp thu tốt — vì vậy đừng tự đổi giờ uống.",
   },
   {
     id: "sitlong",

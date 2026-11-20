@@ -51,3 +51,29 @@ describe("Lomi đưa đúng phần dùng nhiều / tác dụng phụ", () => {
     expect(((await last(["bị tiểu đường ăn nhiều có sao"])) as M).content).not.toMatch(/dùng nhiều có sao không/);
   }, T);
 });
+
+describe("đợt 2 (20/11 trưa): rau quả, đồ ăn thừa, kem chống nắng, giờ uống thuốc, cặp món, giờ ăn", () => {
+  const cases: [string, RegExp][] = [
+    ["ăn nhiều rau có tốt không", /Rau và trái cây[^]*5 phần/],
+    ["cơm để qua đêm ăn được không", /món cơm chỉ 1 ngày/],
+    ["thịt để tủ lạnh được bao lâu", /ngăn dưới cùng/],
+    ["ngồi máy tính nhiều có sao k", /màn hình nhiều/],
+    ["bôi kem chống nắng mỗi ngày có sao k", /SPF từ 30/],
+    ["uống thuốc xong bao lâu thì được ăn", /mỗi thuốc mỗi khác/],
+    ["ăn cua với hồng được không", /kỵ nhau/],
+    ["uống sữa với cam có sao không", /kỵ nhau/],
+    ["uống paracetamol với cà phê được không", /Paracetamol\*\* cùng \*\*cà phê[^]*chưa có dữ liệu/],
+    ["bia với rượu uống chung được không", /Rượu bia/],
+    ["ăn chuối lúc nào tốt nhất", /Chuối[^*]*\*\* — dùng lúc nào tốt[^]*Chưa có bằng chứng/],
+    ["uống cà phê lúc nào tốt", /Không uống sát giờ ngủ/],
+  ];
+  it("trả lời đúng", async () => {
+    for (const [q, re] of cases) expect(((await last([q])) as M).content, q).toMatch(re);
+  }, T * 2);
+  it("không bắt nhầm", async () => {
+    expect(((await last(["đi chơi nhớ mang kem chống nắng"])) as M).content).not.toMatch(/SPF/);
+    expect(((await last(["uống sữa lúc nào tốt"])) as M).content).not.toMatch(/nhìn trong tối/);
+    expect(((await last(["đi chơi với bạn được không"])) as M).content).not.toMatch(/kỵ nhau/);
+    expect(((await last(["uống thuốc chống đông với rau xanh được không"])) as M).content).toMatch(/tuỳ loại thuốc chống đông/);
+  }, T);
+});

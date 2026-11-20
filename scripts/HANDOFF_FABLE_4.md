@@ -165,3 +165,10 @@ Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker tr�
 - AiAssistant: (g) viết lại câu nối "ăn nhiều có sao k", "có tác dụng phụ gì không" sau khi vừa nói về X (dược liệu / thuốc / bệnh / tên in đậm đầu thẻ) → câu đầy đủ với X; bước chống lặp ("vẫn như Lomi vừa nói") bỏ qua câu hỏi này; lọc thẻ ở localReply (không lọc thẻ bệnh).
 - lomiHealthFacts "alcohol": early + nhận "uống rượu nhiều có sao ko", "nhậu nhìu có s k" (trước bị lớp rủ đi nhậu đáp "Nghe là thấy vui rồi 🍻").
 - Chưa có: kem chống nắng; "ăn nhiều rau có tốt không", "ăn nhiều mà vẫn đói" (lỗi có từ trước).
+
+## 15. Câu hỏi đời thường về ăn uống / thuốc (20/11 trưa)
+
+Đo: test 2.600 qua (lomiKb3010 + lomiExcess chạy lại sau khi sửa câu gout) · bộ 1.000 câu 922/985 (hỏng 0) · giữ riêng 61/65 · paraphrase 387/400 · hội thoại 155/160.
+
+- lomiHealthFacts thêm (có nguồn, đối chiếu 20/11/2026): **veg** rau quả (NHS Why 5 A Day, 30/09/2026) · **leftover** đồ ăn thừa / cơm qua đêm / thịt trong tủ lạnh (FSA: nguội rồi vào tủ trong 1–2 giờ, ăn trong 2 ngày — món cơm 1 ngày, hâm 1 lần, thịt sống ngăn dưới) · **sunscreen** kem chống nắng (NHS Sunscreen and sun safety, 24/03/2026; chỉ khi có ý hỏi) · **pilltiming** uống thuốc trước / sau ăn bao lâu (không nguồn riêng → chỉ đọc nhãn / hỏi dược sĩ, không số). Nới "screen" ("ngồi máy tính nhiều có sao"), "alcohol" ("bia với rượu uống chung" — trước bị lớp thuốc đáp "Hai thuốc dùng chung").
+- lomiExcess: `pairAsk` "ăn A với B được không" (cả hai là đồ ăn / uống) → viết lại thành câu món kỵ nhau (thẻ có sẵn); một bên là THUỐC → `drugPairReply` (chưa có dữ liệu dùng chung + dòng thẻ thuốc có nhắc thứ đó). Bỏ qua câu có nhắc bệnh / thai ("bị gout ăn tôm và thịt bò được không" để lớp thẻ bệnh lo). `timingAsk` + `focusTiming` "ăn X lúc nào tốt nhất" → nói thật chưa có "giờ vàng" + các dòng giờ giấc có sẵn trong thẻ.

@@ -149,7 +149,7 @@ import { PALLIATIVE_CARD, diseaseOf, kinOf, palliativeFollow, palliativeOf, pall
 import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
 import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/lib/lomiTab";
-import { excessAsk, excessVerb, focusExcess, sleepPillExcess } from "@/lib/lomiExcess";
+import { drugPairReply, excessAsk, excessVerb, focusExcess, focusTiming, pairAsk, sleepPillExcess, timingAsk } from "@/lib/lomiExcess";
 import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk } from "@/lib/lomiCook";
 // (câu có bệnh / thai / kiêng / trẻ nhỏ → để lớp sức khoẻ lo, không gợi ý món)
 const NOT_FOOD_TALK_VI = /(?<![\p{L}])(bệnh|đau|sốt|tiểu đường|huyết áp|bầu|mang thai|kiêng|dị ứng|giảm cân|ăn kiêng)(?![\p{L}])/u;
@@ -1425,6 +1425,11 @@ export function AiChat({
     const exK2 = !en && rawRef.current ? excessAsk(rawRef.current) : null;
     const slp = exK2 && !rk?.any ? sleepPillExcess(rawRef.current ?? "") : null;
     if (slp) reply = { role: "assistant", content: slp, local: true, health: reply.health ?? {}, routed: "sleep-pill-excess" };
+    // 20/11: "ăn X lúc nào tốt nhất" → phần giờ giấc của thẻ (không có "giờ vàng" được chứng minh)
+    if (!exK2 && !en && rawRef.current && timingAsk(rawRef.current) && !rk?.any && !reply.tarot && (reply.herb || /^(🥗|💊|🌿|☕|🍺|🍵)/u.test(reply.content))) {
+      const ft = focusTiming(reply.content);
+      if (ft) reply = { ...reply, content: ft };
+    }
     //   (chỉ thẻ về MỘT THỨ để ăn / uống / dùng — thuốc, vitamin, món ăn, dược liệu; thẻ bệnh thì giữ nguyên)
     if (exK2 && !slp && !rk?.any && !reply.tarot && (reply.herb || reply.drug || /^(🥗|💊|🌿|☕|🍺|🍵)/u.test(reply.content)) && !/^(🚨|⚠️|🔥)/u.test(reply.content)) {
       const fx = focusExcess(reply.content, exK2, { drug: !!reply.drug });
@@ -2116,6 +2121,36 @@ export function AiChat({
           if (subj && (la.health || la.herb || la.drug || la.med || la.src)) {
             const v = excessVerb(q) ?? (la.drug ? "uống" : "dùng");
             q = exK === "side" ? `${subj} có tác dụng phụ gì` : `${v} ${subj} nhiều có sao không`;
+            raw = q;
+            shownRef.current = { from: q, to: typed };
+            rewroteRef.current = true;
+          }
+        }
+        //   (h) 20/11: "ăn cua với hồng được không", "uống sữa với cam có sao không" (cả hai là đồ ăn / uống) → câu hỏi món kỵ nhau
+        //       (thẻ "Món ăn kỵ nhau"); một bên là THUỐC ("uống paracetamol với cà phê được không") → nói thật chưa có dữ liệu dùng chung.
+        //   (i) 20/11: "ăn chuối lúc nào tốt nhất", "uống sữa lúc nào tốt" → lấy thẻ món đó, lớp lọc đưa phần giờ giấc (lib/lomiExcess).
+        //       (câu có nhắc BỆNH — "bị gout ăn tôm và thịt bò được không" — là hỏi người bệnh ăn được không, để lớp thẻ bệnh lo)
+        const pr = !exK && !findMedId(lowQ) && !VN(/\b(bị|bệnh|đang điều trị|bầu|mang thai|cho con bú)\b/).test(` ${normalizeVi(lowQ)} `) ? pairAsk(q) : null;
+        const FOODISH = /^(hồng|dưa hấu|xoài|mít|ổi|dứa|thơm|bưởi|nho|táo|lê|đu đủ|sầu riêng|bia|rượu|nước ngọt|cà phê|trà|sữa|trứng|mật ong|đậu|rau|cua|tôm|ốc|hải sản|thịt|cá|gà|vịt|cam|chanh|quýt|chuối|dừa|nước dừa|trà sữa|sữa chua|tỏi|hành|gừng|nghệ)(\s|$)/u;
+        const foodish = (x: string) => x.split(/\s+/).length <= 4 && (!!foodOf(x) || FOODISH.test(x));
+        if (pr && !drugAsk(q)) {
+          const dA = findDrug(pr.a), dB = findDrug(pr.b);
+          const dd = dA ?? dB, other = dA ? pr.b : pr.a;
+          if (dd && foodish(other))
+            return localReply(q, { role: "assistant", content: drugPairReply(dd.names[0].charAt(0).toUpperCase() + dd.names[0].slice(1), other, renderDrug(dd, "interactions")), local: true, health: {}, routed: "drug-pair" });
+          if (!dd && foodish(pr.a) && foodish(pr.b)) {
+            q = `${pr.a} và ${pr.b} ăn chung được không`;
+            raw = q;
+            shownRef.current = { from: q, to: typed };
+            rewroteRef.current = true;
+          }
+        }
+        if (!exK && !pr && timingAsk(q) && lowQ.split(/\s+/).length <= 12) {
+          const fT = foodOf(lowQ);
+          const hT = fT ? null : findFolk(lowQ);
+          const nmT = fT?.name.split(/[,(]/u)[0].trim() ?? hT?.names[0];
+          if (nmT) {
+            q = `${nmT} có tác dụng gì`;
             raw = q;
             shownRef.current = { from: q, to: typed };
             rewroteRef.current = true;
