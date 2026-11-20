@@ -2647,6 +2647,8 @@ export type Database = {
         Args: { _report_id: string; _user_id: string }
         Returns: boolean
       }
+      chat_media_readable: { Args: { _name: string }; Returns: boolean }
+      chat_media_writable: { Args: { _name: string }; Returns: boolean }
       claim_offer: { Args: { _offer_id: string; _pin: string }; Returns: Json }
       compute_business_area: { Args: { addr: string }; Returns: string }
       consume_ai_chat_quota: { Args: never; Returns: number }
