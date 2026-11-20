@@ -1429,7 +1429,7 @@ describe("04/11 vòng 14 — đinh lăng, ba kích, lá vối; bệnh kèm dư�
     expect((await last(["gout là gì"])).content).toMatch(/hay dùng cho gout[\s\S]*vối/);
   });
   it("hỏi kiêng gì → kèm thảo dược cần tránh", async () => {
-    expect((await last(["tăng huyết áp kiêng gì"])).content).toMatch(/cần tránh hoặc thận trọng với tăng huyết áp[\s\S]*Cam thảo[\s\S]*Ba kích/);
+    expect((await last(["tăng huyết áp kiêng gì"])).content).toMatch(/nên tránh hoặc hạn chế với tăng huyết áp[\s\S]*Cam thảo[\s\S]*Ba kích/); // 20/11: đổi tên mục (món / mẹo dân gian, không chỉ thảo dược)
   });
 });
 

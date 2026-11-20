@@ -17,7 +17,7 @@ import { normalizeVi } from "@/lib/lomiFaq";
 import { VN } from "@/lib/viMatch";
 
 export type Urgent = {
-  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol" | "weapon";
+  id: "fall" | "poison" | "swallow" | "choke" | "drown" | "bleed" | "burn" | "anaphylaxis" | "preg" | "preeclampsia" | "hypo" | "dengue" | "dvt" | "glaucoma" | "dehydration" | "panicish" | "pmb" | "croup" | "alcohol" | "weapon" | "stroke";
   /** Thẻ medkb có nguồn để lấy phần sơ cứu / khi nào đi cấp cứu. */
   card?: string;
   /** Phần của thẻ cần đưa: "care" (sơ cứu — thẻ sơ cứu tự kèm khi nào gọi 115) hoặc "emergency" (khi nào cần xử trí khẩn). */
@@ -84,6 +84,8 @@ const FALL = VN(/\b(bị ngã|té ngã|bị té|ngã cầu thang|té cầu thang
 const FALL_BAD = VN(/\b(không (đứng|ngồi|tự) dậy được|không dậy được|không đứng lên được|đập đầu|va đầu|đau (hông|lưng|cổ|háng) (dữ dội|nhiều|lắm|quá)|gãy|không cử động được|bất tỉnh|ngất|lơ mơ)\b/);
 const ELDER = VN(/\b(ông|bà|ông bà|ba|bố|mẹ|má|cụ|người già|người cao tuổi|cao tuổi|lớn tuổi|[6-9]\d tuổi|1[01]\d tuổi)\b/);
 const CALL = "gọi **115** ngay";
+// 20/11: dấu hiệu đột quỵ (FAST — mặt, tay chân, lời nói).
+const STROKE = VN(/\b((tê|yếu|liệt|xệ|bị té|bị te) (nửa|một bên|1 bên) (mặt|người|thân)|(tê|yếu|liệt) (một|1) bên (tay|chân)|yếu nửa người|liệt nửa người|tê nửa người|liệt mặt|méo miệng|méo mặt|lệch miệng|miệng (bị |hơi |tự nhiên )?(lệch|méo|xệ))\b/);
 // 18/10 (audit F, P0): đang sốt xuất huyết mà kể DẤU HIỆU CẢNH BÁO (NHS "Dengue", rà soát 13/08/2026: đau bụng dữ dội, nôn nhiều lần,
 //   thở nhanh, chảy máu chân răng / mũi, rất mệt, bồn chồn, nôn / phân có máu → đi cấp cứu). Trước đây "sốt xuất huyết ngày thứ 4 đau bụng,
 //   chảy máu chân răng" bị chọn nhầm thẻ viêm nướu ("chảy máu chân răng" là một tên của thẻ đó) rồi rơi vào nhánh hỏi thêm.
@@ -147,6 +149,10 @@ export function urgentOf(text: string): Urgent | null {
     };
   if (n.trim().split(" ").length > 30) return null;
   if (KNOWLEDGE.test(n) || HEARSAY.test(n)) return null;
+  // 20/11 (bộ 60 đoạn, #55 — "ba mk 68t bi tê nua mat trai, noi hoi kho nghe cung ko ro" từng bị đọc "bị té" → chuyện người già ngã;
+  //   "cuoi mieng hoi lech" → hôi miệng): dấu hiệu ĐỘT QUỴ (mặt méo / tê yếu nửa mặt – nửa người / nói khó) đứng TRƯỚC té ngã. Thẻ dot-quy có nguồn.
+  if (STROKE.test(n))
+    return { id: "stroke", card: "dot-quy", aspect: "emergency", head: `🚨 **Tê / yếu nửa mặt hoặc nửa người, méo lệch miệng, nói khó** xuất hiện đột ngột là dấu hiệu có thể **đột quỵ** → ${CALL}, kể cả khi người đó vẫn tỉnh hay dấu hiệu tự đỡ. **Đừng chờ theo dõi ở nhà**, đừng cho ăn uống gì; ghi lại **giờ bắt đầu** thấy dấu hiệu để báo bác sĩ.` };
   const other = OTHER.test(n);
 
   // 01/11 (hiểu câu vòng 7): "thằng bạn uống rượu say không biết gì" từng được đáp như chuyện vui ("Nghe là thấy vui rồi 🍻").

@@ -38,7 +38,7 @@ const D: Dish[] = [
   { name: "Rau cải xào tỏi", ings: ["rau cai", "cai", "rau muong", "rau"], method: "xao", veg: true, min: 7, alias: ["rau xao toi"], steps: ["Rau nhặt rửa, để thật ráo", "Phi tỏi thơm, cho rau vào xào lửa lớn, đảo nhanh", "Nêm muối / dầu hào, tắt bếp khi rau vừa chín tới"] },
   { name: "Canh rau cải đậu phụ", ings: ["rau cai", "cai", "dau phu"], method: "canh", veg: true, min: 10, steps: ["Đun sôi nước (có thể phi chút hành)", "Cho đậu cắt miếng vào trước, sau đó cho rau cải", "Nêm muối, sôi lại là tắt bếp để rau còn xanh"] },
   { name: "Trứng chiên đậu phụ hành", ings: ["trung", "dau phu"], method: "chien", veg: true, min: 10, steps: ["Đậu cắt hạt lựu nhỏ, trộn với trứng đánh tan, hành lá, chút muối", "Đổ vào chảo dầu nóng, dàn mỏng", "Chiên vàng hai mặt, cắt miếng"] },
-  { name: "Thịt kho trứng", ings: ["thit", "trung"], method: "kho", min: 45, alias: ["thit kho"], steps: ["Thịt ba chỉ cắt miếng, ướp nước mắm, hành tím, chút đường 15 phút; trứng luộc bóc vỏ", "Thắng đường cho có màu, cho thịt vào đảo săn", "Thêm nước dừa (hoặc nước lọc) và trứng, kho lửa nhỏ 30–40 phút tới khi thịt mềm"] },
+  { name: "Thịt kho trứng", ings: ["thit", "trung"], method: "kho", min: 45, alias: ["thit kho", "thit kho trung", "kho trung", "trung kho", "thit kho nuoc dua"], steps: ["Thịt ba chỉ cắt miếng, ướp nước mắm, hành tím, chút đường 15 phút; trứng luộc bóc vỏ", "Thắng đường cho có màu, cho thịt vào đảo săn", "Thêm nước dừa (hoặc nước lọc) và trứng, kho lửa nhỏ 30–40 phút tới khi thịt mềm"] },
   { name: "Cá kho", ings: ["ca"], method: "kho", min: 30, alias: ["ca kho to", "ca kho"], steps: ["Cá ướp nước mắm, đường, tiêu, hành tím 15 phút", "Cho vào nồi đất / nồi nhỏ với chút nước màu", "Kho lửa nhỏ 20–25 phút tới khi nước sệt, rắc tiêu, ớt"] },
   { name: "Canh chua cá", ings: ["ca", "ca chua", "dua", "me", "dau bap", "bac ha"], method: "canh", min: 25, alias: ["canh chua"], steps: ["Dầm me lấy nước chua (hoặc dùng dứa, cà chua)", "Đun sôi nước với nước me, cho cá vào nấu chín", "Thêm cà chua, dứa, đậu bắp, bạc hà (dọc mùng), nêm chua ngọt vừa ăn, rắc rau om, ngò gai"] },
   { name: "Gà xào sả ớt", ings: ["ga", "sa"], method: "xao", min: 20, steps: ["Gà chặt miếng nhỏ, ướp nước mắm, sả băm, chút đường", "Phi sả, ớt thơm, cho gà vào xào lửa lớn cho săn", "Thêm chút nước, đậy nắp 7–10 phút tới khi gà chín, rim cho thấm"] },
@@ -110,7 +110,7 @@ export function isCookAsk(text: string): boolean {
   if (/\b(tim quan|quan nao|o dau|gan day|dat ban|giao tan noi)\b/.test(n)) return false;
   const ing = ingsOf(n).length > 0;
   const named = D.some((d) => [d.name, ...(d.alias ?? [])].some((x) => n.includes(` ${normalizeVi(x)} `)));
-  if (named && /\b(cach (nau|lam)|nau (sao|the nao|ra sao|nhu nao)|lam (sao|the nao|ra sao|nhu nao))\b/.test(n)) return true;
+  if (named && /\b(cach (nau|lam)|nau (sao|the nao|ra sao|nhu nao)|lam (sao|the nao|ra sao|nhu nao)|(nem|uop|kho) (sao|the nao|ra sao|nhu nao)( cho vua)?)\b/.test(n)) return true;
   return (COOK_VERB.test(n) && ASK_DISH.test(n)) || (ing && /\b(tu (lanh )?(con|co)|nha (con|co)|o nha co|trong tu)\b/.test(n) && (COOK_VERB.test(n) || ASK_DISH.test(n)))
     || /\bmon (chay|hap|xao|kho|canh)\b(?: \S+){0,4} (de lam|nhanh|don gian|gon)\b/.test(n)
     || /\b(do an|mon an|mon)\b(?: \S+){0,4} (mang theo|mang di|de chia phan)\b/.test(n);
@@ -148,7 +148,7 @@ export function cookReply(text: string, ctx = ""): string | null {
 
   // Hỏi thẳng cách nấu một món có trong thư viện ("canh chua cá nấu sao", "cách làm trứng chưng")
   const named = D.find((d) => [d.name, ...(d.alias ?? [])].some((x) => n.includes(` ${normalizeVi(x)} `)));
-  if (named && /\b(nau|lam|che bien|cach)\b/.test(n) && (!have.length || named.ings.some((i) => have.includes(i)) || have.length <= 1))
+  if (named && /\b(nau|lam|che bien|cach|nem|uop)\b/.test(n) && (!have.length || named.ings.some((i) => have.includes(i)) || have.length <= 1))
     return `🍳 **${named.name}** (khoảng ${named.min} phút):\n${named.steps.map((s) => `• ${s}`).join("\n")}\n\nNêm nếm theo khẩu vị nhà mình nha 😋`;
 
   // món cụ thể ngoài thư viện ("nấu bún bò Huế thế nào") → không lấy món khác thế vào

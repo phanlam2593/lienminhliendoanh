@@ -651,7 +651,14 @@ export function renderMed(t: MedTopic, aspect: MedAspect | "overview", food?: st
     const groups = (["avoid", "limit", "good", "ok"] as const)
       .map((v) => {
         const fs = t.diet!.foods.filter((f) => f.verdict === v);
-        return fs.length ? `${LAB[v]}: ${fs.map((f) => f.name + caution(f.note)).join(", ")}` : "";
+        // 20/11 (Kir: "gout phải kiêng đồ biển, tôm, cua, ốc, hến… k thấy lomi đề cập"): nhóm món chung chung ("hải sản") thì nêu luôn
+        //   vài món cụ thể trong nhóm (lấy từ aliases của chính thẻ — cùng nguồn) để người đọc biết ngay là món nào.
+        const ex = (f: MedFood) => {
+          if (!VR(/^(hải sản|đồ biển|động vật có vỏ|thịt đỏ|nội tạng|đồ ngọt|đồ chiên|thức ăn nhanh|đồ ăn chế biến sẵn|thịt chế biến sẵn)/iu).test(f.name)) return "";
+          const a = f.aliases.filter((x) => normalizeVi(x) !== normalizeVi(f.name) && !normalizeVi(f.note).includes(normalizeVi(x)));
+          return a.length >= 3 ? ` (vd ${a.slice(0, 5).join(", ")}…)` : "";
+        };
+        return fs.length ? `${LAB[v]}: ${fs.map((f) => f.name + ex(f) + caution(f.note)).join(", ")}` : "";
       })
       .filter(Boolean)
       .join("\n");

@@ -41,7 +41,8 @@ const SYMPTOMS: Sym[] = [
   // 15/10 (audit sức khoẻ): "bà a lơ mơ gọi không tỉnh", "tự nhiên lú lẫn" từng rơi vào "chưa hiểu ý" — đây là dấu hiệu cấp cứu.
   //   ("lơ mơ cả ngày" là buồn ngủ, thuộc mục "sleepy" bên dưới.)
   { id: "unresp", label: "lơ mơ / khó đánh thức / lú lẫn đột ngột", re: VN(/\b(lơ mơ(?! cả ngày)|gọi không (tỉnh|dậy)|lay không (tỉnh|dậy)|đánh thức không (được|dậy)|khó đánh thức|mê man|li bì|lú lẫn đột ngột|tự nhiên lú lẫn|đột nhiên lú lẫn|bỗng nhiên lú lẫn|lẫn lộn đột ngột)\b/), red: "lơ mơ, khó đánh thức hoặc lú lẫn đột ngột" },
-  { id: "stroke", label: "yếu / tê nửa người, méo miệng, nói khó", re: VN(/\b(yếu nửa người|liệt nửa người|tê nửa người|méo miệng|méo mặt|nói ngọng|nói khó đột ngột|nói lắp bắp đột ngột)\b/), red: "yếu liệt nửa người, méo miệng, nói khó (dấu hiệu đột quỵ)" },
+  { id: "stroke", label: "yếu / tê nửa người, méo miệng, nói khó", re: VN(/\b(yếu nửa người|liệt nửa người|tê nửa người|méo miệng|méo mặt|nói ngọng|nói khó đột ngột|nói lắp bắp đột ngột|tê nửa mặt|yếu nửa mặt|liệt nửa mặt|liệt mặt|(tê|yếu|liệt) (một|1) bên (người|mặt|tay|chân)|(tê|yếu) (nửa|một bên) (mặt|người) (trái|phải)|lệch miệng|miệng (bị |hơi |tự nhiên |bị lệch |)?(lệch|méo|xệ)|xệ (một bên )?(mặt|miệng|mép))\b/), red: "yếu liệt nửa người, méo miệng, nói khó (dấu hiệu đột quỵ)" },
+  // (20/11, bộ 60 đoạn #55 — "ba mk 68t bi tê nua mat trai, noi hoi kho nghe" từng thành chuyện bị ngã; "cuoi mieng hoi lech" thành hôi miệng)
   { id: "seizure", label: "co giật", re: VN(/\b(co giật|lên cơn giật)\b/), red: "co giật" },
   { id: "swellface", label: "sưng môi / mặt", re: VN(/\b(sưng môi|sưng mặt|phù mặt|sưng mí mắt|sưng họng)\b/) },
   { id: "bleed", label: "chảy máu bất thường", re: VN(/\b(chảy máu cam|chảy máu chân răng|chấm đỏ trên da|xuất huyết dưới da|bầm tím dễ)\b/) },

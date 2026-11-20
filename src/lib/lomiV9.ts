@@ -69,6 +69,9 @@ function kidFever(q: string, c: V9Ctx): V9Reply | null {
   if (!ctx) return null;
   const n = N(q);
   const RED = "🚨 Đưa bé đi **cấp cứu ngay** nếu: bé dưới 3 tháng tuổi mà sốt, **co giật**, li bì khó đánh thức, **khó thở**, nổi ban tím / chấm đỏ không mất khi ấn ly lên, cổ cứng, nôn liên tục không uống được, ít đi tiểu, hoặc bé quấy khóc không dỗ được.";
+  // 20/11 (bộ 60 đoạn, #25 — "Bé vẫn tỉnh nhưng hơi lừ đừ" từng được khen "dấu hiệu tốt"): lừ đừ / mệt lả / ít chơi là dấu hiệu cần cho bé đi khám.
+  if (VN(/\b(lừ đừ|mệt lả|uể oải|ít chơi|không chơi|nằm im|li bì|lơ mơ|mệt nhiều|bỏ ăn|bỏ bú)\b/).test(n))
+    return { keepHealth: true, text: `Bé sốt mà **lừ đừ, mệt lả, ít chơi hay bỏ ăn / bỏ bú** thì nên **đưa bé đi khám sớm trong hôm nay** nha — với trẻ sốt, bác sĩ xem bé có lừ đừ không quan trọng hơn con số trên nhiệt kế.\n\n${RED}` };
   if (VN(/\b(vẫn chơi|vẫn chạy nhảy|vẫn ăn|vẫn bú|vẫn tỉnh|vẫn cười|chơi bình thường)\b/).test(n))
     return { keepHealth: true, text: `Bé vẫn chơi, vẫn tỉnh táo là **dấu hiệu tốt** nha 👍 Với trẻ sốt, bác sĩ thường xem **bé có lừ đừ, mệt lả không** quan trọng hơn con số trên nhiệt kế.\n\nỞ nhà: cho bé mặc thoáng, uống nhiều nước / bú nhiều hơn, lau người bằng **nước ấm** (không dùng nước lạnh, cồn, chanh). Thuốc hạ sốt cho trẻ phải dùng **đúng liều theo cân nặng** ghi trên hộp thuốc — không chắc thì hỏi dược sĩ, đừng tự tăng liều.\n\n${RED}\n\nBé sốt từ bao giờ rồi bạn?` };
   if (VN(/\b(chưa hạ|không hạ|không giảm|chưa giảm|vẫn sốt|vẫn còn sốt|lại sốt|sốt lại|hạ rồi lại lên)\b/).test(n))

@@ -816,6 +816,15 @@ export function AiChat({
       const text = af?.text ?? (VN(/\b(chỗ nào|ở đâu|nằm|đâu|ntn|như nào|đặt sao|làm sao)\b/).test(nr) ? ff?.a.vi : undefined);
       if (text) return { role: "assistant", content: af?.text ? text : `Dạ, chỗ đó nè 👇\n\n${text}`, local: true, faqId: af?.faqId ?? lastA0.faqId, quick: lastA0.quick };
     }
+    // 20/11 (bộ 60 đoạn): câu hỏi nối trong mạch app có lời đáp riêng ở lib/lomiFollow.appFollow (đặt xe giùm người nhà, bị nhắn quảng cáo,
+    //   theo dõi cửa hàng có thấy ưu đãi mới không, bật hiển thị hồ sơ lại…) → trả lời luôn, trước lớp tâm sự / sức khoẻ.
+    {
+      const recentF = msgs.filter((m) => m.role === "assistant").slice(-3).map((m) => m.faqId).filter(Boolean) as string[];
+      if (recentF.length && w <= 14) {
+        const afT = appFollow(raw, lastA0?.faqId, recentF);
+        if (afT?.text) return { role: "assistant", content: afT.text, local: true, faqId: afT.faqId ?? lastA0?.faqId };
+      }
+    }
     // (0) Lượt trước vừa báo cấp cứu (🚨 … 115) mà hỏi tiếp ngắn ("có phải dị ứng nữa không?") → nhắc lại, không đưa bài chăm sóc thường.
     if (lastA0 && /^🚨/u.test(lastA0.content) && w <= 8 && (raw.includes("?") || VN(/\b(không|ko|hả|ha|phải không|có phải|nguy hiểm|sao)\s*$/).test(nr)) && !VN(/\b(gọi rồi|đã gọi|đang đi|tới viện|đến viện|đỡ rồi|hết rồi|thêm|mờ|đau|sốt|nôn|co giật|chảy máu|tím|ngất|xỉu|thở nhanh|li bì|bỏ bú|tháng|tuổi)\b/).test(nr))
       return { role: "assistant", content: "🚨 Lomi nhắc lại nha: với những dấu hiệu bạn vừa kể, đừng chờ xem có phải hay không — **gọi 115 ngay** hoặc nhờ người chở tới cấp cứu gần nhất. Trong lúc chờ: ngồi thẳng cho dễ thở, không ăn uống thêm gì, có người ở cạnh.\n\nBạn gọi được chưa?", local: true, health: hCtx ?? {}, med: lastA0.med };
@@ -1306,7 +1315,7 @@ export function AiChat({
     const mt = medNow ? await loadMedTopic(medNow.id) : sxMed ? await loadMedTopic(sxMed) : null;
     const tname = mt ? medName(mt) : (hLabelVi ?? "");
     // (3a0) Đang dị ứng / mề đay / vừa ăn, uống gì mà kể sưng môi, lưỡi, họng hay khó thở → phản vệ, gọi 115.
-    if (VN(/\b((môi|lưỡi|họng|mặt|mí mắt|cổ họng)( \S+){0,2} sưng|sưng (môi|lưỡi|họng|mặt|mí mắt)|khó thở|thở khò khè|nghẹn họng|thở rít)\b/).test(nr) && VN(/\b(dị ứng|mề đay|nổi mẩn|ngứa|phát ban|ong|thuốc|hải sản|tôm|cua|đậu phộng)\b/).test(` ${normalizeVi(`${recentU} ${tname} ${lastA0?.content ?? ""}`)} `))
+    if (VN(/\b((môi|lưỡi|họng|mặt|mí mắt|cổ họng)( \S+){0,2} sưng|sưng (môi|lưỡi|họng|mặt|mí mắt)|khó thở|thở khò khè|nghẹn họng|thở rít)\b/).test(nr) && !VN(/\b(đau (tức )?ngực|tức ngực|thắt ngực)\b/).test(nr) && VN(/\b(dị ứng|mề đay|nổi mẩn|ngứa|phát ban|ong|thuốc|hải sản|tôm|cua|đậu phộng)\b/).test(` ${normalizeVi(`${recentU} ${tname} ${lastA0?.content ?? ""}`)} `))
       return { role: "assistant", content: "🚨 Đang nổi mề đay / dị ứng mà **sưng môi, lưỡi, mặt, họng hay khó thở** là dấu hiệu có thể **sốc phản vệ** — gọi **115** ngay hoặc nhờ người chở tới cấp cứu gần nhất, đừng chờ xem có tự hết không.\n• Nếu có bút tiêm adrenaline (epinephrine) được kê sẵn thì dùng ngay theo hướng dẫn\n• Ngồi thẳng cho dễ thở (khó thở) hoặc nằm, kê chân cao (choáng, muốn xỉu); có người ở cạnh\n\nBạn gọi được chưa?", local: true, health: hCtx ?? { label: tname }, ...(medNow ? { med: medNow } : {}) };
     // (3a) Đau bụng chuyển sang bên phải (kèm / không kèm sốt) → đi khám ngay.
     if (VN(/\b(bên phải|phía phải|hố chậu phải|bụng phải|dưới phải)\b/).test(nr) && VN(/\bđau bụng|đau quanh rốn|quanh rốn\b/).test(` ${normalizeVi(`${recentU} ${tname} ${raw}`)} `))
@@ -1909,13 +1918,26 @@ export function AiChat({
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
     // 14/11 (kiến trúc mới) — QUÉT RỦI RO Ở MỘT CHỖ: kết quả để ở riskRef cho trọng tài tại cửa ra (localReply) dùng.
     riskRef.current = riskScan({ q, raw, lang, en, forceAi, harm: !forceAi && !en && !!harmOf(raw, fr1), red: redNow });
+    // 20/11 (bộ 60 đoạn, #50/#55): lượt trước Lomi vừa báo CẤP CỨU (🚨 … 115) mà giờ người dùng hỏi có nên chờ / theo dõi / nằm nghỉ,
+    //   hay kể thêm triệu chứng nặng ("mồ hôi lạnh ra nhiều, tay chân bủn rủn") → nhắc lại: đừng chờ, gọi 115 ngay (trước: "Lomi chưa biết cái này").
+    {
+      const la = msgs[msgs.length - 1];
+      const nr0 = ` ${normalizeVi(raw)} `;
+      if (!forceAi && !en && la?.role === "assistant" && /^(🚨|⚠️)/u.test(la.content) && /115/.test(la.content) && /cấp cứu|đột quỵ|đau tim|115 ngay/u.test(la.content) && raw.split(/\s+/).length <= 25 && !crisisReply(q, lang)
+        && (VN(/\b(theo dõi thêm|theo dõi ở nhà|nằm nghỉ|chờ thêm|đợi thêm|để mai|để sáng|tự (chở|lái))\b/).test(nr0)
+          || VN(/\b(mồ hôi lạnh|vã mồ hôi|bủn rủn|choáng|ngất|xỉu|lơ mơ|nôn|khó thở hơn|đau hơn|nặng hơn|tím|không nói được|nói không được|yếu hơn)\b/).test(nr0))
+        && !VN(/\b(đỡ rồi|hết rồi|ổn rồi|đã gọi|gọi rồi|đang ở viện|tới viện rồi|bác sĩ (khám|nói) rồi)\b/).test(nr0))
+        return localReply(q, { role: "assistant", content: "🚨 Với những dấu hiệu bạn kể, **đừng chờ theo dõi thêm ở nhà** — gọi **115** ngay (hoặc nhờ người gần nhất gọi giúp), nói rõ địa chỉ và các dấu hiệu.\n\nTrong lúc chờ:\n• Có người ở cạnh, không để người bệnh ở một mình\n• Không tự lái xe đi viện, không cho ăn uống hay tự uống thuốc\n• Nếu người bệnh ngất, ngừng thở hoặc không phản ứng: làm theo hướng dẫn của tổng đài 115\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚", local: true, health: {} });
+    }
     // 20/11 (bộ 100 câu, #98–100): hỏi cách nấu món có chữ "sốt" / "kho" là tên món ("trứng sốt cà chua", "cá sốt cà", "bò sốt vang")
     //   → trả công thức NGAY, trước lớp sức khoẻ (trước đây "sốt" bị đọc là bị sốt, ra thẻ "kiêng trứng khi sốt").
-    if (!forceAi && !en && !danger0 && !riskRef.current?.any && /\b(sot (ca chua|ca|vang|me|chua ngot|cam|nam|tieu|bo|kem|mayonnaise|thai)|nuoc sot)\b/.test(` ${normalizeVi(raw)} `)) {
-      const ckS = cookReply(raw);
+    //   (bộ 60 đoạn, #39: lượt trước vừa hỏi làm NƯỚC SỐT — "sốt bơ tỏi" — thì "sốt để ngoài tủ lạnh bao lâu" vẫn là nước sốt, không phải bị sốt)
+    const sauceCtx = /\b(sot (ca chua|ca|vang|me|chua ngot|cam|nam|tieu|bo|kem|mayonnaise|thai|toi|bo toi|bbq|dau)|nuoc sot|lam sot)\b/.test(` ${normalizeVi(msgs.filter((m) => m.role === "user").slice(-3).map((m) => m.raw ?? m.content).join(" "))} `) && /\bsot\b/.test(` ${normalizeVi(raw)} `) && !/\b(bi sot|sot cao|sot nhe|ha sot|con sot|dang sot|be sot|sot \d)/.test(` ${normalizeVi(raw)} `);
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && (sauceCtx || /\b(sot (ca chua|ca|vang|me|chua ngot|cam|nam|tieu|bo|kem|mayonnaise|thai)|nuoc sot)\b/.test(` ${normalizeVi(raw)} `))) {
+      const ckS = !sauceCtx && (isCookAsk(raw) || /\b(nau|cach lam|chi (\S+ )?lam)\b/.test(` ${normalizeVi(raw)} `)) ? cookReply(raw) : null;
       if (ckS) return localReply(q, { role: "assistant", content: ckS, local: true, routed: "cook" });
-      if (isCookAsk(raw) || isUnknownDishAsk(raw))
-        return localReply(q, { role: "assistant", content: "Món này Lomi chưa có công thức nên chưa dám chỉ bừa 🥲 Bạn kể Lomi nghe trong tủ đang có gì, Lomi gợi ý vài món làm được liền nha!", local: true, routed: "cook", stuck: "fallback" });
+      if (isCookAsk(raw) || isUnknownDishAsk(raw) || sauceCtx || /\b(cach lam|lam sao|bao quan|de duoc bao lau|bi tach|cuu)\b/.test(` ${normalizeVi(raw)} `))
+        return localReply(q, { role: "assistant", content: "Phần này về nước sốt / món ăn Lomi chưa có hướng dẫn chắc chắn nên chưa dám chỉ bừa 🥲 Bạn kể Lomi nghe trong tủ đang có gì, Lomi gợi ý vài món nhà làm được liền nha!", local: true, routed: "cook", stuck: "fallback" });
     }
     // 18/11 — tab "Sức khoẻ": câu KỂ có nhắc một bệnh / triệu chứng trong kho ("Nào có mất ngủ, tôi ngủ đủ mà sáng vẫn mệt rũ") mà
     //   lớp sức khoẻ thường bỏ qua vì không phải câu hỏi (rồi lớp tâm sự nhận) → trả thẻ kiến thức của bệnh đó luôn. Chỉ khi: không có rủi ro
@@ -1995,6 +2017,19 @@ export function AiChat({
         return localReply(q, { role: "assistant", content: "Vào **Hồ sơ → ⋯ → Hồ sơ doanh nghiệp** (/ho-so?view=business). Ngay dưới tên doanh nghiệp có số ⭐ đánh giá, 👥 **người theo dõi** và số **khách quen** — bấm vào “khách quen” để xem danh sách nha.", local: true, faqId: "bizoffer" });
       const fApp = matchFaq(q) ?? matchFaq(raw);
       if (fApp) return answerFaq(fApp, q);
+    }
+    // 20/11 (bộ 60 đoạn): ba câu hỏi về app trước đây bị trả lời sai FAQ.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any) {
+      const nA = ` ${normalizeVi(raw)} `;
+      //   #21 đăng nhập 2 máy / đổi máy (trước: cách lấy lại mật khẩu). Lịch sử chat với Lomi lưu trên máy (saveHistory → localStorage).
+      if (VN(/\b((đăng nhập|dùng|xài|vào) (\S+ ){0,3}(trên|ở|bằng) (hai|2|nhiều|mấy) (điện thoại|máy|thiết bị)|đổi (máy|điện thoại)|máy mới|điện thoại mới)\b/).test(nA) && VN(/\b(tài khoản|đăng nhập|dữ liệu|app|ilomi|được không|còn không|mất không|có mất)\b/).test(nA))
+        return localReply(q, { role: "assistant", content: "Được nha 👍 Một tài khoản iLomi đăng nhập được trên nhiều điện thoại — chỉ cần đúng tên đăng nhập + mật khẩu.\n• Đổi máy thì **hồ sơ, bài đăng, tin nhắn, doanh nghiệp, ưu đãi đã nhận** vẫn còn, vì lưu trên máy chủ\n• Riêng **lịch sử trò chuyện với Lomi** lưu trên từng máy, nên máy mới sẽ bắt đầu cuộc trò chuyện mới\n• Dùng xong trên máy lạ thì nhớ **Đăng xuất** (Hồ sơ → ⋯ → Đăng xuất) cho an toàn", local: true, faqId: "logout" });
+      //   #28 ẩn hồ sơ (trước: chuyện xoá tài khoản) — app chưa có chức năng ẩn hồ sơ (đã kiểm tra bảng profiles, trang Hồ sơ).
+      if (VN(/\b((ẩn|giấu|khoá|khóa|tạm ẩn) (\S+ )?(hồ sơ|trang cá nhân|profile|tài khoản)|(không|ko|k) cho (ai|người khác|người lạ) (thấy|xem) (hồ sơ|trang cá nhân|mình))\b/).test(nA) && !VN(/\b(bài|ưu đãi|doanh nghiệp|bình luận)\b/).test(nA))
+        return localReply(q, { role: "assistant", content: "iLomi hiện **chưa có nút ẩn hồ sơ** nha 🙏 Hồ sơ của bạn vẫn hiện với thành viên khác (ngày sinh thì không công khai).\n• Không muốn một người cụ thể xem / nhắn tin: vào hồ sơ hoặc khung chat người đó bấm **⋯ → Chặn người dùng** (bỏ chặn lại được ở Cài đặt → Người dùng đã chặn)\n• Muốn bớt thông tin: sửa phần giới thiệu, ảnh đại diện trong **Hồ sơ → ⋯ → Hồ sơ cá nhân**\n• Cần tạm ngưng tài khoản thì liên hệ Ban quản trị (Hồ sơ → ⋯ → Trợ giúp & Liên hệ)", local: true, faqId: "privacy" });
+      //   #45 chỉ đường tới một địa điểm (trước: "chưa thấy chỗ thuê xe máy") — Lomi không có bản đồ chỉ đường.
+      if (VN(/\b(chỉ đường|tìm đường|đường (đi|đến|tới|lên|xuống) |đi (lối|đường|ngả|hướng) nào|theo (lối|đường|ngả) nào|đi (đến|tới) .{2,30} (bằng cách nào|thế nào|như nào|sao))/).test(nA) && !VN(/\b(đường (huyết|ăn|kính|mía|cát|phèn)|tiểu đường)\b/).test(nA))
+        return localReply(q, { role: "assistant", content: "Lomi chưa chỉ đường từng ngả được 🙏 Bạn mở **Google Maps** (hoặc ứng dụng bản đồ trên điện thoại), gõ tên nơi muốn tới rồi chọn **xe máy** để xem lối đi và thời gian.\n• Ngại tự đi thì đặt xe ở **Đưa đón (/dua-don)**: chọn điểm đón và điểm đến, tài xế chở bạn tới nơi\n• Đi đèo / đường dốc ở Đà Lạt buổi tối thì chạy chậm, bật đèn và để ý sương mù nha", local: true, faqId: "ridebook" });
     }
     // 20/11 (bộ 100 câu, #60/#63): người dùng muốn TỰ BÁN / mở chỗ kinh doanh và hỏi cách làm ("muốn bán đồ handmade trên Facebook mà chưa
     //   biết bắt đầu từ đâu", "bán trà sữa gần trường cần chú ý gì") → tư vấn kinh doanh, không phải tìm quán bán món đó.

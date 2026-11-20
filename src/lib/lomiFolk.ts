@@ -5700,6 +5700,14 @@ export function renderUnverified(herb: string, topicName?: string | null): strin
   ].join("\n\n");
 }
 
+/** 20/11: cách dùng + lưu ý ngắn nhất của một vị (lấy từ how / caution có nguồn của chính vị đó) — để mẹo "nên dùng" kèm luôn cách dùng. */
+function useNote(f: FolkEntry): string {
+  if (f.tip) return "";
+  const how = f.how?.[0]?.text.replace(/^Cách (làm|dùng):\s*/iu, "").replace(/\.$/, "");
+  const care = f.caution?.[0]?.text.replace(/\.$/, "");
+  return [how ? `\n   ↳ Cách dùng: ${how}.` : "", care ? `\n   ↳ Lưu ý: ${care}.` : ""].join("");
+}
+
 /** Mẹo dân gian cho một bệnh trong kho. `withGeneric`: kèm lời dặn chung khi dùng thảo dược. */
 export function renderFolkForTopic(topicId: string, topicName: string, opts: { compact?: boolean; seen?: string } = {}): string | null {
   // (30/10) Mẹo mà thẻ bệnh vừa nói rồi ("vitamin C, tỏi rất ít bằng chứng") thì không nhắc lại.
@@ -5711,11 +5719,25 @@ export function renderFolkForTopic(topicId: string, topicName: string, opts: { c
   // (04/11) vị tóm tắt tự động (gen) gom thành MỘT dòng tên, không liệt kê từng dòng — tránh bài quá dài.
   const main = hits.filter(({ f }) => !f.gen);
   const genN = hits.filter(({ f }) => f.gen).map(({ f }) => f.name);
-  const lines = main.map(({ f, t }) => `• ${VERDICT[t.v ?? f.verdict].icon} ${f.name.endsWith("?") ? cap(t.text) : `**${f.name}** — ${t.text}`}.`);
-  if (genN.length) lines.push(`• 📜 Vị khác y học cổ truyền hay dùng (tham khảo): ${genN.slice(0, 10).join(", ")}${genN.length > 10 ? "…" : ""} — hỏi “${genN[0].toLowerCase()} có tác dụng gì” để xem lưu ý.`);
+  // 20/11 (Kir: "phần mẹo thì nên dùng + tránh cứ bị trộn lẫn, confuse cho ng đọc… khuyên lá vối đi thì tự nhiên kêu hỏi lá vối có tác dụng gì,
+  //   nên hướng dẫn dùng thì hay hơn") → chia 3 nhóm rõ ràng: 🌿 có thể dùng (kèm CÁCH DÙNG + lưu ý ngắn của chính vị đó) · ⚠️ nên tránh /
+  //   hạn chế · 🧐 quan niệm chưa đúng. Không còn câu "hỏi … có tác dụng gì".
+  const line = ({ f, t }: { f: FolkEntry; t: FolkTopic }) => `• ${VERDICT[t.v ?? f.verdict].icon} ${f.name.endsWith("?") ? cap(t.text) : `**${f.name}** — ${t.text}`}.${useNote(f)}`;
+  const isBad = ({ f, t }: { f: FolkEntry; t: FolkTopic }) => ["risky", "danger"].includes(t.v ?? f.verdict);
+  const isMyth = ({ f, t }: { f: FolkEntry; t: FolkTopic }) => (t.v ?? f.verdict) === "myth";
+  const use = main.filter((h) => !isBad(h) && !isMyth(h));
+  const bad = main.filter(isBad);
+  const myth = main.filter(isMyth);
+  const lines: string[] = [];
+  if (use.length || genN.length) {
+    lines.push("🌿 **Có thể dùng (hỗ trợ, tham khảo):**", ...use.map(line));
+    if (genN.length) lines.push(`• 📜 Vị khác y học cổ truyền hay dùng: ${genN.slice(0, 10).join(", ")}${genN.length > 10 ? "…" : ""}.`);
+  }
+  if (bad.length) lines.push(`${lines.length ? "\n" : ""}⚠️ **Nên tránh / hạn chế:**`, ...bad.map(({ f, t }) => `• **${f.name.replace(/\s*\(.*\)$/, "")}** — ${t.text}.`));
+  if (myth.length) lines.push(`${lines.length ? "\n" : ""}🧐 **Quan niệm dân gian chưa đúng:**`, ...myth.map(({ f, t }) => `• ${f.name.endsWith("?") ? cap(t.text) : `**${f.name}** — ${t.text}`}.`));
   const pubs = Array.from(new Set(hits.flatMap(({ f, t }) => t.src.map((i) => f.sources[i].publisher))));
   if (opts.compact)
-    return `🌱 **Mẹo dân gian:**\n${lines.join("\n")}`;
+    return `🌱 **Mẹo dân gian:**\n\n${lines.join("\n")}`;
   return [
     `🌱 **Mẹo dân gian cho ${topicName}:**`,
     lines.join("\n"),
@@ -5741,9 +5763,16 @@ export function herbHintFor(topicId: string, topicName: string, aspect: "overvie
   const good = goodE.map((f) => f.name.replace(/\s*\(.*\)$/, ""));
   const parts: string[] = [];
   if (aspect === "diet" && bad.length)
-    parts.push(`⚠️ **Thảo dược / mẹo dân gian cần tránh hoặc thận trọng với ${topicName}:**\n${bad.slice(0, 5).map(({ f, t }) => `• **${f.name.replace(/\s*\(.*\)$/, "")}** — ${t.text}.`).join("\n")}`);
-  if (good.length)
-    parts.push(`🌿 **Dược liệu / mẹo dân gian hay dùng cho ${topicName}** (tham khảo): ${good.slice(0, 6).join(", ")}${good.length > 6 ? "…" : ""} — hỏi “${goodE[0].names[0]} có tác dụng gì” để xem cách dùng và ai không nên dùng.`);
+    parts.push(`⚠️ **Món / mẹo dân gian nên tránh hoặc hạn chế với ${topicName}:**\n${bad.slice(0, 5).map(({ f, t }) => `• **${f.name.replace(/\s*\(.*\)$/, "")}** — ${t.text}.`).join("\n")}`);
+  // 20/11 (Kir): ghi luôn cách dùng + lưu ý của 2 vị đầu (thay câu "hỏi … có tác dụng gì"), vị còn lại chỉ nêu tên.
+  if (good.length) {
+    const top = goodE.slice(0, 2).map((f) => {
+      const tt = hits.find((h) => h.f === f)?.t.text;
+      return `• **${f.name.replace(/\s*\(.*\)$/, "")}**${tt ? ` — ${tt}` : ""}.${useNote(f)}`;
+    });
+    const rest = good.slice(2, 8);
+    parts.push(`🌿 **Dược liệu / mẹo dân gian hay dùng cho ${topicName}** (tham khảo, không thay thuốc bác sĩ kê):\n${top.join("\n")}${rest.length ? `\n• Vị khác: ${rest.join(", ")}${good.length > 8 ? "…" : ""}.` : ""}`);
+  }
   return parts.length ? parts.join("\n\n") : null;
 }
 

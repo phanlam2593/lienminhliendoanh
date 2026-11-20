@@ -131,7 +131,7 @@ export const FAQS: Faq[] = [
   F("follow", "explore", "Theo dõi doanh nghiệp để làm gì?", "Why follow a business?",
     "Theo dõi để lưu nơi quen và được báo ngay khi quán có ưu đãi mới 🔔 Bấm Theo dõi trên trang doanh nghiệp là xong.",
     "Following saves your favorites and notifies you of new offers 🔔 Tap Follow on the business page.",
-    ["theo doi doanh nghiep", "follow quan", "theo doi quan", "bo theo doi"]),
+    ["theo doi doanh nghiep", "follow quan", "theo doi quan", "bo theo doi", "theo doi cua hang", "theo doi mot cua hang", "theo doi shop", "theo doi tiem"]),
 
   // ── Doanh nghiệp ──
   F("bizcreate", "biz", "Đăng doanh nghiệp lên app thế nào?", "How do I list my business?",
@@ -287,7 +287,7 @@ export const FAQS: Faq[] = [
   F("block", "chat", "Chặn hoặc bỏ chặn ai đó?", "How do I block or unblock someone?",
     "Trong khung chat hoặc hồ sơ người đó bấm ⋯ → Chặn người dùng. Người bị chặn không nhắn tin, gọi hay xem hồ sơ của bạn được. Muốn bỏ chặn: Hồ sơ → ⋯ → Cài đặt → Người dùng đã chặn.",
     "In their chat or profile tap ⋯ → Block user — they can't message, call or view you. To unblock: Profile → ⋯ → Settings → Blocked users.",
-    ["chan", "chan nguoi", "chan nguoi khac", "bo chan", "block", "unblock", "bi lam phien"]),
+    ["chan", "chan nguoi", "chan nguoi khac", "bo chan", "block", "unblock", "bi lam phien", "tin nhan quang cao", "nhan quang cao", "gui quang cao", "spam", "tin nhan rac", "nhan tin lam phien"]),
   F("report", "chat", "Báo cáo nội dung hoặc người dùng thế nào?", "How do I report something?",
     "Bấm nút Báo cáo (⚑ hoặc ⋯ → Báo cáo) trên trang doanh nghiệp, đánh giá, thẻ Quẹt hoặc hồ sơ. Mô tả vấn đề là bắt buộc, ảnh minh hoạ thì tuỳ chọn. Theo dõi phản hồi ở Báo cáo của tôi (/bao-cao-cua-toi): Chờ xử lý → Đã phản hồi → Đã giải quyết.",
     "Tap Report (⚑ or ⋯ → Report) on a business, review, swipe card or profile. A description is required, a photo optional. Track it in My reports (/bao-cao-cua-toi).",

@@ -180,6 +180,19 @@ export function appFollow(q: string, prevFaqId: string | undefined, recentFaqIds
   if (inCtx("claim", "offerlist", "claimexp", "bizoffer") && VN(/\b(hết hạn|còn hạn|hạn dùng|dùng được bao lâu|bao lâu thì hết|mấy giờ hết)\b/).test(n)) return { faqId: "claimexp" };
   if (inCtx("quetwhat", "quetlimit", "quetfilter") && VN(/\b(hết lượt|hết quẹt|quẹt thêm|thêm lượt|không quẹt được nữa)\b/).test(n)) return { faqId: "quetlimit" };
   if (inCtx("ridebook", "ridprice", "ridecancel", "ridetrack", "ridepay") && VN(/\b(trả bằng|thanh toán|trả tiền|chuyển khoản|tiền mặt|quẹt thẻ|momo|ví điện tử)\b/).test(n)) return { faqId: "ridepay" };
+  // 20/11 (bộ 60 đoạn): câu hỏi nối hay gặp.
+  //   #20 "Mình đặt giúp mẹ mình được không?" (đang nói Đưa đón) — trước: lời tâm sự chuyện gia đình. Màn đặt xe có ô Ghi chú cho tài xế (pages/Rides).
+  if (inCtx("ridebook", "ridprice", "ridecancel", "ridetrack", "ridepay") && VN(/\b((đặt|gọi|book)( xe| chuyến)? (giùm|giúp|hộ|dùm|cho) (mẹ|má|ba|bố|ông|bà|người nhà|bạn|người khác|con|vợ|chồng|em|anh|chị)|(đặt|gọi) (xe |chuyến )?(cho )?người khác)\b/).test(n))
+    return { faqId: "ridebook", text: "Được nha 👍 Bạn đặt bằng tài khoản của mình như bình thường:\n• Chọn **điểm đón** là chỗ người đi đang ở (kéo ghim trên bản đồ cho chính xác) và điểm đến\n• Ghi **tên + số điện thoại người đi** vào ô **Ghi chú cho tài xế**, kèm lời dặn (vd “đón mẹ mình, đi chậm giúp”)\n• Tài xế liên lạc qua tài khoản của bạn, nên bạn để ý điện thoại / tin nhắn trong lúc chuyến đang chạy nha" };
+  //   #19 "Nếu họ cứ gửi tin nhắn quảng cáo thì sao?" (vừa hỏi báo cáo) — trước: cách mở Tin nhắn.
+  if (VN(/\b(quảng cáo|spam|làm phiền|nhắn hoài|cứ nhắn|cứ gửi|nhắn mãi|tin rác)\b/).test(n) && (inCtx("report", "block") || VN(/\b(tin nhắn|nhắn tin|nhắn)\b/).test(n)))
+    return { faqId: "block", text: "Gặp người cứ nhắn quảng cáo / làm phiền thì bạn làm vầy nha:\n• **Chặn**: trong khung chat hoặc hồ sơ người đó bấm **⋯ → Chặn người dùng** — họ không nhắn, gọi hay xem hồ sơ của bạn được nữa\n• **Báo cáo**: bấm **⋯ → Báo cáo** để Ban quản trị xem xét tài khoản đó\n• Đừng bấm link lạ hay chuyển tiền theo tin nhắn nha 🛡️" };
+  //   #28 "Sau này bật hiển thị lại được chứ?" (vừa nói app chưa có nút ẩn hồ sơ)
+  if (inCtx("privacy") && VN(/\b((bật|hiện|hiển thị|mở|cho hiện) (lại|ra)|hiển thị lại|bỏ ẩn)\b/).test(n))
+    return { faqId: "privacy", text: "Vì iLomi **chưa có chức năng ẩn hồ sơ**, nên hồ sơ của bạn vẫn đang hiển thị bình thường — không cần bật lại gì cả nha 🙂 Nếu bạn đã **chặn** ai đó thì muốn bỏ chặn vào **Hồ sơ → ⋯ → Cài đặt → Người dùng đã chặn**." };
+  //   #13 "Nếu họ đăng ưu đãi mới thì mình có thấy ko?" (vừa hỏi theo dõi cửa hàng) — trước: cách CHỦ DN đăng ưu đãi.
+  if (inCtx("follow") && VN(/\b(ưu đãi mới|đăng ưu đãi|có ưu đãi|khuyến mãi mới|có thấy|được báo|thông báo)\b/).test(n))
+    return { faqId: "follow", text: "Có nha 🔔 Đã **Theo dõi** cửa hàng thì khi họ đăng ưu đãi mới hoặc gửi thông báo, bạn sẽ được báo trong mục **Thông báo** (/thong-bao). Muốn chắc là không bị lỡ thì vào **Hồ sơ → ⋯ → Cài đặt** xem đã bật thông báo ưu đãi chưa." };
   // Xác minh email sau đăng ký — app không gửi mail xác minh; tài khoản chờ Ban quản trị duyệt.
   if (VN(/\b(xác minh|xác thực|kích hoạt|không thấy mail|không thấy email|chưa nhận được mail|chưa nhận được email|email (vẫn )?chưa xác minh|mail xác nhận)\b/).test(n))
     return { faqId: "approve", text: "iLomi **không gửi email xác minh** đâu nha 📭 Đăng ký xong, tài khoản sẽ **chờ Ban quản trị duyệt tay** — trong lúc chờ bạn vẫn xem được Hồ sơ, Tin nhắn và Thông báo; duyệt xong app sẽ báo cho bạn 🔔\n\nChờ lâu mà chưa thấy duyệt thì liên hệ Ban quản trị: Hồ sơ → ⋯ → Trợ giúp & Liên hệ." };
