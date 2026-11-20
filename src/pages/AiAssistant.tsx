@@ -9,7 +9,7 @@ import { ArrowLeft, CircleHelp, Copy, RotateCcw, Send, Smile, Volume2, VolumeX }
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
-import { claudeEligible, claudeNote, isHardOff, markClaudeOff } from "@/lib/lomiClaude";
+import { claudeEligible, isHardOff, markClaudeOff } from "@/lib/lomiClaude";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -1503,10 +1503,11 @@ export function AiChat({
       );
     }
     const userMsg: Msg = { role: "user", content: asked, local: true, raw: rawRef.current ?? asked };
-    // 20/11 (Kir duyệt — "hướng lai"): Lomi bí thật sự + câu không có dấu hiệu nguy hiểm + là thành viên → nhờ Claude (lib/lomiClaude).
+    // 20/11 (Kir duyệt — "hướng lai"): Lomi bí thật sự + câu không có dấu hiệu nguy hiểm + thuộc 4 mục chính → hỏi máy chủ (lib/lomiClaude):
+    //   câu đã có trong thư viện → trả lời luôn (ai cũng được); chưa có → thành viên mới được nhờ Claude, câu dùng chung được lưu lại.
     //   Claude lỗi / chưa cài key / hết lượt → vẫn gửi câu đáp trên máy như cũ. Câu "bí" vẫn được ghi vào nhật ký ở trên cho admin xem.
     const qClaude = rawRef.current ?? asked;
-    if (claudeEligible({ stuck: reply.stuck, question: qClaude, reply: reply.content, risk: riskRef.current, member: !!quota?.member && left !== 0, tarot: !!reply.tarot })) {
+    if (claudeEligible({ stuck: reply.stuck, question: qClaude, reply: reply.content, risk: riskRef.current, tarot: !!reply.tarot })) {
       void askClaude(userMsg, reply, qClaude);
       return;
     }
@@ -1529,7 +1530,7 @@ export function AiChat({
       text = null;
     }
     setBusy(false);
-    push([userMsg, text ? { role: "assistant", content: text + claudeNote(local.stuck, lang === "en"), local: true, claude: true } : local]);
+    push([userMsg, text ? { role: "assistant", content: text, local: true, claude: true } : local]);
     lomiSound("msg");
   };
 

@@ -1,13 +1,12 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { claudeEligible, claudeNote, isHardOff, markClaudeOff, resetClaudeOff } from "@/lib/lomiClaude";
+import { claudeEligible, isHardOff, markClaudeOff, offTopic, resetClaudeOff } from "@/lib/lomiClaude";
 
 const none = { crisis: null, denial: false, checkIn: false, urgent: false, harm: false, red: false, any: false };
-const base = { stuck: "fallback" as const, question: "cách trồng cây sen đá trong nhà", reply: "Câu này Lomi chưa biết", risk: none, member: true };
+const base = { stuck: "fallback" as const, question: "cách trồng cây sen đá trong nhà", reply: "Câu này Lomi chưa biết", risk: none };
 
 describe("lomiClaude — chỉ câu Lomi bí, không nguy hiểm, thành viên mới nhờ Claude", () => {
   beforeEach(() => resetClaudeOff());
   it("câu bí bình thường của thành viên → nhờ Claude", () => expect(claudeEligible(base)).toBe(true));
-  it("không phải thành viên → không", () => expect(claudeEligible({ ...base, member: false })).toBe(false));
   it("không bí → không", () => expect(claudeEligible({ ...base, stuck: undefined })).toBe(false));
   it("đang gợi ý câu hỏi app / đang nghe kể → giữ trên máy", () => {
     expect(claudeEligible({ ...base, stuck: "suggest" })).toBe(false);
@@ -32,8 +31,13 @@ describe("lomiClaude — chỉ câu Lomi bí, không nguy hiểm, thành viên m
     markClaudeOff();
     expect(claudeEligible(base)).toBe(false);
   });
-  it("ghi chú nói rõ Claude trả lời; câu sức khoẻ nhắc không thay bác sĩ", () => {
-    expect(claudeNote("fallback", false)).toMatch(/nhờ Claude/);
-    expect(claudeNote("unknown_med", false)).toMatch(/không thay cho bác sĩ/);
+  it("câu ngoài 4 mục chính (code, bài tập, dịch, bài văn) → không gửi", () => {
+    for (const q of ["viết code python đọc file csv", "giúp mình sửa lỗi javascript", "giải bài tập toán lớp 9", "dịch đoạn này sang tiếng anh", "viết bài văn tả mẹ", "lập trình web học từ đâu"]) {
+      expect(offTopic(q), q).toBe(true);
+      expect(claudeEligible({ ...base, question: q })).toBe(false);
+    }
+  });
+  it("câu trong phạm vi không bị chặn nhầm", () => {
+    for (const q of ["dịch bệnh sốt xuất huyết mùa này", "bị đau lưng khi ngồi lâu", "người yêu cũ nhắn lại có nên trả lời", "mở quán cà phê nhỏ cần chuẩn bị gì", "cách dùng mã ưu đãi trong app"]) expect(offTopic(q), q).toBe(false);
   });
 });

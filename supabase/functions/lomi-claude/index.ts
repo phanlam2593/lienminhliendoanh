@@ -3,6 +3,9 @@
 //     → trả { fallback: true } (HTTP 200) để app giữ nguyên câu trả lời trên máy — không bao giờ làm khung chat lỗi.
 //   • Chốt chi phí ở server (RPC consume_ai_chat_quota): 20 câu / người / ngày, 300 câu / ngày cho cả app; chỉ thành viên Membership còn hạn.
 //     Gọi lỗi thì hoàn lượt (refund_ai_chat_quota).
+//   • 20/11 (Kir): (1) chỉ trả lời trong 4 mục chính của Lomi — Claude gắn nhãn [NGOAI] cho câu ngoài phạm vi (viết code, làm bài tập…)
+//     → app giữ câu đáp trên máy; (2) câu trả lời dùng chung được ([CHUNG]) lưu vào bảng lomi_claude_answers — lần sau ai hỏi
+//     đúng câu đó thì lấy từ đây, KHÔNG gọi Claude, không trừ lượt (cả câu ngoài phạm vi cũng nhớ để khỏi hỏi lại).
 //   • Model mặc định claude-haiku-5-5 (rẻ nhất); đổi bằng secret ANTHROPIC_MODEL nếu cần. max_tokens 600.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -72,9 +75,22 @@ Bối cảnh riêng của lượt này:
 - Thư viện trên máy của Lomi CHƯA trả lời được câu cuối của người dùng, nên câu này được chuyển cho bạn. Hãy trả lời thẳng vào câu đó.
 - Trả lời ngắn: tối đa khoảng 120 chữ, không dùng tiêu đề, tối đa 4 gạch đầu dòng.
 - Sức khoẻ: chỉ nói điều đã được các nguồn y khoa chính thống thống nhất (Bộ Y tế, WHO, NHS, CDC…); không đưa liều thuốc, không chẩn đoán; nhắc đi khám khi cần.
+- NHÃN BẮT BUỘC — dòng đầu tiên của câu trả lời là đúng một nhãn, rồi xuống dòng mới viết câu trả lời:
+  [NGOAI] nếu câu hỏi KHÔNG thuộc 4 mục của Lomi: (1) tâm sự – tâm lý – tình cảm; (2) sức khoẻ; (3) cách dùng app iLomi; (4) mục Khác: bói Tarot, tìm quán / chỗ chơi ở Đà Lạt, tư vấn kinh doanh nhỏ, trò chuyện – hỏi han thường ngày. Ví dụ ngoài phạm vi: viết / sửa code, lập trình, giải bài tập, làm toán, dịch văn bản, viết bài luận / bài văn, soạn hợp đồng, kiến thức chuyên ngành không liên quan. Với [NGOAI] chỉ ghi nhãn, không viết gì thêm.
+  [CHUNG] nếu câu trả lời đúng cho BẤT KỲ AI hỏi đúng câu này: không dựa vào lời kể trước đó, không nhắc tên / tuổi / hoàn cảnh riêng, không phải lời đáp cảm xúc cho riêng người này.
+  [RIENG] cho mọi trường hợp còn lại.
 - Không nói mình là Claude hay mô hình AI của hãng nào trừ khi được hỏi thẳng; nếu được hỏi, nói thật: câu này Lomi nhờ Claude (của Anthropic) trả lời.`;
 
 type Msg = { role: "user" | "assistant"; content: string };
+
+// Khoá tra "thư viện" câu Claude đã trả lời: chữ thường, giữ dấu (để "lá" ≠ "là"), bỏ dấu câu, bỏ lời mở đầu / tiểu từ cuối câu.
+export function cacheKey(q: string): string {
+  let k = q.normalize("NFC").toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
+  k = k.replace(/^((lomi|em|bạn|bot) ơi |ơi |cho (mình|em|tớ|tôi|anh|chị|tui|t|e|m) hỏi (chút |xíu |tí )?(là )?|cho hỏi (chút |xíu |tí )?(là )?)+/u, "");
+  k = k.replace(/( (ạ|á|à|nhé|nhe|nha|nhá|vậy|z|thế|hả|ha|hen|nè))+$/u, "");
+  return k.trim();
+}
+const cacheable = (k: string) => k.split(" ").length >= 4 && k.length <= 300;
 
 function nowLine(): string {
   const now = new Date();
@@ -98,9 +114,6 @@ function normalize(ms: Msg[]): Msg[] {
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "method" }, 405);
-
-  const key = Deno.env.get("ANTHROPIC_API_KEY");
-  if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
 
   const authHeader = req.headers.get("Authorization") ?? "";
   if (!authHeader) return json({ fallback: true, error: "NOT_AUTH" }, 401);
@@ -128,6 +141,22 @@ Deno.serve(async (req) => {
   messages = normalize(messages);
   if (!messages.length || messages[messages.length - 1].role !== "user") return json({ fallback: true, error: "BAD_REQUEST" }, 400);
 
+  // Thư viện câu đã trả lời — ai đăng nhập cũng dùng được, không trừ lượt, không gọi Claude.
+  const admin = createClient(supabaseUrl, serviceKey);
+  const qKey = cacheKey(messages[messages.length - 1].content);
+  const canCache = cacheable(qKey);
+  if (canCache) {
+    const { data: hit } = await admin.from("lomi_claude_answers").select("scope, answer, hits").eq("key", qKey).maybeSingle();
+    if (hit) {
+      await admin.from("lomi_claude_answers").update({ hits: (hit.hits ?? 0) + 1, last_hit_at: new Date().toISOString() }).eq("key", qKey);
+      if (hit.scope === "out") return json({ fallback: true, error: "OUT_OF_SCOPE", cached: true });
+      if (hit.answer) return json({ reply: hit.answer, cached: true });
+    }
+  }
+
+  const key = Deno.env.get("ANTHROPIC_API_KEY");
+  if (!key) return json({ fallback: true, error: "AI_UNAVAILABLE" });
+
   const { data: remaining, error: qErr } = await userClient.rpc("consume_ai_chat_quota");
   if (qErr) {
     const m = qErr.message ?? "";
@@ -136,7 +165,7 @@ Deno.serve(async (req) => {
   }
   const refund = async () => {
     try {
-      await createClient(supabaseUrl, serviceKey).rpc("refund_ai_chat_quota", { _uid: uid });
+      await admin.rpc("refund_ai_chat_quota", { _uid: uid });
     } catch (e) {
       console.error("lomi-claude refund", e);
     }
@@ -161,11 +190,22 @@ Deno.serve(async (req) => {
       return json({ fallback: true, error: code });
     }
     const data = await res.json();
-    const reply = (Array.isArray(data?.content) ? data.content : [])
+    const raw = (Array.isArray(data?.content) ? data.content : [])
       .filter((b: any) => b?.type === "text")
       .map((b: any) => String(b.text))
       .join("\n")
       .trim();
+    const tag = raw.match(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/iu);
+    const label = tag ? tag[1].toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "") : "RIENG";
+    const reply = (tag ? raw.slice(tag[0].length) : raw).replace(/^\s*\[(NGOAI|NGOÀI|CHUNG|RIENG|RIÊNG)\]\s*/giu, "").trim();
+    // Ngoài 4 mục: không trả lời, nhớ lại để lần sau khỏi hỏi Claude. Không hoàn lượt (đỡ bị hỏi dồn câu ngoài phạm vi).
+    if (label === "NGOAI") {
+      if (canCache) await admin.from("lomi_claude_answers").upsert({ key: qKey, question: messages[messages.length - 1].content.slice(0, 500), scope: "out", answer: null });
+      return json({ fallback: true, error: "OUT_OF_SCOPE", remaining });
+    }
+    if (reply && label === "CHUNG" && canCache) {
+      await admin.from("lomi_claude_answers").upsert({ key: qKey, question: messages[messages.length - 1].content.slice(0, 500), scope: "ok", answer: reply });
+    }
     if (!reply) {
       await refund();
       return json({ fallback: true, error: "AI_ERROR" });
