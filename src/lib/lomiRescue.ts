@@ -229,6 +229,15 @@ export function metaReply(text: string, seed = 0): string | null {
 }
 
 // ── 5) Câu hỏi về CÁCH ĐỌC BÀI Tarot (kiến thức chung, không phải xin trải bài) ──
+/** 20/11: hỏi Tarot có thật / có đúng không — trả lời thật, không rút bài. */
+export function tarotMeta(text: string): string | null {
+  const n = ` ${normalizeVi(text)} `;
+  // 20/11 (bộ 100 câu, #68 — "Tarot có thực sự dự đoán được tương lai không?" từng bị rút bài luôn): hỏi Tarot CÓ THẬT / CÓ ĐÚNG không.
+  if (/\btarot\b(?: \S+){0,4} (co )?(that|thuc su|chinh xac|dung|tin duoc|linh|co co so|co khoa hoc|du doan duoc)\b|\b(?<!khong |chang |cha |ko |k )(co nen tin|nen tin|tin duoc) (vao )?tarot\b|\btarot (la )?(that hay gia|me tin|lua dao)\b/.test(n) && !/\b(rut|trai|boi|xem) (\S+ ){0,3}(cho|giup|gium|dum|ho)\b/.test(n))
+    return "🔮 Nói thật nha: **không có bằng chứng khoa học** cho thấy Tarot dự đoán được tương lai. Lá bài rút ra là ngẫu nhiên.\n\nNhiều người vẫn thích Tarot vì nó giống **một tấm gương**: hình ảnh và ý nghĩa của lá bài gợi mình nghĩ lại chuyện đang lo, nhìn nó từ một góc khác, rồi tự hỏi mình thật sự muốn gì. Lomi bói cho vui và để bạn có thêm góc nhìn — quyết định quan trọng (tiền bạc, sức khoẻ, tình cảm) thì vẫn nên dựa vào thông tin thật và người bạn tin cậy nha. Muốn thử thì gõ “bói 3 lá về …”.";
+  return null;
+}
+
 export function tarotHowto(text: string): string | null {
   const n = ` ${normalizeVi(text)} `;
   if (!/\b(la bai|bai nguoc|la nguoc|trai bai|trai ba la|tarot|xao bai|xao lai|rut bai)\b/.test(n)) return null;
@@ -240,6 +249,8 @@ export function tarotHowto(text: string): string | null {
   //   ("bạn RÚT ba lá GIÚP mình được không" là lời nhờ rút — để lớp bói lo)
   if (!/\b(rut|trai|boc|xem|boi) (\S+ ){0,3}(giup|gium|dum|ho|cho (minh|em|toi|tui|anh|chi|mk|e|t|tao))\b|\b(giup|gium|dum) (minh|em|toi|tui|mk|e) (rut|trai|boc|xem|boi)\b/.test(n) && /\b(dung|xai|trai|rut) (mot|1|ba|3|nam|5|may|bao nhieu) la\b.*\b(duoc (khong|ko|k|chu|hong)|duoc chu|du (khong|ko|chu)|co du|co duoc|on (khong|ko)|hop (khong|ko)|la du)\b|\b(nen|can) (dung|trai|rut) (may|bao nhieu) la\b|\bmay la (thi|la) (du|hop|vua)\b/.test(n))
     return "🔮 Được nha. **1 lá** hợp với câu hỏi nhanh hoặc xem cho hôm nay; **3 lá** hợp với đa số câu hỏi như công việc tháng sau — Lomi hay đọc theo **tình huống – thử thách – lời khuyên** (hoặc quá khứ – hiện tại – hướng sắp tới). Chuyện nhiều mặt quá mới cần trải nhiều lá hơn. Muốn Lomi trải thử thì gõ “bói 3 lá về …” nha.";
+  const meta = tarotMeta(text);
+  if (meta) return meta;
   if (/\b(xao lai|xao bai|tron lai|tron bai)\b.*\b(sau moi la|moi lan|tung la)\b|\bsau moi la\b.*\b(xao|tron)\b/.test(n))
     return "🔮 Không cần đâu. Bạn **xào bài một lần** trước khi rút, vừa xào vừa nghĩ về câu hỏi, rồi rút liền các lá cho cả trải bài. Chỉ xào lại khi bắt đầu một **câu hỏi mới**.";
   return null;
@@ -338,7 +349,7 @@ export function foodChat(text: string, seed = 0): string | null {
   const ch = n.match(/\b(an|uong|nau|di an)\s+(.{2,22}?)\s+hay\s+(?:la\s+)?(.{2,22}?)(?=\s+(?:thi|nhi|ta|day|di|ha|hon|ne|a)\b|\s*$)/);
   // ("uống sau ăn hay trước ăn" là hỏi cách dùng thuốc; "uống buổi sáng hay buổi tối" là hỏi giờ — không phải chọn món)
   const TIMEY = /^(sau|truoc|luc|khi|buoi|ban|moi|1|mot|2|hai|3|ba|bao)\b|\b(an|doi|no|sang|trua|chieu|toi|dem|ngay|tuan|lan|vien|lieu|thuoc)$/;
-  if (ch && !/\b(tim|o dau|quan nao|thuoc|vien|lieu)\b/.test(n) && !TIMEY.test(ch[2].trim()) && !TIMEY.test(ch[3].trim())) {
+  if (ch && !/\b(tim|o dau|quan nao|thuoc|vien|lieu|giao|ho tro|app|ung dung|dich vu|tinh nang|lomi)\b/.test(n) && !TIMEY.test(ch[2].trim()) && !TIMEY.test(ch[3].trim())) {
     const pick = [ch[2], ch[3]][Math.abs(seed) % 2].trim();
     const raw = text.normalize("NFC");
     // (lấy lại đúng chữ có dấu người dùng gõ — "phở", không phải "pho")

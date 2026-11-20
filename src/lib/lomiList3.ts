@@ -1,3 +1,4 @@
+import { overdoseMention } from "@/lib/lomiDrug";
 // ─────────────────────────────────────────────────────────────────────────────
 // 31/10/2026 — DANH SÁCH CHATGPT LẦN 3 (300 câu người dùng thật: tâm sự, tâm lý, thuốc, trò chuyện, teencode, không dấu, lẫn tiếng Anh).
 //   Các câu dưới đây trước đây bị hiểu sai hẳn: "thuốc hết hạn" → hạn gói thành viên, "thuốc nhỏ mắt mở nắp lâu" → lấy lại mật khẩu,
@@ -52,7 +53,8 @@ export function list3Reply(q: string): L3 | null {
       text: "Không chắc đã uống chưa thì **đừng uống thêm cho chắc** nha — uống trùng một liều có thể thành gấp đôi, với vài loại thuốc là nguy hiểm.\n• Gọi hỏi dược sĩ / bác sĩ đã kê, nói rõ tên thuốc và giờ thường uống; họ sẽ bảo nên bỏ liều này hay uống tiếp\n• Lần sau dùng hộp chia thuốc theo ngày, hoặc đánh dấu vào vỉ / đặt nhắc giờ trên điện thoại\n• Nếu lỡ uống gấp đôi rồi mà thấy khó chịu, choáng, khó thở → gọi **115**",
     };
   // Người nhà uống nhiều thuốc → rà soát.
-  if (VN(/\b((uống|dùng|xài) (nhiều|cả đống|cả chục|mấy chục|quá nhiều|rất nhiều|đủ thứ) (loại )?thuốc|nhiều (loại )?thuốc quá)\b/).test(n))
+  //   (20/11, #85: kể ĐÃ uống quá nhiều thuốc — "lỡ uống nhiều thuốc ngủ quá rồi" — là quá liều, để lớp quá liều báo cấp cứu)
+  if (VN(/\b((uống|dùng|xài) (nhiều|cả đống|cả chục|mấy chục|quá nhiều|rất nhiều|đủ thứ) (loại )?thuốc|nhiều (loại )?thuốc quá)\b/).test(n) && overdoseMention(q) !== "event")
     return {
       id: "med_review",
       health: true,

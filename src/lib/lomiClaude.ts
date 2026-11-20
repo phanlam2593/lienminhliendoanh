@@ -26,6 +26,8 @@ export const resetClaudeOff = () => {
 //   Câu khó đoán thì máy chủ để Claude tự gắn nhãn ngoài phạm vi, và nhớ lại để lần sau khỏi hỏi.
 const OFF_TOPIC =
   /\b(code|coding|lap trinh|python|javascript|typescript|java|html|css|sql|php|c\+\+|react|nodejs|thuat toan|debug|bug code|viet ham|script|excel cong thuc|cong thuc excel|giai (bai tap|phuong trinh|toan|de)|bai tap (toan|ly|hoa|tieng anh|ve nha)|tinh (dao ham|tich phan)|dich (cau|doan|bai|van ban|giup|ho|sang|qua) |translate|viet (bai van|bai luan|essay|tieu luan|luan van|bao cao|hop dong|cv)|soan (bai|hop dong|van ban|giao an)|lam (bai tap|luan van|tieu luan) )/;
+export const OFF_TOPIC_REPLY =
+  "Phần này nằm ngoài những gì Lomi giúp được nè 🙏 Lomi chuyên **tâm sự – tình cảm**, **sức khoẻ**, **cách dùng iLomi**, và mấy chuyện như **bói Tarot, tìm quán ở Đà Lạt, kinh doanh nhỏ, nấu ăn**. Bạn có chuyện gì trong mấy mục đó thì hỏi Lomi liền nha!";
 export const offTopic = (q: string) => OFF_TOPIC.test(` ${normalizeVi(q)} `);
 
 export function claudeEligible(i: { stuck?: StuckKind; question: string; reply: string; risk: RiskScan | null; tarot?: boolean }): boolean {

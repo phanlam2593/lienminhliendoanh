@@ -355,7 +355,7 @@ export function actionReply(q: string): Trap | null {
     return say("gọi tài xế", "• Mở **Đưa đón (/dua-don) → Chuyến hiện tại** → bấm **nhắn tin hoặc gọi** tài xế ngay trong chuyến", "ridetrack");
   if (W(/\b(gọi|gọi điện|alo)\b/u).test(low) && !W(/\bthuốc lá điện tử\b/u).test(low))
     return say("gọi điện", "• Gọi quán: mở **trang quán** → bấm **số điện thoại** (nếu quán có ghi)\n• Gọi một thành viên: mở khung chat 1-1 với họ → bấm 📞 (gọi thoại) hoặc 🎥 (gọi video)", "call");
-  if (W(/\b(chuyển tiền|chuyển khoản|chuyển \d+|thanh toán|trả tiền|ví)\b/u).test(low))
+  if (W(/\b(chuyển tiền|chuyển khoản|chuyển \d+|thanh toán|trả tiền|ví(?! dụ| như))\b/u).test(low))
     return say("chuyển tiền hay thanh toán", "• iLomi **không có ví hay chức năng thanh toán hoá đơn** — bạn trả trực tiếp tại quán (hoặc theo cách quán nhận)\n• Đi xe trong app thì trả tiền mặt trực tiếp cho tài xế\n• Đừng gửi số tài khoản, mã OTP ngân hàng cho ai qua tin nhắn nha");
   if (W(/\b(camera|cam)\b/u).test(low))
     return say("xem camera", "• Lomi không kết nối được camera nào cả — bạn mở **ứng dụng camera** của nhà mình để xem\n• Muốn biết quán còn bàn: gọi hoặc nhắn tin cho quán (trên trang quán)");

@@ -9,7 +9,7 @@ import { ArrowLeft, CircleHelp, Copy, RotateCcw, Send, Smile, Volume2, VolumeX }
 import { loadTopTopics, topicHit, type Topic } from "@/lib/lomiTopics";
 import { speak, hasNameLetter } from "@/lib/lomiAddress";
 import { supabase } from "@/integrations/supabase/client";
-import { claudeEligible, isHardOff, markClaudeOff } from "@/lib/lomiClaude";
+import { claudeEligible, isHardOff, markClaudeOff, OFF_TOPIC_REPLY, offTopic } from "@/lib/lomiClaude";
 import { useAuth } from "@/lib/auth";
 import { useLanguage } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -141,7 +141,7 @@ import { TarotCards } from "@/components/LomiTarot";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { kinSupportText } from "@/lib/lomiHeart";
-import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaReply, outOfScope, tarotCardAsk, tarotHowto, thanksGreet } from "@/lib/lomiRescue";
+import { appAskId, byeHello, calcReply, chatAboutLomi, fixTypos, foodChat, metaReply, outOfScope, tarotCardAsk, tarotHowto, tarotMeta, thanksGreet } from "@/lib/lomiRescue";
 import { VAGUE_TEXT, normNeg, otherComplaint, petPatient, qtypeOf, vagueAsk } from "@/lib/lomiQShape";
 import { repairTurn } from "@/lib/lomiRepair";
 import { urgentOf } from "@/lib/lomiUrgent";
@@ -151,7 +151,7 @@ import { vitalAsk } from "@/lib/lomiVitals";
 import { labAsk, labTips } from "@/lib/lomiLabs";
 import { LOMI_TABS, loadLomiTab, lomiTab, saveLomiTab, type LomiTab } from "@/lib/lomiTab";
 import { drugPairReply, excessAsk, excessVerb, focusExcess, focusTiming, pairAsk, sleepPillExcess, timingAsk } from "@/lib/lomiExcess";
-import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk } from "@/lib/lomiCook";
+import { cookIngredientsOnly, cookReply, hasCookIngredients, isCookAsk, isUnknownDishAsk } from "@/lib/lomiCook";
 // (câu có bệnh / thai / kiêng / trẻ nhỏ → để lớp sức khoẻ lo, không gợi ý món)
 const NOT_FOOD_TALK_VI = /(?<![\p{L}])(bệnh|đau|sốt|tiểu đường|huyết áp|bầu|mang thai|kiêng|dị ứng|giảm cân|ăn kiêng)(?![\p{L}])/u;
 const NOT_COOK_CTX = /\b(benh|bi (dau|sot|tieu chay|di ung)|sot|tieu duong|huyet ap|bau|mang thai|kieng|di ung|an kieng|giam can)\b/;
@@ -1491,6 +1491,10 @@ export function AiChat({
         if (sh !== reply.content) reply = { ...reply, content: sh };
       }
     }
+    // 20/11 (bộ 100 câu, #70/#71/#73): câu rõ ràng ngoài 4 mục của Lomi (viết code, giải bài tập, dịch, viết bài văn…) mà Lomi bí
+    //   → nói rõ là ngoài phạm vi (trước: "có phải bạn muốn hỏi…" / "Lomi nghe nè, kể thêm đi"). Không tính là "Lomi bí".
+    if (reply.stuck && !en && offTopic(rawRef.current ?? asked))
+      reply = { ...reply, content: OFF_TOPIC_REPLY, stuck: undefined, sticker: undefined, unk: undefined, unkKey: undefined, quick: undefined, talk: undefined };
     if (reply.stuck) {
       recordStuck(
         {
@@ -1905,6 +1909,14 @@ export function AiChat({
     const danger0 = !forceAi && !en && !!(crisisReply(q, lang) || crisisCheckIn(q) || urgentOf(raw) || redNow || harmOf(raw, fr1));
     // 14/11 (kiến trúc mới) — QUÉT RỦI RO Ở MỘT CHỖ: kết quả để ở riskRef cho trọng tài tại cửa ra (localReply) dùng.
     riskRef.current = riskScan({ q, raw, lang, en, forceAi, harm: !forceAi && !en && !!harmOf(raw, fr1), red: redNow });
+    // 20/11 (bộ 100 câu, #98–100): hỏi cách nấu món có chữ "sốt" / "kho" là tên món ("trứng sốt cà chua", "cá sốt cà", "bò sốt vang")
+    //   → trả công thức NGAY, trước lớp sức khoẻ (trước đây "sốt" bị đọc là bị sốt, ra thẻ "kiêng trứng khi sốt").
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && /\b(sot (ca chua|ca|vang|me|chua ngot|cam|nam|tieu|bo|kem|mayonnaise|thai)|nuoc sot)\b/.test(` ${normalizeVi(raw)} `)) {
+      const ckS = cookReply(raw);
+      if (ckS) return localReply(q, { role: "assistant", content: ckS, local: true, routed: "cook" });
+      if (isCookAsk(raw) || isUnknownDishAsk(raw))
+        return localReply(q, { role: "assistant", content: "Món này Lomi chưa có công thức nên chưa dám chỉ bừa 🥲 Bạn kể Lomi nghe trong tủ đang có gì, Lomi gợi ý vài món làm được liền nha!", local: true, routed: "cook", stuck: "fallback" });
+    }
     // 18/11 — tab "Sức khoẻ": câu KỂ có nhắc một bệnh / triệu chứng trong kho ("Nào có mất ngủ, tôi ngủ đủ mà sáng vẫn mệt rũ") mà
     //   lớp sức khoẻ thường bỏ qua vì không phải câu hỏi (rồi lớp tâm sự nhận) → trả thẻ kiến thức của bệnh đó luôn. Chỉ khi: không có rủi ro
     //   (an toàn đi trước), câu KHÔNG phải câu hỏi kiến thức (câu hỏi để lớp sức khoẻ đầy đủ lo), và không đang nói tiếp đúng bệnh đó.
@@ -1970,7 +1982,32 @@ export function AiChat({
           || (isCookAsk(raw) && !hasCookIngredients(raw) && hasCookIngredients(prevUkT)));
         const ck = cookCtx ? cookReply(raw, prevUkT) : isCookAsk(raw) ? cookReply(raw) : null;
         if (ck) return localReply(q, { role: "assistant", content: ck, local: true, routed: "cook" });
+        // 20/11: hỏi cách nấu một món thư viện chưa có → nói thật + đánh dấu bí (máy chủ nhờ Claude), không để rơi sang lớp khác.
+        if (!cookCtx && (isCookAsk(raw) || isUnknownDishAsk(raw)))
+          return localReply(q, { role: "assistant", content: "Món này Lomi chưa có công thức nên chưa dám chỉ bừa 🥲 Bạn kể Lomi nghe trong tủ đang có gì, Lomi gợi ý vài món làm được liền nha!", local: true, routed: "cook", stuck: "fallback" });
       }
+    }
+    // 20/11 (bộ 100 câu, #44/#54): câu hỏi rõ là về CHỖ NÀO TRONG APP ("tìm việc làm thêm thì dùng mục nào", "xem lượt theo dõi cửa hàng
+    //   ở đâu") mà khớp một câu hướng dẫn app → trả lời câu đó trước lớp tâm sự / tư vấn kinh doanh (trước: "muốn có thêm thu nhập…").
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any && VN(/\b(dùng mục nào|vào mục nào|mục nào|vào đâu|xem ở đâu|xem chỗ nào)\b/).test(` ${normalizeVi(raw)} `)) {
+      // (#54) chủ DN xem số người theo dõi — Hồ sơ doanh nghiệp hiện ⭐ đánh giá · 👥 người theo dõi · khách quen (pages/Profile)
+      if (VN(/\b((lượt|người|ai|bao nhiêu)( \S+){0,3} theo dõi|khách quen)\b/).test(` ${normalizeVi(raw)} `) && VN(/\b(cửa hàng|quán|tiệm|doanh nghiệp|shop|của mình|của tôi|của em)\b/).test(` ${normalizeVi(raw)} `))
+        return localReply(q, { role: "assistant", content: "Vào **Hồ sơ → ⋯ → Hồ sơ doanh nghiệp** (/ho-so?view=business). Ngay dưới tên doanh nghiệp có số ⭐ đánh giá, 👥 **người theo dõi** và số **khách quen** — bấm vào “khách quen” để xem danh sách nha.", local: true, faqId: "bizoffer" });
+      const fApp = matchFaq(q) ?? matchFaq(raw);
+      if (fApp) return answerFaq(fApp, q);
+    }
+    // 20/11 (bộ 100 câu, #60/#63): người dùng muốn TỰ BÁN / mở chỗ kinh doanh và hỏi cách làm ("muốn bán đồ handmade trên Facebook mà chưa
+    //   biết bắt đầu từ đâu", "bán trà sữa gần trường cần chú ý gì") → tư vấn kinh doanh, không phải tìm quán bán món đó.
+    if (!forceAi && !en && !danger0 && !riskRef.current?.any
+      && VN(/\b((muốn|định|tính|đang|sắp|mới|tập|bắt đầu) (\S+ )?(bán|kinh doanh|buôn bán|mở (quán|tiệm|shop|cửa hàng))|^(bán|kinh doanh|mở (quán|tiệm|shop)) )/).test(` ${normalizeVi(raw)} `.trim() + " ")
+      && VN(/\b(bắt đầu từ đâu|bắt đầu sao|cần (chú ý|lưu ý|chuẩn bị)|nên (bán|chọn|làm|bắt đầu)|làm sao (để )?(bán|có khách|đông khách)|có ổn không|có nên|thế nào|như nào|ra sao|những gì|gì không)\b/).test(` ${normalizeVi(raw)} `)
+      && !VN(/\b(tìm|ở đâu bán|chỗ nào bán|quán nào|mua ở đâu)\b/).test(` ${normalizeVi(raw)} `)
+      && !looksLikeBizQuestion(q))
+      return askBiz(q);
+    // 20/11 (bộ 100 câu, #68): "Tarot có thực sự dự đoán được tương lai không?" → trả lời thật, không rút bài.
+    if (!forceAi && !en && !danger0) {
+      const tm = tarotMeta(raw);
+      if (tm) return localReply(q, { role: "assistant", content: tm, local: true, routed: "tarot-howto" });
     }
     // 18/11 (G06-020, G06-048): câu trước nói chuyện trải bài Tarot rồi hỏi cụt bằng chữ chỉ trỏ ("Cái đó đọc theo thứ tự nào vậy?",
     //   "Cái đó dùng ba lá được chứ?") → hiểu là hỏi về trải bài đó.
@@ -2464,7 +2501,9 @@ export function AiChat({
       //   (13/11: "Đi xem tarot XONG đói bụng, gần Nhà thờ Đức Bà có món gì ăn nhẹ" — vế bói chỉ là kể; ý chính là tìm quán → không tách)
       const tarotByQ = !!detectSearch(q) && VN(/\b((xem|bói|coi|rút) (bài |tarot |bói )?(xong|rồi)|(định|tính|sẽ) (đi )?(bói|xem tarot|xem bói|coi bói)( \S+){0,6} (ở|tại) (quán|chỗ))\b/).test(` ${normalizeVi(q)} `);
       //   (19/11: hỏi nấu / chuẩn bị đồ ăn cả câu — "đưa hai cháu đi công viên, muốn chuẩn bị đồ ăn mang theo…, gợi ý thêm món dễ chia phần" — không tách)
-      let sp = tarotByQ || (isCookAsk(q) && !NOT_COOK_CTX.test(` ${normalizeVi(q)} `)) ? null : (splitTwo(q) ?? splitWho(q));
+      // 20/11 (#38): "thuốc X có gây A hoặc B không" là MỘT câu hỏi tác dụng phụ — không tách đôi.
+      const drugSide2 = !!(findDrug(q) || findIndexedDrug(q)) && VN(/\b(gây|tác dụng phụ|ảnh hưởng)\b/).test(` ${normalizeVi(q)} `);
+      let sp = tarotByQ || drugSide2 || (isCookAsk(q) && !NOT_COOK_CTX.test(` ${normalizeVi(q)} `)) ? null : (splitTwo(q) ?? splitWho(q));
       //   (13/11, G10-094: "Từ ngày mở shop mình bỏ bữa, giờ đau bụng dữ dội kèm nôn, cần đi khám ngay không" — vế sau là chuyện sức khoẻ
       //   đang cấp → trả lời vế đó trước, vế làm ăn thành nút)
       const SICK = VN(/\b(đau|sốt|nôn|ói|khó thở|chóng mặt|chảy máu|ngất|co giật|tiêu chảy|đi khám|cấp cứu)\b/);
@@ -2801,7 +2840,7 @@ export function AiChat({
         } finally {
           setBusy(false);
         }
-        const sadP = VN(/\b(buồn|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `);
+        const sadP = VN(/\b(buồn(?! miệng| mồm| ngủ| cười)|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(đi (đâu )?chơi|đi dạo|đi đâu)( \S+){0,4} (cho )?(đỡ|bớt|khỏi|hết) (buồn|chán)\b/g), " "));
         return localReply(q, { role: "assistant", content: sadP && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: itP, quick: sadP ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
       }
     }
@@ -3103,7 +3142,7 @@ export function AiChat({
             setBusy(false);
           }
           // 06/11: "nay muốn kiếm gì đó ăn cho đỡ buồn" — vừa tìm quán vừa có chuyện buồn → hỏi han một câu trước, kèm nút tâm sự
-          const sad = VN(/\b(buồn|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `);
+          const sad = VN(/\b(buồn(?! miệng| mồm| ngủ| cười)|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(đi (đâu )?chơi|đi dạo|đi đâu)( \S+){0,4} (cho )?(đỡ|bớt|khỏi|hết) (buồn|chán)\b/g), " "));
           return localReply(q, { role: "assistant", content: sad && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: intent, avoidIds: avoid, quick: sad ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
         }
       }
@@ -3852,7 +3891,10 @@ export function AiChat({
         const namedId = body && body.sx.length && !kidTalk && !/^(⚠️|🚨)/u.test(body.text) ? findMedId(q) : null;
         const sxCardId = namedId ?? (sx1 && !kidTalk ? symptomCard(sx1) : undefined);
         const sxCard = sxCardId ? await loadMedTopic(sxCardId) : null;
-        if (body && sxCard && (sx1 || namedId)) {
+        // 20/11 (bộ 100 câu, #38 — "Thuốc colchicine có gây tiêu chảy hoặc ảnh hưởng đến cơ không?" từng ra "Bạn đang bị tiêu chảy"):
+        //   câu hỏi một THUỐC có gây triệu chứng đó không là hỏi tác dụng phụ của thuốc — không đưa thẻ triệu chứng như thể người dùng đang bị.
+        const drugSideAsk = !!(findDrug(raw) || findIndexedDrug(raw)) && VN(/\b(gây|tác dụng phụ|ảnh hưởng|bị .{0,12} không)\b/).test(` ${normalizeVi(raw)} `);
+        if (body && sxCard && (sx1 || namedId) && !drugSideAsk) {
           const again = lastA?.med?.id === sxCard.id || (!!sx1 && !namedId && !!lastA?.sx?.includes(sx1) && lastA.sx.length === 1);
           // (23/10 QA V9: lượt trước vừa nói về bé / ông bà — "con a 8 tháng bị ho" → "ho nhiều về đêm" — thì vẫn là người đó, không "Bạn đang bị")
           const aboutW = !patient && !carried && fr?.subject !== "self" && lastA0?.about?.kind === "third" && /^(bé|con|ông|bà|mẹ|ba|bố|má|cha|ông nội|bà nội|ông ngoại|bà ngoại)$/u.test(lastA0.about.text) ? lastA0.about.text : null;
@@ -4044,7 +4086,7 @@ export function AiChat({
           setBusy(false);
         }
         shownRef.current = shown;
-        const sadS = VN(/\b(buồn|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `);
+        const sadS = VN(/\b(buồn(?! miệng| mồm| ngủ| cười)|chán|tủi|stress|áp lực|mệt mỏi|cô đơn|thất tình|chia tay|tâm trạng)\b/).test(` ${normalizeVi(raw)} `.replace(VN(/\b(đi (đâu )?chơi|đi dạo|đi đâu)( \S+){0,4} (cho )?(đỡ|bớt|khỏi|hết) (buồn|chán)\b/g), " "));
         return localReply(q, { role: "assistant", content: sadS && res.places?.length ? `Buồn thì kiếm gì ngon ăn cho ấm bụng cũng là một cách tự thương mình nè 🫂 Ăn xong mà vẫn còn nặng lòng thì kể Lomi nghe nha.\n\n${res.text}` : res.text, local: true, places: res.places, search: intent, quick: sadS ? ["Tâm sự với Lomi", ...(res.quick ?? [])].slice(0, 3) : res.quick });
       }
     }

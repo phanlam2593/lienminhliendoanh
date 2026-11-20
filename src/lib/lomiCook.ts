@@ -20,6 +20,9 @@ type Dish = {
 
 const D: Dish[] = [
   { name: "Trứng xào cà chua", ings: ["trung", "ca chua"], method: "xao", veg: true, min: 10, steps: ["Cà chua bổ múi cau; trứng đánh tan với chút muối, hành lá", "Xào cà chua với chút dầu tới khi mềm, ra nước sệt", "Đổ trứng vào, để hơi se mặt rồi đảo nhẹ cho trứng chín mềm, nêm lại vừa ăn"] },
+  // 20/11 (bộ 100 câu): "chỉ mình cách nấu trứng sốt cà chua" từng bị đọc "sốt" = bị sốt; "cách làm bò kho" chưa có công thức.
+  { name: "Trứng sốt cà chua", ings: ["trung", "ca chua"], method: "kho", veg: true, min: 15, alias: ["trung sot ca chua", "trung sot ca", "trung op la sot ca chua"], steps: ["Trứng chiên ốp la (hoặc luộc chín bóc vỏ, chiên sơ cho se mặt)", "Phi hành tím, cho cà chua băm vào xào tới khi nhừ, thêm chút nước, nêm nước mắm, chút đường cho sệt", "Cho trứng vào, rim nhỏ lửa 3–5 phút cho thấm sốt, rắc hành lá, tiêu"] },
+  { name: "Bò kho", ings: ["bo", "thit bo", "ca rot", "sa"], method: "kho", min: 90, alias: ["bo kho"], steps: ["Thịt bò (nạm, gân hoặc bắp) cắt miếng vuông, ướp sả băm, tỏi, hành tím, gói gia vị bò kho (hoặc ngũ vị hương, quế, hồi), nước mắm, chút đường, màu điều 30 phút", "Phi sả, tỏi thơm, cho bò vào xào săn", "Thêm nước dừa hoặc nước lọc ngập thịt, hầm lửa nhỏ 60–90 phút tới khi bò mềm", "Cho cà rốt cắt khúc vào nấu thêm 10–15 phút, nêm lại; ăn với bánh mì, bún hoặc hủ tiếu"] },
   { name: "Canh cà chua trứng", ings: ["trung", "ca chua"], method: "canh", veg: true, min: 10, steps: ["Phi thơm hành, xào sơ cà chua cho mềm", "Thêm nước, đun sôi, nêm muối / nước mắm", "Đánh tan trứng, rót từ từ thành sợi vào nồi đang sôi, khuấy nhẹ, tắt bếp, rắc hành lá"] },
   { name: "Đậu phụ sốt cà chua", ings: ["dau phu", "ca chua"], method: "kho", veg: true, min: 15, alias: ["dau sot ca chua", "dau hu sot ca"], steps: ["Đậu cắt miếng, chiên vàng (hoặc áp chảo ít dầu)", "Xào cà chua băm với hành tím tới khi sệt, nêm muối, chút đường", "Cho đậu vào, rim nhỏ lửa 5 phút cho thấm, rắc hành lá"] },
   { name: "Đậu phụ xào nấm", ings: ["dau phu", "nam"], method: "xao", veg: true, min: 15, steps: ["Đậu cắt miếng, áp chảo cho vàng mặt", "Phi tỏi, xào nấm lửa lớn cho ráo nước", "Cho đậu vào, nêm nước tương / muối, đảo nhẹ, thêm hành lá"] },
@@ -111,6 +114,12 @@ export function isCookAsk(text: string): boolean {
   return (COOK_VERB.test(n) && ASK_DISH.test(n)) || (ing && /\b(tu (lanh )?(con|co)|nha (con|co)|o nha co|trong tu)\b/.test(n) && (COOK_VERB.test(n) || ASK_DISH.test(n)))
     || /\bmon (chay|hap|xao|kho|canh)\b(?: \S+){0,4} (de lam|nhanh|don gian|gon)\b/.test(n)
     || /\b(do an|mon an|mon)\b(?: \S+){0,4} (mang theo|mang di|de chia phan)\b/.test(n);
+}
+
+/** 20/11: hỏi CÁCH NẤU một món mà thư viện chưa có ("cách nấu cà ri gà") — để AiAssistant chuyển câu này đi hỏi thay vì đoán sang lớp khác. */
+export function isUnknownDishAsk(text: string): boolean {
+  const n = ` ${normalizeVi(text)} `;
+  return /\b(cach nau|nau mon|cach lam mon|cong thuc (nau|lam|mon))\b/.test(n) && !/\b(tim quan|quan nao|o dau|gan day|dat ban|giao tan noi|com tho|nau com dien)\b/.test(n);
 }
 
 /** Câu có nhắc nguyên liệu nấu ăn không */
