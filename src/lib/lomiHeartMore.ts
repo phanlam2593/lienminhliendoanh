@@ -910,7 +910,8 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "procrast",
-    re: VN(/\b(trì hoãn|hay trì hoãn|lười quá|lười biếng|lười học|lười làm|không có động lực|không thể tập trung|mất tập trung|khó tập trung|dễ xao nhãng|cứ để mai|nước đến chân mới nhảy)\b/),
+    // (20/11: + "làm sao bớt lười", "làm sao để tập trung học bài")
+    re: VN(/\b(bớt lười|hết lười|đỡ lười|bỏ lười|(làm sao|cách|bí quyết) (để |cho )?(tập trung|chăm) (học|làm|ôn)|tập trung học bài|trì hoãn|hay trì hoãn|lười quá|lười biếng|lười học|lười làm|không có động lực|không thể tập trung|mất tập trung|khó tập trung|dễ xao nhãng|cứ để mai|nước đến chân mới nhảy)\b/),
     feel: ["Ai cũng có lúc trì hoãn hết á, bạn không lười đâu 😄", "Lomi hiểu, biết phải làm mà cứ không bắt đầu được thì khó chịu với chính mình lắm."],
     insight: [
       "Trì hoãn ít khi do lười — thường là do việc đó làm mình thấy ngợp, chán, hoặc sợ làm không tốt.",
@@ -1300,7 +1301,8 @@ export const MORE_THEMES: Theme[] = [
   },
   {
     id: "confidence",
-    re: VN(/\b(muốn tự tin|làm sao tự tin|tự tin hơn|thiếu tự tin|muốn thay đổi bản ?thân|phát triển bản ?thân|muốn tốt hơn|sống tích cực|làm sao để sống vui|bắt đầu lại|làm lại từ đầu)\b/),
+    // (20/11: + "cách để dậy sớm", "làm sao tạo thói quen tốt")
+    re: VN(/\b((cách|làm sao|bí quyết) (để |cho )?(dậy sớm|thức dậy sớm|tạo thói quen|xây thói quen|bỏ thói quen|giữ kỷ luật|sống kỷ luật)|muốn tự tin|làm sao tự tin|tự tin hơn|thiếu tự tin|muốn thay đổi bản ?thân|phát triển bản ?thân|muốn tốt hơn|sống tích cực|làm sao để sống vui|bắt đầu lại|làm lại từ đầu)\b/),
     feel: ["Muốn trở nên tốt hơn là một mong muốn rất đẹp, Lomi ủng hộ bạn hết mình 💪", "Ui, nghe bạn muốn thay đổi là Lomi thấy có năng lượng liền 🌱"],
     insight: [
       "Tự tin không phải là không sợ, mà là dám làm dù còn sợ. Nó được xây từ những lần mình giữ lời hứa với chính mình.",

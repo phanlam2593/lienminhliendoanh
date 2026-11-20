@@ -172,3 +172,13 @@ Ghi chú kiểm deploy: fetch('/') từ trang đang mở bị service worker tr�
 
 - lomiHealthFacts thêm (có nguồn, đối chiếu 20/11/2026): **veg** rau quả (NHS Why 5 A Day, 30/09/2026) · **leftover** đồ ăn thừa / cơm qua đêm / thịt trong tủ lạnh (FSA: nguội rồi vào tủ trong 1–2 giờ, ăn trong 2 ngày — món cơm 1 ngày, hâm 1 lần, thịt sống ngăn dưới) · **sunscreen** kem chống nắng (NHS Sunscreen and sun safety, 24/03/2026; chỉ khi có ý hỏi) · **pilltiming** uống thuốc trước / sau ăn bao lâu (không nguồn riêng → chỉ đọc nhãn / hỏi dược sĩ, không số). Nới "screen" ("ngồi máy tính nhiều có sao"), "alcohol" ("bia với rượu uống chung" — trước bị lớp thuốc đáp "Hai thuốc dùng chung").
 - lomiExcess: `pairAsk` "ăn A với B được không" (cả hai là đồ ăn / uống) → viết lại thành câu món kỵ nhau (thẻ có sẵn); một bên là THUỐC → `drugPairReply` (chưa có dữ liệu dùng chung + dòng thẻ thuốc có nhắc thứ đó). Bỏ qua câu có nhắc bệnh / thai ("bị gout ăn tôm và thịt bò được không" để lớp thẻ bệnh lo). `timingAsk` + `focusTiming` "ăn X lúc nào tốt nhất" → nói thật chưa có "giờ vàng" + các dòng giờ giấc có sẵn trong thẻ.
+
+## 16. Hay đói, mua mỹ phẩm, mẹo tập trung / dậy sớm / bớt lười (20/11 chiều)
+
+Đo: test 2.601 qua (lomiWork1311 + lomiExcess chạy lại sau khi sửa "bạn"≠"bán") · bộ 1.000 câu 922/985 (hỏng 0) · giữ riêng 61/65 · paraphrase 388/400 · hội thoại 155/160.
+
+- lomiHealthFacts **hunger** ("ăn nhiều mà vẫn đói", "hay đói bụng là bị gì"; early): mẹo thử trước (kiến thức phổ thông) + dấu hiệu NÊN ĐI KHÁM theo NHS (tiểu đường type 2: khát, tiểu nhiều, mệt, sụt cân…; cường giáp: sụt cân dù ăn nhiều hơn…). "đói quá ăn gì giờ" vẫn gợi ý món.
+- lomiSearch: nhóm mỹ phẩm + kem chống nắng / sữa rửa mặt / toner / serum; nhóm "quán ăn vặt" không nhận "kem chống nắng / dưỡng / trị…"; luật chặn "bôi kem" nhường khi có ý MUA ("mua / shop / ở đâu…" — KHÔNG dùng "ban" vì bỏ dấu trùng "bạn").
+- lomiHeartMore: "procrast" + "bớt lười", "làm sao tập trung học bài"; "confidence" + "cách dậy sớm", "tạo / bỏ thói quen". exercise + "đi bộ mỗi ngày".
+- "homestay nào view đẹp" báo "chưa thấy" chỉ do dữ liệu giả lập của bộ test; DB thật có 2 homestay đã duyệt — không phải lỗi.
+- Chưa làm (thiếu nguồn kiểm chứng): ngủ trưa bao lâu, uống nước trước khi ngủ, nằm điều hoà cả đêm.

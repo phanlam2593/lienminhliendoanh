@@ -31,7 +31,7 @@ const KINDS: Kind[] = [
   { re: VN(/\b(trà sữa|trà chanh|milk tea)\b/), type: "food", names: ["tra sua", "tea", "tra"], noun: "quán trà sữa" },
   { re: VN(/\b(tiệm bánh|bakery|bánh ngọt|bánh kem)\b/), type: "food", names: ["banh", "bakery"], noun: "tiệm bánh" },
   { re: VN(/\b(lẩu|nướng|bbq)\b/), type: "food", names: ["lau", "nuong", "bbq"], noun: "quán lẩu nướng" },
-  { re: VN(/\b(ăn vặt|chè|kem)\b/), type: "food", names: ["an vat", "che", "kem"], noun: "quán ăn vặt" },
+  { re: VN(/\b(ăn vặt|chè|kem(?! (chống nắng|dưỡng|trị|bôi|thoa|nền|che khuyết)))\b/), type: "food", names: ["an vat", "che", "kem"], noun: "quán ăn vặt" },
   { re: VN(/\b(bar|pub|quán nhậu|bia|nhậu)\b/), type: "food", names: ["bar", "pub", "bia", "nhau"], noun: "quán nhậu" },
   { re: VN(/\b(nhà hàng|restaurant)\b/), type: "food", names: ["nha hang", "restaurant"], noun: "nhà hàng" },
   { re: VN(/\b(phở|bún|cơm|mì quảng|hủ tiếu|quán ăn|đồ ăn|ăn uống|chỗ ăn)\b/), type: "food", names: [], noun: "quán ăn", broad: true },
@@ -104,7 +104,7 @@ const KINDS: Kind[] = [
   // ── Mua sắm ──
   { re: VN(/\b(tạp hoá|tạp hóa|cửa hàng tiện lợi|tiệm tạp hoá|mua đồ dùng|siêu thị mini)\b/), type: "shopping", names: ["tap hoa", "tien loi", "tong hop"], noun: "tiệm tạp hoá" },
   { re: VN(/\b(hoa tươi|tiệm hoa|shop hoa|mua hoa|bó hoa|lẵng hoa)\b/), type: "shopping", names: ["hoa tuoi"], noun: "tiệm hoa" },
-  { re: VN(/\b(mỹ phẩm|skincare|son môi|kem dưỡng)\b/), type: "shopping", names: ["my pham"], noun: "shop mỹ phẩm" },
+  { re: VN(/\b(mỹ phẩm|skincare|son môi|kem dưỡng|kem chống nắng|sữa rửa mặt|nước tẩy trang|toner|serum)\b/), type: "shopping", names: ["my pham"], noun: "shop mỹ phẩm" }, // (20/11: + kem chống nắng, sữa rửa mặt…)
   { re: VN(/\b(quần áo|thời trang|shop đồ|mua đồ)\b/), type: "shopping", names: ["thoi trang"], noun: "shop thời trang" },
   { re: VN(/\b(nhà sách|hiệu sách|cửa hàng sách|mua sách)\b/), type: "shopping", names: ["sach"], noun: "nhà sách" },
   { re: VN(/\b(văn phòng phẩm|đồ dùng học tập)\b/), type: "shopping", names: ["van phong pham"], noun: "cửa hàng văn phòng phẩm" },
@@ -160,7 +160,7 @@ export function detectSearch(text: string): SearchIntent | null {
   if (VN(/\b((đăng ký|đăng kí|muốn|làm sao|cách) (làm |thành |trở thành )?(tài xế|shipper|người giao hàng)|đang (chạy|làm) (giao hàng|ship|shipper|xe ôm|grab|tài xế|xe công nghệ))\b/).test(n) && !VN(/\b(tìm|kiếm|gọi|đặt|cần) (một |1 )?(tài xế|shipper|xe)\b/).test(n)) return null;
   // 13/11 (G10-099): "bà đang dùng THUỐC chống đông, ăn rau xanh có cần hỏi BÁC SĨ về chế độ ăn không" — hỏi thuốc / ăn uống theo bệnh,
   //   không phải tìm quán (trừ khi tìm chính nhà thuốc / phòng khám)
-  if (/\bkem\b/.test(n) && /\b(boi|thoa|dung kem|kem duong|kem tri|chong nang|da hoi kho|da kho|noi man|rat|di ung|ngua)\b/.test(n) && !/\b(an kem|quan kem|tiem kem|ly kem)\b/.test(n)) return null;
+  if (/\bkem\b/.test(n) && /\b(boi|thoa|dung kem|kem duong|kem tri|chong nang|da hoi kho|da kho|noi man|rat|di ung|ngua)\b/.test(n) && !/\b(an kem|quan kem|tiem kem|ly kem)\b/.test(n) && !/\b(mua|shop|cua hang|tiem|o dau|cho nao|noi nao)\b/.test(n)) return null; // ("ban" bỏ dấu cũng là "bạn" — không dùng) (20/11: "mua kem chống nắng ở đâu" là tìm chỗ bán)
   if (VN(/\b(tăng cân|giảm cân|ăn kiêng|ăn sao (để|cho)|ăn thế nào (để|cho)|ăn như thế nào)\b/).test(n) && !VN(/\b(quán|tiệm|chỗ|ở đâu)\b/).test(n)) return null;
   if (VN(/\b(đang (dùng|uống) thuốc|thuốc (chống đông|huyết áp|tiểu đường|tim)|hỏi bác sĩ|bác sĩ (dặn|kê|bảo))\b/).test(n) && !VN(/\b(nhà thuốc|tiệm thuốc|hiệu thuốc|quầy thuốc|phòng khám|bệnh viện|phòng mạch)\b/).test(n)) return null;
   const near = VN(/\b(gần|quanh|lân cận|nearby)\b/).test(n);

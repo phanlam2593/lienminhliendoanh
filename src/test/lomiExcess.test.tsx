@@ -77,3 +77,17 @@ describe("đợt 2 (20/11 trưa): rau quả, đồ ăn thừa, kem chống nắn
     expect(((await last(["uống thuốc chống đông với rau xanh được không"])) as M).content).toMatch(/tuỳ loại thuốc chống đông/);
   }, T);
 });
+
+describe("đợt 3 (20/11 chiều): hay đói, mua mỹ phẩm, mẹo tập trung / dậy sớm / bớt lười, đi bộ", () => {
+  it("trả lời đúng mảng", async () => {
+    expect(((await last(["ăn nhiều mà vẫn đói có sao không"])) as M).content).toMatch(/Nên đi khám[^]*khát nước suốt/);
+    expect(((await last(["dạo này hay đói bụng là bị gì"])) as M).content).toMatch(/Hay đói/);
+    expect(((await last(["đói quá ăn gì giờ"])) as M).content).not.toMatch(/Hay đói/);
+    expect(((await last(["mua kem chống nắng ở đâu"])) as M).content).toMatch(/mỹ phẩm/);
+    expect(((await last(["bôi kem chống nắng mỗi ngày có sao k"])) as M).content).toMatch(/SPF/);
+    expect(((await last(["tìm quán kem ngon"])) as M).content).not.toMatch(/mỹ phẩm/);
+    expect(((await last(["làm sao bớt lười"])) as M & { heart?: string }).heart).toBe("procrast");
+    expect(((await last(["cách để dậy sớm"])) as M & { heart?: string }).heart).toBe("confidence");
+    expect(((await last(["đi bộ mỗi ngày bao nhiêu là đủ"])) as M).content).toMatch(/150 phút/);
+  }, T * 2);
+});

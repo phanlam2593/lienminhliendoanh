@@ -195,7 +195,7 @@ const FACTS: Fact[] = [
     id: "exercise",
     minAge: 19,
     topic: "mức vận động",
-    re: VN(/\b(tập thể dục|tập gym|chạy bộ|đi bộ bao lâu|đi bộ bao nhiêu|đi bộ mấy|tập bao nhiêu|vận động bao nhiêu|nên tập gì|bắt đầu tập)\b/),
+    re: VN(/\b(tập thể dục|tập gym|chạy bộ|đi bộ bao lâu|đi bộ bao nhiêu|đi bộ mấy|đi bộ mỗi ngày|mỗi ngày (nên )?đi bộ|tập bao nhiêu|vận động bao nhiêu|nên tập gì|bắt đầu tập)\b/),
     a: "🏃 **Vận động** (NHS, người 19–64 tuổi): ít nhất **150 phút/tuần** vận động vừa (đi bộ nhanh, đạp xe, bơi…) **hoặc 75 phút/tuần** vận động mạnh, cộng thêm bài tập sức mạnh cho các nhóm cơ chính **ít nhất 2 ngày/tuần**.\n• Bớt thời gian ngồi / nằm, chen vào những lúc ngồi lâu vài hoạt động nhẹ.\n• Có bệnh tim, huyết áp, xương khớp thì hỏi bác sĩ trước khi tập nặng.",
     src: "NHS (Anh) — Physical activity guidelines for adults aged 19 to 64, rà soát 22/05/2024",
   },
@@ -313,6 +313,16 @@ const FACTS: Fact[] = [
     re: VN(/\b(nhìn điện thoại nhiều có sao|xài điện thoại nhiều|ánh sáng xanh|nhìn màn hình nhiều có sao|dùng điện thoại trước khi ngủ|(ngồi|dùng|xài|nhìn|chơi) (máy tính|laptop|máy vi tính|màn hình|điện thoại|game|điện tử)( \S+){0,3} (nhiều|lâu|cả ngày|suốt ngày)( \S+){0,3} (có sao|có hại|sao không|sao ko|sao k|có s|hại gì|ảnh hưởng))\b/),
     a: "📱 **Dùng điện thoại/màn hình nhiều:** dễ mỏi mắt, khô mắt (nhìn chăm chú lâu thì ít chớp mắt), đau cổ vai gáy, khó ngủ.\n• Quy tắc 20-20-20 (Viện Hàn lâm Nhãn khoa Mỹ): **cứ 20 phút, nhìn một vật xa ít nhất 20 feet (khoảng 6 mét) trong ít nhất 20 giây**.\n• Màn hình thường đặt cách mặt khoảng 50–65 cm, hơi thấp hơn tầm mắt.\n• Cất điện thoại một lúc trước khi ngủ.",
     src: "American Academy of Ophthalmology — Eye Strain (aao.org)",
+  },
+  {
+    // 20/11: "ăn nhiều mà vẫn đói có sao không", "dạo này hay đói bụng là bị gì" — trước: "chưa biết" / gợi ý món ăn.
+    //   Chỉ nêu dấu hiệu NÊN ĐI KHÁM theo NHS (tiểu đường type 2, cường giáp); không chẩn đoán.
+    id: "hunger",
+    early: true,
+    re: VN(/\b(ăn (nhiều|nhiều lắm|rất nhiều|hoài|mãi|liên tục)( \S+){0,3} (vẫn|mà vẫn|cũng|vẫn còn) (đói|thèm ăn)|(hay|dễ|nhanh|lúc nào cũng|suốt ngày|cứ) đói( bụng)?( \S+){0,4} (là bị gì|bị gì|có sao|có bệnh|có phải|sao không|sao ko|tại sao|vì sao|là sao)|(tại sao|vì sao|sao) (mình |em |tôi |tui )?(hay|dễ|nhanh|lúc nào cũng) đói|ăn không biết no|ăn mãi không no|ăn hoài không no)\b/),
+    a: "🍽️ **Hay đói / ăn nhiều mà vẫn đói:**\n• Có thể thử trước: mỗi bữa có **đạm** (trứng, cá, thịt, đậu) và **rau**; bớt đồ ngọt, nước ngọt; ăn chậm; ngủ đủ — rồi xem có đỡ không.\n🩺 **Nên đi khám** nếu hay đói **kèm** một trong các dấu hiệu: **khát nước suốt, đi tiểu nhiều hơn hẳn, mệt nhiều, sụt cân dù không cố giảm**, nhìn mờ, vết thương lâu lành (dễ là dấu hiệu **tiểu đường**); hoặc **sụt cân dù ăn nhiều hơn**, tim đập nhanh, run tay, ra nhiều mồ hôi, sợ nóng (có thể do **tuyến giáp hoạt động quá mức**). Bác sĩ thường cho thử đường huyết, chức năng tuyến giáp.",
+    src: "NHS (Anh) — Type 2 diabetes: symptoms, rà soát 10/02/2025; Overactive thyroid: symptoms, rà soát 11/04/2023 (phần dấu hiệu nên đi khám; mẹo thử trước là kiến thức phổ thông)",
+    checked: "20/11/2026",
   },
   {
     // 20/11: "ăn nhiều rau có tốt không", "ăn trái cây nhiều có sao" — NHS 5 A Day
