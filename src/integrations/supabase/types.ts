@@ -883,6 +883,36 @@ export type Database = {
           },
         ]
       }
+      lomi_claude_answers: {
+        Row: {
+          answer: string | null
+          created_at: string
+          hits: number
+          key: string
+          last_hit_at: string | null
+          question: string
+          scope: string
+        }
+        Insert: {
+          answer?: string | null
+          created_at?: string
+          hits?: number
+          key: string
+          last_hit_at?: string | null
+          question: string
+          scope: string
+        }
+        Update: {
+          answer?: string | null
+          created_at?: string
+          hits?: number
+          key?: string
+          last_hit_at?: string | null
+          question?: string
+          scope?: string
+        }
+        Relationships: []
+      }
       lomi_feedback: {
         Row: {
           answer: string
