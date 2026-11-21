@@ -230,7 +230,51 @@ export function metaReply(text: string, seed = 0): string | null {
 
 // ── 5) Câu hỏi về CÁCH ĐỌC BÀI Tarot (kiến thức chung, không phải xin trải bài) ──
 /** 20/11: hỏi Tarot có thật / có đúng không — trả lời thật, không rút bài. */
-export function tarotMeta(text: string): string | null {
+export function tarotMeta(text: string, ctx = ""): string | null {
+  const base = tarotMetaBase(text);
+  if (!base || !ctx) return base;
+  const note = tarotCtxNote(text, ctx, base);
+  if (!note) return base;
+  // đã nối vào chuyện cụ thể → bỏ câu hỏi ngược / lời mời "gõ bói 3 lá" ở cuối lời chung
+  return base.replace(/\n\nBạn muốn Lomi cùng bạn liệt kê[^\n]*$/u, "").replace(/ Muốn thử thì gõ “bói 3 lá về …”\.$/u, "") + note;
+}
+
+// 21/11 (ChatGPT chấm bộ 50, #45–#50): đã nói lá nào, chuyện gì ở mấy lượt trước → nối lại đúng lá + đúng chuyện, và trả lời thẳng
+//   câu "bao lâu rút lại" / "nơi chuyển tới tốt không" thay vì chỉ lời chung về Tarot.
+function tarotCtxNote(text: string, ctx: string, base: string): string {
+  const n = ` ${normalizeVi(text)} `;
+  const c = ` ${normalizeVi(ctx)} `;
+  let card: ReturnType<typeof tarotCard> | null = null;
+  for (let id = 0; id < TAROT_DECK_SIZE && !card; id++) {
+    const t = tarotCard(id);
+    if (c.includes(` ${normalizeVi(t.name.en)} `) || c.includes(` ${normalizeVi(t.name.vi)} `)) card = t;
+  }
+  const topic = /\b(gop von|hun von|lam an chung|mo quan)\b/.test(c) ? "gopvon"
+    : /\b(vay tien|chi nhanh|dau tu|mo rong)\b/.test(c) ? "dautu"
+    : /\b(chuyen nha|chuyen di|noi o moi|chuyen den)\b/.test(c) ? "chuyennha"
+    : /\b(doi truong|chuyen truong|hoc hanh|hoc tap)\b/.test(c) ? "hoc"
+    : /\b(gia dinh|nguoi than|truoc tet|bo me|ba me)\b/.test(c) ? "giadinh"
+    : /\b(lam hoa|ban lau nam|nguoi ban|ban than|gian nhau)\b/.test(c) ? "banbe"
+    : null;
+  const out: string[] = [];
+  if (/\bbao lau\b/.test(n)) out.push("⏳ Nếu muốn xem lại cùng câu hỏi, nhiều người đợi **khi hoàn cảnh đã có thay đổi thật** — vd sau khi đã nói chuyện, đã có kết quả mới — thường là **vài tuần tới vài tháng**, chứ không rút lại ngay vì chưa yên tâm.");
+  if (card) {
+    const up = card.up.vi.replace(/\s+$/u, "");
+    out.push(`🃏 Lá **${card.name.vi} (${card.name.en})** lúc nãy chủ yếu gợi: _${up}_ — đó là một lời nhắc để mình ngẫm, không phải lời phán.`);
+  }
+  const tip: Record<string, string> = {
+    gopvon: "💼 Chuyện **góp vốn mở quán**: trước khi nhận lời, ngồi lại với bạn ghi rõ **mỗi người góp bao nhiêu, ai làm việc gì, chia lời – lỗ thế nào, muốn rút vốn thì sao**, viết thành giấy có chữ ký; tính thử nếu 6 tháng đầu vắng khách thì có trụ được không.",
+    dautu: "💼 Chuyện **vay tiền mở rộng**: nhìn **dòng tiền mỗi tháng, bao lâu hoà vốn, vắng khách vài tháng có trả nổi nợ không** — số tiền lớn thì hỏi thêm người làm thật.",
+    chuyennha: "🏠 Muốn biết **nơi chuyển tới** tốt hay không thì Tarot không biết được — xem thật: **giá thuê và hợp đồng** (cọc, thời hạn, điều khoản trả nhà), **an ninh** khu đó, **đường đi làm / đi học**, chợ, chỗ gửi xe, tiếng ồn, nước, điện; tới xem **cả ban ngày lẫn buổi tối**, hỏi hàng xóm vài câu.",
+    hoc: "📚 Chuyện **đổi trường**: không cần rút thêm để chắc — nên **nói chuyện với con** (con thấy khó ở đâu, có muốn đổi không), **hỏi giáo viên chủ nhiệm**, xem trường mới về chương trình, đường đi, bạn bè; quyết định chung với con thì con dễ thích nghi hơn.",
+    banbe: "💬 Chuyện **làm hoà**: nếu bạn còn quý tình bạn đó, nhắn một tin ngắn, chân thành là đủ — kiểu “Lâu rồi mình không nói chuyện, mình nhớ bạn. Hôm trước có gì mình xin lỗi nha.” Không cần lá bài nào cho phép mới được nhắn.",
+    giadinh: "🏡 Chuyện **nói chuyện với người thân**: chọn lúc cả nhà thong thả (đừng ngay lúc đang bận rộn chuẩn bị Tết), mở đầu bằng điều mình mong muốn chứ không kể lỗi, nghe nhiều hơn nói — vậy là đúng tinh thần kiên nhẫn, cân bằng rồi.",
+  };
+  if (topic && !(topic === "dautu" && /\bdong tien\b/.test(normalizeVi(base)))) out.push(tip[topic]);
+  return out.length ? `\n\n${out.join("\n\n")}` : "";
+}
+
+function tarotMetaBase(text: string): string | null {
   const n = ` ${normalizeVi(text)} `;
   // 21/11 (bộ 50 đoạn, #46/#48/#49/#50): hỏi VỀ việc rút lại / rút thêm / bài tốt có chắc không — trả lời, không rút bài mới.
   if (/\b(rut|boi|xem|trai) (lai|them)( \S+){0,6} (ket qua khac|tin lan nao|tin cai nao|bao lau|khi nao|co can|co nen|chac chan|moi nen)\b|\b(co can|co nen) (rut|boi|xem) (them|lai)( \S+){0,4} (de )?(chac|chac chan|quyet dinh)\b|\bbao lau (thi |moi )?(nen )?(rut|boi|xem) (lai|bai lan nua)\b|\b(rut|boi) (bai )?lan nua( \S+){0,4} (khac|tin)\b/.test(n))

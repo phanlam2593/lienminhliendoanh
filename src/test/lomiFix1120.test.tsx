@@ -262,7 +262,7 @@ describe("21/11 — bộ 50 đoạn 4 lượt: mạch chuyện", () => {
     expect(a.content).not.toMatch(/rời đi|chia tay/);
   }, T);
   it("hỏi bảo quản món vừa nấu → hướng dẫn đồ ăn thừa có nguồn", async () => {
-    expect(((await last(["Mk muốn nấu cháo cá lóc cho cả nhà, làm sao để cá không tanh?", "Cháo cá còn dư có thể để tủ lạnh qua đêm không?"])) as M).content).toMatch(/Đồ ăn thừa/);
+    expect(((await last(["Mk muốn nấu cháo cá lóc cho cả nhà, làm sao để cá không tanh?", "Cháo cá còn dư có thể để tủ lạnh qua đêm không?"])) as M).content).toMatch(/Cháo cá nấu dư[\s\S]*FSA/);
   }, T);
   it("đồ tự làm để bôi (gel nha đam) để dành → khuyên dùng ngay, không đoán số ngày", async () => {
     expect(((await last(["Mk muốn tìm mẹo giúp giảm cảm giác khó chịu khi bị côn trùng đốt.", "Gel đã lấy ra rồi để ngăn mát dùng lại ngày mai được ko?"])) as M).content).toMatch(/dùng ngay/);
@@ -281,5 +281,54 @@ describe("21/11 — bộ 50 đoạn 4 lượt: mạch chuyện", () => {
     const a = (await last(["Nếu mk rút lại bài lần nữa mà kết quả khác thì tin lần nào?"])) as M;
     expect(a.tarot).toBeFalsy();
     expect(a.content).toMatch(/ngẫu nhiên/);
+  }, T);
+});
+
+describe("21/11 — ChatGPT chấm bộ 50 đoạn", () => {
+  const C = (turns: string[]) => last(turns) as Promise<M>;
+  it("bảo quản: nói đúng món / vật đang nói, không khối 'Đồ ăn thừa' chung", async () => {
+    expect((await C(["Người nhà mk bị táo bón nhẹ, có loại lá nào dân gian hay dùng ko?", "E nói lá mồng tơi, vậy hái lá non hay lá già mới tốt?", "Nấu canh ăn thường xuyên có bị tiêu chảy không, người đang mang thai ăn dc chứ?", "Nếu nấu cả nồi rồi để qua đêm thì hôm sau ăn lại được ko?"])).content).toMatch(/Canh mồng tơi[\s\S]*mang thai/);
+    expect((await C(["Mk hay bị khô môi, có mẹo từ thiên nhiên nào không e?", "Hũ dầu dừa mở nắp rồi để trong nhà tắm có sao không?"])).content).toMatch(/dầu dừa đã mở[\s\S]*Đậy kín/);
+    expect((await C(["E chỉ mk cách làm bánh xèo giòn lâu với.", "Phần bột còn dư để ngăn mát đến ngày mai chiên tiếp dc ko?"])).content).toMatch(/bột bánh xèo còn dư/);
+    expect((await C(["Mk muốn làm chè đậu xanh đánh mà không biết bắt đầu từ đâu.", "Chè này để ngăn đá được không hay chỉ nên để ngăn mát?"])).content).toMatch(/ngăn đá được[\s\S]*không cấp đông lại/);
+    const g = await C(["Có mẹo nào giúp dễ chịu khi bị say xe không e?", "Người đang mang thai 3 tháng đầu dùng cách đó có an toàn không?", "Nếu đã thái gừng sẵn bỏ hộp mang theo thì để được bao lâu?"]);
+    expect(g.content).toMatch(/Gừng thái sẵn[\s\S]*bác sĩ/);
+    expect(g.content).not.toMatch(/Đồ ăn thừa, cơm/);
+  }, T);
+  it("bé 3 tuổi, da trầy → không bôi gel lên chỗ trầy", async () => {
+    expect((await C(["Mk muốn tìm mẹo giúp giảm cảm giác khó chịu khi bị côn trùng đốt.", "E nói gel nha đam, vậy dùng phần gel trong lá tươi được ko?", "Trẻ 3 tuổi bị đốt có bôi loại đó được không, nếu da đang trầy thì sao?", "Gel đã lấy ra rồi để ngăn mát dùng lại ngày mai được ko?"])).content).toMatch(/đừng bôi lên chỗ da trầy/);
+  }, T);
+  it("đang uống thuốc chống đông + gừng gây nóng bụng → không khuyên thử lại", async () => {
+    const a = await C(["Mk hay bị đầy bụng sau khi ăn, có mẹo thảo dược nào nhẹ nhàng ko?", "E vừa nói trà gừng, vậy gừng tươi thái lát nấu thế nào?", "Người đang uống thuốc chống đông máu có dùng loại trà đó được không?", "Nếu uống rồi thấy nóng bụng thì có nên tiếp tục không?"]);
+    expect(a.content).toMatch(/đừng tự uống lại/);
+    expect(a.content).not.toMatch(/Thử lại thì dùng/);
+  }, T);
+  it("cấp cứu: việc trong lúc chờ đúng từng tình huống", async () => {
+    expect((await C(["Mẹ mk lỡ uống một ít dung dịch tẩy rửa vì tưởng nước lọc.", "Mẹ bảo giờ chỉ hơi rát cổ, chắc không sao.", "Mk ngại gọi cấp cứu lắm, để sáng mai đi khám được không?"])).content).toMatch(/Không cố làm cho nôn[\s\S]*chai \/ bao bì/);
+    expect((await C(["Ba mk đột nhiên nói không rõ chữ, một bên mặt hơi xệ.", "Giờ ba bảo đỡ rồi, chờ thêm 30 phút được không?"])).content).toMatch(/Ghi lại giờ bắt đầu/);
+    const ana = await C(["Con mk ăn hạt điều xong bị sưng môi, ho liên tục.", "Mk đã gọi 115 rồi, trong lúc chờ xe tới cần làm gì?"]);
+    expect(ana.content).toMatch(/nếu khó thở thì cho ngồi dậy/);
+    expect(ana.content).not.toMatch(/Cho nằm ngửa và giữ yên/);
+  }, T);
+  it("tâm sự: trả lời đúng câu hỏi lượt cuối", async () => {
+    expect((await C(["Dạo này mk thấy khó xử với gia đình quá, chẳng biết nói với ai.", "Mẹ chồng cứ tự ý vào phòng vợ chồng mình rồi sắp xếp đồ đạc.", "Chồng mk biết nhưng toàn bảo thôi nhịn mẹ đi, có đáng gì đâu.", "Nếu cứ tiếp tục như vậy thì mk nên nói chuyện với ai trước, chồng hay mẹ chồng?"])).content).toMatch(/nói với chồng trước/);
+    expect((await C(["Mk cảm thấy mình không còn được tôn trọng trong gia đình.", "Mỗi lần họ hàng tụ tập, bác ruột đều đem chuyện mk hiếm muộn ra đùa trước mặt mọi người.", "Vk mk lần nào cũng khóc sau đó, nhưng ba mẹ mk lại bảo người lớn nói vui thôi.", "Lần tới nếu bác lại nói như vậy mk nên phản ứng thế nào?"])).content).toMatch(/đừng nhắc hay đùa chuyện này nữa/);
+    const p = await C(["Con gái mk năm nay 14 tuổi, gần đây hai mẹ con rất khó nói chuyện.", "Nó bắt đầu khóa cửa phòng, giấu điện thoại, hỏi gì cũng trả lời cộc lốc.", "Hôm qua mk thấy nó nhắn tin với một người lớn hơn khá nhiều tuổi, mk hỏi thì nó nổi nóng và khóc.", "Mk nên làm gì để con chịu chia sẻ mà không cảm thấy bị kiểm soát?"]);
+    expect(p.content).not.toMatch(/Báo cho ba mẹ/);
+    expect(p.content).toMatch(/111/);
+  }, T);
+  it("tìm chỗ: hỏi giờ nhận khách / món chay của quán → nói thật, không 'Lomi chưa biết'", async () => {
+    const a = await C(["Cuối tuần mk muốn tìm quán ăn tối ở Đà Lạt cho gia đình, giá vừa phải.", "Nếu đi tầm 8 giờ tối thì quán còn nhận khách không?"]);
+    expect(a.content).toMatch(/giờ mở cửa/);
+    expect((await C(["Mk muốn tìm quán ăn sáng có món bánh căn ở Đà Lạt.", "Nếu có một người ăn chay thì quán có món nào phù hợp không?"])).content).toMatch(/món chay của từng quán/);
+  }, T);
+  it("Tarot: nối lại đúng lá người dùng nhắc + chuyện cụ thể", async () => {
+    const a = await C(["Mk muốn hỏi Tarot về chuyện học hành của con trai.", "Lá Page of Pentacles có ý nghĩa gì trong chuyện học tập vậy e?", "Vậy mk có nên cho con đổi trường không?", "Có cần rút thêm bài để chắc chắn quyết định không?"]);
+    expect(a.content).toMatch(/Page of Pentacles[\s\S]*đổi trường/);
+    expect(a.tarot).toBeFalsy();
+  }, T);
+  it("chủ DN: bị báo cáo / đóng tin tuyển dụng → đúng app", async () => {
+    expect((await C(["Có người báo cáo doanh nghiệp mk vi phạm nhưng mk không hiểu lý do.", "Trong lúc chờ admin xử lý, doanh nghiệp mk có bị ẩn khỏi Khám phá không?"])).content).toMatch(/không tự ẩn/);
+    expect((await C(["Mk đã tìm được người rồi, có cách nào đóng tin tuyển dụng để khỏi nhận thêm lượt quẹt không?"])).content).toMatch(/Tạm dừng/);
   }, T);
 });
