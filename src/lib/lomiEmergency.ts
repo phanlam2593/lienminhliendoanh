@@ -73,7 +73,7 @@ const D: Record<EmK, Def> = {
       "**Không tự uống thuốc cầm nôn, cầm tiêu chảy**, không tự gây nôn",
       "Ghi lại giờ ăn và giờ bắt đầu có triệu chứng",
     ],
-    qa: [[VN(/\b(thuốc cầm nôn|thuốc chống nôn|cầm tiêu chảy|uống thuốc)\b/), "**Không tự cho uống thuốc cầm nôn hay cầm tiêu chảy** nha — thuốc có thể che triệu chứng và giữ chất độc lại; để bác sĩ cấp cứu quyết định."]],
+    qa: [[VN(/\b(thuốc cầm nôn|thuốc chống nôn|cầm tiêu chảy|uống thuốc)\b/), "**Không tự cho uống thuốc cầm nôn hay cầm tiêu chảy** nha — khi nghi ngộ độc nấm cần bác sĩ đánh giá, vì có loại độc tố nấm gây tổn thương gan muộn mà thuốc uống ở nhà không xử lý được, còn có thể làm khó theo dõi triệu chứng."]],
     src: "NHS (Anh) — Poisoning",
     first: true,
     overCard: true,
@@ -99,7 +99,7 @@ const D: Record<EmK, Def> = {
   },
   seizure: {
     re: VN(/\b(đang |bị |lên )?co giật|giật (tay chân|liên tục)|lên cơn (giật|động kinh)\b/),
-    head: "Bé **co giật lần đầu** thì luôn gọi **115** — kể cả khi nghi do sốt và cơn đã dừng.",
+    head: "Đang co giật thì gọi **115** — nhất là co giật **lần đầu**, cơn kéo dài **quá 5 phút**, hoặc sau cơn **khó thở, không tỉnh**; với trẻ nhỏ, kể cả nghi do sốt và cơn đã dừng thì vẫn nên gọi. Làm ngay mấy việc dưới đây.",
     delay: "**Đừng đợi hết cơn rồi tính** — gọi 115 ngay bây giờ; co giật lần đầu cần bác sĩ khám, và cơn kéo dài quá 5 phút là cấp cứu.",
     wait: [
       "Đặt bé **nằm trên sàn, chỗ rộng**, dẹp vật cứng, sắc xung quanh, kê **đồ mềm dưới đầu**",
@@ -110,6 +110,9 @@ const D: Record<EmK, Def> = {
     ],
     qa: [[VN(/\b(giữ (chặt )?tay chân|ghì|nhét (khăn|đũa|thìa|muỗng|gì)|cắn (vào )?lưỡi)\b/), "**Không giữ chặt tay chân và không nhét gì vào miệng bé** nha — ghì giữ dễ làm bé bị thương, nhét đồ vào miệng có thể làm gãy răng, nghẹt thở. Bé không “nuốt lưỡi” đâu."]],
     src: "NHS (Anh) — Febrile seizures",
+    first: true,
+    overCard: true,
+    firstIf: VN(/\b(đang co giật|giật (tay chân )?liên tục|co giật liên tục|lên cơn co giật)\b/),
   },
   burn: {
     re: VN(/\b(nước sôi|dầu sôi|nước nóng|lửa|hoá chất|hóa chất)( \S+){0,4} (đổ|văng|tạt|bắn|làm bỏng|bỏng)|bị bỏng( \S+){0,4}(nặng|rộng|phồng|cả)|bỏng (nước sôi|dầu|lửa)\b/),
@@ -155,7 +158,8 @@ const D: Record<EmK, Def> = {
       "Nôn hay lơ mơ thì xoay nằm nghiêng, giữ đầu – cổ – thân thẳng hàng",
       "Ghi lại giờ ngã và đang uống thuốc gì (nhất là thuốc chống đông) để báo bác sĩ",
     ],
-    qa: [[VN(/\b(ngủ một giấc|cho (ba |ông |bà |mẹ )?ngủ|đi ngủ|ngủ (rồi|cho))\b/), "**Đừng cho ba ngủ một giấc rồi theo dõi ở nhà** — lú lẫn sau đập đầu là cần cấp cứu ngay. Trong lúc chờ, ba nằm nghỉ được nhưng **phải có người canh, gọi hỏi liên tục**; khó đánh thức là báo 115 ngay."]],
+    qa: [[VN(/\b(lẫn lộn|lú lẫn|nói lung tung|lơ mơ|khó đánh thức|nôn (nhiều|liên tục)?)\b/), "Ba **lúc đầu tỉnh, giờ lại nói lẫn lộn** là dấu hiệu **đang nặng lên** sau khi đập đầu — gọi **115 ngay bây giờ**, đừng chờ thêm."],
+      [VN(/\b(ngủ một giấc|cho (ba |ông |bà |mẹ )?ngủ|đi ngủ|ngủ (rồi|cho))\b/), "**Đừng cho ba ngủ một giấc rồi theo dõi ở nhà** — lú lẫn sau đập đầu là cần cấp cứu ngay. Trong lúc chờ, ba nằm nghỉ được nhưng **phải có người canh, gọi hỏi liên tục**; khó đánh thức là báo 115 ngay."]],
     src: "NHS (Anh) — Head injury and concussion",
     first: true,
     overCard: true,
@@ -165,7 +169,7 @@ const D: Record<EmK, Def> = {
     head: "Người **nóng ran, nói năng lộn xộn, đứng không vững** sau khi ở ngoài nắng là dấu hiệu **sốc nhiệt** — gọi **115** ngay, đây là cấp cứu.",
     delay: "**Đừng chờ nghỉ cho đỡ** — nói lộn xộn nghĩa là não đã bị ảnh hưởng vì quá nóng; cần làm mát ngay và đi cấp cứu.",
     wait: [
-      "Đưa bạn vào **chỗ mát, bóng râm**, cho nằm, kê cao chân",
+      "Đưa bạn vào **chỗ mát, bóng râm**, cho nằm nghỉ",
       "Cởi bớt quần áo; **làm mát tích cực**: xịt / lau nước mát khắp người, quạt liên tục, chườm khăn mát ở **cổ, nách, bẹn**",
       "Bạn còn tỉnh táo, nuốt được thì cho **uống từng ngụm nước**; **đang lơ mơ thì không ép uống**",
       "Không để bạn một mình; theo dõi tỉnh táo, hơi thở",
@@ -181,7 +185,7 @@ const D: Record<EmK, Def> = {
     head: "Bé **thở rút lõm ngực, môi tím, khóc yếu** là dấu hiệu bé **đang thiếu oxy** — gọi **115** ngay, không phải nghẹt mũi thường.",
     delay: "**Đừng để mai khám** — môi tím và lõm ngực khi thở là cấp cứu ngay bây giờ.",
     wait: [
-      "Giữ bé ở **tư thế bé thấy dễ thở nhất** (thường là bế **ngồi thẳng** trên đùi), đừng đặt nằm ngửa",
+      "Giữ bé ở **tư thế bé thấy dễ thở nhất** (thường là bế **ngồi thẳng** trên đùi), đừng ép bé nằm",
       "Giữ bé bình tĩnh, nới quần áo; không cho đông người vây quanh",
       "**Không cho bé ăn uống gì** khi đang khó thở — dễ sặc",
       "Quan sát môi, nhịp thở; nghi bé **hóc dị vật** thì báo ngay cho 115",
@@ -212,7 +216,7 @@ const D: Record<EmK, Def> = {
     wait: [
       "**Không đối đầu, không giằng dao**, không cãi lại người đang say",
       "Chị ra được **an toàn** (cửa sau, sang nhà hàng xóm) thì đưa bé ra **ngay**, mang theo điện thoại; không cần lấy đồ",
-      "Chưa ra được thì **khoá cửa phòng**, chặn cửa bằng đồ nặng, tránh xa cửa sổ; giữ bé im lặng, điện thoại để im tiếng",
+      "Chưa ra được thì **khoá cửa phòng**, chặn thêm đồ nặng **nếu không làm mất đường thoát** của mình; giữ bé im lặng, điện thoại để im tiếng",
       "Bạn ở ngoài: **đừng tự xông vào**; gọi 113 báo rõ địa chỉ, có **dao, người say, trẻ nhỏ**; nhờ hàng xóm hỗ trợ",
       "Có ai bị thương → gọi thêm **115**",
     ],
@@ -226,13 +230,14 @@ const D: Record<EmK, Def> = {
     head: "Đốt than trong phòng kín gây **ngộ độc khí CO** — khí **không màu, không mùi**, làm người bên trong ngất và có thể làm **cả người cứu ngất theo**. Gọi **114** (cứu nạn) và **115** ngay.",
     delay: "**Đừng chờ** — người đã ngất trong phòng có khí CO cần được đưa ra và cấp cứu ngay, nhưng phải đúng cách để bạn không thành nạn nhân thứ hai.",
     wait: [
-      "**Đừng tự lao vào phòng kín** khi cửa còn đóng — gọi 114 / 115 trước, gọi thêm người hỗ trợ",
-      "Nếu vào được **thật nhanh**: **mở toang cửa, cửa sổ từ ngoài** cho thoáng trước, **nín thở**, kéo người ra rồi **ra ngay**; thấy chóng mặt là quay ra",
+      "**Không vào phòng kín có khí than** — nín thở không bảo vệ được bạn; khí CO có thể làm người cứu ngất trong vài hơi thở",
+      "Gọi **114** (cứu nạn) và **115**, nói rõ: đốt than trong phòng kín, có người ngất, cửa còn đóng; chờ lực lượng chuyên môn vào cứu",
+      "Chỉ làm những gì **đứng ở ngoài** làm được: báo mọi người trong nhà **ra ngoài, tránh xa căn phòng**; không bật lửa, không hút thuốc gần đó",
       "Ai ở gần đó đang chóng mặt, buồn nôn → **ra chỗ thoáng khí ngay**",
       "Người ngất mà còn thở → " + RECOVERY + "; " + CPR,
       "Mọi người tiếp xúc khí đều nên đi khám, kể cả khi đã đỡ",
     ],
-    qa: [[VN(/\b(chạy vào|vào (kéo|cứu)|kéo (họ|người) ra|cứu (họ|người)|làm gì trước)\b/), "**Việc đầu tiên là gọi 114 / 115 và mở thông gió từ ngoài** — đừng chạy thẳng vào phòng kín, vì khí CO có thể làm bạn ngất trong vài hơi thở."]],
+    qa: [[VN(/\b(chạy vào|vào (kéo|cứu)|kéo (họ|người) ra|cứu (họ|người)|làm gì trước)\b/), "**Đừng chạy vào phòng** — kể cả nín thở; khí CO không màu, không mùi và có thể làm bạn ngất ngay ở cửa, thành nạn nhân thứ hai. Việc cứu người trong phòng để **114 / 115** làm (họ có thiết bị thở). Việc của bạn lúc này: **gọi 114 và 115**, đưa mọi người **ra xa** căn phòng, ai đang chóng mặt buồn nôn thì ra chỗ thoáng khí và cũng đi khám."]],
     src: "NHS (Anh) — Carbon monoxide poisoning",
     call: "114 và 115",
     first: true,
@@ -240,7 +245,7 @@ const D: Record<EmK, Def> = {
   },
   chest: {
     re: VN(/\b(đau (thắt |tức |nhói )?ngực|tức ngực|thắt ngực|đè ngực)\b/),
-    head: "**Đau thắt ngực, vã mồ hôi, khó thở, đau lan xuống cánh tay trái** là dấu hiệu có thể **nhồi máu cơ tim** — gọi **115** ngay.",
+    head: "**Đau thắt ngực kèm vã mồ hôi, khó thở** (hay đau lan ra cánh tay, cổ, hàm) là dấu hiệu có thể **nhồi máu cơ tim** — gọi **115** ngay, đừng chờ xem có đỡ không.",
     delay: "**Kể cả khi người bệnh nói đã đỡ** vẫn phải đi cấp cứu — với tim, cơn đau có thể quay lại nặng hơn; khám càng sớm càng ít tổn thương tim.",
     wait: [
       "Cho **ngồi nghỉ yên** ở tư thế dễ chịu (ngồi tựa lưng, co gối), **không đứng dậy đi lại**, không tự lái xe",
@@ -250,6 +255,9 @@ const D: Record<EmK, Def> = {
     ],
     qa: [[VN(/\b(đi bộ|tự đi|ra đầu (đường|hẻm|ngõ)|ra (ngoài )?đón|tự ra)\b/), "**Không cho mẹ tự đi bộ ra đầu đường** — gắng sức lúc này làm tim thiếu máu thêm. Mẹ ngồi nghỉ yên; **người khác ra đón xe**, hoặc gọi lại 115 chỉ đường, mở sẵn cửa."]],
     src: "NHS (Anh) — Heart attack",
+    first: true,
+    overCard: true,
+    firstIf: VN(/\b(vã mồ hôi|đổ mồ hôi|lan (xuống|ra|sang|lên)|cánh tay trái|thắt ngực)\b/), // "đau ngực khó thở" trơn → luồng cũ (có ghi nhớ triệu chứng)
   },
   anaphylaxis: {
     re: VN(/\b(phản vệ|(sưng|phù) (môi|lưỡi|họng)|môi (\S+ )?sưng|nổi mề đay( \S+){0,6}(khó thở|khò khè|sưng))\b/),
@@ -262,7 +270,7 @@ const D: Record<EmK, Def> = {
       "Sau **5 phút** chưa đỡ mà có bút thứ hai → tiêm tiếp",
       CPR,
     ],
-    qa: [[VN(/\b(bút (tiêm|adrenaline|epipen)|dùng (bút|thế nào)|tiêm (thế nào|sao|ở đâu))\b/), "Cách dùng bút adrenaline (đúng bút đã được kê):\n1. **Tháo nắp an toàn** (thường là nắp xanh), nắm chặt bút, đầu tiêm hướng xuống\n2. **Ấn mạnh vào mặt ngoài đùi** — qua lớp quần cũng được — tới khi nghe tách\n3. **Giữ yên đúng số giây in trên bút**, rồi rút ra, xoa nhẹ chỗ tiêm\n4. Ghi giờ tiêm; **vẫn gọi 115** kể cả khi em đỡ ngay, đưa bút đã dùng cho đội cấp cứu"]],
+    qa: [[VN(/\b(bút (tiêm|adrenaline|epipen)|dùng (bút|thế nào)|tiêm (thế nào|sao|ở đâu))\b/), "Cách dùng bút adrenaline (đúng bút đã được kê):\n1. **Tháo nắp an toàn** theo đúng hình in trên bút (mỗi loại bút khác màu, khác cách), nắm chặt bút\n2. **Ấn mạnh vào mặt ngoài đùi** — qua lớp quần cũng được — tới khi nghe tách\n3. **Giữ yên đúng số giây in trên bút**, rồi rút ra, xoa nhẹ chỗ tiêm\n4. Ghi giờ tiêm; **vẫn gọi 115** kể cả khi em đỡ ngay, đưa bút đã dùng cho đội cấp cứu"]],
     src: "NHS (Anh) — Anaphylaxis",
   },
   stroke: {
@@ -281,7 +289,7 @@ const D: Record<EmK, Def> = {
   },
   suicide: {
     re: VN(/\b(không muốn sống|muốn chết|tự tử|tự sát|kết thúc (cuộc đời|tất cả)|chuẩn bị (thuốc|dây))\b/),
-    head: "Người nói **không muốn sống, đã chuẩn bị thuốc và đang ở một mình**, giờ lại **không nghe máy** — phải coi là **khẩn cấp ngay bây giờ**.",
+    head: "Bạn ấy nói **không muốn sống** mà **đã chuẩn bị thuốc, đang ở một mình** — phải coi là **khẩn cấp ngay bây giờ**, bạn ấy có thể đang gặp nguy hiểm. Đừng để bạn ấy một mình.",
     delay: "**Đừng đợi tới sáng mai** 💚 Lúc này bạn ấy có thể đang gặp nguy hiểm.",
     wait: [
       "**Gọi ngay cho người ở gần bạn ấy** — người nhà, bạn cùng phòng, hàng xóm, chủ nhà trọ — nhờ **tới tận nơi**",
@@ -300,13 +308,27 @@ const ORDER: EmK[] = ["violence", "gas", "drowning", "anaphylaxis", "stroke", "s
 // câu hỏi kiến thức / kể phim / học sơ cứu — không phải ca đang xảy ra
 const TRAP = VN(/\b(trong phim|xem phim|bộ phim|phim (có|này|đó)|nhân vật|đang học|học sơ cứu|lớp sơ cứu|hỏi để học|chỉ hỏi (thôi|để biết)|ngoài đời|người ta bảo|giả sử|nếu (thấy|gặp|có) (người|ai)|nói chung|thường gặp|kiến thức)\b/);
 
-const DELAY = VN(/\b(để (mai|sáng|tối|lát)|mai (đi|đưa|khám)|đợi (sáng|mai|hết|anh|ảnh|ổng|bả|nó)|chờ (thêm|sáng|mai)|chắc (chỉ |nó chỉ )?(không sao|ổn|bình thường|buồn ngủ|đau bụng bình thường|nghẹt mũi|do sốt)|đỡ (rồi|hơn)|hết (đau|rồi)|không (cần|phải) gọi|đừng gọi|ngại (gọi|làm phiền)|sợ bị phạt|ngủ một (lúc|giấc|chút)|nghỉ (một )?(chút|lúc)|nằm nghỉ)\b/);
+const DELAY = VN(/\b(để (mai|sáng|tối|lát)|mai (đi|đưa|khám)|đợi (sáng|mai|hết|anh|ảnh|ổng|bả|nó)|chờ (thêm|sáng|mai)|chắc (chỉ |nó chỉ )?(không sao|ổn|bình thường|buồn ngủ|đau bụng bình thường|nghẹt mũi|do sốt)|đỡ (rồi|hơn)|hết (đau|rồi)|không (còn )?đau nữa|nghỉ (ngơi )?(là|cho) (được|khỏi|đỡ)|không (cần|phải) gọi|đừng gọi|ngại (gọi|làm phiền)|sợ bị phạt|ngủ một (lúc|giấc|chút)|nghỉ (một )?(chút|lúc)|nằm nghỉ)\b/);
 const WAITQ = VN(/\b(trong lúc (chờ|đợi)|trước khi xe|làm gì|làm sao|phải làm|sơ cứu|xử lý|nên làm)\b/);
 const CALLED = VN(/\b(đã gọi|gọi rồi|vừa gọi|xe (đang )?tới)\b/);
 
+// người có nguy cơ là NGƯỜI KHÁC (bạn thân, em trai…) — lượt sau "nó bảo đã chuẩn bị thuốc, đang ở một mình" không phải người dùng tự nói về mình
+const THIRD = VN(/\b(bạn (mình|thân|tôi|em|tớ|tui)|bạn thân|em (trai|gái) (mình|tôi)|anh (trai )?(mình|tôi)|chị (gái )?(mình|tôi)|con (mình|tôi|gái|trai)|người yêu (mình|tôi)|(vợ|chồng|mẹ|ba|bố) (mình|tôi)|đồng nghiệp|nó (bảo|nói|nhắn))\b/);
+const SELF = VN(/\b(mình|tôi|em|tớ|tui|t) (cũng )?(không muốn sống|muốn chết|muốn tự tử)\b/);
+const SUI_NOW = VN(/\b(chuẩn bị|một mình|không (nghe|bắt) máy|tắt máy|uống thuốc|đã uống|cầm (dao|dây))\b/);
+function thirdParty(recent: string[]): boolean {
+  const first = recent.find((t) => D.suicide.re.test(` ${normalizeVi(t)} `));
+  if (!first) return false;
+  const f = ` ${normalizeVi(first)} `;
+  return THIRD.test(f) && !SELF.test(f);
+}
+
 export function emKindIn(text: string): EmK | null {
   const n = ` ${normalizeVi(text)} `;
-  for (const k of ORDER) if (D[k].re.test(n)) return k;
+  for (const k of ORDER) {
+    if (k === "seizure" && VN(/\b(mí mắt|mắt|khoé mắt|cơ bắp|bắp (chân|tay)|chuột rút|nấc)\b/).test(n)) continue; // giật mí mắt, chuột rút ≠ co giật
+    if (D[k].re.test(n)) return k;
+  }
   return null;
 }
 
@@ -328,7 +350,7 @@ export function emergencyReply(raw: string, prevUser: string[], opt: { hasCard?:
   if (!prevK) {
     // lượt đầu nhắc tới tình huống: chỉ nhận những tình huống luồng cũ chưa xử lý đúng
     if (!d.first || (opt.hasCard && !d.overCard) || (d.firstIf && !d.firstIf.test(n))) return null; // đã có thẻ bệnh / sơ cứu có nguồn cho câu này → để luồng cũ đưa thẻ
-  } else if (kind === "suicide" && !DELAY.test(n)) return null; // luồng khủng hoảng sẵn có lo phần còn lại
+  } else if (kind === "suicide" && !DELAY.test(n) && !(thirdParty(recent) && SUI_NOW.test(n))) return null; // luồng khủng hoảng sẵn có lo phần còn lại
   else if (d.firstIf && ![raw, ...recent].some((t) => d.firstIf!.test(` ${normalizeVi(t)} `))) return null; // bỏng nhỏ → luồng cũ
   if (n.split(/\s+/).length > 40) return null;
 
@@ -341,17 +363,35 @@ export function emergencyReply(raw: string, prevUser: string[], opt: { hasCard?:
   else if (qa) text = `🚨 ${qa}\n\nChưa gọi **${call}** thì gọi ngay nha. Trong lúc chờ:\n${waitTxt}${src}`;
   else if (DELAY.test(n) && prevK) text = `🚨 ${d.delay} Gọi **${call}** ngay nha.\n\nTrong lúc chờ:\n${waitTxt}${src}`;
   else if (WAITQ.test(n) && prevK) text = `🚨 Gọi **${call}** ngay nếu chưa gọi. Trong lúc chờ:\n${waitTxt}${src}`;
-  else text = `🚨 ${d.head}\n\nTrong lúc chờ:\n${waitTxt}${src}\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚`;
+  else text = `${kind === "chest" && !prevK ? "⚠️" : "🚨"} ${d.head}\n\nTrong lúc chờ:\n${waitTxt}${src}\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚`;
   return { text, kind };
 }
 
 // ── câu hỏi kiến thức (bẫy) hay gặp: trả lời kiến thức, không coi là ca đang xảy ra ──
+const ELEC = VN(/\b(điện giật|bị giật điện|giật điện)\b/);
+const STAB = VN(/\b(đâm|dao đâm|bị đâm)( \S+){0,3} (bụng|ngực)|vết đâm\b/);
+const FOODP = VN(/\b(ngộ độc thực phẩm|ngộ độc thức ăn)\b/);
 const KNOW: [RegExp, RegExp, string][] = [
-  [VN(/\b(điện giật|bị giật điện)\b/), VN(/\b(chạm|kéo ra|cây gỗ|que gỗ|gậy|xử lý|làm sao|sao không|nguy hiểm|có sao)\b/),
-    "Điện giật nguy hiểm thật ngoài đời ⚡ — với nạn nhân (bỏng, co giật, rối loạn nhịp tim) và cả **người cứu**, vì **dòng điện có thể truyền qua người nạn nhân sang người chạm vào**.\n• Việc đầu tiên là **ngắt nguồn điện**: rút phích, gạt cầu dao / tháo cầu chì (chỉ tắt công tắc thiết bị có thể chưa ngắt hẳn)\n• Không ngắt được thì mới dùng **vật khô, không dẫn điện** (gỗ khô, nhựa, bìa các tông) đẩy nguồn điện ra xa — đứng trên chỗ khô; **gỗ ướt, chân ướt thì không an toàn**\n• Điện cao thế (đường dây ngoài trời) thì **tránh xa**, gọi 115 / điện lực, không tự cứu\n• Ngắt điện xong: nạn nhân bất tỉnh, bỏng, co giật thì **gọi 115**; ngừng thở thì ép tim\n\nNếu chuyện này đang xảy ra thật ngay lúc này thì gọi **115** trước nha.\n\n_Nguồn: NHS (Anh) — Electric shock._"],
-  [VN(/\b(đâm|dao đâm|bị đâm)( \S+){0,3} (bụng|ngực)|vết đâm\b/), VN(/\b(nguy hiểm|có sao|không sao|vô lý|nhỏ|đứng dậy|bình thường|cảnh)\b/),
-    "Phim hay cho nhân vật đứng dậy nói chuyện, nhưng ngoài đời **vết đâm ở bụng nhìn nhỏ vẫn có thể rất nguy hiểm** 🩸\n• Lưỡi dao có thể đi sâu, làm **thủng ruột, rách gan, lách hay mạch máu** — máu **chảy vào trong bụng** nên bên ngoài trông không nhiều\n• Người bị đâm có thể vẫn tỉnh táo lúc đầu rồi **sốc vì mất máu** sau đó\n• Ngoài đời bị đâm vào bụng, ngực là **luôn gọi 115**; **không rút dao / vật đâm ra**, ép quanh vết thương, cho nằm yên\n\nVậy nên cảnh trong phim đúng là thiếu thực tế đó 😄\n\n_Nguồn: NHS (Anh) — First aid: bleeding._"],
-  [VN(/\b(ngộ độc thực phẩm|ngộ độc thức ăn)\b/), VN(/\b(gọi 115|cần gọi|có cần|để học)\b/),
+  // — điện giật: trả lời riêng từng câu hỏi tiếp, không lặp nguyên khối —
+  [ELEC, VN(/\b(cây gỗ|que gỗ|gậy|cán chổi|kéo ra)\b/),
+    "Dùng gỗ chỉ là **cách cuối cùng**, khi **không ngắt được điện** ⚡\n• Ưu tiên luôn là **rút phích / gạt cầu dao** trước\n• Nếu buộc phải dùng: vật phải **khô hẳn, không dẫn điện** (gỗ khô, nhựa), bạn **đứng trên chỗ khô** (tấm gỗ, giấy bìa, thảm cao su), **đẩy** nguồn điện ra xa chứ không kéo người vào mình\n• **Gỗ ẩm, tay ướt, chân đứng chỗ nước** thì không an toàn\n• **Điện cao thế** (dây ngoài trời, trạm điện): không áp dụng cách này — tránh xa ít nhất vài chục mét, gọi điện lực và 115\n\n_Nguồn: NHS (Anh) — Electric shock._"],
+  [ELEC, VN(/\b(sao không|không được chạm|chạm (trực tiếp|vào))\b/),
+    "Vì khi người đó **còn dính với nguồn điện**, cơ thể họ đang là một phần của mạch điện ⚡ Bạn chạm vào thì dòng điện **đi tiếp qua người bạn xuống đất** — người cứu bị giật, có khi nặng hơn cả nạn nhân. Dòng điện còn làm **co cứng cơ**, nên tay bạn có thể bị “dính” lại không buông ra được.\n\nVì vậy luôn **ngắt điện trước**; chỉ chạm vào người đó khi chắc chắn đã ngắt điện. Ngắt rồi thì chạm được bình thường — người bị điện giật không còn “tích điện” nữa.\n\n_Nguồn: NHS (Anh) — Electric shock._"],
+  [ELEC, VN(/\b(xử lý|làm sao|làm gì|phải làm|sơ cứu|nguy hiểm|có sao)\b/),
+    "Điện giật nguy hiểm thật ngoài đời ⚡ — với nạn nhân (bỏng, co giật, rối loạn nhịp tim) và cả **người cứu**, vì **dòng điện có thể truyền qua người nạn nhân sang người chạm vào**.\n• Việc đầu tiên là **ngắt nguồn điện**: rút phích, gạt cầu dao / tháo cầu chì (chỉ tắt công tắc thiết bị có thể chưa ngắt hẳn)\n• Không ngắt được thì mới dùng **vật khô, không dẫn điện** đẩy nguồn điện ra xa — đứng trên chỗ khô\n• Điện cao thế (đường dây ngoài trời) thì **tránh xa**, gọi 115 / điện lực, không tự cứu\n• Ngắt điện xong: nạn nhân bất tỉnh, bỏng, co giật thì **gọi 115**; ngừng thở thì ép tim\n\nNếu chuyện này đang xảy ra thật ngay lúc này thì gọi **115** trước nha.\n\n_Nguồn: NHS (Anh) — Electric shock._"],
+  // — vết đâm bụng (kể phim) —
+  [STAB, VN(/\b(đứng dậy|nói chuyện bình thường|vẫn tỉnh|vẫn đi)\b/),
+    "Chỗ đó phim không hẳn sai đâu 😄 Ngoài đời người bị đâm **vẫn có thể tỉnh táo, đứng dậy, nói chuyện lúc đầu** — nhưng đó không có nghĩa là nhẹ. Máu có thể **chảy từ từ vào trong bụng**, vài chục phút sau mới **tái, choáng, lơ mơ** vì mất máu. Chỗ vô lý là phim cho nhân vật cứ thế đi tiếp như không có gì, thay vì được đưa đi cấp cứu ngay."],
+  [STAB, VN(/\b(đâm nhẹ|không sao|nhẹ thì|vết (nhỏ|nông))\b/),
+    "Với bụng thì **không có “đâm nhẹ”** để yên tâm được đâu nha 🩸 Vết ở ngoài nhỏ nhưng lưỡi dao có thể đi sâu, làm **thủng ruột, rách gan, lách hay mạch máu** — nhìn bên ngoài không đoán được bên trong. Ngoài đời bị đâm vào bụng là **luôn đi cấp cứu / gọi 115**, kể cả khi người đó thấy bình thường; **không rút vật đâm ra**, ép quanh vết thương, cho nằm yên.\n\n_Nguồn: NHS (Anh) — First aid: bleeding._"],
+  [STAB, VN(/\b(nguy hiểm|có sao|vô lý|cảnh|nhỏ)\b/),
+    "Phim hay cho nhân vật đứng dậy nói chuyện, nhưng ngoài đời **vết đâm ở bụng nhìn nhỏ vẫn có thể rất nguy hiểm** 🩸\n• Lưỡi dao có thể đi sâu, làm **thủng ruột, rách gan, lách hay mạch máu** — máu **chảy vào trong bụng** nên bên ngoài trông không nhiều\n• Người bị đâm có thể vẫn tỉnh táo lúc đầu rồi **sốc vì mất máu** sau đó\n• Ngoài đời bị đâm vào bụng, ngực là **luôn gọi 115**; **không rút dao / vật đâm ra**, ép quanh vết thương, cho nằm yên\n\n_Nguồn: NHS (Anh) — First aid: bleeding._"],
+  // — ngộ độc thực phẩm (đang học sơ cứu) —
+  [FOODP, VN(/\b(đau bụng nhẹ|chỉ (bị )?(đau bụng|tiêu chảy)|nhẹ (thì sao|thôi)|tiêu chảy (nhẹ|thì sao))\b/),
+    "Ngộ độc thực phẩm **nhẹ** (đau bụng nhẹ, tiêu chảy, vẫn uống được) thường **tự đỡ sau vài ngày**, chăm ở nhà là chính 🙂\n• **Uống đủ nước**, uống từng ngụm nhỏ nếu buồn nôn; người lớn tuổi, trẻ nhỏ hay người có bệnh nền thì dùng **dung dịch bù nước (ORS)**, pha đúng hướng dẫn trên gói\n• **Nghỉ ngơi**; ăn lại khi thấy muốn ăn, bắt đầu bằng món nhẹ, dễ tiêu\n• Rửa tay kỹ, không nấu ăn cho người khác khi đang bị\n• Theo dõi dấu hiệu nặng: **nôn ra máu / đi ngoài ra máu, mất nước nặng** (rất ít tiểu, chóng mặt khi đứng), **sốt cao**, đau bụng dữ dội, hay kéo dài quá vài ngày → đi khám\n\n_Nguồn: NHS (Anh) — Food poisoning._"],
+  [FOODP, VN(/\b(trường hợp nào|khi nào|lúc nào)( \S+){0,4} (cấp cứu|đi khám|gọi 115|đi viện)\b/),
+    "Khi học sơ cứu, nhớ mấy nhóm dấu hiệu này là cần **đi cấp cứu / gọi 115** với ngộ độc thực phẩm 🚑\n• **Nôn ra máu** hoặc **đi ngoài ra máu**\n• **Lơ mơ, lú lẫn, ngất**, co giật, khó thở\n• **Mất nước nặng**: rất ít hoặc không đi tiểu, môi khô, mắt trũng, chóng mặt khi đứng, tim đập nhanh\n• Đau bụng **dữ dội**, không giữ được bất kỳ thứ gì uống vào\n• Nghi do **nấm rừng, hoá chất, đồ có độc**, hoặc có **nhiều người cùng ăn** bị một lúc\n• Trẻ nhỏ, người già, phụ nữ có thai, người bệnh nền thì nên đi khám **sớm hơn**, đừng đợi tới mức nặng\n\n_Nguồn: NHS (Anh) — Food poisoning._"],
+  [FOODP, VN(/\b(gọi 115|cần gọi|có cần|để học)\b/),
     "Chỉ hỏi để học thì **không cần gọi 115** đâu nha 😄 115 là khi **đang có người gặp nạn** cần cấp cứu.\n\nVới ngộ độc thực phẩm, gọi 115 / đi cấp cứu khi người bệnh: **nôn ra máu, đi ngoài ra máu**, **lơ mơ, ngất**, **khó thở**, có **dấu hiệu mất nước nặng** (rất ít tiểu, môi khô, chóng mặt khi đứng), đau bụng dữ dội, hoặc nghi do **nấm, hoá chất, đồ có độc**. Trẻ nhỏ, người già, phụ nữ có thai thì nên đi khám sớm hơn.\n\n_Nguồn: NHS (Anh) — Food poisoning._"],
 ];
 

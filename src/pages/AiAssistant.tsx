@@ -478,7 +478,7 @@ const prevUB = (ms: { role: string; raw?: string; content: string }[]) => " " + 
 const PICK_ASK: [RegExp, string, string][] = [
   [VN(/\b(cầu thang|leo (cầu thang|bậc|dốc)|bậc thang|tầng trệt)\b/), "lối đi (cầu thang, bậc thang)", "hỏi quán có **bàn ở tầng trệt, gần cửa** không và xin giữ bàn đó cho người lớn tuổi"],
   [VN(/\b(hoàng hôn|bình minh|mặt trời (lặn|mọc)|view)\b/), "hướng view (hoàng hôn / bình minh)", "xem **ảnh khách chụp** trong phần đánh giá của từng chỗ, rồi hỏi chủ quán chỗ ngồi nhìn hướng nào, mấy giờ đẹp nhất"],
-  [VN(/\b(lẩu chay|món chay|ăn chay|đồ chay)\b/), "thực đơn chay", "hỏi quán có **món đó trong thực đơn** không (vd lẩu chay), hay phải đặt trước"],
+  [VN(/\b(lẩu chay|món chay|ăn chay|đồ chay)\b/), "thực đơn chay", "hỏi quán có **món chay trong thực đơn** không, hay **làm riêng được không** (không thịt, không trứng, không nước mắm / nước dùng xương)"],
   [VN(/\b(đậu (ô tô|oto|xe)|đỗ (ô tô|xe)|bãi (xe|đỗ)|chỗ (đậu|để|gửi) (ô tô|xe))\b/), "chỗ đậu ô tô", "hỏi chỗ đó có **chỗ đậu ô tô** ngay tại chỗ không, hay phải gửi bãi gần đó"],
   [VN(/\b(nhà vệ sinh|toilet|wc)\b/), "nhà vệ sinh riêng hay chung", "hỏi rõ là **nhà vệ sinh riêng cho từng lều / phòng** hay **khu vệ sinh chung**, có nước nóng không"],
   [VN(/\b(hợp (cho |với )?(bé|trẻ|con)|cho bé|trẻ nhỏ|ít khói|quá khói|bị khói|khói (bếp|nướng))\b/), "mức phù hợp cho trẻ nhỏ (khói, không gian)", "hỏi quán có **khu ngồi thoáng, xa bếp nướng** không, có ghế cho bé không"],
@@ -501,6 +501,9 @@ function placePick(msgs: Msg[], raw: string): PlacePick | null {
   const places = ((pm?.places ?? []) as PlaceCard[]).slice(0, 3);
   const users = msgs.filter((m) => m.role === "user").slice(-4).map((m) => m.raw ?? m.content);
   if ((PICK_CHANGE.test(nr) || VN(/^\s*thôi\b/).test(nr)) && VN(/\b(gần|trong nhà|ngoài trời|yên tĩnh|đi bộ được|ít người|chỗ ngồi)\b/).test(nr)) {
+    const uAll = ` ${normalizeVi(users.join(" ") + " " + raw)} `;
+    if (VN(/\bgần chợ( đà lạt)?\b/).test(nr) && VN(/\b(đi chơi|chỗ chơi|buổi tối|đi dạo|hẹn hò|lãng mạn)\b/).test(uAll) && !VN(/\b(quán|cà phê|cafe|ăn|homestay)\b/).test(uAll))
+      return { text: "Ok, đổi sang **quanh chợ Đà Lạt, đi bộ được** nha 👍 Buổi tối hai vợ chồng, không ồn, khoảng 300k thì Lomi gợi ý:\n• **Chợ đêm Đà Lạt** — ngay khu chợ: dạo, ăn vặt (bánh tráng nướng, sữa đậu nành), xem đồ len; hơi đông giờ cao điểm, đi sớm hoặc sau 21h đỡ chen hơn\n• **Dạo bờ hồ Xuân Hương** — từ chợ đi bộ vài phút là tới, buổi tối mát, yên, hợp đi dạo\n• **Quảng trường Lâm Viên** — đi bộ dọc hồ khoảng 20 phút, tối lên đèn đẹp\n• Kết thúc bằng **một quán cà phê nhìn ra hồ** cho yên tĩnh, tránh khu bar\n\nTối Đà Lạt lạnh nhanh, mang áo ấm nha. Muốn Lomi tìm quán cà phê / quán ăn gần chợ có trong app thì gõ “**quán cà phê gần chợ Đà Lạt**”." };
     const first = users.find((t) => !!detectSearch(t)) ?? users[0] ?? "";
     const want = raw.replace(/^\s*(thôi|vậy|à|ờ)\s+/iu, "").replace(/^(đổi sang|chuyển sang|đổi qua|thôi chọn|chọn)\s+/iu, "");
     return { change: `${first} ${want}`, lead: `Ok, Lomi tìm lại theo ý mới nha 👍 (${want.replace(/[.!?]+$/u, "").replace(/\s*(nhé|nha|nhá)$/u, "")})\n` };
@@ -511,7 +514,10 @@ function placePick(msgs: Msg[], raw: string): PlacePick | null {
   const names = places.map((p) => `**${p.name}**`);
   const lst = names.length ? ` (${names.join(", ")})` : "";
   // so trên câu không dấu đã chuẩn hoá (bộ đọc câu có dấu đôi khi chặn chữ đã đoán dấu lại)
-  const asks = PICK_ASK.filter(([re]) => new RegExp(re.source, "u").test(nr));
+  let asks = PICK_ASK.filter(([re]) => new RegExp(re.source, "u").test(nr));
+  // hỏi "hợp với bé" mà đang tìm CHỖ CHƠI (không phải quán ăn) → mẹo về hoạt động cho trẻ, không nói chuyện khói bếp
+  if (VN(/\b(đi chơi|chỗ chơi|vui chơi|khu vui chơi|hoạt động)\b/).test(` ${normalizeVi(users.join(" "))} `))
+    asks = asks.map((a) => a[1].startsWith("mức phù hợp cho trẻ") ? ([a[0], "hoạt động hợp với độ tuổi của bé", "hỏi chỗ đó có **trò chơi / hoạt động cho bé tuổi này** không (có giới hạn tuổi, chiều cao không), có phải **đi bộ xa, leo dốc** không, có chỗ nghỉ, nhà vệ sinh cho trẻ không"] as [RegExp, string, string]) : a);
   const u = ` ${normalizeVi(users.join(" "))} `;
   // cắm trại gần suối + mưa lớn → an toàn trước, không chọn "chỗ an toàn hơn" thay người dùng
   if (VN(/\b(suối|sông|thác|lòng hồ)\b/).test(u + nr) && VN(/\b(mưa (lớn|to)|mùa mưa|lũ)\b/).test(u + nr) && VN(/\b(cắm trại|camping|lều|ở lại|ngủ lại)\b/).test(u + nr))
