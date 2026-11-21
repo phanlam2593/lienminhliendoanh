@@ -259,19 +259,36 @@ function tarotCtxNote(text: string, ctx: string, base: string): string {
   const out: string[] = [];
   if (/\bbao lau\b/.test(n)) out.push("⏳ Nếu muốn xem lại cùng câu hỏi, nhiều người đợi **khi hoàn cảnh đã có thay đổi thật** — vd sau khi đã nói chuyện, đã có kết quả mới — thường là **vài tuần tới vài tháng**, chứ không rút lại ngay vì chưa yên tâm.");
   if (card) {
-    const up = card.up.vi.replace(/\s+$/u, "");
-    out.push(`🃏 Lá **${card.name.vi} (${card.name.en})** lúc nãy chủ yếu gợi: _${up}_ — đó là một lời nhắc để mình ngẫm, không phải lời phán.`);
+    const up = SYMBOL[card.name.en] ?? softenTarot(card.up.vi.replace(/\s+$/u, ""));
+    out.push(`🃏 Lá **${card.name.vi} (${card.name.en})** thường được xem là biểu tượng của: _${up}_ — chỉ là một cách đọc để mình ngẫm, không phải dự báo chuyện gì sẽ xảy ra.`);
   }
   const tip: Record<string, string> = {
     gopvon: "💼 Chuyện **góp vốn mở quán**: trước khi nhận lời, ngồi lại với bạn ghi rõ **mỗi người góp bao nhiêu, ai làm việc gì, chia lời – lỗ thế nào, muốn rút vốn thì sao**, viết thành giấy có chữ ký; tính thử nếu 6 tháng đầu vắng khách thì có trụ được không.",
     dautu: "💼 Chuyện **vay tiền mở rộng**: nhìn **dòng tiền mỗi tháng, bao lâu hoà vốn, vắng khách vài tháng có trả nổi nợ không** — số tiền lớn thì hỏi thêm người làm thật.",
     chuyennha: "🏠 Muốn biết **nơi chuyển tới** tốt hay không thì Tarot không biết được — xem thật: **giá thuê và hợp đồng** (cọc, thời hạn, điều khoản trả nhà), **an ninh** khu đó, **đường đi làm / đi học**, chợ, chỗ gửi xe, tiếng ồn, nước, điện; tới xem **cả ban ngày lẫn buổi tối**, hỏi hàng xóm vài câu.",
     hoc: "📚 Chuyện **đổi trường**: không cần rút thêm để chắc — nên **nói chuyện với con** (con thấy khó ở đâu, có muốn đổi không), **hỏi giáo viên chủ nhiệm**, xem trường mới về chương trình, đường đi, bạn bè; quyết định chung với con thì con dễ thích nghi hơn.",
-    banbe: "💬 Chuyện **làm hoà**: nếu bạn còn quý tình bạn đó, nhắn một tin ngắn, chân thành là đủ — kiểu “Lâu rồi mình không nói chuyện, mình nhớ bạn. Hôm trước có gì mình xin lỗi nha.” Không cần lá bài nào cho phép mới được nhắn.",
+    banbe: "💬 Chuyện **làm hoà**: nếu bạn còn quý tình bạn đó, nhắn một tin ngắn, chân thành là đủ — kiểu “Lâu rồi mình không nói chuyện, mình nhớ bạn. Mình muốn ngồi nói chuyện lại với bạn, bạn rảnh không?” — mở lời trước không có nghĩa là nhận hết lỗi về mình. Không cần lá bài nào cho phép mới được nhắn.",
     giadinh: "🏡 Chuyện **nói chuyện với người thân**: chọn lúc cả nhà thong thả (đừng ngay lúc đang bận rộn chuẩn bị Tết), mở đầu bằng điều mình mong muốn chứ không kể lỗi, nghe nhiều hơn nói — vậy là đúng tinh thần kiên nhẫn, cân bằng rồi.",
   };
   if (topic && !(topic === "dautu" && /\bdong tien\b/.test(normalizeVi(base)))) out.push(tip[topic]);
   return out.length ? `\n\n${out.join("\n\n")}` : "";
+}
+
+// 22/11 (ChatGPT chấm lần 2): diễn giải BIỂU TƯỢNG, không khẳng định tương lai
+const SYMBOL: Record<string, string> = {
+  "Wheel of Fortune": "thay đổi, chu kỳ lên xuống, những điều mình không kiểm soát hết",
+  "Six of Swords": "giai đoạn chuyển tiếp, rời khỏi một chuyện khó khăn",
+  "Page of Pentacles": "học hỏi, bắt đầu từ việc nhỏ, sự chăm chỉ",
+  "Temperance": "cân bằng, kiên nhẫn, điều độ",
+  "The Hermit": "lùi lại một bước, suy nghĩ kỹ một mình trước khi quyết",
+  "Two of Swords": "phân vân giữa hai lựa chọn, đang né chưa muốn quyết",
+  "The Sun": "sự rõ ràng, năng lượng, niềm vui",
+  "The Star": "hy vọng, hồi phục",
+  "The World": "hoàn thành một giai đoạn",
+  "Ten of Cups": "gắn kết, hoà thuận trong gia đình",
+};
+function softenTarot(t: string): string {
+  return t.replace(/\bchắc chắn\b/gu, "rõ ràng").replace(/\bsẽ\b/gu, "có thể").replace(/ theo hướng tốt/gu, "");
 }
 
 function tarotMetaBase(text: string): string | null {

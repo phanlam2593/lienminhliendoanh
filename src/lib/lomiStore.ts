@@ -70,6 +70,7 @@ export function storeReply(raw: string, prevUser: string[]): StoreReply | null {
       L.push(`**${cap(name)} để ngăn đá được** nha 🧊`);
       L.push("• Để **nguội nhanh** rồi chia **hộp nhỏ, đậy kín** — cho vào tủ trong vòng **1–2 giờ** sau khi nấu");
       L.push("• Ăn thì **rã đông trong ngăn mát**, rồi **ăn trong 24 giờ**, **không cấp đông lại**");
+      L.push("• **Ghi ngày cấp đông** lên hộp — Lomi chưa có nguồn ghi thời hạn tối đa trong ngăn đá cho từng món, nên ăn sớm cho ngon và an tâm");
       if (name === "chè") L.push("• Chè có nước cốt dừa / sữa rã đông có thể **hơi tách nước, đậu bở hơn** — khuấy đều hoặc đun lại cho mịn; chỉ ăn trong 1–2 ngày thì để **ngăn mát** là được, ngon hơn");
       else L.push("• Chỉ ăn trong 1–2 ngày thì để **ngăn mát** là đủ");
     } else {
@@ -97,7 +98,7 @@ export function storeReply(raw: string, prevUser: string[]): StoreReply | null {
 
   if (kind === "batter") {
     return {
-      text: "Phần **bột bánh xèo còn dư** để ngăn mát chiên tiếp ngày mai được nha 🥞\n• Cho vào **hộp / tô đậy kín**, cất **ngăn mát ngay** — đừng để ngoài nhiệt độ phòng cả đêm\n• Mai lấy ra **khuấy đều lại** vì bột lắng xuống đáy; bột đặc hơn thì thêm chút nước cho vừa, **nêm và để bột về bớt lạnh** rồi mới đổ chảo cho giòn\n• Bột có **nước cốt dừa / trứng** thì càng nên chiên sớm, đừng để thêm ngày nữa\n⚠️ Bột **chua, sủi bọt, có mùi lạ** thì bỏ, pha mẻ mới.",
+      text: "Phần **bột bánh xèo còn dư** để ngăn mát chiên tiếp ngày mai được nha 🥞\n• Cho vào **hộp / tô đậy kín**, cất **ngăn mát ngay** — đừng để ngoài nhiệt độ phòng cả đêm\n• Mai lấy ra **khuấy đều lại** vì bột lắng xuống đáy; bột đặc hơn thì thêm chút nước cho vừa, **nêm và để bột về bớt lạnh** rồi mới đổ chảo cho giòn\n• Bột có **nước cốt dừa / trứng** thì càng nên chiên sớm — Lomi chưa có nguồn kiểm chứng ghi số giờ tối đa cho bột sống, nên **chiên hết trong ngày mai**, đừng để thêm\n⚠️ Bột **chua, sủi bọt, có mùi lạ** thì bỏ, pha mẻ mới.",
       health: false,
     };
   }

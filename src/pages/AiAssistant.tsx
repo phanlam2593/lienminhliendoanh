@@ -139,7 +139,7 @@ import {
 } from "@/lib/tarot";
 import { TarotCards } from "@/components/LomiTarot";
 import { storeReply } from "@/lib/lomiStore";
-import { emKindOf, waitList } from "@/lib/lomiWait";
+import { emHead, emKindOf, waitList } from "@/lib/lomiWait";
 import { VR, addViTurn, beginViTurn, typedWithAccents, VN, dropNegated } from "@/lib/viMatch";
 import { replyMismatch, vagueMiss } from "@/lib/lomiReplyGate";
 import { kinSupportText, threadAdvice } from "@/lib/lomiHeart";
@@ -470,6 +470,29 @@ const GOP_VON = "Rút bài thì chỉ để tham khảo cho vui thôi nha 🔮 �
 // 21/11: 3 lượt người dùng gần nhất (đã chuẩn hoá) — để câu hỏi nối hiểu đang nói về ưu đãi / doanh nghiệp.
 const prevUB = (ms: { role: string; raw?: string; content: string }[]) => " " + ms.filter((m) => m.role === "user").slice(-3).map((m) => normalizeVi(m.raw ?? m.content)).join(" ") + " ";
 
+
+// 22/11 (ChatGPT chấm lần 2, #34–#39): hỏi chi tiết chỗ vừa gợi ý → nhắc lại ĐÚNG mấy chỗ đó + tiêu chí người dùng đã nêu, rồi mới nói thiếu dữ liệu
+function placeCtxNote(msgs: Msg[], raw: string): { head: string; ask: string } {
+  const pm = msgs.filter((m) => m.role === "assistant").slice(-6).reverse().find((m) => (m.places?.length ?? 0) > 0);
+  const names = ((pm?.places ?? []) as { name: string }[]).slice(0, 3).map((p) => `**${p.name}**`);
+  const u = ` ${msgs.filter((m) => m.role === "user").slice(-4).map((m) => normalizeVi(m.raw ?? m.content)).join(" ")} ${normalizeVi(raw)} `;
+  const c: string[] = [];
+  const price = u.match(new RegExp(normalizeVi("(dưới|khoảng|tầm) \\d+ ?(k|nghìn|ngàn)"), "u"));
+  if (price) c.push(`giá ${price[0]} / người`);
+  if (VN(/\b(ô tô|oto|xe 7 chỗ|xe hơi)\b/).test(u)) c.push("có chỗ đậu ô tô");
+  else if (VN(/\b(đậu xe máy|gửi xe máy)\b/).test(u)) c.push("chỗ để xe máy cho cả nhóm");
+  if (VN(/\b(không (dùng |có )?hành tỏi|thuần chay)\b/).test(u)) c.push("món chay **không hành tỏi**");
+  else if (VN(/\b(ăn chay|món chay)\b/).test(u)) c.push("có món chay (không trứng, không mỡ hành, chấm xì dầu)");
+  const kid = u.match(new RegExp(normalizeVi("bé (\\d+) tuổi"), "u"));
+  if (kid) c.push(`hợp với bé ${kid[1]} tuổi, có nhà vệ sinh, chỗ ba mẹ ngồi chờ`);
+  if (VN(/\b(đầu gối|đau gối|lớn tuổi|đi khó)\b/).test(u)) c.push("ít bậc thang, đậu xe gần cổng");
+  if (VN(/\b(\d+|tám|sáu|mười) người\b/).test(u) || VN(/\bnhóm\b/).test(u)) { const g = u.match(new RegExp(normalizeVi("(\\d+) người"), "u")); if (g) c.push(`chỗ ngồi cho ${g[1]} người`); }
+  if (VN(/\b(\d+) ?(giờ|h) (tối|sáng)\b/).test(normalizeVi(raw))) { const h = normalizeVi(raw).match(/(\d+) ?(gio|h) (toi|sang)/); if (h) c.push(`còn nhận khách lúc ${h[1]} giờ ${h[3] === "toi" ? "tối" : "sáng"} không`); }
+  return {
+    head: names.length ? `Với mấy chỗ Lomi vừa gợi ý (${names.join(", ")}):\n` : "",
+    ask: c.length ? `\n📞 Khi gọi / nhắn ${names.length ? names.join(", ") : "chỗ đó"}, hỏi gộp luôn: ${c.join("; ")}.` : names.length ? `\n📞 Mấy chỗ lúc nãy: ${names.join(", ")} — bấm vào thẻ để gọi / nhắn hỏi.` : "",
+  };
+}
 export default function AiAssistant() {
   const goBack = useGoBack();
   // 01/10 (theo ý Kir): khung chat Lomi nằm GIỮA thanh trên của app (logo, tin nhắn, thông báo) và thanh điều hướng
@@ -1092,7 +1115,7 @@ export function AiChat({
     // 21/11 (ChatGPT chấm bộ 50, #38): "nếu có một người ăn chay thì quán có món nào phù hợp không" (câu dài > 12 chữ) — trước: tìm lại danh sách quán
     if (searchCtx && w <= 20 && VN(/\b(ăn chay|món chay|đồ chay|không (dùng |có )?hành tỏi)\b/).test(nr) && VN(/\b(quán (đó|này|có)|chỗ (đó|này)|ở đó|có món nào|món nào (phù hợp|hợp))\b/).test(nr)) {
       const srV = searchRefine(raw.split(/\s+/).slice(-12).join(" "));
-      if (srV) return { role: "assistant", content: srV, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish };
+      if (srV) { const pc = placeCtxNote(msgs, raw); return { role: "assistant", content: srV + pc.ask, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish }; }
     }
     if (searchCtx && w <= 12) {
       const nd = detectDish(raw);
@@ -1130,7 +1153,7 @@ export function AiChat({
         if (dm) return dm;
       }
       const sr = searchRefine(raw);
-      if (sr) return { role: "assistant", content: sr, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish };
+      if (sr) { const pc = placeCtxNote(msgs, raw); return { role: "assistant", content: sr + pc.ask, local: true, places: lastA0?.places, search: lastA0?.search, dish: lastA0?.dish }; }
     }
     // (0c) Tarot hỏi tiếp (danh sách ChatGPT lần 4): "Lá The Fool là gì?", "lá này tốt không", "nếu ngược thì sao", "rút lá vui vui coi".
     const lowRaw = raw.normalize("NFC").toLowerCase();
@@ -1977,7 +2000,7 @@ export function AiChat({
         {
           const ek = emKindOf(msgs.filter((m) => m.role === "user").slice(-4).map((m) => m.raw ?? m.content).join(" ") + " " + raw);
           const wl = ek ? waitList(ek) : "• Có người ở cạnh, không để người bệnh ở một mình\n• Không tự lái xe đi viện, không cho ăn uống hay tự uống thuốc\n• Nếu người bệnh ngất, ngừng thở hoặc không phản ứng: làm theo hướng dẫn của tổng đài 115";
-          return localReply(q, { role: "assistant", content: `🚨 Với những dấu hiệu bạn kể, **đừng chờ theo dõi thêm ở nhà** — gọi **115** ngay (hoặc nhờ người gần nhất gọi giúp), nói rõ địa chỉ và các dấu hiệu. **Kể cả khi người bệnh nói đã đỡ** — với đột quỵ, đau tim, phản vệ hay ngộ độc, dấu hiệu có thể quay lại hoặc nặng lên, và điều trị càng sớm càng tốt.\n\nTrong lúc chờ:\n${wl}\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚`, local: true, health: {} });
+          return localReply(q, { role: "assistant", content: `🚨 ${ek ? emHead(ek) : "Với những dấu hiệu bạn kể, **đừng chờ theo dõi thêm ở nhà** — gọi **115** ngay (hoặc nhờ người gần nhất gọi giúp), nói rõ địa chỉ và các dấu hiệu. **Kể cả khi người bệnh nói đã đỡ** — dấu hiệu có thể quay lại hoặc nặng lên, và điều trị càng sớm càng tốt."}\n\nTrong lúc chờ:\n${wl}\n\nGọi xong rồi thì báo Lomi nha, Lomi ở đây với bạn 💚`, local: true, health: {} });
         }
       }
     }
@@ -2134,7 +2157,7 @@ export function AiChat({
       if (VN(/\b((trả lời|phản hồi|rep) (lại )?(đánh giá|review|bình luận của khách)|đánh giá( \S+){0,4} (trả lời|phản hồi) (ở|vào) đâu)\b/).test(nB))
         return bizA("Mở **trang doanh nghiệp** của bạn → dưới đánh giá đó bấm **Trả lời** → viết phản hồi → gửi. Phản hồi hiện công khai ngay dưới đánh giá, ai xem trang cũng đọc được 💬\n• Viết bình tĩnh, lịch sự: cảm ơn khách đã góp ý, nói rõ hôm đó quán kiểm tra thấy thế nào, mời khách nhắn riêng để làm rõ\n• Đánh giá có vẻ sai sự thật / không phải khách thật: bấm **biểu tượng cờ 🚩** ở đánh giá đó để **báo cáo** cho Ban quản trị\n• Đừng nhờ người quen đánh giá bù — vừa không công bằng, vừa dễ mất uy tín");
       if (VN(/\b(báo cáo|report)( \S+){0,3} (đánh giá|review)|đánh giá (giả|ảo|sai sự thật|bịa)|review (giả|ảo)\b/).test(nB) && !VN(/\b(viết|làm|tạo|mua|cày|thuê|nhờ|kiếm|bơm|spam|đăng|tự) (\S+ ){0,3}(đánh giá|review|sao)\b/).test(nB))
-        return bizA("Được nha 👍 Ở đánh giá đó bấm **biểu tượng cờ 🚩** để **báo cáo** cho Ban quản trị, chọn / ghi rõ lý do (vd ngày khách nói tới quán không có ca phục vụ, không có hoá đơn…). Kết quả xử lý bạn xem ở **Báo cáo của tôi** (/bao-cao-cua-toi). Lomi không tự xoá được đánh giá — việc này do admin quyết định sau khi xem.");
+        return bizA((VN(/\b(trả lời|phản hồi|rep)\b/).test(prevUB(msgs)) ? "Bạn làm được cả hai việc nha 👍\n• **Trả lời công khai trước**, ngắn và lịch sự (bấm **Trả lời** dưới đánh giá): “Cảm ơn bạn đã góp ý. Quán đã kiểm tra lại ca làm hôm đó nhưng chưa thấy trường hợp như bạn kể — bạn nhắn riêng giúp quán ngày giờ, để quán làm rõ nha.” Người đọc sau sẽ thấy quán bình tĩnh, thiện chí\n• **Rồi báo cáo**: " : "Được nha 👍 ") + "Ở đánh giá đó bấm **biểu tượng cờ 🚩** để **báo cáo** cho Ban quản trị, chọn / ghi rõ lý do (vd ngày khách nói tới quán không có ca phục vụ, không có hoá đơn…). Kết quả xử lý bạn xem ở **Báo cáo của tôi** (/bao-cao-cua-toi). Lomi không tự xoá được đánh giá — việc này do admin quyết định sau khi xem.");
       if (VN(/\b((bị|có người) (\S+ )?báo cáo (doanh nghiệp|quán|tiệm|cửa hàng|shop|mình|tài khoản)|(doanh nghiệp|quán|tiệm) (mình |của mình )?bị báo cáo)\b/).test(nB + prevUB(msgs)) && VN(/\b(xem|ở đâu|gửi|bằng chứng|giải trình|ẩn|khoá|khóa|bị gì|có sao|làm sao|cho ai)\b/).test(nB))
         return bizA("Bị báo cáo thì đừng lo quá nha — báo cáo chỉ là để **Ban quản trị xem xét**, không tự động phạt hay ẩn doanh nghiệp 🙏\n• Nếu người báo cáo chọn **Gửi cho Doanh nghiệp**, báo cáo đó hiện ở **Báo cáo của tôi** (/bao-cao-cua-toi) — bạn xem được nội dung, **trả lời / giải trình** ngay trong đó và bấm đánh dấu đã xử lý xong\n• Nếu họ chỉ gửi cho Ban quản trị thì bạn không xem được nội dung — Lomi cũng không xem được\n• Muốn gửi thêm bằng chứng (ảnh, tin nhắn, hoá đơn): trả lời trong báo cáo đó, hoặc vào **Hồ sơ → ⋯ → Trợ giúp & Liên hệ** để gửi cho Ban quản trị\n• App **không tự ẩn** doanh nghiệp vì bị báo cáo — chỉ ẩn / tạm khoá **khi admin quyết định** sau khi xem; Lomi không biết trạng thái xử lý cụ thể, cần thì hỏi Ban quản trị");
       if (VN(/\b(gửi|báo|cung cấp|đưa) (\S+ ){0,3}(cho )?(admin|ban quản trị|bqt|quản trị viên)\b|\b(thông tin|bằng chứng) (\S+ ){0,2}(gì|nào) (\S+ ){0,2}(cho )?(admin|ban quản trị|bqt)\b/).test(nB))
@@ -2207,7 +2230,7 @@ export function AiChat({
         const onOther = !onMed && VN(/\b(đang (uống|dùng) thuốc|thuốc (huyết áp|tiểu đường|tim)|mang thai|có bầu)\b/).test(prevU + nX);
         const head = "Dùng vào mà thấy **khó chịu** (nóng bụng, đau bụng, buồn nôn, nổi mẩn…) thì **nên ngưng** nha — mẹo dân gian là để hỗ trợ cho dễ chịu, không cần cố dùng tiếp 🙏";
         const mid = onMed
-          ? "• Bạn đang uống **thuốc chống đông** — **đừng tự uống lại**, kể cả pha loãng hơn. Hỏi **bác sĩ đang kê thuốc hoặc dược sĩ** trước, vì một số thảo dược có thể tương tác có hại với thuốc\n• Thấy **chảy máu bất thường** (chảy máu chân răng, bầm tím nhiều, đi ngoài phân đen) → báo bác sĩ ngay"
+          ? "• Bạn đang uống **thuốc chống đông** — **ngưng trà gừng, đừng tự uống lại**, kể cả pha loãng hơn. Còn **thuốc chống đông thì vẫn uống đúng như bác sĩ kê**, đừng tự ngưng. Hỏi **bác sĩ đang kê thuốc hoặc dược sĩ** trước, vì một số thảo dược có thể tương tác có hại với thuốc\n• Thấy **chảy máu bất thường** (chảy máu chân răng, bầm tím nhiều, đi ngoài phân đen) → báo bác sĩ ngay"
           : onOther
             ? "• Đang dùng thuốc / mang thai thì **đừng tự thử lại** — hỏi **dược sĩ / bác sĩ** trước, vì một số thảo dược có thể tương tác với thuốc"
             : "• Thử lại thì dùng **ít hơn, loãng hơn**, uống **sau bữa ăn** thay vì lúc đói\n• Đang dùng thuốc (nhất là thuốc chống đông, tiểu đường, huyết áp) hay đang mang thai thì hỏi **dược sĩ / bác sĩ** trước khi dùng thường xuyên";
@@ -2219,14 +2242,15 @@ export function AiChat({
       //   #37/#39 (bộ 50): "trời mưa thì chỗ đó còn tham quan được không / có khu trú không" — Lomi không có thông tin chi tiết từng chỗ
       if (VN(/\b(trời mưa|mưa (nhẹ|lớn|to)|lúc mưa|khi mưa|gặp mưa)\b/).test(nX) && VN(/\b(chỗ đó|chỗ này|nơi đó|khu (đó|này|trú)|tham quan|đi chơi|còn (đi|chơi|tham quan)|hoạt động thay thế|trú mưa|có mái)\b/).test(nX))
       {
-        const rl = ["Lomi chưa có thông tin chi tiết từng chỗ lúc trời mưa (có mái che, khu trú hay không) nên không dám nói bừa 🙏 Bạn bấm vào thẻ địa điểm trên **Khám phá** để **gọi / nhắn hỏi** trước nha."];
+        const pcR = placeCtxNote(msgs, raw);
+        const rl = [`${pcR.head}Lomi chưa có thông tin chi tiết từng chỗ lúc trời mưa (có mái che, khu trú hay không) nên không dám nói bừa 🙏 Bạn bấm vào thẻ địa điểm để **gọi / nhắn hỏi** trước nha.`];
         const old = VN(/\b(đầu gối|đau gối|đi khó|lớn tuổi|người già|ông bà|mẹ (mình |mk )?(già|yếu)|bậc thang)\b/).test(prevU + nX);
         const camp = VN(/\b(cắm trại|camping|lều|glamping)\b/).test(prevU + nX);
         if (old) rl.push("• Đi với người **đau gối / lớn tuổi** mà trời mưa thì đường, bậc thang **trơn hơn nhiều** — chọn lối đi **bằng phẳng, có tay vịn**, đậu xe sát cổng, mang giày đế bám, cầm ô thay áo mưa cho dễ đi; thấy trơn thì đổi sang chỗ **trong nhà** (quán cà phê, chợ, bảo tàng)");
         if (camp) rl.push("• Cắm trại mà gặp mưa: hỏi khu cắm trại trước có **nhà bạt / khu mái che, chỗ trú** không, mưa lớn thì có **hoàn tiền hay đổi ngày** không; đường đất lúc mưa rất trơn, xe gầm thấp dễ sa lầy — có phương án **hoãn / đổi ngày** sẵn");
         if (!old && !camp) rl.push("• Đi đồi, thác, đường đất lúc mưa thì rất **trơn** — mang giày bám, áo mưa, cẩn thận với người lớn tuổi và trẻ nhỏ");
         if (!old) rl.push("• Mưa lớn thì nên đổi sang chỗ **trong nhà** (quán cà phê, chợ, bảo tàng, khu vui chơi trong nhà) cho an toàn");
-        return localReply(q, { role: "assistant", content: rl.join("\n"), local: true, stuck: "fallback" });
+        return localReply(q, { role: "assistant", content: rl.join("\n") + pcR.ask, local: true, stuck: "fallback" });
       }
       //   #36 "Bạn ấy còn tập gym muốn tăng cơ nữa" (đang nói dị ứng sữa) — hỏi ăn uống, không phải tìm phòng gym
       if (VN(/\b(tập gym|tập tạ|tập thể hình)\b/).test(nX) && VN(/\b(tăng cơ|lên cơ|giữ cơ|ăn gì|bổ sung|đạm|protein)\b/).test(nX) && !VN(/\b(tìm|ở đâu|phòng gym|chỗ tập|gần đây|giá)\b/).test(nX))

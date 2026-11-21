@@ -39,7 +39,7 @@ const LISTS: Record<EmKind, string[]> = {
   chest: [
     "Cho **ngồi nghỉ yên** ở tư thế dễ chịu (thường là ngồi tựa lưng, co gối), **không đứng dậy đi lại**, không tự lái xe",
     "Nới quần áo chật, để chỗ thoáng",
-    "Hỏi tổng đài 115 có nên cho **nhai aspirin** không — đừng tự cho uống nếu chưa được hướng dẫn hoặc người bệnh dị ứng aspirin",
+    "**Không tự cho uống thuốc gì** — làm đúng theo hướng dẫn của nhân viên tổng đài 115",
     "Ngất, ngừng thở, không phản ứng → **làm theo hướng dẫn ép tim của tổng đài 115**",
   ],
 };
@@ -54,3 +54,12 @@ const SRC: Record<EmKind, string> = {
 export function waitList(kind: EmKind): string {
   return LISTS[kind].map((t) => `• ${t}`).join("\n") + `\n\n_Nguồn: ${SRC[kind]}._`;
 }
+
+// 22/11 (ChatGPT chấm lần 2, #40–#43): câu mở đầu riêng từng tình huống — không kể lẫn đột quỵ / đau tim / phản vệ / ngộ độc vào một câu.
+const HEAD: Record<EmKind, string> = {
+  poison: "Uống nhầm **chất tẩy rửa / hoá chất** thì **đừng chờ tới sáng** — gọi **115** ngay (hoặc nhờ người gần nhất gọi giúp), nói rõ đã uống chất gì. **Kể cả khi giờ chỉ hơi rát cổ** — hoá chất có thể gây bỏng miệng, họng, đừng dựa vào cảm giác lúc này để đoán là không sao.",
+  stroke: "Nói không rõ chữ, một bên mặt xệ là dấu hiệu **có thể là đột quỵ** — gọi **115** ngay, **đừng chờ thêm**. **Kể cả khi đã đỡ** — đó có thể là cơn thiếu máu não thoáng qua (TIA), vẫn cần cấp cứu; điều trị đột quỵ càng sớm càng tốt.",
+  anaphylaxis: "Sưng môi, ho, khó thở sau khi ăn là dấu hiệu **có thể là sốc phản vệ** — gọi **115** ngay, **đừng chờ xem có đỡ không**. **Kể cả khi đã đỡ** — triệu chứng có thể quay lại, nên thường cần theo dõi ở bệnh viện vài giờ.",
+  chest: "Đau ngực, tức ngực mà chưa rõ nguyên nhân thì **đừng chờ theo dõi ở nhà** — gọi **115** ngay. **Kể cả khi người bệnh nói đã đỡ** — với tim, cơn đau có thể quay lại, và được khám càng sớm càng tốt.",
+};
+export function emHead(k: EmKind): string { return HEAD[k]; }

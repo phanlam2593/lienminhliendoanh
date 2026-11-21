@@ -301,9 +301,9 @@ export function searchRefine(q: string): string | null {
   if (parts.includes("giá")) tips.push("bấm vào thẻ quán để xem ảnh menu, đánh giá và ưu đãi đang có — quán có ưu đãi thì đi sẽ đỡ hơn");
   if (parts.includes("lượng khách từng lúc")) tips.push("chiều cuối tuần, ngày lễ thường đông hơn ngày thường — muốn chắc thì **nhắn / gọi hỏi chỗ đó** giờ nào vắng, hoặc đi sớm ngay lúc mở cửa");
   if (parts.includes("đặt bàn")) tips.push("bấm vào thẻ quán → **Gọi** hoặc **Nhắn tin** để hỏi đặt bàn, nói rõ số người, giờ tới");
-  if (parts.includes("món chay của từng quán")) tips.push("hỏi quán **có làm riêng món chay không** (không trứng, không mỡ hành, chấm xì dầu thay nước mắm…) trước khi tới; muốn chắc ăn thì gõ “**quán chay ở Đà Lạt**” để Lomi tìm quán chay riêng");
+  if (parts.includes("món chay của từng quán")) tips.push("hỏi quán **có làm riêng món chay không** (không trứng, không mỡ hành, chấm xì dầu thay nước mắm…) trước khi tới; nếu mấy quán này không làm được thì gõ “**quán chay ở Đà Lạt**”, Lomi tìm thêm quán chay gần đó");
   if (parts.includes("giá vé") || parts.includes("tiện ích (vệ sinh, chỗ ngồi chờ)") || parts.includes("lối đi (bậc thang, dốc)")) tips.push("bấm vào thẻ địa điểm → **Gọi / Nhắn tin** hỏi trước — nhất là đi với **trẻ nhỏ hay người lớn tuổi**, hỏi luôn lối đi, chỗ nghỉ, nhà vệ sinh");
   if (parts.includes("giờ mở cửa") && VN(/\b(tối|khuya|đêm|\d+ ?(giờ|h))\b/).test(n)) tips.push("đi muộn thì **gọi trước** hỏi giờ nhận khách cuối — nhiều quán ngưng nhận món sớm hơn giờ đóng cửa");
-  if (parts.length <= 2 && (parts.includes("giá") || parts.includes("số người") || parts.includes("phù hợp trẻ nhỏ"))) tips.push("muốn gần một chỗ cụ thể thì nói Lomi kiểu “gần chợ”, “gần hồ Xuân Hương”, hoặc bật vị trí để Lomi xếp theo khoảng cách");
+  if (parts.length <= 2 && !parts.includes("đặt bàn") && (parts.includes("giá") || parts.includes("số người") || parts.includes("phù hợp trẻ nhỏ"))) tips.push("muốn gần một chỗ cụ thể thì nói Lomi kiểu “gần chợ”, “gần hồ Xuân Hương”, hoặc bật vị trí để Lomi xếp theo khoảng cách");
   return `Lomi chưa lọc được theo **${list}** đâu 🙏 — dữ liệu trong app chưa ghi đủ những thông tin này của từng chỗ nên Lomi không dám đoán.\n• ${tips.join("\n• ")}`;
 }
